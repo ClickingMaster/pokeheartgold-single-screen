@@ -128,13 +128,13 @@ static BOOL PokedexApp_PlayCursorCry(PokedexAppData *pokedexApp);
 static void PokedexApp_PrepareSearchPageChange(PokedexAppData *pokedexApp, int searchPage, int initialPos, int nextSeq);
 static void PokedexApp_UpdateEntryButtonsEnabled(PokedexAppData *pokedexApp);
 static void PokedexApp_UpdateSearchResultButtonsEnabled(PokedexAppData *pokedexApp);
-static BOOL PokedexApp_CanScrollFormList(PokedexAppData *pokedexApp, int delta, int a2);
+static BOOL PokedexApp_CanScrollFormList(PokedexAppData *pokedexApp, int delta, int steps);
 static void PokedexApp_StepIndexSkipping(s8 *index, s8 skipIndex, int step, u8 count);
 static BOOL PokedexApp_CycleLeftCompareForm(PokedexAppData *pokedexApp, int step);
 static BOOL PokedexApp_CycleRightCompareForm(PokedexAppData *pokedexApp, int step);
 static void PokedexApp_RunWeightCheck(PokedexAppData *pokedexApp);
 static void PokedexApp_EndWeightCheck(PokedexAppData *pokedexApp);
-static BOOL PokedexApp_CanScrollAreaList(PokedexAppData *pokedexApp, int delta, int a2);
+static BOOL PokedexApp_CanScrollAreaList(PokedexAppData *pokedexApp, int delta, int steps);
 static BOOL PokedexApp_SetAreaTimeOfDay(PokedexAppData *pokedexApp, int timeOfDay);
 static BOOL PokedexApp_SetAreaRegion(PokedexAppData *pokedexApp, int region);
 static void PokedexApp_DrawAreaRegionTabs(PokedexAppData *pokedexApp);
@@ -321,24 +321,24 @@ static int PokedexApp_MainSeq_03(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_04(PokedexAppData *pokedexApp) {
-    PokedexFlashButtonState *r4 = &pokedexApp->seqState.state_04;
-    switch (r4->state) {
+    PokedexFlashButtonState *flash = &pokedexApp->seqState.state_04;
+    switch (flash->state) {
     case 0:
-        BgTilemapRectChangePalette(pokedexApp->bgConfig, r4->bgId, r4->x, r4->y, r4->width, r4->height, r4->flashPalette);
-        ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, r4->bgId);
-        ++r4->state;
+        BgTilemapRectChangePalette(pokedexApp->bgConfig, flash->bgId, flash->x, flash->y, flash->width, flash->height, flash->flashPalette);
+        ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, flash->bgId);
+        ++flash->state;
         break;
     case 1:
-        ++r4->timer;
-        if (r4->timer == 4) {
-            BgTilemapRectChangePalette(pokedexApp->bgConfig, r4->bgId, r4->x, r4->y, r4->width, r4->height, r4->normalPalette);
-            ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, r4->bgId);
-            r4->timer = 0;
-            ++r4->state;
+        ++flash->timer;
+        if (flash->timer == 4) {
+            BgTilemapRectChangePalette(pokedexApp->bgConfig, flash->bgId, flash->x, flash->y, flash->width, flash->height, flash->normalPalette);
+            ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, flash->bgId);
+            flash->timer = 0;
+            ++flash->state;
         }
         break;
     case 2:
-        MI_CpuClear8(r4, sizeof(pokedexApp->seqState));
+        MI_CpuClear8(flash, sizeof(pokedexApp->seqState));
         return pokedexApp->nextSeq;
     }
 
@@ -378,9 +378,9 @@ static int PokedexApp_MainSeq_06(PokedexAppData *pokedexApp) {
         PokedexApp_SwitchDexMode(pokedexApp, 0);
         break;
     case 5: {
-        PokedexListDragState *r5 = &pokedexApp->seqState.state_06;
-        System_GetTouchNewCoords(&r5->touchX, &r5->touchY);
-        r5->switchX = PokedexApp_GetDexModeSwitchX(pokedexApp);
+        PokedexListDragState *drag = &pokedexApp->seqState.state_06;
+        System_GetTouchNewCoords(&drag->touchX, &drag->touchY);
+        drag->switchX = PokedexApp_GetDexModeSwitchX(pokedexApp);
         PlaySE(SEQ_SE_GS_BUTTON01);
         return POKEDEXAPP_MAINSEQ_08;
     }
@@ -436,9 +436,9 @@ static int PokedexApp_MainSeq_07(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_08(PokedexAppData *pokedexApp) {
-    PokedexListDragState *r4 = &pokedexApp->seqState.state_06;
+    PokedexListDragState *drag = &pokedexApp->seqState.state_06;
 
-    switch (r4->state) {
+    switch (drag->state) {
     case 0: {
         u32 touchX;
         u32 touchY;
@@ -448,15 +448,15 @@ static int PokedexApp_MainSeq_08(PokedexAppData *pokedexApp) {
                 MI_CpuClear8(&pokedexApp->seqState, sizeof(pokedexApp->seqState));
                 return POKEDEXAPP_MAINSEQ_09;
             }
-            ++r4->state;
-        } else if ((s32)(r4->touchX - touchX) < 0) {
+            ++drag->state;
+        } else if ((s32)(drag->touchX - touchX) < 0) {
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 0);
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
-            PokedexApp_SetSpriteX(pokedexApp, 0, r4->switchX);
+            PokedexApp_SetSpriteX(pokedexApp, 0, drag->switchX);
         } else {
-            ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, r4->touchX - touchX);
-            ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, r4->touchX - touchX);
-            PokedexApp_SetSpriteX(pokedexApp, 0, r4->switchX - (r4->touchX - touchX));
+            ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, drag->touchX - touchX);
+            ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, drag->touchX - touchX);
+            PokedexApp_SetSpriteX(pokedexApp, 0, drag->switchX - (drag->touchX - touchX));
         }
     } break;
     case 1:
@@ -477,29 +477,29 @@ static int PokedexApp_MainSeq_08(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_09(PokedexAppData *pokedexApp) {
-    PokedexEntrySlideState *r4 = &pokedexApp->seqState.state_09;
+    PokedexEntrySlideState *slide = &pokedexApp->seqState.state_09;
 
-    switch (r4->state) {
+    switch (slide->state) {
     case 0:
         PokedexApp_SlideOutListButtons(pokedexApp);
-        ++r4->state;
+        ++slide->state;
         // fallthrough
     case 1: {
         ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_ADD_X, 16);
         ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_ADD_X, 16);
         PokedexApp_MoveSpriteX(pokedexApp, 0, -16);
-        int r6 = Bg_GetXpos(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0);
-        if (r4->buttonsShown == 0 && r6 >= 192 && !BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 0)) {
-            r4->buttonsShown = 1;
+        int bgX = Bg_GetXpos(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0);
+        if (slide->buttonsShown == 0 && bgX >= 192 && !BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 0)) {
+            slide->buttonsShown = 1;
             PokedexApp_SlideInEntryButtons(pokedexApp);
             PokedexApp_UpdateEntryButtonsEnabled(pokedexApp);
         }
-        if (r6 >= 256) {
+        if (bgX >= 256) {
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 256);
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 256);
             PokedexApp_SetSpriteX(pokedexApp, 0, PokedexApp_GetDexModeSwitchX(pokedexApp) - 256);
-            if (r4->buttonsShown == 1) {
-                ++r4->state;
+            if (slide->buttonsShown == 1) {
+                ++slide->state;
             }
         }
     } break;
@@ -634,17 +634,17 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
         if (PokedexApp_IsTouchOnListScrollbar(pokedexApp, 1, x, y) == 1) {
             return POKEDEXAPP_MAINSEQ_15;
         } else {
-            PokedexSeqU16PairState *r1 = &pokedexApp->seqState.state_16;
+            PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-            r1->unk_0 = x;
-            r1->unk_2 = y;
+            scrollbarTouch->unk_0 = x;
+            scrollbarTouch->unk_2 = y;
             return POKEDEXAPP_MAINSEQ_16;
         }
     } break;
     case 14: {
-        PokedexEntryDragState *r0 = &pokedexApp->seqState.state_17;
+        PokedexEntryDragState *drag = &pokedexApp->seqState.state_17;
 
-        System_GetTouchNewCoords(&r0->touchX, &r0->touchY);
+        System_GetTouchNewCoords(&drag->touchX, &drag->touchY);
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
@@ -657,32 +657,32 @@ static int PokedexApp_MainSeq_11(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_12(PokedexAppData *pokedexApp) {
-    PokedexEntrySlideState *r4 = &pokedexApp->seqState.state_09;
+    PokedexEntrySlideState *slide = &pokedexApp->seqState.state_09;
 
-    switch (r4->state) {
+    switch (slide->state) {
     case 0:
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         PokedexApp_SlideOutEntryButtons(pokedexApp);
-        ++r4->state;
+        ++slide->state;
         // fallthrough
     case 1: {
         ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SUB_X, 16);
         ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SUB_X, 16);
         PokedexApp_MoveSpriteX(pokedexApp, 0, 16);
-        int r6 = Bg_GetXpos(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0);
-        if (r4->buttonsShown == 0 && r6 < 64 && !BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 1)) {
-            r4->buttonsShown = 1;
+        int bgX = Bg_GetXpos(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0);
+        if (slide->buttonsShown == 0 && bgX < 64 && !BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 1)) {
+            slide->buttonsShown = 1;
             PokedexApp_SlideInListButtons(pokedexApp);
         }
-        if (r6 <= 0) {
+        if (bgX <= 0) {
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 0);
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
             PokedexApp_SetSpriteX(pokedexApp, 0, PokedexApp_GetDexModeSwitchX(pokedexApp));
-            if (r4->buttonsShown == 1) {
-                ++r4->state;
+            if (slide->buttonsShown == 1) {
+                ++slide->state;
             }
         }
     } break;
@@ -697,35 +697,35 @@ static int PokedexApp_MainSeq_12(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_13(PokedexAppData *pokedexApp) {
-    PokedexListScrollState *r4 = &pokedexApp->seqState.state_13;
+    PokedexListScrollState *scroll = &pokedexApp->seqState.state_13;
 
-    switch (r4->state) {
+    switch (scroll->state) {
     case 0:
         PokedexApp_HideListCursor(pokedexApp);
         PokedexApp_SetSpriteAnim(pokedexApp, 2, 6);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
-        r4->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
-        r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 1, 1), 15);
-        ++r4->state;
+        scroll->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
+        scroll->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 1, 1), 15);
+        ++scroll->state;
         // fallthrough
     case 1:
-        ++r4->scrollStep;
-        PokedexApp_LoadNumberTilemap(pokedexApp, &r4->numberTilemap[0x1E0 - 32 * r4->scrollStep]);
-        PokedexApp_ScrollListIconsBackward(pokedexApp, 24, 8, r4->scrollStep / 5);
-        PokedexApp_MoveListScrollbar(pokedexApp, 1, -r4->scrollbarStep);
-        if (r4->scrollStep == 15) {
-            ++r4->state;
+        ++scroll->scrollStep;
+        PokedexApp_LoadNumberTilemap(pokedexApp, &scroll->numberTilemap[0x1E0 - 32 * scroll->scrollStep]);
+        PokedexApp_ScrollListIconsBackward(pokedexApp, 24, 8, scroll->scrollStep / 5);
+        PokedexApp_MoveListScrollbar(pokedexApp, 1, -scroll->scrollbarStep);
+        if (scroll->scrollStep == 15) {
+            ++scroll->state;
         }
         break;
     case 2:
-        if (r4->wrapCursor == 1) {
+        if (scroll->wrapCursor == 1) {
             pokedexApp->listCursor += 10;
         }
         --pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 5);
-        PokedexApp_FreeNumberTilemap(r4->numberTilemap);
+        PokedexApp_FreeNumberTilemap(scroll->numberTilemap);
         PokedexApp_UpdateListEntry(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
         PokedexApp_SyncListScrollbarToPage(pokedexApp, 1, 1);
@@ -738,35 +738,35 @@ static int PokedexApp_MainSeq_13(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_14(PokedexAppData *pokedexApp) {
-    PokedexListScrollState *r4 = &pokedexApp->seqState.state_13;
+    PokedexListScrollState *scroll = &pokedexApp->seqState.state_13;
 
-    switch (r4->state) {
+    switch (scroll->state) {
     case 0:
         PokedexApp_HideListCursor(pokedexApp);
         PokedexApp_SetSpriteAnim(pokedexApp, 3, 9);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
-        r4->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
-        r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 1, 1), 15);
-        ++r4->state;
+        scroll->numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
+        scroll->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 1, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 1, 1), 15);
+        ++scroll->state;
         // fallthrough
     case 1:
-        ++r4->scrollStep;
-        PokedexApp_LoadNumberTilemap(pokedexApp, &r4->numberTilemap[32 * r4->scrollStep]);
-        PokedexApp_ScrollListIconsForward(pokedexApp, 24, -8, r4->scrollStep / 5);
-        PokedexApp_MoveListScrollbar(pokedexApp, 1, r4->scrollbarStep);
-        if (r4->scrollStep == 15) {
-            ++r4->state;
+        ++scroll->scrollStep;
+        PokedexApp_LoadNumberTilemap(pokedexApp, &scroll->numberTilemap[32 * scroll->scrollStep]);
+        PokedexApp_ScrollListIconsForward(pokedexApp, 24, -8, scroll->scrollStep / 5);
+        PokedexApp_MoveListScrollbar(pokedexApp, 1, scroll->scrollbarStep);
+        if (scroll->scrollStep == 15) {
+            ++scroll->state;
         }
         break;
     case 2:
-        if (r4->wrapCursor == 1) {
+        if (scroll->wrapCursor == 1) {
             pokedexApp->listCursor -= 10;
         }
         ++pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 5);
-        PokedexApp_FreeNumberTilemap(r4->numberTilemap);
+        PokedexApp_FreeNumberTilemap(scroll->numberTilemap);
         PokedexApp_UpdateListEntry(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
         PokedexApp_SyncListScrollbarToPage(pokedexApp, 1, 1);
@@ -786,10 +786,10 @@ static int PokedexApp_MainSeq_15(PokedexAppData *pokedexApp) {
         return POKEDEXAPP_MAINSEQ_11;
     }
     if (PokedexApp_DragListScrollbar(pokedexApp, 1, x, y, 1) == 1) {
-        u16 *r4 = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
+        u16 *numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
         pokedexApp->iconPage ^= 1;
-        PokedexApp_LoadNumberTilemap(pokedexApp, r4);
-        PokedexApp_FreeNumberTilemap(r4);
+        PokedexApp_LoadNumberTilemap(pokedexApp, numberTilemap);
+        PokedexApp_FreeNumberTilemap(numberTilemap);
         PokedexApp_DrawListIconGrid(pokedexApp, 24);
         PokedexApp_UpdateListEntry(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
@@ -800,12 +800,12 @@ static int PokedexApp_MainSeq_15(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_16(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r3 = &pokedexApp->seqState.state_16;
-    if (PokedexApp_DragListScrollbar(pokedexApp, 1, r3->unk_0, r3->unk_2, 1) == 1) {
-        u16 *r4 = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
+    PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
+    if (PokedexApp_DragListScrollbar(pokedexApp, 1, scrollbarTouch->unk_0, scrollbarTouch->unk_2, 1) == 1) {
+        u16 *numberTilemap = PokedexApp_BuildListNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
         pokedexApp->iconPage ^= 1;
-        PokedexApp_LoadNumberTilemap(pokedexApp, r4);
-        PokedexApp_FreeNumberTilemap(r4);
+        PokedexApp_LoadNumberTilemap(pokedexApp, numberTilemap);
+        PokedexApp_FreeNumberTilemap(numberTilemap);
         PokedexApp_DrawListIconGrid(pokedexApp, 24);
         PokedexApp_UpdateListEntry(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
@@ -978,9 +978,9 @@ static int PokedexApp_MainSeq_22(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r5 = &pokedexApp->seqState.state_16;
+    PokedexSeqU16PairState *search = &pokedexApp->seqState.state_16;
 
-    switch (r5->unk_0) {
+    switch (search->unk_0) {
     case 0:
         PokedexApp_SetSpriteAnim(pokedexApp, 27, 2);
         PokedexApp_SetSpriteVisible(pokedexApp, 27, 1);
@@ -988,44 +988,44 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
         PokedexApp_DrawSearchMessage(pokedexApp, 9);
         PokedexApp_SlideOutSearchMenuButtons(pokedexApp);
         PlaySE(SEQ_SE_DP_Z_SEARCH);
-        r5->unk_0 = 1;
+        search->unk_0 = 1;
         break;
     case 1:
         PokedexApp_RunSearch(pokedexApp, pokedexApp->dexMode, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_SORT_ORDER], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_LETTER], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], 1 << pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_AREA], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_BODY_TYPE]);
         if (pokedexApp->searchResults.caughtCount == 0 && pokedexApp->searchResults.count == 0) {
-            r5->unk_0 = 15;
+            search->unk_0 = 15;
         } else {
             PokedexApp_BuildListEntries(pokedexApp, 0);
             pokedexApp->listCursor = 0;
             pokedexApp->listPage = 0;
             pokedexApp->language = 2;
-            r5->unk_0 = 2;
+            search->unk_0 = 2;
         }
         break;
     case 2:
         PokedexApp_SetCellTilemapFromBg(pokedexApp, GF_BG_LYR_MAIN_0, 9);
-        r5->unk_0 = 3;
+        search->unk_0 = 3;
         break;
     case 3:
         PokedexApp_SetCellTilemapFromBg(pokedexApp, GF_BG_LYR_MAIN_2, 10);
-        r5->unk_0 = 4;
+        search->unk_0 = 4;
         break;
     case 4:
         PokedexApp_SetCellTilemapFromBg(pokedexApp, GF_BG_LYR_MAIN_0, 11);
-        r5->unk_0 = 5;
+        search->unk_0 = 5;
         break;
     case 5:
         PokedexApp_SetCellTilemapFromBg(pokedexApp, GF_BG_LYR_MAIN_2, 12);
-        r5->unk_0 = 6;
+        search->unk_0 = 6;
         break;
     case 6:
         PokedexApp_DrawSearchCriteriaSummary(pokedexApp);
-        r5->unk_0 = 7;
+        search->unk_0 = 7;
         break;
     case 7:
         PokedexApp_DrawListIconGrid(pokedexApp, 59);
         PokedexApp_DrawSearchResultNumbers(pokedexApp);
-        r5->unk_0 = 8;
+        search->unk_0 = 8;
         break;
     case 8:
         PokedexApp_SetSpriteVisible(pokedexApp, 18, 1);
@@ -1036,18 +1036,18 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
         PokedexApp_UpdateListScrollbarSize(pokedexApp, 18, 0);
         PokedexApp_SyncListScrollbarToPage(pokedexApp, 18, 0);
         PokedexApp_UpdateListPageArrows(pokedexApp, 19, 0);
-        r5->unk_0 = 9;
+        search->unk_0 = 9;
         break;
     case 9:
         if (!PokedexApp_IsSpriteAnimating(pokedexApp, 27)) {
             PokedexApp_SetSpriteAnim(pokedexApp, 26, 1);
             PokedexApp_SetSpriteVisible(pokedexApp, 27, 0);
-            r5->unk_0 = 10;
+            search->unk_0 = 10;
         }
         break;
     case 10:
-        ++r5->unk_2;
-        if (r5->unk_2 == 32) {
+        ++search->unk_2;
+        if (search->unk_2 == 32) {
             PokedexApp_DrawSearchMessage(pokedexApp, 1);
             PokedexApp_UpdateSearchBodyTypeIcon(pokedexApp);
             PokedexApp_MoveSearchSummaryIcons(pokedexApp, -8);
@@ -1061,14 +1061,14 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, 11, 0, -1, 24);
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, 12, 0, -1, 24);
             PlaySE(SEQ_SE_GS_ZUKAN06);
-            r5->unk_2 = 0;
-            r5->unk_0 = 11;
+            search->unk_2 = 0;
+            search->unk_0 = 11;
         }
         break;
     case 11:
         if (!BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 9)) {
             PokedexApp_SetSubScreenClipWindow(FALSE);
-            r5->unk_0 = 12;
+            search->unk_0 = 12;
         } else {
             PokedexApp_MoveSearchSummaryIcons(pokedexApp, -8);
         }
@@ -1079,11 +1079,11 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000020_NSCR_lz, pokedexApp->bgConfig, GF_BG_LYR_SUB_3, 0, 0, TRUE, HEAP_ID_POKEDEX_APP);
         PokedexApp_SlideInSearchResultButtons(pokedexApp);
         PokedexApp_FreeSprites26And27(pokedexApp);
-        r5->unk_0 = 13;
+        search->unk_0 = 13;
         break;
     case 13:
         if (!BgCellManager_IsCellMoving(pokedexApp->bgCellManager, 8)) {
-            r5->unk_0 = 14;
+            search->unk_0 = 14;
         }
         break;
     case 14:
@@ -1100,23 +1100,23 @@ static int PokedexApp_MainSeq_23(PokedexAppData *pokedexApp) {
         if (!PokedexApp_IsSpriteAnimating(pokedexApp, 27)) {
             PokedexApp_SetSpriteAnim(pokedexApp, 26, 3);
             PokedexApp_SetSpriteVisible(pokedexApp, 27, 0);
-            r5->unk_0 = 16;
+            search->unk_0 = 16;
         }
         break;
     case 16:
         if (!PokedexApp_IsSpriteAnimating(pokedexApp, 26)) {
             PokedexApp_DrawSearchMessage(pokedexApp, 10);
             PlaySE(SEQ_SE_DP_CUSTOM06);
-            r5->unk_0 = 17;
+            search->unk_0 = 17;
         }
         break;
     case 17:
-        ++r5->unk_2;
-        if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE || r5->unk_2 == 60) {
+        ++search->unk_2;
+        if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE || search->unk_2 == 60) {
             PokedexApp_DrawSearchMessage(pokedexApp, 0);
             PokedexApp_SlideInSearchMenuButtons(pokedexApp);
-            r5->unk_2 = 0;
-            r5->unk_0 = 18;
+            search->unk_2 = 0;
+            search->unk_0 = 18;
         }
         break;
     case 18:
@@ -1210,27 +1210,27 @@ static int PokedexApp_MainSeq_19(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_20(PokedexAppData *pokedexApp) {
-    PokedexEntrySlideState *r4 = &pokedexApp->seqState.state_09;
+    PokedexEntrySlideState *slide = &pokedexApp->seqState.state_09;
 
-    switch (r4->state) {
+    switch (slide->state) {
     case 0:
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 6, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 8, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[6]);
         PokedexApp_SlideOutEntryButtons(pokedexApp);
-        r4->timer = 0;
-        ++r4->state;
+        slide->timer = 0;
+        ++slide->state;
         // fallthrough
     case 1:
-        if (r4->timer == 10) {
+        if (slide->timer == 10) {
             PokedexApp_FadeOutTo(pokedexApp, POKEDEXAPP_MAINSEQ_MAX);
-        } else if (r4->timer > 10 && IsPaletteFadeFinished() == TRUE) {
+        } else if (slide->timer > 10 && IsPaletteFadeFinished() == TRUE) {
             MI_CpuClear8(&pokedexApp->seqState, sizeof(pokedexApp->seqState));
             pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_MAX;
             return POKEDEXAPP_MAINSEQ_01;
         }
-        ++r4->timer;
+        ++slide->timer;
         if (Bg_GetXpos(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0) == 0) {
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 0);
             ScheduleSetBgPosText(pokedexApp->bgConfig, GF_BG_LYR_SUB_0, BG_POS_OP_SET_X, 0);
@@ -1247,24 +1247,24 @@ static int PokedexApp_MainSeq_20(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_26(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r4 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *pageChange = &pokedexApp->seqState.state_26;
 
-    switch (r4->unk_2) {
+    switch (pageChange->unk_2) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SlideOutSearchMenuButtons(pokedexApp);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 4), 0, 0, 16, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F, 0, 0, 16, RGB_BLACK);
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_26;
-        ++r4->unk_2;
+        ++pageChange->unk_2;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
         PokedexApp_FreeGridInput(pokedexApp);
         PokedexApp_SlideInSearchPageButtons(pokedexApp);
-        PokedexApp_SetupSearchPage(pokedexApp, r4->unk_0, r4->unk_3);
+        PokedexApp_SetupSearchPage(pokedexApp, pageChange->unk_0, pageChange->unk_3);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 4), 0, 16, 0, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F, 0, 16, 0, RGB_BLACK);
-        pokedexApp->nextSeq = r4->unk_1;
+        pokedexApp->nextSeq = pageChange->unk_1;
         MI_CpuClear8(&pokedexApp->seqState, sizeof(pokedexApp->seqState));
         return POKEDEXAPP_MAINSEQ_03;
     }
@@ -1273,24 +1273,24 @@ static int PokedexApp_MainSeq_26(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_27(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r4 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *pageChange = &pokedexApp->seqState.state_26;
 
-    switch (r4->unk_2) {
+    switch (pageChange->unk_2) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SlideOutSearchPageButtons(pokedexApp);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 4), 0, 0, 16, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F, 0, 0, 16, RGB_BLACK);
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_27;
-        ++r4->unk_2;
+        ++pageChange->unk_2;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
         PokedexApp_FreeGridInput(pokedexApp);
         PokedexApp_SlideInSearchMenuButtons(pokedexApp);
-        PokedexApp_SetupSearchPage(pokedexApp, 0, r4->unk_3);
+        PokedexApp_SetupSearchPage(pokedexApp, 0, pageChange->unk_3);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F & ~(1 << 4), 0, 16, 0, RGB_BLACK);
         PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, PLTTFADE_OPAQUE_ALL_F, 0, 16, 0, RGB_BLACK);
-        pokedexApp->nextSeq = r4->unk_1;
+        pokedexApp->nextSeq = pageChange->unk_1;
         MI_CpuClear8(&pokedexApp->seqState, sizeof(pokedexApp->seqState));
         return POKEDEXAPP_MAINSEQ_03;
     }
@@ -1362,8 +1362,8 @@ static int PokedexApp_MainSeq_31(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_32(PokedexAppData *pokedexApp) {
-    u32 r4 = PokedexApp_HandleSearchNameInput(pokedexApp);
-    switch (r4) {
+    u32 input = PokedexApp_HandleSearchNameInput(pokedexApp);
+    switch (input) {
     case -4:
     case -3:
     case -1:
@@ -1380,7 +1380,7 @@ static int PokedexApp_MainSeq_32(PokedexAppData *pokedexApp) {
     default:
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        PokedexApp_SelectSearchLetter(pokedexApp, r4);
+        PokedexApp_SelectSearchLetter(pokedexApp, input);
         break;
     }
 
@@ -1400,8 +1400,8 @@ static int PokedexApp_MainSeq_34(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_35(PokedexAppData *pokedexApp) {
-    u32 r0 = PokedexApp_HandleSearchTypeInput(pokedexApp);
-    switch (r0) {
+    u32 input = PokedexApp_HandleSearchTypeInput(pokedexApp);
+    switch (input) {
     case -4:
     case -3:
     case -1:
@@ -1420,25 +1420,25 @@ static int PokedexApp_MainSeq_35(PokedexAppData *pokedexApp) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
         return PokedexApp_FlashSearchButton(pokedexApp, 22, 10, POKEDEXAPP_MAINSEQ_36);
     default:
-        if (r0 == DEX_SEARCH_TYPE_ALL) {
+        if (input == DEX_SEARCH_TYPE_ALL) {
             if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] != DEX_SEARCH_TYPE_ALL) {
-                pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = r0;
+                pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = input;
             } else {
-                pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] = r0;
+                pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] = input;
             }
         } else if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] == DEX_SEARCH_TYPE_ALL) {
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] = r0;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] = input;
         } else if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] == DEX_SEARCH_TYPE_ALL) {
-            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] == r0) {
+            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] == input) {
                 break;
             }
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = r0;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = input;
         } else {
-            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] == r0) {
+            if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] == input) {
                 break;
             }
             pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE1] = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2];
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = r0;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_TYPE2] = input;
         }
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
@@ -1466,17 +1466,17 @@ static int PokedexApp_MainSeq_37(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_38(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r5 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     switch (PokedexApp_HandleSearchHeightInput(pokedexApp)) {
     case 0:
-        r5->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX];
-        r5->holdFrames = 0;
+        slider->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX];
+        slider->holdFrames = 0;
         PokedexApp_SetHeightSliderX(pokedexApp, 0, 5, 1);
         return POKEDEXAPP_MAINSEQ_40;
     case 1:
-        r5->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN];
-        r5->holdFrames = 0;
+        slider->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN];
+        slider->holdFrames = 0;
         PokedexApp_SetHeightSliderX(pokedexApp, 0, 11, 1);
         return POKEDEXAPP_MAINSEQ_41;
     case 2:
@@ -1497,17 +1497,17 @@ static int PokedexApp_MainSeq_38(PokedexAppData *pokedexApp) {
         }
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        r5->arrowSprite = 2;
-        r5->direction = 1;
-        PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 54);
+        slider->arrowSprite = 2;
+        slider->direction = 1;
+        PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 54);
         return POKEDEXAPP_MAINSEQ_42;
     case 5:
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX] > pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]) {
             (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
             PlaySE(SEQ_SE_GS_ZKN04);
-            r5->arrowSprite = 1;
-            r5->direction = -1;
-            PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 57);
+            slider->arrowSprite = 1;
+            slider->direction = -1;
+            PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 57);
             return POKEDEXAPP_MAINSEQ_42;
         }
         break;
@@ -1515,9 +1515,9 @@ static int PokedexApp_MainSeq_38(PokedexAppData *pokedexApp) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN] < pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]) {
             (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
             PlaySE(SEQ_SE_GS_ZKN04);
-            r5->arrowSprite = 4;
-            r5->direction = 1;
-            PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 54);
+            slider->arrowSprite = 4;
+            slider->direction = 1;
+            PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 54);
             return POKEDEXAPP_MAINSEQ_43;
         }
         break;
@@ -1527,15 +1527,15 @@ static int PokedexApp_MainSeq_38(PokedexAppData *pokedexApp) {
         }
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        r5->arrowSprite = 3;
-        r5->direction = -1;
-        PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 57);
+        slider->arrowSprite = 3;
+        slider->direction = -1;
+        PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 57);
         return POKEDEXAPP_MAINSEQ_43;
     case -1:
         if ((gSystem.heldKeys & PAD_KEY_LEFT) || (gSystem.heldKeys & PAD_KEY_RIGHT) || System_GetTouchHeld()) {
             break;
         }
-        r5->holdFrames = 0;
+        slider->holdFrames = 0;
         break;
     }
 
@@ -1543,7 +1543,7 @@ static int PokedexApp_MainSeq_38(PokedexAppData *pokedexApp) {
 }
 
 static void PokedexApp_StepSliderValue(u32 *pOut, int hmin, int hmax, u32 *pStep, int direction) {
-    int tmp;
+    int value;
     int step;
 
     if (*pStep != 24) {
@@ -1558,13 +1558,13 @@ static void PokedexApp_StepSliderValue(u32 *pOut, int hmin, int hmax, u32 *pStep
     } else {
         step = 1;
     }
-    tmp = (*pOut) + step * direction;
-    if (tmp < hmin) {
-        tmp = hmin;
-    } else if (tmp > hmax) {
-        tmp = hmax;
+    value = (*pOut) + step * direction;
+    if (value < hmin) {
+        value = hmin;
+    } else if (value > hmax) {
+        value = hmax;
     }
-    *pOut = tmp;
+    *pOut = value;
 }
 
 static void PokedexApp_UpdateSizeSlider(PokedexAppData *pokedexApp, int sliderValue, BOOL isWeight, int sliderIndex, int windowId) {
@@ -1588,26 +1588,26 @@ static int PokedexApp_MainSeq_39(PokedexAppData *pokedexApp) {
 
 static int PokedexApp_MainSeq_40(PokedexAppData *pokedexApp) {
     u32 touchX;
-    u32 r4;
-    PokedexSliderState *r4_2 = &pokedexApp->seqState.state_38;
+    u32 prevValue;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     if (!PokedexApp_GetTouchHeldX(&touchX)) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX] < pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]) {
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX] = r4_2->prevValue;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX] = slider->prevValue;
         }
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], FALSE, 5, 70);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], 1);
         return POKEDEXAPP_MAINSEQ_38;
     }
 
-    r4 = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX];
+    prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX];
     PokedexApp_SetHeightSliderX(pokedexApp, touchX, 5, 1);
     pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX] = PokedexApp_GetSliderValue(pokedexApp, 5);
     PokedexApp_DrawHeightDigits(pokedexApp, 6, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].height);
     PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]].height, 70);
     ScheduleWindowCopyToVram(&pokedexApp->windows[70]);
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], 1);
-    if (r4 != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]) {
+    if (prevValue != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]) {
         PlaySE(SEQ_SE_GS_ZKN03);
     }
     return POKEDEXAPP_MAINSEQ_40;
@@ -1615,36 +1615,36 @@ static int PokedexApp_MainSeq_40(PokedexAppData *pokedexApp) {
 
 static int PokedexApp_MainSeq_41(PokedexAppData *pokedexApp) {
     u32 touchX;
-    u32 r4;
-    PokedexSliderState *r4_2 = &pokedexApp->seqState.state_38;
+    u32 prevValue;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     if (!PokedexApp_GetTouchHeldX(&touchX)) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN] > pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX]) {
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN] = r4_2->prevValue;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN] = slider->prevValue;
         }
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], FALSE, 11, 69);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 3);
         return POKEDEXAPP_MAINSEQ_38;
     }
 
-    r4 = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN];
+    prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN];
     PokedexApp_SetHeightSliderX(pokedexApp, touchX, 11, 1);
     pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN] = PokedexApp_GetSliderValue(pokedexApp, 11);
     PokedexApp_DrawHeightDigits(pokedexApp, 12, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].height);
     PokedexApp_DrawHeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]].height, 69);
     ScheduleWindowCopyToVram(&pokedexApp->windows[69]);
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 3);
-    if (r4 != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]) {
+    if (prevValue != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN]) {
         PlaySE(SEQ_SE_GS_ZKN03);
     }
     return POKEDEXAPP_MAINSEQ_41;
 }
 
 static int PokedexApp_MainSeq_42(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r4 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
-    if (!PokedexApp_IsSpriteAnimating(pokedexApp, r4->arrowSprite)) {
-        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 152, &r4->holdFrames, r4->direction);
+    if (!PokedexApp_IsSpriteAnimating(pokedexApp, slider->arrowSprite)) {
+        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 152, &slider->holdFrames, slider->direction);
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], FALSE, 5, 70);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], 1);
         return POKEDEXAPP_MAINSEQ_38;
@@ -1654,10 +1654,10 @@ static int PokedexApp_MainSeq_42(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_43(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r4 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
-    if (!PokedexApp_IsSpriteAnimating(pokedexApp, r4->arrowSprite)) {
-        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 0, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], &r4->holdFrames, r4->direction);
+    if (!PokedexApp_IsSpriteAnimating(pokedexApp, slider->arrowSprite)) {
+        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 0, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MAX], &slider->holdFrames, slider->direction);
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], FALSE, 11, 69);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_HEIGHT_MIN], 3);
         return POKEDEXAPP_MAINSEQ_38;
@@ -1674,17 +1674,17 @@ static int PokedexApp_MainSeq_44(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_45(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r5 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     switch (PokedexApp_HandleSearchWeightInput(pokedexApp)) {
     case 0:
-        r5->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX];
-        r5->holdFrames = 0;
+        slider->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX];
+        slider->holdFrames = 0;
         PokedexApp_SetWeightSliderX(pokedexApp, 0, 5, 1);
         return POKEDEXAPP_MAINSEQ_47;
     case 1:
-        r5->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN];
-        r5->holdFrames = 0;
+        slider->prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN];
+        slider->holdFrames = 0;
         PokedexApp_SetWeightSliderX(pokedexApp, 0, 11, 1);
         return POKEDEXAPP_MAINSEQ_48;
     case 2:
@@ -1705,17 +1705,17 @@ static int PokedexApp_MainSeq_45(PokedexAppData *pokedexApp) {
         }
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        r5->arrowSprite = 2;
-        r5->direction = 1;
-        PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 54);
+        slider->arrowSprite = 2;
+        slider->direction = 1;
+        PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 54);
         return POKEDEXAPP_MAINSEQ_49;
     case 5:
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX] > pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]) {
             (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
             PlaySE(SEQ_SE_GS_ZKN04);
-            r5->arrowSprite = 1;
-            r5->direction = -1;
-            PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 57);
+            slider->arrowSprite = 1;
+            slider->direction = -1;
+            PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 57);
             return POKEDEXAPP_MAINSEQ_49;
         }
         break;
@@ -1723,9 +1723,9 @@ static int PokedexApp_MainSeq_45(PokedexAppData *pokedexApp) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN] < pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]) {
             (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
             PlaySE(SEQ_SE_GS_ZKN04);
-            r5->arrowSprite = 4;
-            r5->direction = 1;
-            PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 54);
+            slider->arrowSprite = 4;
+            slider->direction = 1;
+            PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 54);
             return POKEDEXAPP_MAINSEQ_50;
         }
         break;
@@ -1735,15 +1735,15 @@ static int PokedexApp_MainSeq_45(PokedexAppData *pokedexApp) {
         }
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        r5->arrowSprite = 3;
-        r5->direction = -1;
-        PokedexApp_SetSpriteAnim(pokedexApp, r5->arrowSprite, 57);
+        slider->arrowSprite = 3;
+        slider->direction = -1;
+        PokedexApp_SetSpriteAnim(pokedexApp, slider->arrowSprite, 57);
         return POKEDEXAPP_MAINSEQ_50;
     case -1:
         if ((gSystem.heldKeys & PAD_KEY_LEFT) || (gSystem.heldKeys & PAD_KEY_RIGHT) || System_GetTouchHeld()) {
             break;
         }
-        r5->holdFrames = 0;
+        slider->holdFrames = 0;
         break;
     }
 
@@ -1757,26 +1757,26 @@ static int PokedexApp_MainSeq_46(PokedexAppData *pokedexApp) {
 
 static int PokedexApp_MainSeq_47(PokedexAppData *pokedexApp) {
     u32 touchX;
-    u32 r4;
-    PokedexSliderState *r4_2 = &pokedexApp->seqState.state_38;
+    u32 prevValue;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     if (!PokedexApp_GetTouchHeldX(&touchX)) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX] < pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]) {
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX] = r4_2->prevValue;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX] = slider->prevValue;
         }
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], TRUE, 5, 73);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], 1);
         return POKEDEXAPP_MAINSEQ_45;
     }
 
-    r4 = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX];
+    prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX];
     PokedexApp_SetWeightSliderX(pokedexApp, touchX, 5, 1);
     pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX] = PokedexApp_GetSliderValue(pokedexApp, 5);
     PokedexApp_DrawWeightDigits(pokedexApp, 6, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].weight);
     PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]].weight, 73);
     ScheduleWindowCopyToVram(&pokedexApp->windows[73]);
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], 1);
-    if (r4 != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]) {
+    if (prevValue != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]) {
         PlaySE(SEQ_SE_GS_ZKN03);
     }
     return POKEDEXAPP_MAINSEQ_47;
@@ -1784,36 +1784,36 @@ static int PokedexApp_MainSeq_47(PokedexAppData *pokedexApp) {
 
 static int PokedexApp_MainSeq_48(PokedexAppData *pokedexApp) {
     u32 touchX;
-    u32 r4;
-    PokedexSliderState *r4_2 = &pokedexApp->seqState.state_38;
+    u32 prevValue;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
     if (!PokedexApp_GetTouchHeldX(&touchX)) {
         if (pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN] > pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX]) {
-            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN] = r4_2->prevValue;
+            pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN] = slider->prevValue;
         }
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], TRUE, 11, 72);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 3);
         return POKEDEXAPP_MAINSEQ_45;
     }
 
-    r4 = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN];
+    prevValue = pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN];
     PokedexApp_SetWeightSliderX(pokedexApp, touchX, 11, 1);
     pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN] = PokedexApp_GetSliderValue(pokedexApp, 11);
     PokedexApp_DrawWeightDigits(pokedexApp, 12, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].weight);
     PokedexApp_DrawWeightValue(pokedexApp, pokedexApp->sliderValues[pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]].weight, 72);
     ScheduleWindowCopyToVram(&pokedexApp->windows[72]);
     PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 3);
-    if (r4 != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]) {
+    if (prevValue != pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN]) {
         PlaySE(SEQ_SE_GS_ZKN03);
     }
     return POKEDEXAPP_MAINSEQ_48;
 }
 
 static int PokedexApp_MainSeq_49(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r4 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
-    if (!PokedexApp_IsSpriteAnimating(pokedexApp, r4->arrowSprite)) {
-        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 152, &r4->holdFrames, r4->direction);
+    if (!PokedexApp_IsSpriteAnimating(pokedexApp, slider->arrowSprite)) {
+        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 152, &slider->holdFrames, slider->direction);
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], TRUE, 5, 73);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], 1);
         return POKEDEXAPP_MAINSEQ_45;
@@ -1823,10 +1823,10 @@ static int PokedexApp_MainSeq_49(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_50(PokedexAppData *pokedexApp) {
-    PokedexSliderState *r4 = &pokedexApp->seqState.state_38;
+    PokedexSliderState *slider = &pokedexApp->seqState.state_38;
 
-    if (!PokedexApp_IsSpriteAnimating(pokedexApp, r4->arrowSprite)) {
-        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 0, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], &r4->holdFrames, r4->direction);
+    if (!PokedexApp_IsSpriteAnimating(pokedexApp, slider->arrowSprite)) {
+        PokedexApp_StepSliderValue(&pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 0, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MAX], &slider->holdFrames, slider->direction);
         PokedexApp_UpdateSizeSlider(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], TRUE, 11, 72);
         PokedexApp_UpdateSliderLimitSprites(pokedexApp, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_WEIGHT_MIN], 3);
         return POKEDEXAPP_MAINSEQ_45;
@@ -1842,9 +1842,9 @@ static int PokedexApp_MainSeq_51(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_52(PokedexAppData *pokedexApp) {
-    u32 r4 = PokedexApp_HandleSearchAreaInput(pokedexApp);
+    u32 input = PokedexApp_HandleSearchAreaInput(pokedexApp);
 
-    switch (r4) {
+    switch (input) {
     case DEX_SEARCH_AREA_SUBMIT:
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
@@ -1857,7 +1857,7 @@ static int PokedexApp_MainSeq_52(PokedexAppData *pokedexApp) {
     default:
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        PokedexApp_SelectSearchArea(pokedexApp, r4);
+        PokedexApp_SelectSearchArea(pokedexApp, input);
         break;
     case -3:
     case -1:
@@ -1880,9 +1880,9 @@ static int PokedexApp_MainSeq_54(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_55(PokedexAppData *pokedexApp) {
-    u32 r4 = PokedexApp_HandleSearchFormInput(pokedexApp);
+    u32 input = PokedexApp_HandleSearchFormInput(pokedexApp);
 
-    switch (r4) {
+    switch (input) {
     case DEX_SEARCH_BODYTYPE_SUBMIT:
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
@@ -1895,7 +1895,7 @@ static int PokedexApp_MainSeq_55(PokedexAppData *pokedexApp) {
     default:
         (void)MenuInputStateMgr_GetState(pokedexApp->args->menuInputStatePtr);
         PlaySE(SEQ_SE_GS_ZKN04);
-        PokedexApp_SelectSearchBodyType(pokedexApp, r4);
+        PokedexApp_SelectSearchBodyType(pokedexApp, input);
         break;
     case -3:
     case -1:
@@ -1981,10 +1981,10 @@ static int PokedexApp_MainSeq_57(PokedexAppData *pokedexApp) {
         if (PokedexApp_IsTouchOnListScrollbar(pokedexApp, 18, x, y) == 1) {
             return POKEDEXAPP_MAINSEQ_60;
         } else {
-            PokedexSeqU16PairState *r1 = &pokedexApp->seqState.state_16;
+            PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-            r1->unk_0 = x;
-            r1->unk_2 = y;
+            scrollbarTouch->unk_0 = x;
+            scrollbarTouch->unk_2 = y;
             return POKEDEXAPP_MAINSEQ_61;
         }
     } break;
@@ -1994,41 +1994,41 @@ static int PokedexApp_MainSeq_57(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
-    PokedexListScrollState *r4 = &pokedexApp->seqState.state_13;
+    PokedexListScrollState *scroll = &pokedexApp->seqState.state_13;
 
-    switch (r4->state) {
+    switch (scroll->state) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SetSpriteAnim(pokedexApp, 19, 6);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
-        r4->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
-        r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 18, 0), 15);
+        scroll->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage - 1));
+        scroll->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage - 1, 18, 0), 15);
         if (pokedexApp->listPage == 1) {
             PokedexApp_ShowSprite25Raised(pokedexApp);
         }
-        ++r4->state;
+        ++scroll->state;
         // fallthrough
     case 1:
-        ++r4->scrollStep;
-        PokedexApp_LoadNumberTilemap(pokedexApp, &r4->numberTilemap[0x1E0 - 32 * r4->scrollStep]);
-        PokedexApp_ScrollListIconsBackward(pokedexApp, 59, 8, r4->scrollStep / 5);
-        PokedexApp_MoveListScrollbar(pokedexApp, 18, -r4->scrollbarStep);
+        ++scroll->scrollStep;
+        PokedexApp_LoadNumberTilemap(pokedexApp, &scroll->numberTilemap[0x1E0 - 32 * scroll->scrollStep]);
+        PokedexApp_ScrollListIconsBackward(pokedexApp, 59, 8, scroll->scrollStep / 5);
+        PokedexApp_MoveListScrollbar(pokedexApp, 18, -scroll->scrollbarStep);
         if (pokedexApp->listPage == 1) {
             PokedexApp_MoveSprite25Vertically(pokedexApp, 8);
         }
-        if (r4->scrollStep == 15) {
-            ++r4->state;
+        if (scroll->scrollStep == 15) {
+            ++scroll->state;
         }
         break;
     case 2:
-        if (r4->wrapCursor == 1) {
+        if (scroll->wrapCursor == 1) {
             pokedexApp->listCursor += 10;
         }
         --pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 0);
-        PokedexApp_FreeNumberTilemap(r4->numberTilemap);
+        PokedexApp_FreeNumberTilemap(scroll->numberTilemap);
         PokedexApp_UpdateSearchResultEntry(pokedexApp);
         PokedexApp_UpdateSearchResultButtonsEnabled(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 19, 0);
@@ -2041,38 +2041,38 @@ static int PokedexApp_MainSeq_58(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_59(PokedexAppData *pokedexApp) {
-    PokedexListScrollState *r4 = &pokedexApp->seqState.state_13;
+    PokedexListScrollState *scroll = &pokedexApp->seqState.state_13;
 
-    switch (r4->state) {
+    switch (scroll->state) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SetSpriteAnim(pokedexApp, 20, 9);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
         PokedexApp_SetIntlSpriteVisible(pokedexApp, 24, 0);
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[94]);
-        r4->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage));
-        r4->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 18, 0), 15);
-        ++r4->state;
+        scroll->numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * (pokedexApp->listPage));
+        scroll->scrollbarStep = PokedexApp_GetListScrollbarStepCount(pokedexApp, 18, PokedexApp_GetListScrollbarYForPage(pokedexApp, pokedexApp->listPage + 1, 18, 0), 15);
+        ++scroll->state;
         // fallthrough
     case 1:
-        ++r4->scrollStep;
-        PokedexApp_LoadNumberTilemap(pokedexApp, &r4->numberTilemap[32 * r4->scrollStep]);
-        PokedexApp_ScrollListIconsForward(pokedexApp, 59, -8, r4->scrollStep / 5);
-        PokedexApp_MoveListScrollbar(pokedexApp, 18, r4->scrollbarStep);
+        ++scroll->scrollStep;
+        PokedexApp_LoadNumberTilemap(pokedexApp, &scroll->numberTilemap[32 * scroll->scrollStep]);
+        PokedexApp_ScrollListIconsForward(pokedexApp, 59, -8, scroll->scrollStep / 5);
+        PokedexApp_MoveListScrollbar(pokedexApp, 18, scroll->scrollbarStep);
         if (pokedexApp->listPage == 0) {
             PokedexApp_MoveSprite25Vertically(pokedexApp, -8);
         }
-        if (r4->scrollStep == 15) {
-            ++r4->state;
+        if (scroll->scrollStep == 15) {
+            ++scroll->state;
         }
         break;
     case 2:
-        if (r4->wrapCursor == 1) {
+        if (scroll->wrapCursor == 1) {
             pokedexApp->listCursor -= 10;
         }
         ++pokedexApp->listPage;
         PokedexApp_MoveSpriteToListCursor(pokedexApp, 0);
-        PokedexApp_FreeNumberTilemap(r4->numberTilemap);
+        PokedexApp_FreeNumberTilemap(scroll->numberTilemap);
         PokedexApp_UpdateSearchResultEntry(pokedexApp);
         PokedexApp_UpdateSearchResultButtonsEnabled(pokedexApp);
         PokedexApp_UpdateListPageArrows(pokedexApp, 19, 0);
@@ -2091,10 +2091,10 @@ static int PokedexApp_MainSeq_60(PokedexAppData *pokedexApp) {
         return POKEDEXAPP_MAINSEQ_57;
     }
     if (PokedexApp_DragListScrollbar(pokedexApp, 18, x, y, 0) == 1) {
-        u16 *r4 = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
+        u16 *numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
         pokedexApp->iconPage ^= 1;
-        PokedexApp_LoadNumberTilemap(pokedexApp, r4);
-        PokedexApp_FreeNumberTilemap(r4);
+        PokedexApp_LoadNumberTilemap(pokedexApp, numberTilemap);
+        PokedexApp_FreeNumberTilemap(numberTilemap);
         PokedexApp_DrawListIconGrid(pokedexApp, 59);
         if (!pokedexApp->listPage) {
             PokedexApp_ShowSprite25(pokedexApp);
@@ -2110,13 +2110,13 @@ static int PokedexApp_MainSeq_60(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_61(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r3 = &pokedexApp->seqState.state_16;
+    PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-    if (PokedexApp_DragListScrollbar(pokedexApp, 18, r3->unk_0, r3->unk_2, 0) == 1) {
-        u16 *r4 = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
+    if (PokedexApp_DragListScrollbar(pokedexApp, 18, scrollbarTouch->unk_0, scrollbarTouch->unk_2, 0) == 1) {
+        u16 *numberTilemap = PokedexApp_BuildSearchResultNumberTilemap(pokedexApp, 15 * pokedexApp->listPage);
         pokedexApp->iconPage ^= 1;
-        PokedexApp_LoadNumberTilemap(pokedexApp, r4);
-        PokedexApp_FreeNumberTilemap(r4);
+        PokedexApp_LoadNumberTilemap(pokedexApp, numberTilemap);
+        PokedexApp_FreeNumberTilemap(numberTilemap);
         PokedexApp_DrawListIconGrid(pokedexApp, 59);
         if (!pokedexApp->listPage) {
             PokedexApp_ShowSprite25(pokedexApp);
@@ -2135,9 +2135,9 @@ static int PokedexApp_MainSeq_61(PokedexAppData *pokedexApp) {
 PokedexApp_MainSeq_62(PokedexAppData *pokedexApp) {
     switch (pokedexApp->seqState.state_10.state) {
     case 0: {
-        u16 r1 = PokedexApp_GetCursorSpecies(pokedexApp);
-        if (r1 != 0) {
-            PokedexResumeState_Set(pokedexApp->args->resumeState, r1, pokedexApp->dexMode);
+        u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
+        if (species != 0) {
+            PokedexResumeState_Set(pokedexApp->args->resumeState, species, pokedexApp->dexMode);
         }
         PokedexApp_RunSearch(pokedexApp, pokedexApp->dexMode, DEX_ORDER_NATIONAL, DEX_SEARCH_LETTERS_ALL, DEX_SEARCH_TYPE_ALL, DEX_SEARCH_TYPE_ALL, 0, 152, 0, 152, 1 << DEX_SEARCH_AREA_ALL, DEX_SEARCH_BODYTYPE_ALL);
         PokedexApp_BuildListEntries(pokedexApp, 1);
@@ -2221,9 +2221,9 @@ static int PokedexApp_MainSeq_63(PokedexAppData *pokedexApp) {
 static int PokedexApp_MainSeq_64(PokedexAppData *pokedexApp) {
     switch (pokedexApp->seqState.state_10.state) {
     case 0: {
-        u16 r1 = PokedexApp_GetCursorSpecies(pokedexApp);
-        if (r1 != SPECIES_NONE) {
-            PokedexResumeState_Set(pokedexApp->args->resumeState, r1, pokedexApp->dexMode);
+        u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
+        if (species != SPECIES_NONE) {
+            PokedexResumeState_Set(pokedexApp->args->resumeState, species, pokedexApp->dexMode);
         }
         BgCellManager_EraseCell(pokedexApp->bgCellManager, 4);
         PokedexApp_SetIntlSpritePairVisible(pokedexApp, 22, 0);
@@ -2312,11 +2312,11 @@ static int PokedexApp_MainSeq_65(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_SwitchEntryTab(PokedexAppData *pokedexApp, u8 fadeStart, u8 newTab) {
-    PokedexEntryTabSwitchState *r2 = &pokedexApp->seqState.state_69;
-    u8 r6 = 0;
+    PokedexEntryTabSwitchState *tabSwitch = &pokedexApp->seqState.state_69;
+    u8 tabX = 0;
 
-    r2->state = 0;
-    r2->fadeStart = fadeStart;
+    tabSwitch->state = 0;
+    tabSwitch->fadeStart = fadeStart;
 
     if (newTab == 0xFF) {
         PokedexApp_MoveEntryTabCursor(pokedexApp, 3);
@@ -2324,30 +2324,30 @@ static int PokedexApp_SwitchEntryTab(PokedexAppData *pokedexApp, u8 fadeStart, u
     }
 
     if (newTab == 1) {
-        r6 = 0;
+        tabX = 0;
         PokedexApp_MoveEntryTabCursor(pokedexApp, 0);
     } else if (newTab == 2) {
-        r6 = 8;
+        tabX = 8;
         PokedexApp_MoveEntryTabCursor(pokedexApp, 1);
     } else if (newTab == 3) {
-        r6 = 16;
+        tabX = 16;
         PokedexApp_MoveEntryTabCursor(pokedexApp, 2);
     } else {
-        r6 = 24;
+        tabX = 24;
         PokedexApp_MoveEntryTabCursor(pokedexApp, 3);
     }
     if (pokedexApp->entryTab == 1) {
         pokedexApp->entryTab = newTab;
-        return PokedexApp_FlashEntryTab(pokedexApp, r6, POKEDEXAPP_MAINSEQ_70);
+        return PokedexApp_FlashEntryTab(pokedexApp, tabX, POKEDEXAPP_MAINSEQ_70);
     } else if (pokedexApp->entryTab == 2) {
         pokedexApp->entryTab = newTab;
-        return PokedexApp_FlashEntryTab(pokedexApp, r6, POKEDEXAPP_MAINSEQ_78);
+        return PokedexApp_FlashEntryTab(pokedexApp, tabX, POKEDEXAPP_MAINSEQ_78);
     } else if (pokedexApp->entryTab == 3) {
         pokedexApp->entryTab = newTab;
-        return PokedexApp_FlashEntryTab(pokedexApp, r6, POKEDEXAPP_MAINSEQ_81);
+        return PokedexApp_FlashEntryTab(pokedexApp, tabX, POKEDEXAPP_MAINSEQ_81);
     } else {
         pokedexApp->entryTab = newTab;
-        return PokedexApp_FlashEntryTab(pokedexApp, r6, POKEDEXAPP_MAINSEQ_91);
+        return PokedexApp_FlashEntryTab(pokedexApp, tabX, POKEDEXAPP_MAINSEQ_91);
     }
 }
 
@@ -2364,15 +2364,15 @@ static int PokedexApp_MainSeq_66(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_67(PokedexAppData *pokedexApp) {
-    PokedexEntryTabSwitchState *r4 = &pokedexApp->seqState.state_69;
+    PokedexEntryTabSwitchState *tabSwitch = &pokedexApp->seqState.state_69;
 
-    switch (r4->state) {
+    switch (tabSwitch->state) {
     case 0:
         PokedexApp_SetSpriteVisible(pokedexApp, 0, 0);
         PokedexApp_SlideOutEntryTabs(pokedexApp);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, 0, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, 0xFFFF, 0, r4->fadeStart, 16, RGB_BLACK);
-        ++r4->state;
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, 0, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_EXCEPT_MAIN_BG_F, 0xFFFF, 0, tabSwitch->fadeStart, 16, RGB_BLACK);
+        ++tabSwitch->state;
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_67;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
@@ -2527,10 +2527,10 @@ static int PokedexApp_MainSeq_69(PokedexAppData *pokedexApp) {
         if (PokedexApp_IsTouchOnAreaScrollbar(pokedexApp, x, y) == 1) {
             return POKEDEXAPP_MAINSEQ_73;
         } else {
-            PokedexSeqU16PairState *r1 = &pokedexApp->seqState.state_16;
+            PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-            r1->unk_0 = x;
-            r1->unk_2 = y;
+            scrollbarTouch->unk_0 = x;
+            scrollbarTouch->unk_2 = y;
             return POKEDEXAPP_MAINSEQ_74;
         }
     } break;
@@ -2600,14 +2600,14 @@ static int PokedexApp_MainSeq_69(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_70(PokedexAppData *pokedexApp) {
-    PokedexEntryTabSwitchState *r4 = &pokedexApp->seqState.state_69;
+    PokedexEntryTabSwitchState *tabSwitch = &pokedexApp->seqState.state_69;
 
-    switch (r4->state) {
+    switch (tabSwitch->state) {
     case 0:
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, PLTTFADE_OPAQUE_ALL_F, -2, r4->fadeStart, 16, RGB_BLACK);
-        ++r4->state;
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, PLTTFADE_OPAQUE_ALL_F, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        ++tabSwitch->state;
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_70;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
@@ -2630,9 +2630,9 @@ static int PokedexApp_MainSeq_70(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_71(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r6 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    switch (r6->unk_0) {
+    switch (scroll->unk_0) {
     case 0:
         --pokedexApp->areaListPos;
         PokedexApp_SetSpriteAnim(pokedexApp, 6, 6);
@@ -2640,17 +2640,17 @@ static int PokedexApp_MainSeq_71(PokedexAppData *pokedexApp) {
         for (u32 i = 0; i < 6; ++i) {
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, i + 17, 0, 1, 3);
         }
-        r6->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->areaListPos), 3);
-        ++r6->unk_0;
+        scroll->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->areaListPos), 3);
+        ++scroll->unk_0;
         // fallthrough
     case 1:
-        PokedexApp_MoveScrollbar(pokedexApp, 5, -r6->unk_3);
-        ++r6->unk_1;
-        if (r6->unk_1 == 3) {
-            r6->unk_0 = 0;
-            r6->unk_1 = 0;
-            --r6->unk_2;
-            if (r6->unk_2 == 0) {
+        PokedexApp_MoveScrollbar(pokedexApp, 5, -scroll->unk_3);
+        ++scroll->unk_1;
+        if (scroll->unk_1 == 3) {
+            scroll->unk_0 = 0;
+            scroll->unk_1 = 0;
+            --scroll->unk_2;
+            if (scroll->unk_2 == 0) {
                 PokedexApp_SyncAreaScrollbar(pokedexApp);
                 PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, pokedexApp->areaList.areas.nMaps, 6);
                 PokedexApp_UpdateAreaMarkers(pokedexApp);
@@ -2666,9 +2666,9 @@ static int PokedexApp_MainSeq_71(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_72(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r6 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    switch (r6->unk_0) {
+    switch (scroll->unk_0) {
     case 0:
         ++pokedexApp->areaListPos;
         PokedexApp_SetSpriteAnim(pokedexApp, 7, 9);
@@ -2676,17 +2676,17 @@ static int PokedexApp_MainSeq_72(PokedexAppData *pokedexApp) {
         for (u32 i = 0; i < 6; ++i) {
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, i + 17, 0, -1, 3);
         }
-        r6->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->areaListPos), 3);
-        ++r6->unk_0;
+        scroll->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetAreaScrollbarY(pokedexApp, pokedexApp->areaListPos), 3);
+        ++scroll->unk_0;
         // fallthrough
     case 1:
-        PokedexApp_MoveScrollbar(pokedexApp, 5, r6->unk_3);
-        ++r6->unk_1;
-        if (r6->unk_1 == 3) {
-            r6->unk_0 = 0;
-            r6->unk_1 = 0;
-            --r6->unk_2;
-            if (r6->unk_2 == 0) {
+        PokedexApp_MoveScrollbar(pokedexApp, 5, scroll->unk_3);
+        ++scroll->unk_1;
+        if (scroll->unk_1 == 3) {
+            scroll->unk_0 = 0;
+            scroll->unk_1 = 0;
+            --scroll->unk_2;
+            if (scroll->unk_2 == 0) {
                 PokedexApp_SyncAreaScrollbar(pokedexApp);
                 PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, pokedexApp->areaList.areas.nMaps, 6);
                 PokedexApp_UpdateAreaMarkers(pokedexApp);
@@ -2719,9 +2719,9 @@ static int PokedexApp_MainSeq_73(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_74(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r2 = &pokedexApp->seqState.state_16;
+    PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-    if (PokedexApp_DragAreaScrollbar(pokedexApp, r2->unk_0, r2->unk_2) == TRUE) {
+    if (PokedexApp_DragAreaScrollbar(pokedexApp, scrollbarTouch->unk_0, scrollbarTouch->unk_2) == TRUE) {
         PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, pokedexApp->areaList.areas.nMaps, 6);
         PokedexApp_UpdateAreaMarkers(pokedexApp);
         PokedexApp_UpdateAreaMarkerPalettes(pokedexApp);
@@ -2733,22 +2733,22 @@ static int PokedexApp_MainSeq_74(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_75(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r4 = &pokedexApp->seqState.state_16;
-    BOOL r0 = PokedexApp_ScrollAreaMap(pokedexApp);
+    PokedexSeqU16PairState *fade = &pokedexApp->seqState.state_16;
+    BOOL mapScrolling = PokedexApp_ScrollAreaMap(pokedexApp);
 
-    switch (r4->unk_0) {
+    switch (fade->unk_0) {
     case 0:
         PokedexApp_ShowAreaUnknownBanner(pokedexApp);
         PokedexApp_HideAreaUnknownBanner(pokedexApp);
         PokedexApp_SetSpriteVisible(pokedexApp, 2, 0);
         PokedexApp_HideAreaMarkers(pokedexApp);
-        ++r4->unk_0;
+        ++fade->unk_0;
         // fallthrough
     case 1:
-        r4->unk_2 += 2;
-        PokedexApp_SetBg2Bg3Blend(31 - r4->unk_2, r4->unk_2);
-        if (r4->unk_2 == 16) {
-            ++r4->unk_0;
+        fade->unk_2 += 2;
+        PokedexApp_SetBg2Bg3Blend(31 - fade->unk_2, fade->unk_2);
+        if (fade->unk_2 == 16) {
+            ++fade->unk_0;
         }
         break;
     case 2:
@@ -2758,18 +2758,18 @@ static int PokedexApp_MainSeq_75(PokedexAppData *pokedexApp) {
         PokedexApp_DrawTimeOfDayLabel(pokedexApp);
         PokedexApp_DrawAreaList(pokedexApp);
         PokedexApp_DrawAreaRegionTabs(pokedexApp);
-        ++r4->unk_0;
+        ++fade->unk_0;
         break;
     case 3:
-        r4->unk_2 -= 2;
-        PokedexApp_SetBg2Bg3Blend(31 - r4->unk_2, r4->unk_2);
-        if (r4->unk_2 == 0) {
+        fade->unk_2 -= 2;
+        PokedexApp_SetBg2Bg3Blend(31 - fade->unk_2, fade->unk_2);
+        if (fade->unk_2 == 0) {
             PokedexApp_InitBlend();
-            ++r4->unk_0;
+            ++fade->unk_0;
         }
         break;
     case 4:
-        if (r0) {
+        if (mapScrolling) {
             break;
         }
         PokedexApp_UpdatePlayerMarkerVisibility(pokedexApp);
@@ -2856,14 +2856,14 @@ static int PokedexApp_MainSeq_77(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_78(PokedexAppData *pokedexApp) {
-    PokedexEntrySlideState *r4 = &pokedexApp->seqState.state_09;
+    PokedexEntrySlideState *slide = &pokedexApp->seqState.state_09;
 
-    switch (r4->state) {
+    switch (slide->state) {
     case 0:
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, r4->timer, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, r4->timer, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, r4->timer, 16, RGB_BLACK);
-        ++r4->state;
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, slide->timer, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, slide->timer, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, slide->timer, 16, RGB_BLACK);
+        ++slide->state;
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_78;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
@@ -2984,10 +2984,10 @@ static int PokedexApp_MainSeq_80(PokedexAppData *pokedexApp) {
         if (PokedexApp_IsTouchOnFormScrollbar(pokedexApp, x, y) == 1) {
             return POKEDEXAPP_MAINSEQ_84;
         } else {
-            PokedexSeqU16PairState *r1 = &pokedexApp->seqState.state_16;
+            PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-            r1->unk_0 = x;
-            r1->unk_2 = y;
+            scrollbarTouch->unk_0 = x;
+            scrollbarTouch->unk_2 = y;
             return POKEDEXAPP_MAINSEQ_85;
         }
     } break;
@@ -3012,20 +3012,20 @@ static int PokedexApp_MainSeq_80(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_81(PokedexAppData *pokedexApp) {
-    PokedexEntryTabSwitchState *r4 = &pokedexApp->seqState.state_69;
+    PokedexEntryTabSwitchState *tabSwitch = &pokedexApp->seqState.state_69;
 
-    switch (r4->state) {
+    switch (tabSwitch->state) {
     case 0:
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, r4->fadeStart, 16, RGB_BLACK);
-        ++r4->state;
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        ++tabSwitch->state;
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_81;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
         PokedexApp_FreeFormsWindows(pokedexApp);
         PokedexApp_FreeFormsSprites(pokedexApp);
-        r4->state = 0;
+        tabSwitch->state = 0;
         if (pokedexApp->entryTab == 1) {
             return POKEDEXAPP_MAINSEQ_68;
         } else if (pokedexApp->entryTab == 2) {
@@ -3039,9 +3039,9 @@ static int PokedexApp_MainSeq_81(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_82(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r6 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    switch (r6->unk_0) {
+    switch (scroll->unk_0) {
     case 0:
         --pokedexApp->selectedForm;
         PokedexApp_ScrollFormListIcons(pokedexApp, 1);
@@ -3050,18 +3050,18 @@ static int PokedexApp_MainSeq_82(PokedexAppData *pokedexApp) {
         for (u32 i = 0; i < 6; ++i) {
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, i + 17, 0, 1, 3);
         }
-        r6->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->selectedForm), 3);
-        ++r6->unk_0;
+        scroll->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->selectedForm), 3);
+        ++scroll->unk_0;
         // fallthrough
     case 1:
         PokedexApp_MoveFormListIcons(pokedexApp, 8);
-        PokedexApp_MoveScrollbar(pokedexApp, 5, -r6->unk_3);
-        ++r6->unk_1;
-        if (r6->unk_1 == 3) {
-            r6->unk_0 = 0;
-            r6->unk_1 = 0;
-            --r6->unk_2;
-            if (r6->unk_2 == 0) {
+        PokedexApp_MoveScrollbar(pokedexApp, 5, -scroll->unk_3);
+        ++scroll->unk_1;
+        if (scroll->unk_1 == 3) {
+            scroll->unk_0 = 0;
+            scroll->unk_1 = 0;
+            --scroll->unk_2;
+            if (scroll->unk_2 == 0) {
                 PokedexApp_ShowFormMonPicsMode0(pokedexApp, pokedexApp->selectedForm);
                 PokedexApp_SyncFormScrollbar(pokedexApp);
                 PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->selectedForm, pokedexApp->numSeenForms, 6);
@@ -3077,9 +3077,9 @@ static int PokedexApp_MainSeq_82(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_83(PokedexAppData *pokedexApp) {
-    PokedexSearchPageChangeState *r6 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    switch (r6->unk_0) {
+    switch (scroll->unk_0) {
     case 0:
         ++pokedexApp->selectedForm;
         PokedexApp_ScrollFormListIcons(pokedexApp, -1);
@@ -3088,18 +3088,18 @@ static int PokedexApp_MainSeq_83(PokedexAppData *pokedexApp) {
         for (u32 i = 0; i < 6; ++i) {
             BgCellManager_StartCellMove(pokedexApp->bgCellManager, i + 17, 0, -1, 3);
         }
-        r6->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->selectedForm), 3);
-        ++r6->unk_0;
+        scroll->unk_3 = PokedexApp_GetScrollbarStepCount(pokedexApp, 5, PokedexApp_GetFormScrollbarY(pokedexApp, pokedexApp->selectedForm), 3);
+        ++scroll->unk_0;
         // fallthrough
     case 1:
         PokedexApp_MoveFormListIcons(pokedexApp, -8);
-        PokedexApp_MoveScrollbar(pokedexApp, 5, r6->unk_3);
-        ++r6->unk_1;
-        if (r6->unk_1 == 3) {
-            r6->unk_0 = 0;
-            r6->unk_1 = 0;
-            --r6->unk_2;
-            if (r6->unk_2 == 0) {
+        PokedexApp_MoveScrollbar(pokedexApp, 5, scroll->unk_3);
+        ++scroll->unk_1;
+        if (scroll->unk_1 == 3) {
+            scroll->unk_0 = 0;
+            scroll->unk_1 = 0;
+            --scroll->unk_2;
+            if (scroll->unk_2 == 0) {
                 PokedexApp_ShowFormMonPicsMode0(pokedexApp, pokedexApp->selectedForm);
                 PokedexApp_SyncFormScrollbar(pokedexApp);
                 PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->selectedForm, pokedexApp->numSeenForms, 6);
@@ -3134,9 +3134,9 @@ static int PokedexApp_MainSeq_84(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_85(PokedexAppData *pokedexApp) {
-    PokedexSeqU16PairState *r2 = &pokedexApp->seqState.state_16;
+    PokedexSeqU16PairState *scrollbarTouch = &pokedexApp->seqState.state_16;
 
-    if (PokedexApp_DragFormScrollbar(pokedexApp, r2->unk_0, r2->unk_2) == 1) {
+    if (PokedexApp_DragFormScrollbar(pokedexApp, scrollbarTouch->unk_0, scrollbarTouch->unk_2) == 1) {
         PokedexApp_DrawFormListIcons(pokedexApp);
         PokedexApp_ShowFormMonPicsMode0(pokedexApp, pokedexApp->selectedForm);
         PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->selectedForm, pokedexApp->numSeenForms, 6);
@@ -3353,14 +3353,14 @@ static int PokedexApp_MainSeq_90(PokedexAppData *pokedexApp) {
 }
 
 static int PokedexApp_MainSeq_91(PokedexAppData *pokedexApp) {
-    PokedexEntryTabSwitchState *r4 = &pokedexApp->seqState.state_69;
+    PokedexEntryTabSwitchState *tabSwitch = &pokedexApp->seqState.state_69;
 
-    switch (r4->state) {
+    switch (tabSwitch->state) {
     case 0:
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, r4->fadeStart, 16, RGB_BLACK);
-        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, r4->fadeStart, 16, RGB_BLACK);
-        ++r4->state;
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_BG_F, 0xF7BE, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_MAIN_OBJ_F, 0xFFEF, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        PaletteData_BeginPaletteFade(pokedexApp->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -2, tabSwitch->fadeStart, 16, RGB_BLACK);
+        ++tabSwitch->state;
         pokedexApp->nextSeq = POKEDEXAPP_MAINSEQ_91;
         return POKEDEXAPP_MAINSEQ_03;
     case 1:
@@ -3391,17 +3391,17 @@ static int PokedexApp_FadeOutTo(PokedexAppData *pokedexApp, int nextSeq) {
 }
 
 static int PokedexApp_FlashButton(PokedexAppData *pokedexApp, u8 bgId, u8 x, u8 y, u8 width, u8 height, u8 normalPalette, u8 flashPalette, int nextSeq) {
-    PokedexFlashButtonState *r0 = &pokedexApp->seqState.state_04;
+    PokedexFlashButtonState *flash = &pokedexApp->seqState.state_04;
 
-    r0->x = x;
-    r0->y = y;
-    r0->width = width;
-    r0->height = height;
-    r0->bgId = bgId;
-    r0->state = 0;
-    r0->timer = 0;
-    r0->normalPalette = normalPalette;
-    r0->flashPalette = flashPalette;
+    flash->x = x;
+    flash->y = y;
+    flash->width = width;
+    flash->height = height;
+    flash->bgId = bgId;
+    flash->state = 0;
+    flash->timer = 0;
+    flash->normalPalette = normalPalette;
+    flash->flashPalette = flashPalette;
     pokedexApp->nextSeq = nextSeq;
     return POKEDEXAPP_MAINSEQ_04;
 }
@@ -3439,17 +3439,17 @@ static void PokedexApp_RefreshList(PokedexAppData *pokedexApp) {
     PokedexApp_RestoreListCursor(pokedexApp);
     PokedexApp_BuildListEntries(pokedexApp, 1);
     u16 species = PokedexApp_GetCursorSpecies(pokedexApp);
-    u32 r6 = PokedexApp_GetListCursorIndex(pokedexApp);
+    u32 cursor = PokedexApp_GetListCursorIndex(pokedexApp);
     if (!PokedexApp_HasCaughtInLanguage(pokedexApp, species, pokedexApp->language)) {
         pokedexApp->language = GAME_LANGUAGE;
     }
-    PokedexApp_DrawListEntryHeader(pokedexApp, species, r6);
-    PokedexApp_DrawListEntryDetails(pokedexApp, species, r6);
+    PokedexApp_DrawListEntryHeader(pokedexApp, species, cursor);
+    PokedexApp_DrawListEntryDetails(pokedexApp, species, cursor);
     PokedexApp_DrawListIconGrid(pokedexApp, 24);
     PokedexApp_ShowMonPic(pokedexApp, species, 11, 10);
-    PokedexApp_UpdateTypeIcons(pokedexApp, species, r6, 14);
+    PokedexApp_UpdateTypeIcons(pokedexApp, species, cursor, 14);
     PokedexApp_UpdateLanguageIcons(pokedexApp, species, 18);
-    PokedexApp_UpdateFootprintSprite(pokedexApp, species, r6, 13);
+    PokedexApp_UpdateFootprintSprite(pokedexApp, species, cursor, 13);
     PokedexApp_MoveSpriteToListCursor(pokedexApp, 5);
     PokedexApp_UpdateListPageArrows(pokedexApp, 2, 1);
     PokedexApp_UpdateListScrollbarSize(pokedexApp, 1, 1);
@@ -3464,9 +3464,9 @@ static void PokedexApp_SwitchDexMode(PokedexAppData *pokedexApp, int dexMode) {
 }
 
 static void PokedexApp_RestoreListCursor(PokedexAppData *pokedexApp) {
-    u32 r4 = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, PokedexApp_FindSpeciesInResults(&pokedexApp->searchResults, PokedexResumeState_GetSpecies(pokedexApp->args->resumeState))) - 1;
-    pokedexApp->listCursor = r4 % 15;
-    pokedexApp->listPage = r4 / 15;
+    u32 position = Pokedex_ConvertToCurrentDexNo(pokedexApp->dexMode, PokedexApp_FindSpeciesInResults(&pokedexApp->searchResults, PokedexResumeState_GetSpecies(pokedexApp->args->resumeState))) - 1;
+    pokedexApp->listCursor = position % 15;
+    pokedexApp->listPage = position / 15;
 }
 
 static BOOL PokedexApp_PlayCursorCry(PokedexAppData *pokedexApp) {
@@ -3498,42 +3498,42 @@ static void PokedexApp_PrepareSearchPageChange(PokedexAppData *pokedexApp, int s
 }
 
 static void PokedexApp_UpdateEntryButtonsEnabled(PokedexAppData *pokedexApp) {
-    u8 r4;
+    u8 palette;
 
     if (PokedexApp_GetCursorSpecies(pokedexApp) == SPECIES_NONE) {
-        r4 = 11;
+        palette = 11;
     } else {
-        r4 = 0;
+        palette = 0;
     }
-    BgCellManager_SetCellPalette(pokedexApp->bgCellManager, 1, 8, 0, 16, 5, r4);
-    BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 8, 19, 16, 5, r4);
+    BgCellManager_SetCellPalette(pokedexApp->bgCellManager, 1, 8, 0, 16, 5, palette);
+    BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 8, 19, 16, 5, palette);
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
 static void PokedexApp_UpdateSearchResultButtonsEnabled(PokedexAppData *pokedexApp) {
-    u8 r4;
+    u8 palette;
 
     if ((pokedexApp->listCursor == 0 && pokedexApp->listPage == 0) || PokedexApp_GetCursorSpecies(pokedexApp) == SPECIES_NONE) {
-        r4 = 11;
+        palette = 11;
     } else {
-        r4 = 0;
+        palette = 0;
     }
-    BgCellManager_SetCellPalette(pokedexApp->bgCellManager, 8, 8, 0, 16, 5, r4);
-    BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 8, 19, 16, 5, r4);
+    BgCellManager_SetCellPalette(pokedexApp->bgCellManager, 8, 8, 0, 16, 5, palette);
+    BgTilemapRectChangePalette(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2, 8, 19, 16, 5, palette);
     ScheduleBgTilemapBufferTransfer(pokedexApp->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-static BOOL PokedexApp_CanScrollFormList(PokedexAppData *pokedexApp, int delta, int a2) {
-    int r4 = pokedexApp->selectedForm + delta;
-    if (r4 < 0 || r4 >= pokedexApp->numSeenForms) {
+static BOOL PokedexApp_CanScrollFormList(PokedexAppData *pokedexApp, int delta, int steps) {
+    int newForm = pokedexApp->selectedForm + delta;
+    if (newForm < 0 || newForm >= pokedexApp->numSeenForms) {
         return FALSE;
     }
 
-    PokedexSearchPageChangeState *r1 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    r1->unk_0 = 0;
-    r1->unk_1 = 0;
-    r1->unk_2 = a2;
+    scroll->unk_0 = 0;
+    scroll->unk_1 = 0;
+    scroll->unk_2 = steps;
     return TRUE;
 }
 
@@ -3558,9 +3558,9 @@ static BOOL PokedexApp_CycleLeftCompareForm(PokedexAppData *pokedexApp, int step
 
     pokedexApp->compareSide = 0;
     PokedexApp_UpdateFormCompareSelector(pokedexApp);
-    s8 r4 = pokedexApp->selectedForm;
+    s8 prevForm = pokedexApp->selectedForm;
     PokedexApp_StepIndexSkipping(&pokedexApp->selectedForm, pokedexApp->compareForm, step, pokedexApp->numSeenForms);
-    if (pokedexApp->selectedForm == r4) {
+    if (pokedexApp->selectedForm == prevForm) {
         return FALSE;
     }
     PokedexApp_SetCompareFormIcon(pokedexApp, 14, pokedexApp->selectedForm);
@@ -3576,9 +3576,9 @@ static BOOL PokedexApp_CycleRightCompareForm(PokedexAppData *pokedexApp, int ste
 
     pokedexApp->compareSide = 1;
     PokedexApp_UpdateFormCompareSelector(pokedexApp);
-    s8 r4 = pokedexApp->compareForm;
+    s8 prevForm = pokedexApp->compareForm;
     PokedexApp_StepIndexSkipping(&pokedexApp->compareForm, pokedexApp->selectedForm, step, pokedexApp->numSeenForms);
-    if (pokedexApp->compareForm == r4) {
+    if (pokedexApp->compareForm == prevForm) {
         return FALSE;
     }
     PokedexApp_SetCompareFormIcon(pokedexApp, 15, pokedexApp->compareForm);
@@ -3588,23 +3588,23 @@ static BOOL PokedexApp_CycleRightCompareForm(PokedexAppData *pokedexApp, int ste
 }
 
 static void PokedexApp_RunWeightCheck(PokedexAppData *pokedexApp) {
-    PokedexWeightCheckState *r4 = &pokedexApp->seqState.state_77;
+    PokedexWeightCheckState *weightCheck = &pokedexApp->seqState.state_77;
 
-    switch (r4->state) {
+    switch (weightCheck->state) {
     case 0:
-        r4->anim = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(PokedexWeightCheckAnim));
-        PokedexApp_InitWeightCheckAnim(pokedexApp, r4->anim);
+        weightCheck->anim = Heap_Alloc(HEAP_ID_POKEDEX_APP, sizeof(PokedexWeightCheckAnim));
+        PokedexApp_InitWeightCheckAnim(pokedexApp, weightCheck->anim);
         PlaySE(SEQ_SE_GS_RAKKA01);
-        ++r4->state;
+        ++weightCheck->state;
         // fallthrough
     case 1:
-        if (!PokedexApp_DropFiguresOntoPans(r4->anim)) {
-            ++r4->state;
+        if (!PokedexApp_DropFiguresOntoPans(weightCheck->anim)) {
+            ++weightCheck->state;
         }
         break;
     case 2:
-        if (!PokedexApp_RunWeightCheckAnim(r4->anim)) {
-            ++r4->state;
+        if (!PokedexApp_RunWeightCheckAnim(weightCheck->anim)) {
+            ++weightCheck->state;
         }
         break;
     }
@@ -3615,17 +3615,17 @@ static void PokedexApp_EndWeightCheck(PokedexAppData *pokedexApp) {
     MI_CpuClear8(&pokedexApp->seqState, sizeof(pokedexApp->seqState));
 }
 
-static BOOL PokedexApp_CanScrollAreaList(PokedexAppData *pokedexApp, int delta, int a2) {
-    int r4 = pokedexApp->areaListPos + delta;
-    if (r4 < 0 || r4 >= pokedexApp->areaList.areas.nMaps) {
+static BOOL PokedexApp_CanScrollAreaList(PokedexAppData *pokedexApp, int delta, int steps) {
+    int newPos = pokedexApp->areaListPos + delta;
+    if (newPos < 0 || newPos >= pokedexApp->areaList.areas.nMaps) {
         return FALSE;
     }
 
-    PokedexSearchPageChangeState *r1 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *scroll = &pokedexApp->seqState.state_26;
 
-    r1->unk_0 = 0;
-    r1->unk_1 = 0;
-    r1->unk_2 = a2;
+    scroll->unk_0 = 0;
+    scroll->unk_1 = 0;
+    scroll->unk_2 = steps;
     return TRUE;
 }
 
