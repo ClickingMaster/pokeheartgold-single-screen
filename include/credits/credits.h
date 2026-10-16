@@ -17,10 +17,10 @@ typedef struct {
 } CreditsArgs;
 
 typedef struct {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
+    u8 charCount;
+    u8 plttCount;
+    u8 cellCount;
+    u8 animCount;
 } CreditsGfxResCounts;
 
 BOOL Credits_Init(OverlayManager *man, int *state);

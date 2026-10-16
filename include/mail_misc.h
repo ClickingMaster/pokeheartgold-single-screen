@@ -17,11 +17,11 @@ typedef struct MsgBankMsgNo {
 
 typedef struct {
     u8 type;
-    u8 unk1;
+    u8 promptMsgNo;
     u8 cancelled;
     u8 changed;
     u8 gameCleared; // TODO: bool8
-    u8 unk5;
+    u8 alwaysConfirm;
     u8 unk6[0x2];
     u32 frame;
     Pokedex *pokedex;
@@ -32,8 +32,8 @@ typedef struct {
 } EasyChatArgs;
 
 typedef struct UseMailArgs {
-    u16 unk0;
-    u32 unk4;
+    u16 screen;
+    u32 mailWritten;
     u32 unk8;
     u16 unkC;
     u8 partyIdx;

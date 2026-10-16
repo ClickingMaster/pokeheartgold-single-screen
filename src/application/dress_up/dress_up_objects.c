@@ -673,8 +673,8 @@ void DressUpButton_InitWithText(DressUpTextButton *button, const DressUpTextButt
     textTemplate.offset = template->charOffset;
     textTemplate.x = template->x;
     textTemplate.y = template->y;
-    textTemplate.unk_20 = 0;
-    textTemplate.unk_24 = 0;
+    textTemplate.bgPriority = 0;
+    textTemplate.drawPriority = 0;
     textTemplate.vram = template->button.spriteTemplate->whichScreen;
     textTemplate.heapID = template->button.spriteTemplate->heapID;
     button->textObj = FontOAM_Create(&textTemplate);

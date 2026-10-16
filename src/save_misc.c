@@ -206,11 +206,11 @@ void SaveMisc_SetVsRecorderColorScheme(SAVE_MISC_DATA *saveMiscData, u8 colorSch
 void SaveMisc_GetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 *key0, u32 *key1, u8 *a4) {
     *key0 = saveMiscData->extraChunkKeys[0][chunkId - 1];
     *key1 = saveMiscData->extraChunkKeys[1][chunkId - 1];
-    *a4 = saveMiscData->unk_02D0[chunkId - 1];
+    *a4 = saveMiscData->extraChunkLastSlots[chunkId - 1];
 }
 
 void SaveMisc_SetExtraChunkKeys(SAVE_MISC_DATA *saveMiscData, int chunkId, u32 key0, u32 key1, u8 a4) {
     saveMiscData->extraChunkKeys[0][chunkId - 1] = key0;
     saveMiscData->extraChunkKeys[1][chunkId - 1] = key1;
-    saveMiscData->unk_02D0[chunkId - 1] = a4;
+    saveMiscData->extraChunkLastSlots[chunkId - 1] = a4;
 }

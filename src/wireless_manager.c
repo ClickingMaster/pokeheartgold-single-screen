@@ -88,9 +88,9 @@ typedef struct WirelessParentParam {
     u16 tgid;      // 0x0C
     u16 entryFlag; // 0x0E
     u16 maxEntry;  // 0x10
-    u16 unk_12;
+    u16 multiBoot;
     u16 keySharing; // 0x14: 1 in mode 2
-    u16 unk_16;
+    u16 continuousSend;
     u16 beaconPeriod; // 0x18
     u8 unk_1A[0x18];
     u16 channel;       // 0x32
@@ -1158,8 +1158,8 @@ BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 bea
     }
     gWirelessManager.work->parentParam.maxEntry = maxEntry;
     value = 0;
-    gWirelessManager.work->parentParam.unk_16 = value;
-    gWirelessManager.work->parentParam.unk_12 = value;
+    gWirelessManager.work->parentParam.continuousSend = value;
+    gWirelessManager.work->parentParam.multiBoot = value;
     gWirelessManager.work->parentParam.entryFlag = entryFlag;
     if (mode == 2) {
         value = 1;

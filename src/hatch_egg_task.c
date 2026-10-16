@@ -21,7 +21,7 @@ typedef struct HatchEggTaskData {
     HatchEggTaskState state;
     BOOL wantToNameNewMon;
     NamingScreenArgs *namingScreenArgs;
-    HatchEggArgs unkC;
+    HatchEggArgs args;
 } HatchEggTaskData;
 
 FS_EXTERN_OVERLAY(OVY_95);
@@ -37,7 +37,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
 
     switch (data->state) {
     case HATCHEGGTASKSTATE_LEAVE_OVERWORLD:
-        HatchEggMon(data->unkC.mon, HEAP_ID_FIELD2);
+        HatchEggMon(data->args.mon, HEAP_ID_FIELD2);
         CallTask_LeaveOverworld(taskManager);
         data->state++;
         break;
@@ -47,7 +47,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
         break;
     case HATCHEGGTASKSTATE_UPDATE_MON_INFO: {
         FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-        Pokemon *pokemon = data->unkC.mon;
+        Pokemon *pokemon = data->args.mon;
         PlayerProfile *profile = Save_PlayerData_GetProfile(FieldSystem_GetSaveData(fieldSystem));
 
         u32 mapsec = MapHeader_GetMapSec(fieldSystem->location->mapId);
@@ -56,7 +56,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
         MonSetTrainerMemo(pokemon, profile, 6, mapsec, HEAP_ID_FIELD2);
         SetMonData(pokemon, MON_DATA_SPECIES_NAME, NULL);
         FieldSystem_TryTriggerElmEggHatchedCall(fieldSystem, pokemon);
-        UpdatePokedexWithReceivedSpecies(FieldSystem_GetSaveData(fieldSystem), data->unkC.mon);
+        UpdatePokedexWithReceivedSpecies(FieldSystem_GetSaveData(fieldSystem), data->args.mon);
 
         if (data->wantToNameNewMon == TRUE) {
             data->state = HATCHEGGTASKSTATE_OPEN_NAMING_SCREEN;
@@ -69,11 +69,11 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
     case HATCHEGGTASKSTATE_OPEN_NAMING_SCREEN: {
         FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
 
-        u32 species = GetMonData(data->unkC.mon, MON_DATA_SPECIES, NULL);
+        u32 species = GetMonData(data->args.mon, MON_DATA_SPECIES, NULL);
         Options *options = Save_PlayerData_GetOptionsAddr(FieldSystem_GetSaveData(fieldSystem));
         data->namingScreenArgs = NamingScreen_CreateArgs(HEAP_ID_FIELD2, NAME_SCREEN_POKEMON, species, POKEMON_NAME_LENGTH, options, NULL);
-        data->namingScreenArgs->monGender = GetMonData(data->unkC.mon, MON_DATA_GENDER, NULL);
-        data->namingScreenArgs->monForm = GetMonData(data->unkC.mon, MON_DATA_FORM, NULL);
+        data->namingScreenArgs->monGender = GetMonData(data->args.mon, MON_DATA_GENDER, NULL);
+        data->namingScreenArgs->monForm = GetMonData(data->args.mon, MON_DATA_FORM, NULL);
 
         CallApplicationAsTask(taskManager, &gOverlayTemplate_NamingScreen, data->namingScreenArgs);
         data->state++;
@@ -81,7 +81,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
     }
     case HATCHEGGTASKSTATE_SET_MON_NAME:
         if (!data->namingScreenArgs->noInput) {
-            SetMonData(data->unkC.mon, MON_DATA_NICKNAME_STRING_AND_FLAG, data->namingScreenArgs->nameInputString);
+            SetMonData(data->args.mon, MON_DATA_NICKNAME_STRING_AND_FLAG, data->namingScreenArgs->nameInputString);
         }
         NamingScreen_DeleteArgs(data->namingScreenArgs);
         data->state++;
@@ -101,7 +101,7 @@ static BOOL Task_HatchEggInParty(TaskManager *taskManager) {
 void CallTask_HatchEggInParty(TaskManager *taskManager, HatchEggArgs *args) {
     HatchEggTaskData *data = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(HatchEggTaskData));
     memset(data, 0, sizeof(HatchEggTaskData));
-    data->unkC = *args;
+    data->args = *args;
 
     TaskManager_Call(taskManager, Task_HatchEggInParty, data);
 }

@@ -920,7 +920,7 @@ BOOL VsRecorder_VideoSearchSelectSpecies(VsRecorderWork *work) {
             search->listConfig.count = search->speciesCount;
             VsRecorder_ClearListWindow(&work->listWindow);
             VsRecorder_InitList(&work->listWindow, work, search->speciesNames, &search->listConfig);
-            work->listWindow.unk_48 = 0;
+            work->listWindow.isPairList = 0;
             VsRecorder_TouchScrollSetEnabled(&work->touchScroll, &work->listWindow);
             VsRecorder_CreateListArrows(&work->listWindow, work, NNS_G2D_VRAM_TYPE_2DSUB);
             VsRecorder_SetVBlankPaused(work, FALSE);
@@ -1262,7 +1262,7 @@ BOOL VsRecorder_VideoSearchShowResults(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
         VsRecorder_InitList(&work->listWindow, work, NULL, &search->listConfig);
-        work->listWindow.unk_48 = 1;
+        work->listWindow.isPairList = 1;
         VsRecorder_TouchScrollSetEnabled(&work->touchScroll, &work->listWindow);
         VsRecorder_SetVBlankPaused(work, FALSE);
         VsRecorder_SetVBlankPaused(work, TRUE);

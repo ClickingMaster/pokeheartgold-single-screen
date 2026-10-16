@@ -341,7 +341,7 @@ typedef struct FootprintStamp {
     fx32 ink;
     fx32 inkShown;
     fx32 inkStep;
-    void *unk19E0;
+    void *showArceusFootprint;
 } FootprintStamp;
 
 // app (footprint_stamp.c)

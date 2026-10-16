@@ -1541,8 +1541,8 @@ void WobbuffetPop_NewTextObj(BgConfig *bgConfig, SpriteManager *spriteManager, F
     template.offset = charAlloc.offset;
     template.x = x;
     template.y = y;
-    template.unk_20 = unk_20;
-    template.unk_24 = vram;
+    template.bgPriority = unk_20;
+    template.drawPriority = vram;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_117;
     obj = FontOAM_Create(&template);

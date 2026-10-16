@@ -1351,8 +1351,8 @@ void SafariAreaCustomizer_CreateCancelTextObj(SafariAreaCustomizer *s) {
     template.window = &s->textObjWindow;
     template.spriteList = SpriteManager_GetSpriteList(s->spriteManager);
     template.plttResourceProxy = SpriteManager_FindPlttResourceProxy(s->spriteManager, 0);
-    template.unk_20 = 3;
-    template.unk_24 = 128;
+    template.bgPriority = 3;
+    template.drawPriority = 128;
     template.x = 200;
     template.y = 172;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;

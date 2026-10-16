@@ -33,7 +33,7 @@ typedef struct PokegearArgs {
 } PokegearArgs;
 
 typedef struct GearPhoneCallerParams {
-    u8 unk_0;
+    u8 recentCallersChunk;
     u8 unk_1;
     u8 callTriggerID;
     u8 isScriptedCall;

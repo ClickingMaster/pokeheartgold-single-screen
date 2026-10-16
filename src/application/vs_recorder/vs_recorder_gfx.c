@@ -139,8 +139,8 @@ void VsRecorder_CreateTextSprite(VsRecorderTextSprite *textSprite, VsRecorderGfx
     template.offset = textSprite->charAlloc.offset;
     template.x = position[1] + 0x24;
     template.y = position[0] - 8;
-    template.unk_20 = 3;
-    template.unk_24 = 0;
+    template.bgPriority = 3;
+    template.drawPriority = 0;
     template.vram = vram;
     template.heapID = HEAP_ID_109;
     textSprite->text = TextOBJ_Create(&template, textSprite->textLayout);

@@ -53,7 +53,7 @@ typedef struct SAVE_MISC_DATA {
     u8 filer_029C[4];
     MailMessage battleGreetingEC;
     u32 extraChunkKeys[2][5];
-    u8 unk_02D0[5];
+    u8 extraChunkLastSlots[5];
     u8 dummy_02D5[3];
     u32 togepiEggPersonality;
     u8 togepiEggGender;

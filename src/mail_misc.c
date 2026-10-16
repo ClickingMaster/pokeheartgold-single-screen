@@ -17,11 +17,11 @@
 EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID) {
     EasyChatArgs *ptr = Heap_Alloc(heapID, sizeof(EasyChatArgs));
     ptr->type = args;
-    ptr->unk1 = a1;
+    ptr->promptMsgNo = a1;
     ptr->pokedex = Save_Pokedex_Get(saveData);
     ptr->easyChat = Save_EasyChat_Get(saveData);
     ptr->gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(saveData));
-    ptr->unk5 = 0;
+    ptr->alwaysConfirm = 0;
     ptr->cancelled = 1;
     ptr->changed = 0;
     ptr->frame = Options_GetFrame(Save_PlayerData_GetOptionsAddr(saveData));
@@ -60,7 +60,7 @@ void EasyChatArgs_SetCancelled(EasyChatArgs *args) {
 }
 
 void EasyChatArgs_SetAlwaysConfirm(EasyChatArgs *args) {
-    args->unk5 = 1;
+    args->alwaysConfirm = 1;
 }
 
 BOOL EasyChatArgs_IsCancelled(EasyChatArgs *args) {
@@ -89,7 +89,7 @@ u8 EasyChatArgs_GetType(EasyChatArgs *args) {
 }
 
 u8 EasyChatArgs_GetPromptMsgNo(EasyChatArgs *args) {
-    return args->unk1;
+    return args->promptMsgNo;
 }
 
 u32 EasyChatArgs_GetFrame(EasyChatArgs *args) {
@@ -109,7 +109,7 @@ u8 EasyChatArgs_GetGameCleared(EasyChatArgs *args) {
 }
 
 u8 EasyChatArgs_GetAlwaysConfirm(EasyChatArgs *args) {
-    return args->unk5;
+    return args->alwaysConfirm;
 }
 
 void EasyChatArgs_CopyMessage(EasyChatArgs *args, MailMessage *msg1, MailMessage *msg2) {
@@ -171,7 +171,7 @@ UseMailArgs *UseMailArgs_NewCompose(SaveData *saveData, u16 a1, u8 partyIdx, u8 
     ptr->mailType = mailType;
     ptr->partyIdx = partyIdx;
     ptr->mailbox = mailbox;
-    ptr->unk0 = 1;
+    ptr->screen = 1;
     ptr->unk8 = a1;
     ptr->unkC = 0;
     ptr->saveData = saveData;
@@ -188,7 +188,7 @@ UseMailArgs *UseMailArgs_NewFromMailbox(SaveData *saveData, int n, u16 i, enum H
     UseMailArgs *ptr = Heap_AllocAtEnd(heapID, sizeof(UseMailArgs));
     MI_CpuFill8(ptr, 0, sizeof(UseMailArgs));
 
-    ptr->unk0 = 0;
+    ptr->screen = 0;
     ptr->unk8 = n;
     ptr->unkC = i;
     ptr->saveData = saveData;
@@ -204,7 +204,7 @@ UseMailArgs *UseMailArgs_NewFromMon(SaveData *saveData, Pokemon *mon, enum HeapI
     UseMailArgs *ptr = Heap_AllocAtEnd(heapID, sizeof(UseMailArgs));
     MI_CpuFill8(ptr, 0, sizeof(UseMailArgs));
 
-    ptr->unk0 = 0;
+    ptr->screen = 0;
     ptr->saveData = saveData;
 
     Mail *mail = Mail_New(heapID);
@@ -218,7 +218,7 @@ UseMailArgs *UseMailArgs_NewPreview(SaveData *saveData, u8 mailType, enum HeapID
     UseMailArgs *ptr = Heap_AllocAtEnd(heapID, sizeof(UseMailArgs));
     MI_CpuFill8(ptr, 0, sizeof(UseMailArgs));
 
-    ptr->unk0 = 0;
+    ptr->screen = 0;
     ptr->saveData = saveData;
 
     Mail *mail = Mail_New(heapID);
@@ -229,7 +229,7 @@ UseMailArgs *UseMailArgs_NewPreview(SaveData *saveData, u8 mailType, enum HeapID
 }
 
 u32 UseMailArgs_WasMailWritten(UseMailArgs *args) {
-    return args->unk4;
+    return args->mailWritten;
 }
 
 BOOL UseMailArgs_GiveMailToMon(UseMailArgs *args, Pokemon *mon) {

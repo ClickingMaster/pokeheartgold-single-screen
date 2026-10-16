@@ -89,7 +89,7 @@ void FootprintStamp_ShowParty(FootprintStamp *work) {
                 FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, sFootprintStampEmptySlotTiles[j], column, j + 20, 4, 1, 17);
             }
         } else {
-            FootprintStamp_LoadFootprintIcon(mon->party[0].species, mon->party[0].form, slot->footprintSprites[0], work->narc, work->footprintNarc, 1, work->unk19E0);
+            FootprintStamp_LoadFootprintIcon(mon->party[0].species, mon->party[0].form, slot->footprintSprites[0], work->narc, work->footprintNarc, 1, work->showArceusFootprint);
             pltt[17] = mon->party[0].color;
             faded[17] = mon->party[0].color;
             BlendPalette(unfaded + (i + 17), unfaded + (i + 33), 1, 12, RGB_BLACK);
@@ -320,7 +320,7 @@ BOOL FootprintStamp_PlaceStamp(FootprintStamp *work, FootprintStampMon *mon, u32
     u8 *sprites;
     u32 offset;
 
-    result = FootprintStampBoard_AddStamp(work, &work->board, mon, work->narc, work->footprintNarc, work->unk19E0);
+    result = FootprintStampBoard_AddStamp(work, &work->board, mon, work->narc, work->footprintNarc, work->showArceusFootprint);
     if (result == TRUE) {
         index = WiFiPlazaLobbyClient_IdToChannelSlot(playerId);
         if (index != -1) {
@@ -329,7 +329,7 @@ BOOL FootprintStamp_PlaceStamp(FootprintStamp *work, FootprintStampMon *mon, u32
                 work->playerColors[index] = mon->color;
                 sprites = (u8 *)work->playerFootprintSprites;
                 offset = index * 4;
-                FootprintStamp_LoadFootprintIcon(mon->species, mon->form, *(ManagedSprite **)(sprites + offset), work->narc, work->footprintNarc, NNS_G2D_VRAM_TYPE_2DSUB, work->unk19E0);
+                FootprintStamp_LoadFootprintIcon(mon->species, mon->form, *(ManagedSprite **)(sprites + offset), work->narc, work->footprintNarc, NNS_G2D_VRAM_TYPE_2DSUB, work->showArceusFootprint);
                 ManagedSprite_SetDrawFlag(*(ManagedSprite **)(sprites + offset), TRUE);
                 PaletteData_FillPaletteInBuffer(work->plttData, PLTTBUF_SUB_BG, PLTTSEL_BOTH, mon->color, index + 33, index + 34);
             }
@@ -506,8 +506,8 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
     template.offset = charTransfer.offset;
     template.x = x;
     template.y = y - 8;
-    template.unk_20 = 0;
-    template.unk_24 = 51;
+    template.bgPriority = 0;
+    template.drawPriority = 51;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_125;
     textObj = FontOAM_Create(&template);

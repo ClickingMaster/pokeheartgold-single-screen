@@ -753,7 +753,7 @@ static BOOL Task_StartMenu_OpenPokedex(TaskManager *taskManager) {
     MI_CpuClear8(pokedexArgs, sizeof(PokedexArgs));
     pokedexArgs->pokedex = Save_Pokedex_Get(fieldSystem->saveData);
     pokedexArgs->playerProfile = Save_PlayerData_GetProfile(fieldSystem->saveData);
-    pokedexArgs->unk_08 = fieldSystem->unkA8;
+    pokedexArgs->resumeState = fieldSystem->unkA8;
     pokedexArgs->menuInputStatePtr = &fieldSystem->menuInputState;
     int x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     int z = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);

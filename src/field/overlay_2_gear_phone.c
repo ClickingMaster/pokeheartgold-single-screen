@@ -93,10 +93,10 @@ u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, GearPho
     MI_CpuFill8(params, 0, sizeof(GearPhoneCallerParams));
     if (gearPhone->callerId >= NUM_PHONE_CONTACTS) {
         GF_ASSERT(FALSE);
-        params->unk_0 = 0xFF;
+        params->recentCallersChunk = 0xFF;
         return 0xFF;
     }
-    params->unk_0 = gearPhone->callerParams[0];
+    params->recentCallersChunk = gearPhone->callerParams[0];
     params->unk_1 = gearPhone->callerParams[1];
     params->isScriptedCall = gearPhone->isScriptedCall;
     params->callScriptID = gearPhone->callScriptID;

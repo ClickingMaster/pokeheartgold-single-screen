@@ -10,7 +10,7 @@ typedef struct BugContestSwapMonArgs {
     Pokemon *currentMon;
     BOOL noPokemonCaught;
     Options *options;
-    Pokemon *unk10;
+    Pokemon *keptMon;
 } BugContestSwapMonArgs;
 
 BOOL BugContestSwapMon_Init(OverlayManager *man, int *state);

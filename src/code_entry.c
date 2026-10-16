@@ -1478,8 +1478,8 @@ void CodeEntry_CreateButtonLabel(CodeEntryApp *app, int button, int x, int y, in
     template.offset = app->buttonLabelAllocs[button].charAlloc.offset;
     template.x = (s16)(centerX - 40);
     template.y = (s16)(centerY - 7);
-    template.unk_20 = 0;
-    template.unk_24 = 0;
+    template.bgPriority = 0;
+    template.drawPriority = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_108;
     app->buttonLabels[button] = FontOAM_Create(&template);

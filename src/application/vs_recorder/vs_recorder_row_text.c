@@ -69,8 +69,8 @@ void VsRecorder_CreateMenuRowText(VsRecorderWork *work) {
             template.offset = rows[j]->charAlloc.offset;
             template.x = x + 36;
             template.y = y - 8;
-            template.unk_20 = 3;
-            template.unk_24 = sVsRecorderMenuRowDrawPriorities[j][i] - 1;
+            template.bgPriority = 3;
+            template.drawPriority = sVsRecorderMenuRowDrawPriorities[j][i] - 1;
             template.vram = vrams.v[j];
             template.heapID = HEAP_ID_109;
             rows[j]->text = TextOBJ_Create(&template, rows[j]->textLayout);

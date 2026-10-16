@@ -8054,10 +8054,10 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     textObjTemplate.sprite = NULL;
     textObjTemplate.x = 176;
     textObjTemplate.y = 8;
-    textObjTemplate.unk_24 = 100;
+    textObjTemplate.drawPriority = 100;
     textObjTemplate.vram = 1;
     textObjTemplate.heapID = HEAP_ID_BATTLE;
-    textObjTemplate.unk_20 = 0;
+    textObjTemplate.bgPriority = 0;
     data->fontOam = FontOAM_Create(&textObjTemplate);
     data->charSpace = unkStruct;
     TextOBJ_SetPalOffsetRespectVramOffset(data->fontOam, 1);

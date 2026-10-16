@@ -53,7 +53,7 @@ void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
 // Output of ApricornJuice_RankFlavors: the juice made from the blended apricorns.
 typedef struct ApricornBoxJuice {
     ApricornJuiceEntry entries[3]; // 0x00
-    u8 unk_06[6];                  // 0x06
+    u8 flavorOrder[6];             // 0x06
     u8 numEntries;                 // 0x0C
 } ApricornBoxJuice;
 
@@ -66,7 +66,7 @@ typedef struct ApricornBoxScreen {
     u8 juiceServings;                           // 0x014, ApricornBox_GetJuiceServings
     u8 flavorTotal;                           // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
     u8 juiceMildness;                           // 0x016, juiceRecord byte 2
-    u8 unk_17;                           // 0x017, ApricornJuice_GetTopMixIndex(juiceRecord)
+    u8 topMixIndex;                      // 0x017, ApricornJuice_GetTopMixIndex(juiceRecord)
     u8 numBlending;                      // 0x018, apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
     u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
     u8 apricornCounts[7];                // 0x01A
@@ -869,7 +869,7 @@ void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     screen->juiceServings = ApricornBox_GetJuiceServings(screen->apricornBox);
     ApricornBox_GetJuice(screen->apricornBox, 8, (ApricornJuice *)screen->juiceRecord);
     screen->juiceMildness = screen->juiceRecord[2];
-    screen->unk_17 = ApricornJuice_GetTopMixIndex(screen->juiceRecord);
+    screen->topMixIndex = ApricornJuice_GetTopMixIndex(screen->juiceRecord);
     screen->flavorTotal = ApricornJuice_GetFlavorTotal((ApricornJuice *)screen->juiceRecord);
     ApricornJuice_RankFlavors(screen->juiceRecord, &screen->juice);
     screen->mixStage = ApricornBox_GetMixProgressLevel(screen->apricornBox);
@@ -1574,7 +1574,7 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
             Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
         }
         Sprite_SetAnimCtrlSeq(screen->sprites[9], screen->juiceServings + 16);
-        Sprite_SetPaletteOverride(screen->sprites[9], screen->unk_17 + 5);
+        Sprite_SetPaletteOverride(screen->sprites[9], screen->topMixIndex + 5);
         break;
     }
     case 2: {
@@ -3238,7 +3238,7 @@ void AprijuiceScreen_PrintMessage(AprijuiceScreen *screen, int message) {
         if (message == 6) {
             message = 12;
         } else if (message == 5) {
-            message = screen->juice.unk_06[0] + 13;
+            message = screen->juice.flavorOrder[0] + 13;
         } else {
             message += 13;
         }

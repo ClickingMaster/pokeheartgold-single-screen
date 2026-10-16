@@ -1082,8 +1082,8 @@ void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, i
     template.offset = editor->buttonLabelChars[index].offset;
     template.x = x - FontID_String_GetWidth(2, string, 0) / 2;
     template.y = y + 192;
-    template.unk_20 = 1;
-    template.unk_24 = 40;
+    template.bgPriority = 1;
+    template.drawPriority = 40;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     template.heapID = HEAP_ID_52;
     editor->buttonLabels[index] = FontOAM_Create(&template);

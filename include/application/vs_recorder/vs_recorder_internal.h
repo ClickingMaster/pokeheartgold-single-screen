@@ -200,7 +200,7 @@ typedef struct VsRecorderListWindow {
     int cursorRow; // row of the cursor on screen
     int topMargin;
     int bottomMargin;
-    int unk_48;
+    int isPairList;
     u32 unk_4C;
 } VsRecorderListWindow; // size 0x50
 

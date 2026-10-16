@@ -12,7 +12,7 @@
 typedef struct PokedexArgs {
     Pokedex *pokedex;
     PlayerProfile *playerProfile;
-    PokedexResumeState *unk_08;
+    PokedexResumeState *resumeState;
     MenuInputStateMgr *menuInputStatePtr;
     int x;
     int y;

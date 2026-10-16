@@ -61,13 +61,13 @@ BOOL UseMail_Init(OverlayManager *manager, int *state) {
     overlayData->heapID = HEAP_ID_OV55;
     overlayData->mailViewArgs = UseMail_CreateMailViewArgs(args->mail, HEAP_ID_OV55);
     overlayData->mailViewArgs->options = Save_PlayerData_GetOptionsAddr(args->saveData);
-    if (args->unk0 == 1) {
+    if (args->screen == 1) {
         overlayData->mailViewArgs->mailType = args->mailType;
     }
     if (overlayData->mailViewArgs->mailType >= NUM_MAIL) {
         overlayData->mailViewArgs->mailType = MAIL_GRASS;
     }
-    overlayData->mailViewArgs->unk0 = args->unk0;
+    overlayData->mailViewArgs->screenOrResult = args->screen;
     overlayData->mailViewArgs->menuInputStateMgr = args->menuInputStatePtr;
     return TRUE;
 }
@@ -78,7 +78,7 @@ BOOL UseMail_Main(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        overlayData->mailViewArgs->unk0 = args->unk0;
+        overlayData->mailViewArgs->screenOrResult = args->screen;
         overlayData->subApp = OverlayManager_New(&sUseMailMailViewTemplate, overlayData->mailViewArgs, overlayData->heapID);
         *state = 1;
         break;
@@ -88,7 +88,7 @@ BOOL UseMail_Main(OverlayManager *manager, int *state) {
             break;
         }
 
-        switch (overlayData->mailViewArgs->unk0) {
+        switch (overlayData->mailViewArgs->screenOrResult) {
         case 0xFFFF:
             *state = 2;
             break;
@@ -103,14 +103,14 @@ BOOL UseMail_Main(OverlayManager *manager, int *state) {
         break;
 
     case 2:
-        if (args->unk0 == 1) {
-            if (overlayData->mailViewArgs->unk0 == 3) {
+        if (args->screen == 1) {
+            if (overlayData->mailViewArgs->screenOrResult == 3) {
                 UseMail_SaveMail(args->mail, overlayData->mailViewArgs);
                 GameStats_AddScore(Save_GameStats_Get(args->saveData), SCORE_EVENT_WROTE_MAIL);
                 GameStats_Inc(Save_GameStats_Get(args->saveData), GAME_STAT_MAIL_WRITTEN);
-                args->unk4 = 1;
+                args->mailWritten = 1;
             } else {
-                args->unk4 = 0;
+                args->mailWritten = 0;
             }
         }
 
@@ -155,7 +155,7 @@ static MailViewArgs *UseMail_CreateMailViewArgs(Mail *mail, enum HeapID heapID) 
     MailViewArgs *ret = Heap_Alloc(heapID, sizeof(MailViewArgs));
     MI_CpuFill8(ret, 0, sizeof(MailViewArgs));
 
-    ret->unk0 = 0;
+    ret->screenOrResult = 0;
     ret->mailOTID = Mail_GetOTID(mail);
     ret->mailAuthorName = String_New(PLAYER_NAME_LENGTH + 1, heapID);
     CopyU16ArrayToString(ret->mailAuthorName, Mail_GetAuthorNamePtr(mail));

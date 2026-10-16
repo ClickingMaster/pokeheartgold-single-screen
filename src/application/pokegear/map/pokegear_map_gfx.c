@@ -884,8 +884,8 @@ static void PokegearMap_CreateMarkingsECWordTextOBJs(PokegearMapAppData *mapApp)
     template.window = &mapApp->windows[8];
     template.spriteList = SpriteManager_GetSpriteList(mapApp->pokegear->spriteManager);
     template.plttResourceProxy = SpriteManager_FindPlttResourceProxy(mapApp->pokegear->spriteManager, 0);
-    template.unk_20 = 0;
-    template.unk_24 = 3;
+    template.bgPriority = 0;
+    template.drawPriority = 3;
     template.x = 4;
     template.y = -6;
     template.vram = 1;

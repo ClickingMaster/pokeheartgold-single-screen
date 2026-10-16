@@ -8,7 +8,7 @@
 #include "pm_string.h"
 
 typedef struct MailViewArgs {
-    u16 unk0;
+    u16 screenOrResult;
     u8 mailMessageIdx;
     Options *options;
     MenuInputStateMgr *menuInputStateMgr;

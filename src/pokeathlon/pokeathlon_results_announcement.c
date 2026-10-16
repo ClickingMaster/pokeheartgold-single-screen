@@ -1053,8 +1053,8 @@ void PokeathlonResultsAnnouncement_CreateText(PokeathlonResultsAnnouncementPlate
     template.offset = charSlot.offset;
     template.x = dx;
     template.y = dy;
-    template.unk_20 = 0;
-    template.unk_24 = 3;
+    template.bgPriority = 0;
+    template.drawPriority = 3;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = plates->heapId;
     textObj = FontOAM_Create(&template);
@@ -1188,8 +1188,8 @@ void PokeathlonResultsAnnouncement_CreateScoreboardText(PokeathlonResultsAnnounc
     template.offset = charSlot.offset;
     template.x = dx;
     template.y = dy;
-    template.unk_20 = 0;
-    template.unk_24 = 0;
+    template.bgPriority = 0;
+    template.drawPriority = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     template.heapID = scoreboard->heapId;
     textObj = FontOAM_Create(&template);

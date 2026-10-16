@@ -22,7 +22,7 @@ struct YesNoPromptButtonTemplate {
     u8 y;
 };
 
-struct SysTaskState_02016DBC {
+struct YesNoPromptCharTransfer {
     BgConfig *bgConfig;
     NNSG2dCharacterData *charData;
     void *charDataRaw;
@@ -30,7 +30,7 @@ struct SysTaskState_02016DBC {
     u16 tileStart;
 };
 
-struct SysTaskState_02016DF8 {
+struct YesNoPromptPlttTransfer {
     NNSG2dPaletteData *plttData;
     void *plttDataRaw;
     u16 bgId;
@@ -318,8 +318,8 @@ static void YesNoPromptButton_Clear(YesNoPromptButton *button) {
 }
 
 static SysTask *LoadPixelDataFromNarcAndScheduleTransfer(NarcId narcId, s32 fileId, BgConfig *bgConfig, int bgId, u32 tileStart, enum HeapID heapID) {
-    struct SysTaskState_02016DBC *buffer = (struct SysTaskState_02016DBC *)Heap_Alloc(heapID, sizeof(struct SysTaskState_02016DBC));
-    memset(buffer, 0, sizeof(struct SysTaskState_02016DBC));
+    struct YesNoPromptCharTransfer *buffer = (struct YesNoPromptCharTransfer *)Heap_Alloc(heapID, sizeof(struct YesNoPromptCharTransfer));
+    memset(buffer, 0, sizeof(struct YesNoPromptCharTransfer));
     buffer->charDataRaw = GfGfxLoader_GetCharData(narcId, fileId, TRUE, &buffer->charData, heapID);
     buffer->bgConfig = bgConfig;
     buffer->bgId = bgId;
@@ -328,8 +328,8 @@ static SysTask *LoadPixelDataFromNarcAndScheduleTransfer(NarcId narcId, s32 file
 }
 
 static SysTask *LoadPlttFromNarcAndScheduleTransfer(NarcId narcId, s32 fileId, int bgId, u32 offset, u32 size, enum HeapID heapID) {
-    struct SysTaskState_02016DF8 *buffer = (struct SysTaskState_02016DF8 *)Heap_Alloc(heapID, sizeof(struct SysTaskState_02016DF8));
-    memset(buffer, 0, sizeof(struct SysTaskState_02016DF8));
+    struct YesNoPromptPlttTransfer *buffer = (struct YesNoPromptPlttTransfer *)Heap_Alloc(heapID, sizeof(struct YesNoPromptPlttTransfer));
+    memset(buffer, 0, sizeof(struct YesNoPromptPlttTransfer));
     buffer->plttDataRaw = GfGfxLoader_GetPlttData(narcId, fileId, &buffer->plttData, heapID);
     buffer->bgId = bgId;
     buffer->offset = offset;
@@ -338,7 +338,7 @@ static SysTask *LoadPlttFromNarcAndScheduleTransfer(NarcId narcId, s32 fileId, i
 }
 
 static void SysTask_LoadBGPixels(SysTask *task, void *voidptr) {
-    struct SysTaskState_02016DBC *data = (struct SysTaskState_02016DBC *)voidptr;
+    struct YesNoPromptCharTransfer *data = (struct YesNoPromptCharTransfer *)voidptr;
     DC_FlushRange(data->charData->pRawData, data->charData->szByte);
     BG_LoadCharTilesData(data->bgConfig, data->bgId, data->charData->pRawData, data->charData->szByte, data->tileStart);
     SysTask_Destroy(task);
@@ -347,7 +347,7 @@ static void SysTask_LoadBGPixels(SysTask *task, void *voidptr) {
 }
 
 static void SysTask_LoadBGPltt(SysTask *task, void *voidptr) {
-    struct SysTaskState_02016DF8 *data = (struct SysTaskState_02016DF8 *)voidptr;
+    struct YesNoPromptPlttTransfer *data = (struct YesNoPromptPlttTransfer *)voidptr;
     DC_FlushRange(data->plttData->pRawData, data->size);
     if (data->bgId == 0) {
         GX_LoadBGPltt(data->plttData->pRawData, data->offset, data->size);

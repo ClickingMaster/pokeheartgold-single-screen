@@ -11,7 +11,7 @@ static TaskManager *Task_New(FieldSystem *fieldSystem, TaskFunc taskFunc, void *
     taskman->state = 0;
     taskman->env = env;
     taskman->unk10 = 0;
-    taskman->unk14 = NULL;
+    taskman->ownedData = NULL;
     taskman->fieldSystem = fieldSystem;
     taskman->bgGoTo = Heap_AllocAtEnd((enum HeapID)32, sizeof(TaskManagerBgGoTo));
     return taskman;
@@ -29,10 +29,10 @@ void TaskManager_Jump(TaskManager *taskman, TaskFunc taskFunc, void *env) {
     taskman->func = taskFunc;
     taskman->state = 0;
     taskman->env = env;
-    if (taskman->unk14 != NULL || taskman->unk14 != NULL) {
-        Heap_Free(taskman->unk14);
+    if (taskman->ownedData != NULL || taskman->ownedData != NULL) {
+        Heap_Free(taskman->ownedData);
         taskman->unk10 = 0;
-        taskman->unk14 = NULL;
+        taskman->ownedData = NULL;
     }
 }
 
@@ -54,8 +54,8 @@ BOOL FieldSystem_RunTaskFrame(FieldSystem *fieldSystem) {
     }
     while (fieldSystem->taskman->func(fieldSystem->taskman) == TRUE) {
         prevTask = fieldSystem->taskman->prev;
-        if (fieldSystem->taskman->unk14 != NULL) {
-            Heap_Free(fieldSystem->taskman->unk14);
+        if (fieldSystem->taskman->ownedData != NULL) {
+            Heap_Free(fieldSystem->taskman->ownedData);
         }
         Heap_Free(fieldSystem->taskman->bgGoTo);
         Heap_Free(fieldSystem->taskman);

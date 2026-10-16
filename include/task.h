@@ -22,7 +22,7 @@ struct TaskManager { // declared in field_system.h
     u32 state;
     void *env;
     u32 unk10;
-    void *unk14;
+    void *ownedData;
     FieldSystem *fieldSystem;
     TaskManagerBgGoTo *bgGoTo; // size=4
 };

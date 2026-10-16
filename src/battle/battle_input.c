@@ -2766,8 +2766,8 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     textObjTemplate.offset = charTransferAlloc.offset;
     textObjTemplate.x = x;
     textObjTemplate.y = y;
-    textObjTemplate.unk_20 = 0;
-    textObjTemplate.unk_24 = 100;
+    textObjTemplate.bgPriority = 0;
+    textObjTemplate.drawPriority = 100;
     textObjTemplate.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     textObjTemplate.heapID = HEAP_ID_BATTLE;
 

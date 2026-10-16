@@ -70,7 +70,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     MI_CpuFill8(work, 0, sizeof(FootprintStamp));
     work->args = OverlayManager_GetArgs(man);
     work->saveData = WiFiPlazaWork_GetSaveData(work->args->lobby);
-    work->unk19E0 = WiFiPlazaWork_GetScheduleValue4(work->args->lobby);
+    work->showArceusFootprint = WiFiPlazaWork_GetScheduleValue4(work->args->lobby);
     FootprintStamp_InitLinkFilter(work);
     FootprintStamp_LoadParty(work->args->boardType, work->saveData, work->party);
     work->ink = FOOTPRINT_STAMP_INK_MAX;
@@ -109,7 +109,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     SpriteSystem_InitManagerWithCapacities(work->spriteSystem, work->spriteManager, &sFootprintStampSpriteResourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(work->spriteSystem), 0, 0x110000);
     WirelessStatusIcon_Create();
-    FootprintStampBoard_Init(&work->board, work->unk19E0);
+    FootprintStampBoard_Init(&work->board, work->showArceusFootprint);
     FootprintStamp_LoadPartySpriteGfx(work, work->narc);
     FootprintStamp_LoadPlayerSpriteGfx(work, work->narc);
     FootprintStamp_CreatePartySprites(work);

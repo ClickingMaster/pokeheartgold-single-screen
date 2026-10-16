@@ -504,10 +504,10 @@ Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *n
     header.multiCellData = NULL;
     header.multiCellAnim = NULL;
     header.flag = 0;
-    header.priority = template->unk_20;
+    header.priority = template->bgPriority;
     sprite.spriteList = template->spriteList;
     sprite.header = &header;
-    sprite.priority = template->unk_24;
+    sprite.priority = template->drawPriority;
     sprite.whichScreen = (NNS_G2D_VRAM_TYPE) template->vram;
     sprite.heapID = template->heapID;
     sprite.position.x = 0;

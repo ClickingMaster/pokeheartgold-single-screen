@@ -19,8 +19,8 @@ typedef struct TextOBJTemplate {
     u32 offset;
     int x;
     int y;
-    int unk_20;
-    int unk_24;
+    int bgPriority;
+    int drawPriority;
     int vram;
     enum HeapID heapID;
 } TextOBJTemplate;

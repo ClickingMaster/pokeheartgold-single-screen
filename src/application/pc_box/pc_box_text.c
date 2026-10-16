@@ -186,8 +186,8 @@ void PCBox_CreateTrayTextObjs(PCBoxView *view) {
     template.offset = textObj->charTransfer.offset;
     template.x = 128;
     template.y = -28;
-    template.unk_20 = 1;
-    template.unk_24 = 4;
+    template.bgPriority = 1;
+    template.drawPriority = 4;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_10;
     view->textObjs[0].textObj = FontOAM_Create(&template);
@@ -207,8 +207,8 @@ void PCBox_CreateTrayTextObjs(PCBoxView *view) {
     template.offset = textObj->charTransfer.offset;
     template.x = 128;
     template.y = -28;
-    template.unk_20 = 1;
-    template.unk_24 = 4;
+    template.bgPriority = 1;
+    template.drawPriority = 4;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_10;
     textObj->textObj = FontOAM_Create(&template);

@@ -1217,8 +1217,8 @@ void LinkBattleScreen_CreateNameTextObj(LinkBattleScreen *screen, int index, Str
     template.offset = (0x3E0 - index * 16) * 32;
     template.x = 0;
     template.y = 0;
-    template.unk_20 = 2;
-    template.unk_24 = 0;
+    template.bgPriority = 2;
+    template.drawPriority = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = screen->args->heapId;
     screen->nameTextObjs[index] = FontOAM_Create(&template);

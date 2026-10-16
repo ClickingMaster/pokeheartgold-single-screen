@@ -200,7 +200,7 @@ void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y) {
 }
 
 void VsRecorder_TouchScrollSetEnabled(VsRecorderTouchScroll *scroll, VsRecorderListWindow *list) {
-    if (list->unk_48 != 0) {
+    if (list->isPairList != 0) {
         if (list->count < 2) {
             scroll->enabled = FALSE;
             return;

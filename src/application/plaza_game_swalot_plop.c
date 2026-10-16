@@ -3541,8 +3541,8 @@ void SwalotPlopCombo_Init(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, NARC *narc
     textTemplate.offset = combo->charTransfer.offset;
     textTemplate.x = -7;
     textTemplate.y = -5;
-    textTemplate.unk_20 = 0;
-    textTemplate.unk_24 = 0;
+    textTemplate.bgPriority = 0;
+    textTemplate.drawPriority = 0;
     textTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     textTemplate.heapID = heapId;
     combo->textObj = TextOBJ_Create(&textTemplate, combo->textLayout);

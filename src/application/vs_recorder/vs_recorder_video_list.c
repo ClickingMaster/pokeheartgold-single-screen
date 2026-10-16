@@ -1049,7 +1049,7 @@ BOOL VsRecorder_VideoListShowList(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateTouchScrollSprites(&work->touchScroll, work);
         VsRecorder_InitList(&work->listWindow, work, NULL, &listWork->listConfig);
-        work->listWindow.unk_48 = 1;
+        work->listWindow.isPairList = 1;
         VsRecorder_TouchScrollSetEnabled(&work->touchScroll, &work->listWindow);
         VsRecorder_CreateListArrows(&work->listWindow, work, NNS_G2D_VRAM_TYPE_2DMAIN);
         VsRecorder_SetListArrowsY(&work->listWindow, 64, 184);

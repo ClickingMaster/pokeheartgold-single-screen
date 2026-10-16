@@ -413,12 +413,12 @@ void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice) {
     switch (choice) {
     case 1: {
         BugContestSwapMonArgs *args = swapMon->args;
-        args->unk10 = args->newlyCaughtMon;
+        args->keptMon = args->newlyCaughtMon;
         return;
     }
     case 2: {
         BugContestSwapMonArgs *args = swapMon->args;
-        args->unk10 = args->currentMon;
+        args->keptMon = args->currentMon;
         return;
     }
     default:

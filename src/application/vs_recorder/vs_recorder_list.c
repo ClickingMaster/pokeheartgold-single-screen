@@ -294,7 +294,7 @@ void VsRecorder_InitPairList(VsRecorderListWindow *list, VsRecorderWork *work, V
         list->topMargin = count - 1;
         list->bottomMargin = list->rows - 1;
     }
-    list->unk_48 = 1;
+    list->isPairList = 1;
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, (u8)config->bgId, (u8)config->x, (u8)config->y, (u8)config->width, (u8)config->height, 14, (u16)config->baseTile);
     FillWindowPixelBuffer(window, 0);

@@ -4868,8 +4868,8 @@ void WifiClub_CreateProfileButtons(WifiClubApp *app, NARC *narc, enum HeapID hea
     textObjTemplate.offset = app->roster.closeTextCharSpace.offset;
     textObjTemplate.x = -32;
     textObjTemplate.y = -8;
-    textObjTemplate.unk_20 = 0;
-    textObjTemplate.unk_24 = 0;
+    textObjTemplate.bgPriority = 0;
+    textObjTemplate.drawPriority = 0;
     textObjTemplate.vram = 2;
     textObjTemplate.heapID = heapID;
     app->roster.closeText = TextOBJ_Create(&textObjTemplate, textLayout);

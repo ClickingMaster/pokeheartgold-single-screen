@@ -154,14 +154,14 @@ BOOL MailView_Init(OverlayManager *man, int *state) {
     memset(mailView, 0, sizeof(MailView));
     mailView->heapID = HEAP_ID_41;
     mailView->args = OverlayManager_GetArgs(man);
-    mailView->screen = mailView->args->unk0;
+    mailView->screen = mailView->args->screenOrResult;
     mailView->returnScreen = mailView->screen;
     mailView->cursorRow = mailView->args->mailMessageIdx;
     mailView->cursorButton = MAIL_VIEW_ARGS_BUTTON(mailView->args);
     cursorPos = mailView->cursorRow;
     mailView->cursorPos = cursorPos;
     mailView->prevCursorPos = cursorPos;
-    mailView->args->unk0 = 0xFFFF;
+    mailView->args->screenOrResult = 0xFFFF;
     mailView->textSpeed = Options_GetTextFrameDelay(mailView->args->options);
     mailView->frame = Options_GetFrame(mailView->args->options);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
@@ -266,7 +266,7 @@ BOOL MailView_HandleWriteKeys(MailView *mailView) {
                     mailView->screen = MAIL_VIEW_SCREEN_EMPTY_WARNING;
                     return FALSE;
                 }
-                mailView->args->unk0 = 3;
+                mailView->args->screenOrResult = 3;
                 PlaySE(SEQ_SE_DP_PIRORIRO2);
                 mailView->args->mailMessageIdx = 0;
                 MAIL_VIEW_ARGS_BUTTON(mailView->args) = 0;
@@ -277,7 +277,7 @@ BOOL MailView_HandleWriteKeys(MailView *mailView) {
             return FALSE;
         }
         mailView->args->mailMessageIdx = mailView->cursorRow;
-        mailView->args->unk0 = mailView->args->mailMessageIdx;
+        mailView->args->screenOrResult = mailView->args->mailMessageIdx;
         MAIL_VIEW_ARGS_BUTTON(mailView->args) = mailView->cursorButton;
         PlaySE(SEQ_SE_DP_DECIDE);
         return TRUE;
@@ -336,7 +336,7 @@ BOOL MailView_HandleWriteTouch(MailView *mailView) {
     }
     if (hit < 3) {
         mailView->args->mailMessageIdx = hit;
-        mailView->args->unk0 = mailView->args->mailMessageIdx;
+        mailView->args->screenOrResult = mailView->args->mailMessageIdx;
         MAIL_VIEW_ARGS_BUTTON(mailView->args) = mailView->cursorButton;
         PlaySE(SEQ_SE_DP_DECIDE);
         return TRUE;
@@ -346,7 +346,7 @@ BOOL MailView_HandleWriteTouch(MailView *mailView) {
         mailView->screen = MAIL_VIEW_SCREEN_EMPTY_WARNING;
         return FALSE;
     }
-    mailView->args->unk0 = 3;
+    mailView->args->screenOrResult = 3;
     PlaySE(SEQ_SE_DP_PIRORIRO2);
     mailView->args->mailMessageIdx = 0;
     MAIL_VIEW_ARGS_BUTTON(mailView->args) = 0;
@@ -473,7 +473,7 @@ BOOL MailView_ConfirmQuit(MailView *mailView) {
         ClearWindowTilemapAndCopyToVram(&mailView->windows[5]);
         mailView->subState = 0;
         if (answer != FALSE) {
-            mailView->args->unk0 = 0xFFFF;
+            mailView->args->screenOrResult = 0xFFFF;
             return TRUE;
         }
         mailView->screen = mailView->returnScreen;

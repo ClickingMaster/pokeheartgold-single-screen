@@ -388,8 +388,8 @@ void FrontierBrainIntro_CreateText(FrontierBrainIntro *intro, FrontierBrainIntro
     textObjTemplate.offset = charTransfer.offset;
     textObjTemplate.x = x;
     textObjTemplate.y = y - 8;
-    textObjTemplate.unk_20 = 0;
-    textObjTemplate.unk_24 = 11;
+    textObjTemplate.bgPriority = 0;
+    textObjTemplate.drawPriority = 11;
     textObjTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     textObjTemplate.heapID = HEAP_ID_101;
 

@@ -288,8 +288,8 @@ void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
     template.window = &view->buttonWindow;
     template.spriteList = view->spriteList;
     template.plttResourceProxy = &view->paletteProxies[0];
-    template.unk_20 = 3;
-    template.unk_24 = 0;
+    template.bgPriority = 3;
+    template.drawPriority = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.x = 0;
     template.y = 0;

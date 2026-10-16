@@ -46,7 +46,7 @@ u32 GetMoveTblAttr(MoveTbl *moveTbl, MoveAttr attr) {
     case MOVEATTR_PRIORTY:
         return moveTbl->priority;
     case MOVEATTR_UNK9:
-        return moveTbl->unkB;
+        return moveTbl->flags;
     case MOVEATTR_UNK10:
         return moveTbl->unkC;
     case MOVEATTR_CONTEST_TYPE:

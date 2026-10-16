@@ -64,7 +64,7 @@ typedef struct FriendRosterAppBlink {
 
 typedef struct FriendRosterAppData {
     BgConfig *bgConfig;
-    void *unk_04;
+    void *lastTouchMenuInput;
     FieldSystem *fieldSystem;
     int *unk_0C;
     SysTask *task;
@@ -144,7 +144,7 @@ SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, Fiel
     task = CreateSysTaskAndEnvironment(FriendRosterApp_Task, sizeof(FriendRosterAppData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->bgConfig = bgConfig;
-    data->unk_04 = lastTouchMenuInput;
+    data->lastTouchMenuInput = lastTouchMenuInput;
     data->fieldSystem = fieldSystem;
     data->unk_0C = result;
     data->task = task;
