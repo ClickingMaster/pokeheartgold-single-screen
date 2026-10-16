@@ -1,5 +1,4 @@
 #pragma force_active on
-// Own TU: built with MWCC 2.0/sp1 (per-object MWCCVER override in the Makefile).
 #include "global.h"
 
 // A cell whose cellAttr bit 11 is set is followed by its bounding rectangle.

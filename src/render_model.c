@@ -15,17 +15,18 @@ typedef struct RenderModel {
     NNSG3dResTex *texture;
 } RenderModel;
 
-void RenderModel_Clear(RenderModel *model);
-void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *file, u32 index);
+static void RenderModel_Clear(RenderModel *model);
+static void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *file, u32 index);
+static void RenderModel_BindTextures(RenderModel *model);
+static void RenderModel_BindTexturesTask(SysTask *task, void *data);
+static void RenderModel_FreeFile(RenderModel *model);
+static void RenderModel_ReleaseTextures(RenderModel *model);
+
 void RenderModel_LoadFromNarc(RenderModel *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
-void RenderModel_BindTextures(RenderModel *model);
-void RenderModel_BindTexturesTask(SysTask *task, void *data);
 void RenderModel_BindTexturesOnVBlank(RenderModel *model);
-void RenderModel_FreeFile(RenderModel *model);
-void RenderModel_ReleaseTextures(RenderModel *model);
 void RenderModel_Free(RenderModelStorage *data);
 
-void RenderModel_Clear(RenderModel *model) {
+static void RenderModel_Clear(RenderModel *model) {
     u32 count = sizeof(*model);
     u8 *bytes = (u8 *)model;
     do {
@@ -33,7 +34,7 @@ void RenderModel_Clear(RenderModel *model) {
     } while (--count);
 }
 
-void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *file, u32 index) {
+static void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *file, u32 index) {
     RenderModel_Clear(model);
     model->file = file;
     model->loaded = FALSE;
@@ -47,13 +48,13 @@ void RenderModel_LoadFromNarc(RenderModel *model, int index, NARC *narc, int fil
     RenderModel_InitFromFile(model, file, index);
 }
 
-void RenderModel_BindTextures(RenderModel *model) {
+static void RenderModel_BindTextures(RenderModel *model) {
     GF3dRender_AllocAndLoadTexResources(model->texture);
     NNS_G3dBindMdlSet(model->set, model->texture);
     model->loaded = TRUE;
 }
 
-void RenderModel_BindTexturesTask(SysTask *task, void *data) {
+static void RenderModel_BindTexturesTask(SysTask *task, void *data) {
     RenderModel_BindTextures(data);
     SysTask_Destroy(task);
 }
@@ -63,13 +64,13 @@ void RenderModel_BindTexturesOnVBlank(RenderModel *model) {
     GF_ASSERT(task != NULL);
 }
 
-void RenderModel_FreeFile(RenderModel *model) {
+static void RenderModel_FreeFile(RenderModel *model) {
     if (model->file) {
         Heap_Free(model->file);
     }
 }
 
-void RenderModel_ReleaseTextures(RenderModel *model) {
+static void RenderModel_ReleaseTextures(RenderModel *model) {
     if (model->texture) {
         NNSG3dTexKey key, key4x4;
         NNS_G3dTexReleaseTexKey(model->texture, &key, &key4x4);

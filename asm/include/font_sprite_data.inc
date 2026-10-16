@@ -50,12 +50,7 @@
 .public memcpy
 .public memset
 
-.public TextOBJ_Clear
 
-.public FontSystem_GetFreeTextOBJ
 
-.public FontOAM_GetCellSizeIndex
 
-.public FontOAM_SplitRect
 
-.public FontOAM_BuildLayout

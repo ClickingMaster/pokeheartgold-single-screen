@@ -5,10 +5,12 @@ extern const int gTypeIconCharFiles[23];
 extern const u8 gTypeIconPalettes[23];
 extern const int gMoveCategoryIconCharFiles[3];
 extern const u8 gMoveCategoryIconPalettes[3];
+
+static int TypeIcon_GetCellFile(void);
+static int TypeIcon_GetAnimFile(void);
+
 int TypeIcon_GetCharFile(int type);
 int TypeIcon_GetPlttFile(void);
-int TypeIcon_GetCellFile(void);
-int TypeIcon_GetAnimFile(void);
 u32 TypeIcon_GetPalette(u32 type);
 NarcId TypeIcon_GetNarc(void);
 void TypeIcon_LoadChar(SpriteSystem *system, SpriteManager *manager, NNS_G2D_VRAM_TYPE vram, int type, int resource);
@@ -36,11 +38,11 @@ int TypeIcon_GetPlttFile(void) {
     return 74;
 }
 
-int TypeIcon_GetCellFile(void) {
+static int TypeIcon_GetCellFile(void) {
     return 242;
 }
 
-int TypeIcon_GetAnimFile(void) {
+static int TypeIcon_GetAnimFile(void) {
     return 243;
 }
 

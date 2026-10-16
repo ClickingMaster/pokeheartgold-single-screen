@@ -15,9 +15,14 @@ typedef struct OamManager {
     enum HeapID heapID;
 } OamManager;
 
-extern OamManager *gOamManager; // asm/oam_manager_data.s
+extern OamManager *gOamManager;
 
-// NitroSystem OAM manager (lib/include/nnsys/g2d_internal.h declares them with its own instance type)
+static void OamManager_CreateExact(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID);
+static BOOL OamManager_EntryMainOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine);
+static BOOL OamManager_EntrySubOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine);
+static u16 OamManager_EntryMainAffine(const MtxFx22 *matrix);
+static u16 OamManager_EntrySubAffine(const MtxFx22 *matrix);
+
 BOOL NNS_G2dGetNewOamManagerInstance(OamInstance *, u16, u16, u16, u16, int);
 void NNS_G2dApplyAndResetOamManagerBuffer(OamInstance *);
 BOOL NNS_G2dEntryOamManagerOamWithAffineIdx(OamInstance *, const GXOamAttr *, u16);
@@ -26,12 +31,6 @@ u16 NNS_G2dEntryOamManagerAffine(OamInstance *, const MtxFx22 *);
 // G2d renderer setup (unk_02025C44 group)
 void GF_InitG2dRenderSurface(NNSG2dRenderSurface *, NNSG2dViewRect *, NNSG2dOamRegisterFunction, NNSG2dAffineRegisterFunction, NNSG2dRndCellCullingFunction, NNS_G2D_VRAM_TYPE, NNSG2dRendererInstance *);
 BOOL GF_G2dIsCellVisible(const NNSG2dCellData *, const MtxFx32 *, const NNSG2dViewRect *);
-
-void OamManager_CreateExact(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID);
-BOOL OamManager_EntryMainOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine);
-BOOL OamManager_EntrySubOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine);
-u16 OamManager_EntryMainAffine(const MtxFx22 *matrix);
-u16 OamManager_EntrySubAffine(const MtxFx22 *matrix);
 
 void OamManager_Create(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID) {
     int adjustedFirst = first;
@@ -55,7 +54,7 @@ void OamManager_Create(int first, int count, int affineFirst, int affineCount, i
     OamManager_CreateExact(adjustedFirst, count, adjustedAffine, affineCount, subFirst, subCount, subAffineFirst, subAffineCount, heapID);
 }
 
-void OamManager_CreateExact(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID) {
+static void OamManager_CreateExact(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID) {
     GF_ASSERT(gOamManager == NULL);
     gOamManager = Heap_Alloc(heapID, sizeof(OamManager));
     GF_ASSERT(gOamManager != NULL);
@@ -100,25 +99,25 @@ void thunk_ClearSubOAM(enum HeapID heapID) {
     ClearSubOAM(heapID);
 }
 
-BOOL OamManager_EntryMainOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine) {
+static BOOL OamManager_EntryMainOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine) {
     BOOL result = NNS_G2dEntryOamManagerOamWithAffineIdx(&gOamManager->main, oam, affine);
     GF_ASSERT(result);
     return result;
 }
 
-BOOL OamManager_EntrySubOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine) {
+static BOOL OamManager_EntrySubOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine) {
     BOOL result = NNS_G2dEntryOamManagerOamWithAffineIdx(&gOamManager->sub, oam, affine);
     GF_ASSERT(result);
     return result;
 }
 
-u16 OamManager_EntryMainAffine(const MtxFx22 *matrix) {
+static u16 OamManager_EntryMainAffine(const MtxFx22 *matrix) {
     u16 result = NNS_G2dEntryOamManagerAffine(&gOamManager->main, matrix);
     GF_ASSERT(result != 0xFFFE);
     return result;
 }
 
-u16 OamManager_EntrySubAffine(const MtxFx22 *matrix) {
+static u16 OamManager_EntrySubAffine(const MtxFx22 *matrix) {
     u16 result = NNS_G2dEntryOamManagerAffine(&gOamManager->sub, matrix);
     GF_ASSERT(result != 0xFFFE);
     return result;

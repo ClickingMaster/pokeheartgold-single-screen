@@ -24,8 +24,23 @@ typedef struct CryStopTaskData {
 #define CRY_BANK_SHAYMIN_SKY 494
 #define CRY_BANK_MAX         495
 
-// sound_system.c, sound_gb.c, sound_chatot.c: declared with the argument types these call sites were compiled
-// against (e.g. GF_GetBankInfoBySeqNo returns a bank info pointer, Sound_SetWaveOutPan takes a u32 pan)
+static void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo);
+static BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
+static BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
+static void ClearPlayingBGM(void);
+static BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo);
+static void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume);
+static void StartCryStopTask(int frames, int heapId);
+static void CryStopTask(SysTask *task, void *arg);
+static void DestroyCryStopTask(void);
+static BOOL IsShayminSkyCry(u16 species, u8 form);
+static void ClearQueuedCries(void);
+static BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form);
+static void PlayReversedCry(u16 species, int unused, int volume, int pan, int heapId);
+static void StopFanfare(int fadeFrames);
+static void StartFanfareWaitTimer(u16 unused);
+static BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds);
+
 int GF_GetBankBySeqNo(int seqNo);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
@@ -59,31 +74,15 @@ void NNS_SndPlayerStopSeq(NNSSndHandle *handle, int fadeFrames);
 void NNS_SndPlayerSetTrackPan(NNSSndHandle *handle, u32 trackMask, int pan);
 BOOL NNS_SndArcPlayerStartSeqEx(NNSSndHandle *handle, int playerNo, int bankNo, int playerPrio, int seqNo);
 
-void ClearPlayingBGM(void);
 BOOL PlayBGMDirect(u16 seqNo);
-void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo);
-BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
-BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo);
-BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds);
 void StopBGMSEAndCry(void);
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
-BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo);
 BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
 void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 void SetPlayerPan(int playerNo, int pan);
 void SetAllSEPan(int pan);
-BOOL IsShayminSkyCry(u16 species, u8 form);
-void ClearQueuedCries(void);
-void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume);
-void StartCryStopTask(int frames, int heapId);
-BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form);
-void PlayReversedCry(u16 species, int pitch, int volume, int pan, int heapId);
-void CryStopTask(SysTask *task, void *data);
-void DestroyCryStopTask(void);
 BOOL IsFanfarePlayingOrWaiting(void);
-void StopFanfare(int fadeFrames);
-void StartFanfareWaitTimer(u16 unused);
 
 BOOL PlayBGMDirect(u16 seqNo) {
     BOOL success;
@@ -116,7 +115,7 @@ BOOL PlayBGM(u16 seqNo) {
     return success;
 }
 
-void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo) {
+static void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo) {
     Sound_SetCurrentBGM(seqNo);
     Sound_ApplyVoiceChatVolume(seqNo, handleNo);
     GF_SndSetState(1);
@@ -125,13 +124,13 @@ void Sound_OnBGMStarted(u16 seqNo, enum SoundHandleNo handleNo) {
     }
 }
 
-BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
+static BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
     GF_Snd_LoadState(Sound_GetSavedHeapLevel(3));
     GF_Snd_LoadSeq(seqNo);
     return Sound_StartSeq(handleNo, -1, -1, -1, seqNo, 1);
 }
 
-BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
+static BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
     GF_SdatGetAttrPtr(19);
     u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
     Sound_ReloadFieldSceneData(seqNo, GF_GetBankBySeqNo(GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(SND_HANDLE_FIELD))));
@@ -174,7 +173,7 @@ void StopBGM(u16 seqNo, int fadeFrames) {
     ClearPlayingBGM();
 }
 
-void ClearPlayingBGM(void) {
+static void ClearPlayingBGM(void) {
     SndRadio_StopSeq(0);
     Sound_SetCurrentBGM(SEQ_NONE);
     GF_SetCurrentPlayingBGM(SEQ_NONE);
@@ -267,7 +266,7 @@ BOOL PlaySEWithFieldBank(u16 seqNo) {
     return PlaySEEx(handleNo, -1, GF_GetBankBySeqNo(*fieldSeqNo), -1, seqNo);
 }
 
-BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo) {
+static BOOL PlaySEEx(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, int seqNo) {
     if (Sound_IsSelectSEMuted() == 1 && (u32)seqNo - SEQ_SE_DP_SELECT <= 1) {
         return FALSE;
     }
@@ -571,12 +570,12 @@ BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 for
     return TRUE;
 }
 
-void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume) {
+static void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int volume) {
     GF_SndHandleSetInitialVolume(handleNo, volume);
     Sound_ApplyVoiceChatVolume(species, (enum SoundHandleNo)handleNo);
 }
 
-void StartCryStopTask(int frames, int heapId) {
+static void StartCryStopTask(int frames, int heapId) {
     SysTask **task = GF_SdatGetAttrPtr(35);
     DestroyCryStopTask();
     CryStopTaskData *data = Heap_Alloc((enum HeapID)heapId, sizeof(CryStopTaskData));
@@ -590,7 +589,7 @@ void StartCryStopTask(int frames, int heapId) {
     *task = data->task;
 }
 
-void CryStopTask(SysTask *task, void *arg) {
+static void CryStopTask(SysTask *task, void *arg) {
     CryStopTaskData *data = arg;
     u8 *firstActive = GF_SdatGetAttrPtr(16);
     u8 *secondActive = GF_SdatGetAttrPtr(17);
@@ -616,7 +615,7 @@ void CryStopTask(SysTask *task, void *arg) {
     }
 }
 
-void DestroyCryStopTask(void) {
+static void DestroyCryStopTask(void) {
     SysTask **task = GF_SdatGetAttrPtr(35);
     if (*task != NULL) {
         void *data = SysTask_GetData(*task);
@@ -670,7 +669,7 @@ void PlayCryDelayedEx(int pattern, u16 species, int pan, int volume, int heapId,
     }
 }
 
-BOOL IsShayminSkyCry(u16 species, u8 form) {
+static BOOL IsShayminSkyCry(u16 species, u8 form) {
     if (species == SPECIES_SHAYMIN && form == 1) {
         return TRUE;
     }
@@ -680,7 +679,7 @@ BOOL IsShayminSkyCry(u16 species, u8 form) {
     return FALSE;
 }
 
-void ClearQueuedCries(void) {
+static void ClearQueuedCries(void) {
     int *pattern0 = GF_SdatGetAttrPtr(41);
     u16 *species0 = GF_SdatGetAttrPtr(45);
     int *pan0 = GF_SdatGetAttrPtr(42);
@@ -707,7 +706,7 @@ void ClearQueuedCries(void) {
     *delay1 = 0;
 }
 
-BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
+static BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
     u8 *useChorus = GF_SdatGetAttrPtr(18);
     *useChorus = 1;
     Chatot_SetForceDefaultCry(1);
@@ -716,7 +715,7 @@ BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
     return success;
 }
 
-void PlayReversedCry(u16 species, int unused, int volume, int pan, int heapId) {
+static void PlayReversedCry(u16 species, int unused, int volume, int pan, int heapId) {
     u8 *useChorus = GF_SdatGetAttrPtr(18);
     *useChorus = 1;
     Sound_AllocWaveOutChannel(15);
@@ -751,7 +750,7 @@ BOOL IsFanfarePlayingOrWaiting(void) {
     return FALSE;
 }
 
-void StopFanfare(int fadeFrames) {
+static void StopFanfare(int fadeFrames) {
     NNS_SndPlayerStopSeq(GF_GetSoundHandle(SND_HANDLE_ME), fadeFrames);
     GF_Snd_LoadState(Sound_GetSavedHeapLevel(6));
 }
@@ -770,12 +769,12 @@ BOOL IsFanfarePlaying(void) {
     return FALSE;
 }
 
-void StartFanfareWaitTimer(u16 unused) {
+static void StartFanfareWaitTimer(u16 unused) {
     u16 *waitTimer = GF_SdatGetAttrPtr(14);
     *waitTimer = 15;
 }
 
-BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds) {
+static BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds) {
     u16 playingSeqNo = seqNo;
     if (useGBSounds == 1 && SoundSys_GetGBSoundsState() == 1) {
         u16 gbSeqNo = GBSounds_GetGBSeqNoByDSSeqNo(seqNo);

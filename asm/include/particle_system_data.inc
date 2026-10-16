@@ -104,8 +104,5 @@
 .public ParticleSystem_AllocSlot13
 .public ParticleSystem_AllocSlot14
 .public ParticleSystem_AllocSlot15
-.public ParticleSystem_LoadResource
-.public ParticleSystem_LoadResourceTask
 .public ParticleSystem_Draw
 .public ParticleSystem_Calc
-.public ParticleEmitter_FindField

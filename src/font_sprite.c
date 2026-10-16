@@ -49,27 +49,28 @@ typedef struct FontSplit {
 
 extern const u8 gFontOAMCellSizes[12][2];
 
+static void TextOBJ_Clear(TextOBJ *object);
+static TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input);
+static int FontOAM_GetCellSizeIndex(int width, int height);
+static BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID heapId);
+static int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOAMCell *list);
+static void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData *sprites, u32 offset, int vram, enum HeapID heapId);
+static u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *proxy, int blockSize, GXOBJVRamModeChar mode, volatile u32 offset, int vram, enum HeapID heapId);
+static void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, NNS_G2D_VRAM_TYPE vram, enum HeapID heapId);
+static u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 offset, int blockSize, GXOBJVRamModeChar mode, enum HeapID heapId);
+static int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram);
+static void TextOBJ_CreateSprites(const TextOBJTemplate *template, FontOAMCell *list, FontSpriteData *sprites, TextOBJ *object);
+static void TextOBJ_DeleteSprites(TextOBJ *object);
+static Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *node, FontSpriteData *proxy);
+static FontOAMCell *FontOAMCell_New(enum HeapID heapId);
+static void FontOAMCell_Delete(FontOAMCell *node);
+static void FontOAMCell_FreeList(FontOAMCell *list);
+static void FontOAMCell_InsertBefore(FontOAMCell *node, FontOAMCell *next);
+
 void TextOBJ_UpdatePosition(TextOBJ *object);
 void TextOBJ_SetPriority(TextOBJ *object, u8 priority);
 void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *object, int palette);
 void TextOBJ_SetPalOffset(TextOBJ *object, u8 palette);
-void TextOBJ_Clear(TextOBJ *object);
-TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *system);
-int FontOAM_GetCellSizeIndex(int width, int height);
-BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID heapId);
-int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOAMCell *list);
-void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData *sprites, u32 offset, int vram, enum HeapID heapId);
-u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *proxy, int blockSize, GXOBJVRamModeChar mode, volatile u32 offset, int vram, enum HeapID heapId);
-void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, NNS_G2D_VRAM_TYPE vram, enum HeapID heapId);
-u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 offset, int blockSize, GXOBJVRamModeChar mode, enum HeapID heapId);
-int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram);
-void TextOBJ_CreateSprites(const TextOBJTemplate *template, FontOAMCell *list, FontSpriteData *sprites, TextOBJ *object);
-void TextOBJ_DeleteSprites(TextOBJ *object);
-Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *node, FontSpriteData *proxy);
-FontOAMCell *FontOAMCell_New(enum HeapID heapId);
-void FontOAMCell_Delete(FontOAMCell *node);
-void FontOAMCell_FreeList(FontOAMCell *list);
-void FontOAMCell_InsertBefore(FontOAMCell *node, FontOAMCell *next);
 void TextOBJ_SetParentSprite(TextOBJ *object, const Sprite *sprite);
 
 FontSystem *FontSystem_NewInit(int count, enum HeapID heapId) {
@@ -293,7 +294,6 @@ void TextOBJ_CopyFromBGWindow(TextOBJ *object, TextOBJLayout *layout, Window *wi
 }
 
 void FontOAM_CopyWindowChars(Window *window, int width, int height, int x, int y, void *charBuf) {
-    // Retain the original per-row width read and address calculation order.
     int sourceOffset;
     GF_ASSERT(window->width >= width + x);
     GF_ASSERT(window->height >= height + y);
@@ -304,12 +304,11 @@ void FontOAM_CopyWindowChars(Window *window, int width, int height, int x, int y
     }
 }
 
-void TextOBJ_Clear(TextOBJ *object) {
+static void TextOBJ_Clear(TextOBJ *object) {
     memset(object, 0, sizeof(TextOBJ));
 }
 
-TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input) {
-    // Keep the original pool metadata reads at each iteration and on return.
+static TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input) {
     volatile FontSystem *system = input;
     int i = 0;
     if (i < system->capacity) {
@@ -325,7 +324,7 @@ TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input) {
     return NULL;
 }
 
-int FontOAM_GetCellSizeIndex(int width, int height) {
+static int FontOAM_GetCellSizeIndex(int width, int height) {
     for (int i = 0; i < 12; i++) {
         if (gFontOAMCellSizes[i][0] <= width && gFontOAMCellSizes[i][1] <= height) {
             return i;
@@ -334,7 +333,7 @@ int FontOAM_GetCellSizeIndex(int width, int height) {
     return 12;
 }
 
-BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID heapId) {
+static BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID heapId) {
     int remainingWidth;
     FontOAMCell *node = FontOAMCell_New(heapId);
     int remainingHeight;
@@ -366,7 +365,7 @@ BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID heapId) 
     return FALSE;
 }
 
-int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOAMCell *list) {
+static int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOAMCell *list) {
     FontRect next;
     FontSplit split;
     int count;
@@ -395,7 +394,7 @@ int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOAMCell *
     return count;
 }
 
-void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData *sprites, u32 offset, int vram, enum HeapID heapId) {
+static void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData *sprites, u32 offset, int vram, enum HeapID heapId) {
     GXOBJVRamModeChar mode = vram == NNS_G2D_VRAM_TYPE_2DMAIN ? GX_GetOBJVRamModeChar() : GXS_GetOBJVRamModeChar();
     int blockSize = ObjCharTransfer_GetBlockSizeFromMode(mode);
     for (FontOAMCell *node = list->prev; node != list; node = node->prev) {
@@ -405,8 +404,7 @@ void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData *sprite
     }
 }
 
-// Volatile preserves the original stack reloads of the VRAM offset.
-u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *proxy, int blockSize, GXOBJVRamModeChar mode, volatile u32 offset, int vram, enum HeapID heapId) {
+static u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *proxy, int blockSize, GXOBJVRamModeChar mode, volatile u32 offset, int vram, enum HeapID heapId) {
     int width = gFontOAMCellSizes[node->index][0];
     int height = gFontOAMCellSizes[node->index][1];
     u32 size = width;
@@ -440,7 +438,7 @@ u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *pro
     return offset + size;
 }
 
-void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, NNS_G2D_VRAM_TYPE vram, enum HeapID heapId) {
+static void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, NNS_G2D_VRAM_TYPE vram, enum HeapID heapId) {
     GXOBJVRamModeChar mode = vram == NNS_G2D_VRAM_TYPE_2DMAIN ? GX_GetOBJVRamModeChar() : GXS_GetOBJVRamModeChar();
     int blockSize = ObjCharTransfer_GetBlockSizeFromMode(mode);
     u32 offset = 0;
@@ -449,7 +447,7 @@ void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, NNS_G2D_
     }
 }
 
-u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 offset, int blockSize, GXOBJVRamModeChar mode, enum HeapID heapId) {
+static u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 offset, int blockSize, GXOBJVRamModeChar mode, enum HeapID heapId) {
     int width = gFontOAMCellSizes[node->index][0];
     int height = gFontOAMCellSizes[node->index][1];
     u32 size = width * height;
@@ -460,7 +458,7 @@ u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 o
     return offset + size * 32;
 }
 
-int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram) {
+static int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram) {
     GXOBJVRamModeChar mode = vram == NNS_G2D_VRAM_TYPE_2DMAIN ? GX_GetOBJVRamModeChar() : GXS_GetOBJVRamModeChar();
     int blockSize = ObjCharTransfer_GetBlockSizeFromMode(mode);
     FontOAMCell *node = list->prev;
@@ -475,7 +473,7 @@ int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram) {
     return size;
 }
 
-void TextOBJ_CreateSprites(const TextOBJTemplate *template, FontOAMCell *list, FontSpriteData *sprites, TextOBJ *object) {
+static void TextOBJ_CreateSprites(const TextOBJTemplate *template, FontOAMCell *list, FontSpriteData *sprites, TextOBJ *object) {
     int i = 0;
     for (FontOAMCell *node = list->prev; node != list; node = node->prev) {
         object->sprites[i].sprite = FontOAM_CreateCellSprite(template, node, sprites);
@@ -487,13 +485,13 @@ void TextOBJ_CreateSprites(const TextOBJTemplate *template, FontOAMCell *list, F
     }
 }
 
-void TextOBJ_DeleteSprites(TextOBJ *object) {
+static void TextOBJ_DeleteSprites(TextOBJ *object) {
     for (int i = 0; i < object->spriteCount; i++) {
         Sprite_Delete(object->sprites[i].sprite);
     }
 }
 
-Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *node, FontSpriteData *proxy) {
+static Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *node, FontSpriteData *proxy) {
     SimpleSpriteTemplate sprite;
     SpriteResourcesHeader header;
     header.imageProxy = proxy;
@@ -521,7 +519,7 @@ Sprite *FontOAM_CreateCellSprite(const TextOBJTemplate *template, FontOAMCell *n
     return Sprite_Create(&sprite);
 }
 
-FontOAMCell *FontOAMCell_New(enum HeapID heapId) {
+static FontOAMCell *FontOAMCell_New(enum HeapID heapId) {
     FontOAMCell *node = Heap_AllocAtEnd(heapId, sizeof(FontOAMCell));
     GF_ASSERT(node != NULL);
     node->prev = NULL;
@@ -529,12 +527,12 @@ FontOAMCell *FontOAMCell_New(enum HeapID heapId) {
     return node;
 }
 
-void FontOAMCell_Delete(FontOAMCell *node) {
+static void FontOAMCell_Delete(FontOAMCell *node) {
     GF_ASSERT(node != NULL);
     Heap_Free(node);
 }
 
-void FontOAMCell_FreeList(FontOAMCell *list) {
+static void FontOAMCell_FreeList(FontOAMCell *list) {
     FontOAMCell *node = list->prev;
     while (node != list) {
         FontOAMCell *next = node->prev;
@@ -543,7 +541,7 @@ void FontOAMCell_FreeList(FontOAMCell *list) {
     }
 }
 
-void FontOAMCell_InsertBefore(FontOAMCell *node, FontOAMCell *next) {
+static void FontOAMCell_InsertBefore(FontOAMCell *node, FontOAMCell *next) {
     node->prev = next->prev;
     node->next = next;
     next->prev->next = node;

@@ -1,6 +1,5 @@
 #include "scanline_effect.h"
 
-// not declared in lib/include/nitro/mi/dma.h
 void MI_HBlankDmaCopy32(u32 dmaNo, const void *src, void *dest, u32 size);
 void MI_HBlankDmaCopy16(u32 dmaNo, const void *src, void *dest, u32 size);
 

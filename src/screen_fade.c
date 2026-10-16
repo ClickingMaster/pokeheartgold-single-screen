@@ -12,8 +12,7 @@
 
 // The palette fade: BeginNormalPaletteFade starts a fade of one or both screens (enum FadeMode) and
 // HandleFadeUpdateFrame advances it every frame. Each screen runs one ScreenFade whose effect is the FadeFunc of its
-// enum FadeType (screen_fade_effects.h). The window wipes share one window register queue and one pair of HBlank
-// callbacks, one per screen.
+// enum FadeType. The window wipes share one window register queue and one pair of HBlank callbacks, one per screen.
 
 typedef void (*FadeHBlankCallback)(void *data);
 
@@ -54,32 +53,33 @@ typedef struct PaletteFade {
 
 typedef BOOL (*FadeFunc)(ScreenFade *fade);
 
-void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness); // not declared by the SDK headers here
+static void HandleEndFade(PaletteFade *fade);
+static BOOL DoFadeUpdateFrame(PaletteFade *fade, ScreenFade *main, ScreenFade *sub);
+static void FadeWork_UpdateFrame(u32 *active, ScreenFade *fade);
+static BOOL CallFadeFunc(ScreenFade *fade);
+static void PaletteFade_SetMode(enum FadeMode mode, PaletteFade *fade);
+static void PaletteFade_SetScreenOrder(PaletteFade *fade, u32 order, u32 main, u32 sub);
+static void ScreenFade_Init(ScreenFade *fade, u32 type, int steps, int framesPerStep, int state, void *effect, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId, u16 color);
+static void FadeBlankPair_Init(FadeBlankPair *blankPair);
+static void FadeBlankPair_HBlankCallback(FadeBlankPair *blankPair);
+static void FadeBlankPair_Start(FadeBlankPair *blankPair, void *data, FadeHBlankCallback callback, int screen);
+static void FadeBlankPair_Stop(FadeBlankPair *blankPair, int screen);
+static void FadeBlankPair_StartTask(SysTask *task, void *data);
+static void FadeBlankPair_StopTask(SysTask *task, void *data);
+static void FadeBlankPair_DummyCallback(void *data);
+static u16 PaletteFade_ResolveColor(PaletteFade *fade, u16 color);
+static u16 PaletteFade_GetEndColor(PaletteFade *fade);
+static void ScreenFade_ResetBrightnessTask(SysTask *task, void *data);
+static void ScreenFade_QueueBrightnessReset(ScreenFade *fade);
+static void ScreenFade_HoldFadeColor(ScreenFade *fade);
+static void PaletteFade_Clear(PaletteFade *fade);
+
+void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 void SetBothScreensBrightnessByColor(u16 color);
 void FillScreenWithColor(int screen, u16 color);
-BOOL DoFadeUpdateFrame(PaletteFade *fade, ScreenFade *main, ScreenFade *sub);
-void FadeWork_UpdateFrame(u32 *active, ScreenFade *fade);
-BOOL CallFadeFunc(ScreenFade *fade);
-void PaletteFade_SetMode(enum FadeMode mode, PaletteFade *fade);
-void PaletteFade_SetScreenOrder(PaletteFade *fade, u32 order, u32 main, u32 sub);
-void ScreenFade_Init(ScreenFade *fade, u32 type, int steps, int framesPerStep, int state, void *effect, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId, u16 color);
-void FadeBlankPair_Init(FadeBlankPair *blankPair);
-void FadeBlankPair_HBlankCallback(FadeBlankPair *blankPair);
-void FadeBlankPair_Start(FadeBlankPair *blankPair, void *data, FadeHBlankCallback callback, int screen);
-void FadeBlankPair_Stop(FadeBlankPair *blankPair, int screen);
-void FadeBlankPair_StartTask(SysTask *task, void *data);
-void FadeBlankPair_StopTask(SysTask *task, void *data);
-void FadeBlankPair_DummyCallback(void *data);
-u16 PaletteFade_ResolveColor(PaletteFade *fade, u16 color);
-u16 PaletteFade_GetEndColor(PaletteFade *fade);
-void ScreenFade_ResetBrightnessTask(SysTask *task, void *data);
-void ScreenFade_QueueBrightnessReset(ScreenFade *fade);
-void ScreenFade_HoldFadeColor(ScreenFade *fade);
-void PaletteFade_Clear(PaletteFade *fade);
-void HandleEndFade(PaletteFade *fade);
 
-const FadeFunc sFadeFuncPtrs[] = {
+static const FadeFunc sFadeFuncPtrs[] = {
     FadeFunc_00,
     FadeFunc_01,
     FadeFunc_02,
@@ -125,7 +125,7 @@ const FadeFunc sFadeFuncPtrs[] = {
     FadeFunc_42,
 };
 
-PaletteFade gPaletteFade;
+static PaletteFade sPaletteFade;
 
 #pragma opt_common_subs off
 
@@ -136,21 +136,21 @@ void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum Fad
     if (framesPerStep == 0) {
         GF_AssertFail();
     }
-    if (gPaletteFade.active != 0) {
+    if (sPaletteFade.active != 0) {
         GF_AssertFail();
     }
     {
-        PaletteFade *fade = &gPaletteFade;
-        PaletteFade_Clear(&gPaletteFade);
-        PaletteFade_SetMode(mode, &gPaletteFade);
-        FadeBlankPair_Init(&gPaletteFade.blankPair);
-        color = PaletteFade_ResolveColor(&gPaletteFade, color);
-        ScreenFade_Init(&gPaletteFade.main, mainType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 0, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
-        ScreenFade_Init(&gPaletteFade.sub, subType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 1, &gPaletteFade.regQueue, &gPaletteFade.blankPair, heapId, color);
-        gPaletteFade.active = 1;
-        FadeWork_UpdateFrame(&gPaletteFade.mainActive, &gPaletteFade.main);
-        FadeWork_UpdateFrame(&gPaletteFade.subActive, &gPaletteFade.sub);
-        if (gPaletteFade.mainEnabled != 0) {
+        PaletteFade *fade = &sPaletteFade;
+        PaletteFade_Clear(&sPaletteFade);
+        PaletteFade_SetMode(mode, &sPaletteFade);
+        FadeBlankPair_Init(&sPaletteFade.blankPair);
+        color = PaletteFade_ResolveColor(&sPaletteFade, color);
+        ScreenFade_Init(&sPaletteFade.main, mainType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 0, &sPaletteFade.regQueue, &sPaletteFade.blankPair, heapId, color);
+        ScreenFade_Init(&sPaletteFade.sub, subType, steps, framesPerStep, SCREEN_FADE_STATE_START, NULL, 1, &sPaletteFade.regQueue, &sPaletteFade.blankPair, heapId, color);
+        sPaletteFade.active = 1;
+        FadeWork_UpdateFrame(&sPaletteFade.mainActive, &sPaletteFade.main);
+        FadeWork_UpdateFrame(&sPaletteFade.subActive, &sPaletteFade.sub);
+        if (sPaletteFade.mainEnabled != 0) {
             ScreenFade_QueueBrightnessReset(&fade->main);
             fade->unk14E = 1;
         }
@@ -164,8 +164,8 @@ void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum Fad
 #pragma opt_common_subs reset
 
 void HandleFadeUpdateFrame(void) {
-    PaletteFade *fade = &gPaletteFade;
-    if (gPaletteFade.active != 0) {
+    PaletteFade *fade = &sPaletteFade;
+    if (sPaletteFade.active != 0) {
         if (DoFadeUpdateFrame(fade, &fade->main, &fade->sub) == TRUE) {
             HandleEndFade(fade);
         }
@@ -173,25 +173,25 @@ void HandleFadeUpdateFrame(void) {
 }
 
 BOOL IsPaletteFadeFinished(void) {
-    return gPaletteFade.active == 0;
+    return sPaletteFade.active == 0;
 }
 
 // Ends the fade at once: both screens skip to their effect's clean-up.
 void StopPaletteFade(void) {
-    FadeBlankPair_Stop(&gPaletteFade.blankPair, 0);
-    FadeBlankPair_Stop(&gPaletteFade.blankPair, 1);
-    if (gPaletteFade.mainActive != 0) {
-        gPaletteFade.main.state = SCREEN_FADE_STATE_CLEANUP;
+    FadeBlankPair_Stop(&sPaletteFade.blankPair, 0);
+    FadeBlankPair_Stop(&sPaletteFade.blankPair, 1);
+    if (sPaletteFade.mainActive != 0) {
+        sPaletteFade.main.state = SCREEN_FADE_STATE_CLEANUP;
     }
-    if (gPaletteFade.subActive != 0) {
-        gPaletteFade.sub.state = SCREEN_FADE_STATE_CLEANUP;
+    if (sPaletteFade.subActive != 0) {
+        sPaletteFade.sub.state = SCREEN_FADE_STATE_CLEANUP;
     }
-    FadeWork_UpdateFrame(&gPaletteFade.mainActive, &gPaletteFade.main);
-    FadeWork_UpdateFrame(&gPaletteFade.subActive, &gPaletteFade.sub);
-    gPaletteFade.active = 0;
-    gPaletteFade.unk14E = 0;
-    gPaletteFade.unk14F = 0;
-    PaletteFade_Clear(&gPaletteFade);
+    FadeWork_UpdateFrame(&sPaletteFade.mainActive, &sPaletteFade.main);
+    FadeWork_UpdateFrame(&sPaletteFade.subActive, &sPaletteFade.sub);
+    sPaletteFade.active = 0;
+    sPaletteFade.unk14E = 0;
+    sPaletteFade.unk14F = 0;
+    PaletteFade_Clear(&sPaletteFade);
 }
 
 void ResetVisibleHardwareWindows(PMLCDTarget screen) {
@@ -204,7 +204,7 @@ void SetMasterBrightnessNeutral(PMLCDTarget screen) {
 
 void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color) {
     if (color == 0xFFFF) {
-        color = gPaletteFade.color;
+        color = sPaletteFade.color;
     }
     SetMasterBrightness(screen, color == RGB_WHITE ? 16 : -16);
 }
@@ -212,28 +212,28 @@ void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color) {
 void SetBothScreensBrightnessByColor(u16 color) {
     int brightness;
     if (color == 0xFFFF) {
-        color = gPaletteFade.color;
+        color = sPaletteFade.color;
     }
     brightness = color == RGB_WHITE ? 16 : -16;
     SetMasterBrightness(0, brightness);
     SetMasterBrightness(1, brightness);
-    gPaletteFade.color = color;
+    sPaletteFade.color = color;
 }
 
 // Covers the screen with the backdrop, set to the color, through a window that shows no layer.
 void FillScreenWithColor(int screen, u16 color) {
     if (color == 0xFFFF) {
-        color = gPaletteFade.color;
+        color = sPaletteFade.color;
     }
     if (screen == 0) {
         GX_LoadBGPltt(&color, 0, sizeof(u16));
     } else {
         GXS_LoadBGPltt(&color, 0, sizeof(u16));
     }
-    ScreenWindow_QueueSetVisible(&gPaletteFade.regQueue, GX_WNDMASK_W0, screen);
-    ScreenWindow_QueueSetInside(&gPaletteFade.regQueue, 0x3F, FALSE, 0, screen);
-    ScreenWindow_QueueSetRect(&gPaletteFade.regQueue, 0, 0, 0, 0, 0, screen);
-    ScreenWindow_QueueSetOutside(&gPaletteFade.regQueue, 0x20, FALSE, screen);
+    ScreenWindow_QueueSetVisible(&sPaletteFade.regQueue, GX_WNDMASK_W0, screen);
+    ScreenWindow_QueueSetInside(&sPaletteFade.regQueue, 0x3F, FALSE, 0, screen);
+    ScreenWindow_QueueSetRect(&sPaletteFade.regQueue, 0, 0, 0, 0, 0, screen);
+    ScreenWindow_QueueSetOutside(&sPaletteFade.regQueue, 0x20, FALSE, screen);
 }
 
 void SetBothBackdropColors(u16 color) {
@@ -249,25 +249,25 @@ void SetMasterBrightness(int screen, int brightness) {
     }
 }
 
-void HandleEndFade(PaletteFade *fade) {
+static void HandleEndFade(PaletteFade *fade) {
     fade->active = 0;
     fade->color = PaletteFade_GetEndColor(fade);
     if (fade->mainEnabled != 0) {
         ScreenFade_HoldFadeColor(&fade->main);
         if (fade->main.fadeOut == FALSE) {
-            gPaletteFade.unk14E = 0;
+            sPaletteFade.unk14E = 0;
         }
     }
     if (fade->subEnabled != 0) {
         ScreenFade_HoldFadeColor(&fade->sub);
         if (fade->main.fadeOut == FALSE) { // the main screen's, even for the sub screen
-            gPaletteFade.unk14F = 0;
+            sPaletteFade.unk14F = 0;
         }
     }
     PaletteFade_Clear(fade);
 }
 
-BOOL DoFadeUpdateFrame(PaletteFade *fade, ScreenFade *main, ScreenFade *sub) {
+static BOOL DoFadeUpdateFrame(PaletteFade *fade, ScreenFade *main, ScreenFade *sub) {
     switch (fade->order) {
     case 0:
         FadeWork_UpdateFrame(&fade->mainActive, main);
@@ -294,17 +294,17 @@ BOOL DoFadeUpdateFrame(PaletteFade *fade, ScreenFade *main, ScreenFade *sub) {
     return FALSE;
 }
 
-void FadeWork_UpdateFrame(u32 *active, ScreenFade *fade) {
+static void FadeWork_UpdateFrame(u32 *active, ScreenFade *fade) {
     if (*active != 0 && CallFadeFunc(fade) == TRUE) {
         *active = 0;
     }
 }
 
-BOOL CallFadeFunc(ScreenFade *fade) {
+static BOOL CallFadeFunc(ScreenFade *fade) {
     return sFadeFuncPtrs[fade->type](fade);
 }
 
-void PaletteFade_SetMode(enum FadeMode mode, PaletteFade *fade) {
+static void PaletteFade_SetMode(enum FadeMode mode, PaletteFade *fade) {
     switch (mode) {
     case FADE_BOTH_SCREENS:
         PaletteFade_SetScreenOrder(fade, 0, 1, 1);
@@ -324,7 +324,7 @@ void PaletteFade_SetMode(enum FadeMode mode, PaletteFade *fade) {
     }
 }
 
-void PaletteFade_SetScreenOrder(PaletteFade *fade, u32 order, u32 main, u32 sub) {
+static void PaletteFade_SetScreenOrder(PaletteFade *fade, u32 order, u32 main, u32 sub) {
     fade->order = order;
     fade->mainActive = main;
     fade->subActive = sub;
@@ -332,7 +332,7 @@ void PaletteFade_SetScreenOrder(PaletteFade *fade, u32 order, u32 main, u32 sub)
     fade->subEnabled = sub;
 }
 
-void ScreenFade_Init(ScreenFade *fade, u32 type, int steps, int framesPerStep, int state, void *effect, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId, u16 color) {
+static void ScreenFade_Init(ScreenFade *fade, u32 type, int steps, int framesPerStep, int state, void *effect, int screen, WindowRegisterQueue *regQueue, void *blankPair, enum HeapID heapId, u16 color) {
     fade->type = type;
     fade->steps = steps;
     fade->framesPerStep = framesPerStep;
@@ -345,7 +345,7 @@ void ScreenFade_Init(ScreenFade *fade, u32 type, int steps, int framesPerStep, i
     fade->color = color;
 }
 
-void FadeBlankPair_Init(FadeBlankPair *blankPair) {
+static void FadeBlankPair_Init(FadeBlankPair *blankPair) {
     int i;
     for (i = 0; i < 2; i++) {
         blankPair->data[i] = NULL;
@@ -354,14 +354,14 @@ void FadeBlankPair_Init(FadeBlankPair *blankPair) {
     }
 }
 
-void FadeBlankPair_HBlankCallback(FadeBlankPair *blankPair) {
+static void FadeBlankPair_HBlankCallback(FadeBlankPair *blankPair) {
     int i;
     for (i = 0; i < 2; i++) {
         blankPair->callbacks[i](blankPair->data[i]);
     }
 }
 
-void FadeBlankPair_Start(FadeBlankPair *blankPair, void *data, FadeHBlankCallback callback, int screen) {
+static void FadeBlankPair_Start(FadeBlankPair *blankPair, void *data, FadeHBlankCallback callback, int screen) {
     u8 installed = TRUE;
     u32 *active = &blankPair->active[screen];
 
@@ -386,7 +386,7 @@ void FadeBlankPair_Start(FadeBlankPair *blankPair, void *data, FadeHBlankCallbac
     *active = TRUE;
 }
 
-void FadeBlankPair_Stop(FadeBlankPair *blankPair, int screen) {
+static void FadeBlankPair_Stop(FadeBlankPair *blankPair, int screen) {
     blankPair->active[screen] = 0;
     if (blankPair->active[0] == 0 && blankPair->active[1] == 0) {
         HBlankInterruptDisable();
@@ -411,24 +411,24 @@ void FadeBlankPair_StopOnVBlank(void *blankPair, int screen, enum HeapID heapId)
     SysTask_CreateOnVWaitQueue(FadeBlankPair_StopTask, args, 0x400);
 }
 
-void FadeBlankPair_StartTask(SysTask *task, void *data) {
+static void FadeBlankPair_StartTask(SysTask *task, void *data) {
     FadeBlankStartArgs *args = data;
     FadeBlankPair_Start(args->blankPair, args->data, args->callback, args->screen);
     SysTask_Destroy(task);
     Heap_Free(args);
 }
 
-void FadeBlankPair_StopTask(SysTask *task, void *data) {
+static void FadeBlankPair_StopTask(SysTask *task, void *data) {
     FadeBlankStopArgs *args = data;
     FadeBlankPair_Stop(args->blankPair, args->screen);
     SysTask_Destroy(task);
     Heap_Free(args);
 }
 
-void FadeBlankPair_DummyCallback(void *data) {
+static void FadeBlankPair_DummyCallback(void *data) {
 }
 
-u16 PaletteFade_ResolveColor(PaletteFade *fade, u16 color) {
+static u16 PaletteFade_ResolveColor(PaletteFade *fade, u16 color) {
     if (color == 0xFFFF) {
         color = fade->color;
     }
@@ -436,7 +436,7 @@ u16 PaletteFade_ResolveColor(PaletteFade *fade, u16 color) {
 }
 
 // The color the screens are left in: the main screen's fade color if it faded out, else the previous color.
-u16 PaletteFade_GetEndColor(PaletteFade *fade) {
+static u16 PaletteFade_GetEndColor(PaletteFade *fade) {
     ScreenFade *screenFade;
     if (fade->mainEnabled == TRUE) {
         screenFade = &fade->main;
@@ -449,14 +449,14 @@ u16 PaletteFade_GetEndColor(PaletteFade *fade) {
     return fade->color;
 }
 
-void ScreenFade_ResetBrightnessTask(SysTask *task, void *data) {
+static void ScreenFade_ResetBrightnessTask(SysTask *task, void *data) {
     ScreenFade *fade = data;
     SetMasterBrightness(fade->screen, 0);
     SysTask_Destroy(task);
 }
 
 // A fade in from black or white done by a window wipe: the master brightness goes back to neutral on the next VBlank.
-void ScreenFade_QueueBrightnessReset(ScreenFade *fade) {
+static void ScreenFade_QueueBrightnessReset(ScreenFade *fade) {
     if (fade->fadeOut == FALSE && (fade->color == RGB_WHITE || fade->color == RGB_BLACK) && !fade->isBrightnessFade) {
         SysTask_CreateOnVWaitQueue(ScreenFade_ResetBrightnessTask, fade, 0x400);
     }
@@ -464,14 +464,14 @@ void ScreenFade_QueueBrightnessReset(ScreenFade *fade) {
 
 // A fade out to black or white done by a window wipe: the screen is left at full brightness of that color with
 // the windows off.
-void ScreenFade_HoldFadeColor(ScreenFade *fade) {
+static void ScreenFade_HoldFadeColor(ScreenFade *fade) {
     if (fade->fadeOut == TRUE && (fade->color == RGB_WHITE || fade->color == RGB_BLACK) && !fade->isBrightnessFade) {
         SetMasterBrightnessByColor((PMLCDTarget)fade->screen, fade->color);
         ResetVisibleHardwareWindows((PMLCDTarget)fade->screen);
     }
 }
 
-void PaletteFade_Clear(PaletteFade *fade) {
+static void PaletteFade_Clear(PaletteFade *fade) {
     memset(fade, 0, offsetof(PaletteFade, main));
     memset(&fade->main, 0, sizeof(ScreenFade));
     memset(&fade->sub, 0, sizeof(ScreenFade));

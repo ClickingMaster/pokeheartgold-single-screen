@@ -4,6 +4,9 @@
 extern int _021D05E8[4];
 extern const u8 sSoundFootstepVariations[8][4];
 extern const u16 gGBSoundsSeqPairs[136][2];
+
+static void SoundSys_SetGBSoundsState(u8 enabled);
+
 BOOL NNS_SndPlayerReadVariable(NNSSndHandle *handle, u32 variable, s16 *value);
 void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u32 channels);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
@@ -13,7 +16,6 @@ void Sound_SetChatotRecordingDisabled(u8 value);
 BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 void Sound_ApplyFootstepVariation(u16 seqNo);
 int Sound_IsSelectSEMuted(void);
-void SoundSys_SetGBSoundsState(u8 enabled);
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void GBSounds_SetAllocatableChannels(void);
@@ -44,7 +46,7 @@ void Sound_SetSelectSEMuted(BOOL enabled) {
 int Sound_IsSelectSEMuted(void) {
     return *(u8 *)GF_SdatGetAttrPtr(56);
 }
-void SoundSys_SetGBSoundsState(u8 enabled) {
+static void SoundSys_SetGBSoundsState(u8 enabled) {
     *(u8 *)GF_SdatGetAttrPtr(57) = enabled;
 }
 BOOL SoundSys_GetGBSoundsState(void) {

@@ -5,7 +5,6 @@
 #include "system.h"
 #include "touchpad_internal.h"
 
-// not declared in lib/include
 void TP_RequestAutoSamplingStartAsync(u16, u16, TPData *, u16);
 void TP_RequestAutoSamplingStopAsync(void);
 void TP_WaitBusy(u32);

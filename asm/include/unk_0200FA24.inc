@@ -73,29 +73,7 @@
 .public GXS_LoadBGPltt
 .public memset
 
-	.public HandleEndFade
-	.public DoFadeUpdateFrame
-	.public FadeWork_UpdateFrame
-	.public CallFadeFunc
-	.public PaletteFade_SetMode
-	.public PaletteFade_SetScreenOrder
-	.public ScreenFade_Init
-	.public FadeBlankPair_Init
-	.public FadeBlankPair_HBlankCallback
-	.public FadeBlankPair_Start
-	.public FadeBlankPair_Stop
-	.public FadeBlankPair_StartTask
-	.public FadeBlankPair_StopTask
-	.public FadeBlankPair_DummyCallback
-	.public PaletteFade_ResolveColor
-	.public PaletteFade_GetEndColor
-	.public ScreenFade_ResetBrightnessTask
-	.public ScreenFade_QueueBrightnessReset
-	.public ScreenFade_HoldFadeColor
-	.public PaletteFade_Clear
-	.public sFadeFuncPtrs
 
-	.public gPaletteFade
 	.public _021D0EF8
 	.public _021D0EFC
 	.public _021D0F08

@@ -38,7 +38,6 @@ enum ParticleFieldType {
     PARTICLE_FIELD_CONVERGENCE,
 };
 
-// asm/particle_system_data.s
 extern const VecFx32 gParticleCameraUp;
 extern const VecFx32 gParticleCameraTarget;
 extern const VecFx32 gParticleCameraPos;
@@ -48,7 +47,6 @@ extern const ParticleAllocFunc gParticleSystemAllocFuncs[16];
 extern void *gParticleSystemCallbackState[2 + 16];
 extern ParticleSystem *gParticleSystems[16];
 
-// SPL library functions not declared in include/library/spl.h
 extern void *SPL_Init(ParticleAllocFunc alloc, int, int, int, int, int);
 extern void SPL_Load(void *, void *);
 extern void SPL_LoadTexByVRAMManager(void *);
@@ -67,6 +65,10 @@ extern void spl_calc_spin(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 extern void spl_calc_scfield(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 extern void spl_calc_convergence(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 
+static void ParticleSystem_LoadResource(ParticleSystem *system);
+static void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system);
+static void *ParticleEmitter_FindField(SPLEmitter *emitter, int type);
+
 void *ParticleSystem_AllocSlot0(u32 size);
 void *ParticleSystem_AllocSlot1(u32 size);
 void *ParticleSystem_AllocSlot2(u32 size);
@@ -83,9 +85,6 @@ void *ParticleSystem_AllocSlot12(u32 size);
 void *ParticleSystem_AllocSlot13(u32 size);
 void *ParticleSystem_AllocSlot14(u32 size);
 void *ParticleSystem_AllocSlot15(u32 size);
-void ParticleSystem_LoadResource(ParticleSystem *system);
-void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system);
-void *ParticleEmitter_FindField(SPLEmitter *emitter, int type);
 void ParticleEmitter_SetGravity(SPLEmitter *emitter, VecFx16 *value);
 void ParticleEmitter_SetMagnetPos(SPLEmitter *emitter, VecFx32 *value);
 void ParticleEmitter_GetMagnetPos(SPLEmitter *emitter, VecFx32 *value);
@@ -266,7 +265,7 @@ void ParticleSystem_SetResource(SPLEmitter *emitter, void *data, u32 flag, BOOL 
     SysTask_CreateOnVWaitQueue((SysTaskFunc)ParticleSystem_LoadResourceTask, system, 5);
 }
 
-void ParticleSystem_LoadResource(ParticleSystem *system) {
+static void ParticleSystem_LoadResource(ParticleSystem *system) {
     texAllocFun texAlloc;
     plttAllocFun plttAlloc;
     void *manager;
@@ -290,7 +289,7 @@ void ParticleSystem_LoadResource(ParticleSystem *system) {
     gParticleSystemCallbackState[0] = NULL;
 }
 
-void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system) {
+static void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system) {
     ParticleSystem_LoadResource(system);
     SysTask_Destroy(task);
 }
@@ -391,7 +390,6 @@ void ParticleSystem_CreateEmitterWithParam(SPLEmitter *emitter, int resNo, void 
     ParticleSystem *system = (ParticleSystem *)emitter;
     SPLEmitter *result;
 
-    // volatile: keeps the original store order of the param and the emitter
     *(void *volatile *)&gParticleSystemCallbackState[1] = arg;
     result = SPL_CreateWithInitialize(system->manager, resNo, callback);
     *(void *volatile *)&gParticleSystemCallbackState[1] = NULL;
@@ -449,7 +447,7 @@ void ParticleEmitter_GetAxis(SPLEmitter *emitter, VecFx16 *axis) {
     axis->z = *(const u16 *)&emitter->axis.z;
 }
 
-void *ParticleEmitter_FindField(SPLEmitter *emitter, int type) {
+static void *ParticleEmitter_FindField(SPLEmitter *emitter, int type) {
     SPLResource *resource = emitter->p_res;
     register int j;
     int count = resource->fld_num;

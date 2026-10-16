@@ -24,12 +24,12 @@ typedef struct BoxTestBounds {
     fx32 scaleZ;
 } BoxTestBounds;
 
-// not declared in lib/include
+static void GF3d_SetBoxTestParams(s16 x, s16 y, s16 z, s16 width, s16 height, s16 depth, BoxTestParams *box);
+static BOOL GF3d_RunBoxTest(const BoxTestParams *box);
+
 int G3X_GetBoxTestResult(u32 *result);
 
 BOOL GF3d_BoundsBoxTest(const VecFx32 *translation, const BoxTestBounds *bounds);
-void GF3d_SetBoxTestParams(s16 x, s16 y, s16 z, s16 width, s16 height, s16 depth, BoxTestParams *box);
-BOOL GF3d_RunBoxTest(const BoxTestParams *box);
 
 BOOL GF3d_ModelBoxTest(NNSG3dResMdl *model, const VecFx32 *translation, const MtxFx33 *rotation, VecFx32 *baseScale) {
     BoxTestParams box;
@@ -80,7 +80,7 @@ BOOL GF3d_BoundsBoxTest(const VecFx32 *translation, const BoxTestBounds *bounds)
     return result;
 }
 
-void GF3d_SetBoxTestParams(s16 x, s16 y, s16 z, s16 width, s16 height, s16 depth, BoxTestParams *box) {
+static void GF3d_SetBoxTestParams(s16 x, s16 y, s16 z, s16 width, s16 height, s16 depth, BoxTestParams *box) {
     box->x = x;
     box->y = y;
     box->z = z;
@@ -89,7 +89,7 @@ void GF3d_SetBoxTestParams(s16 x, s16 y, s16 z, s16 width, s16 height, s16 depth
     box->depth = depth;
 }
 
-BOOL GF3d_RunBoxTest(const BoxTestParams *box) {
+static BOOL GF3d_RunBoxTest(const BoxTestParams *box) {
     u32 result = 1;
     u32 polygonAttr = 0x30C1;
     u32 zero;

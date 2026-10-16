@@ -22,7 +22,6 @@
 .public GF_SetCurrentPlayingBGM
 .public GF_GetQueuedBGM
 .public Sound_SetSecondaryScene
-.public Sound_UnloadSecondarySceneData
 .public Sound_SetPlayingGBSeqNo
 .public Sound_SetFieldBGM
 .public Sound_SetScene
@@ -30,9 +29,6 @@
 .public Sound_LoadSceneSoundEffects
 .public Sound_PlayFieldBGM
 .public Sound_SetSceneAndPlayBGM
-.public Sound_ResetAndLoadSceneSoundEffects
-.public Sound_PlayBGMForFieldScene
-.public Sound_ResumeFieldBGM
 .public Sound_ReloadFieldSceneData
 .public BGM_SaveStateAndPlayNew
 .public Sound_GetSavedHeapLevel
@@ -137,6 +133,3 @@
 .public memset
 .public _s32_div_f
 
-.public GF_SndSetAfterFadeDelayTimer
-.public Sound_StopCaptureReverb
-.public Sound_IsCaptureActive

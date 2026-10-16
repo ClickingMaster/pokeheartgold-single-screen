@@ -6,10 +6,46 @@
 #include "gf_3d_render.h"
 #include "heap.h"
 
-// asm/billboard_lists_data.s
 extern BillboardListManager gBillboardLists;
 
-// src/texture_animation.c, src/billboard_gfx_sequence.c, NitroSystem
+static void Billboard_Clear(Billboard *billboard);
+static void BillboardObject_Clear(BillboardObject *object);
+static BOOL Billboard_DeleteAllObjects(Billboard *billboard);
+static Billboard *BillboardLists_GetFree(void);
+static void Billboard_Draw(Billboard *billboard);
+static void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *resource);
+static void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardResource *resource);
+static void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
+static void Billboard_ReleaseTextureKeys(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
+static void Billboard_BindTexture(NNSG3dResTex *texture, NNSG3dResMdlSet *modelSet, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
+static void Billboard_FreeTextureVram(NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
+static BOOL Billboard_TexturesNeedSameVram(NNSG3dResTex *a, NNSG3dResTex *b);
+static void BillboardObject_RemoveTextureAnimation(Billboard *billboard, BillboardObject *object);
+static void BillboardObject_LoadModel(BillboardObject *object, BillboardResource *resource);
+static void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource);
+static void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource);
+static void BillboardObject_SetResourceData(BillboardObject *object, BillboardResource *resource);
+static inline u8 *Billboard_GetIndexedData(u8 *base, u32 index);
+static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object);
+static void Billboard_SetModelTexture(NNSG3dResMdl *model, void *resourceHeader, u8 index);
+static void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u32 value);
+static void Billboard_SetModelPltt(NNSG3dResMdl *model, void *resourceHeader, u8 index);
+static void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 value);
+static void Billboard_InitObjectPool(Billboard *billboard);
+static BillboardObject *Billboard_AllocObject(Billboard *billboard);
+static BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object);
+static void BillboardObject_InsertBefore(BillboardObject *root, BillboardObject *object);
+static void BillboardObject_Unlink(BillboardObject *object);
+static NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resource, NNSG3dResMdl **model, NNSG3dResTex **texture);
+static void *BillboardResource_GetAnimFile(BillboardResource *resource);
+static void BillboardObject_ApplyResource(BillboardObject *object, u32 resourceIndex);
+static fx32 BillboardObject_GetSequenceStart(BillboardObject *object, u32 index);
+static void BillboardObject_StepFrame(BillboardObject *object, fx32 delta);
+static void BillboardObject_BindTexture(BillboardObject *object);
+static void BillboardObject_ReleaseTexture(BillboardObject *object);
+static void *BillboardResource_GetFile(BillboardResource *resource, u32 which);
+static void *BillboardSequence_Get(void *base, u32 index);
+
 void *TextureAnimationPool_New(int count, enum HeapID heapId);
 void TextureAnimationPool_Free(void *arg);
 void *TextureAnimationPool_Add(void *ctx, BillboardResourceData *resourceData, void *resourceHeader, NNSG3dTexKey texKey, NNSG3dPlttKey paletteKey, u32 unkB8);
@@ -18,26 +54,9 @@ void TextureAnimation_SetFrame(void *, fx32);
 u32 BillboardGfxSequence_GetTexPlttIndex(BillboardResourceData *, u32);
 void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *);
 
-void Billboard_Clear(Billboard *billboard);
-void BillboardObject_Clear(BillboardObject *object);
 Billboard *Billboard_Create(BillboardCreateParams *params);
 BOOL Billboard_Delete(Billboard *billboard);
-BOOL Billboard_DeleteAllObjects(Billboard *billboard);
 BOOL Billboard_HasPendingFree(Billboard *billboard);
-Billboard *BillboardLists_GetFree(void);
-void Billboard_Draw(Billboard *billboard);
-void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *resource);
-void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardResource *resource);
-void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
-void Billboard_ReleaseTextureKeys(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
-void Billboard_BindTexture(NNSG3dResTex *texture, NNSG3dResMdlSet *modelSet, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
-void Billboard_FreeTextureVram(NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey);
-BOOL Billboard_TexturesNeedSameVram(NNSG3dResTex *a, NNSG3dResTex *b);
-void BillboardObject_RemoveTextureAnimation(Billboard *billboard, BillboardObject *object);
-void BillboardObject_LoadModel(BillboardObject *object, BillboardResource *resource);
-void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource);
-void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource);
-void BillboardObject_SetResourceData(BillboardObject *object, BillboardResource *resource);
 BillboardObject *BillboardObject_Create(BillboardObjectCreateParams *params);
 BOOL BillboardObject_Delete(BillboardObject *object);
 void BillboardResource_InitWithKeys(BillboardResource *, void *, u32, u32, BillboardResourceData *, u32, u32, u32);
@@ -60,28 +79,9 @@ NNSG3dPlttKey BillboardObject_GetPlttKey(BillboardObject *);
 void BillboardObject_UpdateTextureAnimation(BillboardObject *object);
 NNSG3dResMdl *BillboardObject_GetModelNoCast(BillboardObject *);
 void BillboardObject_SetCallback(BillboardObject *, BillboardCallback, void *);
-void BillboardObject_UpdateTexPlttSequence(BillboardObject *object);
-void Billboard_SetModelTexture(NNSG3dResMdl *, void *, u8);
-void Billboard_OffsetMaterialTexImage(void *, void *, u32);
-void Billboard_SetModelPltt(NNSG3dResMdl *, void *, u8);
-void Billboard_OffsetMaterialPltt(void *, void *, u32);
-void Billboard_InitObjectPool(Billboard *billboard);
-BillboardObject *Billboard_AllocObject(Billboard *billboard);
-BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object);
-void BillboardObject_InsertBefore(BillboardObject *root, BillboardObject *object);
-void BillboardObject_Unlink(BillboardObject *object);
-NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resource, NNSG3dResMdl **model, NNSG3dResTex **texture);
-void *BillboardResource_GetAnimFile(BillboardResource *resource);
-void BillboardObject_ApplyResource(BillboardObject *object, u32 resourceIndex);
-fx32 BillboardObject_GetSequenceStart(BillboardObject *, u32);
-void BillboardObject_StepFrame(BillboardObject *, fx32);
 BOOL BillboardSequence_Step(void *, fx32 *, fx32);
-void BillboardObject_BindTexture(BillboardObject *object);
-void BillboardObject_ReleaseTexture(BillboardObject *object);
-void *BillboardResource_GetFile(BillboardResource *, u32);
-void *BillboardSequence_Get(void *, u32);
 
-void Billboard_Clear(Billboard *billboard) {
+static void Billboard_Clear(Billboard *billboard) {
     billboard->initialized = 0;
     billboard->draw = 0;
     billboard->objects = NULL;
@@ -93,7 +93,7 @@ void Billboard_Clear(Billboard *billboard) {
     billboard->state = 0;
 }
 
-void BillboardObject_Clear(BillboardObject *object) {
+static void BillboardObject_Clear(BillboardObject *object) {
     object->owner = 0;
     object->resourceId = 0;
     object->modelSet = 0;
@@ -192,7 +192,7 @@ BOOL Billboard_Delete(Billboard *billboard) {
     return TRUE;
 }
 
-BOOL Billboard_DeleteAllObjects(Billboard *billboard) {
+static BOOL Billboard_DeleteAllObjects(Billboard *billboard) {
     BillboardObject *object;
     BillboardObject *next;
     if (billboard == NULL) {
@@ -225,7 +225,7 @@ void Billboard_ClearPendingFree(void *data) {
     }
 }
 
-Billboard *BillboardLists_GetFree(void) {
+static Billboard *BillboardLists_GetFree(void) {
     int i;
     for (i = 0; i < gBillboardLists.count; i++) {
         if (!gBillboardLists.list[i].initialized) {
@@ -235,7 +235,7 @@ Billboard *BillboardLists_GetFree(void) {
     return NULL;
 }
 
-void Billboard_Draw(Billboard *billboard) {
+static void Billboard_Draw(Billboard *billboard) {
     MtxFx33 identity;
     BillboardObject *object;
     GF_ASSERT(billboard != NULL);
@@ -259,7 +259,7 @@ void Billboard_Draw(Billboard *billboard) {
     }
 }
 
-void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *resource) {
     Billboard *billboard = object->owner;
     BillboardObject_RemoveTextureAnimation(billboard, object);
     BillboardObject_LoadModel(object, resource);
@@ -273,7 +273,7 @@ void BillboardObject_LoadResource(BillboardObject *object, BillboardResource *re
     object->frame = 0;
 }
 
-void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardResource *resource) {
     Billboard *billboard = object->owner;
     BillboardObject_RemoveTextureAnimation(billboard, object);
     if (object->type == 2) {
@@ -293,7 +293,7 @@ void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardReso
     object->frame = 0;
 }
 
-void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
+static void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
     u32 texSize = NNS_G3dTexGetRequiredSize(texture);
     u32 tex4x4Size = NNS_G3dTex4x4GetRequiredSize(texture);
     u32 paletteSize = NNS_G3dPlttGetRequiredSize(texture);
@@ -317,18 +317,18 @@ void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNS
     }
 }
 
-void Billboard_ReleaseTextureKeys(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
+static void Billboard_ReleaseTextureKeys(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
     NNS_G3dTexReleaseTexKey(texture, texKey, tex4x4Key);
     *paletteKey = NNS_G3dPlttReleasePlttKey(texture);
 }
 
-void Billboard_BindTexture(NNSG3dResTex *texture, NNSG3dResMdlSet *modelSet, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
+static void Billboard_BindTexture(NNSG3dResTex *texture, NNSG3dResMdlSet *modelSet, NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
     NNS_G3dTexSetTexKey(texture, *texKey, *tex4x4Key);
     NNS_G3dPlttSetPlttKey(texture, *paletteKey);
     NNS_G3dBindMdlSet(modelSet, texture);
 }
 
-void Billboard_FreeTextureVram(NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
+static void Billboard_FreeTextureVram(NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NNSG3dPlttKey *paletteKey) {
     if (*texKey != 0) {
         NNS_GfdDefaultFuncFreeTexVram(*texKey);
     }
@@ -340,7 +340,7 @@ void Billboard_FreeTextureVram(NNSG3dTexKey *texKey, NNSG3dTexKey *tex4x4Key, NN
     }
 }
 
-BOOL Billboard_TexturesNeedSameVram(NNSG3dResTex *a, NNSG3dResTex *b) {
+static BOOL Billboard_TexturesNeedSameVram(NNSG3dResTex *a, NNSG3dResTex *b) {
     u32 aTex, a4x4, aPltt;
     u32 bTex, b4x4, bPltt;
     if (a == NULL || b == NULL) {
@@ -358,14 +358,14 @@ BOOL Billboard_TexturesNeedSameVram(NNSG3dResTex *a, NNSG3dResTex *b) {
     return TRUE;
 }
 
-void BillboardObject_RemoveTextureAnimation(Billboard *billboard, BillboardObject *object) {
+static void BillboardObject_RemoveTextureAnimation(Billboard *billboard, BillboardObject *object) {
     if (object->textureAnimation != NULL) {
         TextureAnimation_Remove(object->textureAnimation);
         object->textureAnimation = NULL;
     }
 }
 
-void BillboardObject_LoadModel(BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_LoadModel(BillboardObject *object, BillboardResource *resource) {
     NNSG3dResTex *oldTexture = object->texture;
     BOOL same;
     object->modelSet = BillboardResource_GetModelSet(resource, &object->model, &object->texture);
@@ -383,7 +383,7 @@ void BillboardObject_LoadModel(BillboardObject *object, BillboardResource *resou
     }
 }
 
-void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource) {
     register BillboardResource *res = resource;
     register BillboardObject *obj = object;
     register Billboard *parent = billboard;
@@ -392,13 +392,13 @@ void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *
     obj->textureAnimation = TextureAnimationPool_Add(parent->textureAnimationPool, &obj->resourceData, obj->resourceHeader, obj->texKey, obj->paletteKey, obj->frame);
 }
 
-void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource) {
     object->modelSet = BillboardResource_GetModelSet(resource, &object->model, &object->texture);
     NNS_G3dRenderObjInit(&object->renderObj, object->model);
     object->resourceHeader = BillboardResource_GetAnimFile(resource);
 }
 
-void BillboardObject_SetResourceData(BillboardObject *object, BillboardResource *resource) {
+static void BillboardObject_SetResourceData(BillboardObject *object, BillboardResource *resource) {
     object->resourceData = resource->data;
     object->textureAnimation = NULL;
 }
@@ -575,7 +575,7 @@ void BillboardObject_SetCallback(BillboardObject *object, BillboardCallback call
     object->callback = callback;
 }
 
-void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
+static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
     volatile u8 data[4];
     u32 value = BillboardGfxSequence_GetTexPlttIndex(&object->resourceData, (object->frame << 4) >> 16);
     data[0] = value;
@@ -586,7 +586,7 @@ void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
     Billboard_SetModelPltt(object->model, object->resourceHeader, data[3]);
 }
 
-void Billboard_SetModelTexture(NNSG3dResMdl *model, void *resourceHeader, u8 index) {
+static void Billboard_SetModelTexture(NNSG3dResMdl *model, void *resourceHeader, u8 index) {
     register u8 *materialBlock;
     NNSG3dResDict *materialDict;
     u32 *entry;
@@ -614,7 +614,7 @@ void Billboard_SetModelTexture(NNSG3dResMdl *model, void *resourceHeader, u8 ind
     }
 }
 
-void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u32 value) {
+static void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u32 value) {
     u8 *material;
     u8 *base = materialBlock;
     int i;
@@ -626,7 +626,7 @@ void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u
     }
 }
 
-void Billboard_SetModelPltt(NNSG3dResMdl *model, void *resourceHeader, u8 index) {
+static void Billboard_SetModelPltt(NNSG3dResMdl *model, void *resourceHeader, u8 index) {
     u32 value;
     u8 *materialBlock;
     NNSG3dResDict *shapeDict;
@@ -659,7 +659,7 @@ void Billboard_SetModelPltt(NNSG3dResMdl *model, void *resourceHeader, u8 index)
     }
 }
 
-void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 value) {
+static void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 value) {
     u8 *indices = (u8 *)materialBlock + *(u16 *)shapeData;
     u32 i;
     u8 *shape;
@@ -670,7 +670,7 @@ void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 valu
     }
 }
 
-void Billboard_InitObjectPool(Billboard *billboard) {
+static void Billboard_InitObjectPool(Billboard *billboard) {
     int i;
     for (i = 0; i < billboard->objectCount; i++) {
         BillboardObject_Clear(&billboard->objects[i]);
@@ -679,7 +679,7 @@ void Billboard_InitObjectPool(Billboard *billboard) {
     billboard->usedCount = 0;
 }
 
-BillboardObject *Billboard_AllocObject(Billboard *billboard) {
+static BillboardObject *Billboard_AllocObject(Billboard *billboard) {
     BillboardObject *object;
     if ((int)billboard->usedCount >= billboard->objectCount) {
         return NULL;
@@ -689,7 +689,7 @@ BillboardObject *Billboard_AllocObject(Billboard *billboard) {
     return object;
 }
 
-BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object) {
+static BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object) {
     if ((int)billboard->usedCount <= 0) {
         return FALSE;
     }
@@ -699,19 +699,19 @@ BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object) {
     return TRUE;
 }
 
-void BillboardObject_InsertBefore(BillboardObject *root, BillboardObject *object) {
+static void BillboardObject_InsertBefore(BillboardObject *root, BillboardObject *object) {
     object->prev = root->prev;
     root->prev->next = object;
     object->next = root;
     root->prev = object;
 }
 
-void BillboardObject_Unlink(BillboardObject *object) {
+static void BillboardObject_Unlink(BillboardObject *object) {
     object->prev->next = object->next;
     object->next->prev = object->prev;
 }
 
-NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resource, NNSG3dResMdl **model, NNSG3dResTex **texture) {
+static NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resource, NNSG3dResMdl **model, NNSG3dResTex **texture) {
     void *file = BillboardResource_GetFile(resource, 0);
     NNSG3dResMdlSet *modelSet = NNS_G3dGetMdlSet(file);
     *model = NNS_G3dGetMdlByIdx(modelSet, 0);
@@ -721,11 +721,11 @@ NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resource, NNSG
     return modelSet;
 }
 
-void *BillboardResource_GetAnimFile(BillboardResource *resource) {
+static void *BillboardResource_GetAnimFile(BillboardResource *resource) {
     return BillboardResource_GetFile(resource, 1);
 }
 
-void BillboardObject_ApplyResource(BillboardObject *object, u32 resourceIndex) {
+static void BillboardObject_ApplyResource(BillboardObject *object, u32 resourceIndex) {
     BillboardResource *resource = (BillboardResource *)resourceIndex;
     if (resource->texKey == 0) {
         BillboardObject_LoadResource(object, resource);
@@ -734,12 +734,12 @@ void BillboardObject_ApplyResource(BillboardObject *object, u32 resourceIndex) {
     }
 }
 
-fx32 BillboardObject_GetSequenceStart(BillboardObject *object, u32 index) {
+static fx32 BillboardObject_GetSequenceStart(BillboardObject *object, u32 index) {
     u32 *entry = BillboardSequence_Get((void *)object->resourceId, index);
     return *entry << FX32_SHIFT;
 }
 
-void BillboardObject_StepFrame(BillboardObject *object, fx32 delta) {
+static void BillboardObject_StepFrame(BillboardObject *object, fx32 delta) {
     void *entry = BillboardSequence_Get((void *)object->resourceId, object->sequence);
     BillboardSequence_Step(entry, &object->frame, delta);
 }
@@ -764,11 +764,11 @@ BOOL BillboardSequence_Step(void *entry, fx32 *value, fx32 delta) {
     return wrapped;
 }
 
-void BillboardObject_BindTexture(BillboardObject *object) {
+static void BillboardObject_BindTexture(BillboardObject *object) {
     Billboard_BindTexture(object->texture, object->modelSet, &object->texKey, &object->tex4x4Key, &object->paletteKey);
 }
 
-void BillboardObject_ReleaseTexture(BillboardObject *object) {
+static void BillboardObject_ReleaseTexture(BillboardObject *object) {
     NNSG3dTexKey tex4x4Key;
     NNSG3dTexKey texKey;
     NNSG3dPlttKey paletteKey;
@@ -776,7 +776,7 @@ void BillboardObject_ReleaseTexture(BillboardObject *object) {
     Billboard_ReleaseTextureKeys(object->texture, &texKey, &tex4x4Key, &paletteKey);
 }
 
-void *BillboardResource_GetFile(BillboardResource *resource, u32 which) {
+static void *BillboardResource_GetFile(BillboardResource *resource, u32 which) {
     switch (which) {
     case 0:
         return *(void **)&resource->padding_00[0];
@@ -787,6 +787,6 @@ void *BillboardResource_GetFile(BillboardResource *resource, u32 which) {
     }
 }
 
-void *BillboardSequence_Get(void *base, u32 index) {
+static void *BillboardSequence_Get(void *base, u32 index) {
     return (u8 *)base + index * 12;
 }

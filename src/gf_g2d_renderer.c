@@ -2,7 +2,6 @@
 
 #include "global.h"
 
-// NitroSystem renderer functions not declared in lib/include
 void NNS_G2dInitRenderSurface(NNSG2dRenderSurface *surface);
 void NNS_G2dAddRendererTargetSurface(NNSG2dRendererInstance *renderer, NNSG2dRenderSurface *surface);
 

@@ -7,8 +7,7 @@
 #include "screen_wipe_effects.h"
 
 // The fade effects (FadeFunc_NN runs enum FadeType NN), the fixed-point helpers of the window wipes, the master
-// brightness fade, and the scanline buffers and line masks the shaped wipes draw into (ARM9 static
-// 0x0201010C-0x0201164C).
+// brightness fade, and the scanline buffers and line masks the shaped wipes draw into.
 
 typedef struct BrightnessTransition {
     int stepsLeft;
@@ -20,10 +19,14 @@ typedef struct BrightnessTransition {
     int screen;
 } BrightnessTransition;
 
-BOOL BrightnessTransition_Step(BrightnessTransition *transition);
+static BOOL BrightnessTransition_Step(BrightnessTransition *transition);
+static inline void ApplyScanlineSpan(WipeScanlineBuffer *buffer, int line, ScreenWipeScanlines *scanlines);
+static inline int GX_IsHBlank(void);
+static inline void SetOutsidePlane(int planes, BOOL effect, int screen);
+static inline void SetInsidePlane(int planes, BOOL effect, int window, int screen);
+static inline void ApplyLine(LineMask *mask, int line, int index);
 
-// The configurations of the fade functions below. MWCC lays out a TU's data by size, ordering each size class
-// by the position of the definitions; the order here reproduces the original layout.
+// The configurations of the fade functions below.
 static const LineShutterRange sFadeFunc04ShutterRanges[] = {
     { 192, 0, 1 },
 };
@@ -947,7 +950,7 @@ BOOL BrightnessTransition_Run(ScreenFade *fade) {
 
 #pragma force_active on
 
-BOOL BrightnessTransition_Step(BrightnessTransition *transition) {
+static BOOL BrightnessTransition_Step(BrightnessTransition *transition) {
     BOOL done = FALSE;
 
     if (++transition->frameCounter >= transition->framesPerStep) {

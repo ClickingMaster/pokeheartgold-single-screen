@@ -2,10 +2,6 @@
 
 #include "global.h"
 
-// LoadWindowFrameIconTiles only matches when BgGetCharPtr and BG_LoadCharTilesData get the background id as an
-// int (the u8 prototypes in bg_window.h narrow it at both calls), so this file declares what it uses itself
-// instead of including bg_window.h; the volatile locals keep the stack layout and store order.
-
 typedef struct WindowView {
     void *bgConfig;
 } WindowView; // leading member of Window

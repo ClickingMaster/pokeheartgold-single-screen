@@ -12,18 +12,19 @@ typedef struct ParticleScene {
     SPLEmitter *context;
 } ParticleScene;
 
+static void ParticleScene_Setup3D(void);
+static u32 ParticleScene_AllocTexVram(u32 size, BOOL compressed);
+static u32 ParticleScene_AllocPlttVram(u32 size, BOOL palette4);
+static SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID);
+static SPLEmitter *ParticleScene_NewParticleSystemFromNarc(enum HeapID heapID, NarcId narc, int file);
+static void ParticleScene_FreeParticleSystem(SPLEmitter *context);
+static void ParticleScene_SetEmitterPosition(SPLEmitter *emitter);
+
 void ParticleScene_HidePlanes(void);
 void ParticleScene_SetBlend(void);
 GF3DVramMan *ParticleScene_CreateVramMan(enum HeapID heapID);
-void ParticleScene_Setup3D(void);
 void ParticleScene_ReserveVram(void);
 void ParticleScene_DrawAndSwap(void);
-u32 ParticleScene_AllocTexVram(u32 size, BOOL compressed);
-u32 ParticleScene_AllocPlttVram(u32 size, BOOL palette4);
-SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID);
-SPLEmitter *ParticleScene_NewParticleSystemFromNarc(enum HeapID heapID, NarcId narc, int file);
-void ParticleScene_FreeParticleSystem(SPLEmitter *context);
-void ParticleScene_SetEmitterPosition(SPLEmitter *emitter);
 ParticleScene *ParticleScene_New(ParticleScene *settings);
 void ParticleScene_CreateEmitter(ParticleScene *scene, int resource);
 BOOL ParticleScene_IsActive(ParticleScene *scene);
@@ -45,7 +46,7 @@ GF3DVramMan *ParticleScene_CreateVramMan(enum HeapID heapID) {
     return GF_3DVramMan_Create(heapID, 0, 2, 0, 2, ParticleScene_Setup3D);
 }
 
-void ParticleScene_Setup3D(void) {
+static void ParticleScene_Setup3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
     G3X_SetShading((GXShading)0);
@@ -76,19 +77,19 @@ void ParticleScene_DrawAndSwap(void) {
     RequestSwap3DBuffers((GXSortMode)1, (GXBufferMode)0);
 }
 
-u32 ParticleScene_AllocTexVram(u32 size, BOOL compressed) {
+static u32 ParticleScene_AllocTexVram(u32 size, BOOL compressed) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, compressed, 0);
     ParticleSystem_RegisterTexKey(key);
     return (key << 16) >> 13;
 }
 
-u32 ParticleScene_AllocPlttVram(u32 size, BOOL palette4) {
+static u32 ParticleScene_AllocPlttVram(u32 size, BOOL palette4) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, palette4, 0);
     ParticleSystem_RegisterPlttKey(key);
     return (key << 16) >> 13;
 }
 
-SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID) {
+static SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID) {
     void *heap = Heap_Alloc(heapID, 0x4800);
     SPLEmitter *context = ParticleSystem_New(ParticleScene_AllocTexVram, ParticleScene_AllocPlttVram, heap, 0x4800, TRUE, heapID);
     Camera *camera = ParticleSystem_GetCamera(context);
@@ -98,20 +99,20 @@ SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID) {
     return context;
 }
 
-SPLEmitter *ParticleScene_NewParticleSystemFromNarc(enum HeapID heapID, NarcId narc, int file) {
+static SPLEmitter *ParticleScene_NewParticleSystemFromNarc(enum HeapID heapID, NarcId narc, int file) {
     SPLEmitter *context = ParticleScene_NewParticleSystem(heapID);
     void *resource = ParticleSystem_LoadResourceFile(narc, file, heapID);
     ParticleSystem_SetResource(context, resource, 10, TRUE);
     return context;
 }
 
-void ParticleScene_FreeParticleSystem(SPLEmitter *context) {
+static void ParticleScene_FreeParticleSystem(SPLEmitter *context) {
     void *heap = ParticleSystem_GetHeap(context);
     ParticleSystem_Free(context);
     Heap_Free(heap);
 }
 
-void ParticleScene_SetEmitterPosition(SPLEmitter *emitter) {
+static void ParticleScene_SetEmitterPosition(SPLEmitter *emitter) {
     VecFx32 position = { 0, 0, 0 };
     position.x = 0;
     position.y = 0x560;

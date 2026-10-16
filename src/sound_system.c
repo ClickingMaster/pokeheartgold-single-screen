@@ -16,18 +16,36 @@ typedef struct WaveArcInfo {
     u32 flags : 8;
 } WaveArcInfo;
 
-// asm/sound_system_data.s
 extern int _021D05E8[4];
 extern MICAutoParam gSoundMicAutoParam;
 extern s8 sSoundChatotBuffer[2000];
 
-// sound_gb.c, sound_playback.c, communication
+static void Sound_ResetAndLoadSceneSoundEffects(int scene);
+static void Sound_PlayBGMForFieldScene(u16 seqNo, int mode);
+static void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo);
+static void Sound_PlayBGMForBattleScene(u16 seqNo, int mode);
+static void Sound_PlayBGMForWifiScene(u16 seqNo, int mode);
+static void Sound_PlayBGMForContestScene(u16 seqNo, int mode);
+static void Sound_PlayBGMForImageScene(u16 seqNo, int mode);
+static void Sound_LoadSecondarySceneSoundEffects(int scene);
+static void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode);
+static void Sound_UnloadSecondarySceneData(void);
+static void Sound_ReverseWaveBuffer(void *buffer, u32 size);
+static BOOL Sound_IsCaptureActive(void);
+static int Sound_GetCaptureType(void);
+static void Sound_StopCaptureReverb(int frames);
+static void GF_SndSetAfterFadeDelayTimer(u32 frames);
+static BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
+static BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused);
+static void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
+static void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels);
+static void Sound_PauseOrStopFieldBGM(void);
+
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void StopBGMSEAndCry(void);
 void Sound_Stop(void);
 BOOL Comm_IsWifiVoiceChatEnabled(void);
 
-// NitroSystem / MIC, with the argument types these call sites were compiled against
 void NNS_SndPlayerPause(NNSSndHandle *handle, BOOL pause);
 void NNS_SndPlayerMoveVolume(NNSSndHandle *handle, int volume, int frames);
 void NNS_SndPlayerSetInitialVolume(NNSSndHandle *handle, int volume);
@@ -56,49 +74,29 @@ void NNS_SndSetMonoFlag(int flag);
 void NNS_SndSetMasterVolume(int volume);
 void NNS_SndPlayerSetAllocatableChannel(int playerNo, u32 channels);
 
-void Sound_UnloadSecondarySceneData(void);
-void Sound_PauseOrStopFieldBGM(void);
 void Sound_ClearBGMPauseFlags(void);
 int GF_NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);
 int GF_GetBankBySeqNo(int seqNo);
 void Sound_SetReloadFieldSeqFlag(u16 seqNo);
 int Sound_GetSavedHeapLevel(int state);
-void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo);
 void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
 BOOL Sound_PlayFieldBGM(u16 seqNo);
-void Sound_ResetAndLoadSceneSoundEffects(int scene);
 void Sound_SetBGMPlayerChannels(int mode);
-void Sound_PlayBGMForFieldScene(u16 seqNo, int mode);
-void Sound_PlayBGMForBattleScene(u16 seqNo, int mode);
-void Sound_PlayBGMForWifiScene(u16 seqNo, int mode);
-void Sound_PlayBGMForContestScene(u16 seqNo, int mode);
-void Sound_PlayBGMForImageScene(u16 seqNo, int mode);
-void Sound_LoadSecondarySceneSoundEffects(int scene);
-void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode);
 void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 const struct NNSSndArcBankInfo *GF_GetBankInfoBySeqNo(int seqNo);
 BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, int heapId);
-void Sound_ReverseWaveBuffer(void *buffer, u32 size);
 void Sound_StopWaveOut(int channel);
 void Sound_SetWaveOutPan(int channel, u32 pan);
 void Sound_SetWaveOutSpeed(int channel, u32 speed);
-BOOL Sound_IsCaptureActive(void);
-int Sound_GetCaptureType(void);
-void Sound_StopCaptureReverb(int frames);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 tracks, int pitch);
 void GF_SndSetTrackPitchByPlayerNo(int playerNo, u32 tracks, int pitch);
 void GF_SndHandleSetTrackPan(int handleNo, u32 tracks, int pan);
 void GF_SndHandleSetTempoRatio(int handleNo, int ratio);
 void GF_SndSetFadeTimer(u32 frames);
-void GF_SndSetAfterFadeDelayTimer(u32 frames);
 BOOL GF_NowStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
-BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
 BOOL GF_FadeStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused);
-BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused);
-void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused);
-void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels);
 
 void GF_SND_BGM_DisableSet(u8 disabled) {
     u8 *value = GF_SdatGetAttrPtr(5);
@@ -442,14 +440,14 @@ BOOL Sound_SetSceneAndPlayBGM(u8 scene, u16 seqNo, int mode) {
     return TRUE;
 }
 
-void Sound_ResetAndLoadSceneSoundEffects(int scene) {
+static void Sound_ResetAndLoadSceneSoundEffects(int scene) {
     GF_Snd_LoadState(*(int *)GF_SdatGetAttrPtr(24));
     GF_Snd_SaveState(GF_SdatGetAttrPtr(25));
     Sound_LoadSceneSoundEffects(scene);
     GF_Snd_SaveState(GF_SdatGetAttrPtr(26));
 }
 
-void Sound_PlayBGMForFieldScene(u16 seqNo, int mode) {
+static void Sound_PlayBGMForFieldScene(u16 seqNo, int mode) {
     int playingSeqNo;
     u8 *reload = GF_SdatGetAttrPtr(12);
     GF_SdatGetAttrPtr(24);
@@ -483,7 +481,7 @@ void Sound_PlayBGMForFieldScene(u16 seqNo, int mode) {
     }
 }
 
-void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo) {
+static void Sound_ResumeFieldBGM(u16 seqNo, u16 previousSeqNo) {
     u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
     if (GF_GetBankBySeqNo(*fieldSeqNo) == BANK_BASIC) {
         GF_Snd_LoadSeqEx(seqNo, 4);
@@ -517,7 +515,7 @@ void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo) {
     }
 }
 
-void Sound_PlayBGMForBattleScene(u16 seqNo, int mode) {
+static void Sound_PlayBGMForBattleScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_PauseOrStopFieldBGM();
     GF_Snd_LoadState(Sound_GetSavedHeapLevel(2));
@@ -527,7 +525,7 @@ void Sound_PlayBGMForBattleScene(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void Sound_PlayBGMForWifiScene(u16 seqNo, int mode) {
+static void Sound_PlayBGMForWifiScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ClearBGMPauseFlags();
@@ -535,7 +533,7 @@ void Sound_PlayBGMForWifiScene(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void Sound_PlayBGMForContestScene(u16 seqNo, int mode) {
+static void Sound_PlayBGMForContestScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ResetAndLoadSceneSoundEffects(6);
@@ -543,7 +541,7 @@ void Sound_PlayBGMForContestScene(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void Sound_PlayBGMForImageScene(u16 seqNo, int mode) {
+static void Sound_PlayBGMForImageScene(u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ResetAndLoadSceneSoundEffects(7);
@@ -551,13 +549,13 @@ void Sound_PlayBGMForImageScene(u16 seqNo, int mode) {
     PlayBGM(seqNo);
 }
 
-void Sound_LoadSecondarySceneSoundEffects(int scene) {
+static void Sound_LoadSecondarySceneSoundEffects(int scene) {
     Sound_UnloadSecondarySceneData();
     Sound_LoadSceneSoundEffects(scene);
     GF_Snd_SaveState(GF_SdatGetAttrPtr(28));
 }
 
-void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode) {
+static void Sound_PlayBGMForScene(int scene, u16 seqNo, int mode) {
     GF_SdatGetAttrPtr(24);
     Sound_Stop();
     Sound_ResetAndLoadSceneSoundEffects(scene);
@@ -570,7 +568,7 @@ void BGM_SaveStateAndPlayNew(u16 seqNo) {
     PlayBGM(seqNo);
 }
 
-void Sound_UnloadSecondarySceneData(void) {
+static void Sound_UnloadSecondarySceneData(void) {
     GF_Snd_LoadState(Sound_GetSavedHeapLevel(4));
 }
 
@@ -581,7 +579,7 @@ int Sound_GetSavedHeapLevel(int state) {
         GF_ASSERT(FALSE);
         return *(int *)GF_SdatGetAttrPtr(27);
     }
-    // Valid state IDs are 0 through 6; preserve the original out-of-range behavior.
+    // Valid state IDs are 0 through 6.
     switch (state) {
     case 0:
         level = GF_SdatGetAttrPtr(23);
@@ -905,7 +903,7 @@ BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, 
     return success;
 }
 
-void Sound_ReverseWaveBuffer(void *buffer, u32 size) {
+static void Sound_ReverseWaveBuffer(void *buffer, u32 size) {
     u8 *data = buffer;
     u32 i;
     for (i = 0; i < size / 2; i++) {
@@ -927,7 +925,7 @@ void Sound_StopWaveOutAndFreeBuffer(int channel) {
     }
 }
 
-BOOL Sound_IsCaptureActive(void) {
+static BOOL Sound_IsCaptureActive(void) {
     BOOL active = NNS_SndCaptureIsActive();
     if (active == TRUE) {
         Sound_GetCaptureType();
@@ -935,11 +933,11 @@ BOOL Sound_IsCaptureActive(void) {
     return active;
 }
 
-int Sound_GetCaptureType(void) {
+static int Sound_GetCaptureType(void) {
     return NNS_SndCaptureGetCaptureType();
 }
 
-void Sound_StopCaptureReverb(int frames) {
+static void Sound_StopCaptureReverb(int frames) {
     NNS_SndCaptureStopReverb(frames);
 }
 
@@ -972,7 +970,7 @@ void GF_SndSetFadeTimer(u32 frames) {
     *(u32 *)GF_SdatGetAttrPtr(7) = frames;
 }
 
-void GF_SndSetAfterFadeDelayTimer(u32 frames) {
+static void GF_SndSetAfterFadeDelayTimer(u32 frames) {
     *(u32 *)GF_SdatGetAttrPtr(8) = frames;
 }
 
@@ -1002,7 +1000,7 @@ BOOL GF_NowStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int 
     return GF_NowStartMusicIdEx(4, seqNo, fadeOutFrames, delay, reload, unused);
 }
 
-BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
+static BOOL GF_NowStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
     u8 *secondary = GF_SdatGetAttrPtr(22);
     Sound_PrepareBGMChange(scene, seqNo, fadeOutFrames, delay, reload, unused);
     *secondary = 0;
@@ -1014,7 +1012,7 @@ BOOL GF_FadeStartMusicId(u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFram
     return GF_FadeStartMusicIdEx(4, seqNo, fadeOutFrames, delay, fadeInFrames, reload, unused);
 }
 
-BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused) {
+static BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, int fadeInFrames, u8 reload, int unused) {
     int *fadeIn = GF_SdatGetAttrPtr(9);
     Sound_PrepareBGMChange(scene, seqNo, fadeOutFrames, delay, reload, unused);
     *fadeIn = fadeInFrames;
@@ -1022,7 +1020,7 @@ BOOL GF_FadeStartMusicIdEx(int scene, u16 seqNo, u16 fadeOutFrames, int delay, i
     return TRUE;
 }
 
-void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
+static void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, u8 reload, int unused) {
     const struct NNSSndArcBankInfo **bank = GF_SdatGetAttrPtr(2);
     GF_SndStartFadeOutBGM(0, fadeOutFrames);
     Sound_SetCurrentBGM(SEQ_NONE);
@@ -1032,7 +1030,7 @@ void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int delay, 
     Sound_SetReloadFieldSeqFlag(reload);
 }
 
-void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels) {
+static void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels) {
     NNS_SndPlayerSetAllocatableChannel(7, channels);
 }
 
@@ -1046,7 +1044,7 @@ void Sound_SetBGMPlayerChannels(int mode) {
     Sound_IsCaptureActive();
 }
 
-void Sound_PauseOrStopFieldBGM(void) {
+static void Sound_PauseOrStopFieldBGM(void) {
     if (GF_SndGetFadeTimer() == 0 && GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(0)) != -1) {
         StopBGMSEAndCry();
         Sound_SetPlayerPause(1, 1);
