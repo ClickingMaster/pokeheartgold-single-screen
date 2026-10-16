@@ -26,18 +26,18 @@ extern ChannelMask sWifiSetupChannelMasks[];
 typedef struct ScanRecord {
     u8 unk_00[4];
     u16 mac[3];
-    u16 unk_0A;
+    u16 ssidLength;
     u16 ssid[16];
     u16 flags;
     u16 presentChannels;
     u16 enabledChannels;
-    u16 unk_32;
-    u16 unk_34;
+    u16 beaconPeriod;
+    u16 dtimPeriod;
     u16 number;
 } ScanRecord;
 
 typedef struct AccessPointInfo {
-    u32 unk_00;
+    u32 ssidLength;
     u16 ssid[16];
     u32 number;
     u8 unk_28[8];
@@ -45,7 +45,7 @@ typedef struct AccessPointInfo {
     u8 unk_36[2];
     int channelCount;
     u8 channels[16];
-    int unk_4C;
+    int beaconPeriod;
     int mode;
 } AccessPointInfo;
 
@@ -220,7 +220,7 @@ void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     int count;
     ChannelMask *p;
 
-    t->unk_00 = s->unk_0A;
+    t->ssidLength = s->ssidLength;
     MIi_CpuCopy16(s->ssid, t->ssid, 32);
     t->number = s->number;
     MIi_CpuCopy16(s->mac, t->mac, 6);
@@ -237,7 +237,7 @@ void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
         }
     }
     t->channelCount = count;
-    t->unk_4C = s->unk_32;
+    t->beaconPeriod = s->beaconPeriod;
     if ((s->flags & 3) == 1) {
         t->mode = 1;
     } else if ((s->flags & 3) == 2) {

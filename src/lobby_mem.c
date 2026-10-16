@@ -113,7 +113,7 @@ static inline BOOL StrLess(Str *a, Str *b) {
 typedef struct ObjKey {
     void *vt;
     u32 id;
-    u32 unk8;
+    u32 param;
 } ObjKey;
 
 static inline Iter IterPostInc(Iter *it) {
@@ -593,7 +593,7 @@ BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id) {
     Iter res;
     key.vt = &gLobbyRequestVtable;
     key.id = id;
-    key.unk8 = 0;
+    key.param = 0;
     pk = &key;
     LobbyRequestMap_Find(&it, t, &pk);
     tmp = it;

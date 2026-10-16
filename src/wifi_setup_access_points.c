@@ -37,8 +37,8 @@ typedef struct WifiSetupApScan {
 typedef struct WifiSetupWmCallback {
     u16 apiid;
     u16 errcode;
-    u16 unk4;
-    u16 unk6;
+    u16 wlCmdID;
+    u16 wlResult;
     u16 state;
 } WifiSetupWmCallback;
 
@@ -56,8 +56,8 @@ typedef struct WifiSetupBssDesc {
 typedef struct WifiSetupScanCallback {
     u16 apiid;
     u16 errcode;
-    u16 unk4;
-    u16 unk6;
+    u16 wlCmdID;
+    u16 wlResult;
     u16 state;
     u8 unkA[4];
     u16 bssDescCount;

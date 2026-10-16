@@ -113,7 +113,7 @@ static inline BOOL StrLess(Str *a, Str *b) {
 typedef struct ObjKey {
     void *vt;
     u32 id;
-    u32 unk8;
+    u32 param;
 } ObjKey;
 
 static inline Iter IterPostInc(Iter *it) {

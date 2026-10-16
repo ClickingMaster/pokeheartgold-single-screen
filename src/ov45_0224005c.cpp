@@ -37,7 +37,7 @@ struct HandlerVtbl {
 struct Base {
     HandlerVtbl *vtbl;
     u32 id;
-    u32 unk8;
+    u32 param;
 };
 
 struct Handler {
@@ -46,7 +46,7 @@ struct Handler {
     virtual void f8();
     virtual u32 getArg();
     u32 id;
-    u32 unk8;
+    u32 param;
     void (*callback)(BOOL ok, u32 zero, const char *str, u32 extra);
 };
 
@@ -89,7 +89,7 @@ extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s)
 inline void KeyInit(Base *k, u32 id) {
     k->vtbl = &gLobbyRequestVtable;
     k->id = id;
-    k->unk8 = 0;
+    k->param = 0;
 }
 
 inline Handler *Lookup(Manager *m, const It &it) {

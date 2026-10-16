@@ -18,8 +18,8 @@ typedef struct ApInfo {
 } ApInfo;
 
 typedef struct ConnectParam {
-    u32 unk00;
-    u8 unk04[0x20];
+    u32 ssidLength;
+    u8 ssid[0x20];
     int mode;
     u32 keyLength;
     u8 key[0x20];
@@ -69,7 +69,7 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
     gWifiSetupConnectSetting.keyIndex = connected;
     MI_CpuCopy8(param->key, (u8 *)&gWifiSetupConnectSetting + (connected * sizeof(ConnectKey) + 2), param->keyLength);
     WCM_ClearApList();
-    if (WifiSetupWcm_StartSearch(0, (u32)param->unk04, param->unk00, 0x0030BFFE)) {
+    if (WifiSetupWcm_StartSearch(0, (u32)param->ssid, param->ssidLength, 0x0030BFFE)) {
         retries = 0;
         OS_CreateAlarm(&alarm);
         OS_SetAlarm(&alarm, 0x003FEC42, (OSAlarmHandler)WifiSetup_OnTimeoutAlarm, (void *)0x12);
