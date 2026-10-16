@@ -958,6 +958,40 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
 
 #pragma force_active reset
 
+enum WiFiPlazaInfoCounterStep {
+    WIFI_PLAZA_INFO_START,
+    WIFI_PLAZA_INFO_PARADE_ON,
+    WIFI_PLAZA_INFO_CLOSING,
+    WIFI_PLAZA_INFO_WELCOME,
+    WIFI_PLAZA_INFO_WHAT_TO_KNOW,
+    WIFI_PLAZA_INFO_OPEN_TOPICS,
+    WIFI_PLAZA_INFO_HANDLE_TOPICS,
+    WIFI_PLAZA_INFO_TAP_TOYS,
+    WIFI_PLAZA_INFO_OPEN_GAMES,
+    WIFI_PLAZA_INFO_HANDLE_GAMES,
+    WIFI_PLAZA_INFO_FIRST_GAME,
+    WIFI_PLAZA_INFO_SECOND_GAME,
+    WIFI_PLAZA_INFO_THIRD_GAME,
+    WIFI_PLAZA_INFO_VISITOR_PROFILES,
+    WIFI_PLAZA_INFO_PLAZA_NEWS,
+    WIFI_PLAZA_INFO_FOOTPRINT_STAMP,
+    WIFI_PLAZA_INFO_OPEN_EVENTS,
+    WIFI_PLAZA_INFO_HANDLE_EVENTS,
+    WIFI_PLAZA_INFO_SPOTLIGHTS,
+    WIFI_PLAZA_INFO_FIREWORKS,
+    WIFI_PLAZA_INFO_PARADE,
+    WIFI_PLAZA_INFO_PLAZA_SURVEY,
+    WIFI_PLAZA_INFO_GOODBYE,
+    WIFI_PLAZA_INFO_WAIT_MESSAGE,
+    WIFI_PLAZA_INFO_END,
+};
+
+enum WiFiPlazaReceptionStep {
+    WIFI_PLAZA_RECEPTION_START,
+    WIFI_PLAZA_RECEPTION_WAIT_MESSAGE,
+    WIFI_PLAZA_RECEPTION_END,
+};
+
 // Prints a message and waits for it (step 23), then goes on with step `next`
 #define PRINT_STAFF_MSG(room, work, msgId, next)                                            \
     do {                                                                                    \
@@ -977,39 +1011,39 @@ BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *r
     u32 choice;
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
-    case 0:
+    case WIFI_PLAZA_INFO_START:
         WiFiPlazaPlayerState_AllocWork(state, sizeof(WiFiPlazaInfoCounter));
         PlaySE(SEQ_SE_DP_SELECT);
         if (WiFiPlazaWork_IsClosing(lobby) == 1) {
-            WiFiPlazaPlayerState_SetStep(state, 2);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_CLOSING);
         } else if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) {
-            WiFiPlazaPlayerState_SetStep(state, 1);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_PARADE_ON);
         } else {
-            WiFiPlazaPlayerState_SetStep(state, 3);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WELCOME);
         }
         break;
-    case 1: // "The Pokemon Parade is on now!"
-        PRINT_STAFF_MSG(room, counter, 0x4E, 24);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_PARADE_ON: // "The Pokemon Parade is on now!"
+        PRINT_STAFF_MSG(room, counter, 0x4E, WIFI_PLAZA_INFO_END);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 2: // "Your Wi-Fi Plaza visit is nearly over."
-        PRINT_STAFF_MSG(room, counter, 3, 24);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_CLOSING: // "Your Wi-Fi Plaza visit is nearly over."
+        PRINT_STAFF_MSG(room, counter, 3, WIFI_PLAZA_INFO_END);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 3: // "This is the general-inquiries counter."
-        PRINT_STAFF_MSG(room, counter, 0xF, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_WELCOME: // "This is the general-inquiries counter."
+        PRINT_STAFF_MSG(room, counter, 0xF, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 4: // "What would you like to know about?"
-        PRINT_STAFF_MSG(room, counter, 0x10, 5);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_WHAT_TO_KNOW: // "What would you like to know about?"
+        PRINT_STAFF_MSG(room, counter, 0x10, WIFI_PLAZA_INFO_OPEN_TOPICS);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 5:
+    case WIFI_PLAZA_INFO_OPEN_TOPICS:
         WiFiPlazaTalkMenu_InitInfoCounter(&counter->menu, room);
         WiFiPlazaRoom_OpenListAt(room, &counter->menu.template, 0, 0, 16, 1, 15);
-        WiFiPlazaPlayerState_SetStep(state, 6);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_HANDLE_TOPICS);
         break;
-    case 6:
+    case WIFI_PLAZA_INFO_HANDLE_TOPICS:
         selected = FALSE;
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
@@ -1019,37 +1053,37 @@ BOOL WiFiPlazaTalk_InfoCounter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *r
             }
             break;
         case 0: // Tap Toys
-            WiFiPlazaPlayerState_SetStep(state, 7);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_TAP_TOYS);
             selected = TRUE;
             break;
         case 1: // Plaza Games
-            WiFiPlazaPlayerState_SetStep(state, 8);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_OPEN_GAMES);
             selected = TRUE;
             break;
         case 2: // Visitor Profiles
-            WiFiPlazaPlayerState_SetStep(state, 13);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_VISITOR_PROFILES);
             selected = TRUE;
             break;
         case 3: // Plaza News
-            WiFiPlazaPlayerState_SetStep(state, 14);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_PLAZA_NEWS);
             selected = TRUE;
             break;
         case 4: // Footprint Stamp
-            WiFiPlazaPlayerState_SetStep(state, 15);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_FOOTPRINT_STAMP);
             selected = TRUE;
             break;
         case 5: // Plaza Survey
-            WiFiPlazaPlayerState_SetStep(state, 21);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_PLAZA_SURVEY);
             selected = TRUE;
             break;
         case 6: // Time Events
-            WiFiPlazaPlayerState_SetStep(state, 16);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_OPEN_EVENTS);
             selected = TRUE;
             break;
 cancelTopics:
             PlaySE(SEQ_SE_DP_SELECT);
         case 7: // Exit
-            WiFiPlazaPlayerState_SetStep(state, 22);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_GOODBYE);
             selected = TRUE;
             break;
         }
@@ -1058,16 +1092,16 @@ cancelTopics:
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
-    case 7:
-        PRINT_STAFF_MSG(room, counter, 0x17, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_TAP_TOYS:
+        PRINT_STAFF_MSG(room, counter, 0x17, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 8:
+    case WIFI_PLAZA_INFO_OPEN_GAMES:
         WiFiPlazaTalkMenu_InitPlazaGames(&counter->menu, room);
         WiFiPlazaRoom_OpenList(room, &counter->menu.template, 0, 0);
-        WiFiPlazaPlayerState_SetStep(state, 9);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_HANDLE_GAMES);
         break;
-    case 9:
+    case WIFI_PLAZA_INFO_HANDLE_GAMES:
         selected = FALSE;
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
@@ -1077,21 +1111,21 @@ cancelTopics:
             }
             break;
         case 0:
-            WiFiPlazaPlayerState_SetStep(state, 10);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_FIRST_GAME);
             selected = TRUE;
             break;
         case 1:
-            WiFiPlazaPlayerState_SetStep(state, 11);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_SECOND_GAME);
             selected = TRUE;
             break;
         case 2:
-            WiFiPlazaPlayerState_SetStep(state, 12);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_THIRD_GAME);
             selected = TRUE;
             break;
 cancelGames:
             PlaySE(SEQ_SE_DP_SELECT);
         case 3:
-            WiFiPlazaPlayerState_SetStep(state, 4);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
             selected = TRUE;
             break;
         }
@@ -1100,39 +1134,39 @@ cancelGames:
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
-    case 10:
+    case WIFI_PLAZA_INFO_FIRST_GAME:
         WiFiPlazaRoom_BufferActivityName(room, 0, 0);
-        PRINT_STAFF_MSG(room, counter, 0x18, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+        PRINT_STAFF_MSG(room, counter, 0x18, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 11:
+    case WIFI_PLAZA_INFO_SECOND_GAME:
         WiFiPlazaRoom_BufferActivityName(room, 1, 0);
-        PRINT_STAFF_MSG(room, counter, 0x19, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+        PRINT_STAFF_MSG(room, counter, 0x19, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 12:
+    case WIFI_PLAZA_INFO_THIRD_GAME:
         WiFiPlazaRoom_BufferActivityName(room, 2, 0);
-        PRINT_STAFF_MSG(room, counter, 0x1A, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+        PRINT_STAFF_MSG(room, counter, 0x1A, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 13:
-        PRINT_STAFF_MSG(room, counter, 0x12, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_VISITOR_PROFILES:
+        PRINT_STAFF_MSG(room, counter, 0x12, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 14:
-        PRINT_STAFF_MSG(room, counter, 0x13, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_PLAZA_NEWS:
+        PRINT_STAFF_MSG(room, counter, 0x13, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 15:
-        PRINT_STAFF_MSG(room, counter, 0x14, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_FOOTPRINT_STAMP:
+        PRINT_STAFF_MSG(room, counter, 0x14, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 16:
+    case WIFI_PLAZA_INFO_OPEN_EVENTS:
         WiFiPlazaTalkMenu_InitTimeEvents(&counter->menu, room);
         WiFiPlazaRoom_OpenList(room, &counter->menu.template, 0, 0);
-        WiFiPlazaPlayerState_SetStep(state, 17);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_HANDLE_EVENTS);
         break;
-    case 17:
+    case WIFI_PLAZA_INFO_HANDLE_EVENTS:
         selected = FALSE;
         choice = WiFiPlazaRoom_ProcessList(room);
         switch (choice) {
@@ -1142,21 +1176,21 @@ cancelGames:
             }
             break;
         case 0:
-            WiFiPlazaPlayerState_SetStep(state, 18);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_SPOTLIGHTS);
             selected = TRUE;
             break;
         case 1:
-            WiFiPlazaPlayerState_SetStep(state, 19);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_FIREWORKS);
             selected = TRUE;
             break;
         case 2:
-            WiFiPlazaPlayerState_SetStep(state, 20);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_PARADE);
             selected = TRUE;
             break;
 cancelEvents:
             PlaySE(SEQ_SE_DP_SELECT);
         case 3:
-            WiFiPlazaPlayerState_SetStep(state, 4);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
             selected = TRUE;
             break;
         }
@@ -1165,32 +1199,32 @@ cancelEvents:
             WiFiPlazaTalkMenu_Free(&counter->menu, room);
         }
         break;
-    case 18:
-        PRINT_STAFF_MSG(room, counter, 0x1B, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_SPOTLIGHTS:
+        PRINT_STAFF_MSG(room, counter, 0x1B, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 19:
-        PRINT_STAFF_MSG(room, counter, 0x1C, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_FIREWORKS:
+        PRINT_STAFF_MSG(room, counter, 0x1C, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 20:
-        PRINT_STAFF_MSG(room, counter, 0x1D, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_PARADE:
+        PRINT_STAFF_MSG(room, counter, 0x1D, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 21:
-        PRINT_STAFF_MSG(room, counter, 0x1E, 4);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_PLAZA_SURVEY:
+        PRINT_STAFF_MSG(room, counter, 0x1E, WIFI_PLAZA_INFO_WHAT_TO_KNOW);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 22: // "We hope you'll enjoy yourself in the Wi-Fi Plaza"
-        PRINT_STAFF_MSG(room, counter, 0x16, 24);
-        WiFiPlazaPlayerState_SetStep(state, 23);
+    case WIFI_PLAZA_INFO_GOODBYE: // "We hope you'll enjoy yourself in the Wi-Fi Plaza"
+        PRINT_STAFF_MSG(room, counter, 0x16, WIFI_PLAZA_INFO_END);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_INFO_WAIT_MESSAGE);
         break;
-    case 23:
+    case WIFI_PLAZA_INFO_WAIT_MESSAGE:
         if (WiFiPlazaRoom_IsMessageFinished(room)) {
             WiFiPlazaPlayerState_SetStep(state, counter->nextStep);
         }
         break;
-    case 24: {
+    case WIFI_PLAZA_INFO_END: {
         WiFiPlazaObjManager *objManager;
 
         WiFiPlazaPlayerState_FreeWork(state);
@@ -1210,19 +1244,19 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
     WiFiPlazaPlayerState_GetWork(state);
     lobby = WiFiPlazaRoom_GetLobby(room);
     switch (WiFiPlazaPlayerState_GetStep(state)) {
-    case 0:
+    case WIFI_PLAZA_RECEPTION_START:
         PlaySE(SEQ_SE_DP_SELECT);
         if (WiFiPlazaWork_IsClosing(lobby) == 0) {
             if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) { // the Pokemon Parade is on
                 message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00078);
                 WiFiPlazaRoom_PrintMessage(room, message);
-                WiFiPlazaPlayerState_SetStep(state, 1);
+                WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);
                 goto done;
             }
         } else { // the visit is nearly over
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00003);
             WiFiPlazaRoom_PrintMessage(room, message);
-            WiFiPlazaPlayerState_SetStep(state, 1);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);
             goto done;
         }
         // what the receptionist recommends
@@ -1262,14 +1296,14 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
             break;
         }
         WiFiPlazaRoom_PrintMessage(room, message);
-        WiFiPlazaPlayerState_SetStep(state, 1);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);
         break;
-    case 1:
+    case WIFI_PLAZA_RECEPTION_WAIT_MESSAGE:
         if (WiFiPlazaRoom_IsMessageFinished(room)) {
-            WiFiPlazaPlayerState_SetStep(state, 2);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_END);
         }
         break;
-    case 2: {
+    case WIFI_PLAZA_RECEPTION_END: {
         WiFiPlazaObjManager *objManager;
         WiFiPlazaObj *ownObj;
 

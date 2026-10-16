@@ -368,13 +368,13 @@ void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen) {
     screen->steps = screen->app->args->steps;
     screen->apricornBox = Save_ApricornBox_Get(screen->app->args->saveData);
     ApricornBoxScreen_LoadBoxState(screen);
-    if (screen->mode == 3) {
+    if (screen->mode == APRICORN_BOX_MODE_USE_JUICE) {
         screen->cursorArea = 2;
         screen->cursorRow = 0;
         screen->lastRowLeft = screen->app->lastRows[0];
         screen->lastRowRight = screen->app->lastRows[1];
-        screen->mode = 1;
-        screen->app->mode = 1;
+        screen->mode = APRICORN_BOX_MODE_BLENDER;
+        screen->app->mode = APRICORN_BOX_MODE_BLENDER;
     }
 }
 
@@ -426,14 +426,14 @@ int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen) {
         if (IsPaletteFadeFinished()) {
             screen->subState = 0;
             switch (screen->mode) {
-            case 0:
+            case APRICORN_BOX_MODE_VIEW:
                 break;
-            case 1:
+            case APRICORN_BOX_MODE_BLENDER:
                 if (ApricornBox_GetMixState(screen->apricornBox) != 1) {
                     return 2;
                 }
                 return 4;
-            case 2:
+            case APRICORN_BOX_MODE_KURT:
                 return 5;
             default:
                 break;
@@ -757,7 +757,7 @@ int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
             return 15;
         }
-        screen->app->mode = 3;
+        screen->app->mode = APRICORN_BOX_MODE_USE_JUICE;
         screen->app->partySlot = 0;
         screen->app->lastRows[0] = screen->lastRowLeft;
         screen->app->lastRows[1] = screen->lastRowRight;
@@ -850,13 +850,13 @@ void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen) {
     }
     mode = screen->mode;
     switch (mode) {
-    case 1:
+    case APRICORN_BOX_MODE_BLENDER:
         ApricornBoxScreen_PrintBlenderStatus(screen);
         return;
-    case 2:
+    case APRICORN_BOX_MODE_KURT:
         ApricornBoxScreen_PrintHeader(screen, 10);
         return;
-    case 0:
+    case APRICORN_BOX_MODE_VIEW:
     default:
         break;
     }
@@ -1484,7 +1484,7 @@ void ApricornBoxScreen_RemoveWindows(ApricornBoxScreen *screen) {
 
 void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen) {
     int i;
-    if (screen->mode != 0) {
+    if (screen->mode != APRICORN_BOX_MODE_VIEW) {
         int offset = (screen->mode - 1) * 8;
         const ApricornBoxListDesc *desc = (const ApricornBoxListDesc *)((const u8 *)sApricornBoxListMenus + offset);
         screen->listMenuItems = ListMenuItems_New(*(const u16 *)((const u8 *)sApricornBoxListMenus + offset), screen->heapId);
@@ -1565,7 +1565,7 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         Sprite_SetPriority(((ApricornBoxScreen *)cursor)->sprites[0], 2);
     }
     switch (screen->mode) {
-    case 1: {
+    case APRICORN_BOX_MODE_BLENDER: {
         u8 *target;
         for (i = 0; i < 2; i++) {
             target = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
@@ -1577,7 +1577,7 @@ void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         Sprite_SetPaletteOverride(screen->sprites[9], screen->topMixIndex + 5);
         break;
     }
-    case 2: {
+    case APRICORN_BOX_MODE_KURT: {
         int anim;
         for (i = 0, y = 112, anim = 28; i < 2; anim += 2, y += 24, i++) {
             cursor = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
@@ -1724,7 +1724,7 @@ u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen) {
     case 1:
         return screen->cursorRow * 2 + 1;
     case 2:
-        if (screen->mode == 1) {
+        if (screen->mode == APRICORN_BOX_MODE_BLENDER) {
             return 7;
         }
         return 8;
@@ -2163,10 +2163,10 @@ BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen) {
             screen->cursorArea--;
             return TRUE;
         }
-        if (screen->mode == 2) {
+        if (screen->mode == APRICORN_BOX_MODE_KURT) {
             return FALSE;
         }
-        if ((keys & (PAD_KEY_RIGHT | PAD_KEY_DOWN)) && screen->mode != 0) {
+        if ((keys & (PAD_KEY_RIGHT | PAD_KEY_DOWN)) && screen->mode != APRICORN_BOX_MODE_VIEW) {
             screen->cursorArea++;
             return TRUE;
         }
@@ -2514,7 +2514,7 @@ void AprijuiceScreen_WriteResult(AprijuiceScreen *screen) {
     MenuInputStateMgr_SetState(screen->app->args->menuInputStatePtr, screen->menuInputState);
     entry = &screen->mons[screen->selectedMon];
     screen->app->partySlot = entry->slot;
-    screen->app->mode = screen->juiceUsed != 0 ? 1 : 3;
+    screen->app->mode = screen->juiceUsed != 0 ? APRICORN_BOX_MODE_BLENDER : APRICORN_BOX_MODE_USE_JUICE;
     if (screen->app->args->juiceUsedVar != NULL) {
         *screen->app->args->juiceUsedVar = screen->juiceUsed;
     }

@@ -78,7 +78,7 @@ BOOL ApricornBox_Main(OverlayManager *man, int *state) {
 
     switch (*state) {
     case APRICORN_BOX_STATE_START:
-        if (app->args->mode == 3) {
+        if (app->args->mode == APRICORN_BOX_LAUNCH_JUICE_STAND) {
             *state = APRICORN_BOX_STATE_OPEN_PARTY_MENU;
         } else {
             *state = APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
@@ -179,18 +179,18 @@ void ApricornBox_InitFromArgs(ApricornBoxApp *app) {
         *app->args->juiceUsedVar = 0;
     }
     switch (app->args->mode) {
-    case 0:
-        app->mode = 0;
+    case APRICORN_BOX_LAUNCH_VIEW:
+        app->mode = APRICORN_BOX_MODE_VIEW;
         break;
-    case 1:
-        app->mode = 1;
+    case APRICORN_BOX_LAUNCH_BLENDER:
+        app->mode = APRICORN_BOX_MODE_BLENDER;
         break;
-    case 2:
-        app->mode = 2;
+    case APRICORN_BOX_LAUNCH_KURT:
+        app->mode = APRICORN_BOX_MODE_KURT;
         break;
-    case 3:
+    case APRICORN_BOX_LAUNCH_JUICE_STAND:
         app->unk_19 = 1;
-        app->mode = 0;
+        app->mode = APRICORN_BOX_MODE_VIEW;
         app->juiceIndex = app->args->juiceIndex;
         return;
     }
@@ -210,7 +210,7 @@ int ApricornBox_State_RunBoxScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return APRICORN_BOX_STATE_RUN_BOX_SCREEN;
     }
-    if (app->mode == 3) {
+    if (app->mode == APRICORN_BOX_MODE_USE_JUICE) {
         app->partySlot = 0;
         return APRICORN_BOX_STATE_OPEN_PARTY_MENU;
     }
@@ -246,7 +246,7 @@ int ApricornBox_State_RunPartyMenu(ApricornBoxApp *app) {
     Heap_Free(app->partyMenuArgs);
     app->partyMenuArgs = NULL;
     if (slot == 7) {
-        if (app->args->mode == 3) {
+        if (app->args->mode == APRICORN_BOX_LAUNCH_JUICE_STAND) {
             return APRICORN_BOX_STATE_EXIT;
         }
         return APRICORN_BOX_STATE_OPEN_BOX_SCREEN;
@@ -263,10 +263,10 @@ int ApricornBox_State_RunAprijuiceScreen(ApricornBoxApp *app) {
     if (!ApricornBox_RunChildApp(&app->child)) {
         return APRICORN_BOX_STATE_RUN_APRIJUICE_SCREEN;
     }
-    if (app->mode == 3) {
+    if (app->mode == APRICORN_BOX_MODE_USE_JUICE) {
         return APRICORN_BOX_STATE_OPEN_PARTY_MENU;
     }
-    if (app->args->mode == 3) {
+    if (app->args->mode == APRICORN_BOX_LAUNCH_JUICE_STAND) {
         return APRICORN_BOX_STATE_EXIT;
     }
     return APRICORN_BOX_STATE_OPEN_BOX_SCREEN;

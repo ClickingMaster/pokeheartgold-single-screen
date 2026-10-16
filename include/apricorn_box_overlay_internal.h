@@ -22,6 +22,22 @@
 #include "system.h"
 #include "apricorn_box.h"
 
+// ApricornBoxApp.mode, the Apricorn Box screen's mode
+enum ApricornBoxMode {
+    APRICORN_BOX_MODE_VIEW,
+    APRICORN_BOX_MODE_BLENDER,
+    APRICORN_BOX_MODE_KURT,
+    APRICORN_BOX_MODE_USE_JUICE,
+};
+
+// ApricornBoxArgs.mode, how the Apricorn Box was opened
+enum ApricornBoxLaunchMode {
+    APRICORN_BOX_LAUNCH_VIEW,
+    APRICORN_BOX_LAUNCH_BLENDER,
+    APRICORN_BOX_LAUNCH_KURT,
+    APRICORN_BOX_LAUNCH_JUICE_STAND,
+};
+
 // No tracked definition found for the Apricorn Box application work block.
 // Derived from OverlayManager_CreateAndGetData(man, 0x20, ...) + MI_CpuFill8(.., 0x20).
 typedef struct ApricornBoxApp {
