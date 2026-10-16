@@ -2406,8 +2406,8 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     s32 y;
     s32 oldX;
     s32 oldY;
-    int r1;
-    int r2;
+    int kickXDone;
+    int kickYDone;
     int i;
     s32 total;
     int rnd;
@@ -2424,11 +2424,11 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
             if (game->wobbleStep <= 8) {
                 oldX = game->kickX.value;
                 oldY = game->kickY.value;
-                r1 = MimeJrTopTween_UpdateAccel(&game->kickX);
-                r2 = MimeJrTopTween_UpdateAccel(&game->kickY);
+                kickXDone = MimeJrTopTween_UpdateAccel(&game->kickX);
+                kickYDone = MimeJrTopTween_UpdateAccel(&game->kickY);
                 x = (s16)((game->kickX.value - oldX) >> 12);
                 y = (s16)((game->kickY.value - oldY) >> 12);
-                if (r1 == 1 || r2 == 1) {
+                if (kickXDone == 1 || kickYDone == 1) {
                     game->kickX.value -= oldX;
                     game->kickY.value -= oldY;
                 }

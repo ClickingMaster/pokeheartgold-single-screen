@@ -116,6 +116,39 @@ extern const GraphicsModes sWiFiPlazaConnectGraphicsModes;
 extern const GraphicsBanks sWiFiPlazaConnectGraphicsBanks;
 extern const BgTemplate sWiFiPlazaConnectBgTemplates[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS];
 
+enum WiFiPlazaConnectState {
+    WIFI_PLAZA_CONNECT_FADE_IN,
+    WIFI_PLAZA_CONNECT_WAIT_FADE_IN,
+    WIFI_PLAZA_CONNECT_ASK_CONNECT,
+    WIFI_PLAZA_CONNECT_HANDLE_CONNECT_PROMPT,
+    WIFI_PLAZA_CONNECT_CONNECT,
+    WIFI_PLAZA_CONNECT_WAIT_LOBBY_START,
+    WIFI_PLAZA_CONNECT_WAIT_JOIN_LOBBY,
+    WIFI_PLAZA_CONNECT_FADE_OUT,
+    WIFI_PLAZA_CONNECT_WAIT_FADE_OUT,
+    WIFI_PLAZA_CONNECT_SHOW_ERROR,
+    WIFI_PLAZA_CONNECT_WAIT_ERROR_BUTTON,
+    WIFI_PLAZA_CONNECT_ASK_RECONNECT,
+    WIFI_PLAZA_CONNECT_HANDLE_RECONNECT_PROMPT,
+    WIFI_PLAZA_CONNECT_WAIT_RECONNECT,
+    WIFI_PLAZA_CONNECT_DISCONNECT,
+    WIFI_PLAZA_CONNECT_WAIT_DISCONNECT,
+};
+
+enum WiFiPlazaDisconnectState {
+    WIFI_PLAZA_DISCONNECT_FADE_IN,
+    WIFI_PLAZA_DISCONNECT_WAIT_FADE_IN,
+    WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTING,
+    WIFI_PLAZA_DISCONNECT_ADD_OWN_LOCATION,
+    WIFI_PLAZA_DISCONNECT_WAIT_OWN_LOCATION,
+    WIFI_PLAZA_DISCONNECT_LEAVE,
+    WIFI_PLAZA_DISCONNECT_WAIT_LEAVE,
+    WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTED,
+    WIFI_PLAZA_DISCONNECT_WAIT,
+    WIFI_PLAZA_DISCONNECT_FADE_OUT,
+    WIFI_PLAZA_DISCONNECT_WAIT_FADE_OUT,
+};
+
 BOOL WiFiPlazaConnect_Init(OverlayManager *man, int *state);
 BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state);
 BOOL WiFiPlazaConnect_Exit(OverlayManager *man, int *state);
@@ -168,56 +201,56 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
     work = OverlayManager_GetData(man);
     args = OverlayManager_GetArgs(man);
     switch (*state) {
-    case 0:
+    case WIFI_PLAZA_CONNECT_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0xFFFF, 6, 1, HEAP_ID_119);
         (*state)++;
         break;
-    case 1:
+    case WIFI_PLAZA_CONNECT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_CONNECT_ASK_CONNECT:
         if (!args->skipPrompt) {
             WiFiPlazaConnect_PrintMessage(&work->statusBox, msg_0800_00017);
             work->yesNoPrompt = WiFiPlazaConnect_CreateYesNoPrompt(work->bgConfig, 0x230);
             (*state)++;
         } else {
-            *state = 4;
+            *state = WIFI_PLAZA_CONNECT_CONNECT;
         }
         break;
-    case 3: {
+    case WIFI_PLAZA_CONNECT_HANDLE_CONNECT_PROMPT: {
         int result = YesNoPrompt_HandleInput(work->yesNoPrompt);
         if (result == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
-            *state = 4;
+            *state = WIFI_PLAZA_CONNECT_CONNECT;
         } else if (result == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
             WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
-            *state = 7;
+            *state = WIFI_PLAZA_CONNECT_FADE_OUT;
         }
         break;
     }
-    case 4:
+    case WIFI_PLAZA_CONNECT_CONNECT:
         CommState_StartWifiPlaza(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->lobby));
         WiFiPlazaConnect_PrintMessage(&work->statusBox, msg_0800_00023);
         WiFiPlazaConnect_StartWaitingIcon(&work->statusBox);
         (*state)++;
         break;
-    case 5:
+    case WIFI_PLAZA_CONNECT_WAIT_LOBBY_START:
         if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
-            *state = 9;
+            *state = WIFI_PLAZA_CONNECT_SHOW_ERROR;
         }
         if (CommState_HasPlazaLobbyStarted() == 1) {
             WiFiPlazaWork_NewPlayerInfo(args->lobby);
             (*state)++;
         }
         break;
-    case 6:
+    case WIFI_PLAZA_CONNECT_WAIT_JOIN_LOBBY:
         if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
-            *state = 9;
+            *state = WIFI_PLAZA_CONNECT_SHOW_ERROR;
         }
         if (CommState_IsWifiJoiningLobby()) {
             s64 seconds;
@@ -229,7 +262,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         break;
-    case 9: {
+    case WIFI_PLAZA_CONNECT_SHOW_ERROR: {
         u32 errorCode;
         int msgId;
         if (CommState_HasWifiFailed()) {
@@ -249,62 +282,62 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         (*state)++;
         break;
     }
-    case 10:
+    case WIFI_PLAZA_CONNECT_WAIT_ERROR_BUTTON:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
             if (CommState_HasWifiFailed()) {
                 u32 *error = CommState_GetWifiError();
                 if (WiFiPlaza_IsErrorRecoverable(error[0], error[1]) == FALSE) {
-                    *state = 11;
+                    *state = WIFI_PLAZA_CONNECT_ASK_RECONNECT;
                 } else {
-                    *state = 14;
+                    *state = WIFI_PLAZA_CONNECT_DISCONNECT;
                 }
             } else {
-                *state = 11;
+                *state = WIFI_PLAZA_CONNECT_ASK_RECONNECT;
             }
         }
         break;
-    case 11:
+    case WIFI_PLAZA_CONNECT_ASK_RECONNECT:
         WiFiPlazaConnect_ClearMessageBox(&work->errorBox);
         WiFiPlazaConnect_PrintMessage(&work->msgBox, msg_0778_00088);
         work->yesNoPrompt = WiFiPlazaConnect_CreateYesNoPrompt(work->bgConfig, 0x230);
         (*state)++;
         break;
-    case 12: {
+    case WIFI_PLAZA_CONNECT_HANDLE_RECONNECT_PROMPT: {
         int result = YesNoPrompt_HandleInput(work->yesNoPrompt);
         if (result == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
             CommState_LeaveWifiPlaza();
-            *state = 13;
+            *state = WIFI_PLAZA_CONNECT_WAIT_RECONNECT;
         } else if (result == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
-            *state = 14;
+            *state = WIFI_PLAZA_CONNECT_DISCONNECT;
         }
         break;
     }
-    case 13:
+    case WIFI_PLAZA_CONNECT_WAIT_RECONNECT:
         if (!CommState_Exists()) {
-            *state = 4;
+            *state = WIFI_PLAZA_CONNECT_CONNECT;
         }
         break;
-    case 14:
+    case WIFI_PLAZA_CONNECT_DISCONNECT:
         WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
         WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
         WiFiPlazaConnect_ClearMessageBox(&work->errorBox);
         CommState_LeaveWifiPlaza();
         (*state)++;
         break;
-    case 15:
+    case WIFI_PLAZA_CONNECT_WAIT_DISCONNECT:
         if (!CommState_Exists()) {
             WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
             WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
-            *state = 7;
+            *state = WIFI_PLAZA_CONNECT_FADE_OUT;
         }
         break;
-    case 7:
+    case WIFI_PLAZA_CONNECT_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_119);
         (*state)++;
         break;
-    case 8:
+    case WIFI_PLAZA_CONNECT_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -367,63 +400,63 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
     work = OverlayManager_GetData(man);
     args = OverlayManager_GetArgs(man);
     switch (*state) {
-    case 0:
+    case WIFI_PLAZA_DISCONNECT_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0xFFFF, 6, 1, HEAP_ID_119);
         (*state)++;
         break;
-    case 1:
+    case WIFI_PLAZA_DISCONNECT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 2;
+            *state = WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTING;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTING:
         WiFiPlazaConnect_PrintMessage(&work->msgBox, msg_0800_00026);
         if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
-            *state = 5;
+            *state = WIFI_PLAZA_DISCONNECT_LEAVE;
             WiFiPlazaConnect_StartWaitingIcon(&work->msgBox);
         } else {
-            *state = 3;
+            *state = WIFI_PLAZA_DISCONNECT_ADD_OWN_LOCATION;
             WiFiPlazaConnect_StartWaitingIcon(&work->msgBox);
         }
         break;
-    case 3:
+    case WIFI_PLAZA_DISCONNECT_ADD_OWN_LOCATION:
         WiFiPlazaLobbyClient_StartAddOwnLocation();
         work->timer = 900;
-        *state = 4;
+        *state = WIFI_PLAZA_DISCONNECT_WAIT_OWN_LOCATION;
         break;
-    case 4:
+    case WIFI_PLAZA_DISCONNECT_WAIT_OWN_LOCATION:
         --work->timer;
         if (WiFiPlazaLobbyClient_IsOwnLocationAdded() || work->timer == 0) {
-            *state = 5;
+            *state = WIFI_PLAZA_DISCONNECT_LEAVE;
         }
         break;
-    case 5:
+    case WIFI_PLAZA_DISCONNECT_LEAVE:
         CommState_LeaveWifiPlaza();
-        *state = 6;
+        *state = WIFI_PLAZA_DISCONNECT_WAIT_LEAVE;
         break;
-    case 6:
+    case WIFI_PLAZA_DISCONNECT_WAIT_LEAVE:
         if (!CommState_Exists()) {
             // the status box is not set up on this screen (frame type 0): this does nothing
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
             WiFiPlazaWork_FreePlayerInfo(args->lobby);
-            *state = 7;
+            *state = WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTED;
         }
         break;
-    case 7:
+    case WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTED:
         WiFiPlazaConnect_PrintMessage(&work->msgBox, msg_0800_00027);
         work->timer = 90;
-        *state = 8;
+        *state = WIFI_PLAZA_DISCONNECT_WAIT;
         break;
-    case 8:
+    case WIFI_PLAZA_DISCONNECT_WAIT:
         if (--work->timer == 0) {
-            *state = 9;
+            *state = WIFI_PLAZA_DISCONNECT_FADE_OUT;
         }
         break;
-    case 9:
+    case WIFI_PLAZA_DISCONNECT_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_119);
         (*state)++;
         break;
-    case 10:
+    case WIFI_PLAZA_DISCONNECT_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             WiFiPlazaConnect_StopWaitingIcon(&work->msgBox);
             return TRUE;

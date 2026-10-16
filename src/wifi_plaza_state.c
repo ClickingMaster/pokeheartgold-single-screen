@@ -576,17 +576,17 @@ void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
     }
 }
 
-void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *a0) {
-    a0->timer = 900;
+void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state) {
+    state->timer = 900;
 }
 
-int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *a0) {
-    return a0->timer > 0;
+int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state) {
+    return state->timer > 0;
 }
 
-void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *a0) {
-    if (a0->timer > 0) {
-        a0->timer--;
+void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state) {
+    if (state->timer > 0) {
+        state->timer--;
     }
 }
 
@@ -607,10 +607,10 @@ void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProf
     Heap_Free(player);
 }
 
-void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *a0) {
-    a0->appQuitForClosing = 1;
+void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state) {
+    state->appQuitForClosing = 1;
 }
 
-u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *a0) {
-    return a0->appQuitForClosing;
+u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
+    return state->appQuitForClosing;
 }

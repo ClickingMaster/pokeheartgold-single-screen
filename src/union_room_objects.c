@@ -21,6 +21,21 @@
 #include "map_object_movement_commands.h"
 #include "field_warp_reset.h"
 
+enum UnionRoomSlotState {
+    UNION_ROOM_SLOT_HIDDEN,
+    UNION_ROOM_SLOT_APPEARING,
+    UNION_ROOM_SLOT_SHOWN,
+    UNION_ROOM_SLOT_LEAVING,
+    UNION_ROOM_SLOT_LEFT,
+};
+
+enum UnionRoomSlotRequest {
+    UNION_ROOM_SLOT_REQUEST_NONE,
+    UNION_ROOM_SLOT_REQUEST_APPEAR_ALONE,
+    UNION_ROOM_SLOT_REQUEST_APPEAR_IN_GROUP,
+    UNION_ROOM_SLOT_REQUEST_LEAVE,
+};
+
 // The 10 players' records of the union room link state (src/field_application_tasks_10.c).
 typedef struct UnionRoomGroup {
     u32 trainerIds[4];
@@ -86,8 +101,8 @@ UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
 void UnionRoomObjects_RequestLeaveAll(UnionRoomObjects *objects) {
     int i;
     for (i = 0; i < 51; i++) {
-        if (objects->slots[i].state != 0) {
-            objects->slots[i].request = 3;
+        if (objects->slots[i].state != UNION_ROOM_SLOT_HIDDEN) {
+            objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_LEAVE;
         }
     }
 }
@@ -95,8 +110,8 @@ void UnionRoomObjects_RequestLeaveAll(UnionRoomObjects *objects) {
 void UnionRoomObjects_ResetSlots(UnionRoomObjects *objects) {
     int i;
     for (i = 0; i < 51; i++) {
-        objects->slots[i].request = 0;
-        objects->slots[i].state = 0;
+        objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_NONE;
+        objects->slots[i].state = UNION_ROOM_SLOT_HIDDEN;
         objects->slots[i].friendship = 0;
         objects->slots[i].emoteRequest = 0;
     }
@@ -153,23 +168,23 @@ BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoo
     trainerIds = group->trainerIds;
     for (i = 0; i < 4; i++) {
         switch (objects->slots[k].state) {
-        case 0:
+        case UNION_ROOM_SLOT_HIDDEN:
             if (group->members[i] != 0) {
-                objects->slots[k].request = 2;
+                objects->slots[k].request = UNION_ROOM_SLOT_REQUEST_APPEAR_IN_GROUP;
                 objects->slots[k].sprite = group->members[i] & 0x7F;
                 objects->slots[k].friendship = PalPad_PlayerIdIsFriendOrMutual(palPad, *trainerIds);
                 ret = TRUE;
             }
             break;
-        case 2:
+        case UNION_ROOM_SLOT_SHOWN:
             if (group->members[i] == 0) {
                 UnionRoomSlots_SetRequest(objects->slots, k, 3);
             } else {
                 ret = TRUE;
             }
             break;
-        case 4:
-            objects->slots[k].request = 0;
+        case UNION_ROOM_SLOT_LEFT:
+            objects->slots[k].request = UNION_ROOM_SLOT_REQUEST_NONE;
             break;
         }
         k++;
@@ -201,30 +216,30 @@ void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom 
         }
 
         switch (objects->slots[i].state) {
-        case 0:
+        case UNION_ROOM_SLOT_HIDDEN:
             if (record != NULL) {
                 objects->slots[i].sprite = PlayerProfile_GetAvatar(profile);
                 objects->slots[i].friendship = PalPad_PlayerIdIsFriendOrMutual(palPad, PlayerProfile_GetTrainerID(profile));
                 objects->slots[i].id = player->id;
                 if (UnionRoomObjects_UpdateGroup(objects, i, record, palPad)) {
-                    objects->slots[i].request = 2;
+                    objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_APPEAR_IN_GROUP;
                 } else {
-                    objects->slots[i].request = 1;
+                    objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_APPEAR_ALONE;
                 }
             }
             break;
-        case 2:
+        case UNION_ROOM_SLOT_SHOWN:
             if (record == NULL) {
                 UnionRoomSlots_SetRequest(objects->slots, i, 3);
             } else if (player->id != objects->slots[i].id) {
                 UnionRoomSlots_SetRequest(objects->slots, i, 3);
             }
             if (UnionRoomObjects_UpdateGroup(objects, i, record, palPad) && objects->slots[i].isWandering == 1) {
-                objects->slots[i].request = 3;
+                objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_LEAVE;
             }
             break;
-        case 4:
-            objects->slots[i].request = 0;
+        case UNION_ROOM_SLOT_LEFT:
+            objects->slots[i].request = UNION_ROOM_SLOT_REQUEST_NONE;
             break;
         }
     }
@@ -249,52 +264,52 @@ void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManag
         object = MapObjectManager_GetFirstActiveObjectByID(mapObjectManager, i + 1);
         GF_ASSERT(object != NULL);
         switch (cursor->slots[0].state) {
-        case 0:
+        case UNION_ROOM_SLOT_HIDDEN:
             if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE && (u32)(cursor->slots[0].request - 1) <= 1) {
                 UnionRoomSlot_Appear(slot, object, x, z);
             }
             break;
-        case 1:
+        case UNION_ROOM_SLOT_APPEARING:
             if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
-                if (cursor->slots[0].request == 3) {
-                    cursor->slots[0].state = 0;
-                    cursor->slots[0].request = 0;
+                if (cursor->slots[0].request == UNION_ROOM_SLOT_REQUEST_LEAVE) {
+                    cursor->slots[0].state = UNION_ROOM_SLOT_HIDDEN;
+                    cursor->slots[0].request = UNION_ROOM_SLOT_REQUEST_NONE;
                     UnionRoomSlot_DestroyEffects(slot, TRUE);
                 } else {
                     MapObject_ClearHeldMovementIfActive(object);
                     MapObject_SetFlag19(object, FALSE);
-                    if (cursor->slots[0].request == 1 && cursor->slots[0].isWandering == 0) {
+                    if (cursor->slots[0].request == UNION_ROOM_SLOT_REQUEST_APPEAR_ALONE && cursor->slots[0].isWandering == 0) {
                         MapObject_ChangeMovement(object, 3);
                         MapObject_SetXRange(object, 1);
                         MapObject_SetYRange(object, 1);
                         cursor->slots[0].isWandering = 1;
                     }
-                    cursor->slots[0].state = 2;
-                    cursor->slots[0].request = 0;
+                    cursor->slots[0].state = UNION_ROOM_SLOT_SHOWN;
+                    cursor->slots[0].request = UNION_ROOM_SLOT_REQUEST_NONE;
                 }
             }
             break;
-        case 2:
+        case UNION_ROOM_SLOT_SHOWN:
             if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
                 UnionRoomSlot_StartEmote(slot, object);
-                if (cursor->slots[0].request == 3) {
+                if (cursor->slots[0].request == UNION_ROOM_SLOT_REQUEST_LEAVE) {
                     UnionRoomSlot_Leave(slot, object);
                 }
                 UnionRoomSlot_TickEmote(slot);
             }
             break;
-        case 3:
+        case UNION_ROOM_SLOT_LEAVING:
             if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
                 MapObject_ClearHeldMovementIfActive(object);
-                cursor->slots[0].state = 4;
-                cursor->slots[0].request = 0;
+                cursor->slots[0].state = UNION_ROOM_SLOT_LEFT;
+                cursor->slots[0].request = UNION_ROOM_SLOT_REQUEST_NONE;
                 cursor->slots[0].isWandering = 0;
                 MapObject_SetVisible(object, TRUE);
                 MapObject_ClearFlag18(object, FALSE);
             }
             break;
-        case 4:
-            cursor->slots[0].state = 0;
+        case UNION_ROOM_SLOT_LEFT:
+            cursor->slots[0].state = UNION_ROOM_SLOT_HIDDEN;
             break;
         }
     }
@@ -343,7 +358,7 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
         MapObject_SetHeldMovement(object, 0x44);
         MapObject_SetVisible(object, FALSE);
         MapObject_ClearFlag18(object, TRUE);
-        slot->state = 1;
+        slot->state = UNION_ROOM_SLOT_APPEARING;
         if (slot->friendship != 0) {
             if (slot->friendship == 1) {
                 slot->friendEffect = FieldShadow_CreateFriendShadow(object, 1);
@@ -362,7 +377,7 @@ void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
     UnionRoomSlot_DestroyEffects(slot, TRUE);
     slot->emoteActive = 0;
     slot->emoteTimer = 0;
-    slot->state = 3;
+    slot->state = UNION_ROOM_SLOT_LEAVING;
 }
 
 void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object) {
@@ -395,7 +410,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
         if (CommState_IsAlternateLinked() != FALSE || CommState_GetJoinResult() != FALSE) {
             for (i = 0; i < 10; i++) {
                 UnionRoomSlot *slot = &objects->slots[i];
-                if (slot->state == 1) {
+                if (slot->state == UNION_ROOM_SLOT_APPEARING) {
                     object = MapObjectManager_GetFirstActiveObjectByID(mapObjectManager, i + 1);
                     GF_ASSERT(object != NULL);
                     MapObject_ChangeSprite(object, slot->sprite);
@@ -403,7 +418,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
                     MapObject_SetHeldMovement(object, 0x44);
                     MapObject_SetVisible(object, FALSE);
                     MapObject_ClearFlag18(object, TRUE);
-                    slot->state = 1;
+                    slot->state = UNION_ROOM_SLOT_APPEARING;
                     if (slot->friendship != 0) {
                         if (slot->friendship == 1) {
                             slot->friendEffect = FieldShadow_CreateFriendShadow(object, 1);

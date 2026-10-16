@@ -31,6 +31,22 @@ extern void (*const sWiFiPlazaAppFreeArgsFuncs[13])(void **args);
 extern void (*const sWiFiPlazaAppStartFuncs[13])(WiFiPlazaApps *apps, void **args);
 extern BOOL (*const sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *apps, void **args);
 
+enum WiFiPlazaApp {
+    WIFI_PLAZA_APP_MAIN,
+    WIFI_PLAZA_APP_VISITOR_PROFILES,
+    WIFI_PLAZA_APP_PLAZA_NEWS,
+    WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_0,
+    WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_1,
+    WIFI_PLAZA_APP_CONNECT,
+    WIFI_PLAZA_APP_SWALOT_PLOP,
+    WIFI_PLAZA_APP_MIME_JR_TOP,
+    WIFI_PLAZA_APP_WOBBUFFET_POP,
+    WIFI_PLAZA_APP_DISCONNECT,
+    WIFI_PLAZA_APP_CLOSED_DISCONNECT,
+    WIFI_PLAZA_APP_SURVEY_ANSWER,
+    WIFI_PLAZA_APP_SURVEY_RESULTS,
+};
+
 // Arguments of app 0, the plaza.
 typedef struct WiFiPlazaMainArgs {
     SaveData *save;
@@ -182,7 +198,7 @@ void WiFiPlazaApps_Delete(WiFiPlazaApps *apps) {
 }
 
 void WiFiPlazaApps_StartFirst(WiFiPlazaApps *apps) {
-    WiFiPlazaApps_Start(apps, 5);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CONNECT);
 }
 
 // TRUE when the last app has finished.
@@ -297,37 +313,37 @@ void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args) {
 BOOL WiFiPlazaApps_EndMain(WiFiPlazaApps *apps, void **args) {
     switch (((WiFiPlazaMainArgs *)*args)->result) {
     case 0:
-        WiFiPlazaApps_Start(apps, 9);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_DISCONNECT);
         break;
     case 1:
-        WiFiPlazaApps_Start(apps, 1);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_VISITOR_PROFILES);
         break;
     case 2:
-        WiFiPlazaApps_Start(apps, 2);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_PLAZA_NEWS);
         break;
     case 6:
-        WiFiPlazaApps_Start(apps, 3);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_0);
         break;
     case 7:
-        WiFiPlazaApps_Start(apps, 4);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_1);
         break;
     case 3:
-        WiFiPlazaApps_Start(apps, 6);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SWALOT_PLOP);
         break;
     case 4:
-        WiFiPlazaApps_Start(apps, 7);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MIME_JR_TOP);
         break;
     case 5:
-        WiFiPlazaApps_Start(apps, 8);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_WOBBUFFET_POP);
         break;
     case 8:
-        WiFiPlazaApps_Start(apps, 10);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
         break;
     case 9:
-        WiFiPlazaApps_Start(apps, 11);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SURVEY_ANSWER);
         break;
     case 10:
-        WiFiPlazaApps_Start(apps, 12);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SURVEY_RESULTS);
         break;
     default:
         GF_AssertFail();
@@ -365,9 +381,9 @@ void WiFiPlazaApps_StartVisitorProfiles(WiFiPlazaApps *apps, void **args) {
 
 BOOL WiFiPlazaApps_EndVisitorProfiles(WiFiPlazaApps *apps) {
     if (WiFiPlazaWork_IsClosed(apps->work)) {
-        WiFiPlazaApps_Start(apps, 10);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
     } else {
-        WiFiPlazaApps_Start(apps, 0);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     }
     return FALSE;
 }
@@ -404,9 +420,9 @@ void WiFiPlazaApps_StartPlazaNews(WiFiPlazaApps *apps, void **args) {
 
 BOOL WiFiPlazaApps_EndPlazaNews(WiFiPlazaApps *apps) {
     if (WiFiPlazaWork_IsClosed(apps->work)) {
-        WiFiPlazaApps_Start(apps, 10);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
     } else {
-        WiFiPlazaApps_Start(apps, 0);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     }
     return FALSE;
 }
@@ -443,7 +459,7 @@ BOOL WiFiPlazaApps_EndConnect(WiFiPlazaApps *apps, void **args) {
     if (((WiFiPlazaConnectArgs *)*args)->result == 0) {
         return TRUE;
     }
-    WiFiPlazaApps_Start(apps, 0);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
 }
 
@@ -476,7 +492,7 @@ BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
     game = *args;
     WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
-    WiFiPlazaApps_Start(apps, 0);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
 }
 
@@ -508,7 +524,7 @@ BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
     game = *args;
     WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
-    WiFiPlazaApps_Start(apps, 0);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
 }
 
@@ -540,7 +556,7 @@ BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
     game = *args;
     WiFiPlazaWork_SetField508_04(apps->work, game->connectionLost);
     WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
-    WiFiPlazaApps_Start(apps, 0);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     return FALSE;
 }
 
@@ -565,9 +581,9 @@ void WiFiPlazaApps_FreeFootprintStampArgs(void **args) {
 
 BOOL WiFiPlazaApps_EndFootprintStamp(WiFiPlazaApps *apps) {
     if (WiFiPlazaWork_IsClosed(apps->work)) {
-        WiFiPlazaApps_Start(apps, 10);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
     } else {
-        WiFiPlazaApps_Start(apps, 0);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     }
     return FALSE;
 }
@@ -677,9 +693,9 @@ void WiFiPlazaApps_StartSurvey(WiFiPlazaApps *apps, void **args) {
 
 BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps) {
     if (WiFiPlazaWork_IsClosed(apps->work)) {
-        WiFiPlazaApps_Start(apps, 10);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
     } else {
-        WiFiPlazaApps_Start(apps, 0);
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
     }
     return FALSE;
 }

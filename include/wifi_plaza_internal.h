@@ -770,14 +770,14 @@ void WiFiPlaza_ClearEventFlags(u32 *flags);
 void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer);
 void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state);
 void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state);
-void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *a0);
-int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *a0);
-void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *a0);
+void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state);
+int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state);
+void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state);
 void WiFiPlaza_NewPlayerProfile(PlayerProfile **profile, enum HeapID heapID);
 void WiFiPlaza_FreePlayerProfile(PlayerProfile **profile);
 void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProfile *src, enum HeapID heapID);
-void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *a0);
-u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *a0);
+void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state);
+u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state);
 
 // wifi_plaza.c
 BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
@@ -1099,12 +1099,12 @@ void WiFiPlazaLobbyClient_OnMatchClientDummy(int result, void *arg);
 
 // wifi_plaza_player_objects.c
 void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg);
-u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbySchedule *unk, int key);
-void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbySurveyData *unk, int count, enum HeapID heapID);
-void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *unk);
-void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *unk, const void *data, u32 count);
-BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *unk, int id);
-u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *unk, int id);
+u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbySchedule *schedule, int key);
+void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbySurveyData *surveyData, int count, enum HeapID heapID);
+void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *surveyData);
+void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *surveyData, const void *data, u32 count);
+BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *surveyData, int id);
+u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *surveyData, int id);
 void WiFiPlazaLobbyClient_CopySurveyData(u32 *dest, const void *data);
 WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum HeapID heapID, enum HeapID loadHeapID);
 void WiFiPlazaPlayerObjects_Delete(WiFiPlazaPlayerObjects *objects);

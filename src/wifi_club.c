@@ -53,6 +53,35 @@ enum WifiClubGame {
 
 BOOL LoadOVY13(void); // network_overlay_loader.c
 
+enum WifiClubTaskState {
+    WIFI_CLUB_TASK_INIT,
+    WIFI_CLUB_TASK_START,
+    WIFI_CLUB_TASK_OPEN_CLUB,
+    WIFI_CLUB_TASK_HANDLE_CHOICE,
+    WIFI_CLUB_TASK_START_BATTLE,
+    WIFI_CLUB_TASK_END_BATTLE,
+    WIFI_CLUB_TASK_START_TRADE,
+    WIFI_CLUB_TASK_END_TRADE,
+    WIFI_CLUB_TASK_WIFI_SETTINGS,
+    WIFI_CLUB_TASK_EXIT,
+    WIFI_CLUB_TASK_EXIT_EARLY,
+    WIFI_CLUB_TASK_EXIT_CANCELLED,
+    WIFI_CLUB_TASK_START_FRONTIER,
+    WIFI_CLUB_TASK_WAIT_FRONTIER,
+    WIFI_CLUB_TASK_SWALOT_PLOP_ENTRY,
+    WIFI_CLUB_TASK_WAIT_SWALOT_PLOP_ENTRY,
+    WIFI_CLUB_TASK_START_SWALOT_PLOP,
+    WIFI_CLUB_TASK_WAIT_SWALOT_PLOP,
+    WIFI_CLUB_TASK_MIME_JR_TOP_ENTRY,
+    WIFI_CLUB_TASK_WAIT_MIME_JR_TOP_ENTRY,
+    WIFI_CLUB_TASK_START_MIME_JR_TOP,
+    WIFI_CLUB_TASK_WAIT_MIME_JR_TOP,
+    WIFI_CLUB_TASK_WOBBUFFET_POP_ENTRY,
+    WIFI_CLUB_TASK_WAIT_WOBBUFFET_POP_ENTRY,
+    WIFI_CLUB_TASK_START_WOBBUFFET_POP,
+    WIFI_CLUB_TASK_WAIT_WOBBUFFET_POP,
+};
+
 typedef struct WifiClubTask {
     WifiClubArgs *clubArgs; // 0x00
     u32 state;              // 0x04
@@ -87,20 +116,20 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     WifiClubTask *task = TaskManager_GetEnvironment(taskManager);
     switch (task->state) {
-    case 0:
+    case WIFI_CLUB_TASK_INIT:
         task->clubArgs->saveData = fieldSystem->saveData;
-    case 1:
+    case WIFI_CLUB_TASK_START:
         task->state++;
         if (task->clubArgs->choice == 1 && Comm_HasWifiProfile(fieldSystem->saveData)) {
-            task->state = 10;
+            task->state = WIFI_CLUB_TASK_EXIT_EARLY;
             *task->result = 0;
         }
         break;
-    case 2:
+    case WIFI_CLUB_TASK_OPEN_CLUB:
         CallApplicationAsTask(taskManager, &gOverlayTemplate_WifiClub, task->clubArgs);
         task->state++;
         break;
-    case 3:
+    case WIFI_CLUB_TASK_HANDLE_CHOICE:
         if (Comm_HasWifiProfile(fieldSystem->saveData)) {
             SetFlag970(Save_VarsFlags_Get(fieldSystem->saveData));
         }
@@ -108,152 +137,152 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         case WIFI_CLUB_BATTLE_SINGLE_FREE:
             task->maxLevel = 0;
             task->doubleBattle = FALSE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_BATTLE_SINGLE_LV50:
             task->maxLevel = 50;
             task->doubleBattle = FALSE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_BATTLE_SINGLE_LV100:
             task->maxLevel = 100;
             task->doubleBattle = FALSE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_BATTLE_DOUBLE_FREE:
             task->maxLevel = 0;
             task->doubleBattle = TRUE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_BATTLE_DOUBLE_LV50:
             task->maxLevel = 50;
             task->doubleBattle = TRUE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_BATTLE_DOUBLE_LV100:
             task->maxLevel = 100;
             task->doubleBattle = TRUE;
-            task->state = 4;
+            task->state = WIFI_CLUB_TASK_START_BATTLE;
             break;
         case WIFI_CLUB_TRADE:
-            task->state = 6;
+            task->state = WIFI_CLUB_TASK_START_TRADE;
             break;
         case WIFI_CLUB_CANCEL:
             *task->result = 1;
-            task->state = 11;
+            task->state = WIFI_CLUB_TASK_EXIT_CANCELLED;
             break;
         case WIFI_CLUB_EXIT:
-            task->state = 9;
+            task->state = WIFI_CLUB_TASK_EXIT;
             break;
         case WIFI_CLUB_FRONTIER:
-            task->state = 12;
+            task->state = WIFI_CLUB_TASK_START_FRONTIER;
             break;
         case WIFI_CLUB_SWALOT_PLOP:
-            task->state = 14;
+            task->state = WIFI_CLUB_TASK_SWALOT_PLOP_ENTRY;
             break;
         case WIFI_CLUB_MIME_JR_TOP:
-            task->state = 18;
+            task->state = WIFI_CLUB_TASK_MIME_JR_TOP_ENTRY;
             break;
         case WIFI_CLUB_WOBBUFFET_POP:
-            task->state = 22;
+            task->state = WIFI_CLUB_TASK_WOBBUFFET_POP_ENTRY;
             break;
         case WIFI_CLUB_WIFI_SETTINGS:
-            task->state = 8;
+            task->state = WIFI_CLUB_TASK_WIFI_SETTINGS;
             break;
         }
         break;
-    case 4:
+    case WIFI_CLUB_TASK_START_BATTLE:
         CallTask_WifiClubBattle(taskManager, task->clubArgs->partnerFriendIndex, task->maxLevel, task->doubleBattle);
         task->state++;
         break;
-    case 5:
-        task->state = 2;
+    case WIFI_CLUB_TASK_END_BATTLE:
+        task->state = WIFI_CLUB_TASK_OPEN_CLUB;
         break;
-    case 6:
+    case WIFI_CLUB_TASK_START_TRADE:
         CallTask_WirelessTrade(taskManager);
         task->state++;
         break;
-    case 7:
-        task->state = 2;
+    case WIFI_CLUB_TASK_END_TRADE:
+        task->state = WIFI_CLUB_TASK_OPEN_CLUB;
         break;
-    case 8:
+    case WIFI_CLUB_TASK_WIFI_SETTINGS:
         Heap_Create(HEAP_ID_3, HEAP_ID_53, 0x40100);
         LoadOVY13();
         RunWifiSetupApp(HEAP_ID_53);
         OS_ResetSystem(0);
         break;
-    case 9:
-    case 10:
-    case 11:
+    case WIFI_CLUB_TASK_EXIT:
+    case WIFI_CLUB_TASK_EXIT_EARLY:
+    case WIFI_CLUB_TASK_EXIT_CANCELLED:
         Heap_Free(task->clubArgs);
         Heap_Free(task);
         task->state++;
         return TRUE;
-    case 12:
+    case WIFI_CLUB_TASK_START_FRONTIER:
         Comm_SetWifiContinuousSend(0);
         task->launchedArgs = Frontier_LaunchApp(fieldSystem, NULL);
         task->state++;
         break;
-    case 13:
+    case WIFI_CLUB_TASK_WAIT_FRONTIER:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             Heap_Free(task->launchedArgs);
-            task->state = 2;
+            task->state = WIFI_CLUB_TASK_OPEN_CLUB;
         }
         break;
-    case 14:
+    case WIFI_CLUB_TASK_SWALOT_PLOP_ENTRY:
         WifiClub_LaunchGameEntry(task, fieldSystem, HEAP_ID_FIELD2, WIFI_CLUB_GAME_SWALOT_PLOP);
         task->state++;
         break;
-    case 15:
+    case WIFI_CLUB_TASK_WAIT_SWALOT_PLOP_ENTRY:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             task->state = WifiClub_FinishGameEntry(task);
         }
         break;
-    case 16:
+    case WIFI_CLUB_TASK_START_SWALOT_PLOP:
         task->launchedArgs = WifiClub_LaunchSwalotPlop(fieldSystem, HEAP_ID_FIELD2, task->selection);
         task->state++;
         break;
-    case 17:
+    case WIFI_CLUB_TASK_WAIT_SWALOT_PLOP:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            task->state = 2;
+            task->state = WIFI_CLUB_TASK_OPEN_CLUB;
             WifiClub_FinishSwalotPlop(task->launchedArgs);
         }
         break;
-    case 18:
+    case WIFI_CLUB_TASK_MIME_JR_TOP_ENTRY:
         WifiClub_LaunchGameEntry(task, fieldSystem, HEAP_ID_FIELD2, WIFI_CLUB_GAME_MIME_JR_TOP);
         task->state++;
         break;
-    case 19:
+    case WIFI_CLUB_TASK_WAIT_MIME_JR_TOP_ENTRY:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             task->state = WifiClub_FinishGameEntry(task);
         }
         break;
-    case 20:
+    case WIFI_CLUB_TASK_START_MIME_JR_TOP:
         task->launchedArgs = WifiClub_LaunchMimeJrTop(fieldSystem, HEAP_ID_FIELD2, task->selection);
         task->state++;
         break;
-    case 21:
+    case WIFI_CLUB_TASK_WAIT_MIME_JR_TOP:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            task->state = 2;
+            task->state = WIFI_CLUB_TASK_OPEN_CLUB;
             WifiClub_FinishMimeJrTop(task->launchedArgs);
         }
         break;
-    case 22:
+    case WIFI_CLUB_TASK_WOBBUFFET_POP_ENTRY:
         WifiClub_LaunchGameEntry(task, fieldSystem, HEAP_ID_FIELD2, WIFI_CLUB_GAME_WOBBUFFET_POP);
         task->state++;
         break;
-    case 23:
+    case WIFI_CLUB_TASK_WAIT_WOBBUFFET_POP_ENTRY:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             task->state = WifiClub_FinishGameEntry(task);
         }
         break;
-    case 24:
+    case WIFI_CLUB_TASK_START_WOBBUFFET_POP:
         task->launchedArgs = WifiClub_LaunchWobbuffetPop(fieldSystem, HEAP_ID_FIELD2, task->selection);
         task->state++;
         break;
-    case 25:
+    case WIFI_CLUB_TASK_WAIT_WOBBUFFET_POP:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
-            task->state = 2;
+            task->state = WIFI_CLUB_TASK_OPEN_CLUB;
             WifiClub_FinishWobbuffetPop(task->launchedArgs);
         }
         break;
@@ -301,18 +330,18 @@ u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
     if (args->result == 1) {
         switch ((enum WifiClubGame)args->game) {
         case WIFI_CLUB_GAME_SWALOT_PLOP:
-            task->state = 16;
+            task->state = WIFI_CLUB_TASK_START_SWALOT_PLOP;
             break;
         case WIFI_CLUB_GAME_MIME_JR_TOP:
-            task->state = 20;
+            task->state = WIFI_CLUB_TASK_START_MIME_JR_TOP;
             break;
         default:
         case WIFI_CLUB_GAME_WOBBUFFET_POP:
-            task->state = 24;
+            task->state = WIFI_CLUB_TASK_START_WOBBUFFET_POP;
             break;
         }
     } else {
-        task->state = 1;
+        task->state = WIFI_CLUB_TASK_START;
     }
     task->selection = args->voiceChat;
     Heap_Free(task->launchedArgs);

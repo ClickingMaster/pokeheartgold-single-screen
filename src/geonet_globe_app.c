@@ -35,6 +35,28 @@
 
 #define GEONET_GLOBE_MAX_LOCATIONS 1024
 
+enum GeonetGlobeState {
+    GEONET_GLOBE_STATE_LOAD,
+    GEONET_GLOBE_STATE_WAIT_FADE_IN,
+    GEONET_GLOBE_STATE_PRINT_WELCOME,
+    GEONET_GLOBE_STATE_OPEN_MENU,
+    GEONET_GLOBE_STATE_HANDLE_MENU,
+    GEONET_GLOBE_STATE_ASK_REGISTER,
+    GEONET_GLOBE_STATE_HANDLE_REGISTER_YES_NO,
+    GEONET_GLOBE_STATE_SELECT_COUNTRY,
+    GEONET_GLOBE_STATE_HANDLE_COUNTRY_LIST,
+    GEONET_GLOBE_STATE_SELECT_REGION,
+    GEONET_GLOBE_STATE_HANDLE_REGION_LIST,
+    GEONET_GLOBE_STATE_SHOW_LOCATION,
+    GEONET_GLOBE_STATE_ASK_CONFIRM,
+    GEONET_GLOBE_STATE_HANDLE_CONFIRM_YES_NO,
+    GEONET_GLOBE_STATE_START_GLOBE,
+    GEONET_GLOBE_STATE_GLOBE,
+    GEONET_GLOBE_STATE_ZOOM,
+    GEONET_GLOBE_STATE_FADE_OUT,
+    GEONET_GLOBE_STATE_WAIT_FADE_OUT,
+};
+
 fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 
 enum GeonetGlobeWindow {
@@ -260,9 +282,9 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
     NARC *narc;
 
     switch (*state) {
-    case 14:
-    case 15:
-    case 16:
+    case GEONET_GLOBE_STATE_START_GLOBE:
+    case GEONET_GLOBE_STATE_GLOBE:
+    case GEONET_GLOBE_STATE_ZOOM:
         break;
     default:
         if (System_GetTouchNew()) {
@@ -272,7 +294,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
     }
 
     switch (*state) {
-    case 0:
+    case GEONET_GLOBE_STATE_LOAD:
         globe->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0186_bin, globe->heapID);
         narc = NARC_New(NARC_a_1_2_3, globe->heapID);
         GeonetGlobe_LoadModels(globe, narc);
@@ -284,29 +306,29 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
-        *state = 1;
+        *state = GEONET_GLOBE_STATE_WAIT_FADE_IN;
         break;
-    case 1:
+    case GEONET_GLOBE_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
-            *state = 2;
+            *state = GEONET_GLOBE_STATE_PRINT_WELCOME;
         }
         break;
-    case 2:
+    case GEONET_GLOBE_STATE_PRINT_WELCOME:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00000, TRUE) == TRUE) {
             if (globe->playerCountry == 0) {
-                *state = 3;
+                *state = GEONET_GLOBE_STATE_OPEN_MENU;
             } else {
-                *state = 14;
+                *state = GEONET_GLOBE_STATE_START_GLOBE;
             }
         }
         break;
-    case 3:
+    case GEONET_GLOBE_STATE_OPEN_MENU:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00001, TRUE) == TRUE) {
             GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &gGeonetGlobeListWindowTemplate, &sGeonetMenuTemplate, sGeonetMenuEntries);
-            *state = 4;
+            *state = GEONET_GLOBE_STATE_HANDLE_MENU;
         }
         break;
-    case 4:
+    case GEONET_GLOBE_STATE_HANDLE_MENU:
         choice = ListMenu_ProcessInput(globe->listMenu);
         if (choice != LIST_NOTHING_CHOSEN) {
             GeonetGlobe_DestroyListMenu(globe);
@@ -315,25 +337,25 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
             case 0:
             case LIST_NOTHING_CHOSEN:
             default:
-                *state = 14;
+                *state = GEONET_GLOBE_STATE_START_GLOBE;
                 break;
             case 1:
-                *state = 5;
+                *state = GEONET_GLOBE_STATE_ASK_REGISTER;
                 break;
             case LIST_CANCEL:
             case 2:
-                *state = 17;
+                *state = GEONET_GLOBE_STATE_FADE_OUT;
                 break;
             }
         }
         break;
-    case 5:
+    case GEONET_GLOBE_STATE_ASK_REGISTER:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00002, TRUE) == TRUE) {
             globe->yesNoMenu = Std_CreateYesNoMenu(globe->bgConfig, &sGeonetYesNoWindowTemplate, 473, 7, globe->heapID);
-            *state = 6;
+            *state = GEONET_GLOBE_STATE_HANDLE_REGISTER_YES_NO;
         }
         break;
-    case 6:
+    case GEONET_GLOBE_STATE_HANDLE_REGISTER_YES_NO:
         choice = Handle2dMenuInput_DeleteOnFinish(globe->yesNoMenu, globe->heapID);
         if (choice == 0) {
             goto case6_yes;
@@ -345,24 +367,24 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
 case6_yes:
         if (globe->isJapanese == TRUE) {
             globe->selectedCountry = 103;
-            *state = 9;
+            *state = GEONET_GLOBE_STATE_SELECT_REGION;
         } else {
-            *state = 7;
+            *state = GEONET_GLOBE_STATE_SELECT_COUNTRY;
         }
         break;
 case6_no:
-        *state = 3;
+        *state = GEONET_GLOBE_STATE_OPEN_MENU;
         break;
-    case 7:
+    case GEONET_GLOBE_STATE_SELECT_COUNTRY:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00003, TRUE) == TRUE) {
             globe->selectedCountry = 0;
             msgIds = LocationGmmDatGetDistrictNameMsgIdsPtr(0);
             count = LocationGmmDatGetDistrictCount(0);
             GeonetGlobe_CreatePlaceList(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &sGeonetPlaceListWindowTemplate, &sGeonetPlaceListTemplate, NARC_msg_msg_0798_bin, msgIds, count);
-            *state = 8;
+            *state = GEONET_GLOBE_STATE_HANDLE_COUNTRY_LIST;
         }
         break;
-    case 8:
+    case GEONET_GLOBE_STATE_HANDLE_COUNTRY_LIST:
         choice = ListMenu_ProcessInput(globe->listMenu);
         if (choice != LIST_NOTHING_CHOSEN) {
             GeonetGlobe_DestroyListMenu(globe);
@@ -373,17 +395,17 @@ case6_no:
             if (choice != LIST_CANCEL) {
                 globe->selectedCountry = choice;
                 if (GeonetGlobe_CountryHasRegions(globe->selectedCountry) == TRUE) {
-                    *state = 9;
+                    *state = GEONET_GLOBE_STATE_SELECT_REGION;
                 } else {
                     globe->selectedRegion = 0;
-                    *state = 11;
+                    *state = GEONET_GLOBE_STATE_SHOW_LOCATION;
                 }
             } else {
-                *state = 3;
+                *state = GEONET_GLOBE_STATE_OPEN_MENU;
             }
         }
         break;
-    case 9:
+    case GEONET_GLOBE_STATE_SELECT_REGION:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00004, TRUE) == TRUE) {
             globe->selectedRegion = 0;
             placeIndex = LocationGmmDatIndexGetByCountryMsgNo(globe->selectedCountry);
@@ -391,10 +413,10 @@ case6_no:
             msgIds = LocationGmmDatGetDistrictNameMsgIdsPtr(placeIndex);
             count = LocationGmmDatGetDistrictCount(placeIndex);
             GeonetGlobe_CreatePlaceList(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &sGeonetPlaceListWindowTemplate, &sGeonetPlaceListTemplate, msgBank, msgIds, count);
-            *state = 10;
+            *state = GEONET_GLOBE_STATE_HANDLE_REGION_LIST;
         }
         break;
-    case 10:
+    case GEONET_GLOBE_STATE_HANDLE_REGION_LIST:
         choice = ListMenu_ProcessInput(globe->listMenu);
         if (choice != LIST_NOTHING_CHOSEN) {
             GeonetGlobe_DestroyListMenu(globe);
@@ -404,25 +426,25 @@ case6_no:
             }
             if (choice != LIST_CANCEL) {
                 globe->selectedRegion = choice;
-                *state = 11;
+                *state = GEONET_GLOBE_STATE_SHOW_LOCATION;
             } else if (globe->isJapanese == TRUE) {
-                *state = 3;
+                *state = GEONET_GLOBE_STATE_OPEN_MENU;
             } else {
-                *state = 7;
+                *state = GEONET_GLOBE_STATE_SELECT_COUNTRY;
             }
         }
         break;
-    case 11:
+    case GEONET_GLOBE_STATE_SHOW_LOCATION:
         GeonetGlobe_ShowLocation(globe, globe->selectedCountry, globe->selectedRegion);
-        *state = 12;
+        *state = GEONET_GLOBE_STATE_ASK_CONFIRM;
         break;
-    case 12:
+    case GEONET_GLOBE_STATE_ASK_CONFIRM:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00005, TRUE) == TRUE) {
             globe->yesNoMenu = Std_CreateYesNoMenu(globe->bgConfig, &sGeonetYesNoWindowTemplate, 473, 7, globe->heapID);
-            *state = 13;
+            *state = GEONET_GLOBE_STATE_HANDLE_CONFIRM_YES_NO;
         }
         break;
-    case 13:
+    case GEONET_GLOBE_STATE_HANDLE_CONFIRM_YES_NO:
         choice = Handle2dMenuInput_DeleteOnFinish(globe->yesNoMenu, globe->heapID);
         if (choice == 0) {
             goto case13_yes;
@@ -436,13 +458,13 @@ case13_yes:
         WiFiHistory_SetPlayerGlobeInfo(globe->wifiHistory, globe->selectedCountry, globe->selectedRegion);
         globe->playerCountry = globe->selectedCountry;
         globe->playerRegion = globe->selectedRegion;
-        *state = 14;
+        *state = GEONET_GLOBE_STATE_START_GLOBE;
         break;
 case13_no:
         GeonetGlobe_HideLocationWindow(globe);
-        *state = 3;
+        *state = GEONET_GLOBE_STATE_OPEN_MENU;
         break;
-    case 14:
+    case GEONET_GLOBE_STATE_START_GLOBE:
         if (globe->isJapanese == TRUE && globe->nonJapanese == FALSE) {
             globe->freeRotation = FALSE;
         } else {
@@ -460,9 +482,9 @@ case13_no:
         GeonetGlobe_UpdateLocationName(globe);
         globe->showLocationName = FALSE;
         globe->drawState = 1;
-        *state = 15;
+        *state = GEONET_GLOBE_STATE_GLOBE;
         break;
-    case 15: {
+    case GEONET_GLOBE_STATE_GLOBE: {
         u16 wasZoomedIn = globe->zoomedIn;
 
         GeonetGlobe_HandleTouch(globe);
@@ -479,10 +501,10 @@ case13_no:
             FillWindowPixelRect(&globe->windows[GEONET_GLOBE_WINDOW_MESSAGE], 15, 0, 0, 216, 32);
             if (globe->playerCountry == 0) {
                 globe->drawState = 2;
-                *state = 3;
+                *state = GEONET_GLOBE_STATE_OPEN_MENU;
             } else {
                 GeonetGlobe_HideLocationWindow(globe);
-                *state = 17;
+                *state = GEONET_GLOBE_STATE_FADE_OUT;
             }
             break;
         }
@@ -506,28 +528,28 @@ case13_no:
             GeonetGlobe_UpdateLocationName(globe);
         }
         if (wasZoomedIn != globe->zoomedIn) {
-            *state = 16;
+            *state = GEONET_GLOBE_STATE_ZOOM;
             PlaySE(SEQ_SE_PL_FTIMER03);
         }
         break;
     }
-    case 16:
+    case GEONET_GLOBE_STATE_ZOOM:
         if (GeonetGlobe_StepZoom(globe) == TRUE) {
-            *state = 15;
+            *state = GEONET_GLOBE_STATE_GLOBE;
         }
         break;
-    case 17:
+    case GEONET_GLOBE_STATE_FADE_OUT:
         globe->unk_C2FC = 0;
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, globe->heapID);
-        *state = 18;
+        *state = GEONET_GLOBE_STATE_WAIT_FADE_OUT;
         break;
-    case 18:
+    case GEONET_GLOBE_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             globe->drawState = 1;
             GeonetGlobe_FreeBgs(globe);
             GeonetGlobe_FreeModels(globe);
             DestroyMsgData(globe->msgData);
-            *state = 0;
+            *state = GEONET_GLOBE_STATE_LOAD;
             result = TRUE;
         }
         break;

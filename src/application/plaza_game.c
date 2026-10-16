@@ -88,6 +88,42 @@ extern const PlazaGameBgTemplate sPlazaGameEntryBgTemplates[];
 extern const PlazaGameBgTemplate sPlazaGameResultsBgTemplates[];
 extern const u8 sPlazaGameCommands[];
 
+enum PlazaGameEntryState {
+    PLAZA_GAME_ENTRY_FADE_IN,
+    PLAZA_GAME_ENTRY_WAIT_FADE_IN,
+    PLAZA_GAME_ENTRY_WAIT_TITLE,
+    PLAZA_GAME_ENTRY_PRINT_ACCEPTED,
+    PLAZA_GAME_ENTRY_WAIT_ACCEPTED,
+    PLAZA_GAME_ENTRY_HIDE_ACCEPTED,
+    PLAZA_GAME_ENTRY_WAIT_TITLE_SLIDE_OUT,
+    PLAZA_GAME_ENTRY_SHOW_PLAYERS,
+    PLAZA_GAME_ENTRY_WAIT_PLAYERS,
+    PLAZA_GAME_ENTRY_START_SYNC,
+    PLAZA_GAME_ENTRY_WAIT_SYNC,
+    PLAZA_GAME_ENTRY_SLIDE_OUT_PLAYERS,
+    PLAZA_GAME_ENTRY_WAIT_PLAYERS_SLIDE_OUT,
+    PLAZA_GAME_ENTRY_FADE_OUT,
+    PLAZA_GAME_ENTRY_WAIT_FADE_OUT,
+    PLAZA_GAME_ENTRY_WAIT_SELECTION,
+    PLAZA_GAME_ENTRY_DONE,
+};
+
+enum PlazaGameContinueState {
+    PLAZA_GAME_CONTINUE_FADE,
+    PLAZA_GAME_CONTINUE_WAIT_FADE,
+    PLAZA_GAME_CONTINUE_PRINT_PROMPT,
+    PLAZA_GAME_CONTINUE_WAIT_PROMPT,
+    PLAZA_GAME_CONTINUE_OPEN_YES_NO,
+    PLAZA_GAME_CONTINUE_HANDLE_YES_NO,
+    PLAZA_GAME_CONTINUE_WAIT_ANSWERS,
+    PLAZA_GAME_CONTINUE_PRINT_CANCELED,
+    PLAZA_GAME_CONTINUE_WAIT_CANCELED,
+    PLAZA_GAME_CONTINUE_WAIT,
+    PLAZA_GAME_CONTINUE_FADE_OUT,
+    PLAZA_GAME_CONTINUE_WAIT_FADE_OUT,
+    PLAZA_GAME_CONTINUE_FINISH,
+};
+
 void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args) {
     int netId;
     int localNetId;
@@ -821,33 +857,33 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
     int i;
     int showCountries;
     switch (entry->state) {
-    case 0:
+    case PLAZA_GAME_ENTRY_FADE_IN:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0xFFFF, 6, 1, (enum HeapID)entry->heapId);
         PlazaGameTitle_StartSlideIn(&entry->title, &entry->bg, (enum HeapID)entry->heapId);
         entry->state++;
         break;
-    case 1:
+    case PLAZA_GAME_ENTRY_WAIT_FADE_IN:
         PlazaGameTitle_UpdateSlideIn(&entry->title, &entry->bg);
         if (IsPaletteFadeFinished() == TRUE) {
             entry->state++;
         }
         break;
-    case 2:
+    case PLAZA_GAME_ENTRY_WAIT_TITLE:
         if (PlazaGameTitle_UpdateSlideIn(&entry->title, &entry->bg) == TRUE) {
             entry->state++;
         }
         break;
-    case 3:
+    case PLAZA_GAME_ENTRY_PRINT_ACCEPTED:
         PlazaGameMessageBox_Show(&entry->messageBox, &entry->text, msg_0236_00000, 0);
         entry->state++;
         break;
-    case 4:
+    case PLAZA_GAME_ENTRY_WAIT_ACCEPTED:
         if (PlazaGameMessageBox_IsPrinterFinished(&entry->messageBox, 0)) {
             entry->state++;
             entry->timer = 64;
         }
         break;
-    case 5:
+    case PLAZA_GAME_ENTRY_HIDE_ACCEPTED:
         if (entry->timer != 0) {
             entry->timer--;
             if (entry->timer == 0) {
@@ -857,12 +893,12 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
             }
         }
         break;
-    case 6:
+    case PLAZA_GAME_ENTRY_WAIT_TITLE_SLIDE_OUT:
         if (PlazaGameTitle_UpdateSlideOut(&entry->title, &entry->bg) == TRUE) {
             entry->state++;
         }
         break;
-    case 7:
+    case PLAZA_GAME_ENTRY_SHOW_PLAYERS:
         PlazaGameLineScroll_Init(&entry->lineScroll, &entry->bg, (enum HeapID)entry->heapId);
         showCountries = PlazaGamePlayerInfo_HasDifferentCountries(&entry->roster, entry->info.countries);
         for (i = 0; i < entry->roster.count; i++) {
@@ -878,12 +914,12 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         entry->timer = 92;
         entry->state++;
         break;
-    case 8:
+    case PLAZA_GAME_ENTRY_WAIT_PLAYERS:
         if (PlazaGameEntry_UpdatePlayers(entry) == TRUE) {
             entry->state++;
         }
         break;
-    case 9:
+    case PLAZA_GAME_ENTRY_START_SYNC:
         entry->timer--;
         if (entry->timer == 0) {
             entry->state++;
@@ -893,26 +929,26 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
             }
         }
         break;
-    case 10:
+    case PLAZA_GAME_ENTRY_WAIT_SYNC:
         if (LinkSync_IsSynced(0x81)) {
             entry->state++;
         }
         break;
-    case 11:
+    case PLAZA_GAME_ENTRY_SLIDE_OUT_PLAYERS:
         for (i = 0; i < entry->roster.count; i++) {
             PlazaGamePlayer_StartSlideOut(&entry->players[i], i * 3);
         }
         entry->state++;
         entry->timer = 8;
         break;
-    case 12:
+    case PLAZA_GAME_ENTRY_WAIT_PLAYERS_SLIDE_OUT:
         entry->timer--;
         PlazaGameEntry_UpdatePlayers(entry);
         if (entry->timer == 0) {
             entry->state++;
         }
         break;
-    case 13:
+    case PLAZA_GAME_ENTRY_FADE_OUT:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, (enum HeapID)entry->heapId);
         PlazaGameEntry_UpdatePlayers(entry);
         if (entry->roster.localIndex == 0) {
@@ -931,19 +967,19 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         }
         entry->state++;
         break;
-    case 14:
+    case PLAZA_GAME_ENTRY_WAIT_FADE_OUT:
         PlazaGameEntry_UpdatePlayers(entry);
         if (IsPaletteFadeFinished() == TRUE) {
             PlazaGameLineScroll_Free(&entry->lineScroll);
             entry->state++;
         }
         break;
-    case 15:
+    case PLAZA_GAME_ENTRY_WAIT_SELECTION:
         if (entry->selectionReceived == 1) {
             entry->state++;
         }
         break;
-    case 16:
+    case PLAZA_GAME_ENTRY_DONE:
         break;
     }
     PlazaGameSprites_Update(&entry->sprites);
@@ -2097,7 +2133,7 @@ void PlazaGameContinue_Free(PlazaGameContinue *prompt) {
 // The volatile heapId keeps it on the stack as in the original.
 BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messageBox, PlazaGameText *text, int game, volatile enum HeapID heapId) {
     switch (prompt->state) {
-    case 0: {
+    case PLAZA_GAME_CONTINUE_FADE: {
         enum HeapID heap = heapId;
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heap);
         WirelessStatusIcon_ShowOnBothScreens(0, heapId);
@@ -2106,26 +2142,26 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
         }
         prompt->state++;
     } break;
-    case 1:
+    case PLAZA_GAME_CONTINUE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             prompt->state++;
         }
         break;
-    case 2:
+    case PLAZA_GAME_CONTINUE_PRINT_PROMPT:
         PlazaGameText_BufferActivityName(text, game);
         PlazaGameMessageBox_Show(messageBox, text, msg_0236_00003, 1);
         prompt->state++;
         break;
-    case 3:
+    case PLAZA_GAME_CONTINUE_WAIT_PROMPT:
         if (PlazaGameMessageBox_IsPrinterFinished(messageBox, 1) == TRUE) {
             prompt->state++;
         }
         break;
-    case 4:
+    case PLAZA_GAME_CONTINUE_OPEN_YES_NO:
         YesNoPrompt_InitFromTemplate(prompt->prompt, &prompt->template);
         prompt->state++;
         break;
-    case 5: {
+    case PLAZA_GAME_CONTINUE_HANDLE_YES_NO: {
         int response = YesNoPrompt_HandleInput(prompt->prompt);
         if ((u32)response - 1u <= 1u) {
             if (response == YESNORESPONSE_YES) {
@@ -2139,36 +2175,36 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
             prompt->state++;
         }
     } break;
-    case 6:
+    case PLAZA_GAME_CONTINUE_WAIT_ANSWERS:
         if (prompt->received) {
             if (prompt->result) {
-                prompt->state = 10;
+                prompt->state = PLAZA_GAME_CONTINUE_FADE_OUT;
             } else {
                 prompt->state++;
             }
         }
         break;
-    case 7:
+    case PLAZA_GAME_CONTINUE_PRINT_CANCELED:
         PlazaGameMessageBox_Show(messageBox, text, msg_0236_00006, 1);
         prompt->state++;
         break;
-    case 8:
+    case PLAZA_GAME_CONTINUE_WAIT_CANCELED:
         if (PlazaGameMessageBox_IsPrinterFinished(messageBox, 1) == TRUE) {
             prompt->state++;
             prompt->timer = 102;
         }
         break;
-    case 9:
+    case PLAZA_GAME_CONTINUE_WAIT:
         prompt->timer--;
         if (prompt->timer == 0) {
             prompt->state++;
         }
         break;
-    case 10:
+    case PLAZA_GAME_CONTINUE_FADE_OUT:
         BeginNormalPaletteFade(FADE_SUB_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapId);
         prompt->state++;
         break;
-    case 11:
+    case PLAZA_GAME_CONTINUE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             WirelessStatusIcon_Destroy();
             if (prompt->voiceChat) {
@@ -2177,7 +2213,7 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
             prompt->state++;
         }
         break;
-    case 12:
+    case PLAZA_GAME_CONTINUE_FINISH:
         return TRUE;
     }
     return FALSE;

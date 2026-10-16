@@ -45,6 +45,14 @@ extern const WiFiPlazaModelsOffset ov49_02269A7E[]; // the z column labelled sep
 extern const WiFiPlazaMoverSpawn sWiFiPlazaMoverSpawns[9];
 extern const WiFiPlazaModelsSpawn sWiFiPlazaPropSpawns[35];
 
+enum WiFiPlazaPropShowState {
+    WIFI_PLAZA_PROP_SHOW_HIDDEN,
+    WIFI_PLAZA_PROP_SHOW_REQUESTED,
+    WIFI_PLAZA_PROP_SHOWN,
+    WIFI_PLAZA_PROP_HIDE_REQUESTED,
+    WIFI_PLAZA_PROP_FADING_OUT,
+};
+
 static inline WiFiPlazaModelsPos WiFiPlazaProp_UnpackPos(u32 packed) {
     WiFiPlazaModelsPos pos;
     pos.x = packed;
@@ -1429,27 +1437,27 @@ void WiFiPlazaModels_PlayPropAnimsOnce(WiFiPlazaModels *models, WiFiPlazaProp *p
 
 void WiFiPlazaPropShow_Init(WiFiPlazaPropShow *show, WiFiPlazaProp *prop) {
     show->prop = prop;
-    show->state = 0;
+    show->state = WIFI_PLAZA_PROP_SHOW_HIDDEN;
 }
 
 void WiFiPlazaPropShow_UpdateEffect(WiFiPlazaPropShow *show, WiFiPlazaModelSet *set) {
     switch (show->state) {
-    case 0:
+    case WIFI_PLAZA_PROP_SHOW_HIDDEN:
         break;
-    case 1:
+    case WIFI_PLAZA_PROP_SHOW_REQUESTED:
         WiFiPlazaPropShow_ShowEffect(show, set);
-        show->state = 2;
+        show->state = WIFI_PLAZA_PROP_SHOWN;
         break;
-    case 2:
+    case WIFI_PLAZA_PROP_SHOWN:
         break;
-    case 3:
+    case WIFI_PLAZA_PROP_HIDE_REQUESTED:
         WiFiPlazaPropShow_StartFade(show);
-        show->state = 4;
+        show->state = WIFI_PLAZA_PROP_FADING_OUT;
         break;
-    case 4:
+    case WIFI_PLAZA_PROP_FADING_OUT:
         if (WiFiPlazaPropShow_UpdateFade(show) == TRUE) {
             WiFiPlazaPropShow_HideEffect(show, set);
-            show->state = 0;
+            show->state = WIFI_PLAZA_PROP_SHOW_HIDDEN;
         }
         break;
     }
@@ -1462,7 +1470,7 @@ void WiFiPlazaPropShow_RequestShow(WiFiPlazaPropShow *show, WiFiPlazaModelSet *s
     if ((u16)(show->state + 0xFFFD) <= 1) {
         WiFiPlazaPropShow_HideEffect(show, set);
     }
-    show->state = 1;
+    show->state = WIFI_PLAZA_PROP_SHOW_REQUESTED;
     show->animSpeed = animSpeed;
 }
 
@@ -1471,9 +1479,9 @@ void WiFiPlazaPropShow_RequestHide(WiFiPlazaPropShow *show) {
         return;
     }
     if (show->state <= 1) {
-        show->state = 0;
+        show->state = WIFI_PLAZA_PROP_SHOW_HIDDEN;
     } else {
-        show->state = 3;
+        show->state = WIFI_PLAZA_PROP_HIDE_REQUESTED;
     }
 }
 
@@ -1526,7 +1534,7 @@ void WiFiPlazaPropShow_Trigger(WiFiPlazaPropShow *show, fx32 animSpeed) {
     state <<= 16;
     state >>= 16;
     if (state > 1) {
-        show->state = 1;
+        show->state = WIFI_PLAZA_PROP_SHOW_REQUESTED;
         show->animSpeed = animSpeed;
     }
 }
@@ -1534,27 +1542,27 @@ void WiFiPlazaPropShow_Trigger(WiFiPlazaPropShow *show, fx32 animSpeed) {
 // Shown once: faded out when the first animation has ended.
 void WiFiPlazaPropShow_UpdateStage(WiFiPlazaPropShow *show, WiFiPlazaModelSet *set) {
     switch (show->state) {
-    case 0:
+    case WIFI_PLAZA_PROP_SHOW_HIDDEN:
         break;
-    case 1:
+    case WIFI_PLAZA_PROP_SHOW_REQUESTED:
         WiFiPlazaPropShow_ShowStage(show, set);
-        show->state = 2;
+        show->state = WIFI_PLAZA_PROP_SHOWN;
         break;
-    case 2:
+    case WIFI_PLAZA_PROP_SHOWN:
         if (WiFiPlazaModelSet_IsPropAnimActive(set, show->prop, 0) == FALSE) {
-            show->state = 3;
+            show->state = WIFI_PLAZA_PROP_HIDE_REQUESTED;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_PROP_HIDE_REQUESTED:
         WiFiPlazaPropShow_StartFade(show);
-        show->state = 4;
+        show->state = WIFI_PLAZA_PROP_FADING_OUT;
         break;
-    case 4:
+    case WIFI_PLAZA_PROP_FADING_OUT:
         if (WiFiPlazaPropShow_UpdateFade(show) == TRUE) {
             WiFiPlazaProp_SetVisible(show->prop, FALSE);
             WiFiPlazaProp_ClearAlpha(show->prop);
             WiFiPlazaProp_SetScale(show->prop, FX32_ONE, FX32_ONE, FX32_ONE);
-            show->state = 0;
+            show->state = WIFI_PLAZA_PROP_SHOW_HIDDEN;
         }
         break;
     default:
@@ -1572,27 +1580,27 @@ void WiFiPlazaPropShow_ShowStage(WiFiPlazaPropShow *show, WiFiPlazaModelSet *set
 
 void WiFiPlazaPropShow_UpdateBurst(WiFiPlazaPropShow *show, WiFiPlazaModelSet *set) {
     switch (show->state) {
-    case 0:
+    case WIFI_PLAZA_PROP_SHOW_HIDDEN:
         break;
-    case 1:
+    case WIFI_PLAZA_PROP_SHOW_REQUESTED:
         WiFiPlazaPropShow_ShowBurst(show, set);
-        show->state = 2;
+        show->state = WIFI_PLAZA_PROP_SHOWN;
         break;
-    case 2:
+    case WIFI_PLAZA_PROP_SHOWN:
         if (WiFiPlazaModelSet_IsPropAnimActive(set, show->prop, 0) == FALSE) {
-            show->state = 3;
+            show->state = WIFI_PLAZA_PROP_HIDE_REQUESTED;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_PROP_HIDE_REQUESTED:
         WiFiPlazaPropShow_StartFade(show);
-        show->state = 4;
+        show->state = WIFI_PLAZA_PROP_FADING_OUT;
         break;
-    case 4:
+    case WIFI_PLAZA_PROP_FADING_OUT:
         if (WiFiPlazaPropShow_UpdateFade(show) == TRUE) {
             WiFiPlazaProp_SetVisible(show->prop, FALSE);
             WiFiPlazaProp_ClearAlpha(show->prop);
             WiFiPlazaProp_SetScale(show->prop, FX32_ONE, FX32_ONE, FX32_ONE);
-            show->state = 0;
+            show->state = WIFI_PLAZA_PROP_SHOW_HIDDEN;
         }
         break;
     default:

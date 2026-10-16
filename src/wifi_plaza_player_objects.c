@@ -14,33 +14,33 @@ void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg) {
     }
 }
 
-u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbySchedule *unk, int key) {
+u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbySchedule *schedule, int key) {
     u32 result = 0;
     int i;
-    for (i = 0; i < unk->count; i++) {
-        if (key == unk->values[i].key) {
-            result = unk->values[i].value;
+    for (i = 0; i < schedule->count; i++) {
+        if (key == schedule->values[i].key) {
+            result = schedule->values[i].value;
         }
     }
     return result;
 }
 
 // The list header overlays the first 8 bytes of WiFiPlazaLobbyClient.surveyData.
-void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbySurveyData *unk, int count, enum HeapID heapID) {
-    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)unk;
+void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbySurveyData *surveyData, int count, enum HeapID heapID) {
+    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     list->items = Heap_Alloc(heapID, count * sizeof(WiFiPlazaLobbyIdValue));
     list->capacity = count;
     list->count = 0;
 }
 
-void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *unk) {
-    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)unk;
+void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *surveyData) {
+    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     Heap_Free(list->items);
     list->items = NULL;
 }
 
-void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *unk, const void *data, u32 count) {
-    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)unk;
+void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *surveyData, const void *data, u32 count) {
+    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     GF_ASSERT(count < list->capacity);
     if (count >= list->capacity) {
         count = list->capacity;
@@ -49,8 +49,8 @@ void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *unk, const void *da
     list->count = count;
 }
 
-BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *unk, int id) {
-    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)unk;
+BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *surveyData, int id) {
+    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     int i;
     for (i = 0; i < list->count; i++) {
         if (id == list->items[i].id) {
@@ -60,8 +60,8 @@ BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *unk, int id) {
     return FALSE;
 }
 
-u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *unk, int id) {
-    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)unk;
+u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *surveyData, int id) {
+    WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     int i;
     for (i = 0; i < list->count; i++) {
         if (id == list->items[i].id) {

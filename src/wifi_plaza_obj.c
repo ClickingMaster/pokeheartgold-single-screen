@@ -139,7 +139,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
     obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     manager->ownPlayer = obj;
-    WiFiPlazaObj_SetHandler(manager, obj, 0);
+    WiFiPlazaObj_SetHandler(manager, obj, WIFI_PLAZA_OBJ_HANDLER_IDLE);
     return obj;
 }
 
@@ -175,7 +175,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
     template.unkA = avatar;
     obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
-    WiFiPlazaObj_SetHandler(manager, obj, 0);
+    WiFiPlazaObj_SetHandler(manager, obj, WIFI_PLAZA_OBJ_HANDLER_IDLE);
     return obj;
 }
 
@@ -456,7 +456,7 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
             obj->gridObj = gridObj;
             avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, gridObj);
             obj->avatar = avatar;
-            WiFiPlazaObj_SetHandler(manager, obj, 0);
+            WiFiPlazaObj_SetHandler(manager, obj, WIFI_PLAZA_OBJ_HANDLER_IDLE);
             if (spawn->tag == 97) {
                 manager->special = obj;
             }

@@ -16,6 +16,32 @@
 #include "text.h"
 #include "wifi_plaza_survey.h"
 
+enum WiFiPlazaSurveyResultsState {
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_INTRO,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_QUESTION,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_QUESTION,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_RESULTS_INTRO,
+    WIFI_PLAZA_SURVEY_RESULTS_SHOW_RESULTS,
+    WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_BARS,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_RESULTS,
+    WIFI_PLAZA_SURVEY_RESULTS_ASK_LAST_WEEK,
+    WIFI_PLAZA_SURVEY_RESULTS_HANDLE_YES_NO,
+    WIFI_PLAZA_SURVEY_RESULTS_FADE_OUT,
+    WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK,
+    WIFI_PLAZA_SURVEY_RESULTS_FADE_IN,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_FADE_IN,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_INTRO,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_QUESTION,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_QUESTION,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_RESULTS_INTRO,
+    WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK_RESULTS,
+    WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_LAST_WEEK_BARS,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_RESULTS,
+    WIFI_PLAZA_SURVEY_RESULTS_PRINT_CLOSING,
+    WIFI_PLAZA_SURVEY_RESULTS_FINISH,
+    WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE,
+};
+
 #define WIFI_PLAZA_SURVEY_BAR_LENGTH 80 // pixels
 #define WIFI_PLAZA_SURVEY_BAR_FRAMES 20
 
@@ -182,135 +208,135 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
     WiFiPlazaSurveyAnswerRecord savedRecord;
     void *saveBlock;
     switch (results->state) {
-    case 0:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_INTRO:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, results->current.isSpecial == FALSE ? msg_0777_00103 : msg_0777_00105));
-        results->nextState = 1;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_PRINT_QUESTION;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 1:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_QUESTION:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetQuestionText(&results->current, messages));
-        results->nextState = 2;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_WAIT_QUESTION;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 2:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_QUESTION:
         if (gSystem.newKeys & PAD_BUTTON_A) {
             WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00104));
-            results->nextState = 3;
-            results->state = 22;
+            results->nextState = WIFI_PLAZA_SURVEY_RESULTS_PRINT_RESULTS_INTRO;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_RESULTS_INTRO:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, results->current.isSpecial == FALSE ? msg_0777_00107 : msg_0777_00108));
-        results->nextState = 4;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_SHOW_RESULTS;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 4:
+    case WIFI_PLAZA_SURVEY_RESULTS_SHOW_RESULTS:
         WiFiPlazaPlayer_GetSurvey(WiFiPlazaWork_GetMyPlayer(args->lobby), &record);
         WiFiPlazaSurveyResults_PrintQuestion(results, &results->current, messages, work, &record, heapID, MAKE_TEXT_COLOR(9, 10, 0), MAKE_TEXT_COLOR(13, 14, 0), WiFiPlazaWork_IsSpecialVisitor(args->lobby, WiFiPlazaWork_GetOwnSlot(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->plazaTally, work, 1);
         PlaySE(SEQ_SE_PL_PINPON2);
-        results->state = 5;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_BARS;
         break;
-    case 5:
+    case WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_BARS:
         if (WiFiPlazaSurveyResults_UpdateBars(results, work) == TRUE) {
-            results->state = 6;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_RESULTS;
         }
         break;
-    case 6:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_RESULTS:
         if (gSystem.newKeys & PAD_BUTTON_A) {
             if (results->lastWeek.questionNo != -1) {
-                results->state = 7;
+                results->state = WIFI_PLAZA_SURVEY_RESULTS_ASK_LAST_WEEK;
             } else {
                 WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00112));
-                results->nextState = 20;
-                results->state = 22;
+                results->nextState = WIFI_PLAZA_SURVEY_RESULTS_PRINT_CLOSING;
+                results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
             }
         }
         break;
-    case 7:
+    case WIFI_PLAZA_SURVEY_RESULTS_ASK_LAST_WEEK:
         WiFiPlazaSurvey_PrintMessageInstant(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00111));
         WiFiPlazaSurvey_CreateYesNoMenu(msgBox, work, heapID);
-        results->state = 8;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_HANDLE_YES_NO;
         break;
-    case 8:
+    case WIFI_PLAZA_SURVEY_RESULTS_HANDLE_YES_NO:
         switch (WiFiPlazaSurvey_HandleYesNoMenu(msgBox, heapID)) {
         case 0:
-            results->state = 9;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_FADE_OUT;
             break;
         case LIST_CANCEL:
-            results->state = 20;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_PRINT_CLOSING;
             break;
         }
         break;
-    case 9:
+    case WIFI_PLAZA_SURVEY_RESULTS_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, heapID);
-        results->state = 10;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK;
         break;
-    case 10:
+    case WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK:
         if (IsPaletteFadeFinished() == TRUE) {
             WiFiPlazaSurveyResults_ShowLastWeek(results, messages, work, heapID);
-            results->state = 11;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_FADE_IN;
         }
         break;
-    case 11:
+    case WIFI_PLAZA_SURVEY_RESULTS_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heapID);
-        results->state = 12;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_FADE_IN;
         break;
-    case 12:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
-            results->state = 13;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_INTRO;
         }
         break;
-    case 13:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_INTRO:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, results->lastWeek.isSpecial == FALSE ? msg_0777_00113 : msg_0777_00115));
-        results->nextState = 14;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_QUESTION;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 14:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_QUESTION:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetQuestionText(&results->lastWeek, messages));
-        results->nextState = 15;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_QUESTION;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 15:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_QUESTION:
         if (gSystem.newKeys & PAD_BUTTON_A) {
             WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00114));
-            results->nextState = 16;
-            results->state = 22;
+            results->nextState = WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_RESULTS_INTRO;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         }
         break;
-    case 16:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_LAST_WEEK_RESULTS_INTRO:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, results->lastWeek.isSpecial == FALSE ? msg_0777_00117 : msg_0777_00118));
-        results->nextState = 17;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK_RESULTS;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 17:
+    case WIFI_PLAZA_SURVEY_RESULTS_SHOW_LAST_WEEK_RESULTS:
         saveBlock = Save_PlazaSurvey_Get(args->saveData);
         savedRecord.surveyId = PlazaSurvey_GetSurveyId(saveBlock);
         savedRecord.answer = PlazaSurvey_GetAnswer(saveBlock);
         WiFiPlazaSurveyResults_PrintQuestion(results, &results->lastWeek, messages, work, &savedRecord, heapID, MAKE_TEXT_COLOR(11, 12, 0), MAKE_TEXT_COLOR(15, 14, 0), WiFiPlazaWork_IsSpecialVisitor(args->lobby, WiFiPlazaWork_GetOwnSlot(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->lastWeekTally, work, 2);
         PlaySE(SEQ_SE_PL_PINPON2);
-        results->state = 18;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_LAST_WEEK_BARS;
         break;
-    case 18:
+    case WIFI_PLAZA_SURVEY_RESULTS_ANIMATE_LAST_WEEK_BARS:
         if (WiFiPlazaSurveyResults_UpdateBars(results, work) == TRUE) {
-            results->state = 19;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_RESULTS;
         }
         break;
-    case 19:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_LAST_WEEK_RESULTS:
         if (gSystem.newKeys & PAD_BUTTON_A) {
-            results->state = 20;
+            results->state = WIFI_PLAZA_SURVEY_RESULTS_PRINT_CLOSING;
         }
         break;
-    case 20:
+    case WIFI_PLAZA_SURVEY_RESULTS_PRINT_CLOSING:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00120));
-        results->nextState = 21;
-        results->state = 22;
+        results->nextState = WIFI_PLAZA_SURVEY_RESULTS_FINISH;
+        results->state = WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE;
         break;
-    case 21:
+    case WIFI_PLAZA_SURVEY_RESULTS_FINISH:
         WiFiPlazaSurvey_ClearMessageBox(msgBox);
         return TRUE;
-    case 22:
+    case WIFI_PLAZA_SURVEY_RESULTS_WAIT_MESSAGE:
         if (WiFiPlazaSurvey_IsMessageFinished(msgBox) == TRUE) {
             results->state = results->nextState;
         }

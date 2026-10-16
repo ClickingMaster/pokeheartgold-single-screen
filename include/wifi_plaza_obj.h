@@ -16,6 +16,19 @@ typedef struct WiFiPlazaObjManager WiFiPlazaObjManager;
 
 typedef void (*WiFiPlazaObjFunc)(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
 
+enum WiFiPlazaObjHandler {
+    WIFI_PLAZA_OBJ_HANDLER_IDLE,
+    WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT,
+    WIFI_PLAZA_OBJ_HANDLER_WANDER,
+    WIFI_PLAZA_OBJ_HANDLER_RISE_OUT,
+    WIFI_PLAZA_OBJ_HANDLER_DROP_IN,
+    WIFI_PLAZA_OBJ_HANDLER_SLIDE_UP,
+    WIFI_PLAZA_OBJ_HANDLER_SLIDE_DOWN,
+    WIFI_PLAZA_OBJ_HANDLER_SLIDE_LEFT,
+    WIFI_PLAZA_OBJ_HANDLER_SLIDE_RIGHT,
+    WIFI_PLAZA_OBJ_HANDLER_HOP,
+};
+
 typedef struct WiFiPlazaObjTween {
     s32 value;
     s32 start;

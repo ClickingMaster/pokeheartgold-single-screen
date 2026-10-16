@@ -559,7 +559,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
         nextStep = WiFiPlazaPlayerState_AllocWork(state, 4);
         PlaySE(SEQ_SE_DP_SELECT);
         direction = Field2D_GetOppositeDirection(WiFiPlazaObj_GetParam(player, 6));
-        WiFiPlazaObj_SetHandler(objManager, special, 0);
+        WiFiPlazaObj_SetHandler(objManager, special, WIFI_PLAZA_OBJ_HANDLER_IDLE);
         WiFiPlazaObj_SetAvatarMode(special, 0);
         WiFiPlazaObj_SetDirection(special, direction);
         if (WiFiPlazaWork_IsClosing(lobby) != 0) {
@@ -614,7 +614,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
     case 4:
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaRoom_CloseYesNoMenu(room);
-        WiFiPlazaObj_SetHandler(objManager, player, 1);
+        WiFiPlazaObj_SetHandler(objManager, player, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
         WiFiPlazaPlayerState_FreeWork(state);
         WiFiPlazaObj_SetAvatarMode(special, 1);
         WiFiPlazaObj_RunCommand(objManager, special, 0, 1);

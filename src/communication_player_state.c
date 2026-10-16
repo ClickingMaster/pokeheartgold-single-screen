@@ -45,13 +45,13 @@ BOOL CommPlayerInfo_Exists(void) {
 void CommPlayerInfo_SendLocal(void) {
     int netId;
     void *friends;
-    void *r7;
+    void *friendRoster;
     void *wifi;
     void *profile;
 
     netId = Comm_GetLocalNetId();
     friends = Save_FriendGroup_Get(gCommPlayerInfo->save);
-    r7 = Save_FriendRoster_Get(gCommPlayerInfo->save);
+    friendRoster = Save_FriendRoster_Get(gCommPlayerInfo->save);
     wifi = Save_WiFiHistory_Get(gCommPlayerInfo->save);
     profile = gCommPlayerInfo->unk00;
     if (profile == NULL) {
@@ -63,7 +63,7 @@ void CommPlayerInfo_SendLocal(void) {
     gCommPlayerInfo->entries[netId].country = WifiHistory_GetPlayerCountry(wifi);
     gCommPlayerInfo->entries[netId].region = WiFiHistory_GetPlayerRegion(wifi);
     gCommPlayerInfo->entries[netId].unk65 = 0;
-    DWC_CreateExchangeToken(FriendRoster_GetUserData(r7), gCommPlayerInfo->entries[netId].token);
+    DWC_CreateExchangeToken(FriendRoster_GetUserData(friendRoster), gCommPlayerInfo->entries[netId].token);
     MI_CpuFill8(&gCommPlayerInfo->entries[netId], 0, 0x20);
     if (gCommPlayerInfo->rules != NULL) {
         LinkBattleRuleset_Copy(gCommPlayerInfo->rules, &gCommPlayerInfo->entries[netId]);
