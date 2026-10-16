@@ -62,28 +62,28 @@ typedef union BattleCastlePartyAppFlags {
 
 // Summary of the selected mon, filled by BattleCastlePartyApp_LoadMonSummary
 typedef struct BattleCastleMonSummary {
-    Pokemon *mon;         // 0x00 (app 0x804)
-    BoxPokemon *boxMon;   // 0x04
-    u16 species;          // 0x08
-    u8 gender : 7;        // 0x0A
-    u8 unk_0A_7 : 1;      // 0 when MON_DATA_NO_PRINT_GENDER == 1; gender is printed only when 0
-    u8 level;             // 0x0B
-    u8 ability;           // 0x0C
-    u8 nature;            // 0x0D
-    u16 heldItem;         // 0x0E
-    u32 personality;      // 0x10
-    u16 hp;               // 0x14
-    u16 maxHp;            // 0x16
-    u16 attack;           // 0x18
-    u16 spAttack;         // 0x1A
-    u16 defense;          // 0x1C
-    u16 spDefense;        // 0x1E
-    u16 speed;            // 0x20
-    u8 form;              // 0x22
-    u8 unk_23;            // 0x23
-    u16 moves[4];         // 0x24
-    u8 pp[4];             // 0x2C
-    u8 maxPp[4];          // 0x30
+    Pokemon *mon;       // 0x00 (app 0x804)
+    BoxPokemon *boxMon; // 0x04
+    u16 species;        // 0x08
+    u8 gender : 7;      // 0x0A
+    u8 hideGender : 1;  // 0 when MON_DATA_NO_PRINT_GENDER == 1; gender is printed only when 0
+    u8 level;           // 0x0B
+    u8 ability;         // 0x0C
+    u8 nature;          // 0x0D
+    u16 heldItem;       // 0x0E
+    u32 personality;    // 0x10
+    u16 hp;             // 0x14
+    u16 maxHp;          // 0x16
+    u16 attack;         // 0x18
+    u16 spAttack;       // 0x1A
+    u16 defense;        // 0x1C
+    u16 spDefense;      // 0x1E
+    u16 speed;          // 0x20
+    u8 form;            // 0x22
+    u8 unk_23;          // 0x23
+    u16 moves[4];       // 0x24
+    u8 pp[4];           // 0x2C
+    u8 maxPp[4];        // 0x30
 } BattleCastleMonSummary; // size 0x34
 
 typedef struct BattleCastlePartyApp {
@@ -130,7 +130,7 @@ typedef struct BattleCastlePartyApp {
     BattleCastleSprite *cursor;                  // 0x760
     BattleCastleSprite *partnerCursor;           // 0x764
     BattleCastleSprite *hpBars[4];               // 0x768
-    BattleCastleSprite *unk_778;                 // 0x778
+    BattleCastleSprite *menuOpenSprite;          // 0x778
     BattleCastleSprite *itemCursor;              // 0x77C
     BattleCastleSprite *monPic;                  // 0x780
     BattleCastleSprite *itemIcons[6];            // 0x784

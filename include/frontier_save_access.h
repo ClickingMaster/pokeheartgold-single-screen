@@ -5,7 +5,7 @@
 #include "save_frontier.h"
 
 struct FrontierSpeciesRecords {
-    u32 unk_000;
+    u32 saveKey;
     u16 stats[3][495];
     u16 padding;
 }; // size = 0xBA0

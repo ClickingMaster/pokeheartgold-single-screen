@@ -146,7 +146,7 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
 
     HealParty(data->opponentParty);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleCastle_GetBattleType(data->type));
-    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->keyPressedSave);
     setup->battleBg = BATTLE_BG_BATTLE_CASTLE;
     setup->terrain = TERRAIN_BATTLE_CASTLE;
     Party_InitWithMaxSize(setup->party[BATTLER_PLAYER], playerCount);

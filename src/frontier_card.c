@@ -30,7 +30,7 @@ typedef struct FrontierCard {
     u8 isEgg : 1;
     u8 form : 7;
     u16 species;
-    u8 unk_1E[2];
+    u8 greetingIsFreeText[2];
     u16 greeting[40];
     u8 unk_70[12];
     u16 crc;
@@ -154,7 +154,7 @@ u32 FrontierCard_GetRegion(FrontierCard *card) {
 String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId) {
     int invalid = 0;
     u32 category, msgNo;
-    if (card->unk_1E[0] == 0) {
+    if (card->greetingIsFreeText[0] == 0) {
         message->msg_bank = card->greeting[0];
         message->msg_no = card->greeting[1];
         message->fields[0] = card->greeting[2];

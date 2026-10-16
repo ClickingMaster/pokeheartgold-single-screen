@@ -10,11 +10,11 @@ FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *param1) {
     FrontierLaunchArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FrontierLaunchArgs));
     MI_CpuFill8(args, 0, sizeof(FrontierLaunchArgs));
 
-    args->unk0 = param1;
+    args->frontierFsys = param1;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->bagCursor = fieldSystem->bagCursor;
-    args->unk1C = fieldSystem->unkB0;
+    args->keyPressedSave = fieldSystem->unkB0;
     args->unk10 = 0;
     args->unk14 = 0;
     args->mapId = fieldSystem->location->mapId;

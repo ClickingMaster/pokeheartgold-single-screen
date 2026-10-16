@@ -288,7 +288,7 @@ BattleSetup *BattleTower_NewBattleSetup(FrontierFieldSystem *tower, FrontierLaun
 
     setup = BattleSetup_New(tower->heapID, BattleTower_GetBattleType(tower->towerMode));
     party = SaveArray_Party_Get(args->saveData);
-    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->unk1C);
+    BattleSetup_InitFromSaveData(setup, NULL, args->saveData, args->mapId, args->bagCursor, args->keyPressedSave);
     setup->battleBg = BATTLE_BG_BATTLE_TOWER;
     setup->terrain = TERRAIN_BATTLE_TOWER;
     mon = AllocMonZeroed(tower->heapID);

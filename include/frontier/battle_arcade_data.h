@@ -57,8 +57,8 @@ typedef struct ArcadeContext {
     u8 linkRecvMon[0x3FE];   // 0x674, received Pokemon, 0x200 per net id (the second one overlaps unkA72)
     u8 unkA72;
     u8 unkA73;
-    u8 unkA74;
-    u8 unkA75;
+    u8 partnerValueA;
+    u8 partnerValueB;
     u16 partnerRound; // the link partner's round
     u16 multiWinStreak;
     u8 mirrorParticles;

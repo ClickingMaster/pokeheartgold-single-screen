@@ -598,7 +598,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
             return;
         }
         FrontierScript_GetMovementStep(&step, data->object->object, data->id, opcode);
-        Field2DMoveQueue_Push(data->unk_10, (Field2DMoveQueueEntry *)&step);
+        Field2DMoveQueue_Push(data->moveQueue, (Field2DMoveQueueEntry *)&step);
         data->repeat++;
         if (data->repeat >= count) {
             data->repeat = 0;

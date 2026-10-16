@@ -42,9 +42,9 @@ typedef struct FrontierTrainerRecord {
     u16 trainerClass;
     u16 unk_06;
     u16 name[8];
-    u16 unk_18;
-    u16 unk_1A;
-    u8 unk_1C[4];
+    u16 introMsgBank;
+    u16 introMsgNo;
+    u8 introMsgFields[4];
     u16 messages[8]; // win and lose easy chat messages
 } FrontierTrainerRecord; // size: 0x30
 
@@ -129,8 +129,8 @@ void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum He
     MI_CpuFill8(record, 0, sizeof(FrontierTrainerRecord));
     trainer = FrontierData_AllocMember((u16)trainerId, heapID, narcId);
     record->id = trainerId;
-    record->unk_18 = 0xFFFF;
-    record->unk_1A = trainerId * 3;
+    record->introMsgBank = 0xFFFF;
+    record->introMsgNo = trainerId * 3;
     record->trainerClass = trainer->trainerClass;
     string = NewString_ReadMsgData(msgData, trainerId);
     CopyStringToU16Array(string, record->name, 8);

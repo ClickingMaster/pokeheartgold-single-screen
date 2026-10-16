@@ -53,12 +53,12 @@ typedef struct BattleFactoryData {
     SysTask *scrollTask;                            // 0x500
     u16 linkBuffer[30];                             // 0x504, outgoing link message
     u8 filler_540[0x3C];
-    u8 unk_57C;                                     // 0x57C, partner's value of link message 0x1A
-    u8 unk_57D;                                     // 0x57D, partner's value of link message 0x1B
-    u16 partnerRound;                               // 0x57E
-    u16 partnerTradeCount;                          // 0x580
-    u16 partnerWinStreak;                           // 0x582
-    BattleFactoryMonSet partnerRentals;             // 0x584, generated for the partner in link multi battles
+    u8 partnerValueA;                   // 0x57C, partner's value of link message 0x1A
+    u8 partnerValueB;                   // 0x57D, partner's value of link message 0x1B
+    u16 partnerRound;                   // 0x57E
+    u16 partnerTradeCount;              // 0x580
+    u16 partnerWinStreak;               // 0x582
+    BattleFactoryMonSet partnerRentals; // 0x584, generated for the partner in link multi battles
     u8 filler_700[2];
     u8 linkMessageCount;                            // 0x702
     u8 filler_703[5];

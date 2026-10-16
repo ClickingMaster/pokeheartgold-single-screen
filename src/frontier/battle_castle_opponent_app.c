@@ -240,7 +240,7 @@ typedef struct BattleCastleOpponentApp {
     BattleCastleSprite *partnerCursor;           // 0x50C
     BattleCastleSprite *hpBars[4];               // 0x510
     BattleCastleSprite *boughtMarks[4][2];       // 0x520 ([0] stats bought, [1] moves bought)
-    BattleCastleSprite *unk_540;                 // 0x540
+    BattleCastleSprite *menuOpenSprite;          // 0x540
     BattleCastleSprite *monPic;                  // 0x544
     u16 *selectionOut;                           // 0x548 (args + 0x20)
     u8 *checked;                                 // 0x54C (args 0x08; per mon, identity checked)
@@ -678,7 +678,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
         } else if (app->flags.bits.linkResume == CASTLE_OPP_RESUME_SUMMARY_MENU) {
             BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
             BattleCastleOpponentApp_OpenSummaryMenu(app);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_540, 200, 105);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 200, 105);
             app->subState = CASTLE_OPP_STATE_SUMMARY_MENU;
         } else if (app->flags.bits.linkResume == CASTLE_OPP_RESUME_BOUGHT_PAGE) {
             app->subState = CASTLE_OPP_STATE_SHOW_BOUGHT_PAGE;
@@ -977,7 +977,7 @@ BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             BattleCastleOpponentApp_OpenSummaryMenu(app);
             BattleCastleOpponentApp_PrintMonSummary(app, 0);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_540, 200, 105);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 200, 105);
             app->subState = CASTLE_OPP_STATE_SUMMARY_MENU;
         }
         break;
@@ -1166,7 +1166,7 @@ void BattleCastleOpponentApp_FreeResources(BattleCastleOpponentApp *app) {
     BattleCastle_FreeGrid(app->partyGrid);
     BattleCastleSprite_Delete(app->cursor);
     BattleCastleSprite_Delete(app->partnerCursor);
-    BattleCastleSprite_Delete(app->unk_540);
+    BattleCastleSprite_Delete(app->menuOpenSprite);
     BattleCastleSprite_Delete(app->monPic);
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 2; j++) {
@@ -1296,8 +1296,8 @@ void BattleCastleOpponentApp_InitGraphics(BattleCastleOpponentApp *app) {
         v.row++;
     } while (v.row < 4);
     BattleCastleOpponentApp_ShowBoughtMarks(app);
-    app->unk_540 = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 11, 20, 20, 0, 0);
-    BattleCastleSprite_SetDrawFlag(app->unk_540, FALSE);
+    app->menuOpenSprite = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 11, 20, 20, 0, 0);
+    BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
     BattleCastleOpponentApp_LoadMonSummary(app);
     BattleCastleOpponentApp_PrintSummaryLabels(app);
     BattleCastleOpponentApp_PrintMonSummary(app, 1);
@@ -1827,7 +1827,7 @@ int BattleCastleOpponentApp_GetLevelChangeCost(int levelChange) {
 void BattleCastleOpponentApp_CloseAll(BattleCastleOpponentApp *app) {
     BattleCastleOpponentApp_CloseMenus(app);
     BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
-    BattleCastleSprite_SetDrawFlag(app->unk_540, FALSE);
+    BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
 }
 
 void BattleCastleOpponentApp_CloseWindow(Window *window) {
@@ -2390,9 +2390,9 @@ void BattleCastleOpponentApp_LoadMonSummary(BattleCastleOpponentApp *app) {
     app->summary.form = GetMonData(mon, MON_DATA_FORM, NULL);
     app->summary.personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == 1) {
-        app->summary.unk_0A_7 = 0;
+        app->summary.hideGender = 0;
     } else {
-        app->summary.unk_0A_7 = 1;
+        app->summary.hideGender = 1;
     }
     app->summary.gender = GetMonGender(mon);
     for (i = 0; i < 4; i++) {
@@ -2465,7 +2465,7 @@ void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app, int c
     FillWindowPixelBuffer(&app->windows[CASTLE_OPP_WIN_SPEED], 0);
     FillWindowPixelBuffer(&app->windows[CASTLE_OPP_WIN_MOVES], 0);
 
-    if (!app->summary.unk_0A_7) {
+    if (!app->summary.hideGender) {
         if (app->summary.gender == MON_MALE) {
             BattleCastle_PrintMsg(&app->windows[CASTLE_OPP_WIN_GENDER], app->msgData, msg_0033_00064, 0, 0, 0, CASTLE_OPP_TEXT_COLOR_MALE, CASTLE_ALIGN_LEFT);
         } else if (app->summary.gender == MON_FEMALE) {

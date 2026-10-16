@@ -43,10 +43,10 @@ typedef struct BattleCastleData {
     FrontierMon opponentMons[CASTLE_OPPONENT_COUNT];          // 0x288
     u8 filler_368[2];                                         // 0x368
     u16 heldItems[CASTLE_PARTY_SIZE];                         // 0x36A, of the party, given back after the challenge
-    u8 unk_370[4];                                            // 0x370, the castle apps' result (BattleCastle_OnAppExit)
-    u8 unk_374[4];                                            // 0x374
-    u8 unk_378[4];                                            // 0x378
-    u8 unk_37C[4];                                            // 0x37C
+    u8 opponentChecked[4];                                    // 0x370, the castle apps' result (BattleCastle_OnAppExit)
+    u8 opponentLevelChanges[4];                               // 0x374
+    u8 opponentStatsBought[4];                                // 0x378
+    u8 opponentMovesBought[4];                                // 0x37C
     u16 selections[6];                                           // 0x380
     u8 filler_38C[8];                                         // 0x38C
     u16 startPP[4][4];                                        // 0x394, PP of each move when the battle started
@@ -54,8 +54,8 @@ typedef struct BattleCastleData {
     u16 linkBuffer[40];                                       // 0x3C0
     u8 linkMonBuffer[CASTLE_LINK_MON_BUFFER_SIZE];            // 0x410
     u8 linkRecvMon[2][CASTLE_LINK_MON_BUFFER_SIZE];           // 0x610
-    u8 unk_A10;                                               // 0xA10
-    u8 unk_A11;                                               // 0xA11
+    u8 partnerValueA;                                         // 0xA10
+    u8 partnerValueB;                                         // 0xA11
     u16 partnerRound;                                         // 0xA12
     u8 filler_A14[2];                                         // 0xA14
     u16 partnerWinStreak;                                     // 0xA16
@@ -71,20 +71,20 @@ typedef struct BattleCastleData {
 
 // Arguments of the castle party / opponent apps (BattleCastle_FillAppArgs).
 typedef struct BattleCastleAppArgs {
-    SaveData *saveData;      // 0x00
-    u8 type;                 // 0x04
-    u8 filler_05[3];         // 0x05
-    u8 unk_08[4];            // 0x08
-    u8 unk_0C[4];            // 0x0C
-    u8 unk_10[4];            // 0x10
-    u8 unk_14[4];            // 0x14
-    Party *playerParty;      // 0x18
-    Party *opponentParty;    // 0x1C
-    u16 selection;           // 0x20, written by the party app
-    u8 filler_22[2];         // 0x22
-    BattleCastleData *data;  // 0x24
-    u16 partnerPoints;       // 0x28
-    u8 filler_2A[6];         // 0x2A
+    SaveData *saveData;     // 0x00
+    u8 type;                // 0x04
+    u8 filler_05[3];        // 0x05
+    u8 checked[4];          // 0x08
+    u8 levelChanges[4];     // 0x0C
+    u8 statsBought[4];      // 0x10
+    u8 movesBought[4];      // 0x14
+    Party *playerParty;     // 0x18
+    Party *opponentParty;   // 0x1C
+    u16 selection;          // 0x20, written by the party app
+    u8 filler_22[2];        // 0x22
+    BattleCastleData *data; // 0x24
+    u16 partnerPoints;      // 0x28
+    u8 filler_2A[6];        // 0x2A
 } BattleCastleAppArgs; // size 0x30
 
 BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 type, int slot0, u16 slot1, u16 slot2, u16 *resultVar);

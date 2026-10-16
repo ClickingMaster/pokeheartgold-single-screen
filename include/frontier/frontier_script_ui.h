@@ -70,7 +70,7 @@ typedef struct FrontierMovementTask {
     u16 id;                          // 0x04
     u8 *runningCount;                // 0x08, the frontier system's count of running movements
     const u16 *script;               // 0x0C, (opcode, count) pairs
-    Field2DMoveQueue *unk_10; // 0x10, the map's unk30
+    Field2DMoveQueue *moveQueue; // 0x10, the map's moveQueue
     FrontierMapObject *object;       // 0x14
 } FrontierMovementTask;
 

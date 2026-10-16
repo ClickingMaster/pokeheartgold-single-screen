@@ -514,7 +514,7 @@ BOOL FrtCmd_LoadObjectGfx(FrontierScriptContext *ctx) {
         if (gfx.id == FRONTIER_LIST_END) {
             break;
         }
-        gfx.unk_02 = FrontierScriptContext_ReadByte(ctx);
+        gfx.animSet = FrontierScriptContext_ReadByte(ctx);
         if (gfx.id == FRONTIER_ID_PLAYER) {
             FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
             gfx.id = Frontier_GetPlayerSpriteId(Save_PlayerData_GetProfile(args->saveData));
@@ -560,12 +560,12 @@ BOOL FrtCmd_CreateObjects(FrontierScriptContext *ctx) {
             break;
         }
         template.spriteId = FrontierScript_ReadVar(ctx);
-        template.unk_0A = FrontierScriptContext_ReadByte(ctx);
+        template.direction = FrontierScriptContext_ReadByte(ctx);
         template.x = FrontierScriptContext_ReadHalfWord(ctx) - 8;
         template.y = FrontierScriptContext_ReadHalfWord(ctx) - 16;
-        template.unk_0B = FrontierScriptContext_ReadByte(ctx);
+        template.visible = FrontierScriptContext_ReadByte(ctx);
         template.unk_0C = FrontierScriptContext_ReadByte(ctx);
-        template.unk_02 = 0;
+        template.action = 0;
         if (template.spriteId == FRONTIER_ID_PLAYER) {
             FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
             PlayerProfile *profile = Save_PlayerData_GetProfile(args->saveData);
@@ -616,7 +616,7 @@ BOOL FrtCmd_ApplyMovement(FrontierScriptContext *ctx) {
     if (object == NULL) {
         GF_AssertFail();
     }
-    FrontierScript_StartMovement(id, object, ctx->scriptPtr + offset, map->unk30, &system->movementCount, system->heapId);
+    FrontierScript_StartMovement(id, object, ctx->scriptPtr + offset, map->moveQueue, &system->movementCount, system->heapId);
     system->movementCount++;
     return FALSE;
 }
@@ -626,7 +626,7 @@ void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *s
     MI_CpuFill8(data, 0, sizeof(FrontierMovementTask));
     data->object = object;
     data->script = (const u16 *)script; // (opcode, count) pairs
-    data->unk_10 = unk3;
+    data->moveQueue = unk3;
     data->id = id;
     data->runningCount = runningCount;
     if (object->movementTask != NULL) {

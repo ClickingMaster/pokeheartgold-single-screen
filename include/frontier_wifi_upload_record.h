@@ -8,7 +8,7 @@
 #include "save.h"
 
 typedef struct FrontierWifiUploadRecord {
-    u8 unk0[0xA8];
+    u8 team[0xA8];
     u16 *playerName;
     u8 unkAC[0xC];
     u8 gameVersion;

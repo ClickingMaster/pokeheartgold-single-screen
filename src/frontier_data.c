@@ -17,18 +17,18 @@
 
 // The Battle Tower challenge in progress (BattleTowerChallenge_GetField / SetField field ids in comments).
 typedef struct BattleTowerChallenge {
-    u8 unk0_0 : 1;      // 7
-    u8 saved : 1;       // BattleTowerChallenge_GetSaved / SetSaved
-    u8 towerMode : 3;   // 0
-    u8 multiAllyId : 3; // 9
+    u8 allyReplaceItem : 1; // 7
+    u8 saved : 1;           // BattleTowerChallenge_GetSaved / SetSaved
+    u8 towerMode : 3;       // 0
+    u8 multiAllyId : 3;     // 9
     u8 unk1;
     u8 battleNumber;      // 1
-    u8 unk3;              // 2, 20 points each off the Wi-Fi score
-    u16 unk4;             // 3, 10 points each off the Wi-Fi score
-    u16 unk6;             // 4, the last part of the Wi-Fi score
+    u8 totalTimesFainted; // 2, 20 points each off the Wi-Fi score
+    u16 totalTurns;       // 3, 10 points each off the Wi-Fi score
+    u16 totalDamage;      // 4, the last part of the Wi-Fi score
     u8 partySlots[4];     // 5
     u8 trainers[28];      // 8, 14 trainer ids
-    u32 unk28;            // 10
+    u32 randomState;      // 10
     u8 multiAllyData[16]; // 6
 } BattleTowerChallenge;   // size = 0x3C
 
@@ -132,11 +132,11 @@ u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
     case 1:
         return c->battleNumber;
     case 2:
-        return c->unk3;
+        return c->totalTimesFainted;
     case 3:
-        return c->unk4;
+        return c->totalTurns;
     case 4:
-        return c->unk6;
+        return c->totalDamage;
     case 5:
         MI_CpuCopy8(c->partySlots, out, 4);
         return 0;
@@ -144,14 +144,14 @@ u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
         MI_CpuCopy8(c->multiAllyData, out, 16);
         return 0;
     case 7:
-        return c->unk0_0;
+        return c->allyReplaceItem;
     case 8:
         MI_CpuCopy8(c->trainers, out, 28);
         return 0;
     case 9:
         return c->multiAllyId;
     case 10:
-        return c->unk28;
+        return c->randomState;
     }
     return 0;
 }
@@ -166,13 +166,13 @@ void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
         c->battleNumber = *(u8 *)value;
         break;
     case 2:
-        c->unk3 = *(u8 *)value;
+        c->totalTimesFainted = *(u8 *)value;
         break;
     case 3:
-        c->unk4 = *(u16 *)value;
+        c->totalTurns = *(u16 *)value;
         break;
     case 4:
-        c->unk6 = *(u16 *)value;
+        c->totalDamage = *(u16 *)value;
         break;
     case 5:
         MI_CpuCopy8(value, c->partySlots, 4);
@@ -181,13 +181,13 @@ void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
         MI_CpuCopy8(value, c->multiAllyData, 16);
         break;
     case 7:
-        c->unk0_0 = *(u8 *)value;
+        c->allyReplaceItem = *(u8 *)value;
         break;
     case 8:
         MI_CpuCopy8(value, c->trainers, 28);
         break;
     case 10:
-        c->unk28 = *(u32 *)value;
+        c->randomState = *(u32 *)value;
         break;
     case 9:
         c->multiAllyId = *(u8 *)value;
@@ -198,19 +198,19 @@ void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
 // Adds to the three Wi-Fi score counters, each capped below its type's maximum.
 void BattleTowerChallenge_AddWifiScoreCounters(u32 challenge, u8 a, u32 b, u32 c) {
     BattleTowerChallenge *ch = (BattleTowerChallenge *)challenge;
-    int x = ch->unk3 + a;
+    int x = ch->totalTimesFainted + a;
     int y;
     int z;
     if (x < 255) {
-        ch->unk3 = x;
+        ch->totalTimesFainted = x;
     }
-    y = ch->unk4 + b;
+    y = ch->totalTurns + b;
     if (y < 65535) {
-        ch->unk4 = y;
+        ch->totalTurns = y;
     }
-    z = ch->unk6 + c;
+    z = ch->totalDamage + c;
     if (z < 65535) {
-        ch->unk6 = z;
+        ch->totalDamage = z;
     }
 }
 
@@ -315,8 +315,8 @@ void FrontierData_GetWifiTeam(FrontierData *data, s32 index, FrontierWifiUploadR
 u16 FrontierData_CalcWifiScore(FrontierData *data, u32 challenge) {
     BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
     u16 base = 1000 * (c->battleNumber - 1);
-    u16 a = 10 * c->unk4;
-    u16 b = 20 * c->unk3;
+    u16 a = 10 * c->totalTurns;
+    u16 b = 20 * c->totalTimesFainted;
     u16 score;
     u16 time;
     if (a + b > 950) {
@@ -324,10 +324,10 @@ u16 FrontierData_CalcWifiScore(FrontierData *data, u32 challenge) {
     } else {
         score = 950 - (a + b);
     }
-    if (c->unk6 > 970) {
+    if (c->totalDamage > 970) {
         time = 0;
     } else {
-        time = (1000 - c->unk6) / 30;
+        time = (1000 - c->totalDamage) / 30;
     }
     u16 result = (u16)(base + score + time);
     data->wifiScore = result;

@@ -6,14 +6,14 @@
 #include "overlay_manager.h"
 
 typedef struct FrontierLaunchArgs {
-    void *unk0;
+    void *frontierFsys;
     Options *options;
     SaveData *saveData;
     BagCursor *bagCursor;
     u32 unk10;
     u32 unk14;
     u32 mapId;
-    void *unk1C;
+    void *keyPressedSave;
     u8 frontierMapId;
     FieldSystem *fieldSystem;
 } FrontierLaunchArgs;

@@ -191,11 +191,11 @@ void FrontierMap_SaveObjects(FrontierMap *map) {
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         object = Frontier_GetMapObject(map->frontier, i);
         if (object->object != NULL) {
-            object->template.unk_0A = Field2DObject_GetParam(object->object, 6);
-            object->template.unk_02 = Field2DObject_GetParam(object->object, 5);
+            object->template.direction = Field2DObject_GetParam(object->object, 6);
+            object->template.action = Field2DObject_GetParam(object->object, 5);
             object->template.x = Field2DObject_GetParam(object->object, 0);
             object->template.y = Field2DObject_GetParam(object->object, 1);
-            object->template.unk_0B = Field2DObjectSprite_IsVisible(object->objectSprite);
+            object->template.visible = Field2DObjectSprite_IsVisible(object->objectSprite);
         }
     }
     FrontierMap_SaveSprites(map);
@@ -210,7 +210,7 @@ void FrontierMap_RestoreObjects(FrontierMap *map) {
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_GFX_MAX; i++) {
         if (gfx[i].id != FRONTIER_MAP_NO_ID) {
-            Field2DObjectSpriteManager_LoadChar(map->objectGfx, gfx[i].id, gfx[i].unk_02, HEAP_ID_101);
+            Field2DObjectSpriteManager_LoadChar(map->objectGfx, gfx[i].id, gfx[i].animSet, HEAP_ID_101);
         }
     }
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
@@ -323,11 +323,11 @@ void FrontierMap_ProcessEvents(FrontierMap *map) {
     Field2DCommand event;
     Field2DMove command;
 
-    while (Field2DMoveQueue_Pop(map->unk30, (Field2DMoveQueueEntry *)&command) == 1) {
+    while (Field2DMoveQueue_Pop(map->moveQueue, (Field2DMoveQueueEntry *)&command) == 1) {
         Field2DObjectManager_StartMove(map->objectManager, &command);
     }
-    while (Field2DCommandQueue_Pop(map->unk2C, &event) == 1) {
-        if (Field2DObjectManager_TryCommand(map->unk18, map->objectManager, &event, &command) == 1) {
+    while (Field2DCommandQueue_Pop(map->commandQueue, &event) == 1) {
+        if (Field2DObjectManager_TryCommand(map->grid, map->objectManager, &event, &command) == 1) {
             Field2DObjectManager_StartMove(map->objectManager, &command);
         }
     }
@@ -431,7 +431,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     u32 bgMode;
 
     map->objectManager = Field2DObjectManager_New(32, HEAP_ID_101);
-    map->unk18 = Field2DMap_New(16, 16, HEAP_ID_101);
+    map->grid = Field2DMap_New(16, 16, HEAP_ID_101);
     Field2DCamera_Init(&map->camera);
     map->objectGfx = Field2DObjectSpriteManager_NewWithShadow(SpriteManager_GetSpriteList(map->spriteManager), map->paletteData, 32, Frontier_GetPlayerSpriteId(profile), 0, 1, HEAP_ID_101);
     layerTemplate = gFrontierMapLayerTemplate;
@@ -451,9 +451,9 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
             map->bg2Layer = Field2DBgLayer_New(SpriteSystem_GetRenderer(map->spriteSystem), map->bgConfig, &layerTemplate, HEAP_ID_101);
         }
     }
-    map->unk2C = Field2DCommandQueue_New(128, HEAP_ID_101);
-    map->unk30 = (Field2DMoveQueue *)Field2DMoveQueue_New(128, HEAP_ID_101);
-    Field2DMap_Load(map->unk18, gFrontierMapLayout);
+    map->commandQueue = Field2DCommandQueue_New(128, HEAP_ID_101);
+    map->moveQueue = (Field2DMoveQueue *)Field2DMoveQueue_New(128, HEAP_ID_101);
+    Field2DMap_Load(map->grid, gFrontierMapLayout);
     bgMode = FrontierMap_GetParam(mapId, MAP_PARAM_BG_MODE);
     narcId = (NarcId)FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
     narc = NARC_New(narcId, HEAP_ID_101);
@@ -500,7 +500,7 @@ void FrontierMap_FreeMapObjects(FrontierMap *map) {
         object++;
     }
     Field2DObjectManager_Free(map->objectManager);
-    Field2DMap_Free(map->unk18);
+    Field2DMap_Free(map->grid);
     Field2DObjectSpriteManager_Free(map->objectGfx);
     if (map->bg3Layer != NULL) {
         Field2DBgLayer_Free(map->bg3Layer);
@@ -508,8 +508,8 @@ void FrontierMap_FreeMapObjects(FrontierMap *map) {
     if (map->bg2Layer != NULL) {
         Field2DBgLayer_Free(map->bg2Layer);
     }
-    Field2DCommandQueue_Free(map->unk2C);
-    Field2DMoveQueue_Free((u32 *)map->unk30);
+    Field2DCommandQueue_Free(map->commandQueue);
+    Field2DMoveQueue_Free((u32 *)map->moveQueue);
 }
 
 GF3DVramMan *FrontierMap_Create3DVramMan(enum HeapID heapID) {
@@ -606,7 +606,7 @@ void FrontierMap_AddObjectGfx(FrontierMap *map, const FrontierMapObjectGfx *gfx)
         GF_AssertFail();
     }
     table[slot] = *gfx;
-    Field2DObjectSpriteManager_LoadChar(map->objectGfx, gfx->id, gfx->unk_02, HEAP_ID_101);
+    Field2DObjectSpriteManager_LoadChar(map->objectGfx, gfx->id, gfx->animSet, HEAP_ID_101);
 }
 #pragma force_active reset
 
@@ -644,12 +644,12 @@ Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjec
     args.unk0 = template->x;
     args.unk2 = template->y;
     args.unk4 = template->id;
-    args.unk6 = template->unk_02;
-    args.unk8 = template->unk_0A;
+    args.unk6 = template->action;
+    args.unk8 = template->direction;
     args.unkA = template->spriteId;
     object = Field2DObjectManager_AddObject(map->objectManager, &args);
     objectSprite = Field2DObjectSpriteManager_CreateSprite(map->objectGfx, object, 0, HEAP_ID_101);
-    Field2DObjectSprite_SetVisible(objectSprite, template->unk_0B);
+    Field2DObjectSprite_SetVisible(objectSprite, template->visible);
     FrontierMap_SetObject(map->frontier, index, object, objectSprite, template);
     return object;
 }

@@ -590,14 +590,14 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         resume = app->flags.bits.linkResume;
         if (resume == 1) {
             BattleCastlePartyApp_OpenHealMenu(app);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 204, 100);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 204, 100);
             app->subState = CASTLE_PARTY_STATE_HEAL_MENU;
             app->flags.bits.linkResume = 0;
             return FALSE;
         }
         if (resume == 2) {
             BattleCastlePartyApp_OpenRentalMenu(app);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 211, 106);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 211, 106);
             app->subState = CASTLE_PARTY_STATE_RENTAL_MENU;
             app->flags.bits.linkResume = 0;
             return FALSE;
@@ -794,7 +794,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             BattleCastlePartyApp_OpenHealMenu(app);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 204, 100);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 204, 100);
             app->subState = CASTLE_PARTY_STATE_HEAL_MENU;
         }
         break;
@@ -1019,7 +1019,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         if (BattleCastle_IsAdvancePressed() == TRUE) {
             PlaySE(SEQ_SE_DP_SELECT);
             BattleCastlePartyApp_OpenRentalMenu(app);
-            BattleCastleSprite_ShowAnim11WithSE(app->unk_778, 211, 106);
+            BattleCastleSprite_ShowAnim11WithSE(app->menuOpenSprite, 211, 106);
             app->subState = CASTLE_PARTY_STATE_RENTAL_MENU;
         }
         break;
@@ -1226,7 +1226,7 @@ void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     BattleCastle_FreeGrid(app->partyGrid);
     BattleCastleSprite_Delete(app->unk_734);
     BattleCastleSprite_Delete(app->unk_738);
-    BattleCastleSprite_Delete(app->unk_778);
+    BattleCastleSprite_Delete(app->menuOpenSprite);
     BattleCastleSprite_Delete(app->cursor);
     BattleCastleSprite_Delete(app->partnerCursor);
     BattleCastleSprite_Delete(app->itemCursor);
@@ -1341,8 +1341,8 @@ void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
     if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         BattleCastleSprite_SetDrawFlag(app->partnerCursor, FALSE);
     }
-    app->unk_778 = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 11, 20, 20, 0, 0);
-    BattleCastleSprite_SetDrawFlag(app->unk_778, FALSE);
+    app->menuOpenSprite = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 11, 20, 20, 0, 0);
+    BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
     app->itemCursor = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 3, 20, 20, 1, 0);
     BattleCastleSprite_SetDrawFlag(app->itemCursor, FALSE);
     BattleCastlePartyApp_LoadMonSummary(app);
@@ -1955,7 +1955,7 @@ void BattleCastlePartyApp_PrintSelectedMonInfo(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_MON_HP], app->msgData, msg_0031_00095, GetWindowWidth(&app->windows[CASTLE_PARTY_WIN_MON_HP]) * 8 / 2, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_CENTER); // "{hp}/{maxHp}"
     BufferBoxMonNickname(app->msgFormat, 0, Mon_GetBoxMon(app->summary.mon));
     BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_MON_NICKNAME], app->msgData, msg_0031_00091, 0, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_LEFT);
-    if (!app->summary.unk_0A_7) {
+    if (!app->summary.hideGender) {
         if (app->summary.gender == MON_MALE) {
             BattleCastle_PrintMsg(&app->windows[CASTLE_PARTY_WIN_MON_GENDER], app->msgData, msg_0031_00086, 0, 0, 0, CASTLE_PARTY_TEXT_COLOR_MALE, CASTLE_ALIGN_LEFT); // "♂"
         } else if (app->summary.gender == MON_FEMALE) {
@@ -2344,7 +2344,7 @@ void BattleCastlePartyApp_CloseAll(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
     BattleCastlePartyApp_HideSummaryPanel(app);
     BattleCastle_RequestBgToggle(2, 0, &app->bgToggleRequests);
-    BattleCastleSprite_SetDrawFlag(app->unk_778, FALSE);
+    BattleCastleSprite_SetDrawFlag(app->menuOpenSprite, FALSE);
 }
 
 #pragma force_active on
@@ -2838,9 +2838,9 @@ void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
     app->summary.form = GetMonData(mon, MON_DATA_FORM, NULL);
     app->summary.personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == 1) {
-        app->summary.unk_0A_7 = 0;
+        app->summary.hideGender = 0;
     } else {
-        app->summary.unk_0A_7 = 1;
+        app->summary.hideGender = 1;
     }
     app->summary.gender = GetMonGender(mon);
     for (i = 0; i < 4; i++) {
@@ -2923,7 +2923,7 @@ void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int schedul
 
     BufferBoxMonNickname(app->msgFormat, 0, Mon_GetBoxMon(app->summary.mon));
     BattleCastlePartyApp_PrintExpandedMessage(app, &app->windows[CASTLE_PARTY_WIN_NICKNAME], app->msgData, msg_0031_00091, 0, 0, 0, CASTLE_PARTY_TEXT_COLOR, CASTLE_ALIGN_LEFT);
-    if (app->summary.unk_0A_7 == 0) {
+    if (app->summary.hideGender == 0) {
         if (app->summary.gender == MON_MALE) {
             BattleCastle_PrintMsg(&app->windows[CASTLE_PARTY_WIN_GENDER], app->msgData, msg_0031_00086, 0, 0, 0, CASTLE_PARTY_TEXT_COLOR_MALE, CASTLE_ALIGN_LEFT);
         } else if (app->summary.gender == MON_FEMALE) {

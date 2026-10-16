@@ -313,7 +313,7 @@ BOOL FrtCmd_HallPrintTrainerMessage(FrontierScriptContext *ctx) {
         if (data == NULL) {
             return FALSE;
         }
-        FrontierScript_PrintMessageEntry(ctx, data->trainers[trainer].unk18);
+        FrontierScript_PrintMessageEntry(ctx, data->trainers[trainer].introMessage);
     }
     return TRUE;
 }

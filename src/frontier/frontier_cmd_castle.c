@@ -150,10 +150,10 @@ void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data)
     args->data = data;
     args->partnerPoints = data->partnerPoints;
     for (i = 0; i < 4; i++) {
-        args->unk_08[i] = data->unk_370[i];
-        args->unk_0C[i] = data->unk_374[i];
-        args->unk_10[i] = data->unk_378[i];
-        args->unk_14[i] = data->unk_37C[i];
+        args->checked[i] = data->opponentChecked[i];
+        args->levelChanges[i] = data->opponentLevelChanges[i];
+        args->statsBought[i] = data->opponentStatsBought[i];
+        args->movesBought[i] = data->opponentMovesBought[i];
     }
 }
 
@@ -245,10 +245,10 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         *result = BattleCastleData_GetBattleNo(data);
         break;
     case 24:
-        *result = data->unk_A10;
+        *result = data->partnerValueA;
         break;
     case 26:
-        *result = data->unk_A11;
+        *result = data->partnerValueB;
         break;
     case 27:
         *result = BattleCastleData_CalcPointsEarned(data);
@@ -467,6 +467,6 @@ BOOL FrtCmd_CastlePrintTrainerMessage(FrontierScriptContext *ctx) {
     if (data == NULL) {
         return FALSE;
     }
-    FrontierScript_PrintMessageEntry(ctx, data->trainers[trainer].unk18);
+    FrontierScript_PrintMessageEntry(ctx, data->trainers[trainer].introMessage);
     return TRUE;
 }

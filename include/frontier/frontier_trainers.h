@@ -5,7 +5,7 @@
 
 typedef struct FrontierTrainerData {
     u8 unk0[0x18];
-    u16 unk18[4];
+    u16 introMessage[4];
     u8 unk1C[0xF0];
 } FrontierTrainerData;
 

@@ -146,7 +146,7 @@ u32 FrontierSpeciesRecords_sizeof(void) {
 
 void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data) {
     MI_CpuFill8(data, 0, sizeof(*data));
-    data->unk_000 = -1;
+    data->saveKey = -1;
 }
 
 u32 *FrontierSpeciesRecords_Load(SaveData *save, u32 heapId, u32 *out) {

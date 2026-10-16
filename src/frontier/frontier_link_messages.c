@@ -320,7 +320,7 @@ BOOL BattleFactoryLink_SendValueA(BattleFactoryData *work, u16 value) {
 void BattleFactoryLink_ReceiveValueA(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_57C = *data;
+        work->partnerValueA = *data;
     }
 }
 
@@ -332,7 +332,7 @@ BOOL BattleFactoryLink_SendValueB(BattleFactoryData *work, u16 value) {
 void BattleFactoryLink_ReceiveValueB(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_57D = *data;
+        work->partnerValueB = *data;
     }
 }
 
@@ -582,7 +582,7 @@ BOOL BattleCastleLink_SendValueA(BattleCastleData *work, u16 value) {
 void BattleCastleLink_ReceiveValueA(int netId, int size, const u16 *data, BattleCastleData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_A10 = *data;
+        work->partnerValueA = *data;
     }
 }
 
@@ -594,7 +594,7 @@ BOOL BattleCastleLink_SendValueB(BattleCastleData *work, u16 value) {
 void BattleCastleLink_ReceiveValueB(int netId, int size, const u16 *data, BattleCastleData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_A11 = *data;
+        work->partnerValueB = *data;
     }
 }
 
@@ -770,7 +770,7 @@ BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u16 value) {
 void BattleArcadeLink_ReceiveValueA(int netId, int size, const u16 *data, ArcadeContext *ctx) {
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        ctx->unkA74 = *data;
+        ctx->partnerValueA = *data;
     }
 }
 
@@ -782,7 +782,7 @@ BOOL BattleArcadeLink_SendValueB(ArcadeContext *ctx, u16 value) {
 void BattleArcadeLink_ReceiveValueB(int netId, int size, const u16 *data, ArcadeContext *ctx) {
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        ctx->unkA75 = *data;
+        ctx->partnerValueB = *data;
     }
 }
 

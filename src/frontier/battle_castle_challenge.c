@@ -305,10 +305,10 @@ void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs 
         data->selections[i] = BattleCastleAppArgs_GetSelection(args, (u8)i);
     }
     for (i = 0; i < 4; i++) {
-        data->unk_370[i] = args->unk_08[i];
-        data->unk_374[i] = args->unk_0C[i];
-        data->unk_378[i] = args->unk_10[i];
-        data->unk_37C[i] = args->unk_14[i];
+        data->opponentChecked[i] = args->checked[i];
+        data->opponentLevelChanges[i] = args->levelChanges[i];
+        data->opponentStatsBought[i] = args->statsBought[i];
+        data->opponentMovesBought[i] = args->movesBought[i];
     }
     data->partnerPoints = args->partnerPoints;
 }
@@ -479,10 +479,10 @@ void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
     }
     BattleCastle_ReviveParty(data->playerParty);
     for (i = 0; i < 4; i++) {
-        data->unk_370[i] = 0;
-        data->unk_374[i] = 0;
-        data->unk_378[i] = 0;
-        data->unk_37C[i] = 0;
+        data->opponentChecked[i] = 0;
+        data->opponentLevelChanges[i] = 0;
+        data->opponentStatsBought[i] = 0;
+        data->opponentMovesBought[i] = 0;
     }
 }
 
@@ -544,7 +544,7 @@ int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
         ppLeft += GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
     }
     for (i = 0; i < numOpponents; i++) {
-        if (data->unk_374[i] == 1) {
+        if (data->opponentLevelChanges[i] == 1) {
             counts[8]++;
         }
     }

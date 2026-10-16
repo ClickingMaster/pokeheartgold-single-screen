@@ -88,7 +88,7 @@ BOOL FrontierMapMovement_LookAround(void *frontier, FrontierMapObject *object) {
     case 2:
     case 3:
         FrontierScript_GetMovementStep(&command, object->object, object->template.id, movement->data[movement->state + 2]);
-        Field2DMoveQueue_Push(map->unk30, &command);
+        Field2DMoveQueue_Push(map->moveQueue, &command);
         if (movement->data[0] == movement->data[movement->state + 2]) {
             movement->data[2] = 45;
             nextState = 1;

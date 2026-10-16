@@ -271,7 +271,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         *out = BattleArcade_GetBattleNo(arcadeCtx);
         break;
     case 24:
-        *out = arcadeCtx->unkA74;
+        *out = arcadeCtx->partnerValueA;
         break;
     case 25:
         if (arcadeCtx->eventId == 0x1b) {
@@ -497,7 +497,7 @@ BOOL FrtCmd_ArcadePrintMsg(FrontierScriptContext *ctx) {
         return FALSE;
     }
 
-    u16 *msg = arcadeCtx->trainers[index].unk18;
+    u16 *msg = arcadeCtx->trainers[index].introMessage;
     FrontierScript_PrintMessageEntry(ctx, msg);
 
     return TRUE;

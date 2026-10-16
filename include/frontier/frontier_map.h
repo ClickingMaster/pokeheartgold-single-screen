@@ -17,12 +17,12 @@
 // Object placement as the frontier scripts and the save copy store it (15 halfwords)
 typedef struct FrontierMapObjectTemplate {
     u16 spriteId;
-    u16 unk_02;
+    u16 action;
     u16 id;
     s16 x;
     s16 y;
-    u8 unk_0A;
-    u8 unk_0B;
+    u8 direction;
+    u8 visible;
     u8 unk_0C;
     u8 filler_0D[0x11];
 } FrontierMapObjectTemplate;
@@ -47,7 +47,7 @@ typedef struct FrontierMapObject {
 // Object graphics loaded into the map's object graphics manager (24 slots)
 typedef struct FrontierMapObjectGfx {
     u16 id;
-    u8 unk_02;
+    u8 animSet;
     u8 unk_03;
 } FrontierMapObjectGfx;
 
@@ -106,13 +106,13 @@ typedef struct FrontierMap {
     GF3DVramMan *vramMan;
     u32 particleManager; // 0x10, from FrontierParticles_New (frontier/frontier_particles.h)
     Field2DObjectManager *objectManager;
-    Field2DMap *unk18;
+    Field2DMap *grid;
     Field2DPoint camera;
     Field2DObjectSpriteManager *objectGfx;
     Field2DBgLayer *bg3Layer;
     Field2DBgLayer *bg2Layer;
-    Field2DCommandQueue *unk2C;
-    Field2DMoveQueue *unk30;
+    Field2DCommandQueue *commandQueue;
+    Field2DMoveQueue *moveQueue;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     FrontierMapSpriteSet spriteSet;

@@ -80,7 +80,7 @@ FS_EXTERN_OVERLAY(OVY_80);
 typedef struct BattleFactoryAppArgs {
     SaveData *saveData; // 0x00
     u8 frontierType;    // 0x04
-    u8 unk_05;          // 0x05
+    u8 levelMode;       // 0x05
     u8 screen;          // 0x06
     u8 unk_07;          // 0x07
     Party *party;       // 0x08
@@ -122,7 +122,7 @@ typedef struct BattleFactoryApp {
     OverlayManager *summaryApp; // 0x004
     u8 subState;                // 0x008
     u8 frontierType;            // 0x009
-    u8 unk_00A;                 // 0x00A
+    u8 levelMode;               // 0x00A
     u8 screen;                  // 0x00B
     int bgScrollX;              // 0x00C
     u8 printerId;               // 0x010
@@ -464,7 +464,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     args = OverlayManager_GetArgs(man);
     app->saveData = args->saveData;
     app->frontierType = args->frontierType;
-    app->unk_00A = args->unk_05;
+    app->levelMode = args->levelMode;
     app->screen = args->screen;
     app->party = args->party;
     app->otherParty = args->otherParty;

@@ -4157,16 +4157,16 @@ BOOL ScrCmd_LaunchFrontier(ScriptContext *ctx) {
     MI_CpuClear8(args, sizeof(FrontierLaunchArgs));
     *pArgs = args;
     if (frontierMapId == 5 || frontierMapId == 6) {
-        args->unk0 = ctx->fieldSystem->frontierFsys;
+        args->frontierFsys = ctx->fieldSystem->frontierFsys;
     } else {
-        args->unk0 = NULL;
+        args->frontierFsys = NULL;
     }
     args->options = Save_PlayerData_GetOptionsAddr(ctx->fieldSystem->saveData);
     args->frontierMapId = frontierMapId;
     args->saveData = ctx->fieldSystem->saveData;
     args->mapId = ctx->fieldSystem->location->mapId;
     args->bagCursor = ctx->fieldSystem->bagCursor;
-    args->unk1C = ctx->fieldSystem->unkB0;
+    args->keyPressedSave = ctx->fieldSystem->unkB0;
     CallApplicationAsTask(ctx->taskman, &gOverlayTemplate_Frontier, args);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;

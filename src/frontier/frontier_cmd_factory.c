@@ -270,10 +270,10 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         *var = BattleFactory_GetBattleNo(data);
         break;
     case 24:
-        *var = data->unk_57C;
+        *var = data->partnerValueA;
         break;
     case 26:
-        *var = data->unk_57D;
+        *var = data->partnerValueB;
         break;
     case 27:
         FrontierLink_RegisterCommands(data);
@@ -390,6 +390,6 @@ BOOL FrtCmd_FactoryPrintMsg(FrontierScriptContext *ctx) {
     if (data == NULL) {
         return FALSE;
     }
-    FrontierScript_PrintMessageEntry(ctx, data->trainers[index].unk18);
+    FrontierScript_PrintMessageEntry(ctx, data->trainers[index].introMessage);
     return TRUE;
 }
