@@ -6,6 +6,7 @@
 #include "msgdata/msg/msg_0775.h"
 
 #include "bg_window.h"
+#include "char_tiles.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gts_internal.h"
@@ -24,7 +25,6 @@
 #include "sprite.h"
 #include "system.h"
 #include "text.h"
-#include "char_tiles.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
@@ -56,7 +56,6 @@ extern const BgTemplate sGtsSummaryBg1Template;
 extern const BgTemplate sGtsSummaryBg2Template;
 extern const BgTemplate sGtsSummaryBg3Template;
 extern const GtsWindowRect sGtsSummaryInfoWindowRects[14];
-// Not const: the original declarations (const changes the scheduling of Gts_DrawMonSummary).
 extern u32 sGtsGenderSymbolMsgs[];
 extern u32 sGtsGenderSymbolColors[];
 
@@ -145,8 +144,6 @@ BOOL GtsSummary_Exit(GtsApp *app, int state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void GtsSummary_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0;
     BgTemplate bg1;
@@ -168,8 +165,6 @@ void GtsSummary_InitBgs(BgConfig *bgConfig) {
     Gts_InitSubScreenBgs(bgConfig, 0, FALSE);
 }
 
-#pragma force_active reset
-
 void GtsSummary_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
@@ -177,8 +172,6 @@ void GtsSummary_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
 }
-
-#pragma force_active on
 
 void GtsSummary_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
@@ -208,8 +201,6 @@ void GtsSummary_CreateMonSprite(GtsApp *app) {
     Sprite_SetPriority(app->monSprite, 1);
     WirelessStatusIcon_Create();
 }
-
-#pragma force_active reset
 
 void GtsSummary_DeleteMonSprite(GtsApp *app) {
     Sprite_Delete(app->monSprite);
@@ -252,8 +243,6 @@ void GtsSummary_CreateStrings(GtsApp *app) {
     }
 }
 
-#pragma force_active on
-
 void GtsSummary_DeleteStrings(GtsApp *app) {
     int i;
 
@@ -263,8 +252,6 @@ void GtsSummary_DeleteStrings(GtsApp *app) {
     String_Delete(app->msgBuffer);
     String_Delete(app->titleString);
 }
-
-#pragma force_active reset
 
 int GtsSummary_Start(GtsApp *app) {
     app->state = GTS_SUMMARY_STATE_HANDLE_INPUT;
@@ -378,8 +365,6 @@ void GtsSummary_PrintMonMessage(GtsApp *app, int msgId, int textSpeed, int unuse
     String_Delete(string);
 }
 
-#pragma force_active on
-
 // windows[0..6]: nickname and gender, species, "Lv.", level, ITEM, item name, NAME.
 void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary) {
     String *speciesName;
@@ -433,8 +418,6 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
     String_Delete(speciesName);
     String_Delete(nameLabel);
 }
-
-#pragma force_active reset
 
 // OFFERER and the trainer's name; the label of message 180 and the Pokemon's OT name.
 void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows) {

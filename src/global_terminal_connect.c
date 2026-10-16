@@ -57,7 +57,7 @@ enum GlobalTerminalConnectState {
     GTC_STATE_DISCONNECT,
 };
 
-// view of GlobalTerminalApp (include/overlay_app_manager_internal.h defines a file-scope static, so it is not included)
+// The GlobalTerminalApp the connect app is started with.
 typedef struct GlobalTerminalConnectArgs {
     GlobalTerminalLaunchArgs *launchArgs; // 0x00
     BOOL disconnect;                      // 0x04, second run after the VS Recorder: only disconnect
@@ -115,14 +115,13 @@ typedef struct GlobalTerminalConnectWork {
     GlobalTerminalConnectPaletteCycle paletteCycle; // 0xA8
 } GlobalTerminalConnectWork;                        // size 0x3D8
 
-// no public header
 void GF_TouchpadResetSampling(void);
 void GF_TouchpadStartSampling(int frequency);
 void GF_TouchpadStopSampling(void);
 void DWC_GetLastError(void *out);
 int DWC_GetLastErrorEx(int *errorCode, u32 *errorType);
 void DWC_ClearError(void);
-void DWC_InitInetEx(void *a0, u32 a1, u32 a2, u32 a3);
+void DWC_InitInetEx(void *connection, u32 priority, u32 unused, u32 sslPriority);
 void DWC_ConnectInetAsync(void);
 int DWC_CheckInet(void);
 void DWC_ProcessInet(void);

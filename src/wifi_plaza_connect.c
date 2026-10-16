@@ -8,6 +8,7 @@
 #include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
 #include "filesystem.h"
 #include "font.h"
 #include "game_stats.h"
@@ -30,7 +31,6 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "comm_state.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
@@ -96,7 +96,6 @@ typedef struct WiFiPlazaConnectWork {
     WiFiPlazaConnectPaletteCycle paletteCycle;
 } WiFiPlazaConnectWork; // size: 0x404
 
-// network_communication_state_full.c and the OVY_45 lobby have no public headers.
 extern void CommState_StartWifiPlaza(SaveData *saveData, s32 profileId);
 extern void CommState_LeaveWifiPlaza(void);
 extern int CommState_HasPlazaLobbyStarted(void);
@@ -491,8 +490,6 @@ void WiFiPlazaConnect_VBlankCB(void *data) {
     WiFiPlazaConnect_DoBgUpdates(data);
 }
 
-#pragma force_active on
-
 void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapID) {
     int i;
     int j;
@@ -579,8 +576,6 @@ void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapI
     work->paletteCycle.task = SysTask_CreateOnVBlankQueue(WiFiPlazaConnect_PaletteCycleTask, &work->paletteCycle, 20);
     NARC_Delete(narc);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data) {
     WiFiPlazaConnectPaletteCycle *cycle = data;

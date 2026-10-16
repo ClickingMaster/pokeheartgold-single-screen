@@ -8,7 +8,7 @@
 #include "save_link_ruleset.h"
 
 // Wireless link layer of the communication code, above the local wireless
-// manager (wireless_manager.c): wireless start-up (WVR), the beacon this game sends as a parent (trainer, link
+// manager: wireless start-up (WVR), the beacon this game sends as a parent (trainer, link
 // kind, member count, profile, ruleset), the list of parents found while scanning (kept 300 frames after their
 // last beacon), connecting to one of them, the parent's start sequence (measure channels, pick one, start) and
 // the shutdown sequences.

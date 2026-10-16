@@ -6,6 +6,7 @@
 #include "gts_internal.h"
 #include "heap.h"
 #include "overlay_manager.h"
+#include "pokemon_summary.h"
 #include "save_special_ribbons.h"
 #include "sound_playback.h"
 #include "sprite.h"
@@ -13,7 +14,6 @@
 #include "systask_environment.h"
 #include "touchscreen.h"
 #include "union_room_avatar.h"
-#include "pokemon_summary.h"
 
 // The avatars on the sub screen: the player walking in and out of the GTS, the trainers a search found (in the
 // Union Room avatar graphics), the marker over the selected one. Then screen 8: the Pokemon summary of the
@@ -30,7 +30,6 @@ typedef struct GtsPlayerAnim {
 // The OBJ char offset of each trainer avatar.
 extern const u16 sGtsAvatarCharOffsets[];
 
-// {x, y} of each trainer avatar; the asm labels the y column separately.
 typedef struct GtsAvatarY {
     u16 y;
     u16 nextX;
@@ -82,7 +81,6 @@ void Gts_CreateAvatars(GtsApp *app, u32 gender) {
     Sprite_SetDrawFlag(app->avatarSprites[0], TRUE);
     i = 0;
     position = sGtsAvatarPositions;
-    // The loops walk a base pointer shifted by one array element per avatar (the original strength reduction).
     slot = app;
     seq = 14;
     for (; i < 7; i++) {
@@ -254,8 +252,6 @@ int Gts_GetTouchedAvatar(int count) {
     return avatar;
 }
 
-#pragma force_active on
-
 // Shows the trainers of the first count search results (animate: they walk in).
 void Gts_ShowResultAvatars(GtsApp *app, int count, int animate) {
     int i;
@@ -267,7 +263,6 @@ void Gts_ShowResultAvatars(GtsApp *app, int count, int animate) {
     if (count && animate == TRUE) {
         PlaySE(SEQ_SE_DP_TELE2);
     }
-    // Base pointers shifted by one result / one sprite per avatar (the original strength reduction).
     result = app;
     i = 0;
     walkSeq = 14;
@@ -292,8 +287,6 @@ void Gts_ShowResultAvatars(GtsApp *app, int count, int animate) {
     }
 }
 
-#pragma force_active reset
-
 int Gts_GetAvatarAnimSeq(int index) {
     return index * 4 + 14;
 }
@@ -301,7 +294,7 @@ int Gts_GetAvatarAnimSeq(int index) {
 // The shown trainers stop walking.
 void Gts_StopAvatarAnims(GtsApp *app) {
     s32 i;
-    GtsApp *slot = app; // shifted by one sprite per avatar (the original strength reduction)
+    GtsApp *slot = app;
 
     for (i = 0; i < 7; i++, slot = (GtsApp *)((u8 *)slot + sizeof(Sprite *))) {
         Sprite *avatar = slot->avatarSprites[1];
@@ -328,7 +321,7 @@ void Gts_LoadAvatar(NNSG2dCharacterData *charData, NNSG2dPaletteData *plttData, 
     GXS_LoadOBJPltt((u8 *)palettes + avatar * 0x20, (index + 2) * 0x20, 0x20);
 }
 
-// gts.c, at exit: the avatar graphics exist once the player walked in.
+// At exit: the avatar graphics exist once the player walked in.
 void Gts_FreeAvatarGraphics(GtsApp *app) {
     if (app->playerAnimDone) {
         Heap_Free(app->avatarPlttAlloc);

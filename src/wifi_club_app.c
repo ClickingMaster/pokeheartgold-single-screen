@@ -1,3 +1,5 @@
+#include "wifi_club_app.h"
+
 #include "global.h"
 
 #include "constants/save_arrays.h"
@@ -7,14 +9,23 @@
 #include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
+#include "comm_wireless.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "dwcaccount.h"
 #include "font.h"
+#include "font_sprite.h"
+#include "friend_roster.h"
+#include "frontier_save_access.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
+#include "link_synchronization.h"
 #include "msgdata.h"
+#include "network_overlay_loader.h"
+#include "oam_manager.h"
 #include "obj_pltt_transfer.h"
 #include "overlay_00_thumb.h"
-#include "wifi_club_app.h"
 #include "party.h"
 #include "poke_overlay.h"
 #include "pokedex.h"
@@ -23,32 +34,22 @@
 #include "render_window.h"
 #include "save_frontier.h"
 #include "save_wifi_history.h"
+#include "save_wii_message.h"
 #include "screen_fade.h"
 #include "sound.h"
+#include "sound_playback.h"
 #include "sound_system.h"
+#include "sprite_resource.h"
 #include "sprite_transfer.h"
 #include "sys_flags.h"
 #include "system.h"
 #include "text.h"
 #include "touch_hitbox_controller.h"
-#include "sound_playback.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "font_sprite.h"
 #include "touchpad.h"
-#include "friend_roster.h"
-#include "frontier_save_access.h"
-#include "save_wii_message.h"
-#include "communication_player_state.h"
-#include "comm_wireless.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "wifi_club.h"
-#include "network_overlay_loader.h"
-#include "wifi_club_comm.h"
 #include "vram_transfer_manager.h"
+#include "wifi_club.h"
+#include "wifi_club_comm.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 enum WifiClubMainState {
@@ -3566,9 +3567,9 @@ s32 WifiClub_IsMessageFinished(WifiClubApp *app) {
 }
 
 s32 WifiClub_State_StartActivity(WifiClubApp *app, s32 mainState) {
-    ListMenuTemplate spC; // Unknown struct of size 0x20
+    ListMenuTemplate linkedFriends;
     if ((WifiClub_CheckMatchLost(app) == 0) && (LinkSync_IsSynced(18) != 0) && (WifiClub_IsMessageFinished(app) == 1)) {
-        Comm_RegisterLinkedFriends(app->saveData, &spC, HEAP_ID_53);
+        Comm_RegisterLinkedFriends(app->saveData, &linkedFriends, HEAP_ID_53);
         WifiClub_CloseMessage(app);
         u32 partnerStatus = WifiClub_GetPlayerStatus(app, WifiClub_GetFriendStatusData(app, WifiConnection_GetTargetFriendIndex()));
         u32 activityStatus = partnerStatus;

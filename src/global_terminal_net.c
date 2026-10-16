@@ -19,7 +19,6 @@
 #include "string_util.h"
 #include "system.h"
 
-// request API of the socket client (src/global_terminal_socket.c, ARM)
 BOOL GlobalTerminalServer_Init(GlobalTerminalNetLogin *login);
 void GlobalTerminalServer_Stop(void);
 int GlobalTerminalServer_GetState(void);
@@ -40,7 +39,6 @@ BOOL GlobalTerminalServer_SearchVideosKind2(void *request, void *response);
 BOOL GlobalTerminalServer_DownloadVideo(u32 argLow, u32 argHigh, int arg2, void *response);
 BOOL GlobalTerminalServer_SendRequest23003(u32 argLow, u32 argHigh, void *response);
 
-// no public header
 void DWC_ClearError(void);
 void DWC_CleanupInet(void);
 void CommState_FreeWfcSession(void);

@@ -2,13 +2,13 @@
 
 #include "global.h"
 
-#include "communication_player_state.h"
-#include "heap.h"
-#include "wireless_manager.h"
+#include "comm_state.h"
 #include "communication_command.h"
 #include "communication_core.h"
-#include "comm_state.h"
+#include "communication_player_state.h"
+#include "heap.h"
 #include "union_room_talk.h"
+#include "wireless_manager.h"
 
 typedef struct SpinTradeLinkPacket {
     u32 command;

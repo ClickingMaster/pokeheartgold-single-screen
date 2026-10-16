@@ -2,6 +2,7 @@
 
 #include "constants/pokemon.h"
 
+#include "evolution_scene.h"
 #include "gts_internal.h"
 #include "heap.h"
 #include "overlay_manager.h"
@@ -9,12 +10,9 @@
 #include "player_data.h"
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
-#include "evolution_scene.h"
 
 extern const OverlayManagerTemplate sGtsTradeSequenceTemplate;
 
-// Defined in save_block_22.c (copies the deposited Pokemon out of the GTS save data, GtsArgs.gtsSave, which
-// Save_Gts_Get returns as an int); not declared in a header.
 void GtsSave_GetStoredMon(void *gtsSave, void *dest);
 
 int GtsTrade_Init(GtsApp *app, int state);
@@ -91,7 +89,7 @@ int GtsTrade_Main(GtsApp *app, int state) {
         }
         OverlayManager_Delete(app->tradeSequence);
         kind = app->nextScreenArg;
-        if (kind == ret + 6) { // kind 9, written against ret (matching)
+        if (kind == ret + 6) { // kind 9
             mon = GtsTrade_GetReceivedMon(app, kind);
             species = GetMonEvolution(NULL, mon, EVOCTX_TRADE, (u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL), &method);
             if (species != SPECIES_NONE) {

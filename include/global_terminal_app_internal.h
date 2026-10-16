@@ -2,14 +2,14 @@
 #define POKEHEARTGOLD_GLOBAL_TERMINAL_APP_INTERNAL_H
 #include "global.h"
 
+#include "comm_state.h"
+#include "comm_wireless.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "network_overlay_loader.h"
 #include "overlay_manager.h"
 #include "sound_system.h"
 #include "system.h"
-#include "comm_wireless.h"
-#include "comm_state.h"
-#include "network_overlay_loader.h"
 
 typedef struct GlobalTerminalAppArgs {
     void *fieldSystem;
@@ -19,7 +19,7 @@ typedef struct GlobalTerminalAppArgs {
     u8 padding[3];
 } GlobalTerminalAppArgs;
 
-// Also the args of the Global Terminal connect app (src/global_terminal_connect.c has its own view).
+// Also the args of the Global Terminal connect app.
 typedef struct GlobalTerminalApp {
     GlobalTerminalAppArgs *args;
     int disconnect;           // 0x04, set for the second connect app run: only disconnect
@@ -31,8 +31,6 @@ typedef struct GlobalTerminalApp {
     int isConnected; // 0x7C, set by the connect app
 } GlobalTerminalApp;
 
-void LoadOVY38(void);
-void UnloadOVY38(void);
 void WirelessStatusIcon_SetLevel(int level);
 const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 mode);
 BOOL CommWireless_IsStartedUp(void);

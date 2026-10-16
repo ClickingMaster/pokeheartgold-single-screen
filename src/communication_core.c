@@ -8,8 +8,8 @@
 #include "error_handling.h"
 #include "gf_rtc.h"
 #include "heap.h"
-#include "system.h"
 #include "link_synchronization.h"
+#include "system.h"
 #include "wifi_connection.h"
 #include "wireless_manager.h"
 
@@ -226,7 +226,7 @@ void Comm_ResetNetIdBuffers(int slot) {
     *(int *)(gCommCore.work + slot * 4 + 0x66C) = 0;
     count = Comm_GetMaxChildren((u16)CommState_GetLinkMode());
     work = gCommCore.work;
-    work = (u8 *)work; // needed to match
+    work = (u8 *)work;
     chunkSize = *(int *)(work + 0x68C) / (count + 1);
     offset *= chunkSize;
     ringOffset *= 12;
@@ -457,8 +457,6 @@ void Comm_ResetWorkAndParents(void) {
     gCommCore.updateLock = lock;
 }
 
-#pragma force_active on
-
 void Comm_UpdateChildSend(void) {
     int i;
     int count;
@@ -531,8 +529,6 @@ void Comm_UpdateChildSend(void) {
     }
 }
 
-#pragma force_active off
-
 BOOL Comm_FillParentFrameFromChildren(int slot) {
     int bad;
     int stride;
@@ -579,8 +575,6 @@ update:
     return TRUE;
 }
 
-#pragma force_active on
-
 void Comm_SendParentFrame(void) {
     int count;
     int i;
@@ -622,8 +616,6 @@ void Comm_SendParentFrame(void) {
         gCommSendStages.stage[0]++;
     }
 }
-
-#pragma force_active off
 
 BOOL Comm_HasNoChildBacklog(void) {
     int count = Comm_GetMaxChildren((u16)CommState_GetLinkMode()) + 1;
@@ -1158,8 +1150,6 @@ void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCurs
     cursor->received = 0;
 }
 
-#pragma force_active on
-
 void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *cursor) {
     while (ByteRing_GetReadableSize(ring)) {
         int command = cursor->command;
@@ -1217,8 +1207,6 @@ void Comm_ReceiveCommands(CommRing *ring, int netId, u8 *buffer, PacketCursor *c
         }
     }
 }
-
-#pragma force_active off
 
 void Comm_ReceiveFromParent(void) {
     u8 *work = gCommCore.work;
@@ -1462,8 +1450,6 @@ void Comm_RecvShutdown(void) {
     CommWireless_RequestShutdown();
 }
 
-#pragma force_active on
-
 void CommRandom_Init(CommRandom *seed) {
     RTCDate date;
     RTCTime time;
@@ -1473,8 +1459,6 @@ void CommRandom_Init(CommRandom *seed) {
     seed->multiplier = 0x5D588B656C078965ULL;
     seed->increment = 0x269EC3;
 }
-
-#pragma force_active off
 
 int Comm_ParentQueueHasCommand(int value) {
     return PacketPool_HasCommand(gCommCore.work + 0x5A0, value);

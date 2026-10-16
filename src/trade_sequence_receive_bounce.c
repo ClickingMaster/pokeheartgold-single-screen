@@ -7,10 +7,7 @@
 #include "trade_sequence_models.h"
 #include "trade_sequence_receive_internal.h"
 
-// Scene 6 of the trade animation, continued (trade_sequence_receive.c): the ball's bounce task. A separate TU: the
-// overlay's data lies between the two.
-
-#pragma force_active on
+// Scene 6 of the trade animation, continued: the ball's bounce task.
 
 void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
     TradeSequenceReceiveBounce *bounce = data;

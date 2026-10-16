@@ -1,11 +1,11 @@
-#include "msgdata/msg/msg_0766.h"
-#include "msgdata/msg/msg_0777.h"
-
 #include "wifi_plaza_talk.h"
 
 #include "global.h"
 
 #include "constants/sndseq.h"
+
+#include "msgdata/msg/msg_0766.h"
+#include "msgdata/msg/msg_0777.h"
 
 #include "math_util.h"
 #include "overlay_42.h"
@@ -88,7 +88,6 @@ enum WiFiPlazaAnswerStep {
     WIFI_PLAZA_ANSWER_END,
 };
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaInfoCounterMsgs[8];
 extern const ListMenuTemplate sWiFiPlazaTalkMenuTemplate;
 extern const u16 sWiFiPlazaTalkGreetingMsgs[8][8]; // by the speaker's and the listener's language

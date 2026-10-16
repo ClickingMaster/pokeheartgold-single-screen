@@ -17,6 +17,7 @@
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
@@ -29,16 +30,15 @@
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "swap_3d_buffers.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // Wi-Fi Plaza "Visitor Profiles", an OverlayManager app started by the Wi-Fi Plaza lobby overlay (OVY_45).
@@ -113,7 +113,6 @@ typedef struct VisitorProfilesMsg {
     String *raw;
 } VisitorProfilesMsg; // size: 0x10
 
-// model_animation.c has no header; same layouts as there.
 typedef struct ModelResource {
     NNSG3dResFileHeader *file;
     NNSG3dResMdlSet *set;
@@ -304,7 +303,6 @@ enum VisitorProfilesMode {
     VISITOR_PROFILES_MODE_EXIT_PROMPT,
 };
 
-// The Wi-Fi Plaza lobby (OVY_45) has no public header.
 extern u32 WiFiPlazaWork_IsClosing(void *lobby);
 extern void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 extern void WiFiPlazaWork_SetLowVolume(void *lobby, u32 value);
@@ -317,7 +315,6 @@ extern u32 WiFiPlaza_HasConnectionFailed(void);
 // FX_Sqrt has no declaration in lib/include.
 fx32 FX_Sqrt(fx32 x);
 
-// Data in asm/wifi_plaza_visitor_profiles_data.s
 extern const u8 sVisitorProfilesBgAnimPeriods[VISITOR_PROFILES_NUM_BG_ANIMS];
 extern const VecFx32 sVisitorProfilesCameraPos;
 extern const u32 sVisitorProfilesMarkerModelFiles[VISITOR_PROFILES_NUM_MARKER_MODELS];
@@ -697,8 +694,6 @@ void VisitorProfiles_GetTouchDrag(s32 x, s32 y, u32 *dirX, u32 *distX, u32 *dirY
     *distY = dy & 0x3F;
 }
 
-#pragma force_active on
-
 // Returns 1 when A / a tap asks for the zoom (only in the full globe view).
 u32 VisitorProfiles_HandleGlobeInput(VisitorProfilesWork *work, u32 trg, u32 held) {
     u16 zoomMode;
@@ -782,8 +777,6 @@ u32 VisitorProfiles_HandleGlobeInput(VisitorProfilesWork *work, u32 trg, u32 hel
     VisitorProfilesGlobe_SetRotation(&work->globe, &rotation);
     return 0;
 }
-
-#pragma force_active reset
 
 void VisitorProfiles_WrapAngles(VecFx32 *angles) {
     if (angles->x >= 0) {
@@ -918,8 +911,6 @@ void VisitorProfiles_FocusStartPlace(VisitorProfilesWork *work, VisitorProfilesA
     }
 }
 
-#pragma force_active on
-
 BOOL VisitorProfiles_PickPlace(VisitorProfilesWork *work, VisitorProfilesPlaceInfo *info) {
     u32 index = VisitorProfiles_FindNearestPlace(work);
     if (index >= VisitorProfilesPlaces_GetCount(&work->places)) {
@@ -930,8 +921,6 @@ BOOL VisitorProfiles_PickPlace(VisitorProfilesWork *work, VisitorProfilesPlaceIn
     info->region = VisitorProfilesPlaces_GetRegion(&work->places, index);
     return TRUE;
 }
-
-#pragma force_active reset
 
 // Index of the dot nearest to the globe centre within 0x80 in both angles, or the place count.
 u32 VisitorProfiles_FindNearestPlace(VisitorProfilesWork *work) {
@@ -1020,8 +1009,6 @@ s32 VisitorProfiles_AngleDistance(VecFx32 *a, VecFx32 *b) {
     return FX_Sqrt((dx * dx + dy * dy) << FX32_SHIFT) >> FX32_SHIFT;
 }
 
-#pragma force_active on
-
 // Local hour at a place; the clock is 4 hours ahead of the reference place (country 219, region 3).
 int VisitorProfiles_CalcLocalHour(VisitorProfilesWork *work, u32 index, VisitorProfilesClock clock) {
     VecFx32 reference;
@@ -1043,8 +1030,6 @@ int VisitorProfiles_CalcLocalHour(VisitorProfilesWork *work, u32 index, VisitorP
     return value;
 }
 
-#pragma force_active reset
-
 BOOL VisitorProfiles_FocusPlace(VisitorProfilesWork *work, u8 country, u8 region) {
     struct {
         VecFx32 current;
@@ -1059,8 +1044,6 @@ BOOL VisitorProfiles_FocusPlace(VisitorProfilesWork *work, u8 country, u8 region
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // Outside a Japanese game the full globe is always shown; in one only if some visitor entry has the Japanese
 // language and unk_00 != 103.
@@ -1084,8 +1067,6 @@ void VisitorProfiles_InitSettings(VisitorProfilesWork *work, VisitorProfilesArgs
         work->settings.fullGlobe = 1;
     }
 }
-
-#pragma force_active reset
 
 void VisitorProfiles_InitGraphics(VisitorProfilesGraphics *gfx, Options *options, enum HeapID heapID) {
     gfx->narc = NARC_New(NARC_a_1_9_2, heapID);
@@ -1114,10 +1095,8 @@ void VisitorProfiles_GraphicsVBlank(VisitorProfilesGraphics *gfx) {
     GF_RunVramTransferTasks();
 }
 
-#pragma force_active on
-
 void VisitorProfiles_InitBgs(VisitorProfilesGraphics *gfx, Options *options, enum HeapID heapID) {
-    volatile int i; // volatile: the loop counter lives on the stack in the original code
+    volatile int i;
     int next;
     const BgTemplate *template;
     const u32 *layer;
@@ -1153,8 +1132,6 @@ void VisitorProfiles_InitBgs(VisitorProfilesGraphics *gfx, Options *options, enu
     LoadUserFrameGfx2(gfx->bgConfig, GF_BG_LYR_MAIN_1, 1, 2, frame, heapID);
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, RGB(10, 22, 28));
 }
-
-#pragma force_active reset
 
 void VisitorProfiles_FreeBgs(VisitorProfilesGraphics *gfx) {
     int i;
@@ -1199,20 +1176,14 @@ void VisitorProfiles_FreeSprites(VisitorProfilesGraphics *gfx) {
     OamManager_Free();
 }
 
-#pragma force_active on
-
 void VisitorProfiles_Init3D(VisitorProfilesGraphics *gfx, enum HeapID heapID) {
     gfx->vramMan = GF_3DVramMan_Create(heapID, GF_3D_TEXALLOC_LNK, 2, GF_3D_PLTTALLOC_LNK, 4, VisitorProfiles_Setup3D);
     NNS_G3dGlbLightVector(GX_LIGHTID_0, 0, 0, -FX16_ONE + 1);
 }
 
-#pragma force_active reset
-
 void VisitorProfiles_Free3D(VisitorProfilesGraphics *gfx) {
     GF_3DVramMan_Delete(gfx->vramMan);
 }
-
-#pragma force_active on
 
 void VisitorProfiles_Setup3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
@@ -1226,8 +1197,6 @@ void VisitorProfiles_Setup3D(void) {
     G3X_SetClearColor(RGB(26, 26, 26), 0, 0x7FFF, 63, FALSE);
     reg_G3_VIEWPORT = 0xBFFF0000;
 }
-
-#pragma force_active reset
 
 void VisitorProfilesGlobe_Init(VisitorProfilesGlobe *globe, VisitorProfilesGraphics *gfx, enum HeapID heapID) {
     globe->position.x = 0;
@@ -1271,9 +1240,6 @@ void VisitorProfilesGlobe_SetRotation(VisitorProfilesGlobe *globe, VecFx32 *src)
     globe->rotation = *src;
 }
 
-#pragma force_active on
-
-// heapID is volatile: the original code reloads it from the stack.
 void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, VisitorProfilesGraphics *gfx, VisitorProfilesSettings settings, volatile enum HeapID heapID) {
     int i;
     enum HeapID heap = heapID;
@@ -1295,16 +1261,12 @@ void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, V
     }
 }
 
-#pragma force_active reset
-
 void VisitorProfilesPlaces_Free(VisitorProfilesPlaces *places) {
     s32 i;
     for (i = 0; i < VISITOR_PROFILES_NUM_MARKER_MODELS; i++) {
         ModelResource_Free(&places->markerResources[i]);
     }
 }
-
-#pragma force_active on
 
 // Each marker model is drawn once per place that uses it (the render object keeps the last matrix of each).
 void VisitorProfilesPlaces_Draw(VisitorProfilesPlaces *places, VisitorProfilesGlobe *globe) {
@@ -1360,8 +1322,6 @@ int VisitorProfiles_GetVisitorMarker(void *visitors, int country, int region) {
     return VISITOR_PROFILES_NO_MARKER;
 }
 
-#pragma force_active reset
-
 u16 VisitorProfilesPlaces_Find(VisitorProfilesPlaces *places, u16 country, u16 region, VecFx32 *coords) {
     u16 marker = VISITOR_PROFILES_NO_MARKER;
     s32 count;
@@ -1375,8 +1335,6 @@ u16 VisitorProfilesPlaces_Find(VisitorProfilesPlaces *places, u16 country, u16 r
     return marker;
 }
 
-#pragma force_active on
-
 u32 VisitorProfilesPlaces_FindIndex(VisitorProfilesPlaces *places, int country, int region) {
     int i = 0;
     u32 count = places->count;
@@ -1387,8 +1345,6 @@ u32 VisitorProfilesPlaces_FindIndex(VisitorProfilesPlaces *places, int country, 
     }
     return count;
 }
-
-#pragma force_active reset
 
 void VisitorProfilesPlaces_GetCoords(VisitorProfilesPlaces *places, VecFx32 *coords, u32 index) {
     GF_ASSERT(index < places->count);
@@ -1416,8 +1372,6 @@ u32 VisitorProfilesPlaces_GetCount(VisitorProfilesPlaces *places) {
     return places->count;
 }
 
-#pragma force_active on
-
 void VisitorProfilesCamera_Init(VisitorProfilesCamera *camera, VisitorProfilesSettings settings, enum HeapID heapID) {
     fx32 distance;
 
@@ -1433,12 +1387,9 @@ void VisitorProfilesCamera_Init(VisitorProfilesCamera *camera, VisitorProfilesSe
         camera->zoomedIn = 0;
         distance = 0x128000;
     }
-    // volatile: the original code stores the distance and reloads it
     *(volatile fx32 *)&camera->distance = distance;
     Camera_SetDistance(*(volatile fx32 *)&camera->distance, camera->camera);
 }
-
-#pragma force_active reset
 
 void VisitorProfilesCamera_Free(VisitorProfilesCamera *camera) {
     Camera_Delete(camera->camera);
@@ -1459,8 +1410,6 @@ void VisitorProfilesCamera_ToggleZoom(VisitorProfilesCamera *camera) {
     camera->zooming = 1;
 }
 
-#pragma force_active on
-
 // Returns 1 once the zoom is done; the marker size follows the distance.
 int VisitorProfilesCamera_UpdateZoom(VisitorProfilesCamera *camera, VisitorProfilesPlaces *places) {
     if (camera->zooming == 0) {
@@ -1470,7 +1419,6 @@ int VisitorProfilesCamera_UpdateZoom(VisitorProfilesCamera *camera, VisitorProfi
     case 1:
         if (camera->distance > 0x58000) {
             camera->distance -= 0x8000;
-            // volatile: the original code reloads the stored x scale
             *(volatile fx32 *)&places->markerScale.x -= 128;
             *(volatile fx32 *)&places->markerScale.y = *(volatile fx32 *)&places->markerScale.x;
         } else {
@@ -1493,13 +1441,9 @@ int VisitorProfilesCamera_UpdateZoom(VisitorProfilesCamera *camera, VisitorProfi
     return 0;
 }
 
-#pragma force_active reset
-
 u16 VisitorProfilesCamera_GetZoomMode(VisitorProfilesCamera *camera) {
     return camera->zoomedIn;
 }
-
-#pragma force_active on
 
 void VisitorProfilesTouch_Init(VisitorProfilesTouch *touch, VisitorProfilesGraphics *gfx, VisitorProfilesMsg *msg, enum HeapID heapID) {
     String *string;
@@ -1516,13 +1460,9 @@ void VisitorProfilesTouch_Init(VisitorProfilesTouch *touch, VisitorProfilesGraph
     DrawFrameAndWindow1(&touch->exitButton, FALSE, 31, 0);
 }
 
-#pragma force_active reset
-
 void VisitorProfilesTouch_Free(VisitorProfilesTouch *touch) {
     RemoveWindow(&touch->exitButton);
 }
-
-#pragma force_active on
 
 void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
     u32 dirX;
@@ -1573,8 +1513,6 @@ void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
     }
 }
 
-#pragma force_active reset
-
 u32 VisitorProfilesTouch_Get(VisitorProfilesTouch *touch, s32 which) {
     switch (which) {
     case 0:
@@ -1596,8 +1534,6 @@ void VisitorProfilesTouch_ShowExitButton(VisitorProfilesTouch *touch) {
     DrawFrameAndWindow1(&touch->exitButton, FALSE, 31, 0);
 }
 
-#pragma force_active on
-
 void VisitorProfilesExitPrompt_Init(VisitorProfilesExitPrompt *prompt, VisitorProfilesGraphics *gfx, VisitorProfilesMsg *msg, SaveData *saveData, enum HeapID heapID) {
     memset(prompt, 0, 44);
     prompt->textSpeed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(saveData));
@@ -1607,8 +1543,6 @@ void VisitorProfilesExitPrompt_Init(VisitorProfilesExitPrompt *prompt, VisitorPr
     VisitorProfilesMsg_Read(msg, msg_0801_00005, prompt->string);
     prompt->prompt = YesNoPrompt_Create(heapID);
 }
-
-#pragma force_active reset
 
 void VisitorProfilesExitPrompt_Free(VisitorProfilesExitPrompt *prompt) {
     if (TextPrinterCheckActive((u8)prompt->printerId) != 0) {
@@ -1656,8 +1590,6 @@ void VisitorProfilesExitPrompt_Close(VisitorProfilesExitPrompt *prompt) {
     ClearWindowTilemapAndScheduleTransfer(&prompt->window);
 }
 
-#pragma force_active on
-
 void VisitorProfilesPanel_Init(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx, VisitorProfilesMsg *msg, enum HeapID heapID) {
     int i;
 
@@ -1676,8 +1608,6 @@ void VisitorProfilesPanel_Init(VisitorProfilesPanel *panel, VisitorProfilesGraph
     VisitorProfilesWindowMask_Init(&panel->windowMask);
 }
 
-#pragma force_active reset
-
 void VisitorProfilesPanel_Free(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx) {
     int i;
 
@@ -1691,8 +1621,6 @@ void VisitorProfilesPanel_Free(VisitorProfilesPanel *panel, VisitorProfilesGraph
         VisitorProfilesBgAnim_Free(&panel->bgAnims[i]);
     }
 }
-
-#pragma force_active on
 
 void VisitorProfilesPanel_Update(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx) {
     switch (panel->state) {
@@ -1722,8 +1650,6 @@ void VisitorProfilesPanel_Update(VisitorProfilesPanel *panel, VisitorProfilesMsg
     }
 }
 
-#pragma force_active reset
-
 void VisitorProfilesPanel_HideHint(VisitorProfilesPanel *panel) {
     ClearFrameAndWindow2(&panel->hintWindow, TRUE);
     ClearWindowTilemapAndScheduleTransfer(&panel->hintWindow);
@@ -1733,8 +1659,6 @@ void VisitorProfilesPanel_ShowHint(VisitorProfilesPanel *panel) {
     ScheduleWindowCopyToVram(&panel->hintWindow);
     DrawFrameAndWindow2(&panel->hintWindow, TRUE, 10, 10);
 }
-
-#pragma force_active on
 
 BOOL VisitorProfilesPanel_AddPlace(VisitorProfilesPanel *panel, VisitorProfilesPlaceInfo *info) {
     switch (panel->state) {
@@ -1752,8 +1676,6 @@ BOOL VisitorProfilesPanel_AddPlace(VisitorProfilesPanel *panel, VisitorProfilesP
     VisitorProfilesPanel_PushHistory(panel, info);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL VisitorProfilesPanel_HasPlace(VisitorProfilesPanel *panel, VisitorProfilesPlaceInfo *info) {
     VisitorProfilesPlaceInfo entry;
@@ -1781,8 +1703,6 @@ void VisitorProfilesPanel_ClearHistory(VisitorProfilesPanel *panel) {
     panel->count = 0;
 }
 
-#pragma force_active on
-
 void VisitorProfilesPanel_PushHistory(VisitorProfilesPanel *panel, const VisitorProfilesPlaceInfo *info) {
     if ((panel->tail + 1) % VISITOR_PROFILES_HISTORY_SIZE == panel->head) {
         VisitorProfilesPanel_PopHistory(panel);
@@ -1791,8 +1711,6 @@ void VisitorProfilesPanel_PushHistory(VisitorProfilesPanel *panel, const Visitor
     panel->tail = (panel->tail + 1) % VISITOR_PROFILES_HISTORY_SIZE;
     panel->count++;
 }
-
-#pragma force_active reset
 
 void VisitorProfilesPanel_PopHistory(VisitorProfilesPanel *panel) {
     u16 head = panel->head;
@@ -1815,8 +1733,6 @@ BOOL VisitorProfilesPanel_GetHistory(VisitorProfilesPanel *panel, VisitorProfile
     *info = panel->history[k];
     return TRUE;
 }
-
-#pragma force_active on
 
 void VisitorProfilesPanel_AnimateBgs(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx) {
     int i;
@@ -1860,25 +1776,17 @@ void VisitorProfilesPanel_StartReveal(VisitorProfilesPanel *panel, VisitorProfil
     }
 }
 
-#pragma force_active reset
-
 BOOL VisitorProfilesPanel_RevealSlow(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx) {
     return VisitorProfilesPanel_Reveal(panel, gfx, 2);
 }
-
-#pragma force_active on
 
 void VisitorProfilesPanel_HalveRevealTicks(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx) {
     panel->ticks = (u32)panel->ticks >> 1;
 }
 
-#pragma force_active reset
-
 BOOL VisitorProfilesPanel_RevealFast(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx) {
     return VisitorProfilesPanel_Reveal(panel, gfx, 1);
 }
-
-#pragma force_active on
 
 // One more row (from the bottom) every ticksPerRow frames; TRUE once all rows are done.
 BOOL VisitorProfilesPanel_Reveal(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx, int ticksPerRow) {
@@ -1904,13 +1812,10 @@ BOOL VisitorProfilesPanel_Reveal(VisitorProfilesPanel *panel, VisitorProfilesGra
     return done;
 }
 
-#pragma force_active reset
-
 void VisitorProfilesPanel_ActivateRow(VisitorProfilesPanel *panel, s32 row) {
     panel->rows[row].active = 1;
 }
 
-#pragma force_active on
 #pragma opt_repositioncode off
 
 // Row i counts from the bottom: first the blank row and the base screen, then the place text and its background.
@@ -1950,7 +1855,6 @@ BOOL VisitorProfilesPanel_UpdateRow(VisitorProfilesPanel *panel, int row, Visito
 }
 
 #pragma opt_repositioncode reset
-#pragma force_active reset
 
 void VisitorProfilesPanel_CopyBaseRow(VisitorProfilesPanel *panel, int row, VisitorProfilesGraphics *gfx) {
     NNSG2dScreenData *screen = panel->baseScreen;
@@ -1958,8 +1862,6 @@ void VisitorProfilesPanel_CopyBaseRow(VisitorProfilesPanel *panel, int row, Visi
     CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_SUB_2, 0, (u8)row, 32, 1, screen->rawData, 0, (u8)row, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_SUB_2);
 }
-
-#pragma force_active on
 
 void VisitorProfilesWindowMask_Init(VisitorProfilesWindowMask *mask) {
     reg_GXS_DB_DISPCNT = (reg_GXS_DB_DISPCNT & 0xFFFF1FFF) | 0x6000;
@@ -1970,8 +1872,6 @@ void VisitorProfilesWindowMask_Init(VisitorProfilesWindowMask *mask) {
     VisitorProfilesWindowMask_SetWindow1(mask, 0, 0);
     mask->task = SysTask_CreateOnVWaitQueue(VisitorProfilesWindowMask_Task, mask, 0);
 }
-
-#pragma force_active reset
 
 void VisitorProfilesWindowMask_Free(VisitorProfilesWindowMask *mask) {
     SysTask_Destroy(mask->task);
@@ -2082,8 +1982,6 @@ void *VisitorProfilesPanel_GetBlankRowPixels(VisitorProfilesPanel *panel, u32 ro
     return (u8 *)panel->blankWindow.pixelBuffer + row * 0x360;
 }
 
-#pragma force_active on
-
 void VisitorProfilesPanel_TransferRowPixels(VisitorProfilesPanel *panel, int index, int row, void *pixels) {
     u16 tile = GetWindowBaseTile(&panel->placeWindows[index]);
     tile += row * 27;
@@ -2108,8 +2006,6 @@ void VisitorProfilesBgAnim_Init(VisitorProfilesBgAnim *anim, VisitorProfilesGrap
     }
 }
 
-#pragma force_active reset
-
 void VisitorProfilesBgAnim_Free(VisitorProfilesBgAnim *anim) {
     int i;
 
@@ -2122,8 +2018,6 @@ void VisitorProfilesBgAnim_Free(VisitorProfilesBgAnim *anim) {
         Heap_Free(anim->plttRaw);
     }
 }
-
-#pragma force_active on
 
 void VisitorProfilesBgAnim_Update(VisitorProfilesBgAnim *anim, VisitorProfilesGraphics *gfx) {
     u16 counter = anim->counter;
@@ -2150,8 +2044,6 @@ void VisitorProfilesBgAnim_Update(VisitorProfilesBgAnim *anim, VisitorProfilesGr
     }
 }
 
-#pragma force_active reset
-
 void VisitorProfilesBgAnim_SetEnabled(VisitorProfilesBgAnim *anim, u32 index, u8 enabled) {
     if (index >= VISITOR_PROFILES_NUM_SHOWN_PLACES) {
         GF_AssertFail();
@@ -2165,8 +2057,6 @@ void VisitorProfilesBgAnim_DisableAll(VisitorProfilesBgAnim *anim) {
     anim->enabled[2] = 0;
     anim->unk_07 = 0;
 }
-
-#pragma force_active on
 
 void VisitorProfilesBgAnim_CopyRow(VisitorProfilesBgAnim *anim, int row, VisitorProfilesGraphics *gfx) {
     if (anim->numScreens) {
@@ -2207,8 +2097,6 @@ void VisitorProfilesHourSprites_Init(VisitorProfilesHourSprites *hourSprites, Vi
     VisitorProfilesWindowMask_SetWindow1(mask, 0, 0);
 }
 
-#pragma force_active reset
-
 void VisitorProfilesHourSprites_Free(VisitorProfilesHourSprites *hourSprites, VisitorProfilesGraphics *gfx) {
     int i;
     int j;
@@ -2230,7 +2118,6 @@ void VisitorProfilesHourSprites_Free(VisitorProfilesHourSprites *hourSprites, Vi
 }
 
 void VisitorProfilesHourSprites_Reset(VisitorProfilesHourSprites *hourSprites) {
-    // the zero stays in one register and each array is written through two pointers, as in the original
     u8 *a = hourSprites->active;
     u8 *b = hourSprites->active;
     u8 zero = 0;
@@ -2249,8 +2136,6 @@ void VisitorProfilesHourSprites_Reset(VisitorProfilesHourSprites *hourSprites) {
     hourSprites->delay = 0x80;
 }
 
-#pragma force_active on
-
 // Two adjacent rows with the same sprite let it fly on from one row into the next.
 void VisitorProfilesHourSprites_Set(VisitorProfilesHourSprites *hourSprites, u8 index, u8 hour, u8 nextHour) {
     hourSprites->active[index] = 1;
@@ -2264,8 +2149,6 @@ void VisitorProfilesHourSprites_Set(VisitorProfilesHourSprites *hourSprites, u8 
         }
     }
 }
-
-#pragma force_active reset
 
 void VisitorProfilesHourSprites_HideAll(VisitorProfilesHourSprites *hourSprites) {
     s32 i;

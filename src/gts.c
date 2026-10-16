@@ -67,7 +67,6 @@ extern const ObjCharTransferTemplate sGtsObjCharTransferTemplate;
 extern const TouchscreenListMenuTemplate sGtsListMenuTemplate;
 extern const GtsScreen sGtsScreens[];
 
-// Network library (OVY_0) and loaders without a header declaring them.
 int WCM_GetPhase(void);
 void DWC_ClearError(void);
 void DWC_UpdateConnection(void);
@@ -120,7 +119,6 @@ void GtsServer_RequestPost(const void *record) {
     }
 }
 
-// The copy goes through two pointers (opt_propagation off keeps them).
 #pragma opt_propagation off
 
 void GtsServer_RequestPostFinish(void) {
@@ -236,7 +234,6 @@ void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
     }
 }
 
-// The copy goes through two pointers (opt_propagation off keeps them).
 #pragma opt_propagation off
 
 void GtsServer_RequestExchangeFinish(void) {

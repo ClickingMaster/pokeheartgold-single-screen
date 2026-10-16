@@ -12,8 +12,8 @@
 #include "trade_sequence_internal.h"
 #include "trade_sequence_models.h"
 
-// Scene 5 of the trade animation, continued (trade_sequence.c): its 3D setup and the tasks that lower the
-// ball, scroll the backgrounds and fade the ball out. A separate TU: the bss of the data asm lies between the two.
+// Scene 5 of the trade animation, continued: its 3D setup and the tasks that lower the
+// ball, scroll the backgrounds and fade the ball out.
 
 // Scrolls layer 2 of both screens down into place.
 typedef struct TradeSequenceArriveScroll {
@@ -88,8 +88,6 @@ void TradeSequenceArrive_Free3D(TradeSequenceArrive *arrive) {
     }
 }
 
-#pragma force_active on
-
 void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task) {
     TradeSequenceArriveScroll *scroll = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveScroll));
     if (scroll) {
@@ -123,8 +121,6 @@ void TradeSequenceArrive_ScrollTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active reset
-
 void TradeSequenceArrive_StopScroll(SysTask *task) {
     TradeSequenceArriveScroll *scroll;
     if (task != NULL) {
@@ -134,8 +130,6 @@ void TradeSequenceArrive_StopScroll(SysTask *task) {
         SysTask_Destroy(task);
     }
 }
-
-#pragma force_active on
 
 void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task) {
     TradeSequenceArriveLower *lower = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveLower));
@@ -166,8 +160,6 @@ void TradeSequenceArrive_LowerTask(SysTask *task, void *data) {
     TradeSequenceArrive_StopLower(task);
 }
 
-#pragma force_active reset
-
 void TradeSequenceArrive_StopLower(SysTask *task) {
     TradeSequenceArriveLower *lower;
     if (task != NULL) {
@@ -177,8 +169,6 @@ void TradeSequenceArrive_StopLower(SysTask *task) {
         SysTask_Destroy(task);
     }
 }
-
-#pragma force_active on
 
 void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task) {
     TradeSequenceArriveAlphaFade *fade = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveAlphaFade));
@@ -198,8 +188,6 @@ void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, in
         *task = NULL;
     }
 }
-
-#pragma force_active reset
 
 void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data) {
     TradeSequenceArriveAlphaFade *fade = data;

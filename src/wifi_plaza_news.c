@@ -6,7 +6,7 @@
 #include "msgdata.h"
 #include "wifi_plaza_internal.h"
 
-// The plaza news (WiFiPlazaWork.unk_04, shown by the plaza news app): the time the lobby opened, the state of every
+// The plaza news (WiFiPlazaWork.news, shown by the plaza news app): the time the lobby opened, the state of every
 // lobby slot and a list of events (topics) built from the lobby requests.
 
 void WiFiPlazaNews_SetOpenTime(WiFiPlazaNews *news, u32 *openTime) {
@@ -14,13 +14,9 @@ void WiFiPlazaNews_SetOpenTime(WiFiPlazaNews *news, u32 *openTime) {
     news->isOpen = 1;
 }
 
-#pragma force_active on
-
 void WiFiPlazaNews_AddPlayer(WiFiPlazaNews *news, int slot, int state, int flags) {
     WiFiPlazaNewsSlots_AddPlayer(&news->slots, slot, state, flags);
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaNews_RemovePlayer(WiFiPlazaNews *news, int slot) {
     BOOL result = WiFiPlazaNewsSlots_IsOldest(&news->slots, slot);

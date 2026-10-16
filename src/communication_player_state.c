@@ -362,8 +362,8 @@ void CommPlayerInfo_RecordBattleResult(void *save, int b) {
     CommPlayerInfo_SaveRecords(save);
 }
 
-void CommPlayerInfo_RecordTrades(void *save, int b) {
-    CommPlayerInfo_AddToRecords(2, b);
+void CommPlayerInfo_RecordTrades(void *save, int count) {
+    CommPlayerInfo_AddToRecords(2, count);
     CommPlayerInfo_SaveRecords(save);
 }
 

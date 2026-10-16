@@ -1,15 +1,17 @@
-#include "constants/save_arrays.h"
-
 #include "union_room_objects.h"
 
 #include "global.h"
 
+#include "constants/save_arrays.h"
+
 #include "assert.h"
 #include "field_effects.h"
 #include "field_system.h"
+#include "field_warp_reset.h"
 #include "heap.h"
 #include "mail_message.h"
 #include "map_object.h"
+#include "map_object_movement_commands.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"
@@ -18,8 +20,6 @@
 #include "sound_playback.h"
 #include "sys_task_api.h"
 #include "task.h"
-#include "map_object_movement_commands.h"
-#include "field_warp_reset.h"
 
 enum UnionRoomSlotState {
     UNION_ROOM_SLOT_HIDDEN,
@@ -36,7 +36,7 @@ enum UnionRoomSlotRequest {
     UNION_ROOM_SLOT_REQUEST_LEAVE,
 };
 
-// The 10 players' records of the union room link state (src/field_application_tasks_10.c).
+// The 10 players' records of the union room link state.
 typedef struct UnionRoomGroup {
     u32 trainerIds[4];
     u8 unk_10[8];
@@ -135,7 +135,6 @@ void UnionRoomObjects_Task(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
 #pragma opt_strength_reduction off
 
 BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad) {
@@ -194,7 +193,6 @@ BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoo
 }
 
 #pragma opt_strength_reduction reset
-#pragma force_active off
 
 void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request) {
     slots[index].request = request;

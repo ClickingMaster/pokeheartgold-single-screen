@@ -17,20 +17,20 @@ typedef struct WiFiPlazaPlayerInfo {
 
 BOOL WifiConnection_SetOwnStatusData(void *data, s32 size);
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId);
-void WiFiPlazaPlayerInfo_Free(void *ptr);
+void WiFiPlazaPlayerInfo_Free(void *info);
 
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId) {
-    WiFiPlazaPlayerInfo *ptr = Heap_Alloc(heapId, sizeof(WiFiPlazaPlayerInfo));
-    memset(ptr, 0, sizeof(WiFiPlazaPlayerInfo));
-    ptr->unk1B = 0x1C;
-    ptr->gender = PlayerProfile_GetTrainerGender(profile);
-    ptr->avatar = PlayerProfile_GetAvatar(profile);
-    ptr->version = PlayerProfile_GetVersion(profile);
-    ptr->language = PlayerProfile_GetLanguage(profile);
-    GF_ASSERT(WifiConnection_SetOwnStatusData(ptr, 0x24) == 1);
-    return ptr;
+    WiFiPlazaPlayerInfo *info = Heap_Alloc(heapId, sizeof(WiFiPlazaPlayerInfo));
+    memset(info, 0, sizeof(WiFiPlazaPlayerInfo));
+    info->unk1B = 0x1C;
+    info->gender = PlayerProfile_GetTrainerGender(profile);
+    info->avatar = PlayerProfile_GetAvatar(profile);
+    info->version = PlayerProfile_GetVersion(profile);
+    info->language = PlayerProfile_GetLanguage(profile);
+    GF_ASSERT(WifiConnection_SetOwnStatusData(info, sizeof(WiFiPlazaPlayerInfo)) == 1);
+    return info;
 }
 
-void WiFiPlazaPlayerInfo_Free(void *ptr) {
-    Heap_Free(ptr);
+void WiFiPlazaPlayerInfo_Free(void *info) {
+    Heap_Free(info);
 }

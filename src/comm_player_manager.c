@@ -1,10 +1,10 @@
 #include "global.h"
 
 #include "comm_player_manager_internal.h"
-#include "sys_task_api.h"
 #include "communication_core.h"
+#include "sys_task_api.h"
 
-// Player positions in the link lobby, 2 and 4 players; CommPlayerManager_AssignBattleSlots (comm_player_sync.c) matches the players to them.
+// Player positions in the link lobby, 2 and 4 players; CommPlayerManager_AssignBattleSlots matches the players to them.
 const u16 __attribute__((aligned(4))) _020FC7A0[4] = { 4, 7, 11, 7 };
 const u16 _020FC7A8[8] = { 4, 6, 11, 6, 4, 8, 11, 8 };
 CommPlayerManager *gCommPlayerManager;

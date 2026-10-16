@@ -3,49 +3,49 @@
 #include "constants/game_stats.h"
 #include "constants/sndseq.h"
 
+#include "field/field_effect_manager.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0206.h"
 
 #include "bag.h"
 #include "bg_window.h"
 #include "camera.h"
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "field_bgm.h"
 #include "filesystem.h"
 #include "font.h"
-#include "spin_trade_link.h"
 #include "game_stats.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
-#include "field/field_effect_manager.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "party.h"
 #include "player_data.h"
 #include "pokemon.h"
+#include "render_animation.h"
+#include "render_model.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "sound_system.h"
+#include "spin_trade_link.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "trainer_memo.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "screen_fade_legacy.h"
 #include "touchpad.h"
-#include "swap_3d_buffers.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "render_model.h"
-#include "render_animation.h"
+#include "trainer_memo.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 // Main loop states (index into gSpinTradeStateFuncs)
 #define SPIN_TRADE_STATE_START               0
@@ -120,7 +120,7 @@
 #define SPIN_TRADE_MAX_PLAYERS 5
 #define SPIN_TRADE_ANGLE_FULL  FX32_CONST(360)
 
-// View of the link menu owned by frontier_menu_communication.c (SpinTradeArgs.menu)
+// The link menu (SpinTradeArgs.menu)
 typedef struct SpinTradeLinkMenu {
     u8 unk_00[0x3C];
     u32 unk_3C;            // 0x3C
@@ -132,7 +132,7 @@ typedef struct SpinTradeLinkMenu {
     u16 confirmMask;       // 0x4A
 } SpinTradeLinkMenu;
 
-// 0x24-byte animation object handled by render_animation.c (RenderAnimation_LoadFromNarc ...)
+// Animation object of RenderAnimation_LoadFromNarc
 typedef struct SpinTradeRenderAnim {
     u8 unk_00[0x24];
 } SpinTradeRenderAnim;
@@ -177,9 +177,9 @@ typedef struct SpinTradeMarker {
 } SpinTradeMarker;             // size 0x68
 
 typedef struct SpinTradeObjects {
-    RenderModelStorage eggModel;             // 0x000
-    RenderModelStorage shadowModel;          // 0x014
-    RenderModelStorage markerModels[5];      // 0x028
+    RenderModelStorage eggModel;               // 0x000
+    RenderModelStorage shadowModel;            // 0x014
+    RenderModelStorage markerModels[5];        // 0x028
     SpinTradeRenderAnim markerAnims[5];        // 0x08C
     SpinTradeEgg eggs[SPIN_TRADE_MAX_PLAYERS]; // 0x140
     SpinTradeShadow shadows[5];                // 0x4B0
@@ -188,20 +188,20 @@ typedef struct SpinTradeObjects {
 
 // The turntable machine model
 typedef struct SpinTradeMachine {
-    VecFx32 position;           // 0x00
-    VecFx32 drawPosition;       // 0x0C
-    VecFx32 scale;              // 0x18
-    VecFx32 shakeOffset;        // 0x24
-    VecFx32 jumpOffset;         // 0x30
-    fx32 angle;                 // 0x3C
-    fx32 baseAngle;             // 0x40
-    fx32 angleOffset;           // 0x44
-    fx32 speed;                 // 0x48
-    u16 rotation[3];            // 0x4C
-    u16 unk_52;                 // 0x52
-    RenderModelStorage model; // 0x54
-    NNSG3dRenderObj renderObj;  // 0x68
-} SpinTradeMachine;             // size 0xBC
+    VecFx32 position;          // 0x00
+    VecFx32 drawPosition;      // 0x0C
+    VecFx32 scale;             // 0x18
+    VecFx32 shakeOffset;       // 0x24
+    VecFx32 jumpOffset;        // 0x30
+    fx32 angle;                // 0x3C
+    fx32 baseAngle;            // 0x40
+    fx32 angleOffset;          // 0x44
+    fx32 speed;                // 0x48
+    u16 rotation[3];           // 0x4C
+    u16 unk_52;                // 0x52
+    RenderModelStorage model;  // 0x54
+    NNSG3dRenderObj renderObj; // 0x68
+} SpinTradeMachine;            // size 0xBC
 
 typedef struct SpinTradeBounce {
     BOOL active;       // 0x00
@@ -329,7 +329,7 @@ typedef struct SpinTradeApp {
     PlayerProfile *profiles[SPIN_TRADE_MAX_PLAYERS]; // 0x084
     String *names[SPIN_TRADE_MAX_PLAYERS];           // 0x098
     u8 scratch[0x20];                                // 0x0AC
-    SpinTradeArgs *args;                                 // 0x0CC
+    SpinTradeArgs *args;                             // 0x0CC
     SpinTradeLinkMenu *menu;                         // 0x0D0
     SpinTradeMachine machine;                        // 0x0D4
     SpinTradeObjects objects;                        // 0x190
@@ -425,14 +425,13 @@ extern const u16 gSpinTradeDropTargetAngles[][5];
 extern int (*const gSpinTradeStateFuncs[])(SpinTradeApp *app);
 extern const int gSpinTradeHoverOffsets[];
 
-// Not declared by the owners' headers
 void Sys_SetSoftResetDisableFlag(int flag);
 void Sys_ClearSoftResetDisableFlag(int flag);
 int GetUserFrameGfx2PaletteMember(int frame);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);
-BOOL Comm_SyncedSave(SaveData *saveData, int a1, s32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, int unused, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
@@ -1467,7 +1466,6 @@ void SpinTrade_VBlankCallback(void *data) {
     DoScheduledBgGpuUpdates(app->bgConfig);
 }
 
-#pragma force_active on
 void SpinTrade_InitGraphics(SpinTradeApp *app) {
     SpinTrade_SetGraphicsBanks(app);
     SpinTrade_Init3D(app);
@@ -1480,7 +1478,6 @@ void SpinTrade_InitGraphics(SpinTradeApp *app) {
     SpinTrade_LoadSpriteResources(app);
     SpinTrade_SetupPlanes(app);
 }
-#pragma force_active reset
 
 void SpinTrade_FreeGraphics(SpinTradeApp *app) {
     SpinTrade_DisableDisplay(app);
@@ -1753,7 +1750,6 @@ ManagedSprite *SpinTrade_CreateSprite(SpinTradeApp *app, const ManagedSpriteTemp
     return SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, template);
 }
 
-#pragma force_active on
 void SpinTrade_InitText(SpinTradeApp *app) {
     SpinTradeText *text = &app->text;
     int i;
@@ -1771,7 +1767,6 @@ void SpinTrade_InitText(SpinTradeApp *app) {
     }
     SpinTrade_AddNameWindows(app, app->args->unk0[2]);
 }
-#pragma force_active reset
 
 void SpinTrade_FreeText(SpinTradeApp *app) {
     SpinTradeText *text = &app->text;
@@ -1842,7 +1837,6 @@ void SpinTrade_ClearMessage(SpinTradeApp *app) {
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active on
 void SpinTrade_AddNameWindows(SpinTradeApp *app, int count) {
     int i;
     SpinTradeText *text = &app->text;
@@ -1863,7 +1857,6 @@ void SpinTrade_RemoveNameWindows(SpinTradeApp *app) {
         RemoveWindow(&text->nameWindows[i]);
     }
 }
-#pragma force_active reset
 
 void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 color) {
     Window *window = &app->text.nameWindows[index];
@@ -1893,7 +1886,6 @@ void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index) {
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active on
 void SpinTrade_InitCamera(SpinTradeApp *app) {
     SpinTradeCamera *camera = &app->camera;
     VecFx32 up;
@@ -1914,13 +1906,11 @@ void SpinTrade_InitCamera(SpinTradeApp *app) {
     Camera_SetLookAtCamUp(&up, camera->camera);
     Camera_SetStaticPtr(camera->camera);
 }
-#pragma force_active reset
 
 void SpinTrade_FreeCamera(SpinTradeApp *app) {
     Camera_Delete(app->camera.camera);
 }
 
-#pragma force_active on
 // Takes the newest valid touch sample of this frame
 void SpinTrade_UpdateTouch(SpinTradeApp *app) {
     int i = 3;
@@ -1939,7 +1929,6 @@ void SpinTrade_UpdateTouch(SpinTradeApp *app) {
     touch->pressed = (touch->held ^ held) & held;
     touch->held = held;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch) {
     s32 x = touch->x;
@@ -1958,7 +1947,6 @@ BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 void SpinTrade_InitMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     int playerCount = app->args->unk0[2];
@@ -1979,13 +1967,11 @@ void SpinTrade_InitMachine(SpinTradeApp *app) {
     machine->position.z = 0;
     machine->drawPosition = machine->position;
 }
-#pragma force_active reset
 
 void SpinTrade_FreeMachine(SpinTradeApp *app) {
     RenderModel_Free(&app->machine.model);
 }
 
-#pragma force_active on
 void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     fx32 angle = machine->angle;
@@ -1997,7 +1983,6 @@ void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
     machine->drawPosition.y = machine->shakeOffset.y + (machine->position.y + machine->jumpOffset.y);
     machine->drawPosition.z = machine->shakeOffset.z + (machine->position.z + machine->jumpOffset.z);
 }
-#pragma force_active reset
 
 void SpinTrade_DrawMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
@@ -2016,9 +2001,8 @@ void SpinTrade_FreeObjects(SpinTradeApp *app) {
     SpinTrade_FreeObjectModels(app);
 }
 
-#pragma force_active on
 void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
-    volatile int i; // volatile: matches the original loop codegen
+    volatile int i;
     const int *modelIds;
     const int *animIds;
     RenderModelStorage *model;
@@ -2064,7 +2048,6 @@ void SpinTrade_FreeObjectModels(SpinTradeApp *app) {
         RenderAnimation_FreeFile(&objects->markerAnims[i]);
     }
 }
-#pragma force_active reset
 
 void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg) {
     RenderObj_InitFromModel(&egg->renderObj, &app->objects.eggModel);
@@ -2073,7 +2056,6 @@ void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg) {
     SpinTrade_ShowMarker(app, egg);
 }
 
-#pragma force_active on
 void SpinTrade_UpdateEggPositions(SpinTradeApp *app) {
     int i = 0;
     int count = app->playerCount;
@@ -2091,7 +2073,6 @@ void SpinTrade_UpdateEggPositions(SpinTradeApp *app) {
         }
     }
 }
-#pragma force_active reset
 
 void SpinTrade_DrawEggs(SpinTradeApp *app) {
     int count = app->playerCount;
@@ -2147,7 +2128,6 @@ void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset
     egg->rotation[2] = egg->rotationFx[2] / FX32_ONE;
 }
 
-#pragma force_active on
 // The egg that stopped closest (turning forward) to this player's seat
 SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
     int distances[SPIN_TRADE_MAX_PLAYERS];
@@ -2188,7 +2168,6 @@ SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
     }
     return &objects->eggs[order[0]];
 }
-#pragma force_active reset
 
 void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg) {
     SpinTradeObjects *objects = &app->objects;
@@ -2359,13 +2338,11 @@ void SpinTrade_BounceTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
 void SpinTrade_StartBounceTask(SpinTradeApp *app) {
     memset(app->bounces, 0, sizeof(app->bounces));
     app->bounceTask = SysTask_CreateOnMainQueue(SpinTrade_BounceTask, app, 256);
     GF_ASSERT(app->bounceTask != NULL);
 }
-#pragma force_active reset
 
 void SpinTrade_StopBounceTask(SpinTradeApp *app) {
     SysTask_Destroy(app->bounceTask);
@@ -2385,7 +2362,6 @@ void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg) {
     GF_AssertFail();
 }
 
-#pragma force_active on
 void SpinTrade_BounceAllEggs(SpinTradeApp *app) {
     SpinTradeObjects *objects = &app->objects;
     int count = app->playerCount;
@@ -2398,7 +2374,6 @@ void SpinTrade_BounceAllEggs(SpinTradeApp *app) {
         i++;
     } while (i < count);
 }
-#pragma force_active reset
 
 BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app) {
     s32 i;
@@ -2412,7 +2387,6 @@ BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 void SpinTradeSpin_Update(SpinTradeSpin *spin) {
     SpinTradeEgg *egg = spin->egg;
 
@@ -2433,7 +2407,6 @@ void SpinTradeSpin_Update(SpinTradeSpin *spin) {
         break;
     }
 }
-#pragma force_active reset
 
 void SpinTrade_SpinTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
@@ -2447,7 +2420,6 @@ void SpinTrade_SpinTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
 void SpinTrade_StartSpinTask(SpinTradeApp *app) {
     memset(app->spins, 0, sizeof(app->spins));
     app->spinTask = SysTask_CreateOnMainQueue(SpinTrade_SpinTask, app, 257);
@@ -2455,13 +2427,11 @@ void SpinTrade_StartSpinTask(SpinTradeApp *app) {
         GF_AssertFail();
     }
 }
-#pragma force_active reset
 
 void SpinTrade_StopSpinTask(SpinTradeApp *app) {
     SysTask_Destroy(app->spinTask);
 }
 
-#pragma force_active on
 // Restarts the spin of an egg that is already spinning
 void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg) {
     int i;
@@ -2517,7 +2487,6 @@ void SpinTradeWobble_Update(SpinTradeWobble *wobble) {
         break;
     }
 }
-#pragma force_active reset
 
 void SpinTrade_WobbleTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
@@ -2531,7 +2500,6 @@ void SpinTrade_WobbleTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
 void SpinTrade_StartWobbleTask(SpinTradeApp *app) {
     memset(app->wobbles, 0, sizeof(app->wobbles));
     app->wobbleTask = SysTask_CreateOnMainQueue(SpinTrade_WobbleTask, app, 258);
@@ -2539,13 +2507,11 @@ void SpinTrade_StartWobbleTask(SpinTradeApp *app) {
         GF_AssertFail();
     }
 }
-#pragma force_active reset
 
 void SpinTrade_StopWobbleTask(SpinTradeApp *app) {
     SysTask_Destroy(app->wobbleTask);
 }
 
-#pragma force_active on
 // Restarts the wobble of an egg that is already wobbling
 void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg) {
     int i = 0;
@@ -2623,20 +2589,17 @@ void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump) {
         break;
     }
 }
-#pragma force_active reset
 
 void SpinTrade_JumpTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     SpinTradeJump_Update(app, &app->jump);
 }
 
-#pragma force_active on
 void SpinTrade_StartJumpTask(SpinTradeApp *app) {
     memset(&app->jump, 0, sizeof(app->jump));
     app->jumpTask = SysTask_CreateOnMainQueue(SpinTrade_JumpTask, app, 255);
     GF_ASSERT(app->jumpTask);
 }
-#pragma force_active reset
 
 void SpinTrade_StopJumpTask(SpinTradeApp *app) {
     SysTask_Destroy(app->jumpTask);
@@ -2687,7 +2650,6 @@ void SpinTrade_CountdownTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
 SysTask *SpinTrade_StartCountdown(SpinTradeApp *app) {
     SpinTradeCountdownTask *countdown;
     ManagedSpriteTemplate template;
@@ -2717,7 +2679,6 @@ SysTask *SpinTrade_StartCountdown(SpinTradeApp *app) {
     GF_ASSERT(task != NULL);
     return task;
 }
-#pragma force_active reset
 
 void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash) {
     switch (flash->state) {
@@ -2758,7 +2719,6 @@ void SpinTrade_ButtonFlashTask(SysTask *task, void *data) {
     SpinTradeButtonFlash_Update(app, &app->buttonFlash);
 }
 
-#pragma force_active on
 void SpinTrade_StartButtonFlashTask(SpinTradeApp *app) {
     memset(&app->buttonFlash, 0, sizeof(app->buttonFlash));
     app->buttonFlashTask = SysTask_CreateOnMainQueue(SpinTrade_ButtonFlashTask, app, 259);
@@ -2766,7 +2726,6 @@ void SpinTrade_StartButtonFlashTask(SpinTradeApp *app) {
         GF_AssertFail();
     }
 }
-#pragma force_active reset
 
 void SpinTrade_StopButtonFlashTask(SpinTradeApp *app) {
     SysTask_Destroy(app->buttonFlashTask);
@@ -2785,7 +2744,6 @@ void SpinTrade_StartButtonFlash(SpinTradeApp *app) {
     flash->state = 1;
 }
 
-#pragma force_active on
 void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
     switch (hover->state) {
     case 0:
@@ -2807,7 +2765,6 @@ void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
         break;
     }
 }
-#pragma force_active reset
 
 void SpinTrade_HoverTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
@@ -2846,7 +2803,6 @@ void SpinTrade_AddHover(SpinTradeApp *app, SpinTradeEgg *egg) {
     hover->egg = egg;
 }
 
-#pragma force_active on
 // Eggs that stopped in a bonus area float up and down
 void SpinTrade_HoverBonusEggs(SpinTradeApp *app) {
     u32 mask = app->bonusMask;
@@ -2860,7 +2816,6 @@ void SpinTrade_HoverBonusEggs(SpinTradeApp *app) {
         }
     }
 }
-#pragma force_active reset
 
 void SpinTrade_SubBgFadeTask(SysTask *task, void *data) {
     SpinTradeFadeTask *fade = data;
@@ -2935,7 +2890,7 @@ void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart) {
     return buf;
 }
 
-// Link receive callbacks (registered by frontier_menu_communication.c)
+// Link receive callbacks
 void SpinTrade_ReceiveJump(SpinTradeApp *app, u8 jump) {
     if (jump != 0) {
         app->remoteJump = jump;
@@ -2999,7 +2954,6 @@ int SpinTrade_CountMembers(SpinTradeApp *app) {
     return count;
 }
 
-#pragma force_active on
 void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member) {
     volatile SpinTradeMember *received = member; // volatile: every field read is a separate load
     int index = received->slot;
@@ -3009,7 +2963,6 @@ void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member) {
         app->mySlot = received->slot;
     }
 }
-#pragma force_active reset
 
 void SpinTrade_ReceivePlayerCount(SpinTradeApp *app, u32 count) {
     app->playerCount = count;
@@ -3065,7 +3018,6 @@ void SpinTrade_ReceiveResult(SpinTradeApp *app, const u16 *src) {
     app->resultReceived = TRUE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
     s32 position;
     u32 a, count;
@@ -3093,7 +3045,6 @@ BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_PartyHasBadEgg(Party *party) {
     Pokemon *mon;

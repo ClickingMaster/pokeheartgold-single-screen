@@ -112,7 +112,7 @@ typedef void *(*TradeSequenceSceneInitFunc)(TradeSequence *ts);
 typedef BOOL (*TradeSequenceSceneMainFunc)(void *sceneWork, int *state);
 typedef void (*TradeSequenceSceneExitFunc)(void *sceneWork);
 
-// The scene table is { init, main, exit, trade modes } x 7; each column is reached through its own label.
+// The scene table: init, main and exit function and trade mode of each of the 7 scenes.
 extern const TradeSequenceSceneInitFunc sTradeSequenceSceneInit[];
 extern const TradeSequenceSceneMainFunc sTradeSequenceSceneMain[];
 extern const TradeSequenceSceneExitFunc sTradeSequenceSceneExit[];
@@ -193,9 +193,7 @@ extern const BgTemplate sTradeSequenceSendBgTemplate_Text;
 extern const BgTemplate sTradeSequenceSendBgTemplate_Background;
 extern const GraphicsBanks sTradeSequenceSendGraphicsBanks;
 
-// Defined in render_window.c; not declared in its header.
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
-// No header declares it.
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
 TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts);
@@ -929,7 +927,7 @@ void TradeSequence_LoadMonPicToBg(TradeSequence *ts, u32 whichMon, u32 bgId, u32
     struct {
         TileRect settings;
         PokepicTemplate template;
-    } local; // keeps the original stack layout
+    } local;
 
     u16 species;
     BOOL lock;
@@ -1203,14 +1201,12 @@ void TradeSequence_SetModelPosition(TradeSequenceModel *model, const VecFx32 *po
 }
 
 void TradeSequence_GetModelRotation(TradeSequenceModel *model, TradeSequenceRotation *rotation) {
-    // copied as unsigned halfwords, as in the original
     rotation->x = *(u16 *)&model->rotation.x;
     rotation->y = *(u16 *)&model->rotation.y;
     rotation->z = *(u16 *)&model->rotation.z;
 }
 
 void TradeSequence_SetModelRotation(TradeSequenceModel *model, const TradeSequenceRotation *rotation) {
-    // copied as unsigned halfwords, as in the original
     model->rotation.x = *(const u16 *)&rotation->x;
     model->rotation.y = *(const u16 *)&rotation->y;
     model->rotation.z = *(const u16 *)&rotation->z;
@@ -1960,7 +1956,6 @@ void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart) {
     G2_SetBG0Priority(0);
     depart->models = TradeSequence_CreateModels(1, 0, 0, 0);
     depart->ball = TradeSequence_LoadModel(depart->models, 0, NARC_a_0_8_9, 27, 0, -0x37800, 0, FALSE);
-    // sTradeSequenceDepartCameraAngle is set through the address of the variable before it (as in the original).
     ((CameraAngle *)(&ov71_0224C0C4 + 1))->x = 0xEBE0;
     ((CameraAngle *)(&ov71_0224C0C4 + 1))->y = 0;
     ((CameraAngle *)(&ov71_0224C0C4 + 1))->z = 0;
@@ -3172,7 +3167,7 @@ BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flight) {
 }
 
 void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
-    volatile int divisor = frames; // the divisions reload it (as in the original)
+    volatile int divisor = frames;
 
     if (frames != 0) {
         flight->radiusXStep = (radiusX - flight->radiusX) / divisor;
@@ -3308,7 +3303,7 @@ void TradeSequenceApproach_VBlankCallback(void *data) {
 
 // Scene 5 of the trade animation (trades and receiving): the ball model, spinning, comes down onto the top screen
 // while the backgrounds scroll into place, fades out over reversed pulses, then the background zooms out and the
-// screen fades to black. The 3D setup and the tasks are in trade_sequence_arrive_tasks.c.
+// screen fades to black.
 
 TradeSequenceArrive *TradeSequenceArrive_Init(TradeSequence *ts) {
     TradeSequenceArrive *arrive = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArrive));

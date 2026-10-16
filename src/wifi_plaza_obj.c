@@ -20,7 +20,6 @@ typedef struct WiFiPlazaObjSpawn {
     u8 pad5[3];
 } WiFiPlazaObjSpawn;
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaObjNeighborDirections[4];
 extern const u8 sWiFiPlazaObjWanderTimers[];
 extern const u8 sWiFiPlazaObjWanderDirections[];
@@ -224,14 +223,10 @@ void WiFiPlazaObj_SetGridPosAndDir(WiFiPlazaObj *obj, Field2DPoint pos, s32 dire
     Field2DObject_SetParam(obj->gridObj, 6, direction);
 }
 
-#pragma force_active on
-
 Field2DPoint WiFiPlazaObj_GetGridPos(WiFiPlazaObj *obj) {
     GF_ASSERT(obj->gridObj != NULL);
     return Field2DObject_GetDrawPos(obj->gridObj);
 }
-
-#pragma force_active reset
 
 s32 WiFiPlazaObj_GetParam(WiFiPlazaObj *obj, s32 param) {
     if (obj->gridObj == NULL) {
@@ -280,8 +275,6 @@ u8 WiFiPlazaObj_GetHandler(WiFiPlazaObj *obj) {
     return obj->handler;
 }
 
-#pragma force_active on
-
 // Returns the object on the cell obj is facing.
 WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj) {
     s32 direction = Field2DObject_GetParam(obj->gridObj, 6);
@@ -293,8 +286,6 @@ WiFiPlazaObj *WiFiPlazaObj_FindFacing(WiFiPlazaObjManager *manager, WiFiPlazaObj
         return WiFiPlazaObj_FindById(manager, Field2DObject_GetParam(facing, 4));
     }
 }
-
-#pragma force_active reset
 
 u32 WiFiPlazaObj_IsCulled(WiFiPlazaObj *obj) {
     return WiFiPlazaPlayerObject_IsCulled(obj->avatar);
@@ -384,7 +375,6 @@ void WiFiPlazaObj_SetDirection(WiFiPlazaObj *obj, u32 direction) {
     WiFiPlazaPlayerObject_SetStandingSequence(obj->avatar, direction);
 }
 
-// The stop call gets `enable` (0) as its second argument register.
 void WiFiPlazaObj_SetPoseEffect(WiFiPlazaObj *obj, u32 enable) {
     if (enable != 0) {
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 1);
@@ -420,8 +410,6 @@ void WiFiPlazaObj_SetVisible(WiFiPlazaObj *obj, u32 value) {
 u32 WiFiPlazaObj_IsVisible(WiFiPlazaObj *obj) {
     return WiFiPlazaPlayerObject_IsVisible(obj->avatar);
 }
-
-#pragma force_active on
 
 // Creates an object on every cell carrying one of the four spawn table tags.
 void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
@@ -464,8 +452,6 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
         }
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id) {
     Field2DCommand data;

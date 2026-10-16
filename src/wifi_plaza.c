@@ -1,11 +1,11 @@
 #include "global.h"
 
+#include "comm_state.h"
 #include "heap.h"
+#include "network_overlay_loader.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
 #include "system.h"
-#include "comm_state.h"
-#include "network_overlay_loader.h"
 #include "wifi_plaza_internal.h"
 
 // Overlay data of the Wi-Fi Plaza overlay.
@@ -85,9 +85,6 @@ void WiFiPlaza_VBlankTask(SysTask *task, void *data) {
     WiFiPlazaWork_VBlankDummy(plaza->work);
 }
 
-// The original objects of WiFiPlazaWork_New and WiFiPlazaWork_Update were force-active.
-#pragma force_active on
-
 WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     WiFiPlazaCallbacks callbacks;
     int i;
@@ -118,16 +115,14 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     return work;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
-    WiFiPlazaPlayerSurvey vals;
+    WiFiPlazaPlayerSurvey survey;
     int i;
-    void *x;
-    WiFiPlazaPlayer_GetSurvey(&work->profile.player, &vals);
-    x = Save_PlazaSurvey_Get(work->save);
-    PlazaSurvey_SetSurveyId(x, vals.surveyId);
-    PlazaSurvey_SetAnswer(x, vals.answer);
+    void *surveySave;
+    WiFiPlazaPlayer_GetSurvey(&work->profile.player, &survey);
+    surveySave = Save_PlazaSurvey_Get(work->save);
+    PlazaSurvey_SetSurveyId(surveySave, survey.surveyId);
+    PlazaSurvey_SetAnswer(surveySave, survey.answer);
     WiFiPlaza_FreePlayerProfile(&work->ownProfileData.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
     WiFiPlazaLobbyClient_ClearLobbyCommands();
@@ -140,8 +135,6 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
 }
 
 // Per frame (WiFiPlaza_Main).
-#pragma force_active on
-
 void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
     WiFiPlazaNews_Update(work->news);
@@ -160,5 +153,3 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
         work->hasError = 1;
     }
 }
-
-#pragma force_active reset

@@ -3,6 +3,7 @@
 #include "comm_player_manager_internal.h"
 #include "communication_player_state.h"
 #include "field_system.h"
+#include "field_terrain.h"
 #include "heap.h"
 #include "map_events.h"
 #include "map_events_internal.h"
@@ -12,12 +13,9 @@
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "field_terrain.h"
 
-// Communication core, network state and player movement functions, declared with the types their call sites were
-// matched against (no header, or a header with other types).
 int Comm_GetLocalNetId(void);
-int Comm_IsNetIdConnected(int netId); // u16 in include/communication_core.h
+int Comm_IsNetIdConnected(int netId);
 BOOL Comm_IsActive(void);
 void Comm_EnableKeySync(void);
 int Comm_GetMaxPlayers(int value);
@@ -161,8 +159,6 @@ u32 CommPlayerManager_sizeof(void) {
     return sizeof(CommPlayerManager);
 }
 
-#pragma force_active on
-
 void CommPlayerManager_CreateAvatar(int netId) {
     PlayerProfile *profile;
     PlayerAvatar *avatar;
@@ -198,8 +194,6 @@ void CommPlayerManager_CreateAvatar(int netId) {
     MapObject_SetID(PlayerAvatar_GetMapObject(avatar), netId + 256);
     gCommPlayerManager->active[netId] = 1;
 }
-
-#pragma force_active off
 
 void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap) {
     PlayerAvatar *avatar;
@@ -368,8 +362,6 @@ u32 CommPlayerManager_GetMoveDelay(int speed) {
     return delays[speed];
 }
 
-#pragma force_active on
-
 void CommPlayerManager_MoveHostPlayers(SysTask *task, CommPlayerManager *unused) {
     int i;
     for (i = 0; i < 8; i++) {
@@ -458,8 +450,6 @@ void CommPlayerManager_ReceivePosition(int netId, int size, const u8 *data) {
     GF_ASSERT(FieldSystem_CheckTileCollision(gCommPlayerManager->fieldSystem, position->x, position->z) == 0);
 }
 
-#pragma force_active off
-
 void CommPlayerManager_ReceiveRemovePlayer(int unused, int size, const u8 *data, FieldSystem *fieldSystem) {
     int netId = *data;
     if (gCommPlayerManager != NULL && netId != Comm_GetLocalNetId()) {
@@ -471,8 +461,6 @@ void CommPlayerManager_ReceiveRemovePlayer(int unused, int size, const u8 *data,
 int CommPlayerManager_GetPositionSize(void) {
     return 5;
 }
-
-#pragma force_active on
 
 void CommPlayerManager_ReceiveHostPosition(int unused, int size, const u8 *data) {
     CommPlayerPosition *position;
@@ -596,8 +584,6 @@ void CommPlayerManager_MoveAvatar(int netId) {
         }
     }
 }
-
-#pragma force_active off
 
 int CommPlayerManager_GetHostPositionSize(void) {
     return 4;

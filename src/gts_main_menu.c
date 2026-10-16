@@ -17,11 +17,11 @@
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
@@ -44,7 +44,6 @@ typedef enum GtsMainMenuState {
     GTS_MAIN_MENU_STATE_HANDLE_EXIT_PROMPT,
 } GtsMainMenuState;
 
-// Sets the level of the wireless status icon (wireless_status_icon_2.c); not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsMainMenuStates[])(GtsApp *app);
@@ -56,7 +55,7 @@ extern const BgTemplate sGtsSubBg0Template;
 extern const BgTemplate sGtsSubBg1Template;
 extern const BgTemplate sGtsSubBg2Template;
 extern const BgTemplate sGtsSubBg3Template;
-// The cursor positions {x, y} of the three buttons; the asm labels the y column separately.
+// The cursor positions {x, y} of the three buttons.
 extern const u16 sGtsMainMenuCursorX[];
 extern const u16 sGtsMainMenuCursorY[];
 extern const TouchscreenHitbox sGtsMainMenuButtonHitboxes[];

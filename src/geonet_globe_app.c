@@ -28,10 +28,10 @@
 #include "render_window.h"
 #include "save_wifi_history.h"
 #include "screen_fade.h"
-#include "system.h"
-#include "text.h"
 #include "sound_playback.h"
 #include "swap_3d_buffers.h"
+#include "system.h"
+#include "text.h"
 
 #define GEONET_GLOBE_MAX_LOCATIONS 1024
 
@@ -57,7 +57,7 @@ enum GeonetGlobeState {
     GEONET_GLOBE_STATE_WAIT_FADE_OUT,
 };
 
-fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
+fx32 FX_Sqrt(fx32 x);
 
 enum GeonetGlobeWindow {
     GEONET_GLOBE_WINDOW_MESSAGE,
@@ -265,8 +265,6 @@ BOOL GeonetGlobe_Init(OverlayManager *man, int *state) {
     GeonetGlobe_LoadLocations(globe);
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
     GeonetGlobe *globe = OverlayManager_GetData(man);
@@ -558,8 +556,6 @@ case13_no:
     return result;
 }
 
-#pragma force_active reset
-
 BOOL GeonetGlobe_Exit(OverlayManager *man, int *state) {
     GeonetGlobe *globe = OverlayManager_GetData(man);
     enum HeapID heapID = globe->heapID;
@@ -760,8 +756,6 @@ void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u3
     *distY = dy & 0x3F;
 }
 
-#pragma force_active on
-
 void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     u16 colors[4];
     String *string;
@@ -815,8 +809,6 @@ void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     FontID_Release(4);
 }
 
-#pragma force_active reset
-
 void GeonetGlobe_FreeBgs(GeonetGlobe *globe) {
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_EXIT_BUTTON]);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON]);
@@ -826,8 +818,6 @@ void GeonetGlobe_FreeBgs(GeonetGlobe *globe) {
     FreeBgTilemapBuffer(globe->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(globe->bgConfig, GF_BG_LYR_SUB_3);
 }
-
-#pragma force_active on
 
 BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait) {
     BOOL done = FALSE;
@@ -856,15 +846,11 @@ BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait) {
     return done;
 }
 
-#pragma force_active reset
-
 void GeonetGlobe_ListMenuMoveCursor(struct ListMenu *menu, s32 index, u8 onInit) {
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
-
-#pragma force_active on
 
 void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, const GeonetGlobeMenuEntry *entries) {
     ListMenuTemplate template;
@@ -912,8 +898,6 @@ void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const Windo
     CopyWindowToVram(window);
 }
 
-#pragma force_active reset
-
 void GeonetGlobe_DestroyListMenu(GeonetGlobe *globe) {
     EraseFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_LIST], FALSE);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_LIST]);
@@ -959,8 +943,6 @@ void GeonetGlobe_HideLocationWindow(GeonetGlobe *globe) {
     EraseFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION], FALSE);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION]);
 }
-
-#pragma force_active on
 
 // Finds the seen location nearest to the globe's current orientation (within 128 units in x and y).
 BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index) {
@@ -1057,8 +1039,6 @@ void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe) {
     }
 }
 
-#pragma force_active reset
-
 void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc) {
     globe->globeFile = NARC_AllocAndReadWholeMember(narc, 0, globe->heapID);
     GF3dRender_InitObjFromHeader(&globe->globeObj, &globe->globeMdl, (NNSG3dResFileHeader **)&globe->globeFile);
@@ -1095,8 +1075,6 @@ void GeonetGlobe_ResetTransform(GeonetGlobe *globe) {
     globe->markerScale.z = FX32_ONE;
 }
 
-#pragma force_active on
-
 void GeonetGlobe_InitCamera(GeonetGlobe *globe) {
     VecFx32 target = { 0, 0, 0 };
     VecFx32 position = sGeonetCameraPosition;
@@ -1113,8 +1091,6 @@ void GeonetGlobe_InitCamera(GeonetGlobe *globe) {
     while (GeonetGlobe_StepZoom(globe) != TRUE) {
     }
 }
-
-#pragma force_active reset
 
 void GeonetGlobe_InitLight(GeonetGlobe *globe) {
     globe->lightVector.x = 0;
@@ -1288,7 +1264,7 @@ void GeonetGlobe_Draw(GeonetGlobe *globe) {
 BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, String *regionName, enum HeapID heapID) {
     BOOL hasRegions;
     int placeIndex = GeonetGlobe_GetPlaceIndex(country);
-    enum HeapID heap = *(volatile enum HeapID *)&heapID; // forces the spill of the argument
+    enum HeapID heap = *(volatile enum HeapID *)&heapID;
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0798_bin, heap);
 
     ReadMsgDataIntoString(msgData, country, countryName);
@@ -1313,8 +1289,6 @@ BOOL GeonetGlobe_CountryHasRegions(int country) {
     return FALSE;
 }
 
-#pragma force_active on
-
 void GeonetGlobe_WrapPosition(int *position) {
     if (position[0] >= 0) {
         position[0] %= 65535;
@@ -1327,8 +1301,6 @@ void GeonetGlobe_WrapPosition(int *position) {
         position[1] += ((position[1] < 0 ? -position[1] : position[1]) / 65535 + 1) * 65535;
     }
 }
-
-#pragma force_active reset
 
 int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b) {
     int dx = a->x - b->x;

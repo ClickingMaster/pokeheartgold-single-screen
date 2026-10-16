@@ -14,6 +14,7 @@
 #include "msgdata/msg/msg_0247.h"
 
 #include "bg_window.h"
+#include "comm_wireless.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -36,7 +37,6 @@
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "comm_wireless.h"
 #include "wireless_status_icon.h"
 
 // Main menu option "Connect to Pokemon Ranger": receives the Manaphy Egg from Pokemon Ranger over DS
@@ -140,8 +140,6 @@ void ConnectToRanger_FormatNumber5Digits(u16 *dst, int value) {
     dst[4] = value + '0';
 }
 
-#pragma force_active on
-
 void ConnectToRanger_EncodePlayerData(ConnectToRangerApp *app) {
     int i;
     const u16 *src = PlayerProfile_GetNamePtr(app->profile);
@@ -176,8 +174,6 @@ void ConnectToRanger_SetupGraphics(ConnectToRangerApp *app) {
     BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
     ConnectToRanger_LoadSubScreenBg(app);
 }
-
-#pragma force_active reset
 
 void ConnectToRanger_LoadSubScreenBg(ConnectToRangerApp *app) {
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 0, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_8_OFFSET, 32, app->heapID);
@@ -427,7 +423,6 @@ void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     wonderCard->info.id = 1;
     wonderCard->info.unique = FALSE;
     wonderCard->info.unk8E_1 = FALSE;
-    // unk8E_2 = unk8E_3 = TRUE, written to the flag byte (the bitfield stores do not match)
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 4;
     WONDER_CARD_FLAG_BYTE(wonderCard) = WONDER_CARD_FLAG_BYTE(wonderCard) | 8;
     wonderCard->info.unk8E_5 = FALSE;
@@ -476,14 +471,12 @@ BOOL ConnectToRanger_CheckTimeoutOrCancel(ConnectToRangerApp *app, u32 *connectS
     return FALSE;
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_lifetimes off
 #pragma opt_propagation off
 #pragma opt_common_subs off
 
 int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
-    // connectState and linkInitialised are read through offsets computed at run time (needed to match).
     s32 stateOffset = (s32) & ((ConnectToRangerApp *)NULL)->connectState;
     s32 linkInitialisedOffset = stateOffset - 4;
 #define CONNECT_STATE (*(u32 *)((u8 *)app + stateOffset))

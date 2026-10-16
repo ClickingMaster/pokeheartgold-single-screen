@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "heap.h"
 
-// Link command layer (ARM9 static 0x02033AE0-0x02034360): byte rings and packet queues that cut the outgoing
+// Link command layer: byte rings and packet queues that cut the outgoing
 // commands into frames, and the command table: 22 commands of the communication layer itself, followed by the
 // table an application registers (Comm_RegisterCommandTable). Each command has a receive handler, a size
 // function (CommCmd_GetSizeVariable: the size travels with the packet) and an optional receive buffer getter.

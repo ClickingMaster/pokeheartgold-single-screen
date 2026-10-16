@@ -28,10 +28,8 @@
 #include "wifi_plaza_event.h"
 #include "wireless_status_icon.h"
 
-// unk_02037C94.c (no header declares it)
 BOOL CommState_HasPlazaLobbyFailed(void);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaListArrowY[2];
 extern const u32 sWiFiPlazaRoomMsgBanks[4];
 extern const GraphicsModes sWiFiPlazaRoomGraphicsModes;
@@ -300,14 +298,10 @@ u8 WiFiPlazaRoom_IsPlayerBusy(WiFiPlazaRoomWork *room, u32 index) {
     return room->playerBusy[index];
 }
 
-#pragma force_active on
-
 void WiFiPlazaRoom_SetCardBlocked(WiFiPlazaRoomWork *room, u8 index, u8 value) {
     GF_ASSERT(index < 20);
     room->cardBlocked[index] = value;
 }
-
-#pragma force_active reset
 
 u8 WiFiPlazaRoom_IsCardBlocked(WiFiPlazaRoomWork *room, u32 index) {
     return room->cardBlocked[index];
@@ -864,8 +858,6 @@ void WiFiPlazaSignWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
     DrawFrameAndWindow3(&window->window, TRUE, 0x1F, 2, 3);
 }
 
-#pragma force_active on
-
 void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
     SpriteResourcesHeader header;
     SimpleSpriteTemplate template;
@@ -895,8 +887,6 @@ void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *grap
     }
     menu->showArrows = FALSE;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics) {
     int i;
@@ -943,13 +933,9 @@ void WiFiPlazaListMenu_DeleteItems(WiFiPlazaListMenu *menu) {
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaListMenu_AddItem(WiFiPlazaListMenu *menu, String *text, int value) {
     ListMenuItems_AddItem(menu->items, text, value);
 }
-
-#pragma force_active reset
 
 ListMenuItem *WiFiPlazaListMenu_GetItems(WiFiPlazaListMenu *menu) {
     return menu->items;
@@ -1033,8 +1019,6 @@ void WiFiPlazaListMenu_SetShowArrows(WiFiPlazaListMenu *menu, BOOL show) {
     menu->showArrows = show;
 }
 
-#pragma force_active on
-
 void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu) {
     u16 scroll;
     if (menu->showArrows == FALSE) {
@@ -1054,8 +1038,6 @@ void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu) {
         Sprite_SetDrawFlag(menu->arrows[1], TRUE);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaTextWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
 }

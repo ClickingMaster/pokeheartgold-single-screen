@@ -38,7 +38,6 @@
 // 6), with GTS_SELECT_MON_MODE_TRADE it is offered for the Pokemon of the selected search result (only Pokemon the
 // depositor wants can be picked, the others are dimmed). Pokemon with a special Ribbon, in a special form, holding the
 // Griseous Orb, and Eggs can't be offered; the Ball Capsule of a party Pokemon is detached first.
-// The screen's first functions are the last states of SEEK POKEMON (screen 4, gts_search.c).
 
 typedef enum GtsSelectMonMode {
     GTS_SELECT_MON_MODE_DEPOSIT = 5,
@@ -100,7 +99,6 @@ typedef struct GtsSelectMonPosition {
     u16 y;
 } GtsSelectMonPosition;
 
-// The same rows as sGtsSelectMonCursorPositions, read from its y column (the asm labels it separately).
 typedef struct GtsSelectMonCursorY {
     u16 y;
     u16 nextX;
@@ -122,7 +120,6 @@ typedef struct GtsMonFields {
     };
 } GtsMonFields;
 
-// Sets the level of the wireless status icon (wireless_status_icon_2.c); not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsSelectMonStates[])(GtsApp *app);
@@ -206,7 +203,7 @@ void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, G
 
 int GtsSearch_PrintSearchFailed(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00152, 1, 0, 0xF0F); // The search failed...
-    Gts_SetState(app, 21, 1);                      // GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT
+    Gts_SetState(app, 21, 1);                                 // GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT
     return 3;
 }
 
@@ -441,8 +438,6 @@ void GtsSelectMon_LoadGraphics(GtsApp *app) {
     NARC_Delete(narc);
 }
 
-#pragma force_active on
-
 // The cursor, each slot's icon, held item and (in the party) Ball Capsule, the box arrows.
 void GtsSelectMon_CreateSprites(GtsApp *app) {
     SpriteTemplate template;
@@ -493,8 +488,6 @@ void GtsSelectMon_CreateSprites(GtsApp *app) {
     Sprite_SetDrawFlag(app->panelSprite, TRUE);
     Gts_SetSpritePosition(app->panelSprite, 55, 424);
 }
-
-#pragma force_active reset
 
 void GtsSelectMon_DeleteSprites(GtsApp *app) {
     int i;
@@ -773,8 +766,8 @@ int GtsSelectMon_StepIndex(int index, int count, int step) {
 
 int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(3, HEAP_ID_61);
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00098, 1);  // SUMMARY
-    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00099, 2);  // OFFER
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00098, 1); // SUMMARY
+    ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00099, 2); // OFFER
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00100, 3); // CANCEL
     app->menu = Gts_CreateListMenu(app, 3, 10);
     app->state = GTS_SELECT_MON_STATE_HANDLE_DEPOSIT_MENU;
@@ -1184,8 +1177,6 @@ BOOL Gts_IsPartyBox(int box) {
     return box == GTS_BOX_PARTY;
 }
 
-#pragma force_active on
-
 BoxPokemon *Gts_GetBoxMon(Party *party, PCStorage *pcStorage, int box, int slot) {
     if (Gts_IsPartyBox(box)) {
         if (slot > Party_GetCount(party) - 1) {
@@ -1195,8 +1186,6 @@ BoxPokemon *Gts_GetBoxMon(Party *party, PCStorage *pcStorage, int box, int slot)
     }
     return PCStorage_GetMonByIndexPair(pcStorage, box, slot);
 }
-
-#pragma force_active reset
 
 // The last Pokemon of the party can't be offered.
 BOOL GtsSelectMon_CanOffer(Party *party, PCStorage *pcStorage, int box, int slot) {
@@ -1284,8 +1273,6 @@ BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted) 
     return GtsSelectMon_MatchesWanted(&summary, wanted);
 }
 
-#pragma force_active on
-
 // The record sent with the trade: the offered Pokemon, its summary, and as the wanted Pokemon the species and gender
 // of the search result's Pokemon.
 void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app) {
@@ -1308,8 +1295,6 @@ void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app) {
     *(u16 *)&record->wanted.gender = wanted.halves[0];   // gender, minLevel
     *(u16 *)&record->wanted.maxLevel = wanted.halves[1]; // maxLevel, unk_5
 }
-
-#pragma force_active reset
 
 void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons) {
     int i;

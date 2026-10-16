@@ -76,11 +76,11 @@
 #define WIRELESS_TRADE_SLOT_CANCEL 12 // the cursor position of the "Quit" button
 #define WIRELESS_TRADE_NUM_WINDOWS 34
 
-// Party data travels in chunks of this size (the receive side is in trade_communication.c).
+// Party data travels in chunks of this size.
 #define WIRELESS_TRADE_PARTY_CHUNK_SIZE 0x590
 #define WIRELESS_TRADE_MON_PIC_SIZE     0xC80
 
-// Communication commands (handled by the receive table in trade_communication.c).
+// Communication commands
 #define WIRELESS_TRADE_CMD_PARTY_CHUNK 0x16
 #define WIRELESS_TRADE_CMD_CURSOR      0x17
 #define WIRELESS_TRADE_CMD_ANSWER      0x18
@@ -137,10 +137,10 @@ struct WirelessTradeSelectMon {
     u32 state;                                                   // 0x0054
     int exchangeState;                                           // 0x0058
     int sentChunks;                                              // 0x005C
-    int commState;                                               // 0x0060, written by trade_communication.c
+    int commState;                                               // 0x0060, written by the receive handlers
     int receivedChunks;                                          // 0x0064
     u32 tradeAccepted;                                           // 0x0068
-    u32 answers[2];                                              // 0x006C, per player, written by trade_communication.c
+    u32 answers[2];                                              // 0x006C, per player, written by the receive handlers
     u32 resultMsg;                                               // 0x0074
     u8 filler_78[0x1C];                                          // 0x0078
     int cursor;                                                  // 0x0094
@@ -199,7 +199,7 @@ struct WirelessTradeSelectMon {
     u8 filler_22BC[8];                                           // 0x22BC
     int bgScrollY;                                               // 0x22C4
     u32 slideStep;                                               // 0x22C8
-    int startDelay;                                              // 0x22CC, written by trade_communication.c
+    int startDelay;                                              // 0x22CC, written by the receive handlers
     WirelessTradeSlide slides[2];                                // 0x22D0
     u8 partyChunks[2][WIRELESS_TRADE_PARTY_CHUNK_SIZE];          // 0x2300, receive buffers
     WirelessTradeChatotData chatot[2];                           // 0x2E20
@@ -248,27 +248,24 @@ typedef struct WirelessTradeWindowTemplate {
     u16 baseTile;
 } WirelessTradeWindowTemplate;
 
-// Defined in trade_communication.c, whose internal header declares them with its own view of the work.
 void WirelessTrade_RegisterCommands(FieldSystem *fieldSystem);
 void WirelessTrade_SetWork(FieldSystem *fieldSystem, WirelessTradeSelectMon *work);
 
-// Defined in friend_roster.c, frontier_save.c, communication_player_state.c, communication_manager_9.c and
-// network_communication_state_full.c; not declared in their public headers.
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
-void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
+void CommPlayerInfo_RecordTrades(SaveData *saveData, int count);
 int Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 void Comm_InitSyncedSave(s32 *state);
-s32 Comm_SyncedSave(SaveData *saveData, s32 a1, s32 *state);
+s32 Comm_SyncedSave(SaveData *saveData, s32 unused, s32 *state);
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode);
 
 extern const u8 sWirelessTradeSelectMonSummaryPages[];
 extern const TouchscreenListMenuTemplate sWirelessTradeSelectMonTouchMenuTemplate;
 extern const ObjCharTransferTemplate sWirelessTradeSelectMonObjCharTransferTemplate;
 extern const GraphicsModes sWirelessTradeSelectMonGraphicsModes;
-// The anim sequence table is [side][own slot, partner slot, quit]; ov65_0221FD6C/70 label its later columns.
+// The cursor anim of each side: own slot, partner slot, quit.
 extern const u32 sWirelessTradeSelectMonCursorAnims[][3];
 extern const u32 ov65_0221FD6C[][3];
 extern const u32 ov65_0221FD70[][3];
@@ -281,11 +278,9 @@ extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Main2;
 extern const BgTemplate sWirelessTradeSelectMonBgTemplate_Main3;
 extern const GraphicsBanks sWirelessTradeSelectMonGraphicsBanks;
 extern const TouchscreenHitbox sWirelessTradeSelectMonSlotHitboxes[];
-// ov65_0221FEA8 labels the y member of sWirelessTradeSelectMonDetailSpritePos[0].
 extern const WirelessTradeDetailSpritePos sWirelessTradeSelectMonDetailSpritePos[];
 extern const WirelessTradeDetailSpritePos ov65_0221FEA8[];
 extern const u32 sWirelessTradeSelectMonBallPalettes[];
-// ov65_0221FF50 labels the y member of sWirelessTradeSelectMonSlotPos[0].
 extern const WirelessTradeSlotPos sWirelessTradeSelectMonSlotPos[];
 extern const WirelessTradeSlotPos ov65_0221FF50[];
 extern const u8 sWirelessTradeSelectMonCursorMoves[][4][6];
@@ -639,8 +634,6 @@ void WirelessTradeSelectMon_PrintNicknameList(Window *window, MessageFormat *msg
     }
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_LoadPartyIcons(Party *party, int firstSlot, WirelessTradeSelectMon *work) {
     int i;
 
@@ -669,8 +662,6 @@ void WirelessTradeSelectMon_LoadPartyIcons(Party *party, int firstSlot, Wireless
         Sprite_SetDrawFlag(work->capsuleSprites[firstSlot + i], FALSE);
     }
 }
-
-#pragma force_active reset
 
 BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
     int i;
@@ -1017,8 +1008,6 @@ BOOL WirelessTradeSelectMon_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_VBlankCB(WirelessTradeSelectMon *work) {
     vu32 *dtcm = (vu32 *)0x027E0000;
 
@@ -1033,8 +1022,6 @@ void WirelessTradeSelectMon_VBlankCB(WirelessTradeSelectMon *work) {
     OamManager_ApplyAndResetBuffers();
     dtcm[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag, through the DTCM base address
 }
-
-#pragma force_active reset
 
 void WirelessTradeSelectMon_SetGfxBanks(void) {
     GraphicsBanks banks = sWirelessTradeSelectMonGraphicsBanks;
@@ -1147,8 +1134,6 @@ void WirelessTradeSelectMon_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_LoadScreenData(NARC *narc, int memberNo, BgConfig *bgConfig, int layer, int unused, u32 size, BOOL isCompressed, enum HeapID heapID) {
     NNSG2dScreenData *screen;
     void *raw = GfGfxLoader_LoadFromOpenNarc(narc, memberNo, isCompressed, heapID, TRUE);
@@ -1165,8 +1150,6 @@ void WirelessTradeSelectMon_LoadScreenData(NARC *narc, int memberNo, BgConfig *b
         Heap_Free(raw);
     }
 }
-
-#pragma force_active reset
 
 void WirelessTradeSelectMon_CommitNameBg(BgConfig *bgConfig, int count, int partnerCount) {
     BgCopyOrUncompressTilemapBufferRangeToVram(bgConfig, GF_BG_LYR_MAIN_2, GetBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2), 0x600, 0);
@@ -1259,8 +1242,6 @@ int WirelessTradeSelectMon_GetGenderSymbol(WirelessTradeMonInfo *info, Party *pa
     return gender;
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Party *party, int slot, WirelessTradeSelectMon *work) {
     struct {
         Party *party;
@@ -1292,7 +1273,6 @@ void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Party *par
     // ov65_0221FEA8 is sWirelessTradeSelectMonDetailSpritePos[0].y.
     WirelessTradeSelectMon_SetSpritePos(*(Sprite **)((u8 *)sprites + f.sideOffset), sWirelessTradeSelectMonDetailSpritePos[side].x, f.yOffset + ov65_0221FEA8[side].x + 192);
     if (side == 0) {
-        // The flip value is passed untruncated (sprite.h declares the parameter u8).
         ((void (*)(Sprite *, int))Sprite_SetFlipMode)(*(Sprite **)((u8 *)sprites + f.sideOffset), work->mons[f.slot].flip);
     }
     WirelessTradeSelectMon_SetBallSprite(work, side + 2, work->mons[f.slot].ball);
@@ -1349,8 +1329,6 @@ void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Party *par
     String_Delete(string);
 }
 
-#pragma force_active reset
-
 void WirelessTradeSelectMon_HideMonDetails(Window *windows, int side, WirelessTradeSelectMon *work) {
     Sprite_SetDrawFlag(work->detailSprites[side], FALSE);
     Sprite_SetDrawFlag(work->detailSprites[side + 2], FALSE);
@@ -1360,8 +1338,6 @@ void WirelessTradeSelectMon_HideMonDetails(Window *windows, int side, WirelessTr
     ClearWindowTilemapAndCopyToVram(&windows[side + 30]);
     ClearWindowTilemapAndCopyToVram(&windows[side + 32]);
 }
-
-#pragma force_active on
 
 void WirelessTradeSelectMon_CreateSprites(WirelessTradeSelectMon *work) {
     SpriteTemplate spriteTemplate;
@@ -1438,8 +1414,6 @@ void WirelessTradeSelectMon_CreateSprites(WirelessTradeSelectMon *work) {
     }
 }
 
-#pragma force_active reset
-
 void WirelessTradeSelectMon_ReadDpad(int *dir) {
     int count;
     int newDir;
@@ -1512,8 +1486,6 @@ void WirelessTradeSelectMon_UpdateCursorBlink(u16 *angle) {
     GX_LoadOBJPltt(&color, 0x3A, sizeof(color));
 }
 
-#pragma force_active on
-
 u8 WirelessTradeSelectMon_GetNextCursorPos(int cursor, int dir, WirelessTradeMonInfo *mons) {
     int i;
     u8 ret = 0;
@@ -1526,8 +1498,6 @@ u8 WirelessTradeSelectMon_GetNextCursorPos(int cursor, int dir, WirelessTradeMon
     }
     return ret;
 }
-
-#pragma force_active reset
 
 void WirelessTradeSelectMon_SetCursorSprite(int cursor, Sprite *sprite, int side) {
     VecFx32 pos;
@@ -1580,8 +1550,6 @@ int WirelessTradeSelectMon_SendCommand(int unused, int command, int value) {
     return Comm_SendCommand(command, &data, sizeof(data));
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_SendCommandIfChanged(WirelessTradeSelectMon *work, int command, int value) {
     if (value != work->lastSentValue || command != work->lastSentCommand) {
         WirelessTradeSelectMon_SendCommand(Comm_GetLocalNetId(), command, value);
@@ -1589,8 +1557,6 @@ void WirelessTradeSelectMon_SendCommandIfChanged(WirelessTradeSelectMon *work, i
         work->lastSentCommand = command;
     }
 }
-
-#pragma force_active reset
 
 void *WirelessTradeSelectMon_GetPartyChunk(void *party, u32 chunk) {
     return (u8 *)party + chunk * WIRELESS_TRADE_PARTY_CHUNK_SIZE;
@@ -1794,8 +1760,6 @@ int WirelessTradeSelectMon_HandleDeletePrompt(WirelessTradeSelectMon *work) {
     return 0;
 }
 
-#pragma force_active on
-
 int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
     int choice = ListMenu_ProcessInput(work->rosterMenu);
 
@@ -1843,8 +1807,6 @@ int WirelessTradeSelectMon_ShowRosterList(WirelessTradeSelectMon *work) {
     work->callback = WirelessTradeSelectMon_HandleRosterListInput;
     return 0;
 }
-
-#pragma force_active reset
 
 int WirelessTradeSelectMon_HandleRosterFullPrompt(WirelessTradeSelectMon *work) {
     int result = WirelessTradeSelectMon_HandleYesNoPrompt(work->bgConfig, work->unk_664, &work->yesNoState, &work->yesNoPrompt, 1);
@@ -2043,8 +2005,6 @@ int WirelessTradeSelectMon_WaitOfferAnswers(WirelessTradeSelectMon *work) {
     return 0;
 }
 
-#pragma force_active on
-
 int WirelessTradeSelectMon_StartTradeSlide(WirelessTradeSelectMon *work) {
     int i;
 
@@ -2078,8 +2038,6 @@ int WirelessTradeSelectMon_StartTradeSlide(WirelessTradeSelectMon *work) {
     work->callback = WirelessTradeSelectMon_UpdateTradeSlide;
     return 0;
 }
-
-#pragma force_active reset
 
 void WirelessTradeSelectMon_InitSlide(WirelessTradeSlide *slide, s32 startX, s32 startY, s32 endX, s32 endY) {
     slide->startX = startX * FX32_ONE;
@@ -2465,8 +2423,6 @@ void WirelessTradeSelectMon_EndMenuDim(void) {
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
 }
 
-#pragma force_active on
-
 void WirelessTradeSelectMon_AddWindows(BgConfig *bgConfig, Window *windows, Options *options) {
     int i;
 
@@ -2496,8 +2452,6 @@ void WirelessTradeSelectMon_AddWindows(BgConfig *bgConfig, Window *windows, Opti
     }
 }
 
-#pragma force_active reset
-
 void WirelessTradeSelectMon_RemoveWindows(Window *windows) {
     int i;
 
@@ -2516,8 +2470,6 @@ void WirelessTradeSelectMon_RemoveWindows(Window *windows) {
     RemoveWindow(&windows[25]);
 }
 
-#pragma force_active on
-
 // x == 1 centers the string in the window.
 void WirelessTradeSelectMon_PrintString(Window *window, String *string, int unused, int textSpeed, int x, int y) {
     int printX = x;
@@ -2528,8 +2480,6 @@ void WirelessTradeSelectMon_PrintString(Window *window, String *string, int unus
     }
     AddTextPrinterParameterizedWithColor(window, 0, string, printX, y, textSpeed, MAKE_TEXT_COLOR(11, 12, 0), NULL);
 }
-
-#pragma force_active reset
 
 u32 WirelessTradeSelectMon_PrintMessage(Window *window, u32 msgId, u32 frame, MsgData *msgData, MessageFormat *msgFormat) {
     String *string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msgId, HEAP_ID_26);

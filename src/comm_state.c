@@ -7,15 +7,15 @@
 #include "overlay_00_thumb.h"
 #include "overlay_13_arm_2.h"
 /* overlay 45 prototypes in private header */
-#include "system.h"
-#include "sound_playback.h"
-#include "wireless_manager.h"
+#include "comm_wireless.h"
 #include "communication_command.h"
 #include "communication_player_state.h"
-#include "comm_wireless.h"
 #include "link_synchronization.h"
-#include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
+#include "sound_playback.h"
+#include "system.h"
+#include "wireless_manager.h"
+#include "wireless_status_icon.h"
 
 typedef struct CommStateWork {
     WifiClubStatusData *wifiClubData;

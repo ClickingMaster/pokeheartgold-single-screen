@@ -11,20 +11,20 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "palette.h"
 #include "pm_string.h"
 #include "screen_fade.h"
+#include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "system.h"
 #include "text.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 // Hours, minutes and seconds as kept by the lobby (overlay 45), copied as one word.
 typedef union PlazaNewsTime {
@@ -153,7 +153,7 @@ void *WiFiPlazaNews_GetEventType(void *newsData);
 int WiFiPlazaNews_FormatEvent(void *newsData, void *info, void *item, String *dest, enum HeapID heapID);
 int WiFiPlazaNews_GetEventSlot(void *newsData, void *item, int index);
 
-extern const u8 sPlazaNewsHeadlineRowTops[3];     // tilemap top of each headline row, followed by the row durations
+extern const u8 sPlazaNewsHeadlineRowTops[3];         // tilemap top of each headline row, followed by the row durations
 extern const u32 sPlazaNewsLastHeadlineRowDuration[]; // duration of the last headline row (240); rows 0-1 come before it
 extern const ObjCharTransferTemplate sPlazaNewsObjCharTransfer;
 extern const int sPlazaNewsClockBlinkTiles[4];

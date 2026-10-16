@@ -12,13 +12,11 @@
 #include "save_block_23.h"
 #include "save_rankings.h"
 
-// record_mixing.c
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup);
 FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup);
 void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIEND_GROUP **received);
 void RecordMixing_MergeBlock23(void *saveBlock23, int numPlayers, int localId, void **received, void **received2);
 
-// No public header declares these.
 u32 FashionEntry_sizeof(void);
 void Save_FashionData_InsertEntries(u8 count, int skip, SaveFashionData *fashionData, SaveFashionDataSub **entries);
 

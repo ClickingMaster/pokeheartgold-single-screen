@@ -13,6 +13,10 @@
 #include "bg_window.h"
 #include "brightness.h"
 #include "camera.h"
+#include "comm_state.h"
+#include "communication_command.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "font.h"
 #include "font_sprite.h"
@@ -21,6 +25,7 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
 #include "model_animation.h"
 #include "oam_manager.h"
@@ -28,25 +33,19 @@
 #include "obj_pltt_transfer.h"
 #include "palette.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "string_util.h"
+#include "swap_3d_buffers.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
-#include "communication_command.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
+#include "wireless_status_icon.h"
 
-// Declared in no public header (touchpad internals and library code).
 BOOL GF_TouchpadStartRecording(TPData *data, u32 capacity, u32 frequency);
 int GF_TouchpadUpdate(SwalotPlopTouch *out, int mode, u32 threshold);
 void TextOBJ_UpdatePosition(TextOBJ *object);
@@ -60,7 +59,6 @@ void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dAnmObjEnableID(NNSG3dAnmObj *anmObj, int id);
 int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *name);
 
-// Tables in asm/plaza_game_swalot_plop_data.s.
 extern const u8 sSwalotPlopModelIds[];
 extern const u8 sSwalotPlopSubBgPalettes[];
 extern const u8 sSwalotPlopShotModelFiles[];
@@ -391,7 +389,6 @@ void SwalotPlop_ReceiveFinalScore(SwalotPlopApp *app, u32 score, int netId) {
 }
 
 void SwalotPlop_ReceiveScores(SwalotPlopApp *app, const u32 *scores, int netId) {
-    // walks the struct shifted by one element per step, as the original code does
     SwalotPlopGame_SetFinalScores(app->game, scores);
     app->scoresReceived = TRUE;
     for (int i = 0; i < 4; i++) {
@@ -829,7 +826,6 @@ void SwalotPlopGame_AddRemoteShot(SwalotPlopGame *game, const SwalotPlopShotReco
 }
 
 BOOL SwalotPlopGame_TakeShotReport(SwalotPlopGame *game, SwalotPlopShotRecord *record) {
-    // some accesses go through offsetof(shots) as in the original code (register allocation)
     int i;
     for (i = 0; i < 0x60; i++) {
         if (game->shots[i].state == SHOT_STATE_REPORT) {
@@ -1439,7 +1435,6 @@ void SwalotPlopShot_FromRecord(const SwalotPlopShotRecord *record, SwalotPlopSho
 }
 
 void SwalotPlopGame_AddShot(SwalotPlopGame *game, const SwalotPlopShotParams *params, u32 state) {
-    // some accesses go through offsetof(shots) as in the original code (register allocation)
     int i;
     for (i = 0; i < 0x60; i++) {
         if (game->shots[i].state == SHOT_STATE_FREE) {
@@ -1481,7 +1476,6 @@ void SwalotPlopShot_Clear(SwalotPlopShot *shot) {
 }
 
 void SwalotPlopGame_UpdateShots(SwalotPlopGame *game) {
-    // walks the struct shifted by one element per step, as the original code does
     SwalotPlopShot *shot = (SwalotPlopShot *)game;
     int i = 0;
     SwalotPlopGame *walker = game;
@@ -1591,7 +1585,6 @@ void SwalotPlopGame_RemoveEndedShots(SwalotPlopGame *game) {
 }
 
 void SwalotPlopGame_DropEndedShots(SwalotPlopGame *game) {
-    // walks the struct shifted by one element per step, as the original code does
     SwalotPlopGame *walker;
     int i;
     SwalotPlopShot *shot;
@@ -1619,7 +1612,6 @@ void SwalotPlopShot_CheckRemove(SwalotPlopShot *shot, SwalotPlopGame *game) {
 }
 
 void SwalotPlopGame_DropFlyingShots(SwalotPlopGame *game) {
-    // walks the struct shifted by one element per step, as the original code does
     int i;
     for (i = 0; i < 0x60; i++, game = (SwalotPlopGame *)((u8 *)game + sizeof(SwalotPlopShot))) {
         if (game->shots[0].state == SHOT_STATE_FLYING) {
@@ -1629,7 +1621,6 @@ void SwalotPlopGame_DropFlyingShots(SwalotPlopGame *game) {
 }
 
 BOOL SwalotPlopGame_HasActiveShots(SwalotPlopGame *game) {
-    // walks the struct shifted by one element per step, as the original code does
     int i;
     for (i = 0; i < 0x60; i++, game = (SwalotPlopGame *)((u8 *)game + sizeof(SwalotPlopShot))) {
         u8 state = game->shots[0].state;
@@ -2395,7 +2386,6 @@ void SwalotPlopGfx_InitSprites(SwalotPlopGfx *gfx, enum HeapID heapId) {
 }
 
 void SwalotPlopGfx_FreeSprites(SwalotPlopGfx *gfx) {
-    // walks the struct shifted by one element per step, as the original code does
     int i;
     SwalotPlopGfx *walker;
     FontSystem_Delete(gfx->fontSystem);
@@ -2807,7 +2797,6 @@ void SwalotPlopGfx_AddShotView(SwalotPlopGfx *gfx, SwalotPlopShot *shot, u32 pla
 }
 
 void SwalotPlopGfx_RemoveShotView(SwalotPlopGfx *gfx, SwalotPlopShot *shot) {
-    // walks the struct shifted by one element per step, as the original code does
     int i;
     SwalotPlopGfx *walker;
 
@@ -3141,7 +3130,6 @@ void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc
     int i, fileId;
     ModelInstance *model;
     ModelResource *resource;
-    // keeps the original's reload of the allocator from the stack
     allocator = allocator;
     resource = stage->resources;
     model = stage->models;
@@ -3260,7 +3248,7 @@ void SwalotPlop_IntersectPlane(const VecFx32 *pos, const VecFx32 *dir, const Vec
         FX_Mul(normal->z, dir->z) + (FX_Mul(normal->x, dir->x) + FX_Mul(normal->y, dir->y)));
     hit->x = pos->x + FX_Mul(dir->x, scale);
     hit->y = pos->y + FX_Mul(dir->y, scale);
-    // the original writes the z result to x as well
+    // the z result is written to x as well
     hit->x = pos->z + FX_Mul(dir->z, scale);
     *t = scale;
 }

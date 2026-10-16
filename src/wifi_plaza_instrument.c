@@ -25,7 +25,6 @@ typedef struct WiFiPlazaInstrumentStep {
 typedef void (*WiFiPlazaInstrumentBurstStartFunc)(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj);
 typedef BOOL (*WiFiPlazaInstrumentBurstUpdateFunc)(WiFiPlazaInstrumentBurst *burst);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaInstrumentBalloonHeights[];
 extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Bell01[];
 extern const WiFiPlazaInstrumentBurstEvent sWiFiPlazaInstrumentBursts_Cymbal02[];
@@ -59,7 +58,6 @@ extern const u8 sWiFiPlazaInstrumentBurstModels03[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
 extern const u16 sWiFiPlazaLight1Colors[];
 
-// library and runtime functions without a public prototype
 s64 _ll_mul(s64 a, s64 b);
 u32 _fflt(s32 value);
 u32 _fadd(u32 a, u32 b);
@@ -1984,7 +1982,6 @@ void WiFiPlazaInstrumentBurst_StartHop(WiFiPlazaInstrumentBurst *burst, u32 inde
     ModelInstance_SetPosition(burst->models[index], origin->x, origin->y, origin->z);
 }
 
-// First function of the light module (see src/wifi_plaza_event.c); it was linked into this file.
 WiFiPlazaLight *WiFiPlazaLight_Create(enum HeapID heapID, u32 colorSet, u32 light1Set, u32 thirdSet) {
     WiFiPlazaLight *light = Heap_Alloc(heapID, sizeof(WiFiPlazaLight));
     int i;

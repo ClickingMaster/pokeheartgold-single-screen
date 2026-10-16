@@ -9,15 +9,15 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_transfer.h"
 #include "system.h"
-#include "oam_manager.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 typedef void (*WiFiPlazaSurveyInitFunc)(void *modeWork, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
 typedef BOOL (*WiFiPlazaSurveyMainFunc)(void *modeWork, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
@@ -145,8 +145,6 @@ void WiFiPlazaSurvey_DoVBlankUpdates(WiFiPlazaSurveyWork *work) {
     GF_RunVramTransferTasks();
 }
 
-#pragma force_active on
-
 void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum HeapID heapID) {
     int i;
     SetBothScreensModesAndDisable(&sWiFiPlazaSurveyGraphicsModes);
@@ -165,8 +163,6 @@ void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum H
     GfGfxLoader_LoadScrnData(NARC_a_1_9_6, 6, work->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
     GfGfxLoader_GXLoadPal(NARC_a_1_9_6, 0, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaSurvey_FreeBgs(WiFiPlazaSurveyWork *work) {
     int i;
@@ -207,8 +203,6 @@ void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work) {
     OamManager_Free();
 }
 
-#pragma force_active on
-
 void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID) {
     int i;
     messages->lobby = lobby;
@@ -219,8 +213,6 @@ void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFi
     messages->expanded = String_New(256, heapID);
     messages->raw = String_New(256, heapID);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages) {
     int i;
@@ -242,7 +234,7 @@ String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, 
 // Questions 0-49 are in msg_0761 (bank 1), the special questions 50-59 in msg_0765 (bank 2).
 String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo) {
     if (questionNo >= 60) {
-        GF_ASSERT(questionNo >= 60); // repeats the test (codegen)
+        GF_ASSERT(questionNo >= 60);
         questionNo = 0;
     }
     if (questionNo < 50) {
@@ -254,7 +246,7 @@ String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages
 // Answers A-C of questions 0-49 are in msg_0758-0760 (banks 3-5), those of 50-59 in msg_0762-0764 (banks 6-8).
 String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo, int answer) {
     if (questionNo >= 60) {
-        GF_ASSERT(questionNo >= 60); // repeats the test (codegen)
+        GF_ASSERT(questionNo >= 60);
         questionNo = 0;
     }
     if (questionNo < 50) {

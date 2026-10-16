@@ -7,6 +7,7 @@
 
 #include "assert.h"
 #include "comm_state.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "easy_chat.h"
 #include "field_system.h"
@@ -18,10 +19,8 @@
 #include "player_data.h"
 #include "trainer_card_data.h"
 #include "union_room_avatar.h"
-#include "communication_core.h"
 
-// Union Room talk (ARM9 static 0x0205A44C-0x0205AC88): the part of the Union Room object (FieldSystem.unionRoom,
-// union_room.c) used while the player talks to another player: the link commands of the talk menu (choice,
+// Union Room talk: the part of the Union Room object (FieldSystem.unionRoom) used while the player talks to another player: the link commands of the talk menu (choice,
 // reply, cancel, battle party choice, trainer card exchange), the script messages for what a player is doing,
 // the activity and chat message broadcast in the player's beacon, and the language greeting learned from a
 // foreign player.
@@ -58,7 +57,7 @@ struct UnionRoom {
     u32 unk28;                        // 0x028
     u32 talkChoiceReceived;           // 0x02C: set by link command 0x67
     u32 talkReply;                    // 0x030: the partner's answer (link command 0x63)
-    u32 sentTalkReply;                        // 0x034
+    u32 sentTalkReply;                // 0x034
     u8 unk038[0x40 - 0x38];           // 0x038
     u32 talkChoice;                   // 0x040: what the partner chose to do (link command 0x67)
     u32 partnerCancelled;             // 0x044: link command 0x68
@@ -73,12 +72,10 @@ struct UnionRoom {
     TrainerCardData *cards[2];        // 0x188: per net id, the trainer cards exchanged
 }; // size: 0x190
 
-// Beacon access of the communication layer (wireless_connection_state_8.c).
 void CommWireless_SetMail(MailMessage *message);
 void CommWireless_SetRuleset(UnionRoomStatus *status);
 void CommWireless_RefreshBeacon(void);
 void CommState_SetLinkMode13RequestMode0(void);
-// Declared u32 here (they return u8): the matched code truncates the results itself.
 u32 CommPlayerInfo_GetCountry(int netId);
 u32 CommPlayerInfo_GetRegion(int netId);
 TrainerCardData *TrainerCardData_New(enum HeapID heapID);

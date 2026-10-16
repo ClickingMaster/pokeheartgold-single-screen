@@ -150,9 +150,6 @@ BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID heapID) 
     return FALSE;
 }
 
-// The original objects of the four lobby callbacks below and of WiFiPlaza_FillPlaces / WiFiPlazaProfile_SetFromLobbyRecord were force-active.
-#pragma force_active on
-
 // Lobby callback: a player entered the plaza (isOwn: the own player, whose profile is synchronised).
 void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn) {
     s64 time;
@@ -211,8 +208,6 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
     }
 }
 
-#pragma force_active reset
-
 // Lobby callback: a player left the plaza.
 void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
     int slot;
@@ -255,8 +250,6 @@ void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wo
         WiFiPlazaGroupWeights_ReportPlace(&work->groupWeights, WiFiPlazaPlayer_GetTapToy(player), slot);
     }
 }
-
-#pragma force_active on
 
 // Lobby callback: a lobby event (0: the lobby opened); most of them start a timer in WiFiPlazaWork.eventSchedule.
 void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
@@ -349,8 +342,6 @@ void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
     }
 }
 
-#pragma force_active reset
-
 // Lobby callback: the own record as the lobby stores it.
 void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work) {
     if (WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save) == FALSE) {
@@ -360,8 +351,6 @@ void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork 
     WiFiPlazaProfile_SetFromLobbyRecord(&work->profile, data, size);
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
 }
-
-#pragma force_active on
 
 // Fills out (200 bytes) with the country and region of the own player, of every player in the lobby and of the
 // 20 lobby entries of WiFiPlazaLobbyClient_GetLocationCountry / WiFiPlazaLobbyClient_GetLocationRegion.
@@ -390,8 +379,6 @@ void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
         WiFiPlazaPlaces_Add(out, entryCountry, WiFiPlazaLobbyClient_GetLocationRegion((u8)i), 1);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work) {
     if (work->eventSchedule.flag0 == 1 && work->eventSchedule.flag7 == 0 && WiFiPlazaLobbyClient_GetState() == 2) {
@@ -488,8 +475,6 @@ BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save)
     return TRUE;
 }
 
-#pragma force_active on
-
 void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size) {
     profile->player = *src;
     if (size <= sizeof(WiFiPlazaPlayer)) {
@@ -500,8 +485,6 @@ void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPl
     MI_CpuCopy8(src->name, profile->lobbyName, sizeof(profile->lobbyName));
     MI_CpuCopy8(profile->name, profile->player.name, sizeof(profile->player.name));
 }
-
-#pragma force_active reset
 
 void WiFiPlaza_ClearEventFlags(u32 *flags) {
     flags[2] = 0;

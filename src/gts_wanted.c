@@ -76,7 +76,6 @@ typedef struct GtsCountryGroup {
     u8 group;
 } GtsCountryGroup;
 
-// Sets the level of the wireless status icon (wireless_status_icon_2.c); not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsWantedStates[])(GtsApp *app);
@@ -233,8 +232,6 @@ void GtsWanted_LoadGraphics(GtsApp *app) {
     NARC_Delete(narc);
 }
 
-#pragma force_active on
-
 // The message window; the wanted Pokemon's lines (infoWindows[0..2]) and the offered Pokemon's (infoWindows[3..5]).
 void GtsWanted_CreateWindows(GtsApp *app) {
     int i;
@@ -255,8 +252,6 @@ void GtsWanted_CreateWindows(GtsApp *app) {
     }
     Gts_CreatePanelWindow(app, 3);
 }
-
-#pragma force_active reset
 
 void GtsWanted_RemoveWindows(GtsApp *app) {
     int i;
@@ -551,8 +546,6 @@ void Gts_PrintSpeciesNameNoTransfer(Window *window, MsgData *speciesNames, int s
     }
 }
 
-#pragma force_active on
-
 // Country 0: ANY.
 void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgData, u32 country, int align, int y, u32 color) {
     String *string;
@@ -567,8 +560,6 @@ void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgDat
     }
 }
 
-#pragma force_active reset
-
 // The color of the male and female symbols; color for the others.
 u32 Gts_GetGenderColor(int gender, u32 color) {
     if (gender == 1) {
@@ -579,8 +570,6 @@ u32 Gts_GetGenderColor(int gender, u32 color) {
     }
     return color;
 }
-
-#pragma force_active on
 
 // The gender symbol, or EITHER (shown with showAny); xOrAlign up to 3 aligns the text, above it is its x.
 void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showAny, int y, int xOrAlign, u32 color) {
@@ -604,8 +593,6 @@ void Gts_PrintGenderNoTransfer(Window *window, MsgData *msgData, int gender, BOO
         String_Delete(string);
     }
 }
-
-#pragma force_active reset
 
 void Gts_PrintLevelRange(Window *window, MsgData *msgData, int levelRange, int align, int y, u32 color, int kind) {
     Gts_PrintLevelRangeAt(window, msgData, levelRange, align, 0, y, color, kind);
@@ -671,8 +658,6 @@ void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, Message
     String_Delete(title);
 }
 
-#pragma force_active on
-
 // OFFER POKEMON, then the nickname and gender, then the level; fills the Pokemon's summary.
 void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary) {
     String *title;
@@ -729,8 +714,6 @@ u16 *Gts_LoadSpeciesByLetter(enum HeapID heapID, int letter, u32 *count) {
     return species;
 }
 
-#pragma force_active reset
-
 // flags[species] is TRUE for the species of the Johto Pokedex.
 void *Gts_CreateJohtoDexFlags(enum HeapID heapID) {
     u32 size;
@@ -775,8 +758,6 @@ void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app) {
     record->summary = app->depositSummary;
     record->wanted = app->depositWanted;
 }
-
-#pragma force_active on
 
 // The level list of the selector.
 int Gts_CreateLevelRangeListItems(ListMenuItem **items, MsgData *msgData, int kind) {
@@ -831,7 +812,6 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind) {
         ranges = sGtsSearchLevelRanges;
         count = 11;
     }
-    // kind is reused as the index (register allocation).
     for (kind = 0; kind < count; kind++) {
         if (minLevel == ranges[kind].minLevel && maxLevel == ranges[kind].maxLevel) {
             return kind;
@@ -839,8 +819,6 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind) {
     }
     return 0;
 }
-
-#pragma force_active reset
 
 // index: 0 for any country, else 1 + the country's index in sGtsCountries.
 void Gts_SetSearchCountry(GtsApp *app, int index) {
@@ -867,8 +845,6 @@ int Gts_GetCountryGroupRange(int group, int *start) {
     return 0;
 }
 
-#pragma force_active on
-
 // The country list of a group; each item's value is 1 + the country's index in sGtsCountries.
 #pragma opt_rotateloops off
 #pragma opt_common_subs off
@@ -886,8 +862,6 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
 
 #pragma opt_rotateloops reset
 #pragma opt_common_subs reset
-
-#pragma force_active reset
 
 void GtsCursorValueTable_Clear(GtsCursorValueTable *arg) {
     int i;

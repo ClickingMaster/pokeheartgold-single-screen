@@ -37,7 +37,6 @@
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
-// These are declared only in other modules' private headers.
 struct DoubleBuffer *DoubleBuffer_New(enum HeapID heapId, void *first, void *second);
 void DoubleBuffer_Delete(struct DoubleBuffer *buffer);
 u16 *DoubleBuffer_GetCurrent(struct DoubleBuffer *buffer);
@@ -531,7 +530,6 @@ Sprite *PlazaGameGfx_CreateSprite(PlazaGameGfxRes *gfxRes, SpriteList *spriteLis
     return Sprite_Create(&template);
 }
 
-// The volatile copies of id and heapId keep them on the stack.
 void PlazaGameGfx_LoadInto(PlazaGameGfx *gfx, PlazaGameGfxRes *gfxRes, NARC *narc, int plttFile, int plttCount, int charFile, int cellFile, int animFile, volatile int id, volatile enum HeapID heapId) {
     enum HeapID heap;
     int resId;
@@ -600,7 +598,6 @@ void PlazaGameSprites_Init(PlazaGameSprites *sprites, int count, int charCount, 
     ObjCharTransferTemplate template;
     enum HeapID heap;
     NNS_G2dInitOamManagerModule();
-    // Read through a volatile pointer: heapId is reloaded from the stack here.
     heap = *(volatile enum HeapID *)&heapId;
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heap);
     template = sPlazaGameObjCharTransfer;
@@ -2097,7 +2094,6 @@ void PlazaGameContinue_Free(PlazaGameContinue *prompt) {
     YesNoPrompt_Destroy(prompt->prompt);
 }
 
-// The volatile heapId keeps it on the stack.
 BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messageBox, PlazaGameText *text, int game, volatile enum HeapID heapId) {
     switch (prompt->state) {
     case PLAZA_GAME_CONTINUE_FADE: {

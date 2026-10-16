@@ -97,7 +97,6 @@ void WiFiPlazaPlayerState_InitArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPla
 void WiFiPlazaPlayerState_FreeArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPlazaRoomWork *room);
 BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, WiFiPlazaObj *obj, u8 kind, u32 justAppeared);
 
-
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnWalk;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherPresent;
 extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherLeave;
@@ -419,8 +418,6 @@ void WiFiPlazaPlayerBounce_Start(WiFiPlazaPlayerBounce *bounce) {
     bounce->repeat = TRUE;
 }
 
-#pragma force_active on
-
 fx32 WiFiPlazaPlayerBounce_Update(WiFiPlazaPlayerBounce *bounce) {
     switch (bounce->state) {
     case 0:
@@ -454,8 +451,6 @@ fx32 WiFiPlazaPlayerBounce_Update(WiFiPlazaPlayerBounce *bounce) {
     }
     return bounce->offset;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerBounce_Stop(WiFiPlazaPlayerBounce *bounce) {
     bounce->repeat = FALSE;
@@ -1897,8 +1892,6 @@ BOOL WiFiPlazaPlayerRide_IsMoverHere(WiFiPlazaPlayerRide *ride, void *models) {
     return TRUE;
 }
 
-#pragma force_active on
-
 // Jump arc from the player's cell onto the mover (24 frames); the camera follows
 BOOL WiFiPlazaPlayerRide_JumpOn(WiFiPlazaPlayerRide *ride, void *models, WiFiPlazaCamera *camera) {
     VecFx32 start, end, pos;
@@ -1937,8 +1930,6 @@ BOOL WiFiPlazaPlayerRide_JumpOn(WiFiPlazaPlayerRide *ride, void *models, WiFiPla
     WiFiPlazaObj_SetPosition(ride->obj, &pos);
     return done;
 }
-
-#pragma force_active reset
 
 // Landing hop on the mover (16 frames)
 BOOL WiFiPlazaPlayerRide_Land(WiFiPlazaPlayerRide *ride, void *models) {

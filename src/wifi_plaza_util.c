@@ -2,14 +2,12 @@
 
 #include "global.h"
 
-#include "location_gmm_dat.h"
 #include "comm_state.h"
+#include "location_gmm_dat.h"
 #include "wifi_connection.h"
 #include "wifi_plaza_internal.h"
 
 BOOL CommState_HasPlazaLobbyFailed(void);
-
-#pragma force_active on
 
 // out = left + right (hour, minute, second; the hour wraps at 24).
 void WiFiPlazaTime_Add(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
@@ -52,8 +50,6 @@ void WiFiPlazaTime_Subtract(const WiFiPlazaTime *first, const WiFiPlazaTime *sec
     }
     out->value[0] = (u8)(a.value[0] - b.value[0]);
 }
-
-#pragma force_active reset
 
 // Adds a country and region to the list (the first free entry, or the entry of the same place unless value is 1).
 void WiFiPlazaPlaces_Add(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {

@@ -107,7 +107,7 @@ struct GtsSelector {
     s8 gender;                  // 0x44, the result of GTS_SELECTOR_MODE_GENDER
     s8 levelRange;              // 0x45, the result of GTS_SELECTOR_MODE_LEVEL
     u8 filler_46[2];            // 0x46
-    s32 cursor;                 // 0x48, s32 (not int) for matching
+    s32 cursor;                 // 0x48
     int state;                  // 0x4C, GtsSelectorState
     int nextState;              // 0x50
     u32 bgId;                   // 0x54, of the windows
@@ -136,7 +136,6 @@ typedef struct GtsSelectorLetterGroup {
     int count;
 } GtsSelectorLetterGroup;
 
-// Not declared in a public header (bg_cell_manager.c).
 void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
 void BgCellManager_DrawCell(BgCellManager *manager, int index);
 void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
@@ -148,8 +147,7 @@ extern const GtsSelectorWindowPosition sGtsSelectorLevelWindowPositions[];
 extern const GtsSelectorWindowPosition sGtsSelectorCountryWindowPositions[];
 extern const GtsSelectorWindowPosition3 sGtsSelectorSpeciesWindowPositions[];
 extern const GtsSelectorWindowPosition sGtsSelectorGridWindowPositions[];
-// The cursor positions are {x, y} pairs; the asm labels the y column separately. The list cursors are in pixels, the
-// grid cursors in tiles of the panel.
+// The cursor positions are {x, y} pairs. The list cursors are in pixels, the grid cursors in tiles of the panel.
 extern const u8 sGtsSelectorGenderCursorX[];
 extern const u8 sGtsSelectorGenderCursorY[];
 extern const u8 sGtsSelectorSpeciesCursorX[];
@@ -164,8 +162,7 @@ extern const u8 sGtsSelectorGroupCursorX[];
 extern const u8 sGtsSelectorGroupCursorY[];
 // The value of each row of the gender list: EITHER MON_GENDERLESS, then MON_MALE, MON_FEMALE, BACK -2.
 extern const int sGtsSelectorGenders[];
-// The cursor's next button for up, down, left, right on each button; the asm labels each column of the letter and
-// country group tables separately.
+// The cursor's next button for up, down, left, right on each button.
 extern const u8 sGtsSelectorLetterNextUp[];
 extern const u8 sGtsSelectorLetterNextDown[];
 extern const u8 sGtsSelectorLetterNextLeft[];
@@ -329,7 +326,6 @@ void GtsSelector_AddWindows(GtsSelector *selector, int page) {
 }
 
 void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
-    // {y, x}: the order of the stack slots.
     s8 position[2];
 
     BgCellManager_GetCellPosition(selector->cellManager, 0, &position[1], &position[0]);
@@ -502,8 +498,6 @@ int GtsSelector_Main(GtsSelector *selector) {
     return result;
 }
 
-#pragma force_active on
-
 // The button touched on the page, -1 for none. Pages above 7 return the selector (never used).
 int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page) {
     int button = (int)selector;
@@ -525,8 +519,6 @@ int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page) {
     }
     return button;
 }
-
-#pragma force_active reset
 
 // The 3x3 grid of letter groups (buttons 0..8) and BACK (9). Returns the group, -2 for BACK, -1 for none; groups
 // with enabled[group] FALSE cannot be chosen.
@@ -571,7 +563,6 @@ int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
 
     if (prevCursor != selector->cursor) {
         PlaySE(SEQ_SE_DP_SELECT);
-        // The y is read from the x label (+1).
         Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[selector->cursor * 2] + 16) * 8, sGtsSelectorGroupCursorX[selector->cursor * 2 + 1] * 8);
         if (selector->cursor == 9) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
@@ -611,8 +602,6 @@ int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
 none:
     return -1;
 }
-
-#pragma force_active on
 
 // The letter of a button of the letter page: -1 past the group's letters, -2 for BACK (3).
 int GtsSelector_GetLetter(GtsSelector *selector, int button) {
@@ -693,8 +682,6 @@ int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
 none:
     return -1;
 }
-
-#pragma force_active reset
 
 // At least one page, also for an empty list.
 int GtsSelector_CountPages(int count, int perPage) {
@@ -903,8 +890,6 @@ int GtsSelector_SelectLevelButton(GtsSelector *selector, int button) {
     return -1;
 }
 
-#pragma force_active on
-
 int GtsSelector_HandleLevelInput(GtsSelector *selector) {
     int prevCursor = selector->cursor;
     int button;
@@ -949,8 +934,6 @@ int GtsSelector_HandleLevelInput(GtsSelector *selector) {
     }
     return -1;
 }
-
-#pragma force_active reset
 
 // Buttons of the country groups: 0..8 the groups, 9 BACK (-2), 10 ANY.
 int GtsSelector_GetCountryGroup(GtsSelector *selector, int button) {
@@ -1139,8 +1122,6 @@ int GtsSelector_HandleCountryListInput(GtsSelector *selector) {
     return -1;
 }
 
-#pragma force_active on
-
 // The letter groups of species (GTS_SELECTOR_PAGE_SPECIES_GROUPS) or countries (GTS_SELECTOR_PAGE_COUNTRY_GROUPS,
 // with ANY), the panel at row y.
 void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
@@ -1188,8 +1169,6 @@ void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
     BgCellManager_DrawCell(selector->cellManager, 0);
 }
 
-#pragma force_active reset
-
 // EITHER, male, female.
 void GtsSelector_ShowGenders(GtsSelector *selector) {
     int i;
@@ -1232,7 +1211,6 @@ void GtsSelector_ShowLevels(GtsSelector *selector) {
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     selector->cursor = 0;
     selector->savedCursor = 0;
-    // The cursor is read back (volatile) instead of reusing the 0 just stored.
     cursor = *(volatile int *)&selector->cursor;
     Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorX[cursor * 2], sGtsSelectorSpeciesCursorY[cursor * 2]);
     BgCellManager_DrawCell(selector->cellManager, 0);
@@ -1297,7 +1275,6 @@ int GtsSelector_OpenSpeciesGroups(GtsSelector *selector) {
     return -1;
 }
 
-// The gotos keep the block order (structured code compiles differently).
 int GtsSelector_HandleSpeciesGroups(GtsSelector *selector) {
     u32 group = GtsSelector_HandleGroupInput(selector, selector->enabled);
     if (group == (u32)-2) {
@@ -1320,7 +1297,6 @@ done:
     return -1;
 }
 
-// The gotos keep the block order (structured code compiles differently).
 int GtsSelector_CloseSpeciesGroups(GtsSelector *selector) {
     int state;
     GtsSelector_RemoveWindows(selector, GTS_SELECTOR_PAGE_SPECIES_GROUPS);
@@ -1427,7 +1403,6 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
 
 #pragma force_active reset
 
-// The gotos keep the block order (structured code compiles differently).
 int GtsSelector_HandleSpeciesLetters(GtsSelector *selector) {
     int letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
     switch (letter) {
@@ -1472,8 +1447,6 @@ int GtsSelector_BackToSpeciesLetters(GtsSelector *selector) {
     return -1;
 }
 
-#pragma force_active on
-
 int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, const u16 *species) {
     int i = 0;
     int seen = 0;
@@ -1488,8 +1461,6 @@ int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, cons
     }
     return seen;
 }
-
-#pragma force_active reset
 
 // The seen species starting with the letter; returns their count.
 int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex) {
@@ -1513,8 +1484,6 @@ int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNam
     Heap_Free(species);
     return count;
 }
-
-#pragma force_active on
 
 // 4 rows of the list (species or level ranges).
 void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count) {
@@ -1543,8 +1512,6 @@ void GtsSelector_PrintCountryPage(GtsSelector *selector, int page, int count) {
         }
     }
 }
-
-#pragma force_active reset
 
 int GtsSelector_OpenSpeciesList(GtsSelector *selector) {
     int value;
@@ -1626,7 +1593,6 @@ int GtsSelector_OpenCountryGroups(GtsSelector *selector) {
     return -1;
 }
 
-// The gotos keep the block order (structured code compiles differently).
 int GtsSelector_HandleCountryGroups(GtsSelector *selector) {
     u32 group = GtsSelector_HandleCountryGroupInput(selector, selector->enabled);
     if (group == 10) {
@@ -1752,7 +1718,6 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
     return -1;
 }
 
-// The gotos keep the block order (structured code compiles differently).
 int GtsSelector_HandleCountryLetters(GtsSelector *selector) {
     int letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
     switch (letter) {
@@ -1990,8 +1955,6 @@ int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
     return seen;
 }
 
-#pragma force_active on
-
 BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
     int count = ov70_02245F5C[group][0];
@@ -2008,8 +1971,6 @@ BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 int GtsSelector_CountCountriesOfLetter(void *unused, u32 letter) {
     int start;

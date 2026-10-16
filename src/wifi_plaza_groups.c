@@ -25,8 +25,6 @@ void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
     }
 }
 
-#pragma force_active on
-
 // Puts id into the first free place of a group that has not ended and whose markerCounts count allows value; returns the
 // place (group * 3 + seat) or -1.
 int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
@@ -49,8 +47,6 @@ int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
     }
     return -1;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id) {
     int place = WiFiPlazaGroups_FindPlace(groups, id);
@@ -87,16 +83,12 @@ int WiFiPlazaGroups_GetCounter(WiFiPlazaGroups *groups, u32 group) {
     return groups->counters[group];
 }
 
-#pragma force_active on
-
 void WiFiPlazaGroups_RequestAction(WiFiPlazaGroups *groups, u32 id) {
     u32 place = WiFiPlazaGroups_FindPlace(groups, id);
     if (place != (u32)-1) {
         groups->actionRequests[place / 3][place % 3] = 1;
     }
 }
-
-#pragma force_active reset
 
 int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
@@ -124,8 +116,6 @@ void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place) {
     *slot = 0;
 }
 
-#pragma force_active on
-
 // The place (group * 3 + seat) of id, or -1.
 int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
     WiFiPlazaGroups *row = groups;
@@ -141,8 +131,6 @@ int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
     }
     return -1;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 value) {
     u32 group;

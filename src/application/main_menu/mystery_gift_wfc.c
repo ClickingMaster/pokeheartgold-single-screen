@@ -5,10 +5,10 @@
 #include "application/main_menu/mystery_gift_app.h"
 #include "application/main_menu/mystery_gift_app_internal.h"
 
+#include "comm_wireless.h"
 #include "heap.h"
 #include "overlay_manager.h"
 #include "system.h"
-#include "comm_wireless.h"
 #include "wifi_connection.h"
 
 // Mystery Gift > Get via Nintendo Wi-Fi Connection: connects, downloads the gift file of the game (into
@@ -85,7 +85,6 @@ extern const char sStr_K5WfPEw9T3cvqzHa[];
 extern const char ov74_0223D054[];
 extern u8 sMysteryGiftWfcFileList[];
 
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 
@@ -104,15 +103,12 @@ void *MysteryGiftWfc_Alloc(void *unused, u32 size) {
 }
 
 #pragma pop
-#pragma force_active reset
 
 void MysteryGiftWfc_Free(void *unused, void *ptr) {
     if (ptr != NULL) {
         Heap_Free(((void **)ptr)[-1]);
     }
 }
-
-#pragma force_active on
 
 // Shows the error of the Wi-Fi library (MysteryGiftApp_ShowWfcError)
 int MysteryGiftWfc_HandleError(MysteryGiftAppData *data) {
@@ -161,8 +157,6 @@ void MysteryGiftWfc_StartCleanup(MysteryGiftAppData *data, int result, int *stat
     }
 }
 
-#pragma force_active reset
-
 void MysteryGiftWfc_OnRequestDone(int unused, int error) {
     sMysteryGiftWfcStatus.requestDone = TRUE;
     sMysteryGiftWfcStatus.requestError = error;
@@ -179,8 +173,6 @@ void MysteryGiftWfc_Shutdown(void) {
     UnloadDwcOverlay();
     CommWireless_Terminate();
 }
-
-#pragma force_active on
 
 // One frame of the download; returns MYSTERY_GIFT_WFC_RESULT_* (0 while running)
 int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
@@ -380,5 +372,3 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
     }
     return 0;
 }
-
-#pragma force_active reset

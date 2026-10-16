@@ -55,7 +55,7 @@ extern int (*const sGtsSearchResultStates[])(GtsApp *app);
 extern const BgTemplate sGtsSearchResultBg0Template;
 extern const BgTemplate sGtsSearchResultBg1Template;
 extern const GtsWindowTemplate sGtsSearchResultInfoWindows[16];
-// The results to the left and to the right of each result ({left, right} pairs; the asm labels both columns).
+// The results to the left and to the right of each result ({left, right} pairs).
 extern const u8 sGtsSearchResultLeft[];
 extern const u8 sGtsSearchResultRight[];
 extern const TouchscreenHitbox sGtsSearchResultButtonHitboxes[];
@@ -146,12 +146,11 @@ extern const TouchscreenHitbox sGtsSearchButtonHitboxes[];
 extern const GtsWindowPosition sGtsSearchFieldWindowPositions[];
 extern const GtsWindowPosition sGtsSearchLineWindowPositions[];
 extern const GtsWindowPosition sGtsSearchValueWindowPositions[];
-// The {column, row} of each button; the asm labels the row column separately.
+// The {column, row} of each button.
 extern const u8 sGtsSearchButtonColumns[];
 extern const u8 sGtsSearchButtonRows[];
 
-// {x, y, anim} of the cursor on each button; the asm labels the three columns separately, so each label is read
-// as an array of rows starting at its column.
+// {x, y, anim} of the cursor on each button.
 typedef struct GtsSearchCursorColumn {
     u16 value;
     u16 nextColumns[2];
@@ -162,7 +161,6 @@ extern const GtsSearchCursorColumn sGtsSearchCursorY[];
 extern const GtsSearchCursorColumn sGtsSearchCursorAnims[];
 extern int gGtsCountryCount[];
 
-// Not declared in a public header.
 u32 GtsSave_GetDepositDate(void *gtsSave);
 u32 GtsSave_GetTradeDate(void *gtsSave);
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
@@ -720,7 +718,6 @@ void GtsSearch_CreateSprites(GtsApp *app) {
     SpriteTemplate template;
 
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
-    // The first cursor position, read through the button table's label (as a u16 array).
     template.position.x = ((const u16 *)sGtsSearchButtonColumns)[7] << FX32_SHIFT;
     template.position.y = ((const u16 *)sGtsSearchButtonColumns)[8] << FX32_SHIFT;
     app->cursorSprite = Sprite_CreateAffine(&template);

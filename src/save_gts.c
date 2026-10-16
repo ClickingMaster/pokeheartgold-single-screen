@@ -1,8 +1,8 @@
+#include "save_gts.h"
+
 #include "global.h"
 
 #include "constants/save_arrays.h"
-
-#include "save_gts.h"
 typedef struct GtsSave {
     u8 storedMon[0xEC]; // the deposited Pokemon (party format), kept until it is traded or taken back
     u16 hasStoredMon;

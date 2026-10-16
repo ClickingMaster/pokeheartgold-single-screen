@@ -1,9 +1,6 @@
 #ifndef POKEHEARTGOLD_DWCACCOUNT_H
 #define POKEHEARTGOLD_DWCACCOUNT_H
 
-// This module predates the typed declarations in the current public headers.
-// Keep its verified DWC and Wi-Fi interfaces private until those headers are
-// reconciled for every caller.
 #include "global.h"
 
 typedef struct DWCUserData DWCUserData;
@@ -60,10 +57,10 @@ DWCFriendData *FriendRoster_GetDwcFriendData(WiFiList *a0, int a1);
 #ifndef POKEHEARTGOLD_PR488_PRIVATE_H
 #define POKEHEARTGOLD_PR488_PRIVATE_H
 
-#include "wifi_club_app.h"
+#include "friend_roster.h"
 #include "save.h"
 #include "save_wifi_history.h"
-#include "friend_roster.h"
+#include "wifi_club_app.h"
 
 BOOL Comm_IsNetIdConnected(u16 arg0);
 int Comm_CountConnected(void);
@@ -138,8 +135,6 @@ int WiFiPlazaLobbyClient_Update(void);
 int WiFiPlazaLobbyClient_IsDisconnected(void);
 int CommPlayerInfo_GetCountry(int arg0);
 int CommPlayerInfo_GetRegion(int arg0);
-void LoadOVY38(void);
-void UnloadOVY38(void);
 void CommPlayerInfo_SaveRecords(SaveData *saveData);
 
 s32 CommState_GetSyncPacketSize(void);

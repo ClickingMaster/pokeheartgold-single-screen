@@ -21,10 +21,8 @@
 // card of another player (name, ID, country, easy chat message or Pokemon, Tap Toy icon, avatar) and the Tap Toy
 // panel. Page switches fade the sub screen out and in (WiFiPlazaInfoPanel_Update).
 
-// type_icon_resources.c (no header declares it)
 int TypeIcon_GetPlttFile(void);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaPanelButtonScreenBases[];
 extern const s8 sWiFiPlazaPanelButtonScrollY[];
 extern const TouchscreenHitbox sWiFiPlazaPanelButtonHitbox[];

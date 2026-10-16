@@ -10,12 +10,17 @@
 
 #include "bg_window.h"
 #include "camera.h"
+#include "comm_state.h"
+#include "communication_command.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "math_util.h"
 #include "model_animation.h"
 #include "msgdata.h"
@@ -25,27 +30,21 @@
 #include "palette.h"
 #include "player_data.h"
 #include "render_window.h"
+#include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
+#include "sprite_resource_header.h"
 #include "sprite_system.h"
+#include "swap_3d_buffers.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
-#include "sprite_resource_header.h"
-#include "screen_fade_legacy.h"
-#include "swap_3d_buffers.h"
-#include "communication_command.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
+#include "wireless_status_icon.h"
 
-// Declared in no public header.
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 void SetBothScreensBrightnessByColor(u16 color);
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *dst);
@@ -54,7 +53,6 @@ fx64c FX_SinFx64c(fx32 x);
 fx64c FX_CosFx64c(fx32 x);
 f32 _f_lltof(s64 value);
 
-// Tables in asm/plaza_game_mime_jr_top_data.s.
 typedef struct MimeJrTopModelFiles {
     int files[16][2]; // model file, animation file
 } MimeJrTopModelFiles;
@@ -144,8 +142,6 @@ typedef struct MimeJrTopPlayerPalettes {
     int values[5];
 } MimeJrTopPlayerPalettes;
 
-// Some call sites were compiled against prototypes with other parameter types than the
-// definitions; they call through these function types so that the argument conversions match.
 typedef void (*MimeJrTopSetPaletteOffsetFunc)(ManagedSprite *sprite, int offset);
 typedef void (*MimeJrTopInitTemplateFunc)(ManagedSpriteTemplate *template, u16 x, u16 y, u32 vram, int pal, int resId);
 typedef void (*MimeJrTopStartBurstFunc)(MimeJrTopGame *game, s16 x, s16 y);
@@ -265,8 +261,7 @@ void MimeJrTop_RegisterCommands(MimeJrTopApp *app) {
     Comm_RegisterCommandTable(table, count, app);
 }
 
-// Builds the game screen once the entry screen is done. Compiled without propagation and
-// strength reduction (the audience loop keeps its separate counters).
+// Builds the game screen once the entry screen is done.
 #pragma opt_propagation off
 #pragma opt_strength_reduction off
 
@@ -2645,7 +2640,6 @@ void MimeJrTopBurst_Task(SysTask *sysTask, MimeJrTopBurst *burst) {
         return;
     }
 
-    // The sprites and tweens are walked with byte-stepped pointers, as in the original code.
     switch (burst->state) {
     case 0: {
         MimeJrTopBurst *cur;
@@ -2741,7 +2735,6 @@ void MimeJrTopStars_Task(SysTask *sysTask, MimeJrTopStarsTask *task) {
     s32 x;
     s32 y;
     int i;
-    // The stars are walked with a task pointer stepped by one star (as the original code does).
     MimeJrTopStarsTask *star;
     MimeJrTopResources *resources = task->game->resources;
 
@@ -3072,7 +3065,6 @@ void MimeJrTopStage_UpdatePopups(MimeJrTopStageEffect *effect) {
                 }
                 limitp++;
             }
-            // The original checks done[2] twice.
             if (done.done[0] != FALSE && done.done[1] != FALSE && done.done[2] != FALSE && done.done[2] != FALSE) {
                 effect->timer = 0;
                 effect->stop = FALSE;

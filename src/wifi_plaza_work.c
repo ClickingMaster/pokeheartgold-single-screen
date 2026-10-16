@@ -9,13 +9,9 @@ u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
     return work->hasError;
 }
 
-#pragma force_active on
-
 void WiFiPlazaWork_TakeLobbyFlag131(void *a0, void *a1, void *a2) {
     WiFiPlazaLobbyClient_TakeFlag131();
 }
-
-#pragma force_active reset
 
 void *WiFiPlazaWork_GetNews(WiFiPlazaWork *work) {
     return work->news;

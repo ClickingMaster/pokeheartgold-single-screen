@@ -61,8 +61,6 @@ void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurv
     }
 }
 
-#pragma force_active on
-
 void WiFiPlazaSurveyAnswer_PrintAnswers(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
     String *string;
     FillWindowPixelBuffer(&answer->window, 0);
@@ -74,8 +72,6 @@ void WiFiPlazaSurveyAnswer_PrintAnswers(WiFiPlazaSurveyAnswer *answer, WiFiPlaza
     AddTextPrinterParameterizedWithColor(&answer->window, 1, string, 0, 48, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     ScheduleWindowCopyToVram(&answer->window);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaSurveyAnswer_UpdateCursor(WiFiPlazaSurveyAnswer *answer) {
     Sprite_SetDrawFlag(answer->cursorSprite, TRUE);
@@ -200,8 +196,6 @@ void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurv
     }
     WiFiPlazaSurvey_LoadLastWeekTotals(&results->lastWeekTally);
 }
-
-#pragma force_active on
 
 BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     WiFiPlazaSurveyAnswerRecord record;
@@ -348,8 +342,6 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
     return FALSE;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results) {
     int i;
     WiFiPlazaSurvey_FreeQuestion(&results->current);
@@ -372,8 +364,6 @@ void WiFiPlazaSurveyResults_PrintTitle(Window *window, WiFiPlazaSurveyMessages *
 }
 
 // Prints the question's answers and, when the player answered this survey, the player's name and answer.
-#pragma force_active on
-
 void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyAnswerRecord *record, enum HeapID heapID, u32 color, u32 highlightColor, BOOL highlight) {
     String *string;
     int width;
@@ -400,8 +390,6 @@ void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiP
     ScheduleWindowCopyToVram(&results->windows[1]);
 }
 
-#pragma force_active reset
-
 void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyTally *tally, WiFiPlazaSurveyWork *work, int palette) {
     int i;
     results->barFrame = 0;
@@ -414,8 +402,6 @@ void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlaza
 }
 
 // Grows the three bars to their lengths over 20 frames, one pixel column at a time.
-#pragma force_active on
-
 BOOL WiFiPlazaSurveyResults_UpdateBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyWork *work) {
     int limit;
     int i;
@@ -467,15 +453,12 @@ void WiFiPlazaSurveyResults_ShowLastWeek(WiFiPlazaSurveyResults *results, WiFiPl
     WiFiPlazaSurveyResults_PrintTitle(&results->windows[0], messages, msg_0777_00119, MAKE_TEXT_COLOR(5, 6, 0));
 }
 
-#pragma force_active reset
-
 // current: this week's survey (fields 0-3 of the lobby's survey data), else last week's (fields 4-7).
 void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL current, enum HeapID heapID) {
     int base;
     int i;
     const u16 *text;
     question->question = String_New(256, heapID);
-    // base doubles as the loop counter here (codegen)
     base = 0;
     do {
         question->answers[base] = String_New(256, heapID);

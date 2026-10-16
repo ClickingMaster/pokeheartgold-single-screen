@@ -7,41 +7,41 @@
 #include "msgdata/msg/msg_0207.h"
 
 #include "bg_window.h"
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "font.h"
-#include "spin_trade_link.h"
 #include "game_stats.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "link_synchronization.h"
 #include "list_menu_2d.h"
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "options.h"
 #include "overlay_manager.h"
 #include "player_data.h"
+#include "screen_fade_legacy.h"
+#include "sound_playback.h"
 #include "sound_system.h"
+#include "spin_trade_link.h"
 #include "sprite.h"
+#include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "sound_playback.h"
-#include "sprite_resource_header.h"
-#include "sprite_resource.h"
-#include "oam_manager.h"
-#include "screen_fade_legacy.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "link_synchronization.h"
-#include "comm_state.h"
-#include "wireless_status_icon.h"
-#include "union_room_talk.h"
 #include "union_room_avatar.h"
+#include "union_room_talk.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 enum SpinTradeGroupState {
     SPIN_TRADE_GROUP_STATE_SHOW_PROMPT,
@@ -78,16 +78,16 @@ enum SpinTradeGroupState {
     SPIN_TRADE_GROUP_STATE_PROCEED,
 };
 
-// View of the link menu owned by frontier_menu_communication.c (SpinTradeArgs.menu)
+// The link menu (SpinTradeArgs.menu)
 typedef struct SpinTradeGroupMenu {
     u8 unk_00[0x20];
-    u32 count;            // 0x20
-    u32 state;            // 0x24
-    u32 leaderJoinPending;      // 0x28
-    u32 participantCount; // 0x2C
-    u32 leavingMask;  // 0x30
-    u32 unk_34;           // 0x34
-    u16 assignedCount;           // 0x38
+    u32 count;             // 0x20
+    u32 state;             // 0x24
+    u32 leaderJoinPending; // 0x28
+    u32 participantCount;  // 0x2C
+    u32 leavingMask;       // 0x30
+    u32 unk_34;            // 0x34
+    u16 assignedCount;     // 0x38
 } SpinTradeGroupMenu;
 
 // Leader marker palette animation
@@ -126,7 +126,7 @@ typedef struct SpinTradeGroupApp {
     int state;                              // 0x0000
     u8 unk_0004[4];                         // 0x0004
     u32 result;                             // 0x0008
-    SpinTradeArgs *args;                        // 0x000C
+    SpinTradeArgs *args;                    // 0x000C
     SpinTradeGroupMenu *menu;               // 0x0010
     BgConfig *bgConfig;                     // 0x0014
     u8 unk_0018[4];                         // 0x0018
@@ -173,19 +173,19 @@ typedef struct SpinTradeGroupApp {
     s32 saveState;                          // 0x03B0
     u16 blinkAngle;                         // 0x03B4
     u16 unk_3B6;                            // 0x03B6
-    void *avatarPalette;                          // 0x03B8
+    void *avatarPalette;                    // 0x03B8
     u8 unk_03BC[0xF80 - 0x3BC];             // 0x03BC
     u8 unk_F80[0x3AC4];                     // 0x0F80
     int lastMemberCount;                    // 0x4A44
-    u32 joinPending;                           // 0x4A48
+    u32 joinPending;                        // 0x4A48
     u32 unk_4A4C;                           // 0x4A4C
-    u8 leaveRequested;                            // 0x4A50
-    s8 maxEntriesMode;                            // 0x4A51
-    u8 startMemberCount;                            // 0x4A52
+    u8 leaveRequested;                      // 0x4A50
+    s8 maxEntriesMode;                      // 0x4A51
+    u8 startMemberCount;                    // 0x4A52
     u8 unk_4A53;                            // 0x4A53
-    s32 leaveTimeout;                           // 0x4A54
-    u32 leaveConnectedCount;                           // 0x4A58
-    s16 leaveWaitFrames;                           // 0x4A5C
+    s32 leaveTimeout;                       // 0x4A54
+    u32 leaveConnectedCount;                // 0x4A58
+    s16 leaveWaitFrames;                    // 0x4A5C
     u8 unk_4A5E[2];                         // 0x4A5E
     SpinTradeGroupTrainerIds trainerIds[5]; // 0x4A60
 } SpinTradeGroupApp;                        // size 0x4AB0
@@ -205,12 +205,11 @@ extern const BgTemplate gSpinTradeGroupBgTemplate_Sub1;
 extern const GraphicsBanks gSpinTradeGroupGraphicsBanks;
 extern int (*const gSpinTradeGroupStateFuncs[])(SpinTradeGroupApp *app, int state);
 
-// Not declared by the owners' headers
 u32 Wireless_GetConnectedBitmap(void);
 void CommState_SetSpinTradeLinkMode(void);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);
-BOOL Comm_SyncedSave(SaveData *saveData, int a1, s32 *state);
+BOOL Comm_SyncedSave(SaveData *saveData, int unused, s32 *state);
 void SpinTradeLink_RegisterCommands(SpinTradeGroupMenu *menu);
 BOOL SpinTradeLink_SendCommand(SpinTradeGroupMenu *menu, int command, void *data, int size);
 
@@ -270,7 +269,7 @@ void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int value);
 void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int netId);
 void SpinTradeGroup_CycleHighlightColor(u16 *p);
 int SpinTradeGroup_CountProfiles(void);
-BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 a1, u32 color, SpinTradeGroupApp *app);
+BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app);
 void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app);
 int SpinTradeGroup_CountMembers(void);
 u32 SpinTradeGroup_GetMemberMask(void);
@@ -1191,7 +1190,7 @@ int SpinTradeGroup_CountProfiles(void) {
     return count;
 }
 
-BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 a1, u32 color, SpinTradeGroupApp *app) {
+BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app) {
     int i;
     int sel;
     String *str;

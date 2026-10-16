@@ -115,7 +115,6 @@ typedef struct RecordMixingFlash {
     NNSG2dPaletteData *pltt;
 } RecordMixingFlash;
 
-// Also viewed by the comm command handlers in wireless_room.c (Room).
 typedef struct RecordMixingApp {
     BgConfig *bgConfig;                                                      // 0x0000
     u32 unk_0004;                                                            // 0x0004
@@ -190,13 +189,12 @@ typedef struct RecordMixingApp {
     RecordMixingMemberKeys memberKeys[RECORD_MIXING_MAX_MEMBERS];            // 0x4A3C
 } RecordMixingApp;                                                           // size: 0x4A8C
 
-// No public header declares these.
 void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
 void Comm_InitSyncedSave(s32 *arg0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
 void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *manager);
-void RecordMixingLink_RegisterCommands(RecordMixingApp *app); // registers the comm command table (wireless_room.c)
+void RecordMixingLink_RegisterCommands(RecordMixingApp *app);
 
 // Record exchange, in the record data part of this overlay.
 void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
@@ -294,7 +292,6 @@ extern int (*sRecordMixingStateFuncs[])(RecordMixingApp *app, int state);
 
 #define RECORD_MIXING_MAX_GROUPS_KEPT 4
 
-// friend_group.c
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 

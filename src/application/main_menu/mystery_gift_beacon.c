@@ -144,7 +144,6 @@ BOOL MysteryGiftBeacon_StartScan(void) {
     return TRUE;
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_rotateloops off
 #pragma opt_common_subs off
@@ -257,8 +256,6 @@ void MysteryGiftBeacon_ScanCallback(void *arg) {
         }
     }
 }
-
-#pragma force_active reset
 
 BOOL MysteryGiftBeacon_EndScan(void) {
     int result = WM_EndScan(MysteryGiftBeacon_EndScanCallback);
@@ -416,8 +413,6 @@ void MysteryGiftBeacon_StartReceive(MysteryGiftBeaconPacket *packet) {
     }
 }
 
-#pragma force_active on
-
 // Stores one packet; TRUE once the gift is complete
 BOOL MysteryGiftBeacon_ReceivePacket(MysteryGiftBeaconPacket *packet) {
     MysteryGiftBeaconWork *work;
@@ -510,14 +505,10 @@ BOOL MysteryGiftBeacon_DecryptGift(void) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // Size of the memory to pass to MysteryGiftBeacon_Init
 u32 MysteryGiftBeacon_GetWorkSize(void) {
     return 0x16A0;
 }
-
-#pragma force_active on
 
 const u16 *MysteryGiftBeacon_GetTitle(void) {
     if (sMysteryGiftBeacon.work->titleReceived) {
@@ -525,5 +516,3 @@ const u16 *MysteryGiftBeacon_GetTitle(void) {
     }
     return NULL;
 }
-
-#pragma force_active reset

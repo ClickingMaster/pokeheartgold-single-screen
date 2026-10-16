@@ -1,24 +1,20 @@
 #include "global.h"
 
 #include "assert.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "record_mixing_exchange.h"
 #include "save.h"
 #include "save_arrays.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
 
-// Merges the records received from the other members into the save, record type by record type (a separate TU from
-// record_mixing_exchange.c: the overlay's data lies between them).
+// Merges the records received from the other members into the save, record type by record type.
 
 #define RECORD_MIXING_MAX_MEMBERS 5
 
-// Defined in save_block_23.c; not declared in a header.
 void SaveBlock23_ClearArraysAndReset(SaveBlock23 *data);
 void SaveBlock23_Reset(SaveBlock23 *data);
 
 void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0]);
-
-#pragma force_active on
 
 void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0]) {
     RecordMixingMergeArgs args;
@@ -89,5 +85,3 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0])
     SaveBlock23_ClearArraysAndReset(block23);
     SaveBlock23_Reset(block23);
 }
-
-#pragma force_active reset

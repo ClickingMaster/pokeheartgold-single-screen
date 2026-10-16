@@ -215,7 +215,6 @@ int WiFiPlazaPlayer_GetActivity(WiFiPlazaPlayer *player) {
     return v < 14 ? v : 14;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 u8 WiFiPlazaPlayer_GetHistoryId(WiFiPlazaPlayer *player, u32 index) {
@@ -236,7 +235,6 @@ u8 WiFiPlazaPlayer_GetHistoryId(WiFiPlazaPlayer *player, u32 index) {
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 void *WiFiPlazaPlayer_GetHistoryValue(WiFiPlazaPlayer *player, u32 index) {
     int seen, i;
@@ -335,8 +333,6 @@ u16 WiFiPlazaPlayer_GetAvatar(WiFiPlazaPlayer *player) {
     return avatar;
 }
 
-#pragma force_active on
-
 u16 WiFiPlazaPlayer_GetCountry(WiFiPlazaPlayer *player) {
     if (player->country >= 234) {
         return 0;
@@ -354,8 +350,6 @@ u8 WiFiPlazaPlayer_GetRegion(WiFiPlazaPlayer *player) {
     return player->region;
 }
 
-#pragma force_active reset
-
 u8 WiFiPlazaPlayer_GetTapToy(WiFiPlazaPlayer *player) {
     u8 v = player->tapToy;
     if (v == 0xFF) {
@@ -370,8 +364,6 @@ u8 WiFiPlazaPlayer_GetTapToy(WiFiPlazaPlayer *player) {
 BOOL WiFiPlazaPlayer_HasTapToy(WiFiPlazaPlayer *player) {
     return player->tapToy == 0xFF ? FALSE : TRUE;
 }
-
-#pragma force_active on
 
 u16 WiFiPlazaPlayer_GetFavoriteType(WiFiPlazaPlayer *player, u32 index) {
     u16 value;
@@ -388,5 +380,3 @@ u16 WiFiPlazaPlayer_GetFavoriteType(WiFiPlazaPlayer *player, u32 index) {
 void WiFiPlazaPlayer_GetSurvey(WiFiPlazaPlayer *player, WiFiPlazaPlayerSurvey *out) {
     *out = player->survey;
 }
-
-#pragma force_active reset

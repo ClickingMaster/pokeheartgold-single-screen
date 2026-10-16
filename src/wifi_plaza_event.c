@@ -1,10 +1,10 @@
-#include "msgdata/msg/msg_0777.h"
-
 #include "wifi_plaza_event.h"
 
 #include <string.h>
 
 #include "global.h"
+
+#include "msgdata/msg/msg_0777.h"
 
 #include "assert.h"
 #include "heap.h"
@@ -15,10 +15,8 @@
 #include "wifi_plaza_map.h"
 #include "wifi_plaza_room.h"
 
-// sound_playback.c (no header declares it)
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u16 sWiFiPlazaLight1Colors[];
 extern const u16 sWiFiPlazaLightColorSets[][5];
 extern void (*const sWiFiPlazaEventEffectPhaseUpdates[])(WiFiPlazaEventEffect *effect, int arg);
@@ -311,8 +309,6 @@ void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event) {
     NNS_G3dGlbLightColor(GX_LIGHTID_2, 0);
 }
 
-#pragma force_active on
-
 WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
     WiFiPlazaEventEffect *effect = Heap_Alloc(heapID, sizeof(WiFiPlazaEventEffect));
     u32 effectId;
@@ -333,8 +329,6 @@ WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlaz
     }
     return effect;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect) {
     WiFiPlazaEvent_StopLoopSE(effect);
@@ -667,8 +661,6 @@ void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work) {
     Heap_Free(work);
 }
 
-#pragma force_active on
-
 void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     int selected = WiFiPlazaWork_FindGroupPlace(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
     u32 column;
@@ -708,8 +700,6 @@ void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     }
 }
 
-#pragma force_active reset
-
 u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field) {
     u8 *entry;
 
@@ -719,13 +709,10 @@ u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int fiel
     if (field >= 3) {
         GF_AssertFail();
     }
-    // address computed as in the original: (work + index * 3 + field)[offset of states]
     entry = (u8 *)work + index * sizeof(work->states[0]);
     entry += field;
     return entry[offsetof(WiFiPlazaEventMovers, states)];
 }
-
-#pragma force_active on
 
 void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
     int value = WiFiPlazaWork_GetGroupCounter(work->lobby, index);
@@ -804,8 +791,6 @@ void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BO
         }
     }
 }
-
-#pragma force_active reset
 
 // While the own player has a selection, only the own index is heard (on the player channel for the own column).
 void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo) {

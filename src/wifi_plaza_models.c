@@ -38,10 +38,9 @@ void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, u32 alpha);
 void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *mdlSet);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const s32 sWiFiPlazaPropTagShiftX[2];
 extern const WiFiPlazaModelsOffset sWiFiPlazaMoverFrontOffsets[]; // x / z cell offsets in front of a mover,
-extern const WiFiPlazaModelsOffset ov49_02269A7E[]; // the z column labelled separately
+extern const WiFiPlazaModelsOffset ov49_02269A7E[];
 extern const WiFiPlazaMoverSpawn sWiFiPlazaMoverSpawns[9];
 extern const WiFiPlazaModelsSpawn sWiFiPlazaPropSpawns[35];
 
@@ -1312,7 +1311,6 @@ void WiFiPlazaModels_TriggerStageShows(WiFiPlazaModels *models, fx32 animSpeed) 
     }
 }
 
-// Rounds the digit frame `n` to fx32 the way the original float conversion did.
 #define WIFI_PLAZA_SIGN_FRAME(n) ((s32)(((n) << 2) ? (float)((n) << 14) + 0.5f : (float)((n) << 14) - 0.5f))
 
 // Sign of matchmaking session `match`: shows its player count (frames 4 + count while it recruits),

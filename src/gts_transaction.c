@@ -93,8 +93,6 @@ extern const BgTemplate sGtsTransactionBg2Template;
 extern const BgTemplate sGtsTransactionSubBg0Template;
 extern const BgTemplate sGtsTransactionSubBg1Template;
 
-// Defined in save_block_22.c (the GTS save data, GtsArgs.gtsSave, which Save_Gts_Get returns as an int: the deposited
-// Pokemon, whether one is deposited, the dates of the last trades); not declared in a header.
 u16 GtsSave_HasStoredMon(void *gtsSave);
 void GtsSave_SetHasStoredMon(void *gtsSave, u16 value);
 void GtsSave_GetStoredMon(void *gtsSave, void *dest);
@@ -102,7 +100,6 @@ void GtsSave_SetStoredMon(void *gtsSave, void *src, int box);
 void GtsSave_SetDepositDate(void *gtsSave, u32 value);
 void GtsSave_SetTradeDate(void *gtsSave, u32 value);
 u16 GtsSave_GetStoredMonBox(void *gtsSave);
-// Not declared in a public header.
 void WirelessStatusIcon_SetLevel(s32 level);
 void CommState_ShowRestartErrorAndHalt(void);
 void DWC_GetDateTime(RTCDate *date, RTCTime *time);
@@ -502,7 +499,6 @@ int GtsTransaction_WaitReturn(GtsApp *app) {
 
 int GtsTransaction_SendExchange(GtsApp *app) {
     Pokemon_RemoveCapsule(&app->record.mon);
-    // The prototype types the id as a pointer.
     GtsServer_RequestExchange((void *)app->searchResults[app->selectedResult].exchangeId, &app->record, &app->searchResults[7]);
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_EXCHANGE_FINISH, GTS_TRANSACTION_STATE_EXCHANGE_DONE);
     app->state = GTS_TRANSACTION_STATE_WAIT_EXCHANGE;

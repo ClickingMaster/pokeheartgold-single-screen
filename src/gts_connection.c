@@ -20,14 +20,14 @@
 #include "palette.h"
 #include "render_window.h"
 #include "sav_system_info.h"
+#include "save_wii_message.h"
 #include "screen_fade.h"
 #include "string_util.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "save_wii_message.h"
-#include "wireless_status_icon.h"
 #include "wifi_connection.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // Connecting to Nintendo Wi-Fi Connection (screen 0, the first and last screen of the GTS). Entered at the start it
@@ -35,7 +35,6 @@
 // server client, asks info.asp and sends the profile (setProfile.asp), then opens the main menu (screen 1). Entered
 // again from the GTS while connected it disconnects and leaves the app. Wi-Fi errors are shown with their error code,
 // server errors with a GTS message and a disconnection.
-// The text helpers every screen uses follow it.
 
 typedef enum GtsConnectionState {
     GTS_CONNECTION_STATE_ASK_CONNECT,
@@ -65,7 +64,7 @@ typedef enum GtsConnectionState {
     GTS_CONNECTION_STATE_WAIT_CLOSE_ERROR,
 } GtsConnectionState;
 
-// The selector's tables of the letter groups (gts_selector.c): the first letter of each group, {first letter,
+// The selector's tables of the letter groups: the first letter of each group, {first letter,
 // letter count} of each group, and the same table read from its second word.
 typedef struct GtsLetterGroup {
     int first;
@@ -84,7 +83,6 @@ extern const BgTemplate sGtsConnectionSubBg1Template;
 // GTS, GTS TRADE POKEMON, GTS SUMMARY, GTS DEPOSIT POKEMON, GTS SEEK POKEMON.
 extern const u32 sGtsPanelCaptionMsgIds[];
 
-// Network library (OVY_0), not declared in a public header.
 int DWC_CheckInet(void);
 void DWC_InitInetEx(void *connection, int priority, int unused, int sslPriority);
 void DWC_SetAuthServer(int server);
@@ -101,7 +99,6 @@ int DWC_NASLoginProcess(void);
 void DWC_ShutdownGHTTP(void);
 void DWC_ShutdownFriendsMatch(void);
 u64 DWC_CreateFriendKey(void *userData);
-// Not declared in a public header.
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
@@ -148,7 +145,6 @@ void Gts_PrintAlignedFont1(Window *window, String *string, int x, int y, int ali
 void GtsConnection_PrintError(GtsApp *app, int msgId);
 void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
 
-// The last function of the selector (gts_selector.c), linked with screen 0.
 BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
     int count = ov70_02245F5C[group][0];
@@ -242,8 +238,6 @@ int GtsConnection_Exit(GtsApp *app, int state) {
     return 1;
 }
 
-#pragma force_active on
-
 void GtsConnection_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0 = sGtsConnectionBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
@@ -270,16 +264,12 @@ void GtsConnection_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
 }
 
-#pragma force_active reset
-
 void GtsConnection_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
-
-#pragma force_active on
 
 void GtsConnection_LoadGraphics(GtsApp *app) {
     NNSG2dPaletteData *pltt;
@@ -346,8 +336,6 @@ void GtsConnection_LoadGraphics(GtsApp *app) {
     app->paletteAnim.task = SysTask_CreateOnVBlankQueue((SysTaskFunc)GtsConnection_AnimatePaletteTask, &app->paletteAnim, 20);
     NARC_Delete(narc);
 }
-
-#pragma force_active reset
 
 void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim) {
     if (!anim->active) {
@@ -495,7 +483,6 @@ void GtsConnection_StartConnect(GtsApp *app) {
 }
 
 int GtsConnection_WaitConnect(GtsApp *app) {
-    // The original kept these locals in one stack frame struct.
     struct {
         int error;
         int errorType;

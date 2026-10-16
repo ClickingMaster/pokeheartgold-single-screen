@@ -5,7 +5,6 @@
 #include "script_manager.h"
 #include "trainer_card_data.h"
 
-// Declared with the types their call sites were matched against (no header, or a header with other types).
 void FillScreenWithColor(int screen, u16 color);
 int LinkSync_GetPlayerState(int index);
 void CommState_FrameDummy(int, void *);

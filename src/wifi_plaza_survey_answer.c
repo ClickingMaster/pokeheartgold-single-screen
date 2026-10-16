@@ -22,10 +22,6 @@ enum WiFiPlazaSurveyAnswerState {
     WIFI_PLAZA_SURVEY_ANSWER_WAIT_MESSAGE,
 };
 
-// Built without -ipa file (Makefile), so it cannot join wifi_plaza_survey.c.
-
-#pragma force_active on
-
 BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     switch (answer->state) {
     case WIFI_PLAZA_SURVEY_ANSWER_PRINT_INTRO:
@@ -114,5 +110,3 @@ BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMes
     }
     return FALSE;
 }
-
-#pragma force_active reset

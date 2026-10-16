@@ -4,7 +4,7 @@
 #include "math_util.h"
 #include "wifi_plaza_internal.h"
 
-// Receive callbacks (see wifi_plaza_receive.c): the sender id marks its lobby slot in WiFiPlazaWork.tapToyPlayed or joins a
+// Receive callbacks: the sender id marks its lobby slot in WiFiPlazaWork.tapToyPlayed or joins a
 // group of WiFiPlazaWork.groups.
 void WiFiPlaza_RecvTapToyPlayed(int id, void *data, u32 size, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
@@ -138,8 +138,6 @@ u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     return NULL;
 }
 
-#pragma force_active on
-
 // Four words of the bank, each picked by the sum of two neighbouring bytes of code.
 void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words) {
     union {
@@ -163,8 +161,6 @@ void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *wor
     words[2] = WallpaperPasswordBank_GetWordAtIndex(bank, (b + c) % count);
     words[3] = WallpaperPasswordBank_GetWordAtIndex(bank, (c + d) % count);
 }
-
-#pragma force_active reset
 
 void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end) {
     timer->active = 0;

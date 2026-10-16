@@ -47,8 +47,8 @@ typedef struct GlobalTerminalSocket {
     GlobalTerminalNetLogin login; // 0x000, the auth token is stored from 0x06
     BOOL hasToken;                // 0x138
     int state;                    // 0x13C
-    char host[0xC0];              // 0x140, also labelled sGlobalTerminalSocketHost
-    u8 unk_200[0x40];             // 0x200, the block labelled sGlobalTerminalSocketSettings starts here
+    char host[0xC0];              // 0x140
+    u8 unk_200[0x40];             // 0x200
     u16 port;                     // 0x240
     u16 unk_242;                  // 0x242
     int connectTimeout;           // 0x244, seconds, 0 = none
@@ -65,7 +65,7 @@ typedef struct GlobalTerminalSocket {
     int threadPriority;           // 0x270
 } GlobalTerminalSocket;           // size 0x274
 
-// sGlobalTerminalSocket + 0x200, addressed through its own label in some functions
+// The socket settings
 typedef struct GlobalTerminalSocketSettings {
     u8 unk_00[0x40];
     u16 port; // 0x40
@@ -165,7 +165,6 @@ extern char sGlobalTerminalServerHostName[];
 extern u8 ov39_0222AA78[];
 extern u8 sGlobalTerminalSocketCipher[];
 
-// no public header
 void *DWC_Alloc(int category, int size);
 void DWC_Free(int category, void *ptr, int size);
 int gsSocketInetAddr(char *address);
@@ -725,8 +724,6 @@ void GlobalTerminalSocket_Sleep(u32 msec) {
 
 #pragma push
 #pragma force_active off
-// The struct copy keeps its destination pointer in its own register, so the destination is a local that copy
-// propagation must not fold back into the assignment.
 #pragma opt_propagation off
 
 int GlobalTerminalSocket_FetchToken(void) {

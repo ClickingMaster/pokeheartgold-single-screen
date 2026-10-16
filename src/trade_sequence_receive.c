@@ -30,8 +30,7 @@
 
 // Scene 6 of the trade animation (trades and receiving): the ball lands with a flash and the received Pokemon
 // appears with its cry, then "<Pokemon> sent over <Pokemon>." / "Take good care of <Pokemon>!" (trade) or "<Pokemon>
-// was taken out." with a fanfare, and the screen fades out. The ball's bounce task is in
-// trade_sequence_receive_bounce.c.
+// was taken out." with a fanfare, and the screen fades out.
 
 #define TRADE_SEQUENCE_RECEIVE_NUM_STATES 4
 
@@ -52,7 +51,6 @@ extern const BgTemplate sTradeSequenceReceiveBgTemplate_Text;
 extern const BgTemplate sTradeSequenceReceiveBgTemplate_Background;
 extern const GraphicsBanks sTradeSequenceReceiveGraphicsBanks;
 
-// Defined in render_window.c; not declared in its header.
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 
 TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts);
@@ -336,8 +334,6 @@ void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive) {
     PokepicManager_SetPlttBaseAddrAndSize(receive->pokepicManager, (plttKey & 0xFFFF) << 3, ((plttKey & 0xFFFF0000) >> 16) << 3);
 }
 
-#pragma force_active on
-
 Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive) {
     PokepicTemplate template;
     int y;
@@ -348,8 +344,6 @@ Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive) {
     y = GetBoxMonPicHeightEx(boxMon, 2, FALSE) + 80;
     return PokepicManager_CreatePokepic(receive->pokepicManager, &template, 128, y, 0, 0, receive->animScript, NULL);
 }
-
-#pragma force_active reset
 
 void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive) {
     NNSG2dImagePaletteProxy palette;
@@ -379,8 +373,6 @@ void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive) {
     TradeSequence_FreeCellAnim(&receive->cellAnim);
 }
 
-#pragma force_active on
-
 void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int start, int target, int frames) {
     TradeSequenceReceiveBrightness *brightness = Heap_Alloc(HEAP_ID_57, sizeof(*brightness));
     if (brightness) {
@@ -393,8 +385,6 @@ void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int sta
         G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG0, start);
     }
 }
-
-#pragma force_active reset
 
 BOOL TradeSequenceReceive_IsBrightnessDone(TradeSequenceReceive *receive) {
     if (receive->brightnessTask == NULL) {
@@ -426,8 +416,6 @@ void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data) {
     TradeSequenceReceive_StopBrightness(brightness->receive);
 }
 
-#pragma force_active on
-
 void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task) {
     TradeSequenceReceiveBounce *bounce = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceReceiveBounce));
     if (bounce) {
@@ -454,8 +442,6 @@ void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **t
         *task = NULL;
     }
 }
-
-#pragma force_active reset
 
 void TradeSequenceReceive_StopBounce(SysTask *task) {
     TradeSequenceReceiveBounce *bounce;

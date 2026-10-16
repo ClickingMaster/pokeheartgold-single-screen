@@ -12,14 +12,14 @@
 #include "launch_application.h"
 #include "overlay_13_thumb_1.h"
 #include "overlay_44.h"
-#include "wifi_club_app.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
 #include "save_vars_flags.h"
 #include "sys_flags.h"
 #include "task.h"
+#include "wifi_club_app.h"
 
-// Wi-Fi Club (ARM9 static 0x02078834-0x02078DD8): the field task that runs the Wi-Fi Club (overlay 44) and whatever
+// Wi-Fi Club: the field task that runs the Wi-Fi Club (overlay 44) and whatever
 // the player chose there: a link battle (free, level 50 or level 100; single or double), a trade, the Battle Frontier,
 // one of the three minigames (each behind the game entry screen of overlay 44), or the Wi-Fi settings, which reset
 // the system afterwards. The Wi-Fi Club comes back after each of them until the player leaves.
@@ -51,7 +51,7 @@ enum WifiClubGame {
     WIFI_CLUB_GAME_WOBBUFFET_POP,
 };
 
-BOOL LoadOVY13(void); // network_overlay_loader.c
+BOOL LoadOVY13(void);
 
 enum WifiClubTaskState {
     WIFI_CLUB_TASK_INIT,
@@ -104,7 +104,6 @@ void WifiClub_FinishMimeJrTop(PlazaGameArgs *args);
 PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
 void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args);
 
-// asm/wifi_club_data.s
 extern const u8 gWifiClubGameMaxPlayers[]; // player limit of the game entry screen, by game
 extern const OverlayManagerTemplate gOverlayTemplate_SwalotPlop;
 extern const OverlayManagerTemplate gOverlayTemplate_MimeJrTop;

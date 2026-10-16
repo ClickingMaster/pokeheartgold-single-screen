@@ -1,19 +1,19 @@
-#include "msgdata/msg/msg_0776.h"
-#include "msgdata/msg/msg_0777.h"
-
 #include "wifi_plaza_game_entry.h"
 
 #include "global.h"
 
 #include "constants/sndseq.h"
 
+#include "msgdata/msg/msg_0776.h"
+#include "msgdata/msg/msg_0777.h"
+
 #include "comm_state.h"
+#include "communication_core.h"
 #include "communication_player_state.h"
 #include "font.h"
 #include "link_synchronization.h"
 #include "sound_playback.h"
 #include "system.h"
-#include "communication_core.h"
 
 // Communication calls without a public declaration
 void CommPlayerInfo_SetProfile(void *profile);
@@ -22,7 +22,6 @@ void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
 void CommState_SetPlazaLinkMode(void);
 
-// rodata of this overlay (asm/wifi_plaza_map_rodata.s)
 extern const u8 sWiFiPlazaGameStatusHeights[2];
 extern const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate;
 

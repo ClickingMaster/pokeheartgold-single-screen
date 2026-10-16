@@ -26,8 +26,6 @@ GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work) {
     return &work->netClient;
 }
 
-#pragma force_active on
-
 void VsRecorder_InitNet(VsRecorderWork *work);
 
 void VsRecorder_InitNet(VsRecorderWork *work) {
@@ -50,8 +48,6 @@ void VsRecorder_InitNet(VsRecorderWork *work) {
     args.messageArg = work;
     GlobalTerminalNet_Init(VsRecorder_NetClient(work), &args);
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_IsNetIdle(VsRecorderWork *work) {
     if (VsRecorder_NetClient(work)->initialized == 0) {

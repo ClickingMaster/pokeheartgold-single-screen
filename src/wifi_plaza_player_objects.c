@@ -375,8 +375,6 @@ void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
     ModelInstance_Draw(&object->model);
 }
 
-#pragma force_active on
-
 // Follows the player's action (ov42 field 5) and its frame (field 8) and moves the sprite to the player's position.
 void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
     int action;
@@ -401,8 +399,6 @@ void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
         WiFiPlazaPlayerObject_SetGridPosition(object, &gridPos);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerObject_ShowStandingSprite(WiFiPlazaPlayerObject *object) {
     u32 index = Field2DObject_GetParam(object->player, 6);
