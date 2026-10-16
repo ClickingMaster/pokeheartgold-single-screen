@@ -90,7 +90,7 @@
 	.public sBattleVideoYesNoTemplate
 	.public sPartyPanelPositions
 	.public sPanelNudgeSteps
-	.public ov05_0221EA6D
+	.public sPanelNudgeSpriteSteps
 	.public sVsGraphicsModes
 	.public sPartyGraphicsModes
 	.public sVsSequence
@@ -132,7 +132,7 @@ sPartyPanelPositions: ; 0x0221EA60
 sPanelNudgeSteps: ; 0x0221EA6C
 	.byte 0x06
 
-ov05_0221EA6D: ; 0x0221EA6D
+sPanelNudgeSpriteSteps: ; 0x0221EA6D
 	.byte 0x06, 0x00, 0x06
 	.byte 0x00, 0x06, 0x04, 0x0A, 0x00, 0x0A, 0x00, 0x0A
 

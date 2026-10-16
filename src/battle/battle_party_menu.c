@@ -404,89 +404,119 @@ void BattlePartyMenu_Create(BattlePartyContext *context) {
     menu->battlerPosition = BattleSystem_GetBattlerType(context->battleSystem, context->battlerId);
 }
 
+enum {
+    BATTLE_PARTY_STATE_SETUP,
+    BATTLE_PARTY_STATE_PARTY_LIST,
+    BATTLE_PARTY_STATE_MON_MENU,
+    BATTLE_PARTY_STATE_SUMMARY,
+    BATTLE_PARTY_STATE_CHECK_MOVES,
+    BATTLE_PARTY_STATE_MOVE_DETAIL,
+    BATTLE_PARTY_STATE_SHOW_PARTY_LIST,
+    BATTLE_PARTY_STATE_SHOW_MON_MENU,
+    BATTLE_PARTY_STATE_SHOW_SUMMARY,
+    BATTLE_PARTY_STATE_SHOW_CHECK_MOVES,
+    BATTLE_PARTY_STATE_SHOW_MOVE_DETAIL,
+    BATTLE_PARTY_STATE_SHOW_LEARN_MOVE,
+    BATTLE_PARTY_STATE_SHOW_FORGET_MOVE,
+    BATTLE_PARTY_STATE_SHOW_RESTORE_PP,
+    BATTLE_PARTY_STATE_REFRESH_MON_PAGE,
+    BATTLE_PARTY_STATE_SHOW_PENDING_MESSAGE,
+    BATTLE_PARTY_STATE_CLOSE_MESSAGE,
+    BATTLE_PARTY_STATE_WAIT_MESSAGE,
+    BATTLE_PARTY_STATE_WAIT_MESSAGE_INPUT,
+    BATTLE_PARTY_STATE_LEARN_MOVE,
+    BATTLE_PARTY_STATE_FORGET_MOVE,
+    BATTLE_PARTY_STATE_RESTORE_PP,
+    BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM,
+    BATTLE_PARTY_STATE_ITEM_EFFECT,
+    BATTLE_PARTY_STATE_RESTORE_ALL_PP,
+    BATTLE_PARTY_STATE_FADE_OUT,
+    BATTLE_PARTY_STATE_EXIT,
+};
+
 void BattlePartyMenu_Task(SysTask *task, void *data) {
     BattlePartyMenu *menu = data;
 
     switch (menu->state) {
-    case 0:
+    case BATTLE_PARTY_STATE_SETUP:
         menu->state = BattlePartyMenu_Setup(menu);
         break;
-    case 1:
+    case BATTLE_PARTY_STATE_PARTY_LIST:
         menu->state = BattlePartyMenu_HandlePartyListInput(menu);
         break;
-    case 2:
+    case BATTLE_PARTY_STATE_MON_MENU:
         menu->state = BattlePartyMenu_HandleMonMenuInput(menu);
         break;
-    case 3:
+    case BATTLE_PARTY_STATE_SUMMARY:
         menu->state = BattlePartyMenu_HandleSummaryInput(menu);
         break;
-    case 4:
+    case BATTLE_PARTY_STATE_CHECK_MOVES:
         menu->state = BattlePartyMenu_HandleCheckMovesInput(menu);
         break;
-    case 5:
+    case BATTLE_PARTY_STATE_MOVE_DETAIL:
         menu->state = BattlePartyMenu_HandleMoveDetailInput(menu);
         break;
-    case 6:
+    case BATTLE_PARTY_STATE_SHOW_PARTY_LIST:
         menu->state = BattlePartyMenu_ShowPartyListPage(menu);
         break;
-    case 7:
+    case BATTLE_PARTY_STATE_SHOW_MON_MENU:
         menu->state = BattlePartyMenu_ShowMonMenuPage(menu);
         break;
-    case 8:
+    case BATTLE_PARTY_STATE_SHOW_SUMMARY:
         menu->state = BattlePartyMenu_ShowSummaryPage(menu);
         break;
-    case 9:
+    case BATTLE_PARTY_STATE_SHOW_CHECK_MOVES:
         menu->state = BattlePartyMenu_ShowCheckMovesPage(menu);
         break;
-    case 10:
+    case BATTLE_PARTY_STATE_SHOW_MOVE_DETAIL:
         menu->state = BattlePartyMenu_ShowMoveDetailPage(menu);
         break;
-    case 11:
+    case BATTLE_PARTY_STATE_SHOW_LEARN_MOVE:
         menu->state = BattlePartyMenu_ShowLearnMovePage(menu);
         break;
-    case 12:
+    case BATTLE_PARTY_STATE_SHOW_FORGET_MOVE:
         menu->state = BattlePartyMenu_ShowForgetMovePage(menu);
         break;
-    case 13:
+    case BATTLE_PARTY_STATE_SHOW_RESTORE_PP:
         menu->state = BattlePartyMenu_ShowRestorePPPage(menu);
         break;
-    case 14:
+    case BATTLE_PARTY_STATE_REFRESH_MON_PAGE:
         menu->state = BattlePartyMenu_RefreshMonPage(menu);
         break;
-    case 15:
+    case BATTLE_PARTY_STATE_SHOW_PENDING_MESSAGE:
         menu->state = BattlePartyMenu_ShowPendingMessage(menu);
         break;
-    case 16:
+    case BATTLE_PARTY_STATE_CLOSE_MESSAGE:
         menu->state = BattlePartyMenu_CloseMessage(menu);
         break;
-    case 17:
+    case BATTLE_PARTY_STATE_WAIT_MESSAGE:
         menu->state = BattlePartyMenu_WaitMessage(menu);
         break;
-    case 18:
+    case BATTLE_PARTY_STATE_WAIT_MESSAGE_INPUT:
         menu->state = BattlePartyMenu_WaitMessageInput(menu);
         break;
-    case 19:
+    case BATTLE_PARTY_STATE_LEARN_MOVE:
         menu->state = BattlePartyMenu_HandleLearnMoveInput(menu);
         break;
-    case 20:
+    case BATTLE_PARTY_STATE_FORGET_MOVE:
         menu->state = BattlePartyMenu_HandleForgetMoveInput(menu);
         break;
-    case 21:
+    case BATTLE_PARTY_STATE_RESTORE_PP:
         menu->state = BattlePartyMenu_HandleRestorePPInput(menu);
         break;
-    case 22:
+    case BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM:
         menu->state = BattlePartyMenu_WaitButtonAnim(menu);
         break;
-    case 23:
+    case BATTLE_PARTY_STATE_ITEM_EFFECT:
         menu->state = BattlePartyMenu_AnimateItemEffect(menu);
         break;
-    case 24:
+    case BATTLE_PARTY_STATE_RESTORE_ALL_PP:
         menu->state = BattlePartyMenu_AnimateRestoreAllPP(menu);
         break;
-    case 25:
+    case BATTLE_PARTY_STATE_FADE_OUT:
         menu->state = BattlePartyMenu_StartFadeOut(menu);
         break;
-    case 26:
+    case BATTLE_PARTY_STATE_EXIT:
         if (BattlePartyMenu_Exit(task, menu) == 1) {
             return;
         }
@@ -503,10 +533,10 @@ int BattlePartyMenu_Setup(BattlePartyMenu *menu) {
     G2S_BlendNone();
     if (menu->context->mode == 3) {
         menu->page = 6;
-        nextState = 19;
+        nextState = BATTLE_PARTY_STATE_LEARN_MOVE;
     } else {
         menu->page = 0;
-        nextState = 1;
+        nextState = BATTLE_PARTY_STATE_PARTY_LIST;
     }
     menu->cursor = BattleDpadCursor_New(menu->context->heapID);
     BattlePartyMenu_LoadMonData(menu);
@@ -535,14 +565,14 @@ int BattlePartyMenu_Setup(BattlePartyMenu *menu) {
 
 int BattlePartyMenu_HandlePartyListInput(BattlePartyMenu *menu) {
     if (PaletteData_GetSelectedBuffersBitmask(menu->paletteData) != 0) {
-        return 1;
+        return BATTLE_PARTY_STATE_PARTY_LIST;
     }
     if (BattlePartyMenu_HandlePartyListSelection(menu) == 1) {
         if (menu->context->selectedMon == 6) {
             if (menu->context->mode != 1) {
                 PlaySE(SEQ_SE_DP_DECIDE);
                 BattlePartyMenu_StartButtonAnim(menu, 6);
-                return 25;
+                return BATTLE_PARTY_STATE_FADE_OUT;
             }
         } else {
             PlaySE(SEQ_SE_DP_DECIDE);
@@ -550,11 +580,11 @@ int BattlePartyMenu_HandlePartyListInput(BattlePartyMenu *menu) {
             if (menu->context->mode == 2) {
                 return BattlePartyMenu_TryUseItemOnMon(menu);
             }
-            menu->nextState = 7;
-            return 22;
+            menu->nextState = BATTLE_PARTY_STATE_SHOW_MON_MENU;
+            return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
         }
     }
-    return 1;
+    return BATTLE_PARTY_STATE_PARTY_LIST;
 }
 
 int BattlePartyMenu_TryUseItemOnMon(BattlePartyMenu *menu) {
@@ -564,33 +594,33 @@ int BattlePartyMenu_TryUseItemOnMon(BattlePartyMenu *menu) {
         BattlePartyMenu_BufferEmbargoMessage(menu);
         BattlePartyMenu_ShowMessage(menu);
         menu->context->selectedMon = 6;
-        menu->nextState = 25;
-        return 17;
+        menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+        return BATTLE_PARTY_STATE_WAIT_MESSAGE;
     }
     if (GetItemAttr(context->item, ITEMATTR_PP_RESTORE, context->heapID) && !GetItemAttr(context->item, ITEMATTR_PP_RESTORE_ALL, context->heapID) && !menu->mons[context->selectedMon].isEgg) {
-        menu->nextState = 13;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_RESTORE_PP;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
     if (BattleSystem_RecoverStatus(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon], 0, context->item) == TRUE) {
         if (GetItemAttr(context->item, ITEMATTR_PP_RESTORE_ALL, context->heapID)) {
-            menu->nextState = 13;
+            menu->nextState = BATTLE_PARTY_STATE_SHOW_RESTORE_PP;
         } else if (BattlePartyMenu_GetSlotType(menu, context->selectedMon) == 1 && !GetItemAttr(context->item, ITEMATTR_REVIVE, context->heapID)) {
             BattlePartyMenu_ConsumeItem(context->battleSystem, context->item, context->pocket, context->heapID);
             menu->mons[context->selectedMon].mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon]);
             context->hpRestored = GetMonData(menu->mons[context->selectedMon].mon, MON_DATA_HP, NULL);
             context->hpRestored -= menu->mons[context->selectedMon].hp;
-            menu->nextState = 25;
+            menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
         } else {
-            menu->nextState = 23;
+            menu->nextState = BATTLE_PARTY_STATE_ITEM_EFFECT;
         }
         menu->effectState = 0;
-        return 22;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
     ReadMsgDataIntoString(menu->msgData, msg_0006_00081, menu->string);
     BattlePartyMenu_ShowMessage(menu);
     menu->context->selectedMon = 6;
-    menu->nextState = 25;
-    return 17;
+    menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+    return BATTLE_PARTY_STATE_WAIT_MESSAGE;
 }
 
 int BattlePartyMenu_HandleMonMenuInput(BattlePartyMenu *menu) {
@@ -599,33 +629,33 @@ int BattlePartyMenu_HandleMonMenuInput(BattlePartyMenu *menu) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 7);
         if (BattlePartyMenu_CanSwitchToSelectedMon(menu) == 1) {
-            return 25;
+            return BATTLE_PARTY_STATE_FADE_OUT;
         }
-        menu->nextState = 15;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_PENDING_MESSAGE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 1:
         if (BattlePartyMenu_IsSelectedMonEgg(menu) == 1) {
             break;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 8);
-        menu->nextState = 8;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_SUMMARY;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 2:
         if (BattlePartyMenu_IsSelectedMonEgg(menu) == 1) {
             break;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 10);
-        menu->nextState = 9;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_CHECK_MOVES;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 3:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
-        menu->nextState = 6;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_PARTY_LIST;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 2;
+    return BATTLE_PARTY_STATE_MON_MENU;
 }
 
 int BattlePartyMenu_HandleSummaryInput(BattlePartyMenu *menu) {
@@ -640,8 +670,8 @@ int BattlePartyMenu_HandleSummaryInput(BattlePartyMenu *menu) {
         menu->context->selectedMon = slot;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 12);
-        menu->nextState = 14;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_REFRESH_MON_PAGE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 1:
         slot = BattlePartyMenu_FindNextMon(menu, menu->context->selectedMon, 1);
         if (slot == 0xFF) {
@@ -650,21 +680,21 @@ int BattlePartyMenu_HandleSummaryInput(BattlePartyMenu *menu) {
         menu->context->selectedMon = slot;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 13);
-        menu->nextState = 14;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_REFRESH_MON_PAGE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 2:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 11);
-        menu->nextState = 9;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_CHECK_MOVES;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 3:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
         menu->monMenuPosition = 1;
-        menu->nextState = 7;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_MON_MENU;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 3;
+    return BATTLE_PARTY_STATE_SUMMARY;
 }
 
 int BattlePartyMenu_HandleCheckMovesInput(BattlePartyMenu *menu) {
@@ -682,8 +712,8 @@ int BattlePartyMenu_HandleCheckMovesInput(BattlePartyMenu *menu) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, (u8)(input + 14));
         menu->context->selectedMove = input;
-        menu->nextState = 10;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_MOVE_DETAIL;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 4:
         slot = BattlePartyMenu_FindNextMon(menu, menu->context->selectedMon, -1);
         if (slot == 0xFF) {
@@ -692,8 +722,8 @@ int BattlePartyMenu_HandleCheckMovesInput(BattlePartyMenu *menu) {
         menu->context->selectedMon = slot;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 12);
-        menu->nextState = 14;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_REFRESH_MON_PAGE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 5:
         slot = BattlePartyMenu_FindNextMon(menu, menu->context->selectedMon, 1);
         if (slot == 0xFF) {
@@ -702,21 +732,21 @@ int BattlePartyMenu_HandleCheckMovesInput(BattlePartyMenu *menu) {
         menu->context->selectedMon = slot;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 13);
-        menu->nextState = 14;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_REFRESH_MON_PAGE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 6:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 9);
-        menu->nextState = 8;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_SUMMARY;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 7:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
         menu->monMenuPosition = 2;
-        menu->nextState = 7;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_MON_MENU;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 4;
+    return BATTLE_PARTY_STATE_CHECK_MOVES;
 }
 
 int BattlePartyMenu_HandleMoveDetailInput(BattlePartyMenu *menu) {
@@ -734,14 +764,14 @@ int BattlePartyMenu_HandleMoveDetailInput(BattlePartyMenu *menu) {
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         menu->context->selectedMove = input;
-        return 10;
+        return BATTLE_PARTY_STATE_SHOW_MOVE_DETAIL;
     case 4:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
-        menu->nextState = 9;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_CHECK_MOVES;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 5;
+    return BATTLE_PARTY_STATE_MOVE_DETAIL;
 }
 
 #pragma force_active reset
@@ -767,8 +797,8 @@ int BattlePartyMenu_HandleLearnMoveInput(BattlePartyMenu *menu) {
         menu->learnMovePosition = input;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, (u8)(input + 23));
-        menu->nextState = 12;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_FORGET_MOVE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 5:
         if (menu->canToggleView == 0) {
             break;
@@ -777,16 +807,16 @@ int BattlePartyMenu_HandleLearnMoveInput(BattlePartyMenu *menu) {
         menu->learnMovePosition = input;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 18);
-        menu->nextState = 11;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_LEARN_MOVE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 6:
         menu->context->selectedMove = 4;
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
-        menu->nextState = 25;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 19;
+    return BATTLE_PARTY_STATE_LEARN_MOVE;
 }
 
 int BattlePartyMenu_HandleForgetMoveInput(BattlePartyMenu *menu) {
@@ -815,11 +845,11 @@ int BattlePartyMenu_HandleForgetMoveInput(BattlePartyMenu *menu) {
             } else {
                 BattlePartyMenu_ClearContestMoveInfo(menu);
             }
-            menu->nextState = 20;
+            menu->nextState = BATTLE_PARTY_STATE_FORGET_MOVE;
         } else {
-            menu->nextState = 25;
+            menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
         }
-        return 22;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 1:
         if (menu->canToggleView == 0) {
             break;
@@ -828,16 +858,16 @@ int BattlePartyMenu_HandleForgetMoveInput(BattlePartyMenu *menu) {
         BattlePartyMenu_StartButtonAnim(menu, 18);
         menu->viewMode ^= 1;
         menu->forgetMovePosition = input;
-        menu->nextState = 12;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_FORGET_MOVE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     case 2:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
         menu->forgetMovePosition = 0;
-        menu->nextState = 11;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_LEARN_MOVE;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 20;
+    return BATTLE_PARTY_STATE_FORGET_MOVE;
 }
 
 int BattlePartyMenu_HandleRestorePPInput(BattlePartyMenu *menu) {
@@ -865,48 +895,48 @@ int BattlePartyMenu_HandleRestorePPInput(BattlePartyMenu *menu) {
         BattlePartyMenu_StartButtonAnim(menu, (u8)(input + 19));
         if (BattleSystem_RecoverStatus(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon], input, context->item) == TRUE) {
             menu->effectState = 0;
-            menu->nextState = 23;
-            return 22;
+            menu->nextState = BATTLE_PARTY_STATE_ITEM_EFFECT;
+            return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
         }
         ReadMsgDataIntoString(menu->msgData, msg_0006_00081, menu->string);
         BattlePartyMenu_ShowMessage(menu);
         menu->context->selectedMon = 6;
-        menu->nextState = 25;
-        return 17;
+        menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+        return BATTLE_PARTY_STATE_WAIT_MESSAGE;
     case 4:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattlePartyMenu_StartButtonAnim(menu, 6);
-        menu->nextState = 6;
-        return 22;
+        menu->nextState = BATTLE_PARTY_STATE_SHOW_PARTY_LIST;
+        return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
     }
-    return 21;
+    return BATTLE_PARTY_STATE_RESTORE_PP;
 }
 
 #pragma force_active on
 
 int BattlePartyMenu_ShowPartyListPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 0);
-    return 1;
+    return BATTLE_PARTY_STATE_PARTY_LIST;
 }
 
 int BattlePartyMenu_ShowMonMenuPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 1);
-    return 2;
+    return BATTLE_PARTY_STATE_MON_MENU;
 }
 
 int BattlePartyMenu_ShowSummaryPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 2);
-    return 3;
+    return BATTLE_PARTY_STATE_SUMMARY;
 }
 
 int BattlePartyMenu_ShowCheckMovesPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 3);
-    return 4;
+    return BATTLE_PARTY_STATE_CHECK_MOVES;
 }
 
 int BattlePartyMenu_ShowMoveDetailPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 4);
-    return 5;
+    return BATTLE_PARTY_STATE_MOVE_DETAIL;
 }
 
 int BattlePartyMenu_ShowLearnMovePage(BattlePartyMenu *menu) {
@@ -915,7 +945,7 @@ int BattlePartyMenu_ShowLearnMovePage(BattlePartyMenu *menu) {
     } else {
         BattlePartyMenu_ChangePage(menu, 8);
     }
-    return 19;
+    return BATTLE_PARTY_STATE_LEARN_MOVE;
 }
 
 int BattlePartyMenu_ShowForgetMovePage(BattlePartyMenu *menu) {
@@ -925,15 +955,15 @@ int BattlePartyMenu_ShowForgetMovePage(BattlePartyMenu *menu) {
     } else {
         BattlePartyMenu_ChangePage(menu, 9);
     }
-    return 20;
+    return BATTLE_PARTY_STATE_FORGET_MOVE;
 }
 
 int BattlePartyMenu_ShowRestorePPPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 5);
     if (GetItemAttr(menu->context->item, ITEMATTR_PP_RESTORE_ALL, menu->context->heapID) != 0) {
-        return 24;
+        return BATTLE_PARTY_STATE_RESTORE_ALL_PP;
     }
-    return 21;
+    return BATTLE_PARTY_STATE_RESTORE_PP;
 }
 
 int BattlePartyMenu_RefreshMonPage(BattlePartyMenu *menu) {
@@ -942,53 +972,61 @@ int BattlePartyMenu_RefreshMonPage(BattlePartyMenu *menu) {
     BattlePartyMenu_DrawPageButtons(menu, menu->page);
     BattlePartyMenu_DrawExpBar(menu, menu->page);
     if (menu->page == 2) {
-        return 3;
+        return BATTLE_PARTY_STATE_SUMMARY;
     }
-    return 4;
+    return BATTLE_PARTY_STATE_CHECK_MOVES;
 }
 
 int BattlePartyMenu_ShowPendingMessage(BattlePartyMenu *menu) {
     BattlePartyMenu_ShowMessage(menu);
-    menu->nextState = 16;
-    return 17;
+    menu->nextState = BATTLE_PARTY_STATE_CLOSE_MESSAGE;
+    return BATTLE_PARTY_STATE_WAIT_MESSAGE;
 }
 
 int BattlePartyMenu_CloseMessage(BattlePartyMenu *menu) {
     ClearFrameAndWindow2(&menu->windows[1], FALSE);
-    return 2;
+    return BATTLE_PARTY_STATE_MON_MENU;
 }
 
 int BattlePartyMenu_WaitMessage(const BattlePartyMenu *menu) {
     if (TextPrinterCheckActive(menu->textPrinterId) == 0) {
-        return 18;
+        return BATTLE_PARTY_STATE_WAIT_MESSAGE_INPUT;
     }
-    return 17;
+    return BATTLE_PARTY_STATE_WAIT_MESSAGE;
 }
 
 int BattlePartyMenu_WaitMessageInput(const BattlePartyMenu *menu) {
     if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == 1) {
         return menu->nextState;
     }
-    return 18;
+    return BATTLE_PARTY_STATE_WAIT_MESSAGE_INPUT;
 }
 
 int BattlePartyMenu_WaitButtonAnim(const BattlePartyMenu *menu) {
     if (menu->buttonAnimActive == 0) {
         return menu->nextState;
     }
-    return 22;
+    return BATTLE_PARTY_STATE_WAIT_BUTTON_ANIM;
 }
+
+enum {
+    ITEM_EFFECT_STATE_START,
+    ITEM_EFFECT_STATE_RESTORE_HP,
+    ITEM_EFFECT_STATE_RESTORE_PP,
+    ITEM_EFFECT_STATE_FINISH,
+    ITEM_EFFECT_STATE_START_HP,
+};
 
 int BattlePartyMenu_AnimateItemEffect(BattlePartyMenu *menu) {
     BattlePartyContext *context = menu->context;
 
     switch (menu->effectState) {
-    case 0:
+    case ITEM_EFFECT_STATE_START:
         menu->mons[context->selectedMon].mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon]);
         BattlePartyMenu_BufferItemResultMessage(menu);
         if (menu->page == 5) {
             menu->ppTargets[0] = GetMonData(menu->mons[context->selectedMon].mon, MON_DATA_MOVE1_PP + context->selectedMove, NULL);
-            menu->effectState = 2;
+            menu->effectState = ITEM_EFFECT_STATE_RESTORE_PP;
         } else {
             int status = Pokemon_GetStatusIconId(menu->mons[context->selectedMon].mon);
             menu->mons[context->selectedMon].status = status;
@@ -997,42 +1035,48 @@ int BattlePartyMenu_AnimateItemEffect(BattlePartyMenu *menu) {
                 BattlePartyMenu_PrintPartyMonLevel(menu, context->selectedMon);
             }
             menu->hpTarget = GetMonData(menu->mons[context->selectedMon].mon, MON_DATA_HP, NULL);
-            menu->effectState = 4;
+            menu->effectState = ITEM_EFFECT_STATE_START_HP;
         }
         PlaySE(SEQ_SE_DP_KAIFUKU);
         break;
-    case 1:
+    case ITEM_EFFECT_STATE_RESTORE_HP:
         if (menu->hpTarget != menu->mons[context->selectedMon].hp) {
             menu->mons[context->selectedMon].hp++;
             BattlePartyMenu_PrintMonHPAndBar(menu, context->selectedMon);
         } else {
-            menu->effectState = 3;
+            menu->effectState = ITEM_EFFECT_STATE_FINISH;
         }
         break;
-    case 2:
+    case ITEM_EFFECT_STATE_RESTORE_PP:
         if (menu->ppTargets[0] != menu->mons[context->selectedMon].moves[context->selectedMove].pp) {
             menu->mons[context->selectedMon].moves[context->selectedMove].pp++;
             BattlePartyMenu_UpdateMovePP(menu, (u16)(context->selectedMove + 1), context->selectedMove);
         } else {
-            menu->effectState = 3;
+            menu->effectState = ITEM_EFFECT_STATE_FINISH;
         }
         break;
-    case 3:
+    case ITEM_EFFECT_STATE_FINISH:
         BattlePartyMenu_ConsumeItem(context->battleSystem, context->item, context->pocket, context->heapID);
         BattlePartyMenu_ShowMessage(menu);
-        menu->nextState = 25;
-        return 17;
-    case 4:
+        menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+        return BATTLE_PARTY_STATE_WAIT_MESSAGE;
+    case ITEM_EFFECT_STATE_START_HP:
         if (menu->hpTarget != menu->mons[context->selectedMon].hp) {
             menu->mons[context->selectedMon].hp++;
             BattlePartyMenu_PrintMonHPAndBar(menu, context->selectedMon);
             BattlePartyMenu_RedrawSelectedMonButton(menu);
         }
-        menu->effectState = 1;
+        menu->effectState = ITEM_EFFECT_STATE_RESTORE_HP;
         break;
     }
-    return 23;
+    return BATTLE_PARTY_STATE_ITEM_EFFECT;
 }
+
+enum {
+    RESTORE_ALL_PP_STATE_START,
+    RESTORE_ALL_PP_STATE_RESTORE,
+    RESTORE_ALL_PP_STATE_FINISH,
+};
 
 int BattlePartyMenu_AnimateRestoreAllPP(BattlePartyMenu *menu) {
     BattlePartyContext *context = menu->context;
@@ -1040,7 +1084,7 @@ int BattlePartyMenu_AnimateRestoreAllPP(BattlePartyMenu *menu) {
     u32 count;
 
     switch (menu->effectState) {
-    case 0:
+    case RESTORE_ALL_PP_STATE_START:
         menu->mons[context->selectedMon].mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon]);
         for (i = 0; i < 4; i++) {
             if (menu->mons[context->selectedMon].moves[i].move != MOVE_NONE) {
@@ -1049,9 +1093,9 @@ int BattlePartyMenu_AnimateRestoreAllPP(BattlePartyMenu *menu) {
         }
         BattlePartyMenu_BufferItemResultMessage(menu);
         PlaySE(SEQ_SE_DP_KAIFUKU);
-        menu->effectState = 1;
+        menu->effectState = RESTORE_ALL_PP_STATE_RESTORE;
         break;
-    case 1:
+    case RESTORE_ALL_PP_STATE_RESTORE:
         count = 0;
         for (i = 0; i < 4; i++) {
             if (menu->mons[context->selectedMon].moves[i].move == MOVE_NONE) {
@@ -1064,21 +1108,21 @@ int BattlePartyMenu_AnimateRestoreAllPP(BattlePartyMenu *menu) {
             }
         }
         if (count == 4) {
-            menu->effectState = 2;
+            menu->effectState = RESTORE_ALL_PP_STATE_FINISH;
         }
         break;
-    case 2:
+    case RESTORE_ALL_PP_STATE_FINISH:
         BattlePartyMenu_ConsumeItem(context->battleSystem, context->item, context->pocket, context->heapID);
         BattlePartyMenu_ShowMessage(menu);
-        menu->nextState = 25;
-        return 17;
+        menu->nextState = BATTLE_PARTY_STATE_FADE_OUT;
+        return BATTLE_PARTY_STATE_WAIT_MESSAGE;
     }
-    return 24;
+    return BATTLE_PARTY_STATE_RESTORE_ALL_PP;
 }
 
 int BattlePartyMenu_StartFadeOut(BattlePartyMenu *menu) {
     PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
-    return 26;
+    return BATTLE_PARTY_STATE_EXIT;
 }
 
 int BattlePartyMenu_Exit(SysTask *task, BattlePartyMenu *menu) {
@@ -3562,24 +3606,30 @@ void BattlePartyMenu_StartButtonAnim(BattlePartyMenu *menu, u32 button) {
     menu->buttonAnimActive = TRUE;
 }
 
+enum {
+    BUTTON_ANIM_STATE_PRESS,
+    BUTTON_ANIM_STATE_HOLD,
+    BUTTON_ANIM_STATE_RELEASE,
+};
+
 void BattlePartyMenu_UpdateButtonAnim(BattlePartyMenu *menu) {
     if (menu->buttonAnimActive) {
         switch (menu->buttonAnimState) {
-        case 0:
+        case BUTTON_ANIM_STATE_PRESS:
             BattlePartyMenu_DrawButton(menu, menu->buttonAnimButton, 1, menu->buttonAnimPalette);
             BattlePartyMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 1);
             BattlePartyMenu_OffsetButtonSprites(menu, menu->buttonAnimButton, 1);
             menu->buttonAnimTimer = 0;
-            menu->buttonAnimState = 1;
+            menu->buttonAnimState = BUTTON_ANIM_STATE_HOLD;
             break;
-        case 1:
+        case BUTTON_ANIM_STATE_HOLD:
             BattlePartyMenu_DrawButton(menu, menu->buttonAnimButton, 2, menu->buttonAnimPalette);
             BattlePartyMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 2);
             BattlePartyMenu_OffsetButtonSprites(menu, menu->buttonAnimButton, 2);
             menu->buttonAnimTimer = 0;
-            menu->buttonAnimState = 2;
+            menu->buttonAnimState = BUTTON_ANIM_STATE_RELEASE;
             break;
-        case 2:
+        case BUTTON_ANIM_STATE_RELEASE:
             BattlePartyMenu_DrawButton(menu, menu->buttonAnimButton, 0, menu->buttonAnimPalette);
             BattlePartyMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 0);
             BattlePartyMenu_OffsetButtonSprites(menu, menu->buttonAnimButton, 0);

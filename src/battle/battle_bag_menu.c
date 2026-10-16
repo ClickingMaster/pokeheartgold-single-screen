@@ -234,54 +234,72 @@ void BattleBagMenu_Create(BattleBagContext *context) {
     }
 }
 
+enum {
+    BATTLE_BAG_STATE_SETUP,
+    BATTLE_BAG_STATE_POCKET_MENU,
+    BATTLE_BAG_STATE_ITEM_LIST,
+    BATTLE_BAG_STATE_USE_ITEM,
+    BATTLE_BAG_STATE_SHOW_POCKET_MENU,
+    BATTLE_BAG_STATE_SHOW_ITEM_LIST,
+    BATTLE_BAG_STATE_SHOW_USE_ITEM,
+    BATTLE_BAG_STATE_CHANGE_ITEM_PAGE,
+    BATTLE_BAG_STATE_CLOSE_MESSAGE,
+    BATTLE_BAG_STATE_WAIT_MESSAGE,
+    BATTLE_BAG_STATE_WAIT_MESSAGE_INPUT,
+    BATTLE_BAG_STATE_WAIT_BUTTON_ANIM,
+    BATTLE_BAG_STATE_TUTORIAL,
+    BATTLE_BAG_STATE_FADE_OUT,
+    BATTLE_BAG_STATE_EXIT,
+};
+
 void BattleBagMenu_Task(SysTask *task, void *data) {
     BattleBagMenu *menu = data;
     int state = menu->state;
 
     switch (state) {
-    case 0:
+    case BATTLE_BAG_STATE_SETUP:
         menu->state = BattleBagMenu_Setup(menu);
         break;
-    case 1:
+    case BATTLE_BAG_STATE_POCKET_MENU:
         menu->state = BattleBagMenu_HandlePocketMenuInput(menu);
         break;
-    case 2:
+    case BATTLE_BAG_STATE_ITEM_LIST:
         menu->state = BattleBagMenu_HandleItemListInput(menu);
         break;
-    case 3:
+    case BATTLE_BAG_STATE_USE_ITEM:
         menu->state = BattleBagMenu_HandleUseItemInput(menu);
         break;
-    case 4:
+    case BATTLE_BAG_STATE_SHOW_POCKET_MENU:
         menu->state = BattleBagMenu_ShowPocketMenuPage(menu);
         break;
-    case 5:
+    case BATTLE_BAG_STATE_SHOW_ITEM_LIST:
         menu->state = BattleBagMenu_ShowItemListPage(menu);
         break;
-    case 6:
+    case BATTLE_BAG_STATE_SHOW_USE_ITEM:
         menu->state = BattleBagMenu_ShowUseItemPage(menu);
         break;
-    case 7:
+    case BATTLE_BAG_STATE_CHANGE_ITEM_PAGE:
         menu->state = BattleBagMenu_ChangeItemPage(menu);
         break;
-    case 8:
+    case BATTLE_BAG_STATE_CLOSE_MESSAGE:
         menu->state = BattleBagMenu_CloseMessage(menu);
         break;
-    case 9:
+    case BATTLE_BAG_STATE_WAIT_MESSAGE:
         menu->state = BattleBagMenu_WaitMessage(menu);
         break;
-    case 10:
+    case BATTLE_BAG_STATE_WAIT_MESSAGE_INPUT:
         menu->state = BattleBagMenu_WaitMessageInput(menu);
         break;
-    case 11:
+    case BATTLE_BAG_STATE_WAIT_BUTTON_ANIM:
         menu->state = BattleBagMenu_WaitButtonAnim(menu);
         break;
-    case 12:
+    case BATTLE_BAG_STATE_TUTORIAL:
         menu->state = BattleBagMenu_RunTutorial(menu);
         break;
-    case 13:
+    case BATTLE_BAG_STATE_FADE_OUT:
         menu->state = BattleBagMenu_StartFadeOut(menu);
         break;
-    case 14:
+    case BATTLE_BAG_STATE_EXIT:
         if (BattleBagMenu_Exit(task, menu) == 1) {
             return;
         }
@@ -312,9 +330,9 @@ int BattleBagMenu_Setup(BattleBagMenu *menu) {
     BattleBagMenu_UpdateTutorialFinger(menu, menu->page);
     PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
     if (menu->context->isTutorial == 1) {
-        return 12;
+        return BATTLE_BAG_STATE_TUTORIAL;
     }
-    return 1;
+    return BATTLE_BAG_STATE_POCKET_MENU;
 }
 
 int BattleBagMenu_HandlePocketMenuInput(BattleBagMenu *menu) {
@@ -322,7 +340,7 @@ int BattleBagMenu_HandlePocketMenuInput(BattleBagMenu *menu) {
     u8 pocket;
 
     if (PaletteData_GetSelectedBuffersBitmask(menu->paletteData)) {
-        return 1;
+        return BATTLE_BAG_STATE_POCKET_MENU;
     }
     input = BattleBagMenu_CheckTouchHitbox(menu, sBattleBagPocketMenuHitboxes);
     if (input == -1) {
@@ -341,27 +359,27 @@ int BattleBagMenu_HandlePocketMenuInput(BattleBagMenu *menu) {
         PlaySE(SEQ_SE_DP_DECIDE);
         pocket = input;
         menu->pocket = pocket;
-        menu->nextState = 5;
+        menu->nextState = BATTLE_BAG_STATE_SHOW_ITEM_LIST;
         BattleBagMenu_StartButtonAnim(menu, pocket, 0);
-        return 11;
+        return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
     case 4:
         if (!menu->context->lastUsedItem) {
             break;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         menu->pocket = menu->context->lastUsedPocket;
-        menu->nextState = 6;
+        menu->nextState = BATTLE_BAG_STATE_SHOW_USE_ITEM;
         BattleBagMenu_SelectLastUsedItem(menu);
         BattleBagMenu_StartButtonAnim(menu, 4, 0);
-        return 11;
+        return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
     case 5:
         PlaySE(SEQ_SE_DP_DECIDE);
         menu->context->selectedItem = ITEM_NONE;
         menu->context->selectedPocket = 4;
         BattleBagMenu_StartButtonAnim(menu, 5, 0);
-        return 13;
+        return BATTLE_BAG_STATE_FADE_OUT;
     }
-    return 1;
+    return BATTLE_BAG_STATE_POCKET_MENU;
 }
 
 #pragma force_active on
@@ -399,36 +417,36 @@ int BattleBagMenu_HandleItemListInput(BattleBagMenu *menu) {
         if (BattleBagMenu_GetItemOnPage(menu, input)) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->context->pocketPositions[menu->pocket] = input;
-            menu->nextState = 6;
+            menu->nextState = BATTLE_BAG_STATE_SHOW_USE_ITEM;
             BattleBagMenu_StartButtonAnim(menu, input + 6, 0);
-            return 11;
+            return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
         }
         break;
     case 6:
         PlaySE(SEQ_SE_DP_DECIDE);
-        menu->nextState = 4;
+        menu->nextState = BATTLE_BAG_STATE_SHOW_POCKET_MENU;
         BattleBagMenu_StartButtonAnim(menu, 14, 0);
-        return 11;
+        return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
     case 7:
         if (menu->lastPages[menu->pocket]) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            menu->nextState = 7;
+            menu->nextState = BATTLE_BAG_STATE_CHANGE_ITEM_PAGE;
             menu->pageDelta = -1;
             BattleBagMenu_StartButtonAnim(menu, 12, 0);
-            return 11;
+            return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
         }
         break;
     case 8:
         if (menu->lastPages[menu->pocket]) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            menu->nextState = 7;
+            menu->nextState = BATTLE_BAG_STATE_CHANGE_ITEM_PAGE;
             menu->pageDelta = 1;
             BattleBagMenu_StartButtonAnim(menu, 13, 0);
-            return 11;
+            return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
         }
         break;
     }
-    return 2;
+    return BATTLE_BAG_STATE_ITEM_LIST;
 }
 
 int BattleBagMenu_ChangeItemPage(BattleBagMenu *menu) {
@@ -447,7 +465,7 @@ int BattleBagMenu_ChangeItemPage(BattleBagMenu *menu) {
     BattleBagMenu_PrintPageNumber(menu);
     BattleBagMenu_ShowPageSprites(menu, menu->page);
     BattleBagMenu_DrawPageButtons(menu, menu->page);
-    return 2;
+    return BATTLE_BAG_STATE_ITEM_LIST;
 }
 
 #pragma force_active reset
@@ -473,12 +491,12 @@ int BattleBagMenu_HandleUseItemInput(BattleBagMenu *menu) {
     }
     case 1: {
         PlaySE(SEQ_SE_DP_DECIDE);
-        menu->nextState = 5;
+        menu->nextState = BATTLE_BAG_STATE_SHOW_ITEM_LIST;
         BattleBagMenu_StartButtonAnim(menu, 16, 0);
-        return 11;
+        return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
     }
     default:
-        return 3;
+        return BATTLE_BAG_STATE_USE_ITEM;
     }
 }
 
@@ -493,7 +511,7 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
     Party *party;
     PCStorage *pcStorage;
 
-    if (menu->pocket == 3) {
+    if (menu->pocket == BTLPOCKETLIST_BATTLE_ITEMS) {
         slot = BattleBagMenu_GetBattlerSelectedMonIndex(menu);
         battleUseFunc = GetItemAttr(context->selectedItem, ITEMATTR_BATTLEUSEFUNC, context->heapID);
         if (context->embargo && context->selectedItem != ITEM_GUARD_SPEC_ && battleUseFunc != 3) {
@@ -504,17 +522,17 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
             StringExpandPlaceholders(menu->msgFormat, menu->string, string);
             String_Delete(string);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
         if (BattleSystem_RecoverStatus(context->battleSystem, context->battlerId, slot, 0, context->selectedItem) == TRUE) {
             BattleBagMenu_ConsumeItem(context->battleSystem, context->selectedItem, menu->pocket, context->heapID);
-            return 13;
+            return BATTLE_BAG_STATE_FADE_OUT;
         }
         if (battleUseFunc == 3) {
             if (!(BattleSystem_GetBattleType(context->battleSystem) & BATTLE_TYPE_TRAINER)) {
                 BattleBagMenu_ConsumeItem(context->battleSystem, context->selectedItem, menu->pocket, context->heapID);
-                return 13;
+                return BATTLE_BAG_STATE_FADE_OUT;
             }
             msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0040_bin, context->heapID);
             string = NewString_ReadMsgData(msgData, msg_0040_00037);
@@ -523,89 +541,95 @@ int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
             String_Delete(string);
             DestroyMsgData(msgData);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
         ReadMsgDataIntoString(menu->msgData, msg_0005_00034, menu->string);
         BattleBagMenu_ShowMessage(menu);
-        menu->nextState = 8;
-        return 9;
+        menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+        return BATTLE_BAG_STATE_WAIT_MESSAGE;
     }
-    if (menu->pocket == 2) {
+    if (menu->pocket == BTLPOCKETLIST_BALLS) {
         if (context->ballBlocked[0] == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00044, menu->string);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
         if (context->ballBlocked[1] == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00047, menu->string);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
         if (context->ballBlocked[2] == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00048, menu->string);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
         party = BattleSystem_GetParty(context->battleSystem, context->battlerId);
         pcStorage = BattleSystem_GetPcStorage(context->battleSystem);
         if (Party_GetCount(party) == PARTY_SIZE && PCStorage_FindFirstBoxWithEmptySlot(pcStorage) == NUM_BOXES) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00045, menu->string);
             BattleBagMenu_ShowMessage(menu);
-            menu->nextState = 8;
-            return 9;
+            menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
+            return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
     }
-    return 13;
+    return BATTLE_BAG_STATE_FADE_OUT;
 }
 
 int BattleBagMenu_ShowPocketMenuPage(BattleBagMenu *menu) {
     BattleBagMenu_ChangePage(menu, 0);
-    return 1;
+    return BATTLE_BAG_STATE_POCKET_MENU;
 }
 
 int BattleBagMenu_ShowItemListPage(BattleBagMenu *menu) {
     BattleBagMenu_ChangePage(menu, 1);
-    return 2;
+    return BATTLE_BAG_STATE_ITEM_LIST;
 }
 
 int BattleBagMenu_ShowUseItemPage(BattleBagMenu *menu) {
     BattleBagMenu_ChangePage(menu, 2);
-    return 3;
+    return BATTLE_BAG_STATE_USE_ITEM;
 }
 
 int BattleBagMenu_CloseMessage(BattleBagMenu *menu) {
     ClearFrameAndWindow2(&menu->messageWindow, FALSE);
-    return 3;
+    return BATTLE_BAG_STATE_USE_ITEM;
 }
 
 int BattleBagMenu_WaitMessage(const BattleBagMenu *menu) {
     if (TextPrinterCheckActive(menu->textPrinterId) == 0) {
-        return 10;
+        return BATTLE_BAG_STATE_WAIT_MESSAGE_INPUT;
     }
-    return 9;
+    return BATTLE_BAG_STATE_WAIT_MESSAGE;
 }
 
 int BattleBagMenu_WaitMessageInput(const BattleBagMenu *menu) {
     if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew() == TRUE) {
         return menu->nextState;
     }
-    return 10;
+    return BATTLE_BAG_STATE_WAIT_MESSAGE_INPUT;
 }
 
+enum {
+    BUTTON_ANIM_STATE_PRESS,
+    BUTTON_ANIM_STATE_HOLD,
+    BUTTON_ANIM_STATE_RELEASE,
+};
+
 int BattleBagMenu_WaitButtonAnim(const BattleBagMenu *menu) {
-    if (menu->buttonAnimState == 2) {
+    if (menu->buttonAnimState == BUTTON_ANIM_STATE_RELEASE) {
         return menu->nextState;
     }
-    return 11;
+    return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
 }
 
 int BattleBagMenu_StartFadeOut(BattleBagMenu *menu) {
     PaletteData_BeginPaletteFade(menu->paletteData, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
-    return 14;
+    return BATTLE_BAG_STATE_EXIT;
 }
 
 int BattleBagMenu_Exit(SysTask *task, BattleBagMenu *menu) {
@@ -634,44 +658,52 @@ int BattleBagMenu_Exit(SysTask *task, BattleBagMenu *menu) {
     return 1;
 }
 
+enum {
+    BAG_TUTORIAL_STATE_TOUCH_POCKET,
+    BAG_TUTORIAL_STATE_SHOW_ITEM_LIST,
+    BAG_TUTORIAL_STATE_TOUCH_ITEM,
+    BAG_TUTORIAL_STATE_SHOW_USE_ITEM,
+    BAG_TUTORIAL_STATE_TOUCH_USE,
+};
+
 int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
     if (PaletteData_GetSelectedBuffersBitmask(menu->paletteData)) {
-        return 12;
+        return BATTLE_BAG_STATE_TUTORIAL;
     }
     switch (menu->tutorialState) {
-    case 0:
+    case BAG_TUTORIAL_STATE_TOUCH_POCKET:
         if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            menu->pocket = 2;
-            menu->nextState = 12;
+            menu->pocket = BTLPOCKETLIST_BALLS;
+            menu->nextState = BATTLE_BAG_STATE_TUTORIAL;
             BattleBagMenu_StartButtonAnim(menu, 2, 0);
             menu->tutorialTimer = 0;
             menu->tutorialState++;
-            return 11;
+            return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
         }
         menu->tutorialTimer++;
         break;
-    case 1:
+    case BAG_TUTORIAL_STATE_SHOW_ITEM_LIST:
         BattleBagMenu_ShowItemListPage(menu);
         menu->tutorialState++;
         break;
-    case 2:
+    case BAG_TUTORIAL_STATE_TOUCH_ITEM:
         if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->context->pocketPositions[menu->pocket] = 0;
-            menu->nextState = 12;
+            menu->nextState = BATTLE_BAG_STATE_TUTORIAL;
             BattleBagMenu_StartButtonAnim(menu, 6, 0);
             menu->tutorialTimer = 0;
             menu->tutorialState++;
-            return 11;
+            return BATTLE_BAG_STATE_WAIT_BUTTON_ANIM;
         }
         menu->tutorialTimer++;
         break;
-    case 3:
+    case BAG_TUTORIAL_STATE_SHOW_USE_ITEM:
         BattleBagMenu_ShowUseItemPage(menu);
         menu->tutorialState++;
         break;
-    case 4:
+    case BAG_TUTORIAL_STATE_TOUCH_USE:
         if (BattleFinger_HasTouched(menu->finger) == TRUE) {
             PlaySE(SEQ_SE_DP_DECIDE);
             menu->context->selectedItem = BattleBagMenu_GetItemOnPage(menu, menu->context->pocketPositions[menu->pocket]);
@@ -682,7 +714,7 @@ int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
         menu->tutorialTimer++;
         break;
     }
-    return 12;
+    return BATTLE_BAG_STATE_TUTORIAL;
 }
 
 void BattleBagMenu_InitBgs(BattleBagMenu *menu) {
@@ -1573,26 +1605,26 @@ void BattleBagMenu_StartButtonAnim(BattleBagMenu *menu, u8 button, u8 mode) {
 void BattleBagMenu_UpdateButtonAnim(BattleBagMenu *menu) {
     if (menu->buttonAnimActive) {
         switch (menu->buttonAnimState) {
-        case 0:
+        case BUTTON_ANIM_STATE_PRESS:
             BattleBagMenu_DrawButton(menu, menu->buttonAnimButton, 1, menu->page);
             BattleBagMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 1);
             BattleBagMenu_OffsetButtonSprite(menu, menu->buttonAnimButton, 1);
             menu->buttonAnimTimer = 0;
-            menu->buttonAnimState = 1;
+            menu->buttonAnimState = BUTTON_ANIM_STATE_HOLD;
             break;
-        case 1:
+        case BUTTON_ANIM_STATE_HOLD:
             BattleBagMenu_DrawButton(menu, menu->buttonAnimButton, 2, menu->page);
             BattleBagMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 2);
             BattleBagMenu_OffsetButtonSprite(menu, menu->buttonAnimButton, 2);
             menu->buttonAnimTimer = 0;
-            menu->buttonAnimState = 2;
+            menu->buttonAnimState = BUTTON_ANIM_STATE_RELEASE;
             break;
-        case 2:
+        case BUTTON_ANIM_STATE_RELEASE:
             BattleBagMenu_DrawButton(menu, menu->buttonAnimButton, 0, menu->page);
             BattleBagMenu_ScrollButtonWindows(menu, menu->buttonAnimButton, 0);
             BattleBagMenu_OffsetButtonSprite(menu, menu->buttonAnimButton, 0);
             menu->buttonAnimTimer = 0;
-            menu->buttonAnimState = 0;
+            menu->buttonAnimState = BUTTON_ANIM_STATE_PRESS;
             menu->buttonAnimActive = FALSE;
             break;
         }

@@ -5,6 +5,7 @@
 #include "global.h"
 
 #include "constants/battle.h"
+#include "constants/battle_menu.h"
 #include "constants/game_stats.h"
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
@@ -172,7 +173,7 @@ void Battle_BattleInit(OverlayManager *manager) {
 
     archive7 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
     archive8 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
-    BattleInput_ChangeMenu(archive7, archive8, battleSystem->battleInput, 0, 1, NULL);
+    BattleInput_ChangeMenu(archive7, archive8, battleSystem->battleInput, BATTLE_MENU_0, 1, NULL);
     BattleInput_LoadBallGaugeResources(archive8, battleSystem->battleInput);
     NARC_Delete(archive7);
     NARC_Delete(archive8);
@@ -1045,6 +1046,43 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     Battle_CreateWirelessStatusIcon();
 }
 
+enum {
+    LINK_STATE_INIT,
+    LINK_STATE_WAIT_FADE,
+    LINK_STATE_START_SYNC,
+    LINK_STATE_WAIT_SYNC,
+    LINK_STATE_SEND_AI_FLAGS,
+    LINK_STATE_WAIT_AI_FLAGS,
+    LINK_STATE_PREPARE_PROFILE,
+    LINK_STATE_SEND_PROFILE,
+    LINK_STATE_WAIT_PROFILE,
+    LINK_STATE_PREPARE_TRAINER,
+    LINK_STATE_SEND_TRAINER,
+    LINK_STATE_WAIT_TRAINER,
+    LINK_STATE_PREPARE_PARTY,
+    LINK_STATE_SEND_PARTY,
+    LINK_STATE_WAIT_PARTY,
+    LINK_STATE_PREPARE_CHATOT,
+    LINK_STATE_SEND_CHATOT,
+    LINK_STATE_WAIT_CHATOT,
+    LINK_STATE_PREPARE_PAL_PAD,
+    LINK_STATE_SEND_PAL_PAD,
+    LINK_STATE_WAIT_PAL_PAD,
+    LINK_STATE_PREPARE_PARTNER_TRAINER_1,
+    LINK_STATE_SEND_PARTNER_TRAINER_1,
+    LINK_STATE_WAIT_PARTNER_TRAINER_1,
+    LINK_STATE_PREPARE_PARTNER_TRAINER_3,
+    LINK_STATE_SEND_PARTNER_TRAINER_3,
+    LINK_STATE_WAIT_PARTNER_TRAINER_3,
+    LINK_STATE_PREPARE_PARTNER_PARTY_1,
+    LINK_STATE_SEND_PARTNER_PARTY_1,
+    LINK_STATE_WAIT_PARTNER_PARTY_1,
+    LINK_STATE_PREPARE_PARTNER_PARTY_3,
+    LINK_STATE_SEND_PARTNER_PARTY_3,
+    LINK_STATE_WAIT_PARTNER_PARTY_3,
+    LINK_STATE_FINISH,
+};
+
 BOOL Battle_LinkMain(OverlayManager *man) {
     BattleLinkStageWork *work = OverlayManager_GetData(man);
     BOOL done;
@@ -1053,21 +1091,21 @@ BOOL Battle_LinkMain(OverlayManager *man) {
     CommState_FrameDummy(5, work->bgConfig);
     done = FALSE;
     switch (work->state) {
-    case 0:
+    case LINK_STATE_INIT:
         SetMasterBrightnessNeutral(PM_LCD_TOP);
         Comm_SetWifiContinuousSendAndMuteVoice(1);
         work->state++;
         break;
-    case 1:
+    case LINK_STATE_WAIT_FADE:
         if (PaletteData_GetSelectedBuffersBitmask(work->palette) == 0) {
             work->state++;
         }
         break;
-    case 2:
+    case LINK_STATE_START_SYNC:
         LinkSync_StartSync(0x32);
         work->state++;
         break;
-    case 3:
+    case LINK_STATE_WAIT_SYNC:
         if (LinkSync_IsSynced(0x32)) {
             LinkSync_StartSync(0x33);
             work->timer = 0;
@@ -1079,81 +1117,81 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             }
         }
         break;
-    case 4:
+    case LINK_STATE_SEND_AI_FLAGS:
         if (BattleLink_SendAiFlags((BattleLinkWork *)work, 0x140) == TRUE) {
             work->state++;
         }
         break;
-    case 5:
+    case LINK_STATE_WAIT_AI_FLAGS:
         goto common;
-    case 6:
+    case LINK_STATE_PREPARE_PROFILE:
         if (BattleLink_PrepareProfile((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x34);
             work->state++;
         }
         break;
-    case 7:
+    case LINK_STATE_SEND_PROFILE:
         if (BattleLink_SendProfile((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
-    case 8:
+    case LINK_STATE_WAIT_PROFILE:
         goto common;
-    case 9:
+    case LINK_STATE_PREPARE_TRAINER:
         if (BattleLink_PrepareTrainer((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x35);
             work->state++;
         }
         break;
-    case 10:
+    case LINK_STATE_SEND_TRAINER:
         if (BattleLink_SendTrainer((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
-    case 11:
+    case LINK_STATE_WAIT_TRAINER:
         goto common;
-    case 12:
+    case LINK_STATE_PREPARE_PARTY:
         if (BattleLink_PrepareParty((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x36);
             work->state++;
         }
         break;
-    case 13:
+    case LINK_STATE_SEND_PARTY:
         if (BattleLink_SendParty((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
-    case 14:
+    case LINK_STATE_WAIT_PARTY:
         goto common;
-    case 15:
+    case LINK_STATE_PREPARE_CHATOT:
         if (BattleLink_PrepareChatot((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x37);
             work->state++;
         }
         break;
-    case 16:
+    case LINK_STATE_SEND_CHATOT:
         if (BattleLink_SendChatot((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
-    case 17:
+    case LINK_STATE_WAIT_CHATOT:
         goto common;
-    case 18:
+    case LINK_STATE_PREPARE_PAL_PAD:
         if (BattleLink_PreparePalPad((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x38);
             work->state++;
         }
         break;
-    case 19:
+    case LINK_STATE_SEND_PAL_PAD:
         if (BattleLink_SendPalPad((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
-    case 20:
+    case LINK_STATE_WAIT_PAL_PAD:
         goto common;
-    case 21:
-        if (!(work->setup->battleType & 0x80)) {
-            work->state = 33;
+    case LINK_STATE_PREPARE_PARTNER_TRAINER_1:
+        if (!(work->setup->battleType & BATTLE_TYPE_FRONTIER)) {
+            work->state = LINK_STATE_FINISH;
         } else if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x39);
             work->state++;
@@ -1162,7 +1200,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 22:
+    case LINK_STATE_SEND_PARTNER_TRAINER_1:
         work->syncCount = 1;
         if (Comm_GetLocalNetId() != 0) {
             if (LinkSync_IsSynced(0x39) == TRUE) {
@@ -1172,9 +1210,9 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 23:
+    case LINK_STATE_WAIT_PARTNER_TRAINER_1:
         goto common;
-    case 24:
+    case LINK_STATE_PREPARE_PARTNER_TRAINER_3:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3A);
             work->state++;
@@ -1183,7 +1221,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 25:
+    case LINK_STATE_SEND_PARTNER_TRAINER_3:
         work->syncCount = 1;
         if (Comm_GetLocalNetId() != 0) {
             if (LinkSync_IsSynced(0x3A) == TRUE) {
@@ -1193,9 +1231,9 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 26:
+    case LINK_STATE_WAIT_PARTNER_TRAINER_3:
         goto common;
-    case 27:
+    case LINK_STATE_PREPARE_PARTNER_PARTY_1:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3B);
             work->state++;
@@ -1204,7 +1242,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 28:
+    case LINK_STATE_SEND_PARTNER_PARTY_1:
         work->syncCount = 1;
         if (Comm_GetLocalNetId() != 0) {
             if (LinkSync_IsSynced(0x3B) == TRUE) {
@@ -1214,9 +1252,9 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 29:
+    case LINK_STATE_WAIT_PARTNER_PARTY_1:
         goto common;
-    case 30:
+    case LINK_STATE_PREPARE_PARTNER_PARTY_3:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3C);
             work->state++;
@@ -1225,7 +1263,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 31:
+    case LINK_STATE_SEND_PARTNER_PARTY_3:
         work->syncCount = 1;
         if (Comm_GetLocalNetId() != 0) {
             if (LinkSync_IsSynced(0x3C) == TRUE) {
@@ -1235,10 +1273,10 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case 32:
+    case LINK_STATE_WAIT_PARTNER_PARTY_3:
 common:
         if (work->syncCount == Comm_CountConnected()) {
-            if (work->state == 20) {
+            if (work->state == LINK_STATE_WAIT_PAL_PAD) {
                 for (i = 0; i < 4; i++) {
                     Heap_Free(((BattleLinkWork *)work)->friends[i]);
                 }
@@ -1246,7 +1284,7 @@ common:
             work->syncCount = 0;
             work->timer = 0;
             work->state++;
-            if (work->state == 33) {
+            if (work->state == LINK_STATE_FINISH) {
                 PaletteData_BeginPaletteFade(work->palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xFFFF, 0, 0, 0x10, 0);
             }
         } else {
@@ -1256,7 +1294,7 @@ common:
             }
         }
         break;
-    case 33:
+    case LINK_STATE_FINISH:
         if (PaletteData_GetSelectedBuffersBitmask(work->palette) == 0) {
             done = TRUE;
             WaitingIcon_Delete(work->waitingIcon);

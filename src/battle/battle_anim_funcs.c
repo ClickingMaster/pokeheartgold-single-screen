@@ -508,15 +508,20 @@ void BattleAnimUtil_ResetPokepicScale(Pokepic *pokepic) {
     Pokepic_SetAttr(pokepic, POKEPIC_AFFINEH, 0x100);
 }
 
+enum {
+    SHAKE_TARGETS_STATE_INIT,
+    SHAKE_TARGETS_STATE_SHAKE,
+};
+
 void BattleAnimTask_ShakeTargets(SysTask *task, void *data) {
     BattleAnimShakeTargetsWork *work = data;
     int i;
     switch (work->common.state[0]) {
-    case 0:
+    case SHAKE_TARGETS_STATE_INIT:
         BattleAnimUtil_InitShake(&work->shake, work->ampX, work->ampY, work->interval, work->count);
         work->common.state[0]++;
         return;
-    case 1:
+    case SHAKE_TARGETS_STATE_SHAKE:
         if (BattleAnimUtil_UpdateShake(&work->shake) == FALSE) {
             work->common.state[0]++;
             return;
@@ -564,17 +569,24 @@ void BattleAnimFunc_ShakeTargets(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_ShakeTargets, work);
 }
 
+enum {
+    SLIDING_BG_STATE_INIT,
+    SLIDING_BG_STATE_BLEND_IN,
+    SLIDING_BG_STATE_WAIT_OFFSCREEN,
+    SLIDING_BG_STATE_BLEND_OUT,
+};
+
 // Moves BG2 by (dx, dy) each frame (the speeds decay towards 0), blending it in; blends it out once it has left
 // the screen vertically
 void BattleAnimTask_SlidingBg(SysTask *task, void *data) {
     BattleAnimSlidingBgWork *work = data;
     int done;
     switch (work->common.state[0]) {
-    case 0:
+    case SLIDING_BG_STATE_INIT:
         G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, work->curEva, work->curEvb);
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
         work->common.state[0]++;
-    case 1:
+    case SLIDING_BG_STATE_BLEND_IN:
         done = 0;
         if (work->curEva < work->eva - 2) {
             work->curEva += 2;
@@ -593,12 +605,12 @@ void BattleAnimTask_SlidingBg(SysTask *task, void *data) {
         }
         reg_G2_BLDALPHA = work->curEva | (work->curEvb << 8);
         break;
-    case 2:
+    case SLIDING_BG_STATE_WAIT_OFFSCREEN:
         if (work->offscreen) {
             work->common.state[0]++;
         }
         break;
-    case 3:
+    case SLIDING_BG_STATE_BLEND_OUT:
         done = 0;
         if (work->curEva > 2) {
             work->curEva -= 2;
@@ -698,11 +710,11 @@ void BattleAnimTask_SlidingBg2(SysTask *task, void *data) {
     BattleAnimSlidingBgWork *work = data;
     int done;
     switch (work->common.state[0]) {
-    case 0:
+    case SLIDING_BG_STATE_INIT:
         G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, work->curEva, work->curEvb);
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
         work->common.state[0]++;
-    case 1:
+    case SLIDING_BG_STATE_BLEND_IN:
         done = 0;
         if (work->curEva < 16) {
             work->curEva += 2;
@@ -721,12 +733,12 @@ void BattleAnimTask_SlidingBg2(SysTask *task, void *data) {
         }
         reg_G2_BLDALPHA = work->curEva | (work->curEvb << 8);
         break;
-    case 2:
+    case SLIDING_BG_STATE_WAIT_OFFSCREEN:
         if (work->offscreen) {
             work->common.state[0]++;
         }
         break;
-    case 3:
+    case SLIDING_BG_STATE_BLEND_OUT:
         done = 0;
         if (work->curEva > 2) {
             work->curEva -= 2;
@@ -826,12 +838,18 @@ void BattleAnimFunc_SlidingBg2(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_SlidingBg2, work);
 }
 
+enum {
+    ROTATE_STATE_ROTATE,
+    ROTATE_STATE_ROTATE_BACK,
+    ROTATE_STATE_END,
+};
+
 // Rotates a battler to an angle and back
 void BattleAnimTask_RotateBattler(SysTask *task, void *data) {
     BattleAnimRotateBattlerWork *work = data;
     switch (work->state) {
-    case 0:
-    case 1:
+    case ROTATE_STATE_ROTATE:
+    case ROTATE_STATE_ROTATE_BACK:
         if (BattleAnimUtil_UpdateValueMotion(&work->rotation) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, (u16)work->rotation.value);
             return;
@@ -839,7 +857,7 @@ void BattleAnimTask_RotateBattler(SysTask *task, void *data) {
         BattleAnimUtil_InitValueMotion(&work->rotation, work->rotation.value, work->startAngle, work->duration);
         work->state++;
         return;
-    case 2:
+    case ROTATE_STATE_END:
         Pokepic_SetAttr(work->pokepic, POKEPIC_XPIVOT, 0);
         Pokepic_SetAttr(work->pokepic, POKEPIC_YPIVOT, 0);
         Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, 0);
@@ -957,46 +975,59 @@ BOOL BattleAnimSpritePop_Update(void *data) {
     return FALSE;
 }
 
+enum {
+    SPRITE_POP_SEQ_STATE_START_FIRST,
+    SPRITE_POP_SEQ_STATE_FIRST,
+    SPRITE_POP_SEQ_STATE_DELAY,
+    SPRITE_POP_SEQ_STATE_SECOND,
+    SPRITE_POP_SEQ_STATE_DONE,
+};
+
 BOOL BattleAnimSpritePop_RunSequence(void *data) {
     BattleAnimSpritePopWork *work = data;
     BOOL done = FALSE;
     switch (work->sequenceState) {
-    case 0:
+    case SPRITE_POP_SEQ_STATE_START_FIRST:
         BattleAnimSpritePop_Start(work, work->x + work->side * 24, work->y - 16);
         work->sequenceState++;
         break;
-    case 1:
+    case SPRITE_POP_SEQ_STATE_FIRST:
         if (BattleAnimSpritePop_Update(work)) {
             work->sequenceState++;
         }
         break;
-    case 2:
+    case SPRITE_POP_SEQ_STATE_DELAY:
         if (--work->delay < 0) {
             work->sequenceState++;
             BattleAnimSpritePop_Start(work, work->x - work->side * 24, work->y - 24);
         }
         break;
-    case 3:
+    case SPRITE_POP_SEQ_STATE_SECOND:
         if (BattleAnimSpritePop_Update(work)) {
             work->sequenceState++;
         }
         break;
-    case 4:
+    case SPRITE_POP_SEQ_STATE_DONE:
         done = TRUE;
         break;
     }
     return done;
 }
 
+enum {
+    SPRITE_POPS_STATE_RUN,
+    SPRITE_POPS_STATE_END,
+};
+
 void BattleAnimTask_SpritePops(SysTask *task, void *data) {
     BattleAnimSpritePopWork *work = data;
     switch (work->state) {
-    case 0:
+    case SPRITE_POPS_STATE_RUN:
         if (BattleAnimSpritePop_RunSequence(work)) {
             work->state++;
         }
         break;
-    case 1:
+    case SPRITE_POPS_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1063,40 +1094,49 @@ void BattleAnimFunc_FadeBgPalette(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WaitPaletteFade, work);
 }
 
+enum {
+    PALETTE_FADE_STATE_START_FADE,
+    PALETTE_FADE_STATE_WAIT_FADE,
+    PALETTE_FADE_STATE_HOLD,
+    PALETTE_FADE_STATE_START_RESTORE,
+    PALETTE_FADE_STATE_WAIT_RESTORE,
+    PALETTE_FADE_STATE_END,
+};
+
 // Fades a battler's palette to a color and back, count times
 void BattleAnimTask_BattlerPaletteFade(SysTask *task, void *data) {
     BattleAnimBattlerPaletteFadeWork *work = data;
     switch (work->state) {
-    case 0:
+    case PALETTE_FADE_STATE_START_FADE:
         Pokepic_StartPaletteFade(work->pokepic, 0, work->strength, work->framesPer, work->color);
         work->state++;
         break;
-    case 1:
+    case PALETTE_FADE_STATE_WAIT_FADE:
         if (!Pokepic_ResumePaletteFade(work->pokepic)) {
             work->state++;
         }
         break;
-    case 2:
+    case PALETTE_FADE_STATE_HOLD:
         if (work->delay == 0) {
             work->state++;
         } else {
             work->delay--;
             break;
         }
-    case 3:
+    case PALETTE_FADE_STATE_START_RESTORE:
         Pokepic_StartPaletteFade(work->pokepic, work->strength, 0, work->framesPer, work->color);
         work->state++;
         break;
-    case 4:
+    case PALETTE_FADE_STATE_WAIT_RESTORE:
         if (!Pokepic_ResumePaletteFade(work->pokepic)) {
             if (--work->count <= 0) {
                 work->state++;
             } else {
-                work->state = 0;
+                work->state = PALETTE_FADE_STATE_START_FADE;
             }
         }
         break;
-    case 5:
+    case PALETTE_FADE_STATE_END:
         Heap_Free(work);
         BattleAnimSystem_DestroyTask(work->system, task); // reads the freed work
         break;
@@ -1196,13 +1236,21 @@ void BattleAnimFunc_BattlerPaletteFade(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_BattlerPaletteFade, work);
 }
 
+enum {
+    PULSE_BATTLER_STATE_START_SCALE,
+    PULSE_BATTLER_STATE_SCALE,
+    PULSE_BATTLER_STATE_START_RESTORE,
+    PULSE_BATTLER_STATE_RESTORE,
+    PULSE_BATTLER_STATE_END,
+};
+
 // Scales a battler sprite copy from start to end and back, count times, keeping its bottom in place
 void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
     BattleAnimPulseBattlerSpriteWork *work = data;
     f32 scaleX, scaleY;
     BOOL active;
     switch (work->state) {
-    case 0:
+    case PULSE_BATTLER_STATE_START_SCALE:
         BattleAnimUtil_InitScaleMotion(&work->scale, (s16)work->start, (s16)work->divisor, (s16)work->end, work->durations >> 16);
         BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
@@ -1211,7 +1259,7 @@ void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
         ManagedSprite_SetAffineScale(work->sprite, scaleX, scaleY);
         work->state++;
         break;
-    case 1:
+    case PULSE_BATTLER_STATE_SCALE:
         active = BattleAnimUtil_UpdateScaleMotion(&work->scale);
         BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
@@ -1224,11 +1272,11 @@ void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 2:
+    case PULSE_BATTLER_STATE_START_RESTORE:
         BattleAnimUtil_InitScaleMotion(&work->scale, (s16)work->end, (s16)work->divisor, (s16)work->start, (u16)work->durations);
         work->state++;
         break;
-    case 3:
+    case PULSE_BATTLER_STATE_RESTORE:
         active = BattleAnimUtil_UpdateScaleMotion(&work->scale);
         BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
@@ -1240,10 +1288,10 @@ void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
         } else if (--work->count <= 0) {
             work->state++;
         } else {
-            work->state = 0;
+            work->state = PULSE_BATTLER_STATE_START_SCALE;
         }
         break;
-    case 4:
+    case PULSE_BATTLER_STATE_END:
         Heap_Free(work);
         BattleAnimSystem_DestroyTask(work->system, task); // reads the freed work
         return;
@@ -1284,44 +1332,53 @@ void BattleAnimFunc_PulseBattlerSprite(BattleAnimSystem *system) {
     }
 }
 
+enum {
+    STRETCH_BATTLER_STATE_START_STRETCH,
+    STRETCH_BATTLER_STATE_STRETCH,
+    STRETCH_BATTLER_STATE_HOLD,
+    STRETCH_BATTLER_STATE_START_RESTORE,
+    STRETCH_BATTLER_STATE_RESTORE,
+    STRETCH_BATTLER_STATE_END,
+};
+
 // Stretches a battler (separate X and Y scale) and back, count times, keeping its bottom in place
 void BattleAnimTask_StretchBattler(SysTask *task, void *data) {
     BattleAnimStretchBattlerWork *work = data;
     switch (work->state) {
-    case 0:
+    case STRETCH_BATTLER_STATE_START_STRETCH:
         BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->startX, (s16)work->endX, (s16)work->startY, (s16)work->endY, (s16)work->divisor, work->durations >> 16);
         BattleAnimUtil_UpdateScaleMotionPokepic(&work->scale, work->pokepic);
         work->state++;
         break;
-    case 1:
+    case STRETCH_BATTLER_STATE_STRETCH:
         if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         } else {
             work->state++;
         }
         break;
-    case 2:
+    case STRETCH_BATTLER_STATE_HOLD:
         if (work->holdFrames == 0) {
             work->state++;
         } else {
             work->holdFrames--;
             break;
         }
-    case 3:
+    case STRETCH_BATTLER_STATE_START_RESTORE:
         BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->endX, (s16)work->startX, (s16)work->endY, (s16)work->startY, (s16)work->divisor, (u16)work->durations);
         BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         work->state++;
         break;
-    case 4:
+    case STRETCH_BATTLER_STATE_RESTORE:
         if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         } else if (--work->count <= 0) {
             work->state++;
         } else {
-            work->state = 0;
+            work->state = STRETCH_BATTLER_STATE_START_STRETCH;
         }
         break;
-    case 5:
+    case STRETCH_BATTLER_STATE_END:
         BattleAnimUtil_ResetPokepicScale(work->pokepic);
         Heap_Free(work);
         BattleAnimSystem_DestroyTask(work->system, task); // reads the freed work
@@ -1502,14 +1559,20 @@ void BattleAnimFunc_BlinkBattler(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_BlinkBattler, work);
 }
 
+enum {
+    MOVE_BATTLER_STATE_INIT,
+    MOVE_BATTLER_STATE_MOVE,
+    MOVE_BATTLER_STATE_END = 0xFF,
+};
+
 void BattleAnimTask_SlideBattler(SysTask *task, void *data) {
     BattleAnimSlideBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case MOVE_BATTLER_STATE_INIT:
         BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
         work->common.state[0]++;
         break;
-    case 1:
+    case MOVE_BATTLER_STATE_MOVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->motion) == FALSE) {
             work->common.state[0]++;
         }
@@ -1568,14 +1631,14 @@ void BattleAnimFunc_SlideBattler(BattleAnimSystem *system) {
 void BattleAnimTask_SlideBattler2(SysTask *task, void *data) {
     BattleAnimMoveBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case MOVE_BATTLER_STATE_INIT:
         if (work->target.pokepic == NULL) {
-            work->common.state[0] = 0xFF;
+            work->common.state[0] = MOVE_BATTLER_STATE_END;
             return;
         }
         BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
         work->common.state[0]++;
-    case 1:
+    case MOVE_BATTLER_STATE_MOVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->motion) == FALSE) {
             work->common.state[0]++;
         }
@@ -1632,11 +1695,18 @@ void BattleAnimFunc_SlideBattler2(BattleAnimSystem *system) {
     BattleAnim_CreateTaskAndRun(work->system, BattleAnimTask_SlideBattler2, work);
 }
 
+enum {
+    SHAKE_SCALE_STATE_SHAKE,
+    SHAKE_SCALE_STATE_DELAY,
+    SHAKE_SCALE_STATE_SCALE,
+    SHAKE_SCALE_STATE_RESTORE,
+};
+
 void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
     BattleAnimShakeAndScaleWork *work = data;
     int start, end, duration;
     switch (work->state) {
-    case 0:
+    case SHAKE_SCALE_STATE_SHAKE:
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             BattleAnimUtil_UpdateShake(&work->shake);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
@@ -1647,7 +1717,7 @@ void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
         }
         work->state++;
         return;
-    case 1:
+    case SHAKE_SCALE_STATE_DELAY:
         if (++work->timer <= work->delay) {
             return;
         }
@@ -1657,7 +1727,7 @@ void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
         BattleAnimUtil_InitScaleMotion(&work->scale, (s16)start, 100, (s16)end, duration);
         work->state++;
         return;
-    case 2:
+    case SHAKE_SCALE_STATE_SCALE:
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
@@ -1666,7 +1736,7 @@ void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
         }
         work->state++;
         return;
-    case 3:
+    case SHAKE_SCALE_STATE_RESTORE:
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
@@ -1709,7 +1779,7 @@ void BattleAnimFunc_ShakeAndScaleBattler(BattleAnimSystem *system) {
 void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
     BattleAnimShakeAndScaleXYWork *work = data;
     switch (work->state) {
-    case 0:
+    case SHAKE_SCALE_STATE_SHAKE:
         if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
             BattleAnimUtil_UpdateShake(&work->shake);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
@@ -1720,14 +1790,14 @@ void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 1:
+    case SHAKE_SCALE_STATE_DELAY:
         work->timer++;
         if (work->timer > work->delay) {
             BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)((work->scaleX >> 16) & 0xFFFF), (s16)(work->scaleX & 0xFF), (s16)((work->scaleY >> 16) & 0xFFFF), (s16)(work->scaleY & 0xFF), 100, work->duration);
             work->state++;
         }
         break;
-    case 2:
+    case SHAKE_SCALE_STATE_SCALE:
         if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
@@ -1736,7 +1806,7 @@ void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 3:
+    case SHAKE_SCALE_STATE_RESTORE:
         if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
@@ -1812,10 +1882,10 @@ void BattleAnimFunc_ShowBattleBgInObjWindow(BattleAnimSystem *system) {
 void BattleAnimTask_MoveBattlerBy(SysTask *task, void *data) {
     BattleAnimMoveBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case MOVE_BATTLER_STATE_INIT:
         BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], (s16)(work->target.pos[0] + work->dx), work->target.pos[1], (s16)(work->target.pos[1] + work->dy), (u16)work->duration);
         work->common.state[0]++;
-    case 1:
+    case MOVE_BATTLER_STATE_MOVE:
         if (!BattleAnimUtil_UpdateLinearMotion(&work->motion)) {
             work->common.state[0]++;
         }
@@ -2176,10 +2246,15 @@ int BattleAnimUtil_GetRoleBattler(BattleAnimSystem *system, int role) {
     return battler;
 }
 
+enum {
+    REVEAL_BATTLER_STATE_REVEAL,
+    REVEAL_BATTLER_STATE_END,
+};
+
 void BattleAnimTask_RevealBattlerRise(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case REVEAL_BATTLER_STATE_REVEAL:
         work->timer++;
         if (work->timer < work->interval) {
             break;
@@ -2194,7 +2269,7 @@ void BattleAnimTask_RevealBattlerRise(SysTask *task, void *data) {
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_H, work->height);
         break;
-    case 1:
+    case REVEAL_BATTLER_STATE_END:
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_VISIBLE, 0);
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_Y, work->baseY);
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_H, work->maxHeight);
@@ -2208,7 +2283,7 @@ void BattleAnimTask_RevealBattlerRise(SysTask *task, void *data) {
 void BattleAnimTask_RevealBattlerSink(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case REVEAL_BATTLER_STATE_REVEAL:
         work->timer++;
         if (work->timer < work->interval) {
             break;
@@ -2223,7 +2298,7 @@ void BattleAnimTask_RevealBattlerSink(SysTask *task, void *data) {
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_H, work->height);
         break;
-    case 1:
+    case REVEAL_BATTLER_STATE_END:
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_VISIBLE, 0);
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_Y, work->baseY);
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_H, work->maxHeight);
@@ -2237,7 +2312,7 @@ void BattleAnimTask_RevealBattlerSink(SysTask *task, void *data) {
 void BattleAnimTask_RevealBattlerUpward(SysTask *task, void *data) {
     BattleAnimRevealBattlerWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case REVEAL_BATTLER_STATE_REVEAL:
         work->timer++;
         if (work->timer < work->interval) {
             break;
@@ -2251,7 +2326,7 @@ void BattleAnimTask_RevealBattlerUpward(SysTask *task, void *data) {
         }
         Pokepic_SetVisible(work->target.pokepic, 0, work->height, 80, work->maxHeight);
         break;
-    case 1:
+    case REVEAL_BATTLER_STATE_END:
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_VISIBLE, 0);
         BattleAnimUtil_ResetPokepicScale(work->target.pokepic);
         BattleAnimSystem_DestroyTask(work->common.system, task);
@@ -2294,14 +2369,19 @@ void BattleAnimFunc_RevealBattler(BattleAnimSystem *system) {
     }
 }
 
+enum {
+    SHAKE_BG_STATE_INIT,
+    SHAKE_BG_STATE_SHAKE,
+};
+
 // Shakes a BG layer (args: amplitudes, interval, shake count), repeatCount + 1 times
 void BattleAnimTask_ShakeBg(SysTask *task, void *data) {
     BattleAnimShakeBgWork *work = data;
     switch (work->state) {
-    case 0:
+    case SHAKE_BG_STATE_INIT:
         BattleAnimUtil_InitShake(&work->shake, (s16)work->ampX, (s16)work->ampY, work->interval, work->shakeCount);
         work->state++;
-    case 1:
+    case SHAKE_BG_STATE_SHAKE:
         if (!BattleAnimUtil_UpdateShake(&work->shake)) {
             if (work->count >= work->repeatCount) {
                 work->state++;
@@ -2726,11 +2806,16 @@ void BattleAnimSpriteFunc_MoveSpriteAndAnimate(BattleAnimSystem *system, SpriteS
 
 #pragma force_active on
 
+enum {
+    SPRITE_ORBIT_STATE_CIRCLE,
+    SPRITE_ORBIT_STATE_SWING,
+};
+
 // Moves the sprite sideways by the steps of sBattleAnimSpriteOrbitStepX (passing behind the battler), then rocks it
 void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
     BattleAnimSpriteOrbitWork *work = data;
     switch (work->common.state[0]) {
-    case 0: {
+    case SPRITE_ORBIT_STATE_CIRCLE: {
         s16 dx = sBattleAnimSpriteOrbitStepX[work->step];
         work->step++;
         if (dx != 255) {
@@ -2752,7 +2837,7 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
         }
         break;
     }
-    case 1:
+    case SPRITE_ORBIT_STATE_SWING:
         if (BattleAnimUtil_UpdateValueMotion(&work->angle) == TRUE) {
             ManagedSprite_SetAffineZRotation(work->sprite, (u16)work->angle.value);
         } else if (work->step > 5) {
@@ -2857,20 +2942,27 @@ void BattleAnimSpriteFunc_SpriteAboveDefender(BattleAnimSystem *system, SpriteSy
 
 #pragma force_active on
 
+enum {
+    SPRITE_ARC_STATE_INIT,
+    SPRITE_ARC_STATE_ARC,
+    SPRITE_ARC_STATE_WAIT_ANIM,
+    SPRITE_ARC_STATE_FADE_OUT,
+};
+
 // Moves the sprite along an arc from the lower left, waits for its animation, then blends it out
 void BattleAnimTask_SpriteArc(SysTask *task, void *data) {
     BattleAnimSpriteArcWork *work = data;
     switch (work->common.state[0]) {
-    case 0:
+    case SPRITE_ARC_STATE_INIT:
         BattleAnimUtil_InitLinearSinMotion(&work->linear, &work->sin, -30, 112, 160, 112, 21, 64 * FX32_ONE);
         work->common.state[0]++;
         break;
-    case 1:
+    case SPRITE_ARC_STATE_ARC:
         if (!BattleAnimUtil_UpdateLinearSinMotionSprite(&work->linear, &work->sin, work->sprite)) {
             work->common.state[0]++;
         }
         break;
-    case 2:
+    case SPRITE_ARC_STATE_WAIT_ANIM:
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
             work->eva = 16;
@@ -2879,7 +2971,7 @@ void BattleAnimTask_SpriteArc(SysTask *task, void *data) {
             work->common.state[0]++;
         }
         break;
-    case 3:
+    case SPRITE_ARC_STATE_FADE_OUT:
         if (work->eva) {
             work->eva--;
         }

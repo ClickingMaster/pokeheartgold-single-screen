@@ -178,8 +178,8 @@ extern const u32 sBattleAnimBattlerSpritePriorities[6];
 extern void (*const sBattleAnimEmitterCallbackTable[])(SPLEmitter *);
 // assert messages; GF_ASSERT(message == NULL) is an assert that always fails
 extern const char sStr_HaikeiSubSystemLaunchLimit[];
-extern const char ov07_02237870[];
-extern const char ov07_0223789C[];
+extern const char gBattleAnimNoBgPaletteAnimMsg[];
+extern const char gBattleAnimInvalidExFlagMsg[];
 
 void BattleAnimSystem_WaitDelay(BattleAnimSystem *system) {
     if (system->delay == 0) {
@@ -1797,13 +1797,19 @@ BattleAnimBgSwitchWork *BattleAnimBackground_NewSwitchWork(BattleAnimSystem *sys
 #pragma push
 #pragma opt_common_subs off
 
+enum {
+    BG_BLEND_IN_STEP_LOAD_BATTLE_BG,
+    BG_BLEND_IN_STEP_LOAD_GRAPHICS,
+    BG_BLEND_IN_STEP_BLEND,
+};
+
 BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
     int done;
     int priority;
     BattleAnimBgSwitchWork *work = data;
 
     switch (work->step) {
-    case 0:
+    case BG_BLEND_IN_STEP_LOAD_BATTLE_BG:
         BattleAnimBackground_LoadBattleBgToLayerDefault(work->system, GF_BG_LYR_MAIN_2);
         priority = BattleAnimSystem_GetBgPriority(work->system, 2);
         BattleAnimSystem_GetBgPriority(work->system, 1);
@@ -1812,7 +1818,7 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
         work->step++;
         goto running;
-    case 1:
+    case BG_BLEND_IN_STEP_LOAD_GRAPHICS:
         SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x0c000);
         if (BattleAnimSystem_GetField08(work->system) != 1) {
             SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
@@ -1822,7 +1828,7 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
         BattleAnimBackground_StartEffects(work);
         work->step++;
         // fallthrough
-    case 2:
+    case BG_BLEND_IN_STEP_BLEND:
         done = 0;
         if (work->eva < work->evaTarget) {
             work->eva += 2;
@@ -1840,7 +1846,7 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
             work->step++;
         }
         reg_G2_BLDALPHA = work->evb | (work->eva << 8);
-        if (work->step == 2) {
+        if (work->step == BG_BLEND_IN_STEP_BLEND) {
             goto running;
         }
         return FALSE;
@@ -1853,17 +1859,25 @@ running:
 
 #pragma pop
 
+enum {
+    BG_BLEND_OUT_STEP_SHOW_LAYER,
+    BG_BLEND_OUT_STEP_START_BLEND,
+    BG_BLEND_OUT_STEP_BLEND,
+    BG_BLEND_OUT_STEP_RESTORE_BATTLE_BG,
+    BG_BLEND_OUT_STEP_RESET_LAYER,
+};
+
 BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) {
     int done;
     int priority3;
     int priority2;
 
     switch (work->step) {
-    case 0:
+    case BG_BLEND_OUT_STEP_SHOW_LAYER:
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
         work->step++;
         // fallthrough
-    case 1:
+    case BG_BLEND_OUT_STEP_START_BLEND:
         priority3 = BattleAnimSystem_GetBgPriority(work->system, 2);
         priority2 = BattleAnimSystem_GetBgPriority(work->system, 1);
         SetBgPriority(GF_BG_LYR_MAIN_3, (u8)priority3);
@@ -1872,7 +1886,7 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         BattleAnimBackground_StartEffects(work);
         work->step++;
         // fallthrough
-    case 2:
+    case BG_BLEND_OUT_STEP_BLEND:
         done = 0;
         if (work->eva < work->evaTarget) {
             work->eva += 2;
@@ -1891,7 +1905,7 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         }
         reg_G2_BLDALPHA = work->eva | (work->evb << 8);
         goto running;
-    case 3:
+    case BG_BLEND_OUT_STEP_RESTORE_BATTLE_BG:
         BattleAnimBackground_StopMarkedEffects(work);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
@@ -1907,7 +1921,7 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         GfGfxLoader_LoadScrnData(work->system->battleBg.narcId, work->system->battleBg.screenMember, work->system->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, work->system->heapId);
         work->step++;
         goto running;
-    case 4:
+    case BG_BLEND_OUT_STEP_RESET_LAYER:
         BattleSystem_SetDefaultBlend();
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
         BattleAnimBackground_ResetLayer(work->system, GF_BG_LYR_MAIN_2);
@@ -1920,9 +1934,14 @@ running:
     return TRUE;
 }
 
+enum {
+    BG_FADE_IN_STEP_FADE_OUT,
+    BG_FADE_IN_STEP_LOAD_GRAPHICS,
+};
+
 BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work) {
     switch (work->step) {
-    case 0:
+    case BG_FADE_IN_STEP_FADE_OUT:
         if (work->fadeToWhite == FALSE) {
             PaletteData_ForceBeginPaletteFade(work->system->paletteData, PLTTBUF_MAIN_BG_F, work->system->battleBgPaletteMask, work->switchFadeWait, 0, 16, RGB_BLACK);
             PaletteData_BlendPalettes(work->system->paletteData, PLTTBUF_MAIN_BG, 0x200, 16, RGB_BLACK);
@@ -1932,7 +1951,7 @@ BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         }
         work->step++;
         // fallthrough
-    case 1:
+    case BG_FADE_IN_STEP_LOAD_GRAPHICS:
         if (PaletteData_GetSelectedBuffersBitmask(work->system->paletteData) != 0) {
             goto running;
         }
@@ -2252,7 +2271,7 @@ BOOL BattleAnimBackground_StartPaletteCycle(BattleAnimBgSwitchWork *work) {
         member = 30;
         break;
     default:
-        GF_ASSERT(ov07_02237870 == NULL);
+        GF_ASSERT(gBattleAnimNoBgPaletteAnimMsg == NULL);
         member = 0;
         break;
     }
@@ -2407,7 +2426,7 @@ void BattleAnimScriptCmd_SwitchBackgroundWithFadeWait(BattleAnimSystem *system) 
         work->restoreFadeWait -= amount;
         break;
     default:
-        GF_ASSERT(ov07_0223789C == NULL);
+        GF_ASSERT(gBattleAnimInvalidExFlagMsg == NULL);
         break;
     }
     SysTask_CreateOnMainQueue(BattleAnimTask_BackgroundSwitch, work, 1100);

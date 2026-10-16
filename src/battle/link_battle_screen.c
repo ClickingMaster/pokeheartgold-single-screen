@@ -156,7 +156,7 @@ extern const LinkBattleScreenBallRows sBallRowFirstSprite;
 extern const WindowTemplate sBattleVideoYesNoTemplate;
 extern const u8 sPartyPanelPositions[6][2];
 extern const u8 sPanelNudgeSteps[];
-extern const u8 ov05_0221EA6D[]; // second byte of each sPanelNudgeSteps pair
+extern const u8 sPanelNudgeSpriteSteps[]; // second byte of each sPanelNudgeSteps pair
 extern const GraphicsModes sVsGraphicsModes;
 extern const GraphicsModes sPartyGraphicsModes;
 extern const LinkBattleScreenStepFunc sVsSequence[];
@@ -284,14 +284,20 @@ void LinkBattleScreen_Start(LinkBattleScreenArgs *args) {
     }
 }
 
+enum {
+    LINK_SCREEN_STATE_INIT,
+    LINK_SCREEN_STATE_RUN,
+    LINK_SCREEN_STATE_FINISH,
+};
+
 void LinkBattleScreen_RunTask(SysTask *task, void *data) {
     LinkBattleScreen *screen = data;
     int result;
     switch (screen->taskState) {
-    case 0:
+    case LINK_SCREEN_STATE_INIT:
         screen->taskState = LinkBattleScreen_Init(screen);
         break;
-    case 1:
+    case LINK_SCREEN_STATE_RUN:
         do {
             result = screen->sequence[screen->sequenceIndex](screen);
             if (result != 0) {
@@ -302,7 +308,7 @@ void LinkBattleScreen_RunTask(SysTask *task, void *data) {
             LinkBattleScreen_UpdateBattleVideoPrompt(screen);
         }
         break;
-    case 2:
+    case LINK_SCREEN_STATE_FINISH:
         if (LinkBattleScreen_Finish(task, data) == 1) {
             return;
         }
@@ -325,26 +331,38 @@ void LinkBattleScreen_SetVramBanks(void) {
 
 #pragma force_active on
 
+enum {
+    VIDEO_PROMPT_STATE_NONE,
+    VIDEO_PROMPT_STATE_SHOW_PROMPT,
+    VIDEO_PROMPT_STATE_WAIT_BUTTON,
+    VIDEO_PROMPT_STATE_ASK_SAVE,
+    VIDEO_PROMPT_STATE_WAIT_YES_NO,
+    VIDEO_PROMPT_STATE_START_SAVE,
+    VIDEO_PROMPT_STATE_SAVING,
+    VIDEO_PROMPT_STATE_CLOSE,
+    VIDEO_PROMPT_STATE_CLOSED,
+};
+
 void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
     if (!LinkBattleScreen_IsBattleRecordActive(screen)) {
         return;
     }
     switch (screen->videoPromptState) {
-    case 0:
+    case VIDEO_PROMPT_STATE_NONE:
         break;
-    case 1:
+    case VIDEO_PROMPT_STATE_SHOW_PROMPT:
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00000, screen->string);
         screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
-        screen->videoPromptState = 2;
+        screen->videoPromptState = VIDEO_PROMPT_STATE_WAIT_BUTTON;
         break;
-    case 2:
+    case VIDEO_PROMPT_STATE_WAIT_BUTTON:
         if (screen->canSaveVideo == TRUE && (gSystem.newKeys & PAD_BUTTON_A)) {
-            screen->videoPromptState = 3;
+            screen->videoPromptState = VIDEO_PROMPT_STATE_ASK_SAVE;
         }
         break;
-    case 3:
+    case VIDEO_PROMPT_STATE_ASK_SAVE:
         if (screen->savedVideoCheck == 1) {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00002, screen->string);
         } else {
@@ -355,39 +373,39 @@ void LinkBattleScreen_UpdateBattleVideoPrompt(LinkBattleScreen *screen) {
         screen->printerId = AddTextPrinterParameterized(&screen->yesNoWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         screen->yesNoMenu = CreateYesNoMenu(screen->bgConfig, &sBattleVideoYesNoTemplate, 31, 14, 1, screen->args->heapId);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
-        screen->videoPromptState = 4;
+        screen->videoPromptState = VIDEO_PROMPT_STATE_WAIT_YES_NO;
         break;
-    case 4:
+    case VIDEO_PROMPT_STATE_WAIT_YES_NO:
         switch ((u32)Handle2dMenuInput_DeleteOnFinish(screen->yesNoMenu, screen->args->heapId)) {
         case 0:
-            screen->videoPromptState = 5;
+            screen->videoPromptState = VIDEO_PROMPT_STATE_START_SAVE;
             screen->yesNoMenu = NULL;
             break;
         case -2:
-            screen->videoPromptState = 1;
+            screen->videoPromptState = VIDEO_PROMPT_STATE_SHOW_PROMPT;
             screen->yesNoMenu = NULL;
             break;
         }
         break;
-    case 5:
+    case VIDEO_PROMPT_STATE_START_SAVE:
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00005, screen->string);
         screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, TEXT_SPEED_INSTANT, NULL);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
-        screen->videoPromptState = 6;
+        screen->videoPromptState = VIDEO_PROMPT_STATE_SAVING;
         break;
-    case 6:
+    case VIDEO_PROMPT_STATE_SAVING:
         break;
-    case 7:
+    case VIDEO_PROMPT_STATE_CLOSE:
         if (screen->yesNoMenu != NULL) {
             Clear2dMenuWindowAndDelete(screen->yesNoMenu, screen->args->heapId);
             screen->yesNoMenu = NULL;
         }
         ClearFrameAndWindow2(&screen->msgWindow, FALSE);
         ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_0);
-        screen->videoPromptState = 8;
+        screen->videoPromptState = VIDEO_PROMPT_STATE_CLOSED;
         break;
-    case 8:
+    case VIDEO_PROMPT_STATE_CLOSED:
         break;
     }
 }
@@ -428,7 +446,7 @@ int LinkBattleScreen_Init(LinkBattleScreen *screen) {
         }
         break;
     }
-    return 1;
+    return LINK_SCREEN_STATE_RUN;
 }
 
 int LinkBattleScreen_InitPartyScreen(LinkBattleScreen *screen) {
@@ -519,7 +537,7 @@ int LinkBattleScreen_InitResultScreen(LinkBattleScreen *screen) {
         screen->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0638_bin, screen->args->heapId);
         screen->msgFormat = MessageFormat_New(screen->args->heapId);
         screen->string = String_New(320, screen->args->heapId);
-        screen->videoPromptState = 1;
+        screen->videoPromptState = VIDEO_PROMPT_STATE_SHOW_PROMPT;
         return 1;
     }
     screen->frame++;
@@ -631,7 +649,7 @@ int LinkBattleScreen_SlidePanelsOut(LinkBattleScreen *screen) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 6, 1, screen->args->heapId);
     }
     if (screen->frame >= 8 && IsPaletteFadeFinished() == TRUE) {
-        screen->taskState = 2;
+        screen->taskState = LINK_SCREEN_STATE_FINISH;
         return 1;
     }
     if (screen->frame == 0) {
@@ -683,14 +701,14 @@ int LinkBattleScreen_NudgePanels(LinkBattleScreen *screen) {
 int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen) {
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SUB_X, sPanelNudgeSteps[screen->frame * 2]);
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SUB_X, sPanelNudgeSteps[screen->frame * 2]);
-    LinkBattleScreen_SetBallRowPosition(screen, 0, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 1, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 2, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 3, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 0, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 1, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 2, ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 3, ov05_0221EA6D[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 0, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 1, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 2, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 3, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 0, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 1, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 2, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 3, sPanelNudgeSpriteSteps[screen->frame * 2], 0);
     if (screen->frame == 0) {
         PlaySE(SEQ_SE_DP_DODON);
     }
@@ -705,14 +723,14 @@ int LinkBattleScreen_NudgePanelsRight(LinkBattleScreen *screen) {
 int LinkBattleScreen_NudgePanelsLeft(LinkBattleScreen *screen) {
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_ADD_X, sPanelNudgeSteps[screen->frame * 2]);
     ScheduleSetBgPosText(screen->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_ADD_X, sPanelNudgeSteps[screen->frame * 2]);
-    LinkBattleScreen_SetBallRowPosition(screen, 0, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 1, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 2, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetBallRowPosition(screen, 3, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 0, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 1, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 2, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
-    LinkBattleScreen_SetNamePosition(screen, 3, (s16)-ov05_0221EA6D[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 0, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 1, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 2, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetBallRowPosition(screen, 3, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 0, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 1, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 2, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
+    LinkBattleScreen_SetNamePosition(screen, 3, (s16)-sPanelNudgeSpriteSteps[screen->frame * 2], 0);
     if (screen->frame == 0) {
         PlaySE(SEQ_SE_DP_DODON);
     }
@@ -781,11 +799,11 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
     if (screen->hasVersionZeroPlayer == 0 && screen->yesNoMenu != NULL) {
         return 0;
     }
-    if (screen->videoPromptState == 5) {
+    if (screen->videoPromptState == VIDEO_PROMPT_STATE_START_SAVE) {
         return 0;
     }
-    if (screen->videoPromptState != 6 && screen->videoPromptState != 5 && screen->videoPromptState != 7 && screen->videoPromptState != 8) {
-        screen->videoPromptState = 7;
+    if (screen->videoPromptState != VIDEO_PROMPT_STATE_SAVING && screen->videoPromptState != VIDEO_PROMPT_STATE_START_SAVE && screen->videoPromptState != VIDEO_PROMPT_STATE_CLOSE && screen->videoPromptState != VIDEO_PROMPT_STATE_CLOSED) {
+        screen->videoPromptState = VIDEO_PROMPT_STATE_CLOSE;
         screen->frame = 0xFF;
     }
     switch (screen->frame) {
@@ -896,7 +914,7 @@ int LinkBattleScreen_SlidePartyPanelsIn(LinkBattleScreen *screen) {
 
 int LinkBattleScreen_StartExit(LinkBattleScreen *screen) {
     BeginAppScreenFade(1, screen->args->heapId);
-    screen->taskState = 2;
+    screen->taskState = LINK_SCREEN_STATE_FINISH;
     return 1;
 }
 

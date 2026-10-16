@@ -20,18 +20,23 @@ typedef struct BattleTransitionTaskEnv {
 static BOOL Task_BattleTransition(TaskManager *taskMan);
 void CallTask_BattleTransition(TaskManager *taskMan, int effect, int bgm);
 
+enum {
+    BATTLE_TRANSITION_STATE_START,
+    BATTLE_TRANSITION_STATE_WAIT,
+};
+
 static BOOL Task_BattleTransition(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     BattleTransitionTaskEnv *env = TaskManager_GetEnvironment(taskMan);
 
     switch (env->state) {
-    case 0:
+    case BATTLE_TRANSITION_STATE_START:
         EncounterEffect_LoadOverlay(env->effect);
         EncounterEffect_Start(env->effect, fieldSystem, &env->done);
         Sound_SetSceneAndPlayBGM(5, env->bgm, 1);
         env->state++;
         break;
-    case 1:
+    case BATTLE_TRANSITION_STATE_WAIT:
         if (env->done == 1) {
             EncounterEffect_UnloadOverlay(env->effect);
             Heap_Free(env);

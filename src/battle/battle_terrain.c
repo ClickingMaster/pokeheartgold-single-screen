@@ -23,7 +23,7 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain);
 void BattleTerrain_CreateSprite(BattleTerrain *terrain);
 void BattleTerrain_DeleteSprite(BattleTerrain *terrain);
 void BattleTerrain_UnloadResources(BattleTerrain *terrain);
-void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *bsys, s32 unk8, s32 unk9);
+void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 side, s32 terrainId);
 
 static const u16 sEnemyTerrainCharFiles[] = {
     0x88,
@@ -185,12 +185,12 @@ void BattleTerrain_SetDrawFlag(BattleTerrain *terrain, s32 flag) {
     }
 }
 
-void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *bsys, s32 unk8, s32 unk9) {
+void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 side, s32 terrainId) {
     MIi_CpuClearFast(0, (void *)terrain, sizeof(BattleTerrain));
-    terrain->battleSystem = bsys;
-    terrain->side = unk8;
-    terrain->terrainId = unk9;
-    if (unk9 >= 0x18) {
+    terrain->battleSystem = battleSystem;
+    terrain->side = side;
+    terrain->terrainId = terrainId;
+    if (terrainId >= 0x18) {
         GF_AssertFail();
         terrain->terrainId = 0;
     }

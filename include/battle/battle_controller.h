@@ -65,7 +65,7 @@ void BattleController_EmitBackgroundSlideIn(BattleSystem *battleSystem, int batt
 void BattleController_EmitHealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 delay);
 void BattleController_EmitHealthbarSlideOut(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitShowMonList(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, u32 mode, u32 canSwitch, u32 reservedMon);
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int a6);
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int msgParam);
 void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battlerId);
 void BattleController_EmitPrintAttackMessage(BattleSystem *battleSystem, BattleContext *ctx);
 void BattleController_EmitPrintMessage(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage *msg);

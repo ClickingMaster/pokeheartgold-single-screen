@@ -475,8 +475,8 @@ struct BattleAnimObjWindowBgWork {
 
 extern const u16 gBattleAnimDarkSpriteDrawFlags[6];
 extern const u32 gBattleAnimObjWindowBgGraphics[];
-extern const u32 ov07_02236810[];
-extern const u32 ov07_02236814[];
+extern const u32 gBattleAnimObjWindowBgPalettes[];
+extern const u32 gBattleAnimObjWindowBgScreens[];
 
 void BattleAnimTask_SkewSlideAttackerBgResetScroll(BattleAnimSkewSlideWork *work, u32 *buffer) {
     u32 value = ((u32)-work->y << 16) | (u16)-work->x;
@@ -508,12 +508,20 @@ BOOL BattleAnimTask_SkewSlideAttackerBgUpdateScroll(BattleAnimSkewSlideWork *wor
     return active;
 }
 
+enum {
+    SKEW_SLIDE_STATE_SCROLL,
+    SKEW_SLIDE_STATE_BLEND_IN,
+    SKEW_SLIDE_STATE_HOLD,
+    SKEW_SLIDE_STATE_BLEND_OUT,
+    SKEW_SLIDE_STATE_END,
+};
+
 void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
     BattleAnimSkewSlideWork *work = data;
     int bgLayer;
 
     switch (work->state) {
-    case 0:
+    case SKEW_SLIDE_STATE_SCROLL:
         if (!BattleAnimTask_SkewSlideAttackerBgUpdateScroll(work)) {
             work->state++;
             BattleAnimUtil_SetBlendBgOverBattleBg(work->system, 31, 0);
@@ -521,7 +529,7 @@ void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
             return;
         }
         break;
-    case 1:
+    case SKEW_SLIDE_STATE_BLEND_IN:
         BattleAnimTask_SkewSlideAttackerBgUpdateScroll(work);
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
@@ -530,7 +538,7 @@ void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
             return;
         }
         break;
-    case 2:
+    case SKEW_SLIDE_STATE_HOLD:
         BgSetPosTextAndCommit(BattleAnimSystem_GetBgConfig(work->system), GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, -work->x);
         BgSetPosTextAndCommit(BattleAnimSystem_GetBgConfig(work->system), GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, -work->y);
         work->timer++;
@@ -540,14 +548,14 @@ void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data) {
             return;
         }
         break;
-    case 3:
+    case SKEW_SLIDE_STATE_BLEND_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, FALSE);
             work->state++;
             return;
         }
         break;
-    case 4:
+    case SKEW_SLIDE_STATE_END:
         BattleAnimScanline_FreeWave(work->wave);
         bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->system, 1));
@@ -609,13 +617,20 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
+enum {
+    FADE_SHRINK_STATE_FADE_IN,
+    FADE_SHRINK_STATE_HOLD,
+    FADE_SHRINK_STATE_SHRINK,
+    FADE_SHRINK_STATE_END,
+};
+
 void BattleAnimTask_FadeInShrinkSprite(SysTask *task, void *data) {
     BattleAnimFadeInShrinkSpriteWork *work = data;
     f32 x;
     f32 y;
 
     switch (work->state) {
-    case 0: {
+    case FADE_SHRINK_STATE_FADE_IN: {
         BOOL active = BattleAnimUtil_UpdateValueMotionFx(&work->blend);
         reg_G2_BLDALPHA = work->blend.value | ((31 - work->blend.value) << 8);
         if (active == FALSE) {
@@ -623,13 +638,13 @@ void BattleAnimTask_FadeInShrinkSprite(SysTask *task, void *data) {
             work->timer = 0;
         }
     } break;
-    case 1:
+    case FADE_SHRINK_STATE_HOLD:
         work->timer++;
         if (work->timer > 32) {
             work->state++;
         }
         break;
-    case 2: {
+    case FADE_SHRINK_STATE_SHRINK: {
         BOOL active = BattleAnimUtil_UpdateScaleMotion(&work->scale);
         BattleAnimUtil_GetScaleFloat(&work->scale, &x, &y);
         if (work->flipX == TRUE) {
@@ -642,7 +657,7 @@ void BattleAnimTask_FadeInShrinkSprite(SysTask *task, void *data) {
         }
         break;
     }
-    case 3:
+    case FADE_SHRINK_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         return;
@@ -650,11 +665,17 @@ void BattleAnimTask_FadeInShrinkSprite(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(work->spriteManager);
 }
 
+enum {
+    BLACK_FLASH_STATE_FADE_OUT,
+    BLACK_FLASH_STATE_FADE_IN,
+    BLACK_FLASH_STATE_END,
+};
+
 void BattleAnimTask_ShakeDefenderBlackFlash(SysTask *task, void *data) {
     BattleAnimShakeDefenderBlackFlashWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case BLACK_FLASH_STATE_FADE_OUT:
         BattleAnimUtil_UpdateShake(&work->shake);
         BattleAnimUtil_SetPokepicPosWithOffset(&work->shake, work->pokepic, work->x, work->y);
         if (work->withSprite == TRUE) {
@@ -669,7 +690,7 @@ void BattleAnimTask_ShakeDefenderBlackFlash(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 1:
+    case BLACK_FLASH_STATE_FADE_IN:
         BattleAnimUtil_UpdateShake(&work->shake);
         BattleAnimUtil_SetPokepicPosWithOffset(&work->shake, work->pokepic, work->x, work->y);
         if (work->withSprite == TRUE) {
@@ -687,7 +708,7 @@ void BattleAnimTask_ShakeDefenderBlackFlash(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 2:
+    case BLACK_FLASH_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -756,29 +777,36 @@ void BattleAnimFunc_ShakeDefenderBlackFlash(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
+enum {
+    WAVE_BLEND_STATE_WAIT_BLEND_IN,
+    WAVE_BLEND_STATE_HOLD,
+    WAVE_BLEND_STATE_BLEND_OUT,
+    WAVE_BLEND_STATE_DONE,
+};
+
 BOOL BattleAnimTask_WaveDefenderOnBgUpdate(BattleAnimWaveOnBgWork *work) {
     BOOL done = FALSE;
 
     switch (work->blendState) {
-    case 0:
+    case WAVE_BLEND_STATE_WAIT_BLEND_IN:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend) == TRUE) {
             work->blendState++;
             work->timer = 32;
         }
         break;
-    case 1:
+    case WAVE_BLEND_STATE_HOLD:
         if (--work->timer < 0) {
             work->blendState++;
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 8, 0, 8, 16, 24);
         }
         break;
-    case 2:
+    case WAVE_BLEND_STATE_BLEND_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend) == TRUE) {
             work->blendState++;
             BattleAnimScanline_FreeWave(work->wave);
         }
         break;
-    case 3:
+    case WAVE_BLEND_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -787,11 +815,17 @@ BOOL BattleAnimTask_WaveDefenderOnBgUpdate(BattleAnimWaveOnBgWork *work) {
 
 #pragma force_active on
 
+enum {
+    WAVE_ON_BG_STATE_HIDE_PIC,
+    WAVE_ON_BG_STATE_WAVE,
+    WAVE_ON_BG_STATE_END,
+};
+
 void BattleAnimTask_WaveDefenderOnBg(SysTask *task, void *data) {
     BattleAnimWaveOnBgWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case WAVE_ON_BG_STATE_HIDE_PIC:
         BattleAnimTask_WaveDefenderOnBgUpdate(work);
         if (ManagedSprite_GetDrawFlag(work->sprite) == TRUE) {
             int defender = BattleAnimSystem_GetDefender(work->system);
@@ -801,12 +835,12 @@ void BattleAnimTask_WaveDefenderOnBg(SysTask *task, void *data) {
         }
         work->state++;
         break;
-    case 1:
+    case WAVE_ON_BG_STATE_WAVE:
         if (BattleAnimTask_WaveDefenderOnBgUpdate(work)) {
             work->state++;
         }
         break;
-    case 2: {
+    case WAVE_ON_BG_STATE_END: {
         int bgLayer = BattleAnimSystem_GetBgLayer(work->system, 1);
         int priority = BattleAnimSystem_GetBgPriority(work->system, 1);
         SetBgPriority((u8)bgLayer, (u8)priority);
@@ -871,6 +905,13 @@ void BattleAnimFunc_WaveDefenderOnBg(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WaveDefenderOnBg, work);
 }
 
+enum {
+    GROW_ROCK_STATE_GROW,
+    GROW_ROCK_STATE_ROCK,
+    GROW_ROCK_STATE_SHRINK,
+    GROW_ROCK_STATE_END,
+};
+
 void BattleAnimTask_GrowRockShrinkSprite(SysTask *task, void *data) {
     BattleAnimGrowRockShrinkSpriteWork *work = data;
     f32 x;
@@ -878,7 +919,7 @@ void BattleAnimTask_GrowRockShrinkSprite(SysTask *task, void *data) {
     BOOL active;
 
     switch (work->state) {
-    case 0:
+    case GROW_ROCK_STATE_GROW:
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             BattleAnimUtil_GetScaleFloat(&work->scale, &x, &y);
             ManagedSprite_SetAffineScale(work->sprite, x * (f32)work->sign, y);
@@ -888,7 +929,7 @@ void BattleAnimTask_GrowRockShrinkSprite(SysTask *task, void *data) {
             BattleAnimUtil_InitScaleMotion(&work->scale, 10, 10, 1, 8);
         }
         break;
-    case 1:
+    case GROW_ROCK_STATE_ROCK:
         active = BattleAnimUtil_UpdateValueMotion(&work->rotation);
         ManagedSprite_SetAffineZRotation(work->sprite, work->rotation.value);
         if (!active) {
@@ -905,7 +946,7 @@ void BattleAnimTask_GrowRockShrinkSprite(SysTask *task, void *data) {
             }
         }
         break;
-    case 2:
+    case GROW_ROCK_STATE_SHRINK:
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             BattleAnimUtil_GetScaleFloat(&work->scale, &x, &y);
             ManagedSprite_SetAffineScale(work->sprite, x * (f32)work->sign, y);
@@ -913,7 +954,7 @@ void BattleAnimTask_GrowRockShrinkSprite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 3:
+    case GROW_ROCK_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1017,12 +1058,19 @@ BOOL BattleAnimScaleSprite_Update(BattleAnimScaleSprite *scaleSprite) {
     return TRUE;
 }
 
+enum {
+    STACKED_SPRITES_STATE_SHOW,
+    STACKED_SPRITES_STATE_SHAKE,
+    STACKED_SPRITES_STATE_SCALE,
+    STACKED_SPRITES_STATE_END,
+};
+
 void BattleAnimTask_StackedSpritesOnDefender(SysTask *task, void *data) {
     BattleAnimStackedSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case STACKED_SPRITES_STATE_SHOW:
         if (work->timer >= 4) {
             work->timer = 0;
             BattleAnimScaleSprite_Show(&work->sprites[work->index]);
@@ -1033,12 +1081,12 @@ void BattleAnimTask_StackedSpritesOnDefender(SysTask *task, void *data) {
         }
         work->timer++;
         break;
-    case 1:
+    case STACKED_SPRITES_STATE_SHAKE:
         if (BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic) == FALSE) {
             work->state++;
         }
         break;
-    case 2: {
+    case STACKED_SPRITES_STATE_SCALE: {
         BOOL active;
         for (i = 0; i < 4; i++) {
             active = BattleAnimScaleSprite_Update(&work->sprites[i]);
@@ -1048,7 +1096,7 @@ void BattleAnimTask_StackedSpritesOnDefender(SysTask *task, void *data) {
         }
         break;
     }
-    case 3:
+    case STACKED_SPRITES_STATE_END:
         Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->x);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->y);
         for (i = 0; i < 4; i++) {
@@ -1092,11 +1140,21 @@ void BattleAnimSpriteFunc_StackedSpritesOnDefender(BattleAnimSystem *system, Spr
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_StackedSpritesOnDefender, work);
 }
 
+enum {
+    BOOMERANG_STATE_LEAN_BACK,
+    BOOMERANG_STATE_LEAN_RETURN,
+    BOOMERANG_STATE_THROW,
+    BOOMERANG_STATE_COME_BACK,
+    BOOMERANG_STATE_CATCH,
+    BOOMERANG_STATE_RECOVER,
+    BOOMERANG_STATE_END,
+};
+
 void BattleAnimTask_BoomerangSprite(SysTask *task, void *data) {
     BattleAnimBoomerangSpriteWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case BOOMERANG_STATE_LEAN_BACK:
         if (BattleAnimUtil_UpdateLinearMotion(&work->lean)) {
             BattleAnimUtil_SetPokepicPosWithOffset(&work->lean, work->attackerPokepic, work->attackerX, work->attackerY);
             return;
@@ -1104,7 +1162,7 @@ void BattleAnimTask_BoomerangSprite(SysTask *task, void *data) {
         BattleAnimUtil_InitLinearMotion(&work->lean, work->lean.x, 0, 0, 0, 2);
         work->state++;
         return;
-    case 1:
+    case BOOMERANG_STATE_LEAN_RETURN:
         if (BattleAnimUtil_UpdateLinearMotion(&work->lean)) {
             BattleAnimUtil_SetPokepicPosWithOffset(&work->lean, work->attackerPokepic, work->attackerX, work->attackerY);
             return;
@@ -1114,19 +1172,19 @@ void BattleAnimTask_BoomerangSprite(SysTask *task, void *data) {
         BattleAnimUtil_InitLinearMotion(&work->lean, 0, -(work->direction << 5), 0, 0, 4);
         work->state++;
         return;
-    case 2:
+    case BOOMERANG_STATE_THROW:
         if (!BattleAnimUtil_UpdateLinearSinMotionSprite(&work->arc, &work->arcHeight, work->sprite)) {
             BattleAnimUtil_InitLinearSinMotion(&work->arc, &work->arcHeight, work->defenderX, work->attackerX, work->defenderY, work->attackerY, 10, -2 << 16);
             work->state++;
         }
         break;
-    case 3:
+    case BOOMERANG_STATE_COME_BACK:
         if (!BattleAnimUtil_UpdateLinearSinMotionSprite(&work->arc, &work->arcHeight, work->sprite)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             work->state++;
         }
         break;
-    case 4:
+    case BOOMERANG_STATE_CATCH:
         if (BattleAnimUtil_UpdateLinearMotion(&work->lean)) {
             BattleAnimUtil_SetPokepicPosWithOffset(&work->lean, work->attackerPokepic, work->attackerX, work->attackerY);
         } else {
@@ -1134,7 +1192,7 @@ void BattleAnimTask_BoomerangSprite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 5:
+    case BOOMERANG_STATE_RECOVER:
         if (BattleAnimUtil_UpdateLinearMotion(&work->lean)) {
             BattleAnimUtil_SetPokepicPosWithOffset(&work->lean, work->attackerPokepic, work->attackerX, work->attackerY);
         } else {
@@ -1143,7 +1201,7 @@ void BattleAnimTask_BoomerangSprite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 6:
+    case BOOMERANG_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1177,31 +1235,38 @@ void BattleAnimSpriteFunc_BoomerangSprite(BattleAnimSystem *system, SpriteSystem
 
 #pragma force_active reset
 
+enum {
+    CIRCLE_FADE_STATE_CIRCLE,
+    CIRCLE_FADE_STATE_DELAY,
+    CIRCLE_FADE_STATE_FADE,
+    CIRCLE_FADE_STATE_END,
+};
+
 void BattleAnimTask_AttackerCircleFade(SysTask *task, void *data) {
     BattleAnimWork0222DB14 *work = data;
 
     switch (work->state) {
-    case 0:
+    case CIRCLE_FADE_STATE_CIRCLE:
         if (BattleAnimUtil_UpdateSinMotionSprite(&work->motion, work->x, work->y - work->shadowHeight, work->sprite) == FALSE) {
             work->state++;
             work->timer = 16;
         }
         break;
-    case 1:
+    case CIRCLE_FADE_STATE_DELAY:
         work->timer--;
         if (work->timer < 0) {
             work->state++;
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 0, 16, 16, 0, 32);
         }
         break;
-    case 2:
+    case CIRCLE_FADE_STATE_FADE:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             ManagedSprite_SetDrawFlag(work->sprite, TRUE);
             Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, FALSE);
             work->state++;
         }
         break;
-    case 3:
+    case CIRCLE_FADE_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         return;
@@ -1236,11 +1301,17 @@ void BattleAnimFunc_AttackerCircleFade(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
+enum {
+    RISING_PIC_STATE_STRETCH,
+    RISING_PIC_STATE_RESTORE,
+    RISING_PIC_STATE_DONE,
+};
+
 BOOL BattleAnimTask_RisingSpriteStretchAttackerPic(BattleAnimRisingSpriteStretchWork *work) {
     BOOL done = FALSE;
 
     switch (work->picState) {
-    case 0:
+    case RISING_PIC_STATE_STRETCH:
         if (BattleAnimUtil_UpdateScaleMotion(&work->picScale)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->picScale.y);
         } else {
@@ -1248,7 +1319,7 @@ BOOL BattleAnimTask_RisingSpriteStretchAttackerPic(BattleAnimRisingSpriteStretch
             BattleAnimUtil_InitScaleMotion(&work->picScale, 15, 10, 10, 12);
         }
         break;
-    case 1:
+    case RISING_PIC_STATE_RESTORE:
         if (BattleAnimUtil_UpdateScaleMotion(&work->picScale)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->picScale.y);
         } else {
@@ -1256,18 +1327,24 @@ BOOL BattleAnimTask_RisingSpriteStretchAttackerPic(BattleAnimRisingSpriteStretch
             work->picState++;
         }
         break;
-    case 2:
+    case RISING_PIC_STATE_DONE:
         done = TRUE;
         break;
     }
     return done;
 }
 
+enum {
+    RISING_SPRITE_STATE_RISE,
+    RISING_SPRITE_STATE_FADE_OUT,
+    RISING_SPRITE_STATE_DONE,
+};
+
 BOOL BattleAnimTask_RisingSpriteStretchAttackerSprite(BattleAnimRisingSpriteStretchWork *work) {
     BOOL done = FALSE;
 
     switch (work->spriteState) {
-    case 0:
+    case RISING_SPRITE_STATE_RISE:
         BattleAnimUtil_UpdateScaleMotionSprite(&work->spriteScale, work->sprite);
         if (BattleAnimUtil_UpdateLinearMotion(&work->rise)) {
             BattleAnimUtil_SetSpritePosWithOffset(&work->rise, work->sprite, work->x, work->y);
@@ -1276,30 +1353,35 @@ BOOL BattleAnimTask_RisingSpriteStretchAttackerSprite(BattleAnimRisingSpriteStre
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 0, 14, 16, 8);
         }
         break;
-    case 1:
+    case RISING_SPRITE_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             work->spriteState++;
         }
         break;
-    case 2:
+    case RISING_SPRITE_STATE_DONE:
         done = TRUE;
         break;
     }
     return done;
 }
 
+enum {
+    RISING_STRETCH_STATE_RUN,
+    RISING_STRETCH_STATE_END,
+};
+
 void BattleAnimTask_RisingSpriteStretchAttacker(SysTask *task, void *data) {
     BattleAnimRisingSpriteStretchWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case RISING_STRETCH_STATE_RUN:
         BattleAnimTask_RisingSpriteStretchAttackerPic(work);
         if (BattleAnimTask_RisingSpriteStretchAttackerSprite(work)) {
             work->state++;
         }
         break;
-    case 1:
+    case RISING_STRETCH_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1376,22 +1458,30 @@ void BattleAnimTask_ZigzagSlashSetLeg(BattleAnimZigzagSlashWork *work) {
 
 #pragma force_active on
 
+enum {
+    ZIGZAG_SLASH_STATE_NEXT_LEG,
+    ZIGZAG_SLASH_STATE_MOVE,
+    ZIGZAG_SLASH_STATE_FADE_OUT,
+    ZIGZAG_SLASH_STATE_RESTORE_PIC,
+    ZIGZAG_SLASH_STATE_END,
+};
+
 void BattleAnimTask_ZigzagSlash(SysTask *task, void *data) {
     BattleAnimZigzagSlashWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case ZIGZAG_SLASH_STATE_NEXT_LEG:
         if (++work->timer > 4) {
             BattleAnimTask_ZigzagSlashSetLeg(work);
             work->state++;
             work->timer = 0;
         }
         break;
-    case 1:
+    case ZIGZAG_SLASH_STATE_MOVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->leg)) {
             BattleAnimUtil_SetSpritePosWithOffset(&work->leg, work->sprite, work->x, work->y);
         } else if (++work->legIndex < 6) {
-            work->state = 0;
+            work->state = ZIGZAG_SLASH_STATE_NEXT_LEG;
             work->x += work->leg.x;
             work->y += work->leg.y;
         } else {
@@ -1401,7 +1491,7 @@ void BattleAnimTask_ZigzagSlash(SysTask *task, void *data) {
             Pokepic_StartPaletteFade(work->pokepic, 0, 10, 0, 0x7FFF);
         }
         break;
-    case 2:
+    case ZIGZAG_SLASH_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
         }
@@ -1410,12 +1500,12 @@ void BattleAnimTask_ZigzagSlash(SysTask *task, void *data) {
             Pokepic_StartPaletteFade(work->pokepic, 10, 0, 0, 0x7FFF);
         }
         break;
-    case 3:
+    case ZIGZAG_SLASH_STATE_RESTORE_PIC:
         if (!Pokepic_ResumePaletteFade(work->pokepic)) {
             work->state++;
         }
         break;
-    case 4:
+    case ZIGZAG_SLASH_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1461,13 +1551,23 @@ void BattleAnimTask_ZigzagFlashSetLeg(BattleAnimZigzagFlashWork *work) {
 
 #pragma force_active on
 
+enum {
+    ZIGZAG_FLASH_STATE_NEXT_LEG,
+    ZIGZAG_FLASH_STATE_MOVE,
+    ZIGZAG_FLASH_STATE_DELAY,
+    ZIGZAG_FLASH_STATE_FLASH,
+    ZIGZAG_FLASH_STATE_RESTORE,
+    ZIGZAG_FLASH_STATE_BLINK,
+    ZIGZAG_FLASH_STATE_END,
+};
+
 void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
     BattleAnimZigzagFlashWork *work = data;
     int i;
     PaletteData *paletteData;
 
     switch (work->state) {
-    case 0:
+    case ZIGZAG_FLASH_STATE_NEXT_LEG:
         if (++work->timer <= 1) {
             break;
         }
@@ -1475,13 +1575,13 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
         work->state++;
         work->timer = 0;
         break;
-    case 1:
+    case ZIGZAG_FLASH_STATE_MOVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->leg)) {
             BattleAnimUtil_SetSpritePosWithOffset(&work->leg, work->sprite, work->x, work->y);
             break;
         }
         if (++work->legIndex < 4) {
-            work->state = 0;
+            work->state = ZIGZAG_FLASH_STATE_NEXT_LEG;
             work->x += work->leg.x;
             work->y += work->leg.y;
         } else {
@@ -1491,7 +1591,7 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
             ManagedSprite_SetAnimateFlag(work->sprite, TRUE);
         }
         break;
-    case 2:
+    case ZIGZAG_FLASH_STATE_DELAY:
         if (--work->timer >= 0) {
             break;
         }
@@ -1504,7 +1604,7 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
             }
         }
         break;
-    case 3:
+    case ZIGZAG_FLASH_STATE_FLASH:
         if (PaletteData_GetSelectedBuffersBitmask(BattleAnimSystem_GetPaletteData(work->system))) {
             break;
         }
@@ -1517,7 +1617,7 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
             }
         }
         break;
-    case 4:
+    case ZIGZAG_FLASH_STATE_RESTORE:
         if (PaletteData_GetSelectedBuffersBitmask(BattleAnimSystem_GetPaletteData(work->system))) {
             break;
         }
@@ -1526,7 +1626,7 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
         work->legIndex = 4;
         work->draw = FALSE;
         break;
-    case 5:
+    case ZIGZAG_FLASH_STATE_BLINK:
         if (--work->timer >= 0) {
             break;
         }
@@ -1538,7 +1638,7 @@ void BattleAnimTask_ZigzagFlash(SysTask *task, void *data) {
         ManagedSprite_SetDrawFlag(work->sprite, work->draw);
         work->draw ^= TRUE;
         break;
-    case 6:
+    case ZIGZAG_FLASH_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1587,11 +1687,18 @@ void BattleAnimTask_WaddlePicStartStep(BattleAnimWaddlePicWork *work, BOOL flip)
 
 #pragma force_active on
 
+enum {
+    WADDLE_STEP_STATE_TILT,
+    WADDLE_STEP_STATE_HOP,
+    WADDLE_STEP_STATE_LAND,
+    WADDLE_STEP_STATE_DONE,
+};
+
 BOOL BattleAnimTask_WaddlePicUpdateStep(BattleAnimWaddlePicWork *work) {
     BOOL done = FALSE;
 
     switch (work->stepState) {
-    case 0:
+    case WADDLE_STEP_STATE_TILT:
         BattleAnimUtil_UpdateValueMotionFx(&work->tilt);
         Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, work->tilt.value);
         if (--work->stepTimer < 0) {
@@ -1599,7 +1706,7 @@ BOOL BattleAnimTask_WaddlePicUpdateStep(BattleAnimWaddlePicWork *work) {
             BattleAnimUtil_InitLinearMotion(&work->hop, work->x, work->x, work->y, (s16)(work->y + 2), 2);
         }
         break;
-    case 1:
+    case WADDLE_STEP_STATE_HOP:
         if (BattleAnimUtil_UpdateValueMotionFx(&work->tilt)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, work->tilt.value);
         }
@@ -1609,7 +1716,7 @@ BOOL BattleAnimTask_WaddlePicUpdateStep(BattleAnimWaddlePicWork *work) {
             BattleAnimUtil_InitLinearMotion(&work->hop, work->x, work->x, (s16)(work->y + 2), work->y, 2);
         }
         break;
-    case 2:
+    case WADDLE_STEP_STATE_LAND:
         BattleAnimUtil_UpdateLinearMotionPokepic(&work->hop, work->pokepic);
         if (BattleAnimUtil_UpdateValueMotionFx(&work->tilt)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, work->tilt.value);
@@ -1620,7 +1727,7 @@ BOOL BattleAnimTask_WaddlePicUpdateStep(BattleAnimWaddlePicWork *work) {
             work->stepState++;
         }
         break;
-    case 3:
+    case WADDLE_STEP_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -1629,11 +1736,16 @@ BOOL BattleAnimTask_WaddlePicUpdateStep(BattleAnimWaddlePicWork *work) {
 
 #pragma force_active reset
 
+enum {
+    WADDLE_STATE_STEP,
+    WADDLE_STATE_END,
+};
+
 void BattleAnimTask_WaddlePic(SysTask *task, void *data) {
     BattleAnimWaddlePicWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case WADDLE_STATE_STEP:
         if (BattleAnimTask_WaddlePicUpdateStep(work)) {
             work->steps++;
             if (work->steps < 4) {
@@ -1645,7 +1757,7 @@ void BattleAnimTask_WaddlePic(SysTask *task, void *data) {
             }
         }
         break;
-    case 1:
+    case WADDLE_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -1686,31 +1798,38 @@ void BattleAnimFunc_WaddlePic(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WaddlePic, work);
 }
 
+enum {
+    STRETCH_UP_STEP_STATE_STRETCH,
+    STRETCH_UP_STEP_STATE_HOLD,
+    STRETCH_UP_STEP_STATE_SHRINK,
+    STRETCH_UP_STEP_STATE_RESET,
+};
+
 BOOL BattleAnimTask_AttackerStretchUpStep(BattleAnimAttackerStretchUpWork *work) {
     BOOL done = FALSE;
 
     switch (work->stepState) {
-    case 0:
+    case STRETCH_UP_STEP_STATE_STRETCH:
         if (BattleAnimUtil_UpdateScaleMotionPokepic(&work->scale, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, (s16)work->y, (s16)work->height, work->scale.curY, 0);
         } else {
             work->stepState++;
         }
         break;
-    case 1:
+    case STRETCH_UP_STEP_STATE_HOLD:
         if (--work->delay < 0) {
             work->stepState++;
             BattleAnimUtil_InitScaleMotion(&work->scale, 15, 10, 10, 8);
         }
         break;
-    case 2:
+    case STRETCH_UP_STEP_STATE_SHRINK:
         if (BattleAnimUtil_UpdateScaleMotionPokepic(&work->scale, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, (s16)work->y, (s16)work->height, work->scale.curY, 0);
         } else {
             work->stepState++;
         }
         break;
-    case 3:
+    case STRETCH_UP_STEP_STATE_RESET:
         Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, 0x100);
         Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, 0x100);
         done = TRUE;
@@ -1721,23 +1840,29 @@ BOOL BattleAnimTask_AttackerStretchUpStep(BattleAnimAttackerStretchUpWork *work)
 
 #pragma force_active reset
 
+enum {
+    STRETCH_UP_STATE_STRETCH,
+    STRETCH_UP_STATE_DELAY,
+    STRETCH_UP_STATE_END,
+};
+
 void BattleAnimTask_AttackerStretchUp(SysTask *task, void *data) {
     BattleAnimAttackerStretchUpWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case STRETCH_UP_STATE_STRETCH:
         if (BattleAnimTask_AttackerStretchUpStep(work)) {
             work->state++;
             work->timer = 16;
         }
         break;
-    case 1:
+    case STRETCH_UP_STATE_DELAY:
         work->timer--;
         if (work->timer < 0) {
             work->state++;
         }
         break;
-    case 2:
+    case STRETCH_UP_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -1763,75 +1888,96 @@ void BattleAnimTask_PulseSpriteBrightnessFlashStartPulse(BattleAnimPulseSpriteWo
     work->pulseCount = 0;
 }
 
+enum {
+    PULSE_STATE_GROW,
+    PULSE_STATE_SHRINK,
+    PULSE_STATE_WAIT_BLEND,
+    PULSE_STATE_DONE,
+};
+
 BOOL BattleAnimTask_PulseSpriteBrightnessFlashUpdatePulse(BattleAnimPulseSpriteWork *work) {
     BOOL done = FALSE;
 
     switch (work->pulseState) {
-    case 0:
+    case PULSE_STATE_GROW:
         if (!BattleAnimUtil_UpdateScaleMotionSprite(&work->scale, work->sprite)) {
             BattleAnimUtil_InitScaleMotion(&work->scale, (s16)(work->scaleB / 100), 10, (s16)(work->scaleA / 100), work->duration / 100);
             work->pulseState++;
         }
         break;
-    case 1:
+    case PULSE_STATE_SHRINK:
         if (!BattleAnimUtil_UpdateScaleMotionSprite(&work->scale, work->sprite)) {
             work->pulseCount++;
             if (work->pulseCount < 2) {
-                work->pulseState = 0;
+                work->pulseState = PULSE_STATE_GROW;
                 BattleAnimUtil_InitScaleMotion(&work->scale, (s16)(work->scaleA / 100), 10, (s16)(work->scaleB / 100), work->duration / 100);
             } else {
                 work->pulseState++;
             }
         }
         break;
-    case 2:
+    case PULSE_STATE_WAIT_BLEND:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             done = TRUE;
             work->pulseState++;
         }
         break;
-    case 3:
+    case PULSE_STATE_DONE:
         done = TRUE;
         break;
     }
     return done;
 }
 
+enum {
+    PULSE_ROUND_STATE_START,
+    PULSE_ROUND_STATE_UPDATE,
+    PULSE_ROUND_STATE_DONE,
+};
+
 BOOL BattleAnimTask_PulseSpriteBrightnessFlashUpdatePulses(BattleAnimPulseSpriteWork *work) {
     BOOL done = FALSE;
 
     switch (work->roundState) {
-    case 0:
+    case PULSE_ROUND_STATE_START:
         BattleAnimTask_PulseSpriteBrightnessFlashStartPulse(work);
         BattleAnimTask_PulseSpriteBrightnessFlashUpdatePulse(work);
         work->roundState++;
         break;
-    case 1:
+    case PULSE_ROUND_STATE_UPDATE:
         if (BattleAnimTask_PulseSpriteBrightnessFlashUpdatePulse(work)) {
             work->repeats--;
             if (work->repeats >= 0) {
                 work->duration -= work->duration / 3;
                 work->scaleA -= work->scaleA / 3;
                 work->scaleB -= work->scaleB / 3;
-                work->roundState = 0;
+                work->roundState = PULSE_ROUND_STATE_START;
             } else {
                 done = TRUE;
                 work->roundState++;
             }
         }
         break;
-    case 2:
+    case PULSE_ROUND_STATE_DONE:
         done = TRUE;
         break;
     }
     return done;
 }
 
+enum {
+    BRIGHTNESS_FLASH_STATE_PULSE,
+    BRIGHTNESS_FLASH_STATE_FLASH,
+    BRIGHTNESS_FLASH_STATE_WAIT_BRIGHTNESS,
+    BRIGHTNESS_FLASH_STATE_FADE_OUT,
+    BRIGHTNESS_FLASH_STATE_END,
+};
+
 static void BattleAnimTask_PulseSpriteBrightnessFlash(SysTask *task, void *data) {
     BattleAnimPulseSpriteWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case BRIGHTNESS_FLASH_STATE_PULSE:
         if (BattleAnimTask_PulseSpriteBrightnessFlashUpdatePulses(work)) {
             work->state++;
             work->timer = 30;
@@ -1841,7 +1987,7 @@ static void BattleAnimTask_PulseSpriteBrightnessFlash(SysTask *task, void *data)
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 0, 16, 16, 0, 4);
         }
         break;
-    case 1:
+    case BRIGHTNESS_FLASH_STATE_FLASH:
         if (work->timer == 0) {
             StartBrightnessTransition(8, 16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3), SCREEN_MASK_MAIN);
             work->timer = -1;
@@ -1856,20 +2002,20 @@ static void BattleAnimTask_PulseSpriteBrightnessFlash(SysTask *task, void *data)
             work->state++;
         }
         break;
-    case 2:
+    case BRIGHTNESS_FLASH_STATE_WAIT_BRIGHTNESS:
         if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
             work->state++;
             BattleAnimUtil_SetBlendWithBattleBg(work->system, 16, 0);
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 0, 0, 16, 8);
         }
         break;
-    case 3:
+    case BRIGHTNESS_FLASH_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             work->state++;
         }
         break;
-    case 4:
+    case BRIGHTNESS_FLASH_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -1909,27 +2055,33 @@ void BattleAnimTask_AttackerDipSetLeg(BattleAnimAttackerDipWork *work) {
     }
 }
 
+enum {
+    DIP_STATE_NEXT_LEG,
+    DIP_STATE_MOVE,
+    DIP_STATE_END,
+};
+
 static void BattleAnimTask_AttackerDip(SysTask *task, void *data) {
     BattleAnimAttackerDipWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case DIP_STATE_NEXT_LEG:
         BattleAnimTask_AttackerDipSetLeg(work);
         work->state++;
         break;
-    case 1:
+    case DIP_STATE_MOVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->move)) {
             BattleAnimUtil_SetPokepicPosWithOffset(&work->move, work->pokepic, work->x, work->y);
             break;
         }
         work->leg++;
         if (work->leg < 4) {
-            work->state = 0;
+            work->state = DIP_STATE_NEXT_LEG;
         } else {
             work->state++;
         }
         break;
-    case 2:
+    case DIP_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -1946,16 +2098,26 @@ void BattleAnimFunc_AttackerDip(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerDip, work);
 }
 
+enum {
+    LUNGE_KNOCKBACK_STATE_INIT,
+    LUNGE_KNOCKBACK_STATE_CIRCLE,
+    LUNGE_KNOCKBACK_STATE_LUNGE,
+    LUNGE_KNOCKBACK_STATE_KNOCKBACK,
+    LUNGE_KNOCKBACK_STATE_ATTACKER_RETURN,
+    LUNGE_KNOCKBACK_STATE_DEFENDER_RETURN,
+    LUNGE_KNOCKBACK_STATE_END,
+};
+
 static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
     BattleAnimLungeKnockbackWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case LUNGE_KNOCKBACK_STATE_INIT:
         BattleAnimUtil_InitCircleMotion(&work->attackerMove.sin, 1, 64);
         work->attackerMove.sin.ampX *= work->direction;
         work->state++;
         break;
-    case 1:
+    case LUNGE_KNOCKBACK_STATE_CIRCLE:
         if (BattleAnimUtil_UpdateSinMotionPokepic(&work->attackerMove.sin, work->attackerX, (s16)(work->attackerY + 8), work->attackerPokepic)) {
             break;
         }
@@ -1967,7 +2129,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
         BattleAnimUtil_UpdateLinearMotion(&work->attackerMove.linear);
         Pokepic_SetAttr(work->attackerPokepic, POKEPIC_X, work->attackerMove.linear.x);
         break;
-    case 2:
+    case LUNGE_KNOCKBACK_STATE_LUNGE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->attackerMove.linear)) {
             Pokepic_SetAttr(work->attackerPokepic, POKEPIC_X, work->attackerMove.linear.x);
             break;
@@ -1975,7 +2137,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
         BattleAnimUtil_InitLinearMotion(&work->defenderMove, work->defenderX, work->defenderX + (work->direction << 5), 0, 0, 2);
         work->state++;
         break;
-    case 3:
+    case LUNGE_KNOCKBACK_STATE_KNOCKBACK:
         if (BattleAnimUtil_UpdateLinearMotion(&work->defenderMove)) {
             Pokepic_SetAttr(work->defenderPokepic, POKEPIC_X, work->defenderMove.x);
             break;
@@ -1983,7 +2145,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
         BattleAnimUtil_InitLinearMotion(&work->attackerMove.linear, work->attackerMove.linear.x, work->attackerX, 0, 0, 8);
         work->state++;
         break;
-    case 4:
+    case LUNGE_KNOCKBACK_STATE_ATTACKER_RETURN:
         if (BattleAnimUtil_UpdateLinearMotion(&work->attackerMove.linear)) {
             Pokepic_SetAttr(work->attackerPokepic, POKEPIC_X, work->attackerMove.linear.x);
             break;
@@ -1992,7 +2154,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
         BattleAnimUtil_InitLinearMotion(&work->defenderMove, work->defenderMove.x, work->defenderX, 0, 0, 8);
         work->state++;
         break;
-    case 5:
+    case LUNGE_KNOCKBACK_STATE_DEFENDER_RETURN:
         if (BattleAnimUtil_UpdateLinearMotion(&work->defenderMove)) {
             Pokepic_SetAttr(work->defenderPokepic, POKEPIC_X, work->defenderMove.x);
             break;
@@ -2000,7 +2162,7 @@ static void BattleAnimTask_AttackerLungeKnockback(SysTask *task, void *data) {
         Pokepic_SetAttr(work->defenderPokepic, POKEPIC_X, work->defenderX);
         work->state++;
         break;
-    case 6:
+    case LUNGE_KNOCKBACK_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -2027,11 +2189,18 @@ void BattleAnimTask_FanSpritesStartAttackerPulse(BattleAnimFanSpritesWork *work)
 
 #pragma force_active on
 
+enum {
+    FAN_PULSE_STATE_WIDEN,
+    FAN_PULSE_STATE_STRETCH,
+    FAN_PULSE_STATE_RESTORE,
+    FAN_PULSE_STATE_DONE,
+};
+
 BOOL BattleAnimTask_FanSpritesUpdateAttackerPulse(BattleAnimFanSpritesWork *work) {
     BOOL done = FALSE;
 
     switch (work->pulseState) {
-    case 0:
+    case FAN_PULSE_STATE_WIDEN:
         if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->pulse, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->pulse.curY, 0);
         } else {
@@ -2039,7 +2208,7 @@ BOOL BattleAnimTask_FanSpritesUpdateAttackerPulse(BattleAnimFanSpritesWork *work
             BattleAnimUtil_InitScaleMotionXY(&work->pulse, 9, 11, 8, 15, 10, 2);
         }
         break;
-    case 1:
+    case FAN_PULSE_STATE_STRETCH:
         if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->pulse, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->pulse.curY, 0);
         } else {
@@ -2047,7 +2216,7 @@ BOOL BattleAnimTask_FanSpritesUpdateAttackerPulse(BattleAnimFanSpritesWork *work
             BattleAnimUtil_InitScaleMotionXY(&work->pulse, 11, 10, 15, 10, 10, 2);
         }
         break;
-    case 2:
+    case FAN_PULSE_STATE_RESTORE:
         if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->pulse, work->pokepic)) {
             BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->pulse.curY, 0);
         } else {
@@ -2057,7 +2226,7 @@ BOOL BattleAnimTask_FanSpritesUpdateAttackerPulse(BattleAnimFanSpritesWork *work
             done = TRUE;
         }
         break;
-    case 3:
+    case FAN_PULSE_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -2098,17 +2267,26 @@ BOOL BattleAnimUtil_IsSpriteAnimDone(ManagedSprite *sprite, u32 *state) {
     return done;
 }
 
+enum {
+    FAN_SPRITES_STATE_START_SPRITE,
+    FAN_SPRITES_STATE_WAIT_SPRITE,
+    FAN_SPRITES_STATE_DELAY,
+    FAN_SPRITES_STATE_START_EXIT,
+    FAN_SPRITES_STATE_WAIT_EXIT,
+    FAN_SPRITES_STATE_END,
+};
+
 void BattleAnimTask_FanSpritesAroundAttacker(SysTask *task, void *data) {
     BattleAnimFanSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case FAN_SPRITES_STATE_START_SPRITE:
         BattleAnimTask_FanSpritesStartAttackerPulse(work);
         BattleAnimUtil_StartSpriteAnim(work->sprites[work->index], &work->animStates[work->index], FX32_CONST(2));
         work->state++;
         break;
-    case 1: {
+    case FAN_SPRITES_STATE_WAIT_SPRITE: {
         BOOL pulseDone = BattleAnimTask_FanSpritesUpdateAttackerPulse(work);
         BOOL animDone = BattleAnimUtil_IsSpriteAnimDone(work->sprites[work->index], &work->animStates[work->index]);
         if (pulseDone == animDone && pulseDone == TRUE) {
@@ -2117,24 +2295,24 @@ void BattleAnimTask_FanSpritesAroundAttacker(SysTask *task, void *data) {
         }
         break;
     }
-    case 2:
+    case FAN_SPRITES_STATE_DELAY:
         work->timers[work->index]--;
         if (work->timers[work->index] < 0) {
             work->index++;
             if (work->index < 6) {
-                work->state = 0;
+                work->state = FAN_SPRITES_STATE_START_SPRITE;
             } else {
                 work->state++;
             }
         }
         break;
-    case 3:
+    case FAN_SPRITES_STATE_START_EXIT:
         for (i = 0; i < 6; i++) {
             BattleAnimUtil_StartSpriteAnim(work->sprites[i], &work->animStates[i], FX32_CONST(2));
         }
         work->state++;
         break;
-    case 4: {
+    case FAN_SPRITES_STATE_WAIT_EXIT: {
         BOOL done = FALSE;
         for (i = 0; i < 6; i++) {
             done = BattleAnimUtil_IsSpriteAnimDone(work->sprites[i], &work->animStates[i]);
@@ -2144,7 +2322,7 @@ void BattleAnimTask_FanSpritesAroundAttacker(SysTask *task, void *data) {
         }
         break;
     }
-    case 5:
+    case FAN_SPRITES_STATE_END:
         for (i = 0; i < 6; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -2201,15 +2379,24 @@ void BattleAnimSpriteFunc_FanSpritesAroundAttacker(BattleAnimSystem *system, Spr
 
 #pragma force_active reset
 
+enum {
+    SHRINK_INTO_STATE_START_ANIM,
+    SHRINK_INTO_STATE_WAIT_ANIM,
+    SHRINK_INTO_STATE_SHRINK,
+    SHRINK_INTO_STATE_WAIT_CLOSE_ANIM,
+    SHRINK_INTO_STATE_LEAVE,
+    SHRINK_INTO_STATE_END,
+};
+
 void BattleAnimTask_ShrinkAttackerIntoSprite(SysTask *task, void *data) {
     BattleAnimShrinkIntoSpriteWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case SHRINK_INTO_STATE_START_ANIM:
         ManagedSprite_SetAnimateFlag(work->sprite, TRUE);
         work->state++;
         break;
-    case 1:
+    case SHRINK_INTO_STATE_WAIT_ANIM:
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             ManagedSprite_SetAnimateFlag(work->sprite, FALSE);
             work->state++;
@@ -2219,7 +2406,7 @@ void BattleAnimTask_ShrinkAttackerIntoSprite(SysTask *task, void *data) {
             BattleAnimUtil_InitLinearMotion(&work->move, x, work->x, y, work->y, 8);
         }
         break;
-    case 2:
+    case SHRINK_INTO_STATE_SHRINK:
         BattleAnimUtil_UpdateLinearMotionPokepic(&work->move, work->pokepic);
         if (!BattleAnimUtil_UpdateScaleMotionPokepic(&work->scale, work->pokepic)) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_VANISHED, TRUE);
@@ -2231,21 +2418,21 @@ void BattleAnimTask_ShrinkAttackerIntoSprite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 3:
+    case SHRINK_INTO_STATE_WAIT_CLOSE_ANIM:
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             ManagedSprite_SetAnimateFlag(work->sprite, FALSE);
             work->state++;
             BattleAnimUtil_InitLinearMotion(&work->leave, 0, 0, work->y, 0, 8);
         }
         break;
-    case 4:
+    case SHRINK_INTO_STATE_LEAVE:
         if (BattleAnimUtil_UpdateLinearMotion(&work->leave)) {
             ManagedSprite_SetPositionXY(work->sprite, work->x, work->leave.y);
         } else {
             work->state++;
         }
         break;
-    case 5:
+    case SHRINK_INTO_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -2299,13 +2486,19 @@ void BattleAnimTask_DarkSpriteJumpStartRise(BattleAnimDarkSpriteJumpWork *work) 
 
 #pragma force_active on
 
+enum {
+    JUMP_RISE_STATE_STRETCH,
+    JUMP_RISE_STATE_SCALE,
+    JUMP_RISE_STATE_DONE,
+};
+
 BOOL BattleAnimTask_DarkSpriteJumpUpdateRise(BattleAnimDarkSpriteJumpWork *work) {
     f32 x;
     f32 y;
     BOOL done = FALSE;
 
     switch (work->partState) {
-    case 0:
+    case JUMP_RISE_STATE_STRETCH:
         BattleAnimUtil_UpdateScaleMotionXY(&work->stretch);
         BattleAnimUtil_GetScaleFloat(&work->stretch, &x, &y);
         if (work->flipRise == TRUE) {
@@ -2319,7 +2512,7 @@ BOOL BattleAnimTask_DarkSpriteJumpUpdateRise(BattleAnimDarkSpriteJumpWork *work)
             BattleAnimUtil_InitScaleMotionXY(&work->stretch, 10, 1, 20, 20, 10, 4);
         }
         break;
-    case 1:
+    case JUMP_RISE_STATE_SCALE:
         BattleAnimUtil_UpdateScaleMotionXY(&work->stretch);
         if (BattleAnimUtil_UpdateScaleMotion(&work->scale)) {
             work->stretch.x = work->scale.x;
@@ -2336,7 +2529,7 @@ BOOL BattleAnimTask_DarkSpriteJumpUpdateRise(BattleAnimDarkSpriteJumpWork *work)
             done = TRUE;
         }
         break;
-    case 2:
+    case JUMP_RISE_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -2367,6 +2560,12 @@ void BattleAnimTask_DarkSpriteJumpStartDrop(BattleAnimDarkSpriteJumpWork *work) 
 
 #pragma force_active reset
 
+enum {
+    JUMP_DROP_STATE_FALL,
+    JUMP_DROP_STATE_LAND,
+    JUMP_DROP_STATE_DONE,
+};
+
 BOOL BattleAnimTask_DarkSpriteJumpUpdateDrop(BattleAnimDarkSpriteJumpWork *work) {
     BOOL done = FALSE;
     BOOL active;
@@ -2374,14 +2573,14 @@ BOOL BattleAnimTask_DarkSpriteJumpUpdateDrop(BattleAnimDarkSpriteJumpWork *work)
     f32 y;
 
     switch (work->partState) {
-    case 0:
+    case JUMP_DROP_STATE_FALL:
         work->partTimer--;
         BattleAnimUtil_UpdateLinearMotionSprite(&work->drop, work->sprites[1]);
         if (work->partTimer < 0) {
             work->partState++;
         }
         break;
-    case 1:
+    case JUMP_DROP_STATE_LAND:
         BattleAnimUtil_UpdateLinearMotionSprite(&work->drop, work->sprites[1]);
         active = BattleAnimUtil_UpdateScaleMotionXY(&work->stretch);
         BattleAnimUtil_GetScaleFloat(&work->stretch, &x, &y);
@@ -2394,7 +2593,7 @@ BOOL BattleAnimTask_DarkSpriteJumpUpdateDrop(BattleAnimDarkSpriteJumpWork *work)
             done = TRUE;
         }
         break;
-    case 2:
+    case JUMP_DROP_STATE_DONE:
         done = TRUE;
         break;
     }
@@ -2403,45 +2602,55 @@ BOOL BattleAnimTask_DarkSpriteJumpUpdateDrop(BattleAnimDarkSpriteJumpWork *work)
 
 #pragma force_active on
 
+enum {
+    DARK_JUMP_STATE_FADE_IN,
+    DARK_JUMP_STATE_WAIT_FADE_IN,
+    DARK_JUMP_STATE_RISE,
+    DARK_JUMP_STATE_DELAY,
+    DARK_JUMP_STATE_DROP,
+    DARK_JUMP_STATE_FADE_OUT,
+    DARK_JUMP_STATE_END,
+};
+
 void BattleAnimTask_DarkSpriteJump(SysTask *task, void *data) {
     BattleAnimDarkSpriteJumpWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case DARK_JUMP_STATE_FADE_IN:
         BattleAnimUtil_SetBlendWithBattleBg(work->system, 0, 16);
         BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 0, 8, 16, 8, 8);
         work->state++;
         break;
-    case 1:
+    case DARK_JUMP_STATE_WAIT_FADE_IN:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
             BattleAnimTask_DarkSpriteJumpStartRise(work);
         }
         break;
-    case 2:
+    case DARK_JUMP_STATE_RISE:
         if (BattleAnimTask_DarkSpriteJumpUpdateRise(work)) {
             work->state++;
             work->timer = 2;
         }
         break;
-    case 3:
+    case DARK_JUMP_STATE_DELAY:
         if (--work->timer < 0) {
             BattleAnimTask_DarkSpriteJumpStartDrop(work);
             work->state++;
         }
         break;
-    case 4:
+    case DARK_JUMP_STATE_DROP:
         if (BattleAnimTask_DarkSpriteJumpUpdateDrop(work)) {
             work->state++;
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 8, 0, 8, 16, 8);
         }
         break;
-    case 5:
+    case DARK_JUMP_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
         }
         break;
-    case 6:
+    case DARK_JUMP_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -2510,34 +2719,42 @@ void BattleAnimTask_ScaleSpritesOverDefenderStartShrink(BattleAnimScaleSpritesWo
 
 #pragma force_active on
 
+enum {
+    SCALE_SPRITES_STATE_START_GROW,
+    SCALE_SPRITES_STATE_GROW,
+    SCALE_SPRITES_STATE_SHAKE,
+    SCALE_SPRITES_STATE_SHRINK,
+    SCALE_SPRITES_STATE_END,
+};
+
 void BattleAnimTask_ScaleSpritesOverDefender(SysTask *task, void *data) {
     BattleAnimScaleSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case SCALE_SPRITES_STATE_START_GROW:
         BattleAnimTask_ScaleSpritesOverDefenderStartGrow(work);
         work->state++;
         break;
-    case 1:
+    case SCALE_SPRITES_STATE_GROW:
         if (BattleAnimUtil_UpdateSpriteSequence(&work->sequence) == FALSE) {
             ManagedSprite_SetDrawFlag(work->sprites[0], TRUE);
             work->state++;
             BattleAnimUtil_InitShake(&work->shake, 4, 0, 1, 6);
         }
         break;
-    case 2:
+    case SCALE_SPRITES_STATE_SHAKE:
         if (BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic) == FALSE) {
             work->state++;
             BattleAnimTask_ScaleSpritesOverDefenderStartShrink(work);
         }
         break;
-    case 3:
+    case SCALE_SPRITES_STATE_SHRINK:
         if (BattleAnimUtil_UpdateSpriteSequence(&work->sequence) == FALSE) {
             work->state++;
         }
         break;
-    case 4:
+    case SCALE_SPRITES_STATE_END:
         for (i = 0; i < 3; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -2615,26 +2832,34 @@ void BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(BattleAnimOrbitSpritesWork
 
 #pragma force_active reset
 
+enum {
+    ORBIT_BOBBING_STATE_FADE_IN,
+    ORBIT_BOBBING_STATE_WAIT_FADE_IN,
+    ORBIT_BOBBING_STATE_ORBIT,
+    ORBIT_BOBBING_STATE_FADE_OUT,
+    ORBIT_BOBBING_STATE_END,
+};
+
 void BattleAnimTask_SpritesOrbitAttackerBobbing(SysTask *task, void *data) {
     BattleAnimOrbitSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case ORBIT_BOBBING_STATE_FADE_IN:
         BattleAnimUtil_SetBlendWithBattleBg(work->system, 1, 15);
         BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 1, 16, 15, 0, 10);
         BattleAnimTask_SpritesOrbitAttackerBobbingInit(work, work->direction);
         BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(work);
         work->state++;
         break;
-    case 1:
+    case ORBIT_BOBBING_STATE_WAIT_FADE_IN:
         BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(work);
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
             work->timer = 28;
         }
         break;
-    case 2:
+    case ORBIT_BOBBING_STATE_ORBIT:
         BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(work);
         work->timer--;
         if (work->timer < 0) {
@@ -2642,13 +2867,13 @@ void BattleAnimTask_SpritesOrbitAttackerBobbing(SysTask *task, void *data) {
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 1, 0, 15, 10);
         }
         break;
-    case 3:
+    case ORBIT_BOBBING_STATE_FADE_OUT:
         BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(work);
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
         }
         break;
-    case 4:
+    case ORBIT_BOBBING_STATE_END:
         for (i = 0; i < 6; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -2862,28 +3087,34 @@ void BattleAnimTask_WobbleDefenderOnBgUpdateScanlines(BattleAnimWobbleOnBgWork *
 
 #pragma force_active reset
 
+enum {
+    WOBBLE_STATE_SET_PHASE,
+    WOBBLE_STATE_WOBBLE,
+    WOBBLE_STATE_END,
+};
+
 void BattleAnimTask_WobbleDefenderOnBg(SysTask *task, void *data) {
     BattleAnimWobbleOnBgWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case WOBBLE_STATE_SET_PHASE:
         BattleAnimTask_WobbleDefenderOnBgSetPhase(work);
         BattleAnimTask_WobbleDefenderOnBgUpdateScanlines(work);
         work->state++;
         break;
-    case 1:
+    case WOBBLE_STATE_WOBBLE:
         work->timer--;
         BattleAnimTask_WobbleDefenderOnBgUpdateScanlines(work);
         if (work->timer < 0) {
             work->phase++;
             if (work->phase < 3) {
-                work->state = 0;
+                work->state = WOBBLE_STATE_SET_PHASE;
             } else {
                 work->state++;
             }
         }
         break;
-    case 2: {
+    case WOBBLE_STATE_END: {
         u32 bgLayer;
         BgConfig *bgConfig;
 
@@ -2942,12 +3173,21 @@ void BattleAnimFunc_WobbleDefenderOnBg(BattleAnimSystem *system) {
 
 #pragma force_active reset
 
+enum {
+    WINDOW_SWEEP_STATE_INIT,
+    WINDOW_SWEEP_STATE_DELAY,
+    WINDOW_SWEEP_STATE_SWEEP,
+    WINDOW_SWEEP_STATE_WAIT_FLASH,
+    WINDOW_SWEEP_STATE_WAIT_RESTORE,
+    WINDOW_SWEEP_STATE_END,
+};
+
 void BattleAnimTask_WindowSweepFlashWhite(SysTask *task, void *data) {
     BattleAnimWindowSweepWork *work = data;
     PaletteData *paletteData;
 
     switch (work->state) {
-    case 0:
+    case WINDOW_SWEEP_STATE_INIT:
         BattleAnimUtil_InitLinearMotion(&work->sweep, 127, 0, 0, 0, 8);
         GX_SetVisibleWnd(GX_WNDMASK_W0);
         BattleAnimUtil_SetWindowInsidePlanes(work->system, 0, FALSE);
@@ -2956,14 +3196,14 @@ void BattleAnimTask_WindowSweepFlashWhite(SysTask *task, void *data) {
         work->timer = 7;
         work->state++;
         break;
-    case 1:
+    case WINDOW_SWEEP_STATE_DELAY:
         if (--work->timer < 0) {
             paletteData = BattleAnimSystem_GetPaletteData(work->system);
             PaletteData_BeginPaletteFade(paletteData, PLTTBUF_MAIN_BG_F, BattleAnimSystem_GetBattleBgPaletteMask(work->system), 0, 0, 16, 0xFFFF);
             work->state++;
         }
         break;
-    case 2:
+    case WINDOW_SWEEP_STATE_SWEEP:
         if (BattleAnimUtil_UpdateLinearMotion(&work->sweep)) {
             s16 x = work->sweep.x;
             reg_G2_WIN0H = (((127 - x) << 8) & 0xFF00) | (u8)(x + 128);
@@ -2972,20 +3212,20 @@ void BattleAnimTask_WindowSweepFlashWhite(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 3:
+    case WINDOW_SWEEP_STATE_WAIT_FLASH:
         if (PaletteData_GetSelectedBuffersBitmask(BattleAnimSystem_GetPaletteData(work->system)) == 0) {
             work->state++;
             GX_SetVisibleWnd(GX_WNDMASK_NONE);
             PaletteData_BeginPaletteFade(BattleAnimSystem_GetPaletteData(work->system), PLTTBUF_MAIN_BG_F, BattleAnimSystem_GetBattleBgPaletteMask(work->system), 0, 16, 0, 0xFFFF);
         }
         break;
-    case 4:
+    case WINDOW_SWEEP_STATE_WAIT_RESTORE:
         paletteData = BattleAnimSystem_GetPaletteData(work->system);
         if (PaletteData_GetSelectedBuffersBitmask(paletteData) == 0) {
             work->state++;
         }
         break;
-    case 5:
+    case WINDOW_SWEEP_STATE_END:
         Heap_Free(work);
         BattleAnimSystem_DestroyTask(work->system, task);
         break;
@@ -2998,32 +3238,40 @@ void BattleAnimFunc_WindowSweepFlashWhite(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(system, BattleAnimTask_WindowSweepFlashWhite, work);
 }
 
+enum {
+    FADE_SPRITE_ANIM_STATE_FADE_IN,
+    FADE_SPRITE_ANIM_STATE_WAIT_FADE_IN,
+    FADE_SPRITE_ANIM_STATE_WAIT_ANIM,
+    FADE_SPRITE_ANIM_STATE_FADE_OUT,
+    FADE_SPRITE_ANIM_STATE_END,
+};
+
 void BattleAnimTask_FadeSpriteAnim(SysTask *task, void *data) {
     BattleAnimFadeSpriteAnimWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case FADE_SPRITE_ANIM_STATE_FADE_IN:
         BattleAnimUtil_SetBlendWithBattleBg(work->system, 0, 16);
         BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 0, 16, 16, 0, 8);
         work->state++;
         break;
-    case 1:
+    case FADE_SPRITE_ANIM_STATE_WAIT_FADE_IN:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
         }
         break;
-    case 2:
+    case FADE_SPRITE_ANIM_STATE_WAIT_ANIM:
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             work->state++;
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 0, 0, 16, 8);
         }
         break;
-    case 3:
+    case FADE_SPRITE_ANIM_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
         }
         break;
-    case 4:
+    case FADE_SPRITE_ANIM_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -3047,19 +3295,27 @@ void BattleAnimSpriteFunc_FadeSpriteAnim(BattleAnimSystem *system, SpriteSystem 
 
 #pragma force_active reset
 
+enum {
+    STRETCH_SHAKE_STATE_START_STRETCH,
+    STRETCH_SHAKE_STATE_STRETCH,
+    STRETCH_SHAKE_STATE_START_RESTORE,
+    STRETCH_SHAKE_STATE_RESTORE,
+    STRETCH_SHAKE_STATE_END,
+};
+
 void BattleAnimTask_StretchShakeDefender(SysTask *task, void *data) {
     BattleAnimStretchShakeWork *work = data;
     BOOL active;
 
     switch (work->state) {
-    case 0:
+    case STRETCH_SHAKE_STATE_START_STRETCH:
         BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->startX, (s16)work->endX, (s16)work->startY, (s16)work->endY, (s16)work->divisor, (s32)work->durations >> 16);
         BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic);
         BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         work->state++;
         return;
-    case 1:
+    case STRETCH_SHAKE_STATE_STRETCH:
         BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic);
         active = BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
@@ -3068,14 +3324,14 @@ void BattleAnimTask_StretchShakeDefender(SysTask *task, void *data) {
             return;
         }
         break;
-    case 2:
+    case STRETCH_SHAKE_STATE_START_RESTORE:
         BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->endX, (s16)work->startX, (s16)work->endY, (s16)work->startY, (s16)work->divisor, (u16)work->durations);
         BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic);
         BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         work->state++;
         return;
-    case 3:
+    case STRETCH_SHAKE_STATE_RESTORE:
         BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic);
         active = BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
@@ -3083,12 +3339,12 @@ void BattleAnimTask_StretchShakeDefender(SysTask *task, void *data) {
             if (--work->repeats <= 0) {
                 work->state++;
             } else {
-                work->state = 0;
+                work->state = STRETCH_SHAKE_STATE_START_STRETCH;
             }
             return;
         }
         break;
-    case 4:
+    case STRETCH_SHAKE_STATE_END:
         Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->x);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->y);
         Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, 0x100);
@@ -3157,38 +3413,47 @@ void BattleAnimFunc_ShootSpriteFromAttacker(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShootSpriteFromAttacker, work);
 }
 
+enum {
+    SHAKE_LUNGE_STATE_START_SHAKE,
+    SHAKE_LUNGE_STATE_SHAKE,
+    SHAKE_LUNGE_STATE_LUNGE,
+    SHAKE_LUNGE_STATE_HOLD,
+    SHAKE_LUNGE_STATE_RETURN,
+    SHAKE_LUNGE_STATE_END,
+};
+
 void BattleAnimTask_AttackerShakeLunge(SysTask *task, void *data) {
     BattleAnimShakeLungeWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case SHAKE_LUNGE_STATE_START_SHAKE:
         BattleAnimUtil_InitShake(&work->shake, 4, 0, 1, 4);
         work->state++;
         break;
-    case 1:
+    case SHAKE_LUNGE_STATE_SHAKE:
         if (!BattleAnimUtil_UpdateShakePokepic(&work->shake, work->x, work->y, work->pokepic)) {
             work->state++;
             BattleAnimUtil_InitLinearMotion(&work->move, work->x, work->x + work->dirX * 40, work->y, work->y + work->dirY * -7, 4);
         }
         break;
-    case 2:
+    case SHAKE_LUNGE_STATE_LUNGE:
         if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->move, work->pokepic)) {
             work->state++;
             work->timer = 8;
         }
         break;
-    case 3:
+    case SHAKE_LUNGE_STATE_HOLD:
         if (--work->timer < 0) {
             work->state++;
             BattleAnimUtil_InitLinearMotion(&work->move, work->x + work->dirX * 40, work->x, work->y + work->dirY * -7, work->y, 4);
         }
         break;
-    case 4:
+    case SHAKE_LUNGE_STATE_RETURN:
         if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->move, work->pokepic)) {
             work->state++;
         }
         break;
-    case 5:
+    case SHAKE_LUNGE_STATE_END:
         Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->x);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->y);
         Heap_Free(work);
@@ -3211,21 +3476,29 @@ void BattleAnimFunc_AttackerShakeLunge(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerShakeLunge, work);
 }
 
+enum {
+    KNOCKBACK_STATE_START,
+    KNOCKBACK_STATE_MOVE,
+    KNOCKBACK_STATE_SHAKE,
+    KNOCKBACK_STATE_RETURN,
+    KNOCKBACK_STATE_END,
+};
+
 void BattleAnimTask_DefenderKnockback(SysTask *task, void *data) {
     BattleAnimKnockbackWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case KNOCKBACK_STATE_START:
         BattleAnimUtil_InitLinearMotion(&work->move, work->x, work->x + work->dirX * -40, work->y, work->y + work->dirY * 16, 4);
         work->state++;
         break;
-    case 1:
+    case KNOCKBACK_STATE_MOVE:
         if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->move, work->pokepic)) {
             work->state++;
             BattleAnimUtil_InitShake(&work->shake, 4, 0, 1, 4);
         }
         break;
-    case 2: {
+    case KNOCKBACK_STATE_SHAKE: {
         s16 x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
         s16 y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
         if (!BattleAnimUtil_UpdateShakePokepic(&work->shake, x, y, work->pokepic)) {
@@ -3234,12 +3507,12 @@ void BattleAnimTask_DefenderKnockback(SysTask *task, void *data) {
         }
         break;
     }
-    case 3:
+    case KNOCKBACK_STATE_RETURN:
         if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->move, work->pokepic)) {
             work->state++;
         }
         break;
-    case 4:
+    case KNOCKBACK_STATE_END:
         Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->x);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->y);
         Heap_Free(work);
@@ -3292,37 +3565,45 @@ void BattleAnimSpriteFunc_RisingShrinkSprites(BattleAnimSystem *system, SpriteSy
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_RisingShrinkSprites, work);
 }
 
+enum {
+    RISING_SHRINK_STATE_LAUNCH_FIRST,
+    RISING_SHRINK_STATE_DELAY,
+    RISING_SHRINK_STATE_LAUNCH_SECOND,
+    RISING_SHRINK_STATE_WAIT,
+    RISING_SHRINK_STATE_END,
+};
+
 void BattleAnimTask_RisingShrinkSprites(SysTask *task, void *data) {
     BattleAnimRisingShrinkSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case RISING_SHRINK_STATE_LAUNCH_FIRST:
         BattleAnimTask_RisingShrinkSpritesLaunch(work->sprites[0], &work->moves[0], &work->scales[0], work->direction);
         BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[0], &work->moves[0], &work->scales[0]);
         work->state++;
         work->timer = 8;
         break;
-    case 1:
+    case RISING_SHRINK_STATE_DELAY:
         work->timer--;
         BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[0], &work->moves[0], &work->scales[0]);
         if (work->timer < 0) {
             work->state++;
         }
         break;
-    case 2:
+    case RISING_SHRINK_STATE_LAUNCH_SECOND:
         BattleAnimTask_RisingShrinkSpritesLaunch(work->sprites[1], &work->moves[1], &work->scales[1], work->direction);
         BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[1], &work->moves[1], &work->scales[1]);
         BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[0], &work->moves[0], &work->scales[0]);
         work->state++;
         break;
-    case 3:
+    case RISING_SHRINK_STATE_WAIT:
         BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[0], &work->moves[0], &work->scales[0]);
         if (BattleAnimTask_RisingShrinkSpritesUpdate(work->sprites[1], &work->moves[1], &work->scales[1])) {
             work->state++;
         }
         break;
-    case 4:
+    case RISING_SHRINK_STATE_END:
         for (i = 0; i < 2; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -3372,37 +3653,45 @@ void BattleAnimSpriteFunc_PaletteCycleSprite(BattleAnimSystem *system, SpriteSys
 
 #pragma force_active reset
 
+enum {
+    PALETTE_CYCLE_STATE_FADE_IN,
+    PALETTE_CYCLE_STATE_WAIT_FADE_IN,
+    PALETTE_CYCLE_STATE_CYCLE,
+    PALETTE_CYCLE_STATE_FADE_OUT,
+    PALETTE_CYCLE_STATE_END,
+};
+
 void BattleAnimTask_PaletteCycleSprite(SysTask *task, void *data) {
     BattleAnimPaletteCycleSpriteWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case PALETTE_CYCLE_STATE_FADE_IN:
         BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 0, 16, 20, 4, 10);
         ManagedSprite_SetDrawFlag(work->sprite, TRUE);
         BattleAnimUtil_SetBlendWithBattleBg(work->system, 0, 20);
         work->state++;
         break;
-    case 1:
+    case PALETTE_CYCLE_STATE_WAIT_FADE_IN:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
             ManagedSprite_SetAnimateFlag(work->sprite, TRUE);
             ManagedSprite_SetAnimSpeed(work->sprite, FX32_ONE);
         }
         break;
-    case 2:
+    case PALETTE_CYCLE_STATE_CYCLE:
         ((ManagedSpriteSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(work->sprite, work->paletteOffset + ManagedSprite_GetAnimationFrame(work->sprite) % 3);
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             work->state++;
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 0, 4, 20, 8);
         }
         break;
-    case 3:
+    case PALETTE_CYCLE_STATE_FADE_OUT:
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
         }
         break;
-    case 4:
+    case PALETTE_CYCLE_STATE_END:
         Sprite_DeleteAndFreeResources(work->sprite);
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
@@ -3470,12 +3759,17 @@ BOOL BattleAnimTask_SpriteRowSequenceUpdate(ManagedSprite *sprite, int *visibleT
     return FALSE;
 }
 
+enum {
+    SPRITE_ROW_STATE_UPDATE,
+    SPRITE_ROW_STATE_END,
+};
+
 void BattleAnimTask_SpriteRowSequence(SysTask *task, void *data) {
     BattleAnimSpriteRowWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0: {
+    case SPRITE_ROW_STATE_UPDATE: {
         BOOL done = FALSE;
         for (i = 0; i < 6; i++) {
             done = BattleAnimTask_SpriteRowSequenceUpdate(work->sprites[i], &work->visibleTimes[i], &work->delays[i]);
@@ -3485,7 +3779,7 @@ void BattleAnimTask_SpriteRowSequence(SysTask *task, void *data) {
         }
         break;
     }
-    case 1:
+    case SPRITE_ROW_STATE_END:
         for (i = 0; i < 6; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -3527,26 +3821,34 @@ void BattleAnimTask_SpritesOrbitAttackerUpdate(BattleAnimOrbitSpritesWork *work)
     }
 }
 
+enum {
+    ORBIT_STATE_FADE_IN,
+    ORBIT_STATE_WAIT_FADE_IN,
+    ORBIT_STATE_ORBIT,
+    ORBIT_STATE_FADE_OUT,
+    ORBIT_STATE_END,
+};
+
 void BattleAnimTask_SpritesOrbitAttacker(SysTask *task, void *data) {
     BattleAnimOrbitSpritesWork *work = data;
     int i;
 
     switch (work->state) {
-    case 0:
+    case ORBIT_STATE_FADE_IN:
         BattleAnimUtil_SetBlendWithBattleBg(work->system, 1, 15);
         BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 1, 16, 15, 0, 10);
         BattleAnimTask_SpritesOrbitAttackerInit(work, work->direction);
         BattleAnimTask_SpritesOrbitAttackerUpdate(work);
         work->state++;
         break;
-    case 1:
+    case ORBIT_STATE_WAIT_FADE_IN:
         BattleAnimTask_SpritesOrbitAttackerUpdate(work);
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
             work->timer = 28;
         }
         break;
-    case 2:
+    case ORBIT_STATE_ORBIT:
         BattleAnimTask_SpritesOrbitAttackerUpdate(work);
         work->timer--;
         if (work->timer < 0) {
@@ -3554,13 +3856,13 @@ void BattleAnimTask_SpritesOrbitAttacker(SysTask *task, void *data) {
             BattleAnimUtil_StartBlendAlphaMotion(&work->blend, 16, 1, 0, 15, 10);
         }
         break;
-    case 3:
+    case ORBIT_STATE_FADE_OUT:
         BattleAnimTask_SpritesOrbitAttackerUpdate(work);
         if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
             work->state++;
         }
         break;
-    case 4:
+    case ORBIT_STATE_END:
         for (i = 0; i < 6; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
@@ -3614,31 +3916,38 @@ void BattleAnimObjWindowBg_LoadGraphics(BattleAnimObjWindowBgWork *work, int bgL
     enum HeapID heapId = BattleAnimSystem_GetHeapID(work->common.system);
     SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->common.system, 3));
     GfGfxLoader_LoadCharData(work->params.narcId, gBattleAnimObjWindowBgGraphics[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
-    PaletteData_LoadNarc(work->common.paletteData, work->params.narcId, ov07_02236810[work->params.graphic * 4], heapId, PLTTBUF_MAIN_BG, 32, 128);
+    PaletteData_LoadNarc(work->common.paletteData, work->params.narcId, gBattleAnimObjWindowBgPalettes[work->params.graphic * 4], heapId, PLTTBUF_MAIN_BG, 32, 128);
     BgClearTilemapBufferAndCommit(work->common.bgConfig, (u8)bgLayer);
-    GfGfxLoader_LoadScrnData(work->params.narcId, ov07_02236814[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
+    GfGfxLoader_LoadScrnData(work->params.narcId, gBattleAnimObjWindowBgScreens[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
 }
+
+enum {
+    OBJ_WINDOW_BG_STATE_LOAD,
+    OBJ_WINDOW_BG_STATE_SET_BLEND,
+    OBJ_WINDOW_BG_STATE_SCROLL,
+    OBJ_WINDOW_BG_STATE_FADE_OUT,
+};
 
 void BattleAnimTask_ObjWindowBgScroll(SysTask *task, void *data) {
     BattleAnimObjWindowBgWork *work = data;
 
     switch (work->common.state[0]) {
-    case 0:
+    case OBJ_WINDOW_BG_STATE_LOAD:
         BattleAnimObjWindowBg_LoadGraphics(work, GF_BG_LYR_MAIN_2);
         ++work->common.state[0];
         break;
-    case 1:
+    case OBJ_WINDOW_BG_STATE_SET_BLEND:
         G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, work->params.eva, work->params.evb);
         ++work->common.state[0];
         break;
-    case 2:
+    case OBJ_WINDOW_BG_STATE_SCROLL:
         if (work->timer > 20) {
             ++work->common.state[0];
         } else {
             ++work->timer;
         }
         break;
-    case 3:
+    case OBJ_WINDOW_BG_STATE_FADE_OUT:
         if (work->params.eva) {
             --work->params.eva;
         }

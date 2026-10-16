@@ -198,56 +198,68 @@ BOOL BattleRoomResults_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
+enum {
+    BATTLE_ROOM_RESULTS_STATE_SETUP,
+    BATTLE_ROOM_RESULTS_STATE_FADE_IN,
+    BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_IN,
+    BATTLE_ROOM_RESULTS_STATE_RESULTS_INPUT,
+    BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT,
+    BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH,
+    BATTLE_ROOM_RESULTS_STATE_FADE_OUT,
+    BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_OUT,
+    BATTLE_ROOM_RESULTS_STATE_TEARDOWN,
+};
+
 BOOL BattleRoomResults_Main(OverlayManager *man, int *state) {
     BattleRoomResults *results = OverlayManager_GetData(man);
 
     switch (*state) {
-    case 0:
+    case BATTLE_ROOM_RESULTS_STATE_SETUP:
         if (BattleRoomResults_SetupScreens(results)) {
-            *state = 1;
+            *state = BATTLE_ROOM_RESULTS_STATE_FADE_IN;
         }
         break;
-    case 1:
+    case BATTLE_ROOM_RESULTS_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, results->heapID);
-        *state = 2;
+        *state = BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_IN;
         break;
-    case 2:
+    case BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             if (results->showLeaders == FALSE) {
-                *state = 3;
+                *state = BATTLE_ROOM_RESULTS_STATE_RESULTS_INPUT;
             } else {
-                *state = 4;
+                *state = BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
             }
         }
         break;
-    case 3:
+    case BATTLE_ROOM_RESULTS_STATE_RESULTS_INPUT:
         *state = BattleRoomResults_HandleResultsInput(results);
         break;
-    case 4:
+    case BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT:
         *state = BattleRoomResults_HandleLeadersInput(results);
         break;
-    case 5:
+    case BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH:
         if (!BattleRoomResults_UpdateButtonFlash(results)) {
             *state = results->nextState;
         }
         break;
-    case 6:
+    case BATTLE_ROOM_RESULTS_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, results->heapID);
-        *state = 7;
+        *state = BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_OUT;
         break;
-    case 7:
+    case BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
-            *state = 8;
+            *state = BATTLE_ROOM_RESULTS_STATE_TEARDOWN;
         }
         break;
-    case 8:
+    case BATTLE_ROOM_RESULTS_STATE_TEARDOWN:
         if (BattleRoomResults_TeardownScreens(results)) {
             return TRUE;
         }
         break;
     }
 
-    if (*state >= 1 && *state <= 7) {
+    if (*state >= BATTLE_ROOM_RESULTS_STATE_FADE_IN && *state <= BATTLE_ROOM_RESULTS_STATE_WAIT_FADE_OUT) {
         BattleRoomResults_UpdateSprites(results);
     }
     return FALSE;
@@ -340,10 +352,10 @@ int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
     if (TouchscreenHitbox_TouchNewIsIn(gBattleRoomResultsHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattleRoomResults_StartExitButtonFlash(results);
-        results->nextState = 6;
-        return 5;
+        results->nextState = BATTLE_ROOM_RESULTS_STATE_FADE_OUT;
+        return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
     }
-    return 3;
+    return BATTLE_ROOM_RESULTS_STATE_RESULTS_INPUT;
 }
 
 #pragma force_active on
@@ -354,18 +366,18 @@ int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
     case GRID_MENU_CANCEL:
         PlaySE(SEQ_SE_DP_DECIDE);
         BattleRoomResults_StartExitButtonFlash(results);
-        results->nextState = 6;
-        return 5;
+        results->nextState = BATTLE_ROOM_RESULTS_STATE_FADE_OUT;
+        return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
     case GRID_MENU_CURSOR_MOVE:
         PlaySE(SEQ_SE_DP_SELECT);
         if (results->pageChange == 1) {
             BattleRoomResults_StartSpriteFlash(results, 2);
-            results->nextState = 4;
-            return 5;
+            results->nextState = BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
+            return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
         } else if (results->pageChange == 2) {
             BattleRoomResults_StartSpriteFlash(results, 3);
-            results->nextState = 4;
-            return 5;
+            results->nextState = BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
+            return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
         }
         break;
     case GRID_MENU_BUTTON_MODE:
@@ -389,8 +401,8 @@ int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
         BattleRoomResults_PrintLeaderInfo(results, results->page * BATTLE_ROOM_RESULTS_LEADERS_PER_PAGE + GridInputHandler_GetNextInput(results->gridInput));
         BattleRoomResults_PrintPageNumber(results);
         BattleRoomResults_StartSpriteFlash(results, 2);
-        results->nextState = 4;
-        return 5;
+        results->nextState = BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
+        return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
     case 1:
         if (results->page < BATTLE_ROOM_RESULTS_NUM_PAGES - 1) {
             results->page++;
@@ -402,10 +414,10 @@ int BattleRoomResults_HandleLeadersInput(BattleRoomResults *results) {
         BattleRoomResults_PrintLeaderInfo(results, results->page * BATTLE_ROOM_RESULTS_LEADERS_PER_PAGE + GridInputHandler_GetNextInput(results->gridInput));
         BattleRoomResults_PrintPageNumber(results);
         BattleRoomResults_StartSpriteFlash(results, 3);
-        results->nextState = 4;
-        return 5;
+        results->nextState = BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
+        return BATTLE_ROOM_RESULTS_STATE_BUTTON_FLASH;
     }
-    return 4;
+    return BATTLE_ROOM_RESULTS_STATE_LEADERS_INPUT;
 }
 
 #pragma force_active reset

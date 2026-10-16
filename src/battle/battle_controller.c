@@ -621,9 +621,9 @@ void BattleController_EmitRecallPokemon(BattleSystem *battleSystem, BattleContex
     int facing;
 
     if (battleSystem->opponentData[battlerId]->battlerType & 1) {
-        facing = 2;
+        facing = MON_PIC_FACING_FRONT;
     } else {
-        facing = 0;
+        facing = MON_PIC_FACING_BACK;
     }
     int form = battleSystem->ctx->battleMons[battlerId].form;
     packet.command = 5;
@@ -657,7 +657,7 @@ void BattleController_EmitPokemonEnterBall(BattleSystem *battleSystem, s32 battl
     int form;
     int facing;
 
-    facing = battleSystem->opponentData[battlerId]->battlerType & 1 ? 2 : 0;
+    facing = battleSystem->opponentData[battlerId]->battlerType & 1 ? MON_PIC_FACING_FRONT : MON_PIC_FACING_BACK;
     form = battleSystem->ctx->battleMons[battlerId].form;
     packet.command = 6;
     if (battleSystem->ctx->battleMons[battlerId].status2 & STATUS2_TRANSFORM) {
@@ -1058,7 +1058,7 @@ void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battle
 
 #pragma force_active on
 
-void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int a6) {
+void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext *ctx, int battlerId, int msgId, int mode, int value, int msgParam) {
     BattleControllerPacketYesNoBox packet;
 
     BattleBuffer_Clear(ctx, battlerId);
@@ -1066,7 +1066,7 @@ void BattleController_EmitDrawYesNoBox(BattleSystem *battleSystem, BattleContext
     packet.msgId = msgId;
     packet.mode = mode;
     packet.value = value;
-    packet.param = a6;
+    packet.param = msgParam;
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
