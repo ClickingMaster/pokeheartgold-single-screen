@@ -59,8 +59,8 @@ BOOL GearPhoneCall_Buena(PokegearPhoneCallContext *ctx) {
 
 BOOL GearPhoneCall_Buena2(PokegearPhoneCallContext *ctx) {
     PokegearPhoneCallState *state = &ctx->state;
-    u8 r5;
-    u8 r2;
+    u8 numMessages;
+    u8 msgIdx;
 
     switch (state->scriptState) {
     case 0:
@@ -74,12 +74,12 @@ BOOL GearPhoneCall_Buena2(PokegearPhoneCallContext *ctx) {
         if (state->sharedU8var == 3) {
             PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0641_00036);
         } else {
-            r5 = 11 + state->flag0 * 3;
-            r2 = LCRandom() % r5;
-            if (r2 == 13) {
+            numMessages = 11 + state->flag0 * 3;
+            msgIdx = LCRandom() % numMessages;
+            if (msgIdx == 13) {
                 PhoneCallMessagePrint_Gendered(ctx, ctx->msgData_PhoneContact, msg_0641_00034, msg_0641_00035);
             } else {
-                PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0641_00021 + r2);
+                PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0641_00021 + msgIdx);
             }
         }
         break;

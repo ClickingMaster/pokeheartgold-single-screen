@@ -41,11 +41,11 @@ u16 PhoneCall_GetScriptId_ProfOak(PokegearPhoneCallContext *ctx, PokegearPhoneCa
 BOOL GearPhoneCall_ProfOak(PokegearPhoneCallContext *ctx) {
     PokegearPhoneCallState *state = &ctx->state;
     Pokedex *pokedex;
-    int r6;
+    int selection;
     u16 r7;
-    u16 r6_2;
+    u16 numOwned;
     u16 dexFanfare;
-    BOOL r6_3;
+    BOOL dexComplete;
 
     switch (state->scriptState) {
     case 0:
@@ -79,18 +79,18 @@ BOOL GearPhoneCall_ProfOak(PokegearPhoneCallContext *ctx) {
         PhoneCall_TouchscreenListMenu_Create(ctx, msg_0666_00003 + state->sharedU8var);
         break;
     case 3:
-        r6 = PhoneCall_TouchscreenListMenu_HandleInput(ctx);
-        if (r6 == -1) {
+        selection = PhoneCall_TouchscreenListMenu_HandleInput(ctx);
+        if (selection == -1) {
             return FALSE;
         }
         PhoneCall_TouchscreenListMenu_Destroy(ctx);
-        if (r6 == 0) {
+        if (selection == 0) {
             if (state->sharedU8var == 2) {
                 state->flag3 = TRUE;
             } else {
                 state->flag3 = FALSE;
             }
-        } else if (r6 == 1 && state->sharedU8var == 1) {
+        } else if (selection == 1 && state->sharedU8var == 1) {
             state->flag3 = TRUE;
         } else {
             PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0666_00021);
@@ -99,36 +99,36 @@ BOOL GearPhoneCall_ProfOak(PokegearPhoneCallContext *ctx) {
         }
         if (!state->flag3) {
             r7 = Pokedex_CountJohtoDexSeen(state->miscPtr.pokedex);
-            r6_2 = Pokedex_CountJohtoDexOwned(state->miscPtr.pokedex);
+            numOwned = Pokedex_CountJohtoDexOwned(state->miscPtr.pokedex);
         } else {
             r7 = Pokedex_CountNationalDexSeen(state->miscPtr.pokedex);
-            r6_2 = Pokedex_CountNationalDexOwned(state->miscPtr.pokedex);
+            numOwned = Pokedex_CountNationalDexOwned(state->miscPtr.pokedex);
         }
         BufferIntegerAsString(ctx->msgFormat, 5, r7, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BufferIntegerAsString(ctx->msgFormat, 6, r6_2, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
+        BufferIntegerAsString(ctx->msgFormat, 6, numOwned, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, msg_0666_00020);
         break;
     case 4:
         if (!PhoneCall_IsMessageDonePrinting(ctx)) {
             return FALSE;
         }
-        r6_3 = FALSE;
+        dexComplete = FALSE;
         if (!state->flag3) {
             r7 = GetOakJohtoDexRating(Pokedex_CountJohtoOwned_ExcludeMythical(state->miscPtr.pokedex), ctx->playerGender, &dexFanfare);
             if (state->flag1) {
                 Save_VarsFlags_SetFlagInArray(ctx->saveVarsFlags, FLAG_SYS_OAK_ACKNOWLEDGED_JOHTO_DEX_COMPLETION);
-                r6_3 = TRUE;
+                dexComplete = TRUE;
             }
         } else {
             r7 = GetOakNationalDexRating(Pokedex_CountNationalOwned_ExcludeMythical(state->miscPtr.pokedex), ctx->playerGender, &dexFanfare);
             if (state->flag2) {
                 Save_VarsFlags_SetFlagInArray(ctx->saveVarsFlags, FLAG_SYS_OAK_ACKNOWLEDGED_NATIONAL_DEX_COMPLETION);
-                r6_3 = TRUE;
+                dexComplete = TRUE;
             }
         }
         PlayFanfare(dexFanfare);
         PhoneCallMessagePrint_Ungendered(ctx, ctx->msgData_PhoneContact, r7);
-        if (r6_3) {
+        if (dexComplete) {
             state->scriptState = 255;
             return FALSE;
         }

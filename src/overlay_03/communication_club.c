@@ -192,10 +192,10 @@ static void CommClub_CreateListMenu(ListMenuTemplate listMenuTemplate, u8 x, u8 
         AddWindowParameterized(sCommClubManager->fieldSystem->bgConfig, &sCommClubManager->windows[0], 3, x, y, width, height, 13, baseTile);
     }
     DrawFrameAndWindow1(&sCommClubManager->windows[0], TRUE, 985, HEAP_ID_FIELD2);
-    ListMenuTemplate temp = listMenuTemplate;
-    temp.items = sCommClubManager->items;
-    temp.window = &sCommClubManager->windows[0];
-    sCommClubManager->listMenu = ListMenuInit(&temp, 0, 0, HEAP_ID_FIELD1);
+    ListMenuTemplate template = listMenuTemplate;
+    template.items = sCommClubManager->items;
+    template.window = &sCommClubManager->windows[0];
+    sCommClubManager->listMenu = ListMenuInit(&template, 0, 0, HEAP_ID_FIELD1);
     CopyWindowToVram(&sCommClubManager->windows[0]);
 }
 
@@ -534,21 +534,21 @@ static BOOL CommClub_HandleHostReply(void *task, CommClubManager *commClubManage
     return TRUE;
 }
 
-static void CommClub_WaitHostReply(void *task, CommClubManager *unk_ovo3) {
+static void CommClub_WaitHostReply(void *task, CommClubManager *commClubManager) {
     if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        if (unk_ovo3->buttonsShown == 0) {
+        if (commClubManager->buttonsShown == 0) {
             sCommClubManager->buttonMsgIds = &sRemoveFromMembersButton;
             sCommClubManager->buttonCount = 1;
             sCommClubManager->buttonSelection = 0xFFFF;
             sCommClubManager->buttonCloseRequest = 0;
             FieldSystem_SwitchBottomScreenApp(sCommClubManager->fieldSystem, 7, &sCommClubManager->buttonMsgIds);
-            unk_ovo3->buttonsShown = 1;
-        } else if (FieldSystem_GetBottomScreenAppState(unk_ovo3->fieldSystem) == TRUE) {
-            if (CommClub_HandleHostReply(task, unk_ovo3)) {
-                unk_ovo3->buttonCloseRequest = 2;
-            } else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->buttonSelection == 0) {
+            commClubManager->buttonsShown = 1;
+        } else if (FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem) == TRUE) {
+            if (CommClub_HandleHostReply(task, commClubManager)) {
+                commClubManager->buttonCloseRequest = 2;
+            } else if (PAD_BUTTON_B & gSystem.newKeys || commClubManager->buttonSelection == 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
-                unk_ovo3->buttonsShown = 0;
+                commClubManager->buttonsShown = 0;
                 CommClub_PrintMessage(3, FALSE);
                 CommClub_SetState(&CommClub_OpenLeaveGroupChoice);
             }
@@ -1497,13 +1497,13 @@ static int CommClub_GetBeaconId() {
     return sCommClubManager->course + (sCommClubManager->unk93 * 16);
 }
 
-void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
+void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 course, u16 arg3) {
     CommClub_NewManager(fieldSystem);
     sCommClubManager->commType = commType;
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
-    sCommClubManager->course = arg2;
+    sCommClubManager->course = course;
     sCommClubManager->unk93 = arg3;
     CommClub_StartChild(sCommClubManager);
 }
@@ -1520,13 +1520,13 @@ u32 CommClub_PollJoinResult() {
     return retCode;
 }
 
-void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
+void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 course, u16 arg3) {
     CommClub_NewManager(fieldSystem);
     sCommClubManager->commType = commType;
     if (commType == COMM_TYPE_MIX_BATTLE || commType == COMM_TYPE_MULTI_BATTLE_1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
-    sCommClubManager->course = arg2;
+    sCommClubManager->course = course;
     sCommClubManager->unk93 = arg3;
     CommClub_StartParent(sCommClubManager);
 }
@@ -1554,9 +1554,9 @@ static void CommClub_OpenYesNoButtons(CommClubManager *commClubManager) {
 }
 
 static BOOL CommClub_InitYesNoButtons(CommClubManager *commClubManager) {
-    int unkInt = FieldSystem_GetBottomScreenAppId(commClubManager->fieldSystem);
-    BOOL unkBool = FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem);
-    if (unkInt == 3 && unkBool == TRUE) {
+    int appId = FieldSystem_GetBottomScreenAppId(commClubManager->fieldSystem);
+    BOOL appState = FieldSystem_GetBottomScreenAppState(commClubManager->fieldSystem);
+    if (appId == 3 && appState == TRUE) {
         FieldSystem_SetTouchscreenChoiceMenuState(commClubManager->fieldSystem, 3, 3, &commClubManager->choiceResult);
         return TRUE;
     }

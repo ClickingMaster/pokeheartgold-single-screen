@@ -122,7 +122,7 @@ BOOL RadioShow_Commercials_Print(RadioShow *radioShow) {
 void RadioShow_Commercials_Init(RadioShow *radioShow) {
     u8 num = 0;
     u8 i;
-    u8 r0;
+    u8 station;
     CommercialsData *data = radioShow->showData;
     SaveVarsFlags *varsFlags;
 
@@ -146,8 +146,8 @@ void RadioShow_Commercials_Init(RadioShow *radioShow) {
             continue;
         }
         // This is required to match
-        r0 = sCommercialsData[i][2];
-        if (r0 != 0xFF && r0 != radioShow->nextStation) {
+        station = sCommercialsData[i][2];
+        if (station != 0xFF && station != radioShow->nextStation) {
             continue;
         }
         if (sCommercialsData[i][1] & (radioShow->regionNo + 1)) {

@@ -1429,15 +1429,15 @@ static void VoltorbFlip_PrintCoins(VoltorbFlipAppData *work, CoinDisplay type, i
 }
 
 static void VoltorbFlip_RenderCardMemo(VoltorbFlipAppData *work, int cardId, int memoFlag) {
-    u16 temp1[1];
+    u16 tile[1];
 
     int idx = MemoFlagToIdx(memoFlag);
     int x = (cardId % 5) * 4 + 1 + sMemoRenderOverrides[idx].xOffset;
     int y = (cardId / 5) * 4 + 1 + sMemoRenderOverrides[idx].yOffset;
 
     if (VoltorbFlipGameState_IsCardMemoFlagOn(work->game, cardId, memoFlag) != 0) {
-        temp1[0] = sMemoRenderOverrides[idx].tileId;
-        LoadRectToBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, temp1, x, y, 1, 1);
+        tile[0] = sMemoRenderOverrides[idx].tileId;
+        LoadRectToBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, tile, x, y, 1, 1);
     } else {
         FillBgTilemapRect(work->bgConfig, GF_BG_LYR_MAIN_2, 0, x, y, 1, 1, 0);
     }
@@ -1519,7 +1519,7 @@ static void SetTile(u16 *tiles3x3, int baseTile) {
 }
 
 static void DrawCardFaceUp(BgConfig *bgConfig, VoltorbFlipGameState *game, int cardId, int mode) {
-    u16 temp1[9];
+    u16 tiles[9];
 
     int x = (cardId % 5) * 4 + 1;
     int y = (cardId / 5) * 4 + 1;
@@ -1527,22 +1527,22 @@ static void DrawCardFaceUp(BgConfig *bgConfig, VoltorbFlipGameState *game, int c
 
     switch (mode) {
     case 0:
-        SetTile(temp1, 119);
+        SetTile(tiles, 119);
         break;
     case 1:
-        SetTile(temp1, 26);
+        SetTile(tiles, 26);
         break;
     case 2:
-        SetTile(temp1, GetCardFaceUpTile(cardType, 0));
+        SetTile(tiles, GetCardFaceUpTile(cardType, 0));
         break;
     case 3:
-        SetTile(temp1, GetCardFaceUpTile(cardType, 1));
+        SetTile(tiles, GetCardFaceUpTile(cardType, 1));
         break;
     default:
         GF_ASSERT(FALSE);
     }
 
-    LoadRectToBgTilemapRect(bgConfig, GF_BG_LYR_MAIN_0, temp1, x, y, 3, 3);
+    LoadRectToBgTilemapRect(bgConfig, GF_BG_LYR_MAIN_0, tiles, x, y, 3, 3);
 }
 
 static void DrawCardFaceDown(BgConfig *bgConfig, VoltorbFlipGameState *game, int cardId, int mode) {

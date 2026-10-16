@@ -111,22 +111,22 @@ BOOL CommState_Exists(void) {
     return gCommState ? TRUE : FALSE;
 }
 
-void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 arg3) {
+void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules) {
     if (!Comm_IsActive()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, linkMode);
         gCommState->beaconId = beaconId;
-        gCommState->rules = arg3;
+        gCommState->rules = rules;
         CommState_SetState(CommState_ParentStart, 0);
     }
 }
 
-void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 arg3) {
+void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules) {
     if (!Comm_IsActive()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, linkMode);
         gCommState->beaconId = beaconId;
-        gCommState->rules = arg3;
+        gCommState->rules = rules;
         CommState_SetState(CommState_ChildStartScan, 0);
     }
 }

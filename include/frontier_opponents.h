@@ -12,7 +12,7 @@ BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *tra
 BOOL FrontierFieldSystem_IsLinkFlagSetByEither(FieldSystem *fieldSystem, u16 *a1);
 void FrontierFieldSystem_PackLinkAllyData(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys);
-void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 a1);
+void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 flag);
 u16 FrontierFieldSystem_GetRandomFrontierTrainerID(FrontierFieldSystem *frontierFsys, u8 difficultyBracket, u8 winsThisRound, u32 towerMode);
 u32 FrontierFieldSystem_GenerateFrontierTrainer(FrontierFieldSystem *frontierFsys, FrontierTrainer *frontierTrainer, u16 frontierTrainerIndex, u32 numPokemon, u16 *partySpecies, u16 *partyItems, FrontierMultiBattleAllyData *allyData, enum HeapID heapID);
 void FrontierFieldSystem_GenerateAllyFrontierMons(FrontierFieldSystem *frontierFsys, FrontierTrainer *frontierTrainer, u16 frontierTrainerIndex, u32 replaceItem, FrontierMultiBattleAllyData *allyData, enum HeapID heapID);

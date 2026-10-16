@@ -580,39 +580,39 @@ static const u8 sMartCursorNeighbors[9][4] = {
 };
 
 static int MartData_HandleItemListInput(MartData *data) {
-    u8 unkExternVal;
-    BOOL unkBool = FALSE;
+    u8 neighbor;
+    BOOL cursorMoved = FALSE;
     if (gSystem.newKeys & PAD_KEY_UP) {
         data->cursorPos = sMartCursorNeighbors[data->cursorPos][0];
         PlaySE(SEQ_SE_DP_SELECT);
-        unkBool++;
+        cursorMoved++;
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
         data->cursorPos = sMartCursorNeighbors[data->cursorPos][1];
         PlaySE(SEQ_SE_DP_SELECT);
-        unkBool++;
+        cursorMoved++;
     } else if (gSystem.newKeys & PAD_KEY_LEFT) {
-        unkExternVal = sMartCursorNeighbors[data->cursorPos][2];
-        if (unkExternVal == 6) {
+        neighbor = sMartCursorNeighbors[data->cursorPos][2];
+        if (neighbor == 6) {
             return MartData_SelectItemListButton(data, 6);
         }
         if (data->cursorPos != 8) {
-            data->cursorPos = unkExternVal;
+            data->cursorPos = neighbor;
             PlaySE(SEQ_SE_DP_SELECT);
-            unkBool++;
+            cursorMoved++;
         }
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        unkExternVal = sMartCursorNeighbors[data->cursorPos][3];
-        if (unkExternVal == 7) {
+        neighbor = sMartCursorNeighbors[data->cursorPos][3];
+        if (neighbor == 7) {
             return MartData_SelectItemListButton(data, 7);
         }
         if (data->cursorPos != 8) {
-            data->cursorPos = unkExternVal;
+            data->cursorPos = neighbor;
             PlaySE(SEQ_SE_DP_SELECT);
-            unkBool++;
+            cursorMoved++;
         }
     }
 
-    if (unkBool) {
+    if (cursorMoved) {
         MartData_SetCursorPosition(data, data->cursorPos, 0);
         MartData_PrintItemDescription(data, data->cursorPos);
     }
@@ -682,17 +682,17 @@ static u8 MartData_NextPage(MartData *data) {
 }
 
 static void MartData_DrawPageItemIcons(MartData *data, int pageStart, u8 numItems) {
-    int temp;
+    int numShown;
     for (int i = 0; i < 6; i++) {
         if (numItems - pageStart > 6) {
-            temp = 6;
+            numShown = 6;
         } else if (numItems - pageStart < 0) {
-            temp = 0;
+            numShown = 0;
         } else {
-            temp = numItems - pageStart;
+            numShown = numItems - pageStart;
         }
 
-        if (i < temp) {
+        if (i < numShown) {
             MartData_LoadItemIcon(data, i + 3, i + 2, data->itemIds[i + pageStart]);
             Sprite_SetDrawFlag(data->sprites[i + 4], TRUE);
         } else {
@@ -717,7 +717,7 @@ static u32 MartData_GetCurrency(MartData *data, u32 martType) {
     }
 }
 
-int MartData_CheckCannotBuy(MartData *data, u32 unkAmount) {
+int MartData_CheckCannotBuy(MartData *data, u32 money) {
     if (data->martType == MART_TYPE_3) {
         if (PokeathlonSave_IsDailyItemBought(data->pokeathlonSave, data->cursorPos + data->pageStart)) {
             return 2;
@@ -726,7 +726,7 @@ int MartData_CheckCannotBuy(MartData *data, u32 unkAmount) {
         return 3;
     }
 
-    return unkAmount < data->cost;
+    return money < data->cost;
 }
 
 static u8 MartData_BeginPurchase(MartData *data, u16 itemID) {
@@ -738,12 +738,12 @@ static u8 MartData_BeginPurchase(MartData *data, u16 itemID) {
     data->item = itemID;
     data->quantity = 1;
     data->cost = MartData_GetItemPrice(data, data->item);
-    u32 unkAmount = MartData_GetCurrency(data, data->martType);
-    if (MartData_CheckCannotBuy(data, unkAmount)) {
+    u32 money = MartData_GetCurrency(data, data->martType);
+    if (MartData_CheckCannotBuy(data, money)) {
         data->touchMartAction = 10;
         return TASK_MART_14;
     }
-    data->maxQuantity = unkAmount / data->cost;
+    data->maxQuantity = money / data->cost;
     if (data->maxQuantity > 99) {
         data->maxQuantity = 99;
     }
@@ -1024,8 +1024,8 @@ static u8 MartData_WaitPremierBallMessage(MartData *data) {
     return TASK_MART_15;
 }
 
-static u16 Mart_GetPriceOverride(u16 itemID, const struct MartItem *priceOverrides, u8 unk270) {
-    for (int i = 0; i < unk270; i++) {
+static u16 Mart_GetPriceOverride(u16 itemID, const struct MartItem *priceOverrides, u8 numOverrides) {
+    for (int i = 0; i < numOverrides; i++) {
         if (itemID == priceOverrides[i].item_id) {
             return priceOverrides[i].cost;
         }

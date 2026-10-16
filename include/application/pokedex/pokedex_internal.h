@@ -340,7 +340,7 @@ struct PokedexAppData {
 void PokedexApp_VBlankCallback(void *cb_arg);
 void PokedexApp_SetGraphicsBanks(void);
 void PokedexApp_InitBgs(PokedexAppData *pokedexApp);
-void PokedexApp_SetSubBg3Mode(PokedexAppData *pokedexApp, BOOL a1);
+void PokedexApp_SetSubBg3Mode(PokedexAppData *pokedexApp, BOOL useAffine);
 void PokedexApp_FreeBgs(PokedexAppData *pokedexApp);
 void PokedexApp_ClearBgTilemap(PokedexAppData *pokedexApp, u8 bgId);
 void PokedexApp_InitBlend(void);

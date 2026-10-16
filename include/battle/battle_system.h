@@ -91,8 +91,8 @@ void BattleSystem_SetTutorialState(BattleSystem *battleSystem, u8 tutorialState)
 BOOL BattleSystem_MetBill(BattleSystem *battleSystem);
 void BattleSystem_GameStatIncrement(BattleSystem *battleSystem, int id);
 void BattleSystem_AddSpeciesCaughtScore(BattleSystem *battleSystem);
-void BattleSystem_SetField2440(BattleSystem *battleSystem, int a1);
-void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 a1);
+void BattleSystem_SetField2440(BattleSystem *battleSystem, int ready);
+void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 mask);
 void *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem);
 void BattleSystem_SetWaitingIcon(BattleSystem *battleSystem, void *waitingIcon);
 MonPicData *BattleSystem_GetMonPicData(BattleSystem *battleSystem, int index);

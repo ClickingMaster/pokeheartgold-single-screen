@@ -429,83 +429,83 @@ void PaletteData_SetSelectedBufferAll(PaletteData *plttData, BOOL selected) {
 }
 
 void ZeroPalettesByBitmask(u16 selectedBuffer, enum HeapID heapID) {
-    void *tmp;
+    void *zeroBuf;
 
-    tmp = Heap_Alloc(heapID, 0x200);
-    memset(tmp, 0, 0x200);
-    DC_FlushRange(tmp, 0x200);
+    zeroBuf = Heap_Alloc(heapID, 0x200);
+    memset(zeroBuf, 0, 0x200);
+    DC_FlushRange(zeroBuf, 0x200);
 
     if (selectedBuffer & PLTTBUF_MAIN_BG_F) {
-        GX_LoadBGPltt(tmp, 0, 0x200);
+        GX_LoadBGPltt(zeroBuf, 0, 0x200);
     }
     if (selectedBuffer & PLTTBUF_SUB_BG_F) {
-        GXS_LoadBGPltt(tmp, 0, 0x200);
+        GXS_LoadBGPltt(zeroBuf, 0, 0x200);
     }
     if (selectedBuffer & PLTTBUF_MAIN_OBJ_F) {
-        GX_LoadOBJPltt(tmp, 0, 0x200);
+        GX_LoadOBJPltt(zeroBuf, 0, 0x200);
     }
     if (selectedBuffer & PLTTBUF_SUB_OBJ_F) {
-        GXS_LoadOBJPltt(tmp, 0, 0x200);
+        GXS_LoadOBJPltt(zeroBuf, 0, 0x200);
     }
 
-    Heap_FreeExplicit(heapID, tmp);
+    Heap_FreeExplicit(heapID, zeroBuf);
 
-    tmp = Heap_Alloc(heapID, 0x2000);
-    memset(tmp, 0, 0x2000);
-    DC_FlushRange(tmp, 0x2000);
+    zeroBuf = Heap_Alloc(heapID, 0x2000);
+    memset(zeroBuf, 0, 0x2000);
+    DC_FlushRange(zeroBuf, 0x2000);
 
     if (selectedBuffer & PLTTBUF_MAIN_EX_BG_0_F) {
         GX_BeginLoadBGExtPltt();
-        GX_LoadBGExtPltt(tmp, 0, 0x2000);
+        GX_LoadBGExtPltt(zeroBuf, 0, 0x2000);
         GX_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_MAIN_EX_BG_1_F) {
         GX_BeginLoadBGExtPltt();
-        GX_LoadBGExtPltt(tmp, 0x2000, 0x2000);
+        GX_LoadBGExtPltt(zeroBuf, 0x2000, 0x2000);
         GX_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_MAIN_EX_BG_2_F) {
         GX_BeginLoadBGExtPltt();
-        GX_LoadBGExtPltt(tmp, 0x4000, 0x2000);
+        GX_LoadBGExtPltt(zeroBuf, 0x4000, 0x2000);
         GX_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_MAIN_EX_BG_3_F) {
         GX_BeginLoadBGExtPltt();
-        GX_LoadBGExtPltt(tmp, 0x6000, 0x2000);
+        GX_LoadBGExtPltt(zeroBuf, 0x6000, 0x2000);
         GX_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_SUB_EX_BG_0_F) {
         GXS_BeginLoadBGExtPltt();
-        GXS_LoadBGExtPltt(tmp, 0, 0x2000);
+        GXS_LoadBGExtPltt(zeroBuf, 0, 0x2000);
         GXS_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_SUB_EX_BG_1_F) {
         GXS_BeginLoadBGExtPltt();
-        GXS_LoadBGExtPltt(tmp, 0x2000, 0x2000);
+        GXS_LoadBGExtPltt(zeroBuf, 0x2000, 0x2000);
         GXS_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_SUB_EX_BG_2_F) {
         GXS_BeginLoadBGExtPltt();
-        GXS_LoadBGExtPltt(tmp, 0x4000, 0x2000);
+        GXS_LoadBGExtPltt(zeroBuf, 0x4000, 0x2000);
         GXS_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_SUB_EX_BG_3_F) {
         GXS_BeginLoadBGExtPltt();
-        GXS_LoadBGExtPltt(tmp, 0x6000, 0x2000);
+        GXS_LoadBGExtPltt(zeroBuf, 0x6000, 0x2000);
         GXS_EndLoadBGExtPltt();
     }
     if (selectedBuffer & PLTTBUF_MAIN_EX_OBJ_F) {
         GX_BeginLoadOBJExtPltt();
-        GX_LoadOBJExtPltt(tmp, 0, 0x2000);
+        GX_LoadOBJExtPltt(zeroBuf, 0, 0x2000);
         GX_EndLoadOBJExtPltt();
     }
     if (selectedBuffer & PLTTBUF_SUB_EX_OBJ_F) {
         GXS_BeginLoadOBJExtPltt();
-        GXS_LoadOBJExtPltt(tmp, 0, 0x2000);
+        GXS_LoadOBJExtPltt(zeroBuf, 0, 0x2000);
         GXS_EndLoadOBJExtPltt();
     }
 
-    Heap_FreeExplicit(heapID, tmp);
+    Heap_FreeExplicit(heapID, zeroBuf);
 }
 
 void PaletteData_FillPaletteInBuffer(PaletteData *plttData, PaletteBufferId bufferID, PaletteSelector which, u16 value, u16 begin, u16 end) {

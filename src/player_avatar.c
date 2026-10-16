@@ -403,9 +403,9 @@ s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar) {
     return avatar->lastVerticalInput;
 }
 
-void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 unk28, s32 unk2C) {
-    PlayerAvatar_SetLastHorizontalInput(avatar, unk28);
-    PlayerAvatar_SetLastVerticalInput(avatar, unk2C);
+void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 lastHorizontal, s32 lastVertical) {
+    PlayerAvatar_SetLastHorizontalInput(avatar, lastHorizontal);
+    PlayerAvatar_SetLastVerticalInput(avatar, lastVertical);
 }
 
 void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect) {

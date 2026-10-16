@@ -631,7 +631,7 @@ void BattleRegulation_PrintRulesWindow(FieldSystem *fieldSystem, Window *window,
 u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
     Party *party = SaveArray_Party_Get(fieldSystem->saveData);
     PokedexData *pokedexData = PokedexData_CreateAndLoad(HEAP_ID_FIELD2);
-    u32 unkValue;
+    u32 checkResult;
     if (ruleset == 10) {
         int partySize = Party_GetCount(party);
         int validMons = partySize;
@@ -640,13 +640,13 @@ u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *message
                 validMons--;
             }
         }
-        unkValue = validMons < 2 ? 7 : 0;
+        checkResult = validMons < 2 ? 7 : 0;
     } else {
-        unkValue = BattleRegulation_ValidateParty(&fieldSystem->linkBattleRuleset[0], party, pokedexData);
+        checkResult = BattleRegulation_ValidateParty(&fieldSystem->linkBattleRuleset[0], party, pokedexData);
     }
     PokedexData_UnloadAndDelete(pokedexData);
     int ruleValue;
-    switch (unkValue) {
+    switch (checkResult) {
     case 0:
         return 0;
     case 4:
@@ -671,9 +671,9 @@ u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *message
     }
 }
 
-u32 BattleRegulation_GetLinkModeOffset(int arg0) {
-    u32 unkValue = arg0;
-    switch (unkValue) {
+u32 BattleRegulation_GetLinkModeOffset(int linkMode) {
+    u32 offset = linkMode;
+    switch (offset) {
     case 6:
         return 0xFF;
     case 7:
@@ -694,8 +694,8 @@ u32 BattleRegulation_GetLinkModeOffset(int arg0) {
     default:
         break;
     }
-    if (unkValue >= 9) {
-        unkValue = 0xFF;
+    if (offset >= 9) {
+        offset = 0xFF;
     }
-    return unkValue;
+    return offset;
 }

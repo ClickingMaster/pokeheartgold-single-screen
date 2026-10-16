@@ -131,14 +131,14 @@ RenderResult RenderText(TextPrinter *printer) {
                 u16 field = MsgArray_ControlCodeGetField(
                     printer->template.currentChar.raw, 0);
                 if (field == 0xff) {
-                    u8 r2 = printer->template.savedColor;
+                    u8 prevSavedColor = printer->template.savedColor;
                     printer->template.savedColor = ((printer->template.fgColor - 1) / 2 + 100);
 
-                    if (r2 < 100 || r2 >= 107) {
+                    if (prevSavedColor < 100 || prevSavedColor >= 107) {
                         break;
                     }
 
-                    field = (r2 - 100);
+                    field = (prevSavedColor - 100);
                 } else {
                     if (field >= 100) {
                         printer->template.savedColor = field;

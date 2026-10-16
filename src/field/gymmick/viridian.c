@@ -99,9 +99,9 @@ static void ViridianGymmick_Unload3dGraphics(ViridianGymmickLocalData *localData
     }
 
     for (j = 0; j < 3; ++j) {
-        ViridianGymmickAnimManager *r4 = &localData->animMgrs[j];
+        ViridianGymmickAnimManager *animMgr = &localData->animMgrs[j];
         for (k = 0; k < 4; ++k) {
-            Field3dModelAnimation_Unload(&r4->animStates[k].anim, &localData->allocator);
+            Field3dModelAnimation_Unload(&animMgr->animStates[k].anim, &localData->allocator);
         }
     }
 }

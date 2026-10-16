@@ -147,8 +147,8 @@ void Mail_SetNewMessageDetails(Mail *mail, u8 mailType, u8 mon_no, SaveData *sav
 }
 
 Mail *CreateKenyaMail(Pokemon *mon, u8 mailType, u8 gender, String *name, u8 otId) {
-    u8 r0;
-    u32 r5;
+    u8 iconPalette;
+    u32 iconNaix;
     u16 species;
     u32 isEgg, form;
     Mail *ret = Mail_New(HEAP_ID_3);
@@ -178,10 +178,10 @@ Mail *CreateKenyaMail(Pokemon *mon, u8 mailType, u8 gender, String *name, u8 otI
     species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     isEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
     form = GetMonData(mon, MON_DATA_FORM, NULL);
-    r5 = Pokemon_GetIconNaix(mon);
-    r0 = GetMonIconPaletteEx(species, form, isEgg);
-    ret->mon_icons[0].icon = r5;
-    ret->mon_icons[0].pal = r0;
+    iconNaix = Pokemon_GetIconNaix(mon);
+    iconPalette = GetMonIconPaletteEx(species, form, isEgg);
+    ret->mon_icons[0].icon = iconNaix;
+    ret->mon_icons[0].pal = iconPalette;
 
     return ret;
 }
@@ -216,13 +216,13 @@ u8 Mail_GetVersion(const Mail *mail) {
     return mail->author_version;
 }
 
-u16 Mail_GetMonIconData(Mail *mail, u8 r1, u8 r4, u16 r3) {
+u16 Mail_GetMonIconData(Mail *mail, u8 monIdx, u8 attr, u16 formFlags) {
     int i;
     union MailPatternData iconData;
-    if (r1 < NELEMS(mail->mon_icons)) {
-        iconData = mail->mon_icons[r1];
+    if (monIdx < NELEMS(mail->mon_icons)) {
+        iconData = mail->mon_icons[monIdx];
         for (i = 0; i < NELEMS(sFormOverrides); i++) {
-            if (sFormOverrides[i].base_icon == iconData.icon && sFormOverrides[i].form == ((r3 >> (5 * r1)) & 31)) {
+            if (sFormOverrides[i].base_icon == iconData.icon && sFormOverrides[i].form == ((formFlags >> (5 * monIdx)) & 31)) {
                 iconData.icon = sFormOverrides[i].formed_icon;
                 iconData.pal = GetMonIconPaletteEx(sFormOverrides[i].species, sFormOverrides[i].form, FALSE);
                 break;
@@ -232,7 +232,7 @@ u16 Mail_GetMonIconData(Mail *mail, u8 r1, u8 r4, u16 r3) {
             iconData.icon = 7;
             iconData.pal = 0;
         }
-        switch (r4) {
+        switch (attr) {
         case 0:
             return iconData.icon;
         case 1:

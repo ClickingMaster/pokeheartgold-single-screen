@@ -1927,15 +1927,15 @@ FollowMonMood *FollowMonMood_New(enum HeapID heapID) {
     return ret;
 }
 
-void FollowMonMood_Add(FollowMonMood *unk, s8 by) {
+void FollowMonMood_Add(FollowMonMood *followMood, s8 by) {
     s8 mood;
 
-    if (unk->mon == NULL) {
+    if (followMood->mon == NULL) {
         GF_ASSERT(FALSE);
         return;
     }
 
-    mood = GetMonData(unk->mon, MON_DATA_MOOD, NULL);
+    mood = GetMonData(followMood->mon, MON_DATA_MOOD, NULL);
     if (mood + by > 127) {
         mood = 127;
     } else if (mood + by < -127) {
@@ -1943,25 +1943,25 @@ void FollowMonMood_Add(FollowMonMood *unk, s8 by) {
     } else {
         mood += by;
     }
-    SetMonData(unk->mon, MON_DATA_MOOD, &mood);
+    SetMonData(followMood->mon, MON_DATA_MOOD, &mood);
 }
 
-void FollowMonMood_Set(FollowMonMood *unk, s8 mood) {
-    if (unk->mon == NULL) {
+void FollowMonMood_Set(FollowMonMood *followMood, s8 mood) {
+    if (followMood->mon == NULL) {
         GF_ASSERT(FALSE);
         return;
     }
 
-    SetMonData(unk->mon, MON_DATA_MOOD, &mood);
+    SetMonData(followMood->mon, MON_DATA_MOOD, &mood);
 }
 
-s8 FollowMonMood_Get(FollowMonMood *unk) {
-    if (unk->mon == NULL) {
+s8 FollowMonMood_Get(FollowMonMood *followMood) {
+    if (followMood->mon == NULL) {
         GF_ASSERT(FALSE);
         return 0;
     }
 
-    return GetMonData(unk->mon, MON_DATA_MOOD, NULL);
+    return GetMonData(followMood->mon, MON_DATA_MOOD, NULL);
 }
 
 void FollowMonMood_SetMon(FollowMonMood *followMonMood, Pokemon *mon, u16 species, u32 personality) {

@@ -14,10 +14,10 @@
 #include "save_vars_flags.h"
 #include "sys_flags.h"
 
-EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 a1, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID) {
+EasyChatArgs *EasyChat_CreateArgs(u8 args, u8 promptMsgNo, SaveData *saveData, MenuInputStateMgr *menuInputStateMgr, enum HeapID heapID) {
     EasyChatArgs *ptr = Heap_Alloc(heapID, sizeof(EasyChatArgs));
     ptr->type = args;
-    ptr->promptMsgNo = a1;
+    ptr->promptMsgNo = promptMsgNo;
     ptr->pokedex = Save_Pokedex_Get(saveData);
     ptr->easyChat = Save_EasyChat_Get(saveData);
     ptr->gameCleared = CheckGameClearFlag(Save_VarsFlags_Get(saveData));

@@ -49,12 +49,12 @@ BOOL ScrCmd_NonNPCMsg(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_GetStdMsgNaix(ScriptContext *ctx) {
-    u16 r5 = ScriptGetVar(ctx);
+    u16 bankIdx = ScriptGetVar(ctx);
     u16 *fileIdPtr = ScriptGetVarPointer(ctx);
-    if (r5 >= NELEMS(gScriptStdMsgBanks)) {
+    if (bankIdx >= NELEMS(gScriptStdMsgBanks)) {
         *fileIdPtr = 0;
     } else {
-        *fileIdPtr = gScriptStdMsgBanks[r5];
+        *fileIdPtr = gScriptStdMsgBanks[bankIdx];
     }
     return FALSE;
 }
@@ -130,11 +130,11 @@ BOOL ScrCmd_MsgBoxFrontierBannedSpecies(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_MsgFont3(ScriptContext *ctx) {
-    struct MessagePrintOptions unkStruct;
+    struct MessagePrintOptions printOptions;
     u16 messageNum = ScriptReadHalfword(ctx);
-    ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);
-    unkStruct.fontId = 3;
-    ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNum, FALSE, &unkStruct);
+    ovFieldMain_InitMessagePrintOptions(&printOptions, ctx);
+    printOptions.fontId = 3;
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, messageNum, FALSE, &printOptions);
     SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
@@ -159,11 +159,11 @@ BOOL ScrCmd_NonNPCMsgVar(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_NonNPCMsgVarAutoScroll(ScriptContext *ctx) {
-    struct MessagePrintOptions unkStruct;
+    struct MessagePrintOptions printOptions;
     u16 messageNum = ScriptGetVar(ctx);
-    ovFieldMain_InitMessagePrintOptions(&unkStruct, ctx);
-    unkStruct.autoScroll = 1;
-    ovFieldMain_ShowMessage(ctx, ctx->msgdata, (u8)messageNum, TRUE, &unkStruct);
+    ovFieldMain_InitMessagePrintOptions(&printOptions, ctx);
+    printOptions.autoScroll = 1;
+    ovFieldMain_ShowMessage(ctx, ctx->msgdata, (u8)messageNum, TRUE, &printOptions);
     SetupNativeScript(ctx, ScrNative_WaitTextPrinter);
     return TRUE;
 }
@@ -197,30 +197,30 @@ BOOL ScrCmd_NPCMsgByObjectType(ScriptContext *ctx) {
     return TRUE;
 }
 
-void ovFieldMain_InitMessagePrintOptions(struct MessagePrintOptions *unkStruct, ScriptContext *ctx) {
-    unkStruct->textFrameDelay = ovFieldMain_GetTextFrameDelay(ctx);
-    unkStruct->autoScroll = 0;
-    unkStruct->fontId = 1;
+void ovFieldMain_InitMessagePrintOptions(struct MessagePrintOptions *printOptions, ScriptContext *ctx) {
+    printOptions->textFrameDelay = ovFieldMain_GetTextFrameDelay(ctx);
+    printOptions->autoScroll = 0;
+    printOptions->fontId = 1;
 }
 
-void ovFieldMain_ShowMessage(ScriptContext *ctx, MsgData *messageData, u16 messageNum, u8 canABSpeedUp, struct MessagePrintOptions *unkStruct) {
+void ovFieldMain_ShowMessage(ScriptContext *ctx, MsgData *messageData, u16 messageNum, u8 canABSpeedUp, struct MessagePrintOptions *printOptions) {
     MessageBox messageBox;
     ovFieldMain_GetMsgBoxParameters(ctx->fieldSystem, &messageBox);
     ovFieldMain_CreateMessageBox(ctx->fieldSystem, &messageBox);
     ovFieldMain_ReadAndExpandMsgDataViaBuffer(&messageBox, messageData, messageNum);
     u32 textFrameDelay;
-    u32 unk1;
+    u32 autoScroll;
     u8 fontId;
-    if (unkStruct == NULL) {
+    if (printOptions == NULL) {
         textFrameDelay = ovFieldMain_GetTextFrameDelay(ctx);
-        unk1 = 0;
+        autoScroll = 0;
         fontId = 1;
     } else {
-        textFrameDelay = unkStruct->textFrameDelay;
-        unk1 = unkStruct->autoScroll;
-        fontId = unkStruct->fontId;
+        textFrameDelay = printOptions->textFrameDelay;
+        autoScroll = printOptions->autoScroll;
+        fontId = printOptions->fontId;
     }
-    ovFieldMain_PrintMessageEx(&messageBox, fontId, textFrameDelay, canABSpeedUp, unk1);
+    ovFieldMain_PrintMessageEx(&messageBox, fontId, textFrameDelay, canABSpeedUp, autoScroll);
 }
 
 static void ovFieldMain_ShowMessageInField(ScriptContext *ctx, MsgData *messageData, u32 messageNum) {

@@ -755,39 +755,39 @@ static void PokegearMap_CullOffscreenObjects(PokegearMapAppData *mapApp) {
 }
 
 static void PokegearMap_TouchToMapCoords(PokegearMapAppData *mapApp, s16 *pX, s16 *pY) {
-    s16 r7;
-    s16 r4;
+    s16 x;
+    s16 y;
 
     static const u8 ov101_021F7E9C[][4] = {
         { 1, 16, 1, 22 },
         { 1, 7,  1, 10 },
     };
 
-    const u8 *r6 = ov101_021F7E9C[mapApp->zoomed];
+    const u8 *bounds = ov101_021F7E9C[mapApp->zoomed];
 
-    r7 = gSystem.touchX - mapApp->centerX;
-    r4 = gSystem.touchY - mapApp->centerY;
-    r7 /= ((mapApp->zoomed + 1) * 8);
-    r4 /= ((mapApp->zoomed + 1) * 8);
-    if (r4 < r6[0]) {
-        r4 = r6[0];
+    x = gSystem.touchX - mapApp->centerX;
+    y = gSystem.touchY - mapApp->centerY;
+    x /= ((mapApp->zoomed + 1) * 8);
+    y /= ((mapApp->zoomed + 1) * 8);
+    if (y < bounds[0]) {
+        y = bounds[0];
     }
-    if (r4 > r6[1]) {
-        r4 = r6[1];
+    if (y > bounds[1]) {
+        y = bounds[1];
     }
-    if (r7 < r6[2]) {
-        r7 = r6[2];
+    if (x < bounds[2]) {
+        x = bounds[2];
     }
-    if (r7 > r6[3]) {
-        r7 = r6[3];
+    if (x > bounds[3]) {
+        x = bounds[3];
     }
-    r7 += mapApp->cursorSpriteState.left;
-    r4 += mapApp->cursorSpriteState.top;
+    x += mapApp->cursorSpriteState.left;
+    y += mapApp->cursorSpriteState.top;
     if (pX != NULL) {
-        *pX = r7;
+        *pX = x;
     }
     if (pY != NULL) {
-        *pY = r4;
+        *pY = y;
     }
     PokegearMap_SetCursorToPlayerPos(mapApp);
 }

@@ -48,7 +48,7 @@ GearPhoneRingManager *FieldSystem_GetGearPhoneRingManager(FieldSystem *sys);
 void GearPhoneRingManager_StartRinging(GearPhoneRingManager *ptr);
 BOOL GearPhoneRingManager_IsRinging(GearPhoneRingManager *ptr);
 PhoneBookEntry *GearPhoneRingManager_GetCallerPhoneBookEntry(GearPhoneRingManager *ptr);
-void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigger, BOOL a2);
+void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigger, BOOL ringSoon);
 void GearPhoneRingManager_AddMinutes(GearPhoneRingManager *ptr, s32 minutes, BOOL a2);
 void GearPhoneRingManager_HandleTimeAdvance(GearPhoneRingManager *ptr, s64 seconds);
 void GearPhoneRingManager_ResetIfActive(GearPhoneRingManager *ptr);

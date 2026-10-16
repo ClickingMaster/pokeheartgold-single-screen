@@ -38,7 +38,7 @@ int GridInputHandler_HandleInput_AllowHold(GridInputHandler *inputHandler);
 int GridInputHandler_GetNextInput(GridInputHandler *inputHandler);
 int GridInputHandler_GetReturnInput(GridInputHandler *inputHandler);
 void GridInputHandler_SetNextInput(GridInputHandler *inputHandler, int nextInput);
-void GridInputHandler_SetNextLastReturnInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int unk0F);
+void GridInputHandler_SetNextLastReturnInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int returnInput);
 BOOL GridInputHandler_IsButtonInputMode(GridInputHandler *inputHandler);
 void GridInputHandler_SetButtonInputMode(GridInputHandler *inputHandler, BOOL isButtons);
 void GridInputHandler_SetAllEnabled(GridInputHandler *inputHandler);

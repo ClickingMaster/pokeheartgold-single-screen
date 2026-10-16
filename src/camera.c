@@ -378,11 +378,11 @@ void Camera_SetLookAtCamPos(const VecFx32 *pos, Camera *camera) {
     camera->lookAt.camPos = *pos;
 }
 
-void Camera_SetHistoryEnabled(Camera *camera, BOOL param1) {
+void Camera_SetHistoryEnabled(Camera *camera, BOOL enabled) {
     if (camera->history == NULL) {
         return;
     }
-    if (param1) {
+    if (enabled) {
         camera->history->enabled = TRUE;
     } else {
         camera->history->enabled = FALSE;

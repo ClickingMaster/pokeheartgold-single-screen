@@ -439,11 +439,11 @@ static u32 BerryPotsApp_MainSeq_FadeOut(BerryPotsAppData *data) {
 }
 
 static u32 BerryPotsApp_MainSeq_SelectPot(BerryPotsAppData *data) {
-    u32 unk = BerryPotsApp_HandleSelectPotInput(data);
-    if (unk == 2) {
+    u32 nextSeq = BerryPotsApp_HandleSelectPotInput(data);
+    if (nextSeq == 2) {
         BerryPotsApp_UpdateGrowthFromRTC(data, 1);
     }
-    return unk;
+    return nextSeq;
 }
 
 static u32 BerryPotsApp_MainSeq_EmptyPotMenu(BerryPotsAppData *data) {
@@ -455,14 +455,14 @@ static u32 BerryPotsApp_MainSeq_EmptyPotMenu(BerryPotsAppData *data) {
         data->state70++;
         break;
     case 1: {
-        int unk = BerryPotsApp_HandleMenuInput(data);
-        if (unk == -1) {
+        int selection = BerryPotsApp_HandleMenuInput(data);
+        if (selection == -1) {
             break;
         }
 
         data->state70 = 0;
 
-        if (unk == 2 || unk == -2) {
+        if (selection == 2 || selection == -2) {
             BerryPotsApp_PrintMessage(data, BERRY_POTS_APP_MSG_TOUCH_POT, 4, TRUE);
             BerryPotsApp_SetAnimsActive(data, TRUE);
             return 2;
@@ -471,7 +471,7 @@ static u32 BerryPotsApp_MainSeq_EmptyPotMenu(BerryPotsAppData *data) {
         data->args->potIndex = data->selectedPot;
         data->args->itemId = 0xFFFF;
 
-        if (unk == 0) {
+        if (selection == 0) {
             if (data->totalMulchQuantity == 0) {
                 BerryPotsApp_PrintMessage(data, BERRY_POTS_APP_MSG_NO_FERTILIZER, 4, FALSE);
                 return 8;
@@ -501,14 +501,14 @@ static u32 BerryPotsApp_MainSeq_MulchedPotMenu(BerryPotsAppData *data) {
         data->state70++;
         break;
     case 1: {
-        int unk = BerryPotsApp_HandleMenuInput(data);
-        if (unk == -1) {
+        int selection = BerryPotsApp_HandleMenuInput(data);
+        if (selection == -1) {
             break;
         }
 
         data->state70 = 0;
 
-        if (unk == 1 || unk == -2) {
+        if (selection == 1 || selection == -2) {
             BerryPotsApp_PrintMessage(data, BERRY_POTS_APP_MSG_TOUCH_POT, 4, 1);
             BerryPotsApp_SetAnimsActive(data, 1);
             return 2;
@@ -538,12 +538,12 @@ static u32 BerryPotsApp_MainSeq_WaterMenu(BerryPotsAppData *data) {
         data->state70++;
         break;
     case 1: {
-        int unk = BerryPotsApp_HandleMenuInput(data);
-        if (unk == -1) {
+        int selection = BerryPotsApp_HandleMenuInput(data);
+        if (selection == -1) {
             break;
         }
 
-        if (unk == 1 || unk == -2) {
+        if (selection == 1 || selection == -2) {
             data->state70 = 0;
             BerryPotsApp_PrintMessage(data, BERRY_POTS_APP_MSG_TOUCH_POT, 4, TRUE);
             BerryPotsApp_SetAnimsActive(data, TRUE);
@@ -590,20 +590,20 @@ static u32 BerryPotsApp_MainSeq_HarvestMenu(BerryPotsAppData *data) {
         break;
 
     case 1: {
-        int unk = BerryPotsApp_HandleMenuInput(data);
-        if (unk == -1) {
+        int selection = BerryPotsApp_HandleMenuInput(data);
+        if (selection == -1) {
             break;
         }
 
-        if (unk == 1 || unk == -2) {
+        if (selection == 1 || selection == -2) {
             data->state70 = 0;
             BerryPotsApp_PrintMessage(data, BERRY_POTS_APP_MSG_TOUCH_POT, 4, TRUE);
             BerryPotsApp_SetAnimsActive(data, TRUE);
             return 2;
         }
 
-        BerryPotsAppPot *unkStruct = &data->pots[data->selectedPot];
-        if (Bag_HasSpaceForItem(data->bag, BerryIdToItemId(unkStruct->berryId), unkStruct->quantityOrYieldMaybe, data->heapID)) {
+        BerryPotsAppPot *pot = &data->pots[data->selectedPot];
+        if (Bag_HasSpaceForItem(data->bag, BerryIdToItemId(pot->berryId), pot->quantityOrYieldMaybe, data->heapID)) {
             data->state70 = 3;
             BerryPotsApp_SetCursorVisible(data, FALSE);
         } else {
@@ -696,8 +696,8 @@ static BOOL ItemIdIsMulch(u16 itemId) {
 static void BerryPotsApp_ApplyChosenItem(BerryPotsAppData *data) {
     data->appliedItemAction = 0;
 
-    u8 unk = data->args->itemAction;
-    if (unk == 0) {
+    u8 itemAction = data->args->itemAction;
+    if (itemAction == 0) {
         return;
     }
 
@@ -706,14 +706,14 @@ static void BerryPotsApp_ApplyChosenItem(BerryPotsAppData *data) {
         return;
     }
 
-    if (unk == 1) {
+    if (itemAction == 1) {
         if (!ItemIdIsMulch(itemId)) {
             return;
         }
 
         BerryPots_SetPotMulch(data->berryPots, data->selectedPot, ItemIdToMulchId(data->args->itemId));
         data->appliedItemAction = 1;
-    } else if (unk == 2) {
+    } else if (itemAction == 2) {
         if (!ItemIdIsBerry(itemId)) {
             return;
         }
@@ -727,10 +727,10 @@ static void BerryPotsApp_ApplyChosenItem(BerryPotsAppData *data) {
 }
 
 static u32 BerryPotsApp_GetStateAfterFadeIn(BerryPotsAppData *data) {
-    u8 unk14 = data->args->itemAction;
+    u8 itemAction = data->args->itemAction;
     data->args->itemAction = 0;
 
-    if (unk14 == 0) {
+    if (itemAction == 0) {
         return 2;
     }
 
@@ -757,8 +757,8 @@ static BOOL BerryPotsApp_WaitMessageInput(BerryPotsAppData *data) {
         return TRUE;
     }
 
-    u8 unk = data->messageTimer--;
-    if (unk == 0) {
+    u8 timer = data->messageTimer--;
+    if (timer == 0) {
         PlaySE(SEQ_SE_DP_SELECT);
         return TRUE;
     }
@@ -925,9 +925,9 @@ void BerryPotsApp_DrawCancelButton(BerryPotsAppData *data, u32 seqNo) {
 }
 
 void BerryPotsApp_UpdateCursor(BerryPotsAppData *data) {
-    u8 unk7C = data->selectedPot;
-    Sprite_SetPositionXY(data->sprites[1], (unk7C + 1) * 27, 96);
-    if (data->pots[unk7C].growthStage > BERRY_POT_GROWTH_STAGE_GROWING) {
+    u8 potIndex = data->selectedPot;
+    Sprite_SetPositionXY(data->sprites[1], (potIndex + 1) * 27, 96);
+    if (data->pots[potIndex].growthStage > BERRY_POT_GROWTH_STAGE_GROWING) {
         Sprite_SetAnimCtrlSeq(data->sprites[1], 3);
     } else {
         Sprite_SetAnimCtrlSeq(data->sprites[1], 2);
@@ -974,14 +974,14 @@ static void BerryPotsApp_CreateMenu(BerryPotsAppData *data, u32 menuId) {
 }
 
 static int BerryPotsApp_HandleMenuInput(BerryPotsAppData *data) {
-    int r4 = TouchscreenListMenu_HandleInput(data->menu);
-    int r0 = -1;
-    if (r4 != -1) {
+    int input = TouchscreenListMenu_HandleInput(data->menu);
+    int selection = -1;
+    if (input != -1) {
         data->fieldMenuState = (MenuInputState)TouchscreenListMenu_WasLastInputTouch(data->menu);
         TouchscreenListMenu_Destroy(data->menu);
-        r0 = r4;
+        selection = input;
     }
-    return r0;
+    return selection;
 }
 
 void BerryPotsApp_UpdatePlantSprite(BerryPotsAppData *data, int index) {
@@ -996,23 +996,23 @@ void BerryPotsApp_UpdatePlantSprite(BerryPotsAppData *data, int index) {
         return;
     }
 
-    UnmanagedSpriteTemplate unkStruct;
-    MI_CpuCopy8(&sBerryPlantSpriteTemplate, &unkStruct, sizeof(UnmanagedSpriteTemplate));
-    unkStruct.x = (index + 1) * 27;
+    UnmanagedSpriteTemplate template;
+    MI_CpuCopy8(&sBerryPlantSpriteTemplate, &template, sizeof(UnmanagedSpriteTemplate));
+    template.x = (index + 1) * 27;
     switch (sub->growthStage) {
     case BERRY_POT_GROWTH_STAGE_PLANTED:
-        unkStruct.animation = 5;
+        template.animation = 5;
         break;
     case BERRY_POT_GROWTH_STAGE_SPROUTED:
-        unkStruct.animation = 6;
+        template.animation = 6;
         break;
     default:
-        unkStruct.resourceSet = index + 1;
-        unkStruct.animation = sub->growthStage - 3;
+        template.resourceSet = index + 1;
+        template.animation = sub->growthStage - 3;
         break;
     }
 
-    sub->soilSpriteMaybe = SpriteSystem_CreateSpriteFromResourceHeader(data->spriteRenderer, data->spriteGfxHandler1, &unkStruct);
+    sub->soilSpriteMaybe = SpriteSystem_CreateSpriteFromResourceHeader(data->spriteRenderer, data->spriteGfxHandler1, &template);
     Sprite_SetDrawFlag(sub->soilSpriteMaybe, TRUE);
     if (sub->growthStage == BERRY_POT_GROWTH_STAGE_PLANTED) {
         Sprite_SetAnimActiveFlag(sub->soilSpriteMaybe, FALSE);
@@ -1025,22 +1025,22 @@ void BerryPotsApp_UpdatePlantSprite(BerryPotsAppData *data, int index) {
 }
 
 void BerryPotsApp_WaterPot(BerryPotsAppData *data, u8 index) {
-    BerryPotsAppPot *unk = &data->pots[index];
+    BerryPotsAppPot *pot = &data->pots[index];
     BerryPots_ResetPotMoisture(data->berryPots, index);
     BerryPotsApp_RefreshPotData(data);
     Sprite_SetAnimationFrame(data->sprites[index + 3], 2);
-    if (unk->growthStage == BERRY_POT_GROWTH_STAGE_PLANTED) {
-        Sprite_SetAnimationFrame(unk->soilSpriteMaybe, unk->soilState);
+    if (pot->growthStage == BERRY_POT_GROWTH_STAGE_PLANTED) {
+        Sprite_SetAnimationFrame(pot->soilSpriteMaybe, pot->soilState);
     }
 }
 
 static void BerryPotsApp_HarvestBerries(BerryPotsAppData *data) {
-    BerryPotsAppPot *unk = &data->pots[data->selectedPot];
+    BerryPotsAppPot *pot = &data->pots[data->selectedPot];
     BerryPots_HarvestPot(data->berryPots, data->selectedPot);
-    Bag_AddItem(data->bag, BerryIdToItemId(unk->berryId), unk->quantityOrYieldMaybe, data->heapID);
+    Bag_AddItem(data->bag, BerryIdToItemId(pot->berryId), pot->quantityOrYieldMaybe, data->heapID);
     BerryPotsApp_RefreshPotData(data);
-    Sprite_Delete(unk->soilSpriteMaybe);
-    unk->soilSpriteMaybe = NULL;
+    Sprite_Delete(pot->soilSpriteMaybe);
+    pot->soilSpriteMaybe = NULL;
     Sprite_SetAnimationFrame(data->sprites[data->selectedPot + 3], 2);
     GameStats_AddScore(data->stats, SCORE_EVENT_BERRY_PICKED);
 }
@@ -1172,10 +1172,10 @@ static void BerryPotsApp_FreeWindows(BerryPotsAppData *data) {
 
 static void BerryPotsApp_SetupListMenuItems(BerryPotsAppData *data) {
     for (int i = 0; i < (int)NELEMS(data->listMenuItems); i++) {
-        const struct BerryPotsMenu *unk = &sBerryPotsMenus[i];
-        data->listMenuItems[i] = ListMenuItems_New(unk->numButtons, data->heapID);
-        for (int j = 0; j < (int)unk->numButtons; j++) {
-            ListMenuItems_AppendFromMsgData(data->listMenuItems[i], data->msgData, unk->msgId[j], j);
+        const struct BerryPotsMenu *menu = &sBerryPotsMenus[i];
+        data->listMenuItems[i] = ListMenuItems_New(menu->numButtons, data->heapID);
+        for (int j = 0; j < (int)menu->numButtons; j++) {
+            ListMenuItems_AppendFromMsgData(data->listMenuItems[i], data->msgData, menu->msgId[j], j);
         }
     }
 }

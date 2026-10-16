@@ -967,12 +967,12 @@ void BattleSystem_AddSpeciesCaughtScore(BattleSystem *battleSystem) {
     GameStats_AddScore(battleSystem->gameStats, SCORE_EVENT_REGISTER_SPECIES_CAUGHT);
 }
 
-void BattleSystem_SetField2440(BattleSystem *battleSystem, int a1) {
-    battleSystem->mainMenuReady = a1;
+void BattleSystem_SetField2440(BattleSystem *battleSystem, int ready) {
+    battleSystem->mainMenuReady = ready;
 }
 
-void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 a1) {
-    battleSystem->switchingOrCanPickCommandMask = a1;
+void BattleSystem_SetSwitchingOrCanPickCommandMask(BattleSystem *battleSystem, u8 mask) {
+    battleSystem->switchingOrCanPickCommandMask = mask;
 }
 
 void *BattleSystem_GetWaitingIcon(BattleSystem *battleSystem) {

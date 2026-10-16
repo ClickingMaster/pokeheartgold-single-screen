@@ -700,9 +700,9 @@ static BlackthornPlatformRotationBonkState BlackthornPlatform_CheckRotationBonk(
     if (BlackthornGymmick_CheckWallCollision(fieldSystem, rightWallMinus1, platform->rightWall) != 0xFF) {
         return ROTATE_BONK_NO_GO;
     }
-    u16 r0 = BlackthornGymmick_GetMaximumRotationAngle(fieldSystem, platform);
-    if (r0 < 0x4000) {
-        *out = r0;
+    u16 maxAngle = BlackthornGymmick_GetMaximumRotationAngle(fieldSystem, platform);
+    if (maxAngle < 0x4000) {
+        *out = maxAngle;
         return ROTATE_BONK_PARTIAL_GO;
     }
     return ROTATE_BONK_OK;

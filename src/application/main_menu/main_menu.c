@@ -252,26 +252,26 @@ static BOOL MainMenu_HandleKeyInput(MainMenuAppData *data, int *state) {
         return FALSE;
     }
 
-    u32 unk;
+    u32 scrollOption;
     u32 oldOption = data->currentOption;
     if (gSystem.newKeys & PAD_KEY_UP) {
         if (ChangeCurrentAppOption(data, -1)) {
-            unk = CountAvailableAppsBefore(data, oldOption);
-            if (unk == 7) {
-                unk = 3;
+            scrollOption = CountAvailableAppsBefore(data, oldOption);
+            if (scrollOption == 7) {
+                scrollOption = 3;
                 changedOption = TRUE;
-            } else if (unk == 3) {
-                unk = 0;
+            } else if (scrollOption == 3) {
+                scrollOption = 0;
                 changedOption = TRUE;
             }
         }
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
         changedOption = ChangeCurrentAppOption(data, 1);
-        unk = data->currentOption;
+        scrollOption = data->currentOption;
     }
 
     if (changedOption) {
-        MainMenu_ScrollToOption(data, unk);
+        MainMenu_ScrollToOption(data, scrollOption);
     }
 
     return FALSE;
@@ -469,11 +469,11 @@ static BOOL MainMenu_PrintWifiInfoErasedWarning(MainMenuAppData *data) {
         for (int i = 0; i < (int)NELEMS(data->warningPending); i++) {
             if (data->warningPending[i] == 1) {
                 data->warningPending[i] = 0;
-                MainMenuTextPrinter unk;
-                const MainMenuWarningBox *unk2 = &ov74_0223BBD4[i];
-                MainMenuTextPrinter_Init(&unk, &data->warningWindow, 0, unk2->gmmId, 0x3F7, 2);
-                MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 1);
-                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
+                MainMenuTextPrinter printer;
+                const MainMenuWarningBox *box = &ov74_0223BBD4[i];
+                MainMenuTextPrinter_Init(&printer, &data->warningWindow, 0, box->gmmId, 0x3F7, 2);
+                MainMenuTextPrinter_SetSize(&printer, box->width, box->height, 1);
+                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, box->x, box->y, box->msgId);
                 return TRUE;
             }
         }
@@ -543,31 +543,31 @@ static void MainMenu_UpdateBeaconWatch(MainMenuAppData *data) {
             break;
         }
 
-        u32 unk = CommState_GetSeenGames();
-        u32 unk2 = ~data->raisedNotices & unk;
-        if (unk2 != 0 && data->noticeState == 15 && data->noticeDelay == 0 && data->raisedNotices != unk2) {
+        u32 seenGames = CommState_GetSeenGames();
+        u32 newNotices = ~data->raisedNotices & seenGames;
+        if (newNotices != 0 && data->noticeState == 15 && data->noticeDelay == 0 && data->raisedNotices != newNotices) {
             data->redrawOptions = TRUE;
 
-            if (unk2 & (1 << 0)) {
+            if (newNotices & (1 << 0)) {
                 data->drawMysteryGiftButton = TRUE;
-                unk2 = (1 << 0);
+                newNotices = (1 << 0);
             }
 
-            if (unk2 & (1 << 1)) {
+            if (newNotices & (1 << 1)) {
                 data->drawConnectToRangerButton = TRUE;
-                unk2 = (1 << 1);
+                newNotices = (1 << 1);
             }
 
-            if (unk2 & (1 << 2)) {
+            if (newNotices & (1 << 2)) {
                 data->drawConnectToWiiButton = TRUE;
-                unk2 = (1 << 2);
+                newNotices = (1 << 2);
             }
 
-            if (unk2 & (1 << 1 | 1 << 0)) {
+            if (newNotices & (1 << 1 | 1 << 0)) {
                 data->noticePending = TRUE;
             }
 
-            data->raisedNotices |= unk2;
+            data->raisedNotices |= newNotices;
         }
 
         data->beaconWatchTimer--;
@@ -623,40 +623,40 @@ static BOOL MainMenu_UpdateNoticeBoxes(MainMenuAppData *data) {
         data->noticeState = 17;
         break;
     case 17: {
-        MainMenuTextPrinter unk;
-        MainMenuTextPrinter_Init(&unk, &data->noticeWindow, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
-        MainMenuNoticeBox *unk2;
+        MainMenuTextPrinter printer;
+        MainMenuTextPrinter_Init(&printer, &data->noticeWindow, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
+        MainMenuNoticeBox *box;
         u32 unk3 = data->raisedNotices & ~data->shownNotices;
         if (unk3 & (1 << 0)) {
-            unk2 = (data->wirelessButtonsShown & (1 << 0)) ? &ov74_0223BC30[0] : &ov74_0223BC30[1];
+            box = (data->wirelessButtonsShown & (1 << 0)) ? &ov74_0223BC30[0] : &ov74_0223BC30[1];
         } else if (unk3 & (1 << 1)) {
-            unk2 = (data->wirelessButtonsShown & (1 << 1)) ? &ov74_0223BC30[2] : &ov74_0223BC30[3];
+            box = (data->wirelessButtonsShown & (1 << 1)) ? &ov74_0223BC30[2] : &ov74_0223BC30[3];
         } else if (unk3 & (1 << 7)) {
-            unk.frameType = 2;
-            unk2 = &ov74_0223BC30[4];
-            MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, unk.msgFileId, HEAP_ID_MAIN_MENU);
-            String *string = NewString_ReadMsgData(msgData, unk2->msgId);
-            u32 width = FontID_String_GetWidthMultiline(unk.fontId, string, 0);
-            unk.textX = (unk2->width * 8 - width) / 2;
+            printer.frameType = 2;
+            box = &ov74_0223BC30[4];
+            MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, printer.msgFileId, HEAP_ID_MAIN_MENU);
+            String *string = NewString_ReadMsgData(msgData, box->msgId);
+            u32 width = FontID_String_GetWidthMultiline(printer.fontId, string, 0);
+            printer.textX = (box->width * 8 - width) / 2;
             String_Delete(string);
             DestroyMsgData(msgData);
-            unk.textY = 4;
+            printer.textY = 4;
         }
-        MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 0x91);
-        unk.bgId = GF_BG_LYR_MAIN_1;
-        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
+        MainMenuTextPrinter_SetSize(&printer, box->width, box->height, 0x91);
+        printer.bgId = GF_BG_LYR_MAIN_1;
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, box->x, box->y, box->msgId);
 
-        BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(unk.window), GetWindowY(unk.window), GetWindowWidth(unk.window), GetWindowHeight(unk.window), 0);
+        BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(printer.window), GetWindowY(printer.window), GetWindowWidth(printer.window), GetWindowHeight(printer.window), 0);
 
         if ((unk3 & (1 << 7)) && !(unk3 & (1 << 1 | 1 << 0))) {
             for (int i = 0; i < (int)NELEMS(data->newGameOptionWindows); i++) {
                 Window *window = &data->newGameOptionWindows[i];
-                MainMenuTextPrinter_Init(&unk, window, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
+                MainMenuTextPrinter_Init(&printer, window, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
                 MainMenuNoticeBox *unk3 = &ov74_0223BC30[i + 5];
-                unk.textY = 4;
-                MainMenuTextPrinter_SetSize(&unk, unk3->width, unk3->height, (i * 72) + 1);
-                unk.bgId = GF_BG_LYR_MAIN_1;
-                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk3->x, unk3->y, unk3->msgId);
+                printer.textY = 4;
+                MainMenuTextPrinter_SetSize(&printer, unk3->width, unk3->height, (i * 72) + 1);
+                printer.bgId = GF_BG_LYR_MAIN_1;
+                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, unk3->x, unk3->y, unk3->msgId);
             }
             data->currentNewGameOption = 0;
             MainMenu_HighlightNewGameOption(data, -1);
@@ -680,14 +680,14 @@ static BOOL MainMenu_UpdateNoticeBoxes(MainMenuAppData *data) {
         }
 
         u32 oldInputState = data->menuInputState.state;
-        u32 unk = MainMenu_GetNewInput(data);
-        if (unk & (PAD_BUTTON_B | PAD_BUTTON_A)) {
+        u32 printer = MainMenu_GetNewInput(data);
+        if (printer & (PAD_BUTTON_B | PAD_BUTTON_A)) {
             if (oldInputState != data->menuInputState.state) {
                 MainMenu_HighlightOption(data, data->currentOption);
             }
             RemoveWindow(&data->noticeWindow);
             data->noticeState = 20;
-            data->noticeInput = unk;
+            data->noticeInput = printer;
             PlaySE(SEQ_SE_DP_SELECT);
         }
         break;
@@ -1058,14 +1058,14 @@ static BOOL MainMenu_DrawOptionWindows(MainMenuAppData *data) {
 
     for (i = 0, y = 1; i < APPOPTION_COUNT; i++) {
         const MainMenuButton *button = &sMainMenuButtons[i];
-        MainMenuTextPrinter unk;
-        MainMenuTextPrinter_Init(&unk, &data->optionWindows[i], 1, NARC_msg_msg_0442_bin, 0x3F7, 2);
-        MainMenuTextPrinter_SetSize(&unk, 23, button->height, data->windowBaseTile);
+        MainMenuTextPrinter printer;
+        MainMenuTextPrinter_Init(&printer, &data->optionWindows[i], 1, NARC_msg_msg_0442_bin, 0x3F7, 2);
+        MainMenuTextPrinter_SetSize(&printer, 23, button->height, data->windowBaseTile);
         if (button->printFunction != NULL) {
             if (data->optionIds[i] != 0) {
-                SetWindowX(unk.window, 3);
-                SetWindowY(unk.window, y);
-                DrawFrameAndWindow1(unk.window, FALSE, unk.frameBaseTile, unk.framePalette);
+                SetWindowX(printer.window, 3);
+                SetWindowY(printer.window, y);
+                DrawFrameAndWindow1(printer.window, FALSE, printer.frameBaseTile, printer.framePalette);
 
                 if (data->wirelessIconTypes[i] != 0) {
                     DrawWirelessIcon(data, 23, y, data->wirelessIconTypes[i]);
@@ -1075,13 +1075,13 @@ static BOOL MainMenu_DrawOptionWindows(MainMenuAppData *data) {
                 y += button->height + 2;
                 ret = TRUE;
             } else {
-                if (button->printFunction(data, i, &unk, y) == TRUE) {
+                if (button->printFunction(data, i, &printer, y) == TRUE) {
                     y += button->height + 2;
                     ret = TRUE;
                 }
             }
         } else {
-            MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, 3, y, button->msgId);
+            MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, 3, y, button->msgId);
             data->optionIds[i] = button->id;
             y += button->height + 2;
         }

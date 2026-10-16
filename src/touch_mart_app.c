@@ -155,7 +155,7 @@ void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data);
 void TouchMartApp_AddDetailWindows(TouchMartAppData *data);
 void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data);
 
-SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, MartData *martData) {
+SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, MartData *martData) {
     SysTask *task;
     TouchMartAppData *data;
 
@@ -165,7 +165,7 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSyste
     data->task = task;
     data->unk_00 = 0;
     data->bgConfig = bgConfig;
-    data->lastTouchMenuInput = a1;
+    data->lastTouchMenuInput = lastTouchMenuInput;
     data->fieldSystem = fieldSystem;
     data->unk_30 = 0;
     data->options = Save_PlayerData_GetOptionsAddr(data->fieldSystem->saveData);

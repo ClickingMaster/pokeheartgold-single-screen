@@ -5,6 +5,6 @@
 
 #include "field_system.h"
 
-FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *param1);
+FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *frontierFsys);
 
 #endif // POKEHEARTGOLD_FRONTIER_LAUNCH_H

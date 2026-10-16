@@ -85,10 +85,10 @@ typedef struct MartData {
     u32 unk2A0;
 } MartData;
 
-void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
+void CommClub_StartJoin(FieldSystem *fieldSystem, u32 commType, u16 course, u16 arg3);
 void CommClub_OnChildStarted();
 u32 CommClub_PollJoinResult();
-void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
+void CommClub_StartHost(FieldSystem *fieldSystem, u32 commType, u16 course, u16 arg3);
 void CommClub_OnParentConnected();
 u32 CommClub_PollHostResult();
 
@@ -100,7 +100,7 @@ u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *msgFmt,
 u32 BattleRegulation_GetLinkModeOffset(int);
 
 BOOL Task_Mart(TaskManager *taskManager);
-int MartData_CheckCannotBuy(MartData *data, u32 unkAmount);
+int MartData_CheckCannotBuy(MartData *data, u32 money);
 int MartData_GetOwnedQuantity(MartData *data, int itemID);
 u32 MartData_GetItemPrice(MartData *data, u16 itemID);
 void MartData_CreateSprites(MartData *data);

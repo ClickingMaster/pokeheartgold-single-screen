@@ -27,9 +27,9 @@ void SetTalkedTrainerMovement(FieldSystem *fieldSystem, LocalMapObject *last_tal
         movement = 17;
     }
 
-    LocalMapObject *unk_lmo = FindDoubleBattlePartner(fieldSystem, last_talked, TRUE);
-    if (unk_lmo != NULL) {
-        ChangeTrainerMovement(unk_lmo, movement);
+    LocalMapObject *partnerObj = FindDoubleBattlePartner(fieldSystem, last_talked, TRUE);
+    if (partnerObj != NULL) {
+        ChangeTrainerMovement(partnerObj, movement);
     }
     ChangeTrainerMovement(last_talked, movement);
 }

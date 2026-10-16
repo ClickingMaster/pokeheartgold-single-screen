@@ -6,11 +6,11 @@
 
 #include "field_system.h"
 
-FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *param1) {
+FrontierLaunchArgs *Frontier_LaunchApp(FieldSystem *fieldSystem, void *frontierFsys) {
     FrontierLaunchArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(FrontierLaunchArgs));
     MI_CpuFill8(args, 0, sizeof(FrontierLaunchArgs));
 
-    args->frontierFsys = param1;
+    args->frontierFsys = frontierFsys;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->saveData = fieldSystem->saveData;
     args->bagCursor = fieldSystem->bagCursor;

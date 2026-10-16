@@ -6,7 +6,7 @@
 #include "overlay_03.h"
 #include "sys_task.h"
 
-SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSystem, MartData *martData);
+SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, MartData *martData);
 void TouchMartApp_Exit(BgConfig *bgConfig, SysTask *task);
 BOOL TouchMartApp_IsExitDone(void);
 

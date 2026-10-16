@@ -112,7 +112,7 @@ static const u16 sTerrainPaletteFiles[][3] __attribute__((aligned(4))) = {
 };
 
 void BattleTerrain_LoadResources(BattleTerrain *terrain) {
-    u32 r6;
+    u32 cellAnimResId;
     NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(terrain->battleSystem);
@@ -127,13 +127,13 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
         charFile = sPlayerTerrainCharFiles[terrain->terrainId];
         charResId = UNK_RES_4E2D;
         cellFile = 0x80;
-        r6 = charResId - 8;
+        cellAnimResId = charResId - 8;
         animFile = 0x81;
     } else {
         charFile = sEnemyTerrainCharFiles[terrain->terrainId];
         charResId = UNK_RES_4E2E;
         cellFile = 0x83;
-        r6 = charResId - 8;
+        cellAnimResId = charResId - 8;
         animFile = 0x84;
     }
     SpriteSystem_LoadCharResObjFromOpenNarc(spriteSystem, spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
@@ -144,9 +144,9 @@ void BattleTerrain_LoadResources(BattleTerrain *terrain) {
     palette = BattleSystem_GetPaletteData(terrain->battleSystem);
     PaletteData_LoadNarc(palette, NARC_a_0_0_8, sTerrainPaletteFiles[terrain->terrainId][subfile], HEAP_ID_BATTLE, PLTTBUF_MAIN_BG, 0x20, 0x70);
 
-    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, cellFile, TRUE, r6);
+    SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, cellFile, TRUE, cellAnimResId);
 
-    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, animFile, TRUE, r6);
+    SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, animFile, TRUE, cellAnimResId);
 
     NARC_Delete(narc);
 }
@@ -171,11 +171,11 @@ void BattleTerrain_DeleteSprite(BattleTerrain *terrain) {
 void BattleTerrain_UnloadResources(BattleTerrain *terrain) {
     SpriteManager *manager = BattleSystem_GetSpriteManager(terrain->battleSystem);
     s32 resId = terrain->side == 0 ? UNK_RES_4E2D : UNK_RES_4E2E;
-    u32 temp = resId - 8;
+    u32 cellAnimResId = resId - 8;
     SpriteManager_UnloadCharObjById(manager, resId);
     SpriteManager_UnloadPlttObjById(manager, UNK_RES_4E29);
-    SpriteManager_UnloadCellObjById(manager, temp);
-    SpriteManager_UnloadAnimObjById(manager, temp);
+    SpriteManager_UnloadCellObjById(manager, cellAnimResId);
+    SpriteManager_UnloadAnimObjById(manager, cellAnimResId);
 }
 
 void BattleTerrain_SetDrawFlag(BattleTerrain *terrain, s32 flag) {

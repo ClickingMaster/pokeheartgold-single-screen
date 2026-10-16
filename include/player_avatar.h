@@ -82,7 +82,7 @@ void PlayerAvatar_ClearSpeedAndFlag2(PlayerAvatar *avatar);
 s32 PlayerAvatar_AddSpeedWithCeiling(PlayerAvatar *avatar, s32 delta, s32 ceiling);
 s32 PlayerAvatar_GetLastHorizontalInput(PlayerAvatar *avatar);
 s32 PlayerAvatar_GetLastVerticalInput(PlayerAvatar *avatar);
-void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 unk28, s32 unk2C);
+void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 lastHorizontal, s32 lastVertical);
 void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect);
 u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar);
 PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar);

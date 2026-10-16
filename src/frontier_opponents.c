@@ -206,9 +206,9 @@ void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys) {
     MI_CpuCopy8(frontierFsys->trainersInCurrentRound, frontierFsys->linkSendBuffer, sizeof(frontierFsys->trainersInCurrentRound));
 }
 
-void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 a1) {
-    frontierFsys->unk10_3 = a1;
-    frontierFsys->linkSendBuffer[0] = a1;
+void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 flag) {
+    frontierFsys->unk10_3 = flag;
+    frontierFsys->linkSendBuffer[0] = flag;
 }
 
 u16 FrontierFieldSystem_GetRandomFrontierTrainerID(FrontierFieldSystem *frontierFsys, u8 difficultyBracket, u8 winsThisRound, u32 towerMode) {

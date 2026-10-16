@@ -133,9 +133,9 @@ PhoneBookEntry *GearPhoneRingManager_GetCallerPhoneBookEntry(GearPhoneRingManage
     return &ptr->entry;
 }
 
-void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigger, BOOL a2) {
+void GearPhoneRingManager_SetCallTrigger(GearPhoneRingManager *ptr, u8 callTrigger, BOOL ringSoon) {
     PhoneCallPersistentState_SetCallTriggerFlag(ptr->savingsData, callTrigger);
-    if (a2) {
+    if (ringSoon) {
         if (ptr->elapsedMinutes < ptr->callIntervalMinutes - 1) {
             ptr->elapsedMinutes = ptr->callIntervalMinutes - 1;
         }

@@ -703,14 +703,14 @@ void BattleHpBar_InitHpChange(BattleHpBar *hpBar, int hp) {
 }
 
 int BattleHpBar_UpdateHpChange(BattleHpBar *hpBar) {
-    int r4 = BattleHpBar_StepGauge(hpBar, FALSE);
-    if (r4 == -1) {
+    int curHp = BattleHpBar_StepGauge(hpBar, FALSE);
+    if (curHp == -1) {
         hpBar->hp -= hpBar->gainedHp;
         BattleHpBar_Draw(hpBar, hpBar->hp, 2);
     } else {
-        BattleHpBar_Draw(hpBar, r4, 2);
+        BattleHpBar_Draw(hpBar, curHp, 2);
     }
-    return r4;
+    return curHp;
 }
 
 void BattleHpBar_InitExpChange(BattleHpBar *hpBar, int exp) {
@@ -824,11 +824,11 @@ void BattleHpBar_StartSlide(BattleHpBar *hpBar, BOOL slideOut) {
 static void Task_BattleHpBarSlide(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     s16 x, y;
-    const ManagedSpriteTemplate *r6;
-    int r4;
+    const ManagedSpriteTemplate *template;
+    int done;
 
-    r4 = 0;
-    r6 = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type);
+    done = 0;
+    template = BattleHpBar_Util_GetHpBoxSpriteTemplate(hpBar->type);
     ManagedSprite_GetPositionXY(hpBar->boxObj, &x, &y);
 
     switch (hpBar->type) {
@@ -839,30 +839,30 @@ static void Task_BattleHpBarSlide(SysTask *task, void *data) {
     case HP_BAR_TYPE_PALPARK:
         if (hpBar->slideOut == 0) {
             x -= 24;
-            if (x < r6->x) {
-                x = r6->x;
-                r4++;
+            if (x < template->x) {
+                x = template->x;
+                done++;
             }
         } else {
             x += 24;
-            if (x > r6->x + 160) {
-                x = r6->x + 160;
-                r4++;
+            if (x > template->x + 160) {
+                x = template->x + 160;
+                done++;
             }
         }
         break;
     default:
         if (hpBar->slideOut == 0) {
             x += 24;
-            if (x > r6->x) {
-                x = r6->x;
-                r4++;
+            if (x > template->x) {
+                x = template->x;
+                done++;
             }
         } else {
             x -= 24;
-            if (x < r6->x - 24) {
-                x = r6->x - 24;
-                r4++;
+            if (x < template->x - 24) {
+                x = template->x - 24;
+                done++;
             }
         }
         break;
@@ -872,7 +872,7 @@ static void Task_BattleHpBarSlide(SysTask *task, void *data) {
         ManagedSprite_SetPositionXY(hpBar->arrowObj, x - sHpBarArrowXOffsets[hpBar->type], y + 0);
     }
 
-    if (r4 > 0) {
+    if (done > 0) {
         hpBar->slideDone = TRUE;
         SysTask_Destroy(task);
         return;
@@ -928,95 +928,95 @@ static void BattleHpBar_DrawNickname(BattleHpBar *hpBar) {
 }
 
 static void BattleHpBar_DrawGenderIcon(BattleHpBar *hpBar) {
-    int r0, r4;
+    int bottomComponentId, topComponentId;
 
     if (hpBar->gender == 0) {
-        r0 = 74;
-        r4 = 62;
+        bottomComponentId = 74;
+        topComponentId = 62;
     } else if (hpBar->gender == 1) {
-        r0 = 72;
-        r4 = 60;
+        bottomComponentId = 72;
+        topComponentId = 60;
     } else {
-        r0 = 76;
-        r4 = 64;
+        bottomComponentId = 76;
+        topComponentId = 64;
     }
-    const u8 *sp0 = BattleHpBar_Util_GetComponentRawGraphic(r0);
-    const u8 *r7 = BattleHpBar_Util_GetComponentRawGraphic(r4);
+    const u8 *bottomGraphic = BattleHpBar_Util_GetComponentRawGraphic(bottomComponentId);
+    const u8 *topGraphic = BattleHpBar_Util_GetComponentRawGraphic(topComponentId);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
-    MI_CpuCopy16(r7, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][0].size);
-    MI_CpuCopy16(sp0, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][1].size);
+    MI_CpuCopy16(topGraphic, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16(bottomGraphic, (void *)((u32)vramAddr + sGenderIconVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sGenderIconVramRegions[hpBar->type][1].size);
 }
 
 static void BattleHpBar_DrawLevel(BattleHpBar *hpBar) {
     int j, i, k;
-    u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
-    u8 *r7 = Heap_Alloc(HEAP_ID_BATTLE, 0xC0);
-    MI_CpuFill8(r4, 0xFF, 0x60);
-    BattleNumberPrinter_PrintUInt(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
+    u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
+    u8 *tileBuf = Heap_Alloc(HEAP_ID_BATTLE, 0xC0);
+    MI_CpuFill8(numberBuf, 0xFF, 0x60);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetLevelNumPrinter(hpBar->battleSystem), hpBar->level, 3, PRINTING_MODE_LEFT_ALIGN, (void *)numberBuf);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
-    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7, sLevelVramRegions[hpBar->type][0].size);
-    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), r7 + 0x60, sLevelVramRegions[hpBar->type][1].size);
+    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), tileBuf, sLevelVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16((void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), tileBuf + 0x60, sLevelVramRegions[hpBar->type][1].size);
     k = 0;
     for (i = 0; i < 0x60; i += 0x20) {
         for (j = 0; j < 0x10; ++j) {
-            r7[i + 0x10 + j] = r4[k];
-            r7[i + j + 0x60] = r4[k + 0x10];
+            tileBuf[i + 0x10 + j] = numberBuf[k];
+            tileBuf[i + j + 0x60] = numberBuf[k + 0x10];
             ++k;
         }
         k += 0x10;
     }
-    u8 *buf1 = r7;
-    u8 *buf2 = r7 + 0x60;
+    u8 *buf1 = tileBuf;
+    u8 *buf2 = tileBuf + 0x60;
     MI_CpuCopy16(buf1, (void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sLevelVramRegions[hpBar->type][0].size);
     MI_CpuCopy16(buf2, (void *)((u32)vramAddr + sLevelVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sLevelVramRegions[hpBar->type][1].size);
-    Heap_Free(r4);
-    Heap_Free(r7);
+    Heap_Free(numberBuf);
+    Heap_Free(tileBuf);
 }
 
 static void BattleHpBar_DrawCurrentHp(BattleHpBar *hpBar, u32 num) {
-    u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
-    MI_CpuFill8(r4, 0xFF, 0x60);
-    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)r4);
+    u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
+    MI_CpuFill8(numberBuf, 0xFF, 0x60);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), num, 3, PRINTING_MODE_RIGHT_ALIGN, (void *)numberBuf);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][0].size);
-    MI_CpuCopy16(r4 + sCurrentHpVramRegions[hpBar->type][0].size, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][1].size);
-    Heap_Free(r4);
+    MI_CpuCopy16(numberBuf, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][0].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][0].size);
+    MI_CpuCopy16(numberBuf + sCurrentHpVramRegions[hpBar->type][0].size, (void *)((u32)vramAddr + sCurrentHpVramRegions[hpBar->type][1].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCurrentHpVramRegions[hpBar->type][1].size);
+    Heap_Free(numberBuf);
 }
 
 static void BattleHpBar_DrawMaxHp(BattleHpBar *hpBar) {
-    u8 *r4 = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
-    MI_CpuFill8(r4, 0xFF, 0x60);
-    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)r4);
+    u8 *numberBuf = Heap_Alloc(HEAP_ID_BATTLE, 0x60);
+    MI_CpuFill8(numberBuf, 0xFF, 0x60);
+    BattleNumberPrinter_PrintUInt(BattleSystem_GetHpNumPrinter(hpBar->battleSystem), hpBar->maxHp, 3, PRINTING_MODE_LEFT_ALIGN, (void *)numberBuf);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sMaxHpVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sMaxHpVramRegions[hpBar->type].size);
-    Heap_Free(r4);
+    MI_CpuCopy16(numberBuf, (void *)((u32)vramAddr + sMaxHpVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sMaxHpVramRegions[hpBar->type].size);
+    Heap_Free(numberBuf);
 }
 
 static void BattleHpBar_DrawCaughtIcon(BattleHpBar *hpBar) {
-    const u8 *r4;
+    const u8 *graphic;
     if (hpBar->caught == 1) {
-        r4 = BattleHpBar_Util_GetComponentRawGraphic(59);
+        graphic = BattleHpBar_Util_GetComponentRawGraphic(59);
     } else {
-        r4 = BattleHpBar_Util_GetComponentRawGraphic(38);
+        graphic = BattleHpBar_Util_GetComponentRawGraphic(38);
     }
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sCaughtIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCaughtIconVramRegions[hpBar->type].size);
+    MI_CpuCopy16(graphic, (void *)((u32)vramAddr + sCaughtIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sCaughtIconVramRegions[hpBar->type].size);
 }
 
 static void BattleHpBar_DrawStatusIcon(BattleHpBar *hpBar, int componentId) {
-    const u8 *r4 = BattleHpBar_Util_GetComponentRawGraphic(componentId);
+    const u8 *graphic = BattleHpBar_Util_GetComponentRawGraphic(componentId);
     NNSG2dImageProxy *imgProxy = Sprite_GetImageProxy(hpBar->boxObj->sprite);
     void *vramAddr = G2_GetOBJCharPtr();
 
-    MI_CpuCopy16(r4, (void *)((u32)vramAddr + sStatusIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sStatusIconVramRegions[hpBar->type].size);
+    MI_CpuCopy16(graphic, (void *)((u32)vramAddr + sStatusIconVramRegions[hpBar->type].offset + imgProxy->vramLocation.baseAddrOfVram[NNS_G2D_VRAM_TYPE_2DMAIN]), sStatusIconVramRegions[hpBar->type].size);
 }
 
 static void BattleHpBar_PrintSafariOrParkBallsString(BattleHpBar *hpBar, u32 flag) {
@@ -1133,7 +1133,7 @@ static int BattleHpBar_StepGauge(BattleHpBar *hpBar, BOOL isExp) {
 static void BattleHpBar_DrawGauge(BattleHpBar *hpBar, u8 isExp) {
     u8 i;
     u8 pixelBuffer[12];
-    u8 tmp;
+    u8 componentId;
     const u8 *src;
     void *vramAddr;
     NNSG2dImageProxy *imgProxy;
@@ -1146,17 +1146,17 @@ static void BattleHpBar_DrawGauge(BattleHpBar *hpBar, u8 isExp) {
         // hp
         switch (HpBar_GetColorIdx(BattleHpBar_Util_MakeHpBarPixelBuffer(hpBar->maxHp, hpBar->hp, hpBar->gainedHp, &hpBar->hpCalc, pixelBuffer, 6), 0x30)) {
         case 3: // Green
-            tmp = 2;
+            componentId = 2;
             break;
         case 2: // Yellow
-            tmp = 11;
+            componentId = 11;
             break;
         case 1: // Red
         default:
-            tmp = 20;
+            componentId = 20;
             break;
         }
-        src = BattleHpBar_Util_GetComponentRawGraphic(tmp);
+        src = BattleHpBar_Util_GetComponentRawGraphic(componentId);
         sizeTop = sHpGaugeVramRegions[hpBar->type][0].size / 32;
         for (i = 0; i < 6; ++i) {
             if (i < sizeTop) {

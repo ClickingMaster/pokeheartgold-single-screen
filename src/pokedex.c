@@ -215,16 +215,16 @@ static BOOL Pokedex_CheckSeenForm_2max(Pokedex *pokedex, u32 species, u8 form) {
 }
 
 static void Pokedex_SetSeenForm_2max(Pokedex *pokedex, u32 species, BOOL state) {
-    int r4;
-    u8 *r5;
+    int seenFormNum;
+    u8 *formOrder;
     GF_ASSERT(species == SPECIES_SHELLOS || species == SPECIES_GASTRODON || species == SPECIES_SHAYMIN || species == SPECIES_GIRATINA);
     if (!Pokedex_CheckSeenForm_2max(pokedex, species, state)) {
-        r5 = Pokedex_GetFormOrderAddr(pokedex, species);
-        r4 = Pokedex_GetSeenFormNum_2max(pokedex, species);
-        if (r4 < 2) {
-            SetDexFlagState(r5, state, r4 + 1);
-            if (r4 == 0) {
-                SetDexFlagState(r5, state, r4 + 2);
+        formOrder = Pokedex_GetFormOrderAddr(pokedex, species);
+        seenFormNum = Pokedex_GetSeenFormNum_2max(pokedex, species);
+        if (seenFormNum < 2) {
+            SetDexFlagState(formOrder, state, seenFormNum + 1);
+            if (seenFormNum == 0) {
+                SetDexFlagState(formOrder, state, seenFormNum + 2);
             }
         }
     }

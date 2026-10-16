@@ -40,11 +40,11 @@ typedef void (*BattleAnimInitSinMotionFromStepU16Func)(BattleAnimSinMotion *moti
 
 // OBJ window inside planes (WINOUT bits 8-13), written like G2_SetWndOutsidePlane
 static inline void BattleAnim_SetObjWindowInsidePlane(int wnd, BOOL effect) {
-    u32 tmp = (reg_G2_WINOUT & ~REG_G2_WINOUT_OBJWININ_MASK) | ((u32)wnd << REG_G2_WINOUT_OBJWININ_SHIFT);
+    u32 winOut = (reg_G2_WINOUT & ~REG_G2_WINOUT_OBJWININ_MASK) | ((u32)wnd << REG_G2_WINOUT_OBJWININ_SHIFT);
     if (effect) {
-        tmp |= 0x20 << REG_G2_WINOUT_OBJWININ_SHIFT;
+        winOut |= 0x20 << REG_G2_WINOUT_OBJWININ_SHIFT;
     }
-    reg_G2_WINOUT = (u16)tmp;
+    reg_G2_WINOUT = (u16)winOut;
 }
 
 typedef struct BattleAnimDropSpriteStepwiseWork {

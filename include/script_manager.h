@@ -13,12 +13,12 @@ typedef struct HiddenItemResponse {
 
 void StartMapSceneScript(FieldSystem *fieldSystem, u16 script, LocalMapObject *lastTalked);
 void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj, int sightDistance, int sightDirection, int scriptId, int trainerId, int encounterType, int idx);
-void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastTalked, void *a3);
+void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastTalked, void *resultPtr);
 void StartScriptFromMenu(TaskManager *taskman, u16 script, LocalMapObject *lastTalked);
 BOOL Task_RunScripts(TaskManager *taskman);
 ScriptEnvironment *ScriptEnvironment_New(void);
 void DestroyScriptContext(ScriptContext *ctx);
-void SetupScriptEngine(FieldSystem *fieldSystem, ScriptEnvironment *env, u16 script, LocalMapObject *lastTalked, void *a4);
+void SetupScriptEngine(FieldSystem *fieldSystem, ScriptEnvironment *env, u16 script, LocalMapObject *lastTalked, void *resultPtr);
 ScriptContext *CreateScriptContext(FieldSystem *fieldSystem, u16 script);
 void SetUpScriptContextForMap(FieldSystem *fieldSystem, ScriptContext *ctx, u16 scriptId, u32 unused_r3);
 u16 LoadScriptsAndMessagesByMapId(FieldSystem *fieldSystem, ScriptContext *ctx, u16 scriptId);

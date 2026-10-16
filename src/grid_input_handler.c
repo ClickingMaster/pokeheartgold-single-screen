@@ -33,8 +33,8 @@ void GridInputHandler_Free(GridInputHandler *inputHandler) {
 
 int GridInputHandler_HandleInput_NoHold(GridInputHandler *inputHandler) {
     u16 i = 0;
-    BOOL r6 = FALSE;
-    int r0;
+    BOOL touched = FALSE;
+    int result;
     u8 input;
     u8 direction;
 
@@ -44,15 +44,15 @@ int GridInputHandler_HandleInput_NoHold(GridInputHandler *inputHandler) {
             break;
         }
         if (TouchscreenHitbox_TouchNewIsIn(&inputHandler->touchscreenHitboxes[i]) == TRUE) {
-            r0 = GridInputHandler_HandleTouch(inputHandler, i);
-            if (r0 != GRID_MENU_NOTHING_CHOSEN) {
-                return r0;
+            result = GridInputHandler_HandleTouch(inputHandler, i);
+            if (result != GRID_MENU_NOTHING_CHOSEN) {
+                return result;
             }
-            r6 = TRUE;
+            touched = TRUE;
         }
         ++i;
     }
-    if (r6) {
+    if (touched) {
         return GRID_MENU_NOTHING_CHOSEN;
     }
 
@@ -97,8 +97,8 @@ int GridInputHandler_HandleInput_NoHold(GridInputHandler *inputHandler) {
 
 int GridInputHandler_HandleInput_AllowHold(GridInputHandler *inputHandler) {
     u16 i = 0;
-    BOOL r6 = FALSE;
-    int r0;
+    BOOL touched = FALSE;
+    int result;
     u8 input;
     u8 direction;
 
@@ -108,15 +108,15 @@ int GridInputHandler_HandleInput_AllowHold(GridInputHandler *inputHandler) {
             break;
         }
         if (TouchscreenHitbox_TouchNewIsIn(&inputHandler->touchscreenHitboxes[i]) == TRUE) {
-            r0 = GridInputHandler_HandleTouch(inputHandler, i);
-            if (r0 != GRID_MENU_NOTHING_CHOSEN) {
-                return r0;
+            result = GridInputHandler_HandleTouch(inputHandler, i);
+            if (result != GRID_MENU_NOTHING_CHOSEN) {
+                return result;
             }
-            r6 = TRUE;
+            touched = TRUE;
         }
         ++i;
     }
-    if (r6) {
+    if (touched) {
         return GRID_MENU_NOTHING_CHOSEN;
     }
 
@@ -185,7 +185,7 @@ static int GridInputHandler_HandleButton(GridInputHandler *inputHandler) {
 static int GridInputHandler_HandleDpad(GridInputHandler *inputHandler, u8 direction, u8 input) {
     u8 neighborIsEnabled;
     u32 mask;
-    u8 r1;
+    u8 neighbor;
 
     if (input & 0x80) {
         if (inputHandler->returnInput != 0xFF) {
@@ -201,12 +201,12 @@ static int GridInputHandler_HandleDpad(GridInputHandler *inputHandler, u8 direct
             break;
         }
         neighborIsEnabled = FALSE;
-        r1 = DpadMenuBox_GetNeighborInDirection(inputHandler->dpadPositions, NULL, NULL, NULL, NULL, input, direction) & 0x7F;
-        if (r1 == input || r1 == inputHandler->nextInput) {
+        neighbor = DpadMenuBox_GetNeighborInDirection(inputHandler->dpadPositions, NULL, NULL, NULL, NULL, input, direction) & 0x7F;
+        if (neighbor == input || neighbor == inputHandler->nextInput) {
             input = inputHandler->nextInput;
             break;
         }
-        input = r1;
+        input = neighbor;
     }
     if (inputHandler->nextInput != input) {
         if (DpadBox_IsForcedInDirection(&inputHandler->dpadPositions[input], direction) == TRUE && neighborIsEnabled) {
@@ -237,10 +237,10 @@ void GridInputHandler_SetNextInput(GridInputHandler *inputHandler, int nextInput
     inputHandler->returnInput = 0xFF;
 }
 
-void GridInputHandler_SetNextLastReturnInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int unk0F) {
+void GridInputHandler_SetNextLastReturnInputs(GridInputHandler *inputHandler, int nextInput, int lastInput, int returnInput) {
     inputHandler->nextInput = nextInput;
     inputHandler->lastInput = lastInput;
-    inputHandler->returnInput = unk0F;
+    inputHandler->returnInput = returnInput;
 }
 
 BOOL GridInputHandler_IsButtonInputMode(GridInputHandler *inputHandler) {

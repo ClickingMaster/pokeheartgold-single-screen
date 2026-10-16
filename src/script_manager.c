@@ -80,10 +80,10 @@ void FieldSystem_SetEngagedTrainer(FieldSystem *fieldSystem, LocalMapObject *obj
     trainer->overworldEvent = obj;
 }
 
-void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastInteracted, void *a3) {
+void QueueScript(TaskManager *taskman, u16 script, LocalMapObject *lastInteracted, void *resultPtr) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     ScriptEnvironment *env = ScriptEnvironment_New();
-    SetupScriptEngine(fieldSystem, env, script, lastInteracted, a3);
+    SetupScriptEngine(fieldSystem, env, script, lastInteracted, resultPtr);
     TaskManager_Call(taskman, Task_RunScripts, env);
 }
 
@@ -158,12 +158,12 @@ void DestroyScriptContext(ScriptContext *ctx) {
     Heap_Free(ctx);
 }
 
-void SetupScriptEngine(FieldSystem *fieldSystem, ScriptEnvironment *env, u16 script, LocalMapObject *lastInteracted, void *a4) {
+void SetupScriptEngine(FieldSystem *fieldSystem, ScriptEnvironment *env, u16 script, LocalMapObject *lastInteracted, void *resultPtr) {
     u16 *varLastInteracted = FieldSysGetAttrAddrInternal(env, SCRIPTENV_SPECIAL_VAR_LAST_INTERACTED);
     env->facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     env->lastInteracted = lastInteracted;
     env->activeScriptNumber = script;
-    env->resultPtr = a4;
+    env->resultPtr = resultPtr;
     if (lastInteracted != NULL) {
         *varLastInteracted = MapObject_GetID(lastInteracted);
     }
@@ -325,16 +325,16 @@ void *FieldSysGetAttrAddrInternal(ScriptEnvironment *environment, enum ScriptEnv
 }
 
 void *FieldSysGetAttrAddr(FieldSystem *fieldSystem, enum ScriptEnvField field) {
-    ScriptEnvironment *unk = TaskManager_GetEnvironment(fieldSystem->taskman);
-    GF_ASSERT(unk != NULL);
-    GF_ASSERT(unk->check == Unk80_10_C_MAGIC);
-    return FieldSysGetAttrAddrInternal(unk, field);
+    ScriptEnvironment *env = TaskManager_GetEnvironment(fieldSystem->taskman);
+    GF_ASSERT(env != NULL);
+    GF_ASSERT(env->check == Unk80_10_C_MAGIC);
+    return FieldSysGetAttrAddrInternal(env, field);
 }
 
 void Script_ReopenStartMenuOnEnd(FieldSystem *fieldSystem) {
-    ScriptEnvironment *unk = TaskManager_GetEnvironment(fieldSystem->taskman);
+    ScriptEnvironment *env = TaskManager_GetEnvironment(fieldSystem->taskman);
     if (FieldSystem_MapIsNotMysteryZone(fieldSystem) == TRUE) {
-        unk->scrctx_end_cb = StartMenu_ReopenAfterScript;
+        env->scrctx_end_cb = StartMenu_ReopenAfterScript;
     }
 }
 
