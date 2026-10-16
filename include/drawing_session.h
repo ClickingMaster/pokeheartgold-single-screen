@@ -43,6 +43,13 @@ typedef struct DrawingSessionMember {
     PlayerProfile *prev;
 } DrawingSessionMember;
 
+// One 1000-byte piece of the canvas picture as sent by the leader.
+typedef struct DrawingSessionPictureChunk {
+    u8 data[1000];
+    u32 checksum; // XOR of the data words
+    u8 index;
+} DrawingSessionPictureChunk;
+
 typedef struct DrawingSessionWork DrawingSessionWork;
 
 typedef struct DrawingSessionState {
@@ -94,8 +101,10 @@ struct DrawingSessionWork {
     DrawingSessionStroke strokes[DRAWING_SESSION_MAX_MEMBERS];   // 0x4382
     DrawingSessionPoint lastPoints[DRAWING_SESSION_MAX_MEMBERS]; // 0x43B4
     void *unk_43C8;
-    u32 pictureChunkIndex;
-    u8 unk_43D0[0x93B0 - 0x43D0];
+    int pictureChunkIndex;
+    u8 picture[0x3840]; // the canvas pixels as received from the leader
+    DrawingSessionPictureChunk sendChunk;
+    DrawingSessionPictureChunk recvChunks[DRAWING_SESSION_MAX_MEMBERS];
     u32 leaveConnectedCount;
     u32 leavingMask;
     u16 assignedCount;

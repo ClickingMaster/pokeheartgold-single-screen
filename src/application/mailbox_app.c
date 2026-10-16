@@ -1317,24 +1317,23 @@ void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
         };
     } icon;
     u32 i;
-    u32 offset;
     register Mail *mail = app->data->mail[app->selectedMail];
     NNSG2dCharacterData *charData;
     void *charFile;
     u32 imageLoc;
     u32 iconId;
 
-    for (i = 0, offset = 0; i < 3; i++, offset += 4) {
+    for (i = 0; i < 3; i++) {
         icon.raw = Mail_GetMonIconData(mail, (u8)i, 2, Mail_GetFormFlags(mail));
         if (icon.raw == 0xFFFF || (iconId = icon.species) == 7) {
             MailboxAppData_SetSpriteDrawFlag(app->data, i + 4, FALSE);
         } else {
-            imageLoc = NNS_G2dGetImageLocation(Sprite_GetImageProxy((*(ManagedSprite **)((u8 *)app->data->sprites + 0x10 + offset))->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
+            imageLoc = NNS_G2dGetImageLocation(Sprite_GetImageProxy(app->data->sprites[i + 4]->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
             charFile = GfGfxLoader_GetCharDataFromOpenNarc(app->data->monIconNarc, iconId, FALSE, &charData, HEAP_ID_157);
             DC_FlushRange(charData->pRawData, 0x200);
             GXS_LoadOBJ(charData->pRawData, imageLoc, 0x200);
             Heap_Free(charFile);
-            ManagedSprite_SetPaletteOverride(*(ManagedSprite **)((u8 *)app->data->sprites + 0x10 + offset), icon.palette);
+            ManagedSprite_SetPaletteOverride(app->data->sprites[i + 4], icon.palette);
             MailboxAppData_SetSpriteDrawFlag(app->data, i + 4, TRUE);
         }
     }

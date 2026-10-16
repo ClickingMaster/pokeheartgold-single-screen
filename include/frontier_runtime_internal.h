@@ -76,7 +76,7 @@ void *Frontier_GetMap(FrontierWork *);
 void *Frontier_GetData(FrontierWork *);
 void Frontier_SetData(FrontierWork *, void *);
 void Frontier_LaunchApplication(FrontierWork *, const void *, void *, u8, void (*)(void *));
-void Frontier_RequestExit(FrontierLaunchArgsInternal *);
+void Frontier_RequestExit(FrontierWork *);
 void Frontier_ChangeMode(FrontierWork *, u8, u16);
 void *Frontier_GetMapObjectGfx(FrontierWork *);
 void *Frontier_GetMapObjects(FrontierWork *);

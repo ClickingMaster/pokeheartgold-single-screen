@@ -132,7 +132,7 @@ void RenderAnimation_Free(RenderAnimation *animation) {
 BOOL RenderAnimation_Advance(RenderAnimation *animation, fx32 step, BOOL loop) {
     fx32 next = animation->frame;
     BOOL done = FALSE;
-    fx32 frames = *(u16 *)((u8 *)animation->object->resAnm + 4) << 12;
+    fx32 frames = NNS_G3dAnmObjGetNumFrame(animation->object);
     animation->frame = next + step;
     if (step > 0) {
         if (animation->frame >= frames) {

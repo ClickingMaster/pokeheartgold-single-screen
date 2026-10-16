@@ -310,7 +310,7 @@ void Billboard_AllocTextureVram(NNSG3dResTex *texture, NNSG3dTexKey *texKey, NNS
         *tex4x4Key = 0;
     }
     if (paletteSize != 0) {
-        *paletteKey = NNS_GfdDefaultFuncAllocPlttVram(paletteSize, *(u16 *)((u8 *)texture + 0x20) & 0x8000, 0);
+        *paletteKey = NNS_GfdDefaultFuncAllocPlttVram(paletteSize, texture->tex4x4Info.flag & 0x8000, 0);
         GF_ASSERT(*paletteKey != 0);
     } else {
         *paletteKey = 0;

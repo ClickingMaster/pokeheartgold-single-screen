@@ -3200,7 +3200,7 @@ void BattleCastlePrompt_Hide(BattleCastlePrompt *prompt) {
 void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
     const WindowTemplate *templates = gBattleCastleWindowSets[set].templates;
     u8 i = 0;
-    u32 count = *(u32 *)((u8 *)gBattleCastleWindowSets + 4 + set * 8); // = gBattleCastleWindowSets[set].count
+    u32 count = gBattleCastleWindowSets[set].count;
 
     for (; i < count; i++) {
         AddWindow(bgConfig, &windows[i], &templates[i]);
@@ -3210,7 +3210,7 @@ void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
 
 void BattleCastle_RemoveWindows(Window *windows, u32 set) {
     u16 i;
-    u32 count = *(u32 *)((u8 *)gBattleCastleWindowSets + 4 + set * 8);
+    u32 count = gBattleCastleWindowSets[set].count;
 
     i = 0;
     for (; i < count; i++) {

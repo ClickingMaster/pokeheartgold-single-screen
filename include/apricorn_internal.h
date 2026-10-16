@@ -9,25 +9,6 @@
 #include "string_util.h"
 #include "apricorn_box.h"
 
-struct SaveApricornBox {
-    u8 apricorns[7];
-    u8 kurtQuantity;
-    u8 kurtApricorn;
-    u8 juiceServings;
-    u16 queuedApricorns;
-    u8 juice[8];
-    u32 mixStartSteps;
-    u32 juiceAgingSteps;
-    union {
-        u32 mixWord;
-        struct {
-            u32 mixProgress : 30;
-            u32 mixState : 2;
-        };
-    };
-    u8 juiceRecords[3][0x20];
-};
-
 typedef struct ApricornRecord {
     u32 trainerId;
     u8 gender;
@@ -37,6 +18,25 @@ typedef struct ApricornRecord {
     u16 name[8];
     ApricornJuice data;
 } ApricornRecord;
+
+struct SaveApricornBox {
+    u8 apricorns[7];
+    u8 kurtQuantity;
+    u8 kurtApricorn;
+    u8 juiceServings;
+    u16 queuedApricorns;
+    ApricornJuice juice;
+    u32 mixStartSteps;
+    u32 juiceAgingSteps;
+    union {
+        u32 mixWord;
+        struct {
+            u32 mixProgress : 30;
+            u32 mixState : 2;
+        };
+    };
+    ApricornRecord juiceRecords[3];
+};
 
 typedef struct ApricornMix {
     u8 padding[3];

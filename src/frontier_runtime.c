@@ -167,8 +167,8 @@ void Frontier_LaunchApplication(FrontierWork *work, const void *template, void *
     work->childExit = exit;
 }
 
-void Frontier_RequestExit(FrontierLaunchArgsInternal *args) {
-    ((u8 *)args)[0x22] = 1;
+void Frontier_RequestExit(FrontierWork *work) {
+    work->exitRequested = 1;
 }
 
 void Frontier_ChangeMode(FrontierWork *work, u8 mode, u16 taskId) {
@@ -198,8 +198,7 @@ void Frontier_ResetMapSpriteState(FrontierWork *work) {
     MI_CpuFill8(work->spriteState, 0, 8);
     i = 0;
     do {
+        work->spriteState[i] = 0xffff;
         i++;
-        *(u16 *)((u8 *)work + 0xa04) = 0xffff;
-        work = (FrontierWork *)((u8 *)work + 2);
     } while (i < 8);
 }

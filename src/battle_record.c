@@ -29,9 +29,13 @@ typedef struct {
     u16 species[12];
     u8 forms[12];
     u16 arg;
-    u8 type, padding;
+    u8 type, sealed;
     LinkBattleRuleset rules;
-    u8 rest[0x64 - 0x28 - sizeof(LinkBattleRuleset)];
+    u16 magic;
+    u8 unk_4A[14];
+    u64 videoNumber;
+    u16 crc;
+    u16 padding;
 } BattleRecordHeader;
 
 typedef struct {
@@ -172,8 +176,8 @@ BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battl
         *out = 3;
         return TRUE;
     }
-    void *data = gBattleRecord->data;
-    u32 crc = *(u16 *)((u8 *)data + 0x1c64);
+    BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
+    u32 crc = data->crc;
     BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (BattleRecord_IsEmpty(save, gBattleRecord) == TRUE) {
         *out = 0;
@@ -197,8 +201,8 @@ BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int 
         Heap_Free(record);
         return FALSE;
     }
-    void *data = record->data;
-    u32 crc = *(u16 *)((u8 *)data + 0x1c64);
+    BattleRecordData *data = (BattleRecordData *)record->data;
+    u32 crc = data->crc;
     BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (BattleRecord_IsEmpty(save, record) == TRUE) {
         *out = 0;
@@ -248,14 +252,14 @@ int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, 
         if (gBattleRecord == NULL) {
             return 3;
         }
-        u8 *header = gBattleRecord->header;
-        u8 *data = gBattleRecord->data;
+        BattleRecordHeader *header = (BattleRecordHeader *)gBattleRecord->header;
+        BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
         BattleRecord_FillHeader(save, header, data, type, arg);
-        *(u16 *)(header + 0x48) = 0xe281;
-        *(u16 *)(header + 0x60) = SaveArray_CalcCRC16(save, header, 0x58);
-        *(u16 *)(data + 0x1c62) = 0xe281;
-        *(u16 *)(data + 0x1c64) = SaveArray_CalcCRC16(save, data, 0x1c64);
-        u32 crc = *(u16 *)(data + 0x1c64);
+        header->magic = 0xe281;
+        header->crc = SaveArray_CalcCRC16(save, header, 0x58);
+        data->magic = 0xe281;
+        data->crc = SaveArray_CalcCRC16(save, data, 0x1c64);
+        u32 crc = data->crc;
         BattleRecord_Encrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
         *writeState = 0;
         (*state)++;
@@ -365,34 +369,34 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
 }
 
 BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
-    u8 *data = record->data;
-    u8 *header = record->header;
+    BattleRecordData *data = (BattleRecordData *)record->data;
+    BattleRecordHeader *header = (BattleRecordHeader *)record->header;
     if (!Save_CheckExtraChunksExist(save)) {
         return TRUE;
     }
-    if (*(u16 *)(data + 0x1c62) != 0xe281 || *(u16 *)(header + 0x48) != 0xe281) {
+    if (data->magic != 0xe281 || header->magic != 0xe281) {
         return TRUE;
     }
     return FALSE;
 }
 
 BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
-    u8 *data = record->data;
-    u8 *header = record->header;
-    if (*(u16 *)(data + 0x1c62) != 0xe281 || *(u16 *)(header + 0x48) != 0xe281) {
+    BattleRecordData *data = (BattleRecordData *)record->data;
+    BattleRecordHeader *header = (BattleRecordHeader *)record->header;
+    if (data->magic != 0xe281 || header->magic != 0xe281) {
         return FALSE;
     }
     u32 crc = SaveArray_CalcCRC16(save, header, 0x58);
-    if (crc != *(u16 *)(header + 0x60)) {
+    if (crc != header->crc) {
         return FALSE;
     }
     crc = SaveArray_CalcCRC16(save, data, 0x1c64);
-    if (crc != *(u16 *)(data + 0x1c64)) {
+    if (crc != data->crc) {
         return FALSE;
     }
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            struct BattleRecordMon *mon = &((BattleRecordData *)data)->parties[i].mons[j];
+            struct BattleRecordMon *mon = &data->parties[i].mons[j];
             if (mon->species > SPECIES_BAD_EGG) {
                 return FALSE;
             }
@@ -419,17 +423,15 @@ void BattleRecord_Decrypt(void *data, u32 size, u32 seed) {
 
 void BattleRecord_SetCommand(int battlerId, u32 offset, u8 value) {
     if (gBattleRecord != NULL) {
-        u8 *buffer = (u8 *)gBattleRecord + battlerId * 1024;
-        buffer += offset;
-        buffer[0x238] = value;
+        BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
+        data->commands[battlerId][offset] = value;
     }
 }
 
 u8 BattleRecord_GetCommand(int battlerId, u32 offset) {
     GF_ASSERT(gBattleRecord != NULL);
-    u8 *buffer = (u8 *)gBattleRecord + battlerId * 1024;
-    buffer += offset;
-    return buffer[0x238];
+    BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
+    return data->commands[battlerId][offset];
 }
 
 void BattleRecord_StoreSetup(BattleSetup *setup) {
@@ -582,7 +584,7 @@ void BattleRecord_Import(void *profile, void *summary, void *data, void *battle,
     MI_CpuCopy8(summary, gBattleRecord->header, 0x64);
     MI_CpuCopy8(data, gBattleRecord->data, 0x1c68);
     MI_CpuCopy8(profile, gBattleRecord->profile, 0x80);
-    u32 crc = *(u16 *)((u8 *)gBattleRecord + 0x1d4c);
+    u32 crc = ((BattleRecordData *)gBattleRecord->data)->crc;
     BattleRecord_Decrypt(gBattleRecord->data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (battle != NULL) {
         BattleRecord_RestoreSetup(battle, save);
@@ -590,30 +592,31 @@ void BattleRecord_Import(void *profile, void *summary, void *data, void *battle,
 }
 
 u64 BattleRecordHeader_GetField(void *summary, int field, int index) {
+    BattleRecordHeader *header = summary;
     switch (field) {
     case 0:
         GF_ASSERT(index < 12);
-        if (((u16 *)summary)[index] > 493) {
+        if (header->species[index] > 493) {
             return 0;
         }
-        return ((u16 *)summary)[index];
+        return header->species[index];
     case 1:
         GF_ASSERT(index < 12);
-        return ((u8 *)summary + index)[0x18];
+        return header->forms[index];
     case 2:
-        if (*(u16 *)((u8 *)summary + 0x24) > 9999) {
+        if (header->arg > 9999) {
             return 9999;
         }
-        return *(u16 *)((u8 *)summary + 0x24);
+        return header->arg;
     case 3:
-        if (((u8 *)summary)[0x26] >= 33) {
+        if (header->type >= 33) {
             return 0;
         }
-        return ((u8 *)summary)[0x26];
+        return header->type;
     case 4:
-        return *(u64 *)((u8 *)summary + 0x58);
+        return header->videoNumber;
     case 5:
-        return ((u8 *)summary)[0x27];
+        return header->sealed;
     }
     GF_ASSERT(FALSE);
     return 0;
