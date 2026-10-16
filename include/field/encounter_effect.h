@@ -19,10 +19,10 @@
 typedef struct EncounterEffectTask {
     u32 state;
     BOOL fadeDone; // set by EncounterEffect_StartFlash when its brightness fade ends
-    u32 timer;    // frame counter in some effects
+    u32 timer;     // frame counter in some effects
     void *work;    // effect-specific, freed by EncounterEffect_Finish
     FieldSystem *fieldSystem;
-    BOOL *done;  // set to TRUE by the effect when the screen is ready for the battle
+    BOOL *done;    // set to TRUE by the effect when the screen is ready for the battle
     BOOL wipeDone; // read by EncounterEffect_IsWipeDone
     u32 unk_1C;
     NARC *narc; // deleted by EncounterEffect_Finish
@@ -85,6 +85,16 @@ BOOL EncounterEffectQuadInterp_Update(EncounterEffectQuadInterp *interp);
 void EncounterEffect_LoadBgGraphics(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
 void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId, int mirrorBgId);
 
+typedef struct StripeWipe StripeWipe;
+typedef struct SplitWipe SplitWipe;
+
+StripeWipe *StripeWipe_New(void);
+void StripeWipe_Free(StripeWipe *wipe);
+void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeHeight, s32 duration, s32 start, s32 end, s32 velocity);
+SplitWipe *SplitWipe_New(void);
+void SplitWipe_Free(SplitWipe *wipe);
+void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration, s32 velocityX, s32 velocityY);
+
 // Sprites, filled rectangles, wipes and main screen brightness (src/field/encounter_effect_util.c)
 void EncounterEffect_InitSprites(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount);
 void EncounterEffect_FreeSprites(EncounterEffectSpriteManager *spriteManager);
@@ -94,6 +104,22 @@ Sprite *EncounterEffect_CreateSprite(EncounterEffectSpriteManager *spriteManager
 void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
 void EncounterEffect_FillWindowRect(Window *window, s16 top, s16 bottom, s16 left, s16 right, u8 fill);
 SysTask *EncounterEffect_ApplyMainBrightness(EncounterEffectInterp *brightness);
+
+typedef struct FilledRect FilledRect;
+typedef struct BlockWipe BlockWipe;
+typedef struct ZigzagWipe ZigzagWipe;
+
+FilledRect *RectTrail_New(enum HeapID heapID);
+void RectTrail_Free(FilledRect *rect);
+void RectTrail_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill);
+BOOL RectTrail_Update(FilledRect *rect);
+BlockWipe *BlockWipe_New(enum HeapID heapID);
+void BlockWipe_Free(BlockWipe *wipe);
+void BlockWipe_Start(BlockWipe *wipe, u8 duration, u8 delay, Window *window, u8 fill);
+BOOL BlockWipe_Update(BlockWipe *wipe);
+ZigzagWipe *ZigzagWipe_New(void);
+void ZigzagWipe_Free(ZigzagWipe *wipe);
+SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, u32 width, u32 insidePlanes, u32 outsidePlanes);
 
 // State of the running encounter effect (src/field/encounter_effect.c)
 typedef struct EncounterEffectParticles EncounterEffectParticles;
@@ -110,6 +136,19 @@ extern EncounterEffectState gEncounterEffectState;
 void EncounterEffectHBlankWave_Init(EncounterEffectHBlankWave *wave, int heapID);
 void EncounterEffectHBlankWave_Free(EncounterEffectHBlankWave *wave);
 void EncounterEffectHBlankWave_Start(EncounterEffectHBlankWave *wave, u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, void *destination, u32 fill, u32 priority);
+void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, u32 period);
+
+// Particle mode of the leader effects (src/field/encounter_effect_particles.c)
+void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem);
+void EncounterEffect_RequestParticleSetup(void);
+u8 EncounterEffect_IsParticleSetupDone(void);
+void EncounterEffect_DrawParticles(void);
+void EncounterEffect_EndParticleMode(void);
+void EncounterEffect_LoadParticles(NARC *narc, int member);
+void EncounterEffect_CreateEmitters(u32 count);
+BOOL EncounterEffect_UpdateParticles(void);
+BOOL EncounterEffect_AreParticlesDone(void);
+void EncounterEffect_FreeParticles(void);
 
 // Effect callbacks (entries of overlay 01's effect table)
 void EncounterEffect_WildRowsWhite(SysTask *task, EncounterEffectTask *effect);

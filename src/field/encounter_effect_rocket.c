@@ -11,9 +11,9 @@
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
+#include "screen_fade_legacy.h"
 #include "sprite.h"
 #include "text.h"
-#include "screen_fade_legacy.h"
 
 // Team Rocket battle intros: effect 39 (grunts) and 40-44 (executives and the boss).
 
@@ -52,10 +52,6 @@ typedef struct RocketExecutiveEffectWork {
 void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member);
 String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
-
-void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
-void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
-void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 
 // One entry per grunt sprite, 8 words apart: start/end/velocity of x, start/end/velocity of y,
 // delay before the sprite appears, rotation
@@ -250,7 +246,6 @@ enum RocketExecutiveState {
 
 // The trainer's picture slides in behind a window that opens from the middle of the screen,
 // with the trainer's name in a text window.
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 #pragma opt_propagation off
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params) {

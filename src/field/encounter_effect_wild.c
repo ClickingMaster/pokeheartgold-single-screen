@@ -7,9 +7,9 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
+#include "screen_fade_legacy.h"
 #include "sprite.h"
 #include "sys_task_api.h"
-#include "screen_fade_legacy.h"
 
 // The wild-battle effects 0-5 cover the screen with a grid of 8x6 black (or white) squares
 // of 32x32 pixels; effect 46 (PKMN Trainer Red) fills the screen in random order and then
@@ -483,7 +483,6 @@ BOOL WildEffectStep_Run(WildEffectStep *step, void *work) {
     return step->func(work, &step->state);
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) {
     RedEffectWork *work = effect->work;

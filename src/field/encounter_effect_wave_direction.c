@@ -1,11 +1,8 @@
-#include "field/encounter_effect.h"
-
 #include "global.h"
 
-#include "scanline_effect.h"
+#include "field/encounter_effect.h"
 
-// The trainer and Team Rocket effects declare this locally (with an int period).
-void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, u32 period);
+#include "scanline_effect.h"
 
 #pragma force_active on
 

@@ -13,7 +13,7 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 
-// Defined in hblank_system_1.c; no header declares them yet.
+// From field/hblank_system.c.
 typedef void (*HBlankTaskFunc)(void *, void *);
 void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
 void HBlankTask_Delete(void *task);
@@ -37,15 +37,15 @@ typedef struct PoisonEffect {
     SysTask *swapTask;          // 0x324
 } PoisonEffect;                 // 0x328
 
-void PoisonEffect_Task(SysTask *task, void *data);
-void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect);
-void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom);
-void PoisonEffect_VBlankResetTask(SysTask *task, void *data);
-void PoisonEffect_HBlankCallback(void *unused, void *data);
-void PoisonEffect_OnHBlank(PoisonEffect *effect);
-void PoisonEffect_SwapBuffersTask(SysTask *task, void *data);
-void PoisonEffect_SwapBuffers(PoisonEffect *effect);
-void PoisonEffect_Stop(PoisonEffect *effect);
+static void PoisonEffect_Task(SysTask *task, void *data);
+static void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect);
+static void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom);
+static void PoisonEffect_VBlankResetTask(SysTask *task, void *data);
+static void PoisonEffect_HBlankCallback(void *unused, void *data);
+static void PoisonEffect_OnHBlank(PoisonEffect *effect);
+static void PoisonEffect_SwapBuffersTask(SysTask *task, void *data);
+static void PoisonEffect_SwapBuffers(PoisonEffect *effect);
+static void PoisonEffect_Stop(PoisonEffect *effect);
 
 void *PoisonEffect_New(enum HeapID heapID, HBlankSystem *hBlankSystem) {
     PoisonEffect *effect = Heap_Alloc(heapID, sizeof(PoisonEffect));
@@ -79,7 +79,7 @@ void FieldSystem_DoPoisonEffect(void *data) {
     PlaySE(SEQ_SE_DP_DOKU2);
 }
 
-void PoisonEffect_Task(SysTask *task, void *data) {
+static void PoisonEffect_Task(SysTask *task, void *data) {
     PoisonEffect *effect = data;
     switch (effect->seqNo) {
     case 0:
@@ -108,7 +108,7 @@ void PoisonEffect_Task(SysTask *task, void *data) {
     }
 }
 
-void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect) {
+static void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect) {
     s32 vcount = GX_GetVCount();
     u16 *buffer = DoubleBuffer_GetOther(effect->doubleBuffer);
     if (vcount < 192) {
@@ -122,11 +122,11 @@ void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect) {
     }
 }
 
-void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom) {
+static void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom) {
     int toggle = 1;
     int i;
     s32 value = num * 3 / denom;
-    for (i = 0; i < 0xC0; i++) {
+    for (i = 0; i < 192; i++) {
         if (i % 10 == 0) {
             toggle ^= 1;
         }
@@ -138,34 +138,34 @@ void PoisonEffect_FillOffsets(u16 *offsets, int num, int denom) {
     }
 }
 
-void PoisonEffect_VBlankResetTask(SysTask *task, void *data) {
+static void PoisonEffect_VBlankResetTask(SysTask *task, void *data) {
     PoisonEffect *effect = data;
     effect->hblankReady = 0;
     G3X_SetHOffset(0);
 }
 
-void PoisonEffect_HBlankCallback(void *unused, void *data) {
+static void PoisonEffect_HBlankCallback(void *unused, void *data) {
     PoisonEffect_OnHBlank(data);
 }
 
-void PoisonEffect_OnHBlank(PoisonEffect *effect) {
+static void PoisonEffect_OnHBlank(PoisonEffect *effect) {
     if (effect->state == 1 && effect->hblankReady == 1) {
         PoisonEffect_ApplyNextLineOffset(effect);
     }
 }
 
-void PoisonEffect_SwapBuffersTask(SysTask *task, void *data) {
+static void PoisonEffect_SwapBuffersTask(SysTask *task, void *data) {
     PoisonEffect_SwapBuffers(data);
 }
 
-void PoisonEffect_SwapBuffers(PoisonEffect *effect) {
+static void PoisonEffect_SwapBuffers(PoisonEffect *effect) {
     if (effect->state == 1) {
         DoubleBuffer_Swap(effect->doubleBuffer);
         effect->hblankReady = 1;
     }
 }
 
-void PoisonEffect_Stop(PoisonEffect *effect) {
+static void PoisonEffect_Stop(PoisonEffect *effect) {
     HBlankTask_Delete(effect->hblankTask);
     effect->hblankTask = NULL;
     SysTask_Destroy(effect->mainTask);

@@ -6,8 +6,8 @@
 #include "camera.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
-#include "sprite.h"
 #include "screen_fade_legacy.h"
+#include "sprite.h"
 
 // Trainer battle transitions (effects 6-11). Most of them zoom the field camera in while a
 // couple of Poke Ball sprites spin over the screen.
@@ -16,7 +16,7 @@ typedef struct SpinZoomEffectWork {
     EncounterEffectQuadInterp scale;
     EncounterEffectInterp rotation;
     EncounterEffectQuadInterp movement;
-    void *flash;
+    StripeWipe *wipe;
     EncounterEffectSpriteManager spriteManager;
     EncounterEffectSpriteResources spriteResources;
     Sprite *sprites[2];
@@ -28,7 +28,7 @@ typedef struct SpinZoomEffectWork {
 typedef struct SpinApartEffectWork {
     EncounterEffectInterp position;
     EncounterEffectInterp rotation;
-    void *flash;
+    SplitWipe *wipe;
     EncounterEffectSpriteManager spriteManager;
     EncounterEffectSpriteResources spriteResources;
     Sprite *sprites[2];
@@ -59,7 +59,7 @@ typedef struct BallDropEffectWork {
     Sprite *sprites[BALL_DROP_SPRITE_COUNT];
     EncounterEffectInterp y[BALL_DROP_SPRITE_COUNT];
     EncounterEffectInterp rotation[BALL_DROP_SPRITE_COUNT];
-    void *trails[BALL_DROP_SPRITE_COUNT];
+    FilledRect *trails[BALL_DROP_SPRITE_COUNT];
     BOOL active[BALL_DROP_SPRITE_COUNT];
     Window *window;
     EncounterEffectHBlankWave wave;
@@ -90,31 +90,12 @@ typedef struct BallFallEffectWork {
     EncounterEffectInterp rotation[BALL_DROP_SPRITE_COUNT];
     BOOL active[BALL_DROP_SPRITE_COUNT];
     Window *window;
-    void *circleWipe;
+    BlockWipe *blockWipe;
     Camera *camera;
     EncounterEffectQuadInterp cameraDistance;
     s16 timer;
 } BallFallEffectWork;
 
-BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect);
-void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
-BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
-void *StripeWipe_New(void);
-void StripeWipe_Free(void *flash);
-void StripeWipe_Start(EncounterEffectTask *effect, void *flash, s32 stripeHeight, s32 duration, s32 start, s32 end, s32 velocity);
-void *SplitWipe_New(void);
-void SplitWipe_Free(void *flash);
-void SplitWipe_Start(EncounterEffectTask *effect, void *flash, s32 duration, s32 velocityX, s32 velocityY);
-void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
-void *RectTrail_New(int heapID);
-void RectTrail_Free(void *trail);
-void RectTrail_Start(void *trail, int startX, int endX, int startY, int endY, int duration, Window *window, int width, int height, int fill);
-BOOL RectTrail_Update(void *trail);
-void *BlockWipe_New(enum HeapID heapID);
-void BlockWipe_Free(void *circleWipe);
-void BlockWipe_Start(void *circleWipe, u8 duration, u8 delay, Window *window, u8 fillColor);
-BOOL BlockWipe_Update(void *circleWipe);
-void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, int unused);
 void SetBothScreensBrightnessByColor(u16 color);
 
 enum SpinZoomState {
@@ -145,7 +126,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         memset(effect->work, 0, sizeof(SpinZoomEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        work->flash = StripeWipe_New();
+        work->wipe = StripeWipe_New();
         EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
         EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 7, 9, 8, 600000);
         for (i = 0; i < 2; i++) {
@@ -190,7 +171,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case SPIN_ZOOM_STATE_START_WIPE:
-        StripeWipe_Start(effect, work->flash, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
+        StripeWipe_Start(effect, work->wipe, 96, 6, 0, FX32_CONST(255), FX32_CONST(10));
         Sprite_SetAnimCtrlSeq(work->sprites[0], 1);
         Sprite_SetAnimCtrlSeq(work->sprites[1], 2);
         EncounterEffectQuadInterp_Init(&work->movement, 0, FX32_CONST(255), FX32_CONST(10), 6);
@@ -224,7 +205,7 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
         }
         EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
         EncounterEffect_FreeSprites(&work->spriteManager);
-        StripeWipe_Free(work->flash);
+        StripeWipe_Free(work->wipe);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -254,7 +235,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         memset(effect->work, 0, sizeof(SpinApartEffectWork));
         work = effect->work;
         work->camera = effect->fieldSystem->camera;
-        work->flash = SplitWipe_New();
+        work->wipe = SplitWipe_New();
         EncounterEffect_InitSprites(&work->spriteManager, 2, 1);
         EncounterEffect_LoadSpriteResources(effect->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 600000);
         for (i = 0; i < 2; i++) {
@@ -303,7 +284,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         }
         break;
     case 5:
-        SplitWipe_Start(effect, work->flash, 8, FX32_ONE, FX32_ONE);
+        SplitWipe_Start(effect, work->wipe, 8, FX32_ONE, FX32_ONE);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
         effect->state++;
@@ -325,7 +306,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         }
         EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
         EncounterEffect_FreeSprites(&work->spriteManager);
-        SplitWipe_Free(work->flash);
+        SplitWipe_Free(work->wipe);
         EncounterEffect_Finish(effect, task);
         break;
     }
@@ -758,7 +739,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         BG_LoadPlttData(GF_BG_LYR_MAIN_3, black, sizeof(black[0]), 30);
         FillWindowPixelBuffer(work->window, 0);
         ScheduleWindowCopyToVram(work->window);
-        work->circleWipe = BlockWipe_New(HEAP_ID_FIELD1);
+        work->blockWipe = BlockWipe_New(HEAP_ID_FIELD1);
         effect->state++;
         break;
     case BALL_FALL_STATE_START_FLASH:
@@ -818,13 +799,13 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         }
         break;
     case BALL_FALL_STATE_START_WIPE:
-        BlockWipe_Start(work->circleWipe, 1, 1, work->window, 15);
+        BlockWipe_Start(work->blockWipe, 1, 1, work->window, 15);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 15), FX32_CONST(10), 64);
         effect->state++;
         break;
     case BALL_FALL_STATE_WIPE:
-        done = BlockWipe_Update(work->circleWipe);
+        done = BlockWipe_Update(work->blockWipe);
         ScheduleWindowCopyToVram(work->window);
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
@@ -842,7 +823,7 @@ void EncounterEffect_TrainerBallFall(SysTask *task, EncounterEffectTask *effect)
         }
         EncounterEffect_FreeSpriteResources(&work->spriteManager, &work->spriteResources);
         EncounterEffect_FreeSprites(&work->spriteManager);
-        BlockWipe_Free(work->circleWipe);
+        BlockWipe_Free(work->blockWipe);
         ClearWindowTilemapAndCopyToVram(work->window);
         RemoveWindow(work->window);
         WindowArray_Delete(work->window, 1);

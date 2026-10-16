@@ -1,6 +1,7 @@
-#include "field/encounter_effect.h"
-
 #include "global.h"
+
+#include "field/encounter_effect.h"
+#include "field/fieldmap.h"
 
 #include "bg_window.h"
 #include "camera.h"
@@ -11,8 +12,6 @@
 #include "scanline_effect.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
-
-#include "field/fieldmap.h"
 
 // Particle mode of the leader effects: the main screen switches to 3D (BG0) over a captured image of the field
 // (BG2/BG3 bitmap) so particle emitters can be drawn over it. One instance, kept in gEncounterEffectState.
@@ -43,25 +42,14 @@ extern const GraphicsModes sParticleGraphicsModes;
 extern const BgTemplate sParticleCaptureBgTemplate;
 extern const GraphicsBanks sParticleGraphicsBanks;
 
-// The leader effects declare these locally (several of them with FieldSystem *).
-void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem);
-void EncounterEffect_RequestParticleSetup(void);
-u8 EncounterEffect_IsParticleSetupDone(void);
-void EncounterEffect_DrawParticles(void);
-void EncounterEffect_EndParticleMode(void);
-void EncounterEffect_LoadParticles(NARC *narc, int member);
-void EncounterEffect_CreateEmitters(u32 count);
-BOOL EncounterEffect_UpdateParticles(void);
-BOOL EncounterEffect_AreParticlesDone(void);
-void EncounterEffect_FreeParticles(void);
-void Task_ParticleSetup_VWait(SysTask *task, void *data);
-void Task_ParticleSetup_Main(SysTask *task, void *data);
-void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem);
-void EncounterEffect_FreeParticleGraphics(FieldSystem *fieldSystem);
-u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp);
-u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt);
-SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave);
-void Task_EncounterEffectHBlankWave(SysTask *task, void *data);
+static void Task_ParticleSetup_VWait(SysTask *task, void *data);
+static void Task_ParticleSetup_Main(SysTask *task, void *data);
+static void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem);
+static void EncounterEffect_FreeParticleGraphics(FieldSystem *fieldSystem);
+static u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp);
+static u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt);
+static SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave);
+static void Task_EncounterEffectHBlankWave(SysTask *task, void *data);
 
 #pragma force_active on
 
@@ -190,7 +178,7 @@ void EncounterEffect_FreeParticles(void) {
 }
 
 // Waits one frame for the capture, then sets up the 3D and bitmap BGs once the effect asks for it.
-void Task_ParticleSetup_VWait(SysTask *task, void *data) {
+static void Task_ParticleSetup_VWait(SysTask *task, void *data) {
     EncounterEffectParticles *particles = data;
     switch (particles->state) {
     case 0:
@@ -208,7 +196,7 @@ void Task_ParticleSetup_VWait(SysTask *task, void *data) {
 
 #pragma force_active on
 
-void Task_ParticleSetup_Main(SysTask *task, void *data) {
+static void Task_ParticleSetup_Main(SysTask *task, void *data) {
     EncounterEffectParticles *particles = data;
     if (particles->state == 2) {
         ParticleSystem_ZeroAll();
@@ -228,7 +216,7 @@ void Task_ParticleSetup_Main(SysTask *task, void *data) {
 }
 
 // 3D on BG0, the captured field image as a 256-colour bitmap on BG3 behind it; BG2 is cleared.
-void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
+static void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
     GraphicsBanks banks = sParticleGraphicsBanks;
     GraphicsModes modes;
     MtxFx22 matrix;
@@ -252,14 +240,14 @@ void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
 
 #pragma force_active reset
 
-void EncounterEffect_FreeParticleGraphics(FieldSystem *fieldSystem) {
+static void EncounterEffect_FreeParticleGraphics(FieldSystem *fieldSystem) {
     FreeBgTilemapBuffer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2);
     Thunk_BgConfig_Init(fieldSystem->bgConfig);
 }
 
 #pragma force_active on
 
-u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp) {
+static u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp) {
     EncounterEffectParticles *particles;
     u32 offset, next;
     if (!gEncounterEffectState.particles) {
@@ -275,7 +263,7 @@ u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp) {
     return offset;
 }
 
-u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt) {
+static u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt) {
     EncounterEffectParticles *particles;
     u32 offset, next;
     if (!gEncounterEffectState.particles) {
@@ -293,11 +281,11 @@ u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt) {
 
 #pragma force_active reset
 
-SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave) {
+static SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave) {
     return SysTask_CreateOnVBlankQueue(Task_EncounterEffectHBlankWave, wave, 1024);
 }
 
-void Task_EncounterEffectHBlankWave(SysTask *task, void *data) {
+static void Task_EncounterEffectHBlankWave(SysTask *task, void *data) {
     EncounterEffectHBlankWave *wave = data;
     if (wave->frames >= 2) {
         ScanlineEffect_SwapBuffers(wave->effect);

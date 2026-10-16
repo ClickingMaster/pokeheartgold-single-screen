@@ -1,8 +1,7 @@
-#include "field/encounter_effect.h"
-
 #include "global.h"
 
 #include "battle/battle_setup.h"
+#include "field/encounter_effect.h"
 
 #include "bg_window.h"
 #include "heap.h"
@@ -19,7 +18,7 @@
 #define BLOCK_WIPE_BLOCKS  (BLOCK_WIPE_COLUMNS * BLOCK_WIPE_ROWS)
 #define BLOCK_WIPE_SIZE    32
 
-// Defined in hblank_system_1.c; no header declares them yet.
+// From field/hblank_system.c.
 typedef void (*HBlankTaskFunc)(void *, void *);
 void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
 void HBlankTask_Delete(void *task);
@@ -29,7 +28,7 @@ void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 // A width x height rectangle filled with fill, moved from (x.start, y.start) to (x.end, y.end); positions are
 // the rectangle's centre in pixels.
-typedef struct FilledRect {
+struct FilledRect {
     EncounterEffectInterp x; // 0x00
     EncounterEffectInterp y; // 0x14
     Window *window;          // 0x28
@@ -37,25 +36,25 @@ typedef struct FilledRect {
     u8 height;               // 0x2D
     u8 active;               // 0x2E
     u8 fill;                 // 0x2F
-} FilledRect;
+};
 
 // 32x32 blocks fall one after another (every delay frames, columns in sBlockWipeColumnOrder, bottom row first)
 // and stack up until they cover the window.
-typedef struct BlockWipe {
-    Window *window;                       // 0x00
+struct BlockWipe {
+    Window *window;                        // 0x00
     FilledRect *blocks[BLOCK_WIPE_BLOCKS]; // 0x04
-    u8 started;                           // 0xC4
-    u8 finished;                          // 0xC5
-    u8 duration;                          // 0xC6
-    u8 delay;                             // 0xC7
-    s8 timer;                             // 0xC8
-    u8 fill;                              // 0xC9
-    u8 active;                            // 0xCA
-} BlockWipe;
+    u8 started;                            // 0xC4
+    u8 finished;                           // 0xC5
+    u8 duration;                           // 0xC6
+    u8 delay;                              // 0xC7
+    s8 timer;                              // 0xC8
+    u8 fill;                               // 0xC9
+    u8 active;                             // 0xCA
+};
 
 // Window 0 is closed from the left; its left edge is a zigzag (lines[], period lines per stroke) that moves
 // with the interpolated value.
-typedef struct ZigzagWipe {
+struct ZigzagWipe {
     EncounterEffectInterp edge; // 0x00
     u32 state;                  // 0x14
     u8 lines[192];              // 0x18
@@ -63,32 +62,20 @@ typedef struct ZigzagWipe {
     void *hBlankTask;           // 0xDC
     SysTask *task;              // 0xE0
     BOOL *done;                 // 0xE4
-} ZigzagWipe;
+};
 
 extern u8 sBlockWipeColumnOrder[];
 
-// The trainer and leader effects keep these objects as untyped pointers and declare the functions locally.
-FilledRect *RectTrail_New(enum HeapID heapID);
-void RectTrail_Free(FilledRect *rect);
-void RectTrail_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill);
-BOOL RectTrail_Update(FilledRect *rect);
-FilledRect *MovingRect_New(enum HeapID heapID);
-void MovingRect_Free(FilledRect *rect);
-void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill);
-BOOL MovingRect_Update(FilledRect *rect);
-BlockWipe *BlockWipe_New(enum HeapID heapID);
-void BlockWipe_Free(BlockWipe *wipe);
-void BlockWipe_Start(BlockWipe *wipe, u8 duration, u8 delay, Window *window, u8 fill);
-BOOL BlockWipe_Update(BlockWipe *wipe);
-ZigzagWipe *ZigzagWipe_New(void);
-void ZigzagWipe_Free(ZigzagWipe *wipe);
-SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, volatile u32 width, u32 insidePlanes, u32 outsidePlanes);
-void Task_ZigzagWipe_Begin(SysTask *task, void *data);
-void Task_ZigzagWipe_Update(SysTask *task, void *data);
-void HBlank_ZigzagWipe(void *unused, void *data);
-void ZigzagWipe_End(ZigzagWipe *wipe);
+static FilledRect *MovingRect_New(enum HeapID heapID);
+static void MovingRect_Free(FilledRect *rect);
+static void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill);
+static BOOL MovingRect_Update(FilledRect *rect);
+static void Task_ZigzagWipe_Begin(SysTask *task, void *data);
+static void Task_ZigzagWipe_Update(SysTask *task, void *data);
+static void HBlank_ZigzagWipe(void *unused, void *data);
+static void ZigzagWipe_End(ZigzagWipe *wipe);
 int EncounterEffect_GetDefaultEffect(BattleSetup *setup);
-void Task_ApplyMainBrightness(SysTask *task, void *data);
+static void Task_ApplyMainBrightness(SysTask *task, void *data);
 
 void EncounterEffect_InitSprites(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount) {
     int i;
@@ -189,17 +176,17 @@ BOOL RectTrail_Update(FilledRect *rect) {
     return done;
 }
 
-FilledRect *MovingRect_New(enum HeapID heapID) {
+static FilledRect *MovingRect_New(enum HeapID heapID) {
     FilledRect *rect = Heap_Alloc(heapID, sizeof(FilledRect));
     memset(rect, 0, sizeof(FilledRect));
     return rect;
 }
 
-void MovingRect_Free(FilledRect *rect) {
+static void MovingRect_Free(FilledRect *rect) {
     Heap_Free(rect);
 }
 
-void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill) {
+static void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY, int endY, s32 duration, Window *window, int width, int height, u8 fill) {
     if (rect->active) {
         GF_ASSERT(FALSE);
     }
@@ -213,7 +200,7 @@ void MovingRect_Start(FilledRect *rect, int startX, int endX, int startY, int en
 }
 
 // Clears the rectangle (colour 0) at its old position, then draws it at the new one.
-BOOL MovingRect_Update(FilledRect *rect) {
+static BOOL MovingRect_Update(FilledRect *rect) {
     if (rect->active == FALSE) {
         return TRUE;
     }
@@ -335,7 +322,6 @@ void ZigzagWipe_Free(ZigzagWipe *wipe) {
 
 #pragma force_active on
 
-// width is volatile: the generated code keeps it on the stack.
 SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, volatile u32 width, u32 insidePlanes, u32 outsidePlanes) {
     int i;
     width = width;
@@ -367,14 +353,14 @@ SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 dur
 
 #pragma force_active reset
 
-void Task_ZigzagWipe_Begin(SysTask *task, void *data) {
+static void Task_ZigzagWipe_Begin(SysTask *task, void *data) {
     ZigzagWipe *wipe = data;
     wipe->hBlankTask = HBlankSystem_StartTask(wipe->hBlankSystem, HBlank_ZigzagWipe, wipe);
     wipe->task = SysTask_CreateOnVWaitQueue(Task_ZigzagWipe_Update, wipe, 1024);
     SysTask_Destroy(task);
 }
 
-void Task_ZigzagWipe_Update(SysTask *task, void *data) {
+static void Task_ZigzagWipe_Update(SysTask *task, void *data) {
     ZigzagWipe *wipe = data;
     switch (wipe->state) {
     case 0:
@@ -388,7 +374,7 @@ void Task_ZigzagWipe_Update(SysTask *task, void *data) {
     }
 }
 
-void HBlank_ZigzagWipe(void *unused, void *data) {
+static void HBlank_ZigzagWipe(void *unused, void *data) {
     ZigzagWipe *wipe = data;
     s32 line = reg_GX_VCOUNT;
     s32 left;
@@ -403,7 +389,7 @@ void HBlank_ZigzagWipe(void *unused, void *data) {
     reg_G2_WIN0V = 192;
 }
 
-void ZigzagWipe_End(ZigzagWipe *wipe) {
+static void ZigzagWipe_End(ZigzagWipe *wipe) {
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
     *wipe->done = TRUE;
     HBlankTask_Delete(wipe->hBlankTask);
@@ -453,7 +439,7 @@ int EncounterEffect_GetDefaultEffect(BattleSetup *setup) {
     return effect + 6 * trainer;
 }
 
-void Task_ApplyMainBrightness(SysTask *task, void *data) {
+static void Task_ApplyMainBrightness(SysTask *task, void *data) {
     EncounterEffectInterp *brightness = data;
     GXx_SetMasterBrightness_(&reg_GX_MASTER_BRIGHT, brightness->value);
     SysTask_Destroy(task);

@@ -1,6 +1,6 @@
-#include "field/encounter_effect.h"
-
 #include "global.h"
+
+#include "field/encounter_effect.h"
 
 #include "bg_window.h"
 #include "gf_gfx_loader.h"
@@ -14,14 +14,14 @@
 // BG0-3 and OBJ
 #define WND_PLANEMASK_ALL (GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ)
 
-// Defined in hblank_system_1.c; no header declares them yet.
+// From field/hblank_system.c.
 typedef void (*HBlankTaskFunc)(void *, void *);
 void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
 void HBlankTask_Delete(void *task);
 
 // The screen is cut into horizontal stripes of stripeHeight lines; every other stripe slides right, the
 // others slide left, until the window closes the screen.
-typedef struct StripeWipe {
+struct StripeWipe {
     EncounterEffectQuadInterp offset; // 0x00, fx32 pixels
     u32 stripeHeight;                 // 0x18
     u32 state;                        // 0x1C
@@ -29,10 +29,10 @@ typedef struct StripeWipe {
     void *hBlankTask;                 // 0x24
     SysTask *task;                    // 0x28
     BOOL *done;                       // 0x2C
-} StripeWipe;
+};
 
 // The top half of the screen shrinks towards the top left corner, the bottom half towards the bottom right.
-typedef struct SplitWipe {
+struct SplitWipe {
     EncounterEffectQuadInterp x; // 0x00, fx32 pixels
     EncounterEffectQuadInterp y; // 0x18, fx32 pixels
     u32 middleLine;              // 0x30
@@ -41,24 +41,16 @@ typedef struct SplitWipe {
     void *hBlankTask;            // 0x3C
     SysTask *task;               // 0x40
     BOOL *done;                  // 0x44
-} SplitWipe;
+};
 
-// The trainer effects keep the wipes as untyped pointers and declare these locally.
-StripeWipe *StripeWipe_New(void);
-void StripeWipe_Free(StripeWipe *wipe);
-void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeHeight, s32 duration, s32 start, s32 end, s32 velocity);
-SplitWipe *SplitWipe_New(void);
-void SplitWipe_Free(SplitWipe *wipe);
-void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration, s32 velocityX, s32 velocityY);
-
-void Task_StripeWipe_Begin(SysTask *task, void *data);
-void Task_StripeWipe_Update(SysTask *task, void *data);
-void StripeWipe_End(StripeWipe *wipe);
-void HBlank_StripeWipe(void *unused, void *data);
-void Task_SplitWipe_Begin(SysTask *task, void *data);
-void Task_SplitWipe_Update(SysTask *task, void *data);
-void HBlank_SplitWipe(void *unused, void *data);
-void SplitWipe_End(SplitWipe *wipe);
+static void Task_StripeWipe_Begin(SysTask *task, void *data);
+static void Task_StripeWipe_Update(SysTask *task, void *data);
+static void StripeWipe_End(StripeWipe *wipe);
+static void HBlank_StripeWipe(void *unused, void *data);
+static void Task_SplitWipe_Begin(SysTask *task, void *data);
+static void Task_SplitWipe_Update(SysTask *task, void *data);
+static void HBlank_SplitWipe(void *unused, void *data);
+static void SplitWipe_End(SplitWipe *wipe);
 
 #pragma force_active on
 
@@ -104,14 +96,14 @@ void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeH
     SysTask_CreateOnVWaitQueue(Task_StripeWipe_Begin, wipe, 1024);
 }
 
-void Task_StripeWipe_Begin(SysTask *task, void *data) {
+static void Task_StripeWipe_Begin(SysTask *task, void *data) {
     StripeWipe *wipe = data;
     wipe->task = SysTask_CreateOnVWaitQueue(Task_StripeWipe_Update, wipe, 1024);
     wipe->hBlankTask = HBlankSystem_StartTask(wipe->hBlankSystem, HBlank_StripeWipe, wipe);
     SysTask_Destroy(task);
 }
 
-void Task_StripeWipe_Update(SysTask *task, void *data) {
+static void Task_StripeWipe_Update(SysTask *task, void *data) {
     StripeWipe *wipe = data;
     s32 offset;
 
@@ -139,7 +131,7 @@ void Task_StripeWipe_Update(SysTask *task, void *data) {
     }
 }
 
-void StripeWipe_End(StripeWipe *wipe) {
+static void StripeWipe_End(StripeWipe *wipe) {
     G2_SetWnd0InsidePlane(WND_PLANEMASK_ALL, TRUE);
     G2_SetWndOutsidePlane(GX_WND_PLANEMASK_NONE, FALSE);
     G2_SetWnd0Position(0, 0, 0, 0);
@@ -154,7 +146,7 @@ void StripeWipe_End(StripeWipe *wipe) {
 #pragma force_active on
 
 // Even stripes scroll every BG by +offset and show window 0, odd stripes by -offset and show window 1.
-void HBlank_StripeWipe(void *unused, void *data) {
+static void HBlank_StripeWipe(void *unused, void *data) {
     StripeWipe *wipe = data;
     int offset;
     u32 scroll;
@@ -217,7 +209,7 @@ void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration,
     SysTask_CreateOnVWaitQueue(Task_SplitWipe_Begin, wipe, 1024);
 }
 
-void Task_SplitWipe_Begin(SysTask *task, void *data) {
+static void Task_SplitWipe_Begin(SysTask *task, void *data) {
     SplitWipe *wipe = data;
     wipe->task = SysTask_CreateOnVWaitQueue(Task_SplitWipe_Update, wipe, 1024);
     wipe->hBlankTask = HBlankSystem_StartTask(wipe->hBlankSystem, HBlank_SplitWipe, wipe);
@@ -225,7 +217,7 @@ void Task_SplitWipe_Begin(SysTask *task, void *data) {
 }
 
 // Window 0 covers x 0..255-x and lines 0..96-y, window 1 covers x x..255 and lines 96+y..192.
-void Task_SplitWipe_Update(SysTask *task, void *data) {
+static void Task_SplitWipe_Update(SysTask *task, void *data) {
     SplitWipe *wipe = data;
     s32 x;
     s32 y;
@@ -250,7 +242,7 @@ void Task_SplitWipe_Update(SysTask *task, void *data) {
 }
 
 // Window 0 above the middle line, window 1 below it.
-void HBlank_SplitWipe(void *unused, void *data) {
+static void HBlank_SplitWipe(void *unused, void *data) {
     SplitWipe *wipe = data;
 
     if (reg_GX_VCOUNT <= wipe->middleLine) {
@@ -260,7 +252,7 @@ void HBlank_SplitWipe(void *unused, void *data) {
     }
 }
 
-void SplitWipe_End(SplitWipe *wipe) {
+static void SplitWipe_End(SplitWipe *wipe) {
     G2_SetWnd0InsidePlane(WND_PLANEMASK_ALL, TRUE);
     G2_SetWndOutsidePlane(GX_WND_PLANEMASK_NONE, FALSE);
     reg_G2_WIN0H = 0;

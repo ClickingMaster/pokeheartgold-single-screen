@@ -4,9 +4,7 @@
 
 #include "assert.h"
 #include "heap.h"
-
-// Defined in main.c; no header declares it yet.
-BOOL Main_SetHBlankIntrCB(void (*cb)(void *), void *arg);
+#include "system.h"
 
 typedef struct HBlankTask HBlankTask;
 typedef void (*HBlankTaskCallback)(HBlankTask *, void *);
@@ -24,11 +22,11 @@ struct HBlankSystem {
 
 HBlankTask *HBlankSystem_StartTask(HBlankSystem *system, HBlankTaskCallback callback, void *arg);
 void HBlankTask_Delete(HBlankTask *task);
-void HBlankSystem_Init(HBlankSystem *system);
-void HBlankTask_Reset(HBlankTask *task);
-void HBlankSystem_Callback(void *arg);
-void HBlankTask_Dummy(HBlankTask *task, void *arg);
-HBlankTask *HBlankSystem_GetFreeTask(HBlankSystem *system);
+static void HBlankSystem_Init(HBlankSystem *system);
+static void HBlankTask_Reset(HBlankTask *task);
+static void HBlankSystem_Callback(void *arg);
+static void HBlankTask_Dummy(HBlankTask *task, void *arg);
+static HBlankTask *HBlankSystem_GetFreeTask(HBlankSystem *system);
 
 HBlankSystem *HBlankSystem_New(enum HeapID heapID) {
     HBlankSystem *system = Heap_Alloc(heapID, sizeof(HBlankSystem));
@@ -77,7 +75,7 @@ void HBlankTask_Delete(HBlankTask *task) {
     HBlankTask_Reset(task);
 }
 
-void HBlankSystem_Init(HBlankSystem *system) {
+static void HBlankSystem_Init(HBlankSystem *system) {
     memset(system, 0, sizeof(HBlankSystem));
     system->running = FALSE;
     {
@@ -88,13 +86,13 @@ void HBlankSystem_Init(HBlankSystem *system) {
     }
 }
 
-void HBlankTask_Reset(HBlankTask *task) {
+static void HBlankTask_Reset(HBlankTask *task) {
     task->active = FALSE;
     task->callback = HBlankTask_Dummy;
     task->arg = NULL;
 }
 
-void HBlankSystem_Callback(void *arg) {
+static void HBlankSystem_Callback(void *arg) {
     HBlankSystem *system = arg;
     s32 i;
     for (i = 0; i < 2; i++) {
@@ -102,10 +100,10 @@ void HBlankSystem_Callback(void *arg) {
     }
 }
 
-void HBlankTask_Dummy(HBlankTask *task, void *arg) {
+static void HBlankTask_Dummy(HBlankTask *task, void *arg) {
 }
 
-HBlankTask *HBlankSystem_GetFreeTask(HBlankSystem *system) {
+static HBlankTask *HBlankSystem_GetFreeTask(HBlankSystem *system) {
     s32 i;
     for (i = 0; i < 2; i++) {
         if (system->tasks[i].active == FALSE) {

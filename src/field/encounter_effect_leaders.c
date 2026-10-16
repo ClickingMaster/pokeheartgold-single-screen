@@ -16,10 +16,10 @@
 #include "palette.h"
 #include "player_data.h"
 #include "pm_string.h"
-#include "sprite.h"
-#include "text.h"
 #include "screen_fade_legacy.h"
+#include "sprite.h"
 #include "swap_3d_buffers.h"
+#include "text.h"
 
 // Battle intros of the gym leaders and the rival (effects 12-28): the leader's picture slides
 // in over a scrolling band with the leader's name. Elite Four and champion (effects 29-33):
@@ -48,7 +48,7 @@ typedef struct GymLeaderIntroWork {
     EncounterEffectQuadInterp slide;
     EncounterEffectInterp brightness;
     u8 unk_2C[0x14];
-    void *band;
+    ZigzagWipe *wipe;
     EncounterEffectSpriteManager spriteManager;
     EncounterEffectSpriteResources leaderResources;
     EncounterEffectSpriteResources scaleSpriteResources;
@@ -95,26 +95,6 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
 u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem);
 BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params);
 void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
-
-BOOL EncounterEffect_IsWipeDone(EncounterEffectTask *effect);
-void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 end, s32 duration);
-BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp);
-void EncounterEffect_LoadBgGraphics(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId);
-void EncounterEffect_SetVecFx32(VecFx32 *vec, fx32 x, fx32 y, fx32 z);
-void *ZigzagWipe_New(void);
-void ZigzagWipe_Free(void *band);
-void ZigzagWipe_Start(EncounterEffectTask *effect, void *band, int duration, int period, int width, int insidePlanes, int outsidePlanes);
-SysTask *EncounterEffect_ApplyMainBrightness(EncounterEffectInterp *brightness);
-void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem);
-void EncounterEffect_RequestParticleSetup(void);
-u8 EncounterEffect_IsParticleSetupDone(void);
-void EncounterEffect_DrawParticles(void);
-void EncounterEffect_EndParticleMode(void);
-void EncounterEffect_LoadParticles(NARC *narc, int member);
-void EncounterEffect_CreateEmitters(u32 count);
-BOOL EncounterEffect_UpdateParticles(void);
-BOOL EncounterEffect_AreParticlesDone(void);
-void EncounterEffect_FreeParticles(void);
 
 extern const GymLeaderIntroParams gEncounterRivalIntroParams;
 extern const EliteFourIntroParams gEncounterEliteFourWillIntroParams;
@@ -166,7 +146,6 @@ void ScaleSprites_Delete(ScaleSprites *scaleSprites) {
     }
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
 #pragma force_active on
 BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
     BOOL done = TRUE;
@@ -277,7 +256,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
         Sprite_SetDrawFlag(work->leaderSprite, FALSE);
         ScaleSprites_Init(&work->scaleSprites, &work->spriteManager, &work->scaleSpriteResources, FX32_CONST(72), FX32_CONST(74), heapID);
         LeadersEffect_LoadBlendedSpritePalette(work->leaderSprite, heapID, params->spriteMembers[0], 14, RGB_BLACK);
-        work->band = ZigzagWipe_New();
+        work->wipe = ZigzagWipe_New();
         effect->state++;
         break;
     case GYM_LEADER_INTRO_STATE_START_FLASH:
@@ -292,7 +271,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
     case GYM_LEADER_INTRO_STATE_START_WIPE:
         EncounterEffect_LoadBgGraphics(effect->narc, params->bgMembers[2], params->bgMembers[1], params->bgMembers[0], 0, 1, effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
         work->scrolling = TRUE;
-        ZigzagWipe_Start(effect, work->band, 6, 8, 16, 31, 23);
+        ZigzagWipe_Start(effect, work->wipe, 6, 8, 16, 31, 23);
         SetBgPriority(GF_BG_LYR_MAIN_2, 0);
         SetBgPriority(GF_BG_LYR_MAIN_3, 1);
         SetBgPriority(GF_BG_LYR_MAIN_0, 2);
@@ -303,7 +282,7 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
     case GYM_LEADER_INTRO_STATE_WAIT_WIPE:
         if (EncounterEffect_IsWipeDone(effect)) {
             effect->state++;
-            ZigzagWipe_Free(work->band);
+            ZigzagWipe_Free(work->wipe);
             work->timer = 10;
         }
         break;

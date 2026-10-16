@@ -12,11 +12,10 @@ typedef struct KimonoGirlEffectWork {
     BOOL scrolling;
 } KimonoGirlEffectWork;
 
-void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int member1, int member2, int member3, int palette, int paletteCount, BgConfig *bgConfig, int bgId1, int bgId2);
 extern void SetBothScreensBrightnessByColor(); // called without its color argument here
 
 // BgTemplates for BG1 and BG3 (512x256, 16 colors; screen base 0x0000 / 0x1000, char base 0x4000 /
-// 0x8000, priority 0 / 1). Kept as byte arrays: MWCC places char arrays in their own .rodata sections.
+// 0x8000, priority 0 / 1).
 const u8 gKimonoGirlEffectBg1Template[sizeof(BgTemplate)] __attribute__((aligned(4))) = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0x10, 0, 0, 0, 0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
 };

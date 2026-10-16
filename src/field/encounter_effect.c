@@ -44,11 +44,11 @@ void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 extern void (*const sEncounterEffectFuncs[])(SysTask *task, EncounterEffectTask *effect);
 
-void Task_EncounterEffectFlash(SysTask *task, void *data);
-void EncounterEffect_SetMasterBrightness(int screen, s32 brightness);
-void BrightnessInterp_Init(BrightnessInterp *interp, s32 start, s32 end, int screen, s32 duration);
-BOOL BrightnessInterp_Update(BrightnessInterp *interp);
-void Task_ApplyBrightness(SysTask *task, void *data);
+static void Task_EncounterEffectFlash(SysTask *task, void *data);
+static void EncounterEffect_SetMasterBrightness(int screen, s32 brightness);
+static void BrightnessInterp_Init(BrightnessInterp *interp, s32 start, s32 end, int screen, s32 duration);
+static BOOL BrightnessInterp_Update(BrightnessInterp *interp);
+static void Task_ApplyBrightness(SysTask *task, void *data);
 
 void Task_RunEncounterEffect(SysTask *task, EncounterEffectTask *effect) {
     sEncounterEffectFuncs[gEncounterEffectState.effect](task, effect);
@@ -159,7 +159,7 @@ void EncounterEffect_StartFlash(int screen, int brightness, int otherBrightness,
     flash->count = count;
 }
 
-void Task_EncounterEffectFlash(SysTask *task, void *data) {
+static void Task_EncounterEffectFlash(SysTask *task, void *data) {
     EncounterEffectFlash *flash = data;
     switch (flash->state) {
     case 0:
@@ -290,7 +290,7 @@ BOOL EncounterEffectQuadInterp_Update(EncounterEffectQuadInterp *interp) {
     return TRUE;
 }
 
-void EncounterEffect_SetMasterBrightness(int screen, s32 brightness) {
+static void EncounterEffect_SetMasterBrightness(int screen, s32 brightness) {
     if (screen == 1) {
         GXx_SetMasterBrightness_(&reg_GX_MASTER_BRIGHT, brightness);
     } else {
@@ -298,18 +298,18 @@ void EncounterEffect_SetMasterBrightness(int screen, s32 brightness) {
     }
 }
 
-void BrightnessInterp_Init(BrightnessInterp *interp, s32 start, s32 end, int screen, s32 duration) {
+static void BrightnessInterp_Init(BrightnessInterp *interp, s32 start, s32 end, int screen, s32 duration) {
     interp->screen = screen;
     EncounterEffectInterp_Init(&interp->interp, start, end, duration);
 }
 
-BOOL BrightnessInterp_Update(BrightnessInterp *interp) {
+static BOOL BrightnessInterp_Update(BrightnessInterp *interp) {
     BOOL finished = EncounterEffectInterp_Update(&interp->interp);
     SysTask_CreateOnVWaitQueue(Task_ApplyBrightness, interp, 10);
     return finished;
 }
 
-void Task_ApplyBrightness(SysTask *task, void *data) {
+static void Task_ApplyBrightness(SysTask *task, void *data) {
     BrightnessInterp *interp = data;
     EncounterEffect_SetMasterBrightness(interp->screen, interp->interp.value);
     SysTask_Destroy(task);
