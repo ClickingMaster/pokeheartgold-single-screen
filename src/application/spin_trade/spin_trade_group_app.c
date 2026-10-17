@@ -411,8 +411,8 @@ BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state) {
     reg_GX_POWCNT |= 0x8000;
     Main_SetVBlankIntrCB(NULL, NULL);
     app->args->result = app->result;
-    app->args->unk0[2] = SpinTradeGroup_CountMembers();
-    app->args->unk0[3] = SpinTradeGroup_GetMemberMask();
+    app->args->playerCount = SpinTradeGroup_CountMembers();
+    app->args->memberMask = SpinTradeGroup_GetMemberMask();
     SpinTradeGroup_FreeData(app);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_102);

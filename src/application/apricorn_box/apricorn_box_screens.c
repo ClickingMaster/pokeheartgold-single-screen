@@ -101,7 +101,7 @@ typedef struct ApricornBoxScreen {
     String *closeText;                   // 0x06C, message 1 "CLOSE"
     String *unk_70;                      // 0x070
     String *numberTemplate;              // 0x074, message 25
-    String *unk_78[22];                  // 0x078, messages 27-48
+    String *infoTexts[22];               // 0x078, messages 27-48
     String *apricornNames[7];            // 0x0D0, messages 7-13
     u8 filler_EC[0x3C];                  // 0x0EC
     Window windows[18];                  // 0x128
@@ -1388,7 +1388,7 @@ static void ApricornBoxScreen_InitStrings(ApricornBoxScreen *screen) {
     screen->closeText = NewString_ReadMsgData(screen->msgData, msg_0021_00001);
     screen->numberTemplate = NewString_ReadMsgData(screen->msgData, msg_0021_00025);
     for (i = 0; i < 22; i++) {
-        screen->unk_78[i] = NewString_ReadMsgData(screen->msgData, i + msg_0021_00027);
+        screen->infoTexts[i] = NewString_ReadMsgData(screen->msgData, i + msg_0021_00027);
     }
     for (j = 0; j < 7; j++) {
         screen->apricornNames[j] = NewString_ReadMsgData(screen->msgData, j + msg_0021_00007);
@@ -1406,7 +1406,7 @@ static void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen) {
         j = 0;
         cursor = (u8 *)screen;
         for (; j < 22; j++, cursor += sizeof(String *)) {
-            String_Delete(((ApricornBoxScreen *)cursor)->unk_78[0]);
+            String_Delete(((ApricornBoxScreen *)cursor)->infoTexts[0]);
         }
     }
     String_Delete(screen->numberTemplate);

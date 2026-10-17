@@ -96,7 +96,7 @@ BOOL SpinTradeFlow_WaitGroupApp(SpinTradeFlow *work) {
         } else {
             CommState_SetErrorWatch(1, 1);
             work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
-            work->subwork->unk0[0] = 1;
+            work->subwork->unk_00 = 1;
             work->state = 2;
         }
     }
@@ -115,9 +115,9 @@ BOOL SpinTradeFlow_WaitPartyMenu(SpinTradeFlow *work) {
             PokemonSummary_LearnForget_LaunchApp(work->fieldSystem, work->summary);
             work->state = 3;
         } else {
-            work->subwork->unk0[1] = slot;
+            work->subwork->partySlot = slot;
             FieldSystem_LaunchApplication(work->fieldSystem, &gOverlayTemplate_SpinTrade, work->subwork);
-            work->subwork->unk0[0] = 3;
+            work->subwork->unk_00 = 3;
             work->state = 4;
         }
     }

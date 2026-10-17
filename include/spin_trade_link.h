@@ -20,7 +20,10 @@ typedef struct SpinTradeCommonArgs {
 } SpinTradeCommonArgs;
 
 typedef struct SpinTradeArgs {
-    u32 unk0[4];
+    u32 unk_00;
+    u32 partySlot;
+    u32 playerCount;
+    u32 memberMask;
     u32 result;
     SpinTradeCommonArgs input;
     void *menu;

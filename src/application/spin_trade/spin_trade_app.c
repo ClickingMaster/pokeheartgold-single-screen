@@ -663,14 +663,14 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     machine = &app->machine;
     args = app->args;
     for (; i < SPIN_TRADE_MAX_PLAYERS; i++) {
-        if (args->unk0[3] & (1 << i)) {
+        if (args->memberMask & (1 << i)) {
             if (i == myNetId) {
                 break;
             }
             slot++;
         }
     }
-    machine->baseAngle = gSpinTradeSlotAngles[args->unk0[2]][slot] << FX32_SHIFT;
+    machine->baseAngle = gSpinTradeSlotAngles[args->playerCount][slot] << FX32_SHIFT;
     app->bgm = GF_GetCurrentPlayingBGM();
     SpinTrade_StartBounceTask(app);
     SpinTrade_StartSpinTask(app);
@@ -856,7 +856,7 @@ BOOL SpinTrade_State_WaitSync(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_SendTradeSlot(SpinTradeApp *app) {
-    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_TRADE_SLOT, &app->args->unk0[1], 4)) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_TRADE_SLOT, &app->args->partySlot, 4)) {
         app->state = SPIN_TRADE_STATE_SEND_PARTY;
     }
     return FALSE;
@@ -1745,7 +1745,7 @@ void SpinTrade_InitText(SpinTradeApp *app) {
     for (i = 0; i < SPIN_TRADE_MAX_PLAYERS; i++) {
         app->names[i] = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_102);
     }
-    SpinTrade_AddNameWindows(app, app->args->unk0[2]);
+    SpinTrade_AddNameWindows(app, app->args->playerCount);
 }
 
 void SpinTrade_FreeText(SpinTradeApp *app) {
@@ -1929,7 +1929,7 @@ BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app) {
 
 void SpinTrade_InitMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
-    int playerCount = app->args->unk0[2];
+    int playerCount = app->args->playerCount;
 
     RenderModel_LoadFromNarc(&machine->model, 0, app->narc, gSpinTradeMachineModelIds[playerCount], HEAP_ID_102, FALSE);
     RenderModel_BindTexturesOnVBlank(&machine->model);
@@ -2907,7 +2907,7 @@ BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     SpinTradeArgs *args = app->args;
     u32 count = 0;
-    s32 needed = args->unk0[2] - 1;
+    s32 needed = args->playerCount - 1;
     u32 mask = menu->memberMask;
 
     while (mask != 0) {
@@ -2960,7 +2960,7 @@ void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
     Party *party = app->party;
     Party *otherParty = SpinTradeLink_GetReceivedParty(app->menu, netId);
     int otherSlot = app->tradeSlots[netId];
-    Pokemon *dest = Party_GetMonByIndex(party, app->args->unk0[1]);
+    Pokemon *dest = Party_GetMonByIndex(party, app->args->partySlot);
     Pokemon *mon = Party_GetMonByIndex(otherParty, otherSlot);
 
     MonSetTrainerMemo(mon, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);

@@ -46,8 +46,8 @@ typedef struct PaletteFade {
     FadeBlankPair blankPair;
     WindowRegisterQueue regQueue;
     u16 active;
-    u8 unk14E;
-    u8 unk14F;
+    u8 mainFaded;
+    u8 subFaded;
     u16 color; // the color of the last fade, used when a fade passes 0xFFFF
 } PaletteFade; // size: 0x154
 
@@ -152,11 +152,11 @@ void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum Fad
         FadeWork_UpdateFrame(&sPaletteFade.subActive, &sPaletteFade.sub);
         if (sPaletteFade.mainEnabled != 0) {
             ScreenFade_QueueBrightnessReset(&fade->main);
-            fade->unk14E = 1;
+            fade->mainFaded = 1;
         }
         if (fade->subEnabled != 0) {
             ScreenFade_QueueBrightnessReset(&fade->sub);
-            fade->unk14F = 1;
+            fade->subFaded = 1;
         }
     }
 }
@@ -189,8 +189,8 @@ void StopPaletteFade(void) {
     FadeWork_UpdateFrame(&sPaletteFade.mainActive, &sPaletteFade.main);
     FadeWork_UpdateFrame(&sPaletteFade.subActive, &sPaletteFade.sub);
     sPaletteFade.active = 0;
-    sPaletteFade.unk14E = 0;
-    sPaletteFade.unk14F = 0;
+    sPaletteFade.mainFaded = 0;
+    sPaletteFade.subFaded = 0;
     PaletteFade_Clear(&sPaletteFade);
 }
 
@@ -255,13 +255,13 @@ static void HandleEndFade(PaletteFade *fade) {
     if (fade->mainEnabled != 0) {
         ScreenFade_HoldFadeColor(&fade->main);
         if (fade->main.fadeOut == FALSE) {
-            sPaletteFade.unk14E = 0;
+            sPaletteFade.mainFaded = 0;
         }
     }
     if (fade->subEnabled != 0) {
         ScreenFade_HoldFadeColor(&fade->sub);
         if (fade->main.fadeOut == FALSE) { // the main screen's, even for the sub screen
-            sPaletteFade.unk14F = 0;
+            sPaletteFade.subFaded = 0;
         }
     }
     PaletteFade_Clear(fade);

@@ -13,8 +13,8 @@ typedef struct OrbitCursorSprite {
     /* 0x00 */ ManagedSprite *sprite;
     /* 0x04 */ s16 x;
     /* 0x06 */ s16 y;
-    /* 0x08 */ int unk_08;
-    /* 0x0C */ int unk_0C;
+    /* 0x08 */ int orbitPhase;
+    /* 0x0C */ int angle;
 } OrbitCursorSprite; // size 0x10
 
 typedef struct OrbitCursor {
@@ -25,12 +25,12 @@ typedef struct OrbitCursor {
     /* 0x010 */ int count;
     /* 0x014 */ enum HeapID heapId;
     /* 0x018 */ int resBase;
-    /* 0x01C */ int unk_1C;
+    /* 0x01C */ int fixedPalette;
     /* 0x020 */ fx32 yOffset;
     /* 0x024 */ OrbitCursorSprite sprites[12];
     /* 0x0E4 */ int state;
-    /* 0x0E8 */ int unk_E8;
-    /* 0x0EC */ int unk_EC;
+    /* 0x0E8 */ int leadSprite;
+    /* 0x0EC */ int orbitingCount;
     /* 0x0F0 */ int active;
     /* 0x0F4 */ SysTask *task;
     /* 0x0F8 */ int unk_F8;
@@ -39,7 +39,7 @@ typedef struct OrbitCursor {
     /* 0x104 */ int unk_104;
 } OrbitCursor; // size 0x108
 
-OrbitCursor *OrbitCursor_New(int count, enum HeapID heapId, int resBase, int unk1C, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData);
+OrbitCursor *OrbitCursor_New(int count, enum HeapID heapId, int resBase, int fixedPalette, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData);
 void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette);
 void OrbitCursor_LoadResources(OrbitCursor *p, int palette);
 void OrbitCursor_CreateSprites(OrbitCursor *p);

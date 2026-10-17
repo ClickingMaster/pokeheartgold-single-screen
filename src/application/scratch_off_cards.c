@@ -107,7 +107,7 @@ typedef struct ScratchOffCardsWork {
     ScratchOffCardsSprite *cellSprites[9];       // 0x308
     ScratchOffCardsSprite *cardChoiceSprites[4]; // 0x32C
     ScratchOffCardsSprite *buttonSprite;         // 0x33C
-    ScratchOffCardsSprite *unk_340;              // 0x340
+    ScratchOffCardsSprite *messageSprite;        // 0x340
     ScratchOffCardsSprite *highlightSprites[3];  // 0x344
     ScratchOffCardsSprite *resultSprites[3];     // 0x350
     ScratchOffCardsSprite *winSprite;            // 0x35C
@@ -451,14 +451,14 @@ static int ScratchOffCards_SelectCard(ScratchOffCardsWork *work) {
     case 1:
         if (work->delay == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
-            ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
+            ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
         } else {
             work->delay--;
         }
         hit = TouchscreenHitbox_FindRectAtTouchHeld(sScratchOffCardsCardChoiceHitboxes);
         if (hit != -1) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
-            ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
+            ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
             PlaySE(SEQ_SE_DP_BUTTON9);
             work->chosenCards[work->cardNo] = hit;
             work->cardNo++;
@@ -648,7 +648,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCards_PrintNextCardButton(work);
         }
         work->delay = 30;
-        ScratchOffCardsSprite_SetVisible(work->unk_340, TRUE);
+        ScratchOffCardsSprite_SetVisible(work->messageSprite, TRUE);
         ScratchOffCards_PrintStartCardMessage(work);
         for (i = 0; i < 4; i++) {
             ScratchOffCards_PrintPrizeName(work, (u8)i);
@@ -665,7 +665,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
         break;
     case 2:
         if (work->delay == 0) {
-            ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
+            ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
             FillWindowPixelBuffer(&work->windows[10], 0);
             ScheduleWindowCopyToVram(&work->windows[10]);
             work->subState = 3;
@@ -690,7 +690,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             }
             if (ScratchOffCards_CheckMatch(work) == TRUE) {
                 StopSE(SEQ_SE_PL_KEZURI, 0);
-                ScratchOffCardsSprite_SetVisible(work->unk_340, TRUE);
+                ScratchOffCardsSprite_SetVisible(work->messageSprite, TRUE);
                 work->prizeItems[work->cardNo] = work->prizes[work->matchedSymbol];
                 if (work->prizes[work->matchedSymbol] == 92) {
                     work->prizeKinds[work->cardNo] = 1;
@@ -705,7 +705,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             if (work->revealedCount >= 3) {
                 StopSE(SEQ_SE_PL_KEZURI, 0);
                 work->delay = 60;
-                ScratchOffCardsSprite_SetVisible(work->unk_340, TRUE);
+                ScratchOffCardsSprite_SetVisible(work->messageSprite, TRUE);
                 ScratchOffCards_PrintTooBadMessage(work);
                 work->subState = 7;
                 return FALSE;
@@ -929,8 +929,8 @@ static void ScratchOffCards_CreateResultSprites(ScratchOffCardsWork *work) {
 static void ScratchOffCards_CreateButtonSprites(ScratchOffCardsWork *work) {
     work->buttonSprite = ScratchOffCardsSprite_New(&work->spriteGfx, 3, 1, 0x44, 0xA0, FALSE, 1, 0);
     ScratchOffCardsSprite_SetVisible(work->buttonSprite, FALSE);
-    work->unk_340 = ScratchOffCardsSprite_New(&work->spriteGfx, 3, 3, 0x44, 0x44, FALSE, 1, 0);
-    ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
+    work->messageSprite = ScratchOffCardsSprite_New(&work->spriteGfx, 3, 3, 0x44, 0x44, FALSE, 1, 0);
+    ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
 }
 
 static void ScratchOffCards_DeleteCardChoiceSprites(ScratchOffCardsWork *work) {
@@ -960,8 +960,8 @@ static void ScratchOffCards_FreeResources(ScratchOffCardsWork *work) {
     if (work->buttonSprite) {
         ScratchOffCardsSprite_Delete(work->buttonSprite);
     }
-    if (work->unk_340) {
-        ScratchOffCardsSprite_Delete(work->unk_340);
+    if (work->messageSprite) {
+        ScratchOffCardsSprite_Delete(work->messageSprite);
     }
     for (i = 0; i < 3; i++) {
         ScratchOffCardsSprite *sprite = work->highlightSprites[i];
@@ -1648,7 +1648,7 @@ static void ScratchOffCards_AdvanceCard(ScratchOffCardsWork *work) {
 }
 
 static void ScratchOffCards_HideStartCardMessage(ScratchOffCardsWork *work) {
-    ScratchOffCardsSprite_SetVisible(work->unk_340, FALSE);
+    ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
     FillWindowPixelBuffer(&work->windows[10], 0);
     ScheduleWindowCopyToVram(&work->windows[10]);
 }
