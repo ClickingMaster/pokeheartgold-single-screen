@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c9a5e130e · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 59529f7ff · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5337,9 +5337,12 @@ src/application/photo_album_app.c</title></rect>
 7,490 bytes · C-only source
 src/application/geonet_globe_app.c</title></rect>
 <rect x="888.687" y="641.294" width="31.052" height="38.595" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="888.687" y="679.889" width="31.052" height="37.111" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_95 / hatch_egg_app.o
-7,202 bytes · C-only source
+<rect x="888.687" y="679.889" width="31.052" height="23.961" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_95 / hatch_egg_app.o
+4,650 bytes · C-only source
 src/application/hatch_egg_app.c</title></rect>
+<rect x="888.687" y="703.850" width="31.052" height="13.150" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_95 / hatch_egg_gfx.o
+2,552 bytes · C-only source
+src/application/hatch_egg_gfx.c</title></rect>
 <rect x="888.687" y="679.889" width="31.052" height="37.111" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="919.739" y="641.294" width="11.923" height="13.957" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_encrypted.o
 1,040 bytes · C-only source
