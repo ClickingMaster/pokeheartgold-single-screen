@@ -79,30 +79,14 @@ typedef struct TrainerCardBgPair {
     BgTemplate templates[2];
 } TrainerCardBgPair;
 
-extern const TouchscreenHitbox sTrainerCardCancelHitbox;
-extern const TouchscreenHitbox sTrainerCardSignHitbox;
-extern const TouchscreenHitbox sTrainerCardCardHitbox;
-extern const GraphicsModes sTrainerCardGraphicsModes;
-extern const TrainerCardPaletteTable sTrainerCardPlatinumPalettes;
-extern const TrainerCardPaletteTable sTrainerCardDiamondPalettes;
-extern const TrainerCardPaletteTable sTrainerCardHGSSPalettes;
-extern const TrainerCardPaletteTable sTrainerCardPearlPalettes;
-extern const BgTemplate sTrainerCardMainBg2Template;
-extern const BgTemplate sTrainerCardMainBg3Template;
-extern const BgTemplate sTrainerCardSubBg2Template;
-extern const BgTemplate sTrainerCardSubBg3Template;
-extern const GraphicsBanks sTrainerCardGraphicsBanks;
-extern const TrainerCardBgPair sTrainerCardSubBg01Templates;
-extern const u32 sTrainerCardCaseCharFileIds[];
-extern const WindowTemplate sTrainerCardWindowTemplates[];
 extern const u8 sTrainerCardResourceCounts[4];
 extern const TrainerCardObjVramTypes sTrainerCardObjVramTypes;
 extern const TrainerCardObjFiles sTrainerCardObjFileIds;
 extern const ObjCharTransferTemplate sTrainerCardObjCharTransferTemplate;
 extern const TrainerCardBadgePalettes sTrainerCardBadgePaletteFileIds;
 extern const TrainerCardSpritePosition sTrainerCardBadgeSpritePositions[16];
-extern const u8 sTrainerCardButtonSpriteAnims[];
-extern const TrainerCardButtonPosition sTrainerCardButtonSpritePositions[];
+extern u8 sTrainerCardButtonSpriteAnims[];
+extern TrainerCardButtonPosition sTrainerCardButtonSpritePositions[];
 
 static void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain);
 static void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain);
@@ -151,6 +135,184 @@ static void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites);
 static void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw);
 static void TrainerCardMain_InitObjTransfer(void);
 static void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
+
+static const TouchscreenHitbox sTrainerCardCancelHitbox = {
+    .rect = { 168, 191, 191, 255 }
+};
+
+static const TouchscreenHitbox sTrainerCardSignHitbox = {
+    .rect = { 168, 191, 0, 112 }
+};
+
+static const TouchscreenHitbox sTrainerCardCardHitbox[] = {
+    { .rect = { 0, 168, 0, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsModes sTrainerCardGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_5,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const TrainerCardPaletteTable sTrainerCardPlatinumPalettes = {
+    { 19, 20, 21, 22, 23, 24 },
+};
+
+static const TrainerCardPaletteTable sTrainerCardDiamondPalettes = {
+    { 7, 8, 9, 10, 11, 12 },
+};
+
+static const TrainerCardPaletteTable sTrainerCardHGSSPalettes = {
+    { 0, 1, 2, 3, 4, 5 },
+};
+
+static const TrainerCardPaletteTable sTrainerCardPearlPalettes = {
+    { 13, 14, 15, 16, 17, 18 },
+};
+
+static const BgTemplate sTrainerCardSubBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_256,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sTrainerCardMainBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sTrainerCardMainBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sTrainerCardSubBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_256,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const GraphicsBanks sTrainerCardGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const TrainerCardBgPair sTrainerCardSubBg01Templates = {
+    {
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xd800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xe000,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     },
+};
+
+static const u32 sTrainerCardCaseCharFileIds[16] = {
+    76,
+    73,
+    64,
+    67,
+    69,
+    70,
+    74,
+    66,
+    72,
+    62,
+    77,
+    65,
+    68,
+    71,
+    63,
+    75,
+};
+
+static const WindowTemplate sTrainerCardWindowTemplates[] = {
+    { GF_BG_LYR_SUB_3, 2,  3,  12, 2, 15, 129 },
+    { GF_BG_LYR_SUB_3, 17, 3,  13, 2, 15, 153 },
+    { GF_BG_LYR_SUB_3, 2,  6,  17, 2, 15, 179 },
+    { GF_BG_LYR_SUB_3, 2,  9,  17, 2, 15, 213 },
+    { GF_BG_LYR_SUB_3, 2,  13, 17, 2, 15, 247 },
+    { GF_BG_LYR_SUB_3, 2,  16, 28, 2, 15, 281 },
+    { GF_BG_LYR_SUB_3, 2,  18, 28, 2, 15, 337 },
+    { GF_BG_LYR_SUB_3, 2,  1,  28, 4, 15, 193 },
+    { GF_BG_LYR_SUB_3, 2,  6,  28, 2, 15, 305 },
+    { GF_BG_LYR_SUB_3, 2,  8,  28, 2, 15, 361 },
+    { GF_BG_LYR_SUB_3, 2,  10, 28, 2, 15, 417 },
+    { GF_BG_LYR_SUB_0, 2,  1,  27, 4, 14, 825 },
+    { GF_BG_LYR_SUB_0, 1,  21, 16, 3, 15, 777 },
+    { GF_BG_LYR_SUB_0, 25, 21, 6,  3, 15, 759 },
+};
 
 int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain *cardMain;
@@ -730,7 +892,7 @@ static int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) 
         PlaySE(SEQ_SE_DP_SELECT);
         return 4;
     }
-    if (TouchscreenHitbox_TouchNewIsIn(&sTrainerCardCardHitbox)) {
+    if (TouchscreenHitbox_TouchNewIsIn(sTrainerCardCardHitbox)) {
         cardMain->touchX = gSystem.touchX;
         cardMain->touchY = gSystem.touchY;
         *touched = 1;

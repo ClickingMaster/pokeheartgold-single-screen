@@ -1868,7 +1868,6 @@ Overlay OVY_68
 {
     After main
     Object src/move_relearner_app.o
-    Object asm/move_relearner_app_data.o
     Object src/move_relearner_sub_screen.o
 }
 Overlay OVY_69

@@ -130,36 +130,13 @@ typedef struct MoveRelearner {
     MoveRelearnerButtonFlash buttonFlash;               // 0x1D0
 } MoveRelearner;                                        // size: 0x1DC
 
-// One row of the yes/no answer table. sMoveRelearnerYesActions and sMoveRelearnerNoActions
-// label the same table (the second one 4 bytes in), so each one's "other" member is the
-// callback of the opposite answer.
+// What answering the yes/no question does, per MoveRelearnerQuestion.
 typedef struct MoveRelearnerYesNoAction {
-    int (*callback)(MoveRelearner *relearner);
-    int (*other)(MoveRelearner *relearner);
+    int (*onYes)(MoveRelearner *relearner);
+    int (*onNo)(MoveRelearner *relearner);
 } MoveRelearnerYesNoAction;
 
 NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
-
-extern const u8 sMoveRelearnerSummaryPages[2];
-extern const VecFx32 sMoveRelearnerCameraPos;
-extern const GraphicsModes sMoveRelearnerGraphicsModes;
-extern const GridCallbacks sMoveRelearnerGridCallbacks;
-extern const OamCharTransferParam sMoveRelearnerOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sMoveRelearnerSpriteResourceCounts;
-extern const BgTemplate sMoveRelearnerBgTemplate_Main3;
-extern const BgTemplate sMoveRelearnerBgTemplate_Main2;
-extern const BgTemplate sMoveRelearnerBgTemplate_Sub0;
-extern const BgTemplate sMoveRelearnerBgTemplate_Sub2;
-extern const BgTemplate sMoveRelearnerBgTemplate_Sub3;
-extern const OamManagerParam sMoveRelearnerOamManagerParam;
-extern const TouchscreenHitbox sMoveRelearnerGridHitboxes[];
-extern const GraphicsBanks sMoveRelearnerGraphicsBanks;
-extern const MoveRelearnerYesNoAction sMoveRelearnerYesActions[];
-extern const MoveRelearnerYesNoAction sMoveRelearnerNoActions[];
-extern const DpadMenuBox sMoveRelearnerGridDpadBoxes[];
-extern const u32 sMoveRelearnerMessageIds[][11]; // [MoveRelearnerArgs.type][message]
-extern const WindowTemplate sMoveRelearnerWindowTemplates[];
-extern const ManagedSpriteTemplate sMoveRelearnerSpriteTemplates[];
 
 static void MoveRelearner_Setup(MoveRelearner *relearner);
 static void MoveRelearner_Teardown(MoveRelearner *relearner);
@@ -230,20 +207,381 @@ static int MoveRelearner_AskGiveUp(MoveRelearner *relearner);
 static int MoveRelearner_AskTeachAfterFlash(MoveRelearner *relearner);
 static int MoveRelearner_AskTeach(MoveRelearner *relearner);
 
-int MoveRelearner_OnTeachYes(MoveRelearner *relearner);
-int MoveRelearner_OnTeachNo(MoveRelearner *relearner);
-int MoveRelearner_OnGiveUpYes(MoveRelearner *relearner);
-int MoveRelearner_OnGiveUpNo(MoveRelearner *relearner);
-int MoveRelearner_OnDeleteMoveYes(MoveRelearner *relearner);
-int MoveRelearner_OnDeleteMoveNo(MoveRelearner *relearner);
-int MoveRelearner_OnStopTeachingYes(MoveRelearner *relearner);
-int MoveRelearner_OnStopTeachingNo(MoveRelearner *relearner);
-int MoveRelearner_OnForgetMoveYes(MoveRelearner *relearner);
-int MoveRelearner_OnForgetMoveNo(MoveRelearner *relearner);
-void MoveRelearner_GridNoop(void);
-void MoveRelearner_GridOnKeyMove(MoveRelearner *relearner, s32 input, u32 direction);
-void MoveRelearner_GridOnTouch(MoveRelearner *relearner, int input);
+static int MoveRelearner_OnTeachYes(MoveRelearner *relearner);
+static int MoveRelearner_OnTeachNo(MoveRelearner *relearner);
+static int MoveRelearner_OnGiveUpYes(MoveRelearner *relearner);
+static int MoveRelearner_OnGiveUpNo(MoveRelearner *relearner);
+static int MoveRelearner_OnDeleteMoveYes(MoveRelearner *relearner);
+static int MoveRelearner_OnDeleteMoveNo(MoveRelearner *relearner);
+static int MoveRelearner_OnStopTeachingYes(MoveRelearner *relearner);
+static int MoveRelearner_OnStopTeachingNo(MoveRelearner *relearner);
+static int MoveRelearner_OnForgetMoveYes(MoveRelearner *relearner);
+static int MoveRelearner_OnForgetMoveNo(MoveRelearner *relearner);
+static void MoveRelearner_GridNoop(void *data, int input, int prevInput);
+static void MoveRelearner_GridOnKeyMove(void *data, int input, int direction);
+static void MoveRelearner_GridOnTouch(void *data, int input, int prevInput);
 void MoveRelearner_DimSubScreen(int on);
+
+static const VecFx32 sMoveRelearnerCameraPos = {
+    .x = 0,
+    .y = 0,
+    .z = FX32_CONST(16),
+};
+
+static const GridCallbacks sMoveRelearnerGridCallbacks = {
+    MoveRelearner_GridNoop,
+    MoveRelearner_GridNoop,
+    MoveRelearner_GridOnKeyMove,
+    MoveRelearner_GridOnTouch,
+};
+
+static const GraphicsModes sMoveRelearnerGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const OamCharTransferParam sMoveRelearnerOamCharTransferParam = {
+    .maxTasks = 12,
+    .sizeMain = 0x4000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sMoveRelearnerSpriteResourceCounts = {
+    .numChar = 11,
+    .numPltt = 3,
+    .numCell = 3,
+    .numAnim = 3,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const BgTemplate sMoveRelearnerBgTemplate_Main3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sMoveRelearnerBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sMoveRelearnerBgTemplate_Sub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sMoveRelearnerBgTemplate_Sub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sMoveRelearnerBgTemplate_Sub3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_512x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_512x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const OamManagerParam sMoveRelearnerOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const TouchscreenHitbox sMoveRelearnerGridHitboxes[] = {
+    { .rect = { 32, 63, 0, 127 } },
+    { .rect = { 64, 95, 0, 127 } },
+    { .rect = { 96, 127, 0, 127 } },
+    { .rect = { 128, 159, 0, 127 } },
+    { .rect = { 168, 191, 0, 39 } },
+    { .rect = { 168, 191, 40, 79 } },
+    { .rect = { 166, 191, 192, 255 } },
+    { .rect = { 166, 191, 120, 183 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsBanks sMoveRelearnerGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_B,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_16_G,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_A,
+    .texpltt = GX_VRAM_TEXPLTT_0_F,
+};
+
+static const MoveRelearnerYesNoAction sMoveRelearnerYesNoActions[] = {
+    [MOVE_RELEARNER_QUESTION_TEACH] = { MoveRelearner_OnTeachYes,        MoveRelearner_OnTeachNo        },
+    [MOVE_RELEARNER_QUESTION_GIVE_UP] = { MoveRelearner_OnGiveUpYes,       MoveRelearner_OnGiveUpNo       },
+    [MOVE_RELEARNER_QUESTION_DELETE_MOVE] = { MoveRelearner_OnDeleteMoveYes,   MoveRelearner_OnDeleteMoveNo   },
+    [MOVE_RELEARNER_QUESTION_STOP_TEACHING] = { MoveRelearner_OnStopTeachingYes, MoveRelearner_OnStopTeachingNo },
+    [MOVE_RELEARNER_QUESTION_FORGET_MOVE] = { MoveRelearner_OnForgetMoveYes,   MoveRelearner_OnForgetMoveNo   },
+};
+
+static const DpadMenuBox sMoveRelearnerGridDpadBoxes[] = {
+    { 40,  52,  0, 0, 6, 1, 0, 0 },
+    { 80,  60,  0, 0, 0, 2, 1, 1 },
+    { 40,  84,  0, 0, 1, 3, 2, 2 },
+    { 80,  92,  0, 0, 2, 6, 3, 3 },
+    { 40,  116, 0, 0, 4, 4, 4, 4 },
+    { 80,  124, 0, 0, 5, 5, 5, 5 },
+    { 224, 168, 0, 0, 3, 6, 6, 6 },
+    { 224, 168, 0, 0, 7, 7, 7, 7 },
+};
+
+static const u32 sMoveRelearnerMessageIds[2][11] = {
+    {
+     msg_0747_00000,
+     msg_0747_00001,
+     msg_0747_00002,
+     msg_0747_00003,
+     msg_0747_00004,
+     msg_0747_00005,
+     msg_0747_00006,
+     msg_0747_00007,
+     msg_0747_00008,
+     msg_0747_00009,
+     msg_0747_00010,
+     },
+    {
+     msg_0747_00011,
+     msg_0747_00012,
+     msg_0747_00013,
+     msg_0747_00014,
+     msg_0747_00015,
+     msg_0747_00016,
+     msg_0747_00017,
+     msg_0747_00018,
+     msg_0747_00019,
+     msg_0747_00020,
+     msg_0747_00021,
+     },
+};
+
+static const WindowTemplate sMoveRelearnerWindowTemplates[MOVE_RELEARNER_NUM_WINDOWS] = {
+    { GF_BG_LYR_SUB_2,  17, 4,  6,  2,  15, 91  },
+    { GF_BG_LYR_SUB_2,  17, 6,  6,  2,  15, 103 },
+    { GF_BG_LYR_SUB_2,  17, 8,  8,  2,  15, 115 },
+    { GF_BG_LYR_SUB_2,  28, 6,  3,  2,  15, 131 },
+    { GF_BG_LYR_SUB_2,  28, 8,  3,  2,  15, 137 },
+    { GF_BG_LYR_SUB_2,  17, 10, 15, 10, 15, 143 },
+    { GF_BG_LYR_SUB_0,  2,  19, 27, 4,  14, 293 },
+    { GF_BG_LYR_SUB_2,  1,  0,  30, 3,  15, 401 },
+    { GF_BG_LYR_SUB_2,  15, 21, 8,  3,  15, 491 },
+    { GF_BG_LYR_SUB_2,  24, 21, 8,  3,  15, 515 },
+    { GF_BG_LYR_SUB_2,  5,  4,  10, 16, 15, 539 },
+    { GF_BG_LYR_SUB_0,  23, 13, 7,  4,  14, 699 },
+    { GF_BG_LYR_MAIN_2, 1,  0,  20, 3,  15, 1   },
+    { GF_BG_LYR_MAIN_2, 19, 5,  10, 16, 15, 61  },
+    { GF_BG_LYR_MAIN_2, 2,  5,  9,  8,  15, 221 },
+};
+
+static const ManagedSpriteTemplate sMoveRelearnerSpriteTemplates[MOVE_RELEARNER_NUM_SPRITES] = {
+    {
+     .x = 0,
+     .y = 168,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 2,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 40,
+     .y = 168,
+     .z = 0,
+     .animation = 4,
+     .drawPriority = 1,
+     .pal = 2,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 0,
+     .y = 32,
+     .z = 0,
+     .animation = 8,
+     .drawPriority = 0,
+     .pal = 3,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8A8, 0xB8A8, 0xB8A8, 0xB8A8, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 236,
+     .y = 40,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 0,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8AA, 0xB8A8, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 22,
+     .y = 40,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8AB, 0xB8A9, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 22,
+     .y = 72,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8AC, 0xB8A9, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 22,
+     .y = 104,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8AD, 0xB8A9, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 22,
+     .y = 136,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 0xB8AE, 0xB8A9, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 134,
+     .y = 48,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0xB8AF, 0xB8AA, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 134,
+     .y = 80,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0xB8B0, 0xB8AA, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 134,
+     .y = 112,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0xB8B1, 0xB8AA, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 134,
+     .y = 144,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0xB8B2, 0xB8AA, 0xB8AA, 0xB8AA, 0, 0 },
+     .bgPriority = 2,
+     .vramTransfer = 0,
+     },
+};
 
 BOOL MoveRelearner_Init(OverlayManager *man, int *state) {
     MoveRelearner *relearner;
@@ -379,8 +717,6 @@ static void MoveRelearner_VBlankCB(MoveRelearner *relearner) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-#pragma force_active on
-
 static void MoveRelearner_SetGfxBanks(void) {
     GraphicsBanks banks = sMoveRelearnerGraphicsBanks;
     GfGfx_SetBanks(&banks);
@@ -420,8 +756,6 @@ static void MoveRelearner_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_66);
 }
 
-#pragma force_active reset
-
 static void MoveRelearner_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
@@ -432,8 +766,6 @@ static void MoveRelearner_FreeBgs(BgConfig *bgConfig) {
     Heap_FreeExplicit(HEAP_ID_66, bgConfig);
     reg_GX_POWCNT |= 0x8000;
 }
-
-#pragma force_active on
 
 static void MoveRelearner_LoadBgGraphics(MoveRelearner *relearner, NARC *narc) {
     BgConfig_LoadAssetFromOpenNarc(relearner->bgConfig, HEAP_ID_66, narc, NARC_a_1_1_0, 1, GF_BG_LYR_MAIN_3, GF_BG_GFX_TYPE_CHAR, 0, 0);
@@ -449,13 +781,9 @@ static void MoveRelearner_LoadBgGraphics(MoveRelearner *relearner, NARC *narc) {
     LoadUserFrameGfx2(relearner->bgConfig, GF_BG_LYR_SUB_0, 61, 13, Options_GetFrame(relearner->args->options), HEAP_ID_66);
 }
 
-#pragma force_active reset
-
 static void MoveRelearner_FreeScreenFile(MoveRelearner *relearner) {
     Heap_Free(relearner->screenFile);
 }
-
-#pragma force_active on
 
 static void MoveRelearner_AddWindows(MoveRelearner *relearner) {
     u32 i;
@@ -468,8 +796,6 @@ static void MoveRelearner_AddWindows(MoveRelearner *relearner) {
     ClearWindowTilemapAndScheduleTransfer(&relearner->windows[8]);
     relearner->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_66);
 }
-
-#pragma force_active reset
 
 static void MoveRelearner_RemoveWindows(MoveRelearner *relearner) {
     u32 i;
@@ -504,8 +830,6 @@ static int MoveRelearner_WaitFade(MoveRelearner *relearner) {
     }
     return MOVE_RELEARNER_STATE_WAIT_FADE;
 }
-
-#pragma force_active on
 
 static int MoveRelearner_HandleInput(MoveRelearner *relearner) {
     u32 input;
@@ -552,8 +876,6 @@ static int MoveRelearner_HandleInput(MoveRelearner *relearner) {
     return MOVE_RELEARNER_STATE_INPUT;
 }
 
-#pragma force_active reset
-
 static int MoveRelearner_WaitMessage(MoveRelearner *relearner) {
     if (TextPrinterCheckActive(relearner->textPrinterId) == 0) {
         return relearner->nextState;
@@ -584,11 +906,11 @@ static int MoveRelearner_HandleYesNo(MoveRelearner *relearner) {
 
     switch (YesNoPrompt_HandleInput(relearner->yesNoPrompt)) {
     case YESNORESPONSE_YES:
-        nextState = sMoveRelearnerYesActions[relearner->question].callback(relearner);
+        nextState = sMoveRelearnerYesNoActions[relearner->question].onYes(relearner);
         MoveRelearner_DimSubScreen(0);
         break;
     case YESNORESPONSE_NO:
-        nextState = sMoveRelearnerNoActions[relearner->question].callback(relearner);
+        nextState = sMoveRelearnerYesNoActions[relearner->question].onNo(relearner);
         MoveRelearner_DimSubScreen(0);
         break;
     default:
@@ -620,8 +942,6 @@ static int MoveRelearner_PrintLearned(MoveRelearner *relearner) {
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-#pragma force_active on
-
 static int MoveRelearner_AskAfterSummary(MoveRelearner *relearner) {
     if (relearner->args->moveSlot < MAX_MON_MOVES) {
         MoveRelearner_PrintMessage(relearner, 10);
@@ -633,8 +953,6 @@ static int MoveRelearner_AskAfterSummary(MoveRelearner *relearner) {
     relearner->nextState = MOVE_RELEARNER_STATE_SHOW_YES_NO;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
-
-#pragma force_active reset
 
 static int MoveRelearner_FadeOut(MoveRelearner *relearner) {
     BeginAppScreenFade(1, HEAP_ID_66);
@@ -684,8 +1002,6 @@ static void MoveRelearner_FormatNumber(MoveRelearner *relearner, u32 msgId, s32 
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, format);
     String_Delete(format);
 }
-
-#pragma force_active on
 
 static void MoveRelearner_PrintStaticTexts(MoveRelearner *relearner) {
     String *format;
@@ -752,8 +1068,6 @@ static void MoveRelearner_PrintStaticTexts(MoveRelearner *relearner) {
     String_Delete(format);
 }
 
-#pragma force_active reset
-
 static u32 MoveRelearner_CountEligibleMoves(MoveRelearner *relearner) {
     u16 *moves = relearner->args->eligibleMoves;
     u32 i;
@@ -774,8 +1088,6 @@ static void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u32 x, u32 y
     ScheduleBgTilemapBufferTransfer(relearner->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-#pragma force_active on
-
 static void MoveRelearner_PrintListRow(MoveRelearner *relearner, int scrollOffset, int row) {
     int index = scrollOffset + row;
     int y = row * 32;
@@ -793,8 +1105,6 @@ static void MoveRelearner_PrintListRow(MoveRelearner *relearner, int scrollOffse
     // int coordinates: y + 16 is computed again for this call
     ((u8(*)(Window *, u32, String *, int, int, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[10], 0, relearner->string, 45, y + 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
-
-#pragma force_active reset
 
 static void MoveRelearner_PrintMoveList(MoveRelearner *relearner) {
     u32 i;
@@ -949,8 +1259,6 @@ static u16 MoveRelearner_GetMoveToReplace(MoveRelearner *relearner) {
     return GetMonData(args->mon, args->moveSlot + MON_DATA_MOVE1, NULL);
 }
 
-#pragma force_active on
-
 static void MoveRelearner_PrintMessage(MoveRelearner *relearner, u32 message) {
     FillWindowPixelBuffer(&relearner->windows[6], 15);
     DrawFrameAndWindow2(&relearner->windows[6], FALSE, 61, 13);
@@ -958,8 +1266,6 @@ static void MoveRelearner_PrintMessage(MoveRelearner *relearner, u32 message) {
     TextFlags_SetCanABSpeedUpPrint(TRUE);
     relearner->textPrinterId = AddTextPrinterParameterized(&relearner->windows[6], 1, relearner->string, 0, 0, Options_GetTextFrameDelay(relearner->args->options), MoveRelearner_TextPrinterCallback);
 }
-
-#pragma force_active reset
 
 static void MoveRelearner_ClearMessage(MoveRelearner *relearner) {
     ClearFrameAndWindow2(&relearner->windows[6], TRUE);
@@ -996,14 +1302,14 @@ static u32 MoveRelearner_CountKnownMoves(MoveRelearner *relearner) {
     return i;
 }
 
-int MoveRelearner_OnTeachYes(MoveRelearner *relearner) {
+static int MoveRelearner_OnTeachYes(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 3);
     relearner->args->moveSlot = MoveRelearner_CountKnownMoves(relearner);
     relearner->nextState = MOVE_RELEARNER_STATE_TEACH_MOVE;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-int MoveRelearner_OnTeachNo(MoveRelearner *relearner) {
+static int MoveRelearner_OnTeachNo(MoveRelearner *relearner) {
     MoveRelearner_ClearMessage(relearner);
     if (relearner->learnButtonActive == FALSE) {
         MoveRelearner_DrawListRows(relearner, 5);
@@ -1011,54 +1317,52 @@ int MoveRelearner_OnTeachNo(MoveRelearner *relearner) {
     return MOVE_RELEARNER_STATE_INPUT;
 }
 
-int MoveRelearner_OnGiveUpYes(MoveRelearner *relearner) {
+static int MoveRelearner_OnGiveUpYes(MoveRelearner *relearner) {
     relearner->args->cancelled = TRUE;
     return MOVE_RELEARNER_STATE_FADE_OUT;
 }
 
-int MoveRelearner_OnGiveUpNo(MoveRelearner *relearner) {
+static int MoveRelearner_OnGiveUpNo(MoveRelearner *relearner) {
     MoveRelearner_ClearMessage(relearner);
     return MOVE_RELEARNER_STATE_INPUT;
 }
 
-int MoveRelearner_OnDeleteMoveYes(MoveRelearner *relearner) {
+static int MoveRelearner_OnDeleteMoveYes(MoveRelearner *relearner) {
     relearner->nextState = MOVE_RELEARNER_STATE_FADE_OUT_TO_SUMMARY;
     return MOVE_RELEARNER_STATE_WAIT_FADE;
 }
 
-int MoveRelearner_OnDeleteMoveNo(MoveRelearner *relearner) {
+static int MoveRelearner_OnDeleteMoveNo(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 7);
     relearner->question = MOVE_RELEARNER_QUESTION_STOP_TEACHING;
     relearner->nextState = MOVE_RELEARNER_STATE_SHOW_YES_NO;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-int MoveRelearner_OnStopTeachingYes(MoveRelearner *relearner) {
+static int MoveRelearner_OnStopTeachingYes(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 8);
     relearner->nextState = MOVE_RELEARNER_STATE_FADE_OUT;
     relearner->args->cancelled = TRUE;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-int MoveRelearner_OnStopTeachingNo(MoveRelearner *relearner) {
+static int MoveRelearner_OnStopTeachingNo(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 4);
     relearner->question = MOVE_RELEARNER_QUESTION_DELETE_MOVE;
     relearner->nextState = MOVE_RELEARNER_STATE_SHOW_YES_NO;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-int MoveRelearner_OnForgetMoveYes(MoveRelearner *relearner) {
+static int MoveRelearner_OnForgetMoveYes(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 5);
     relearner->nextState = MOVE_RELEARNER_STATE_PRINT_LEARNED;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
 }
 
-int MoveRelearner_OnForgetMoveNo(MoveRelearner *relearner) {
+static int MoveRelearner_OnForgetMoveNo(MoveRelearner *relearner) {
     relearner->nextState = MOVE_RELEARNER_STATE_FADE_OUT_TO_SUMMARY;
     return MOVE_RELEARNER_STATE_WAIT_FADE;
 }
-
-#pragma force_active on
 
 static void MoveRelearner_InitSpriteSystem(MoveRelearner *relearner) {
     SpriteResourceCountsListUnion resourceCounts = sMoveRelearnerSpriteResourceCounts;
@@ -1076,8 +1380,6 @@ static void MoveRelearner_InitSpriteSystem(MoveRelearner *relearner) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
-
-#pragma force_active reset
 
 static void MoveRelearner_FreeSprites(MoveRelearner *relearner) {
     u32 i;
@@ -1163,7 +1465,6 @@ static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, int move) {
 
 // Sprites: 0/1 scroll arrows (down/up), 2 cursor, 3 category icon of the selected move,
 // 4-7 type icons of the list rows, 8-11 type icons of the Pokemon's current moves.
-#pragma force_active on
 
 static void MoveRelearner_InitSprites(MoveRelearner *relearner, NARC *narc) {
     u32 i;
@@ -1187,8 +1488,6 @@ static void MoveRelearner_CreateCamera(Camera **camera, enum HeapID heapID) {
     Camera_SetStaticPtr(*camera);
 }
 
-#pragma force_active reset
-
 static void MoveRelearner_CreatePokepic(MoveRelearnerMonPic *monPic, Pokemon *mon, enum HeapID heapID) {
     PokepicTemplate template;
     int species;
@@ -1201,8 +1500,6 @@ static void MoveRelearner_CreatePokepic(MoveRelearnerMonPic *monPic, Pokemon *mo
     form = GetMonData(mon, MON_DATA_FORM, NULL);
     Pokepic_SetAttr(monPic->pokepic, POKEPIC_HFLIP, 1 ^ GetMonBaseStat_HandleAlternateForm(species, form, BASE_FLIP));
 }
-
-#pragma force_active on
 
 static void MoveRelearner_Init3D(MoveRelearner *relearner) {
     NNS_G3dInit();
@@ -1224,8 +1521,6 @@ static void MoveRelearner_Init3D(MoveRelearner *relearner) {
     G2_SetBG0Priority(1);
 }
 
-#pragma force_active reset
-
 static void MoveRelearner_Draw3D(MoveRelearnerMonPic *monPic) {
     Thunk_G3X_Reset();
     Camera_PushLookAtToNNSGlb();
@@ -1244,8 +1539,6 @@ static void MoveRelearner_Free3D(MoveRelearnerMonPic *monPic) {
     PokepicManager_Delete(monPic->pokepicManager);
     MI_CpuFill8(monPic, 0, sizeof(MoveRelearnerMonPic));
 }
-
-#pragma force_active on
 
 // pos 0-3: list rows, 4/5: the bottom buttons ("TEACH", "RETURN"), else the yes/no position.
 static void MoveRelearner_SetCursorPos(MoveRelearner *relearner, u32 pos, int palette) {
@@ -1293,8 +1586,6 @@ static void MoveRelearner_UpdateScrollArrows(MoveRelearner *relearner, int which
     ManagedSprite_SetAnimateFlag(relearner->sprites[1], anim);
 }
 
-#pragma force_active reset
-
 static int MoveRelearner_FadeOutToSummary(MoveRelearner *relearner) {
     BeginAppScreenFade(1, HEAP_ID_66);
     relearner->nextState = MOVE_RELEARNER_STATE_OPEN_SUMMARY;
@@ -1302,10 +1593,8 @@ static int MoveRelearner_FadeOutToSummary(MoveRelearner *relearner) {
 }
 
 static int MoveRelearner_OpenSummary(MoveRelearner *relearner) {
-    u8 pages[2];
+    u8 pages[] = { 1, 4 };
 
-    pages[0] = sMoveRelearnerSummaryPages[0];
-    pages[1] = sMoveRelearnerSummaryPages[1];
     MoveRelearner_Teardown(relearner);
     relearner->summary.party = (Party *)relearner->args->mon; // the summary shows this one Pokemon (partyCount 1)
     relearner->summary.options = relearner->args->options;
@@ -1345,11 +1634,13 @@ static void MoveRelearner_FreeGridInput(MoveRelearner *relearner) {
     GridInputHandler_Free(relearner->gridInput);
 }
 
-void MoveRelearner_GridNoop(void) {
+static void MoveRelearner_GridNoop(void *data, int input, int prevInput) {
 }
 
 // Grid inputs: 0-3 list rows, 4 scroll down, 5 scroll up, 6 "RETURN", 7 "TEACH".
-void MoveRelearner_GridOnKeyMove(MoveRelearner *relearner, s32 input, u32 direction) {
+static void MoveRelearner_GridOnKeyMove(void *data, int input, int direction) {
+    MoveRelearner *relearner = data;
+
     MoveRelearner_SetLearnButtonActive(relearner, FALSE);
     MoveRelearner_DrawListRows(relearner, 5);
 
@@ -1392,9 +1683,9 @@ void MoveRelearner_GridOnKeyMove(MoveRelearner *relearner, s32 input, u32 direct
     MoveRelearner_SetCursorPos(relearner, (u8)input, 3);
 }
 
-#pragma force_active on
+static void MoveRelearner_GridOnTouch(void *data, int input, int prevInput) {
+    MoveRelearner *relearner = data;
 
-void MoveRelearner_GridOnTouch(MoveRelearner *relearner, int input) {
     if (input <= 3) {
         relearner->args->cursorPos = input;
         if (relearner->args->scrollOffset + relearner->args->cursorPos < relearner->numMoves) {
@@ -1443,8 +1734,6 @@ void MoveRelearner_GridOnTouch(MoveRelearner *relearner, int input) {
     }
     MoveRelearner_SetCursorPos(relearner, (u8)input, 3);
 }
-
-#pragma force_active reset
 
 static void MoveRelearner_SetLearnButtonActive(MoveRelearner *relearner, u32 active) {
     if (active == TRUE) {
@@ -1503,7 +1792,6 @@ static void MoveRelearner_AnimateScrollArrows(MoveRelearner *relearner, s32 dire
     }
 }
 
-#pragma force_active on
 #pragma opt_lifetimes off
 #pragma opt_common_subs on
 
@@ -1529,7 +1817,6 @@ static void MoveRelearner_DrawListRows(MoveRelearner *relearner, u32 selected) {
 
 #pragma opt_common_subs reset
 #pragma opt_lifetimes reset
-#pragma force_active reset
 
 static int MoveRelearner_StartReturnButtonFlash(MoveRelearner *relearner, int nextState) {
     MoveRelearnerButtonFlash *flash = &relearner->buttonFlash;
@@ -1556,8 +1843,6 @@ static int MoveRelearner_StartLearnButtonFlash(MoveRelearner *relearner, int nex
     flash->nextState = nextState;
     return MOVE_RELEARNER_STATE_BUTTON_FLASH;
 }
-
-#pragma force_active on
 
 static int MoveRelearner_UpdateButtonFlash(MoveRelearner *relearner) {
     MoveRelearnerButtonFlash *flash = &relearner->buttonFlash;
@@ -1586,8 +1871,6 @@ static int MoveRelearner_UpdateButtonFlash(MoveRelearner *relearner) {
     }
     return MOVE_RELEARNER_STATE_BUTTON_FLASH;
 }
-
-#pragma force_active reset
 
 static int MoveRelearner_AskGiveUp(MoveRelearner *relearner) {
     MoveRelearner_PrintMessage(relearner, 2);

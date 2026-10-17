@@ -49,8 +49,6 @@ extern const u16 sPokeathlonEventThresholds[][2];
 extern const u32 sPokeathlonPowersOfTen[5];
 extern const GraphicsBanks sPokeathlonUtilGraphicsBanks;
 extern const TouchscreenHitbox sPokeathlonExitHitbox;
-extern const OamManagerParam sPokeathlonUtilOamManagerParam;
-extern const OamCharTransferParam sPokeathlonUtilOamCharTransferParam;
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx);
 void *PokeathlonUtil_GetSpriteManager(PokeathlonSpriteContext *ctx);

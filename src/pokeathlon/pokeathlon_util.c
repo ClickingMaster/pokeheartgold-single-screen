@@ -22,15 +22,35 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 
 u32 MATH_CountPopulation(u32 value);
 
-extern const u32 sPokeathlonUtilScreenVramTypes[2];
-extern const TileRect sPokeathlonMonPicRect;
-
 static void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size);
 static void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId);
 static void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out);
 static void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 font, u8 fill);
 static void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 window);
 static void PokeathlonUtil_SetGfxBanks(void);
+
+static const OamManagerParam sPokeathlonUtilOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const OamCharTransferParam sPokeathlonUtilOamCharTransferParam = {
+    .maxTasks = 0,
+    .sizeMain = 0x20000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_64K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_64K,
+};
+
+static const TileRect sPokeathlonMonPicRect = { 0, 0, 10, 10 };
+
+static const u32 sPokeathlonUtilScreenVramTypes[2] = { NNS_G2D_VRAM_TYPE_2DSUB, NNS_G2D_VRAM_TYPE_2DMAIN };
 
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx) {
     GF_ASSERT(ctx != NULL);
