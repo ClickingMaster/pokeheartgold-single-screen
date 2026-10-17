@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "896a09ae74103554f74f54cc222e51a7c25b7028",
+  "commit": "e347fcfa81de8c6a924df3b388a381356c35a7e6",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b61870179adf01e478c9b36c2c602242262c4d99ebb65597f63361ebed22929d",
+    "ARM9": "f4b05be8cb18f3f27e9c6408f5cdf59a4eb895d42f13f380723d3afc7b0f4b72",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -5696,9 +5696,17 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_snow_throw.o",
-      "bytes": 12918,
+      "bytes": 9378,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_snow_throw.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
+      "object": "pokeathlon_snow_throw_display.o",
+      "bytes": 3540,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_snow_throw_display.c"
     },
     {
       "cpu": "ARM9",

@@ -715,31 +715,6 @@
 	.public gPokeathlonRelayRunPicIds
 	.public sRelayRunMapStartOffset
 	.public sRelayRunMapCenter
-	.public sRelayRunNameWindowTemplate
-	.public sRelayRunLapsWindowTemplate
-	.public sRelayRunCpuCellScores
-	.public sSnowThrowScoreWindowTemplate
-	.public sSnowThrowSpritePoolTemplate
-	.public sSnowThrowPacketScale
-	.public sSnowThrowViewAnims
-	.public sSnowThrowGraphicsModes
-	.public sSnowThrowNameWindowTemplates
-	.public sSnowThrowBgTemplate_Sub1
-	.public sSnowThrowBgTemplate_Sub2
-	.public sSnowThrowBgTemplate_Main0
-	.public sSnowThrowBgTemplate_Main1
-	.public sSnowThrowBgTemplate_Sub3
-	.public sSnowThrowBgTemplate_Main3
-	.public sSnowThrowBgTemplate_Sub0
-	.public sSnowThrowOtherMonX
-	.public sSnowThrowOtherMonY
-	.public sSnowThrowTeamMarkPositions
-	.public sSnowThrowGraphicsBanks
-	.public sSnowThrowDrawOrder
-	.public sSnowThrowMonPositions
-	.public sSnowThrowOtherMonDrawPriorities
-	.public sSnowThrowDisplayNameWindowTemplate
-	.public sSnowThrowCpuMonPositions
 	.public sPennantCaptureScoreWindowTemplate
 	.public sPennantCaptureReferenceVector
 	.public sPennantCaptureSpritePoolTemplate

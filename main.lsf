@@ -2060,9 +2060,11 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_relay_run.o
     Object src/pokeathlon/pokeathlon_relay_run_hud.o
     Object src/pokeathlon/pokeathlon_relay_run_pic_frames.o
-    Object asm/pokeathlon_snow_throw_pennant_capture_rodata.o
+    Object asm/pokeathlon_relay_run_map_rodata.o
     Object src/pokeathlon/pokeathlon_relay_run_cpu.o
     Object src/pokeathlon/pokeathlon_snow_throw.o
+    Object src/pokeathlon/pokeathlon_snow_throw_display.o
+    Object asm/pokeathlon_pennant_capture_rodata.o
     Object src/pokeathlon/pokeathlon_pennant_capture.o
     Object src/pokeathlon/pokeathlon_pennant_capture_play.o
     Object src/pokeathlon/pokeathlon_pennant_capture_field.o

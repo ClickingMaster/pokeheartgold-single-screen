@@ -20,14 +20,33 @@ void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *po
 
 // Sprite resource ids of the touch screen (pairs: the two Pokemon pictures are entries 6 and 7).
 extern const u32 gPokeathlonRelayRunPicIds[];
-extern const WindowTemplate sRelayRunNameWindowTemplate;
-extern const WindowTemplate sRelayRunLapsWindowTemplate;
-// Base score of each cell ahead of the runner: the farther, the better.
-extern const s32 sRelayRunCpuCellScores[RELAY_RUN_CPU_CELLS];
 
 static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer);
 static void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta);
 static PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonRelayRunCpu *cpu);
+
+static const WindowTemplate sRelayRunLapsWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_0,
+    .left = 24,
+    .top = 16,
+    .width = 6,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 0x21,
+};
+
+static const WindowTemplate sRelayRunNameWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_0,
+    .left = 0,
+    .top = 22,
+    .width = 16,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 1,
+};
+
+// Base score of each cell ahead of the runner: the farther, the better.
+static const s32 sRelayRunCpuCellScores[RELAY_RUN_CPU_CELLS] = { 2, 4, 6, 6, 2, 4, 6, 6, 2, 4, 6, 6, 2, 4, 6, 6 };
 
 // The touch screen: where the two picture slots are in VRAM.
 void PokeathlonRelayRunHud_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonRelayRunHud *hud) {
