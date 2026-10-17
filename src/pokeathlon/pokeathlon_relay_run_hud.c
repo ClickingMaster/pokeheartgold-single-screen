@@ -1,7 +1,5 @@
 #include "global.h"
 
-#include "constants/sndseq.h"
-
 #include "application/choose_starter/choose_starter_sub_res.naix"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
@@ -22,7 +20,6 @@
 #include "pm_string.h"
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
-#include "sound_playback.h"
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
@@ -41,154 +38,18 @@ VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePool
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
 
-BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
-extern const WindowTemplate sRelayRunResultWindowTemplate; // the result window
-extern const VecFx32 sRelayRunLapCounterPlatePos;          // lap counter: the plate
-extern const VecFx32 sRelayRunLapCounterFirstDigitPos;     // lap counter: the first digit
-extern const VecFx32 sRelayRunLapCounterSecondDigitPos;    // lap counter: the second digit
 extern const u32 gPokeathlonRelayRunPicIds[];              // touch screen sprite resource ids
-extern const u8 sRelayRunTimerSpriteX[6];                  // x of the timer's sprites
-extern const u8 sRelayRunTimerSpriteAnims[6];              // their animations: digits and separators
 extern const VecFx32 sRelayRunMapStartOffset;              // track map: offset of the start from its centre
 extern const VecFx32 sRelayRunMapCenter;                   // track map: centre
-
-// Shows the lap count for a second (60 frames) each time it goes up.
 
 static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member);
 static void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
 static void PokeathlonRelayRunHud_PrintLaps(PokeathlonRelayRunHud *hud);
 
-void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, u8 laps) {
-    VecFx32 platePosition = sRelayRunLapCounterPlatePos, firstPosition = sRelayRunLapCounterFirstDigitPos, secondPosition = sRelayRunLapCounterSecondDigitPos;
-    int changed;
-    if (counter->laps < laps) {
-        counter->laps = laps;
-        changed = 1;
-    } else {
-        changed = 0;
-    }
-    if (changed) {
-        u8 tens = laps / 10;
-        u8 ones = laps % 10;
-        if (tens) {
-            platePosition.x = FX32_CONST(96);
-            firstPosition.x = FX32_CONST(144);
-            secondPosition.x = FX32_CONST(176);
-            Sprite_SetAnimCtrlSeq(counter->digits[0], tens + 1);
-            Sprite_SetAnimCtrlSeq(counter->digits[1], ones + 1);
-        } else {
-            platePosition.x = FX32_CONST(112);
-            firstPosition.x = FX32_CONST(160);
-            Sprite_SetAnimCtrlSeq(counter->digits[0], ones + 1);
-            Sprite_SetAnimCtrlSeq(counter->digits[1], 0);
-        }
-        PokeathlonCourseSpritePoolSprite_SetPosition(counter->plate, &platePosition);
-        Sprite_SetMatrix(counter->digits[0], &firstPosition);
-        Sprite_SetMatrix(counter->digits[1], &secondPosition);
-        PokeathlonCourseSpritePoolSprite_Show(counter->plate, TRUE, TRUE);
-        Sprite_SetDrawFlag(counter->digits[0], TRUE);
-        Sprite_SetDrawFlag(counter->digits[1], TRUE);
-        counter->timer = 60;
-        PlaySE(SEQ_SE_GS_POINT3);
-    } else {
-        counter->timer--;
-        if (counter->timer == 0) {
-            counter->timer = 0;
-            PokeathlonCourseSpritePoolSprite_Show(counter->plate, TRUE, FALSE);
-            Sprite_SetDrawFlag(counter->digits[0], FALSE);
-            Sprite_SetDrawFlag(counter->digits[1], FALSE);
-        }
-    }
-}
+static const u8 sRelayRunTimerSpriteX[6] = { 144, 152, 168, 184, 192, 208 };
 
-void PokeathlonRelayRun_AddResultWindow(PokeathlonRelayRun *relayRun) {
-    AddWindow(relayRun->bgConfig, &relayRun->window, &sRelayRunResultWindowTemplate);
-    BG_FillCharDataRange(relayRun->bgConfig, GF_BG_LYR_MAIN_3, 0, 1, 0);
-    LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, relayRun->heapId);
-}
-
-// "Pokemon Total: laps.tenths Laps" (x: distance into the last lap).
-static void PokeathlonRelayRun_PrintResult(PokeathlonRelayRun *relayRun, int laps, int x) {
-    MsgData *msgData;
-    MessageFormat *msgFormat;
-    String *string;
-    int tenths;
-    FillWindowPixelBuffer(&relayRun->window, 0);
-    tenths = (int)(x * 10 / 1024.0);
-    if (tenths > 9) {
-        GF_ASSERT(FALSE);
-    }
-    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, relayRun->heapId);
-    msgFormat = MessageFormat_New(relayRun->heapId);
-    BufferIntegerAsString(msgFormat, 0, laps, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    BufferIntegerAsString(msgFormat, 1, tenths, 1, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0309_00162, relayRun->heapId);
-    AddTextPrinterParameterizedWithColor(&relayRun->window, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
-    String_Delete(string);
-    MessageFormat_Delete(msgFormat);
-    DestroyMsgData(msgData);
-    CopyWindowToVram(&relayRun->window);
-}
-
-// Plays a sound effect for something at screen x if it is on screen, on the player's own channel (3) when it
-// belongs to the player's own team.
-void PokeathlonRelayRun_PlaySEIfOnScreen(int x, int seqNo, int isOwn) {
-    if (x >= 0 && x < 256) {
-        PlaySEOnPlayer((u16)seqNo, isOwn ? 3 : 4);
-    }
-}
-
-// The sign at the top of a player's screen (swapSigns): 1 the runner is tired, 2 the swap button is pressed,
-// 3 a swap is not possible now (swapping, stunned or exhausted), 4 pressed while it is not possible.
-void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, int touchingSwapButton) {
-    u8 *signs = relayRun->swapSigns;
-    PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + teamId * sizeof(PokeathlonRelayRunTeam));
-    u8 sign = 0;
-    u8 condition = shifted->teams[0].members[shifted->teams[0].current].condition;
-    if (shifted->teams[0].swapping != FALSE) {
-        sign = 3;
-    } else if (shifted->teams[0].stunTimer != 0) {
-        sign = 3;
-    } else if (condition == RELAY_RUN_EXHAUSTED) {
-        sign = 3;
-    } else if (condition == RELAY_RUN_TIRED) {
-        sign = 1;
-    }
-    if (touchingSwapButton == FALSE) {
-        signs[teamId] = sign;
-        return;
-    }
-    if (relayRun->presses[teamId].pressed != FALSE) {
-        if (sign <= 1) {
-            signs[teamId] = 2;
-            return;
-        }
-        if (sign == 3) {
-            signs[teamId] = 4;
-            return;
-        }
-        GF_ASSERT(FALSE);
-        return;
-    }
-    if (relayRun->presses[teamId].held == FALSE) {
-        signs[teamId] = sign;
-    }
-}
-
-// Finish callback: the player's record (laps << 10 | x) and the result window.
-void PokeathlonRelayRun_SaveResult(PokeathlonCourseData *course) {
-    PokeathlonRelayRunPacket *packet = (PokeathlonRelayRunPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + offsetof(PokeathlonRelayRunLink, packet));
-    PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);
-    u8 own = (u8)PokeathlonCourse_GetNetId(course);
-    u8 laps = (u8)(packet->laps[own] & 0x7F);
-    u16 x = packet->x[own];
-    if (laps > RELAY_RUN_MAX_LAPS) {
-        laps = RELAY_RUN_MAX_LAPS;
-    }
-    PokeathlonCourse_SetRecordScore(course, (u16)(x + (laps << 10)));
-    PokeathlonRelayRun_PrintResult(relayRun, laps, x);
-}
+static const u8 sRelayRunTimerSpriteAnims[6] = { 1, 12, 1, 1, 11, 1 };
 
 PokeathlonRelayRunHud *PokeathlonRelayRunHud_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course) {
     PokeathlonRelayRunHud *hud = Heap_Alloc(heapId, sizeof(PokeathlonRelayRunHud));

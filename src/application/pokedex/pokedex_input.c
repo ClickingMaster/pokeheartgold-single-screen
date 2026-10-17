@@ -13,52 +13,424 @@
 #include "system.h"
 #include "touchscreen.h"
 
-extern const TouchscreenHitbox sPokedexListMenuHitboxes[];
-extern const int sPokedexListMenuHitResults[];
-extern const TouchscreenHitbox sPokedexListHitboxes[];
-extern const int sPokedexListHitResults[];
-extern const TouchscreenHitbox sPokedexEntryTabHitboxes[];
-extern const int sPokedexEntryTabHitResults[];
-extern const TouchscreenHitbox sPokedexAreaHitboxes[];
-extern const int sPokedexAreaHitResults[];
-extern const TouchscreenHitbox sPokedexFormsHitboxes[];
-extern const int sPokedexFormsHitResults[];
-extern const TouchscreenHitbox sPokedexFormCompareHitboxes[];
-extern const int sPokedexFormCompareHitResults[];
-extern const TouchscreenHitbox sPokedexEntryMenuHitboxes[];
-extern const TouchscreenHitbox sPokedexSearchSliderHitboxes[]; // height / weight slider handles
+static const u8 sSearchWeightCursorAnims[4] = { 62, 62, 35, 35 };
 
-extern const TouchscreenHitbox sSearchMenuHitboxes[];
-extern const DpadMenuBox sSearchMenuDpadBoxes[];
-extern const GridCallbacks sSearchMenuGridCallbacks;
-extern const u8 sSearchMenuCursorAnims[];
-extern const TouchscreenHitbox sSearchOrderHitboxes[];
-extern const DpadMenuBox sSearchOrderDpadBoxes[];
-extern const GridCallbacks sSearchOrderGridCallbacks;
-extern const u8 sSearchOrderCursorAnims[];
-extern const TouchscreenHitbox sSearchNameHitboxes[];
-extern const DpadMenuBox sSearchNameDpadBoxes[];
-extern const GridCallbacks sSearchNameGridCallbacks;
-extern const TouchscreenHitbox sSearchTypeHitboxes[];
-extern const DpadMenuBox sSearchTypeDpadBoxes[];
-extern const GridCallbacks sSearchTypeGridCallbacks;
-extern const u8 sSearchTypeCursorAnims[];
-extern const TouchscreenHitbox sSearchHeightHitboxes[];
-extern const DpadMenuBox sSearchHeightDpadBoxes[];
-extern const GridCallbacks sSearchHeightGridCallbacks;
-extern const u8 sSearchHeightCursorAnims[];
-extern const TouchscreenHitbox sSearchWeightHitboxes[];
-extern const DpadMenuBox sSearchWeightDpadBoxes[];
-extern const GridCallbacks sSearchWeightGridCallbacks;
-extern const u8 sSearchWeightCursorAnims[];
-extern const TouchscreenHitbox sSearchAreaHitboxes[];
-extern const DpadMenuBox sSearchAreaDpadBoxes[];
-extern const GridCallbacks sSearchAreaGridCallbacks;
-extern const u8 sSearchAreaCursorAnims[];
-extern const TouchscreenHitbox sSearchFormHitboxes[];
-extern const DpadMenuBox sSearchFormDpadBoxes[];
-extern const GridCallbacks sSearchFormGridCallbacks;
-extern const u8 sSearchFormCursorAnims[];
+static const u8 sSearchHeightCursorAnims[4] = { 62, 62, 35, 35 };
+
+static const TouchscreenHitbox sPokedexEntryMenuHitboxes[] = {
+    { .rect = { 72, 103, 48, 207 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const u8 sSearchAreaCursorAnims[8] = { 38, 38, 38, 38, 35, 35, 0, 0 };
+
+static const u8 sSearchOrderCursorAnims[8] = { 39, 39, 39, 39, 39, 39, 35, 35 };
+
+static const GridCallbacks sSearchWeightGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchWeightGridMove,
+    .onTouch = PokedexApp_OnSearchWeightGridTouch,
+};
+
+static const GridCallbacks sSearchNameGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchNameGridMove,
+    .onTouch = PokedexApp_OnSearchNameGridTouch,
+};
+
+static const GridCallbacks sSearchFormGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchFormGridMove,
+    .onTouch = PokedexApp_OnSearchFormGridTouch,
+};
+
+static const GridCallbacks sSearchOrderGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchOrderGridMove,
+    .onTouch = PokedexApp_OnSearchOrderGridTouch,
+};
+
+static const GridCallbacks sSearchTypeGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchTypeGridMove,
+    .onTouch = PokedexApp_OnSearchTypeGridTouch,
+};
+
+static const GridCallbacks sSearchHeightGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchHeightGridMove,
+    .onTouch = PokedexApp_OnSearchHeightGridTouch,
+};
+
+static const int sPokedexEntryTabHitResults[4] = { 0, 1, 2, 3 };
+
+static const GridCallbacks sSearchMenuGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchMenuGridMove,
+    .onTouch = PokedexApp_OnSearchMenuGridTouch,
+};
+
+static const GridCallbacks sSearchAreaGridCallbacks = {
+    .onButton = PokedexApp_DummyGridCallback,
+    .onSwitchToTouchMode = PokedexApp_DummyGridCallback,
+    .onKeyMove = PokedexApp_OnSearchAreaGridMove,
+    .onTouch = PokedexApp_OnSearchAreaGridTouch,
+};
+
+static const TouchscreenHitbox sPokedexSearchSliderHitboxes[] = {
+    { .rect = { 49, 70, 230, 245 } },
+    { .rect = { 49, 70, 10, 25 } },
+    { .rect = { 121, 142, 230, 245 } },
+    { .rect = { 121, 142, 10, 25 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sSearchHeightHitboxes[] = {
+    { .rect = { 46, 73, 26, 229 } },
+    { .rect = { 118, 145, 26, 229 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sSearchWeightHitboxes[] = {
+    { .rect = { 46, 73, 26, 229 } },
+    { .rect = { 118, 145, 26, 229 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const int sPokedexListMenuHitResults[5] = { 6, 5, 1, 0, 2 };
+
+static const u8 sSearchTypeCursorAnims[20] = { 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 35, 35 };
+
+static const TouchscreenHitbox sPokedexListMenuHitboxes[] = {
+    { .rect = { 112, 143, 96, 160 } },
+    { .rect = { 0, 151, 0, 255 } },
+    { .rect = { 152, 187, 0, 63 } },
+    { .rect = { 152, 187, 64, 191 } },
+    { .rect = { 152, 187, 192, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sSearchAreaHitboxes[] = {
+    { .rect = { 64, 79, 48, 103 } },
+    { .rect = { 64, 79, 152, 207 } },
+    { .rect = { 120, 135, 48, 103 } },
+    { .rect = { 120, 135, 152, 207 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const int sPokedexFormsHitResults[8] = { 4, 5, 6, 7, 8, 9, 10, 11 };
+
+static const DpadMenuBox sSearchHeightDpadBoxes[] = {
+    { 52,  60,  0, 0, 2, 1,   0, 0 },
+    { 204, 132, 0, 0, 0, 130, 1, 1 },
+    { 40,  176, 0, 0, 1, 0,   3, 3 },
+    { 216, 176, 0, 0, 1, 0,   2, 2 },
+};
+
+static const DpadMenuBox sSearchWeightDpadBoxes[] = {
+    { 52,  60,  0, 0, 2, 1,   0, 0 },
+    { 204, 132, 0, 0, 0, 130, 1, 1 },
+    { 40,  176, 0, 0, 1, 0,   3, 3 },
+    { 216, 176, 0, 0, 1, 0,   2, 2 },
+};
+
+static const int sPokedexFormCompareHitResults[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+static const TouchscreenHitbox sPokedexFormCompareHitboxes[] = {
+    { .rect = { 48, 63, 56, 71 } },
+    { .rect = { 120, 136, 56, 71 } },
+    { .rect = { 48, 63, 184, 199 } },
+    { .rect = { 120, 136, 184, 199 } },
+    { .rect = { 160, 183, 8, 119 } },
+    { .rect = { 160, 183, 128, 255 } },
+    { .rect = { 67, 116, 2, 114 } },
+    { .rect = { 67, 116, 130, 253 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sPokedexFormsHitboxes[] = {
+    { .rect = { 8, 23, 34, 213 } },
+    { .rect = { 32, 47, 34, 213 } },
+    { .rect = { 104, 119, 34, 213 } },
+    { .rect = { 80, 95, 34, 213 } },
+    { .rect = { 5, 20, 231, 252 } },
+    { .rect = { 107, 122, 231, 252 } },
+    { .rect = { 21, 106, 231, 252 } },
+    { .rect = { 134, 154, 134, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sSearchOrderHitboxes[] = {
+    { .rect = { 48, 63, 24, 111 } },
+    { .rect = { 48, 63, 144, 231 } },
+    { .rect = { 80, 95, 24, 111 } },
+    { .rect = { 80, 95, 144, 231 } },
+    { .rect = { 112, 127, 24, 111 } },
+    { .rect = { 112, 127, 144, 231 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const int sPokedexListHitResults[11] = { 0, 14, 9, 11, 13, 7, 8, 2, 3, 4, 5 };
+
+static const TouchscreenHitbox sSearchMenuHitboxes[] = {
+    { .rect = { 8, 23, 128, 215 } },
+    { .rect = { 32, 47, 56, 127 } },
+    { .rect = { 56, 71, 56, 177 } },
+    { .rect = { 80, 95, 56, 183 } },
+    { .rect = { 104, 119, 56, 239 } },
+    { .rect = { 128, 143, 56, 111 } },
+    { .rect = { 56, 87, 208, 239 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 92, 163 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sPokedexListHitboxes[] = {
+    { .rect = { 4, 123, 27, 226 } },
+    { .rect = { 0, 124, 0, 23 } },
+    { .rect = { 5, 20, 231, 252 } },
+    { .rect = { 131, 146, 231, 252 } },
+    { .rect = { 21, 130, 231, 252 } },
+    { .rect = { 128, 143, 48, 79 } },
+    { .rect = { 128, 143, 168, 199 } },
+    { .rect = { 152, 187, 0, 63 } },
+    { .rect = { 152, 187, 64, 127 } },
+    { .rect = { 152, 187, 128, 191 } },
+    { .rect = { 152, 187, 192, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DpadMenuBox sSearchAreaDpadBoxes[] = {
+    { 76,  72,  0, 0, 4, 2, 1, 1 },
+    { 180, 72,  0, 0, 5, 3, 0, 0 },
+    { 76,  128, 0, 0, 0, 4, 3, 3 },
+    { 180, 128, 0, 0, 1, 5, 2, 2 },
+    { 40,  176, 0, 0, 2, 0, 5, 5 },
+    { 216, 176, 0, 0, 3, 1, 4, 4 },
+};
+
+static const int sPokedexAreaHitResults[12] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+
+static const TouchscreenHitbox sPokedexAreaHitboxes[] = {
+    { .rect = { 40, 55, 82, 221 } },
+    { .rect = { 64, 79, 82, 221 } },
+    { .rect = { 136, 151, 82, 221 } },
+    { .rect = { 112, 127, 82, 221 } },
+    { .rect = { 37, 52, 231, 252 } },
+    { .rect = { 139, 154, 231, 252 } },
+    { .rect = { 53, 138, 231, 252 } },
+    { .rect = { 6, 25, 70, 129 } },
+    { .rect = { 6, 25, 190, 247 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 33, 77, 13 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 33, 109, 13 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 33, 141, 13 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DpadMenuBox sSearchOrderDpadBoxes[] = {
+    { 68,  56,  0, 0, 6, 2, 1, 1 },
+    { 188, 56,  0, 0, 7, 3, 0, 0 },
+    { 68,  88,  0, 0, 0, 4, 3, 3 },
+    { 188, 88,  0, 0, 1, 5, 2, 2 },
+    { 68,  120, 0, 0, 2, 6, 5, 5 },
+    { 188, 120, 0, 0, 3, 7, 4, 4 },
+    { 40,  176, 0, 0, 4, 0, 7, 7 },
+    { 216, 176, 0, 0, 5, 1, 6, 6 },
+};
+
+static const TouchscreenHitbox sSearchFormHitboxes[] = {
+    { .rect = { 40, 71, 16, 47 } },
+    { .rect = { 40, 71, 64, 95 } },
+    { .rect = { 40, 71, 112, 143 } },
+    { .rect = { 40, 71, 160, 191 } },
+    { .rect = { 40, 71, 208, 239 } },
+    { .rect = { 80, 111, 16, 47 } },
+    { .rect = { 80, 111, 64, 95 } },
+    { .rect = { 80, 111, 112, 143 } },
+    { .rect = { 80, 111, 160, 191 } },
+    { .rect = { 80, 111, 208, 239 } },
+    { .rect = { 120, 151, 16, 47 } },
+    { .rect = { 120, 151, 64, 95 } },
+    { .rect = { 120, 151, 112, 143 } },
+    { .rect = { 120, 151, 160, 191 } },
+    { .rect = { 120, 151, 208, 239 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DpadMenuBox sSearchMenuDpadBoxes[] = {
+    { 172, 16,  0, 0, 0, 1,   0,   0 },
+    { 92,  40,  0, 0, 0, 2,   1,   6 },
+    { 116, 64,  0, 0, 1, 3,   2,   6 },
+    { 112, 88,  0, 0, 2, 4,   3,   6 },
+    { 136, 112, 0, 0, 3, 5,   4,   4 },
+    { 84,  136, 0, 0, 4, 136, 5,   5 },
+    { 224, 72,  0, 0, 0, 4,   129, 6 },
+    { 40,  176, 0, 0, 5, 7,   7,   8 },
+    { 128, 176, 0, 0, 5, 8,   7,   9 },
+    { 216, 176, 0, 0, 5, 9,   8,   9 },
+};
+
+static const TouchscreenHitbox sSearchTypeHitboxes[] = {
+    { .rect = { 40, 55, 3, 60 } },
+    { .rect = { 40, 55, 67, 124 } },
+    { .rect = { 40, 55, 131, 188 } },
+    { .rect = { 40, 55, 195, 252 } },
+    { .rect = { 64, 79, 3, 60 } },
+    { .rect = { 64, 79, 67, 124 } },
+    { .rect = { 64, 79, 131, 188 } },
+    { .rect = { 64, 79, 195, 252 } },
+    { .rect = { 88, 104, 3, 60 } },
+    { .rect = { 88, 104, 67, 124 } },
+    { .rect = { 88, 104, 131, 188 } },
+    { .rect = { 88, 104, 195, 252 } },
+    { .rect = { 112, 127, 3, 60 } },
+    { .rect = { 112, 127, 67, 124 } },
+    { .rect = { 112, 127, 131, 188 } },
+    { .rect = { 112, 127, 195, 252 } },
+    { .rect = { 136, 151, 3, 60 } },
+    { .rect = { 136, 151, 67, 124 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sSearchNameHitboxes[] = {
+    { .rect = { 40, 55, 24, 39 } },
+    { .rect = { 40, 55, 56, 71 } },
+    { .rect = { 40, 55, 88, 103 } },
+    { .rect = { 40, 55, 120, 135 } },
+    { .rect = { 40, 55, 152, 167 } },
+    { .rect = { 40, 55, 184, 199 } },
+    { .rect = { 40, 55, 216, 231 } },
+    { .rect = { 72, 87, 24, 39 } },
+    { .rect = { 72, 87, 56, 71 } },
+    { .rect = { 72, 87, 88, 103 } },
+    { .rect = { 72, 87, 120, 135 } },
+    { .rect = { 72, 87, 152, 167 } },
+    { .rect = { 72, 87, 184, 199 } },
+    { .rect = { 72, 87, 216, 231 } },
+    { .rect = { 104, 119, 24, 39 } },
+    { .rect = { 104, 119, 56, 71 } },
+    { .rect = { 104, 119, 88, 103 } },
+    { .rect = { 104, 119, 120, 135 } },
+    { .rect = { 104, 119, 152, 167 } },
+    { .rect = { 104, 119, 184, 199 } },
+    { .rect = { 104, 119, 216, 231 } },
+    { .rect = { 136, 151, 24, 39 } },
+    { .rect = { 136, 151, 56, 71 } },
+    { .rect = { 136, 151, 88, 103 } },
+    { .rect = { 136, 151, 120, 135 } },
+    { .rect = { 136, 151, 152, 167 } },
+    { .rect = { 136, 151, 216, 231 } },
+    { .rect = { 164, 187, 4, 75 } },
+    { .rect = { 164, 187, 180, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DpadMenuBox sSearchFormDpadBoxes[] = {
+    { 32,  56,  0, 0, 15, 5,  4,  1  },
+    { 80,  56,  0, 0, 15, 6,  0,  2  },
+    { 128, 56,  0, 0, 15, 7,  1,  3  },
+    { 176, 56,  0, 0, 16, 8,  2,  4  },
+    { 224, 56,  0, 0, 16, 9,  3,  0  },
+    { 32,  96,  0, 0, 0,  10, 9,  6  },
+    { 80,  96,  0, 0, 1,  11, 5,  7  },
+    { 128, 96,  0, 0, 2,  12, 6,  8  },
+    { 176, 96,  0, 0, 3,  13, 7,  9  },
+    { 224, 96,  0, 0, 4,  14, 8,  5  },
+    { 32,  136, 0, 0, 5,  15, 14, 11 },
+    { 80,  136, 0, 0, 6,  15, 10, 12 },
+    { 128, 136, 0, 0, 7,  15, 11, 13 },
+    { 176, 136, 0, 0, 8,  16, 12, 14 },
+    { 224, 136, 0, 0, 9,  16, 13, 10 },
+    { 40,  176, 0, 0, 10, 0,  16, 16 },
+    { 216, 176, 0, 0, 14, 4,  15, 15 },
+};
+
+static const DpadMenuBox sSearchTypeDpadBoxes[] = {
+    { 32,  48,  0, 0, 18, 4,  3,  1  },
+    { 96,  48,  0, 0, 18, 5,  0,  2  },
+    { 160, 48,  0, 0, 19, 6,  1,  3  },
+    { 224, 48,  0, 0, 19, 7,  2,  0  },
+    { 32,  72,  0, 0, 0,  8,  7,  5  },
+    { 96,  72,  0, 0, 1,  9,  4,  6  },
+    { 160, 72,  0, 0, 2,  10, 5,  7  },
+    { 224, 72,  0, 0, 3,  11, 6,  4  },
+    { 32,  96,  0, 0, 4,  12, 11, 9  },
+    { 96,  96,  0, 0, 5,  13, 8,  10 },
+    { 160, 96,  0, 0, 6,  14, 9,  11 },
+    { 224, 96,  0, 0, 7,  15, 10, 8  },
+    { 32,  120, 0, 0, 8,  16, 15, 13 },
+    { 96,  120, 0, 0, 9,  17, 12, 14 },
+    { 160, 120, 0, 0, 10, 19, 13, 15 },
+    { 224, 120, 0, 0, 11, 19, 14, 12 },
+    { 32,  144, 0, 0, 12, 18, 17, 17 },
+    { 96,  144, 0, 0, 13, 18, 16, 16 },
+    { 40,  176, 0, 0, 16, 0,  19, 19 },
+    { 216, 176, 0, 0, 15, 3,  18, 18 },
+};
+
+static const DpadMenuBox sSearchNameDpadBoxes[] = {
+    { 32,  48,  0, 0, 27, 7,  6,  1  },
+    { 64,  48,  0, 0, 27, 8,  0,  2  },
+    { 96,  48,  0, 0, 27, 9,  1,  3  },
+    { 128, 48,  0, 0, 27, 10, 2,  4  },
+    { 160, 48,  0, 0, 28, 11, 3,  5  },
+    { 192, 48,  0, 0, 28, 12, 4,  6  },
+    { 224, 48,  0, 0, 28, 13, 5,  0  },
+    { 32,  80,  0, 0, 0,  14, 13, 8  },
+    { 64,  80,  0, 0, 1,  15, 7,  9  },
+    { 96,  80,  0, 0, 2,  16, 8,  10 },
+    { 128, 80,  0, 0, 3,  17, 9,  11 },
+    { 160, 80,  0, 0, 4,  18, 10, 12 },
+    { 192, 80,  0, 0, 5,  19, 11, 13 },
+    { 224, 80,  0, 0, 6,  20, 12, 7  },
+    { 32,  112, 0, 0, 7,  21, 20, 15 },
+    { 64,  112, 0, 0, 8,  22, 14, 16 },
+    { 96,  112, 0, 0, 9,  23, 15, 17 },
+    { 128, 112, 0, 0, 10, 24, 16, 18 },
+    { 160, 112, 0, 0, 11, 25, 17, 19 },
+    { 192, 112, 0, 0, 12, 28, 18, 20 },
+    { 224, 112, 0, 0, 13, 26, 19, 14 },
+    { 32,  144, 0, 0, 14, 27, 26, 22 },
+    { 64,  144, 0, 0, 15, 27, 21, 23 },
+    { 96,  144, 0, 0, 16, 27, 22, 24 },
+    { 128, 144, 0, 0, 17, 27, 23, 25 },
+    { 160, 144, 0, 0, 18, 28, 24, 26 },
+    { 224, 144, 0, 0, 20, 28, 25, 21 },
+    { 40,  176, 0, 0, 21, 0,  28, 28 },
+    { 216, 176, 0, 0, 26, 6,  27, 27 },
+};
+
+static const u8 sSearchMenuCursorAnims[12] = { 39, 35, 36, 59, 60, 38, 34, 35, 35, 35, 0, 0 };
+
+static const u8 sSearchFormCursorAnims[20] = { 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 34, 35, 35, 0, 0, 0 };
+
+static const TouchscreenHitbox sPokedexEntryTabHitboxes[] = {
+    { .rect = { 168, 183, 7, 57 } },
+    { .rect = { 168, 183, 71, 121 } },
+    { .rect = { 168, 183, 135, 185 } },
+    { .rect = { 168, 183, 199, 249 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
 
 // Entry screen tabs and list buttons (touch), A / B / Start (keys). In the national dex (nationalDex) left and
 // right switch between the Johto and national lists.
@@ -232,12 +604,14 @@ void PokedexApp_UpdateSearchMenuCursor(PokedexAppData *pokedexApp, int target) {
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchMenuCursorAnims[target]);
 }
 
-void PokedexApp_OnSearchMenuGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchMenuGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchMenuCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchMenuGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchMenuGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchMenuCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
@@ -266,12 +640,14 @@ void PokedexApp_UpdateSearchOrderCursor(PokedexAppData *pokedexApp, int target) 
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchOrderCursorAnims[target]);
 }
 
-void PokedexApp_OnSearchOrderGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchOrderGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchOrderCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchOrderGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchOrderGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchOrderCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
@@ -307,7 +683,8 @@ void PokedexApp_UpdateSearchNameCursor(PokedexAppData *pokedexApp, int target) {
 typedef void (*GridSetInputsU8Func)(GridInputHandler *inputHandler, u8 nextInput, u8 lastInput, u8 unk0F);
 
 // Moving up or down from OK / cancel lands in the letter column the cursor left from.
-void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchNameGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     if ((u32)(input - 27) <= 1) {
         int previous = pokedexApp->prevGridInput;
         u8 left = sSearchNameDpadBoxes[previous].left;
@@ -336,7 +713,8 @@ void PokedexApp_OnSearchNameGridMove(PokedexAppData *pokedexApp, int target, int
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchNameGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchNameGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchNameCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
     pokedexApp->prevGridInput = input;
@@ -366,7 +744,8 @@ void PokedexApp_UpdateSearchTypeCursor(PokedexAppData *pokedexApp, int target) {
 }
 
 // Moving into the OK (18) / cancel (19) buttons and back returns to the column the cursor came from.
-void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchTypeGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     if (input == 18) {
         if (target == 0) {
             s32 previous = pokedexApp->prevGridInput;
@@ -413,7 +792,8 @@ void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int target, int
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchTypeGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchTypeGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchTypeCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
     pokedexApp->prevGridInput = input;
@@ -479,12 +859,14 @@ void PokedexApp_UpdateSearchHeightCursor(PokedexAppData *pokedexApp, int target)
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchHeightCursorAnims[target]);
 }
 
-void PokedexApp_OnSearchHeightGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchHeightGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchHeightGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchHeightGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
@@ -549,12 +931,14 @@ void PokedexApp_UpdateSearchWeightCursor(PokedexAppData *pokedexApp, int target)
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchWeightCursorAnims[target]);
 }
 
-void PokedexApp_OnSearchWeightGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchWeightGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchWeightGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchWeightGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
@@ -587,12 +971,14 @@ void PokedexApp_UpdateSearchAreaCursor(PokedexAppData *pokedexApp, int target) {
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchAreaCursorAnims[target]);
 }
 
-void PokedexApp_OnSearchAreaGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchAreaGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchAreaCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchAreaGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchAreaGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchAreaCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
@@ -621,7 +1007,8 @@ void PokedexApp_UpdateSearchFormCursor(PokedexAppData *pokedexApp, int target) {
 }
 
 // Moving into the OK (15) / cancel (16) buttons and back returns to the column the cursor came from.
-void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchFormGridMove(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     int previous;
 
     if (input == 15) {
@@ -670,7 +1057,8 @@ void PokedexApp_OnSearchFormGridMove(PokedexAppData *pokedexApp, int target, int
     PlaySE(SEQ_SE_GS_ZKN03);
 }
 
-void PokedexApp_OnSearchFormGridTouch(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_OnSearchFormGridTouch(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
     PokedexApp_UpdateSearchFormCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
     pokedexApp->prevGridInput = input;
@@ -784,7 +1172,8 @@ void PokedexApp_FreeGridInput(PokedexAppData *pokedexApp) {
     }
 }
 
-void PokedexApp_DummyGridCallback(PokedexAppData *pokedexApp, int target, int input) {
+void PokedexApp_DummyGridCallback(void *data, int target, int input) {
+    PokedexAppData *pokedexApp = data;
 }
 
 // The tabs of the entry screens (touch) and B. The size tab needs the species caught.

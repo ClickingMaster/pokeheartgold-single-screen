@@ -290,7 +290,11 @@ struct PokeathlonCoursePoint {
 
 // One entry of NARC poketool/personal_performance (0x14).
 struct PokeathlonCoursePerformance {
-    u8 raw[0x14];
+    u8 unk00[6];
+    u8 collisionSizeClass;
+    u8 unk07;
+    u8 spriteSizeType;
+    u8 unk09[11];
 };
 
 // The performance data of every participant's Pokemon.
@@ -427,13 +431,6 @@ typedef struct PokeathlonCourseLayout {
     PokeathlonCourseFinishFunc finishCallback;    // 0xD6C
 } PokeathlonCourseLayout;
 
-struct PokeathlonPerformanceSizeInfo {
-    u8 unk00[6];
-    u8 collisionSizeClass;
-    u8 unk07;
-    u8 spriteSizeType;
-};
-
 // ---------------------------------------------------------------------------------------------------------
 // Saved records (parts of PokeathlonSave)
 
@@ -533,8 +530,8 @@ void PokeathlonCourse_LoadPerformanceData(PokeathlonCourseData *course);
 PokeathlonCoursePerformance *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int mon);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
 int PokeathlonCourse_GetTouchRadius(void);
-int PokeathlonCourse_GetSpriteSizeType(const PokeathlonPerformanceSizeInfo *types);
-int PokeathlonCourse_GetCollisionSizeClass(const PokeathlonPerformanceSizeInfo *types);
+int PokeathlonCourse_GetSpriteSizeType(const PokeathlonCoursePerformance *performance);
+int PokeathlonCourse_GetCollisionSizeClass(const PokeathlonCoursePerformance *performance);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int which, PokeathlonCourseMonInfo *info);
 Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
 Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx);

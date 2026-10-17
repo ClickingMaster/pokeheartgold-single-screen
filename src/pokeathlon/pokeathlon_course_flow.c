@@ -109,11 +109,11 @@ int PokeathlonCourse_GetTouchRadius(void) {
     return 0x50;
 }
 
-int PokeathlonCourse_GetSpriteSizeType(const PokeathlonPerformanceSizeInfo *types) {
-    if (types == NULL) {
+int PokeathlonCourse_GetSpriteSizeType(const PokeathlonCoursePerformance *performance) {
+    if (performance == NULL) {
         return 0;
     }
-    switch (types->spriteSizeType) {
+    switch (performance->spriteSizeType) {
     case 1:
         return 1;
     case 2:
@@ -126,11 +126,11 @@ int PokeathlonCourse_GetSpriteSizeType(const PokeathlonPerformanceSizeInfo *type
     }
 }
 
-int PokeathlonCourse_GetCollisionSizeClass(const PokeathlonPerformanceSizeInfo *types) {
-    if (types == NULL) {
+int PokeathlonCourse_GetCollisionSizeClass(const PokeathlonCoursePerformance *performance) {
+    if (performance == NULL) {
         return 0;
     }
-    switch (types->collisionSizeClass) {
+    switch (performance->collisionSizeClass) {
     case 1:
         return 1;
     case 2:

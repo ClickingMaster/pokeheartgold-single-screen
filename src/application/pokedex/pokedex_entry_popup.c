@@ -61,12 +61,6 @@ typedef struct PokedexEntryPopup {
     u32 done;                            // 0x254
 } PokedexEntryPopup;
 
-extern const BgTemplate sEntryPopupBg1Template;
-extern const BgTemplate sEntryPopupBg2Template;
-extern const BgTemplate sEntryPopupBg3Template;
-extern const WindowTemplate sEntryPopupWindowTemplates[9];
-extern const ObjCharTransferTemplate sEntryPopupObjCharTransferTemplate;
-
 static void PokedexEntryPopup_Task(SysTask *task, void *data);
 static void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup);
 static void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup);
@@ -99,6 +93,142 @@ static void PokedexEntryPopup_DeleteBannerSprite(PokedexEntryPopup *popup);
 static void PokedexEntryPopup_CreateFootprintSprite(PokedexEntryPopup *popup);
 static void PokedexEntryPopup_DeleteFootprintSprite(PokedexEntryPopup *popup);
 static void PokedexEntryPopup_CreatePokepic(PokedexEntryPopup *popup);
+
+static const ObjCharTransferTemplate sEntryPopupObjCharTransferTemplate = {
+    .maxTasks = 32,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .heapID = HEAP_ID_DEFAULT,
+};
+
+static const BgTemplate sEntryPopupBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sEntryPopupBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sEntryPopupBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const WindowTemplate sEntryPopupWindowTemplates[9] = {
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 2,
+     .top = 0,
+     .width = 28,
+     .height = 2,
+     .palette = 2,
+     .baseTile = 0x3C8,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 15,
+     .top = 3,
+     .width = 4,
+     .height = 2,
+     .palette = 0,
+     .baseTile = 0x3C0,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 19,
+     .top = 3,
+     .width = 9,
+     .height = 2,
+     .palette = 0,
+     .baseTile = 0x3AE,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 13,
+     .top = 5,
+     .width = 18,
+     .height = 2,
+     .palette = 0,
+     .baseTile = 0x38A,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 2,
+     .top = 17,
+     .width = 28,
+     .height = 6,
+     .palette = 1,
+     .baseTile = 0x2E2,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 18,
+     .top = 11,
+     .width = 5,
+     .height = 2,
+     .palette = 1,
+     .baseTile = 0x2D8,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 23,
+     .top = 11,
+     .width = 8,
+     .height = 2,
+     .palette = 1,
+     .baseTile = 0x2C8,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 18,
+     .top = 13,
+     .width = 5,
+     .height = 2,
+     .palette = 1,
+     .baseTile = 0x2BE,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 23,
+     .top = 13,
+     .width = 8,
+     .height = 2,
+     .palette = 1,
+     .baseTile = 0x2AE,
+     },
+};
 
 OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
     PokedexEntryPopup *popup = Heap_Alloc(args->heapID, sizeof(PokedexEntryPopup));

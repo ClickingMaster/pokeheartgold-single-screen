@@ -1252,11 +1252,11 @@ Overlay OVY_18
     Object src/application/pokedex/pokedex_area_sprites.o
     Object src/application/pokedex/pokedex_size_check.o
     Object src/application/pokedex/pokedex_forms.o
+    Object asm/pokedex_rodata.o
     Object src/application/pokedex/pokedex_input.o
     Object src/application/pokedex/pokedex_search.o
     Object src/application/pokedex/pokedex_entry_popup.o
     Object src/application/pokedex/pokedex_text_util.o
-    Object asm/pokedex_rodata.o
 }
 Overlay OVY_19
 {
@@ -2055,12 +2055,11 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_lamp_jump.o
     Object src/pokeathlon/pokeathlon_results_announcement.o
     Object src/pokeathlon/pokeathlon_results_plates.o
-    Object asm/pokeathlon_lamp_jump_hurdle_dash_rodata.o
+    Object asm/pokeathlon_hurdle_dash_rodata.o
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_runner.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
     Object src/pokeathlon/pokeathlon_relay_run.o
-    Object src/pokeathlon/pokeathlon_relay_run_track.o
     Object src/pokeathlon/pokeathlon_relay_run_hud.o
     Object src/pokeathlon/pokeathlon_relay_run_pic_frames.o
     Object asm/pokeathlon_snow_throw_pennant_capture_rodata.o

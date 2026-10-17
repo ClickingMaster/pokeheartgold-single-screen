@@ -22,11 +22,17 @@ typedef struct PokeathlonCourseMonObjects PokeathlonCourseMonObjects;
 typedef struct PokeathlonCourseLink PokeathlonCourseLink;
 typedef struct PokeathlonCoursePoint PokeathlonCoursePoint;
 typedef struct PokeathlonCoursePerformance PokeathlonCoursePerformance;
-typedef struct PokeathlonPerformanceSizeInfo PokeathlonPerformanceSizeInfo;
 typedef struct PokeathlonEventBanner PokeathlonEventBanner;
 typedef struct PokeathlonCourseMessageBox PokeathlonCourseMessageBox;
 
 struct PokeathlonCourseData;
+
+// What PokeathlonCourseSpritePool_New sets up: sprite and resource capacities.
+struct PokeathlonCourseSpritePoolTemplate {
+    int capacity;      // 0x00: sprites
+    int resourceCount; // 0x04: resource ids
+    u8 resCounts[4];   // 0x08: char, palette, cell, animation
+};
 
 // One step of a course scene; returns TRUE when the step is done.
 typedef BOOL (*PokeathlonCourseStepFunc)(struct PokeathlonCourseData *course, u8 *state);

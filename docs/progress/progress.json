@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "27da732f5508399cec18aebcc3986232d5c9b8d6",
+  "commit": "ba4971b37ace55f613883ec360c62580e2f1cc0f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a817da4087000924bad237a5d74ae4ae548fc917ca38a3f1e216c991d7500e70",
+    "ARM9": "00bd837025779430f49a4d440de2382d53fc08edf3ad1223dfe6dcd6cdf89fe4",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -5600,7 +5600,7 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_relay_run.o",
-      "bytes": 7650,
+      "bytes": 14276,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_relay_run.c"
     },
@@ -5616,7 +5616,7 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_relay_run_hud.o",
-      "bytes": 4172,
+      "bytes": 3398,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_relay_run_hud.c"
     },
@@ -5627,14 +5627,6 @@
       "bytes": 240,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_relay_run_pic_frames.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "pokeathlon_relay_run_track.o",
-      "bytes": 5852,
-      "status": "c",
-      "source": "src/pokeathlon/pokeathlon_relay_run_track.c"
     },
     {
       "cpu": "ARM9",

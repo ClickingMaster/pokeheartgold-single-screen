@@ -146,7 +146,7 @@ void PokeathlonRingDrop_CreateMonObjects(PokeathlonRingDrop *ringDrop, Pokeathlo
             int member = i % 3;
             int participant = i / 3;
             PokeathlonCourse_GetMonInfo(course, participant, member, &infos[i]);
-            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType((void *)PokeathlonCourse_GetPerformance(course, participant, member));
+            template.sizeTypes[i] = PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, participant, member));
         }
         template.priority = 3;
         template.vram = 1;
@@ -185,7 +185,7 @@ void PokeathlonRingDrop_InitMons(PokeathlonRingDrop *ringDrop, PokeathlonCourseD
         teamMember = &ringDrop->players[participant].mon.members[member];
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonRingDrop_SetMonObjectDrawn(object, member == 0);
-        size = PokeathlonCourse_GetCollisionSizeClass((PokeathlonPerformanceSizeInfo *)PokeathlonCourse_GetPerformance(course, participant, member));
+        size = PokeathlonCourse_GetCollisionSizeClass(PokeathlonCourse_GetPerformance(course, participant, member));
         PokeathlonCourseObject_SetCollision(object, collisions[size - 1].offsetY, collisions[size - 1].radius);
         object = PokeathlonRingDrop_GetMonObject(ringDrop->monObjects, i);
         PokeathlonCourseMonObject_GetGfx(object);

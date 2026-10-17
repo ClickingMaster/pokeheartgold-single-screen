@@ -73,12 +73,6 @@ void PokeathlonCourseMonObject_SetPosition(PokeathlonCourseObject *object, int x
 // Sprite pool: resources loaded from NARCs into four resource managers, sprites created from
 // them up front and handed out by resource id and kind.
 
-struct PokeathlonCourseSpritePoolTemplate {
-    int capacity;      // 0x00: sprites
-    int resourceCount; // 0x04: resource ids
-    u8 resCounts[4];   // 0x08: char, palette, cell, animation
-};
-
 typedef struct PokeathlonCourseSpritePoolResources {
     u32 id;                     // 0x00
     SpriteResource *objects[4]; // 0x04: char, palette, cell, animation

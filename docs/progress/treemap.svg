@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 27da732f5 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · ba4971b37 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -2419,160 +2419,157 @@ lib/MSL_C/src/msl_fp_init.c</title></rect>
 <rect x="28.000" y="147.000" width="280.240" height="570.000" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="31.000" y="150.000" width="91.000" height="22" rx="3" fill="#101722" opacity="0.88"/>
 <text x="37.000" y="166.000" font-size="12">ARM9 / main</text>
-<rect x="308.240" y="147.000" width="42.495" height="48.640" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw.o
+<rect x="308.240" y="147.000" width="38.305" height="59.632" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run.o
+14,276 bytes · C-only source
+src/pokeathlon/pokeathlon_relay_run.c</title></rect>
+<rect x="346.545" y="147.000" width="34.662" height="59.632" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_snow_throw.o
 12,918 bytes · C-only source
 src/pokeathlon/pokeathlon_snow_throw.c</title></rect>
-<rect x="350.735" y="147.000" width="40.034" height="48.640" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push.o
+<rect x="308.240" y="206.632" width="36.871" height="52.813" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push.o
 12,170 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push.c</title></rect>
-<rect x="308.240" y="195.640" width="29.877" height="63.805" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ceremony.o
+<rect x="345.111" y="206.632" width="36.096" height="52.813" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ceremony.o
 11,914 bytes · C-only source
 src/pokeathlon/pokeathlon_course_ceremony.c</title></rect>
-<rect x="338.117" y="195.640" width="52.652" height="32.504" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_flow.o
+<rect x="381.207" y="147.000" width="27.736" height="61.705" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_flow.o
 10,696 bytes · C-only source
 src/pokeathlon/pokeathlon_course_flow.c</title></rect>
-<rect x="338.117" y="228.144" width="52.652" height="31.301" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump.o
+<rect x="408.943" y="147.000" width="50.602" height="32.569" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_lamp_jump.o
 10,300 bytes · C-only source
 src/pokeathlon/pokeathlon_lamp_jump.c</title></rect>
-<rect x="390.769" y="147.000" width="24.812" height="59.417" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_race.o
+<rect x="408.943" y="179.569" width="50.602" height="29.135" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_race.o
 9,214 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash_race.c</title></rect>
-<rect x="415.582" y="147.000" width="45.801" height="31.001" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash.o
+<rect x="381.207" y="208.705" width="27.984" height="50.740" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash.o
 8,874 bytes · C-only source
 src/pokeathlon/pokeathlon_block_smash.c</title></rect>
-<rect x="415.582" y="178.001" width="45.801" height="28.416" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash_teams.o
+<rect x="409.190" y="208.705" width="50.354" height="25.847" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_block_smash_teams.o
 8,134 bytes · C-only source
 src/pokeathlon/pokeathlon_block_smash_teams.c</title></rect>
-<rect x="390.769" y="206.417" width="23.638" height="53.027" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_field.o
+<rect x="409.190" y="234.551" width="50.354" height="24.893" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_field.o
 7,834 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_field.c</title></rect>
-<rect x="414.408" y="206.417" width="46.975" height="26.609" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_field.o
+<rect x="459.544" y="147.000" width="43.699" height="28.604" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_field.o
 7,812 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_field.c</title></rect>
-<rect x="414.408" y="233.026" width="46.975" height="26.418" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch.o
+<rect x="459.544" y="175.604" width="43.699" height="28.399" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch.o
 7,756 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch.c</title></rect>
-<rect x="461.383" y="147.000" width="35.330" height="34.646" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run.o
-7,650 bytes · C-only source
-src/pokeathlon/pokeathlon_relay_run.c</title></rect>
-<rect x="461.383" y="181.646" width="35.330" height="26.765" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll.o
+<rect x="503.243" y="147.000" width="32.095" height="29.464" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll.o
 5,910 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll.c</title></rect>
-<rect x="496.713" y="147.000" width="43.460" height="21.545" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_track.o
-5,852 bytes · C-only source
-src/pokeathlon/pokeathlon_relay_run_track.c</title></rect>
-<rect x="496.713" y="168.545" width="22.171" height="39.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_display.o
+<rect x="503.243" y="176.464" width="32.095" height="27.540" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_display.o
 5,524 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_display.c</title></rect>
-<rect x="518.884" y="168.545" width="21.288" height="39.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_sprites.o
+<rect x="459.544" y="204.003" width="40.601" height="20.903" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_sprites.o
 5,304 bytes · C-only source
 src/pokeathlon/pokeathlon_course_sprites.c</title></rect>
-<rect x="461.383" y="208.411" width="40.652" height="17.830" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_field.o
+<rect x="459.544" y="224.906" width="20.986" height="34.538" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_field.o
 4,530 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_field.c</title></rect>
-<rect x="461.383" y="226.241" width="20.403" height="33.204" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_display.o
+<rect x="480.530" y="224.906" width="19.615" height="34.538" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_display.o
 4,234 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push_display.c</title></rect>
-<rect x="481.786" y="226.241" width="20.249" height="33.204" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_field.o
+<rect x="500.145" y="204.003" width="35.192" height="19.105" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_field.o
 4,202 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_field.c</title></rect>
-<rect x="502.035" y="208.411" width="38.138" height="17.504" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_hud.o
-4,172 bytes · C-only source
-src/pokeathlon/pokeathlon_relay_run_hud.c</title></rect>
-<rect x="502.035" y="225.915" width="19.498" height="33.530" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_intro.o
+<rect x="500.145" y="223.108" width="35.192" height="18.577" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_intro.o
 4,086 bytes · C-only source
 src/pokeathlon/pokeathlon_event_intro.c</title></rect>
-<rect x="521.533" y="225.915" width="18.639" height="33.530" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_cpu.o
+<rect x="500.145" y="241.686" width="35.192" height="17.759" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_cpu.o
 3,906 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_cpu.c</title></rect>
-<rect x="540.173" y="147.000" width="21.477" height="28.475" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_play.o
+<rect x="535.337" y="147.000" width="22.247" height="27.489" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_play.o
 3,822 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_play.c</title></rect>
-<rect x="561.649" y="147.000" width="21.128" height="28.475" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash.o
+<rect x="557.584" y="147.000" width="21.886" height="27.489" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash.o
 3,760 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash.c</title></rect>
-<rect x="540.173" y="175.475" width="21.514" height="27.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_announcement.o
+<rect x="535.337" y="174.489" width="22.285" height="26.322" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_announcement.o
 3,666 bytes · C-only source
 src/pokeathlon/pokeathlon_results_announcement.c</title></rect>
-<rect x="561.686" y="175.475" width="21.091" height="27.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_field.o
+<rect x="557.622" y="174.489" width="21.847" height="26.322" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_field.o
 3,594 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push_field.c</title></rect>
-<rect x="582.778" y="147.000" width="17.082" height="29.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_display.o
+<rect x="579.470" y="147.000" width="18.750" height="28.998" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_hud.o
+3,398 bytes · C-only source
+src/pokeathlon/pokeathlon_relay_run_hud.c</title></rect>
+<rect x="598.220" y="147.000" width="17.271" height="28.998" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_display.o
 3,130 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_display.c</title></rect>
-<rect x="599.860" y="147.000" width="15.631" height="29.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_plates.o
+<rect x="579.470" y="175.998" width="18.468" height="24.813" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_results_plates.o
 2,864 bytes · C-only source
 src/pokeathlon/pokeathlon_results_plates.c</title></rect>
-<rect x="582.778" y="176.318" width="16.484" height="26.422" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_ui.o
+<rect x="597.938" y="175.998" width="17.553" height="24.813" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_ui.o
 2,722 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_ui.c</title></rect>
-<rect x="599.261" y="176.318" width="16.229" height="26.422" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop.o
+<rect x="535.337" y="200.811" width="14.734" height="29.104" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop.o
 2,680 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop.c</title></rect>
-<rect x="540.173" y="202.740" width="13.699" height="31.116" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_mon.o
+<rect x="550.071" y="200.811" width="26.675" height="15.980" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_mon.o
 2,664 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_mon.c</title></rect>
-<rect x="553.871" y="202.740" width="21.556" height="16.241" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_gfx.o
+<rect x="550.071" y="216.791" width="26.675" height="13.125" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_gfx.o
 2,188 bytes · C-only source
 src/pokeathlon/pokeathlon_course_mon_gfx.c</title></rect>
-<rect x="553.871" y="218.981" width="21.556" height="14.875" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_cpu.o
+<rect x="535.337" y="229.915" width="21.186" height="15.135" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_cpu.o
 2,004 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_cpu.c</title></rect>
-<rect x="540.173" y="233.856" width="11.918" height="25.588" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_scores.o
+<rect x="535.337" y="245.050" width="21.186" height="14.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_scores.o
 1,906 bytes · C-only source
 src/pokeathlon/pokeathlon_course_scores.c</title></rect>
-<rect x="552.091" y="233.856" width="23.336" height="12.863" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture.o
+<rect x="556.524" y="229.915" width="20.222" height="14.844" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture.o
 1,876 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture.c</title></rect>
-<rect x="552.091" y="246.719" width="23.336" height="12.726" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course.o
+<rect x="556.524" y="244.759" width="20.222" height="14.686" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course.o
 1,856 bytes · C-only source
 src/pokeathlon/pokeathlon_course.c</title></rect>
-<rect x="575.427" y="202.740" width="20.939" height="13.617" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_objects.o
+<rect x="576.746" y="200.811" width="20.250" height="14.080" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_objects.o
 1,782 bytes · C-only source
 src/pokeathlon/pokeathlon_course_objects.c</title></rect>
-<rect x="575.427" y="216.357" width="20.939" height="13.357" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_cpu.o
+<rect x="576.746" y="214.891" width="20.250" height="13.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_cpu.o
 1,748 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_cpu.c</title></rect>
-<rect x="596.367" y="202.740" width="19.124" height="14.307" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_display.o
+<rect x="596.996" y="200.811" width="18.495" height="14.794" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_goal_roll_display.o
 1,710 bytes · C-only source
 src/pokeathlon/pokeathlon_goal_roll_display.c</title></rect>
-<rect x="596.367" y="217.047" width="19.124" height="12.667" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_cpu.o
+<rect x="596.996" y="215.605" width="18.495" height="13.098" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_ring_drop_cpu.o
 1,514 bytes · C-only source
 src/pokeathlon/pokeathlon_ring_drop_cpu.c</title></rect>
-<rect x="575.427" y="229.715" width="21.302" height="10.846" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_scoreboard.o
+<rect x="576.746" y="228.703" width="20.601" height="11.216" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_scoreboard.o
 1,444 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_scoreboard.c</title></rect>
-<rect x="575.427" y="240.561" width="11.269" height="18.884" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ui.o
+<rect x="576.746" y="239.919" width="10.899" height="19.526" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_ui.o
 1,330 bytes · C-only source
 src/pokeathlon/pokeathlon_course_ui.c</title></rect>
-<rect x="586.697" y="240.561" width="10.032" height="18.884" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_cpu.o
+<rect x="587.644" y="239.919" width="9.702" height="19.526" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_disc_catch_cpu.o
 1,184 bytes · C-only source
 src/pokeathlon/pokeathlon_disc_catch_cpu.c</title></rect>
-<rect x="596.729" y="229.715" width="10.183" height="13.953" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_pics.o
+<rect x="597.346" y="228.703" width="9.848" height="14.427" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_pics.o
 888 bytes · C-only source
 src/pokeathlon/pokeathlon_course_pics.c</title></rect>
-<rect x="606.913" y="229.715" width="8.578" height="13.953" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_wait.o
+<rect x="607.195" y="228.703" width="8.296" height="14.427" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_wait.o
 748 bytes · C-only source
 src/pokeathlon/pokeathlon_course_wait.c</title></rect>
-<rect x="596.729" y="243.667" width="10.669" height="8.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_runner.o
+<rect x="597.346" y="243.130" width="10.318" height="9.305" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_hurdle_dash_runner.o
 600 bytes · C-only source
 src/pokeathlon/pokeathlon_hurdle_dash_runner.c</title></rect>
-<rect x="596.729" y="252.666" width="10.669" height="6.779" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_points.o
+<rect x="597.346" y="252.435" width="10.318" height="7.010" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_points.o
 452 bytes · C-only source
 src/pokeathlon/pokeathlon_event_points.c</title></rect>
-<rect x="607.398" y="243.667" width="8.093" height="4.745" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_pic_frames.o
+<rect x="607.664" y="243.130" width="7.826" height="4.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_relay_run_pic_frames.o
 240 bytes · C-only source
 src/pokeathlon/pokeathlon_relay_run_pic_frames.c</title></rect>
-<rect x="607.398" y="248.412" width="8.093" height="3.796" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_pic_sprites.o
+<rect x="607.664" y="248.037" width="7.826" height="3.925" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_circle_push_pic_sprites.o
 192 bytes · C-only source
 src/pokeathlon/pokeathlon_circle_push_pic_sprites.c</title></rect>
-<rect x="607.398" y="252.208" width="4.157" height="7.236" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_pic_sprites.o
+<rect x="607.664" y="251.962" width="4.020" height="7.483" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_pennant_capture_pic_sprites.o
 188 bytes · C-only source
 src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.c</title></rect>
-<rect x="611.555" y="252.208" width="3.936" height="6.830" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_rank_points.o
+<rect x="611.684" y="251.962" width="3.806" height="7.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_event_rank_points.o
 168 bytes · C-only source
 src/pokeathlon/pokeathlon_event_rank_points.c</title></rect>
-<rect x="611.555" y="259.038" width="3.936" height="0.407" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_palette.o
+<rect x="611.684" y="259.024" width="3.806" height="0.420" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / pokeathlon_course_mon_palette.o
 10 bytes · C-only source
 src/pokeathlon/pokeathlon_course_mon_palette.c</title></rect>
 <rect x="308.240" y="147.000" width="307.251" height="112.445" fill="none" stroke="#101722" stroke-width="2"/>
