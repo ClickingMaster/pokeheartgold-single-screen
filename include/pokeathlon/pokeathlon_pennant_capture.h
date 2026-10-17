@@ -369,4 +369,6 @@ void PokeathlonPennantCaptureCpu_SetObstacles(PokeathlonPennantCaptureCpu *cpu, 
 void PokeathlonPennantCaptureCpu_Delete(PokeathlonPennantCaptureCpu *cpu);
 int PokeathlonPennantCaptureCpu_Update(PokeathlonPennantCaptureCpu *cpu);
 
+extern const VecFx32 gPokeathlonPennantCaptureInitialPosition;
+
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_PENNANT_CAPTURE_H

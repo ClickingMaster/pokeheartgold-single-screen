@@ -127,11 +127,6 @@ enum ArceusScriptResult {
 
 typedef int (*ArceusScriptCmd)(LegendaryCinematic *cinematic, const int *cmd);
 
-extern const VecFx32 gLegendaryCinematicModelScale;
-extern const GraphicsModes gLegendaryCinematicGraphicsModes;
-extern const MtxFx33 gLegendaryCinematicModelRotation;
-extern const GraphicsBanks gLegendaryCinematicGraphicsBanks;
-extern const LegendaryCinematicCaptureConfig gLegendaryCinematicCaptureConfig;
 extern const GXRgb gHoOhCinematicEdgeColors[8];
 extern const LegendaryCinematicModelSpec gHoOhCinematicSecondSceneModels[];
 extern const LegendaryCinematicModelSpec gHoOhCinematicModels[];
@@ -201,6 +196,44 @@ u32 GX_GetBankForLCDC(void);
 BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
 u16 GF_GetCurrentPlayingBGM();
 void GF_SetVolumeBySeqNo(u16 seqNo, int volume);
+
+static const VecFx32 sLegendaryCinematicModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
+
+static const GraphicsModes sLegendaryCinematicGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const MtxFx33 sLegendaryCinematicModelRotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const GraphicsBanks sLegendaryCinematicGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_16_F,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
+
+static const LegendaryCinematicCaptureConfig sLegendaryCinematicCaptureConfig = {
+    .dispMode = GX_DISPMODE_VRAM_C,
+    .bgMode = GX_BGMODE_0,
+    .bg0As = GX_BG0_AS_3D,
+    .size = GX_CAPTURE_SIZE_256x192,
+    .mode = GX_CAPTURE_MODE_AB,
+    .srcA = GX_CAPTURE_SRCA_2D3D,
+    .srcB = GX_CAPTURE_SRCB_VRAM_0x00000,
+    .dest = GX_CAPTURE_DEST_VRAM_C_0x00000,
+    .eva = 0,
+    .evb = 0,
+    .heapID = HEAP_ID_153,
+};
 
 static inline void LegendaryCinematic_SetCaptureRegister(GXCaptureSize size, GXCaptureMode mode, GXCaptureSrcA srcA, GXCaptureSrcB srcB, GXCaptureDest dest, int eva, int evb) {
     reg_GX_DISPCAPCNT = REG_GX_DISPCAPCNT_FIELD(1, mode, 0, srcB, srcA, size, 0, dest, evb, eva);
@@ -362,8 +395,8 @@ static void LegendaryCinematic_FreeModels(LegendaryCinematic *cinematic) {
 }
 
 static void LegendaryCinematic_DrawModels(LegendaryCinematic *cinematic) {
-    MtxFx33 rotation = gLegendaryCinematicModelRotation;
-    VecFx32 scale = gLegendaryCinematicModelScale;
+    MtxFx33 rotation = sLegendaryCinematicModelRotation;
+    VecFx32 scale = sLegendaryCinematicModelScale;
     VecFx32 translation = { 0, 0, 0 };
     u32 i;
     Thunk_G3X_Reset();
@@ -425,11 +458,11 @@ static BOOL LegendaryCinematic_AreModelsAnimating(LegendaryCinematic *cinematic)
 }
 
 static void LegendaryCinematic_SetBanks(void) {
-    GfGfx_SetBanks(&gLegendaryCinematicGraphicsBanks);
+    GfGfx_SetBanks(&sLegendaryCinematicGraphicsBanks);
 }
 
 static void LegendaryCinematic_SetGraphicsModes(void) {
-    GraphicsModes modes = gLegendaryCinematicGraphicsModes;
+    GraphicsModes modes = sLegendaryCinematicGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
 }
@@ -544,7 +577,7 @@ static LegendaryCinematicCapture *LegendaryCinematic_StartMotionBlur(int eva, in
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     GX_ResetBankForBG();
-    config = gLegendaryCinematicCaptureConfig;
+    config = sLegendaryCinematicCaptureConfig;
     config.eva = eva;
     config.evb = evb;
     return LegendaryCinematic_StartCapture(&config);
@@ -649,7 +682,6 @@ int ScriptCinematic_Lugia(void *data) {
     return TRUE;
 }
 
-#pragma force_active on
 int LugiaCinematic_Init(LegendaryCinematic *cinematic) {
     LegendaryCinematic_Init3D(cinematic);
     LegendaryCinematic_SetCamera(cinematic, &gLugiaCinematicCamera);
@@ -659,7 +691,6 @@ int LugiaCinematic_Init(LegendaryCinematic *cinematic) {
     LegendaryCinematic_FadeInFromBlack(cinematic, 6, 1, 3);
     return 2;
 }
-#pragma force_active reset
 
 int LugiaCinematic_Exit(LegendaryCinematic *cinematic) {
     LegendaryCinematic_FreeModels(cinematic);
@@ -674,7 +705,6 @@ int LugiaCinematic_WaitFade(LegendaryCinematic *cinematic) {
     return 2;
 }
 
-#pragma force_active on
 int LugiaCinematic_Play(LegendaryCinematic *cinematic) {
     if (LegendaryCinematic_AreModelsAnimating(cinematic) == FALSE && IsPaletteFadeFinished() == TRUE) {
         cinematic->frame = 0;
@@ -703,7 +733,6 @@ int LugiaCinematic_Play(LegendaryCinematic *cinematic) {
     cinematic->frame++;
     return 3;
 }
-#pragma force_active reset
 
 int ScriptCinematic_Arceus(void *data) {
     LegendaryCinematic *cinematic = data;
@@ -835,7 +864,6 @@ static int ArceusCinematic_GetOverworldModel(int species, int form, int gender) 
     return model;
 }
 
-#pragma force_active on
 // The Arceus sprite uses the overworld texture of the party's lead Arceus (its form and shininess),
 // or of a genderless normal Arceus when the lead is something else.
 static void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic) {
@@ -908,7 +936,6 @@ int ArceusCinematic_Init(LegendaryCinematic *cinematic) {
     Main_SetVBlankIntrCB((GFIntrCB)ArceusCinematic_VBlank, cinematic->arceus);
     return 4;
 }
-#pragma force_active reset
 
 int ArceusCinematic_Exit(LegendaryCinematic *cinematic) {
     ArceusCinematic *arceus = cinematic->arceus;
@@ -927,7 +954,6 @@ int ArceusCinematic_WaitFade(LegendaryCinematic *cinematic) {
     return 2;
 }
 
-#pragma force_active on
 // Moves the first blend target's EV from blendStartEv to blendTargetEv over blendDuration frames
 // (the second target gets the complement to 15).
 int ArceusCinematic_Blend(LegendaryCinematic *cinematic) {
@@ -987,7 +1013,6 @@ int ArceusCinematic_RunScript(LegendaryCinematic *cinematic) {
     }
     return cinematic->state;
 }
-#pragma force_active reset
 
 static void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId) {
     NNSG2dPaletteData *palette;
@@ -1050,14 +1075,12 @@ int ArceusScriptCmd_FadeOutToWhite(LegendaryCinematic *cinematic, const int *cmd
     return ARCEUS_SCRIPT_CONTINUE;
 }
 
-#pragma force_active on
 int ArceusScriptCmd_WaitFade(LegendaryCinematic *cinematic, const int *cmd) {
     GF_ASSERT(cmd[0] == 5);
     cinematic->state = 2;
     cinematic->nextState = 4;
     return ARCEUS_SCRIPT_YIELD;
 }
-#pragma force_active reset
 
 int ArceusScriptCmd_LoadBg(LegendaryCinematic *cinematic, const int *cmd) {
     ArceusCinematic *arceus = cinematic->arceus;

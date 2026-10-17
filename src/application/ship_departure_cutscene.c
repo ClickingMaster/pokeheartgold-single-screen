@@ -48,24 +48,69 @@ typedef struct ShipCutsceneFiles {
     u16 anims[SHIP_CUTSCENE_NUM_ANIMS];
 } ShipCutsceneFiles;
 
-extern const u16 sShipDepartureCutsceneClipPlanes[2][SHIP_CUTSCENE_NUM_SCENES][2];
-extern const VecFx32 sShipDepartureCutsceneModelScale;
-extern const GXRgb sShipDepartureCutsceneEdgeColors[8];
-extern const VecFx32 sShipDepartureCutsceneCameraOffsets[2][SHIP_CUTSCENE_NUM_SCENES];
-extern const MtxFx33 sShipDepartureCutsceneModelRotation;
-extern const CameraParam sShipDepartureCutsceneCameraParams[2][SHIP_CUTSCENE_NUM_SCENES];
-extern const GraphicsBanks sShipDepartureCutsceneGraphicsBanks;
-extern const u32 sShipDepartureCutscenePort1SceneSE[SHIP_CUTSCENE_NUM_SCENES];
-extern const u32 sShipDepartureCutscenePort0SceneSE[SHIP_CUTSCENE_NUM_SCENES];
-extern ShipCutsceneFiles sShipDepartureCutscenePort0NightFiles;
-extern ShipCutsceneFiles sShipDepartureCutscenePort0DayFiles;
-extern ShipCutsceneFiles sShipDepartureCutscenePort1NightFiles;
-extern ShipCutsceneFiles sShipDepartureCutscenePort1DayFiles;
-
 static void ShipDepartureCutscene_InitGraphics(void);
 static void ShipDepartureCutscene_InitCamera(ShipDepartureCutscene *cutscene);
 static void ShipDepartureCutscene_SetBanks(void);
 static void ShipDepartureCutscene_LoadModel(ShipDepartureCutscene *cutscene);
+
+static const u32 sShipDepartureCutscenePort0SceneSE[SHIP_CUTSCENE_NUM_SCENES] = { SEQ_SE_GS_N_KITEKI };
+static const u32 sShipDepartureCutscenePort1SceneSE[SHIP_CUTSCENE_NUM_SCENES] = { SEQ_SE_GS_N_KITEKI };
+
+static const u16 sShipDepartureCutsceneClipPlanes[2][SHIP_CUTSCENE_NUM_SCENES][2] = {
+    { { 150, 1700 } },
+    { { 150, 1700 } },
+};
+
+static const VecFx32 sShipDepartureCutsceneModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
+
+static const GXRgb sShipDepartureCutsceneEdgeColors[8] = {
+    GX_RGB(0, 0, 0),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+    GX_RGB(4, 4, 4),
+};
+
+static const VecFx32 sShipDepartureCutsceneCameraOffsets[2][SHIP_CUTSCENE_NUM_SCENES] = {
+    { { 0x10F279, 0, 0x274F } },
+    { { 0x10F279, 0, 0x274F } },
+};
+
+static const MtxFx33 sShipDepartureCutsceneModelRotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const CameraParam sShipDepartureCutsceneCameraParams[2][SHIP_CUTSCENE_NUM_SCENES] = {
+    { { 0x1B7152, { 0xE162, 0x1360, 0, 0 }, 0, 0xB81, 0 } },
+    { { 0x1B7152, { 0xE162, 0x1360, 0, 0 }, 0, 0xB81, 0 } },
+};
+
+static const GraphicsBanks sShipDepartureCutsceneGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_16_F,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
+
+static ShipCutsceneFiles sShipDepartureCutscenePort1NightFiles = {
+    15, { 16, 17, 18, 19 }
+};
+static ShipCutsceneFiles sShipDepartureCutscenePort0NightFiles = {
+    5, { 6, 7, 8, 9 }
+};
+static ShipCutsceneFiles sShipDepartureCutscenePort0DayFiles = {
+    0, { 1, 2, 3, 4 }
+};
+static ShipCutsceneFiles sShipDepartureCutscenePort1DayFiles = {
+    10, { 11, 12, 13, 14 }
+};
 
 BOOL ShipDepartureCutscene_Init(OverlayManager *man, int *state) {
     u8 i;

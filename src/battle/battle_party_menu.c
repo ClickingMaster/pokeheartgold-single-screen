@@ -326,21 +326,6 @@ static void BattlePartyMenu_RedrawSelectedMonButton(BattlePartyMenu *menu);
 
 NarcId MoveCategoryIcon_GetNarc(void);
 
-extern const BattlePartyMenuOrder sBattlePartyMultiBattleOrder;
-extern const GraphicsModes sBattlePartyGraphicsModes;
-extern const TouchscreenHitbox sBattlePartyForgetMoveHitboxes[];
-extern const TouchscreenHitbox sBattlePartyMonMenuHitboxes[];
-extern const TouchscreenHitbox sBattlePartySummaryHitboxes[];
-extern const TouchscreenHitbox sBattlePartyMoveDetailHitboxes[];
-extern const TouchscreenHitbox sBattlePartyRestorePPHitboxes[];
-extern const BgTemplate sBattlePartyBgTemplateSub3;
-extern const BgTemplate sBattlePartyBgTemplateSub0;
-extern const BgTemplate sBattlePartyBgTemplateSub2;
-extern const BgTemplate sBattlePartyBgTemplateSub1;
-extern const TouchscreenHitbox sBattlePartyPartyListHitboxes[];
-extern const TouchscreenHitbox sBattlePartyLearnMoveHitboxes[];
-extern const TouchscreenHitbox sBattlePartyCheckMovesHitboxes[];
-extern const u32 sBattlePartyPageScreenFiles[][2];
 extern const u32 sBattlePartyMoveNameMsgIds[];
 extern const u32 sBattlePartyMonNameMsgIds[];
 extern const WindowTemplate sBattlePartyMonMenuWindows[];
@@ -380,6 +365,165 @@ extern const u8 sBattlePartyButtonRectsY[];
 extern const u8 sBattlePartyButtonRectsWidth[];
 extern const u8 sBattlePartyButtonRectsHeight[];
 extern const DpadMenuBox *const sBattlePartyPageCursorBoxes[];
+
+static const BattlePartyMenuOrder sBattlePartyMultiBattleOrder = {
+    { 0, 2, 4, 1, 3, 5 }
+};
+
+static const GraphicsModes sBattlePartyGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const TouchscreenHitbox sBattlePartyForgetMoveHitboxes[] = {
+    { .rect = { 152, 191, 0, 207 } },
+    { .rect = { 0, 39, 184, 255 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartyMonMenuHitboxes[] = {
+    { .rect = { 8, 143, 8, 247 } },
+    { .rect = { 152, 191, 0, 103 } },
+    { .rect = { 152, 191, 104, 207 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartySummaryHitboxes[] = {
+    { .rect = { 152, 191, 0, 39 } },
+    { .rect = { 152, 191, 40, 79 } },
+    { .rect = { 152, 191, 96, 199 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartyMoveDetailHitboxes[] = {
+    { .rect = { 152, 167, 88, 127 } },
+    { .rect = { 152, 167, 128, 167 } },
+    { .rect = { 168, 183, 88, 127 } },
+    { .rect = { 168, 183, 128, 167 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartyRestorePPHitboxes[] = {
+    { .rect = { 48, 95, 0, 127 } },
+    { .rect = { 48, 95, 128, 255 } },
+    { .rect = { 96, 143, 0, 127 } },
+    { .rect = { 96, 143, 128, 255 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const BgTemplate sBattlePartyBgTemplateSub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x1000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattlePartyBgTemplateSub3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x0000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattlePartyBgTemplateSub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x1800,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattlePartyBgTemplateSub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x0800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const TouchscreenHitbox sBattlePartyLearnMoveHitboxes[] = {
+    { .rect = { 48, 95, 0, 127 } },
+    { .rect = { 48, 95, 128, 255 } },
+    { .rect = { 96, 143, 0, 127 } },
+    { .rect = { 96, 143, 128, 255 } },
+    { .rect = { 144, 191, 64, 191 } },
+    { .rect = { 0, 39, 184, 255 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartyPartyListHitboxes[] = {
+    { .rect = { 0, 47, 0, 127 } },
+    { .rect = { 8, 55, 128, 255 } },
+    { .rect = { 48, 95, 0, 127 } },
+    { .rect = { 56, 103, 128, 255 } },
+    { .rect = { 96, 143, 0, 127 } },
+    { .rect = { 104, 151, 128, 255 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sBattlePartyCheckMovesHitboxes[] = {
+    { .rect = { 48, 95, 0, 127 } },
+    { .rect = { 48, 95, 128, 255 } },
+    { .rect = { 96, 143, 0, 127 } },
+    { .rect = { 96, 143, 128, 255 } },
+    { .rect = { 152, 191, 0, 39 } },
+    { .rect = { 152, 191, 40, 79 } },
+    { .rect = { 152, 191, 96, 199 } },
+    { .rect = { 152, 191, 216, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const u32 sBattlePartyPageScreenFiles[][2] = {
+    { 1,  0  },
+    { 19, 18 },
+    { 5,  4  },
+    { 3,  2  },
+    { 7,  6  },
+    { 9,  8  },
+    { 11, 10 },
+    { 15, 14 },
+    { 13, 12 },
+    { 17, 16 }
+};
 
 #pragma force_active on
 

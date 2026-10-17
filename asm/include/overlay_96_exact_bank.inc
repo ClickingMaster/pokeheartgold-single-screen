@@ -902,19 +902,6 @@
 	.public sPennantCaptureTimerDigitX
 	.public sPennantCaptureTimerDigitAnims
 	.public gPokeathlonPennantCaptureSpriteIds
-	.public gPokeathlonPennantCaptureWindowTemplate
-	.public gPokeathlonPennantCaptureInitialPosition
-	.public gPokeathlonBlockSmashBannerPosition
-	.public gPokeathlonBlockSmashSwipeHitboxes
-	.public gPokeathlonBlockSmashGraphicsModes
-	.public gPokeathlonBlockSmashOamCharTransferParam
-	.public gPokeathlonBlockSmashSpriteResourceCounts
-	.public gPokeathlonBlockSmashBgLayers
-	.public gPokeathlonBlockSmashWindowTemplates
-	.public gPokeathlonBlockSmashOamManagerParam
-	.public gPokeathlonBlockSmashGraphicsBanks
-	.public gPokeathlonBlockSmashRowSprites
-	.public gPokeathlonBlockSmashBgTemplates
 	.public gPokeathlonBlockSmashSpotHitboxCounts
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind2
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind1

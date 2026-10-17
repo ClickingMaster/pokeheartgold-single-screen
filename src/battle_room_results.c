@@ -108,28 +108,6 @@ typedef struct BattleRoomDownload BattleRoomDownload;
 
 void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *data, enum HeapID heapID);
 
-typedef struct BattleRoomResultsGraphicsBanks {
-    u32 banks[10];
-} BattleRoomResultsGraphicsBanks;
-
-extern const TouchscreenHitbox gBattleRoomResultsHitbox[];
-extern const TouchscreenHitbox sBattleRoomResultsPageHitboxes[];
-extern const GraphicsModes sBattleRoomResultsGraphicsModes;
-extern const GridCallbacks sBattleRoomResultsGridCallbacks;
-extern const OamCharTransferParam sBattleRoomResultsOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sBattleRoomResultsSpriteResourceCounts;
-extern const BgTemplate sBattleRoomResultsBgTemplate_Main0;
-extern const BgTemplate sBattleRoomResultsBgTemplate_Sub0;
-extern const BgTemplate sBattleRoomResultsBgTemplate_Sub1;
-extern const BgTemplate sBattleRoomResultsBgTemplate_Main1;
-extern const OamManagerParam sBattleRoomResultsOamManagerParam;
-extern const BattleRoomResultsGraphicsBanks sBattleRoomResultsGraphicsBanks;
-extern const TouchscreenHitbox sBattleRoomResultsGridHitboxes[];
-extern const WindowTemplate sBattleRoomResultsWindowTemplates[];
-extern const DpadMenuBox sBattleRoomResultsGridDpadBoxes[];
-extern const ManagedSpriteTemplate sBattleRoomResultsSpriteTemplates[];
-extern const WindowTemplate sBattleRoomResultsLeaderWindowTemplates[];
-
 static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results);
 static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results);
 static void BattleRoomResults_SetGfxBanks(void);
@@ -167,9 +145,225 @@ static void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results);
 static void BattleRoomResults_CreateGridInput(BattleRoomResults *results);
 static void BattleRoomResults_FreeGridInput(BattleRoomResults *results);
 static void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input);
-void BattleRoomResults_GridNoop(void);
-void BattleRoomResults_GridOnKeyMove(BattleRoomResults *results, int newInput, int prevInput);
-void BattleRoomResults_GridOnTouch(BattleRoomResults *results, int input);
+static void BattleRoomResults_GridNoop(void *data, int newInput, int prevInput);
+static void BattleRoomResults_GridOnKeyMove(void *data, int newInput, int prevInput);
+static void BattleRoomResults_GridOnTouch(void *data, int input, int prevInput);
+
+static const TouchscreenHitbox sBattleRoomResultsHitbox[] = {
+    { .rect = { 164, 187, 193, 254 } },
+};
+
+static const TouchscreenHitbox sBattleRoomResultsPageHitboxes[] = {
+    { .rect = { 162, 189, 18, 45 } },
+    { .rect = { 162, 189, 50, 77 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsModes sBattleRoomResultsGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const GridCallbacks sBattleRoomResultsGridCallbacks = {
+    .onButton = BattleRoomResults_GridNoop,
+    .onSwitchToTouchMode = BattleRoomResults_GridNoop,
+    .onKeyMove = BattleRoomResults_GridOnKeyMove,
+    .onTouch = BattleRoomResults_GridOnTouch,
+};
+
+static const OamCharTransferParam sBattleRoomResultsOamCharTransferParam = {
+    .maxTasks = 1,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sBattleRoomResultsSpriteResourceCounts = {
+    .numChar = 1,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const BgTemplate sBattleRoomResultsBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleRoomResultsBgTemplate_Main0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleRoomResultsBgTemplate_Sub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleRoomResultsBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const OamManagerParam sBattleRoomResultsOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sBattleRoomResultsGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const TouchscreenHitbox sBattleRoomResultsGridHitboxes[] = {
+    { .rect = { 56, 71, 21, 90 } },
+    { .rect = { 56, 71, 93, 162 } },
+    { .rect = { 56, 71, 165, 234 } },
+    { .rect = { 80, 95, 21, 90 } },
+    { .rect = { 80, 95, 93, 162 } },
+    { .rect = { 80, 95, 165, 234 } },
+    { .rect = { 104, 119, 21, 90 } },
+    { .rect = { 104, 119, 93, 162 } },
+    { .rect = { 104, 119, 165, 234 } },
+    { .rect = { 128, 143, 21, 90 } },
+    { .rect = { 128, 143, 93, 162 } },
+    { .rect = { 128, 143, 165, 234 } },
+    { .rect = { 164, 187, 193, 254 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const WindowTemplate sBattleRoomResultsWindowTemplates[] = {
+    { GF_BG_LYR_MAIN_0, 24, 21, 8,  2, 15, 1    },
+    { GF_BG_LYR_MAIN_0, 5,  1,  22, 2, 15, 0x11 },
+    { GF_BG_LYR_MAIN_0, 1,  6,  9,  4, 15, 0x3D },
+    { GF_BG_LYR_MAIN_0, 1,  13, 9,  4, 15, 0x61 },
+    { GF_BG_LYR_MAIN_0, 11, 7,  6,  2, 15, 0x85 },
+    { GF_BG_LYR_MAIN_0, 20, 7,  2,  2, 15, 0x91 },
+    { GF_BG_LYR_MAIN_0, 11, 13, 7,  2, 15, 0x95 },
+    { GF_BG_LYR_MAIN_0, 18, 13, 12, 2, 15, 0xA3 },
+    { GF_BG_LYR_MAIN_0, 11, 16, 6,  2, 15, 0xBB },
+    { GF_BG_LYR_MAIN_0, 18, 16, 12, 2, 15, 0xC7 },
+};
+
+static const DpadMenuBox sBattleRoomResultsGridDpadBoxes[] = {
+    { 56,  64,  0, 0, 0,   3,  2,  1  },
+    { 128, 64,  0, 0, 1,   4,  0,  2  },
+    { 200, 64,  0, 0, 2,   5,  1,  0  },
+    { 56,  88,  0, 0, 0,   6,  5,  4  },
+    { 128, 88,  0, 0, 1,   7,  3,  5  },
+    { 200, 88,  0, 0, 2,   8,  4,  3  },
+    { 56,  112, 0, 0, 3,   9,  8,  7  },
+    { 128, 112, 0, 0, 4,   10, 6,  8  },
+    { 200, 112, 0, 0, 5,   11, 7,  6  },
+    { 56,  136, 0, 0, 6,   12, 11, 10 },
+    { 128, 136, 0, 0, 7,   12, 9,  11 },
+    { 200, 136, 0, 0, 8,   12, 10, 9  },
+    { 224, 176, 0, 0, 139, 12, 12, 12 },
+};
+
+static const ManagedSpriteTemplate sBattleRoomResultsSpriteTemplates[] = {
+    { 224, 176, 0, 2, 0,  0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD158, 0xD158, 0xD158, 0xD158, -1, -1 }, 0, 0 },
+    { 224, 176, 0, 0, 10, 0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD158, 0xD158, 0xD158, 0xD158, -1, -1 }, 1, 0 },
+    { 40,  176, 0, 3, 0,  0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD158, 0xD158, 0xD158, 0xD158, -1, -1 }, 0, 0 },
+    { 72,  176, 0, 5, 10, 0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD158, 0xD158, 0xD158, 0xD158, -1, -1 }, 0, 0 },
+};
+
+static const WindowTemplate sBattleRoomResultsLeaderWindowTemplates[] = {
+    { GF_BG_LYR_MAIN_0, 24, 21, 8,  2, 15, 1     },
+    { GF_BG_LYR_MAIN_0, 5,  1,  8,  2, 15, 0x11  },
+    { GF_BG_LYR_MAIN_0, 13, 1,  15, 2, 15, 0x21  },
+    { GF_BG_LYR_MAIN_0, 5,  3,  22, 2, 15, 0x3F  },
+    { GF_BG_LYR_MAIN_0, 15, 21, 4,  2, 15, 0x6B  },
+    { GF_BG_LYR_SUB_0,  2,  7,  28, 2, 15, 1     },
+    { GF_BG_LYR_SUB_0,  2,  10, 28, 6, 15, 0x71  },
+    { GF_BG_LYR_SUB_0,  2,  17, 28, 6, 15, 0x1C1 },
+    { GF_BG_LYR_SUB_0,  2,  7,  28, 2, 15, 0x39  },
+    { GF_BG_LYR_SUB_0,  2,  10, 28, 6, 15, 0x119 },
+    { GF_BG_LYR_SUB_0,  2,  17, 28, 6, 15, 0x269 },
+    { GF_BG_LYR_MAIN_0, 3,  7,  8,  2, 15, 0x73  },
+    { GF_BG_LYR_MAIN_0, 12, 7,  8,  2, 15, 0x83  },
+    { GF_BG_LYR_MAIN_0, 21, 7,  8,  2, 15, 0x93  },
+    { GF_BG_LYR_MAIN_0, 3,  10, 8,  2, 15, 0xA3  },
+    { GF_BG_LYR_MAIN_0, 12, 10, 8,  2, 15, 0xB3  },
+    { GF_BG_LYR_MAIN_0, 21, 10, 8,  2, 15, 0xC3  },
+    { GF_BG_LYR_MAIN_0, 3,  13, 8,  2, 15, 0xD3  },
+    { GF_BG_LYR_MAIN_0, 12, 13, 8,  2, 15, 0xE3  },
+    { GF_BG_LYR_MAIN_0, 21, 13, 8,  2, 15, 0xF3  },
+    { GF_BG_LYR_MAIN_0, 3,  16, 8,  2, 15, 0x103 },
+    { GF_BG_LYR_MAIN_0, 12, 16, 8,  2, 15, 0x113 },
+    { GF_BG_LYR_MAIN_0, 21, 16, 8,  2, 15, 0x123 },
+    { GF_BG_LYR_MAIN_0, 3,  7,  8,  2, 15, 0x133 },
+    { GF_BG_LYR_MAIN_0, 12, 7,  8,  2, 15, 0x143 },
+    { GF_BG_LYR_MAIN_0, 21, 7,  8,  2, 15, 0x153 },
+    { GF_BG_LYR_MAIN_0, 3,  10, 8,  2, 15, 0x163 },
+    { GF_BG_LYR_MAIN_0, 12, 10, 8,  2, 15, 0x173 },
+    { GF_BG_LYR_MAIN_0, 21, 10, 8,  2, 15, 0x183 },
+    { GF_BG_LYR_MAIN_0, 3,  13, 8,  2, 15, 0x193 },
+    { GF_BG_LYR_MAIN_0, 12, 13, 8,  2, 15, 0x1A3 },
+    { GF_BG_LYR_MAIN_0, 21, 13, 8,  2, 15, 0x1B3 },
+    { GF_BG_LYR_MAIN_0, 3,  16, 8,  2, 15, 0x1C3 },
+    { GF_BG_LYR_MAIN_0, 12, 16, 8,  2, 15, 0x1D3 },
+    { GF_BG_LYR_MAIN_0, 21, 16, 8,  2, 15, 0x1E3 },
+};
 
 BOOL BattleRoomResults_Init(OverlayManager *man, int *state) {
     BattleRoomResultsArgs *args = OverlayManager_GetArgs(man);
@@ -333,8 +527,8 @@ static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
 }
 
 static void BattleRoomResults_SetGfxBanks(void) {
-    BattleRoomResultsGraphicsBanks banks = sBattleRoomResultsGraphicsBanks;
-    GfGfx_SetBanks((GraphicsBanks *)&banks);
+    GraphicsBanks banks = sBattleRoomResultsGraphicsBanks;
+    GfGfx_SetBanks(&banks);
 }
 
 static void BattleRoomResults_VBlankCB(BattleRoomResults *results) {
@@ -344,7 +538,7 @@ static void BattleRoomResults_VBlankCB(BattleRoomResults *results) {
 }
 
 static int BattleRoomResults_HandleResultsInput(BattleRoomResults *results) {
-    if (TouchscreenHitbox_TouchNewIsIn(gBattleRoomResultsHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
+    if (TouchscreenHitbox_TouchNewIsIn(sBattleRoomResultsHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         PlaySE(SEQ_SE_DP_DECIDE);
         BattleRoomResults_StartExitButtonFlash(results);
         results->nextState = BATTLE_ROOM_RESULTS_STATE_FADE_OUT;
@@ -899,13 +1093,13 @@ static void BattleRoomResults_MoveCursor(BattleRoomResults *results, int input) 
     }
 }
 
-void BattleRoomResults_GridNoop(void) {
+static void BattleRoomResults_GridNoop(void *data, int newInput, int prevInput) {
 }
 
-#pragma force_active on
-
 // Grid key move: moving off the left/right edge of the 3x4 name grid turns the page.
-void BattleRoomResults_GridOnKeyMove(BattleRoomResults *results, int newInput, int prevInput) {
+static void BattleRoomResults_GridOnKeyMove(void *data, int newInput, int prevInput) {
+    BattleRoomResults *results = data;
+
     results->pageChange = 0;
     if ((newInput == 2 && prevInput == 0) || (newInput == 5 && prevInput == 3) || (newInput == 8 && prevInput == 6) || (newInput == 11 && prevInput == 9)) {
         if (results->page != 0) {
@@ -931,9 +1125,8 @@ void BattleRoomResults_GridOnKeyMove(BattleRoomResults *results, int newInput, i
     BattleRoomResults_MoveCursor(results, newInput);
 }
 
-#pragma force_active reset
-
-void BattleRoomResults_GridOnTouch(BattleRoomResults *results, int input) {
+static void BattleRoomResults_GridOnTouch(void *data, int input, int prevInput) {
+    BattleRoomResults *results = data;
     int leader;
 
     if (input == BATTLE_ROOM_RESULTS_CANCEL) {

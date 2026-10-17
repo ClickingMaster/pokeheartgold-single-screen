@@ -79,21 +79,9 @@ typedef struct PokeathlonBlockSmashBannerPosition {
     u16 y;
 } PokeathlonBlockSmashBannerPosition;
 
-extern const PokeathlonBlockSmashBannerPosition gPokeathlonBlockSmashBannerPosition;
-extern const TouchscreenHitbox gPokeathlonBlockSmashSwipeHitboxes[];
-extern const GraphicsModes gPokeathlonBlockSmashGraphicsModes;
-extern const OamCharTransferParam gPokeathlonBlockSmashOamCharTransferParam;
-extern const SpriteResourceCountsListUnion gPokeathlonBlockSmashSpriteResourceCounts;
-extern const u32 gPokeathlonBlockSmashBgLayers[6];
-extern const WindowTemplate gPokeathlonBlockSmashWindowTemplates[4];
-extern const OamManagerParam gPokeathlonBlockSmashOamManagerParam;
-extern const GraphicsBanks gPokeathlonBlockSmashGraphicsBanks;
-
 typedef struct PokeathlonBlockSmashBgTemplates {
     BgTemplate templates[6];
 } PokeathlonBlockSmashBgTemplates;
-
-extern const PokeathlonBlockSmashBgTemplates gPokeathlonBlockSmashBgTemplates;
 
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
 
@@ -134,8 +122,6 @@ typedef struct PokeathlonBlockSmashRowSprites {
     u32 bar;
     u32 star;
 } PokeathlonBlockSmashRowSprites;
-
-extern const PokeathlonBlockSmashRowSprites gPokeathlonBlockSmashRowSprites[4];
 
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
@@ -190,6 +176,166 @@ static void PokeathlonBlockSmashFragments_Spawn(PokeathlonBlockSmashFragment *fr
 static void PokeathlonBlockSmashFragments_Update(PokeathlonBlockSmashFragment *fragments);
 static void PokeathlonBlockSmashFragments_Pause(PokeathlonBlockSmashFragment *fragments);
 
+static const PokeathlonBlockSmashBannerPosition sPokeathlonBlockSmashBannerPosition = { 120, 132 };
+
+static const TouchscreenHitbox sPokeathlonBlockSmashSwipeHitboxes[] = {
+    { .rect = { 8, 32, 0, 64 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsModes sPokeathlonBlockSmashGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const OamCharTransferParam sPokeathlonBlockSmashOamCharTransferParam = {
+    .maxTasks = 0,
+    .sizeMain = 0x40000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_256K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_256K,
+};
+
+static const u32 sPokeathlonBlockSmashBgLayers[6] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_2, GF_BG_LYR_SUB_0, GF_BG_LYR_SUB_1, GF_BG_LYR_SUB_2 };
+
+static const SpriteResourceCountsListUnion sPokeathlonBlockSmashSpriteResourceCounts = {
+    .numChar = 9,
+    .numPltt = 10,
+    .numCell = 7,
+    .numAnim = 7,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const WindowTemplate sPokeathlonBlockSmashWindowTemplates[4] = {
+    { GF_BG_LYR_MAIN_1, 6,  22, 4,  2, 15, 1    },
+    { GF_BG_LYR_MAIN_1, 25, 22, 7,  2, 15, 9    },
+    { GF_BG_LYR_MAIN_2, 0,  20, 32, 2, 15, 0x17 },
+    { GF_BG_LYR_SUB_2,  0,  22, 15, 2, 15, 1    },
+};
+
+static const OamManagerParam sPokeathlonBlockSmashOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 126,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 1,
+    .numOBJsub = 126,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sPokeathlonBlockSmashGraphicsBanks = {
+    .bg = GX_VRAM_BG_64_E,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_256_AB,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const PokeathlonBlockSmashRowSprites sPokeathlonBlockSmashRowSprites[4] = {
+    { 1,  2,  3  },
+    { 4,  5,  6  },
+    { 7,  8,  9  },
+    { 10, 11, 12 },
+};
+
+static const PokeathlonBlockSmashBgTemplates sPokeathlonBlockSmashBgTemplates = {
+    {
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0800,
+            .charBase = GX_BG_CHARBASE_0x08000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0800,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x14000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     },
+};
+
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y) {
     s32 left = cell->targetX - 16;
     s32 right = cell->targetX + 16;
@@ -234,7 +380,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
         if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == BLOCKS_STATE_READY) {
             PokeathlonBlockSmashBannerPosition position;
             SpriteList *spriteList;
-            position = gPokeathlonBlockSmashBannerPosition;
+            position = sPokeathlonBlockSmashBannerPosition;
             spriteList = SpriteManager_GetSpriteList(work->spriteManager);
             PokeathlonCourse_CreateStartSprites(course, 0, work->iconResources, spriteList, 1, 1, &position);
             (*state)++;
@@ -543,14 +689,14 @@ BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course) {
 }
 
 static void PokeathlonBlockSmash_SetVramBanks(void) {
-    GraphicsBanks banks = gPokeathlonBlockSmashGraphicsBanks;
+    GraphicsBanks banks = sPokeathlonBlockSmashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 static void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
-    SpriteResourceCountsListUnion counts = gPokeathlonBlockSmashSpriteResourceCounts;
-    OamManagerParam oamParam = gPokeathlonBlockSmashOamManagerParam;
-    OamCharTransferParam transferParam = gPokeathlonBlockSmashOamCharTransferParam;
+    SpriteResourceCountsListUnion counts = sPokeathlonBlockSmashSpriteResourceCounts;
+    OamManagerParam oamParam = sPokeathlonBlockSmashOamManagerParam;
+    OamCharTransferParam transferParam = sPokeathlonBlockSmashOamCharTransferParam;
     transferParam.maxTasks = 128;
     work->spriteSystem = SpriteSystem_Alloc(work->heapId);
     work->spriteManager = SpriteManager_New(work->spriteSystem);
@@ -679,15 +825,15 @@ static void PokeathlonBlockSmash_StopHudAnims(PokeathlonBlockSmash *work) {
 }
 
 static void PokeathlonBlockSmash_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
-    GraphicsModes modes = gPokeathlonBlockSmashGraphicsModes;
+    GraphicsModes modes = sPokeathlonBlockSmashGraphicsModes;
     s32 i;
     SetBothScreensModesAndDisable(&modes);
     {
-        PokeathlonBlockSmashBgTemplates templates = gPokeathlonBlockSmashBgTemplates;
+        PokeathlonBlockSmashBgTemplates templates = sPokeathlonBlockSmashBgTemplates;
         for (i = 0; i < 6; i++) {
-            InitBgFromTemplate(bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
-            BgClearTilemapBufferAndCommit(bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i]);
-            BG_ClearCharDataRange((u8)gPokeathlonBlockSmashBgLayers[i], 0x20, 0, heapId);
+            InitBgFromTemplate(bgConfig, (u8)sPokeathlonBlockSmashBgLayers[i], &templates.templates[i], GF_BG_TYPE_TEXT);
+            BgClearTilemapBufferAndCommit(bgConfig, (u8)sPokeathlonBlockSmashBgLayers[i]);
+            BG_ClearCharDataRange((u8)sPokeathlonBlockSmashBgLayers[i], 0x20, 0, heapId);
         }
         FontID_Alloc(4, heapId);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -707,7 +853,7 @@ static void PokeathlonBlockSmash_FreeBgsAndText(PokeathlonBlockSmash *work) {
         RemoveWindow(&work->windows[i]);
     }
     for (i = 0; i < 6; i++) {
-        FreeBgTilemapBuffer(work->bgConfig, (u8)gPokeathlonBlockSmashBgLayers[i]);
+        FreeBgTilemapBuffer(work->bgConfig, (u8)sPokeathlonBlockSmashBgLayers[i]);
     }
     FontID_Release(4);
     Heap_Free(work->bgConfig);
@@ -732,7 +878,7 @@ static void PokeathlonBlockSmash_InitText(PokeathlonCourseData *course) {
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0309_bin, work->heapId);
     work->msgFormat = MessageFormat_New(work->heapId);
     for (i = 0; i < 4; i++) {
-        AddWindow(work->bgConfig, &work->windows[i], &gPokeathlonBlockSmashWindowTemplates[i]);
+        AddWindow(work->bgConfig, &work->windows[i], &sPokeathlonBlockSmashWindowTemplates[i]);
         FillWindowPixelBuffer(&work->windows[i], 0);
         ClearWindowTilemap(&work->windows[i]);
     }
@@ -790,7 +936,7 @@ static void PokeathlonBlockSmash_CreateTeamRows(PokeathlonCourseData *course) {
     GF_ASSERT(work->spriteSystem != NULL);
     GF_ASSERT(work->spriteManager != NULL);
     GF_ASSERT(work->rivals != NULL);
-    for (i = 0, row = work->icons.rows, x = 120, sprites = gPokeathlonBlockSmashRowSprites; i < 4; row++, x += 32, sprites++, i++) {
+    for (i = 0, row = work->icons.rows, x = 120, sprites = sPokeathlonBlockSmashRowSprites; i < 4; row++, x += 32, sprites++, i++) {
         s16 iconX = x;
         row->icon = PokeathlonBlockSmash_NewSubSprite(work->spriteSystem, work->spriteManager, iconX, 152, i + 13, 3);
         PokeathlonBlockSmash_SetTeamRowIcon(course, (u8)i, 0);
@@ -937,7 +1083,7 @@ static void PokeathlonBlockSmash_HandleSwipe(PokeathlonBlockSmash *work, BOOL an
         }
     }
     if (System_GetTouchNew() || System_GetTouchHeld() <= 0) {
-        if (TouchscreenHitbox_FindRectAtTouchNew(gPokeathlonBlockSmashSwipeHitboxes) != -1) {
+        if (TouchscreenHitbox_FindRectAtTouchNew(sPokeathlonBlockSmashSwipeHitboxes) != -1) {
             if (PokeathlonBlockSmashMon_CanSwitch(work->mon)) {
                 anim = 20;
                 PlaySE(SEQ_SE_GS_CHANGE1);

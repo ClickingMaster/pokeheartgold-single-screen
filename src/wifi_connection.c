@@ -74,11 +74,7 @@ struct WifiConnection {
     u8 filler_10E7[0x1108 - 0x10E7];         // 0x10E7
 };
 
-extern const DwcMatchOptMinComplete sWifiConnectionAnybodyMatchParams;
-extern char gWifiGameName[];
-extern char gWifiSecretKey[];
-extern char gWifiLobbyKeyName[];
-extern char gWifiMatchFilterFormat[];
+WifiConnection *gWifiConnection;
 
 extern int sprintf(char *dest, const char *format, ...);
 
@@ -96,6 +92,16 @@ extern int DWC_SetRecvTimeoutTime(u8, int);
 extern void DWC_SetUserSendCallback(void (*)(u32, s32));
 extern void DWC_SetUserRecvCallback(void (*)(u16, const u8 *, int));
 extern void DWC_SetUserRecvTimeoutCallback(void (*)(void));
+
+static const DwcMatchOptMinComplete sWifiConnectionAnybodyMatchParams = {
+    .valid = 1,
+    .minEntry = 2,
+    .retry = 0,
+    .pad = 0,
+    .timeout = 0,
+};
+
+static const char sWifiConnectionMatchFilterFormat[] = "%s = '%s'";
 
 int WifiConnection_Init(void *saveData, int heapId, u32 heapSize, int maxPlayers) {
     u8 *raw;
@@ -196,7 +202,7 @@ int WifiConnection_UpdateLogin(void) {
         if (err) {
             return err;
         }
-        DWC_InitFriendsMatch(&gWifiConnection->loginControl, gWifiConnection->userData, 0x29E7, gWifiGameName, gWifiSecretKey, 0, 0, gWifiConnection->friendList, 32);
+        DWC_InitFriendsMatch(&gWifiConnection->loginControl, gWifiConnection->userData, 0x29E7, "pokemondpds", "1vTlwb", 0, 0, gWifiConnection->friendList, 32);
         OS_GetOwnerInfo(&owner);
         DWC_LoginAsync(owner.nickName, 0, WifiConnection_LoginCallback, NULL);
         gWifiConnection->state = WIFI_CONNECTION_STATE_LOGGING_IN;
@@ -240,9 +246,9 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     params = sWifiConnectionAnybodyMatchParams;
     params.timeout = 1000 * timeoutSeconds;
     GF_ASSERT(DWC_SetMatchingOption(0, &params, sizeof(params)) == 0);
-    GF_ASSERT(DWC_AddMatchKeyString(0, gWifiLobbyKeyName, name) != 0);
+    GF_ASSERT(DWC_AddMatchKeyString(0, "ppw_lobby", name) != 0);
     MI_CpuFill8(gWifiConnection->matchFilter, 0, 128);
-    sprintf(gWifiConnection->matchFilter, gWifiMatchFilterFormat, gWifiLobbyKeyName, name);
+    sprintf(gWifiConnection->matchFilter, sWifiConnectionMatchFilterFormat, "ppw_lobby", name);
     GF_ASSERT(strlen(gWifiConnection->matchFilter) < 128);
     if (filterLocal) {
         DWC_AddMatchKeyString(1, gWifiConnection->matchFilter, gWifiConnection->matchFilter);

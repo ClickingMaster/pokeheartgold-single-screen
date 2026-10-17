@@ -88,21 +88,6 @@ extern void CommWireless_SetDetectDrops(BOOL value);
 extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
 extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work);
 
-extern const TouchscreenHitbox sDrawingSessionYesNoHitbox[];
-extern const TouchscreenHitbox sDrawingSessionCanvasHitbox[];
-extern const GraphicsModes sDrawingSessionGraphicsModes;
-extern const ObjCharTransferTemplate sDrawingSessionObjCharTransferTemplate;
-extern const BgTemplate sDrawingSessionBgTemplateMain0;
-extern const BgTemplate sDrawingSessionBgTemplateSub1;
-extern const BgTemplate sDrawingSessionBgTemplateMain1;
-extern const BgTemplate sDrawingSessionBgTemplateMain2;
-extern const BgTemplate sDrawingSessionBgTemplateSub0;
-extern const GraphicsBanks sDrawingSessionGraphicsBanks;
-extern const TouchscreenHitbox sDrawingSessionButtonHitboxes[];
-extern const DrawingSessionButtonSprite sDrawingSessionButtonSprites[];
-extern const u8 sDrawingSessionBrushBitmaps[3][8][0x18]; // [pen size][pen colour], 6x6 dots, 4bpp
-extern const DrawingSessionState sDrawingSessionSubStates[];
-
 static void DrawingSession_VBlankCB(void *bgConfig);
 static void DrawingSession_SetVramBanks(void);
 static void DrawingSession_InitBgs(BgConfig *bgConfig);
@@ -167,6 +152,205 @@ int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state);
 int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state);
 
+static const TouchscreenHitbox sDrawingSessionCanvasHitbox[] = {
+    { .rect = { 16, 136, 8, 248 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sDrawingSessionYesNoHitbox[] = {
+    { .rect = { 48, 112, 200, 248 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsModes sDrawingSessionGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const ObjCharTransferTemplate sDrawingSessionObjCharTransferTemplate = { 20, 2048, 2048, HEAP_ID_39 };
+
+static const BgTemplate sDrawingSessionBgTemplateMain1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sDrawingSessionBgTemplateMain2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xd800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sDrawingSessionBgTemplateSub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sDrawingSessionBgTemplateSub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sDrawingSessionBgTemplateMain0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sDrawingSessionGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const TouchscreenHitbox sDrawingSessionButtonHitboxes[] = {
+    { .rect = { 150, 189, 0, 23 } },
+    { .rect = { 150, 189, 24, 47 } },
+    { .rect = { 150, 189, 48, 71 } },
+    { .rect = { 150, 189, 72, 95 } },
+    { .rect = { 150, 189, 96, 119 } },
+    { .rect = { 150, 189, 120, 143 } },
+    { .rect = { 150, 189, 144, 167 } },
+    { .rect = { 150, 189, 168, 191 } },
+    { .rect = { 150, 189, 192, 255 } },
+    { .rect = { 1, 13, 14, 26 } },
+    { .rect = { 1, 13, 30, 42 } },
+    { .rect = { 1, 13, 46, 58 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DrawingSessionButtonSprite sDrawingSessionButtonSprites[] = {
+    { 13,  171, 5  },
+    { 37,  171, 7  },
+    { 61,  171, 9  },
+    { 85,  171, 11 },
+    { 109, 171, 13 },
+    { 133, 171, 15 },
+    { 157, 171, 17 },
+    { 181, 171, 19 },
+    { 225, 171, 21 },
+    { 20,  9,   29 },
+    { 36,  9,   32 },
+    { 52,  9,   33 },
+};
+
+// [pen size][pen colour], 6x6 dots, 4bpp
+static const u8 sDrawingSessionBrushBitmaps[3][8][0x18] = {
+    {
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 102, 0, 0, 0, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 119, 0, 0, 0, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 136, 0, 0, 0, 136, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+     },
+    {
+     { 0, 0, 0, 0, 0, 17, 0, 0, 16, 17, 1, 0, 16, 17, 1, 0, 0, 17, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 34, 0, 0, 32, 34, 2, 0, 32, 34, 2, 0, 0, 34, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 51, 0, 0, 48, 51, 3, 0, 48, 51, 3, 0, 0, 51, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 68, 0, 0, 64, 68, 4, 0, 64, 68, 4, 0, 0, 68, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 85, 0, 0, 80, 85, 5, 0, 80, 85, 5, 0, 0, 85, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 102, 0, 0, 96, 102, 6, 0, 96, 102, 6, 0, 0, 102, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 119, 0, 0, 112, 119, 7, 0, 112, 119, 7, 0, 0, 119, 0, 0, 0, 0, 0, 0 },
+     { 0, 0, 0, 0, 0, 136, 0, 0, 128, 136, 8, 0, 128, 136, 8, 0, 0, 136, 0, 0, 0, 0, 0, 0 },
+     },
+    {
+     { 16, 17, 1, 0, 17, 17, 17, 0, 17, 17, 17, 0, 17, 17, 17, 0, 17, 17, 17, 0, 16, 17, 1, 0 },
+     { 32, 34, 2, 0, 34, 34, 34, 0, 34, 34, 34, 0, 34, 34, 34, 0, 34, 34, 34, 0, 32, 34, 2, 0 },
+     { 48, 51, 3, 0, 51, 51, 51, 0, 51, 51, 51, 0, 51, 51, 51, 0, 51, 51, 51, 0, 48, 51, 3, 0 },
+     { 64, 68, 4, 0, 68, 68, 68, 0, 68, 68, 68, 0, 68, 68, 68, 0, 68, 68, 68, 0, 64, 68, 4, 0 },
+     { 80, 85, 5, 0, 85, 85, 85, 0, 85, 85, 85, 0, 85, 85, 85, 0, 85, 85, 85, 0, 80, 85, 5, 0 },
+     { 96, 102, 6, 0, 102, 102, 102, 0, 102, 102, 102, 0, 102, 102, 102, 0, 102, 102, 102, 0, 96, 102, 6, 0 },
+     { 112, 119, 7, 0, 119, 119, 119, 0, 119, 119, 119, 0, 119, 119, 119, 0, 119, 119, 119, 0, 112, 119, 7, 0 },
+     { 128, 136, 8, 0, 136, 136, 136, 0, 136, 136, 136, 0, 136, 136, 136, 0, 136, 136, 136, 0, 128, 136, 8, 0 },
+     },
+};
+
+static DrawingSessionState sDrawingSessionSubStates[] = {
+    { NULL,                                    1 },
+    { DrawingSession_StateMemberJoined,        0 },
+    { DrawingSession_StateHidePenCursors,      0 },
+    { DrawingSession_StateResumeDrawing,       0 },
+    { DrawingSession_StateDraw,                0 },
+    { DrawingSession_StateShowQuitPrompt,      1 },
+    { DrawingSession_StateHandleQuitPrompt,    1 },
+    { DrawingSession_StateWaitLeaveReply,      1 },
+    { DrawingSession_StateLeaveAccepted,       1 },
+    { DrawingSession_StateLeaveRefused,        1 },
+    { DrawingSession_StatePrintSessionEnded,   1 },
+    { DrawingSession_StateWaitSessionEndedMsg, 1 },
+    { DrawingSession_StateWaitAndFadeOut,      1 },
+    { DrawingSession_StateShowDisbandPrompt,   1 },
+    { DrawingSession_StateHandleDisbandPrompt, 1 },
+    { DrawingSession_StatePrintLeaderLeft,     1 },
+    { DrawingSession_StateWaitLeaderLeftMsg,   1 },
+    { DrawingSession_StateWaitSyncAndFadeOut,  1 },
+    { DrawingSession_StateNone,                1 },
+    { DrawingSession_StatePrintNoMembers,      1 },
+    { DrawingSession_StateWaitNoMembersMsg,    1 },
+    { DrawingSession_StatePrintMemberLeft,     1 },
+    { DrawingSession_StateWaitMemberLeftMsg,   1 },
+    { DrawingSession_StateWaitAfterMemberLeft, 1 },
+};
+
 BOOL DrawingSession_Init(OverlayManager *man, int *state) {
     DrawingSessionWork *work;
     NARC *narc;
@@ -224,8 +408,6 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL DrawingSession_Main(OverlayManager *man, int *state) {
     DrawingSessionWork *work = OverlayManager_GetData(man);
     if (!Comm_GetLocalNetId() && work->leavingMask) {
@@ -273,8 +455,6 @@ BOOL DrawingSession_Main(OverlayManager *man, int *state) {
     SpriteList_RenderAndAnimateSprites(work->spriteList);
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
     DrawingSessionWork *work;
@@ -477,8 +657,6 @@ static void DrawingSession_InitSpriteResources(DrawingSessionWork *work, NARC *n
     SpriteTransfer_CreateExtPlttTransferTask(work->resources[5]);
 }
 
-#pragma force_active on
-
 static void DrawingSession_CreateSprites(DrawingSessionWork *work) {
     SpriteTemplate spriteTemplate;
     int i;
@@ -529,8 +707,6 @@ static void DrawingSession_CreateSprites(DrawingSessionWork *work) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, TRUE);
 }
-
-#pragma force_active reset
 
 // man is not used.
 static void DrawingSession_AddWindows(DrawingSessionWork *work, OverlayManager *man) {
@@ -588,8 +764,6 @@ static void DrawingSession_SetPenCursorPos(Sprite *sprite, s32 x, s32 y) {
     vec.z = 0;
     Sprite_SetMatrix(sprite, &vec);
 }
-
-#pragma force_active on
 
 static void DrawingSession_HandleTouch(DrawingSessionWork *work) {
     int selected;
@@ -681,8 +855,6 @@ static void DrawingSession_HandleTouch(DrawingSessionWork *work) {
         }
     }
 }
-
-#pragma force_active reset
 
 static void DrawingSession_SetColorButtonSelected(Sprite **buttons, int selected) {
     int i;
@@ -1276,8 +1448,6 @@ static u32 DrawingSession_CountPlayerProfiles(void) {
     return count;
 }
 
-#pragma force_active on
-
 static void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work) {
     int ownId = Comm_GetLocalNetId();
     int i;
@@ -1347,8 +1517,6 @@ static void DrawingSession_SendStrokes(DrawingSessionWork *work) {
         }
     }
 }
-
-#pragma force_active reset
 
 static int DrawingSession_CountMembers(void) {
     int i;
@@ -1424,7 +1592,6 @@ static void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra)
     }
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 // TRUE for 2, 4, 8 and 16: the bit of exactly one member other than the leader.
@@ -1495,7 +1662,6 @@ static int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 static void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state) {
     work->nextSubState = state;

@@ -909,7 +909,6 @@ Overlay OVY_0
     After main
     Object src/wifi_connection.o
     Object src/voice_chat.o
-    Object asm/wifi_connection_data.o
     Object src/voice_chat_conference.o
     Object lib/NitroDWC/asm/dwc_lib_rodata.o
     Object lib/NitroDWC/src/auth_client.o
@@ -1096,7 +1095,6 @@ Overlay OVY_5
 {
     After OVY_0
     Object src/battle/link_battle_screen.o
-    Object asm/link_battle_screen_data.o
 }
 Overlay OVY_6
 {
@@ -1391,7 +1389,6 @@ Overlay OVY_37
 {
     After main
     Object src/drawing_session.o
-    Object asm/drawing_session_data.o
     Object src/drawing_session_stroke.o
 }
 Overlay OVY_38
@@ -1829,7 +1826,6 @@ Overlay OVY_67
 {
     After main
     Object src/battle_room_results.o
-    Object asm/battle_room_results_data.o
 }
 Overlay OVY_68
 {
@@ -2254,7 +2250,6 @@ Overlay OVY_105
 {
     After main
     Object src/application/ship_departure_cutscene.o
-    Object asm/ship_departure_cutscene_data.o
 }
 Overlay OVY_106
 {

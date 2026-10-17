@@ -50,7 +50,6 @@ typedef struct VoiceChat {
 } VoiceChat;
 
 extern VoiceChat gVoiceChat;
-extern VoiceChatWork *gVoiceChatWork; // same storage as gVoiceChat.work
 
 void VoiceChat_InitAudio(void);
 void VoiceChat_MicCallback(MICResult result, void *arg);

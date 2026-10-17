@@ -15,6 +15,8 @@ extern u8 *MIC_GetLastSamplingAddress(void);
 extern void MIC_StopAutoSampling(void);
 extern int Comm_IsWifiPeerLinkMode(void);
 
+VoiceChat gVoiceChat;
+
 void VoiceChat_InitAudio(void) {
     int i;
 
@@ -249,7 +251,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
 
     if (!gVoiceChat.work) {
         allocation = 0;
-        VoiceChat_AllocAligned((void **)&allocation, (void **)&gVoiceChatWork, sizeof(VoiceChatWork), heapId);
+        VoiceChat_AllocAligned((void **)&allocation, (void **)&gVoiceChat.work, sizeof(VoiceChatWork), heapId);
         gVoiceChat.work->rawAlloc = (void *)allocation;
         VoiceChat_AllocAligned(&gVoiceChat.work->vctBufferRaw, &gVoiceChat.work->vctBuffer, count * 0x23C0 + 32, heapId);
         gVoiceChat.work->heapId = heapId;

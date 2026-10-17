@@ -42,7 +42,6 @@ void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool
 extern const u8 sPennantCaptureTimerDigitX[];
 extern const u8 sPennantCaptureTimerDigitAnims[];
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
-extern const VecFx32 gPokeathlonPennantCaptureInitialPosition;
 
 // Several loops below walk a display-typed cursor by one array element per step instead of indexing
 // (fields are read at their offset from the cursor); that is the form the code matches with.

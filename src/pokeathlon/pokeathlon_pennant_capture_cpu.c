@@ -15,7 +15,6 @@
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
 
-extern const WindowTemplate gPokeathlonPennantCaptureWindowTemplate;
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
 typedef struct PokeathlonPennantCaptureCpuPoint {
@@ -35,6 +34,18 @@ static void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu
 static PokeathlonPennantCaptureCpuCell *PokeathlonPennantCaptureCpu_PickBestCell(PokeathlonPennantCaptureCpu *cpu);
 static u8 PokeathlonPennantCaptureCpu_SortCells(PokeathlonPennantCaptureCpuCell **cells, PokeathlonPennantCaptureCpuCell **out);
 
+static const WindowTemplate sPokeathlonPennantCaptureWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_0,
+    .left = 0,
+    .top = 22,
+    .width = 16,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 1,
+};
+
+const VecFx32 gPokeathlonPennantCaptureInitialPosition = { 0x70000, 0x2C4000, 0 };
+
 void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display) {
     PokeathlonPennantCaptureSpriteIds ids = gPokeathlonPennantCaptureSpriteIds[3];
     u8 i;
@@ -52,7 +63,7 @@ void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(PokeathlonCourseSpritePoo
 #pragma force_active reset
 
 void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay *display) {
-    AddWindow(display->bgConfig, &display->window, &gPokeathlonPennantCaptureWindowTemplate);
+    AddWindow(display->bgConfig, &display->window, &sPokeathlonPennantCaptureWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, display->heapId);
 }

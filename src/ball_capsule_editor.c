@@ -280,10 +280,6 @@ typedef struct BallCapsuleEditorPokepicEffectParams {
     Pokemon *mon;
 } BallCapsuleEditorPokepicEffectParams;
 
-extern const GraphicsModes sBallCapsuleEditorGraphicsModes;
-extern const GraphicsBanks sBallCapsuleEditorGraphicsBanks;
-extern const BallCapsuleEditorMainBgTemplates sBallCapsuleEditorMainBgTemplates;
-extern const BallCapsuleEditorSubBgTemplates sBallCapsuleEditorSubBgTemplates;
 extern const TouchscreenListMenuTemplate sBallCapsuleEditorMenuTemplate;
 extern const OamCharTransferParam sBallCapsuleEditorOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sBallCapsuleEditorSpriteResourceCounts;
@@ -603,7 +599,133 @@ static void BallCapsuleEditor_DisableInterrupts(enum HeapID heapID) {
     HBlankInterruptDisable();
 }
 
-#pragma force_active on
+static const GraphicsModes sBallCapsuleEditorGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const GraphicsBanks sBallCapsuleEditorGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_BC,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const BallCapsuleEditorMainBgTemplates sBallCapsuleEditorMainBgTemplates = {
+    {
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_512x512_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x512_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x3000,
+            .charBase = GX_BG_CHARBASE_0x10000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     },
+};
+
+static const BallCapsuleEditorSubBgTemplates sBallCapsuleEditorSubBgTemplates = {
+    {
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x6800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x7000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x6000,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x7800,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+     },
+};
 
 static void BallCapsuleEditor_InitBgs(BgConfig *bgConfig) {
     BallCapsuleEditorMainBgTemplates mainTemplates;
@@ -654,8 +776,6 @@ static void BallCapsuleEditor_VBlankCB(void *data) {
     GF_RunVramTransferTasks();
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
-
-#pragma force_active reset
 
 static u8 BallCapsuleEditor_GetArgsCapsuleIndex(BallCapsuleEditorArgs *args) {
     return args->capsuleIndex;
@@ -735,8 +855,6 @@ static void BallCapsuleEditor_LoadSeals(BallCapsuleEditor *editor) {
     } while (i < MAX_SEALS_ON_CAPSULE);
 }
 
-#pragma force_active on
-
 static u32 BallCapsuleEditor_AddSeal(BallCapsuleEditor *editor, u8 caseIndex) {
     int i;
 
@@ -757,8 +875,6 @@ static u32 BallCapsuleEditor_AddSeal(BallCapsuleEditor *editor, u8 caseIndex) {
     }
     return BALL_CAPSULE_EDITOR_NONE;
 }
-
-#pragma force_active reset
 
 static BOOL BallCapsuleEditor_HasFreeSealSlot(BallCapsuleEditor *editor) {
     int i;
@@ -862,8 +978,6 @@ static void BallCapsuleEditor_SortSeals(BallCapsuleEditor *editor) {
     }
 }
 
-#pragma force_active on
-
 static BOOL BallCapsuleEditor_CreateSealSprite(BallCapsuleEditor *editor, u8 index) {
     ManagedSpriteTemplate template;
     SpriteSystem *spriteSystem = editor->display.spriteSystem;
@@ -895,8 +1009,6 @@ static BOOL BallCapsuleEditor_CreateSealSprite(BallCapsuleEditor *editor, u8 ind
     ManagedSprite_TickFrame(seal->sprite);
     return TRUE;
 }
-
-#pragma force_active reset
 
 static BOOL BallCapsuleEditor_HandleSealTouch(BallCapsuleEditor *editor, u32 event, s32 index) {
     BOOL onCapsule;
@@ -1056,8 +1168,6 @@ static void BallCapsuleEditor_RemoveMessageWindows(BallCapsuleEditor *editor) {
     RemoveWindow(&editor->display.windows[2]);
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_PrintExitLabel(BallCapsuleEditor *editor, BOOL show) {
     if (show) {
         MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0011_bin, HEAP_ID_52);
@@ -1074,8 +1184,6 @@ static void BallCapsuleEditor_PrintExitLabel(BallCapsuleEditor *editor, BOOL sho
         ClearWindowTilemapAndScheduleTransfer(&editor->display.windows[2]);
     }
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_InitFonts(BallCapsuleEditor *editor) {
     editor->fontSystem = FontSystem_NewInit(2, HEAP_ID_52);
@@ -1107,8 +1215,6 @@ static void BallCapsuleEditor_SetButtonLabelsDrawFlag(BallCapsuleEditor *editor,
     TextOBJ_SetSpritesDrawFlag(editor->buttonLabels[0], draw);
     TextOBJ_SetSpritesDrawFlag(editor->buttonLabels[1], draw);
 }
-
-#pragma force_active on
 
 static void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, int x, int y, int palette) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0011_bin, HEAP_ID_52);
@@ -1174,8 +1280,6 @@ static void BallCapsuleEditor_FillPageSeals(BallCapsuleEditor *editor, int page)
     }
 }
 
-#pragma force_active reset
-
 static void BallCapsuleEditor_LoadCaseSealSpriteResources(BallCapsuleEditor *editor) {
     SpriteSystem *spriteSystem = editor->display.spriteSystem;
     int i;
@@ -1189,8 +1293,6 @@ static void BallCapsuleEditor_LoadCaseSealSpriteResources(BallCapsuleEditor *edi
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_a_0_8_7, 37, TRUE, 27037);
     SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_a_0_8_7, 35, TRUE, 28035);
 }
-
-#pragma force_active on
 
 static void BallCapsuleEditor_CreateCaseSealSprites(BallCapsuleEditor *editor) {
     ManagedSpriteTemplate template;
@@ -1227,8 +1329,6 @@ static void BallCapsuleEditor_CreateCaseSealSprites(BallCapsuleEditor *editor) {
     }
 }
 
-#pragma force_active reset
-
 static void BallCapsuleEditor_DeleteCaseSealSprites(BallCapsuleEditor *editor) {
     s32 i;
 
@@ -1255,8 +1355,6 @@ static GF3DVramMan *BallCapsuleEditor_Create3DVramMan(void) {
     return GF_3DVramMan_Create(HEAP_ID_52, 0, 2, 0, 2, BallCapsuleEditor_Init3D);
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_Init3D(void) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
@@ -1269,8 +1367,6 @@ static void BallCapsuleEditor_Init3D(void) {
     G3X_SetClearColor(RGB_BLACK, 0, GF_GX_CLEARCOLORDEPTH_MAX, 63, FALSE);
     G3_ViewPort(0, 0, 255, 191);
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_Alloc3DVram(void) {
     NNSGfdTexKey texKey = NNS_GfdAllocTexVram(0x8000, FALSE, 0);
@@ -1328,8 +1424,6 @@ static inline int BallCapsuleEditor_GetMenuItems(int items[4], int kind) {
     return size;
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_CreateMenu(BgConfig *bgConfig, Window *unusedWindow, int unused, BallCapsuleEditor *editor, int capsule) {
     TouchscreenListMenuHeader header;
     int items[4];
@@ -1357,8 +1451,6 @@ static void BallCapsuleEditor_CreateMenu(BgConfig *bgConfig, Window *unusedWindo
     editor->menu = TouchscreenListMenu_Create(editor->display.menuSpawner, &header, (u8)editor->menuInputState, 22, (u8)(23 - count * 3), 8, 0);
 }
 
-#pragma force_active reset
-
 static void BallCapsuleEditor_DestroyMenu(BallCapsuleEditor *editor) {
     editor->menuInputState = (MenuInputState)editor->menu->isTouch;
     TouchscreenListMenu_Destroy(editor->menu);
@@ -1370,8 +1462,6 @@ static void BallCapsuleEditor_GetCapsulePosition(s32 capsule, s16 *x, s16 *y) {
     *x = column * 56 + 40;
     *y = (capsule >> 2) * 53 + 27;
 }
-
-#pragma force_active on
 
 static void BallCapsuleEditor_LoadMonIconResources(BallCapsuleEditor *editor) {
     SpriteSystem *spriteSystem = editor->display.spriteSystem;
@@ -1416,8 +1506,6 @@ static void BallCapsuleEditor_CreateMonIcons(BallCapsuleEditor *editor) {
     }
 }
 
-#pragma force_active reset
-
 // The icon of a party Pokémon is shown on the capsule it has.
 static void BallCapsuleEditor_PlaceMonIcons(BallCapsuleEditor *editor) {
     s32 i;
@@ -1456,8 +1544,6 @@ static void BallCapsuleEditor_DeleteMonIcons(BallCapsuleEditor *editor) {
     }
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_UpdateCapsuleIconStates(BallCapsuleEditor *editor) {
     int i;
 
@@ -1490,15 +1576,11 @@ static void BallCapsuleEditor_InitSpriteSystem(BallCapsuleEditorDisplay *display
     display->menuSpawner = TouchscreenListMenuSpawner_Create(HEAP_ID_52, display->paletteData);
 }
 
-#pragma force_active reset
-
 static void BallCapsuleEditor_FreeSpriteSystem(BallCapsuleEditorDisplay *display) {
     TouchscreenListMenuSpawner_Destroy(display->menuSpawner);
     SpriteSystem_FreeResourcesAndManager(display->spriteSystem, display->spriteManager);
     SpriteSystem_Free(display->spriteSystem);
 }
-
-#pragma force_active on
 
 static void BallCapsuleEditor_LoadArrowResources(BallCapsuleEditor *editor, NARC *narc) {
     SpriteSystem_LoadCharResObjFromOpenNarc(editor->display.spriteSystem, editor->display.spriteManager, narc, 14, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 45000);
@@ -1535,8 +1617,6 @@ static void BallCapsuleEditor_CreateArrows(BallCapsuleEditor *editor) {
         ((BallCapsuleEditorSetFlipModeFunc)ManagedSprite_SetFlipMode)(editor->arrows[i], data.arrows.arrows[i].flipMode);
     }
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_TickArrows(BallCapsuleEditor *editor) {
     if (editor->display.inputEnabled != FALSE) {
@@ -1901,8 +1981,6 @@ static void BallCapsuleEditor_LoadCaseButtonResources(BallCapsuleEditor *editor,
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 24, TRUE, 28024);
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_CreateCaseButtons(BallCapsuleEditor *editor) {
     ManagedSpriteTemplate template;
     BallCapsuleEditorCasePositions positions;
@@ -1958,8 +2036,6 @@ static void BallCapsuleEditor_CreateCaseButtons(BallCapsuleEditor *editor) {
         BallCapsuleEditor_SetSpriteHitbox(&editor->display.hitboxes[i], editor->caseSprites[i], hitboxSizes.positions[i].x, hitboxSizes.positions[i].y);
     }
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_SetCaseSpritesDrawFlag(BallCapsuleEditor *editor, BOOL draw) {
     int i;
@@ -2228,8 +2304,6 @@ BOOL BallCapsuleEditor_ModeRemove(BallCapsuleEditor *editor) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL BallCapsuleEditor_ModeSwitch(BallCapsuleEditor *editor) {
     switch (editor->state) {
     case BALL_CAPSULE_SWITCH_START:
@@ -2264,8 +2338,6 @@ BOOL BallCapsuleEditor_ModeSwitch(BallCapsuleEditor *editor) {
     BallCapsuleEditor_TickCapsuleIcons(editor);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BallCapsuleEditor_ModeNone(BallCapsuleEditor *editor) {
     return FALSE;
@@ -2316,8 +2388,6 @@ static int BallCapsuleEditor_EnterEdit(BallCapsuleEditor *editor) {
     return BALL_CAPSULE_EDIT_ENTER;
 }
 
-#pragma force_active on
-
 static BOOL BallCapsuleEditor_LeaveEdit(BallCapsuleEditor *editor) {
     switch (editor->subState) {
     case 0:
@@ -2365,8 +2435,6 @@ static BOOL BallCapsuleEditor_LeaveEdit(BallCapsuleEditor *editor) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // "Quit without changing the Capsule design?"
 static int BallCapsuleEditor_ConfirmQuitEdit(BallCapsuleEditor *editor) {
@@ -2585,8 +2653,6 @@ static int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
     return BALL_CAPSULE_EDIT_PREVIEW;
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_HitboxCallback(u32 index, u32 event, void *arg) {
     BallCapsuleEditor *editor = arg;
 
@@ -2702,8 +2768,6 @@ static void BallCapsuleEditor_HitboxCallback(u32 index, u32 event, void *arg) {
     }
 }
 
-#pragma force_active reset
-
 // Switches between key and touch input: returns TRUE when a key press ended touch input.
 static int BallCapsuleEditor_UpdateMenuInputState(BallCapsuleEditor *editor) {
     if (editor->menuInputState == MENU_INPUT_STATE_TOUCH) {
@@ -2769,8 +2833,6 @@ static int BallCapsuleEditor_HandleSelection(BallCapsuleEditor *editor, int sele
     return BALL_CAPSULE_SELECT_INPUT;
 }
 
-#pragma force_active on
-
 static int BallCapsuleEditor_HandleSelectKeys(BallCapsuleEditor *editor) {
     int selection;
 
@@ -2792,8 +2854,6 @@ static int BallCapsuleEditor_HandleSelectKeys(BallCapsuleEditor *editor) {
     }
 }
 
-#pragma force_active reset
-
 static int BallCapsuleEditor_HandleSelectTouch(BallCapsuleEditor *editor) {
     int selection = BallCapsuleEditor_GetTouchedCapsule(editor);
 
@@ -2810,8 +2870,6 @@ static int BallCapsuleEditor_HandleSwitchInput(BallCapsuleEditor *editor) {
     }
     return BallCapsuleEditor_HandleSwitchTouch(editor);
 }
-
-#pragma force_active on
 
 static int BallCapsuleEditor_FinishSwitch(BallCapsuleEditor *editor, BOOL confirm) {
     int target = editor->cursorCapsule[1];
@@ -2834,8 +2892,6 @@ static int BallCapsuleEditor_FinishSwitch(BallCapsuleEditor *editor, BOOL confir
     return BALL_CAPSULE_SWITCH_FINISH;
 }
 
-#pragma force_active reset
-
 static int BallCapsuleEditor_HandleSwitchSelection(BallCapsuleEditor *editor, int selection) {
     switch (selection) {
     case BALL_CAPSULE_EDITOR_SELECT_BACK:
@@ -2855,8 +2911,6 @@ static int BallCapsuleEditor_HandleSwitchSelection(BallCapsuleEditor *editor, in
     return BALL_CAPSULE_SWITCH_INPUT;
 }
 
-#pragma force_active on
-
 static int BallCapsuleEditor_HandleSwitchKeys(BallCapsuleEditor *editor) {
     int selection;
 
@@ -2875,8 +2929,6 @@ static int BallCapsuleEditor_HandleSwitchKeys(BallCapsuleEditor *editor) {
     }
     return BallCapsuleEditor_HandleSwitchSelection(editor, (u8)selection);
 }
-
-#pragma force_active reset
 
 static int BallCapsuleEditor_HandleSwitchTouch(BallCapsuleEditor *editor) {
     int selection = BallCapsuleEditor_GetTouchedCapsule(editor);
@@ -2941,7 +2993,6 @@ static void BallCapsuleEditor_UpdateCursors(BallCapsuleEditor *editor, int which
 }
 
 // The touched capsule (0-11), BALL_CAPSULE_EDITOR_SELECT_BACK / _CONFIRM for the capsule area, or -1.
-#pragma force_active on
 
 static int BallCapsuleEditor_GetTouchedCapsule(BallCapsuleEditor *editor) {
     struct {
@@ -2979,8 +3030,6 @@ static int BallCapsuleEditor_GetTouchedCapsule(BallCapsuleEditor *editor) {
     }
     return found;
 }
-
-#pragma force_active reset
 
 static int BallCapsuleEditor_HandleEditKeys(BallCapsuleEditor *editor) {
     u32 keys;
@@ -3030,8 +3079,6 @@ BOOL BallCapsuleEditor_MenuQuit(BallCapsuleEditor *editor) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL BallCapsuleEditor_MenuSet(BallCapsuleEditor *editor) {
     BallCapsuleEditor_SortSeals(editor);
     BallCapsuleEditor_SaveCapsule(editor);
@@ -3040,8 +3087,6 @@ BOOL BallCapsuleEditor_MenuSet(BallCapsuleEditor *editor) {
     editor->state = BALL_CAPSULE_SELECT_FADE_OUT;
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL BallCapsuleEditor_MenuRemove(BallCapsuleEditor *editor) {
     BallCapsuleEditor_SetMode(editor, BALL_CAPSULE_EDITOR_MODE_REMOVE, BALL_CAPSULE_REMOVE_START, BALL_CAPSULE_SELECT_INPUT);
@@ -3080,7 +3125,6 @@ static void BallCapsuleEditor_RestoreSealCounts(BallCapsuleEditor *editor) {
 }
 
 // The Pokémon with the capsule, else the first party Pokémon that is not an Egg.
-#pragma force_active on
 
 static void BallCapsuleEditor_CopyPreviewMon(BallCapsuleEditor *editor) {
     int partySlot = editor->capsules[editor->cursorCapsule[0]].partySlot;
@@ -3098,8 +3142,6 @@ static void BallCapsuleEditor_CopyPreviewMon(BallCapsuleEditor *editor) {
         }
     }
 }
-
-#pragma force_active reset
 
 // state 0xFF: the saved returnState.
 static void BallCapsuleEditor_SetMode(BallCapsuleEditor *editor, u32 mode, u32 state, u32 returnState) {
@@ -3161,8 +3203,6 @@ static void BallCapsuleEditor_Task_ButtonPress(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 static SysTask *BallCapsuleEditor_StartButtonPress(ManagedSprite *button, TextOBJ *label) {
     BallCapsuleEditorButtonPress *press = Heap_Alloc(HEAP_ID_52, sizeof(BallCapsuleEditorButtonPress));
 
@@ -3173,8 +3213,6 @@ static SysTask *BallCapsuleEditor_StartButtonPress(ManagedSprite *button, TextOB
     return SysTask_CreateOnMainQueue(BallCapsuleEditor_Task_ButtonPress, press, 1000);
 }
 
-#pragma force_active reset
-
 static u32 BallCapsuleEditor_GetField280(BallCapsuleEditor *editor) {
     return editor->unk_280;
 }
@@ -3182,8 +3220,6 @@ static u32 BallCapsuleEditor_GetField280(BallCapsuleEditor *editor) {
 static void BallCapsuleEditor_SetInputEnabled(BallCapsuleEditor *editor, BOOL enabled) {
     editor->display.inputEnabled = enabled;
 }
-
-#pragma force_active on
 
 static void BallCapsuleEditor_CreatePreviewPokepic(BallCapsuleEditor *editor) {
     PokepicTemplate template;
@@ -3205,8 +3241,6 @@ static void BallCapsuleEditor_StartPreviewPokepicAnim(BallCapsuleEditor *editor)
     ((void (*)(Pokepic *, int))Pokepic_StartAnim)(editor->display.pokepic, 1);
     NARC_StartPokepicAnim(editor->pokepicAnimNarc, editor->pokepicAnim, editor->display.pokepic, (u16)species, 2, 0, 0);
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_ClearPreviewPokepicScale(BallCapsuleEditor *editor) {
     Pokepic_SetAttr(editor->display.pokepic, POKEPIC_AFFINEW, 0);
@@ -3256,8 +3290,6 @@ static void BallCapsuleEditor_ResetBlend(void) {
     G2S_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_NONE, 31, 31);
 }
 
-#pragma force_active on
-
 static void BallCapsuleEditor_InitHitboxes(BallCapsuleEditor *editor) {
     const TouchscreenHitbox empty = { 0 };
     int i;
@@ -3271,8 +3303,6 @@ static void BallCapsuleEditor_InitHitboxes(BallCapsuleEditor *editor) {
     }
     editor->display.hitboxController = TouchHitboxController_Create(editor->display.hitboxes, BALL_CAPSULE_EDITOR_NUM_HITBOXES, BallCapsuleEditor_HitboxCallback, editor, HEAP_ID_52);
 }
-
-#pragma force_active reset
 
 static void BallCapsuleEditor_ClearCapsuleMon(BallCapsuleEditor *editor, int capsule) {
     u32 capsuleId = 0;
