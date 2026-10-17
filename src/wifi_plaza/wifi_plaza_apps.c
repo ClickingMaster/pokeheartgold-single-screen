@@ -53,8 +53,8 @@ enum WiFiPlazaApp {
 // Arguments of app 0, the plaza.
 typedef struct WiFiPlazaMainArgs {
     SaveData *save;
-    int unk_04; // WiFiPlazaWork_GetScheduleValue3
-    int unk_08; // WiFiPlazaWork_GetScheduleValue2
+    int group;
+    int variant;
     u32 unk_0c[3];
     u32 result; // what to do next (WiFiPlazaApps_EndMain)
     WiFiPlazaWork *work;
@@ -452,8 +452,8 @@ void WiFiPlazaApps_FreeMainArgs(void **args) {
 
 void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args) {
     WiFiPlazaMainArgs *main = *args;
-    main->unk_04 = WiFiPlazaWork_GetScheduleValue3(apps->work);
-    main->unk_08 = WiFiPlazaWork_GetScheduleValue2(apps->work);
+    main->group = WiFiPlazaWork_GetScheduleValue3(apps->work);
+    main->variant = WiFiPlazaWork_GetScheduleValue2(apps->work);
     WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMainOverlayTemplate);
 }
 

@@ -15,7 +15,7 @@ void CommPlayerInfo_Init(void *save, void *rules) {
             CommPlayerInfo_ClearPlayer(i);
         }
         sCommPlayerInfo->unk3A4 = 0;
-        sCommPlayerInfo->unk3A5 = 0;
+        sCommPlayerInfo->hasNewEntries = 0;
         sCommPlayerInfo->curIdx = 0;
         sCommPlayerInfo->save = save;
         sCommPlayerInfo->rules = rules;
@@ -55,13 +55,13 @@ void CommPlayerInfo_SendLocal(void) {
     friends = Save_FriendGroup_Get(sCommPlayerInfo->save);
     friendRoster = Save_FriendRoster_Get(sCommPlayerInfo->save);
     wifi = Save_WiFiHistory_Get(sCommPlayerInfo->save);
-    profile = sCommPlayerInfo->unk00;
+    profile = sCommPlayerInfo->localProfile;
     if (profile == NULL) {
         profile = Save_PlayerData_GetProfile(sCommPlayerInfo->save);
     }
     PlayerProfile_Copy(profile, sCommPlayerInfo->profiles[netId]);
     OS_GetMacAddress(sCommPlayerInfo->entries[netId].mac);
-    MI_CpuCopy8(Save_FriendGroup_GetName(friends, 1, 0), sCommPlayerInfo->entries[netId].unk4C, 0x10);
+    MI_CpuCopy8(Save_FriendGroup_GetName(friends, 1, 0), sCommPlayerInfo->entries[netId].groupName, 0x10);
     sCommPlayerInfo->entries[netId].country = WifiHistory_GetPlayerCountry(wifi);
     sCommPlayerInfo->entries[netId].region = WiFiHistory_GetPlayerRegion(wifi);
     sCommPlayerInfo->entries[netId].unk65 = 0;
@@ -120,13 +120,13 @@ void CommPlayerInfo_RecvPlayerEntry(int netId, int unused, void *src) {
         sCommPlayerInfo->status[netId] = 3;
         return;
     }
-    sCommPlayerInfo->unk3A5 = 1;
+    sCommPlayerInfo->hasNewEntries = 1;
 }
 
 BOOL CommPlayerInfo_HostRedistribute(void) {
     int i;
 
-    if (sCommPlayerInfo->unk3A5 == 0) {
+    if (sCommPlayerInfo->hasNewEntries == 0) {
         return FALSE;
     }
     if (Comm_GetLocalNetId() != 0) {
@@ -141,14 +141,14 @@ BOOL CommPlayerInfo_HostRedistribute(void) {
             }
         }
         Comm_SendParentCommandNoCopyUnchecked(5, NULL, 0);
-        sCommPlayerInfo->unk3A5 = 0;
+        sCommPlayerInfo->hasNewEntries = 0;
         return TRUE;
     }
     return FALSE;
 }
 
 u8 CommPlayerInfo_HasNewEntries(void) {
-    return sCommPlayerInfo->unk3A5;
+    return sCommPlayerInfo->hasNewEntries;
 }
 
 void CommPlayerInfo_ClearPlayer(int netId) {
@@ -249,7 +249,7 @@ u8 CommPlayerInfo_GetFriendIndex(int a) {
 
 void *CommPlayerInfo_GetGroupName(int netId) {
     if (sCommPlayerInfo->status[netId] != 0) {
-        return sCommPlayerInfo->entries[netId].unk4C;
+        return sCommPlayerInfo->entries[netId].groupName;
     }
     return NULL;
 }
@@ -370,5 +370,5 @@ void CommPlayerInfo_RecordTrades(void *save, int count) {
 }
 
 void CommPlayerInfo_SetProfile(void *a) {
-    sCommPlayerInfo->unk00 = a;
+    sCommPlayerInfo->localProfile = a;
 }

@@ -15,9 +15,9 @@
 
 typedef struct WiFiPlazaObjSpawn {
     u8 tag;
-    u8 unk1;
-    u16 unk2;
-    u8 unk4;
+    u8 direction;
+    u16 spriteId;
+    u8 id;
     u8 pad5[3];
 } WiFiPlazaObjSpawn;
 
@@ -461,10 +461,10 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
             obj = WiFiPlazaObj_AllocObj(manager);
             frame.template.unk0 = frame.cell.x << 4;
             frame.template.unk2 = frame.cell.y << 4;
-            frame.template.unk4 = spawn->unk4;
+            frame.template.unk4 = spawn->id;
             frame.template.unk6 = 0;
-            frame.template.unk8 = spawn->unk1;
-            frame.template.unkA = spawn->unk2;
+            frame.template.unk8 = spawn->direction;
+            frame.template.unkA = spawn->spriteId;
             gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &frame.template);
             obj->gridObj = gridObj;
             avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, gridObj);

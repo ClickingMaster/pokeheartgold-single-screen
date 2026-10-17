@@ -41,7 +41,7 @@ struct CommPlayerManager {
     u8 hostMoveTimer[8];                 // 0xD4
     u8 moveTimer[8];                     // 0xDC
     u8 unk_E4[2];                        // 0xE4
-    u8 unk_E6[5];                        // 0xE6
+    u8 lockOnSpot[5];                        // 0xE6
     u8 localPositionSent;                // 0xEB
     u8 sendAllPositions;                 // 0xEC
     u8 localMoveEnabled;                           // 0xED: sent with command 0x3E

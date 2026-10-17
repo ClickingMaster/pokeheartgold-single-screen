@@ -108,8 +108,8 @@ typedef struct WiFiPlazaLobbyMessage {
     u8 count;   // of ids
     u8 type;
     u8 tapToy;
-    u8 unk_13_0 : 7;
-    u8 unk_13_7 : 1;
+    u8 option : 7;
+    u8 allPlayers : 1;
 } WiFiPlazaLobbyMessage;
 
 // Part of WiFiPlazaWork at 0x1FC (WiFiPlazaEventSchedule_Update / WiFiPlazaEventSchedule_Init / WiFiPlazaEventSchedule_ApplyVolume work on it).
@@ -470,9 +470,9 @@ typedef struct WiFiPlazaLobbyIdValueList {
 typedef struct WiFiPlazaLobbySchedule {
     u32 unk_00;
     u32 unk_04;
-    u32 unk_08; // bit 0: WiFiPlazaLobbyClient_GetScheduleValue field 4
-    u8 unk_0c;
-    u8 unk_0d;
+    u32 roomFlag; // bit 0: the Arceus footprint is shown
+    u8 roomType;
+    u8 season;
     volatile u16 count;
     WiFiPlazaLobbyKeyValue values[126]; // WiFiPlazaLobbySchedule_FindValue
 } WiFiPlazaLobbySchedule;

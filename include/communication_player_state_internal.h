@@ -7,7 +7,7 @@ typedef struct CommPlayerInfoEntry {
     /* 0x00 */ u8 rules[0x20];
     /* 0x20 */ u8 profile[0x20];
     /* 0x40 */ u8 token[0xC];
-    /* 0x4C */ u8 unk4C[0x10];
+    /* 0x4C */ u8 groupName[0x10];
     /* 0x5C */ u8 mac[6];
     /* 0x62 */ u8 index;
     /* 0x63 */ u8 country;
@@ -23,7 +23,7 @@ typedef struct CommPlayerRecord {
 } CommPlayerRecord;
 
 typedef struct CommPlayerInfo {
-    /* 0x000 */ void *unk00;
+    /* 0x000 */ void *localProfile;
     /* 0x004 */ void *rules;
     /* 0x008 */ void *save;
     /* 0x00C */ CommPlayerInfoEntry entries[8];
@@ -31,7 +31,7 @@ typedef struct CommPlayerInfo {
     /* 0x36C */ CommPlayerRecord scores[8];
     /* 0x39C */ u8 status[8];
     /* 0x3A4 */ u8 unk3A4;
-    /* 0x3A5 */ u8 unk3A5;
+    /* 0x3A5 */ u8 hasNewEntries;
     /* 0x3A6 */ u8 curIdx;
     /* 0x3A7 */ u8 unk3A7;
 } CommPlayerInfo;

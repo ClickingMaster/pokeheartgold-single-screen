@@ -766,7 +766,7 @@ void CommPlayerManager_RecvUnkE6(int netId, int size, const u8 *data) {
     if (value == 3) {
         gCommPlayerManager->inputLocked[netId] = 0;
     } else {
-        gCommPlayerManager->unk_E6[netId] = value;
+        gCommPlayerManager->lockOnSpot[netId] = value;
     }
 }
 
@@ -779,7 +779,7 @@ void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void) {
     table = count == 2 ? _0210FAB4 : _0210FABC;
     i = 0;
     while (i < count) {
-        if (gCommPlayerManager->unk_E6[i] != 0) {
+        if (gCommPlayerManager->lockOnSpot[i] != 0) {
             int j;
             const u16 *pair;
             j = 0;

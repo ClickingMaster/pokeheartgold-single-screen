@@ -366,13 +366,13 @@ u32 WiFiPlazaLobbyClient_GetScheduleValue(int field) {
         result = unk->unk_04;
         break;
     case 2:
-        result = unk->unk_0c;
+        result = unk->roomType;
         break;
     case 3:
-        result = unk->unk_0d;
+        result = unk->season;
         break;
     case 4:
-        result = (unk->unk_08 & 1) != 0;
+        result = (unk->roomFlag & 1) != 0;
         break;
     case 5:
         result = WiFiPlazaLobbySchedule_FindValue(unk, 0x13);

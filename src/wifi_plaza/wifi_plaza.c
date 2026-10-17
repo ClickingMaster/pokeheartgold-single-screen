@@ -880,8 +880,8 @@ void WiFiPlaza_SendActivityNews(void *unused, int selector, int count, int slot0
     msg.ids[2] = WiFiPlazaLobbyClient_SlotToId(slot2);
     msg.ids[3] = WiFiPlazaLobbyClient_SlotToId(slot3);
     msg.count = count;
-    msg.unk_13_0 = selector;
-    msg.unk_13_7 = flag;
+    msg.option = selector;
+    msg.allPlayers = flag;
     WiFiPlazaLobbyClient_SendToLobby(4, &msg, 20);
 }
 
@@ -903,8 +903,8 @@ void WiFiPlaza_SendMinigameResultNews(void *unused, int mode, u8 kind, u32 slot0
         msg.ids[2] = WiFiPlazaLobbyClient_SlotToId(slot2);
         msg.ids[3] = WiFiPlazaLobbyClient_SlotToId(slot3);
         msg.count = kind;
-        msg.unk_13_0 = mode;
-        msg.unk_13_7 = 0;
+        msg.option = mode;
+        msg.allPlayers = 0;
         WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
         break;
     }
@@ -1864,7 +1864,7 @@ void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobby
     if (msg->count > 4 || msg->count == 0) {
         return;
     }
-    if ((msg->unk_13_7) == 1) {
+    if ((msg->allPlayers) == 1) {
         for (i = 0; i < 4; i++) {
             if (i < msg->count) {
                 slot = WiFiPlazaLobbyClient_IdToSlot(msg->ids[i]);
@@ -1891,7 +1891,7 @@ void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobby
             }
         }
     }
-    req.option = msg->unk_13_0;
+    req.option = msg->option;
     req.count = msg->count;
     req.profiles[0] = profiles[0];
     req.profiles[1] = profiles[1];
@@ -1901,7 +1901,7 @@ void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobby
     req.slots[1] = WiFiPlazaLobbyClient_IdToSlot(msg->ids[1]);
     req.slots[2] = WiFiPlazaLobbyClient_IdToSlot(msg->ids[2]);
     req.slots[3] = WiFiPlazaLobbyClient_IdToSlot(msg->ids[3]);
-    req.flag = msg->unk_13_7;
+    req.flag = msg->allPlayers;
     WiFiPlazaNews_AddMinigameEntryEvent(work->news, &req);
 }
 
@@ -1917,7 +1917,7 @@ void WiFiPlaza_HandleFootprintStampNews(WiFiPlazaWork *work, const WiFiPlazaLobb
         return;
     }
     WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(work, slot), work->profiles[0], work->heapID);
-    req.option = msg->unk_13_0;
+    req.option = msg->option;
     req.count = msg->count;
     req.profile = work->profiles[0];
     req.slot = WiFiPlazaLobbyClient_IdToSlot(msg->ids[0]);
@@ -2008,7 +2008,7 @@ void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobb
             profiles[i] = NULL;
         }
     }
-    req.option = msg->unk_13_0;
+    req.option = msg->option;
     req.count = msg->count;
     req.profiles[0] = profiles[0];
     req.profiles[1] = profiles[1];
