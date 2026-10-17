@@ -161,8 +161,6 @@ void WiFiPlazaLobbyClient_OnPlayerUpdate(int id, const void *data) {
     }
 }
 
-#pragma force_active on
-
 static inline BOOL IsSameId(int id, int other) {
     return id == other;
 }
@@ -186,8 +184,6 @@ void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info) {
         WiFiPlazaLobbyMatches_Set(gWiFiPlazaLobbyClient, info->index, id, info);
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaLobbyClient_OnMatchClosed(int id, const WiFiPlazaLobbyMatchInfo *info) {
     int result;

@@ -1230,8 +1230,6 @@ int GtsSelector_Idle(GtsSelector *selector) {
     return -1;
 }
 
-#pragma force_active on
-
 // The panel slid in: show the cursor (and the page arrows of the level list).
 int GtsSelector_WaitShow(GtsSelector *selector) {
     if (BgCellManager_IsCellMoving(selector->cellManager, 0) == FALSE) {
@@ -1246,8 +1244,6 @@ int GtsSelector_WaitShow(GtsSelector *selector) {
     }
     return -1;
 }
-
-#pragma force_active reset
 
 int GtsSelector_WaitMove(GtsSelector *selector) {
     if (!BgCellManager_IsCellMoving(selector->cellManager, 0)) {
@@ -1319,8 +1315,6 @@ setState:
     selector->state = state;
     return -1;
 }
-
-#pragma force_active on
 
 #pragma opt_strength_reduction off
 
@@ -1400,8 +1394,6 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
     selector->state = GTS_SELECTOR_STATE_HANDLE_SPECIES_LETTERS;
     return -1;
 }
-
-#pragma force_active reset
 
 int GtsSelector_HandleSpeciesLetters(GtsSelector *selector) {
     int letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
@@ -1887,8 +1879,6 @@ int GtsSelector_OpenLevels(GtsSelector *selector) {
     return -1;
 }
 
-#pragma force_active on
-
 int GtsSelector_HandleLevels(GtsSelector *selector) {
     int button = GtsSelector_HandleLevelInput(selector);
     switch (button) {
@@ -1915,8 +1905,6 @@ int GtsSelector_HandleLevels(GtsSelector *selector) {
     }
     return -1;
 }
-
-#pragma force_active reset
 
 int GtsSelector_FinishLevel(GtsSelector *selector) {
     GtsSelector_RemoveWindows(selector, GTS_SELECTOR_PAGE_LEVELS);

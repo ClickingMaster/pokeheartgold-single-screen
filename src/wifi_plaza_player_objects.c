@@ -455,8 +455,6 @@ void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object) {
     }
 }
 
-#pragma force_active on
-
 // Effect 1 (sWiFiPlazaPlayerObjectEffects): turns around, one direction every 4 ticks.
 void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
     if (((int)object->timer) % 4 == 0) {
@@ -469,8 +467,6 @@ void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
         object->timer = 0;
     }
 }
-
-#pragma force_active reset
 
 void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object) {
     if (object->timer == 0) {

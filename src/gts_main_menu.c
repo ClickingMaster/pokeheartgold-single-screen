@@ -299,8 +299,6 @@ void GtsMainMenu_DeleteStrings(GtsApp *app) {
     String_Delete(app->titleString);
 }
 
-#pragma force_active on
-
 // Waits for the player to walk in, then checks the GTS's status (screen 7).
 int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
     if (app->playerAnimDone) {
@@ -314,22 +312,16 @@ int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app) {
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_2);
     return 3;
 }
-
-#pragma force_active on
 
 // Returns nothing although it is a state function (the state table ignores it: Gts_Main state 3).
 void GtsMainMenu_StartFadeIn(GtsApp *app) {
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_MAIN_MENU_STATE_WAIT_FADE_IN;
 }
-
-#pragma force_active reset
 
 int GtsMainMenu_WaitFadeIn(GtsApp *app) {
     if (IsPaletteFadeFinished()) {

@@ -457,8 +457,6 @@ void WifiSetupLink_PostEvent(u32 event) {
     WifiSetupLink_PushEvent(event, 0);
 }
 
-#pragma force_active on
-
 // The mask is computed at run time (-32 as a 16-bit value) so the alignment keeps its instruction
 // sequence.
 static inline u32 AlignDown32(u32 value) {
@@ -518,8 +516,6 @@ int WifiSetupLink_Open(u32 count) {
 }
 
 #pragma pop
-
-#pragma force_active reset
 
 // Shuts WCM down (waits for event 20) and frees the buffers.
 int WifiSetupLink_Close(void) {

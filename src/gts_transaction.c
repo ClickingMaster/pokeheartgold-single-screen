@@ -598,8 +598,6 @@ int GtsTransaction_SendResult(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active on
-
 // 0: the deposited Pokemon is still offered, 1: it was traded, -3: the server has no deposit (the Pokemon in the
 // save comes back), -4: neither has one ("appears to have fled").
 int GtsTransaction_WaitResult(GtsApp *app) {
@@ -682,8 +680,6 @@ int GtsTransaction_WaitResult(GtsApp *app) {
     }
     return 3;
 }
-
-#pragma force_active reset
 
 int GtsTransaction_ExitToMainMenu(GtsApp *app) {
     Gts_SetNextScreen(app, 1, 0);
@@ -949,8 +945,6 @@ int GtsTransaction_SaveAndExit(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active on
-
 // The save starts after 2..61 frames.
 int GtsTransaction_StartSave(GtsApp *app) {
     SetAllPCBoxesModified();
@@ -960,8 +954,6 @@ int GtsTransaction_StartSave(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsTransaction_WaitSaveDelay(GtsApp *app) {
     app->waitFrames--;
     if (app->waitFrames == 0) {
@@ -970,16 +962,12 @@ int GtsTransaction_WaitSaveDelay(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active on
-
 int GtsTransaction_SaveFirstPart(GtsApp *app) {
     if (Save_WriteFileAsync(app->args->saveData) == WRITE_STATUS_NEXT) {
         app->state = app->saveMidState;
     }
     return 3;
 }
-
-#pragma force_active reset
 
 int GtsTransaction_SaveRest(GtsApp *app) {
     if (Save_WriteFileAsync(app->args->saveData) == WRITE_STATUS_SUCCESS) {

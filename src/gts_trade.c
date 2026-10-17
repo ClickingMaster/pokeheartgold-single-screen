@@ -22,8 +22,6 @@ PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record);
 Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind);
 void GtsTrade_StoreReceivedMon(GtsApp *app);
 
-#pragma force_active on
-
 // Starts the trade sequence (OVY_71) for the kind of trade in nextScreenArg (7..10).
 int GtsTrade_Init(GtsApp *app, int state) {
     app->depositedMon = AllocMonZeroed(HEAP_ID_61);
@@ -145,8 +143,6 @@ freeDeposited:
     }
     return ret;
 }
-
-#pragma force_active reset
 
 int GtsTrade_Exit(GtsApp *app, int state) {
     Heap_Free(app->depositedMon);

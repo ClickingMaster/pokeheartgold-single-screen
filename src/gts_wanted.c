@@ -128,8 +128,6 @@ u32 Gts_GetGenderColor(int gender, u32 color);
 void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary);
 void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app);
 
-#pragma force_active on
-
 int GtsWanted_Init(GtsApp *app, int state) {
     GtsSelectorArgs args;
 
@@ -158,8 +156,6 @@ int GtsWanted_Init(GtsApp *app, int state) {
     app->state = GTS_WANTED_STATE_START;
     return 2;
 }
-
-#pragma force_active reset
 
 int GtsWanted_Main(GtsApp *app, int state) {
     WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
@@ -363,8 +359,6 @@ BOOL Gts_SetFixedGender(GtsWantedMon *wanted, u32 genderRatio) {
     }
 }
 
-#pragma force_active on
-
 int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
     int selection = GtsSelector_Main(app->selector);
     switch (selection) {
@@ -395,8 +389,6 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsWanted_AskGender(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_GENDER_SELECTOR);
@@ -409,8 +401,6 @@ int GtsWanted_OpenGenderSelector(GtsApp *app) {
     app->state = GTS_WANTED_STATE_HANDLE_GENDER_SELECTOR;
     return 3;
 }
-
-#pragma force_active on
 
 int GtsWanted_HandleGenderSelector(GtsApp *app) {
     u32 selection = GtsSelector_Main(app->selector);
@@ -430,8 +420,6 @@ int GtsWanted_HandleGenderSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsWanted_AskLevel(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_LEVEL_SELECTOR);
@@ -444,8 +432,6 @@ int GtsWanted_OpenLevelSelector(GtsApp *app) {
     app->state = GTS_WANTED_STATE_HANDLE_LEVEL_SELECTOR;
     return 3;
 }
-
-#pragma force_active on
 
 // Canceling goes back to the gender, or to the species when it has only one gender.
 int GtsWanted_HandleLevelSelector(GtsApp *app) {
@@ -474,8 +460,6 @@ int GtsWanted_HandleLevelSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsWanted_AskConfirm(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00023, 1, 0, 0xF0F); // Are these conditions OK?
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_SHOW_CONFIRM_PROMPT);
@@ -487,8 +471,6 @@ int GtsWanted_ShowConfirmPrompt(GtsApp *app) {
     app->state = GTS_WANTED_STATE_HANDLE_CONFIRM_PROMPT;
     return 3;
 }
-
-#pragma force_active on
 
 int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
@@ -516,8 +498,6 @@ int GtsWanted_FadeOut(GtsApp *app) {
     app->state = GTS_WANTED_STATE_START;
     return 4;
 }
-
-#pragma force_active reset
 
 int GtsWanted_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {

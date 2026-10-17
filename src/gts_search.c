@@ -211,8 +211,6 @@ int GtsSearch_ShowExitPrompt(GtsApp *app);
 int GtsSearch_HandleExitPrompt(GtsApp *app);
 int GtsSearch_ReturnToInput(GtsApp *app);
 
-#pragma force_active on
-
 int GtsSearchResult_Init(GtsApp *app, int state) {
     GtsSearchResult_CreateStrings(app);
     GtsSearchResult_InitBgs(app->bgConfig, -32 - app->scrollY);
@@ -242,8 +240,6 @@ int GtsSearchResult_Init(GtsApp *app, int state) {
     app->state = GTS_SEARCH_RESULT_STATE_START;
     return 2;
 }
-
-#pragma force_active reset
 
 int GtsSearchResult_Main(GtsApp *app, int state) {
     int ret = sGtsSearchResultStates[app->state](app);
@@ -404,8 +400,6 @@ int GtsSearchResult_Start(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active on
-
 // Switches to another result: the screen is entered again (arg 17) for it.
 void GtsSearchResult_Select(GtsApp *app, int result) {
     if (result != app->selectedResult && result >= 0) {
@@ -458,8 +452,6 @@ int GtsSearchResult_HandleInput(GtsApp *app) {
     }
     return 3;
 }
-
-#pragma force_active reset
 
 int GtsSearchResult_FadeOut(GtsApp *app) {
     Sprite_SetDrawFlag(app->avatarMarkerSprite, FALSE);
@@ -596,8 +588,6 @@ void GtsSearchResult_ScrollBgs(GtsApp *app) {
 // the selector, SEARCH asks search.asp, the trainers found stand on the top screen; touching one, or the results
 // button, shows it (screen 3).
 
-#pragma force_active on
-
 int GtsSearch_Init(GtsApp *app, int state) {
     GtsSelectorArgs args;
 
@@ -648,8 +638,6 @@ int GtsSearch_Main(GtsApp *app, int state) {
     Gts_SetSpritePosition(app->cursorSprite, sGtsSearchCursorX[x].value, sGtsSearchCursorY[y].value - app->scrollY);
     return ret;
 }
-
-#pragma force_active reset
 
 int GtsSearch_Exit(GtsApp *app, int state) {
     app->vblankFunc = NULL;
@@ -1167,8 +1155,6 @@ int GtsSearch_OpenSpeciesSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active on
-
 int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
     int selection = GtsSelector_Main(app->selector);
     switch (selection) {
@@ -1196,8 +1182,6 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsSearch_AskGender(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_GENDER_SELECTOR);
@@ -1210,8 +1194,6 @@ int GtsSearch_OpenGenderSelector(GtsApp *app) {
     app->state = GTS_SEARCH_STATE_HANDLE_GENDER_SELECTOR;
     return 3;
 }
-
-#pragma force_active on
 
 int GtsSearch_HandleGenderSelector(GtsApp *app) {
     u32 selection = GtsSelector_Main(app->selector);
@@ -1234,8 +1216,6 @@ int GtsSearch_HandleGenderSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsSearch_AskLevel(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_LEVEL_SELECTOR);
@@ -1249,8 +1229,6 @@ int GtsSearch_OpenLevelSelector(GtsApp *app) {
     app->state = GTS_SEARCH_STATE_HANDLE_LEVEL_SELECTOR;
     return 3;
 }
-
-#pragma force_active on
 
 int GtsSearch_HandleLevelSelector(GtsApp *app) {
     u32 selection = GtsSelector_Main(app->selector);
@@ -1273,8 +1251,6 @@ int GtsSearch_HandleLevelSelector(GtsApp *app) {
     return 3;
 }
 
-#pragma force_active reset
-
 int GtsSearch_AskCountry(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00176, 1, 0, 0xF0F);
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_COUNTRY_SELECTOR);
@@ -1288,8 +1264,6 @@ int GtsSearch_OpenCountrySelector(GtsApp *app) {
     app->state = GTS_SEARCH_STATE_HANDLE_COUNTRY_SELECTOR;
     return 3;
 }
-
-#pragma force_active on
 
 int GtsSearch_HandleCountrySelector(GtsApp *app) {
     int selection = GtsSelector_Main(app->selector);
@@ -1308,8 +1282,6 @@ int GtsSearch_HandleCountrySelector(GtsApp *app) {
     }
     return 3;
 }
-
-#pragma force_active reset
 
 int GtsSearch_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x120, 3, 1);

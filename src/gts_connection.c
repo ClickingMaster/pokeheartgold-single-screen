@@ -203,8 +203,6 @@ int GtsConnection_Init(GtsApp *app, int state) {
     return 2;
 }
 
-#pragma force_active on
-
 int GtsConnection_Main(GtsApp *app, int state) {
     int prevState;
     int result;
@@ -218,8 +216,6 @@ int GtsConnection_Main(GtsApp *app, int state) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 int GtsConnection_Exit(GtsApp *app, int state) {
     if (app->paletteAnim.task != NULL) {

@@ -5,8 +5,6 @@
 // Receive callbacks of the exchange with one other player (WiFiPlazaWork.talk; WiFiPlazaLobbyClient_SendToPlayer sends its messages):
 // id is the sender, data the received words.
 
-#pragma force_active on
-
 // Message 0: the other player asks for an exchange; answered with WiFiPlazaWork_SendTalkAnswer (TRUE = accepted).
 void WiFiPlaza_OnTalkRequest(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     u32 slot = WiFiPlazaLobbyClient_IdToSlot(id);
@@ -53,8 +51,6 @@ void WiFiPlaza_OnTalkAnswer(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     }
 }
 
-#pragma force_active reset
-
 // Message 2: the state of the other player (2 or 3), or the end of the exchange.
 void WiFiPlaza_OnTalkState(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     int slot;
@@ -85,11 +81,7 @@ void WiFiPlaza_OnTalkCancel(int id, u16 *data, u32 size, WiFiPlazaWork *work) {
     }
 }
 
-#pragma force_active on
-
 // A lobby message: handled by sWiFiPlazaLobbyMessageHandlers[type] (WiFiPlaza_HandleChatNews ...).
 void WiFiPlaza_OnLobbyMessage(int id, WiFiPlazaLobbyMessage *msg, u32 size, WiFiPlazaWork *work) {
     sWiFiPlazaLobbyMessageHandlers[msg->type](work, msg);
 }
-
-#pragma force_active reset
