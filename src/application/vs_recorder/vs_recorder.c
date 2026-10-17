@@ -45,8 +45,6 @@ void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
 // per-screen step tables, indexed by VsRecorderWork.subState
-extern VsRecorderScreenFunc sVsRecorderDressUpSendSubStates[];
-extern VsRecorderScreenFunc sVsRecorderDressUpViewSubStates[];
 extern VsRecorderScreenFunc sVsRecorderBoxDataSendSubStates[];
 extern VsRecorderScreenFunc sVsRecorderBoxDataViewSubStates[];
 extern VsRecorderScreenFunc sVsRecorderRankingsSubStates[];
@@ -453,11 +451,11 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_SEND:
-        done = sVsRecorderDressUpSendSubStates[work->subState](work);
+        done = gVsRecorderDressUpSendSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_VIEW:
-        done = sVsRecorderDressUpViewSubStates[work->subState](work);
+        done = gVsRecorderDressUpViewSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_SEND:

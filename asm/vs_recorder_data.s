@@ -1,20 +1,4 @@
 	.include "asm/macros.inc"
-	.public VsRecorder_DressUpInit
-	.public VsRecorder_DressUpEnter
-	.public VsRecorder_DressUpSendShow
-	.public VsRecorder_DressUpSendMain
-	.public VsRecorder_DressUpSendUpload
-	.public VsRecorder_DressUpSendExit
-	.public VsRecorder_DressUpViewInit
-	.public VsRecorder_DressUpViewSelectCategory
-	.public VsRecorder_DressUpViewSelectSpecies
-	.public VsRecorder_DressUpViewExit
-	.public VsRecorder_DressUpViewDownload
-	.public VsRecorder_DressUpViewShowPhoto
-	.public VsRecorder_DressUpViewMain
-	.public VsRecorder_DressUpViewClosePhoto
-	.public VsRecorder_DressUpViewToggleProfile
-	.public VsRecorder_DressUpViewChangePhoto
 	.public VsRecorder_BoxDataInit
 	.public VsRecorder_BoxDataEnter
 	.public VsRecorder_BoxDataSendChangeBox
@@ -130,16 +114,6 @@
 	.public VsRecorder_DeleteEnter
 	.public VsRecorder_DeleteMain
 	.public VsRecorder_DeleteExit
-	.public sVsRecorderDressUpCenterButtonHitbox
-	.public sVsRecorderDressUpLeftButtonHitbox
-	.public sVsRecorderDressUpRightButtonHitbox
-	.public sVsRecorderDressUpTopBarHitbox
-	.public sVsRecorderDressUpPrevPhotoHitbox
-	.public sVsRecorderDressUpNextPhotoHitbox
-	.public sVsRecorderDressUpSpeciesListHitboxes
-	.public sVsRecorderDressUpSpeciesListConfig
-	.public sVsRecorderDressUpSendSubStates
-	.public sVsRecorderDressUpViewSubStates
 	.public ov40_02245268
 	.public sVsRecorderBoxDataHitboxes
 	.public sVsRecorderBoxListButtonWindows
@@ -213,57 +187,6 @@
 	.include "global.inc"
 
 	.rodata
-
-sVsRecorderDressUpCenterButtonHitbox:
-	.byte 0x98, 0xB8, 0x50, 0xB0
-
-sVsRecorderDressUpLeftButtonHitbox:
-	.byte 0x98, 0xB8, 0x20, 0x80
-
-sVsRecorderDressUpRightButtonHitbox:
-	.byte 0x98, 0xB8, 0x80, 0xE0
-
-sVsRecorderDressUpTopBarHitbox:
-	.byte 0x10, 0x30, 0x38, 0xC8
-
-sVsRecorderDressUpPrevPhotoHitbox:
-	.byte 0x48, 0x68, 0x18, 0x48
-
-sVsRecorderDressUpNextPhotoHitbox:
-	.byte 0x48, 0x68, 0xB8, 0xE8
-
-sVsRecorderDressUpSpeciesListHitboxes:
-	.byte 0x18, 0x28, 0x38, 0xC0
-	.byte 0x28, 0x38, 0x38, 0xC0, 0x38, 0x48, 0x38, 0xC0, 0x48, 0x58, 0x38, 0xC0, 0x58, 0x68, 0x38, 0xC0
-	.byte 0x68, 0x78, 0x38, 0xC0
-
-sVsRecorderDressUpSpeciesListConfig:
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
-	.byte 0x09, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
-	.byte 0x20, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
-	.word sVsRecorderDressUpSpeciesListHitboxes
-
-sVsRecorderDressUpSendSubStates:
-	.word VsRecorder_DressUpInit
-	.word VsRecorder_DressUpEnter
-	.word VsRecorder_DressUpSendShow
-	.word VsRecorder_DressUpSendMain
-	.word VsRecorder_DressUpSendUpload
-	.word VsRecorder_DressUpSendExit
-
-sVsRecorderDressUpViewSubStates:
-	.word VsRecorder_DressUpInit
-	.word VsRecorder_DressUpEnter
-	.word VsRecorder_DressUpViewInit
-	.word VsRecorder_DressUpViewSelectCategory
-	.word VsRecorder_DressUpViewSelectSpecies
-	.word VsRecorder_DressUpViewExit
-	.word VsRecorder_DressUpViewDownload
-	.word VsRecorder_DressUpViewShowPhoto
-	.word VsRecorder_DressUpViewMain
-	.word VsRecorder_DressUpViewClosePhoto
-	.word VsRecorder_DressUpViewToggleProfile
-	.word VsRecorder_DressUpViewChangePhoto
 
 ov40_02245268:
 	.byte 0x04, 0x03, 0x18, 0x02

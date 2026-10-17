@@ -64,6 +64,8 @@ extern const VsRecorderScreenFunc gVsRecorderTitleSubStates[];
 extern const VsRecorderScreenFunc gVsRecorderMenuSubStates[];
 extern const VsRecorderScreenFunc gVsRecorderSavedVideoSubStates[];
 extern const VsRecorderScreenFunc gVsRecorderFrontierSubStates[];
+extern const VsRecorderScreenFunc gVsRecorderDressUpSendSubStates[];
+extern const VsRecorderScreenFunc gVsRecorderDressUpViewSubStates[];
 
 // VsRecorderWork.screenPtr
 #define VS_RECORDER_SCREEN_TITLE         0
@@ -190,7 +192,7 @@ typedef struct VsRecorderListConfig {
     int baseTile;
     int bgId;
     int rows;
-    TouchscreenHitbox *hitboxes; // one per visible row, or NULL
+    const TouchscreenHitbox *hitboxes; // one per visible row, or NULL
 } VsRecorderListConfig;
 
 // a scrolling list in one BG window

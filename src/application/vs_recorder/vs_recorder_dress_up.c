@@ -40,21 +40,14 @@
 
 FS_EXTERN_OVERLAY(OVY_41);
 
-extern const TouchscreenHitbox sVsRecorderDressUpCenterButtonHitbox;   // centre bottom button (exit)
-extern const TouchscreenHitbox sVsRecorderDressUpLeftButtonHitbox;     // left bottom button (exit)
-extern const TouchscreenHitbox sVsRecorderDressUpRightButtonHitbox;    // right bottom button (send)
-extern const TouchscreenHitbox sVsRecorderDressUpTopBarHitbox;         // top bar (photo / profile)
-extern const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox;      // previous photo
-extern const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox;      // next photo
-extern const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig; // species list
-extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];      // species groups (9)
+extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[]; // species groups (9)
 
-// substates of sending a Dress-Up photo (sVsRecorderDressUpSendSubStates)
+// substates of sending a Dress-Up photo (gVsRecorderDressUpSendSubStates)
 #define DRESS_UP_SEND_MAIN   3
 #define DRESS_UP_SEND_UPLOAD 4
 #define DRESS_UP_SEND_EXIT   5
 
-// substates of viewing Dress-Up photos (sVsRecorderDressUpViewSubStates)
+// substates of viewing Dress-Up photos (gVsRecorderDressUpViewSubStates)
 #define DRESS_UP_VIEW_SELECT_CATEGORY 3
 #define DRESS_UP_VIEW_SELECT_SPECIES  4
 #define DRESS_UP_VIEW_EXIT            5
@@ -86,6 +79,72 @@ static void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
 
 // first species list index of each group
 static u16 sVsRecorderDressUpSpeciesGroupStarts[10] = { 0, 87, 136, 191, 235, 303, 360, 457, 487, 493 };
+
+// right bottom button (send)
+static const TouchscreenHitbox sVsRecorderDressUpRightButtonHitbox = { 152, 184, 128, 224 };
+
+// top bar (photo / profile)
+static const TouchscreenHitbox sVsRecorderDressUpTopBarHitbox = { 16, 48, 56, 200 };
+
+// centre bottom button (exit)
+static const TouchscreenHitbox sVsRecorderDressUpCenterButtonHitbox = { 152, 184, 80, 176 };
+
+// next photo
+static const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox = { 72, 104, 184, 232 };
+
+// previous photo
+static const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox = { 72, 104, 24, 72 };
+
+// left bottom button (exit)
+static const TouchscreenHitbox sVsRecorderDressUpLeftButtonHitbox = { 152, 184, 32, 128 };
+
+static const TouchscreenHitbox sVsRecorderDressUpSpeciesListHitboxes[6] = {
+    { 24,  40,  56, 192 },
+    { 40,  56,  56, 192 },
+    { 56,  72,  56, 192 },
+    { 72,  88,  56, 192 },
+    { 88,  104, 56, 192 },
+    { 104, 120, 56, 192 },
+};
+
+// species list
+static const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig = {
+    .entries = NULL,
+    .count = 0,
+    .lineHeight = 1,
+    .x = 9,
+    .y = 3,
+    .width = 14,
+    .height = 12,
+    .baseTile = 0x20,
+    .bgId = 6,
+    .rows = 6,
+    .hitboxes = sVsRecorderDressUpSpeciesListHitboxes,
+};
+
+const VsRecorderScreenFunc gVsRecorderDressUpSendSubStates[6] = {
+    VsRecorder_DressUpInit,
+    VsRecorder_DressUpEnter,
+    VsRecorder_DressUpSendShow,
+    VsRecorder_DressUpSendMain,
+    VsRecorder_DressUpSendUpload,
+    VsRecorder_DressUpSendExit,
+};
+
+const VsRecorderScreenFunc gVsRecorderDressUpViewSubStates[12] = {
+    VsRecorder_DressUpInit,
+    VsRecorder_DressUpEnter,
+    VsRecorder_DressUpViewInit,
+    VsRecorder_DressUpViewSelectCategory,
+    VsRecorder_DressUpViewSelectSpecies,
+    VsRecorder_DressUpViewExit,
+    VsRecorder_DressUpViewDownload,
+    VsRecorder_DressUpViewShowPhoto,
+    VsRecorder_DressUpViewMain,
+    VsRecorder_DressUpViewClosePhoto,
+    VsRecorder_DressUpViewToggleProfile,
+    VsRecorder_DressUpViewChangePhoto,
+};
 
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
