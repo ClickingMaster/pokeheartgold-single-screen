@@ -119,8 +119,6 @@ u32 PCBox_IsSpriteAnimated(PCBoxView *view, u32 index) {
     return ManagedSprite_IsAnimated(view->sprites[index]);
 }
 
-#pragma force_active on
-
 void PCBox_SetSpriteVisible(PCBoxView *view, int index, int state) {
     if (state == 1) {
         ManagedSprite_SetDrawFlag(view->sprites[index], 1);
@@ -135,8 +133,6 @@ int PCBox_IsSpriteVisible(PCBoxView *view, int index) {
     }
     return 0;
 }
-
-#pragma force_active reset
 
 void PCBox_SetSpritePriority(PCBoxView *view, u32 index, u32 priority) {
     ManagedSprite_SetPriority(view->sprites[index], priority);
@@ -265,8 +261,6 @@ static void *PCBox_LoadMonIconChars(PCBoxView *view, BoxPokemon *boxMon, NNSG2dC
     return GfGfxLoader_GetCharDataFromOpenNarc(view->iconNarc, Boxmon_GetIconNaix(boxMon), FALSE, charData, HEAP_ID_10);
 }
 
-#pragma force_active on
-
 // Keeps the icon graphics of a box (for the scroll animation between boxes).
 void PCBox_LoadBoxIconImages(PCBoxWork *work, int box) {
     u32 i;
@@ -288,8 +282,6 @@ void PCBox_LoadBoxIconImages(PCBoxWork *work, int box) {
     }
 }
 
-#pragma force_active reset
-
 static void PCBox_SetIconImage(PCBoxView *view, void *src, int index, int palette) {
     PCBox_LoadSpriteCharsMain(view, index, src, 0x200);
     ManagedSprite_SetPaletteOverride(view->sprites[index], palette + 3);
@@ -304,8 +296,6 @@ static void PCBox_LoadMonIcon(PCBoxWork *work, BoxPokemon *boxMon, int index) {
     Heap_Free(allocation);
 }
 
-#pragma force_active on
-
 void PCBox_RefreshSlotIcon(PCBoxWork *work, int box, int slot, int index) {
     ManagedSprite **sprites = work->view->sprites;
 
@@ -316,8 +306,6 @@ void PCBox_RefreshSlotIcon(PCBoxWork *work, int box, int slot, int index) {
     }
 }
 
-#pragma force_active reset
-
 void PCBox_LoadBoxIcons(PCBoxWork *work) {
     u32 i;
 
@@ -325,8 +313,6 @@ void PCBox_LoadBoxIcons(PCBoxWork *work) {
         PCBox_RefreshSlotIcon(work, work->activeBox, i, i + 25);
     }
 }
-
-#pragma force_active on
 
 void PCBox_LoadPartyIcons(PCBoxWork *work) {
     u32 count = Party_GetCount(work->party);
@@ -338,8 +324,6 @@ void PCBox_LoadPartyIcons(PCBoxWork *work) {
         PCBox_SetSpriteVisible(work->view, work->view->slotIcons[PC_BOX_SLOT_PARTY_START + i], 0);
     }
 }
-
-#pragma force_active reset
 
 void PCBox_GetSlotPosition(u32 slot, s16 *x, s16 *y, int partyLayout) {
     if (slot < PC_BOX_SLOT_PARTY_START) {
@@ -458,8 +442,6 @@ void PCBox_SetMovingIconPriority(PCBoxView *view, int slot, u32 target) {
     PCBox_SetSpriteDrawPriority(view, index, 0x14);
 }
 
-#pragma force_active on
-
 // Scrolls the box icons sideways; an icon leaving the box reappears on the other side with the graphics of the box
 // being scrolled in (PCBox_LoadBoxIconImages).
 void PCBox_ScrollBoxIcons(PCBoxWork *work, s32 amount) {
@@ -494,10 +476,6 @@ void PCBox_ScrollBoxIcons(PCBoxWork *work, s32 amount) {
     }
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 void PCBox_UpdatePartyIconPositions(PCBoxWork *work) {
     s8 cell[2];
     s16 x, y;
@@ -510,8 +488,6 @@ void PCBox_UpdatePartyIconPositions(PCBoxWork *work) {
         ManagedSprite_SetPositionXY(work->view->sprites[work->view->slotIcons[PC_BOX_SLOT_PARTY_START + i]], x + sPCBoxPartyIconOffsets[i][0], y + sPCBoxPartyIconOffsets[i][1]);
     }
 }
-
-#pragma force_active reset
 
 void PCBox_StartReleaseScale(PCBoxReleaseWork *releaseWork) {
     releaseWork->scale = 1.0f;
@@ -710,8 +686,6 @@ void PCBox_PlaceHeldItemIconAtSlot(PCBoxView *view, u32 slot, u32 partyLayout) {
     PCBox_SetHeldItemIconPosition(view, pos[1], (s16)(pos[0] + 4));
 }
 
-#pragma force_active on
-
 void PCBox_CreateHeldItemIconOutline(PCBoxView *view) {
     ManagedSpriteTemplate template;
     s16 x, y;
@@ -746,8 +720,6 @@ void PCBox_CreateHeldItemIconOutline(PCBoxView *view) {
         }
     }
 }
-
-#pragma force_active reset
 
 void PCBox_ShowHeldItemIconOutline(PCBoxView *view) {
     u32 i;
@@ -840,8 +812,6 @@ static void PCBox_CreateUiSprites(PCBoxView *view) {
     PCBox_SetSpriteVisible(view, 10, 0);
 }
 
-#pragma force_active on
-
 void PCBox_CreateSelectedIconOutline(PCBoxWork *work) {
     ManagedSpriteTemplate template;
     s16 x, y;
@@ -883,8 +853,6 @@ void PCBox_CreateSelectedIconOutline(PCBoxWork *work) {
         }
     }
 }
-
-#pragma force_active reset
 
 void PCBox_HideSelectedIconOutline(PCBoxWork *work) {
     PCBox_SetSelectedIconOutlineVisible(work, 0);
@@ -1164,8 +1132,6 @@ void PCBox_GetTrayBoxPosition(PCBoxView *view, u32 box, s16 *x, s16 *y) {
     ManagedSprite_GetPositionXY(view->sprites[15 + box], x, y);
 }
 
-#pragma force_active on
-
 void PCBox_DrawBoxThumbnail(PCBoxWork *work, int box) {
     NNSG2dCharacterData *charData;
     void *allocation = AllocAtEndAndReadWholeNarcMemberByIdPair(NARC_a_0_1_9, 70, HEAP_ID_10);
@@ -1176,8 +1142,6 @@ void PCBox_DrawBoxThumbnail(PCBoxWork *work, int box) {
     PCBox_ColorWallpaperThumbnail(work, work->view->boxThumbnails[box], PCBox_GetWallpaperGfxIndex(work, box), 8, 0x400);
     PCBox_DrawBoxThumbnailMons(work, box, work->view->boxThumbnails[box]);
 }
-
-#pragma force_active reset
 
 void PCBox_DrawAllBoxThumbnails(PCBoxWork *work) {
     u32 i;

@@ -124,8 +124,6 @@ static u32 PCBox_FlashPartyPanelButton(PCBoxWork *work, u32 button, u32 nextStat
 static void PCBox_DimForExitPrompt(PCBoxWork *work);
 static void PCBox_InitSprites(PCBoxWork *work);
 
-#pragma force_active on
-
 u32 PCBox_State_Init(PCBoxWork *work) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
@@ -167,8 +165,6 @@ u32 PCBox_State_Init(PCBoxWork *work) {
     PCBox_SetBlendEnabled(1);
     return work->nextState;
 }
-
-#pragma force_active reset
 
 u32 PCBox_State_Exit(PCBoxWork *work) {
     PCBox_SaveMenuInputState(work);
@@ -953,8 +949,6 @@ u32 PCBox_State_SetupPartyPanelInput(PCBoxWork *work) {
     return PC_BOX_STATE_MOVE_MODE_PARTY_INPUT;
 }
 
-#pragma force_active on
-
 static inline u32 plus30(u32 n) {
     return n + 30;
 }
@@ -1062,8 +1056,6 @@ int PCBox_State_MoveModePartyInput(PCBoxWork *work) {
         return PC_BOX_STATE_MOVE_MODE_PARTY_INPUT;
     }
 }
-
-#pragma force_active reset
 
 u32 PCBox_State_SlideOutPartyPanel(PCBoxWork *work) {
     PCBox_SlideOutPartyPanel(work->view->panels);
@@ -1495,8 +1487,6 @@ u32 PCBox_State_OpenTrayFromBox(PCBoxWork *work) {
     return PCBox_OpenBoxTray(work, 0x30);
 }
 
-#pragma force_active on
-
 void PCBox_State_SlideInTrayPartyPanel(PCBoxWork *work) {
     PCBox_LoadPartyPanelTilemap(work->view->panels, 1);
     PCBox_PlacePartyPanelRightHidden(work->view->panels);
@@ -1510,8 +1500,6 @@ void PCBox_State_SlideInTrayPartyPanel(PCBoxWork *work) {
     }
     PCBox_WaitForUpdateFunc(work, PCBox_WaitPartyPanelSlide, 40);
 }
-
-#pragma force_active reset
 
 u32 PCBox_State_SlideOutTray(PCBoxWork *work) {
     return PCBox_CloseBoxTray(work, 0x32);
@@ -1822,8 +1810,6 @@ u32 PCBox_State_ResumeMoveModePartyInput(PCBoxWork *work) {
     return PC_BOX_STATE_MOVE_MODE_PARTY_INPUT;
 }
 
-#pragma force_active on
-
 int PCBox_State_WithdrawInput(PCBoxWork *work) {
     u32 input = PCBox_FindTouchedBoxSlot();
     if (input != -1) {
@@ -1951,8 +1937,6 @@ int PCBox_State_WithdrawInput(PCBoxWork *work) {
     return PC_BOX_STATE_WITHDRAW_INPUT;
 }
 
-#pragma force_active reset
-
 void PCBox_State_ReturnToWithdrawInput(PCBoxWork *work) {
     PCBox_PrintMonActionMessage(work, 0, 0, 0x27);
     PCBox_State_ResumeWithdrawInput(work);
@@ -2016,8 +2000,6 @@ u32 PCBox_State_ResumeWithdrawInput(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 1);
     return PC_BOX_STATE_WITHDRAW_INPUT;
 }
-
-#pragma force_active on
 
 int PCBox_State_DepositInput(PCBoxWork *work) {
     u32 choice = PCBox_FindTouchedPartySlot();
@@ -2111,10 +2093,6 @@ int PCBox_State_DepositInput(PCBoxWork *work) {
     return PC_BOX_STATE_DEPOSIT_INPUT;
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 int PCBox_State_TryDeposit(PCBoxWork *work) {
     int slot = work->selectedSlot - 30;
     Pokemon *mon;
@@ -2142,8 +2120,6 @@ int PCBox_State_TryDeposit(PCBoxWork *work) {
     PCBox_HideSelectedIconOutline(work);
     return PCBox_WaitForUpdateFunc(work, PCBox_AnimateDepositBoxSelectOpen, PC_BOX_STATE_SHOW_DEPOSIT_BOX_SELECT);
 }
-
-#pragma force_active reset
 
 u32 PCBox_State_ReturnFromDepositError(PCBoxWork *work) {
     return PCBox_WaitForUpdateFunc(work, PCBox_WaitActionMenuAndButtonsSlide, PC_BOX_STATE_RETURN_TO_ACTION_MENU);
@@ -3285,8 +3261,6 @@ static u32 PCBox_WaitForPendingUpdateFunc(PCBoxWork *work, u32 value) {
     return PC_BOX_STATE_WAIT_UPDATE_FUNC;
 }
 
-#pragma force_active on
-
 static int PCBox_ShowYesNo(PCBoxWork *work, int state) {
     if (state == 1) {
         PCBox_ShowYesNoPrompt(work, 1);
@@ -3296,8 +3270,6 @@ static int PCBox_ShowYesNo(PCBoxWork *work, int state) {
     work->view->yesNoHandler = state;
     return PC_BOX_STATE_HANDLE_YES_NO;
 }
-
-#pragma force_active reset
 
 static u32 PCBox_StartSubApp(PCBoxWork *work, u32 value) {
     work->subAppIndex = value;
@@ -3997,8 +3969,6 @@ static u32 PCBox_PickUpTrayMon(PCBoxWork *work, u32 value) {
     return PCBox_WaitForUpdateFunc(work, PCBox_AnimateTrayPickUp, PC_BOX_STATE_BOX_TRAY_HOLDING_INPUT);
 }
 
-#pragma force_active on
-
 static u32 PCBox_DropTrayMon(PCBoxWork *work, u32 index) {
     struct {
         s16 y, x;
@@ -4079,8 +4049,6 @@ static u32 PCBox_DropTrayMon(PCBoxWork *work, u32 index) {
     work->partyLayout = 2;
     return PCBox_WaitForUpdateFunc(work, PCBox_AnimateTrayDrop, PC_BOX_STATE_END_TRAY_HOLDING_DROP);
 }
-
-#pragma force_active reset
 
 static u32 PCBox_SelectItemModeBoxMon(PCBoxWork *work, u32 value) {
     work->selectedSlot = value;
@@ -4190,8 +4158,6 @@ static u32 PCBox_PickUpTrayItem(PCBoxWork *work, u32 value) {
     return PCBox_WaitForUpdateFunc(work, PCBox_AnimateTrayItemPickUp, PC_BOX_STATE_ITEM_TRAY_HOLDING_INPUT);
 }
 
-#pragma force_active on
-
 static u32 PCBox_ReturnTrayItem(PCBoxWork *work) {
     u32 input = GridInputHandler_GetNextInput(work->view->gridInput);
     if (input < 36) {
@@ -4204,8 +4170,6 @@ static u32 PCBox_ReturnTrayItem(PCBoxWork *work) {
     PCBox_AllocHeldItemMove(work);
     return PCBox_WaitForUpdateFunc(work, PCBox_AnimateTrayItemReturn, PC_BOX_STATE_FINISH_ITEM_TRAY_DROP);
 }
-
-#pragma force_active reset
 
 static u32 PCBox_DropTrayItem(PCBoxWork *work, u32 value) {
     s16 xy[2];
@@ -4611,20 +4575,14 @@ void PCBox_State_ChooseTrayBox(PCBoxWork *work) {
     PCBox_JumpToTrayBox(work, 3);
 }
 
-#pragma force_active on
-
 void PCBox_State_ChooseTrayExit(PCBoxWork *work) {
     PCBox_ClearMonInfoAndSelection(work);
     PCBox_CloseTray(work);
 }
 
-#pragma force_active reset
-
 u32 PCBox_State_BoxMenuSwitchBox(PCBoxWork *work) {
     return PCBox_JumpToTrayBox(work, 1);
 }
-
-#pragma force_active on
 
 void PCBox_State_ChooseWallpaper(PCBoxWork *work) {
     PCBox_CloseMessageWindow(work->view, 39);
@@ -4633,8 +4591,6 @@ void PCBox_State_ChooseWallpaper(PCBoxWork *work) {
     PCBox_CloseBoxTray(work, 63);
 }
 
-#pragma force_active reset
-
 u32 PCBox_State_ChooseRename(PCBoxWork *work) {
     return PCBox_StartSubApp(work, 2);
 }
@@ -4642,8 +4598,6 @@ u32 PCBox_State_ChooseRename(PCBoxWork *work) {
 u32 PCBox_State_SwitchBoxForWallpaper(PCBoxWork *work) {
     return PCBox_JumpToTrayBox(work, 2);
 }
-
-#pragma force_active on
 
 int PCBox_State_ChooseWallpaperMenuExit(PCBoxWork *work) {
     PCBox_CloseMessageWindow(work->view, 39);
@@ -4658,13 +4612,9 @@ int PCBox_State_ChooseWallpaperMenuExit(PCBoxWork *work) {
     return PC_BOX_STATE_CLOSE_WALLPAPER_MENU;
 }
 
-#pragma force_active reset
-
 void PCBox_State_ChooseWithdraw(PCBoxWork *work) {
     PCBox_TryWithdraw(work);
 }
-
-#pragma force_active on
 
 void PCBox_State_CloseWithdrawActionMenu(PCBoxWork *work) {
     PCBox_SlideOutActionMenu(work->view->panels);
@@ -4673,8 +4623,6 @@ void PCBox_State_CloseWithdrawActionMenu(PCBoxWork *work) {
     PCBox_SetSelectedIconOutlineVisible(work, 0);
     PCBox_WaitForUpdateFunc(work, PCBox_WaitDeselectThenReturnButton, 89);
 }
-
-#pragma force_active reset
 
 void PCBox_State_ChooseDeposit(PCBoxWork *work) {
     PCBox_StartDeposit(work);
@@ -4705,8 +4653,6 @@ void PCBox_State_ChooseBagGive(PCBoxWork *work) {
     PCBox_HandleBagGiveCommand(work);
 }
 
-#pragma force_active on
-
 void PCBox_State_CloseItemModeActionMenu(PCBoxWork *work) {
     PCBox_SlideOutActionMenu(work->view->panels);
     PCBox_SlideInPartyButton(work->view->panels);
@@ -4719,14 +4665,10 @@ void PCBox_State_CloseItemModeActionMenu(PCBoxWork *work) {
     PCBox_WaitForUpdateFunc(work, PCBox_WaitItemModeDeselect, 118);
 }
 
-#pragma force_active reset
-
 void PCBox_State_ItemModeChooseTrayBox(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 0);
     PCBox_JumpToTrayBox(work, 4);
 }
-
-#pragma force_active on
 
 void PCBox_State_ItemModePartyChooseTray(PCBoxWork *work) {
     PCBox_ClearMonInfoAndSelection(work);
@@ -4752,5 +4694,3 @@ static void PCBox_InitSprites(PCBoxWork *work) {
     PCBox_CreateSprites(work);
     PCBox_CreateTrayTextObjs(work->view);
 }
-
-#pragma force_active reset

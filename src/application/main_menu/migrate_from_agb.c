@@ -1270,8 +1270,6 @@ BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL MigrateFromAgb_Init(OverlayManager *man, int *state) {
     MigrateFromAgbApp *app;
     Heap_Create(HEAP_ID_3, HEAP_ID_76, 0x38000);
@@ -1295,10 +1293,6 @@ BOOL MigrateFromAgb_Init(OverlayManager *man, int *state) {
     sMigrateFromAgbIcons = app->icons;
     return TRUE;
 }
-
-#pragma force_active reset
-
-#pragma force_active on
 
 BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
     MigrateFromAgbApp *app = OverlayManager_GetData(man);
@@ -1592,8 +1586,6 @@ BOOL MigrateFromAgb_Main(OverlayManager *man, int *state) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL MigrateFromAgb_Exit(OverlayManager *man, int *state) {
     MigrateFromAgbApp *app;

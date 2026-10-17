@@ -200,8 +200,6 @@ BOOL ConnectToRanger_ShowPokedexRequiredMessage(ConnectToRangerApp *app) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void ConnectToRanger_PrintScreen(ConnectToRangerApp *app) {
     MainMenuTextPrinter_Init(&app->statusText, &app->statusWindow, 0, NARC_msg_msg_0247_bin, 10, 2);
     MainMenuTextPrinter_SetSize(&app->statusText, 27, 4, app->nextFreeTile);
@@ -260,8 +258,6 @@ void ConnectToRanger_PrintPlayerInfo(ConnectToRangerApp *app) {
     MessageFormat_Delete(msgFormat);
 }
 
-#pragma force_active reset
-
 void ConnectToRanger_FreeGraphics(OverlayManager *manager) {
     ConnectToRangerApp *app = OverlayManager_GetData(manager);
     MainMenuUtil_FreeSprites();
@@ -299,8 +295,6 @@ BOOL ConnectToRanger_Init(OverlayManager *manager, int *state) {
     Sound_SetSceneAndPlayBGM(9, SEQ_GS_WIFI_PRESENT, 1);
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
     ConnectToRangerApp *app = OverlayManager_GetData(manager);
@@ -376,8 +370,6 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL ConnectToRanger_Exit(OverlayManager *manager, int *state) {
     Heap_Destroy(HEAP_ID_89);
     RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
@@ -385,8 +377,6 @@ BOOL ConnectToRanger_Exit(OverlayManager *manager, int *state) {
     Heap_Destroy(HEAP_ID_83);
     return TRUE;
 }
-
-#pragma force_active on
 
 // WonderCardInfo with its flag bits seen as one byte.
 typedef struct WonderCardInfoFlags {
@@ -443,8 +433,6 @@ void ConnectToRanger_StoreManaphyEggCard(ConnectToRangerApp *app) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     MainMenuUtil_ShowCardSubScreen(app->bgConfig, wonderCard);
 }
-
-#pragma force_active reset
 
 void ConnectToRanger_SetTimeout(ConnectToRangerApp *app, int frames) {
     app->timer = frames;

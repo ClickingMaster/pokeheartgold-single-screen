@@ -924,8 +924,6 @@ int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state) {
     return state;
 }
 
-#pragma force_active on
-
 int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
     u8 data[4];
 
@@ -947,8 +945,6 @@ int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
     RecordMixing_UpdateDummy(app);
     return state;
 }
-
-#pragma force_active reset
 
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state) {
     app->leaveRequested = 0;
@@ -1084,8 +1080,6 @@ int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state) {
     return state;
 }
 
-#pragma force_active on
-
 int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     int input;
     int data;
@@ -1114,8 +1108,6 @@ int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     RecordMixing_UpdateDummy(app);
     return state;
 }
-
-#pragma force_active reset
 
 int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {

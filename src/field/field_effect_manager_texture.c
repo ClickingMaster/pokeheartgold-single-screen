@@ -2,8 +2,6 @@
 
 #include "field/field_effect_manager_internal.h"
 
-#pragma force_active on
-
 NNSG3dResTex *FieldEffectManager_GetTexture(FieldEffectManager *manager, u32 id) {
     NNSG3dResTex *tex;
     GF_3DGfxRawResObj *texObj = GF3dGfxRawResMan_GetObjById(manager->gfx->resMan, id);

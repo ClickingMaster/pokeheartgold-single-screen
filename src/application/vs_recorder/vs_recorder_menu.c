@@ -93,8 +93,6 @@ BOOL VsRecorder_MenuInvalid(VsRecorderWork *work) {
     return VsRecorder_MenuMain(work);
 }
 
-#pragma force_active on
-
 BOOL VsRecorder_MenuExit(VsRecorderWork *work) {
     switch (work->step) {
     case 0:
@@ -134,8 +132,6 @@ BOOL VsRecorder_MenuExit(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work) {
     if (VsRecorder_SlideInChoiceRows(work)) {
@@ -196,8 +192,6 @@ static void VsRecorder_RowMoveTask(SysTask *task, void *data) {
         break;
     }
 }
-
-#pragma force_active on
 
 // the touched choice moves into the path column, the other choices drop out; then the entry's action or child menu
 BOOL VsRecorder_MenuSelect(VsRecorderWork *work) {
@@ -315,8 +309,6 @@ BOOL VsRecorder_MenuSelect(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // back: the last path row returns to the choices, the earlier path rows move down, then the parent menu slides in
 BOOL VsRecorder_MenuBack(VsRecorderWork *work) {

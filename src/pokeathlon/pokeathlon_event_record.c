@@ -208,8 +208,6 @@ static void PokeathlonEventRecord_LoadBgGraphics(PokeathlonEventRecord *work) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 55, work->bgConfig, GF_BG_LYR_SUB_2, 1, 0, TRUE, work->heapId);
 }
 
-#pragma force_active on
-
 static void PokeathlonEventRecord_DrawEventIcon(PokeathlonEventRecord *work, u8 event, s16 x, s16 y, BOOL grayed, BOOL subScreen) {
     int row;
     u8 bgId = subScreen ? GF_BG_LYR_SUB_2 : GF_BG_LYR_MAIN_2;
@@ -225,8 +223,6 @@ static void PokeathlonEventRecord_DrawEventIcon(PokeathlonEventRecord *work, u8 
     }
     BgCommitTilemapBufferToVram(work->bgConfig, bgId);
 }
-
-#pragma force_active reset
 
 static void PokeathlonEventRecord_FreeBgs(PokeathlonEventRecord *work) {
     u8 i;
@@ -301,8 +297,6 @@ static void PokeathlonEventRecord_PrintReturnButton(PokeathlonEventRecord *work)
     PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 4, msg_0314_00000, TRUE, 0, 4);
 }
 
-#pragma force_active on
-
 static void PokeathlonEventRecord_PrintRecordValue(PokeathlonEventRecord *work, int value, int window, int unused, int y) {
     GF_ASSERT(value != 0xFFFF);
     if (work->cursor == 0) {
@@ -317,14 +311,10 @@ static void PokeathlonEventRecord_PrintRecordValue(PokeathlonEventRecord *work, 
     PokeathlonUtil_PrintMessageAt(work->textContext, window, work->cursor + msg_0314_00086, 0, (u8)y);
 }
 
-#pragma force_active reset
-
 static void PokeathlonEventRecord_PrintModeTitle(PokeathlonEventRecord *work) {
     PokeathlonUtil_PrintMessageAtXY(work->textContext, 0, sPokeathlonEventRecordModeTitleMsgIds[work->linkMode], 1, 0);
     PokeathlonUtil_PrintAlignedMessageAtY(work->textContext, 1, sPokeathlonEventRecordModeSubtitleMsgIds[work->linkMode], TRUE, 0, 4);
 }
-
-#pragma force_active on
 
 static void PokeathlonEventRecord_PrintEventRecord(PokeathlonEventRecord *work) {
     int i;
@@ -396,8 +386,6 @@ static void PokeathlonEventRecord_CreateSprites(PokeathlonEventRecord *work) {
     PokeathlonEventRecord_ShowEventRecordMons(work);
 }
 
-#pragma force_active reset
-
 static void PokeathlonEventRecord_ShowEventRecordMons(PokeathlonEventRecord *work) {
     BOOL showMarker;
 
@@ -439,8 +427,6 @@ static void PokeathlonEventRecord_CreateUiSprites(PokeathlonEventRecord *work) {
         i++;
     } while (i < 2);
 }
-
-#pragma force_active on
 
 static void PokeathlonEventRecord_CreateEventSprites(PokeathlonEventRecord *work) {
     ManagedSpriteTemplate spriteTemplate = { 0 };
@@ -525,8 +511,6 @@ static void PokeathlonEventRecord_ShowRecordMonIcons(PokeathlonEventRecord *work
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonEventRecord_SetMonIconsVisible(PokeathlonEventRecord *work, BOOL visible) {
     int rank = 0;
     int base = 0;
@@ -586,8 +570,6 @@ static void PokeathlonEventRecord_UpdateEventGrid(PokeathlonEventRecord *work) {
         row++;
     } while (row < 2);
 }
-
-#pragma force_active on
 
 static BOOL PokeathlonEventRecord_HandleInput(PokeathlonEventRecord *work) {
     int oldCursor = work->cursor;
@@ -706,8 +688,6 @@ static void PokeathlonEventRecord_CopyRecords(PokeathlonEventRecord *work, const
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonEventRecord_CreateRecordData(PokeathlonEventRecord *work, PokeathlonEventRecordArgs *args) {
     PokeathlonEventRecordData *data = Heap_Alloc(work->heapId, sizeof(PokeathlonEventRecordData));
 
@@ -735,8 +715,6 @@ static BOOL PokeathlonEventRecord_AreFlags0EFTo0F1Set(PokeathlonEventRecordData 
     return data->args->allGoalsMet;
 }
 
-#pragma force_active on
-
 static void PokeathlonEventRecord_GetRecordMon(PokeathlonEventRecordData *data, PokeathlonMonInfo *mon, int event, int rank, int slot, BOOL link) {
     int value;
     PokeathlonEventRecordEntry *records;
@@ -751,8 +729,6 @@ static void PokeathlonEventRecord_GetRecordMon(PokeathlonEventRecordData *data, 
     mon->species = value & 0x3FF;
     mon->form = value >> 10;
 }
-
-#pragma force_active reset
 
 static u16 PokeathlonEventRecord_GetRecordScore(PokeathlonEventRecordData *data, int event, u8 rank, BOOL link) {
     GF_ASSERT(data != NULL);

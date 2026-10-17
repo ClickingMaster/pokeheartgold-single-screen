@@ -49,8 +49,6 @@ static u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt);
 static SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave);
 static void Task_EncounterEffectHBlankWave(SysTask *task, void *data);
 
-#pragma force_active on
-
 void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem) {
     if (gEncounterEffectState.particles) {
         GF_AssertFail();
@@ -70,8 +68,6 @@ void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem) {
     SysTask_CreateOnVWaitQueue(Task_ParticleSetup_VWait, gEncounterEffectState.particles, 1024);
     SysTask_CreateOnMainQueue(Task_ParticleSetup_Main, gEncounterEffectState.particles, 1024);
 }
-
-#pragma force_active reset
 
 void EncounterEffect_RequestParticleSetup(void) {
     EncounterEffectParticles *particles = gEncounterEffectState.particles;
@@ -109,8 +105,6 @@ void EncounterEffect_EndParticleMode(void) {
     gEncounterEffectState.particles = NULL;
 }
 
-#pragma force_active on
-
 void EncounterEffect_LoadParticles(NARC *narc, int member) {
     if (gEncounterEffectState.particles == NULL) {
         GF_AssertFail();
@@ -130,8 +124,6 @@ void EncounterEffect_LoadParticles(NARC *narc, int member) {
         ParticleSystem_SetResource(gEncounterEffectState.particles->system, resource, 0, FALSE);
     }
 }
-
-#pragma force_active reset
 
 void EncounterEffect_CreateEmitters(u32 count) {
     VecFx32 position = { 0, 0, 0 };
@@ -192,8 +184,6 @@ static void Task_ParticleSetup_VWait(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 static void Task_ParticleSetup_Main(SysTask *task, void *data) {
     EncounterEffectParticles *particles = data;
     if (particles->state == 2) {
@@ -236,14 +226,10 @@ static void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-#pragma force_active reset
-
 static void EncounterEffect_FreeParticleGraphics(FieldSystem *fieldSystem) {
     FreeBgTilemapBuffer(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2);
     Thunk_BgConfig_Init(fieldSystem->bgConfig);
 }
-
-#pragma force_active on
 
 static u32 EncounterEffectParticles_AllocTexVram(u32 size, BOOL is4x4Comp) {
     EncounterEffectParticles *particles;
@@ -276,8 +262,6 @@ static u32 EncounterEffectParticles_AllocPlttVram(u32 size, BOOL is4Pltt) {
     particles->plttOffset = next;
     return offset;
 }
-
-#pragma force_active reset
 
 static SysTask *EncounterEffectHBlankWave_StartTask(EncounterEffectHBlankWave *wave) {
     return SysTask_CreateOnVBlankQueue(Task_EncounterEffectHBlankWave, wave, 1024);

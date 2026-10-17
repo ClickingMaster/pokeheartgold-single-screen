@@ -477,8 +477,6 @@ int MysteryGiftApp_DeclineSearch(OverlayManager *manager) {
     return MysteryGiftApp_SelectReceiveGift(manager);
 }
 
-#pragma force_active on
-
 int MysteryGiftApp_SelectGetFromFriend(OverlayManager *manager) {
     Window *window;
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
@@ -533,8 +531,6 @@ void MysteryGiftApp_AskReceiveGift(OverlayManager *manager) {
     MysteryGiftApp_CreateListMenu(manager, sMysteryGiftAskReceiveMenuItems, 2, window, msg_0247_00004);
 }
 
-#pragma force_active reset
-
 int MysteryGiftApp_DeclineAcceptGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
@@ -547,8 +543,6 @@ int MysteryGiftApp_DeclineAcceptGift(OverlayManager *manager) {
     return MysteryGiftApp_SelectReceiveGift(manager);
 }
 
-#pragma force_active on
-
 int MysteryGiftApp_ConfirmWirelessSearch(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
@@ -558,8 +552,6 @@ int MysteryGiftApp_ConfirmWirelessSearch(OverlayManager *manager) {
     sMysteryGiftLinkState.state = MYSTERY_GIFT_LINK_START_UP;
     return MYSTERY_GIFT_STATE_BEACON_SEARCH;
 }
-
-#pragma force_active reset
 
 int MysteryGiftApp_ConfirmReceiveGift(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
@@ -1748,8 +1740,6 @@ void MysteryGiftAnim_Task(SysTask *task, MysteryGiftAnimData *anim) {
     MysteryGiftAnim_UpdateSprites(anim);
 }
 
-#pragma force_active on
-
 BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
     WonderCard *card;
@@ -2153,8 +2143,6 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 OverlayManager *MysteryGiftApp_GetOverlayManager(void) {
     return sMysteryGiftLinkState.manager;
 }
@@ -2162,8 +2150,6 @@ OverlayManager *MysteryGiftApp_GetOverlayManager(void) {
 void MysteryGiftApp_SetOverlayManager(OverlayManager *manager) {
     sMysteryGiftLinkState.manager = manager;
 }
-
-#pragma force_active on
 
 BOOL MysteryGiftApp_Exit(OverlayManager *manager, int *state) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
@@ -2231,8 +2217,6 @@ void MysteryGiftApp_BeaconCallback(int choice) {
         break;
     }
 }
-
-#pragma force_active reset
 
 void MysteryGiftApp_StopWirelessLink(void) {
     CommWireless_Terminate();

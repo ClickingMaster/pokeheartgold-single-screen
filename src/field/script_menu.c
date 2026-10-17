@@ -250,8 +250,6 @@ void ScriptMenu_AddListItem(ScriptMenu *menu, int msgId, int helpMsgId, int valu
     ScriptMenu_AppendListItem(menu, msgId, helpMsgId, value);
 }
 
-// force_active only sets a section flag; it is kept so the objects stay identical to the matched ones
-#pragma force_active on
 void ScriptMenu_ShowList(ScriptMenu *menu) {
     u32 width = ScriptMenu_GetListItemsWidth(menu);
     u32 tiles;
@@ -272,7 +270,6 @@ void ScriptMenu_ShowList(ScriptMenu *menu) {
     }
     ScriptMenu_OpenListWindow(menu, tiles);
 }
-#pragma force_active reset
 
 void ScriptMenu_ShowListWithWidth(ScriptMenu *menu, u16 width) {
     ScriptMenu_OpenListWindow(menu, width);
@@ -292,7 +289,6 @@ void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width) {
     menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_ListTask, menu, 0);
 }
 
-#pragma force_active on
 void ScriptMenu_ShowListAtPosition(ScriptMenu *menu, u16 *scroll_p, u16 *row_p) {
     u32 width = ScriptMenu_GetListItemsWidth(menu);
     u32 tiles;
@@ -326,7 +322,6 @@ void ScriptMenu_ShowListAtPosition(ScriptMenu *menu, u16 *scroll_p, u16 *row_p) 
     ScriptMenu_PrintCursorHelpMessage(menu);
     menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_ListTask, menu, 0);
 }
-#pragma force_active reset
 
 void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value) {
     String *tmp = String_New(80, HEAP_ID_FIELD1);
@@ -476,7 +471,6 @@ void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu) {
 
 // the matched code needs copy propagation off here
 #pragma opt_propagation off
-#pragma force_active on
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor) {
     u32 tiles;
     u8 flag;
@@ -507,9 +501,7 @@ void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, 
     menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_FloorWindowTask, menu, 0);
 }
 #pragma opt_propagation reset
-#pragma force_active reset
 
-#pragma force_active on
 void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
     String *tmp = String_New(90, HEAP_ID_FIELD1);
     String *dest = String_New(90, HEAP_ID_FIELD1);
@@ -519,7 +511,6 @@ void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
     String_Delete(tmp);
     String_Delete(dest);
 }
-#pragma force_active reset
 
 void ScriptMenu_FloorWindowTask(SysTask *task, ScriptMenu *menu) {
     int i;
@@ -694,7 +685,6 @@ void MoneyBoxSys_Update(FieldSystem *fieldSystem, Window *moneybox) {
     ScheduleWindowCopyToVram(moneybox);
 }
 
-#pragma force_active on
 Window *PointsBox_New(FieldSystem *fieldSystem, u8 type, u8 x, u8 y) {
     Window *window = AllocWindows(HEAP_ID_FIELD1, 1);
     AddWindowParameterized(fieldSystem->bgConfig, window, GF_BG_LYR_MAIN_3, x, y, 10, 2, 13, 41);
@@ -703,14 +693,12 @@ Window *PointsBox_New(FieldSystem *fieldSystem, u8 type, u8 x, u8 y) {
     PointsBox_Update(fieldSystem, window, type);
     return window;
 }
-#pragma force_active reset
 
 void PointsBox_Delete(Window *window) {
     EraseFrameAndWindow1(window, FALSE);
     WindowArray_Delete(window, 1);
 }
 
-#pragma force_active on
 // type 0: coins, 1: Battle Points, otherwise: athlete points.
 void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type) {
     MsgData *msgData;
@@ -770,14 +758,12 @@ Window *SavingsBox_New(FieldSystem *fieldSystem, u8 x, u8 y) {
     SavingsBox_Update(fieldSystem, window);
     return window;
 }
-#pragma force_active reset
 
 void SavingsBox_Delete(Window *window) {
     EraseFrameAndWindow1(window, FALSE);
     WindowArray_Delete(window, 1);
 }
 
-#pragma force_active on
 void SavingsBox_Update(FieldSystem *fieldSystem, Window *window) {
     FillWindowPixelRect(window, 15, 0, 128, 128, 16);
     FillWindowPixelRect(window, 15, 0, 384, 128, 16);
@@ -801,7 +787,6 @@ void SavingsBox_Update(FieldSystem *fieldSystem, Window *window) {
     DestroyMsgData(msgData);
     ScheduleWindowCopyToVram(window);
 }
-#pragma force_active reset
 
 ListMenuItem *ScriptMenu_GetListItems(ScriptMenu *menu) {
     return menu->items;

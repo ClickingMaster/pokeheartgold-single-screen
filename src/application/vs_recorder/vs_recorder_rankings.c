@@ -127,8 +127,6 @@ static void VsRecorder_InitRankingsList(VsRecorderWork *work) {
     VsRecorder_SetVBlankPaused(work, FALSE);
 }
 
-#pragma force_active on
-
 // list entries of the shown ranking and team kind: this week the teams in order, last week with their scores
 static void VsRecorder_FillRankingEntries(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
@@ -187,8 +185,6 @@ static void VsRecorder_FillRankingEntries(VsRecorderWork *work) {
         break;
     }
 }
-
-#pragma force_active reset
 
 // SWITCH RANKINGS / SWITCH TEAMS
 static void VsRecorder_CreateRankingsButtonLabels(VsRecorderWork *work) {
@@ -491,8 +487,6 @@ BOOL VsRecorder_RankingsEnter(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL VsRecorder_RankingsDownload(VsRecorderWork *work);
 
 // substate 2: receive the rankings; back to the menu if they cannot be received or are incomplete
@@ -616,8 +610,6 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // substate 5: show the windows and the list
 BOOL VsRecorder_RankingsShow(VsRecorderWork *work) {
@@ -757,8 +749,6 @@ BOOL VsRecorder_RankingsInvalid(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work);
 
 // substate 4: SWITCH RANKINGS / SWITCH TEAMS: rebuild the list and the windows
@@ -796,5 +786,3 @@ BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset

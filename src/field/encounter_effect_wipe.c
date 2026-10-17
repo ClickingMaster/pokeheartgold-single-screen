@@ -48,8 +48,6 @@ static void Task_SplitWipe_Update(SysTask *task, void *data);
 static void HBlank_SplitWipe(HBlankTask *task, void *data);
 static void SplitWipe_End(SplitWipe *wipe);
 
-#pragma force_active on
-
 StripeWipe *StripeWipe_New(void) {
     StripeWipe *wipe = Heap_Alloc(HEAP_ID_FIELD1, sizeof(StripeWipe));
     memset(wipe, 0, sizeof(StripeWipe));
@@ -57,8 +55,6 @@ StripeWipe *StripeWipe_New(void) {
     G2_SetWnd1InsidePlane(GX_WND_PLANEMASK_NONE, FALSE);
     return wipe;
 }
-
-#pragma force_active reset
 
 void StripeWipe_Free(StripeWipe *wipe) {
     if (wipe->hBlankTask) {
@@ -139,8 +135,6 @@ static void StripeWipe_End(StripeWipe *wipe) {
     wipe->task = NULL;
 }
 
-#pragma force_active on
-
 // Even stripes scroll every BG by +offset and show window 0, odd stripes by -offset and show window 1.
 static void HBlank_StripeWipe(HBlankTask *task, void *data) {
     StripeWipe *wipe = data;
@@ -166,8 +160,6 @@ static void HBlank_StripeWipe(HBlankTask *task, void *data) {
         G2_SetWndOutsidePlane(WND_PLANEMASK_ALL, TRUE);
     }
 }
-
-#pragma force_active reset
 
 SplitWipe *SplitWipe_New(void) {
     SplitWipe *wipe = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SplitWipe));
@@ -275,8 +267,6 @@ void EncounterEffect_LoadBgGraphics(NARC *narc, int screenMember, int charMember
     ScheduleBgTilemapBufferTransfer(bgConfig, bgId);
 }
 
-#pragma force_active on
-
 // Loads the same graphics into bgId and mirrorBgId, then flips mirrorBgId's tilemap horizontally in runs of
 // 16 tiles.
 void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int screenMember, int charMember, int paletteMember, int palette, int paletteCount, BgConfig *bgConfig, int bgId, int mirrorBgId) {
@@ -301,5 +291,3 @@ void EncounterEffect_LoadBgGraphicsMirrored(NARC *narc, int screenMember, int ch
     }
     ScheduleBgTilemapBufferTransfer(bgConfig, mirrorBgId);
 }
-
-#pragma force_active reset

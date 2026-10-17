@@ -130,8 +130,6 @@ static void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work) {
     *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
 }
 
-#pragma force_active on
-
 static void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
     GraphicsModes modes;
     PokeathlonTrophiesBgTemplates templates;
@@ -148,8 +146,6 @@ static void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {
     }
     work->narc = NARC_New(NARC_a_1_7_7, work->heapId);
 }
-
-#pragma force_active reset
 
 static void PokeathlonTrophies_LoadBgGraphics(PokeathlonTrophies *work) {
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 56, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, work->heapId);

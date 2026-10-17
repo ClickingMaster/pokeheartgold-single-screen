@@ -210,8 +210,6 @@ void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_FollowMonInteract, NULL);
 }
 
-#pragma force_active on
-
 int FollowMon_SelectInteraction(FieldSystem *fieldSystem) {
     FollowMonSituation situation;
     int order[100];
@@ -263,8 +261,6 @@ int FollowMon_SelectInteraction(FieldSystem *fieldSystem) {
     return 0;
 }
 
-#pragma force_active reset
-
 void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
     fieldSystem->followMonInteraction->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -281,8 +277,6 @@ void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situat
     FollowMonSituation_SetFacing(fieldSystem, situation);
     FollowMonSituation_SetSpeciesAttr(fieldSystem->followMonInteraction->species, situation);
 }
-
-#pragma force_active on
 
 BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, const FollowMonSituation *situation) {
     u16 flag;
@@ -394,8 +388,6 @@ BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, 
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situation) {
     ShinyLeafMonDataIds leafIds;
@@ -762,8 +754,6 @@ static inline void FollowMonInteraction_CloseMessage(FieldSystem *fieldSystem, F
     interaction->state = INTERACTION_STATE_START_WAIT;
 }
 
-#pragma force_active on
-
 int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
     FollowMonInteractionStep *step;
     u16 movement;
@@ -838,8 +828,6 @@ int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *int
     return FOLLOW_MON_INTERACTION_RUNNING;
 }
 
-#pragma force_active reset
-
 BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     return step->movement != 0;
 }
@@ -860,8 +848,6 @@ BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonIntera
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     Options *options;
     if (step->message != 0) {
@@ -876,8 +862,6 @@ BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInt
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int flags) {
     Options *options;
@@ -1084,8 +1068,6 @@ BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInterac
     return FALSE;
 }
 
-#pragma force_active on
-
 static inline void FieldSystem_CloseFollowMonMessage(FieldSystem *fieldSystem) {
     ClearFrameAndWindow2(&fieldSystem->followMonInteraction->window, FALSE);
     RemoveWindow(&fieldSystem->followMonInteraction->window);
@@ -1234,8 +1216,6 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageFormat) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
@@ -1461,8 +1441,6 @@ BOOL FollowMonRule_CheckSpeciesAttr(u32 rule, u32 value) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // TRUE when the Pokemon does not have shiny leaf `leaf` (1-5) yet.
 BOOL FollowMonRule_CheckShinyLeaf(int leaf, u8 shinyLeaves) {
     ShinyLeafMasks masks = sShinyLeafMasks;
@@ -1474,8 +1452,6 @@ BOOL FollowMonRule_CheckShinyLeaf(int leaf, u8 shinyLeaves) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL FieldSystem_FirstAliveMonHasType(FieldSystem *fieldSystem, u8 type) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));

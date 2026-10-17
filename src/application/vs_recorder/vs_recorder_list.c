@@ -158,8 +158,6 @@ void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgDa
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active on
-
 // ranking list (type 0 message value, 1 month, 2 species); equal times share a rank
 void VsRecorder_InitRankingList(VsRecorderListWindow *list, VsRecorderWork *work, MsgData *msgData, VsRecorderListConfig *config, int unused, int type, String *valueTemplate) {
     Window *win;
@@ -273,8 +271,6 @@ void VsRecorder_InitRankingList(VsRecorderListWindow *list, VsRecorderWork *work
     MessageFormat_Delete(fmt);
 }
 
-#pragma force_active reset
-
 // two columns of prepared strings (items[2 * row], items[2 * row + 1])
 void VsRecorder_InitPairList(VsRecorderListWindow *list, VsRecorderWork *work, VsRecorderListConfig *config, String **items) {
     Window *window = &list->window;
@@ -352,8 +348,6 @@ int VsRecorder_RedrawPairList(VsRecorderListWindow *list, VsRecorderWork *work, 
     list->drawnPos = list->cursor;
     return 0;
 }
-
-#pragma force_active on
 
 int VsRecorder_RedrawRankingList(VsRecorderListWindow *list, VsRecorderWork *work, void *unused, u32 type, String *valueTemplate) {
     Window *win;
@@ -499,8 +493,6 @@ u32 VsRecorder_UpdateMessageList(VsRecorderListWindow *list, VsRecorderWork *wor
     list->drawnPos = list->scroll;
     return result;
 }
-
-#pragma force_active reset
 
 int VsRecorder_RedrawNameList(VsRecorderListWindow *list, VsRecorderWork *work) {
     int i;

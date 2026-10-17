@@ -339,7 +339,6 @@ BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
     SpinTradeGroupApp *app = OverlayManager_GetData(man);
     int mode;
@@ -390,7 +389,6 @@ BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
     SpriteList_RenderAndAnimateSprites(app->spriteList);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state) {
 #pragma unused(state)

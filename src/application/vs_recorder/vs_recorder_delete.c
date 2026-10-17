@@ -46,8 +46,6 @@ static void VsRecorder_HideDeleteWindow(VsRecorderWork *work) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-#pragma force_active on
-
 // msg 282 ("delete the video of {owner}?") names the owner of saved video `slot`
 static void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int slot) {
     Window *window = &work->messageWindow;
@@ -73,8 +71,6 @@ static void VsRecorder_PrintDeleteMessage(VsRecorderWork *work, int msgId, int s
     ScheduleWindowCopyToVram(window);
     String_Delete(text);
 }
-
-#pragma force_active reset
 
 // YES / NO buttons (sub screen BG 2)
 static void VsRecorder_ShowDeleteYesNo(VsRecorderWork *work) {
@@ -153,8 +149,6 @@ BOOL VsRecorder_DeleteEnter(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // asks twice, then deletes the saved video in slot work->selection and says so
 BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
@@ -239,8 +233,6 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_DeleteExit(VsRecorderWork *work) {
     VsRecorderDeleteVideo *deleteWork = work->screenWork;

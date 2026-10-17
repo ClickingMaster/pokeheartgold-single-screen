@@ -139,8 +139,6 @@ void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error) {
     }
 }
 
-#pragma force_active on
-
 static void VsRecorder_PlaceVideoListIcons(VsRecorderWork *work) {
     VsRecorderIconPositions positions = sVsRecorderVideoListIconPositions;
     int i, j;
@@ -154,8 +152,6 @@ static void VsRecorder_PlaceVideoListIcons(VsRecorderWork *work) {
         }
     }
 }
-
-#pragma force_active reset
 
 // exit and back buttons of the list and the details
 static void VsRecorder_CreateVideoListButtons(VsRecorderWork *work) {
@@ -688,8 +684,6 @@ BOOL VsRecorder_VideoListBackToList(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // slot button label: the owner of the video saved there, or empty
 static void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot) {
     Window window;
@@ -767,8 +761,6 @@ static void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 static void VsRecorder_FreeSlotButtons(VsRecorderWork *work) {
     int i = 0;
     VsRecorderTextSprite *button = ((VsRecorderVideoListScreen *)work->screenWork)->buttons;
@@ -808,8 +800,6 @@ static void VsRecorder_SetVideoListButtonsMode(VsRecorderWork *work, int backOnl
     TextOBJ_SetPosition(listWork->buttons[1].text, 36, -8);
 }
 
-#pragma force_active on
-
 static void VsRecorder_RemoveVideoListWindows(VsRecorderWork *work) {
     VsRecorderVideoListScreen *listWork = work->screenWork;
     int i;
@@ -835,8 +825,6 @@ static void VsRecorder_RemoveVideoListButtonWindows(VsRecorderWork *work) {
     }
     listWork->buttonWindowCount = 0;
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_VideoListInit(VsRecorderWork *work) {
     VsRecorderVideoListScreen *listWork = Heap_Alloc(HEAP_ID_109, sizeof(VsRecorderVideoListScreen));
@@ -905,8 +893,6 @@ BOOL VsRecorder_VideoListEnter(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // request the list (latest / popular / search result) from the server
 BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
@@ -1020,8 +1006,6 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // list title (by list type) and the label under the touch area
 static void VsRecorder_CreateVideoListWindows(VsRecorderWork *work) {
@@ -1672,8 +1656,6 @@ static void VsRecorder_CreateDetailsButtonWindow(VsRecorderWork *work) {
     VsRecorder_PrintDetailsButtonLabel(work, listWork->showProfile + 0x79);
 }
 
-#pragma force_active on
-
 static void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work) {
     VsRecorderVideoListScreen *listWork = work->screenWork;
     Window *window = &listWork->buttonWindows[0];
@@ -1695,8 +1677,6 @@ static void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work) {
     String_Delete(str);
     ScheduleWindowCopyToVram(window);
 }
-
-#pragma force_active reset
 
 static void VsRecorder_RemoveOverwriteWindows(VsRecorderWork *work) {
     u8 *listWork = work->screenWork;
@@ -1804,8 +1784,6 @@ static void VsRecorder_LoadVideoDetails(VsRecorderWork *work) {
     MI_CpuCopy8(work->net.videoList.headers[work->listWindow.cursor]->data, listWork->info.header, 0x64);
 }
 
-#pragma force_active on
-
 // party icons of the visible list rows
 static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
     int i;
@@ -1865,8 +1843,6 @@ static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
     VsRecorder_PlaceVideoListIcons(work);
 }
 
-#pragma force_active reset
-
 static void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
@@ -1899,8 +1875,6 @@ static void VsRecorder_FreeVideoListIcons(VsRecorderWork *work) {
         }
     }
 }
-
-#pragma force_active on
 
 // keep the icons in step with the list scroll: drop the row that left, shift, make the row that came in
 static void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work) {
@@ -1999,8 +1973,6 @@ static void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work) {
     }
     VsRecorder_SetVBlankPaused(work, FALSE);
 }
-
-#pragma force_active reset
 
 static void VsRecorder_FreeDetailsButtons(VsRecorderWork *work) {
     VsRecorderVideoListScreen *listWork = work->screenWork;

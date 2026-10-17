@@ -197,8 +197,6 @@ static BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
     return result;
 }
 
-#pragma force_active on
-
 // touch callback of the menu choice hitboxes
 void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
     struct {
@@ -241,8 +239,6 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
         work->menuNoticeShown = 0;
     }
 }
-
-#pragma force_active reset
 
 void VsRecorder_InitMenuHitboxes(VsRecorderWork *work) {
     s32 i = 0;
@@ -312,8 +308,6 @@ void VsRecorder_UpdateMenuTouch(VsRecorderWork *work) {
     TouchHitboxController_IsTriggered(work->hitboxController);
 }
 
-#pragma force_active on
-
 void VsRecorder_MenuPop(VsRecorderWork *work) {
     if (work->menuDepth > 0) {
         work->menuDepth--;
@@ -333,8 +327,6 @@ void VsRecorder_ClearResumeState(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 u32 VsRecorder_HasResumeScreen(VsRecorderWork *work) {
     return work->hasResumeScreen;
 }
@@ -343,8 +335,6 @@ void VsRecorder_SetResumeScreen(VsRecorderWork *work, u32 screen) {
     work->hasResumeScreen = TRUE;
     work->resumeScreen = screen;
 }
-
-#pragma force_active on
 
 // BG 1 / 5 frame: the VS Recorder's own (palettes by colour scheme) or the Global Terminal's
 void VsRecorder_LoadFrameBg(VsRecorderWork *work) {
@@ -373,8 +363,6 @@ void VsRecorder_LoadFrameBg(VsRecorderWork *work) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 70, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_109);
     PaletteData_BlendPalettes(plttData, PLTTBUF_SUB_BG, 2, 16, (u16)work->blendColor);
 }
-
-#pragma force_active reset
 
 void VsRecorder_LoadMessageBg(VsRecorderWork *work, GFBgLayer layer, BOOL alternate) {
     NARC *narc = work->narc;
@@ -422,8 +410,6 @@ void VsRecorder_LoadDecorGfx(VsRecorderWork *work) {
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, 46, FALSE, 10000);
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 47, FALSE, 10000);
 }
-
-#pragma force_active on
 
 void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
     ManagedSpriteTemplate template;
@@ -506,8 +492,6 @@ void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 void VsRecorder_DeleteDecorSprites(VsRecorderWork *work) {
     int i;
     int j;
@@ -535,8 +519,6 @@ void VsRecorder_DestroyDecorTasks(VsRecorderWork *work) {
         SysTask_Destroy(((VsRecorderWork *)row)->decor[0].task);
     }
 }
-
-#pragma force_active on
 
 // sprite resources of the menu rows (main / sub screen), per app mode
 void VsRecorder_LoadMenuRowGfx(VsRecorderWork *work) {
@@ -586,8 +568,6 @@ void VsRecorder_LoadMenuRowGfx(VsRecorderWork *work) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, anims, FALSE, 10002);
 }
 
-#pragma force_active reset
-
 void VsRecorder_UnloadMenuRowChars(VsRecorderWork *work) {
     SpriteManager_UnloadCharObjById(work->spriteManager, 10001);
     SpriteManager_UnloadCharObjById(work->spriteManager, 10002);
@@ -627,8 +607,6 @@ void VsRecorder_LayoutMenuRows(VsRecorderWork *work) {
         pathRow2 += sizeof(VsRecorderMenuRow);
     } while (j < work->menuDepth);
 }
-
-#pragma force_active on
 
 void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
     s16 x;
@@ -716,8 +694,6 @@ void VsRecorder_RefreshChoiceRows(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 void VsRecorder_AttachMenuRowText(VsRecorderWork *work) {
     int i;
     u8 *row = (u8 *)work; // VsRecorderMenuRow stride over the work
@@ -727,8 +703,6 @@ void VsRecorder_AttachMenuRowText(VsRecorderWork *work) {
         TextOBJ_SetParentSprite(((VsRecorderWork *)row)->pathRows[0].text, ((VsRecorderWork *)row)->pathRows[0].sprite->sprite);
     }
 }
-
-#pragma force_active on
 
 // left column: the entries chosen on the way down
 void VsRecorder_RefreshPathRows(VsRecorderWork *work) {
@@ -744,8 +718,6 @@ void VsRecorder_RefreshPathRows(VsRecorderWork *work) {
         }
     }
 }
-
-#pragma force_active reset
 
 void VsRecorder_DeleteMenuRowSprites(VsRecorderWork *work) {
     int i;
@@ -778,8 +750,6 @@ void VsRecorder_SetMenuRowsDrawFlag(VsRecorderWork *work, BOOL draw) {
         }
     }
 }
-
-#pragma force_active on
 
 // V-blank task of one decor pair: wait, wobble in, slide to the target x, then sway in place
 static void VsRecorder_DecorTask(SysTask *task, void *data) {
@@ -868,8 +838,6 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
         ManagedSprite_SetAffineScale(decor->sprites[1], decor->scale, 1.0f);
     }
 }
-
-#pragma force_active reset
 
 // sprite position on the combined (main + sub) screen space
 void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y) {

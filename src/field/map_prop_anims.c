@@ -74,7 +74,6 @@ enum HealAnimState {
     HEAL_ANIM_STATE_END,
 };
 
-#pragma force_active on
 BOOL PokecenterAnimRun(TaskManager *taskManager);
 
 BOOL PokecenterAnimRun(TaskManager *taskManager) {
@@ -151,7 +150,6 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 enum ElevatorAnimState {
     ELEVATOR_ANIM_STATE_LOAD,
@@ -220,7 +218,6 @@ BOOL ElevatorAnimRun(TaskManager *taskManager) {
     return FALSE;
 }
 
-#pragma force_active on
 // Loads the two one-shot animations of the first of the props sPCPropModels found on the map under the tag.
 void PCProp_LoadAnimations(FieldSystem *fieldSystem, u8 tag) {
     MapProp *prop;
@@ -236,7 +233,6 @@ void PCProp_LoadAnimations(FieldSystem *fieldSystem, u8 tag) {
         GF_AssertFail();
     }
 }
-#pragma force_active reset
 
 void PCProp_PlayPowerOnAnimation(FieldSystem *fieldSystem, u8 tag) {
     MapPropOneShotAnimationManager_PlayAnimation(fieldSystem->mapPropOneShotAnimationManager, tag, 0);

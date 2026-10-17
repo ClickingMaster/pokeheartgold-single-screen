@@ -362,7 +362,6 @@ int FieldMove_WaitCutIn(TaskManager *taskManager, FieldSystem *fieldSystem, Fiel
     return FIELD_MOVE_STEP_WAIT;
 }
 
-#pragma force_active on
 FieldMoveTaskEnvironment *FieldMoveTask_CreateTeleportEnvironment(FieldSystem *fieldSystem, Pokemon *mon, u8 slotno, enum HeapID heapID) {
     FieldMoveTaskEnvironment *env = FieldMoveTaskEnvironment_New(heapID, sizeof(FieldMoveTaskEnvironment));
     env->kind = FIELD_MOVE_WARP_TELEPORT;
@@ -433,7 +432,6 @@ BOOL Task_FieldTeleport(TaskManager *taskManager) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 FieldMoveTaskEnvironment *FieldMoveTaskEnvironment_New(enum HeapID heapID, u32 size) {
     FieldMoveTaskEnvironment *env = Heap_AllocAtEnd(heapID, size);

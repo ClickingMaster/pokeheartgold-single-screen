@@ -96,8 +96,6 @@ static void *MainMenuUtil_CryptoAlloc(u32 size) {
     return Heap_Alloc(sMainMenuUtilCryptoHeapId, size);
 }
 
-#pragma force_active on
-
 // A Mystery Gift GBA cartridge: one of the game codes of sGiftCartridgeGameCodes, with a payload signed with the key sGiftCartridgePublicKey
 static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u8 payload[0x4A8];
@@ -125,8 +123,6 @@ static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 static BOOL MainMenuUtil_IsGiftCartridgeInserted(void) {
     CTRDG_Init();
@@ -171,15 +167,11 @@ BOOL MainMenuUtil_ReadCartridgeGift(void *dest, int size) {
     return success;
 }
 
-#pragma force_active on
-
 void MainMenuUtil_InitWork(enum HeapID heapID) {
     memset(&sMainMenuUtilCryptoHeapId + 1, 0, sizeof(MainMenuUtilWork));
     gMainMenuUtilWork.unk_004 = 1;
     gMainMenuUtilWork.heapId = heapID;
 }
-
-#pragma force_active reset
 
 void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize) {
     void *data;
@@ -190,8 +182,6 @@ void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u3
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     return data;
 }
-
-#pragma force_active on
 
 void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase) {
     BgTemplate template = sMainMenuUtilBgTemplate;
@@ -216,13 +206,9 @@ void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 scree
     BgClearTilemapBufferAndCommit(bgConfig, (u8)bgId);
 }
 
-#pragma force_active reset
-
 void MainMenuUtil_SetFadeWhite(u32 fadeWhite) {
     gMainMenuUtilWork.fadeWhite = fadeWhite;
 }
-
-#pragma force_active on
 
 void MainMenuUtil_StartFade(u32 fadeType, u32 nextState, int *state, u32 waitingState) {
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
@@ -243,8 +229,6 @@ void MainMenuUtil_WaitFade(int *state) {
         *state = work->nextState;
     }
 }
-
-#pragma force_active reset
 
 // The message box printer (MainMenuTextPrinter)
 void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 palette, u32 msgFileId, u32 frameBaseTile, u32 framePalette) {
@@ -283,8 +267,6 @@ void MainMenuTextPrinter_SetTextPos(MainMenuTextPrinter *printer, u32 textX, u32
     printer->textX = textX;
     printer->textY = textY;
 }
-
-#pragma force_active on
 
 // Prints message msgId of the printer's message file (if it is not already shown); returns the text printer id
 static int MainMenuTextPrinter_Print(MainMenuTextPrinter *printer, int msgId) {
@@ -354,13 +336,9 @@ int MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, MainMenuTextPrinte
     return result;
 }
 
-#pragma force_active reset
-
 u32 MainMenuTextPrinter_GetTileCount(MainMenuTextPrinter *printer) {
     return printer->width * printer->height;
 }
-
-#pragma force_active on
 
 void MainMenuUtil_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sMainMenuUtilObjCharTransferTemplate;
@@ -371,13 +349,9 @@ void MainMenuUtil_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-#pragma force_active reset
-
 u32 MainMenuUtil_SpritesActive(void) {
     return gMainMenuUtilWork.sprites.spriteList != NULL;
 }
-
-#pragma force_active on
 
 void MainMenuUtil_InitSprites(void) {
     MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
@@ -398,9 +372,6 @@ MainMenuUtilSprites *MainMenuUtil_GetSpriteList(void) {
     return &work->sprites;
 }
 
-#pragma force_active reset
-
-#pragma force_active on
 #pragma push
 #pragma opt_common_subs off
 
@@ -440,7 +411,6 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 }
 
 #pragma pop
-#pragma force_active reset
 
 static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
     G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);
@@ -450,8 +420,6 @@ static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
 void MainMenuUtil_UpdateSprites(void) {
     MainMenuUtil_UpdateGiftSprite(FALSE);
 }
-
-#pragma force_active on
 
 // Per frame: the gift sprite of the sub screen appears after its delay and slides down; renders the sprites
 void MainMenuUtil_UpdateGiftSprite(int hideGiftSprite) {
@@ -474,10 +442,6 @@ void MainMenuUtil_UpdateGiftSprite(int hideGiftSprite) {
         SpriteList_RenderAndAnimateSprites(work->sprites.spriteList);
     }
 }
-
-#pragma force_active reset
-
-#pragma force_active on
 
 // Creates (if needed) and shows a sprite on screen 0 (main) / 1 (sub)
 Sprite *MainMenuUtil_CreateSprite(u32 screen, Sprite *sprite, u32 x, u32 y, u32 animSeq) {
@@ -541,13 +505,9 @@ void MainMenuUtil_FreeSprites(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
 }
 
-#pragma force_active reset
-
 u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
     return 1 << (spriteId - 10);
 }
-
-#pragma force_active on
 
 static void MainMenuUtil_VBlankCB(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
@@ -587,8 +547,6 @@ int MainMenuUtil_GetGiftPalette(int giftType) {
     return 0;
 }
 
-#pragma force_active reset
-
 // Loads the front sprite of the gift Pokemon into the gift sprite of the sub screen
 static void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds) {
     u32 gender = GetMonGender(mon);
@@ -609,8 +567,6 @@ void MainMenuUtil_ShowGiftBox(MainMenuUtilWork *work, int giftType, void *gift) 
     MainMenuUtil_SetSubScreenOffset(0, FX32_CONST(256));
     work->giftSprite = MainMenuUtil_CreateSprite(1, work->giftSprite, 128, 0, 0);
 }
-
-#pragma force_active on
 
 // The gift Pokemon (types 1, 13), Egg (2) or Manaphy Egg (7)
 void MainMenuUtil_ShowGiftPokemon(MainMenuUtilWork *work, int giftType, void *gift) {
@@ -635,8 +591,6 @@ void MainMenuUtil_ShowGiftPokemon(MainMenuUtilWork *work, int giftType, void *gi
         break;
     }
 }
-
-#pragma force_active reset
 
 // The gift item (type 3) or the item of a special gift
 void MainMenuUtil_ShowGiftItem(MainMenuUtilWork *work, int giftType, void *gift) {

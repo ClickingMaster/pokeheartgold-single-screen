@@ -301,8 +301,6 @@ void VsRecorder_InitBgBlend(int *eva, int *evb, int mode) {
     VsRecorder_InitBlend(eva, evb, GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, mode);
 }
 
-#pragma force_active on
-
 // one step of the alpha fade in (or out when reverse); TRUE when done
 BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, int mode) {
     BOOL done = TRUE;
@@ -337,8 +335,6 @@ BOOL VsRecorder_StepBlend(int *eva, int *evb, BOOL reverse, int mode) {
     }
     return done;
 }
-
-#pragma force_active reset
 
 // palette fade value 0..16 in steps of 2; TRUE when done
 BOOL VsRecorder_StepFade(int *fade, int direction) {
@@ -427,16 +423,12 @@ void VsRecorder_ClearPaletteBlend(VsRecorderWork *work) {
     PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 0xFFFF, 0, work->blendColor);
 }
 
-#pragma force_active on
-
 u16 *VsRecorder_LoadSpeciesList(enum HeapID heapID, int unused, int *count) {
     u32 size;
     u16 *data = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, 13, FALSE, heapID, FALSE, &size);
     *count = size >> 1;
     return data;
 }
-
-#pragma force_active reset
 
 void VsRecorder_SetBoxUploaded(VsRecorderWork *work, u32 value) {
     work->boxUploaded = value;

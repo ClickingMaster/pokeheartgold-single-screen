@@ -293,8 +293,6 @@ BOOL VsRecorder_DressUpSendMain(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // send screen, substate 4: upload the photo, then return to the menu
 BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
@@ -406,8 +404,6 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // send screen, substate 5: back to the menu without sending
 BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work) {
@@ -1121,8 +1117,6 @@ static void VsRecorder_SetDressUpSendButtonHidden(VsRecorderWork *work, BOOL hid
     TextOBJ_SetPosition(dressUp->sendButton.text, 36, -8);
 }
 
-#pragma force_active on
-
 static void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     VsRecorder_LoadButtonGfx31(work, NNS_G2D_VRAM_TYPE_2DSUB);
@@ -1142,8 +1136,6 @@ static void VsRecorder_CreateDressUpButtons(VsRecorderWork *work) {
     TextOBJ_SetSpritesDrawFlag(dressUp->sendButton.text, TRUE);
     VsRecorder_SetDressUpSendButtonHidden(work, FALSE);
 }
-
-#pragma force_active reset
 
 static void VsRecorder_FreeDressUpButtons(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
@@ -1246,8 +1238,6 @@ static void VsRecorder_PrintPhotoCaption(VsRecorderWork *work, int index) {
     MessageFormat_Delete(msgFormat);
 }
 
-#pragma force_active on
-
 // TRUE if the player has seen a species of the group
 static BOOL VsRecorder_DressUpCategoryHasSeen(VsRecorderWork *work, int category) {
     BOOL found = FALSE;
@@ -1312,8 +1302,6 @@ static void VsRecorder_BuildDressUpSpeciesList(VsRecorderWork *work, int categor
     dressUp->categoryChosen = TRUE;
 }
 
-#pragma force_active reset
-
 static void VsRecorder_FreeDressUpSpeciesList(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     DestroyMsgData(dressUp->speciesNames);
@@ -1332,8 +1320,6 @@ static void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg) {
     }
     VsRecorder_BuildDressUpSpeciesList(arg, index);
 }
-
-#pragma force_active on
 
 // one window per species group, grayed out if no species of it was seen
 static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
@@ -1372,8 +1358,6 @@ static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
         hitbox++;
     }
 }
-
-#pragma force_active reset
 
 static void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work) {
     u32 i;

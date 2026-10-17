@@ -267,8 +267,6 @@ void BlockWipe_Start(BlockWipe *wipe, u8 duration, u8 delay, Window *window, u8 
     wipe->active = TRUE;
 }
 
-#pragma force_active on
-
 BOOL BlockWipe_Update(BlockWipe *wipe) {
     int i;
     int result;
@@ -300,8 +298,6 @@ BOOL BlockWipe_Update(BlockWipe *wipe) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 ZigzagWipe *ZigzagWipe_New(void) {
     ZigzagWipe *wipe = Heap_Alloc(HEAP_ID_FIELD1, sizeof(ZigzagWipe));
     memset(wipe, 0, sizeof(ZigzagWipe));
@@ -314,8 +310,6 @@ void ZigzagWipe_Free(ZigzagWipe *wipe) {
     }
     Heap_Free(wipe);
 }
-
-#pragma force_active on
 
 SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, volatile u32 width, u32 insidePlanes, u32 outsidePlanes) {
     int i;
@@ -345,8 +339,6 @@ SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 dur
     GX_SetVisibleWnd(GX_WNDMASK_W0);
     return SysTask_CreateOnVWaitQueue(Task_ZigzagWipe_Begin, wipe, 1024);
 }
-
-#pragma force_active reset
 
 static void Task_ZigzagWipe_Begin(SysTask *task, void *data) {
     ZigzagWipe *wipe = data;

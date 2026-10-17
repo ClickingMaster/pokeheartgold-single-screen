@@ -279,8 +279,6 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work);
 
 // view screen, substate 9: show the chosen box
@@ -363,8 +361,6 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // view screen, substate 10: the box
 BOOL VsRecorder_BoxDataViewBoxMain(VsRecorderWork *work) {

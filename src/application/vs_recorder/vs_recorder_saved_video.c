@@ -303,8 +303,6 @@ static void VsRecorder_HideYesNoWindows(VsRecorderWork *work) {
     RemoveWindow(&savedVideo->windows[1]);
 }
 
-#pragma force_active on
-
 // "The game will be saved before you can view Battle Videos." YES saves, NO goes back
 BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
@@ -395,8 +393,6 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // back from playback of a video that was not saved yet: save it into its slot and reload the slots
 BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {

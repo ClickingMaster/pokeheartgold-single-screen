@@ -4,8 +4,6 @@
 
 #include "scanline_effect.h"
 
-#pragma force_active on
-
 // Negates the offsets of every other block of period lines, so neighbouring blocks wave in opposite directions.
 void EncounterEffectHBlankWave_AlternateDirection(EncounterEffectHBlankWave *wave, u32 period) {
     int i;

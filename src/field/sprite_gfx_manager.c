@@ -11,7 +11,6 @@
 
 void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
 
-#pragma force_active on
 #pragma opt_optimizecontrolflow off
 
 void SpriteGfxManager_Init(SpriteGfxManager *manager, int numSprites, int numChar, int numPltt, int numCell, int numAnim, int charNone, int plttNone, int cellNone, int animNone) {
@@ -62,7 +61,6 @@ void SpriteGfxManager_Init(SpriteGfxManager *manager, int numSprites, int numCha
 }
 
 #pragma opt_optimizecontrolflow reset
-#pragma force_active reset
 
 void SpriteGfxManager_Free(SpriteGfxManager *manager) {
     int i;

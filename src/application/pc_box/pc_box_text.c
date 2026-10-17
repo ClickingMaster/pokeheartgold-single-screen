@@ -1200,8 +1200,6 @@ void PCBox_FreeGridInput(PCBoxWork *work) {
     }
 }
 
-#pragma force_active on
-
 void PCBox_PlaceCursorOnGridInput(PCBoxWork *work, int target) {
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(work->view->gridInput, target);
 
@@ -1218,8 +1216,6 @@ void PCBox_GridOnButton(PCBoxWork *work, int target) {
     GridInputHandler_SetNextInput(work->view->gridInput, (u8)target);
     PCBox_PlaceCursorOnGridInput(work, target);
 }
-
-#pragma force_active reset
 
 void PCBox_GridOnSwitchToTouchMode(PCBoxWork *work) {
     PCBox_SetSpriteVisible(work->view, 9, 0);

@@ -694,8 +694,6 @@ BOOL VsRecorder_NumberSearchExitDetails(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // slot button label: the owner of the video saved there, or empty
 static void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsRecorderWork *work, int slot) {
     Window window;
@@ -724,8 +722,6 @@ static void VsRecorder_SetSearchSlotButtonName(VsRecorderTextSprite *button, VsR
     String_Delete(text);
     RemoveWindow(&window);
 }
-
-#pragma force_active reset
 
 // message window over the details (main screen BG 2); msg 0x64 names the video's owner
 static void VsRecorder_ShowSearchMessage(VsRecorderWork *work, int msgId, int unused) {

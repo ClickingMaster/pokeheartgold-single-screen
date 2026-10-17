@@ -62,8 +62,6 @@ static void VsRecorder_TouchIndicatorTask(SysTask *task, void *data);
 static void VsRecorder_ShowTouchIndicator(VsRecorderWork *work);
 static void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID);
 
-#pragma force_active on
-
 static void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     VsRecorderWindowRectSet templates = sVsRecorderVideoInfoLabelWindows;
     VsRecorderMsgIdSet msgIds = sVsRecorderVideoInfoLabelMsgIds;
@@ -189,8 +187,6 @@ static void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork 
     MessageFormat_Delete(fmt);
 }
 
-#pragma force_active reset
-
 static void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int i;
     Window *window = (Window *)info;
@@ -226,8 +222,6 @@ static BOOL VsRecorderVideoInfo_UsesThreeMonLayout(VsRecorderVideoInfo *info) {
 int VsRecorderVideoInfo_GetScreenId(VsRecorderVideoInfo *info) {
     return VsRecorderVideoInfo_UsesThreeMonLayout(info) == TRUE ? 0x51 : 0x52;
 }
-
-#pragma force_active on
 
 static void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int mon;
@@ -311,14 +305,10 @@ static void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecord
     }
 }
 
-#pragma force_active reset
-
 void VsRecorder_CreateVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     VsRecorder_PrintVideoInfo(info, work);
     VsRecorder_CreateVideoPartyIcons(info, work);
 }
-
-#pragma force_active on
 
 void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int i;
@@ -340,8 +330,6 @@ void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     VsRecorder_RemoveVideoInfoWindows(info, work);
 }
 
-#pragma force_active reset
-
 void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw) {
     int i;
     for (i = 0; i < 12; i++, info = (VsRecorderVideoInfo *)((u8 *)info + sizeof(ManagedSprite *))) {
@@ -352,14 +340,10 @@ void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw)
     }
 }
 
-#pragma force_active on
-
 int VsRecorder_GetCenteredTextX(Window *window, String *str) {
     int width = FontID_String_GetWidth(0, str, 0);
     return (GetWindowWidth(window) * 8 - width) / 2;
 }
-
-#pragma force_active reset
 
 void VsRecorder_ResetRecordSave(VsRecorderWork *work) {
     work->recordSaveState = 0;
@@ -473,8 +457,6 @@ void VsRecorder_SetVBlankPaused(VsRecorderWork *work, u32 paused) {
     work->vblankPaused = paused;
 }
 
-#pragma force_active on
-
 void VsRecorder_CreateLabeledSprite(VsRecorderWork *work, VsRecorderTextSprite *textSprite, NNS_G2D_VRAM_TYPE vram, int msgId, s16 x, s16 y, s16 textX, s16 textY, int anim, BOOL draw) {
     textSprite->sprite = VsRecorder_NewButtonSprite(work, vram);
     VsRecorder_CreateTextSprite(textSprite, (VsRecorderGfx *)&work->narc, vram);
@@ -485,14 +467,10 @@ void VsRecorder_CreateLabeledSprite(VsRecorderWork *work, VsRecorderTextSprite *
     ManagedSprite_SetAnim(textSprite->sprite, anim);
 }
 
-#pragma force_active reset
-
 void VsRecorder_FreeLabeledSprite(VsRecorderTextSprite *textSprite) {
     VsRecorder_FreeTextSprite(textSprite);
     Sprite_DeleteAndFreeResources(textSprite->sprite);
 }
-
-#pragma force_active on
 
 // message of the message screen: type 0 / 1 by index, type 2 by group and index
 u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index, u32 type) {
@@ -804,8 +782,6 @@ u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index,
     work->messageScreen.msgId = result;
     return work->messageScreen.msgId;
 }
-
-#pragma force_active reset
 
 // switch to the message screen; it returns to the current screen after a touch
 void VsRecorder_ShowMessageScreen(VsRecorderWork *work, int group, u32 index, u32 type) {

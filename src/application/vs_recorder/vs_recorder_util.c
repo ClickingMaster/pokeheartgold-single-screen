@@ -38,8 +38,6 @@ void VsRecorder_ClearListWindow(VsRecorderListWindow *list) {
     memset(list, 0, sizeof(VsRecorderListWindow));
 }
 
-#pragma force_active on
-
 // up / down arrows of a list (main screen: vram 1, sub screen: vram 2)
 void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram) {
     NARC *narc = work->narc;
@@ -87,8 +85,6 @@ void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *wor
     }
     VsRecorder_UpdateListArrows(list);
 }
-
-#pragma force_active reset
 
 void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY) {
     ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[0], 0x80, upY);
@@ -174,16 +170,12 @@ void VsRecorder_CreateTouchScrollSprites(VsRecorderTouchScroll *scroll, VsRecord
     VsRecorder_CreateTouchScrollSpritesWithAnim(scroll, work, 5);
 }
 
-#pragma force_active on
-
 void VsRecorder_CreateTouchScrollSpritesWithAnim(VsRecorderTouchScroll *scroll, VsRecorderWork *work, int anim) {
     scroll->sprites[0] = VsRecorder_NewScrollSprite(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
     scroll->sprites[1] = VsRecorder_NewScrollSprite(scroll, work, NNS_G2D_VRAM_TYPE_2DSUB, anim);
     ManagedSprite_SetPositionXY(scroll->sprites[0], 24, 136);
     ManagedSprite_SetPositionXY(scroll->sprites[1], 232, 136);
 }
-
-#pragma force_active reset
 
 void VsRecorder_InitTouchScroll(VsRecorderTouchScroll *scroll) {
     memset(scroll, 0, sizeof(VsRecorderTouchScroll));
@@ -322,7 +314,6 @@ void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result) {
     work->battleResult = result;
 }
 
-#pragma force_active on
 #pragma opt_strength_reduction off
 
 // server result callback: copy the received video list
@@ -348,7 +339,6 @@ void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
 }
 
 #pragma opt_strength_reduction reset
-#pragma force_active reset
 
 // the four saved videos (header + owner card); slot 0 owner is the player
 void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {
@@ -440,7 +430,6 @@ void VsRecorder_CloseMonIconNarc(NARC *narc) {
     NARC_Delete(narc);
 }
 
-#pragma force_active on
 #pragma opt_lifetimes off
 #pragma opt_dead_assignments off
 #pragma opt_propagation off
@@ -486,7 +475,6 @@ ManagedSprite *VsRecorder_NewMonIcon(VsRecorderWork *work, NARC *narc, int index
 #pragma opt_propagation reset
 #pragma opt_dead_assignments reset
 #pragma opt_lifetimes reset
-#pragma force_active reset
 
 void VsRecorder_DeleteMonIcon(VsRecorderWork *work, u32 index, ManagedSprite *sprite) {
     if (sprite != NULL) {

@@ -78,8 +78,6 @@ static void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad);
 static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate);
 static void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad);
 
-#pragma force_active on
-
 // the number of an uploaded video, "XX-XXXXX-XXXXX" (msg 0x127)
 void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *work) {
     MessageFormat *msgFmt = VsRecorder_NewMessageFormat(HEAP_ID_109);
@@ -110,8 +108,6 @@ void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *
     MessageFormat_ResetBuffers(msgFmt);
     MessageFormat_Delete(msgFmt);
 }
-
-#pragma force_active reset
 
 VsRecorderNumberPadConfig *VsRecorder_NewNumberPadConfig(enum HeapID heapID, u32 length, const int *groupLengths, void *options) {
     VsRecorderNumberPadConfig *config;
@@ -163,8 +159,6 @@ static void VsRecorder_NumberPadSetGroup(VsRecorderNumberPad *pad, int group) {
     }
 }
 
-#pragma force_active on
-
 static void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
     VsRecorderNumberPadStartX startX;
     int i;
@@ -209,16 +203,12 @@ static void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
     } while (i < pad->count);
 }
 
-#pragma force_active reset
-
 static void VsRecorder_NumberPadSetState(VsRecorderNumberPad *pad, int state) {
     pad->state = state;
     pad->unk_1F8 = 0;
     pad->step = 0;
     pad->timer = 0;
 }
-
-#pragma force_active on
 
 BOOL VsRecorder_NumberPadInit(VsRecorderNumberPad *pad) {
     VsRecorder_NumberPadInitLayout(pad);
@@ -233,8 +223,6 @@ BOOL VsRecorder_NumberPadInit(VsRecorderNumberPad *pad) {
     VsRecorder_NumberPadSetState(pad, VS_RECORDER_NUMBER_PAD_INPUT);
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_NumberPadFree(VsRecorderNumberPad *pad) {
     TouchHitboxController_Destroy(pad->hitboxController);
@@ -251,8 +239,6 @@ BOOL VsRecorder_NumberPadInput(VsRecorderNumberPad *pad) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // the digits of the new group grow, those of the old group shrink back
 BOOL VsRecorder_NumberPadSwitchGroup(VsRecorderNumberPad *pad) {
@@ -341,8 +327,6 @@ BOOL VsRecorder_NumberPadSwitchGroup(VsRecorderNumberPad *pad) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // one step of the number pad; TRUE when it closed
 BOOL VsRecorder_NumberPadMain(VsRecorderNumberPad *pad) {
     BOOL result = sVsRecorderNumberPadStates[pad->state](pad);
@@ -385,8 +369,6 @@ static void VsRecorder_NumberPadConfirm(VsRecorderNumberPad *pad) {
     String_Delete(str);
     VsRecorder_NumberPadSetState(pad, VS_RECORDER_NUMBER_PAD_FREE);
 }
-
-#pragma force_active on
 
 // back: clears the selected digit and moves to the previous one; on the first digit the pad closes (cancelled)
 static void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad) {
@@ -521,8 +503,6 @@ static void VsRecorder_OnNumberPadTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-#pragma force_active reset
-
 static void VsRecorder_NumberPadRunAction(VsRecorderNumberPad *pad) {
     switch (pad->action) {
     case VS_RECORDER_NUMBER_PAD_ACTION_GROUP:
@@ -578,8 +558,6 @@ static int VsRecorder_NumberPadFindGroupLast(VsRecorderNumberPad *pad, int group
     return n - 1;
 }
 
-#pragma force_active on
-
 static void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad) {
     NARC *narc;
     SpriteSystem *spriteSystem;
@@ -604,8 +582,6 @@ static void VsRecorder_NumberPadLoadGfx(VsRecorderNumberPad *pad) {
     SpriteSystem_LoadCellResObjFromOpenNarc(spriteSystem, spriteManager, narc, 85, FALSE, NUMBER_PAD_RES_CURSORS);
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 86, FALSE, NUMBER_PAD_RES_CURSORS);
 }
-
-#pragma force_active reset
 
 static void VsRecorder_NumberPadShowSprites(VsRecorderNumberPad *pad) {
     int i = 0;
@@ -710,8 +686,6 @@ static void VsRecorder_NumberPadCreateDigitSprites(VsRecorderNumberPad *pad) {
     }
 }
 
-#pragma force_active on
-
 static inline void VsRecorder_InitKeyCursor(VsRecorderNumberPad *pad, VsRecorderNumberPadDigit *cursor) {
     cursor->dx = 0;
     cursor->dy = 0;
@@ -754,8 +728,6 @@ static void VsRecorder_NumberPadCreateCursors(VsRecorderNumberPad *pad) {
     VsRecorder_NumberPadSetCursorDrawFlag(pad, 2, FALSE);
 }
 
-#pragma force_active reset
-
 static void VsRecorder_NumberPadSetCursorDrawFlag(VsRecorderNumberPad *pad, int cursor, int draw) {
     if (draw == TRUE) {
         ManagedSprite_SetDrawFlag(pad->cursors[cursor].sprite, TRUE);
@@ -773,8 +745,6 @@ static void VsRecorder_NumberPadMoveCursor(VsRecorderNumberPad *pad, int digit) 
     ManagedSprite_SetPositionXY(pad->cursors[0].sprite, x, y + 16);
 }
 
-#pragma force_active on
-
 static void VsRecorder_NumberPadPlaceKeyCursor(VsRecorderNumberPad *pad, int key) {
     int x = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.left + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.right) / 2);
     int y = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.top + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.bottom) / 2);
@@ -786,8 +756,6 @@ static void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int k
     int y = (s16)((pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.top + pad->hitboxes[key + NUMBER_PAD_KEY_0].rect.bottom) / 2);
     ManagedSprite_SetPositionXY(pad->cursors[cursor].sprite, x, y - 8);
 }
-
-#pragma force_active reset
 
 // the key press (anim 3) hides itself when it ends; the key cursor shows unless the input was a touch
 static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
@@ -851,8 +819,6 @@ static void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad) {
         } while (i < pad->count);
     }
 }
-
-#pragma force_active on
 
 // the digits of the current group are 32 pixels apart, the others 8; animate: move there in 2 frames
 static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate) {
@@ -939,5 +905,3 @@ static void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad) {
         } while (i < pad->count);
     }
 }
-
-#pragma force_active reset

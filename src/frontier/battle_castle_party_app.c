@@ -432,7 +432,6 @@ BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
 // BattleCastlePartyApp main
 int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
@@ -493,7 +492,6 @@ int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
     SpriteList_RenderAndAnimateSprites(app->spriteGfx.spriteList);
     return FALSE;
 }
-#pragma force_active reset
 
 // BattleCastlePartyApp exit
 BOOL BattleCastlePartyApp_Exit(OverlayManager *manager) {
@@ -2440,7 +2438,6 @@ static void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, in
     app->linkSendBuf[5] = app->action;
 }
 
-#pragma force_active on
 // Link receive: the partner's menu action (sent by BattleCastlePartyApp_PrepareLinkAction).
 // The parent decides whose action wins; the child takes the parent's decision.
 void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
@@ -2462,14 +2459,12 @@ void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, Battle
         }
     }
 }
-#pragma force_active reset
 
 static void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int command) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = app->cursorPos;
 }
 
-#pragma force_active on
 // Link receive: the partner's cursor position (sent by BattleCastlePartyApp_PrepareLinkCursor)
 void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
     if (netId != Comm_GetLocalNetId()) {
@@ -2477,7 +2472,6 @@ void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, Battle
         BattleCastlePartyApp_DrawCursor(app, app->partnerCursorPos, TRUE);
     }
 }
-#pragma force_active reset
 
 static void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command) {
     app->linkSendBuf[0] = 1;

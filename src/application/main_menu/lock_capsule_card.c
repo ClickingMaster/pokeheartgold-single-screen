@@ -135,8 +135,6 @@ static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode,
 static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view);
 static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view);
 
-#pragma force_active on
-
 static void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
     if (view->buttonSprites[0] != NULL) {
         Sprite_Delete(view->buttonSprites[0]);
@@ -158,8 +156,6 @@ static void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
     MainMenuUtil_FreeSprites();
 }
 
-#pragma force_active reset
-
 static void LockCapsuleCard_EraseWindowIfInUse(Window *window, BOOL dontCopyToVram) {
     if (WindowIsInUse(window) == TRUE) {
         EraseFrameAndWindow1(window, dontCopyToVram);
@@ -171,8 +167,6 @@ static void LockCapsuleCard_ClearWindowIfInUse(Window *window, BOOL dontCopyToVr
         ClearFrameAndWindow2(window, dontCopyToVram);
     }
 }
-
-#pragma force_active on
 
 static void LockCapsuleCard_CreateListMenu(LockCapsuleCardView *view, const MysteryGiftMenuItem *items, int count, Window *window, int itemsAbove) {
     int i;
@@ -207,8 +201,6 @@ static void LockCapsuleCard_DestroyListMenu(LockCapsuleCardView *view) {
     RemoveWindow(&view->menuWindow);
 }
 
-#pragma force_active reset
-
 BOOL LockCapsuleCard_PrintMessageOnly(void) {
     return TRUE;
 }
@@ -231,8 +223,6 @@ BOOL LockCapsuleCard_PrintStatus(LockCapsuleCardView *view, Window *window, u32 
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL LockCapsuleCard_BufferReceiveDate(LockCapsuleCardView *view) {
     RTCDate date;
 
@@ -242,8 +232,6 @@ BOOL LockCapsuleCard_BufferReceiveDate(LockCapsuleCardView *view) {
     BufferIntegerAsString(view->msgFormat, 2, date.day, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL LockCapsuleCard_PrintCardText(LockCapsuleCardView *view, Window *window, u32 color) {
     String *string = String_New(251, HEAP_ID_85);
@@ -257,8 +245,6 @@ BOOL LockCapsuleCard_PrintCardText(LockCapsuleCardView *view, Window *window, u3
 BOOL LockCapsuleCard_PrintNothing(void) {
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL LockCapsuleCard_ShowCardMenu(LockCapsuleCardView *view, Window *window, u32 color) {
     MysteryGiftMenuItem items[2];
@@ -275,8 +261,6 @@ BOOL LockCapsuleCard_ShowCardMenu(LockCapsuleCardView *view, Window *window, u32
     return TRUE;
 }
 
-#pragma force_active reset
-
 static void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType fadeType, int nextState, int *state) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, fadeType, fadeType, RGB_BLACK, 6, 1, HEAP_ID_85);
     if (state != NULL) {
@@ -284,8 +268,6 @@ static void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType f
     }
     view->nextState = nextState;
 }
-
-#pragma force_active on
 
 static void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
     const WonderCardTextBox *boxes = sLockCapsuleCardTextBoxes;
@@ -358,8 +340,6 @@ static int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *windo
     return baseTile + box->width * box->height;
 }
 
-#pragma force_active reset
-
 static void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId, int bgId, int offset) {
     NNSG2dScreenData *screenData;
     void *data = GfGfxLoader_LoadFromNarc(NARC_a_1_1_3, fileId, TRUE, view->heapId, TRUE);
@@ -368,8 +348,6 @@ static void LockCapsuleCard_LoadScreenData(LockCapsuleCardView *view, int fileId
     BG_LoadScreenTilemapData(view->bgConfig, bgId, screenData->rawData, offset);
     Heap_Free(data);
 }
-
-#pragma force_active on
 
 static void LockCapsuleCard_LoadCardBg(LockCapsuleCardView *view, int page) {
     GfGfxLoader_GXLoadPal(NARC_a_1_1_3, 7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x100, view->heapId);
@@ -459,8 +437,6 @@ static void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view) {
     }
 }
 
-#pragma force_active reset
-
 BOOL LockCapsuleCard_Init(OverlayManager *manager, int *state) {
     LockCapsuleCardView *view;
 
@@ -485,8 +461,6 @@ static void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *
     HBlankDma_Start(buffer, (void *)REG_BG0HOFS_ADDR, 8, 1);
 }
 
-#pragma force_active on
-
 static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 speed, fx32 accel) {
     WonderCardFlipEffect *effect = &view->flipEffect;
 
@@ -502,8 +476,6 @@ static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode,
     effect->active = TRUE;
 }
 
-#pragma force_active reset
-
 static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view) {
     WonderCardFlipEffect *effect = &view->flipEffect;
 
@@ -517,8 +489,6 @@ static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view) {
     effect->task = NULL;
     HBlankDma_Stop();
 }
-
-#pragma force_active on
 
 static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view) {
     WonderCardFlipEffect *effect = &view->flipEffect;
@@ -716,7 +686,6 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
 }
 
 #pragma pop
-#pragma force_active reset
 
 BOOL LockCapsuleCard_Exit(OverlayManager *manager, int *state) {
     LockCapsuleCardView *view = OverlayManager_GetData(manager);
@@ -748,8 +717,6 @@ BOOL LockCapsuleCard_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 // Draws the Lock Capsule card on bgConfig with a temporary work (used by the Mystery Gift app).
 void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID) {
     LockCapsuleCardView *view;
@@ -763,8 +730,6 @@ void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum Hea
     LockCapsuleCard_DrawCard(view, 1, 0);
     Heap_Free(view);
 }
-
-#pragma force_active reset
 
 void WonderCard_SetGraphicsBanks(void) {
     GraphicsBanks banks = gWonderCardGraphicsBanks;
@@ -797,8 +762,6 @@ void WonderCard_InitBgLayers(BgConfig *bgConfig) {
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
 }
-
-#pragma force_active on
 
 // 0: the gift can be received; 1: not for this game, 2: already received (unique gift), 3: no free gift slot,
 // 4: no free Wonder Card slot, 5: delivered by another route. A header with all bits set wipes the Mystery Gift
@@ -835,5 +798,3 @@ int MysteryGift_CheckCanReceive(SaveData *saveData, WonderCardInfo *header) {
     }
     return 0;
 }
-
-#pragma force_active reset

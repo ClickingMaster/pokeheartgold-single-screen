@@ -25,7 +25,6 @@ void CTRDG_TerminateForPulledOut(void);
 extern enum HeapID sMainMenuUtilCryptoHeapId;
 extern u32 ov74_0223E2D4[];
 
-#pragma force_active on
 // The start of the MainMenuUtilWork, up to its sprites; the rest is defined with the overlay's other data.
 u32 gMainMenuUtilWork[13];
 
@@ -144,8 +143,6 @@ void MainMenuUtil_DecryptWonderCard(WonderCardInfo *header, WonderCard *dest, en
     Heap_Free(rc4);
 }
 
-#pragma force_active reset
-
 // Cursor callback of the overlay's list menus
 void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit) {
     switch (onInit) {
@@ -156,8 +153,6 @@ void MainMenuUtil_ListMenuCursorCallback(ListMenu *list, s32 index, u8 onInit) {
         break;
     }
 }
-
-#pragma force_active on
 
 // Cartridge interrupt: the GBA cartridge was pulled out
 static void MainMenuUtil_CartridgeIrqHandler(void) {
@@ -177,12 +172,8 @@ void MainMenuUtil_EnableCartridgePullOutCheck(BOOL enable) {
     }
 }
 
-#pragma force_active reset
-
 static void MainMenuUtil_IgnoreCartridgeIrqHandler(void) {
 }
-
-#pragma force_active on
 
 // Cartridge interrupt that does nothing
 void MainMenuUtil_IgnoreCartridgeIrq(void) {
@@ -192,15 +183,11 @@ void MainMenuUtil_IgnoreCartridgeIrq(void) {
     OS_EnableIrq();
 }
 
-#pragma force_active reset
-
 // Asynchronous save: MainMenuUtil_RunSave runs it step by step; the state is SAVE_STATE_*
 void MainMenuUtil_StartSave(SaveData *saveData) {
     sMainMenuUtilWork->saveData = saveData;
     sMainMenuUtilWork->saveState = SAVE_STATE_START;
 }
-
-#pragma force_active on
 
 int MainMenuUtil_RunSave(void) {
     // the work through the preceding label (second literal-pool entry of the same address)
@@ -241,8 +228,6 @@ void MainMenuUtil_ResumeSave(void) {
         work->saveState = SAVE_STATE_WRITING;
     }
 }
-
-#pragma force_active reset
 
 void MainMenuUtil_CancelSave(void) {
     Save_Cancel(sMainMenuUtilWork->saveData);

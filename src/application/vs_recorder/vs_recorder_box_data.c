@@ -133,8 +133,6 @@ static BOOL VsRecorder_BoxFormHasMon(GlobalTerminalNetBoxForm *form) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // from the cursor on, then from the first slot: put the cursor on the next slot with a Pokemon
 static void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
     // the slots are walked through a view of the work shifted by one u16 per slot
@@ -170,8 +168,6 @@ static void VsRecorder_SkipToOccupiedSlot(VsRecorderBoxData *boxData) {
         }
     }
 }
-
-#pragma force_active reset
 
 static void VsRecorder_OnBoxDataSendTouch(u32 index, u32 event, void *arg) {
     VsRecorderWork *work = arg;
@@ -406,8 +402,6 @@ BOOL VsRecorder_BoxDataEnter(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // send screen, substate 4: show the previous / next box of the PC
 BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -452,8 +446,6 @@ BOOL VsRecorder_BoxDataSendChangeBox(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hidden) {
     VsRecorderBoxData *boxData = work->screenWork;
 
@@ -469,8 +461,6 @@ static void VsRecorder_SetBoxDataSendButtonHidden(VsRecorderWork *work, BOOL hid
     TextOBJ_SetPosition(boxData->exitButton.text, 36, -8);
     TextOBJ_SetPosition(boxData->sendButton.text, 36, -8);
 }
-
-#pragma force_active on
 
 // send screen, substate 5: ask for the category
 BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work) {
@@ -501,15 +491,11 @@ BOOL VsRecorder_BoxDataSendShowCategories(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // send screen, substate 6
 BOOL VsRecorder_BoxDataSendSelectCategory(VsRecorderWork *work) {
     TouchHitboxController_IsTriggered(((VsRecorderBoxData *)work->screenWork)->hitboxes[1]);
     return FALSE;
 }
-
-#pragma force_active on
 
 // send screen, substate 8: send the box
 BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
@@ -582,8 +568,6 @@ BOOL VsRecorder_BoxDataSendUpload(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // send screen, substate 7: back to the box
 BOOL VsRecorder_BoxDataSendCancelCategory(VsRecorderWork *work) {
@@ -734,8 +718,6 @@ void VsRecorder_RemoveBoxDataWindows(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active on
-
 void VsRecorder_PrintBoxDataMessage(VsRecorderWork *work, int msgId) {
     VsRecorderBoxData *boxData = work->screenWork;
     Window *window = &boxData->windows[2];
@@ -746,8 +728,6 @@ void VsRecorder_PrintBoxDataMessage(VsRecorderWork *work, int msgId) {
     ScheduleWindowCopyToVram(window);
     String_Delete(str);
 }
-
-#pragma force_active reset
 
 // "<sender>'S <category> PC BOX"
 void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused) {
@@ -770,8 +750,6 @@ void VsRecorder_PrintBoxDataOwnerMessage(VsRecorderWork *work, int unused) {
     MessageFormat_Delete(msgFormat);
 }
 
-#pragma force_active on
-
 static void VsRecorder_PrintBoxName(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
     Window *window = &boxData->windows[1];
@@ -782,8 +760,6 @@ static void VsRecorder_PrintBoxName(VsRecorderWork *work) {
     ScheduleWindowCopyToVram(window);
     String_Delete(str);
 }
-
-#pragma force_active reset
 
 // Pokemon name and box name
 void VsRecorder_ClearBoxDataInfoWindows(VsRecorderWork *work) {
@@ -829,8 +805,6 @@ static void VsRecorder_PrintBoxMonName(VsRecorderWork *work, int slot) {
     String_Delete(str);
 }
 
-#pragma force_active on
-
 static void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
     VsRecorderBoxData *boxData;
     PaletteData *plttData;
@@ -875,8 +849,6 @@ static void VsRecorder_CreateBoxMonIcons(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 void VsRecorder_SetBoxMonIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     VsRecorderBoxData *boxData = work->screenWork;
     int i;
@@ -903,8 +875,6 @@ void VsRecorder_FreeBoxMonIcons(VsRecorderWork *work) {
         }
     }
 }
-
-#pragma force_active on
 
 static void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -938,8 +908,6 @@ static void VsRecorder_CreateBoxMonPic(VsRecorderWork *work) {
     boxData->pokepic = PokepicManager_CreatePokepic(work->pokepicManager, &template, 42, 91, 0, 0, NULL, NULL);
     FreeMonPersonal(personal);
 }
-
-#pragma force_active reset
 
 void VsRecorder_SetBoxMonPicVanished(VsRecorderWork *work, BOOL vanished) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -1043,8 +1011,6 @@ BOOL VsRecorder_BoxDataSendMain(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // send screen, substate 10: back to the menu
 BOOL VsRecorder_BoxDataSendExit(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
@@ -1133,15 +1099,11 @@ BOOL VsRecorder_BoxDataViewShow(VsRecorderWork *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // view screen, substate 3
 BOOL VsRecorder_BoxDataViewSelectCategory(VsRecorderWork *work) {
     TouchHitboxController_IsTriggered(((VsRecorderBoxData *)work->screenWork)->hitboxes[2]);
     return FALSE;
 }
-
-#pragma force_active on
 
 // VIEW PROFILE and VIEW BOX DATA
 void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {
@@ -1171,8 +1133,6 @@ void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {
         rect++;
     }
 }
-
-#pragma force_active reset
 
 // VIEW PROFILE / CLOSE PROFILE
 void VsRecorder_PrintBoxListProfileButton(VsRecorderWork *work, u32 msgId) {
@@ -1223,7 +1183,6 @@ void VsRecorder_RemoveBoxListButtons(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active on
 #pragma optimization_level 2
 
 // "LATEST 20 IN THE <category> PC BOX"
@@ -1264,4 +1223,3 @@ void VsRecorder_CreateBoxListTitle(VsRecorderWork *work) {
 }
 
 #pragma optimization_level reset
-#pragma force_active reset

@@ -556,7 +556,6 @@ void WaterfallEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, 
     }
 }
 
-#pragma force_active on
 void WaterfallEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, WaterfallEffect *effect) {
     FileIdPair modelFileIds;
     FileIdPair animFileIds;
@@ -596,7 +595,6 @@ void WaterfallEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, W
         break;
     }
 }
-#pragma force_active reset
 
 void WaterfallEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, WaterfallEffect *effect) {
     int i;
@@ -613,7 +611,6 @@ void WaterfallEffect_Delete(Field3dObjectTask *task) {
     Field3dObjectTask_Delete(task);
 }
 
-#pragma force_active on
 void WhirlpoolEffect_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, WhirlpoolEffect *effect) {
     struct {
         u8 animFileId;
@@ -638,7 +635,6 @@ void WhirlpoolEffect_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, Whi
     PlaySE(SEQ_SE_DP_FW463);
     effect->state = 0;
 }
-#pragma force_active reset
 
 void WhirlpoolEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, WhirlpoolEffect *effect) {
     FieldMoveEffectModel_Unload(&effect->model, &effect->allocator);
@@ -875,7 +871,6 @@ void HeadbuttEffect_Destroy(Field3dObjectTask *task, FieldSystem *fieldSystem, H
     FieldMoveEffectModel_Unload(&effect->model, &effect->allocator);
 }
 
-#pragma force_active on
 void HeadbuttEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, HeadbuttEffect *effect) {
     switch (effect->state) {
     case 0:
@@ -905,7 +900,6 @@ void HeadbuttEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, He
         break;
     }
 }
-#pragma force_active reset
 
 void HeadbuttEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, HeadbuttEffect *effect) {
     FieldMoveEffectModel_Draw(&effect->model);

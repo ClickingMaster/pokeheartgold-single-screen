@@ -361,7 +361,6 @@ void CutInScrollSprite_Destroy(FieldEffect *effect, CutInScrollSprite *work) {
     Sprite_Delete(work->sprite);
 }
 
-#pragma force_active on
 void CutInScrollSprite_Update(FieldEffect *effect, CutInScrollSprite *work) {
     VecFx32 pos;
     FieldEffect_GetPosition(effect, &pos);
@@ -384,7 +383,6 @@ void CutInScrollSprite_Update(FieldEffect *effect, CutInScrollSprite *work) {
         }
     }
 }
-#pragma force_active reset
 
 void CutInScrollSprite_Draw(FieldEffect *effect, CutInScrollSprite *work) {
 }

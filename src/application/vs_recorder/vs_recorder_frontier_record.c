@@ -88,8 +88,6 @@ void VsRecorder_FreeFrontierButtons(VsRecorderWork *work) {
     VsRecorder_FreeButtonGfx(work);
 }
 
-#pragma force_active on
-
 void VsRecorder_LoadFrontierGfx(VsRecorderWork *work) {
     VsRecorderIntSet5 palFileIds;
     VsRecorderIntSet5 charFileIds;
@@ -147,8 +145,6 @@ void VsRecorder_LoadFrontierGfx(VsRecorderWork *work) {
     SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_a_1_7_9, charFileId, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 165535);
 }
 
-#pragma force_active reset
-
 // converts count colours from start on to grey
 void VsRecorder_GrayscalePalette(u16 *buf, int start, int count) {
     int i;
@@ -162,8 +158,6 @@ void VsRecorder_GrayscalePalette(u16 *buf, int start, int count) {
         buf++;
     }
 }
-
-#pragma force_active on
 
 void VsRecorder_GrayFrontierPrints(VsRecorderWork *work) {
     PaletteData *plttData = work->plttData;
@@ -313,8 +307,6 @@ void VsRecorder_CreateFrontierSprites(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active reset
-
 void VsRecorder_FreeFrontierSprites(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
     int i;
@@ -450,8 +442,6 @@ void VsRecorder_PlaceFrontierSprites(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active on
-
 BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record;
     int i;
@@ -532,8 +522,6 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL VsRecorder_FrontierMain(VsRecorderWork *work) {
     u32 x;

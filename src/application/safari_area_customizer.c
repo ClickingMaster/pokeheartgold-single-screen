@@ -462,7 +462,6 @@ int SafariAreaCustomizer_State_FadeOut(SafariAreaCustomizer *s) {
     return SAC_STATE_FADE_OUT;
 }
 
-#pragma force_active on
 int SafariAreaCustomizer_Setup(SafariAreaCustomizer *s) {
     switch (s->subState) {
     case 0:
@@ -523,7 +522,6 @@ int SafariAreaCustomizer_Teardown(SafariAreaCustomizer *s) {
     s->subState++;
     return FALSE;
 }
-#pragma force_active reset
 
 int SafariAreaCustomizer_HandleSlotInput(SafariAreaCustomizer *s) {
     if (SafariAreaCustomizer_CheckInputModeSwitch(s)) {
@@ -612,7 +610,6 @@ int SafariAreaCustomizer_HandleAreaInput(SafariAreaCustomizer *s) {
     return SafariAreaCustomizer_HandleAreaTouch(s);
 }
 
-#pragma force_active on
 int SafariAreaCustomizer_HandleConfirmArea(SafariAreaCustomizer *s) {
     int yes;
     int touchMode;
@@ -657,7 +654,6 @@ int SafariAreaCustomizer_HandleConfirmArea(SafariAreaCustomizer *s) {
     }
     return SAC_INPUT_STATE_WAIT;
 }
-#pragma force_active reset
 
 int SafariAreaCustomizer_ChangePage(SafariAreaCustomizer *s) {
     switch (s->subState) {
@@ -1077,7 +1073,6 @@ int SafariAreaCustomizer_HandleMoveTouch(SafariAreaCustomizer *s) {
     return SAC_INPUT_STATE_SWAP_AREAS;
 }
 
-#pragma force_active on
 void SafariAreaCustomizer_OpenSlotMenu(SafariAreaCustomizer *s) {
     TouchscreenListMenuHeader header;
     u16 x;
@@ -1094,7 +1089,6 @@ void SafariAreaCustomizer_OpenSlotMenu(SafariAreaCustomizer *s) {
     SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, s->selectedSlot, TRUE);
     SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_SUB_0, s->selectedSlot, TRUE);
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_AskConfirmArea(SafariAreaCustomizer *s) {
     YesNoPromptTemplate template;
@@ -1242,7 +1236,6 @@ void SafariAreaCustomizer_DeleteStrings(SafariAreaCustomizer *s) {
     FontID_Release(4);
 }
 
-#pragma force_active on
 void SafariAreaCustomizer_AddWindows(SafariAreaCustomizer *s) {
     int i;
     u8 y;
@@ -1272,7 +1265,6 @@ void SafariAreaCustomizer_AddWindows(SafariAreaCustomizer *s) {
     FillWindowPixelBufferText_AssumeTileSize32(&s->textObjWindow, 0);
     s->yesNoPrompt = YesNoPrompt_Create(s->heapId);
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_RemoveWindows(SafariAreaCustomizer *s) {
     int i;
@@ -1397,7 +1389,6 @@ void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s) {
     TextOBJLayout_Delete(s->fontLayout);
 }
 
-#pragma force_active on
 void SafariAreaCustomizer_DrawPageScreenPart(SafariAreaCustomizer *s, int value) {
     NNSG2dScreenData *screen;
 
@@ -1437,7 +1428,6 @@ void SafariAreaCustomizer_PrintWindowText(SafariAreaCustomizer *s, u8 windowId, 
     }
     AddTextPrinterParameterizedWithColor(&s->windows[windowId], 0, strings[msg], x, y, TEXT_SPEED_INSTANT, color, NULL);
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_PrintPageNumber(SafariAreaCustomizer *s) {
     u32 x;
@@ -1499,7 +1489,6 @@ void SafariAreaCustomizer_MoveCursor(SafariAreaCustomizer *s, u32 index, u32 pos
     SafariAreaCustomizer_SetCursorAnim(s, index, anim, TRUE);
 }
 
-#pragma force_active on
 void SafariAreaCustomizer_DrawSelectFrame(SafariAreaCustomizer *s, u8 layer, int pos, BOOL show) {
     struct {
         u8 x;
@@ -1529,7 +1518,6 @@ void SafariAreaCustomizer_DrawSelectFrame(SafariAreaCustomizer *s, u8 layer, int
     FillBgTilemapRect(s->bgConfig, layer, 0, frame.x, frame.y, 8, 8, TILEMAP_FILL_OVWT_PAL);
     ScheduleBgTilemapBufferTransfer(s->bgConfig, layer);
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_InitSlotTilemaps(SafariAreaCustomizer *s) {
     int slot;
@@ -1610,7 +1598,6 @@ void SafariAreaCustomizer_PrintObjectTypeLabels(SafariAreaCustomizer *s) {
     }
 }
 
-#pragma force_active on
 // Prints the name of the area in `slot` and, once objects are unlocked, its object counts per type.
 void SafariAreaCustomizer_PrintSlotInfo(SafariAreaCustomizer *s, u32 slot) {
     int i;
@@ -1659,7 +1646,6 @@ void SafariAreaCustomizer_PrintSlotInfo(SafariAreaCustomizer *s, u32 slot) {
         }
     }
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_PrintAreaNames(SafariAreaCustomizer *s) {
     u8 x;
@@ -1764,7 +1750,6 @@ void SafariAreaCustomizer_StartPageChange(SafariAreaCustomizer *s) {
     s->animFrame = 0;
 }
 
-#pragma force_active on
 // Slides the area page by 32 pixels per frame, 8 frames.
 BOOL SafariAreaCustomizer_RunPageChange(SafariAreaCustomizer *s) {
     int i;
@@ -1807,7 +1792,6 @@ BOOL SafariAreaCustomizer_RunSwapAnim(SafariAreaCustomizer *s, int dir) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_InitSpriteSystem(SafariAreaCustomizer *s) {
     GF_CreateVramTransferManager(32, s->heapId);
@@ -1892,7 +1876,6 @@ void SafariAreaCustomizerSpriteRes_SetSpriteList(SafariAreaCustomizerSpriteRes *
     res->externalSpriteList = spriteList;
 }
 
-#pragma force_active on
 ManagedSprite *SafariAreaCustomizerSpriteRes_CreateAreaSprite(SafariAreaCustomizerSpriteRes *res, u16 x, u16 y, u8 transfer, u8 priority, u8 index, u8 area, int vram) {
     ManagedSprite *sprite;
     SpriteTemplate template;
@@ -1927,7 +1910,6 @@ ManagedSprite *SafariAreaCustomizerSpriteRes_CreateAreaSprite(SafariAreaCustomiz
     GF_ASSERT(sprite->sprite != NULL);
     return sprite;
 }
-#pragma force_active reset
 
 void SafariAreaCustomizer_DeleteAreaSprite(ManagedSprite *sprite) {
     Sprite_DeleteAndFreeResources(sprite);
@@ -1961,7 +1943,6 @@ void SafariAreaCustomizerSpriteRes_Free(SafariAreaCustomizerSpriteRes *res) {
     }
 }
 
-#pragma force_active on
 void SafariAreaCustomizerSpriteRes_LoadResources(SafariAreaCustomizerSpriteRes *res) {
     int i;
     GF_2DGfxResObjList *list = res->resObjList[GF_GFX_RES_TYPE_CHAR];
@@ -1998,4 +1979,3 @@ void SafariAreaCustomizerSpriteRes_LoadResources(SafariAreaCustomizerSpriteRes *
     }
     SpriteTransfer_CreatePlttTransferTask(list->obj[0]);
 }
-#pragma force_active reset

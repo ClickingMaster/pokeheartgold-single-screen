@@ -312,8 +312,6 @@ static void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOO
     }
 }
 
-#pragma force_active on
-
 static void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work) {
     SpriteManager_UnloadCharObjById(work->spriteManager, 100000);
     SpriteManager_UnloadPlttObjById(work->spriteManager, 100000);
@@ -361,8 +359,6 @@ static void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecord
         ManagedSprite_SetAnim(profile->monIcon, 1);
     }
 }
-
-#pragma force_active reset
 
 static void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw) {
     ManagedSprite_SetDrawFlag(profile->avatar, draw);
@@ -444,16 +440,12 @@ void VsRecorder_CreateProfile(VsRecorderProfile *profile, VsRecorderWork *work) 
     VsRecorder_CreateProfileMonIcon(profile, work);
 }
 
-#pragma force_active on
-
 void VsRecorder_FreeProfile(VsRecorderProfile *profile, VsRecorderWork *work) {
     VsRecorder_RemoveProfileWindows(profile);
     VsRecorder_SetProfileDrawFlag(profile, FALSE);
     VsRecorder_FreeProfileAvatar(profile, work);
     VsRecorder_FreeProfileMonIcon(profile, work);
 }
-
-#pragma force_active reset
 
 void VsRecorder_SetProfileDrawFlag(VsRecorderProfile *profile, BOOL draw) {
     VsRecorder_SetProfileMonIconDrawFlag(profile, draw);

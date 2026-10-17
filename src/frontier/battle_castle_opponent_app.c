@@ -1919,7 +1919,6 @@ static void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *a
     app->linkSendBuf[5] = app->action;
 }
 
-#pragma force_active on
 // Link receive callback: the action the partner chose (the host decides when both act at once)
 void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
     app->linkRecvCount++;
@@ -1940,14 +1939,12 @@ void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, Bat
         }
     }
 }
-#pragma force_active reset
 
 static void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int command) {
     app->linkSendBuf[0] = command;
     app->linkSendBuf[1] = app->cursorPos;
 }
 
-#pragma force_active on
 // Link receive callback: the partner's cursor
 void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
     if (netId != Comm_GetLocalNetId()) {
@@ -1955,7 +1952,6 @@ void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, Bat
         BattleCastleOpponentApp_DrawCursor(app, app->partnerCursorPos, TRUE);
     }
 }
-#pragma force_active reset
 
 static void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int command) {
     app->linkSendBuf[0] = TRUE;

@@ -225,8 +225,6 @@ BOOL VsRecorder_TitleSlideInChoices(VsRecorderWork *work) {
     return done;
 }
 
-#pragma force_active on
-
 // slides the choice rows up from the bottom of the touch screen while their palettes fade in; TRUE when all are in place
 BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work) {
     fx32 posY;
@@ -304,5 +302,3 @@ BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active reset

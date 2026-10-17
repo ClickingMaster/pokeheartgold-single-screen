@@ -21,8 +21,6 @@ typedef struct VsRecorderS8x6 {
     s8 v[6];
 } VsRecorderS8x6;
 
-#pragma force_active on
-
 extern const u8 sVsRecorderMenuRowDrawPriorities[2][5];
 
 // x offsets of the decor sprites

@@ -146,8 +146,6 @@ static void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
     }
 }
 
-#pragma force_active on
-
 // party icons of the visible result rows
 static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
     int i;
@@ -208,8 +206,6 @@ static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
     VsRecorder_PlaceSearchResultIcons(work);
 }
 
-#pragma force_active reset
-
 static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
@@ -244,8 +240,6 @@ static void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
     }
     VsRecorder_SetVBlankPaused(work, FALSE);
 }
-
-#pragma force_active on
 
 // keep the icons in step with the list scroll: drop the row that left, shift, make the row that came in
 static void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
@@ -343,8 +337,6 @@ static void VsRecorder_ScrollSearchResultIcons(VsRecorderWork *work) {
     VsRecorder_SetVBlankPaused(work, FALSE);
 }
 
-#pragma force_active reset
-
 // at least one condition is set
 BOOL VsRecorder_HasSearchConditions(VsRecorderWork *work) {
     VsRecorderVideoSearch *search = work->screenWork;
@@ -360,8 +352,6 @@ BOOL VsRecorder_HasSearchConditions(VsRecorderWork *work) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // the condition labels and value windows on the main screen
 static void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mode) {
@@ -403,8 +393,6 @@ static void VsRecorder_CreateSearchConditionWindows(VsRecorderWork *work, int mo
         msgId++;
     }
 }
-
-#pragma force_active reset
 
 static void VsRecorder_PrintSearchFacility(VsRecorderWork *work, u32 facility) {
     VsRecorderVideoSearch *search = work->screenWork;

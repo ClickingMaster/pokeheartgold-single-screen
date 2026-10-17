@@ -136,8 +136,6 @@ BOOL SafariZone_CanPlaceObjectOnWater(u8 behavior, BOOL blocked) {
     return MetatileBehavior_IsSurfableWater_thunk(behavior);
 }
 
-#pragma force_active on
-
 SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum HeapID heapID) {
     SafariDecorationArgs *args = Heap_AllocAtEnd(heapID, sizeof(SafariDecorationArgs));
     s16 x;
@@ -185,8 +183,6 @@ SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum
     }
     return args;
 }
-
-#pragma force_active reset
 
 BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData) {
     u32 trainerId = PlayerProfile_GetTrainerID(Save_PlayerData_GetProfile(saveData));
@@ -260,8 +256,6 @@ u16 FieldSystem_GetFacingSafariObject(FieldSystem *fieldSystem, u16 *objectIndex
     *objectIndex = 0;
     return 0xFF;
 }
-
-#pragma force_active on
 
 BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
     u8 query[3];
@@ -446,8 +440,6 @@ BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL SafariZone_CanPlaceObjectOn(u8 behavior, BOOL blocked, u32 onWater) {
     if (onWater == FALSE) {

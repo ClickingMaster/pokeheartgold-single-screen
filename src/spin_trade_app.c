@@ -630,7 +630,6 @@ BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app);
 int SpinTrade_CountConfirmed(SpinTradeApp *app);
 BOOL SpinTrade_IsCancelled(SpinTradeApp *app);
 
-#pragma force_active on
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     SpinTradeArgs *args = OverlayManager_GetArgs(man);
     SpinTradeApp *app;
@@ -722,7 +721,6 @@ BOOL SpinTradeApp_Main(OverlayManager *man, int *state) {
     SpinTrade_ClearLinkFlags(app);
     return FALSE;
 }
-#pragma force_active reset
 
 void SpinTrade_ClearLinkFlags(SpinTradeApp *app) {
     app->remoteJump = FALSE;
@@ -735,7 +733,6 @@ BOOL SpinTrade_State_Start(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_WaitFadeIn(SpinTradeApp *app) {
     if (IsPaletteFadeFinished()) {
         if (!Comm_GetLocalNetId()) {
@@ -747,7 +744,6 @@ BOOL SpinTrade_State_WaitFadeIn(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitMembers(SpinTradeApp *app) {
     if (SpinTrade_HaveAllMembersJoined(app)) {
@@ -873,7 +869,6 @@ BOOL SpinTrade_State_SendParty(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_CheckEggs(SpinTradeApp *app) {
     if (app->playerCount == SpinTrade_CountReceivedParties(app)) {
         if (SpinTrade_AnyPartyHasBadEgg(app) == 1) {
@@ -886,7 +881,6 @@ BOOL SpinTrade_State_CheckEggs(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitConfirm(SpinTradeApp *app) {
     if (SpinTrade_IsCancelled(app) == 1) {
@@ -897,7 +891,6 @@ BOOL SpinTrade_State_WaitConfirm(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_SetupDrop(SpinTradeApp *app) {
     SpinTradeDrop *drop = SpinTrade_ClearScratch(app, sizeof(SpinTradeDrop));
     u32 playerCount;
@@ -938,7 +931,6 @@ BOOL SpinTrade_State_DropEggs(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitEggsLanded(SpinTradeApp *app) {
     int i = 0;
@@ -1007,7 +999,6 @@ BOOL SpinTrade_State_StartCountdown(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_ClearNames(SpinTradeApp *app) {
     int i;
     if (++app->timer < 95) {
@@ -1020,7 +1011,6 @@ BOOL SpinTrade_State_ClearNames(SpinTradeApp *app) {
     app->state = SPIN_TRADE_STATE_BEGIN_SPIN;
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_BeginSpin(SpinTradeApp *app) {
     Comm_GetLocalNetId();
@@ -1028,7 +1018,6 @@ BOOL SpinTrade_State_BeginSpin(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 // The host accelerates the table for 300 frames, then slows it down; the clients follow its SPIN packets
 BOOL SpinTrade_State_SpinHost(SpinTradeApp *app) {
     fx32 speed;
@@ -1078,7 +1067,6 @@ BOOL SpinTrade_State_SpinHost(SpinTradeApp *app) {
     SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_SPIN, data, 8);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_SpinClient(SpinTradeApp *app) {
     if (app->spinReceived == TRUE) {
@@ -1136,7 +1124,6 @@ BOOL SpinTrade_State_RotateToOwnEgg(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_AlignToSlot(SpinTradeApp *app) {
     fx32 angle;
     fx32 target;
@@ -1166,7 +1153,6 @@ BOOL SpinTrade_State_AlignToSlot(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_StartResultSync(SpinTradeApp *app) {
     LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
@@ -1281,7 +1267,6 @@ BOOL SpinTrade_State_WaitEggFanfare(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 // An egg that stopped in a bonus area also gives its receiver a random Berry
 BOOL SpinTrade_State_GiveBonusBerry(SpinTradeApp *app) {
     u32 item, high;
@@ -1312,7 +1297,6 @@ BOOL SpinTrade_State_GiveBonusBerry(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitBerryFanfare(SpinTradeApp *app) {
     if (app->timer < 120) {
@@ -1398,7 +1382,6 @@ BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
     if (app->unk_018 == FALSE) {
         if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
@@ -1421,7 +1404,6 @@ BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitDisconnect(SpinTradeApp *app) {
     if (Comm_CountConnected() <= 1) {
@@ -1431,7 +1413,6 @@ BOOL SpinTrade_State_WaitDisconnect(SpinTradeApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL SpinTrade_State_FadeOut(SpinTradeApp *app) {
     int bgm;
 
@@ -1443,7 +1424,6 @@ BOOL SpinTrade_State_FadeOut(SpinTradeApp *app) {
     app->state = SPIN_TRADE_STATE_WAIT_FADE_OUT;
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL SpinTrade_State_WaitFadeOut(SpinTradeApp *app) {
     if (IsPaletteFadeFinished()) {
@@ -2278,7 +2258,6 @@ int SpinTradeEggDrop_Fall(SpinTradeEggDropTask *task) {
     return 0;
 }
 
-#pragma force_active on
 int SpinTradeEggDrop_Land(SpinTradeEggDropTask *task) {
     SpinTradeEgg *egg = task->egg;
 
@@ -2296,7 +2275,6 @@ int SpinTradeEggDrop_Land(SpinTradeEggDropTask *task) {
     }
     return 0;
 }
-#pragma force_active reset
 
 void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce) {
     SpinTradeEgg *egg = bounce->egg;

@@ -542,8 +542,6 @@ void EasyChatAppView_Cmd_ShowWordListCursor(SysTask *task, EasyChatViewCommand *
     EasyChatAppView_EndCommand(command);
 }
 
-#pragma force_active on
-
 void EasyChatAppView_Cmd_FocusMenu(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
@@ -554,8 +552,6 @@ void EasyChatAppView_Cmd_FocusMenu(SysTask *task, EasyChatViewCommand *command) 
     EasyChatMenuView_MoveCursor(view->menuView, EasyChatApp_GetMenuCursor(view->app));
     EasyChatAppView_EndCommand(command);
 }
-
-#pragma force_active reset
 
 void EasyChatAppView_Cmd_FocusSentence(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
@@ -852,8 +848,6 @@ void EasyChatAppView_Cmd_SetWordListCursor(SysTask *task, EasyChatViewCommand *c
     EasyChatAppView_EndCommand(command);
 }
 
-#pragma force_active on
-
 void EasyChatAppView_Cmd_ScrollWordList(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
@@ -870,8 +864,6 @@ void EasyChatAppView_Cmd_ScrollWordList(SysTask *task, EasyChatViewCommand *comm
         break;
     }
 }
-
-#pragma force_active reset
 
 void EasyChatAppView_Cmd_HideMessage(SysTask *task, EasyChatViewCommand *command) {
     EasyChatSentenceView_PrintMessage(command->view->sentence, 0);
@@ -918,8 +910,6 @@ void EasyChatAppView_Cmd_DrawYesNoCursor(SysTask *task, EasyChatViewCommand *com
     EasyChatAppView_EndCommand(command);
 }
 
-#pragma force_active on
-
 void EasyChatAppView_Cmd_CloseYesNo(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
@@ -933,8 +923,6 @@ void EasyChatAppView_Cmd_CloseYesNo(SysTask *task, EasyChatViewCommand *command)
     }
     EasyChatAppView_EndCommand(command);
 }
-
-#pragma force_active reset
 
 void EasyChatAppView_Cmd_PressPageUp(SysTask *task, EasyChatViewCommand *command) {
     EasyChatPageButtonsView_SetPressed(command->view->pageButtons, 0, 1);

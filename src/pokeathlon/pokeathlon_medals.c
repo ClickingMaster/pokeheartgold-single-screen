@@ -153,8 +153,6 @@ static u16 *PokeathlonMedals_LoadSpeciesOrder(PokeathlonMedals *work, u32 *count
     return order;
 }
 
-#pragma force_active on
-
 static void PokeathlonMedals_BuildSpeciesList(PokeathlonMedals *work) {
     u32 count;
     u32 i;
@@ -203,8 +201,6 @@ static void PokeathlonMedals_DrawMedalistMark(PokeathlonMedals *work, int slot, 
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonMedals_SetIconsVisible(PokeathlonMedals *work, BOOL visible) {
     int i = 0;
 
@@ -230,8 +226,6 @@ static void PokeathlonMedals_ShowPage(PokeathlonMedals *work) {
         PokeathlonMedals_DrawMedalistMark(work, (u16)i, species);
     }
 }
-
-#pragma force_active on
 
 static void PokeathlonMedals_UpdatePageIndicator(PokeathlonMedals *work) {
     BOOL showUp = FALSE;
@@ -292,8 +286,6 @@ static BOOL PokeathlonMedals_UpdatePageScroll(PokeathlonMedals *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void PokeathlonMedals_LoadMonPic(PokeathlonMedals *work, u16 species) {
     PokeathlonRecordMon mon = { 0 };
 
@@ -340,8 +332,6 @@ static void PokeathlonMedals_HideSelectedSpecies(PokeathlonMedals *work) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
 
-#pragma force_active on
-
 BOOL PokeathlonMedals_Init(OverlayManager *man, int *state) {
     PokeathlonMedals *work;
     PokeathlonMedalsArgs *args;
@@ -374,8 +364,6 @@ BOOL PokeathlonMedals_Init(OverlayManager *man, int *state) {
     Main_SetVBlankIntrCB((GFIntrCB)PokeathlonMedals_VBlankCallback, work);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL PokeathlonMedals_Exit(OverlayManager *man, int *state) {
     PokeathlonMedals *work = OverlayManager_GetData(man);
@@ -458,8 +446,6 @@ static void PokeathlonMedals_FreeGridInput(PokeathlonMedals *work) {
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonMedals_ChangePage(PokeathlonMedals *work, BOOL forward, BOOL touch) {
     u32 oldPage = work->flags.page;
     int input;
@@ -521,8 +507,6 @@ static BOOL PokeathlonMedals_HandleInput(PokeathlonMedals *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void PokeathlonMedals_MoveCursor(PokeathlonMedals *work, u32 target) {
     u8 x;
     u8 y;
@@ -572,8 +556,6 @@ static void PokeathlonMedals_OnCursorMoved(PokeathlonMedals *work, u32 newTarget
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonMedals_InitBgs(PokeathlonMedals *work) {
     GraphicsModes modes;
     PokeathlonMedalsBgTemplates templates;
@@ -591,8 +573,6 @@ static void PokeathlonMedals_InitBgs(PokeathlonMedals *work) {
         i++;
     } while (i < 7);
 }
-
-#pragma force_active reset
 
 static void PokeathlonMedals_LoadBgGraphics(PokeathlonMedals *work) {
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 42, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, work->heapId);
@@ -669,8 +649,6 @@ static void PokeathlonMedals_CreateUiSprites(PokeathlonMedals *work) {
     } while (i < 4);
 }
 
-#pragma force_active on
-
 static void PokeathlonMedals_CreateMedalSprites(PokeathlonMedals *work) {
     ManagedSpriteTemplate spriteTemplate = { 0 };
     const int *columns = sPokeathlonMedalsMedalColumns;
@@ -722,8 +700,6 @@ static void PokeathlonMedals_CreateIconSprites(PokeathlonMedals *work) {
         y += 24;
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonMedals_PrintStaticText(PokeathlonMedals *work) {
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(work->textContext);

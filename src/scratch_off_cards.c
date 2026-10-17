@@ -286,7 +286,6 @@ static void ScratchOffCards_RemoveWindows(Window *windows);
 static void ScratchOffCards_DrawMessageFrame(BgConfig *bgConfig, Window *window);
 static void ScratchOffCards_DrawWindowFrame(Window *window, int frame);
 
-#pragma force_active on
 BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work;
     ScratchOffCardsArgs *args;
@@ -315,9 +314,7 @@ BOOL ScratchOffCards_Init(OverlayManager *man, int *state) {
     Sound_SetSceneAndPlayBGM(66, SEQ_NONE, 0);
     return TRUE;
 }
-#pragma force_active reset
 
-#pragma force_active on
 BOOL ScratchOffCards_Main(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work = OverlayManager_GetData(man);
     switch (*state) {
@@ -377,7 +374,6 @@ BOOL ScratchOffCards_Main(OverlayManager *man, int *state) {
     SpriteList_RenderAndAnimateSprites(work->spriteGfx.spriteList);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL ScratchOffCards_Exit(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work = OverlayManager_GetData(man);
@@ -407,7 +403,6 @@ static int ScratchOffCards_FadeIn(ScratchOffCardsWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
 static int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
     int i;
     switch (work->subState) {
@@ -443,7 +438,6 @@ static int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 static int ScratchOffCards_SelectCard(ScratchOffCardsWork *work) {
     int hit;
@@ -533,7 +527,6 @@ static int ScratchOffCards_ZoomSelectedCard(ScratchOffCardsWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
 static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
     int i;
     switch (work->subState) {
@@ -639,9 +632,7 @@ static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
-#pragma force_active on
 static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
     int i;
     int hit;
@@ -840,7 +831,6 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 static int ScratchOffCards_SlideOutCard(ScratchOffCardsWork *work) {
     switch (work->subState) {
@@ -953,7 +943,6 @@ static void ScratchOffCards_DeleteCardChoiceSprites(ScratchOffCardsWork *work) {
     }
 }
 
-#pragma force_active on
 static void ScratchOffCards_FreeResources(ScratchOffCardsWork *work) {
     int i;
     for (i = 0; i < 4; i++) {
@@ -1007,7 +996,6 @@ static void ScratchOffCards_FreeResources(ScratchOffCardsWork *work) {
     ScratchOffCards_FreeBgConfig(work->bgConfig);
     NARC_Delete(work->narc);
 }
-#pragma force_active reset
 
 static void ScratchOffCards_ResetDisplay(void) {
     volatile u32 *dispcnt = &reg_GX_DISPCNT;
@@ -1020,7 +1008,6 @@ static void ScratchOffCards_ResetDisplay(void) {
     *dispcntSub &= 0xFFFFE0FF;
 }
 
-#pragma force_active on
 static void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
     int i;
     work->narc = NARC_New(NARC_a_2_0_5, HEAP_ID_122);
@@ -1063,7 +1050,6 @@ static void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
     GF_TouchpadStartSampling(1);
     Main_SetVBlankIntrCB((GFIntrCB)ScratchOffCards_VBlank, work);
 }
-#pragma force_active reset
 
 static void ScratchOffCards_CreateYesNoPrompt(ScratchOffCardsWork *work) {
     work->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_122);
@@ -1138,7 +1124,6 @@ static void ScratchOffCards_SetVramBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
 static void ScratchOffCards_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = sScratchOffCardsGraphicsModes;
     BgTemplate sub0;
@@ -1172,7 +1157,6 @@ static void ScratchOffCards_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
 }
-#pragma force_active reset
 
 static void ScratchOffCards_LoadSubBg3Gfx(ScratchOffCardsWork *work, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0x23, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
@@ -1210,16 +1194,13 @@ static void ScratchOffCards_LoadMainBg0Gfx(ScratchOffCardsWork *work, GFBgLayer 
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 9, work->bgConfig, bgId, 0, 0, FALSE, HEAP_ID_122);
 }
 
-#pragma force_active on
 static int ScratchOffCards_PrintMessage(ScratchOffCardsWork *work, Window *window, int msgNo, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     FillWindowPixelBuffer(window, bg);
     ReadMsgDataIntoString(work->msgData, msgNo, work->stringBuffer);
     StringExpandPlaceholders(work->msgFormat, work->string, work->stringBuffer);
     return AddTextPrinterParameterizedWithColor(window, fontId, work->string, x, y, textSpeed, MAKE_TEXT_COLOR(fg, shadow, bg), NULL);
 }
-#pragma force_active reset
 
-#pragma force_active on
 static int ScratchOffCards_PrintMessageCentered(ScratchOffCardsWork *work, Window *window, int msgNo, u32 x, u32 y, u32 textSpeed, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     FillWindowPixelBuffer(window, bg);
     ReadMsgDataIntoString(work->msgData, msgNo, work->stringBuffer);
@@ -1227,7 +1208,6 @@ static int ScratchOffCards_PrintMessageCentered(ScratchOffCardsWork *work, Windo
     x -= (FontID_String_GetWidth(fontId, work->string, 0) + 1) / 2;
     return AddTextPrinterParameterizedWithColor(window, fontId, work->string, x, y, textSpeed, MAKE_TEXT_COLOR(fg, shadow, bg), NULL);
 }
-#pragma force_active reset
 
 static int ScratchOffCards_PrintStopPrompt(ScratchOffCardsWork *work) {
     int ret;
@@ -1253,7 +1233,6 @@ static int ScratchOffCards_PrintStartCardMessage(ScratchOffCardsWork *work) {
     return ret;
 }
 
-#pragma force_active on
 static int ScratchOffCards_ShowResult(ScratchOffCardsWork *work) {
     u8 i;
     for (i = 0; i < 3; i++) {
@@ -1265,7 +1244,6 @@ static int ScratchOffCards_ShowResult(ScratchOffCardsWork *work) {
     PlaySE(SEQ_SE_PL_CALL);
     return 0;
 }
-#pragma force_active reset
 
 static int ScratchOffCards_PrintTooBadMessage(ScratchOffCardsWork *work) {
     int ret;
@@ -1289,7 +1267,6 @@ static int ScratchOffCards_PrintCancelButton(ScratchOffCardsWork *work) {
     return ret;
 }
 
-#pragma force_active on
 static int ScratchOffCards_PrintPrizeName(ScratchOffCardsWork *work, int prizeNo) {
     int ret;
     BufferItemName(work->msgFormat, 0, work->prizes[prizeNo]);
@@ -1297,7 +1274,6 @@ static int ScratchOffCards_PrintPrizeName(ScratchOffCardsWork *work, int prizeNo
     ScheduleWindowCopyToVram(&work->windows[prizeNo + 2]);
     return ret;
 }
-#pragma force_active reset
 
 static void ScratchOffCards_BufferNumber(ScratchOffCardsWork *work, int fieldNo, int number) {
     BufferIntegerAsString(work->msgFormat, fieldNo, number, 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -1320,7 +1296,6 @@ static void ScratchOffCards_PlaceWildcards(ScratchOffCardsWork *work) {
     } while (i < 2);
 }
 
-#pragma force_active on
 static void ScratchOffCards_FillCells(ScratchOffCardsWork *work) {
     int failures, i, j, k;
     u8 symbol = LCRandom() % 4;
@@ -1358,7 +1333,6 @@ retry:
         }
     }
 }
-#pragma force_active reset
 
 static void ScratchOffCards_ShuffleCells(ScratchOffCardsWork *work, int unused) {
     ScratchOffCards_PlaceWildcards(work);
@@ -1373,7 +1347,6 @@ static void ScratchOffCards_ClearCells(ScratchOffCardsWork *work) {
     } while (i < 9);
 }
 
-#pragma force_active on
 static void ScratchOffCards_ChoosePrizes(ScratchOffCardsWork *work, int unused) {
     u16 choices[4];
     struct {
@@ -1404,9 +1377,7 @@ static void ScratchOffCards_ChoosePrizes(ScratchOffCardsWork *work, int unused) 
         }
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 static int ScratchOffCards_BounceCardChoice(ScratchOffCardsWork *work, int cardNo) {
     int x, y, newX, newY;
     int step;
@@ -1423,7 +1394,6 @@ static int ScratchOffCards_BounceCardChoice(ScratchOffCardsWork *work, int cardN
     ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[cardNo], newX, newY);
     return FALSE;
 }
-#pragma force_active reset
 
 static void ScratchOffCards_SetBgPalette(ScratchOffCardsWork *work, int bgId, u8 palette, u8 width, u8 height) {
     BgTilemapRectChangePalette(work->bgConfig, bgId, 0, 0, width, height, palette);
@@ -1459,7 +1429,6 @@ static void ScratchOffCards_ClearRevealedCells(ScratchOffCardsWork *work) {
     } while (i < 9);
 }
 
-#pragma force_active on
 static void ScratchOffCards_ScratchCell(ScratchOffCardsWork *work, int cellNo) {
     int i = 0;
     if (i < work->touch.count) {
@@ -1477,7 +1446,6 @@ static void ScratchOffCards_ScratchCell(ScratchOffCardsWork *work, int cellNo) {
         } while (i < work->touch.count);
     }
 }
-#pragma force_active reset
 
 static void ScratchOffCards_MarkTouchedArea(ScratchOffCardsWork *work) {
     int i;
@@ -1490,7 +1458,6 @@ static void ScratchOffCards_MarkTouchedArea(ScratchOffCardsWork *work) {
     }
 }
 
-#pragma force_active on
 static void ScratchOffCards_MarkArea(ScratchOffCardsWork *work, int x, int y) {
     int dy, dx;
     int py, px;
@@ -1504,9 +1471,7 @@ static void ScratchOffCards_MarkArea(ScratchOffCardsWork *work, int x, int y) {
         }
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 static int ScratchOffCards_CheckCellRevealed(ScratchOffCardsWork *work, u8 cellNo) {
     int x;
     int y;
@@ -1534,9 +1499,7 @@ static int ScratchOffCards_CheckCellRevealed(ScratchOffCardsWork *work, u8 cellN
     }
     return FALSE;
 }
-#pragma force_active reset
 
-#pragma force_active on
 static void ScratchOffCards_AnimateMatch(ScratchOffCardsWork *work) {
     int i;
     work->matchTimer++;
@@ -1556,7 +1519,6 @@ static void ScratchOffCards_AnimateMatch(ScratchOffCardsWork *work) {
         ScratchOffCardsSpriteGfx_ReplaceMatchPalette(&work->spriteGfx, work->matchFrame);
     }
 }
-#pragma force_active reset
 
 static int ScratchOffCards_CheckMatch(ScratchOffCardsWork *work) {
     int match = FALSE;
@@ -1726,7 +1688,6 @@ static void ScratchOffCards_ScratchAt(ScratchOffCardsWork *work, int x, int y) {
     BgCommitTilemapBufferToVram(work->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-#pragma force_active on
 static void ScratchOffCards_ClearScratchPixel(ScratchOffCardsWork *work, u32 x, u32 y) {
     u8 mask;
     u32 tileX, tileY, pixelX;
@@ -1746,7 +1707,6 @@ static void ScratchOffCards_ClearScratchPixel(ScratchOffCardsWork *work, u32 x, 
     }
     work->scratchPixels[(u32)(y + (pixelX + (tileY + tileX)))] &= mask;
 }
-#pragma force_active reset
 
 static void ScratchOffCardsSpriteGfx_Init(ScratchOffCardsSpriteGfx *gfx) {
     const u8 *counts;
@@ -1803,7 +1763,6 @@ static void ScratchOffCardsSpriteGfx_LoadWinGfx(ScratchOffCardsSpriteGfx *gfx, u
     gfx->resObj[4][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_2_0_5, 0x12, FALSE, 4, GF_GFX_RES_TYPE_ANIM, HEAP_ID_122);
 }
 
-#pragma force_active on
 static Sprite *ScratchOffCardsSpriteGfx_CreateSprite(ScratchOffCardsSpriteGfx *gfx, int resId, int animSeq, int priority, int drawPriority, u8 isSubScreen) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
@@ -1831,7 +1790,6 @@ static Sprite *ScratchOffCardsSpriteGfx_CreateSprite(ScratchOffCardsSpriteGfx *g
     Sprite_SetAnimCtrlSeq(sprite, animSeq);
     return sprite;
 }
-#pragma force_active reset
 
 static void ScratchOffCardsSpriteGfx_Free(ScratchOffCardsSpriteGfx *gfx) {
     u8 i;
@@ -1856,7 +1814,6 @@ static void ScratchOffCardsSpriteGfx_InitTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-#pragma force_active on
 static void ScratchOffCardsSpriteGfx_ReplaceMatchPalette(ScratchOffCardsSpriteGfx *gfx, int frame) {
     SpriteResource *resource;
     if (frame >= 8) {
@@ -1866,9 +1823,7 @@ static void ScratchOffCardsSpriteGfx_ReplaceMatchPalette(ScratchOffCardsSpriteGf
     ReplacePlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], resource, NARC_a_2_0_5, sScratchOffCardsMatchPaletteFiles[frame], FALSE, HEAP_ID_122);
     SpriteTransfer_ReplacePlttData(resource);
 }
-#pragma force_active reset
 
-#pragma force_active on
 static ScratchOffCardsSprite *ScratchOffCardsSprite_New(ScratchOffCardsSpriteGfx *gfx, int resId, int animSeq, u16 x, u16 y, u8 isSubScreen, int priority, int drawPriority) {
     ScratchOffCardsSprite *sprite = Heap_Alloc(HEAP_ID_122, sizeof(ScratchOffCardsSprite));
     memset(sprite, 0, sizeof(ScratchOffCardsSprite));
@@ -1877,7 +1832,6 @@ static ScratchOffCardsSprite *ScratchOffCardsSprite_New(ScratchOffCardsSpriteGfx
     ScratchOffCardsSprite_SetPosition(sprite, x, y);
     return sprite;
 }
-#pragma force_active reset
 
 static int ScratchOffCardsSprite_Delete(ScratchOffCardsSprite *sprite) {
     Sprite_Delete(sprite->sprite);

@@ -149,8 +149,6 @@ static BOOL PmAgbCartridgeHasFlash(void) {
     return TRUE;
 }
 
-#pragma force_active on
-
 int PmAgbCartridgeGetOffsets(void *buffer) {
     int result;
     sPmAgbSave.buffer = buffer;
@@ -175,8 +173,6 @@ int PmAgbCartridgeGetOffsets(void *buffer) {
     return PM_AGB_RESULT_OK;
 }
 
-#pragma force_active reset
-
 void PmAgbCartridgeUnlinkSpec(void) {
     sPmAgbCartridgeSpec.spec = NULL;
 }
@@ -188,8 +184,6 @@ u8 PmAgbCartridge_GetVersionInternal(void) {
 u16 PmAgbCartridge_GetLanguage(void) {
     return sPmAgbCartridgeSpec.spec->language;
 }
-
-#pragma force_active on
 
 static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
     AgbRomHeader header;
@@ -234,8 +228,6 @@ static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
     return PM_AGB_RESULT_OK;
 }
 
-#pragma force_active reset
-
 static u16 PmAgbCartridge_CalcSectorChecksum(u32 *data, u16 size) {
     u16 i;
     u32 sum = 0;
@@ -249,7 +241,6 @@ static void PmAgbCartridge_ReadSector(int sector, void *dest) {
     CTRDG_ReadAgbFlash((u16)sector, 0, dest, AGB_SAVE_SECTOR_SIZE);
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 
@@ -270,7 +261,6 @@ static u16 PmAgbCartridge_GetSectorDataSize(int id) {
 }
 
 #pragma pop
-#pragma force_active reset
 
 // Where the data of the save sector with this id is kept: trainer info at +0x1000, game state at +0x2000, PC boxes
 // at +0x6000
@@ -286,8 +276,6 @@ static void *PmAgbCartridge_GetSectorData(int id) {
     }
     return NULL;
 }
-
-#pragma force_active on
 
 // 1: all 14 sectors of the slot are valid, 0xFF: some are, 0: the slot is empty
 static int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter) {
@@ -315,8 +303,6 @@ static int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *co
     }
     return 0;
 }
-
-#pragma force_active reset
 
 // Picks the newer of the two save slots
 static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter) {
@@ -370,8 +356,6 @@ static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u
     return 2;
 }
 
-#pragma force_active on
-
 // Reads the latest save into the buffer
 int PmAgbCartridge_LoadSave(void) {
     // sMigrateFromAgbIcons + 1 is sPmAgbSave: the literal pool holds the state's address twice
@@ -413,8 +397,6 @@ int PmAgbCartridge_LoadSave(void) {
     }
     return PM_AGB_RESULT_SAVE_CORRUPT;
 }
-
-#pragma force_active reset
 
 // Writes the save sector with this id into the other slot (asynchronously; PmAgbCartridge_WriteSectorCallback continues)
 static void PmAgbCartridge_WriteSectorAsync(int id) {
@@ -524,8 +506,6 @@ u32 PmAgbCartridge_GetTrainerId(void) {
 void *PmAgbCartridge_GetPlayerName(void *unused) {
     return PmAgbCartridge_GetTrainerInfo();
 }
-
-#pragma force_active on
 
 // Substructure `which` (0 growth, 1 attacks, 2 EVs and condition, 3 misc) of the box Pokemon; the order of the four
 // depends on personality % 24
@@ -968,8 +948,6 @@ void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
     return result;
 }
 
-#pragma force_active reset
-
 // The substructures are XORed with the OT id and the personality
 static void AGB_DecryptBoxMon(AgbBoxMon *mon) {
     u32 *key = (u32 *)mon;
@@ -1021,8 +999,6 @@ static u16 AGB_CalcBoxMonChecksum(AgbBoxMon *mon) {
     }
     return sum;
 }
-
-#pragma force_active on
 
 u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
     u32 result = 0;
@@ -1271,8 +1247,6 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 // Only the nickname, language, flags, OT name and species can be set
 void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {

@@ -181,13 +181,9 @@ void *MysteryGiftComm_GetRecvBuffer(int netId, void *arg, int size) {
     return sMysteryGiftCommWork->recvBuffer;
 }
 
-#pragma force_active on
-
 void MysteryGiftComm_RecvSetFlag3C1(int i) {
     sMysteryGiftCommWork->unk_3C1[i] = TRUE;
 }
-
-#pragma force_active reset
 
 void MysteryGiftComm_Free(void) {
     Heap_FreeExplicit(HEAP_ID_15, sMysteryGiftCommWork);

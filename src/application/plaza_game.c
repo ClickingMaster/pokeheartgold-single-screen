@@ -2036,8 +2036,6 @@ void PlazaGameResults_StartFlash(PlazaGameResults *results) {
     }
 }
 
-#pragma force_active on
-
 static inline u8 *PlazaGameResults_GetFlashColors(PlazaGameResults *results, u8 *data, u32 slot) {
     if (results->flashFrame == 0) {
         return data + (slot + 3) * 32;
@@ -2069,8 +2067,6 @@ void PlazaGameResults_UpdateFlash(PlazaGameResults *results) {
         results->flashFrame = ((int)results->flashFrame + 1) % 16;
     }
 }
-
-#pragma force_active reset
 
 void PlazaGameResults_FreeFlashPalette(PlazaGameResults *results) {
     Heap_Free(results->flashPlttRaw);
