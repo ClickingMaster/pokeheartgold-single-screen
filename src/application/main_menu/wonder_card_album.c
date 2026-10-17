@@ -104,11 +104,6 @@ extern void CommWireless_SetCustomBeacon(void *src);
 extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
-extern const MysteryGiftMenuItem sWonderCardAlbumMenuItems[10];
-extern const MysteryGiftMenuItem sWonderCardAlbumWirelessYesNoItems[];
-extern const MysteryGiftMenuItem sWonderCardAlbumShareYesNoItems[];
-extern const ListMenuTemplate sWonderCardAlbumListMenuTemplate;
-extern const WonderCardTextBox sWonderCardAlbumTextBoxes[19];
 static u32 sWonderCardAlbumMenuInput;
 
 enum {
@@ -183,6 +178,319 @@ static int WonderCardAlbum_CountReceivers(void);
 static int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window);
 static void WonderCardAlbum_PrintReceiverCount(WonderCardAlbum *album, Window *window, int count);
 static void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int nextState);
+
+static MysteryGiftMenuItem sWonderCardAlbumWirelessYesNoItems[2] = {
+    { msg_0247_00065, (MysteryGiftMenuFunc)ALBUM_STATE_SHARE_FADE_OUT },
+    { msg_0247_00066, WonderCardAlbum_ReturnToCardMenu                },
+};
+
+static MysteryGiftMenuItem sWonderCardAlbumTrashYesNoItems[2] = {
+    { msg_0247_00065, WonderCardAlbum_ConfirmTrash     },
+    { msg_0247_00066, WonderCardAlbum_ReturnToCardMenu },
+};
+
+static MysteryGiftMenuItem sWonderCardAlbumShareYesNoItems[2] = {
+    { msg_0247_00065, (MysteryGiftMenuFunc)ALBUM_STATE_WIRELESS_YES_NO },
+    { msg_0247_00066, WonderCardAlbum_ReturnToCardMenu                 },
+};
+
+static ListMenuTemplate sWonderCardAlbumListMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = MainMenuUtil_ListMenuCursorCallback,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 4,
+    .header_X = 0,
+    .item_X = 12,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 1,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+static MysteryGiftMenuItem sWonderCardAlbumCardMenuItems[4] = {
+    { msg_0247_00043, (MysteryGiftMenuFunc)ALBUM_STATE_START_FLIP      },
+    { msg_0247_00044, WonderCardAlbum_SelectShare                      },
+    { msg_0247_00045, WonderCardAlbum_SelectTrash                      },
+    { msg_0247_00046, (MysteryGiftMenuFunc)ALBUM_STATE_CLOSE_CARD_MENU },
+};
+
+static WonderCardTextBox sWonderCardAlbumTextBoxes[19] = {
+    {
+     .page = 0,
+     .x = 2,
+     .y = 2,
+     .width = 12,
+     .height = 2,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 37,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 0,
+     .x = 6,
+     .y = 0x11,
+     .width = 11,
+     .height = 2,
+     .fontId = 1,
+     .color = 0xF0200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 41,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 0,
+     .x = 2,
+     .y = 9,
+     .width = 28,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintGiftStatus,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 0,
+     .x = 2,
+     .y = 6,
+     .width = 28,
+     .height = 2,
+     .fontId = 1,
+     .color = 0xF0200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintCardTitle,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 0,
+     .x = 0x12,
+     .y = 0x11,
+     .width = 11,
+     .height = 2,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 50,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_BufferReceiveDate,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 1,
+     .x = 2,
+     .y = 3,
+     .width = 28,
+     .height = 10,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintCardText,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 1,
+     .x = 2,
+     .y = 0xE,
+     .width = 28,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 42,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintSharesLeft,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 2,
+     .y = 0x13,
+     .width = 27,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 15,
+     .msgId = 37,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 0x12,
+     .y = 9,
+     .width = 12,
+     .height = 8,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 5,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_ShowCardMenu,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 0x18,
+     .y = 0xD,
+     .width = 6,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 5,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_ShowTrashYesNo,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 0x18,
+     .y = 0xD,
+     .width = 6,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 5,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_ShowShareYesNo,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 3,
+     .x = 1,
+     .y = 1,
+     .width = 25,
+     .height = 2,
+     .fontId = 0,
+     .color = 0xE0F00,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 53,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 7,
+     .textY = 0,
+     },
+    {
+     .page = 3,
+     .x = 0x17,
+     .y = 7,
+     .width = 9,
+     .height = 4,
+     .fontId = 0,
+     .color = 0xE0F00,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 56,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 2,
+     .textY = 0,
+     },
+    {
+     .page = 3,
+     .x = 6,
+     .y = 0x14,
+     .width = 6,
+     .height = 2,
+     .fontId = 0,
+     .color = 0xE0F00,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 58,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0xFFFFFFFF,
+     .textY = 1,
+     },
+    {
+     .page = 3,
+     .x = 0x14,
+     .y = 0x14,
+     .width = 6,
+     .height = 2,
+     .fontId = 0,
+     .color = 0xE0F00,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 59,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0xFFFFFFFF,
+     .textY = 1,
+     },
+    {
+     .page = 3,
+     .x = 0x19,
+     .y = 0xC,
+     .width = 4,
+     .height = 2,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 57,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_BufferZero,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 3,
+     .x = 2,
+     .y = 5,
+     .width = 19,
+     .height = 11,
+     .fontId = 0,
+     .color = 0x10200,
+     .fillColor = 0xFFFFFFFF,
+     .msgId = 0,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 2,
+     .y = 0x13,
+     .width = 27,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 14,
+     .msgId = 60,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+    {
+     .page = 2,
+     .x = 2,
+     .y = 0x13,
+     .width = 27,
+     .height = 4,
+     .fontId = 1,
+     .color = 0x10200,
+     .fillColor = 14,
+     .msgId = 61,
+     .func = (WonderCardTextBoxFunc)WonderCardAlbum_PrintMessageOnly,
+     .textX = 0,
+     .textY = 0,
+     },
+};
 
 static void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
     WonderCardAlbum_DeleteSprites(album);
@@ -420,12 +728,12 @@ BOOL WonderCardAlbum_ShowCardMenu(WonderCardAlbum *album, Window *window, u32 co
     int shrink;
 
     count = 0;
-    items[count++] = sWonderCardAlbumMenuItems[6];
+    items[count++] = sWonderCardAlbumCardMenuItems[0];
     if (album->cards[album->cardIndex]->shareMax) {
-        items[count++] = sWonderCardAlbumMenuItems[7];
+        items[count++] = sWonderCardAlbumCardMenuItems[1];
     }
-    items[count] = sWonderCardAlbumMenuItems[8];
-    items[count + 1] = sWonderCardAlbumMenuItems[9];
+    items[count] = sWonderCardAlbumCardMenuItems[2];
+    items[count + 1] = sWonderCardAlbumCardMenuItems[3];
     box = album->box;
     ClearWindowTilemapAndCopyToVram(window);
     RemoveWindow(window);
@@ -436,7 +744,7 @@ BOOL WonderCardAlbum_ShowCardMenu(WonderCardAlbum *album, Window *window, u32 co
 }
 
 BOOL WonderCardAlbum_ShowTrashYesNo(WonderCardAlbum *album, Window *window, u32 color) {
-    WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumMenuItems, 2, window, 1);
+    WonderCardAlbum_CreateListMenu(album, sWonderCardAlbumTrashYesNoItems, 2, window, 1);
     return TRUE;
 }
 

@@ -32,7 +32,6 @@ typedef struct MysteryGiftCommWork {
 } MysteryGiftCommWork;                  // size: 0x3D4
 
 static MysteryGiftCommWork *sMysteryGiftCommWork;
-extern const u8 sMysteryGiftCommCommands[]; // command table
 
 extern u16 Comm_GetLocalNetId(void);
 extern int Comm_IsNetIdConnected(u16 slot);
@@ -48,6 +47,19 @@ extern void *CommWireless_GetParentMail(int slot);
 
 // The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
+
+static const CommCommand sMysteryGiftCommCommands[2] = {
+    {
+        .recv = MysteryGiftComm_HandleReceived,
+        .getSize = MysteryGiftComm_GetRecvBufferSize,
+        .getBuffer = MysteryGiftComm_GetRecvBuffer,
+    },
+    {
+        .recv = MysteryGiftComm_RecvSetFlag3C1,
+        .getSize = CommCmd_GetSize0,
+        .getBuffer = NULL,
+    },
+};
 
 void MysteryGiftComm_Start(void *owner) {
     if (sMysteryGiftCommWork == NULL) {
@@ -163,8 +175,8 @@ int MysteryGiftComm_GetFirstParentInfo(void *dst) {
     return -1;
 }
 
-void MysteryGiftComm_HandleReceived(u8 channel) {
-    if (sMysteryGiftCommWork->channel == channel) {
+void MysteryGiftComm_HandleReceived(int netId, int size, void *data, void *context) {
+    if (sMysteryGiftCommWork->channel == netId) {
         sMysteryGiftCommWork->received = TRUE;
     }
 }
@@ -173,7 +185,7 @@ u8 MysteryGiftComm_IsReceived(void) {
     return sMysteryGiftCommWork->received;
 }
 
-int MysteryGiftComm_GetRecvBufferSize(void) {
+u32 MysteryGiftComm_GetRecvBufferSize(void) {
     return sizeof(WonderCard);
 }
 
@@ -181,8 +193,8 @@ void *MysteryGiftComm_GetRecvBuffer(int netId, void *arg, int size) {
     return sMysteryGiftCommWork->recvBuffer;
 }
 
-void MysteryGiftComm_RecvSetFlag3C1(int i) {
-    sMysteryGiftCommWork->unk_3C1[i] = TRUE;
+void MysteryGiftComm_RecvSetFlag3C1(int netId, int size, void *data, void *context) {
+    sMysteryGiftCommWork->unk_3C1[netId] = TRUE;
 }
 
 void MysteryGiftComm_Free(void) {

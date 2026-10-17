@@ -20,11 +20,11 @@ int MysteryGiftWireless_SendCard(void *data, void *size);
 void MysteryGiftComm_StartChild(void *owner, int linkMode);
 void MysteryGiftComm_ConnectToChannel(int channel);
 int MysteryGiftComm_GetFirstParentInfo(void *dst);
-void MysteryGiftComm_HandleReceived(u8 channel);
+void MysteryGiftComm_HandleReceived(int netId, int size, void *data, void *context);
 u8 MysteryGiftComm_IsReceived(void);
-int MysteryGiftComm_GetRecvBufferSize(void);
+u32 MysteryGiftComm_GetRecvBufferSize(void);
 void *MysteryGiftComm_GetRecvBuffer(int netId, void *arg, int size);
-void MysteryGiftComm_RecvSetFlag3C1(int i);
+void MysteryGiftComm_RecvSetFlag3C1(int netId, int size, void *data, void *context);
 void MysteryGiftComm_Free(void);
 void MysteryGiftComm_RegisterCommands(void *owner);
 

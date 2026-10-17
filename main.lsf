@@ -1715,6 +1715,7 @@ Overlay OVY_59
     After OVY_58
     Object src/application/apricorn_box/apricorn_box_screens.o
     Object asm/apricorn_box_screens_data.o
+    Object src/application/apricorn_box/apricorn_box_input.o
     Object src/application/apricorn_box/aprijuice_screen.o
     Object src/application/apricorn_box/aprijuice_scene_camera.o
 }
@@ -1836,6 +1837,7 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/mystery_gift_app.o
     Object src/application/main_menu/wonder_card_album.o
     Object src/application/main_menu/lock_capsule_card.o
+    Object asm/lock_capsule_card_data.o
     Object src/application/main_menu/ranger_link.o
     Object src/application/main_menu/migrate_from_agb.o
     Object src/application/main_menu/agb_cartridge.o
@@ -2057,6 +2059,7 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_runner.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o
+    Object src/pokeathlon/pokeathlon_hurdle_dash_track.o
     Object src/pokeathlon/pokeathlon_relay_run.o
     Object src/pokeathlon/pokeathlon_relay_run_hud.o
     Object src/pokeathlon/pokeathlon_relay_run_pic_frames.o

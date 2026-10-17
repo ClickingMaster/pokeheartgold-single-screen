@@ -65,14 +65,6 @@ enum {
 #define RANGER_LINK_COMMAND_LIST  0xFD // parent: announce to the connected children
 #define RANGER_LINK_COMMAND_REPLY 0xFE
 
-// one header word: who sent the packet / who it is for (the GGID-like id of the game and its version)
-typedef struct RangerLinkHeaderWord {
-    u32 gameCode : 8;
-    u32 version : 4;
-    u32 encrypted : 4;
-    u32 id : 16; // sender word: the scramble seed
-} RangerLinkHeaderWord;
-
 // every packet starts with this (0x10 bytes); headerSize is the payload offset
 typedef struct RangerLinkPacket {
     RangerLinkHeaderWord sender;
@@ -96,7 +88,7 @@ typedef struct RangerLinkGameInfo {
     u16 name2[12];
 } RangerLinkGameInfo;
 
-// gRangerLinkParentParam (asm data): parameters for WM_SetParentParameter
+// parameters for WM_SetParentParameter (sRangerLinkParentParam)
 typedef struct RangerLinkParentParam {
     RangerLinkGameInfo *gameInfo;
     u16 gameInfoLength;
@@ -219,12 +211,6 @@ typedef struct RangerLinkWmResult {
     u16 aid;
     u16 unk0C;
 } RangerLinkWmResult;
-
-typedef struct RangerLinkConfig {
-    RangerLinkHeaderWord receiver;
-    u16 *name2;
-    u16 *name1;
-} RangerLinkConfig;
 
 typedef struct RangerLinkSsidCheck {
     u32 gameCode : 8;
@@ -390,7 +376,6 @@ typedef struct RangerLinkScrambledPacket {
     u32 data[1];
 } RangerLinkScrambledPacket;
 
-extern RangerLinkParentParam gRangerLinkParentParam;
 RangerLinkWork gRangerLinkWork;
 
 void RangerLink_Abort(void);
@@ -501,6 +486,20 @@ BOOL RangerLink_WmPowerOn(void);
 BOOL RangerLink_WmPowerOff(void);
 BOOL RangerLink_WmReset(void);
 BOOL RangerLink_WmEnd(void);
+
+static RangerLinkParentParam sRangerLinkParentParam = {
+    .gameInfo = NULL,
+    .gameInfoLength = 0,
+    .unk06 = { 0, 0, 49, 1, 64, 0 },
+    .tgid = 0,
+    .unk0E = { 1, 0, 9, 0, 0, 0, 0, 0 },
+    .noFixedFrequency = 0,
+    .beaconPeriod = 200,
+    .unk1A = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    .channel = 0,
+    .maxSendSize = 64,
+    .unk36 = { 64, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+};
 
 static inline RangerLinkMacTail GetMacAddressTail(RangerLinkParentResult *result) {
     RangerLinkMacTail tail;
@@ -1299,8 +1298,7 @@ u32 RangerLink_GetRecvBufferSize(void) {
 }
 
 // carves the WM buffers out of the caller's buffer and sets up the beacon info
-void RangerLink_Init(const void *configArg, void *buffer) {
-    const RangerLinkConfig *config = configArg;
+void RangerLink_Init(const RangerLinkConfig *config, void *buffer) {
     RangerLinkWork *work;
     u16 *name1;
     u16 *name2;
@@ -1724,7 +1722,7 @@ BOOL RangerLink_IsFinished(void) {
 }
 
 RangerLinkParentParam *RangerLink_GetParentParam(void) {
-    return &gRangerLinkParentParam;
+    return &sRangerLinkParentParam;
 }
 
 RangerLinkWork *RangerLink_GetWork(void) {

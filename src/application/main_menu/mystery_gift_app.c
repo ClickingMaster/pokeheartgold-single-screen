@@ -63,16 +63,6 @@
 // over Nintendo Wi-Fi Connection), stores it in the save, and opens the Wonder Card viewers.
 
 // The menu tables of the module
-typedef struct MysteryGiftMenuTables {
-    MysteryGiftMenuItem wfcPromptItems[2];      // 0x00
-    MysteryGiftMenuItem wirelessPromptItems[2]; // 0x10
-    MysteryGiftMenuItem unk_20[2];              // 0x20
-    MysteryGiftMenuItem friendPromptItems[2];   // 0x30
-    MysteryGiftMenuItem unk_40[2];              // 0x40
-    ListMenuTemplate listMenuTemplate;          // 0x50
-    MysteryGiftMenuItem mainMenuItems[2];       // 0x70
-} MysteryGiftMenuTables;
-
 enum MysteryGiftState {
     MYSTERY_GIFT_STATE_INIT,
     MYSTERY_GIFT_STATE_SETUP_SCREEN,
@@ -168,18 +158,8 @@ extern void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
 
 static MysteryGiftLinkState sMysteryGiftLinkState;
 
-extern const GraphicsModes gMysteryGiftAppGraphicsModes;
-extern const BgTemplate sMysteryGiftAppBgTemplate;
-extern const MysteryGiftMenuTables sMysteryGiftMenuTables;
-extern const MysteryGiftMenuItem sMysteryGiftWirelessMenuItems[];
-extern const MysteryGiftMenuItem sMysteryGiftAskReceiveMenuItems[];
-extern const MysteryGiftMenuItem sMysteryGiftFromFriendMenuItems[];
-extern const MysteryGiftMenuItem sMysteryGiftReceivePromptMenuItems[];
-extern const ListMenuTemplate sMysteryGiftListMenuTemplate;
 extern const OverlayManagerTemplate sWonderCardAlbumOverlayTemplate;
 extern const OverlayManagerTemplate sLockCapsuleCardOverlayTemplate;
-extern const MysteryGiftMenuItem sMysteryGiftMainMenuExtraItems[];
-extern const MysteryGiftMenuItem sMysteryGiftReceiveMenuItems[];
 
 #define MYSTERY_GIFT_PARTICLE_COUNT 80
 
@@ -231,12 +211,99 @@ typedef struct MysteryGiftDelayTable {
     int values[21];
 } MysteryGiftDelayTable;
 
-extern const MysteryGiftDelayTable sMysteryGiftSparkleDelays;
-
 typedef struct MysteryGiftVec2 {
     float x;
     float y;
 } MysteryGiftVec2;
+
+const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift = { MysteryGiftApp_Init, MysteryGiftApp_Main, MysteryGiftApp_Exit, FS_OVERLAY_ID_NONE };
+
+static const GraphicsModes sMysteryGiftAppGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const BgTemplate sMysteryGiftAppBgTemplate = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const MysteryGiftDelayTable sMysteryGiftSparkleDelays = {
+    .values = { 1, 30, 60, 90, 90, 120, 120, 120, 150, 150, 150, 150, 180, 180, 180, 180, 210, 210, 210, 210, 210 },
+};
+
+static MysteryGiftMenuItem sMysteryGiftWfcMenuItems[2] = {
+    { msg_0247_00018, MysteryGiftApp_ConfirmWfcSearch },
+    { msg_0247_00019, MysteryGiftApp_DeclineSearch    },
+};
+
+static MysteryGiftMenuItem sMysteryGiftReceivePromptMenuItems[2] = {
+    { msg_0247_00018, MysteryGiftApp_AcceptGift        },
+    { msg_0247_00019, MysteryGiftApp_DeclineAcceptGift },
+};
+
+static MysteryGiftMenuItem sMysteryGiftFromFriendMenuItems[2] = {
+    { msg_0247_00018, MysteryGiftApp_StartSearch   },
+    { msg_0247_00019, MysteryGiftApp_DeclineSearch },
+};
+
+static MysteryGiftMenuItem sMysteryGiftAskReceiveMenuItems[2] = {
+    { msg_0247_00018, MysteryGiftApp_ConfirmReceiveGift },
+    { msg_0247_00019, MysteryGiftApp_DeclineReceiveGift },
+};
+
+static MysteryGiftMenuItem sMysteryGiftWirelessMenuItems[2] = {
+    { msg_0247_00018, MysteryGiftApp_ConfirmWirelessSearch },
+    { msg_0247_00019, MysteryGiftApp_DeclineSearch         },
+};
+
+static MysteryGiftMenuItem sMysteryGiftReceiveMenuItems[4] = {
+    { msg_0247_00015, MysteryGiftApp_SelectGetFromFriend  },
+    { msg_0247_00020, MysteryGiftApp_SelectGetViaWireless },
+    { msg_0247_00016, MysteryGiftApp_SelectGetViaWfc      },
+    { msg_0247_00017, MysteryGiftApp_CancelReceiveMenu    },
+};
+
+static ListMenuTemplate sMysteryGiftListMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = MainMenuUtil_ListMenuCursorCallback,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 3,
+    .header_X = 0,
+    .item_X = 12,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 1,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+static MysteryGiftMenuItem sMysteryGiftMainMenuItems[4] = {
+    { msg_0247_00012, MysteryGiftApp_SelectReceiveGift         },
+    { msg_0247_00013, MysteryGiftApp_SelectCheckCard           },
+    { msg_0247_00021, MysteryGiftApp_SelectViewLockCapsuleCard },
+    { msg_0247_00014, MysteryGiftApp_SelectExit                },
+};
 
 void MysteryGiftApp_SetWaitingIconVisible(MysteryGiftAppData *data, BOOL visible) {
     if (visible == TRUE) {
@@ -502,7 +569,7 @@ int MysteryGiftApp_SelectGetViaWfc(OverlayManager *manager) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 23, 10, 6, 4, 0, 428);
     }
     DrawFrameAndWindow1(window, TRUE, 31, 3);
-    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftMenuTables.wfcPromptItems, 2, window, msg_0247_00080);
+    MysteryGiftApp_CreateListMenu(manager, sMysteryGiftWfcMenuItems, 2, window, msg_0247_00080);
     return MYSTERY_GIFT_STATE_CONFIRM_CONNECT;
 }
 
@@ -659,7 +726,7 @@ void MysteryGiftApp_InitBgLayer(BgConfig *bgConfig, GFBgLayer bgId, u32 screenOf
 }
 
 void MysteryGiftApp_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = gMysteryGiftAppGraphicsModes;
+    GraphicsModes modes = sMysteryGiftAppGraphicsModes;
 
     SetBothScreensModesAndDisable(&modes);
     MysteryGiftApp_InitBgLayer(bgConfig, GF_BG_LYR_MAIN_0, 0xF000, 0);
@@ -723,14 +790,14 @@ void MysteryGiftApp_ShowMainMenu(OverlayManager *manager, int baseTile, int msgI
     MysteryGiftMenuItem items[4];
     Window *window = &data->windows[0];
 
-    items[count++] = sMysteryGiftMenuTables.mainMenuItems[0];
+    items[count++] = sMysteryGiftMainMenuItems[0];
     if (SaveMysteryGift_HasAnyCard(mysteryGift)) {
-        items[count++] = sMysteryGiftMenuTables.mainMenuItems[1];
+        items[count++] = sMysteryGiftMainMenuItems[1];
     }
     if (SaveMysteryGift_SpecialCardTagIsValid(mysteryGift)) {
-        items[count++] = sMysteryGiftMainMenuExtraItems[0];
+        items[count++] = sMysteryGiftMainMenuItems[2];
     }
-    items[count] = sMysteryGiftMainMenuExtraItems[1];
+    items[count] = sMysteryGiftMainMenuItems[3];
     if (window->bgConfig == NULL) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_MAIN_0, 6, 7, 20, (u8)(2 * (count + 1)), 0, (u16)baseTile);
     }

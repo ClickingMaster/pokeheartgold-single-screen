@@ -5,7 +5,22 @@
 
 // Wireless link to Pokemon Ranger used by Connect to Pokemon Ranger.
 
-void RangerLink_Init(const void *config, void *buffer);
+// one header word: who sent the packet / who it is for (the GGID-like id of the game and its version)
+typedef struct RangerLinkHeaderWord {
+    u32 gameCode : 8;
+    u32 version : 4;
+    u32 encrypted : 4;
+    u32 id : 16; // sender word: the scramble seed
+} RangerLinkHeaderWord;
+
+// beacon setup passed to RangerLink_Init: the game it looks for and the two names it announces
+typedef struct RangerLinkConfig {
+    RangerLinkHeaderWord receiver;
+    u16 *name2;
+    u16 *name1;
+} RangerLinkConfig;
+
+void RangerLink_Init(const RangerLinkConfig *config, void *buffer);
 void RangerLink_Update(void);
 void RangerLink_StartChild(void);
 BOOL RangerLink_CanSelectParent(int index);

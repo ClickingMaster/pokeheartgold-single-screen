@@ -5,7 +5,7 @@
 #include "constants/items.h"
 #include "constants/sndseq.h"
 
-#include "application/apricorn_box/apricorn_box_overlay_internal.h"
+#include "application/apricorn_box/apricorn_box_screen_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0021.h"
 
@@ -44,64 +44,6 @@ BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
 u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
 int ApricornJuice_GetTopMixIndex(void *data);
 
-// The Apricorn Box screen (OVY_59 first app): view the apricorns, put them into the blender, give them to Kurt.
-typedef struct ApricornBoxScreen {
-    enum HeapID heapId;                  // 0x000
-    ApricornBoxApp *app;                 // 0x004
-    u8 filler_08[8];                     // 0x008
-    SaveApricornBox *apricornBox;        // 0x010
-    u8 juiceServings;                    // 0x014, ApricornBox_GetJuiceServings
-    u8 flavorTotal;                      // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
-    u8 juiceMildness;                    // 0x016, juiceRecord byte 2
-    u8 topMixIndex;                      // 0x017, ApricornJuice_GetTopMixIndex(juiceRecord)
-    u8 numBlending;                      // 0x018, apricorns in the blender (ApricornBox_CountQueuedApricorns, at most 5)
-    u8 mixStage;                         // 0x019, ApricornBox_GetMixProgressLevel
-    u8 apricornCounts[7];                // 0x01A
-    u8 filler_21;                        // 0x021
-    u8 juiceRecord[8];                   // 0x022, ApricornJuice (unaligned)
-    ApricornBoxJuice juice;              // 0x02A
-    u32 steps;                           // 0x038
-    u16 subState;                        // 0x03C
-    u16 animState;                       // 0x03E
-    MenuInputState menuInputState;       // 0x040
-    u8 mode;                             // 0x044, ApricornBoxApp.mode
-    u8 textFrameDelay;                   // 0x045
-    u8 frame;                            // 0x046
-    u8 textPrinterId;                    // 0x047
-    u8 quantityInputResult;              // 0x048
-    u8 cursorArea;                       // 0x049, 0/1: apricorn columns, 2/3: buttons
-    u8 cursorRow;                        // 0x04A
-    u8 lastRowLeft;                      // 0x04B
-    u8 lastRowRight;                     // 0x04C
-    u8 selectedApricorn;                 // 0x04D
-    u8 quantity;                         // 0x04E
-    u8 maxQuantity;                      // 0x04F
-    u8 activeTasks;                      // 0x050
-    vu8 timer;                           // 0x051, volatile in AnimateHand (read twice there)
-    u8 unk_52;                           // 0x052
-    u8 overBlender;                      // 0x053
-    BgConfig *bgConfig;                  // 0x054
-    TouchscreenListMenuSpawner *spawner; // 0x058
-    MsgData *msgData;                    // 0x05C
-    MessageFormat *msgFormat;            // 0x060
-    String *string;                      // 0x064
-    String *string2;                     // 0x068
-    String *closeText;                   // 0x06C, message 1 "CLOSE"
-    String *unk_70;                      // 0x070
-    String *numberTemplate;              // 0x074, message 25
-    String *infoTexts[22];               // 0x078, messages 27-48
-    String *apricornNames[7];            // 0x0D0, messages 7-13
-    u8 filler_EC[0x3C];                  // 0x0EC
-    Window windows[18];                  // 0x128
-    YesNoPrompt *yesNoPrompt;            // 0x248
-    SpriteSystem *spriteSystem;          // 0x24C
-    SpriteManager *spriteManager;        // 0x250
-    Sprite *sprites[15];                 // 0x254
-    NARC *narc;                          // 0x290
-    ListMenuItem *listMenuItems;         // 0x294
-    TouchscreenListMenu *listMenu;       // 0x298
-} ApricornBoxScreen;                     // size: 0x29C
-
 // Moves a sprite in a straight line to (x, y) (task).
 typedef struct ApricornBoxMoveTask {
     ApricornBoxScreen *owner; // 0x00
@@ -120,23 +62,22 @@ typedef struct ApricornBoxMoveTask {
 
 typedef struct ApricornBoxListDesc {
     u16 count;
-    u16 unk_02;
+    u8 x;
+    u8 y;
     const u8 *messages;
 } ApricornBoxListDesc;
 
-extern const u32 sApricornBoxConfirmButtonColors[];
 extern const u8 sApricornBoxQuantityDigitX[];
 extern const TouchscreenListMenuTemplate sApricornBoxListMenuTemplates[2];
 extern const ResdatIdList sApricornBoxSpriteResources;
 extern const GraphicsModes sApricornBoxGraphicsModes;
-extern const ApricornBoxListDesc sApricornBoxListMenus[];
-extern const u8 sApricornBoxListMenuX[];
-extern const u8 sApricornBoxListMenuY[];
+extern const u8 sApricornBoxListMenu0Messages[3];
+extern const u8 sApricornBoxListMenu1Messages[2];
+extern const ApricornBoxListDesc sApricornBoxListMenus[2];
 extern const OamCharTransferParam sApricornBoxOamCharTransferParam;
 extern const BgTemplate sApricornBoxBgTemplate_Sub3;
 extern const BgTemplate sApricornBoxBgTemplate_Main0;
-extern const u16 sApricornBoxApricornPositions[];
-extern const u16 sApricornBoxApricornPositionsY[];
+extern const u16 sApricornBoxApricornPositions[7][2];
 extern const BgTemplate sApricornBoxBgTemplate_Main3;
 extern const BgTemplate sApricornBoxBgTemplate_Main1;
 extern const BgTemplate sApricornBoxBgTemplate_Sub0;
@@ -144,13 +85,7 @@ extern const BgTemplate sApricornBoxBgTemplate_Main2;
 extern const OamManagerParam sApricornBoxOamManagerParam;
 extern const GraphicsBanks sApricornBoxGraphicsBanks;
 extern const WindowTemplate sApricornBoxWindowTemplates[];
-extern const UnmanagedSpriteTemplate sApricornBoxSpriteTemplates[];
-extern const UnmanagedSpriteTemplate sApricornBoxApricornSpriteTemplate;
-extern const UnmanagedSpriteTemplate sApricornBoxConfirmButtonSpriteTemplate;
-extern const UnmanagedSpriteTemplate sApricornBoxQuantityArrowSpriteTemplate;
-extern const TouchscreenHitbox sApricornBoxQuantityHitboxes[];
-extern const TouchscreenHitbox sApricornBoxHitboxes[];
-extern const TouchscreenHitbox sApricornBoxBlenderHitbox[];
+extern const UnmanagedSpriteTemplate sApricornBoxSpriteTemplates[7];
 
 static void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen);
@@ -176,24 +111,18 @@ static void ApricornBoxScreen_InitGraphics(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_FreeGraphics(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_DrawScreen(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen);
-static void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence);
-static void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence);
-static void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_SetCursorAnimActive(ApricornBoxScreen *screen, int active);
 static void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 index);
-static void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value);
 static void ApricornBoxScreen_ShowQuantityPanel(ApricornBoxScreen *screen, int show);
 static void ApricornBoxScreen_PrintBlenderStatus(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_PrintHeader(ApricornBoxScreen *screen, int msgNo);
 static void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen);
-static void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed);
 static void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen);
 static int ApricornBoxScreen_HandleJuiceMenu(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_ShowYesNo(ApricornBoxScreen *screen);
 static int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen);
-static void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode);
 static BOOL ApricornBoxScreen_AnimateHand(ApricornBoxScreen *screen, int active);
 static inline int ApricornBoxScreen_Abs(int n);
 static void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index, int type);
@@ -218,27 +147,8 @@ static void ApricornBoxScreen_DeleteSprites(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_MoveTask(SysTask *task, ApricornBoxMoveTask *move);
 static void ApricornBoxScreen_ReadMessage(ApricornBoxScreen *screen, int msgNo);
 static u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, ApricornJuiceEntry *entry, int line);
-static u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input);
-static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit);
-static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input);
-static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit);
-static int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input);
-static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit);
-static int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input);
-static int ApricornBoxScreen_StepQuantity(int value, int max, int delta);
-static int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen);
-static int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit);
-static BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen);
-static void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction);
+
+static u32 sApricornBoxConfirmButtonColors[8] = { MAKE_TEXT_COLOR(15, 3, 0), MAKE_TEXT_COLOR(15, 5, 0) };
 
 BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state) {
     ApricornBoxScreen *screen;
@@ -845,7 +755,7 @@ static void ApricornBoxScreen_LoadBoxState(ApricornBoxScreen *screen) {
     }
 }
 
-static void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence) {
+void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int sequence) {
     u32 width;
     Sprite_SetAnimCtrlSeq(screen->sprites[0], sequence);
     Sprite_ResetAnimCtrlState(screen->sprites[0]);
@@ -855,7 +765,7 @@ static void ApricornBoxScreen_DrawCloseButton(ApricornBoxScreen *screen, int seq
     ScheduleWindowCopyToVram(&screen->windows[2]);
 }
 
-static void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence) {
+void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int index, int sequence) {
     struct {
         int value;
     } width;
@@ -870,7 +780,7 @@ static void ApricornBoxScreen_DrawConfirmButton(ApricornBoxScreen *screen, int i
     Sprite_ResetAnimCtrlState(screen->sprites[index + 9]);
 }
 
-static void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
+void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
     int index = ApricornBoxScreen_GetCursorTarget(screen);
     s16 x;
     s16 y;
@@ -885,8 +795,8 @@ static void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
         y = 168;
         break;
     default:
-        x = sApricornBoxApricornPositions[index * 2] + 4;
-        y = sApricornBoxApricornPositionsY[index * 2] - 16;
+        x = sApricornBoxApricornPositions[index][0] + 4;
+        y = sApricornBoxApricornPositions[index][1] - 16;
         break;
     }
     Sprite_SetPositionXY(screen->sprites[1], x, y);
@@ -920,10 +830,10 @@ static void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 in
         AddTextPrinterParameterizedWithColor((Window *)(windowBase + windowOffset), 0, screen->string, (16 - width) / 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram((Window *)(windowBase + windowOffset));
     }
-    Sprite_SetPositionXY(*spriteSlot, sApricornBoxApricornPositions[index * 2], sApricornBoxApricornPositionsY[index * 2]);
+    Sprite_SetPositionXY(*spriteSlot, sApricornBoxApricornPositions[index][0], sApricornBoxApricornPositions[index][1]);
 }
 
-static void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
+void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
     u8 digits[2];
     int i;
     digits[0] = value % 10;
@@ -1013,7 +923,7 @@ static void ApricornBoxScreen_PrintDescription(ApricornBoxScreen *screen) {
     ScheduleWindowCopyToVram(window);
 }
 
-static void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed) {
+void ApricornBoxScreen_PrintMessage(ApricornBoxScreen *screen, int msgNo, int speed) {
     Window *window = &screen->windows[0];
     FillWindowPixelBuffer(window, 15);
     DrawFrameAndWindow2(window, TRUE, 1, 13);
@@ -1079,8 +989,8 @@ static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
     header.listMenuItems = screen->listMenuItems;
     header.bgConfig = screen->bgConfig;
     header.numWindows = sApricornBoxListMenus[screen->mode - 1].count;
-    y = sApricornBoxListMenuY[(screen->mode - 1) * 8];
-    x = sApricornBoxListMenuX[(screen->mode - 1) * 8];
+    y = sApricornBoxListMenus[screen->mode - 1].y;
+    x = sApricornBoxListMenus[screen->mode - 1].x;
     screen->listMenu = TouchscreenListMenu_Create(screen->spawner, &header, (u8)screen->menuInputState, x, y, 8, 0);
 }
 
@@ -1126,7 +1036,7 @@ static int ApricornBoxScreen_HandleYesNo(ApricornBoxScreen *screen) {
     return answer;
 }
 
-static void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode) {
+void ApricornBoxScreen_SetApricornsFocus(ApricornBoxScreen *screen, int mode) {
     int i;
     if (mode == 1 || mode == 2) {
         for (i = 0; i < 7; i++) {
@@ -1226,9 +1136,9 @@ static void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index
         move->x = 192 + index * 4;
         move->y = 96 + index * -10;
     } else {
-        base = sApricornBoxApricornPositions[move->apricorn * 2];
+        base = sApricornBoxApricornPositions[move->apricorn][0];
         move->x = base + index * 4;
-        base = sApricornBoxApricornPositionsY[move->apricorn * 2];
+        base = sApricornBoxApricornPositions[move->apricorn][1];
         move->y = base + index * -10;
     }
     dx = move->x - x;
@@ -1491,7 +1401,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     position = (const s16 *)sApricornBoxApricornPositions;
     for (i = 0; i < 7; position += 2, i++) {
         cursor = (u8 *)screen + (u8)(i + 2) * sizeof(Sprite *);
-        ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxApricornSpriteTemplate);
+        ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[2]);
         Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], position[0], position[1]);
         Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
         Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
@@ -1515,7 +1425,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         int anim;
         for (i = 0, y = 112, anim = 28; i < 2; anim += 2, y += 24, i++) {
             cursor = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxConfirmButtonSpriteTemplate);
+            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[5]);
             Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 160, y);
             Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
             Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
@@ -1525,7 +1435,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         for (i = 0; i < 4; i++) {
             int column;
             cursor = (u8 *)screen + (u8)(i + 11) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxQuantityArrowSpriteTemplate);
+            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[6]);
             column = i % 2;
             Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 103 + (i / 2) * -22, 96 + column * 40);
             Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
@@ -1640,527 +1550,5 @@ static u16 ApricornBoxScreen_GetJuiceTasteMsg(ApricornBoxScreen *screen, Apricor
             return high + 128;
         }
         return low * 6 + high + 56;
-    }
-}
-
-static u8 ApricornBoxScreen_GetCursorTarget(ApricornBoxScreen *screen) {
-    switch (screen->cursorArea) {
-    case 0:
-        return screen->cursorRow * 2;
-    case 1:
-        return screen->cursorRow * 2 + 1;
-    case 2:
-        if (screen->mode == APRICORN_BOX_MODE_BLENDER) {
-            return 7;
-        }
-        return 8;
-    case 3:
-        return 8;
-    }
-    return 0;
-}
-
-static int ApricornBoxScreen_HandleViewInput(ApricornBoxScreen *screen) {
-    int hit = 0;
-    int result = ApricornBoxScreen_ViewTouch(screen, &hit);
-    if (hit == 0) {
-        result = ApricornBoxScreen_ViewKeys(screen);
-    }
-    return result;
-}
-
-static int ApricornBoxScreen_HandleBlenderInput(ApricornBoxScreen *screen) {
-    int hit = 0;
-    int result = ApricornBoxScreen_BlenderTouch(screen, &hit);
-    if (hit == 0) {
-        result = ApricornBoxScreen_BlenderKeys(screen);
-    }
-    return result;
-}
-
-static int ApricornBoxScreen_HandleDrag(ApricornBoxScreen *screen) {
-    s16 x;
-    s16 y;
-    u8 hit;
-    Sprite_GetPositionXY(screen->sprites[screen->selectedApricorn + 2], &x, &y);
-    hit = TouchscreenHitbox_PointIsIn(sApricornBoxBlenderHitbox, x, y);
-    if (System_GetTouchHeld()) {
-        x = gSystem.touchX;
-        y = gSystem.touchY;
-        Sprite_SetPositionXY(screen->sprites[screen->selectedApricorn + 2], x, y);
-        Sprite_SetPositionXY(screen->sprites[1], x, y - 6);
-        if (hit) {
-            if (screen->overBlender == 0) {
-                screen->overBlender = 1;
-                PlaySE(SEQ_SE_GS_BON01);
-                Sprite_SetAnimCtrlSeq(screen->sprites[10], 21);
-            }
-        } else if (screen->overBlender != 0) {
-            screen->overBlender = 0;
-            PlaySE(SEQ_SE_GS_BON01);
-            Sprite_SetAnimCtrlSeq(screen->sprites[10], 20);
-        }
-        return -1;
-    }
-    screen->overBlender = 0;
-    if (hit) {
-        PlaySE(SEQ_SE_DP_BOX01);
-        return 1;
-    }
-    PlaySE(SEQ_SE_DP_HYUN2);
-    return 0;
-}
-
-static int ApricornBoxScreen_HandleKurtInput(ApricornBoxScreen *screen) {
-    int hit = 0;
-    int result = ApricornBoxScreen_KurtTouch(screen, &hit);
-    if (hit == 0) {
-        result = ApricornBoxScreen_KurtKeys(screen);
-    }
-    return result;
-}
-
-static int ApricornBoxScreen_HandleQuantityInput(ApricornBoxScreen *screen) {
-    int hit = 0;
-    int result = ApricornBoxScreen_QuantityTouch(screen, &hit);
-    if (hit == 0) {
-        result = ApricornBoxScreen_QuantityKeys(screen);
-    }
-    return result;
-}
-
-static int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input) {
-    if (input <= 6) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        screen->selectedApricorn = input;
-        return 3;
-    }
-    if (input == 8) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
-    }
-    return 3;
-}
-
-static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
-    u32 keys = gSystem.newKeys;
-    if (keys & 0xCF3) {
-        screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
-    }
-    keys = gSystem.newKeys;
-    if (keys & PAD_BUTTON_B) {
-        return ApricornBoxScreen_ViewSelect(screen, 8);
-    }
-    if (keys & PAD_BUTTON_A) {
-        return ApricornBoxScreen_ViewSelect(screen, ApricornBoxScreen_GetCursorTarget(screen));
-    }
-    if (ApricornBoxScreen_MoveCursor(screen)) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        return 3;
-    }
-    return 3;
-}
-
-static int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit) {
-    int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
-    if (input == -1 || input == 7) {
-        return 3;
-    }
-    *hit = 1;
-    screen->menuInputState = MENU_INPUT_STATE_TOUCH;
-    screen->lastRowRight = 0;
-    screen->lastRowLeft = screen->lastRowRight;
-    screen->cursorRow = 0;
-    if (input == 8) {
-        screen->cursorArea = 2;
-    } else {
-        screen->cursorArea = input % 2;
-        screen->cursorRow = input / 2;
-    }
-    return ApricornBoxScreen_ViewSelect(screen, input);
-}
-
-static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input) {
-    if (input <= 6) {
-        ApricornBoxScreen_UpdateCursor(screen);
-        if (screen->apricornCounts[input] == 0) {
-            return 4;
-        }
-        PlaySE(SEQ_SE_DP_BOX02);
-        screen->selectedApricorn = input;
-        return screen->menuInputState == MENU_INPUT_STATE_BUTTONS ? 7 : 8;
-    }
-    if (input == 8) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
-    }
-    if (input == 7) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        screen->selectedApricorn = input;
-        if (screen->juiceServings == 0 && screen->numBlending == 0) {
-            ApricornBoxScreen_PrintMessage(screen, 25, TEXT_SPEED_NOTRANSFER);
-            ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
-        }
-        if (screen->juiceServings == 0 && screen->numBlending != 0) {
-            ApricornBoxScreen_PrintMessage(screen, 27, TEXT_SPEED_NOTRANSFER);
-            ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
-        }
-        if (screen->juiceServings != 0 && screen->numBlending != 0) {
-            ApricornBoxScreen_PrintMessage(screen, 28, TEXT_SPEED_NOTRANSFER);
-            ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
-        }
-        return 11;
-    }
-    return 4;
-}
-
-static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
-    u32 keys = gSystem.newKeys;
-    if (keys & 0xCF3) {
-        screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
-    }
-    keys = gSystem.newKeys;
-    if (keys & PAD_BUTTON_B) {
-        return ApricornBoxScreen_BlenderSelect(screen, 8);
-    }
-    if (keys & PAD_BUTTON_A) {
-        return ApricornBoxScreen_BlenderSelect(screen, ApricornBoxScreen_GetCursorTarget(screen));
-    }
-    if (ApricornBoxScreen_MoveCursor(screen)) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        return 4;
-    }
-    return 4;
-}
-
-static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
-    int input;
-    int value;
-    input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
-    value = 0;
-    if (input == ~value) {
-        return 4;
-    }
-    value = 1;
-    *hit = value;
-    screen->menuInputState = (MenuInputState)value;
-    value = 0;
-    screen->lastRowRight = value;
-    screen->lastRowLeft = screen->lastRowRight;
-    screen->cursorRow = value;
-    switch (input) {
-    case 7:
-        screen->cursorArea = 2;
-        break;
-    case 8:
-        screen->cursorArea = 3;
-        break;
-    default:
-        screen->cursorArea = input % 2;
-        screen->cursorRow = input / 2;
-        break;
-    }
-    return ApricornBoxScreen_BlenderSelect(screen, input);
-}
-
-static int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input) {
-    if (input <= 6) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        if (screen->apricornCounts[input] == 0) {
-            return 5;
-        }
-        screen->selectedApricorn = input;
-        screen->quantity = 1;
-        screen->maxQuantity = screen->apricornCounts[screen->selectedApricorn];
-        return 6;
-    }
-    if (input == 8) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
-    }
-    return 5;
-}
-
-static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
-    u32 keys = gSystem.newKeys;
-    if (keys & 0xCF3) {
-        screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
-    }
-    keys = gSystem.newKeys;
-    if (keys & PAD_BUTTON_B) {
-        return ApricornBoxScreen_KurtSelect(screen, 8);
-    }
-    if (keys & PAD_BUTTON_A) {
-        return ApricornBoxScreen_KurtSelect(screen, ApricornBoxScreen_GetCursorTarget(screen));
-    }
-    if (ApricornBoxScreen_MoveCursor(screen)) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_UpdateCursor(screen);
-        return 5;
-    }
-    return 5;
-}
-
-static int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit) {
-    int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
-    if (input == -1 || input == 7) {
-        return 5;
-    }
-    *hit = 1;
-    screen->menuInputState = MENU_INPUT_STATE_TOUCH;
-    screen->lastRowRight = 0;
-    screen->lastRowLeft = screen->lastRowRight;
-    screen->cursorRow = 0;
-    if (input == 8) {
-        screen->cursorArea = 2;
-    } else {
-        screen->cursorArea = input % 2;
-        screen->cursorRow = input / 2;
-    }
-    return ApricornBoxScreen_KurtSelect(screen, input);
-}
-
-static int ApricornBoxScreen_QuantitySelect(ApricornBoxScreen *screen, int input) {
-    if (input == 0) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_DrawConfirmButton(screen, 0, 1);
-        return 0;
-    }
-    if (input == 1) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        ApricornBoxScreen_DrawConfirmButton(screen, 1, 1);
-        return 1;
-    }
-    switch (input) {
-    case 2:
-        screen->quantity = ApricornBoxScreen_StepQuantity(screen->quantity, screen->maxQuantity, 1);
-        break;
-    case 4:
-        screen->quantity = ApricornBoxScreen_StepQuantity(screen->quantity, screen->maxQuantity, 10);
-        break;
-    case 3:
-        screen->quantity = ApricornBoxScreen_StepQuantity(screen->quantity, screen->maxQuantity, -1);
-        break;
-    case 5:
-        screen->quantity = ApricornBoxScreen_StepQuantity(screen->quantity, screen->maxQuantity, -10);
-        break;
-    default:
-        return 6;
-    }
-    PlaySE(SEQ_SE_DP_SELECT);
-    ApricornBoxScreen_PrintQuantity(screen, screen->quantity);
-    return 6;
-}
-
-static int ApricornBoxScreen_StepQuantity(int value, int max, int delta) {
-    if (delta > 0) {
-        if (value == max) {
-            return 1;
-        }
-        value += delta;
-        if (value > max) {
-            return max;
-        }
-    } else {
-        if (value == 1) {
-            return max;
-        }
-        value += delta;
-        if (value <= 0) {
-            return 1;
-        }
-    }
-    return value;
-}
-
-static int ApricornBoxScreen_QuantityKeys(ApricornBoxScreen *screen) {
-    u32 keys = gSystem.newKeys;
-    int down;
-    if (keys & 0xCF3) {
-        screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
-    }
-    keys = gSystem.newKeys;
-    if (keys & PAD_BUTTON_B) {
-        return ApricornBoxScreen_QuantitySelect(screen, 1);
-    }
-    if (keys & PAD_BUTTON_A) {
-        return ApricornBoxScreen_QuantitySelect(screen, 0);
-    }
-    if (keys & PAD_KEY_UP) {
-        return ApricornBoxScreen_QuantitySelect(screen, 2);
-    }
-    down = keys & PAD_KEY_DOWN;
-    if (down) {
-        return ApricornBoxScreen_QuantitySelect(screen, 3);
-    }
-    if (keys & PAD_KEY_RIGHT) {
-        return ApricornBoxScreen_QuantitySelect(screen, 4);
-    }
-    if (keys & PAD_KEY_LEFT) {
-        return ApricornBoxScreen_QuantitySelect(screen, 5);
-    }
-    if (down != 0) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        return 6;
-    }
-    return 6;
-}
-
-static int ApricornBoxScreen_QuantityTouch(ApricornBoxScreen *screen, int *hit) {
-    int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxQuantityHitboxes);
-    if (input == -1) {
-        return 6;
-    }
-    if ((u32)(input - 4) <= 1 && screen->maxQuantity < 10) {
-        return 6;
-    }
-    if (input >= 2) {
-        Sprite **sprites = screen->sprites;
-        u32 offset = (input + 9) * sizeof(Sprite *);
-        Sprite_SetAnimActiveFlag(*(Sprite **)((u8 *)sprites + offset), TRUE);
-        Sprite_ResetAnimCtrlState(*(Sprite **)((u8 *)sprites + offset));
-    }
-    *hit = 1;
-    screen->menuInputState = MENU_INPUT_STATE_TOUCH;
-    return ApricornBoxScreen_QuantitySelect(screen, input);
-}
-
-static BOOL ApricornBoxScreen_MoveCursor(ApricornBoxScreen *screen) {
-    u32 keys;
-    switch (screen->cursorArea) {
-    case 0:
-        keys = gSystem.newKeys;
-        if (keys & PAD_KEY_RIGHT) {
-            ApricornBoxScreen_SwitchColumn(screen, 0);
-            return TRUE;
-        }
-        if ((keys & PAD_KEY_UP) && screen->cursorRow != 0) {
-            screen->lastRowRight = 0;
-            screen->cursorRow--;
-            return TRUE;
-        }
-        if ((keys & PAD_KEY_DOWN) && screen->cursorRow < 3) {
-            screen->lastRowRight = 0;
-            screen->cursorRow++;
-            return TRUE;
-        }
-        break;
-    case 1:
-        keys = gSystem.newKeys;
-        if (keys & PAD_KEY_LEFT) {
-            ApricornBoxScreen_SwitchColumn(screen, 1);
-            return TRUE;
-        }
-        if (keys & PAD_KEY_RIGHT) {
-            screen->lastRowRight = screen->cursorRow;
-            screen->cursorRow = 0;
-            screen->cursorArea++;
-            return TRUE;
-        }
-        if ((keys & PAD_KEY_UP) && screen->cursorRow != 0) {
-            screen->lastRowLeft = 0;
-            screen->cursorRow--;
-            return TRUE;
-        }
-        if ((keys & PAD_KEY_DOWN) && screen->cursorRow < 2) {
-            screen->lastRowLeft = 0;
-            screen->cursorRow++;
-            return TRUE;
-        }
-        break;
-    case 2:
-        keys = gSystem.newKeys;
-        if (keys & PAD_KEY_LEFT) {
-            screen->cursorRow = screen->lastRowRight;
-            screen->cursorArea--;
-            return TRUE;
-        }
-        if (screen->mode == APRICORN_BOX_MODE_KURT) {
-            return FALSE;
-        }
-        if ((keys & (PAD_KEY_RIGHT | PAD_KEY_DOWN)) && screen->mode != APRICORN_BOX_MODE_VIEW) {
-            screen->cursorArea++;
-            return TRUE;
-        }
-        break;
-    case 3:
-        keys = gSystem.newKeys;
-        if (keys & (PAD_KEY_LEFT | PAD_KEY_UP)) {
-            screen->cursorArea--;
-            return TRUE;
-        }
-        break;
-    }
-    return FALSE;
-}
-
-static void ApricornBoxScreen_SwitchColumn(ApricornBoxScreen *screen, int direction) {
-    u8 row;
-    if (direction == 0) {
-        screen->lastRowLeft = screen->cursorRow;
-        screen->cursorArea = 1;
-        row = screen->cursorRow;
-        switch (row) {
-        case 1:
-        case 2:
-            if (row != screen->lastRowRight && row - 1 != screen->lastRowRight) {
-                screen->cursorRow = 1;
-            } else {
-                screen->cursorRow = screen->lastRowRight;
-            }
-            break;
-        case 3:
-            screen->cursorRow = 2;
-            break;
-        case 0:
-        default:
-            screen->cursorRow = 0;
-            break;
-        }
-    } else {
-        screen->lastRowRight = screen->cursorRow;
-        screen->cursorArea = 0;
-        switch (screen->cursorRow) {
-        case 0:
-            row = screen->lastRowLeft;
-            if (row > 1) {
-                screen->cursorRow = 1;
-            } else {
-                screen->cursorRow = row;
-            }
-            break;
-        case 1:
-            row = screen->lastRowLeft;
-            if (row == 0) {
-                screen->cursorRow = 1;
-            } else if (row == 3) {
-                screen->cursorRow = 2;
-            } else {
-                screen->cursorRow = row;
-            }
-            break;
-        case 2:
-            row = screen->lastRowLeft;
-            if (row < 2) {
-                screen->cursorRow = 2;
-            } else {
-                screen->cursorRow = row;
-            }
-            break;
-        default:
-            screen->cursorRow = 0;
-            break;
-        }
     }
 }

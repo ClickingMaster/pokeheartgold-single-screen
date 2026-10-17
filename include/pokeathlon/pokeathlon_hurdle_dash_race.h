@@ -154,5 +154,17 @@ void PokeathlonHurdleDashStandings_Draw(PokeathlonHurdleDashStandings *standings
 PokeathlonHurdleDashDustLane *PokeathlonHurdleDashDust_New(enum HeapID heapId);
 void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, PokeathlonCourseSpritePool *spritePool, u16 priority);
 void PokeathlonHurdleDashDust_Free(PokeathlonHurdleDashDustLane *lanes);
+PokeathlonHurdle *PokeathlonHurdleDash_GetHurdle(PokeathlonHurdle *hurdles, int index);
+BOOL PokeathlonHurdle_IsStanding(PokeathlonHurdle *hurdle);
+void PokeathlonHurdle_KnockDown(PokeathlonHurdle *hurdle);
+void PokeathlonHurdle_Scroll(PokeathlonHurdle *hurdle, int distance);
+void PokeathlonHurdle_GetRect(PokeathlonHurdle *hurdle, PokeathlonHurdleDashRect *rect);
+void PokeathlonHurdleDashTrack_RevealHurdles(PokeathlonHurdleDashTrack *track, int position, int lane);
+int PokeathlonHurdleDashTrack_GetHurdleAt(PokeathlonHurdleDashTrack *track, int lane, int position);
+void PokeathlonHurdleDashStandings_SetMonX(PokeathlonHurdleDashStandings *standings, int index, int x);
+void PokeathlonHurdleDashStandings_SetRank(PokeathlonHurdleDashStandings *standings, u32 index, u32 rank);
+void PokeathlonHurdleDashStandings_SetMonDrawFlag(PokeathlonHurdleDashStandings *standings, int index, BOOL draw);
+void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, const VecFx32 *position);
+void PokeathlonHurdleDashDust_Scroll(PokeathlonHurdleDashDustLane *lanes, u32 lane, u32 distance);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_HURDLE_DASH_RACE_H

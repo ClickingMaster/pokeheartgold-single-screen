@@ -7,7 +7,9 @@
 
 #include "application/main_menu/main_menu.h"
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/main_menu_shared.h"
 #include "application/main_menu/main_menu_util.h"
+#include "application/main_menu/wonder_card_album.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0247.h"
 
@@ -84,16 +86,8 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
-extern const MysteryGiftMenuItem sLockCapsuleCardMenuItems[2];
-extern const ListMenuTemplate sLockCapsuleCardListMenuTemplate;
 extern const WonderCardTextBox sLockCapsuleCardTextBoxes[11];
 static u32 sLockCapsuleCardMenuInput;
-extern const GraphicsModes gWonderCardGraphicsModes;
-extern const BgTemplate sWonderCardBgTemplate_Main3;
-extern const BgTemplate sWonderCardBgTemplate_Main0;
-extern const BgTemplate sWonderCardBgTemplate_Main2;
-extern const BgTemplate sWonderCardBgTemplate_Main1;
-extern const GraphicsBanks gWonderCardGraphicsBanks;
 
 enum {
     LOCK_CAPSULE_STATE_LOAD_SAVE,
@@ -134,6 +128,117 @@ static void LockCapsuleCard_FlipEffectTask(SysTask *task, WonderCardFlipEffect *
 static void LockCapsuleCard_StartFlipEffect(LockCapsuleCardView *view, int mode, fx32 speed, fx32 accel);
 static void LockCapsuleCard_StopFlipEffect(LockCapsuleCardView *view);
 static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view);
+
+const OverlayManagerTemplate sLockCapsuleCardOverlayTemplate = { LockCapsuleCard_Init, LockCapsuleCard_Main, LockCapsuleCard_Exit, FS_OVERLAY_ID_NONE };
+
+static const GraphicsModes sWonderCardGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static MysteryGiftMenuItem sLockCapsuleCardMenuItems[2] = {
+    { msg_0247_00043, (MysteryGiftMenuFunc)LOCK_CAPSULE_STATE_START_FLIP      },
+    { msg_0247_00046, (MysteryGiftMenuFunc)LOCK_CAPSULE_STATE_CLOSE_CARD_MENU },
+};
+
+static const BgTemplate sWonderCardBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sWonderCardBgTemplate_Main3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x0c000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sWonderCardBgTemplate_Main0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sWonderCardBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sWonderCardGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+const OverlayManagerTemplate sWonderCardAlbumOverlayTemplate = { WonderCardAlbum_Init, WonderCardAlbum_Main, WonderCardAlbum_Exit, FS_OVERLAY_ID_NONE };
+
+static ListMenuTemplate sLockCapsuleCardListMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = MainMenuUtil_ListMenuCursorCallback,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 4,
+    .header_X = 0,
+    .item_X = 12,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 1,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
 
 static void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
     if (view->buttonSprites[0] != NULL) {
@@ -732,13 +837,13 @@ void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum Hea
 }
 
 void WonderCard_SetGraphicsBanks(void) {
-    GraphicsBanks banks = gWonderCardGraphicsBanks;
+    GraphicsBanks banks = sWonderCardGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void WonderCard_InitBgLayers(BgConfig *bgConfig) {
     {
-        GraphicsModes modes = gWonderCardGraphicsModes;
+        GraphicsModes modes = sWonderCardGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     {

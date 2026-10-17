@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "constants/moves.h"
 #include "constants/sndseq.h"
 
 #include "application/main_menu/agb_cartridge.h"
@@ -62,20 +63,6 @@ void Sys_SetSoftResetDisableFlag(int flag);
 void Sys_ClearSoftResetDisableFlag(int flag);
 
 extern int gAgbCartridgePulledOutInSleep;
-extern const ObjCharTransferTemplate sMigrateFromAgbObjCharTransferTemplate;
-extern const GraphicsModes gMigrateFromAgbGraphicsModes;
-extern const BgTemplate sMigrateFromAgbBgTemplate0;
-extern const BgTemplate sMigrateFromAgbBgTemplate1;
-extern const BgTemplate sMigrateFromAgbBgTemplate2;
-extern const BgTemplate sMigrateFromAgbBgTemplate3;
-extern const GraphicsBanks gMigrateFromAgbGraphicsBanks;
-extern const u8 sMigrateFromAgbBoxBgPalettes[];
-extern const int sMigrateFromAgbMainMessages[];
-extern const int sMigrateFromAgbIntroMessages[];
-extern const u32 sMigrateFromAgbHMMoves[];
-extern const u16 ov74_0223C9A8[];
-extern const int sMigrateFromAgbResultMessages[];
-extern const u16 sMigrateFromAgbBlockedItems[];
 extern MigrateFromAgbIcon *sMigrateFromAgbIcons;
 
 enum {
@@ -194,6 +181,125 @@ void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, 
 BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index);
 BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed);
+
+static const ObjCharTransferTemplate sMigrateFromAgbObjCharTransferTemplate = {
+    .maxTasks = 20,
+    .sizeMain = 0x800,
+    .sizeSub = 0x800,
+    .heapID = HEAP_ID_76,
+};
+
+static const GraphicsModes sMigrateFromAgbGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+const OverlayManagerTemplate gApp_MainMenu_SelectOption_MigrateFromAgb = { MigrateFromAgb_Init, MigrateFromAgb_Main, MigrateFromAgb_Exit, FS_OVERLAY_ID_NONE };
+
+static const BgTemplate sMigrateFromAgbBgTemplate3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMigrateFromAgbBgTemplate0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMigrateFromAgbBgTemplate1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMigrateFromAgbBgTemplate2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sMigrateFromAgbGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static u8 sMigrateFromAgbBoxBgPalettes[6] = { 0, 2, 1, 3, 4, 5 };
+
+static int sMigrateFromAgbMainMessages[6] = {
+#ifdef HEARTGOLD
+    msg_0301_00000,
+    msg_0301_00020,
+    msg_0301_00018,
+    msg_0301_00022,
+    msg_0301_00024,
+    msg_0301_00026,
+#else
+    msg_0301_00000,
+    msg_0301_00021,
+    msg_0301_00019,
+    msg_0301_00023,
+    msg_0301_00025,
+    msg_0301_00027,
+#endif
+};
+
+static int sMigrateFromAgbIntroMessages[6] = { msg_0301_00000, msg_0301_00001, msg_0301_00000, msg_0301_00002, msg_0301_00003, msg_0301_00004 };
+
+static u32 sMigrateFromAgbHMMoves[8] = { MOVE_CUT, MOVE_FLY, MOVE_SURF, MOVE_STRENGTH, MOVE_FLASH, MOVE_ROCK_SMASH, MOVE_WATERFALL, MOVE_DIVE };
+
+static int sMigrateFromAgbResultMessages[8] = { msg_0301_00000, msg_0301_00037, msg_0301_00031, msg_0301_00032, msg_0301_00032, msg_0301_00005, msg_0301_00007, msg_0301_00033 };
+
+static u16 sMigrateFromAgbBlockedItems[146] = {
+    5, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 72, 82, 87, 88, 89, 90, 91, 92, 99, 100, 101, 102, 105, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 176, 177, 178, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 0x103, 0x104, 0x105, 0x106, 0x107, 0x108, 0x109, 0x10A, 0x10B, 0x10C, 0x10D, 0x10E, 0x10F, 0x110, 0x111, 0x112, 0x113, 0x114, 0x115, 0x116, 0x117, 0x118, 0x119, 0x11A, 0x11B, 0x11C, 0x11D, 0x11E, 0x11F, 0x120, 0x153, 0x154, 0x155, 0x156, 0x157, 0x158, 0x159, 0x15A, 0x15B, 0x15C, 0x15D, 0x15E, 0x15F, 0x160, 0x161, 0x162, 0x163, 0x164, 0x165, 0x166, 0x167, 0x168, 0x169, 0x16A, 0x16B, 0x16C, 0x16D, 0x16E, 0x16F, 0x170, 0x171, 0x172, 0x173, 0x174, 0x175, 0x176, 0x177, 0x178, 0
+};
 
 // Species the DP games can't take (none, the unused GBA indexes, out of range)
 static BOOL MigrateFromAgb_IsSpeciesUnavailable(int species) {
@@ -745,7 +851,7 @@ static BOOL MigrateFromAgb_HoldsBlockedItem(MigrateFromAgbApp *app, int slot) {
     AgbPokemonStorage *storage = app->storage;
     int box = app->box;
     u32 item = AGB_GetBoxMonData(&storage->boxes[box][slot], AGB_MON_DATA_HELD_ITEM, NULL);
-    if (ov74_0223C9A8[24] != 0) {
+    if (sMigrateFromAgbBlockedItems[0] != 0) {
         const u16 *items = sMigrateFromAgbBlockedItems;
         do {
             if (item == *items) {
@@ -971,7 +1077,7 @@ static void MigrateFromAgb_StartFadeWhite(MigrateFromAgbApp *app, enum FadeType 
 }
 
 static void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = gMigrateFromAgbGraphicsModes;
+    GraphicsModes modes = sMigrateFromAgbGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     BgTemplate bg0 = sMigrateFromAgbBgTemplate0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
@@ -988,7 +1094,7 @@ static void MigrateFromAgb_InitBgs(BgConfig *bgConfig) {
 }
 
 static void MigrateFromAgb_InitGraphics(MigrateFromAgbApp *app) {
-    GraphicsBanks banks = gMigrateFromAgbGraphicsBanks;
+    GraphicsBanks banks = sMigrateFromAgbGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MigrateFromAgb_InitBgs(app->bgConfig);
     gSystem.screensFlipped = TRUE;
