@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a62f0a16f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · d875d20f3 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5466,9 +5466,18 @@ src/field/dowsing_mchn.c</title></rect>
 5,224 bytes · C-only source
 src/alph_puzzle.c</title></rect>
 <rect x="1067.742" y="597.420" width="36.475" height="22.917" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1067.742" y="620.336" width="36.475" height="22.846" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_106 / legendary_cinematic.o
-5,208 bytes · C-only source
+<rect x="1067.742" y="620.336" width="17.467" height="22.846" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_106 / arceus_cinematic.o
+2,494 bytes · C-only source
+src/application/arceus_cinematic.c</title></rect>
+<rect x="1085.209" y="620.336" width="19.008" height="16.112" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_106 / legendary_cinematic.o
+1,914 bytes · C-only source
 src/application/legendary_cinematic.c</title></rect>
+<rect x="1085.209" y="636.448" width="10.977" height="6.734" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_106 / ho_oh_cinematic.o
+462 bytes · C-only source
+src/application/ho_oh_cinematic.c</title></rect>
+<rect x="1096.186" y="636.448" width="8.031" height="6.734" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_106 / lugia_cinematic.o
+338 bytes · C-only source
+src/application/lugia_cinematic.c</title></rect>
 <rect x="1067.742" y="620.336" width="36.475" height="22.846" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1104.216" y="573.547" width="23.109" height="35.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_67 / battle_room_results.o
 5,180 bytes · C-only source

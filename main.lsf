@@ -2205,7 +2205,9 @@ Overlay OVY_106
 {
     After main
     Object src/application/legendary_cinematic.o
-    Object asm/legendary_cinematic_data.o
+    Object src/application/ho_oh_cinematic.o
+    Object src/application/lugia_cinematic.o
+    Object src/application/arceus_cinematic.o
 }
 Overlay OVY_107
 {
