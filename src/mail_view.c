@@ -108,19 +108,9 @@ typedef struct MailView {
     ManagedSprite *icons[3];                   // 0xB8
 } MailView;                                    // size: 0xC4
 
-extern const GraphicsModes gMailViewGraphicsModes;
-extern int (*const sMailViewScreenFuncs[])(MailView *);
-extern const OamCharTransferParam sMailViewOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sMailViewSpriteResourceCounts;
-extern const TouchscreenHitbox sMailViewHitboxes[];
-extern const OamManagerParam sMailViewOamManagerParam;
-extern const GraphicsBanks sMailViewGraphicsBanks;
-
 typedef struct MailViewBgTemplates {
     BgTemplate bgs[5];
 } MailViewBgTemplates;
-
-extern const MailViewBgTemplates sMailViewBgTemplates;
 
 static BOOL MailView_AreAllMessagesEmpty(MailView *mailView);
 static void MailView_ResetCursorHighlight(MailView *mailView);
@@ -150,10 +140,154 @@ static void MailView_DeleteMonIcons(MailView *mailView);
 BOOL MailView_Init(OverlayManager *man, int *state);
 BOOL MailView_Main(OverlayManager *man, int *state);
 BOOL MailView_Exit(OverlayManager *man, int *state);
-BOOL MailView_HandleReadInput(MailView *mailView);
-BOOL MailView_HandleWriteInput(MailView *mailView);
-BOOL MailView_ShowEmptyMailWarning(MailView *mailView);
-BOOL MailView_ConfirmQuit(MailView *mailView);
+static BOOL MailView_HandleReadInput(MailView *mailView);
+static BOOL MailView_HandleWriteInput(MailView *mailView);
+static BOOL MailView_ShowEmptyMailWarning(MailView *mailView);
+static BOOL MailView_ConfirmQuit(MailView *mailView);
+
+static int (*const sMailViewScreenFuncs[])(MailView *) = {
+    MailView_HandleReadInput,
+    MailView_HandleWriteInput,
+    MailView_ShowEmptyMailWarning,
+    MailView_ConfirmQuit,
+};
+
+static const GraphicsModes sMailViewGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const OamCharTransferParam sMailViewOamCharTransferParam = {
+    .maxTasks = 3,
+    .sizeMain = 0x400,
+    .sizeSub = 0,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sMailViewSpriteResourceCounts = {
+    .numChar = 3,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const TouchscreenHitbox sMailViewHitboxes[] = {
+    { .rect = { 24, 56, 24, 232 } },
+    { .rect = { 64, 96, 24, 232 } },
+    { .rect = { 104, 136, 24, 232 } },
+    { .rect = { 148, 172, 160, 224 } },
+    { .rect = { 148, 172, 24, 88 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const OamManagerParam sMailViewOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 7,
+    .fromAffineMain = 1,
+    .numAffineMain = 1,
+    .fromOBJsub = 0,
+    .numOBJsub = 1,
+    .fromAffineSub = 1,
+    .numAffineSub = 1,
+};
+
+static const GraphicsBanks sMailViewGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const MailViewBgTemplates sMailViewBgTemplates = {
+    .bgs = {
+            {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf800,
+            .charBase = GX_BG_CHARBASE_0x10000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+            {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf000,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+            {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xe800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+            {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xe000,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+            {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+            },
+};
 
 BOOL MailView_Init(OverlayManager *man, int *state) {
     MailView *mailView;
@@ -252,7 +386,7 @@ static BOOL MailView_CheckInputModeSwitch(MailView *mailView) {
     return FALSE;
 }
 
-BOOL MailView_HandleReadInput(MailView *mailView) {
+static BOOL MailView_HandleReadInput(MailView *mailView) {
     if (gSystem.newKeys) {
         mailView->inputMode = MENU_INPUT_STATE_BUTTONS;
     } else if (System_GetTouchHeld()) {
@@ -363,7 +497,7 @@ static BOOL MailView_HandleWriteTouch(MailView *mailView) {
     return TRUE;
 }
 
-BOOL MailView_HandleWriteInput(MailView *mailView) {
+static BOOL MailView_HandleWriteInput(MailView *mailView) {
     if (MailView_CheckInputModeSwitch(mailView)) {
         return FALSE;
     }
@@ -373,7 +507,7 @@ BOOL MailView_HandleWriteInput(MailView *mailView) {
     return MailView_HandleWriteTouch(mailView);
 }
 
-BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
+static BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
     BOOL done = FALSE;
     String *string = NULL;
 
@@ -452,7 +586,7 @@ static int MailView_HandleYesNoPrompt(MailView *mailView) {
     return result;
 }
 
-BOOL MailView_ConfirmQuit(MailView *mailView) {
+static BOOL MailView_ConfirmQuit(MailView *mailView) {
     String *string;
     int answer;
 
@@ -648,7 +782,7 @@ static void MailView_InitBgs(MailView *mailView) {
 
     MailView_SetGfxBanks();
     mailView->bgConfig = BgConfig_Alloc(mailView->heapID);
-    modes = gMailViewGraphicsModes;
+    modes = sMailViewGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     templates = sMailViewBgTemplates;

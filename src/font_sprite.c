@@ -8,7 +8,7 @@
 
 struct FontSystem {
     void *cellFiles[12];
-    NNSG2dCellDataBank *cellBanks[12]; // one per entry of gFontOAMCellSizes
+    NNSG2dCellDataBank *cellBanks[12]; // one per entry of sFontOAMCellSizes
     TextOBJ *objects;
     int capacity;
 };
@@ -22,7 +22,7 @@ struct FontOAMSprite {
 typedef struct FontOAMCell {
     int x; // in tiles
     int y;
-    int index; // into gFontOAMCellSizes
+    int index; // into sFontOAMCellSizes
     struct FontOAMCell *prev;
     struct FontOAMCell *next;
 } FontOAMCell;
@@ -47,8 +47,6 @@ typedef struct FontSplit {
     u8 hasRemainder;
 } FontSplit;
 
-extern const u8 gFontOAMCellSizes[12][2];
-
 static void TextOBJ_Clear(TextOBJ *object);
 static TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input);
 static int FontOAM_GetCellSizeIndex(int width, int height);
@@ -72,6 +70,21 @@ void TextOBJ_SetPriority(TextOBJ *object, u8 priority);
 void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *object, int palette);
 void TextOBJ_SetPalOffset(TextOBJ *object, u8 palette);
 void TextOBJ_SetParentSprite(TextOBJ *object, const Sprite *sprite);
+
+static const u8 sFontOAMCellSizes[12][2] = {
+    { 8, 8 },
+    { 8, 4 },
+    { 4, 8 },
+    { 4, 4 },
+    { 4, 2 },
+    { 4, 1 },
+    { 2, 4 },
+    { 2, 2 },
+    { 2, 1 },
+    { 1, 4 },
+    { 1, 2 },
+    { 1, 1 },
+};
 
 FontSystem *FontSystem_NewInit(int count, enum HeapID heapId) {
     FontSystem *system = Heap_Alloc(heapId, sizeof(FontSystem));
@@ -326,7 +339,7 @@ static TextOBJ *FontSystem_GetFreeTextOBJ(FontSystem *input) {
 
 static int FontOAM_GetCellSizeIndex(int width, int height) {
     for (int i = 0; i < 12; i++) {
-        if (gFontOAMCellSizes[i][0] <= width && gFontOAMCellSizes[i][1] <= height) {
+        if (sFontOAMCellSizes[i][0] <= width && sFontOAMCellSizes[i][1] <= height) {
             return i;
         }
     }
@@ -342,19 +355,19 @@ static BOOL FontOAM_SplitRect(FontSplit *split, FontOAMCell *list, enum HeapID h
     node->x = split->current.x;
     node->y = split->current.y;
     remainingWidth = split->current.width;
-    remainingWidth -= gFontOAMCellSizes[node->index][0];
+    remainingWidth -= sFontOAMCellSizes[node->index][0];
     remainingHeight = split->current.height;
-    remainingHeight -= gFontOAMCellSizes[node->index][1];
+    remainingHeight -= sFontOAMCellSizes[node->index][1];
     if (remainingWidth > 0) {
         split->remainder.height = split->current.height;
         split->remainder.width = remainingWidth;
         split->remainder.y = split->current.y;
-        split->remainder.x = split->current.x + gFontOAMCellSizes[node->index][0];
+        split->remainder.x = split->current.x + sFontOAMCellSizes[node->index][0];
         GF_ASSERT(split->hasRemainder != 1);
         split->hasRemainder = 1;
     }
     if (remainingHeight > 0) {
-        split->current.y += gFontOAMCellSizes[node->index][1];
+        split->current.y += sFontOAMCellSizes[node->index][1];
         split->current.height = remainingHeight;
     } else if (split->hasRemainder == 1) {
         split->current = split->remainder;
@@ -381,7 +394,7 @@ static int FontOAM_BuildLayout(int width, int height, enum HeapID heapId, FontOA
     next.width = width;
     while (height != 0) {
         int index = FontOAM_GetCellSizeIndex(split.current.width, height);
-        int rowHeight = gFontOAMCellSizes[index][1];
+        int rowHeight = sFontOAMCellSizes[index][1];
         next.y = split.current.y + rowHeight;
         next.height = split.current.height - rowHeight;
         split.current.height = rowHeight;
@@ -405,8 +418,8 @@ static void FontOAM_LoadChars(Window *window, FontOAMCell *list, FontSpriteData 
 }
 
 static u32 FontOAM_LoadCellChars(Window *window, FontOAMCell *node, FontSpriteData *proxy, int blockSize, GXOBJVRamModeChar mode, volatile u32 offset, int vram, enum HeapID heapId) {
-    int width = gFontOAMCellSizes[node->index][0];
-    int height = gFontOAMCellSizes[node->index][1];
+    int width = sFontOAMCellSizes[node->index][0];
+    int height = sFontOAMCellSizes[node->index][1];
     u32 size = width;
     void *buffer;
     size *= height;
@@ -448,8 +461,8 @@ static void FontOAM_CopyChars(Window *window, void *buffer, FontOAMCell *list, N
 }
 
 static u32 FontOAM_CopyCellChars(Window *window, FontOAMCell *node, void *buffer, u32 offset, int blockSize, GXOBJVRamModeChar mode, enum HeapID heapId) {
-    int width = gFontOAMCellSizes[node->index][0];
-    int height = gFontOAMCellSizes[node->index][1];
+    int width = sFontOAMCellSizes[node->index][0];
+    int height = sFontOAMCellSizes[node->index][1];
     u32 size = width * height;
     if ((int)size < blockSize) {
         size = blockSize;
@@ -464,7 +477,7 @@ static int FontOAM_GetLayoutCharSize(FontOAMCell *list, NNS_G2D_VRAM_TYPE vram) 
     FontOAMCell *node = list->prev;
     u32 size = 0;
     for (; node != list; node = node->prev) {
-        int tiles = gFontOAMCellSizes[node->index][0] * gFontOAMCellSizes[node->index][1];
+        int tiles = sFontOAMCellSizes[node->index][0] * sFontOAMCellSizes[node->index][1];
         if (tiles < blockSize) {
             tiles = blockSize;
         }

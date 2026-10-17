@@ -20,7 +20,7 @@ BOOL Save_FriendGroup_IsGroupNameTaken(SAV_FRIEND_GRP *data, u16 *name);
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
-extern SAV_FRIEND_GRP *gFriendGroupSave;
+static SAV_FRIEND_GRP *sFriendGroupSave;
 
 u32 Save_FriendGroup_sizeof(void) {
     return sizeof(SAV_FRIEND_GRP);
@@ -37,7 +37,7 @@ void Save_FriendGroup_Init(SAV_FRIEND_GRP *data) {
         data->groups[i].groupName[0] = 0xFFFF;
         data->groups[i].leaderName[0] = 0xFFFF;
     }
-    gFriendGroupSave = data;
+    sFriendGroupSave = data;
 }
 
 void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *data, u32 days) {

@@ -76,8 +76,6 @@ typedef struct BattleTowerOpponent {
     u8 team[0xA8];
 } BattleTowerOpponent;
 
-extern const MailMessageTemplate gTowerMessageTemplates[4];
-
 u32 BattleRoomTrainer_sizeof(void);
 void FrontierData_Reset(void *data);
 void TowerMessages_Init(void *data);
@@ -94,6 +92,13 @@ void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out);
 void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOpponent *out, u32 index);
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *download, void *leaders, u32 rank, u32 room);
 void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *download, enum HeapID heapID);
+
+static const MailMessageTemplate sTowerMessageTemplates[4] = {
+    { 0, 0, { 4, -1 }, { 7, 0 }  },
+    { 1, 0, { 4, -1 }, { 33, 0 } },
+    { 2, 0, { 8, -1 }, { 10, 0 } },
+    { 1, 4, { 4, -1 }, { 1, 0 }  },
+};
 
 u32 BattleRoomTrainer_sizeof(void) {
     return sizeof(BattleRoomTrainer);
@@ -112,7 +117,7 @@ void TowerMessages_Init(void *data) {
     MailMessage *messages = data;
     int i;
     for (i = 0; i < 4; i++) {
-        MailMsg_Init_FromTemplate(&messages[i], &gTowerMessageTemplates[i]);
+        MailMsg_Init_FromTemplate(&messages[i], &sTowerMessageTemplates[i]);
     }
 }
 

@@ -8,6 +8,7 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "data/resdat.naix"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0302.h"
 
@@ -86,13 +87,6 @@ extern const TouchscreenHitbox gPokemonSummaryRibbonHitboxes[];
 
 u8 PokemonSummary_CheckTouchedButton(PokemonSummary *summary);
 void PokemonSummary_ReloadPokepic(PokemonSummary *summary);
-
-extern const ResdatIdList gPokemonSummarySpriteResdatIds;
-extern const OamCharTransferParam gPokemonSummaryOamTransferParam;
-extern const OamManagerParam gPokemonSummaryOamManagerParam;
-extern const UnmanagedSpriteTemplate gPokemonSummarySpriteTemplates[POKEMON_SUMMARY_SPRITE_COUNT];
-extern const u8 gPokemonSummaryBallPalettes[];
-extern const u8 gPokemonSummaryPartySlotPositions[][2];
 
 NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
 
@@ -233,6 +227,164 @@ static void PokemonSummary_ShowRibbonSprites(PokemonSummary *summary);
 static void PokemonSummary_UpdateRibbonSprites(PokemonSummary *summary);
 static void PokemonSummary_UpdateRibbonCursorSprite(PokemonSummary *summary);
 static void PokemonSummary_AnimateRibbonSprite66(PokemonSummary *summary);
+
+static u8 sPokemonSummaryPartySlotPositions[][2] = {
+    { 183, 55  },
+    { 223, 63  },
+    { 183, 87  },
+    { 223, 95  },
+    { 183, 119 },
+    { 223, 127 },
+};
+
+static const ResdatIdList sPokemonSummarySpriteResdatIds = {
+    .charRes = NARC_resdat_resdat_00000054_bin,
+    .plttRes = NARC_resdat_resdat_00000055_bin,
+    .cellRes = NARC_resdat_resdat_00000053_bin,
+    .animRes = NARC_resdat_resdat_00000052_bin,
+    .mcelRes = 0xFFFF,
+    .manmRes = 0xFFFF,
+    .headerId = NARC_resdat_resdat_00000085_bin,
+};
+
+static const OamCharTransferParam sPokemonSummaryOamTransferParam = {
+    .maxTasks = 115,
+    .sizeMain = 0x400,
+    .sizeSub = 0x400,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const OamManagerParam sPokemonSummaryOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const UnmanagedSpriteTemplate sPokemonSummarySpriteTemplates[POKEMON_SUMMARY_SPRITE_COUNT] = {
+    { 1,  128, 24,  0, 0, 1, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  144, 24,  0, 1, 1, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  160, 24,  0, 2, 1, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  176, 24,  0, 3, 1, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  192, 24,  0, 4, 1, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  208, 24,  0, 5, 1, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  224, 24,  0, 6, 1, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 1,  240, 24,  0, 7, 1, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 0,  168, 39,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 2,  68,  24,  0, 0, 1, 2,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 2,  68,  24,  0, 1, 0, 2,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 3,  0,   0,   0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 4,  0,   0,   0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 5,  0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 6,  0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 7,  0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 8,  0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 9,  0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 10, 0,   0,   0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 11, 160, 16,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 12, 232, 58,  0, 0, 0, 3,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 14, 0,   24,  0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 14, 0,   24,  0, 1, 0, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 17, 200, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 18, 208, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 19, 216, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 20, 224, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 21, 232, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 22, 240, 150, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 152, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 160, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 168, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 176, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 184, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 192, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 200, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 208, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 216, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 224, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 232, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 13, 240, 168, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 15, 208, 48,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 15, 224, 88,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 15, 216, 120, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 15, 144, 120, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 15, 136, 88,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 16, 0,   0,   0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 24, 0,   0,   0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 24, 0,   0,   0, 1, 0, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 24, 0,   0,   0, 3, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 24, 0,   0,   0, 2, 0, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 24, 0,   0,   0, 4, 0, 0,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 23, 252, 72,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 23, 252, 132, 0, 1, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 25, 32,  24,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 26, 64,  24,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 27, 96,  24,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 28, 32,  64,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 29, 64,  64,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 30, 96,  64,  0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 31, 32,  104, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 32, 64,  104, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 33, 96,  104, 0, 0, 0, 0,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 34, 32,  24,  0, 0, 0, 15, NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 34, 128, 32,  0, 4, 0, 15, NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 34, 128, 96,  0, 5, 0, 15, NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 35, 164, 148, 0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 36, 32,  24,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 36, 32,  24,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 36, 32,  24,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 36, 32,  24,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 36, 32,  24,  0, 0, 0, 2,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 37, 228, 54,  0, 0, 0, 1,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 38, 184, 50,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 39, 224, 58,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 40, 184, 82,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 41, 224, 90,  0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 42, 184, 114, 0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 43, 224, 122, 0, 0, 0, 4,  NNS_G2D_VRAM_TYPE_2DSUB,  0, 0, 0, 0 },
+    { 44, 64,  48,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  48,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 96,  48,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 112, 48,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 128, 48,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 64,  80,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  80,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 96,  80,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 112, 80,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 128, 80,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 64,  112, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  112, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 96,  112, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 112, 112, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 128, 112, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 64,  144, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  144, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 96,  144, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 112, 144, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 128, 144, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 64,  176, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  176, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 96,  176, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 112, 176, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 128, 176, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  32,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  64,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  96,  0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  128, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 80,  160, 0, 0, 0, 5,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 91,  182, 0, 6, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 101, 182, 0, 6, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 111, 182, 0, 6, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 121, 182, 0, 6, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 131, 182, 0, 6, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+    { 44, 111, 182, 0, 7, 0, 6,  NNS_G2D_VRAM_TYPE_2DMAIN, 0, 0, 0, 0 },
+};
+
+static const u8 sPokemonSummaryBallPalettes[] = { 2, 0, 2, 2, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 2, 0, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0 };
 
 u32 PokemonSummary_GetDefaultUnk2C(SaveData *saveData) {
     return 1;
@@ -2257,11 +2409,11 @@ static void PokemonSummary_InitSpriteSystem(PokemonSummary *summary) {
     GF_CreateVramTransferManager(32, HEAP_ID_19);
     summary->spriteSystem = SpriteSystem_Alloc(HEAP_ID_19);
     summary->spriteManager = SpriteManager_New(summary->spriteSystem);
-    oamManagerParam = gPokemonSummaryOamManagerParam;
-    oamTransferParam = gPokemonSummaryOamTransferParam;
+    oamManagerParam = sPokemonSummaryOamManagerParam;
+    oamTransferParam = sPokemonSummaryOamTransferParam;
     SpriteSystem_Init(summary->spriteSystem, &oamManagerParam, &oamTransferParam, 32);
     SpriteSystem_InitSprites(summary->spriteSystem, summary->spriteManager, POKEMON_SUMMARY_SPRITE_COUNT);
-    resdatIds = gPokemonSummarySpriteResdatIds;
+    resdatIds = sPokemonSummarySpriteResdatIds;
     SpriteSystem_LoadResourceDataFromFileIdList(summary->spriteSystem, summary->spriteManager, &resdatIds);
 }
 
@@ -2279,7 +2431,7 @@ static void PokemonSummary_UpdateSpriteAnims(PokemonSummary *summary) {
 
 static void PokemonSummary_CreateSprites(PokemonSummary *summary) {
     for (u16 i = 0; i < POKEMON_SUMMARY_SPRITE_COUNT; i++) {
-        summary->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(summary->spriteSystem, summary->spriteManager, &gPokemonSummarySpriteTemplates[i]);
+        summary->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(summary->spriteSystem, summary->spriteManager, &sPokemonSummarySpriteTemplates[i]);
     }
     PokemonSummary_LoadTypeAndIconSprites(summary);
     Sprite_SetDrawFlag(summary->sprites[10], FALSE);
@@ -2307,7 +2459,7 @@ static void PokemonSummary_CreateSprites(PokemonSummary *summary) {
 // Sprite 9 marks the shown Pokemon's party slot (not for a box Pokemon).
 static void PokemonSummary_UpdatePartySlotSprite(PokemonSummary *summary) {
     if (summary->args->monDataType != 2) {
-        Sprite_SetPositionXY(summary->sprites[9], gPokemonSummaryPartySlotPositions[summary->args->partySlot][0], gPokemonSummaryPartySlotPositions[summary->args->partySlot][1]);
+        Sprite_SetPositionXY(summary->sprites[9], sPokemonSummaryPartySlotPositions[summary->args->partySlot][0], sPokemonSummaryPartySlotPositions[summary->args->partySlot][1]);
         Sprite_SetAnimCtrlSeq(summary->sprites[9], 2);
     } else {
         Sprite_SetDrawFlag(summary->sprites[9], FALSE);
@@ -2328,7 +2480,7 @@ static void PokemonSummary_LoadBallSprite(PokemonSummary *summary) {
     int pokeball = summary->mon.pokeball;
     int charFile = pokeball == BALL_NONE ? 25 : pokeball + 24;
     SpriteSystem_ReplaceCharResObj(summary->spriteSystem, summary->spriteManager, NARC_a_1_6_2, charFile, FALSE, 0);
-    SpriteSystem_ReplacePlttResObj(summary->spriteSystem, summary->spriteManager, NARC_a_1_6_2, gPokemonSummaryBallPalettes[summary->mon.pokeball] + 49, FALSE, 6);
+    SpriteSystem_ReplacePlttResObj(summary->spriteSystem, summary->spriteManager, NARC_a_1_6_2, sPokemonSummaryBallPalettes[summary->mon.pokeball] + 49, FALSE, 6);
 }
 
 // Sprite 20 is the status condition icon, sprite 72 the "no status" one; 7 = fainted (neither).

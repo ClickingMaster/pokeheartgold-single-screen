@@ -35,7 +35,6 @@ Static main
     Object src/sprite_resource.o
     Object src/sprite_transfer.o
     Object src/oam_manager.o
-    Object asm/oam_manager_data.o
     Object src/brightness.o
     Object src/msgdata.o
     Object src/message_format.o
@@ -52,7 +51,6 @@ Static main
     Object src/screen_wipe_effects.o
     Object src/screen_window_wipe.o
     Object src/font_sprite.o
-    Object asm/font_sprite_data.o
     Object src/char_tiles.o
     Object src/gf_rtc.o
     Object src/list_menu_items.o
@@ -99,7 +97,6 @@ Static main
     Object src/gf_gfx_planes.o
     Object src/camera.o
     Object src/billboard_lists.o
-    Object asm/billboard_lists_data.o
     Object src/sprite.o
     Object src/touchscreen.o
     Object src/timer3.o
@@ -132,9 +129,7 @@ Static main
     Object src/mail.o
     Object src/save_fashion.o
     Object src/friend_roster.o
-    Object asm/friend_roster_data.o
     Object src/friend_group.o
-    Object asm/friend_group_data.o
     Object src/coins.o
     Object src/save_trainer_card.o
     Object src/save_wifi_history.o
@@ -143,7 +138,6 @@ Static main
     Object src/sav_chatot.o
     Object src/game_stats.o
     Object src/frontier_data.o
-    Object asm/frontier_data_rodata.o
     Object src/save_special_ribbons.o
     Object src/roamer.o
     Object src/save_gts.o
@@ -159,7 +153,6 @@ Static main
     Object src/safari_zone.o
     Object src/photo_album.o
     Object src/battle_record.o
-    Object asm/battle_record_data.o
     Object src/frontier_state.o
     Object src/frontier_save.o
     Object src/frontier_card.o
@@ -295,7 +288,6 @@ Static main
     Object src/frontier_wifi_upload_record.o
     Object src/render_model.o
     Object src/render_animation.o
-    Object asm/render_animation_data.o
     Object src/follow_mon.o
     Object src/map_preview_graphic.o
     Object src/field_take_photo.o
@@ -316,7 +308,6 @@ Static main
     Object src/evolution_scene.o
     Object src/particle_scene.o
     Object src/type_icon_resources.o
-    Object asm/type_icon_resources_data.o
     Object src/bag_view.o
     Object src/item.o
     Object src/bag.o
@@ -338,9 +329,7 @@ Static main
     Object src/ui_util.o
     Object asm/pokemon_summary_data.o
     Object src/pokemon_summary.o
-    Object asm/pokemon_summary_sprites_data.o
     Object src/pokemon_summary_text.o
-    Object asm/pokemon_summary_text_data.o
     Object asm/pokemon_summary_scene_data.o
     Object src/pokemon_summary_scene.o
     Object src/ribbon.o
@@ -1706,7 +1695,6 @@ Overlay OVY_46
 {
     After OVY_45
     Object src/wifi_plaza_connect.o
-    Object asm/wifi_plaza_connect_data.o
 }
 Overlay OVY_47
 {
@@ -1777,7 +1765,6 @@ Overlay OVY_56
 {
     After OVY_55
     Object src/mail_view.o
-    Object asm/mail_view_data.o
 }
 Overlay OVY_57
 {
@@ -2305,7 +2292,6 @@ Overlay OVY_109
 {
     After main
     Object src/application/photo_album_app.o
-    Object asm/photo_album_app_data.o
 }
 Overlay OVY_110
 {

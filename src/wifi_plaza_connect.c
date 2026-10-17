@@ -110,11 +110,6 @@ extern u32 WiFiPlazaLobbyClient_ToErrorCode(void);
 extern void WiFiPlazaLobbyClient_StartAddOwnLocation(void);
 extern BOOL WiFiPlazaLobbyClient_IsOwnLocationAdded(void);
 
-extern const u32 sWiFiPlazaConnectBgLayers[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS];
-extern const GraphicsModes sWiFiPlazaConnectGraphicsModes;
-extern const GraphicsBanks sWiFiPlazaConnectGraphicsBanks;
-extern const BgTemplate sWiFiPlazaConnectBgTemplates[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS];
-
 enum WiFiPlazaConnectState {
     WIFI_PLAZA_CONNECT_FADE_IN,
     WIFI_PLAZA_CONNECT_WAIT_FADE_IN,
@@ -168,6 +163,76 @@ void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box);
 void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int msgId);
 void WiFiPlazaConnect_BufferErrorCode(WiFiPlazaConnectMessageBox *box, int errorCode);
 YesNoPrompt *WiFiPlazaConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart);
+
+static const u32 sWiFiPlazaConnectBgLayers[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_SUB_0 };
+
+static const GraphicsModes sWiFiPlazaConnectGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const GraphicsBanks sWiFiPlazaConnectGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_NONE,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const BgTemplate sWiFiPlazaConnectBgTemplates[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS] = {
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .dummy = 0,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe000,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .dummy = 0,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .dummy = 0,
+     .mosaic = FALSE,
+     },
+};
 
 BOOL WiFiPlazaConnect_Init(OverlayManager *man, int *state) {
     WiFiPlazaConnectArgs *args;

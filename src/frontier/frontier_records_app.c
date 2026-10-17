@@ -134,24 +134,6 @@ typedef struct FrontierRecordsApp {
     u16 pageArrowTiles[3][16];                       // 0x334
 } FrontierRecordsApp;
 
-extern const TouchscreenHitbox gFrontierRecordsExitHitbox;
-extern const TouchscreenHitbox gFrontierRecordsSpeciesHitboxes[];
-extern const GridCallbacks gFrontierRecordsSpeciesGridCallbacks;
-extern const GridCallbacks gFrontierRecordsLetterGridCallbacks;
-extern const GraphicsModes gFrontierRecordsAppGraphicsModes;
-extern const OamCharTransferParam gFrontierRecordsAppOamCharTransferParam;
-extern const SpriteResourceCountsListUnion gFrontierRecordsAppSpriteResourceCounts;
-extern const BgTemplate gFrontierRecordsBgTemplate_MainText;
-extern const BgTemplate gFrontierRecordsBgTemplate_MainRecords;
-extern const BgTemplate gFrontierRecordsBgTemplate_SubText;
-extern const BgTemplate gFrontierRecordsBgTemplate_SubBackground;
-extern const OamManagerParam gFrontierRecordsAppOamManagerParam;
-extern const TouchscreenHitbox gFrontierRecordsSpeciesGridHitboxes[];
-extern const GraphicsBanks gFrontierRecordsAppGraphicsBanks;
-extern const DpadMenuBox gFrontierRecordsSpeciesGridBoxes[];
-extern const ManagedSpriteTemplate gFrontierRecordsSpriteTemplates[];
-extern const TouchscreenHitbox gFrontierRecordsLetterGridHitboxes[];
-extern const DpadMenuBox gFrontierRecordsLetterGridBoxes[];
 extern const u8 gFrontierRecordsLetterPositions[NUM_LETTERS];
 extern const FrontierRecordsWindowSet gFrontierRecordsWindowSets[];
 
@@ -207,7 +189,7 @@ static void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app);
 static void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page);
 static void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app);
 static void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app);
-void FrontierRecordsApp_GridCallback_Nop(void);
+static void FrontierRecordsApp_GridCallback_Nop(void *data, int input, int prevInput);
 static u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count);
 static void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app);
 static void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app);
@@ -217,15 +199,15 @@ static void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app);
 static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app);
 static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection);
 static void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app);
-void FrontierRecordsApp_LetterGrid_OnKeyMove(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_LetterGrid_OnTouch(FrontierRecordsApp *app, int selection);
+static void FrontierRecordsApp_LetterGrid_OnKeyMove(void *data, int input, int prevInput);
+static void FrontierRecordsApp_LetterGrid_OnTouch(void *data, int input, int prevInput);
 static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter);
 static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app);
 static void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app);
 static void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection);
 static void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app);
-void FrontierRecordsApp_SpeciesGrid_OnKeyMove(FrontierRecordsApp *app, int selection);
-void FrontierRecordsApp_SpeciesGrid_OnTouch(FrontierRecordsApp *app, int selection);
+static void FrontierRecordsApp_SpeciesGrid_OnKeyMove(void *data, int input, int prevInput);
+static void FrontierRecordsApp_SpeciesGrid_OnTouch(void *data, int input, int prevInput);
 static void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int slot);
 static void FrontierRecordsApp_StartArrowFlash(FrontierRecordsApp *app, u8 x, u8 y);
 static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app);
@@ -241,6 +223,233 @@ static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, i
 static void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
 static void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);
 static void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
+
+static const TouchscreenHitbox sFrontierRecordsExitHitbox = {
+    .rect = { 164, 187, 193, 254 }
+};
+
+static const TouchscreenHitbox sFrontierRecordsSpeciesHitboxes[] = {
+    { .rect = { 162, 189, 18, 45 } },
+    { .rect = { 162, 189, 50, 77 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GridCallbacks sFrontierRecordsLetterGridCallbacks = {
+    .onButton = FrontierRecordsApp_GridCallback_Nop,
+    .onSwitchToTouchMode = FrontierRecordsApp_GridCallback_Nop,
+    .onKeyMove = FrontierRecordsApp_LetterGrid_OnKeyMove,
+    .onTouch = FrontierRecordsApp_LetterGrid_OnTouch,
+};
+
+static const GridCallbacks sFrontierRecordsSpeciesGridCallbacks = {
+    .onButton = FrontierRecordsApp_GridCallback_Nop,
+    .onSwitchToTouchMode = FrontierRecordsApp_GridCallback_Nop,
+    .onKeyMove = FrontierRecordsApp_SpeciesGrid_OnKeyMove,
+    .onTouch = FrontierRecordsApp_SpeciesGrid_OnTouch,
+};
+
+static const GraphicsModes sFrontierRecordsAppGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const SpriteResourceCountsListUnion sFrontierRecordsAppSpriteResourceCounts = {
+    .numChar = 1,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const BgTemplate sFrontierRecordsBgTemplate_MainText = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const OamCharTransferParam sFrontierRecordsAppOamCharTransferParam = {
+    .maxTasks = 0x400,
+    .sizeMain = 0x20000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const BgTemplate sFrontierRecordsBgTemplate_MainRecords = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_512x512_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_512x512,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xd800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sFrontierRecordsBgTemplate_SubText = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sFrontierRecordsBgTemplate_SubBackground = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const OamManagerParam sFrontierRecordsAppOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const TouchscreenHitbox sFrontierRecordsSpeciesGridHitboxes[] = {
+    { .rect = { 32, 63, 40, 127 } },
+    { .rect = { 32, 63, 144, 231 } },
+    { .rect = { 64, 95, 40, 127 } },
+    { .rect = { 64, 95, 144, 231 } },
+    { .rect = { 96, 127, 40, 127 } },
+    { .rect = { 96, 127, 144, 231 } },
+    { .rect = { 128, 159, 40, 127 } },
+    { .rect = { 128, 159, 144, 231 } },
+    { .rect = { 164, 187, 193, 254 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsBanks sFrontierRecordsAppGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const DpadMenuBox sFrontierRecordsSpeciesGridBoxes[] = {
+    { 84,  48,  0, 0, 0,   2, 0, 1 },
+    { 188, 48,  0, 0, 1,   3, 0, 1 },
+    { 84,  80,  0, 0, 0,   4, 2, 3 },
+    { 188, 80,  0, 0, 1,   5, 2, 3 },
+    { 84,  112, 0, 0, 2,   6, 4, 5 },
+    { 188, 112, 0, 0, 3,   7, 4, 5 },
+    { 84,  144, 0, 0, 4,   8, 6, 7 },
+    { 188, 144, 0, 0, 5,   8, 6, 7 },
+    { 224, 176, 0, 0, 135, 8, 8, 8 },
+};
+
+static const ManagedSpriteTemplate sFrontierRecordsSpriteTemplates[] = {
+    { 224, 176, 0, 0, 10, 0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD8CC, 0xD8CC, 0xD8CC, 0xD8CC, -1, -1 }, 1, 0 },
+    { 224, 176, 0, 1, 0,  0, NNS_G2D_VRAM_TYPE_2DMAIN, { 0xD8CC, 0xD8CC, 0xD8CC, 0xD8CC, -1, -1 }, 0, 0 },
+};
+
+static const TouchscreenHitbox sFrontierRecordsLetterGridHitboxes[] = {
+    { .rect = { 40, 55, 24, 39 } },
+    { .rect = { 40, 55, 56, 71 } },
+    { .rect = { 40, 55, 88, 103 } },
+    { .rect = { 40, 55, 120, 135 } },
+    { .rect = { 40, 55, 152, 167 } },
+    { .rect = { 40, 55, 184, 199 } },
+    { .rect = { 40, 55, 216, 231 } },
+    { .rect = { 72, 87, 24, 39 } },
+    { .rect = { 72, 87, 56, 71 } },
+    { .rect = { 72, 87, 88, 103 } },
+    { .rect = { 72, 87, 120, 135 } },
+    { .rect = { 72, 87, 152, 167 } },
+    { .rect = { 72, 87, 184, 199 } },
+    { .rect = { 72, 87, 216, 231 } },
+    { .rect = { 104, 119, 24, 39 } },
+    { .rect = { 104, 119, 56, 71 } },
+    { .rect = { 104, 119, 88, 103 } },
+    { .rect = { 104, 119, 120, 135 } },
+    { .rect = { 104, 119, 152, 167 } },
+    { .rect = { 104, 119, 184, 199 } },
+    { .rect = { 104, 119, 216, 231 } },
+    { .rect = { 136, 151, 24, 39 } },
+    { .rect = { 136, 151, 56, 71 } },
+    { .rect = { 136, 151, 88, 103 } },
+    { .rect = { 136, 151, 120, 135 } },
+    { .rect = { 136, 151, 152, 167 } },
+    { .rect = { 164, 187, 193, 254 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const DpadMenuBox sFrontierRecordsLetterGridBoxes[] = {
+    { 32,  48,  0, 0, 0,   7,  0,  1  },
+    { 64,  48,  0, 0, 1,   8,  0,  2  },
+    { 96,  48,  0, 0, 2,   9,  1,  3  },
+    { 128, 48,  0, 0, 3,   10, 2,  4  },
+    { 160, 48,  0, 0, 4,   11, 3,  5  },
+    { 192, 48,  0, 0, 5,   12, 4,  6  },
+    { 224, 48,  0, 0, 6,   13, 5,  6  },
+    { 32,  80,  0, 0, 0,   14, 7,  8  },
+    { 64,  80,  0, 0, 1,   15, 7,  9  },
+    { 96,  80,  0, 0, 2,   16, 8,  10 },
+    { 128, 80,  0, 0, 3,   17, 9,  11 },
+    { 160, 80,  0, 0, 4,   18, 10, 12 },
+    { 192, 80,  0, 0, 5,   19, 11, 13 },
+    { 224, 80,  0, 0, 6,   20, 12, 13 },
+    { 32,  112, 0, 0, 7,   21, 14, 15 },
+    { 64,  112, 0, 0, 8,   22, 14, 16 },
+    { 96,  112, 0, 0, 9,   23, 15, 17 },
+    { 128, 112, 0, 0, 10,  24, 16, 18 },
+    { 160, 112, 0, 0, 11,  25, 17, 19 },
+    { 192, 112, 0, 0, 12,  26, 18, 20 },
+    { 224, 112, 0, 0, 13,  26, 19, 20 },
+    { 32,  144, 0, 0, 14,  26, 21, 22 },
+    { 64,  144, 0, 0, 15,  26, 21, 23 },
+    { 96,  144, 0, 0, 16,  26, 22, 24 },
+    { 128, 144, 0, 0, 17,  26, 23, 25 },
+    { 160, 144, 0, 0, 18,  26, 24, 25 },
+    { 224, 176, 0, 0, 132, 26, 26, 26 },
+};
 
 BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state) {
     FrontierRecordsApp *app;
@@ -367,7 +576,7 @@ static BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app) {
         }
         break;
     case RUN_STATE_RECORDS:
-        if (TouchscreenHitbox_TouchNewIsIn(&gFrontierRecordsExitHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
+        if (TouchscreenHitbox_TouchNewIsIn(&sFrontierRecordsExitHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
             PlaySE(SEQ_SE_DP_DECIDE);
             FrontierRecordsApp_StartReturnButtonFlash(app);
             app->nextState = RUN_STATE_EXIT;
@@ -396,7 +605,7 @@ static BOOL FrontierRecordsApp_Run(FrontierRecordsApp *app) {
         app->state = RUN_STATE_HALL_RECORDS;
         break;
     case RUN_STATE_HALL_RECORDS:
-        if (TouchscreenHitbox_TouchNewIsIn(&gFrontierRecordsExitHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
+        if (TouchscreenHitbox_TouchNewIsIn(&sFrontierRecordsExitHitbox) == TRUE || (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B))) {
             PlaySE(SEQ_SE_DP_DECIDE);
             FrontierRecordsApp_StartReturnButtonFlash(app);
             app->nextState = RUN_STATE_SHOW_SPECIES;
@@ -446,30 +655,29 @@ static void FrontierRecordsApp_VBlankCallback(void *cbArg) {
 }
 
 static void FrontierRecordsApp_SetGraphicsBanks(FrontierRecordsApp *app) {
-    GraphicsBanks banks = gFrontierRecordsAppGraphicsBanks;
+    GraphicsBanks banks = sFrontierRecordsAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = gFrontierRecordsAppGraphicsModes;
+    GraphicsModes modes = sFrontierRecordsAppGraphicsModes;
     BgTemplate mainText;
     BgTemplate mainRecords;
     BgTemplate subText;
     BgTemplate subBackground;
 
     SetBothScreensModesAndDisable(&modes);
-    mainText = gFrontierRecordsBgTemplate_MainText;
+    mainText = sFrontierRecordsBgTemplate_MainText;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &mainText, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_121);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    mainRecords = gFrontierRecordsBgTemplate_MainRecords;
+    mainRecords = sFrontierRecordsBgTemplate_MainRecords;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &mainRecords, GF_BG_TYPE_TEXT);
-    subText = gFrontierRecordsBgTemplate_SubText;
+    subText = sFrontierRecordsBgTemplate_SubText;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subText, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_121);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    subBackground = gFrontierRecordsBgTemplate_SubBackground;
+    subBackground = sFrontierRecordsBgTemplate_SubBackground;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &subBackground, GF_BG_TYPE_TEXT);
 }
 
@@ -482,7 +690,6 @@ static void FrontierRecordsApp_InitGraphics(FrontierRecordsApp *app) {
     FrontierRecordsApp_LoadMainBgGraphics(app, GF_BG_LYR_MAIN_2);
     FrontierRecordsApp_LoadSubBgGraphics(app, GF_BG_LYR_SUB_2);
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_FreeBgLayers(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_ALL, GF_PLANE_TOGGLE_OFF);
@@ -867,7 +1074,6 @@ static inline void FrontierRecordsApp_PrintTowerStreak(FrontierRecordsApp *app, 
     FrontierRecordsApp_PrintFormattedMessage(app, windowId, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
     FillWindowPixelBuffer(&app->windows[0], 0);
     FillWindowPixelBuffer(&app->windows[1], 0);
@@ -896,7 +1102,6 @@ static void FrontierRecordsApp_PrintTowerMultiRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[7]);
     ScheduleWindowCopyToVram(&app->windows[8]);
 }
-#pragma force_active reset
 
 static u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode) {
     FrontierData *frontierData = Save_FrontierData_Get(app->saveData);
@@ -936,7 +1141,6 @@ static void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app) {
     String_Delete(string);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
     OamManagerParam oamParam;
     OamCharTransferParam transferParam;
@@ -948,10 +1152,10 @@ static void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_121);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
-    oamParam = gFrontierRecordsAppOamManagerParam;
-    transferParam = gFrontierRecordsAppOamCharTransferParam;
+    oamParam = sFrontierRecordsAppOamManagerParam;
+    transferParam = sFrontierRecordsAppOamCharTransferParam;
     SpriteSystem_Init(app->spriteSystem, &oamParam, &transferParam, 32);
-    capacities = gFrontierRecordsAppSpriteResourceCounts;
+    capacities = sFrontierRecordsAppSpriteResourceCounts;
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 2);
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &capacities);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(app->spriteSystem), 0, FX32_CONST(512));
@@ -962,10 +1166,9 @@ static void FrontierRecordsApp_CreateSprites(FrontierRecordsApp *app) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(app->spriteSystem, app->spriteManager, narc, 50, TRUE, 55500);
     NARC_Delete(narc);
     for (i = 0; i < 2; i++) {
-        app->sprites[i] = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &gFrontierRecordsSpriteTemplates[i]);
+        app->sprites[i] = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &sFrontierRecordsSpriteTemplates[i]);
     }
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_FreeSprites(FrontierRecordsApp *app) {
     u32 i;
@@ -1005,7 +1208,6 @@ enum {
     BUTTON_FLASH_WAIT,
 };
 
-#pragma force_active on
 // Returns 0 once the flash has finished
 static int FrontierRecordsApp_RunButtonFlash(FrontierRecordsApp *app) {
     switch (app->flash.state) {
@@ -1050,7 +1252,6 @@ static void FrontierRecordsApp_StartReturnButtonFlash(FrontierRecordsApp *app) {
     app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
-#pragma force_active reset
 
 static BOOL FrontierRecordsApp_IsHall(FrontierRecordsApp *app) {
     return app->facility == FRONTIER_RECORDS_HALL;
@@ -1070,7 +1271,6 @@ static void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app) {
     FrontierRecordsApp_FreeGridInput(app);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_ShowHallPage(FrontierRecordsApp *app, int page) {
     switch (page) {
     case HALL_PAGE_RECORDS:
@@ -1120,7 +1320,6 @@ static void FrontierRecordsApp_DrawPageArrows(FrontierRecordsApp *app) {
     }
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app) {
     if (app->gridInput != NULL) {
@@ -1129,10 +1328,9 @@ static void FrontierRecordsApp_FreeGridInput(FrontierRecordsApp *app) {
     }
 }
 
-void FrontierRecordsApp_GridCallback_Nop(void) {
+static void FrontierRecordsApp_GridCallback_Nop(void *data, int input, int prevInput) {
 }
 
-#pragma force_active on
 // Species of one letter in alphabetical order (members 18-43 of the Pokedex sort data)
 static u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count) {
     u32 size;
@@ -1166,7 +1364,6 @@ static void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
         Heap_Free(records);
     }
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_FreeSpeciesGroups(FrontierRecordsApp *app) {
     u32 i;
@@ -1184,21 +1381,18 @@ static void FrontierRecordsApp_LoadWindowFrame(FrontierRecordsApp *app) {
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_121);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_ShowPrompt(FrontierRecordsApp *app) {
     DrawFrameAndWindow2(&app->windows[23], TRUE, 0x3E2, 14);
     FillWindowPixelBuffer(&app->windows[23], 15);
     FrontierRecordsApp_PrintMessage(app, 23, msg_0019_00042, 0, 0, 1, COLOR_PROMPT, 0);
     ScheduleWindowCopyToVram(&app->windows[23]);
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_ClearPrompt(FrontierRecordsApp *app) {
     ClearFrameAndWindow2(&app->windows[23], TRUE);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_0);
 }
 
-#pragma force_active on
 // Letter buttons are laid out 7 per row, 32 pixels apart
 static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
     u16 i;
@@ -1210,7 +1404,6 @@ static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
         FrontierRecordsApp_PrintMessage(app, 4, i + msg_0019_00056, (column << 5) + 24, (position / 7) << 5, 4, COLOR_BUTTON, 2);
     }
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int selection) {
     u8 x;
@@ -1226,19 +1419,17 @@ static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int sel
     }
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app) {
-    app->gridInput = GridInputHandler_Create(gFrontierRecordsLetterGridHitboxes, gFrontierRecordsLetterGridBoxes, &gFrontierRecordsLetterGridCallbacks, app, TRUE, (u8)app->letter, HEAP_ID_121);
+    app->gridInput = GridInputHandler_Create(sFrontierRecordsLetterGridHitboxes, sFrontierRecordsLetterGridBoxes, &sFrontierRecordsLetterGridCallbacks, app, TRUE, (u8)app->letter, HEAP_ID_121);
     FrontierRecordsApp_MoveLetterCursor(app, app->letter);
 }
-#pragma force_active reset
 
-void FrontierRecordsApp_LetterGrid_OnKeyMove(FrontierRecordsApp *app, int selection) {
-    FrontierRecordsApp_MoveLetterCursor(app, selection);
+static void FrontierRecordsApp_LetterGrid_OnKeyMove(void *data, int input, int prevInput) {
+    FrontierRecordsApp_MoveLetterCursor(data, input);
 }
 
-void FrontierRecordsApp_LetterGrid_OnTouch(FrontierRecordsApp *app, int selection) {
-    FrontierRecordsApp_MoveLetterCursor(app, selection);
+static void FrontierRecordsApp_LetterGrid_OnTouch(void *data, int input, int prevInput) {
+    FrontierRecordsApp_MoveLetterCursor(data, input);
 }
 
 static inline void FrontierRecordsApp_InitLetterFlash(FrontierRecordsApp *app) {
@@ -1248,7 +1439,6 @@ static inline void FrontierRecordsApp_InitLetterFlash(FrontierRecordsApp *app) {
     app->flash.paletteOff = 0;
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_lifetimes off
 static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
@@ -1264,7 +1454,6 @@ static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int let
     app->flash.timer = 0;
 }
 #pragma pop
-#pragma force_active reset
 
 static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
     u32 input;
@@ -1330,20 +1519,18 @@ static void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int se
     }
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_CreateSpeciesGrid(FrontierRecordsApp *app) {
     int selection = app->speciesIndex;
-    app->gridInput = GridInputHandler_Create(gFrontierRecordsSpeciesGridHitboxes, gFrontierRecordsSpeciesGridBoxes, &gFrontierRecordsSpeciesGridCallbacks, app, TRUE, (u8)selection, HEAP_ID_121);
-    FrontierRecordsApp_MoveSpeciesCursor(app, selection);
-}
-#pragma force_active reset
-
-void FrontierRecordsApp_SpeciesGrid_OnKeyMove(FrontierRecordsApp *app, int selection) {
+    app->gridInput = GridInputHandler_Create(sFrontierRecordsSpeciesGridHitboxes, sFrontierRecordsSpeciesGridBoxes, &sFrontierRecordsSpeciesGridCallbacks, app, TRUE, (u8)selection, HEAP_ID_121);
     FrontierRecordsApp_MoveSpeciesCursor(app, selection);
 }
 
-void FrontierRecordsApp_SpeciesGrid_OnTouch(FrontierRecordsApp *app, int selection) {
-    FrontierRecordsApp_MoveSpeciesCursor(app, selection);
+static void FrontierRecordsApp_SpeciesGrid_OnKeyMove(void *data, int input, int prevInput) {
+    FrontierRecordsApp_MoveSpeciesCursor(data, input);
+}
+
+static void FrontierRecordsApp_SpeciesGrid_OnTouch(void *data, int input, int prevInput) {
+    FrontierRecordsApp_MoveSpeciesCursor(data, input);
 }
 
 // Species buttons: two columns, 13 tiles apart
@@ -1390,7 +1577,6 @@ static inline void FrontierRecordsApp_NextPage(FrontierRecordsApp *app) {
     }
 }
 
-#pragma force_active on
 static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
     int input = GridInputHandler_HandleInput_NoHold(app->gridInput);
 
@@ -1444,7 +1630,7 @@ static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
         app->nextState = RUN_STATE_SHOW_HALL_RECORDS;
         return RUN_STATE_BUTTON_FLASH;
     }
-    switch (TouchscreenHitbox_FindRectAtTouchNew(gFrontierRecordsSpeciesHitboxes)) {
+    switch (TouchscreenHitbox_FindRectAtTouchNew(sFrontierRecordsSpeciesHitboxes)) {
     case 0:
         if (app->lastPage != 0) {
             FrontierRecordsApp_PrevPage(app);
@@ -1466,7 +1652,6 @@ static int FrontierRecordsApp_HandleSpeciesInput(FrontierRecordsApp *app) {
     }
     return RUN_STATE_SPECIES;
 }
-#pragma force_active reset
 
 static int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintSpeciesPage(app);
@@ -1474,7 +1659,6 @@ static int FrontierRecordsApp_FlipSpeciesPage(FrontierRecordsApp *app) {
     return RUN_STATE_SPECIES;
 }
 
-#pragma force_active on
 // The species page alternates between two sets of eight windows (5-12 and 13-20)
 static void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app) {
     int windowId;
@@ -1504,7 +1688,6 @@ static void FrontierRecordsApp_PrintSpeciesPage(FrontierRecordsApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
     app->speciesWindowBank ^= 1;
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app) {
     u32 i = 5;
@@ -1519,7 +1702,6 @@ static void FrontierRecordsApp_ClearSpeciesWindows(FrontierRecordsApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[22]);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_PrintLetterTitle(FrontierRecordsApp *app) {
     int width;
 
@@ -1538,20 +1720,17 @@ static void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app) {
     FrontierRecordsApp_PrintFormattedMessage(app, 22, msg_0019_00040, 32, 0, 0, COLOR_TEXT, 1);
     ScheduleWindowCopyToVram(&app->windows[22]);
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app) {
     FrontierRecordsApp_SetSpritePosition(app, 1, 224, 176);
     FrontierRecordsApp_SetSpriteAnim(app, 1, 1);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app) {
     u16 *species = app->groups[app->letter].species;
     app->species = species[app->speciesIndex + app->page * SPECIES_PER_PAGE];
     FrontierRecordsApp_PrintHallRecords(app);
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[0]);
@@ -1560,7 +1739,6 @@ static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[3]);
 }
 
-#pragma force_active on
 static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set) {
     u8 i;
     const WindowTemplate *templates = gFrontierRecordsWindowSets[set].templates;
@@ -1571,7 +1749,6 @@ static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, i
         FillWindowPixelBuffer(&windows[i], 0);
     }
 }
-#pragma force_active reset
 
 static void FrontierRecordsApp_RemoveWindows(Window *windows, int set) {
     u16 i;

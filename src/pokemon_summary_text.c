@@ -26,10 +26,6 @@
 
 // Pokemon summary screen text: the screen's windows and the text of each page.
 
-extern const WindowTemplate gPokemonSummaryRibbonWindowTemplates[];
-extern const WindowTemplate gPokemonSummaryInfoWindowTemplates[];
-extern const WindowTemplate gPokemonSummaryStatsWindowTemplates[];
-extern const WindowTemplate gPokemonSummaryWindowTemplates[34];
 extern const s8 gNatureStatMods[][5];
 
 // PokemonSummary_PrintTrainerMemo calls it with three arguments.
@@ -53,10 +49,90 @@ static void PokemonSummary_PrintRibbonCount(PokemonSummary *summary);
 static void PokemonSummary_PrintFlavorPreference(PokemonSummary *summary);
 static void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot);
 
+static const WindowTemplate sPokemonSummaryRibbonWindowTemplates[] = {
+    { GF_BG_LYR_SUB_0,  13, 17, 5,  2, 13, 0x21f },
+    { GF_BG_LYR_SUB_0,  1,  16, 21, 2, 13, 0x229 },
+    { GF_BG_LYR_SUB_0,  1,  18, 30, 4, 13, 0x253 },
+    { GF_BG_LYR_MAIN_1, 1,  3,  10, 2, 13, 0x21f },
+    { GF_BG_LYR_MAIN_1, 1,  7,  10, 2, 13, 0x233 },
+    { GF_BG_LYR_MAIN_1, 1,  11, 10, 2, 13, 0x247 },
+    { GF_BG_LYR_MAIN_1, 1,  15, 10, 2, 13, 0x25b },
+    { GF_BG_LYR_MAIN_1, 1,  19, 10, 2, 13, 0x26f },
+};
+
+static const WindowTemplate sPokemonSummaryInfoWindowTemplates[] = {
+    { GF_BG_LYR_SUB_0,  12, 1,  3,  2,  13, 0x21f },
+    { GF_BG_LYR_SUB_0,  9,  3,  9,  2,  13, 0x227 },
+    { GF_BG_LYR_SUB_0,  9,  7,  9,  2,  13, 0x239 },
+    { GF_BG_LYR_SUB_0,  11, 9,  5,  2,  13, 0x24b },
+    { GF_BG_LYR_SUB_0,  10, 13, 7,  2,  13, 0x255 },
+    { GF_BG_LYR_SUB_0,  11, 17, 6,  2,  13, 0x263 },
+    { GF_BG_LYR_MAIN_1, 0,  3,  18, 18, 13, 0x21f },
+    { GF_BG_LYR_MAIN_1, 1,  22, 11, 2,  13, 0x363 },
+};
+
+static const WindowTemplate sPokemonSummaryStatsWindowTemplates[] = {
+    { GF_BG_LYR_MAIN_1, 11, 3,  7,  2,  13, 0x21f },
+    { GF_BG_LYR_MAIN_1, 13, 6,  3,  2,  13, 0x22d },
+    { GF_BG_LYR_MAIN_1, 13, 8,  3,  2,  13, 0x233 },
+    { GF_BG_LYR_MAIN_1, 13, 10, 3,  2,  13, 0x239 },
+    { GF_BG_LYR_MAIN_1, 13, 12, 3,  2,  13, 0x23f },
+    { GF_BG_LYR_MAIN_1, 13, 14, 3,  2,  13, 0x245 },
+    { GF_BG_LYR_MAIN_1, 9,  17, 9,  2,  13, 0x24b },
+    { GF_BG_LYR_MAIN_1, 0,  19, 19, 4,  13, 0x25d },
+    { GF_BG_LYR_SUB_0,  5,  1,  11, 4,  13, 0x21f },
+    { GF_BG_LYR_SUB_0,  5,  5,  11, 4,  13, 0x24b },
+    { GF_BG_LYR_SUB_0,  5,  9,  11, 4,  13, 0x277 },
+    { GF_BG_LYR_SUB_0,  5,  13, 11, 4,  13, 0x2a3 },
+    { GF_BG_LYR_SUB_0,  5,  19, 11, 4,  13, 0x2cf },
+    { GF_BG_LYR_SUB_0,  27, 6,  3,  2,  13, 0x2fb },
+    { GF_BG_LYR_SUB_0,  27, 8,  3,  2,  13, 0x301 },
+    { GF_BG_LYR_SUB_0,  17, 10, 15, 10, 13, 0x307 },
+    { GF_BG_LYR_SUB_0,  1,  20, 15, 2,  13, 0x39d },
+    { GF_BG_LYR_SUB_0,  1,  17, 10, 2,  13, 0x39d },
+};
+
+static const WindowTemplate sPokemonSummaryWindowTemplates[34] = {
+    { GF_BG_LYR_SUB_0,  20, 1,  11, 2, 13, 0x001 },
+    { GF_BG_LYR_MAIN_1, 20, 1,  11, 2, 13, 0x017 },
+    { GF_BG_LYR_MAIN_1, 20, 1,  11, 2, 13, 0x02d },
+    { GF_BG_LYR_MAIN_1, 1,  0,  11, 2, 13, 0x043 },
+    { GF_BG_LYR_SUB_0,  20, 1,  11, 2, 13, 0x059 },
+    { GF_BG_LYR_MAIN_1, 20, 1,  11, 2, 13, 0x06f },
+    { GF_BG_LYR_MAIN_1, 20, 20, 6,  2, 13, 0x085 },
+    { GF_BG_LYR_SUB_0,  1,  1,  9,  2, 13, 0x091 },
+    { GF_BG_LYR_SUB_0,  1,  3,  5,  2, 13, 0x0a3 },
+    { GF_BG_LYR_SUB_0,  1,  5,  5,  2, 13, 0x0ad },
+    { GF_BG_LYR_SUB_0,  1,  7,  5,  2, 13, 0x0b7 },
+    { GF_BG_LYR_SUB_0,  1,  9,  5,  2, 13, 0x0c1 },
+    { GF_BG_LYR_SUB_0,  1,  11, 15, 2, 13, 0x0cb },
+    { GF_BG_LYR_SUB_0,  1,  15, 12, 2, 13, 0x0e9 },
+    { GF_BG_LYR_SUB_0,  6,  17, 3,  2, 13, 0x101 },
+    { GF_BG_LYR_MAIN_1, 5,  3,  2,  2, 13, 0x107 },
+    { GF_BG_LYR_MAIN_1, 3,  6,  6,  2, 13, 0x10b },
+    { GF_BG_LYR_MAIN_1, 3,  8,  6,  2, 13, 0x117 },
+    { GF_BG_LYR_MAIN_1, 3,  10, 6,  2, 13, 0x123 },
+    { GF_BG_LYR_MAIN_1, 3,  12, 6,  2, 13, 0x12f },
+    { GF_BG_LYR_MAIN_1, 3,  14, 6,  2, 13, 0x13b },
+    { GF_BG_LYR_MAIN_1, 0,  17, 7,  2, 13, 0x147 },
+    { GF_BG_LYR_MAIN_1, 1,  22, 6,  2, 13, 0x147 },
+    { GF_BG_LYR_SUB_0,  25, 21, 5,  2, 13, 0x153 },
+    { GF_BG_LYR_SUB_0,  18, 4,  6,  2, 13, 0x15d },
+    { GF_BG_LYR_SUB_0,  18, 6,  6,  2, 13, 0x169 },
+    { GF_BG_LYR_SUB_0,  18, 8,  8,  2, 13, 0x175 },
+    { GF_BG_LYR_MAIN_1, 18, 11, 9,  2, 13, 0x185 },
+    { GF_BG_LYR_MAIN_1, 2,  13, 12, 2, 13, 0x197 },
+    { GF_BG_LYR_SUB_0,  1,  17, 12, 2, 13, 0x1af },
+    { GF_BG_LYR_SUB_0,  20, 1,  11, 2, 13, 0x1c7 },
+    { GF_BG_LYR_MAIN_1, 20, 22, 12, 2, 13, 0x1dd },
+    { GF_BG_LYR_MAIN_1, 20, 6,  6,  2, 13, 0x1f5 },
+    { GF_BG_LYR_MAIN_1, 22, 4,  9,  2, 13, 0x201 },
+};
+
 void PokemonSummary_AddWindows(PokemonSummary *summary) {
     u16 i;
     for (i = 0; i < 34; i++) {
-        AddWindow(summary->bgConfig, &summary->windows[i], &gPokemonSummaryWindowTemplates[i]);
+        AddWindow(summary->bgConfig, &summary->windows[i], &sPokemonSummaryWindowTemplates[i]);
         FillWindowPixelBuffer(&summary->windows[i], 0);
     }
     PokemonSummary_PrintLabels(summary);
@@ -71,15 +147,15 @@ void PokemonSummary_AddPageWindows(PokemonSummary *summary) {
 
     switch (summary->page) {
     case 0:
-        templates = gPokemonSummaryInfoWindowTemplates;
+        templates = sPokemonSummaryInfoWindowTemplates;
         summary->numPageWindows = 8;
         break;
     case 1:
-        templates = gPokemonSummaryStatsWindowTemplates;
+        templates = sPokemonSummaryStatsWindowTemplates;
         summary->numPageWindows = 18;
         break;
     case 2:
-        templates = gPokemonSummaryRibbonWindowTemplates;
+        templates = sPokemonSummaryRibbonWindowTemplates;
         summary->numPageWindows = 8;
         break;
     case 3:
@@ -457,8 +533,6 @@ static void PokemonSummary_PrintMemo(PokemonSummary *summary) {
     }
 }
 
-#pragma force_active on
-
 static void PokemonSummary_PrintStats(PokemonSummary *summary) {
     String *template;
     MsgData *abilityDescriptions;
@@ -514,8 +588,6 @@ static void PokemonSummary_PrintStats(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->pageWindows[7]);
 }
 
-#pragma force_active off
-
 static void PokemonSummary_PrintMoves(PokemonSummary *summary) {
     if (summary->args->mode != 2) {
         ScheduleWindowCopyToVram(&summary->windows[4]);
@@ -534,8 +606,6 @@ static void PokemonSummary_PrintMoves(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->pageWindows[11]);
     ScheduleWindowCopyToVram(&summary->windows[23]);
 }
-
-#pragma force_active on
 
 static void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[5]);
@@ -562,8 +632,6 @@ static void PokemonSummary_PrintPokeathlonStatLabels(PokemonSummary *summary) {
         ScheduleWindowCopyToVram(&summary->pageWindows[7]);
     }
 }
-
-#pragma force_active off
 
 static void PokemonSummary_PrintRibbonCount(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->windows[30]);
@@ -607,8 +675,6 @@ void PokemonSummary_PrintRibbonInfo(PokemonSummary *summary) {
     ScheduleWindowCopyToVram(&summary->pageWindows[2]);
 }
 
-#pragma force_active on
-
 // slot 4: the move to learn.
 static void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot) {
     int offset;
@@ -640,8 +706,6 @@ static void PokemonSummary_PrintMoveSlot(PokemonSummary *summary, int slot) {
         AddTextPrinterParameterizedWithColor((Window *)(windows + offset), 0, summary->buffer, 60 - (width >> 1), 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     }
 }
-
-#pragma force_active off
 
 // Power, accuracy and description of the move.
 void PokemonSummary_PrintMoveInfo(PokemonSummary *summary, u16 move) {

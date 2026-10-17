@@ -315,11 +315,6 @@ extern u32 WiFiPlaza_HasConnectionFailed(void);
 // FX_Sqrt has no declaration in lib/include.
 fx32 FX_Sqrt(fx32 x);
 
-extern const u8 sVisitorProfilesBgAnimPeriods[VISITOR_PROFILES_NUM_BG_ANIMS];
-extern const VecFx32 sVisitorProfilesCameraPos;
-extern const u32 sVisitorProfilesMarkerModelFiles[VISITOR_PROFILES_NUM_MARKER_MODELS];
-extern const VecFx32 sVisitorProfilesCameraTarget;
-extern const GraphicsModes sVisitorProfilesGraphicsModes;
 extern ObjCharTransferTemplate sVisitorProfilesObjCharTransferTemplate;
 extern const u32 sVisitorProfilesBgLayers[VISITOR_PROFILES_NUM_BG_LAYERS];
 extern const YesNoPromptTemplate sVisitorProfilesYesNoTemplate;
@@ -463,6 +458,29 @@ void VisitorProfilesMsg_Read(VisitorProfilesMsg *msg, s32 msgId, String *dest);
 String *VisitorProfilesMsg_GetCountryName(VisitorProfilesMsg *msg, u32 country);
 String *VisitorProfilesMsg_GetRegionName(VisitorProfilesMsg *msg, u32 country, u32 region);
 s32 VisitorProfiles_FindFirstVisitor(void *visitors);
+
+static const u8 sVisitorProfilesBgAnimPeriods[VISITOR_PROFILES_NUM_BG_ANIMS] = { 30, 30, 30, 30, 30 };
+
+static const u32 sVisitorProfilesMarkerModelFiles[VISITOR_PROFILES_NUM_MARKER_MODELS] = { 0, 1, 2 };
+
+static const VecFx32 sVisitorProfilesCameraPos = {
+    .x = 0,
+    .y = 0,
+    .z = FX32_CONST(296),
+};
+
+static const VecFx32 sVisitorProfilesCameraTarget = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+};
+
+static const GraphicsModes sVisitorProfilesGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
 
 BOOL VisitorProfiles_Init(OverlayManager *man, int *state) {
     VisitorProfilesArgs *args;

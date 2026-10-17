@@ -6,8 +6,6 @@
 #include "gf_3d_render.h"
 #include "heap.h"
 
-extern BillboardListManager gBillboardLists;
-
 static void Billboard_Clear(Billboard *billboard);
 static void BillboardObject_Clear(BillboardObject *object);
 static BOOL Billboard_DeleteAllObjects(Billboard *billboard);
@@ -81,6 +79,8 @@ NNSG3dResMdl *BillboardObject_GetModelNoCast(BillboardObject *);
 void BillboardObject_SetCallback(BillboardObject *, BillboardCallback, void *);
 BOOL BillboardSequence_Step(void *, fx32 *, fx32);
 
+static BillboardListManager sBillboardLists;
+
 static void Billboard_Clear(Billboard *billboard) {
     billboard->initialized = 0;
     billboard->draw = 0;
@@ -123,34 +123,34 @@ static void BillboardObject_Clear(BillboardObject *object) {
 void BillboardLists_Create(int count, enum HeapID heapID) {
     int i;
 
-    GF_ASSERT(gBillboardLists.list == NULL);
-    gBillboardLists.list = Heap_Alloc(heapID, count * sizeof(Billboard));
-    gBillboardLists.count = count;
+    GF_ASSERT(sBillboardLists.list == NULL);
+    sBillboardLists.list = Heap_Alloc(heapID, count * sizeof(Billboard));
+    sBillboardLists.count = count;
     for (i = 0; i < count; i++) {
-        Billboard_Clear(&gBillboardLists.list[i]);
+        Billboard_Clear(&sBillboardLists.list[i]);
     }
 }
 
 void BillboardLists_Delete(void) {
     int i;
 
-    for (i = 0; i < gBillboardLists.count; i++) {
-        Billboard_Delete(&gBillboardLists.list[i]);
+    for (i = 0; i < sBillboardLists.count; i++) {
+        Billboard_Delete(&sBillboardLists.list[i]);
     }
-    Heap_Free(gBillboardLists.list);
-    gBillboardLists.list = NULL;
-    gBillboardLists.count = 0;
+    Heap_Free(sBillboardLists.list);
+    sBillboardLists.list = NULL;
+    sBillboardLists.count = 0;
 }
 
 void BillboardLists_Draw(void) {
     int i;
 
-    for (i = 0; i < gBillboardLists.count; i++) {
-        if (gBillboardLists.list[i].draw == 1) {
-            Billboard_Draw(&gBillboardLists.list[i]);
+    for (i = 0; i < sBillboardLists.count; i++) {
+        if (sBillboardLists.list[i].draw == 1) {
+            Billboard_Draw(&sBillboardLists.list[i]);
         }
-        if (gBillboardLists.list[i].state == 1) {
-            gBillboardLists.list[i].state = 2;
+        if (sBillboardLists.list[i].state == 1) {
+            sBillboardLists.list[i].state = 2;
         }
     }
 }
@@ -227,9 +227,9 @@ void Billboard_ClearPendingFree(void *data) {
 
 static Billboard *BillboardLists_GetFree(void) {
     int i;
-    for (i = 0; i < gBillboardLists.count; i++) {
-        if (!gBillboardLists.list[i].initialized) {
-            return &gBillboardLists.list[i];
+    for (i = 0; i < sBillboardLists.count; i++) {
+        if (!sBillboardLists.list[i].initialized) {
+            return &sBillboardLists.list[i];
         }
     }
     return NULL;

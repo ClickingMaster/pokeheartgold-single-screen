@@ -1,10 +1,6 @@
 #include "type_icon_resources.h"
 
 #include "global.h"
-extern const int gTypeIconCharFiles[23];
-extern const u8 gTypeIconPalettes[23];
-extern const int gMoveCategoryIconCharFiles[3];
-extern const u8 gMoveCategoryIconPalettes[3];
 
 static int TypeIcon_GetCellFile(void);
 static int TypeIcon_GetAnimFile(void);
@@ -29,9 +25,19 @@ void MoveCategoryIcon_LoadChar(SpriteSystem *system, SpriteManager *manager, int
 void MoveCategoryIcon_UnloadChar(SpriteManager *manager, int resource);
 void MoveCategoryIcon_DeleteSprite(ManagedSprite *sprite);
 
+static const u8 sMoveCategoryIconPalettes[3] = { 0, 1, 0 };
+
+static const int sMoveCategoryIconCharFiles[3] = { 244, 246, 245 };
+
+static const int sTypeIconCharFiles[23] = {
+    234, 225, 227, 235, 229, 237, 231, 228, 238, 236, 226, 241, 233, 222, 223, 230, 221, 224, 240, 219, 220, 232, 239
+};
+
+static const u8 sTypeIconPalettes[23] = { 0, 0, 1, 1, 0, 0, 2, 1, 0, 2, 0, 1, 2, 0, 1, 1, 2, 0, 0, 1, 1, 2, 0 };
+
 int TypeIcon_GetCharFile(int type) {
     GF_ASSERT((u32)type < 23);
-    return gTypeIconCharFiles[type];
+    return sTypeIconCharFiles[type];
 }
 
 int TypeIcon_GetPlttFile(void) {
@@ -48,7 +54,7 @@ static int TypeIcon_GetAnimFile(void) {
 
 u32 TypeIcon_GetPalette(u32 type) {
     GF_ASSERT(type < 23);
-    return gTypeIconPalettes[type];
+    return sTypeIconPalettes[type];
 }
 
 NarcId TypeIcon_GetNarc(void) {
@@ -107,12 +113,12 @@ void thunk_ManagedSprite_DeleteAndFreeResources(ManagedSprite *sprite) {
 
 int MoveCategoryIcon_GetCharFile(u32 category) {
     GF_ASSERT(category < 3);
-    return gMoveCategoryIconCharFiles[category];
+    return sMoveCategoryIconCharFiles[category];
 }
 
 u32 MoveCategoryIcon_GetPalette(u32 category) {
     GF_ASSERT(category < 3);
-    return gMoveCategoryIconPalettes[category];
+    return sMoveCategoryIconPalettes[category];
 }
 
 NarcId MoveCategoryIcon_GetNarc(void) {

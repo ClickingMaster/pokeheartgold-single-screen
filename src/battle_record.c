@@ -89,10 +89,6 @@ typedef struct {
     u32 values48[4];
 } FrontierRecord;
 
-extern const BattlerOrder gBattleRecordBattlerOrder;
-extern const MultiOrder gBattleRecordMultiOrder;
-extern BattleRecord *gBattleRecord;
-
 u32 BattleRecord_sizeof(void);
 void BattleRecord_Init(BattleRecord *record);
 BattleRecord *BattleRecord_Get(void);
@@ -124,6 +120,16 @@ u32 FactoryChallenge_GetSaved(FrontierRecord *record);
 void FactoryChallenge_SetSaved(FrontierRecord *record, int flag);
 void FactoryChallenge_SetField(FrontierRecord *record, int field, int index, void *value);
 u32 FactoryChallenge_GetField(FrontierRecord *record, int field, int index);
+
+static const MultiOrder sBattleRecordMultiOrder = {
+    .order = { 0, 2, 1, 3 },
+};
+
+static const BattlerOrder sBattleRecordBattlerOrder = {
+    .order = { { 0, 2, 3, 1 }, { 3, 1, 0, 2 } },
+};
+
+BattleRecord *gBattleRecord;
 
 u32 BattleRecord_sizeof(void) {
     return sizeof(BattleRecord);
@@ -291,8 +297,8 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
     BattleRecordHeader *summary = header;
     BattleRecordData *data = recordData;
     int count, partySize;
-    BattlerOrder order = gBattleRecordBattlerOrder;
-    MultiOrder multi = gBattleRecordMultiOrder;
+    BattlerOrder order = sBattleRecordBattlerOrder;
+    MultiOrder multi = sBattleRecordMultiOrder;
     int player;
     int k;
     MI_CpuFill8(summary, 0, sizeof(*summary));

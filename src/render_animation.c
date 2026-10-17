@@ -26,9 +26,6 @@ typedef struct RenderModel {
     NNSG3dResTex *texture;
 } RenderModel;
 
-extern const VecFx32 gRenderObjUnitScale;
-extern const MtxFx33 gRenderObjIdentityRotation;
-
 static void RenderAnimation_Clear(RenderAnimation *animation);
 static void RenderAnimation_InitOwned(RenderAnimation *animation, void *file, int unused);
 static void RenderAnimation_InitShared(RenderAnimation *animation, void *file, int unused);
@@ -55,6 +52,24 @@ void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *mo
 void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const MtxFx33 *rotation);
 void RenderObj_DrawAt(int object, VecFx32 *position);
 void RenderObj_DrawRotated(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
+
+static const VecFx32 sRenderObjUnitScale = {
+    .x = FX32_ONE,
+    .y = FX32_ONE,
+    .z = FX32_ONE,
+};
+
+static const MtxFx33 sRenderObjIdentityRotation = {
+    ._00 = FX32_ONE,
+    ._01 = 0,
+    ._02 = 0,
+    ._10 = 0,
+    ._11 = FX32_ONE,
+    ._12 = 0,
+    ._20 = 0,
+    ._21 = 0,
+    ._22 = FX32_ONE,
+};
 
 static void RenderAnimation_Clear(RenderAnimation *animation) {
     memset(animation, 0, sizeof(*animation));
@@ -202,7 +217,7 @@ void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecF
 }
 
 void RenderObj_DrawAt(int object, VecFx32 *position) {
-    RenderObj_Draw((NNSG3dRenderObj *)object, position, &gRenderObjUnitScale, &gRenderObjIdentityRotation);
+    RenderObj_Draw((NNSG3dRenderObj *)object, position, &sRenderObjUnitScale, &sRenderObjIdentityRotation);
 }
 
 void RenderObj_DrawRotated(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles) {
