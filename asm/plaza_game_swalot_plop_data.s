@@ -2,9 +2,6 @@
 	.include "overlay_91.inc"
 	.include "global.inc"
 
-	.public sSwalotPlopModelIds
-	.public sSwalotPlopSubBgPalettes
-	.public sSwalotPlopShotModelFiles
 	.public sSwalotPlopStageAnimFiles
 	.public sSwalotPlopStageAnimModels
 	.public sSwalotPlopSceneModelFiles
@@ -125,7 +122,6 @@
 	.public ov91_0226273C
 	.public sSwalotPlopSceneAnimModels
 	.public sSwalotPlopCommands
-	.public sSwalotPlopTouchpadBuffer
 	.extern _0225C5BE
 	.extern _0225C5CA
 	.extern _0225C5D8
@@ -1076,15 +1072,6 @@
 	.text
 	.rodata
 
-sSwalotPlopModelIds:
-	.byte 0x00, 0x00, 0x00, 0x00
-
-sSwalotPlopSubBgPalettes: ; 0x02261BEC
-	.byte 0x00, 0x09, 0x0A, 0x0B
-
-sSwalotPlopShotModelFiles: ; 0x02261BF0
-	.byte 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x00, 0x00, 0x00
-
 sSwalotPlopStageAnimFiles: ; 0x02261BF8
 	.byte 0x26, 0x00, 0x27, 0x00, 0x28, 0x00
 
@@ -1562,6 +1549,3 @@ sSwalotPlopCommands: ; 0x02262754
 	; 0x022627B4
 
 	.bss
-
-sSwalotPlopTouchpadBuffer: ; 0x022627C0
-	.space 0x40

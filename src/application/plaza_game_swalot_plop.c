@@ -59,9 +59,6 @@ void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dAnmObjEnableID(NNSG3dAnmObj *anmObj, int id);
 int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *name);
 
-extern const u8 sSwalotPlopModelIds[];
-extern const u8 sSwalotPlopSubBgPalettes[];
-extern const u8 sSwalotPlopShotModelFiles[];
 extern const u16 sSwalotPlopStageAnimFiles[];
 extern const u16 sSwalotPlopStageAnimModels[];
 extern const u16 sSwalotPlopSceneModelFiles[3];
@@ -93,7 +90,14 @@ extern const u8 sSwalotPlopPopupPosY[];
 extern const NNSG3dResName sSwalotPlopSceneNodeNames[6][15];
 extern const u8 sSwalotPlopSceneAnimModels[6];
 extern const SwalotPlopCommand sSwalotPlopCommands[8];
-extern u8 sSwalotPlopTouchpadBuffer[];
+
+const u8 sSwalotPlopModelIds[] = { 0, 0, 0, 0 };
+
+static const u8 sSwalotPlopSubBgPalettes[] = { 0, 9, 10, 11 };
+
+static const u8 sSwalotPlopShotModelFiles[] = { 41, 42, 43, 44, 45, 0, 0, 0 };
+
+static TPData sSwalotPlopTouchpadBuffer[8];
 
 BOOL SwalotPlop_Init(OverlayManager *man, int *state) {
     PlazaGameArgs *args = OverlayManager_GetArgs(man);
@@ -627,7 +631,7 @@ SwalotPlopGame *SwalotPlopGame_New(enum HeapID heapId, u32 duration, u32 playerC
     SwalotPlopGame_InitGfx(game, heapId);
     SwalotPlopDemo_Init(&game->demo, &game->gfx, heapId);
     SwalotPlopScoreReports_Init(&game->scoreReports);
-    if (GF_TouchpadStartRecording((TPData *)sSwalotPlopTouchpadBuffer, 8, 4) != TRUE) {
+    if (GF_TouchpadStartRecording(sSwalotPlopTouchpadBuffer, 8, 4) != TRUE) {
         GF_AssertFail();
     }
     return game;
