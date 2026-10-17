@@ -109,7 +109,7 @@ extern const MysteryGiftMenuItem sWonderCardAlbumWirelessYesNoItems[];
 extern const MysteryGiftMenuItem sWonderCardAlbumShareYesNoItems[];
 extern const ListMenuTemplate sWonderCardAlbumListMenuTemplate;
 extern const WonderCardTextBox sWonderCardAlbumTextBoxes[19];
-extern u32 sWonderCardAlbumMenuInput;
+static u32 sWonderCardAlbumMenuInput;
 
 enum {
     ALBUM_STATE_LOAD_SAVE,

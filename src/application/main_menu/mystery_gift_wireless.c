@@ -31,7 +31,7 @@ typedef struct MysteryGiftCommWork {
     u8 unk_3C1[16];                     // 0x3C1
 } MysteryGiftCommWork;                  // size: 0x3D4
 
-extern MysteryGiftCommWork *sMysteryGiftCommWork;
+static MysteryGiftCommWork *sMysteryGiftCommWork;
 extern const u8 sMysteryGiftCommCommands[]; // command table
 
 extern u16 Comm_GetLocalNetId(void);

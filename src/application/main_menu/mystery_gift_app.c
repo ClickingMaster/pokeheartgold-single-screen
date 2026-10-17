@@ -166,7 +166,7 @@ extern void CommState_StopBeaconWatch(void);
 extern u32 CommState_GetSeenGames(void);
 extern void CommState_SetErrorWatch(s8 watchMembers, s8 reportErrors);
 
-extern MysteryGiftLinkState sMysteryGiftLinkState;
+static MysteryGiftLinkState sMysteryGiftLinkState;
 
 extern const GraphicsModes gMysteryGiftAppGraphicsModes;
 extern const BgTemplate sMysteryGiftAppBgTemplate;

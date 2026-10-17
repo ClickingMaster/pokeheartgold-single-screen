@@ -90,32 +90,12 @@
 	.extern RangerLink_GetGameInfo
 	.extern RangerLink_GetSsid
 	.extern RangerLink_GetPacketHeaderSize
-	.public sMysteryGiftCommWork
-	.public sMysteryGiftLinkState
-	.public sWonderCardAlbumMenuInput
-	.public sLockCapsuleCardMenuInput
-	.public gRangerLinkWork
 	.public sMigrateFromAgbIcons
 	.public sPmAgbSave
 	.public sPmAgbSaveCounter
 	.public sPmAgbRomHeader
 	.public sMainMenuUtilCryptoHeapId
 	.bss
-sMysteryGiftCommWork: ; 0x0223D0A4
-	.space 0x4
-
-sMysteryGiftLinkState: ; 0x0223D0A8
-	.space 0x14
-
-sWonderCardAlbumMenuInput: ; 0x0223D0BC
-	.space 0x4
-
-sLockCapsuleCardMenuInput: ; 0x0223D0C0
-	.space 0x4
-
-	.public gRangerLinkWork
-gRangerLinkWork: ; 0x0223D0C4
-	.space 0x274
 
 sMigrateFromAgbIcons: ; 0x0223D338
 	.space 0x4

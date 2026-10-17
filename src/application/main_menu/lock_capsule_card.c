@@ -87,7 +87,7 @@ extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
 extern const MysteryGiftMenuItem sLockCapsuleCardMenuItems[2];
 extern const ListMenuTemplate sLockCapsuleCardListMenuTemplate;
 extern const WonderCardTextBox sLockCapsuleCardTextBoxes[11];
-extern u32 sLockCapsuleCardMenuInput;
+static u32 sLockCapsuleCardMenuInput;
 extern const GraphicsModes gWonderCardGraphicsModes;
 extern const BgTemplate sWonderCardBgTemplate_Main3;
 extern const BgTemplate sWonderCardBgTemplate_Main0;

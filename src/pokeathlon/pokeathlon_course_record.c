@@ -14,25 +14,6 @@
 
 FS_EXTERN_OVERLAY(OVY_98);
 
-extern const SpriteResourceCountsListUnion sPokeathlonCourseRecordSpriteResourceCounts;
-extern const u8 sPokeathlonCourseRecordCourseEvents[][4];
-extern const u8 sPokeathlonCourseRecordBgLayers[8];
-extern const GraphicsModes sPokeathlonCourseRecordGraphicsModes;
-extern const PokeathlonCourseRecordBgTemplates sPokeathlonCourseRecordBgTemplates;
-extern const s32 sPokeathlonCourseRecordScreenFiles[][2];
-extern const s32 sPokeathlonCourseRecordSubScreenFiles[][2];
-extern const PokeathlonCourseRecordSpritePos sPokeathlonCourseRecordScrollSpritePositions[6];
-extern const u32 sPokeathlonCourseRecordScoreWindows[];
-extern const int sPokeathlonCourseRecordMonIconResIds[];
-extern const int sPokeathlonCourseRecordMonPicResIds[3][4];
-extern const ManagedSpriteTemplate sPokeathlonCourseRecordSpriteTemplates[26];
-extern const u32 sPokeathlonCourseRecordDigitAnims[];
-extern const TouchscreenHitbox sPokeathlonCourseRecordHitboxes[];
-extern const s16 sPokeathlonCourseRecordCursorPositions[];
-extern const s16 sPokeathlonCourseRecordCursorPositionsY[];
-extern const WindowTemplate sPokeathlonCourseRecordWindowTemplates[17];
-extern const char sStr_SeqError[]; // "seq error!"
-
 static void PokeathlonCourseRecord_CopyArgs(PokeathlonCourseRecord *work, const PokeathlonCourseRecordArgs *args);
 static void PokeathlonCourseRecord_FreeArgs(PokeathlonCourseRecordArgs *args);
 static void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work);
@@ -53,6 +34,547 @@ static void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work);
 static void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, BOOL visible);
 static void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course);
 static BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work);
+
+static const u8 sPokeathlonCourseRecordBgLayers[8] = {
+    GF_BG_LYR_MAIN_0,
+    GF_BG_LYR_MAIN_1,
+    GF_BG_LYR_MAIN_2,
+    GF_BG_LYR_MAIN_3,
+    GF_BG_LYR_SUB_0,
+    GF_BG_LYR_SUB_1,
+    GF_BG_LYR_SUB_2,
+    GF_BG_LYR_SUB_3,
+};
+
+static const GraphicsModes sPokeathlonCourseRecordGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const int sPokeathlonCourseRecordMonIconResIds[4] = { 7, 7, 5, 5 };
+
+static const s16 sPokeathlonCourseRecordCursorPositions[6][2] = {
+    { 208, 16  },
+    { 240, 48  },
+    { 208, 80  },
+    { 240, 112 },
+    { 208, 144 },
+    { 224, 176 },
+};
+
+static const SpriteResourceCountsListUnion sPokeathlonCourseRecordSpriteResourceCounts = {
+    .numChar = 10,
+    .numPltt = 8,
+    .numCell = 6,
+    .numAnim = 6,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const u32 sPokeathlonCourseRecordScoreWindows[6] = { 5, 8, 6, 9, 7, 10 };
+
+static const TouchscreenHitbox sPokeathlonCourseRecordHitboxes[] = {
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 208, 16, 16 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 240, 48, 16 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 208, 80, 16 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 240, 112, 16 } },
+    { .circle = { TOUCHSCREEN_CIRCLE_SENTINEL, 208, 144, 16 } },
+    { .rect = { 160, 192, 192, 0 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const u32 sPokeathlonCourseRecordDigitAnims[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+static const s32 sPokeathlonCourseRecordScreenFiles[5][2] = {
+    { 63, 69 },
+    { 64, 70 },
+    { 65, 71 },
+    { 66, 72 },
+    { 67, 73 },
+};
+
+static const u8 sPokeathlonCourseRecordCourseEvents[10][4] = {
+    { 0, 1, 6, 10 },
+    { 3, 2, 9, 10 },
+    { 8, 9, 1, 10 },
+    { 7, 6, 3, 10 },
+    { 5, 4, 0, 10 },
+    { 0, 5, 4, 6  },
+    { 5, 4, 1, 8  },
+    { 9, 8, 1, 3  },
+    { 3, 2, 9, 7  },
+    { 6, 7, 0, 2  },
+};
+
+static const int sPokeathlonCourseRecordMonPicResIds[4][4] = {
+    { 3, 4, 4, 4 },
+    { 4, 5, 4, 4 },
+    { 5, 6, 4, 4 },
+    { 0, 0, 0, 0 },
+};
+
+static const PokeathlonCourseRecordSpritePos sPokeathlonCourseRecordScrollSpritePositions[6] = {
+    { 11, 96,  64  },
+    { 12, 56,  104 },
+    { 13, 136, 104 },
+    { 14, 120, 152 },
+    { 15, 104, 152 },
+    { 16, 88,  152 },
+};
+
+static const WindowTemplate sPokeathlonCourseRecordWindowTemplates[17] = {
+    { GF_BG_LYR_MAIN_0, 0,  0,  14, 2, 12, 1   },
+    { GF_BG_LYR_MAIN_0, 0,  22, 14, 2, 12, 29  },
+    { GF_BG_LYR_MAIN_0, 25, 21, 6,  2, 12, 57  },
+    { GF_BG_LYR_SUB_2,  7,  0,  18, 2, 12, 1   },
+    { GF_BG_LYR_SUB_2,  2,  2,  28, 2, 12, 37  },
+    { GF_BG_LYR_SUB_2,  3,  6,  14, 2, 12, 93  },
+    { GF_BG_LYR_SUB_2,  3,  8,  14, 2, 12, 121 },
+    { GF_BG_LYR_SUB_2,  3,  10, 14, 2, 12, 149 },
+    { GF_BG_LYR_SUB_2,  22, 6,  8,  2, 12, 177 },
+    { GF_BG_LYR_SUB_2,  22, 8,  8,  2, 12, 193 },
+    { GF_BG_LYR_SUB_2,  22, 10, 8,  2, 12, 209 },
+    { GF_BG_LYR_SUB_2,  7,  12, 14, 2, 12, 225 },
+    { GF_BG_LYR_SUB_2,  22, 12, 8,  2, 12, 253 },
+    { GF_BG_LYR_SUB_2,  26, 22, 6,  2, 12, 269 },
+    { GF_BG_LYR_SUB_2,  4,  16, 12, 2, 12, 281 },
+    { GF_BG_LYR_SUB_2,  5,  19, 12, 2, 12, 305 },
+    { GF_BG_LYR_SUB_2,  6,  22, 12, 2, 12, 329 },
+};
+
+static const PokeathlonCourseRecordBgTemplates sPokeathlonCourseRecordBgTemplates = {
+    {
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0800,
+            .charBase = GX_BG_CHARBASE_0x08000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_512x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x2000,
+            .charBase = GX_BG_CHARBASE_0x14000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 256,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_512x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xe800,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xe000,
+            .charBase = GX_BG_CHARBASE_0x08000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xd800,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+     },
+};
+
+static const ManagedSpriteTemplate sPokeathlonCourseRecordSpriteTemplates[26] = {
+    {
+     .x = 208,
+     .y = 16,
+     .z = 0,
+     .animation = 8,
+     .drawPriority = 2,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 16,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 2,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 2, 2, 2, 2, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 240,
+     .y = 48,
+     .z = 0,
+     .animation = 1,
+     .drawPriority = 2,
+     .pal = 1,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 2, 2, 2, 2, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 80,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 2,
+     .pal = 2,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 2, 2, 2, 2, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 240,
+     .y = 112,
+     .z = 0,
+     .animation = 3,
+     .drawPriority = 2,
+     .pal = 3,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 2, 2, 2, 2, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 144,
+     .z = 0,
+     .animation = 4,
+     .drawPriority = 2,
+     .pal = 4,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 2, 2, 2, 2, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 16,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 240,
+     .y = 48,
+     .z = 0,
+     .animation = 3,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 80,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 240,
+     .y = 112,
+     .z = 0,
+     .animation = 3,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 144,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 1, 1, 1, 1, 0, 0 },
+     .bgPriority = 3,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 96,
+     .y = 64,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 2,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 3, 4, 4, 4, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 56,
+     .y = 104,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 4, 5, 4, 4, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 136,
+     .y = 104,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 5, 6, 4, 4, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 120,
+     .y = 152,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 104,
+     .y = 152,
+     .z = 0,
+     .animation = 1,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 88,
+     .y = 152,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 128,
+     .y = 56,
+     .z = 0,
+     .animation = 10,
+     .drawPriority = 0,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 40,
+     .y = 96,
+     .z = 0,
+     .animation = 11,
+     .drawPriority = 0,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 128,
+     .y = 152,
+     .z = 0,
+     .animation = 12,
+     .drawPriority = 0,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .resIdList = { 0, 0, 0, 0, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 208,
+     .y = 149,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 6, 3, 3, 3, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 176,
+     .y = 149,
+     .z = 0,
+     .animation = 1,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 6, 3, 3, 3, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 144,
+     .y = 149,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 6, 3, 3, 3, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 16,
+     .y = 128,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 7, 7, 5, 5, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 24,
+     .y = 152,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 8, 7, 5, 5, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+    {
+     .x = 32,
+     .y = 176,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+     .resIdList = { 9, 7, 5, 5, 0, 0 },
+     .bgPriority = 0,
+     .vramTransfer = 0,
+     },
+};
 
 // The first 0xDC bytes of PokeathlonSave hold the five course records.
 static inline PokeathlonCourseRecordEntry *PokeathlonCourseRecord_GetRecords(PokeathlonCourseRecordArgs *args) {
@@ -146,7 +668,7 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
         PokeathlonUtil_DisableDisplay();
         return TRUE;
     default:
-        GF_ASSERT(!sStr_SeqError);
+        GF_ASSERT(!"seq error!");
         break;
     }
     PokeathlonUtil_DrawSprites(work->spriteContext);
@@ -183,8 +705,6 @@ static BOOL PokeathlonCourseRecord_HasRecord(PokeathlonCourseRecordArgs *args, i
     return PokeathlonCourseRecord_GetTotalScore(args, course) != 0;
 }
 
-#pragma force_active on
-
 static u16 PokeathlonCourseRecord_GetScore(PokeathlonCourseRecordArgs *args, int course, int event) {
     GF_ASSERT(args != NULL);
     if (event == 3) {
@@ -195,8 +715,6 @@ static u16 PokeathlonCourseRecord_GetScore(PokeathlonCourseRecordArgs *args, int
     }
     return PokeathlonCourseRecord_GetRecords(args)[course].eventScores[event];
 }
-
-#pragma force_active reset
 
 static int PokeathlonCourseRecord_GetEventId(PokeathlonCourseRecordArgs *args, s32 course, u32 event) {
     const u8 *events;
@@ -214,8 +732,6 @@ static u16 PokeathlonCourseRecord_GetMonSpecies(PokeathlonCourseRecordArgs *args
     GF_ASSERT(course < 5);
     return PokeathlonCourseRecord_GetRecords(args)[course].mons[slot].info.species;
 }
-
-#pragma force_active on
 
 static void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
     GraphicsModes modes;
@@ -235,8 +751,6 @@ static void PokeathlonCourseRecord_InitBgs(PokeathlonCourseRecord *work) {
     G2S_SetBlendAlpha(GX_BLEND_PLANEMASK_BG3, GX_BLEND_PLANEMASK_BG1, 15, 0);
     work->narc = NARC_New(NARC_a_1_7_7, work->heapId);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseRecord_FreeBgs(PokeathlonCourseRecord *work) {
     u8 i;
@@ -265,8 +779,6 @@ static void PokeathlonCourseRecord_LoadBgGraphics(PokeathlonCourseRecord *work) 
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 41, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, TRUE, work->heapId);
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work, int course, BOOL forward) {
     s16 offset;
     u8 i;
@@ -279,7 +791,7 @@ static void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work,
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordScreenFiles[course][0], work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, work->heapId);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordSubScreenFiles[course][0], work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, work->heapId);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, sPokeathlonCourseRecordScreenFiles[course][1], work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, TRUE, work->heapId);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, offset);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, offset);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -288,8 +800,6 @@ static void PokeathlonCourseRecord_StartPageScroll(PokeathlonCourseRecord *work,
         ManagedSprite_OffsetPositionXY(work->sprites[sPokeathlonCourseRecordScrollSpritePositions[i].sprite], -offset, 0);
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseRecord_UpdatePageScroll(PokeathlonCourseRecord *work) {
     s32 xpos;
@@ -371,8 +881,6 @@ static void PokeathlonCourseRecord_PrintMonNames(PokeathlonCourseRecord *work, B
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work, int course) {
     PokeathlonTextContext *textContext = work->textContext;
     MessageFormat *msgFormat = PokeathlonUtil_GetMessageFormat(textContext);
@@ -394,8 +902,6 @@ static void PokeathlonCourseRecord_PrintCourseName(PokeathlonCourseRecord *work,
         }
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work) {
     PokeathlonTextContext *textContext = work->textContext;
@@ -454,8 +960,6 @@ static void PokeathlonCourseRecord_LoadMonPicResources(PokeathlonCourseRecord *w
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
     int i;
     s32 course;
@@ -490,8 +994,6 @@ static void PokeathlonCourseRecord_CreateSprites(PokeathlonCourseRecord *work) {
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *work, BOOL visible) {
     ManagedSprite_SetDrawFlag(work->sprites[14], visible);
     ManagedSprite_SetDrawFlag(work->sprites[15], visible);
@@ -503,8 +1005,6 @@ static void PokeathlonCourseRecord_SetMonSpritesVisible(PokeathlonCourseRecord *
     ManagedSprite_SetDrawFlag(work->sprites[18], visible);
     ManagedSprite_SetDrawFlag(work->sprites[19], visible);
 }
-
-#pragma force_active on
 
 static void PokeathlonCourseRecord_UpdatePageSprites(PokeathlonCourseRecord *work, int course) {
     u32 totalScore = PokeathlonCourseRecord_GetTotalScore(work->args, course);
@@ -584,7 +1084,7 @@ static BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
     selection->cursor = cursor;
     work->selection.page = selection->cursor;
     if (oldCursor != selection->cursor) {
-        ManagedSprite_SetPositionXY(work->sprites[0], sPokeathlonCourseRecordCursorPositions[selection->cursor * 2], sPokeathlonCourseRecordCursorPositionsY[selection->cursor * 2]);
+        ManagedSprite_SetPositionXY(work->sprites[0], sPokeathlonCourseRecordCursorPositions[selection->cursor][0], sPokeathlonCourseRecordCursorPositions[selection->cursor][1]);
         if (selection->cursor == 5) {
             ManagedSprite_SetAnim(work->sprites[0], 12);
         } else {
@@ -599,5 +1099,3 @@ static BOOL PokeathlonCourseRecord_HandleInput(PokeathlonCourseRecord *work) {
     }
     return exit;
 }
-
-#pragma force_active reset

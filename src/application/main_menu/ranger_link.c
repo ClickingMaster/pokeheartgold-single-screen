@@ -391,7 +391,7 @@ typedef struct RangerLinkScrambledPacket {
 } RangerLinkScrambledPacket;
 
 extern RangerLinkParentParam gRangerLinkParentParam;
-extern RangerLinkWork gRangerLinkWork;
+RangerLinkWork gRangerLinkWork;
 
 void RangerLink_Abort(void);
 u32 RangerLink_GetMacAddressTail(u8 *macAddress);
