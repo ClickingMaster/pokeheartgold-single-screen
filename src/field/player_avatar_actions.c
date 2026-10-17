@@ -1,5 +1,8 @@
+#include "player_avatar_actions.h"
+
 #include "global.h"
 
+#include "constants/flags.h"
 #include "constants/global_fieldmap.h"
 #include "constants/maps.h"
 #include "constants/player_avatar.h"
@@ -12,9 +15,11 @@
 #include "field/field_control.h"
 #include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
+#include "field/map_object_render.h"
 
 #include "field_bgm.h"
 #include "field_metatile_query_internal.h"
+#include "field_surf_mount.h"
 #include "field_system.h"
 #include "follow_mon.h"
 #include "heap.h"
@@ -25,9 +30,6 @@
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "player_avatar_actions.h"
-#include "field/map_object_render.h"
-#include "field_surf_mount.h"
 #include "overlay_02.h"
 #include "party.h"
 #include "player_avatar.h"
@@ -89,7 +91,7 @@ typedef struct RockClimbWork {
     LocalMapObject *mapObject;  // 0x14
     u32 effect;                 // 0x18
     FieldMoveAnim anim;         // 0x1C
-    Field3dObjectTask *debris;   // 0x2C
+    Field3dObjectTask *debris;  // 0x2C
 } RockClimbWork;                // size: 0x30
 
 // Waterfall (up and down) and Whirlpool.
@@ -152,21 +154,21 @@ void WhirlpoolEffect_Delete(Field3dObjectTask *task);
 Field3dObjectTask *RockClimbDebris_Create(FieldSystem *fieldSystem);
 void RockClimbDebris_Delete(Field3dObjectTask *task);
 
-void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToWatering(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToFishing(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToPoketch(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToSaving(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToHeal(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToLadder(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToRocketHeal(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToPokeathlon(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToApricornShake(PlayerAvatar *playerAvatar);
-void Field_PlayerAvatar_TransitionToRocketSaving(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToWatering(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToFishing(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToPoketch(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToSaving(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToHeal(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToLadder(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToRocketHeal(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToPokeathlon(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToApricornShake(PlayerAvatar *playerAvatar);
+static void Field_PlayerAvatar_TransitionToRocketSaving(PlayerAvatar *playerAvatar);
 BOOL Field_PlayerAvatar_TryFieldMoveInDirection(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int direction, int playerEvents);
 BOOL Field_PlayerAvatar_TryPushBoulder(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int direction, int collision);
 void Field_StartPushBoulderTask(int direction, FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, LocalMapObject *boulder);
@@ -182,37 +184,37 @@ BOOL Field_PlayerAvatar_TryWaterfallUp(FieldSystem *fieldSystem, PlayerAvatar *p
 BOOL Field_PlayerAvatar_HandleForcedMovement(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int playerEvents);
 void Field_StartRockClimbTask(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim);
 BOOL Task_RockClimb(TaskManager *taskManager);
-int RockClimb_StartCutIn(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_PlayFollowMonCry(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_StartJump(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_WaitJump(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_StartStep(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager);
-int RockClimb_Finish(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_StartCutIn(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_PlayFollowMonCry(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_StartJump(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_WaitJump(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_StartStep(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager);
+static int RockClimb_Finish(RockClimbWork *work, TaskManager *taskManager);
 WaterfallWork *Waterfall_NewWork(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim);
 void Field_StartWaterfallTask(FieldSystem *fieldSystem, u32 direction);
 BOOL Task_Waterfall(TaskManager *taskManager);
-int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager);
-int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager);
 void Field_StartWhirlpoolTask(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim);
 BOOL Task_Whirlpool(TaskManager *taskManager);
-int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager);
-int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager);
-int Whirlpool_CheckNextTile(WaterfallWork *work);
+static int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
+static int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager);
+static int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager);
+static int Whirlpool_CheckNextTile(WaterfallWork *work);
 void PlayerMovementSaving_Update(SysTask *task, void *data);
 void FieldMoveAnim_Init(FieldSystem *fieldSystem, Pokemon *mon, FieldMoveAnim *anim);
 void FieldMoveAnim_Start(FieldSystem *fieldSystem, FieldMoveAnim *anim);
@@ -223,19 +225,82 @@ void *FieldMoveTask_AllocWork(u32 size);
 void FieldMoveTask_FreeWork(void *work);
 Pokemon *Field_GetPartyMon(FieldSystem *fieldSystem, int partySlot);
 
-extern const WaterfallStepFunc sWhirlpoolSteps[5];
-extern const WaterfallStepFunc sWaterfallUpSteps[5];
-extern const WaterfallStepFunc sWaterfallDownSteps[5];
-extern const RockClimbStepFunc sRockClimbCutInSteps[8];
-extern const RockClimbStepFunc sRockClimbFollowMonSteps[9];
-extern const BoulderHole sIcePathBoulderHoles[4];
-extern void (*const sPlayerAvatarBitUpdateFuncs[15])(PlayerAvatar *);
+static const WaterfallStepFunc sWaterfallDownSteps[5] = {
+    (WaterfallStepFunc)WaterfallDown_StartCutIn,
+    (WaterfallStepFunc)WaterfallDown_WaitCutIn,
+    (WaterfallStepFunc)WaterfallDown_Init,
+    (WaterfallStepFunc)WaterfallDown_Advance,
+    (WaterfallStepFunc)WaterfallDown_Descend,
+};
+
+static const WaterfallStepFunc sWaterfallUpSteps[5] = {
+    (WaterfallStepFunc)WaterfallUp_StartCutIn,
+    (WaterfallStepFunc)WaterfallUp_WaitCutIn,
+    (WaterfallStepFunc)WaterfallUp_Init,
+    (WaterfallStepFunc)WaterfallUp_Rise,
+    (WaterfallStepFunc)WaterfallUp_Climb,
+};
+
+static const WaterfallStepFunc sWhirlpoolSteps[5] = {
+    (WaterfallStepFunc)Whirlpool_StartCutIn,
+    (WaterfallStepFunc)Whirlpool_WaitCutIn,
+    (WaterfallStepFunc)Whirlpool_CreateEffect,
+    (WaterfallStepFunc)Whirlpool_StartStep,
+    Whirlpool_CheckNextTile,
+};
+
+static const RockClimbStepFunc sRockClimbCutInSteps[8] = {
+    RockClimb_StartCutIn,
+    RockClimb_WaitCutIn,
+    RockClimb_CreateEffect,
+    RockClimb_StartJump,
+    RockClimb_WaitJump,
+    RockClimb_StartStep,
+    RockClimb_CheckNextTile,
+    RockClimb_Finish,
+};
+
+static const RockClimbStepFunc sRockClimbFollowMonSteps[9] = {
+    RockClimb_FollowMonReact,
+    RockClimb_PlayFollowMonCry,
+    RockClimb_WaitFollowMonCry,
+    RockClimb_CreateEffect,
+    RockClimb_StartJump,
+    RockClimb_WaitJump,
+    RockClimb_StartStep,
+    RockClimb_CheckNextTile,
+    RockClimb_Finish,
+};
+
+static const BoulderHole sIcePathBoulderHoles[4] = {
+    { MAP_ICE_PATH_B1F, 11, 10, 0, FLAG_HIDE_ICE_PATH_BOULDER_1_FALLEN },
+    { MAP_ICE_PATH_B1F, 10, 18, 1, FLAG_HIDE_ICE_PATH_BOULDER_2_FALLEN },
+    { MAP_ICE_PATH_B1F, 18, 7,  2, FLAG_HIDE_ICE_PATH_BOULDER_3_FALLEN },
+    { MAP_ICE_PATH_B1F, 19, 19, 3, FLAG_HIDE_ICE_PATH_BOULDER_4_FALLEN },
+};
+
+static void (*const sPlayerAvatarBitUpdateFuncs[15])(PlayerAvatar *) = {
+    Field_PlayerAvatar_TransitionToWalking,
+    Field_PlayerAvatar_TransitionToCycling,
+    Field_PlayerAvatar_TransitionToSurfing,
+    Field_PlayerAvatar_TransitionX0008,
+    Field_PlayerAvatar_TransitionToWatering,
+    Field_PlayerAvatar_TransitionToFishing,
+    Field_PlayerAvatar_TransitionToPoketch,
+    Field_PlayerAvatar_TransitionToSaving,
+    Field_PlayerAvatar_TransitionToHeal,
+    Field_PlayerAvatar_TransitionToLadder,
+    Field_PlayerAvatar_TransitionToRocket,
+    Field_PlayerAvatar_TransitionToRocketHeal,
+    Field_PlayerAvatar_TransitionToPokeathlon,
+    Field_PlayerAvatar_TransitionToApricornShake,
+    Field_PlayerAvatar_TransitionToRocketSaving,
+};
 
 void Field_PlayerAvatar_OrrTransitionFlags(PlayerAvatar *playerAvatar, int flags) {
     PlayerAvatar_SetTransitionFlagsBits(playerAvatar, flags);
 }
 
-#pragma force_active on
 void Field_PlayerAvatar_ApplyTransitionFlags(PlayerAvatar *avatar) {
     u32 i = 0;
     u32 flags = PlayerAvatar_GetTransitionFlags(avatar);
@@ -247,9 +312,8 @@ void Field_PlayerAvatar_ApplyTransitionFlags(PlayerAvatar *avatar) {
     }
     PlayerAvatar_SetTransitionFlags(avatar, 0);
 }
-#pragma force_active reset
 
-void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WALKING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_WALKING);
@@ -261,7 +325,7 @@ void Field_PlayerAvatar_TransitionToWalking(PlayerAvatar *playerAvatar) {
     PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
 }
 
-void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_CYCLING, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_CYCLING);
@@ -274,7 +338,7 @@ void Field_PlayerAvatar_TransitionToCycling(PlayerAvatar *playerAvatar) {
     PlaySE(SEQ_SE_DP_JITENSYA);
 }
 
-void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     int direction;
     LocalMapObject *mapObject;
@@ -292,7 +356,7 @@ void Field_PlayerAvatar_TransitionToSurfing(PlayerAvatar *playerAvatar) {
     PlayerAvatar_SetSurfMountEffect(playerAvatar, SurfMountEffect_Create(mapObject, 0, 0, direction, 1));
 }
 
-void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar) {
     u32 surfMount;
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_ROCKET, PlayerAvatar_GetGender(playerAvatar)));
     PlayerAvatar_SetState(playerAvatar, PLAYER_STATE_ROCKET);
@@ -304,47 +368,47 @@ void Field_PlayerAvatar_TransitionToRocket(PlayerAvatar *playerAvatar) {
     PlayerAvatar_SetSurfMountEffect(playerAvatar, 0);
 }
 
-void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionX0008(PlayerAvatar *playerAvatar) {
     PlayerAvatar_SetFlag1(playerAvatar, TRUE);
 }
 
-void Field_PlayerAvatar_TransitionToWatering(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToWatering(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WATERING, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToFishing(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToFishing(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_FISHING, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToPoketch(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToPoketch(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_POKETCH, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToSaving(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToSaving(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_SAVING, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToHeal(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToHeal(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_HEAL, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToLadder(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToLadder(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_LADDER, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToRocketHeal(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToRocketHeal(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_ROCKET_HEAL, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToPokeathlon(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToPokeathlon(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_POKEATHLON, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToApricornShake(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToApricornShake(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_APRICORN_SHAKE, PlayerAvatar_GetGender(playerAvatar)));
 }
 
-void Field_PlayerAvatar_TransitionToRocketSaving(PlayerAvatar *playerAvatar) {
+static void Field_PlayerAvatar_TransitionToRocketSaving(PlayerAvatar *playerAvatar) {
     Field_PlayerAvatar_SetSprite(playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_ROCKET_SAVING, PlayerAvatar_GetGender(playerAvatar)));
 }
 
@@ -413,7 +477,6 @@ void Field_StartPushBoulderTask(int direction, FieldSystem *fieldSystem, PlayerA
     FieldSystem_CreateTask(fieldSystem, Task_PushBoulder, work);
 }
 
-#pragma force_active on
 BOOL Task_PushBoulder(TaskManager *taskManager) {
     PushBoulderWork *work = TaskManager_GetEnvironment(taskManager);
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->playerAvatar);
@@ -469,7 +532,6 @@ BOOL Field_TryDropBoulderIntoHole(FieldSystem *fieldSystem, LocalMapObject *boul
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL PushBoulder_Finish(TaskManager *taskManager, FieldSystem *fieldSystem, LocalMapObject *boulder) {
     if (Field_TryDropBoulderIntoHole(fieldSystem, boulder) == FALSE) {
@@ -479,7 +541,6 @@ BOOL PushBoulder_Finish(TaskManager *taskManager, FieldSystem *fieldSystem, Loca
     return FALSE;
 }
 
-#pragma force_active on
 void Field_StartSurfTask(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim) {
     SurfWork *work = FieldMoveTask_AllocWork(sizeof(SurfWork));
     work->direction = direction;
@@ -489,8 +550,6 @@ void Field_StartSurfTask(FieldSystem *fieldSystem, int direction, FieldMoveAnim 
     work->anim = *anim;
     TaskManager_Call(fieldSystem->taskman, Task_Surf, work);
 }
-
-#pragma force_active reset
 
 void CallFieldTask_Surf(TaskManager *taskManager, int direction, int partySlot) {
     u32 state;
@@ -522,7 +581,6 @@ BOOL Field_PlayerCanSurfOnTile(PlayerAvatar *playerAvatar, int currentTile, int 
     return FALSE;
 }
 
-#pragma force_active on
 BOOL Task_Surf(TaskManager *taskManager) {
     SurfWork *work = TaskManager_GetEnvironment(taskManager);
     switch (work->state) {
@@ -616,7 +674,6 @@ BOOL Task_Surf(TaskManager *taskManager) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL Field_PlayerAvatar_TryStopSurfing(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int direction, int collision) {
     u32 result;
@@ -769,7 +826,6 @@ BOOL MetatileBehavior_IsRockClimbInDirection(int facingTile, int facingDirection
     return FALSE;
 }
 
-#pragma force_active on
 BOOL Task_RockClimb(TaskManager *taskManager) {
     RockClimbWork *work = TaskManager_GetEnvironment(taskManager);
     int result;
@@ -788,15 +844,14 @@ BOOL Task_RockClimb(TaskManager *taskManager) {
     }
     return result;
 }
-#pragma force_active reset
 
-int RockClimb_StartCutIn(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_StartCutIn(RockClimbWork *work, TaskManager *taskManager) {
     FieldMoveAnim_Start(work->fieldSystem, &work->anim);
     work->state++;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         FollowMon_StartRecall(work->fieldSystem);
         work->state++;
@@ -804,8 +859,7 @@ int RockClimb_WaitCutIn(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-#pragma force_active on
-int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager) {
     u8 count;
     if (FieldSystem_FirstAliveMonHasType(work->fieldSystem, TYPE_NORMAL)) {
         FollowMonMood_Add(work->fieldSystem->followMonMood, 1);
@@ -818,16 +872,15 @@ int RockClimb_FollowMonReact(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int RockClimb_PlayFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_PlayFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
     int species = GetMonData(work->anim.mon, MON_DATA_SPECIES, NULL);
     int form = GetMonData(work->anim.mon, MON_DATA_FORM, NULL);
     PlayCry((u16)species, (u8)form);
     work->state++;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
-#pragma force_active reset
 
-int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
     if (IsCryFinished()) {
         return FIELD_MOVE_TASK_STEP_WAIT;
     }
@@ -836,8 +889,7 @@ int RockClimb_WaitFollowMonCry(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-#pragma force_active on
-int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager) {
     int x = PlayerAvatar_GetXCoord(work->playerAvatar);
     int dx = GetDeltaXByFacingDirection(work->direction);
     int z = PlayerAvatar_GetZCoord(work->playerAvatar);
@@ -851,9 +903,8 @@ int RockClimb_CreateEffect(RockClimbWork *work, TaskManager *taskManager) {
     work->state++;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
-#pragma force_active reset
 
-int RockClimb_StartJump(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_StartJump(RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
         MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, 0x34));
         work->state++;
@@ -861,7 +912,7 @@ int RockClimb_StartJump(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int RockClimb_WaitJump(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_WaitJump(RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_IsMovementPaused(work->mapObject) == TRUE) {
         work->state++;
         RockClimbEffect_SetFollow(work->effect, TRUE);
@@ -869,7 +920,7 @@ int RockClimb_WaitJump(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int RockClimb_StartStep(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_StartStep(RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
         MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, MOVEMENT_RUN_UP));
         work->state++;
@@ -877,8 +928,7 @@ int RockClimb_StartStep(RockClimbWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-#pragma force_active on
-int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager) {
     int direction;
     if (!MapObject_IsMovementPaused(work->mapObject)) {
         return FIELD_MOVE_TASK_STEP_WAIT;
@@ -896,9 +946,8 @@ int RockClimb_CheckNextTile(RockClimbWork *work, TaskManager *taskManager) {
     work->debris = NULL;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
-#pragma force_active reset
 
-int RockClimb_Finish(RockClimbWork *work, TaskManager *taskManager) {
+static int RockClimb_Finish(RockClimbWork *work, TaskManager *taskManager) {
     if (!MapObject_IsMovementPaused(work->mapObject)) {
         return FIELD_MOVE_TASK_STEP_WAIT;
     }
@@ -930,7 +979,6 @@ void CallFieldTask_Waterfall(TaskManager *taskManager, int direction, int partyS
     TaskManager_Call(taskManager, Task_Waterfall, Waterfall_NewWork(fieldSystem, direction, &anim));
 }
 
-#pragma force_active on
 BOOL Task_Waterfall(TaskManager *taskManager) {
     WaterfallWork *work = TaskManager_GetEnvironment(taskManager);
     int result;
@@ -948,9 +996,8 @@ BOOL Task_Waterfall(TaskManager *taskManager) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
-int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
     if (work->anim.useCutIn == TRUE) {
         FieldMoveAnim_Start(work->fieldSystem, &work->anim);
         work->state++;
@@ -960,7 +1007,7 @@ int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_DONE;
 }
 
-int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         PlaySE(SEQ_SE_DP_FW463);
         work->state++;
@@ -968,7 +1015,7 @@ int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     VecFx32 step;
     u8 kind;
@@ -994,7 +1041,7 @@ int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1010,7 +1057,7 @@ int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1036,7 +1083,7 @@ int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_DONE;
 }
 
-int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
     if (work->anim.useCutIn == TRUE) {
         FieldMoveAnim_Start(work->fieldSystem, &work->anim);
         work->state++;
@@ -1046,7 +1093,7 @@ int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_NEXT;
 }
 
-int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         PlaySE(SEQ_SE_DP_FW463);
         work->state++;
@@ -1054,7 +1101,7 @@ int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     VecFx32 step;
     int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(DIR_SOUTH) << 1);
@@ -1083,7 +1130,7 @@ int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.z += work->step.z;
@@ -1101,7 +1148,7 @@ int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1150,7 +1197,6 @@ void CallFieldTask_Whirlpool(TaskManager *taskManager, int direction, int partyS
     Field_StartWhirlpoolTask(fieldSystem, direction, &anim);
 }
 
-#pragma force_active on
 BOOL Task_Whirlpool(TaskManager *taskManager) {
     int result;
     WaterfallWork *work = TaskManager_GetEnvironment(taskManager);
@@ -1163,22 +1209,21 @@ BOOL Task_Whirlpool(TaskManager *taskManager) {
     }
     return result;
 }
-#pragma force_active reset
 
-int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
     FieldMoveAnim_Start(work->fieldSystem, &work->anim);
     work->state++;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         work->state++;
     }
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager) {
     if (FollowMon_IsActive(work->fieldSystem)) {
         MapObject_UnpauseMovement(FollowMon_GetMapObject(work->fieldSystem));
     }
@@ -1188,7 +1233,7 @@ int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
         MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, 4));
         work->state++;
@@ -1196,7 +1241,7 @@ int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-int Whirlpool_CheckNextTile(WaterfallWork *work) {
+static int Whirlpool_CheckNextTile(WaterfallWork *work) {
     if (MapObject_IsMovementPaused(work->mapObject) == FALSE) {
         return FIELD_MOVE_TASK_STEP_WAIT;
     }

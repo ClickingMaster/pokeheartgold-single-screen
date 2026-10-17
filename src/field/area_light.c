@@ -34,7 +34,23 @@ struct AreaLightManager {
     u32 applyChanges;                 // 0x10
 };
 
-extern const char *const gAreaLightFilePaths[AREA_LIGHT_FILE_COUNT];
+static char sAreaLightFileDun20_01[24] = "data/dun20_01light.txt";
+
+static char sAreaLightFileArea01[24] = "data/area01light.txt";
+
+static char sAreaLightFileArea02[24] = "data/area02light.txt";
+
+static char sAreaLightFileArea00[24] = "data/area00light.txt";
+
+static char sAreaLightFileDun20_02[24] = "data/dun20_02light.txt";
+
+static const char *const sAreaLightFilePaths[5] = {
+    sAreaLightFileArea00,
+    sAreaLightFileArea01,
+    sAreaLightFileArea02,
+    sAreaLightFileDun20_01,
+    sAreaLightFileDun20_02,
+};
 
 AreaLightManager *AreaLightManager_New(ModelAttributes *areaModelAttributes, const u32 archiveID) {
     AreaLightManager *areaLightManager;
@@ -45,7 +61,7 @@ AreaLightManager *AreaLightManager_New(ModelAttributes *areaModelAttributes, con
     GF_ASSERT(archiveID < AREA_LIGHT_FILE_COUNT);
     areaLightManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(AreaLightManager));
     areaLightManager->modelAttributes = areaModelAttributes;
-    areaLightManager->count = AreaLight_LoadEntries(gAreaLightFilePaths[archiveID], &areaLightManager->entries);
+    areaLightManager->count = AreaLight_LoadEntries(sAreaLightFilePaths[archiveID], &areaLightManager->entries);
     areaLightManager->activeIndex = 0;
     sec = GF_RTC_TimeToSec() / 2;
     i = 0;
@@ -134,7 +150,6 @@ void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model) {
     NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_EMISSION);
 }
 
-#pragma force_active on
 // Each entry is 10 lines: "endTime,...", 4 light lines, 4 material color lines and one more; the file ends with "EOF".
 int AreaLight_LoadEntries(const char *path, AreaLightEntry **entriesOut) {
     s8 line[256];
@@ -191,7 +206,6 @@ int AreaLight_LoadEntries(const char *path, AreaLightEntry **entriesOut) {
     Heap_FreeExplicit(HEAP_ID_FIELD1, (void *)data);
     return count;
 }
-#pragma force_active reset
 
 void AreaLight_FreeEntries(AreaLightEntry **entries) {
     Heap_FreeExplicit(HEAP_ID_FIELD1, *entries);
@@ -273,7 +287,7 @@ void LoadAreaOrDungeonLightTxt(u32 archiveID, ModelAttributes *modelAttributes) 
     AreaLightEntry *entry;
 
     GF_ASSERT(archiveID < AREA_LIGHT_FILE_COUNT);
-    count = AreaLight_LoadEntries(gAreaLightFilePaths[archiveID], &entries);
+    count = AreaLight_LoadEntries(sAreaLightFilePaths[archiveID], &entries);
     sec = GF_RTC_TimeToSec() / 2;
     i = 0;
     if (count > 0) {

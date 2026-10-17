@@ -136,14 +136,6 @@ typedef struct BattleHallApp {
     u8 unk_27E[6];                   // 0x27E
 } BattleHallApp;
 
-extern const u8 gBattleHallAppSummaryPages[];
-extern const GraphicsModes gBattleHallAppGraphicsModes;
-extern const BgTemplate gBattleHallAppSubBg0Template;
-extern const BgTemplate gBattleHallAppBg0Template;
-extern const BgTemplate gBattleHallAppBg1Template;
-extern const BgTemplate gBattleHallAppBg3Template;
-extern const BgTemplate gBattleHallAppSubBg1Template;
-extern const GraphicsBanks gBattleHallAppGraphicsBanks;
 extern const u8 gBattleHallAppResObjCounts[4];
 extern const ObjCharTransferTemplate gBattleHallAppCharTransferTemplate;
 extern const WindowTemplate gBattleHallAppWindowTemplates[4];
@@ -239,6 +231,103 @@ static YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId);
 static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt);
 static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch);
 static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt);
+
+static const u8 sBattleHallAppSummaryPages[] = { 0, 1, 2, 3, 4 };
+
+static const GraphicsModes sBattleHallAppGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const BgTemplate sBattleHallAppBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x0800,
+    .charBase = GX_BG_CHARBASE_0x0c000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleHallAppBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x0000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleHallAppBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x2000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleHallAppSubBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7800,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleHallAppSubBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sBattleHallAppGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
 
 BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     BattleHallApp *app;
@@ -412,7 +501,6 @@ static void BattleHallApp_PrintTitle(BattleHallApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, bgId);
 }
 
-#pragma force_active on
 // Frame tiles: corners at tile+0/2/6/8, edges at tile+1/3/5/7
 static void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u16 tile, u16 palette) {
     FillBgTilemapRect(bgConfig, bgId, tile, x, y, 1, 1, palette);
@@ -424,7 +512,6 @@ static void BattleHallApp_DrawFrame(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 
     FillBgTilemapRect(bgConfig, bgId, tile + 3, x, y + 1, 1, height - 2, palette);
     FillBgTilemapRect(bgConfig, bgId, tile + 5, x + width - 1, y + 1, 1, height - 2, palette);
 }
-#pragma force_active reset
 
 static BOOL BattleHallApp_RunSummary(BattleHallApp *app) {
     if (app->subState == 0) {
@@ -452,7 +539,6 @@ enum {
     HALL_SELECT_OPEN_SUMMARY,
 };
 
-#pragma force_active on
 static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
     switch (app->subState) {
     case HALL_SELECT_INIT:
@@ -582,7 +668,6 @@ static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 enum {
     HALL_LINK_CMD_PING = 4,
@@ -838,7 +923,6 @@ static void BattleHallApp_DisableDisplay(void) {
     GXS_SetVisiblePlane(0);
 }
 
-#pragma force_active on
 static void BattleHallApp_InitGraphics(BattleHallApp *app) {
     int i, x;
     u16 y;
@@ -887,7 +971,6 @@ static void BattleHallApp_InitBgGraphics(BattleHallApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     BattleHallApp_LoadSubBgGraphics(app, GF_BG_LYR_SUB_1);
 }
-#pragma force_active reset
 
 static void BattleHallApp_InitSprites(BattleHallApp *app) {
     Pokemon *mon = Party_GetMonByIndex(app->party, 0);
@@ -919,37 +1002,37 @@ static void BattleHallApp_VBlankCallback(BattleHallApp *app) {
 }
 
 static void BattleHallApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = gBattleHallAppGraphicsBanks;
+    GraphicsBanks banks = sBattleHallAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 static void BattleHallApp_InitBgLayers(BgConfig *bgConfig) {
-    GraphicsModes modes = gBattleHallAppGraphicsModes;
+    GraphicsModes modes = sBattleHallAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
-        BgTemplate bg = gBattleHallAppBg0Template;
+        BgTemplate bg = sBattleHallAppBg0Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_105);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate bg = gBattleHallAppBg1Template;
+        BgTemplate bg = sBattleHallAppBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_105);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate bg = gBattleHallAppBg3Template;
+        BgTemplate bg = sBattleHallAppBg3Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
     {
-        BgTemplate bg = gBattleHallAppSubBg1Template;
+        BgTemplate bg = sBattleHallAppSubBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
     {
-        BgTemplate bg = gBattleHallAppSubBg0Template;
+        BgTemplate bg = sBattleHallAppSubBg0Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
@@ -1010,7 +1093,6 @@ static void BattleHallApp_BufferNumber(BattleHallApp *app, u32 field, u32 value)
     BufferIntegerAsString(app->msgFormat, field, value, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
 }
 
-#pragma force_active on
 static void BattleHallApp_PrintMonName(BattleHallApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId) {
     u16 name[12];
     String *string;
@@ -1051,7 +1133,6 @@ static void BattleHallApp_PrintTypeNames(BattleHallApp *app, Window *window, int
     DestroyMsgData(msgData);
     CopyWindowToVram(window);
 }
-#pragma force_active reset
 
 static void BattleHallApp_PrintNumber(BattleHallApp *app, Window *window, u32 value, u32 x, u32 y) {
     PrintUIntOnWindow(app->messagePrinter, value, 2, PRINTING_MODE_LEFT_ALIGN, window, x, y);
@@ -1116,7 +1197,7 @@ static void BattleHallApp_CreateSummaryArgs(BattleHallApp *app) {
     app->summaryArgs->unk2C = PokemonSummary_GetDefaultUnk2C(app->saveData);
     app->summaryArgs->ribbons = Save_SpecialRibbons_Get(app->saveData);
     app->summaryArgs->isFlag982Set = 0;
-    PokemonSummary_SetPages(app->summaryArgs, gBattleHallAppSummaryPages);
+    PokemonSummary_SetPages(app->summaryArgs, sBattleHallAppSummaryPages);
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
@@ -1203,7 +1284,6 @@ static void BattleHallApp_HandleDpad(BattleHallApp *app, int unused) {
     }
 }
 
-#pragma force_active on
 static BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
     u16 x, y;
     int row, column;
@@ -1235,7 +1315,6 @@ static BOOL BattleHallApp_HandleTouch(BattleHallApp *app) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 static BOOL BattleHallApp_HandleConfirm(BattleHallApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_A) {
@@ -1271,7 +1350,6 @@ static void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-#pragma force_active on
 // state: 0 = normal, 1 = selected, 2 = partner's choice, 3 = unavailable
 static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int state) {
     u8 palette;
@@ -1335,7 +1413,6 @@ static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int stat
         }
     }
 }
-#pragma force_active reset
 
 static u8 BattleHallApp_GetRecordIndex(u8 index) {
     if (index >= 17) {
@@ -1450,7 +1527,6 @@ static void BattleHallApp_ResetYesNo(BattleHallApp *app) {
     }
 }
 
-#pragma force_active on
 static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
     u8 rank;
     int msgId;
@@ -1473,7 +1549,6 @@ static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
     BattleHallApp_InitYesNo(app->yesNoPrompt, app->bgConfig, app->usedTouch);
     app->yesNoActive = 1;
 }
-#pragma force_active reset
 
 static void BattleHallApp_CancelConfirm(BattleHallApp *app) {
     BattleHallApp_ClearMessage(app);
@@ -1652,7 +1727,6 @@ static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt) {
     YesNoPrompt_Destroy(prompt);
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch) {
@@ -1674,7 +1748,6 @@ static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 
     YesNoPrompt_InitFromTemplate(prompt, &template);
 }
 #pragma pop
-#pragma force_active reset
 
 static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt) {
     return YesNoPrompt_HandleInput(prompt);

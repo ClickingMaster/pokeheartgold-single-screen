@@ -261,10 +261,6 @@ void Comm_InitSyncedSave(s32 *state);
 s32 Comm_SyncedSave(SaveData *saveData, s32 unused, s32 *state);
 void Comm_StoreFriendFromPlayer(SaveData *saveData, s32 netId, s32 slot, enum HeapID heapID, u32 mode);
 
-extern const u8 sWirelessTradeSelectMonSummaryPages[];
-extern const TouchscreenListMenuTemplate sWirelessTradeSelectMonTouchMenuTemplate;
-extern const ObjCharTransferTemplate sWirelessTradeSelectMonObjCharTransferTemplate;
-extern const GraphicsModes sWirelessTradeSelectMonGraphicsModes;
 // The cursor anim of each side: own slot, partner slot, quit.
 extern const u32 sWirelessTradeSelectMonCursorAnims[][3];
 extern const u32 ov65_0221FD6C[][3];
@@ -424,6 +420,35 @@ enum WirelessTradeSelectExchangeState {
     WIRELESS_TRADE_EXCHANGE_WAIT_MAIN_SCREEN,
     WIRELESS_TRADE_EXCHANGE_SHOW_SUB_SCREEN,
     WIRELESS_TRADE_EXCHANGE_WAIT_SUB_SCREEN,
+};
+
+static const u8 sWirelessTradeSelectMonSummaryPages[] = { 0, 1, 2, 3, 4 };
+
+static const TouchscreenListMenuTemplate sWirelessTradeSelectMonTouchMenuTemplate = {
+    .wrapAround = 0,
+    .centered = 1,
+    .xOffset = 0,
+    .bgId = 0,
+    .plttOffset = 12,
+    .unk4 = 0,
+    .unk5 = 0,
+    .baseTile = 0x180,
+    .charOffset = 0x1CE,
+    .unkA = 78,
+};
+
+static const ObjCharTransferTemplate sWirelessTradeSelectMonObjCharTransferTemplate = {
+    .maxTasks = 20,
+    .sizeMain = 0x1000,
+    .sizeSub = 0x800,
+    .heapID = HEAP_ID_26,
+};
+
+static const GraphicsModes sWirelessTradeSelectMonGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
 };
 
 BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {

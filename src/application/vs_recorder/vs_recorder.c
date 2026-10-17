@@ -44,11 +44,6 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
-extern const GraphicsModes sVsRecorderGraphicsModes;
-extern const OamCharTransferParam sVsRecorderOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sVsRecorderSpriteResourceCounts;
-extern const OamManagerParam sVsRecorderOamManagerParam;
-extern const GraphicsBanks sVsRecorderGraphicsBanks;
 extern const BgTemplate sVsRecorderBgTemplate_Main0;
 extern const BgTemplate sVsRecorderBgTemplate_Main1;
 extern const BgTemplate sVsRecorderBgTemplate_Main2;
@@ -77,7 +72,46 @@ extern VsRecorderScreenFunc sVsRecorderDeleteSubStates[];
 static void VsRecorder_InitBgLayers(BgConfig *bgConfig);
 static void VsRecorder_InitSpriteSystem(VsRecorderWork *work);
 
-#pragma force_active on
+static const GraphicsModes sVsRecorderGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const OamCharTransferParam sVsRecorderOamCharTransferParam = {
+    .maxTasks = 128,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_128K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_128K,
+};
+
+static const SpriteResourceCountsListUnion sVsRecorderSpriteResourceCounts = { 128, 32, 128, 128, 16, 16 };
+
+static const OamManagerParam sVsRecorderOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 4,
+    .numOBJsub = 124,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sVsRecorderGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
 
 void VsRecorder_InitResources(VsRecorderWork *work) {
     VsRecorderBannerArgs args;
@@ -149,8 +183,6 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     VsRecorder_StartVBlankTask(work);
 }
 
-#pragma force_active reset
-
 void VsRecorder_FreeResources(VsRecorderWork *work) {
     int i;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
@@ -211,8 +243,6 @@ void VsRecorder_FreeResources(VsRecorderWork *work) {
     GF_DestroyVramTransferManager();
 }
 
-#pragma force_active on
-
 static void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes;
     GraphicsBanks banks;
@@ -255,8 +285,6 @@ static void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, 7, 8);
     G2S_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_OBJ, 7, 8);
 }
-
-#pragma force_active reset
 
 void VsRecorder_SetScreensFlipped(int flipped) {
     gSystem.screensFlipped = flipped;

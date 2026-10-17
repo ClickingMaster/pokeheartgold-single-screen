@@ -977,12 +977,10 @@ Overlay field
     Object src/field/map_prop_animation.o
     Object src/field/door_transition.o
     Object src/field/area_light.o
-    Object asm/door_transition_area_light_data.o
     Object src/field/build_model_shapes.o
     Object src/field_fog.o
     Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
-    Object asm/field_camera_data.o
     Object src/field/field_bottom_screen.o
     Object src/field/field_texture_manager.o
     Object src/field/weather_manager.o
@@ -996,26 +994,20 @@ Overlay field
     Object asm/encounter_effect_data.o
     Object src/field/encounter_effect_wave_direction.o
     Object src/field/field_effect_manager.o
-    Object asm/field_effect_manager_data.o
     Object src/field/field_effect_manager_texture.o
     Object src/field/player_avatar_actions.o
-    Object asm/player_avatar_actions_data.o
     Object src/field/spin_slide.o
     Object src/field/warp_spin.o
     Object src/field/map_prop_manager.o
     Object src/field/signpost.o
-    Object asm/save_stats_printer_data.o
     Object src/field/save_stats_printer.o
     Object src/field/field_motion_blur.o
-    Object asm/map_load_manager_data.o
     Object src/field/map_load_manager.o
     Object src/field/bottom_screen_app.o
     Object src/field/pal_pad_registration.o
     Object asm/overlay_01_sprite_data.o
     Object src/field/map_object_billboard_motion.o
-    Object asm/map_object_billboard_motion_data.o
     Object src/field/map_object_models.o
-    Object asm/map_object_render_data.o
     Object src/field/map_object_render.o
     Object src/field/map_load_buffers.o
     Object src/field/bdhc.o
@@ -1023,7 +1015,6 @@ Overlay field
     Object src/field/hblank_system.o
     Object src/field/field_poison_effect.o
     Object src/field/area_data.o
-    Object asm/area_data_tables.o
     Object src/field/honey_sweet_scent.o
     Object src/field/resource_bank.o
     Object asm/overlay_01_data_02208BFC.o
@@ -1032,13 +1023,9 @@ Overlay field
     Object src/field/field_move_sweet_scent.o
     Object src/field/map_object_model_list.o
     Object src/field/field_shadow.o
-    Object asm/field_shadow_data.o
-    Object asm/field_reflection_data.o
     Object src/field/field_reflection.o
     Object src/field/field_footprints.o
-    Object asm/field_apricorn_regrowth_data.o
     Object src/field/field_apricorn_regrowth.o
-    Object asm/field_apricorn_regrowth_gfx_data.o
     Object src/field/field_surf_mount.o
     Object src/field/field_rock_climb_effect.o
     Object src/field/field_puddle_splash.o
@@ -1056,21 +1043,17 @@ Overlay field
     Object asm/field_emote_mark_data.o
     Object src/field/field_union_chat_marker.o
     Object src/field/field_warp_arrow.o
-    Object asm/field_warp_arrow_data.o
     Object src/field/scrcmd_pokemon_misc.o
     Object src/field/scrcmd_move_tutor.o
     Object src/field/scrcmd_moneybox.o
     Object src/field/field_follow_mon_ball.o
-    Object asm/field_follow_mon_ball_data.o
     Object src/field/field_emote_bubble.o
-    Object asm/field_flash_darkness_data.o
     Object src/field/field_flash_darkness.o
     Object src/field/map_prop_render.o
     Object src/field/apricorn_tree_anim.o
     Object src/field/rock_smash_item.o
     Object src/field/headbutt.o
     Object src/field/field_shaymin_form_change.o
-    Object asm/field_shaymin_form_change_data.o
     Object src/field/field_follow_mon.o
     Object asm/field_follow_mon_data.o
 }
@@ -1078,7 +1061,6 @@ Overlay OVY_2
 {
     After field
     Object src/field/script_field_effects.o
-    Object asm/script_field_effects_data.o
     Object src/field/encounter_check.o
     Object src/field/sprite_gfx_manager.o
     Object src/field/fly_landing_effect.o
@@ -1874,7 +1856,6 @@ Overlay OVY_69
 {
     After main
     Object src/geonet_globe_app.o
-    Object asm/geonet_globe_app_data.o
 }
 Overlay OVY_70
 {

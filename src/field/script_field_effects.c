@@ -137,12 +137,6 @@ typedef struct LanceFliesAwayEnv {
     SysTask *flyTask;
 } LanceFliesAwayEnv;
 
-extern const WindowTemplate sAlphHiddenRoomWindowTemplate;
-extern const FieldAnimModelTemplate sLegendaryWingModels[];
-extern const TrapEffectTemplate sTrapEffects[];
-extern const u16 *sLegendaryWingLoopAnimLists[];
-extern const u16 *sLegendaryWingEndAnimLists[];
-
 LighthouseLightUpEnv *LighthouseLightUp_CreateTaskEnv(FieldSystem *fieldSystem);
 BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager);
 void LighthouseLightUp_Load(LighthouseLightUpEnv *env);
@@ -178,6 +172,89 @@ BOOL AlphHiddenRoom_IsAButtonPressed(void);
 LanceFliesAwayEnv *LanceFliesAway_CreateTaskEnv(FieldSystem *fieldSystem, LocalMapObject *lance, LocalMapObject *dragoniteObject);
 BOOL Task_LanceFliesAway(TaskManager *taskManager);
 
+static const u16 sElectricTrapAnims[1] = { NARC_legend_legend_00000011_NSBCA };
+
+static const u16 sPoisonTrapAnims[2] = { NARC_legend_legend_00000004_NSBCA, NARC_legend_legend_00000005_NSBMA };
+
+static const u16 sLegendaryWingLoopAnims1[3] = { NARC_legend_legend_00000069_NSBCA, NARC_legend_legend_00000070_NSBMA, NARC_legend_legend_00000071_NSBTP };
+
+static const u16 sRockTrapAnims[3] = { NARC_legend_legend_00000007_NSBCA, NARC_legend_legend_00000008_NSBMA, NARC_legend_legend_00000009_NSBTA };
+
+static const u16 sLegendaryWingEndAnims0[3] = { NARC_legend_legend_00000062_NSBCA, NARC_legend_legend_00000063_NSBMA, NARC_legend_legend_00000064_NSBTP };
+
+static const u16 sLegendaryWingEndAnims1[3] = { NARC_legend_legend_00000072_NSBCA, NARC_legend_legend_00000073_NSBMA, NARC_legend_legend_00000074_NSBTP };
+
+static const u16 sLegendaryWingIntroAnims0[3] = { NARC_legend_legend_00000057_NSBCA, NARC_legend_legend_00000056_NSBMA, NARC_legend_legend_00000058_NSBTP };
+
+static const u16 sLegendaryWingLoopAnims0[3] = { NARC_legend_legend_00000059_NSBCA, NARC_legend_legend_00000060_NSBMA, NARC_legend_legend_00000061_NSBTP };
+
+static const u16 sLegendaryWingIntroAnims1[3] = { NARC_legend_legend_00000067_NSBCA, NARC_legend_legend_00000066_NSBMA, NARC_legend_legend_00000068_NSBTP };
+
+static const WindowTemplate sAlphHiddenRoomWindowTemplate = {
+    .bgId = GF_BG_LYR_MAIN_1,
+    .left = 9,
+    .top = 10,
+    .width = 14,
+    .height = 2,
+    .palette = 0,
+    .baseTile = 0x80,
+};
+
+static const FieldAnimModelTemplate sLegendaryWingModels[2] = {
+    {
+     .narcId = NARC_demo_legend,
+     .modelFileId = NARC_legend_legend_00000055_NSBMD,
+     .animCount = 3,
+     .animFileIds = sLegendaryWingIntroAnims0,
+     },
+    {
+     .narcId = NARC_demo_legend,
+     .modelFileId = NARC_legend_legend_00000065_NSBMD,
+     .animCount = 3,
+     .animFileIds = sLegendaryWingIntroAnims1,
+     },
+};
+
+static const TrapEffectTemplate sTrapEffects[3] = {
+    {
+     .model = {
+            .narcId = NARC_demo_legend,
+            .modelFileId = NARC_legend_legend_00000010_NSBMD,
+            .animCount = 1,
+            .animFileIds = sElectricTrapAnims,
+        },
+     .se = SEQ_SE_GS_DENKI_TRAP,
+     },
+    {
+     .model = {
+            .narcId = NARC_demo_legend,
+            .modelFileId = NARC_legend_legend_00000003_NSBMD,
+            .animCount = 2,
+            .animFileIds = sPoisonTrapAnims,
+        },
+     .se = SEQ_SE_GS_DOKU_TRAP,
+     },
+    {
+     .model = {
+            .narcId = NARC_demo_legend,
+            .modelFileId = NARC_legend_legend_00000006_NSBMD,
+            .animCount = 3,
+            .animFileIds = sRockTrapAnims,
+        },
+     .se = SEQ_SE_GS_IWA_TRAP,
+     },
+};
+
+static const u16 *sLegendaryWingLoopAnimLists[1] = {
+    sLegendaryWingLoopAnims0,
+};
+
+static const u16 *sLegendaryWingEndAnimLists[3] = {
+    sLegendaryWingEndAnims0,
+    sLegendaryWingLoopAnims1,
+    sLegendaryWingEndAnims1,
+};
+
 void ShowLighthouseLightUp(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     LighthouseLightUpEnv *env = LighthouseLightUp_CreateTaskEnv(fieldSystem);
@@ -195,8 +272,6 @@ LighthouseLightUpEnv *LighthouseLightUp_CreateTaskEnv(FieldSystem *fieldSystem) 
     env->heapId = HEAP_ID_FIELD1;
     return env;
 }
-
-#pragma force_active on
 
 BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
     LighthouseLightUpEnv *env = TaskManager_GetEnvironment(taskManager);
@@ -253,8 +328,6 @@ BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void LighthouseLightUp_Load(LighthouseLightUpEnv *env) {
     HeapExp_FndInitAllocator(&env->allocator, env->heapId, 32);
@@ -411,8 +484,6 @@ LegendaryWingEnv *LegendaryWing_CreateTaskEnv(FieldSystem *fieldSystem, u32 kind
     return env;
 }
 
-#pragma force_active on
-
 BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
     LegendaryWingEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
@@ -452,8 +523,6 @@ BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void LegendaryWing_AnimateLoop(SysTask *task, void *data) {
     LegendaryWingEnv *env = data;
@@ -580,8 +649,6 @@ void CameraShake_Delete(CameraShake *shake) {
     Heap_Free(shake);
 }
 
-#pragma force_active on
-
 void CameraShake_Start(CameraShake *shake, int amplitudeX, int amplitudeY, u32 repeats, u16 period) {
     VecFx32 target;
     shake->amplitudeX = (fx32)(amplitudeX > 0 ? 0.5f + (float)(amplitudeX << 12) : (float)(amplitudeX << 12) - 0.5f);
@@ -598,14 +665,10 @@ void CameraShake_Start(CameraShake *shake, int amplitudeX, int amplitudeY, u32 r
     Camera_SetStaticPtr(shake->camera);
 }
 
-#pragma force_active reset
-
 void CameraShake_RestoreCamera(CameraShake *shake) {
     shake->ticks = 0;
     Camera_SetStaticPtr(shake->fieldSystem->camera);
 }
-
-#pragma force_active on
 
 BOOL CameraShake_Update(CameraShake *shake) {
     s32 angle;
@@ -633,8 +696,6 @@ BOOL CameraShake_Update(CameraShake *shake) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void ShakeScreen(TaskManager *taskManager, u32 amplitudeX, u32 amplitudeY, u32 repeats, u16 period) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);

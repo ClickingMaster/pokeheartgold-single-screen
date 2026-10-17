@@ -23,7 +23,7 @@ void RenderModel_BindTexturesOnVBlank(void *model);
 void RenderAnimation_LoadFromNarc(void *animation, int unused, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
 void RenderAnimation_InitForModel(void *animation, void *model, void *source, int unused, enum HeapID heapID);
 
-extern const VecFx32 sBillboardDefaultScale;
+static const VecFx32 sBillboardDefaultScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
 FieldEffectManager *FieldEffectManager_New(FieldSystem *fieldSystem, u32 rendererCount, enum HeapID heapID) {
     FieldEffectManager *manager = Heap_Alloc(heapID, sizeof(FieldEffectManager));
@@ -301,8 +301,6 @@ void *FieldEffectManager_CreateBillboardFromRecord(FieldEffectManager *manager, 
     return FieldEffectManager_CreateBillboard(manager, FieldEffectGfx_GetRecord(manager->gfx, id), position);
 }
 
-#pragma force_active on
-
 static inline FieldEffectGfx *FieldEffectManager_GetGfx(FieldEffectManager *manager) {
     return manager->gfx;
 }
@@ -326,8 +324,6 @@ FieldEffectRecord *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32
     GF_ASSERT(record);
     return record;
 }
-
-#pragma force_active reset
 
 void FieldEffectGfx_InitRecords(FieldEffectManager *manager, FieldEffectGfx *gfx, u32 count) {
     FieldEffectRecord *records = FieldEffectManager_HeapAlloc(manager, count * sizeof(FieldEffectRecord), FALSE);
@@ -360,8 +356,6 @@ void FieldEffectGfx_ReleaseRecord(FieldEffectGfx *gfx, u32 id) {
     } while (--i != 0);
     GF_AssertFail();
 }
-
-#pragma force_active on
 
 FieldEffectRecord *FieldEffectGfx_AddRecord(FieldEffectGfx *gfx, u32 id, void *a2, const FieldEffectGfxSequence *sequence, NNSG3dResTex *tex, GF_3DGfxRawResObj *texObj, int a6) {
     FieldEffectRecord *record = NULL;
@@ -402,8 +396,6 @@ FieldEffectRecord *FieldEffectGfx_AddRecord(FieldEffectGfx *gfx, u32 id, void *a
     record->unk_08 = a6;
     return record;
 }
-
-#pragma force_active reset
 
 FieldEffectRecord *FieldEffectGfx_GetRecord(FieldEffectGfx *gfx, u32 id) {
     u32 i = gfx->recordCount;
@@ -492,8 +484,6 @@ void FieldEffectManager_InitRenderAnimation(FieldEffectManager *manager, void *a
     RenderAnimation_InitForModel(animation, model, source, unused, manager->heapID);
 }
 
-#pragma force_active on
-
 void FieldEffectManager_InitModel(FieldEffectManager *manager, NNSG3dRenderObj *renderObj, NNSG3dResMdl **ppMdl, NNSG3dResFileHeader **ppRes) {
     NNSG3dResTex *tex = NNS_G3dGetTex(*ppRes);
     if (tex != NULL && !GF3dRender_ResTexIsLoaded(tex)) {
@@ -506,8 +496,6 @@ void FieldEffectManager_InitModel(FieldEffectManager *manager, NNSG3dRenderObj *
     GF_ASSERT(ppMdl != NULL);
     NNS_G3dRenderObjInit(renderObj, *ppMdl);
 }
-
-#pragma force_active reset
 
 void FieldEffectManager_LoadModel(FieldEffectManager *manager, u32 fileId, BOOL atEnd, NNSG3dRenderObj *renderObj, NNSG3dResMdl **ppMdl, NNSG3dResFileHeader **ppRes) {
     *ppRes = FieldEffectManager_LoadNarcMember(manager, fileId, atEnd);

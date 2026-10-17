@@ -141,7 +141,6 @@ extern const GraphicsModes sGlobalTerminalConnectGraphicsModes;
 extern const GraphicsBanks sGlobalTerminalConnectGraphicsBanks;
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectMainBgTemplates;
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectSubBgTemplates;
-extern BOOL (*sGlobalTerminalConnectStates[])(GlobalTerminalConnectWork *work);
 
 BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state);
 BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state);
@@ -178,7 +177,22 @@ BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork 
 BOOL GlobalTerminalConnect_StateWaitMessage(GlobalTerminalConnectWork *work);
 BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work);
 
-#pragma force_active on
+static BOOL (*sGlobalTerminalConnectStates[14])(GlobalTerminalConnectWork *) = {
+    GlobalTerminalConnect_StateAskConnect,
+    GlobalTerminalConnect_StateStartConnect,
+    GlobalTerminalConnect_StateWaitConnect,
+    GlobalTerminalConnect_StateStartAuth,
+    GlobalTerminalConnect_StateWaitAuth,
+    GlobalTerminalConnect_StateSaveProfileId,
+    GlobalTerminalConnect_StateShowError,
+    GlobalTerminalConnect_StateWaitErrorAck,
+    GlobalTerminalConnect_StateExit,
+    GlobalTerminalConnect_StateExit,
+    GlobalTerminalConnect_StateShowServerError,
+    GlobalTerminalConnect_StateServerErrorDisconnect,
+    GlobalTerminalConnect_StateWaitMessage,
+    GlobalTerminalConnect_StateDisconnect,
+};
 
 BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     GlobalTerminalConnectWork *work;
@@ -241,8 +255,6 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     work->args->isConnected = FALSE;
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state) {
     GlobalTerminalConnectWork *work = OverlayManager_GetData(manager);
@@ -706,8 +718,6 @@ BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     int errorCode;
     u32 errorType;
@@ -768,8 +778,6 @@ BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
     work->args->isConnected = TRUE;
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work) {
     int msgId = WifiConnection_ClassifyErrorCode(-work->errorCode, work->errorType);

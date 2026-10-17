@@ -132,20 +132,11 @@ enum {
 
 #define EASY_CHAT_CATEGORY_BACK 0xFE // the back button below the category list
 
-extern const TouchscreenHitbox gEasyChatInitialGridHitboxes[];
-extern const TouchscreenHitbox gEasyChatWordListHitboxes[];
-extern const TouchscreenHitbox gEasyChatListButtonHitboxes[];
-extern const TouchscreenHitbox gEasyChatOneWordMenuHitboxes[];
-extern const TouchscreenHitbox gEasyChatTwoWordMenuHitboxes[];
-extern const TouchscreenHitbox gEasyChatMessageMenuHitboxes[];
-extern const TouchscreenHitbox gEasyChatButtonHitboxes[];
 // Category grid neighbours, 4 bytes per category (13th: the back button): up, down, left, right.
 extern const u8 gEasyChatCategoryGridNeighbors[];
 extern const u8 gEasyChatCategoryGridNeighborDown[];
 extern const u8 gEasyChatCategoryGridNeighborLeft[];
 extern const u8 gEasyChatCategoryGridNeighborRight[];
-extern const EasyChatAppHandler gEasyChatAppHandlers[];
-extern BOOL (*const gEasyChatCategoryCursorFuncs[])(EasyChatApp *app);
 
 void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg);
 EasyChatApp *EasyChatApp_Create(OverlayManager *man);
@@ -209,6 +200,66 @@ BOOL EasyChatApp_HasChanged(EasyChatApp *app);
 BOOL EasyChatApp_IsComplete(EasyChatApp *app);
 void EasyChatYesNo_Set(u8 *result, u8 a, u8 b);
 u8 EasyChatYesNo_GetCursor(u8 *result);
+
+static const TouchscreenHitbox sEasyChatInitialGridHitboxes[2] = {
+    { .rect = { 64, 128, 20, 215 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static BOOL (*const sEasyChatCategoryCursorFuncs[2])(EasyChatApp *) = {
+    EasyChatApp_MoveCategoryGridCursor,
+    EasyChatApp_MoveInitialGridCursor,
+};
+
+static const TouchscreenHitbox sEasyChatWordListHitboxes[3] = {
+    { .rect = { 48, 104, 228, 252 } },
+    { .rect = { 104, 160, 228, 252 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const EasyChatAppHandler sEasyChatAppHandlers[3] = {
+    EasyChatApp_Handler_WordMenu,
+    EasyChatApp_Handler_WordMenu,
+    EasyChatApp_Handler_MessageMenu,
+};
+
+static const TouchscreenHitbox sEasyChatListButtonHitboxes[4] = {
+    { .rect = { 164, 186, 196, 252 } },
+    { .rect = { 0, 42, 16, 104 } },
+    { .rect = { 0, 42, 152, 240 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sEasyChatOneWordMenuHitboxes[4] = {
+    { .rect = { 112, 128, 192, 0 } },
+    { .rect = { 136, 152, 192, 0 } },
+    { .rect = { 16, 32, 80, 176 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sEasyChatTwoWordMenuHitboxes[5] = {
+    { .rect = { 112, 128, 192, 0 } },
+    { .rect = { 136, 152, 192, 0 } },
+    { .rect = { 16, 32, 24, 120 } },
+    { .rect = { 16, 32, 136, 232 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sEasyChatMessageMenuHitboxes[5] = {
+    { .rect = { 112, 128, 192, 0 } },
+    { .rect = { 136, 152, 192, 0 } },
+    { .rect = { 52, 76, 8, 40 } },
+    { .rect = { 52, 76, 216, 248 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sEasyChatButtonHitboxes[5] = {
+    { .rect = { 24, 80, 24, 112 } },
+    { .rect = { 112, 168, 24, 112 } },
+    { .rect = { 40, 72, 176, 208 } },
+    { .rect = { 120, 152, 176, 208 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
 
 BOOL EasyChat_Init(OverlayManager *man, int *state) {
     EasyChatApp *app;
@@ -306,7 +357,7 @@ EasyChatApp *EasyChatApp_Create(OverlayManager *man) {
     }
     app->menu = ECMenu_New(HEAP_ID_34, app->args);
     app->view = EasyChatAppView_Create(app, app->menu);
-    app->touchHitboxes = TouchHitboxController_Create(gEasyChatButtonHitboxes, 5, EasyChatApp_OnTouchButton, app, HEAP_ID_34);
+    app->touchHitboxes = TouchHitboxController_Create(sEasyChatButtonHitboxes, 5, EasyChatApp_OnTouchButton, app, HEAP_ID_34);
     app->unk_44 = 0;
     app->unk_48 = 0;
     app->listMode = EASY_CHAT_LIST_MODE_CATEGORIES;
@@ -401,7 +452,7 @@ BOOL EasyChatApp_UpdateMenuInputState(EasyChatApp *app, u32 *state) {
 }
 
 int EasyChatApp_Handler_Main(EasyChatApp *app, u32 *state) {
-    return gEasyChatAppHandlers[app->type](app, state);
+    return sEasyChatAppHandlers[app->type](app, state);
 }
 
 int EasyChatApp_WordMenuAction(EasyChatApp *app, int action) {
@@ -466,12 +517,12 @@ int EasyChatApp_WordMenuHandleKeys(EasyChatApp *app) {
 
 int EasyChatApp_GetOneWordMenuTouch(EasyChatApp *app) {
 #pragma unused(app)
-    return TouchscreenHitbox_FindRectAtTouchNew(gEasyChatOneWordMenuHitboxes);
+    return TouchscreenHitbox_FindRectAtTouchNew(sEasyChatOneWordMenuHitboxes);
 }
 
 int EasyChatApp_GetTwoWordMenuTouch(EasyChatApp *app) {
 #pragma unused(app)
-    return TouchscreenHitbox_FindRectAtTouchNew(gEasyChatTwoWordMenuHitboxes);
+    return TouchscreenHitbox_FindRectAtTouchNew(sEasyChatTwoWordMenuHitboxes);
 }
 
 int EasyChatApp_WordMenuHandleTouch(EasyChatApp *app) {
@@ -700,7 +751,7 @@ int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
             PlaySE(SEQ_SE_DP_SELECT);
             return 6;
         }
-        result = TouchscreenHitbox_FindRectAtTouchNew(gEasyChatMessageMenuHitboxes);
+        result = TouchscreenHitbox_FindRectAtTouchNew(sEasyChatMessageMenuHitboxes);
         if (result == -1) {
             count = EasyChatAppView_GetNumWordSlots(app->view);
             for (i = 0; i < count; i++) {
@@ -863,7 +914,7 @@ void EasyChatApp_CategoryMenuHandleKeys(EasyChatApp *app, u32 *state) {
 }
 
 int EasyChatApp_GetListButtonTouch(EasyChatApp *app) {
-    int result = TouchscreenHitbox_FindRectAtTouchNew(gEasyChatListButtonHitboxes);
+    int result = TouchscreenHitbox_FindRectAtTouchNew(sEasyChatListButtonHitboxes);
 
     if (result == -1) {
         return 0;
@@ -919,7 +970,7 @@ int EasyChatApp_GetCategoryGridTouch(EasyChatApp *app) {
 
 int EasyChatApp_GetInitialGridTouch(EasyChatApp *app) {
     int result;
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(gEasyChatInitialGridHitboxes);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(sEasyChatInitialGridHitboxes);
 
     result = -1;
     if (hit != result) {
@@ -1002,7 +1053,7 @@ BOOL EasyChatApp_CategoryHasWords(ECMenu *menu, u8 listMode, u16 category) {
 }
 
 BOOL EasyChatApp_MoveCategoryCursor(EasyChatApp *app) {
-    return gEasyChatCategoryCursorFuncs[app->listMode](app);
+    return sEasyChatCategoryCursorFuncs[app->listMode](app);
 }
 
 BOOL EasyChatApp_MoveCategoryGridCursor(EasyChatApp *app) {
@@ -1208,7 +1259,7 @@ int EasyChatApp_GetWordListTouch(EasyChatApp *app) {
     if (!System_GetTouchNew()) {
         return 0;
     }
-    hit = TouchscreenHitbox_FindRectAtTouchNew(gEasyChatWordListHitboxes);
+    hit = TouchscreenHitbox_FindRectAtTouchNew(sEasyChatWordListHitboxes);
     switch (hit) {
     case 0:
         return EasyChatWordPage_PageUp(&app->wordPage);

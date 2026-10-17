@@ -1,42 +1,4 @@
 	.include "asm/macros.inc"
-	.public _0225F034
-	.public _0225F040
-	.public _0225F050
-	.public _0225F0A2
-	.public _0225F0E0
-	.public _0225F100
-	.public _0225F124
-	.public _0225F134
-	.public _0225F136
-	.public _0225F256
-	.public _0225F262
-	.public _0225F274
-	.public _0225F2A4
-	.public _0225F2B8
-	.public _0225F2BC
-	.public _0225F2C0
-	.public _0225F2C4
-	.public _0225F2C8
-	.public _0225F2CC
-	.public _0225F2D0
-	.public _0225F2D4
-	.public _0225F2D8
-	.public _0225F2DC
-	.public _0225F2E0
-	.public _0225F300
-	.public _0225F308
-	.public _0225F330
-	.public _0225F358
-	.public _0225F394
-	.public _0225F3E4
-	.public _0225F41A
-	.public gEncounterExecutivePetrelIntroParams
-	.public EncounterEffect_TeamRocket
-	.public RocketEffect_RunExecutiveIntro
-	.public gEncounterExecutiveProtonIntroParams
-	.public gEncounterExecutiveArcherIntroParams
-	.public gEncounterExecutiveArianaIntroParams
-	.public gEncounterRocketBossIntroParams
 	.public gEncounterTeamRocketSteps
 	.public gEncounterTeamRocketStepEndX
 	.public gEncounterTeamRocketStepVelocityX
@@ -45,39 +7,11 @@
 	.public gEncounterTeamRocketStepVelocityY
 	.public gEncounterTeamRocketStepDelay
 	.public gEncounterTeamRocketStepRotation
-	.public gEncounterExecutivePetrelIntroParams
-	.public EncounterEffect_TeamRocket
-	.public RocketEffect_LoadBgScreen
-	.public RocketEffect_GetTrainerNameString
-	.public EncounterEffect_ExecutivePetrel
-	.public EncounterEffect_ExecutiveProton
-	.public EncounterEffect_ExecutiveArcher
-	.public EncounterEffect_ExecutiveAriana
-	.public EncounterEffect_RocketBoss
-	.public RocketEffect_RunExecutiveIntro
 	.include "overlay_117.inc"
 	.include "global.inc"
 
 .text
 	.rodata
-
-gEncounterExecutivePetrelIntroParams:
-	.byte 0xDE, 0xDF, 0xE0, 0xE1
-	.byte 0xE8, 0x01, 0x00, 0x00
-
-gEncounterExecutiveProtonIntroParams: ; 0x0225FAD4
-	.byte 0xE2, 0xE3, 0xE4, 0xE5, 0xE6, 0x01, 0x00, 0x00
-
-gEncounterExecutiveArcherIntroParams: ; 0x0225FADC
-	.byte 0xE6, 0xE7, 0xE8, 0xE9
-	.byte 0xE5, 0x01, 0x00, 0x00
-
-gEncounterExecutiveArianaIntroParams: ; 0x0225FAE4
-	.byte 0xEA, 0xEB, 0xEC, 0xED, 0xDF, 0x01, 0x00, 0x00
-
-gEncounterRocketBossIntroParams: ; 0x0225FAEC
-	.byte 0xEE, 0xEF, 0xF0, 0xF1
-	.byte 0xBC, 0x02, 0x00, 0x00
 
 gEncounterTeamRocketSteps: ; 0x0225FAF4
 	.byte 0x00, 0x40, 0x10, 0x00

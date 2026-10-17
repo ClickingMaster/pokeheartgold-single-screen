@@ -169,26 +169,6 @@ typedef union GeonetGlobePosition {
     int values[2];
 } GeonetGlobePosition;
 
-extern const WindowTemplate gGeonetGlobeListWindowTemplate;
-extern const WindowTemplate sGeonetLocationWindowTemplate;
-extern const WindowTemplate sGeonetInfoButtonWindowTemplate;
-extern const WindowTemplate sGeonetExitButtonWindowTemplate;
-extern const WindowTemplate sGeonetYesNoWindowTemplate;
-extern const WindowTemplate sGeonetMessageWindowTemplate;
-extern const WindowTemplate sGeonetPlaceListWindowTemplate;
-extern const VecFx32 sGeonetCameraPosition;
-extern const GraphicsModes sGeonetGraphicsModes;
-extern const GeonetGlobeMenuEntry sGeonetMenuEntries[];
-extern const BgTemplate sGeonetBgTemplate_Text;
-extern const BgTemplate sGeonetBgTemplate_Frame;
-extern const ListMenuTemplate sGeonetMenuTemplate;
-extern const ListMenuTemplate sGeonetPlaceListTemplate;
-extern const MtxFx33 sGeonetGlobeRotationInit;
-extern const MtxFx33 sGeonetMarkerRotationInit;
-extern const MtxFx33 sGeonetLocationRotationInit;
-extern const MtxFx33 sGeonetCursorRotation;
-extern const GraphicsBanks sGeonetGraphicsBanks;
-
 void GeonetGlobe_SetGfxBanks(void);
 void GeonetGlobe_SetGraphicsModes(void);
 void GeonetGlobe_LoadLocations(GeonetGlobe *globe);
@@ -223,6 +203,186 @@ BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, 
 BOOL GeonetGlobe_CountryHasRegions(int country);
 void GeonetGlobe_WrapPosition(int *position);
 int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b);
+
+static const WindowTemplate sGeonetPlaceListWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_2,
+    .left = 3,
+    .top = 2,
+    .width = 26,
+    .height = 14,
+    .palette = 4,
+    .baseTile = 1,
+};
+
+static const WindowTemplate sGeonetGlobeListWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_2,
+    .left = 19,
+    .top = 11,
+    .width = 12,
+    .height = 6,
+    .palette = 4,
+    .baseTile = 0x125,
+};
+
+static const WindowTemplate sGeonetLocationWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_2,
+    .left = 2,
+    .top = 1,
+    .width = 27,
+    .height = 6,
+    .palette = 4,
+    .baseTile = 0xB3,
+};
+
+static const WindowTemplate sGeonetExitButtonWindowTemplate = {
+    .bgId = GF_BG_LYR_MAIN_2,
+    .left = 25,
+    .top = 21,
+    .width = 6,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 0x1CD,
+};
+
+static const WindowTemplate sGeonetMessageWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_2,
+    .left = 2,
+    .top = 19,
+    .width = 27,
+    .height = 4,
+    .palette = 4,
+    .baseTile = 0x16D,
+};
+
+static const WindowTemplate sGeonetYesNoWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_2,
+    .left = 25,
+    .top = 13,
+    .width = 6,
+    .height = 4,
+    .palette = 4,
+    .baseTile = 0x155,
+};
+
+static const WindowTemplate sGeonetInfoButtonWindowTemplate = {
+    .bgId = GF_BG_LYR_MAIN_2,
+    .left = 1,
+    .top = 21,
+    .width = 6,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 0x1C1,
+};
+
+static const VecFx32 sGeonetCameraPosition = { 0, 0, FX32_CONST(296) };
+
+static const GraphicsModes sGeonetGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const GeonetGlobeMenuEntry sGeonetMenuEntries[3] = {
+    { msg_0186_00010, 0 },
+    { msg_0186_00011, 1 },
+    { msg_0186_00012, 2 },
+};
+
+static const BgTemplate sGeonetBgTemplate_Text = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGeonetBgTemplate_Frame = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7800,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const ListMenuTemplate sGeonetMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = NULL,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 3,
+    .maxShowed = 3,
+    .header_X = 0,
+    .item_X = 12,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+static const ListMenuTemplate sGeonetPlaceListTemplate = {
+    .items = NULL,
+    .moveCursorFunc = NULL,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 7,
+    .header_X = 0,
+    .item_X = 12,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 1,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+static const MtxFx33 sGeonetMarkerRotationInit = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const MtxFx33 sGeonetLocationRotationInit = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const MtxFx33 sGeonetGlobeRotationInit = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const MtxFx33 sGeonetCursorRotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const GraphicsBanks sGeonetGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_16_F,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
 
 BOOL GeonetGlobe_Init(OverlayManager *man, int *state) {
     GeonetGlobe *globe;
@@ -322,7 +482,7 @@ BOOL GeonetGlobe_Main(OverlayManager *man, int *state) {
         break;
     case GEONET_GLOBE_STATE_OPEN_MENU:
         if (GeonetGlobe_PrintMessage(globe, msg_0186_00001, TRUE) == TRUE) {
-            GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &gGeonetGlobeListWindowTemplate, &sGeonetMenuTemplate, sGeonetMenuEntries);
+            GeonetGlobe_CreateMenu(globe, &globe->windows[GEONET_GLOBE_WINDOW_LIST], &sGeonetGlobeListWindowTemplate, &sGeonetMenuTemplate, sGeonetMenuEntries);
             *state = GEONET_GLOBE_STATE_HANDLE_MENU;
         }
         break;

@@ -48,9 +48,6 @@ void *BattleRecord_GetProfile(void);
 void VsRecorder_EncryptRecord(SaveData *saveData);
 int VsRecorder_SaveRecordNumber(SaveData *saveData, int numberLow, int numberHigh, void *out1, void *out2);
 
-extern const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[];
-extern OSHeapHandle sGlobalTerminalNetOsHeap;
-
 BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
@@ -148,6 +145,26 @@ typedef struct GlobalTerminalNetVideoView {
     u8 unk_00[0xE4];
     u8 savedNumber[8];
 } GlobalTerminalNetVideoView;
+
+static const GlobalTerminalNetStepFunc sGlobalTerminalNetNoSequence[1] = {
+    NULL,
+};
+
+static const GlobalTerminalNetStepFunc sGlobalTerminalNetErrorSequence[5] = {
+    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqDisconnect,
+    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqStopClient,
+    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqShowError,
+    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqWaitButton,
+    NULL,
+};
+
+static const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[3] = {
+    NULL,
+    sGlobalTerminalNetErrorSequence,
+    sGlobalTerminalNetNoSequence,
+};
+
+static OSHeapHandle sGlobalTerminalNetOsHeap;
 
 void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form) {
     GlobalTerminalNet_DressUpToUploadForm(record, form);

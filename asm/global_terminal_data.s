@@ -21,32 +21,12 @@
 	.extern GlobalTerminalConnect_StateWaitMessage
 	.extern GlobalTerminalConnect_StateDisconnect
 
-	.public sGlobalTerminalNetOsHeap
-	.public sGlobalTerminalNetNoSequence
-	.public sGlobalTerminalNetSequences
-	.public sGlobalTerminalNetErrorSequence
 	.public sGlobalTerminalConnectGraphicsModes
 	.public sGlobalTerminalConnectGraphicsBanks
 	.public sGlobalTerminalConnectMainBgTemplates
 	.public sGlobalTerminalConnectSubBgTemplates
-	.public sGlobalTerminalConnectStates
 
 	.rodata
-
-sGlobalTerminalNetNoSequence:
-	.byte 0x00, 0x00, 0x00, 0x00
-
-sGlobalTerminalNetSequences: ; 0x0222A8B4
-	.byte 0x00, 0x00, 0x00, 0x00
-	.word sGlobalTerminalNetErrorSequence
-	.word sGlobalTerminalNetNoSequence
-
-sGlobalTerminalNetErrorSequence:
-	.word GlobalTerminalNet_SeqDisconnect
-	.word GlobalTerminalNet_SeqStopClient
-	.word GlobalTerminalNet_SeqShowError
-	.word GlobalTerminalNet_SeqWaitButton
-	.byte 0x00, 0x00, 0x00, 0x00
 
 sGlobalTerminalConnectGraphicsModes: ; 0x0222A8D4
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -75,23 +55,4 @@ sGlobalTerminalConnectSubBgTemplates: ; 0x0222A944
 
 	.data
 
-sGlobalTerminalConnectStates:
-	.word GlobalTerminalConnect_StateAskConnect
-	.word GlobalTerminalConnect_StateStartConnect
-	.word GlobalTerminalConnect_StateWaitConnect
-	.word GlobalTerminalConnect_StateStartAuth
-	.word GlobalTerminalConnect_StateWaitAuth
-	.word GlobalTerminalConnect_StateSaveProfileId
-	.word GlobalTerminalConnect_StateShowError
-	.word GlobalTerminalConnect_StateWaitErrorAck
-	.word GlobalTerminalConnect_StateExit
-	.word GlobalTerminalConnect_StateExit
-	.word GlobalTerminalConnect_StateShowServerError
-	.word GlobalTerminalConnect_StateServerErrorDisconnect
-	.word GlobalTerminalConnect_StateWaitMessage
-	.word GlobalTerminalConnect_StateDisconnect
-
 	.bss
-
-sGlobalTerminalNetOsHeap:
-	.space 0x4

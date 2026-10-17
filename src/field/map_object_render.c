@@ -147,10 +147,6 @@ typedef struct SpriteChangeWork {
     void *reflection;
 } SpriteChangeWork;
 
-extern const VecFx32 gMapObjectBillboardScale;
-extern const u32 gFacingBillboardStandSequences[];
-extern const u32 gFacingBillboardWalkSequences[];
-extern const u32 sMapObjectFacingSequences[];
 extern const BillboardModelEntry gBillboardModelNarcMembers[];
 extern const BillboardModelEntry gBillboardSequenceNarcMembers[];
 extern const u32 gResidentBillboardModelIds[];
@@ -300,6 +296,14 @@ void MapObjectRender_CreateQueue(MapObjectRender *render, u32 count, u32 loadsPe
 static void MapObjectRender_DestroyQueue(MapObjectRender *render);
 void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u32 spriteId);
 void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work);
+
+static const VecFx32 sMapObjectBillboardScale = { FX32_ONE, FX32_ONE, FX32_ONE };
+
+static const u32 sFacingBillboardStandSequences[4] = { 0, 1, 2, 3 };
+
+static const u32 sFacingBillboardWalkSequences[4] = { 4, 5, 6, 7 };
+
+static const u32 sMapObjectFacingSequences[4] = { 4, 5, 4, 5 };
 
 void MapObjectRender_Init(MapObjectRender *render, MapObjectManager *manager, u32 count, u32 priority, u32 textureCount, u32 residentTextureCount, const u32 *textureIds, u32 loadsPerFrame) {
     render->manager = manager;
@@ -575,7 +579,6 @@ static void *BillboardModelEntries_Find(int id, int terminator, const BillboardM
     }
 }
 
-#pragma force_active on
 // Loads the NARC member of the model / sequence id into the bank unless it is there; FALSE if it was
 BOOL MapObjectRender_LoadIntoBank(MapObjectRender *render, ResourceBank *bank, int id, int terminator, const BillboardModelEntry *entries) {
     const BillboardModelEntry *entry;
@@ -612,7 +615,6 @@ int MapObjectRender_LoadSpriteTexture(MapObjectRender *render, u32 dynamic, u32 
         return 1;
     }
 }
-#pragma force_active reset
 
 static void MapObjectRender_LoadResidentSpriteTexture(MapObjectRender *render, u32 spriteId) {
     MapObjectRender_LoadSpriteTexture(render, FALSE, spriteId);
@@ -622,14 +624,12 @@ static int MapObjectRender_LoadDynamicSpriteTexture(MapObjectRender *render, u32
     return MapObjectRender_LoadSpriteTexture(render, TRUE, spriteId);
 }
 
-#pragma force_active on
 void MapObjectRender_LoadResidentSpriteTextures(MapObjectRender *render, const u32 *spriteIds) {
     while (*spriteIds != 0xFFFF) {
         MapObjectRender_LoadResidentSpriteTexture(render, *spriteIds);
         spriteIds++;
     }
 }
-#pragma force_active reset
 
 static void MapObjectRender_LoadResidentModel(MapObjectRender *render, u32 id) {
     MapObjectRender_GetFieldE8(render);
@@ -755,7 +755,6 @@ BOOL MapObjectRender_RemoveDynamicModelId(MapObjectRender *render, u32 id) {
     return IdList_Remove((u32 *)((u8 *)ids + offset), id, 0xFF, count);
 }
 
-#pragma force_active on
 // Frees the dynamic models no map object uses any more
 void MapObjectRender_FreeUnusedModels(MapObjectManager *manager, MapObjectRender *render) {
     u32 *ids;
@@ -774,7 +773,6 @@ void MapObjectRender_FreeUnusedModels(MapObjectManager *manager, MapObjectRender
         count--;
     } while (count);
 }
-#pragma force_active reset
 
 static void MapObjectRender_ClearSequenceIds(MapObjectRender *render) {
     IdList_Fill(MapObjectRender_GetSequenceIds(render), 0xFF, 8);
@@ -817,7 +815,6 @@ BOOL MapObjectRender_RemoveDynamicSequenceId(MapObjectRender *render, u32 id) {
     return IdList_Remove((u32 *)((u8 *)ids + offset), id, 0xFF, count);
 }
 
-#pragma force_active on
 // Frees the dynamic gfx sequences no map object uses any more
 void MapObjectRender_FreeUnusedSequences(MapObjectManager *manager, MapObjectRender *render) {
     u32 *ids;
@@ -836,7 +833,6 @@ void MapObjectRender_FreeUnusedSequences(MapObjectManager *manager, MapObjectRen
         count--;
     } while (count);
 }
-#pragma force_active reset
 
 static void MapObjectRender_ClearTextureIds(MapObjectRender *render) {
     IdList_Fill(MapObjectRender_GetTextureIds(render), 0xFFFF, 32);
@@ -883,7 +879,6 @@ BOOL MapObjectRender_RemoveDynamicTextureId(MapObjectRender *render, u32 id) {
     return IdList_Remove((u32 *)((u8 *)ids + offset), id, 0xFFFF, count);
 }
 
-#pragma force_active on
 // Frees the dynamic textures no map object uses any more
 void MapObjectRender_FreeUnusedTextures(MapObjectManager *manager, MapObjectRender *render) {
     u32 id;
@@ -904,7 +899,6 @@ void MapObjectRender_FreeUnusedTextures(MapObjectManager *manager, MapObjectRend
         count--;
     } while (count != 0);
 }
-#pragma force_active reset
 
 BOOL MapObjectRender_IsDynamicTexture(MapObjectRender *render, u32 id) {
     u32 *ids = MapObjectRender_GetTextureIds(render);
@@ -1135,7 +1129,6 @@ static void *FldObjSys_ReadMModelFromNarc(MapObjectRender *render, u32 memberIdx
     return ReadMModelFromNarcInternal(render->manager, memberIdx, atStart);
 }
 
-#pragma force_active on
 const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId) {
     const SpriteBillboardIndex *entry = gObjectEventGraphicsInfos;
     do {
@@ -1152,7 +1145,6 @@ const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId) {
     GF_AssertFail();
     return NULL;
 }
-#pragma force_active reset
 
 static u8 SpriteId_GetBillboardModelId(u32 spriteId) {
     return SpriteId_GetBillboardInfo(spriteId)->modelId;
@@ -1194,14 +1186,13 @@ static void MapObjectBillboards_Delete(void *billboards) {
     Billboard_Delete(billboards);
 }
 
-#pragma force_active on
 void *MapObjectBillboards_CreateBillboard(void *billboards, MapObjectBillboardResource *resource, VecFx32 *position) {
     MapObjectBillboardCreateParams params;
     void *billboard;
     params.billboards = billboards;
     params.resource = resource;
     params.position = *position;
-    params.scale = gMapObjectBillboardScale;
+    params.scale = sMapObjectBillboardScale;
     billboard = BillboardObject_Create(&params);
     if (billboard) {
         BillboardObject_SetVisible(billboard, 0);
@@ -1224,7 +1215,6 @@ void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId
     resource->plttKey = GF3dGfxRawResObj_GetPlttKey(texture);
     resource->ranges = SpriteId_GetBillboardRanges(spriteId);
 }
-#pragma force_active reset
 
 static MapObjectRender *MapObject_GetRender(LocalMapObject *object) {
     return MapObjectManager_GetRender(MapObject_GetManager(object));
@@ -1250,18 +1240,17 @@ void MapObject_SetBillboardVisibleFromFlags(LocalMapObject *object, void *billbo
 }
 
 u32 Facing_GetBillboardStandSequence(u32 facing) {
-    return gFacingBillboardStandSequences[facing];
+    return sFacingBillboardStandSequences[facing];
 }
 
 u32 Facing_GetBillboardWalkSequence(u32 facing) {
-    return gFacingBillboardWalkSequences[facing];
+    return sFacingBillboardWalkSequences[facing];
 }
 
 u32 MapObjectRender_GetFacingSequence(u32 facing) {
     return sMapObjectFacingSequences[facing];
 }
 
-#pragma force_active on
 // 1: the texture was loaded now; 0: queued for a later frame (the queue is full for this frame, or the
 // billboards are busy)
 int MapObjectRender_LoadOrQueueTexture(MapObjectRender *render, u32 spriteId, u32 modelId, u32 dynamic) {
@@ -1287,7 +1276,6 @@ int MapObjectRender_LoadOrQueueTexture(MapObjectRender *render, u32 spriteId, u3
         return 1;
     }
 }
-#pragma force_active reset
 
 static void MapObjectRender_CancelTextureLoad(MapObjectRender *render, u32 spriteId) {
     MapObjectRenderQueue *queue = render->queue;
@@ -1319,7 +1307,6 @@ static int MapObjectRender_GetTextureLoadState(MapObjectRender *render, u32 spri
     return 0;
 }
 
-#pragma force_active on
 // Main task: loads up to loadsPerFrame queued textures, then compacts the queue
 void MapObjectRender_TextureLoadTask(SysTask *task, void *data) {
     MapObjectRender *render = data;
@@ -1355,7 +1342,6 @@ void MapObjectRender_TextureLoadTask(SysTask *task, void *data) {
     }
     queue->loadsThisFrame = 0;
 }
-#pragma force_active reset
 
 static void MapObjectRender_AddTexture(MapObjectRender *render, u32 spriteId, void *textureFile, u32 dynamic) {
     if (GF3dGfxRawResMan_AllocObjAndKeys(render->textures, textureFile, spriteId, TRUE, HEAP_ID_FIELD1) == NULL) {
@@ -1369,7 +1355,6 @@ static void MapObjectRender_AddTexture(MapObjectRender *render, u32 spriteId, vo
     }
 }
 
-#pragma force_active on
 void MapObjectRender_QueueTextureTransfer(MapObjectRender *render, u32 spriteId) {
     int i = 0;
     MapObjectRenderQueue *queue = render->queue;
@@ -1404,7 +1389,6 @@ void MapObjectRender_CancelTextureTransfer(MapObjectRender *render, u32 spriteId
     }
     queue->busy = FALSE;
 }
-#pragma force_active reset
 
 // VBlank task: transfers the queued textures to VRAM
 void MapObjectRender_TextureTransferTask(SysTask *task, void *data) {
@@ -1447,7 +1431,6 @@ void MapObjectRender_TextureReleaseTask(SysTask *task, void *data) {
     queue->busy = FALSE;
 }
 
-#pragma force_active on
 #pragma opt_lifetimes off
 // Queues the creation of the object's billboard until its texture is in VRAM
 void MapObjectRender_QueueBillboard(MapObjectRender *render, LocalMapObject *object, void **billboard, u32 spriteId) {
@@ -1468,7 +1451,6 @@ void MapObjectRender_QueueBillboard(MapObjectRender *render, LocalMapObject *obj
     GF_AssertFail();
 }
 #pragma opt_lifetimes reset
-#pragma force_active reset
 
 static void MapObjectRender_CancelQueuedBillboard(MapObjectRender *render, LocalMapObject *object) {
     MapObjectRenderQueue *queue = render->queue;
@@ -1519,7 +1501,6 @@ static void MapObjectRender_CreatePendingBillboard(MapObjectRender *render, Pend
     pending->billboard = NULL;
 }
 
-#pragma force_active on
 void MapObjectRender_CreateQueue(MapObjectRender *render, u32 count, u32 loadsPerFrame) {
     u32 size, loadsSize, pendingSize, transfersSize, priority;
     MapObjectRenderQueue *queue;
@@ -1544,7 +1525,6 @@ void MapObjectRender_CreateQueue(MapObjectRender *render, u32 count, u32 loadsPe
     queue->transferTask = SysTask_CreateOnVBlankQueue(MapObjectRender_TextureTransferTask, render, 255);
     queue->releaseTask = SysTask_CreateOnVWaitQueue(MapObjectRender_TextureReleaseTask, render, 255);
 }
-#pragma force_active reset
 
 static void MapObjectRender_DestroyQueue(MapObjectRender *render) {
     MapObjectRenderQueue *queue = render->queue;
@@ -1571,7 +1551,6 @@ void MapObject_ChangeBillboardSprite(LocalMapObject *object, u32 spriteId) {
     }
 }
 
-#pragma force_active on
 void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u32 spriteId) {
     int fog;
     u32 oldSpriteId;
@@ -1668,7 +1647,6 @@ void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u32 spri
     GF_ASSERT(task != NULL);
     SpriteChangeWork_Task(task, work);
 }
-#pragma force_active reset
 
 // Deletes the old billboard's copy once the object's new billboard exists (or the object is gone)
 void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work) {

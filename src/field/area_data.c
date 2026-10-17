@@ -65,10 +65,13 @@ NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataMan
 BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 void Field3dObject_SetXRotation(Field3dObject *object, u16 angle, int axis);
 
-extern const u16 gAreaEdgeColorTableLightKind0[8];
-extern const u16 gAreaEdgeColorTableLightKindN[8];
-extern char gBuildModelShapesFieldPath[];
-extern char gBuildModelShapesRoomPath[];
+static char sBuildModelShapesRoomPath[44] = "fielddata/build_model/bm_room_matshp.dat";
+
+static char sBuildModelShapesFieldPath[44] = "fielddata/build_model/bm_field_matshp.dat";
+
+static const u16 sAreaEdgeColorTableLightKindN[8] = { 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084 };
+
+static const u16 sAreaEdgeColorTableLightKind0[8] = { 0, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084 };
 
 // Once a texture file's images are in VRAM, only its header and dictionaries are kept on the heap.
 void AreaDataManager_TrimTextureFile(void *file, NNSG3dResTex *tex) {
@@ -164,7 +167,6 @@ u32 AreaDataManager_GetAreaLightArchiveID(AreaDataManager *areaDataManager) {
     return 0;
 }
 
-#pragma force_active on
 void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, AreaMapAnimation *unkCC, TimeOfDayPropAnimManager *unk104) {
     MapPropAnimListFile animListFile;
     char path[256];
@@ -241,21 +243,20 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
     NARC_Delete(ctx->mapPropModelNarc);
     G3X_EdgeMarking(TRUE);
     if (!areaDataManager->header.lightKind) {
-        G3X_SetEdgeColorTable(gAreaEdgeColorTableLightKind0);
+        G3X_SetEdgeColorTable(sAreaEdgeColorTableLightKind0);
     } else {
-        G3X_SetEdgeColorTable(gAreaEdgeColorTableLightKindN);
+        G3X_SetEdgeColorTable(sAreaEdgeColorTableLightKindN);
     }
     areaDataManager->buildModelShapes = BuildModelShapes_New();
     if (areaDataManager->header.buildModelKind) {
-        sprintf(path, gBuildModelShapesFieldPath);
+        sprintf(path, sBuildModelShapesFieldPath);
     } else {
-        sprintf(path, gBuildModelShapesRoomPath);
+        sprintf(path, sBuildModelShapesRoomPath);
     }
     BuildModelShapes_Load(path, areaDataManager->buildModelShapes);
     Heap_Free(areaDataManager->loadCtx);
     areaDataManager->loadCtx = NULL;
 }
-#pragma force_active reset
 
 void Field3dModel_LoadFromFilesystem(Field3dModel *model, NarcId narcId, s32 fileId, enum HeapID heapID) {
     model->dataRaw = GfGfxLoader_LoadFromNarc(narcId, fileId, FALSE, heapID, FALSE);
@@ -334,7 +335,6 @@ void Field3dModelAnimation_Unload(Field3DModelAnimation *anim, NNSFndAllocator *
     memset(anim, 0, sizeof(Field3DModelAnimation));
 }
 
-#pragma force_active on
 void Field3dModelAnimation_FrameAdvanceAndLoop(Field3DModelAnimation *anim, fx32 delta) {
     fx32 numFrames = ((const FieldAnmRes *)anim->animObj->resAnm)->numFrames << FX32_SHIFT;
     if (delta > 0) {
@@ -347,7 +347,6 @@ void Field3dModelAnimation_FrameAdvanceAndLoop(Field3DModelAnimation *anim, fx32
     }
     anim->animObj->frame = anim->frame;
 }
-#pragma force_active reset
 
 BOOL Field3dModelAnimation_FrameAdvanceAndCheck(Field3DModelAnimation *anim, fx32 delta) {
     fx32 numFrames = ((const FieldAnmRes *)anim->animObj->resAnm)->numFrames << FX32_SHIFT;

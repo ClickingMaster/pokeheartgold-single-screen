@@ -20,9 +20,18 @@
 // direction.
 typedef void (*BillboardMotionFunc)(void *object, void *billboard, void *work, int facing);
 
+typedef struct LadderBillboardMotions {
+    BillboardMotionFunc stand[1];
+    BillboardMotionFunc walk[2];
+} LadderBillboardMotions;
+
 typedef struct BillboardFrameSteps4 {
     fx32 values[4];
 } BillboardFrameSteps4;
+
+typedef struct BillboardFacingSequences {
+    u32 values[4];
+} BillboardFacingSequences;
 
 typedef struct BillboardFrameSteps7 {
     fx32 values[7];
@@ -87,25 +96,6 @@ typedef struct SignedFacingMotionWork {
     void *billboard;
 } SignedFacingMotionWork;
 
-extern const BillboardMotionFunc gNpcBillboardMotions[9];
-extern const BillboardMotionFunc gPcWomanBillboardMotions[10];
-extern const BillboardMotionFunc gPlayerWalkingBillboardMotions[10];
-extern const BillboardMotionFunc gPlayerCyclingBillboardMotions[12];
-extern const BillboardMotionFunc gPlayerFishingBillboardMotions[4];
-extern const struct {
-    BillboardMotionFunc stand[1];
-    BillboardMotionFunc walk[2];
-} sPlayerApricornLadderBillboardMotions;
-extern const u32 gPlayerFishingSequences[];
-extern const u32 gPlayerLadderSequences[];
-extern const u32 gPlayerApricornShakeSequences[];
-extern const BillboardFrameSteps4 gPlayerWalkSlightlyFasterFrameSteps;
-extern const BillboardFrameSteps4 gWalkSlightlyFasterFrameSteps;
-extern const BillboardFrameSteps4 gPlayerCyclingStandSequences;
-extern const BillboardFrameSteps7 gPlayerWalkSlightlyFastFrameSteps;
-extern const BillboardFrameSteps7 gWalkSlightlyFastFrameSteps;
-extern const BillboardFrameSteps8 gWalkEverSoSlightlyFastFrameSteps;
-extern const BillboardFrameSteps8 gPlayerWalkEverSoSlightlyFastFrameSteps;
 extern const u32 gEffectModelOffsets[];
 
 void *ApricornTreeObject_GetBillboard(LocalMapObject *object);
@@ -131,45 +121,45 @@ void BillboardDraw_UpdatePositionOnly(void *object);
 void BillboardDraw_UpdateLooping(void *object);
 void FollowMonDraw_UpdateLarge(LocalMapObject *object);
 void FollowMonDraw_Update(LocalMapObject *object);
-void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
-void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workRaw, int facing);
-void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
+static void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
+static void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workRaw, int facing);
+static void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
 void BillboardDraw_UpdatePcWoman(void *object);
-void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing);
-void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing);
+static void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing);
 void BillboardDraw_UpdateTwoSequences(void *object);
 void PlayerDraw_Init(void *object);
 void PlayerDraw_Delete(void *object);
 void PlayerDraw_Pause(void *object);
 void PlayerDraw_Resume(void *object);
 void PlayerDraw_UpdateWalking(void *object);
-void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *work, int facing);
-void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldStepWork *work, int facing);
-void PlayerBillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *work, int facing);
-void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *work, int facing);
-void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *work, int facing);
-void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *work, int facing);
+static void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldStepWork *work, int facing);
+static void PlayerBillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *work, int facing);
+static void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *work, int facing);
+static void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *work, int facing);
+static void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_UpdateCycling(void *object);
-void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing);
-void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing);
+static void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
 void PlayerDraw_UpdateFishing(void *object);
-void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing);
-void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing);
+static void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateLadder(void *object);
-void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
-void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing);
 void PlayerDraw_UpdateSurfing(void *object);
 void PlayerDraw_UpdateUseHmOrSaving(void *object);
@@ -177,7 +167,7 @@ void PlayerDraw_UpdateWatering(void *object);
 void PlayerDraw_UpdatePoketch(void *object);
 void PlayerDraw_UpdateHeal(void *object);
 void PlayerDraw_UpdateApricornShake(void *object);
-void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing);
+static void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing);
 static void BillboardObject_AlignSequenceFrame(void *billboard, int divisor);
 static void BillboardObject_AlignSequenceFrameTo8(void *billboard);
@@ -191,6 +181,108 @@ void ModelObjectDraw_Delete(void *object);
 void ModelObjectDraw_Pause(void *object);
 void ModelObjectDraw_Resume(void *object);
 
+static const LadderBillboardMotions sPlayerApricornLadderBillboardMotions = {
+    .stand = {
+              (BillboardMotionFunc)PlayerBillboardMotion_ApricornShake,
+              },
+    .walk = {
+              (BillboardMotionFunc)PlayerBillboardMotion_Ladder0,
+              (BillboardMotionFunc)PlayerBillboardMotion_Ladder1,
+              },
+};
+
+static const BillboardFrameSteps4 sWalkSlightlyFasterFrameSteps = {
+    .values = { FX32_CONST(3), FX32_CONST(2), FX32_CONST(3), 0 },
+};
+
+static const u32 sPlayerFishingSequences[4] = { 0, 1, 2, 3 };
+
+static const BillboardMotionFunc sPlayerFishingBillboardMotions[4] = {
+    (BillboardMotionFunc)PlayerBillboardMotion_FishingIdle,
+    (BillboardMotionFunc)PlayerBillboardMotion_FishingCast,
+    PlayerBillboardMotion_FishingBite,
+    (BillboardMotionFunc)PlayerBillboardMotion_FishingReel,
+};
+
+static const u32 sPlayerLadderSequences[4] = { 0, 1, 2, 3 };
+
+static const u32 sPlayerApricornShakeSequences[4] = { 0, 1, 2, 3 };
+
+static const BillboardFrameSteps4 sPlayerWalkSlightlyFasterFrameSteps = {
+    .values = { FX32_CONST(3), FX32_CONST(2), FX32_CONST(3), 0 },
+};
+
+static const BillboardFacingSequences sPlayerCyclingStandSequences = {
+    .values = { 6, 7, 8, 9 },
+};
+
+static const BillboardFrameSteps7 sWalkSlightlyFastFrameSteps = {
+    .values = { FX32_ONE, FX32_ONE, FX32_CONST(2), FX32_ONE, FX32_ONE, FX32_CONST(2), 0 },
+};
+
+static const BillboardFrameSteps7 sPlayerWalkSlightlyFastFrameSteps = {
+    .values = { FX32_ONE, FX32_ONE, FX32_CONST(2), FX32_ONE, FX32_ONE, FX32_CONST(2), 0 },
+};
+
+static const BillboardFrameSteps8 sWalkEverSoSlightlyFastFrameSteps = {
+    .values = { FX32_CONST(2), FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, 0 },
+};
+
+static const BillboardFrameSteps8 sPlayerWalkEverSoSlightlyFastFrameSteps = {
+    .values = { FX32_CONST(2), FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, FX32_ONE, 0 },
+};
+
+static const BillboardMotionFunc sNpcBillboardMotions[9] = {
+    (BillboardMotionFunc)BillboardMotion_Stand,
+    (BillboardMotionFunc)BillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateNormalSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateDoubleSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateQuadSpeed,
+    (BillboardMotionFunc)BillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)BillboardMotion_WalkSlightlyFaster,
+    (BillboardMotionFunc)BillboardMotion_WalkEverSoSlightlyFast,
+};
+
+static const BillboardMotionFunc sPlayerCyclingBillboardMotions[10] = {
+    (BillboardMotionFunc)PlayerBillboardMotion_CyclingStand,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateNormalSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateDoubleSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)PlayerBillboardMotion_CyclingAnimateHalfSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_CyclingAnimateNormalSpeed,
+};
+
+static const BillboardMotionFunc sPcWomanBillboardMotions[10] = {
+    (BillboardMotionFunc)BillboardMotion_PcWomanStand,
+    (BillboardMotionFunc)BillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateNormalSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateDoubleSpeed,
+    (BillboardMotionFunc)BillboardMotion_AnimateQuadSpeed,
+    (BillboardMotionFunc)BillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)BillboardMotion_WalkSlightlyFaster,
+    (BillboardMotionFunc)BillboardMotion_WalkEverSoSlightlyFast,
+    (BillboardMotionFunc)BillboardMotion_PcWomanBow,
+};
+
+static const BillboardMotionFunc sPlayerWalkingBillboardMotions[10] = {
+    (BillboardMotionFunc)PlayerBillboardMotion_Stand,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateHalfSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateNormalSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateDoubleSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_AnimateQuadSpeed,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkSlightlyFast,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkSlightlyFaster,
+    (BillboardMotionFunc)PlayerBillboardMotion_WalkEverSoSlightlyFast,
+    (BillboardMotionFunc)PlayerBillboardMotion_Run,
+};
+
 static inline void BillboardMotion_Loop(void *billboard, const s8 *work, int facing, int movement, const u32 *sequences) {
     if (facing != work[0] || work[2] != movement) {
         BillboardObject_SetSequence(billboard, sequences[facing]);
@@ -202,7 +294,7 @@ static inline void BillboardMotion_Loop(void *billboard, const s8 *work, int fac
 static inline void BillboardMotion_Fall(void *billboard, const s8 *work, int facing, int movement) {
     fx32 frame;
     if (facing != work[0] || work[2] != movement) {
-        BillboardObject_SetSequence(billboard, gPlayerFishingSequences[facing]);
+        BillboardObject_SetSequence(billboard, sPlayerFishingSequences[facing]);
         BillboardObject_SetSequenceFrame(billboard, 15 * FX32_ONE);
     }
     frame = BillboardObject_GetSequenceFrame(billboard) - FX32_ONE;
@@ -340,7 +432,6 @@ void FollowMonDraw_Pause(void *object) {
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
-#pragma force_active on
 // Draw callback of the following Pokemon: (re)loads the party leader's overworld sprite on first use.
 void FollowMonDraw_Resume(LocalMapObject *object) {
     typedef struct {
@@ -412,7 +503,6 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
         }
     }
 }
-#pragma force_active reset
 
 void FollowMonDraw_ClearBob(void *object) {
     u8 *work = MapObject_GetDrawData(object);
@@ -424,7 +514,6 @@ void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager) {
     return *(void **)MapObject_GetDrawData(MapObjectManager_GetFirstActiveObjectByID(manager, 0xFD));
 }
 
-#pragma force_active on
 void BillboardDraw_UpdateNpc(void *object) {
     typedef struct {
         u8 unk_00;
@@ -447,14 +536,13 @@ void BillboardDraw_UpdateNpc(void *object) {
     if (movement >= 9) {
         GF_AssertFail();
     }
-    gNpcBillboardMotions[movement](object, billboard, work, facing.value);
+    sNpcBillboardMotions[movement](object, billboard, work, facing.value);
     MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
     work->facing = facing.value;
     work->movement = MapObject_GetAnimation(object);
     MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
-#pragma force_active reset
 
 void BillboardDraw_UpdatePositionOnly(void *object) {
     u8 *work = MapObject_GetDrawData(object);
@@ -548,7 +636,7 @@ void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object) {
     MapObject_UpdateBillboardVisibility(object, sprite);
 }
 
-void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -558,7 +646,7 @@ void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int fa
     BillboardObject_AdvanceFrame(billboard, 0);
 }
 
-void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -568,7 +656,7 @@ void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *w
     }
 }
 
-void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -578,7 +666,7 @@ void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 
     }
 }
 
-void BillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -588,7 +676,7 @@ void BillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 
     }
 }
 
-void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -598,7 +686,7 @@ void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *w
     }
 }
 
-void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing) {
+static void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
@@ -609,7 +697,7 @@ void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw
         work->step = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps7 steps = gWalkSlightlyFastFrameSteps;
+        BillboardFrameSteps7 steps = sWalkSlightlyFastFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
         if (steps.values[work->step] == 0) {
@@ -618,7 +706,7 @@ void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw
     }
 }
 
-void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workRaw, int facing) {
+static void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
@@ -629,7 +717,7 @@ void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workR
         work->step = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps4 steps = gWalkSlightlyFasterFrameSteps;
+        BillboardFrameSteps4 steps = sWalkSlightlyFasterFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
         if (steps.values[work->step] == 0) {
@@ -638,7 +726,7 @@ void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workR
     }
 }
 
-void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing) {
+static void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing) {
     SteppedWalkWork *work = (SteppedWalkWork *)workRaw;
     if (facing != work->prevFacing) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
@@ -649,7 +737,7 @@ void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *w
         work->step = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps8 steps = gWalkEverSoSlightlyFastFrameSteps;
+        BillboardFrameSteps8 steps = sWalkEverSoSlightlyFastFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work->step]);
         work->step++;
         if (steps.values[work->step] == 0) {
@@ -658,7 +746,6 @@ void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *w
     }
 }
 
-#pragma force_active on
 void BillboardDraw_UpdatePcWoman(void *object) {
     typedef struct {
         u8 unk_00[2];
@@ -678,16 +765,15 @@ void BillboardDraw_UpdatePcWoman(void *object) {
         if (movement >= 10) {
             GF_AssertFail();
         }
-        gPcWomanBillboardMotions[movement](object, billboard, work[0], facing[0]);
+        sPcWomanBillboardMotions[movement](object, billboard, work[0], facing[0]);
         work[0]->facing = facing[0];
         work[0]->movement = MapObject_GetAnimation(object);
         MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
-#pragma force_active reset
 
-void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[2] || work[3] == 9) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -697,7 +783,7 @@ void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work,
     BillboardObject_AdvanceFrame(billboard, 0);
 }
 
-void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing) {
+static void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing) {
     if (work[3] != 9) {
         BillboardObject_SetSequence(billboard, 4);
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -705,7 +791,6 @@ void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, i
     BillboardObject_AdvanceFrame(billboard, FX32_ONE);
 }
 
-#pragma force_active on
 void BillboardDraw_UpdateTwoSequences(void *object) {
     typedef struct {
         s8 unk_00;
@@ -742,7 +827,6 @@ void BillboardDraw_UpdateTwoSequences(void *object) {
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
-#pragma force_active reset
 
 void PlayerDraw_Init(void *object) {
     s8 *work = (s8 *)MapObject_InitDrawData(object, 0x14);
@@ -796,7 +880,7 @@ void PlayerDraw_UpdateWalking(void *object) {
         if (movement >= 10) {
             GF_AssertFail();
         }
-        gPlayerWalkingBillboardMotions[movement](object, billboard, work, facing);
+        sPlayerWalkingBillboardMotions[movement](object, billboard, work, facing);
         MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
         work[0] = facing;
         work[2] = MapObject_GetAnimation(object);
@@ -805,7 +889,7 @@ void PlayerDraw_UpdateWalking(void *object) {
     }
 }
 
-void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *work, int facing) {
+static void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *work, int facing) {
 #pragma unused(object)
     if (facing != work->facing) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
@@ -825,7 +909,7 @@ void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *wo
     BillboardObject_AlignSequenceFrameTo8(billboard);
 }
 
-void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldStepWork *work, int facing) {
+static void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldStepWork *work, int facing) {
     if (facing != work->facing) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -841,19 +925,19 @@ void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldS
     }
 }
 
-void PlayerBillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Walk(object, billboard, work, facing, FX32_ONE);
 }
 
-void PlayerBillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_AnimateDoubleSpeed(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Walk(object, billboard, work, facing, 2 * FX32_ONE);
 }
 
-void PlayerBillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_AnimateQuadSpeed(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Walk(object, billboard, work, facing, 4 * FX32_ONE);
 }
 
-void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *work, int facing) {
+static void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -865,7 +949,7 @@ void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *w
         work[1] = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps7 steps = gPlayerWalkSlightlyFastFrameSteps;
+        BillboardFrameSteps7 steps = sPlayerWalkSlightlyFastFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
         if (steps.values[work[1]] == 0) {
@@ -874,7 +958,7 @@ void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *w
     }
 }
 
-void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *work, int facing) {
+static void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -886,7 +970,7 @@ void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 
         work[1] = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps4 steps = gPlayerWalkSlightlyFasterFrameSteps;
+        BillboardFrameSteps4 steps = sPlayerWalkSlightlyFasterFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
         if (steps.values[work[1]] == 0) {
@@ -895,7 +979,7 @@ void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 
     }
 }
 
-void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *work, int facing) {
+static void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *work, int facing) {
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -907,7 +991,7 @@ void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard,
         work[1] = 0;
     }
     if (!MapObject_IsBillboardAnimPaused(object)) {
-        BillboardFrameSteps8 steps = gPlayerWalkEverSoSlightlyFastFrameSteps;
+        BillboardFrameSteps8 steps = sPlayerWalkEverSoSlightlyFastFrameSteps;
         BillboardObject_AdvanceFrame(billboard, steps.values[work[1]]);
         work[1]++;
         if (steps.values[work[1]] == 0) {
@@ -916,7 +1000,7 @@ void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard,
     }
 }
 
-void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing) {
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, Facing_GetBillboardWalkSequence(facing));
         BillboardObject_SetSequenceFrame(billboard, 0);
@@ -928,7 +1012,6 @@ void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, in
     }
 }
 
-#pragma force_active on
 void PlayerDraw_UpdateCycling(void *object) {
     HeldMotionWork *work = (HeldMotionWork *)MapObject_GetDrawData(object);
     int facing, movement;
@@ -942,7 +1025,7 @@ void PlayerDraw_UpdateCycling(void *object) {
         if (work->movement == 0 && movement != work->movement && work->held == 0) {
             work->facing = -1;
         }
-        gPlayerCyclingBillboardMotions[movement](object, billboard, work, facing);
+        sPlayerCyclingBillboardMotions[movement](object, billboard, work, facing);
         work->facing = facing;
         work->movement = movement;
         MapObject_UpdateBillboardPosition(object, billboard);
@@ -950,8 +1033,8 @@ void PlayerDraw_UpdateCycling(void *object) {
     }
 }
 
-void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing) {
-    BillboardFrameSteps4 sequences = gPlayerCyclingStandSequences;
+static void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing) {
+    BillboardFacingSequences sequences = sPlayerCyclingStandSequences;
     int sequence;
     sequence = sequences.values[facing];
     if (facing != work->facing) {
@@ -968,9 +1051,8 @@ void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotio
         BillboardObject_AdvanceFrame(billboard, FX32_ONE);
     }
 }
-#pragma force_active reset
 
-void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing) {
     u32 sequence = MapObjectRender_GetFacingSequence(facing);
     if (facing != work[0] || work[2] != 0) {
         BillboardObject_SetSequence(billboard, sequence);
@@ -987,7 +1069,7 @@ void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard
     }
 }
 
-void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing) {
     u32 sequence = MapObjectRender_GetFacingSequence(facing);
     if (facing != work[0]) {
         BillboardObject_SetSequence(billboard, sequence);
@@ -1004,7 +1086,6 @@ void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboa
     }
 }
 
-#pragma force_active on
 void PlayerDraw_UpdateFishing(void *object) {
     struct {
         volatile int value;
@@ -1020,25 +1101,23 @@ void PlayerDraw_UpdateFishing(void *object) {
     if (movement >= 4) {
         GF_AssertFail();
     }
-    gPlayerFishingBillboardMotions[movement](object, billboard, work, facing.value);
+    sPlayerFishingBillboardMotions[movement](object, billboard, work, facing.value);
     PlayerDraw_SetFishingOffset(object, billboard, facing.value);
     work->facing = facing.value;
     work->movement = MapObject_GetAnimation(object);
     MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
-#pragma force_active reset
 
-void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Fall(billboard, work, facing, 0);
 }
 
-void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing) {
-    BillboardMotion_Loop(billboard, work, facing, 1, gPlayerFishingSequences);
+static void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing) {
+    BillboardMotion_Loop(billboard, work, facing, 1, sPlayerFishingSequences);
 }
 
-#pragma force_active on
-void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing) {
+static void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing) {
     typedef struct {
         s8 facing;
         volatile s8 ticks;
@@ -1049,7 +1128,7 @@ void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *work
     Work *work = workRaw;
     int frame;
     if (facing != work->facing || work->movement != 2) {
-        BillboardObject_SetSequence(billboard, gPlayerFishingSequences[facing]);
+        BillboardObject_SetSequence(billboard, sPlayerFishingSequences[facing]);
         BillboardObject_SetSequenceFrame(billboard, 15 * FX32_ONE);
         work->phase = 0;
     }
@@ -1079,13 +1158,11 @@ void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *work
     BillboardObject_SetSequenceFrame(billboard, frame);
     BillboardObject_AdvanceFrame(billboard, 0);
 }
-#pragma force_active reset
 
-void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing) {
+static void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing) {
     BillboardMotion_Fall(billboard, work, facing, 3);
 }
 
-#pragma force_active on
 static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
@@ -1137,17 +1214,15 @@ void PlayerDraw_UpdateLadder(void *object) {
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
-#pragma force_active reset
 
-void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing) {
-    BillboardMotion_Loop(billboard, work, facing, 0, gPlayerLadderSequences);
+static void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing) {
+    BillboardMotion_Loop(billboard, work, facing, 0, sPlayerLadderSequences);
 }
 
-void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing) {
-    BillboardMotion_Loop(billboard, work, facing, 1, gPlayerLadderSequences);
+static void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing) {
+    BillboardMotion_Loop(billboard, work, facing, 1, sPlayerLadderSequences);
 }
 
-#pragma force_active on
 static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing) {
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
@@ -1176,7 +1251,6 @@ static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, 
     }
     MapObject_SetFacingVector(object, &offset);
 }
-#pragma force_active reset
 
 void PlayerDraw_UpdateSurfing(void *object) {
     u8 *work = MapObject_GetDrawData(object);
@@ -1211,7 +1285,6 @@ void PlayerDraw_UpdateUseHmOrSaving(void *object) {
     }
 }
 
-#pragma force_active on
 void PlayerDraw_UpdateWatering(void *object) {
     FacingMotionWork *work = (FacingMotionWork *)MapObject_GetDrawData(object);
     void *billboard = work->billboard;
@@ -1238,7 +1311,6 @@ void PlayerDraw_UpdateWatering(void *object) {
     MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
 }
-#pragma force_active reset
 
 void PlayerDraw_UpdatePoketch(void *object) {
     s8 *work = (s8 *)MapObject_GetDrawData(object);
@@ -1258,7 +1330,6 @@ void PlayerDraw_UpdatePoketch(void *object) {
     }
 }
 
-#pragma force_active on
 void PlayerDraw_UpdateHeal(void *object) {
     int movement;
     SignedFacingMotionWork *work = (SignedFacingMotionWork *)MapObject_GetDrawData(object);
@@ -1301,10 +1372,9 @@ void PlayerDraw_UpdateApricornShake(void *object) {
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
 }
-#pragma force_active reset
 
-void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing) {
-    BillboardMotion_Loop(billboard, work, facing, 0, gPlayerApricornShakeSequences);
+static void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing) {
+    BillboardMotion_Loop(billboard, work, facing, 0, sPlayerApricornShakeSequences);
 }
 
 static void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing) {

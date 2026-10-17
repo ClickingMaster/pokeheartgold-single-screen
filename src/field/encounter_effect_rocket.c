@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/trainers.h"
+
 #include "field/encounter_effect.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0189.h"
@@ -63,11 +65,6 @@ extern const s32 gEncounterTeamRocketStepEndY[];
 extern const s32 gEncounterTeamRocketStepVelocityY[];
 extern const s32 gEncounterTeamRocketStepDelay[];
 extern const s32 gEncounterTeamRocketStepRotation[];
-extern const RocketExecutiveIntroParams gEncounterExecutivePetrelIntroParams;
-extern const RocketExecutiveIntroParams gEncounterExecutiveProtonIntroParams;
-extern const RocketExecutiveIntroParams gEncounterExecutiveArcherIntroParams;
-extern const RocketExecutiveIntroParams gEncounterExecutiveArianaIntroParams;
-extern const RocketExecutiveIntroParams gEncounterRocketBossIntroParams;
 
 enum TeamRocketState {
     TEAM_ROCKET_STATE_INIT,
@@ -78,6 +75,31 @@ enum TeamRocketState {
     TEAM_ROCKET_STATE_START_FADE,
     TEAM_ROCKET_STATE_WAIT_FADE,
     TEAM_ROCKET_STATE_END,
+};
+
+static const RocketExecutiveIntroParams sEncounterExecutiveArianaIntroParams = {
+    .spriteMembers = { 234, 235, 236, 237 },
+    .trainerId = TRAINER_EXECUTIVE_ARIANA_ARIANA_2,
+};
+
+static const RocketExecutiveIntroParams sEncounterExecutiveArcherIntroParams = {
+    .spriteMembers = { 230, 231, 232, 233 },
+    .trainerId = TRAINER_EXECUTIVE_ARCHER_ARCHER,
+};
+
+static const RocketExecutiveIntroParams sEncounterExecutiveProtonIntroParams = {
+    .spriteMembers = { 226, 227, 228, 229 },
+    .trainerId = TRAINER_EXECUTIVE_PROTON_PROTON,
+};
+
+static const RocketExecutiveIntroParams sEncounterExecutivePetrelIntroParams = {
+    .spriteMembers = { 222, 223, 224, 225 },
+    .trainerId = TRAINER_EXECUTIVE_PETREL_PETREL_2,
+};
+
+static const RocketExecutiveIntroParams sEncounterRocketBossIntroParams = {
+    .spriteMembers = { 238, 239, 240, 241 },
+    .trainerId = TRAINER_ROCKET_BOSS_GIOVANNI,
 };
 
 // Six "R" sprites fly in one after another, then the screen fades to black.
@@ -209,23 +231,23 @@ String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
 }
 
 void EncounterEffect_ExecutivePetrel(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutivePetrelIntroParams);
+    RocketEffect_RunExecutiveIntro(task, effect, &sEncounterExecutivePetrelIntroParams);
 }
 
 void EncounterEffect_ExecutiveProton(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveProtonIntroParams);
+    RocketEffect_RunExecutiveIntro(task, effect, &sEncounterExecutiveProtonIntroParams);
 }
 
 void EncounterEffect_ExecutiveArcher(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveArcherIntroParams);
+    RocketEffect_RunExecutiveIntro(task, effect, &sEncounterExecutiveArcherIntroParams);
 }
 
 void EncounterEffect_ExecutiveAriana(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterExecutiveArianaIntroParams);
+    RocketEffect_RunExecutiveIntro(task, effect, &sEncounterExecutiveArianaIntroParams);
 }
 
 void EncounterEffect_RocketBoss(SysTask *task, EncounterEffectTask *effect) {
-    RocketEffect_RunExecutiveIntro(task, effect, &gEncounterRocketBossIntroParams);
+    RocketEffect_RunExecutiveIntro(task, effect, &sEncounterRocketBossIntroParams);
 }
 
 enum RocketExecutiveState {
@@ -246,7 +268,6 @@ enum RocketExecutiveState {
 
 // The trainer's picture slides in behind a window that opens from the middle of the screen,
 // with the trainer's name in a text window.
-#pragma force_active on
 #pragma opt_propagation off
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params) {
     enum HeapID heapID = HEAP_ID_FIELD1;
@@ -431,4 +452,3 @@ void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, 
     }
 }
 #pragma opt_propagation reset
-#pragma force_active reset

@@ -59,11 +59,6 @@ struct SaveStatsRow {
     u32 color; // index into sTextColors
 };
 
-extern const u32 sTextColors[2];
-extern const u32 sMsgIdsMain[4];
-extern const u32 sMsgIdsSub[5];
-extern const struct SaveStatsRow sStatRows[9];
-
 void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem);
 void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats);
 int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats);
@@ -71,6 +66,24 @@ void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer);
 int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fontId);
 void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer);
 void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem);
+
+static const u32 sTextColors[2] = { MAKE_TEXT_COLOR(15, 2, 0), MAKE_TEXT_COLOR(14, 2, 0) };
+
+static const u32 sMsgIdsMain[4] = { msg_0423_00013, msg_0423_00014, msg_0423_00015, msg_0423_00016 };
+
+static const u32 sMsgIdsSub[5] = { msg_0423_00000, msg_0423_00005, msg_0423_00006, msg_0423_00007, msg_0423_00008 };
+
+static const struct SaveStatsRow sStatRows[9] = {
+    { msg_0423_00005, 0, 1, 0 },
+    { msg_0423_00006, 0, 2, 0 },
+    { msg_0423_00007, 0, 3, 0 },
+    { msg_0423_00008, 0, 4, 0 },
+    { msg_0423_00000, 2, 0, 0 },
+    { msg_0423_00009, 1, 1, 1 },
+    { msg_0423_00010, 1, 2, 1 },
+    { msg_0423_00011, 1, 3, 1 },
+    { msg_0423_00012, 1, 4, 1 },
+};
 
 void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem) {
     SaveData *saveData = fieldSystem->saveData;

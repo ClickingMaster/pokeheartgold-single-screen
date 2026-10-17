@@ -157,17 +157,6 @@ typedef struct MailboxAppSubApp {
     int nextState;
 } MailboxAppSubApp;
 
-extern const TouchscreenListMenuTemplate gMailboxMailMenuTemplate;
-extern const GraphicsModes gMailboxAppGraphicsModes;
-extern const BgTemplate gMailboxBgTemplate1;
-extern const BgTemplate gMailboxBgTemplate2;
-extern const BgTemplate gMailboxBgTemplate6;
-extern const BgTemplate gMailboxBgTemplate5;
-extern const BgTemplate gMailboxBgTemplate4;
-extern const BgTemplate gMailboxBgTemplate0;
-extern const BgTemplate gMailboxBgTemplate3;
-extern const BgTemplate gMailboxBgTemplate7;
-extern const GraphicsBanks gMailboxAppGraphicsBanks;
 extern const OverlayManagerTemplate gMailboxUseMailOverlayTemplate;
 extern const MailboxAppStateFunc gMailboxYesNoHandlers[][2];
 extern const MailboxAppSubApp gMailboxSubApps[];
@@ -310,6 +299,159 @@ void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 
 void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
+static const TouchscreenListMenuTemplate sMailboxMailMenuTemplate = {
+    .wrapAround = 1,
+    .centered = 1,
+    .xOffset = 0,
+    .bgId = 0,
+    .plttOffset = 12,
+    .unk4 = 0,
+    .unk5 = 0,
+    .baseTile = 0x2FD,
+    .charOffset = 0x2E2,
+    .unkA = 169,
+};
+
+static const GraphicsModes sMailboxAppGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const BgTemplate sMailboxBgTemplate4 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate5 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate6 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sMailboxBgTemplate7 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sMailboxAppGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_B,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_A,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
 BOOL MailboxApp_Init(OverlayManager *man, int *state) {
     MailboxApp *app;
 
@@ -347,7 +489,7 @@ static void MailboxApp_VBlankCB(void *cbArg) {
 }
 
 static void MailboxApp_SetGfxBanks(void) {
-    GfGfx_SetBanks(&gMailboxAppGraphicsBanks);
+    GfGfx_SetBanks(&sMailboxAppGraphicsBanks);
 }
 
 static void MailboxApp_InitBgLayers(MailboxApp *app) {
@@ -355,34 +497,34 @@ static void MailboxApp_InitBgLayers(MailboxApp *app) {
     BgTemplate bg4, bg5, bg6, bg7, bg0, bg1, bg2, bg3;
 
     app->data->bgConfig = BgConfig_Alloc(HEAP_ID_157);
-    modes = gMailboxAppGraphicsModes;
+    modes = sMailboxAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    bg4 = gMailboxBgTemplate4;
+    bg4 = sMailboxBgTemplate4;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_157);
-    bg5 = gMailboxBgTemplate5;
+    bg5 = sMailboxBgTemplate5;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_1);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_157);
-    bg6 = gMailboxBgTemplate6;
+    bg6 = sMailboxBgTemplate6;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_SUB_2);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_157);
-    bg7 = gMailboxBgTemplate7;
+    bg7 = sMailboxBgTemplate7;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_SUB_3, &bg7, GF_BG_TYPE_TEXT);
-    bg0 = gMailboxBgTemplate0;
+    bg0 = sMailboxBgTemplate0;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_157);
-    bg1 = gMailboxBgTemplate1;
+    bg1 = sMailboxBgTemplate1;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_157);
-    bg2 = gMailboxBgTemplate2;
+    bg2 = sMailboxBgTemplate2;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->data->bgConfig, GF_BG_LYR_MAIN_2);
-    bg3 = gMailboxBgTemplate3;
+    bg3 = sMailboxBgTemplate3;
     InitBgFromTemplate(app->data->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
 }
 
@@ -513,7 +655,7 @@ static void MailboxApp_DeleteMailMenuItems(MailboxApp *app) {
 
 static void MailboxApp_OpenMailMenu(MailboxApp *app) {
     TouchscreenListMenuHeader header;
-    TouchscreenListMenuTemplate template = gMailboxMailMenuTemplate;
+    TouchscreenListMenuTemplate template = sMailboxMailMenuTemplate;
 
     header.template = template;
     header.listMenuItems = app->data->listMenuItems;
