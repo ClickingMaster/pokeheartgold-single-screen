@@ -3801,14 +3801,14 @@ BOOL ScrCmd_GetRandomGivableAccessory(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
     FashionCase *fashionCase = Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData));
     int i, k, n = 0;
-    u16 sp4[16];
+    u16 canGive[16];
 
-    // UB: Since sp4 is not initialized, it is possible
+    // UB: Since canGive is not initialized, it is possible
     // (though unlikely) that some element could randomly
     // be equal to 1 unintentionally on entry.
     for (i = 0; i < 16; i++) {
         if (FashionCase_CanGiveAccessory(fashionCase, i + 34, 1) == TRUE) {
-            sp4[i] = 1;
+            canGive[i] = 1;
             n++;
         }
     }
@@ -3818,7 +3818,7 @@ BOOL ScrCmd_GetRandomGivableAccessory(ScriptContext *ctx) {
     }
     k = LCRandom() % n;
     for (i = 0; i < 16; i++) {
-        if (sp4[i] == 1) {
+        if (canGive[i] == 1) {
             if (k == 0) {
                 break;
             }

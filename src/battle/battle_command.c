@@ -57,7 +57,7 @@ static void BattleScriptJump(BattleContext *ctx, NarcId narcId, int adrs);
 static void BattleScriptGotoSubscript(BattleContext *ctx, NarcId narcId, int adrs);
 static void *BattleScriptGetVarPointer(BattleSystem *battleSystem, BattleContext *ctx, int var);
 static int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
-static void BattlerSetAbility(BattleContext *ctx, u8 a1, u8 a2);
+static void BattlerSetAbility(BattleContext *ctx, u8 battlerID, u8 ability);
 static void BattlerSetItem(BattleContext *ctx, u8 battlerId, u16 item);
 static void BattleScript_CalcEffortValues(Party *party, int slot, u32 species, u32 form);
 static u32 BattleSystem_CalculateBallShakes(BattleSystem *battleSystem, BattleContext *ctx);
@@ -3364,9 +3364,9 @@ BOOL BtlCmd_TryPerishSong(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_GetTurnOrderBySpeed(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    u32 *unkPtr = BattleScriptGetVarPointer(battleSystem, ctx, BattleScriptReadWord(ctx));
+    u32 *var = BattleScriptGetVarPointer(battleSystem, ctx, BattleScriptReadWord(ctx));
 
-    *unkPtr = ctx->turnOrder[ctx->turnOrderIndexTemp];
+    *var = ctx->turnOrder[ctx->turnOrderIndexTemp];
 
     return FALSE;
 }

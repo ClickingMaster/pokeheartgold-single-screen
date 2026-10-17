@@ -150,15 +150,15 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
     Field2DObjectTemplate template;
     WiFiPlazaObj *obj = WiFiPlazaObj_AllocObj(manager);
 
-    template.unk0 = x << 4;
-    template.unk2 = y << 4;
-    template.unk4 = id;
-    template.unk6 = 0;
-    template.unk8 = 0;
+    template.x = x << 4;
+    template.y = y << 4;
+    template.id = id;
+    template.action = 0;
+    template.direction = 0;
     if (manager->mode == 0) {
-        template.unkA = 0;
+        template.spriteId = 0;
     } else {
-        template.unkA = 0x61;
+        template.spriteId = 0x61;
     }
     obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
@@ -191,12 +191,12 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
         }
         i++;
     } while (!found);
-    template.unk0 = cell[1] << 4;
-    template.unk2 = cell[0] << 4;
-    template.unk4 = id;
-    template.unk6 = 0;
-    template.unk8 = 1;
-    template.unkA = avatar;
+    template.x = cell[1] << 4;
+    template.y = cell[0] << 4;
+    template.id = id;
+    template.action = 0;
+    template.direction = 1;
+    template.spriteId = avatar;
     obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
     WiFiPlazaObj_SetHandler(manager, obj, WIFI_PLAZA_OBJ_HANDLER_IDLE);
@@ -270,10 +270,10 @@ void WiFiPlazaObj_QueueCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, 
 void WiFiPlazaObj_RunCommand(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, u16 value, u32 kind) {
     Field2DMove data;
 
-    data.unk0 = Field2DObject_GetPos(obj->gridObj);
-    data.unk4 = value;
-    data.unk6 = kind;
-    data.unk7 = Field2DObject_GetParam(obj->gridObj, 4);
+    data.startPos = Field2DObject_GetPos(obj->gridObj);
+    data.action = value;
+    data.direction = kind;
+    data.objectId = Field2DObject_GetParam(obj->gridObj, 4);
     Field2DObjectManager_StartMove(manager->gridObjs, &data);
 }
 
@@ -459,12 +459,12 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
         n = 0;
         while (WiFiPlazaMap_FindTileTag(manager->map, spawn->tag, &frame.cell.x, &frame.cell.y, n) == TRUE) {
             obj = WiFiPlazaObj_AllocObj(manager);
-            frame.template.unk0 = frame.cell.x << 4;
-            frame.template.unk2 = frame.cell.y << 4;
-            frame.template.unk4 = spawn->id;
-            frame.template.unk6 = 0;
-            frame.template.unk8 = spawn->direction;
-            frame.template.unkA = spawn->spriteId;
+            frame.template.x = frame.cell.x << 4;
+            frame.template.y = frame.cell.y << 4;
+            frame.template.id = spawn->id;
+            frame.template.action = 0;
+            frame.template.direction = spawn->direction;
+            frame.template.spriteId = spawn->spriteId;
             gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &frame.template);
             obj->gridObj = gridObj;
             avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, gridObj);
@@ -481,9 +481,9 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
 void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id) {
     Field2DCommand data;
 
-    data.unk0 = command;
-    data.unk2 = direction;
-    data.unk3 = id;
+    data.action = command;
+    data.direction = direction;
+    data.objectId = id;
     WiFiPlazaObj_PushCommand(manager, &data);
 }
 

@@ -262,7 +262,7 @@ BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
         TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, kind, outputVar);
     } else {
         frontierFsys->resultVar = outputVar;
-        frontierFsys->unk8D5 = kind;
+        frontierFsys->partnerCheckKind = kind;
         SetupNativeScript(ctx, ScrNative_WaitFrontierPartnerCheck);
     }
     return TRUE;
@@ -271,10 +271,10 @@ BOOL ScrCmd_BattleTowerCheckLinkPartner(ScriptContext *ctx) {
 static BOOL ScrNative_WaitFrontierPartnerCheck(ScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 *result = GetVarPointer(ctx->fieldSystem, frontierFsys->resultVar);
-    u32 expectedCount = frontierFsys->unk8D5 == 1 ? 1 : 2;
+    u32 expectedCount = frontierFsys->partnerCheckKind == 1 ? 1 : 2;
     if (frontierFsys->linkReceiveCount == expectedCount) {
         frontierFsys->linkReceiveCount = 0;
-        *result = frontierFsys->unk8D8;
+        *result = frontierFsys->partnerCheckResult;
         return TRUE;
     } else {
         return FALSE;

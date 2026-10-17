@@ -1467,15 +1467,15 @@ void WifiClub_RemoveWindows(WifiClubApp *app) {
     if (WindowIsInUse(&app->statusWindow) != 0) {
         RemoveWindow(&app->statusWindow);
     }
-    if (WindowIsInUse(&app->unk310) != 0) {
-        RemoveWindow(&app->unk310);
+    if (WindowIsInUse(&app->unusedMenuWindow) != 0) {
+        RemoveWindow(&app->unusedMenuWindow);
     }
-    if (app->unk150 != NULL) {
-        DestroyListMenu(app->unk150, NULL, NULL);
+    if (app->unusedListMenu != NULL) {
+        DestroyListMenu(app->unusedListMenu, NULL, NULL);
     }
-    if (app->unk14C != NULL) {
-        ListMenuItems_Delete(app->unk14C);
-        app->unk14C = NULL;
+    if (app->unusedMenuItems != NULL) {
+        ListMenuItems_Delete(app->unusedMenuItems);
+        app->unusedMenuItems = NULL;
     }
     if (WindowIsInUse(&app->noticeWindow) != 0) {
         RemoveWindow(&app->noticeWindow);
@@ -1905,12 +1905,12 @@ s32 WifiClub_State_Reconnect(WifiClubApp *app, s32 mainState) {
         BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, 0);
         app->resetBrightness = 1;
-        if (app->unk14C != NULL) {
-            RemoveWindow(&app->unk310);
-            DestroyListMenu(app->unk150, NULL, NULL);
-            app->unk150 = NULL;
-            ListMenuItems_Delete(app->unk14C);
-            app->unk14C = NULL;
+        if (app->unusedMenuItems != NULL) {
+            RemoveWindow(&app->unusedMenuWindow);
+            DestroyListMenu(app->unusedListMenu, NULL, NULL);
+            app->unusedListMenu = NULL;
+            ListMenuItems_Delete(app->unusedMenuItems);
+            app->unusedMenuItems = NULL;
         }
         MI_CpuFill8(app->onlineFriends, 0, 32);
         MI_CpuFill8(app->prevOnlineFriends, 0, 32);
@@ -2124,12 +2124,12 @@ s32 WifiClub_State_EnterRoom(WifiClubApp *app, s32 mainState) {
     WifiClub_RestoreVoiceChatSetting(app);
     WifiClub_CloseMessage(app);
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_3);
-    if (app->unk14C != NULL) {
-        RemoveWindow(&app->unk310);
-        DestroyListMenu(app->unk150, NULL, NULL);
-        app->unk150 = NULL;
-        ListMenuItems_Delete(app->unk14C);
-        app->unk14C = NULL;
+    if (app->unusedMenuItems != NULL) {
+        RemoveWindow(&app->unusedMenuWindow);
+        DestroyListMenu(app->unusedListMenu, NULL, NULL);
+        app->unusedListMenu = NULL;
+        ListMenuItems_Delete(app->unusedMenuItems);
+        app->unusedMenuItems = NULL;
     }
     if (WifiClubRoom_IsInitialized(&app->room) == 0) {
         s16 playerSpriteId;

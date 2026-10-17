@@ -18,7 +18,7 @@ static u32 Save_IsNewGame(SaveData *saveData);
 static void Save_SetExtraChunksExist(SaveData *saveData);
 static u32 Save_CalcNumModifiedPCBoxes(SaveData *saveData);
 static void SaveFooterDebugPrn(struct SaveChunkFooter *footer);
-static void DebugPrn_MirrorValid(BOOL unk);
+static void DebugPrn_MirrorValid(BOOL valid);
 static void SaveSlotCheck_InitDummy(struct SaveSlotCheck *check);
 static u16 SaveArray_CalcCRC16MinusFooter(SaveData *saveData, const void *data, u32 size);
 static u32 GetChunkOffsetFromCurrentSaveSlot(u32 slot, struct SaveSlotSpec *spec);
@@ -287,8 +287,8 @@ static void SaveFooterDebugPrn(struct SaveChunkFooter *footer) {
 #pragma unused(footer)
 }
 
-static void DebugPrn_MirrorValid(BOOL unk) {
-#pragma unused(unk)
+static void DebugPrn_MirrorValid(BOOL valid) {
+#pragma unused(valid)
 }
 
 static void SaveSlotCheck_InitDummy(struct SaveSlotCheck *check) {

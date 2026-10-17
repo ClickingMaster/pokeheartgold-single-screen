@@ -25,6 +25,6 @@ typedef struct FrontierWifiUploadRecord {
     u16 unkE2;
 } FrontierWifiUploadRecord;
 
-void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record);
+void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 isWifiUpload, FrontierWifiUploadRecord *record);
 
 #endif // POKEHEARTGOLD_FRONTIER_WIFI_UPLOAD_RECORD_H

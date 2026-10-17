@@ -381,8 +381,8 @@ int SaveHallOfFame(SaveData *saveData, HallOfFame *hallOfFame) {
 }
 
 struct BattleRecord *LoadBattleRecord(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx) {
-    int sp4;
-    return ReadExtraSaveChunkKeyed(saveData, heapID, idx + 2, ret_p, &sp4);
+    int keysUpdated;
+    return ReadExtraSaveChunkKeyed(saveData, heapID, idx + 2, ret_p, &keysUpdated);
 }
 
 int SaveBattleRecord(SaveData *saveData, struct BattleRecord *data, int idx) {
@@ -390,8 +390,8 @@ int SaveBattleRecord(SaveData *saveData, struct BattleRecord *data, int idx) {
 }
 
 struct FrontierSpeciesRecords *LoadFrontierSpeciesRecords(SaveData *saveData, enum HeapID heapID, int *ret_p) {
-    int sp4;
-    return ReadExtraSaveChunkKeyed(saveData, heapID, 1, ret_p, &sp4);
+    int keysUpdated;
+    return ReadExtraSaveChunkKeyed(saveData, heapID, 1, ret_p, &keysUpdated);
 }
 
 int SaveFrontierSpeciesRecords(SaveData *saveData, struct FrontierSpeciesRecords *data) {

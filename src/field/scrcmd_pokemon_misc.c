@@ -877,9 +877,9 @@ BOOL ScrCmd_LaunchApricornBoxForKurt(ScriptContext *ctx) { // todo: rename struc
 // Related to aprijuice stand- canceling
 BOOL ScrCmd_LaunchApricornBoxForJuice(ScriptContext *ctx) {
     ApricornBoxArgs **args = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    u32 unkVar = ScriptGetVar(ctx);
+    u32 juiceIndex = ScriptGetVar(ctx);
     u16 *juiceUsedVar = ScriptGetVarPointer(ctx);
-    *args = ApricornBox_LaunchAppForJuice(ctx->fieldSystem, unkVar, juiceUsedVar);
+    *args = ApricornBox_LaunchAppForJuice(ctx->fieldSystem, juiceIndex, juiceUsedVar);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);
     return TRUE;
 }
@@ -1234,10 +1234,10 @@ BOOL ScrCmd_BufferPokeathlonCourseName(ScriptContext *ctx) {
 
 // Gets called when getting a package from your mom
 BOOL ScrCmd_PeekMomGift(ScriptContext *ctx) {
-    u16 *unkPtr1 = ScriptGetVarPointer(ctx);
-    u16 *unkPtr2 = ScriptGetVarPointer(ctx);
+    u16 *itemIdVar = ScriptGetVarPointer(ctx);
+    u16 *resultVar = ScriptGetVarPointer(ctx);
 
-    *unkPtr2 = PhoneCallPersistentState_MomGiftQueue_Peek(SaveData_GetPhoneCallPersistentState(ctx->fieldSystem->saveData), 0, unkPtr1);
+    *resultVar = PhoneCallPersistentState_MomGiftQueue_Peek(SaveData_GetPhoneCallPersistentState(ctx->fieldSystem->saveData), 0, itemIdVar);
 
     return FALSE;
 }
@@ -1252,11 +1252,11 @@ BOOL ScrCmd_GetBuenasPassword(ScriptContext *ctx) {
     u16 *msgPtr = ScriptGetVarPointer(ctx);
     u16 *unkPtr2 = ScriptGetVarPointer(ctx);
 
-    u8 unkVar = Save_VarsFlags_GetBuenasPasswordSet(Save_VarsFlags_Get(ctx->fieldSystem->saveData)) % 30;
+    u8 passwordSet = Save_VarsFlags_GetBuenasPasswordSet(Save_VarsFlags_Get(ctx->fieldSystem->saveData)) % 30;
 
-    *msgPtr = 2 * (unkVar / 3) + unkVar / 3 + msg_0066_D23R0102_00040;
+    *msgPtr = 2 * (passwordSet / 3) + passwordSet / 3 + msg_0066_D23R0102_00040;
 
-    *unkPtr2 = unkVar % 3;
+    *unkPtr2 = passwordSet % 3;
     return FALSE;
 }
 
@@ -1402,11 +1402,11 @@ BOOL ScrCmd_CheckKyogreGroudonInParty(ScriptContext *ctx) {
     u32 unkVar;
     int partyCount;
     Party *playerParty;
-    u16 *unkPtr;
+    u16 *result;
 
     u8 kyogreGroudonFlags = 0;
 
-    unkPtr = ScriptGetVarPointer(ctx);
+    result = ScriptGetVarPointer(ctx);
     playerParty = SaveArray_Party_Get(ctx->fieldSystem->saveData);
     partyCount = Party_GetCount(playerParty);
     unkVar = *(ctx->script_ptr);
@@ -1435,9 +1435,9 @@ BOOL ScrCmd_CheckKyogreGroudonInParty(ScriptContext *ctx) {
     }
 
     if (kyogreGroudonFlags == 3) {
-        *unkPtr = TRUE;
+        *result = TRUE;
     } else {
-        *unkPtr = FALSE;
+        *result = FALSE;
     }
 
     return FALSE;
@@ -1453,12 +1453,12 @@ BOOL ScrCmd_SysSetSleepFlag(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_BugContestAction(ScriptContext *ctx) {
-    u8 unkVar1 = ScriptReadByte(ctx);
+    u8 action = ScriptReadByte(ctx);
     u32 weekday = ScriptGetVar(ctx);
 
     FieldSystem *fieldSystem = ctx->fieldSystem;
 
-    if (unkVar1 == 0) {
+    if (action == 0) {
         fieldSystem->bugContest = BugContest_New(fieldSystem, weekday);
     } else {
         BugContest_Delete(fieldSystem->bugContest);

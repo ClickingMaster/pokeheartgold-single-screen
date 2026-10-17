@@ -586,7 +586,7 @@ void StartMapLoadScript(FieldSystem *fieldSystem, u16 script) {
 BOOL TryStartMapScriptByType(FieldSystem *fieldSystem, u8 type) {
     u8 *header;
     u16 script;
-    if (fieldSystem->unkAC != 0) {
+    if (fieldSystem->warpResetSuppressed != 0) {
         return FALSE;
     }
     header = MapEvents_GetScriptHeader(fieldSystem);
@@ -604,7 +604,7 @@ BOOL TryStartMapScriptByType(FieldSystem *fieldSystem, u8 type) {
 BOOL MapSceneScriptCheck(FieldSystem *fieldSystem) {
     u8 *header;
     u16 script;
-    if (fieldSystem->unkAC != 0) {
+    if (fieldSystem->warpResetSuppressed != 0) {
         return FALSE;
     }
     header = MapEvents_GetScriptHeader(fieldSystem);

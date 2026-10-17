@@ -129,7 +129,7 @@ static void AdvanceButtonBorderAnimation(MainMenuAppData *data);
 
 static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
 static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
-static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 a3);
+static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
 static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
 static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);
 static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 index, MainMenuTextPrinter *printer, u32 y);

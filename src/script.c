@@ -38,8 +38,8 @@ void StopScript(ScriptContext *ctx) {
     ctx->script_ptr = NULL;
 }
 
-void ScriptContext_SetTaskManager(ScriptContext *ctx, TaskManager *unk) {
-    ctx->taskman = unk;
+void ScriptContext_SetTaskManager(ScriptContext *ctx, TaskManager *taskman) {
+    ctx->taskman = taskman;
 }
 
 BOOL RunScriptCommand(ScriptContext *ctx) {

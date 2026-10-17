@@ -86,7 +86,7 @@ void PlayerAvatar_SetLastInputs(PlayerAvatar *avatar, s32 lastHorizontal, s32 la
 void PlayerAvatar_SetSurfMountEffect(PlayerAvatar *avatar, u32 surfMountEffect);
 u32 PlayerAvatar_GetSurfMountEffect(PlayerAvatar *avatar);
 PlayerSaveData *PlayerAvatar_GetPlayerSaveData(PlayerAvatar *avatar);
-void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 unkA);
+void PlayerAvatar_SetHeldMovement(PlayerAvatar *avatar, u32 heldMovement);
 u32 PlayerAvatar_GetHeldMovement(PlayerAvatar *avatar);
 BOOL PlayerAvatar_GetFootstepToggle(PlayerAvatar *avatar);
 void PlayerAvatar_ToggleFootstep(PlayerAvatar *avatar);

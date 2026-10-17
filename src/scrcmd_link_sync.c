@@ -161,8 +161,8 @@ static BOOL Task_BallCapsuleEditor(TaskManager *taskManager) {
 }
 
 BOOL ScrCmd_ConditionalLinkSyncStart(ScriptContext *ctx) {
-    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
-    LinkSyncWork_StartSync(*unkStruct, ScriptGetVar(ctx));
+    LinkSyncWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork_StartSync(*p_work, ScriptGetVar(ctx));
     return FALSE;
 }
 
@@ -174,12 +174,12 @@ BOOL ScrCmd_ConditionalLinkSyncWait(ScriptContext *ctx) {
 }
 
 static BOOL ScrNative_WaitLinkSyncWork(ScriptContext *ctx) {
-    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
-    return LinkSyncWork_IsSynced(*unkStruct, ctx->data[0]);
+    LinkSyncWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    return LinkSyncWork_IsSynced(*p_work, ctx->data[0]);
 }
 
 BOOL ScrCmd_ConditionalLinkSyncCreate(ScriptContext *ctx) {
-    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 arg1 = ScriptGetVar(ctx);
     u16 arg2 = ScriptGetVar(ctx);
     u16 arg3 = ScriptGetVar(ctx);
@@ -189,15 +189,15 @@ BOOL ScrCmd_ConditionalLinkSyncCreate(ScriptContext *ctx) {
     unusedStruct.unk01 = arg1;
     unusedStruct.unk02 = arg3;
     unusedStruct.saveData = ctx->fieldSystem->saveData;
-    *unkStruct = LinkSyncWork_CreateWithHeap(&unusedStruct);
+    *p_work = LinkSyncWork_CreateWithHeap(&unusedStruct);
     return FALSE;
 }
 
 BOOL ScrCmd_ConditionalLinkSyncDestroy(ScriptContext *ctx) {
-    LinkSyncWork **unkStruct = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
+    LinkSyncWork **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MISC_DATA_PTR);
     u16 unused = ScriptGetVar(ctx);
     u32 unused2 = MapHeader_GetMapSec(ctx->fieldSystem->location->mapId);
-    LinkSyncWork_Delete(*unkStruct);
+    LinkSyncWork_Delete(*p_work);
     return FALSE;
 }
 
@@ -228,9 +228,9 @@ static BOOL LinkSyncWork_IsSynced(LinkSyncWork *work, u8 syncState) {
 }
 
 static LinkSyncWork *LinkSyncWork_New(void) {
-    LinkSyncWork *unkStruct = Heap_Alloc(HEAP_ID_20, sizeof(LinkSyncWork));
-    MI_CpuFill8(unkStruct, 0, sizeof(LinkSyncWork));
-    return unkStruct;
+    LinkSyncWork *work = Heap_Alloc(HEAP_ID_20, sizeof(LinkSyncWork));
+    MI_CpuFill8(work, 0, sizeof(LinkSyncWork));
+    return work;
 }
 
 static LinkSyncWork *LinkSyncWork_CreateWithHeap(LinkSyncWorkParams *unused) {

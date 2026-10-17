@@ -8,7 +8,7 @@
 #define MAP_PROP_MAX 32
 
 void MapLoadManager_Tick(MapLoadManager *mapLoadManager);
-MapLoadManager *MapLoadManager_New(MapMatrix *mapMatrix, void *unk34, void *unkC0, MapPropAnimationManager *mapPropAnimationManager, void *unkCC, int unk64, SaveData *saveData);
+MapLoadManager *MapLoadManager_New(MapMatrix *mapMatrix, void *areaDataManager, void *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, void *areaMapAnimation, int mode, SaveData *saveData);
 void MapLoadManager_InitialLoad(MapLoadManager *mapLoadManager, int x, int z);
 void MapLoadManager_RenderLoadedMaps(MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes);
 void MapLoadManager_End(MapLoadManager *mapLoadManager);

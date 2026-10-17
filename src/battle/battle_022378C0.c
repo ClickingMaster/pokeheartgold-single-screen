@@ -210,10 +210,10 @@ void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem) {
     void *data = GetSubBgPlttAddr();
     MIi_CpuClear16(0, data, size);
 
-    NARC *unkNarcA = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
-    NARC *unkNarcB = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
+    NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
+    NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
 
-    battleSystem->battleInput = BattleInput_NewInit(unkNarcA, unkNarcB, battleSystem, BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem)), battleSystem->keyPressedSave);
+    battleSystem->battleInput = BattleInput_NewInit(narc0, narc1, battleSystem, BattleSystem_GetTrainerGender(battleSystem, BattleSystem_GetNetworkId(battleSystem)), battleSystem->keyPressedSave);
 
     FontID_Alloc(4, HEAP_ID_BATTLE);
 
@@ -222,11 +222,11 @@ void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem) {
     BgConfig_InitBattleMenuBackgrounds(battleSystem->bgConfig);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     BattleInput_LoadDefaultResources(battleSystem->battleInput);
-    BattleInput_ChangeMenu(unkNarcA, unkNarcB, battleSystem->battleInput, 0, TRUE, NULL);
-    BattleInput_LoadBallGaugeResources(unkNarcB, battleSystem->battleInput);
+    BattleInput_ChangeMenu(narc0, narc1, battleSystem->battleInput, 0, TRUE, NULL);
+    BattleInput_LoadBallGaugeResources(narc1, battleSystem->battleInput);
 
-    NARC_Delete(unkNarcA);
-    NARC_Delete(unkNarcB);
+    NARC_Delete(narc0);
+    NARC_Delete(narc1);
 
     TextPrinter_SetDownArrowBaseTile(1);
     BattleSystem_SetupTextFlags(battleSystem);

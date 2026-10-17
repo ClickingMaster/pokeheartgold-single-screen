@@ -296,7 +296,7 @@ static RegisterHallOfFameScene RegisterHallOfFame_IndivMonsExit(RegisterHallOfFa
 static RegisterHallOfFameScene RegisterHallOfFame_WholePartyInit(RegisterHallOfFameData *data);
 static RegisterHallOfFameScene RegisterHallOfFame_WholePartyMain(RegisterHallOfFameData *data);
 static RegisterHallOfFameScene RegisterHallOfFame_WholePartyExit(RegisterHallOfFameData *data);
-static void RegisterHallOfFame_MonSpritePosScaleAnimStep(ManagedSprite *unkImageStruct, const RegHOFSpritePosScaleAnimParam *param, u32 duration, u32 step);
+static void RegisterHallOfFame_MonSpritePosScaleAnimStep(ManagedSprite *sprite, const RegHOFSpritePosScaleAnimParam *param, u32 duration, u32 step);
 static void RegisterHallOfFame_IndivMonsScene_LoadSpriteGfx(RegisterHallOfFameData *data);
 static void RegisterHallOfFame_IndivMonsScene_UnloadSpriteGfx(RegisterHallOfFameData *data);
 static void RegisterHallOfFame_IndivMonsScene_SetPicGfxAndPltt(RegisterHallOfFameData *data, RegisterHofMon *mon, u8 whichFacing, int picIdx);
@@ -1154,13 +1154,13 @@ static RegisterHallOfFameScene RegisterHallOfFame_WholePartyExit(RegisterHallOfF
     return REGHOF_SCENE_WHOLE_PARTY_EXIT;
 }
 
-static void RegisterHallOfFame_MonSpritePosScaleAnimStep(ManagedSprite *unkImageStruct, const RegHOFSpritePosScaleAnimParam *param, u32 duration, u32 step) {
+static void RegisterHallOfFame_MonSpritePosScaleAnimStep(ManagedSprite *sprite, const RegHOFSpritePosScaleAnimParam *param, u32 duration, u32 step) {
     if (step == 0) {
-        ManagedSprite_SetPositionXY(unkImageStruct, param->xStart, param->yStart);
-        ManagedSprite_SetAffineScale(unkImageStruct, param->scaleStart, param->scaleStart);
+        ManagedSprite_SetPositionXY(sprite, param->xStart, param->yStart);
+        ManagedSprite_SetAffineScale(sprite, param->scaleStart, param->scaleStart);
     } else if (step == duration) {
-        ManagedSprite_SetPositionXY(unkImageStruct, param->xEnd, param->yEnd);
-        ManagedSprite_SetAffineScale(unkImageStruct, param->scaleEnd, param->scaleEnd);
+        ManagedSprite_SetPositionXY(sprite, param->xEnd, param->yEnd);
+        ManagedSprite_SetAffineScale(sprite, param->scaleEnd, param->scaleEnd);
     } else {
         s16 dx = ((abs(param->xStart - param->xEnd) * 256) / duration * step) / 256;
         if (param->xStart > param->xEnd) {
@@ -1174,10 +1174,10 @@ static void RegisterHallOfFame_MonSpritePosScaleAnimStep(ManagedSprite *unkImage
         } else {
             dy = param->yStart + dy;
         }
-        ManagedSprite_SetPositionXY(unkImageStruct, dx, dy);
+        ManagedSprite_SetPositionXY(sprite, dx, dy);
 
         f32 fpos = param->scaleStart + (param->scaleEnd - param->scaleStart) / (float)duration * (float)step;
-        ManagedSprite_SetAffineScale(unkImageStruct, fpos, fpos);
+        ManagedSprite_SetAffineScale(sprite, fpos, fpos);
     }
 }
 

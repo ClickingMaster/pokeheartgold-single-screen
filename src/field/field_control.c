@@ -1120,7 +1120,7 @@ static void FieldSystem_ProcessSoundplateAtCoords(FieldSystem *fieldSystem, int 
 }
 
 void FieldSystem_ProcessSoundplate(FieldSystem *fieldSystem, BOOL wipeEnvironmentSound) {
-    if (fieldSystem->unkAC == 0) {
+    if (fieldSystem->warpResetSuppressed == 0) {
         int x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
         int z = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
         if (wipeEnvironmentSound) {

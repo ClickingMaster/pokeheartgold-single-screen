@@ -16,8 +16,8 @@ typedef struct UnusedFieldModel {
 void FieldSystem_StartBugContestTimer(FieldSystem *fieldSystem);
 void FieldSystem_CheckDayChange(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date);
 void FieldSystem_CheckTimeAdvance(FieldSystem *fieldSystem, SysInfo_RTC *sysinfo, RTCDate *date, RTCTime *time);
-void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int unkA);
-void FieldSystem_HandleMinutesPassed(FieldSystem *fieldSystem, u32 unkA, RTCTime *time);
+void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int days);
+void FieldSystem_HandleMinutesPassed(FieldSystem *fieldSystem, u32 minutes, RTCTime *time);
 TIMEOFDAY Field_GetTimeOfDay(FieldSystem *fieldSystem);
 TimeOfDayWildParam Field_GetTimeOfDayWildParam(FieldSystem *fieldSystem);
 u32 Field_GetMonth(FieldSystem *fieldSystem);
@@ -28,10 +28,10 @@ void FieldSystem_GetGameClearTime(FieldSystem *fieldSystem, RTCDate *date, RTCTi
 void FieldSystem_SetGameClearTime(FieldSystem *fieldSystem);
 BOOL FieldSystem_HasPenalty(FieldSystem *fieldSystem);
 UnusedFieldModel *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID);
-void UnusedFieldModel_Delete(UnusedFieldModel *unkPtr);
+void UnusedFieldModel_Delete(UnusedFieldModel *model);
 void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem);
-void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnusedFieldModel *unkPtrB);
-void UnusedFieldModel_Unload(struct UnusedFieldModel *unkPtr);
+void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnusedFieldModel *model);
+void UnusedFieldModel_Unload(struct UnusedFieldModel *model);
 BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject);
 BOOL FieldSystem_ApricornTree_PickApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);
 BOOL FieldSystem_ApricornTree_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObj);

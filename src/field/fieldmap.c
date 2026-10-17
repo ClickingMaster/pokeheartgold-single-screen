@@ -727,7 +727,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
     MapObjectModelList_Init(fieldSystem->fieldEffectManager);
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);
 
-    if (fieldSystem->unkAC != 0) {
+    if (fieldSystem->warpResetSuppressed != 0) {
         MapObjectManager_ResumePlayerDraw(fieldSystem->mapObjectManager);
     } else {
         MapObjectManager_ResumeAllDraw(fieldSystem->mapObjectManager);
@@ -736,7 +736,7 @@ static void FieldMap_InitFieldEffectsAndObjects(FieldSystem *fieldSystem) {
 
     CommPlayerManager_ForcePosition();
 
-    if (fieldSystem->unkAC != 0) {
+    if (fieldSystem->warpResetSuppressed != 0) {
         MapObjectManager_ClearFlagsBits(fieldSystem->mapObjectManager, MAPOBJECTFLAG_SINGLE_MOVEMENT);
     } else {
         MapObjectManager_ResumeMovement(fieldSystem->mapObjectManager);

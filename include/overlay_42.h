@@ -14,16 +14,16 @@ typedef struct Field2DPoint {
 } Field2DPoint;
 
 typedef struct Field2DCommand {
-    u16 unk0;
-    u8 unk2;
-    u8 unk3;
+    u16 action;
+    u8 direction;
+    u8 objectId;
 } Field2DCommand;
 
 typedef struct Field2DMove {
-    Field2DPoint unk0;
-    u16 unk4;
-    u8 unk6;
-    u8 unk7;
+    Field2DPoint startPos;
+    u16 action;
+    u8 direction;
+    u8 objectId;
 } Field2DMove;
 
 typedef struct Field2DCommandQueue {
@@ -83,12 +83,12 @@ typedef struct Field2DMap {
 } Field2DMap;
 
 typedef struct Field2DObjectTemplate {
-    s16 unk0;
-    s16 unk2;
-    u16 unk4;
-    u16 unk6;
-    u16 unk8;
-    u16 unkA;
+    s16 x;
+    s16 y;
+    u16 id;
+    u16 action;
+    u16 direction;
+    u16 spriteId;
 } Field2DObjectTemplate;
 
 typedef struct CharSprite {
@@ -172,11 +172,11 @@ typedef struct Field2DBgLayerTemplate {
     u8 compressed;
 } Field2DBgLayerTemplate;
 
-typedef s32 (*Field2DCommandCheckFunc)(Field2DObject *arg0, Field2DMap *arg1, Field2DObjectManager *arg2, Field2DCommand *arg3, Field2DMove *arg4);
-typedef void (*Field2DObjectStartFunc)(Field2DObject *arg0, Field2DPoint arg2, u32 arg3);
-typedef s32 (*Field2DObjectUpdateFunc)(Field2DObject *arg0);
-typedef void (*CharSpriteAnimUpdateFunc)(CharSprite *arg0);
-typedef void (*CharSpriteAnimStartFunc)(CharSprite *arg0, s32 arg1);
+typedef s32 (*Field2DCommandCheckFunc)(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move);
+typedef void (*Field2DObjectStartFunc)(Field2DObject *object, Field2DPoint pos, u32 direction);
+typedef s32 (*Field2DObjectUpdateFunc)(Field2DObject *object);
+typedef void (*CharSpriteAnimUpdateFunc)(CharSprite *charSprite);
+typedef void (*CharSpriteAnimStartFunc)(CharSprite *charSprite, s32 direction);
 
 CharSpriteManager *CharSpriteManager_New(SpriteList *spriteList, PaletteData *paletteData, s32 maxSprites, enum HeapID heapID);
 void CharSpriteManager_Free(CharSpriteManager *charSpriteManager);
@@ -253,7 +253,7 @@ void Field2DMap_Load(Field2DMap *map, const void *cells);
 Field2DMapCell Field2DMap_GetCell(Field2DMap *map, u32 x, u32 y);
 s32 Field2DMap_IsBlocked(Field2DMap *map, u16 x, u16 y);
 u32 Field2DMap_GetTag(Field2DMap *map, u16 x, u16 y);
-Field2DObjectManager *Field2DObjectManager_New(u32 a0, enum HeapID heapID);
+Field2DObjectManager *Field2DObjectManager_New(u32 capacity, enum HeapID heapID);
 void Field2DObjectManager_Free(Field2DObjectManager *objectManager);
 void Field2DObjectManager_StartMove(Field2DObjectManager *objectManager, Field2DMove *move);
 void Field2DObjectManager_Update(Field2DObjectManager *objectManager);

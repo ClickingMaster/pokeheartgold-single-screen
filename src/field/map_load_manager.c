@@ -233,7 +233,7 @@ Bdhc *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 mapSlot);
 SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 mapSlot);
 static void MapModelLoad_Cancel(SysTask *task);
 static void Task_LoadMapModel(SysTask *task, MapModelLoad *load);
-static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading);
+static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *areaMapAnimation, BOOL *loaded, BOOL *loading);
 static NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture);
 
 static const MapLoadFuncs sMapLoadFuncs_Default = {
@@ -1248,7 +1248,7 @@ static void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, Ve
     }
 }
 
-MapLoadManager *MapLoadManager_New(MapMatrix *mapMatrix, void *areaDataManager, void *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, void *unkCC, int mode, SaveData *saveData) {
+MapLoadManager *MapLoadManager_New(MapMatrix *mapMatrix, void *areaDataManager, void *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, void *areaMapAnimation, int mode, SaveData *saveData) {
     MapLoadManager *mapLoadManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(MapLoadManager));
     BOOL withSecondary;
 
@@ -1274,7 +1274,7 @@ MapLoadManager *MapLoadManager_New(MapMatrix *mapMatrix, void *areaDataManager, 
     mapLoadManager->height = MapMatrix_GetHeight(mapMatrix);
     mapLoadManager->stride = mapLoadManager->width << 5;
     mapLoadManager->mapPropAnimationManager = mapPropAnimationManager;
-    mapLoadManager->areaMapAnimation = unkCC;
+    mapLoadManager->areaMapAnimation = areaMapAnimation;
     mapLoadManager->tracking.enabled = TRUE;
     MapLoadManager_ResetSlots(mapLoadManager);
     mapLoadManager->ended = FALSE;
@@ -1561,7 +1561,7 @@ static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
     }
 }
 
-static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading) {
+static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *areaMapAnimation, BOOL *loaded, BOOL *loading) {
     MapModelLoad *load = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(MapModelLoad));
 
     load->narc = narc;
@@ -1570,7 +1570,7 @@ static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dR
     load->renderObj = renderObj;
     load->modelFile = modelFile;
     load->texture = texture;
-    load->areaMapAnimation = unkCC;
+    load->areaMapAnimation = areaMapAnimation;
     load->state = 0;
     load->loaded = loaded;
     *loaded = FALSE;

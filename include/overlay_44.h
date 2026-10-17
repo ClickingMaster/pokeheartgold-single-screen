@@ -82,7 +82,7 @@ typedef struct WifiClubGameEntry {
     WifiClubGameEntryScreen screen;
 } WifiClubGameEntry;
 
-typedef void (*WifiClubGameEntryAvatarFunc)(WifiClubGameEntry *arg0, WifiClubGameEntryAvatar *arg1);
+typedef void (*WifiClubGameEntryAvatarFunc)(WifiClubGameEntry *gameEntry, WifiClubGameEntryAvatar *avatar);
 typedef s32 (*WifiClubGameEntryStateFunc)(WifiClubGameEntry *, WifiClubGameEntryArgs *, enum HeapID);
 
 BOOL WifiClubGameEntry_Init(OverlayManager *man, int *state);

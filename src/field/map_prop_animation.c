@@ -9,7 +9,7 @@
 
 #define ANIM_ARCHIVE_ID_NONE -1
 
-static void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex);
+static void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *animationPool, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex);
 
 static BOOL BicycleSlopeAnimation_Load(BicycleSlopeAnimation *bicycleSlopeAnims, NNSG3dRenderObj *renderObj, MapPropAnimation *animation, const u8 animID) {
     int i;
@@ -35,17 +35,17 @@ static BOOL BicycleSlopeAnimation_Load(BicycleSlopeAnimation *bicycleSlopeAnims,
 }
 
 // Some equivalent to pokeplatinum's MapPropAnimation_LoadAnimationObj.
-void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *unkCC_Sub0, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex) {
+void MapPropAnimation_LoadAnimObj(NARC *narc, MapPropAnimationPool *animationPool, MapPropAnimation *animation, int fileID, NNSG3dResMdl *resMdl, NNSG3dResTex *resTex) {
     GF_ASSERT(fileID != ANIM_ARCHIVE_ID_NONE);
     
     void *anim = NARC_AllocAndReadWholeMember(narc, fileID, HEAP_ID_FIELD1);
     
     GF_ASSERT(anim != NULL);
     
-    MapPropAnimationPool_LoadAnimObj(unkCC_Sub0, animation, anim, resMdl, resTex);
+    MapPropAnimationPool_LoadAnimObj(animationPool, animation, anim, resMdl, resTex);
 }
 
-MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *unkSubC8) {
+MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *poolList) {
     int i;
     MapPropAnimationManager *mapPropAnimationManager = Heap_Alloc(HEAP_ID_FIELD1, sizeof(MapPropAnimationManager));
     
@@ -64,7 +64,7 @@ MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPro
     
     mapPropAnimationManager->animNARC = NARC_New(NARC_a_1_0_6, HEAP_ID_FIELD1);
     mapPropAnimationManager->animListNARC = animListNARC;
-    mapPropAnimationManager->animationPool = MapPropAnimationPoolList_AddPool(unkSubC8, HEAP_ID_FIELD1, 0x10);
+    mapPropAnimationManager->animationPool = MapPropAnimationPoolList_AddPool(poolList, HEAP_ID_FIELD1, 0x10);
     return mapPropAnimationManager;
 }
 

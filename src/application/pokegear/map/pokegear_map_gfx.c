@@ -36,7 +36,7 @@ static void PokegearMap_RemoveAuxSprites_MapMode(PokegearMapAppData *mapApp);
 static void PokegearMap_RemoveAllSprites(PokegearMapAppData *mapApp);
 static void PokegearMap_SetBgParam_MapMode(PokegearMapAppData *mapApp);
 static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp);
-static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL a1);
+static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL enteringMarkingsMode);
 
 BOOL PokegearMap_LoadGFX(PokegearMapAppData *mapApp) {
     switch (mapApp->substate) {
@@ -1150,8 +1150,8 @@ static void PokegearMap_SetBgParam_MarkingsMode(PokegearMapAppData *mapApp) {
     mapApp->pokegear->deselectAppCB = PokegearMap_InMarkingsMode_HideCursor;
 }
 
-static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL a1) {
-    if (!a1) {
+static void PokegearMap_ResetMarkingsModeIfLeaving(PokegearMapAppData *mapApp, BOOL enteringMarkingsMode) {
+    if (!enteringMarkingsMode) {
         mapApp->sessionState.index = 0;
         mapApp->inMarkingsMode = FALSE;
     }

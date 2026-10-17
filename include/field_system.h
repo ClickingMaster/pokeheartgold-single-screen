@@ -248,7 +248,7 @@ struct FieldSystem {
     FrontierFieldSystem *frontierFsys;
     LinkBattleRuleset *linkBattleRuleset;
     PokedexResumeState *pokedexResumeState;
-    u32 unkAC;
+    u32 warpResetSuppressed;
     void *keyPressedSave;
     s64 plazaLoginTime;
     int fieldMapUpdateFlags;     // FieldMap_UpdateFrame steps: bit 0 texture free, 1 map load tick, 2 3D render, 3 MapPropAnimationPoolList_Update

@@ -358,12 +358,12 @@ u32 BattleTower_GetBattleType(u32 towerMode) {
 }
 
 void BattleTowerSetup_SetLinkFlag(FrontierFieldSystem *tower, u16 value) {
-    tower->unk10_3 = value;
+    tower->linkFlag = value;
     tower->linkSendBuffer[0] = value;
 }
 
 BOOL BattleTowerSetup_IsLinkFlagSetByEither(FrontierFieldSystem *tower, const u16 *remote) {
-    if (tower->unk10_3 || *remote != 0) {
+    if (tower->linkFlag || *remote != 0) {
         return TRUE;
     }
     return FALSE;

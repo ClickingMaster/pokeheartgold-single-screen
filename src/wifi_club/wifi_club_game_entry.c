@@ -942,15 +942,15 @@ void WifiClubGameEntry_AddMemberAvatar(WifiClubGameEntry *gameEntry, s32 netId, 
         if (netId != Comm_GetLocalNetId()) {
             PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(netId);
             GF_ASSERT(playerProfile);
-            template.unkA = PlayerProfile_GetAvatar(playerProfile);
+            template.spriteId = PlayerProfile_GetAvatar(playerProfile);
         } else if (gameEntry->clubStatus->trainerInfo[2] == 0) {
-            template.unkA = 0;
+            template.spriteId = 0;
         } else {
-            template.unkA = 97;
+            template.spriteId = 97;
         }
         gameEntry->screen.avatars[netId].object = Field2DObjectManager_AddObject(gameEntry->screen.objects, &template);
-        if (Field2DObjectSpriteManager_IsCharLoaded(gameEntry->screen.drawers, template.unkA) == 0) {
-            Field2DObjectSpriteManager_LoadChar(gameEntry->screen.drawers, template.unkA, 2, heapID);
+        if (Field2DObjectSpriteManager_IsCharLoaded(gameEntry->screen.drawers, template.spriteId) == 0) {
+            Field2DObjectSpriteManager_LoadChar(gameEntry->screen.drawers, template.spriteId, 2, heapID);
         }
 
         gameEntry->screen.avatars[netId].drawer = Field2DObjectSpriteManager_CreateSprite(gameEntry->screen.drawers, gameEntry->screen.avatars[netId].object, 0, heapID);

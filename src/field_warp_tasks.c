@@ -227,7 +227,7 @@ void FieldSystem_InitMapOnEnter(FieldSystem *fieldSystem, BOOL isConnection) {
     u16 spawnId;
 
     FieldBGM_ClearOverride(fieldSystem);
-    if (!fieldSystem->unkAC) {
+    if (!fieldSystem->warpResetSuppressed) {
         ClearTempFieldEventData(fieldSystem);
     }
     if (!isConnection) {
@@ -235,7 +235,7 @@ void FieldSystem_InitMapOnEnter(FieldSystem *fieldSystem, BOOL isConnection) {
     } else {
         FieldSystem_ResetStateOnMapConnection(fieldSystem);
     }
-    if (!fieldSystem->unkAC && !isConnection) {
+    if (!fieldSystem->warpResetSuppressed && !isConnection) {
         FieldSystem_StartBugContestTimer(fieldSystem);
     }
     if (!isConnection) {
@@ -276,7 +276,7 @@ void FieldSystem_InitMapOnEnter(FieldSystem *fieldSystem, BOOL isConnection) {
 static void FieldSystem_CreatePlayerAndMapObjects(FieldSystem *fieldSystem) {
     u32 gender;
     struct PlayerSaveData *playerSaveData;
-    if (fieldSystem->unkAC) {
+    if (fieldSystem->warpResetSuppressed) {
         gender = PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData));
         playerSaveData = LocalFieldData_GetPlayer(Save_LocalFieldData_Get(fieldSystem->saveData));
         fieldSystem->playerAvatar = PlayerAvatar_CreateWithParams(fieldSystem->mapObjectManager, fieldSystem->location->x, fieldSystem->location->y, fieldSystem->location->direction, playerSaveData->state, gender, 2, playerSaveData);
@@ -292,7 +292,7 @@ static void FieldSystem_CreatePlayerAndMapObjects(FieldSystem *fieldSystem) {
 }
 
 static void FieldSystem_DeletePlayerAndMapObjects(FieldSystem *fieldSystem) {
-    if (fieldSystem->unkAC) {
+    if (fieldSystem->warpResetSuppressed) {
         PlayerAvatar_DeleteFromMap(fieldSystem->playerAvatar);
     } else {
         CommPlayerManager_RemoveAllAvatars();

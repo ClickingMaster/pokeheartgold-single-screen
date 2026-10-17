@@ -1775,7 +1775,7 @@ void InitSwitchWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerI
     int i;
     int maxBattlers;
     u8 *data;
-    MoveEffectData unkStruct = ctx->battleMons[battlerId].moveEffectData;
+    MoveEffectData savedEffects = ctx->battleMons[battlerId].moveEffectData;
 
     maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
     BattleSystem_GetBattleType(battleSystem);
@@ -1819,13 +1819,13 @@ void InitSwitchWork(BattleSystem *battleSystem, BattleContext *ctx, int battlerI
     }
 
     if (ctx->battleStatus & BATTLE_STATUS_BATON_PASS) {
-        ctx->battleMons[battlerId].moveEffectData.substituteHp = unkStruct.substituteHp;
-        ctx->battleMons[battlerId].moveEffectData.battlerIdLockOn = unkStruct.battlerIdLockOn;
-        ctx->battleMons[battlerId].moveEffectData.perishSongTurns = unkStruct.perishSongTurns;
-        ctx->battleMons[battlerId].moveEffectData.battlerIdMeanLook = unkStruct.battlerIdMeanLook;
-        ctx->battleMons[battlerId].moveEffectData.magnetRiseTurns = unkStruct.magnetRiseTurns;
-        ctx->battleMons[battlerId].moveEffectData.embargoFlag = unkStruct.embargoFlag;
-        ctx->battleMons[battlerId].moveEffectData.healBlockTurns = unkStruct.healBlockTurns;
+        ctx->battleMons[battlerId].moveEffectData.substituteHp = savedEffects.substituteHp;
+        ctx->battleMons[battlerId].moveEffectData.battlerIdLockOn = savedEffects.battlerIdLockOn;
+        ctx->battleMons[battlerId].moveEffectData.perishSongTurns = savedEffects.perishSongTurns;
+        ctx->battleMons[battlerId].moveEffectData.battlerIdMeanLook = savedEffects.battlerIdMeanLook;
+        ctx->battleMons[battlerId].moveEffectData.magnetRiseTurns = savedEffects.magnetRiseTurns;
+        ctx->battleMons[battlerId].moveEffectData.embargoFlag = savedEffects.embargoFlag;
+        ctx->battleMons[battlerId].moveEffectData.healBlockTurns = savedEffects.healBlockTurns;
     }
 
     ctx->battleMons[battlerId].moveEffectData.fakeOutCount = ctx->totalTurns + 1;

@@ -94,7 +94,7 @@ u32 CommClub_PollHostResult();
 
 void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
 void BattleRegulation_BufferName(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
-void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 a1);
+void BattleRegulation_SetActiveRuleset(FieldSystem *fieldSystem, u16 rulesetIndex);
 void BattleRegulation_PrintRulesWindow(FieldSystem *fieldSystem, Window *window, u32 ruleset);
 u16 BattleRegulation_CheckParty(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 ruleset);
 u32 BattleRegulation_GetLinkModeOffset(int);

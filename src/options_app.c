@@ -990,7 +990,7 @@ static void OptionsApp_SetupSpriteRenderer(OptionsApp_Data *data) {
     data->spriteRenderer = SpriteSystem_Alloc(data->heapID);
     data->spriteGfxHandler = SpriteManager_New(data->spriteRenderer);
 
-    const OamManagerParam unk1 = {
+    const OamManagerParam oamManagerParam = {
         .fromOBJmain = 0,
         .numOBJmain = 128,
         .fromAffineMain = 0,
@@ -1000,14 +1000,14 @@ static void OptionsApp_SetupSpriteRenderer(OptionsApp_Data *data) {
         .fromAffineSub = 0,
         .numAffineSub = 32,
     };
-    const OamCharTransferParam unk2 = {
+    const OamCharTransferParam oamTransferParam = {
         .maxTasks = 9,
         .sizeMain = 0x400,
         .sizeSub = 0x400,
         .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
         .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
     };
-    SpriteSystem_Init(data->spriteRenderer, &unk1, &unk2, 32);
+    SpriteSystem_Init(data->spriteRenderer, &oamManagerParam, &oamTransferParam, 32);
     SpriteSystem_InitSprites(data->spriteRenderer, data->spriteGfxHandler, 9);
 
     ResdatIdList fileIdList = {

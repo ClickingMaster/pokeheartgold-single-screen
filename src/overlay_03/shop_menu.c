@@ -153,11 +153,11 @@ BOOL ScrCmd_UpdateMapPropAnimsFromFlag96B(ScriptContext *ctx) {
 
 static void RocketHQ_UpdateElectrodePropAnimation(FieldSystem *fieldSystem, u8 index) {
     u16 modelID = sRocketHQElectrodePropModels[index];
-    Field3dRenderObj *unkC0_SubC = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, modelID);
-    if (unkC0_SubC == NULL) {
+    Field3dRenderObj *propObj = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, modelID);
+    if (propObj == NULL) {
         GF_AssertFail();
     } else {
-        MapPropAnimationManager_AddAnimationToRenderObj(modelID, CheckRocketHQElectrodeDefeated(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, &unkC0_SubC->renderObj, fieldSystem->mapPropAnimationManager); 
+        MapPropAnimationManager_AddAnimationToRenderObj(modelID, CheckRocketHQElectrodeDefeated(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, &propObj->renderObj, fieldSystem->mapPropAnimationManager); 
     }
 }
 

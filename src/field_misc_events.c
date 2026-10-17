@@ -60,15 +60,15 @@ static BOOL MonIsInGameTradePokeInternal(Pokemon *mon, NPCTrade *trade, NpcTrade
 static BOOL Task_BugContest_PromptSwapPokemon(TaskManager *taskManager);
 
 BOOL FieldSystem_TryPushIceBlock(FieldSystem *fieldSystem) {
-    LocalMapObject *unk1 = MapObjectManager_GetFirstActiveObjectWithMovement1(fieldSystem->mapObjectManager);
-    LocalMapObject *unk2 = IceBlock_GetFacingBlock(unk1);
-    if (unk2) {
-        IceBlockPushWork *unkStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(IceBlockPushWork));
-        unkStruct->block = unk2;
-        unkStruct->hitBlock = NULL;
-        unkStruct->direction = MapObject_GetFacingDirection(unk1);
-        unkStruct->slideState = 0;
-        FieldSystem_CreateTask(fieldSystem, Task_PushIceBlock, unkStruct);
+    LocalMapObject *playerObj = MapObjectManager_GetFirstActiveObjectWithMovement1(fieldSystem->mapObjectManager);
+    LocalMapObject *block = IceBlock_GetFacingBlock(playerObj);
+    if (block) {
+        IceBlockPushWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(IceBlockPushWork));
+        work->block = block;
+        work->hitBlock = NULL;
+        work->direction = MapObject_GetFacingDirection(playerObj);
+        work->slideState = 0;
+        FieldSystem_CreateTask(fieldSystem, Task_PushIceBlock, work);
         PlaySE(SEQ_SE_GS_HYOUKAI_HIT);
         return TRUE;
     } else {
@@ -78,7 +78,7 @@ BOOL FieldSystem_TryPushIceBlock(FieldSystem *fieldSystem) {
 
 static BOOL Task_PushIceBlock(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    IceBlockPushWork *unkStruct = TaskManager_GetEnvironment(taskManager);
+    IceBlockPushWork *work = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {
     case 0:
@@ -88,23 +88,23 @@ static BOOL Task_PushIceBlock(TaskManager *taskManager) {
         }
         break;
     case 1:
-        if (IceBlock_UpdateSlide(unkStruct)) {
+        if (IceBlock_UpdateSlide(work)) {
             StopSE(SEQ_SE_GS_HYOUKAI_SUBERU, 0);
             (*state)++;
         }
         break;
     case 2:
-        if (MapObject_IsMovementPaused(unkStruct->block)) {
-            if (unkStruct->hitBlock == NULL) {
+        if (MapObject_IsMovementPaused(work->block)) {
+            if (work->hitBlock == NULL) {
                 (*state)++;
-            } else if (MapObject_IsMovementPaused(unkStruct->hitBlock)) {
+            } else if (MapObject_IsMovementPaused(work->hitBlock)) {
                 (*state)++;
             }
         }
         break;
     case 3:
         IceBlock_EndPlayerForcedMovement(fieldSystem->playerAvatar);
-        Heap_Free(unkStruct);
+        Heap_Free(work);
         return TRUE;
     }
     return FALSE;
@@ -218,11 +218,11 @@ static u32 IceBlock_UpdateSlide(IceBlockPushWork *work) {
 }
 
 static u32 IceBlock_GetBlockedFlags(LocalMapObject *object, u32 x, u32 height, u32 y) {
-    u32 unk;
+    u32 slope;
     VecFx32 position;
     MapObject_CopyPositionVector(object, &position);
     u32 flags = 0;
-    if (FieldSystem_CheckCollisionHeightAndGimmick(MapObject_GetFieldSystem(object), &position, x, y, &unk) == 1) {
+    if (FieldSystem_CheckCollisionHeightAndGimmick(MapObject_GetFieldSystem(object), &position, x, y, &slope) == 1) {
         flags |= 1;
     }
     if (MetatileBehavior_IsIce(GetMetatileBehavior(MapObject_GetFieldSystem(object), x, y)) == FALSE) {
@@ -401,34 +401,34 @@ void BugContest_WarpToJudging(TaskManager *taskManager, FieldSystem *fieldSystem
 }
 
 void BugContest_PromptSwapPokemon(TaskManager *taskManager, Pokemon *mon) {
-    BugContestSwapMonWork *unkStruct = Heap_AllocAtEnd(HEAP_ID_3, sizeof(BugContestSwapMonWork));
-    MI_CpuFill8(unkStruct, 0, sizeof(BugContestSwapMonWork));
-    unkStruct->newlyCaughtMon = mon;
-    TaskManager_Call(taskManager, Task_BugContest_PromptSwapPokemon, unkStruct);
+    BugContestSwapMonWork *work = Heap_AllocAtEnd(HEAP_ID_3, sizeof(BugContestSwapMonWork));
+    MI_CpuFill8(work, 0, sizeof(BugContestSwapMonWork));
+    work->newlyCaughtMon = mon;
+    TaskManager_Call(taskManager, Task_BugContest_PromptSwapPokemon, work);
 }
 
 static BOOL Task_BugContest_PromptSwapPokemon(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    BugContestSwapMonWork *unkStruct = TaskManager_GetEnvironment(taskManager);
+    BugContestSwapMonWork *work = TaskManager_GetEnvironment(taskManager);
     BugContest *contest = FieldSystem_BugContest_Get(fieldSystem);
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {
     case 0: {
         u32 noPokemonCaught = contest->caught_poke == SPECIES_NONE;
-        unkStruct->appArgs = BugContestSwapMon_LaunchApp(fieldSystem, unkStruct->newlyCaughtMon, contest->mon, noPokemonCaught);
+        work->appArgs = BugContestSwapMon_LaunchApp(fieldSystem, work->newlyCaughtMon, contest->mon, noPokemonCaught);
         (*state)++;
         break;
     }
     case 1:
         if (FieldSystem_ApplicationIsRunning(fieldSystem) == FALSE) {
-            if (unkStruct->appArgs->keptMon != contest->mon) {
-                CopyPokemonToPokemon(unkStruct->newlyCaughtMon, contest->mon);
+            if (work->appArgs->keptMon != contest->mon) {
+                CopyPokemonToPokemon(work->newlyCaughtMon, contest->mon);
             }
             if (!contest->caught_poke) {
                 contest->caught_poke = TRUE;
             }
-            Heap_Free(unkStruct->appArgs);
-            Heap_Free(unkStruct);
+            Heap_Free(work->appArgs);
+            Heap_Free(work);
             return TRUE;
         }
         break;

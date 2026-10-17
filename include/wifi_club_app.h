@@ -166,8 +166,8 @@ struct WifiClubApp {
     u8 prevOnlineFriends[0x20];
     u32 friendStatuses[0x20];
     u32 friendVoiceChat[0x20];
-    ListMenuItem *unk14C;
-    struct ListMenu *unk150;
+    ListMenuItem *unusedMenuItems;
+    struct ListMenu *unusedListMenu;
     ListMenuItem *menuItems;
     struct ListMenu *listMenu;
     BgConfig *bgConfig;
@@ -191,7 +191,7 @@ struct WifiClubApp {
     Window statusWindow;
     Window titleWindow;
     Window noticeWindow;
-    Window unk310;
+    Window unusedMenuWindow;
     Window menuWindow;
     Window unk330;
     s32 matchTimer;

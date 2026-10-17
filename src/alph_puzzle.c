@@ -93,7 +93,7 @@ typedef struct AlphPuzzleTile {
 typedef struct AlphPuzzleData {
     enum HeapID heapID;
     MenuInputState menuInputState;
-    int unkState;
+    int stepState;
     u16 subState;
     u16 sceneTimer;
     AlphPuzzleArgs *args;
@@ -675,16 +675,16 @@ static void AlphPuzzle_Finish(AlphPuzzleData *data) {
 }
 
 static BOOL AlphPuzzle_OverlayEnterStep(AlphPuzzleData *data) {
-    switch (data->unkState) {
+    switch (data->stepState) {
     case 0:
         AlphPuzzle_SetupGraphics(data);
-        data->unkState++;
+        data->stepState++;
         break;
     case 1:
         AlphPuzzle_DrawHintTextAndHideCursor(data);
         GF_TouchpadResetSampling();
         GF_TouchpadStartSampling(1);
-        data->unkState = 0;
+        data->stepState = 0;
         return TRUE;
     }
     return FALSE;
@@ -697,14 +697,14 @@ static BOOL AlphPuzzle_OverlayExitStep(AlphPuzzleData *data) {
 }
 
 static int AlphPuzzleMainSeq_FadeIn(AlphPuzzleData *data) {
-    switch (data->unkState) {
+    switch (data->stepState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, data->heapID);
-        data->unkState++;
+        data->stepState++;
         break;
     case 1:
         if (IsPaletteFadeFinished()) {
-            data->unkState = 0;
+            data->stepState = 0;
             return ALPH_PUZZLE_STATE_WAIT_FOR_INPUT;
         }
         break;
@@ -713,14 +713,14 @@ static int AlphPuzzleMainSeq_FadeIn(AlphPuzzleData *data) {
 }
 
 static int AlphPuzzleMainSeq_FadeOut(AlphPuzzleData *data) {
-    switch (data->unkState) {
+    switch (data->stepState) {
     case 0:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, data->heapID);
-        data->unkState++;
+        data->stepState++;
         break;
     case 1:
         if (IsPaletteFadeFinished()) {
-            data->unkState = 0;
+            data->stepState = 0;
             return ALPH_PUZZLE_STATE_END;
         }
         break;
@@ -1334,18 +1334,18 @@ static void AlphPuzzle_UpdateHoverGraphicOnBg(AlphPuzzleData *data, u8 x, u8 y) 
 }
 
 static void AlphPuzzle_Quit_CreateYesNoPrompt(AlphPuzzleData *data) {
-    YesNoPromptTemplate unkStruct;
-    MI_CpuFill8(&unkStruct, 0, sizeof(YesNoPromptTemplate));
-    unkStruct.bgConfig = data->bgConfig;
-    unkStruct.tileStart = 31;
-    unkStruct.plttSlot = 6;
-    unkStruct.bgId = 0;
-    unkStruct.x = 25;
-    unkStruct.y = 10;
-    unkStruct.ignoreTouchFlag = data->menuInputState;
-    unkStruct.initialCursorPos = 1;
-    unkStruct.shapeParam = 0;
-    YesNoPrompt_InitFromTemplateWithPalette(data->yesNoPrompt, &unkStruct, data->palette);
+    YesNoPromptTemplate template;
+    MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
+    template.bgConfig = data->bgConfig;
+    template.tileStart = 31;
+    template.plttSlot = 6;
+    template.bgId = 0;
+    template.x = 25;
+    template.y = 10;
+    template.ignoreTouchFlag = data->menuInputState;
+    template.initialCursorPos = 1;
+    template.shapeParam = 0;
+    YesNoPrompt_InitFromTemplateWithPalette(data->yesNoPrompt, &template, data->palette);
 }
 
 static AlphPuzzleStates AlphPuzzle_Quit_HandleYesNoPrompt(AlphPuzzleData *data) {
@@ -1409,10 +1409,10 @@ typedef struct AlphPuzzleQuitTaskData {
 } AlphPuzzleQuitTaskData;
 
 static void AlphPuzzle_CreateQuitTask(AlphPuzzleData *data) {
-    AlphPuzzleQuitTaskData *unkStruct = Heap_AllocAtEnd(data->heapID, sizeof(AlphPuzzleQuitTaskData));
-    MI_CpuFill8(unkStruct, 0, sizeof(AlphPuzzleQuitTaskData));
-    unkStruct->data = data;
-    SysTask_CreateOnMainQueue(Task_AlphPuzzle_WaitDropCursorAnimOnQuit, unkStruct, 0);
+    AlphPuzzleQuitTaskData *quitTask = Heap_AllocAtEnd(data->heapID, sizeof(AlphPuzzleQuitTaskData));
+    MI_CpuFill8(quitTask, 0, sizeof(AlphPuzzleQuitTaskData));
+    quitTask->data = data;
+    SysTask_CreateOnMainQueue(Task_AlphPuzzle_WaitDropCursorAnimOnQuit, quitTask, 0);
     AlphPuzzle_ToggleDropCursorSprite(data, 1);
     data->quitTaskActive = 1;
 }

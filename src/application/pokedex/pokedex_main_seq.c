@@ -3489,12 +3489,12 @@ static BOOL PokedexApp_PlayCursorCry(PokedexAppData *pokedexApp) {
 }
 
 static void PokedexApp_PrepareSearchPageChange(PokedexAppData *pokedexApp, int searchPage, int initialPos, int nextSeq) {
-    PokedexSearchPageChangeState *r4 = &pokedexApp->seqState.state_26;
+    PokedexSearchPageChangeState *pageChange = &pokedexApp->seqState.state_26;
 
-    r4->unk_0 = searchPage;
-    r4->unk_1 = nextSeq;
-    r4->unk_3 = initialPos;
-    r4->unk_2 = 0;
+    pageChange->unk_0 = searchPage;
+    pageChange->unk_1 = nextSeq;
+    pageChange->unk_3 = initialPos;
+    pageChange->unk_2 = 0;
 }
 
 static void PokedexApp_UpdateEntryButtonsEnabled(PokedexAppData *pokedexApp) {

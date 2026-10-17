@@ -858,8 +858,8 @@ static BOOL PageWindowRendering(PageDisplayWork *pageDisplay) {
 
 static void TogglePageDisplayCB(SysTask *task, void *taskData) {
     PageDisplayWork *pageDisplay = (PageDisplayWork *)taskData;
-    int temp;
-    int temp2;
+    int x1;
+    int x2;
     fx32 xPos;
 
     if (pageDisplay->rendering == FALSE) {
@@ -868,11 +868,11 @@ static void TogglePageDisplayCB(SysTask *task, void *taskData) {
 
     pageDisplay->step++;
     if (pageDisplay->hidden == FALSE) {
-        temp2 = 0xff;
-        temp = (1 - pageDisplay->step) * temp2;
+        x2 = 0xff;
+        x1 = (1 - pageDisplay->step) * x2;
     } else {
-        temp = 0;
-        temp2 = (1 - pageDisplay->step) * 0xff;
+        x1 = 0;
+        x2 = (1 - pageDisplay->step) * 0xff;
     }
 
     xPos = pageDisplay->step * 0xff;
@@ -884,7 +884,7 @@ static void TogglePageDisplayCB(SysTask *task, void *taskData) {
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         }
     }
-    SetPageWindowPosition(temp, 0, temp2, 0xc0);
+    SetPageWindowPosition(x1, 0, x2, 0xc0);
     BgSetPosTextAndCommit(pageDisplay->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, xPos);
 }
 

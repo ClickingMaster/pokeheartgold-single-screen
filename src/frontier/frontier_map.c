@@ -858,12 +858,12 @@ Field2DObject *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjec
             GF_AssertFail();
         }
     }
-    args.unk0 = template->x;
-    args.unk2 = template->y;
-    args.unk4 = template->id;
-    args.unk6 = template->action;
-    args.unk8 = template->direction;
-    args.unkA = template->spriteId;
+    args.x = template->x;
+    args.y = template->y;
+    args.id = template->id;
+    args.action = template->action;
+    args.direction = template->direction;
+    args.spriteId = template->spriteId;
     object = Field2DObjectManager_AddObject(map->objectManager, &args);
     objectSprite = Field2DObjectSpriteManager_CreateSprite(map->objectGfx, object, 0, HEAP_ID_101);
     Field2DObjectSprite_SetVisible(objectSprite, template->visible);

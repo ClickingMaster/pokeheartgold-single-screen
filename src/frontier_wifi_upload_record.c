@@ -8,7 +8,7 @@
 #include "frontier_data_access.h"
 #include "union_room_avatar.h"
 
-void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 a1, FrontierWifiUploadRecord *record) {
+void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 isWifiUpload, FrontierWifiUploadRecord *record) {
     PlayerProfile *playerProfile = Save_PlayerData_GetProfile(saveData);
     SaveWiFiHistory *saveWiFiHistory = Save_WiFiHistory_Get(saveData);
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
@@ -28,13 +28,13 @@ void Frontier_FillWifiUploadRecord(SaveData *saveData, s32 a1, FrontierWifiUploa
 
     MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, 3), &record->unkC0, sizeof(record->unkC0));
 
-    if (a1 == 0) {
+    if (isWifiUpload == 0) {
         record->unkE2 = FrontierData_FlagAction(frontierData, 7, 0);
         if (record->unkE2 != 0) {
-            FrontierData_GetWifiTeam(frontierData, a1, record);
+            FrontierData_GetWifiTeam(frontierData, isWifiUpload, record);
         }
     } else {
         record->unkE2 = FrontierData_GetWifiScore(frontierData);
-        FrontierData_GetWifiTeam(frontierData, a1, record);
+        FrontierData_GetWifiTeam(frontierData, isWifiUpload, record);
     }
 }

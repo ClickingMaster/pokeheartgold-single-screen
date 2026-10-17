@@ -397,7 +397,7 @@ static u32 BattleHallSelectMons_WaitSummary(BattleHallSelectMonsEnv *env, FieldS
 
 BOOL ScrCmd_BufferBattleHallStreak(ScriptContext *ctx) {
     u32 i;
-    void *unk0;
+    void *records;
     FieldSystem *fieldSystem = ctx->fieldSystem;
     MessageFormat **messageFormat = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 strIdxWinStreak = ScriptReadByte(ctx);
@@ -407,21 +407,21 @@ BOOL ScrCmd_BufferBattleHallStreak(ScriptContext *ctx) {
     u16 *winStreakLevel = ScriptGetVarPointer(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
     u32 winStreak = 0;
-    u32 unk1 = 1;
+    u32 loadResult = 1;
     if (Save_CheckExtraChunksExist(fieldSystem->saveData) == FALSE) {
         *result = 0;
         return FALSE;
     }
-    unk0 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk1);
-    if (unk1 != 1) {
+    records = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &loadResult);
+    if (loadResult != 1) {
         winStreak = 0;
     } else {
         for (i = 0; i < MAX_SPECIES; i++) {
-            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk0, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, records, 0, i);
         }
     }
-    if (unk0 != NULL) {
-        Heap_Free(unk0);
+    if (records != NULL) {
+        Heap_Free(records);
     }
     BufferIntegerAsString(*messageFormat, strIdxWinStreak, winStreak, CountDigits(winStreak), PRINTING_MODE_RIGHT_ALIGN, TRUE);
     u16 battlePoints = 0;
@@ -463,27 +463,27 @@ BOOL ScrCmd_BattleHallCountUsedSpecies(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *result = ScriptGetVarPointer(ctx);
     u32 numSpecies = 0;
-    u32 unk0 = 1;
+    u32 loadResult = 1;
     if (!Save_CheckExtraChunksExist(fieldSystem->saveData)) {
         *result = 0;
         return FALSE;
     }
-    void *unk1 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk0);
-    if (unk0 != 1) {
+    void *records = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &loadResult);
+    if (loadResult != 1) {
         numSpecies = 0;
     } else {
         for (i = 0; i < MAX_SPECIES; i++) {
             u32 winStreak = 0;
-            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 0, i);
-            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 1, i);
-            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 2, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, records, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, records, 1, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, records, 2, i);
             if (winStreak > 0) {
                 numSpecies++;
             }
         }
     }
-    if (unk1 != NULL) {
-        Heap_Free(unk1);
+    if (records != NULL) {
+        Heap_Free(records);
     }
     *result = numSpecies;
     return FALSE;
@@ -495,19 +495,19 @@ BOOL ScrCmd_BattleHallGetTotalStreak(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *result = ScriptGetVarPointer(ctx);
     u32 winStreak = 0;
-    u32 unk0 = 1;
+    u32 loadResult = 1;
     if (!Save_CheckExtraChunksExist(fieldSystem->saveData)) {
         *result = 0;
         return FALSE;
     }
-    void *unk1 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk0);
-    if (unk0 == 1) {
+    void *records = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &loadResult);
+    if (loadResult == 1) {
         for (u32 i = 0; i < MAX_SPECIES; i++) {
-            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, records, 0, i);
         }
     }
-    if (unk1 != NULL) {
-        Heap_Free(unk1);
+    if (records != NULL) {
+        Heap_Free(records);
     }
     if (winStreak > BATTLE_HALL_MAX_WIN_STREAK) {
         winStreak = BATTLE_HALL_MAX_WIN_STREAK;
@@ -520,9 +520,9 @@ BOOL ScrCmd_BattleHallGetTotalStreak(ScriptContext *ctx) {
 BOOL ScrCmd_CheckBattleHallStreakIs50(ScriptContext *ctx) {
     u16 *result = ScriptGetVarPointer(ctx);
     FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetSpeciesStat(0), 0xff);
-    u32 unk0 = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetWinStreakStat(0), 0xff);
+    u32 winStreak = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), BattleHall_GetWinStreakStat(0), 0xff);
     *result = 0;
-    if (unk0 == 50) {
+    if (winStreak == 50) {
         *result = 1;
     }
     return FALSE;

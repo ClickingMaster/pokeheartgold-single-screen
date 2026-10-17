@@ -22,7 +22,7 @@ const BgTemplate sField2DBgLayerBgTemplate = {
 s32 Field2DCommand_CheckStand(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
     int action = Field2DObject_GetParam(object, 5);
     if ((action == 0) || (action == 4)) {
-        Field2DMove_Init(move, object, command->unk0, command->unk3, command->unk2);
+        Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
     return 0;
@@ -31,8 +31,8 @@ s32 Field2DCommand_CheckStand(Field2DObject *object, Field2DMap *map, Field2DObj
 s32 Field2DCommand_CheckTurn(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
     int action = Field2DObject_GetParam(object, 5);
     int direction = Field2DObject_GetParam(object, 6);
-    if (action == 0 && direction != command->unk2) {
-        Field2DMove_Init(move, object, command->unk0, command->unk3, command->unk2);
+    if (action == 0 && direction != command->direction) {
+        Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
     return 0;
@@ -40,12 +40,12 @@ s32 Field2DCommand_CheckTurn(Field2DObject *object, Field2DMap *map, Field2DObje
 
 s32 Field2DCommand_CheckWalk(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
     int action = Field2DObject_GetParam(object, 5);
-    if ((action == 0) && (Field2DObject_IsMapBlockedInDirection(object, map, command->unk2) != 1) && (Field2DObject_IsObjectInDirection(object, objectManager, command->unk2) != 1)) {
-        Field2DMove_Init(move, object, command->unk0, command->unk3, command->unk2);
+    if ((action == 0) && (Field2DObject_IsMapBlockedInDirection(object, map, command->direction) != 1) && (Field2DObject_IsObjectInDirection(object, objectManager, command->direction) != 1)) {
+        Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
     if ((action == 0) && (Field2DObject_GetParam(object, 10) >= 8)) {
-        Field2DMove_Init(move, object, 5U, command->unk3, command->unk2);
+        Field2DMove_Init(move, object, 5U, command->objectId, command->direction);
         return 1;
     }
     return 0;
@@ -57,7 +57,7 @@ s32 Field2DCommand_CheckRun(Field2DObject *object, Field2DMap *map, Field2DObjec
 
 s32 Field2DCommand_CheckPause(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
     if (Field2DObject_GetParam(object, 5) == 0) {
-        Field2DMove_Init(move, object, command->unk0, command->unk3, command->unk2);
+        Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
     return 0;
@@ -74,7 +74,7 @@ s32 Field2DCommand_CheckWalkSlow(Field2DObject *object, Field2DMap *map, Field2D
 
 s32 Field2DCommand_CheckWalkInPlace(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
     if (Field2DObject_GetParam(object, 5) == 0) {
-        Field2DMove_Init(move, object, command->unk0, command->unk3, command->unk2);
+        Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return TRUE;
     }
     return FALSE;
@@ -94,10 +94,10 @@ BOOL Field2DObject_IsObjectInDirection(Field2DObject *object, Field2DObjectManag
 }
 
 void Field2DMove_Init(Field2DMove *move, Field2DObject *object, u16 action, u8 objectId, s32 direction) {
-    move->unk0 = Field2DObject_GetPos(object);
-    move->unk4 = action;
-    move->unk7 = objectId;
-    move->unk6 = direction;
+    move->startPos = Field2DObject_GetPos(object);
+    move->action = action;
+    move->objectId = objectId;
+    move->direction = direction;
 }
 
 Field2DObjectSpriteManager *Field2DObjectSpriteManager_New(SpriteList *spriteList, PaletteData *paletteData, u16 maxSprites, s8 vramType, enum HeapID heapID) {

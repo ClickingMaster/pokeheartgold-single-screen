@@ -460,12 +460,12 @@ BOOL FrtCmd_ArcadeGetBattleResult(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_ArcadeSendBuffer(FrontierScriptContext *ctx) {
-    u32 unk0 = FrontierScript_ReadVar(ctx);
-    u32 unk1 = FrontierScript_ReadVar(ctx);
+    u32 cmd = FrontierScript_ReadVar(ctx);
+    u32 value = FrontierScript_ReadVar(ctx);
     u16 *ret = FrontierScript_ReadVarPtr(ctx);
 
     ArcadeContext *arcadeContxt = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    *ret = BattleArcade_SendBuffer(arcadeContxt, unk0, unk1);
+    *ret = BattleArcade_SendBuffer(arcadeContxt, cmd, value);
 
     return TRUE;
 }

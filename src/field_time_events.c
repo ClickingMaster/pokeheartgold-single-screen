@@ -94,10 +94,10 @@ void FieldSystem_HandleDaysPassed(FieldSystem *fieldSystem, int days) {
     Save_VarsFlags_UpdateBuenasPasswordSet(Save_VarsFlags_Get(fieldSystem->saveData));
 }
 
-void FieldSystem_HandleMinutesPassed(FieldSystem *fieldSystem, u32 unkA, RTCTime *time) {
-    GearPhoneRingManager_AddMinutes(FieldSystem_GetGearPhoneRingManager(fieldSystem), unkA, 0);
-    FieldSystem_IncrementBugContestTimer(fieldSystem, unkA);
-    Party_TryResetShaymin(SaveArray_Party_Get(fieldSystem->saveData), unkA, time);
+void FieldSystem_HandleMinutesPassed(FieldSystem *fieldSystem, u32 minutes, RTCTime *time) {
+    GearPhoneRingManager_AddMinutes(FieldSystem_GetGearPhoneRingManager(fieldSystem), minutes, 0);
+    FieldSystem_IncrementBugContestTimer(fieldSystem, minutes);
+    Party_TryResetShaymin(SaveArray_Party_Get(fieldSystem->saveData), minutes, time);
 }
 
 TIMEOFDAY Field_GetTimeOfDay(FieldSystem *fieldSystem) {
@@ -141,16 +141,16 @@ BOOL FieldSystem_HasPenalty(FieldSystem *fieldSystem) {
 }
 
 UnusedFieldModel *UnusedFieldModel_New(FieldSystem *fieldSystem, enum HeapID heapID) {
-    UnusedFieldModel *unkPtr = Heap_Alloc(heapID, sizeof(UnusedFieldModel));
-    MI_CpuClear8(unkPtr, sizeof(UnusedFieldModel));
-    unkPtr->heapID = heapID;
-    UnusedFieldModel_Load(fieldSystem, unkPtr);
-    return unkPtr;
+    UnusedFieldModel *model = Heap_Alloc(heapID, sizeof(UnusedFieldModel));
+    MI_CpuClear8(model, sizeof(UnusedFieldModel));
+    model->heapID = heapID;
+    UnusedFieldModel_Load(fieldSystem, model);
+    return model;
 }
 
-void UnusedFieldModel_Delete(UnusedFieldModel *unkPtr) {
-    UnusedFieldModel_Unload(unkPtr);
-    Heap_Free(unkPtr);
+void UnusedFieldModel_Delete(UnusedFieldModel *model) {
+    UnusedFieldModel_Unload(model);
+    Heap_Free(model);
 }
 
 void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem) {
@@ -158,15 +158,15 @@ void FieldSystem_RegrowApricornTrees(FieldSystem *fieldSystem) {
     ApricornTrees_RegrowEmpty(trees);
 }
 
-void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnusedFieldModel *unkPtrB) {
+void UnusedFieldModel_Load(FieldSystem *fieldSystem, UnusedFieldModel *model) {
     FieldEffectManager *fieldEffectManager = fieldSystem->fieldEffectManager;
-    unkPtrB->modelFile = Heap_Alloc(unkPtrB->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
-    FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, unkPtrB->modelFile);
-    GF3dRender_InitObjFromHeader(&unkPtrB->renderObj, &unkPtrB->model, &unkPtrB->modelFile);
+    model->modelFile = Heap_Alloc(model->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
+    FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, model->modelFile);
+    GF3dRender_InitObjFromHeader(&model->renderObj, &model->model, &model->modelFile);
 }
 
-void UnusedFieldModel_Unload(UnusedFieldModel *unkPtr) {
-    FieldEffectManager_HeapFree(unkPtr->modelFile); // function frees modelFile to heap
+void UnusedFieldModel_Unload(UnusedFieldModel *model) {
+    FieldEffectManager_HeapFree(model->modelFile); // function frees modelFile to heap
 }
 
 BOOL FieldSystem_ApricornTreeObject_HasApricorn(FieldSystem *fieldSystem, LocalMapObject *mapObject) {

@@ -45,7 +45,7 @@ void Field2DObjectManager_Free(Field2DObjectManager *objectManager) {
 }
 
 void Field2DObjectManager_StartMove(Field2DObjectManager *objectManager, Field2DMove *move) {
-    Field2DObject_StartMove(Field2DObjectManager_FindById(objectManager, move->unk7), move);
+    Field2DObject_StartMove(Field2DObjectManager_FindById(objectManager, move->objectId), move);
 }
 
 void Field2DObjectManager_Update(Field2DObjectManager *objectManager) {
@@ -68,14 +68,14 @@ Field2DObject *Field2DObjectManager_AddObject(Field2DObjectManager *objectManage
     GF_ASSERT(template);
     Field2DObject *object;
     object = Field2DObjectManager_GetFreeSlot(objectManager);
-    object->pos.unk0 = template->unk0;
-    object->pos.unk2 = template->unk2;
-    object->prevPos.unk0 = template->unk0;
-    object->prevPos.unk2 = template->unk2;
-    object->id = template->unk4;
-    object->action = template->unk6;
-    object->direction = template->unk8;
-    object->spriteId = template->unkA;
+    object->pos.unk0 = template->x;
+    object->pos.unk2 = template->y;
+    object->prevPos.unk0 = template->x;
+    object->prevPos.unk2 = template->y;
+    object->id = template->id;
+    object->action = template->action;
+    object->direction = template->direction;
+    object->spriteId = template->spriteId;
     object->active = 1;
     return object;
 }
@@ -300,7 +300,7 @@ Field2DObject *Field2DObjectManager_FindObjectAt(Field2DObjectManager *objectMan
 }
 
 void Field2DObject_StartMove(Field2DObject *object, Field2DMove *move) {
-    sField2DObjectStartFuncs[move->unk4](object, move->unk0, move->unk6);
+    sField2DObjectStartFuncs[move->action](object, move->startPos, move->direction);
     object->stateFrames = 0;
 }
 
@@ -498,7 +498,7 @@ s32 Field2DObjectManager_TryCommand(Field2DMap *map, Field2DObjectManager *objec
     GF_ASSERT(objectManager);
     GF_ASSERT(command);
     GF_ASSERT(move);
-    Field2DObject *object = Field2DObjectManager_GetById(objectManager, command->unk3);
+    Field2DObject *object = Field2DObjectManager_GetById(objectManager, command->objectId);
     GF_ASSERT(object);
-    return sField2DCommandCheckFuncs[command->unk0](object, map, objectManager, command, move);
+    return sField2DCommandCheckFuncs[command->action](object, map, objectManager, command, move);
 }

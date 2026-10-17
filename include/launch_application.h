@@ -125,7 +125,7 @@ BugContestSwapMonArgs *BugContestSwapMon_LaunchApp(FieldSystem *fieldSystem, Pok
 PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot, u16 moveToLearn);
 void CallTask_DressUp(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 partyIdx, u16 showTutorial);
 BOOL AccessoryPortrait_LaunchApp(FieldSystem *fieldSystem, FashionAppData *fashionData);
-void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
+void BattleRoomResults_LaunchApp(FieldSystem *fieldSystem, BattleRoomResultsArgs *args);
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *pcBoxData);
 void CallTask_WirelessTrade(TaskManager *taskManager);
 void DrawingSession_LaunchApp(FieldSystem *fieldSystem);

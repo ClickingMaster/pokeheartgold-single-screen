@@ -441,7 +441,7 @@ void FrontierFieldSystem_RecordSetLost(FrontierFieldSystem *frontierFsys, SaveDa
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk = FrontierSave_SetStat(frontierSaveData, statId + 1, FrontierStat_GetFriendIndex(statId + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 winStreak = FrontierSave_SetStat(frontierSaveData, statId + 1, FrontierStat_GetFriendIndex(statId + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100), 0);
     } else {
@@ -453,11 +453,11 @@ void FrontierFieldSystem_RecordSetLost(FrontierFieldSystem *frontierFsys, SaveDa
         GameStats_Add(Save_GameStats_Get(saveData), GAME_STAT_BATTLE_TOWER_BATTLE_COUNT, 1);
     }
     FrontierFieldSystem_CheckRibbonStreak(frontierFsys);
-    unk++;
-    if (unk > 9999) {
-        unk = 9999;
+    winStreak++;
+    if (winStreak > 9999) {
+        winStreak = 9999;
     }
-    FrontierFieldSystem_RecordSetMons(frontierFsys, saveData, 0, unk);
+    FrontierFieldSystem_RecordSetMons(frontierFsys, saveData, 0, winStreak);
 }
 
 void FrontierFieldSystem_RecordSetWon(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
@@ -472,14 +472,14 @@ void FrontierFieldSystem_RecordSetWon(FrontierFieldSystem *frontierFsys, SaveDat
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk6 = FrontierSave_SetStat(frontierSaveData, statId + 1, FrontierStat_GetFriendIndex(statId + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 winStreak = FrontierSave_SetStat(frontierSaveData, statId + 1, FrontierStat_GetFriendIndex(statId + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, FrontierStat_GetFriendIndex(100), 1);
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 1);
     }
     FrontierSave_GetStat(frontierSaveData, statId, FrontierStat_GetFriendIndex(statId));
-    FrontierSave_RaiseStat(frontierSaveData, statId, FrontierStat_GetFriendIndex(statId), unk6);
+    FrontierSave_RaiseStat(frontierSaveData, statId, FrontierStat_GetFriendIndex(statId), winStreak);
     GameStats_Add(gameStats, GAME_STAT_BATTLE_TOWER_WIN_COUNT, 7);
     FrontierData_TowerRoundAction(frontierFsys->frontierData, frontierFsys->towerMode, 3);
     if (frontierFsys->towerMode != TOWER_MODE_6) {
@@ -487,7 +487,7 @@ void FrontierFieldSystem_RecordSetWon(FrontierFieldSystem *frontierFsys, SaveDat
     }
     GameStats_AddScore(gameStats, SCORE_EVENT_BATTLE_TOWER_SET_WON);
     FrontierFieldSystem_CheckRibbonStreak(frontierFsys);
-    FrontierFieldSystem_RecordSetMons(frontierFsys, saveData, 1, unk6);
+    FrontierFieldSystem_RecordSetMons(frontierFsys, saveData, 1, winStreak);
 }
 
 void FrontierFieldSystem_SaveChallenge(FrontierFieldSystem *frontierFsys) {

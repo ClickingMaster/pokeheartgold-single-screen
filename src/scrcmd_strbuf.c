@@ -136,9 +136,9 @@ BOOL ScrCmd_BufferIntEx(ScriptContext *ctx) {
     u8 idx = ScriptReadByte(ctx);
     u16 number = ScriptGetVar(ctx);
     u8 str_conv_mode = ScriptReadByte(ctx);
-    u8 unk2 = ScriptReadByte(ctx);
+    u8 maxDigits = ScriptReadByte(ctx);
 
-    u8 digits = unk2;
+    u8 digits = maxDigits;
     if (str_conv_mode == PRINTING_MODE_LEFT_ALIGN) {
         digits = CountDigits(number);
     }
@@ -153,9 +153,9 @@ BOOL ScrCmd_BufferIntExWord(ScriptContext *ctx) {
     u8 idx = ScriptReadByte(ctx);
     u32 number = ScriptReadWord(ctx);
     u8 str_conv_mode = ScriptReadByte(ctx);
-    u8 unk2 = ScriptReadByte(ctx);
+    u8 maxDigits = ScriptReadByte(ctx);
 
-    u8 digits = unk2;
+    u8 digits = maxDigits;
     if (str_conv_mode == PRINTING_MODE_LEFT_ALIGN) {
         digits = CountDigits(number);
     }
@@ -317,10 +317,10 @@ BOOL ScrCmd_BufferBerryName(ScriptContext *ctx) {
     MessageFormat **msg_fmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 idx = ScriptReadByte(ctx);
     u16 berry_id = ScriptGetVar(ctx);
-    u16 unk = ScriptGetVar(ctx);
+    u16 quantity = ScriptGetVar(ctx);
 
     String *str = GetNutName((u16)(berry_id - FIRST_BERRY_IDX), HEAP_ID_FIELD3);
-    BufferString(*msg_fmt, idx, str, 0, unk < 2, 2);
+    BufferString(*msg_fmt, idx, str, 0, quantity < 2, 2);
     String_Delete(str);
 
     return FALSE;
@@ -364,9 +364,9 @@ BOOL ScrCmd_BufferPartyMonMoveName(ScriptContext *ctx) {
 BOOL ScrCmd_BufferRibbonName(ScriptContext *ctx) {
     MessageFormat **msg_fmt = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
     u8 idx = ScriptReadByte(ctx);
-    u8 unk = ScriptGetVar(ctx);
+    u8 ribbon = ScriptGetVar(ctx);
 
-    u16 ribbon_id = GetRibbonAttr(unk, RIBBONDAT_NAMEGMM);
+    u16 ribbon_id = GetRibbonAttr(ribbon, RIBBONDAT_NAMEGMM);
     BufferRibbonNameOrDesc(*msg_fmt, idx, ribbon_id);
 
     return FALSE;

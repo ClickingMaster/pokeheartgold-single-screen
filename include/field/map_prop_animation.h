@@ -67,7 +67,7 @@ typedef struct MapPropOneShotAnimationManager {
     MapPropOneShotAnimation items[MAP_PROP_ONE_SHOT_ANIMATION_MANAGER_MAX_ITEMS];
 } MapPropOneShotAnimationManager; // Size: 0x380
 
-MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *unkSubC8);
+MapPropAnimationManager *MapPropAnimationManager_Init(NARC *animListNARC, MapPropAnimationPoolList *poolList);
 BOOL MapPropAnimationManager_AddAnimationToRenderObj(const int mapPropModelID, const int mapPropAnimID, const BOOL isDeferred, NNSG3dRenderObj *renderObj, MapPropAnimationManager *manager);
 void MapPropAnimationManager_UnloadAllAnimations(MapPropAnimationManager *manager);
 void MapPropAnimationManager_RemoveAnimationFromRenderObj(MapPropAnimationManager *mapPropAnimationManager, NNSG3dRenderObj *renderObj, const int mapPropModelID, const int mapPropAnimIndex);

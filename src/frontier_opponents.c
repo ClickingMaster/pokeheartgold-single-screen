@@ -189,7 +189,7 @@ BOOL FrontierFieldSystem_ReceiveRoundTrainers(FieldSystem *fieldSystem, u16 *tra
 }
 
 BOOL FrontierFieldSystem_IsLinkFlagSetByEither(FieldSystem *fieldSystem, u16 *a1) {
-    return fieldSystem->frontierFsys->unk10_3 || a1[0] != 0;
+    return fieldSystem->frontierFsys->linkFlag || a1[0] != 0;
 }
 
 void FrontierFieldSystem_PackLinkAllyData(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
@@ -207,7 +207,7 @@ void FrontierFieldSystem_PackRoundTrainers(FrontierFieldSystem *frontierFsys) {
 }
 
 void FrontierFieldSystem_SetLinkFlag(FrontierFieldSystem *frontierFsys, u32 flag) {
-    frontierFsys->unk10_3 = flag;
+    frontierFsys->linkFlag = flag;
     frontierFsys->linkSendBuffer[0] = flag;
 }
 

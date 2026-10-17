@@ -186,9 +186,9 @@ static const fx32 sPartyMonSpritePositions[][2] = {
 };
 
 static void particleEmitCallback(SPLEmitter *emitter) {
-    IconFormChangeData *unkA = ParticleSystem_GetEmitterParam();
-    SPL_SetEmitterPositionX(emitter, sPartyMonSpritePositions[unkA->partyMonIndex][0]);
-    SPL_SetEmitterPositionY(emitter, sPartyMonSpritePositions[unkA->partyMonIndex][1]);
+    IconFormChangeData *formChange = ParticleSystem_GetEmitterParam();
+    SPL_SetEmitterPositionX(emitter, sPartyMonSpritePositions[formChange->partyMonIndex][0]);
+    SPL_SetEmitterPositionY(emitter, sPartyMonSpritePositions[formChange->partyMonIndex][1]);
 }
 
 static s32 _RunParticleSystem(void) {
@@ -203,27 +203,27 @@ static s32 _RunParticleSystem(void) {
 }
 
 static void _DestroyParticleSystem(IconFormChangeData *partyMenu) {
-    void *unkA = ParticleSystem_GetHeap(partyMenu->particleSystem);
+    void *heap = ParticleSystem_GetHeap(partyMenu->particleSystem);
     ParticleSystem_Free(partyMenu->particleSystem);
-    Heap_Free(unkA);
+    Heap_Free(heap);
 }
 
 static u32 texAlloc(u32 szByte, BOOL is4x4comp) {
-    NNSGfdTexKey unkC = NNS_GfdDefaultFuncAllocTexVram(szByte, is4x4comp, 0);
+    NNSGfdTexKey texKey = NNS_GfdDefaultFuncAllocTexVram(szByte, is4x4comp, 0);
 
-    GF_ASSERT(unkC != NNS_GFD_ALLOC_ERROR_TEXKEY);
+    GF_ASSERT(texKey != NNS_GFD_ALLOC_ERROR_TEXKEY);
 
-    ParticleSystem_RegisterTexKey(unkC);
+    ParticleSystem_RegisterTexKey(texKey);
 
-    return NNS_GfdGetTexKeyAddr(unkC);
+    return NNS_GfdGetTexKeyAddr(texKey);
 }
 
 static u32 plttAlloc(u32 szByte, BOOL is4pltt) {
-    NNSGfdPlttKey unkC = NNS_GfdDefaultFuncAllocPlttVram(szByte, is4pltt, 1);
+    NNSGfdPlttKey plttKey = NNS_GfdDefaultFuncAllocPlttVram(szByte, is4pltt, 1);
 
-    GF_ASSERT(unkC != NNS_GFD_ALLOC_ERROR_PLTTKEY);
+    GF_ASSERT(plttKey != NNS_GFD_ALLOC_ERROR_PLTTKEY);
 
-    ParticleSystem_RegisterPlttKey(unkC);
+    ParticleSystem_RegisterPlttKey(plttKey);
 
-    return NNS_GfdGetPlttKeyAddr(unkC);
+    return NNS_GfdGetPlttKeyAddr(plttKey);
 }

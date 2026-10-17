@@ -167,7 +167,7 @@ u32 AreaDataManager_GetAreaLightArchiveID(AreaDataManager *areaDataManager) {
     return 0;
 }
 
-void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, AreaMapAnimation *unkCC, TimeOfDayPropAnimManager *unk104) {
+void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjManager *renderObjManager, MapPropAnimationManager *mapPropAnimationManager, AreaMapAnimation *areaMapAnimation, TimeOfDayPropAnimManager *timeOfDayPropAnims) {
     MapPropAnimListFile animListFile;
     char path[256];
     AreaDataLoadContext *ctx = areaDataManager->loadCtx;
@@ -199,7 +199,7 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
         AreaDataManager_TrimTextureFile(areaDataManager->mapPropTexFile, areaDataManager->mapPropTex);
     }
     if (areaDataManager->header.mapPropAnimFileId != 0xFFFF) {
-        AreaMapAnimation_Load(unkCC, areaDataManager->header.mapPropAnimFileId);
+        AreaMapAnimation_Load(areaMapAnimation, areaDataManager->header.mapPropAnimFileId);
     }
     for (i = 0; i < AREA_DATA_MAX_MAP_PROPS; i++) {
         areaDataManager->mapPropModels[i] = NULL;
@@ -221,7 +221,7 @@ void AreaDataManager_Load(AreaDataManager *areaDataManager, Field3dRenderObjMana
         if (!animListFile.filler_3) {
             renderObj = (NNSG3dRenderObj *)Field3dObjectList_AddShared(renderObjManager, id);
             if (id < animListFileCount) {
-                MapPropAnimationManager_LoadPropAnimations(id, NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(areaDataManager->mapPropModels[id]), 0), renderObj, areaDataManager->mapPropTex, &animListFile, mapPropAnimationManager, unk104);
+                MapPropAnimationManager_LoadPropAnimations(id, NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(areaDataManager->mapPropModels[id]), 0), renderObj, areaDataManager->mapPropTex, &animListFile, mapPropAnimationManager, timeOfDayPropAnims);
             }
         }
     }

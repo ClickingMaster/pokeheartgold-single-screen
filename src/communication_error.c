@@ -77,12 +77,12 @@ static BOOL GetWifiErrorCodeToShow(u32 *error_code_ptr) {
     }
 
     // TODO: this is probably a struct.
-    u32 *unk = CommState_GetWifiError();
-    s32 unk2 = WifiConnection_ClassifyErrorCode(unk[0], unk[1]);
+    u32 *wifiError = CommState_GetWifiError();
+    s32 errorClass = WifiConnection_ClassifyErrorCode(wifiError[0], wifiError[1]);
 
-    *error_code_ptr = unk[0];
+    *error_code_ptr = wifiError[0];
 
-    if ((unk2 == 11 || (unk2 >= 14 || unk[0] == 25 || unk[0] == 26)) && unk[1] != 2) {
+    if ((errorClass == 11 || (errorClass >= 14 || wifiError[0] == 25 || wifiError[0] == 26)) && wifiError[1] != 2) {
         return FALSE;
     }
 

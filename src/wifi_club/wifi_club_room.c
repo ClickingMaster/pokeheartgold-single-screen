@@ -555,12 +555,12 @@ void WifiClubRoom_CreatePersonDrawer(WifiClubRoom *room, WifiClubRoomPerson *per
 
 void WifiClubRoom_CreatePersonObject(WifiClubRoom *room, WifiClubRoomPerson *person, s16 *pos, s16 id, u16 spriteId, u8 direction, s32 action) {
     Field2DObjectTemplate template;
-    template.unk0 = pos[0];
-    template.unk2 = pos[1];
-    template.unk4 = id;
-    template.unk6 = action;
-    template.unk8 = direction;
-    template.unkA = spriteId;
+    template.x = pos[0];
+    template.y = pos[1];
+    template.id = id;
+    template.action = action;
+    template.direction = direction;
+    template.spriteId = spriteId;
 
     person->object = Field2DObjectManager_AddObject(room->objects, &template);
 }
@@ -752,9 +752,9 @@ s32 WifiClubRoomPerson_UpdateTalking(WifiClubRoom *room, WifiClubRoomPerson *per
 
 void WifiClubRoom_QueueMoveCommand(WifiClubRoom *room, s16 action, u32 direction, u32 objectId) {
     Field2DCommand command;
-    command.unk0 = action;
-    command.unk2 = direction;
-    command.unk3 = objectId;
+    command.action = action;
+    command.direction = direction;
+    command.objectId = objectId;
 
     Field2DCommandQueue_Push(room->commandQueue, &command);
 }

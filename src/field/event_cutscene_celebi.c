@@ -141,9 +141,9 @@ static void Task_CelebiCutsceneSwirl(SysTask *task, void *_data) {
     CelebiTimeTravelCutsceneTaskData *data = _data;
     switch (data->swirlTaskState) {
     case 0:
-        CelebiSwirlParams unk = { 0xFFFF0000, 0xB4, 0x500 };
-        unk.perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
-        CelebiCutscene_InitSwirlData(data, &unk);
+        CelebiSwirlParams swirlParams = { 0xFFFF0000, 0xB4, 0x500 };
+        swirlParams.perspective = Camera_GetPerspectiveAngle(data->fieldSystem->camera);
+        CelebiCutscene_InitSwirlData(data, &swirlParams);
         data->swirlTaskState++;
         break;
     case 1:

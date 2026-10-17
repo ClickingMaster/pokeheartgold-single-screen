@@ -64,7 +64,7 @@ void BattleSetupSub134_Delete(struct BattleSetupSub_134 *sub) {
 }
 
 void FieldSystem_SetWarpResetSuppressed(FieldSystem *fieldSystem, u8 value) {
-    fieldSystem->unkAC = value;
+    fieldSystem->warpResetSuppressed = value;
 }
 
 void FieldSystem_ResetStateOnMapConnection(FieldSystem *fieldSystem) {
@@ -89,7 +89,7 @@ void FieldSystem_ResetStateOnWarp(FieldSystem *fieldSystem) {
     SaveVarsFlags *flags;
     RoamerSaveData *roamers;
     PlayerSaveData *player;
-    if (fieldSystem->unkAC == 1) {
+    if (fieldSystem->warpResetSuppressed == 1) {
         return;
     }
     flags = Save_VarsFlags_Get(fieldSystem->saveData);
