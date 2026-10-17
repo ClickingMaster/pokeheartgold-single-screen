@@ -304,10 +304,10 @@ s32 CharSprite_IsAnimSetAllowed(u32 spriteId, s32 animSet) {
     return 1;
 }
 
-s32 CharSprite_GetCellAnimResId(s32 animSet, s32 resType, s32 arg2) {
+s32 CharSprite_GetCellAnimResId(s32 animSet, s32 resType, s32 nonStandardSize) {
     GF_ASSERT(resType == 2 || resType == 3);
     s32 variantIndex = resType - 2;
-    if (arg2 == 0) {
+    if (nonStandardSize == 0) {
         variantIndex += 2;
     }
     return 256 + (animSet * 2) + sCharCellAnimVariants[variantIndex];
@@ -327,16 +327,16 @@ void CharSpriteManager_LoadCharWithPalette(CharSpriteManager *charSpriteManager,
     charSpriteManager->chars[charIndex].plttResource = AddPlttResObjFromOpenNarc(charSpriteManager->resManagers[1], charSpriteManager->charNarc, charIndex * 2 + 13, 0, charIndex + 512, vramType, 1, (enum HeapID)heapID);
     NNSG2dCharacterData *charData = GF2DGfxResObj_GetCharDataPtr(charSpriteManager->chars[charIndex].charResource);
 
-    s32 sp34;
+    s32 nonStandardSize;
     if (charData->szByte != 6144) {
-        sp34 = 1;
+        nonStandardSize = 1;
     } else {
-        sp34 = 0;
+        nonStandardSize = 0;
     }
     if (animSet == 2) {
         charData->szByte = 2048;
     } else if (animSet == 1) {
-        if (sp34 != 0) {
+        if (nonStandardSize != 0) {
             charData->szByte = 5120;
         } else {
             charData->szByte = 6144;
@@ -356,8 +356,8 @@ void CharSpriteManager_LoadCharWithPalette(CharSpriteManager *charSpriteManager,
     charSpriteManager->chars[charIndex].vramType = vramType;
     charSpriteManager->chars[charIndex].animSet = animSet;
     charSpriteManager->chars[charIndex].sharedPalette = 0;
-    s32 cellResId = CharSprite_GetCellAnimResId(animSet, 2, sp34);
-    CreateSpriteResourcesHeader(&charSpriteManager->chars[charIndex].header, charIndex + 512, charIndex + 512, cellResId, CharSprite_GetCellAnimResId(animSet, 3, sp34), -1, -1, 0, 0, charSpriteManager->resManagers[0], charSpriteManager->resManagers[1], charSpriteManager->resManagers[2], charSpriteManager->resManagers[3], 0, 0);
+    s32 cellResId = CharSprite_GetCellAnimResId(animSet, 2, nonStandardSize);
+    CreateSpriteResourcesHeader(&charSpriteManager->chars[charIndex].header, charIndex + 512, charIndex + 512, cellResId, CharSprite_GetCellAnimResId(animSet, 3, nonStandardSize), -1, -1, 0, 0, charSpriteManager->resManagers[0], charSpriteManager->resManagers[1], charSpriteManager->resManagers[2], charSpriteManager->resManagers[3], 0, 0);
 }
 
 void CharSpriteManager_LoadSharedPaletteChar(CharSpriteManager *charSpriteManager, s32 charIndex, s32 vramType, s32 animSet, enum HeapID heapID) {

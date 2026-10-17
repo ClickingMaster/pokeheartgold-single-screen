@@ -25,12 +25,16 @@ typedef struct FieldTerrainQueries {
 
 #define FS_TERRAIN_QUERIES(fieldSystem) ((const FieldTerrainQueries *)(fieldSystem)->terrainQueries)
 
+int TileIndex_GetQuadrant(int tile, int stride);
+int MapLoadManager_GetMapSlotOfMatrixIndex(int matrixIndex, int unused, MapLoadManager *mapLoadManager);
+Bdhc *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 mapSlot);
+BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *mapSlot);
+SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 mapSlot);
+int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 mapSlot);
+
 int Terrain_AbsDiff(int lhs, int rhs);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
 
-extern int TileIndex_GetQuadrant(int idx, int stride);
-extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int a1, MapLoadManager *mapLoadManager);
-extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
 int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
@@ -40,9 +44,6 @@ BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *o
 u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
 int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 
-extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
-extern SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 idx);
-extern int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 idx);
 u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *outSlope);
 void Terrain_MakeTileRect(int x, int z, int offsetX, int offsetZ, int width, int depth, fx32 *out);
 BOOL MapProp_IsInRect(MapProp *mapProp, fx32 *rect, VecFx32 *offset);
@@ -130,7 +131,7 @@ int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objec
     if (loadedMapIndex > QUADRANT_COUNT - 1) {
         bdhcHeightValid = FALSE;
     } else {
-        void *bdhc = MapLoadManager_GetBdhc(landDataMan, loadedMapIndex);
+        Bdhc *bdhc = MapLoadManager_GetBdhc(landDataMan, loadedMapIndex);
         bdhcHeightValid = Bdhc_GetHeight(objectHeightMode, objectHeight, objectPosition.x, objectPosition.z, bdhc, &objectPosition.y);
     }
 

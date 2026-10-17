@@ -1,5 +1,6 @@
 #include "field_warp_state.h"
 
+#include "constants/movements.h"
 #include "constants/pokemon.h"
 
 #include "field/field_follow_mon.h"
@@ -46,20 +47,20 @@ u32 GetSpawnIdForFlyMap(u32 mapId);
 void FlypointFlagAction(FieldSystem *fieldSystem, u32 mapId);
 
 static const MovementScriptCommand sFollowMovement[] = {
-    { 73, 1 },
-    { 33, 1 },
-    { 74, 1 },
-    { 254, 0 },
+    { MOVEMENT_UNK_73,   1 },
+    { 33,                1 },
+    { MOVEMENT_UNK_74,   1 },
+    { MOVEMENT_STEP_END, 0 },
 };
 
 struct BattleSetupSub_134 *BattleSetupSub134_New(enum HeapID heapId) {
-    struct BattleSetupSub_134 *p = Heap_Alloc(heapId, 0x24);
-    MI_CpuClearFast(p, 0x24);
-    return p;
+    struct BattleSetupSub_134 *sub = Heap_Alloc(heapId, 0x24);
+    MI_CpuClearFast(sub, 0x24);
+    return sub;
 }
 
-void BattleSetupSub134_Delete(struct BattleSetupSub_134 *p) {
-    Heap_Free(p);
+void BattleSetupSub134_Delete(struct BattleSetupSub_134 *sub) {
+    Heap_Free(sub);
 }
 
 void FieldSystem_SetWarpResetSuppressed(FieldSystem *fieldSystem, u8 value) {
@@ -130,25 +131,25 @@ void FieldSystem_ClearSafariSysFlag(FieldSystem *fieldSystem) {
 }
 
 void FieldSystem_ClearFollowingTrainer(FieldSystem *fieldSystem) {
-    SaveVarsFlags *f = Save_VarsFlags_Get(fieldSystem->saveData);
-    Save_VarsFlags_ClearHaveFollowerFlag(f);
-    Save_VarsFlags_SetFollowerTrainerNum(f, 0);
+    SaveVarsFlags *flags = Save_VarsFlags_Get(fieldSystem->saveData);
+    Save_VarsFlags_ClearHaveFollowerFlag(flags);
+    Save_VarsFlags_SetFollowerTrainerNum(flags, 0);
 }
 
 void FieldSystem_RandomizeRoamers(FieldSystem *fieldSystem) {
     Save_RandomizeRoamersLocation(Save_Roamers_Get(fieldSystem->saveData));
 }
 
-struct FlyTaskEnv *FlyTaskEnv_New(enum HeapID heapId, FieldSystem *fieldSystem, Pokemon *mon, u16 value, u16 mapNo, s16 x, s16 y) {
-    struct FlyTaskEnv *p = Heap_AllocAtEnd(heapId, sizeof(struct FlyTaskEnv));
-    memset(p, 0, sizeof(struct FlyTaskEnv));
-    p->fieldSystem = fieldSystem;
-    p->mon = mon;
-    p->mapNo = mapNo;
-    p->x = x;
-    p->y = y;
-    p->partySlot = value;
-    return p;
+struct FlyTaskEnv *FlyTaskEnv_New(enum HeapID heapId, FieldSystem *fieldSystem, Pokemon *mon, u16 partySlot, u16 mapNo, s16 x, s16 y) {
+    struct FlyTaskEnv *env = Heap_AllocAtEnd(heapId, sizeof(struct FlyTaskEnv));
+    memset(env, 0, sizeof(struct FlyTaskEnv));
+    env->fieldSystem = fieldSystem;
+    env->mon = mon;
+    env->mapNo = mapNo;
+    env->x = x;
+    env->y = y;
+    env->partySlot = partySlot;
+    return env;
 }
 
 BOOL FieldTask_Fly(TaskManager *task) {
@@ -224,9 +225,7 @@ BOOL FieldTask_Fly(TaskManager *task) {
             FieldMoveCutIn_Delete(env->effect);
             local = Save_LocalFieldData_Get(fieldSystem->saveData);
             map = GetSpawnIdForFlyMap(env->mapNo);
-            if (map == 0) {
-                GF_AssertFail();
-            }
+            GF_ASSERT(map != 0);
             GetFlyWarpData(map, &warp);
             GetSpecialSpawnWarpData(map, LocalFieldData_GetSpecialSpawnWarpPtr(local));
             JumpTask_FlyWarp(task, warp.mapId, -1, warp.x, warp.y, 1);

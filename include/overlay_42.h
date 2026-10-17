@@ -207,7 +207,7 @@ void CharSpriteManager_LoadCellAnims(CharSpriteManager *charSpriteManager, s32 a
 void CharSpriteManager_UnloadCellAnims(CharSpriteManager *charSpriteManager, s32 animSet);
 u16 CharSprite_GetCharIndex(s32 spriteId);
 s32 CharSprite_IsAnimSetAllowed(u32 spriteId, s32 animSet);
-s32 CharSprite_GetCellAnimResId(s32 animSet, s32 resType, s32 arg2);
+s32 CharSprite_GetCellAnimResId(s32 animSet, s32 resType, s32 nonStandardSize);
 void CharSpriteManager_LoadCharResources(CharSpriteManager *charSpriteManager, s32 charIndex, u8 vramType, s32 animSet, enum HeapID heapID, s32 sharedPalette);
 void CharSpriteManager_LoadCharWithPalette(CharSpriteManager *charSpriteManager, s32 charIndex, s32 vramType, s32 animSet, enum HeapID heapID);
 void CharSpriteManager_LoadSharedPaletteChar(CharSpriteManager *charSpriteManager, s32 charIndex, s32 vramType, s32 animSet, enum HeapID heapID);

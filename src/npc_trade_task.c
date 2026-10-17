@@ -1,20 +1,42 @@
-#include "npc_trade_task_private.h"
+#include "global.h"
 
-const OverlayManagerTemplate gNPCTradeSequenceAppTemplate = {
+#include "field_overworld_restore.h"
+#include "field_overworld_transition.h"
+#include "field_warp_reset.h"
+#include "heap.h"
+#include "npc_trade.h"
+#include "task.h"
+#include "trade_sequence.h"
+
+FS_EXTERN_OVERLAY(OVY_71);
+
+typedef struct NPCTradeTaskEnv {
+    NPCTradeAppData *tradeWork;
+    int state;
+    int slot;
+    TRADE_ANIM_WORK animWork;
+    Pokemon *myMon;
+    Pokemon *tradeMon;
+} NPCTradeTaskEnv;
+
+static void NPCTrade_CallTradeSequenceApp(TaskManager *taskManager);
+static BOOL Task_NPCTrade(TaskManager *taskManager);
+
+static const OverlayManagerTemplate sNPCTradeSequenceAppTemplate = {
     TradeSequence_Init,
     TradeSequence_Main,
     TradeSequence_Exit,
     FS_OVERLAY_ID(OVY_71),
 };
 
-void NPCTrade_CallTradeSequenceApp(TaskManager *taskManager) {
+static void NPCTrade_CallTradeSequenceApp(TaskManager *taskManager) {
     NPCTradeTaskEnv *env;
     TaskManager_GetFieldSystem(taskManager);
     env = TaskManager_GetEnvironment(taskManager);
-    CallApplicationAsTask(taskManager, &gNPCTradeSequenceAppTemplate, &env->animWork);
+    CallApplicationAsTask(taskManager, &sNPCTradeSequenceAppTemplate, &env->animWork);
 }
 
-BOOL Task_NPCTrade(TaskManager *taskManager) {
+static BOOL Task_NPCTrade(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     NPCTradeTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
@@ -53,13 +75,13 @@ BOOL Task_NPCTrade(TaskManager *taskManager) {
     return FALSE;
 }
 
-void CallTask_NPCTrade(TaskManager *taskManager, NPCTradeAppData *tradeWork, u16 slot, enum HeapID heapId) {
-    NPCTradeTaskEnv *env = Heap_Alloc(heapId, sizeof(NPCTradeTaskEnv));
+void CallTask_NPCTrade(TaskManager *taskManager, NPCTradeAppData *tradeWork, u16 slot, enum HeapID heapID) {
+    NPCTradeTaskEnv *env = Heap_Alloc(heapID, sizeof(NPCTradeTaskEnv));
     memset(env, 0, sizeof(NPCTradeTaskEnv));
     env->state = 0;
     env->tradeWork = tradeWork;
     env->slot = slot;
-    env->myMon = AllocMonZeroed(heapId);
-    env->tradeMon = AllocMonZeroed(heapId);
+    env->myMon = AllocMonZeroed(heapID);
+    env->tradeMon = AllocMonZeroed(heapID);
     TaskManager_Call(taskManager, Task_NPCTrade, env);
 }

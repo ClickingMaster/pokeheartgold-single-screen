@@ -2,21 +2,21 @@
 
 #include "global.h"
 
+#include "field_overworld_restore.h"
 #include "field_system.h"
 #include "overlay_01.h"
 #include "screen_fade.h"
 #include "task.h"
-#include "field_overworld_restore.h"
 
 // Field tasks that leave the overworld (unload the field map) or bring it back, with or without a screen fade.
 
-BOOL Task_LeaveOverworld(TaskManager *taskManager);
-BOOL Task_RestoreOverworld(TaskManager *taskManager);
-BOOL Task_WaitPaletteFade(TaskManager *taskManager);
-BOOL Task_FadeOutAndLeaveOverworld(TaskManager *taskManager);
-BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager);
+static BOOL Task_LeaveOverworld(TaskManager *taskManager);
+static BOOL Task_RestoreOverworld(TaskManager *taskManager);
+static BOOL Task_WaitPaletteFade(TaskManager *taskManager);
+static BOOL Task_FadeOutAndLeaveOverworld(TaskManager *taskManager);
+static BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager);
 
-BOOL Task_LeaveOverworld(TaskManager *taskManager) {
+static BOOL Task_LeaveOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     if (!FieldSystem_IsFieldMapLoaded(fieldSystem)) {
         return TRUE;
@@ -34,7 +34,7 @@ void CallTask_LeaveOverworld(TaskManager *taskManager) {
     TaskManager_Call(taskManager, Task_LeaveOverworld, NULL);
 }
 
-BOOL Task_RestoreOverworld(TaskManager *taskManager) {
+static BOOL Task_RestoreOverworld(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     if (FieldSystem_IsOverworldRestored(fieldSystem)) {
         return TRUE;
@@ -52,7 +52,7 @@ void CallTask_RestoreOverworld(TaskManager *taskManager) {
     TaskManager_Call(taskManager, Task_RestoreOverworld, NULL);
 }
 
-BOOL Task_WaitPaletteFade(TaskManager *taskManager) {
+static BOOL Task_WaitPaletteFade(TaskManager *taskManager) {
     if (IsPaletteFadeFinished()) {
         return TRUE;
     }
@@ -78,7 +78,7 @@ void CallTask_FadeFromBlack(TaskManager *taskManager) {
     TaskManager_Call(taskManager, Task_WaitPaletteFade, NULL);
 }
 
-BOOL Task_FadeOutAndLeaveOverworld(TaskManager *taskManager) {
+static BOOL Task_FadeOutAndLeaveOverworld(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {
     case 0:
@@ -99,7 +99,7 @@ void CallTask_FadeOutAndLeaveOverworld(TaskManager *taskManager) {
     TaskManager_Call(taskManager, Task_FadeOutAndLeaveOverworld, NULL);
 }
 
-BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager) {
+static BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     switch (*state) {

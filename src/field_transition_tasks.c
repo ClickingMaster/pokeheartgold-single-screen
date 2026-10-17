@@ -4,26 +4,28 @@
 
 #include "constants/global_fieldmap.h"
 
+#include "field/door_transition.h"
 #include "field/fieldmap.h"
+#include "wifi_plaza/wifi_plaza_internal.h"
 
 #include "camera.h"
+#include "field_metatile_query_internal.h"
 #include "field_system.h"
+#include "field_terrain.h"
+#include "field_transition_effects.h"
 #include "follow_mon.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_movement_commands.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-#include "field/door_transition.h"
-#include "player_avatar_actions.h"
 #include "player_avatar.h"
+#include "player_avatar_actions.h"
 #include "screen_fade.h"
 #include "task.h"
-#include "field_terrain.h"
-#include "field_transition_effects.h"
-#include "map_object_movement_commands.h"
 
-// Map enter routines (sMapEnterRoutines) and the player/camera placement run before them (sMapEnterPlacementRoutines), indexed by
-// FieldTransitionEnvironment.transitionNo, plus the Wi-Fi Plaza launch task (ScrCmd_LaunchWiFiPlaza).
+// Map enter routines (sMapEnterRoutines) and the player/camera placement run before them
+// (sMapEnterPlacementRoutines), indexed by FieldTransitionEnvironment.transitionNo, plus the Wi-Fi Plaza launch task.
 
 typedef struct WiFiPlazaTaskEnv {
     u16 state;
@@ -33,17 +35,9 @@ typedef struct WiFiPlazaTaskEnv {
     u32 value;
 } WiFiPlazaTaskEnv;
 
-// Defined in field overlay / Wi-Fi Plaza sources that have no header yet.
-BOOL DoorTransition_WalkOutOfSideDoor(FieldSystem *fieldSystem, FieldTransitionWork *work, u8 direction);
-BOOL Task_WalkOutOfDoorAfterWarp(TaskManager *taskMan);
-int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, fx32 x, fx32 z, u8 *outKind);
-BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
-BOOL WiFiPlaza_Main(OverlayManager *man, int *state);
-BOOL WiFiPlaza_Exit(OverlayManager *man, int *state);
-
 FS_EXTERN_OVERLAY(OVY_45);
 
-BOOL Task_WiFiPlaza(TaskManager *taskMan);
+static BOOL Task_WiFiPlaza(TaskManager *taskMan);
 
 BOOL FieldTransition_EnterThroughSideDoor(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
@@ -363,7 +357,7 @@ void CallTask_WiFiPlaza(TaskManager *taskMan, u16 parameter) {
     TaskManager_Call(taskMan, Task_WiFiPlaza, env);
 }
 
-BOOL Task_WiFiPlaza(TaskManager *taskMan) {
+static BOOL Task_WiFiPlaza(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     WiFiPlazaTaskEnv *env = TaskManager_GetEnvironment(taskMan);
     switch (env->state) {

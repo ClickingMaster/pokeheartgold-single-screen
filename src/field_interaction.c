@@ -5,20 +5,20 @@
 #include "constants/global_fieldmap.h"
 
 #include "field_system.h"
+#include "field_terrain.h"
 #include "map_events_internal.h"
 #include "map_object.h"
 #include "metatile_behavior.h"
 #include "player_avatar.h"
 #include "script_manager.h"
-#include "field_terrain.h"
 
 void BottomScreen_None_Init(void);
 void BottomScreen_None_End(void);
 BOOL BottomScreen_None_IsDone(void);
-u32 _GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z);
-u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object);
-u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent);
-BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
+static u32 GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z);
+static u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object);
+static u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent);
+static BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
 
 void BottomScreen_None_Init(void) {
 }
@@ -30,28 +30,28 @@ BOOL BottomScreen_None_IsDone(void) {
     return TRUE;
 }
 
-u32 _GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z) {
+static u32 GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z) {
     u32 dir = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     *x = (int)PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     *z = (int)PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
     switch (dir) {
-    case 0:
+    case DIR_NORTH:
         (*z)--;
         break;
-    case 1:
+    case DIR_SOUTH:
         (*z)++;
         break;
-    case 2:
+    case DIR_WEST:
         (*x)--;
         break;
-    case 3:
+    case DIR_EAST:
         (*x)++;
         break;
     }
     return dir;
 }
 
-u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object) {
+static u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object) {
     u32 y = MapObject_GetPositionVectorYCoordUInt(PlayerAvatar_GetMapObject(avatar));
     if (y == MapObject_GetPositionVectorYCoordUInt(object)) {
         return TRUE;
@@ -62,7 +62,7 @@ u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object) {
 void FieldSystem_GetFacingObject(FieldSystem *fieldSystem, LocalMapObject **ret_p) {
     int x;
     int z;
-    u32 dir = _GetCoordsOfFacingTile(fieldSystem, &x, &z);
+    u32 dir = GetCoordsOfFacingTile(fieldSystem, &x, &z);
     if (MetatileBehavior_IsCounter(GetMetatileBehavior(fieldSystem, x, z)) == TRUE) {
         switch (dir) {
         case 0:
@@ -96,7 +96,7 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
     int z;
     int i;
     BgEvent *bgEvent;
-    _GetCoordsOfFacingTile(fieldSystem, &x, &z);
+    GetCoordsOfFacingTile(fieldSystem, &x, &z);
     i = 0;
     if (numEvents > 0) {
         bgEvent = bgEvents;
@@ -117,7 +117,7 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
     return 0xFFFF;
 }
 
-u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent) {
+static u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent) {
     if (bgEvent->type != 2) {
         return FALSE;
     }
@@ -127,7 +127,7 @@ u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent) {
     return TRUE;
 }
 
-BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent) {
+static BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent) {
     if (bgEvent->dir == 4) {
         return TRUE;
     }
@@ -164,7 +164,7 @@ u32 GetFacingSignScript(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEven
     if (PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar) != DIR_NORTH) {
         return 0xFFFF;
     }
-    _GetCoordsOfFacingTile(fieldSystem, &x, &z);
+    GetCoordsOfFacingTile(fieldSystem, &x, &z);
     for (i = 0; i < numEvents; i++) {
         if (x == bgEvents[i].x && z == bgEvents[i].z && bgEvents[i].type == 1) {
             return bgEvents[i].scriptId;

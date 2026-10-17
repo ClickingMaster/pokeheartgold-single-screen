@@ -1,24 +1,24 @@
 #include "global.h"
 
-// Field hook object reached through FieldSystem->mapSystems->unk14 (field_system.c, field/bottom_screen_app.c).
-// Its creator is not known, so the names stay as they are.
+// The field hook kept in the field map systems: it receives the bottom screen app events and tells the field
+// whether the player may move.
 
-typedef void (*Ov35Callback)(void *arg);
+typedef void (*FieldHookCallback)(void *arg);
 
-typedef struct Ov35State {
+typedef struct FieldHookState {
     u8 unk_00[2];
     u8 unk_02; // the callback only runs when this is 2
-    u8 unk_03; // returned by FieldHookUnused_IsMovementAllowed; field_system.c uses it as "movement allowed"
+    u8 movementAllowed;
     u8 unk_04; // set by event 1
     u8 unk_05[0x3F];
-    Ov35Callback callback;
+    FieldHookCallback callback;
     void *callbackArg;
-} Ov35State;
+} FieldHookState;
 
-void FieldHookUnused_OnEvent(Ov35State *state, u32 event);
-u8 FieldHookUnused_IsMovementAllowed(Ov35State *state);
+void FieldHookUnused_OnEvent(FieldHookState *state, u32 event);
+u8 FieldHookUnused_IsMovementAllowed(FieldHookState *state);
 
-void FieldHookUnused_OnEvent(Ov35State *state, u32 event) {
+void FieldHookUnused_OnEvent(FieldHookState *state, u32 event) {
     switch (event) {
     case 0:
         break;
@@ -39,6 +39,6 @@ void FieldHookUnused_OnEvent(Ov35State *state, u32 event) {
     }
 }
 
-u8 FieldHookUnused_IsMovementAllowed(Ov35State *state) {
-    return state->unk_03;
+u8 FieldHookUnused_IsMovementAllowed(FieldHookState *state) {
+    return state->movementAllowed;
 }

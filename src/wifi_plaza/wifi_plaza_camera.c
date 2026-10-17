@@ -2,11 +2,10 @@
 
 #include "global.h"
 
+#include "wifi_plaza/wifi_plaza_obj.h"
+
 #include "camera.h"
 #include "heap.h"
-
-// Object manager (wifi_plaza_obj): writes the object's position
-void WiFiPlazaObj_GetPosition(void *object, VecFx32 *position);
 
 static const CameraAngle sWiFiPlazaCameraAngle = {
     .x = 0xD602,
@@ -19,7 +18,6 @@ WiFiPlazaCamera *WiFiPlazaCamera_Create(enum HeapID heapID) {
     u32 i;
     u8 *p = (u8 *)camera;
 
-    // byte-wise clear written out (the compiled loop)
     i = sizeof(WiFiPlazaCamera);
     do {
         *p = 0;
@@ -60,7 +58,7 @@ void WiFiPlazaCamera_SetTargetWithOffset(WiFiPlazaCamera *camera, fx32 x, fx32 y
     camera->target.z = z - 0x20000;
 }
 
-void WiFiPlazaCamera_SetFollowObject(WiFiPlazaCamera *camera, void *object) {
+void WiFiPlazaCamera_SetFollowObject(WiFiPlazaCamera *camera, WiFiPlazaObj *object) {
     camera->followObject = object;
 }
 
