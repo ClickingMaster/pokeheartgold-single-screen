@@ -155,9 +155,10 @@ const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenu = { VsRecorderMenu_
 static const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode) {
     if (mode >= 7) {
         GF_ASSERT(mode < 7);
+        // falls back to the first mode's menu (sVsRecorderRootMenu[0].child)
         return *(const VsRecorderMenuEntry **)(_02103754 + 0x64);
     }
-    return sVsRecorderRootMenus[mode].menu;
+    return sVsRecorderRootMenu[mode].child;
 }
 
 const VsRecorderMenuEntry *VsRecorderApp_GetStartMenu(VsRecorderWork *recorder, int mode) {

@@ -907,7 +907,6 @@
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind1
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind0
 	.public gPokeathlonBlockSmashSpotPositions
-	.public gPokeathlonBlockSmashSpotPositionsY
 	.public gPokeathlonBlockSmashBlockTouchOffsets
 	.public gPokeathlonBlockSmashCpuSwitchGaugeThresholds
 	.public gPokeathlonBlockSmashCpuSwitchGaugeChances
@@ -971,7 +970,6 @@
 	.public gPokeathlonGoalRollGoalPositions
 	.public gPokeathlonGoalRollMonStartPositions
 	.public gPokeathlonGoalRollBallSpawnPoints
-	.public gPokeathlonGoalRollBallSpawnPointsY
 	.public gPokeathlonGoalRollGoalLines
 	.public gPokeathlonGoalRollGoalPosts
 	.public gPokeathlonGoalRollBallSpeedsA
@@ -993,7 +991,6 @@
 	.public gPokeathlonRingDropGraphicsModes
 	.public gPokeathlonRingDropRingEdge
 	.public gPokeathlonRingDropMonStartPositions
-	.public gPokeathlonRingDropMonStartPositionsY
 	.public gPokeathlonRingDropOamCharTransferParam
 	.public gPokeathlonRingDropSwitchSpots
 	.public gPokeathlonRingDropSwitchSpotsY
@@ -1011,7 +1008,6 @@
 	.public gPokeathlonRingDropCpuCloseChances
 	.public gPokeathlonRingDropCpuDashChances
 	.public gPokeathlonRingDropCpuSwitchSpots
-	.public gPokeathlonRingDropCpuSwitchSpotsY
 	.public gPokeathlonEventRankPoints
 	.public gPokeathlonEventPointsCalcFuncs
 	.public gPokeathlonEventScorePointsFuncs

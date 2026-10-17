@@ -19,8 +19,7 @@ void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 BOOL PlaySEOnPlayer(u16 seqNo, int player);
 
-extern const s16 gPokeathlonRingDropMonStartPositions[];
-extern const s16 gPokeathlonRingDropMonStartPositionsY[];
+extern const s16 gPokeathlonRingDropMonStartPositions[][2];
 // Jump heights by frame (jump type, frame) and fall speeds by jump type.
 extern const s16 gPokeathlonRingDropJumpHeights[5][10];
 extern const u8 gPokeathlonRingDropFallSpeeds[8];
@@ -42,7 +41,7 @@ static void PokeathlonRingDropMon_Respawn(PokeathlonRingDropMon *mon) {
 
 void PokeathlonRingDropMon_ResetToStart(PokeathlonRingDropMon *mon) {
     int x, y;
-    PokeathlonCourseObject_GroundToCenter(mon->member->object, gPokeathlonRingDropMonStartPositions[mon->flags.bits.participant * 2], gPokeathlonRingDropMonStartPositionsY[mon->flags.bits.participant * 2], &x, &y);
+    PokeathlonCourseObject_GroundToCenter(mon->member->object, gPokeathlonRingDropMonStartPositions[mon->flags.bits.participant][0], gPokeathlonRingDropMonStartPositions[mon->flags.bits.participant][1], &x, &y);
     mon->position.x = x << FX32_SHIFT;
     mon->position.y = y << FX32_SHIFT;
     mon->destination.x = x << FX32_SHIFT;

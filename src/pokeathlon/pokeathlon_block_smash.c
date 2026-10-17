@@ -112,8 +112,13 @@ ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, Spr
 
 extern const TouchscreenHitbox *gPokeathlonBlockSmashSpotHitboxes[3];
 extern const u8 gPokeathlonBlockSmashSpotHitboxCounts[3];
-extern const s16 gPokeathlonBlockSmashSpotPositions[4][2]; // x, y of the four weak spot positions
-extern const s16 gPokeathlonBlockSmashSpotPositionsY[];    // their y (the second half of each gPokeathlonBlockSmashSpotPositions entry)
+// One of the four weak spot positions
+typedef struct PokeathlonBlockSmashSpot {
+    s16 x;
+    s16 y;
+} PokeathlonBlockSmashSpot;
+
+extern const PokeathlonBlockSmashSpot gPokeathlonBlockSmashSpotPositions[];
 extern const s16 gPokeathlonBlockSmashBlockTouchOffsets[4][2];
 
 // The sprites of a participant's row on the top screen
@@ -1518,8 +1523,8 @@ static void PokeathlonBlockSmashBlock_MoveSpot(PokeathlonBlockSmashBlock *block)
         slot++;
     }
     block->spotSlot = slot;
-    block->spotX = gPokeathlonBlockSmashSpotPositions[block->spotSlot][0] + (MTRandom() & 15);
-    block->spotY = gPokeathlonBlockSmashSpotPositionsY[block->spotSlot * 2] + MTRandom() % 12;
+    block->spotX = gPokeathlonBlockSmashSpotPositions[block->spotSlot].x + (MTRandom() & 15);
+    block->spotY = gPokeathlonBlockSmashSpotPositions[block->spotSlot].y + MTRandom() % 12;
 }
 
 static void PokeathlonBlockSmashBlock_UpdateSpot(PokeathlonBlockSmashBlock *block) {

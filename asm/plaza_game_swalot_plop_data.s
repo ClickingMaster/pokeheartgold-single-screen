@@ -6,8 +6,7 @@
 	.public sSwalotPlopStageAnimModels
 	.public sSwalotPlopSceneModelFiles
 	.public sSwalotPlopStageFiles
-	.public sSwalotPlopSpecialAnimStarts
-	.public sSwalotPlopSpecialAnimEnds
+	.public sSwalotPlopSpecialAnimRanges
 	.public sSwalotPlopSceneAnimFiles
 	.public sSwalotPlopBodyOffset
 	.public sSwalotPlopHitPoints
@@ -997,11 +996,12 @@ sSwalotPlopStageFiles: ; 0x02261C0A
 	.byte 0x23, 0x00, 0x23, 0x00, 0x22, 0x00
 	.byte 0x21, 0x00
 
-sSwalotPlopSpecialAnimStarts: ; 0x02261C12
-	.byte 0x00
-
-sSwalotPlopSpecialAnimEnds: ; 0x02261C13
-	.byte 0x00, 0x01, 0x0A, 0x0B, 0x14, 0x15, 0x1E, 0x1F, 0x28
+sSwalotPlopSpecialAnimRanges: ; 0x02261C12
+	.byte 0x00, 0x00
+	.byte 0x01, 0x0A
+	.byte 0x0B, 0x14
+	.byte 0x15, 0x1E
+	.byte 0x1F, 0x28
 
 sSwalotPlopSceneAnimFiles: ; 0x02261C1C
 	.byte 0x1A, 0x00, 0x1B, 0x00

@@ -63,8 +63,12 @@ extern const u16 sSwalotPlopStageAnimFiles[];
 extern const u16 sSwalotPlopStageAnimModels[];
 extern const u16 sSwalotPlopSceneModelFiles[3];
 extern const u16 sSwalotPlopStageFiles[];
-extern const u8 sSwalotPlopSpecialAnimStarts[];
-extern const u8 sSwalotPlopSpecialAnimEnds[];
+typedef struct SwalotPlopAnimRange {
+    u8 start;
+    u8 end;
+} SwalotPlopAnimRange;
+
+extern const SwalotPlopAnimRange sSwalotPlopSpecialAnimRanges[];
 extern const u16 sSwalotPlopSceneAnimFiles[6];
 extern const VecFx32 sSwalotPlopBodyOffset;
 extern const u32 sSwalotPlopHitPoints[];
@@ -2690,13 +2694,13 @@ void SwalotPlopScene_UpdateSpecial(SwalotPlopScene *scene) {
         }
     } else {
         int i = scene->leader == 4 ? 0 : scene->leader + 1;
-        int start = sSwalotPlopSpecialAnimStarts[i * 2] << 12;
+        int start = sSwalotPlopSpecialAnimRanges[i].start << 12;
         int frame = scene->frame;
         if (frame < start) {
             scene->frame = start;
         } else {
             int next = frame + 0x2000;
-            if (next < (sSwalotPlopSpecialAnimEnds[i * 2] << 12)) {
+            if (next < (sSwalotPlopSpecialAnimRanges[i].end << 12)) {
                 scene->frame = next;
             } else {
                 scene->frame = start;

@@ -161,8 +161,12 @@ typedef struct SafariAreaCustomizerConsts {
 extern const SafariAreaCustomizerConsts sSafariAreaCustomizerConsts;
 extern const u32 sSafariAreaCustomizerLabelColors[2];
 extern const GraphicsModes sSafariAreaCustomizerGraphicsModes;
-extern const u16 sSafariAreaCustomizerSlotMenuPositions[];
-extern const u16 sSafariAreaCustomizerSlotMenuPositionsY[];
+typedef struct SafariAreaCustomizerMenuPos {
+    u16 x;
+    u16 y;
+} SafariAreaCustomizerMenuPos;
+
+extern const SafariAreaCustomizerMenuPos sSafariAreaCustomizerSlotMenuPositions[];
 extern const TouchscreenHitbox sSafariAreaCustomizerSlotHitboxes[];
 extern const GraphicsBanks sSafariAreaCustomizerGraphicsBanks;
 extern const WindowTemplate sSafariAreaCustomizerWindowTemplates[5];
@@ -1083,8 +1087,8 @@ void SafariAreaCustomizer_OpenSlotMenu(SafariAreaCustomizer *s) {
     header.listMenuItems = s->areaMenuItems;
     header.bgConfig = s->bgConfig;
     header.numWindows = 3;
-    y = sSafariAreaCustomizerSlotMenuPositionsY[s->selectedSlot * 2];
-    x = sSafariAreaCustomizerSlotMenuPositions[s->selectedSlot * 2];
+    y = sSafariAreaCustomizerSlotMenuPositions[s->selectedSlot].y;
+    x = sSafariAreaCustomizerSlotMenuPositions[s->selectedSlot].x;
     s->listMenu = TouchscreenListMenu_Create(s->listMenuSpawner, &header, s->touchMode, x, y, 0, 0);
     SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_MAIN_1, s->selectedSlot, TRUE);
     SafariAreaCustomizer_DrawSelectFrame(s, GF_BG_LYR_SUB_0, s->selectedSlot, TRUE);

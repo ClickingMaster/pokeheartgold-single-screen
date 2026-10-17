@@ -64,8 +64,8 @@ typedef enum GtsConnectionState {
     GTS_CONNECTION_STATE_WAIT_CLOSE_ERROR,
 } GtsConnectionState;
 
-// The selector's tables of the letter groups: the first letter of each group, {first letter,
-// letter count} of each group, and the same table read from its second word.
+// The selector's tables of the letter groups: the first letter of each group and {first letter,
+// letter count} of each group.
 typedef struct GtsLetterGroup {
     int first;
     int count;
@@ -73,7 +73,6 @@ typedef struct GtsLetterGroup {
 
 extern const int gGtsSelectorGroupStarts[];
 extern const GtsLetterGroup gGtsSelectorLetterGroups[];
-extern const int ov70_02245F5C[][2];
 
 extern int (*const sGtsConnectionStates[])(GtsApp *app);
 extern const BgTemplate sGtsConnectionBg0Template;
@@ -147,7 +146,7 @@ void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
 
 BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
-    int count = ov70_02245F5C[group][0];
+    int count = gGtsSelectorLetterGroups[group].count;
     if (count > 0) {
         int i = 0;
         if (i < count) {

@@ -31,8 +31,12 @@ extern const VecFx32 gPokeathlonGoalRollFrameLeft;
 extern const VecFx32 gPokeathlonGoalRollNormalTopRight;
 extern const VecFx32 gPokeathlonGoalRollFrameRight;
 extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplates[];
-extern const s16 gPokeathlonGoalRollBallSpawnPoints[];
-extern const s16 gPokeathlonGoalRollBallSpawnPointsY[];
+typedef struct PokeathlonGoalRollSpawnPoint {
+    s16 x;
+    s16 y;
+} PokeathlonGoalRollSpawnPoint;
+
+extern const PokeathlonGoalRollSpawnPoint gPokeathlonGoalRollBallSpawnPoints[];
 extern const Point2D gPokeathlonGoalRollGoalLines[4][2]; // the goal line of each corner
 extern const VecFx32 gPokeathlonGoalRollGoalPosts[4][2];
 extern const u8 gPokeathlonGoalRollBallSpeedsA[][30];
@@ -1131,8 +1135,8 @@ static void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, Pokea
     }
     {
         u8 selected = candidates[(u8)(LCRandom() % count)];
-        ball->position.x = gPokeathlonGoalRollBallSpawnPoints[selected * 2] << 12;
-        ball->position.y = gPokeathlonGoalRollBallSpawnPointsY[selected * 2] << 12;
+        ball->position.x = gPokeathlonGoalRollBallSpawnPoints[selected].x << 12;
+        ball->position.y = gPokeathlonGoalRollBallSpawnPoints[selected].y << 12;
         ball->spawnPoint = selected;
     }
 }

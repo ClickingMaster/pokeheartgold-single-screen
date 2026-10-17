@@ -192,8 +192,12 @@ typedef struct SpinTradeGroupApp {
 
 extern const WindowTemplate gSpinTradeGroupYesNoWindowTemplate;
 extern const u16 gSpinTradeGroupAvatarCharOffsets[];
-extern const u8 gSpinTradeGroupBlinkFrames[];
-extern const u8 ov85_021EA8EB[];
+typedef struct SpinTradeGroupBlinkFrame {
+    u8 duration;
+    u8 palette;
+} SpinTradeGroupBlinkFrame;
+
+extern const SpinTradeGroupBlinkFrame gSpinTradeGroupBlinkFrames[];
 extern const GraphicsModes gSpinTradeGroupGraphicsModes;
 extern const ObjCharTransferTemplate gSpinTradeGroupObjCharTransferTemplate;
 extern const SpinTradeGroupPos gSpinTradeGroupAvatarPositions[];
@@ -423,13 +427,13 @@ void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
     SpinTradeGroupApp *app = data;
     SpinTradeGroupBlink *blink = &app->blink;
     if (app->blink.active != FALSE) {
-        if (blink->timer > gSpinTradeGroupBlinkFrames[blink->frame * 2]) {
+        if (blink->timer > gSpinTradeGroupBlinkFrames[blink->frame].duration) {
             blink->timer = 0;
             blink->frame++;
-            if (ov85_021EA8EB[blink->frame * 2] == 0xFF) {
+            if (gSpinTradeGroupBlinkFrames[blink->frame].palette == 0xFF) {
                 blink->frame = 0;
             }
-            GX_LoadOBJPltt((u8 *)blink->pltt->pRawData + ov85_021EA8EB[blink->frame * 2] * 32, 0, 0x20);
+            GX_LoadOBJPltt((u8 *)blink->pltt->pRawData + gSpinTradeGroupBlinkFrames[blink->frame].palette * 32, 0, 0x20);
         } else {
             app->blink.timer++;
         }

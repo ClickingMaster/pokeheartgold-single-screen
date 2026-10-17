@@ -474,9 +474,15 @@ struct BattleAnimObjWindowBgWork {
 }; // size: 0x44
 
 extern const u16 gBattleAnimDarkSpriteDrawFlags[6];
-extern const u32 gBattleAnimObjWindowBgGraphics[];
-extern const u32 gBattleAnimObjWindowBgPalettes[];
-extern const u32 gBattleAnimObjWindowBgScreens[];
+// NARC members of each background the object window effect can show
+typedef struct BattleAnimObjWindowBgFiles {
+    u32 graphics;
+    u32 palette;
+    u32 screen;
+    u32 unk_0C;
+} BattleAnimObjWindowBgFiles;
+
+extern const BattleAnimObjWindowBgFiles gBattleAnimObjWindowBgFiles[];
 
 void BattleAnimTask_SkewSlideAttackerBgResetScroll(BattleAnimSkewSlideWork *work, u32 *buffer) {
     u32 value = ((u32)-work->y << 16) | (u16)-work->x;
@@ -3817,10 +3823,10 @@ void BattleAnimObjWindowBg_SetBlend(BattleAnimObjWindowBgParams *params, s16 eva
 void BattleAnimObjWindowBg_LoadGraphics(BattleAnimObjWindowBgWork *work, int bgLayer) {
     enum HeapID heapId = BattleAnimSystem_GetHeapID(work->common.system);
     SetBgPriority((u8)bgLayer, (u8)BattleAnimSystem_GetBgPriority(work->common.system, 3));
-    GfGfxLoader_LoadCharData(work->params.narcId, gBattleAnimObjWindowBgGraphics[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
-    PaletteData_LoadNarc(work->common.paletteData, work->params.narcId, gBattleAnimObjWindowBgPalettes[work->params.graphic * 4], heapId, PLTTBUF_MAIN_BG, 32, 128);
+    GfGfxLoader_LoadCharData(work->params.narcId, gBattleAnimObjWindowBgFiles[work->params.graphic].graphics, work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
+    PaletteData_LoadNarc(work->common.paletteData, work->params.narcId, gBattleAnimObjWindowBgFiles[work->params.graphic].palette, heapId, PLTTBUF_MAIN_BG, 32, 128);
     BgClearTilemapBufferAndCommit(work->common.bgConfig, (u8)bgLayer);
-    GfGfxLoader_LoadScrnData(work->params.narcId, gBattleAnimObjWindowBgScreens[work->params.graphic * 4], work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
+    GfGfxLoader_LoadScrnData(work->params.narcId, gBattleAnimObjWindowBgFiles[work->params.graphic].screen, work->common.bgConfig, (GFBgLayer)bgLayer, 0, 0, TRUE, heapId);
 }
 
 enum {

@@ -390,8 +390,12 @@ extern const u8 ov72_0223B466[];
 extern const u8 ov72_0223B468[];
 extern const u8 ov72_0223B46A[];
 extern const int gNintendoWfcNumberInputWindowX[];
-extern const u8 gNintendoWfcPadKeyFlashes[];
-extern const u8 gNintendoWfcPadKeyFlashesY[];
+typedef struct NintendoWfcPadKeyFlash {
+    u8 x;
+    u8 y;
+} NintendoWfcPadKeyFlash;
+
+extern const NintendoWfcPadKeyFlash gNintendoWfcPadKeyFlashes[];
 extern const u8 gNintendoWfcPadNeighbors[][4];
 extern const TouchscreenHitbox gNintendoWfcYesNoHitboxes[];
 extern const TouchscreenHitbox gNintendoWfcPadHitboxes_Max100[];
@@ -2664,7 +2668,7 @@ static void NintendoWfc_PressPadKey(NintendoWfcConnect *wfc, int key) {
             wfc->numberInput.cursor = NintendoWfc_GetCursorAfterDigit(&wfc->numberInput);
             NintendoWfc_MovePadCursor(wfc->sprites[NINTENDO_WFC_SPRITE_PAD_CURSOR], wfc->numberInput.cursor);
             PlaySE(SEQ_SE_DP_SELECT);
-            NintendoWfc_StartButtonFlash(wfc, gNintendoWfcPadKeyFlashes[(key - 3) * 2], gNintendoWfcPadKeyFlashesY[(key - 3) * 2], NINTENDO_WFC_NUMBER_INPUT_MAIN);
+            NintendoWfc_StartButtonFlash(wfc, gNintendoWfcPadKeyFlashes[key - 3].x, gNintendoWfcPadKeyFlashes[key - 3].y, NINTENDO_WFC_NUMBER_INPUT_MAIN);
         } else {
             PlaySE(SEQ_SE_DP_CUSTOM06);
         }

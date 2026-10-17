@@ -124,6 +124,18 @@ typedef struct GtsSelectorWindowPosition {
     u8 y;
 } GtsSelectorWindowPosition;
 
+typedef struct GtsSelectorCursorPos {
+    u8 x;
+    u8 y;
+} GtsSelectorCursorPos;
+
+typedef struct GtsSelectorCursorNext {
+    u8 up;
+    u8 down;
+    u8 left;
+    u8 right;
+} GtsSelectorCursorNext;
+
 typedef struct GtsSelectorWindowPosition3 {
     u8 x;
     u8 y;
@@ -148,30 +160,18 @@ extern const GtsSelectorWindowPosition sGtsSelectorCountryWindowPositions[];
 extern const GtsSelectorWindowPosition3 sGtsSelectorSpeciesWindowPositions[];
 extern const GtsSelectorWindowPosition sGtsSelectorGridWindowPositions[];
 // The cursor positions are {x, y} pairs. The list cursors are in pixels, the grid cursors in tiles of the panel.
-extern const u8 sGtsSelectorGenderCursorX[];
-extern const u8 sGtsSelectorGenderCursorY[];
-extern const u8 sGtsSelectorSpeciesCursorX[];
-extern const u8 sGtsSelectorSpeciesCursorY[];
-extern const u8 sGtsSelectorLevelCursorX[];
-extern const u8 sGtsSelectorLevelCursorY[];
-extern const u8 sGtsSelectorCountryCursorX[];
-extern const u8 sGtsSelectorCountryCursorY[];
-extern const u8 sGtsSelectorCountryGroupCursorX[];
-extern const u8 sGtsSelectorCountryGroupCursorY[];
-extern const u8 sGtsSelectorGroupCursorX[];
-extern const u8 sGtsSelectorGroupCursorY[];
+extern const GtsSelectorCursorPos sGtsSelectorGenderCursorPositions[];
+extern const GtsSelectorCursorPos sGtsSelectorSpeciesCursorPositions[];
+extern const GtsSelectorCursorPos sGtsSelectorLevelCursorPositions[];
+extern const GtsSelectorCursorPos sGtsSelectorCountryCursorPositions[];
+extern const GtsSelectorCursorPos sGtsSelectorCountryGroupCursorPositions[];
+extern const GtsSelectorCursorPos sGtsSelectorGroupCursorPositions[];
 // The value of each row of the gender list: EITHER MON_GENDERLESS, then MON_MALE, MON_FEMALE, BACK -2.
 extern const int sGtsSelectorGenders[];
 // The cursor's next button for up, down, left, right on each button.
-extern const u8 sGtsSelectorLetterNextUp[];
-extern const u8 sGtsSelectorLetterNextDown[];
-extern const u8 sGtsSelectorLetterNextLeft[];
-extern const u8 sGtsSelectorLetterNextRight[];
-extern const u8 sGtsSelectorGroupNext[];
-extern const u8 sGtsSelectorCountryGroupNextUp[];
-extern const u8 sGtsSelectorCountryGroupNextDown[];
-extern const u8 sGtsSelectorCountryGroupNextLeft[];
-extern const u8 sGtsSelectorCountryGroupNextRight[];
+extern const GtsSelectorCursorNext sGtsSelectorLetterNext[];
+extern const GtsSelectorCursorNext sGtsSelectorGroupNext[];
+extern const GtsSelectorCursorNext sGtsSelectorCountryGroupNext[];
 extern const TouchscreenHitbox sGtsSelectorGroupHitboxes[];
 extern const TouchscreenHitbox sGtsSelectorCountryGroupHitboxes[];
 extern const TouchscreenHitbox sGtsSelectorListHitboxes[];
@@ -181,8 +181,6 @@ extern const TouchscreenHitbox sGtsSelectorLetterHitboxes[];
 // The first letter of each letter group.
 extern const int gGtsSelectorGroupStarts[];
 extern const GtsSelectorLetterGroup gGtsSelectorLetterGroups[];
-// The same table read from its second word: ov70_02245F5C[group][0] is the letter count of the group.
-extern const int ov70_02245F5C[][2];
 // The message of each letter, A .. Z.
 extern const int sGtsSelectorLetterMsgs[];
 
@@ -532,13 +530,13 @@ int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
     }
     keys = gSystem.newAndRepeatedKeys;
     if (keys & PAD_KEY_UP) {
-        selector->cursor = sGtsSelectorGroupNext[selector->cursor * 4];
+        selector->cursor = sGtsSelectorGroupNext[selector->cursor].up;
     } else if (keys & PAD_KEY_DOWN) {
-        selector->cursor = sGtsSelectorGroupNext[selector->cursor * 4 + 1];
+        selector->cursor = sGtsSelectorGroupNext[selector->cursor].down;
     } else if (keys & PAD_KEY_LEFT) {
-        selector->cursor = sGtsSelectorGroupNext[selector->cursor * 4 + 2];
+        selector->cursor = sGtsSelectorGroupNext[selector->cursor].left;
     } else if (keys & PAD_KEY_RIGHT) {
-        selector->cursor = sGtsSelectorGroupNext[selector->cursor * 4 + 3];
+        selector->cursor = sGtsSelectorGroupNext[selector->cursor].right;
     }
 
     // Back into the grid from BACK: the column the cursor left, in the bottom (up) or top (down) row.
@@ -563,7 +561,7 @@ int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
 
     if (prevCursor != selector->cursor) {
         PlaySE(SEQ_SE_DP_SELECT);
-        Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[selector->cursor * 2] + 16) * 8, sGtsSelectorGroupCursorX[selector->cursor * 2 + 1] * 8);
+        Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorPositions[selector->cursor].x + 16) * 8, sGtsSelectorGroupCursorPositions[selector->cursor].y * 8);
         if (selector->cursor == 9) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
@@ -609,7 +607,7 @@ int GtsSelector_GetLetter(GtsSelector *selector, int button) {
     if (button != 3) {
         group = selector->group;
         if (group <= 8) {
-            if (button >= ov70_02245F5C[group][0]) {
+            if (button >= gGtsSelectorLetterGroups[group].count) {
                 button = -1;
             }
             return button;
@@ -630,13 +628,13 @@ int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
         selector->savedCursor = prevCursor;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        selector->cursor = sGtsSelectorLetterNextUp[selector->cursor * 4];
+        selector->cursor = sGtsSelectorLetterNext[selector->cursor].up;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        selector->cursor = sGtsSelectorLetterNextDown[selector->cursor * 4];
+        selector->cursor = sGtsSelectorLetterNext[selector->cursor].down;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        selector->cursor = sGtsSelectorLetterNextLeft[selector->cursor * 4];
+        selector->cursor = sGtsSelectorLetterNext[selector->cursor].left;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        selector->cursor = sGtsSelectorLetterNextRight[selector->cursor * 4];
+        selector->cursor = sGtsSelectorLetterNext[selector->cursor].right;
     }
     if (prevCursor == 3 && selector->cursor < 3) {
         selector->cursor = selector->savedCursor;
@@ -647,7 +645,7 @@ int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
             Gts_SetSpritePosition(selector->cursorSprite, 192, 136);
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
-            Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[selector->cursor * 2] + 16) * 8, sGtsSelectorGroupCursorY[selector->cursor * 2] * 8);
+            Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorPositions[selector->cursor].x + 16) * 8, sGtsSelectorGroupCursorPositions[selector->cursor].y * 8);
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 47);
         }
     }
@@ -771,7 +769,7 @@ int GtsSelector_HandleSpeciesListInput(GtsSelector *selector) {
         int cursor;
         PlaySE(SEQ_SE_DP_SELECT);
         cursor = selector->cursor;
-        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorX[cursor * 2], sGtsSelectorSpeciesCursorY[cursor * 2]);
+        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorPositions[cursor].x, sGtsSelectorSpeciesCursorPositions[cursor].y);
         if (selector->cursor == 4) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
@@ -816,7 +814,7 @@ int GtsSelector_HandleGenderInput(GtsSelector *selector) {
 
     if (prevCursor != selector->cursor) {
         int cursor = selector->cursor;
-        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorGenderCursorX[cursor * 2], sGtsSelectorGenderCursorY[cursor * 2]);
+        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorGenderCursorPositions[cursor].x, sGtsSelectorGenderCursorPositions[cursor].y);
         if (selector->cursor == 3) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
@@ -914,7 +912,7 @@ int GtsSelector_HandleLevelInput(GtsSelector *selector) {
         GtsSelector_ChangeLevelPage(selector, 1);
     }
     if (prevCursor != selector->cursor) {
-        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorLevelCursorX[selector->cursor * 2], sGtsSelectorLevelCursorY[selector->cursor * 2]);
+        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorLevelCursorPositions[selector->cursor].x, sGtsSelectorLevelCursorPositions[selector->cursor].y);
         if (selector->cursor == 4) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
@@ -956,13 +954,13 @@ int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled
         selector->savedCursor = prevCursor;
     }
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        selector->cursor = sGtsSelectorCountryGroupNextUp[selector->cursor * 4];
+        selector->cursor = sGtsSelectorCountryGroupNext[selector->cursor].up;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        selector->cursor = sGtsSelectorCountryGroupNextDown[selector->cursor * 4];
+        selector->cursor = sGtsSelectorCountryGroupNext[selector->cursor].down;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        selector->cursor = sGtsSelectorCountryGroupNextLeft[selector->cursor * 4];
+        selector->cursor = sGtsSelectorCountryGroupNext[selector->cursor].left;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        selector->cursor = sGtsSelectorCountryGroupNextRight[selector->cursor * 4];
+        selector->cursor = sGtsSelectorCountryGroupNext[selector->cursor].right;
     }
 
     if (prevCursor >= 9 && selector->cursor < 9) {
@@ -987,7 +985,7 @@ int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled
         int cursor;
         PlaySE(SEQ_SE_DP_SELECT);
         cursor = selector->cursor;
-        Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorCountryGroupCursorX[cursor * 2] + 16) << 3, sGtsSelectorCountryGroupCursorY[cursor * 2] << 3);
+        Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorCountryGroupCursorPositions[cursor].x + 16) << 3, sGtsSelectorCountryGroupCursorPositions[cursor].y << 3);
         switch (selector->cursor) {
         case 9:
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
@@ -1100,7 +1098,7 @@ int GtsSelector_HandleCountryListInput(GtsSelector *selector) {
 
     if (prevCursor != selector->cursor) {
         int cursor = selector->cursor;
-        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorCountryCursorX[cursor * 2], sGtsSelectorCountryCursorY[cursor * 2]);
+        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorCountryCursorPositions[cursor].x, sGtsSelectorCountryCursorPositions[cursor].y);
         if (selector->cursor == 5) {
             Sprite_SetAnimCtrlSeq(selector->cursorSprite, 48);
         } else {
@@ -1212,7 +1210,7 @@ void GtsSelector_ShowLevels(GtsSelector *selector) {
     selector->cursor = 0;
     selector->savedCursor = 0;
     cursor = *(volatile int *)&selector->cursor;
-    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorX[cursor * 2], sGtsSelectorSpeciesCursorY[cursor * 2]);
+    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorPositions[cursor].x, sGtsSelectorSpeciesCursorPositions[cursor].y);
     BgCellManager_DrawCell(selector->cellManager, 0);
     BgCellManager_StartCellMove(selector->cellManager, 0, -4, 0, 4);
     selector->state = GTS_SELECTOR_STATE_HANDLE_LEVELS;
@@ -1302,7 +1300,7 @@ int GtsSelector_CloseSpeciesGroups(GtsSelector *selector) {
     }
     GF_ASSERT(selector->group <= 8);
     // A group of one letter skips the letters.
-    if (ov70_02245F5C[selector->group][0] == 1) {
+    if (gGtsSelectorLetterGroups[selector->group].count == 1) {
         selector->letter = 0;
         state = GTS_SELECTOR_STATE_OPEN_SPECIES_LIST;
     } else {
@@ -1349,7 +1347,7 @@ int GtsSelector_ReopenSpeciesGroups(GtsSelector *selector) {
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     BgCellManager_DrawCell(selector->cellManager, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 61);
-    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[selector->group * 2] + 16) * 8, sGtsSelectorGroupCursorY[selector->group * 2] * 8);
+    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorPositions[selector->group].x + 16) * 8, sGtsSelectorGroupCursorPositions[selector->group].y * 8);
     selector->cursor = selector->group;
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
     selector->state = GTS_SELECTOR_STATE_HANDLE_SPECIES_GROUPS;
@@ -1368,7 +1366,7 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
     MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, selector->windows, selector->group + 110, 2, MAKE_TEXT_COLOR(15, 14, 2));
     i = 1;
-    if (i <= ov70_02245F5C[selector->group][0]) {
+    if (i <= gGtsSelectorLetterGroups[selector->group].count) {
         do {
             if (GtsSelector_CountSeenSpeciesOfLetter(selector, gGtsSelectorGroupStarts[selector->group] + i - 1) > 0) {
                 color = MAKE_TEXT_COLOR(15, 14, 2);
@@ -1389,7 +1387,7 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
     } else {
         selector->cursor = selector->letter;
     }
-    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[selector->cursor * 2] + 16) * 8, sGtsSelectorGroupCursorY[selector->cursor * 2] * 8);
+    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorPositions[selector->cursor].x + 16) * 8, sGtsSelectorGroupCursorPositions[selector->cursor].y * 8);
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
     selector->state = GTS_SELECTOR_STATE_HANDLE_SPECIES_LETTERS;
     return -1;
@@ -1520,7 +1518,7 @@ int GtsSelector_OpenSpeciesList(GtsSelector *selector) {
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     selector->cursor = 0;
-    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorX[selector->cursor * 2], sGtsSelectorSpeciesCursorY[selector->cursor * 2]);
+    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorPositions[selector->cursor].x, sGtsSelectorSpeciesCursorPositions[selector->cursor].y);
     Gts_SetSpritePosition(selector->rightArrowSprite, 228, 120);
     Gts_SetSpritePosition(selector->leftArrowSprite, 154, 120);
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
@@ -1561,7 +1559,7 @@ int GtsSelector_CancelSpeciesList(GtsSelector *selector) {
     GtsSelector_RemoveWindows(selector, GTS_SELECTOR_PAGE_SPECIES_LIST);
     ListMenuItems_Delete(selector->listItems);
     GF_ASSERT(selector->group <= 8);
-    selector->state = ov70_02245F5C[selector->group][0] == 1 ? GTS_SELECTOR_STATE_REOPEN_SPECIES_GROUPS : GTS_SELECTOR_STATE_BACK_TO_SPECIES_LETTERS;
+    selector->state = gGtsSelectorLetterGroups[selector->group].count == 1 ? GTS_SELECTOR_STATE_REOPEN_SPECIES_GROUPS : GTS_SELECTOR_STATE_BACK_TO_SPECIES_LETTERS;
     return -1;
 }
 
@@ -1580,7 +1578,7 @@ int GtsSelector_OpenCountryGroups(GtsSelector *selector) {
     selector->cursor = 10; // ANY
     selector->group = -1;
     cursor = selector->cursor;
-    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorCountryGroupCursorX[cursor * 2] + 16) * 8, sGtsSelectorCountryGroupCursorY[cursor * 2] * 8);
+    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorCountryGroupCursorPositions[cursor].x + 16) * 8, sGtsSelectorCountryGroupCursorPositions[cursor].y * 8);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     return -1;
 }
@@ -1632,7 +1630,7 @@ int GtsSelector_CloseCountryGroups(GtsSelector *selector) {
         }
     } else {
         GF_ASSERT(selector->group <= 8);
-        if (ov70_02245F5C[selector->group][0] == 1) {
+        if (gGtsSelectorLetterGroups[selector->group].count == 1) {
             // A group of one letter skips the letters.
             selector->letter = 0;
             BgCellManager_StartCellMove(selector->cellManager, 0, -4, 0, 3);
@@ -1656,8 +1654,8 @@ int GtsSelector_ReopenCountryGroups(GtsSelector *selector) {
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 61);
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
     cursor = selector->group;
-    x = sGtsSelectorCountryGroupCursorX[cursor * 2];
-    y = sGtsSelectorCountryGroupCursorY[cursor * 2];
+    x = sGtsSelectorCountryGroupCursorPositions[cursor].x;
+    y = sGtsSelectorCountryGroupCursorPositions[cursor].y;
     selector->cursor = cursor;
     Gts_SetSpritePosition(selector->cursorSprite, (x + 16) * 8, y * 8);
     if (selector->screenCursorSprite) {
@@ -1701,7 +1699,7 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
         selector->cursor = selector->letter;
     }
     i = selector->cursor;
-    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorX[i * 2] + 16) * 8, sGtsSelectorGroupCursorY[i * 2] * 8);
+    Gts_SetSpritePosition(selector->cursorSprite, (sGtsSelectorGroupCursorPositions[i].x + 16) * 8, sGtsSelectorGroupCursorPositions[i].y * 8);
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
     if (selector->screenCursorSprite) {
         Sprite_SetDrawFlag(selector->screenCursorSprite, TRUE);
@@ -1773,10 +1771,7 @@ int GtsSelector_OpenCountryList(GtsSelector *selector) {
     GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 1, 0);
     selector->cursor = 0;
-    {
-        u32 i = selector->cursor * 2;
-        Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorCountryCursorX[i], sGtsSelectorCountryCursorY[i]);
-    }
+    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorCountryCursorPositions[selector->cursor].x, sGtsSelectorCountryCursorPositions[selector->cursor].y);
     Gts_SetSpritePosition(selector->rightArrowSprite, 176, 136);
     Gts_SetSpritePosition(selector->leftArrowSprite, 88, 136);
     Sprite_SetDrawFlag(selector->cursorSprite, TRUE);
@@ -1816,7 +1811,7 @@ int GtsSelector_CancelCountryList(GtsSelector *selector) {
     GtsSelector_RemoveWindows(selector, GTS_SELECTOR_PAGE_COUNTRY_LIST);
     ListMenuItems_Delete(selector->listItems);
     GF_ASSERT(selector->group <= 8);
-    selector->state = ov70_02245F5C[selector->group][0] == 1 ? GTS_SELECTOR_STATE_REOPEN_COUNTRY_GROUPS : GTS_SELECTOR_STATE_BACK_TO_COUNTRY_LETTERS;
+    selector->state = gGtsSelectorLetterGroups[selector->group].count == 1 ? GTS_SELECTOR_STATE_REOPEN_COUNTRY_GROUPS : GTS_SELECTOR_STATE_BACK_TO_COUNTRY_LETTERS;
     return -1;
 }
 
@@ -1833,8 +1828,7 @@ int GtsSelector_OpenGenders(GtsSelector *selector) {
     selector->cursor = 0;
     GtsSelector_ShowGenders(selector);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
-    u32 i = selector->cursor * 2;
-    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorGenderCursorX[i], sGtsSelectorGenderCursorY[i]);
+    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorGenderCursorPositions[selector->cursor].x, sGtsSelectorGenderCursorPositions[selector->cursor].y);
     selector->state = GTS_SELECTOR_STATE_WAIT_SHOW;
     selector->nextState = GTS_SELECTOR_STATE_HANDLE_GENDERS;
     return -1;
@@ -1872,8 +1866,7 @@ int GtsSelector_OpenLevels(GtsSelector *selector) {
     selector->cursor = 0;
     GtsSelector_ShowLevels(selector);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
-    u32 i = selector->cursor * 2;
-    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorLevelCursorX[i], sGtsSelectorLevelCursorY[i]);
+    Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorLevelCursorPositions[selector->cursor].x, sGtsSelectorLevelCursorPositions[selector->cursor].y);
     selector->state = GTS_SELECTOR_STATE_WAIT_SHOW;
     selector->nextState = GTS_SELECTOR_STATE_HANDLE_LEVELS;
     return -1;
@@ -1945,7 +1938,7 @@ int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
 
 BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
-    int count = ov70_02245F5C[group][0];
+    int count = gGtsSelectorLetterGroups[group].count;
     if (count > 0) {
         int i;
         for (i = 0; i < count; i++) {

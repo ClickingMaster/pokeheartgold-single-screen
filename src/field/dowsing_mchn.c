@@ -105,8 +105,12 @@ extern const TouchscreenHitbox sDowsingMchnExitButtonHitbox;
 extern const TouchscreenHitbox sDowsingMchnRunningShoesHitbox;
 extern const TouchscreenHitbox sDowsingMchnSearchAreaHitbox[];
 // Interleaved {signalCap, gridValue} pairs, one per level.
-extern const u8 sDowsingMchnLevelSignalCaps[];
-extern const u8 sDowsingMchnLevelGridValues[];
+typedef struct DowsingMchnLevelParams {
+    u8 signalCap;
+    u8 gridValue;
+} DowsingMchnLevelParams;
+
+extern const DowsingMchnLevelParams sDowsingMchnLevelParams[];
 extern const u8 sDowsingMchnActionSpriteParams[];
 extern const u8 sDowsingMchnRunningShoesSpriteParams[];
 extern const u8 sDowsingMchnRunningShoesSprite2Params[];
@@ -644,7 +648,7 @@ static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
     if (delta >= 0) {
         int gain = delta * sDowsingMchnLevelSignalGains[dowsing->level];
         dowsing->signal = dowsing->signal + gain;
-        int cap = sDowsingMchnLevelSignalCaps[dowsing->level * 2];
+        int cap = sDowsingMchnLevelParams[dowsing->level].signalCap;
         if (dowsing->signal > cap) {
             dowsing->signal = cap;
         }
@@ -656,8 +660,8 @@ static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
 #pragma opt_propagation reset
 
 static void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette) {
-    if (dowsing->signal > sDowsingMchnLevelSignalCaps[dowsing->level * 2]) {
-        dowsing->signal = sDowsingMchnLevelSignalCaps[dowsing->level * 2];
+    if (dowsing->signal > sDowsingMchnLevelParams[dowsing->level].signalCap) {
+        dowsing->signal = sDowsingMchnLevelParams[dowsing->level].signalCap;
     }
     *blink = (dowsing->signal / 10) & 1;
     *palette = dowsing->signal / 20;
@@ -725,7 +729,7 @@ static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
         }
         return strength * 10 - 1;
     }
-    return sDowsingMchnLevelGridValues[level * 2];
+    return sDowsingMchnLevelParams[level].gridValue;
 }
 
 // Cells within distance 4 of the touched cell rise toward their target, the others fade out.

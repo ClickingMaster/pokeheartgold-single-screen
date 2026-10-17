@@ -42,15 +42,9 @@ extern const OverlayManagerTemplate gOverlayTemplate_VsRecorderMenuFromTerminal;
 extern const VsRecorderMenuEntry sVsRecorderMode3MenuNoFrontier[];
 extern const VsRecorderMenuEntry sVsRecorderMode0MenuNoFrontier[];
 
-// The root menus (the child fields of the 7 root entries, 0x24 bytes apart in the screen data): sVsRecorderRootMenus is
-// the first child field, 0x64 bytes into _02103754
-typedef struct VsRecorderRootMenu {
-    const VsRecorderMenuEntry *menu;
-    u8 nextEntry[0x20];
-} VsRecorderRootMenu;
-
+// One entry per mode; each entry's child is the first menu of that mode.
+extern const VsRecorderMenuEntry sVsRecorderRootMenu[7];
 extern const u8 _02103754[];
-extern const VsRecorderRootMenu sVsRecorderRootMenus[];
 
 void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *saveData);
 void *BattleRecord_Get(void);

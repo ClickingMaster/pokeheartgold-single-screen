@@ -14,8 +14,7 @@
 	.public sDowsingMchnExitButtonHitbox
 	.public sDowsingMchnRunningShoesHitbox
 	.public sDowsingMchnSearchAreaHitbox
-	.public sDowsingMchnLevelSignalCaps
-	.public sDowsingMchnLevelGridValues
+	.public sDowsingMchnLevelParams
 	.public sDowsingMchnActionSpriteParams
 	.public sDowsingMchnRunningShoesSpriteParams
 	.public sDowsingMchnRunningShoesSprite2Params
@@ -37,8 +36,7 @@
 	.public sDowsingMchnExitButtonHitbox
 	.public sDowsingMchnRunningShoesHitbox
 	.public sDowsingMchnSearchAreaHitbox
-	.public sDowsingMchnLevelSignalCaps
-	.public sDowsingMchnLevelGridValues
+	.public sDowsingMchnLevelParams
 	.public sDowsingMchnActionSpriteParams
 	.public sDowsingMchnRunningShoesSpriteParams
 	.public sDowsingMchnRunningShoesSprite2Params
@@ -67,11 +65,12 @@ sDowsingMchnRunningShoesHitbox: ; 0x0225EA84
 sDowsingMchnSearchAreaHitbox: ; 0x0225EA88
 	.byte 0xFE, 0x54, 0x64, 0x48, 0xFF, 0x00, 0x00, 0x00
 
-sDowsingMchnLevelSignalCaps: ; 0x0225EA90
-	.byte 0x31
-
-sDowsingMchnLevelGridValues: ; 0x0225EA91
-	.byte 0x1D, 0x4F, 0x27, 0x6D, 0x31, 0x81, 0x31, 0x9F, 0x9F
+sDowsingMchnLevelParams: ; 0x0225EA90
+	.byte 0x31, 0x1D
+	.byte 0x4F, 0x27
+	.byte 0x6D, 0x31
+	.byte 0x81, 0x31
+	.byte 0x9F, 0x9F
 
 sDowsingMchnActionSpriteParams: ; 0x0225EA9A
 	.byte 0xA8, 0x90, 0x00, 0x05
