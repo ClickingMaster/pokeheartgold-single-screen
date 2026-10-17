@@ -1814,9 +1814,9 @@ Overlay OVY_71
     After OVY_70
     Object src/application/trade_sequence/trade_sequence.o
     Object asm/trade_sequence_bss.o
+    Object asm/trade_sequence_data.o
     Object src/application/trade_sequence/trade_sequence_arrive_tasks.o
     Object src/application/trade_sequence/trade_sequence_receive.o
-    Object asm/trade_sequence_data.o
     Object src/application/trade_sequence/trade_sequence_receive_bounce.o
 }
 Overlay OVY_72

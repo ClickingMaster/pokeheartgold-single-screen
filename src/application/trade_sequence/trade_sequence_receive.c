@@ -44,13 +44,6 @@ typedef struct TradeSequenceReceiveBrightness {
 
 typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32 *state);
 
-extern const TradeSequenceRotation sTradeSequenceReceiveModelRotation;
-extern const TradeSequenceReceiveStateFunc sTradeSequenceReceiveStates[TRADE_SEQUENCE_RECEIVE_NUM_STATES];
-extern const GraphicsModes sTradeSequenceReceiveGraphicsModes;
-extern const BgTemplate sTradeSequenceReceiveBgTemplate_Text;
-extern const BgTemplate sTradeSequenceReceiveBgTemplate_Background;
-extern const GraphicsBanks sTradeSequenceReceiveGraphicsBanks;
-
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 
 TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts);
@@ -69,6 +62,69 @@ void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive);
 void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive);
 void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data);
 void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task);
+
+static const TradeSequenceRotation sTradeSequenceReceiveModelRotation = {
+    .x = 0,
+    .y = -0x1000,
+    .z = 0,
+};
+
+static const TradeSequenceReceiveStateFunc sTradeSequenceReceiveStates[4] = {
+    TradeSequenceReceive_SetupScreens,
+    TradeSequenceReceive_WaitFadeIn,
+    TradeSequenceReceive_ShowMon,
+    TradeSequenceReceive_ShowMessages,
+};
+
+static const GraphicsModes sTradeSequenceReceiveGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const BgTemplate sTradeSequenceReceiveBgTemplate_Text = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sTradeSequenceReceiveBgTemplate_Background = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sTradeSequenceReceiveGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_B,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_23_G,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_0123_H,
+    .obj = GX_VRAM_OBJ_16_F,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_A,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
 
 TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts) {
     TradeSequenceReceive *receive = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceReceive));

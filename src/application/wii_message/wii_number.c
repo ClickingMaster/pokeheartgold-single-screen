@@ -13,9 +13,22 @@ typedef struct WiiNumberDigitChar {
     s8 digit;
 } WiiNumberDigitChar;
 
-extern s8 sWiiAddressPrefix[];
-extern s8 sWiiAddressDomain[];
-extern WiiNumberDigitChar sWiiNumberDigitChars[];
+static const s8 sWiiAddressPrefix[] = "w";
+
+static const s8 sWiiAddressDomain[] = "@wii.com";
+
+static const WiiNumberDigitChar sWiiNumberDigitChars[] = {
+    { CHAR_0, '0' },
+    { CHAR_1, '1' },
+    { CHAR_2, '2' },
+    { CHAR_3, '3' },
+    { CHAR_4, '4' },
+    { CHAR_5, '5' },
+    { CHAR_6, '6' },
+    { CHAR_7, '7' },
+    { CHAR_8, '8' },
+    { CHAR_9, '9' },
+};
 
 void WiiNumber_ToWiiAddress(String *wiiNumber, char *address, enum HeapID heapID) {
     int len = 0;
