@@ -83,13 +83,9 @@ typedef struct CommWireless {
     CommWirelessWork *work;
 } CommWireless;
 
-extern CommWireless gCommWireless;
-
 typedef struct CommBssid {
     u8 data[6];
 } CommBssid;
-
-extern const CommBssid gCommWirelessAnyBssid; // FF:FF:FF:FF:FF:FF
 
 void OS_Terminate(void);
 void Sys_SetSleepDisableFlag(u32 flag);
@@ -193,8 +189,14 @@ void CommWireless_HasSentBeacons(void);
 void CommWireless_SetCustomBeacon(const void *src);
 void *CommWireless_GetParentMail(int slot);
 
+static const CommBssid sCommWirelessAnyBssid = {
+    .data = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
+};
+
+static CommWireless sCommWireless;
+
 void CommWireless_Init(PlayerProfile *profile, int mode) {
-    if (gCommWireless.work == NULL) {
+    if (sCommWireless.work == NULL) {
         void *allocation;
         CommWirelessWork *work;
         u8 *raw;
@@ -202,34 +204,34 @@ void CommWireless_Init(PlayerProfile *profile, int mode) {
         u32 adjustment;
 
         allocation = Heap_Alloc(HEAP_ID_15, sizeof(CommWirelessWork));
-        gCommWireless.work = allocation;
+        sCommWireless.work = allocation;
         MI_CpuFill8(allocation, 0, sizeof(CommWirelessWork));
 
         allocation = Heap_Alloc(HEAP_ID_15, Wireless_GetWorkSize());
-        gCommWireless.work->managerBuffer = allocation;
-        MI_CpuFill8(gCommWireless.work->managerBuffer, 0, Wireless_GetWorkSize());
+        sCommWireless.work->managerBuffer = allocation;
+        MI_CpuFill8(sCommWireless.work->managerBuffer, 0, Wireless_GetWorkSize());
 
         allocation = Heap_Alloc(HEAP_ID_15, LinkBattleRuleset_sizeof());
-        gCommWireless.work->ruleset = allocation;
-        MI_CpuFill8(gCommWireless.work->ruleset, 0, LinkBattleRuleset_sizeof());
+        sCommWireless.work->ruleset = allocation;
+        MI_CpuFill8(sCommWireless.work->ruleset, 0, LinkBattleRuleset_sizeof());
 
         allocation = Heap_Alloc(HEAP_ID_15, 0x90);
-        gCommWireless.work->beaconBuffer = allocation;
-        work = gCommWireless.work;
+        sCommWireless.work->beaconBuffer = allocation;
+        work = sCommWireless.work;
         raw = work->beaconBuffer;
         remainder = (u32)raw & 0x1F;
         adjustment = 0x20 - remainder;
         work->beacon = (CommBeacon *)(adjustment + (u32)raw);
-        gCommWireless.work->ggid = 0x333;
-        gCommWireless.work->profile = profile;
-        MailMsg_Init(&gCommWireless.work->mail);
+        sCommWireless.work->ggid = 0x333;
+        sCommWireless.work->profile = profile;
+        MailMsg_Init(&sCommWireless.work->mail);
         CommWireless_InitManager(mode);
-        gCommWireless.tgid = WM_GetNextTgid();
+        sCommWireless.tgid = WM_GetNextTgid();
     }
 }
 
 BOOL CommWireless_IsInitialized(void) {
-    return gCommWireless.work != NULL;
+    return sCommWireless.work != NULL;
 }
 
 BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size) {
@@ -268,8 +270,8 @@ void CommWireless_OnParentFound(void *parentInfo) {
     if (kind != 14 && beacon[5] != id) {
         return;
     }
-    MI_CpuCopy8(data, &gCommWireless.work->received, 0xC0);
-    gCommWireless.work->parentPending = 1;
+    MI_CpuCopy8(data, &sCommWireless.work->received, 0xC0);
+    sCommWireless.work->parentPending = 1;
 }
 
 void CommWireless_StoreFoundParent(void) {
@@ -278,31 +280,31 @@ void CommWireless_StoreFoundParent(void) {
     u8 *slot;
     int i;
 
-    work = gCommWireless.work;
+    work = sCommWireless.work;
     received = (u8 *)&work->received;
     if (work->parentPending == 0) {
         return;
     }
     work->parentPending = 0;
     for (i = 0; i < 16; i++) {
-        if (gCommWireless.work->parentTimers[i] != 0) {
-            if (CommWireless_BytesEqual(gCommWireless.work->parents[i].macAddress, received + 4, 6)) {
-                gCommWireless.work->parentTimers[i] = 300;
-                MI_CpuCopy8(received, &gCommWireless.work->parents[i], 0xC0);
+        if (sCommWireless.work->parentTimers[i] != 0) {
+            if (CommWireless_BytesEqual(sCommWireless.work->parents[i].macAddress, received + 4, 6)) {
+                sCommWireless.work->parentTimers[i] = 300;
+                MI_CpuCopy8(received, &sCommWireless.work->parents[i], 0xC0);
                 return;
             }
         }
     }
-    slot = (u8 *)gCommWireless.work;
+    slot = (u8 *)sCommWireless.work;
     for (i = 0; i < 16; i++, slot += 2) {
         if (*(u16 *)(slot + offsetof(CommWirelessWork, parentTimers)) == 0) {
             break;
         }
     }
     if (i < 16) {
-        gCommWireless.work->parentTimers[i] = 300;
-        MI_CpuCopy8(received, &gCommWireless.work->parents[i], 0xC0);
-        gCommWireless.work->parentListChanged = 1;
+        sCommWireless.work->parentTimers[i] = 300;
+        MI_CpuCopy8(received, &sCommWireless.work->parents[i], 0xC0);
+        sCommWireless.work->parentListChanged = 1;
     }
 }
 
@@ -310,28 +312,28 @@ void CommWireless_OnStartedUp(void *unused, int failed) {
     if (failed != 0) {
         OS_Terminate();
     }
-    gCommWireless.state = 2;
+    sCommWireless.state = 2;
 }
 
 void CommWireless_OnTerminated(void *unused) {
-    gCommWireless.state = 0;
+    sCommWireless.state = 0;
     Sys_ClearSleepDisableFlag(4);
 }
 
 void CommWireless_StartUp(void) {
     Sys_SetSleepDisableFlag(4);
-    gCommWireless.state = 1;
+    sCommWireless.state = 1;
     if (WVR_StartUpAsync(8, CommWireless_OnStartedUp, NULL) != 1) {
         OS_Terminate();
     }
 }
 
 BOOL CommWireless_IsStartedUp(void) {
-    return gCommWireless.state == 2;
+    return sCommWireless.state == 2;
 }
 
 BOOL CommWireless_IsOn(void) {
-    return gCommWireless.state != 0;
+    return sCommWireless.state != 0;
 }
 
 void CommWireless_Terminate(void) {
@@ -342,33 +344,33 @@ void CommWireless_InitManager(int mode) {
     u8 *buffer;
     u32 misalignment;
 
-    gCommWireless.work->unk_D70 = 0;
-    buffer = gCommWireless.work->managerBuffer;
+    sCommWireless.work->unk_D70 = 0;
+    buffer = sCommWireless.work->managerBuffer;
     misalignment = (u32)buffer & 0x1F;
     Wireless_Init(buffer + (0x20 - misalignment), mode);
-    Wireless_SetGgid((void *)gCommWireless.work->ggid);
+    Wireless_SetGgid((void *)sCommWireless.work->ggid);
 }
 
 void CommWireless_ClearParents(void) {
     int i;
     for (i = 0; i < 16; i++) {
-        gCommWireless.work->parentTimers[i] = 0;
+        sCommWireless.work->parentTimers[i] = 0;
     }
-    MI_CpuFill8(gCommWireless.work->parents, 0, sizeof(gCommWireless.work->parents));
+    MI_CpuFill8(sCommWireless.work->parents, 0, sizeof(sCommWireless.work->parents));
 }
 
 void CommWireless_SetRenewTgid(BOOL renew) {
-    gCommWireless.work->renewTgid = renew;
+    sCommWireless.work->renewTgid = renew;
 }
 
 void CommWireless_ResetFlags(void) {
-    gCommWireless.work->parentListChanged = 0;
-    gCommWireless.work->linkLost = 0;
-    gCommWireless.work->lostWhenAlone = 0;
-    gCommWireless.work->shutdown = 0;
-    gCommWireless.work->shutdownRequested = 0;
-    gCommWireless.work->stopState = 0;
-    gCommWireless.work->portCallbackSet = 0;
+    sCommWireless.work->parentListChanged = 0;
+    sCommWireless.work->linkLost = 0;
+    sCommWireless.work->lostWhenAlone = 0;
+    sCommWireless.work->shutdown = 0;
+    sCommWireless.work->shutdownRequested = 0;
+    sCommWireless.work->stopState = 0;
+    sCommWireless.work->portCallbackSet = 0;
 }
 
 // Measures the channels; CommWireless_Update starts the parent on the quietest one.
@@ -377,11 +379,11 @@ BOOL CommWireless_StartParent(int unused, BOOL renewTgid, BOOL entryFlag) {
     CommWireless_ResetFlags();
     CommWireless_SetRenewTgid(renewTgid);
     Wireless_ClearBeaconCount();
-    if (gCommWireless.work->portCallbackSet == 0) {
+    if (sCommWireless.work->portCallbackSet == 0) {
         Wireless_SetReceiveCallback(Comm_RecvChildFrameCallback, 14);
-        gCommWireless.work->portCallbackSet = 1;
+        sCommWireless.work->portCallbackSet = 1;
     }
-    gCommWireless.work->entryFlag = entryFlag;
+    sCommWireless.work->entryFlag = entryFlag;
     if (Wireless_GetState() == 1 && Wireless_StartMeasureChannels() != 0) {
         return TRUE;
     }
@@ -395,12 +397,12 @@ BOOL CommWireless_StartScan(int unused, BOOL clearParents) {
     if (clearParents) {
         CommWireless_ClearParents();
     }
-    if (gCommWireless.work->portCallbackSet == 0) {
+    if (sCommWireless.work->portCallbackSet == 0) {
         Wireless_SetReceiveCallback(Comm_RecvParentFrameCallback, 14);
-        gCommWireless.work->portCallbackSet = 1;
+        sCommWireless.work->portCallbackSet = 1;
     }
     if (Wireless_GetState() == 1) {
-        bssid = gCommWirelessAnyBssid;
+        bssid = sCommWirelessAnyBssid;
         if (Wireless_StartScan(CommWireless_OnParentFound, &bssid, 0) != 0) {
             return TRUE;
         }
@@ -410,23 +412,23 @@ BOOL CommWireless_StartScan(int unused, BOOL clearParents) {
 
 // Ends the scan / the link; TRUE once the manager is idle.
 BOOL CommWireless_Stop(void) {
-    if (gCommWireless.work == NULL) {
+    if (sCommWireless.work == NULL) {
         return TRUE;
     }
-    switch (gCommWireless.work->stopState) {
+    switch (sCommWireless.work->stopState) {
     case 0:
         if (Wireless_IsScanning() != 0) {
             Wireless_StopScan();
-            gCommWireless.work->stopState = 1;
+            sCommWireless.work->stopState = 1;
         } else if (Wireless_IsBusy() == 0) {
             Wireless_Stop();
-            gCommWireless.work->stopState = 2;
+            sCommWireless.work->stopState = 2;
         }
         break;
     case 1:
         if (Wireless_IsBusy() == 0) {
             Wireless_Stop();
-            gCommWireless.work->stopState = 2;
+            sCommWireless.work->stopState = 2;
         }
         break;
     case 2:
@@ -434,7 +436,7 @@ BOOL CommWireless_Stop(void) {
             return TRUE;
         }
         if (Wireless_HasError() != 0) {
-            gCommWireless.work->stopState = 1;
+            sCommWireless.work->stopState = 1;
         }
         break;
     }
@@ -442,8 +444,8 @@ BOOL CommWireless_Stop(void) {
 }
 
 BOOL CommWireless_RequestStopAndFree(void) {
-    if (gCommWireless.work != NULL && gCommWireless.work->shutdown == 0) {
-        gCommWireless.work->shutdown = 1;
+    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == 0) {
+        sCommWireless.work->shutdown = 1;
         Wireless_Stop();
         return 1;
     }
@@ -451,22 +453,22 @@ BOOL CommWireless_RequestStopAndFree(void) {
 }
 
 void CommWireless_SetManagerEnded(BOOL end) {
-    if (gCommWireless.work != NULL) {
+    if (sCommWireless.work != NULL) {
         if (end) {
-            gCommWireless.work->shutdown = 2;
+            sCommWireless.work->shutdown = 2;
         } else {
-            gCommWireless.work->shutdown = 0;
+            sCommWireless.work->shutdown = 0;
             CommWireless_InitManager(1);
         }
     }
 }
 
 void CommWireless_Free(void) {
-    Heap_Free(gCommWireless.work->ruleset);
-    Heap_Free(gCommWireless.work->managerBuffer);
-    Heap_Free(gCommWireless.work->beaconBuffer);
-    Heap_Free(gCommWireless.work);
-    gCommWireless.work = NULL;
+    Heap_Free(sCommWireless.work->ruleset);
+    Heap_Free(sCommWireless.work->managerBuffer);
+    Heap_Free(sCommWireless.work->beaconBuffer);
+    Heap_Free(sCommWireless.work);
+    sCommWireless.work = NULL;
 }
 
 int CommWireless_CountParents(void) {
@@ -478,7 +480,7 @@ int CommWireless_CountParents(void) {
         return 0;
     }
     count = 0;
-    ptr = (u8 *)gCommWireless.work;
+    ptr = (u8 *)sCommWireless.work;
     for (i = 0; i < 16; i++, ptr += 2) {
         if (*(u16 *)(ptr + offsetof(CommWirelessWork, parentTimers)) != 0) {
             count++;
@@ -492,7 +494,7 @@ int CommWireless_GetParentSlot(int ordinal) {
     int count = 0;
     u8 *ptr;
 
-    ptr = (u8 *)gCommWireless.work;
+    ptr = (u8 *)sCommWireless.work;
     for (i = 0; i < 16; i++, ptr += 2) {
         if (*(u16 *)(ptr + offsetof(CommWirelessWork, parentTimers)) != 0) {
             if (count == ordinal) {
@@ -506,11 +508,11 @@ int CommWireless_GetParentSlot(int ordinal) {
 }
 
 u8 CommWireless_IsParentListChanged(void) {
-    return gCommWireless.work->parentListChanged;
+    return sCommWireless.work->parentListChanged;
 }
 
 void CommWireless_ClearParentListChanged(void) {
-    gCommWireless.work->parentListChanged = 0;
+    sCommWireless.work->parentListChanged = 0;
 }
 
 // The players connected to the parent in slot (at least 1), FALSE for a free slot.
@@ -518,7 +520,7 @@ BOOL CommWireless_GetParentMemberCount(int slot) {
     CommWirelessWork *work;
     u16 value;
 
-    work = gCommWireless.work;
+    work = sCommWireless.work;
     value = work->parentTimers[slot];
     if (value != 0) {
         u8 count = work->parents[slot].beacon.memberCount;
@@ -533,7 +535,7 @@ BOOL CommWireless_GetParentMemberCount(int slot) {
 void CommWireless_CopyParentProfile(int ordinal, PlayerProfile *profile) {
     int i;
     int current = 0;
-    u8 *ptr = (u8 *)gCommWireless.work;
+    u8 *ptr = (u8 *)sCommWireless.work;
 
     for (i = 0; i < 16; i++, ptr += 2) {
         if (*(u16 *)(ptr + offsetof(CommWirelessWork, parentTimers)) != 0) {
@@ -556,11 +558,11 @@ BOOL CommWireless_ConnectToParent(int slot) {
     if (Wireless_GetState() == 1) {
         int kind = CommState_GetLinkMode();
         u32 offset = slot * sizeof(CommParentInfo);
-        gCommWireless.work->currentChannel = *(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parents[0].channel));
+        sCommWireless.work->currentChannel = *(u16 *)((u8 *)sCommWireless.work + offset + offsetof(CommWirelessWork, parents[0].channel));
         if (Comm_IsUnionRoomLinkMode(kind)) {
-            Wireless_ScanAndConnect(1, (u8 *)gCommWireless.work + offsetof(CommWirelessWork, parents[0].macAddress) + offset, 0);
+            Wireless_ScanAndConnect(1, (u8 *)sCommWireless.work + offsetof(CommWirelessWork, parents[0].macAddress) + offset, 0);
         } else {
-            Wireless_StartChild(1, (u8 *)gCommWireless.work + offsetof(CommWirelessWork, parents) + offset);
+            Wireless_StartChild(1, (u8 *)sCommWireless.work + offsetof(CommWirelessWork, parents) + offset);
         }
         return TRUE;
     }
@@ -574,11 +576,11 @@ void CommWireless_UpdateParents(void) {
 
     CommWireless_StoreFoundParent();
     for (i = 0, offset = 0; i < 16; i++, offset += 2) {
-        if (*(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) != 0) {
-            if (*(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) != 0) {
-                --*(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers));
-                if (*(u16 *)((u8 *)gCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) == 0) {
-                    gCommWireless.work->parentListChanged = 1;
+        if (*(u16 *)((u8 *)sCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) != 0) {
+            if (*(u16 *)((u8 *)sCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) != 0) {
+                --*(u16 *)((u8 *)sCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers));
+                if (*(u16 *)((u8 *)sCommWireless.work + offset + offsetof(CommWirelessWork, parentTimers)) == 0) {
+                    sCommWireless.work->parentListChanged = 1;
                 }
             }
         }
@@ -590,7 +592,7 @@ void CommWireless_BuildBeacon(void) {
     PlayerProfile *profile = CommWireless_GetProfile();
 
     if (kind != 15) {
-        u8 *beacon = (u8 *)gCommWireless.work->beacon;
+        u8 *beacon = (u8 *)sCommWireless.work->beacon;
         if ((int)LinkBattleRuleset_sizeof() > 0x20) {
             GF_AssertFail();
         }
@@ -598,32 +600,32 @@ void CommWireless_BuildBeacon(void) {
             GF_AssertFail();
         }
         MI_CpuCopy8(profile, beacon + 0x10, PlayerProfile_sizeof());
-        MI_CpuCopy8(gCommWireless.work->ruleset, beacon + 0x30, LinkBattleRuleset_sizeof());
+        MI_CpuCopy8(sCommWireless.work->ruleset, beacon + 0x30, LinkBattleRuleset_sizeof());
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
         beacon[4] = CommState_GetLinkMode();
         beacon[5] = CommState_GetBeaconId();
-        MI_CpuCopy8(&gCommWireless.work->mail, beacon + 8, 8);
+        MI_CpuCopy8(&sCommWireless.work->mail, beacon + 8, 8);
         beacon += 0x54;
         *beacon = Wireless_IsEntryLocked();
     } else {
-        u8 *beacon = (u8 *)gCommWireless.work->beacon;
+        u8 *beacon = (u8 *)sCommWireless.work->beacon;
         *(u32 *)beacon = PlayerProfile_GetTrainerID(profile);
         beacon[4] = CommState_GetLinkMode();
         beacon[5] = CommState_GetBeaconId();
-        MI_CpuCopy8(gCommWireless.work->customBeacon, beacon + 8, 0x54);
+        MI_CpuCopy8(sCommWireless.work->customBeacon, beacon + 8, 0x54);
     }
-    DC_FlushRange(gCommWireless.work->beacon, sizeof(CommBeacon));
-    Wireless_SetParentGameInfo(gCommWireless.work->beacon, sizeof(CommBeacon));
+    DC_FlushRange(sCommWireless.work->beacon, sizeof(CommBeacon));
+    Wireless_SetParentGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon));
 }
 
 void CommWireless_UpdateBeaconMemberCount(void) {
-    CommBeacon *beacon = gCommWireless.work->beacon;
+    CommBeacon *beacon = sCommWireless.work->beacon;
 
     if (beacon->memberCount != CommWireless_CountConnected()) {
         beacon->memberCount = CommWireless_CountConnected();
-        DC_FlushRange(gCommWireless.work->beacon, sizeof(CommBeacon));
-        Wireless_SetParentGameInfo(gCommWireless.work->beacon, sizeof(CommBeacon));
-        Wireless_UpdateGameInfo(gCommWireless.work->beacon, sizeof(CommBeacon), (void *)gCommWireless.work->ggid, gCommWireless.tgid);
+        DC_FlushRange(sCommWireless.work->beacon, sizeof(CommBeacon));
+        Wireless_SetParentGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon));
+        Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), (void *)sCommWireless.work->ggid, sCommWireless.tgid);
     }
 }
 
@@ -633,18 +635,18 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
     int state = Wireless_GetState(count);
     int dropped = CommPlayerInfo_DropDisconnected();
     CommWireless_UpdateBeaconMemberCount();
-    if (Wireless_GetAid() == 0 && CommWireless_GetConnectedChildren() == 0 && gCommWireless.work->lostWhenAlone) {
-        gCommWireless.work->linkLost = 1;
+    if (Wireless_GetAid() == 0 && CommWireless_GetConnectedChildren() == 0 && sCommWireless.work->lostWhenAlone) {
+        sCommWireless.work->linkLost = 1;
     }
-    if (gCommWireless.work->firstCount == 0xFFFF) {
-        gCommWireless.work->firstCount = count;
+    if (sCommWireless.work->firstCount == 0xFFFF) {
+        sCommWireless.work->firstCount = count;
     }
-    if (gCommWireless.work->detectDrops) {
-        if (gCommWireless.work->firstCount > (u32)count) {
-            gCommWireless.work->linkLost = 1;
+    if (sCommWireless.work->detectDrops) {
+        if (sCommWireless.work->firstCount > (u32)count) {
+            sCommWireless.work->linkLost = 1;
         }
         if (dropped != 0) {
-            gCommWireless.work->linkLost = 1;
+            sCommWireless.work->linkLost = 1;
         }
     }
     if (Wireless_GetError() == 0x19) {
@@ -652,22 +654,22 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
     }
     switch (state) {
     case 0:
-        if (gCommWireless.work->shutdown == 1) {
+        if (sCommWireless.work->shutdown == 1) {
             CommWireless_Free();
             return;
         }
-        if (gCommWireless.work->shutdown == 2) {
-            gCommWireless.work->shutdown = 3;
+        if (sCommWireless.work->shutdown == 2) {
+            sCommWireless.work->shutdown = 3;
             return;
         }
         break;
     case 1:
-        if (gCommWireless.work->shutdown == 1) {
+        if (sCommWireless.work->shutdown == 1) {
             if (Wireless_End() != 0) {
                 break;
             }
         }
-        if (gCommWireless.work->shutdown == 2) {
+        if (sCommWireless.work->shutdown == 2) {
             if (Wireless_End() == 0) {
                 return;
             }
@@ -676,8 +678,8 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
         break;
     case 8:
     case 9:
-        if (gCommWireless.work != NULL) {
-            gCommWireless.work->linkLost = 1;
+        if (sCommWireless.work != NULL) {
+            sCommWireless.work->linkLost = 1;
             return;
         }
         break;
@@ -686,21 +688,21 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
         u16 saved;
         int maxEntry;
         u32 beaconPeriod;
-        if (gCommWireless.work->channelTimer == 0) {
-            gCommWireless.work->channel = channel;
-            gCommWireless.work->channelTimer = 5;
+        if (sCommWireless.work->channelTimer == 0) {
+            sCommWireless.work->channel = channel;
+            sCommWireless.work->channelTimer = 5;
         } else {
-            gCommWireless.work->channelTimer--;
+            sCommWireless.work->channelTimer--;
         }
-        saved = gCommWireless.work->channel;
-        if (gCommWireless.work->renewTgid) {
-            gCommWireless.tgid = WM_GetNextTgid();
+        saved = sCommWireless.work->channel;
+        if (sCommWireless.work->renewTgid) {
+            sCommWireless.tgid = WM_GetNextTgid();
         }
         CommWireless_BuildBeacon();
         maxEntry = Comm_GetMaxChildren((u16)CommState_GetLinkMode());
         beaconPeriod = CommWireless_GetBeaconPeriod((u16)CommState_GetLinkMode());
-        Wireless_StartParent(0, gCommWireless.tgid, saved, maxEntry, beaconPeriod, gCommWireless.work->entryFlag);
-        gCommWireless.work->currentChannel = saved;
+        Wireless_StartParent(0, sCommWireless.tgid, saved, maxEntry, beaconPeriod, sCommWireless.work->entryFlag);
+        sCommWireless.work->currentChannel = saved;
         break;
     }
     }
@@ -708,13 +710,13 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
 }
 
 BOOL CommWireless_Main(int count) {
-    if (gCommWireless.work != NULL) {
-        CommWireless_Update(count, gCommWireless.work);
+    if (sCommWireless.work != NULL) {
+        CommWireless_Update(count, sCommWireless.work);
     }
 }
 
 BOOL CommWireless_IsAidConnected(u16 aid) {
-    if (gCommWireless.work == NULL) {
+    if (sCommWireless.work == NULL) {
         return FALSE;
     }
     if (Wireless_GetState() != 4) {
@@ -738,33 +740,33 @@ int CommWireless_CountConnected(void) {
 }
 
 int CommWireless_IsManagerEnded(void) {
-    if (gCommWireless.work != NULL && gCommWireless.work->shutdown == 3) {
+    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == 3) {
         return 1;
     }
     return 0;
 }
 
 BOOL CommWireless_Exists(void) {
-    return gCommWireless.work != NULL;
+    return sCommWireless.work != NULL;
 }
 
 int CommWireless_IsIdle(void) {
-    if (gCommWireless.work != NULL) {
-        return Wireless_IsIdle(gCommWireless.work);
+    if (sCommWireless.work != NULL) {
+        return Wireless_IsIdle(sCommWireless.work);
     }
     return 1;
 }
 
 int CommWireless_GetConnectedChildren(void) {
-    if (gCommWireless.work != NULL) {
-        return Wireless_GetConnectedBitmap(gCommWireless.work) & 0xFFFE;
+    if (sCommWireless.work != NULL) {
+        return Wireless_GetConnectedBitmap(sCommWireless.work) & 0xFFFE;
     }
     return 0;
 }
 
 BOOL CommWireless_IsLinkLost(void) {
-    if (gCommWireless.work != NULL) {
-        if (gCommWireless.work->linkLost != 0) {
+    if (sCommWireless.work != NULL) {
+        if (sCommWireless.work->linkLost != 0) {
             return TRUE;
         }
     }
@@ -772,15 +774,15 @@ BOOL CommWireless_IsLinkLost(void) {
 }
 
 void CommWireless_SetLostWhenAlone(BOOL value) {
-    if (gCommWireless.work != NULL) {
-        gCommWireless.work->lostWhenAlone = value;
+    if (sCommWireless.work != NULL) {
+        sCommWireless.work->lostWhenAlone = value;
     }
 }
 
 void CommWireless_SetDetectDrops(BOOL value) {
-    if (gCommWireless.work != NULL) {
-        gCommWireless.work->detectDrops = value;
-        gCommWireless.work->firstCount = 0xFFFF;
+    if (sCommWireless.work != NULL) {
+        sCommWireless.work->detectDrops = value;
+        sCommWireless.work->firstCount = 0xFFFF;
     }
 }
 
@@ -799,64 +801,64 @@ u32 CommWireless_GetBeaconPeriod(u32 kind) {
 }
 
 void *CommWireless_GetParentInfo(int slot) {
-    if (gCommWireless.work != NULL) {
-        if (gCommWireless.work->parentTimers[slot] != 0) {
-            return &gCommWireless.work->parents[slot];
+    if (sCommWireless.work != NULL) {
+        if (sCommWireless.work->parentTimers[slot] != 0) {
+            return &sCommWireless.work->parents[slot];
         }
     }
     return NULL;
 }
 
 void *CommWireless_GetProfile(void) {
-    return gCommWireless.work->profile;
+    return sCommWireless.work->profile;
 }
 
 void *CommWireless_GetParentProfile(int slot) {
     u8 *result;
-    if (gCommWireless.work->parentTimers[slot] == 0) {
+    if (sCommWireless.work->parentTimers[slot] == 0) {
         return NULL;
     }
-    result = (u8 *)&gCommWireless.work->parents[slot].beacon;
+    result = (u8 *)&sCommWireless.work->parents[slot].beacon;
     return result + offsetof(CommBeacon, profile);
 }
 
 void CommWireless_SetMacAddress(void *macAddress, int index) {
-    if (gCommWireless.work != NULL) {
+    if (sCommWireless.work != NULL) {
         if (index >= 8) {
             GF_AssertFail();
         }
-        MI_CpuCopy8(macAddress, gCommWireless.work->macAddresses[index], 6);
+        MI_CpuCopy8(macAddress, sCommWireless.work->macAddresses[index], 6);
     }
 }
 
 BOOL CommWireless_IsShutdownRequested(void) {
-    if (gCommWireless.work != NULL) {
-        return gCommWireless.work->shutdownRequested;
+    if (sCommWireless.work != NULL) {
+        return sCommWireless.work->shutdownRequested;
     }
     return 0;
 }
 
 void CommWireless_RequestShutdown(void) {
-    if (gCommWireless.work != NULL) {
-        gCommWireless.work->shutdownRequested = 1;
+    if (sCommWireless.work != NULL) {
+        sCommWireless.work->shutdownRequested = 1;
     }
 }
 
 void CommWireless_SetMail(void *mail) {
-    MI_CpuCopy8(mail, &gCommWireless.work->mail, 8);
+    MI_CpuCopy8(mail, &sCommWireless.work->mail, 8);
 }
 
 void CommWireless_SetRuleset(void *ruleset) {
-    MI_CpuCopy8(ruleset, gCommWireless.work->ruleset, LinkBattleRuleset_sizeof());
+    MI_CpuCopy8(ruleset, sCommWireless.work->ruleset, LinkBattleRuleset_sizeof());
 }
 
 void *CommWireless_GetRuleset(void) {
-    return gCommWireless.work->ruleset;
+    return sCommWireless.work->ruleset;
 }
 
 void CommWireless_RefreshBeacon(void) {
     CommWireless_BuildBeacon();
-    Wireless_UpdateGameInfo(gCommWireless.work->beacon, sizeof(CommBeacon), (void *)gCommWireless.work->ggid, gCommWireless.tgid);
+    Wireless_UpdateGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon), (void *)sCommWireless.work->ggid, sCommWireless.tgid);
 }
 
 void CommWireless_HasSentBeacons(void) {
@@ -864,14 +866,14 @@ void CommWireless_HasSentBeacons(void) {
 }
 
 void CommWireless_SetCustomBeacon(const void *src) {
-    MI_CpuCopy8(src, gCommWireless.work->customBeacon, sizeof(gCommWireless.work->customBeacon));
+    MI_CpuCopy8(src, sCommWireless.work->customBeacon, sizeof(sCommWireless.work->customBeacon));
     CommWireless_RefreshBeacon();
 }
 
 void *CommWireless_GetParentMail(int slot) {
-    if (gCommWireless.work != NULL) {
-        if (gCommWireless.work->parentTimers[slot] != 0) {
-            u8 *result = (u8 *)&gCommWireless.work->parents[slot].beacon;
+    if (sCommWireless.work != NULL) {
+        if (sCommWireless.work->parentTimers[slot] != 0) {
+            u8 *result = (u8 *)&sCommWireless.work->parents[slot].beacon;
             return result + offsetof(CommBeacon, mail);
         }
     }

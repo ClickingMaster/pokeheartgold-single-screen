@@ -37,10 +37,6 @@ typedef struct FootstepSound {
 
 typedef BOOL (*ForcedMovementFunc)(PlayerAvatar *avatar, int value);
 
-extern ForcedMovementFunc gPlayerForcedMovementFuncs[];
-extern const ForcedMovementEntry gPlayerForcedMovementBehaviors[];
-extern const FootstepSound gPlayerFootstepSounds[];
-
 int GetMovementDirection(u32 movement);
 int MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction);
 int GetMovementForDirection(int direction, int movement);
@@ -116,6 +112,36 @@ u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKe
 BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
 void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 void PlayerAvatar_GetMetatileBehaviorInDirection(PlayerAvatar *avatar, int direction);
+
+static const ForcedMovementFunc sPlayerForcedMovementFuncs[] = {
+    ForcedMovement_None,
+    ForcedMovement_Ice,
+    ForcedMovement_CyclingRoadSlope,
+};
+
+static const ForcedMovementEntry sPlayerForcedMovementBehaviors[] = {
+    { MetatileBehavior_IsIce, 1 },
+    { NULL,                   3 },
+};
+
+static const FootstepSound sPlayerFootstepSounds[] = {
+    { SEQ_SE_GS_ASHIOTO_A_WALK, 0 },
+    { SEQ_SE_GS_ASHIOTO_A,      0 },
+    { SEQ_SE_GS_OCHIBA,         0 },
+    { SEQ_SE_GS_EDAPAKI,        0 },
+    { SEQ_SE_GS_KUSA2,          0 },
+    { SEQ_SE_GS_ASHIOTO_B,      1 },
+    { SEQ_SE_GS_ASHIOTO_D,      1 },
+    { SEQ_SE_GS_ASHIOTO_D_2,    0 },
+    { SEQ_SE_GS_ASHIOTO_E,      0 },
+    { SEQ_SE_GS_ASHIOTO_B,      1 },
+    { SEQ_SE_GS_ASHIOTO_F,      1 },
+    { SEQ_SE_GS_ASHIOTO_D,      0 },
+    { SEQ_SE_GS_ASHIOTO_H,      0 },
+    { SEQ_SE_GS_ASHIOTO_G,      0 },
+    { SEQ_SE_DP_BOX02,          0 },
+    { SEQ_SE_DP_BOX01,          0 },
+};
 
 void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManager, int direction, u16 keys, u16 heldKeys, int allowTurn) {
     register MapLoadManager *manager = mapLoadManager;
@@ -237,7 +263,7 @@ static void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar 
     if (direction != DIR_NONE) {
         behavior = MapObject_GetTileAttrBits8To14InDirection(object, direction);
     }
-    if (gPlayerFootstepSounds[behavior].sequence == SEQ_SE_GS_EDAPAKI) {
+    if (sPlayerFootstepSounds[behavior].sequence == SEQ_SE_GS_EDAPAKI) {
         PlayerAvatar_ResetFootstepToggle(avatar);
     } else if (PlayerAvatar_GetPlayerMoveState(avatar) == PLAYER_MOVE_STATE_NONE) {
         PlayerAvatar_ResetFootstepToggle(avatar);
@@ -257,11 +283,11 @@ static void PlayerAvatar_PlayFootstepSound(LocalMapObject *object, PlayerAvatar 
         if (behavior == 0 && PlayerAvatar_IsRunning(avatar) == TRUE) {
             behavior = 1;
         }
-        if (gPlayerFootstepSounds[behavior].fieldBank == 1) {
-            sequence = gPlayerFootstepSounds[behavior].sequence;
+        if (sPlayerFootstepSounds[behavior].fieldBank == 1) {
+            sequence = sPlayerFootstepSounds[behavior].sequence;
             PlaySEWithFieldBank(sequence);
         } else {
-            sequence = gPlayerFootstepSounds[behavior].sequence;
+            sequence = sPlayerFootstepSounds[behavior].sequence;
             PlaySE(sequence);
         }
         Sound_ApplyFootstepVariation(sequence);
@@ -397,16 +423,16 @@ static int PlayerAvatar_GetForcedMovementKind(PlayerAvatar *avatar, int value) {
         return 0;
     }
     do {
-        if (gPlayerForcedMovementBehaviors[i].matches((u8)behavior) == TRUE) {
-            return gPlayerForcedMovementBehaviors[i].kind;
+        if (sPlayerForcedMovementBehaviors[i].matches((u8)behavior) == TRUE) {
+            return sPlayerForcedMovementBehaviors[i].kind;
         }
         i++;
-    } while (gPlayerForcedMovementBehaviors[i].matches != NULL);
+    } while (sPlayerForcedMovementBehaviors[i].matches != NULL);
     return 0;
 }
 
 static BOOL PlayerAvatar_RunForcedMovement(PlayerAvatar *avatar, int kind, int value) {
-    if (gPlayerForcedMovementFuncs[kind](avatar, value) == TRUE) {
+    if (sPlayerForcedMovementFuncs[kind](avatar, value) == TRUE) {
         return TRUE;
     }
     return FALSE;

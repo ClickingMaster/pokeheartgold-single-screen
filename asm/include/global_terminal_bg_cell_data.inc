@@ -89,7 +89,6 @@
 .public GlobalTerminalConnect_Exit
 
 	.public BgCellManager_NoTransfer
-	.public sBgCellTransferFuncs
 
 	.public GlobalTerminalApp_LoadWifi
 	.public GlobalTerminalApp_UnloadWifi

@@ -65,8 +65,6 @@ int Comm_FindFriendSlot(void *a, void *b, int *c);
 u8 Comm_FindFriendIndexOfPlayer(void *save, int a);
 void DWC_CreateExchangeToken(void *a, void *b);
 
-extern CommPlayerInfo *gCommPlayerInfo;
-
 void CommPlayerInfo_Init(void *save, void *rules);
 void CommPlayerInfo_Free(void);
 BOOL CommPlayerInfo_Exists(void);

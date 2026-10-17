@@ -1,8 +1,11 @@
+#include "field_misc_util.h"
+
 #include "global.h"
 
 #include "constants/heap.h"
 #include "constants/items.h"
 #include "constants/pokemon.h"
+#include "constants/species.h"
 
 #include "field_system.h"
 #include "heap.h"
@@ -11,7 +14,6 @@
 #include "party.h"
 #include "pokemon.h"
 #include "task.h"
-#include "field_misc_util.h"
 
 typedef struct SpinEnvironment {
     LocalMapObject *object;
@@ -32,10 +34,10 @@ typedef struct BlinkEnvironment {
     u8 padding[2];
 } BlinkEnvironment;
 
-extern const u16 sRegiSpecies[3];
-
 static BOOL Task_SpinMapObject(TaskManager *taskManager);
 static BOOL Task_BlinkMapObject(TaskManager *taskManager);
+
+static const u16 sRegiSpecies[3] = { SPECIES_REGIROCK, SPECIES_REGICE, SPECIES_REGISTEEL };
 
 u32 CountDigits(u32 value) {
     if (value / 10 == 0) {

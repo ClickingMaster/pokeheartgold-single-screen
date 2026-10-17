@@ -64,8 +64,6 @@ typedef struct FieldSystemFrontierFsysView {
     FrontierFsysBattleTotalsView *inner;
 } FieldSystemFrontierFsysView;
 
-extern const u8 gFrontierSummaryPages[];
-
 extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
 extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
 
@@ -99,6 +97,8 @@ enum {
     PARTY_SELECT_WAIT_SUMMARY,
     PARTY_SELECT_EXIT,
 };
+
+static const u8 sFrontierSummaryPages[] = { 0, 1, 2, 3, 4 };
 
 u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
     PartyMenuArgs *args = Heap_AllocAtEnd(heapId, sizeof(PartyMenuArgs));
@@ -160,7 +160,7 @@ u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    PokemonSummary_SetPages(args, gFrontierSummaryPages);
+    PokemonSummary_SetPages(args, sFrontierSummaryPages);
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(saveData));
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     *env->runningApp = args;

@@ -42,7 +42,6 @@ Static main
     Object src/message_printer_number.o
     Object src/sprite_system.o
     Object src/sys_task_api.o
-    Object asm/render_window_data.o
     Object src/render_window.o
     Object src/render_window_frame_icon.o
     Object src/render_window_icons.o
@@ -65,7 +64,6 @@ Static main
     Object src/yes_no_prompt.o
     Object asm/pokepic_anim_data.o
     Object src/pokepic_anim.o
-    Object asm/map_section_data.o
     Object src/map_section.o
     Object src/model_animation.o
     Object src/igt_counter.o
@@ -74,7 +72,6 @@ Static main
     Object src/camera_translation.o
     Object src/global_terminal_app.o
     Object asm/global_terminal_app_data.o
-    Object asm/bg_cell_manager_data.o
     Object src/bg_cell_manager.o
     Object src/grid_input_handler.o
     Object src/system.o
@@ -111,7 +108,6 @@ Static main
     Object src/swap_3d_buffers.o
     Object src/palette_vram_addr.o
     Object src/gf_3d_vramman.o
-    Object asm/system_card_data.o
     Object src/system_card.o
     Object src/save_arrays.o
     Object src/save.o
@@ -156,25 +152,19 @@ Static main
     Object src/frontier_state.o
     Object src/frontier_save.o
     Object src/frontier_card.o
-    Object asm/frontier_save_data.o
     Object src/save_wii_message.o
     Object src/save_plaza_survey.o
     Object src/pokeathlon/pokeathlon_save.o
-    Object asm/apricorn_box_data.o
     Object src/apricorn_box.o
     Object src/pokewalker.o
     Object src/save_trainer_house.o
-    Object asm/wireless_manager_data.o
     Object src/wireless_manager.o
     Object asm/communication_command_data.o
     Object src/communication_command.o
     Object src/communication_player_state.o
-    Object asm/communication_player_state_data.o
-    Object asm/comm_wireless_data.o
     Object src/comm_wireless.o
     Object src/communication_core.o
     Object src/link_synchronization.o
-    Object asm/link_synchronization_data.o
     Object src/comm_state.o
     Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
@@ -228,7 +218,6 @@ Static main
     Object src/field_warp_tasks.o
     Object src/script_pokemon_util.o
     Object src/terrain_attributes.o
-    Object asm/field_terrain_data.o
     Object src/field_terrain.o
     Object src/headbutt_tree.o
     Object src/field_bgm.o
@@ -251,11 +240,9 @@ Static main
     Object src/union_room_avatar.o
     Object src/dialog_box.o
     Object src/metatile_behavior.o
-    Object asm/field_misc_util_data.o
     Object src/field_misc_util.o
     Object src/frontier_stat_ids.o
     Object src/player_avatar.o
-    Object asm/player_avatar_movement_data.o
     Object src/player_avatar_movement.o
     Object src/map_object.o
     Object asm/map_object_movement_tables.o
@@ -274,7 +261,6 @@ Static main
     Object src/map_object_follow.o
     Object src/sys_flags.o
     Object src/sys_vars.o
-    Object asm/frontier_field_support_data.o
     Object src/frontier_field_support.o
     Object src/field_roamer.o
     Object src/npc_trade_task.o

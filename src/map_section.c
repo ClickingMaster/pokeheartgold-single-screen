@@ -6,13 +6,17 @@
 
 #include "assert.h"
 
-// first mapsec of each MapsecType (asm/map_section_data.s)
-extern const u16 gMapsecTypeStarts[MAPSECTYPE_MAX];
+// first mapsec of each MapsecType
+static const u16 sMapsecTypeStarts[MAPSECTYPE_MAX] = {
+    MAPSEC_MYSTERY_ZONE,
+    METLOC_DAY_CARE_COUPLE,
+    METLOC_LOVELY_PLACE,
+};
 
 int Mapsec_GetType(int mapsec) {
     int i;
     for (i = 0; i < MAPSECTYPE_MAX - 1; i++) {
-        if ((u32)mapsec < gMapsecTypeStarts[i + 1]) {
+        if ((u32)mapsec < sMapsecTypeStarts[i + 1]) {
             return i;
         }
     }
@@ -20,12 +24,12 @@ int Mapsec_GetType(int mapsec) {
 }
 
 int Mapsec_GetIndexInType(int mapsec) {
-    return mapsec - gMapsecTypeStarts[Mapsec_GetType(mapsec)];
+    return mapsec - sMapsecTypeStarts[Mapsec_GetType(mapsec)];
 }
 
 int Mapsec_FromTypeAndIndex(MapsecType type, int offset) {
     GF_ASSERT(type < MAPSECTYPE_MAX);
-    return gMapsecTypeStarts[type] + offset;
+    return sMapsecTypeStarts[type] + offset;
 }
 
 BOOL LocationIsDiamondPearlCompatible(mapsec_t mapsec) {

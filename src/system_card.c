@@ -26,7 +26,7 @@ typedef struct RomHeaderFields {
     u32 fatSize;
 } RomHeaderFields;
 
-extern const char sRomArchiveName[];
+static const char sRomArchiveName[] = "rom";
 
 void SystemCard_InitRomArchive(void) {
     FSArchive *archive;

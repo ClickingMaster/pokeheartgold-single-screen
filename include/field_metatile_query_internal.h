@@ -51,11 +51,6 @@ void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 BOOL MapModelNo_IsInTableD0ToD3(u16 a0);
 BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0);
 
-extern const u16 _020FC5FC[];
-extern const FieldAttrVTable gTerrainQueries_Bdhc;
-extern const u16 _020FC60C[];
-extern const FieldAttrVTable gTerrainQueries_Simple;
-
 SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, int z);
 void FieldSystem_SetTerrainQueries(void **queries, int mode);
 BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z);

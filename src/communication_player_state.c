@@ -1,42 +1,44 @@
 #include "communication_player_state_internal.h"
 
+static CommPlayerInfo *sCommPlayerInfo;
+
 void CommPlayerInfo_Init(void *save, void *rules) {
     void *profile;
     int i;
 
     profile = Save_PlayerData_GetProfile(save);
-    if (gCommPlayerInfo == NULL) {
-        gCommPlayerInfo = Heap_Alloc(15, sizeof(CommPlayerInfo));
-        MI_CpuFill8(gCommPlayerInfo, 0, sizeof(CommPlayerInfo));
+    if (sCommPlayerInfo == NULL) {
+        sCommPlayerInfo = Heap_Alloc(15, sizeof(CommPlayerInfo));
+        MI_CpuFill8(sCommPlayerInfo, 0, sizeof(CommPlayerInfo));
         for (i = 0; i < 8; i++) {
-            gCommPlayerInfo->profiles[i] = &gCommPlayerInfo->entries[i].profile;
+            sCommPlayerInfo->profiles[i] = &sCommPlayerInfo->entries[i].profile;
             CommPlayerInfo_ClearPlayer(i);
         }
-        gCommPlayerInfo->unk3A4 = 0;
-        gCommPlayerInfo->unk3A5 = 0;
-        gCommPlayerInfo->curIdx = 0;
-        gCommPlayerInfo->save = save;
-        gCommPlayerInfo->rules = rules;
-        PlayerProfile_Copy(profile, gCommPlayerInfo->profiles[0]);
+        sCommPlayerInfo->unk3A4 = 0;
+        sCommPlayerInfo->unk3A5 = 0;
+        sCommPlayerInfo->curIdx = 0;
+        sCommPlayerInfo->save = save;
+        sCommPlayerInfo->rules = rules;
+        PlayerProfile_Copy(profile, sCommPlayerInfo->profiles[0]);
     }
 }
 
 void CommPlayerInfo_Free(void) {
     int i;
 
-    if (gCommPlayerInfo != NULL) {
+    if (sCommPlayerInfo != NULL) {
         for (i = 0; i < 8; i++) {
-            gCommPlayerInfo->profiles[i] = NULL;
+            sCommPlayerInfo->profiles[i] = NULL;
         }
-        if (gCommPlayerInfo != NULL) {
-            Heap_Free(gCommPlayerInfo);
+        if (sCommPlayerInfo != NULL) {
+            Heap_Free(sCommPlayerInfo);
         }
-        gCommPlayerInfo = NULL;
+        sCommPlayerInfo = NULL;
     }
 }
 
 BOOL CommPlayerInfo_Exists(void) {
-    if (gCommPlayerInfo != NULL) {
+    if (sCommPlayerInfo != NULL) {
         return TRUE;
     }
     return FALSE;
@@ -50,25 +52,25 @@ void CommPlayerInfo_SendLocal(void) {
     void *profile;
 
     netId = Comm_GetLocalNetId();
-    friends = Save_FriendGroup_Get(gCommPlayerInfo->save);
-    friendRoster = Save_FriendRoster_Get(gCommPlayerInfo->save);
-    wifi = Save_WiFiHistory_Get(gCommPlayerInfo->save);
-    profile = gCommPlayerInfo->unk00;
+    friends = Save_FriendGroup_Get(sCommPlayerInfo->save);
+    friendRoster = Save_FriendRoster_Get(sCommPlayerInfo->save);
+    wifi = Save_WiFiHistory_Get(sCommPlayerInfo->save);
+    profile = sCommPlayerInfo->unk00;
     if (profile == NULL) {
-        profile = Save_PlayerData_GetProfile(gCommPlayerInfo->save);
+        profile = Save_PlayerData_GetProfile(sCommPlayerInfo->save);
     }
-    PlayerProfile_Copy(profile, gCommPlayerInfo->profiles[netId]);
-    OS_GetMacAddress(gCommPlayerInfo->entries[netId].mac);
-    MI_CpuCopy8(Save_FriendGroup_GetName(friends, 1, 0), gCommPlayerInfo->entries[netId].unk4C, 0x10);
-    gCommPlayerInfo->entries[netId].country = WifiHistory_GetPlayerCountry(wifi);
-    gCommPlayerInfo->entries[netId].region = WiFiHistory_GetPlayerRegion(wifi);
-    gCommPlayerInfo->entries[netId].unk65 = 0;
-    DWC_CreateExchangeToken(FriendRoster_GetUserData(friendRoster), gCommPlayerInfo->entries[netId].token);
-    MI_CpuFill8(&gCommPlayerInfo->entries[netId], 0, 0x20);
-    if (gCommPlayerInfo->rules != NULL) {
-        LinkBattleRuleset_Copy(gCommPlayerInfo->rules, &gCommPlayerInfo->entries[netId]);
+    PlayerProfile_Copy(profile, sCommPlayerInfo->profiles[netId]);
+    OS_GetMacAddress(sCommPlayerInfo->entries[netId].mac);
+    MI_CpuCopy8(Save_FriendGroup_GetName(friends, 1, 0), sCommPlayerInfo->entries[netId].unk4C, 0x10);
+    sCommPlayerInfo->entries[netId].country = WifiHistory_GetPlayerCountry(wifi);
+    sCommPlayerInfo->entries[netId].region = WiFiHistory_GetPlayerRegion(wifi);
+    sCommPlayerInfo->entries[netId].unk65 = 0;
+    DWC_CreateExchangeToken(FriendRoster_GetUserData(friendRoster), sCommPlayerInfo->entries[netId].token);
+    MI_CpuFill8(&sCommPlayerInfo->entries[netId], 0, 0x20);
+    if (sCommPlayerInfo->rules != NULL) {
+        LinkBattleRuleset_Copy(sCommPlayerInfo->rules, &sCommPlayerInfo->entries[netId]);
     }
-    Comm_SendCommand(3, &gCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
+    Comm_SendCommand(3, &sCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
 }
 
 int CommPlayerInfo_GetEntrySize(void) {
@@ -76,8 +78,8 @@ int CommPlayerInfo_GetEntrySize(void) {
 }
 
 void CommPlayerInfo_RecvSetUnk3A4(void) {
-    if (gCommPlayerInfo != NULL) {
-        gCommPlayerInfo->unk3A4 = 1;
+    if (sCommPlayerInfo != NULL) {
+        sCommPlayerInfo->unk3A4 = 1;
     }
 }
 
@@ -85,46 +87,46 @@ void CommPlayerInfo_RecvEntry(int netId, int unused, void *packet) {
 #pragma unused(unused)
     CommPlayerInfoEntry *pkt = packet;
 
-    if (gCommPlayerInfo == NULL) {
+    if (sCommPlayerInfo == NULL) {
         return;
     }
     if (!Comm_IsNetIdConnected((u16)netId)) {
         return;
     }
-    MI_CpuCopy8(pkt, &gCommPlayerInfo->entries[pkt->index], sizeof(CommPlayerInfoEntry));
-    gCommPlayerInfo->curIdx = pkt->index;
-    if (PlayerProfile_IsNameEmpty(gCommPlayerInfo->profiles[gCommPlayerInfo->curIdx]) == TRUE) {
+    MI_CpuCopy8(pkt, &sCommPlayerInfo->entries[pkt->index], sizeof(CommPlayerInfoEntry));
+    sCommPlayerInfo->curIdx = pkt->index;
+    if (PlayerProfile_IsNameEmpty(sCommPlayerInfo->profiles[sCommPlayerInfo->curIdx]) == TRUE) {
         return;
     }
-    if (gCommPlayerInfo->status[gCommPlayerInfo->curIdx] >= 2) {
+    if (sCommPlayerInfo->status[sCommPlayerInfo->curIdx] >= 2) {
         return;
     }
-    gCommPlayerInfo->status[gCommPlayerInfo->curIdx] = 1;
-    if (gCommPlayerInfo->curIdx != Comm_GetLocalNetId()) {
+    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = 1;
+    if (sCommPlayerInfo->curIdx != Comm_GetLocalNetId()) {
         return;
     }
-    gCommPlayerInfo->status[gCommPlayerInfo->curIdx] = 3;
+    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = 3;
 }
 
 void CommPlayerInfo_RecvPlayerEntry(int netId, int unused, void *src) {
 #pragma unused(unused)
-    if (gCommPlayerInfo == NULL) {
+    if (sCommPlayerInfo == NULL) {
         return;
     }
-    MI_CpuCopy8(src, &gCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
-    CommWireless_SetMacAddress(gCommPlayerInfo->entries[netId].mac, netId);
-    gCommPlayerInfo->status[netId] = 1;
+    MI_CpuCopy8(src, &sCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
+    CommWireless_SetMacAddress(sCommPlayerInfo->entries[netId].mac, netId);
+    sCommPlayerInfo->status[netId] = 1;
     if (netId == Comm_GetLocalNetId()) {
-        gCommPlayerInfo->status[netId] = 3;
+        sCommPlayerInfo->status[netId] = 3;
         return;
     }
-    gCommPlayerInfo->unk3A5 = 1;
+    sCommPlayerInfo->unk3A5 = 1;
 }
 
 BOOL CommPlayerInfo_HostRedistribute(void) {
     int i;
 
-    if (gCommPlayerInfo->unk3A5 == 0) {
+    if (sCommPlayerInfo->unk3A5 == 0) {
         return FALSE;
     }
     if (Comm_GetLocalNetId() != 0) {
@@ -132,55 +134,55 @@ BOOL CommPlayerInfo_HostRedistribute(void) {
     }
     if (Comm_ParentQueueHasCommand(5) == 0) {
         for (i = 0; i < 8; i++) {
-            if (gCommPlayerInfo->status[i] != 0) {
-                gCommPlayerInfo->entries[i].index = i;
-                MI_CpuCopy8(gCommPlayerInfo->profiles[i], gCommPlayerInfo->entries[i].profile, PlayerProfile_sizeof());
-                Comm_SendParentCommandNoCopyUnchecked(4, &gCommPlayerInfo->entries[i], sizeof(CommPlayerInfoEntry));
+            if (sCommPlayerInfo->status[i] != 0) {
+                sCommPlayerInfo->entries[i].index = i;
+                MI_CpuCopy8(sCommPlayerInfo->profiles[i], sCommPlayerInfo->entries[i].profile, PlayerProfile_sizeof());
+                Comm_SendParentCommandNoCopyUnchecked(4, &sCommPlayerInfo->entries[i], sizeof(CommPlayerInfoEntry));
             }
         }
         Comm_SendParentCommandNoCopyUnchecked(5, NULL, 0);
-        gCommPlayerInfo->unk3A5 = 0;
+        sCommPlayerInfo->unk3A5 = 0;
         return TRUE;
     }
     return FALSE;
 }
 
 u8 CommPlayerInfo_HasNewEntries(void) {
-    return gCommPlayerInfo->unk3A5;
+    return sCommPlayerInfo->unk3A5;
 }
 
 void CommPlayerInfo_ClearPlayer(int netId) {
-    PlayerProfile_Init(gCommPlayerInfo->profiles[netId]);
-    gCommPlayerInfo->status[netId] = 0;
+    PlayerProfile_Init(sCommPlayerInfo->profiles[netId]);
+    sCommPlayerInfo->status[netId] = 0;
 }
 
 BOOL CommPlayerInfo_IsReceived(int netId) {
-    if (gCommPlayerInfo->status[netId] == 1) {
+    if (sCommPlayerInfo->status[netId] == 1) {
         return TRUE;
     }
     return FALSE;
 }
 
 BOOL CommPlayerInfo_IsReceivedOrAccepted(int netId) {
-    return gCommPlayerInfo->status[netId] == 2 || gCommPlayerInfo->status[netId] == 1;
+    return sCommPlayerInfo->status[netId] == 2 || sCommPlayerInfo->status[netId] == 1;
 }
 
 BOOL CommPlayerInfo_IsAccepted(int netId) {
-    if (gCommPlayerInfo->status[netId] == 2) {
+    if (sCommPlayerInfo->status[netId] == 2) {
         return TRUE;
     }
     return FALSE;
 }
 
 void CommPlayerInfo_Accept(int netId) {
-    gCommPlayerInfo->status[netId] = 2;
+    sCommPlayerInfo->status[netId] = 2;
 }
 
 int CommPlayerInfo_FindReceived(void) {
     int i;
 
     for (i = 0; i < 8; i++) {
-        if (gCommPlayerInfo->status[i] == 1) {
+        if (sCommPlayerInfo->status[i] == 1) {
             return i;
         }
     }
@@ -193,7 +195,7 @@ int CommPlayerInfo_CountAccepted(void) {
 
     count = 0;
     for (i = 0; i < 8; i++) {
-        switch (gCommPlayerInfo->status[i]) {
+        switch (sCommPlayerInfo->status[i]) {
         case 2:
         case 3:
             count++;
@@ -207,12 +209,12 @@ BOOL CommPlayerInfo_DropDisconnected(void) {
     BOOL ret;
 
     ret = FALSE;
-    if (gCommPlayerInfo != NULL) {
+    if (sCommPlayerInfo != NULL) {
         if (Comm_CountConnected() == 0) {
             return ret;
         }
         for (i = 0; i < 8; i++) {
-            if (!Comm_IsNetIdConnected((u16)i) && gCommPlayerInfo->status[i] != 0) {
+            if (!Comm_IsNetIdConnected((u16)i) && sCommPlayerInfo->status[i] != 0) {
                 CommPlayerInfo_ClearPlayer(i);
                 ret = TRUE;
             }
@@ -222,46 +224,46 @@ BOOL CommPlayerInfo_DropDisconnected(void) {
 }
 
 void *CommPlayerInfo_GetProfile(int netId) {
-    if (gCommPlayerInfo == NULL) {
+    if (sCommPlayerInfo == NULL) {
         return NULL;
     }
-    switch (gCommPlayerInfo->status[netId]) {
+    switch (sCommPlayerInfo->status[netId]) {
     case 1:
     case 2:
     case 3:
-        return gCommPlayerInfo->profiles[netId];
+        return sCommPlayerInfo->profiles[netId];
     }
     return NULL;
 }
 
 void *CommPlayerInfo_GetExchangeToken(int netId) {
-    if (gCommPlayerInfo->status[netId] != 0) {
-        return gCommPlayerInfo->entries[netId].token;
+    if (sCommPlayerInfo->status[netId] != 0) {
+        return sCommPlayerInfo->entries[netId].token;
     }
     return NULL;
 }
 
 u8 CommPlayerInfo_GetFriendIndex(int a) {
-    return Comm_FindFriendIndexOfPlayer(gCommPlayerInfo->save, a);
+    return Comm_FindFriendIndexOfPlayer(sCommPlayerInfo->save, a);
 }
 
 void *CommPlayerInfo_GetGroupName(int netId) {
-    if (gCommPlayerInfo->status[netId] != 0) {
-        return gCommPlayerInfo->entries[netId].unk4C;
+    if (sCommPlayerInfo->status[netId] != 0) {
+        return sCommPlayerInfo->entries[netId].unk4C;
     }
     return NULL;
 }
 
 u8 CommPlayerInfo_GetCountry(int netId) {
-    if (gCommPlayerInfo->status[netId] != 0) {
-        return gCommPlayerInfo->entries[netId].country;
+    if (sCommPlayerInfo->status[netId] != 0) {
+        return sCommPlayerInfo->entries[netId].country;
     }
     return 0;
 }
 
 u8 CommPlayerInfo_GetRegion(int netId) {
-    if (gCommPlayerInfo->status[netId] != 0) {
-        return gCommPlayerInfo->entries[netId].region;
+    if (sCommPlayerInfo->status[netId] != 0) {
+        return sCommPlayerInfo->entries[netId].region;
     }
     return 0;
 }
@@ -274,17 +276,17 @@ BOOL CommPlayerInfo_RulesetsMatch(void) {
         if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
-        if (gCommPlayerInfo->status[i] == 0) {
+        if (sCommPlayerInfo->status[i] == 0) {
             continue;
         }
         if (!Comm_IsNetIdConnected((u16)(i + 1))) {
             continue;
         }
-        if (gCommPlayerInfo->status[i + 1] == 0) {
+        if (sCommPlayerInfo->status[i + 1] == 0) {
             continue;
         }
         for (j = 0; j < 0x20; j++) {
-            if (gCommPlayerInfo->entries[i].rules[j] != gCommPlayerInfo->entries[i + 1].rules[j]) {
+            if (sCommPlayerInfo->entries[i].rules[j] != sCommPlayerInfo->entries[i + 1].rules[j]) {
                 return FALSE;
             }
         }
@@ -296,7 +298,7 @@ void CommPlayerInfo_AddToRecords(int mode, int delta) {
     int i;
     int parity;
 
-    if (gCommPlayerInfo == NULL) {
+    if (sCommPlayerInfo == NULL) {
         return;
     }
     if (mode != 2) {
@@ -306,21 +308,21 @@ void CommPlayerInfo_AddToRecords(int mode, int delta) {
         if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
-        if (gCommPlayerInfo->status[i] == 0) {
+        if (sCommPlayerInfo->status[i] == 0) {
             continue;
         }
         if (mode == 0) {
             if (parity == (Comm_GetBattleSlot(i) & 1)) {
                 continue;
             }
-            gCommPlayerInfo->scores[i].wins += delta;
+            sCommPlayerInfo->scores[i].wins += delta;
         } else if (mode == 1) {
             if (parity == (Comm_GetBattleSlot(i) & 1)) {
                 continue;
             }
-            gCommPlayerInfo->scores[i].losses += delta;
+            sCommPlayerInfo->scores[i].losses += delta;
         } else {
-            gCommPlayerInfo->scores[i].trades += delta;
+            sCommPlayerInfo->scores[i].trades += delta;
         }
     }
 }
@@ -342,14 +344,14 @@ void CommPlayerInfo_SaveRecords(void *save) {
                 if (val < 0) {
                     GF_AssertFail();
                 }
-                FriendRoster_AddWinsLossesTrades(r, val, gCommPlayerInfo->scores[i].wins, gCommPlayerInfo->scores[i].losses, gCommPlayerInfo->scores[i].trades);
+                FriendRoster_AddWinsLossesTrades(r, val, sCommPlayerInfo->scores[i].wins, sCommPlayerInfo->scores[i].losses, sCommPlayerInfo->scores[i].trades);
             }
         }
     }
     for (i = 0; i < 8; i++) {
-        gCommPlayerInfo->scores[i].wins = 0;
-        gCommPlayerInfo->scores[i].losses = 0;
-        gCommPlayerInfo->scores[i].trades = 0;
+        sCommPlayerInfo->scores[i].wins = 0;
+        sCommPlayerInfo->scores[i].losses = 0;
+        sCommPlayerInfo->scores[i].trades = 0;
     }
 }
 
@@ -368,5 +370,5 @@ void CommPlayerInfo_RecordTrades(void *save, int count) {
 }
 
 void CommPlayerInfo_SetProfile(void *a) {
-    gCommPlayerInfo->unk00 = a;
+    sCommPlayerInfo->unk00 = a;
 }

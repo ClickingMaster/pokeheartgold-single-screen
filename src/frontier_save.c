@@ -1,8 +1,6 @@
 #include "frontier_save_access.h"
 #include "save_arrays.h"
 
-extern FrontierSave gFrontierSave;
-
 u32 Save_Frontier_sizeof(void);
 void Save_Frontier_Init(FrontierSave *frontier);
 void FrontierData_Reset(void *data);
@@ -21,6 +19,8 @@ u32 FrontierSpeciesRecords_sizeof(void);
 void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data);
 int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data);
 
+static FrontierSave sFrontierSave;
+
 u32 Save_Frontier_sizeof(void) {
     return sizeof(FrontierSave);
 }
@@ -34,21 +34,21 @@ void Save_Frontier_Init(FrontierSave *frontier) {
     HallFlags_Init((u8 *)frontier + 0x161c);
     CastleFlags_Init((u8 *)frontier + 0x1620);
     ArcadeFlags_Init((u8 *)frontier + 0x1624);
-    MI_CpuCopy8(frontier, &gFrontierSave, sizeof(*frontier));
+    MI_CpuCopy8(frontier, &sFrontierSave, sizeof(*frontier));
 }
 
 FrontierSave *Save_Frontier_GetStatic(SaveData *save) {
-    return &gFrontierSave;
+    return &sFrontierSave;
 }
 
 void Save_Frontier_Commit(SaveData *save) {
     FrontierSave *frontier = SaveArray_Get(save, 19);
-    MI_CpuCopy8(&gFrontierSave, frontier, sizeof(*frontier));
+    MI_CpuCopy8(&sFrontierSave, frontier, sizeof(*frontier));
 }
 
 void Save_Frontier_Load(SaveData *save) {
     FrontierSave *frontier = SaveArray_Get(save, 19);
-    MI_CpuCopy8(frontier, &gFrontierSave, sizeof(*frontier));
+    MI_CpuCopy8(frontier, &sFrontierSave, sizeof(*frontier));
 }
 
 u16 FrontierSave_GetStat(FrontierSave *frontier, int stat, int index) {

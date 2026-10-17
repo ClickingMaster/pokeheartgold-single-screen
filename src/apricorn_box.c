@@ -46,10 +46,6 @@ typedef struct ApricornMixState {
     u8 values[5];
 } ApricornMixState;
 
-extern const u16 gApricornBallItems[];
-extern const s8 gApricornFlavorDeltas[][5];
-extern const ApricornPreset gApricornJuicePresets[];
-
 static void InitApricornBox(SaveApricornBox *apricornBox);
 static void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox);
 static void ClearApricornJuice(void *ptr);
@@ -74,6 +70,34 @@ int ApricornJuice_GetTopMixIndex(void *data);
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
 ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
 void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
+
+static const u16 sApricornBallItems[] = {
+    ITEM_LEVEL_BALL,
+    ITEM_MOON_BALL,
+    ITEM_LURE_BALL,
+    ITEM_FRIEND_BALL,
+    ITEM_LOVE_BALL,
+    ITEM_FAST_BALL,
+    ITEM_HEAVY_BALL,
+};
+
+static const s8 sApricornFlavorDeltas[][5] = {
+    { 4,  -2, 0,  0,  0  },
+    { 0,  4,  -2, 0,  0  },
+    { 0,  0,  4,  -2, 0  },
+    { 0,  0,  0,  4,  -2 },
+    { -2, 0,  0,  0,  4  },
+    { -2, -2, -2, -2, -2 },
+    { 2,  2,  2,  2,  2  },
+};
+
+static const ApricornPreset sApricornJuicePresets[] = {
+    { { 0, 0x1674, 10, 0 } },
+    { { 150, 120, 0xE14, 0 } },
+    { { 0x21C, 125, 0x1C00, 20 } },
+    { { 200, 136, 0, 0xE18 } },
+    { { 150, 0xC68, 0, 0x1400 } },
+};
 
 u32 Save_ApricornBox_sizeof(void) {
     return sizeof(SaveApricornBox);
@@ -162,7 +186,7 @@ int ApricornBox_GetKurtBall(SaveApricornBox *apricornBox) {
     if (apricornBox->kurtApricorn >= 7) {
         return ITEM_POKE_BALL;
     }
-    return gApricornBallItems[apricornBox->kurtApricorn];
+    return sApricornBallItems[apricornBox->kurtApricorn];
 }
 
 void ApricornBox_SetMixState(SaveApricornBox *apricornBox, u32 value) {
@@ -257,7 +281,7 @@ BOOL ApricornBox_GetJuice(SaveApricornBox *box, int index, ApricornJuice *out) {
         index = 0;
     }
     if (index <= 4) {
-        *(ApricornPreset *)out = gApricornJuicePresets[index];
+        *(ApricornPreset *)out = sApricornJuicePresets[index];
     } else if (index <= 7) {
         src = (const u16 *)&box->juiceRecords[index - 5].data;
         if (ApricornJuice_GetFlavorTotal((ApricornJuice *)src) == 0) {
@@ -638,7 +662,7 @@ static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
             s8 *v;
             s8 change;
             s8 old;
-            row = gApricornFlavorDeltas[action];
+            row = sApricornFlavorDeltas[action];
             v = &values[0];
             for (i = 0; i < 5; i++) {
                 change = *row;

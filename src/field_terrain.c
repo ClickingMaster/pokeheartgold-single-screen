@@ -12,7 +12,7 @@
 #include "map_matrix.h"
 #include "terrain_attributes.h"
 
-// Field terrain queries (ARM9 static 0x02054648-0x02054E40). FieldSystem.terrainQueries points at one of two query tables,
+// Field terrain queries. FieldSystem.terrainQueries points at one of two query tables,
 // chosen by the map's useSimpleTerrainCollisions: the BDHC one reads heights from the loaded map chunks' BDHC data
 // (and the dynamic height plates) and attributes from the loaded chunks, the simple one has no heights and reads
 // attributes from the whole map's TerrainAttributes. Attribute bits: 0-7 metatile behavior, 15 collision.
@@ -24,11 +24,6 @@ typedef struct FieldTerrainQueries {
 } FieldTerrainQueries;
 
 #define FS_TERRAIN_QUERIES(fieldSystem) ((const FieldTerrainQueries *)(fieldSystem)->terrainQueries)
-
-extern const u16 _020FC5FC[];
-extern const FieldTerrainQueries gTerrainQueries_Bdhc;
-extern const u16 _020FC60C[];
-extern const FieldTerrainQueries gTerrainQueries_Simple;
 
 int Terrain_AbsDiff(int lhs, int rhs);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
@@ -59,6 +54,20 @@ int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId
 void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
 BOOL MapModelNo_IsInTableD0ToD3(u16 modelNo);
 BOOL MapModelNo_HasNoAreaMapAnimation(u16 modelNo);
+
+static const u16 sMapModelsD0ToD3[] = { 0xD0, 0xD1, 0xD2, 0xD3 };
+
+static const FieldTerrainQueries sTerrainQueries_Bdhc = {
+    .getHeight = Terrain_GetHeight_Bdhc,
+    .getAttributes = Terrain_GetAttributes_Loaded,
+};
+
+static const u16 sMapModelsWithoutAreaMapAnimation[] = { 0xD0, 0xD2, 0xD3, 0 };
+
+static const FieldTerrainQueries sTerrainQueries_Simple = {
+    .getHeight = Terrain_GetHeight_Simple,
+    .getAttributes = Terrain_GetAttributes_Simple,
+};
 
 int Terrain_AbsDiff(int lhs, int rhs) {
     if (lhs >= rhs) {
@@ -212,9 +221,9 @@ SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, i
 
 void FieldSystem_SetTerrainQueries(void **queries, int mode) {
     if (mode == 0) {
-        *queries = (void *)&gTerrainQueries_Bdhc;
+        *queries = (void *)&sTerrainQueries_Bdhc;
     } else if (mode == 1) {
-        *queries = (void *)&gTerrainQueries_Simple;
+        *queries = (void *)&sTerrainQueries_Simple;
     } else {
         GF_AssertFail();
     }
@@ -511,7 +520,7 @@ void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos) {
 
 BOOL MapModelNo_IsInTableD0ToD3(u16 modelNo) {
     int i;
-    const u16 *p = _020FC60C;
+    const u16 *p = sMapModelsD0ToD3;
     for (i = 0; i < 4; i++) {
         if (modelNo == *p) {
             return TRUE;
@@ -527,7 +536,7 @@ BOOL MapModelNo_HasNoAreaMapAnimation(u16 modelNo) {
     if (!MapModelNo_IsInTableD0ToD3(modelNo)) {
         return FALSE;
     }
-    p = _020FC5FC;
+    p = sMapModelsWithoutAreaMapAnimation;
     for (i = 0; i < 3; i++) {
         if (modelNo == *p) {
             return TRUE;

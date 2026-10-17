@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -10,11 +11,10 @@
 #include "render_text.h"
 #include "render_window_internal.h"
 #include "sprite.h"
+#include "sprite_resource.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "systask_environment.h"
-#include "sprite_resource.h"
-#include "char_tiles.h"
 
 // Window decorations: the text printer's down arrow and the waiting icon (NARC a/0/3/8 members 0x16/0x17 drawn
 // over frame tiles 10-11), map signposts (NARC a/0/3/6) and the framed Pokemon picture window (a/0/3/8 0x2F-0x32).
@@ -39,6 +39,42 @@ struct PokemonPicWindow {
     u8 x;                             // 0x16D
     u8 y;                             // 0x16E
     u8 state;                         // 0x16F
+};
+
+static const TileRect sPokemonPicFrame1Rect = {
+    .x = 10,
+    .y = 0,
+    .w = 10,
+    .h = 10,
+};
+
+static const TileRect sPokemonPicFrame0Rect = {
+    .x = 0,
+    .y = 0,
+    .w = 10,
+    .h = 10,
+};
+
+static const SpriteResourceCountsListUnion sPokemonPicWindowResourceCounts = {
+    .numChar = 1,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const ManagedSpriteTemplate sPokemonPicWindowSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0x15CD5, 0x15CD5, 0x15CD5, 0x15CD5, 0, 0 },
+    .bgPriority = 0,
+    .vramTransfer = 0,
 };
 
 void LoadDownArrowTiles(Window *window, u32 baseTile) {

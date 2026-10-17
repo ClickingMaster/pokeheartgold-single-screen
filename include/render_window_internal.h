@@ -1,11 +1,10 @@
 #ifndef POKEHEARTGOLD_RENDER_WINDOW_INTERNAL_H
 #define POKEHEARTGOLD_RENDER_WINDOW_INTERNAL_H
 
-// Full declarations of the window frame module: src/render_window.c (frames), src/render_window_frame_icon.c and
-// src/render_window_icons.c (down arrow, signposts, waiting icon, Pokemon picture window). include/render_window.h
-// is the public subset other modules use; it declares WaitingIcon_New() with a u16 tile and the DrawPokemonPic*
-// results as PokepicManager pointers (what their callers expect), so the module's own files include this header
-// instead.
+// Full declarations of the window frame module: frames, the down arrow, signposts, the waiting icon and the Pokemon
+// picture window. The public header is the subset other modules use; it declares WaitingIcon_New() with a u16 tile
+// and the DrawPokemonPic* results as PokepicManager pointers (what their callers expect), so the module's own files
+// include this header instead.
 
 #include "field/field_sprite_manager.h"
 
@@ -16,11 +15,6 @@
 
 typedef struct WaitingIcon WaitingIcon;
 typedef struct PokemonPicWindow PokemonPicWindow;
-
-extern const TileRect sPokemonPicFrame1Rect;
-extern const TileRect sPokemonPicFrame0Rect;
-extern const SpriteResourceCountsListUnion sPokemonPicWindowResourceCounts;
-extern const ManagedSpriteTemplate sPokemonPicWindowSpriteTemplate;
 
 void LoadUserFrameGfx1Tiles(BgConfig *bgConfig, u32 layer, u32 baseTile, BOOL frame, u32 heapId);
 u32 GetUserFrameGfx1PaletteMember(void);
