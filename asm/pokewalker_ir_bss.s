@@ -12,8 +12,8 @@
 gPokewalkerIrLink:
 	.space 0x38
 
-gPokewalkerIrPacket: ; 0x021FFA18
+gPokewalkerIrPacket:
 	.space 0x8
 
-gPokewalkerIrPayload: ; 0x021FFA20
+gPokewalkerIrPayload:
 	.space 0x84

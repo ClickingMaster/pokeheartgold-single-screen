@@ -32,9 +32,6 @@ typedef struct TradeSequenceExchange {
 
 typedef BOOL (*TradeSequenceExchangeStateFunc)(TradeSequenceExchange *exchange, u32 *state);
 
-TradeSequenceExchange *TradeSequenceExchange_Init(TradeSequence *ts);
-void TradeSequenceExchange_Exit(TradeSequenceExchange *exchange);
-BOOL TradeSequenceExchange_Main(TradeSequenceExchange *exchange, u32 *state);
 BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state);
 BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state);
 void TradeSequenceExchange_SlideTask(SysTask *task, void *data);
@@ -112,7 +109,7 @@ static const GraphicsBanks sTradeSequenceExchangeGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceExchange *TradeSequenceExchange_Init(TradeSequence *ts) {
+void *TradeSequenceExchange_Init(TradeSequence *ts) {
     TradeSequenceExchange *exchange = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceExchange));
     if (exchange != NULL) {
         exchange->ts = ts;
@@ -122,15 +119,19 @@ TradeSequenceExchange *TradeSequenceExchange_Init(TradeSequence *ts) {
     return exchange;
 }
 
-void TradeSequenceExchange_Exit(TradeSequenceExchange *exchange) {
+void TradeSequenceExchange_Exit(void *data) {
+    TradeSequenceExchange *exchange = data;
+
     if (exchange != NULL) {
         TradeSequenceExchange_FreeBgs(exchange);
         Heap_Free(exchange);
     }
 }
 
-BOOL TradeSequenceExchange_Main(TradeSequenceExchange *exchange, u32 *state) {
-    if (*state < TRADE_SEQUENCE_EXCHANGE_NUM_STATES) {
+BOOL TradeSequenceExchange_Main(void *data, int *state) {
+    TradeSequenceExchange *exchange = data;
+
+    if (*state < NELEMS(sTradeSequenceExchangeStates)) {
         if (sTradeSequenceExchangeStates[*state](exchange, &exchange->subState)) {
             *state = *state + 1;
             exchange->subState = 0;

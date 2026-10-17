@@ -77,9 +77,6 @@ typedef BOOL (*TradeSequenceApproachStateFunc)(TradeSequenceApproach *approach, 
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
-TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts);
-void TradeSequenceApproach_Exit(TradeSequenceApproach *approach);
-BOOL TradeSequenceApproach_Main(TradeSequenceApproach *approach, u32 *state);
 BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state);
 BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state);
 void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach);
@@ -152,7 +149,7 @@ static const GraphicsBanks sTradeSequenceApproachGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts) {
+void *TradeSequenceApproach_Init(TradeSequence *ts) {
     TradeSequenceApproach *approach = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceApproach));
     if (approach != NULL) {
         approach->ts = ts;
@@ -166,7 +163,9 @@ TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts) {
     return approach;
 }
 
-void TradeSequenceApproach_Exit(TradeSequenceApproach *approach) {
+void TradeSequenceApproach_Exit(void *data) {
+    TradeSequenceApproach *approach = data;
+
     if (approach != NULL) {
         Main_SetVBlankIntrCB(NULL, NULL);
         TradeSequenceApproach_FreeBgs(approach);
@@ -177,8 +176,10 @@ void TradeSequenceApproach_Exit(TradeSequenceApproach *approach) {
     }
 }
 
-BOOL TradeSequenceApproach_Main(TradeSequenceApproach *approach, u32 *state) {
-    if (*state < TRADE_SEQUENCE_APPROACH_NUM_STATES) {
+BOOL TradeSequenceApproach_Main(void *data, int *state) {
+    TradeSequenceApproach *approach = data;
+
+    if (*state < NELEMS(sTradeSequenceApproachStates)) {
         if (sTradeSequenceApproachStates[*state](approach, &approach->subState)) {
             *state = *state + 1;
             approach->subState = 0;

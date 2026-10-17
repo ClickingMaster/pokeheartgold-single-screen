@@ -2,6 +2,7 @@
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
+
 	.public sBattlePartyWindowTemplates
 	.public sBattlePartyMoveNameMsgIds
 	.public sBattlePartyMonNameMsgIds
@@ -19,52 +20,18 @@
 	.public sBattlePartyCheckMovesTypeIconPos
 	.public sBattlePartyMoveDetailTypeIconPos
 	.public sBattlePartySummaryTypeIconPos
-	.public sBattlePartyPage7CursorBoxes
 	.public sBattlePartySpriteCapacities
-	.public sBattlePartyPage2CursorBoxes
 	.public sBattlePartyCheckMovesMoveIconPos
-	.public sBattlePartyPage1CursorBoxes
-	.public sBattlePartyPage4CursorBoxes
 	.public sBattlePartyPageCursorBoxes
-	.public sBattlePartyPage5CursorBoxes
 	.public sBattlePartyLearnMoveMoveIconPos
 	.public sBattlePartyListIconPos
 	.public sBattlePartyListStatusIconPos
-	.public sBattlePartyPage0CursorBoxes
-	.public sBattlePartyPage6CursorBoxes
-	.public sBattlePartyPage3CursorBoxes
 	.public sBattlePartySpriteTemplates
 	.public sBattlePartySpriteTemplatesPltt
 	.public sBattlePartySpriteTemplatesCell
 	.public sBattlePartySpriteTemplatesAnim
 	.public sBattlePartySpriteTemplatesPriority
-	.public sBattlePartyButton8Windows
-	.public sBattlePartyButton10Windows
-	.public sBattlePartyButton4Windows
-	.public sBattlePartyButton23Windows
-	.public sBattlePartyButton1Windows
-	.public sBattlePartyButton28Windows
-	.public sBattlePartyButton0Windows
-	.public sBattlePartyButton3Windows
-	.public sBattlePartyButton5Windows
-	.public sBattlePartyButton24Windows
-	.public sBattlePartyButton29Windows
-	.public sBattlePartyButton22Windows
-	.public sBattlePartyButton21Windows
-	.public sBattlePartyButton20Windows
-	.public sBattlePartyButton27Windows
-	.public sBattlePartyButton19Windows
-	.public sBattlePartyButton26Windows
-	.public sBattlePartyButton2Windows
-	.public sBattlePartyButton25Windows
-	.public sBattlePartyButton9Windows
-	.public sBattlePartyButton11Windows
-	.public sBattlePartyButton7Windows
-	.public sBattlePartyButton14Windows
 	.public sBattlePartyButtonScrollAmounts
-	.public sBattlePartyButton15Windows
-	.public sBattlePartyButton16Windows
-	.public sBattlePartyButton17Windows
 	.public sBattlePartySlotButtonScrollAmounts
 	.public sBattlePartyButtonSpriteOffsets
 	.public sBattlePartySlotButtonSpriteOffsets
@@ -87,38 +54,16 @@
 	.public sBattleBagItemEntryQuantityMsgIds
 	.public sBattleBagItemListWindows
 	.public sBattleBagPocketOrder
-	.public ov08_02225CE8
 	.public sBattleBagPageCursorBoxes
-	.public sBattleBagPage2CursorBoxes
 	.public sBattleBagSpriteCapacities
 	.public sBattleBagTutorialFingerPos
 	.public sBattleBagTutorialFingerPosY
-	.public sBattleBagPage0CursorBoxes
 	.public sBattleBagItemListIconPos
-	.public sBattleBagPage1CursorBoxes
 	.public sBattleBagSpriteTemplates
 	.public sBattleBagSpriteTemplatesPltt
 	.public sBattleBagSpriteTemplatesCell
 	.public sBattleBagSpriteTemplatesAnim
 	.public sBattleBagSpriteTemplatesPriority
-	.public sBattleBagButton3Windows
-	.public sBattleBagButton15Windows
-	.public sBattleBagButton1Windows
-	.public sBattleBagButton4Windows
-	.public sBattleBagButton2Windows
-	.public sBattleBagButton0Windows
-	.public sBattleBagButton18Windows
-	.public sBattleBagButton19Windows
-	.public sBattleBagButton22Windows
-	.public sBattleBagButton9Windows
-	.public sBattleBagButton8Windows
-	.public sBattleBagButton7Windows
-	.public sBattleBagButton6Windows
-	.public sBattleBagButton10Windows
-	.public sBattleBagButton20Windows
-	.public sBattleBagButton11Windows
-	.public sBattleBagButton17Windows
-	.public sBattleBagButton21Windows
 	.public sBattleBagButtonRects
 	.public sBattleBagButtonRectsY
 	.public sBattleBagButtonRectsWidth

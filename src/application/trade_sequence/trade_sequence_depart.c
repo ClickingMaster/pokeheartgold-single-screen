@@ -125,9 +125,6 @@ typedef struct TradeSequenceDepartAlphaFade {
 
 typedef BOOL (*TradeSequenceDepartStateFunc)(TradeSequenceDepart *depart, u32 *state);
 
-TradeSequenceDepart *TradeSequenceDepart_Init(TradeSequence *ts);
-void TradeSequenceDepart_Exit(TradeSequenceDepart *depart);
-BOOL TradeSequenceDepart_Main(TradeSequenceDepart *depart, u32 *state);
 void TradeSequenceDepart_Draw(TradeSequenceDepart *depart);
 BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state);
 BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state);
@@ -238,7 +235,7 @@ static const GraphicsBanks sTradeSequenceDepartGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceDepart *TradeSequenceDepart_Init(TradeSequence *ts) {
+void *TradeSequenceDepart_Init(TradeSequence *ts) {
     TradeSequenceDepart *depart = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceDepart));
     if (depart != NULL) {
         depart->ts = ts;
@@ -257,7 +254,8 @@ TradeSequenceDepart *TradeSequenceDepart_Init(TradeSequence *ts) {
     return depart;
 }
 
-void TradeSequenceDepart_Exit(TradeSequenceDepart *depart) {
+void TradeSequenceDepart_Exit(void *data) {
+    TradeSequenceDepart *depart = data;
     OSIntrMode enabled = OS_DisableInterrupts();
     if (depart != NULL) {
         TradeSequenceDepart_FreeBgs(depart);
@@ -275,8 +273,10 @@ void TradeSequenceDepart_Exit(TradeSequenceDepart *depart) {
     OS_RestoreInterrupts(enabled);
 }
 
-BOOL TradeSequenceDepart_Main(TradeSequenceDepart *depart, u32 *state) {
-    if (*state < TRADE_SEQUENCE_DEPART_NUM_STATES) {
+BOOL TradeSequenceDepart_Main(void *data, int *state) {
+    TradeSequenceDepart *depart = data;
+
+    if (*state < NELEMS(sTradeSequenceDepartStates)) {
         if (sTradeSequenceDepartStates[*state](depart, &depart->subState)) {
             *state = *state + 1;
             depart->subState = 0;

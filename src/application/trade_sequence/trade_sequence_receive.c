@@ -46,9 +46,6 @@ typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32
 
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 
-TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts);
-void TradeSequenceReceive_Exit(TradeSequenceReceive *receive);
-BOOL TradeSequenceReceive_Main(TradeSequenceReceive *receive, u32 *state);
 void TradeSequenceReceive_Draw(TradeSequenceReceive *receive);
 BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state);
 BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state);
@@ -126,7 +123,7 @@ static const GraphicsBanks sTradeSequenceReceiveGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts) {
+void *TradeSequenceReceive_Init(TradeSequence *ts) {
     TradeSequenceReceive *receive = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceReceive));
 
     if (receive != NULL) {
@@ -145,7 +142,9 @@ TradeSequenceReceive *TradeSequenceReceive_Init(TradeSequence *ts) {
     return receive;
 }
 
-void TradeSequenceReceive_Exit(TradeSequenceReceive *receive) {
+void TradeSequenceReceive_Exit(void *data) {
+    TradeSequenceReceive *receive = data;
+
     if (receive != NULL) {
         TradeSequenceReceive_StopBrightness(receive);
         TradeSequenceReceive_DeleteSprites(receive);
@@ -166,8 +165,10 @@ void TradeSequenceReceive_Exit(TradeSequenceReceive *receive) {
     }
 }
 
-BOOL TradeSequenceReceive_Main(TradeSequenceReceive *receive, u32 *state) {
-    if (*state < TRADE_SEQUENCE_RECEIVE_NUM_STATES) {
+BOOL TradeSequenceReceive_Main(void *data, int *state) {
+    TradeSequenceReceive *receive = data;
+
+    if (*state < NELEMS(sTradeSequenceReceiveStates)) {
         if (sTradeSequenceReceiveStates[*state](receive, &receive->subState)) {
             (*state)++;
             receive->subState = 0;

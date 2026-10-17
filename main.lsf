@@ -1804,7 +1804,6 @@ Overlay OVY_71
 {
     After OVY_70
     Object src/application/trade_sequence/trade_sequence.o
-    Object asm/trade_sequence_data.o
     Object src/application/trade_sequence/trade_sequence_send.o
     Object src/application/trade_sequence/trade_sequence_depart.o
     Object src/application/trade_sequence/trade_sequence_recede.o

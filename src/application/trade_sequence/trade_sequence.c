@@ -104,13 +104,12 @@ typedef void *(*TradeSequenceSceneInitFunc)(TradeSequence *ts);
 typedef BOOL (*TradeSequenceSceneMainFunc)(void *sceneWork, int *state);
 typedef void (*TradeSequenceSceneExitFunc)(void *sceneWork);
 
-// The scene table: init, main and exit function and trade mode of each of the 7 scenes.
-extern const TradeSequenceSceneInitFunc sTradeSequenceSceneInit[];
-extern const TradeSequenceSceneMainFunc sTradeSequenceSceneMain[];
-extern const TradeSequenceSceneExitFunc sTradeSequenceSceneExit[];
-extern const u32 sTradeSequenceSceneModes[];
-extern const s32 sTradeSequenceBgZoomCenterY[];
-extern const TileRect sTradeSequenceMonPicSettings;
+typedef struct TradeSequenceScene {
+    TradeSequenceSceneInitFunc init;
+    TradeSequenceSceneMainFunc main;
+    TradeSequenceSceneExitFunc exit;
+    u32 tradeModes; // the trade modes (1: full trade, 2: sending only, 4: receiving only) the scene plays in
+} TradeSequenceScene;
 
 BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon);
 void TradeSequence_DrawSpritesTask(SysTask *task, void *data);
@@ -129,6 +128,20 @@ void TradeSequence_InitModel(TradeSequenceModel *model);
 void TradeSequence_FreeModel(TradeSequenceModel *model);
 void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 targetY, fx32 targetZ);
 void TradeSequence_FreeCamera(TradeSequenceModels *models);
+
+static const s32 sTradeSequenceBgZoomCenterY[] = { 144, 56 };
+
+static const TileRect sTradeSequenceMonPicSettings = { 0, 0, 10, 10 };
+
+static const TradeSequenceScene sTradeSequenceScenes[TRADE_SEQUENCE_NUM_SCENES] = {
+    { TradeSequenceSend_Init,     TradeSequenceSend_Main,     TradeSequenceSend_Exit,     1 | 2 },
+    { TradeSequenceDepart_Init,   TradeSequenceDepart_Main,   TradeSequenceDepart_Exit,   1 | 2 },
+    { TradeSequenceRecede_Init,   TradeSequenceRecede_Main,   TradeSequenceRecede_Exit,   1 | 2 },
+    { TradeSequenceExchange_Init, TradeSequenceExchange_Main, TradeSequenceExchange_Exit, 1     },
+    { TradeSequenceApproach_Init, TradeSequenceApproach_Main, TradeSequenceApproach_Exit, 1 | 4 },
+    { TradeSequenceArrive_Init,   TradeSequenceArrive_Main,   TradeSequenceArrive_Exit,   1 | 4 },
+    { TradeSequenceReceive_Init,  TradeSequenceReceive_Main,  TradeSequenceReceive_Exit,  1 | 4 },
+};
 
 static s32 sTradeSequenceDeferredFreeCount;
 
@@ -220,12 +233,12 @@ BOOL TradeSequence_Main(OverlayManager *man, int *state) {
     TradeSequence *ts = OverlayManager_GetData(man);
 
     if (ts->scene < TRADE_SEQUENCE_NUM_SCENES) {
-        if (ts->args->is_ingame & sTradeSequenceSceneModes[ts->scene * 4]) {
+        if (ts->args->is_ingame & sTradeSequenceScenes[ts->scene].tradeModes) {
             if (ts->sceneWork == NULL) {
-                ts->sceneWork = sTradeSequenceSceneInit[ts->scene * 4](ts);
+                ts->sceneWork = sTradeSequenceScenes[ts->scene].init(ts);
             }
-            if (sTradeSequenceSceneMain[ts->scene * 4](ts->sceneWork, state)) {
-                sTradeSequenceSceneExit[ts->scene * 4](ts->sceneWork);
+            if (sTradeSequenceScenes[ts->scene].main(ts->sceneWork, state)) {
+                sTradeSequenceScenes[ts->scene].exit(ts->sceneWork);
                 ts->sceneWork = NULL;
                 ts->scene++;
                 *state = 0;

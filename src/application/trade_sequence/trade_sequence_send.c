@@ -80,9 +80,6 @@ typedef BOOL (*TradeSequenceSendStateFunc)(TradeSequenceSend *send, u32 *state);
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
-TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts);
-void TradeSequenceSend_Exit(TradeSequenceSend *send);
-BOOL TradeSequenceSend_Main(TradeSequenceSend *send, u32 *state);
 void TradeSequenceSend_Draw(TradeSequenceSend *send);
 BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state);
 BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state);
@@ -165,7 +162,7 @@ static const GraphicsBanks sTradeSequenceSendGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts) {
+void *TradeSequenceSend_Init(TradeSequence *ts) {
     TradeSequenceSend *send = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceSend));
     if (send) {
         send->ts = ts;
@@ -182,7 +179,9 @@ TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts) {
     return send;
 }
 
-void TradeSequenceSend_Exit(TradeSequenceSend *send) {
+void TradeSequenceSend_Exit(void *data) {
+    TradeSequenceSend *send = data;
+
     if (send) {
         TradeSequenceSend_StopBrightness(send);
         TradeSequenceSend_StopBounce(send);
@@ -203,8 +202,10 @@ void TradeSequenceSend_Exit(TradeSequenceSend *send) {
     }
 }
 
-BOOL TradeSequenceSend_Main(TradeSequenceSend *send, u32 *state) {
-    if (*state < TRADE_SEQUENCE_SEND_NUM_STATES) {
+BOOL TradeSequenceSend_Main(void *data, int *state) {
+    TradeSequenceSend *send = data;
+
+    if (*state < NELEMS(sTradeSequenceSendStates)) {
         if (sTradeSequenceSendStates[*state](send, &send->subState)) {
             *state = *state + 1;
             send->subState = 0;

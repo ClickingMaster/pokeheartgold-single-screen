@@ -385,10 +385,10 @@ extern const u16 gNintendoWfcDigitSpritePositions[][3][2];
 extern const u16 gNintendoWfcDigitSpritePositionsY[][3][2];
 extern const u16 gNintendoWfcPadCursorPositions[][2];
 extern const u16 gNintendoWfcPadCursorPositionsY[][2];
-extern const u8 ov72_0223B464[];
-extern const u8 ov72_0223B466[];
-extern const u8 ov72_0223B468[];
-extern const u8 ov72_0223B46A[];
+extern const u8 gNintendoWfcPadKeysUpFromLeftButton[];
+extern const u8 gNintendoWfcPadKeysDownFromLeftButton[];
+extern const u8 gNintendoWfcPadKeysUpFromRightButton[];
+extern const u8 gNintendoWfcPadKeysDownFromRightButton[];
 extern const int gNintendoWfcNumberInputWindowX[];
 typedef struct NintendoWfcPadKeyFlash {
     u8 x;
@@ -2561,13 +2561,13 @@ static u8 NintendoWfc_GetPadNeighbor(u32 key, u32 direction, u16 *padColumn) {
     u8 next = gNintendoWfcPadNeighbors[key][direction];
 
     if (next == 13) {
-        next = ov72_0223B464[padColumn[0]];
+        next = gNintendoWfcPadKeysUpFromLeftButton[padColumn[0]];
     } else if (next == 14) {
-        next = ov72_0223B466[padColumn[0]];
+        next = gNintendoWfcPadKeysDownFromLeftButton[padColumn[0]];
     } else if (next == 15) {
-        next = ov72_0223B468[padColumn[1]];
+        next = gNintendoWfcPadKeysUpFromRightButton[padColumn[1]];
     } else if (next == 16) {
-        next = ov72_0223B46A[padColumn[1]];
+        next = gNintendoWfcPadKeysDownFromRightButton[padColumn[1]];
     } else if (next == 10) {
         if (key == 5 || key == 0) {
             padColumn[0] = 0;

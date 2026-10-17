@@ -2,7 +2,13 @@
 	.include "overlay_90.inc"
 	.include "global.inc"
 
-	.text
+	.extern PlazaGame_GetCommandSizeNone
+	.extern PlazaGame_GetCommandSizeU32
+	.extern PlazaGame_HandleSelectionCommand
+	.extern PlazaGame_HandleVoteYesCommand
+	.extern PlazaGame_HandleVoteNoCommand
+	.extern PlazaGame_HandleContinueCommand
+	.extern PlazaGame_HandleQuitCommand
 	.public sPlazaGameMimeJrTopSelectionWeights
 	.public sPlazaGameWobbuffetPopSelectionWeights
 	.public sPlazaGameSwalotPlopSelectionWeights
@@ -36,13 +42,6 @@
 	.public sPlazaGameResultsBgTemplates
 	.public sPlazaGameCommands
 
-	.public PlazaGame_GetCommandSizeNone
-	.public PlazaGame_GetCommandSizeU32
-	.public PlazaGame_HandleSelectionCommand
-	.public PlazaGame_HandleVoteYesCommand
-	.public PlazaGame_HandleVoteNoCommand
-	.public PlazaGame_HandleContinueCommand
-	.public PlazaGame_HandleQuitCommand
 	.rodata
 
 sPlazaGameMimeJrTopSelectionWeights:

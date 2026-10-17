@@ -71,9 +71,6 @@ typedef struct TradeSequenceRecede {
 
 typedef BOOL (*TradeSequenceRecedeStateFunc)(TradeSequenceRecede *recede, u32 *state);
 
-TradeSequenceRecede *TradeSequenceRecede_Init(TradeSequence *ts);
-void TradeSequenceRecede_Exit(TradeSequenceRecede *recede);
-BOOL TradeSequenceRecede_Main(TradeSequenceRecede *recede, u32 *state);
 void TradeSequenceRecede_Draw(TradeSequenceRecede *recede);
 BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state);
 BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state);
@@ -144,7 +141,7 @@ static const GraphicsBanks sTradeSequenceRecedeGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceRecede *TradeSequenceRecede_Init(TradeSequence *ts) {
+void *TradeSequenceRecede_Init(TradeSequence *ts) {
     TradeSequenceRecede *recede = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceRecede));
     if (recede != NULL) {
         recede->ts = ts;
@@ -156,7 +153,9 @@ TradeSequenceRecede *TradeSequenceRecede_Init(TradeSequence *ts) {
     return recede;
 }
 
-void TradeSequenceRecede_Exit(TradeSequenceRecede *recede) {
+void TradeSequenceRecede_Exit(void *data) {
+    TradeSequenceRecede *recede = data;
+
     if (recede != NULL) {
         Main_SetVBlankIntrCB(NULL, NULL);
         TradeSequenceRecede_FreeBgs(recede);
@@ -167,8 +166,10 @@ void TradeSequenceRecede_Exit(TradeSequenceRecede *recede) {
     }
 }
 
-BOOL TradeSequenceRecede_Main(TradeSequenceRecede *recede, u32 *state) {
-    if (*state < TRADE_SEQUENCE_RECEDE_NUM_STATES) {
+BOOL TradeSequenceRecede_Main(void *data, int *state) {
+    TradeSequenceRecede *recede = data;
+
+    if (*state < NELEMS(sTradeSequenceRecedeStates)) {
         if (sTradeSequenceRecedeStates[*state](recede, &recede->subState)) {
             *state = *state + 1;
             recede->subState = 0;

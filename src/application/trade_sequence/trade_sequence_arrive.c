@@ -72,9 +72,6 @@ typedef struct TradeSequenceArriveAlphaFade {
 
 typedef BOOL (*TradeSequenceArriveStateFunc)(TradeSequenceArrive *arrive, u32 *state);
 
-TradeSequenceArrive *TradeSequenceArrive_Init(TradeSequence *ts);
-void TradeSequenceArrive_Exit(TradeSequenceArrive *arrive);
-BOOL TradeSequenceArrive_Main(TradeSequenceArrive *arrive, u32 *state);
 void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive);
 BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state);
 BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state);
@@ -164,7 +161,7 @@ static const GraphicsBanks sTradeSequenceArriveGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_0123_E,
 };
 
-TradeSequenceArrive *TradeSequenceArrive_Init(TradeSequence *ts) {
+void *TradeSequenceArrive_Init(TradeSequence *ts) {
     TradeSequenceArrive *arrive = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArrive));
     if (arrive != NULL) {
         arrive->ts = ts;
@@ -181,7 +178,9 @@ TradeSequenceArrive *TradeSequenceArrive_Init(TradeSequence *ts) {
     return arrive;
 }
 
-void TradeSequenceArrive_Exit(TradeSequenceArrive *arrive) {
+void TradeSequenceArrive_Exit(void *data) {
+    TradeSequenceArrive *arrive = data;
+
     if (arrive != NULL) {
         TradeSequenceArrive_FreeBgs(arrive);
         TradeSequenceArrive_Free3D(arrive);
@@ -198,8 +197,10 @@ void TradeSequenceArrive_Exit(TradeSequenceArrive *arrive) {
     }
 }
 
-BOOL TradeSequenceArrive_Main(TradeSequenceArrive *arrive, u32 *state) {
-    if (*state < TRADE_SEQUENCE_ARRIVE_NUM_STATES) {
+BOOL TradeSequenceArrive_Main(void *data, int *state) {
+    TradeSequenceArrive *arrive = data;
+
+    if (*state < NELEMS(sTradeSequenceArriveStates)) {
         if (sTradeSequenceArriveStates[*state](arrive, &arrive->subState)) {
             *state = *state + 1;
             arrive->subState = 0;

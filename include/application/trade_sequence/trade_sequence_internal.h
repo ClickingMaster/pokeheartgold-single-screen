@@ -46,4 +46,27 @@ u32 TradeSequence_GetFrameType(TradeSequence *ts);
 int TradeSequence_GetTradeMode(TradeSequence *ts);
 void TradeSequence_DeferFree(void *ptr);
 
+// The scenes, in the order they play.
+void *TradeSequenceSend_Init(TradeSequence *ts);
+BOOL TradeSequenceSend_Main(void *data, int *state);
+void TradeSequenceSend_Exit(void *data);
+void *TradeSequenceDepart_Init(TradeSequence *ts);
+BOOL TradeSequenceDepart_Main(void *data, int *state);
+void TradeSequenceDepart_Exit(void *data);
+void *TradeSequenceRecede_Init(TradeSequence *ts);
+BOOL TradeSequenceRecede_Main(void *data, int *state);
+void TradeSequenceRecede_Exit(void *data);
+void *TradeSequenceExchange_Init(TradeSequence *ts);
+BOOL TradeSequenceExchange_Main(void *data, int *state);
+void TradeSequenceExchange_Exit(void *data);
+void *TradeSequenceApproach_Init(TradeSequence *ts);
+BOOL TradeSequenceApproach_Main(void *data, int *state);
+void TradeSequenceApproach_Exit(void *data);
+void *TradeSequenceArrive_Init(TradeSequence *ts);
+BOOL TradeSequenceArrive_Main(void *data, int *state);
+void TradeSequenceArrive_Exit(void *data);
+void *TradeSequenceReceive_Init(TradeSequence *ts);
+BOOL TradeSequenceReceive_Main(void *data, int *state);
+void TradeSequenceReceive_Exit(void *data);
+
 #endif // POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_INTERNAL_H
