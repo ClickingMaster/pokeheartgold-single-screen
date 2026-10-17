@@ -140,8 +140,6 @@ typedef struct EasyChatCategoryNeighbors {
     u8 right;
 } EasyChatCategoryNeighbors;
 
-extern const EasyChatCategoryNeighbors gEasyChatCategoryGridNeighbors[];
-
 void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg);
 EasyChatApp *EasyChatApp_Create(OverlayManager *man);
 void EasyChatMessageCursor_Init(EasyChatMessageCursor *cursor, MailMessage *message);
@@ -204,6 +202,22 @@ BOOL EasyChatApp_HasChanged(EasyChatApp *app);
 BOOL EasyChatApp_IsComplete(EasyChatApp *app);
 void EasyChatYesNo_Set(u8 *result, u8 a, u8 b);
 u8 EasyChatYesNo_GetCursor(u8 *result);
+
+static const EasyChatCategoryNeighbors sEasyChatCategoryGridNeighbors[13] = {
+    { EASY_CHAT_CATEGORY_BACK, 3,                       2,                       1                       },
+    { EASY_CHAT_CATEGORY_BACK, 4,                       0,                       2                       },
+    { EASY_CHAT_CATEGORY_BACK, 5,                       1,                       0                       },
+    { 0,                       6,                       5,                       4                       },
+    { 1,                       7,                       3,                       5                       },
+    { 2,                       8,                       4,                       3                       },
+    { 3,                       9,                       8,                       7                       },
+    { 4,                       10,                      6,                       8                       },
+    { 5,                       11,                      7,                       6                       },
+    { 6,                       EASY_CHAT_CATEGORY_BACK, 11,                      10                      },
+    { 7,                       EASY_CHAT_CATEGORY_BACK, 9,                       11                      },
+    { 8,                       EASY_CHAT_CATEGORY_BACK, 10,                      9                       },
+    { 9,                       0,                       EASY_CHAT_CATEGORY_BACK, EASY_CHAT_CATEGORY_BACK },
+};
 
 static const TouchscreenHitbox sEasyChatInitialGridHitboxes[2] = {
     { .rect = { 64, 128, 20, 215 } },
@@ -1070,19 +1084,19 @@ BOOL EasyChatApp_MoveCategoryGridCursor(EasyChatApp *app) {
     if (category != EASY_CHAT_CATEGORY_BACK) {
         app->prevCategory = category;
         if (app->repeatedKeys & PAD_KEY_UP) {
-            app->category = gEasyChatCategoryGridNeighbors[index].up;
+            app->category = sEasyChatCategoryGridNeighbors[index].up;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_DOWN) {
-            app->category = gEasyChatCategoryGridNeighbors[index].down;
+            app->category = sEasyChatCategoryGridNeighbors[index].down;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_LEFT) {
-            app->category = gEasyChatCategoryGridNeighbors[index].left;
+            app->category = sEasyChatCategoryGridNeighbors[index].left;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_RIGHT) {
-            app->category = gEasyChatCategoryGridNeighbors[index].right;
+            app->category = sEasyChatCategoryGridNeighbors[index].right;
             return TRUE;
         }
     } else {

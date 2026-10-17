@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 59529f7ff · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a62f0a16f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5439,8 +5439,11 @@ src/field/encounter_effect_trainer.c</title></rect>
 5,896 bytes · C-only source
 src/application/view_rankings.c</title></rect>
 <rect x="986.222" y="673.691" width="43.285" height="21.795" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="986.222" y="695.486" width="43.285" height="21.514" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_97 / pokeathlon_box.o
-5,820 bytes · C-only source
+<rect x="986.222" y="695.486" width="26.670" height="21.514" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_97 / pokeathlon_box_graphics.o
+3,586 bytes · C-only source
+src/pokeathlon/pokeathlon_box_graphics.c</title></rect>
+<rect x="1012.892" y="695.486" width="16.615" height="21.514" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_97 / pokeathlon_box.o
+2,234 bytes · C-only source
 src/pokeathlon/pokeathlon_box.c</title></rect>
 <rect x="986.222" y="695.486" width="43.285" height="21.514" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1029.507" y="573.547" width="38.235" height="23.720" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_47 / wifi_plaza_survey.o

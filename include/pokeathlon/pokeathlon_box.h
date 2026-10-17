@@ -149,4 +149,10 @@ BOOL PokeathlonBox_Init(OverlayManager *manager);
 BOOL PokeathlonBox_Main(OverlayManager *manager);
 BOOL PokeathlonBox_Exit(OverlayManager *manager, int *state);
 
+PokeathlonBox_Graphics *PokeathlonBox_InitGraphics(enum HeapID heapID);
+void PokeathlonBox_SetupGraphics(PokeathlonBox_Graphics *graphics, BgConfig *bgConfig, u8 courseId, u32 isSupreme);
+void PokeathlonBox_DrawMonInfo(PokeathlonBox_Graphics *graphics, PokeathlonBox_MonInfo *mon);
+void PokeathlonBox_RenderAndAnimateSprites(PokeathlonBox_Graphics *graphics);
+void PokeathlonBox_ReleaseGraphics(PokeathlonBox_Graphics *graphics);
+
 #endif // POKEHEARTGOLD_POKEATHLON_BOX_H

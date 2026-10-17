@@ -1691,7 +1691,6 @@ Overlay trainer_card_signature
 {
     After trainer_card_main
     Object src/application/trainer_card/overlay_trainer_card_signature.o
-    Object asm/trainer_card_signature_data.o
 }
 Overlay OVY_53
 {
@@ -2097,7 +2096,7 @@ Overlay OVY_97
 {
     After OVY_96
     Object src/pokeathlon/pokeathlon_box.o
-    Object asm/pokeathlon_box_data.o
+    Object src/pokeathlon/pokeathlon_box_graphics.o
 }
 Overlay OVY_98
 {
