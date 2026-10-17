@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · fc63a6e91 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 9f5651078 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5499,9 +5499,12 @@ src/application/battle_room_results.c</title></rect>
 5,076 bytes · C-only source
 src/application/trainer_card/overlay_trainer_card_signature.c</title></rect>
 <rect x="1127.325" y="573.547" width="22.645" height="35.866" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1149.971" y="573.547" width="22.029" height="35.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_115 / encounter_effect_leaders.o
-4,938 bytes · C-only source
+<rect x="1149.971" y="573.547" width="22.029" height="32.191" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_115 / encounter_effect_leaders.o
+4,432 bytes · C-only source
 src/field/encounter_effect_leaders.c</title></rect>
+<rect x="1149.971" y="605.738" width="22.029" height="3.675" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_115 / encounter_effect_leaders_util.o
+506 bytes · C-only source
+src/field/encounter_effect_leaders_util.c</title></rect>
 <rect x="1149.971" y="573.547" width="22.029" height="35.866" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1104.216" y="609.413" width="23.245" height="33.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / options_app / options_app.o
 4,906 bytes · C-only source

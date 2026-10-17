@@ -1,18 +1,17 @@
+#include "field/encounter_effect_leaders.h"
+
 #include "global.h"
 
 #include "constants/trainer_class.h"
+#include "constants/trainers.h"
 
 #include "field/encounter_effect.h"
-#include "msgdata/msg.naix"
-#include "msgdata/msg/msg_0189.h"
 
 #include "bg_window.h"
 #include "brightness.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
-#include "message_format.h"
-#include "msgdata.h"
 #include "palette.h"
 #include "player_data.h"
 #include "pm_string.h"
@@ -24,25 +23,6 @@
 // Battle intros of the gym leaders and the rival (effects 12-28): the leader's picture slides
 // in over a scrolling band with the leader's name. Elite Four and champion (effects 29-33):
 // the player and the opponent slide in from both sides and shake.
-
-#define SCALE_SPRITE_COUNT 4
-
-// Sprites that pop in one after another, shrinking from double size.
-typedef struct ScaleSprites {
-    s16 timer;
-    s16 count;
-    Sprite *sprites[SCALE_SPRITE_COUNT];
-    EncounterEffectInterp scale[SCALE_SPRITE_COUNT];
-} ScaleSprites;
-
-typedef struct GymLeaderIntroParams {
-    s32 endX;
-    u32 trainerId;
-    u16 trainerClass;
-    u8 padding[2];
-    u8 spriteMembers[4]; // character, palette, cell, animation
-    u8 bgMembers[3];
-} GymLeaderIntroParams;
 
 typedef struct GymLeaderIntroWork {
     EncounterEffectQuadInterp slide;
@@ -86,93 +66,194 @@ typedef struct EliteFourIntroWork {
     u8 unused[8];
 } EliteFourIntroWork;
 
-void ScaleSprites_Init(ScaleSprites *scaleSprites, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, fx32 x, fx32 y, enum HeapID heapID);
-void ScaleSprites_Delete(ScaleSprites *scaleSprites);
-BOOL ScaleSprites_Update(ScaleSprites *scaleSprites);
-String *LeadersEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
-String *LeadersEffect_GetRivalNameString(SaveData *saveData, enum HeapID heapID);
 BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params);
 u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem);
 BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params);
 void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
 
-extern const GymLeaderIntroParams gEncounterRivalIntroParams;
-extern const EliteFourIntroParams gEncounterEliteFourWillIntroParams;
-extern const EliteFourIntroParams gEncounterEliteFourKogaIntroParams;
-extern const EliteFourIntroParams gEncounterEliteFourBrunoIntroParams;
-extern const EliteFourIntroParams gEncounterEliteFourKarenIntroParams;
-extern const EliteFourIntroParams gEncounterChampionIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderFalknerIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderBugsyIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderWhitneyIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderMortyIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderJasmineIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderChuckIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderPryceIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderClairIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderBrockIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderMistyIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderLtSurgeIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderErikaIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderJanineIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderSabrinaIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderBlaineIntroParams;
-extern const GymLeaderIntroParams gEncounterLeaderBlueIntroParams;
+static const EliteFourIntroParams sEncounterEliteFourKarenIntroParams = {
+    .opponentMember = 143,
+    .nameplateMember = 53,
+    .shakeFrames = 32,
+    .unk_04 = 88,
+    .trainerId = TRAINER_ELITE_FOUR_KAREN_KAREN,
+};
 
-void ScaleSprites_Init(ScaleSprites *scaleSprites, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *resources, fx32 x, fx32 y, enum HeapID heapID) {
-    int i;
+static const EliteFourIntroParams sEncounterEliteFourKogaIntroParams = {
+    .opponentMember = 135,
+    .nameplateMember = 51,
+    .shakeFrames = 32,
+    .unk_04 = 89,
+    .trainerId = TRAINER_ELITE_FOUR_KOGA_KOGA,
+};
 
-    scaleSprites->timer = 0;
-    scaleSprites->count = 0;
-    for (i = 0; i < SCALE_SPRITE_COUNT; i++) {
-        scaleSprites->sprites[i] = EncounterEffect_CreateSprite(spriteManager, resources, x, y, 0, 0);
-        Sprite_SetDrawFlag(scaleSprites->sprites[i], FALSE);
-        Sprite_SetAnimActiveFlag(scaleSprites->sprites[i], TRUE);
-        if (i != SCALE_SPRITE_COUNT - 1) {
-            Sprite_SetAffineOverwriteMode(scaleSprites->sprites[i], NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
-            Sprite_SetAnimCtrlSeq(scaleSprites->sprites[i], 1);
-            EncounterEffectInterp_InitFx(&scaleSprites->scale[i], FX32_CONST(2), FX32_CONST(1), 6);
-        } else {
-            EncounterEffectInterp_InitFx(&scaleSprites->scale[i], FX32_CONST(1), FX32_CONST(1), 6);
-        }
-    }
-}
+static const EliteFourIntroParams sEncounterChampionIntroParams = {
+    .opponentMember = 147,
+    .nameplateMember = 54,
+    .shakeFrames = 9,
+    .unk_04 = 86,
+    .trainerId = TRAINER_CHAMPION_LANCE,
+};
 
-void ScaleSprites_Delete(ScaleSprites *scaleSprites) {
-    int i;
+static const EliteFourIntroParams sEncounterEliteFourBrunoIntroParams = {
+    .opponentMember = 139,
+    .nameplateMember = 52,
+    .shakeFrames = 32,
+    .unk_04 = 112,
+    .trainerId = TRAINER_ELITE_FOUR_BRUNO_BRUNO,
+};
 
-    for (i = 0; i < SCALE_SPRITE_COUNT; i++) {
-        Sprite_Delete(scaleSprites->sprites[i]);
-    }
-}
+static const EliteFourIntroParams sEncounterEliteFourWillIntroParams = {
+    .opponentMember = 131,
+    .nameplateMember = 47,
+    .shakeFrames = 32,
+    .unk_04 = 87,
+    .trainerId = TRAINER_ELITE_FOUR_WILL_WILL,
+};
 
-BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
-    BOOL done = TRUE;
-    VecFx32 scale;
-    int i;
-    BOOL finished;
+static const GymLeaderIntroParams sEncounterLeaderErikaIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_ERIKA_ERIKA,
+    .trainerClass = TRAINERCLASS_LEADER_ERIKA,
+    .unk_0A = 1,
+    .spriteMembers = { 107, 108, 109, 110 },
+    .bgMembers = { 30, 29, 31 },
+};
 
-    if (scaleSprites->count < SCALE_SPRITE_COUNT) {
-        done = FALSE;
-        scaleSprites->timer--;
-        if (scaleSprites->timer <= 0) {
-            scaleSprites->timer = 3;
-            scaleSprites->count++;
-        }
-    }
-    for (i = 0; i < scaleSprites->count; i++) {
-        finished = EncounterEffectInterp_UpdateFx(&scaleSprites->scale[i]);
-        EncounterEffect_SetVecFx32(&scale, scaleSprites->scale[i].value, scaleSprites->scale[i].value, scaleSprites->scale[i].value);
-        Sprite_SetAffineScale(scaleSprites->sprites[i], &scale);
-        Sprite_SetDrawFlag(scaleSprites->sprites[i], TRUE);
-        if (finished == FALSE) {
-            done = FALSE;
-        } else if (i != SCALE_SPRITE_COUNT - 1) {
-            Sprite_SetDrawFlag(scaleSprites->sprites[i], FALSE);
-        }
-    }
-    return done;
-}
+static const GymLeaderIntroParams sEncounterLeaderBrockIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_BROCK_BROCK,
+    .trainerClass = TRAINERCLASS_LEADER_BROCK,
+    .unk_0A = 1,
+    .spriteMembers = { 95, 96, 97, 98 },
+    .bgMembers = { 21, 20, 22 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderClairIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_CLAIR_CLAIR,
+    .trainerClass = TRAINERCLASS_LEADER_CLAIR,
+    .unk_0A = 1,
+    .spriteMembers = { 91, 92, 93, 94 },
+    .bgMembers = { 42, 41, 43 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderPryceIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_PRYCE_PRYCE,
+    .trainerClass = TRAINERCLASS_LEADER_PRYCE,
+    .unk_0A = 1,
+    .spriteMembers = { 87, 88, 89, 90 },
+    .bgMembers = { 39, 38, 40 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderChuckIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_CHUCK_CHUCK,
+    .trainerClass = TRAINERCLASS_LEADER_CHUCK,
+    .unk_0A = 1,
+    .spriteMembers = { 83, 84, 85, 86 },
+    .bgMembers = { 36, 35, 37 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderMortyIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_MORTY_MORTY,
+    .trainerClass = TRAINERCLASS_LEADER_MORTY,
+    .unk_0A = 1,
+    .spriteMembers = { 75, 76, 77, 78 },
+    .bgMembers = { 30, 29, 31 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderJasmineIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_JASMINE_JASMINE,
+    .trainerClass = TRAINERCLASS_LEADER_JASMINE,
+    .unk_0A = 1,
+    .spriteMembers = { 79, 80, 81, 82 },
+    .bgMembers = { 33, 32, 34 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderLtSurgeIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_LT_SURGE_LT__SURGE,
+    .trainerClass = TRAINERCLASS_LEADER_LT_SURGE,
+    .unk_0A = 0,
+    .spriteMembers = { 103, 104, 105, 106 },
+    .bgMembers = { 27, 26, 28 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderJanineIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_JANINE_JANINE,
+    .trainerClass = TRAINERCLASS_LEADER_JANINE,
+    .unk_0A = 1,
+    .spriteMembers = { 111, 112, 113, 114 },
+    .bgMembers = { 33, 32, 34 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderFalknerIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_FALKNER_FALKNER,
+    .trainerClass = TRAINERCLASS_LEADER_FALKNER,
+    .unk_0A = 1,
+    .spriteMembers = { 63, 64, 65, 66 },
+    .bgMembers = { 21, 20, 22 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderBugsyIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_BUGSY_BUGSY,
+    .trainerClass = TRAINERCLASS_LEADER_BUGSY,
+    .unk_0A = 1,
+    .spriteMembers = { 67, 68, 69, 70 },
+    .bgMembers = { 24, 23, 25 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderMistyIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_MISTY_MISTY,
+    .trainerClass = TRAINERCLASS_LEADER_MISTY,
+    .unk_0A = 1,
+    .spriteMembers = { 99, 100, 101, 102 },
+    .bgMembers = { 24, 23, 25 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderSabrinaIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_SABRINA_SABRINA,
+    .trainerClass = TRAINERCLASS_LEADER_SABRINA,
+    .unk_0A = 1,
+    .spriteMembers = { 115, 116, 117, 118 },
+    .bgMembers = { 36, 35, 37 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderWhitneyIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_WHITNEY,
+    .trainerClass = TRAINERCLASS_LEADER_WHITNEY,
+    .unk_0A = 0,
+    .spriteMembers = { 71, 72, 73, 74 },
+    .bgMembers = { 27, 26, 28 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderBlaineIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_BLAINE_BLAINE,
+    .trainerClass = TRAINERCLASS_LEADER_BLAINE,
+    .unk_0A = 1,
+    .spriteMembers = { 119, 120, 121, 122 },
+    .bgMembers = { 39, 38, 40 },
+};
+
+static const GymLeaderIntroParams sEncounterLeaderBlueIntroParams = {
+    .endX = FX32_CONST(214),
+    .trainerId = TRAINER_LEADER_BLUE_BLUE,
+    .trainerClass = TRAINERCLASS_LEADER_BLUE,
+    .unk_0A = 1,
+    .spriteMembers = { 123, 124, 125, 126 },
+    .bgMembers = { 42, 41, 43 },
+};
 
 enum GymLeaderIntroState {
     GYM_LEADER_INTRO_STATE_INIT,
@@ -192,36 +273,6 @@ enum GymLeaderIntroState {
     GYM_LEADER_INTRO_STATE_WAIT_FADE,
     GYM_LEADER_INTRO_STATE_END,
 };
-
-String *LeadersEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0189_bin, heapID);
-    MessageFormat *msgFormat = MessageFormat_New(heapID);
-    String *string = String_New(128, heapID);
-    String *template = String_New(128, heapID);
-
-    ReadMsgDataIntoString(msgData, msg_0189_00000, template);
-    BufferTrainerName(msgFormat, 0, trainerId);
-    StringExpandPlaceholders(msgFormat, string, template);
-    DestroyMsgData(msgData);
-    MessageFormat_Delete(msgFormat);
-    String_Delete(template);
-    return string;
-}
-
-String *LeadersEffect_GetRivalNameString(SaveData *saveData, enum HeapID heapID) {
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0189_bin, heapID);
-    MessageFormat *msgFormat = MessageFormat_New(heapID);
-    String *string = String_New(128, heapID);
-    String *template = String_New(128, heapID);
-
-    ReadMsgDataIntoString(msgData, msg_0189_00000, template);
-    BufferRivalsName(msgFormat, 0, saveData);
-    StringExpandPlaceholders(msgFormat, string, template);
-    DestroyMsgData(msgData);
-    MessageFormat_Delete(msgFormat);
-    String_Delete(template);
-    return string;
-}
 
 BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params) {
     u32 state = effect->state;
@@ -378,97 +429,97 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
 }
 
 void EncounterEffect_LeaderFalkner(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderFalknerIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderFalknerIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBugsy(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBugsyIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderBugsyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderWhitney(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderWhitneyIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderWhitneyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMorty(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderMortyIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderMortyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJasmine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderJasmineIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderJasmineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderChuck(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderChuckIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderChuckIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderPryce(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderPryceIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderPryceIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderClair(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderClairIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderClairIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBrock(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBrockIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderBrockIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderMisty(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderMistyIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderMistyIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderLtSurge(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderLtSurgeIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderLtSurgeIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderErika(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderErikaIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderErikaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderJanine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderJanineIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderJanineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderSabrina(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderSabrinaIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderSabrinaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlaine(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBlaineIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderBlaineIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_LeaderBlue(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderBlueIntroParams) == TRUE) {
+    if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &sEncounterLeaderBlueIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
@@ -787,31 +838,31 @@ void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, 
 }
 
 void EncounterEffect_EliteFourWill(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourWillIntroParams) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &sEncounterEliteFourWillIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKoga(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourKogaIntroParams) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &sEncounterEliteFourKogaIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourBruno(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourBrunoIntroParams) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &sEncounterEliteFourBrunoIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_EliteFourKaren(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterEliteFourKarenIntroParams) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &sEncounterEliteFourKarenIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }
 
 void EncounterEffect_Champion(SysTask *task, EncounterEffectTask *effect) {
-    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &gEncounterChampionIntroParams) == TRUE) {
+    if (LeadersEffect_RunEliteFourIntro(effect, HEAP_ID_FIELD1, &sEncounterChampionIntroParams) == TRUE) {
         EncounterEffect_Finish(effect, task);
     }
 }

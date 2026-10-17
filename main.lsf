@@ -2269,8 +2269,8 @@ Overlay OVY_114
 Overlay OVY_115
 {
     After OVY_31
+    Object src/field/encounter_effect_leaders_util.o
     Object src/field/encounter_effect_leaders.o
-    Object asm/encounter_effect_leaders_data.o
 }
 Overlay OVY_116
 {
