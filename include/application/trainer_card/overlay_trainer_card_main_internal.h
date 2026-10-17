@@ -9,8 +9,8 @@
 #include "overlay_trainer_card_main.h"
 #include "pm_string.h"
 #include "sprite.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
+#include "sprite_resource_header.h"
 #include "yes_no_prompt.h"
 
 // The card payload at the start of TrainerCardAppArgs, as the trainer card viewer reads it.
@@ -119,5 +119,12 @@ typedef struct TrainerCardMain {
     u8 touchY;        // 0x3441
     u8 unk_3442[2];
 } TrainerCardMain; // size: 0x3444
+
+void TrainerCardMain_InitSprites(TrainerCardMainSprites *sprites);
+void TrainerCardMain_CreateBadgeSprites(TrainerCardMainSprites *sprites, const u8 *badgeFlags, int showKantoBadges);
+void TrainerCardMain_CreateButtonSprites(TrainerCardMainSprites *sprites);
+void TrainerCardMain_FreeSprites(TrainerCardMainSprites *sprites);
+void TrainerCardMain_SetButtonSpriteAnim(TrainerCardMainSprites *sprites, int button, int sequence, int draw);
+void TrainerCardMain_InitUnk33A0Pairs(u8 *pairs);
 
 #endif // POKEHEARTGOLD_APPLICATION_TRAINER_CARD_OVERLAY_TRAINER_CARD_MAIN_INTERNAL_H

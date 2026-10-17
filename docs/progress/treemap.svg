@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 84445dc0f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5cc988412 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5314,9 +5314,12 @@ src/frontier/frontier_records_app.c</title></rect>
 158 bytes · C-only source
 src/frontier/frontier_records_windows.c</title></rect>
 <rect x="1139.583" y="526.291" width="32.417" height="47.256" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="888.687" y="573.547" width="62.446" height="22.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_main / overlay_trainer_card_main.o
-8,940 bytes · C-only source
+<rect x="888.687" y="573.547" width="53.966" height="22.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_main / overlay_trainer_card_main.o
+7,726 bytes · C-only source
 src/application/trainer_card/overlay_trainer_card_main.c</title></rect>
+<rect x="942.653" y="573.547" width="8.480" height="22.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_main / overlay_trainer_card_main_sprites.o
+1,214 bytes · C-only source
+src/application/trainer_card/overlay_trainer_card_main_sprites.c</title></rect>
 <rect x="888.687" y="573.547" width="62.446" height="22.907" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="596.454" width="31.744" height="44.679" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_68 / move_relearner_app.o
 8,864 bytes · C-only source

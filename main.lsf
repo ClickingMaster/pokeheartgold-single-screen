@@ -1676,7 +1676,7 @@ Overlay trainer_card_main
 {
     After trainer_card
     Object src/application/trainer_card/overlay_trainer_card_main.o
-    Object asm/trainer_card_main_24_owned_data.o
+    Object src/application/trainer_card/overlay_trainer_card_main_sprites.o
 }
 Overlay trainer_card_signature
 {
