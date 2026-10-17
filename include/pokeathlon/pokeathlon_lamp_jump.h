@@ -152,4 +152,61 @@ BOOL PokeathlonLampJump_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonLampJump_CalcScores(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonLampJump_CheckCollision(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
 
+// The trampoline the Pokemon bounce on (drawn in 3D as a band of
+// changing colors), the lamps (29, up to 25 lit at a time, relit every 240 frames), the bouncing and the
+// collisions of the three Pokemon, the score and timer displays and the participants without a player.
+
+// One lamp. It is lit while `lit`; touching a lit lamp puts it out and scores.
+typedef struct PokeathlonLampJumpLamp {
+    BOOL lit;                                       // 0x00
+    VecFx32 pos;                                    // 0x04
+    PokeathlonCourseSpritePoolSprite *sprite;       // 0x10
+    PokeathlonCourseSpritePoolSprite *pointsSprite; // 0x14: the points of the hit
+    PokeathlonCourseSpritePoolSprite *hitSprite;    // 0x18
+} PokeathlonLampJumpLamp;                           // size: 0x1C
+
+typedef struct PokeathlonLampJumpLamps {
+    PokeathlonLampJumpLamp lamps[29]; // 0x000
+    int relightTimer;                 // 0x32C
+} PokeathlonLampJumpLamps;            // size: 0x330
+
+// The participants without a player: every 3 frames one of them may hit a lamp, more likely with more Jump
+// and Skill.
+typedef struct PokeathlonLampJumpCpuPlayers {
+    BOOL active;                // 0x00
+    u8 *dataCopy;               // 0x04: PokeathlonCourse_GetDataCopyArea
+    u8 skill[4];                // 0x08: per participant, the sum of the Skill of its Pokemon
+    u8 jump[4];                 // 0x0C: per participant, the sum of the Jump of its Pokemon
+    u8 skillUpTo[4][3];         // 0x10: per participant, the Skill sums up to each Pokemon (picks the one that hits)
+    u8 count;                   // 0x1C
+    u8 current;                 // 0x1D
+    u8 tick;                    // 0x1E
+    u8 interval;                // 0x1F
+    u8 first;                   // 0x20: first participant without a player
+    u8 unk21;                   // 0x21: the same (4: none)
+    u8 unk22[2];                // 0x22
+} PokeathlonLampJumpCpuPlayers; // size: 0x24
+
+void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_CalcTrampolineSurface(PokeathlonLampJumpTrampoline *trampoline);
+void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_SetRestingHeights(PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_LoadSpriteResources(PokeathlonCourseSpritePool *scene);
+void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCourseSpritePool *scene);
+void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self);
+void PokeathlonLampJump_UpdateScoreDisplay(PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_UpdateTimerDisplay(PokeathlonLampJump *lampJump, u16 frames);
+void PokeathlonLampJump_PrintPlayerNames(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_InitWindows(PokeathlonLampJump *lampJump);
+void PokeathlonLampJump_PrintTotal(PokeathlonLampJump *lampJump, u16 score);
+void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLampJumpMonParams *params, u8 member, PokeathlonLampJumpMon *mon);
+BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLampJump *lampJump);
+PokeathlonLampJumpLamps *PokeathlonLampJump_NewLamps(enum HeapID heapId);
+void PokeathlonLampJump_FreeLamps(PokeathlonLampJumpLamps *lamps);
+void PokeathlonLampJump_UpdateLamps(PokeathlonLampJumpLamps *lamps);
+PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapId, int count, int unused, u8 *dataCopy, PokeathlonCourseData *course);
+void PokeathlonLampJump_FreeCpuPlayers(PokeathlonLampJumpCpuPlayers *cpu);
+int PokeathlonLampJump_UpdateCpuPlayers(PokeathlonCourseData *course, PokeathlonLampJumpCpuPlayers *cpu);
+
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_LAMP_JUMP_H

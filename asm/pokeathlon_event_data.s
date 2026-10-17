@@ -10,12 +10,9 @@
 	.extern gPokeathlonLampJumpEvent
 	.public gPokeathlonRingDropFallSpeeds
 	.public gPokeathlonRingDropJumpHeights
-	.public sLampJumpTimerDigitX
-	.public sLampJumpTimerDigitAnims
 	.public gPokeathlonRingDropSwitchSpots
 	.public gPokeathlonRingDropSwitchSpotsY
 	.public gPokeathlonRingDropSwitchSpotsRadius
-	.public sLampJumpCameraOffset
 	.public gPokeathlonGoalRollPaletteData
 	.public sRelayRunMapStartOffset
 	.public sRelayRunMapCenter
@@ -25,10 +22,6 @@
 	.public sPennantCaptureBgTemplate_Sub2
 	.public sPennantCaptureBgTemplate_Main0
 	.public sPennantCaptureBgTemplate_Main3
-	.public sResultsAnnouncementBgLayers
-	.public sResultsAnnouncementBgTypes
-	.public sResultsAnnouncementGraphicsModes
-	.public sResultsAnnouncementBgTemplates
 	.public gPokeathlonGoalRollBallSpeedsA
 	.public gPokeathlonGoalRollBallSpeedsB
 	.public gPokeathlonGoalRollKickSpeeds
@@ -37,15 +30,9 @@
 	.public gPokeathlonGoalRollFrameRight
 	.public gPokeathlonGoalRollGoalLines
 	.public gPokeathlonCirclePushNameplateCoords
-	.public sResultsAnnouncementSceneConfig
-	.public sHurdleDashRisingJumpHeights
-	.public sHurdleDashFallingJumpHeights
-	.public sRelayRunTimerSpriteX
-	.public sRelayRunTimerSpriteAnims
 	.public gPokeathlonLampJumpSoundPlayers
 	.public gPokeathlonHurdleDashLanePans
 	.public gPokeathlonHurdleDashLaneSoundPlayers
-	.public sHurdleDashNewHurdlePos
 	.public gPokeathlonBlockSmashSpotHitboxCounts
 	.public gPokeathlonRingDropDirectionReference
 	.public gPokeathlonRingDropGraphicsModes
@@ -142,25 +129,12 @@
 	.extern gPokeathlonBlockSmashFramesSinceHit
 	.public gPokeathlonEventRankPoints
 	.public gPokeathlonCourseEvent_Wait
-	.public gPokeathlonCourseWaitSteps
 	.public gPokeathlonBlockSmashSpotPositions
 	.public gPokeathlonDiscCatchOamCharTransferParam
 	.public gPokeathlonDiscCatchSpriteResourceCounts
 	.public gPokeathlonDiscCatchOamManagerParam
 	.public gPokeathlonCourseEvents
-	.public sResultsAnnouncementPlatePos
-	.public sRelayRunLapCounterPlatePos
-	.public sRelayRunLapCounterFirstDigitPos
-	.public sRelayRunLapCounterSecondDigitPos
 	.public gPokeathlonPennantCaptureSpriteIds
-	.public sRelayRunGraphicsModes
-	.public sRelayRunBgTemplate_Sub2
-	.public sRelayRunBgTemplate_Main0
-	.public sRelayRunBgTemplate_Main1
-	.public sRelayRunBgTemplate_Main2
-	.public sRelayRunBgTemplate_Main3
-	.public sRelayRunBgTemplate_Sub0
-	.public sRelayRunBgTemplate_Sub1
 	.public sSnowThrowGraphicsModes
 	.public sSnowThrowBgTemplate_Sub1
 	.public sSnowThrowBgTemplate_Sub2

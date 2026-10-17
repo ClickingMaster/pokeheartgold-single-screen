@@ -2055,10 +2055,10 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_circle_push_field.o
     Object src/pokeathlon/pokeathlon_circle_push_pic_sprites.o
     Object src/pokeathlon/pokeathlon_circle_push_display.o
-    Object asm/pokeathlon_lamp_jump_hurdle_dash_rodata.o
     Object src/pokeathlon/pokeathlon_lamp_jump.o
-    Object src/pokeathlon/pokeathlon_lamp_jump_stage.o
     Object src/pokeathlon/pokeathlon_results_announcement.o
+    Object src/pokeathlon/pokeathlon_results_plates.o
+    Object asm/pokeathlon_lamp_jump_hurdle_dash_rodata.o
     Object src/pokeathlon/pokeathlon_hurdle_dash.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_runner.o
     Object src/pokeathlon/pokeathlon_hurdle_dash_race.o

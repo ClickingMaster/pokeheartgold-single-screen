@@ -159,4 +159,21 @@ BOOL PokeathlonResults_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonResults_Exit(PokeathlonCourseData *course);
 BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state);
 
+// Called once without its argument (the plate is still in r0 there), so it has no prototype.
+u16 PokeathlonResults_GetPlateRank();
+PokeathlonResultsAnnouncementPlates *PokeathlonResults_NewPlates(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
+void PokeathlonResults_FreePlates(PokeathlonResultsAnnouncementPlates *plates);
+void PokeathlonResults_DrawPlates(PokeathlonResultsAnnouncementPlates *plates);
+void PokeathlonResults_InitPlates(PokeathlonResultsAnnouncementPlates *plates, int unused);
+PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonResultsAnnouncementScore *score);
+void PokeathlonResults_HidePlate(PokeathlonResultsAnnouncementPlate *plate);
+void PokeathlonResults_GetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int *x, int *y);
+void PokeathlonResults_SetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int x, int y);
+void PokeathlonResults_MovePlate(PokeathlonResultsAnnouncementPlate *plate, int dx, int dy);
+PokeathlonResultsAnnouncementScoreboard *PokeathlonResults_NewScoreboard(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseSpritePool *scene);
+void PokeathlonResults_FreeScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard);
+void PokeathlonResults_LoadScoreboardResources(PokeathlonResultsAnnouncementScoreboard *scoreboard, s32 index);
+void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonCourseData *course, int y);
+void PokeathlonResults_SetScore(PokeathlonResultsAnnouncementScoreboard *scoreboard, u32 points, u32 team);
+
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_RESULTS_ANNOUNCEMENT_H

@@ -708,84 +708,10 @@
 	.public gPokeathlonLampJumpEvent
 	.public gPokeathlonCourseEventIds
 	.public gPokeathlonCourse10EventSets
-	.public sPokeathlonStateInfoFuncTable
 	.public gPokeathlonNpcTeamSpriteIds
 	.public gPokeathlonPerformanceFileIds
 	.public gPokeathlonCourseCmds
 	.public gPokeathlonCirclePushNameplateCoords
-	.public sCirclePushDisplayPicKeys
-	.public sCirclePushDisplayWindowTemplates
-	.public sCirclePushDisplayPic0Path
-	.public sCirclePushDisplayPic1Path
-	.public sLampJumpTimerDigitX
-	.public sLampJumpTimerDigitAnims
-	.public sLampJumpSceneConfig
-	.public ov96_0221C0C4
-	.public sLampJumpFirstOtherPlayerPos
-	.public sLampJumpOwnPlayerPos
-	.public sLampJumpTrampolineScale
-	.public sLampJumpCameraOffset
-	.public sLampJumpGraphicsModes
-	.public sLampJumpLampSoundPitches
-	.public sLampJumpBgTemplate_Main2
-	.public sLampJumpBgTemplate_Main1
-	.public sLampJumpBgTemplate_Main3
-	.public sLampJumpBgTemplate_Sub0
-	.public sLampJumpBgTemplate_Sub1
-	.public sLampJumpBgTemplate_Sub2
-	.public sLampJumpWindowTemplates
-	.public sLampJumpGraphicsBanks
-	.public sLampJumpLampPositions
-	.public sResultsAnnouncementBgLayers
-	.public sResultsAnnouncementBgTypes
-	.public sResultsAnnouncementWindowTemplate
-	.public sResultsAnnouncementSceneConfig
-	.public sResultsAnnouncementGraphicsModes
-	.public sResultsAnnouncementOamCharTransferParam
-	.public sResultsAnnouncementSpriteResourceCounts
-	.public sResultsAnnouncementOamManagerParam
-	.public sResultsAnnouncementGraphicsBanks
-	.public sResultsAnnouncementBgTemplates
-	.public sResultsAnnouncementPlatePos
-	.public sHurdleDashTimerDigitAnims
-	.public sHurdleDashTimerDigitX
-	.public sHurdleDashTimeWindowTemplate
-	.public sHurdleDashSceneConfig
-	.public sHurdleDashNumberX
-	.public sHurdleDashTouchLaneX
-	.public sHurdleDashDustLaneX
-	.public sHurdleDashGraphicsModes
-	.public sHurdleDashBoostSpeeds
-	.public sHurdleDashBgTemplate_Sub0
-	.public sHurdleDashBgTemplate_Sub1
-	.public sHurdleDashBgTemplate_Main0
-	.public sHurdleDashBgTemplate_Main1
-	.public sHurdleDashBgTemplate_Main2
-	.public sHurdleDashBgTemplate_Main3
-	.public sHurdleDashBgTemplate_Sub3
-	.public sHurdleDashBgTemplate_Sub2
-	.public sHurdleDashGraphicsBanks
-	.public sHurdleDashRisingJumpHeights
-	.public sHurdleDashFallingJumpHeights
-	.public sHurdleDashNewHurdlePos
-	.public sRelayRunResultWindowTemplate
-	.public sRelayRunLapCounterPlatePos
-	.public sRelayRunLapCounterFirstDigitPos
-	.public sRelayRunSpritePoolTemplate
-	.public sRelayRunLapCounterSecondDigitPos
-	.public sRelayRunEdgeHits
-	.public sRelayRunCornerHits
-	.public sRelayRunGraphicsModes
-	.public sRelayRunBgTemplate_Sub2
-	.public sRelayRunBgTemplate_Main0
-	.public sRelayRunBgTemplate_Main1
-	.public sRelayRunBgTemplate_Main2
-	.public sRelayRunBgTemplate_Main3
-	.public sRelayRunBgTemplate_Sub0
-	.public sRelayRunBgTemplate_Sub1
-	.public sRelayRunGraphicsBanks
-	.public sRelayRunTimerSpriteX
-	.public sRelayRunTimerSpriteAnims
 	.public gPokeathlonRelayRunPicIds
 	.public sRelayRunMapStartOffset
 	.public sRelayRunMapCenter
@@ -940,11 +866,6 @@
 	.public gPokeathlonEventScorePointsFuncs
 	.public gPokeathlonCourseEventSteps
 	.public gPokeathlonCourseEvents
-	.public gPokeathlonCourseOpeningSteps
-	.public gPokeathlonCourseClosingSteps
-	.public gPokeathlonCourseWaitSteps
-	.public gPokeathlonEventIntroSteps
-	.public gPokeathlonCirclePushStates
 	.public sTrampolineBlue
 	.public gPokeathlonLampJumpSoundPlayers
 	.public gPokeathlonLampJumpStates
