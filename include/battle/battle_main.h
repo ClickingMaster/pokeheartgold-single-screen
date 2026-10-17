@@ -24,8 +24,6 @@ typedef struct BattleBgTemplateSet {
 
 extern const BattleBgTemplateSet gBattleReinitBgTemplates;
 extern const BattleBgTemplateSet gBattleBgTemplates;
-extern const GraphicsBanks sBattleGraphicsBanks;
-extern const GraphicsModes sBattleGraphicsModes;
 
 void BattleSystem_InitTerrainsAndBalls(BattleSystem *battleSystem);
 void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup);

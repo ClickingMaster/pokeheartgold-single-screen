@@ -93,19 +93,7 @@ typedef struct BattleLinkStageWork {
 // The overlay 5 link battle screen arguments, held by the battle system while that screen runs.
 #define LINK_SCREEN_ARGS(battleSystem) ((LinkBattleScreenArgs *)(battleSystem)->linkScreenArgs)
 
-extern const OamManagerParam sBattleOamManagerParam;
-extern const OamCharTransferParam sBattleOamCharTransferParam;
-extern SpriteResourceCountsListUnion sBattleSpriteResourceCounts;
 extern const u32 sBattleBgFillColors[23][3];
-extern const GraphicsBanks gBattleGraphicsBanks;
-extern const GraphicsBanks gBattleGraphicsBanks2;
-extern const GraphicsBanks sLinkGraphicsBanks;
-extern const GraphicsModes sLinkGraphicsModes;
-extern const BgTemplate sLinkBgTemplate;
-extern const u8 sSinglesBattlerTypes[4];
-extern const u8 sLinkSinglesBattlerTypes[4];
-extern const u8 sLinkDoublesBattlerTypes[2][4];
-extern const u8 sLinkMultiBattlerTypes[4][4];
 extern const u8 sDoublesBattlerTypes[4];
 
 extern u32 *BattleAnimSystem_New(enum HeapID heapId);
@@ -114,6 +102,163 @@ extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
+
+const BattleBgTemplateSet gBattleReinitBgTemplates = {
+    .templates = {
+        {
+            .x = 0,
+            .y = 0,
+            .bufferSize = 0x800,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+        {
+            .x = 0,
+            .y = 0,
+            .bufferSize = 0x2000,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x512,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+        {
+            .x = 0,
+            .y = 0,
+            .bufferSize = 0x1000,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x256,
+            .colorMode = GX_BG_COLORMODE_256,
+            .screenBase = GX_BG_SCRBASE_0x3000,
+            .charBase = GX_BG_CHARBASE_0x10000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+    },
+};
+
+static const u8 sLinkSinglesBattlerTypes[4] = { 0, 1, 1, 0 };
+
+static const u8 sSinglesBattlerTypes[4] = { 0, 1, 0, 0 };
+
+static const u8 sLinkDoublesBattlerTypes[2][4] = { { 2, 3, 4, 5 }, { 3, 2, 5, 4 } };
+
+static const GraphicsModes sBattleGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const GraphicsModes sLinkGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const u8 sLinkMultiBattlerTypes[4][4] = { { 2, 5, 4, 3 }, { 3, 4, 5, 2 }, { 2, 5, 4, 3 }, { 3, 4, 5, 2 } };
+
+static const OamCharTransferParam sBattleOamCharTransferParam = {
+    .maxTasks = 96,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_64K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sBattleSpriteResourceCounts = { 96, 32, 64, 64, 8, 8 };
+
+static const BgTemplate sLinkBgTemplate = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x0000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const OamManagerParam sBattleOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sBattleGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_BC,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const GraphicsBanks sBattleRestoreGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_BC,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const GraphicsBanks sLinkGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_BC,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const GraphicsBanks sSubMenuGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
 
 void Battle_BattleInit(OverlayManager *manager) {
     BattleSystem *battleSystem = OverlayManager_GetData(manager);
@@ -164,7 +309,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     battleSystem->gfxHandler = SpriteManager_New(battleSystem->spriteRenderer);
     SpriteSystem_InitSprites(battleSystem->spriteRenderer, battleSystem->gfxHandler, 128);
-    SpriteSystem_InitManagerWithCapacities(battleSystem->spriteRenderer, battleSystem->gfxHandler, &sBattleSpriteResourceCounts);
+    SpriteSystem_InitManagerWithCapacities(battleSystem->spriteRenderer, battleSystem->gfxHandler, (SpriteResourceCountsListUnion *)&sBattleSpriteResourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(battleSystem->spriteRenderer), 0, 0x110000);
     BattleInput_LoadDefaultResources(battleSystem->battleInput);
 
@@ -858,12 +1003,12 @@ void Battle_VBlankCallback(void *data) {
     }
     if (battleSystem->battleBanksRequested) {
         battleSystem->battleBanksRequested = 0;
-        banks = gBattleGraphicsBanks;
+        banks = sBattleRestoreGraphicsBanks;
         GfGfx_SetBanks(&banks);
     }
     if (battleSystem->subMenuBanksRequested) {
         battleSystem->subMenuBanksRequested = 0;
-        banks2 = gBattleGraphicsBanks2;
+        banks2 = sSubMenuGraphicsBanks;
         GfGfx_SetBanks(&banks2);
     }
     PokepicManager_HandleLoadImgAndOrPltt(battleSystem->pokepicManager);

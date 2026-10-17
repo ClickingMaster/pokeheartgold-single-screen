@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 385146174 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 4b8e84710 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5072,16 +5072,31 @@ src/overlay_03/overlay_03_scrcmds.c</title></rect>
 310 bytes · C-only source
 src/overlay_03/custom_safari_zone.c</title></rect>
 <rect x="664.640" y="646.245" width="47.951" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="712.590" y="646.245" width="47.403" height="58.773" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence.o
-17,412 bytes · C-only source
+<rect x="712.590" y="646.245" width="19.437" height="37.109" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_depart.o
+4,508 bytes · C-only source
+src/application/trade_sequence/trade_sequence_depart.c</title></rect>
+<rect x="732.028" y="646.245" width="27.966" height="22.359" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence.o
+3,908 bytes · C-only source
 src/application/trade_sequence/trade_sequence.c</title></rect>
-<rect x="712.590" y="705.017" width="32.341" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive.o
+<rect x="732.028" y="668.604" width="27.966" height="14.750" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_send.o
+2,578 bytes · C-only source
+src/application/trade_sequence/trade_sequence_send.c</title></rect>
+<rect x="712.590" y="683.354" width="21.552" height="17.981" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive.o
 2,422 bytes · C-only source
 src/application/trade_sequence/trade_sequence_receive.c</title></rect>
-<rect x="744.931" y="705.017" width="11.323" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive_tasks.o
-848 bytes · C-only source
-src/application/trade_sequence/trade_sequence_arrive_tasks.c</title></rect>
-<rect x="756.255" y="705.017" width="3.739" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive_bounce.o
+<rect x="712.590" y="701.335" width="21.552" height="15.665" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_recede.o
+2,110 bytes · C-only source
+src/application/trade_sequence/trade_sequence_recede.c</title></rect>
+<rect x="734.142" y="683.354" width="25.851" height="12.874" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_approach.o
+2,080 bytes · C-only source
+src/application/trade_sequence/trade_sequence_approach.c</title></rect>
+<rect x="734.142" y="696.228" width="15.868" height="20.772" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive.o
+2,060 bytes · C-only source
+src/application/trade_sequence/trade_sequence_arrive.c</title></rect>
+<rect x="750.011" y="696.228" width="9.983" height="16.284" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_exchange.o
+1,016 bytes · C-only source
+src/application/trade_sequence/trade_sequence_exchange.c</title></rect>
+<rect x="750.011" y="712.512" width="9.983" height="4.488" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive_bounce.o
 280 bytes · C-only source
 src/application/trade_sequence/trade_sequence_receive_bounce.c</title></rect>
 <rect x="712.590" y="646.245" width="47.403" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
