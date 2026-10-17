@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "application/dress_up/accessory_portrait.h"
+#include "global_terminal/global_terminal_net.h"
 
 #include "bg_window.h"
 #include "fashion_case.h"
@@ -11,7 +12,6 @@
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
-#include "global_terminal_net.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "obj_char_transfer.h"

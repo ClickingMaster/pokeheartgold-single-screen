@@ -3,12 +3,12 @@
 #include "constants/species.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "global_terminal/global_terminal_net.h"
 
 #include "assert.h"
 #include "battle_recording.h"
 #include "bg_window.h"
 #include "game_stats.h"
-#include "global_terminal_net.h"
 #include "heap.h"
 #include "pokemon_icon_idx.h"
 #include "sprite_system.h"

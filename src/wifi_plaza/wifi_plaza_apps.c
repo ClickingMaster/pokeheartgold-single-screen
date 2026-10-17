@@ -1,0 +1,1064 @@
+#include <nitro/rtc.h>
+
+#include "global.h"
+
+#include "application/footprint_stamp.h"
+#include "application/plaza_game_mime_jr_top.h"
+#include "application/plaza_game_swalot_plop.h"
+#include "application/plaza_news.h"
+#include "wifi_plaza/wifi_plaza_connect.h"
+#include "wifi_plaza/wifi_plaza_internal.h"
+#include "wifi_plaza/wifi_plaza_visitor_profiles.h"
+
+#include "comm_state.h"
+#include "location_gmm_dat.h"
+#include "overlay_manager.h"
+#include "poke_overlay.h"
+#include "wifi_connection.h"
+#include "wobbuffet_pop.h"
+
+// The applications of the plaza, one overlay at a time. Each app has an entry in the four tables below (index =
+// app): make its arguments, free them, start its overlay, and pick the next app when the overlay has finished.
+//   0 the plaza itself (OVY_49)   1 visitor profiles (OVY_48)   2 plaza news (OVY_88)   3, 4 footprint stamp (OVY_89)
+//   5 connect (OVY_46)   6, 7, 8 the games (OVY_91, OVY_92, OVY_93, with OVY_90)   9, 10 disconnect (OVY_46)
+//   11, 12 the app of sWiFiPlazaSurveyOverlayTemplate
+
+FS_EXTERN_OVERLAY(OVY_46);
+FS_EXTERN_OVERLAY(OVY_47);
+FS_EXTERN_OVERLAY(OVY_48);
+FS_EXTERN_OVERLAY(OVY_49);
+FS_EXTERN_OVERLAY(OVY_88);
+FS_EXTERN_OVERLAY(OVY_89);
+FS_EXTERN_OVERLAY(OVY_90);
+FS_EXTERN_OVERLAY(OVY_91);
+FS_EXTERN_OVERLAY(OVY_92);
+FS_EXTERN_OVERLAY(OVY_93);
+
+enum WiFiPlazaApp {
+    WIFI_PLAZA_APP_MAIN,
+    WIFI_PLAZA_APP_VISITOR_PROFILES,
+    WIFI_PLAZA_APP_PLAZA_NEWS,
+    WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_0,
+    WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_1,
+    WIFI_PLAZA_APP_CONNECT,
+    WIFI_PLAZA_APP_SWALOT_PLOP,
+    WIFI_PLAZA_APP_MIME_JR_TOP,
+    WIFI_PLAZA_APP_WOBBUFFET_POP,
+    WIFI_PLAZA_APP_DISCONNECT,
+    WIFI_PLAZA_APP_CLOSED_DISCONNECT,
+    WIFI_PLAZA_APP_SURVEY_ANSWER,
+    WIFI_PLAZA_APP_SURVEY_RESULTS,
+};
+
+// Arguments of app 0, the plaza.
+typedef struct WiFiPlazaMainArgs {
+    SaveData *save;
+    int unk_04; // WiFiPlazaWork_GetScheduleValue3
+    int unk_08; // WiFiPlazaWork_GetScheduleValue2
+    u32 unk_0c[3];
+    u32 result; // what to do next (WiFiPlazaApps_EndMain)
+    WiFiPlazaWork *work;
+} WiFiPlazaMainArgs;
+
+// Arguments of app 1, the visitor profiles.
+typedef struct WiFiPlazaVisitorArgs {
+    void *players; // WiFiPlazaWork_GetPlaces
+    SaveData *save;
+    u32 time; // WiFiPlazaWork.currentTime
+    WiFiPlazaWork *work;
+} WiFiPlazaVisitorArgs;
+
+// Arguments of app 2, the plaza news.
+typedef struct WiFiPlazaNewsArgs {
+    void *news; // WiFiPlazaWork.news
+    u32 *time;  // WiFiPlazaWork.currentTime
+    WiFiPlazaWork *work;
+} WiFiPlazaNewsArgs;
+
+// Arguments of app 5, connect.
+typedef struct WiFiPlazaConnectArgs {
+    SaveData *save;
+    WiFiPlazaWork *work;
+    u32 skipPrompt; // WiFiPlazaApps.skipPrompt
+    s64 *loginTime;
+    u32 result; // 0: not connected
+} WiFiPlazaConnectArgs;
+
+// Arguments of apps 3 and 4, the footprint stamp.
+typedef struct WiFiPlazaFootprintArgs {
+    WiFiPlazaWork *work;
+    u8 mode;
+} WiFiPlazaFootprintArgs;
+
+// Arguments of apps 9 to 12.
+typedef struct WiFiPlazaDisconnectArgs {
+    SaveData *save;
+    WiFiPlazaWork *work;
+    u32 mode;
+} WiFiPlazaDisconnectArgs;
+
+// Arguments of the games (apps 6 to 8).
+typedef struct WiFiPlazaGameArgs {
+    u32 tapToy;               // WiFiPlazaPlayer_GetTapToy of the own player
+    u8 slots[4];              // WiFiPlazaWork_GetGameMembers
+    u8 specialVisitors[0x14]; // WiFiPlazaWork_GetSpecialVisitors
+    void *connectionLost;
+    PlayerProfile *profiles[4];
+    WiFiPlazaWork *work;
+    SaveData *save;
+    u8 voiceChat;
+    u8 fromLobby;
+    u8 unk_3a[2];
+    u32 mimeJrTopVoiceChat;
+} WiFiPlazaGameArgs;
+
+// The entries of the app tables (and their helpers).
+void WiFiPlazaGameArgs_NewProfiles(WiFiPlazaGameArgs *args, enum HeapID heapID);
+void WiFiPlazaGameArgs_FreeProfiles(WiFiPlazaGameArgs *args);
+void WiFiPlazaGameArgs_Setup(WiFiPlazaGameArgs *args, WiFiPlazaWork *work, enum HeapID heapID);
+void WiFiPlazaApps_NewMainArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeMainArgs(void **args);
+void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndMain(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewVisitorProfilesArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeVisitorProfilesArgs(void **args);
+void WiFiPlazaApps_StartVisitorProfiles(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndVisitorProfiles(WiFiPlazaApps *apps);
+void WiFiPlazaApps_NewPlazaNewsArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreePlazaNewsArgs(void **args);
+void WiFiPlazaApps_StartPlazaNews(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndPlazaNews(WiFiPlazaApps *apps);
+void WiFiPlazaApps_NewConnectArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeConnectArgs(void **args);
+void WiFiPlazaApps_StartConnect(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndConnect(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewSwalotPlopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeSwalotPlopArgs(void **args);
+void WiFiPlazaApps_StartSwalotPlop(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewMimeJrTopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeMimeJrTopArgs(void **args);
+void WiFiPlazaApps_StartMimeJrTop(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewWobbuffetPopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeWobbuffetPopArgs(void **args);
+void WiFiPlazaApps_StartWobbuffetPop(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewFootprintStampArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeFootprintStampArgs(void **args);
+BOOL WiFiPlazaApps_EndFootprintStamp(WiFiPlazaApps *apps);
+void WiFiPlazaApps_StartFootprintStampBoard0(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_StartFootprintStampBoard1(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_NewDisconnectArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeDisconnectArgs(void **args);
+void WiFiPlazaApps_StartDisconnect(WiFiPlazaApps *apps, void **args);
+void WiFiPlazaApps_StartClosedDisconnect(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndDisconnect(void);
+void WiFiPlazaApps_NewSurveyAnswerArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_NewSurveyResultsArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID);
+void WiFiPlazaApps_FreeSurveyArgs(void **args);
+void WiFiPlazaApps_StartSurvey(WiFiPlazaApps *apps, void **args);
+BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps);
+
+BOOL CommState_HasPlazaLobbyFailed(void);
+
+static const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard0OverlayTemplate = {
+    .init = FootprintStamp_Init,
+    .exec = FootprintStamp_Main,
+    .exit = FootprintStamp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_89),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate = {
+    .init = WobbuffetPopApp_Init,
+    .exec = WobbuffetPopApp_Main,
+    .exit = WobbuffetPopApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_93),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard1OverlayTemplate = {
+    .init = FootprintStamp_Init,
+    .exec = FootprintStamp_Main,
+    .exit = FootprintStamp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_89),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate = {
+    .init = WiFiPlazaConnect_DisconnectInit,
+    .exec = WiFiPlazaConnect_DisconnectMain,
+    .exit = WiFiPlazaConnect_DisconnectExit,
+    .ovy_id = FS_OVERLAY_ID(OVY_46),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate = {
+    .init = MimeJrTop_Init,
+    .exec = MimeJrTop_Main,
+    .exit = MimeJrTop_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_92),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate = {
+    .init = WiFiPlazaRoom_Init,
+    .exec = WiFiPlazaRoom_Main,
+    .exit = WiFiPlazaRoom_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_49),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaVisitorProfilesOverlayTemplate = {
+    .init = VisitorProfiles_Init,
+    .exec = VisitorProfiles_Main,
+    .exit = VisitorProfiles_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_48),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate = {
+    .init = PlazaNews_Init,
+    .exec = PlazaNews_Main,
+    .exit = PlazaNews_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_88),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate = {
+    .init = WiFiPlazaConnect_Init,
+    .exec = WiFiPlazaConnect_Main,
+    .exit = WiFiPlazaConnect_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_46),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate = {
+    .init = SwalotPlop_Init,
+    .exec = SwalotPlop_Main,
+    .exit = SwalotPlop_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_91),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaSurveyOverlayTemplate = {
+    .init = WiFiPlazaSurvey_Init,
+    .exec = WiFiPlazaSurvey_Main,
+    .exit = WiFiPlazaSurvey_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_47),
+};
+
+static const u8 sWiFiPlazaTypeChoices[20] = { 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 0, 0 };
+
+static void (*sWiFiPlazaAppStartFuncs[13])(WiFiPlazaApps *, void **) = {
+    WiFiPlazaApps_StartMain,
+    WiFiPlazaApps_StartVisitorProfiles,
+    WiFiPlazaApps_StartPlazaNews,
+    WiFiPlazaApps_StartFootprintStampBoard0,
+    WiFiPlazaApps_StartFootprintStampBoard1,
+    WiFiPlazaApps_StartConnect,
+    WiFiPlazaApps_StartSwalotPlop,
+    WiFiPlazaApps_StartMimeJrTop,
+    WiFiPlazaApps_StartWobbuffetPop,
+    WiFiPlazaApps_StartDisconnect,
+    WiFiPlazaApps_StartClosedDisconnect,
+    WiFiPlazaApps_StartSurvey,
+    WiFiPlazaApps_StartSurvey,
+};
+
+static void (*sWiFiPlazaAppFreeArgsFuncs[13])(void **) = {
+    WiFiPlazaApps_FreeMainArgs,
+    WiFiPlazaApps_FreeVisitorProfilesArgs,
+    WiFiPlazaApps_FreePlazaNewsArgs,
+    WiFiPlazaApps_FreeFootprintStampArgs,
+    WiFiPlazaApps_FreeFootprintStampArgs,
+    WiFiPlazaApps_FreeConnectArgs,
+    WiFiPlazaApps_FreeSwalotPlopArgs,
+    WiFiPlazaApps_FreeMimeJrTopArgs,
+    WiFiPlazaApps_FreeWobbuffetPopArgs,
+    WiFiPlazaApps_FreeDisconnectArgs,
+    WiFiPlazaApps_FreeDisconnectArgs,
+    WiFiPlazaApps_FreeSurveyArgs,
+    WiFiPlazaApps_FreeSurveyArgs,
+};
+
+static void (*sWiFiPlazaAppInitArgsFuncs[13])(WiFiPlazaApps *, void **, enum HeapID) = {
+    WiFiPlazaApps_NewMainArgs,
+    WiFiPlazaApps_NewVisitorProfilesArgs,
+    WiFiPlazaApps_NewPlazaNewsArgs,
+    WiFiPlazaApps_NewFootprintStampArgs,
+    WiFiPlazaApps_NewFootprintStampArgs,
+    WiFiPlazaApps_NewConnectArgs,
+    WiFiPlazaApps_NewSwalotPlopArgs,
+    WiFiPlazaApps_NewMimeJrTopArgs,
+    WiFiPlazaApps_NewWobbuffetPopArgs,
+    WiFiPlazaApps_NewDisconnectArgs,
+    WiFiPlazaApps_NewDisconnectArgs,
+    WiFiPlazaApps_NewSurveyAnswerArgs,
+    WiFiPlazaApps_NewSurveyResultsArgs,
+};
+
+static BOOL (*sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *, void **) = {
+    WiFiPlazaApps_EndMain,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndVisitorProfiles,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndPlazaNews,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndFootprintStamp,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndFootprintStamp,
+    WiFiPlazaApps_EndConnect,
+    WiFiPlazaApps_EndSwalotPlop,
+    WiFiPlazaApps_EndMimeJrTop,
+    WiFiPlazaApps_EndWobbuffetPop,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndDisconnect,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndDisconnect,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndSurvey,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndSurvey,
+};
+
+int WiFiPlaza_AvatarToIndex(u16 avatar) {
+    int i;
+    for (i = 0; i < 16; i++) {
+        if (avatar == gWiFiPlazaAvatars[i].avatar) {
+            return i;
+        }
+    }
+    return 16;
+}
+
+u16 WiFiPlaza_IndexToAvatar(u32 index) {
+    if (index < 16) {
+        return gWiFiPlazaAvatars[index].avatar;
+    }
+    return 0xffff;
+}
+
+WiFiPlazaApps *WiFiPlazaApps_New(u32 skipPrompt, SaveData *save, void *loginTime, WiFiPlazaWork *work, enum HeapID heapID) {
+    WiFiPlazaApps *apps = Heap_Alloc(heapID, sizeof(WiFiPlazaApps));
+    int i;
+    memset(apps, 0, sizeof(WiFiPlazaApps));
+    apps->work = work;
+    apps->save = save;
+    apps->loginTime = loginTime;
+    apps->skipPrompt = skipPrompt;
+    apps->heapID = heapID;
+    for (i = 0; i < 13; i++) {
+        WiFiPlazaApps_InitArgs(apps, i, heapID);
+    }
+    return apps;
+}
+
+void WiFiPlazaApps_Delete(WiFiPlazaApps *apps) {
+    int i;
+    for (i = 0; i < 13; i++) {
+        WiFiPlazaApps_FreeArgs(apps, i);
+    }
+    Heap_Free(apps);
+}
+
+void WiFiPlazaApps_StartFirst(WiFiPlazaApps *apps) {
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CONNECT);
+}
+
+// TRUE when the last app has finished.
+BOOL WiFiPlazaApps_Run(WiFiPlazaApps *apps) {
+    BOOL done = FALSE;
+    if (apps->manager && OverlayManager_Run(apps->manager)) {
+        OverlayManager_Delete(apps->manager);
+        apps->manager = NULL;
+        done = WiFiPlazaApps_End(apps, apps->current);
+    }
+    return done;
+}
+
+void WiFiPlazaApps_VBlank(WiFiPlazaApps *apps) {
+}
+
+void WiFiPlazaApps_StartOverlay(WiFiPlazaApps *apps, void **args, const OverlayManagerTemplate *template) {
+    if (apps->manager != NULL) {
+        GF_AssertFail();
+    }
+    apps->manager = OverlayManager_New(template, *args, (enum HeapID)apps->heapID);
+}
+
+void WiFiPlazaApps_InitArgs(WiFiPlazaApps *apps, u32 app, enum HeapID heapID) {
+    if (app >= 13) {
+        GF_AssertFail();
+    }
+    sWiFiPlazaAppInitArgsFuncs[app](apps, &apps->args[app], heapID);
+}
+
+void WiFiPlazaApps_FreeArgs(WiFiPlazaApps *apps, u32 app) {
+    if (app >= 13) {
+        GF_AssertFail();
+    }
+    sWiFiPlazaAppFreeArgsFuncs[app](&apps->args[app]);
+}
+
+void WiFiPlazaApps_Start(WiFiPlazaApps *apps, u32 app) {
+    if (app >= 13) {
+        GF_AssertFail();
+    }
+    sWiFiPlazaAppStartFuncs[app](apps, &apps->args[app]);
+    apps->current = app;
+}
+
+BOOL WiFiPlazaApps_End(WiFiPlazaApps *apps, u32 app) {
+    if (app >= 13) {
+        GF_AssertFail();
+    }
+    return sWiFiPlazaAppEndFuncs[app](apps, &apps->args[app]);
+}
+
+void WiFiPlazaGameArgs_NewProfiles(WiFiPlazaGameArgs *args, enum HeapID heapID) {
+    int i;
+    for (i = 0; i < 4; i++) {
+        args->profiles[i] = PlayerProfile_New(heapID);
+    }
+}
+
+void WiFiPlazaGameArgs_FreeProfiles(WiFiPlazaGameArgs *args) {
+    int i;
+    void *nullp = NULL;
+    for (i = 0; i < 4; i++) {
+        Heap_Free(args->profiles[i]);
+        args->profiles[i] = nullp;
+    }
+}
+
+void WiFiPlazaGameArgs_Setup(WiFiPlazaGameArgs *args, WiFiPlazaWork *work, enum HeapID heapID) {
+    int i;
+    args->tapToy = WiFiPlazaPlayer_GetTapToy(WiFiPlazaWork_GetMyPlayer(work));
+    WiFiPlazaWork_GetSpecialVisitors(work, args->specialVisitors);
+    WiFiPlazaWork_GetGameMembers(work, args->slots);
+    args->work = work;
+    args->connectionLost = NULL;
+    for (i = 0; i < 4; i++) {
+        WiFiPlazaPlayer *player = WiFiPlazaWork_GetPlayer(work, args->slots[i]);
+        if (player) {
+            WiFiPlazaPlayer_CopyToProfile(player, args->profiles[i], heapID);
+        }
+    }
+}
+
+// App 0, the plaza.
+void WiFiPlazaApps_NewMainArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    WiFiPlazaApps *state = apps;
+    void **dest = out;
+    WiFiPlazaMainArgs *args;
+    *dest = Heap_Alloc(heapID, sizeof(WiFiPlazaMainArgs));
+    memset(*dest, 0, sizeof(WiFiPlazaMainArgs));
+    args = *dest;
+    args->save = state->save;
+    args->work = state->work;
+}
+
+void WiFiPlazaApps_FreeMainArgs(void **args) {
+    if (*args == NULL) {
+        GF_AssertFail();
+    }
+    Heap_Free(*args);
+    *args = NULL;
+}
+
+void WiFiPlazaApps_StartMain(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaMainArgs *main = *args;
+    main->unk_04 = WiFiPlazaWork_GetScheduleValue3(apps->work);
+    main->unk_08 = WiFiPlazaWork_GetScheduleValue2(apps->work);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMainOverlayTemplate);
+}
+
+// The plaza tells which app comes next.
+BOOL WiFiPlazaApps_EndMain(WiFiPlazaApps *apps, void **args) {
+    switch (((WiFiPlazaMainArgs *)*args)->result) {
+    case 0:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_DISCONNECT);
+        break;
+    case 1:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_VISITOR_PROFILES);
+        break;
+    case 2:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_PLAZA_NEWS);
+        break;
+    case 6:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_0);
+        break;
+    case 7:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_FOOTPRINT_STAMP_BOARD_1);
+        break;
+    case 3:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SWALOT_PLOP);
+        break;
+    case 4:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MIME_JR_TOP);
+        break;
+    case 5:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_WOBBUFFET_POP);
+        break;
+    case 8:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
+        break;
+    case 9:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SURVEY_ANSWER);
+        break;
+    case 10:
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_SURVEY_RESULTS);
+        break;
+    default:
+        GF_AssertFail();
+    }
+    return FALSE;
+}
+
+// App 1, the visitor profiles.
+void WiFiPlazaApps_NewVisitorProfilesArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p;
+    u32 count;
+    p = Heap_Alloc(heapID, sizeof(WiFiPlazaVisitorArgs));
+    *out = p;
+    count = sizeof(WiFiPlazaVisitorArgs);
+    do {
+        *p = 0;
+        p++;
+        count--;
+    } while (count);
+    p = *out;
+    ((WiFiPlazaVisitorArgs *)p)->save = apps->save;
+    ((WiFiPlazaVisitorArgs *)p)->work = apps->work;
+}
+
+void WiFiPlazaApps_FreeVisitorProfilesArgs(void **args) {
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartVisitorProfiles(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaVisitorArgs *visitor = *args;
+    visitor->players = WiFiPlazaWork_GetPlaces(apps->work);
+    visitor->time = *WiFiPlazaWork_GetCurrentTimePtr(apps->work);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaVisitorProfilesOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndVisitorProfiles(WiFiPlazaApps *apps) {
+    if (WiFiPlazaWork_IsClosed(apps->work)) {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
+    } else {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    }
+    return FALSE;
+}
+
+// App 2, the plaza news.
+void WiFiPlazaApps_NewPlazaNewsArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p = Heap_Alloc(heapID, 12);
+    *out = p;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    p[11] = 0;
+    p = *out;
+    ((WiFiPlazaNewsArgs *)p)->news = WiFiPlazaWork_GetNews(apps->work);
+    ((WiFiPlazaNewsArgs *)p)->time = WiFiPlazaWork_GetCurrentTimePtr(apps->work);
+    ((WiFiPlazaNewsArgs *)p)->work = apps->work;
+}
+
+void WiFiPlazaApps_FreePlazaNewsArgs(void **args) {
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartPlazaNews(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaNewsOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndPlazaNews(WiFiPlazaApps *apps) {
+    if (WiFiPlazaWork_IsClosed(apps->work)) {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
+    } else {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    }
+    return FALSE;
+}
+
+// App 5, connect.
+void WiFiPlazaApps_NewConnectArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p;
+    u32 count;
+    p = Heap_Alloc(heapID, sizeof(WiFiPlazaConnectArgs));
+    *out = p;
+    count = sizeof(WiFiPlazaConnectArgs);
+    do {
+        *p = 0;
+        p++;
+        count--;
+    } while (count);
+    p = *out;
+    ((WiFiPlazaConnectArgs *)p)->save = apps->save;
+    ((WiFiPlazaConnectArgs *)p)->work = apps->work;
+    ((WiFiPlazaConnectArgs *)p)->skipPrompt = apps->skipPrompt;
+    ((WiFiPlazaConnectArgs *)p)->loginTime = apps->loginTime;
+}
+
+void WiFiPlazaApps_FreeConnectArgs(void **args) {
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartConnect(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaConnectOverlayTemplate);
+}
+
+// TRUE (the plaza ends) unless the connection was made.
+BOOL WiFiPlazaApps_EndConnect(WiFiPlazaApps *apps, void **args) {
+    if (((WiFiPlazaConnectArgs *)*args)->result == 0) {
+        return TRUE;
+    }
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    return FALSE;
+}
+
+// Apps 6, 7, 8, the games.
+void WiFiPlazaApps_NewSwalotPlopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p;
+    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without mimeJrTopVoiceChat
+    memset(*out, 0, sizeof(WiFiPlazaGameArgs) - 4);
+    p = *out;
+    ((WiFiPlazaGameArgs *)p)->voiceChat = 0;
+    ((WiFiPlazaGameArgs *)p)->fromLobby = 1;
+    ((WiFiPlazaGameArgs *)p)->save = apps->save;
+    WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
+}
+
+void WiFiPlazaApps_FreeSwalotPlopArgs(void **args) {
+    WiFiPlazaGameArgs_FreeProfiles(*args);
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartSwalotPlop(WiFiPlazaApps *apps, void **args) {
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
+    WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaSwalotPlopOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndSwalotPlop(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaGameArgs *game;
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
+    game = *args;
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    return FALSE;
+}
+
+void WiFiPlazaApps_NewMimeJrTopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p;
+    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs));
+    memset(*out, 0, sizeof(WiFiPlazaGameArgs));
+    p = *out;
+    ((WiFiPlazaGameArgs *)p)->mimeJrTopVoiceChat = 0;
+    *(u32 *)&((WiFiPlazaGameArgs *)p)->voiceChat = 1; // this game reads voiceChat as a whole word
+    ((WiFiPlazaGameArgs *)p)->save = apps->save;
+    WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
+}
+
+void WiFiPlazaApps_FreeMimeJrTopArgs(void **args) {
+    WiFiPlazaGameArgs_FreeProfiles(*args);
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartMimeJrTop(WiFiPlazaApps *apps, void **args) {
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
+    WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaMimeJrTopOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndMimeJrTop(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaGameArgs *game;
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
+    game = *args;
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    return FALSE;
+}
+
+void WiFiPlazaApps_NewWobbuffetPopArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p;
+    *out = Heap_Alloc(heapID, sizeof(WiFiPlazaGameArgs) - 4); // without mimeJrTopVoiceChat
+    memset(*out, 0, sizeof(WiFiPlazaGameArgs) - 4);
+    p = *out;
+    ((WiFiPlazaGameArgs *)p)->voiceChat = 0;
+    ((WiFiPlazaGameArgs *)p)->fromLobby = 1;
+    ((WiFiPlazaGameArgs *)p)->save = apps->save;
+    WiFiPlazaGameArgs_NewProfiles((WiFiPlazaGameArgs *)p, heapID);
+}
+
+void WiFiPlazaApps_FreeWobbuffetPopArgs(void **args) {
+    WiFiPlazaGameArgs_FreeProfiles(*args);
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartWobbuffetPop(WiFiPlazaApps *apps, void **args) {
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
+    WiFiPlazaGameArgs_Setup(*args, apps->work, (enum HeapID)apps->heapID);
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaWobbuffetPopOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndWobbuffetPop(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaGameArgs *game;
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
+    game = *args;
+    WiFiPlazaWork_SetGameConnectionLost(apps->work, game->connectionLost);
+    WiFiPlazaWork_SetTapToy(apps->work, game->tapToy);
+    WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    return FALSE;
+}
+
+// Apps 3 and 4, the footprint stamp.
+void WiFiPlazaApps_NewFootprintStampArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p = Heap_Alloc(heapID, 8);
+    *out = p;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    ((WiFiPlazaFootprintArgs *)*out)->work = apps->work;
+}
+
+void WiFiPlazaApps_FreeFootprintStampArgs(void **args) {
+    Heap_Free(*args);
+}
+
+BOOL WiFiPlazaApps_EndFootprintStamp(WiFiPlazaApps *apps) {
+    if (WiFiPlazaWork_IsClosed(apps->work)) {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
+    } else {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    }
+    return FALSE;
+}
+
+void WiFiPlazaApps_StartFootprintStampBoard0(WiFiPlazaApps *apps, void **args) {
+    ((WiFiPlazaFootprintArgs *)*args)->mode = 0;
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaFootprintStampBoard0OverlayTemplate);
+}
+
+void WiFiPlazaApps_StartFootprintStampBoard1(WiFiPlazaApps *apps, void **args) {
+    ((WiFiPlazaFootprintArgs *)*args)->mode = 1;
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaFootprintStampBoard1OverlayTemplate);
+}
+
+// Apps 9 and 10, disconnect.
+void WiFiPlazaApps_NewDisconnectArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p = Heap_Alloc(heapID, 12);
+    *out = p;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    p[11] = 0;
+    p = *out;
+    ((WiFiPlazaDisconnectArgs *)p)->save = apps->save;
+    ((WiFiPlazaDisconnectArgs *)p)->work = apps->work;
+}
+
+void WiFiPlazaApps_FreeDisconnectArgs(void **args) {
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartDisconnect(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaApps_StartDisconnectOverlay(apps, args, 0);
+}
+
+void WiFiPlazaApps_StartClosedDisconnect(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaApps_StartDisconnectOverlay(apps, args, 1);
+}
+
+void WiFiPlazaApps_StartDisconnectOverlay(WiFiPlazaApps *apps, void **args, u32 mode) {
+    ((WiFiPlazaDisconnectArgs *)*args)->mode = mode;
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaDisconnectOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndDisconnect(void) {
+    return TRUE;
+}
+
+// Apps 11 and 12.
+void WiFiPlazaApps_NewSurveyAnswerArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p = Heap_Alloc(heapID, 12);
+    *out = p;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    p[11] = 0;
+    p = *out;
+    ((WiFiPlazaDisconnectArgs *)p)->save = apps->save;
+    ((WiFiPlazaDisconnectArgs *)p)->work = apps->work;
+    ((WiFiPlazaDisconnectArgs *)p)->mode = 0;
+}
+
+void WiFiPlazaApps_NewSurveyResultsArgs(WiFiPlazaApps *apps, void **out, enum HeapID heapID) {
+    u8 *p = Heap_Alloc(heapID, 12);
+    *out = p;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    p[11] = 0;
+    p = *out;
+    ((WiFiPlazaDisconnectArgs *)p)->save = apps->save;
+    ((WiFiPlazaDisconnectArgs *)p)->work = apps->work;
+    ((WiFiPlazaDisconnectArgs *)p)->mode = 1;
+}
+
+void WiFiPlazaApps_FreeSurveyArgs(void **args) {
+    Heap_Free(*args);
+}
+
+void WiFiPlazaApps_StartSurvey(WiFiPlazaApps *apps, void **args) {
+    WiFiPlazaApps_StartOverlay(apps, args, &sWiFiPlazaSurveyOverlayTemplate);
+}
+
+BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps) {
+    if (WiFiPlazaWork_IsClosed(apps->work)) {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_CLOSED_DISCONNECT);
+    } else {
+        WiFiPlazaApps_Start(apps, WIFI_PLAZA_APP_MAIN);
+    }
+    return FALSE;
+}
+
+// Hour, minute and second of a time in seconds, in the low three bytes of out.
+void WiFiPlaza_SecondsToTime(u32 *out, s64 *seconds) {
+    RTCDate date;
+    RTCTime time;
+    RTC_ConvertSecondToDateTime(&date, &time, *seconds);
+    ((u8 *)out)[0] = time.hour;
+    ((u8 *)out)[1] = time.minute;
+    ((u8 *)out)[2] = time.second;
+}
+
+// out = left + right (hour, minute, second; the hour wraps at 24).
+void WiFiPlazaTime_Add(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *left, b = *right;
+    a.field.second += b.field.second;
+    a.field.minute += a.field.second / 60;
+    out->field.second = a.field.second % 60;
+    a.field.minute += b.field.minute;
+    a.field.hour += a.field.minute / 60;
+    out->field.minute = a.field.minute % 60;
+    a.field.hour += b.field.hour;
+    out->field.hour = a.field.hour % 24;
+}
+
+// out = first - second (hour, minute, second; the hour wraps at 24).
+void WiFiPlazaTime_Subtract(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *first, b = *second;
+    int delta;
+    u8 value;
+    value = b.value[2];
+    delta = a.signedValue[2] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[2] = (u8)(a.value[2] + borrow * 60);
+        a.value[1] = (u8)(a.value[1] - borrow);
+    }
+    out->value[2] = (u8)(a.value[2] - value);
+    value = b.value[1];
+    delta = a.signedValue[1] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[1] = (u8)(a.value[1] + borrow * 60);
+        a.value[0] = (u8)(a.value[0] - borrow);
+    }
+    out->value[1] = (u8)(a.value[1] - value);
+    delta = (s8)a.value[0] - (s8)b.value[0];
+    if (delta < 0) {
+        int borrow = (-delta) / 24 + 1;
+        a.value[0] = (u8)(a.value[0] + borrow * 24);
+    }
+    out->value[0] = (u8)(a.value[0] - b.value[0]);
+}
+
+// Adds a country and region to the list (the first free entry, or the entry of the same place unless value is 1).
+void WiFiPlazaPlaces_Add(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
+    s32 i;
+    BOOL use;
+    if (country == 0) {
+        return;
+    }
+    if (region > (u32)LocationGmmDatRegionCountGetByCountryMsgNo(country)) {
+        return;
+    }
+    use = FALSE;
+    for (i = 0; i < 50; i++) {
+        if (places[i].occupied == 0) {
+            use = TRUE;
+        } else if (places[i].country == country && places[i].region == region) {
+            if (value == 1) {
+                return;
+            }
+            use = TRUE;
+        }
+        if (use) {
+            places[i].country = country;
+            places[i].region = region;
+            places[i].value = value;
+            places[i].occupied = 1;
+            return;
+        }
+    }
+}
+
+u16 WiFiPlazaPlaces_GetCountry(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->country;
+}
+
+u8 WiFiPlazaPlaces_GetRegion(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    if (places[index].occupied != 1) {
+        GF_AssertFail();
+    }
+    return places[index].region;
+}
+
+u8 WiFiPlazaPlaces_GetValue(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->value;
+}
+
+u8 WiFiPlazaPlaces_IsOccupied(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    return places[index].occupied;
+}
+
+// Turns off the diffuse, ambient, specular and emission flags of the materials of the first model of file.
+void WiFiPlaza_DisableModelLighting(void *file) {
+    NNSG3dResMdlSet *set = NNS_G3dGetMdlSet(file);
+    NNSG3dResMdl *model = NNS_G3dGetMdlByIdx(set, 0);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_DIFFUSE);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_AMBIENT);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_SPECULAR);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_EMISSION);
+}
+
+// TRUE if region exists in country (region 0 for a country without regions).
+BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
+    u32 count = LocationGmmDatRegionCountGetByCountryMsgNo(country);
+    if (count == 0 && region == 0) {
+        return TRUE;
+    }
+    if (region >= 1 && region <= count) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+u32 WiFiPlaza_GetTypeByChoice(u32 index) {
+    return sWiFiPlazaTypeChoices[index];
+}
+
+// The error message class of a connection error (WifiConnection_ClassifyErrorCode, with the plaza's own errors 25 and
+// 26).
+int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (class == 11 || errorCode == 25) {
+        if (context != 2) {
+            return 14;
+        }
+        return 11;
+    }
+    if (errorCode == 26) {
+        return 13;
+    }
+    if (class < 0) {
+        class = 11;
+    }
+    return class;
+}
+
+// FALSE for the errors that end the connection.
+BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (errorCode == 25) {
+        class = 11;
+    } else if (errorCode == 26) {
+        class = 12;
+    }
+    switch (class) {
+    case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
+BOOL WiFiPlaza_HasConnectionFailed(void) {
+    if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+WiFiPlazaNews *WiFiPlazaNews_New(enum HeapID heapID) {
+    WiFiPlazaNews *news = Heap_Alloc(heapID, sizeof(WiFiPlazaNews));
+    memset(news, 0, sizeof(WiFiPlazaNews));
+    WiFiPlazaNewsSlots_Init(&news->slots);
+    WiFiPlazaNewsEventList_Init(&news->events, heapID);
+    return news;
+}
+
+void WiFiPlazaNews_Delete(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Free(&news->events);
+    Heap_Free(news);
+}
+
+void WiFiPlazaNews_Update(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Update(&news->events);
+    WiFiPlazaNewsSlots_SetChange(&news->slots, 0);
+}

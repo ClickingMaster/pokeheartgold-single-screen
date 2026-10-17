@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "c115db075b24c059e9fe6bb3bdbc1c840aa7498a",
+  "commit": "3d8ce3d129c4c6d9b1cb5e26c439bb10b155aadc",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "dc0e4385e6915f85bfe54925cb7dbe13fac4d32e58171ad31c63d758fe7f7620",
+    "ARM9": "6eb2a0a73449cba6f85cb374bfbbbd6c59e3988fd36e2caf911a8d34b43bcd32",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -1047,7 +1047,7 @@
       "object": "wifi_setup.o",
       "bytes": 272,
       "status": "c",
-      "source": "src/wifi_setup.c"
+      "source": "src/wifi_setup/wifi_setup.c"
     },
     {
       "cpu": "ARM9",
@@ -1055,7 +1055,7 @@
       "object": "wifi_setup_access_points.o",
       "bytes": 4176,
       "status": "c",
-      "source": "src/wifi_setup_access_points.c"
+      "source": "src/wifi_setup/wifi_setup_access_points.c"
     },
     {
       "cpu": "ARM9",
@@ -1063,7 +1063,7 @@
       "object": "wifi_setup_address_entry.o",
       "bytes": 2788,
       "status": "c",
-      "source": "src/wifi_setup_address_entry.c"
+      "source": "src/wifi_setup/wifi_setup_address_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -1071,7 +1071,7 @@
       "object": "wifi_setup_address_entry_init.o",
       "bytes": 372,
       "status": "c",
-      "source": "src/wifi_setup_address_entry_init.c"
+      "source": "src/wifi_setup/wifi_setup_address_entry_init.c"
     },
     {
       "cpu": "ARM9",
@@ -1079,7 +1079,7 @@
       "object": "wifi_setup_ap_scan_state.o",
       "bytes": 52,
       "status": "c",
-      "source": "src/wifi_setup_ap_scan_state.c"
+      "source": "src/wifi_setup/wifi_setup_ap_scan_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1087,7 +1087,7 @@
       "object": "wifi_setup_ap_select.o",
       "bytes": 460,
       "status": "c",
-      "source": "src/wifi_setup_ap_select.c"
+      "source": "src/wifi_setup/wifi_setup_ap_select.c"
     },
     {
       "cpu": "ARM9",
@@ -1095,7 +1095,7 @@
       "object": "wifi_setup_api.o",
       "bytes": 836,
       "status": "c",
-      "source": "src/wifi_setup_api.c"
+      "source": "src/wifi_setup/wifi_setup_api.c"
     },
     {
       "cpu": "ARM9",
@@ -1103,7 +1103,7 @@
       "object": "wifi_setup_app.o",
       "bytes": 3340,
       "status": "c",
-      "source": "src/wifi_setup_app.c"
+      "source": "src/wifi_setup/wifi_setup_app.c"
     },
     {
       "cpu": "ARM9",
@@ -1111,7 +1111,7 @@
       "object": "wifi_setup_auto_setup.o",
       "bytes": 8404,
       "status": "c",
-      "source": "src/wifi_setup_auto_setup.c"
+      "source": "src/wifi_setup/wifi_setup_auto_setup.c"
     },
     {
       "cpu": "ARM9",
@@ -1119,7 +1119,7 @@
       "object": "wifi_setup_bg_screen.o",
       "bytes": 608,
       "status": "c",
-      "source": "src/wifi_setup_bg_screen.c"
+      "source": "src/wifi_setup/wifi_setup_bg_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -1127,7 +1127,7 @@
       "object": "wifi_setup_bg_screen_state.o",
       "bytes": 44,
       "status": "c",
-      "source": "src/wifi_setup_bg_screen_state.c"
+      "source": "src/wifi_setup/wifi_setup_bg_screen_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1135,7 +1135,7 @@
       "object": "wifi_setup_busy_icon.o",
       "bytes": 268,
       "status": "c",
-      "source": "src/wifi_setup_busy_icon.c"
+      "source": "src/wifi_setup/wifi_setup_busy_icon.c"
     },
     {
       "cpu": "ARM9",
@@ -1143,7 +1143,7 @@
       "object": "wifi_setup_connect.o",
       "bytes": 464,
       "status": "c",
-      "source": "src/wifi_setup_connect.c"
+      "source": "src/wifi_setup/wifi_setup_connect.c"
     },
     {
       "cpu": "ARM9",
@@ -1151,7 +1151,7 @@
       "object": "wifi_setup_connection_menu.o",
       "bytes": 9024,
       "status": "c",
-      "source": "src/wifi_setup_connection_menu.c"
+      "source": "src/wifi_setup/wifi_setup_connection_menu.c"
     },
     {
       "cpu": "ARM9",
@@ -1159,7 +1159,7 @@
       "object": "wifi_setup_crypto.o",
       "bytes": 4256,
       "status": "c",
-      "source": "src/wifi_setup_crypto.c"
+      "source": "src/wifi_setup/wifi_setup_crypto.c"
     },
     {
       "cpu": "ARM9",
@@ -1167,7 +1167,7 @@
       "object": "wifi_setup_error_screen.o",
       "bytes": 1684,
       "status": "c",
-      "source": "src/wifi_setup_error_screen.c"
+      "source": "src/wifi_setup/wifi_setup_error_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -1175,7 +1175,7 @@
       "object": "wifi_setup_keyboard_input.o",
       "bytes": 2800,
       "status": "c",
-      "source": "src/wifi_setup_keyboard_input.c"
+      "source": "src/wifi_setup/wifi_setup_keyboard_input.c"
     },
     {
       "cpu": "ARM9",
@@ -1183,7 +1183,7 @@
       "object": "wifi_setup_keyboard_layout.o",
       "bytes": 636,
       "status": "c",
-      "source": "src/wifi_setup_keyboard_layout.c"
+      "source": "src/wifi_setup/wifi_setup_keyboard_layout.c"
     },
     {
       "cpu": "ARM9",
@@ -1191,7 +1191,7 @@
       "object": "wifi_setup_keyboard_slide_in.o",
       "bytes": 444,
       "status": "c",
-      "source": "src/wifi_setup_keyboard_slide_in.c"
+      "source": "src/wifi_setup/wifi_setup_keyboard_slide_in.c"
     },
     {
       "cpu": "ARM9",
@@ -1199,7 +1199,7 @@
       "object": "wifi_setup_keyboard_view.o",
       "bytes": 2452,
       "status": "c",
-      "source": "src/wifi_setup_keyboard_view.c"
+      "source": "src/wifi_setup/wifi_setup_keyboard_view.c"
     },
     {
       "cpu": "ARM9",
@@ -1207,7 +1207,7 @@
       "object": "wifi_setup_keypad.o",
       "bytes": 3580,
       "status": "c",
-      "source": "src/wifi_setup_keypad.c"
+      "source": "src/wifi_setup/wifi_setup_keypad.c"
     },
     {
       "cpu": "ARM9",
@@ -1215,7 +1215,7 @@
       "object": "wifi_setup_keypad_layout.o",
       "bytes": 608,
       "status": "c",
-      "source": "src/wifi_setup_keypad_layout.c"
+      "source": "src/wifi_setup/wifi_setup_keypad_layout.c"
     },
     {
       "cpu": "ARM9",
@@ -1223,7 +1223,7 @@
       "object": "wifi_setup_keypad_view.o",
       "bytes": 1272,
       "status": "c",
-      "source": "src/wifi_setup_keypad_view.c"
+      "source": "src/wifi_setup/wifi_setup_keypad_view.c"
     },
     {
       "cpu": "ARM9",
@@ -1231,7 +1231,7 @@
       "object": "wifi_setup_link.o",
       "bytes": 2546,
       "status": "c",
-      "source": "src/wifi_setup_link.c"
+      "source": "src/wifi_setup/wifi_setup_link.c"
     },
     {
       "cpu": "ARM9",
@@ -1239,7 +1239,7 @@
       "object": "wifi_setup_local_wireless.o",
       "bytes": 10512,
       "status": "c",
-      "source": "src/wifi_setup_local_wireless.c"
+      "source": "src/wifi_setup/wifi_setup_local_wireless.c"
     },
     {
       "cpu": "ARM9",
@@ -1247,7 +1247,7 @@
       "object": "wifi_setup_md5.o",
       "bytes": 2120,
       "status": "c",
-      "source": "src/wifi_setup_md5.c"
+      "source": "src/wifi_setup/wifi_setup_md5.c"
     },
     {
       "cpu": "ARM9",
@@ -1255,7 +1255,7 @@
       "object": "wifi_setup_packet.o",
       "bytes": 3072,
       "status": "c",
-      "source": "src/wifi_setup_packet.c"
+      "source": "src/wifi_setup/wifi_setup_packet.c"
     },
     {
       "cpu": "ARM9",
@@ -1263,7 +1263,7 @@
       "object": "wifi_setup_platform.o",
       "bytes": 1654,
       "status": "c",
-      "source": "src/wifi_setup_platform.c"
+      "source": "src/wifi_setup/wifi_setup_platform.c"
     },
     {
       "cpu": "ARM9",
@@ -1271,7 +1271,7 @@
       "object": "wifi_setup_protocol.o",
       "bytes": 4560,
       "status": "c",
-      "source": "src/wifi_setup_protocol.c"
+      "source": "src/wifi_setup/wifi_setup_protocol.c"
     },
     {
       "cpu": "ARM9",
@@ -1279,7 +1279,7 @@
       "object": "wifi_setup_result.o",
       "bytes": 504,
       "status": "c",
-      "source": "src/wifi_setup_result.c"
+      "source": "src/wifi_setup/wifi_setup_result.c"
     },
     {
       "cpu": "ARM9",
@@ -1287,7 +1287,7 @@
       "object": "wifi_setup_screens.o",
       "bytes": 23480,
       "status": "c",
-      "source": "src/wifi_setup_screens.c"
+      "source": "src/wifi_setup/wifi_setup_screens.c"
     },
     {
       "cpu": "ARM9",
@@ -1295,7 +1295,7 @@
       "object": "wifi_setup_scroll_bar.o",
       "bytes": 1508,
       "status": "c",
-      "source": "src/wifi_setup_scroll_bar.c"
+      "source": "src/wifi_setup/wifi_setup_scroll_bar.c"
     },
     {
       "cpu": "ARM9",
@@ -1303,7 +1303,7 @@
       "object": "wifi_setup_scroll_bar_state.o",
       "bytes": 60,
       "status": "c",
-      "source": "src/wifi_setup_scroll_bar_state.c"
+      "source": "src/wifi_setup/wifi_setup_scroll_bar_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1311,7 +1311,7 @@
       "object": "wifi_setup_session.o",
       "bytes": 2584,
       "status": "c",
-      "source": "src/wifi_setup_session.c"
+      "source": "src/wifi_setup/wifi_setup_session.c"
     },
     {
       "cpu": "ARM9",
@@ -1319,7 +1319,7 @@
       "object": "wifi_setup_settings.o",
       "bytes": 7024,
       "status": "c",
-      "source": "src/wifi_setup_settings.c"
+      "source": "src/wifi_setup/wifi_setup_settings.c"
     },
     {
       "cpu": "ARM9",
@@ -1327,7 +1327,7 @@
       "object": "wifi_setup_share.o",
       "bytes": 9036,
       "status": "c",
-      "source": "src/wifi_setup_share.c"
+      "source": "src/wifi_setup/wifi_setup_share.c"
     },
     {
       "cpu": "ARM9",
@@ -1335,7 +1335,7 @@
       "object": "wifi_setup_state.o",
       "bytes": 180,
       "status": "c",
-      "source": "src/wifi_setup_state.c"
+      "source": "src/wifi_setup/wifi_setup_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1343,7 +1343,7 @@
       "object": "wifi_setup_ui_parts.o",
       "bytes": 5088,
       "status": "c",
-      "source": "src/wifi_setup_ui_parts.c"
+      "source": "src/wifi_setup/wifi_setup_ui_parts.c"
     },
     {
       "cpu": "ARM9",
@@ -1351,7 +1351,7 @@
       "object": "wifi_setup_ui_system.o",
       "bytes": 11844,
       "status": "c",
-      "source": "src/wifi_setup_ui_system.c"
+      "source": "src/wifi_setup/wifi_setup_ui_system.c"
     },
     {
       "cpu": "ARM9",
@@ -1359,7 +1359,7 @@
       "object": "wifi_setup_usb_connector_screen.o",
       "bytes": 1280,
       "status": "c",
-      "source": "src/wifi_setup_usb_connector_screen.c"
+      "source": "src/wifi_setup/wifi_setup_usb_connector_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -1367,7 +1367,7 @@
       "object": "wifi_setup_wcm.o",
       "bytes": 1654,
       "status": "c",
-      "source": "src/wifi_setup_wcm.c"
+      "source": "src/wifi_setup/wifi_setup_wcm.c"
     },
     {
       "cpu": "ARM9",
@@ -1375,7 +1375,7 @@
       "object": "wifi_setup_worker.o",
       "bytes": 996,
       "status": "c",
-      "source": "src/wifi_setup_worker.c"
+      "source": "src/wifi_setup/wifi_setup_worker.c"
     },
     {
       "cpu": "ARM9",
@@ -2015,7 +2015,7 @@
       "object": "global_terminal_connect.o",
       "bytes": 4540,
       "status": "c",
-      "source": "src/global_terminal_connect.c"
+      "source": "src/global_terminal/global_terminal_connect.c"
     },
     {
       "cpu": "ARM9",
@@ -2023,7 +2023,7 @@
       "object": "global_terminal_net.o",
       "bytes": 4304,
       "status": "c",
-      "source": "src/global_terminal_net.c"
+      "source": "src/global_terminal/global_terminal_net.c"
     },
     {
       "cpu": "ARM9",
@@ -2031,7 +2031,7 @@
       "object": "global_terminal_socket.o",
       "bytes": 5536,
       "status": "c",
-      "source": "src/global_terminal_socket.c"
+      "source": "src/global_terminal/global_terminal_socket.c"
     },
     {
       "cpu": "ARM9",
@@ -2439,7 +2439,7 @@
       "object": "chat_callbacks.o",
       "bytes": 12312,
       "status": "c",
-      "source": "src/chat_callbacks.c"
+      "source": "src/chat/chat_callbacks.c"
     },
     {
       "cpu": "ARM9",
@@ -2447,7 +2447,7 @@
       "object": "chat_channel.o",
       "bytes": 8252,
       "status": "c",
-      "source": "src/chat_channel.c"
+      "source": "src/chat/chat_channel.c"
     },
     {
       "cpu": "ARM9",
@@ -2455,7 +2455,7 @@
       "object": "chat_cipher.o",
       "bytes": 344,
       "status": "c",
-      "source": "src/chat_cipher.c"
+      "source": "src/chat/chat_cipher.c"
     },
     {
       "cpu": "ARM9",
@@ -2463,7 +2463,7 @@
       "object": "chat_handlers.o",
       "bytes": 17600,
       "status": "c",
-      "source": "src/chat_handlers.c"
+      "source": "src/chat/chat_handlers.c"
     },
     {
       "cpu": "ARM9",
@@ -2471,7 +2471,7 @@
       "object": "chat_main.o",
       "bytes": 9424,
       "status": "c",
-      "source": "src/chat_main.c"
+      "source": "src/chat/chat_main.c"
     },
     {
       "cpu": "ARM9",
@@ -2479,7 +2479,7 @@
       "object": "chat_requests.o",
       "bytes": 6736,
       "status": "c",
-      "source": "src/chat_requests.c"
+      "source": "src/chat/chat_requests.c"
     },
     {
       "cpu": "ARM9",
@@ -2487,7 +2487,7 @@
       "object": "chat_socket.o",
       "bytes": 6652,
       "status": "c",
-      "source": "src/chat_socket.c"
+      "source": "src/chat/chat_socket.c"
     },
     {
       "cpu": "ARM9",
@@ -2495,7 +2495,7 @@
       "object": "chat_socket_buffer.o",
       "bytes": 1248,
       "status": "c",
-      "source": "src/chat_socket_buffer.c"
+      "source": "src/chat/chat_socket_buffer.c"
     },
     {
       "cpu": "ARM9",
@@ -2503,7 +2503,7 @@
       "object": "chat_socket_recv.o",
       "bytes": 1392,
       "status": "c",
-      "source": "src/chat_socket_recv.c"
+      "source": "src/chat/chat_socket_recv.c"
     },
     {
       "cpu": "ARM9",
@@ -2511,7 +2511,7 @@
       "object": "lobby_byte_vector_data.o",
       "bytes": 20,
       "status": "c",
-      "source": "src/lobby_byte_vector_data.c"
+      "source": "src/lobby/lobby_byte_vector_data.c"
     },
     {
       "cpu": "ARM9",
@@ -2519,7 +2519,7 @@
       "object": "lobby_channel_map.o",
       "bytes": 304,
       "status": "c",
-      "source": "src/lobby_channel_map.c"
+      "source": "src/lobby/lobby_channel_map.c"
     },
     {
       "cpu": "ARM9",
@@ -2527,7 +2527,7 @@
       "object": "lobby_channel_map_erase_key.o",
       "bytes": 80,
       "status": "c",
-      "source": "src/lobby_channel_map_erase_key.c"
+      "source": "src/lobby/lobby_channel_map_erase_key.c"
     },
     {
       "cpu": "ARM9",
@@ -2535,7 +2535,7 @@
       "object": "lobby_channel_map_find_insert_pos.o",
       "bytes": 140,
       "status": "c",
-      "source": "src/lobby_channel_map_find_insert_pos.c"
+      "source": "src/lobby/lobby_channel_map_find_insert_pos.c"
     },
     {
       "cpu": "ARM9",
@@ -2543,7 +2543,7 @@
       "object": "lobby_channel_map_insert_node.o",
       "bytes": 296,
       "status": "cpp",
-      "source": "src/lobby_channel_map_insert_node.cpp"
+      "source": "src/lobby/lobby_channel_map_insert_node.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2551,7 +2551,7 @@
       "object": "lobby_char_vector_append_zeros_slow.o",
       "bytes": 316,
       "status": "cpp",
-      "source": "src/lobby_char_vector_append_zeros_slow.cpp"
+      "source": "src/lobby/lobby_char_vector_append_zeros_slow.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2559,7 +2559,7 @@
       "object": "lobby_char_vector_assign_range.o",
       "bytes": 88,
       "status": "c",
-      "source": "src/lobby_char_vector_assign_range.c"
+      "source": "src/lobby/lobby_char_vector_assign_range.c"
     },
     {
       "cpu": "ARM9",
@@ -2567,7 +2567,7 @@
       "object": "lobby_char_vector_buffer.o",
       "bytes": 144,
       "status": "c",
-      "source": "src/lobby_char_vector_buffer.c"
+      "source": "src/lobby/lobby_char_vector_buffer.c"
     },
     {
       "cpu": "ARM9",
@@ -2575,7 +2575,7 @@
       "object": "lobby_char_vector_buffer_deallocate.o",
       "bytes": 80,
       "status": "c",
-      "source": "src/lobby_char_vector_buffer_deallocate.c"
+      "source": "src/lobby/lobby_char_vector_buffer_deallocate.c"
     },
     {
       "cpu": "ARM9",
@@ -2583,7 +2583,7 @@
       "object": "lobby_chat_callbacks.o",
       "bytes": 512,
       "status": "c",
-      "source": "src/lobby_chat_callbacks.c"
+      "source": "src/lobby/lobby_chat_callbacks.c"
     },
     {
       "cpu": "ARM9",
@@ -2591,7 +2591,7 @@
       "object": "lobby_chat_channel_commands.o",
       "bytes": 1264,
       "status": "c",
-      "source": "src/lobby_chat_channel_commands.c"
+      "source": "src/lobby/lobby_chat_channel_commands.c"
     },
     {
       "cpu": "ARM9",
@@ -2599,7 +2599,7 @@
       "object": "lobby_chat_enter_channel.o",
       "bytes": 636,
       "status": "cpp",
-      "source": "src/lobby_chat_enter_channel.cpp"
+      "source": "src/lobby/lobby_chat_enter_channel.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2607,7 +2607,7 @@
       "object": "lobby_chat_find_user_id_by_nick.o",
       "bytes": 232,
       "status": "c",
-      "source": "src/lobby_chat_find_user_id_by_nick.c"
+      "source": "src/lobby/lobby_chat_find_user_id_by_nick.c"
     },
     {
       "cpu": "ARM9",
@@ -2615,7 +2615,7 @@
       "object": "lobby_chat_is_in_channel.o",
       "bytes": 184,
       "status": "c",
-      "source": "src/lobby_chat_is_in_channel.c"
+      "source": "src/lobby/lobby_chat_is_in_channel.c"
     },
     {
       "cpu": "ARM9",
@@ -2623,7 +2623,7 @@
       "object": "lobby_chat_manager.o",
       "bytes": 628,
       "status": "c",
-      "source": "src/lobby_chat_manager.c"
+      "source": "src/lobby/lobby_chat_manager.c"
     },
     {
       "cpu": "ARM9",
@@ -2631,7 +2631,7 @@
       "object": "lobby_chat_manager_get_names.o",
       "bytes": 32,
       "status": "c",
-      "source": "src/lobby_chat_manager_get_names.c"
+      "source": "src/lobby/lobby_chat_manager_get_names.c"
     },
     {
       "cpu": "ARM9",
@@ -2639,7 +2639,7 @@
       "object": "lobby_chat_manager_get_nick.o",
       "bytes": 16,
       "status": "c",
-      "source": "src/lobby_chat_manager_get_nick.c"
+      "source": "src/lobby/lobby_chat_manager_get_nick.c"
     },
     {
       "cpu": "ARM9",
@@ -2647,7 +2647,7 @@
       "object": "lobby_chat_map_destroy.o",
       "bytes": 64,
       "status": "c",
-      "source": "src/lobby_chat_map_destroy.c"
+      "source": "src/lobby/lobby_chat_map_destroy.c"
     },
     {
       "cpu": "ARM9",
@@ -2655,7 +2655,7 @@
       "object": "lobby_chat_on_broadcast_key_changed.o",
       "bytes": 248,
       "status": "c",
-      "source": "src/lobby_chat_on_broadcast_key_changed.c"
+      "source": "src/lobby/lobby_chat_on_broadcast_key_changed.c"
     },
     {
       "cpu": "ARM9",
@@ -2663,7 +2663,7 @@
       "object": "lobby_chat_on_channel_message.o",
       "bytes": 356,
       "status": "c",
-      "source": "src/lobby_chat_on_channel_message.c"
+      "source": "src/lobby/lobby_chat_on_channel_message.c"
     },
     {
       "cpu": "ARM9",
@@ -2671,7 +2671,7 @@
       "object": "lobby_chat_on_disconnected.o",
       "bytes": 216,
       "status": "c",
-      "source": "src/lobby_chat_on_disconnected.c"
+      "source": "src/lobby/lobby_chat_on_disconnected.c"
     },
     {
       "cpu": "ARM9",
@@ -2679,7 +2679,7 @@
       "object": "lobby_chat_on_enter_channel.o",
       "bytes": 608,
       "status": "cpp",
-      "source": "src/lobby_chat_on_enter_channel.cpp"
+      "source": "src/lobby/lobby_chat_on_enter_channel.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2687,7 +2687,7 @@
       "object": "lobby_chat_on_get_channel_keys.o",
       "bytes": 396,
       "status": "cpp",
-      "source": "src/lobby_chat_on_get_channel_keys.cpp"
+      "source": "src/lobby/lobby_chat_on_get_channel_keys.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2695,7 +2695,7 @@
       "object": "lobby_chat_on_get_channel_mode.o",
       "bytes": 312,
       "status": "cpp",
-      "source": "src/lobby_chat_on_get_channel_mode.cpp"
+      "source": "src/lobby/lobby_chat_on_get_channel_mode.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2703,7 +2703,7 @@
       "object": "lobby_chat_on_nick_error.o",
       "bytes": 544,
       "status": "c",
-      "source": "src/lobby_chat_on_nick_error.c"
+      "source": "src/lobby/lobby_chat_on_nick_error.c"
     },
     {
       "cpu": "ARM9",
@@ -2711,7 +2711,7 @@
       "object": "lobby_chat_on_private_message.o",
       "bytes": 552,
       "status": "c",
-      "source": "src/lobby_chat_on_private_message.c"
+      "source": "src/lobby/lobby_chat_on_private_message.c"
     },
     {
       "cpu": "ARM9",
@@ -2719,7 +2719,7 @@
       "object": "lobby_chat_on_user_changed_nick.o",
       "bytes": 116,
       "status": "c",
-      "source": "src/lobby_chat_on_user_changed_nick.c"
+      "source": "src/lobby/lobby_chat_on_user_changed_nick.c"
     },
     {
       "cpu": "ARM9",
@@ -2727,7 +2727,7 @@
       "object": "lobby_chat_on_user_joined.o",
       "bytes": 668,
       "status": "c",
-      "source": "src/lobby_chat_on_user_joined.c"
+      "source": "src/lobby/lobby_chat_on_user_joined.c"
     },
     {
       "cpu": "ARM9",
@@ -2735,7 +2735,7 @@
       "object": "lobby_chat_on_user_mode_changed.o",
       "bytes": 212,
       "status": "c",
-      "source": "src/lobby_chat_on_user_mode_changed.c"
+      "source": "src/lobby/lobby_chat_on_user_mode_changed.c"
     },
     {
       "cpu": "ARM9",
@@ -2743,7 +2743,7 @@
       "object": "lobby_chat_on_user_parted.o",
       "bytes": 300,
       "status": "c",
-      "source": "src/lobby_chat_on_user_parted.c"
+      "source": "src/lobby/lobby_chat_on_user_parted.c"
     },
     {
       "cpu": "ARM9",
@@ -2751,7 +2751,7 @@
       "object": "lobby_chat_process.o",
       "bytes": 484,
       "status": "cpp",
-      "source": "src/lobby_chat_process.cpp"
+      "source": "src/lobby/lobby_chat_process.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2759,7 +2759,7 @@
       "object": "lobby_chat_rename_user.o",
       "bytes": 160,
       "status": "c",
-      "source": "src/lobby_chat_rename_user.c"
+      "source": "src/lobby/lobby_chat_rename_user.c"
     },
     {
       "cpu": "ARM9",
@@ -2767,7 +2767,7 @@
       "object": "lobby_chat_set_channel_mode.o",
       "bytes": 204,
       "status": "c",
-      "source": "src/lobby_chat_set_channel_mode.c"
+      "source": "src/lobby/lobby_chat_set_channel_mode.c"
     },
     {
       "cpu": "ARM9",
@@ -2775,7 +2775,7 @@
       "object": "lobby_chat_shutdown.o",
       "bytes": 188,
       "status": "c",
-      "source": "src/lobby_chat_shutdown.c"
+      "source": "src/lobby/lobby_chat_shutdown.c"
     },
     {
       "cpu": "ARM9",
@@ -2783,7 +2783,7 @@
       "object": "lobby_chat_timer_connect_timeout.o",
       "bytes": 36,
       "status": "c",
-      "source": "src/lobby_chat_timer_connect_timeout.c"
+      "source": "src/lobby/lobby_chat_timer_connect_timeout.c"
     },
     {
       "cpu": "ARM9",
@@ -2791,7 +2791,7 @@
       "object": "lobby_chat_users.o",
       "bytes": 484,
       "status": "c",
-      "source": "src/lobby_chat_users.c"
+      "source": "src/lobby/lobby_chat_users.c"
     },
     {
       "cpu": "ARM9",
@@ -2799,7 +2799,7 @@
       "object": "lobby_event_deque_append_range.o",
       "bytes": 184,
       "status": "c",
-      "source": "src/lobby_event_deque_append_range.c"
+      "source": "src/lobby/lobby_event_deque_append_range.c"
     },
     {
       "cpu": "ARM9",
@@ -2807,7 +2807,7 @@
       "object": "lobby_event_deque_copy.o",
       "bytes": 348,
       "status": "cpp",
-      "source": "src/lobby_event_deque_copy.cpp"
+      "source": "src/lobby/lobby_event_deque_copy.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2815,7 +2815,7 @@
       "object": "lobby_event_deque_erase_at_begin.o",
       "bytes": 196,
       "status": "c",
-      "source": "src/lobby_event_deque_erase_at_begin.c"
+      "source": "src/lobby/lobby_event_deque_erase_at_begin.c"
     },
     {
       "cpu": "ARM9",
@@ -2823,7 +2823,7 @@
       "object": "lobby_event_deque_iterator_at.o",
       "bytes": 140,
       "status": "c",
-      "source": "src/lobby_event_deque_iterator_at.c"
+      "source": "src/lobby/lobby_event_deque_iterator_at.c"
     },
     {
       "cpu": "ARM9",
@@ -2831,7 +2831,7 @@
       "object": "lobby_event_deque_map_allocate.o",
       "bytes": 172,
       "status": "c",
-      "source": "src/lobby_event_deque_map_allocate.c"
+      "source": "src/lobby/lobby_event_deque_map_allocate.c"
     },
     {
       "cpu": "ARM9",
@@ -2839,7 +2839,7 @@
       "object": "lobby_event_deque_map_append_range.o",
       "bytes": 376,
       "status": "c",
-      "source": "src/lobby_event_deque_map_append_range.c"
+      "source": "src/lobby/lobby_event_deque_map_append_range.c"
     },
     {
       "cpu": "ARM9",
@@ -2847,7 +2847,7 @@
       "object": "lobby_event_deque_map_buffer.o",
       "bytes": 776,
       "status": "c",
-      "source": "src/lobby_event_deque_map_buffer.c"
+      "source": "src/lobby/lobby_event_deque_map_buffer.c"
     },
     {
       "cpu": "ARM9",
@@ -2855,7 +2855,7 @@
       "object": "lobby_event_deque_map_copy.o",
       "bytes": 372,
       "status": "c",
-      "source": "src/lobby_event_deque_map_copy.c"
+      "source": "src/lobby/lobby_event_deque_map_copy.c"
     },
     {
       "cpu": "ARM9",
@@ -2863,7 +2863,7 @@
       "object": "lobby_event_deque_map_copy_backward.o",
       "bytes": 404,
       "status": "c",
-      "source": "src/lobby_event_deque_map_copy_backward.c"
+      "source": "src/lobby/lobby_event_deque_map_copy_backward.c"
     },
     {
       "cpu": "ARM9",
@@ -2871,7 +2871,7 @@
       "object": "lobby_event_deque_map_init_copy.o",
       "bytes": 256,
       "status": "c",
-      "source": "src/lobby_event_deque_map_init_copy.c"
+      "source": "src/lobby/lobby_event_deque_map_init_copy.c"
     },
     {
       "cpu": "ARM9",
@@ -2879,7 +2879,7 @@
       "object": "lobby_event_deque_map_iterator_distance.o",
       "bytes": 116,
       "status": "c",
-      "source": "src/lobby_event_deque_map_iterator_distance.c"
+      "source": "src/lobby/lobby_event_deque_map_iterator_distance.c"
     },
     {
       "cpu": "ARM9",
@@ -2887,7 +2887,7 @@
       "object": "lobby_event_deque_map_iterator_distance2.o",
       "bytes": 116,
       "status": "c",
-      "source": "src/lobby_event_deque_map_iterator_distance2.c"
+      "source": "src/lobby/lobby_event_deque_map_iterator_distance2.c"
     },
     {
       "cpu": "ARM9",
@@ -2895,7 +2895,7 @@
       "object": "lobby_event_deque_map_length_error.o",
       "bytes": 24,
       "status": "c",
-      "source": "src/lobby_event_deque_map_length_error.c"
+      "source": "src/lobby/lobby_event_deque_map_length_error.c"
     },
     {
       "cpu": "ARM9",
@@ -2903,7 +2903,7 @@
       "object": "lobby_event_deque_map_recommend_size.o",
       "bytes": 272,
       "status": "c",
-      "source": "src/lobby_event_deque_map_recommend_size.c"
+      "source": "src/lobby/lobby_event_deque_map_recommend_size.c"
     },
     {
       "cpu": "ARM9",
@@ -2911,7 +2911,7 @@
       "object": "lobby_event_vector_assign_range.o",
       "bytes": 548,
       "status": "c",
-      "source": "src/lobby_event_vector_assign_range.c"
+      "source": "src/lobby/lobby_event_vector_assign_range.c"
     },
     {
       "cpu": "ARM9",
@@ -2919,7 +2919,7 @@
       "object": "lobby_event_vector_reallocate.o",
       "bytes": 112,
       "status": "c",
-      "source": "src/lobby_event_vector_reallocate.c"
+      "source": "src/lobby/lobby_event_vector_reallocate.c"
     },
     {
       "cpu": "ARM9",
@@ -2927,7 +2927,7 @@
       "object": "lobby_event_vector_recommend_size.o",
       "bytes": 204,
       "status": "c",
-      "source": "src/lobby_event_vector_recommend_size.c"
+      "source": "src/lobby/lobby_event_vector_recommend_size.c"
     },
     {
       "cpu": "ARM9",
@@ -2935,7 +2935,7 @@
       "object": "lobby_mem.o",
       "bytes": 1028,
       "status": "c",
-      "source": "src/lobby_mem.c"
+      "source": "src/lobby/lobby_mem.c"
     },
     {
       "cpu": "ARM9",
@@ -2943,7 +2943,7 @@
       "object": "lobby_request_map_find.o",
       "bytes": 188,
       "status": "c",
-      "source": "src/lobby_request_map_find.c"
+      "source": "src/lobby/lobby_request_map_find.c"
     },
     {
       "cpu": "ARM9",
@@ -2951,7 +2951,7 @@
       "object": "lobby_request_map_insert_node.o",
       "bytes": 216,
       "status": "c",
-      "source": "src/lobby_request_map_insert_node.c"
+      "source": "src/lobby/lobby_request_map_insert_node.c"
     },
     {
       "cpu": "ARM9",
@@ -2959,7 +2959,7 @@
       "object": "lobby_requests.o",
       "bytes": 396,
       "status": "c",
-      "source": "src/lobby_requests.c"
+      "source": "src/lobby/lobby_requests.c"
     },
     {
       "cpu": "ARM9",
@@ -2967,7 +2967,7 @@
       "object": "lobby_sort_lower_bound.o",
       "bytes": 128,
       "status": "c",
-      "source": "src/lobby_sort_lower_bound.c"
+      "source": "src/lobby/lobby_sort_lower_bound.c"
     },
     {
       "cpu": "ARM9",
@@ -2975,7 +2975,7 @@
       "object": "lobby_sort_merge_adaptive.o",
       "bytes": 1168,
       "status": "cpp",
-      "source": "src/lobby_sort_merge_adaptive.cpp"
+      "source": "src/lobby/lobby_sort_merge_adaptive.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2983,7 +2983,7 @@
       "object": "lobby_sort_rotate.o",
       "bytes": 276,
       "status": "c",
-      "source": "src/lobby_sort_rotate.c"
+      "source": "src/lobby/lobby_sort_rotate.c"
     },
     {
       "cpu": "ARM9",
@@ -2991,7 +2991,7 @@
       "object": "lobby_sort_stable_sort.o",
       "bytes": 168,
       "status": "c",
-      "source": "src/lobby_sort_stable_sort.c"
+      "source": "src/lobby/lobby_sort_stable_sort.c"
     },
     {
       "cpu": "ARM9",
@@ -2999,7 +2999,7 @@
       "object": "lobby_sort_stable_sort_adaptive.o",
       "bytes": 644,
       "status": "cpp",
-      "source": "src/lobby_sort_stable_sort_adaptive.cpp"
+      "source": "src/lobby/lobby_sort_stable_sort_adaptive.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3007,7 +3007,7 @@
       "object": "lobby_sort_upper_bound.o",
       "bytes": 128,
       "status": "c",
-      "source": "src/lobby_sort_upper_bound.c"
+      "source": "src/lobby/lobby_sort_upper_bound.c"
     },
     {
       "cpu": "ARM9",
@@ -3015,7 +3015,7 @@
       "object": "lobby_string_find_first_of.o",
       "bytes": 52,
       "status": "cpp",
-      "source": "src/lobby_string_find_first_of.cpp"
+      "source": "src/lobby/lobby_string_find_first_of.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3023,7 +3023,7 @@
       "object": "lobby_string_format.o",
       "bytes": 120,
       "status": "c",
-      "source": "src/lobby_string_format.c"
+      "source": "src/lobby/lobby_string_format.c"
     },
     {
       "cpu": "ARM9",
@@ -3031,7 +3031,7 @@
       "object": "lobby_string_vector_append_copies_slow.o",
       "bytes": 368,
       "status": "cpp",
-      "source": "src/lobby_string_vector_append_copies_slow.cpp"
+      "source": "src/lobby/lobby_string_vector_append_copies_slow.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3039,7 +3039,7 @@
       "object": "lobby_string_vector_buffer_allocate.o",
       "bytes": 56,
       "status": "c",
-      "source": "src/lobby_string_vector_buffer_allocate.c"
+      "source": "src/lobby/lobby_string_vector_buffer_allocate.c"
     },
     {
       "cpu": "ARM9",
@@ -3047,7 +3047,7 @@
       "object": "lobby_string_vector_buffer_deallocate.o",
       "bytes": 88,
       "status": "c",
-      "source": "src/lobby_string_vector_buffer_deallocate.c"
+      "source": "src/lobby/lobby_string_vector_buffer_deallocate.c"
     },
     {
       "cpu": "ARM9",
@@ -3055,7 +3055,7 @@
       "object": "lobby_string_vector_erase_at_end.o",
       "bytes": 60,
       "status": "c",
-      "source": "src/lobby_string_vector_erase_at_end.c"
+      "source": "src/lobby/lobby_string_vector_erase_at_end.c"
     },
     {
       "cpu": "ARM9",
@@ -3063,7 +3063,7 @@
       "object": "lobby_timer_map_find.o",
       "bytes": 132,
       "status": "c",
-      "source": "src/lobby_timer_map_find.c"
+      "source": "src/lobby/lobby_timer_map_find.c"
     },
     {
       "cpu": "ARM9",
@@ -3071,7 +3071,7 @@
       "object": "lobby_timer_map_find_insert_pos.o",
       "bytes": 108,
       "status": "c",
-      "source": "src/lobby_timer_map_find_insert_pos.c"
+      "source": "src/lobby/lobby_timer_map_find_insert_pos.c"
     },
     {
       "cpu": "ARM9",
@@ -3079,7 +3079,7 @@
       "object": "lobby_timer_map_make_entry.o",
       "bytes": 60,
       "status": "c",
-      "source": "src/lobby_timer_map_make_entry.c"
+      "source": "src/lobby/lobby_timer_map_make_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -3087,7 +3087,7 @@
       "object": "lobby_tree_nodes.o",
       "bytes": 772,
       "status": "c",
-      "source": "src/lobby_tree_nodes.c"
+      "source": "src/lobby/lobby_tree_nodes.c"
     },
     {
       "cpu": "ARM9",
@@ -3095,7 +3095,7 @@
       "object": "lobby_u32_vector_assign_from_set.o",
       "bytes": 232,
       "status": "c",
-      "source": "src/lobby_u32_vector_assign_from_set.c"
+      "source": "src/lobby/lobby_u32_vector_assign_from_set.c"
     },
     {
       "cpu": "ARM9",
@@ -3103,7 +3103,7 @@
       "object": "lobby_u32_vector_buffer.o",
       "bytes": 76,
       "status": "c",
-      "source": "src/lobby_u32_vector_buffer.c"
+      "source": "src/lobby/lobby_u32_vector_buffer.c"
     },
     {
       "cpu": "ARM9",
@@ -3111,7 +3111,7 @@
       "object": "lobby_u32_vector_buffer_deallocate.o",
       "bytes": 80,
       "status": "c",
-      "source": "src/lobby_u32_vector_buffer_deallocate.c"
+      "source": "src/lobby/lobby_u32_vector_buffer_deallocate.c"
     },
     {
       "cpu": "ARM9",
@@ -3119,7 +3119,7 @@
       "object": "lobby_u32_vector_data2.o",
       "bytes": 20,
       "status": "c",
-      "source": "src/lobby_u32_vector_data2.c"
+      "source": "src/lobby/lobby_u32_vector_data2.c"
     },
     {
       "cpu": "ARM9",
@@ -3127,7 +3127,7 @@
       "object": "lobby_user_id_set_assign.o",
       "bytes": 312,
       "status": "c",
-      "source": "src/lobby_user_id_set_assign.c"
+      "source": "src/lobby/lobby_user_id_set_assign.c"
     },
     {
       "cpu": "ARM9",
@@ -3135,7 +3135,7 @@
       "object": "lobby_user_id_set_erase.o",
       "bytes": 112,
       "status": "c",
-      "source": "src/lobby_user_id_set_erase.c"
+      "source": "src/lobby/lobby_user_id_set_erase.c"
     },
     {
       "cpu": "ARM9",
@@ -3143,7 +3143,7 @@
       "object": "lobby_user_id_set_erase_key.o",
       "bytes": 80,
       "status": "c",
-      "source": "src/lobby_user_id_set_erase_key.c"
+      "source": "src/lobby/lobby_user_id_set_erase_key.c"
     },
     {
       "cpu": "ARM9",
@@ -3151,7 +3151,7 @@
       "object": "lobby_user_id_set_insert.o",
       "bytes": 184,
       "status": "c",
-      "source": "src/lobby_user_id_set_insert.c"
+      "source": "src/lobby/lobby_user_id_set_insert.c"
     },
     {
       "cpu": "ARM9",
@@ -3159,7 +3159,7 @@
       "object": "lobby_user_id_set_insert_node.o",
       "bytes": 216,
       "status": "c",
-      "source": "src/lobby_user_id_set_insert_node.c"
+      "source": "src/lobby/lobby_user_id_set_insert_node.c"
     },
     {
       "cpu": "ARM9",
@@ -3167,7 +3167,7 @@
       "object": "lobby_user_map.o",
       "bytes": 348,
       "status": "c",
-      "source": "src/lobby_user_map.c"
+      "source": "src/lobby/lobby_user_map.c"
     },
     {
       "cpu": "ARM9",
@@ -3175,7 +3175,7 @@
       "object": "lobby_user_map_insert.o",
       "bytes": 184,
       "status": "c",
-      "source": "src/lobby_user_map_insert.c"
+      "source": "src/lobby/lobby_user_map_insert.c"
     },
     {
       "cpu": "ARM9",
@@ -3183,7 +3183,7 @@
       "object": "lobby_user_map_make_entry.o",
       "bytes": 192,
       "status": "c",
-      "source": "src/lobby_user_map_make_entry.c"
+      "source": "src/lobby/lobby_user_map_make_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -3191,7 +3191,7 @@
       "object": "lobby_vip_vector_assign_range.o",
       "bytes": 404,
       "status": "c",
-      "source": "src/lobby_vip_vector_assign_range.c"
+      "source": "src/lobby/lobby_vip_vector_assign_range.c"
     },
     {
       "cpu": "ARM9",
@@ -3199,7 +3199,7 @@
       "object": "lobby_vip_vector_reallocate.o",
       "bytes": 112,
       "status": "c",
-      "source": "src/lobby_vip_vector_reallocate.c"
+      "source": "src/lobby/lobby_vip_vector_reallocate.c"
     },
     {
       "cpu": "ARM9",
@@ -3207,7 +3207,7 @@
       "object": "lobby_vip_vector_recommend_size.o",
       "bytes": 204,
       "status": "c",
-      "source": "src/lobby_vip_vector_recommend_size.c"
+      "source": "src/lobby/lobby_vip_vector_recommend_size.c"
     },
     {
       "cpu": "ARM9",
@@ -3215,7 +3215,7 @@
       "object": "ov45_02231c8c.o",
       "bytes": 548,
       "status": "cpp",
-      "source": "src/ov45_02231c8c.cpp"
+      "source": "src/lobby/ov45_02231c8c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3223,7 +3223,7 @@
       "object": "ov45_02231ec0.o",
       "bytes": 500,
       "status": "cpp",
-      "source": "src/ov45_02231ec0.cpp"
+      "source": "src/lobby/ov45_02231ec0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3231,7 +3231,7 @@
       "object": "ov45_022325b0.o",
       "bytes": 432,
       "status": "cpp",
-      "source": "src/ov45_022325b0.cpp"
+      "source": "src/lobby/ov45_022325b0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3239,7 +3239,7 @@
       "object": "ov45_022327b8.o",
       "bytes": 164,
       "status": "cpp",
-      "source": "src/ov45_022327b8.cpp"
+      "source": "src/lobby/ov45_022327b8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3247,7 +3247,7 @@
       "object": "ov45_0223285c.o",
       "bytes": 652,
       "status": "cpp",
-      "source": "src/ov45_0223285c.cpp"
+      "source": "src/lobby/ov45_0223285c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3255,7 +3255,7 @@
       "object": "ov45_02232e60.o",
       "bytes": 21888,
       "status": "cpp",
-      "source": "src/ov45_02232e60.cpp"
+      "source": "src/lobby/ov45_02232e60.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3263,7 +3263,7 @@
       "object": "ov45_022383e0.o",
       "bytes": 112,
       "status": "cpp",
-      "source": "src/ov45_022383e0.cpp"
+      "source": "src/lobby/ov45_022383e0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3271,7 +3271,7 @@
       "object": "ov45_022384bc.o",
       "bytes": 76,
       "status": "cpp",
-      "source": "src/ov45_022384bc.cpp"
+      "source": "src/lobby/ov45_022384bc.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3279,7 +3279,7 @@
       "object": "ov45_02238508.o",
       "bytes": 80,
       "status": "c",
-      "source": "src/ov45_02238508.c"
+      "source": "src/lobby/ov45_02238508.c"
     },
     {
       "cpu": "ARM9",
@@ -3287,7 +3287,7 @@
       "object": "ov45_02238c74.o",
       "bytes": 224,
       "status": "cpp",
-      "source": "src/ov45_02238c74.cpp"
+      "source": "src/lobby/ov45_02238c74.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3295,7 +3295,7 @@
       "object": "ov45_02238d54.o",
       "bytes": 268,
       "status": "cpp",
-      "source": "src/ov45_02238d54.cpp"
+      "source": "src/lobby/ov45_02238d54.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3303,7 +3303,7 @@
       "object": "ov45_02238f18.o",
       "bytes": 376,
       "status": "cpp",
-      "source": "src/ov45_02238f18.cpp"
+      "source": "src/lobby/ov45_02238f18.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3311,7 +3311,7 @@
       "object": "ov45_02239bbc.o",
       "bytes": 564,
       "status": "cpp",
-      "source": "src/ov45_02239bbc.cpp"
+      "source": "src/lobby/ov45_02239bbc.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3319,7 +3319,7 @@
       "object": "ov45_02239df0.o",
       "bytes": 344,
       "status": "cpp",
-      "source": "src/ov45_02239df0.cpp"
+      "source": "src/lobby/ov45_02239df0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3327,7 +3327,7 @@
       "object": "ov45_02239f48.o",
       "bytes": 388,
       "status": "cpp",
-      "source": "src/ov45_02239f48.cpp"
+      "source": "src/lobby/ov45_02239f48.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3335,7 +3335,7 @@
       "object": "ov45_0223a0cc.o",
       "bytes": 1020,
       "status": "cpp",
-      "source": "src/ov45_0223a0cc.cpp"
+      "source": "src/lobby/ov45_0223a0cc.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3343,7 +3343,7 @@
       "object": "ov45_0223a4c8.o",
       "bytes": 796,
       "status": "cpp",
-      "source": "src/ov45_0223a4c8.cpp"
+      "source": "src/lobby/ov45_0223a4c8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3351,7 +3351,7 @@
       "object": "ov45_0223a7e4.o",
       "bytes": 476,
       "status": "cpp",
-      "source": "src/ov45_0223a7e4.cpp"
+      "source": "src/lobby/ov45_0223a7e4.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3359,7 +3359,7 @@
       "object": "ov45_0223a9c0.o",
       "bytes": 192,
       "status": "cpp",
-      "source": "src/ov45_0223a9c0.cpp"
+      "source": "src/lobby/ov45_0223a9c0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3367,7 +3367,7 @@
       "object": "ov45_0223aca4.o",
       "bytes": 76,
       "status": "cpp",
-      "source": "src/ov45_0223aca4.cpp"
+      "source": "src/lobby/ov45_0223aca4.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3375,7 +3375,7 @@
       "object": "ov45_0223ae84.o",
       "bytes": 88,
       "status": "cpp",
-      "source": "src/ov45_0223ae84.cpp"
+      "source": "src/lobby/ov45_0223ae84.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3383,7 +3383,7 @@
       "object": "ov45_0223b2dc.o",
       "bytes": 1160,
       "status": "cpp",
-      "source": "src/ov45_0223b2dc.cpp"
+      "source": "src/lobby/ov45_0223b2dc.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3391,7 +3391,7 @@
       "object": "ov45_0223b764.o",
       "bytes": 184,
       "status": "cpp",
-      "source": "src/ov45_0223b764.cpp"
+      "source": "src/lobby/ov45_0223b764.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3399,7 +3399,7 @@
       "object": "ov45_0223b8e0.o",
       "bytes": 348,
       "status": "cpp",
-      "source": "src/ov45_0223b8e0.cpp"
+      "source": "src/lobby/ov45_0223b8e0.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3407,7 +3407,7 @@
       "object": "ov45_0223ba3c.o",
       "bytes": 448,
       "status": "cpp",
-      "source": "src/ov45_0223ba3c.cpp"
+      "source": "src/lobby/ov45_0223ba3c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3415,7 +3415,7 @@
       "object": "ov45_0223bf9c.o",
       "bytes": 1440,
       "status": "cpp",
-      "source": "src/ov45_0223bf9c.cpp"
+      "source": "src/lobby/ov45_0223bf9c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3423,7 +3423,7 @@
       "object": "ov45_0223c53c.o",
       "bytes": 464,
       "status": "cpp",
-      "source": "src/ov45_0223c53c.cpp"
+      "source": "src/lobby/ov45_0223c53c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3431,7 +3431,7 @@
       "object": "ov45_0223ca14.o",
       "bytes": 160,
       "status": "cpp",
-      "source": "src/ov45_0223ca14.cpp"
+      "source": "src/lobby/ov45_0223ca14.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3439,7 +3439,7 @@
       "object": "ov45_0223d0a8.o",
       "bytes": 180,
       "status": "cpp",
-      "source": "src/ov45_0223d0a8.cpp"
+      "source": "src/lobby/ov45_0223d0a8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3447,7 +3447,7 @@
       "object": "ov45_0223d27c.o",
       "bytes": 968,
       "status": "cpp",
-      "source": "src/ov45_0223d27c.cpp"
+      "source": "src/lobby/ov45_0223d27c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3455,7 +3455,7 @@
       "object": "ov45_0223d644.o",
       "bytes": 368,
       "status": "cpp",
-      "source": "src/ov45_0223d644.cpp"
+      "source": "src/lobby/ov45_0223d644.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3463,7 +3463,7 @@
       "object": "ov45_0223db8c.o",
       "bytes": 324,
       "status": "cpp",
-      "source": "src/ov45_0223db8c.cpp"
+      "source": "src/lobby/ov45_0223db8c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3471,7 +3471,7 @@
       "object": "ov45_0223df4c.o",
       "bytes": 124,
       "status": "cpp",
-      "source": "src/ov45_0223df4c.cpp"
+      "source": "src/lobby/ov45_0223df4c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3479,7 +3479,7 @@
       "object": "ov45_0223e100.o",
       "bytes": 916,
       "status": "cpp",
-      "source": "src/ov45_0223e100.cpp"
+      "source": "src/lobby/ov45_0223e100.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3487,7 +3487,7 @@
       "object": "ov45_0223e4a8.o",
       "bytes": 176,
       "status": "cpp",
-      "source": "src/ov45_0223e4a8.cpp"
+      "source": "src/lobby/ov45_0223e4a8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3495,7 +3495,7 @@
       "object": "ov45_0223e558.o",
       "bytes": 240,
       "status": "cpp",
-      "source": "src/ov45_0223e558.cpp"
+      "source": "src/lobby/ov45_0223e558.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3503,7 +3503,7 @@
       "object": "ov45_0223e648.o",
       "bytes": 1564,
       "status": "c",
-      "source": "src/ov45_0223e648.c"
+      "source": "src/lobby/ov45_0223e648.c"
     },
     {
       "cpu": "ARM9",
@@ -3511,7 +3511,7 @@
       "object": "ov45_0223f000.o",
       "bytes": 456,
       "status": "cpp",
-      "source": "src/ov45_0223f000.cpp"
+      "source": "src/lobby/ov45_0223f000.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3519,7 +3519,7 @@
       "object": "ov45_0223fc6c.o",
       "bytes": 256,
       "status": "cpp",
-      "source": "src/ov45_0223fc6c.cpp"
+      "source": "src/lobby/ov45_0223fc6c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3527,7 +3527,7 @@
       "object": "ov45_0223fe28.o",
       "bytes": 448,
       "status": "cpp",
-      "source": "src/ov45_0223fe28.cpp"
+      "source": "src/lobby/ov45_0223fe28.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3535,7 +3535,7 @@
       "object": "ov45_0223ffe8.o",
       "bytes": 116,
       "status": "cpp",
-      "source": "src/ov45_0223ffe8.cpp"
+      "source": "src/lobby/ov45_0223ffe8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3543,7 +3543,7 @@
       "object": "ov45_0224005c.o",
       "bytes": 472,
       "status": "cpp",
-      "source": "src/ov45_0224005c.cpp"
+      "source": "src/lobby/ov45_0224005c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3551,7 +3551,7 @@
       "object": "ov45_02240b10.o",
       "bytes": 1116,
       "status": "cpp",
-      "source": "src/ov45_02240b10.cpp"
+      "source": "src/lobby/ov45_02240b10.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3559,7 +3559,7 @@
       "object": "ov45_022417b4.o",
       "bytes": 620,
       "status": "cpp",
-      "source": "src/ov45_022417b4.cpp"
+      "source": "src/lobby/ov45_022417b4.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3567,7 +3567,7 @@
       "object": "ov45_02241a20.o",
       "bytes": 356,
       "status": "cpp",
-      "source": "src/ov45_02241a20.cpp"
+      "source": "src/lobby/ov45_02241a20.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3575,7 +3575,7 @@
       "object": "ov45_02241b84.o",
       "bytes": 468,
       "status": "cpp",
-      "source": "src/ov45_02241b84.cpp"
+      "source": "src/lobby/ov45_02241b84.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3583,7 +3583,7 @@
       "object": "ov45_02241e24.o",
       "bytes": 348,
       "status": "cpp",
-      "source": "src/ov45_02241e24.cpp"
+      "source": "src/lobby/ov45_02241e24.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3591,7 +3591,7 @@
       "object": "ov45_022421e4.o",
       "bytes": 112,
       "status": "cpp",
-      "source": "src/ov45_022421e4.cpp"
+      "source": "src/lobby/ov45_022421e4.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3599,7 +3599,7 @@
       "object": "ov45_0224268c.o",
       "bytes": 460,
       "status": "cpp",
-      "source": "src/ov45_0224268c.cpp"
+      "source": "src/lobby/ov45_0224268c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3607,7 +3607,7 @@
       "object": "ov45_02242acc.o",
       "bytes": 276,
       "status": "cpp",
-      "source": "src/ov45_02242acc.cpp"
+      "source": "src/lobby/ov45_02242acc.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3615,7 +3615,7 @@
       "object": "ov45_02242be0.o",
       "bytes": 788,
       "status": "c",
-      "source": "src/ov45_02242be0.c"
+      "source": "src/lobby/ov45_02242be0.c"
     },
     {
       "cpu": "ARM9",
@@ -3623,7 +3623,7 @@
       "object": "ov45_02242ef4.o",
       "bytes": 392,
       "status": "cpp",
-      "source": "src/ov45_02242ef4.cpp"
+      "source": "src/lobby/ov45_02242ef4.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3631,7 +3631,7 @@
       "object": "ov45_0224307c.o",
       "bytes": 172,
       "status": "cpp",
-      "source": "src/ov45_0224307c.cpp"
+      "source": "src/lobby/ov45_0224307c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3639,7 +3639,7 @@
       "object": "ov45_0224335c.o",
       "bytes": 356,
       "status": "cpp",
-      "source": "src/ov45_0224335c.cpp"
+      "source": "src/lobby/ov45_0224335c.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3647,7 +3647,7 @@
       "object": "ov45_02243cf8.o",
       "bytes": 332,
       "status": "cpp",
-      "source": "src/ov45_02243cf8.cpp"
+      "source": "src/lobby/ov45_02243cf8.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3655,7 +3655,7 @@
       "object": "ppw_lobby_encode_message.o",
       "bytes": 984,
       "status": "c",
-      "source": "src/ppw_lobby_encode_message.c"
+      "source": "src/lobby/ppw_lobby_encode_message.c"
     },
     {
       "cpu": "ARM9",
@@ -3663,7 +3663,7 @@
       "object": "ppw_lobby_get_channel_base_name.o",
       "bytes": 16,
       "status": "c",
-      "source": "src/ppw_lobby_get_channel_base_name.c"
+      "source": "src/lobby/ppw_lobby_get_channel_base_name.c"
     },
     {
       "cpu": "ARM9",
@@ -3671,7 +3671,7 @@
       "object": "ppw_lobby_get_channel_data.o",
       "bytes": 304,
       "status": "cpp",
-      "source": "src/ppw_lobby_get_channel_data.cpp"
+      "source": "src/lobby/ppw_lobby_get_channel_data.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3679,7 +3679,7 @@
       "object": "ppw_lobby_get_channel_name.o",
       "bytes": 360,
       "status": "c",
-      "source": "src/ppw_lobby_get_channel_name.c"
+      "source": "src/lobby/ppw_lobby_get_channel_name.c"
     },
     {
       "cpu": "ARM9",
@@ -3687,7 +3687,7 @@
       "object": "ppw_lobby_get_sub_channel_state.o",
       "bytes": 196,
       "status": "c",
-      "source": "src/ppw_lobby_get_sub_channel_state.c"
+      "source": "src/lobby/ppw_lobby_get_sub_channel_state.c"
     },
     {
       "cpu": "ARM9",
@@ -3695,7 +3695,7 @@
       "object": "ppw_lobby_get_time_info.o",
       "bytes": 300,
       "status": "c",
-      "source": "src/ppw_lobby_get_time_info.c"
+      "source": "src/lobby/ppw_lobby_get_time_info.c"
     },
     {
       "cpu": "ARM9",
@@ -3703,7 +3703,7 @@
       "object": "ppw_lobby_get_work.o",
       "bytes": 16,
       "status": "c",
-      "source": "src/ppw_lobby_get_work.c"
+      "source": "src/lobby/ppw_lobby_get_work.c"
     },
     {
       "cpu": "ARM9",
@@ -3711,7 +3711,7 @@
       "object": "ppw_lobby_initialize.o",
       "bytes": 772,
       "status": "cpp",
-      "source": "src/ppw_lobby_initialize.cpp"
+      "source": "src/lobby/ppw_lobby_initialize.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3719,7 +3719,7 @@
       "object": "ppw_lobby_initialize_async.o",
       "bytes": 132,
       "status": "c",
-      "source": "src/ppw_lobby_initialize_async.c"
+      "source": "src/lobby/ppw_lobby_initialize_async.c"
     },
     {
       "cpu": "ARM9",
@@ -3727,7 +3727,7 @@
       "object": "ppw_lobby_player_destroy.o",
       "bytes": 72,
       "status": "c",
-      "source": "src/ppw_lobby_player_destroy.c"
+      "source": "src/lobby/ppw_lobby_player_destroy.c"
     },
     {
       "cpu": "ARM9",
@@ -3735,7 +3735,7 @@
       "object": "ppw_lobby_player_has_profiles.o",
       "bytes": 20,
       "status": "c",
-      "source": "src/ppw_lobby_player_has_profiles.c"
+      "source": "src/lobby/ppw_lobby_player_has_profiles.c"
     },
     {
       "cpu": "ARM9",
@@ -3743,7 +3743,7 @@
       "object": "ppw_lobby_player_set_destroy_nodes.o",
       "bytes": 284,
       "status": "c",
-      "source": "src/ppw_lobby_player_set_destroy_nodes.c"
+      "source": "src/lobby/ppw_lobby_player_set_destroy_nodes.c"
     },
     {
       "cpu": "ARM9",
@@ -3751,7 +3751,7 @@
       "object": "ppw_lobby_players.o",
       "bytes": 636,
       "status": "c",
-      "source": "src/ppw_lobby_players.c"
+      "source": "src/lobby/ppw_lobby_players.c"
     },
     {
       "cpu": "ARM9",
@@ -3759,7 +3759,7 @@
       "object": "ppw_lobby_players_get_entered_ids.o",
       "bytes": 312,
       "status": "c",
-      "source": "src/ppw_lobby_players_get_entered_ids.c"
+      "source": "src/lobby/ppw_lobby_players_get_entered_ids.c"
     },
     {
       "cpu": "ARM9",
@@ -3767,7 +3767,7 @@
       "object": "ppw_lobby_process.o",
       "bytes": 1828,
       "status": "cpp",
-      "source": "src/ppw_lobby_process.cpp"
+      "source": "src/lobby/ppw_lobby_process.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3775,7 +3775,7 @@
       "object": "ppw_lobby_recruit.o",
       "bytes": 576,
       "status": "c",
-      "source": "src/ppw_lobby_recruit.c"
+      "source": "src/lobby/ppw_lobby_recruit.c"
     },
     {
       "cpu": "ARM9",
@@ -3783,7 +3783,7 @@
       "object": "ppw_lobby_schedule_copy.o",
       "bytes": 152,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_copy.c"
+      "source": "src/lobby/ppw_lobby_schedule_copy.c"
     },
     {
       "cpu": "ARM9",
@@ -3791,7 +3791,7 @@
       "object": "ppw_lobby_schedule_copy_to_vector.o",
       "bytes": 108,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_copy_to_vector.c"
+      "source": "src/lobby/ppw_lobby_schedule_copy_to_vector.c"
     },
     {
       "cpu": "ARM9",
@@ -3799,7 +3799,7 @@
       "object": "ppw_lobby_schedule_init.o",
       "bytes": 164,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_init.c"
+      "source": "src/lobby/ppw_lobby_schedule_init.c"
     },
     {
       "cpu": "ARM9",
@@ -3807,7 +3807,7 @@
       "object": "ppw_lobby_schedule_process.o",
       "bytes": 476,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_process.c"
+      "source": "src/lobby/ppw_lobby_schedule_process.c"
     },
     {
       "cpu": "ARM9",
@@ -3815,7 +3815,7 @@
       "object": "ppw_lobby_schedule_questionnaire.o",
       "bytes": 76,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_questionnaire.c"
+      "source": "src/lobby/ppw_lobby_schedule_questionnaire.c"
     },
     {
       "cpu": "ARM9",
@@ -3823,7 +3823,7 @@
       "object": "ppw_lobby_schedule_start.o",
       "bytes": 332,
       "status": "c",
-      "source": "src/ppw_lobby_schedule_start.c"
+      "source": "src/lobby/ppw_lobby_schedule_start.c"
     },
     {
       "cpu": "ARM9",
@@ -3831,7 +3831,7 @@
       "object": "ppw_lobby_set_channel_data.o",
       "bytes": 96,
       "status": "c",
-      "source": "src/ppw_lobby_set_channel_data.c"
+      "source": "src/lobby/ppw_lobby_set_channel_data.c"
     },
     {
       "cpu": "ARM9",
@@ -3839,7 +3839,7 @@
       "object": "ppw_lobby_shutdown.o",
       "bytes": 132,
       "status": "c",
-      "source": "src/ppw_lobby_shutdown.c"
+      "source": "src/lobby/ppw_lobby_shutdown.c"
     },
     {
       "cpu": "ARM9",
@@ -3847,7 +3847,7 @@
       "object": "ppw_lobby_web_request_delete.o",
       "bytes": 64,
       "status": "c",
-      "source": "src/ppw_lobby_web_request_delete.c"
+      "source": "src/lobby/ppw_lobby_web_request_delete.c"
     },
     {
       "cpu": "ARM9",
@@ -3863,7 +3863,7 @@
       "object": "wifi_plaza.o",
       "bytes": 11246,
       "status": "c",
-      "source": "src/wifi_plaza.c"
+      "source": "src/wifi_plaza/wifi_plaza.c"
     },
     {
       "cpu": "ARM9",
@@ -3871,7 +3871,7 @@
       "object": "wifi_plaza_apps.o",
       "bytes": 2982,
       "status": "c",
-      "source": "src/wifi_plaza_apps.c"
+      "source": "src/wifi_plaza/wifi_plaza_apps.c"
     },
     {
       "cpu": "ARM9",
@@ -3879,7 +3879,7 @@
       "object": "wifi_plaza_history.o",
       "bytes": 412,
       "status": "c",
-      "source": "src/wifi_plaza_history.c"
+      "source": "src/wifi_plaza/wifi_plaza_history.c"
     },
     {
       "cpu": "ARM9",
@@ -3887,7 +3887,7 @@
       "object": "wifi_plaza_lobby_client.o",
       "bytes": 5672,
       "status": "c",
-      "source": "src/wifi_plaza_lobby_client.c"
+      "source": "src/wifi_plaza/wifi_plaza_lobby_client.c"
     },
     {
       "cpu": "ARM9",
@@ -3895,7 +3895,7 @@
       "object": "wifi_plaza_lobby_events.o",
       "bytes": 4720,
       "status": "c",
-      "source": "src/wifi_plaza_lobby_events.c"
+      "source": "src/wifi_plaza/wifi_plaza_lobby_events.c"
     },
     {
       "cpu": "ARM9",
@@ -3903,7 +3903,7 @@
       "object": "wifi_plaza_news.o",
       "bytes": 3256,
       "status": "c",
-      "source": "src/wifi_plaza_news.c"
+      "source": "src/wifi_plaza/wifi_plaza_news.c"
     },
     {
       "cpu": "ARM9",
@@ -3911,7 +3911,7 @@
       "object": "wifi_plaza_sprite_culling.o",
       "bytes": 284,
       "status": "c",
-      "source": "src/wifi_plaza_sprite_culling.c"
+      "source": "src/wifi_plaza/wifi_plaza_sprite_culling.c"
     },
     {
       "cpu": "ARM9",
@@ -3919,7 +3919,7 @@
       "object": "wifi_plaza_time_zone.o",
       "bytes": 284,
       "status": "c",
-      "source": "src/wifi_plaza_time_zone.c"
+      "source": "src/wifi_plaza/wifi_plaza_time_zone.c"
     },
     {
       "cpu": "ARM9",
@@ -3927,7 +3927,7 @@
       "object": "wifi_plaza_connect.o",
       "bytes": 3472,
       "status": "c",
-      "source": "src/wifi_plaza_connect.c"
+      "source": "src/wifi_plaza/wifi_plaza_connect.c"
     },
     {
       "cpu": "ARM9",
@@ -3935,7 +3935,7 @@
       "object": "wifi_plaza_survey.o",
       "bytes": 5668,
       "status": "c",
-      "source": "src/wifi_plaza_survey.c"
+      "source": "src/wifi_plaza/wifi_plaza_survey.c"
     },
     {
       "cpu": "ARM9",
@@ -3943,7 +3943,7 @@
       "object": "wifi_plaza_visitor_profiles.o",
       "bytes": 10514,
       "status": "c",
-      "source": "src/wifi_plaza_visitor_profiles.c"
+      "source": "src/wifi_plaza/wifi_plaza_visitor_profiles.c"
     },
     {
       "cpu": "ARM9",
@@ -3951,7 +3951,7 @@
       "object": "wifi_plaza_camera.o",
       "bytes": 204,
       "status": "c",
-      "source": "src/wifi_plaza_camera.c"
+      "source": "src/wifi_plaza/wifi_plaza_camera.c"
     },
     {
       "cpu": "ARM9",
@@ -3959,7 +3959,7 @@
       "object": "wifi_plaza_event.o",
       "bytes": 4272,
       "status": "c",
-      "source": "src/wifi_plaza_event.c"
+      "source": "src/wifi_plaza/wifi_plaza_event.c"
     },
     {
       "cpu": "ARM9",
@@ -3967,7 +3967,7 @@
       "object": "wifi_plaza_game_entry.o",
       "bytes": 3974,
       "status": "c",
-      "source": "src/wifi_plaza_game_entry.c"
+      "source": "src/wifi_plaza/wifi_plaza_game_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -3975,7 +3975,7 @@
       "object": "wifi_plaza_instrument.o",
       "bytes": 12788,
       "status": "c",
-      "source": "src/wifi_plaza_instrument.c"
+      "source": "src/wifi_plaza/wifi_plaza_instrument.c"
     },
     {
       "cpu": "ARM9",
@@ -3983,7 +3983,7 @@
       "object": "wifi_plaza_map.o",
       "bytes": 688,
       "status": "c",
-      "source": "src/wifi_plaza_map.c"
+      "source": "src/wifi_plaza/wifi_plaza_map.c"
     },
     {
       "cpu": "ARM9",
@@ -3991,7 +3991,7 @@
       "object": "wifi_plaza_models.o",
       "bytes": 8736,
       "status": "c",
-      "source": "src/wifi_plaza_models.c"
+      "source": "src/wifi_plaza/wifi_plaza_models.c"
     },
     {
       "cpu": "ARM9",
@@ -3999,7 +3999,7 @@
       "object": "wifi_plaza_mover_markers.o",
       "bytes": 96,
       "status": "c",
-      "source": "src/wifi_plaza_mover_markers.c"
+      "source": "src/wifi_plaza/wifi_plaza_mover_markers.c"
     },
     {
       "cpu": "ARM9",
@@ -4007,7 +4007,7 @@
       "object": "wifi_plaza_obj.o",
       "bytes": 3960,
       "status": "c",
-      "source": "src/wifi_plaza_obj.c"
+      "source": "src/wifi_plaza/wifi_plaza_obj.c"
     },
     {
       "cpu": "ARM9",
@@ -4015,7 +4015,7 @@
       "object": "wifi_plaza_player_state.o",
       "bytes": 12628,
       "status": "c",
-      "source": "src/wifi_plaza_player_state.c"
+      "source": "src/wifi_plaza/wifi_plaza_player_state.c"
     },
     {
       "cpu": "ARM9",
@@ -4023,7 +4023,7 @@
       "object": "wifi_plaza_room.o",
       "bytes": 12476,
       "status": "c",
-      "source": "src/wifi_plaza_room.c"
+      "source": "src/wifi_plaza/wifi_plaza_room.c"
     },
     {
       "cpu": "ARM9",
@@ -4031,7 +4031,7 @@
       "object": "wifi_plaza_talk.o",
       "bytes": 8990,
       "status": "c",
-      "source": "src/wifi_plaza_talk.c"
+      "source": "src/wifi_plaza/wifi_plaza_talk.c"
     },
     {
       "cpu": "ARM9",
@@ -4263,7 +4263,7 @@
       "object": "gts.o",
       "bytes": 4282,
       "status": "c",
-      "source": "src/gts.c"
+      "source": "src/gts/gts.c"
     },
     {
       "cpu": "ARM9",
@@ -4271,7 +4271,7 @@
       "object": "gts_avatars.o",
       "bytes": 1832,
       "status": "c",
-      "source": "src/gts_avatars.c"
+      "source": "src/gts/gts_avatars.c"
     },
     {
       "cpu": "ARM9",
@@ -4279,7 +4279,7 @@
       "object": "gts_connection.o",
       "bytes": 4606,
       "status": "c",
-      "source": "src/gts_connection.c"
+      "source": "src/gts/gts_connection.c"
     },
     {
       "cpu": "ARM9",
@@ -4287,7 +4287,7 @@
       "object": "gts_main_menu.o",
       "bytes": 3182,
       "status": "c",
-      "source": "src/gts_main_menu.c"
+      "source": "src/gts/gts_main_menu.c"
     },
     {
       "cpu": "ARM9",
@@ -4295,7 +4295,7 @@
       "object": "gts_search.o",
       "bytes": 8298,
       "status": "c",
-      "source": "src/gts_search.c"
+      "source": "src/gts/gts_search.c"
     },
     {
       "cpu": "ARM9",
@@ -4303,7 +4303,7 @@
       "object": "gts_select_mon.o",
       "bytes": 7746,
       "status": "c",
-      "source": "src/gts_select_mon.c"
+      "source": "src/gts/gts_select_mon.c"
     },
     {
       "cpu": "ARM9",
@@ -4311,7 +4311,7 @@
       "object": "gts_selector.o",
       "bytes": 9904,
       "status": "c",
-      "source": "src/gts_selector.c"
+      "source": "src/gts/gts_selector.c"
     },
     {
       "cpu": "ARM9",
@@ -4319,7 +4319,7 @@
       "object": "gts_server.o",
       "bytes": 1644,
       "status": "c",
-      "source": "src/gts_server.c"
+      "source": "src/gts/gts_server.c"
     },
     {
       "cpu": "ARM9",
@@ -4327,7 +4327,7 @@
       "object": "gts_summary.o",
       "bytes": 3138,
       "status": "c",
-      "source": "src/gts_summary.c"
+      "source": "src/gts/gts_summary.c"
     },
     {
       "cpu": "ARM9",
@@ -4335,7 +4335,7 @@
       "object": "gts_trade.o",
       "bytes": 1128,
       "status": "c",
-      "source": "src/gts_trade.c"
+      "source": "src/gts/gts_trade.c"
     },
     {
       "cpu": "ARM9",
@@ -4343,7 +4343,7 @@
       "object": "gts_transaction.o",
       "bytes": 5116,
       "status": "c",
-      "source": "src/gts_transaction.c"
+      "source": "src/gts/gts_transaction.c"
     },
     {
       "cpu": "ARM9",
@@ -4351,7 +4351,7 @@
       "object": "gts_wanted.o",
       "bytes": 4556,
       "status": "c",
-      "source": "src/gts_wanted.c"
+      "source": "src/gts/gts_wanted.c"
     },
     {
       "cpu": "ARM9",
@@ -9029,7 +9029,7 @@
       "object": "global_terminal_app.o",
       "bytes": 668,
       "status": "c",
-      "source": "src/global_terminal_app.c"
+      "source": "src/global_terminal/global_terminal_app.c"
     },
     {
       "cpu": "ARM9",
@@ -12863,7 +12863,7 @@
       "object": "wifi_plaza_player_info.o",
       "bytes": 86,
       "status": "c",
-      "source": "src/wifi_plaza_player_info.c"
+      "source": "src/wifi_plaza/wifi_plaza_player_info.c"
     },
     {
       "cpu": "ARM9",

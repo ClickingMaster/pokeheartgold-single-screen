@@ -1,13 +1,13 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "global_terminal/global_terminal_app_internal.h"
 
 #include "bag_cursor.h"
 #include "battle_record.h"
 #include "battle_recording.h"
 #include "field_bgm.h"
 #include "game_stats.h"
-#include "global_terminal_app_internal.h"
 #include "heap.h"
 #include "poke_overlay.h"
 #include "sound_system.h"

@@ -70,7 +70,7 @@ Static main
     Object src/menu_input_state.o
     Object src/touchscreen_list_menu.o
     Object src/camera_translation.o
-    Object src/global_terminal_app.o
+    Object src/global_terminal/global_terminal_app.o
     Object asm/global_terminal_app_data.o
     Object src/bg_cell_manager.o
     Object src/grid_input_handler.o
@@ -299,7 +299,7 @@ Static main
     Object src/bag.o
     Object src/wifi_club.o
     Object asm/wifi_club_data.o
-    Object src/wifi_plaza_player_info.o
+    Object src/wifi_plaza/wifi_plaza_player_info.o
     Object src/party_menu.o
     Object src/party_context_menu.o
     Object src/party_menu_sprites.o
@@ -1172,60 +1172,60 @@ Overlay OVY_13
     Object lib/NitroSDK/src/mb/mb_cache.o
     Object lib/NitroSDK/src/mb/mb_task_thread.o
     Object lib/NitroSDK/src/mb/mb_task_piece_buffer.o
-    Object src/wifi_setup.o
-    Object src/wifi_setup_session.o
-    Object src/wifi_setup_state.o
-    Object src/wifi_setup_result.o
-    Object src/wifi_setup_protocol.o
-    Object src/wifi_setup_platform.o
-    Object src/wifi_setup_connect.o
-    Object src/wifi_setup_wcm.o
-    Object src/wifi_setup_link.o
-    Object src/wifi_setup_ap_select.o
-    Object src/wifi_setup_packet.o
-    Object src/wifi_setup_worker.o
-    Object src/wifi_setup_crypto.o
-    Object src/wifi_setup_md5.o
-    Object src/wifi_setup_api.o
+    Object src/wifi_setup/wifi_setup.o
+    Object src/wifi_setup/wifi_setup_session.o
+    Object src/wifi_setup/wifi_setup_state.o
+    Object src/wifi_setup/wifi_setup_result.o
+    Object src/wifi_setup/wifi_setup_protocol.o
+    Object src/wifi_setup/wifi_setup_platform.o
+    Object src/wifi_setup/wifi_setup_connect.o
+    Object src/wifi_setup/wifi_setup_wcm.o
+    Object src/wifi_setup/wifi_setup_link.o
+    Object src/wifi_setup/wifi_setup_ap_select.o
+    Object src/wifi_setup/wifi_setup_packet.o
+    Object src/wifi_setup/wifi_setup_worker.o
+    Object src/wifi_setup/wifi_setup_crypto.o
+    Object src/wifi_setup/wifi_setup_md5.o
+    Object src/wifi_setup/wifi_setup_api.o
     Object asm/wifi_setup_data.o
     Object lib/NitroDWC/asm/wifi_setup_dwc_data.o
-    Object src/wifi_setup_busy_icon.o
+    Object src/wifi_setup/wifi_setup_busy_icon.o
     Object lib/NitroDWC/asm/wifi_setup_ui_parts_bss.o
-    Object src/wifi_setup_ui_parts.o
-    Object src/wifi_setup_keyboard_slide_in.o
-    Object src/wifi_setup_keyboard_input.o
-    Object src/wifi_setup_keyboard_layout.o
+    Object src/wifi_setup/wifi_setup_ui_parts.o
+    Object src/wifi_setup/wifi_setup_keyboard_slide_in.o
+    Object src/wifi_setup/wifi_setup_keyboard_input.o
+    Object src/wifi_setup/wifi_setup_keyboard_layout.o
     Object lib/NitroDWC/asm/wifi_setup_keyboard_rodata.o
-    Object src/wifi_setup_keyboard_view.o
-    Object src/wifi_setup_keypad.o
-    Object src/wifi_setup_keypad_layout.o
+    Object src/wifi_setup/wifi_setup_keyboard_view.o
+    Object src/wifi_setup/wifi_setup_keypad.o
+    Object src/wifi_setup/wifi_setup_keypad_layout.o
     Object lib/NitroDWC/asm/wifi_setup_keypad_rodata.o
-    Object src/wifi_setup_keypad_view.o
+    Object src/wifi_setup/wifi_setup_keypad_view.o
     Object lib/NitroDWC/asm/wifi_setup_app_bss.o
-    Object src/wifi_setup_app.o
+    Object src/wifi_setup/wifi_setup_app.o
     Object lib/NitroDWC/asm/wifi_setup_screens_bss.o
-    Object src/wifi_setup_screens.o
-    Object src/wifi_setup_address_entry_init.o
+    Object src/wifi_setup/wifi_setup_screens.o
+    Object src/wifi_setup/wifi_setup_address_entry_init.o
     Object lib/NitroDWC/asm/wifi_setup_address_entry_rodata.o
-    Object src/wifi_setup_address_entry.o
-    Object src/wifi_setup_error_screen.o
-    Object src/wifi_setup_settings.o
+    Object src/wifi_setup/wifi_setup_address_entry.o
+    Object src/wifi_setup/wifi_setup_error_screen.o
+    Object src/wifi_setup/wifi_setup_settings.o
     Object lib/NitroDWC/asm/wifi_setup_screens_rodata.o
-    Object src/wifi_setup_auto_setup.o
-    Object src/wifi_setup_connection_menu.o
-    Object src/wifi_setup_usb_connector_screen.o
-    Object src/wifi_setup_bg_screen_state.o
-    Object src/wifi_setup_bg_screen.o
-    Object src/wifi_setup_scroll_bar_state.o
-    Object src/wifi_setup_scroll_bar.o
-    Object src/wifi_setup_ap_scan_state.o
+    Object src/wifi_setup/wifi_setup_auto_setup.o
+    Object src/wifi_setup/wifi_setup_connection_menu.o
+    Object src/wifi_setup/wifi_setup_usb_connector_screen.o
+    Object src/wifi_setup/wifi_setup_bg_screen_state.o
+    Object src/wifi_setup/wifi_setup_bg_screen.o
+    Object src/wifi_setup/wifi_setup_scroll_bar_state.o
+    Object src/wifi_setup/wifi_setup_scroll_bar.o
+    Object src/wifi_setup/wifi_setup_ap_scan_state.o
     Object lib/NitroDWC/asm/wifi_setup_access_points_bss.o
-    Object src/wifi_setup_access_points.o
+    Object src/wifi_setup/wifi_setup_access_points.o
     Object lib/NitroDWC/asm/wifi_setup_ui_system_bss.o
-    Object src/wifi_setup_local_wireless.o
+    Object src/wifi_setup/wifi_setup_local_wireless.o
     Object lib/NitroDWC/asm/wifi_setup_share_data.o
-    Object src/wifi_setup_share.o
-    Object src/wifi_setup_ui_system.o
+    Object src/wifi_setup/wifi_setup_share.o
+    Object src/wifi_setup/wifi_setup_ui_system.o
 }
 Overlay OVY_14
 {
@@ -1395,11 +1395,11 @@ Overlay OVY_38
 Overlay OVY_39
 {
     After OVY_38
-    Object src/global_terminal_net.o
-    Object src/global_terminal_connect.o
+    Object src/global_terminal/global_terminal_net.o
+    Object src/global_terminal/global_terminal_connect.o
     Object asm/global_terminal_data.o
     Object asm/global_terminal_socket_data.o
-    Object src/global_terminal_socket.o
+    Object src/global_terminal/global_terminal_socket.o
 }
 Overlay OVY_40
 {
@@ -1469,227 +1469,227 @@ Overlay OVY_44
 Overlay OVY_45
 {
     After OVY_42
-    Object src/wifi_plaza.o
-    Object src/wifi_plaza_history.o
-    Object src/wifi_plaza_apps.o
-    Object src/wifi_plaza_news.o
-    Object src/wifi_plaza_lobby_client.o
-    Object src/wifi_plaza_lobby_events.o
+    Object src/wifi_plaza/wifi_plaza.o
+    Object src/wifi_plaza/wifi_plaza_history.o
+    Object src/wifi_plaza/wifi_plaza_apps.o
+    Object src/wifi_plaza/wifi_plaza_news.o
+    Object src/wifi_plaza/wifi_plaza_lobby_client.o
+    Object src/wifi_plaza/wifi_plaza_lobby_events.o
     Object asm/wifi_plaza_lobby_data.o
-    Object src/wifi_plaza_sprite_culling.o
-    Object src/wifi_plaza_time_zone.o
+    Object src/wifi_plaza/wifi_plaza_sprite_culling.o
+    Object src/wifi_plaza/wifi_plaza_time_zone.o
     Object lib/NitroDWC/asm/dwc_lobby_data.o
-    Object src/ppw_lobby_get_work.o
-    Object src/ppw_lobby_initialize_async.o
-    Object src/ppw_lobby_initialize.o
-    Object src/ppw_lobby_player_destroy.o
-    Object src/ppw_lobby_shutdown.o
-    Object src/ppw_lobby_process.o
-    Object src/ppw_lobby_web_request_delete.o
-    Object src/lobby_byte_vector_data.o
-    Object src/ov45_02231c8c.o
-    Object src/ppw_lobby_get_channel_base_name.o
-    Object src/ov45_02231ec0.o
-    Object src/ppw_lobby_get_time_info.o
-    Object src/ppw_lobby_get_sub_channel_state.o
-    Object src/ppw_lobby_set_channel_data.o
-    Object src/ppw_lobby_get_channel_data.o
-    Object src/ppw_lobby_get_channel_name.o
-    Object src/lobby_u32_vector_data2.o
-    Object src/ov45_022325b0.o
-    Object src/lobby_char_vector_assign_range.o
-    Object src/ov45_022327b8.o
-    Object src/ov45_0223285c.o
-    Object src/lobby_timer_map_make_entry.o
-    Object src/lobby_string_format.o
-    Object src/ppw_lobby_recruit.o
-    Object src/lobby_timer_map_find.o
-    Object src/ov45_02232e60.o
+    Object src/lobby/ppw_lobby_get_work.o
+    Object src/lobby/ppw_lobby_initialize_async.o
+    Object src/lobby/ppw_lobby_initialize.o
+    Object src/lobby/ppw_lobby_player_destroy.o
+    Object src/lobby/ppw_lobby_shutdown.o
+    Object src/lobby/ppw_lobby_process.o
+    Object src/lobby/ppw_lobby_web_request_delete.o
+    Object src/lobby/lobby_byte_vector_data.o
+    Object src/lobby/ov45_02231c8c.o
+    Object src/lobby/ppw_lobby_get_channel_base_name.o
+    Object src/lobby/ov45_02231ec0.o
+    Object src/lobby/ppw_lobby_get_time_info.o
+    Object src/lobby/ppw_lobby_get_sub_channel_state.o
+    Object src/lobby/ppw_lobby_set_channel_data.o
+    Object src/lobby/ppw_lobby_get_channel_data.o
+    Object src/lobby/ppw_lobby_get_channel_name.o
+    Object src/lobby/lobby_u32_vector_data2.o
+    Object src/lobby/ov45_022325b0.o
+    Object src/lobby/lobby_char_vector_assign_range.o
+    Object src/lobby/ov45_022327b8.o
+    Object src/lobby/ov45_0223285c.o
+    Object src/lobby/lobby_timer_map_make_entry.o
+    Object src/lobby/lobby_string_format.o
+    Object src/lobby/ppw_lobby_recruit.o
+    Object src/lobby/lobby_timer_map_find.o
+    Object src/lobby/ov45_02232e60.o
     Object lib/NitroDWC/asm/dwc_lobby_chat_data.o
-    Object src/ov45_022383e0.o
-    Object src/lobby_timer_map_find_insert_pos.o
-    Object src/ov45_022384bc.o
-    Object src/ov45_02238508.o
-    Object src/ppw_lobby_player_set_destroy_nodes.o
-    Object src/lobby_string_vector_append_copies_slow.o
-    Object src/lobby_string_vector_erase_at_end.o
-    Object src/lobby_char_vector_append_zeros_slow.o
-    Object src/lobby_char_vector_buffer.o
-    Object src/lobby_char_vector_buffer_deallocate.o
-    Object src/lobby_string_vector_buffer_allocate.o
-    Object src/lobby_string_vector_buffer_deallocate.o
-    Object src/ppw_lobby_schedule_init.o
-    Object src/ppw_lobby_schedule_copy.o
-    Object src/ppw_lobby_schedule_copy_to_vector.o
-    Object src/ov45_02238c74.o
-    Object src/ov45_02238d54.o
-    Object src/lobby_event_deque_append_range.o
-    Object src/ov45_02238f18.o
-    Object src/lobby_event_deque_copy.o
-    Object src/lobby_sort_stable_sort.o
-    Object src/lobby_sort_stable_sort_adaptive.o
-    Object src/lobby_sort_merge_adaptive.o
-    Object src/lobby_sort_rotate.o
-    Object src/lobby_sort_lower_bound.o
-    Object src/lobby_sort_upper_bound.o
-    Object src/ov45_02239bbc.o
-    Object src/ov45_02239df0.o
-    Object src/ov45_02239f48.o
-    Object src/ov45_0223a0cc.o
-    Object src/ov45_0223a4c8.o
-    Object src/ov45_0223a7e4.o
-    Object src/ov45_0223a9c0.o
-    Object src/lobby_event_vector_assign_range.o
-    Object src/ov45_0223aca4.o
-    Object src/lobby_vip_vector_assign_range.o
-    Object src/ov45_0223ae84.o
-    Object src/ppw_lobby_schedule_questionnaire.o
-    Object src/ppw_lobby_schedule_process.o
-    Object src/ppw_lobby_schedule_start.o
-    Object src/lobby_event_deque_iterator_at.o
-    Object src/ov45_0223b2dc.o
-    Object src/ov45_0223b764.o
-    Object src/lobby_event_deque_erase_at_begin.o
-    Object src/ov45_0223b8e0.o
-    Object src/ov45_0223ba3c.o
-    Object src/lobby_event_deque_map_recommend_size.o
-    Object src/lobby_event_deque_map_length_error.o
-    Object src/lobby_vip_vector_reallocate.o
-    Object src/lobby_vip_vector_recommend_size.o
-    Object src/lobby_event_vector_reallocate.o
-    Object src/lobby_event_vector_recommend_size.o
-    Object src/ov45_0223bf9c.o
-    Object src/ov45_0223c53c.o
-    Object src/lobby_event_deque_map_copy_backward.o
-    Object src/lobby_event_deque_map_copy.o
-    Object src/ov45_0223ca14.o
-    Object src/lobby_event_deque_map_buffer.o
-    Object src/lobby_event_deque_map_iterator_distance.o
-    Object src/lobby_event_deque_map_init_copy.o
-    Object src/lobby_event_deque_map_append_range.o
-    Object src/ov45_0223d0a8.o
-    Object src/lobby_event_deque_map_allocate.o
-    Object src/lobby_event_deque_map_iterator_distance2.o
-    Object src/ov45_0223d27c.o
-    Object src/ov45_0223d644.o
-    Object src/ppw_lobby_encode_message.o
-    Object src/ov45_0223db8c.o
-    Object src/ppw_lobby_players.o
-    Object src/ov45_0223df4c.o
-    Object src/ppw_lobby_players_get_entered_ids.o
-    Object src/ov45_0223e100.o
-    Object src/ppw_lobby_player_has_profiles.o
-    Object src/ov45_0223e4a8.o
-    Object src/ov45_0223e558.o
-    Object src/ov45_0223e648.o
-    Object src/lobby_u32_vector_buffer.o
-    Object src/lobby_u32_vector_buffer_deallocate.o
-    Object src/lobby_chat_on_disconnected.o
-    Object src/lobby_chat_on_private_message.o
-    Object src/ov45_0223f000.o
-    Object src/lobby_chat_on_channel_message.o
-    Object src/lobby_chat_on_user_joined.o
-    Object src/lobby_chat_on_user_parted.o
-    Object src/lobby_chat_on_user_changed_nick.o
-    Object src/lobby_chat_on_user_mode_changed.o
-    Object src/lobby_chat_callbacks.o
-    Object src/lobby_chat_on_nick_error.o
-    Object src/lobby_chat_manager_get_nick.o
-    Object src/ov45_0223fc6c.o
-    Object src/lobby_request_map_find.o
-    Object src/ov45_0223fe28.o
-    Object src/ov45_0223ffe8.o
-    Object src/ov45_0224005c.o
-    Object src/lobby_chat_on_enter_channel.o
-    Object src/lobby_chat_on_get_channel_keys.o
-    Object src/lobby_chat_on_broadcast_key_changed.o
-    Object src/lobby_chat_on_get_channel_mode.o
-    Object src/lobby_chat_timer_connect_timeout.o
-    Object src/lobby_chat_process.o
-    Object src/lobby_chat_is_in_channel.o
-    Object src/ov45_02240b10.o
-    Object src/lobby_chat_manager_get_names.o
-    Object src/lobby_chat_shutdown.o
-    Object src/lobby_chat_enter_channel.o
-    Object src/lobby_chat_channel_commands.o
-    Object src/ov45_022417b4.o
-    Object src/ov45_02241a20.o
-    Object src/ov45_02241b84.o
-    Object src/lobby_chat_set_channel_mode.o
-    Object src/ov45_02241e24.o
-    Object src/lobby_requests.o
-    Object src/lobby_request_map_insert_node.o
-    Object src/ov45_022421e4.o
-    Object src/lobby_string_find_first_of.o
-    Object src/lobby_mem.o
-    Object src/ov45_0224268c.o
-    Object src/lobby_chat_manager.o
-    Object src/ov45_02242acc.o
-    Object src/ov45_02242be0.o
-    Object src/ov45_02242ef4.o
-    Object src/ov45_0224307c.o
-    Object src/lobby_chat_users.o
-    Object src/lobby_user_id_set_erase_key.o
-    Object src/ov45_0224335c.o
-    Object src/lobby_u32_vector_assign_from_set.o
-    Object src/lobby_channel_map_erase_key.o
-    Object src/lobby_chat_find_user_id_by_nick.o
-    Object src/lobby_chat_rename_user.o
-    Object src/lobby_user_map_make_entry.o
-    Object src/lobby_channel_map.o
-    Object src/lobby_channel_map_insert_node.o
-    Object src/lobby_user_id_set_insert.o
-    Object src/lobby_user_id_set_erase.o
-    Object src/lobby_user_id_set_assign.o
-    Object src/ov45_02243cf8.o
-    Object src/lobby_user_id_set_insert_node.o
-    Object src/lobby_user_map_insert.o
-    Object src/lobby_user_map.o
-    Object src/lobby_chat_map_destroy.o
-    Object src/lobby_channel_map_find_insert_pos.o
-    Object src/lobby_tree_nodes.o
-    Object src/chat_callbacks.o
-    Object src/chat_channel.o
-    Object src/chat_cipher.o
-    Object src/chat_requests.o
-    Object src/chat_handlers.o
-    Object src/chat_main.o
-    Object src/chat_socket_buffer.o
-    Object src/chat_socket.o
-    Object src/chat_socket_recv.o
+    Object src/lobby/ov45_022383e0.o
+    Object src/lobby/lobby_timer_map_find_insert_pos.o
+    Object src/lobby/ov45_022384bc.o
+    Object src/lobby/ov45_02238508.o
+    Object src/lobby/ppw_lobby_player_set_destroy_nodes.o
+    Object src/lobby/lobby_string_vector_append_copies_slow.o
+    Object src/lobby/lobby_string_vector_erase_at_end.o
+    Object src/lobby/lobby_char_vector_append_zeros_slow.o
+    Object src/lobby/lobby_char_vector_buffer.o
+    Object src/lobby/lobby_char_vector_buffer_deallocate.o
+    Object src/lobby/lobby_string_vector_buffer_allocate.o
+    Object src/lobby/lobby_string_vector_buffer_deallocate.o
+    Object src/lobby/ppw_lobby_schedule_init.o
+    Object src/lobby/ppw_lobby_schedule_copy.o
+    Object src/lobby/ppw_lobby_schedule_copy_to_vector.o
+    Object src/lobby/ov45_02238c74.o
+    Object src/lobby/ov45_02238d54.o
+    Object src/lobby/lobby_event_deque_append_range.o
+    Object src/lobby/ov45_02238f18.o
+    Object src/lobby/lobby_event_deque_copy.o
+    Object src/lobby/lobby_sort_stable_sort.o
+    Object src/lobby/lobby_sort_stable_sort_adaptive.o
+    Object src/lobby/lobby_sort_merge_adaptive.o
+    Object src/lobby/lobby_sort_rotate.o
+    Object src/lobby/lobby_sort_lower_bound.o
+    Object src/lobby/lobby_sort_upper_bound.o
+    Object src/lobby/ov45_02239bbc.o
+    Object src/lobby/ov45_02239df0.o
+    Object src/lobby/ov45_02239f48.o
+    Object src/lobby/ov45_0223a0cc.o
+    Object src/lobby/ov45_0223a4c8.o
+    Object src/lobby/ov45_0223a7e4.o
+    Object src/lobby/ov45_0223a9c0.o
+    Object src/lobby/lobby_event_vector_assign_range.o
+    Object src/lobby/ov45_0223aca4.o
+    Object src/lobby/lobby_vip_vector_assign_range.o
+    Object src/lobby/ov45_0223ae84.o
+    Object src/lobby/ppw_lobby_schedule_questionnaire.o
+    Object src/lobby/ppw_lobby_schedule_process.o
+    Object src/lobby/ppw_lobby_schedule_start.o
+    Object src/lobby/lobby_event_deque_iterator_at.o
+    Object src/lobby/ov45_0223b2dc.o
+    Object src/lobby/ov45_0223b764.o
+    Object src/lobby/lobby_event_deque_erase_at_begin.o
+    Object src/lobby/ov45_0223b8e0.o
+    Object src/lobby/ov45_0223ba3c.o
+    Object src/lobby/lobby_event_deque_map_recommend_size.o
+    Object src/lobby/lobby_event_deque_map_length_error.o
+    Object src/lobby/lobby_vip_vector_reallocate.o
+    Object src/lobby/lobby_vip_vector_recommend_size.o
+    Object src/lobby/lobby_event_vector_reallocate.o
+    Object src/lobby/lobby_event_vector_recommend_size.o
+    Object src/lobby/ov45_0223bf9c.o
+    Object src/lobby/ov45_0223c53c.o
+    Object src/lobby/lobby_event_deque_map_copy_backward.o
+    Object src/lobby/lobby_event_deque_map_copy.o
+    Object src/lobby/ov45_0223ca14.o
+    Object src/lobby/lobby_event_deque_map_buffer.o
+    Object src/lobby/lobby_event_deque_map_iterator_distance.o
+    Object src/lobby/lobby_event_deque_map_init_copy.o
+    Object src/lobby/lobby_event_deque_map_append_range.o
+    Object src/lobby/ov45_0223d0a8.o
+    Object src/lobby/lobby_event_deque_map_allocate.o
+    Object src/lobby/lobby_event_deque_map_iterator_distance2.o
+    Object src/lobby/ov45_0223d27c.o
+    Object src/lobby/ov45_0223d644.o
+    Object src/lobby/ppw_lobby_encode_message.o
+    Object src/lobby/ov45_0223db8c.o
+    Object src/lobby/ppw_lobby_players.o
+    Object src/lobby/ov45_0223df4c.o
+    Object src/lobby/ppw_lobby_players_get_entered_ids.o
+    Object src/lobby/ov45_0223e100.o
+    Object src/lobby/ppw_lobby_player_has_profiles.o
+    Object src/lobby/ov45_0223e4a8.o
+    Object src/lobby/ov45_0223e558.o
+    Object src/lobby/ov45_0223e648.o
+    Object src/lobby/lobby_u32_vector_buffer.o
+    Object src/lobby/lobby_u32_vector_buffer_deallocate.o
+    Object src/lobby/lobby_chat_on_disconnected.o
+    Object src/lobby/lobby_chat_on_private_message.o
+    Object src/lobby/ov45_0223f000.o
+    Object src/lobby/lobby_chat_on_channel_message.o
+    Object src/lobby/lobby_chat_on_user_joined.o
+    Object src/lobby/lobby_chat_on_user_parted.o
+    Object src/lobby/lobby_chat_on_user_changed_nick.o
+    Object src/lobby/lobby_chat_on_user_mode_changed.o
+    Object src/lobby/lobby_chat_callbacks.o
+    Object src/lobby/lobby_chat_on_nick_error.o
+    Object src/lobby/lobby_chat_manager_get_nick.o
+    Object src/lobby/ov45_0223fc6c.o
+    Object src/lobby/lobby_request_map_find.o
+    Object src/lobby/ov45_0223fe28.o
+    Object src/lobby/ov45_0223ffe8.o
+    Object src/lobby/ov45_0224005c.o
+    Object src/lobby/lobby_chat_on_enter_channel.o
+    Object src/lobby/lobby_chat_on_get_channel_keys.o
+    Object src/lobby/lobby_chat_on_broadcast_key_changed.o
+    Object src/lobby/lobby_chat_on_get_channel_mode.o
+    Object src/lobby/lobby_chat_timer_connect_timeout.o
+    Object src/lobby/lobby_chat_process.o
+    Object src/lobby/lobby_chat_is_in_channel.o
+    Object src/lobby/ov45_02240b10.o
+    Object src/lobby/lobby_chat_manager_get_names.o
+    Object src/lobby/lobby_chat_shutdown.o
+    Object src/lobby/lobby_chat_enter_channel.o
+    Object src/lobby/lobby_chat_channel_commands.o
+    Object src/lobby/ov45_022417b4.o
+    Object src/lobby/ov45_02241a20.o
+    Object src/lobby/ov45_02241b84.o
+    Object src/lobby/lobby_chat_set_channel_mode.o
+    Object src/lobby/ov45_02241e24.o
+    Object src/lobby/lobby_requests.o
+    Object src/lobby/lobby_request_map_insert_node.o
+    Object src/lobby/ov45_022421e4.o
+    Object src/lobby/lobby_string_find_first_of.o
+    Object src/lobby/lobby_mem.o
+    Object src/lobby/ov45_0224268c.o
+    Object src/lobby/lobby_chat_manager.o
+    Object src/lobby/ov45_02242acc.o
+    Object src/lobby/ov45_02242be0.o
+    Object src/lobby/ov45_02242ef4.o
+    Object src/lobby/ov45_0224307c.o
+    Object src/lobby/lobby_chat_users.o
+    Object src/lobby/lobby_user_id_set_erase_key.o
+    Object src/lobby/ov45_0224335c.o
+    Object src/lobby/lobby_u32_vector_assign_from_set.o
+    Object src/lobby/lobby_channel_map_erase_key.o
+    Object src/lobby/lobby_chat_find_user_id_by_nick.o
+    Object src/lobby/lobby_chat_rename_user.o
+    Object src/lobby/lobby_user_map_make_entry.o
+    Object src/lobby/lobby_channel_map.o
+    Object src/lobby/lobby_channel_map_insert_node.o
+    Object src/lobby/lobby_user_id_set_insert.o
+    Object src/lobby/lobby_user_id_set_erase.o
+    Object src/lobby/lobby_user_id_set_assign.o
+    Object src/lobby/ov45_02243cf8.o
+    Object src/lobby/lobby_user_id_set_insert_node.o
+    Object src/lobby/lobby_user_map_insert.o
+    Object src/lobby/lobby_user_map.o
+    Object src/lobby/lobby_chat_map_destroy.o
+    Object src/lobby/lobby_channel_map_find_insert_pos.o
+    Object src/lobby/lobby_tree_nodes.o
+    Object src/chat/chat_callbacks.o
+    Object src/chat/chat_channel.o
+    Object src/chat/chat_cipher.o
+    Object src/chat/chat_requests.o
+    Object src/chat/chat_handlers.o
+    Object src/chat/chat_main.o
+    Object src/chat/chat_socket_buffer.o
+    Object src/chat/chat_socket.o
+    Object src/chat/chat_socket_recv.o
     Object src/stats_upload.o
 }
 Overlay OVY_46
 {
     After OVY_45
-    Object src/wifi_plaza_connect.o
+    Object src/wifi_plaza/wifi_plaza_connect.o
 }
 Overlay OVY_47
 {
     After OVY_45
-    Object src/wifi_plaza_survey.o
+    Object src/wifi_plaza/wifi_plaza_survey.o
 }
 Overlay OVY_48
 {
     After OVY_45
-    Object src/wifi_plaza_visitor_profiles.o
+    Object src/wifi_plaza/wifi_plaza_visitor_profiles.o
     Object asm/wifi_plaza_visitor_profiles_data.o
 }
 Overlay OVY_49
 {
     After OVY_45
-    Object src/wifi_plaza_map.o
-    Object src/wifi_plaza_obj.o
-    Object src/wifi_plaza_room.o
-    Object src/wifi_plaza_camera.o
-    Object src/wifi_plaza_models.o
-    Object src/wifi_plaza_player_state.o
-    Object src/wifi_plaza_game_entry.o
-    Object src/wifi_plaza_talk.o
-    Object src/wifi_plaza_instrument.o
-    Object src/wifi_plaza_event.o
+    Object src/wifi_plaza/wifi_plaza_map.o
+    Object src/wifi_plaza/wifi_plaza_obj.o
+    Object src/wifi_plaza/wifi_plaza_room.o
+    Object src/wifi_plaza/wifi_plaza_camera.o
+    Object src/wifi_plaza/wifi_plaza_models.o
+    Object src/wifi_plaza/wifi_plaza_player_state.o
+    Object src/wifi_plaza/wifi_plaza_game_entry.o
+    Object src/wifi_plaza/wifi_plaza_talk.o
+    Object src/wifi_plaza/wifi_plaza_instrument.o
+    Object src/wifi_plaza/wifi_plaza_event.o
     Object asm/wifi_plaza_map_rodata.o
-    Object src/wifi_plaza_mover_markers.o
+    Object src/wifi_plaza/wifi_plaza_mover_markers.o
 }
 Overlay trainer_card
 {
@@ -1810,18 +1810,18 @@ Overlay OVY_69
 Overlay OVY_70
 {
     After OVY_7
-    Object src/gts_server.o
-    Object src/gts.o
-    Object src/gts_main_menu.o
-    Object src/gts_summary.o
-    Object src/gts_search.o
-    Object src/gts_select_mon.o
-    Object src/gts_wanted.o
-    Object src/gts_transaction.o
-    Object src/gts_avatars.o
-    Object src/gts_trade.o
-    Object src/gts_selector.o
-    Object src/gts_connection.o
+    Object src/gts/gts_server.o
+    Object src/gts/gts.o
+    Object src/gts/gts_main_menu.o
+    Object src/gts/gts_summary.o
+    Object src/gts/gts_search.o
+    Object src/gts/gts_select_mon.o
+    Object src/gts/gts_wanted.o
+    Object src/gts/gts_transaction.o
+    Object src/gts/gts_avatars.o
+    Object src/gts/gts_trade.o
+    Object src/gts/gts_selector.o
+    Object src/gts/gts_connection.o
     Object asm/gts_data.o
 }
 Overlay OVY_71

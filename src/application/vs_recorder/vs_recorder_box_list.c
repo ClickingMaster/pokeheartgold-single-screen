@@ -3,12 +3,12 @@
 #include "constants/sndseq.h"
 
 #include "application/vs_recorder/vs_recorder_internal.h"
+#include "global_terminal/global_terminal_net.h"
 #include "msgdata/msg/msg_0013.h"
 
 #include "bg_window.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
-#include "global_terminal_net.h"
 #include "heap.h"
 #include "orbit_cursor.h"
 #include "palette.h"

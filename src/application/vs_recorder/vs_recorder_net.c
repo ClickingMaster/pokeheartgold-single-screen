@@ -1,8 +1,8 @@
 #include "global.h"
 
 #include "application/vs_recorder/vs_recorder_screens.h"
+#include "global_terminal/global_terminal_net.h"
 
-#include "global_terminal_net.h"
 #include "heap.h"
 #include "sav_system_info.h"
 

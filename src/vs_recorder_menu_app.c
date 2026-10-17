@@ -1,9 +1,10 @@
 #include "constants/flypoints.h"
 #include "constants/trainer_class.h"
 
+#include "global_terminal/global_terminal_app_internal.h"
+
 #include "assert.h"
 #include "field_bgm.h"
-#include "global_terminal_app_internal.h"
 #include "heap.h"
 #include "orbit_cursor.h"
 #include "poke_overlay.h"

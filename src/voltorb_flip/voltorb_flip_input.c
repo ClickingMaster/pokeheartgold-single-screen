@@ -9,7 +9,7 @@
 #include "system.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "global_terminal_app.h"
+#include "global_terminal/global_terminal_app.h"
 
 static void VoltorbFlipInputHandler_HandleDpad(VoltorbFlipInputHandler *inputHandler);
 static void VoltorbFlipInputHandler_MoveMemoCursorToExit(VoltorbFlipInputHandler *inputHandler);
