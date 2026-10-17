@@ -94,22 +94,14 @@ typedef struct TouchMartWindowPos {
 // One tilemap edit of the item list background: kind 1 copies a rect, kind 2 fills it.
 typedef struct TouchMartBgOp {
     u8 kind;
-    u8 x;
-    u8 y;
+    u8 srcX;
+    u8 srcY;
     u8 destX;
+    u8 destY;
     u8 width;
     u8 height;
-    u8 value;
     u8 padding;
 } TouchMartBgOp;
-
-extern const TouchscreenHitbox sTouchMartTextSkipHitbox[];
-extern const TouchMartWindowPos sTouchMartItemWindowPositions[TOUCH_MART_ITEMS_PER_PAGE];
-extern const BgTemplate sTouchMartBgTemplate_Sub0;
-extern const BgTemplate sTouchMartBgTemplate_Sub1;
-extern const BgTemplate sTouchMartBgTemplate_Sub2;
-extern const TouchscreenHitbox *sTouchMartButtonSets[];
-extern const TouchMartBgOp sTouchMartListTilemapEdits[][4];
 
 static void TouchMartApp_SetupText(TouchMartAppData *data);
 static void TouchMartApp_FreeText(TouchMartAppData *data);
@@ -154,6 +146,132 @@ static void TouchMartApp_PrintNoRoomInBag(TouchMartAppData *data);
 static void TouchMartApp_PrintPremierBallBonus(TouchMartAppData *data);
 static void TouchMartApp_AddDetailWindows(TouchMartAppData *data);
 static void TouchMartApp_RemoveDetailWindows(TouchMartAppData *data);
+
+static const TouchscreenHitbox sTouchMartTextSkipHitbox[] = {
+    { .rect = { 0, 191, 0, 255 } },
+};
+
+static const TouchscreenHitbox sTouchMartQuantityButtons[] = {
+    { .rect = { 88, 111, 120, 151 } },
+    { .rect = { 88, 111, 152, 183 } },
+    { .rect = { 136, 159, 120, 151 } },
+    { .rect = { 136, 159, 152, 183 } },
+    { .rect = { 168, 191, 96, 173 } },
+    { .rect = { 168, 191, 178, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sTouchMartItemListButtons[] = {
+    { .rect = { 32, 73, 0, 127 } },
+    { .rect = { 32, 73, 128, 255 } },
+    { .rect = { 74, 117, 0, 127 } },
+    { .rect = { 74, 117, 128, 255 } },
+    { .rect = { 118, 153, 0, 127 } },
+    { .rect = { 118, 153, 128, 255 } },
+    { .rect = { 168, 191, 0, 39 } },
+    { .rect = { 168, 191, 40, 79 } },
+    { .rect = { 168, 191, 192, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchMartWindowPos sTouchMartItemWindowPositions[TOUCH_MART_ITEMS_PER_PAGE] = {
+    { 4,  5,  173 },
+    { 20, 5,  217 },
+    { 4,  10, 261 },
+    { 20, 10, 305 },
+    { 4,  15, 349 },
+    { 20, 15, 393 },
+};
+
+static const BgTemplate sTouchMartBgTemplates[3] = {
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x6800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = 0,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x7000,
+     .charBase = GX_BG_CHARBASE_0x04000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = 0,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x7800,
+     .charBase = GX_BG_CHARBASE_0x04000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 2,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = 0,
+     },
+};
+
+static const TouchscreenHitbox *sTouchMartButtonSets[] = {
+    sTouchMartItemListButtons,
+    sTouchMartQuantityButtons,
+};
+
+// Indexed by the item count of the page; a full page needs no edits.
+static TouchMartBgOp sTouchMartListTilemapEdits[TOUCH_MART_ITEMS_PER_PAGE][4] = {
+    {
+     { 0 },
+     { 2, 0, 0, 0, 4, 32, 16 },
+     { 0 },
+     { 0, 0, 0, 16, 4, 16, 16 },
+     },
+    {
+     { 1, 0, 19, 0, 9, 16, 1 },
+     { 2, 0, 0, 0, 10, 16, 10 },
+     { 0 },
+     { 2, 0, 0, 16, 4, 16, 16 },
+     },
+    {
+     { 1, 0, 19, 0, 9, 16, 1 },
+     { 0 },
+     { 1, 16, 19, 16, 9, 16, 1 },
+     { 2, 0, 0, 0, 10, 32, 10 },
+     },
+    {
+     { 1, 0, 19, 0, 14, 16, 1 },
+     { 2, 0, 0, 0, 15, 16, 5 },
+     { 1, 16, 19, 16, 9, 16, 1 },
+     { 2, 0, 0, 16, 10, 16, 10 },
+     },
+    {
+     { 1, 0, 19, 0, 14, 16, 1 },
+     { 0 },
+     { 1, 16, 19, 16, 14, 16, 1 },
+     { 2, 0, 0, 0, 15, 32, 5 },
+     },
+    {
+     { 0 },
+     { 0 },
+     { 1, 16, 19, 16, 14, 16, 1 },
+     { 2, 0, 0, 16, 15, 16, 5 },
+     },
+};
 
 SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, MartData *martData) {
     SysTask *task;
@@ -205,9 +323,6 @@ static void TouchMartApp_FreeText(TouchMartAppData *data) {
     MessageFormat_Delete(data->messageFormat);
 }
 
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned) {
     String *string = NewString_ReadMsgData(data->msgData, msg_0435_00017);
     ClearWindowTilemapAndCopyToVram(&data->cancelWindow);
@@ -221,8 +336,6 @@ static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned) {
     ScheduleWindowCopyToVram(&data->cancelWindow);
     String_Delete(string);
 }
-
-#pragma force_active reset
 
 void TouchMartApp_Exit(BgConfig *bgConfig, SysTask *task) {
     TouchMartAppData *data = SysTask_GetData(task);
@@ -415,9 +528,9 @@ static void TouchMartApp_SetupBgs(TouchMartAppData *data) {
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     *dispcnt = (*dispcnt & 0xFFCFFFEF) | 0x10;
-    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_0, &sTouchMartBgTemplate_Sub0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_1, &sTouchMartBgTemplate_Sub1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_2, &sTouchMartBgTemplate_Sub2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_0, &sTouchMartBgTemplates[0], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_1, &sTouchMartBgTemplates[1], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(data->bgConfig, GF_BG_LYR_SUB_2, &sTouchMartBgTemplates[2], GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_FIELD1);
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_2);
 }
@@ -619,9 +732,9 @@ static void TouchMartApp_EditListTilemap(BgConfig *bgConfig, int bgId, int itemC
     op = sTouchMartListTilemapEdits[itemCount];
     for (i = 0; i < 4; i++, op++) {
         if (op->kind == 1) {
-            LoadRectToBgTilemapRect(bgConfig, (u8)bgId, (u8 *)tilemap + (op->x + op->y * 32) * 2, op->destX, op->width, op->height, op->value);
+            LoadRectToBgTilemapRect(bgConfig, (u8)bgId, (u8 *)tilemap + (op->srcX + op->srcY * 32) * 2, op->destX, op->destY, op->width, op->height);
         } else if (op->kind == 2) {
-            FillBgTilemapRect(bgConfig, (u8)bgId, 0, op->destX, op->width, op->height, op->value, 0);
+            FillBgTilemapRect(bgConfig, (u8)bgId, 0, op->destX, op->destY, op->width, op->height, 0);
         }
     }
 }
@@ -772,9 +885,6 @@ static void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFor
     }
 }
 
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 static void TouchMartApp_PrintHowMany(TouchMartAppData *data) {
     String *template;
     FillWindowPixelBuffer(&data->windows[TOUCH_MART_WINDOW_PROMPT], 15);
@@ -804,8 +914,6 @@ static void TouchMartApp_PrintConfirmPurchase(TouchMartAppData *data) {
     DrawFrameAndWindow2(&data->windows[TOUCH_MART_WINDOW_PROMPT], TRUE, 437, 5);
     data->printerId = AddTextPrinterParameterized(&data->windows[TOUCH_MART_WINDOW_PROMPT], 1, data->string, 0, 0, Options_GetTextFrameDelay(data->options), NULL);
 }
-
-#pragma force_active reset
 
 static void TouchMartApp_CreateYesNoPrompt(TouchMartAppData *data) {
     YesNoPromptTemplate template;
@@ -845,9 +953,6 @@ static BOOL TouchMartApp_HandleYesNoPrompt(TouchMartAppData *data) {
     return FALSE;
 }
 
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
     String *template;
     MartData *martData = data->martData;
@@ -885,8 +990,6 @@ static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
     DrawFrameAndWindow2(&data->messageWindow, TRUE, 437, 5);
     data->martData->printerID = AddTextPrinterParameterized(&data->messageWindow, 1, data->string, 0, 0, Options_GetTextFrameDelay(data->options), TouchMartApp_PurchaseDonePrinterCallback);
 }
-
-#pragma force_active reset
 
 static BOOL TouchMartApp_PurchaseDonePrinterCallback(TextPrinterTemplate *template, u16 glyphId) {
     if (glyphId == 1) {

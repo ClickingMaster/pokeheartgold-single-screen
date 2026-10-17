@@ -1390,13 +1390,11 @@ Overlay OVY_31
 {
     After OVY_27
     Object src/touch_mart_app.o
-    Object asm/touch_mart_app_data.o
 }
 Overlay OVY_32
 {
     After OVY_27
     Object src/friend_roster_app.o
-    Object asm/friend_roster_app_data.o
 }
 Overlay OVY_33
 {

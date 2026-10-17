@@ -87,16 +87,6 @@ typedef struct FriendRosterAppData {
     int *result;
 } FriendRosterAppData; // size: 0x2B4
 
-extern const TouchscreenHitbox sFriendRosterAppPageArrowHitboxes[];
-extern const GridCallbacks sFriendRosterAppGridCallbacks;
-extern const u8 sFriendRosterAppSpriteSpecs[FRIEND_ROSTER_APP_NUM_SPRITES][4];
-extern const BgTemplate sFriendRosterAppBgTemplateSub2;
-extern const BgTemplate sFriendRosterAppBgTemplateSub0;
-extern const BgTemplate sFriendRosterAppBgTemplateSub1;
-extern const TouchscreenHitbox sFriendRosterAppGridHitboxes[];
-extern const DpadMenuBox sFriendRosterAppGridDpadBoxes[];
-extern const WindowTemplate sFriendRosterAppWindowTemplates[];
-
 static void FriendRosterApp_SetVramBanks(void);
 static void FriendRosterApp_InitBgs(BgConfig *bgConfig);
 static void FriendRosterApp_FreeBgs(BgConfig *bgConfig);
@@ -128,12 +118,123 @@ static void FriendRosterApp_SetBlinkPalette(FriendRosterAppData *data, u8 palett
 static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data);
 static int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState);
 static int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y, u8 nextState);
+static void FriendRosterApp_GridNoop(void *data, int newTarget, int prevTarget);
+static void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget);
 
 SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result);
 void FriendRosterApp_Exit(void *unused, SysTask *task);
 BOOL FriendRosterApp_IsExitDone(void);
-void FriendRosterApp_GridNoop(void);
-void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget);
+
+static const BgTemplate sFriendRosterAppBgTemplateSub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sFriendRosterAppBgTemplateSub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sFriendRosterAppBgTemplateSub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x6800,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const WindowTemplate sFriendRosterAppWindowTemplates[FRIEND_ROSTER_APP_NUM_WINDOWS] = {
+    { GF_BG_LYR_SUB_0, 23, 21, 8,  2, 2, 1   },
+    { GF_BG_LYR_SUB_0, 14, 21, 4,  2, 2, 17  },
+    { GF_BG_LYR_SUB_0, 3,  1,  10, 2, 2, 25  },
+    { GF_BG_LYR_SUB_0, 19, 1,  10, 2, 2, 45  },
+    { GF_BG_LYR_SUB_0, 3,  6,  10, 2, 2, 65  },
+    { GF_BG_LYR_SUB_0, 19, 6,  10, 2, 2, 85  },
+    { GF_BG_LYR_SUB_0, 3,  11, 10, 2, 2, 105 },
+    { GF_BG_LYR_SUB_0, 19, 11, 10, 2, 2, 125 },
+    { GF_BG_LYR_SUB_0, 3,  16, 10, 2, 2, 145 },
+    { GF_BG_LYR_SUB_0, 19, 16, 10, 2, 2, 165 },
+    { GF_BG_LYR_SUB_0, 3,  1,  10, 2, 2, 185 },
+    { GF_BG_LYR_SUB_0, 19, 1,  10, 2, 2, 205 },
+    { GF_BG_LYR_SUB_0, 3,  6,  10, 2, 2, 225 },
+    { GF_BG_LYR_SUB_0, 19, 6,  10, 2, 2, 245 },
+    { GF_BG_LYR_SUB_0, 3,  11, 10, 2, 2, 265 },
+    { GF_BG_LYR_SUB_0, 19, 11, 10, 2, 2, 285 },
+    { GF_BG_LYR_SUB_0, 3,  16, 10, 2, 2, 305 },
+    { GF_BG_LYR_SUB_0, 19, 16, 10, 2, 2, 325 },
+};
+
+static const TouchscreenHitbox sFriendRosterAppGridHitboxes[] = {
+    { .rect = { 8, 23, 24, 103 } },
+    { .rect = { 8, 23, 152, 231 } },
+    { .rect = { 48, 63, 24, 103 } },
+    { .rect = { 48, 63, 152, 231 } },
+    { .rect = { 88, 103, 24, 103 } },
+    { .rect = { 88, 103, 152, 231 } },
+    { .rect = { 128, 143, 24, 103 } },
+    { .rect = { 128, 143, 152, 231 } },
+    { .rect = { 160, 191, 176, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const u8 sFriendRosterAppSpriteSpecs[FRIEND_ROSTER_APP_NUM_SPRITES][4] = {
+    { 32,  32,  0, 0 },
+    { 216, 176, 1, 2 },
+    { 24,  176, 1, 4 },
+    { 56,  176, 1, 6 },
+};
+
+static const GridCallbacks sFriendRosterAppGridCallbacks = {
+    FriendRosterApp_GridNoop,
+    FriendRosterApp_GridNoop,
+    FriendRosterApp_OnCursorMove,
+    FriendRosterApp_OnCursorMove,
+};
+
+static const DpadMenuBox sFriendRosterAppGridDpadBoxes[] = {
+    { 64,  16,  0, 0, 0,   2, 0, 1 },
+    { 192, 16,  0, 0, 1,   3, 0, 1 },
+    { 64,  56,  0, 0, 0,   4, 2, 3 },
+    { 192, 56,  0, 0, 1,   5, 2, 3 },
+    { 64,  96,  0, 0, 2,   6, 4, 5 },
+    { 192, 96,  0, 0, 3,   7, 4, 5 },
+    { 64,  136, 0, 0, 4,   8, 6, 7 },
+    { 192, 136, 0, 0, 5,   8, 6, 7 },
+    { 216, 176, 0, 0, 135, 8, 8, 8 },
+};
+
+static const TouchscreenHitbox sFriendRosterAppPageArrowHitboxes[] = {
+    { .rect = { 160, 191, 8, 39 } },
+    { .rect = { 160, 191, 40, 71 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
 
 SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSystem *fieldSystem, int *result) {
     SysTask *task;
@@ -436,10 +537,10 @@ static void FriendRosterApp_FreeGridInput(FriendRosterAppData *data) {
     GridInputHandler_Free(data->gridInput);
 }
 
-void FriendRosterApp_GridNoop(void) {
+static void FriendRosterApp_GridNoop(void *data, int newTarget, int prevTarget) {
 }
 
-void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget) {
+static void FriendRosterApp_OnCursorMove(void *data, int newTarget, int prevTarget) {
     FriendRosterApp_SetCursorPos(data, newTarget);
 }
 
