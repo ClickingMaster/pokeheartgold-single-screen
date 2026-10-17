@@ -234,7 +234,7 @@ BOOL PlazaNews_Init(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL PlazaNews_Main(OverlayManager *man, u32 *state) {
+BOOL PlazaNews_Main(OverlayManager *man, int *state) {
     PlazaNewsWork *work = OverlayManager_GetData(man);
     PlazaNewsArgs *args = OverlayManager_GetArgs(man);
     switch (*state) {

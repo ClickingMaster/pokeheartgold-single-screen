@@ -1470,24 +1470,11 @@ Overlay OVY_45
 {
     After OVY_42
     Object src/wifi_plaza.o
-    Object src/wifi_plaza_work.o
-    Object src/wifi_plaza_player.o
-    Object src/wifi_plaza_lobby.o
-    Object src/wifi_plaza_state.o
-    Object src/wifi_plaza_requests.o
-    Object src/wifi_plaza_groups.o
-    Object src/wifi_plaza_receive.o
-    Object src/wifi_plaza_word_set.o
     Object src/wifi_plaza_history.o
     Object src/wifi_plaza_apps.o
-    Object src/wifi_plaza_util.o
     Object src/wifi_plaza_news.o
-    Object src/wifi_plaza_news_events.o
     Object src/wifi_plaza_lobby_client.o
-    Object src/wifi_plaza_lobby_players.o
     Object src/wifi_plaza_lobby_events.o
-    Object src/wifi_plaza_lobby_matches.o
-    Object src/wifi_plaza_player_objects.o
     Object asm/wifi_plaza_lobby_data.o
     Object src/wifi_plaza_sprite_culling.o
     Object src/wifi_plaza_time_zone.o
@@ -1681,9 +1668,6 @@ Overlay OVY_47
 {
     After OVY_45
     Object src/wifi_plaza_survey.o
-    Object src/wifi_plaza_survey_answer.o
-    Object src/wifi_plaza_survey_results.o
-    Object asm/wifi_plaza_survey_data.o
 }
 Overlay OVY_48
 {

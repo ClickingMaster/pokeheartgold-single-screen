@@ -2,9 +2,20 @@
 
 #include "global.h"
 
+#include "application/footprint_stamp.h"
+#include "application/plaza_game_mime_jr_top.h"
+#include "application/plaza_game_swalot_plop.h"
+#include "application/plaza_news.h"
+
+#include "comm_state.h"
+#include "location_gmm_dat.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
+#include "wifi_connection.h"
+#include "wifi_plaza_connect.h"
 #include "wifi_plaza_internal.h"
+#include "wifi_plaza_visitor_profiles.h"
+#include "wobbuffet_pop.h"
 
 // The applications of the plaza, one overlay at a time. Each app has an entry in the four tables below (index =
 // app): make its arguments, free them, start its overlay, and pick the next app when the overlay has finished.
@@ -12,24 +23,16 @@
 //   5 connect (OVY_46)   6, 7, 8 the games (OVY_91, OVY_92, OVY_93, with OVY_90)   9, 10 disconnect (OVY_46)
 //   11, 12 the app of sWiFiPlazaSurveyOverlayTemplate
 
+FS_EXTERN_OVERLAY(OVY_46);
+FS_EXTERN_OVERLAY(OVY_47);
+FS_EXTERN_OVERLAY(OVY_48);
+FS_EXTERN_OVERLAY(OVY_49);
+FS_EXTERN_OVERLAY(OVY_88);
+FS_EXTERN_OVERLAY(OVY_89);
 FS_EXTERN_OVERLAY(OVY_90);
-
-extern const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate;           // disconnect (OVY_46)
-extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard1OverlayTemplate; // footprint stamp (OVY_89)
-extern const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard0OverlayTemplate; // footprint stamp (OVY_89)
-extern const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate;         // OVY_93
-extern const OverlayManagerTemplate sWiFiPlazaSurveyOverlayTemplate;
-extern const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate;      // OVY_91
-extern const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate;         // connect (OVY_46)
-extern const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate;            // plaza news (OVY_88)
-extern const OverlayManagerTemplate sWiFiPlazaVisitorProfilesOverlayTemplate; // visitor profiles (OVY_48)
-extern const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate;            // the plaza (OVY_49)
-extern const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate;       // OVY_92
-
-extern void (*const sWiFiPlazaAppInitArgsFuncs[13])(WiFiPlazaApps *apps, void **args, enum HeapID heapID);
-extern void (*const sWiFiPlazaAppFreeArgsFuncs[13])(void **args);
-extern void (*const sWiFiPlazaAppStartFuncs[13])(WiFiPlazaApps *apps, void **args);
-extern BOOL (*const sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *apps, void **args);
+FS_EXTERN_OVERLAY(OVY_91);
+FS_EXTERN_OVERLAY(OVY_92);
+FS_EXTERN_OVERLAY(OVY_93);
 
 enum WiFiPlazaApp {
     WIFI_PLAZA_APP_MAIN,
@@ -157,10 +160,155 @@ void WiFiPlazaApps_FreeSurveyArgs(void **args);
 void WiFiPlazaApps_StartSurvey(WiFiPlazaApps *apps, void **args);
 BOOL WiFiPlazaApps_EndSurvey(WiFiPlazaApps *apps);
 
+BOOL CommState_HasPlazaLobbyFailed(void);
+
+static const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard0OverlayTemplate = {
+    .init = FootprintStamp_Init,
+    .exec = FootprintStamp_Main,
+    .exit = FootprintStamp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_89),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaWobbuffetPopOverlayTemplate = {
+    .init = WobbuffetPopApp_Init,
+    .exec = WobbuffetPopApp_Main,
+    .exit = WobbuffetPopApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_93),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaFootprintStampBoard1OverlayTemplate = {
+    .init = FootprintStamp_Init,
+    .exec = FootprintStamp_Main,
+    .exit = FootprintStamp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_89),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaDisconnectOverlayTemplate = {
+    .init = WiFiPlazaConnect_DisconnectInit,
+    .exec = WiFiPlazaConnect_DisconnectMain,
+    .exit = WiFiPlazaConnect_DisconnectExit,
+    .ovy_id = FS_OVERLAY_ID(OVY_46),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaMimeJrTopOverlayTemplate = {
+    .init = MimeJrTop_Init,
+    .exec = MimeJrTop_Main,
+    .exit = MimeJrTop_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_92),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaMainOverlayTemplate = {
+    .init = WiFiPlazaRoom_Init,
+    .exec = WiFiPlazaRoom_Main,
+    .exit = WiFiPlazaRoom_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_49),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaVisitorProfilesOverlayTemplate = {
+    .init = VisitorProfiles_Init,
+    .exec = VisitorProfiles_Main,
+    .exit = VisitorProfiles_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_48),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaNewsOverlayTemplate = {
+    .init = PlazaNews_Init,
+    .exec = PlazaNews_Main,
+    .exit = PlazaNews_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_88),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaConnectOverlayTemplate = {
+    .init = WiFiPlazaConnect_Init,
+    .exec = WiFiPlazaConnect_Main,
+    .exit = WiFiPlazaConnect_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_46),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaSwalotPlopOverlayTemplate = {
+    .init = SwalotPlop_Init,
+    .exec = SwalotPlop_Main,
+    .exit = SwalotPlop_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_91),
+};
+
+static const OverlayManagerTemplate sWiFiPlazaSurveyOverlayTemplate = {
+    .init = WiFiPlazaSurvey_Init,
+    .exec = WiFiPlazaSurvey_Main,
+    .exit = WiFiPlazaSurvey_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_47),
+};
+
+static const u8 sWiFiPlazaTypeChoices[20] = { 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 0, 0 };
+
+static void (*sWiFiPlazaAppStartFuncs[13])(WiFiPlazaApps *, void **) = {
+    WiFiPlazaApps_StartMain,
+    WiFiPlazaApps_StartVisitorProfiles,
+    WiFiPlazaApps_StartPlazaNews,
+    WiFiPlazaApps_StartFootprintStampBoard0,
+    WiFiPlazaApps_StartFootprintStampBoard1,
+    WiFiPlazaApps_StartConnect,
+    WiFiPlazaApps_StartSwalotPlop,
+    WiFiPlazaApps_StartMimeJrTop,
+    WiFiPlazaApps_StartWobbuffetPop,
+    WiFiPlazaApps_StartDisconnect,
+    WiFiPlazaApps_StartClosedDisconnect,
+    WiFiPlazaApps_StartSurvey,
+    WiFiPlazaApps_StartSurvey,
+};
+
+static void (*sWiFiPlazaAppFreeArgsFuncs[13])(void **) = {
+    WiFiPlazaApps_FreeMainArgs,
+    WiFiPlazaApps_FreeVisitorProfilesArgs,
+    WiFiPlazaApps_FreePlazaNewsArgs,
+    WiFiPlazaApps_FreeFootprintStampArgs,
+    WiFiPlazaApps_FreeFootprintStampArgs,
+    WiFiPlazaApps_FreeConnectArgs,
+    WiFiPlazaApps_FreeSwalotPlopArgs,
+    WiFiPlazaApps_FreeMimeJrTopArgs,
+    WiFiPlazaApps_FreeWobbuffetPopArgs,
+    WiFiPlazaApps_FreeDisconnectArgs,
+    WiFiPlazaApps_FreeDisconnectArgs,
+    WiFiPlazaApps_FreeSurveyArgs,
+    WiFiPlazaApps_FreeSurveyArgs,
+};
+
+static void (*sWiFiPlazaAppInitArgsFuncs[13])(WiFiPlazaApps *, void **, enum HeapID) = {
+    WiFiPlazaApps_NewMainArgs,
+    WiFiPlazaApps_NewVisitorProfilesArgs,
+    WiFiPlazaApps_NewPlazaNewsArgs,
+    WiFiPlazaApps_NewFootprintStampArgs,
+    WiFiPlazaApps_NewFootprintStampArgs,
+    WiFiPlazaApps_NewConnectArgs,
+    WiFiPlazaApps_NewSwalotPlopArgs,
+    WiFiPlazaApps_NewMimeJrTopArgs,
+    WiFiPlazaApps_NewWobbuffetPopArgs,
+    WiFiPlazaApps_NewDisconnectArgs,
+    WiFiPlazaApps_NewDisconnectArgs,
+    WiFiPlazaApps_NewSurveyAnswerArgs,
+    WiFiPlazaApps_NewSurveyResultsArgs,
+};
+
+static BOOL (*sWiFiPlazaAppEndFuncs[13])(WiFiPlazaApps *, void **) = {
+    WiFiPlazaApps_EndMain,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndVisitorProfiles,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndPlazaNews,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndFootprintStamp,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndFootprintStamp,
+    WiFiPlazaApps_EndConnect,
+    WiFiPlazaApps_EndSwalotPlop,
+    WiFiPlazaApps_EndMimeJrTop,
+    WiFiPlazaApps_EndWobbuffetPop,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndDisconnect,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndDisconnect,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndSurvey,
+    (BOOL(*const)(WiFiPlazaApps *, void **))WiFiPlazaApps_EndSurvey,
+};
+
 int WiFiPlaza_AvatarToIndex(u16 avatar) {
     int i;
     for (i = 0; i < 16; i++) {
-        if (avatar == sWiFiPlazaAvatars[i].avatar) {
+        if (avatar == gWiFiPlazaAvatars[i].avatar) {
             return i;
         }
     }
@@ -169,7 +317,7 @@ int WiFiPlaza_AvatarToIndex(u16 avatar) {
 
 u16 WiFiPlaza_IndexToAvatar(u32 index) {
     if (index < 16) {
-        return sWiFiPlazaAvatars[index].avatar;
+        return gWiFiPlazaAvatars[index].avatar;
     }
     return 0xffff;
 }
@@ -708,4 +856,209 @@ void WiFiPlaza_SecondsToTime(u32 *out, s64 *seconds) {
     ((u8 *)out)[0] = time.hour;
     ((u8 *)out)[1] = time.minute;
     ((u8 *)out)[2] = time.second;
+}
+
+// out = left + right (hour, minute, second; the hour wraps at 24).
+void WiFiPlazaTime_Add(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *left, b = *right;
+    a.field.second += b.field.second;
+    a.field.minute += a.field.second / 60;
+    out->field.second = a.field.second % 60;
+    a.field.minute += b.field.minute;
+    a.field.hour += a.field.minute / 60;
+    out->field.minute = a.field.minute % 60;
+    a.field.hour += b.field.hour;
+    out->field.hour = a.field.hour % 24;
+}
+
+// out = first - second (hour, minute, second; the hour wraps at 24).
+void WiFiPlazaTime_Subtract(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *first, b = *second;
+    int delta;
+    u8 value;
+    value = b.value[2];
+    delta = a.signedValue[2] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[2] = (u8)(a.value[2] + borrow * 60);
+        a.value[1] = (u8)(a.value[1] - borrow);
+    }
+    out->value[2] = (u8)(a.value[2] - value);
+    value = b.value[1];
+    delta = a.signedValue[1] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[1] = (u8)(a.value[1] + borrow * 60);
+        a.value[0] = (u8)(a.value[0] - borrow);
+    }
+    out->value[1] = (u8)(a.value[1] - value);
+    delta = (s8)a.value[0] - (s8)b.value[0];
+    if (delta < 0) {
+        int borrow = (-delta) / 24 + 1;
+        a.value[0] = (u8)(a.value[0] + borrow * 24);
+    }
+    out->value[0] = (u8)(a.value[0] - b.value[0]);
+}
+
+// Adds a country and region to the list (the first free entry, or the entry of the same place unless value is 1).
+void WiFiPlazaPlaces_Add(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
+    s32 i;
+    BOOL use;
+    if (country == 0) {
+        return;
+    }
+    if (region > (u32)LocationGmmDatRegionCountGetByCountryMsgNo(country)) {
+        return;
+    }
+    use = FALSE;
+    for (i = 0; i < 50; i++) {
+        if (places[i].occupied == 0) {
+            use = TRUE;
+        } else if (places[i].country == country && places[i].region == region) {
+            if (value == 1) {
+                return;
+            }
+            use = TRUE;
+        }
+        if (use) {
+            places[i].country = country;
+            places[i].region = region;
+            places[i].value = value;
+            places[i].occupied = 1;
+            return;
+        }
+    }
+}
+
+u16 WiFiPlazaPlaces_GetCountry(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->country;
+}
+
+u8 WiFiPlazaPlaces_GetRegion(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    if (places[index].occupied != 1) {
+        GF_AssertFail();
+    }
+    return places[index].region;
+}
+
+u8 WiFiPlazaPlaces_GetValue(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->value;
+}
+
+u8 WiFiPlazaPlaces_IsOccupied(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    return places[index].occupied;
+}
+
+// Turns off the diffuse, ambient, specular and emission flags of the materials of the first model of file.
+void WiFiPlaza_DisableModelLighting(void *file) {
+    NNSG3dResMdlSet *set = NNS_G3dGetMdlSet(file);
+    NNSG3dResMdl *model = NNS_G3dGetMdlByIdx(set, 0);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_DIFFUSE);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_AMBIENT);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_SPECULAR);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_EMISSION);
+}
+
+// TRUE if region exists in country (region 0 for a country without regions).
+BOOL WiFiPlaza_IsRegionValid(u32 country, u32 region) {
+    u32 count = LocationGmmDatRegionCountGetByCountryMsgNo(country);
+    if (count == 0 && region == 0) {
+        return TRUE;
+    }
+    if (region >= 1 && region <= count) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+u32 WiFiPlaza_GetTypeByChoice(u32 index) {
+    return sWiFiPlazaTypeChoices[index];
+}
+
+// The error message class of a connection error (WifiConnection_ClassifyErrorCode, with the plaza's own errors 25 and
+// 26).
+int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (class == 11 || errorCode == 25) {
+        if (context != 2) {
+            return 14;
+        }
+        return 11;
+    }
+    if (errorCode == 26) {
+        return 13;
+    }
+    if (class < 0) {
+        class = 11;
+    }
+    return class;
+}
+
+// FALSE for the errors that end the connection.
+BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (errorCode == 25) {
+        class = 11;
+    } else if (errorCode == 26) {
+        class = 12;
+    }
+    switch (class) {
+    case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
+BOOL WiFiPlaza_HasConnectionFailed(void) {
+    if (CommState_HasWifiFailed() || CommState_HasPlazaLobbyFailed()) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+WiFiPlazaNews *WiFiPlazaNews_New(enum HeapID heapID) {
+    WiFiPlazaNews *news = Heap_Alloc(heapID, sizeof(WiFiPlazaNews));
+    memset(news, 0, sizeof(WiFiPlazaNews));
+    WiFiPlazaNewsSlots_Init(&news->slots);
+    WiFiPlazaNewsEventList_Init(&news->events, heapID);
+    return news;
+}
+
+void WiFiPlazaNews_Delete(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Free(&news->events);
+    Heap_Free(news);
+}
+
+void WiFiPlazaNews_Update(WiFiPlazaNews *news) {
+    WiFiPlazaNewsEventList_Update(&news->events);
+    WiFiPlazaNewsSlots_SetChange(&news->slots, 0);
 }

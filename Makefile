@@ -343,7 +343,6 @@ $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bca_trans.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/NitroSystem/src/gfd_linked_list_pltt_vram_man_reset.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroWiFi/src/soc_gethostbyname.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/gfd_linked_list_tex_vram_man_reset.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/wifi_plaza_survey_answer.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/application/vs_recorder/vs_recorder_row_text.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

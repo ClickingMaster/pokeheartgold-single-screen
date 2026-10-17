@@ -14,8 +14,8 @@
 #include "render_window.h"
 #include "save.h"
 #include "sprite.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
+#include "sprite_resource_header.h"
 
 // Wi-Fi Plaza "Plaza Survey", started by the Wi-Fi Plaza lobby overlay (OVY_45): mode 0 asks the
 // player to take part and answer this week's question, mode 1 shows the results of this Wi-Fi Plaza
@@ -101,6 +101,11 @@ typedef struct WiFiPlazaSurveyResults {
     WiFiPlazaSurveyTally lastWeekTally;
 } WiFiPlazaSurveyResults; // size: 0xF0
 
+typedef union WiFiPlazaSurveyModeWork {
+    WiFiPlazaSurveyAnswer answer;
+    WiFiPlazaSurveyResults results;
+} WiFiPlazaSurveyModeWork;
+
 typedef struct WiFiPlazaSurveyWork {
     BgConfig *bgConfig;
     SpriteList *spriteList;
@@ -108,12 +113,7 @@ typedef struct WiFiPlazaSurveyWork {
     GF_2DGfxResMan *resMans[4];
     NARC *narc; // a/2/0/7
     WiFiPlazaSurveyMessages messages;
-
-    union {
-        WiFiPlazaSurveyAnswer answer;
-        WiFiPlazaSurveyResults results;
-    } mode;
-
+    WiFiPlazaSurveyModeWork mode;
     WiFiPlazaSurveyMessageBox msgBox;
 } WiFiPlazaSurveyWork; // size: 0x28C
 
@@ -156,9 +156,9 @@ String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, 
 String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo);
 String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo, int answer);
 void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID);
-void WiFiPlazaSurveyAnswer_Init(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
-BOOL WiFiPlazaSurveyAnswer_Main(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
-void WiFiPlazaSurveyAnswer_Exit(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
+void WiFiPlazaSurveyAnswer_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+BOOL WiFiPlazaSurveyAnswer_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+void WiFiPlazaSurveyAnswer_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
 void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID);
 BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
 void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
@@ -176,9 +176,9 @@ void WiFiPlazaSurvey_ClearMessageBox(WiFiPlazaSurveyMessageBox *msgBox);
 void WiFiPlazaSurvey_CreateYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, enum HeapID heapID);
 u32 WiFiPlazaSurvey_HandleYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID);
 void WiFiPlazaSurvey_DestroyYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID);
-void WiFiPlazaSurveyResults_Init(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
-BOOL WiFiPlazaSurveyResults_Main(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
-void WiFiPlazaSurveyResults_Exit(WiFiPlazaSurveyResults *results);
+void WiFiPlazaSurveyResults_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+BOOL WiFiPlazaSurveyResults_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+void WiFiPlazaSurveyResults_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
 void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
 BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
 void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results);

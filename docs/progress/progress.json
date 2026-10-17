@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "43cc62eb1e2e71b8dabdc6701fe4f5ba9619772d",
+  "commit": "6cae54b2490adcae4a38ec17cc18b99da582717d",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "e9f59b3df2b3fdaae351a2776b158db4ccf3aa78c18225b87d44045b2c515e67",
+    "ARM9": "d1715c265e2525fd9476788f167f23f379d84a8d9a2ea0efabda55f3e752e5fc",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -3861,7 +3861,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "wifi_plaza.o",
-      "bytes": 788,
+      "bytes": 11246,
       "status": "c",
       "source": "src/wifi_plaza.c"
     },
@@ -3869,17 +3869,9 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "wifi_plaza_apps.o",
-      "bytes": 2082,
+      "bytes": 2982,
       "status": "c",
       "source": "src/wifi_plaza_apps.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_groups.o",
-      "bytes": 714,
-      "status": "c",
-      "source": "src/wifi_plaza_groups.c"
     },
     {
       "cpu": "ARM9",
@@ -3892,16 +3884,8 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "wifi_plaza_lobby.o",
-      "bytes": 1428,
-      "status": "c",
-      "source": "src/wifi_plaza_lobby.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "wifi_plaza_lobby_client.o",
-      "bytes": 4624,
+      "bytes": 5672,
       "status": "c",
       "source": "src/wifi_plaza_lobby_client.c"
     },
@@ -3909,73 +3893,17 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "wifi_plaza_lobby_events.o",
-      "bytes": 1418,
+      "bytes": 4720,
       "status": "c",
       "source": "src/wifi_plaza_lobby_events.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "wifi_plaza_lobby_matches.o",
-      "bytes": 550,
-      "status": "c",
-      "source": "src/wifi_plaza_lobby_matches.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_lobby_players.o",
-      "bytes": 1048,
-      "status": "c",
-      "source": "src/wifi_plaza_lobby_players.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "wifi_plaza_news.o",
-      "bytes": 1664,
+      "bytes": 3256,
       "status": "c",
       "source": "src/wifi_plaza_news.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_news_events.o",
-      "bytes": 1592,
-      "status": "c",
-      "source": "src/wifi_plaza_news_events.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_player.o",
-      "bytes": 1598,
-      "status": "c",
-      "source": "src/wifi_plaza_player.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_player_objects.o",
-      "bytes": 2752,
-      "status": "c",
-      "source": "src/wifi_plaza_player_objects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_receive.o",
-      "bytes": 436,
-      "status": "c",
-      "source": "src/wifi_plaza_receive.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_requests.o",
-      "bytes": 1642,
-      "status": "c",
-      "source": "src/wifi_plaza_requests.c"
     },
     {
       "cpu": "ARM9",
@@ -3988,42 +3916,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "wifi_plaza_state.o",
-      "bytes": 3166,
-      "status": "c",
-      "source": "src/wifi_plaza_state.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "wifi_plaza_time_zone.o",
       "bytes": 284,
       "status": "c",
       "source": "src/wifi_plaza_time_zone.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_util.o",
-      "bytes": 900,
-      "status": "c",
-      "source": "src/wifi_plaza_util.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_word_set.o",
-      "bytes": 762,
-      "status": "c",
-      "source": "src/wifi_plaza_word_set.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "wifi_plaza_work.o",
-      "bytes": 712,
-      "status": "c",
-      "source": "src/wifi_plaza_work.c"
     },
     {
       "cpu": "ARM9",
@@ -4037,25 +3933,9 @@
       "cpu": "ARM9",
       "module": "OVY_47",
       "object": "wifi_plaza_survey.o",
-      "bytes": 1854,
+      "bytes": 5668,
       "status": "c",
       "source": "src/wifi_plaza_survey.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_47",
-      "object": "wifi_plaza_survey_answer.o",
-      "bytes": 484,
-      "status": "c",
-      "source": "src/wifi_plaza_survey_answer.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_47",
-      "object": "wifi_plaza_survey_results.o",
-      "bytes": 3330,
-      "status": "c",
-      "source": "src/wifi_plaza_survey_results.c"
     },
     {
       "cpu": "ARM9",
