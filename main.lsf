@@ -299,8 +299,9 @@ Static main
     Object src/party_menu_list_items.o
     Object src/party_menu_items.o
     Object src/naming_screen.o
-    Object asm/code_entry_data.o
     Object src/code_entry.o
+    Object src/code_entry_states.o
+    Object src/code_entry_gfx.o
     Object src/orbit_cursor.o
     Object src/vs_recorder_app.o
     Object src/vs_recorder_menu_app.o
@@ -330,7 +331,6 @@ Static main
     Object src/location_gmm_dat.o
     Object src/move_relearner.o
     Object src/easy_chat_menu.o
-    Object asm/easy_chat_menu_data.o
     Object src/application/delete_savedata.o
     Object src/application/check_savedata.o
     Object src/save_data_read_error.o
@@ -1940,7 +1940,8 @@ Overlay OVY_81
 {
     After OVY_80
     Object src/frontier/battle_factory_app.o
-    Object asm/battle_factory_app_data.o
+    Object src/frontier/battle_factory_app_gfx.o
+    Object src/frontier/battle_factory_app_grid.o
 }
 Overlay OVY_82
 {
@@ -1985,7 +1986,6 @@ Overlay OVY_88
 {
     After OVY_45
     Object src/application/plaza_news.o
-    Object asm/plaza_news_data.o
 }
 Overlay OVY_89
 {

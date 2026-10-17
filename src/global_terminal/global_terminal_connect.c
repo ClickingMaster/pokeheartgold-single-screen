@@ -138,9 +138,6 @@ void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
 u32 FashionEntry_sizeof(void);
 
-extern const GraphicsModes sGlobalTerminalConnectGraphicsModes;
-extern const GraphicsBanks sGlobalTerminalConnectGraphicsBanks;
-extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectMainBgTemplates;
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectSubBgTemplates;
 
 void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work);
@@ -190,6 +187,59 @@ static BOOL (*sGlobalTerminalConnectStates[14])(GlobalTerminalConnectWork *) = {
     GlobalTerminalConnect_StateServerErrorDisconnect,
     GlobalTerminalConnect_StateWaitMessage,
     GlobalTerminalConnect_StateDisconnect,
+};
+
+static const GraphicsModes sGlobalTerminalConnectGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const GraphicsBanks sGlobalTerminalConnectGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectMainBgTemplates = {
+    .templates = {
+        {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+        {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf000,
+            .charBase = GX_BG_CHARBASE_0x08000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = FALSE,
+        },
+    },
 };
 
 BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {

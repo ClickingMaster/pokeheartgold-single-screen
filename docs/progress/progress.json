@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "d875d20f32b48bf0685cf8c66e5b2d8f587207b3",
+  "commit": "fc63a6e91f65b39378c07acd38db3790d6c46930",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "20b19892404037ec63f6ae980f4e1545c71cf89e6c85e8dfb2741ca6ec843020",
+    "ARM9": "500cc6ee5da50fa0c6e41519692b1cd8060f68229d1bc94e262e755a00b8a363",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -4992,9 +4992,25 @@
       "cpu": "ARM9",
       "module": "OVY_81",
       "object": "battle_factory_app.o",
-      "bytes": 22186,
+      "bytes": 18804,
       "status": "c",
       "source": "src/frontier/battle_factory_app.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_81",
+      "object": "battle_factory_app_gfx.o",
+      "bytes": 2824,
+      "status": "c",
+      "source": "src/frontier/battle_factory_app_gfx.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_81",
+      "object": "battle_factory_app_grid.o",
+      "bytes": 558,
+      "status": "c",
+      "source": "src/frontier/battle_factory_app_grid.c"
     },
     {
       "cpu": "ARM9",
@@ -7042,9 +7058,25 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "code_entry.o",
-      "bytes": 8564,
+      "bytes": 1808,
       "status": "c",
       "source": "src/code_entry.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "code_entry_gfx.o",
+      "bytes": 3712,
+      "status": "c",
+      "source": "src/code_entry_gfx.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "code_entry_states.o",
+      "bytes": 3044,
+      "status": "c",
+      "source": "src/code_entry_states.c"
     },
     {
       "cpu": "ARM9",

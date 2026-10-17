@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/sndseq.h"
+
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"
@@ -153,18 +155,6 @@ void *WiFiPlazaNews_GetEventType(void *newsData);
 int WiFiPlazaNews_FormatEvent(void *newsData, void *info, void *item, String *dest, enum HeapID heapID);
 int WiFiPlazaNews_GetEventSlot(void *newsData, void *item, int index);
 
-extern const u8 sPlazaNewsHeadlineRowTops[3];         // tilemap top of each headline row, followed by the row durations
-extern const u32 sPlazaNewsLastHeadlineRowDuration[]; // duration of the last headline row (240); rows 0-1 come before it
-extern const ObjCharTransferTemplate sPlazaNewsObjCharTransfer;
-extern const int sPlazaNewsClockBlinkTiles[4];
-extern const GraphicsModes sPlazaNewsGraphicsModes;
-extern const u32 sPlazaNewsBgIds[5];
-extern const GraphicsBanks sPlazaNewsBanks;
-extern const PlazaNewsTitleTemplate sPlazaNewsTitleTemplates[4];
-extern const BgTemplate sPlazaNewsBgTemplates[5];
-extern const u16 sPlazaNewsTitlePaletteOffsets[4];
-extern const u32 sPlazaNewsTitleSEs[4];
-
 void PlazaNews_VBlankCallback(void *data);
 void PlazaNews_Update(PlazaNewsWork *work, void *lobby);
 void PlazaNewsGraphics_Init(PlazaNewsGraphics *graphics, enum HeapID heapID);
@@ -212,6 +202,169 @@ void PlazaNewsFlash_Init(PlazaNewsFlash *flash, u16 paletteOffset, u32 sound);
 void PlazaNewsFlash_Clear(PlazaNewsFlash *flash);
 void PlazaNewsFlash_Start(PlazaNewsFlash *flash);
 void PlazaNewsFlash_Update(PlazaNewsFlash *flash);
+
+static const u8 sPlazaNewsHeadlineRowTops[3] = { 15, 18, 21 };
+
+static const u32 sPlazaNewsHeadlineRowDurations[3] = { 336, 288, 240 };
+
+static const int sPlazaNewsClockBlinkTiles[4] = { 1, 4, 5, 6 };
+
+static const GraphicsModes sPlazaNewsGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const ObjCharTransferTemplate sPlazaNewsObjCharTransfer = {
+    .maxTasks = 32,
+    .sizeMain = 0x18000,
+    .sizeSub = 0x4000,
+    .heapID = HEAP_ID_114,
+};
+
+static const u32 sPlazaNewsBgIds[5] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_2, GF_BG_LYR_MAIN_3, GF_BG_LYR_SUB_0 };
+
+static const GraphicsBanks sPlazaNewsBanks = {
+    .bg = GX_VRAM_BG_256_AB,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_96_EFG,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const PlazaNewsTitleTemplate sPlazaNewsTitleTemplates[4] = {
+    {
+     .left = 6,
+     .top = 0,
+     .width = 20,
+     .height = 8,
+     .baseTile = 1,
+     .palette = 10,
+     .x = 80,
+     .y = 6,
+     .alignment = 1,
+     .color = MAKE_TEXT_COLOR(3, 4, 0),
+     },
+    {
+     .left = 0,
+     .top = 6,
+     .width = 6,
+     .height = 3,
+     .baseTile = 0xA1,
+     .palette = 7,
+     .x = 16,
+     .y = 4,
+     .alignment = 1,
+     .color = MAKE_TEXT_COLOR(13,                     14,                0),
+     },
+    {
+     .left = 15,
+     .top = 6,
+     .width = 6,
+     .height = 5,
+     .baseTile = 0xB3,
+     .palette = 7,
+     .x = 24,
+     .y = 4,
+     .alignment = 1,
+     .color = MAKE_TEXT_COLOR(13,               14,                       0),
+     },
+    {
+     .left = 4,
+     .top = 12,
+     .width = 18,
+     .height = 3,
+     .baseTile = 0xD1,
+     .palette = 7,
+     .x = 4,
+     .y = 4,
+     .alignment = 0,
+     .color = MAKE_TEXT_COLOR(13,                14,              0),
+     },
+};
+
+static const BgTemplate sPlazaNewsBgTemplates[5] = {
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe000,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd800,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 3,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd000,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 2,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+};
+
+static u16 sPlazaNewsTitlePaletteOffsets[4] = { 0, 0x18, 0x1A, 0x1E };
+
+static u32 sPlazaNewsTitleSEs[6] = { 0, SEQ_SE_DP_DECIDE, SEQ_SE_DP_BUTTON9, SEQ_SE_DP_PIRORIRO2, 0, 0 };
 
 BOOL PlazaNews_Init(OverlayManager *man, int *state) {
     PlazaNewsArgs *args;
@@ -750,7 +903,7 @@ BOOL PlazaNewsHeadlines_Update(PlazaNewsHeadlines *headlines, void *newsData, vo
     WiFiPlazaWork_GetSpecialVisitors(lobby, info);
     i = 2;
     ticker = &headlines->tickers[2];
-    duration = sPlazaNewsLastHeadlineRowDuration;
+    duration = &sPlazaNewsHeadlineRowDurations[2];
     for (; i >= 0; i--) {
         if (ticker->active) {
             if (PlazaNewsTicker_Advance(ticker) == TRUE) {
