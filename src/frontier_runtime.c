@@ -1,17 +1,26 @@
+#include "assert.h"
 #include "frontier_runtime_internal.h"
+#include "heap.h"
+#include "poke_overlay.h"
 
-int Frontier_Init(void *manager) {
+FS_EXTERN_OVERLAY(OVY_42);
+FS_EXTERN_OVERLAY(OVY_80);
+FS_EXTERN_OVERLAY(OVY_81);
+
+const OverlayManagerTemplate gOverlayTemplate_Frontier = { Frontier_Init, Frontier_Main, Frontier_Exit, FS_OVERLAY_ID_NONE };
+
+BOOL Frontier_Init(OverlayManager *manager, int *state) {
     FrontierWork *work;
     Frontier_LoadOverlays();
-    work = OverlayManager_CreateAndGetData(manager, 0xa54, 11);
-    MI_CpuFill8(work, 0, 0xa54);
+    work = OverlayManager_CreateAndGetData(manager, sizeof(FrontierWork), HEAP_ID_FIELD2);
+    MI_CpuFill8(work, 0, sizeof(FrontierWork));
     Frontier_ResetMapObjects(work);
     Frontier_ResetMapSpriteState(work);
     work->launchArgs = OverlayManager_GetArgs(manager);
     if (work->launchArgs == 0) {
         GF_AssertFail();
     }
-    work->system = FrontierSystem_Create(work, 11, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode);
+    work->system = FrontierSystem_Create(work, HEAP_ID_FIELD2, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode);
     FrontierSystem_AddTask(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, 0);
     Frontier_CreateMap(work);
     return 1;
@@ -27,7 +36,7 @@ enum {
     FRONTIER_MAIN_REBUILD_MAP,
 };
 
-int Frontier_Main(void *manager, int *state) {
+BOOL Frontier_Main(OverlayManager *manager, int *state) {
     FrontierWork *work = OverlayManager_GetData(manager);
     switch (*state) {
     case FRONTIER_MAIN_INIT:
@@ -46,7 +55,7 @@ int Frontier_Main(void *manager, int *state) {
             break;
         }
         FrontierSystem_Main(work->system);
-        if (work->childManager != 0) {
+        if (work->childManager != NULL) {
             *state = FRONTIER_MAIN_START_CHILD_APP;
         }
         break;
@@ -68,7 +77,7 @@ int Frontier_Main(void *manager, int *state) {
             if (work->childArgs != 0 && work->freeChildArgs == 1) {
                 Heap_Free(work->childArgs);
             }
-            work->childManager = 0;
+            work->childManager = NULL;
             work->childExit = 0;
             work->childArgs = 0;
             Frontier_CreateMap(work);
@@ -84,11 +93,11 @@ int Frontier_Main(void *manager, int *state) {
     case FRONTIER_MAIN_REBUILD_MAP:
         Frontier_CreateMap(work);
         if (work->taskId == 0xffff) {
-            FrontierSystem_ChangeMsgBank(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, 11);
+            FrontierSystem_ChangeMsgBank(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, HEAP_ID_FIELD2);
         } else {
-            void *saved = FrontierSystem_SaveVars(work->system, 11);
+            void *saved = FrontierSystem_SaveVars(work->system, HEAP_ID_FIELD2);
             FrontierSystem_Delete(work->system);
-            work->system = FrontierSystem_Create(work, 11, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode);
+            work->system = FrontierSystem_Create(work, HEAP_ID_FIELD2, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode);
             FrontierSystem_AddTask(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, work->taskId);
             FrontierSystem_RestoreVars(work->system, saved);
         }
@@ -99,7 +108,7 @@ int Frontier_Main(void *manager, int *state) {
     return 0;
 }
 
-int Frontier_Exit(void *manager) {
+BOOL Frontier_Exit(OverlayManager *manager, int *state) {
     FrontierWork *work = OverlayManager_GetData(manager);
     FrontierSystem_Delete(work->system);
     Frontier_FreeMap(work);
@@ -130,15 +139,15 @@ void Frontier_ResetMapObjects(FrontierWork *work) {
 }
 
 void Frontier_LoadOverlays(void) {
-    HandleLoadOverlay((u32)SDK_OVERLAY_OVY_80_ID, 2);
-    HandleLoadOverlay((u32)SDK_OVERLAY_OVY_81_ID, 2);
-    HandleLoadOverlay((u32)SDK_OVERLAY_OVY_42_ID, 2);
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_80), OVY_LOAD_ASYNC);
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_81), OVY_LOAD_ASYNC);
+    HandleLoadOverlay(FS_OVERLAY_ID(OVY_42), OVY_LOAD_ASYNC);
 }
 
 void Frontier_UnloadOverlays(void) {
-    UnloadOverlayByID((u32)SDK_OVERLAY_OVY_80_ID);
-    UnloadOverlayByID((u32)SDK_OVERLAY_OVY_81_ID);
-    UnloadOverlayByID((u32)SDK_OVERLAY_OVY_42_ID);
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_80));
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_81));
+    UnloadOverlayByID(FS_OVERLAY_ID(OVY_42));
 }
 
 void *Frontier_GetLaunchArgs(FrontierWork *work) {
@@ -157,11 +166,11 @@ void Frontier_SetData(FrontierWork *work, void *data) {
     *(void **)work->launchArgs = data;
 }
 
-void Frontier_LaunchApplication(FrontierWork *work, const void *template, void *args, u8 freeArgs, void (*exit)(void *)) {
-    if (work->childManager != 0) {
+void Frontier_LaunchApplication(FrontierWork *work, const OverlayManagerTemplate *template, void *args, u8 freeArgs, void (*exit)(void *)) {
+    if (work->childManager != NULL) {
         GF_AssertFail();
     }
-    work->childManager = OverlayManager_New(template, args, 11);
+    work->childManager = OverlayManager_New(template, args, HEAP_ID_FIELD2);
     work->childArgs = args;
     work->freeChildArgs = freeArgs;
     work->childExit = exit;

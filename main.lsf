@@ -356,7 +356,6 @@ Static main
     Object src/error_message_reset.o
     Object src/sin_vcount.o
     Object src/frontier_runtime.o
-    Object asm/frontier_template.o
 	Object src/frontier_launch.o
     Object src/battle_frontier_communication.o
     Object asm/battle_frontier_communication_data.o

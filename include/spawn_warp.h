@@ -3,10 +3,10 @@
 
 #include "script.h"
 
-u16 GetMomSpawnId(void);
-void GetFlyWarpData(u16 spawnId, Location *dest);
-void GetDeathWarpData(u16 spawnId, Location *dest);
-void GetSpecialSpawnWarpData(u16 spawnId, Location *dest);
+u32 GetMomSpawnId(void);
+void GetFlyWarpData(s32 spawnId, Location *dest);
+void GetDeathWarpData(s32 spawnId, Location *dest);
+void GetSpecialSpawnWarpData(s32 spawnId, Location *dest);
 u32 MapHeader_GetSpawnIdForDeathWarp(u32 mapId);
 
 #endif // POKEHEARTGOLD_SPAWN_WARP_H

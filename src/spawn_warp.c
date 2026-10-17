@@ -1,3 +1,5 @@
+#include "spawn_warp.h"
+
 #include "global.h"
 
 #include "constants/flags.h"

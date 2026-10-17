@@ -25,7 +25,7 @@ int Terrain_AbsDiff(int lhs, int rhs);
 int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
 
 extern int TileIndex_GetQuadrant(int idx, int stride);
-extern int MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int unused, MapLoadManager *mapLoadManager);
+u8 MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int unused, MapLoadManager *mapLoadManager);
 extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
 int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
