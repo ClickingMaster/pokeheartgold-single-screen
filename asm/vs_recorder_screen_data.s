@@ -1,19 +1,14 @@
-#include "constants/items.h"
-#include "constants/moves.h"
-#include "constants/pokemon.h"
-#include "constants/ribbon.h"
-#include "constants/field_move_response.h"
 #include "msgdata/msg/msg_0013.h"
 	.include "asm/macros.inc"
 	.include "vs_recorder_screen_data.inc"
 	.include "global.inc"
 
-	.public gOverlayTemplate_Battle
-	.public gNatureStatMods
+	.public sVsRecorderMode3MenuNoFrontier
+	.public sVsRecorderMode0MenuNoFrontier
+	.public _02103754
+	.public sVsRecorderRootMenu
 
 	.text
-	.public VsRecorderApp_GetStartMenu
-	.public VsRecorderApp_CountMenuChoices
 
 	// enabled entry: message, animation, action, next substate, selection, unused, submenu
 	.macro menu_entry msgId, anim, action, next, selection, unk1C, child
@@ -75,7 +70,6 @@ sVsRecorderMode3Menu:
 	menu_entry_empty
 	menu_entry_empty
 
-	.public sVsRecorderMode3MenuNoFrontier
 sVsRecorderMode3MenuNoFrontier:
 	menu_entry msg_0013_00092, 0, 14, 3, 300, 0xFBFBFBFB, 0
 	menu_entry msg_0013_00002, 2, 2, 3, 999, 0xFBFBFBFB, sVsRecorderMode3QuitMenu
@@ -153,7 +147,6 @@ sVsRecorderBattleVideosMenu:
 	menu_entry msg_0013_00003, 5, 3, 4, 0xFBFBFBFB, 0xFBFBFBFB, 0
 	menu_entry_empty
 
-	.public sVsRecorderMode0MenuNoFrontier
 sVsRecorderMode0MenuNoFrontier:
 	menu_entry msg_0013_00000, 0, 1, 3, 0xFBFBFBFB, 0xFBFBFBFB, sVsRecorderBattleVideosMenu
 	menu_entry msg_0013_00002, 4, 2, 2, 0xFBFBFBFB, 0xFBFBFBFB, 0
@@ -173,12 +166,10 @@ sVsRecorderMode6Menu:
 	menu_entry msg_0013_00058, 1, 10, 3, 100, 0xFBFBFBFB, 0
 	menu_entry msg_0013_00002, 2, 2, 3, 999, 0xFBFBFBFB, sVsRecorderQuitMenu
 	.space 4
-	.public _02103754
 _02103754:
 	.space 0x20
 	menu_entry_empty
 
-	.public sVsRecorderRootMenu
 sVsRecorderRootMenu:
 	menu_entry 255, 65535, 0, 9, 0xFBFBFBFB, 0xFBFBFBFB, sVsRecorderMode0Menu
 	menu_entry 255, 65535, 0, 9, 0xFBFBFBFB, 0xFBFBFBFB, sVsRecorderMode1Menu

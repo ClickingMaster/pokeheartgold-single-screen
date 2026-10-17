@@ -10,22 +10,194 @@
 #include "player_avatar.h"
 #include "player_avatar_movement.h"
 
-extern MovementStateFunc gPathMovementStateFuncs[];
-extern MovementStateFunc gBackAndForthMovementStateFuncs[];
-extern MovementStateFunc gAlternatingSpinMovementStateFuncs[];
-extern MovementStateFunc gSpinMovementStateFuncs[];
-extern const DirectionCycle gSpinCounterclockwiseOrder;
-extern const DirectionCycle gSpinClockwiseOrder;
-extern const int gAlternatingSpinCounterclockwiseOrder[5];
-extern const int gAlternatingSpinClockwiseOrder[5];
-extern const int gRandomLookDelays[];
-extern int gWalkingSpinOrders[][4];
-extern const int gPlayerAwareMovementTypes[];
-extern const MovementListEntry gMovementDirectionTables[];
+static BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, void *data);
+static BOOL SpinMovement_WaitFace(LocalMapObject *object, void *data);
+static BOOL SpinMovement_Wait(LocalMapObject *object, void *data);
+static BOOL SpinMovement_Turn(LocalMapObject *object, void *data);
+static BOOL AlternatingSpinMovement_Face(LocalMapObject *object, void *data);
+static BOOL AlternatingSpinMovement_WaitFace(LocalMapObject *object, void *data);
+static BOOL AlternatingSpinMovement_Wait(LocalMapObject *object, void *data);
+static BOOL AlternatingSpinMovement_Turn(LocalMapObject *object, void *data);
+static BOOL BackAndForthMovement_FaceStart(LocalMapObject *object, void *data);
+static BOOL BackAndForthMovement_Step(LocalMapObject *mapObject, void *data);
+static BOOL BackAndForthMovement_WaitStep(LocalMapObject *object, void *data);
+static BOOL PathMovement_Step(LocalMapObject *object, void *data);
+static BOOL PathMovement_WaitStep(LocalMapObject *object, void *data);
+
+static const MovementStateFunc sPathMovementStateFuncs[] = {
+    PathMovement_Step,
+    PathMovement_WaitStep,
+};
+
+static const int sDirectionTable09[] = { DIR_NORTH, DIR_SOUTH, DIR_NONE };
+
+static const int sDirectionTable04[] = { DIR_SOUTH, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable02[] = { DIR_NORTH, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable12[] = { DIR_NORTH, DIR_SOUTH, DIR_NONE };
+
+static const MovementStateFunc sBackAndForthMovementStateFuncs[] = {
+    BackAndForthMovement_FaceStart,
+    BackAndForthMovement_Step,
+    BackAndForthMovement_WaitStep,
+};
+
+static const int sDirectionTable10[] = { DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable01[] = { DIR_NORTH, DIR_WEST, DIR_NONE };
+
+static const int sDirectionTable03[] = { DIR_SOUTH, DIR_WEST, DIR_NONE };
+
+static const int sDirectionTable13[] = { DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable36[] = { DIR_WEST, DIR_NORTH, DIR_EAST, DIR_SOUTH };
+
+static const int sDirectionTable19[] = { DIR_WEST, DIR_EAST, DIR_SOUTH, DIR_NORTH };
+
+static const int sDirectionTable37[] = { DIR_EAST, DIR_SOUTH, DIR_WEST, DIR_NORTH };
+
+static const int sDirectionTable33[] = { DIR_EAST, DIR_NORTH, DIR_WEST, DIR_SOUTH };
+
+static const int sDirectionTable25[] = { DIR_SOUTH, DIR_EAST, DIR_WEST, DIR_NORTH };
+
+static const int sDirectionTable22[] = { DIR_WEST, DIR_NORTH, DIR_SOUTH, DIR_EAST };
+
+static const int sDirectionTable07[] = { DIR_NORTH, DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable24[] = { DIR_EAST, DIR_WEST, DIR_NORTH, DIR_SOUTH };
+
+static const int sDirectionTable05[] = { DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_NONE };
+
+static const int sDirectionTable18[] = { DIR_WEST, DIR_EAST, DIR_SOUTH, DIR_NORTH };
+
+static const int sDirectionTable32[] = { DIR_WEST, DIR_SOUTH, DIR_EAST, DIR_NORTH };
+
+static const int sDirectionTable26[] = { DIR_EAST, DIR_NORTH, DIR_SOUTH, DIR_WEST };
+
+static const int sDirectionTable23[] = { DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_WEST };
+
+static const int sDirectionTable27[] = { DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_EAST };
+
+static const int sDirectionTable14[] = { DIR_NORTH, DIR_EAST, DIR_WEST, DIR_SOUTH };
+
+static const int sDirectionTable15[] = { DIR_EAST, DIR_WEST, DIR_SOUTH, DIR_NORTH };
+
+static const MovementStateFunc sAlternatingSpinMovementStateFuncs[] = {
+    AlternatingSpinMovement_Face,
+    AlternatingSpinMovement_WaitFace,
+    AlternatingSpinMovement_Wait,
+    AlternatingSpinMovement_Turn,
+};
+
+static const int sDirectionTable29[] = { DIR_SOUTH, DIR_WEST, DIR_EAST, DIR_NORTH };
+
+static const int sDirectionTable30[] = { DIR_NORTH, DIR_WEST, DIR_SOUTH, DIR_EAST };
+
+static const MovementStateFunc sSpinMovementStateFuncs[] = {
+    SpinMovement_FaceNearbyPlayer,
+    SpinMovement_WaitFace,
+    SpinMovement_Wait,
+    SpinMovement_Turn,
+};
+
+static const int sDirectionTable35[] = { DIR_SOUTH, DIR_WEST, DIR_NORTH, DIR_EAST };
+
+static const int sDirectionTable16[] = { DIR_SOUTH, DIR_NORTH, DIR_EAST, DIR_WEST };
+
+static const int sDirectionTable17[] = { DIR_WEST, DIR_SOUTH, DIR_NORTH, DIR_EAST };
+
+static const int sDirectionTable06[] = { DIR_NORTH, DIR_SOUTH, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable08[] = { DIR_SOUTH, DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable21[] = { DIR_EAST, DIR_SOUTH, DIR_NORTH, DIR_WEST };
+
+static const int sDirectionTable34[] = { DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WEST };
+
+static const int sDirectionTable20[] = { DIR_SOUTH, DIR_NORTH, DIR_WEST, DIR_EAST };
+
+static const int sDirectionTable28[] = { DIR_WEST, DIR_EAST, DIR_NORTH, DIR_SOUTH };
+
+static const int sDirectionTable31[] = { DIR_SOUTH, DIR_EAST, DIR_NORTH, DIR_WEST };
+
+static const DirectionCycle sSpinClockwiseOrder = {
+    { DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WEST, DIR_NONE }
+};
+
+static const DirectionCycle sAlternatingSpinCounterclockwiseOrder = {
+    { DIR_NORTH, DIR_WEST, DIR_SOUTH, DIR_EAST, DIR_NONE }
+};
+
+static const DirectionCycle sAlternatingSpinClockwiseOrder = {
+    { DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WEST, DIR_NONE }
+};
+
+static const int sRandomLookDelays[] = { 16, 32, 48, 64, -1 };
+
+static const int sDirectionTable11[] = { DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const DirectionCycle sSpinCounterclockwiseOrder = {
+    { DIR_NORTH, DIR_WEST, DIR_SOUTH, DIR_EAST, DIR_NONE }
+};
+
+static const int sDirectionTable38[] = { DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sDirectionTable00[] = { DIR_NORTH, DIR_SOUTH, DIR_WEST, DIR_EAST, DIR_NONE };
+
+static const int sWalkingSpinOrders[][4] = {
+    { DIR_NORTH, DIR_WEST, DIR_SOUTH, DIR_EAST },
+    { DIR_NORTH, DIR_EAST, DIR_SOUTH, DIR_WEST },
+};
+
+static const int sPlayerAwareMovementTypes[] = { 2, 6, 7, 8, 9, 10, 11, 12, 13, 45, 46, 18, 19, 255 };
+
+static const MovementListEntry sMovementDirectionTables[] = {
+    { 0,  sDirectionTable00 },
+    { 1,  sDirectionTable01 },
+    { 2,  sDirectionTable02 },
+    { 3,  sDirectionTable03 },
+    { 4,  sDirectionTable04 },
+    { 5,  sDirectionTable05 },
+    { 6,  sDirectionTable06 },
+    { 7,  sDirectionTable07 },
+    { 8,  sDirectionTable08 },
+    { 9,  sDirectionTable09 },
+    { 10, sDirectionTable10 },
+    { 11, sDirectionTable11 },
+    { 12, sDirectionTable12 },
+    { 13, sDirectionTable13 },
+    { 14, sDirectionTable14 },
+    { 15, sDirectionTable15 },
+    { 16, sDirectionTable16 },
+    { 17, sDirectionTable17 },
+    { 18, sDirectionTable18 },
+    { 19, sDirectionTable19 },
+    { 20, sDirectionTable20 },
+    { 21, sDirectionTable21 },
+    { 22, sDirectionTable22 },
+    { 23, sDirectionTable23 },
+    { 24, sDirectionTable24 },
+    { 25, sDirectionTable25 },
+    { 26, sDirectionTable26 },
+    { 27, sDirectionTable27 },
+    { 28, sDirectionTable28 },
+    { 29, sDirectionTable29 },
+    { 30, sDirectionTable30 },
+    { 31, sDirectionTable31 },
+    { 32, sDirectionTable32 },
+    { 33, sDirectionTable33 },
+    { 34, sDirectionTable34 },
+    { 35, sDirectionTable35 },
+    { 36, sDirectionTable36 },
+    { 37, sDirectionTable37 },
+    { 38, sDirectionTable38 },
+    { 39, NULL              },
+};
 
 void RandomLookMovement_Init(LocalMapObject *object, u32 value) {
     u8 *state = MapObject_InitMovementData(object, 8);
-    *(u16 *)(state + 2) = DirectionList_GetRandom(gRandomLookDelays, -1);
+    *(u16 *)(state + 2) = DirectionList_GetRandom(sRandomLookDelays, -1);
     *(u32 *)(state + 4) = value;
     MapObject_SetAnimation(object, 0);
     MapObject_ClearSingleMovement(object);
@@ -83,7 +255,7 @@ void RandomLookMovement_Update(LocalMapObject *object) {
     } else if (*(u16 *)state == 0) {
         (*(s16 *)(state + 2))--;
         if (*(s16 *)(state + 2) <= 0) {
-            *(u16 *)(state + 2) = DirectionList_GetRandom(gRandomLookDelays, -1);
+            *(u16 *)(state + 2) = DirectionList_GetRandom(sRandomLookDelays, -1);
             direction = GetRandomDirectionFromTable(*(u32 *)(state + 4), -1);
             MapObject_SetFacingDirection(object, direction);
         }
@@ -92,7 +264,6 @@ void RandomLookMovement_Update(LocalMapObject *object) {
 }
 
 void RandomLookMovement_Delete(LocalMapObject *object) {
-    (void)object;
 }
 
 void RandomWalkMovement_InitAnyDirection(LocalMapObject *object) {
@@ -131,7 +302,7 @@ void RandomWalkMovement_Update(LocalMapObject *object) {
         if (!MapObject_RunForcedMovement(object)) {
             break;
         }
-        state->delay = DirectionList_GetRandom(gRandomLookDelays, -1);
+        state->delay = DirectionList_GetRandom(sRandomLookDelays, -1);
         state->state++;
     case 2:
         state->delay--;
@@ -293,11 +464,12 @@ void SpinMovement_InitClockwise(LocalMapObject *object) {
 void SpinMovement_Update(LocalMapObject *object) {
     u8 *state = MapObject_GetMovementData(object);
 
-    while (gSpinMovementStateFuncs[(s8)state[2]](object, state) == TRUE) {
+    while (sSpinMovementStateFuncs[(s8)state[2]](object, state) == TRUE) {
     }
 }
 
-BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, u8 *state) {
+static BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, void *data) {
+    u8 *state = data;
     int direction = MapObject_GetAllowedDirectionToNearbyPlayer(object, 0x26, -1);
     if (direction == DIR_NONE) {
         direction = MapObject_GetFacingDirection(object);
@@ -307,7 +479,8 @@ BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, u8 *state) {
     return TRUE;
 }
 
-BOOL SpinMovement_WaitFace(LocalMapObject *object, u8 *state) {
+static BOOL SpinMovement_WaitFace(LocalMapObject *object, void *data) {
+    u8 *state = data;
     if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
@@ -316,7 +489,8 @@ BOOL SpinMovement_WaitFace(LocalMapObject *object, u8 *state) {
     return TRUE;
 }
 
-BOOL SpinMovement_Wait(LocalMapObject *object, u8 *state) {
+static BOOL SpinMovement_Wait(LocalMapObject *object, void *data) {
+    u8 *state = data;
     if (*(u32 *)(state + 4) != 0 && MapObject_GetAllowedDirectionToNearbyPlayer(object, 0x26, -1) != DIR_NONE) {
         state[2] = 0;
         return TRUE;
@@ -329,9 +503,10 @@ BOOL SpinMovement_Wait(LocalMapObject *object, u8 *state) {
     return TRUE;
 }
 
-BOOL SpinMovement_Turn(LocalMapObject *object, s8 *state) {
-    DirectionCycle listA = gSpinCounterclockwiseOrder;
-    DirectionCycle listB = gSpinClockwiseOrder;
+static BOOL SpinMovement_Turn(LocalMapObject *object, void *data) {
+    s8 *state = data;
+    DirectionCycle listA = sSpinCounterclockwiseOrder;
+    DirectionCycle listB = sSpinClockwiseOrder;
     int i;
     DirectionCycle *list = &listA;
     int direction;
@@ -367,16 +542,19 @@ void AlternatingSpinMovement_Init(LocalMapObject *object) {
 
 void AlternatingSpinMovement_Update(LocalMapObject *object) {
     u8 *state = MapObject_GetMovementData(object);
-    while (gAlternatingSpinMovementStateFuncs[(s8)state[2]](object, state) == TRUE) {}
+    while (sAlternatingSpinMovementStateFuncs[(s8)state[2]](object, state) == TRUE) {}
 }
 
-void AlternatingSpinMovement_Face(LocalMapObject *object, u8 *state) {
+static BOOL AlternatingSpinMovement_Face(LocalMapObject *object, void *data) {
+    u8 *state = data;
     u32 facing = MapObject_GetFacingDirection(object);
     MapObject_ForceSetHeldMovement(object, GetMovementForDirection(facing, MOVEMENT_FACE_UP));
     state[2] = 1;
+    return TRUE;
 }
 
-BOOL AlternatingSpinMovement_WaitFace(LocalMapObject *object, u8 *state) {
+static BOOL AlternatingSpinMovement_WaitFace(LocalMapObject *object, void *data) {
+    u8 *state = data;
     if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
@@ -385,8 +563,8 @@ BOOL AlternatingSpinMovement_WaitFace(LocalMapObject *object, u8 *state) {
     return TRUE;
 }
 
-BOOL AlternatingSpinMovement_Wait(LocalMapObject *object, u8 *state) {
-    (void)object;
+static BOOL AlternatingSpinMovement_Wait(LocalMapObject *object, void *data) {
+    u8 *state = data;
     (*(int *)(state + 4))++;
     if (*(int *)(state + 4) < 24) {
         return FALSE;
@@ -395,20 +573,17 @@ BOOL AlternatingSpinMovement_Wait(LocalMapObject *object, u8 *state) {
     return TRUE;
 }
 
-BOOL AlternatingSpinMovement_Turn(LocalMapObject *object, DirectionCycleState *state) {
-    typedef struct DirectionOrder {
-        int values[5];
-    } DirectionOrder;
-
-    DirectionOrder orderA = *(const DirectionOrder *)gAlternatingSpinCounterclockwiseOrder;
-    DirectionOrder orderB = *(const DirectionOrder *)gAlternatingSpinClockwiseOrder;
+static BOOL AlternatingSpinMovement_Turn(LocalMapObject *object, void *data) {
+    DirectionCycleState *state = data;
+    DirectionCycle orderA = sAlternatingSpinCounterclockwiseOrder;
+    DirectionCycle orderB = sAlternatingSpinClockwiseOrder;
     int i;
     int direction;
     int *order;
     int *alternate;
 
-    order = orderA.values;
-    alternate = orderB.values;
+    order = orderA.value;
+    alternate = orderB.value;
     if (state->state != 2) {
         order = alternate;
     }
@@ -447,10 +622,11 @@ void BackAndForthMovement_Init(LocalMapObject *object) {
 
 void BackAndForthMovement_Update(LocalMapObject *object) {
     u8 *state = MapObject_GetMovementData(object);
-    while (gBackAndForthMovementStateFuncs[*(s16 *)state](object, state) == TRUE) {}
+    while (sBackAndForthMovementStateFuncs[*(s16 *)state](object, state) == TRUE) {}
 }
 
-void BackAndForthMovement_FaceStart(LocalMapObject *object, u8 *state) {
+static BOOL BackAndForthMovement_FaceStart(LocalMapObject *object, void *data) {
+    u8 *state = data;
     u32 direction = MapObject_GetInitialFacingDirection(object);
     if (*(s16 *)(state + 2) == 1) {
         direction = GetOppositeDirection(direction);
@@ -460,9 +636,11 @@ void BackAndForthMovement_FaceStart(LocalMapObject *object, u8 *state) {
         MapObject_SetFacingDirection(object, direction);
     }
     *(u16 *)state = 1;
+    return TRUE;
 }
 
-int BackAndForthMovement_Step(void *mapObject, BackAndForthMovementState *state) {
+static BOOL BackAndForthMovement_Step(LocalMapObject *mapObject, void *data) {
+    BackAndForthMovementState *state = data;
     int direction;
     int result;
     int kind;
@@ -500,10 +678,11 @@ int BackAndForthMovement_Step(void *mapObject, BackAndForthMovementState *state)
     }
     MapObject_SetSingleMovement(mapObject);
     state->state = 2;
-    return 1;
+    return TRUE;
 }
 
-BOOL BackAndForthMovement_WaitStep(LocalMapObject *object, u8 *state) {
+static BOOL BackAndForthMovement_WaitStep(LocalMapObject *object, void *data) {
+    u8 *state = data;
     if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         if (MapObject_SpinsWhileWalking(object) == TRUE) {
@@ -590,10 +769,11 @@ void PathMovement_InitTable29(LocalMapObject *object) {
 
 void PathMovement_Update(LocalMapObject *object) {
     u8 *state = MapObject_GetMovementData(object);
-    while (gPathMovementStateFuncs[state[0]](object, state) == TRUE) {}
+    while (sPathMovementStateFuncs[state[0]](object, state) == TRUE) {}
 }
 
-BOOL PathMovement_Step(LocalMapObject *object, MovementPathState *state) {
+static BOOL PathMovement_Step(LocalMapObject *object, void *data) {
+    MovementPathState *state = data;
     const int *list;
     int direction;
     u32 collision;
@@ -648,7 +828,8 @@ BOOL PathMovement_Step(LocalMapObject *object, MovementPathState *state) {
     return TRUE;
 }
 
-BOOL PathMovement_WaitStep(LocalMapObject *object, u8 *state) {
+static BOOL PathMovement_WaitStep(LocalMapObject *object, void *data) {
+    u8 *state = data;
     if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         if (MapObject_SpinsWhileWalking(object) == TRUE) {
@@ -714,7 +895,7 @@ int GetRandomDirectionFromTable(int tableId, int value) {
 }
 
 const int *GetDirectionTable(int id) {
-    const MovementListEntry *entry = gMovementDirectionTables;
+    const MovementListEntry *entry = sMovementDirectionTables;
     int current = 0;
 
     while (current != 0x27) {
@@ -743,7 +924,7 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
     i = 0;
     movement = MapObject_GetMovement(object);
     do {
-        entry = gPlayerAwareMovementTypes[i++];
+        entry = sPlayerAwareMovementTypes[i++];
     } while (entry != movement && entry != 255);
     if (movement != entry) {
         return DIR_NONE;
@@ -874,13 +1055,13 @@ void WalkingSpin_Init(LocalMapObject *object, u8 *state) {
 void WalkingSpin_TurnBeforeStep(LocalMapObject *object, s8 *state) {
     int facing = MapObject_GetFacingDirection(object);
     int i = 0;
-    while (i < 4 && facing != gWalkingSpinOrders[state[1]][i]) {
+    while (i < 4 && facing != sWalkingSpinOrders[state[1]][i]) {
         i++;
     }
     GF_ASSERT(i < 4);
     state[0] = facing;
     i = (i + 1) % 4;
-    facing = gWalkingSpinOrders[state[1]][i];
+    facing = sWalkingSpinOrders[state[1]][i];
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK7)) {
         state[2] = 1;
     } else {

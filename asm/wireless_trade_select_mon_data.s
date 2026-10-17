@@ -1,5 +1,7 @@
-#include "constants/pokemon.h"
 	.include "asm/macros.inc"
+	.include "overlay_65.inc"
+	.include "global.inc"
+
 	.public sWirelessTradeSelectMonCursorAnims
 	.public ov65_0221FD6C
 	.public ov65_0221FD70
@@ -21,8 +23,6 @@
 	.public sWirelessTradeSelectMonRosterListTemplate
 	.public sWirelessTradeSelectMonNameWindowPos
 	.public sWirelessTradeSelectMonDetailWindows
-	.include "overlay_65.inc"
-	.include "global.inc"
 
 	.rodata
 

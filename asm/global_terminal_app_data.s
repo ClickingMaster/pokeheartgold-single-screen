@@ -2,9 +2,10 @@
 	.include "global_terminal_bg_cell_data.inc"
 	.include "global.inc"
 
+	.public _021D1108
+
 	.bss
 
-	.public _021D1108
 _021D1108:
 	.space 0x4
 

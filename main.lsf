@@ -20,7 +20,6 @@ Static main
     Object src/sound.o
     Object src/sound_radio_sys.o
     Object src/sound_system.o
-    Object asm/sound_system_data.o
     Object src/sound_player_volume.o
     Object src/sound_gb.o
     Object src/sound_playback.o
@@ -227,7 +226,7 @@ Static main
     Object src/communication_club_link.o
     Object src/colosseum.o
     Object src/union_room.o
-    Object asm/union_room_talk_data.o
+    Object src/union_room_talk_data.o
     Object src/union_room_talk.o
     Object src/union_room_objects.o
     Object src/union_room_avatar.o
@@ -241,7 +240,6 @@ Static main
     Object asm/map_object_movement_tables.o
     Object src/map_object_update.o
     Object src/map_object_movement_utilities.o
-    Object asm/map_object_movement_data.o
     Object src/map_object_movement.o
     Object asm/unk_data_020FD978.o
     Object asm/map_object_movement_commands_data.o

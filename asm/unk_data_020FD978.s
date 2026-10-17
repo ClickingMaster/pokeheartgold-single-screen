@@ -1,16 +1,24 @@
-#include "constants/sndseq.h"
-#include "constants/species.h"
-#include "constants/maps.h"
-#include "constants/pokemon.h"
-#include "constants/flags.h"
-#include "constants/vars.h"
-#include "constants/items.h"
-#include "constants/std_script.h"
-#include "fielddata/script/scr_seq/event_D24R0204.h"
-#include "constants/field_move_response.h"
 	.include "asm/macros.inc"
 	.include "unk_data_020FD978.inc"
 	.include "global.inc"
+
+	.public gMovementCmdSteps_001
+	.public gMovementCmdSteps_003
+	.public gMovementCmdSteps_073
+	.public gMovementCmdSteps_074
+	.public gMovementCmdSteps_072
+	.public gMovementCmdSteps_070
+	.public gMovementCmdSteps_069
+	.public gMovementCmdSteps_000
+	.public gMovementCmdSteps_002
+	.public gMovementCmdSteps_071
+	.public gMovementCmdSteps_010
+	.public gMovementCmdSteps_089
+	.public gMovementCmdSteps_083
+	.public gMovementCmdSteps_006
+	.public gMovementCmdSteps_091
+	.public gMovementCmdSteps_004
+	.public gMovementCmdSteps_011
 
 	.rodata
 

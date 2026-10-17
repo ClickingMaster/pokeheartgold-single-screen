@@ -16,9 +16,9 @@ typedef struct WaveArcInfo {
     u32 flags : 8;
 } WaveArcInfo;
 
-extern int gSoundSystemFlags[4];
-extern MICAutoParam gSoundMicAutoParam;
-extern s8 sSoundChatotBuffer[2000];
+int gSoundSystemFlags[4];
+static MICAutoParam sSoundMicAutoParam;
+static s8 sSoundChatotBuffer[2000] __attribute__((aligned(32)));
 
 static void Sound_ResetAndLoadSceneSoundEffects(int scene);
 static void Sound_PlayBGMForFieldScene(u16 seqNo, int mode);
@@ -721,7 +721,7 @@ BOOL Sound_IsMicCounterFull(void) {
 BOOL GF_MIC_StartAutoSampling(MICAutoParam *param) {
     MICResult result = MIC_StartAutoSampling(param);
     ((u8 *)gSoundSystemFlags)[0] = 1;
-    gSoundMicAutoParam = *param;
+    sSoundMicAutoParam = *param;
     return result;
 }
 
@@ -741,7 +741,7 @@ void GF_MicPauseOnLidClose(void) {
 
 void GF_MicResumeOnLidOpen(void) {
     if (((u8 *)gSoundSystemFlags)[0] != 0) {
-        if (MIC_StartAutoSampling(&gSoundMicAutoParam) != MIC_RESULT_SUCCESS) {
+        if (MIC_StartAutoSampling(&sSoundMicAutoParam) != MIC_RESULT_SUCCESS) {
             GF_ASSERT(FALSE);
         }
     }

@@ -1,3 +1,7 @@
+	.include "asm/macros.inc"
+	.include "overlay_49.inc"
+	.include "global.inc"
+
 	.extern WiFiPlazaInstrument_InitRipple01
 	.extern WiFiPlazaInstrument_InitRipple02
 	.extern WiFiPlazaInstrument_InitRipple03
@@ -52,63 +56,6 @@
 	.extern WiFiPlazaEventWobble_InitSmall
 	.extern WiFiPlazaEventWobble_InitLarge
 	.extern WiFiPlazaEventWobble_Step
-	.include "asm/macros.inc"
-	.include "overlay_49.inc"
-	.include "global.inc"
-	.public WiFiPlazaInstrument_InitRipple01
-	.public WiFiPlazaInstrument_InitRipple02
-	.public WiFiPlazaInstrument_InitRipple03
-	.public WiFiPlazaInstrument_InitWhirl01
-	.public WiFiPlazaInstrument_InitWhirl02
-	.public WiFiPlazaInstrument_InitWhirl03
-	.public WiFiPlazaInstrument_InitSignal
-	.public WiFiPlazaInstrument_InitPop01
-	.public WiFiPlazaInstrument_InitPop02
-	.public WiFiPlazaInstrument_InitPop03
-	.public WiFiPlazaInstrument_InitBalloon01
-	.public WiFiPlazaInstrument_InitBalloon02
-	.public WiFiPlazaInstrument_InitBalloon03
-	.public WiFiPlazaInstrument_InitSparkle01
-	.public WiFiPlazaInstrument_InitSparkle02
-	.public WiFiPlazaInstrument_InitSparkle03
-	.public WiFiPlazaInstrument_InitBell01
-	.public WiFiPlazaInstrument_InitBell02
-	.public WiFiPlazaInstrument_InitBell03
-	.public WiFiPlazaInstrument_InitDrum01
-	.public WiFiPlazaInstrument_InitDrum02
-	.public WiFiPlazaInstrument_InitDrum03
-	.public WiFiPlazaInstrument_InitCymbal01
-	.public WiFiPlazaInstrument_InitCymbal02
-	.public WiFiPlazaInstrument_InitCymbal03
-	.public WiFiPlazaInstrument_UpdateRipple
-	.public WiFiPlazaInstrument_UpdateSignal01
-	.public WiFiPlazaInstrument_UpdateSignal02
-	.public WiFiPlazaInstrument_UpdateSignal03
-	.public WiFiPlazaInstrument_UpdateWhirl
-	.public WiFiPlazaInstrument_UpdatePop
-	.public WiFiPlazaInstrument_UpdateBalloon
-	.public WiFiPlazaInstrument_UpdateSparkle
-	.public WiFiPlazaInstrument_UpdateBellDrum
-	.public WiFiPlazaInstrument_UpdateCymbal
-	.public WiFiPlazaInstrumentBurst_StartBell
-	.public WiFiPlazaInstrumentBurst_UpdateBell
-	.public WiFiPlazaInstrumentBurst_StartDrum
-	.public WiFiPlazaInstrumentBurst_UpdateDrum
-	.public WiFiPlazaInstrumentBurst_StartCymbal
-	.public WiFiPlazaInstrumentBurst_UpdateCymbal
-	.public WiFiPlazaEventEffect_UpdateNone
-	.public WiFiPlazaEventEffect_UpdatePhase2
-	.public WiFiPlazaEventEffect_UpdatePhase3
-	.public WiFiPlazaEventEffect_UpdatePhase4
-	.public WiFiPlazaEventEffect_UpdatePhase5
-	.public WiFiPlazaEventEffect_StartHideProps
-	.public WiFiPlazaEventEffect_StartPhase2
-	.public WiFiPlazaEventEffect_StartPhase3
-	.public WiFiPlazaEventEffect_StartPhase4
-	.public WiFiPlazaEventEffect_StartPhase5
-	.public WiFiPlazaEventWobble_InitSmall
-	.public WiFiPlazaEventWobble_InitLarge
-	.public WiFiPlazaEventWobble_Step
 	.public sWiFiPlazaInstrumentBalloonHeights
 	.public sWiFiPlazaInstrumentBursts_Bell01
 	.public sWiFiPlazaInstrumentBursts_Cymbal02

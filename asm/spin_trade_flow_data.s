@@ -1,21 +1,17 @@
-#include "constants/easy_chat.h"
-#include "constants/items.h"
-#include "constants/maps.h"
-#include "constants/moves.h"
-#include "constants/species.h"
 	.include "asm/macros.inc"
 	.include "spin_trade_flow_data.inc"
 	.include "global.inc"
 
+	.public gOverlayTemplate_SpinTradeGroup
+	.public gOverlayTemplate_SpinTrade
+	.public gSpinTradeFlowStates
+
 	.rodata
 
-	.public gOverlayTemplate_SpinTradeGroup
 gOverlayTemplate_SpinTradeGroup:
 	.word SpinTradeGroupApp_Init, SpinTradeGroupApp_Main, SpinTradeGroupApp_Exit, FS_OVERLAY_ID(OVY_85)
-	.public gOverlayTemplate_SpinTrade
 gOverlayTemplate_SpinTrade:
 	.word SpinTradeApp_Init, SpinTradeApp_Main, SpinTradeApp_Exit, FS_OVERLAY_ID(OVY_85)
-	.public gSpinTradeFlowStates
 gSpinTradeFlowStates:
 	.word SpinTradeFlow_LaunchGroupApp
 	.word SpinTradeFlow_WaitGroupApp

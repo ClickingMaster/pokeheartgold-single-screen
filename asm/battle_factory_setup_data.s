@@ -1,7 +1,8 @@
-	.public gBattleFactoryTrainerSetRanges
     .include "asm/macros.inc"
 	.include "battle_factory_setup_data.inc"
 	.include "global.inc"
+
+	.public gBattleFactoryTrainerSetRanges
 
     .data
 

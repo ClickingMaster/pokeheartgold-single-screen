@@ -90,26 +90,6 @@ void UnionRoomStatus_Init(UnionRoomStatus *status);
 void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
 
 // gender-indexed message ids
-extern const int gUnionRoomTalkGreetingMsgs[2];
-extern const int gUnionRoomTalkComeBackMsgs[2];
-extern const int gUnionRoomTalkAnythingElseMsgs[2];
-extern const int gUnionRoomTalkLeaveMsgs[2];
-extern const int gUnionRoomTalkUntradeableEggMsgs[2];
-extern const int gUnionRoomActivityBusyMsgs[2];
-extern const int gUnionRoomActivityTradeMsgs[2][2];
-extern const int gUnionRoomActivityTrainerCardMsgs[2][2];
-extern const u16 gUnionRoomGroupFirstSlot[10];
-extern const int gUnionRoomTalkJoinGroupMsgs[3][2];
-extern const int gUnionRoomTalkJoinAcceptedMsgs[3][2];
-extern const int gUnionRoomTalkJoinDeclinedMsgs[3][2];
-extern const int gUnionRoomTalkRequirementMsgs[3][2];
-extern const int gUnionRoomLanguageGreetings[7];
-extern const int gUnionRoomActivityDrawingMsgs[4][2];
-extern const int gUnionRoomActivityBattleMsgs[4][2];
-extern const int gUnionRoomActivityRecordMixMsgs[4][2];
-extern const int gUnionRoomActivitySpinTradeMsgs[4][2];
-extern const int gUnionRoomTalkDeclineRequestMsgs[6][2];
-extern const int gUnionRoomTalkAcceptRequestMsgs[8][2];
 
 static const int sSentTalkReplyMsgs[7][2] = {
     { msg_0738_UNION_00044, msg_0738_UNION_00104 },
