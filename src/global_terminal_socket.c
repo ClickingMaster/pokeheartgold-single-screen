@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "global_terminal_net.h"
@@ -723,7 +722,6 @@ void GlobalTerminalSocket_Sleep(u32 msec) {
 }
 
 #pragma push
-#pragma force_active off
 #pragma opt_propagation off
 
 int GlobalTerminalSocket_FetchToken(void) {

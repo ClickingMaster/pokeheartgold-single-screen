@@ -9,8 +9,6 @@ extern const u8 gPokeathlonEventRankPoints[4];
 
 PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, int index);
 
-#pragma force_active on
-
 void PokeathlonEvent_CalcRankPoints(PokeathlonCourseScoreList *list) {
     u8 ranks[4];
     u8 ties[4];
@@ -44,5 +42,3 @@ void PokeathlonEvent_CalcRankPoints(PokeathlonCourseScoreList *list) {
         entry->points = points;
     }
 }
-
-#pragma force_active reset

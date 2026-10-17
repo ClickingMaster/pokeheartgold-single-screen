@@ -104,8 +104,6 @@ inline Elem *Copy(It first, It last, Elem *out) {
     return out;
 }
 
-#pragma force_active on
-
 extern "C" DIter LobbyEventDeque_UninitializedCopy(It first, It last, DIter result, FalseType, u32 *count) {
     if (first != last) {
         int n = last - first;

@@ -3,7 +3,6 @@
 void MoveRelearner_DimSubScreen(int on);
 
 // Darkens the bottom screen behind the move relearner's yes/no prompt (on: 1) or restores it (on: 0).
-#pragma force_active on
 
 void MoveRelearner_DimSubScreen(int on) {
     if (on == 1) {
@@ -12,5 +11,3 @@ void MoveRelearner_DimSubScreen(int on) {
         G2S_BlendNone();
     }
 }
-
-#pragma force_active reset

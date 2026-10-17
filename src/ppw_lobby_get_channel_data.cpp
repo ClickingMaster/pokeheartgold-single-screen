@@ -79,7 +79,6 @@ inline int ErrorMap::Map(int r) const {
     return state;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) {

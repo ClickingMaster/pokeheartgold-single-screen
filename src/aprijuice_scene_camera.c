@@ -1,12 +1,8 @@
-#pragma force_active on
 #include "global.h"
 
 #include "camera.h"
 
-// Camera of the Aprijuice scene (src/apricorn_box_screens.c); linked after the overlay's data, so it
-// is its own TU.
-
-// leading fields of AprijuiceScene (src/apricorn_box_screens.c)
+// The leading fields of the Aprijuice scene
 typedef struct AprijuiceSceneHeader {
     enum HeapID heapId; // 0x00
     void *vramMan;      // 0x04

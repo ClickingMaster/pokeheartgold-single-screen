@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_local_wireless.h"
 
 #include "global.h"

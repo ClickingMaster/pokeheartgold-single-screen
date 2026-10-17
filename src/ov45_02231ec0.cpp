@@ -157,7 +157,6 @@ inline void Refresh(Work *w, Info &info) {
     ww->dirty = 1;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyLeaveSubChannel(void) {

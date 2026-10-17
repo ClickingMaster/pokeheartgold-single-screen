@@ -147,7 +147,6 @@ extern "C" void LobbySort_InsertionSort(Cursor, Cursor, void *);
 extern "C" void LobbySort_StableSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
 extern "C" Cursor LobbySort_MergeBuffers(ConstructingOut, ConstructingOut, ConstructingOut, ConstructingOut, Cursor, void *);
 extern "C" void LobbySort_MergeAdaptive(Cursor first, Cursor middle, Cursor last, void *ctx, s32 len1, s32 len2, ConstructingOut buf, ConstructingOut bufEnd);
-#pragma force_active on
 extern "C" void LobbySort_StableSortAdaptive(Cursor first, Cursor last, ConstructingOut buf, ConstructingOut bufEnd, void *ctx);
 
 extern "C" void LobbySort_StableSortAdaptive(Cursor first, Cursor last, ConstructingOut buf, ConstructingOut bufEnd, void *ctx) {

@@ -7,8 +7,6 @@
 
 // Text helpers of the details screen; this file links after the overlay's data.
 
-#pragma force_active on
-
 void PalPadDetailsSlot_ClearBg(PalPadGfx *gfx, PalPadDetailsSlot *slot) {
     int y = slot->layout.y;
     int x;
@@ -38,8 +36,6 @@ void PalPadDetailsSlot_Print(PalPadDetailsSlot *slot, u32 page, u32 window, PalP
     }
     AddTextPrinterParameterizedWithColor(&slot->windows[page][window], 1, text, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
-
-#pragma force_active reset
 
 void PalPadDetails_PrintProfileText(Window *window, PalPadShared *shared, PalPadGfx *gfx, int msgId, int x, int y, u32 color) {
     ReadMsgDataIntoString(gfx->msgData, msgId, gfx->pageBuffer);

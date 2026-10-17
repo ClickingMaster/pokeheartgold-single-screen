@@ -7,8 +7,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#pragma force_active on
-
 typedef struct WifiSetupOamBlockManager {
     u8 blocks[0x20][0x10];
     WifiSetupOamBlock first;
@@ -1268,8 +1266,6 @@ void WifiSetup_RestoreVBlankIntr(void) {
     OS_SetIrqMask(gWifiSetupIrqSave.mask);
     OS_SetIrqFunction(OS_IE_V_BLANK, gWifiSetupIrqSave.vblankFunc);
 }
-
-#pragma force_active off
 
 static inline volatile u32 *WifiSetup_GetIrqCheckBase(void) {
     return (volatile u32 *)0x027E0000;

@@ -140,7 +140,6 @@ inline Result Insert2(Container *c, const Entry &e) {
     return LobbyTimerMap_Insert(c, e);
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" int PPW_LobbyStartRecruit(User *u) {

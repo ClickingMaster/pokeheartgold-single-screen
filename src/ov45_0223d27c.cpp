@@ -107,7 +107,6 @@ extern "C" int PPWLobby_DecodeMessageData(const char *, CVec *);
 extern "C" const char sStr_SpaceSpace[], sStr_Space_2[], sStr_B[], sStr_S[], ov45_022551D9[];
 extern "C" char ov45_022551D8[];
 extern "C" int PPWLobby_ParseMessage(const Str *, Out *);
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" int PPWLobby_ParseMessage(const Str *src, Out *out) {

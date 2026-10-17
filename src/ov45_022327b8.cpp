@@ -61,7 +61,6 @@ inline char Cast(const Iter &i) {
 }
 
 extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last);
-#pragma force_active on
 
 extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last) {
     u32 n = last.p - first.p;

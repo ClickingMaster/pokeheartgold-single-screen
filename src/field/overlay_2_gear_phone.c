@@ -56,8 +56,6 @@ static u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, 
 static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId);
 static void GearPhoneRingManager_SetRinging(GearPhoneRingManager *gearPhone, BOOL ringing);
 
-#pragma force_active on
-
 String *GetPhoneBookEntryName(GearPhoneRingManager *gearPhone, enum HeapID heapID) {
     String *str;
     if (!gearPhone->active || gearPhone->callerId >= NUM_PHONE_CONTACTS) {
@@ -144,8 +142,6 @@ BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
     u8 numContacts;
     u8 numCallers;
@@ -228,8 +224,6 @@ static u32 GearPhoneRingManager_TryRandomCall(GearPhoneRingManager *gearPhone, P
     return numCallers;
 }
 
-#pragma force_active on
-
 static u32 GearPhoneRingManager_TryCallTrigger(GearPhoneRingManager *gearPhone, PhoneBook *phoneBook, u32 mapId) {
     u8 callTriggerID = GearPhoneRingManager_PickCallTrigger(gearPhone, phoneBook, mapId);
     if (callTriggerID == 0xFF) {
@@ -299,5 +293,3 @@ enum RadioMusicPlayingSeq GetRadioMusicPlayingSeq(void) {
     }
     return RADIO_MUSIC_SEQ_NONE;
 }
-
-#pragma force_active reset

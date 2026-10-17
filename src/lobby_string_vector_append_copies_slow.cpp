@@ -163,8 +163,6 @@ inline void Release(Vec *) {
     (void)f;
 }
 
-#pragma force_active on
-
 extern "C" void LobbyStringVector_AppendCopiesSlow(Vec *v, u32 n, const Str &x) {
     Buf b(&v->cap);
     u32 len = LobbyStringVector_RecommendSize(v, v->size + n - v->cap);

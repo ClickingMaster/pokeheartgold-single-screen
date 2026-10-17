@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "dwc/dwc_bm_internal.h"
@@ -805,6 +804,8 @@ void WifiSetupConnectionTest_PollTask(void *task) {
     WifiSetupTask_DestroyLater(0, task);
 }
 
+#pragma force_active on
+
 void *WifiSetupConnectionTest_Alloc(void *arg, u32 size) {
     return WifiSetupHeap_AllocZeroed(size, 0x20);
 }
@@ -812,6 +813,8 @@ void *WifiSetupConnectionTest_Alloc(void *arg, u32 size) {
 void WifiSetupConnectionTest_Free(void *arg, void *ptr) {
     WifiSetupHeap_Free(ptr);
 }
+
+#pragma force_active reset
 
 void WifiSetupConnectionOk_Init(void) {
     gWifiSetupConnectionOkTimer = 0;

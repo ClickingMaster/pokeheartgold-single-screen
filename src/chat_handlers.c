@@ -1,4 +1,3 @@
-#pragma force_active on
 #include <string.h>
 
 #include "global.h"

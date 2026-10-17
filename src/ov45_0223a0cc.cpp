@@ -132,7 +132,6 @@ using namespace NativeSort;
 extern "C" ConstructingOut LobbySort_InsertionSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
 extern "C" ConstructingOut LobbySort_Merge(Cursor, Cursor, Cursor, Cursor, ConstructingOut, void *);
 extern "C" void LobbySort_StableSortAdaptive(Cursor, Cursor, ConstructingOut, ConstructingOut, void *);
-#pragma force_active on
 extern "C" void LobbySort_StableSortToBuffer(Cursor, Cursor, ConstructingOut, void *);
 
 extern "C" void LobbySort_StableSortToBuffer(Cursor first, Cursor last, ConstructingOut output, void *context) {
@@ -164,5 +163,3 @@ extern "C" void LobbySort_StableSortToBuffer(Cursor first, Cursor last, Construc
     LobbySort_StableSortAdaptive(middle, last, output + half, output + count, context);
     LobbySort_Merge(first, first + half, first + half, first + count, output, context);
 }
-
-#pragma force_active off

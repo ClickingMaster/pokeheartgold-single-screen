@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_access_points.h"
 
 #include "global.h"
@@ -190,6 +189,8 @@ void WifiSetupConnections_SetSsid(const void *ssid) {
     gWifiSetupConnections->edit.setupMethod = WIFI_SETUP_METHOD_MANUAL;
 }
 
+#pragma force_active on
+
 void WifiSetupConnections_SetWepKey(const char *key) {
     int i;
     int len;
@@ -252,6 +253,8 @@ void WifiSetupConnections_SetPrimaryDns(const char *str) {
 void WifiSetupConnections_SetSecondaryDns(const char *str) {
     WifiSetup_ParseAddress(str, gWifiSetupConnections->edit.dns2);
 }
+
+#pragma force_active reset
 
 void WifiSetupConnections_GetSsid(void *dst) {
     MI_CpuCopy8(gWifiSetupConnections->edit.ssid, dst, 0x20);

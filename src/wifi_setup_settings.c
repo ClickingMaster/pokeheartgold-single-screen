@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "wifi_setup_settings.h"
 
 #include <nitro/fx/fx_cp.h>

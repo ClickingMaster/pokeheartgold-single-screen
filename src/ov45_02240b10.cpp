@@ -142,7 +142,6 @@ inline void DeleteRoot(Root *r) {
 
 extern "C" void MI_CpuFill8(void *, u8, u32);
 extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId);
-#pragma force_active on
 
 extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId) {
     String nick, userName, realName;

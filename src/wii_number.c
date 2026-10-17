@@ -17,8 +17,6 @@ extern s8 sWiiAddressPrefix[];
 extern s8 sWiiAddressDomain[];
 extern WiiNumberDigitChar sWiiNumberDigitChars[];
 
-#pragma force_active on
-
 void WiiNumber_ToWiiAddress(String *wiiNumber, char *address, enum HeapID heapID) {
     int len = 0;
     int i = 0;
@@ -100,5 +98,3 @@ void WiiNumber_ParseDigitGroups(char *address, u32 *groups, enum HeapID unused) 
         groups++;
     }
 }
-
-#pragma force_active reset

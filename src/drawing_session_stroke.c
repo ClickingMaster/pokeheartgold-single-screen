@@ -2,12 +2,6 @@
 
 #include "drawing_session.h"
 
-// The last function of the Union Room drawing session; its object is linked after
-// the overlay's data.
-
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 // Turns this frame's touch samples into the own stroke: the first and the last sample, dropped when
 // either is (0, 0).
 void DrawingSession_BuildStroke(DrawingSessionStroke *stroke, TouchOutput *touch, int color, int size) {

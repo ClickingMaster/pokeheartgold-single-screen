@@ -72,8 +72,6 @@ static void BagApp_UpdatePageArrows(BagApp *app);
 
 NarcId MoveCategoryIcon_GetNarc(void);
 
-#pragma force_active on
-
 static void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot) {
     NNSG2dCharacterData *charData;
     void *buffer = BagApp_LoadListIconChars(app, &charData);
@@ -84,8 +82,6 @@ static void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BO
     }
     Heap_FreeExplicit(HEAP_ID_6, buffer);
 }
-
-#pragma force_active reset
 
 void BagApp_LoadItemMenuStrings(BagApp *app) {
     app->menuStrings[0] = NewString_ReadMsgData(app->msgData, msg_0010_00000);
@@ -112,8 +108,6 @@ void BagApp_FreeItemMenuStrings(BagApp *app) {
         String_Delete(app->menuStrings[i]);
     }
 }
-
-#pragma force_active on
 
 void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) {
     BagViewPocket *pocket;
@@ -142,8 +136,6 @@ void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count) 
     String_Delete(template);
     ScheduleWindowCopyToVram(&app->windows[2]);
 }
-
-#pragma force_active reset
 
 void BagApp_ShowItemDescription(BagApp *app, Window *window, u32 itemId) {
     FillWindowPixelBuffer(window, 0);
@@ -192,8 +184,6 @@ void BagApp_PrintMoveItemPrompt(BagApp *app) {
     String_Delete(template);
 }
 
-#pragma force_active on
-
 void BagApp_PrintQuantityDigits(BagApp *app, u32 numDigits) {
     String *string;
     u32 divisor, value, i;
@@ -235,8 +225,6 @@ void BagApp_PrintTrashConfirmMessage(BagApp *app) {
     app->printerId = (u8)BagApp_PrintMessage(app, FALSE);
 }
 
-#pragma force_active reset
-
 u8 BagApp_PrintMessage(BagApp *app, BOOL wide) {
     Window *window;
     if (wide == FALSE) {
@@ -269,8 +257,6 @@ static BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event) 
     return FALSE;
 }
 
-#pragma force_active on
-
 void BagApp_CreateYesNoPrompt(BagApp *app) {
     YesNoPromptTemplate template;
     template.bgConfig = app->bgConfig;
@@ -287,13 +273,9 @@ void BagApp_CreateYesNoPrompt(BagApp *app) {
     YesNoPrompt_InitFromTemplate(app->yesNoPrompt, &template);
 }
 
-#pragma force_active reset
-
 void BagApp_DestroyYesNoPrompt(BagApp *app) {
     YesNoPrompt_Destroy(app->yesNoPrompt);
 }
-
-#pragma force_active on
 
 void BagApp_PrintSellPrice(BagApp *app) {
     String *template;
@@ -308,8 +290,6 @@ void BagApp_PrintSellPrice(BagApp *app) {
     ScheduleWindowCopyToVram(window);
     String_Delete(template);
 }
-
-#pragma force_active reset
 
 void BagApp_PrintMoney(BagApp *app, BOOL skipLabel) {
     String *string = String_New(0x100, HEAP_ID_6);
@@ -361,8 +341,6 @@ void BagApp_PrintCancelButton(BagApp *app, BOOL left) {
     ScheduleWindowCopyToVram(&app->windows[7]);
     String_Delete(string);
 }
-
-#pragma force_active on
 
 static int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n) {
     int i;
@@ -425,8 +403,6 @@ void BagApp_DrawItemList(BagApp *app, int scroll, int unused, BOOL dim) {
     }
 }
 
-#pragma force_active reset
-
 void BagApp_DrawSelectedItemEntry(BagApp *app, s32 scroll, s32 slot) {
     u32 index = slot;
     BagView *bagView = app->bagView;
@@ -451,8 +427,6 @@ void BagApp_DrawSelectedItemEntry(BagApp *app, s32 scroll, s32 slot) {
 void BagApp_ClearSelectedItemEntry(BagApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->dynWindows[12]);
 }
-
-#pragma force_active on
 
 static void BagApp_PrintItemListEntry(BagApp *app, Window *window, String *name, BagViewPocket *pocket, int index) {
     switch (pocket->pocketId) {
@@ -486,8 +460,6 @@ static void BagApp_PrintItemQuantity(MessageFormat *msgFormat, MsgData *msgData,
     String_Delete(string);
 }
 
-#pragma force_active reset
-
 void BagApp_PrintPageNumber(BagApp *app, s32 itemCount, s32 scroll, s32 slot) {
     s32 page = (scroll + slot) / 6;
     s32 numPages;
@@ -505,8 +477,6 @@ void BagApp_PrintPageNumber(BagApp *app, s32 itemCount, s32 scroll, s32 slot) {
     String_Delete(string);
 }
 
-#pragma force_active on
-
 void BagApp_PrintItemMenuLabel(Window *window, String **strings, u8 action) {
     FillWindowPixelBuffer(window, 0);
     if (action != 0xFF) {
@@ -518,8 +488,6 @@ void BagApp_PrintItemMenuLabel(Window *window, String **strings, u8 action) {
     }
     ScheduleWindowCopyToVram(window);
 }
-
-#pragma force_active reset
 
 void BagApp_ClearItemMenuLabels(Window *windows) {
     s32 i;
@@ -546,8 +514,6 @@ void BagApp_ClearCancelButtonText(BagApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[7]);
 }
 
-#pragma force_active on
-
 void BagApp_InitSprites(BagApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -557,8 +523,6 @@ void BagApp_InitSprites(BagApp *app) {
     BagApp_CreateSprites(app);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(app->spriteSystem), 0, FX32_CONST(256));
 }
-
-#pragma force_active reset
 
 void BagApp_FreeSprites(BagApp *app) {
     u32 i;
@@ -577,14 +541,10 @@ void BagApp_TickSprites(BagApp *app) {
     }
 }
 
-#pragma force_active on
-
 static void BagApp_SetItemIconSprite(BagApp *app, int slot, u16 itemId) {
     SpriteSystem_ReplaceCharResObj(app->spriteSystem, app->spriteManager, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemId, ITEMNARC_NCGR), FALSE, slot + 0xC0FC);
     SpriteSystem_ReplacePlttResObj(app->spriteSystem, app->spriteManager, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemId, ITEMNARC_NCLR), FALSE, slot + 0xC0FB);
 }
-
-#pragma force_active reset
 
 void BagApp_SetField648(BagApp *app) {
     app->unk_64B = 0;
@@ -633,8 +593,6 @@ static void BagApp_CreateSpriteSystem(BagApp *app) {
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &counts);
 }
 
-#pragma force_active on
-
 static void BagApp_LoadSpriteResources(BagApp *app) {
     int i;
 
@@ -668,8 +626,6 @@ static void BagApp_LoadSpriteResources(BagApp *app) {
     TypeIcon_LoadCellAnim(app->spriteSystem, app->spriteManager, 0xC0FE, 0xC0FF);
     app->objPaletteBuffer = GfGfxLoader_GetPlttData(NARC_a_0_1_5, 48, &app->objPalette, HEAP_ID_6);
 }
-
-#pragma force_active reset
 
 static void BagApp_CreateSprites(BagApp *app) {
     const ManagedSpriteTemplate *template = sBagSpriteTemplates;
@@ -716,8 +672,6 @@ void BagApp_HideCursor(BagApp *app) {
     ManagedSprite_SetDrawFlag(app->sprites[20], FALSE);
 }
 
-#pragma force_active on
-
 void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
     GF_ASSERT(slot < 9);
     if (slot == 8) {
@@ -738,8 +692,6 @@ void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
     ManagedSprite_SetPaletteOverride(app->sprites[20], sMoveCursorPositionsPalette[slot * 4]);
 }
 
-#pragma force_active reset
-
 void BagApp_SetQuantityCursorPosition(BagApp *app, s32 index) {
     GF_ASSERT(index < 8);
     index <<= 2;
@@ -747,8 +699,6 @@ void BagApp_SetQuantityCursorPosition(BagApp *app, s32 index) {
     ManagedSprite_SetAnim(app->sprites[20], sQuantityCursorPositionsAnim[index]);
     ManagedSprite_SetPaletteOverride(app->sprites[20], sQuantityCursorPositionsPalette[index]);
 }
-
-#pragma force_active on
 
 void BagApp_LoadPocketObjPalette(BagApp *app, int pocket) {
     if (pocket <= 7) {
@@ -785,8 +735,6 @@ void BagApp_ShowMoveSlotSprites(BagApp *app, int count, int movingSlot, BOOL hid
     }
 }
 
-#pragma force_active reset
-
 static void BagApp_UpdatePageArrows(BagApp *app) {
     BagView *bagView = app->bagView;
     if (bagView->pockets[bagView->pocketIndex].itemCount <= 6) {
@@ -797,8 +745,6 @@ static void BagApp_UpdatePageArrows(BagApp *app) {
         ManagedSprite_SetDrawFlag(app->sprites[18], TRUE);
     }
 }
-
-#pragma force_active on
 
 void BagApp_DrawItemIcons(BagApp *app, BagViewPocket *pocket, int count, BOOL update) {
     int i;
@@ -833,8 +779,6 @@ void BagApp_ShowMovingItemIcon(BagApp *app, BagViewPocket *pocket, int index) {
     BagApp_UpdatePageArrows(app);
 }
 
-#pragma force_active reset
-
 void BagApp_ShowItemMenuSprites(BagApp *app, const u8 *actions) {
     s32 i;
     ManagedSprite_SetDrawFlag(app->sprites[20], TRUE);
@@ -856,8 +800,6 @@ void BagApp_HideItemMenuSprites(BagApp *app) {
     }
 }
 
-#pragma force_active on
-
 void BagApp_ShowSelectedItemIcon(BagApp *app, int slot) {
     int i;
     for (i = 0; i < 6; i++) {
@@ -868,8 +810,6 @@ void BagApp_ShowSelectedItemIcon(BagApp *app, int slot) {
         }
     }
 }
-
-#pragma force_active reset
 
 // 0: all three digits can be stepped, 1: max is below 100 (hide the hundreds), 2: max is below 10 (ones only)
 s32 BagApp_GetUnusedDigitCount(s32 max) {
@@ -882,8 +822,6 @@ s32 BagApp_GetUnusedDigitCount(s32 max) {
     }
     return ret;
 }
-
-#pragma force_active on
 
 // type 2: sell (two digits), 3: trash (three digits)
 void BagApp_ShowQuantityButtons(BagApp *app, int type, int max) {
@@ -915,8 +853,6 @@ void BagApp_ShowQuantityButtons(BagApp *app, int type, int max) {
     ManagedSprite_SetAnim(app->sprites[19], 39);
 }
 
-#pragma force_active reset
-
 void BagApp_HideQuantityButtons(BagApp *app) {
     s32 i;
     for (i = 0; i < 6; i++) {
@@ -924,8 +860,6 @@ void BagApp_HideQuantityButtons(BagApp *app) {
     }
     ManagedSprite_SetDrawFlag(app->sprites[38], FALSE);
 }
-
-#pragma force_active on
 
 void BagApp_ShowPocketTabSprites(BagApp *app, BOOL show) {
     u8 hasPocket[8];
@@ -947,8 +881,6 @@ void BagApp_ShowPocketTabSprites(BagApp *app, BOOL show) {
         }
     }
 }
-
-#pragma force_active reset
 
 void BagApp_SetCancelSpriteVisible(BagApp *app, BOOL show) {
     ManagedSprite_SetDrawFlag(app->sprites[19], show);

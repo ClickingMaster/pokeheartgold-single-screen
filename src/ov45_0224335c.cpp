@@ -147,7 +147,6 @@ inline F ForEach(It first, It last, F f) {
 }
 
 extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key);
-#pragma force_active on
 
 extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key) {
     MapIt it;

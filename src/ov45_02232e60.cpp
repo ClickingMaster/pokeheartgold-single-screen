@@ -41,7 +41,6 @@ extern "C" u8 gLobbyTimerMapNotInserted = 0;
 #pragma push
 
 namespace F00 {
-#pragma force_active on
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
@@ -303,8 +302,6 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
 
 namespace F01 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #pragma warn_uninitializedvar off
 #define V(p, o) (*(volatile u32 *)((u8 *)(p) + (o)))
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
@@ -533,8 +530,6 @@ inline void SetError(int r) {
     }
 }
 
-#pragma force_active on
-
 extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d, int e) {
     int result;
     if (id == -1 && key == 5) {
@@ -572,8 +567,6 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
 
 namespace F03 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 
 typedef union {
     u32 words[3];
@@ -845,7 +838,6 @@ extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
 extern "C" void PPWLobby_StartCheckProfile(void);
-#pragma force_active on
 
 extern "C" void PPWLobby_StartCheckProfile(void) {
     Info info;
@@ -908,8 +900,6 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 
 namespace F05 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *gPPWLobbyWork;
@@ -972,7 +962,6 @@ void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
 #pragma push
 
 namespace F06 {
-#pragma force_active on
 
 namespace DwcStringConcat200 {
     union Str {
@@ -1036,7 +1025,6 @@ extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
 #pragma push
 
 namespace F07 {
-#pragma force_active on
 
 namespace DwcStringConcat200 {
     union Str {
@@ -1096,8 +1084,6 @@ extern "C" Str *LobbyString_ConcatCStr(Str *out, Str *left, char *right) {
 
 namespace F08 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *gPPWLobbyWork;
@@ -1198,7 +1184,6 @@ typedef char DispatchSize[sizeof(ResizeDispatch) == 1 ? 1 : -1];
 
 using namespace DwcFormatted216;
 extern "C" void LobbyString_Format(Str *, const char *, ...);
-#pragma force_active on
 
 extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
     Vector vector;
@@ -1214,14 +1199,11 @@ extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
     LobbyString_InitFromCStr(output, vector.text());
 }
 
-#pragma force_active off
-
 #pragma pop
 
 #pragma push
 
 namespace F10 {
-#pragma force_active on
 class Str;
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
@@ -1517,7 +1499,6 @@ inline int IsActive(Session *s) {
     return s != 0 && s->active != 0;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id, int arg, const char *text, int extra) {
@@ -1602,8 +1583,6 @@ inline int Decoder::Decode(const char *src, u32 len, Vec *dst) const {
     return DWC_Base64Decode(src, len, LobbyByteVector_Data(dst), dst->size);
 }
 
-#pragma force_active on
-
 extern "C" int PPWLobby_DecodeMessageData(const char *text, Vec *out) {
     Decoder codec = Decoder();
     u32 len = strlen(text);
@@ -1651,7 +1630,6 @@ public:
 
 extern "C" int LobbyString_Compare(const String *, const String *);
 extern "C" int LobbyString_Equals(const String &, const String &);
-#pragma force_active on
 
 extern "C" int LobbyString_Equals(const String &a, const String &b) {
     return a.Size() == b.Size() && LobbyString_Compare(&a, &b) == 0;
@@ -1878,8 +1856,6 @@ static inline void OnPairFn(const u8 *d) {
     gPPWLobbyWork->SetPair(Val(d));
 }
 
-#pragma force_active on
-
 extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const char *cmd, const u8 *data, u32 len) {
     if (sel) {
         return 0;
@@ -1943,7 +1919,6 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
 
 namespace F15 {
 extern "C" {
-#pragma force_active on
 
 typedef struct {
     u32 pad[2];
@@ -2024,8 +1999,6 @@ done:
 
 namespace F16 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 
 typedef union {
     struct {
@@ -2101,9 +2074,7 @@ int PPWLobby_IsMainChannelReady(void) {
 
 namespace F17 {
 extern "C" {
-#pragma force_active on
 #pragma opt_common_subs off
-#pragma force_active on
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 typedef union Str {
@@ -2179,8 +2150,6 @@ int PPWLobby_TimerUploadUserProfile(void) {
 
 namespace F18 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *gPPWLobbyWork;
@@ -2273,7 +2242,6 @@ int PPWLobby_TimerRequestChannelTime(void) {
 
 namespace F19 {
 extern "C" {
-#pragma force_active on
 extern u8 *gPPWLobbyWork;
 extern u8 sStr_b_lib_c_lobby[];
 extern void PPWLobby_OnGetLobbyData(void), PPWLobbyChannel_GetName(void *, void *), LobbyString_Destroy(void *), LobbyChat_GetChannelKeysAsync(void *, int, void *, void (*)(void), int);
@@ -2296,7 +2264,6 @@ static inline BOOL limit(int value) {
 }
 
 int PPWLobby_TimerRequestLobbyData(void);
-#pragma force_active on
 
 int PPWLobby_TimerRequestLobbyData(void) {
     String s;
@@ -2320,8 +2287,6 @@ int PPWLobby_TimerRequestLobbyData(void) {
 
 namespace F20 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *gPPWLobbyWork;
@@ -2565,7 +2530,6 @@ extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
 extern "C" void StatsUpload_Stop(int);
 extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
 extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2);
-#pragma force_active on
 
 extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     Info info;
@@ -2807,7 +2771,6 @@ extern "C" void StatsUpload_Stop(int);
 extern "C" int PPWLobbySchedule_IsSizeValid(void *, void *, u32);
 extern "C" void PPWLobbySchedule_Load(void *, void *, u32);
 extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2);
-#pragma force_active on
 #pragma opt_dead_assignments off
 
 extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
@@ -3048,7 +3011,6 @@ extern "C" void StatsUpload_Stop(int);
 extern "C" int PPWLobbySchedule_ValidateVipRecords(void *, void *, u32);
 extern "C" void PPWLobbySchedule_SetVipRecords(void *, void *, u32);
 extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2);
-#pragma force_active on
 
 extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     Info info;
@@ -3129,8 +3091,6 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
 
 namespace F24 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 
 typedef struct {
     int state, error;
@@ -3191,8 +3151,6 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
 
 namespace F25 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define I(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *gPPWLobbyWork;
@@ -3254,7 +3212,6 @@ void PPWLobby_OnSubmitQuestionnaire(int status) {
 #pragma push
 
 namespace F26 {
-#pragma force_active on
 using std::memcmp;
 
 typedef struct RTCDate {
@@ -3667,7 +3624,6 @@ extern "C" Work *gPPWLobbyWork;
 extern "C" char gPPWLobbyFootChannelMode[], gPPWLobbyClockChannelMode[], gPPWLobbyNewsChannelMode[];
 extern "C" void LobbyChat_SetChannelMode(int, const char *);
 extern "C" void PPWLobby_OnEnterSubChannel(int, int, int, int);
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int kind) {
@@ -3867,7 +3823,6 @@ inline void MakeSum(Session *s, Summary &arg) {
     arg = sum;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
@@ -4049,7 +4004,6 @@ inline void MakeSum(Session *s, Summary &arg) {
     arg = sum;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
@@ -4095,9 +4049,7 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
 
 namespace F30 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -4329,7 +4281,6 @@ void PPWLobby_OnPlayerMessage(int a, int b, int c) {
 
 namespace F31 {
 extern "C" {
-#pragma force_active on
 
 typedef struct {
     u32 a, b, c;
@@ -4366,7 +4317,6 @@ static inline void zeroString(String *s) {
     *p = 0;
 }
 
-#pragma force_active on
 #pragma opt_lifetimes off
 #pragma opt_common_subs off
 
@@ -4466,9 +4416,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
 
 namespace F32 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -4708,7 +4656,6 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f) {
 
 namespace F33 {
 extern "C" {
-#pragma force_active on
 
 typedef struct {
     u32 allocated : 1;
@@ -4856,7 +4803,6 @@ struct Vec {
 };
 
 extern "C" Vec LobbyString_Split(const Str &s, const Str &delim, int max);
-#pragma force_active on
 
 extern "C" Vec LobbyString_Split(const Str &s, const Str &delim, int max) {
     Vec out;
@@ -4891,8 +4837,6 @@ extern "C" Vec LobbyString_Split(const Str &s, const Str &delim, int max) {
 
 namespace F35 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 void LobbyString_InitSubstring(void *, void *, int, int);
 void LobbyString_Substr(void *, void *, int, int);
 
@@ -4981,7 +4925,6 @@ inline bool IsSelf(int id) {
     return id == gPPWLobbyWork->self;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int *ids) {
@@ -5021,9 +4964,7 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
 
 namespace F37 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -5320,7 +5261,6 @@ extern "C" void PPWLobby_SetChannelData(int, int, char *, Stamp *, int);
 extern "C" char *LobbyByteVector_Data(Vec *);
 extern "C" void LobbyTimerMap_EraseKey(void *, int *);
 extern "C" void PPWLobby_OnGetChannelTime(int, int, int, int, const char *);
-#pragma force_active on
 
 extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, int unused3, const char *value) {
     if (result == 0) {
@@ -5357,7 +5297,6 @@ extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, 
 
 namespace F39 {
 extern "C" {
-#pragma force_active on
 
 typedef struct {
     void *ptr;
@@ -5419,9 +5358,7 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
 
 namespace F40 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -5678,7 +5615,6 @@ void *PPWLobbyPlayer_Delete(u8 *a) {
 
 namespace F41 {
 extern "C" {
-#pragma force_active on
 
 typedef struct Queue {
     u32 a;
@@ -5728,9 +5664,7 @@ Queue *LobbyEventDeque_Destroy(Queue *p) {
 
 namespace F42 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -5965,7 +5899,6 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a) {
 
 namespace F43 {
 extern "C" {
-#pragma force_active on
 
 typedef struct Node {
     char pad[12];
@@ -6003,9 +5936,7 @@ void LobbyTimerMap_Insert(Result *r, void *p, u32 *v) {
 
 namespace F44 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -6332,7 +6263,6 @@ inline Node *Allocate(Alloc) {
 
 extern "C" void LobbyTree_InsertRebalance(Node *, Node *);
 extern "C" Node *LobbyTimerMap_InsertNode(Tree *, Node *, int, int, Value *);
-#pragma force_active on
 
 extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int leftmost, Value *v) {
     if (t->count == (u32)-1) {
@@ -6368,9 +6298,7 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int l
 
 namespace F46 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -6616,7 +6544,6 @@ void *LobbyTimerMap_Destroy(struct Tree *a) {
 #pragma push
 
 namespace F47 {
-#pragma force_active on
 
 static inline void *Left(void *node) {
     return *reinterpret_cast<void **>(static_cast<unsigned char *>(node));
@@ -6660,9 +6587,7 @@ extern "C" void ov45_02236E58(Iterator *it) {
 
 namespace F48 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 
 typedef struct Node {
     void *left, *right;
@@ -6743,7 +6668,6 @@ void LobbyTree_InsertRebalance(Node *n, void *volatile root) {
 
 namespace F49 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
 
 typedef struct Node {
@@ -6923,9 +6847,7 @@ Node *LobbyTree_EraseRebalance(Node *node, void *root) {
 
 namespace F50 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -7201,8 +7123,6 @@ void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused)
 
 namespace F51 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 
 typedef struct Tag {
     u8 value;
@@ -7238,9 +7158,7 @@ u32 *LobbyStringVector_Destroy(u32 *p) {
 
 namespace F52 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -7503,7 +7421,6 @@ struct Vec *LobbyEventVector_Destroy(struct Vec *a) {
 #pragma push
 
 namespace F53 {
-#pragma force_active on
 extern "C" void *memset(void *, int, unsigned);
 
 class Alloc {};
@@ -7538,9 +7455,7 @@ extern "C" void LobbyCharVector_Grow(Vec *v, u32 n) {
 
 namespace F54 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -7773,8 +7688,6 @@ void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused) {
 
 namespace F55 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
@@ -7822,9 +7735,7 @@ void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
 
 namespace F56 {
 extern "C" {
-#pragma force_active on
 void ov45_02236E58(Iterator *);
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
 #pragma warn_uninitializedvar off
@@ -8049,7 +7960,6 @@ u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
 #pragma push
 using std::memset;
 using namespace DwcFormatted216Native;
-#pragma force_active on
 
 extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispatch) {
     u32 capacity = vector->cap;
@@ -8064,8 +7974,6 @@ extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispat
     }
     LobbyCharVector_AppendZerosSlow(vector, count);
 }
-
-#pragma force_active off
 
 #pragma pop
 
@@ -8084,8 +7992,6 @@ struct CharacterAllocator {
     }
 };
 }
-
-#pragma force_active on
 
 extern "C" Vec *LobbyCharVector_Destroy(Vec *vector) {
     if (vector->ptr) {
@@ -8112,14 +8018,11 @@ extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
     return output;
 }
 
-#pragma force_active off
-
 #pragma pop
 
 #pragma push
 
 namespace F59 {
-#pragma force_active on
 
 class String {
 public:
@@ -8172,7 +8075,6 @@ extern "C" String *LobbyString_InitSubstring(String *self, String *str, u32 pos,
 #pragma push
 using DwcStringConcat200::RangeDispatch;
 using std::strlen;
-#pragma force_active on
 
 extern "C" Str *LobbyString_InitFromCStr(Str *output, char *text) {
     u32 index, length;
@@ -8195,16 +8097,12 @@ extern "C" Str *LobbyString_Destroy(Str *output) {
     return output;
 }
 
-#pragma force_active off
-
 #pragma pop
 
 #pragma push
 
 namespace F61 {
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 #define B(p, o)  (*((u8 *)(p) + (o)))
 #define H(p, o)  (*(u16 *)((u8 *)(p) + (o)))
 #define SH(p, o) (*(s16 *)((u8 *)(p) + (o)))
@@ -8310,7 +8208,6 @@ void LobbyString_Reserve(Text *w, u32 size) {
 
 namespace F62 {
 extern "C" {
-#pragma force_active on
 
 struct StrRaw {
     u32 w[3];
@@ -8331,7 +8228,6 @@ struct Str {
 };
 extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
 struct Str *LobbyString_Assign(struct Str *, struct Str *);
-#pragma force_active on
 
 struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
     BOOL isLong = dst->u.bits.large ? TRUE : FALSE;
@@ -8349,7 +8245,6 @@ struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
 #pragma push
 
 namespace F63 {
-#pragma force_active on
 
 namespace DwcStringConcat200 {
     union Str {
@@ -8400,7 +8295,6 @@ extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
 #pragma push
 
 namespace F64 {
-#pragma force_active on
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
 extern "C" char sStr_BasicStringOutOfRange[];
@@ -8458,7 +8352,6 @@ extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, S
 #pragma pop
 
 #pragma push
-#pragma force_active on
 
 inline StringSearchRange StringSearch::GetRange() const {
     if (raw.longForm.flag) {
@@ -8480,8 +8373,6 @@ extern "C" int LobbyString_Find(const StringSearch *a, const StringSearch *b, u3
 
 #pragma push
 extern "C" {
-#pragma force_active on
-#pragma force_active on
 
 u32 LobbyString_FindChars(const StringSearch *s, const s8 *needle, u32 start, u32 count) {
     u32 len, left;
@@ -8526,7 +8417,6 @@ fail:
 #pragma push
 
 namespace F67 {
-#pragma force_active on
 extern "C" unsigned strlen(const char *);
 
 class String {
@@ -8596,10 +8486,8 @@ extern "C" int LobbyString_CompareCStr(const String *a, const char *b) {
 
 namespace F68 {
 extern "C" {
-#pragma force_active on
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma force_active on
 extern const char sStr_StringComparePosGtLen[];
 int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
 
@@ -8641,7 +8529,6 @@ int LobbyString_CompareChars(const u8 *s, u32 pos, u32 length, const void *other
 #pragma push
 
 namespace F69 {
-#pragma force_active on
 extern "C" void *memcpy(void *, const void *, unsigned);
 extern "C" void *memmove(void *, const void *, unsigned);
 extern "C" int printf(const char *, ...);

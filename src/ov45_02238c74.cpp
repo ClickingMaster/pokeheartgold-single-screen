@@ -68,8 +68,6 @@ inline void Assign(Deque *d, It first, It last) {
     LobbyEventDeque_Assign(d, first, last, t);
 }
 
-#pragma force_active on
-
 extern "C" int PPWLobbySchedule_Load(Obj *o, Src *s) {
     Less c;
     if (!PPWLobbySchedule_IsSizeValid(o, s)) {

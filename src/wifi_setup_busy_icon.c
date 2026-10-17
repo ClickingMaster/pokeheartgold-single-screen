@@ -6,8 +6,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#pragma force_active on
-
 static inline void SetOamPriority(GXOamAttr *oam, int priority) {
     oam->attr2 = (oam->attr2 & ~0xc00) | (priority << 10);
 }
