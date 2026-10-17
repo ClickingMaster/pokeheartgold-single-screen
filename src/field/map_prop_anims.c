@@ -46,8 +46,6 @@ typedef struct ElevatorAnim {
 
 // Poke Ball positions on the healing machine, relative to it (x, y and z of one VecFx32 per ball)
 extern const VecFx32 sHealingMachineBallOffsets[];
-extern const VecFx32 sHealingMachineBallOffsetsY[];
-extern const VecFx32 sHealingMachineBallOffsetsZ[];
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 
 typedef struct MapPropModelPair {
@@ -105,8 +103,8 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
     case HEAL_ANIM_STATE_PLACE_BALL: {
         VecFx32 rotation = { 0 };
         pos.x = anim->machinePos.x + sHealingMachineBallOffsets[anim->ballIndex].x;
-        pos.y = anim->machinePos.y + sHealingMachineBallOffsetsY[anim->ballIndex].x;
-        pos.z = anim->machinePos.z + sHealingMachineBallOffsetsZ[anim->ballIndex].x;
+        pos.y = anim->machinePos.y + sHealingMachineBallOffsets[anim->ballIndex].y;
+        pos.z = anim->machinePos.z + sHealingMachineBallOffsets[anim->ballIndex].z;
         PlaySE(SEQ_SE_DP_BOWA);
         anim->ballProps[anim->ballIndex] = MapPropManager_LoadOne(fieldSystem->mapPropManager, MAP_PROP_HEALING_POKE_BALL, &pos, &rotation, fieldSystem->mapPropAnimationManager);
         anim->state++;

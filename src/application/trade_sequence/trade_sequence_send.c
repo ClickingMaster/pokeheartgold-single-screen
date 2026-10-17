@@ -80,24 +80,24 @@ typedef BOOL (*TradeSequenceSendStateFunc)(TradeSequenceSend *send, u32 *state);
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
-void TradeSequenceSend_Draw(TradeSequenceSend *send);
-BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state);
-BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state);
-BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state);
-BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state);
-void TradeSequenceSend_Init3D(TradeSequenceSend *send);
-Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send);
-void TradeSequenceSend_CreateSprites(TradeSequenceSend *send);
-void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send);
-void TradeSequenceSend_StartBrightness(TradeSequenceSend *send, int start, int target, int frames);
-BOOL TradeSequenceSend_IsBrightnessDone(TradeSequenceSend *send);
-void TradeSequenceSend_StopBrightness(TradeSequenceSend *send);
-void TradeSequenceSend_BrightnessTask(SysTask *task, void *data);
-void TradeSequenceSend_StartBounce(TradeSequenceSend *send);
-BOOL TradeSequenceSend_IsBounceDone(TradeSequenceSend *send);
-int TradeSequenceSend_GetBounceCount(TradeSequenceSend *send);
-void TradeSequenceSend_StopBounce(TradeSequenceSend *send);
-void TradeSequenceSend_BounceTask(SysTask *task, void *data);
+static void TradeSequenceSend_Draw(TradeSequenceSend *send);
+static BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state);
+static BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state);
+static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state);
+static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state);
+static void TradeSequenceSend_Init3D(TradeSequenceSend *send);
+static Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send);
+static void TradeSequenceSend_CreateSprites(TradeSequenceSend *send);
+static void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send);
+static void TradeSequenceSend_StartBrightness(TradeSequenceSend *send, int start, int target, int frames);
+static BOOL TradeSequenceSend_IsBrightnessDone(TradeSequenceSend *send);
+static void TradeSequenceSend_StopBrightness(TradeSequenceSend *send);
+static void TradeSequenceSend_BrightnessTask(SysTask *task, void *data);
+static void TradeSequenceSend_StartBounce(TradeSequenceSend *send);
+static BOOL TradeSequenceSend_IsBounceDone(TradeSequenceSend *send);
+static int TradeSequenceSend_GetBounceCount(TradeSequenceSend *send);
+static void TradeSequenceSend_StopBounce(TradeSequenceSend *send);
+static void TradeSequenceSend_BounceTask(SysTask *task, void *data);
 
 static const TradeSequenceRotation sTradeSequenceSendModelRotation = {
     .x = 0,
@@ -216,7 +216,7 @@ BOOL TradeSequenceSend_Main(void *data, int *state) {
     return TRUE;
 }
 
-void TradeSequenceSend_Draw(TradeSequenceSend *send) {
+static void TradeSequenceSend_Draw(TradeSequenceSend *send) {
     u32 one;
 
     G3X_Reset();
@@ -231,7 +231,7 @@ void TradeSequenceSend_Draw(TradeSequenceSend *send) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
 }
 
-BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) {
+static BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) {
     TradeSequenceRotation rotation;
 
     GfGfx_SetBanks(&sTradeSequenceSendGraphicsBanks);
@@ -271,7 +271,7 @@ BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) {
     return TRUE;
 }
 
-BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
+static BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
     if (*state == 0 && IsPaletteFadeFinished()) {
         Sprite_SetAnimCtrlSeq(send->sprites[0], 1);
         Sprite_SetDrawFlag(send->sprites[0], TRUE);
@@ -280,7 +280,7 @@ BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
     return FALSE;
 }
 
-BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
+static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
     switch (*state) {
     case 0:
         send->timer = 0;
@@ -343,7 +343,7 @@ BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
     return FALSE;
 }
 
-BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state) {
+static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state) {
     switch (*state) {
     case 0:
         PlaySE(SEQ_SE_DP_KOUKAN01);
@@ -383,7 +383,7 @@ BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state) 
     return FALSE;
 }
 
-void TradeSequenceSend_Init3D(TradeSequenceSend *send) {
+static void TradeSequenceSend_Init3D(TradeSequenceSend *send) {
     u32 texKey, plttKey;
 
     NNS_G3dInit();
@@ -403,7 +403,7 @@ void TradeSequenceSend_Init3D(TradeSequenceSend *send) {
     PokepicManager_SetPlttBaseAddrAndSize(send->pokepicManager, (plttKey & 0xFFFF) << 3, ((plttKey & 0xFFFF0000) >> 16) << 3);
 }
 
-Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send) {
+static Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send) {
     PokepicTemplate template;
     BoxPokemon *boxMon = TradeSequence_GetSentBoxMon(send->ts);
 
@@ -415,7 +415,7 @@ Pokepic *TradeSequenceSend_CreateMonPic(TradeSequenceSend *send) {
     }
 }
 
-void TradeSequenceSend_CreateSprites(TradeSequenceSend *send) {
+static void TradeSequenceSend_CreateSprites(TradeSequenceSend *send) {
     NNSG2dImagePaletteProxy palette;
     NNSG2dImageProxy image;
     SpriteResourcesHeader header;
@@ -433,7 +433,7 @@ void TradeSequenceSend_CreateSprites(TradeSequenceSend *send) {
     Sprite_SetDrawFlag(send->sprites[1], FALSE);
 }
 
-void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send) {
+static void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send) {
     s32 i;
     TradeSequenceSend *p;
 
@@ -449,7 +449,7 @@ void TradeSequenceSend_DeleteSprites(TradeSequenceSend *send) {
     TradeSequence_FreeCellAnim(&send->cellAnim);
 }
 
-void TradeSequenceSend_StartBrightness(TradeSequenceSend *send, int start, int target, int frames) {
+static void TradeSequenceSend_StartBrightness(TradeSequenceSend *send, int start, int target, int frames) {
     TradeSequenceSendBrightness *brightness = Heap_Alloc(HEAP_ID_57, sizeof(*brightness));
     if (brightness) {
         brightness->send = send;
@@ -462,14 +462,14 @@ void TradeSequenceSend_StartBrightness(TradeSequenceSend *send, int start, int t
     }
 }
 
-BOOL TradeSequenceSend_IsBrightnessDone(TradeSequenceSend *send) {
+static BOOL TradeSequenceSend_IsBrightnessDone(TradeSequenceSend *send) {
     if (send->brightnessTask == NULL) {
         return TRUE;
     }
     return FALSE;
 }
 
-void TradeSequenceSend_StopBrightness(TradeSequenceSend *send) {
+static void TradeSequenceSend_StopBrightness(TradeSequenceSend *send) {
     if (send->brightnessTask != NULL) {
         TradeSequence_DeferFree(SysTask_GetData(send->brightnessTask));
         SysTask_Destroy(send->brightnessTask);
@@ -477,7 +477,7 @@ void TradeSequenceSend_StopBrightness(TradeSequenceSend *send) {
     }
 }
 
-void TradeSequenceSend_BrightnessTask(SysTask *task, void *data) {
+static void TradeSequenceSend_BrightnessTask(SysTask *task, void *data) {
     TradeSequenceSendBrightness *brightness = data;
 
     if (--brightness->frames > 0) {
@@ -489,7 +489,7 @@ void TradeSequenceSend_BrightnessTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceSend_StartBounce(TradeSequenceSend *send) {
+static void TradeSequenceSend_StartBounce(TradeSequenceSend *send) {
     TradeSequenceSendBounce *bounce = Heap_Alloc(HEAP_ID_57, sizeof(*bounce));
     if (bounce) {
         bounce->send = send;
@@ -505,21 +505,21 @@ void TradeSequenceSend_StartBounce(TradeSequenceSend *send) {
     }
 }
 
-BOOL TradeSequenceSend_IsBounceDone(TradeSequenceSend *send) {
+static BOOL TradeSequenceSend_IsBounceDone(TradeSequenceSend *send) {
     if (send->bounceTask == NULL) {
         return TRUE;
     }
     return FALSE;
 }
 
-int TradeSequenceSend_GetBounceCount(TradeSequenceSend *send) {
+static int TradeSequenceSend_GetBounceCount(TradeSequenceSend *send) {
     if (send->bounceTask != NULL) {
         return ((TradeSequenceSendBounce *)SysTask_GetData(send->bounceTask))->bounces;
     }
     return 0;
 }
 
-void TradeSequenceSend_StopBounce(TradeSequenceSend *send) {
+static void TradeSequenceSend_StopBounce(TradeSequenceSend *send) {
     if (send->bounceTask != NULL) {
         Heap_Free(SysTask_GetData(send->bounceTask));
         SysTask_Destroy(send->bounceTask);
@@ -527,7 +527,7 @@ void TradeSequenceSend_StopBounce(TradeSequenceSend *send) {
     }
 }
 
-void TradeSequenceSend_BounceTask(SysTask *task, void *data) {
+static void TradeSequenceSend_BounceTask(SysTask *task, void *data) {
     TradeSequenceSendBounce *bounce = data;
 
     if (!bounce->landed) {

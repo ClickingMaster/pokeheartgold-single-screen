@@ -32,12 +32,12 @@ typedef struct TradeSequenceExchange {
 
 typedef BOOL (*TradeSequenceExchangeStateFunc)(TradeSequenceExchange *exchange, u32 *state);
 
-BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state);
-BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state);
-void TradeSequenceExchange_SlideTask(SysTask *task, void *data);
-void TradeSequenceExchange_InitBgs(TradeSequenceExchange *exchange);
-void TradeSequenceExchange_FreeBgs(TradeSequenceExchange *exchange);
-void TradeSequenceExchange_SetMonPicPositions(BgConfig *bgConfig, u32 sentY, u32 receivedY);
+static BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state);
+static BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state);
+static void TradeSequenceExchange_SlideTask(SysTask *task, void *data);
+static void TradeSequenceExchange_InitBgs(TradeSequenceExchange *exchange);
+static void TradeSequenceExchange_FreeBgs(TradeSequenceExchange *exchange);
+static void TradeSequenceExchange_SetMonPicPositions(BgConfig *bgConfig, u32 sentY, u32 receivedY);
 
 static const TradeSequenceExchangeStateFunc sTradeSequenceExchangeStates[TRADE_SEQUENCE_EXCHANGE_NUM_STATES] = {
     TradeSequenceExchange_SetupScreens,
@@ -141,13 +141,13 @@ BOOL TradeSequenceExchange_Main(void *data, int *state) {
     return TRUE;
 }
 
-BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state) {
+static BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state) {
     TradeSequenceExchange_InitBgs(exchange);
     BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
-BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state) {
+static BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
@@ -177,7 +177,7 @@ BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state) {
     return FALSE;
 }
 
-void TradeSequenceExchange_SlideTask(SysTask *task, void *data) {
+static void TradeSequenceExchange_SlideTask(SysTask *task, void *data) {
     TradeSequenceExchange *exchange = data;
 
     if (exchange->frames != 0) {
@@ -192,7 +192,7 @@ void TradeSequenceExchange_SlideTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceExchange_InitBgs(TradeSequenceExchange *exchange) {
+static void TradeSequenceExchange_InitBgs(TradeSequenceExchange *exchange) {
     GfGfx_SetBanks(&sTradeSequenceExchangeGraphicsBanks);
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
     SetBothScreensModesAndDisable(&sTradeSequenceExchangeGraphicsModes);
@@ -227,7 +227,7 @@ void TradeSequenceExchange_InitBgs(TradeSequenceExchange *exchange) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void TradeSequenceExchange_FreeBgs(TradeSequenceExchange *exchange) {
+static void TradeSequenceExchange_FreeBgs(TradeSequenceExchange *exchange) {
     FreeBgTilemapBuffer(exchange->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(exchange->bgConfig, GF_BG_LYR_SUB_3);
     FreeBgTilemapBuffer(exchange->bgConfig, GF_BG_LYR_MAIN_2);
@@ -238,7 +238,7 @@ void TradeSequenceExchange_FreeBgs(TradeSequenceExchange *exchange) {
 
 // The sent Pokemon is drawn on both screens (its sub-screen copy is 192 pixels further down), the received one on the
 // main screen only.
-void TradeSequenceExchange_SetMonPicPositions(BgConfig *bgConfig, u32 sentY, u32 receivedY) {
+static void TradeSequenceExchange_SetMonPicPositions(BgConfig *bgConfig, u32 sentY, u32 receivedY) {
     u32 sent = sentY & 0x1FF;
     u32 received = receivedY & 0x1FF;
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, received);

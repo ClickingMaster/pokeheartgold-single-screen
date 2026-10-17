@@ -46,19 +46,19 @@ typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32
 
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 
-void TradeSequenceReceive_Draw(TradeSequenceReceive *receive);
-BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state);
-BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state);
-BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state);
-BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state);
-BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, int frames);
-void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive);
-Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive);
-void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive);
-void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive);
-void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive);
-void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data);
-void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task);
+static void TradeSequenceReceive_Draw(TradeSequenceReceive *receive);
+static BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state);
+static BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state);
+static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state);
+static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state);
+static BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, int frames);
+static void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive);
+static Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive);
+static void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive);
+static void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive);
+static void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive);
+static void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data);
+static void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task);
 
 static const TradeSequenceRotation sTradeSequenceReceiveModelRotation = {
     .x = 0,
@@ -179,7 +179,7 @@ BOOL TradeSequenceReceive_Main(void *data, int *state) {
     return TRUE;
 }
 
-void TradeSequenceReceive_Draw(TradeSequenceReceive *receive) {
+static void TradeSequenceReceive_Draw(TradeSequenceReceive *receive) {
     u32 one;
 
     G3X_Reset();
@@ -196,7 +196,7 @@ void TradeSequenceReceive_Draw(TradeSequenceReceive *receive) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
 }
 
-BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state) {
+static BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state) {
     TradeSequenceRotation rotation;
 
     GfGfx_SetBanks(&sTradeSequenceReceiveGraphicsBanks);
@@ -231,7 +231,7 @@ BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state
     return TRUE;
 }
 
-BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state) {
+static BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state) {
     if (*state == 0 && IsPaletteFadeFinished()) {
         Sprite_SetAnimCtrlSeq(receive->sprites[0], 1);
         Sprite_SetDrawFlag(receive->sprites[0], TRUE);
@@ -240,7 +240,7 @@ BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state) 
     return FALSE;
 }
 
-BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state) {
+static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state) {
     u8 cryDelay[4];
 
     switch (*state) {
@@ -288,7 +288,7 @@ BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state) {
     return FALSE;
 }
 
-BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state) {
+static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state) {
     switch (*state) {
     case 0:
         receive->timer = 0;
@@ -352,7 +352,7 @@ BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state
     return FALSE;
 }
 
-BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, int frames) {
+static BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, int frames) {
     if (receive->fanfarePlaying) {
         receive->fanfarePlaying = IsFanfarePlaying();
     }
@@ -366,7 +366,7 @@ BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, in
     return FALSE;
 }
 
-void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive) {
+static void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive) {
     NNSGfdTexKey texKey;
     NNSGfdPlttKey plttKey;
 
@@ -387,7 +387,7 @@ void TradeSequenceReceive_Init3D(TradeSequenceReceive *receive) {
     PokepicManager_SetPlttBaseAddrAndSize(receive->pokepicManager, (plttKey & 0xFFFF) << 3, ((plttKey & 0xFFFF0000) >> 16) << 3);
 }
 
-Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive) {
+static Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive) {
     PokepicTemplate template;
     int y;
     BoxPokemon *boxMon = TradeSequence_GetReceivedBoxMon(receive->ts);
@@ -398,7 +398,7 @@ Pokepic *TradeSequenceReceive_CreateMonPic(TradeSequenceReceive *receive) {
     return PokepicManager_CreatePokepic(receive->pokepicManager, &template, 128, y, 0, 0, receive->animScript, NULL);
 }
 
-void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive) {
+static void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive) {
     NNSG2dImagePaletteProxy palette;
     NNSG2dImageProxy image;
     SpriteResourcesHeader header;
@@ -416,7 +416,7 @@ void TradeSequenceReceive_CreateSprites(TradeSequenceReceive *receive) {
     Sprite_SetDrawFlag(receive->sprites[1], FALSE);
 }
 
-void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive) {
+static void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive) {
     int i;
     for (i = 0; i < 2; i++) {
         if (receive->sprites[i] != NULL) {
@@ -446,7 +446,7 @@ BOOL TradeSequenceReceive_IsBrightnessDone(TradeSequenceReceive *receive) {
     return FALSE;
 }
 
-void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive) {
+static void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive) {
     if (receive->brightnessTask != NULL) {
         TradeSequence_DeferFree(SysTask_GetData(receive->brightnessTask));
         SysTask_Destroy(receive->brightnessTask);
@@ -454,7 +454,7 @@ void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive) {
     }
 }
 
-void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data) {
+static void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data) {
     TradeSequenceReceiveBrightness *brightness = data;
     fx32 value;
 
@@ -469,7 +469,7 @@ void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data) {
     TradeSequenceReceive_StopBrightness(brightness->receive);
 }
 
-void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task) {
+static void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task) {
     TradeSequenceReceiveBounce *bounce = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceReceiveBounce));
     if (bounce) {
         u32 zero = 0;

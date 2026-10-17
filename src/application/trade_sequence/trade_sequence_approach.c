@@ -77,23 +77,23 @@ typedef BOOL (*TradeSequenceApproachStateFunc)(TradeSequenceApproach *approach, 
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 
-BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state);
-BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state);
-void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach);
-void TradeSequenceApproach_FreeBgs(TradeSequenceApproach *approach);
-void TradeSequenceApproach_Init3D(TradeSequenceApproach *approach);
-void TradeSequenceApproach_Free3D(TradeSequenceApproach *approach);
-void TradeSequenceApproach_CreateSprite(TradeSequenceApproach *approach);
-void TradeSequenceApproach_DeleteSprite(TradeSequenceApproach *approach);
-void TradeSequenceApproach_InitFlight(TradeSequenceApproachFlight *flight);
-void TradeSequenceApproach_StopFlight(TradeSequenceApproachFlight *flight);
-void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, TradeSequenceApproachFlight *flight);
-BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flight);
-void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames);
-void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight);
-void TradeSequenceApproach_FlightTask(SysTask *task, void *data);
-void TradeSequenceApproach_RequestScreenSwap(TradeSequenceApproach *approach);
-void TradeSequenceApproach_VBlankCallback(void *data);
+static BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state);
+static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state);
+static void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_FreeBgs(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_Init3D(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_Free3D(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_CreateSprite(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_DeleteSprite(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_InitFlight(TradeSequenceApproachFlight *flight);
+static void TradeSequenceApproach_StopFlight(TradeSequenceApproachFlight *flight);
+static void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, TradeSequenceApproachFlight *flight);
+static BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flight);
+static void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames);
+static void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight);
+static void TradeSequenceApproach_FlightTask(SysTask *task, void *data);
+static void TradeSequenceApproach_RequestScreenSwap(TradeSequenceApproach *approach);
+static void TradeSequenceApproach_VBlankCallback(void *data);
 
 // when 0 the ball only follows the center instead of spiralling around it
 static u32 sTradeSequenceBallSpirals[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
@@ -189,7 +189,7 @@ BOOL TradeSequenceApproach_Main(void *data, int *state) {
     return TRUE;
 }
 
-BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state) {
+static BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state) {
     TradeSequenceApproach_InitBgs(approach);
     TradeSequenceApproach_Init3D(approach);
     TradeSequenceApproach_CreateSprite(approach);
@@ -197,7 +197,7 @@ BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *st
     return TRUE;
 }
 
-BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state) {
+static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
@@ -229,7 +229,7 @@ BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state) {
     return FALSE;
 }
 
-void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach) {
     int scrnFile, charFile, palFile, palOffset;
 
     GfGfx_SetBanks(&sTradeSequenceApproachGraphicsBanks);
@@ -278,12 +278,12 @@ void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach) {
     WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_56);
 }
 
-void TradeSequenceApproach_FreeBgs(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_FreeBgs(TradeSequenceApproach *approach) {
     FreeBgTilemapBuffer(approach->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(approach->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void TradeSequenceApproach_Init3D(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_Init3D(TradeSequenceApproach *approach) {
     CameraAngle angle;
     VecFx32 cameraPos;
 
@@ -314,13 +314,13 @@ void TradeSequenceApproach_Init3D(TradeSequenceApproach *approach) {
     TradeSequence_GetCameraPos(approach->models, &cameraPos);
 }
 
-void TradeSequenceApproach_Free3D(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_Free3D(TradeSequenceApproach *approach) {
     if (approach->models != NULL) {
         TradeSequence_DestroyModels(approach->models);
     }
 }
 
-void TradeSequenceApproach_CreateSprite(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_CreateSprite(TradeSequenceApproach *approach) {
     NNSG2dImagePaletteProxy palette;
     NNSG2dImageProxy image;
     SpriteResourcesHeader header;
@@ -335,25 +335,25 @@ void TradeSequenceApproach_CreateSprite(TradeSequenceApproach *approach) {
     Sprite_SetDrawFlag(approach->sprite, FALSE);
 }
 
-void TradeSequenceApproach_DeleteSprite(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_DeleteSprite(TradeSequenceApproach *approach) {
     if (approach->sprite != NULL) {
         Sprite_Delete(approach->sprite);
     }
     TradeSequence_FreeCellAnim(&approach->cellAnim);
 }
 
-void TradeSequenceApproach_InitFlight(TradeSequenceApproachFlight *flight) {
+static void TradeSequenceApproach_InitFlight(TradeSequenceApproachFlight *flight) {
     flight->task = NULL;
 }
 
-void TradeSequenceApproach_StopFlight(TradeSequenceApproachFlight *flight) {
+static void TradeSequenceApproach_StopFlight(TradeSequenceApproachFlight *flight) {
     if (flight->task != NULL) {
         SysTask_Destroy(flight->task);
         flight->task = NULL;
     }
 }
 
-void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, TradeSequenceApproachFlight *flight) {
+static void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, TradeSequenceApproachFlight *flight) {
     flight->approach = approach;
     flight->ball = approach->ball;
     flight->models = approach->models;
@@ -382,14 +382,14 @@ void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, TradeSeq
     flight->task = SysTask_CreateOnMainQueue(TradeSequenceApproach_FlightTask, flight, 0);
 }
 
-BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flight) {
+static BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flight) {
     if (flight->task == NULL) {
         return TRUE;
     }
     return FALSE;
 }
 
-void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
+static void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
     volatile int divisor = frames;
 
     if (frames != 0) {
@@ -403,7 +403,7 @@ void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight,
     }
 }
 
-void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight) {
+static void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight) {
     s32 angle;
 
     if (sTradeSequenceBallSpirals[0] != 0) {
@@ -449,7 +449,7 @@ void TradeSequenceApproach_UpdateFlight(TradeSequenceApproachFlight *flight) {
 
 // Lets the ball spiral in place for 12 frames, then moves the center until the ball leaves the bottom screen (screen
 // swap) and, 70 frames after the start, hides it.
-void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
+static void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
     TradeSequenceApproachFlight *flight = data;
 
     if (flight->frames < 70) {
@@ -498,12 +498,12 @@ void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceApproach_RequestScreenSwap(TradeSequenceApproach *approach) {
+static void TradeSequenceApproach_RequestScreenSwap(TradeSequenceApproach *approach) {
     approach->swapScreens = TRUE;
 }
 
 // Draws the models; once requested, also moves the layer 3 backgrounds, tilts the camera back and swaps the screens.
-void TradeSequenceApproach_VBlankCallback(void *data) {
+static void TradeSequenceApproach_VBlankCallback(void *data) {
     TradeSequenceApproach *approach = data;
     CameraAngle delta;
 

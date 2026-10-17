@@ -125,42 +125,42 @@ typedef struct TradeSequenceDepartAlphaFade {
 
 typedef BOOL (*TradeSequenceDepartStateFunc)(TradeSequenceDepart *depart, u32 *state);
 
-void TradeSequenceDepart_Draw(TradeSequenceDepart *depart);
-BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state);
-BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state);
-BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state);
-BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32 *state);
-void TradeSequenceDepart_InitBgs(TradeSequenceDepart *depart);
-void TradeSequenceDepart_FreeBgs(TradeSequenceDepart *depart);
-void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart);
-void TradeSequenceDepart_Free3D(TradeSequenceDepart *depart);
-void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart);
-void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart);
-void TradeSequenceDepart_RequestScreenSwap(TradeSequenceDepart *depart);
-void TradeSequenceDepart_ScreenSwapTask(SysTask *task, void *data);
-void TradeSequenceDepart_StartStreakFall(TradeSequenceDepart *depart, SysTask **task, TradeSequenceDepartStreakFall *fall);
-void TradeSequenceDepart_StreakFallTask(SysTask *task, void *data);
-void TradeSequenceDepart_StopStreakFall(SysTask *task);
-void TradeSequenceDepart_StartScroll(TradeSequenceDepart *depart, SysTask **task);
-void TradeSequenceDepart_ScrollTask(SysTask *task, void *data);
-void TradeSequenceDepart_StopScroll(SysTask *task);
-void TradeSequenceDepart_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames);
-void TradeSequenceDepart_AlphaFadeTask(SysTask *task, void *data);
-SysTask *TradeSequenceDepart_StartFlight(TradeSequenceDepart *depart);
-void TradeSequenceDepart_SetAngleSpeed(TradeSequenceDepartFlight *flight, int target, int frames);
-void TradeSequenceDepart_SetRadius(TradeSequenceDepartFlight *flight, fx32 radiusX, fx32 radiusZ, int frames);
-void TradeSequenceDepart_SetSpin(TradeSequenceDepartFlight *flight, int axis, int target, int frames);
-void TradeSequenceDepart_UpdateFlight(TradeSequenceDepartFlight *flight);
-void TradeSequenceDepart_FlightTask_Appear(SysTask *task, void *data);
-void TradeSequenceDepart_FlightTask_FlyAway(SysTask *task, void *data);
-BOOL TradeSequenceDepart_IsFlightOutOfView(SysTask *task);
-BOOL TradeSequenceDepart_IsFlightFlyingAway(SysTask *task);
-void TradeSequenceDepart_RestartFlightFromBelow(SysTask *task);
-void TradeSequenceDepart_FlightTask_Rise(SysTask *task, void *data);
-void TradeSequenceDepart_FlightTask_Hover(SysTask *task, void *data);
-void TradeSequenceDepart_FlightTask_Sink(SysTask *task, void *data);
-void TradeSequenceDepart_FlightTask_Pause(SysTask *task, void *data);
-void TradeSequenceDepart_FlightTask_Leave(SysTask *task, void *data);
+static void TradeSequenceDepart_Draw(TradeSequenceDepart *depart);
+static BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state);
+static BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state);
+static BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state);
+static BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32 *state);
+static void TradeSequenceDepart_InitBgs(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_FreeBgs(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_Free3D(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_RequestScreenSwap(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_ScreenSwapTask(SysTask *task, void *data);
+static void TradeSequenceDepart_StartStreakFall(TradeSequenceDepart *depart, SysTask **task, TradeSequenceDepartStreakFall *fall);
+static void TradeSequenceDepart_StreakFallTask(SysTask *task, void *data);
+static void TradeSequenceDepart_StopStreakFall(SysTask *task);
+static void TradeSequenceDepart_StartScroll(TradeSequenceDepart *depart, SysTask **task);
+static void TradeSequenceDepart_ScrollTask(SysTask *task, void *data);
+static void TradeSequenceDepart_StopScroll(SysTask *task);
+static void TradeSequenceDepart_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames);
+static void TradeSequenceDepart_AlphaFadeTask(SysTask *task, void *data);
+static SysTask *TradeSequenceDepart_StartFlight(TradeSequenceDepart *depart);
+static void TradeSequenceDepart_SetAngleSpeed(TradeSequenceDepartFlight *flight, int target, int frames);
+static void TradeSequenceDepart_SetRadius(TradeSequenceDepartFlight *flight, fx32 radiusX, fx32 radiusZ, int frames);
+static void TradeSequenceDepart_SetSpin(TradeSequenceDepartFlight *flight, int axis, int target, int frames);
+static void TradeSequenceDepart_UpdateFlight(TradeSequenceDepartFlight *flight);
+static void TradeSequenceDepart_FlightTask_Appear(SysTask *task, void *data);
+static void TradeSequenceDepart_FlightTask_FlyAway(SysTask *task, void *data);
+static BOOL TradeSequenceDepart_IsFlightOutOfView(SysTask *task);
+static BOOL TradeSequenceDepart_IsFlightFlyingAway(SysTask *task);
+static void TradeSequenceDepart_RestartFlightFromBelow(SysTask *task);
+static void TradeSequenceDepart_FlightTask_Rise(SysTask *task, void *data);
+static void TradeSequenceDepart_FlightTask_Hover(SysTask *task, void *data);
+static void TradeSequenceDepart_FlightTask_Sink(SysTask *task, void *data);
+static void TradeSequenceDepart_FlightTask_Pause(SysTask *task, void *data);
+static void TradeSequenceDepart_FlightTask_Leave(SysTask *task, void *data);
 
 static s32 sTradeSequenceDepartWaitFrames;
 static CameraAngle sTradeSequenceDepartCameraAngle;
@@ -287,7 +287,7 @@ BOOL TradeSequenceDepart_Main(void *data, int *state) {
     return TRUE;
 }
 
-void TradeSequenceDepart_Draw(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_Draw(TradeSequenceDepart *depart) {
     if (depart->models != NULL) {
         G3X_Reset();
         TradeSequence_DrawModels(depart->models);
@@ -295,7 +295,7 @@ void TradeSequenceDepart_Draw(TradeSequenceDepart *depart) {
     }
 }
 
-BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state) {
+static BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state) {
     TradeSequenceDepart_InitBgs(depart);
     TradeSequenceDepart_Init3D(depart);
     TradeSequenceDepart_CreateStreaks(depart);
@@ -303,7 +303,7 @@ BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *state) {
     return TRUE;
 }
 
-BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state) {
+static BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
@@ -323,7 +323,7 @@ BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state) {
     return FALSE;
 }
 
-BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state) {
+static BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
     case 0:
         depart->timer = 0;
@@ -355,7 +355,7 @@ BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state
     return FALSE;
 }
 
-BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32 *state) {
+static BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
     case 0:
         TradeSequenceDepart_RestartFlightFromBelow(depart->flightTask);
@@ -396,7 +396,7 @@ BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32
     return FALSE;
 }
 
-void TradeSequenceDepart_InitBgs(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_InitBgs(TradeSequenceDepart *depart) {
     OSIntrMode intrMode;
     u32 srcOffset;
     void *buf;
@@ -445,7 +445,7 @@ void TradeSequenceDepart_InitBgs(TradeSequenceDepart *depart) {
     depart->bgZoom = TradeSequence_StartBgZoom(depart->bgConfig, 0x480, FX32_ONE, 1, 0x128, 0, &depart->bgZoomFinished);
 }
 
-void TradeSequenceDepart_FreeBgs(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_FreeBgs(TradeSequenceDepart *depart) {
     if (depart->pulsesRunning) {
         TradeSequence_DestroyPulses(depart->pulses);
     }
@@ -455,7 +455,7 @@ void TradeSequenceDepart_FreeBgs(TradeSequenceDepart *depart) {
     FreeBgTilemapBuffer(depart->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart) {
     NNS_G3dInit();
     G3X_InitMtxStack();
     G3X_SetShading(GX_SHADING_TOON);
@@ -480,13 +480,13 @@ void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart) {
     TradeSequence_SetModelScale(depart->ball, 0x1C00);
 }
 
-void TradeSequenceDepart_Free3D(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_Free3D(TradeSequenceDepart *depart) {
     if (depart->models != NULL) {
         TradeSequence_DestroyModels(depart->models);
     }
 }
 
-void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart) {
     NNSG2dImagePaletteProxy palette;
     NNSG2dImageProxy image;
     SpriteResourcesHeader header;
@@ -518,7 +518,7 @@ void TradeSequenceDepart_CreateStreaks(TradeSequenceDepart *depart) {
     } while (++i < TRADE_SEQUENCE_DEPART_NUM_STREAKS);
 }
 
-void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart) {
     s32 i;
     TradeSequenceDepart *p;
 
@@ -537,13 +537,13 @@ void TradeSequenceDepart_DeleteStreaks(TradeSequenceDepart *depart) {
     TradeSequence_FreeCellAnim(&depart->cellAnim);
 }
 
-void TradeSequenceDepart_RequestScreenSwap(TradeSequenceDepart *depart) {
+static void TradeSequenceDepart_RequestScreenSwap(TradeSequenceDepart *depart) {
     depart->swapScreens = TRUE;
 }
 
 // Once requested (on the next V-wait): moves the layer 2 backgrounds, shows layer 3 on the sub engine instead of the main
 // one and swaps the screens, so that the ball, which left the top screen, comes into view on the bottom one.
-void TradeSequenceDepart_ScreenSwapTask(SysTask *task, void *data) {
+static void TradeSequenceDepart_ScreenSwapTask(SysTask *task, void *data) {
     TradeSequenceDepart *depart = data;
 
     if (depart->swapScreens) {
@@ -557,7 +557,7 @@ void TradeSequenceDepart_ScreenSwapTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceDepart_StartStreakFall(TradeSequenceDepart *depart, SysTask **task, TradeSequenceDepartStreakFall *fall) {
+static void TradeSequenceDepart_StartStreakFall(TradeSequenceDepart *depart, SysTask **task, TradeSequenceDepartStreakFall *fall) {
     int i;
 
     fall->depart = depart;
@@ -574,7 +574,7 @@ void TradeSequenceDepart_StartStreakFall(TradeSequenceDepart *depart, SysTask **
     }
 }
 
-void TradeSequenceDepart_StreakFallTask(SysTask *task, void *data) {
+static void TradeSequenceDepart_StreakFallTask(SysTask *task, void *data) {
     TradeSequenceDepartStreakFall *fall = data;
     int i;
 
@@ -605,14 +605,14 @@ void TradeSequenceDepart_StreakFallTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceDepart_StopStreakFall(SysTask *task) {
+static void TradeSequenceDepart_StopStreakFall(SysTask *task) {
     if (task != NULL) {
         *((TradeSequenceDepartStreakFall *)SysTask_GetData(task))->task = NULL;
         SysTask_Destroy(task);
     }
 }
 
-void TradeSequenceDepart_StartScroll(TradeSequenceDepart *depart, SysTask **task) {
+static void TradeSequenceDepart_StartScroll(TradeSequenceDepart *depart, SysTask **task) {
     TradeSequenceDepartScroll *scroll = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceDepartScroll));
     if (scroll) {
         scroll->depart = depart;
@@ -630,7 +630,7 @@ void TradeSequenceDepart_StartScroll(TradeSequenceDepart *depart, SysTask **task
     }
 }
 
-void TradeSequenceDepart_ScrollTask(SysTask *task, void *data) {
+static void TradeSequenceDepart_ScrollTask(SysTask *task, void *data) {
     TradeSequenceDepartScroll *scroll = data;
 
     if (scroll->distance < FX32_CONST(512)) {
@@ -644,7 +644,7 @@ void TradeSequenceDepart_ScrollTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceDepart_StopScroll(SysTask *task) {
+static void TradeSequenceDepart_StopScroll(SysTask *task) {
     TradeSequenceDepartScroll *scroll;
     if (task != NULL) {
         scroll = SysTask_GetData(task);
@@ -655,7 +655,7 @@ void TradeSequenceDepart_StopScroll(SysTask *task) {
     }
 }
 
-void TradeSequenceDepart_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames) {
+static void TradeSequenceDepart_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames) {
     TradeSequenceDepartAlphaFade *fade = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceDepartAlphaFade));
     if (fade != NULL) {
         fade->alpha = start << FX32_SHIFT;
@@ -668,7 +668,7 @@ void TradeSequenceDepart_StartAlphaFade(TradeSequenceModel *model, int start, in
     }
 }
 
-void TradeSequenceDepart_AlphaFadeTask(SysTask *task, void *data) {
+static void TradeSequenceDepart_AlphaFadeTask(SysTask *task, void *data) {
     TradeSequenceDepartAlphaFade *fade = data;
 
     fade->frames--;
@@ -682,7 +682,7 @@ void TradeSequenceDepart_AlphaFadeTask(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-SysTask *TradeSequenceDepart_StartFlight(TradeSequenceDepart *depart) {
+static SysTask *TradeSequenceDepart_StartFlight(TradeSequenceDepart *depart) {
     TradeSequenceDepartFlight *flight = &depart->flight;
     int i;
 
@@ -714,7 +714,7 @@ SysTask *TradeSequenceDepart_StartFlight(TradeSequenceDepart *depart) {
     return SysTask_CreateOnMainQueue(TradeSequenceDepart_FlightTask_Appear, flight, 0);
 }
 
-void TradeSequenceDepart_SetAngleSpeed(TradeSequenceDepartFlight *flight, int target, int frames) {
+static void TradeSequenceDepart_SetAngleSpeed(TradeSequenceDepartFlight *flight, int target, int frames) {
     if (frames != 0) {
         flight->angleSpeedStep = (target - flight->angleSpeed) / frames;
         flight->angleSpeed += flight->angleSpeedStep;
@@ -725,7 +725,7 @@ void TradeSequenceDepart_SetAngleSpeed(TradeSequenceDepartFlight *flight, int ta
     flight->angleSpeedFrames = frames;
 }
 
-void TradeSequenceDepart_SetRadius(TradeSequenceDepartFlight *flight, fx32 radiusX, fx32 radiusZ, int frames) {
+static void TradeSequenceDepart_SetRadius(TradeSequenceDepartFlight *flight, fx32 radiusX, fx32 radiusZ, int frames) {
     if (frames != 0) {
         flight->radiusXStep = (radiusX - flight->radiusX) / frames;
         flight->radiusZStep = (radiusZ - flight->radiusZ) / frames;
@@ -737,7 +737,7 @@ void TradeSequenceDepart_SetRadius(TradeSequenceDepartFlight *flight, fx32 radiu
     flight->radiusFrames = frames;
 }
 
-void TradeSequenceDepart_SetSpin(TradeSequenceDepartFlight *flight, int axis, int target, int frames) {
+static void TradeSequenceDepart_SetSpin(TradeSequenceDepartFlight *flight, int axis, int target, int frames) {
     if (frames != 0) {
         flight->spins[axis].step = (target - flight->spins[axis].speed) / frames;
     }
@@ -745,7 +745,7 @@ void TradeSequenceDepart_SetSpin(TradeSequenceDepartFlight *flight, int axis, in
     flight->spins[axis].frames = frames;
 }
 
-void TradeSequenceDepart_UpdateFlight(TradeSequenceDepartFlight *flight) {
+static void TradeSequenceDepart_UpdateFlight(TradeSequenceDepartFlight *flight) {
     s64 product;
     s32 radius;
     s32 angle;
@@ -797,7 +797,7 @@ void TradeSequenceDepart_UpdateFlight(TradeSequenceDepartFlight *flight) {
     flight->rotation.z += flight->spins[2].speed;
 }
 
-void TradeSequenceDepart_FlightTask_Appear(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Appear(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     if (flight->frames != 0) {
@@ -818,7 +818,7 @@ void TradeSequenceDepart_FlightTask_Appear(SysTask *task, void *data) {
     TradeSequence_SetModelRotation(flight->model, &flight->rotation);
 }
 
-void TradeSequenceDepart_FlightTask_FlyAway(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_FlyAway(SysTask *task, void *data) {
 #pragma unused(task)
     TradeSequenceDepartFlight *flight = data;
 
@@ -836,15 +836,15 @@ void TradeSequenceDepart_FlightTask_FlyAway(SysTask *task, void *data) {
     }
 }
 
-BOOL TradeSequenceDepart_IsFlightOutOfView(SysTask *task) {
+static BOOL TradeSequenceDepart_IsFlightOutOfView(SysTask *task) {
     return ((TradeSequenceDepartFlight *)SysTask_GetData(task))->outOfView;
 }
 
-BOOL TradeSequenceDepart_IsFlightFlyingAway(SysTask *task) {
+static BOOL TradeSequenceDepart_IsFlightFlyingAway(SysTask *task) {
     return ((TradeSequenceDepartFlight *)SysTask_GetData(task))->flyingAway;
 }
 
-void TradeSequenceDepart_RestartFlightFromBelow(SysTask *task) {
+static void TradeSequenceDepart_RestartFlightFromBelow(SysTask *task) {
     CameraAngle angle;
     TradeSequenceDepartFlight *flight = SysTask_GetData(task);
 
@@ -866,7 +866,7 @@ void TradeSequenceDepart_RestartFlightFromBelow(SysTask *task) {
     SysTask_SetFunc(task, TradeSequenceDepart_FlightTask_Rise);
 }
 
-void TradeSequenceDepart_FlightTask_Rise(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Rise(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     TradeSequenceDepart_UpdateFlight(flight);
@@ -882,7 +882,7 @@ void TradeSequenceDepart_FlightTask_Rise(SysTask *task, void *data) {
     TradeSequence_SetModelRotation(flight->model, &flight->rotation);
 }
 
-void TradeSequenceDepart_FlightTask_Hover(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Hover(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     TradeSequenceDepart_UpdateFlight(flight);
@@ -896,7 +896,7 @@ void TradeSequenceDepart_FlightTask_Hover(SysTask *task, void *data) {
     TradeSequence_SetModelRotation(flight->model, &flight->rotation);
 }
 
-void TradeSequenceDepart_FlightTask_Sink(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Sink(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     TradeSequenceDepart_UpdateFlight(flight);
@@ -912,7 +912,7 @@ void TradeSequenceDepart_FlightTask_Sink(SysTask *task, void *data) {
     TradeSequence_SetModelRotation(flight->model, &flight->rotation);
 }
 
-void TradeSequenceDepart_FlightTask_Pause(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Pause(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     TradeSequenceDepart_UpdateFlight(flight);
@@ -925,7 +925,7 @@ void TradeSequenceDepart_FlightTask_Pause(SysTask *task, void *data) {
     TradeSequence_SetModelRotation(flight->model, &flight->rotation);
 }
 
-void TradeSequenceDepart_FlightTask_Leave(SysTask *task, void *data) {
+static void TradeSequenceDepart_FlightTask_Leave(SysTask *task, void *data) {
     TradeSequenceDepartFlight *flight = data;
 
     if (!flight->outOfView) {

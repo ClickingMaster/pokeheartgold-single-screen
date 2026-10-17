@@ -71,24 +71,24 @@ typedef struct TradeSequenceRecede {
 
 typedef BOOL (*TradeSequenceRecedeStateFunc)(TradeSequenceRecede *recede, u32 *state);
 
-void TradeSequenceRecede_Draw(TradeSequenceRecede *recede);
-BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state);
-BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state);
-void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede);
-void TradeSequenceRecede_FreeBgs(TradeSequenceRecede *recede);
-void TradeSequenceRecede_Init3D(TradeSequenceRecede *recede);
-void TradeSequenceRecede_Free3D(TradeSequenceRecede *recede);
-void TradeSequenceRecede_CreateSprite(TradeSequenceRecede *recede);
-void TradeSequenceRecede_DeleteSprite(TradeSequenceRecede *recede);
-void TradeSequenceRecede_InitFlight(TradeSequenceRecedeFlight *flight);
-void TradeSequenceRecede_StopFlight(TradeSequenceRecedeFlight *flight);
-void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSequenceRecedeFlight *flight);
-BOOL TradeSequenceRecede_IsFlightDone(TradeSequenceRecedeFlight *flight);
-void TradeSequenceRecede_SetFlightTargets(TradeSequenceRecedeFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames);
-void TradeSequenceRecede_UpdateFlight(TradeSequenceRecedeFlight *flight);
-void TradeSequenceRecede_FlightTask(SysTask *task, void *data);
-void TradeSequenceRecede_RequestScreenSwap(TradeSequenceRecede *recede);
-void TradeSequenceRecede_ScreenSwapTask(SysTask *task, void *data);
+static void TradeSequenceRecede_Draw(TradeSequenceRecede *recede);
+static BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state);
+static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state);
+static void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_FreeBgs(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_Init3D(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_Free3D(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_CreateSprite(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_DeleteSprite(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_InitFlight(TradeSequenceRecedeFlight *flight);
+static void TradeSequenceRecede_StopFlight(TradeSequenceRecedeFlight *flight);
+static void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSequenceRecedeFlight *flight);
+static BOOL TradeSequenceRecede_IsFlightDone(TradeSequenceRecedeFlight *flight);
+static void TradeSequenceRecede_SetFlightTargets(TradeSequenceRecedeFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames);
+static void TradeSequenceRecede_UpdateFlight(TradeSequenceRecedeFlight *flight);
+static void TradeSequenceRecede_FlightTask(SysTask *task, void *data);
+static void TradeSequenceRecede_RequestScreenSwap(TradeSequenceRecede *recede);
+static void TradeSequenceRecede_ScreenSwapTask(SysTask *task, void *data);
 
 static const TradeSequenceRecedeStateFunc sTradeSequenceRecedeStates[TRADE_SEQUENCE_RECEDE_NUM_STATES] = {
     TradeSequenceRecede_SetupScreens,
@@ -180,7 +180,7 @@ BOOL TradeSequenceRecede_Main(void *data, int *state) {
     return TRUE;
 }
 
-void TradeSequenceRecede_Draw(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_Draw(TradeSequenceRecede *recede) {
     if (recede->models != NULL) {
         G3X_Reset();
         TradeSequence_DrawModels(recede->models);
@@ -188,7 +188,7 @@ void TradeSequenceRecede_Draw(TradeSequenceRecede *recede) {
     }
 }
 
-BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state) {
+static BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state) {
     TradeSequenceRecede_InitBgs(recede);
     TradeSequenceRecede_Init3D(recede);
     TradeSequenceRecede_CreateSprite(recede);
@@ -198,7 +198,7 @@ BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *state) {
     return TRUE;
 }
 
-BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
+static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
     switch (*state) {
     case 0:
         recede->timer = 0;
@@ -236,7 +236,7 @@ BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
     return FALSE;
 }
 
-void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede) {
     int scrnFile;
     int charFile;
     int palFile;
@@ -287,12 +287,12 @@ void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void TradeSequenceRecede_FreeBgs(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_FreeBgs(TradeSequenceRecede *recede) {
     FreeBgTilemapBuffer(recede->bgConfig, GF_BG_LYR_MAIN_3);
     FreeBgTilemapBuffer(recede->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void TradeSequenceRecede_Init3D(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_Init3D(TradeSequenceRecede *recede) {
     CameraAngle angle;
     VecFx32 cameraPos;
 
@@ -321,13 +321,13 @@ void TradeSequenceRecede_Init3D(TradeSequenceRecede *recede) {
     TradeSequence_GetCameraPos(recede->models, &cameraPos);
 }
 
-void TradeSequenceRecede_Free3D(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_Free3D(TradeSequenceRecede *recede) {
     if (recede->models != NULL) {
         TradeSequence_DestroyModels(recede->models);
     }
 }
 
-void TradeSequenceRecede_CreateSprite(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_CreateSprite(TradeSequenceRecede *recede) {
     NNSG2dImagePaletteProxy palette;
     NNSG2dImageProxy image;
     SpriteResourcesHeader header;
@@ -342,25 +342,25 @@ void TradeSequenceRecede_CreateSprite(TradeSequenceRecede *recede) {
     Sprite_SetDrawFlag(recede->sprite, FALSE);
 }
 
-void TradeSequenceRecede_DeleteSprite(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_DeleteSprite(TradeSequenceRecede *recede) {
     if (recede->sprite != NULL) {
         Sprite_Delete(recede->sprite);
     }
     TradeSequence_FreeCellAnim(&recede->cellAnim);
 }
 
-void TradeSequenceRecede_InitFlight(TradeSequenceRecedeFlight *flight) {
+static void TradeSequenceRecede_InitFlight(TradeSequenceRecedeFlight *flight) {
     flight->task = NULL;
 }
 
-void TradeSequenceRecede_StopFlight(TradeSequenceRecedeFlight *flight) {
+static void TradeSequenceRecede_StopFlight(TradeSequenceRecedeFlight *flight) {
     if (flight->task != NULL) {
         SysTask_Destroy(flight->task);
         flight->task = NULL;
     }
 }
 
-void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSequenceRecedeFlight *flight) {
+static void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSequenceRecedeFlight *flight) {
     flight->recede = recede;
     flight->ball = recede->ball;
     flight->models = recede->models;
@@ -388,14 +388,14 @@ void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSequenceR
     flight->task = SysTask_CreateOnMainQueue(TradeSequenceRecede_FlightTask, flight, 0);
 }
 
-BOOL TradeSequenceRecede_IsFlightDone(TradeSequenceRecedeFlight *flight) {
+static BOOL TradeSequenceRecede_IsFlightDone(TradeSequenceRecedeFlight *flight) {
     if (flight->task == NULL) {
         return TRUE;
     }
     return FALSE;
 }
 
-void TradeSequenceRecede_SetFlightTargets(TradeSequenceRecedeFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
+static void TradeSequenceRecede_SetFlightTargets(TradeSequenceRecedeFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
     if (frames) {
         flight->radiusXStep = (radiusX - flight->radiusX) / frames;
         flight->radiusYStep = (radiusY - flight->radiusY) / frames;
@@ -404,7 +404,7 @@ void TradeSequenceRecede_SetFlightTargets(TradeSequenceRecedeFlight *flight, fx3
     }
 }
 
-void TradeSequenceRecede_UpdateFlight(TradeSequenceRecedeFlight *flight) {
+static void TradeSequenceRecede_UpdateFlight(TradeSequenceRecedeFlight *flight) {
     int angle = (u16)flight->angle / 182; // to degrees
     if (angle >= 360) {
         angle -= 360;
@@ -427,7 +427,7 @@ void TradeSequenceRecede_UpdateFlight(TradeSequenceRecedeFlight *flight) {
 
 // Flies the ball into view, requests the screen swap once it leaves the top screen, then (after at least 60 frames)
 // shrinks it into the distance and hides it.
-void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
+static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
     TradeSequenceRecedeFlight *flight = data;
 
     if (flight->elapsed < 60) {
@@ -485,12 +485,12 @@ void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceRecede_RequestScreenSwap(TradeSequenceRecede *recede) {
+static void TradeSequenceRecede_RequestScreenSwap(TradeSequenceRecede *recede) {
     recede->swapScreens = TRUE;
 }
 
 // Once requested (on the next V-wait): moves the layer 3 backgrounds, tilts the camera and swaps the screens.
-void TradeSequenceRecede_ScreenSwapTask(SysTask *task, void *data) {
+static void TradeSequenceRecede_ScreenSwapTask(SysTask *task, void *data) {
     TradeSequenceRecede *recede = data;
     CameraAngle delta;
 

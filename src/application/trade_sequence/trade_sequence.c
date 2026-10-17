@@ -111,23 +111,23 @@ typedef struct TradeSequenceScene {
     u32 tradeModes; // the trade modes (1: full trade, 2: sending only, 4: receiving only) the scene plays in
 } TradeSequenceScene;
 
-BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon);
-void TradeSequence_DrawSpritesTask(SysTask *task, void *data);
-void TradeSequence_PulsesTask(SysTask *task, void *data);
-void TradeSequence_SetPulseColor(TradeSequencePulses *pulses, int clearIndex, int setIndex, u16 color);
-void TradeSequence_StartPulse(TradeSequencePulses *pulses);
-void TradeSequence_DestroyPulse(TradeSequencePulses *pulses, int slot);
-void TradeSequence_PulseTask(SysTask *task, void *data);
-void TradeSequence_BgZoomTask(SysTask *task, void *data);
-void TradeSequence_ApplyBgZoom(TradeSequenceBgZoom *zoom);
-void TradeSequence_ResetDeferredFrees(void);
-void TradeSequence_FlushDeferredFrees(void);
+static BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon);
+static void TradeSequence_DrawSpritesTask(SysTask *task, void *data);
+static void TradeSequence_PulsesTask(SysTask *task, void *data);
+static void TradeSequence_SetPulseColor(TradeSequencePulses *pulses, int clearIndex, int setIndex, u16 color);
+static void TradeSequence_StartPulse(TradeSequencePulses *pulses);
+static void TradeSequence_DestroyPulse(TradeSequencePulses *pulses, int slot);
+static void TradeSequence_PulseTask(SysTask *task, void *data);
+static void TradeSequence_BgZoomTask(SysTask *task, void *data);
+static void TradeSequence_ApplyBgZoom(TradeSequenceBgZoom *zoom);
+static void TradeSequence_ResetDeferredFrees(void);
+static void TradeSequence_FlushDeferredFrees(void);
 
-void TradeSequence_DrawModel(TradeSequenceModel *model);
-void TradeSequence_InitModel(TradeSequenceModel *model);
-void TradeSequence_FreeModel(TradeSequenceModel *model);
-void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 targetY, fx32 targetZ);
-void TradeSequence_FreeCamera(TradeSequenceModels *models);
+static void TradeSequence_DrawModel(TradeSequenceModel *model);
+static void TradeSequence_InitModel(TradeSequenceModel *model);
+static void TradeSequence_FreeModel(TradeSequenceModel *model);
+static void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 targetY, fx32 targetZ);
+static void TradeSequence_FreeCamera(TradeSequenceModels *models);
 
 static const s32 sTradeSequenceBgZoomCenterY[] = { 144, 56 };
 
@@ -202,7 +202,7 @@ BOOL TradeSequence_Init(OverlayManager *man, int *state) {
     }
 }
 
-BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon) {
+static BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon) {
     u32 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     u32 form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
     if (GetMonBaseStat_HandleAlternateForm(species, form, BASE_FLIP) == 0) {
@@ -253,7 +253,7 @@ BOOL TradeSequence_Main(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void TradeSequence_DrawSpritesTask(SysTask *task, void *data) {
+static void TradeSequence_DrawSpritesTask(SysTask *task, void *data) {
     TradeSequence *ts = data;
     vu32 *dtcm = (vu32 *)0x027E0000; // OS_SetIrqCheckFlag(OS_IE_V_BLANK) through the DTCM base address
 
@@ -315,7 +315,7 @@ void TradeSequence_DestroyPulses(TradeSequencePulses *pulses) {
     }
 }
 
-void TradeSequence_PulsesTask(SysTask *task, void *data) {
+static void TradeSequence_PulsesTask(SysTask *task, void *data) {
     TradeSequencePulses *pulses = data;
 
     if (pulses->stop == 0) {
@@ -354,7 +354,7 @@ void TradeSequence_PulsesTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequence_SetPulseColor(TradeSequencePulses *pulses, int clearIndex, int setIndex, u16 color) {
+static void TradeSequence_SetPulseColor(TradeSequencePulses *pulses, int clearIndex, int setIndex, u16 color) {
     if (clearIndex >= 0 && clearIndex < TRADE_SEQUENCE_NUM_PULSE_COLORS) {
         pulses->colors[clearIndex] = 0;
     }
@@ -364,7 +364,7 @@ void TradeSequence_SetPulseColor(TradeSequencePulses *pulses, int clearIndex, in
     pulses->dirty = 1;
 }
 
-void TradeSequence_StartPulse(TradeSequencePulses *pulses) {
+static void TradeSequence_StartPulse(TradeSequencePulses *pulses) {
     TradeSequencePulse *pulse;
 
     if (pulses->pulseTasks[pulses->nextSlot] != NULL) {
@@ -391,7 +391,7 @@ void TradeSequence_StartPulse(TradeSequencePulses *pulses) {
     }
 }
 
-void TradeSequence_DestroyPulse(TradeSequencePulses *pulses, int slot) {
+static void TradeSequence_DestroyPulse(TradeSequencePulses *pulses, int slot) {
     if (pulses->pulseTasks[slot] != NULL) {
         Heap_Free(SysTask_GetData(pulses->pulseTasks[slot]));
         SysTask_Destroy(pulses->pulseTasks[slot]);
@@ -400,7 +400,7 @@ void TradeSequence_DestroyPulse(TradeSequencePulses *pulses, int slot) {
     }
 }
 
-void TradeSequence_PulseTask(SysTask *task, void *data) {
+static void TradeSequence_PulseTask(SysTask *task, void *data) {
     TradeSequencePulse *pulse = data;
 
     if (++pulse->frameCounter >= pulse->stepFrames) {
@@ -448,7 +448,7 @@ TradeSequenceBgZoom *TradeSequence_StartBgZoom(BgConfig *bgConfig, fx32 scale, f
     return zoom;
 }
 
-void TradeSequence_BgZoomTask(SysTask *task, void *data) {
+static void TradeSequence_BgZoomTask(SysTask *task, void *data) {
     TradeSequenceBgZoom *zoom = data;
     s32 amount = ((zoom->scale * zoom->speed) >> FX32_SHIFT) / 32;
     s32 scale = zoom->scale;
@@ -484,7 +484,7 @@ void TradeSequence_BgZoomTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequence_ApplyBgZoom(TradeSequenceBgZoom *zoom) {
+static void TradeSequence_ApplyBgZoom(TradeSequenceBgZoom *zoom) {
     MtxFx22 matrix;
     matrix._00 = zoom->scale;
     matrix._01 = 0;
@@ -650,11 +650,11 @@ int TradeSequence_GetTradeMode(TradeSequence *ts) {
     return ts->args->is_ingame;
 }
 
-void TradeSequence_ResetDeferredFrees(void) {
+static void TradeSequence_ResetDeferredFrees(void) {
     sTradeSequenceDeferredFreeCount = 0;
 }
 
-void TradeSequence_FlushDeferredFrees(void) {
+static void TradeSequence_FlushDeferredFrees(void) {
     s32 i;
 
     if (sTradeSequenceDeferredFreeCount != 0) {
@@ -711,7 +711,7 @@ void TradeSequence_DrawModels(TradeSequenceModels *models) {
     NNS_G3dGeBufferOP_N(G3OP_MTX_POP, &one, 1);
 }
 
-void TradeSequence_DrawModel(TradeSequenceModel *model) {
+static void TradeSequence_DrawModel(TradeSequenceModel *model) {
     MtxFx33 rotation;
     MtxFx33 temp;
 
@@ -728,7 +728,7 @@ void TradeSequence_DrawModel(TradeSequenceModel *model) {
     GF3dRender_DrawModel(&model->renderObj, &model->translation, &rotation, &model->scale);
 }
 
-void TradeSequence_InitModel(TradeSequenceModel *model) {
+static void TradeSequence_InitModel(TradeSequenceModel *model) {
     model->visible = FALSE;
     model->file = NULL;
     model->rotation.x = model->rotation.y = model->rotation.z = 0;
@@ -736,7 +736,7 @@ void TradeSequence_InitModel(TradeSequenceModel *model) {
     model->translation.x = model->translation.y = model->translation.z = 0;
 }
 
-void TradeSequence_FreeModel(TradeSequenceModel *model) {
+static void TradeSequence_FreeModel(TradeSequenceModel *model) {
     if (model->file != NULL) {
         Heap_Free(model->file);
         model->file = NULL;
@@ -848,7 +848,7 @@ void TradeSequence_SetCameraPerspectiveAngle(TradeSequenceModels *models, u16 pe
     Camera_SetPerspectiveAngle(perspectiveAngle, models->camera);
 }
 
-void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 targetY, fx32 targetZ) {
+static void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 targetY, fx32 targetZ) {
     VecFx32 up;
 
     models->camera = Camera_New(HEAP_ID_57);
@@ -867,7 +867,7 @@ void TradeSequence_InitCamera(TradeSequenceModels *models, fx32 targetX, fx32 ta
     Camera_SetPerspectiveClippingPlane(0, FX32_CONST(1000), models->camera);
 }
 
-void TradeSequence_FreeCamera(TradeSequenceModels *models) {
+static void TradeSequence_FreeCamera(TradeSequenceModels *models) {
     Camera_UnsetStaticPtr();
     Camera_Delete(models->camera);
 }

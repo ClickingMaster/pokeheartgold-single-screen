@@ -72,23 +72,23 @@ typedef struct TradeSequenceArriveAlphaFade {
 
 typedef BOOL (*TradeSequenceArriveStateFunc)(TradeSequenceArrive *arrive, u32 *state);
 
-void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive);
-BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state);
-BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state);
-BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state);
-void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive);
-void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive);
-void TradeSequenceArrive_Init3D(TradeSequenceArrive *arrive);
-void TradeSequenceArrive_Free3D(TradeSequenceArrive *arrive);
-void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task);
-void TradeSequenceArrive_StopScroll(SysTask *task);
-void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task);
-void TradeSequenceArrive_StopLower(SysTask *task);
-void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task);
-void TradeSequenceArrive_StopAlphaFade(SysTask *task);
-void TradeSequenceArrive_ScrollTask(SysTask *task, void *data);
-void TradeSequenceArrive_LowerTask(SysTask *task, void *data);
-void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data);
+static void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive);
+static BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state);
+static BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state);
+static BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state);
+static void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive);
+static void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive);
+static void TradeSequenceArrive_Init3D(TradeSequenceArrive *arrive);
+static void TradeSequenceArrive_Free3D(TradeSequenceArrive *arrive);
+static void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task);
+static void TradeSequenceArrive_StopScroll(SysTask *task);
+static void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task);
+static void TradeSequenceArrive_StopLower(SysTask *task);
+static void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task);
+static void TradeSequenceArrive_StopAlphaFade(SysTask *task);
+static void TradeSequenceArrive_ScrollTask(SysTask *task, void *data);
+static void TradeSequenceArrive_LowerTask(SysTask *task, void *data);
+static void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data);
 
 CameraAngle sTradeSequenceArriveCameraAngle[2]; // only [0] is used
 
@@ -212,7 +212,7 @@ BOOL TradeSequenceArrive_Main(void *data, int *state) {
 }
 
 // Spins the ball and draws the models.
-void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive) {
+static void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive) {
     if (arrive->models != NULL) {
         arrive->rotation.y += 0x1000;
         TradeSequence_SetModelRotation(arrive->ball, &arrive->rotation);
@@ -222,14 +222,14 @@ void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive) {
     }
 }
 
-BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state) {
+static BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state) {
     TradeSequenceArrive_InitBgs(arrive);
     TradeSequenceArrive_Init3D(arrive);
     BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
-BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state) {
+static BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
@@ -277,7 +277,7 @@ BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state) {
     return FALSE;
 }
 
-BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state) {
+static BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state) {
     switch (*state) {
     case 0:
         arrive->bgZoom = TradeSequence_StartBgZoom(arrive->bgConfig, FX32_ONE, 0x400, 1, 0x128, 1, &arrive->bgZoomFinished);
@@ -302,7 +302,7 @@ BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state) {
     return FALSE;
 }
 
-void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive) {
+static void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive) {
     OSIntrMode intrMode;
     void *buf;
     u32 timeOfDay;
@@ -351,7 +351,7 @@ void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive) {
+static void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive) {
     if (arrive->pulsesRunning) {
         TradeSequence_DestroyPulses(arrive->pulses);
     }
@@ -361,7 +361,7 @@ void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive) {
     FreeBgTilemapBuffer(arrive->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void TradeSequenceArrive_Init3D(TradeSequenceArrive *arrive) {
+static void TradeSequenceArrive_Init3D(TradeSequenceArrive *arrive) {
     NNS_G3dInit();
     G3X_InitMtxStack();
     G3X_SetShading(GX_SHADING_TOON);
@@ -388,14 +388,14 @@ void TradeSequenceArrive_Init3D(TradeSequenceArrive *arrive) {
     TradeSequence_GetModelRotation(arrive->ball, &arrive->rotation);
 }
 
-void TradeSequenceArrive_Free3D(TradeSequenceArrive *arrive) {
+static void TradeSequenceArrive_Free3D(TradeSequenceArrive *arrive) {
     if (arrive->models != NULL) {
         TradeSequence_DestroyModels(arrive->models);
         arrive->models = NULL;
     }
 }
 
-void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task) {
+static void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task) {
     TradeSequenceArriveScroll *scroll = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveScroll));
     if (scroll) {
         scroll->arrive = arrive;
@@ -412,7 +412,7 @@ void TradeSequenceArrive_StartScroll(TradeSequenceArrive *arrive, SysTask **task
     }
 }
 
-void TradeSequenceArrive_ScrollTask(SysTask *task, void *data) {
+static void TradeSequenceArrive_ScrollTask(SysTask *task, void *data) {
     TradeSequenceArriveScroll *scroll = data;
 
     if (scroll->frames) {
@@ -428,7 +428,7 @@ void TradeSequenceArrive_ScrollTask(SysTask *task, void *data) {
     }
 }
 
-void TradeSequenceArrive_StopScroll(SysTask *task) {
+static void TradeSequenceArrive_StopScroll(SysTask *task) {
     TradeSequenceArriveScroll *scroll;
     if (task != NULL) {
         scroll = SysTask_GetData(task);
@@ -438,7 +438,7 @@ void TradeSequenceArrive_StopScroll(SysTask *task) {
     }
 }
 
-void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task) {
+static void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task) {
     TradeSequenceArriveLower *lower = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveLower));
     if (lower) {
         lower->task = task;
@@ -453,7 +453,7 @@ void TradeSequenceArrive_StartLower(TradeSequenceArrive *arrive, SysTask **task)
     }
 }
 
-void TradeSequenceArrive_LowerTask(SysTask *task, void *data) {
+static void TradeSequenceArrive_LowerTask(SysTask *task, void *data) {
     TradeSequenceArriveLower *lower = data;
 
     if (lower->frames) {
@@ -467,7 +467,7 @@ void TradeSequenceArrive_LowerTask(SysTask *task, void *data) {
     TradeSequenceArrive_StopLower(task);
 }
 
-void TradeSequenceArrive_StopLower(SysTask *task) {
+static void TradeSequenceArrive_StopLower(SysTask *task) {
     TradeSequenceArriveLower *lower;
     if (task != NULL) {
         lower = SysTask_GetData(task);
@@ -477,7 +477,7 @@ void TradeSequenceArrive_StopLower(SysTask *task) {
     }
 }
 
-void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task) {
+static void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task) {
     TradeSequenceArriveAlphaFade *fade = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceArriveAlphaFade));
     if (fade) {
         fade->task = task;
@@ -496,7 +496,7 @@ void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, in
     }
 }
 
-void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data) {
+static void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data) {
     TradeSequenceArriveAlphaFade *fade = data;
 
     fade->frames--;
@@ -509,7 +509,7 @@ void TradeSequenceArrive_AlphaFadeTask(SysTask *task, void *data) {
     TradeSequenceArrive_StopAlphaFade(task);
 }
 
-void TradeSequenceArrive_StopAlphaFade(SysTask *task) {
+static void TradeSequenceArrive_StopAlphaFade(SysTask *task) {
     TradeSequenceArriveAlphaFade *fade;
     if (task != NULL) {
         fade = SysTask_GetData(task);

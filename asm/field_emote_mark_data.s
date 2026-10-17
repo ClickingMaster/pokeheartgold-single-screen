@@ -12,32 +12,10 @@
 	.include "field_emote_mark_data.inc"
 	.include "global.inc"
 
-	.public EmoteMark_New
-	.public EmoteMark_Free
-	.public EmoteMark_RetainExclamation
-	.public EmoteMark_ReleaseExclamation
-	.public EmoteMark_RetainQuestion
-	.public EmoteMark_ReleaseQuestion
-	.public EmoteMark_Retain
-	.public EmoteMark_Release
-	.public EmoteMark_LoadExclamationGfx
-	.public EmoteMark_LoadQuestionGfx
-	.public EmoteMark_FreeExclamationGfx
-	.public EmoteMark_FreeQuestionGfx
-	.public EmoteMark_LoadExclamationGfxIfUnused
-	.public EmoteMark_LoadQuestionGfxIfUnused
-	.public EmoteMark_FreeExclamationGfxIfUnused
-	.public EmoteMark_FreeQuestionGfxIfUnused
-	.public EmoteMark_LoadGfxIfUnused
-	.public EmoteMark_FreeGfxIfUnused
-	.public EmoteMark_CreateBillboard
-	.public EmoteMark_IsDone
-	.public EmoteMark_Hide
 	.public EmoteMarkEffect_Init
 	.public EmoteMarkEffect_Update
 	.public EmoteMarkEffect_Destroy
 	.public EmoteMarkEffect_Draw
-	.public EmoteMark_Spawn
 	.public MapObjectEmoteMarkEffect_Init
 	.public MapObjectEmoteMarkEffect_Update
 	.public sEmoteMarkTemplate
@@ -53,13 +31,13 @@ sEmoteMarkTemplate:
 	.word EmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-sMapObjectEmoteMarkTemplate: ; 0x022092DC
+sMapObjectEmoteMarkTemplate:
 	.word 0x00000044
 	.word MapObjectEmoteMarkEffect_Init
 	.word EmoteMarkEffect_Destroy
 	.word MapObjectEmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-sEmoteMarkRecordParams: ; 0x022092F0
+sEmoteMarkRecordParams:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
