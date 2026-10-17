@@ -7,6 +7,7 @@
 #include "msgdata/msg/msg_0799.h"
 #include "msgdata/msg/msg_0800.h"
 #include "nnsys/fnd/expheap.h"
+#include "record_mixing/record_mixing.h"
 
 #include "bg_window.h"
 #include "comm_wireless.h"
@@ -27,7 +28,6 @@
 #include "options.h"
 #include "palette.h"
 #include "pm_string.h"
-#include "record_mixing.h"
 #include "render_text.h"
 #include "render_window.h"
 #include "sav_system_info.h"

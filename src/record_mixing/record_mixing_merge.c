@@ -1,9 +1,10 @@
 #include "global.h"
 
+#include "record_mixing/record_mixing_exchange.h"
+
 #include "assert.h"
 #include "communication_core.h"
 #include "communication_player_state.h"
-#include "record_mixing_exchange.h"
 #include "save.h"
 #include "save_arrays.h"
 

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "3d8ce3d129c4c6d9b1cb5e26c439bb10b155aadc",
+  "commit": "624e9bda31628270ffc30bfd53397312652a366c",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "6eb2a0a73449cba6f85cb374bfbbbd6c59e3988fd36e2caf911a8d34b43bcd32",
+    "ARM9": "cad2c9c6e94441c8a0a6d617a4ab338fd6d19ea97e0cb3092d90a8f41ba86846",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2407,7 +2407,7 @@
       "object": "wifi_club_app.o",
       "bytes": 31466,
       "status": "c",
-      "source": "src/wifi_club_app.c"
+      "source": "src/wifi_club/wifi_club_app.c"
     },
     {
       "cpu": "ARM9",
@@ -2415,7 +2415,7 @@
       "object": "wifi_club_game_entry.o",
       "bytes": 9266,
       "status": "c",
-      "source": "src/wifi_club_game_entry.c"
+      "source": "src/wifi_club/wifi_club_game_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -2423,7 +2423,7 @@
       "object": "wifi_club_room.o",
       "bytes": 5198,
       "status": "c",
-      "source": "src/wifi_club_room.c"
+      "source": "src/wifi_club/wifi_club_room.c"
     },
     {
       "cpu": "ARM9",
@@ -2431,7 +2431,7 @@
       "object": "wifi_club_room_maps.o",
       "bytes": 24,
       "status": "c",
-      "source": "src/wifi_club_room_maps.c"
+      "source": "src/wifi_club/wifi_club_room_maps.c"
     },
     {
       "cpu": "ARM9",
@@ -4415,7 +4415,7 @@
       "object": "record_mixing.o",
       "bytes": 9490,
       "status": "c",
-      "source": "src/record_mixing.c"
+      "source": "src/record_mixing/record_mixing.c"
     },
     {
       "cpu": "ARM9",
@@ -4423,7 +4423,7 @@
       "object": "record_mixing_exchange.o",
       "bytes": 364,
       "status": "c",
-      "source": "src/record_mixing_exchange.c"
+      "source": "src/record_mixing/record_mixing_exchange.c"
     },
     {
       "cpu": "ARM9",
@@ -4431,7 +4431,7 @@
       "object": "record_mixing_merge.o",
       "bytes": 332,
       "status": "c",
-      "source": "src/record_mixing_merge.c"
+      "source": "src/record_mixing/record_mixing_merge.c"
     },
     {
       "cpu": "ARM9",
@@ -11229,7 +11229,7 @@
       "object": "record_mixing_link.o",
       "bytes": 564,
       "status": "c",
-      "source": "src/record_mixing_link.c"
+      "source": "src/record_mixing/record_mixing_link.c"
     },
     {
       "cpu": "ARM9",
@@ -12839,7 +12839,7 @@
       "object": "wifi_club.o",
       "bytes": 1440,
       "status": "c",
-      "source": "src/wifi_club.c"
+      "source": "src/wifi_club/wifi_club.c"
     },
     {
       "cpu": "ARM9",
@@ -12847,7 +12847,7 @@
       "object": "wifi_club_comm.o",
       "bytes": 108,
       "status": "c",
-      "source": "src/wifi_club_comm.c"
+      "source": "src/wifi_club/wifi_club_comm.c"
     },
     {
       "cpu": "ARM9",
@@ -12855,7 +12855,7 @@
       "object": "wifi_club_comm_table.o",
       "bytes": 12,
       "status": "c",
-      "source": "src/wifi_club_comm_table.c"
+      "source": "src/wifi_club/wifi_club_comm_table.c"
     },
     {
       "cpu": "ARM9",

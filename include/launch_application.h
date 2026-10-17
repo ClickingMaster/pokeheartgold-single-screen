@@ -29,7 +29,7 @@
 #include "overlay_58.h"
 #include "battle_room_results.h"
 #include "nintendo_wfc_connect.h"
-#include "record_mixing.h"
+#include "record_mixing/record_mixing.h"
 #include "overlay_86.h"
 #include "overlay_87.h"
 #include "overlay_99.h"

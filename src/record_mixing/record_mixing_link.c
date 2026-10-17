@@ -1,4 +1,4 @@
-#include "record_mixing_link_internal.h"
+#include "record_mixing/record_mixing_link_internal.h"
 
 void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room) {
     Comm_RegisterCommandTable(gRecordMixingLinkCommands, 110, room);

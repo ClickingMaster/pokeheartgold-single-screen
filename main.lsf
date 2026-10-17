@@ -169,7 +169,7 @@ Static main
     Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
     Object src/communication_error.o
-    Object src/wifi_club_comm_table.o
+    Object src/wifi_club/wifi_club_comm_table.o
     Object src/wfc_user_info_warning.o
     Object src/map_matrix.o
     Object src/map_header.o
@@ -297,7 +297,7 @@ Static main
     Object src/bag_view.o
     Object src/item.o
     Object src/bag.o
-    Object src/wifi_club.o
+    Object src/wifi_club/wifi_club.o
     Object asm/wifi_club_data.o
     Object src/wifi_plaza/wifi_plaza_player_info.o
     Object src/party_menu.o
@@ -324,7 +324,7 @@ Static main
     Object asm/trade_communication_data.o
     Object src/drawing_session_link.o
     Object asm/drawing_session_link_data.o
-    Object src/record_mixing_link.o
+    Object src/record_mixing/record_mixing_link.o
     Object asm/record_mixing_link_data.o
     Object src/use_item_on_mon.o
     Object src/mail_misc.o
@@ -367,7 +367,7 @@ Static main
     Object asm/spin_trade_link_data.o
     Object src/spin_trade_flow.o
     Object asm/spin_trade_flow_data.o
-    Object src/wifi_club_comm.o
+    Object src/wifi_club/wifi_club_comm.o
     Object src/safari_zone_encounters.o
     Object src/safari_decoration_task.o
     Object src/field_effect_launch_1.o
@@ -1461,10 +1461,10 @@ Overlay OVY_43
 Overlay OVY_44
 {
     After OVY_42
-    Object src/wifi_club_app.o
-    Object src/wifi_club_room.o
-    Object src/wifi_club_room_maps.o
-    Object src/wifi_club_game_entry.o
+    Object src/wifi_club/wifi_club_app.o
+    Object src/wifi_club/wifi_club_room.o
+    Object src/wifi_club/wifi_club_room_maps.o
+    Object src/wifi_club/wifi_club_game_entry.o
 }
 Overlay OVY_45
 {
@@ -1844,11 +1844,11 @@ Overlay OVY_72
 Overlay OVY_73
 {
     After main
-    Object src/record_mixing.o
+    Object src/record_mixing/record_mixing.o
     Object src/nintendo_wfc_connect_unused.o
-    Object src/record_mixing_exchange.o
+    Object src/record_mixing/record_mixing_exchange.o
     Object asm/record_mixing_data.o
-    Object src/record_mixing_merge.o
+    Object src/record_mixing/record_mixing_merge.o
 }
 Overlay OVY_74
 {

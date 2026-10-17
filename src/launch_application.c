@@ -51,7 +51,7 @@
 #include "gts/gts.h"
 #include "trade_sequence.h"
 #include "nintendo_wfc_connect.h"
-#include "record_mixing.h"
+#include "record_mixing/record_mixing.h"
 #include "overlay_86.h"
 #include "overlay_87.h"
 #include "overlay_99.h"

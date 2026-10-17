@@ -1,4 +1,4 @@
-#include "record_mixing.h"
+#include "record_mixing/record_mixing.h"
 
 #include "global.h"
 
@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0422.h"
+#include "record_mixing/record_mixing_records.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -25,7 +26,6 @@
 #include "obj_pltt_transfer.h"
 #include "player_data.h"
 #include "pm_string.h"
-#include "record_mixing_records.h"
 #include "render_window.h"
 #include "save_arrays.h"
 #include "save_block_23.h"

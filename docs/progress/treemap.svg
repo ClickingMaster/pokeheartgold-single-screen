@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 3d8ce3d12 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 624e9bda3 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -599,7 +599,7 @@ src/filesystem.c</title></rect>
 src/mail.c</title></rect>
 <rect x="261.491" y="536.521" width="12.105" height="19.035" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club.o
 1,440 bytes · C-only source
-src/wifi_club.c</title></rect>
+src/wifi_club/wifi_club.c</title></rect>
 <rect x="237.047" y="555.556" width="12.217" height="18.807" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / game_clear.o
 1,436 bytes · C-only source
 src/game_clear.c</title></rect>
@@ -1189,7 +1189,7 @@ src/player_data.c</title></rect>
 lib/libCPS/src/cps_ip.c</title></rect>
 <rect x="262.350" y="591.037" width="9.601" height="9.400" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / record_mixing_link.o
 564 bytes · C-only source
-src/record_mixing_link.c</title></rect>
+src/record_mixing/record_mixing_link.c</title></rect>
 <rect x="262.350" y="600.437" width="9.601" height="9.366" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_move_relearner.o
 562 bytes · C-only source
 src/scrcmd_move_relearner.c</title></rect>
@@ -2032,7 +2032,7 @@ lib/NitroSDK/src/os/os_exception_init.c</title></rect>
 lib/MSL_C/src/msl_string_strstr.c</title></rect>
 <rect x="284.642" y="693.242" width="5.624" height="3.073" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club_comm.o
 108 bytes · C-only source
-src/wifi_club_comm.c</title></rect>
+src/wifi_club/wifi_club_comm.c</title></rect>
 <rect x="284.642" y="696.315" width="5.624" height="3.016" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / fx_mtx44_rot.o
 106 bytes · Original hand-written assembly
 lib/NitroSDK/src/fx/fx_mtx44_rot.c
@@ -2392,7 +2392,7 @@ lib/NitroSDK/src/os/os_terminate_proc.c
 OS_Halt</title></rect>
 <rect x="307.189" y="712.734" width="1.050" height="1.828" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wifi_club_comm_table.o
 12 bytes · C-only source
-src/wifi_club_comm_table.c</title></rect>
+src/wifi_club/wifi_club_comm_table.c</title></rect>
 <rect x="306.139" y="714.562" width="1.050" height="1.219" fill="#6f8fd8" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / mi_swap.o
 8 bytes · Original hand-written assembly
 lib/NitroSDK/src/mi/mi_swap.c
@@ -4936,16 +4936,16 @@ src/field/fashion_case_gifts.c</title></rect>
 <rect x="1042.480" y="358.802" width="129.520" height="67.483" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="615.491" y="426.285" width="94.996" height="53.000" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_44 / wifi_club_app.o
 31,466 bytes · C-only source
-src/wifi_club_app.c</title></rect>
+src/wifi_club/wifi_club_app.c</title></rect>
 <rect x="710.486" y="426.285" width="43.739" height="33.897" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_44 / wifi_club_game_entry.o
 9,266 bytes · C-only source
-src/wifi_club_game_entry.c</title></rect>
+src/wifi_club/wifi_club_game_entry.c</title></rect>
 <rect x="710.486" y="460.182" width="43.538" height="19.103" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_44 / wifi_club_room.o
 5,198 bytes · C-only source
-src/wifi_club_room.c</title></rect>
+src/wifi_club/wifi_club_room.c</title></rect>
 <rect x="754.024" y="460.182" width="0.201" height="19.103" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_44 / wifi_club_room_maps.o
 24 bytes · C-only source
-src/wifi_club_room_maps.c</title></rect>
+src/wifi_club/wifi_club_room_maps.c</title></rect>
 <rect x="615.491" y="426.285" width="138.735" height="53.000" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="615.491" y="479.285" width="71.840" height="46.554" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_party_app.o
 20,902 bytes · C-only source
@@ -5127,16 +5127,16 @@ src/battle/trainer_ai.c</title></rect>
 <rect x="759.994" y="644.575" width="43.178" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="803.171" y="644.575" width="42.855" height="35.432" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
 9,490 bytes · C-only source
-src/record_mixing.c</title></rect>
+src/record_mixing/record_mixing.c</title></rect>
 <rect x="803.171" y="680.007" width="39.845" height="36.993" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused.o
 9,212 bytes · C-only source
 src/nintendo_wfc_connect_unused.c</title></rect>
 <rect x="843.016" y="680.007" width="3.010" height="19.347" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_exchange.o
 364 bytes · C-only source
-src/record_mixing_exchange.c</title></rect>
+src/record_mixing/record_mixing_exchange.c</title></rect>
 <rect x="843.016" y="699.354" width="3.010" height="17.646" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_merge.o
 332 bytes · C-only source
-src/record_mixing_merge.c</title></rect>
+src/record_mixing/record_mixing_merge.c</title></rect>
 <rect x="803.171" y="644.575" width="42.855" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="846.026" y="644.575" width="42.661" height="45.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_85 / spin_trade_app.o
 12,118 bytes · C-only source
