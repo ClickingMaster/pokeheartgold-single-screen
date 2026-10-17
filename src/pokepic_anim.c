@@ -9,7 +9,7 @@
 #include "sys_task_api.h"
 
 // Animation scripts of Pokemon pictures (NARC a/0/9/0, one per animation): a word stream of commands
-// (gPokepicAnimCommands, by opcode) that read their arguments from the stream. Commands work on 8 variables and on
+// (sPokepicAnimCommands, by opcode) that read their arguments from the stream. Commands work on 8 variables and on
 // a transform (position offsets, scale, rotation) that is applied to the Pokepic; up to 4 motions animate one
 // transform field per frame until they end.
 
@@ -18,7 +18,7 @@ typedef struct PokepicScriptAnim PokepicScriptAnim;
 typedef struct PokepicMotion {
     u32 active;
 
-    union { // 0x04, read from the script; the argument count is per motion type (gPokepicMotionTypes)
+    union { // 0x04, read from the script; the argument count is per motion type (sPokepicMotionTypes)
         int args[7];
 
         struct {
@@ -105,10 +105,7 @@ typedef struct PokepicMotionType {
     int targetArg;
 } PokepicMotionType;
 
-extern const PokepicMotionType gPokepicMotionTypes[];
-extern const int gPokepicMotionTypeArgCounts[];
-extern const int gPokepicMotionTypeTargetArgs[];
-extern void (*gPokepicAnimCommands[])(PokepicScriptAnim *anim);
+typedef void (*PokepicScriptAnimCmd)(PokepicScriptAnim *anim);
 
 static void PokepicScriptAnim_Task(SysTask *task, void *data);
 static void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim);
@@ -168,6 +165,51 @@ void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion);
 void PokepicMotion_UpdateAccel(PokepicMotion *motion);
 void PokepicMotion_UpdateLinear(PokepicMotion *motion);
 void PokepicMotion_UpdateAccelToLimit(PokepicMotion *motion);
+
+static const PokepicMotionType sPokepicMotionTypes[] = {
+    { PokepicMotion_UpdateWave,             6, 1 },
+    { PokepicMotion_UpdateWaveOverDuration, 6, 1 },
+    { PokepicMotion_UpdateAccel,            4, 0 },
+    { PokepicMotion_UpdateLinear,           3, 0 },
+    { PokepicMotion_UpdateAccelToLimit,     4, 0 },
+};
+
+static const PokepicScriptAnimCmd sPokepicAnimCommands[] = {
+    PokepicScriptAnimCmd_End,
+    PokepicScriptAnimCmd_Yield,
+    PokepicScriptAnimCmd_ResetTransform,
+    PokepicScriptAnimCmd_SetVarIfCompare,
+    PokepicScriptAnimCmd_SetVar,
+    PokepicScriptAnimCmd_CopyVar,
+    PokepicScriptAnimCmd_AddVar,
+    PokepicScriptAnimCmd_MulVar,
+    PokepicScriptAnimCmd_SubVar,
+    PokepicScriptAnimCmd_DivVar,
+    PokepicScriptAnimCmd_ModVar,
+    PokepicScriptAnimCmd_LoopStart,
+    PokepicScriptAnimCmd_LoopEnd,
+    PokepicScriptAnimCmd_SetAttrFromVar,
+    PokepicScriptAnimCmd_AddAttrFromVar,
+    PokepicScriptAnimCmd_SetOrAddAttr,
+    PokepicScriptAnimCmd_Sin,
+    PokepicScriptAnimCmd_Cos,
+    PokepicScriptAnimCmd_SetPosFromVar,
+    PokepicScriptAnimCmd_AddPosFromVar,
+    PokepicScriptAnimCmd_SetOrAddTransform,
+    PokepicScriptAnimCmd_ApplyPosition,
+    PokepicScriptAnimCmd_ApplyTransform,
+    PokepicScriptAnimCmd_SetOffsetFromVar,
+    PokepicScriptAnimCmd_RunMotions,
+    PokepicScriptAnimCmd_SetScaleMode,
+    PokepicScriptAnimCmd_StartWaveMotion,
+    PokepicScriptAnimCmd_StartWaveMotionOverDuration,
+    PokepicScriptAnimCmd_StartAccelMotion,
+    PokepicScriptAnimCmd_StartLinearMotion,
+    PokepicScriptAnimCmd_StartAccelMotionToLimit,
+    PokepicScriptAnimCmd_Wait,
+    PokepicScriptAnimCmd_StartPaletteFade,
+    PokepicScriptAnimCmd_WaitPaletteFade,
+};
 
 PokepicAnimManager *PokepicAnimManager_New(enum HeapID heapId, int count, int flag) {
     PokepicAnimManager *mgr = Heap_Alloc(heapId, sizeof(PokepicAnimManager));
@@ -298,7 +340,7 @@ static void PokepicScriptAnim_RunFrame(PokepicScriptAnim *anim) {
         if ((u32)*anim->cursor >= 0x22) {
             GF_AssertFail();
         }
-        gPokepicAnimCommands[(u32)*anim->cursor](anim);
+        sPokepicAnimCommands[(u32)*anim->cursor](anim);
         if (anim->done != 0) {
             return;
         }
@@ -338,7 +380,7 @@ static PokepicMotion *PokepicScriptAnim_AllocMotion(PokepicScriptAnim *anim, int
         if (motion->active == 0) {
             MI_CpuFill8(motion, 0, sizeof(PokepicMotion));
             motion->active = 1;
-            motion->update = (void (*)(PokepicMotion *, PokepicScriptAnim *))gPokepicMotionTypes[type].update;
+            motion->update = (void (*)(PokepicMotion *, PokepicScriptAnim *))sPokepicMotionTypes[type].update;
             return motion;
         }
     }
@@ -860,20 +902,17 @@ static void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScr
 static void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type) {
     PokepicMotion *motion = PokepicScriptAnim_AllocMotion(anim, (u8)type);
     u8 i;
-    int offset;
     PokepicScriptAnim_ReadArgByte(anim, &motion->op);
     PokepicScriptAnim_ReadArgByte(anim, &motion->delay);
-    // the type's fields are addressed through labels inside gPokepicMotionTypes
-    offset = type * sizeof(PokepicMotionType);
     i = 0;
-    if (*(const int *)((const u8 *)gPokepicMotionTypeArgCounts + offset) > 0) {
-        const PokepicMotionType *motionType = (const PokepicMotionType *)((const u8 *)gPokepicMotionTypes + offset);
+    if (sPokepicMotionTypes[type].argCount > 0) {
+        const PokepicMotionType *motionType = &sPokepicMotionTypes[type];
         do {
             PokepicScriptAnim_ReadArg(anim, &motion->args[i]);
             i = (u8)(i + 1);
         } while (i < motionType->argCount);
     }
-    PokepicMotion_SetTarget(motion->args[*(const int *)((const u8 *)gPokepicMotionTypeTargetArgs + offset)], motion, anim);
+    PokepicMotion_SetTarget(motion->args[sPokepicMotionTypes[type].targetArg], motion, anim);
     if (motion->delay == 0) {
         motion->update(motion, anim);
     } else {

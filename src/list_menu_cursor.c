@@ -11,14 +11,15 @@ typedef struct ListMenuCursor {
     u32 color;
     String *string;
 } ListMenuCursor;
-extern const u16 gListMenuCursorChar[];
+
+static const u16 sListMenuCursorChar[] = { 0x11F, EOS };
 
 struct ListMenuCursor *ListMenuCursorNew(enum HeapID heapID) {
     ListMenuCursor *cursor = Heap_Alloc(heapID, sizeof(ListMenuCursor));
     if (cursor != NULL) {
         cursor->color = 0x1020F;
         cursor->string = String_New(4, heapID);
-        CopyU16ArrayToString(cursor->string, gListMenuCursorChar);
+        CopyU16ArrayToString(cursor->string, sListMenuCursorChar);
     }
     return cursor;
 }

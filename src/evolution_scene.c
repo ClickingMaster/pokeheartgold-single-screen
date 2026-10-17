@@ -202,8 +202,6 @@ typedef struct EvolutionBgTemplates {
     BgTemplate bg[3];
 } EvolutionBgTemplates;
 
-extern const u8 gEvolutionSummaryPages[];
-
 static ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation);
 static void EvolutionScene_InitSprites(EvolutionTaskData *data);
 static void EvolutionScene_FreeSprites(EvolutionTaskData *data);
@@ -225,6 +223,8 @@ static BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyph
 static void EvolutionScene_OpenSummary(EvolutionTaskData *data);
 
 static const s16 sEvolutionMenuCursorX[] = { 128 };
+
+static const u8 sEvolutionSummaryPages[] = { 1, 4 };
 
 static const s16 sEvolutionMenuCursorY[] = { 72, 128, 120 };
 
@@ -974,7 +974,7 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
             data->summaryArgs->mode = 2;
             data->summaryArgs->chatot = 0;
             data->summaryArgs->menuInputStatePtr = NULL;
-            PokemonSummary_SetPages(data->summaryArgs, gEvolutionSummaryPages);
+            PokemonSummary_SetPages(data->summaryArgs, sEvolutionSummaryPages);
             EvolutionScene_OpenSummary(data);
             data->state++;
         }

@@ -53,13 +53,20 @@ static void VeryTallGrass_LoadGfx(VeryTallGrass *grass);
 static void VeryTallGrass_FreeGfx(VeryTallGrass *grass);
 void VeryTallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
 void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing);
-BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work);
-void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work);
-void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work);
-void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work);
+static BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work);
+static void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work);
+static void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work);
+static void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work);
 
-extern const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate; // very tall grass effect
-extern const u32 sVeryTallGrassRecordParams[6];                     // very tall grass record params
+static const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate = {
+    sizeof(VeryTallGrassEffect),
+    (FieldEffectInitFunc)VeryTallGrassEffect_Init,
+    (FieldEffectFunc)VeryTallGrassEffect_Destroy,
+    (FieldEffectFunc)VeryTallGrassEffect_Update,
+    (FieldEffectFunc)VeryTallGrassEffect_Draw,
+};
+
+extern const u32 sVeryTallGrassRecordParams[6];
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager) {
     VeryTallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(VeryTallGrass), FALSE, 0);
@@ -129,7 +136,7 @@ void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z
     FieldEffectManager_CreateEffect(manager, &sVeryTallGrassEffectTemplate, &position, animate, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work) {
+static BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work) {
     VecFx32 position;
 
     work->args = *(VeryTallGrassEffectArgs *)FieldEffect_GetUserData(effect);
@@ -155,11 +162,11 @@ BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *work) {
     return TRUE;
 }
 
-void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work) {
+static void VeryTallGrassEffect_Destroy(FieldEffect *effect, VeryTallGrassEffect *work) {
     BillboardObject_Delete(work->billboard);
 }
 
-void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) {
+static void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) {
     VecFx32 current;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
@@ -212,7 +219,7 @@ void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect *work) 
     }
 }
 
-void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work) {
+static void VeryTallGrassEffect_Draw(FieldEffect *effect, VeryTallGrassEffect *work) {
     VecFx32 position;
 
     if (!MapObject_CheckSpriteIDAndMap(work->args.mapObject, work->spriteId, work->objectId, work->mapId)) {

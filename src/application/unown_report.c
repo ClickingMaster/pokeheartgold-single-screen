@@ -123,20 +123,6 @@ typedef struct UnownReportInfoPage {
 
 extern const ResdatIdList sUnownReportResdatIds;
 extern const TouchscreenHitbox sUnownReportHitboxes[];
-extern const GraphicsModes sUnownReportGraphicsModes;
-extern const OamCharTransferParam sUnownReportOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sUnownReportSpriteResourceCounts;
-extern const UnownReportInfoPage sUnownReportInfoPages[];
-extern const BgTemplate sUnownReportBgTemplate_Sub3;
-extern const BgTemplate sUnownReportBgTemplate_Main1;
-extern const BgTemplate sUnownReportBgTemplate_Main2;
-extern const BgTemplate sUnownReportBgTemplate_Sub1;
-extern const BgTemplate sUnownReportBgTemplate_Main3;
-extern const BgTemplate sUnownReportBgTemplate_Sub2;
-extern const WindowTemplate sUnownReportWindowTemplates[];
-extern const OamManagerParam sUnownReportOamManagerParam;
-extern const GraphicsBanks sUnownReportGraphicsBanks;
-extern const UnmanagedSpriteTemplate sUnownReportSpriteTemplates[];
 
 static void UnownReport_ResetDisplay();
 static int UnownReport_GetSeenPunctuationForms(Pokedex *pokedex, u8 *forms);
@@ -184,6 +170,237 @@ static void UnownReport_CreateSpriteObjects(UnownReportApp *app);
 static void UnownReport_DeleteSpriteObjects(UnownReportApp *app);
 static void UnownReport_LoadIcon(UnownReportApp *app, int icon, int form);
 static void UnownReport_UpdateArrows(UnownReportApp *app);
+
+static const GraphicsModes sUnownReportGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const OamCharTransferParam sUnownReportOamCharTransferParam = {
+    .maxTasks = 16,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sUnownReportSpriteResourceCounts = {
+    .numChar = 14,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const UnownReportInfoPage sUnownReportInfoPages[6] = {
+    { .left = { 6, 1, 1 },  .right = { 7, 1, 1 }  },
+    { .left = { 8, 1, 2 },  .right = { 9, 1, 3 }  },
+    { .left = { 10, 1, 4 }, .right = { 11, 1, 4 } },
+    { .left = { 12, 1, 5 }, .right = { 13, 1, 6 } },
+    { .left = { 14, 3, 7 }, .right = { 17, 1, 7 } },
+    { .left = { 18, 1, 8 }, .right = { 19, 1, 8 } },
+};
+
+static const BgTemplate sUnownReportBgTemplate_Main3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sUnownReportBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sUnownReportBgTemplate_Sub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sUnownReportBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sUnownReportBgTemplate_Sub3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sUnownReportBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const OamManagerParam sUnownReportOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const WindowTemplate sUnownReportWindowTemplates[4] = {
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 25,
+     .top = 21,
+     .width = 6,
+     .height = 2,
+     .palette = 12,
+     .baseTile = 0x1E1,
+     },
+    {
+     .bgId = GF_BG_LYR_SUB_1,
+     .left = 2,
+     .top = 3,
+     .width = 24,
+     .height = 20,
+     .palette = 12,
+     .baseTile = 1,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 2,
+     .top = 1,
+     .width = 24,
+     .height = 20,
+     .palette = 12,
+     .baseTile = 1,
+     },
+    {
+     .bgId = GF_BG_LYR_MAIN_1,
+     .left = 28,
+     .top = 9,
+     .width = 3,
+     .height = 2,
+     .palette = 12,
+     .baseTile = 0x1ED,
+     },
+};
+
+static const GraphicsBanks sUnownReportGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const UnmanagedSpriteTemplate sUnownReportSpriteTemplates[3] = {
+    {
+     .resourceSet = 0,
+     .x = 224,
+     .y = 176,
+     .z = 0,
+     .animation = 0,
+     .drawPriority = 0,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .paletteMode = 1,
+     .unk_1C = 0,
+     .unk_20 = 0,
+     .unk_24 = 0,
+     },
+    {
+     .resourceSet = 0,
+     .x = 236,
+     .y = 28,
+     .z = 0,
+     .animation = 2,
+     .drawPriority = 1,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .paletteMode = 1,
+     .unk_1C = 0,
+     .unk_20 = 0,
+     .unk_24 = 0,
+     },
+    {
+     .resourceSet = 0,
+     .x = 236,
+     .y = 132,
+     .z = 0,
+     .animation = 5,
+     .drawPriority = 2,
+     .pal = 0,
+     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+     .paletteMode = 1,
+     .unk_1C = 0,
+     .unk_20 = 0,
+     .unk_24 = 0,
+     },
+};
 
 BOOL UnownReport_Init(OverlayManager *man, int *state) {
     UnownReportApp *app;

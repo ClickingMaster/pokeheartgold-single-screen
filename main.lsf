@@ -56,13 +56,11 @@ Static main
     Object src/scanline_effect.o
     Object src/particle_system.o
     Object src/list_menu_cursor.o
-    Object asm/particle_system_data.o
     Object src/mail_message.o
     Object src/easy_chat.o
     Object src/graphics_object_manager.o
     Object src/palette_blink.o
     Object src/yes_no_prompt.o
-    Object asm/pokepic_anim_data.o
     Object src/pokepic_anim.o
     Object src/map_section.o
     Object src/model_animation.o
@@ -287,7 +285,6 @@ Static main
     Object src/pokedex_util.o
     Object src/battle_regulation.o
     Object src/battle_link_comm.o
-    Object asm/evolution_scene_data.o
     Object src/evolution_scene.o
     Object src/particle_scene.o
     Object src/type_icon_resources.o
@@ -998,8 +995,8 @@ Overlay field
     Object src/field/field_tall_grass.o
     Object src/field/field_shallow_water_ripple.o
     Object src/field/field_ground_dust.o
-    Object asm/field_very_tall_grass_data.o
     Object src/field/field_very_tall_grass.o
+    Object asm/field_very_tall_grass_data.o
     Object src/field/field_unused_billboard_effect.o
     Object src/field/field_hidden_object_cover.o
     Object src/field/field_trainer_reveal.o
@@ -2259,8 +2256,8 @@ Object asm/pokewalker_data.o
 Overlay OVY_113
 {
     After main
-    Object src/application/unown_report.o
     Object asm/unown_report_data.o
+    Object src/application/unown_report.o
 }
 Overlay OVY_114
 {
