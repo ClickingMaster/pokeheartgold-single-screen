@@ -119,7 +119,13 @@ extern "C" const u8 _version_NINTENDO_DWC_LOBBY[];
 extern "C" void OSi_ReferSymbol(const void *);
 extern "C" const char sStr_DWCUser[], sStr_DWCName[], sStr_Dot[], sStr_PeerchatGsNintendowifiNet[];
 extern "C" void *LobbyMem_Alloc(u32);
-extern "C" Root *LobbyChatManager_Init(Root *, String *, String *, int, void *, String *, String *, String *, void *);
+struct ConnectCallbacks {
+    void (*onConnected)();
+    void (*onError)();
+    void *param;
+};
+
+extern "C" Root *LobbyChatManager_Init(Root *, String *, String *, int, void *, String *, String *, String *, const ConnectCallbacks *);
 extern "C" int LobbyMem_InstallOutOfMemoryHandler(void);
 extern "C" void LobbyChat_OnRaw(void), LobbyChat_OnDisconnected(void), LobbyChat_OnInvited(void), LobbyChat_OnPrivateMessage(void), LobbyChat_OnNickError(void), LobbyChat_OnFillInUser(void), LobbyChat_OnConnected(void);
 extern "C" int LobbyChat_TimerConnectTimeout(void);
@@ -141,9 +147,9 @@ inline void DeleteRoot(Root *r) {
 }
 
 extern "C" void MI_CpuFill8(void *, u8, u32);
-extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId);
+extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, const ConnectCallbacks *config, void *userId);
 
-extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, u8 *config, void *userId) {
+extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, int prefix, const ConnectCallbacks *config, void *userId) {
     String nick, userName, realName;
     Callbacks callbacks;
     String gameKeyStr, gameNameStr;
@@ -193,7 +199,7 @@ extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, i
         callbacks.f[1] = LobbyChat_OnDisconnected;
         callbacks.f[2] = LobbyChat_OnPrivateMessage;
         callbacks.f[3] = LobbyChat_OnInvited;
-        callbacks.data = *(void **)(config + 8);
+        callbacks.data = config->param;
         LobbyChatManager_GetGameName(&hostGameName, gLobbyChatManager);
         LobbyString_ConcatCStr(&hostPrefix, &hostGameName, sStr_Dot);
         LobbyString_ConcatCStr(&host, &hostPrefix, sStr_PeerchatGsNintendowifiNet);
@@ -201,7 +207,7 @@ extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, i
         LobbyChatManager_GetRealName(&realNameArg, gLobbyChatManager);
         LobbyChatManager_GetGameName(&gameNameArg, gLobbyChatManager);
         LobbyChatManager_GetGameKey(&gameKeyArg, gLobbyChatManager);
-        u32 connection = chatConnectSpecialA(host.c_str(), 0x1a0b, nickArg.c_str(), realNameArg.c_str(), gameNameArg.c_str(), gameKeyArg.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, *(void **)(config + 8), 0);
+        u32 connection = chatConnectSpecialA(host.c_str(), 0x1a0b, nickArg.c_str(), realNameArg.c_str(), gameNameArg.c_str(), gameKeyArg.c_str(), &callbacks, LobbyChat_OnNickError, LobbyChat_OnFillInUser, LobbyChat_OnConnected, config->param, 0);
         gameKeyArg.destroy();
         gameNameArg.destroy();
         realNameArg.destroy();

@@ -115,10 +115,14 @@ struct MemberTable {
 
 extern "C" const MemberTable ov45_02255358;
 
+struct ChannelMap {
+    u32 count;
+    MapNode header;
+};
+
 struct Root {
     u8 pad[0x80];
-    u32 msize;
-    MapNode *mhdr;
+    ChannelMap channels;
 };
 
 extern "C" void LobbyChannelMap_Find(MapIt *, void *, Str *);
@@ -150,13 +154,13 @@ extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key);
 
 extern "C" int LobbyChat_RemoveChannel(Root *root, Str *key) {
     MapIt it;
-    LobbyChannelMap_Find(&it, (u8 *)root + 0x80, key);
-    if (it.n == (MapNode *)((u8 *)root + 0x84)) {
+    LobbyChannelMap_Find(&it, &root->channels, key);
+    if (it.n == &root->channels.header) {
         return 0;
     }
     Vec values;
     values.Build(SetIt(it.n->first), SetIt((SetNode *)&it.n->hdr));
-    LobbyChannelMap_EraseKey((u8 *)root + 0x80, key);
+    LobbyChannelMap_EraseKey(&root->channels, key);
     ForEach(values.begin(), values.end(), Bound(ov45_02255358.method, root));
     values.Destroy();
     return 1;
