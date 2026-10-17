@@ -1,15 +1,15 @@
-#include "apricorn_box_screens.h"
+#include "application/apricorn_box/apricorn_box_screens.h"
 
 #include "global.h"
 
 #include "constants/items.h"
 #include "constants/sndseq.h"
 
+#include "application/apricorn_box/apricorn_box_overlay_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0021.h"
 #include "msgdata/msg/msg_0022.h"
 
-#include "apricorn_box_overlay_internal.h"
 #include "bg_window.h"
 #include "camera.h"
 #include "font.h"

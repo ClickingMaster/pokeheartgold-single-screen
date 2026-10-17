@@ -4,6 +4,7 @@
 
 #include "constants/sndseq.h"
 
+#include "application/trainer_card/overlay_trainer_card_main_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0727.h"
 
@@ -20,7 +21,6 @@
 #include "obj_pltt_transfer.h"
 #include "options.h"
 #include "overlay_manager.h"
-#include "overlay_trainer_card_main_internal.h"
 #include "palette.h"
 #include "player_data.h"
 #include "pm_string.h"

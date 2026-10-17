@@ -2,6 +2,7 @@
 
 #include "constants/sndseq.h"
 
+#include "application/wii_message/wii_number.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0038.h"
 #include "msgdata/msg/msg_0188.h"
@@ -50,7 +51,6 @@
 #include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "wifi_club_app.h"
-#include "wii_number.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 

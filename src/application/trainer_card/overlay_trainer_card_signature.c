@@ -5,6 +5,7 @@
 #include "constants/game_stats.h"
 #include "constants/sndseq.h"
 
+#include "application/trainer_card/overlay_trainer_card_signature_internal.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0252.h"
 
@@ -22,7 +23,6 @@
 #include "obj_pltt_transfer.h"
 #include "options.h"
 #include "overlay_manager.h"
-#include "overlay_trainer_card_signature_internal.h"
 #include "player_data.h"
 #include "pm_string.h"
 #include "render_text.h"

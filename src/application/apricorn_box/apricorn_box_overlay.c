@@ -1,6 +1,6 @@
 #include "constants/gx.h"
 
-#include "apricorn_box_overlay_internal.h"
+#include "application/apricorn_box/apricorn_box_overlay_internal.h"
 
 FS_EXTERN_OVERLAY(OVY_59);
 

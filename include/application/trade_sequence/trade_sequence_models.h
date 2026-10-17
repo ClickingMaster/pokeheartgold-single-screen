@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_TRADE_SEQUENCE_MODELS_H
-#define POKEHEARTGOLD_TRADE_SEQUENCE_MODELS_H
+#ifndef POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_MODELS_H
+#define POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_MODELS_H
 
 #include "camera.h"
 #include "filesystem.h"
@@ -52,4 +52,4 @@ void TradeSequence_AdjustCameraAngle(TradeSequenceModels *models, const CameraAn
 void TradeSequence_SetCameraPerspectiveType(TradeSequenceModels *models, u8 perspectiveType);
 void TradeSequence_SetCameraPerspectiveAngle(TradeSequenceModels *models, u16 perspectiveAngle);
 
-#endif // POKEHEARTGOLD_TRADE_SEQUENCE_MODELS_H
+#endif // POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_MODELS_H

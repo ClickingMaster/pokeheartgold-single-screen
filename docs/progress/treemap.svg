@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 39b0d3258 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c115db075 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5074,16 +5074,16 @@ src/overlay_03/custom_safari_zone.c</title></rect>
 <rect x="664.640" y="646.245" width="47.951" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="712.590" y="646.245" width="47.403" height="58.773" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence.o
 17,412 bytes · C-only source
-src/trade_sequence.c</title></rect>
+src/application/trade_sequence/trade_sequence.c</title></rect>
 <rect x="712.590" y="705.017" width="32.341" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive.o
 2,422 bytes · C-only source
-src/trade_sequence_receive.c</title></rect>
+src/application/trade_sequence/trade_sequence_receive.c</title></rect>
 <rect x="744.931" y="705.017" width="11.323" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_arrive_tasks.o
 848 bytes · C-only source
-src/trade_sequence_arrive_tasks.c</title></rect>
+src/application/trade_sequence/trade_sequence_arrive_tasks.c</title></rect>
 <rect x="756.255" y="705.017" width="3.739" height="11.983" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_71 / trade_sequence_receive_bounce.o
 280 bytes · C-only source
-src/trade_sequence_receive_bounce.c</title></rect>
+src/application/trade_sequence/trade_sequence_receive_bounce.c</title></rect>
 <rect x="712.590" y="646.245" width="47.403" height="70.755" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="759.994" y="570.086" width="42.961" height="25.557" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_43 / palpad_details.o
 6,862 bytes · C-only source
@@ -5140,21 +5140,21 @@ src/record_mixing_merge.c</title></rect>
 <rect x="803.171" y="644.575" width="42.855" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="846.026" y="644.575" width="42.661" height="45.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_85 / spin_trade_app.o
 12,118 bytes · C-only source
-src/spin_trade_app.c</title></rect>
+src/application/spin_trade/spin_trade_app.c</title></rect>
 <rect x="846.026" y="690.025" width="42.661" height="26.975" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_85 / spin_trade_group_app.o
 7,192 bytes · C-only source
-src/spin_trade_group_app.c</title></rect>
+src/application/spin_trade/spin_trade_group_app.c</title></rect>
 <rect x="846.026" y="644.575" width="42.661" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="426.285" width="72.912" height="40.568" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / apricorn_box_screens.o
 18,486 bytes · C-only source
-src/apricorn_box_screens.c</title></rect>
+src/application/apricorn_box/apricorn_box_screens.c</title></rect>
 <rect x="961.599" y="426.285" width="0.379" height="40.568" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / aprijuice_scene_camera.o
 96 bytes · C-only source
-src/aprijuice_scene_camera.c</title></rect>
+src/application/apricorn_box/aprijuice_scene_camera.c</title></rect>
 <rect x="888.687" y="426.285" width="73.290" height="40.568" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="466.853" width="73.290" height="37.747" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_57 / ball_capsule_editor.o
 17,290 bytes · C-only source
-src/ball_capsule_editor.c</title></rect>
+src/application/ball_capsule_editor.c</title></rect>
 <rect x="888.687" y="466.853" width="73.290" height="37.747" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="961.978" y="426.285" width="36.242" height="39.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp.o
 9,042 bytes · C-only source
@@ -5252,10 +5252,10 @@ src/battle/link_battle_screen.c</title></rect>
 <rect x="1119.801" y="426.285" width="52.199" height="37.900" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1119.801" y="464.185" width="50.673" height="37.127" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_message_settings.o
 11,758 bytes · C-only source
-src/wii_message_settings.c</title></rect>
+src/application/wii_message/wii_message_settings.c</title></rect>
 <rect x="1170.474" y="464.185" width="1.526" height="37.127" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_number.o
 354 bytes · C-only source
-src/wii_number.c</title></rect>
+src/application/wii_message/wii_number.c</title></rect>
 <rect x="1119.801" y="464.185" width="52.199" height="37.127" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1029.155" y="501.312" width="26.700" height="53.287" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_27 / touchscreen_menu.o
 8,892 bytes · C-only source
@@ -5276,16 +5276,16 @@ src/oaks_speech_obj.c</title></rect>
 <rect x="1055.855" y="501.312" width="48.798" height="36.803" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1055.855" y="538.115" width="31.240" height="18.274" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_42 / field2d_view.o
 3,568 bytes · C-only source
-src/field2d_view.c</title></rect>
+src/field2d/field2d_view.c</title></rect>
 <rect x="1055.855" y="556.389" width="31.240" height="17.158" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_42 / field2d_object.o
 3,350 bytes · C-only source
-src/field2d_object.c</title></rect>
+src/field2d/field2d_object.c</title></rect>
 <rect x="1087.096" y="538.115" width="17.557" height="29.964" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_42 / field2d_char_sprite.o
 3,288 bytes · C-only source
-src/field2d_char_sprite.c</title></rect>
+src/field2d/field2d_char_sprite.c</title></rect>
 <rect x="1087.096" y="568.079" width="17.557" height="5.468" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_42 / field2d_char_sprite_anim.o
 600 bytes · C-only source
-src/field2d_char_sprite_anim.c</title></rect>
+src/field2d/field2d_char_sprite_anim.c</title></rect>
 <rect x="1055.855" y="538.115" width="48.798" height="35.432" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1104.653" y="501.312" width="67.347" height="24.980" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_48 / wifi_plaza_visitor_profiles.o
 10,514 bytes · C-only source
@@ -5293,7 +5293,7 @@ src/wifi_plaza_visitor_profiles.c</title></rect>
 <rect x="1104.653" y="501.312" width="67.347" height="24.980" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1104.653" y="526.291" width="34.930" height="47.256" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_87 / scratch_off_cards.o
 10,316 bytes · C-only source
-src/scratch_off_cards.c</title></rect>
+src/application/scratch_off_cards.c</title></rect>
 <rect x="1104.653" y="526.291" width="34.930" height="47.256" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1139.583" y="526.291" width="32.417" height="47.256" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_86 / frontier_records_app.o
 9,574 bytes · C-only source
@@ -5301,14 +5301,14 @@ src/frontier/frontier_records_app.c</title></rect>
 <rect x="1139.583" y="526.291" width="32.417" height="47.256" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="573.547" width="62.446" height="22.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_main / overlay_trainer_card_main.o
 8,940 bytes · C-only source
-src/overlay_trainer_card_main.c</title></rect>
+src/application/trainer_card/overlay_trainer_card_main.c</title></rect>
 <rect x="888.687" y="573.547" width="62.446" height="22.907" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="596.454" width="31.744" height="44.679" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_68 / move_relearner_app.o
 8,864 bytes · C-only source
-src/move_relearner_app.c</title></rect>
+src/application/move_relearner/move_relearner_app.c</title></rect>
 <rect x="888.687" y="641.133" width="31.744" height="0.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_68 / move_relearner_sub_screen.o
 32 bytes · C-only source
-src/move_relearner_sub_screen.c</title></rect>
+src/application/move_relearner/move_relearner_sub_screen.c</title></rect>
 <rect x="888.687" y="596.454" width="31.744" height="44.840" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="920.431" y="596.454" width="30.702" height="44.840" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app.o
 8,604 bytes · C-only source
@@ -5327,10 +5327,10 @@ src/frontier/battle_hall_app.c</title></rect>
 <rect x="951.133" y="607.834" width="39.900" height="33.461" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="991.033" y="573.547" width="37.850" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / drawing_session.o
 8,132 bytes · C-only source
-src/drawing_session.c</title></rect>
+src/application/drawing_session/drawing_session.c</title></rect>
 <rect x="1028.883" y="573.547" width="0.624" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / drawing_session_stroke.o
 134 bytes · C-only source
-src/drawing_session_stroke.c</title></rect>
+src/application/drawing_session/drawing_session_stroke.c</title></rect>
 <rect x="991.033" y="573.547" width="38.474" height="34.377" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="991.033" y="607.924" width="38.474" height="33.370" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_109 / photo_album_app.o
 8,024 bytes · C-only source
@@ -5338,11 +5338,11 @@ src/application/photo_album_app.c</title></rect>
 <rect x="991.033" y="607.924" width="38.474" height="33.370" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="641.294" width="31.052" height="38.595" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_69 / geonet_globe_app.o
 7,490 bytes · C-only source
-src/geonet_globe_app.c</title></rect>
+src/application/geonet_globe_app.c</title></rect>
 <rect x="888.687" y="641.294" width="31.052" height="38.595" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="679.889" width="31.052" height="37.111" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_95 / hatch_egg_app.o
 7,202 bytes · C-only source
-src/hatch_egg_app.c</title></rect>
+src/application/hatch_egg_app.c</title></rect>
 <rect x="888.687" y="679.889" width="31.052" height="37.111" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="919.739" y="641.294" width="11.923" height="13.957" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_encrypted.o
 1,040 bytes · C-only source
@@ -5408,7 +5408,7 @@ NitroStaticInit, NitroStaticInit_</title></rect>
 <rect x="919.739" y="641.294" width="44.693" height="25.376" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="919.739" y="666.670" width="44.693" height="25.168" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_84 / battle_arcade_game_board.o
 7,030 bytes · C-only source
-src/battle_arcade_game_board.c</title></rect>
+src/frontier/battle_arcade_game_board.c</title></rect>
 <rect x="919.739" y="666.670" width="44.693" height="25.168" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="919.739" y="691.839" width="17.895" height="25.161" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / pokegear / pokegear_app_ui.o
 2,814 bytes · C-only source
@@ -5469,11 +5469,11 @@ src/application/legendary_cinematic.c</title></rect>
 <rect x="1067.742" y="620.336" width="36.475" height="22.846" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1104.216" y="573.547" width="23.109" height="35.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_67 / battle_room_results.o
 5,180 bytes · C-only source
-src/battle_room_results.c</title></rect>
+src/application/battle_room_results.c</title></rect>
 <rect x="1104.216" y="573.547" width="23.109" height="35.866" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1127.325" y="573.547" width="22.645" height="35.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_signature / overlay_trainer_card_signature.o
 5,076 bytes · C-only source
-src/overlay_trainer_card_signature.c</title></rect>
+src/application/trainer_card/overlay_trainer_card_signature.c</title></rect>
 <rect x="1127.325" y="573.547" width="22.645" height="35.866" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1149.971" y="573.547" width="22.029" height="35.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_115 / encounter_effect_leaders.o
 4,938 bytes · C-only source
@@ -5485,7 +5485,7 @@ src/options_app.c</title></rect>
 <rect x="1104.216" y="609.413" width="23.245" height="33.770" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1127.462" y="609.413" width="22.279" height="33.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_111 / bug_contest_swap_mon.o
 4,702 bytes · C-only source
-src/bug_contest_swap_mon.c</title></rect>
+src/application/bug_contest_swap_mon.c</title></rect>
 <rect x="1127.462" y="609.413" width="22.279" height="33.770" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1149.740" y="609.413" width="22.260" height="33.770" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_113 / unown_report.o
 4,698 bytes · C-only source
@@ -5493,7 +5493,7 @@ src/application/unown_report.c</title></rect>
 <rect x="1149.740" y="609.413" width="22.260" height="33.770" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1029.507" y="643.183" width="34.514" height="20.936" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_56 / mail_view.o
 4,516 bytes · C-only source
-src/mail_view.c</title></rect>
+src/application/mail_view.c</title></rect>
 <rect x="1029.507" y="643.183" width="34.514" height="20.936" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1029.507" y="664.119" width="34.514" height="20.639" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_120 / encounter_effect_wild.o
 4,452 bytes · C-only source
@@ -5605,7 +5605,7 @@ src/npc_trade.c</title></rect>
 <rect x="1154.168" y="660.786" width="17.832" height="10.732" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1154.168" y="671.518" width="17.832" height="9.960" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_58 / apricorn_box_overlay.o
 1,110 bytes · C-only source
-src/apricorn_box_overlay.c</title></rect>
+src/application/apricorn_box/apricorn_box_overlay.c</title></rect>
 <rect x="1154.168" y="671.518" width="17.832" height="9.960" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1135.316" y="681.478" width="10.005" height="15.961" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_94 / overlay_94.o
 998 bytes · C-only source
@@ -5656,7 +5656,7 @@ sub/lib/src/sp_startup.c</title></rect>
 <rect x="1154.784" y="698.115" width="6.396" height="10.707" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1161.180" y="698.115" width="5.858" height="10.707" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card / overlay_trainer_card.o
 392 bytes · C-only source
-src/overlay_trainer_card.c</title></rect>
+src/application/trainer_card/overlay_trainer_card.c</title></rect>
 <rect x="1161.180" y="698.115" width="5.858" height="10.707" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1167.038" y="698.115" width="4.962" height="10.707" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_124 / overlay_124.o
 332 bytes · C-only source

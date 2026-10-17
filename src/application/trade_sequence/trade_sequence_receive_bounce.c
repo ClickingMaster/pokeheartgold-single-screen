@@ -2,10 +2,11 @@
 
 #include "constants/sndseq.h"
 
+#include "application/trade_sequence/trade_sequence_models.h"
+#include "application/trade_sequence/trade_sequence_receive_internal.h"
+
 #include "sound_playback.h"
 #include "sys_task.h"
-#include "trade_sequence_models.h"
-#include "trade_sequence_receive_internal.h"
 
 // Scene 6 of the trade animation, continued: the ball's bounce task.
 

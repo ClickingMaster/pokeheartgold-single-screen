@@ -3,6 +3,9 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "application/trade_sequence/trade_sequence_internal.h"
+#include "application/trade_sequence/trade_sequence_models.h"
+#include "application/trade_sequence/trade_sequence_receive_internal.h"
 #include "msgdata/msg/msg_0179.h"
 
 #include "bg_window.h"
@@ -24,9 +27,6 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "text.h"
-#include "trade_sequence_internal.h"
-#include "trade_sequence_models.h"
-#include "trade_sequence_receive_internal.h"
 
 // Scene 6 of the trade animation (trades and receiving): the ball lands with a flash and the received Pokemon
 // appears with its cry, then "<Pokemon> sent over <Pokemon>." / "Take good care of <Pokemon>!" (trade) or "<Pokemon>

@@ -1,5 +1,9 @@
 #include "global.h"
 
+#include "application/trade_sequence/trade_sequence_arrive_internal.h"
+#include "application/trade_sequence/trade_sequence_internal.h"
+#include "application/trade_sequence/trade_sequence_models.h"
+
 #include "bg_window.h"
 #include "camera.h"
 #include "filesystem.h"
@@ -8,9 +12,6 @@
 #include "heap.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
-#include "trade_sequence_arrive_internal.h"
-#include "trade_sequence_internal.h"
-#include "trade_sequence_models.h"
 
 // Scene 5 of the trade animation, continued: its 3D setup and the tasks that lower the
 // ball, scroll the backgrounds and fade the ball out.

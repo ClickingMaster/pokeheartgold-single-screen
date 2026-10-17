@@ -1,4 +1,4 @@
-#include "wii_number.h"
+#include "application/wii_message/wii_number.h"
 
 #include "global.h"
 

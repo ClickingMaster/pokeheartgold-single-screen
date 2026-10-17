@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "39b0d3258011c00c0a3f878099b3a7d51a3f55a5",
+  "commit": "c115db075b24c059e9fe6bb3bdbc1c840aa7498a",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "0939b141df5a0ca3c50466c9926e6b33a67a84cf9654d08965cc284eb228ad13",
+    "ARM9": "dc0e4385e6915f85bfe54925cb7dbe13fac4d32e58171ad31c63d758fe7f7620",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -559,7 +559,7 @@
       "object": "bug_contest_swap_mon.o",
       "bytes": 4702,
       "status": "c",
-      "source": "src/bug_contest_swap_mon.c"
+      "source": "src/application/bug_contest_swap_mon.c"
     },
     {
       "cpu": "ARM9",
@@ -1935,7 +1935,7 @@
       "object": "drawing_session.o",
       "bytes": 8132,
       "status": "c",
-      "source": "src/drawing_session.c"
+      "source": "src/application/drawing_session/drawing_session.c"
     },
     {
       "cpu": "ARM9",
@@ -1943,7 +1943,7 @@
       "object": "drawing_session_stroke.o",
       "bytes": 134,
       "status": "c",
-      "source": "src/drawing_session_stroke.c"
+      "source": "src/application/drawing_session/drawing_session_stroke.c"
     },
     {
       "cpu": "ARM9",
@@ -2327,7 +2327,7 @@
       "object": "field2d_char_sprite.o",
       "bytes": 3288,
       "status": "c",
-      "source": "src/field2d_char_sprite.c"
+      "source": "src/field2d/field2d_char_sprite.c"
     },
     {
       "cpu": "ARM9",
@@ -2335,7 +2335,7 @@
       "object": "field2d_char_sprite_anim.o",
       "bytes": 600,
       "status": "c",
-      "source": "src/field2d_char_sprite_anim.c"
+      "source": "src/field2d/field2d_char_sprite_anim.c"
     },
     {
       "cpu": "ARM9",
@@ -2343,7 +2343,7 @@
       "object": "field2d_object.o",
       "bytes": 3350,
       "status": "c",
-      "source": "src/field2d_object.c"
+      "source": "src/field2d/field2d_object.c"
     },
     {
       "cpu": "ARM9",
@@ -2351,7 +2351,7 @@
       "object": "field2d_view.o",
       "bytes": 3568,
       "status": "c",
-      "source": "src/field2d_view.c"
+      "source": "src/field2d/field2d_view.c"
     },
     {
       "cpu": "ARM9",
@@ -4079,7 +4079,7 @@
       "object": "mail_view.o",
       "bytes": 4516,
       "status": "c",
-      "source": "src/mail_view.c"
+      "source": "src/application/mail_view.c"
     },
     {
       "cpu": "ARM9",
@@ -4087,7 +4087,7 @@
       "object": "ball_capsule_editor.o",
       "bytes": 17290,
       "status": "c",
-      "source": "src/ball_capsule_editor.c"
+      "source": "src/application/ball_capsule_editor.c"
     },
     {
       "cpu": "ARM9",
@@ -4095,7 +4095,7 @@
       "object": "apricorn_box_overlay.o",
       "bytes": 1110,
       "status": "c",
-      "source": "src/apricorn_box_overlay.c"
+      "source": "src/application/apricorn_box/apricorn_box_overlay.c"
     },
     {
       "cpu": "ARM9",
@@ -4103,7 +4103,7 @@
       "object": "apricorn_box_screens.o",
       "bytes": 18486,
       "status": "c",
-      "source": "src/apricorn_box_screens.c"
+      "source": "src/application/apricorn_box/apricorn_box_screens.c"
     },
     {
       "cpu": "ARM9",
@@ -4111,7 +4111,7 @@
       "object": "aprijuice_scene_camera.o",
       "bytes": 96,
       "status": "c",
-      "source": "src/aprijuice_scene_camera.c"
+      "source": "src/application/apricorn_box/aprijuice_scene_camera.c"
     },
     {
       "cpu": "ARM9",
@@ -4167,7 +4167,7 @@
       "object": "battle_room_results.o",
       "bytes": 5180,
       "status": "c",
-      "source": "src/battle_room_results.c"
+      "source": "src/application/battle_room_results.c"
     },
     {
       "cpu": "ARM9",
@@ -4175,7 +4175,7 @@
       "object": "move_relearner_app.o",
       "bytes": 8864,
       "status": "c",
-      "source": "src/move_relearner_app.c"
+      "source": "src/application/move_relearner/move_relearner_app.c"
     },
     {
       "cpu": "ARM9",
@@ -4183,7 +4183,7 @@
       "object": "move_relearner_sub_screen.o",
       "bytes": 32,
       "status": "c",
-      "source": "src/move_relearner_sub_screen.c"
+      "source": "src/application/move_relearner/move_relearner_sub_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -4191,7 +4191,7 @@
       "object": "geonet_globe_app.o",
       "bytes": 7490,
       "status": "c",
-      "source": "src/geonet_globe_app.c"
+      "source": "src/application/geonet_globe_app.c"
     },
     {
       "cpu": "ARM9",
@@ -4359,7 +4359,7 @@
       "object": "trade_sequence.o",
       "bytes": 17412,
       "status": "c",
-      "source": "src/trade_sequence.c"
+      "source": "src/application/trade_sequence/trade_sequence.c"
     },
     {
       "cpu": "ARM9",
@@ -4367,7 +4367,7 @@
       "object": "trade_sequence_arrive_tasks.o",
       "bytes": 848,
       "status": "c",
-      "source": "src/trade_sequence_arrive_tasks.c"
+      "source": "src/application/trade_sequence/trade_sequence_arrive_tasks.c"
     },
     {
       "cpu": "ARM9",
@@ -4375,7 +4375,7 @@
       "object": "trade_sequence_receive.o",
       "bytes": 2422,
       "status": "c",
-      "source": "src/trade_sequence_receive.c"
+      "source": "src/application/trade_sequence/trade_sequence_receive.c"
     },
     {
       "cpu": "ARM9",
@@ -4383,7 +4383,7 @@
       "object": "trade_sequence_receive_bounce.o",
       "bytes": 280,
       "status": "c",
-      "source": "src/trade_sequence_receive_bounce.c"
+      "source": "src/application/trade_sequence/trade_sequence_receive_bounce.c"
     },
     {
       "cpu": "ARM9",
@@ -4658,7 +4658,7 @@
       "object": "wii_message_settings.o",
       "bytes": 11758,
       "status": "c",
-      "source": "src/wii_message_settings.c"
+      "source": "src/application/wii_message/wii_message_settings.c"
     },
     {
       "cpu": "ARM9",
@@ -4666,7 +4666,7 @@
       "object": "wii_number.o",
       "bytes": 354,
       "status": "c",
-      "source": "src/wii_number.c"
+      "source": "src/application/wii_message/wii_number.c"
     },
     {
       "cpu": "ARM9",
@@ -5018,7 +5018,7 @@
       "object": "battle_arcade_game_board.o",
       "bytes": 7030,
       "status": "c",
-      "source": "src/battle_arcade_game_board.c"
+      "source": "src/frontier/battle_arcade_game_board.c"
     },
     {
       "cpu": "ARM9",
@@ -5026,7 +5026,7 @@
       "object": "spin_trade_app.o",
       "bytes": 12118,
       "status": "c",
-      "source": "src/spin_trade_app.c"
+      "source": "src/application/spin_trade/spin_trade_app.c"
     },
     {
       "cpu": "ARM9",
@@ -5034,7 +5034,7 @@
       "object": "spin_trade_group_app.o",
       "bytes": 7192,
       "status": "c",
-      "source": "src/spin_trade_group_app.c"
+      "source": "src/application/spin_trade/spin_trade_group_app.c"
     },
     {
       "cpu": "ARM9",
@@ -5050,7 +5050,7 @@
       "object": "scratch_off_cards.o",
       "bytes": 10316,
       "status": "c",
-      "source": "src/scratch_off_cards.c"
+      "source": "src/application/scratch_off_cards.c"
     },
     {
       "cpu": "ARM9",
@@ -5138,7 +5138,7 @@
       "object": "hatch_egg_app.o",
       "bytes": 7202,
       "status": "c",
-      "source": "src/hatch_egg_app.c"
+      "source": "src/application/hatch_egg_app.c"
     },
     {
       "cpu": "ARM9",
@@ -13375,7 +13375,7 @@
       "object": "overlay_trainer_card.o",
       "bytes": 392,
       "status": "c",
-      "source": "src/overlay_trainer_card.c"
+      "source": "src/application/trainer_card/overlay_trainer_card.c"
     },
     {
       "cpu": "ARM9",
@@ -13383,7 +13383,7 @@
       "object": "overlay_trainer_card_main.o",
       "bytes": 8940,
       "status": "c",
-      "source": "src/overlay_trainer_card_main.c"
+      "source": "src/application/trainer_card/overlay_trainer_card_main.c"
     },
     {
       "cpu": "ARM9",
@@ -13391,7 +13391,7 @@
       "object": "overlay_trainer_card_signature.o",
       "bytes": 5076,
       "status": "c",
-      "source": "src/overlay_trainer_card_signature.c"
+      "source": "src/application/trainer_card/overlay_trainer_card_signature.c"
     },
     {
       "cpu": "ARM9",

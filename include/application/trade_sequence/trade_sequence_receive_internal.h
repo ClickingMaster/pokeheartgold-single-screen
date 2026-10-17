@@ -1,5 +1,8 @@
-#ifndef POKEHEARTGOLD_TRADE_SEQUENCE_RECEIVE_INTERNAL_H
-#define POKEHEARTGOLD_TRADE_SEQUENCE_RECEIVE_INTERNAL_H
+#ifndef POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_RECEIVE_INTERNAL_H
+#define POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_RECEIVE_INTERNAL_H
+
+#include "application/trade_sequence/trade_sequence_internal.h"
+#include "application/trade_sequence/trade_sequence_models.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -7,8 +10,6 @@
 #include "pokepic.h"
 #include "sprite.h"
 #include "sys_task.h"
-#include "trade_sequence_internal.h"
-#include "trade_sequence_models.h"
 
 // Scene 6 of the trade animation (trade_sequence_receive.c, trade_sequence_receive_bounce.c).
 
@@ -60,4 +61,4 @@ void TradeSequenceReceive_UpdateSpin(TradeSequenceReceiveBounce *bounce);
 void TradeSequenceReceive_SetSpin(TradeSequenceReceiveBounce *bounce, int target, int frames);
 void TradeSequenceReceive_BounceTask(SysTask *task, void *data);
 
-#endif // POKEHEARTGOLD_TRADE_SEQUENCE_RECEIVE_INTERNAL_H
+#endif // POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_RECEIVE_INTERNAL_H

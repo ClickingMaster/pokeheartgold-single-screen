@@ -6,6 +6,9 @@
 #include "constants/sndseq.h"
 #include "constants/species.h"
 
+#include "application/trade_sequence/trade_sequence_arrive_internal.h"
+#include "application/trade_sequence/trade_sequence_internal.h"
+#include "application/trade_sequence/trade_sequence_models.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0179.h"
 
@@ -41,9 +44,6 @@
 #include "system.h"
 #include "text.h"
 #include "trade_anim.h"
-#include "trade_sequence_arrive_internal.h"
-#include "trade_sequence_internal.h"
-#include "trade_sequence_models.h"
 #include "wireless_status_icon.h"
 
 // Trade animation: the app that plays the scenes of a trade (or of receiving a Pokemon) and the helpers they share

@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_APRICORN_BOX_SCREENS_H
-#define POKEHEARTGOLD_APRICORN_BOX_SCREENS_H
+#ifndef POKEHEARTGOLD_APPLICATION_APRICORN_BOX_APRICORN_BOX_SCREENS_H
+#define POKEHEARTGOLD_APPLICATION_APRICORN_BOX_APRICORN_BOX_SCREENS_H
 
 #include "overlay_manager.h"
 
@@ -15,4 +15,4 @@ BOOL AprijuiceScreen_Init(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Main(OverlayManager *man, int *state);
 BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state);
 
-#endif // POKEHEARTGOLD_APRICORN_BOX_SCREENS_H
+#endif // POKEHEARTGOLD_APPLICATION_APRICORN_BOX_APRICORN_BOX_SCREENS_H

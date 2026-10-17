@@ -1,10 +1,11 @@
-#ifndef POKEHEARTGOLD_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
-#define POKEHEARTGOLD_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
+#ifndef POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
+#define POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
+
+#include "application/trade_sequence/trade_sequence_internal.h"
+#include "application/trade_sequence/trade_sequence_models.h"
 
 #include "bg_window.h"
 #include "sys_task.h"
-#include "trade_sequence_internal.h"
-#include "trade_sequence_models.h"
 
 // Scene 5 of the trade animation (trade_sequence.c, trade_sequence_arrive_tasks.c).
 
@@ -35,4 +36,4 @@ void TradeSequenceArrive_StopLower(SysTask *task);
 void TradeSequenceArrive_StartAlphaFade(TradeSequenceModel *model, int start, int target, int frames, SysTask **task);
 void TradeSequenceArrive_StopAlphaFade(SysTask *task);
 
-#endif // POKEHEARTGOLD_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
+#endif // POKEHEARTGOLD_APPLICATION_TRADE_SEQUENCE_TRADE_SEQUENCE_ARRIVE_INTERNAL_H
