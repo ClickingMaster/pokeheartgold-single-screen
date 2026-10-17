@@ -1,19 +1,23 @@
+#include "field_follow_mon_ball.h"
+
 #include "global.h"
 
 #include "field/field_3d_model.h"
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
+#include "field/map_object_billboard_motion.h"
 
 #include "field_effects.h"
 #include "field_system.h"
 #include "follow_mon.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "vram_transfer_manager.h"
 
-// The following Pokemon's Poke Ball (field effect renderer 17): a ball model and a burst model with one
-// animation, both kept loaded. FollowMonBall_Spawn kinds:
+// The following Pokemon's Poke Ball: a ball model and a burst model with one animation, both kept loaded.
+// FollowMonBall_Spawn kinds:
 //   0: the ball bursts open and the Pokemon appears (it is made visible when the burst starts);
 //   1: the Pokemon's billboard turns white and shrinks into the ball (a large Pokemon is also pulled towards
 //      the tile it faces), the ball stays shown;
@@ -22,16 +26,9 @@
 
 #define FOLLOW_MON_BALL_SHRINK_FRAMES 4
 
-// Puts position->y on the ground of the tile at position->x/z; FALSE while that tile has no ground yet.
-// (unk_0205FD20.h declares it returning void.)
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
-// The following Pokemon's billboard (field map object motion, still unnamed).
-void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
-// billboard_lists.c
 void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
 
-// Renderer data, from FieldEffectManager_GetRendererData(manager, 17).
 typedef struct FollowMonBall {
     FieldEffectManager *manager;
     NNSFndAllocator allocator;
@@ -50,9 +47,9 @@ typedef struct FollowMonBallEffectArgs {
     FieldEffectManager *manager;
     FollowMonBall *ball;
     LocalMapObject *mapObject;
-    u16 unk1C;
-    u16 unk1E;
-    s8 unk20;
+    u16 unk_1C;
+    u16 unk_1E;
+    s8 unk_20;
 } FollowMonBallEffectArgs;
 
 typedef struct FollowMonBallEffect {
@@ -71,9 +68,8 @@ typedef struct FollowMonBallEffect {
 
 FollowMonBall *FollowMonBall_New(FieldEffectManager *manager);
 void FollowMonBall_Free(FollowMonBall *ball);
-void FollowMonBall_LoadModels(FollowMonBall *ball);
-void FollowMonBall_FreeModels(FollowMonBall *ball);
-FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, int kind);
+static void FollowMonBall_LoadModels(FollowMonBall *ball);
+static void FollowMonBall_FreeModels(FollowMonBall *ball);
 static BOOL FollowMonBallEffect_InitBurst(FieldEffect *effect, FollowMonBallEffect *work);
 static void FollowMonBallEffect_Destroy(void);
 static void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBallEffect *work);
@@ -85,8 +81,8 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMon
 static void FollowMonBallEffect_DrawBall(FieldEffect *effect, FollowMonBallEffect *work);
 static BOOL FollowMonBallEffect_InitRecall(FieldEffect *effect, FollowMonBallEffect *work);
 static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallEffect *work);
-void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate);
-int FollowMonBall_GetPullStep(u32 direction);
+static void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate);
+static int FollowMonBall_GetPullStep(u32 direction);
 
 static u16 sFollowMonWhitePalette[32] = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
@@ -141,7 +137,7 @@ void FollowMonBall_Free(FollowMonBall *ball) {
     FieldEffectManager_HeapFree(ball);
 }
 
-void FollowMonBall_LoadModels(FollowMonBall *ball) {
+static void FollowMonBall_LoadModels(FollowMonBall *ball) {
     ball->ballFile = FieldEffectManager_LoadNarcMember(ball->manager, 0x81, FALSE);
     Field3dModel_LoadFromData(&ball->ballModel, ball->ballFile);
     Field3dObject_InitFromModel(&ball->ball, &ball->ballModel);
@@ -152,7 +148,7 @@ void FollowMonBall_LoadModels(FollowMonBall *ball) {
     Field3dObject_AddAnimation(&ball->burst, &ball->burstAnimation);
 }
 
-void FollowMonBall_FreeModels(FollowMonBall *ball) {
+static void FollowMonBall_FreeModels(FollowMonBall *ball) {
     Field3dModel_UnloadKeepData(&ball->ballModel);
     FieldEffectManager_HeapFree(ball->ballFile);
     Field3dModel_UnloadKeepData(&ball->burstModel);
@@ -168,9 +164,9 @@ FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, int kind) {
 
     MapObject_CopyPositionVector(mapObject, &args.position);
     args.position.z += 6 * FX32_ONE;
-    args.unk1C = 0;
-    args.unk1E = 0;
-    args.unk20 = -1;
+    args.unk_1C = 0;
+    args.unk_1E = 0;
+    args.unk_20 = -1;
     args.manager = manager;
     args.fieldSystem = FieldEffectManager_GetFieldSystem(manager);
     args.ball = FieldEffectManager_GetRendererData(manager, 17);
@@ -463,7 +459,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallE
 
 // The coordinate of position a large following Pokemon is pulled along: z when facing north or south, x
 // when facing west or east.
-void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate) {
+static void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate) {
     switch (direction) {
     case 0:
     case 1:
@@ -476,7 +472,7 @@ void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **co
     }
 }
 
-int FollowMonBall_GetPullStep(u32 direction) {
+static int FollowMonBall_GetPullStep(u32 direction) {
     switch (direction) {
     case 0:
         return -1;

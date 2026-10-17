@@ -1,3 +1,5 @@
+#include "field/field_follow_mon.h"
+
 #include "global.h"
 
 #include "constants/global_fieldmap.h"
@@ -6,16 +8,21 @@
 #include "constants/sprites.h"
 
 #include "field/field_effect_helpers.h"
-#include "field/field_follow_mon.h"
+#include "field/map_object_billboard_motion.h"
 #include "field/map_object_models.h"
+#include "field/map_object_render.h"
 #include "field/resource_bank.h"
 
+#include "field_follow_mon_ball.h"
 #include "field_system.h"
+#include "field_terrain.h"
 #include "follow_mon.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_follow_internal.h"
+#include "map_object_movement_commands.h"
+#include "map_object_movement_commands_internal.h"
 #include "overlay_01.h"
-#include "field_follow_mon_ball.h"
 #include "overlay_25.h"
 #include "palette.h"
 #include "party.h"
@@ -27,13 +34,7 @@
 #include "script_pokemon_util.h"
 #include "sys_task_api.h"
 #include "task.h"
-#include "field_terrain.h"
-#include "map_object_movement_commands.h"
 #include "vram_transfer_manager.h"
-
-// Overlay 01 helpers for the following Pokemon (map object obj_partner_poke, and the Day-Care Pokemon that use
-// the same billboards): its map object params, keeping it next to the player, and the scripted tasks that put
-// it into its Poke Ball (FollowMonBall_Spawn) or flash its palette. Also script command 808.
 
 FS_EXTERN_OVERLAY(OVY_25);
 
@@ -45,29 +46,17 @@ FS_EXTERN_OVERLAY(OVY_25);
 #define BILLBOARD_SEQUENCE_FOLLOW_MON     21
 #define BILLBOARD_SEQUENCE_FOLLOW_MON_ALT 22
 
-// map_object_follow_2.c / r40_unk_020659A8_run1.c / map_object_follow_3.c (no header).
-u8 FollowPlayerMovement_GetHopFrame(LocalMapObject *object);
-u32 FollowPlayerMovement_GetHopSpeed(LocalMapObject *object);
-void FollowPlayerMovement_DisableBallEffect(LocalMapObject *object);
-// unk_02062108.c: the movement for a direction (movement + direction).
-u32 GetMovementForDirection(u32 direction, u32 movement);
-// field object models (still in asm or crammed).
 BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, void *record);
-u32 Facing_GetBillboardStandSequence(u32 direction);
-// The following Pokemon's billboard (field map object motion, still unnamed).
-void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 void BillboardGfxSequence_Init(void *sequence, void *dest);
-// billboard_lists.c
 void BillboardObject_SetResource(void *billboard, void *record);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
 NNSG3dTexKey BillboardObject_GetTexKey(void *billboard);
-// texture helpers (render_animation / field object models)
 void *Texture_GetPaletteData(NNSG3dResTex *texture, u32 index);
 void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
 
 // The render data of the map object manager (MapObjectManager_GetRender); only the billboard sequence bank is used here.
 typedef struct MapObjectRenderData {
-    u8 unk00[0xFC];
+    u8 unk_00[0xFC];
     ResourceBank *sequenceBank;
 } MapObjectRenderData;
 
@@ -109,7 +98,7 @@ typedef struct FollowMonHopIntoBall {
     u8 step;
     u8 timer;
     u8 movement;
-    u8 unk04[64];
+    u8 unk_04[64];
     BOOL toLeft;
 } FollowMonHopIntoBall;
 
@@ -136,14 +125,17 @@ extern const HopOffsets gFollowMonHopIntoBallZOffsets;
 extern const VecFx32 sFollowMonRecallScale;
 extern const VecFx32 gFollowMonHopIntoBallScale;
 
-const HopTable sFollowMonHopIntoBallTable = { { 1, 2, 2, 3, 3, 2, 2, 0 }, { 14, 12 } };
+const HopTable sFollowMonHopIntoBallTable = {
+    { 1, 2, 2, 3, 3, 2, 2, 0 },
+    { 14, 12 }
+};
 
-void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data);
-BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan);
-u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env);
-BOOL Task_FollowMonRecall(TaskManager *taskMan);
-BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan);
-BOOL Task_FollowMonFlash(TaskManager *taskMan);
+static void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data);
+static BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan);
+static u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env);
+static BOOL Task_FollowMonRecall(TaskManager *taskMan);
+static BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan);
+static BOOL Task_FollowMonFlash(TaskManager *taskMan);
 
 BOOL ScrCmd_TrainerHouseBattle(ScriptContext *ctx) {
     u16 trainerNum = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
@@ -421,7 +413,7 @@ void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *bil
 }
 
 // Frees the sepia transfer once the VRAM transfers are done.
-void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data) {
+static void SepiaBillboardTransfer_FreeWhenDone(SysTask *task, void *data) {
     SepiaBillboardTransfer *transfer = data;
     if (GF_GetNumPendingVramTransferTasks() == 0) {
         SysTask_Destroy(task);
@@ -546,7 +538,7 @@ void FollowMon_StartHopIntoBall(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_FollowMonHopIntoBall, env);
 }
 
-BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
+static BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonHopIntoBall *env = TaskManager_GetEnvironment(taskMan);
     LocalMapObject *mapObject;
@@ -634,7 +626,7 @@ BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
 }
 
 // Which side of the player the following Pokemon is on: below it (it moves aside first), or left/right of it.
-u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env) {
+static u32 FollowMonHopIntoBall_GetSide(FieldSystem *fieldSystem, FollowMonHopIntoBall *env) {
     int playerX = MapObject_GetXCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
     int playerZ = MapObject_GetZCoord(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
     int x = MapObject_GetXCoord(FollowMon_GetMapObject(fieldSystem));
@@ -672,7 +664,7 @@ BOOL FollowMon_StartRecall(FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-BOOL Task_FollowMonRecall(TaskManager *taskMan) {
+static BOOL Task_FollowMonRecall(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonRecall *env = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
@@ -727,7 +719,7 @@ void FollowMon_StartHideForFieldMove(TaskManager *taskMan) {
     TaskManager_Call(taskMan, Task_FollowMonHideForFieldMove, env);
 }
 
-BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
+static BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     int *timer = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
@@ -830,7 +822,7 @@ BOOL FollowMon_StartFlash(FieldSystem *fieldSystem, u8 step, u8 period) {
     return TRUE;
 }
 
-BOOL Task_FollowMonFlash(TaskManager *taskMan) {
+static BOOL Task_FollowMonFlash(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     FollowMonFlash *env = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);

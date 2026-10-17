@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/scrcmd.h"
+
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
@@ -115,7 +117,6 @@ void FollowMonDraw_Delete(void *object);
 void FollowMonDraw_Pause(void *object);
 void FollowMonDraw_Resume(LocalMapObject *object);
 void FollowMonDraw_ClearBob(void *object);
-void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 void BillboardDraw_UpdateNpc(void *object);
 void BillboardDraw_UpdatePositionOnly(void *object);
 void BillboardDraw_UpdateLooping(void *object);
@@ -444,7 +445,7 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
     VecFx32 pos;
     VecFx32 facing;
     Work *work = (Work *)MapObject_GetDrawData(object);
-    if (!work->loaded && MapObject_GetID(object) == 0xFD) {
+    if (!work->loaded && MapObject_GetID(object) == obj_partner_poke) {
         FieldSystem *fieldSystem = MapObjectManager_GetFieldSystem(MapObject_GetManager(object));
         Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
         int species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -511,7 +512,7 @@ void FollowMonDraw_ClearBob(void *object) {
 }
 
 void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager) {
-    return *(void **)MapObject_GetDrawData(MapObjectManager_GetFirstActiveObjectByID(manager, 0xFD));
+    return *(void **)MapObject_GetDrawData(MapObjectManager_GetFirstActiveObjectByID(manager, obj_partner_poke));
 }
 
 void BillboardDraw_UpdateNpc(void *object) {

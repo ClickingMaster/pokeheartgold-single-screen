@@ -6,5 +6,6 @@
 
 Sprite *MapObject_GetBillboard(LocalMapObject *object);
 void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object);
+void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_OBJECT_BILLBOARD_MOTION_H

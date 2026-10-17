@@ -3,6 +3,7 @@
 #include "constants/global_fieldmap.h"
 #include "constants/items.h"
 #include "constants/pokemon.h"
+#include "constants/scrcmd.h"
 #include "constants/sndseq.h"
 #include "constants/species.h"
 #include "constants/sprites.h"
@@ -10,6 +11,8 @@
 
 #include "field/bottom_screen_app.h"
 #include "field/field_effect_helpers.h"
+#include "field/map_object_billboard_motion.h"
+#include "field/map_object_models.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0040.h"
 #include "overlay_2/overlay_02_field_utils.h"
@@ -18,6 +21,8 @@
 #include "dialog_box.h"
 #include "fashion_case.h"
 #include "field_system.h"
+#include "field_terrain.h"
+#include "field_time_events.h"
 #include "filesystem.h"
 #include "follow_mon.h"
 #include "heap.h"
@@ -48,8 +53,6 @@
 #include "sys_flags.h"
 #include "system.h"
 #include "task.h"
-#include "field_terrain.h"
-#include "field_time_events.h"
 
 // What the following Pokemon and its surroundings look like when the player talks to it; compared against the
 // conditions of the interaction tables (FollowMonRule) to pick an interaction script.
@@ -156,12 +159,6 @@ extern const u8 sFollowMonJumpOnSpotMovements[];
 extern const u32 sNatureGroups[];
 extern const VecFx32 sFollowMonGrowScale;
 extern const VecFx32 sFollowMonShrinkScale;
-
-// Overlay 1 map object model helpers.
-void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager);
-void FollowMonBillboard_SetShadowAnchored(LocalMapObject *object, BOOL set);
-void FollowMonBillboard_SetHeight(LocalMapObject *object, s8 height);
-void FollowMonBillboard_AddHeight(LocalMapObject *object, s8 delta);
 
 int FollowMon_SelectInteraction(FieldSystem *fieldSystem);
 void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation);
@@ -494,7 +491,7 @@ void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSitu
                 situation->nearTree = TRUE;
             } else if (dx >= -1 && dx <= 1 && dz >= -1 && dz <= 1) {
                 int id = MapObject_GetID(object);
-                if (id != 0xFD && id != 0xFF) {
+                if (id != obj_partner_poke && id != obj_player) {
                     situation->nearbyObjects++;
                 }
             }
