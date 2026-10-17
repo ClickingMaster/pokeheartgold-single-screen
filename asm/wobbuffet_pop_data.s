@@ -3,8 +3,6 @@
 	.include "global.inc"
 
 	.text
-	.public sWobbuffetPopGameOverlayTemplate
-	.public sWobbuffetPopPlazaScreenOverlayTemplate
 	.public sWobbuffetPopCameraAngle
 	.public sWobbuffetPopCameraTarget
 	.public sWobbuffetPopGraphicsModes
@@ -21,19 +19,10 @@
 	.public sWobbuffetPopSlotModelFiles3
 	.public sWobbuffetPopMainBgTemplates
 	.public sWobbuffetPopSubBgTemplates
-	.extern WobbuffetPop_Init
-	.extern WobbuffetPop_Main
-	.extern WobbuffetPop_Exit
 	.extern WobbuffetPop_HostStartGame
 	.extern WobbuffetPop_HostPlayGame
 	.extern WobbuffetPop_HostFinishGame
 	.rodata
-
-sWobbuffetPopGameOverlayTemplate:
-	.word WobbuffetPop_Init, WobbuffetPop_Main, WobbuffetPop_Exit, 0xFFFFFFFF
-
-sWobbuffetPopPlazaScreenOverlayTemplate: ; 0x02262A08
-	.word WobbuffetPopPlazaScreen_Init, WobbuffetPopPlazaScreen_Main, WobbuffetPopPlazaScreen_Exit, 0xFFFFFFFF
 
 sWobbuffetPopCameraAngle: ; 0x02262A18
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

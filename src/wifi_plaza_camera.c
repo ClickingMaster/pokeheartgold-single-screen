@@ -5,10 +5,14 @@
 #include "camera.h"
 #include "heap.h"
 
-extern const CameraAngle sWiFiPlazaCameraAngle;
-
 // Object manager (wifi_plaza_obj): writes the object's position
 void WiFiPlazaObj_GetPosition(void *object, VecFx32 *position);
+
+static const CameraAngle sWiFiPlazaCameraAngle = {
+    .x = 0xD602,
+    .y = 0,
+    .z = 0,
+};
 
 WiFiPlazaCamera *WiFiPlazaCamera_Create(enum HeapID heapID) {
     WiFiPlazaCamera *camera = Heap_Alloc(heapID, sizeof(WiFiPlazaCamera));

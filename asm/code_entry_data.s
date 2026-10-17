@@ -68,20 +68,6 @@ sCodeEntryKeyRects:
 	.short 0x00C0, 0x00B0, 0x003C, 0x000C
 
 	; OamCharTransferParam
-	.public sCodeEntryOamCharTransferParam
-sCodeEntryOamCharTransferParam:
-	.word 0x60, 0x10000, 0x4000, 0x100010, 0x10
-
-	; SpriteResourceCountsListUnion
-	.public sCodeEntrySpriteResourceCounts
-sCodeEntrySpriteResourceCounts:
-	.word 0x60, 0x20, 0x40, 0x40, 0x10, 0x10
-
-	; OamManagerParam
-	.public sCodeEntryOamManagerParam
-sCodeEntryOamManagerParam:
-	.word 0x00, 0x80, 0x00, 0x20, 0x00, 0x80, 0x00, 0x20
-
 	.data
 
 	; affine scales of a digit growing into / shrinking out of the selected group

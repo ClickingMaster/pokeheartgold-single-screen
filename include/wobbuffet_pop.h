@@ -403,6 +403,9 @@ typedef struct WobbuffetPop {
 BOOL WobbuffetPopApp_Init(OverlayManager *man, int *state);
 BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state);
 BOOL WobbuffetPopApp_Exit(OverlayManager *man, int *state);
+BOOL WobbuffetPopPlazaScreen_Init(OverlayManager *man, int *state);
+BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state);
+BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state);
 
 void WobbuffetPopBalloon_ReleaseTouch(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_LoadShininessTable(void);

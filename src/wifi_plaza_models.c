@@ -25,10 +25,10 @@ typedef struct WiFiPlazaMoverSpawn {
     u16 texture;
 } WiFiPlazaMoverSpawn;
 
-typedef struct WiFiPlazaModelsOffset {
-    s16 value;
-    s16 unused;
-} WiFiPlazaModelsOffset;
+typedef struct WiFiPlazaMoverFrontOffset {
+    s16 x;
+    s16 z;
+} WiFiPlazaMoverFrontOffset;
 
 // OVY_45: drops the texture data of a model file once it is in VRAM
 void WiFiPlaza_DisableModelLighting(NNSG3dResFileHeader *file);
@@ -38,18 +38,71 @@ void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, u32 alpha);
 void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *mdlSet);
 
-extern const s32 sWiFiPlazaPropTagShiftX[2];
-extern const WiFiPlazaModelsOffset sWiFiPlazaMoverFrontOffsets[]; // x / z cell offsets in front of a mover,
-extern const WiFiPlazaModelsOffset ov49_02269A7E[];
-extern const WiFiPlazaMoverSpawn sWiFiPlazaMoverSpawns[9];
-extern const WiFiPlazaModelsSpawn sWiFiPlazaPropSpawns[35];
-
 enum WiFiPlazaPropShowState {
     WIFI_PLAZA_PROP_SHOW_HIDDEN,
     WIFI_PLAZA_PROP_SHOW_REQUESTED,
     WIFI_PLAZA_PROP_SHOWN,
     WIFI_PLAZA_PROP_HIDE_REQUESTED,
     WIFI_PLAZA_PROP_FADING_OUT,
+};
+
+static const s32 sWiFiPlazaPropTagShiftX[2] = { -11, 12 };
+
+// Cell offsets of the spots in front of a mover
+static const WiFiPlazaMoverFrontOffset sWiFiPlazaMoverFrontOffsets[3] = {
+    { -2, 10 },
+    { 14, 10 },
+    { 30, 10 },
+};
+
+static const WiFiPlazaMoverSpawn sWiFiPlazaMoverSpawns[9] = {
+    { 0, 0 },
+    { 0, 0 },
+    { 1, 0 },
+    { 0, 1 },
+    { 0, 1 },
+    { 1, 1 },
+    { 0, 2 },
+    { 0, 2 },
+    { 1, 2 },
+};
+
+static const WiFiPlazaModelsSpawn sWiFiPlazaPropSpawns[35] = {
+    { 24, 0  },
+    { 25, 1  },
+    { 26, 2  },
+    { 27, 3  },
+    { 27, 3  },
+    { 28, 4  },
+    { 33, 5  },
+    { 70, 6  },
+    { 71, 7  },
+    { 72, 8  },
+    { 76, 9  },
+    { 73, 10 },
+    { 74, 10 },
+    { 75, 10 },
+    { 77, 11 },
+    { 78, 12 },
+    { 77, 13 },
+    { 78, 13 },
+    { 77, 14 },
+    { 78, 14 },
+    { 25, 15 },
+    { 26, 15 },
+    { 27, 15 },
+    { 27, 15 },
+    { 28, 15 },
+    { 25, 16 },
+    { 26, 16 },
+    { 27, 16 },
+    { 27, 16 },
+    { 28, 16 },
+    { 92, 13 },
+    { 93, 13 },
+    { 92, 14 },
+    { 93, 14 },
+    { 98, 17 },
 };
 
 static inline WiFiPlazaModelsPos WiFiPlazaProp_UnpackPos(u32 packed) {
@@ -1119,8 +1172,8 @@ void WiFiPlazaModels_GetMoverFrontPos(WiFiPlazaModels *models, int index, int si
         GF_AssertFail();
     }
     WiFiPlazaMover_GetPosition(models->movers[index], position);
-    position->x += sWiFiPlazaMoverFrontOffsets[side].value << FX32_SHIFT;
-    position->z += ov49_02269A7E[side].value << FX32_SHIFT;
+    position->x += sWiFiPlazaMoverFrontOffsets[side].x << FX32_SHIFT;
+    position->z += sWiFiPlazaMoverFrontOffsets[side].z << FX32_SHIFT;
     position->y = 40 * FX32_ONE;
 }
 

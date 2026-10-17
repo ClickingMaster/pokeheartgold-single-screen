@@ -141,9 +141,6 @@ extern const CodeEntrySubBgTemplates sCodeEntrySubBgTemplates;
 extern const CodeEntryStateFunc sCodeEntryStates[4];
 extern const CodeEntryKeyGrid sCodeEntryKeyGrid;
 extern const CodeEntryKeyRect sCodeEntryKeyRects[12];
-extern const OamCharTransferParam sCodeEntryOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sCodeEntrySpriteResourceCounts;
-extern const OamManagerParam sCodeEntryOamManagerParam;
 
 static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
 static void CodeEntry_SetupBgs(BgConfig *bgConfig);
@@ -200,9 +197,37 @@ BOOL CodeEntry_State_FadeOut(CodeEntryApp *app);
 BOOL CodeEntry_State_Input(CodeEntryApp *app);
 BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app);
 
+static f32 sCodeEntryShrinkScales[] = { 0.8f, 0.6f, 0.4f, 0.2f, 0.8f, 1.0f, 1.0f };
+
 static f32 sCodeEntryGrowScales[] = { 0.5f, 0.2f, 0.5f, 1.0f, 1.2f, 1.0f, 1.0f };
 
-static f32 sCodeEntryShrinkScales[] = { 0.8f, 0.6f, 0.4f, 0.2f, 0.8f, 1.0f, 1.0f };
+static const OamCharTransferParam sCodeEntryOamCharTransferParam = {
+    .maxTasks = 96,
+    .sizeMain = 0x10000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_64K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sCodeEntrySpriteResourceCounts = {
+    .numChar = 96,
+    .numPltt = 32,
+    .numCell = 64,
+    .numAnim = 64,
+    .numMcel = 16,
+    .numManm = 16,
+};
+
+static const OamManagerParam sCodeEntryOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
 
 BOOL CodeEntry_Init(OverlayManager *manager, int *state) {
     CodeEntryApp *app;

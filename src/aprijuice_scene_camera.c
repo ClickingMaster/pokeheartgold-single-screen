@@ -9,12 +9,16 @@ typedef struct AprijuiceSceneHeader {
     Camera *camera;     // 0x08
 } AprijuiceSceneHeader;
 
-extern VecFx32 gAprijuiceSceneCameraPosition; // camera position
-
 void AprijuiceScene_InitCamera(AprijuiceSceneHeader *scene, enum HeapID heapId);
 
+static const VecFx32 sAprijuiceSceneCameraPosition = {
+    .x = 0,
+    .y = 0,
+    .z = FX32_CONST(16),
+};
+
 void AprijuiceScene_InitCamera(AprijuiceSceneHeader *scene, enum HeapID heapId) {
-    VecFx32 pos = gAprijuiceSceneCameraPosition;
+    VecFx32 pos = sAprijuiceSceneCameraPosition;
     CameraAngle angle = { 0, 0, 0, 0 };
     scene->camera = Camera_New(heapId);
     Camera_Init_FromPosDistanceAndAngle(&pos, FX32_CONST(16), &angle, 1473, 1, scene->camera);

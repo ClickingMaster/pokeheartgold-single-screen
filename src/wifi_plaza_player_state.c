@@ -17,8 +17,11 @@
 #include "sound_playback.h"
 #include "system.h"
 #include "wifi_plaza_camera.h"
+#include "wifi_plaza_event.h"
+#include "wifi_plaza_game_entry.h"
 #include "wifi_plaza_map.h"
 #include "wifi_plaza_obj.h"
+#include "wifi_plaza_talk.h"
 
 // Where and how the own player re-enters the room (room args, see WiFiPlazaRoom_GetStartParams); entryMode picks the own
 // player's first handler from sWiFiPlazaPlayerStateOwnEntries
@@ -97,29 +100,277 @@ void WiFiPlazaPlayerState_InitArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPla
 void WiFiPlazaPlayerState_FreeArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPlazaRoomWork *room);
 BOOL WiFiPlazaPlayerState_PlaceOtherForActivity(WiFiPlazaPlacement *placement, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, WiFiPlazaObj *obj, u8 kind, u32 justAppeared);
 
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnWalk;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherPresent;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherLeave;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherRideMover;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherActivity;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateTalkStart;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateGameEntryEndLink;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateTalkAnswer;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherWait;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStatePlayInstrument;
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateGameEntryRegister;
-extern const u32 sWiFiPlazaActivity2Tags[];
-extern const u32 sWiFiPlazaActivity4Tags[];
-extern const u32 sWiFiPlazaActivity7Tags[];
-extern const u32 sWiFiPlazaActivity3Tags[];
-extern const u32 sWiFiPlazaActivity8Tags[];
-extern const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnEntries[4];
-extern const ListMenuTemplate sWiFiPlazaArrivalMenuTemplate;
-extern const u32 sWiFiPlazaActivity5Tags[];
-extern const u32 sWiFiPlazaActivity6Tags[];
-extern const WiFiPlazaTileAction sWiFiPlazaWalkUpTileActions[];
-extern const WiFiPlazaTileAction sWiFiPlazaCheckTileActions[];
-extern const WiFiPlazaTileAction sWiFiPlazaStandTileActions[];
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateGameEntryEndLink = {
+    .update = WiFiPlazaGameEntry_EndLink,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateGameEntryRegister = {
+    .update = WiFiPlazaGameEntry_Register,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherWait = {
+    .update = WiFiPlazaPlayerState_OtherWaitForPlayer,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateTalkAnswer = {
+    .update = WiFiPlazaTalk_Answer,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateTalkStart = {
+    .update = WiFiPlazaTalk_Start,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherActivity = {
+    .update = WiFiPlazaPlayerState_OtherDoActivity,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherLeave = {
+    .update = WiFiPlazaPlayerState_OtherLeave,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStatePlayInstrument = {
+    .update = WiFiPlazaPlayerState_PlayInstrument,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherRideMover = {
+    .update = WiFiPlazaPlayerState_OtherRideMover,
+    .lateUpdate = NULL,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnWalk = {
+    .update = WiFiPlazaPlayerState_OwnWalk,
+    .lateUpdate = WiFiPlazaPlayerState_OwnWalkLate,
+};
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOtherPresent = {
+    .update = WiFiPlazaPlayerState_OtherPresent,
+    .lateUpdate = NULL,
+};
+
+static const u32 sWiFiPlazaActivity2Tags[4] = { 79, 80, 81, 82 };
+
+static const u32 sWiFiPlazaActivity4Tags[4] = { 87, 88, 89, 90 };
+
+static const u32 sWiFiPlazaActivity7Tags[4] = { 50, 51, 52, 53 };
+
+static const u32 sWiFiPlazaActivity3Tags[4] = { 83, 84, 85, 86 };
+
+static const u32 sWiFiPlazaActivity8Tags[4] = { 54, 55, 56, 57 };
+
+static const WiFiPlazaPlayerStateHandlers sWiFiPlazaPlayerStateOwnEntries[4] = {
+    {
+     .update = WiFiPlazaPlayerState_OwnArrival,
+     .lateUpdate = NULL,
+     },
+    {
+     .update = WiFiPlazaPlayerState_OwnReturnFromAttraction,
+     .lateUpdate = NULL,
+     },
+    {
+     .update = WiFiPlazaPlayerState_OwnReturnFromMinigame,
+     .lateUpdate = NULL,
+     },
+    {
+     .update = WiFiPlazaPlayerState_OwnReturnFromSurvey,
+     .lateUpdate = NULL,
+     },
+};
+
+static const ListMenuTemplate sWiFiPlazaArrivalMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = NULL,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 18,
+    .maxShowed = 7,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 1,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+static const u32 sWiFiPlazaActivity5Tags[8] = { 34, 35, 36, 37, 38, 39, 40, 41 };
+
+static const u32 sWiFiPlazaActivity6Tags[8] = { 42, 43, 44, 45, 46, 47, 48, 49 };
+
+static const WiFiPlazaTileAction sWiFiPlazaWalkUpTileActions[2] = {
+    {
+     .tiles = { 39, 40, 41, 255, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaGameEntry_ReadSign,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 255, 0, 0, 0, 0, 0, 0, 0 },
+     .action = 3,
+     .handlers = {
+            .update = NULL,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+};
+
+static const WiFiPlazaTileAction sWiFiPlazaCheckTileActions[6] = {
+    {
+     .tiles = { 36, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaTalk_Greeter,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 37, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaTalk_InfoCounter,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 38, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaTalk_Reception,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 39, 40, 41, 255, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaGameEntry_ReadSign,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 43, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 1,
+     .handlers = {
+            .update = WiFiPlazaTalk_Survey,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 255, 0, 0, 0, 0, 0, 0, 0 },
+     .action = 3,
+     .handlers = {
+            .update = NULL,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+};
+
+static const WiFiPlazaTileAction sWiFiPlazaStandTileActions[9] = {
+    {
+     .tiles = { 1, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnExit,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 22, 23, 24, 25, 255, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnEnterAttraction,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 26, 27, 28, 29, 255, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnEnterAttraction,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 6, 7, 8, 9, 10, 11, 12, 13 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnEnterAttraction,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 14, 15, 16, 17, 18, 19, 20, 21 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnEnterAttraction,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 33, 34, 35, 255, 0, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnRideMover,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 30, 31, 32, 255, 0, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnEnterMinigame,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 44, 255, 0, 0, 0, 0, 0, 0 },
+     .action = 0,
+     .handlers = {
+            .update = WiFiPlazaPlayerState_OwnUseSurveyMonitor,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+    {
+     .tiles = { 255, 0, 0, 0, 0, 0, 0, 0 },
+     .action = 3,
+     .handlers = {
+            .update = NULL,
+            .lateUpdate = NULL,
+        },
+     .callback = NULL,
+     },
+};
 
 WiFiPlazaPlayerStateManager *WiFiPlazaPlayerState_CreateManager(WiFiPlazaRoomWork *room, enum HeapID heapID) {
     int i;

@@ -21,39 +21,19 @@
 #include "text.h"
 #include "wobbuffet_pop.h"
 
-extern const u16 sWobbuffetPopConfettiPalettes[];
-extern const u16 sWobbuffetPopSubBgColorIndices[];
-extern const u16 sWobbuffetPopBonusTargetAnims[];
-extern const u16 sWobbuffetPopSubObjColorIndices[];
-extern const u16 sWobbuffetPopSubObjPaletteBases[];
-extern u32 (*const sWobbuffetPopBonusTargetStateFuncs[])(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-extern const s32 sWobbuffetPopPuffBonusFactors[];
-extern const s16 sWobbuffetPopSeatPositions[][2];
-extern const s16 sWobbuffetPopSeatPositionsY[][2];
-extern const u8 sWobbuffetPopRingSpeedSteps[];
-extern const u8 sWobbuffetPopRingSpeedDelays[];
-extern const u8 sWobbuffetPopRingSpeedTimers[];
-extern const u8 sWobbuffetPopPopupSpots[][4];
-extern const u16 sWobbuffetPopInflationCharFiles[];
-extern const u16 sWobbuffetPopInflationScrnFiles[];
-extern const s32 sWobbuffetPopInflationScales[][2];
-extern const u16 sWobbuffetPopSubObjPaletteIndices[][4];
-extern const u16 sWobbuffetPopPopupPalettes[][4];
-extern const u16 sWobbuffetPopSeatColorIndices[][4];
-extern const u16 sWobbuffetPopConfettiAnims[][4];
-extern const u16 sWobbuffetPopSubBgPaletteIndices[][4];
-extern const ManagedSpriteTemplate sWobbuffetPopPuffSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopConfettiSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopBalloonIconSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopSeatSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopBonusSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopBonusEffectSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopBonusShadowSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopDustSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopScoreFrameSpriteTemplate;
-extern const ManagedSpriteTemplate sWobbuffetPopDemoStylusSpriteTemplate;
-extern const s32 sWobbuffetPopInflationCapacities[][3];
-extern const u8 sWobbuffetPopPuffConfigs[];
+typedef struct WobbuffetPopRingSpeed {
+    u8 steps;
+    u8 delay;
+    u8 timer;
+    u8 unused;
+} WobbuffetPopRingSpeed;
+
+typedef struct WobbuffetPopInflationGfx {
+    u16 charFile;
+    u16 scrnFile;
+    s32 scale;
+} WobbuffetPopInflationGfx;
+
 extern const u32 sWobbuffetPopCommands[];
 extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
@@ -103,9 +83,6 @@ u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring
 u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-BOOL WobbuffetPopPlazaScreen_Init(OverlayManager *man, int *state);
-BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state);
-BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state);
 u32 WobbuffetPop_GetEventCommandSize(void);
 u32 WobbuffetPop_GetPlayerValueCommandSize(void);
 void WobbuffetPop_RecvEvent(int netId, int size, void *data, void *arg);
@@ -119,11 +96,241 @@ void WobbuffetPop_HandleFinishEvent(WobbuffetPop *game, WobbuffetPopEvent *event
 void WobbuffetPop_HandleSyncEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 void WobbuffetPop_HandleDemoEvent(WobbuffetPop *game, WobbuffetPopEvent *event);
 
+static const u16 sWobbuffetPopConfettiPalettes[3] = { 6, 8, 7 };
+
+static const u16 sWobbuffetPopBonusTargetAnims[4] = { 12, 12, 15, 18 };
+
+static const u16 sWobbuffetPopSubObjColorIndices[4] = { 82, 81, 83, 84 };
+
+static const u16 sWobbuffetPopSubBgColorIndices[4] = { 29, 13, 61, 45 };
+
+static const u16 sWobbuffetPopSubObjPaletteBases[5] = { 32, 16, 48, 64, 0 };
+
+static const s32 sWobbuffetPopPuffBonusFactors[4] = { 0x1000, 0x1800, 0xA00, 0x2000 };
+
+static const s16 sWobbuffetPopSeatPositions[4][2] = {
+    { 128, 164 },
+    { 128, 28  },
+    { 52,  96  },
+    { 204, 96  },
+};
+
+static u32 (*const sWobbuffetPopBonusTargetStateFuncs[4])(WobbuffetPop *, WobbuffetPopBonusRing *, WobbuffetPopBonusTarget *) = {
+    WobbuffetPopBonusTarget_Idle,
+    WobbuffetPopBonusTarget_Enter,
+    WobbuffetPopBonusTarget_Walk,
+    WobbuffetPopBonusTarget_Hit,
+};
+
+static const u8 sWobbuffetPopPopupSpots[5][4] = {
+    { 0, 0, 0, 0 },
+    { 0, 2, 1, 3 },
+    { 0, 1, 0, 0 },
+    { 0, 2, 3, 0 },
+    { 0, 2, 1, 3 },
+};
+
+static const WobbuffetPopRingSpeed sWobbuffetPopRingSpeeds[5] = {
+    { 8, 20, 7, 0 },
+    { 8, 17, 7, 0 },
+    { 8, 14, 6, 0 },
+    { 8, 10, 6, 0 },
+    { 8, 6,  5, 0 },
+};
+
+static const WobbuffetPopInflationGfx sWobbuffetPopInflationGfx[3] = {
+    { 11, 12, 0x1100 },
+    { 9,  10, 0x1700 },
+    { 7,  8,  0x1D00 },
+};
+
+static const u16 sWobbuffetPopConfettiAnims[5][4] = {
+    { 22, 21, 23, 24 },
+    { 22, 21, 23, 24 },
+    { 22, 23, 0,  0  },
+    { 22, 24, 23, 0  },
+    { 22, 21, 23, 24 },
+};
+
+static const u16 sWobbuffetPopSubBgPaletteIndices[5][4] = {
+    { 29, 45, 13, 61 },
+    { 29, 45, 13, 61 },
+    { 29, 13, 0,  0  },
+    { 29, 61, 13, 0  },
+    { 29, 45, 13, 61 },
+};
+
+static const u16 sWobbuffetPopSeatColorIndices[5][4] = {
+    { 82, 81, 83, 84 },
+    { 82, 81, 83, 84 },
+    { 82, 81, 0,  0  },
+    { 82, 83, 81, 0  },
+    { 82, 84, 81, 83 },
+};
+
+static const u16 sWobbuffetPopSubObjPaletteIndices[5][4] = {
+    { 32, 16, 48, 64 },
+    { 32, 16, 48, 64 },
+    { 32, 16, 0,  0  },
+    { 32, 48, 16, 0  },
+    { 32, 64, 16, 48 },
+};
+
+static const u16 sWobbuffetPopPopupPalettes[5][4] = {
+    { 2, 4, 1, 3 },
+    { 2, 4, 1, 3 },
+    { 2, 1, 0, 0 },
+    { 2, 3, 1, 0 },
+    { 2, 4, 1, 3 },
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopConfettiSpriteTemplate = {
+    .x = 0x80,
+    .y = 0x60,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 12,
+    .pal = 5,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopBonusSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 16,
+    .pal = 2,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopBonusEffectSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 15,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopDustSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 17,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopScoreFrameSpriteTemplate = {
+    .x = 0x28,
+    .y = 0xB0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 13,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0x2712, 0x2714, 0x2712, 0x2712, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopPuffSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 20,
+    .pal = 1,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopBalloonIconSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 11,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopBonusShadowSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 18,
+    .pal = 1,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopDemoStylusSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 11,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0x2711, 0x2712, 0x2711, 0x2711, -1, -1 },
+    .bgPriority = 0,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sWobbuffetPopSeatSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 19,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2714, 0x2716, 0x2714, 0x2714, -1, -1 },
+    .bgPriority = 3,
+    .vramTransfer = 0,
+};
+
+static const s32 sWobbuffetPopInflationCapacities[5][3] = {
+    { 3000, 6000,  8000  },
+    { 1000, 1000,  1000  },
+    { 6566, 8442,  10318 },
+    { 8428, 10836, 13244 },
+    { 9800, 12600, 15400 },
+};
+
+static const u8 sWobbuffetPopPuffConfigs[200] = {
+    128, 0, 208, 0, 7, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 208, 0, 7, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 208, 0, 7, 0, 2, 2, 0, 0, 128, 0, 240, 255, 10, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 208, 0, 7, 0, 2, 2, 0, 0, 240, 255, 96, 0, 9, 0, 3, 3, 0, 0, 16, 1, 96, 0, 8, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 208, 0, 7, 0, 2, 2, 0, 0, 240, 255, 96, 0, 9, 0, 4, 3, 0, 0, 128, 0, 240, 255, 10, 0, 1, 0, 0, 0, 0, 1, 96, 0, 8, 0, 3, 1, 0, 0
+};
+
 static void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation) {
     NARC *narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
 
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, sWobbuffetPopInflationCharFiles[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, sWobbuffetPopInflationScrnFiles[size * 4], bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, sWobbuffetPopInflationGfx[size].charFile, bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, sWobbuffetPopInflationGfx[size].scrnFile, bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_117);
     NARC_Delete(narc);
     MI_CpuFill8(inflation, 0, sizeof(WobbuffetPopInflation));
     inflation->capacity = sWobbuffetPopInflationCapacities[playerCount][size];
@@ -184,7 +391,7 @@ static void WobbuffetPopInflation_UpdateBg(BgConfig *bgConfig, WobbuffetPopInfla
 }
 
 static void WobbuffetPopInflation_CalcScale(int playerCount, int size, int air, int *scaleX, int *scaleY) {
-    int q = sWobbuffetPopInflationScales[size][0] * air / sWobbuffetPopInflationCapacities[playerCount][size];
+    int q = sWobbuffetPopInflationGfx[size].scale * air / sWobbuffetPopInflationCapacities[playerCount][size];
     int scale = q + 768;
 
     *scaleX = scale;
@@ -1055,7 +1262,7 @@ void WobbuffetPopBonusRing_FreeSprites(WobbuffetPop *game, WobbuffetPopBonusRing
 
 #pragma opt_strength_reduction off
 void WobbuffetPopBonusRing_Init(WobbuffetPop *game, WobbuffetPopBonusRing *ring) {
-    ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4];
+    ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeeds[ring->speed].steps;
     int i = 0;
     int angle = i;
     WobbuffetPopBonusTarget *target = ring->targets;
@@ -1083,11 +1290,11 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     if (ring->delay == 0) {
         ring->angle += ring->angleStep;
         ring->stepTimer++;
-        if (ring->stepTimer >= sWobbuffetPopRingSpeedSteps[ring->speed * 4]) {
+        if (ring->stepTimer >= sWobbuffetPopRingSpeeds[ring->speed].steps) {
             ring->stepTimer = 0;
             ring->position++;
             ring->angle = ring->position * 0x1e000;
-            ring->delay = sWobbuffetPopRingSpeedDelays[ring->speed * 4];
+            ring->delay = sWobbuffetPopRingSpeeds[ring->speed].delay;
         }
     } else {
         ring->delay--;
@@ -1097,14 +1304,14 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
             if (ring->speed >= 5) {
                 ring->speed = 4;
             }
-            ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4];
+            ring->angleStep = 0x1e000 / sWobbuffetPopRingSpeeds[ring->speed].steps;
         }
     }
     if (ring->speed == 1) {
         {
-            const u8 *p = sWobbuffetPopRingSpeedSteps;
-            for (i = 0; i < 2; i++, p += 4) {
-                sum += (p[0] + p[1]) * 12;
+            const WobbuffetPopRingSpeed *p = sWobbuffetPopRingSpeeds;
+            for (i = 0; i < 2; i++, p++) {
+                sum += (p->steps + p->delay) * 12;
             }
         }
         if (sum - 15 == ring->ticks) {
@@ -1112,9 +1319,9 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
         }
     } else if (ring->speed == 2) {
         {
-            const u8 *p = sWobbuffetPopRingSpeedSteps;
-            for (i = 0; i < 3; i++, p += 4) {
-                sum += (p[0] + p[1]) * 12;
+            const WobbuffetPopRingSpeed *p = sWobbuffetPopRingSpeeds;
+            for (i = 0; i < 3; i++, p++) {
+                sum += (p->steps + p->delay) * 12;
             }
         }
         if (sum - 15 == ring->ticks) {
@@ -1240,18 +1447,18 @@ u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring
     float scale;
 
     if (ring->stepTimer != 0) {
-        ManagedSprite_TickNFrames(target->sprite, 0x2c000 / sWobbuffetPopRingSpeedSteps[ring->speed * 4]);
+        ManagedSprite_TickNFrames(target->sprite, 0x2c000 / sWobbuffetPopRingSpeeds[ring->speed].steps);
     } else {
         ManagedSprite_SetAnimationFrame(target->sprite, 0);
     }
-    bob = -FX_Mul(GF_SinDegFX32(((180 * ring->stepTimer) << FX32_SHIFT) / sWobbuffetPopRingSpeedSteps[ring->speed * 4]), 0xc000) / FX32_ONE;
+    bob = -FX_Mul(GF_SinDegFX32(((180 * ring->stepTimer) << FX32_SHIFT) / sWobbuffetPopRingSpeeds[ring->speed].steps), 0xc000) / FX32_ONE;
     x = 128 + FX_Mul(GF_SinDegFX32(ring->angle + target->angle), 76);
     y = 98 - FX_Mul(GF_CosDegFX32(ring->angle + target->angle), 68);
     ManagedSprite_SetPositionXYWithSubscreenOffset(target->sprite, (s16)x, (s16)(y - 24 + bob), 0x160000);
     ManagedSprite_SetPositionXYWithSubscreenOffset(target->shadow, (s16)x, (s16)y, 0x160000);
     scale = (float)(FX32_ONE - ((-bob / 3) << FX32_SHIFT) / 12) / (float)FX32_ONE;
     ManagedSprite_SetAffineScale(target->shadow, scale, scale);
-    if (ring->stepTimer == sWobbuffetPopRingSpeedSteps[ring->speed * 4] - 1) {
+    if (ring->stepTimer == sWobbuffetPopRingSpeeds[ring->speed].steps - 1) {
         WobbuffetPopDust_Start(game, target, &target->dust);
     }
     target->atFront = (((ring->angle + target->angle) >> FX32_SHIFT) % 360 == 180);
@@ -1282,8 +1489,8 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         ManagedSprite_SetAnim(target->effect, 33);
         ManagedSprite_SetDrawFlag(target->effect, TRUE);
         ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 2);
-        target->timer = sWobbuffetPopRingSpeedTimers[ring->speed * 4];
-        target->halfTime = sWobbuffetPopRingSpeedTimers[ring->speed * 4] / 2;
+        target->timer = sWobbuffetPopRingSpeeds[ring->speed].timer;
+        target->halfTime = sWobbuffetPopRingSpeeds[ring->speed].timer / 2;
         target->step = (u8)(target->step + 1);
         break;
     case 1:
@@ -1309,18 +1516,18 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         s32 cosine;
 
         if (ring->delay == 0) {
-            int period = sWobbuffetPopRingSpeedSteps[ring->speed * 4];
+            int period = sWobbuffetPopRingSpeeds[ring->speed].steps;
             value += period - ring->stepTimer;
-            value += sWobbuffetPopRingSpeedDelays[ring->speed * 4];
+            value += sWobbuffetPopRingSpeeds[ring->speed].delay;
             duration = value + period;
             start = ring->position + 2;
         } else {
             value += ring->delay;
             if (ring->position >= 12) {
-                duration = value + sWobbuffetPopRingSpeedSteps[(ring->speed + 1) * 4];
+                duration = value + sWobbuffetPopRingSpeeds[ring->speed + 1].steps;
                 start = 1;
             } else {
-                duration = value + sWobbuffetPopRingSpeedSteps[ring->speed * 4];
+                duration = value + sWobbuffetPopRingSpeeds[ring->speed].steps;
                 start = ring->position + 1;
             }
         }
@@ -1415,7 +1622,7 @@ static void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPop
     spot = sWobbuffetPopPopupSpots[game->app->playerCount][seat];
     {
         s16 x = sWobbuffetPopSeatPositions[spot][0];
-        popup->targetY = sWobbuffetPopSeatPositionsY[spot][0] - 24;
+        popup->targetY = sWobbuffetPopSeatPositions[spot][1] - 24;
         ManagedSprite_SetPositionXYWithSubscreenOffset(popup->sprite, x, popup->targetY - 96, 22 << 16);
     }
     Sprite_TickFrame(popup->sprite->sprite);

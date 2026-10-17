@@ -317,7 +317,7 @@ void WiFiPlazaRoomMsg_BufferCityName(WiFiPlazaRoomMsg *msg, u32 country, u32 cit
 void WiFiPlazaRoomMsg_BufferECWord(WiFiPlazaRoomMsg *msg, u32 field, u16 word);
 void WiFiPlazaRoomMsg_ResetBuffers(WiFiPlazaRoomMsg *msg);
 
-// Info panel on the touch screen (src/wifi_plaza_info_panel.c)
+// Info panel on the touch screen
 typedef struct WiFiPlazaCardAvatar {
     u16 avatar;
     u16 trainerClass;

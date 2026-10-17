@@ -120,9 +120,6 @@ extern const u32 sTradeSequenceSceneModes[];
 extern const s32 sTradeSequenceBgZoomCenterY[];
 extern const TileRect sTradeSequenceMonPicSettings;
 
-extern s32 sTradeSequenceDeferredFreeCount;
-extern void *sTradeSequenceDeferredFrees[TRADE_SEQUENCE_MAX_DEFERRED];
-
 BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon);
 void TradeSequence_DrawSpritesTask(SysTask *task, void *data);
 void TradeSequence_PulsesTask(SysTask *task, void *data);
@@ -529,7 +526,6 @@ extern const GraphicsModes sTradeSequenceApproachGraphicsModes;
 extern const GXRgb sTradeSequenceApproachEdgeColors[8];
 extern const BgTemplate sTradeSequenceApproachBgTemplate;
 extern const GraphicsBanks sTradeSequenceApproachGraphicsBanks;
-extern u32 sTradeSequenceBallSpirals[]; // 1 in the data: the ball spirals (when 0 it would only follow the center)
 
 TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts);
 void TradeSequenceApproach_Exit(TradeSequenceApproach *approach);
@@ -572,6 +568,13 @@ BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state);
 BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state);
 void TradeSequenceArrive_InitBgs(TradeSequenceArrive *arrive);
 void TradeSequenceArrive_FreeBgs(TradeSequenceArrive *arrive);
+
+static s32 sTradeSequenceDeferredFreeCount;
+
+static void *sTradeSequenceDeferredFrees[TRADE_SEQUENCE_MAX_DEFERRED];
+
+// when 0 the ball only follows the center instead of spiralling around it
+static u32 sTradeSequenceBallSpirals[] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 
 BOOL TradeSequence_Init(OverlayManager *man, int *state) {
     TradeSequence *ts;

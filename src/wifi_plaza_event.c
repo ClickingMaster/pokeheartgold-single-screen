@@ -538,7 +538,7 @@ void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect) {
 
 // Player state handler: talking to the special object (map tag 97), which turns to the player; message bank 1
 // with a yes/no menu.
-BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     u32 *nextStep = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);

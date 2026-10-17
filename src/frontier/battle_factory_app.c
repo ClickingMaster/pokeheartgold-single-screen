@@ -203,24 +203,6 @@ typedef struct BattleFactoryApp {
     u8 flashNextState;                    // 0x48B
 } BattleFactoryApp;
 
-extern const u8 gBattleFactoryAppSummaryPages[];
-extern const u16 gBattleFactoryBallPositions_Multi2[];
-extern const u16 gBattleFactoryBallY_Multi2[];
-extern const u16 gBattleFactoryBallPositions_Single[];
-extern const u16 gBattleFactoryBallY_Single[];
-extern const u16 gBattleFactoryBallPositions_Multi[];
-extern const u16 gBattleFactoryBallY_Multi[];
-extern const GraphicsModes gBattleFactoryAppGraphicsModes;
-extern const u16 gBattleFactoryBallPositions_Rental[];
-extern const u16 gBattleFactoryBallY_Rental[];
-extern const BgTemplate gBattleFactoryAppBgTemplate_Main1;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Main2;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Sub1;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Main3;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Sub0;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Sub2;
-extern const BgTemplate gBattleFactoryAppBgTemplate_Sub3;
-extern const GraphicsBanks gBattleFactoryAppGraphicsBanks;
 extern const u8 gBattleFactorySpriteResManSizes[4];
 extern const ObjCharTransferTemplate gBattleFactoryObjCharTransferTemplate;
 extern const WindowTemplate gBattleFactoryAppWindowTemplates[18];
@@ -445,6 +427,160 @@ static GridInputHandler *BattleFactoryApp_RecreateSwapOutGrid(BattleFactoryApp *
 static GridInputHandler *BattleFactoryApp_CreateSwapInGrid(BattleFactoryApp *app, GridInputHandler *grid);
 static void BattleFactory_SetSwapInGridMenu(GridInputHandler *grid, int menuOpen, int frontierType);
 void BattleFactoryApp_OnSwapInCursorMove(BattleFactoryApp *app, int target);
+
+static const u8 sBattleFactoryAppSummaryPages[4] = { 0, 1, 3, 4 };
+
+static const u16 sBattleFactoryBallPositions_Multi2[2][2] = {
+    { 96,  64 },
+    { 152, 64 }
+};
+
+static const u16 sBattleFactoryBallPositions_Single[3][2] = {
+    { 64,  64 },
+    { 120, 64 },
+    { 176, 64 }
+};
+
+static const GraphicsModes sBattleFactoryAppGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const u16 sBattleFactoryBallPositions_Multi[4][2] = {
+    { 40,  64 },
+    { 96,  64 },
+    { 152, 64 },
+    { 208, 64 },
+};
+
+static const u16 sBattleFactoryBallPositions_Rental[6][2] = {
+    { 24,  64 },
+    { 64,  64 },
+    { 104, 64 },
+    { 144, 64 },
+    { 184, 64 },
+    { 224, 64 },
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Sub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Main3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Sub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBattleFactoryAppBgTemplate_Sub3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x18000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sBattleFactoryAppGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_B,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_A,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
 
 BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     BattleFactoryApp *app;
@@ -1963,50 +2099,50 @@ static void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
 }
 
 static void BattleFactoryApp_SetGraphicsBanks(void) {
-    GraphicsBanks banks = gBattleFactoryAppGraphicsBanks;
+    GraphicsBanks banks = sBattleFactoryAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 static void BattleFactoryApp_InitBgLayers(BgConfig *bgConfig) {
     {
-        GraphicsModes modes = gBattleFactoryAppGraphicsModes;
+        GraphicsModes modes = sBattleFactoryAppGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Main1;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Main1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Main2;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Main2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Main3;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Main3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Sub0;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Sub0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Sub1;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Sub1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
     }
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_100);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Sub2;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Sub2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     {
-        BgTemplate template = gBattleFactoryAppBgTemplate_Sub3;
+        BgTemplate template = sBattleFactoryAppBgTemplate_Sub3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
@@ -2401,7 +2537,7 @@ static void BattleFactoryApp_CreateSummaryArgs(BattleFactoryApp *app) {
     app->summaryArgs->natDexEnabled = SaveArray_IsNatDexEnabled(app->saveData);
     app->summaryArgs->unk2C = 0;
     app->summaryArgs->isFlag982Set = 0;
-    PokemonSummary_SetPages(app->summaryArgs, gBattleFactoryAppSummaryPages);
+    PokemonSummary_SetPages(app->summaryArgs, sBattleFactoryAppSummaryPages);
     PokemonSummaryArgs_SetPlayer(app->summaryArgs, Save_PlayerData_GetProfile(app->saveData));
 }
 
@@ -2574,17 +2710,17 @@ static BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int
     u16 y;
 
     if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
-        x = gBattleFactoryBallPositions_Rental[index * 2];
-        y = gBattleFactoryBallY_Rental[index * 2];
+        x = sBattleFactoryBallPositions_Rental[index][0];
+        y = sBattleFactoryBallPositions_Rental[index][1];
     } else if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
-        x = gBattleFactoryBallPositions_Single[index * 2];
-        y = gBattleFactoryBallY_Single[index * 2];
+        x = sBattleFactoryBallPositions_Single[index][0];
+        y = sBattleFactoryBallPositions_Single[index][1];
     } else if (app->numBalls == 2) {
-        x = gBattleFactoryBallPositions_Multi2[index * 2];
-        y = gBattleFactoryBallY_Multi2[index * 2];
+        x = sBattleFactoryBallPositions_Multi2[index][0];
+        y = sBattleFactoryBallPositions_Multi2[index][1];
     } else {
-        x = gBattleFactoryBallPositions_Multi[index * 2];
-        y = gBattleFactoryBallY_Multi[index * 2];
+        x = sBattleFactoryBallPositions_Multi[index][0];
+        y = sBattleFactoryBallPositions_Multi[index][1];
     }
     return BattleFactoryBall_Create(&app->spriteGfx, x, y, HEAP_ID_100);
 }

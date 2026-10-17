@@ -176,8 +176,8 @@ void BattleAnimSystem_StartSoundTask(BattleAnimSystem *system, BattleAnimSoundTa
 void BattleAnimTask_Sound(SysTask *task, BattleAnimSoundTaskData *data);
 BOOL BattleAnimSoundFunc_None(BattleAnimSoundTaskData *data);
 BOOL BattleAnimSoundFunc_PanSweep(BattleAnimSoundTaskData *data);
-void BattleAnimSoundFunc_PanSweep2(BattleAnimSoundTaskData *data);
-void BattleAnimSoundFunc_PanSweep3(BattleAnimSoundTaskData *data);
+BOOL BattleAnimSoundFunc_PanSweep2(BattleAnimSoundTaskData *data);
+BOOL BattleAnimSoundFunc_PanSweep3(BattleAnimSoundTaskData *data);
 BOOL BattleAnimSoundFunc_RepeatSE(BattleAnimSoundTaskData *data);
 BOOL BattleAnimSoundFunc_DelayedSE(BattleAnimSoundTaskData *data);
 void BattleAnimSystem_InitBlend(void);
@@ -248,7 +248,7 @@ void BattleAnimBackground_LoadGraphics(BattleAnimBgSwitchWork *work, BattleAnimS
 BOOL BattleAnimBackground_HasEffectFlags(u32 flags, u32 mask);
 void BattleAnimBackground_StartEffects(BattleAnimBgSwitchWork *work);
 BattleAnimBgSwitchWork *BattleAnimBackground_NewSwitchWork(BattleAnimSystem *system);
-BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data);
+BOOL BattleAnimBackground_BlendIn(SysTask *task, BattleAnimBgSwitchWork *work);
 BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work);
 BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work);
 BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work);

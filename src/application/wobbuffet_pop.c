@@ -57,8 +57,6 @@ typedef struct WobbuffetPopModelFiles {
     int files[5];
 } WobbuffetPopModelFiles;
 
-extern const OverlayManagerTemplate sWobbuffetPopGameOverlayTemplate;
-extern const OverlayManagerTemplate sWobbuffetPopPlazaScreenOverlayTemplate;
 extern const CameraAngle sWobbuffetPopCameraAngle;
 extern BOOL (*const sWobbuffetPopHostSteps[])(WobbuffetPop *game, WobbuffetPopSequence *sequence);
 extern const VecFx32 sWobbuffetPopCameraTarget;
@@ -141,6 +139,20 @@ static BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air);
 static void WobbuffetPopBalloon_ResetAir(WobbuffetPopBalloon *balloon);
 static void WobbuffetPopBalloon_UpdateFlash(WobbuffetPopBalloon *balloon);
 static void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess);
+
+static const OverlayManagerTemplate sWobbuffetPopGameOverlayTemplate = {
+    .init = WobbuffetPop_Init,
+    .exec = WobbuffetPop_Main,
+    .exit = WobbuffetPop_Exit,
+    .ovy_id = 0xFFFFFFFF,
+};
+
+static const OverlayManagerTemplate sWobbuffetPopPlazaScreenOverlayTemplate = {
+    .init = WobbuffetPopPlazaScreen_Init,
+    .exec = WobbuffetPopPlazaScreen_Main,
+    .exit = WobbuffetPopPlazaScreen_Exit,
+    .ovy_id = 0xFFFFFFFF,
+};
 
 BOOL WobbuffetPopApp_Init(OverlayManager *man, int *state) {
     PlazaGameArgs *args;

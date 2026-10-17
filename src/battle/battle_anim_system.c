@@ -78,7 +78,7 @@ struct BattleAnimBgSwitchWork {
     BattleAnimSystem *system;
 }; // size: 0x4C
 
-typedef BOOL (*BattleAnimBgSwitchFunc)(SysTask *task, void *data);
+typedef BOOL (*BattleAnimBgSwitchFunc)(SysTask *task, BattleAnimBgSwitchWork *work);
 typedef BOOL (*BattleAnimBgEffectFunc)(BattleAnimBgSwitchWork *work);
 
 // Background effect kind 1: BG scroll
@@ -160,26 +160,262 @@ struct BattleAnimBattlerSprites {
     Pokepic *pokepics[4];
 };
 
-extern const BattleAnimScriptCmd sBattleAnimScriptCmdTable[];
-extern const BattleAnimSoundFunc sBattleAnimSoundFuncs[];
-extern const u32 sBattleAnimWeatherMasks[4];
-extern const u32 sSecretPowerTerrainAnims[25];
-extern const u32 sBattleAnimEmitterSelect6[6][6];
-extern const u32 sBattleAnimEmitterSelect4[6][6];
-extern const BattleAnimBgSwitchFunc sBattleAnimBgSwitchFuncs[];
-extern const BattleAnimBgEffectFunc sBattleAnimBgEffectFuncs[];
-extern const u32 sBattleAnimBgEffectMasks[6];
-extern const s16 sBattleAnimBgWaveSteps[16];
-extern const u32 sBattleAnimBackgroundFiles[][5];
-extern const u32 sBattleAnimBgLayers[];
-extern const u32 sBattleAnimBgMaskLayers[];
-extern const SpriteResourceCountsListUnion sBattleAnimBattlerSpriteCapacities;
-extern const u32 sBattleAnimBattlerSpritePriorities[6];
 extern void (*const sBattleAnimEmitterCallbackTable[])(SPLEmitter *);
 // assert messages; GF_ASSERT(message == NULL) is an assert that always fails
 extern const char sStr_HaikeiSubSystemLaunchLimit[];
 extern const char gBattleAnimNoBgPaletteAnimMsg[];
 extern const char gBattleAnimInvalidExFlagMsg[];
+
+static const u32 sBattleAnimBgMaskLayers[] = { 1, 2, 3 };
+
+static const u32 sBattleAnimEmitterSelect6[6][6] = {
+    { 255, 1,   255, 255, 255, 255 },
+    { 4,   255, 255, 255, 255, 255 },
+    { 255, 255, 255, 3,   255, 1   },
+    { 255, 255, 6,   255, 4,   255 },
+    { 255, 255, 255, 1,   255, 2   },
+    { 255, 255, 4,   255, 5,   255 },
+};
+
+static const u32 sBattleAnimBgEffectMasks[6] = { 0x20000, 0x40000, 0x200000, 0x400000, 0x800000, 0x1000000 };
+
+static const u32 sBattleAnimBgLayers[] = { GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_2, GF_BG_LYR_MAIN_3 };
+
+static const BattleAnimSoundFunc sBattleAnimSoundFuncs[] = {
+    BattleAnimSoundFunc_None,
+    BattleAnimSoundFunc_PanSweep,
+    BattleAnimSoundFunc_PanSweep2,
+    BattleAnimSoundFunc_PanSweep3,
+    BattleAnimSoundFunc_RepeatSE,
+    BattleAnimSoundFunc_DelayedSE,
+};
+
+static const SpriteResourceCountsListUnion sBattleAnimBattlerSpriteCapacities = {
+    .numChar = 5,
+    .numPltt = 5,
+    .numCell = 5,
+    .numAnim = 5,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const s16 sBattleAnimBgWaveSteps[16] = { 32, 28, 24, 20, 16, 12, 8, 4, 4, 8, 12, 16, 20, 24, 28, 32 };
+
+static const BattleAnimBgEffectFunc sBattleAnimBgEffectFuncs[] = {
+    BattleAnimBackground_EffectNone,
+    BattleAnimBackground_StartScroll,
+    BattleAnimBackground_MarkScrollForStop,
+    BattleAnimBackground_StopAllEffects,
+    BattleAnimBackground_EffectNone,
+    BattleAnimBackground_StartWave,
+    BattleAnimBackground_MarkWaveForStop,
+    BattleAnimBackground_StartPaletteCycle,
+    BattleAnimBackground_MarkPaletteCycleForStop,
+};
+
+static const u32 sBattleAnimEmitterSelect4[6][6] = {
+    { 255, 255, 255, 255, 255, 255 },
+    { 255, 255, 255, 255, 255, 255 },
+    { 255, 255, 255, 255, 0,   255 },
+    { 255, 255, 255, 255, 255, 1   },
+    { 255, 255, 1,   255, 255, 255 },
+    { 255, 255, 255, 0,   255, 255 },
+};
+
+static const BattleAnimBgSwitchFunc sBattleAnimBgSwitchFuncs[] = {
+    BattleAnimBackground_BlendIn,
+    BattleAnimBackground_FadeIn,
+    BattleAnimBackground_StartEffectsOnly,
+    BattleAnimBackground_BlendOut,
+    BattleAnimBackground_FadeOut,
+    BattleAnimBackground_StartEffectsAndStopMarked,
+};
+
+static const u32 sBattleAnimWeatherMasks[4] = { 0x03, 0x0C, 0x30, 0xC0 };
+
+// Secret Power animation (a move) by battle terrain
+static const u32 sSecretPowerTerrainAnims[25] = {
+    MOVE_MUD_SLAP,
+    MOVE_MUD_SLAP,
+    MOVE_NEEDLE_ARM,
+    MOVE_NEEDLE_ARM,
+    MOVE_ROCK_THROW,
+    MOVE_ROCK_THROW,
+    MOVE_AVALANCHE,
+    MOVE_WATER_PULSE,
+    MOVE_ICE_SHARD,
+    MOVE_BODY_SLAM,
+    MOVE_MUD_SHOT,
+    MOVE_GUST,
+    MOVE_BODY_SLAM,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+    MOVE_POUND,
+};
+
+static const u32 sBattleAnimBattlerSpritePriorities[6] = { 0, 0, 20, 10, 10, 20 };
+
+static const BattleAnimScriptCmd sBattleAnimScriptCmdTable[] = {
+    BattleAnimScriptCmd_Wait,
+    BattleAnimScriptCmd_WaitForTasks,
+    BattleAnimScriptCmd_BeginLoop,
+    BattleAnimScriptCmd_EndLoop,
+    BattleAnimScriptCmd_End,
+    BattleAnimScriptCmd_PlaySE,
+    BattleAnimScriptCmd_Nop6,
+    BattleAnimScriptCmd_Nop7,
+    BattleAnimScriptCmd_SetSubScreenBlend,
+    BattleAnimScriptCmd_ResetBlend,
+    BattleAnimScriptCmd_Call,
+    BattleAnimScriptCmd_Return,
+    BattleAnimScriptCmd_SetArg,
+    BattleAnimScriptCmd_JumpByVariantBit0,
+    BattleAnimScriptCmd_JumpIfVariantEqual,
+    BattleAnimScriptCmd_Jump,
+    BattleAnimScriptCmd_SwitchBackground,
+    BattleAnimScriptCmd_SetBgScroll,
+    BattleAnimScriptCmd_RestoreBackground,
+    BattleAnimScriptCmd_WaitForBackgroundLoaded,
+    BattleAnimScriptCmd_WaitForBackgroundSwitch,
+    BattleAnimScriptCmd_SetBackground,
+    BattleAnimScriptCmd_PlaySEWithPan,
+    BattleAnimScriptCmd_SetSEPan,
+    BattleAnimScriptCmd_PanSweepSE,
+    BattleAnimScriptCmd_RepeatSE,
+    BattleAnimScriptCmd_DelayedSE,
+    BattleAnimScriptCmd_Nop27,
+    BattleAnimScriptCmd_Nop28,
+    BattleAnimScriptCmd_WaitForSoundTasks,
+    BattleAnimScriptCmd_JumpIfArgEqual,
+    BattleAnimScriptCmd_CopyBattlerToBg,
+    BattleAnimScriptCmd_ClearBattlerBg,
+    BattleAnimScriptCmd_JumpIfContextField01,
+    BattleAnimScriptCmd_SwitchBackgroundBySide,
+    BattleAnimScriptCmd_PanSweepSERaw,
+    BattleAnimScriptCmd_PanSweepSEConverted,
+    BattleAnimScriptCmd_Nop37,
+    BattleAnimScriptCmd_Nop38,
+    BattleAnimScriptCmd_Nop39,
+    BattleAnimScriptCmd_Nop40,
+    BattleAnimScriptCmd_Nop41,
+    BattleAnimScriptCmd_Nop42,
+    BattleAnimScriptCmd_Nop43,
+    BattleAnimScriptCmd_StopSE,
+    BattleAnimScriptCmd_CallFunc,
+    BattleAnimScriptCmd_CreateEmitter,
+    BattleAnimScriptCmd_CreateEmitterInSlot,
+    BattleAnimScriptCmd_CreateEmitterByPosition6,
+    BattleAnimScriptCmd_CreateEmitterByPosition4,
+    BattleAnimScriptCmd_WaitForParticles,
+    BattleAnimScriptCmd_LoadParticleSystem,
+    BattleAnimScriptCmd_LoadParticleSystemEx,
+    BattleAnimScriptCmd_FreeParticleSystem,
+    BattleAnimScriptCmd_Nop54,
+    BattleAnimScriptCmd_Invalid55,
+    BattleAnimScriptCmd_InitBattlerSpriteManager,
+    BattleAnimScriptCmd_LoadBattlerSpriteResources,
+    BattleAnimScriptCmd_CreateBattlerSprite,
+    BattleAnimScriptCmd_FreeBattlerSpriteManager,
+    BattleAnimScriptCmd_DeleteBattlerSprite,
+    BattleAnimScriptCmd_StopFollowTask,
+    BattleAnimScriptCmd_SetParticlePerspective,
+    BattleAnimScriptCmd_SetParticleFlipY,
+    BattleAnimScriptCmd_JumpBySide,
+    BattleAnimScriptCmd_PlayCry,
+    BattleAnimScriptCmd_WaitForCry,
+    BattleAnimScriptCmd_ClearArgs,
+    BattleAnimScriptCmd_ChangeBattlerPic,
+    BattleAnimScriptCmd_RestoreBattlerPic,
+    BattleAnimScriptCmd_JumpByWeather,
+    BattleAnimScriptCmd_JumpIfField08Is1,
+    BattleAnimScriptCmd_JumpIfSameSide,
+    BattleAnimScriptCmd_InitSpriteManager,
+    BattleAnimScriptCmd_LoadCharResource,
+    BattleAnimScriptCmd_LoadPaletteResource,
+    BattleAnimScriptCmd_LoadCellResource,
+    BattleAnimScriptCmd_LoadAnimResource,
+    BattleAnimScriptCmd_CreateSpriteWithFunc,
+    BattleAnimScriptCmd_CreateSprite,
+    BattleAnimScriptCmd_FreeSpriteManager,
+    BattleAnimScriptCmd_SetBattlerSpriteVisible,
+    BattleAnimScriptCmd_StartBattlerSpriteDraw,
+    BattleAnimScriptCmd_StopBattlerSpriteDraw,
+    BattleAnimScriptCmd_WaitForButtonCombo,
+    BattleAnimScriptCmd_BrightnessFlash,
+    BattleAnimScriptCmd_SwitchBackgroundWithFadeWait,
+    BattleAnimScriptCmd_JumpIfAttackerActive,
+};
+
+static const u32 sBattleAnimBackgroundFiles[][5] = {
+    { 59,  0x127, 56,  57,  58  },
+    { 59,  0x127, 56,  57,  58  },
+    { 119, 0x13F, 120, 120, 120 },
+    { 59,  0x127, 56,  57,  58  },
+    { 59,  0x127, 56,  57,  58  },
+    { 59,  0x14A, 56,  57,  58  },
+    { 63,  0x128, 60,  61,  62  },
+    { 142, 0x14E, 143, 144, 143 },
+    { 63,  0x151, 60,  61,  62  },
+    { 64,  0x129, 65,  65,  65  },
+    { 64,  0x129, 65,  65,  65  },
+    { 119, 0x140, 120, 120, 120 },
+    { 64,  0x149, 65,  65,  65  },
+    { 64,  0x150, 65,  65,  65  },
+    { 119, 0x13E, 120, 120, 120 },
+    { 70,  0x12C, 66,  66,  66  },
+    { 70,  0x134, 66,  66,  66  },
+    { 119, 0x13D, 120, 120, 120 },
+    { 70,  0x134, 66,  66,  66  },
+    { 75,  0x12D, 76,  76,  74  },
+    { 83,  0x12F, 80,  81,  82  },
+    { 89,  0x131, 86,  87,  88  },
+    { 93,  0x132, 90,  91,  92  },
+    { 94,  0x133, 95,  95,  95  },
+    { 99,  0x136, 100, 100, 100 },
+    { 102, 0x137, 103, 103, 101 },
+    { 108, 0x138, 107, 107, 107 },
+    { 108, 0x15C, 107, 107, 107 },
+    { 109, 0x139, 110, 110, 110 },
+    { 111, 0x13A, 112, 112, 112 },
+    { 109, 0x139, 110, 110, 110 },
+    { 118, 0x13C, 115, 116, 117 },
+    { 118, 0x13C, 115, 116, 117 },
+    { 118, 0x13C, 115, 116, 117 },
+    { 125, 0x144, 126, 126, 126 },
+    { 130, 0x146, 131, 131, 129 },
+    { 132, 0x147, 133, 133, 134 },
+    { 139, 0x14C, 137, 138, 138 },
+    { 140, 0x14D, 141, 141, 141 },
+    { 145, 0x14F, 146, 146, 146 },
+    { 150, 0x152, 147, 148, 149 },
+    { 154, 0x153, 151, 152, 153 },
+    { 155, 0x154, 156, 156, 156 },
+    { 157, 0x155, 158, 158, 158 },
+    { 159, 0x156, 160, 160, 160 },
+    { 164, 0x157, 161, 162, 163 },
+    { 165, 0x158, 166, 166, 166 },
+    { 46,  0x122, 47,  47,  47  },
+    { 167, 0x159, 168, 169, 168 },
+    { 167, 0x15B, 168, 169, 168 },
+    { 170, 0x15A, 172, 171, 171 },
+    { 72,  0x12B, 73,  73,  73  },
+    { 84,  0x130, 85,  85,  85  },
+    { 79,  0x12E, 77,  78,  77  },
+    { 113, 0x13B, 114, 114, 114 },
+    { 123, 0x143, 124, 124, 124 },
+    { 121, 0x142, 122, 122, 122 },
+    { 135, 0x14B, 136, 136, 136 },
+    { 98,  0x135, 96,  97,  96  },
+};
 
 void BattleAnimSystem_WaitDelay(BattleAnimSystem *system) {
     if (system->delay == 0) {
@@ -542,12 +778,12 @@ BOOL BattleAnimSoundFunc_PanSweep(BattleAnimSoundTaskData *data) {
     return result;
 }
 
-void BattleAnimSoundFunc_PanSweep2(BattleAnimSoundTaskData *data) {
-    BattleAnimSoundFunc_PanSweep(data);
+BOOL BattleAnimSoundFunc_PanSweep2(BattleAnimSoundTaskData *data) {
+    return BattleAnimSoundFunc_PanSweep(data);
 }
 
-void BattleAnimSoundFunc_PanSweep3(BattleAnimSoundTaskData *data) {
-    BattleAnimSoundFunc_PanSweep(data);
+BOOL BattleAnimSoundFunc_PanSweep3(BattleAnimSoundTaskData *data) {
+    return BattleAnimSoundFunc_PanSweep(data);
 }
 
 BOOL BattleAnimSoundFunc_RepeatSE(BattleAnimSoundTaskData *data) {
@@ -1771,10 +2007,9 @@ enum {
     BG_BLEND_IN_STEP_BLEND,
 };
 
-BOOL BattleAnimBackground_BlendIn(SysTask *task, void *data) {
+BOOL BattleAnimBackground_BlendIn(SysTask *task, BattleAnimBgSwitchWork *work) {
     int done;
     int priority;
-    BattleAnimBgSwitchWork *work = data;
 
     switch (work->step) {
     case BG_BLEND_IN_STEP_LOAD_BATTLE_BG:

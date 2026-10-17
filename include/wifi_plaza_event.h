@@ -90,7 +90,7 @@ void WiFiPlazaEventEffect_StartPhase5(WiFiPlazaEventEffect *effect);
 void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list);
 void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect);
 void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect);
-BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index);
 WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID);
 void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work);
 void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work);

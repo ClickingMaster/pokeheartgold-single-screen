@@ -1681,7 +1681,6 @@ Overlay OVY_49
     Object src/wifi_plaza_map.o
     Object src/wifi_plaza_obj.o
     Object src/wifi_plaza_room.o
-    Object src/wifi_plaza_info_panel.o
     Object src/wifi_plaza_camera.o
     Object src/wifi_plaza_models.o
     Object src/wifi_plaza_player_state.o

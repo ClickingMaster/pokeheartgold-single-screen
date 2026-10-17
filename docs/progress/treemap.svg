@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 64529187f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 6d7d319b5 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -4408,40 +4408,37 @@ src/frontier/frontier_cmd_sound.c</title></rect>
 156 bytes · C-only source
 src/frontier/frontier_cmd_create_sprites.c</title></rect>
 <rect x="964.502" y="147.000" width="77.978" height="145.663" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="883.121" y="292.663" width="30.626" height="66.811" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_instrument.o
+<rect x="883.121" y="292.663" width="27.808" height="73.580" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_instrument.o
 12,788 bytes · C-only source
 src/wifi_plaza_instrument.c</title></rect>
-<rect x="913.747" y="292.663" width="51.773" height="39.027" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_player_state.o
+<rect x="910.929" y="292.663" width="54.590" height="37.013" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_player_state.o
 12,628 bytes · C-only source
 src/wifi_plaza_player_state.c</title></rect>
-<rect x="913.747" y="331.690" width="51.773" height="27.784" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_talk.o
+<rect x="910.929" y="329.676" width="54.590" height="36.567" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_room.o
+12,476 bytes · C-only source
+src/wifi_plaza_room.c</title></rect>
+<rect x="883.121" y="366.243" width="47.238" height="30.451" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_talk.o
 8,990 bytes · C-only source
 src/wifi_plaza_talk.c</title></rect>
-<rect x="883.121" y="359.474" width="36.704" height="38.083" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_models.o
+<rect x="883.121" y="396.694" width="47.238" height="29.591" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_models.o
 8,736 bytes · C-only source
 src/wifi_plaza_models.c</title></rect>
-<rect x="883.121" y="397.557" width="36.704" height="28.728" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_room.o
-6,590 bytes · C-only source
-src/wifi_plaza_room.c</title></rect>
-<rect x="919.825" y="359.474" width="26.478" height="35.570" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_info_panel.o
-5,886 bytes · C-only source
-src/wifi_plaza_info_panel.c</title></rect>
-<rect x="946.302" y="359.474" width="19.217" height="35.570" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_event.o
+<rect x="930.359" y="366.243" width="35.161" height="19.441" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_event.o
 4,272 bytes · C-only source
 src/wifi_plaza_event.c</title></rect>
-<rect x="919.825" y="395.043" width="20.353" height="31.242" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_game_entry.o
+<rect x="930.359" y="385.684" width="35.161" height="18.084" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_game_entry.o
 3,974 bytes · C-only source
 src/wifi_plaza_game_entry.c</title></rect>
-<rect x="940.178" y="395.043" width="25.342" height="25.003" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_obj.o
+<rect x="930.359" y="403.768" width="28.140" height="22.517" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_obj.o
 3,960 bytes · C-only source
 src/wifi_plaza_obj.c</title></rect>
-<rect x="940.178" y="420.047" width="17.647" height="6.238" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_map.o
+<rect x="958.499" y="403.768" width="7.021" height="15.680" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_map.o
 688 bytes · C-only source
 src/wifi_plaza_map.c</title></rect>
-<rect x="957.825" y="420.047" width="5.232" height="6.238" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_camera.o
+<rect x="958.499" y="419.448" width="4.774" height="6.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_camera.o
 204 bytes · C-only source
 src/wifi_plaza_camera.c</title></rect>
-<rect x="963.057" y="420.047" width="2.462" height="6.238" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_mover_markers.o
+<rect x="963.273" y="419.448" width="2.247" height="6.837" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_49 / wifi_plaza_mover_markers.o
 96 bytes · C-only source
 src/wifi_plaza_mover_markers.c</title></rect>
 <rect x="883.121" y="292.663" width="82.399" height="133.622" fill="none" stroke="#101722" stroke-width="2"/>

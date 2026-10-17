@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "64529187fbc80d3165727403fb816cd0870e3cc7",
+  "commit": "6d7d319b567bc427bc7be0f56dc7960f876dd951",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "5488c687bd6a7cf5bc17374a41292c956eb80fbaf55ef50a245d95730e58324d",
+    "ARM9": "351410635972de2b4e455ec2855f7ad672711b1bb496c430b864afb07c2a5023",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -3972,14 +3972,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_49",
-      "object": "wifi_plaza_info_panel.o",
-      "bytes": 5886,
-      "status": "c",
-      "source": "src/wifi_plaza_info_panel.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_49",
       "object": "wifi_plaza_instrument.o",
       "bytes": 12788,
       "status": "c",
@@ -4029,7 +4021,7 @@
       "cpu": "ARM9",
       "module": "OVY_49",
       "object": "wifi_plaza_room.o",
-      "bytes": 6590,
+      "bytes": 12476,
       "status": "c",
       "source": "src/wifi_plaza_room.c"
     },

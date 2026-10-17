@@ -22,10 +22,31 @@ void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
 void CommState_SetPlazaLinkMode(void);
 
-extern const u8 sWiFiPlazaGameStatusHeights[2];
-extern const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate;
+static const u8 sWiFiPlazaGameStatusHeights[2] = { 8, 10 };
 
-BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, int playerIndex) {
+static const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = NULL,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 3,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = 0,
+    .cursorKind = 0,
+    .data = NULL,
+};
+
+BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 playerIndex) {
     u8 memberIds[4];
     WiFiPlazaWork *lobby;
     s32 connection;
@@ -548,7 +569,7 @@ next:
     return FALSE;
 }
 
-BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     switch (WiFiPlazaPlayerState_GetStep(state)) {
     case 0:
         CommState_SetErrorWatch(0, 0);
@@ -568,7 +589,7 @@ BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *
     return FALSE;
 }
 
-BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
+BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaGameStatus *status = WiFiPlazaPlayerState_GetWork(state);
     u32 game;
     u32 msgId;
