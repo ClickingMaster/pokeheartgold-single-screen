@@ -297,7 +297,6 @@ Static main
     Object src/item.o
     Object src/bag.o
     Object src/wifi_club/wifi_club.o
-    Object asm/wifi_club_data.o
     Object src/wifi_plaza/wifi_plaza_player_info.o
     Object src/party_menu.o
     Object src/party_context_menu.o
@@ -349,7 +348,6 @@ Static main
     Object src/mom_gift.o
     Object src/phone_rematch.o
     Object src/box_mon_selector.o
-    Object asm/grid_cursor_data.o
     Object src/grid_cursor.o
     Object src/pokeathlon_course_task.o
     Object src/phonebook_dat.o

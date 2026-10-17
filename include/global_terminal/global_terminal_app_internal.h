@@ -39,8 +39,6 @@ void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32
 int DWC_GetLinkLevel(void);
 void DWC_UpdateConnection(void);
 
-extern const OverlayManagerTemplate sOverlayTemplate_GlobalTerminalConnect;
-
 BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state);
 BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state);
 BOOL GlobalTerminalApp_Exit(OverlayManager *man, int *state);
@@ -49,12 +47,8 @@ void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data);
 void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align);
 void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size);
 
-BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state);
-BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state);
-BOOL GlobalTerminalApp_Exit(OverlayManager *man, int *state);
-void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data);
-void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data);
-void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align);
-void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size);
+BOOL GlobalTerminalConnect_Init(OverlayManager *man, int *state);
+BOOL GlobalTerminalConnect_Main(OverlayManager *man, int *state);
+BOOL GlobalTerminalConnect_Exit(OverlayManager *man, int *state);
 
 #endif

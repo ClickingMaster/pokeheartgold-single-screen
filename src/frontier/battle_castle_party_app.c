@@ -269,7 +269,7 @@ void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int 
 // Entry points and link receive callbacks
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
 int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
-BOOL BattleCastlePartyApp_Exit(OverlayManager *manager);
+BOOL BattleCastlePartyApp_Exit(OverlayManager *manager, int *state);
 static void BattleCastlePartyApp_ReloadBgPalette(void);
 void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
@@ -494,7 +494,7 @@ int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
 }
 
 // BattleCastlePartyApp exit
-BOOL BattleCastlePartyApp_Exit(OverlayManager *manager) {
+BOOL BattleCastlePartyApp_Exit(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
 
     *app->selectionOut = app->cursorPos;

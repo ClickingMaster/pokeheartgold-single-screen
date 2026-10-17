@@ -28,8 +28,8 @@ typedef struct ObjCharSpaceReservation {
 
 typedef struct ObjCharTransferTasksManager ObjCharTransferTasksManager;
 
-void ObjCharTransfer_Init(ObjCharTransferTemplate *template);
-void ObjCharTransfer_InitEx(ObjCharTransferTemplate *template, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub);
+void ObjCharTransfer_Init(const ObjCharTransferTemplate *template);
+void ObjCharTransfer_InitEx(const ObjCharTransferTemplate *template, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub);
 void ObjCharTransfer_Destroy(void);
 void ObjCharTransfer_ClearBuffers(void);
 void ObjCharTransfer_SetReservedRegion(u32 offset, u32 size, NNS_G2D_VRAM_TYPE vram);

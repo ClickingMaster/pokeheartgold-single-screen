@@ -929,10 +929,10 @@ void WifiClub_PaletteCycleTask(s32 task, WifiClubPaletteCycle *paletteCycle) {
     }
 }
 
-s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
+BOOL WifiClub_Init(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
-        WifiClubArgs *overlayArgs = OverlayManager_GetArgs(overlayMananger);
+        WifiClubArgs *overlayArgs = OverlayManager_GetArgs(man);
         if (CommState_IsWifi() != 0) {
             switch (overlayArgs->choice) {
             case 1:
@@ -958,7 +958,7 @@ s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
         } else {
             Heap_Create(HEAP_ID_3, HEAP_ID_53, 0xA0000);
         }
-        WifiClubApp *data = OverlayManager_CreateAndGetData(overlayMananger, sizeof(WifiClubApp), HEAP_ID_53);
+        WifiClubApp *data = OverlayManager_CreateAndGetData(man, sizeof(WifiClubApp), HEAP_ID_53);
         MI_CpuFill8(data, 0, sizeof(WifiClubApp));
         GF_CreateVramTransferManager(32, HEAP_ID_53);
         data->textPrinterId = 8;
@@ -982,15 +982,15 @@ s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state) {
         *state += 1;
         break;
     case 1:
-        OverlayManager_GetData(overlayMananger);
+        OverlayManager_GetData(man);
         *state = 0;
         return 1;
     }
     return 0;
 }
 
-s32 WifiClub_Main(OverlayManager *overlayManager, s32 *state) {
-    WifiClubApp *data = OverlayManager_GetData(overlayManager);
+BOOL WifiClub_Main(OverlayManager *man, int *state) {
+    WifiClubApp *data = OverlayManager_GetData(man);
     int mainState = state[0];
     switch (mainState) {
     case WIFI_CLUB_MAIN_FADE_IN:
@@ -1051,10 +1051,10 @@ void WifiClub_TeardownGraphics(WifiClubApp *app) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_42));
 }
 
-s32 WifiClub_Exit(OverlayManager *overlayManager) {
-    WifiClubApp *data = OverlayManager_GetData(overlayManager);
+BOOL WifiClub_Exit(OverlayManager *man, int *state) {
+    WifiClubApp *data = OverlayManager_GetData(man);
     WifiClub_TeardownGraphics(data);
-    WifiClubArgs *args = OverlayManager_GetArgs(overlayManager);
+    WifiClubArgs *args = OverlayManager_GetArgs(man);
     args->choice = data->exitChoice;
     if ((data->exitChoice == 8) || (data->exitChoice == 10)) {
         UnloadDwcOverlay();
@@ -1063,7 +1063,7 @@ s32 WifiClub_Exit(OverlayManager *overlayManager) {
         args->partnerFriendIndex = WifiConnection_GetTargetFriendIndex();
     }
     WifiClub_FreeStrings(data);
-    OverlayManager_FreeData(overlayManager);
+    OverlayManager_FreeData(man);
     GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
     Heap_Destroy(HEAP_ID_53);

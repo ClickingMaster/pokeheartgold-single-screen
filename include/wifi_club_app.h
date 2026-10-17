@@ -252,10 +252,10 @@ void WifiClub_SetupGraphics(WifiClubApp *app);
 
 s32 WifiClub_IsSeekingStatus(u32);
 void WifiClub_PaletteCycleTask(s32 task, WifiClubPaletteCycle *paletteCycle);
-s32 WifiClub_Init(OverlayManager *overlayMananger, s32 *state);
-s32 WifiClub_Main(OverlayManager *overlayManager, s32 *state);
+BOOL WifiClub_Init(OverlayManager *man, int *state);
+BOOL WifiClub_Main(OverlayManager *man, int *state);
 void WifiClub_TeardownGraphics(WifiClubApp *app);
-s32 WifiClub_Exit(OverlayManager *overlayManager);
+BOOL WifiClub_Exit(OverlayManager *man, int *);
 void WifiClub_VBlankCB(WifiClubApp *app);
 void WifiClub_SetVramBanks(void);
 void WifiClub_InitBgs(BgConfig *bgConfig);

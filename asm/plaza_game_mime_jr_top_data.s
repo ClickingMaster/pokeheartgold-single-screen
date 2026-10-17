@@ -897,19 +897,8 @@
 	.public _0226380A
 	.public _02263818
 	.public _02263820
-	.public sMimeJrTopCommands
 	.public sMimeJrTopPlayerPalettes
 	.public _02264160
-	.public MimeJrTop_ReceiveStart
-	.public MimeJrTop_ReceiveFinish
-	.public MimeJrTop_ReceivePlayerState
-	.public MimeJrTop_ReceiveFinalScore
-	.public MimeJrTop_ReceiveCommand4
-	.public MimeJrTop_GetFinishSize
-	.public MimeJrTop_GetStartSize
-	.public MimeJrTop_GetPlayerStateSize
-	.public MimeJrTop_GetFinalScoreSize
-	.public MimeJrTop_GetCommand4Size
 	.public MimeJrTop_GetCommandTable
 	.public MimeJrTop_GetCommandCount
 	.public MimeJrTop_RegisterCommands
@@ -1080,15 +1069,6 @@
 	.include "global.inc"
 
 	.text
-	.public MimeJrTop_ReceiveFinish
-	.public MimeJrTop_ReceivePlayerState
-	.public MimeJrTop_ReceiveFinalScore
-	.public MimeJrTop_ReceiveCommand4
-	.public MimeJrTop_GetFinishSize
-	.public MimeJrTop_GetStartSize
-	.public MimeJrTop_GetPlayerStateSize
-	.public MimeJrTop_GetFinalScoreSize
-	.public MimeJrTop_GetCommand4Size
 	.public MimeJrTop_GetCommandTable
 	.public MimeJrTop_GetCommandCount
 	.public MimeJrTop_ResetRound
@@ -1127,13 +1107,6 @@
 	.public MimeJrTop_QuatDivide
 	.public MimeJrTop_FloatMatrixToFx43
 	.rodata
-
-sMimeJrTopCommands:
-	.word MimeJrTop_ReceiveStart, MimeJrTop_GetStartSize, 0
-	.word MimeJrTop_ReceiveFinish, MimeJrTop_GetFinishSize, 0
-	.word MimeJrTop_ReceivePlayerState, MimeJrTop_GetPlayerStateSize, 0
-	.word MimeJrTop_ReceiveFinalScore, MimeJrTop_GetFinalScoreSize, 0
-	.word MimeJrTop_ReceiveCommand4, MimeJrTop_GetCommand4Size, 0
 
 ov92_02263878: ; 0x02263878
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x06, 0x00

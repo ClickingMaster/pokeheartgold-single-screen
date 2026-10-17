@@ -156,7 +156,7 @@ void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
 BOOL BattleHallApp_Init(OverlayManager *man, int *state);
 BOOL BattleHallApp_Main(OverlayManager *man, int *state);
-BOOL BattleHallApp_Exit(OverlayManager *man);
+BOOL BattleHallApp_Exit(OverlayManager *man, int *state);
 static BOOL BattleHallApp_FadeIn(BattleHallApp *app);
 static void BattleHallApp_PrintTypeGrid(BattleHallApp *app);
 static void BattleHallApp_PrintTitle(BattleHallApp *app);
@@ -427,7 +427,7 @@ BOOL BattleHallApp_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL BattleHallApp_Exit(OverlayManager *man) {
+BOOL BattleHallApp_Exit(OverlayManager *man, int *state) {
     BattleHallApp *app = OverlayManager_GetData(man);
 
     *app->resultOut = app->cursor;

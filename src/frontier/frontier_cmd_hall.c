@@ -9,6 +9,7 @@
 #include "frontier/battle_hall_data.h"
 #include "frontier/battle_hall_setup.h"
 #include "frontier/frontier.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_trainers.h"
 
@@ -18,11 +19,6 @@
 #include "party.h"
 #include "pokemon.h"
 #include "sound_system.h"
-
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
-u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
-u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
-void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
 extern const OverlayManagerTemplate gOverlayTemplate_BattleHallApp;
 

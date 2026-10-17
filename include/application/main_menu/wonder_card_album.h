@@ -61,7 +61,7 @@ BOOL WonderCardAlbum_ShowShareYesNo(WonderCardAlbum *album, Window *window, u32 
 BOOL WonderCardAlbum_BufferZero(WonderCardAlbum *album);
 BOOL WonderCardAlbum_Init(OverlayManager *manager, int *state);
 BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state);
-BOOL WonderCardAlbum_Exit(OverlayManager *manager);
+BOOL WonderCardAlbum_Exit(OverlayManager *manager, int *state);
 void WonderCardAlbum_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_WONDER_CARD_ALBUM_H

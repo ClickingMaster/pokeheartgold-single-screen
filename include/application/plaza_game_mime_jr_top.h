@@ -359,17 +359,26 @@ typedef struct MimeJrTopApp {
     BOOL keepPlaying;               // 0xCC
 } MimeJrTopApp;
 
-void MimeJrTop_ReceiveStart(int netId, int size, volatile u32 *data, MimeJrTopApp *app);
+typedef void (*MimeJrTopReceiveFunc)(int netId, int size, void *data, MimeJrTopApp *app);
+typedef u32 (*MimeJrTopSizeFunc)(void);
+
+typedef struct MimeJrTopCommand {
+    MimeJrTopReceiveFunc receive;
+    MimeJrTopSizeFunc getSize;
+    void *(*getBuffer)(int netId, void *context, int size);
+} MimeJrTopCommand;
+
+void MimeJrTop_ReceiveStart(int netId, int size, void *data, MimeJrTopApp *app);
 void MimeJrTop_ReceiveFinish(int netId, int size, void *data, MimeJrTopApp *app);
-void MimeJrTop_ReceivePlayerState(int netId, int size, const u32 *data, MimeJrTopApp *app);
-void MimeJrTop_ReceiveFinalScore(int netId, int size, const u32 *data, MimeJrTopApp *app);
-void MimeJrTop_ReceiveCommand4(void);
+void MimeJrTop_ReceivePlayerState(int netId, int size, void *data, MimeJrTopApp *app);
+void MimeJrTop_ReceiveFinalScore(int netId, int size, void *data, MimeJrTopApp *app);
+void MimeJrTop_ReceiveCommand4(int netId, int size, void *data, MimeJrTopApp *app);
 u32 MimeJrTop_GetFinishSize(void);
 u32 MimeJrTop_GetStartSize(void);
 u32 MimeJrTop_GetPlayerStateSize(void);
 u32 MimeJrTop_GetFinalScoreSize(void);
 u32 MimeJrTop_GetCommand4Size(void);
-const void *MimeJrTop_GetCommandTable(void);
+const MimeJrTopCommand *MimeJrTop_GetCommandTable(void);
 int MimeJrTop_GetCommandCount(void);
 void MimeJrTop_RegisterCommands(MimeJrTopApp *app);
 void MimeJrTop_InitGame(MimeJrTopApp *app);

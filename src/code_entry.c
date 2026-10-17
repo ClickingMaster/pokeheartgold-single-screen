@@ -144,7 +144,7 @@ extern const CodeEntryKeyRect sCodeEntryKeyRects[12];
 
 static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
 static void CodeEntry_SetupBgs(BgConfig *bgConfig);
-static void CodeEntry_VBlank(CodeEntryApp *app);
+static void CodeEntry_VBlank(void *data);
 static void CodeEntry_SelectGroup(CodeEntryApp *app, int group);
 static void CodeEntry_InitLayout(CodeEntryApp *app);
 static void CodeEntry_SetState(CodeEntryApp *app, int state);
@@ -262,7 +262,7 @@ BOOL CodeEntry_Init(OverlayManager *manager, int *state) {
     }
     G2x_SetBlendAlpha_(REG_BLDCNT_ADDR, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2, 0xF, 7);
     G2x_SetBlendAlpha_(REG_DB_BLDCNT_ADDR, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3, 7, 8);
-    Main_SetVBlankIntrCB((void (*)(void *))CodeEntry_VBlank, app);
+    Main_SetVBlankIntrCB(CodeEntry_VBlank, app);
     return TRUE;
 }
 
@@ -400,7 +400,9 @@ static void CodeEntry_SetupBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-static void CodeEntry_VBlank(CodeEntryApp *app) {
+static void CodeEntry_VBlank(void *data) {
+    CodeEntryApp *app = data;
+
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
     PaletteData_PushTransparentBuffers(app->paletteData);

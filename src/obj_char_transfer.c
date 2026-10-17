@@ -86,11 +86,11 @@ static void ObjCharTransfer_ReserveVramSpace(u32 size, NNS_G2D_VRAM_TYPE vram);
 static void ObjCharTransfer_BitPositionToByteAndBitIndexPair(int arrayBitIndex, u32 *byteIndex, u8 *bitIndex);
 static void ObjCharTransferInternal_BoundsFixOffsetAndSize(u32 baseOffset, u32 curOffset, u32 size, int *correctedOffset, int *correctedSize);
 
-void ObjCharTransfer_Init(ObjCharTransferTemplate *template) {
+void ObjCharTransfer_Init(const ObjCharTransferTemplate *template) {
     ObjCharTransfer_InitEx(template, GX_GetOBJVRamModeChar(), GXS_GetOBJVRamModeChar());
 }
 
-void ObjCharTransfer_InitEx(ObjCharTransferTemplate *template, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub) {
+void ObjCharTransfer_InitEx(const ObjCharTransferTemplate *template, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub) {
     if (sObjCharTransferTasksManager == NULL) {
         sObjCharTransferTasksManager = Heap_Alloc(template->heapID, sizeof(ObjCharTransferTasksManager));
         MI_CpuClear32(sObjCharTransferTasksManager, sizeof(ObjCharTransferTasksManager));

@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "global_terminal/global_terminal_app_internal.h"
 #include "global_terminal/global_terminal_net.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0775.h"
@@ -142,9 +143,6 @@ extern const GraphicsBanks sGlobalTerminalConnectGraphicsBanks;
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectMainBgTemplates;
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectSubBgTemplates;
 
-BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state);
-BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state);
-BOOL GlobalTerminalConnect_Exit(OverlayManager *manager);
 void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work);
 void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig);
 void GlobalTerminalConnect_FreeBgs(BgConfig *bgConfig);
@@ -288,7 +286,7 @@ BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_Exit(OverlayManager *manager) {
+BOOL GlobalTerminalConnect_Exit(OverlayManager *manager, int *state) {
     GlobalTerminalConnectWork *work = OverlayManager_GetData(manager);
 
     if (work->paletteCycle.task != NULL) {

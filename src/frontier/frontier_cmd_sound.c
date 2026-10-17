@@ -2,13 +2,12 @@
 
 #include "global.h"
 
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 
 #include "sound.h"
 #include "sound_playback.h"
 #include "sound_system.h"
-
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 
 static BOOL FrontierScriptNative_WaitSE(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitFanfare(FrontierScriptContext *ctx);

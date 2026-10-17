@@ -1,3 +1,5 @@
+#include "frontier/frontier_script_commands.h"
+
 #include "global.h"
 
 #include "frontier/frontier.h"
@@ -61,10 +63,7 @@ void Frontier_RequestExit(void *frontierWork);
 void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
 u16 Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 
-u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
-u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
 BOOL FrtCmd_Nop(FrontierScriptContext *ctx);
 BOOL FrtCmd_End(FrontierScriptContext *ctx);
 BOOL FrtCmd_Exit(FrontierScriptContext *ctx);

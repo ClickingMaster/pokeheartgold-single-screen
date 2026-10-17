@@ -3,6 +3,7 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_link_lobby.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 
 #include "battle_frontier_communication.h"
@@ -21,9 +22,6 @@
 
 // Script commands of the frontier link lobby and of the link
 // Battle Tower started from it (FrontierFieldSystem).
-
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
-u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 
 u8 LinkSync_GetPlayerState(int netId);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);

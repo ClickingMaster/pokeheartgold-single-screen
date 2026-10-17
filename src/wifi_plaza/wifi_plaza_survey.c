@@ -317,7 +317,7 @@ void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID hea
     int i;
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heapID);
-    ObjCharTransfer_InitEx((ObjCharTransferTemplate *)&sWiFiPlazaSurveyObjCharTransferTemplate, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
+    ObjCharTransfer_InitEx(&sWiFiPlazaSurveyObjCharTransferTemplate, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(32, heapID);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();

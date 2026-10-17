@@ -13,6 +13,7 @@
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_particles.h"
 #include "frontier/frontier_scrcmd.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_transition.h"
@@ -103,8 +104,6 @@ void FrontierMap_WindowTask(SysTask *task, FrontierMapWindowTask *data);
 void FrontierMenu_SetAlignRight(void *menu, u8 value);
 void FrontierMenu_SetAlignBottom(void *menu, u8 value);
 
-u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 BOOL FrtCmd_DeleteSprite(FrontierScriptContext *ctx);
 BOOL FrtCmd_SetSpriteDrawFlag(FrontierScriptContext *ctx);
 BOOL FrtCmd_SetSpriteFlip(FrontierScriptContext *ctx);

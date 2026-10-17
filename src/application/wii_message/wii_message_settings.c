@@ -11,6 +11,7 @@
 #include "msgdata/msg/msg_0800.h"
 
 #include "bg_window.h"
+#include "code_entry.h"
 #include "comm_state.h"
 #include "comm_wireless.h"
 #include "filesystem.h"
@@ -54,6 +55,7 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
+FS_EXTERN_OVERLAY(OVY_44);
 FS_EXTERN_OVERLAY(OVY_70);
 
 // The sub-applications the Wii message settings app runs, indexes into sWiiMessageSettingsApps.
@@ -243,15 +245,6 @@ typedef struct WiiMessageSettingsSubBgTemplates {
     BgTemplate bg1;
 } WiiMessageSettingsSubBgTemplates;
 
-typedef struct NumberEntryArgs {
-    u8 filler_00[0x1C];
-    String *string; // 0x1C
-} NumberEntryArgs;
-
-NumberEntryArgs *CodeEntryArgs_New(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 promptMsg, u32 showWirelessIcon);
-NumberEntryArgs *CodeEntryArgs_NewWithFixedDigits(enum HeapID heapID, u32 length, const u32 *groups, Options *options, u32 promptMsg, u32 showWirelessIcon, u32 fixedGroups, u32 fixedValue);
-void CodeEntryArgs_Delete(NumberEntryArgs *args);
-
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void CommWireless_Terminate(void);
@@ -287,7 +280,6 @@ int GtsServer_GetResult(void);
 void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
 extern NNSFndHeapHandle sWiiMessageSettingsHeap;
-extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsRegisteredMenuWindow;
 extern const WiiMessageSettingsWindowRect sWiiMessageSettingsUnregisteredMenuWindow;
 extern const GraphicsModes sWiiMessageSettingsGraphicsModes;
@@ -346,7 +338,7 @@ BOOL WiiMessageSettings_Init(OverlayManager *man, int *state);
 BOOL WiiMessageSettings_Main(OverlayManager *man, int *state);
 BOOL WiiMessageSettings_Exit(OverlayManager *man, int *state);
 void *WiiMessageSettings_CreateScreenArgs(WiiMessageSettings *app);
-void WiiMessageSettings_DestroyScreenArgs(void);
+void WiiMessageSettings_DestroyScreenArgs(WiiMessageSettings *app);
 void *WiiMessageSettings_CreateWiiNumberEntryArgs(WiiMessageSettings *app);
 void WiiMessageSettings_FinishWiiNumberEntry(WiiMessageSettings *app);
 void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app);
@@ -398,6 +390,18 @@ BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *sc
 BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen);
 void WiiMessageSettingsScreen_RegisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
 void WiiMessageSettingsScreen_UnregisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
+
+static const OverlayManagerTemplate sWiiMessageSettingsScreenTemplate = { WiiMessageSettingsScreen_Init, WiiMessageSettingsScreen_Main, WiiMessageSettingsScreen_Exit, FS_OVERLAY_ID_NONE };
+static const OverlayManagerTemplate sWiiMessageSettingsWifiClubTemplate = { WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44) };
+
+static const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[] = {
+    [WII_MESSAGE_SETTINGS_APP_SCREEN] = { WiiMessageSettings_CreateScreenArgs,                WiiMessageSettings_DestroyScreenArgs,           &sWiiMessageSettingsScreenTemplate,   FALSE },
+    [WII_MESSAGE_SETTINGS_APP_WII_NUMBER_ENTRY] = { WiiMessageSettings_CreateWiiNumberEntryArgs,        WiiMessageSettings_FinishWiiNumberEntry,        &gOverlayTemplate_CodeEntry,          FALSE },
+    [WII_MESSAGE_SETTINGS_APP_REGISTRATION_CODE_ENTRY] = { WiiMessageSettings_CreateRegistrationCodeEntryArgs, WiiMessageSettings_FinishRegistrationCodeEntry, &gOverlayTemplate_CodeEntry,          FALSE },
+    [WII_MESSAGE_SETTINGS_APP_SET_PASSWORD] = { WiiMessageSettings_CreatePasswordEntryArgs,         WiiMessageSettings_FinishPasswordEntry,         &gOverlayTemplate_CodeEntry,          FALSE },
+    [WII_MESSAGE_SETTINGS_APP_CHECK_PASSWORD] = { WiiMessageSettings_CreatePasswordEntryArgs,         WiiMessageSettings_FinishPasswordEntry,         &gOverlayTemplate_CodeEntry,          FALSE },
+    [WII_MESSAGE_SETTINGS_APP_OV44] = { WiiMessageSettings_CreateWifiClubArgs,              WiiMessageSettings_FinishWifiClub,              &sWiiMessageSettingsWifiClubTemplate, TRUE  },
+};
 
 BOOL WiiMessageSettings_Init(OverlayManager *man, int *state) {
     WiiMessageSettings *app;
@@ -592,12 +596,12 @@ void *WiiMessageSettings_CreateScreenArgs(WiiMessageSettings *app) {
     return app;
 }
 
-void WiiMessageSettings_DestroyScreenArgs(void) {
+void WiiMessageSettings_DestroyScreenArgs(WiiMessageSettings *app) {
 }
 
 // The Wii number: 16 digits in groups of 4.
 void *WiiMessageSettings_CreateWiiNumberEntryArgs(WiiMessageSettings *app) {
-    u32 groups[4];
+    int groups[4];
     groups[0] = 4;
     groups[1] = 4;
     groups[2] = 4;
@@ -607,17 +611,17 @@ void *WiiMessageSettings_CreateWiiNumberEntryArgs(WiiMessageSettings *app) {
 }
 
 void WiiMessageSettings_FinishWiiNumberEntry(WiiMessageSettings *app) {
-    NumberEntryArgs *args = app->childArgs;
-    if (WiiNumber_IsZero(args->string, HEAP_ID_115)) {
+    CodeEntryArgs *args = app->childArgs;
+    if (WiiNumber_IsZero(args->text, HEAP_ID_115)) {
         WiiMessageSettings_SetWiiNumberEntryState(app, WII_NUMBER_ENTRY_CANCELLED);
     } else if (WiiMessageSettings_GetWiiNumberEntryState(app) == WII_NUMBER_ENTRY_ENTERED_ONCE) {
-        if (String_Compare(app->wiiNumber, args->string)) {
+        if (String_Compare(app->wiiNumber, args->text)) {
             WiiMessageSettings_SetWiiNumberEntryState(app, WII_NUMBER_ENTRY_MISMATCH);
         } else {
             WiiMessageSettings_SetWiiNumberEntryState(app, WII_NUMBER_ENTRY_CONFIRMED);
         }
     } else {
-        String_Copy(app->wiiNumber, args->string);
+        String_Copy(app->wiiNumber, args->text);
         WiiMessageSettings_SetWiiNumberEntryState(app, WII_NUMBER_ENTRY_ENTERED_ONCE);
     }
     CodeEntryArgs_Delete(args);
@@ -626,7 +630,7 @@ void WiiMessageSettings_FinishWiiNumberEntry(WiiMessageSettings *app) {
 
 // The registration code: the 3-digit prefix sent with the request, then the 4 digits the player enters.
 void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app) {
-    u32 groups[4];
+    int groups[4];
     groups[0] = 3;
     groups[1] = 4;
     groups[2] = 0;
@@ -637,8 +641,8 @@ void *WiiMessageSettings_CreateRegistrationCodeEntryArgs(WiiMessageSettings *app
 
 void WiiMessageSettings_FinishRegistrationCodeEntry(WiiMessageSettings *app) {
     BOOL success;
-    NumberEntryArgs *args = app->childArgs;
-    app->registrationCode = (u64)String_atoi(args->string, &success) % 10000;
+    CodeEntryArgs *args = app->childArgs;
+    app->registrationCode = (u64)String_atoi(args->text, &success) % 10000;
     if (!success) {
         GF_AssertFail();
     }
@@ -647,7 +651,7 @@ void WiiMessageSettings_FinishRegistrationCodeEntry(WiiMessageSettings *app) {
 }
 
 void *WiiMessageSettings_CreatePasswordEntryArgs(WiiMessageSettings *app) {
-    u32 groups[4];
+    int groups[4];
     groups[0] = 4;
     groups[1] = 0;
     groups[2] = 0;
@@ -658,8 +662,8 @@ void *WiiMessageSettings_CreatePasswordEntryArgs(WiiMessageSettings *app) {
 
 void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app) {
     BOOL success;
-    NumberEntryArgs *args = app->childArgs;
-    app->password = String_atoi(args->string, &success);
+    CodeEntryArgs *args = app->childArgs;
+    app->password = String_atoi(args->text, &success);
     if (!success) {
         GF_AssertFail();
     }

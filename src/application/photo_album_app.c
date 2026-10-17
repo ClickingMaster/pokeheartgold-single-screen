@@ -173,7 +173,7 @@ static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app);
 static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app);
 static int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app);
 static int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app);
-static void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app);
+static void PhotoAlbumApp_VBlankCB(void *data);
 static void PhotoAlbumApp_ApplyBgToggle(PhotoAlbumApp *app);
 static void PhotoAlbumApp_RequestBgToggle(PhotoAlbumApp *app, int on);
 static void PhotoAlbumApp_ApplyZoom(PhotoAlbumApp *app);
@@ -213,7 +213,7 @@ static int PhotoAlbumApp_HandleContextMenu(PhotoAlbumApp *app);
 static void PhotoAlbumApp_OpenDeletePrompt(PhotoAlbumApp *app);
 static int PhotoAlbumApp_HandleDeletePrompt(PhotoAlbumApp *app);
 static void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app);
-static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data);
+static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, void *taskData);
 static u8 Photo_CountPartyMons(Photo *photo);
 
 static const u8 sPhotoAlbumGridSlots[] = { 0, 1, 6, 7, 2, 3, 8, 9, 4, 5, 10, 11 };
@@ -650,7 +650,7 @@ static void PhotoAlbumApp_InitGraphics(PhotoAlbumApp *app) {
     PhotoAlbumApp_LoadStrings(app);
     PhotoAlbumApp_CreateWindows(app);
     PhotoAlbumApp_InitSpritesAndMenus(app);
-    Main_SetVBlankIntrCB((void (*)(void *))PhotoAlbumApp_VBlankCB, app);
+    Main_SetVBlankIntrCB(PhotoAlbumApp_VBlankCB, app);
 }
 
 static void PhotoAlbumApp_FreeGraphics(PhotoAlbumApp *app) {
@@ -1157,7 +1157,9 @@ static int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app) {
     return PHOTO_ALBUM_STATE_DELETE_PROMPT;
 }
 
-static void PhotoAlbumApp_VBlankCB(PhotoAlbumApp *app) {
+static void PhotoAlbumApp_VBlankCB(void *data) {
+    PhotoAlbumApp *app = data;
+
     if (app->spriteSystem != NULL) {
         SpriteSystem_TransferOam();
     }
@@ -1686,12 +1688,14 @@ static void PhotoAlbumApp_StartCloseButtonAnim(PhotoAlbumApp *app) {
     PhotoAlbumTask *task = Heap_AllocAtEnd(app->heapId, sizeof(PhotoAlbumTask));
     MI_CpuFill8(task, 0, sizeof(PhotoAlbumTask));
     task->app = app;
-    SysTask_CreateOnMainQueue((void (*)(SysTask *, void *))Task_PhotoAlbumApp_WaitCloseButtonAnim, task, 0);
+    SysTask_CreateOnMainQueue(Task_PhotoAlbumApp_WaitCloseButtonAnim, task, 0);
     PhotoAlbumApp_PrintCloseButton(app, 1);
     app->fadeRunning = TRUE;
 }
 
-static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, PhotoAlbumTask *data) {
+static void Task_PhotoAlbumApp_WaitCloseButtonAnim(SysTask *task, void *taskData) {
+    PhotoAlbumTask *data = taskData;
+
     if (!Sprite_IsAnimated(data->app->sprites[4])) {
         PhotoAlbumApp_PrintCloseButton(data->app, 0);
         data->app->fadeRunning = FALSE;

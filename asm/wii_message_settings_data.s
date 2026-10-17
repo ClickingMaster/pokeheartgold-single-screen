@@ -1,19 +1,6 @@
 	.extern WiiMessageSettings_Init
 	.extern WiiMessageSettings_Main
 	.extern WiiMessageSettings_Exit
-	.extern WiiMessageSettings_CreateScreenArgs
-	.extern WiiMessageSettings_DestroyScreenArgs
-	.extern WiiMessageSettings_CreateWiiNumberEntryArgs
-	.extern WiiMessageSettings_FinishWiiNumberEntry
-	.extern WiiMessageSettings_CreateRegistrationCodeEntryArgs
-	.extern WiiMessageSettings_FinishRegistrationCodeEntry
-	.extern WiiMessageSettings_CreatePasswordEntryArgs
-	.extern WiiMessageSettings_FinishPasswordEntry
-	.extern WiiMessageSettings_CreateWifiClubArgs
-	.extern WiiMessageSettings_FinishWifiClub
-	.extern WiiMessageSettingsScreen_Init
-	.extern WiiMessageSettingsScreen_Main
-	.extern WiiMessageSettingsScreen_Exit
 	.extern WiiMessageSettingsScreen_MainMenu
 	.extern WiiMessageSettingsScreen_StartCheckWiiNumber
 	.extern WiiMessageSettingsScreen_SetMessageReception
@@ -62,15 +49,6 @@
 	.public WiiMessageSettings_Init
 	.public WiiMessageSettings_Main
 	.public WiiMessageSettings_Exit
-	.public WiiMessageSettings_CreateWiiNumberEntryArgs
-	.public WiiMessageSettings_FinishWiiNumberEntry
-	.public WiiMessageSettings_CreateRegistrationCodeEntryArgs
-	.public WiiMessageSettings_FinishRegistrationCodeEntry
-	.public WiiMessageSettings_CreatePasswordEntryArgs
-	.public WiiMessageSettings_FinishPasswordEntry
-	.public WiiMessageSettingsScreen_Init
-	.public WiiMessageSettingsScreen_Main
-	.public WiiMessageSettingsScreen_Exit
 	.public WiiMessageSettingsScreen_MainMenu
 	.public WiiMessageSettingsScreen_SetMessageReception
 	.public WiiMessageSettingsScreen_DeleteSettings
@@ -101,9 +79,6 @@
 	.public WiiNumber_ToWiiAddress
 	.public WiiNumber_IsZero
 	.public WiiNumber_ParseDigitGroups
-	.public sWiiMessageSettingsWifiClubTemplate
-	.public sWiiMessageSettingsScreenTemplate
-	.public sWiiMessageSettingsApps
 	.public sWiiMessageSettingsRegisteredMenuWindow
 	.public sWiiMessageSettingsUnregisteredMenuWindow
 	.public sWiiMessageSettingsGraphicsModes
@@ -119,10 +94,6 @@
 	.public sWiiNumberDigitChars
 	.public ov75_02249B24
 	.public sWiiMessageSettingsScreenStates
-	.public WiiMessageSettings_CreateScreenArgs
-	.public WiiMessageSettings_DestroyScreenArgs
-	.public WiiMessageSettings_CreateWifiClubArgs
-	.public WiiMessageSettings_FinishWifiClub
 	.public WiiMessageSettingsScreen_StartCheckWiiNumber
 	.public WiiMessageSettingsScreen_StartWiiNumberEntry
 	.public WiiMessageSettingsScreen_CheckWiiNumberEntry
@@ -143,19 +114,6 @@
 
 .text
 	.rodata
-
-sWiiMessageSettingsWifiClubTemplate:
-	.word WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44)
-sWiiMessageSettingsScreenTemplate:
-	.word WiiMessageSettingsScreen_Init, WiiMessageSettingsScreen_Main, WiiMessageSettingsScreen_Exit, 0xFFFFFFFF
-
-sWiiMessageSettingsApps: ; 0x02249904
-	.word WiiMessageSettings_CreateScreenArgs, WiiMessageSettings_DestroyScreenArgs, sWiiMessageSettingsScreenTemplate, 0
-	.word WiiMessageSettings_CreateWiiNumberEntryArgs, WiiMessageSettings_FinishWiiNumberEntry, gOverlayTemplate_CodeEntry, 0
-	.word WiiMessageSettings_CreateRegistrationCodeEntryArgs, WiiMessageSettings_FinishRegistrationCodeEntry, gOverlayTemplate_CodeEntry, 0
-	.word WiiMessageSettings_CreatePasswordEntryArgs, WiiMessageSettings_FinishPasswordEntry, gOverlayTemplate_CodeEntry, 0
-	.word WiiMessageSettings_CreatePasswordEntryArgs, WiiMessageSettings_FinishPasswordEntry, gOverlayTemplate_CodeEntry, 0
-	.word WiiMessageSettings_CreateWifiClubArgs, WiiMessageSettings_FinishWifiClub, sWiiMessageSettingsWifiClubTemplate, 1
 
 ov75_App_MainMenu_SelectOption_WiiMessageSettings:
 	.word WiiMessageSettings_Init, WiiMessageSettings_Main, WiiMessageSettings_Exit, 0xFFFFFFFF

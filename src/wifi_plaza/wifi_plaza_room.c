@@ -718,7 +718,7 @@ void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save,
     GfGfxLoader_GXLoadPal(NARC_a_2_0_7, 0x5A, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_2_OFFSET, 0x20, heapID);
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 0x7E, 0, 0x1F, 0, 0x7E, 0, 0x1F, heapID);
-    ObjCharTransfer_InitEx((ObjCharTransferTemplate *)&sWiFiPlazaRoomCharTransfer, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_64K);
+    ObjCharTransfer_InitEx(&sWiFiPlazaRoomCharTransfer, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_64K);
     ObjPlttTransfer_Init(24, heapID);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();

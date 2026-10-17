@@ -3,6 +3,8 @@
 #include "global.h"
 
 #include "application/plaza_game.h"
+#include "application/plaza_game_mime_jr_top.h"
+#include "application/plaza_game_swalot_plop.h"
 
 #include "comm_state.h"
 #include "encounter.h"
@@ -18,13 +20,18 @@
 #include "sys_flags.h"
 #include "task.h"
 #include "wifi_club_app.h"
+#include "wobbuffet_pop.h"
 
 // Wi-Fi Club: the field task that runs the Wi-Fi Club (overlay 44) and whatever
 // the player chose there: a link battle (free, level 50 or level 100; single or double), a trade, the Battle Frontier,
 // one of the three minigames (each behind the game entry screen of overlay 44), or the Wi-Fi settings, which reset
 // the system afterwards. The Wi-Fi Club comes back after each of them until the player leaves.
 
+FS_EXTERN_OVERLAY(OVY_44);
 FS_EXTERN_OVERLAY(OVY_90);
+FS_EXTERN_OVERLAY(OVY_91);
+FS_EXTERN_OVERLAY(OVY_92);
+FS_EXTERN_OVERLAY(OVY_93);
 
 // What the player chose in the Wi-Fi Club (WifiClubArgs.unk4, written by overlay 44).
 enum WifiClubChoice {
@@ -104,12 +111,14 @@ void WifiClub_FinishMimeJrTop(PlazaGameArgs *args);
 PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
 void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args);
 
-extern const u8 gWifiClubGameMaxPlayers[]; // player limit of the game entry screen, by game
-extern const OverlayManagerTemplate gOverlayTemplate_SwalotPlop;
-extern const OverlayManagerTemplate gOverlayTemplate_MimeJrTop;
-extern const OverlayManagerTemplate gOverlayTemplate_WifiClubGameEntry;
-extern const OverlayManagerTemplate gOverlayTemplate_WifiClub;
-extern const OverlayManagerTemplate gOverlayTemplate_WobbuffetPop;
+// player limit of the game entry screen, by game
+static const u8 sWifiClubGameMaxPlayers[] = { 3, 4, 4, 4 };
+
+static const OverlayManagerTemplate sOverlayTemplate_WifiClubGameEntry = { WifiClubGameEntry_Init, WifiClubGameEntry_Main, WifiClubGameEntry_Exit, FS_OVERLAY_ID(OVY_44) };
+static const OverlayManagerTemplate sOverlayTemplate_MimeJrTop = { MimeJrTop_Init, MimeJrTop_Main, MimeJrTop_Exit, FS_OVERLAY_ID(OVY_92) };
+static const OverlayManagerTemplate sOverlayTemplate_SwalotPlop = { SwalotPlop_Init, SwalotPlop_Main, SwalotPlop_Exit, FS_OVERLAY_ID(OVY_91) };
+static const OverlayManagerTemplate sOverlayTemplate_WifiClub = { WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44) };
+static const OverlayManagerTemplate sOverlayTemplate_WobbuffetPop = { WobbuffetPopApp_Init, WobbuffetPopApp_Main, WobbuffetPopApp_Exit, FS_OVERLAY_ID(OVY_93) };
 
 BOOL Task_WifiClub(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -125,7 +134,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
         }
         break;
     case WIFI_CLUB_TASK_OPEN_CLUB:
-        CallApplicationAsTask(taskManager, &gOverlayTemplate_WifiClub, task->clubArgs);
+        CallApplicationAsTask(taskManager, &sOverlayTemplate_WifiClub, task->clubArgs);
         task->state++;
         break;
     case WIFI_CLUB_TASK_HANDLE_CHOICE:
@@ -316,12 +325,12 @@ void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum
     WifiClubGameEntryArgs *args = Heap_Alloc(heapID, sizeof(WifiClubGameEntryArgs));
     args->game = game;
     args->minPlayers = 2;
-    args->maxPlayers = gWifiClubGameMaxPlayers[game];
+    args->maxPlayers = sWifiClubGameMaxPlayers[game];
     args->result = 0;
     args->voiceChat = 0;
     args->saveData = fieldSystem->saveData;
     task->launchedArgs = args;
-    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_WifiClubGameEntry, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_WifiClubGameEntry, args);
 }
 
 u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
@@ -354,7 +363,7 @@ PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID h
     args->fromLobby = FALSE;
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
-    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_SwalotPlop, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_SwalotPlop, args);
     return args;
 }
 
@@ -370,7 +379,7 @@ PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID he
     *(u32 *)&args->voiceChat = 0; // read as one word: launched from the lobby
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
-    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_MimeJrTop, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_MimeJrTop, args);
     return args;
 }
 
@@ -386,7 +395,7 @@ PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID
     args->fromLobby = FALSE;
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
-    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_WobbuffetPop, args);
+    FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_WobbuffetPop, args);
     return args;
 }
 

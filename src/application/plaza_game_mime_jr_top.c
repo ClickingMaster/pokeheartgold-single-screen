@@ -147,7 +147,6 @@ typedef void (*MimeJrTopInitTemplateFunc)(ManagedSpriteTemplate *template, u16 x
 typedef void (*MimeJrTopStartBurstFunc)(MimeJrTopGame *game, s16 x, s16 y);
 typedef void (*MimeJrTopRosterInitFunc)(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u32 unkA, PlazaGameArgs *args);
 
-extern const u8 sMimeJrTopCommands[];
 extern const VecFx32 ov92_02263878;
 extern const VecFx32 ov92_02263884;
 extern const MimeJrTopGraphicsModes sMimeJrTopGraphicsModes;
@@ -195,11 +194,10 @@ extern const MimeJrTopRoutineTask sMimeJrTopRoutineTasks[];
 extern MimeJrTopPlayerPalettes sMimeJrTopPlayerPalettes[];
 
 // Command 22: the selection made on the entry screen and the parent's random seed.
-void MimeJrTop_ReceiveStart(int netId, int size, volatile u32 *data, MimeJrTopApp *app) {
-    u32 first = data[0], second = data[1];
-    *(u32 *)&app->start.selection = first;
-    app->start.seed = second;
-    SetLCRNGSeed(second);
+void MimeJrTop_ReceiveStart(int netId, int size, void *data, MimeJrTopApp *app) {
+    const MimeJrTopStartMessage *start = data;
+    app->start = *start;
+    SetLCRNGSeed(app->start.seed);
     MimeJrTop_SetStartReceived(app);
 }
 
@@ -209,18 +207,18 @@ void MimeJrTop_ReceiveFinish(int netId, int size, void *data, MimeJrTopApp *app)
 }
 
 // Command 24: a player's state (0 spinning, 1 fallen, 2 back on the top).
-void MimeJrTop_ReceivePlayerState(int netId, int size, const u32 *data, MimeJrTopApp *app) {
+void MimeJrTop_ReceivePlayerState(int netId, int size, void *data, MimeJrTopApp *app) {
     u8 *game = (u8 *)app->game;
-    ((MimeJrTopGame *)(game + netId * 4))->playerStates[0] = *data;
+    ((MimeJrTopGame *)(game + netId * 4))->playerStates[0] = *(u32 *)data;
 }
 
 // Command 25: a player's final score.
-void MimeJrTop_ReceiveFinalScore(int netId, int size, const u32 *data, MimeJrTopApp *app) {
+void MimeJrTop_ReceiveFinalScore(int netId, int size, void *data, MimeJrTopApp *app) {
     MimeJrTopApp *entry = (MimeJrTopApp *)((u8 *)app + netId * 8);
-    entry->scores[0].score = *data;
+    entry->scores[0].score = *(u32 *)data;
 }
 
-void MimeJrTop_ReceiveCommand4(void) {
+void MimeJrTop_ReceiveCommand4(int netId, int size, void *data, MimeJrTopApp *app) {
 }
 
 u32 MimeJrTop_GetFinishSize(void) {
@@ -243,16 +241,24 @@ u32 MimeJrTop_GetCommand4Size(void) {
     return 0x20;
 }
 
-const void *MimeJrTop_GetCommandTable(void) {
+static const MimeJrTopCommand sMimeJrTopCommands[] = {
+    { MimeJrTop_ReceiveStart,       MimeJrTop_GetStartSize,       NULL },
+    { MimeJrTop_ReceiveFinish,      MimeJrTop_GetFinishSize,      NULL },
+    { MimeJrTop_ReceivePlayerState, MimeJrTop_GetPlayerStateSize, NULL },
+    { MimeJrTop_ReceiveFinalScore,  MimeJrTop_GetFinalScoreSize,  NULL },
+    { MimeJrTop_ReceiveCommand4,    MimeJrTop_GetCommand4Size,    NULL },
+};
+
+const MimeJrTopCommand *MimeJrTop_GetCommandTable(void) {
     return sMimeJrTopCommands;
 }
 
 int MimeJrTop_GetCommandCount(void) {
-    return 5;
+    return NELEMS(sMimeJrTopCommands);
 }
 
 void MimeJrTop_RegisterCommands(MimeJrTopApp *app) {
-    const void *table = MimeJrTop_GetCommandTable();
+    const MimeJrTopCommand *table = MimeJrTop_GetCommandTable();
     int count = MimeJrTop_GetCommandCount();
     Comm_RegisterCommandTable(table, count, app);
 }

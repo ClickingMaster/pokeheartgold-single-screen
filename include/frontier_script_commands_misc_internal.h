@@ -8,7 +8,7 @@
 
 #include "launch_application.h"
 
-u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
+u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u32 GF_GetCurrentPlayingBGM(void);
 void StopBGM(u32 sequence, u32 fade);

@@ -192,13 +192,13 @@ u8 sWifiClubGameEntryTitleMsgIds[4] = { 126, 127, 127, 127 };
 
 FS_EXTERN_OVERLAY(OVY_42);
 
-void WifiClubGameEntry_Init(OverlayManager *overlayMananger) {
-    WifiClubGameEntryArgs *args = OverlayManager_GetArgs(overlayMananger);
+BOOL WifiClubGameEntry_Init(OverlayManager *man, int *state) {
+    WifiClubGameEntryArgs *args = OverlayManager_GetArgs(man);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_42), OVY_LOAD_ASYNC);
     GF_ASSERT(CommState_IsWifi() == 1);
     Heap_Create(HEAP_ID_3, HEAP_ID_103, 0x18000);
     Heap_Create(HEAP_ID_3, HEAP_ID_104, 0xA000);
-    WifiClubGameEntry *gameEntry = OverlayManager_CreateAndGetData(overlayMananger, sizeof(WifiClubGameEntry), HEAP_ID_103);
+    WifiClubGameEntry *gameEntry = OverlayManager_CreateAndGetData(man, sizeof(WifiClubGameEntry), HEAP_ID_103);
     MI_CpuFill8(gameEntry, 0, sizeof(WifiClubGameEntry));
     MI_CpuFill8(gameEntry->shownVoiceChatFlags, 1, 4);
     MI_CpuFill8(gameEntry->voiceChatFlags, 1, 4);
@@ -211,18 +211,19 @@ void WifiClubGameEntry_Init(OverlayManager *overlayMananger) {
     WifiClubComm_RegisterCommands(gameEntry);
     WifiClubGameEntry_SetDisconnectCallback(gameEntry);
     WifiClubGameEntry_InitScreen(gameEntry, args, HEAP_ID_103);
-    Main_SetVBlankIntrCB((void *)&WifiClubGameEntry_VBlankCB, gameEntry);
+    Main_SetVBlankIntrCB(WifiClubGameEntry_VBlankCB, gameEntry);
     WirelessStatusIcon_Create();
     gameEntry->watchConnection = 1;
+    return TRUE;
 }
 
-s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *state) {
+BOOL WifiClubGameEntry_Main(OverlayManager *man, int *state) {
     WifiClubGameEntryArgs *args;
     WifiClubGameEntry *gameEntry;
     s32 done;
 
-    gameEntry = OverlayManager_GetData(overlayManager);
-    args = OverlayManager_GetArgs(overlayManager);
+    gameEntry = OverlayManager_GetData(man);
+    args = OverlayManager_GetArgs(man);
     switch (state[0]) {
     case 0:
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_103);
@@ -274,7 +275,7 @@ s32 WifiClubGameEntry_Main(OverlayManager *overlayManager, u32 *state) {
     return 0;
 }
 
-s32 WifiClubGameEntry_Exit(OverlayManager *man) {
+BOOL WifiClubGameEntry_Exit(OverlayManager *man, int *state) {
     WifiClubGameEntry *gameEntry;
 
     gameEntry = OverlayManager_GetData(man);
@@ -340,7 +341,9 @@ void WifiClubGameEntry_OnVoiceChatFlags(WifiClubGameEntry *gameEntry, String *st
     }
 }
 
-void WifiClubGameEntry_VBlankCB(WifiClubGameEntry *gameEntry) {
+void WifiClubGameEntry_VBlankCB(void *data) {
+    WifiClubGameEntry *gameEntry = data;
+
     DoScheduledBgGpuUpdates(gameEntry->screen.bgConfig);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();

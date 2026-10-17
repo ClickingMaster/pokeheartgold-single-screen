@@ -2,12 +2,6 @@
 	.include "global_terminal_bg_cell_data.inc"
 	.include "global.inc"
 
-	.rodata
-
-	.public sOverlayTemplate_GlobalTerminalConnect
-sOverlayTemplate_GlobalTerminalConnect:
-	.word GlobalTerminalConnect_Init, GlobalTerminalConnect_Main, GlobalTerminalConnect_Exit, 0xFFFFFFFF
-
 	.bss
 
 	.public _021D1108

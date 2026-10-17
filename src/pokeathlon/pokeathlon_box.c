@@ -173,7 +173,7 @@ BOOL PokeathlonBox_Main(OverlayManager *manager) {
     return FALSE;
 }
 
-BOOL PokeathlonBox_Exit(OverlayManager *manager) {
+BOOL PokeathlonBox_Exit(OverlayManager *manager, int *state) {
     PokeathlonBox *data = OverlayManager_GetData(manager);
 
     Main_SetVBlankIntrCB(NULL, NULL);

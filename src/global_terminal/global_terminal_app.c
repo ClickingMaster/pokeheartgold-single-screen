@@ -5,6 +5,8 @@
 // DWC allocations of the Wi-Fi apps run by GlobalTerminalApp_Main (set once the DWC heap exists).
 static NNSFndHeapHandle sDwcHeap;
 
+static const OverlayManagerTemplate sOverlayTemplate_GlobalTerminalConnect = { GlobalTerminalConnect_Init, GlobalTerminalConnect_Main, GlobalTerminalConnect_Exit, FS_OVERLAY_ID_NONE };
+
 BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state) {
     GlobalTerminalApp *data;
 

@@ -147,6 +147,6 @@ typedef struct PokeathlonBox {
 
 BOOL PokeathlonBox_Init(OverlayManager *manager);
 BOOL PokeathlonBox_Main(OverlayManager *manager);
-BOOL PokeathlonBox_Exit(OverlayManager *manager);
+BOOL PokeathlonBox_Exit(OverlayManager *manager, int *state);
 
 #endif // POKEHEARTGOLD_POKEATHLON_BOX_H

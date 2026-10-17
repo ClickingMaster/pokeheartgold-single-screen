@@ -1200,7 +1200,7 @@ static void WonderCardAlbum_StopSharing(WonderCardAlbum *album, int *state, int 
     *state = ALBUM_STATE_WAIT_COMM_END;
 }
 
-BOOL WonderCardAlbum_Exit(OverlayManager *manager) {
+BOOL WonderCardAlbum_Exit(OverlayManager *manager, int *state) {
     WonderCardAlbum *album = OverlayManager_GetData(manager);
     u32 i;
 

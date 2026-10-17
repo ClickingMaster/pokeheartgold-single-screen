@@ -8,6 +8,7 @@
 #include "frontier/battle_castle_data.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_trainers.h"
 
@@ -19,11 +20,7 @@
 #include "party.h"
 #include "pokemon.h"
 
-u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
-u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
-u16 FrontierScript_GetVar(FrontierScriptContext *ctx, u16 index);
-void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *message);
 
 extern const OverlayManagerTemplate gBattleCastleEmptyAppTemplate;
 extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
