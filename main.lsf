@@ -1483,28 +1483,28 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_process.o
     Object src/lobby/ppw_lobby_web_request_delete.o
     Object src/lobby/lobby_byte_vector_data.o
-    Object src/lobby/ov45_02231c8c.o
+    Object src/lobby/ppw_lobby_join_sub_channel_async.o
     Object src/lobby/ppw_lobby_get_channel_base_name.o
-    Object src/lobby/ov45_02231ec0.o
+    Object src/lobby/ppw_lobby_leave_sub_channel.o
     Object src/lobby/ppw_lobby_get_time_info.o
     Object src/lobby/ppw_lobby_get_sub_channel_state.o
     Object src/lobby/ppw_lobby_set_channel_data.o
     Object src/lobby/ppw_lobby_get_channel_data.o
     Object src/lobby/ppw_lobby_get_channel_name.o
     Object src/lobby/lobby_u32_vector_data2.o
-    Object src/lobby/ov45_022325b0.o
+    Object src/lobby/ppw_lobby_update_my_profile.o
     Object src/lobby/lobby_char_vector_assign_range.o
-    Object src/lobby/ov45_022327b8.o
-    Object src/lobby/ov45_0223285c.o
+    Object src/lobby/lobby_char_vector_assign_iter_range.o
+    Object src/lobby/ppw_lobby_start_recruit.o
     Object src/lobby/lobby_timer_map_make_entry.o
     Object src/lobby/lobby_string_format.o
     Object src/lobby/ppw_lobby_recruit.o
     Object src/lobby/lobby_timer_map_find.o
-    Object src/lobby/ov45_02232e60.o
+    Object src/lobby/ppw_lobby.o
     Object lib/NitroDWC/asm/dwc_lobby_chat_data.o
-    Object src/lobby/ov45_022383e0.o
+    Object src/lobby/lobby_char_vector_init_range.o
     Object src/lobby/lobby_timer_map_find_insert_pos.o
-    Object src/lobby/ov45_022384bc.o
+    Object src/lobby/lobby_string_assign_range.o
     Object src/lobby/ov45_02238508.o
     Object src/lobby/ppw_lobby_player_set_destroy_nodes.o
     Object src/lobby/lobby_string_vector_append_copies_slow.o
@@ -1517,10 +1517,10 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_schedule_init.o
     Object src/lobby/ppw_lobby_schedule_copy.o
     Object src/lobby/ppw_lobby_schedule_copy_to_vector.o
-    Object src/lobby/ov45_02238c74.o
-    Object src/lobby/ov45_02238d54.o
+    Object src/lobby/ppw_lobby_schedule_load.o
+    Object src/lobby/lobby_event_deque_assign.o
     Object src/lobby/lobby_event_deque_append_range.o
-    Object src/lobby/ov45_02238f18.o
+    Object src/lobby/lobby_event_deque_uninitialized_copy.o
     Object src/lobby/lobby_event_deque_copy.o
     Object src/lobby/lobby_sort_stable_sort.o
     Object src/lobby/lobby_sort_stable_sort_adaptive.o
@@ -1528,34 +1528,34 @@ Overlay OVY_45
     Object src/lobby/lobby_sort_rotate.o
     Object src/lobby/lobby_sort_lower_bound.o
     Object src/lobby/lobby_sort_upper_bound.o
-    Object src/lobby/ov45_02239bbc.o
-    Object src/lobby/ov45_02239df0.o
-    Object src/lobby/ov45_02239f48.o
-    Object src/lobby/ov45_0223a0cc.o
-    Object src/lobby/ov45_0223a4c8.o
-    Object src/lobby/ov45_0223a7e4.o
-    Object src/lobby/ov45_0223a9c0.o
+    Object src/lobby/lobby_sort_merge_backward.o
+    Object src/lobby/lobby_sort_merge_buffer_forward.o
+    Object src/lobby/lobby_sort_merge_buffers.o
+    Object src/lobby/lobby_sort_stable_sort_to_buffer.o
+    Object src/lobby/lobby_sort_merge.o
+    Object src/lobby/lobby_sort_insertion_sort_to_buffer.o
+    Object src/lobby/lobby_sort_insertion_sort.o
     Object src/lobby/lobby_event_vector_assign_range.o
-    Object src/lobby/ov45_0223aca4.o
+    Object src/lobby/ppw_lobby_schedule_set_vip_records.o
     Object src/lobby/lobby_vip_vector_assign_range.o
-    Object src/lobby/ov45_0223ae84.o
+    Object src/lobby/ppw_lobby_schedule_validate_vip_records.o
     Object src/lobby/ppw_lobby_schedule_questionnaire.o
     Object src/lobby/ppw_lobby_schedule_process.o
     Object src/lobby/ppw_lobby_schedule_start.o
     Object src/lobby/lobby_event_deque_iterator_at.o
-    Object src/lobby/ov45_0223b2dc.o
-    Object src/lobby/ov45_0223b764.o
+    Object src/lobby/lobby_event_deque_add_back_capacity.o
+    Object src/lobby/lobby_event_deque_erase_at_end.o
     Object src/lobby/lobby_event_deque_erase_at_begin.o
-    Object src/lobby/ov45_0223b8e0.o
-    Object src/lobby/ov45_0223ba3c.o
+    Object src/lobby/lobby_event_deque_map_reserve.o
+    Object src/lobby/lobby_event_deque_map_push_back.o
     Object src/lobby/lobby_event_deque_map_recommend_size.o
     Object src/lobby/lobby_event_deque_map_length_error.o
     Object src/lobby/lobby_vip_vector_reallocate.o
     Object src/lobby/lobby_vip_vector_recommend_size.o
     Object src/lobby/lobby_event_vector_reallocate.o
     Object src/lobby/lobby_event_vector_recommend_size.o
-    Object src/lobby/ov45_0223bf9c.o
-    Object src/lobby/ov45_0223c53c.o
+    Object src/lobby/lobby_event_deque_map_insert_range.o
+    Object src/lobby/lobby_event_deque_map_copy_range.o
     Object src/lobby/lobby_event_deque_map_copy_backward.o
     Object src/lobby/lobby_event_deque_map_copy.o
     Object src/lobby/ov45_0223ca14.o
@@ -1563,26 +1563,26 @@ Overlay OVY_45
     Object src/lobby/lobby_event_deque_map_iterator_distance.o
     Object src/lobby/lobby_event_deque_map_init_copy.o
     Object src/lobby/lobby_event_deque_map_append_range.o
-    Object src/lobby/ov45_0223d0a8.o
+    Object src/lobby/lobby_event_deque_map_copy_to_array.o
     Object src/lobby/lobby_event_deque_map_allocate.o
     Object src/lobby/lobby_event_deque_map_iterator_distance2.o
-    Object src/lobby/ov45_0223d27c.o
-    Object src/lobby/ov45_0223d644.o
+    Object src/lobby/ppw_lobby_parse_message.o
+    Object src/lobby/lobby_string_compare_no_case.o
     Object src/lobby/ppw_lobby_encode_message.o
-    Object src/lobby/ov45_0223db8c.o
+    Object src/lobby/lobby_char_vector_append_fill_slow.o
     Object src/lobby/ppw_lobby_players.o
-    Object src/lobby/ov45_0223df4c.o
+    Object src/lobby/ppw_lobby_players_clear.o
     Object src/lobby/ppw_lobby_players_get_entered_ids.o
-    Object src/lobby/ov45_0223e100.o
+    Object src/lobby/ppw_lobby_players_set_self.o
     Object src/lobby/ppw_lobby_player_has_profiles.o
-    Object src/lobby/ov45_0223e4a8.o
-    Object src/lobby/ov45_0223e558.o
-    Object src/lobby/ov45_0223e648.o
+    Object src/lobby/ppw_lobby_players_all_have_profiles.o
+    Object src/lobby/ppw_lobby_players_update_states.o
+    Object src/lobby/ppw_lobby_player_set.o
     Object src/lobby/lobby_u32_vector_buffer.o
     Object src/lobby/lobby_u32_vector_buffer_deallocate.o
     Object src/lobby/lobby_chat_on_disconnected.o
     Object src/lobby/lobby_chat_on_private_message.o
-    Object src/lobby/ov45_0223f000.o
+    Object src/lobby/lobby_chat_split_string.o
     Object src/lobby/lobby_chat_on_channel_message.o
     Object src/lobby/lobby_chat_on_user_joined.o
     Object src/lobby/lobby_chat_on_user_parted.o
@@ -1591,11 +1591,11 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_callbacks.o
     Object src/lobby/lobby_chat_on_nick_error.o
     Object src/lobby/lobby_chat_manager_get_nick.o
-    Object src/lobby/ov45_0223fc6c.o
+    Object src/lobby/lobby_chat_on_enum_channels.o
     Object src/lobby/lobby_request_map_find.o
-    Object src/lobby/ov45_0223fe28.o
-    Object src/lobby/ov45_0223ffe8.o
-    Object src/lobby/ov45_0224005c.o
+    Object src/lobby/lobby_chat_on_enum_users.o
+    Object src/lobby/lobby_u32_vector_assign_range.o
+    Object src/lobby/lobby_chat_on_enter_channel_enum_users.o
     Object src/lobby/lobby_chat_on_enter_channel.o
     Object src/lobby/lobby_chat_on_get_channel_keys.o
     Object src/lobby/lobby_chat_on_broadcast_key_changed.o
@@ -1603,30 +1603,30 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_timer_connect_timeout.o
     Object src/lobby/lobby_chat_process.o
     Object src/lobby/lobby_chat_is_in_channel.o
-    Object src/lobby/ov45_02240b10.o
+    Object src/lobby/lobby_chat_initialize.o
     Object src/lobby/lobby_chat_manager_get_names.o
     Object src/lobby/lobby_chat_shutdown.o
     Object src/lobby/lobby_chat_enter_channel.o
     Object src/lobby/lobby_chat_channel_commands.o
-    Object src/lobby/ov45_022417b4.o
-    Object src/lobby/ov45_02241a20.o
-    Object src/lobby/ov45_02241b84.o
+    Object src/lobby/lobby_chat_get_channel_keys_async.o
+    Object src/lobby/lobby_chat_enum_channels_async.o
+    Object src/lobby/lobby_chat_enum_users_async.o
     Object src/lobby/lobby_chat_set_channel_mode.o
-    Object src/lobby/ov45_02241e24.o
+    Object src/lobby/lobby_chat_get_channel_mode_async.o
     Object src/lobby/lobby_requests.o
     Object src/lobby/lobby_request_map_insert_node.o
-    Object src/lobby/ov45_022421e4.o
+    Object src/lobby/lobby_u32_vector_reallocate.o
     Object src/lobby/lobby_string_find_first_of.o
     Object src/lobby/lobby_mem.o
-    Object src/lobby/ov45_0224268c.o
+    Object src/lobby/lobby_chat_manager_init.o
     Object src/lobby/lobby_chat_manager.o
-    Object src/lobby/ov45_02242acc.o
-    Object src/lobby/ov45_02242be0.o
-    Object src/lobby/ov45_02242ef4.o
-    Object src/lobby/ov45_0224307c.o
+    Object src/lobby/lobby_chat_add_channel.o
+    Object src/lobby/lobby_chat_add_channel_user.o
+    Object src/lobby/lobby_chat_add_channel_users.o
+    Object src/lobby/lobby_chat_remove_user_if_unused.o
     Object src/lobby/lobby_chat_users.o
     Object src/lobby/lobby_user_id_set_erase_key.o
-    Object src/lobby/ov45_0224335c.o
+    Object src/lobby/lobby_chat_remove_channel.o
     Object src/lobby/lobby_u32_vector_assign_from_set.o
     Object src/lobby/lobby_channel_map_erase_key.o
     Object src/lobby/lobby_chat_find_user_id_by_nick.o
@@ -1637,7 +1637,7 @@ Overlay OVY_45
     Object src/lobby/lobby_user_id_set_insert.o
     Object src/lobby/lobby_user_id_set_erase.o
     Object src/lobby/lobby_user_id_set_assign.o
-    Object src/lobby/ov45_02243cf8.o
+    Object src/lobby/lobby_user_id_set_copy_nodes.o
     Object src/lobby/lobby_user_id_set_insert_node.o
     Object src/lobby/lobby_user_map_insert.o
     Object src/lobby/lobby_user_map.o
