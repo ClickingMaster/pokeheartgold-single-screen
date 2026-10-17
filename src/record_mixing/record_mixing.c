@@ -6,7 +6,6 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0422.h"
-#include "record_mixing/record_mixing_records.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -27,8 +26,6 @@
 #include "player_data.h"
 #include "pm_string.h"
 #include "render_window.h"
-#include "save_arrays.h"
-#include "save_block_23.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
@@ -105,6 +102,12 @@ typedef struct RecordMixingMemberKeys {
     RecordMixingMemberKey cur;
     RecordMixingMemberKey prev;
 } RecordMixingMemberKeys;
+
+// One step of the player sprite flash; a palette of 0xFF restarts the cycle.
+typedef struct RecordMixingFlashFrame {
+    u8 duration;
+    u8 palette;
+} RecordMixingFlashFrame;
 
 // Palette flash of the player sprite while records are mixed.
 typedef struct RecordMixingFlash {
@@ -188,6 +191,8 @@ typedef struct RecordMixingApp {
     s32 buttonHighlightTimer;                                                // 0x4A38
     RecordMixingMemberKeys memberKeys[RECORD_MIXING_MAX_MEMBERS];            // 0x4A3C
 } RecordMixingApp;                                                           // size: 0x4A8C
+
+typedef int (*RecordMixingStateFunc)(RecordMixingApp *app, int state);
 
 void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
@@ -275,27 +280,153 @@ int RecordMixing_GetTextSpeed(RecordMixingApp *app);
 void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index);
 int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
 
-extern const u8 sRecordMixingButtonX[];
-extern const u16 sRecordMixingAvatarVramOffsets[];
-extern const u8 sRecordMixingFlashDurations[];
-extern const u8 sRecordMixingFlashPalettes[];
-extern const TouchscreenHitbox sRecordMixingButtonHitboxes[];
-extern const GraphicsModes sRecordMixingGraphicsModes;
-extern const ObjCharTransferTemplate sRecordMixingObjCharTransferTemplate;
-extern const u16 sRecordMixingSpritePositions[][2];
-extern const BgTemplate sRecordMixingBgTemplate_Main0;
-extern const BgTemplate sRecordMixingBgTemplate_Main1;
-extern const BgTemplate sRecordMixingBgTemplate_Sub0;
-extern const BgTemplate sRecordMixingBgTemplate_Sub1;
-extern const GraphicsBanks sRecordMixingGraphicsBanks;
-extern int (*sRecordMixingStateFuncs[])(RecordMixingApp *app, int state);
+static const u8 sRecordMixingButtonX[2] = { 16, 24 };
 
-#define RECORD_MIXING_MAX_GROUPS_KEPT 4
+static const u16 sRecordMixingAvatarVramOffsets[5] = { 0x1A0, 0x7A0, 0xDA0, 0x13A0, 0x19A0 };
 
-BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
-BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
+static const RecordMixingFlashFrame sRecordMixingFlashFrames[5] = {
+    { 8,  2   },
+    { 8,  3   },
+    { 8,  4   },
+    { 24, 0   },
+    { 0,  255 },
+};
 
-extern const u8 *sRecordMixingAllowedEntryKinds[];
+static const TouchscreenHitbox sRecordMixingButtonHitboxes[3] = {
+    { 160, 192, 128, 192 },
+    { 160, 192, 192, 0   },
+    { 255, 0,   0,   0   }
+};
+
+static const GraphicsModes sRecordMixingGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const ObjCharTransferTemplate sRecordMixingObjCharTransferTemplate = {
+    .maxTasks = 20,
+    .sizeMain = 0x800,
+    .sizeSub = 0x800,
+    .heapID = HEAP_ID_50,
+};
+
+static const u16 sRecordMixingSpritePositions[6][2] = {
+    { 84,  104 },
+    { 85,  72  },
+    { 114, 88  },
+    { 103, 117 },
+    { 66,  117 },
+    { 55,  88  },
+};
+
+static const BgTemplate sRecordMixingBgTemplate_Main0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sRecordMixingBgTemplate_Sub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sRecordMixingBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sRecordMixingBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GraphicsBanks sRecordMixingGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static RecordMixingStateFunc sRecordMixingStateFuncs[31] = {
+    RecordMixing_State_PrintGroupPrompt,
+    RecordMixing_State_WaitTextThenResetMenu,
+    RecordMixing_State_ResetLeaderMenuState,
+    RecordMixing_State_HandleGroupMenu,
+    RecordMixing_State_ShowCancelYesNo,
+    RecordMixing_State_HandleCancelYesNo,
+    RecordMixing_State_WaitLeaveReply,
+    RecordMixing_State_SendLeave,
+    RecordMixing_State_AbortLeave,
+    RecordMixing_State_PrintCanceled,
+    RecordMixing_State_FadeOutAfterDelay,
+    RecordMixing_State_ShowDisbandYesNo,
+    RecordMixing_State_HandleDisbandYesNo,
+    RecordMixing_State_PrintDisband,
+    RecordMixing_State_WaitDisband,
+    RecordMixing_State_StartExitSync,
+    RecordMixing_State_WaitExitSync,
+    RecordMixing_State_PrintMemberUnavailable,
+    RecordMixing_State_WaitMemberUnavailable,
+    RecordMixing_State_PrintMemberLeft,
+    RecordMixing_State_StartMemberLeftWait,
+    RecordMixing_State_WaitMemberLeft,
+    RecordMixing_State_ShowConfirmYesNo,
+    RecordMixing_State_HandleConfirmYesNo,
+    RecordMixing_State_SendStartMixing,
+    RecordMixing_State_WaitRecords,
+    RecordMixing_State_MergeRecords,
+    RecordMixing_State_StartSave,
+    RecordMixing_State_Save,
+    RecordMixing_State_WaitAfterSave,
+    RecordMixing_State_WaitText,
+};
 
 BOOL RecordMixing_Init(OverlayManager *man, int *state) {
     RecordMixingApp *app;
@@ -440,13 +571,13 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
 void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app) {
     RecordMixingFlash *flash = &app->flash;
     if (app->flash.active) {
-        if (flash->timer > sRecordMixingFlashDurations[flash->frame * 2]) {
+        if (flash->timer > sRecordMixingFlashFrames[flash->frame].duration) {
             flash->timer = 0;
             flash->frame++;
-            if (sRecordMixingFlashPalettes[flash->frame * 2] == 0xFF) {
+            if (sRecordMixingFlashFrames[flash->frame].palette == 0xFF) {
                 flash->frame = 0;
             }
-            GX_LoadOBJPltt((u8 *)flash->pltt->pRawData + sRecordMixingFlashPalettes[flash->frame * 2] * 0x20, 0, 0x20);
+            GX_LoadOBJPltt((u8 *)flash->pltt->pRawData + sRecordMixingFlashFrames[flash->frame].palette * 0x20, 0, 0x20);
         } else {
             app->flash.timer++;
         }
@@ -1607,218 +1738,4 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
     }
     app->lastMemberCount = RecordMixing_CountMembers();
     return 1;
-}
-
-u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup) {
-    return sizeof(FRIEND_GROUP);
-}
-
-FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup) {
-    return &friendGroup->groups[1];
-}
-
-// groups[2..5] hold the groups received by mixing, newest first
-void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group) {
-    int i;
-    for (i = 5; i > 2; --i) {
-        groups[i] = groups[i - 1];
-    }
-    groups[2] = *group;
-}
-
-void RecordMixing_RemoveGroup(FRIEND_GROUP *groups, int index) {
-    int i;
-    if (index < 2 || index > 5) {
-        GF_AssertFail();
-    }
-    for (i = index + 1; i <= 5; ++i) {
-        groups[i - 1] = groups[i];
-    }
-    u8 *last = (u8 *)&groups[5];
-    *(u16 *)last = EOS;
-    *(u16 *)(last + 0x10) = EOS;
-}
-
-void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIEND_GROUP **received) {
-    int i;
-    for (i = 0; i < count; i++) {
-        FRIEND_GROUP *group = received[i];
-        if (i == localId || group == NULL || FriendGroup_IsEmpty(group) == TRUE || FriendGroup_Equals(group, groups) != FALSE) {
-            continue;
-        }
-        int j;
-        for (j = 0; j < RECORD_MIXING_MAX_GROUPS_KEPT; ++j) {
-            if (FriendGroup_Equals(group, &groups[j + 2]) != FALSE) {
-                RecordMixing_RemoveGroup(groups, j + 2);
-            }
-        }
-        RecordMixing_InsertGroup(groups, group);
-    }
-}
-
-u32 RecordMixing_Block23List2_GetSize(SaveData *saveData) {
-    return 4 * sizeof(RecordMixingEntry);
-}
-
-u32 RecordMixing_Block23List0_GetSize(SaveData *saveData) {
-    return 4 * sizeof(RecordMixingEntry);
-}
-
-u32 RecordMixing_Block23List1_GetSize(SaveData *saveData) {
-    return 4 * sizeof(RecordMixingEntry);
-}
-
-BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
-    int i;
-    for (i = 0; sRecordMixingAllowedEntryKinds[idx][i] != 0xFF; i++) {
-        if (val == sRecordMixingAllowedEntryKinds[idx][i]) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
-    PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
-    int i;
-    for (i = 0; i < count; i++, in++, out++) {
-        MI_CpuClearFast(out, sizeof(RecordMixingEntry));
-        out->trainerId = PlayerProfile_GetTrainerID(profile);
-        out->gender = PlayerProfile_GetTrainerGender(profile);
-        out->version = GAME_VERSION;
-        out->language = GAME_LANGUAGE;
-        CopyU16StringArrayN(out->name, PlayerProfile_GetNamePtr(profile), 8);
-        out->data = *in;
-        out->data.unk_01 = 0;
-        out->data.kind = 0;
-    }
-}
-
-void *RecordMixing_Block23List2_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 1, 3);
-    return out;
-}
-
-void *RecordMixing_Block23List0_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 1, 4);
-    return out;
-}
-
-void *RecordMixing_Block23List1_Load(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 1, 5);
-    return out;
-}
-
-void *RecordMixing_Block23List2_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List2_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list2, 4, 0, 0);
-    return out;
-}
-
-void *RecordMixing_Block23List0_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List0_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list0, 4, 0, 1);
-    return out;
-}
-
-void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u32 size) {
-    void *out = Heap_AllocAtEnd(heapID, size);
-    SaveBlock23 *data = Save_Block23_Get(saveData);
-    if (size != RecordMixing_Block23List1_GetSize(saveData)) {
-        GF_AssertFail();
-    }
-    RecordMixing_FillBlock23Entries(saveData, out, (RecordMixingEntryData *)data->list1, 4, 0, 2);
-    return out;
-}
-
-int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
-    int i;
-    if (entry->data.kind == 0) {
-        return 0;
-    }
-    if (!RecordMixing_IsAllowedEntryKind(idx, entry->data.kind)) {
-        return -1;
-    }
-    for (i = 0; i < count; i++) {
-        if (entries[i].data.kind == 0) {
-            entries[i] = *entry;
-            return 1;
-        }
-    }
-    for (i = 0; i < count; i++) {
-        if (entries[i].data.unk_01 >= 3) {
-            entries[i] = *entry;
-            return 1;
-        }
-    }
-    return 0;
-}
-
-// a for partners whose profile has a version set, b otherwise
-void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
-    PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
-    if (!profile) {
-        return NULL;
-    }
-    if (PlayerProfile_GetVersion(profile)) {
-        b = a;
-    }
-    return b;
-}
-
-// every member takes 4 entries, from the other members in turn
-
-void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
-    u8 given[16];
-    int j;
-    int i;
-    int k;
-    RecordMixingEntry **list;
-    MI_CpuFill8(given, 0, sizeof(given));
-    j = 0;
-    for (i = 0; i < numPlayers; i++) {
-        if (received[i] == NULL) {
-            continue;
-        }
-        for (k = 0; k < 4; k++) {
-            while (received[j] == NULL || j == i || given[j] == 4) {
-                j = (j + 1) % numPlayers;
-            }
-            given[j]++;
-            if (j != localId) {
-                list = RecordMixing_SelectReceivedBuffer(j, received, received2);
-                if (list != NULL) {
-                    RecordMixing_InsertBlock23Entry(entries, count, &list[j][k], idx);
-                }
-            }
-        }
-    }
-    SaveSubstruct_UpdateCRC(23);
-}
-
-void RecordMixing_MergeBlock23(void *saveBlock23, int numPlayers, int localId, RecordMixingEntry **received, void *received2) {
-    RecordMixing_MergeBlock23List((RecordMixingEntry *)((u8 *)saveBlock23 + 0x90C), 8, numPlayers, localId, received, received2, 0);
 }

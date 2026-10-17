@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "frontier/battle_factory_app.h"
+
 #include "battle_frontier_communication.h"
 #include "bg_cell_manager.h"
 #include "bg_window.h"
@@ -148,9 +150,6 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *stri
 u8 TextPrinterCheckActive(u8 printerId);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
-BOOL BattleFactoryApp_Init(OverlayManager *man, int *state);
-BOOL BattleFactoryApp_Main(OverlayManager *man, int *state);
-BOOL BattleFactoryApp_Exit(OverlayManager *man, int *state);
 void BattleFactory_ReceivePing(int netId);
 void BattleFactory_ReceiveRentals(int netId, int size, const u16 *data, BattleFactoryApp *app);
 void BattleFactory_ReceiveUnused(void);

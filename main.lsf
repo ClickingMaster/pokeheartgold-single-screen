@@ -1822,7 +1822,10 @@ Overlay OVY_73
 {
     After main
     Object src/record_mixing/record_mixing.o
+    Object src/record_mixing/record_mixing_records.o
+    Object asm/nintendo_wfc_connect_unused_data.o
     Object src/nintendo_wfc_connect_unused.o
+    Object src/nintendo_wfc_connect_unused_session.o
     Object src/record_mixing/record_mixing_exchange.o
     Object asm/record_mixing_data.o
     Object src/record_mixing/record_mixing_merge.o
@@ -1901,7 +1904,6 @@ Overlay OVY_80
     Object src/frontier/frontier_cmd_create_sprites.o
     Object src/frontier/frontier_script_commands_ext.o
     Object src/frontier/frontier_script_ui.o
-    Object asm/frontier_script_commands_data.o
     Object src/frontier/frontier_script_tasks.o
     Object src/frontier/frontier_cmd_factory.o
     Object src/frontier/battle_factory_data.o
@@ -1909,6 +1911,7 @@ Overlay OVY_80
     Object src/frontier/battle_hall_data.o
     Object src/frontier/frontier_cmd_castle.o
     Object src/frontier/battle_castle_challenge.o
+    Object asm/frontier_script_commands_data.o
     Object src/frontier/frontier_cmd_arcade.o
     Object src/frontier/battle_arcade_data.o
     Object src/frontier/frontier_cmd_sound.o

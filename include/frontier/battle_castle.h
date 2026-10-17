@@ -3,6 +3,7 @@
 
 #include "bg_window.h"
 #include "gf_gfx_planes.h"
+#include "grid_input_handler.h"
 #include "list_menu_items.h"
 #include "message_format.h"
 #include "message_printer.h"
@@ -15,10 +16,9 @@
 #include "save.h"
 #include "save_frontier.h"
 #include "sprite.h"
-#include "touchscreen_list_menu.h"
-#include "sprite_resource_header.h"
 #include "sprite_resource.h"
-#include "grid_input_handler.h"
+#include "sprite_resource_header.h"
+#include "touchscreen_list_menu.h"
 #include "yes_no_prompt.h"
 
 // Battle Castle (overlay 83): the party app and the
@@ -62,28 +62,28 @@ typedef union BattleCastlePartyAppFlags {
 
 // Summary of the selected mon, filled by BattleCastlePartyApp_LoadMonSummary
 typedef struct BattleCastleMonSummary {
-    Pokemon *mon;       // 0x00 (app 0x804)
-    BoxPokemon *boxMon; // 0x04
-    u16 species;        // 0x08
-    u8 gender : 7;      // 0x0A
-    u8 hideGender : 1;  // 0 when MON_DATA_NO_PRINT_GENDER == 1; gender is printed only when 0
-    u8 level;           // 0x0B
-    u8 ability;         // 0x0C
-    u8 nature;          // 0x0D
-    u16 heldItem;       // 0x0E
-    u32 personality;    // 0x10
-    u16 hp;             // 0x14
-    u16 maxHp;          // 0x16
-    u16 attack;         // 0x18
-    u16 spAttack;       // 0x1A
-    u16 defense;        // 0x1C
-    u16 spDefense;      // 0x1E
-    u16 speed;          // 0x20
-    u8 form;            // 0x22
-    u8 unk_23;          // 0x23
-    u16 moves[4];       // 0x24
-    u8 pp[4];           // 0x2C
-    u8 maxPp[4];        // 0x30
+    Pokemon *mon;         // 0x00 (app 0x804)
+    BoxPokemon *boxMon;   // 0x04
+    u16 species;          // 0x08
+    u8 gender : 7;        // 0x0A
+    u8 hideGender : 1;    // 0 when MON_DATA_NO_PRINT_GENDER == 1; gender is printed only when 0
+    u8 level;             // 0x0B
+    u8 ability;           // 0x0C
+    u8 nature;            // 0x0D
+    u16 heldItem;         // 0x0E
+    u32 personality;      // 0x10
+    u16 hp;               // 0x14
+    u16 maxHp;            // 0x16
+    u16 attack;           // 0x18
+    u16 spAttack;         // 0x1A
+    u16 defense;          // 0x1C
+    u16 spDefense;        // 0x1E
+    u16 speed;            // 0x20
+    u8 form;              // 0x22
+    u8 unk_23;            // 0x23
+    u16 moves[4];         // 0x24
+    u8 pp[4];             // 0x2C
+    u8 maxPp[4];          // 0x30
 } BattleCastleMonSummary; // size 0x34
 
 typedef struct BattleCastlePartyApp {
@@ -98,10 +98,10 @@ typedef struct BattleCastlePartyApp {
     BattleCastlePartyAppFlags flags;             // 0x00E
     u8 linkRecvCount;                            // 0x00F (incremented by the link receive callbacks)
     u16 selectedItem;                            // 0x010
-    u8 linkSlot;                                  // 0x012 (slot of the pending link action, 0xFF = none)
+    u8 linkSlot;                                 // 0x012 (slot of the pending link action, 0xFF = none)
     u8 action;                                   // 0x013 (menu action id: 1-3 heal, 4/8 rank up, 6/7 rental, 9/10 summary)
     u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
-    u8 numOwnSlots;                                  // 0x015 (4)
+    u8 numOwnSlots;                              // 0x015 (4)
     u8 unk_016[6];                               // 0x016
     MsgData *itemDescMsgData;                    // 0x01C (msg_0221)
     MsgData *msgData;                            // 0x020 (msg_0031)
@@ -119,8 +119,8 @@ typedef struct BattleCastlePartyApp {
     MessagePrinter *msgPrinter;                  // 0x504
     Options *options;                            // 0x508
     SaveData *saveData;                          // 0x50C
-    void *castleChallenge;                               // 0x510 (Save_Frontier_GetCastleChallenge)
-    u32 castleFlags;                                 // 0x514 (Save_Frontier_GetCastleFlags)
+    void *castleChallenge;                       // 0x510 (Save_Frontier_GetCastleChallenge)
+    u32 castleFlags;                             // 0x514 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x518
     BattleCastleSprite *unk_734;                 // 0x734
     BattleCastleSprite *unk_738;                 // 0x738
@@ -141,8 +141,8 @@ typedef struct BattleCastlePartyApp {
     u16 linkSendBuf[20];                         // 0x7AC (Comm_SendCommand payload, 0x28 bytes)
     u8 unk_7D4[0x28];                            // 0x7D4
     u8 partnerCursorPos;                         // 0x7FC
-    u8 partnerSlot;                                  // 0x7FD
-    u8 partnerExited;                                  // 0x7FE
+    u8 partnerSlot;                              // 0x7FD
+    u8 partnerExited;                            // 0x7FE
     u8 partnerRanks[3];                          // 0x7FF
     u16 partnerPoints;                           // 0x802 (args 0x28)
     BattleCastleMonSummary summary;              // 0x804
@@ -154,7 +154,7 @@ typedef struct BattleCastlePartyApp {
     BattleCastlePrompt yesNoPrompt;              // 0x84C
     u8 unk_858[4];                               // 0x858
     GridInputHandler *itemGrid;                  // 0x85C
-    u8 rentalItemIndex;                                  // 0x860
+    u8 rentalItemIndex;                          // 0x860
     u8 numItems;                                 // 0x861
     s16 itemPage;                                // 0x862 (one piece writes it as u16)
     u16 pressedButton;                           // 0x864
@@ -302,5 +302,13 @@ void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y,
 void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int index);
 void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos);
 GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
+
+BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
+int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
+BOOL BattleCastlePartyApp_Exit(OverlayManager *manager, int *state);
+
+BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state);
+BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state);
+BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager, int *state);
 
 #endif // POKEHEARTGOLD_FRONTIER_BATTLE_CASTLE_H

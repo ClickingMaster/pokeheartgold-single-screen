@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 4e726ae6e · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 84445dc0f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5125,16 +5125,22 @@ src/application/safari_decoration.c</title></rect>
 19,544 bytes · C-only source
 src/battle/trainer_ai.c</title></rect>
 <rect x="759.994" y="644.575" width="43.178" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="803.171" y="644.575" width="42.855" height="35.432" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
-9,490 bytes · C-only source
+<rect x="803.171" y="644.575" width="42.855" height="30.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
+8,246 bytes · C-only source
 src/record_mixing/record_mixing.c</title></rect>
-<rect x="803.171" y="680.007" width="39.845" height="36.993" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused.o
-9,212 bytes · C-only source
+<rect x="803.171" y="675.362" width="29.029" height="41.638" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused_session.o
+7,554 bytes · C-only source
+src/nintendo_wfc_connect_unused_session.c</title></rect>
+<rect x="832.200" y="675.362" width="13.826" height="19.187" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / nintendo_wfc_connect_unused.o
+1,658 bytes · C-only source
 src/nintendo_wfc_connect_unused.c</title></rect>
-<rect x="843.016" y="680.007" width="3.010" height="19.347" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_exchange.o
+<rect x="832.200" y="694.550" width="13.826" height="14.396" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_records.o
+1,244 bytes · C-only source
+src/record_mixing/record_mixing_records.c</title></rect>
+<rect x="832.200" y="708.946" width="7.231" height="8.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_exchange.o
 364 bytes · C-only source
 src/record_mixing/record_mixing_exchange.c</title></rect>
-<rect x="843.016" y="699.354" width="3.010" height="17.646" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_merge.o
+<rect x="839.431" y="708.946" width="6.595" height="8.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_merge.o
 332 bytes · C-only source
 src/record_mixing/record_mixing_merge.c</title></rect>
 <rect x="803.171" y="644.575" width="42.855" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>

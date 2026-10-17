@@ -36,9 +36,6 @@ typedef struct BattleHallTrainerPair {
     u16 partnerTrainerId;
 } BattleHallTrainerPair;
 
-extern const u8 gBattleHallBattlePoints[];
-extern const u8 gBattleHallMultiBattlePoints[];
-
 int FrontierSpeciesRecords_UpdateFromStat(void *saveData, int stat, int stat2, int substat, int stat3, int heapID, int *out1, int *out2);
 void HallChallenge_Clear(void *challenge);
 u32 HallChallenge_GetField(void *challenge, int field, u8 index, int unused, int unused2);
@@ -60,6 +57,10 @@ int BattleHall_GetLevelRank(BattleHallData *data);
 u8 BattleHall_GetPartySize(u8 type);
 void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index);
 void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
+
+static const u8 sBattleHallBattlePoints[20] = { 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 6, 6, 8, 8, 10, 10, 12 };
+
+static const u8 sBattleHallMultiBattlePoints[20] = { 0, 6, 6, 6, 8, 8, 8, 10, 10, 10, 12, 12, 14, 15, 17, 17, 20, 20, 23 };
 
 BattleHallData *BattleHallData_Alloc(SaveData *saveData, BOOL resume, u8 type, u8 slot0, u8 slot1) {
     BattleHallData *data;
@@ -369,13 +370,13 @@ u8 BattleHallData_GetWonBattlePoints(BattleHallData *data) {
         if (round >= HALL_MAX_ROUND) {
             ret = 12;
         } else {
-            ret = gBattleHallBattlePoints[round];
+            ret = sBattleHallBattlePoints[round];
         }
     } else {
         if (round >= HALL_MAX_ROUND) {
             ret = 23;
         } else {
-            ret = gBattleHallMultiBattlePoints[round];
+            ret = sBattleHallMultiBattlePoints[round];
         }
     }
     if (type == 0) {

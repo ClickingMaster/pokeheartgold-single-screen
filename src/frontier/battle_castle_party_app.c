@@ -267,9 +267,6 @@ int BattleCastle_GetPartySize(u8 frontierType, int kind);
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
 // Entry points and link receive callbacks
-BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
-int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
-BOOL BattleCastlePartyApp_Exit(OverlayManager *manager, int *state);
 static void BattleCastlePartyApp_ReloadBgPalette(void);
 void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
 void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);

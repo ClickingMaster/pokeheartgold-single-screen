@@ -118,26 +118,18 @@
 	.extern FrontierTransition_RowScroll1
 	.extern FrontierTransition_RowScroll2
 	.extern FrontierTransition_Wave
-	.public FrontierScript_ReadVarPtr
-	.public FrontierScript_ReadVar
-	.public FrontierScript_GetVarPtr
-	.public FrontierScript_GetVar
 	.public FrtCmd_Nop
 	.public FrtCmd_End
 	.public FrtCmd_Exit
 	.public FrtCmd_ChangeMode
-	.public FrontierScriptNative_WaitFrame
 	.public FrtCmd_ChangeModeWithTask
 	.public FrtCmd_Wait
-	.public FrontierScriptNative_WaitFrames
 	.public FrtCmd_SetVar
 	.public FrtCmd_CopyVar
 	.public FrtCmd_AddVar
 	.public FrtCmd_SubVar
-	.public FrontierScript_Compare
 	.public FrtCmd_CompareVarToValue
 	.public FrtCmd_CompareVarToVar
-	.public FrontierScript_Jump
 	.public FrtCmd_GoTo
 	.public FrtCmd_GoToIf
 	.public FrtCmd_Call
@@ -146,24 +138,20 @@
 	.public FrtCmd_PrintMessageInstant
 	.public FrtCmd_PrintMessage
 	.public FrtCmd_PrintMessageCanSpeedUp
-	.public FrontierScriptNative_WaitMessage
 	.public FrtCmd_CloseMessage
 	.public FrtCmd_FadeScreen
 	.public FrtCmd_WaitFade
-	.public FrontierScriptNative_WaitPaletteFade
 	.public FrtCmd_MenuInitStdGmm
 	.public FrtCmd_MenuInit
 	.public FrtCmd_MenuItemAdd
 	.public FrtCmd_MenuItemAddWithDescription
 	.public FrtCmd_MenuExec
-	.public FrontierScriptNative_WaitMenu
 	.public FrtCmd_ListMenuInitStdGmm
 	.public FrtCmd_ListMenuInit
 	.public FrtCmd_ListMenuItemAdd
 	.public FrtCmd_ListMenuExec
 	.public FrtCmd_ListMenuCancel
 	.public FrtCmd_YesNo
-	.public FrontierScriptNative_WaitYesNo
 	.public FrtCmd_LoadObjectGfx
 	.public FrtCmd_RemoveObjectGfx
 	.public FrtCmd_CreateObjects
@@ -171,9 +159,7 @@
 	.public FrtCmd_SetObjectVisible
 	.public FrtCmd_Dummy039
 	.public FrtCmd_ApplyMovement
-	.public FrontierScript_StartMovement
 	.public FrtCmd_WaitMovement
-	.public FrontierScriptNative_WaitMovements
 	.public FrtCmd_LoadSpriteResources
 	.public FrtCmd_UnloadSpriteResources
 	.public FrtCmd_CreateSprites
@@ -184,80 +170,61 @@
 	.public FrtCmd_StartSpriteAnim
 	.public FrtCmd_StopSpriteAnim
 	.public FrtCmd_WaitSpriteAnim
-	.public FrontierScriptNative_WaitSpriteAnim
-	.public FrontierScript_SetObjectMovement
 	.public FrtCmd_ClearObjectMovement
 	.public FrtCmd_SetObjectLookAround
 	.public FrtCmd_LaunchNamingScreen
-	.public FrontierScript_FreeNamingScreenArgs
 	.public FrtCmd_CreateBattleRecord
 	.public FrtCmd_SaveBattleRecord
-	.public FrontierScriptNative_WaitSaveBattleRecord
-	.public FrontierScript_GetBattleRecordType
 	.public FrtCmd_PlayBattleRecord
 	.public FrtCmd_DeleteBattleRecord
 	.public FrtCmd_CheckBattleRecordSlotValid
 	.public FrtCmd_SaveGameNormal
 	.public FrtCmd_SaveGameAsync
-	.public FrontierScriptNative_WaitSave
 	.public FrtCmd_SaveWipeExtraChunks
 	.public FrtCmd_CheckExtraSaveChunksExist
 	.public FrtCmd_AddWaitingIcon
 	.public FrtCmd_RemoveWaitingIcon
 	.public FrtCmd_BufferItemName
 	.public FrtCmd_BufferInt
-	.public FrontierScript_CountDigits
 	.public FrtCmd_BufferPlayersName
 	.public FrtCmd_BufferPartnersName
 	.public FrtCmd_BufferMoveName
 	.public FrtCmd_BufferSpeciesName
-	.public FrontierScript_ReadString
 	.public FrtCmd_BufferTypeName
 	.public FrtCmd_BufferRivalsName
 	.public FrtCmd_GetBattlePoints
 	.public FrtCmd_GiveBattlePoints
 	.public FrtCmd_TakeBattlePoints
 	.public FrtCmd_LinkSync
-	.public FrontierScriptNative_WaitLinkSync
 	.public FrtCmd_ClearLinkSyncPackets
 	.public FrtCmd_ExitClubLink
-	.public FrontierScriptNative_WaitCommEnd
 	.public FrtCmd_Random
 	.public FrtCmd_HealParty
 	.public FrtCmd_WaitButton
-	.public FrontierScriptNative_WaitButton
 	.public FrtCmd_WaitButtonOrDelay
-	.public FrontierScriptNative_WaitButtonOrFrames
 	.public FrtCmd_Dummy060
 	.public FrtCmd_SetSaveVar
 	.public FrtCmd_GetSaveVar
 	.public FrontierTransition_Flash
 	.public FrontierTransition_FlashWipeHorizontal
 	.public FrontierTransition_FlashWipeVertical
-	.public FrontierScript_PackHalfWords
-	.public FrontierTransition_RowScrollTask
 	.public FrontierTransition_RowScroll1
 	.public FrontierTransition_RowScroll2
 	.public FrontierTransition_Wave
 	.public FrtCmd_BattleTransition
-	.public FrontierScriptNative_WaitTransition
 	.public FrtCmd_GetPlayerSpriteId
 	.public FrtCmd_CreateParticleSystem
 	.public FrtCmd_DestroyParticleSystem
 	.public FrtCmd_CreateParticleEmitter
 	.public FrtCmd_WaitParticles
-	.public FrontierScriptNative_WaitMapEffect
 	.public FrtCmd_ShakeMap
 	.public FrtCmd_WaitShakeMap
-	.public FrontierScriptNative_WaitShake
 	.public FrtCmd_SetWindowDelayed
 	.public FrtCmd_WaitWindowDelayed
-	.public FrontierScriptNative_WaitWindowTask
 	.public FrtCmd_Dummy150
 	.public FrtCmd_CreatePartyMonSprite
 	.public FrtCmd_DeleteMonSprite
 	.public FrtCmd_BrainIntro
-	.public FrontierScriptNative_WaitBrainIntro
 	.public FrtCmd_IncGameStat
 	.public FrtCmd_AddGameStat
 	.public FrtCmd_AddGameScore
@@ -267,72 +234,10 @@
 	.public FrtCmd_200
 	.public FrtCmd_201
 	.public FrtCmd_LinkSyncOrAbort
-	.public FrontierScriptNative_WaitLinkSyncOrAbort
 	.public FrtCmd_GetSyncAborted
 	.public FrtCmd_ClearSyncAborted
 	.public FrtCmd_MenuSetAlignRight
 	.public FrtCmd_MenuSetAlignBottom
-	.public FrontierSystem_PrintMessage
-	.public FrontierSystem_ShowMessageWindow
-	.public FrontierSystem_FormatMessage
-	.public FrontierSystem_StartTextPrinter
-	.public FrontierSystem_CloseMessageWindow
-	.public FrontierSystem_PrintMailMessage
-	.public FrontierScript_GetMailMessageString
-	.public FrontierMenu_Init
-	.public FrontierMenu_New
-	.public FrontierMenu_AddItem
-	.public FrontierMenu_Show
-	.public FrontierMenu_AddItemInternal
-	.public FrontierMenu_GetWidth
-	.public FrontierMenu_InitTemplate
-	.public FrontierMenu_Task
-	.public FrontierMenu_Close
-	.public FrontierMenu_PrintDescription
-	.public FrontierListMenu_New
-	.public FrontierListMenu_AddItem
-	.public FrontierListMenu_Show
-	.public FrontierListMenu_AddItemInternal
-	.public FrontierListMenu_GetWidth
-	.public FrontierListMenu_InitTemplate
-	.public FrontierListMenu_PrintItem
-	.public FrontierListMenu_MoveCursorCallback
-	.public FrontierListMenu_Task
-	.public FrontierListMenu_Close
-	.public FrontierMenu_PrintMessage
-	.public FrontierListMenu_PrintDescription
-	.public FrontierListMenu_Cancel
-	.public FrontierScript_MovementTask
-	.public FrontierScript_GetMovementStep
-	.public FrontierMap_CreateMonSprite
-	.public FrontierMap_DeleteMonSprite
-	.public FrontierMap_LoadMonIconResources
-	.public FrontierMap_UnloadMonIconResources
-	.public FrontierMap_CreateMonIcon
-	.public FrontierMap_DeleteMonIcon
-	.public FrontierMap_LoadItemIconResources
-	.public FrontierMap_UnloadItemIconResources
-	.public FrontierMap_CreateItemIcon
-	.public FrontierMap_DeleteItemIcon
-	.public FrontierScript_PrintMessageEntry
-	.public FrontierScript_PrintMessageEntryFromBank
-	.public FrontierScriptNative_WaitMessageEntry
-	.public FrontierMap_ShakeTask
-	.public FrontierMap_WindowTask
-	.public FrontierMenu_SetAlignRight
-	.public FrontierMenu_SetAlignBottom
-	.public gOverlayTemplate_BattleFactoryRentalApp
-	.public gOverlayTemplate_BattleFactoryTradeApp
-	.public gBattleFactoryBattlePoints
-	.public gBattleFactoryMultiBattlePoints
-	.public gOverlayTemplate_BattleHallApp
-	.public gBattleHallBattlePoints
-	.public gBattleHallMultiBattlePoints
-	.public gBattleCastleEmptyAppTemplate
-	.public gOverlayTemplate_BattleCastlePartyApp
-	.public gOverlayTemplate_BattleCastleOpponentApp
-	.public gBattleCastleRoundValues_Single
-	.public gBattleCastleRoundValues_Multi
 	.public gBattleArcadeParticlePosition
 	.public gOverlayTemplate_BattleArcadeGameBoard
 	.public gBattleArcadeFaintedMonPoints
@@ -376,8 +281,6 @@
 	.public gBattleHallTrainerClasses
 	.public gBattleHallSetSpecies
 	.public gBattleHallSetTypes
-	.public FrontierScript_ReadVar
-	.public FrontierScript_ReadVarPtr
 	.public FrtCmd_Nop
 	.public FrtCmd_End
 	.public FrtCmd_Exit
@@ -455,32 +358,6 @@
 	.public FrtCmd_LinkSyncOrAbort
 	.public FrtCmd_GetSyncAborted
 	.public FrtCmd_ClearSyncAborted
-	.public FrontierScript_GetVar
-	.public FrontierScriptNative_WaitFrame
-	.public FrontierScriptNative_WaitFrames
-	.public FrontierScript_Compare
-	.public FrontierScript_Jump
-	.public FrontierScriptNative_WaitMessage
-	.public FrontierScriptNative_WaitPaletteFade
-	.public FrontierScriptNative_WaitMovements
-	.public FrontierScript_FreeNamingScreenArgs
-	.public FrontierScriptNative_WaitLinkSync
-	.public FrontierScript_PackHalfWords
-	.public FrontierScriptNative_WaitMapEffect
-	.public FrontierScriptNative_WaitShake
-	.public FrontierScriptNative_WaitWindowTask
-	.public FrontierScriptNative_WaitBrainIntro
-	.public FrontierSystem_CloseMessageWindow
-	.public FrontierMenu_AddItem
-	.public FrontierMenu_PrintDescription
-	.public FrontierListMenu_AddItem
-	.public FrontierListMenu_PrintItem
-	.public FrontierListMenu_MoveCursorCallback
-	.public FrontierListMenu_Cancel
-	.public FrontierMap_DeleteMonIcon
-	.public FrontierMap_DeleteItemIcon
-	.public FrontierScript_PrintMessageEntry
-	.public FrontierScriptNative_WaitMessageEntry
 .public gBattleArcadeParticlePosition
 	.include "asm/macros.inc"
 	.include "frontier_script_commands_data.inc"
@@ -488,60 +365,6 @@
 
 .text
 	.rodata
-
-gOverlayTemplate_BattleFactoryRentalApp: ; 0x0223BDB4
-	.word BattleFactoryApp_Init
-	.word BattleFactoryApp_Main
-	.word BattleFactoryApp_Exit
-	.word FS_OVERLAY_ID(OVY_81)
-
-gOverlayTemplate_BattleFactoryTradeApp: ; 0x0223BDC4
-	.word BattleFactoryApp_Init
-	.word BattleFactoryApp_Main
-	.word BattleFactoryApp_Exit
-	.word FS_OVERLAY_ID(OVY_81)
-
-gBattleFactoryBattlePoints: ; 0x0223BDD4
-	.byte 0x00, 0x05, 0x05, 0x05, 0x05, 0x07, 0x07, 0x08, 0x09, 0x00, 0x00, 0x00
-
-gBattleFactoryMultiBattlePoints: ; 0x0223BDE0
-	.byte 0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x10, 0x11, 0x13, 0x15, 0x00, 0x00, 0x00
-
-gOverlayTemplate_BattleHallApp: ; 0x0223BDEC
-	.word BattleHallApp_Init
-	.word BattleHallApp_Main
-	.word BattleHallApp_Exit
-	.word FS_OVERLAY_ID(OVY_82)
-
-gBattleHallBattlePoints: ; 0x0223BDFC
-	.byte 0x00, 0x01, 0x01, 0x01
-	.byte 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04, 0x06, 0x06, 0x08, 0x08, 0x0A, 0x0A, 0x0C, 0x00
-
-gBattleHallMultiBattlePoints: ; 0x0223BE10
-	.byte 0x00, 0x06, 0x06, 0x06, 0x08, 0x08, 0x08, 0x0A, 0x0A, 0x0A, 0x0C, 0x0C, 0x0E, 0x0F, 0x11, 0x11
-	.byte 0x14, 0x14, 0x17, 0x00
-
-gBattleCastleEmptyAppTemplate: ; 0x0223BE24
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x53, 0x00, 0x00, 0x00
-
-gOverlayTemplate_BattleCastlePartyApp: ; 0x0223BE34
-	.word BattleCastlePartyApp_Init
-	.word BattleCastlePartyApp_Main
-	.word BattleCastlePartyApp_Exit
-	.word FS_OVERLAY_ID(OVY_83)
-
-gOverlayTemplate_BattleCastleOpponentApp: ; 0x0223BE44
-	.word BattleCastleOpponentApp_Init
-	.word BattleCastleOpponentApp_Main
-	.word BattleCastleOpponentApp_Exit
-	.word FS_OVERLAY_ID(OVY_83)
-
-gBattleCastleRoundValues_Single: ; 0x0223BE54
-	.byte 0x00, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x07, 0x07, 0x00, 0x00, 0x00
-
-gBattleCastleRoundValues_Multi: ; 0x0223BE60
-	.byte 0x00, 0x08, 0x09, 0x0B, 0x0C, 0x0E, 0x0F, 0x12, 0x12, 0x00, 0x00, 0x00
 
 gBattleArcadeParticlePosition: ; 0x0223BE6C
 	.byte 0x00, 0xF0, 0xFF, 0xFF

@@ -63,9 +63,6 @@ BOOL BattleCastleLink_SendValueA(BattleCastleData *data, u16 value);
 BOOL BattleCastleLink_SendValueB(BattleCastleData *data, u16 value);
 BOOL BattleCastleLink_SendPartyMons(BattleCastleData *data);
 
-extern const u8 gBattleCastleRoundValues_Single[];
-extern const u8 gBattleCastleRoundValues_Multi[];
-
 static void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data);
 static void BattleCastleData_RestoreParty(BattleCastleData *data);
@@ -84,6 +81,10 @@ static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *windo
 #define CASTLE_CHALLENGE_SET_IDS     8
 
 #define CASTLE_FLAGS_HAS_STREAK 9
+
+static const u8 sBattleCastleRoundValues_Single[12] = { 0, 3, 3, 4, 4, 5, 5, 7, 7 };
+
+static const u8 sBattleCastleRoundValues_Multi[12] = { 0, 8, 9, 11, 12, 14, 15, 18, 18 };
 
 BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 type, int slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     static BattleCastleData *sBattleCastleData;
@@ -728,15 +729,15 @@ static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *windo
     CopyWindowToVram(window);
 }
 
-// Value of the current round from gBattleCastleRoundValues_Single / gBattleCastleRoundValues_Multi (0x14 at 21 / 49 wins of the single challenge).
+// Value of the current round from sBattleCastleRoundValues_Single / sBattleCastleRoundValues_Multi (0x14 at 21 / 49 wins of the single challenge).
 u32 BattleCastleData_GetRoundTableValue(BattleCastleData *data) {
     u32 type = data->type;
     u32 round = data->round;
     u32 result;
     if (type <= 1) {
-        result = round >= 8 ? 7 : gBattleCastleRoundValues_Single[round];
+        result = round >= 8 ? 7 : sBattleCastleRoundValues_Single[round];
     } else {
-        result = round >= 8 ? 0x12 : gBattleCastleRoundValues_Multi[round];
+        result = round >= 8 ? 0x12 : sBattleCastleRoundValues_Multi[round];
     }
     if (type == 0) {
         u16 winStreak = data->winStreak;

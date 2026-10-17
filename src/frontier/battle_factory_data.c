@@ -30,8 +30,6 @@ typedef struct BattleFactoryTrainer {
 } BattleFactoryTrainer;
 
 BattleFactoryData *gBattleFactoryData;
-extern const u8 gBattleFactoryBattlePoints[];
-extern const u8 gBattleFactoryMultiBattlePoints[];
 
 void *Save_Frontier_GetFactoryChallenge(SaveData *saveData);
 void FactoryChallenge_Clear(void *challenge);
@@ -59,6 +57,10 @@ BOOL BattleFactory_IsMultiType(int type);
 u16 BattleFactory_GetRound(BattleFactoryData *data);
 
 #define FACTORY_FLAGS_HAS_STREAK 10
+
+static const u8 sBattleFactoryBattlePoints[12] = { 0, 5, 5, 5, 5, 7, 7, 8, 9 };
+
+static const u8 sBattleFactoryMultiBattlePoints[12] = { 0, 10, 11, 12, 13, 16, 17, 19, 21 };
 
 BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 type, u8 levelMode) {
     BattleFactoryData *data;
@@ -575,9 +577,9 @@ int BattleFactory_GetWonBattlePoints(BattleFactoryData *data) {
     u16 round = data->round;
     int points;
     if (type <= 1) {
-        points = round >= 8 ? 9 : gBattleFactoryBattlePoints[round];
+        points = round >= 8 ? 9 : sBattleFactoryBattlePoints[round];
     } else {
-        points = round >= 8 ? 21 : gBattleFactoryMultiBattlePoints[round];
+        points = round >= 8 ? 21 : sBattleFactoryMultiBattlePoints[round];
     }
     // the Factory Head's battles (21st and 49th)
     if (type == 0) {

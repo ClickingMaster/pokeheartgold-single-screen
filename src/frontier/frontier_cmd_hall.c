@@ -6,6 +6,7 @@
 #include "constants/sndseq.h"
 
 #include "battle/battle_setup.h"
+#include "frontier/battle_hall_app.h"
 #include "frontier/battle_hall_data.h"
 #include "frontier/battle_hall_setup.h"
 #include "frontier/frontier.h"
@@ -20,7 +21,7 @@
 #include "pokemon.h"
 #include "sound_system.h"
 
-extern const OverlayManagerTemplate gOverlayTemplate_BattleHallApp;
+FS_EXTERN_OVERLAY(OVY_82);
 
 u32 HallChallenge_GetSaved(void *challenge);
 u32 HallTypeRanks_Get(u8 cell, void *ranks);
@@ -32,6 +33,13 @@ void FrontierLink_RegisterCommands(void);
 
 static void BattleHall_OnAppExit(void *args);
 static BOOL FrontierScriptNative_WaitHallLink(FrontierScriptContext *ctx);
+
+static const OverlayManagerTemplate sOverlayTemplate_BattleHallApp = {
+    .init = BattleHallApp_Init,
+    .exec = BattleHallApp_Main,
+    .exit = BattleHallApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_82),
+};
 
 BOOL FrtCmd_HallAlloc(FrontierScriptContext *ctx) {
     u16 resume = FrontierScript_ReadVar(ctx);
@@ -81,7 +89,7 @@ BOOL FrtCmd_HallLaunchApp(FrontierScriptContext *ctx) {
         // Multi battles (modes 2 and 3) also bring the partner's Pokemon
         Party_AddMon(args->party, data->partnerMon);
     }
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleHallApp, args, 0, BattleHall_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &sOverlayTemplate_BattleHallApp, args, 0, BattleHall_OnAppExit);
     return TRUE;
 }
 

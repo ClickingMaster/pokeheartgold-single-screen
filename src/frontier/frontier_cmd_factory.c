@@ -5,6 +5,7 @@
 #include "constants/pokemon.h"
 
 #include "battle/battle_setup.h"
+#include "frontier/battle_factory_app.h"
 #include "frontier/battle_factory_data.h"
 #include "frontier/battle_factory_setup.h"
 #include "frontier/frontier.h"
@@ -22,8 +23,7 @@
 #include "pokemon.h"
 #include "sys_task_api.h"
 
-extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryRentalApp;
-extern const OverlayManagerTemplate gOverlayTemplate_BattleFactoryTradeApp;
+FS_EXTERN_OVERLAY(OVY_81);
 
 u32 FactoryChallenge_GetSaved(void *challenge);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
@@ -31,6 +31,20 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 static void BattleFactory_OnAppExit(void *args);
 static void BattleFactory_BgScrollTask(SysTask *task, void *data);
 static BOOL FrontierScriptNative_WaitFactoryLink(FrontierScriptContext *ctx);
+
+static const OverlayManagerTemplate sOverlayTemplate_BattleFactoryRentalApp = {
+    .init = BattleFactoryApp_Init,
+    .exec = BattleFactoryApp_Main,
+    .exit = BattleFactoryApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_81),
+};
+
+static const OverlayManagerTemplate sOverlayTemplate_BattleFactoryTradeApp = {
+    .init = BattleFactoryApp_Init,
+    .exec = BattleFactoryApp_Main,
+    .exit = BattleFactoryApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_81),
+};
 
 BOOL FrtCmd_FactoryAlloc(FrontierScriptContext *ctx) {
     u32 resume = FrontierScript_ReadVar(ctx);
@@ -64,7 +78,7 @@ BOOL FrtCmd_FactoryLaunchRentalApp(FrontierScriptContext *ctx) {
     args->playerParty = data->playerParty;
     args->opponentParty = data->opponentParty;
     args->data = data;
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleFactoryRentalApp, args, 0, BattleFactory_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &sOverlayTemplate_BattleFactoryRentalApp, args, 0, BattleFactory_OnAppExit);
     return TRUE;
 }
 
@@ -107,7 +121,7 @@ BOOL FrtCmd_FactoryLaunchTradeApp(FrontierScriptContext *ctx) {
     args->playerParty = data->playerParty;
     args->opponentParty = data->opponentParty;
     args->data = data;
-    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_BattleFactoryTradeApp, args, 0, BattleFactory_OnAppExit);
+    Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &sOverlayTemplate_BattleFactoryTradeApp, args, 0, BattleFactory_OnAppExit);
     return TRUE;
 }
 

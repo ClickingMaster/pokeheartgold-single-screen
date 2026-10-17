@@ -5,6 +5,7 @@
 #include "constants/pokemon.h"
 
 #include "battle/battle_setup.h"
+#include "frontier/battle_castle.h"
 #include "frontier/battle_castle_data.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
@@ -20,11 +21,9 @@
 #include "party.h"
 #include "pokemon.h"
 
-u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
+FS_EXTERN_OVERLAY(OVY_83);
 
-extern const OverlayManagerTemplate gBattleCastleEmptyAppTemplate;
-extern const OverlayManagerTemplate gOverlayTemplate_BattleCastlePartyApp;
-extern const OverlayManagerTemplate gOverlayTemplate_BattleCastleOpponentApp;
+u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 
 u32 CastleChallenge_GetSaved(void *challenge);
 u32 Comm_GetLocalNetId(void);
@@ -39,6 +38,27 @@ static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData
 static void BattleCastle_OnAppExit(void *args);
 static BOOL FrontierScriptNative_WaitCastleLink(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitCastleLinkChoice(FrontierScriptContext *ctx);
+
+static const OverlayManagerTemplate sOverlayTemplate_BattleCastlePartyApp = {
+    .init = BattleCastlePartyApp_Init,
+    .exec = BattleCastlePartyApp_Main,
+    .exit = BattleCastlePartyApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_83),
+};
+
+static const OverlayManagerTemplate sBattleCastleEmptyAppTemplate = {
+    .init = NULL,
+    .exec = NULL,
+    .exit = NULL,
+    .ovy_id = FS_OVERLAY_ID(OVY_83),
+};
+
+static const OverlayManagerTemplate sOverlayTemplate_BattleCastleOpponentApp = {
+    .init = BattleCastleOpponentApp_Init,
+    .exec = BattleCastleOpponentApp_Main,
+    .exit = BattleCastleOpponentApp_Exit,
+    .ovy_id = FS_OVERLAY_ID(OVY_83),
+};
 
 static inline BOOL BattleCastle_LaunchApp(FrontierScriptContext *ctx, const OverlayManagerTemplate *template) {
     FrontierLaunchArgs *launchArgs = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
@@ -76,11 +96,11 @@ BOOL FrtCmd_CastleFree(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_CastleLaunchPartyApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastlePartyApp);
+    return BattleCastle_LaunchApp(ctx, &sOverlayTemplate_BattleCastlePartyApp);
 }
 
 BOOL FrtCmd_CastleLaunchEmptyApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &gBattleCastleEmptyAppTemplate);
+    return BattleCastle_LaunchApp(ctx, &sBattleCastleEmptyAppTemplate);
 }
 
 BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx) {
@@ -109,7 +129,7 @@ BOOL FrtCmd_CastleStartBattle(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_CastleLaunchOpponentApp(FrontierScriptContext *ctx) {
-    return BattleCastle_LaunchApp(ctx, &gOverlayTemplate_BattleCastleOpponentApp);
+    return BattleCastle_LaunchApp(ctx, &sOverlayTemplate_BattleCastleOpponentApp);
 }
 
 static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data) {

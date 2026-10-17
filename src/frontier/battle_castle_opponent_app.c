@@ -241,9 +241,6 @@ enum {
 };
 
 // Entry points and link receive callbacks
-BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state);
-BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state);
-BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager, int *state);
 void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
