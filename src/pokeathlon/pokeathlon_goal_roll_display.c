@@ -33,12 +33,6 @@ SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonGoalRollSpritePoo
 
 // declared writable here: the plate task was built so (the loads stay in order with the stores)
 extern PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
-extern const u8 gPokeathlonGoalRollTimerDigitX[2];
-extern const u8 gPokeathlonGoalRollTimerDigitAnims[2];
-extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplate;
-extern const WindowTemplate gPokeathlonGoalRollMessageWindowTemplate;
-extern const VecFx32 gPokeathlonGoalRollNumberPosition;
-extern const VecFx32 gPokeathlonGoalRollLabelPosition;
 
 // BgTilemapRectChangePalette as the plate task was built: with int arguments.
 typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId, int x, int y, int width, int height, int palette);
@@ -46,6 +40,34 @@ typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId
 
 static u32 PokeathlonGoalRoll_GetQuadrant(s32 x, s32 y);
 static void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display);
+
+static const u8 sPokeathlonGoalRollTimerDigitAnims[2] = { 1, 1 };
+
+static const u8 sPokeathlonGoalRollTimerDigitX[2] = { 192, 208 };
+
+static const WindowTemplate sPokeathlonGoalRollMessageWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_0,
+    .left = 19,
+    .top = 14,
+    .width = 10,
+    .height = 4,
+    .palette = 15,
+    .baseTile = 0x15,
+};
+
+static const WindowTemplate sPokeathlonGoalRollNameWindowTemplate = {
+    .bgId = GF_BG_LYR_SUB_0,
+    .left = 8,
+    .top = 18,
+    .width = 10,
+    .height = 2,
+    .palette = 15,
+    .baseTile = 1,
+};
+
+static const VecFx32 sPokeathlonGoalRollNumberPosition = { FX32_CONST(54), FX32_CONST(664), 0 };
+
+static const VecFx32 sPokeathlonGoalRollLabelPosition = { FX32_CONST(176), FX32_CONST(640), 0 };
 
 void PokeathlonGoalRoll_StartPlateFlash(PokeathlonGoalRoll *goalRoll, int participant, int gained, int bigBall) {
     goalRoll->plates[participant].state = PLATE_STATE_START_FLASH;
@@ -319,8 +341,8 @@ void PokeathlonGoalRollDisplay_LoadBgGfx(PokeathlonGoalRollDisplay *display) {
 }
 
 void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool, PokeathlonGoalRollDisplay *display, PokeathlonGoalRollResources *resources) {
-    VecFx32 numberPosition = gPokeathlonGoalRollNumberPosition;
-    VecFx32 labelPosition = gPokeathlonGoalRollLabelPosition;
+    VecFx32 numberPosition = sPokeathlonGoalRollNumberPosition;
+    VecFx32 labelPosition = sPokeathlonGoalRollLabelPosition;
     PokeathlonGoalRollSprite *sprite;
     u8 i;
 
@@ -339,11 +361,11 @@ void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool,
         VecFx32 position;
         display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 0, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
-        position.x = gPokeathlonGoalRollTimerDigitX[i] << 12;
+        position.x = sPokeathlonGoalRollTimerDigitX[i] << 12;
         position.y = 10 << 18;
         position.z = 0;
         Sprite_SetMatrix(display->timerDigits[i], &position);
-        Sprite_SetAnimCtrlSeq(display->timerDigits[i], gPokeathlonGoalRollTimerDigitAnims[i]);
+        Sprite_SetAnimCtrlSeq(display->timerDigits[i], sPokeathlonGoalRollTimerDigitAnims[i]);
     }
 }
 
@@ -368,8 +390,8 @@ void PokeathlonGoalRollDisplay_PrintSecondWind(PokeathlonGoalRollDisplay *displa
 }
 
 static void PokeathlonGoalRollDisplay_InitWindows(PokeathlonGoalRollDisplay *display) {
-    AddWindow(display->bgConfig, &display->nameWindow, &gPokeathlonGoalRollNameWindowTemplate);
-    AddWindow(display->bgConfig, &display->messageWindow, &gPokeathlonGoalRollMessageWindowTemplate);
+    AddWindow(display->bgConfig, &display->nameWindow, &sPokeathlonGoalRollNameWindowTemplate);
+    AddWindow(display->bgConfig, &display->messageWindow, &sPokeathlonGoalRollMessageWindowTemplate);
     BG_FillCharDataRange(display->bgConfig, GF_BG_LYR_SUB_0, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, display->heapId);
 }

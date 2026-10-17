@@ -730,24 +730,9 @@
 	.public sPennantCaptureTimerDigitX
 	.public sPennantCaptureTimerDigitAnims
 	.public gPokeathlonPennantCaptureSpriteIds
-	.public gPokeathlonBlockSmashSpotHitboxCounts
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind2
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind1
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind0
-	.public gPokeathlonBlockSmashSpotPositions
-	.public gPokeathlonBlockSmashBlockTouchOffsets
-	.public gPokeathlonBlockSmashCpuSwitchGaugeThresholds
-	.public gPokeathlonBlockSmashCpuSwitchGaugeChances
-	.public gPokeathlonBlockSmashCpuSwitchStaminaThresholds
-	.public gPokeathlonBlockSmashCpuSwitchStaminaChances
-	.public gPokeathlonBlockSmashCpuSpotKindChances
-	.public gPokeathlonBlockSmashCpuHitAgainGaugeThresholds
-	.public gPokeathlonBlockSmashCpuHitAgainGaugeChances
-	.public gPokeathlonBlockSmashCpuHitAgainStaminaThresholds
-	.public gPokeathlonBlockSmashCpuHitAgainStaminaChances
-	.public gPokeathlonBlockSmashHitStaminaCosts
-	.public gPokeathlonBlockSmashMainSpriteTemplate
-	.public gPokeathlonBlockSmashSubSpriteTemplate
 	.public gPokeathlonDiscCatchScoreWindowTemplate
 	.public gPokeathlonDiscCatchTouchDistances
 	.public gPokeathlonDiscCatchFacingReference
@@ -764,9 +749,6 @@
 	.public gPokeathlonDiscCatchDiscTouchSpriteTemplate
 	.public gPokeathlonDiscCatchEffectSpriteTemplate
 	.public gPokeathlonDiscCatchBgTemplates
-	.public gPokeathlonDiscCatchScoreboardBadgePositions
-	.public gPokeathlonDiscCatchScoreboardWindowTemplates
-	.public gPokeathlonDiscCatchScoreboardSpriteTemplate
 	.public gPokeathlonDiscCatchCpuHomeRowStarts
 	.public gPokeathlonDiscCatchCpuHomeRowCounts
 	.public gPokeathlonDiscCatchCpuJumpChances
@@ -803,12 +785,6 @@
 	.public gPokeathlonGoalRollBallSpeedsA
 	.public gPokeathlonGoalRollBallSpeedsB
 	.public gPokeathlonGoalRollKickSpeeds
-	.public gPokeathlonGoalRollTimerDigitX
-	.public gPokeathlonGoalRollTimerDigitAnims
-	.public gPokeathlonGoalRollNameWindowTemplate
-	.public gPokeathlonGoalRollMessageWindowTemplate
-	.public gPokeathlonGoalRollNumberPosition
-	.public gPokeathlonGoalRollLabelPosition
 	.public gPokeathlonGoalRollCpuGuardPoints
 	.public gPokeathlonGoalRollCpuGuardPointsY
 	.public gPokeathlonGoalRollCpuGuardPoints1
@@ -830,12 +806,6 @@
 	.public gPokeathlonRingDropSpriteTemplate
 	.public gPokeathlonRingDropJumpHeights
 	.public gPokeathlonRingDropBgTemplates
-	.public gPokeathlonRingDropUiWindowTemplates
-	.public gPokeathlonRingDropUiSpriteTemplate
-	.public gPokeathlonRingDropUiTimerSpriteTemplate
-	.public gPokeathlonRingDropCpuCloseChances
-	.public gPokeathlonRingDropCpuDashChances
-	.public gPokeathlonRingDropCpuSwitchSpots
 	.public gPokeathlonEventRankPoints
 	.public gPokeathlonEventPointsCalcFuncs
 	.public gPokeathlonEventScorePointsFuncs

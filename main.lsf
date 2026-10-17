@@ -2072,19 +2072,25 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_pennant_capture_pic_sprites.o
     Object src/pokeathlon/pokeathlon_pennant_capture_cpu.o
     Object src/pokeathlon/pokeathlon_block_smash.o
+    Object src/pokeathlon/pokeathlon_block_smash_blocks.o
     Object src/pokeathlon/pokeathlon_block_smash_teams.o
     Object src/pokeathlon/pokeathlon_disc_catch.o
     Object src/pokeathlon/pokeathlon_disc_catch_field.o
+    Object asm/pokeathlon_disc_catch_rodata.o
     Object src/pokeathlon/pokeathlon_disc_catch_scoreboard.o
     Object src/pokeathlon/pokeathlon_disc_catch_cpu.o
+    Object asm/pokeathlon_disc_catch_cpu_rodata.o
     Object src/pokeathlon/pokeathlon_goal_roll.o
     Object src/pokeathlon/pokeathlon_goal_roll_field.o
+    Object asm/pokeathlon_goal_roll_rodata.o
     Object src/pokeathlon/pokeathlon_goal_roll_display.o
     Object src/pokeathlon/pokeathlon_goal_roll_cpu.o
+    Object asm/pokeathlon_goal_roll_cpu_rodata.o
     Object src/pokeathlon/pokeathlon_ring_drop.o
     Object src/pokeathlon/pokeathlon_ring_drop_display.o
     Object src/pokeathlon/pokeathlon_ring_drop_field.o
     Object src/pokeathlon/pokeathlon_ring_drop_mon.o
+    Object asm/pokeathlon_ring_drop_rodata.o
     Object src/pokeathlon/pokeathlon_ring_drop_ui.o
     Object src/pokeathlon/pokeathlon_ring_drop_cpu.o
     Object src/pokeathlon/pokeathlon_event_points.o

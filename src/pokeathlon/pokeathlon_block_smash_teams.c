@@ -31,18 +31,6 @@ void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *monPic, in
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScreen, int palette, enum HeapID heapId);
 
 extern u32 gPokeathlonBlockSmashFramesSinceHit;
-extern const s32 gPokeathlonBlockSmashCpuSpotKindChances[3];
-extern const u16 gPokeathlonBlockSmashCpuSwitchGaugeThresholds[3];
-extern const s16 gPokeathlonBlockSmashCpuSwitchGaugeChances[3];
-extern const u16 gPokeathlonBlockSmashCpuSwitchStaminaThresholds[5];
-extern const s16 gPokeathlonBlockSmashCpuSwitchStaminaChances[5];
-extern const u32 gPokeathlonBlockSmashCpuHitAgainGaugeThresholds[4];
-extern const s32 gPokeathlonBlockSmashCpuHitAgainGaugeChances[4];
-extern const u32 gPokeathlonBlockSmashCpuHitAgainStaminaThresholds[5];
-extern const s32 gPokeathlonBlockSmashCpuHitAgainStaminaChances[5];
-extern const s32 gPokeathlonBlockSmashHitStaminaCosts[10];
-extern const ManagedSpriteTemplate gPokeathlonBlockSmashMainSpriteTemplate;
-extern const ManagedSpriteTemplate gPokeathlonBlockSmashSubSpriteTemplate;
 
 // The stamina cost was called through a declaration taking the stamina as u32 and the frames as u16
 // (the callers narrow the frames); the definition takes s32 and u32.
@@ -111,6 +99,52 @@ static void PokeathlonBlockSmashCpuPlayer_EndFullGauge(PokeathlonBlockSmashCpuPl
 static void PokeathlonBlockSmash_InitMembers(PokeathlonBlockSmashMember *members, u32 participant, PokeathlonCourseData *course);
 static void PokeathlonBlockSmash_RecoverStamina(PokeathlonBlockSmashMember *members, u32 frames, int active);
 static s32 PokeathlonBlockSmash_TakeStamina(s32 stamina, u32 frames);
+
+static const s16 sPokeathlonBlockSmashCpuSwitchGaugeChances[3] = { -50, -20, -10 };
+
+static const u16 sPokeathlonBlockSmashCpuSwitchGaugeThresholds[3] = { 90, 80, 70 };
+
+static const s16 sPokeathlonBlockSmashCpuSwitchStaminaChances[5] = { 85, 75, 10, 10, 0 };
+
+static const u16 sPokeathlonBlockSmashCpuSwitchStaminaThresholds[5] = { 5, 10, 15, 20, 30 };
+
+static const s32 sPokeathlonBlockSmashCpuSpotKindChances[3] = { 4, 8, 16 };
+
+static const u32 sPokeathlonBlockSmashCpuHitAgainGaugeThresholds[4] = { 100, 90, 80, 70 };
+
+static const s32 sPokeathlonBlockSmashCpuHitAgainGaugeChances[4] = { 100, 60, 20, 10 };
+
+static const u32 sPokeathlonBlockSmashCpuHitAgainStaminaThresholds[5] = { 100, 40, 20, 8, 0 };
+
+static const s32 sPokeathlonBlockSmashCpuHitAgainStaminaChances[5] = { 100, 100, 100, 80, 60 };
+
+static const s32 sPokeathlonBlockSmashHitStaminaCosts[10] = { 0, 4, 4, 4, 3, 3, 3, 2, 2, 2 };
+
+static const ManagedSpriteTemplate sPokeathlonBlockSmashMainSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0xFFFF,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0x2710, 0x2710, 0x2710, 0x2710, 0, 0 },
+    .bgPriority = 0,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sPokeathlonBlockSmashSubSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0xFFFF,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2711, 0x2711, 0x2711, 0x2711, 0, 0 },
+    .bgPriority = 2,
+    .vramTransfer = 0,
+};
 
 PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course) {
     u8 participant = PokeathlonCourse_GetNetId(course);
@@ -1132,14 +1166,14 @@ static BOOL PokeathlonBlockSmashCpuPlayer_DecideHitAgain(PokeathlonBlockSmashCpu
     int i;
     GF_ASSERT(player != NULL);
     for (i = 0; i < 5; i++) {
-        if (player->members[player->member].stamina >= gPokeathlonBlockSmashCpuHitAgainStaminaThresholds[i]) {
-            chance += gPokeathlonBlockSmashCpuHitAgainStaminaChances[i];
+        if (player->members[player->member].stamina >= sPokeathlonBlockSmashCpuHitAgainStaminaThresholds[i]) {
+            chance += sPokeathlonBlockSmashCpuHitAgainStaminaChances[i];
             break;
         }
     }
     for (i = 0; i < 4; i++) {
-        if (player->gauge >= gPokeathlonBlockSmashCpuHitAgainGaugeThresholds[i]) {
-            chance += gPokeathlonBlockSmashCpuHitAgainGaugeChances[i];
+        if (player->gauge >= sPokeathlonBlockSmashCpuHitAgainGaugeThresholds[i]) {
+            chance += sPokeathlonBlockSmashCpuHitAgainGaugeChances[i];
             break;
         }
     }
@@ -1149,13 +1183,13 @@ static BOOL PokeathlonBlockSmashCpuPlayer_DecideHitAgain(PokeathlonBlockSmashCpu
     return FALSE;
 }
 
-// The chance to hit the weak spot depends on the Pokemon's spot kind (gPokeathlonBlockSmashCpuSpotKindChances).
+// The chance to hit the weak spot depends on the Pokemon's spot kind (sPokeathlonBlockSmashCpuSpotKindChances).
 static u32 PokeathlonBlockSmashCpuPlayer_DecideSpotHit(PokeathlonBlockSmashCpuPlayer *player) {
     s32 chance = 0;
     u8 roll = (u8)(MTRandom() % 100);
     u8 kind = (u8)player->members[player->member].kind;
     GF_ASSERT(kind < 3);
-    chance += gPokeathlonBlockSmashCpuSpotKindChances[kind];
+    chance += sPokeathlonBlockSmashCpuSpotKindChances[kind];
     if (roll < chance) {
         return TRUE;
     }
@@ -1169,14 +1203,14 @@ static BOOL PokeathlonBlockSmashCpuPlayer_DecideSwitch(PokeathlonBlockSmashCpuPl
     int i;
     GF_ASSERT(player != NULL);
     for (i = 0; i < 5; i++) {
-        if (player->members[player->member].stamina < gPokeathlonBlockSmashCpuSwitchStaminaThresholds[i]) {
-            chance += gPokeathlonBlockSmashCpuSwitchStaminaChances[i];
+        if (player->members[player->member].stamina < sPokeathlonBlockSmashCpuSwitchStaminaThresholds[i]) {
+            chance += sPokeathlonBlockSmashCpuSwitchStaminaChances[i];
             break;
         }
     }
     for (i = 0; i < 3; i++) {
-        if (player->gauge >= gPokeathlonBlockSmashCpuSwitchGaugeThresholds[i]) {
-            chance += gPokeathlonBlockSmashCpuSwitchGaugeChances[i];
+        if (player->gauge >= sPokeathlonBlockSmashCpuSwitchGaugeThresholds[i]) {
+            chance += sPokeathlonBlockSmashCpuSwitchGaugeChances[i];
             break;
         }
     }
@@ -1303,7 +1337,7 @@ static void PokeathlonBlockSmashCpuPlayer_EndFullGauge(PokeathlonBlockSmashCpuPl
 
 // The touch screen's sprites (resources 10000).
 ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority) {
-    ManagedSpriteTemplate template = gPokeathlonBlockSmashMainSpriteTemplate;
+    ManagedSpriteTemplate template = sPokeathlonBlockSmashMainSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
     GF_ASSERT(spriteManager != NULL);
@@ -1319,7 +1353,7 @@ ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, Sp
 
 // The top screen's sprites (resources 10001).
 ManagedSprite *PokeathlonBlockSmash_NewSubSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority) {
-    ManagedSpriteTemplate template = gPokeathlonBlockSmashSubSpriteTemplate;
+    ManagedSpriteTemplate template = sPokeathlonBlockSmashSubSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem != NULL);
     GF_ASSERT(spriteManager != NULL);
@@ -1373,11 +1407,11 @@ static void PokeathlonBlockSmash_RecoverStamina(PokeathlonBlockSmashMember *memb
     }
 }
 
-// A hit's stamina cost (gPokeathlonBlockSmashHitStaminaCosts, by the frames since the last hit: faster hits cost more).
+// A hit's stamina cost (sPokeathlonBlockSmashHitStaminaCosts, by the frames since the last hit: faster hits cost more).
 static s32 PokeathlonBlockSmash_TakeStamina(s32 stamina, u32 frames) {
     s32 result;
     GF_ASSERT(frames < 10);
-    result = stamina - gPokeathlonBlockSmashHitStaminaCosts[frames];
+    result = stamina - sPokeathlonBlockSmashHitStaminaCosts[frames];
     if (result <= 0) {
         result = 0;
     }

@@ -63,9 +63,6 @@ void PokeathlonCourse_LoadMonPic(void *sprite, void *info, u32 mainScreen, u32 p
 Sprite *PokeathlonCourse_CreateTimerDigitSprite(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 
 // Sprite templates (resources 10001 and 10000) and the windows: name, next name, label.
-extern const ManagedSpriteTemplate gPokeathlonRingDropUiSpriteTemplate;
-extern const ManagedSpriteTemplate gPokeathlonRingDropUiTimerSpriteTemplate;
-extern const WindowTemplate gPokeathlonRingDropUiWindowTemplates[3];
 
 static void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui);
 static void PokeathlonRingDropUi_DrawScore(PokeathlonRingDropUi *ui, s32 score);
@@ -79,6 +76,62 @@ static void PokeathlonRingDropUi_CreateTimerSprites(PokeathlonRingDropUi *ui);
 static void PokeathlonRingDropUi_PrintNextName(PokeathlonRingDropUi *ui, s32 member);
 static void PokeathlonRingDropUi_SetPicPosition(PokeathlonRingDropUi *ui, s32 sprite, s32 x, s32 y);
 static void PokeathlonRingDropUi_ShowSwitching(PokeathlonRingDropUi *ui, s32 participant, BOOL switching);
+
+static const WindowTemplate sPokeathlonRingDropUiWindowTemplates[3] = {
+    {
+        .bgId = GF_BG_LYR_SUB_1,
+        .left = 18,
+        .top = 19,
+        .width = 10,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 1,
+    },
+    {
+        .bgId = GF_BG_LYR_SUB_1,
+        .left = 0,
+        .top = 22,
+        .width = 15,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x15,
+    },
+    {
+        .bgId = GF_BG_LYR_SUB_1,
+        .left = 14,
+        .top = 9,
+        .width = 10,
+        .height = 2,
+        .palette = 15,
+        .baseTile = 0x33,
+    },
+};
+
+static const ManagedSpriteTemplate sPokeathlonRingDropUiSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0x2711, 0x2711, 0x2711, 0x2711, 0, 0 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sPokeathlonRingDropUiTimerSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0x2710, 0x2710, 0x2710, 0x2710, 0, 0 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
 
 PokeathlonRingDropUi *PokeathlonRingDropUi_New(SpriteSystem *spriteSystem, SpriteManager *spriteManager, void *resources, BgConfig *bgConfig, MsgData *msgData, MessageFormat *msgFormat, u8 participant, enum HeapID heapId, PokeathlonCourseData *course) {
     PokeathlonRingDropUi *ui;
@@ -339,7 +392,7 @@ void PokeathlonRingDropUi_SetSwitching(PokeathlonRingDropUi *ui, u8 participant,
 }
 
 static ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
-    ManagedSpriteTemplate template = gPokeathlonRingDropUiSpriteTemplate;
+    ManagedSpriteTemplate template = sPokeathlonRingDropUiSpriteTemplate;
     ManagedSprite *sprite;
     GF_ASSERT(spriteSystem);
     GF_ASSERT(spriteManager);
@@ -361,7 +414,7 @@ static void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui) {
         GF_AssertFail();
     }
     for (i = 0; i < 3; i++) {
-        AddWindow(ui->bgConfig, &(&ui->nameWindow)[i], &gPokeathlonRingDropUiWindowTemplates[i]);
+        AddWindow(ui->bgConfig, &(&ui->nameWindow)[i], &sPokeathlonRingDropUiWindowTemplates[i]);
     }
     BG_FillCharDataRange(ui->bgConfig, GF_BG_LYR_SUB_1, 0, 1, 0);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, ui->heapId);
@@ -464,7 +517,7 @@ static void PokeathlonRingDropUi_LoadMonIcon(PokeathlonRingDropUi *ui, u8 partic
 }
 
 static void *PokeathlonRingDropUi_NewTimerSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 priority) {
-    ManagedSpriteTemplate template = gPokeathlonRingDropUiTimerSpriteTemplate;
+    ManagedSpriteTemplate template = sPokeathlonRingDropUiTimerSpriteTemplate;
     void *sprite;
     if (spriteSystem == NULL) {
         GF_AssertFail();

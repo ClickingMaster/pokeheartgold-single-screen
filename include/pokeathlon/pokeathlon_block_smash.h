@@ -20,6 +20,12 @@
 // three Pokemon are switched by swiping the active one up; the top screen shows the four
 // participants' scores. The event runs for 900 frames (30 seconds).
 
+// PokeathlonBlockSmashBlocks.state
+enum {
+    BLOCKS_STATE_DROPPING = 1,
+    BLOCKS_STATE_READY,
+};
+
 typedef struct PokeathlonBlockSmashMon PokeathlonBlockSmashMon;       // the own team (0x48)
 typedef struct PokeathlonBlockSmashRivals PokeathlonBlockSmashRivals; // the other teams' Pokemon (0xC8)
 typedef struct PokeathlonBlockSmashCpu PokeathlonBlockSmashCpu;       // the participants without a player (host only)
@@ -163,5 +169,13 @@ BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course);
 u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int member, s16 power, int hitSpot, int strongHit, BOOL *cleared);
+PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);
+void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks);
+void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks);
+void PokeathlonBlockSmashBlocks_Pause(PokeathlonBlockSmashBlocks *blocks);
+BOOL PokeathlonBlockSmashBlocks_IsSpotTouched(PokeathlonBlockSmashBlocks *blocks, int kind);
+BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *blocks);
+u32 PokeathlonBlockSmashBlocks_GetState(PokeathlonBlockSmashBlocks *blocks);
+u16 PokeathlonBlockSmashBlocks_GetScore(PokeathlonBlockSmashBlocks *blocks);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_BLOCK_SMASH_H

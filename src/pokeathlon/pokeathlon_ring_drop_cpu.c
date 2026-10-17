@@ -54,9 +54,7 @@ void PokeathlonRingDrop_SetMonDestination(PokeathlonCourseData *course, u8 parti
 int PokeathlonRingDrop_GetDirection(const VecFx32 *vec);
 
 // Chance (percent) of a dash by the best opponent kind (0 none, 1 close, 2 near in front, 3 close in front).
-extern const u8 gPokeathlonRingDropCpuDashChances[];
 // Chance of a jump by the number of close opponents (1..3).
-extern const u8 gPokeathlonRingDropCpuCloseChances[];
 
 // The switch spots by participant.
 typedef struct PokeathlonRingDropCpuSpot {
@@ -64,10 +62,19 @@ typedef struct PokeathlonRingDropCpuSpot {
     s16 y;
 } PokeathlonRingDropCpuSpot;
 
-extern const PokeathlonRingDropCpuSpot gPokeathlonRingDropCpuSwitchSpots[];
-
 static void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course);
 static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player);
+
+static const u8 sPokeathlonRingDropCpuCloseChances[4] = { 5, 10, 30, 0 };
+
+static const u8 sPokeathlonRingDropCpuDashChances[16] = { 0, 10, 50, 80, 60, 0, 0, 0, 80, 0, 0, 0, 100, 0, 0, 0 };
+
+static const PokeathlonRingDropCpuSpot sPokeathlonRingDropCpuSwitchSpots[4] = {
+    { 0x30, 0x40 },
+    { 0xD0, 0x40 },
+    { 0x20, 0xA0 },
+    { 0xE0, 0xA0 },
+};
 
 PokeathlonRingDropCpu *PokeathlonRingDropCpu_New(PokeathlonCourseData *course, enum HeapID heapId) {
     int i, participant;
@@ -188,7 +195,7 @@ static void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
         }
     }
     roll = MTRandom() % 100;
-    dashChance += gPokeathlonRingDropCpuDashChances[best[1]];
+    dashChance += sPokeathlonRingDropCpuDashChances[best[1]];
     if (roll < dashChance) {
         position = PokeathlonRingDrop_GetMonPosition(player->course, best[0]);
         target[0] = position->x >> FX32_SHIFT;
@@ -202,7 +209,7 @@ static void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
         chance += 5;
     }
     if (closeCount != 0) {
-        chance += gPokeathlonRingDropCpuCloseChances[closeCount - 1];
+        chance += sPokeathlonRingDropCpuCloseChances[closeCount - 1];
     }
     if (roll < chance) {
         PokeathlonRingDrop_RequestJump(player->course, player->participant);
@@ -250,12 +257,12 @@ static void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
 
 // Walks to the switch spot and switches there.
 static void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) {
-    const PokeathlonRingDropCpuSpot *spot = &gPokeathlonRingDropCpuSwitchSpots[player->participant];
+    const PokeathlonRingDropCpuSpot *spot = &sPokeathlonRingDropCpuSwitchSpots[player->participant];
     VecFx32 position = { 0, 0, 0 };
     VecFx32 spotPosition = { 0, 0, 0 };
     PokeathlonRingDrop_GetMonScreenPosition(player->course, player->participant, &position);
-    spotPosition.x = gPokeathlonRingDropCpuSwitchSpots[player->participant].x << FX32_SHIFT;
-    spotPosition.y = gPokeathlonRingDropCpuSwitchSpots[player->participant].y << FX32_SHIFT;
+    spotPosition.x = sPokeathlonRingDropCpuSwitchSpots[player->participant].x << FX32_SHIFT;
+    spotPosition.y = sPokeathlonRingDropCpuSwitchSpots[player->participant].y << FX32_SHIFT;
     PokeathlonRingDrop_SetMonDestination(player->course, player->participant, (const s16 *)spot);
     if (PokeathlonRingDrop_IsNear(&position, &spotPosition, FX32_CONST(64))) {
         PokeathlonRingDrop_StartMonSwitch(player->course, player->participant);
