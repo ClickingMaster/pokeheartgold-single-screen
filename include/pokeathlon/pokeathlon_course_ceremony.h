@@ -23,7 +23,7 @@
 typedef struct PokeathlonCourseCeremonyIntro {
     u32 msgId;      // msg 311 # (NPC team) or msg 309 # (player)
     u32 value : 24; // the number in the line
-    u32 cheer : 8;  // 0..12: pitch of the crowd's cheer (gPokeathlonCourseCeremonyCheerPitches)
+    u32 cheer : 8;  // 0..12: pitch of the crowd's cheer (sPokeathlonCourseCeremonyCheerPitches)
 } PokeathlonCourseCeremonyIntro;
 
 // What the host sends for the opening (at course data copy area + 0x28).
@@ -194,10 +194,10 @@ BOOL PokeathlonCourseClosing_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_Main(PokeathlonCourseData *course);
 BOOL PokeathlonCourseClosing_Exit(PokeathlonCourseData *course);
 BOOL PokeathlonCourseOpening_FadeIn(PokeathlonCourseData *course, u8 *state);
-BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course);
+BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseOpening_FadeOut(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseClosing_FadeIn(PokeathlonCourseData *course, u8 *state);
-BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course);
+BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCourseClosing_FadeOut(PokeathlonCourseData *course, u8 *state);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_CEREMONY_H

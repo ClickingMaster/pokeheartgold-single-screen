@@ -49,8 +49,6 @@ typedef struct PokeathlonEventIntro {
     ManagedSprite *sprites[4];     // 0x38: buttons, mascot, Pokemon
 } PokeathlonEventIntro;            // size: 0x48
 
-void PokeathlonCourse_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, int fileId, BOOL mainScreen, BOOL grayScale, enum HeapID heapId);
-int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass);
 BOOL PokeathlonCourseWait_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCourseWait_Main(void);
 BOOL PokeathlonCourseWait_Exit(PokeathlonCourseData *course);

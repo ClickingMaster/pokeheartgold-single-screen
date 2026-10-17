@@ -712,79 +712,6 @@
 	.public gPokeathlonNpcTeamSpriteIds
 	.public gPokeathlonPerformanceFileIds
 	.public gPokeathlonCourseCmds
-	.public gPokeathlonCourseCeremonyIntroStatThresholds
-	.public gPokeathlonCourseCeremonyGraphicsModes
-	.public gPokeathlonCourseCeremonyOamCharTransferParam
-	.public gPokeathlonCourseCeremonySpriteResourceCounts
-	.public gPokeathlonCourseCeremonyBgTemplate0
-	.public gPokeathlonCourseCeremonyBgTemplate4
-	.public gPokeathlonCourseCeremonyBgTemplate5
-	.public gPokeathlonCourseCeremonyBgTemplate1
-	.public gPokeathlonCourseCeremonyOamManagerParam
-	.public gPokeathlonCourseCeremonyGraphicsBanks
-	.public gPokeathlonCourseCeremonyCheerThresholds
-	.public gPokeathlonCourseCeremonyCheerPitches
-	.public gPokeathlonCourseConfettiSpriteTemplate
-	.public gPokeathlonCourseConfettiTopSpriteTemplate
-	.public gPokeathlonCourseCeremonyIntroStatWeights
-	.public gPokeathlonEventBannerWindowTemplates
-	.public gPokeathlonCourseMonPicRect
-	.public gPokeathlonCourseTrainerPicFileIds
-	.public gPokeathlonNpcTrainerClasses
-	.public gPokeathlonNpcTrainerPicFileIds
-	.public gPokeathlonCourseWaitGraphicsModes
-	.public gPokeathlonCourseWaitBgTemplate
-	.public gPokeathlonCourseWaitGraphicsBanks
-	.public gPokeathlonEventIntroBgTypes
-	.public gPokeathlonEventIntroBgLayers
-	.public gPokeathlonEventIntroDetailsHitboxes
-	.public gPokeathlonEventIntroRulesHitboxes
-	.public gPokeathlonEventIntroControlsHitboxes
-	.public gPokeathlonEventIntroGraphicsModes
-	.public gPokeathlonEventIntroOamCharTransferParam
-	.public gPokeathlonEventIntroSpriteResourceCounts
-	.public gPokeathlonEventIntroSpritePositions
-	.public gPokeathlonEventIntroOamManagerParam
-	.public gPokeathlonEventIntroGraphicsBanks
-	.public gPokeathlonEventIntroMascotAnims
-	.public gPokeathlonEventIntroWindowTemplates
-	.public gPokeathlonEventIntroBgTemplates
-	.public gPokeathlonCirclePushScoreWindowTemplate
-	.public gPokeathlonCirclePushDirectionReference
-	.public gPokeathlonCirclePushSpritePoolTemplate
-	.public gPokeathlonCirclePushGraphicsModes
-	.public gPokeathlonCirclePushTimerTiles
-	.public gPokeathlonCirclePushFallScales
-	.public gPokeathlonCirclePushFallOffsets
-	.public gPokeathlonCirclePushBgTemplate_Sub3
-	.public gPokeathlonCirclePushBgTemplate_Main0
-	.public gPokeathlonCirclePushBgTemplate_Main1
-	.public gPokeathlonCirclePushBgTemplate_Sub2
-	.public gPokeathlonCirclePushBgTemplate_Main2
-	.public gPokeathlonCirclePushBgTemplate_Main3
-	.public gPokeathlonCirclePushBgTemplate_Sub0
-	.public gPokeathlonCirclePushBgTemplate_Sub1
-	.public gPokeathlonCirclePushGraphicsBanks
-	.public gPokeathlonCirclePushMonStartPositions
-	.public gPokeathlonCirclePushZoneKind3
-	.public gPokeathlonCirclePushZoneKind4
-	.public gPokeathlonCirclePushZoneKind2
-	.public gPokeathlonCirclePushZoneKind1
-	.public gPokeathlonCirclePushZones_Layout9
-	.public gPokeathlonCirclePushZones_Layout10
-	.public gPokeathlonCirclePushZones_Layout13
-	.public gPokeathlonCirclePushZones_Layout5
-	.public gPokeathlonCirclePushZones_Layout6
-	.public gPokeathlonCirclePushZones_Layout4
-	.public gPokeathlonCirclePushZones_Layout3
-	.public gPokeathlonCirclePushZones_Layout2
-	.public gPokeathlonCirclePushZones_Layout1
-	.public gPokeathlonCirclePushZones_Layout11
-	.public gPokeathlonCirclePushZones_Layout7
-	.public gPokeathlonCirclePushZones_Layout0
-	.public gPokeathlonCirclePushZones_Layout8
-	.public gPokeathlonCirclePushZones_Layout12
-	.public gPokeathlonCirclePushZones_Layout14
 	.public gPokeathlonCirclePushNameplateCoords
 	.public sCirclePushDisplayPicKeys
 	.public sCirclePushDisplayWindowTemplates
@@ -1017,13 +944,7 @@
 	.public gPokeathlonCourseClosingSteps
 	.public gPokeathlonCourseWaitSteps
 	.public gPokeathlonEventIntroSteps
-	.public gPokeathlonEventIntroSpriteTemplates
 	.public gPokeathlonCirclePushStates
-	.public gPokeathlonCirclePushBounceOffsets
-	.public gPokeathlonCirclePushShakeOffsets
-	.public gPokeathlonCirclePushZoneKinds
-	.public gPokeathlonCirclePushLayoutZones
-	.public gPokeathlonCirclePushDisplayIdleAnims
 	.public sTrampolineBlue
 	.public gPokeathlonLampJumpSoundPlayers
 	.public gPokeathlonLampJumpStates

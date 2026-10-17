@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "e176a6944c5f284cd6be2531ba374ad0dded57fc",
+  "commit": "2ff1703bdc8c654349007886c4847c21da92c804",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a348b9446b3f5bec252bbfa0b6bfb496e30a2a2fadc56f79b619838a13523505",
+    "ARM9": "d9d6d6eab976fe02c74750007eded1f03f6fde93c559233db5fa85eda51f4505",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -5312,7 +5312,7 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_circle_push.o",
-      "bytes": 15764,
+      "bytes": 12170,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_circle_push.c"
     },
@@ -5323,6 +5323,14 @@
       "bytes": 4234,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_circle_push_display.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
+      "object": "pokeathlon_circle_push_field.o",
+      "bytes": 3594,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_circle_push_field.c"
     },
     {
       "cpu": "ARM9",
@@ -5383,6 +5391,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
+      "object": "pokeathlon_course_pics.o",
+      "bytes": 888,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_course_pics.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
       "object": "pokeathlon_course_scores.o",
       "bytes": 1906,
       "status": "c",
@@ -5400,9 +5416,17 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_course_ui.o",
-      "bytes": 2062,
+      "bytes": 1330,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_course_ui.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
+      "object": "pokeathlon_course_wait.o",
+      "bytes": 748,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_course_wait.c"
     },
     {
       "cpu": "ARM9",
@@ -5440,7 +5464,7 @@
       "cpu": "ARM9",
       "module": "OVY_96",
       "object": "pokeathlon_event_intro.o",
-      "bytes": 4990,
+      "bytes": 4086,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_event_intro.c"
     },

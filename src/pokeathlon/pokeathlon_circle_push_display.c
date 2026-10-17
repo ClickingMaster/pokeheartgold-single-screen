@@ -31,11 +31,6 @@ SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpri
 // The resource ids of the two picture sprites (102, 103) lie 0x20 bytes after the coordinates in
 // the read-only data of their defining file.
 extern PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords;
-extern const WindowTemplate sCirclePushDisplayWindowTemplates[5];
-extern const PokeathlonCirclePushPicKeys sCirclePushDisplayPicKeys;
-extern const VecFx32 sCirclePushDisplayPic0Path[4];
-extern const VecFx32 sCirclePushDisplayPic1Path[4];
-extern const u32 gPokeathlonCirclePushDisplayIdleAnims[3];
 
 static void PokeathlonCirclePushDisplay_PrintRound(PokeathlonCirclePushDisplay *display, u32 round);
 static int PokeathlonCirclePushDisplayAnim_TakeNewMon(PokeathlonCirclePushDisplayAnim *anim, const u8 *monScored);
@@ -53,6 +48,76 @@ static void PokeathlonCirclePushDisplayAnim_SetupMatchup(PokeathlonCirclePushDis
 static void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, PokeathlonCourseSpritePoolSprite *picSprite);
 static void PokeathlonCirclePushDisplayAnim_SetupMonPic(PokeathlonCirclePushDisplayAnim *anim, int mon);
 static void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, PokeathlonCourseSpritePoolSprite *picSprite);
+
+static const PokeathlonCirclePushPicKeys sCirclePushDisplayPicKeys = {
+    .start = -FX32_CONST(40),
+    .hold = FX32_CONST(120),
+    .end = FX32_CONST(296),
+};
+
+static const WindowTemplate sCirclePushDisplayWindowTemplates[5] = {
+    {
+     .bgId = GF_BG_LYR_SUB_0,
+     .left = 6,
+     .top = 16,
+     .width = 10,
+     .height = 2,
+     .palette = 15,
+     .baseTile = 1,
+     },
+    {
+     .bgId = GF_BG_LYR_SUB_0,
+     .left = 21,
+     .top = 8,
+     .width = 10,
+     .height = 2,
+     .palette = 15,
+     .baseTile = 0x15,
+     },
+    {
+     .bgId = GF_BG_LYR_SUB_0,
+     .left = 21,
+     .top = 12,
+     .width = 10,
+     .height = 2,
+     .palette = 15,
+     .baseTile = 0x29,
+     },
+    {
+     .bgId = GF_BG_LYR_SUB_0,
+     .left = 21,
+     .top = 16,
+     .width = 10,
+     .height = 2,
+     .palette = 15,
+     .baseTile = 0x3D,
+     },
+    {
+     .bgId = GF_BG_LYR_SUB_0,
+     .left = 18,
+     .top = 20,
+     .width = 14,
+     .height = 2,
+     .palette = 15,
+     .baseTile = 0x51,
+     },
+};
+
+static const VecFx32 sCirclePushDisplayPic0Path[4] = {
+    { FX32_CONST(296), FX32_CONST(24),  0 },
+    { FX32_CONST(168), FX32_CONST(120), 0 },
+    { FX32_CONST(176), FX32_CONST(112), 0 },
+    { FX32_CONST(104), -FX32_CONST(24), 0 },
+};
+
+static const VecFx32 sCirclePushDisplayPic1Path[4] = {
+    { FX32_CONST(40),  FX32_CONST(232), 0 },
+    { FX32_CONST(104), FX32_CONST(136), 0 },
+    { FX32_CONST(96),  FX32_CONST(136), 0 },
+    { FX32_CONST(168), FX32_CONST(272), 0 },
+};
+
+static u32 sPokeathlonCirclePushDisplayIdleAnims[3] = { 4, 3, 3 };
 
 void PokeathlonCirclePushDisplay_CreateSprites(PokeathlonCourseSpritePool *scene, PokeathlonCirclePushDisplay *display) {
     VecFx32 pos = { 0, 0, 0 };
@@ -473,7 +538,7 @@ static void PokeathlonCirclePushDisplayAnim_StartZoom(PokeathlonCirclePushDispla
 
 static void PokeathlonCirclePushDisplayAnim_StartIdle(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig) {
     PokeathlonCirclePushDisplayAnim_Stop(anim);
-    if (gPokeathlonCirclePushDisplayIdleAnims[anim->idleCount] == CIRCLE_PUSH_DISPLAY_MATCHUP) {
+    if (sPokeathlonCirclePushDisplayIdleAnims[anim->idleCount] == CIRCLE_PUSH_DISPLAY_MATCHUP) {
         PokeathlonCirclePushDisplayAnim_StartMatchup(anim, bgConfig);
     } else {
         PokeathlonCirclePushDisplayAnim_StartZoom(anim, bgConfig);

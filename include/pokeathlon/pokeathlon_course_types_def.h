@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H
 #define POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H
 
+#include "global.h"
+
 // Structs shared by the Pokeathlon course and its events (defined in pokeathlon_course_objects.h,
 // pokeathlon_course_internal.h and pokeathlon_course_ui.h).
 typedef struct PokeathlonCourseObject PokeathlonCourseObject;
@@ -23,5 +25,10 @@ typedef struct PokeathlonCoursePerformance PokeathlonCoursePerformance;
 typedef struct PokeathlonPerformanceSizeInfo PokeathlonPerformanceSizeInfo;
 typedef struct PokeathlonEventBanner PokeathlonEventBanner;
 typedef struct PokeathlonCourseMessageBox PokeathlonCourseMessageBox;
+
+struct PokeathlonCourseData;
+
+// One step of a course scene; returns TRUE when the step is done.
+typedef BOOL (*PokeathlonCourseStepFunc)(struct PokeathlonCourseData *course, u8 *state);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H

@@ -347,8 +347,6 @@ typedef struct PokeathlonCourseEvent {
     BOOL sendsOwnResult;
 } PokeathlonCourseEvent;
 
-typedef BOOL (*PokeathlonCourseStepFunc)(PokeathlonCourseData *course, u8 *state);
-
 // The course results (its first 4 PokeathlonFieldData are the counters).
 typedef struct PokeathlonCourseResults {
     u32 counters[4][3][8]; // 0x000: per participant and Pokemon, capped at 9999
@@ -509,10 +507,10 @@ extern const PokeathlonCourseEvent gPokeathlonCourseEvent_Wait;
 extern const PokeathlonCourseEvent gPokeathlonCourseEvent_EventIntro;
 extern const PokeathlonCourseEvent *const gPokeathlonCourseEvents[];        // events by event id
 extern const PokeathlonCourseStepFunc *const gPokeathlonCourseEventSteps[]; // their state functions
-extern const PokeathlonCourseStepFunc gPokeathlonCourseOpeningSteps[];
-extern const PokeathlonCourseStepFunc gPokeathlonCourseClosingSteps[];
-extern const PokeathlonCourseStepFunc gPokeathlonCourseWaitSteps[];
-extern const PokeathlonCourseStepFunc gPokeathlonEventIntroSteps[];
+extern PokeathlonCourseStepFunc gPokeathlonCourseOpeningSteps[];
+extern PokeathlonCourseStepFunc gPokeathlonCourseClosingSteps[];
+extern PokeathlonCourseStepFunc gPokeathlonCourseWaitSteps[];
+extern PokeathlonCourseStepFunc gPokeathlonEventIntroSteps[];
 extern const PokeathlonCourseStepFunc gPokeathlonResultsAnnouncementSteps[];
 extern const u8 gPokeathlonEventScoreOrders[];     // score order of each event (0: higher is better, 1: lower)
 extern const u16 gPokeathlonEventTargetScores[];   // target score of each event

@@ -8,25 +8,6 @@
 	.extern gPokeathlonRelayRunEvent
 	.extern gPokeathlonHurdleDashEvent
 	.extern gPokeathlonLampJumpEvent
-	.extern gPokeathlonCirclePushZoneKind3
-	.extern gPokeathlonCirclePushZoneKind4
-	.extern gPokeathlonCirclePushZoneKind2
-	.extern gPokeathlonCirclePushZoneKind1
-	.extern gPokeathlonCirclePushZones_Layout9
-	.extern gPokeathlonCirclePushZones_Layout10
-	.extern gPokeathlonCirclePushZones_Layout13
-	.extern gPokeathlonCirclePushZones_Layout5
-	.extern gPokeathlonCirclePushZones_Layout6
-	.extern gPokeathlonCirclePushZones_Layout4
-	.extern gPokeathlonCirclePushZones_Layout3
-	.extern gPokeathlonCirclePushZones_Layout2
-	.extern gPokeathlonCirclePushZones_Layout1
-	.extern gPokeathlonCirclePushZones_Layout11
-	.extern gPokeathlonCirclePushZones_Layout7
-	.extern gPokeathlonCirclePushZones_Layout0
-	.extern gPokeathlonCirclePushZones_Layout8
-	.extern gPokeathlonCirclePushZones_Layout12
-	.extern gPokeathlonCirclePushZones_Layout14
 	.public gPokeathlonRingDropFallSpeeds
 	.public gPokeathlonRingDropJumpHeights
 	.public sLampJumpTimerDigitX
@@ -34,7 +15,6 @@
 	.public gPokeathlonRingDropSwitchSpots
 	.public gPokeathlonRingDropSwitchSpotsY
 	.public gPokeathlonRingDropSwitchSpotsRadius
-	.public gPokeathlonCourseMonPicRect
 	.public sLampJumpCameraOffset
 	.public gPokeathlonGoalRollPaletteData
 	.public sRelayRunMapStartOffset
@@ -56,7 +36,6 @@
 	.public gPokeathlonGoalRollFrameLeft
 	.public gPokeathlonGoalRollFrameRight
 	.public gPokeathlonGoalRollGoalLines
-	.public gPokeathlonCourseCeremonyCheerPitches
 	.public gPokeathlonCirclePushNameplateCoords
 	.public sResultsAnnouncementSceneConfig
 	.public sHurdleDashRisingJumpHeights
@@ -66,11 +45,6 @@
 	.public gPokeathlonLampJumpSoundPlayers
 	.public gPokeathlonHurdleDashLanePans
 	.public gPokeathlonHurdleDashLaneSoundPlayers
-	.public gPokeathlonEventIntroOamCharTransferParam
-	.public gPokeathlonEventIntroSpriteResourceCounts
-	.public gPokeathlonEventIntroSpritePositions
-	.public gPokeathlonEventIntroOamManagerParam
-	.public gPokeathlonEventIntroMascotAnims
 	.public sHurdleDashNewHurdlePos
 	.public gPokeathlonBlockSmashSpotHitboxCounts
 	.public gPokeathlonRingDropDirectionReference
@@ -78,7 +52,6 @@
 	.public gPokeathlonRingDropMonStartPositions
 	.public gPokeathlonRingDropBgLayers
 	.public gPokeathlonRingDropBgTemplates
-	.public gPokeathlonEventIntroSpriteTemplates
 	.public gPokeathlonBlockSmashSpotHitboxes
 	.extern PokeathlonCourse_AllocWork
 	.extern PokeathlonCourse_FreeWork
@@ -169,11 +142,6 @@
 	.extern gPokeathlonBlockSmashFramesSinceHit
 	.public gPokeathlonEventRankPoints
 	.public gPokeathlonCourseEvent_Wait
-	.public gPokeathlonCourseCeremonyGraphicsModes
-	.public gPokeathlonCourseCeremonyBgTemplate0
-	.public gPokeathlonCourseCeremonyBgTemplate4
-	.public gPokeathlonCourseCeremonyBgTemplate5
-	.public gPokeathlonCourseCeremonyBgTemplate1
 	.public gPokeathlonCourseWaitSteps
 	.public gPokeathlonBlockSmashSpotPositions
 	.public gPokeathlonDiscCatchOamCharTransferParam

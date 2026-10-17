@@ -98,22 +98,6 @@ void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int an
 BOOL PokeathlonCourseMonObject_IsAnimated(PokeathlonCourseMonObject *object);
 void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *objects, u8 index, int vram, void *palette);
 
-extern const GraphicsBanks gPokeathlonCourseCeremonyGraphicsBanks;
-extern const s32 gPokeathlonCourseCeremonyCheerPitches[];
-extern const GraphicsModes gPokeathlonCourseCeremonyGraphicsModes;
-extern const BgTemplate gPokeathlonCourseCeremonyBgTemplate0;
-extern const BgTemplate gPokeathlonCourseCeremonyBgTemplate1;
-extern const BgTemplate gPokeathlonCourseCeremonyBgTemplate4;
-extern const BgTemplate gPokeathlonCourseCeremonyBgTemplate5;
-extern const SpriteResourceCountsListUnion gPokeathlonCourseCeremonySpriteResourceCounts;
-extern const OamManagerParam gPokeathlonCourseCeremonyOamManagerParam;
-extern const OamCharTransferParam gPokeathlonCourseCeremonyOamCharTransferParam;
-extern const ManagedSpriteTemplate gPokeathlonCourseConfettiSpriteTemplate;
-extern const ManagedSpriteTemplate gPokeathlonCourseConfettiTopSpriteTemplate;
-extern const s32 gPokeathlonCourseCeremonyCheerThresholds[12];
-extern const u32 gPokeathlonCourseCeremonyIntroStatWeights[29];
-extern const u32 gPokeathlonCourseCeremonyIntroStatThresholds[4];
-
 // Not declared by a header yet.
 void SetBothScreensBrightnessByColor(u16 color);
 
@@ -175,6 +159,155 @@ static void PokeathlonCourseCeremony_BreakTie(PokeathlonCourseCeremonyRank *rank
 static BOOL PokeathlonCourseCeremony_SyncOpening(PokeathlonCourseData *course);
 static BOOL PokeathlonCourseCeremony_SyncClosing(PokeathlonCourseData *course);
 
+static const GraphicsModes sPokeathlonCourseCeremonyGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const u32 sPokeathlonCourseCeremonyIntroStatThresholds[4] = { 11, 6, 3, 0 };
+
+static const OamCharTransferParam sPokeathlonCourseCeremonyOamCharTransferParam = {
+    .maxTasks = 0,
+    .sizeMain = 0x40000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_256K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_64K,
+};
+
+static const SpriteResourceCountsListUnion sPokeathlonCourseCeremonySpriteResourceCounts = { 112, 110, 105, 105, 0, 0 };
+
+static const BgTemplate sPokeathlonCourseCeremonyBgTemplate0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sPokeathlonCourseCeremonyBgTemplate4 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sPokeathlonCourseCeremonyBgTemplate5 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sPokeathlonCourseCeremonyBgTemplate1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xd800,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const OamManagerParam sPokeathlonCourseCeremonyOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 126,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 1,
+    .numOBJsub = 126,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sPokeathlonCourseCeremonyGraphicsBanks = {
+    .bg = GX_VRAM_BG_64_E,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_256_AB,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const s32 sPokeathlonCourseCeremonyCheerThresholds[12] = { 11, 26, 51, 101, 201, 0x1F5, 0x3E9, 0x7D1, 0x1389, 0x2711, 0x4E21, 0xC351 };
+
+static const s32 sPokeathlonCourseCeremonyCheerPitches[13] = { -64, -32, 0, 32, 64, 96, -32, -16, 0, 16, 32, 48, 64 };
+
+static const ManagedSpriteTemplate sPokeathlonCourseConfettiSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 11,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 105, 105, 101, 101, 0, 0 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sPokeathlonCourseConfettiTopSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 106, 106, 102, 102, 0, 0 },
+    .bgPriority = 0,
+    .vramTransfer = 0,
+};
+
+static const u32 sPokeathlonCourseCeremonyIntroStatWeights[29] = {
+    8, 6, 3, 15, 6, 18, 0xBB8, 240, 0x168, 0x3C0, 0x1E0, 12, 0x384, 36, 6, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 120
+};
+
+PokeathlonCourseStepFunc gPokeathlonCourseOpeningSteps[3] = {
+    PokeathlonCourseOpening_FadeIn,
+    PokeathlonCourseOpening_Introduce,
+    PokeathlonCourseOpening_FadeOut,
+};
+
+PokeathlonCourseStepFunc gPokeathlonCourseClosingSteps[3] = {
+    PokeathlonCourseClosing_FadeIn,
+    PokeathlonCourseClosing_Awards,
+    PokeathlonCourseClosing_FadeOut,
+};
+
 BOOL PokeathlonCourseOpening_Init(PokeathlonCourseData *course) {
     return PokeathlonCourseCeremony_Init(course);
 }
@@ -200,7 +333,7 @@ BOOL PokeathlonCourseClosing_Exit(PokeathlonCourseData *course) {
 }
 
 static void PokeathlonCourseCeremony_SetBanks(void) {
-    GraphicsBanks banks = gPokeathlonCourseCeremonyGraphicsBanks;
+    GraphicsBanks banks = sPokeathlonCourseCeremonyGraphicsBanks;
 
     GfGfx_SetBanks(&banks);
 }
@@ -232,7 +365,7 @@ BOOL PokeathlonCourseOpening_FadeIn(PokeathlonCourseData *course, u8 *state) {
 // line, its name and Pokemon, while the team's Pokemon jump and the crowd cheers.
 #pragma force_active on
 
-BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course) {
+BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course, u8 *state) {
     int i;
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     BOOL waiting = FALSE;
@@ -295,7 +428,7 @@ BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course) {
             } else {
                 seqNo = SEQ_SE_GS_VOICE02;
             }
-            PlaySE_SetPitch((u16)seqNo, (s16)gPokeathlonCourseCeremonyCheerPitches[cheer]);
+            PlaySE_SetPitch((u16)seqNo, (s16)sPokeathlonCourseCeremonyCheerPitches[cheer]);
             ceremony->cheering = TRUE;
             msgId = msg_0309_00001;
             ceremony->state = OPENING_STATE_WAIT_CHEER;
@@ -407,7 +540,7 @@ BOOL PokeathlonCourseClosing_FadeIn(PokeathlonCourseData *course, u8 *state) {
 // lots when tied) with its medals and course record.
 #pragma force_active on
 
-BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course) {
+BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     BOOL waiting = FALSE;
     int msgId;
@@ -743,24 +876,24 @@ static BOOL PokeathlonCourseCeremony_IsCryActive(PokeathlonCourseCeremony *cerem
 #pragma force_active on
 
 static void PokeathlonCourseCeremony_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = gPokeathlonCourseCeremonyGraphicsModes;
+    GraphicsModes modes = sPokeathlonCourseCeremonyGraphicsModes;
     BgTemplate bg0;
     BgTemplate bg1;
     BgTemplate bg4;
     BgTemplate bg5;
     SetBothScreensModesAndDisable(&modes);
-    bg0 = gPokeathlonCourseCeremonyBgTemplate0;
+    bg0 = sPokeathlonCourseCeremonyBgTemplate0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     BG_FillCharDataRange(bgConfig, GF_BG_LYR_MAIN_1, 0, 1, 0);
-    bg1 = gPokeathlonCourseCeremonyBgTemplate1;
+    bg1 = sPokeathlonCourseCeremonyBgTemplate1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BG_FillCharDataRange(bgConfig, GF_BG_LYR_MAIN_1, 0, 1, 0);
-    bg4 = gPokeathlonCourseCeremonyBgTemplate4;
+    bg4 = sPokeathlonCourseCeremonyBgTemplate4;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    bg5 = gPokeathlonCourseCeremonyBgTemplate5;
+    bg5 = sPokeathlonCourseCeremonyBgTemplate5;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
 }
@@ -782,9 +915,9 @@ static void PokeathlonCourseCeremony_LoadWinnerBg(BgConfig *bgConfig, enum HeapI
 }
 
 static void PokeathlonCourseCeremony_InitSpriteSystem(PokeathlonCourseCeremony *ceremony) {
-    SpriteResourceCountsListUnion counts = gPokeathlonCourseCeremonySpriteResourceCounts;
-    OamManagerParam oamManagerParam = gPokeathlonCourseCeremonyOamManagerParam;
-    OamCharTransferParam charTransferParam = gPokeathlonCourseCeremonyOamCharTransferParam;
+    SpriteResourceCountsListUnion counts = sPokeathlonCourseCeremonySpriteResourceCounts;
+    OamManagerParam oamManagerParam = sPokeathlonCourseCeremonyOamManagerParam;
+    OamCharTransferParam charTransferParam = sPokeathlonCourseCeremonyOamCharTransferParam;
 
     charTransferParam.maxTasks = 0x80;
     ceremony->spriteSystem = SpriteSystem_Alloc(ceremony->heapId);
@@ -1250,7 +1383,7 @@ static void PokeathlonCourseConfetti_Spawn(PokeathlonCourseConfettiPiece *piece,
 
     piece->state.speed = MTRandom() % 5 + 1;
     piece->state.active = TRUE;
-    template = gPokeathlonCourseConfettiSpriteTemplate;
+    template = sPokeathlonCourseConfettiSpriteTemplate;
     template.x = piece->x >> 12;
     if (!(MTRandom() & 1)) {
         template.animation = 12;
@@ -1292,7 +1425,7 @@ static BOOL PokeathlonCourseConfetti_Fall(PokeathlonCourseConfettiPiece *piece) 
 
 // Moves the piece to the top screen.
 static void PokeathlonCourseConfetti_MoveToTopScreen(PokeathlonCourseConfettiPiece *piece, SpriteSystem *spriteSystem, SpriteManager *spriteManager) {
-    ManagedSpriteTemplate template = gPokeathlonCourseConfettiTopSpriteTemplate;
+    ManagedSpriteTemplate template = sPokeathlonCourseConfettiTopSpriteTemplate;
 
     piece->y = 0;
     template.animation = ManagedSprite_GetActiveAnim(piece->sprite) - 11;
@@ -2070,11 +2203,11 @@ static void PokeathlonCourseCeremony_BufferNumber(MessageFormat *msgFormat, s32 
     BufferIntegerAsString(msgFormat, field, value, digits, PRINTING_MODE_LEFT_ALIGN, TRUE);
 }
 
-// Cheer level 0..12 of a value (thresholds gPokeathlonCourseCeremonyCheerThresholds).
+// Cheer level 0..12 of a value (thresholds sPokeathlonCourseCeremonyCheerThresholds).
 static u32 PokeathlonCourseCeremony_GetCheerLevel(s32 value) {
     s32 i;
     for (i = 0; i < 12; i++) {
-        if (gPokeathlonCourseCeremonyCheerThresholds[i] > value) {
+        if (sPokeathlonCourseCeremonyCheerThresholds[i] > value) {
             return i;
         }
     }
@@ -2118,16 +2251,16 @@ static void PokeathlonCourseCeremony_GetIntroStats(PokeathlonStatistics *dest, c
     dest->fanCount = src->fanCount;
 }
 
-// Weighs the statistics (value / gPokeathlonCourseCeremonyIntroStatWeights[i], plus 0..2 at random).
+// Weighs the statistics (value / sPokeathlonCourseCeremonyIntroStatWeights[i], plus 0..2 at random).
 static void PokeathlonCourseCeremony_WeighIntroStats(u8 *weights, const u32 *stats) {
     int i;
     for (i = 0; i < 29; i++) {
-        if (gPokeathlonCourseCeremonyIntroStatWeights[i] == 0) {
+        if (sPokeathlonCourseCeremonyIntroStatWeights[i] == 0) {
             GF_AssertFail();
         }
         weights[i] = MTRandom() % 3;
         if (stats[i] != 0) {
-            weights[i] = weights[i] + stats[i] / gPokeathlonCourseCeremonyIntroStatWeights[i];
+            weights[i] = weights[i] + stats[i] / sPokeathlonCourseCeremonyIntroStatWeights[i];
         }
     }
 }
@@ -2155,7 +2288,7 @@ static int PokeathlonCourseCeremony_PickIntroStat(const u8 *weights, u8 *level) 
         i++;
     }
     for (i = 0; i < 4; i++) {
-        if ((u32)max >= gPokeathlonCourseCeremonyIntroStatThresholds[i]) {
+        if ((u32)max >= sPokeathlonCourseCeremonyIntroStatThresholds[i]) {
             *level = 3 - i;
             break;
         }

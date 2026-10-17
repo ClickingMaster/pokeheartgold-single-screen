@@ -66,9 +66,9 @@ typedef struct PokeathlonCirclePushTouch {
     u8 unk8[4];   // 0x8
 } PokeathlonCirclePushTouch;
 
-// A bonus zone of a layout (gPokeathlonCirclePushLayoutZones[layout], up to 4).
+// A bonus zone of a layout (sPokeathlonCirclePushLayoutZones[layout], up to 4).
 typedef struct PokeathlonCirclePushZone {
-    u32 kind; // 0: none; gPokeathlonCirclePushZoneKinds[kind - 1] = radius, points
+    u32 kind; // 0: none; sPokeathlonCirclePushZoneKinds[kind - 1] = radius, points
     u16 x;
     u16 y;
 } PokeathlonCirclePushZone;
@@ -238,5 +238,23 @@ BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course);
 BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state);
 BOOL PokeathlonCirclePush_End(PokeathlonCourseData *course, u8 *state);
+
+PokeathlonCirclePushZoneMarkers *PokeathlonCirclePushZoneMarkers_New(enum HeapID heapId);
+void PokeathlonCirclePushZoneMarkers_Free(PokeathlonCirclePushZoneMarkers *markers);
+void PokeathlonCirclePushZoneMarkers_CreateSprites(PokeathlonCirclePushZoneMarkers *markers, PokeathlonCourseSpritePool *pool);
+u8 PokeathlonCirclePush_ChooseLayout(u8 layout, int kind);
+int PokeathlonCirclePush_GetZonePoints(u8 layout, u16 x, u16 y, u8 *zone);
+void PokeathlonCirclePushZoneMarkers_Show(PokeathlonCirclePushZoneMarkers *markers, u8 layout);
+void PokeathlonCirclePushZoneMarkers_Hide(PokeathlonCirclePushZoneMarkers *markers, u8 layout);
+int PokeathlonCirclePush_GetPointsEffect(int points);
+PokeathlonCirclePushAi *PokeathlonCirclePushAi_New(enum HeapID heapId, int teamCount, int linkMode);
+void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseObject *object);
+void PokeathlonCirclePushAi_Free(PokeathlonCirclePushAi *ai);
+int PokeathlonCirclePushAi_Update(PokeathlonCirclePushAi *ai, u8 layout);
+PokeathlonCirclePushDisplay *PokeathlonCirclePushDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);
+void PokeathlonCirclePushDisplay_Free(PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_LoadScreens(PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_LoadPics(PokeathlonCirclePushDisplay *display);
+void PokeathlonCirclePushDisplay_LoadSpriteResources(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_CIRCLE_PUSH_H
