@@ -234,9 +234,6 @@ static void DowsingMchn_SetVramBanks(void) {
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
 }
 
-// force_active only sets a section flag here; kept so the object stays identical.
-#pragma force_active on
-
 static void DowsingMchn_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub0;
     BgTemplate sub1;
@@ -252,8 +249,6 @@ static void DowsingMchn_InitBgs(BgConfig *bgConfig) {
     sub2 = sDowsingMchnBgTemplateSub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
 }
-
-#pragma force_active reset
 
 static void DowsingMchn_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
@@ -285,8 +280,6 @@ static void DowsingMchn_FreeStrings(DowsingMchn *dowsing) {
     }
 }
 
-#pragma force_active on
-
 // Prints each label into its own window; only the current action label and EXIT are shown.
 static void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
     u32 i;
@@ -301,8 +294,6 @@ static void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
     ScheduleWindowCopyToVram(&dowsing->windows[sDowsingMchnActionTypeToWindow[dowsing->actionType]]);
     ScheduleWindowCopyToVram(&dowsing->windows[DOWSING_MCHN_WINDOW_EXIT]);
 }
-
-#pragma force_active reset
 
 static void DowsingMchn_RemoveWindows(DowsingMchn *dowsing) {
     u32 i;
@@ -341,8 +332,6 @@ static void DowsingMchn_DestroyResourceManagers(DowsingMchn *dowsing) {
     }
 }
 
-#pragma force_active on
-
 static void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxResMan **resMans, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId) {
     resObjs[GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CHAR], narc, charFileId, TRUE, charId, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_8);
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(resObjs[GF_GFX_RES_TYPE_CHAR]);
@@ -353,8 +342,6 @@ static void DowsingMchn_LoadSpriteResources(SpriteResource **resObjs, GF_2DGfxRe
     resObjs[GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_CELL], narc, cellFileId, TRUE, cellId, GF_GFX_RES_TYPE_CELL, HEAP_ID_8);
     resObjs[GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(resMans[GF_GFX_RES_TYPE_ANIM], narc, animFileId, TRUE, animId, GF_GFX_RES_TYPE_ANIM, HEAP_ID_8);
 }
-
-#pragma force_active reset
 
 static void DowsingMchn_CreateResourcesHeader(SpriteResource **resObjs, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority) {
     int charId = GF2DGfxResObj_GetResID(resObjs[GF_GFX_RES_TYPE_CHAR]);
@@ -414,8 +401,6 @@ static void DowsingMchn_DestroyButtonSprites(DowsingMchn *dowsing) {
     SpriteTransfer_DeletePlttTransferTask(dowsing->buttonResObjs[GF_GFX_RES_TYPE_PLTT]);
 }
 
-#pragma force_active on
-
 // The indicators start at (0, 0); DowsingMchn_UpdateIndicatorPositions places them.
 static void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc) {
     SpriteResourcesHeader header;
@@ -429,8 +414,6 @@ static void DowsingMchn_CreateIndicatorSprites(DowsingMchn *dowsing, NARC *narc)
     }
 }
 
-#pragma force_active reset
-
 static void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
     u32 i;
     for (i = 0; i < DOWSING_MCHN_NUM_ANGLES; i++) {
@@ -439,8 +422,6 @@ static void DowsingMchn_DestroyIndicatorSprites(DowsingMchn *dowsing) {
     SpriteTransfer_DeleteCharTransferTask(dowsing->indicatorResObjs[GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_DeletePlttTransferTask(dowsing->indicatorResObjs[GF_GFX_RES_TYPE_PLTT]);
 }
-
-#pragma force_active on
 
 static void DowsingMchn_Task(SysTask *task, void *taskData) {
     DowsingMchn *dowsing = taskData;
@@ -474,8 +455,6 @@ static void DowsingMchn_Task(SysTask *task, void *taskData) {
     SpriteList_RenderAndAnimateSprites(dowsing->spriteList);
 }
 
-#pragma force_active reset
-
 static void DowsingMchn_GetHiddenItemLocs(DowsingMchn *dowsing) {
     dowsing->hiddenItems = AllocAndFetchNearbyHiddenItems(dowsing->fieldSystem, HEAP_ID_8);
 }
@@ -486,8 +465,6 @@ static void DowsingMchn_FreeHiddenItemLocs(DowsingMchn *dowsing) {
         dowsing->hiddenItems = NULL;
     }
 }
-
-#pragma force_active on
 
 // Nearest by |x| + |y|; the list ends with an entry whose unk4 is 0xFF.
 static void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing) {
@@ -519,8 +496,6 @@ static void DowsingMchn_FindNearestHiddenItem(DowsingMchn *dowsing) {
     }
     DowsingMchn_FreeHiddenItemLocs(dowsing);
 }
-
-#pragma force_active reset
 
 // Point on the circle of radius 68 around (84, 100) of the sub screen.
 static void DowsingMchn_GetIndicatorPos(VecFx32 *pos, int deg) {
@@ -612,8 +587,6 @@ static void DowsingMchn_SetTargetAnglesLevel4(DowsingMchn *dowsing) {
     dowsing->angleSteps = 3;
 }
 
-#pragma force_active on
-
 // Picks the proximity level from the nearest item, sets the targets and steps the angles,
 // unwrapping them so that each indicator turns the short way round.
 static void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
@@ -681,7 +654,6 @@ static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 static void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette) {
     if (dowsing->signal > sDowsingMchnLevelSignalCaps[dowsing->level * 2]) {
@@ -714,8 +686,6 @@ static void DowsingMchn_SetSpriteRotation(Sprite *sprite, int deg) {
     Sprite_SetRotationAndAffineType(sprite, GF_DegreeToSinCosIdx((u16)deg), 2);
 }
 
-#pragma force_active on
-
 // Moves the indicators one step: the last step lands on the target, the others on `next`.
 static void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
     u32 i;
@@ -742,8 +712,6 @@ static void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
     }
 }
 
-#pragma force_active reset
-
 // Level 4: brighter the closer the cell is to the item; otherwise a fixed value per level.
 static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
     u32 level = dowsing->level;
@@ -759,8 +727,6 @@ static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
     }
     return sDowsingMchnLevelGridValues[level * 2];
 }
-
-#pragma force_active on
 
 // Cells within distance 4 of the touched cell rise toward their target, the others fade out.
 static void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
@@ -843,7 +809,6 @@ static void DowsingMchn_PlaySignalSE(DowsingMchn *dowsing) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 // Returns TRUE if the stylus has not moved.
 static BOOL DowsingMchn_UpdateTouchPos(DowsingMchn *dowsing) {

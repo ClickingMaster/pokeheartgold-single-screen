@@ -62,8 +62,6 @@ void PokedexApp_FreeSprites(PokedexAppData *pokedexApp) {
     PokedexApp_CloseMonIconNarc(pokedexApp);
 }
 
-#pragma force_active on
-
 void PokedexApp_TickSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
@@ -102,8 +100,6 @@ void PokedexApp_DeleteSprite(PokedexAppData *pokedexApp, int index) {
     }
 }
 
-#pragma force_active reset
-
 void PokedexApp_DeleteAllSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
@@ -111,8 +107,6 @@ void PokedexApp_DeleteAllSprites(PokedexAppData *pokedexApp) {
         PokedexApp_DeleteSprite(pokedexApp, i);
     }
 }
-
-#pragma force_active on
 
 // Copies character data straight into the VRAM the sprite's image proxy points at.
 void PokedexApp_LoadSpriteCharData(PokedexAppData *pokedexApp, int index, const void *data, u32 size, NNS_G2D_VRAM_TYPE vram) {
@@ -133,8 +127,6 @@ void PokedexApp_SetSpriteTranslucent(PokedexAppData *pokedexApp, int index, int 
         ManagedSprite_SetOamMode(pokedexApp->sprites[index], GX_OAM_MODE_NORMAL);
     }
 }
-
-#pragma force_active reset
 
 void PokedexApp_SetSpriteAnim(PokedexAppData *pokedexApp, int index, int anim) {
     ManagedSprite_SetAnimationFrame(pokedexApp->sprites[index], 0);
@@ -220,8 +212,6 @@ void PokedexApp_UnloadMonIconResources(PokedexAppData *pokedexApp, u32 count) {
     SpriteManager_UnloadAnimObjById(pokedexApp->spriteManager, 0xC550);
 }
 
-#pragma force_active on
-
 // 60 icon sprites from slot first on, each with its own character resource
 void PokedexApp_CreateMonIconSprites(PokedexAppData *pokedexApp, int first) {
     ManagedSpriteTemplate template;
@@ -239,8 +229,6 @@ void PokedexApp_CreateMonIconSprites(PokedexAppData *pokedexApp, int first) {
         slot += sizeof(ManagedSprite *);
     }
 }
-
-#pragma force_active reset
 
 void *PokedexApp_LoadMonIconCharData(PokedexAppData *pokedexApp, u32 species, u32 form, NNSG2dCharacterData **charData) {
     u32 file = GetBattleMonIconNaixEx(species, FALSE, form);
@@ -275,8 +263,6 @@ void PokedexApp_SetMonIconSub(PokedexAppData *pokedexApp, u32 species, u32 form,
     Heap_Free(raw);
 }
 
-#pragma force_active on
-
 // Shows list entry entry's icon in sprite slot sprite (translucent while only seen).
 void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
     ManagedSprite **sprites = pokedexApp->sprites;
@@ -310,8 +296,6 @@ void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
     }
 }
 
-#pragma force_active reset
-
 // Fills the shown icon set (sprites first + 30 * iconPage) with the 30 entries of the current list page.
 void PokedexApp_DrawListIconGrid(PokedexAppData *pokedexApp, int first) {
     u16 i;
@@ -331,8 +315,6 @@ void PokedexApp_DrawListIconGrid(PokedexAppData *pokedexApp, int first) {
         ManagedSprite_SetPositionXY(pokedexApp->sprites[sprite], 48 + 40 * col, 24 + 40 * row);
     }
 }
-
-#pragma force_active on
 
 // Scrolls the icon grid down by dy; icons leaving the bottom wrap to the top, showing the entries of the row above.
 void PokedexApp_ScrollListIconsBackward(PokedexAppData *pokedexApp, int first, int dy, u8 row) {
@@ -384,8 +366,6 @@ void PokedexApp_ScrollListIconsForward(PokedexAppData *pokedexApp, int first, in
     }
 }
 
-#pragma force_active reset
-
 void PokedexApp_LoadMonPicResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCharResObj(pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 76, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC58C);
     SpriteSystem_LoadCharResObj(pokedexApp->spriteSystem, pokedexApp->spriteManager, NARC_a_0_0_8, 76, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC58D);
@@ -424,8 +404,6 @@ void PokedexApp_CreateMonPicSprites(PokedexAppData *pokedexApp, int index) {
     pokedexApp->sprites[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexMonPicSpriteTemplate0, FX32_CONST(512));
     (pokedexApp->sprites + 1)[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &sPokedexMonPicSpriteTemplate1, FX32_CONST(512));
 }
-
-#pragma force_active on
 
 // Decodes the Pokemon picture into sprite's VRAM. mode 0 loads its palette, 1 loads it into the palette buffer
 // only, anything else fills the palette with black.
@@ -490,8 +468,6 @@ void PokedexApp_SwapMonPic(PokedexAppData *pokedexApp, int species, int index, i
     PokedexApp_LoadMonPicToSprite(pokedexApp, species, (u8)form, (u8)gender, 2, index, 0);
 }
 
-#pragma force_active reset
-
 void PokedexApp_ShowMonPic(PokedexAppData *pokedexApp, int species, int index, int old) {
     PokedexApp_SwapMonPic(pokedexApp, species, index, old);
 }
@@ -533,8 +509,6 @@ void PokedexApp_UpdateFootprintSprite(PokedexAppData *pokedexApp, u32 species, i
     }
 }
 
-#pragma force_active on
-
 // characters 0xC593-0xC596: two type icons, twice (PokedexApp_UpdateTypeIcons alternates between the pairs)
 void PokedexApp_LoadTypeIconResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000036_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC593);
@@ -545,8 +519,6 @@ void PokedexApp_LoadTypeIconResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000033_NCER_lz, TRUE, 0xC555);
     SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000034_NANR_lz, TRUE, 0xC555);
 }
-
-#pragma force_active reset
 
 void PokedexApp_UnloadTypeIconResources(PokedexAppData *pokedexApp) {
     SpriteManager_UnloadCharObjById(pokedexApp->spriteManager, 0xC593);
@@ -572,7 +544,6 @@ void PokedexApp_CreateTypeIconSprites(PokedexAppData *pokedexApp, int index) {
     (pokedexApp->sprites + 3)[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &template, FX32_CONST(512));
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 // Hides the shown type icon pair and draws species' types into the other one (the second icon only for a
@@ -626,7 +597,6 @@ void PokedexApp_UpdateTypeIcons(PokedexAppData *pokedexApp, u32 species, int ent
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 void PokedexApp_SetTypeIconGraphics(PokedexAppData *pokedexApp, int index, u32 type) {
     NNSG2dCharacterData *charData;
@@ -678,8 +648,6 @@ void PokedexApp_CreateSpriteInSlot(PokedexAppData *pokedexApp, int index, const 
     }
 }
 
-#pragma force_active on
-
 // sprites 18-23: the six foreign-language icons (24 pixels apart from x 124); 8: the current language's icon
 void PokedexApp_CreateLanguageIconSprites(PokedexAppData *pokedexApp) {
     ManagedSpriteTemplate template = sLanguageIconSpriteTemplate;
@@ -695,8 +663,6 @@ void PokedexApp_CreateLanguageIconSprites(PokedexAppData *pokedexApp) {
     PokedexApp_CreateSpriteInSlot(pokedexApp, 8, &sPokedexLanguageIconSpriteTemplate);
 }
 
-#pragma force_active reset
-
 void PokedexApp_UpdateCurrentLanguageIcon(PokedexAppData *pokedexApp, u32 species, int sprite) {
     if (species == SPECIES_NONE || Pokedex_GetInternationalViewFlag(pokedexApp->args->pokedex) == FALSE) {
         ManagedSprite_SetDrawFlag(pokedexApp->sprites[sprite], FALSE);
@@ -705,8 +671,6 @@ void PokedexApp_UpdateCurrentLanguageIcon(PokedexAppData *pokedexApp, u32 specie
         ManagedSprite_SetDrawFlag(pokedexApp->sprites[sprite], TRUE);
     }
 }
-
-#pragma force_active on
 
 // One icon per language species has a Pokedex entry in, right-aligned; the shown language's icon is highlighted.
 void PokedexApp_UpdateLanguageIcons(PokedexAppData *pokedexApp, u16 species, int first) {
@@ -740,8 +704,6 @@ void PokedexApp_UpdateLanguageIcons(PokedexAppData *pokedexApp, u16 species, int
         }
     }
 }
-
-#pragma force_active reset
 
 // list cursor and markers, main screen
 void PokedexApp_LoadMainObjResources(PokedexAppData *pokedexApp) {
@@ -899,8 +861,6 @@ s16 PokedexApp_GetDexModeSwitchX(PokedexAppData *pokedexApp) {
     return 112;
 }
 
-#pragma force_active on
-
 // Moves sprite onto the icon grid cell of the list cursor.
 void PokedexApp_MoveSpriteToListCursor(PokedexAppData *pokedexApp, int sprite) {
     int cursor = pokedexApp->listCursor;
@@ -911,8 +871,6 @@ void PokedexApp_MoveSpriteToListCursor(PokedexAppData *pokedexApp, int sprite) {
     ManagedSprite_SetPositionXY(sprites[sprite], col * 40 + 48, row * 40 + 24);
     ManagedSprite_SetDrawFlag(sprites[sprite], TRUE);
 }
-
-#pragma force_active reset
 
 void PokedexApp_HideListCursor(PokedexAppData *pokedexApp) {
     ManagedSprite_SetDrawFlag(pokedexApp->sprites[5], FALSE);
@@ -1123,8 +1081,6 @@ void PokedexApp_UnloadSearchSpriteResources(PokedexAppData *pokedexApp) {
     SpriteManager_UnloadAnimObjById(pokedexApp->spriteManager, 0xC55E);
 }
 
-#pragma force_active on
-
 // Search result entry, sub screen: 44-45 frame, 46-47 Pokemon picture, 48 footprint, 49-52 type icons,
 // 53-58 language icons (all hidden at first).
 void PokedexApp_CreateSearchEntrySprites(PokedexAppData *pokedexApp) {
@@ -1155,8 +1111,6 @@ void PokedexApp_CreateSearchEntrySprites(PokedexAppData *pokedexApp) {
     }
 }
 
-#pragma force_active reset
-
 void PokedexApp_UnloadSearchEntryResources(PokedexAppData *pokedexApp) {
     PokedexApp_UnloadMonPicResources(pokedexApp);
     PokedexApp_UnloadFootprintResources(pokedexApp);
@@ -1164,8 +1118,6 @@ void PokedexApp_UnloadSearchEntryResources(PokedexAppData *pokedexApp) {
     PokedexApp_UnloadSubObjResources(pokedexApp);
     PokedexApp_UnloadLanguageIconResourcesSub(pokedexApp);
 }
-
-#pragma force_active on
 
 // Search screen: 0-25 menu sprites, 26-27 and 43 sub screen, 28 body type icon, 29-42 body type choices
 // (5 per row), 59-118 icon grid.
@@ -1205,14 +1157,10 @@ void PokedexApp_CreateSearchSprites(PokedexAppData *pokedexApp) {
     PokedexApp_CreateMonIconSprites(pokedexApp, 59);
 }
 
-#pragma force_active reset
-
 void PokedexApp_FreeSearchSprites(PokedexAppData *pokedexApp) {
     PokedexApp_DeleteAllSprites(pokedexApp);
     PokedexApp_UnloadSearchSpriteResources(pokedexApp);
 }
-
-#pragma force_active on
 
 void PokedexApp_FreeSprites26And27(PokedexAppData *pokedexApp) {
     PokedexApp_DeleteSprite(pokedexApp, 26);
@@ -1261,8 +1209,6 @@ void PokedexApp_SetBodyTypeSpriteLayout(PokedexAppData *pokedexApp, int menu) {
         }
     }
 }
-
-#pragma force_active reset
 
 // sprites 1-16: the height / weight page's slider
 void PokedexApp_SetSliderSpritesVisible(PokedexAppData *pokedexApp, int visible) {
@@ -1409,7 +1355,6 @@ void PokedexApp_DrawHeightDigits(PokedexAppData *pokedexApp, int index, u16 heig
     PokedexApp_SetSpriteVisible(pokedexApp, index + 4, FALSE);
 }
 
-#pragma force_active on
 #pragma opt_strength_reduction off
 
 // weight in hectograms, shown in tenths of pounds over five digits, leading zeroes hidden (9999: 9999.0 lbs)
@@ -1441,7 +1386,6 @@ void PokedexApp_DrawWeightDigits(PokedexAppData *pokedexApp, int index, u32 weig
 }
 
 #pragma opt_strength_reduction reset
-#pragma force_active reset
 
 // the handle's arrows: no left arrow at the minimum, no right arrow at the maximum (152)
 void PokedexApp_UpdateSliderLimitSprites(PokedexAppData *pokedexApp, u32 value, int index) {
@@ -1597,8 +1541,6 @@ void PokedexApp_FreeEntryTabCursor(PokedexAppData *pokedexApp) {
     PokedexApp_UnloadMainObjResources(pokedexApp);
 }
 
-#pragma force_active on
-
 void PokedexApp_MoveEntryTabCursor(PokedexAppData *pokedexApp, int index) {
     PokedexApp_SetSpritePos(pokedexApp, 0, index * 64 + 32, 176, FALSE);
 }
@@ -1620,8 +1562,6 @@ void PokedexApp_SetupAreaSprites(PokedexAppData *pokedexApp) {
     PokedexApp_SetupAreaListScrollbar(pokedexApp);
     PokedexApp_CreateAreaMarkerSprites(pokedexApp);
 }
-
-#pragma force_active reset
 
 void PokedexApp_FreeAreaSprites(PokedexAppData *pokedexApp) {
     u32 i;

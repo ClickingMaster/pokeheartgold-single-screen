@@ -19,8 +19,6 @@ u32 GetUserFrameGfx1PaletteMember(void) {
     return 0x19;
 }
 
-#pragma force_active on
-
 void LoadUserFrameGfx1(BgConfig *bgConfig, enum GFBgLayer layer, u32 baseTile, u32 paletteNum, u8 frame, enum HeapID heapId) {
     int member;
     if (frame != 0) {
@@ -58,8 +56,6 @@ void DrawFrameAndWindow1(Window *window, BOOL dontCopyToVram, u16 baseTile, u8 p
         CopyWindowToVram(window);
     }
 }
-
-#pragma force_active off
 
 void EraseFrameAndWindow1(Window *window, BOOL dontCopyToVram) {
     u8 bgId = GetWindowBgId(window);
@@ -142,8 +138,6 @@ void ClearFrameAndWindow2(Window *window, BOOL dontCopyToVram) {
     }
 }
 
-#pragma force_active on
-
 void BlitPixelRect4Bit(void *src, u16 srcX, u16 srcY, u16 srcWidth, u16 srcHeight, void *dest, u16 destWidth, u16 destHeight, u16 destX, u16 destY, u16 width, u16 height) {
     Bitmap srcBitmap;
     Bitmap destBitmap;
@@ -156,5 +150,3 @@ void BlitPixelRect4Bit(void *src, u16 srcX, u16 srcY, u16 srcWidth, u16 srcHeigh
     destBitmap.height = destHeight;
     BlitBitmapRect4Bit(&srcBitmap, &destBitmap, srcX, srcY, destX, destY, width, height, 0);
 }
-
-#pragma force_active off

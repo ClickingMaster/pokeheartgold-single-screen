@@ -23,7 +23,6 @@ void LoadWindowFrameIconTiles(WindowView *window, int member, int baseTile, int 
 
 // Builds `count` copies of the 2x2 block of frame tiles 10/11, draws icon `member` of NARC a/0/3/8 over them
 // (starting at srcX/srcY in the icon) and loads the result at baseTile + 18.
-#pragma force_active on
 
 void LoadWindowFrameIconTiles(WindowView *window, int member, int baseTile, int count, u8 srcX, u8 srcY) {
     struct {

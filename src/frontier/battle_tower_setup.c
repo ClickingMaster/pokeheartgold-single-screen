@@ -72,7 +72,6 @@ u32 BattleTower_GenerateTrainerMons(FrontierFieldSystem *tower, FrontierTrainer 
     return replaceItem;
 }
 
-#pragma force_active on
 u32 BattleTower_PickTrainerMonSets(FrontierFieldSystem *tower, BattleTowerTrainerSets *sets, u16 trainerId, FrontierMon *mons, u8 count, u16 *partySpecies, u16 *partyItems, FrontierMultiBattleAllyData *allyData, enum HeapID heapID) {
     int i;
     int j;
@@ -168,7 +167,6 @@ u32 BattleTower_PickTrainerMonSets(FrontierFieldSystem *tower, BattleTowerTraine
     }
     return replaceItem;
 }
-#pragma force_active reset
 
 void BattleTower_GetRoomTrainer(SaveData *saveData, FrontierTrainer *trainer, int index) {
     u32 download;

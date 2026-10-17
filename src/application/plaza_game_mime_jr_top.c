@@ -194,8 +194,6 @@ extern const MimeJrTopRoutineValue ov92_02263EA8[];
 extern const MimeJrTopRoutineTask sMimeJrTopRoutineTasks[];
 extern MimeJrTopPlayerPalettes sMimeJrTopPlayerPalettes[];
 
-#pragma force_active on
-
 // Command 22: the selection made on the entry screen and the parent's random seed.
 void MimeJrTop_ReceiveStart(int netId, int size, volatile u32 *data, MimeJrTopApp *app) {
     u32 first = data[0], second = data[1];
@@ -204,8 +202,6 @@ void MimeJrTop_ReceiveStart(int netId, int size, volatile u32 *data, MimeJrTopAp
     SetLCRNGSeed(second);
     MimeJrTop_SetStartReceived(app);
 }
-
-#pragma force_active reset
 
 // Command 23: the parent's clock ran out.
 void MimeJrTop_ReceiveFinish(int netId, int size, void *data, MimeJrTopApp *app) {
@@ -3439,8 +3435,6 @@ void MimeJrTopGame_StartDance(MimeJrTopGame *game) {
     game->dance.task = SysTask_CreateOnMainQueue(MimeJrTopDance_Task, &game->dance, 1 << 12);
 }
 
-#pragma force_active on
-
 // Routine of level 1: the two dancers circle in from opposite sides.
 void MimeJrTopDance_Routine1(SysTask *sysTask, MimeJrTopDance *dance) {
     int x, y;
@@ -3519,8 +3513,6 @@ void MimeJrTopDance_Routine1(SysTask *sysTask, MimeJrTopDance *dance) {
         break;
     }
 }
-
-#pragma force_active reset
 
 void MimeJrTopDancer_Reset(MimeJrTopDancer *dancer) {
     dancer->state = 0;

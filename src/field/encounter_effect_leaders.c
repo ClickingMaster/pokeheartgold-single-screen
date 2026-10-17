@@ -146,7 +146,6 @@ void ScaleSprites_Delete(ScaleSprites *scaleSprites) {
     }
 }
 
-#pragma force_active on
 BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
     BOOL done = TRUE;
     VecFx32 scale;
@@ -174,7 +173,6 @@ BOOL ScaleSprites_Update(ScaleSprites *scaleSprites) {
     }
     return done;
 }
-#pragma force_active reset
 
 enum GymLeaderIntroState {
     GYM_LEADER_INTRO_STATE_INIT,
@@ -225,7 +223,6 @@ String *LeadersEffect_GetRivalNameString(SaveData *saveData, enum HeapID heapID)
     return string;
 }
 
-#pragma force_active on
 BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params) {
     u32 state = effect->state;
     GymLeaderIntroWork *work = effect->work;
@@ -379,7 +376,6 @@ BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID he
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void EncounterEffect_LeaderFalkner(SysTask *task, EncounterEffectTask *effect) {
     if (LeadersEffect_RunGymLeaderIntro(effect, HEAP_ID_FIELD1, &gEncounterLeaderFalknerIntroParams) == TRUE) {
@@ -528,7 +524,6 @@ static inline void EliteFourIntro_CreateSprites(EncounterEffectSpriteManager *sp
 }
 
 // sprites[0]: player, [1]: opponent, [2] and [3]: their nameplates
-#pragma force_active on
 BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params) {
     VecFx32 pos;
     VecFx32 initial;
@@ -775,7 +770,6 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
     }
     return FALSE;
 }
-#pragma force_active reset
 
 void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color) {
     NNSG2dPaletteData *paletteData;

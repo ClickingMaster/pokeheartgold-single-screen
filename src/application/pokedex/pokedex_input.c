@@ -215,8 +215,6 @@ void PokedexApp_CreateSearchMenuGrid(PokedexAppData *pokedexApp, int initialPos)
     PokedexApp_UpdateSearchMenuCursor(pokedexApp, initialPos);
 }
 
-#pragma force_active on
-
 u32 PokedexApp_HandleSearchMenuInput(PokedexAppData *pokedexApp) {
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_BUTTONS);
     if (gSystem.newKeys & PAD_BUTTON_START) {
@@ -224,8 +222,6 @@ u32 PokedexApp_HandleSearchMenuInput(PokedexAppData *pokedexApp) {
     }
     return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
-
-#pragma force_active reset
 
 void PokedexApp_UpdateSearchMenuCursor(PokedexAppData *pokedexApp, int target) {
     u8 x;
@@ -245,8 +241,6 @@ void PokedexApp_OnSearchMenuGridTouch(PokedexAppData *pokedexApp, int target, in
     PokedexApp_UpdateSearchMenuCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
-
-#pragma force_active on
 
 void PokedexApp_CreateSearchOrderGrid(PokedexAppData *pokedexApp) {
     pokedexApp->gridInput = GridInputHandler_Create(sSearchOrderHitboxes, sSearchOrderDpadBoxes, &sSearchOrderGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
@@ -271,8 +265,6 @@ void PokedexApp_UpdateSearchOrderCursor(PokedexAppData *pokedexApp, int target) 
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], pos.x, pos.y);
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchOrderCursorAnims[target]);
 }
-
-#pragma force_active reset
 
 void PokedexApp_OnSearchOrderGridMove(PokedexAppData *pokedexApp, int target, int input) {
     PokedexApp_UpdateSearchOrderCursor(pokedexApp, target);
@@ -427,8 +419,6 @@ void PokedexApp_OnSearchTypeGridTouch(PokedexAppData *pokedexApp, int target, in
     pokedexApp->prevGridInput = input;
 }
 
-#pragma force_active on
-
 void PokedexApp_CreateSearchHeightGrid(PokedexAppData *pokedexApp) {
     pokedexApp->gridInput = GridInputHandler_Create(sSearchHeightHitboxes, sSearchHeightDpadBoxes, &sSearchHeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
@@ -489,8 +479,6 @@ void PokedexApp_UpdateSearchHeightCursor(PokedexAppData *pokedexApp, int target)
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchHeightCursorAnims[target]);
 }
 
-#pragma force_active reset
-
 void PokedexApp_OnSearchHeightGridMove(PokedexAppData *pokedexApp, int target, int input) {
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
@@ -500,8 +488,6 @@ void PokedexApp_OnSearchHeightGridTouch(PokedexAppData *pokedexApp, int target, 
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
-
-#pragma force_active on
 
 void PokedexApp_CreateSearchWeightGrid(PokedexAppData *pokedexApp) {
     pokedexApp->gridInput = GridInputHandler_Create(sSearchWeightHitboxes, sSearchWeightDpadBoxes, &sSearchWeightGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
@@ -563,8 +549,6 @@ void PokedexApp_UpdateSearchWeightCursor(PokedexAppData *pokedexApp, int target)
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchWeightCursorAnims[target]);
 }
 
-#pragma force_active reset
-
 void PokedexApp_OnSearchWeightGridMove(PokedexAppData *pokedexApp, int target, int input) {
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, target);
     PlaySE(SEQ_SE_GS_ZKN03);
@@ -574,8 +558,6 @@ void PokedexApp_OnSearchWeightGridTouch(PokedexAppData *pokedexApp, int target, 
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, target);
     MenuInputStateMgr_SetState(pokedexApp->args->menuInputStatePtr, MENU_INPUT_STATE_TOUCH);
 }
-
-#pragma force_active on
 
 u32 PokedexApp_GetTouchHeldX(u32 *x) {
     u32 y;
@@ -604,8 +586,6 @@ void PokedexApp_UpdateSearchAreaCursor(PokedexAppData *pokedexApp, int target) {
     ManagedSprite_SetPositionXY(pokedexApp->sprites[0], x, y);
     PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchAreaCursorAnims[target]);
 }
-
-#pragma force_active reset
 
 void PokedexApp_OnSearchAreaGridMove(PokedexAppData *pokedexApp, int target, int input) {
     PokedexApp_UpdateSearchAreaCursor(pokedexApp, target);
@@ -887,8 +867,6 @@ u32 PokedexApp_HandleAreaInput(PokedexAppData *pokedexApp, u32 *touched) {
     return -1;
 }
 
-#pragma force_active on
-
 u32 PokedexApp_HandleSizeCheckInput(PokedexAppData *pokedexApp, u32 *touched) {
     int value = PokedexApp_HandleEntryTabTouch(pokedexApp, touched), fallback = -1;
 
@@ -904,8 +882,6 @@ u32 PokedexApp_HandleSizeCheckInput(PokedexAppData *pokedexApp, u32 *touched) {
     }
     return value;
 }
-
-#pragma force_active reset
 
 u32 PokedexApp_HandleFormsInput(PokedexAppData *pokedexApp, u32 *touched) {
     int ret = PokedexApp_HandleEntryTabTouch(pokedexApp, touched);

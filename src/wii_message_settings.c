@@ -539,16 +539,12 @@ static void WiiMessageSettings_Free(int unused, void *ptr) {
     }
 }
 
-#pragma force_active on
-
 static void WiiMessageSettings_SaveWiiAddress(WiiMessageSettings *app) {
     char *address = Heap_Alloc(HEAP_ID_115, 100);
     WiiNumber_ToWiiAddress(app->wiiNumber, address, HEAP_ID_115);
     Save_WiiMessage_SetWiiAddress(app->saveData, address);
     Heap_Free(address);
 }
-
-#pragma force_active reset
 
 static void WiiMessageSettings_SaveRegistrationCode(WiiMessageSettings *app) {
     Save_WiiMessage_SetParam(app->saveData, 1, app->registrationCodePrefix);
@@ -689,8 +685,6 @@ void WiiMessageSettings_FinishWifiClub(WiiMessageSettings *app) {
     WiiMessageSettings_SetNextApp(app, WII_MESSAGE_SETTINGS_APP_SCREEN, 0);
 }
 
-#pragma force_active on
-
 BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
     WiiMessageSettingsScreen *screen;
 
@@ -764,8 +758,6 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
     Main_SetVBlankIntrCB(WiiMessageSettingsScreen_VBlankCB, screen);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL WiiMessageSettingsScreen_Main(OverlayManager *man, int *state) {
     WiiMessageSettingsScreen *screen = OverlayManager_GetData(man);
@@ -844,8 +836,6 @@ static void WiiMessageSettingsScreen_VBlankCB(void *data) {
     dtcm[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag, through the DTCM base address
 }
 
-#pragma force_active on
-
 static void WiiMessageSettingsScreen_InitBgs(BgConfig *bgConfig) {
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
@@ -897,8 +887,6 @@ static void WiiMessageSettingsScreen_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_116);
 }
 
-#pragma force_active reset
-
 static void WiiMessageSettingsScreen_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
@@ -907,8 +895,6 @@ static void WiiMessageSettingsScreen_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
-
-#pragma force_active on
 
 static void WiiMessageSettingsScreen_LoadGraphics(WiiMessageSettingsScreen *screen) {
     BgConfig *bgConfig = screen->bgConfig;
@@ -985,8 +971,6 @@ static void WiiMessageSettingsScreen_LoadGraphics(WiiMessageSettingsScreen *scre
     NARC_Delete(narc);
 }
 
-#pragma force_active reset
-
 static void WiiMessageSettingsScreen_AnimatePaletteTask(SysTask *task, WiiMessageSettingsPaletteAnim *anim) {
     if (anim->active) {
         anim->skipFrame ^= 1;
@@ -1047,8 +1031,6 @@ static void WiiMessageSettingsScreen_HideWaitingIcon(WiiMessageSettingsScreen *s
         screen->waitingIcon = NULL;
     }
 }
-
-#pragma force_active on
 
 static YesNoPrompt *WiiMessageSettingsScreen_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart, int initialCursorPos) {
     YesNoPrompt *prompt = YesNoPrompt_Create(HEAP_ID_116);
@@ -1138,8 +1120,6 @@ BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiiMessageSettingsScreen_StartCheckWiiNumber(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_CHECK_PASSWORD, WII_MESSAGE_SETTINGS_APP_SET_PASSWORD);
     WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_CHECK_PASSWORD);
@@ -1222,8 +1202,6 @@ static WiiMessageSettingsChoicePosition sWiiMessageSettingsRegisterChoicePositio
     { 128, 8 },
 };
 
-#pragma force_active on
-
 static void WiiMessageSettingsScreen_PrintRegisterChoice(WiiMessageSettingsScreen *screen) {
     String *string;
 
@@ -1238,14 +1216,10 @@ static void WiiMessageSettingsScreen_PrintRegisterChoice(WiiMessageSettingsScree
     CopyWindowToVram(&screen->choiceWindow);
 }
 
-#pragma force_active reset
-
 static void WiiMessageSettingsScreen_ClearRegisterChoice(WiiMessageSettingsScreen *screen) {
     FillWindowPixelBuffer(&screen->choiceWindow, 15);
     CopyWindowToVram(&screen->choiceWindow);
 }
-
-#pragma force_active on
 
 // Blinks the scroll arrows of the explanation text on bg main 3.
 static void WiiMessageSettingsScreen_AnimateScrollArrows(WiiMessageSettingsScreen *screen) {
@@ -1282,8 +1256,6 @@ static void WiiMessageSettingsScreen_AnimateScrollArrows(WiiMessageSettingsScree
     ScheduleBgTilemapBufferTransfer(screen->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-#pragma force_active reset
-
 // Prints the 6 lines of the "Registering a Wii Number" text from the scroll position on.
 static void WiiMessageSettingsScreen_PrintExplanation(WiiMessageSettingsScreen *screen) {
     String *text[1];
@@ -1309,8 +1281,6 @@ static void WiiMessageSettingsScreen_PrintExplanation(WiiMessageSettingsScreen *
     String_Delete(line);
     CopyWindowToVram(&screen->explanationWindow);
 }
-
-#pragma force_active on
 
 // The scrollable explanation with "Don't register" / "Register"; returns 1: register, 2: don't register.
 static int WiiMessageSettingsScreen_RunExplanation(WiiMessageSettingsScreen *screen) {
@@ -1414,8 +1384,6 @@ static int WiiMessageSettingsScreen_RunExplanation(WiiMessageSettingsScreen *scr
     WiiMessageSettingsScreen_AnimateScrollArrows(screen);
     return 0;
 }
-
-#pragma force_active reset
 
 BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen) {
     int input;
@@ -1579,8 +1547,6 @@ BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
     switch (screen->subState) {
     case 0:
@@ -1655,15 +1621,11 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
     DWC_NASLoginAsync();
     screen->state = WMS_STATE_WAIT_AUTH;
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     int errorCode;
@@ -1736,8 +1698,6 @@ BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *scree
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_InitRequest(screen->app);
     WiiMessageSettings_SetRequestWiiAddress(screen->app);
@@ -1746,8 +1706,6 @@ BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *
     screen->timeoutTimer = 0;
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen) {
     if (GtsServer_IsRequestDone()) {
@@ -1867,8 +1825,6 @@ BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *scr
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiiMessageSettingsScreen_StartRegistrationCodeEntry(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_REGISTRATION_CODE_ENTRY, WII_MESSAGE_SETTINGS_APP_WII_NUMBER_ENTRY);
     WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_CONFIRM_REGISTRATION_CODE);
@@ -1905,8 +1861,6 @@ BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *screen) {
     int result;
@@ -2009,8 +1963,6 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -2163,8 +2115,6 @@ BOOL WiiMessageSettingsScreen_ShowYesNoPrompt(WiiMessageSettingsScreen *screen) 
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *screen) {
     int fromGtsMsgs = 0;
     int msgId;
@@ -2273,16 +2223,12 @@ BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiiMessageSettingsScreen_WaitMessage(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == FALSE) {
         screen->state = screen->nextState;
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *screen) {
     if (!WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId)) {
@@ -2293,8 +2239,6 @@ BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *scre
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == FALSE) {
@@ -2324,8 +2268,6 @@ static BOOL WiiMessageSettingsScreen_IsPrinterActive(u32 printerId) {
     }
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -2375,8 +2317,6 @@ BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // alignment 0: left at x, 1: centered, 2: right aligned
 static int WiiMessageSettingsScreen_GetAlignedX(Window *window, String *string, int x, int alignment, u32 unused, u32 fontId) {
     switch (alignment) {
@@ -2394,14 +2334,10 @@ static int WiiMessageSettingsScreen_GetAlignedX(Window *window, String *string, 
     return x;
 }
 
-#pragma force_active on
-
 static int WiiMessageSettingsScreen_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color) {
     int alignedX = WiiMessageSettingsScreen_GetAlignedX(window, string, x, alignment, color, 1);
     return AddTextPrinterParameterizedWithColor(window, 1, string, alignedX, y, TEXT_SPEED_INSTANT, color, NULL);
 }
-
-#pragma force_active reset
 
 static void WiiMessageSettingsScreen_PrintError(WiiMessageSettingsScreen *screen, int msgId) {
     String *string = String_New(256, HEAP_ID_116);

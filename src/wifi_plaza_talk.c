@@ -95,8 +95,6 @@ extern const u16 sWiFiPlazaTalkGreetingMsgs[8][8]; // by the speaker's and the l
 extern const u16 sWiFiPlazaTalkMsgPairs[];
 extern const u16 sWiFiPlazaTalkMsgPairsHighlighted[];
 
-#pragma force_active on
-
 BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 playerIndex) {
     int length;
     String *text;
@@ -587,10 +585,6 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
     return FALSE;
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     WiFiPlazaTalk *talk = WiFiPlazaPlayerState_GetWork(state);
@@ -954,8 +948,6 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) 
     WiFiPlazaTalk_CountMenuTimer(talk);
     return FALSE;
 }
-
-#pragma force_active reset
 
 enum WiFiPlazaInfoCounterStep {
     WIFI_PLAZA_INFO_START,

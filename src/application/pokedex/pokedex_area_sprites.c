@@ -10,8 +10,6 @@ extern const u16 sPokedexAreaScrollbarSizeSteps[];
 extern u8 sPokedexAreaMarkerSizes[]; // width and height of each area marker shape (not const: const lets loads move out of loops)
 extern const ManagedSpriteTemplate sAreaMarkerSpriteTemplate;
 
-#pragma force_active on
-
 void PokedexApp_LoadAreaSpriteResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000076_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC550);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->iconNarc, GetMonIconPlttNaix(), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0xC551);
@@ -26,8 +24,6 @@ void PokedexApp_LoadAreaSpriteResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCellResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000120_NCER_lz, TRUE, 0xC559);
     SpriteSystem_LoadAnimResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000121_NANR_lz, TRUE, 0xC559);
 }
-
-#pragma force_active reset
 
 void PokedexApp_UnloadAreaSpriteResources(PokedexAppData *pokedexApp) {
     SpriteManager_UnloadCharObjById(pokedexApp->spriteManager, 0xC550);
@@ -96,8 +92,6 @@ void PokedexApp_CreateAreaMarkerSprites(PokedexAppData *pokedexApp) {
     }
 }
 
-#pragma force_active on
-
 // Position and shape of the marker of an overworld map. Rectangles come from the area layout table
 // (overworldAreaTable), except for three maps with fixed shapes.
 void PokedexApp_GetOverworldMarkerPos(PokedexAppData *pokedexApp, int mapIndex, s16 *outX, s16 *outY, u8 *shape) {
@@ -161,8 +155,6 @@ void PokedexApp_GetOverworldMarkerPos(PokedexAppData *pokedexApp, int mapIndex, 
     *outY = (s16)((s32)((u32)y << 3) + (s32)((u32)height << 3) / 2 + 40);
 }
 
-#pragma force_active reset
-
 // Position and shape of the marker of a dungeon map (dungeonAreaTable holds one block position per dungeon).
 void PokedexApp_GetDungeonMarkerPos(PokedexAppData *pokedexApp, u32 mapIndex, s16 *outX, s16 *outY, u8 *shape) {
     u32 mapId;
@@ -195,8 +187,6 @@ typedef struct PokedexAreaMarker {
     s16 y;
     s16 x;
 } PokedexAreaMarker;
-
-#pragma force_active on
 
 // Places a marker on every map where the species lives (or only on the selected list entry), and
 // switches the player marker's animation when it lies inside one of them.
@@ -282,16 +272,12 @@ void PokedexApp_UpdateAreaMarkers(PokedexAppData *pokedexApp) {
     PokedexApp_SetPlayerMarkerAnim(pokedexApp, hit);
 }
 
-#pragma force_active reset
-
 void PokedexApp_HideAreaMarkers(PokedexAppData *pokedexApp) {
     u32 i;
     for (i = 9; i < 59; i++) {
         PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
     }
 }
-
-#pragma force_active on
 
 // Shows the markers for the current time of day (areaBlinkPhase picks the palette); maps without
 // encounters at that time are hidden.
@@ -333,8 +319,6 @@ void PokedexApp_UpdateAreaMarkerPalettes(PokedexAppData *pokedexApp) {
         PokedexApp_UpdateSpecialAreaMarkers(pokedexApp, specialAreas, hiddenSpecialAreas, 10, pokedexApp->areaBlinkPhase + 4);
     }
 }
-
-#pragma force_active reset
 
 // Maps drawn with extra fixed markers instead of their own rectangle: bit 0, bit 1 and bit 2 select
 // one, one and two extra markers.

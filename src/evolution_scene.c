@@ -421,8 +421,6 @@ static int EvolutionScene_RunMenu(EvolutionTaskData *data) {
     return EVO_MENU_NONE;
 }
 
-#pragma force_active on
-
 EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, Options *options, u32 a4, Pokedex *dex, Bag *bag, GameStats *stats, u32 evolutionCondition, u32 flags, enum HeapID heapID) {
     EvolutionTaskData *data;
 
@@ -493,8 +491,6 @@ EvolutionTaskData *EvolutionScene_New(Party *party, Pokemon *mon, int species, O
     return data;
 }
 
-#pragma force_active reset
-
 static void EvolutionScene_Task(SysTask *task, void *taskData) {
     EvolutionTaskData *data = taskData;
 
@@ -546,8 +542,6 @@ void EvolutionScene_Delete(EvolutionTaskData *data) {
     gSystem.screensFlipped = TRUE;
     GfGfx_SwapDisplay();
 }
-
-#pragma force_active on
 
 static void EvolutionScene_Run(EvolutionTaskData *data) {
     if (data->scaleOscillation) {
@@ -988,8 +982,6 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
     }
 }
 
-#pragma force_active reset
-
 // Ninjask's evolution leaves a Shedinja in a free party slot when the bag holds a Poke Ball (which it uses up);
 // evolutions that consume the held item clear it.
 static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
@@ -1059,8 +1051,6 @@ static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
         break;
     }
 }
-
-#pragma force_active on
 
 static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgConfig) {
     EvolutionBgTemplates mainTemplates;
@@ -1133,8 +1123,6 @@ static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgCon
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     Main_SetVBlankIntrCB(EvolutionScene_VBlankCB, data);
 }
-
-#pragma force_active reset
 
 static void EvolutionScene_FreeBgs(BgConfig *bgConfig) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);

@@ -321,8 +321,6 @@ BOOL WedgeWipe_Step(WedgeWipe *wipe) {
     return FALSE;
 }
 
-#pragma force_active on
-
 void WedgeWipe_BuildScanlines(WedgeWipe *wipe) {
     s32 halfWidths[192];
     int y;
@@ -334,8 +332,6 @@ void WedgeWipe_BuildScanlines(WedgeWipe *wipe) {
         buffer->nextRight[y] = ScreenFade_AddClamped(128, halfWidths[y]);
     }
 }
-
-#pragma force_active off
 
 void SlopeWipe_Begin(ScreenFade *fade, const AngleWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(SlopeWipe));
@@ -413,8 +409,6 @@ BOOL SlopeWipe_Step(SlopeWipe *wipe) {
     return FALSE;
 }
 
-#pragma force_active on
-
 void SlopeWipe_BuildScanlines(SlopeWipe *wipe) {
     s32 slope[192];
     s32 halfWidth;
@@ -450,8 +444,6 @@ void SlopeWipe_BuildScanlines(SlopeWipe *wipe) {
         buffer->nextRight[191 - y] = right;
     }
 }
-
-#pragma force_active off
 
 void MultiRectWipe_Begin(ScreenFade *fade, const MultiRectWipeConfig *config) {
     fade->effect = Heap_Alloc(fade->heapId, sizeof(MultiRectWipe));
@@ -552,8 +544,6 @@ void MultiRectWipe_BuildScanlines(MultiRectWipe *wipe) {
     }
 }
 
-#pragma force_active on
-
 void MultiRectWipe_DrawRect(MultiRectWipe *wipe, RectLerp *rect) {
     WipeScanlineBuffer *buffer = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
     s32 y;
@@ -564,8 +554,6 @@ void MultiRectWipe_DrawRect(MultiRectWipe *wipe, RectLerp *rect) {
         buffer->nextRight[y] = right;
     }
 }
-
-#pragma force_active off
 
 void MultiRectWipe_Advance(MultiRectWipe *wipe) {
     int i;
@@ -662,8 +650,6 @@ BOOL SectorWipe_Step(SectorWipe *wipe) {
 void SectorWipe_Finish(SectorWipe *wipe) {
 }
 
-#pragma force_active on
-
 void SectorWipe_BuildScanlines(SectorWipe *wipe) {
     u32 phase = (u16)(wipe->phase.value % 0x3FFF);
     WipeScanlineBuffer *buffer0 = ScreenWipeScanlines_GetBuffer(&wipe->scanlines, 0);
@@ -709,8 +695,6 @@ void SectorWipe_BuildScanlines(SectorWipe *wipe) {
         }
     }
 }
-
-#pragma force_active off
 
 void SectorWipe_Interpolate(WipeInterpolation *interp, int numerator, int denominator) {
     int value = interp->delta * numerator / denominator;
@@ -797,8 +781,6 @@ BOOL MirroredSectorWipe_Step(SectorWipe *wipe) {
 void MirroredSectorWipe_Finish(SectorWipe *wipe) {
 }
 
-#pragma force_active on
-
 void MirroredSectorWipe_BuildScanlines(SectorWipe *wipe) {
     int y;
     WipeScanlineBuffer *buffer0;
@@ -835,8 +817,6 @@ void MirroredSectorWipe_BuildScanlines(SectorWipe *wipe) {
         buffer1->nextRight[191 - y] = right1;
     }
 }
-
-#pragma force_active off
 
 void MirroredSectorWipe_Interpolate(WipeInterpolation *interp, int numerator, int denominator) {
     int value = interp->delta * numerator / denominator;

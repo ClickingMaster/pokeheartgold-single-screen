@@ -105,8 +105,6 @@ void BgCellManager_LoadCellTilemapFromOpenNarc(BgCellManager *manager, int index
     Heap_Free(file);
 }
 
-#pragma force_active on
-
 void BgCellManager_DrawCellAt(BgCellManager *manager, int index, int x, int y) {
     BgCell *cell = &manager->cells[index];
     u8 copyWidth;
@@ -165,13 +163,9 @@ void BgCellManager_DrawCellAt(BgCellManager *manager, int index, int x, int y) {
     cell->hidden = 0;
 }
 
-#pragma force_active off
-
 void BgCellManager_DrawCell(BgCellManager *manager, int index) {
     BgCellManager_DrawCellAt(manager, index, manager->cells[index].x, manager->cells[index].y);
 }
-
-#pragma force_active on
 
 void BgCellManager_EraseCell(BgCellManager *manager, int index) {
     BgCell *cell = &manager->cells[index];
@@ -233,8 +227,6 @@ void BgCellManager_EraseCell(BgCellManager *manager, int index) {
     FillBgTilemapRect(manager->bgConfig, cell->bgId, 0, destX, y, eraseWidth, eraseHeight, 16);
     sBgCellTransferFuncs[manager->transferMode](manager->bgConfig, cell->bgId);
 }
-
-#pragma force_active off
 
 void BgCellManager_StartCellMove(BgCellManager *manager, int index, int dx, int dy, u8 frames) {
     BgCell *cell = &manager->cells[index];

@@ -557,8 +557,6 @@ void NintendoWfcHttp_Init(u32 profileId, u64 friendKey) {
     sNintendoWfcHttp.friendKey = friendKey;
 }
 
-#pragma force_active on
-
 void NintendoWfcHttp_Update(void) {
     switch (sNintendoWfcHttp.state) {
     case NINTENDO_WFC_HTTP_NONE:
@@ -717,8 +715,6 @@ void NintendoWfcHttp_Update(void) {
     }
 }
 
-#pragma force_active reset
-
 BOOL NintendoWfcHttp_IsDone(void) {
     switch (sNintendoWfcHttp.state) {
     case NINTENDO_WFC_HTTP_IDLE:
@@ -761,8 +757,6 @@ void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer) {
     }
 }
 
-#pragma force_active on
-
 void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWifiUploadRecord *record) {
     u8 *dst;
     u8 *src;
@@ -787,8 +781,6 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
         GameStats_Shutdown();
     }
 }
-
-#pragma force_active reset
 
 void NintendoWfcHttp_RequestInfo(void) {
     GameStats_Start();
@@ -887,8 +879,6 @@ static int NintendoWfcHttp_ConvertError(int error) {
     return ret;
 }
 
-#pragma force_active on
-
 BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
     NintendoWfcConnect *wfc;
     switch (*state) {
@@ -934,8 +924,6 @@ BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL NintendoWfc_Main(OverlayManager *man, int *state) {
     NintendoWfcConnect *wfc = OverlayManager_GetData(man);
@@ -1030,8 +1018,6 @@ static void NintendoWfc_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-#pragma force_active on
-
 static void NintendoWfc_InitSpriteResources(NintendoWfcConnect *wfc) {
     NARC *narcA237 = NARC_New(NARC_a_2_3_7, HEAP_ID_67);
     NARC *narcA236 = NARC_New(NARC_a_2_3_6, HEAP_ID_67);
@@ -1065,8 +1051,6 @@ static void NintendoWfc_InitSpriteResources(NintendoWfcConnect *wfc) {
     NARC_Delete(narcA237);
 }
 
-#pragma force_active reset
-
 static void NintendoWfc_InitSpriteTemplate(SpriteTemplate *template, NintendoWfcConnect *wfc, SpriteResourcesHeader *header, u32 whichScreen) {
     template->spriteList = wfc->spriteList;
     template->header = header;
@@ -1079,8 +1063,6 @@ static void NintendoWfc_InitSpriteTemplate(SpriteTemplate *template, NintendoWfc
     template->whichScreen = (NNS_G2D_VRAM_TYPE)whichScreen;
     template->heapID = HEAP_ID_67;
 }
-
-#pragma force_active on
 
 static void NintendoWfc_CreateSprites(NintendoWfcConnect *wfc) {
     SpriteTemplate template;
@@ -1130,8 +1112,6 @@ static void NintendoWfc_CreateSprites(NintendoWfcConnect *wfc) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, TRUE);
     WirelessStatusIcon_Create();
 }
-
-#pragma force_active reset
 
 static int NintendoWfc_HandleYesNoPrompt(YesNoPrompt *prompt) {
     int response = YesNoPrompt_HandleInput(prompt);
@@ -1349,8 +1329,6 @@ static void NintendoWfc_LoadSubScreenBg(NintendoWfcConnect *wfc, int numberPad) 
     }
 }
 
-#pragma force_active on
-
 static void NintendoWfc_LoadBgGraphics(NintendoWfcConnect *wfc) {
     NNSG2dPaletteData *plttData;
     NARC *narc;
@@ -1416,8 +1394,6 @@ static void NintendoWfc_LoadBgGraphics(NintendoWfcConnect *wfc) {
     NARC_Delete(narc);
 }
 
-#pragma force_active reset
-
 static void NintendoWfc_PaletteCycleTask(SysTask *task, void *data) {
     NintendoWfcPaletteCycle *cycle = data;
     if (cycle->active != 0) {
@@ -1469,8 +1445,6 @@ static void NintendoWfc_RemoveWindows(NintendoWfcConnect *wfc) {
     RemoveWindow(&wfc->errorWindow);
 }
 
-#pragma force_active on
-
 static void NintendoWfc_InitStrings(NintendoWfcConnect *wfc) {
     wfc->msgString = String_New(180, HEAP_ID_67);
     wfc->unk_0BE8 = String_New(4, HEAP_ID_67);
@@ -1478,8 +1452,6 @@ static void NintendoWfc_InitStrings(NintendoWfcConnect *wfc) {
     wfc->titleString = NewString_ReadMsgData(wfc->msgDataTower, msg_0774_00012);
     wfc->errorString = String_New(256, HEAP_ID_67);
 }
-
-#pragma force_active reset
 
 static void NintendoWfc_FreeStrings(NintendoWfcConnect *wfc) {
     String_Delete(wfc->errorString);
@@ -1494,8 +1466,6 @@ int NintendoWfc_AskConnect(NintendoWfcConnect *wfc) {
     NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_OPEN_YES_NO_MENU, NINTENDO_WFC_STATE_HANDLE_CONNECT_CHOICE);
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_HandleConnectChoice(NintendoWfcConnect *wfc) {
     int choice = NintendoWfcYesNo_Run(&wfc->yesNoMenu);
@@ -1512,8 +1482,6 @@ int NintendoWfc_HandleConnectChoice(NintendoWfcConnect *wfc) {
     }
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active reset
 
 int NintendoWfc_AskLogOut(NintendoWfcConnect *wfc) {
     NintendoWfc_PrintMessage(wfc, wfc->msgDataWfc, msg_0778_00012, 1, 0xF0F);
@@ -1595,8 +1563,6 @@ int NintendoWfc_StartAuth(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active on
-
 int NintendoWfc_WaitAuth(NintendoWfcConnect *wfc) {
     int value;
     u32 category;
@@ -1654,8 +1620,6 @@ int NintendoWfc_InitHttp(NintendoWfcConnect *wfc) {
     wfc->state = NINTENDO_WFC_STATE_REQUEST_INFO;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active reset
 
 int NintendoWfc_RequestInfo(NintendoWfcConnect *wfc) {
     NintendoWfcHttp_RequestInfo();
@@ -1937,8 +1901,6 @@ int NintendoWfc_RequestTrainersDownload(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active on
-
 int NintendoWfc_WaitTrainersDownload(NintendoWfcConnect *wfc) {
     if (NintendoWfcHttp_IsDone()) {
         int result = NintendoWfcHttp_GetResult();
@@ -1995,8 +1957,6 @@ int NintendoWfc_WaitTrainersDownload(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_PrintTrainersReceived(NintendoWfcConnect *wfc) {
     NintendoWfc_PrintMessage(wfc, wfc->msgDataTower, msg_0774_00003, 1, 0xF0F);
     NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_WAIT_MESSAGE, NINTENDO_WFC_STATE_START_DISCONNECT);
@@ -2011,8 +1971,6 @@ int NintendoWfc_PrintSendingRecord(NintendoWfcConnect *wfc) {
     NintendoWfc_ShowWaitingIcon(wfc);
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_RequestUpload(NintendoWfcConnect *wfc) {
     u8 buf[4];
@@ -2077,8 +2035,6 @@ int NintendoWfc_WaitUpload(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_PrintRecordSent(NintendoWfcConnect *wfc) {
     NintendoWfc_PrintMessage(wfc, wfc->msgDataTower, msg_0774_00008, 1, 0xF0F);
     NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_WAIT_MESSAGE, NINTENDO_WFC_STATE_START_DISCONNECT);
@@ -2100,8 +2056,6 @@ int NintendoWfc_StartLeadersRankInput(NintendoWfcConnect *wfc) {
     wfc->state = NINTENDO_WFC_STATE_HANDLE_LEADERS_RANK_INPUT;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_HandleLeadersRankInput(NintendoWfcConnect *wfc) {
     int value = NintendoWfc_RunNumberInput(wfc);
@@ -2128,8 +2082,6 @@ int NintendoWfc_AskLeadersRoom(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_StartLeadersRoomInput(NintendoWfcConnect *wfc) {
     wfc->room = 1;
     NintendoWfc_StartNumberInput(wfc, 1, wfc->roomCount);
@@ -2137,8 +2089,6 @@ int NintendoWfc_StartLeadersRoomInput(NintendoWfcConnect *wfc) {
     wfc->state = NINTENDO_WFC_STATE_HANDLE_LEADERS_ROOM_INPUT;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_HandleLeadersRoomInput(NintendoWfcConnect *wfc) {
     int value = NintendoWfc_RunNumberInput(wfc);
@@ -2161,8 +2111,6 @@ int NintendoWfc_PrintReceivingLeaders(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_RequestLeadersDownload(NintendoWfcConnect *wfc) {
     NintendoWfcHttp_RequestDownload(wfc->rank, wfc->room, wfc->downloadBuffer);
     wfc->state = NINTENDO_WFC_STATE_WAIT_LEADERS_DOWNLOAD;
@@ -2170,8 +2118,6 @@ int NintendoWfc_RequestLeadersDownload(NintendoWfcConnect *wfc) {
     NintendoWfc_ShowWaitingIcon(wfc);
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_WaitLeadersDownload(NintendoWfcConnect *wfc) {
     if (NintendoWfcHttp_IsDone()) {
@@ -2233,8 +2179,6 @@ int NintendoWfc_PrintLeadersReceived(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_StartDisconnect(NintendoWfcConnect *wfc) {
     wfc->state = NINTENDO_WFC_STATE_PRINT_DISCONNECTING;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
@@ -2260,8 +2204,6 @@ int NintendoWfc_AskCancelChallenge(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active on
-
 int NintendoWfc_HandleCancelChallengeChoice(NintendoWfcConnect *wfc) {
     int result = NintendoWfcYesNo_Run(&wfc->yesNoMenu);
     if (result) {
@@ -2275,15 +2217,11 @@ int NintendoWfc_HandleCancelChallengeChoice(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_AskCancelDownload(NintendoWfcConnect *wfc) {
     NintendoWfc_PrintMessage(wfc, wfc->msgDataTower, msg_0774_00009, 1, 0xF0F);
     NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_OPEN_YES_NO_MENU, NINTENDO_WFC_STATE_HANDLE_CANCEL_DOWNLOAD_CHOICE);
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active on
 
 int NintendoWfc_HandleCancelDownloadChoice(NintendoWfcConnect *wfc) {
     int result = NintendoWfcYesNo_Run(&wfc->yesNoMenu);
@@ -2304,8 +2242,6 @@ int NintendoWfc_PrintDisconnecting(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active reset
-
 int NintendoWfc_CloseConnection(NintendoWfcConnect *wfc) {
     DWC_CleanupInet();
     NintendoWfc_SetNextMode(wfc, 0, 0);
@@ -2313,16 +2249,12 @@ int NintendoWfc_CloseConnection(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active on
-
 int NintendoWfc_PrintDisconnected(NintendoWfcConnect *wfc) {
     NintendoWfc_PrintMessage(wfc, wfc->msgDataError, msg_0800_00027, 1, 0xF0F);
     NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_WAIT_MESSAGE_AND_DELAY, NINTENDO_WFC_STATE_START_EXIT);
     wfc->messageTimer = 0;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active reset
 
 int NintendoWfc_UnusedState_Idle(void) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
@@ -2376,8 +2308,6 @@ int NintendoWfc_ShowHttpError(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
 
-#pragma force_active on
-
 int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
     switch (wfc->subState) {
     case 0:
@@ -2410,8 +2340,6 @@ int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
     }
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
-
-#pragma force_active reset
 
 int NintendoWfc_WaitMessage(NintendoWfcConnect *wfc) {
     if (!TextPrinterCheckActive((u8)wfc->textPrinterId)) {
@@ -2506,15 +2434,11 @@ static void NintendoWfc_CreateWirelessIcon(NintendoWfcConnect *wfc) {
 static void NintendoWfc_NumberInputDummy(NintendoWfcConnect *wfc, int a1, int a2) {
 }
 
-#pragma force_active on
-
 static void NintendoWfc_ShowWaitingIcon(NintendoWfcConnect *wfc) {
     if (!wfc->waitingIcon) {
         wfc->waitingIcon = WaitingIcon_New(&wfc->msgWindow, 1);
     }
 }
-
-#pragma force_active reset
 
 static void NintendoWfc_HideWaitingIcon(NintendoWfcConnect *wfc) {
     WaitingIcon *waitingIcon = wfc->waitingIcon;
@@ -2544,8 +2468,6 @@ static void NintendoWfc_ShowErrorMessage(NintendoWfcConnect *wfc, int msgNo, int
     NintendoWfc_PrintErrorMessage(wfc, msgNo);
 }
 
-#pragma force_active on
-
 static int NintendoWfc_StartNumberInput(NintendoWfcConnect *wfc, int a1, int maxValue) {
     wfc->numberInput.unk_0 = a1;
     wfc->numberInput.maxValue = maxValue;
@@ -2569,8 +2491,6 @@ static int NintendoWfc_StartNumberInput(NintendoWfcConnect *wfc, int a1, int max
     }
     return 1;
 }
-
-#pragma force_active reset
 
 static int NintendoWfc_RunNumberInput(NintendoWfcConnect *wfc) {
     if (sNintendoWfcNumberInputStates[wfc->numberInput.state](wfc) == 1) {
@@ -2718,8 +2638,6 @@ static u8 NintendoWfc_GetCursorAfterDigit(NintendoWfcNumberInput *input) {
     return input->cursor;
 }
 
-#pragma force_active on
-
 static void NintendoWfc_PressPadKey(NintendoWfcConnect *wfc, int key) {
     switch (key) {
     case 0:
@@ -2786,8 +2704,6 @@ static void NintendoWfc_PressPadKey(NintendoWfcConnect *wfc, int key) {
         break;
     }
 }
-
-#pragma force_active reset
 
 static BOOL NintendoWfc_HandlePadButtons(NintendoWfcConnect *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
@@ -2857,8 +2773,6 @@ int NintendoWfc_NumberInput_StartFadeOut(NintendoWfcConnect *wfc) {
     return 0;
 }
 
-#pragma force_active on
-
 int NintendoWfc_NumberInput_Teardown(NintendoWfcConnect *wfc) {
     if (IsPaletteFadeFinished() == TRUE) {
         NintendoWfc_HideNumberInput(wfc);
@@ -2868,8 +2782,6 @@ int NintendoWfc_NumberInput_Teardown(NintendoWfcConnect *wfc) {
     }
     return 0;
 }
-
-#pragma force_active reset
 
 int NintendoWfc_NumberInput_WaitButtonFlash(NintendoWfcConnect *wfc) {
     if (!NintendoWfc_UpdateButtonFlash(wfc)) {
@@ -2889,8 +2801,6 @@ int NintendoWfc_NumberInput_Finish(void) {
     return 1;
 }
 
-#pragma force_active on
-
 static void NintendoWfc_AddNumberInputWindows(NintendoWfcConnect *wfc) {
     int i;
     int baseTile;
@@ -2904,8 +2814,6 @@ static void NintendoWfc_AddNumberInputWindows(NintendoWfcConnect *wfc) {
     }
     AddWindowParameterized(wfc->bgConfig, &wfc->numberInputWindow, GF_BG_LYR_SUB_0, 2, 19, 27, 4, 13, 79);
 }
-
-#pragma force_active reset
 
 static void NintendoWfc_PrintButtonLabel(Window *window, MsgData *msgData, int msgNo) {
     String *string = NewString_ReadMsgData(msgData, msgNo);
@@ -2926,8 +2834,6 @@ static void NintendoWfc_RemoveNumberInputWindows(NintendoWfcConnect *wfc) {
     RemoveWindow(&wfc->numberInputWindow);
 }
 
-#pragma force_active on
-
 static void NintendoWfc_HideNumberInput(NintendoWfcConnect *wfc) {
     int i;
     NintendoWfc_RemoveNumberInputWindows(wfc);
@@ -2943,8 +2849,6 @@ static void NintendoWfc_HideNumberInput(NintendoWfcConnect *wfc) {
         Sprite_SetAnimCtrlSeq(wfc->sprites[NINTENDO_WFC_SPRITE_DIGIT_0 + i], 0);
     }
 }
-
-#pragma force_active reset
 
 static void NintendoWfc_SetButtonFlashPltt(NintendoWfcConnect *wfc, u8 pltt) {
     NintendoWfcButtonFlash *flash = &wfc->buttonFlash;
@@ -2981,8 +2885,6 @@ static BOOL NintendoWfc_UpdateButtonFlash(NintendoWfcConnect *wfc) {
     return TRUE;
 }
 
-#pragma force_active on
-
 static void NintendoWfc_StartButtonFlash(NintendoWfcConnect *wfc, int x, int y, int nextState) {
     wfc->buttonFlash.isBgRect = TRUE;
     wfc->buttonFlash.timer = 0;
@@ -2997,8 +2899,6 @@ static void NintendoWfc_StartButtonFlash(NintendoWfcConnect *wfc, int x, int y, 
     wfc->numberInput.nextState = nextState;
     wfc->numberInput.state = NINTENDO_WFC_NUMBER_INPUT_WAIT_BUTTON_FLASH;
 }
-
-#pragma force_active reset
 
 static void NintendoWfcYesNo_Init(NintendoWfcYesNoMenu *menu) {
     menu->state = NINTENDO_WFC_YES_NO_START;
@@ -3020,8 +2920,6 @@ int NintendoWfcYesNo_Start(NintendoWfcYesNoMenu *menu) {
     menu->state = NINTENDO_WFC_YES_NO_HANDLE_INPUT;
     return 0;
 }
-
-#pragma force_active on
 
 int NintendoWfcYesNo_HandleInput(NintendoWfcYesNoMenu *menu) {
     int hit = TouchscreenHitbox_FindRectAtTouchNew(gNintendoWfcYesNoHitboxes);
@@ -3062,8 +2960,6 @@ int NintendoWfcYesNo_HandleInput(NintendoWfcYesNoMenu *menu) {
     return 0;
 }
 
-#pragma force_active reset
-
 int NintendoWfcYesNo_UnusedState2(void) {
     return 0;
 }
@@ -3078,8 +2974,6 @@ BOOL NintendoWfcYesNo_WaitClose(NintendoWfcYesNoMenu *menu) {
     Sprite_SetDrawFlag(menu->cursorSprite, FALSE);
     return TRUE;
 }
-
-#pragma force_active on
 
 static void NintendoWfcYesNo_LoadGraphics(NintendoWfcYesNoMenu *menu) {
     NARC *narc = NARC_New(NARC_a_2_3_7, menu->heapID);
@@ -3115,8 +3009,6 @@ static void NintendoWfcYesNo_LoadGraphics(NintendoWfcYesNoMenu *menu) {
     ToggleBgLayer(menu->bgLayer, TRUE);
     ToggleBgLayer(menu->textBgLayer, TRUE);
 }
-
-#pragma force_active reset
 
 static void NintendoWfcYesNo_AddWindows(NintendoWfcYesNoMenu *menu) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0191_bin, menu->heapID);

@@ -85,7 +85,6 @@ static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *windo
 
 #define CASTLE_FLAGS_HAS_STREAK 9
 
-#pragma force_active on
 BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 type, int slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     static BattleCastleData *sBattleCastleData;
     BattleCastleData *data;
@@ -193,7 +192,6 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
     }
     return sBattleCastleData;
 }
-#pragma force_active reset
 
 void BattleCastleData_Init(BattleCastleData *data, u32 resume) {
     if (resume == FALSE) {
@@ -205,7 +203,6 @@ void BattleCastleData_Init(BattleCastleData *data, u32 resume) {
 
 #pragma opt_movepostops off
 #pragma opt_common_subs off
-#pragma force_active on
 static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty), i, battleNo;
     u8 *cursor;
@@ -231,11 +228,9 @@ static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     isLink = BattleCastle_IsMultiType(data->type);
     FrontierTrainer_GenerateMons(monCount, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
 }
-#pragma force_active reset
 #pragma opt_common_subs reset
 #pragma opt_movepostops reset
 
-#pragma force_active on
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     struct {
         u8 ivs[8];
@@ -269,7 +264,6 @@ static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     }
     Heap_Free(mon);
 }
-#pragma force_active reset
 
 static void BattleCastleData_RestoreParty(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty);
@@ -309,7 +303,6 @@ void BattleCastleData_Free(BattleCastleData *data) {
     }
 }
 
-#pragma force_active on
 void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs *args) {
     int i;
     for (i = 0; i < 6; i++) {
@@ -323,7 +316,6 @@ void BattleCastleData_ReadAppResult(BattleCastleData *data, BattleCastleAppArgs 
     }
     data->partnerPoints = args->partnerPoints;
 }
-#pragma force_active reset
 
 static u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index) {
     if (index >= 6) {
@@ -333,7 +325,6 @@ static u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index
     return args->selection;
 }
 
-#pragma force_active on
 void BattleCastleData_Save(BattleCastleData *data, int mode) {
     u32 count;
     u32 castleFlags = Save_Frontier_GetCastleFlags(data->saveData);
@@ -412,7 +403,6 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
         CastleChallenge_SetField(data->challenge, CASTLE_CHALLENGE_SET_IDS, (u8)i, 0, &value.half);
     }
 }
-#pragma force_active reset
 
 u8 BattleCastleData_NextBattle(BattleCastleData *data) {
     data->battleNo++;
@@ -497,7 +487,6 @@ void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
     }
 }
 
-#pragma force_active on
 // Castle points earned by the last battle: from the party's HP, status and PP left (and data->unk_374).
 int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
     int points;
@@ -587,7 +576,6 @@ int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
     }
     return points;
 }
-#pragma force_active reset
 
 void BattleCastle_AddPoints(SaveData *saveData, u32 type, s32 amount) {
     FrontierSave *frontierSave = Save_Frontier_GetStatic(saveData);
@@ -637,7 +625,6 @@ BOOL BattleCastleData_SendLinkMessage(BattleCastleData *data, u32 kind, u16 valu
     }
 }
 
-#pragma force_active on
 void BattleCastle_ShowPointsWindows(FrontierSystem *system, BattleCastleData *data) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(system);
     if (system->castlePointsWindows[0] != NULL) {
@@ -660,7 +647,6 @@ void BattleCastle_ShowPointsWindows(FrontierSystem *system, BattleCastleData *da
     }
     BattleCastle_PrintPoints(system, data);
 }
-#pragma force_active reset
 
 static void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window) {
     DrawFrameAndWindow1(window, TRUE, 0x3D9, 12);
@@ -694,7 +680,6 @@ void BattleCastle_HidePointsWindows(FrontierSystem *system, BattleCastleData *da
     system->castlePointsWindows[1] = NULL;
 }
 
-#pragma force_active on
 void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
     FrontierSave *frontierSave;
     int stat;
@@ -723,9 +708,7 @@ void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
         BattleCastle_PrintPlayerPoints(system, system->castlePointsWindows[1], CommPlayerInfo_GetProfile(1), partnerPoints);
     }
 }
-#pragma force_active reset
 
-#pragma force_active on
 static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points) {
     String *tmp = String_New(20, system->heapId);
     String *buf = String_New(20, system->heapId);
@@ -744,7 +727,6 @@ static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *windo
     DestroyMsgData(msgData);
     CopyWindowToVram(window);
 }
-#pragma force_active reset
 
 // Value of the current round from gBattleCastleRoundValues_Single / gBattleCastleRoundValues_Multi (0x14 at 21 / 49 wins of the single challenge).
 u32 BattleCastleData_GetRoundTableValue(BattleCastleData *data) {

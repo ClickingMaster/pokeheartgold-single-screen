@@ -948,8 +948,6 @@ BOOL BrightnessTransition_Run(ScreenFade *fade) {
     return done;
 }
 
-#pragma force_active on
-
 static BOOL BrightnessTransition_Step(BrightnessTransition *transition) {
     BOOL done = FALSE;
 
@@ -1022,8 +1020,6 @@ void ScreenWipeScanlines_HBlankCallback(void *data) {
         }
     }
 }
-
-#pragma force_active off
 
 // window: 0 or 1 for one buffer of that window, 2 for one buffer per window
 void ScreenWipeScanlines_Init(ScreenWipeScanlines *scanlines, int window, int screen, enum HeapID heapId) {

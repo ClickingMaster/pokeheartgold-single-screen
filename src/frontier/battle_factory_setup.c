@@ -137,7 +137,6 @@ const BattleFactorySetRange *BattleFactory_GetRentalSetRange(int round, int leve
     return &gBattleFactoryOpenLevelRentalRanges[round];
 }
 
-#pragma force_active on
 int BattleFactory_PickSetIds(const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID, const BattleFactorySetRange *range, u16 tradeCount, u8 *ivs) {
     BattleFactorySet sets[6];
     int i, j;
@@ -198,7 +197,6 @@ int BattleFactory_PickSetIds(const u16 *excludedSpecies, const u16 *excludedItem
     }
     return 0;
 }
-#pragma force_active reset
 
 int BattleFactory_GetPartySize(int type) {
     switch (type) {
@@ -239,7 +237,6 @@ void BattleFactory_GenerateRentalSets(int round, int levelMode, u16 *setIds, Fro
     FrontierMon_GenerateList(mons, setIds, ivs, NULL, otIds, 6, HEAP_ID_FIELD2, FACTORY_SETS_NARC);
 }
 
-#pragma force_active on
 void BattleFactory_GenerateTrainerSets(u8 count, u16 trainerId, u8 levelMode, const FrontierMon *partyMons, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, int numPartyMons) {
     FrontierMon partyMon;
     u16 species[12];
@@ -314,7 +311,6 @@ BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunc
     }
     return setup;
 }
-#pragma force_active reset
 
 u32 BattleFactory_GetBattleType(int type) {
     switch (type) {
@@ -382,7 +378,6 @@ BOOL BattleFactory_IsMultiType(int type) {
     return FALSE;
 }
 
-#pragma force_active on
 int BattleFactory_GetTrainerAIFlags(BattleFactoryData *data) {
     int aiFlags, round;
 
@@ -405,7 +400,6 @@ int BattleFactory_GetTrainerAIFlags(BattleFactoryData *data) {
     }
     return aiFlags;
 }
-#pragma force_active reset
 
 int BattleFactory_GetRound(BattleFactoryData *data) {
     u16 round = data->round;

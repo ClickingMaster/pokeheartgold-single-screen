@@ -902,8 +902,6 @@ BOOL WiFiPlazaPlayerState_OwnReturnFromSurvey(WiFiPlazaPlayerState *state, WiFiP
     return FALSE;
 }
 
-#pragma force_active on
-
 // The own player walks around: map tile actions, talking to other players, the profile panel (X)
 BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     int *savedHandler = WiFiPlazaPlayerState_GetWork(state);
@@ -1055,8 +1053,6 @@ BOOL WiFiPlazaPlayerState_OwnWalk(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL WiFiPlazaPlayerState_OwnWalkLate(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     if (WiFiPlazaObj_GetParam(WiFiPlazaObj_GetOwnPlayer(WiFiPlazaRoom_GetObjManager(room)), 5)) {
         WiFiPlazaRoom_SetPanelButtonDisabled(room, 1);
@@ -1152,8 +1148,6 @@ BOOL WiFiPlazaPlayerState_OwnExit(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
@@ -1335,8 +1329,6 @@ BOOL WiFiPlazaPlayerState_OwnEnterAttraction(WiFiPlazaPlayerState *state, WiFiPl
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaPlayerState_OwnEnterMinigame(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaPlayerStateResult *result = WiFiPlazaPlayerState_GetWork(state);
@@ -1711,8 +1703,6 @@ BOOL WiFiPlazaTalk_Greeter(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room,
     return FALSE;
 }
 
-#pragma force_active on
-
 // The own player jumps onto a mover and rides it until the room closes
 BOOL WiFiPlazaPlayerState_OwnRideMover(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
@@ -1870,8 +1860,6 @@ BOOL WiFiPlazaPlayerState_OwnRideMover(WiFiPlazaPlayerState *state, WiFiPlazaRoo
     return FALSE;
 }
 
-#pragma force_active reset
-
 void WiFiPlazaPlayerRide_FollowCamera(WiFiPlazaPlayerRide *ride, WiFiPlazaCamera *camera) {
     VecFx32 pos;
     WiFiPlazaObj_GetPosition(ride->obj, &pos);
@@ -1997,8 +1985,6 @@ void WiFiPlazaPlayerState_InitArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPla
 void WiFiPlazaPlayerState_FreeArrivalMenu(WiFiPlazaOwnArrivalWork *work, WiFiPlazaRoomWork *room) {
     WiFiPlazaRoom_DeleteListItems(room);
 }
-
-#pragma force_active on
 
 // Another player's slot while that player is not in the room: creates its object once the lobby reports it
 BOOL WiFiPlazaPlayerState_OtherWaitForPlayer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
@@ -2128,8 +2114,6 @@ BOOL WiFiPlazaPlayerState_OtherPresent(WiFiPlazaPlayerState *state, WiFiPlazaRoo
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // Another player left the room: its object rises out and is deleted
 BOOL WiFiPlazaPlayerState_OtherLeave(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {

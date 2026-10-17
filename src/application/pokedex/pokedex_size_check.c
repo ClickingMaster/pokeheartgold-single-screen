@@ -25,8 +25,6 @@ extern const ManagedSpriteTemplate sPokedexSizeCheckSpriteTemplates[];
 extern PokedexWeightRange sWeightCheckDiffRanges[];
 extern BOOL (*const sWeightCheckAnimFuncs[])(PokedexWeightCheckAnim *anim);
 
-#pragma force_active on
-
 void PokedexApp_SetupSizeCheckSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
@@ -41,8 +39,6 @@ void PokedexApp_SetupSizeCheckSprites(PokedexAppData *pokedexApp) {
     PokedexApp_SetSpriteVisible(pokedexApp, 5, FALSE);
 }
 
-#pragma force_active reset
-
 void PokedexApp_FreeSizeCheckSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
@@ -51,8 +47,6 @@ void PokedexApp_FreeSizeCheckSprites(PokedexAppData *pokedexApp) {
     }
     PokedexApp_UnloadSizeCheckResources(pokedexApp);
 }
-
-#pragma force_active on
 
 // The trainer sprites (0xC59B-0xC59D) depend on the player's gender.
 void PokedexApp_LoadSizeCheckResources(PokedexAppData *pokedexApp) {
@@ -80,8 +74,6 @@ void PokedexApp_LoadSizeCheckResources(PokedexAppData *pokedexApp) {
         SpriteSystem_LoadPaletteBufferFromOpenNarc(pokedexApp->paletteData, PLTTBUF_SUB_OBJ, pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000110_NCLR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DSUB, 0xC55E);
     }
 }
-
-#pragma force_active reset
 
 void PokedexApp_UnloadSizeCheckResources(PokedexAppData *pokedexApp) {
     PokedexApp_UnloadMonIconResources(pokedexApp, 1);
@@ -175,8 +167,6 @@ void PokedexApp_SetPanSpritePos(PokedexAppData *pokedexApp, int index, u16 angle
     PokedexApp_SetSpritePos(pokedexApp, index, x, y, 1);
 }
 
-#pragma force_active on
-
 // Puts sprite index 16 pixels above sprite from.
 void PokedexApp_PlaceFigureOnPan(PokedexAppData *pokedexApp, int index, int from) {
     s16 x, y;
@@ -186,8 +176,6 @@ void PokedexApp_PlaceFigureOnPan(PokedexAppData *pokedexApp, int index, int from
     PokedexApp_SetSpritePos(pokedexApp, index, x, y, 1);
 }
 
-#pragma force_active reset
-
 // Swings the two pans (sprites 8 and 9, with the trainer and the Pokemon icon on top) around the scale's
 // pivot for the beam angle.
 void PokedexApp_UpdateScalePans(PokedexAppData *pokedexApp, u32 angle) {
@@ -196,8 +184,6 @@ void PokedexApp_UpdateScalePans(PokedexAppData *pokedexApp, u32 angle) {
     PokedexApp_PlaceFigureOnPan(pokedexApp, 2, 8);
     PokedexApp_PlaceFigureOnPan(pokedexApp, 4, 9);
 }
-
-#pragma force_active on
 
 // Picks the animation from the weight difference between the Pokemon and the player (40.0 or 41.0 kg).
 void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexWeightCheckAnim *anim) {
@@ -250,8 +236,6 @@ BOOL PokedexApp_DropFiguresOntoPans(PokedexWeightCheckAnim *anim) {
     PokedexApp_SetSpritePos(anim->pokedexApp, 4, mon.x, mon.y, 1);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL PokedexApp_RunWeightCheckAnim(PokedexWeightCheckAnim *anim) {
     return sWeightCheckAnimFuncs[anim->animIndex](anim);

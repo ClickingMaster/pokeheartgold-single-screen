@@ -1160,7 +1160,6 @@ u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring
     return TRUE;
 }
 
-#pragma force_active on
 u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     struct {
         s16 y;
@@ -1233,7 +1232,6 @@ u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     target->timer++;
     return TRUE;
 }
-#pragma force_active off
 
 u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     s32 bob;
@@ -1270,7 +1268,6 @@ static inline void WobbuffetPopBonusTarget_StartHop(WobbuffetPopBonusTarget *tar
     target->step = (u8)(target->step + 1);
 }
 
-#pragma force_active on
 u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     s16 originX;
     s16 originY;
@@ -1357,7 +1354,6 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
     }
     return TRUE;
 }
-#pragma force_active off
 
 void WobbuffetPop_CreateBonusPopupSprites(WobbuffetPop *game, WobbuffetPopBonusPopup *popups) {
     ManagedSpriteTemplate template = sWobbuffetPopBonusSpriteTemplate;
@@ -1875,7 +1871,6 @@ BOOL WobbuffetPopPlazaScreen_Init(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
 BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state) {
     WobbuffetPopPlazaScreen *screen = OverlayManager_GetData(man);
 
@@ -1945,7 +1940,6 @@ BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state) {
     }
     return FALSE;
 }
-#pragma force_active off
 
 BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state) {
     OverlayManager_GetData(man);
@@ -1989,7 +1983,6 @@ BOOL WobbuffetPop_SendFinished(WobbuffetPop *game) {
     return FALSE;
 }
 
-#pragma force_active on
 void WobbuffetPop_RecvPlayerValue(int netId, int size, const void *data, void *arg) {
     WobbuffetPop *game = arg;
     u32 value = *(u32 *)data;
@@ -2004,7 +1997,6 @@ void WobbuffetPop_RecvPlayerValue(int netId, int size, const void *data, void *a
     GF_ASSERT(i < game->app->playerCount);
     game->readyCount++;
 }
-#pragma force_active off
 
 BOOL WobbuffetPop_SendPlayerValue(void) {
     u32 value = 100;

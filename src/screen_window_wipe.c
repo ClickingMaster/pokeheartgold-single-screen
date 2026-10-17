@@ -275,8 +275,6 @@ s8 ScreenWindow_GetInside(int window, int screen) {
     return result;
 }
 
-#pragma force_active on
-
 static inline GXWndPlane GetWindowPlane(volatile GXWndPlane *reg) {
     return *reg;
 }
@@ -290,8 +288,6 @@ s8 ScreenWindow_GetOutside(int screen) {
     }
     return *(s8 *)&plane;
 }
-
-#pragma force_active off
 
 void ScreenWindow_SetRect(int left, int top, int right, int bottom, int window, int screen) {
     if (window == 0) {

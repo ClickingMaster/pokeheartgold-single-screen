@@ -41,8 +41,6 @@ static inline u32 GameStats_GetLinkCount(GameStats *stats) {
                     + (GameStats_GetCapped(stats, GAME_STAT_COMM_CONTEST_ENTRIES) + GameStats_GetCapped(stats, GAME_STAT_LOCAL_LINK_TRADES)))));
 }
 
-#pragma force_active on
-
 void TrainerCardData_Build(u8 unk_04_0, u8 liveIgt, u8 unk_02, u8 caseVariant, FieldSystem *fieldSystem, TrainerCardAppArgs *trainerCard) {
     SaveData *save;
     PlayerProfile *profile;
@@ -83,8 +81,6 @@ void TrainerCardData_Build(u8 unk_04_0, u8 liveIgt, u8 unk_02, u8 caseVariant, F
     card->checksum = checksum;
     card->received = 0;
 }
-
-#pragma force_active off
 
 TrainerCardData *TrainerCardData_New(enum HeapID heapID) {
     TrainerCardData *card = Heap_Alloc(heapID, sizeof(TrainerCardData));

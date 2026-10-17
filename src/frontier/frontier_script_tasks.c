@@ -7,7 +7,6 @@
 // Tasks of the frontier map's shake (FrtCmd_ShakeMap) and window (FrtCmd_SetWindowDelayed) commands, and the menu alignment flags
 // (FrtCmd_MenuSetAlignRight/MenuSetAlignBottom).
 
-#pragma force_active on
 void FrontierMap_ShakeTask(SysTask *task, FrontierMapShake *shake) {
     shake->frame++;
     if (shake->frame > shake->interval) {
@@ -74,4 +73,3 @@ void FrontierMenu_SetAlignRight(FrontierMenu *menu, int value) {
 void FrontierMenu_SetAlignBottom(FrontierMenu *menu, int value) {
     menu->alignBottom = (u8)value;
 }
-#pragma force_active reset

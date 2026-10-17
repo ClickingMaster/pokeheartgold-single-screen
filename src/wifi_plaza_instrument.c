@@ -874,8 +874,6 @@ BOOL WiFiPlazaInstrument_UpdateWhirl(WiFiPlazaInstrumentManager *manager, WiFiPl
     return result;
 }
 
-#pragma force_active on
-
 // Model 0 plays three times; models 1-3 follow, each fading out (8 steps) once its animation ended.
 BOOL WiFiPlazaInstrument_UpdatePop(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     BOOL done;
@@ -929,8 +927,6 @@ BOOL WiFiPlazaInstrument_UpdatePop(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     return done;
 }
 
-#pragma force_active reset
-
 BOOL WiFiPlazaInstrument_UpdateBalloon(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     u8 phase = effect->phase;
 
@@ -949,8 +945,6 @@ BOOL WiFiPlazaInstrument_UpdateBalloon(WiFiPlazaInstrumentManager *manager, WiFi
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // Shows the models row by row (4 per row, every 8 frames); each falls along its tween.
 BOOL WiFiPlazaInstrument_UpdateSparkle(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
@@ -998,8 +992,6 @@ BOOL WiFiPlazaInstrument_UpdateSparkle(WiFiPlazaInstrumentManager *manager, WiFi
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL WiFiPlazaInstrument_UpdateBellDrum(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
     int result = WiFiPlazaInstrument_UpdateBursts(&effect->work.burst, effect->frame);
@@ -1739,8 +1731,6 @@ BOOL WiFiPlazaInstrumentBurst_Update(WiFiPlazaInstrumentBurst *burst) {
     return done;
 }
 
-#pragma force_active on
-
 void WiFiPlazaInstrumentBurst_StartBell(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
     u16 angle;
@@ -1811,8 +1801,6 @@ BOOL WiFiPlazaInstrumentBurst_UpdateBell(WiFiPlazaInstrumentBurst *burst) {
     }
     return result;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrumentBurst_StartDrum(WiFiPlazaInstrumentBurst *burst, WiFiPlazaObj *obj) {
     VecFx32 pos;
@@ -1904,8 +1892,6 @@ void WiFiPlazaInstrumentBurst_StartCymbal(WiFiPlazaInstrumentBurst *burst, WiFiP
     }
 }
 
-#pragma force_active on
-
 // Three hops: each time the tweens end, the next one starts from where the model landed.
 BOOL WiFiPlazaInstrumentBurst_UpdateCymbal(WiFiPlazaInstrumentBurst *burst) {
     struct {
@@ -1948,8 +1934,6 @@ BOOL WiFiPlazaInstrumentBurst_UpdateCymbal(WiFiPlazaInstrumentBurst *burst) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void WiFiPlazaInstrumentBurst_StartHop(WiFiPlazaInstrumentBurst *burst, u32 index, VecFx32 *origin, fx32 dx01, fx32 dy01, fx32 dx23, fx32 dy23, s32 duration) {
     fx32 x;
