@@ -99,11 +99,6 @@ typedef struct GtsSelectMonPosition {
     u16 y;
 } GtsSelectMonPosition;
 
-typedef struct GtsSelectMonCursorY {
-    u16 y;
-    u16 nextX;
-} GtsSelectMonCursorY;
-
 // The summary of a Pokemon, and the first fields of the wanted Pokemon, as they are copied into the record: in u16
 // halves.
 typedef struct GtsMonFields {
@@ -123,21 +118,10 @@ typedef struct GtsMonFields {
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsSelectMonStates[])(GtsApp *app);
-extern const GraphicsModes sGtsSelectMonGraphicsModes;
-extern const BgTemplate sGtsSelectMonBg0Template;
-extern const BgTemplate sGtsSelectMonBg1Template;
-extern const BgTemplate sGtsSelectMonBg2Template;
-extern const BgTemplate sGtsSelectMonBg3Template;
 // {x, y} of the cursor on each slot, on BACK and on the box name.
-extern const GtsSelectMonPosition sGtsSelectMonCursorPositions[];
-extern const GtsSelectMonCursorY sGtsSelectMonCursorY[];
 // The next and previous box arrows.
-extern const GtsSelectMonPosition sGtsSelectMonArrowPositions[];
 // Where the cursor goes from each position: up, down, left, right.
-extern const u8 sGtsSelectMonCursorMoves[][4];
-extern const TouchscreenHitbox sGtsSelectMonHitboxes[];
 // The Ribbons that can't be traded (MON_DATA_*).
-extern const u16 sGtsSpecialRibbons[];
 
 int GtsSearch_PrintSearchFailed(GtsApp *app);
 int GtsSearch_WaitText(GtsApp *app);
@@ -200,6 +184,198 @@ void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app);
 void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons);
 
 // The last states of SEEK POKEMON (screen 4).
+
+static const GtsSelectMonPosition sGtsSelectMonArrowPositions[2] = {
+    { 154, 12 },
+    { 14,  12 },
+};
+
+static const GraphicsModes sGtsSelectMonGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const u16 sGtsSpecialRibbons[10] = {
+    MON_DATA_MARINE_RIBBON,
+    MON_DATA_LAND_RIBBON,
+    MON_DATA_SKY_RIBBON,
+    MON_DATA_RED_RIBBON,
+    MON_DATA_GREEN_RIBBON,
+    MON_DATA_BLUE_RIBBON,
+    MON_DATA_FESTIVAL_RIBBON,
+    MON_DATA_CARNIVAL_RIBBON,
+    MON_DATA_CLASSIC_RIBBON,
+    MON_DATA_PREMIER_RIBBON,
+};
+
+static const BgTemplate sGtsSelectMonBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSelectMonBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSelectMonBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSelectMonBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GtsSelectMonPosition sGtsSelectMonCursorPositions[32] = {
+    { 19,  36  },
+    { 45,  36  },
+    { 71,  36  },
+    { 97,  36  },
+    { 123, 36  },
+    { 149, 36  },
+    { 19,  59  },
+    { 45,  59  },
+    { 71,  59  },
+    { 97,  59  },
+    { 123, 59  },
+    { 149, 59  },
+    { 19,  82  },
+    { 45,  82  },
+    { 71,  82  },
+    { 97,  82  },
+    { 123, 82  },
+    { 149, 82  },
+    { 19,  105 },
+    { 45,  105 },
+    { 71,  105 },
+    { 97,  105 },
+    { 123, 105 },
+    { 149, 105 },
+    { 19,  128 },
+    { 45,  128 },
+    { 71,  128 },
+    { 97,  128 },
+    { 123, 128 },
+    { 149, 128 },
+    { 224, 135 },
+    { 82,  16  },
+};
+
+static const u8 sGtsSelectMonCursorMoves[32][4] = {
+    { 31, 6,  5,  1   },
+    { 31, 7,  0,  2   },
+    { 31, 8,  1,  3   },
+    { 31, 9,  2,  4   },
+    { 31, 10, 3,  5   },
+    { 31, 11, 4,  0   },
+    { 0,  12, 11, 7   },
+    { 1,  13, 6,  8   },
+    { 2,  14, 7,  9   },
+    { 3,  15, 8,  10  },
+    { 4,  16, 9,  11  },
+    { 5,  17, 10, 6   },
+    { 6,  18, 17, 13  },
+    { 7,  19, 12, 14  },
+    { 8,  20, 13, 15  },
+    { 9,  21, 14, 16  },
+    { 10, 22, 15, 17  },
+    { 11, 23, 16, 12  },
+    { 12, 24, 23, 19  },
+    { 13, 25, 18, 20  },
+    { 14, 26, 19, 21  },
+    { 15, 27, 20, 22  },
+    { 16, 28, 21, 23  },
+    { 17, 29, 22, 18  },
+    { 18, 31, 30, 25  },
+    { 19, 31, 24, 26  },
+    { 20, 31, 25, 27  },
+    { 21, 31, 26, 28  },
+    { 22, 31, 27, 29  },
+    { 23, 31, 28, 30  },
+    { 30, 30, 29, 24  },
+    { 26, 2,  99, 101 },
+};
+
+static const TouchscreenHitbox sGtsSelectMonHitboxes[34] = {
+    { .rect = { 23, 49, 8, 30 } },
+    { .rect = { 23, 49, 34, 56 } },
+    { .rect = { 23, 49, 60, 82 } },
+    { .rect = { 23, 49, 86, 108 } },
+    { .rect = { 23, 49, 112, 134 } },
+    { .rect = { 23, 49, 138, 160 } },
+    { .rect = { 46, 72, 8, 30 } },
+    { .rect = { 46, 72, 34, 56 } },
+    { .rect = { 46, 72, 60, 82 } },
+    { .rect = { 46, 72, 86, 108 } },
+    { .rect = { 46, 72, 112, 134 } },
+    { .rect = { 46, 72, 138, 160 } },
+    { .rect = { 69, 95, 8, 30 } },
+    { .rect = { 69, 95, 34, 56 } },
+    { .rect = { 69, 95, 60, 82 } },
+    { .rect = { 69, 95, 86, 108 } },
+    { .rect = { 69, 95, 112, 134 } },
+    { .rect = { 69, 95, 138, 160 } },
+    { .rect = { 92, 118, 8, 30 } },
+    { .rect = { 92, 118, 34, 56 } },
+    { .rect = { 92, 118, 60, 82 } },
+    { .rect = { 92, 118, 86, 108 } },
+    { .rect = { 92, 118, 112, 134 } },
+    { .rect = { 92, 118, 138, 160 } },
+    { .rect = { 115, 141, 8, 30 } },
+    { .rect = { 115, 141, 34, 56 } },
+    { .rect = { 115, 141, 60, 82 } },
+    { .rect = { 115, 141, 86, 108 } },
+    { .rect = { 115, 141, 112, 134 } },
+    { .rect = { 115, 141, 138, 160 } },
+    { .rect = { 123, 148, 186, 245 } },
+    { .rect = { 4, 28, 146, 162 } },
+    { .rect = { 4, 28, 2, 18 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
 
 int GtsSearch_PrintSearchFailed(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00152, 1, 0, 0xF0F); // The search failed...
@@ -445,7 +621,7 @@ void GtsSelectMon_CreateSprites(GtsApp *app) {
 
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
     template.position.x = sGtsSelectMonCursorPositions[app->selectedSlot].x << FX32_SHIFT;
-    template.position.y = sGtsSelectMonCursorY[app->selectedSlot].y << FX32_SHIFT;
+    template.position.y = sGtsSelectMonCursorPositions[app->selectedSlot].y << FX32_SHIFT;
     app->cursorSprite = Sprite_CreateAffine(&template);
     Sprite_SetAnimActiveFlag(app->cursorSprite, TRUE);
     Sprite_SetAnimCtrlSeq(app->cursorSprite, 4);
@@ -744,7 +920,7 @@ void GtsSelectMon_MoveCursor(GtsApp *app) {
 }
 
 void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position) {
-    Gts_SetSpritePositionRounded(sprite, sGtsSelectMonCursorPositions[position].x, sGtsSelectMonCursorY[position].y);
+    Gts_SetSpritePositionRounded(sprite, sGtsSelectMonCursorPositions[position].x, sGtsSelectMonCursorPositions[position].y);
     if (position == GTS_SELECT_MON_BOX_NAME || (position >= 0 && position <= 5)) {
         Sprite_SetPriority(sprite, 0);
     } else {

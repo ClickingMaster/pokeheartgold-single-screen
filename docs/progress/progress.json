@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "502b1df73fbd603d2b18aa8dbf9f87bef908ea90",
+  "commit": "c28d3dceeb906e77cb3bb81a950ef76562749729",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "974ea348d10ee68f7463d9c1c58372f37b259646290864d689ddbad962d2491f",
+    "ARM9": "277ff7dade27fa75fb96836ef5ee0566c828d9ee92f76942fb3aa0901c119a9a",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -4349,9 +4349,17 @@
       "cpu": "ARM9",
       "module": "OVY_70",
       "object": "gts_search.o",
-      "bytes": 8298,
+      "bytes": 5072,
       "status": "c",
       "source": "src/gts/gts_search.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_70",
+      "object": "gts_search_result.o",
+      "bytes": 3226,
+      "status": "c",
+      "source": "src/gts/gts_search_result.c"
     },
     {
       "cpu": "ARM9",

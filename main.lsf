@@ -1796,6 +1796,7 @@ Overlay OVY_70
     Object src/gts/gts.o
     Object src/gts/gts_main_menu.o
     Object src/gts/gts_summary.o
+    Object src/gts/gts_search_result.o
     Object src/gts/gts_search.o
     Object src/gts/gts_select_mon.o
     Object src/gts/gts_wanted.o

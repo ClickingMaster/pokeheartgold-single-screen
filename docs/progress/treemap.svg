@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 502b1df73 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c28d3dcee · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -4839,40 +4839,43 @@ src/application/pokewalker/pokewalker_ir_requests.c</title></rect>
 172 bytes · C-only source
 src/application/pokewalker/pokewalker_ir_status.c</title></rect>
 <rect x="1042.480" y="220.505" width="129.520" height="69.818" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1042.480" y="290.323" width="60.629" height="26.138" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_selector.o
+<rect x="1042.480" y="290.323" width="36.499" height="43.417" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_selector.o
 9,904 bytes · C-only source
 src/gts/gts_selector.c</title></rect>
-<rect x="1042.480" y="316.460" width="31.358" height="42.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search.o
-8,298 bytes · C-only source
-src/gts/gts_search.c</title></rect>
-<rect x="1073.837" y="316.460" width="29.272" height="42.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_select_mon.o
+<rect x="1078.979" y="290.323" width="28.546" height="43.417" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_select_mon.o
 7,746 bytes · C-only source
 src/gts/gts_select_mon.c</title></rect>
-<rect x="1103.109" y="290.323" width="33.361" height="24.537" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_transaction.o
+<rect x="1042.480" y="333.740" width="32.663" height="25.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_transaction.o
 5,116 bytes · C-only source
 src/gts/gts_transaction.c</title></rect>
-<rect x="1103.109" y="314.860" width="33.361" height="22.091" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_connection.o
+<rect x="1075.143" y="333.740" width="32.382" height="25.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search.o
+5,072 bytes · C-only source
+src/gts/gts_search.c</title></rect>
+<rect x="1107.525" y="290.323" width="22.090" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_connection.o
 4,606 bytes · C-only source
 src/gts/gts_connection.c</title></rect>
-<rect x="1103.109" y="336.951" width="33.361" height="21.851" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
+<rect x="1129.614" y="290.323" width="21.850" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
 4,556 bytes · C-only source
 src/gts/gts_wanted.c</title></rect>
-<rect x="1136.470" y="290.323" width="20.383" height="33.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
+<rect x="1151.464" y="290.323" width="20.536" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
 4,282 bytes · C-only source
 src/gts/gts.c</title></rect>
-<rect x="1156.853" y="290.323" width="15.147" height="33.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
+<rect x="1107.525" y="323.686" width="29.198" height="17.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search_result.o
+3,226 bytes · C-only source
+src/gts/gts_search_result.c</title></rect>
+<rect x="1107.525" y="341.364" width="29.198" height="17.437" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
 3,182 bytes · C-only source
 src/gts/gts_main_menu.c</title></rect>
-<rect x="1136.470" y="323.936" width="14.401" height="34.865" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
+<rect x="1136.723" y="323.686" width="14.298" height="35.116" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
 3,138 bytes · C-only source
 src/gts/gts_summary.c</title></rect>
-<rect x="1150.871" y="323.936" width="21.129" height="13.873" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
+<rect x="1151.022" y="323.686" width="20.978" height="13.973" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
 1,832 bytes · C-only source
 src/gts/gts_avatars.c</title></rect>
-<rect x="1150.871" y="337.810" width="12.531" height="20.992" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
+<rect x="1151.022" y="337.659" width="20.978" height="12.539" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
 1,644 bytes · C-only source
 src/gts/gts_server.c</title></rect>
-<rect x="1163.402" y="337.810" width="8.598" height="20.992" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
+<rect x="1151.022" y="350.198" width="20.978" height="8.603" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
 1,128 bytes · C-only source
 src/gts/gts_trade.c</title></rect>
 <rect x="1042.480" y="290.323" width="129.520" height="68.479" fill="none" stroke="#101722" stroke-width="2"/>
