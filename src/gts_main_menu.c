@@ -47,20 +47,8 @@ typedef enum GtsMainMenuState {
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsMainMenuStates[])(GtsApp *app);
-extern const GraphicsModes sGtsMainMenuGraphicsModes;
-extern const BgTemplate sGtsMainMenuBg0Template;
-extern const BgTemplate sGtsMainMenuBg1Template;
-extern const BgTemplate sGtsMainMenuBg2Template;
-extern const BgTemplate sGtsSubBg0Template;
-extern const BgTemplate sGtsSubBg1Template;
-extern const BgTemplate sGtsSubBg2Template;
-extern const BgTemplate sGtsSubBg3Template;
 // The cursor positions {x, y} of the three buttons.
-extern const u16 sGtsMainMenuCursorX[];
-extern const u16 sGtsMainMenuCursorY[];
-extern const TouchscreenHitbox sGtsMainMenuButtonHitboxes[];
 // The button labels, [hasDepositedMon][button].
-extern const u32 sGtsMainMenuButtonMsgs[2][3];
 
 int GtsMainMenu_Init(GtsApp *app, int state);
 int GtsMainMenu_Main(GtsApp *app, int state);
@@ -95,6 +83,137 @@ int GtsMainMenu_ShowExitPrompt(GtsApp *app);
 int GtsMainMenu_HandleExitPrompt(GtsApp *app);
 int GtsMainMenu_WaitText(GtsApp *app);
 int GtsMainMenu_WaitTextAndPause(GtsApp *app);
+
+// Cursor position (x, y) of each main menu button.
+static const u16 sGtsMainMenuCursorPositions[3][2] = {
+    { 128, 56  },
+    { 128, 96  },
+    { 128, 136 },
+};
+
+static const TouchscreenHitbox sGtsMainMenuButtonHitboxes[4] = {
+    { 40,  71,  24, 231 },
+    { 80,  111, 24, 231 },
+    { 120, 151, 24, 231 },
+    { 255, 0,   0,  0   }
+};
+
+static const GraphicsModes sGtsMainMenuGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const u32 sGtsMainMenuButtonMsgs[2][3] = {
+    { 41, 42, 43 },
+    { 40, 42, 43 }
+};
+
+static const BgTemplate sGtsSubBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSubBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x14000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsMainMenuBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsMainMenuBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSubBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_256,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsMainMenuBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSubBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xd800,
+    .charBase = GX_BG_CHARBASE_0x10000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
 
 int GtsMainMenu_Init(GtsApp *app, int state) {
     GtsMainMenu_CreateStrings(app);
@@ -234,8 +353,8 @@ void GtsMainMenu_CreateCursor(GtsApp *app) {
 
     CreateSpriteResourcesHeader(&header, 0, 0, 0, 0, -1, -1, 0, 1, app->resourceManagers[GF_GFX_RES_TYPE_CHAR], app->resourceManagers[GF_GFX_RES_TYPE_PLTT], app->resourceManagers[GF_GFX_RES_TYPE_CELL], app->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     Gts_InitSpriteTemplate(&template, app, &header, NNS_G2D_VRAM_TYPE_2DMAIN);
-    template.position.x = sGtsMainMenuCursorX[app->menuCursor * 2] << FX32_SHIFT;
-    template.position.y = sGtsMainMenuCursorY[app->menuCursor * 2] << FX32_SHIFT;
+    template.position.x = sGtsMainMenuCursorPositions[app->menuCursor][0] << FX32_SHIFT;
+    template.position.y = sGtsMainMenuCursorPositions[app->menuCursor][1] << FX32_SHIFT;
     app->cursorSprite = Sprite_CreateAffine(&template);
     Sprite_SetAnimActiveFlag(app->cursorSprite, TRUE);
     Sprite_SetAnimCtrlSeq(app->cursorSprite, 43);
@@ -393,7 +512,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
         app->menuCursor = button;
         PlaySE(SEQ_SE_DP_SELECT);
         cursor = app->menuCursor;
-        Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorX[cursor * 2], sGtsMainMenuCursorY[cursor * 2]);
+        Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorPositions[cursor][0], sGtsMainMenuCursorPositions[cursor][1]);
         GtsMainMenu_SelectButton(app, button);
         return 3;
     }
@@ -409,13 +528,13 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
             app->menuCursor -= 1;
             PlaySE(SEQ_SE_DP_SELECT);
             button = app->menuCursor;
-            Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorX[button * 2], sGtsMainMenuCursorY[button * 2]);
+            Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorPositions[button][0], sGtsMainMenuCursorPositions[button][1]);
         }
     } else if ((gSystem.newKeys & PAD_KEY_DOWN) && app->menuCursor < 2) {
         app->menuCursor += 1;
         PlaySE(SEQ_SE_DP_SELECT);
         button = app->menuCursor;
-        Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorX[button * 2], sGtsMainMenuCursorY[button * 2]);
+        Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorPositions[button][0], sGtsMainMenuCursorPositions[button][1]);
     }
 
     return 3;

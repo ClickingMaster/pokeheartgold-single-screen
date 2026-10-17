@@ -50,21 +50,6 @@ typedef struct GtsScreen {
     int (*exit)(GtsApp *app, int state);
 } GtsScreen;
 
-extern const char sGtsPostUrl[];
-extern const char sGtsPostFinishUrl[];
-extern const char sGtsGetUrl[];
-extern const char sGtsResultUrl[];
-extern const char sGtsDeleteUrl[];
-extern const char sGtsReturnUrl[];
-extern const char sGtsSearchUrl[];
-extern const char sGtsExchangeUrl[];
-extern const char sGtsExchangeFinishUrl[];
-extern const char sGtsInfoUrl[];
-extern const char sGtsSetProfileUrl[];
-extern const GraphicsModes sGtsGraphicsModes;
-extern const GraphicsBanks sGtsGraphicsBanks;
-extern const ObjCharTransferTemplate sGtsObjCharTransferTemplate;
-extern const TouchscreenListMenuTemplate sGtsListMenuTemplate;
 extern const GtsScreen sGtsScreens[];
 
 int WCM_GetPhase(void);
@@ -86,6 +71,46 @@ void *Gts_Alloc(void *unused, u32 size, int alignment);
 void Gts_Free(void *unused, void *ptr);
 void Gts_DecrementTimer(GtsApp *app);
 void Gts_CountBoxMonsStep(GtsApp *app);
+
+static const TouchscreenListMenuTemplate sGtsListMenuTemplate = {
+    .wrapAround = 0,
+    .centered = 1,
+    .xOffset = 0,
+    .bgId = 0,
+    .plttOffset = 10,
+    .unk4 = 0,
+    .unk5 = 0,
+    .baseTile = 0x180,
+    .charOffset = 0x1BC,
+    .unkA = 60,
+};
+
+static const GraphicsModes sGtsGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const ObjCharTransferTemplate sGtsObjCharTransferTemplate = {
+    .maxTasks = 20,
+    .sizeMain = 0x800,
+    .sizeSub = 0x800,
+    .heapID = HEAP_ID_61,
+};
+
+static const GraphicsBanks sGtsGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_0_B,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
 
 void GtsServer_Exit(void) {
     gGtsServer.state = GTS_SERVER_STATE_NONE;
@@ -110,7 +135,7 @@ int GtsServer_GetResult(void) {
 void GtsServer_RequestPost(const void *record) {
     memcpy(gGtsServerRequest, record, GTS_RECORD_SIZE);
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsPostUrl, gGtsServerRequest, GTS_RECORD_SIZE, gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post.asp", gGtsServerRequest, GTS_RECORD_SIZE, gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_POST;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -126,7 +151,7 @@ void GtsServer_RequestPostFinish(void) {
     GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
     *dest = *src;
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsPostFinishUrl, gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_POST_FINISH;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -140,7 +165,7 @@ void GtsServer_RequestPostFinish(void) {
 void GtsServer_RequestGet(void *response) {
     ov70_02246900.response = response;
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsGetUrl, gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/get.asp", gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
         gGtsServer.state = GTS_SERVER_STATE_GET;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -152,7 +177,7 @@ void GtsServer_RequestGet(void *response) {
 void GtsServer_RequestResult(void *response) {
     ov70_02246900.response = response;
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsResultUrl, gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/result.asp", gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
         gGtsServer.state = GTS_SERVER_STATE_RESULT;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -163,7 +188,7 @@ void GtsServer_RequestResult(void *response) {
 
 void GtsServer_RequestDelete(void) {
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsDeleteUrl, gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/delete.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_DELETE;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -174,7 +199,7 @@ void GtsServer_RequestDelete(void) {
 
 void GtsServer_RequestReturn(void) {
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsReturnUrl, gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/return.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_RETURN;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -188,7 +213,7 @@ void GtsServer_RequestSearch(const void *criteria, int count, void *response) {
     GameStats_Start();
     *(GtsSearchCriteria *)gGtsServerRequest = *(const GtsSearchCriteria *)criteria;
     gGtsServer.request.search.count = count;
-    if (GtsServer_StartRequest(sGtsSearchUrl, gGtsServerRequest, 7, response, GTS_RECORD_SIZE * count)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/search.asp", gGtsServerRequest, 7, response, GTS_RECORD_SIZE * count)) {
         gGtsServer.state = GTS_SERVER_STATE_SEARCH;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -211,7 +236,7 @@ void GtsServer_RequestSearchEx(const void *criteria, void *response) {
         *dest++ = *src++;
         i--;
     } while (i != 0);
-    if (GtsServer_StartRequest(sGtsSearchUrl, gGtsServerRequest, sizeof(GtsSearchCriteriaEx), response, ((const GtsSearchCriteriaEx *)criteria)->count * GTS_RECORD_SIZE)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/search.asp", gGtsServerRequest, sizeof(GtsSearchCriteriaEx), response, ((const GtsSearchCriteriaEx *)criteria)->count * GTS_RECORD_SIZE)) {
         gGtsServer.state = GTS_SERVER_STATE_SEARCH;
         return;
     }
@@ -225,7 +250,7 @@ void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
     GameStats_Start();
     memcpy(gGtsServerRequest, record, GTS_RECORD_SIZE);
     ov70_02246900.exchangeArg = arg;
-    if (GtsServer_StartRequest(sGtsExchangeUrl, gGtsServerRequest, GTS_RECORD_SIZE + 4, response, GTS_RECORD_SIZE)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange.asp", gGtsServerRequest, GTS_RECORD_SIZE + 4, response, GTS_RECORD_SIZE)) {
         gGtsServer.state = GTS_SERVER_STATE_EXCHANGE;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -241,7 +266,7 @@ void GtsServer_RequestExchangeFinish(void) {
     GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
     *dest = *src;
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsExchangeFinishUrl, gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_EXCHANGE_FINISH;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -254,7 +279,7 @@ void GtsServer_RequestExchangeFinish(void) {
 
 void GtsServer_RequestInfo(void) {
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsInfoUrl, gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/info.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_INFO;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;
@@ -269,7 +294,7 @@ void GtsServer_RequestSetProfile(void *profile, void *response) {
     memcpy(gGtsServerRequest, profile, 0x64);
     ov70_02246900.response = response;
     GameStats_Start();
-    if (GtsServer_StartRequest(sGtsSetProfileUrl, gGtsServerRequest, 0x64, ov70_02246900.response, 8)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp", gGtsServerRequest, 0x64, ov70_02246900.response, 8)) {
         gGtsServer.state = GTS_SERVER_STATE_SET_PROFILE;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;

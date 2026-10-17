@@ -51,11 +51,6 @@ typedef struct GtsWindowRect {
 } GtsWindowRect;
 
 extern int (*const sGtsSummaryStates[])(GtsApp *app);
-extern const BgTemplate sGtsSummaryBg0Template;
-extern const BgTemplate sGtsSummaryBg1Template;
-extern const BgTemplate sGtsSummaryBg2Template;
-extern const BgTemplate sGtsSummaryBg3Template;
-extern const GtsWindowRect sGtsSummaryInfoWindowRects[14];
 extern u32 sGtsGenderSymbolMsgs[];
 extern u32 sGtsGenderSymbolColors[];
 
@@ -88,6 +83,83 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
 void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows);
 void Gts_LoadMonPicture(Pokemon *mon);
 void GtsSummary_DrawWanted(GtsApp *app);
+
+static const BgTemplate sGtsSummaryBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSummaryBg1Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSummaryBg2Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sGtsSummaryBg3Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const GtsWindowRect sGtsSummaryInfoWindowRects[14] = {
+    { 1,  1,  9,  2 },
+    { 8,  4,  8,  2 },
+    { 11, 1,  3,  2 },
+    { 14, 1,  3,  2 },
+    { 1,  10, 6,  2 },
+    { 8,  10, 11, 2 },
+    { 1,  4,  6,  2 },
+    { 1,  13, 9,  2 },
+    { 11, 13, 8,  2 },
+    { 1,  16, 12, 2 },
+    { 1,  18, 10, 2 },
+    { 11, 18, 12, 2 },
+    { 1,  7,  4,  2 },
+    { 8,  7,  8,  2 },
+};
 
 void Gts_LoadSubScreenBg(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
