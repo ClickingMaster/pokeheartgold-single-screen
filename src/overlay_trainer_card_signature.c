@@ -60,9 +60,6 @@ enum TrainerCardSignatureState {
 
 typedef int (*TrainerCardSignatureStateFunc)(TrainerCardSignature *signature, int state);
 
-extern const u16 sTrainerCardSignatureDoneButtonPos[];
-extern const TouchscreenHitbox sTrainerCardSignatureCanvasHitbox[];
-extern const TouchscreenHitbox sTrainerCardSignatureButtonHitboxes[];
 extern const GraphicsModes sTrainerCardSignatureGraphicsModes;
 extern const ObjCharTransferTemplate sTrainerCardSignatureObjCharTransferTemplate;
 extern const BgTemplate sTrainerCardSignatureSubBg0Template;
@@ -72,7 +69,6 @@ extern const BgTemplate sTrainerCardSignatureMainBg1Template;
 extern const BgTemplate sTrainerCardSignatureMainBg2Template;
 extern const GraphicsBanks sTrainerCardSignatureGraphicsBanks;
 extern const u8 sTrainerCardSignaturePenBitmaps[][16];
-extern const TrainerCardSignatureStateFunc sTrainerCardSignatureStateFuncs[];
 
 static void TrainerCardSignature_VBlankCB(BgConfig *bgConfig);
 static void TrainerCardSignature_SetGfxBanks(void);
@@ -114,6 +110,30 @@ int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, in
 int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state);
 int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state);
+
+static TrainerCardSignatureStateFunc sTrainerCardSignatureStateFuncs[] = {
+    NULL,
+    TrainerCardSignature_State_Draw,
+    TrainerCardSignature_State_WaitConfirmMessage,
+    TrainerCardSignature_State_ConfirmPrompt,
+    TrainerCardSignature_State_PrintEraseMessage,
+    TrainerCardSignature_State_WaitEraseMessage,
+    TrainerCardSignature_State_ErasePrompt,
+};
+
+static const u16 sTrainerCardSignatureDoneButtonPos[] = { 224, 175, 0 };
+
+static const TouchscreenHitbox sTrainerCardSignatureCanvasHitbox[] = {
+    { .rect = { 72, 136, 32, 224 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const TouchscreenHitbox sTrainerCardSignatureButtonHitboxes[] = {
+    { .rect = { 166, 192, 203, 255 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+    { .rect = { 166, 192, 0, 95 } },
+    { .rect = { 166, 192, 96, 191 } },
+};
 
 int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
     TrainerCardSignature *signature;

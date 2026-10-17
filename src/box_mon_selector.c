@@ -64,11 +64,6 @@ enum BoxMonSelectorPanel {
 #define DRAG_FROM_BOX   1
 #define DRAG_FROM_PICKS 2
 
-extern const BgTemplate gBoxMonSelectorBgTemplateMain2;
-extern const BgTemplate gBoxMonSelectorBgTemplateMain1;
-extern const BgTemplate gBoxMonSelectorBgTemplateMain0;
-extern const BgTemplate gBoxMonSelectorBgTemplateMain3;
-
 static int BoxMonSelector_HandleInput(BoxMonSelector *selector);
 static void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector);
 static void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector);
@@ -124,7 +119,69 @@ static void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector);
 static void BoxMonSelector_DimScreen(void);
 static void BoxMonSelector_ResetBlend(void);
 
-#pragma force_active on
+static const BgTemplate sBoxMonSelectorBgTemplateMain0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBoxMonSelectorBgTemplateMain1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBoxMonSelectorBgTemplateMain2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sBoxMonSelectorBgTemplateMain3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_23,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .dummy = 0,
+    .mosaic = FALSE,
+};
 
 BoxMonSelector *BoxMonSelector_New(enum HeapID heapId, int maxPicks, int numPages) {
     BoxMonSelector *selector = Heap_Alloc(heapId, sizeof(BoxMonSelector));
@@ -215,8 +272,6 @@ void BoxMonSelector_Init(BoxMonSelector *selector, BgConfig *bgConfig, void *sto
     selector->touchStarted = FALSE;
 }
 
-#pragma force_active off
-
 void BoxMonSelector_VBlank(BoxMonSelector *selector) {
     if (selector->vblankTask != NULL) {
         selector->vblankTask(selector->iconChars);
@@ -253,8 +308,6 @@ int BoxMonSelector_Run(BoxMonSelector *selector) {
         return 2;
     }
 }
-
-#pragma force_active on
 
 static int BoxMonSelector_HandleInput(BoxMonSelector *selector) {
     int result = 0;
@@ -372,8 +425,6 @@ static int BoxMonSelector_HandleInput(BoxMonSelector *selector) {
     return result;
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector) {
     YesNoPromptTemplate template;
     MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
@@ -457,8 +508,6 @@ void BoxMonSelector_RenderSprites(BoxMonSelector *selector) {
     }
 }
 
-#pragma force_active on
-
 static void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
     int i;
 
@@ -475,8 +524,6 @@ static void BoxMonSelector_InitSpriteResources(BoxMonSelector *selector) {
     SpriteTransfer_CreateExtPlttTransferTask(selector->spriteResources[1]);
     GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), GF_PAL_LOCATION_MAIN_OBJ, GF_PAL_SLOT_8_OFFSET, 0, selector->heapId);
 }
-
-#pragma force_active off
 
 static void BoxMonSelector_InitSpriteHeader(BoxMonSelector *selector) {
     CreateSpriteResourcesHeader(&selector->spriteHeader, 0, 0, 0, 0, -1, -1, 0, 0, selector->resManagers[0], selector->resManagers[1], selector->resManagers[2], selector->resManagers[3], NULL, NULL);
@@ -519,8 +566,6 @@ static void BoxMonSelector_CreatePickSlots(BoxMonSelector *selector) {
     selector->boxDropArea.right = 151;
     selector->boxDropArea.occupied = FALSE;
 }
-
-#pragma force_active on
 
 // Returns 0 when nothing happened, 1 when the Pokemon in hand was placed in a free pick slot, 2 when it was dropped
 // back on the box (pick removed), 3 when a pick was moved to another pick slot.
@@ -572,8 +617,6 @@ static int BoxMonSelector_HandleDrop(BoxMonSelector *selector) {
     }
     return 0;
 }
-
-#pragma force_active off
 
 static void BoxMonSelector_AddPick(BoxMonSelector *selector, u8 pick) {
     u8 i;
@@ -676,8 +719,6 @@ static Sprite *BoxMonSelector_CreateSprite(BoxMonSelector *selector, int x, int 
     return sprite;
 }
 
-#pragma force_active on
-
 static void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgConfig, enum HeapID heapId) {
     GfGfxLoader_LoadScrnData(NARC_a_1_5_1, 1, bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, heapId);
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 32, 24, 1);
@@ -690,16 +731,12 @@ static void BoxMonSelector_LoadScreens(BoxMonSelector *selector, BgConfig *bgCon
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_SetHitboxRect(TouchscreenHitbox *hitbox, int x, int y, int width, int height) {
     hitbox->rect.top = y - height / 2;
     hitbox->rect.left = x - width / 2;
     hitbox->rect.bottom = y + height / 2;
     hitbox->rect.right = x + width / 2;
 }
-
-#pragma force_active on
 
 static void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector) {
     SpriteTemplate template;
@@ -736,8 +773,6 @@ static void BoxMonSelector_CreateBoxIcons(BoxMonSelector *selector) {
     Sprite_SetDrawPriority(selector->boxIcons[BOX_MON_SELECTOR_BOX_SLOTS].sprite, 8);
     Sprite_SetOamMode(selector->boxIcons[BOX_MON_SELECTOR_BOX_SLOTS].sprite, GX_OAM_MODE_XLU);
 }
-
-#pragma force_active off
 
 static int BoxMonSelector_LoadPage(BoxMonSelector *selector) {
     if (selector->page == BOX_MON_SELECTOR_PARTY_PAGE) {
@@ -816,8 +851,6 @@ static int BoxMonSelector_LoadPartyPage(BoxMonSelector *selector) {
     ScheduleBgTilemapBufferTransfer(selector->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-#pragma force_active on
-
 static void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int source, BOOL fromPick) {
     void *buf;
     NARC *narc;
@@ -840,8 +873,6 @@ static void BoxMonSelector_SetPickIcon(BoxMonSelector *selector, u8 pick, int so
     selector->vblankTask = BoxMonSelector_TransferIconChars;
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_TransferIconChars(BoxMonSelectorIconChars *chars) {
     int i;
     for (i = 0; i < BOX_MON_SELECTOR_BOX_SLOTS; i++) {
@@ -858,8 +889,6 @@ static int BoxMonSelector_PointAtBoxSlot(BoxMonSelector *selector, int slot) {
     Sprite_SetMatrix(selector->handCursor, Sprite_GetMatrixPtr(selector->boxIcons[slot].sprite));
     return BoxMonSelector_GetBoxSlotState(selector, slot);
 }
-
-#pragma force_active on
 
 static int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot) {
     int i, found;
@@ -889,8 +918,6 @@ static int BoxMonSelector_GetBoxSlotState(BoxMonSelector *selector, int slot) {
     return SLOT_PICKED;
 }
 
-#pragma force_active off
-
 static int BoxMonSelector_PointAtPick(BoxMonSelector *selector, int pick) {
     int ret = BoxMonSelector_GetPickState(selector, pick);
     if (pick < selector->maxPicks) {
@@ -909,8 +936,6 @@ static int BoxMonSelector_GetPickState(BoxMonSelector *selector, int pick) {
     }
     return SLOT_SELECTABLE;
 }
-
-#pragma force_active on
 
 static void BoxMonSelector_StartDrag(BoxMonSelector *selector, int source, int index) {
     BoxMonSelectorIcon *icons;
@@ -968,15 +993,11 @@ static void BoxMonSelector_UpdateTouchDrag(BoxMonSelector *selector) {
     }
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_Drop(BoxMonSelector *selector) {
     if (selector->dragging != FALSE) {
         BoxMonSelector_EndDrag(selector, BoxMonSelector_HandleDrop(selector));
     }
 }
-
-#pragma force_active on
 
 // result: 0 puts the Pokemon in hand back, otherwise the result of BoxMonSelector_HandleDrop.
 static void BoxMonSelector_EndDrag(BoxMonSelector *selector, int result) {
@@ -1045,14 +1066,10 @@ static void BoxMonSelector_LoadIconChars(BoxMonSelectorMon *mon, BoxMonSelectorI
     }
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_ReadIconChars(u32 fileId, NNSG2dCharacterData **ppCharData, void *dest, NARC *narc) {
     NARC_ReadWholeMember(narc, fileId, dest);
     NNS_G2dGetUnpackedBGCharacterData(dest, ppCharData);
 }
-
-#pragma force_active on
 
 static void BoxMonSelector_PrintPageName(BoxMonSelector *selector, int page) {
     String *string;
@@ -1083,8 +1100,6 @@ static void BoxMonSelector_PrintCancelButton(BoxMonSelector *selector) {
     DestroyMsgData(msgData);
 }
 
-#pragma force_active off
-
 static void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     BoxMonSelector_InitBgLayers(bgConfig);
     gSystem.screensFlipped = TRUE;
@@ -1096,22 +1111,22 @@ static void BoxMonSelector_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
 
 static void BoxMonSelector_InitBgLayers(BgConfig *bgConfig) {
     {
-        BgTemplate template = gBoxMonSelectorBgTemplateMain0;
+        BgTemplate template = sBoxMonSelectorBgTemplateMain0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate template = gBoxMonSelectorBgTemplateMain1;
+        BgTemplate template = sBoxMonSelectorBgTemplateMain1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate template = gBoxMonSelectorBgTemplateMain2;
+        BgTemplate template = sBoxMonSelectorBgTemplateMain2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
-        BgTemplate template = gBoxMonSelectorBgTemplateMain3;
+        BgTemplate template = sBoxMonSelectorBgTemplateMain3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
@@ -1138,8 +1153,6 @@ static void BoxMonSelector_GetPartyMon(BoxMonSelector *selector, int slot, BoxMo
     mon->heldItem = GetMonData(partyMon, MON_DATA_HELD_ITEM, NULL);
     mon->unk_0E = 0;
 }
-
-#pragma force_active on
 
 static void BoxMonSelector_RemovePick(BoxMonSelector *selector, int pick) {
     u32 markIndex = selector->picks[pick].markIndex;
@@ -1175,8 +1188,6 @@ static void BoxMonSelector_ShowMessage(BoxMonSelector *selector, int msgId, Font
     CopyWindowToVram(&selector->messageWindow);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
-
-#pragma force_active off
 
 static void BoxMonSelector_ShowTakePrompt(BoxMonSelector *selector) {
     if (selector->maxPicks == 1) {
@@ -1299,8 +1310,6 @@ static void BoxMonSelector_UpdateCursorSprite(BoxMonSelector *selector) {
     }
 }
 
-#pragma force_active on
-
 // Returns 1 when a Pokemon was taken in hand, 3 when CANCEL was pressed.
 static int BoxMonSelector_HandleAButton(BoxMonSelector *selector) {
     int result = 0;
@@ -1356,8 +1365,6 @@ static int BoxMonSelector_HandleAButton(BoxMonSelector *selector) {
     return result;
 }
 
-#pragma force_active off
-
 static int BoxMonSelector_HandleBButton(BoxMonSelector *selector) {
     VecFx32 pos;
     int result = 0;
@@ -1383,8 +1390,6 @@ static int BoxMonSelector_HandleBButton(BoxMonSelector *selector) {
     }
     return result;
 }
-
-#pragma force_active on
 
 static void BoxMonSelector_PrevPage(BoxMonSelector *selector) {
     if (selector->page == 0) {
@@ -1414,8 +1419,6 @@ static void BoxMonSelector_PrevPage(BoxMonSelector *selector) {
         break;
     }
 }
-
-#pragma force_active off
 
 static void BoxMonSelector_NextPage(BoxMonSelector *selector) {
     VecFx32 pos;
@@ -1448,8 +1451,6 @@ static void BoxMonSelector_PressCancelButton(BoxMonSelector *selector) {
     Sprite_SetAnimCtrlSeq(selector->cancelButton, 5);
     PlaySE(SEQ_SE_DP_SELECT);
 }
-
-#pragma force_active on
 
 // Tells the caller about the Pokemon under the cursor (page and slot, or -1, -1) when it changed.
 static void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector) {
@@ -1490,8 +1491,6 @@ static void BoxMonSelector_NotifyCursorMove(BoxMonSelector *selector) {
         selector->lastCursorSlot = slot;
     }
 }
-
-#pragma force_active off
 
 static void BoxMonSelector_DimScreen(void) {
     G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, -7);

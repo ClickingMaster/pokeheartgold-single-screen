@@ -364,7 +364,6 @@ Static main
     Object src/mom_gift.o
     Object src/phone_rematch.o
     Object src/box_mon_selector.o
-    Object asm/box_mon_selector_data.o
     Object asm/grid_cursor_data.o
     Object src/grid_cursor.o
     Object src/pokeathlon_course_task.o

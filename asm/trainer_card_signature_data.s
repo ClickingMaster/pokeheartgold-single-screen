@@ -4,14 +4,6 @@
 	.include "global.inc"
 
 	.text
-	.public TrainerCardSignature_Exit
-	.public TrainerCardSignature_Init
-	.public TrainerCardSignature_Main
-	.public sTrainerCardSignatureDoneButtonPos
-	.public TrainerCardSignature_State_ConfirmPrompt
-	.public TrainerCardSignature_State_ErasePrompt
-	.public sTrainerCardSignatureCanvasHitbox
-	.public sTrainerCardSignatureButtonHitboxes
 	.public sTrainerCardSignatureGraphicsModes
 	.public sTrainerCardSignatureObjCharTransferTemplate
 	.public sTrainerCardSignatureSubBg0Template
@@ -21,23 +13,7 @@
 	.public sTrainerCardSignatureMainBg2Template
 	.public sTrainerCardSignatureGraphicsBanks
 	.public sTrainerCardSignaturePenBitmaps
-	.public sTrainerCardSignatureStateFuncs
-	.public TrainerCardSignature_State_Draw
-	.public TrainerCardSignature_State_WaitConfirmMessage
-	.public TrainerCardSignature_State_PrintEraseMessage
-	.public TrainerCardSignature_State_WaitEraseMessage
 	.rodata
-
-sTrainerCardSignatureDoneButtonPos:
-	.byte 0xE0, 0x00, 0xAF, 0x00
-	.byte 0x00, 0x00
-
-sTrainerCardSignatureCanvasHitbox: ; 0x021E94B2
-	.byte 0x48, 0x88, 0x20, 0xE0, 0xFF, 0x00, 0x00, 0x00
-
-sTrainerCardSignatureButtonHitboxes: ; 0x021E94BA
-	.byte 0xA6, 0xC0, 0xCB, 0xFF, 0xFF, 0x00
-	.byte 0x00, 0x00, 0xA6, 0xC0, 0x00, 0x5F, 0xA6, 0xC0, 0x60, 0xBF, 0x00, 0x00
 
 sTrainerCardSignatureGraphicsModes: ; 0x021E94CC
 	.byte 0x01, 0x00, 0x00, 0x00
@@ -94,13 +70,3 @@ sTrainerCardSignaturePenBitmaps: ; 0x021E95A0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 	.data
-
-sTrainerCardSignatureStateFuncs:
-	.word 0
-	.word TrainerCardSignature_State_Draw
-	.word TrainerCardSignature_State_WaitConfirmMessage
-	.word TrainerCardSignature_State_ConfirmPrompt
-	.word TrainerCardSignature_State_PrintEraseMessage
-	.word TrainerCardSignature_State_WaitEraseMessage
-	.word TrainerCardSignature_State_ErasePrompt
-	; 0x021E96E0
