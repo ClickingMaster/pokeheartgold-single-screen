@@ -1,39 +1,14 @@
-#include "global.h"
+#ifndef POKEHEARTGOLD_SPAWN_WARP_LOOKUP_INTERNAL_H
+#define POKEHEARTGOLD_SPAWN_WARP_LOOKUP_INTERNAL_H
 
-typedef struct SpawnEntryPrivate {
-    u16 flagIndex : 8;
-    u16 isBlackoutSpawn : 1;
-    u16 isFlyPoint : 1;
-    u16 unused : 6;
-    u16 deathMap;
-    u16 deathX : 8;
-    u16 deathY : 8;
-    u16 flyMap;
-    u16 flyX;
-    u16 flyY;
-    u16 specialMap;
-    u16 specialX;
-    u16 specialY;
-} SpawnEntryPrivate;
+#include "field_system.h"
 
-typedef struct WarpDataPrivate {
-    u32 map;
-    s32 warpId;
-    u32 x;
-    u32 y;
-    u32 direction;
-} WarpDataPrivate;
-
-extern const u16 sSpawnMaps[][9];
-extern void GF_AssertFail(void);
-extern void *Save_VarsFlags_Get(void *);
-extern void Save_VarsFlags_FlypointFlagAction(void *, u32, u32);
-
-s32 SpawnIdToTableIndex(s32);
 u32 GetMomSpawnId(void);
-void GetFlyWarpData(s32, WarpDataPrivate *);
-void GetDeathWarpData(s32, WarpDataPrivate *);
-void GetSpecialSpawnWarpData(s32, WarpDataPrivate *);
-u32 MapHeader_GetSpawnIdForDeathWarp(u32);
-u32 GetSpawnIdForFlyMap(u32);
-void FlypointFlagAction(void *, u32);
+void GetFlyWarpData(s32 spawnId, Location *warp);
+void GetDeathWarpData(s32 spawnId, Location *warp);
+void GetSpecialSpawnWarpData(s32 spawnId, Location *warp);
+u32 MapHeader_GetSpawnIdForDeathWarp(u32 mapId);
+u32 GetSpawnIdForFlyMap(u32 mapId);
+void FlypointFlagAction(FieldSystem *fieldSystem, u32 mapId);
+
+#endif // POKEHEARTGOLD_SPAWN_WARP_LOOKUP_INTERNAL_H

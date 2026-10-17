@@ -8,13 +8,16 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0191.h"
 #include "msgdata/msg/msg_0435.h"
+#include "pokeathlon/pokeathlon_save.h"
 
+#include "coins.h"
 #include "font.h"
+#include "frontier_data.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "list_menu_2d.h"
-#include "overlay_01.h"
 #include "money_box.h"
+#include "overlay_01.h"
 #include "overlay_03.h"
 #include "player_data.h"
 #include "pm_string.h"
@@ -26,9 +29,6 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
-#include "coins.h"
-#include "frontier_data.h"
-#include "pokeathlon/pokeathlon_save.h"
 
 typedef struct ScriptMenuItem {
     String *text;
@@ -73,8 +73,6 @@ struct ScriptMenu {
     /* 0x2DC */ u16 lastRow;
     /* 0x2DE */ u16 unk_2DE;
 };
-
-
 
 void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData) {
     int i;
@@ -411,9 +409,13 @@ void ScriptMenu_ListTask(SysTask *task, ScriptMenu *menu) {
         int input = ListMenu_ProcessInput(menu->listMenu);
         oldRow = menu->lastRow;
         ListMenuGetCurrentItemArrayId(menu->listMenu, &menu->lastRow);
-        if (oldRow != menu->lastRow) PlaySE(SEQ_SE_DP_SELECT);
+        if (oldRow != menu->lastRow) {
+            PlaySE(SEQ_SE_DP_SELECT);
+        }
         int keys = gSystem.newAndRepeatedKeys;
-        if ((keys & 0x40) || (keys & 0x80) || (keys & 0x20) || (keys & 0x10)) ScriptMenu_PrintCursorHelpMessage(menu);
+        if ((keys & PAD_KEY_UP) || (keys & PAD_KEY_DOWN) || (keys & PAD_KEY_LEFT) || (keys & PAD_KEY_RIGHT)) {
+            ScriptMenu_PrintCursorHelpMessage(menu);
+        }
         switch (input) {
         case -2:
             if (menu->cancellable == 1) {
@@ -469,7 +471,6 @@ void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu) {
     }
 }
 
-// the matched code needs copy propagation off here
 #pragma opt_propagation off
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor) {
     u32 tiles;

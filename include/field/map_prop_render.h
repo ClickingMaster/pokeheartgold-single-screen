@@ -111,7 +111,7 @@ void AreaMapAnimation_Free(AreaMapAnimation *areaMapAnimation);
 void AreaMapAnimation_Load(AreaMapAnimation *areaMapAnimation, int fileID);
 void AreaMapAnimation_AddToRenderObj(AreaMapAnimation *areaMapAnimation, NNSG3dRenderObj *renderObj);
 void AreaMapAnimation_RemoveFromRenderObj(AreaMapAnimation *areaMapAnimation, NNSG3dRenderObj *renderObj);
-void AreaMapAnimation_IsLoaded(AreaMapAnimation *areaMapAnimation);
+BOOL AreaMapAnimation_IsLoaded(AreaMapAnimation *areaMapAnimation);
 TimeOfDayPropAnimManager *TimeOfDayPropAnimManager_New(enum HeapID heapID);
 void TimeOfDayPropAnimManager_Free(TimeOfDayPropAnimManager *manager);
 void TimeOfDayPropAnimManager_AddProp(TimeOfDayPropAnimManager *manager, NNSG3dRenderObj *renderObj, MapPropAnimation **animation, int count);

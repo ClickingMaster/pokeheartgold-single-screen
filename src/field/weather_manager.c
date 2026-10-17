@@ -2,18 +2,19 @@
 
 #include "constants/weather.h"
 
+#include "field/field_flash_darkness.h"
+
 #include "field_system.h"
 #include "geometry_math.h"
+#include "gf_g2d_renderer.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
-#include "field/field_flash_darkness.h"
-#include "sprite_transfer.h"
-#include "sound_playback.h"
 #include "oam_manager.h"
 #include "screen_fade_legacy.h"
-#include "gf_g2d_renderer.h"
+#include "sound_playback.h"
+#include "sprite_transfer.h"
 
 static void WeatherTask_ChangeWeather(SysTask *task, void *data);
 static void WeatherTask_ChangeWeatherOverlapped(SysTask *task, void *data);

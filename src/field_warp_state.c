@@ -43,7 +43,7 @@ struct FlyTaskEnv {
 };
 
 u32 GetSpawnIdForFlyMap(u32 mapId);
-void FlypointFlagAction(void *fieldSystem, u32 mapId);
+void FlypointFlagAction(FieldSystem *fieldSystem, u32 mapId);
 
 static const MovementScriptCommand sFollowMovement[] = {
     { 73, 1 },

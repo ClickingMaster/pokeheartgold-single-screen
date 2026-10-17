@@ -396,8 +396,8 @@ void AreaMapAnimation_RemoveFromRenderObj(AreaMapAnimation *areaMapAnimation, NN
     MapPropAnimation_RemoveFromRenderObj(renderObj, areaMapAnimation->mapPropAnimation);
 }
 
-void AreaMapAnimation_IsLoaded(AreaMapAnimation *areaMapAnimation) {
-    MapPropAnimationPool_GetNumUsed(areaMapAnimation->pool);
+BOOL AreaMapAnimation_IsLoaded(AreaMapAnimation *areaMapAnimation) {
+    return MapPropAnimationPool_GetNumUsed(areaMapAnimation->pool);
 }
 
 static void AreaMapAnimation_AllocAnimObj(NNSFndAllocator *pAllocator, NNSG3dAnmObj **pAlloc, void *res) {
@@ -407,7 +407,7 @@ static void AreaMapAnimation_AllocAnimObj(NNSFndAllocator *pAllocator, NNSG3dAnm
     AreaMapAnimation_InitAnimObj(alloc, anim);
 }
 
-static int AreaMapAnimation_GetAnimObjSize(ResAnim_4004 *anim) { // Returns some sort of size
+static int AreaMapAnimation_GetAnimObjSize(ResAnim_4004 *anim) {
     return ((anim->numMapData * 2) + 0x1C) & ~3;
 }
 
@@ -416,7 +416,7 @@ static void *AreaMapAnimation_AllocAnimObjMem(NNSFndAllocator *pAllocator, ResAn
 }
 
 static void AreaMapAnimation_InitAnimObjMapData(NNSG3dAnmObj *alloc, ResAnim_4004 *anim) {
-    alloc->funcAnm = gAnmCalcFuncNsBta; // NNS_G3dFuncAnmMatNsBtaDefault
+    alloc->funcAnm = gAnmCalcFuncNsBta;
     u8 numMapData = anim->numMapData;
     alloc->numMapData = numMapData;
     MIi_CpuClear16(0, alloc->mapData, numMapData * 2);

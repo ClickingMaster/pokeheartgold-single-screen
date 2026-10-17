@@ -59,13 +59,13 @@ struct SaveStatsRow {
     u32 color; // index into sTextColors
 };
 
-void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem);
-void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats);
-int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats);
-void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer);
-int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fontId);
-void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer);
-void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem);
+static void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem);
+static void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats);
+static int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats);
+static void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer);
+static int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fontId);
+static void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer);
+static void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem);
 
 static const u32 sTextColors[2] = { MAKE_TEXT_COLOR(15, 2, 0), MAKE_TEXT_COLOR(14, 2, 0) };
 
@@ -85,7 +85,7 @@ static const struct SaveStatsRow sStatRows[9] = {
     { msg_0423_00012, 1, 4, 1 },
 };
 
-void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem) {
+static void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem *fieldSystem) {
     SaveData *saveData = fieldSystem->saveData;
     Location *position = LocalFieldData_GetCurrentPosition(Save_LocalFieldData_Get(saveData));
     Pokedex *pokedex = Save_Pokedex_Get(saveData);
@@ -100,7 +100,7 @@ void SaveStatsPrinter_GetStats(struct SaveStatsPrinterStats *stats, FieldSystem 
     stats->igt = Save_PlayerData_GetIGTAddr(saveData);
 }
 
-void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats) {
+static void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats) {
     int value;
     int numDigits;
     PrintingMode mode;
@@ -138,12 +138,12 @@ void SaveStatsPrinter_BufferStats(MessageFormat *msgFmt, struct SaveStatsPrinter
     BufferIntegerAsString(msgFmt, 5, GetIGTMinutes(stats->igt), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
 }
 
-int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats) {
+static int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats) {
     return 10;
 }
 
 // The save prompt layout: the location, then label / value lines (the Pokedex line only once it is enabled).
-void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer) {
+static void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer) {
     String *str;
     int y;
     int lineHeight;
@@ -210,7 +210,7 @@ void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer) {
     Heap_Free(printer);
 }
 
-int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fontId) {
+static int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fontId) {
     int x = 0;
 
     switch (align) {
@@ -225,7 +225,7 @@ int SaveStatsPrinter_GetAlignedX(Window *window, String *str, int align, int fon
 }
 
 // The touch save layout (sStatRows; the Pokedex lines only once it is enabled).
-void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer) {
+static void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer) {
     String *str;
     u32 i;
     int lineHeight;
@@ -290,7 +290,7 @@ int Field_SaveGameNormal(FieldSystem *fieldSystem) {
 }
 
 // Map objects and the player's position into the save data.
-void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem) {
+static void FieldSystem_StorePlayerLocation(FieldSystem *fieldSystem) {
     FieldSystem_SyncMapObjectsToSave(fieldSystem);
     FieldSystem_SendBottomScreenEvent(fieldSystem, 4, 0);
     fieldSystem->location->x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);

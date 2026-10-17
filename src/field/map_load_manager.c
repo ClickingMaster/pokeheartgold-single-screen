@@ -1,5 +1,3 @@
-// field/map_prop_render.h (through field_system.h) declares AreaMapAnimation_IsLoaded void; its result is used here
-#define AreaMapAnimation_IsLoaded AreaMapAnimation_IsLoaded_void
 #include "field/map_load_manager.h"
 
 #include <nnsys/gfd_internal.h>
@@ -71,14 +69,14 @@ typedef struct MapSoundplates {
 typedef struct LoadedMap {
     u16 permissions[0x400];
     NNSG3dRenderObj renderObj;
-    NNSG3dResFileHeader *modelFile; // 0x854
+    NNSG3dResFileHeader *modelFile;
     u8 *bdhcBuffer;
     Bdhc *bdhc;
-    int matrixIndex;  // -1: empty
-    BOOL modelLoaded; // 0x864
+    int matrixIndex; // -1: empty
+    BOOL modelLoaded;
     MapPropManager *propManager;
     MapSoundplates soundplates;
-    u8 *permissionBytes; // 0xA70, safari zone mode only: the low bytes of permissions
+    u8 *permissionBytes; // safari zone mode only: the low bytes of permissions
 } LoadedMap;
 
 typedef struct MapLoadTasks {
@@ -91,32 +89,32 @@ typedef struct MapLoadSlot {
     LoadedMap *maps[2];
     SysTask *modelTask;
     SysTask *bdhcTask;
-    MapLoadTasks tasks; // 0x10
+    MapLoadTasks tasks;
     int matrixIndices[2];
-    u8 mapSlots[2]; // 0x20, cells of the window
+    u8 mapSlots[2]; // cells of the window
     u8 numStarted;
-    BOOL finished; // 0x24
+    BOOL finished;
     BOOL active;
-    u8 direction; // 0x2C
-} MapLoadSlot;    // size: 0x30
+    u8 direction;
+} MapLoadSlot; // size: 0x30
 
 // A scroll requested while both load slots were busy
 typedef struct MapLoadQueued {
     LoadedMap *maps[2];
-    BOOL queued; // 0x6C
+    BOOL queued;
     u8 direction;
     int matrixIndices[2];
-    u8 mapSlots[2]; // 0x7C
+    u8 mapSlots[2];
 } MapLoadQueued;
 
 // The tracked position follows the target one tile at a time
 typedef struct MapLoadTracking {
     VecFx32 pos;
-    VecFx32 *target; // 0xDC
+    VecFx32 *target;
     fx32 *upper;
     fx32 *lower;
     BOOL moving;
-    u8 direction; // 0xEC
+    u8 direction;
     BOOL enabled;
 } MapLoadTracking;
 
@@ -131,115 +129,112 @@ typedef void (*MapLoadedCallback)(void *arg, int matrixIndex, MapPropManager *pr
 struct MapLoadManager {
     MapLoadBuffers *buffers;
     MapLoadSlot slots[2];
-    MapLoadQueued queued;   // 0x64
-    BOOL mapStale[4];       // 0x80, per cell: the map was reset, drop its pending load
-    LoadedMap *maps[4];     // 0x90
-    u8 numActiveSlots;      // 0xA0
-    u8 nextSlot;            // 0xA1
-    u8 currentSlot;         // 0xA2
-    u32 currentMatrixIndex; // 0xA4
-    u32 currentTile;        // 0xA8
-    u8 currentMapSlot;      // 0xAC
-    u8 quadrant;            // 0xAD
-    BOOL ended;             // 0xB0
-    int state;              // 0xB4
+    MapLoadQueued queued;
+    BOOL mapStale[4]; // per cell: the map was reset, drop its pending load
+    LoadedMap *maps[4];
+    u8 numActiveSlots;
+    u8 nextSlot;
+    u8 currentSlot;
+    u32 currentMatrixIndex;
+    u32 currentTile;
+    u8 currentMapSlot;
+    u8 quadrant;
+    BOOL ended;
+    int state;
     AreaDataManager *areaDataManager;
-    Field3dRenderObjManager *renderObjManager; // 0xBC
+    Field3dRenderObjManager *renderObjManager;
     MapMatrix *mapMatrix;
-    int width; // 0xC4, in maps
+    int width; // in maps
     int height;
-    u32 stride;                                       // 0xCC, width in tiles
-    MapLoadTracking tracking;                         // 0xD0
-    MapPropAnimationManager *mapPropAnimationManager; // 0xF4
+    u32 stride; // width in tiles
+    MapLoadTracking tracking;
+    MapPropAnimationManager *mapPropAnimationManager;
     AreaMapAnimation *areaMapAnimation;
-    const MapLoadFuncs *funcs; // 0xFC
+    const MapLoadFuncs *funcs;
     NARC *narc;
-    SaveData *saveData; // 0x104
+    SaveData *saveData;
     MapLoadedCallback mapLoadedCallback;
-    void *mapLoadedCallbackArg; // 0x10C
+    void *mapLoadedCallbackArg;
 };
 
 // The model load task
 typedef struct MapModelLoad {
     NARC *narc;
     u32 modelNo;
-    int size; // 0x08
+    int size;
     NNSG3dRenderObj *renderObj;
-    NNSG3dResFileHeader **modelFile; // 0x10
+    NNSG3dResFileHeader **modelFile;
     NNSG3dResTex *texture;
-    u8 state; // 0x18
+    u8 state;
     BOOL *loaded;
-    BOOL cancel; // 0x20
+    BOOL cancel;
     BOOL *loading;
-    AreaMapAnimation *areaMapAnimation; // 0x28
+    AreaMapAnimation *areaMapAnimation;
     int offset;
 } MapModelLoad;
 
-#undef AreaMapAnimation_IsLoaded
-BOOL AreaMapAnimation_IsLoaded(AreaMapAnimation *unkCC);
-
-BOOL MapModelNo_HasNoAreaMapAnimation(u32 modelNo); // u16 in the field terrain headers; called here without narrowing
+BOOL MapModelNo_HasNoAreaMapAnimation(u32 modelNo);
 BOOL AreaDataManager_IsLit(AreaDataManager *areaDataManager);
 
-BOOL MapMatrixIndex_IsSameColumn(int index1, int index2, int width);
-BOOL MapMatrixIndex_IsSameRow(int index1, int index2, int width);
-void MapLoadManager_CancelSlotTasks(MapLoadManager *mapLoadManager, int slot);
-void MapLoadSlot_CancelTasks(MapLoadSlot *slot);
-void CalcMapIndicesAroundPosition(int x, int z, int width, int height, u32 stride, int *indices);
-void MapLoadManager_AllocMaps(MapLoadManager *mapLoadManager, BOOL withPermissionBytes);
-void MapLoadManager_AllocMapsNoCollision(MapLoadManager *mapLoadManager);
-void ReadMapFileHeader(NARC *narc, int modelNo, MapFileHeader *header);
-int MapLoadManager_ReadMapFileHeader(MapFileHeader *header, MapLoadManager *mapLoadManager, MapMatrix *mapMatrix, LoadedMap *map, int matrixIndex, int numMaps, BOOL clearModel);
-void MapLoadManager_ReadSoundplates(MapLoadManager *mapLoadManager, LoadedMap *map);
-void MapLoadManager_ReadPermissions(MapLoadManager *mapLoadManager, LoadedMap *map, u32 size);
-void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, int matrixIndex);
-void MapLoadManager_StartLoadTasks(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, MapLoadSlot *slot, int modelNo, BOOL withBdhc);
-void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, int modelNo, int matrixIndex, BOOL applyLight, BOOL withBdhc);
+static BOOL MapMatrixIndex_IsSameColumn(int index1, int index2, int width);
+static BOOL MapMatrixIndex_IsSameRow(int index1, int index2, int width);
+static void MapLoadManager_CancelSlotTasks(MapLoadManager *mapLoadManager, int slot);
+static void MapLoadSlot_CancelTasks(MapLoadSlot *slot);
+static void CalcMapIndicesAroundPosition(int x, int z, int width, int height, u32 stride, int *indices);
+static void MapLoadManager_AllocMaps(MapLoadManager *mapLoadManager, BOOL withPermissionBytes);
+static void MapLoadManager_AllocMapsNoCollision(MapLoadManager *mapLoadManager);
+static void ReadMapFileHeader(NARC *narc, int modelNo, MapFileHeader *header);
+static int MapLoadManager_ReadMapFileHeader(MapFileHeader *header, MapLoadManager *mapLoadManager, MapMatrix *mapMatrix, LoadedMap *map, int matrixIndex, int numMaps, BOOL clearModel);
+static void MapLoadManager_ReadSoundplates(MapLoadManager *mapLoadManager, LoadedMap *map);
+static void MapLoadManager_ReadPermissions(MapLoadManager *mapLoadManager, LoadedMap *map, u32 size);
+static void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, int matrixIndex);
+static void MapLoadManager_StartLoadTasks(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, MapLoadSlot *slot, int modelNo, BOOL withBdhc);
+static void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, int modelNo, int matrixIndex, BOOL applyLight, BOOL withBdhc);
 static void LoadSlotMap_Default(int index, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, int width, int height, MapLoadManager *mapLoadManager, MapLoadSlot *slot);
 static void LoadSlotMap_NoCollision(int index, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, int width, int height, MapLoadManager *mapLoadManager, MapLoadSlot *slot);
 static void LoadSlotMap_SafariZone(int index, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, int width, int height, MapLoadManager *mapLoadManager, MapLoadSlot *slot);
-void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
-void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
-void LoadMapNow_SafariZone(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
-BOOL MapLoadTasks_AreDone(MapLoadTasks *tasks);
-BOOL MapLoadManager_StartSlot(MapLoadManager *mapLoadManager, int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 slot, u8 direction);
-void MapLoadManager_RequestLoad(int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 direction, MapLoadManager *mapLoadManager);
-void MapLoadManager_ResetMap(int mapSlot, MapLoadManager *mapLoadManager);
-void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSlot4, MapLoadManager *mapLoadManager);
-void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoadManager);
-u32 TileIndex_ToMatrixIndex(u32 tile, u32 width, u32 stride);
-u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride);
-u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride);
-int Quadrant_ToMapSlot(int quadrant);
-int TileIndex_Step(int direction, int height, int stride, int tile);
-u32 MapSlot_Step(u32 direction, int mapSlot);
-void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot);
-int Direction_GetOpposite(u32 direction);
-BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManager, u8 *slot);
-BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager);
-void MapLoadManager_StartQueuedLoad(MapLoadManager *mapLoadManager);
-BOOL MapLoadManager_IsCurrentSlotFinished(MapLoadManager *mapLoadManager);
-void MapLoadManager_ClearMapStale(MapLoadManager *mapLoadManager);
-void MapLoadManager_MarkMapsStale(u32 direction, MapLoadManager *mapLoadManager);
+static void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
+static void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
+static void LoadMapNow_SafariZone(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager);
+static BOOL MapLoadTasks_AreDone(MapLoadTasks *tasks);
+static BOOL MapLoadManager_StartSlot(MapLoadManager *mapLoadManager, int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 slot, u8 direction);
+static void MapLoadManager_RequestLoad(int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 direction, MapLoadManager *mapLoadManager);
+static void MapLoadManager_ResetMap(int mapSlot, MapLoadManager *mapLoadManager);
+static void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSlot4, MapLoadManager *mapLoadManager);
+static void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoadManager);
+static u32 TileIndex_ToMatrixIndex(u32 tile, u32 width, u32 stride);
+static u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride);
+static u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride);
+static int Quadrant_ToMapSlot(int quadrant);
+static int TileIndex_Step(int direction, int height, int stride, int tile);
+static u32 MapSlot_Step(u32 direction, int mapSlot);
+static void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot);
+static int Direction_GetOpposite(u32 direction);
+static BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManager, u8 *slot);
+static BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager);
+static void MapLoadManager_StartQueuedLoad(MapLoadManager *mapLoadManager);
+static BOOL MapLoadManager_IsCurrentSlotFinished(MapLoadManager *mapLoadManager);
+static void MapLoadManager_ClearMapStale(MapLoadManager *mapLoadManager);
+static void MapLoadManager_MarkMapsStale(u32 direction, MapLoadManager *mapLoadManager);
 static void InitialLoad_Default(MapLoadManager *mapLoadManager, int x, int z, u32 stride);
 static void InitialLoad_NoCollision(MapLoadManager *mapLoadManager, int x, int z, u32 stride);
 static void InitialLoad_SafariZone(MapLoadManager *mapLoadManager, int x, int z, u32 stride);
-void MapLoadManager_ResetSlots(MapLoadManager *mapLoadManager);
-void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager);
-void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, VecFx32 *pos);
-void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager);
-void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ);
-void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes);
+static void MapLoadManager_ResetSlots(MapLoadManager *mapLoadManager);
+static void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager);
+static void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, VecFx32 *pos);
+static void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager);
+static void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ);
+static void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes);
 int TileIndex_GetQuadrant(int tile, int stride);
 u8 MapLoadManager_GetMapSlotOfMatrixIndex(int matrixIndex, int unused, MapLoadManager *mapLoadManager);
 int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 mapSlot);
 BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *mapSlot);
 Bdhc *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 mapSlot);
 SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 mapSlot);
-void MapModelLoad_Cancel(SysTask *task);
-void Task_LoadMapModel(SysTask *task, MapModelLoad *load);
-SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading);
-NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture);
+static void MapModelLoad_Cancel(SysTask *task);
+static void Task_LoadMapModel(SysTask *task, MapModelLoad *load);
+static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading);
+static NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture);
 
 static const MapLoadFuncs sMapLoadFuncs_Default = {
     .initialLoad = InitialLoad_Default,
@@ -260,21 +255,21 @@ static const VecFx32 sMapModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
 static const MtxFx33 sMapModelRotation = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
 
-BOOL MapMatrixIndex_IsSameColumn(int index1, int index2, int width) {
+static BOOL MapMatrixIndex_IsSameColumn(int index1, int index2, int width) {
     if (index1 % width == index2 % width) {
         return TRUE;
     }
     return FALSE;
 }
 
-BOOL MapMatrixIndex_IsSameRow(int index1, int index2, int width) {
+static BOOL MapMatrixIndex_IsSameRow(int index1, int index2, int width) {
     if (index1 / width == index2 / width) {
         return TRUE;
     }
     return FALSE;
 }
 
-void MapLoadManager_CancelSlotTasks(MapLoadManager *mapLoadManager, int slot) {
+static void MapLoadManager_CancelSlotTasks(MapLoadManager *mapLoadManager, int slot) {
     if (mapLoadManager->slots[slot].tasks.modelLoading != FALSE) {
         MapModelLoad_Cancel(mapLoadManager->slots[slot].modelTask);
     }
@@ -284,7 +279,7 @@ void MapLoadManager_CancelSlotTasks(MapLoadManager *mapLoadManager, int slot) {
     mapLoadManager->slots[slot].finished = TRUE;
 }
 
-void MapLoadSlot_CancelTasks(MapLoadSlot *slot) {
+static void MapLoadSlot_CancelTasks(MapLoadSlot *slot) {
     if (slot->tasks.modelLoading != FALSE) {
         MapModelLoad_Cancel(slot->modelTask);
     }
@@ -296,7 +291,7 @@ void MapLoadSlot_CancelTasks(MapLoadSlot *slot) {
 }
 
 // The matrix indices of the window's four maps (-1 outside the matrix) for a tile position
-void CalcMapIndicesAroundPosition(int x, int z, int width, int height, u32 stride, int *indices) {
+static void CalcMapIndicesAroundPosition(int x, int z, int width, int height, u32 stride, int *indices) {
     int mapX = x / 32, mapZ = z / 32;
     u32 quadrant = TileIndex_GetQuadrant(TileCoords_ToIndex(x, z, stride), stride);
     int index = mapX + mapZ * width;
@@ -360,7 +355,7 @@ void CalcMapIndicesAroundPosition(int x, int z, int width, int height, u32 strid
     }
 }
 
-void MapLoadManager_AllocMaps(MapLoadManager *mapLoadManager, BOOL withPermissionBytes) {
+static void MapLoadManager_AllocMaps(MapLoadManager *mapLoadManager, BOOL withPermissionBytes) {
     u32 i;
     LoadedMap *map;
 
@@ -382,7 +377,7 @@ void MapLoadManager_AllocMaps(MapLoadManager *mapLoadManager, BOOL withPermissio
     }
 }
 
-void MapLoadManager_AllocMapsNoCollision(MapLoadManager *mapLoadManager) {
+static void MapLoadManager_AllocMapsNoCollision(MapLoadManager *mapLoadManager) {
     u8 i;
     LoadedMap *map;
 
@@ -397,7 +392,7 @@ void MapLoadManager_AllocMapsNoCollision(MapLoadManager *mapLoadManager) {
     }
 }
 
-void ReadMapFileHeader(NARC *narc, int modelNo, MapFileHeader *header) {
+static void ReadMapFileHeader(NARC *narc, int modelNo, MapFileHeader *header) {
     u32 *buf;
 
     if (narc != NULL) {
@@ -415,7 +410,7 @@ void ReadMapFileHeader(NARC *narc, int modelNo, MapFileHeader *header) {
 }
 
 // Leaves the NARC at the start of the map's land data file; returns its model number (MAP_LOAD_NONE: no map)
-int MapLoadManager_ReadMapFileHeader(MapFileHeader *header, MapLoadManager *mapLoadManager, MapMatrix *mapMatrix, LoadedMap *map, int matrixIndex, int numMaps, BOOL clearModel) {
+static int MapLoadManager_ReadMapFileHeader(MapFileHeader *header, MapLoadManager *mapLoadManager, MapMatrix *mapMatrix, LoadedMap *map, int matrixIndex, int numMaps, BOOL clearModel) {
     int modelNo;
 
     if (clearModel) {
@@ -434,7 +429,7 @@ int MapLoadManager_ReadMapFileHeader(MapFileHeader *header, MapLoadManager *mapL
     return modelNo;
 }
 
-void MapLoadManager_ReadSoundplates(MapLoadManager *mapLoadManager, LoadedMap *map) {
+static void MapLoadManager_ReadSoundplates(MapLoadManager *mapLoadManager, LoadedMap *map) {
     u16 size;
 
     NARC_ReadFile(mapLoadManager->narc, 4, &map->soundplates);
@@ -444,7 +439,7 @@ void MapLoadManager_ReadSoundplates(MapLoadManager *mapLoadManager, LoadedMap *m
     }
 }
 
-void MapLoadManager_ReadPermissions(MapLoadManager *mapLoadManager, LoadedMap *map, u32 size) {
+static void MapLoadManager_ReadPermissions(MapLoadManager *mapLoadManager, LoadedMap *map, u32 size) {
     int i;
 
     NARC_ReadFile(mapLoadManager->narc, size, map);
@@ -456,7 +451,7 @@ void MapLoadManager_ReadPermissions(MapLoadManager *mapLoadManager, LoadedMap *m
 }
 
 // The safari zone's 3x2 area grid (matrix cells 1-3, 1-2) takes its props from the save
-void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, int matrixIndex) {
+static void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, int matrixIndex) {
     u8 *areaSet;
     int width = mapLoadManager->width;
     u16 x = matrixIndex % width;
@@ -480,7 +475,7 @@ void MapLoadManager_LoadSafariZoneProps(MapLoadManager *mapLoadManager, LoadedMa
     }
 }
 
-void MapLoadManager_StartLoadTasks(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, MapLoadSlot *slot, int modelNo, BOOL withBdhc) {
+static void MapLoadManager_StartLoadTasks(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, MapLoadSlot *slot, int modelNo, BOOL withBdhc) {
     NNSG3dResTex *texture;
 
     slot->tasks.modelLoading++;
@@ -492,7 +487,7 @@ void MapLoadManager_StartLoadTasks(MapLoadManager *mapLoadManager, LoadedMap *ma
     }
 }
 
-void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, int modelNo, int matrixIndex, BOOL applyLight, BOOL withBdhc) {
+static void MapLoadManager_LoadModelAndBdhc(MapLoadManager *mapLoadManager, LoadedMap *map, MapFileHeader *header, AreaDataManager *areaDataManager, int modelNo, int matrixIndex, BOOL applyLight, BOOL withBdhc) {
     NNSG3dResTex *texture = AreaDataManager_GetMapTexture(areaDataManager);
     NNSG3dResMdl *model = LoadMapModel(mapLoadManager->narc, header->modelSize, &map->renderObj, &map->modelFile, texture);
     if (applyLight) {
@@ -545,7 +540,7 @@ static void LoadSlotMap_SafariZone(int index, AreaDataManager *areaDataManager, 
     }
 }
 
-void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
+static void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
     MapFileHeader header;
     int modelNo;
 
@@ -558,7 +553,7 @@ void LoadMapNow_Default(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataMa
     }
 }
 
-void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
+static void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
     u8 permissions[0x800];
     MapFileHeader header;
     int modelNo;
@@ -572,7 +567,7 @@ void LoadMapNow_NoCollision(int matrixIndex, u8 mapSlot, AreaDataManager *areaDa
     }
 }
 
-void LoadMapNow_SafariZone(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
+static void LoadMapNow_SafariZone(int matrixIndex, u8 mapSlot, AreaDataManager *areaDataManager, MapMatrix *mapMatrix, u32 width, u32 height, BOOL applyLight, MapLoadManager *mapLoadManager) {
     MapFileHeader header;
     int modelNo;
 
@@ -585,14 +580,14 @@ void LoadMapNow_SafariZone(int matrixIndex, u8 mapSlot, AreaDataManager *areaDat
     }
 }
 
-BOOL MapLoadTasks_AreDone(MapLoadTasks *tasks) {
+static BOOL MapLoadTasks_AreDone(MapLoadTasks *tasks) {
     if (tasks->modelLoading == FALSE && tasks->bdhcLoading == FALSE) {
         return TRUE;
     }
     return FALSE;
 }
 
-BOOL MapLoadManager_StartSlot(MapLoadManager *mapLoadManager, int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 slot, u8 direction) {
+static BOOL MapLoadManager_StartSlot(MapLoadManager *mapLoadManager, int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 slot, u8 direction) {
     if (mapLoadManager->slots[slot].active != FALSE) {
         GF_AssertFail();
     }
@@ -760,7 +755,7 @@ void MapLoadManager_Tick(MapLoadManager *mapLoadManager) {
 
 // Starts loading two maps in a free slot; with both slots busy, the slot loading the other way is cancelled and the
 // request queued
-void MapLoadManager_RequestLoad(int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 direction, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_RequestLoad(int matrixIndex1, int matrixIndex2, u8 mapSlot1, u8 mapSlot2, u8 direction, MapLoadManager *mapLoadManager) {
     u8 slot;
 
     if (mapLoadManager->queued.queued == TRUE) {
@@ -787,7 +782,7 @@ void MapLoadManager_RequestLoad(int matrixIndex1, int matrixIndex2, u8 mapSlot1,
     }
 }
 
-void MapLoadManager_ResetMap(int mapSlot, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_ResetMap(int mapSlot, MapLoadManager *mapLoadManager) {
     mapLoadManager->maps[mapSlot]->modelLoaded = FALSE;
     Bdhc_Reset(mapLoadManager->maps[mapSlot]->bdhc);
     MapPropManager_Reset(mapLoadManager->maps[mapSlot]->propManager);
@@ -802,7 +797,7 @@ void MapLoadManager_ResetMap(int mapSlot, MapLoadManager *mapLoadManager) {
 }
 
 // Resets the maps in mapSlot1/2 and swaps them with mapSlot3/4
-void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSlot4, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSlot4, MapLoadManager *mapLoadManager) {
     LoadedMap *map1;
     LoadedMap *map2;
     LoadedMap *map3;
@@ -819,7 +814,7 @@ void MapLoadManager_SwapMaps(int mapSlot1, int mapSlot2, int mapSlot3, int mapSl
 }
 
 // The player entered another quadrant of the map at matrixIndex: move the window and load the two new maps
-void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoadManager) {
     u32 mapSlot1;
     int matrixIndex1;
     int matrixIndex2;
@@ -948,7 +943,7 @@ void MapLoadManager_Scroll(int matrixIndex, u8 direction, MapLoadManager *mapLoa
     }
 }
 
-void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes) {
+static void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes) {
     VecFx32 pos = { 0, 0, 0 };
     VecFx32 scale;
     MtxFx33 rotation;
@@ -968,25 +963,25 @@ void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager,
     }
 }
 
-u32 TileIndex_ToMatrixIndex(u32 tile, u32 width, u32 stride) {
+static u32 TileIndex_ToMatrixIndex(u32 tile, u32 width, u32 stride) {
     u32 x = tile % stride;
     u32 z = tile / stride;
 
     return z / 32 * width + x / 32;
 }
 
-u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride) {
+static u32 TileCoords_ToIndex(u32 x, u32 z, u32 stride) {
     return x + z * stride;
 }
 
-u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride) {
+static u32 MapLoadManager_GetMatrixIndexFromTile(u32 tile, u32 width, u32 stride) {
     u32 x = tile % stride;
     u32 z = tile / stride;
 
     return z / 32 * width + x / 32;
 }
 
-int Quadrant_ToMapSlot(int quadrant) {
+static int Quadrant_ToMapSlot(int quadrant) {
     if (quadrant == 0) {
         return 3;
     }
@@ -1004,7 +999,7 @@ int Quadrant_ToMapSlot(int quadrant) {
 }
 
 // The tile next to tile in direction, or tile itself at the edge of the matrix
-int TileIndex_Step(int direction, int height, int stride, int tile) {
+static int TileIndex_Step(int direction, int height, int stride, int tile) {
     int next;
 
     switch (direction) {
@@ -1045,7 +1040,7 @@ int TileIndex_Step(int direction, int height, int stride, int tile) {
 }
 
 // The window cell next to mapSlot in direction
-u32 MapSlot_Step(u32 direction, int mapSlot) {
+static u32 MapSlot_Step(u32 direction, int mapSlot) {
     switch (direction) {
     case MAP_LOAD_DIR_NORTH:
         return (u8)(mapSlot - 2);
@@ -1059,7 +1054,7 @@ u32 MapSlot_Step(u32 direction, int mapSlot) {
     return direction;
 }
 
-void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot) {
+static void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot) {
     int current = MapSlot_Step(direction, target);
     u8 result;
 
@@ -1087,7 +1082,7 @@ void MapLoadManager_UpdateCurrentMapSlot(int direction, int target, u8 *mapSlot)
     *mapSlot = result;
 }
 
-int Direction_GetOpposite(u32 direction) {
+static int Direction_GetOpposite(u32 direction) {
     switch (direction) {
     case MAP_LOAD_DIR_NORTH:
         return MAP_LOAD_DIR_SOUTH;
@@ -1102,7 +1097,7 @@ int Direction_GetOpposite(u32 direction) {
     return MAP_LOAD_DIR_NONE;
 }
 
-BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManager, u8 *slot) {
+static BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManager, u8 *slot) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -1114,7 +1109,7 @@ BOOL MapLoadManager_FindOppositeSlot(u8 direction, MapLoadManager *mapLoadManage
     return FALSE;
 }
 
-BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager) {
+static BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager) {
     MapLoadQueued *queued = &mapLoadManager->queued;
 
     GF_ASSERT(mapLoadManager->slots[mapLoadManager->nextSlot].active == FALSE);
@@ -1131,7 +1126,7 @@ BOOL MapLoadManager_StartQueuedSlot(MapLoadManager *mapLoadManager) {
     return TRUE;
 }
 
-void MapLoadManager_StartQueuedLoad(MapLoadManager *mapLoadManager) {
+static void MapLoadManager_StartQueuedLoad(MapLoadManager *mapLoadManager) {
     MapLoadQueued *queued = &mapLoadManager->queued;
 
     if (mapLoadManager->numActiveSlots >= 2) {
@@ -1146,11 +1141,11 @@ void MapLoadManager_StartQueuedLoad(MapLoadManager *mapLoadManager) {
     mapLoadManager->nextSlot = (mapLoadManager->nextSlot + 1) % 2;
 }
 
-BOOL MapLoadManager_IsCurrentSlotFinished(MapLoadManager *mapLoadManager) {
+static BOOL MapLoadManager_IsCurrentSlotFinished(MapLoadManager *mapLoadManager) {
     return mapLoadManager->slots[mapLoadManager->currentSlot].finished;
 }
 
-void MapLoadManager_ClearMapStale(MapLoadManager *mapLoadManager) {
+static void MapLoadManager_ClearMapStale(MapLoadManager *mapLoadManager) {
     u8 i;
 
     for (i = 0; i < 4; i++) {
@@ -1159,7 +1154,7 @@ void MapLoadManager_ClearMapStale(MapLoadManager *mapLoadManager) {
 }
 
 // The two cells a scroll in direction replaces
-void MapLoadManager_MarkMapsStale(u32 direction, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_MarkMapsStale(u32 direction, MapLoadManager *mapLoadManager) {
     switch (direction) {
     case MAP_LOAD_DIR_NORTH:
         mapLoadManager->mapStale[2] = TRUE;
@@ -1218,7 +1213,7 @@ static void InitialLoad_SafariZone(MapLoadManager *mapLoadManager, int x, int z,
     }
 }
 
-void MapLoadManager_ResetSlots(MapLoadManager *mapLoadManager) {
+static void MapLoadManager_ResetSlots(MapLoadManager *mapLoadManager) {
     int i;
 
     mapLoadManager->currentSlot = 0;
@@ -1231,7 +1226,7 @@ void MapLoadManager_ResetSlots(MapLoadManager *mapLoadManager) {
     MapLoadManager_ClearMapStale(mapLoadManager);
 }
 
-void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager) {
     mapLoadManager->currentTile = TileCoords_ToIndex(x, z, mapLoadManager->stride);
     mapLoadManager->quadrant = TileIndex_GetQuadrant(mapLoadManager->currentTile, mapLoadManager->stride);
     mapLoadManager->currentMapSlot = Quadrant_ToMapSlot(mapLoadManager->quadrant);
@@ -1239,7 +1234,7 @@ void MapLoadManager_SetPosition(int x, int z, MapLoadManager *mapLoadManager) {
 }
 
 // The world position of a map's origin (its altitude from the map matrix)
-void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, VecFx32 *pos) {
+static void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, VecFx32 *pos) {
     pos->x = FX32_CONST(256);
     pos->z = FX32_CONST(256);
     if (matrixIndex != -1) {
@@ -1296,7 +1291,7 @@ void MapLoadManager_InitialLoad(MapLoadManager *mapLoadManager, int x, int z) {
 
 // Called for each tile the tracked position moves; scrolls the window when the player enters another quadrant of
 // the current map
-void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager) {
+static void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager) {
     int tile = TileIndex_Step(direction, mapLoadManager->height, mapLoadManager->stride, mapLoadManager->currentTile);
     int matrixIndex = TileIndex_ToMatrixIndex(tile, mapLoadManager->width, mapLoadManager->stride);
     int quadrant = TileIndex_GetQuadrant(tile, mapLoadManager->stride);
@@ -1316,7 +1311,7 @@ void MapLoadManager_RenderLoadedMaps(MapLoadManager *mapLoadManager, ModelAttrib
     }
 }
 
-void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ) {
+static void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ) {
     *tileX = x / MAP_TILE_SIZE;
     *tileZ = z / MAP_TILE_SIZE;
 }
@@ -1498,13 +1493,13 @@ SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, 
     return (SoundplateStruct *)&mapLoadManager->maps[mapSlot]->soundplates;
 }
 
-void MapModelLoad_Cancel(SysTask *task) {
+static void MapModelLoad_Cancel(SysTask *task) {
     MapModelLoad *load = SysTask_GetData(task);
     load->cancel = TRUE;
 }
 
 // Reads the model in chunks of 0xE000 bytes per frame, binds the area texture and sets up the render object
-void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
+static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
     if (load->cancel == TRUE) {
         load->state = 5;
     }
@@ -1566,7 +1561,7 @@ void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
     }
 }
 
-SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading) {
+static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *unkCC, BOOL *loaded, BOOL *loading) {
     MapModelLoad *load = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(MapModelLoad));
 
     load->narc = narc;
@@ -1584,7 +1579,7 @@ SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderOb
     return SysTask_CreateOnMainQueue((SysTaskFunc)Task_LoadMapModel, load, 1);
 }
 
-NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture) {
+static NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture) {
     NNSG3dResMdlSet *modelSet;
     NNSG3dResMdl *model;
 
