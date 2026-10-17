@@ -1366,7 +1366,6 @@ Overlay OVY_38
 {
     After OVY_0
     Object src/game_stats_request.o
-    Object asm/overlay_38_thumb_data.o
     Object lib/NitroDWC/asm/http_data.o
     Object lib/NitroDWC/src/http_connection.o
     Object lib/NitroDWC/src/http_request.o

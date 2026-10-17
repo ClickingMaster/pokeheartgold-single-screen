@@ -1,5 +1,4 @@
 	.public sRecordMixingHandlers
-	.public sNintendoWfcUnusedStates
 	.extern RecordMixing_Block23List2_GetSize
 	.extern RecordMixing_Block23List0_GetSize
 	.extern RecordMixing_Block23List1_GetSize
@@ -9,63 +8,6 @@
 	.extern RecordMixing_Block23List2_Load2
 	.extern RecordMixing_Block23List0_Load2
 	.extern RecordMixing_Block23List1_Load2
-	.extern NintendoWfcUnused_AskConnect
-	.extern NintendoWfcUnused_HandleConnectChoice
-	.extern NintendoWfcUnused_AskLogOut
-	.extern NintendoWfcUnused_HandleLogOutChoice
-	.extern NintendoWfcUnused_StartConnect
-	.extern NintendoWfcUnused_WaitConnect
-	.extern NintendoWfcUnused_StartAuth
-	.extern NintendoWfcUnused_WaitAuth
-	.extern NintendoWfcUnused_InitHttp
-	.extern NintendoWfcUnused_RequestInfo
-	.extern NintendoWfcUnused_WaitInfo
-	.extern NintendoWfcUnused_RequestSetProfile
-	.extern NintendoWfcUnused_WaitSetProfile
-	.extern NintendoWfcUnused_RequestRoomCount
-	.extern NintendoWfcUnused_WaitRoomCount
-	.extern NintendoWfcUnused_AskChallengeRoom
-	.extern NintendoWfcUnused_StartChallengeRoomInput
-	.extern NintendoWfcUnused_HandleChallengeRoomInput
-	.extern NintendoWfcUnused_PrintReceivingTrainers
-	.extern NintendoWfcUnused_PrintRoomUnavailable
-	.extern NintendoWfcUnused_RequestTrainersDownload
-	.extern NintendoWfcUnused_WaitTrainersDownload
-	.extern NintendoWfcUnused_PrintTrainersReceived
-	.extern NintendoWfcUnused_PrintSendingRecord
-	.extern NintendoWfcUnused_RequestUpload
-	.extern NintendoWfcUnused_WaitUpload
-	.extern NintendoWfcUnused_PrintRecordSent
-	.extern NintendoWfcUnused_AskLeadersRank
-	.extern NintendoWfcUnused_StartLeadersRankInput
-	.extern NintendoWfcUnused_HandleLeadersRankInput
-	.extern NintendoWfcUnused_AskLeadersRoom
-	.extern NintendoWfcUnused_StartLeadersRoomInput
-	.extern NintendoWfcUnused_HandleLeadersRoomInput
-	.extern NintendoWfcUnused_PrintReceivingLeaders
-	.extern NintendoWfcUnused_RequestLeadersDownload
-	.extern NintendoWfcUnused_WaitLeadersDownload
-	.extern NintendoWfcUnused_PrintLeadersReceived
-	.extern NintendoWfcUnused_StartDisconnect
-	.extern NintendoWfcUnused_StartSave
-	.extern NintendoWfcUnused_Save
-	.extern NintendoWfcUnused_AskCancelChallenge
-	.extern NintendoWfcUnused_HandleCancelChallengeChoice
-	.extern NintendoWfcUnused_AskCancelDownload
-	.extern NintendoWfcUnused_HandleCancelDownloadChoice
-	.extern NintendoWfcUnused_PrintDisconnecting
-	.extern NintendoWfcUnused_CloseConnection
-	.extern NintendoWfcUnused_PrintDisconnected
-	.extern NintendoWfcUnused_UnusedState_Idle
-	.extern NintendoWfcUnused_StartExit
-	.extern NintendoWfcUnused_UnusedState_HandleYesNo
-	.extern NintendoWfcUnused_ShowHttpError
-	.extern NintendoWfcUnused_Disconnect
-	.extern NintendoWfcUnused_WaitMessage
-	.extern NintendoWfcUnused_WaitMessageAndDelay
-	.extern NintendoWfcUnused_OpenYesNoPrompt
-	.extern NintendoWfcUnused_ShowDwcError
-	.extern NintendoWfcUnused_WaitErrorDismiss
 	.extern RecordMixing_FriendGroup_GetSize
 	.extern RecordMixing_FriendGroup_Load
 	.extern RecordMixing_FriendGroup_Merge
@@ -95,65 +37,4 @@ sRecordMixingHandlers:
 	.word RecordMixing_Block23List0_GetSize, RecordMixing_Block23List0_Load2, 0
 	.word RecordMixing_Block23List1_GetSize, RecordMixing_Block23List1_Load2, 0
 	.word RecordMixing_Block23List2_GetSize, RecordMixing_Block23List2_Load2, RecordMixing_Block23_Merge
-
-	.data
-
-sNintendoWfcUnusedStates:
-	.word NintendoWfcUnused_AskConnect
-	.word NintendoWfcUnused_HandleConnectChoice
-	.word NintendoWfcUnused_StartConnect
-	.word NintendoWfcUnused_WaitConnect
-	.word NintendoWfcUnused_StartAuth
-	.word NintendoWfcUnused_WaitAuth
-	.word NintendoWfcUnused_InitHttp
-	.word NintendoWfcUnused_RequestInfo
-	.word NintendoWfcUnused_WaitInfo
-	.word NintendoWfcUnused_RequestSetProfile
-	.word NintendoWfcUnused_WaitSetProfile
-	.word NintendoWfcUnused_RequestRoomCount
-	.word NintendoWfcUnused_WaitRoomCount
-	.word NintendoWfcUnused_AskChallengeRoom
-	.word NintendoWfcUnused_StartChallengeRoomInput
-	.word NintendoWfcUnused_HandleChallengeRoomInput
-	.word NintendoWfcUnused_PrintReceivingTrainers
-	.word NintendoWfcUnused_RequestTrainersDownload
-	.word NintendoWfcUnused_WaitTrainersDownload
-	.word NintendoWfcUnused_PrintTrainersReceived
-	.word NintendoWfcUnused_PrintRoomUnavailable
-	.word NintendoWfcUnused_AskCancelChallenge
-	.word NintendoWfcUnused_HandleCancelChallengeChoice
-	.word NintendoWfcUnused_AskCancelDownload
-	.word NintendoWfcUnused_HandleCancelDownloadChoice
-	.word NintendoWfcUnused_PrintSendingRecord
-	.word NintendoWfcUnused_RequestUpload
-	.word NintendoWfcUnused_WaitUpload
-	.word NintendoWfcUnused_PrintRecordSent
-	.word NintendoWfcUnused_AskLeadersRank
-	.word NintendoWfcUnused_StartLeadersRankInput
-	.word NintendoWfcUnused_HandleLeadersRankInput
-	.word NintendoWfcUnused_AskLeadersRoom
-	.word NintendoWfcUnused_StartLeadersRoomInput
-	.word NintendoWfcUnused_HandleLeadersRoomInput
-	.word NintendoWfcUnused_PrintReceivingLeaders
-	.word NintendoWfcUnused_RequestLeadersDownload
-	.word NintendoWfcUnused_WaitLeadersDownload
-	.word NintendoWfcUnused_PrintLeadersReceived
-	.word NintendoWfcUnused_StartSave
-	.word NintendoWfcUnused_Save
-	.word NintendoWfcUnused_PrintDisconnecting
-	.word NintendoWfcUnused_CloseConnection
-	.word NintendoWfcUnused_PrintDisconnected
-	.word NintendoWfcUnused_UnusedState_Idle
-	.word NintendoWfcUnused_StartDisconnect
-	.word NintendoWfcUnused_StartExit
-	.word NintendoWfcUnused_WaitMessage
-	.word NintendoWfcUnused_OpenYesNoPrompt
-	.word NintendoWfcUnused_WaitMessageAndDelay
-	.word NintendoWfcUnused_UnusedState_HandleYesNo
-	.word NintendoWfcUnused_AskLogOut
-	.word NintendoWfcUnused_HandleLogOutChoice
-	.word NintendoWfcUnused_ShowHttpError
-	.word NintendoWfcUnused_Disconnect
-	.word NintendoWfcUnused_ShowDwcError
-	.word NintendoWfcUnused_WaitErrorDismiss
 

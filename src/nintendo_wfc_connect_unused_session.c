@@ -24,8 +24,6 @@
 #include "text.h"
 #include "wireless_status_icon.h"
 
-extern int (*const sNintendoWfcUnusedStates[])(NintendoWfcUnused *wfc);
-
 static void NintendoWfcUnused_InitBgs(BgConfig *bgConfig);
 static void NintendoWfcUnused_FreeBgs(BgConfig *bgConfig);
 static void NintendoWfcUnused_LoadBgGraphics(NintendoWfcUnused *wfc);
@@ -46,6 +44,66 @@ static void NintendoWfcUnused_ShowWaitingIcon(NintendoWfcUnused *wfc);
 static void NintendoWfcUnused_HideWaitingIcon(NintendoWfcUnused *wfc);
 static void NintendoWfcUnused_PrintErrorMessage(NintendoWfcUnused *wfc, int msgNo);
 static void NintendoWfcUnused_ShowErrorMessage(NintendoWfcUnused *wfc, int msgNo, int errorCode);
+
+static int (*sNintendoWfcUnusedStates[])(NintendoWfcUnused *wfc) = {
+    NintendoWfcUnused_AskConnect,
+    NintendoWfcUnused_HandleConnectChoice,
+    NintendoWfcUnused_StartConnect,
+    NintendoWfcUnused_WaitConnect,
+    NintendoWfcUnused_StartAuth,
+    NintendoWfcUnused_WaitAuth,
+    NintendoWfcUnused_InitHttp,
+    NintendoWfcUnused_RequestInfo,
+    NintendoWfcUnused_WaitInfo,
+    NintendoWfcUnused_RequestSetProfile,
+    NintendoWfcUnused_WaitSetProfile,
+    NintendoWfcUnused_RequestRoomCount,
+    NintendoWfcUnused_WaitRoomCount,
+    NintendoWfcUnused_AskChallengeRoom,
+    NintendoWfcUnused_StartChallengeRoomInput,
+    NintendoWfcUnused_HandleChallengeRoomInput,
+    NintendoWfcUnused_PrintReceivingTrainers,
+    NintendoWfcUnused_RequestTrainersDownload,
+    NintendoWfcUnused_WaitTrainersDownload,
+    NintendoWfcUnused_PrintTrainersReceived,
+    NintendoWfcUnused_PrintRoomUnavailable,
+    NintendoWfcUnused_AskCancelChallenge,
+    NintendoWfcUnused_HandleCancelChallengeChoice,
+    NintendoWfcUnused_AskCancelDownload,
+    NintendoWfcUnused_HandleCancelDownloadChoice,
+    NintendoWfcUnused_PrintSendingRecord,
+    NintendoWfcUnused_RequestUpload,
+    NintendoWfcUnused_WaitUpload,
+    NintendoWfcUnused_PrintRecordSent,
+    NintendoWfcUnused_AskLeadersRank,
+    NintendoWfcUnused_StartLeadersRankInput,
+    NintendoWfcUnused_HandleLeadersRankInput,
+    NintendoWfcUnused_AskLeadersRoom,
+    NintendoWfcUnused_StartLeadersRoomInput,
+    NintendoWfcUnused_HandleLeadersRoomInput,
+    NintendoWfcUnused_PrintReceivingLeaders,
+    NintendoWfcUnused_RequestLeadersDownload,
+    NintendoWfcUnused_WaitLeadersDownload,
+    NintendoWfcUnused_PrintLeadersReceived,
+    NintendoWfcUnused_StartSave,
+    NintendoWfcUnused_Save,
+    NintendoWfcUnused_PrintDisconnecting,
+    NintendoWfcUnused_CloseConnection,
+    NintendoWfcUnused_PrintDisconnected,
+    NintendoWfcUnused_UnusedState_Idle,
+    NintendoWfcUnused_StartDisconnect,
+    NintendoWfcUnused_StartExit,
+    NintendoWfcUnused_WaitMessage,
+    NintendoWfcUnused_OpenYesNoPrompt,
+    NintendoWfcUnused_WaitMessageAndDelay,
+    NintendoWfcUnused_UnusedState_HandleYesNo,
+    NintendoWfcUnused_AskLogOut,
+    NintendoWfcUnused_HandleLogOutChoice,
+    NintendoWfcUnused_ShowHttpError,
+    NintendoWfcUnused_Disconnect,
+    NintendoWfcUnused_ShowDwcError,
+    NintendoWfcUnused_WaitErrorDismiss,
+};
 
 static const BgTemplate sNintendoWfcUnusedBgTemplate_Main0 = {
     .x = 0,
@@ -77,21 +135,6 @@ static const BgTemplate sNintendoWfcUnusedBgTemplate_Main1 = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate sNintendoWfcUnusedBgTemplate_Sub1 = {
-    .x = 0,
-    .y = 0,
-    .bufferSize = 0x800,
-    .baseTile = 0,
-    .size = GF_BG_SCR_SIZE_256x256,
-    .colorMode = GX_BG_COLORMODE_16,
-    .screenBase = GX_BG_SCRBASE_0xd800,
-    .charBase = GX_BG_CHARBASE_0x08000,
-    .bgExtPltt = GX_BG_EXTPLTT_01,
-    .priority = 2,
-    .areaOver = GX_BG_AREAOVER_XLU,
-    .mosaic = FALSE,
-};
-
 static const BgTemplate sNintendoWfcUnusedBgTemplate_Sub0 = {
     .x = 0,
     .y = 0,
@@ -103,6 +146,21 @@ static const BgTemplate sNintendoWfcUnusedBgTemplate_Sub0 = {
     .charBase = GX_BG_CHARBASE_0x10000,
     .bgExtPltt = GX_BG_EXTPLTT_01,
     .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
+};
+
+static const BgTemplate sNintendoWfcUnusedBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xd800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
     .areaOver = GX_BG_AREAOVER_XLU,
     .mosaic = FALSE,
 };
@@ -382,11 +440,12 @@ int NintendoWfcUnused_HandleLogOutChoice(NintendoWfcUnused *wfc) {
     return NINTENDO_WFC_UNUSED_MAIN_SESSION_MAIN;
 }
 
-void NintendoWfcUnused_StartConnect(NintendoWfcUnused *wfc) {
+int NintendoWfcUnused_StartConnect(NintendoWfcUnused *wfc) {
     DWC_InitInetEx(wfc->connection, 2, 1, 20);
     DWC_SetAuthServer(2);
     DWC_ConnectInetAsync();
     wfc->state = NINTENDO_WFC_UNUSED_STATE_WAIT_CONNECT;
+    return NINTENDO_WFC_UNUSED_MAIN_SESSION_MAIN;
 }
 
 int NintendoWfcUnused_WaitConnect(NintendoWfcUnused *wfc) {
@@ -1155,7 +1214,7 @@ int NintendoWfcUnused_PrintDisconnected(NintendoWfcUnused *wfc) {
     return NINTENDO_WFC_UNUSED_MAIN_SESSION_MAIN;
 }
 
-int NintendoWfcUnused_UnusedState_Idle(void) {
+int NintendoWfcUnused_UnusedState_Idle(NintendoWfcUnused *wfc) {
     return NINTENDO_WFC_UNUSED_MAIN_SESSION_MAIN;
 }
 

@@ -4,26 +4,6 @@
 
 #include "global.h"
 
-typedef struct HexDigits {
-    char digits[17];
-} HexDigits;
-
-typedef struct HashSalt {
-    char chars[21];
-} HashSalt;
-
-extern const HexDigits gGameStatsHexDigits;
-extern HashSalt gGameStatsHashSalt;
-extern char gGameStatsHashParam[];
-extern char gGameStatsDataParam[];
-extern char gGameStatsErrorChecksum[];
-extern char gGameStatsErrorPid[];
-extern char gGameStatsErrorDataLength[];
-extern char gGameStatsErrorTokenNotFound[];
-extern char gGameStatsErrorTokenExpired[];
-extern char gGameStatsErrorIncorrectHash[];
-extern char gGameStatsUrlFormat[];
-
 extern int strncmp(const char *a, const char *b, u32 n);
 extern int sprintf(char *dest, const char *format, ...);
 
@@ -134,8 +114,6 @@ static void GameStats_SetRequestError(int result) {
 
 static void GameStats_ResponseCallback(const char *response, int length, int error) {
     char text[54];
-    HexDigits hexDigits;
-    char *digest;
     int i;
     int j;
     int result;
@@ -150,25 +128,19 @@ static void GameStats_ResponseCallback(const char *response, int length, int err
             if (length == 32) {
                 // The 20-byte SHA1 digest is computed in the second half of the hash text and
                 // expanded to 40 hex digits in place.
-                digest = gGameStatsRequest.hashText + 20;
-                hexDigits = gGameStatsHexDigits;
-                {
-                    const u8 *src = (const u8 *)gGameStatsHashSalt.chars;
-                    u8 *dst = (u8 *)text;
-                    u32 count = 21;
-                    do {
-                        *dst++ = *src++;
-                    } while (--count);
-                }
+                char *digest = gGameStatsRequest.hashText + 20;
+                char hexDigits[] = "0123456789abcdef";
+
+                strcpy(text, "sAdeqWo3voLeC5r16DYv");
                 strncat(text, response, length);
                 MATH_CalcSHA1(digest, text, strlen(text));
-                strcat(gGameStatsRequest.url, gGameStatsHashParam);
+                strcat(gGameStatsRequest.url, "&hash=");
                 for (i = 0, j = 0; i < 20; i++, j += 2) {
-                    gGameStatsRequest.hashText[j] = hexDigits.digits[*(u8 *)((u32)digest + i) >> 4];
-                    gGameStatsRequest.hashText[j + 1] = hexDigits.digits[*(u8 *)((u32)digest + i) & 15];
+                    gGameStatsRequest.hashText[j] = hexDigits[*(u8 *)((u32)digest + i) >> 4];
+                    gGameStatsRequest.hashText[j + 1] = hexDigits[*(u8 *)((u32)digest + i) & 15];
                 }
                 gGameStatsRequest.hashText[40] = 0;
-                strcat(gGameStatsRequest.url, gGameStatsDataParam);
+                strcat(gGameStatsRequest.url, "&data=");
                 result = GameStats_EncodePayload(gGameStatsRequest.pid, gGameStatsRequest.payload, gGameStatsRequest.payloadSize, gGameStatsRequest.dataText, gGameStatsRequest.dataTextSize);
                 switch (result) {
                 case 0:
@@ -185,32 +157,32 @@ static void GameStats_ResponseCallback(const char *response, int length, int err
             return;
         case GAME_STATS_STATE_WAIT_RESPONSE:
             if (length == 22) {
-                if (strncmp(response, gGameStatsErrorChecksum, 22) == 0) {
+                if (strncmp(response, "error: check sum      ", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 26;
                     return;
                 }
-                if (strncmp(response, gGameStatsErrorPid, 22) == 0) {
+                if (strncmp(response, "error: pid            ", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 27;
                     return;
                 }
-                if (strncmp(response, gGameStatsErrorDataLength, 22) == 0) {
+                if (strncmp(response, "error: data length    ", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 28;
                     return;
                 }
-                if (strncmp(response, gGameStatsErrorTokenNotFound, 22) == 0) {
+                if (strncmp(response, "error: token not found", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 29;
                     return;
                 }
-                if (strncmp(response, gGameStatsErrorTokenExpired, 22) == 0) {
+                if (strncmp(response, "error: token expired  ", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 30;
                     return;
                 }
-                if (strncmp(response, gGameStatsErrorIncorrectHash, 22) == 0) {
+                if (strncmp(response, "error: incorrect hash ", 22) == 0) {
                     gGameStatsRequest.state = GAME_STATS_STATE_IDLE;
                     gGameStatsRequest.error = 31;
                     return;
@@ -309,12 +281,12 @@ int GameStats_PrepareRequest(char *url, int pid, void *payload, int payloadSize,
     if (gGameStatsRequest.url == NULL) {
         return 2;
     }
-    sprintf(gGameStatsRequest.url, gGameStatsUrlFormat, url, pid);
+    sprintf(gGameStatsRequest.url, "%s?pid=%d", url, pid);
     p = gGameStatsRequest.url;
     len = strlen(p);
-    n = strlen(gGameStatsHashParam);
+    n = strlen("&hash=");
     gGameStatsRequest.hashText = p + len + n;
-    n = strlen(gGameStatsDataParam);
+    n = strlen("&data=");
     gGameStatsRequest.dataText = gGameStatsRequest.hashText + 40 + n;
     gGameStatsRequest.dataTextSize = GameStats_GetBase64Length(payloadSize) + 1;
     gGameStatsRequest.state = GAME_STATS_STATE_PREPARED;
