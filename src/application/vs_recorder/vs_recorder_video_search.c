@@ -86,7 +86,6 @@ extern const VsRecorderPartyIconOrder sVsRecorderSearchScrollIconOrder;
 extern const VsRecorderSearchButtonWindows sVsRecorderSearchButtonWindows;
 extern const VsRecorderConditionWindows sVsRecorderSearchConditionWindows;
 extern const VsRecorderIconPositions sVsRecorderSearchResultIconPositions;
-extern const u16 sVsRecorderSearchSpeciesGroupStarts[];
 
 // the result list entries are video headers; the icons read their party part
 #define VIDEO_PARTY(work, i) ((VsRecorderVideoParty *)(work)->net.videoList.headers[i])
@@ -131,6 +130,8 @@ static void VsRecorder_CreateSearchResultWindows(VsRecorderWork *work);
 static void VsRecorder_CreateSearchCategoryWindows(VsRecorderWork *work);
 static void VsRecorder_RemoveSearchCategoryWindows(VsRecorderWork *work);
 static void VsRecorder_FreeSearchSpeciesList(VsRecorderWork *work);
+
+static u16 sVsRecorderSearchSpeciesGroupStarts[10] = { 0, 87, 136, 191, 235, 303, 360, 457, 487, 493 };
 
 static void VsRecorder_PlaceSearchResultIcons(VsRecorderWork *work) {
     VsRecorderIconPositions positions = sVsRecorderSearchResultIconPositions;

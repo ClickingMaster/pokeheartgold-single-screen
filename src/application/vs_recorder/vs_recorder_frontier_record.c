@@ -27,15 +27,38 @@ typedef struct VsRecorderIntSet5 {
     int values[5];
 } VsRecorderIntSet5;
 
-extern const VsRecorderIntSet5 sVsRecorderFrontierPrintPaletteSlots; // print palette slots
-extern const VsRecorderIntSet5 sVsRecorderFrontierIconCharFiles;     // facility icon char files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles;  // facility icon palette files (NARC_a_1_7_9)
-extern const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims;        // print animation per facility
-extern const s16 sVsRecorderFrontierPrintPositions[];                // print positions (x, y) after the spin
-
-// substates of the Battle Frontier record screen (sVsRecorderFrontierSubStates)
+// substates of the Battle Frontier record screen (gVsRecorderFrontierSubStates)
 #define FRONTIER_MAIN 1
 #define FRONTIER_EXIT 2
+
+const VsRecorderScreenFunc gVsRecorderFrontierSubStates[3] = {
+    VsRecorder_FrontierEnter,
+    VsRecorder_FrontierMain,
+    VsRecorder_FrontierExit,
+};
+
+// facility icon palette files (NARC_a_1_7_9)
+static const VsRecorderIntSet5 sVsRecorderFrontierIconPaletteFiles = {
+    .values = { 125, 291, 297, 295, 293 },
+};
+
+// facility icon char files (NARC_a_1_7_9)
+static const VsRecorderIntSet5 sVsRecorderFrontierIconCharFiles = {
+    .values = { 126, 292, 298, 296, 294 },
+};
+
+// print palette slots
+static const VsRecorderIntSet5 sVsRecorderFrontierPrintPaletteSlots = {
+    .values = { 0, 1, 4, 3, 2 },
+};
+
+// print animation per facility
+static const VsRecorderIntSet5 sVsRecorderFrontierPrintAnims = {
+    .values = { 0, 1, 4, 3, 2 },
+};
+
+// print positions (x, y) after the spin
+static s16 sVsRecorderFrontierPrintPositions[10] = { 128, 42, 189, 87, 172, 134, 83, 134, 66, 87 };
 
 void VsRecorder_FreeExitButton(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;

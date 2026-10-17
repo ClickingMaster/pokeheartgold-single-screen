@@ -5,10 +5,12 @@
 #include "msgdata/msg/msg_0013.h"
 
 #include "assert.h"
+#include "bg_window.h"
 #include "fashion_case.h"
 #include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "math_util.h"
+#include "obj_char_transfer.h"
 #include "orbit_cursor.h"
 #include "palette.h"
 #include "sound_playback.h"
@@ -17,7 +19,15 @@
 #include "touch_hitbox_controller.h"
 
 // VS Recorder screen framework: screen / step helpers, the menu tree (stack, actions, touch input),
-// shared BG / sprite resources, the drifting decor sprites and the menu row sprites.
+// shared BG / sprite resources, the drifting decor sprites and the menu row sprites and labels.
+
+typedef struct VsRecorderIntPair {
+    int v[2];
+} VsRecorderIntPair;
+
+typedef struct VsRecorderVramPair {
+    NNS_G2D_VRAM_TYPE v[2];
+} VsRecorderVramPair;
 
 typedef struct VsRecorderS8x6 {
     s8 v[6];
@@ -38,16 +48,42 @@ typedef struct VsRecorderAngles {
 BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
 void TextOBJ_SetParentSprite(TextOBJ *textOBJ, const Sprite *sprite);
 
-extern const u8 gVsRecorderDecorSpriteXOffsets[];
-extern const u8 sVsRecorderMenuRowDrawPriorities[];
-extern const VsRecorderAngles sVsRecorderDecorAngles;
-extern const VsRecorderF32x6 sVsRecorderDecorScales;
-
 static void VsRecorder_SetStep(VsRecorderWork *work, u32 step);
 static void VsRecorder_RefreshMenu(VsRecorderWork *work);
 static BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work);
 static void VsRecorder_ClearMenuHitboxes(VsRecorderWork *work);
 static void VsRecorder_DecorTask(SysTask *task, void *data);
+
+// x offsets of the decor sprites
+static const VsRecorderS8x6 sVsRecorderDecorSpriteXOffsets = {
+    { -1, -3, 2, -1, -3, 2 }
+};
+
+static const VsRecorderVramPair sVsRecorderMenuRowVrams = {
+    { NNS_G2D_VRAM_TYPE_2DMAIN, NNS_G2D_VRAM_TYPE_2DSUB }
+};
+static const VsRecorderIntPair sVsRecorderMenuRowPalettes = {
+    { 9999, 10000 }
+};
+
+// draw priorities of the menu row sprites
+static const u8 sVsRecorderMenuRowDrawPriorities[2][5] = {
+    { 5,  10, 15, 20, 25 },
+    { 25, 20, 15, 10, 5  },
+};
+
+// y positions of the decor sprites
+static const VsRecorderS16x6 sVsRecorderDecorSpriteYs = {
+    { 82, 178, 118, 42, 150, 210 }
+};
+
+static const VsRecorderAngles sVsRecorderDecorAngles = {
+    { 90, 135, 270, 45, 225, 0 }
+};
+
+static const VsRecorderF32x6 sVsRecorderDecorScales = {
+    { 1.4f, 1.8f, 2.0f, 1.6f, 1.4f, 1.6f }
+};
 
 void VsRecorder_SetScreenIfDone(VsRecorderWork *work, int nextScreen, BOOL done, int *screen) {
     if (done) {
@@ -438,9 +474,9 @@ void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
     template.resIdList[3] = 9999;
     template.resIdList[4] = -1;
     template.resIdList[5] = -1;
-    ys = *(const VsRecorderS16x6 *)(gVsRecorderDecorSpriteXOffsets + 0x22);
+    ys = sVsRecorderDecorSpriteYs;
     scales = sVsRecorderDecorScales;
-    xs = *(const VsRecorderS8x6 *)gVsRecorderDecorSpriteXOffsets;
+    xs = sVsRecorderDecorSpriteXOffsets;
     for (i = 0; i < 6; i++) {
         for (j = 0; j < 2; j++) {
             if (j == 0) {
@@ -645,7 +681,7 @@ void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
         template.resIdList[1] = 10000;
         template.resIdList[2] = 10002;
         template.resIdList[3] = 10002;
-        template.drawPriority = sVsRecorderMenuRowDrawPriorities[i + 5];
+        template.drawPriority = sVsRecorderMenuRowDrawPriorities[1][i];
         rows[i].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ManagedSprite_TickFrame(rows[i].sprite);
         ManagedSprite_SetDrawFlag(rows[i].sprite, TRUE);
@@ -655,7 +691,7 @@ void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
         template.resIdList[1] = 9999;
         template.resIdList[2] = 10001;
         template.resIdList[3] = 10001;
-        template.drawPriority = sVsRecorderMenuRowDrawPriorities[i];
+        template.drawPriority = sVsRecorderMenuRowDrawPriorities[0][i];
         rows[i + 5].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ManagedSprite_TickFrame(rows[i + 5].sprite);
         VsRecorder_SetSpritePos(rows[i + 5].sprite, template.x, template.y);
@@ -846,4 +882,48 @@ void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y) {
 
 void VsRecorder_GetSpritePos(ManagedSprite *sprite, s16 *x, s16 *y) {
     ManagedSprite_GetPositionXYWithSubscreenOffset(sprite, x, y, 1 << 20);
+}
+
+void VsRecorder_CreateMenuRowText(VsRecorderWork *work) {
+    TextOBJTemplate template;
+    Window window;
+    VsRecorderMenuRow *rows[2];
+    VsRecorderVramPair vrams;
+    VsRecorderIntPair pltts;
+    s16 x;
+    s16 y;
+    int i;
+    int j;
+    int size;
+
+    vrams = sVsRecorderMenuRowVrams;
+    pltts = sVsRecorderMenuRowPalettes;
+    for (i = 0; i < 5; i++) {
+        rows[0] = &work->choiceRows[i];
+        rows[1] = &work->pathRows[i];
+        for (j = 0; j < 2; j++) {
+            InitWindow(&window);
+            AddTextWindowTopLeftCorner(work->bgConfig, &window, 20, 2, 0, 0);
+            rows[j]->textLayout = TextOBJLayout_New(&window, HEAP_ID_109);
+            size = FontOAM_GetCharSize(&window, vrams.v[j], HEAP_ID_109);
+            ObjCharTransfer_ReserveCharSpace(size, TRUE, vrams.v[j], &rows[j]->charAlloc);
+            ManagedSprite_GetPositionXY(rows[j]->sprite, &x, &y);
+            template.fontSystem = work->fontSystem;
+            template.window = &window;
+            template.spriteList = SpriteManager_GetSpriteList(work->spriteManager);
+            template.plttResourceProxy = SpriteManager_FindPlttResourceProxy(work->spriteManager, pltts.v[j]);
+            template.sprite = rows[j]->sprite->sprite;
+            template.offset = rows[j]->charAlloc.offset;
+            template.x = x + 36;
+            template.y = y - 8;
+            template.bgPriority = 3;
+            template.drawPriority = sVsRecorderMenuRowDrawPriorities[j][i] - 1;
+            template.vram = vrams.v[j];
+            template.heapID = HEAP_ID_109;
+            rows[j]->text = TextOBJ_Create(&template, rows[j]->textLayout);
+            TextOBJ_SetPalOffsetRespectVramOffset(rows[j]->text, 1);
+            RemoveWindow(&window);
+            TextOBJ_SetSpritesDrawFlag(rows[j]->text, FALSE);
+        }
+    }
 }

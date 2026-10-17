@@ -33,10 +33,17 @@ typedef struct VsRecorderChoiceSlideIn {
     u8 fade;
 } VsRecorderChoiceSlideIn;
 
-// substates of the title screen (sVsRecorderTitleSubStates)
+// substates of the title screen (gVsRecorderTitleSubStates)
 #define TITLE_SHOW_MENU        1
 #define TITLE_FLASH            2
 #define TITLE_SLIDE_IN_CHOICES 3
+
+const VsRecorderScreenFunc gVsRecorderTitleSubStates[4] = {
+    VsRecorder_TitleIntro,
+    VsRecorder_TitleShowMenu,
+    VsRecorder_TitleFlash,
+    VsRecorder_TitleSlideInChoices,
+};
 
 BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
     switch (work->step) {

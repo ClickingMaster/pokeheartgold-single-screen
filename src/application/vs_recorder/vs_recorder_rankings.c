@@ -50,7 +50,6 @@ extern const VsRecorderRankingsWindowRect sVsRecorderRankingsThisWeekWindows[]; 
 extern const VsRecorderRankingsWindowRect sVsRecorderRankingsLastWeekWindows[];    // VsRecorderRankings.windows, last week
 extern const VsRecorderListConfig sVsRecorderRankingsThisWeekListConfig;           // this week's ranking list
 extern const VsRecorderListConfig sVsRecorderRankingsLastWeekListConfig;           // last week's results list
-extern u32 sVsRecorderRankedRecordGameStats[];                                     // game stat of each record (0xFFFF: none)
 
 // ranking list entry kinds (VsRecorderListEntry.msgId)
 #define RANKING_ENTRY_TRAINER_TYPE       10000
@@ -88,6 +87,11 @@ static void VsRecorder_CreateRankingsButtons(VsRecorderWork *work);
 static void VsRecorder_FreeRankingsButtons(VsRecorderWork *work);
 static void VsRecorder_UpdateRankingTeamCount(VsRecorderRankings *rankings);
 static void VsRecorder_OnRankingsTouch(u32 index, u32 event, void *arg);
+
+// game stat of each record (0xFFFF: none)
+static u32 sVsRecorderRankedRecordGameStats[87] = {
+    74, 77, 79, 80, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 5, 0, 8, 9, 10, 11, 12, 13, 15, 16, 20, 22, 23, 24, 25, 27, 28, 29, 30, 36, 41, 42, 45, 114, 115, 116, 117, 46, 118, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 119, 120, 71, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
+};
 
 void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error) {
 }

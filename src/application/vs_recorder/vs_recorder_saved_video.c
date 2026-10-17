@@ -24,11 +24,7 @@
 // VS Recorder saved video screen (VS_RECORDER_SCREEN_SAVED_VIDEO): the battle video in the chosen save slot with its
 // owner's profile, play (after saving the game if needed) and exit. Also the menu's next-colour-scheme substate.
 
-extern const TouchscreenHitbox sVsRecorderSaveYesHitbox;         // YES
-extern const TouchscreenHitbox sVsRecorderSaveNoHitbox;          // NO
-extern const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3]; // profile, play, exit
-
-// substates of the saved video screen (sVsRecorderSavedVideoSubStates)
+// substates of the saved video screen (gVsRecorderSavedVideoSubStates)
 #define SAVED_VIDEO_ENTER          1
 #define SAVED_VIDEO_SHOW           2
 #define SAVED_VIDEO_MAIN           3
@@ -47,6 +43,32 @@ static void VsRecorder_ShowProfileButton(VsRecorderWork *work);
 static void VsRecorder_RemoveProfileButton(VsRecorderWork *work);
 static void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId);
 static void VsRecorder_CreateExitButton(VsRecorderWork *work);
+
+// YES button
+static const TouchscreenHitbox sVsRecorderSaveYesHitbox = { 40, 72, 32, 120 };
+
+// NO button
+static const TouchscreenHitbox sVsRecorderSaveNoHitbox = { 40, 72, 144, 232 };
+
+// profile, play and exit buttons
+static const TouchscreenHitbox sVsRecorderSavedVideoHitboxes[3] = {
+    { 16,  48,  64, 200 },
+    { 64,  112, 88, 168 },
+    { 152, 184, 80, 176 }
+};
+
+const VsRecorderScreenFunc gVsRecorderSavedVideoSubStates[10] = {
+    VsRecorder_SavedVideoInit,
+    VsRecorder_SavedVideoEnter,
+    VsRecorder_SavedVideoShow,
+    VsRecorder_SavedVideoMain,
+    VsRecorder_SavedVideoToggleProfile,
+    VsRecorder_SavedVideoSavePrompt,
+    VsRecorder_SavedVideoSave,
+    VsRecorder_SavedVideoPlay,
+    VsRecorder_SavedVideoExit,
+    VsRecorder_SavedVideoResume,
+};
 
 // right colour scheme arrow (VS_RECORDER_SCREEN_MENU substate 8): like VsRecorder_MenuPrevScheme the other way round
 BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work) {

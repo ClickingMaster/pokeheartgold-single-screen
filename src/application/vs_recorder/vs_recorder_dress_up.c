@@ -48,7 +48,6 @@ extern const TouchscreenHitbox sVsRecorderDressUpPrevPhotoHitbox;      // previo
 extern const TouchscreenHitbox sVsRecorderDressUpNextPhotoHitbox;      // next photo
 extern const VsRecorderListConfig sVsRecorderDressUpSpeciesListConfig; // species list
 extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[];      // species groups (9)
-extern const u16 sVsRecorderDressUpSpeciesGroupStarts[];               // first species list index of each group
 
 // substates of sending a Dress-Up photo (sVsRecorderDressUpSendSubStates)
 #define DRESS_UP_SEND_MAIN   3
@@ -84,6 +83,9 @@ static void VsRecorder_OnDressUpCategoryTouch(u32 index, u32 event, void *arg);
 static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work);
 static void VsRecorder_RemoveDressUpCategoryWindows(VsRecorderWork *work);
 static void VsRecorder_RemovePhotoCaption(VsRecorderWork *work);
+
+// first species list index of each group
+static u16 sVsRecorderDressUpSpeciesGroupStarts[10] = { 0, 87, 136, 191, 235, 303, 360, 457, 487, 493 };
 
 BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;

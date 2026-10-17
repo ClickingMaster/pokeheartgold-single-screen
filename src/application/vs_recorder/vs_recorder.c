@@ -44,20 +44,7 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
-extern const BgTemplate sVsRecorderBgTemplate_Main0;
-extern const BgTemplate sVsRecorderBgTemplate_Main1;
-extern const BgTemplate sVsRecorderBgTemplate_Main2;
-extern const BgTemplate sVsRecorderBgTemplate_Main3;
-extern const BgTemplate sVsRecorderBgTemplate_Sub0;
-extern const BgTemplate sVsRecorderBgTemplate_Sub1;
-extern const BgTemplate sVsRecorderBgTemplate_Sub2;
-extern const BgTemplate sVsRecorderBgTemplate_Sub3;
-
 // per-screen step tables, indexed by VsRecorderWork.subState
-extern VsRecorderScreenFunc sVsRecorderTitleSubStates[];
-extern VsRecorderScreenFunc sVsRecorderMenuSubStates[];
-extern VsRecorderScreenFunc sVsRecorderSavedVideoSubStates[];
-extern VsRecorderScreenFunc sVsRecorderFrontierSubStates[];
 extern VsRecorderScreenFunc sVsRecorderDressUpSendSubStates[];
 extern VsRecorderScreenFunc sVsRecorderDressUpViewSubStates[];
 extern VsRecorderScreenFunc sVsRecorderBoxDataSendSubStates[];
@@ -113,6 +100,120 @@ static const GraphicsBanks sVsRecorderGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_01_FG,
 };
 
+static const BgTemplate sVsRecorderBgTemplates[] = {
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x2000,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x2800,
+     .charBase = GX_BG_CHARBASE_0x14000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 3,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x3000,
+     .charBase = GX_BG_CHARBASE_0x18000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 2,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x3800,
+     .charBase = GX_BG_CHARBASE_0x1c000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xc000,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xc800,
+     .charBase = GX_BG_CHARBASE_0x04000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 3,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd000,
+     .charBase = GX_BG_CHARBASE_0x08000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 2,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+};
 void VsRecorder_InitResources(VsRecorderWork *work) {
     VsRecorderBannerArgs args;
     NNSG2dPaletteData *pltt;
@@ -255,18 +356,18 @@ static void VsRecorder_InitBgLayers(BgConfig *bgConfig) {
     MIi_CpuClear32(0, (void *)HW_DB_BG_VRAM, 0x20000);
     MIi_CpuClear32(0, (void *)HW_OBJ_VRAM, 0x40000);
     MIi_CpuClear32(0, (void *)HW_DB_OBJ_VRAM, 0x20000);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &sVsRecorderBgTemplate_Main0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &sVsRecorderBgTemplate_Main1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplate_Main2, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &sVsRecorderBgTemplate_Main3, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &sVsRecorderBgTemplates[GF_BG_LYR_MAIN_0], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &sVsRecorderBgTemplates[GF_BG_LYR_MAIN_1], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplates[GF_BG_LYR_MAIN_2], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &sVsRecorderBgTemplates[GF_BG_LYR_MAIN_3], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sVsRecorderBgTemplate_Sub0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sVsRecorderBgTemplate_Sub1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sVsRecorderBgTemplate_Sub2, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sVsRecorderBgTemplate_Sub3, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sVsRecorderBgTemplates[GF_BG_LYR_SUB_0], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sVsRecorderBgTemplates[GF_BG_LYR_SUB_1], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sVsRecorderBgTemplates[GF_BG_LYR_SUB_2], GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &sVsRecorderBgTemplates[GF_BG_LYR_SUB_3], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
@@ -292,7 +393,7 @@ void VsRecorder_SetScreensFlipped(int flipped) {
 }
 
 void VsRecorder_ResetBg2(VsRecorderWork *work) {
-    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplate_Main2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(work->bgConfig, GF_BG_LYR_MAIN_2, &sVsRecorderBgTemplates[GF_BG_LYR_MAIN_2], GF_BG_TYPE_TEXT);
 }
 
 static void VsRecorder_InitSpriteSystem(VsRecorderWork *work) {
@@ -328,7 +429,7 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
     BOOL done;
     switch (*screen) {
     case VS_RECORDER_SCREEN_TITLE:
-        done = sVsRecorderTitleSubStates[work->subState](work);
+        done = gVsRecorderTitleSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, done, screen);
         if (done == FALSE) {
             break;
@@ -340,15 +441,15 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         }
         break;
     case VS_RECORDER_SCREEN_MENU:
-        done = sVsRecorderMenuSubStates[work->subState](work);
+        done = gVsRecorderMenuSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SAVED_VIDEO:
-        done = sVsRecorderSavedVideoSubStates[work->subState](work);
+        done = gVsRecorderSavedVideoSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_FRONTIER:
-        done = sVsRecorderFrontierSubStates[work->subState](work);
+        done = gVsRecorderFrontierSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_SEND:

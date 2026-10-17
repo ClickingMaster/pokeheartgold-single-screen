@@ -49,11 +49,26 @@ typedef struct VsRecorderMenuMove {
     int arrived;
 } VsRecorderMenuMove;
 
-extern const TouchscreenHitbox sVsRecorderPrevSchemeHitbox; // left edge: previous colour scheme
-extern const TouchscreenHitbox sVsRecorderNextSchemeHitbox; // right edge: next colour scheme
-
 static int VsRecorder_CheckSchemeArrowTouch(void);
 static void VsRecorder_RowMoveTask(SysTask *task, void *data);
+
+// right edge: next colour scheme
+static const TouchscreenHitbox sVsRecorderNextSchemeHitbox = { 0, 192, 248, 0 };
+
+// left edge: previous colour scheme
+static const TouchscreenHitbox sVsRecorderPrevSchemeHitbox = { 0, 192, 0, 8 };
+
+const VsRecorderScreenFunc gVsRecorderMenuSubStates[9] = {
+    VsRecorder_MenuMain,
+    VsRecorder_MenuInvalid,
+    VsRecorder_MenuExit,
+    VsRecorder_MenuSelect,
+    VsRecorder_MenuBack,
+    VsRecorder_MenuSlideIn,
+    VsRecorder_MenuShow,
+    VsRecorder_MenuPrevScheme,
+    VsRecorder_MenuNextScheme,
+};
 
 BOOL VsRecorder_MenuMain(VsRecorderWork *work) {
     if (System_GetTouchNew() && work->menuNoticeShown == 0) {

@@ -39,8 +39,6 @@ typedef struct VsRecorderNumberPadKeys {
 extern const VsRecorderNumberPadFunc sVsRecorderNumberPadStates[];
 extern const VsRecorderNumberPadStartX sVsRecorderNumberPadStartX;
 extern const VsRecorderNumberPadKeys sVsRecorderNumberPadKeys;
-extern f32 sVsRecorderDigitScalesNewGroup[];
-extern f32 sVsRecorderDigitScalesOldGroup[];
 
 // VsRecorderNumberPad.hitboxes: digits 0-11, then the keys
 #define NUMBER_PAD_KEY_0    12
@@ -77,6 +75,12 @@ static int VsRecorder_GetDigitAnim(int value, BOOL enabled);
 static void VsRecorder_NumberPadUpdateEnabled(VsRecorderNumberPad *pad);
 static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL animate);
 static void VsRecorder_NumberPadUpdateHitboxes(VsRecorderNumberPad *pad);
+
+static f32 sVsRecorderDigitScalesOldGroup[7] = {
+    0.8f, 0.6f, 0.4f, 0.2f, 0.8f, 1.0f, 1.0f
+};
+
+static f32 sVsRecorderDigitScalesNewGroup[11] = { 0.5f, 0.2f, 0.5f, 1.0f, 1.2f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
 // the number of an uploaded video, "XX-XXXXX-XXXXX" (msg 0x127)
 void VsRecorder_PrintVideoNumber(VsRecorderVideoSearch *search, VsRecorderWork *work) {

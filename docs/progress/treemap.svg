@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c28d3dcee · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 4e726ae6e · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -3737,79 +3737,64 @@ src/field/field_effect_manager_texture.c</title></rect>
 <rect x="423.434" y="606.674" width="192.057" height="110.326" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="426.434" y="609.674" width="98.000" height="22" rx="3" fill="#101722" opacity="0.88"/>
 <text x="432.434" y="625.674" font-size="12">ARM9 / field</text>
-<rect x="615.491" y="147.000" width="33.944" height="60.356" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_list.o
+<rect x="615.491" y="147.000" width="65.841" height="36.579" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_screen.o
+15,052 bytes · C-only source
+src/application/vs_recorder/vs_recorder_screen.c</title></rect>
+<rect x="615.491" y="183.579" width="65.841" height="31.116" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_list.o
 12,804 bytes · C-only source
 src/application/vs_recorder/vs_recorder_video_list.c</title></rect>
-<rect x="649.434" y="147.000" width="32.995" height="60.356" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_transfer.o
+<rect x="615.491" y="214.695" width="36.356" height="54.776" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_transfer.o
 12,446 bytes · C-only source
 src/application/vs_recorder/vs_recorder_video_transfer.c</title></rect>
-<rect x="615.491" y="207.356" width="26.002" height="62.115" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_search.o
+<rect x="651.846" y="214.695" width="29.486" height="54.776" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_video_search.o
 10,094 bytes · C-only source
 src/application/vs_recorder/vs_recorder_video_search.c</title></rect>
-<rect x="641.492" y="207.356" width="40.937" height="34.145" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_dress_up.o
+<rect x="681.332" y="147.000" width="41.880" height="33.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_dress_up.o
 8,736 bytes · C-only source
 src/application/vs_recorder/vs_recorder_dress_up.c</title></rect>
-<rect x="641.492" y="241.501" width="40.937" height="27.970" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_data.o
+<rect x="681.332" y="180.377" width="41.880" height="27.340" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_data.o
 7,156 bytes · C-only source
 src/application/vs_recorder/vs_recorder_box_data.c</title></rect>
-<rect x="682.429" y="147.000" width="37.696" height="22.132" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_rankings.o
+<rect x="723.212" y="147.000" width="27.554" height="30.440" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_ui.o
+5,242 bytes · C-only source
+src/application/vs_recorder/vs_recorder_ui.c</title></rect>
+<rect x="723.212" y="177.440" width="27.554" height="30.277" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_rankings.o
 5,214 bytes · C-only source
 src/application/vs_recorder/vs_recorder_rankings.c</title></rect>
-<rect x="682.429" y="169.132" width="37.696" height="21.919" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_number_pad.o
+<rect x="681.332" y="207.717" width="35.409" height="23.335" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_number_pad.o
 5,164 bytes · C-only source
 src/application/vs_recorder/vs_recorder_number_pad.c</title></rect>
-<rect x="682.429" y="191.051" width="37.696" height="20.858" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_ui.o
-4,914 bytes · C-only source
-src/application/vs_recorder/vs_recorder_ui.c</title></rect>
-<rect x="720.125" y="147.000" width="30.641" height="22.904" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_list.o
+<rect x="681.332" y="231.052" width="35.409" height="19.819" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_list.o
 4,386 bytes · C-only source
 src/application/vs_recorder/vs_recorder_box_list.c</title></rect>
-<rect x="720.125" y="169.904" width="30.641" height="21.494" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_saved_video.o
+<rect x="681.332" y="250.871" width="35.409" height="18.599" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_saved_video.o
 4,116 bytes · C-only source
 src/application/vs_recorder/vs_recorder_saved_video.c</title></rect>
-<rect x="720.125" y="191.397" width="30.641" height="20.512" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_screen.o
-3,928 bytes · C-only source
-src/application/vs_recorder/vs_recorder_screen.c</title></rect>
-<rect x="682.429" y="211.909" width="18.207" height="34.169" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_list.o
-3,888 bytes · C-only source
-src/application/vs_recorder/vs_recorder_list.c</title></rect>
-<rect x="700.636" y="211.909" width="17.279" height="34.169" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_frontier_record.o
+<rect x="716.741" y="207.717" width="20.127" height="29.334" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_frontier_record.o
 3,690 bytes · C-only source
 src/application/vs_recorder/vs_recorder_frontier_record.c</title></rect>
-<rect x="682.429" y="246.078" width="18.058" height="23.393" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_windows.o
-2,640 bytes · C-only source
-src/application/vs_recorder/vs_recorder_windows.c</title></rect>
-<rect x="700.487" y="246.078" width="17.428" height="23.393" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_menu.o
+<rect x="736.868" y="207.717" width="13.898" height="29.334" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_menu.o
 2,548 bytes · C-only source
 src/application/vs_recorder/vs_recorder_menu.c</title></rect>
-<rect x="717.915" y="211.909" width="32.851" height="12.060" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_gfx.o
-2,476 bytes · C-only source
-src/application/vs_recorder/vs_recorder_gfx.c</title></rect>
-<rect x="717.915" y="223.969" width="16.655" height="20.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder.o
+<rect x="716.741" y="237.051" width="20.561" height="16.965" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder.o
 2,180 bytes · C-only source
 src/application/vs_recorder/vs_recorder.c</title></rect>
-<rect x="734.570" y="223.969" width="16.196" height="20.944" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_util.o
-2,120 bytes · C-only source
-src/application/vs_recorder/vs_recorder_util.c</title></rect>
-<rect x="717.915" y="244.913" width="12.940" height="24.558" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_title.o
+<rect x="716.741" y="254.016" width="20.561" height="15.455" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_title.o
 1,986 bytes · C-only source
 src/application/vs_recorder/vs_recorder_title.c</title></rect>
-<rect x="730.855" y="244.913" width="19.911" height="13.484" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_delete.o
+<rect x="737.302" y="237.051" width="13.464" height="19.941" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_delete.o
 1,678 bytes · C-only source
 src/application/vs_recorder/vs_recorder_delete.c</title></rect>
-<rect x="730.855" y="258.397" width="6.444" height="11.074" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_record.o
+<rect x="737.302" y="256.993" width="5.719" height="12.478" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_record.o
 446 bytes · C-only source
 src/application/vs_recorder/vs_recorder_record.c</title></rect>
-<rect x="737.299" y="258.397" width="5.144" height="11.074" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_battle_names.o
+<rect x="743.021" y="256.993" width="7.745" height="7.355" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_battle_names.o
 356 bytes · C-only source
 src/application/vs_recorder/vs_recorder_battle_names.c</title></rect>
-<rect x="742.443" y="258.397" width="8.323" height="6.306" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_row_text.o
-328 bytes · C-only source
-src/application/vs_recorder/vs_recorder_row_text.c</title></rect>
-<rect x="742.443" y="264.703" width="7.048" height="4.768" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_net.o
+<rect x="743.021" y="264.347" width="6.558" height="5.123" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_net.o
 210 bytes · C-only source
 src/application/vs_recorder/vs_recorder_net.c</title></rect>
-<rect x="749.491" y="264.703" width="1.275" height="4.768" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_list_title.o
+<rect x="749.579" y="264.347" width="1.187" height="5.123" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_40 / vs_recorder_box_list_title.o
 38 bytes · C-only source
 src/application/vs_recorder/vs_recorder_box_list_title.c</title></rect>
 <rect x="615.491" y="147.000" width="135.276" height="122.471" fill="none" stroke="#101722" stroke-width="2"/>
@@ -5268,10 +5253,13 @@ src/field/gymmick/ecruteak.c</title></rect>
 12,364 bytes · C-only source
 src/battle/link_battle_screen.c</title></rect>
 <rect x="1119.801" y="426.285" width="52.199" height="37.900" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1119.801" y="464.185" width="50.673" height="37.127" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_message_settings.o
-11,758 bytes · C-only source
+<rect x="1119.801" y="464.185" width="44.519" height="37.127" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_message_settings_screen.o
+10,330 bytes · C-only source
+src/application/wii_message/wii_message_settings_screen.c</title></rect>
+<rect x="1164.320" y="464.185" width="7.680" height="29.752" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_message_settings.o
+1,428 bytes · C-only source
 src/application/wii_message/wii_message_settings.c</title></rect>
-<rect x="1170.474" y="464.185" width="1.526" height="37.127" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_number.o
+<rect x="1164.320" y="493.936" width="7.680" height="7.375" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_75 / wii_number.o
 354 bytes · C-only source
 src/application/wii_message/wii_number.c</title></rect>
 <rect x="1119.801" y="464.185" width="52.199" height="37.127" fill="none" stroke="#101722" stroke-width="2"/>

@@ -59,6 +59,12 @@ u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
 // one step of a screen; TRUE when the screen is done
 typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
 
+// per-screen step tables, indexed by VsRecorderWork.subState
+extern const VsRecorderScreenFunc gVsRecorderTitleSubStates[];
+extern const VsRecorderScreenFunc gVsRecorderMenuSubStates[];
+extern const VsRecorderScreenFunc gVsRecorderSavedVideoSubStates[];
+extern const VsRecorderScreenFunc gVsRecorderFrontierSubStates[];
+
 // VsRecorderWork.screenPtr
 #define VS_RECORDER_SCREEN_TITLE         0
 #define VS_RECORDER_SCREEN_MENU          1
@@ -81,7 +87,7 @@ typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
 #define VS_RECORDER_SCREEN_MESSAGE       18
 #define VS_RECORDER_SCREEN_NONE          0xFF
 
-// substates of the menu (sVsRecorderMenuSubStates)
+// substates of the menu (gVsRecorderMenuSubStates)
 #define VS_RECORDER_MENU_MAIN        0
 #define VS_RECORDER_MENU_INVALID     1
 #define VS_RECORDER_MENU_SLIDE_IN    5

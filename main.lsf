@@ -1391,12 +1391,6 @@ Overlay OVY_40
     After OVY_39
     Object src/application/vs_recorder/vs_recorder.o
     Object src/application/vs_recorder/vs_recorder_ui.o
-    Object asm/vs_recorder_app_rodata.o
-    Object src/application/vs_recorder/vs_recorder_row_text.o
-    Object src/application/vs_recorder/vs_recorder_gfx.o
-    Object src/application/vs_recorder/vs_recorder_windows.o
-    Object src/application/vs_recorder/vs_recorder_list.o
-    Object src/application/vs_recorder/vs_recorder_util.o
     Object src/application/vs_recorder/vs_recorder_screen.o
     Object src/application/vs_recorder/vs_recorder_title.o
     Object src/application/vs_recorder/vs_recorder_menu.o
@@ -1871,7 +1865,8 @@ Overlay OVY_75
 {
     After OVY_70
     Object src/application/wii_message/wii_message_settings.o
-    Object asm/wii_message_settings_data.o
+    Object src/application/wii_message/wii_message_settings_template.o
+    Object src/application/wii_message/wii_message_settings_screen.o
     Object src/application/wii_message/wii_number.o
 }
 Overlay credits

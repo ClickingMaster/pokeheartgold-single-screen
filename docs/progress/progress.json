@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "c28d3dceeb906e77cb3bb81a950ef76562749729",
+  "commit": "4e726ae6e64ef32fda2687b8a5aa3756f90014a4",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "277ff7dade27fa75fb96836ef5ee0566c828d9ee92f76942fb3aa0901c119a9a",
+    "ARM9": "486b34d0ed0c3f6b08f30ecbd8f12f429fe6bfd92e7c572160d5f7af896346b4",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2236,22 +2236,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_40",
-      "object": "vs_recorder_gfx.o",
-      "bytes": 2476,
-      "status": "c",
-      "source": "src/application/vs_recorder/vs_recorder_gfx.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_40",
-      "object": "vs_recorder_list.o",
-      "bytes": 3888,
-      "status": "c",
-      "source": "src/application/vs_recorder/vs_recorder_list.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_40",
       "object": "vs_recorder_menu.o",
       "bytes": 2548,
       "status": "c",
@@ -2292,14 +2276,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_40",
-      "object": "vs_recorder_row_text.o",
-      "bytes": 328,
-      "status": "c",
-      "source": "src/application/vs_recorder/vs_recorder_row_text.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_40",
       "object": "vs_recorder_saved_video.o",
       "bytes": 4116,
       "status": "c",
@@ -2309,7 +2285,7 @@
       "cpu": "ARM9",
       "module": "OVY_40",
       "object": "vs_recorder_screen.o",
-      "bytes": 3928,
+      "bytes": 15052,
       "status": "c",
       "source": "src/application/vs_recorder/vs_recorder_screen.c"
     },
@@ -2325,17 +2301,9 @@
       "cpu": "ARM9",
       "module": "OVY_40",
       "object": "vs_recorder_ui.o",
-      "bytes": 4914,
+      "bytes": 5242,
       "status": "c",
       "source": "src/application/vs_recorder/vs_recorder_ui.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_40",
-      "object": "vs_recorder_util.o",
-      "bytes": 2120,
-      "status": "c",
-      "source": "src/application/vs_recorder/vs_recorder_util.c"
     },
     {
       "cpu": "ARM9",
@@ -2360,14 +2328,6 @@
       "bytes": 12446,
       "status": "c",
       "source": "src/application/vs_recorder/vs_recorder_video_transfer.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_40",
-      "object": "vs_recorder_windows.o",
-      "bytes": 2640,
-      "status": "c",
-      "source": "src/application/vs_recorder/vs_recorder_windows.c"
     },
     {
       "cpu": "ARM9",
@@ -4720,9 +4680,17 @@
       "cpu": "ARM9",
       "module": "OVY_75",
       "object": "wii_message_settings.o",
-      "bytes": 11758,
+      "bytes": 1428,
       "status": "c",
       "source": "src/application/wii_message/wii_message_settings.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_75",
+      "object": "wii_message_settings_screen.o",
+      "bytes": 10330,
+      "status": "c",
+      "source": "src/application/wii_message/wii_message_settings_screen.c"
     },
     {
       "cpu": "ARM9",
