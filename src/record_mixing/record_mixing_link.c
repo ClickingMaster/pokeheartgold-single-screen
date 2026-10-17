@@ -1,20 +1,155 @@
 #include "record_mixing/record_mixing_link_internal.h"
 
+static void RecordMixingLink_RecvRecords(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvLeaderMenuState(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvStartMixing(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvClearMessage(int sender, int size, void *data, void *context);
+static void RecordMixingLink_HandleJoinRequest(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvMemberJoined(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvUnused108(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvUnused109(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvCloseYesNo(int sender, int size, void *data, void *context);
+static void RecordMixingLink_RecvJoinNotice(int sender, int size, void *data, void *context);
+static u32 RecordMixingLink_GetSize0(void);
+static u32 RecordMixingLink_GetSize1(void);
+static u32 RecordMixingLink_GetJoinRequestSize(void);
+static void *RecordMixingLink_GetRecvBuffer(int sender, void *context, int size);
+
+static const CommCommand sRecordMixingLinkCommands[] = {
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { RecordMixingLink_RecvUnused108,       RecordMixingLink_GetSize1,           NULL                           },
+    { RecordMixingLink_RecvUnused109,       RecordMixingLink_GetSize1,           NULL                           },
+    { RecordMixingLink_RecvMemberJoined,    RecordMixingLink_GetSize1,           NULL                           },
+    { RecordMixingLink_RecvClearMessage,    RecordMixingLink_GetSize0,           NULL                           },
+    { RecordMixingLink_HandleJoinRequest,   RecordMixingLink_GetJoinRequestSize, NULL                           },
+    { RecordMixingLink_RecvCloseYesNo,      RecordMixingLink_GetSize0,           NULL                           },
+    { RecordMixingLink_RecvJoinNotice,      RecordMixingLink_GetSize0,           NULL                           },
+    { RecordMixingLink_RecvStartMixing,     RecordMixingLink_GetSize0,           NULL                           },
+    { RecordMixingLink_RecvRecords,         CommCmd_GetSize3008,                 RecordMixingLink_GetRecvBuffer },
+    { RecordMixingLink_RecvLeaderMenuState, RecordMixingLink_GetSize1,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+    { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
+};
+
 void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room) {
-    Comm_RegisterCommandTable(gRecordMixingLinkCommands, 110, room);
+    Comm_RegisterCommandTable(sRecordMixingLinkCommands, NELEMS(sRecordMixingLinkCommands), room);
 }
 
-void RecordMixingLink_RecvRecords(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvRecords(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+
     room->recordsReceived++;
 }
 
-void RecordMixingLink_RecvLeaderMenuState(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvLeaderMenuState(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+    u8 *state = data;
+
     if (sender == 0) {
-        room->leaderJoinPending = *data;
+        room->leaderJoinPending = *state;
     }
 }
 
-void RecordMixingLink_RecvStartMixing(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvStartMixing(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+
     room->recordsReceived = 0;
     room->isMixing = 1;
     RecordMixingLink_SendRecords(room, Comm_GetLocalNetId());
@@ -24,12 +159,16 @@ void RecordMixingLink_RecvStartMixing(int sender, int unused, void *data, Record
     PlaySE(0x657);
 }
 
-void RecordMixingLink_RecvClearMessage(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvClearMessage(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+
     RecordMixing_SetStateFromLink(room, 2, 0);
 }
 
-void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_HandleJoinRequest(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
     RecordMixingJoinRequest *src = data;
+
     if (sender != 0) {
         RecordMixingJoinRequest packet;
         if (Comm_GetLocalNetId() != 0) {
@@ -74,26 +213,31 @@ void RecordMixingLink_HandleJoinRequest(int sender, int unused, void *data, Reco
     }
 }
 
-void RecordMixingLink_RecvMemberJoined(int sender, int unused, u8 *data, RecordMixingLinkWork *room) {
-    RecordMixing_SetStateFromLinkInMenu(room, 1, *data);
+static void RecordMixingLink_RecvMemberJoined(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+    u8 *member = data;
+
+    RecordMixing_SetStateFromLinkInMenu(room, 1, *member);
     if (Comm_GetLocalNetId() == 0) {
         room->flag = 0;
     }
 }
 
-void RecordMixingLink_RecvUnused108(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvUnused108(int sender, int size, void *data, void *context) {
 }
 
-void RecordMixingLink_RecvUnused109(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvUnused109(int sender, int size, void *data, void *context) {
 }
 
-void RecordMixingLink_RecvCloseYesNo(int sender, int unused, void *data, RecordMixingLinkWork *room) {
+static void RecordMixingLink_RecvCloseYesNo(int sender, int size, void *data, void *context) {
+    RecordMixingLinkWork *room = context;
+
     if (Comm_GetLocalNetId() != 0) {
         RecordMixing_SetStateFromLink(room, 13, 0);
     }
 }
 
-void RecordMixingLink_RecvJoinNotice(int sender) {
+static void RecordMixingLink_RecvJoinNotice(int sender, int size, void *data, void *context) {
     if (Comm_GetLocalNetId() == 0) {
         u8 id = sender;
         Comm_SendCommand(110, &id, 1);
@@ -113,18 +257,20 @@ void RecordMixingLink_SendRecords(RecordMixingLinkWork *room, int unused) {
     Comm_SendCommandNoCopy(116, room->send, 0xbc0);
 }
 
-u32 RecordMixingLink_GetSize0(void) {
+static u32 RecordMixingLink_GetSize0(void) {
     return 0;
 }
 
-u32 RecordMixingLink_GetSize1(void) {
+static u32 RecordMixingLink_GetSize1(void) {
     return 1;
 }
 
-u32 RecordMixingLink_GetJoinRequestSize(void) {
+static u32 RecordMixingLink_GetJoinRequestSize(void) {
     return 4;
 }
 
-void *RecordMixingLink_GetRecvBuffer(int sender, RecordMixingLinkWork *room) {
+static void *RecordMixingLink_GetRecvBuffer(int sender, void *context, int size) {
+    RecordMixingLinkWork *room = context;
+
     return room->receive[sender];
 }

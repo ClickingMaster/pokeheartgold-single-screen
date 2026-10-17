@@ -3,6 +3,16 @@
 
 #include "global.h"
 
+typedef void (*CommCmdRecvFunc)(int netId, int size, void *data, void *context);
+typedef u32 (*CommCmdSizeFunc)(void);
+typedef void *(*CommCmdBufferFunc)(int netId, void *context, int size);
+
+typedef struct CommCommand {
+    CommCmdRecvFunc recv;
+    CommCmdSizeFunc getSize;
+    CommCmdBufferFunc getBuffer;
+} CommCommand;
+
 BOOL Comm_IsUnionRoomLinkMode(int);
 void Comm_RegisterCommandTable(const void *, int, void *context);
 void Comm_CallCommandRecv(int netId, int command, int size, void *data);

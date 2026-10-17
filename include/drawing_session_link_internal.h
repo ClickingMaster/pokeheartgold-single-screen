@@ -3,13 +3,14 @@
 
 #include "global.h"
 
+#include "communication_command.h"
 #include "drawing_session.h"
+#include "field_comm_cmds.h"
+
 typedef struct FourBytes {
     u8 data[4];
 } FourBytes;
 
-extern const u8 gDrawingSessionLinkCommands[];
-void *Comm_RegisterCommandTable(const void *, int, void *);
 int Comm_GetLocalNetId(void);
 void Comm_SendParentCommand(int, const void *, int);
 int Comm_CountConnected(void);
@@ -20,22 +21,7 @@ void GF_AssertFail(void);
 void CommState_SetErrorWatch(int, int);
 void Comm_SendParentCommandNoCopy(int, const void *, int);
 
-void *DrawingSessionLink_RegisterCommands(void *);
-void DrawingSessionLink_ReceivePictureChunk(void *, void *, const DrawingSessionPictureChunk *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveMemberStroke(int, void *, const DrawingSessionStroke *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveStrokes(int, void *, const DrawingSessionStroke *, DrawingSessionWork *);
-void DrawingSessionLink_ReceivePictureDone(void *, void *, void *, DrawingSessionWork *);
-void DrawingSessionLink_HandleJoinRequest(int, void *, const FourBytes *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveDummy103(void);
-void DrawingSessionLink_ReceiveMemberJoined(void *, void *, const u8 *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveDummy99(void);
-void DrawingSessionLink_ReceiveDummy100(void);
-void DrawingSessionLink_ReceiveEvent15(void *, void *, void *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveJoinNotice(int, void *, void *, DrawingSessionWork *);
-void DrawingSessionLink_ReceiveSetJoinState1(void *, void *, void *, DrawingSessionWork *);
-void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *, int);
-DrawingSessionPictureChunk *DrawingSessionLink_GetChunkRecvBuffer(int, DrawingSessionWork *);
-int DrawingSessionLink_GetSize4(void);
-int DrawingSessionLink_GetJoinRequestSize(void);
+void DrawingSessionLink_RegisterCommands(void *arg);
+void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *work, int index);
 
 #endif

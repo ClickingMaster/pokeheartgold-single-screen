@@ -56,16 +56,6 @@ typedef struct ByteWriter {
     int remaining;
 } ByteWriter;
 
-typedef void (*CommCmdRecvFunc)(int netId, int size, void *data, void *context);
-typedef u32 (*CommCmdSizeFunc)(void);
-typedef void *(*CommCmdBufferFunc)(int netId, void *context, int size);
-
-typedef struct CommCommand {
-    CommCmdRecvFunc recv;
-    CommCmdSizeFunc getSize;
-    CommCmdBufferFunc getBuffer;
-} CommCommand;
-
 typedef struct CommCommandTable {
     const CommCommand *commands;
     int count;

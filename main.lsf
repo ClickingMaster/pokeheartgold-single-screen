@@ -316,9 +316,7 @@ Static main
     Object src/trainer_memo.o
     Object src/trade_communication.o
     Object src/drawing_session_link.o
-    Object asm/drawing_session_link_data.o
     Object src/record_mixing/record_mixing_link.o
-    Object asm/record_mixing_link_data.o
     Object src/use_item_on_mon.o
     Object src/mail_misc.o
     Object src/seal_data.o
@@ -352,7 +350,6 @@ Static main
 	Object src/frontier_launch.o
     Object src/battle_frontier_communication.o
     Object src/spin_trade_link.o
-    Object asm/spin_trade_link_data.o
     Object src/spin_trade_flow.o
     Object asm/spin_trade_flow_data.o
     Object src/wifi_club/wifi_club_comm.o
