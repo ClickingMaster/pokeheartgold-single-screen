@@ -73,18 +73,17 @@ void CommPlayerInfo_SendLocal(void) {
     Comm_SendCommand(3, &sCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
 }
 
-int CommPlayerInfo_GetEntrySize(void) {
+u32 CommPlayerInfo_GetEntrySize(void) {
     return sizeof(CommPlayerInfoEntry);
 }
 
-void CommPlayerInfo_RecvSetUnk3A4(void) {
+void CommPlayerInfo_RecvSetUnk3A4(int netId, int size, void *data, void *context) {
     if (sCommPlayerInfo != NULL) {
         sCommPlayerInfo->unk3A4 = 1;
     }
 }
 
-void CommPlayerInfo_RecvEntry(int netId, int unused, void *packet) {
-#pragma unused(unused)
+void CommPlayerInfo_RecvEntry(int netId, int size, void *packet, void *context) {
     CommPlayerInfoEntry *pkt = packet;
 
     if (sCommPlayerInfo == NULL) {
@@ -108,8 +107,7 @@ void CommPlayerInfo_RecvEntry(int netId, int unused, void *packet) {
     sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = 3;
 }
 
-void CommPlayerInfo_RecvPlayerEntry(int netId, int unused, void *src) {
-#pragma unused(unused)
+void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *context) {
     if (sCommPlayerInfo == NULL) {
         return;
     }

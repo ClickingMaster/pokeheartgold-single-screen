@@ -157,14 +157,12 @@ Static main
     Object src/pokewalker.o
     Object src/save_trainer_house.o
     Object src/wireless_manager.o
-    Object asm/communication_command_data.o
     Object src/communication_command.o
     Object src/communication_player_state.o
     Object src/comm_wireless.o
     Object src/communication_core.o
     Object src/link_synchronization.o
     Object src/comm_state.o
-    Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
     Object src/communication_error.o
     Object src/wifi_club/wifi_club_comm_table.o
@@ -310,7 +308,6 @@ Static main
     Object asm/pokemon_summary_data.o
     Object src/pokemon_summary.o
     Object src/pokemon_summary_text.o
-    Object asm/pokemon_summary_scene_data.o
     Object src/pokemon_summary_scene.o
     Object src/ribbon.o
     Object src/trainer_memo.o

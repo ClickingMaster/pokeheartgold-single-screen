@@ -66,14 +66,7 @@ typedef struct CommCommandTable {
 
 #define COMM_BASE_COMMAND_COUNT 22
 
-typedef struct CommCommandBytes {
-    u8 values[41];
-} CommCommandBytes;
-
-extern CommCommandTable *gCommCommandTable;
-extern const CommCommandBytes gCommMaxChildren;
-extern const CommCommandBytes gCommMinChildren;
-extern const CommCommand gCommBaseCommands[COMM_BASE_COMMAND_COUNT];
+static CommCommandTable *sCommCommandTable;
 
 void Comm_SetLinkError(void);
 int Comm_GetLocalNetId(void);
@@ -105,8 +98,8 @@ void PacketPool_Init(PacketPool *pool, int count, ByteRing *ring);
 void PacketPool_Reset(PacketPool *pool);
 void PacketPool_Free(PacketPool *pool);
 BOOL PacketPool_HasCommand(PacketPool *pool, u8 command);
-int Comm_GetMaxChildren(u16 command);
-int Comm_GetMinChildren(u16 command);
+int Comm_GetMaxChildren(u16 linkMode);
+int Comm_GetMinChildren(u16 linkMode);
 BOOL Comm_IsWifiLinkMode(int v);
 BOOL Comm_IsWifiPeerLinkMode(int v);
 BOOL Comm_IsLinkMode19To23Or34(int v);
@@ -117,9 +110,54 @@ void Comm_CallCommandRecv(int netId, int command, int size, void *data);
 u32 Comm_GetCommandSize(int command);
 BOOL Comm_CommandHasBuffer(int command);
 void *Comm_GetCommandBuffer(int command, int netId, int size);
-void CommCmd_RecvReady(int netId);
-void CommCmd_RecvShutdown(int netId, int size, void *data);
-void CommCmd_RecvNotReady(int netId);
+void CommCmd_RecvReady(int netId, int size, void *data, void *context);
+void CommCmd_RecvShutdown(int netId, int size, void *data, void *context);
+void CommCmd_RecvNotReady(int netId, int size, void *data, void *context);
+
+void Comm_RecvShutdown(int netId, int size, void *data, void *context);
+void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *context);
+void CommPlayerInfo_RecvEntry(int netId, int size, void *packet, void *context);
+void CommPlayerInfo_RecvSetUnk3A4(int netId, int size, void *data, void *context);
+u32 CommPlayerInfo_GetEntrySize(void);
+void CommState_RecvJoinRequest(int netId, int size, void *data, void *context);
+void CommState_RecvJoinReply(int netId, int size, void *data, void *context);
+u32 CommState_GetJoinMessageSize(void);
+void Comm_RecvTransferModeRequest(int netId, int size, void *data, void *context);
+void Comm_RecvTransferModeChange(int netId, int size, void *data, void *context);
+void Comm_RecvTransferModeAck(int netId, int size, void *data, void *context);
+void LinkSync_RecvRequest(int sender, int size, void *data, void *context);
+void LinkSync_RecvDone(int sender, int size, void *data, void *context);
+void LinkSync_RecvState(int sender, int size, void *data, void *context);
+void LinkSync_RecvValue(int sender, int size, void *data, void *context);
+u32 LinkSync_GetValueSize(void);
+void LinkSync_RecvPacket(int sender, int size, void *data, void *context);
+u32 CommState_GetSyncPacketSize(void);
+void CommState_RecvWifiDisconnect(int netId, int size, void *data, void *context);
+
+static const CommCommand sCommBaseCommands[COMM_BASE_COMMAND_COUNT] = {
+    { NULL,                           CommCmd_GetSize0,             NULL },
+    { NULL,                           CommCmd_GetSize0,             NULL },
+    { Comm_RecvShutdown,              CommCmd_GetSize0,             NULL },
+    { CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize,  NULL },
+    { CommPlayerInfo_RecvEntry,       CommPlayerInfo_GetEntrySize,  NULL },
+    { CommPlayerInfo_RecvSetUnk3A4,   CommCmd_GetSize0,             NULL },
+    { CommState_RecvJoinRequest,      CommState_GetJoinMessageSize, NULL },
+    { CommState_RecvJoinReply,        CommState_GetJoinMessageSize, NULL },
+    { NULL,                           NULL,                         NULL },
+    { NULL,                           NULL,                         NULL },
+    { Comm_RecvTransferModeRequest,   CommCmd_GetSize1,             NULL },
+    { Comm_RecvTransferModeChange,    CommCmd_GetSize1,             NULL },
+    { Comm_RecvTransferModeAck,       CommCmd_GetSize1,             NULL },
+    { CommCmd_RecvReady,              CommCmd_GetSize0,             NULL },
+    { CommCmd_RecvShutdown,           CommCmd_GetSize0,             NULL },
+    { CommCmd_RecvNotReady,           CommCmd_GetSize0,             NULL },
+    { LinkSync_RecvRequest,           CommCmd_GetSize1,             NULL },
+    { LinkSync_RecvDone,              CommCmd_GetSize1,             NULL },
+    { LinkSync_RecvState,             CommCmd_GetSize2,             NULL },
+    { LinkSync_RecvValue,             LinkSync_GetValueSize,        NULL },
+    { LinkSync_RecvPacket,            CommState_GetSyncPacketSize,  NULL },
+    { CommState_RecvWifiDisconnect,   CommCmd_GetSize0,             NULL },
+};
 
 void ByteRing_Init(ByteRing *ring, u8 *data, u16 capacity) {
     ring->data = data;
@@ -435,16 +473,16 @@ BOOL PacketPool_HasCommand(PacketPool *pool, u8 command) {
     return FALSE;
 }
 
-int Comm_GetMaxChildren(u16 command) {
-    CommCommandBytes table = gCommMaxChildren;
-    GF_ASSERT(command < 41);
-    return table.values[command];
+int Comm_GetMaxChildren(u16 linkMode) {
+    u8 maxChildren[] = { 1, 1, 1, 1, 3, 3, 3, 4, 3, 4, 7, 3, 7, 4, 1, 4, 1, 1, 4, 1, 1, 1, 1, 3, 0, 0, 4, 1, 1, 2, 1, 1, 1, 3, 1, 3, 0, 1, 1, 1, 3 };
+    GF_ASSERT(linkMode < NELEMS(maxChildren));
+    return maxChildren[linkMode];
 }
 
-int Comm_GetMinChildren(u16 command) {
-    CommCommandBytes table = gCommMinChildren;
-    GF_ASSERT(command < 41);
-    return table.values[command];
+int Comm_GetMinChildren(u16 linkMode) {
+    u8 minChildren[] = { 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 };
+    GF_ASSERT(linkMode < NELEMS(minChildren));
+    return minChildren[linkMode];
 }
 
 BOOL Comm_IsUnionRoomLinkMode(int v) {
@@ -521,40 +559,40 @@ BOOL Comm_IsCommClubLinkMode(int v) {
 
 void Comm_RegisterCommandTable(const void *commands, int count, void *context) {
     int i;
-    if (gCommCommandTable == NULL) {
-        gCommCommandTable = Heap_Alloc(HEAP_ID_15, sizeof(CommCommandTable));
+    if (sCommCommandTable == NULL) {
+        sCommCommandTable = Heap_Alloc(HEAP_ID_15, sizeof(CommCommandTable));
     }
-    gCommCommandTable->commands = commands;
-    gCommCommandTable->count = count;
-    gCommCommandTable->context = context;
+    sCommCommandTable->commands = commands;
+    sCommCommandTable->count = count;
+    sCommCommandTable->context = context;
     for (i = 0; i < 8; i++) {
-        gCommCommandTable->ready[i] = 0;
+        sCommCommandTable->ready[i] = 0;
     }
-    gCommCommandTable->shutdown = 0;
+    sCommCommandTable->shutdown = 0;
 }
 
 void Comm_FreeCommandTable(void) {
-    if (gCommCommandTable != NULL) {
-        Heap_Free(gCommCommandTable);
-        gCommCommandTable = NULL;
+    if (sCommCommandTable != NULL) {
+        Heap_Free(sCommCommandTable);
+        sCommCommandTable = NULL;
     }
 }
 
 void Comm_CallCommandRecv(int netId, int command, int size, void *data) {
     CommCmdRecvFunc func;
     if (command < COMM_BASE_COMMAND_COUNT) {
-        func = gCommBaseCommands[command].recv;
+        func = sCommBaseCommands[command].recv;
     } else {
-        GF_ASSERT(gCommCommandTable != NULL);
-        if (command > gCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
+        GF_ASSERT(sCommCommandTable != NULL);
+        if (command > sCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
             Comm_SetLinkError();
             return;
         }
-        func = gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].recv;
+        func = sCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].recv;
     }
     if (func != NULL) {
-        if (gCommCommandTable != NULL) {
-            func(netId, size, data, gCommCommandTable->context);
+        if (sCommCommandTable != NULL) {
+            func(netId, size, data, sCommCommandTable->context);
         } else {
             func(netId, size, data, NULL);
         }
@@ -565,19 +603,19 @@ u32 Comm_GetCommandSize(int command) {
     CommCmdSizeFunc func;
     u32 result = 0;
     if (command < COMM_BASE_COMMAND_COUNT) {
-        func = gCommBaseCommands[command].getSize;
+        func = sCommBaseCommands[command].getSize;
     } else {
-        GF_ASSERT(gCommCommandTable != NULL);
-        if (gCommCommandTable == NULL) {
+        GF_ASSERT(sCommCommandTable != NULL);
+        if (sCommCommandTable == NULL) {
             Comm_SetLinkError();
             return 0;
         }
-        if (command > gCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
+        if (command > sCommCommandTable->count + COMM_BASE_COMMAND_COUNT) {
             GF_ASSERT(FALSE);
             Comm_SetLinkError();
             return 0;
         }
-        func = gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getSize;
+        func = sCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getSize;
     }
     if (func != NULL) {
         result = func();
@@ -587,12 +625,12 @@ u32 Comm_GetCommandSize(int command) {
 
 BOOL Comm_CommandHasBuffer(int command) {
     if (command < COMM_BASE_COMMAND_COUNT) {
-        if (gCommBaseCommands[command].getBuffer != NULL) {
+        if (sCommBaseCommands[command].getBuffer != NULL) {
             return TRUE;
         }
         return FALSE;
     } else {
-        if (gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getBuffer != NULL) {
+        if (sCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getBuffer != NULL) {
             return TRUE;
         }
         return FALSE;
@@ -601,9 +639,9 @@ BOOL Comm_CommandHasBuffer(int command) {
 
 void *Comm_GetCommandBuffer(int command, int netId, int size) {
     if (command < COMM_BASE_COMMAND_COUNT) {
-        return gCommBaseCommands[command].getBuffer(netId, NULL, size);
+        return sCommBaseCommands[command].getBuffer(netId, NULL, size);
     }
-    return gCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getBuffer(netId, gCommCommandTable->context, size);
+    return sCommCommandTable->commands[command - COMM_BASE_COMMAND_COUNT].getBuffer(netId, sCommCommandTable->context, size);
 }
 
 u32 CommCmd_GetSizeVariable(void) {
@@ -623,12 +661,12 @@ u32 CommCmd_GetSize2(void) {
 }
 
 // The parent counts the players ready to switch command tables; once all are, it sends command 14.
-void CommCmd_RecvReady(int netId) {
+void CommCmd_RecvReady(int netId, int size, void *data, void *context) {
     int i;
     if (Comm_GetLocalNetId() == 0) {
-        gCommCommandTable->ready[netId] = 1;
+        sCommCommandTable->ready[netId] = 1;
         for (i = 0; i < 8; i++) {
-            if (Comm_IsNetIdConnected((u16)i) != 0 && gCommCommandTable->ready[i] == 0) {
+            if (Comm_IsNetIdConnected((u16)i) != 0 && sCommCommandTable->ready[i] == 0) {
                 return;
             }
         }
@@ -636,16 +674,16 @@ void CommCmd_RecvReady(int netId) {
     }
 }
 
-void CommCmd_RecvShutdown(int netId, int size, void *data) {
-    gCommCommandTable->commands = NULL;
-    gCommCommandTable->count = 0;
-    gCommCommandTable->context = NULL;
-    gCommCommandTable->shutdown = 1;
+void CommCmd_RecvShutdown(int netId, int size, void *data, void *context) {
+    sCommCommandTable->commands = NULL;
+    sCommCommandTable->count = 0;
+    sCommCommandTable->context = NULL;
+    sCommCommandTable->shutdown = 1;
     Comm_SendFixedCommand(15, data);
 }
 
-void CommCmd_RecvNotReady(int netId) {
+void CommCmd_RecvNotReady(int netId, int size, void *data, void *context) {
     if (Comm_GetLocalNetId() == 0) {
-        gCommCommandTable->ready[netId] = 0;
+        sCommCommandTable->ready[netId] = 0;
     }
 }

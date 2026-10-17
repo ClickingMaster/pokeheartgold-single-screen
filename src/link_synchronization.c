@@ -26,8 +26,9 @@ BOOL LinkSync_Exists(void) {
     return sLinkSync != NULL;
 }
 
-void LinkSync_RecvRequest(int sender, int unused, u8 *data) {
-    u8 state = data[0];
+void LinkSync_RecvRequest(int sender, int size, void *data, void *context) {
+    u8 *request = data;
+    u8 state = request[0];
     u8 packet[2];
     int i;
     if (Comm_GetLocalNetId() != 0) {
@@ -47,12 +48,14 @@ void LinkSync_RecvRequest(int sender, int unused, u8 *data) {
     }
 }
 
-void LinkSync_RecvState(int sender, int unused, u8 *data) {
-    sLinkSync->states[data[0]] = data[1];
+void LinkSync_RecvState(int sender, int size, void *data, void *context) {
+    u8 *state = data;
+    sLinkSync->states[state[0]] = state[1];
 }
 
-void LinkSync_RecvDone(int sender, int unused, u8 *data) {
-    sLinkSync->completed = data[0];
+void LinkSync_RecvDone(int sender, int size, void *data, void *context) {
+    u8 *state = data;
+    sLinkSync->completed = state[0];
 }
 
 void LinkSync_StartSync(u8 state) {
@@ -85,9 +88,10 @@ u8 LinkSync_GetPlayerState(int index) {
     return sLinkSync->states[index];
 }
 
-void LinkSync_RecvValue(int sender, int unused, u8 *data) {
-    sLinkSync->values[sender][0] = data[0];
-    sLinkSync->values[sender][1] = data[1];
+void LinkSync_RecvValue(int sender, int size, void *data, void *context) {
+    u8 *value = data;
+    sLinkSync->values[sender][0] = value[0];
+    sLinkSync->values[sender][1] = value[1];
 }
 
 u32 LinkSync_GetValueSize(void) {
@@ -141,7 +145,7 @@ u16 *LinkSync_GetPacket(s32 index) {
     return NULL;
 }
 
-void LinkSync_RecvPacket(int sender, int unused, void *data) {
+void LinkSync_RecvPacket(int sender, int size, void *data, void *context) {
     sLinkSync->received[sender] = 1;
     MI_CpuCopy8(data, &sLinkSync->packets[sender], 0x46);
 }

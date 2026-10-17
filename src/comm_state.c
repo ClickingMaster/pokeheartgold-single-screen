@@ -63,7 +63,7 @@ static u8 sJoinAccepted[] = " GAME";
 static u8 sJoinRequest[] = "FREAK";
 static u8 sJoinRefused[] = " FULL";
 
-s32 CommState_GetSyncPacketSize(void) {
+u32 CommState_GetSyncPacketSize(void) {
     return 70;
 }
 
@@ -755,12 +755,13 @@ void CommState_ReconnectWaitLinked(void) {
     CommState_SetState(CommState_ReconnectStop, 0);
 }
 
-void CommState_RecvJoinRequest(u8 netId, u8 size, u8 *data) {
+void CommState_RecvJoinRequest(int netId, int size, void *data, void *context) {
+    const u8 *request = data;
     u32 i;
     if (!Comm_GetLocalNetId()) {
         BOOL matches = TRUE;
         for (i = 0; i < 6; i++) {
-            if (sJoinRequest[i] != data[i]) {
+            if (sJoinRequest[i] != request[i]) {
                 matches = FALSE;
                 break;
             }
@@ -775,30 +776,31 @@ void CommState_RecvJoinRequest(u8 netId, u8 size, u8 *data) {
     }
 }
 
-void CommState_RecvJoinReply(u32 netId, u32 size, u8 *data) {
+void CommState_RecvJoinReply(int netId, int size, void *data, void *context) {
+    const u8 *reply = data;
     u32 i;
     BOOL matches = TRUE;
     for (i = 1; i < 6; i++) {
-        if (sJoinAccepted[i] != data[i]) {
+        if (sJoinAccepted[i] != reply[i]) {
             matches = FALSE;
             break;
         }
     }
     if (matches) {
-        u8 acceptedNetId = *data;
+        u8 acceptedNetId = *reply;
         if (acceptedNetId == Comm_GetLocalNetId()) {
             gCommState->joinReply = 1;
         }
     } else {
         matches = TRUE;
         for (i = 1; i < 6; i++) {
-            if (sJoinRefused[i] != data[i]) {
+            if (sJoinRefused[i] != reply[i]) {
                 matches = FALSE;
                 break;
             }
         }
         if (matches) {
-            u8 refusedNetId = *data;
+            u8 refusedNetId = *reply;
             u8 localNetId = Comm_GetLocalNetId();
             if (refusedNetId == localNetId) {
                 gCommState->joinReply = 2;
@@ -807,7 +809,7 @@ void CommState_RecvJoinReply(u32 netId, u32 size, u8 *data) {
     }
 }
 
-s32 CommState_GetJoinMessageSize(void) {
+u32 CommState_GetJoinMessageSize(void) {
     return 6;
 }
 
@@ -1080,7 +1082,7 @@ void CommState_WifiDisconnect(void) {
     }
 }
 
-void CommState_RecvWifiDisconnect(void) {
+void CommState_RecvWifiDisconnect(int netId, int size, void *data, void *context) {
     if (!Comm_GetLocalNetId()) {
         gCommState->waitHostDisconnect = 0;
         CommState_SetState(CommState_WifiDisconnect, 0);

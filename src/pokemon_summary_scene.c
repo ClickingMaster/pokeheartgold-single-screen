@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "gf_gfx_planes.h"
+#include "touchscreen.h"
 
 // The parts of the summary screen state this module uses.
 typedef struct PokemonSummaryScene {
@@ -30,9 +31,9 @@ typedef struct PokemonSummaryScene {
 
 // A condition chart vertex: at 0 (min), at 255 (max), and its step per condition point.
 typedef struct ConditionChartVertexAnim {
-    u16 max[3];  // 0x00
-    u16 min[3];  // 0x06
-    u16 step[3]; // 0x0C
+    u16 max[3];
+    u16 min[3];
+    u16 step[3];
 } ConditionChartVertexAnim;
 
 typedef struct ConditionChartVertexAnimS {
@@ -50,9 +51,6 @@ struct PokemonSummaryArgsDataTypeView {
     u8 monDataType;
 };
 
-extern const VecFx32 _02104EA4;
-extern const u8 _02104FD0[][4];
-
 void NNS_G2dSetupSoftwareSpriteCamera(void);
 void PokepicManager_DrawAll(void *mgr);
 void PokepicManager_Delete(void *mgr);
@@ -67,9 +65,6 @@ void GetBoxmonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c, int d);
 void NARC_ReadPokepicAnimScript(void *narc, void *dest, u16 species, int d);
 void *PokepicManager_CreatePokepic(void *mgr, u32 *a, int x, int y, int e, int f, void *g, int h);
 void Pokepic_SetAttr(void *pic, int attr, int value);
-int TouchscreenHitbox_FindRectAtTouchNew(const void *hitboxes);
-
-extern const u8 _02104FFC[][4];
 
 void PokemonSummary_DrawPokepic(PokemonSummaryScene *summary);
 void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary);
@@ -116,8 +111,10 @@ void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary) {
     PokepicManager_Delete(summary->pokepicManager);
 }
 
+static const VecFx32 sSummaryCameraPos = { 0, 0, FX32_CONST(16) };
+
 void PokemonSummary_CreateCamera(PokemonSummaryScene *summary) {
-    VecFx32 pos = _02104EA4;
+    VecFx32 pos = sSummaryCameraPos;
     CameraAngle angle = { 0, 0, 0, 0 };
     summary->camera = Camera_New((enum HeapID)0x13);
     Camera_Init_FromPosDistanceAndAngle(&pos, 0x10000, &angle, 0x5C1, 1, summary->camera);
@@ -156,23 +153,6 @@ typedef struct PictureVectorWork {
     u32 done;
 } PictureVectorWork;
 
-extern const u8 _02104EB0[];
-extern const u8 _02104EC2[];
-extern const u8 _02104ED4[];
-extern const u8 _02104EE6[];
-extern const u8 _02104EF8[];
-extern const u8 _02104F0A[];
-extern const u8 _02104F1C[];
-extern const u8 _02104F2E[];
-extern const u8 _02104F40[];
-extern const u8 _02104F52[];
-extern const u8 _02104F64[];
-extern const u8 _02104F76[];
-extern const u8 _02104F88[];
-extern const u8 _02104F9A[];
-extern const u8 _02104FAC[];
-extern const u8 _02104FBE[];
-
 static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out) {
     int diff;
     s16 rounded;
@@ -202,27 +182,123 @@ static void ConditionChart_GetStep(const ConditionChartVertex *from, const Condi
     out->z = rounded;
 }
 
+static const ConditionChartVertexAnim sConditionChartQuad3Vertex2 = {
+    { 3106, -2955, 0 },
+    { 4884, -106,  0 },
+    { -7,   -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad3Vertex3 = {
+    { 7079, -2955, 0 },
+    { 5380, -106,  0 },
+    { 7,    -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad0Vertex1 = {
+    { 8344, 965, 0 },
+    { 5538, 383, 0 },
+    { 11,   2,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad3Vertex0 = {
+    { 5138, 300, 0 },
+    { 5138, 300, 0 },
+    { 0,    0,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad2Vertex2 = {
+    { 3106, -2955, 0 },
+    { 4803, -106,  0 },
+    { -7,   -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad2Vertex3 = {
+    { 7079, -2955, 0 },
+    { 5299, -106,  0 },
+    { 7,    -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad2Vertex1 = {
+    { 5045, 300, 0 },
+    { 5045, 300, 0 },
+    { 0,    0,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad2Vertex0 = {
+    { 1843, 965, 0 },
+    { 4645, 383, 0 },
+    { -11,  2,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad1Vertex2 = {
+    { 3106, -2955, 0 },
+    { 4803, -106,  0 },
+    { -7,   -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad1Vertex3 = {
+    { 5045, 300, 0 },
+    { 5045, 300, 0 },
+    { 0,    0,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad1Vertex1 = {
+    { 5045, 3784, 0 },
+    { 5045, 735,  0 },
+    { 0,    12,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad1Vertex0 = {
+    { 1843, 965, 0 },
+    { 4645, 383, 0 },
+    { -11,  2,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad0Vertex2 = {
+    { 5138, 300, 0 },
+    { 5138, 300, 0 },
+    { 0,    0,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad0Vertex3 = {
+    { 7079, -2955, 0 },
+    { 5380, -106,  0 },
+    { 7,    -11,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad3Vertex1 = {
+    { 8344, 965, 0 },
+    { 5538, 383, 0 },
+    { 11,   2,   0 },
+};
+
+static const ConditionChartVertexAnim sConditionChartQuad0Vertex0 = {
+    { 5138, 3784, 0 },
+    { 5138, 735,  0 },
+    { 0,    12,   0 },
+};
+
 void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary) {
     u32 i;
     u8 *raw = (u8 *)summary;
     PictureVectorWork *vectors = (PictureVectorWork *)summary;
 
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104EB0, (ConditionChartVertex *)&raw[0x398], raw[0x275]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104EC2, (ConditionChartVertex *)&raw[0x39E], raw[0x276]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104ED4, (ConditionChartVertex *)&raw[0x3AA], raw[0x277]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104EE6, (ConditionChartVertex *)&raw[0x3A4], 0);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104EF8, (ConditionChartVertex *)&raw[0x3B0], raw[0x279]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F0A, (ConditionChartVertex *)&raw[0x3B6], raw[0x275]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F1C, (ConditionChartVertex *)&raw[0x3C2], 0);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F2E, (ConditionChartVertex *)&raw[0x3BC], raw[0x278]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F40, (ConditionChartVertex *)&raw[0x3C8], raw[0x279]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F52, (ConditionChartVertex *)&raw[0x3CE], 0);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F64, (ConditionChartVertex *)&raw[0x3DA], raw[0x277]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F76, (ConditionChartVertex *)&raw[0x3D4], raw[0x278]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F88, (ConditionChartVertex *)&raw[0x3E0], 0);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104F9A, (ConditionChartVertex *)&raw[0x3E6], raw[0x276]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104FAC, (ConditionChartVertex *)&raw[0x3F2], raw[0x277]);
-    ConditionChart_GetVertex((const ConditionChartVertexAnim *)_02104FBE, (ConditionChartVertex *)&raw[0x3EC], raw[0x278]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex0, (ConditionChartVertex *)&raw[0x398], raw[0x275]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex1, (ConditionChartVertex *)&raw[0x39E], raw[0x276]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex3, (ConditionChartVertex *)&raw[0x3AA], raw[0x277]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex2, (ConditionChartVertex *)&raw[0x3A4], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex0, (ConditionChartVertex *)&raw[0x3B0], raw[0x279]);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex1, (ConditionChartVertex *)&raw[0x3B6], raw[0x275]);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex3, (ConditionChartVertex *)&raw[0x3C2], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex2, (ConditionChartVertex *)&raw[0x3BC], raw[0x278]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex0, (ConditionChartVertex *)&raw[0x3C8], raw[0x279]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex1, (ConditionChartVertex *)&raw[0x3CE], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex3, (ConditionChartVertex *)&raw[0x3DA], raw[0x277]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex2, (ConditionChartVertex *)&raw[0x3D4], raw[0x278]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex0, (ConditionChartVertex *)&raw[0x3E0], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex1, (ConditionChartVertex *)&raw[0x3E6], raw[0x276]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex3, (ConditionChartVertex *)&raw[0x3F2], raw[0x277]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex2, (ConditionChartVertex *)&raw[0x3EC], raw[0x278]);
 
     for (i = 0; i < 4; i++) {
         ConditionChart_GetStep(&vectors->from[i].vectors[0], &vectors->to[i].vectors[0], &vectors->out[i].vectors[0]);
@@ -267,6 +343,34 @@ void PokemonSummary_ReloadPokepic(PokemonSummaryScene *summary) {
     PokemonSummary_StartPokepicAnim(summary);
 }
 
+static const u8 sTouchButtons[][4] = {
+    { 0,    1,    1,    4    },
+    { 1,    2,    5,    15   },
+    { 2,    4,    25,   10   },
+    { 3,    4,    26,   4    },
+    { 4,    0,    0,    0    },
+    { 5,    0,    0,    0    },
+    { 6,    0,    0,    0    },
+    { 7,    0,    0,    0    },
+    { 8,    0,    0,    0    },
+    { 9,    0,    0,    0    },
+    { 0xFF, 0xFF, 0xFF, 0xFF },
+};
+
+static const TouchscreenHitbox sTouchButtonHitboxes[] = {
+    { .rect = { 165, 191, 2, 45 } },
+    { .rect = { 165, 191, 48, 96 } },
+    { .rect = { 165, 191, 99, 140 } },
+    { .rect = { 165, 191, 189, 250 } },
+    { .rect = { 38, 66, 165, 203 } },
+    { .rect = { 46, 74, 205, 243 } },
+    { .rect = { 70, 98, 165, 203 } },
+    { .rect = { 78, 106, 205, 243 } },
+    { .rect = { 102, 130, 165, 203 } },
+    { .rect = { 110, 138, 205, 243 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
 static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary) {
     int button;
 
@@ -274,18 +378,18 @@ static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary) {
         return -1;
     }
     if (((struct PokemonSummaryArgsDataTypeView *)summary->args)->monDataType != 2) {
-        button = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
+        button = TouchscreenHitbox_FindRectAtTouchNew(sTouchButtonHitboxes);
         if (button != -1) {
-            button = _02104FD0[button][0];
+            button = sTouchButtons[button][0];
         }
         return button;
     } else {
-        button = TouchscreenHitbox_FindRectAtTouchNew(_02104FFC);
+        button = TouchscreenHitbox_FindRectAtTouchNew(sTouchButtonHitboxes);
         if (button >= 4 && button <= 9) {
             return -1;
         }
         if (button != -1) {
-            button = _02104FD0[button][0];
+            button = sTouchButtons[button][0];
         }
         return button;
     }

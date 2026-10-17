@@ -1357,23 +1357,26 @@ void Comm_UpdateTransferModeHandshake(void) {
     }
 }
 
-void Comm_RecvTransferModeRequest(int netId, int size, const u8 *data) {
+void Comm_RecvTransferModeRequest(int netId, int size, void *data, void *context) {
+    const u8 *mode = data;
     if (Comm_GetLocalNetId() == 0) {
         gCommCore.work[0x6AB] = 1;
-        gCommCore.work[0x6AC] = *data;
+        gCommCore.work[0x6AC] = *mode;
     }
 }
 
-void Comm_RecvTransferModeChange(int netId, int size, const u8 *data) {
+void Comm_RecvTransferModeChange(int netId, int size, void *data, void *context) {
+    const u8 *mode = data;
     if (Comm_GetLocalNetId() != 0) {
-        gCommCore.work[0x6AC] = *data;
+        gCommCore.work[0x6AC] = *mode;
         gCommCore.work[0x6AB] = 3;
     }
 }
 
-void Comm_RecvTransferModeAck(int netId, int size, const u8 *data) {
+void Comm_RecvTransferModeAck(int netId, int size, void *data, void *context) {
+    const u8 *mode = data;
     if (Comm_GetLocalNetId() == 0 && gCommCore.work[0x6AB] == 2) {
-        Comm_RequestTransferMode(*data);
+        Comm_RequestTransferMode(*mode);
         gCommCore.work[0x6AB] = 0;
     }
 }
@@ -1434,7 +1437,7 @@ int Comm_GetMinPlayers(int value) {
     return Comm_GetMinChildren((u16)value) + 1;
 }
 
-void Comm_RecvShutdown(void) {
+void Comm_RecvShutdown(int netId, int size, void *data, void *context) {
     u8 value;
     if (!CommWireless_IsShutdownRequested() && !Comm_GetLocalNetId()) {
         Comm_SendFixedParentCommand(2, &value);
