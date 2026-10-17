@@ -213,4 +213,94 @@ TouchscreenListMenu *BattleCastle_CreateListMenu(TouchscreenListMenuSpawner *spa
 void BattleCastle_DestroyListMenu(TouchscreenListMenu *menu);
 BOOL BattleCastle_IsAdvancePressed(void);
 
+// BattleCastle_PrintString / BattleCastle_PrintMsg alignment
+#define CASTLE_ALIGN_LEFT   0
+#define CASTLE_ALIGN_RIGHT  1
+#define CASTLE_ALIGN_CENTER 2
+
+// app->flags (0x0F); also read and written as a whole byte
+typedef union BattleCastleOpponentAppFlags {
+    u8 raw;
+    struct {
+        u8 effectActive : 1; // app->effectSprite is playing (BattleCastleOpponentApp_PlayActionEffect)
+        u8 unk_1 : 1;
+        u8 listMenuOpen : 1; // touchscreen list menu is open
+        u8 linkResume : 5;   // CASTLE_OPP_RESUME_*
+    } bits;
+} BattleCastleOpponentAppFlags;
+
+typedef struct BattleCastleOpponentApp {
+    OverlayManager *manager;                     // 0x000
+    FrontierSave *frontierSave;                  // 0x004
+    u8 subState;                                 // 0x008
+    u8 frontierType;                             // 0x009 (args 0x04; BattleCastle_IsMultiType() == TRUE for the link challenge)
+    u8 printerId;                                // 0x00A
+    u8 unk_00B;                                  // 0x00B
+    u8 prevCursorPos;                            // 0x00C
+    u8 cursorPos;                                // 0x00D (written back through selectionOut on exit)
+    u8 levelChange;                              // 0x00E (CASTLE_LEVEL_UP / DOWN chosen in the LEVEL menu)
+    BattleCastleOpponentAppFlags flags;          // 0x00F
+    u8 linkActionPending;                        // 0x010 (Main goes to the link exchange state)
+    u8 linkSlot;                                 // 0x011 (slot of the pending link action, 0xFF = none)
+    u8 linkLevelChange;                          // 0x012 (level change of the pending link action)
+    u8 action;                                   // 0x013 (CASTLE_OPP_ACTION_*)
+    u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
+    u8 numOwnSlots;                              // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
+    u8 timer;                                    // 0x016
+    u8 linkRecvCount;                            // 0x017 (incremented by the link receive callbacks)
+    u8 unk_018[8];                               // 0x018
+    MsgData *msgData;                            // 0x020 (msg_0033)
+    MessageFormat *msgFormat;                    // 0x024
+    String *expandedString;                      // 0x028
+    String *rawString;                           // 0x02C
+    String *strings[3];                          // 0x030
+    u8 unk_03C[0x10];                            // 0x03C
+    BgConfig *bgConfig;                          // 0x04C
+    Window windows[35];                          // 0x050 (window set 1; [7] at 0x0C0 is the message box; [12-34] summary)
+    u8 unk_280[0x30];                            // 0x280
+    PaletteData *paletteData;                    // 0x2B0
+    MessagePrinter *msgPrinter;                  // 0x2B4
+    Options *options;                            // 0x2B8
+    SaveData *saveData;                          // 0x2BC
+    void *castleChallenge;                       // 0x2C0 (Save_Frontier_GetCastleChallenge)
+    u32 castleFlags;                             // 0x2C4 (Save_Frontier_GetCastleFlags)
+    BattleCastleSpriteGfx spriteGfx;             // 0x2C8
+    BattleCastleSprite *monIcons[4];             // 0x4E4
+    BattleCastleSprite *hiddenMonIcons[4];       // 0x4F4 (shown until the mon is checked)
+    BattleCastleSprite *effectSprite;            // 0x504
+    BattleCastleSprite *cursor;                  // 0x508
+    BattleCastleSprite *partnerCursor;           // 0x50C
+    BattleCastleSprite *hpBars[4];               // 0x510
+    BattleCastleSprite *boughtMarks[4][2];       // 0x520 ([0] stats bought, [1] moves bought)
+    BattleCastleSprite *menuOpenSprite;          // 0x540
+    BattleCastleSprite *monPic;                  // 0x544
+    u16 *selectionOut;                           // 0x548 (args + 0x20)
+    u8 *checked;                                 // 0x54C (args 0x08; per mon, identity checked)
+    u8 *levelChanges;                            // 0x550 (args 0x0C; per mon, CASTLE_LEVEL_*)
+    u8 *statsBought;                             // 0x554 (args 0x10)
+    u8 *movesBought;                             // 0x558 (args 0x14)
+    Party *party;                                // 0x55C (args 0x1C; the opponent's party)
+    NARC *narc;                                  // 0x560
+    u16 linkSendBuf[20];                         // 0x564 (Comm_SendCommand payload, 0x28 bytes)
+    u8 unk_58C[0x28];                            // 0x58C
+    u8 partnerCursorPos;                         // 0x5B4
+    u8 partnerSlot;                              // 0x5B5
+    u8 partnerExited;                            // 0x5B6
+    u8 partnerRanks[3];                          // 0x5B7
+    u16 partnerPoints;                           // 0x5BA (args 0x28)
+    BattleCastleMonSummary summary;              // 0x5BC
+    GridInputHandler *partyGrid;                 // 0x5F0
+    TouchscreenListMenuSpawner *listMenuSpawner; // 0x5F4
+    TouchscreenListMenu *listMenu;               // 0x5F8
+    ListMenuItem *listMenuItems;                 // 0x5FC
+    u32 listCursorPos;                           // 0x600
+    BattleCastlePrompt yesNoPrompt;              // 0x604
+    u8 unk_610[4];                               // 0x610
+} BattleCastleOpponentApp;                       // size 0x614
+void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos, u32 prevCursorPos);
+void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y, int animSeq);
+void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int index);
+void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos);
+GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
+
 #endif // POKEHEARTGOLD_FRONTIER_BATTLE_CASTLE_H

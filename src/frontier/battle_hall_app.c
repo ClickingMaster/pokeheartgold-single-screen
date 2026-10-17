@@ -1,3 +1,5 @@
+#include "frontier/battle_hall_app.h"
+
 #include "global.h"
 
 #include "constants/pokemon.h"
@@ -65,19 +67,6 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define HALL_STATE_FADE_OUT     5
 #define HALL_STATE_CLOSE_PROMPT 6
 
-typedef struct BattleHallSprite {
-    u8 unk_00[0xC];
-    const u8 *anim;
-    Sprite *sprite;
-} BattleHallSprite;
-
-typedef struct BattleHallSpriteGfx {
-    SpriteList *spriteList;
-    G2dRenderer renderer;
-    GF_2DGfxResMan *resMan[4];
-    SpriteResource *resObj[2][4];
-} BattleHallSpriteGfx;
-
 typedef struct BattleHallApp {
     OverlayManager *manager;         // 0x000
     OverlayManager *summaryApp;      // 0x004
@@ -136,10 +125,6 @@ typedef struct BattleHallApp {
     u8 unk_27E[6];                   // 0x27E
 } BattleHallApp;
 
-extern const u8 gBattleHallAppResObjCounts[4];
-extern const ObjCharTransferTemplate gBattleHallAppCharTransferTemplate;
-extern const WindowTemplate gBattleHallAppWindowTemplates[4];
-
 // Frontier helpers
 u8 BattleHall_GetCellType(u8 index);
 u32 BattleHall_IsMultiType(u8 mode);
@@ -154,9 +139,6 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *stri
 u8 TextPrinterCheckActive(u8 printerId);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
-BOOL BattleHallApp_Init(OverlayManager *man, int *state);
-BOOL BattleHallApp_Main(OverlayManager *man, int *state);
-BOOL BattleHallApp_Exit(OverlayManager *man, int *state);
 static BOOL BattleHallApp_FadeIn(BattleHallApp *app);
 static void BattleHallApp_PrintTypeGrid(BattleHallApp *app);
 static void BattleHallApp_PrintTitle(BattleHallApp *app);
@@ -214,23 +196,6 @@ static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app);
 static void BattleHallApp_CancelConfirm(BattleHallApp *app);
 static void BattleHallApp_ClearMessage(BattleHallApp *app);
 static void BattleHallApp_SetBrightness(s32 brightness);
-static void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon);
-static Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen);
-static void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx);
-static void BattleHallSpriteGfx_InitTransfers(void);
-static BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim);
-static u32 BattleHallSprite_Delete(BattleHallSprite *sprite);
-static void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible);
-static void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y);
-static void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq);
-static void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon);
-static void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows);
-static void BattleHallApp_RemoveWindows(Window *windows);
-static void BattleHallApp_DrawMessageFrame(Window *window, u32 frame);
-static YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId);
-static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt);
-static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch);
-static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt);
 
 static const u8 sBattleHallAppSummaryPages[] = { 0, 1, 2, 3, 4 };
 
@@ -1565,190 +1530,4 @@ static void BattleHallApp_ClearMessage(BattleHallApp *app) {
 
 static void BattleHallApp_SetBrightness(s32 brightness) {
     G2_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, brightness);
-}
-
-static void BattleHallSpriteGfx_Init(BattleHallSpriteGfx *gfx, Pokemon *mon) {
-    NARC *narc;
-    int i;
-
-    BattleHallSpriteGfx_InitTransfers();
-    NNS_G2dInitOamManagerModule();
-    OamManager_Create(0, 128, 0, 32, 0, 128, 0, 32, HEAP_ID_105);
-    gfx->spriteList = G2dRenderer_Init(2, &gfx->renderer, HEAP_ID_105);
-    for (i = 0; i < 4; i++) {
-        gfx->resMan[i] = Create2DGfxResObjMan(gBattleHallAppResObjCounts[i], (GfGfxResType)i, HEAP_ID_105);
-    }
-    gfx->resObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 0xC, TRUE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_105);
-    gfx->resObj[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_1_8_4, 0x36, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_105);
-    gfx->resObj[0][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_1_8_4, 0xE, TRUE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_105);
-    gfx->resObj[0][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_1_8_4, 0xD, TRUE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_105);
-    narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_105);
-    gfx->resObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, Pokemon_GetIconNaix(mon), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_105);
-    gfx->resObj[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_105);
-    gfx->resObj[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, GetMonIconCell32KNaix(), FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_105);
-    gfx->resObj[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, GetMonIconAnim32KNaix(), FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_105);
-    for (i = 0; i < 2; i++) {
-        SpriteTransfer_CreateCharTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_CHAR]);
-        SpriteTransfer_CreateExtPlttTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_PLTT]);
-    }
-    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, TRUE);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
-    NARC_Delete(narc);
-}
-
-static Sprite *BattleHallSpriteGfx_CreateSprite(BattleHallSpriteGfx *gfx, int resourceId, int animSeq, int drawPriority, u8 screen) {
-    SpriteResourcesHeader header;
-    SpriteTemplate template;
-    Sprite *sprite;
-
-    CreateSpriteResourcesHeader(&header, resourceId, resourceId, resourceId, resourceId, -1, -1, 0, 1, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
-    template.spriteList = gfx->spriteList;
-    template.header = &header;
-    template.position.x = 0;
-    template.position.y = 0;
-    template.position.z = 0;
-    template.scale.x = FX32_ONE;
-    template.scale.y = FX32_ONE;
-    template.scale.z = FX32_ONE;
-    template.rotation = 0;
-    template.drawPriority = drawPriority;
-    if (screen == 0) {
-        template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
-    } else {
-        template.whichScreen = NNS_G2D_VRAM_TYPE_2DSUB;
-    }
-    template.heapID = HEAP_ID_105;
-    if (screen == 1) {
-        template.position.y += 3 << 18;
-    }
-    sprite = Sprite_CreateAffine(&template);
-    Sprite_SetAnimActiveFlag(sprite, TRUE);
-    Sprite_SetAnimSpeed(sprite, FX32_ONE);
-    Sprite_SetAnimCtrlSeq(sprite, animSeq);
-    return sprite;
-}
-
-static void BattleHallSpriteGfx_Free(BattleHallSpriteGfx *gfx) {
-    u8 i;
-
-    for (i = 0; i < 2; i++) {
-        SpriteTransfer_DeleteCharTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_CHAR]);
-        SpriteTransfer_DeletePlttTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_PLTT]);
-    }
-    for (i = 0; i < 4; i++) {
-        Destroy2DGfxResObjMan(gfx->resMan[i]);
-    }
-    SpriteList_Delete(gfx->spriteList);
-    OamManager_Free();
-    ObjCharTransfer_Destroy();
-    ObjPlttTransfer_Destroy();
-}
-
-static void BattleHallSpriteGfx_InitTransfers(void) {
-    ObjCharTransferTemplate template = gBattleHallAppCharTransferTemplate;
-    ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
-    ObjPlttTransfer_Init(4, HEAP_ID_105);
-    ObjCharTransfer_ClearBuffers();
-    ObjPlttTransfer_Reset();
-}
-
-static BattleHallSprite *BattleHallSprite_Create(BattleHallSpriteGfx *gfx, u32 resourceId, u32 animSeq, s32 x, u16 y, const u8 *anim) {
-    BattleHallSprite *sprite = Heap_Alloc(HEAP_ID_105, sizeof(BattleHallSprite));
-    VecFx32 position;
-
-    memset(sprite, 0, sizeof(BattleHallSprite));
-    sprite->anim = anim;
-    sprite->sprite = BattleHallSpriteGfx_CreateSprite(gfx, resourceId, animSeq, 0, 0);
-    position.x = x << FX32_SHIFT;
-    position.y = y << FX32_SHIFT;
-    Sprite_SetMatrix(sprite->sprite, &position);
-    return sprite;
-}
-
-static u32 BattleHallSprite_Delete(BattleHallSprite *sprite) {
-    Sprite_Delete(sprite->sprite);
-    Heap_Free(sprite);
-    return 0;
-}
-
-static void BattleHallSprite_SetVisible(BattleHallSprite *sprite, BOOL visible) {
-    Sprite_SetDrawFlag(sprite->sprite, visible);
-}
-
-static void BattleHallSprite_SetPosition(BattleHallSprite *sprite, s32 x, s32 y) {
-    VecFx32 position;
-
-    if (sprite->anim != NULL) {
-        Sprite_TryChangeAnimSeq(sprite->sprite, sprite->anim[0]);
-    }
-    position = *Sprite_GetMatrixPtr(sprite->sprite);
-    position.x = x << FX32_SHIFT;
-    position.y = y << FX32_SHIFT;
-    Sprite_SetMatrix(sprite->sprite, &position);
-}
-
-static void BattleHallSprite_SetAnim(BattleHallSprite *sprite, u32 animSeq) {
-    Sprite_SetAnimSpeed(sprite->sprite, FX32_ONE);
-    Sprite_TryChangeAnimSeq(sprite->sprite, animSeq);
-}
-
-static void BattleHallSprite_SetIconPalette(BattleHallSprite *sprite, Pokemon *mon) {
-    Sprite_SetPalOffsetRespectVramOffset(sprite->sprite, Pokemon_GetIconPalette(mon));
-}
-
-static void BattleHallApp_AddWindows(BgConfig *bgConfig, Window *windows) {
-    u8 i;
-
-    for (i = 0; i < 4; i++) {
-        AddWindow(bgConfig, &windows[i], &gBattleHallAppWindowTemplates[i]);
-        FillWindowPixelBuffer(&windows[i], 0);
-    }
-}
-
-static void BattleHallApp_RemoveWindows(Window *windows) {
-    u16 i;
-
-    for (i = 0; i < 4; i++) {
-        RemoveWindow(&windows[i]);
-    }
-}
-
-static void BattleHallApp_DrawMessageFrame(Window *window, u32 frame) {
-    LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), 0x3D9, 10, (u8)frame, HEAP_ID_105);
-    FillWindowPixelBuffer(window, 15);
-    DrawFrameAndWindow2(window, FALSE, 0x3D9, 10);
-}
-
-static YesNoPrompt *BattleHallApp_CreateYesNo(enum HeapID heapId) {
-    return YesNoPrompt_Create(heapId);
-}
-
-static void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt) {
-    YesNoPrompt_Destroy(prompt);
-}
-
-#pragma push
-#pragma opt_propagation off
-static void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch) {
-    YesNoPromptTemplate template;
-
-    MI_CpuFill8(&template, 0, sizeof(template));
-    {
-        int zero = 0;
-        template.tileStart = 109;
-        template.plttSlot = 14;
-        template.bgConfig = bgConfig;
-        template.bgId = zero;
-        template.x = 24;
-        template.y = 10;
-        template.ignoreTouchFlag = ignoreTouch;
-        template.initialCursorPos = 0;
-        template.shapeParam = zero;
-    }
-    YesNoPrompt_InitFromTemplate(prompt, &template);
-}
-#pragma pop
-
-static u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt) {
-    return YesNoPrompt_HandleInput(prompt);
 }

@@ -10,7 +10,6 @@
 
 #include "battle_frontier_communication.h"
 #include "bg_window.h"
-#include "char_tiles.h"
 #include "communication_core.h"
 #include "communication_player_state.h"
 #include "font.h"
@@ -19,7 +18,6 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
-#include "item.h"
 #include "link_synchronization.h"
 #include "message_format.h"
 #include "message_printer.h"
@@ -27,26 +25,21 @@
 #include "move.h"
 #include "msgdata.h"
 #include "oam_manager.h"
-#include "obj_char_transfer.h"
-#include "obj_pltt_transfer.h"
 #include "options.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "party.h"
-#include "party_menu.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"
 #include "poke_overlay.h"
 #include "pokemon.h"
-#include "pokemon_icon_idx.h"
 #include "render_window.h"
 #include "save.h"
 #include "save_frontier.h"
 #include "screen_fade_legacy.h"
 #include "sound_playback.h"
 #include "sprite.h"
-#include "sprite_transfer.h"
 #include "string_util.h"
 #include "system.h"
 #include "vram_transfer_manager.h"
@@ -55,6 +48,7 @@
 FS_EXTERN_OVERLAY(OVY_80);
 
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
+
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 #define TEXT_SPEED_NOTRANSFER       0xFF
 
@@ -147,6 +141,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 #define CASTLE_OPP_WIN_HP            3
 #define CASTLE_OPP_WIN_MESSAGE       7
 #define CASTLE_OPP_WIN_CHOOSE_PROMPT 8
+
 // Summary panel of the selected mon (12-34)
 #define CASTLE_OPP_WIN_SUMMARY_FIRST 12
 #define CASTLE_OPP_WIN_SPECIES       12
@@ -178,91 +173,6 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 #define CASTLE_OPP_TEXT_COLOR_MALE      MAKE_TEXT_COLOR(5, 6, 0) // male symbol
 #define CASTLE_OPP_TEXT_COLOR_FEMALE    MAKE_TEXT_COLOR(3, 4, 0) // female symbol and names
 #define CASTLE_OPP_TEXT_COLOR_MALE_NAME MAKE_TEXT_COLOR(7, 8, 0)
-
-// BattleCastle_PrintString / BattleCastle_PrintMsg alignment
-#define CASTLE_ALIGN_LEFT   0
-#define CASTLE_ALIGN_RIGHT  1
-#define CASTLE_ALIGN_CENTER 2
-
-// app->flags (0x0F); also read and written as a whole byte
-typedef union BattleCastleOpponentAppFlags {
-    u8 raw;
-    struct {
-        u8 effectActive : 1; // app->effectSprite is playing (BattleCastleOpponentApp_PlayActionEffect)
-        u8 unk_1 : 1;
-        u8 listMenuOpen : 1; // touchscreen list menu is open
-        u8 linkResume : 5;   // CASTLE_OPP_RESUME_*
-    } bits;
-} BattleCastleOpponentAppFlags;
-
-typedef struct BattleCastleOpponentApp {
-    OverlayManager *manager;                     // 0x000
-    FrontierSave *frontierSave;                  // 0x004
-    u8 subState;                                 // 0x008
-    u8 frontierType;                             // 0x009 (args 0x04; BattleCastle_IsMultiType() == TRUE for the link challenge)
-    u8 printerId;                                // 0x00A
-    u8 unk_00B;                                  // 0x00B
-    u8 prevCursorPos;                            // 0x00C
-    u8 cursorPos;                                // 0x00D (written back through selectionOut on exit)
-    u8 levelChange;                              // 0x00E (CASTLE_LEVEL_UP / DOWN chosen in the LEVEL menu)
-    BattleCastleOpponentAppFlags flags;          // 0x00F
-    u8 linkActionPending;                        // 0x010 (Main goes to the link exchange state)
-    u8 linkSlot;                                 // 0x011 (slot of the pending link action, 0xFF = none)
-    u8 linkLevelChange;                          // 0x012 (level change of the pending link action)
-    u8 action;                                   // 0x013 (CASTLE_OPP_ACTION_*)
-    u8 numMons;                                  // 0x014 (3, or 4 for the link challenge)
-    u8 numOwnSlots;                              // 0x015 (4; grid positions from here on are the EXIT button / partner's slots)
-    u8 timer;                                    // 0x016
-    u8 linkRecvCount;                            // 0x017 (incremented by the link receive callbacks)
-    u8 unk_018[8];                               // 0x018
-    MsgData *msgData;                            // 0x020 (msg_0033)
-    MessageFormat *msgFormat;                    // 0x024
-    String *expandedString;                      // 0x028
-    String *rawString;                           // 0x02C
-    String *strings[3];                          // 0x030
-    u8 unk_03C[0x10];                            // 0x03C
-    BgConfig *bgConfig;                          // 0x04C
-    Window windows[35];                          // 0x050 (window set 1; [7] at 0x0C0 is the message box; [12-34] summary)
-    u8 unk_280[0x30];                            // 0x280
-    PaletteData *paletteData;                    // 0x2B0
-    MessagePrinter *msgPrinter;                  // 0x2B4
-    Options *options;                            // 0x2B8
-    SaveData *saveData;                          // 0x2BC
-    void *castleChallenge;                       // 0x2C0 (Save_Frontier_GetCastleChallenge)
-    u32 castleFlags;                             // 0x2C4 (Save_Frontier_GetCastleFlags)
-    BattleCastleSpriteGfx spriteGfx;             // 0x2C8
-    BattleCastleSprite *monIcons[4];             // 0x4E4
-    BattleCastleSprite *hiddenMonIcons[4];       // 0x4F4 (shown until the mon is checked)
-    BattleCastleSprite *effectSprite;            // 0x504
-    BattleCastleSprite *cursor;                  // 0x508
-    BattleCastleSprite *partnerCursor;           // 0x50C
-    BattleCastleSprite *hpBars[4];               // 0x510
-    BattleCastleSprite *boughtMarks[4][2];       // 0x520 ([0] stats bought, [1] moves bought)
-    BattleCastleSprite *menuOpenSprite;          // 0x540
-    BattleCastleSprite *monPic;                  // 0x544
-    u16 *selectionOut;                           // 0x548 (args + 0x20)
-    u8 *checked;                                 // 0x54C (args 0x08; per mon, identity checked)
-    u8 *levelChanges;                            // 0x550 (args 0x0C; per mon, CASTLE_LEVEL_*)
-    u8 *statsBought;                             // 0x554 (args 0x10)
-    u8 *movesBought;                             // 0x558 (args 0x14)
-    Party *party;                                // 0x55C (args 0x1C; the opponent's party)
-    NARC *narc;                                  // 0x560
-    u16 linkSendBuf[20];                         // 0x564 (Comm_SendCommand payload, 0x28 bytes)
-    u8 unk_58C[0x28];                            // 0x58C
-    u8 partnerCursorPos;                         // 0x5B4
-    u8 partnerSlot;                              // 0x5B5
-    u8 partnerExited;                            // 0x5B6
-    u8 partnerRanks[3];                          // 0x5B7
-    u16 partnerPoints;                           // 0x5BA (args 0x28)
-    BattleCastleMonSummary summary;              // 0x5BC
-    GridInputHandler *partyGrid;                 // 0x5F0
-    TouchscreenListMenuSpawner *listMenuSpawner; // 0x5F4
-    TouchscreenListMenu *listMenu;               // 0x5F8
-    ListMenuItem *listMenuItems;                 // 0x5FC
-    u32 listCursorPos;                           // 0x600
-    BattleCastlePrompt yesNoPrompt;              // 0x604
-    u8 unk_610[4];                               // 0x610
-} BattleCastleOpponentApp;                       // size 0x614
 
 typedef struct BattleCastleOpponentAppArgs {
     SaveData *saveData; // 0x00
@@ -296,36 +206,39 @@ extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Main3;
 extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub0;
 extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastleOpponentAppGraphicsBanks;
-extern const u8 gBattleCastleSpriteResManSizes[4]; // sprite resource manager sizes
-extern const ObjCharTransferTemplate gBattleCastleObjCharTransferTemplate;
-extern const TileRect gBattleCastleMonPicRect;
-extern const struct {
-    const WindowTemplate *templates;
-    u32 count;
-} gBattleCastleWindowSets[2];                                          // window sets
-extern const TouchscreenHitbox gBattleCastleItemGridArrowHitboxes[];   // rental item grid page arrows
-extern const GridCallbacks gBattleCastlePartyAppPartyGridCallbacks;    // party app party grid
-extern const GridCallbacks gBattleCastleOpponentAppPartyGridCallbacks; // opponent app party grid
-extern const GridCallbacks gBattleCastleItemGridCallbacks;             // rental item grid
-extern const TouchscreenHitbox gBattleCastlePartyGrid3Hitboxes[];      // party grid, 3 mons
-extern const int gBattleCastlePartyGridSlots[];                        // party grid position -> slot
-extern const TouchscreenHitbox gBattleCastlePartyGrid4Hitboxes[];      // party grid, 4 mons
-extern const u32 gBattleCastleItemGridCursorAnims[];                   // rental item grid cursor animations
-extern const int gBattleCastleItemGridButtons[];                       // rental item grid position -> button
-extern const DpadMenuBox gBattleCastlePartyGrid3Boxes[];
-extern const TouchscreenHitbox gBattleCastleItemGridHitboxes[];
-extern const DpadMenuBox gBattleCastlePartyGrid4Boxes[];
-extern const DpadMenuBox gBattleCastleItemGridBoxes[]; // rental item grid
-extern const u8 gBattleCastleItemGridBoxTops[];        // = &gBattleCastleItemGridBoxes[0].top, referenced by its own label
-
-// Frontier helpers
-void Frontier_SetSpriteAnim(Sprite *sprite, int value);
-void Frontier_SetSpritePosition(Sprite *sprite, s16 x, s16 y, int value);
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 int BattleCastle_GetPartySize(u8 frontierType, int kind);
 u8 BattleCastle_GetOpponentMonCount(u8 frontierType, int kind); // number of opponent mons (defined with an int result)
 void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
+
+enum {
+    CASTLE_OPP_FADE_IN_START_SYNC,
+    CASTLE_OPP_FADE_IN_WAIT_SYNC,
+    CASTLE_OPP_FADE_IN_SEND_START,
+    CASTLE_OPP_FADE_IN_WAIT_PARTNER,
+    CASTLE_OPP_FADE_IN_WAIT_FADE,
+};
+
+enum {
+    CASTLE_OPP_LINK_ACTION_SEND,
+    CASTLE_OPP_LINK_ACTION_APPLY,
+    CASTLE_OPP_LINK_ACTION_PLAY_EFFECT,
+    CASTLE_OPP_LINK_ACTION_DELAY,
+    CASTLE_OPP_LINK_ACTION_WAIT_SYNC,
+    CASTLE_OPP_LINK_ACTION_FINISH,
+};
+
+enum {
+    CASTLE_OPP_LINK_EXIT_SEND,
+    CASTLE_OPP_LINK_EXIT_DELAY,
+    CASTLE_OPP_LINK_EXIT_WAIT_SYNC,
+};
+
+enum {
+    CASTLE_OPP_FADE_OUT_START,
+    CASTLE_OPP_FADE_OUT_WAIT,
+};
 
 // Entry points and link receive callbacks
 BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state);
@@ -335,7 +248,6 @@ void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, Ba
 void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
-
 static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
 static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app);
@@ -418,7 +330,6 @@ static void BattleCastleOpponentApp_PrintMonSummary(BattleCastleOpponentApp *app
 static void BattleCastleOpponentApp_ShowMonSummary(BattleCastleOpponentApp *app, int copyMode);
 static void BattleCastleOpponentApp_ShowSummaryPanel(BattleCastleOpponentApp *app, int show);
 static void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app);
-static void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos);
 static void BattleCastleOpponentApp_CreateListMenu(BattleCastleOpponentApp *app, u8 count, u8 x, u8 y, u8 width);
 static void BattleCastleOpponentApp_CreateMainMenuList(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_CreateSummaryMenuList(BattleCastleOpponentApp *app);
@@ -426,25 +337,6 @@ static void BattleCastleOpponentApp_CreateLevelMenuList(BattleCastleOpponentApp 
 static void BattleCastleOpponentApp_DestroyListMenu(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_PrintMainMenuHelp(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp *app);
-
-// Helpers that only this file uses
-static Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen);
-static void BattleCastle_InitSpriteTransfer(void);
-static void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx);
-static void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx);
-void BattleCastle_GridCallbackNoOp(void);
-static GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons);
-void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget);
-void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget);
-void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
-void BattleCastleOpponentApp_OnPartyGridTouch(BattleCastleOpponentApp *app, int newTarget, int prevTarget);
-void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget);
-void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget);
-
-// Party app functions the shared helpers call
-void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos, u32 prevCursorPos);
-void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y, int animSeq);
-void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int index);
 
 // Palette flash of the party app's pressed button (app->pressedButton); FALSE when done
 BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
@@ -595,14 +487,6 @@ BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager, int *state) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_80));
     return TRUE;
 }
-
-enum {
-    CASTLE_OPP_FADE_IN_START_SYNC,
-    CASTLE_OPP_FADE_IN_WAIT_SYNC,
-    CASTLE_OPP_FADE_IN_SEND_START,
-    CASTLE_OPP_FADE_IN_WAIT_PARTNER,
-    CASTLE_OPP_FADE_IN_WAIT_FADE,
-};
 
 static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
     switch (app->subState) {
@@ -1054,15 +938,6 @@ static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
-enum {
-    CASTLE_OPP_LINK_ACTION_SEND,
-    CASTLE_OPP_LINK_ACTION_APPLY,
-    CASTLE_OPP_LINK_ACTION_PLAY_EFFECT,
-    CASTLE_OPP_LINK_ACTION_DELAY,
-    CASTLE_OPP_LINK_ACTION_WAIT_SYNC,
-    CASTLE_OPP_LINK_ACTION_FINISH,
-};
-
 static BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_LINK_ACTION_SEND:
@@ -1124,12 +999,6 @@ static BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     return FALSE;
 }
 
-enum {
-    CASTLE_OPP_LINK_EXIT_SEND,
-    CASTLE_OPP_LINK_EXIT_DELAY,
-    CASTLE_OPP_LINK_EXIT_WAIT_SYNC,
-};
-
 static BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case CASTLE_OPP_LINK_EXIT_SEND:
@@ -1158,11 +1027,6 @@ static BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
     }
     return FALSE;
 }
-
-enum {
-    CASTLE_OPP_FADE_OUT_START,
-    CASTLE_OPP_FADE_OUT_WAIT,
-};
 
 static BOOL BattleCastleOpponentApp_FadeOut(BattleCastleOpponentApp *app) {
     switch (app->subState) {
@@ -2603,7 +2467,7 @@ static void BattleCastleOpponentApp_LoadMonPic(BattleCastleOpponentApp *app) {
     }
 }
 
-static void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos) {
+void BattleCastleOpponentApp_SetCursorPos(BattleCastleOpponentApp *app, u32 cursorPos, u32 prevCursorPos) {
     app->cursorPos = cursorPos;
     app->prevCursorPos = prevCursorPos;
     BattleCastleOpponentApp_MoveCursor(app);
@@ -2751,587 +2615,4 @@ static void BattleCastleOpponentApp_PrintSummaryMenuHelp(BattleCastleOpponentApp
         BattleCastleOpponentApp_PrintMessage(app, &app->windows[CASTLE_OPP_WIN_MESSAGE], msgNo, 1, 1, TEXT_SPEED_NOTRANSFER, 1, 2, 15, 1);
         app->listCursorPos = app->listMenu->cursorPos;
     }
-}
-
-// ---------------------------------------------------------------------------
-// Helpers shared by both Battle Castle apps
-// ---------------------------------------------------------------------------
-
-// Sprite renderer and resources: the castle sprites (id 0), the type icons (id 2, NARC a/0/0/8),
-// the party list item marks (id 1), the selected item icon (id 3), the six item icons (ids 4-9)
-// and the four party mon icons (ids 10-13)
-void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isLink) {
-    int i;
-    NARC *narc;
-
-    GF_CreateVramTransferManager(32, HEAP_ID_107);
-    BattleCastle_InitSpriteTransfer();
-    NNS_G2dInitOamManagerModule();
-    OamManager_Create(0, 128, 0, 32, 0, 128, 0, 32, HEAP_ID_107);
-    gfx->spriteList = G2dRenderer_Init(40, &gfx->renderer, HEAP_ID_107);
-    for (i = 0; i < 4; i++) {
-        gfx->resMan[i] = Create2DGfxResObjMan(gBattleCastleSpriteResManSizes[i], (GfGfxResType)i, HEAP_ID_107);
-    }
-    BattleCastle_LoadMonPicGfx(gfx);
-    gfx->resObj[0][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 15, TRUE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
-    gfx->resObj[0][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_a_1_8_4, 55, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 4, HEAP_ID_107);
-    gfx->resObj[0][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_1_8_4, 17, TRUE, 0, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[0][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_1_8_4, 16, TRUE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-
-    narc = NARC_New(NARC_itemtool_itemdata_item_icon, HEAP_ID_107);
-    for (i = 4; i <= 9; i++) {
-        gfx->resObj[i][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, GetItemIndexMapping(ITEM_NONE, ITEMNARC_NCGR), FALSE, i, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
-        gfx->resObj[i][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(ITEM_NONE, ITEMNARC_NCLR), FALSE, i, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_107);
-    }
-    gfx->resObj[4][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, GetItemIconCell(), FALSE, 4, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[4][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, GetItemIconAnim(), FALSE, 4, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-    gfx->resObj[3][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(ITEM_NONE, ITEMNARC_NCLR), FALSE, 3, NNS_G2D_VRAM_TYPE_2DSUB, 1, HEAP_ID_107);
-    NARC_Delete(narc);
-
-    gfx->resObj[3][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], NARC_a_1_8_4, 36, TRUE, 3, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_107);
-    gfx->resObj[3][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], NARC_a_1_8_4, 38, TRUE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[3][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], NARC_a_1_8_4, 37, TRUE, 3, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-    BattleCastle_LoadPartyListGfx(gfx);
-
-    narc = NARC_New(NARC_poketool_icongra_poke_icon, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), FALSE, 10, NNS_G2D_VRAM_TYPE_2DMAIN, 3, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, GetMonIconCell32KNaix(), FALSE, 5, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[10][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, GetMonIconAnim32KNaix(), FALSE, 5, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-    for (i = 0; i < 4; i++) {
-        Pokemon *mon;
-
-        if (i == 3) {
-            // without the link partner, the fourth icon repeats the first mon
-            if (isLink == FALSE) {
-                mon = Party_GetMonByIndex(party, 0);
-            } else {
-                mon = Party_GetMonByIndex(party, i);
-            }
-        } else {
-            mon = Party_GetMonByIndex(party, i);
-        }
-        gfx->resObj[10 + i][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, Pokemon_GetIconNaix(mon), FALSE, i + 10, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
-    }
-    NARC_Delete(narc);
-
-    for (i = 0; i < 14; i++) {
-        SpriteTransfer_CreateCharTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_CHAR]);
-    }
-    for (i = 0; i < 11; i++) {
-        SpriteTransfer_CreateExtPlttTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_PLTT]);
-    }
-    GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-    GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-}
-
-static Sprite *BattleCastle_CreateSprite(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, int drawPriority, int priority, u8 screen) {
-    SpriteResourcesHeader header;
-    SpriteTemplate template;
-    Sprite *sprite;
-
-    CreateSpriteResourcesHeader(&header, charId, plttId, cellId, cellId, -1, -1, FALSE, priority, gfx->resMan[GF_GFX_RES_TYPE_CHAR], gfx->resMan[GF_GFX_RES_TYPE_PLTT], gfx->resMan[GF_GFX_RES_TYPE_CELL], gfx->resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
-    template.spriteList = gfx->spriteList;
-    template.header = &header;
-    template.position.x = 0;
-    template.position.y = 0;
-    template.position.z = 0;
-    template.scale.x = FX32_ONE;
-    template.scale.y = FX32_ONE;
-    template.scale.z = FX32_ONE;
-    template.rotation = 0;
-    template.drawPriority = drawPriority;
-    if (screen == 0) {
-        template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
-    } else {
-        template.whichScreen = NNS_G2D_VRAM_TYPE_2DSUB;
-    }
-    template.heapID = HEAP_ID_107;
-    if (screen == 1) {
-        template.position.y += 192 * FX32_ONE;
-    }
-    sprite = Sprite_CreateAffine(&template);
-    Sprite_SetAnimActiveFlag(sprite, TRUE);
-    Sprite_SetAnimSpeed(sprite, FX32_ONE);
-    Sprite_SetAnimCtrlSeq(sprite, animSeq);
-    return sprite;
-}
-
-void BattleCastle_FreeSpriteGfx(BattleCastleSpriteGfx *gfx) {
-    u8 i;
-
-    for (i = 0; i < 14; i++) {
-        SpriteTransfer_DeleteCharTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_CHAR]);
-    }
-    for (i = 0; i < 11; i++) {
-        SpriteTransfer_DeletePlttTransferTask(gfx->resObj[i][GF_GFX_RES_TYPE_PLTT]);
-    }
-    for (i = 0; i < 4; i++) {
-        Destroy2DGfxResObjMan(gfx->resMan[i]);
-    }
-    SpriteList_Delete(gfx->spriteList);
-    OamManager_Free();
-    ObjCharTransfer_Destroy();
-    ObjPlttTransfer_Destroy();
-}
-
-// Item icon graphics (resource id resId) of the given item
-void BattleCastle_LoadItemIconChar(BattleCastleSpriteGfx *gfx, int resId, u16 item) {
-    SpriteResource *res = SpriteResourceCollection_Find(gfx->resMan[GF_GFX_RES_TYPE_CHAR], resId);
-    int fileId = GetItemIndexMapping(item, ITEMNARC_NCGR);
-
-    ReplaceCharResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], res, NARC_itemtool_itemdata_item_icon, fileId, FALSE, HEAP_ID_107);
-    SpriteTransfer_ReplaceCharData(res);
-}
-
-void BattleCastle_LoadItemIconPalette(BattleCastleSpriteGfx *gfx, int resId, u16 item) {
-    SpriteResource *res = SpriteResourceCollection_Find(gfx->resMan[GF_GFX_RES_TYPE_PLTT], resId);
-    int fileId = GetItemIndexMapping(item, ITEMNARC_NCLR);
-
-    ReplacePlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], res, NARC_itemtool_itemdata_item_icon, fileId, FALSE, HEAP_ID_107);
-    SpriteTransfer_ReplacePlttData(res);
-}
-
-static void BattleCastle_InitSpriteTransfer(void) {
-    ObjCharTransferTemplate template = gBattleCastleObjCharTransferTemplate;
-
-    ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_64K);
-    ObjPlttTransfer_Init(32, HEAP_ID_107);
-    ObjCharTransfer_ClearBuffers();
-    ObjPlttTransfer_Reset();
-}
-
-static void BattleCastle_LoadPartyListGfx(BattleCastleSpriteGfx *gfx) {
-    NARC *narc = NARC_New(NARC_graphic_plist_gra, HEAP_ID_107);
-
-    gfx->resObj[1][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, PartyMenu_GetHeldItemIconNCGR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], NARC_graphic_plist_gra, PartyMenu_GetHeldItemIconNCLR(), FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, PartyMenu_GetHeldItemIconNCER(), FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[1][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, PartyMenu_GetHeldItemIconNANR(), FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-    NARC_Delete(narc);
-}
-
-static void BattleCastle_LoadMonPicGfx(BattleCastleSpriteGfx *gfx) {
-    NARC *narc = NARC_New(NARC_a_0_0_8, HEAP_ID_107);
-
-    gfx->resObj[2][GF_GFX_RES_TYPE_CHAR] = AddCharResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CHAR], narc, 0x4C, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_107);
-    gfx->resObj[2][GF_GFX_RES_TYPE_PLTT] = AddPlttResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_PLTT], narc, 0x4B, FALSE, 2, NNS_G2D_VRAM_TYPE_2DSUB, 1, HEAP_ID_107);
-    gfx->resObj[2][GF_GFX_RES_TYPE_CELL] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_CELL], narc, 0x4D, FALSE, 2, GF_GFX_RES_TYPE_CELL, HEAP_ID_107);
-    gfx->resObj[2][GF_GFX_RES_TYPE_ANIM] = AddCellOrAnimResObjFromOpenNarc(gfx->resMan[GF_GFX_RES_TYPE_ANIM], narc, 0x4E, FALSE, 2, GF_GFX_RES_TYPE_ANIM, HEAP_ID_107);
-    NARC_Delete(narc);
-}
-
-BattleCastleSprite *BattleCastleSprite_New(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, s16 x, s16 y, int priority, int unused) {
-    BattleCastleSprite *sprite = Heap_Alloc(HEAP_ID_107, sizeof(BattleCastleSprite));
-    VecFx32 pos;
-
-    memset(sprite, 0, sizeof(BattleCastleSprite));
-    sprite->x = x;
-    sprite->y = y;
-    sprite->sprite = BattleCastle_CreateSprite(gfx, charId, plttId, cellId, animSeq, 0, priority, 0);
-    pos.x = x << FX32_SHIFT;
-    pos.y = y << FX32_SHIFT;
-    Sprite_SetMatrix(sprite->sprite, &pos);
-    return sprite;
-}
-
-BattleCastleSprite *BattleCastleSprite_NewSubScreen(BattleCastleSpriteGfx *gfx, int charId, int plttId, int cellId, int animSeq, s16 x, s16 y, int priority, int unused) {
-    BattleCastleSprite *sprite = Heap_Alloc(HEAP_ID_107, sizeof(BattleCastleSprite));
-    VecFx32 pos;
-
-    memset(sprite, 0, sizeof(BattleCastleSprite));
-    sprite->x = x;
-    sprite->y = y;
-    sprite->sprite = BattleCastle_CreateSprite(gfx, charId, plttId, cellId, animSeq, 0, priority, 1);
-    pos.x = x << FX32_SHIFT;
-    pos.y = (y << FX32_SHIFT) + 192 * FX32_ONE;
-    Sprite_SetMatrix(sprite->sprite, &pos);
-    return sprite;
-}
-
-int BattleCastleSprite_Delete(BattleCastleSprite *sprite) {
-    if (sprite == NULL) {
-        GF_AssertFail();
-        return 0;
-    }
-    Sprite_Delete(sprite->sprite);
-    Heap_Free(sprite);
-    return 0;
-}
-
-void BattleCastleSprite_SetDrawFlag(BattleCastleSprite *sprite, int draw) {
-    Sprite_SetDrawFlag(sprite->sprite, draw);
-}
-
-void BattleCastleSprite_SetPosition(BattleCastleSprite *sprite, int x, int y) {
-    VecFx32 pos = *Sprite_GetMatrixPtr(sprite->sprite);
-
-    pos.x = x << FX32_SHIFT;
-    pos.y = y << FX32_SHIFT;
-    Sprite_SetMatrix(sprite->sprite, &pos);
-}
-
-void BattleCastleSprite_SetPositionSubScreen(BattleCastleSprite *sprite, int x, int y) {
-    VecFx32 pos = *Sprite_GetMatrixPtr(sprite->sprite);
-
-    pos.x = x << FX32_SHIFT;
-    pos.y = (y << FX32_SHIFT) + 192 * FX32_ONE;
-    Sprite_SetMatrix(sprite->sprite, &pos);
-}
-
-void BattleCastleSprite_SetAnim(BattleCastleSprite *sprite, int seq) {
-    Sprite_SetAnimationFrame(sprite->sprite, 0);
-    Sprite_SetAnimCtrlSeq(sprite->sprite, seq);
-}
-
-void BattleCastleSprite_SetMonIconPalette(BattleCastleSprite *sprite, Pokemon *mon) {
-    int palette = Pokemon_GetIconPalette(mon);
-    Sprite_SetPalOffsetRespectVramOffset(sprite->sprite, palette);
-}
-
-void BattleCastleSprite_ChangeAnim(BattleCastleSprite *sprite, int value) {
-    Frontier_SetSpriteAnim(sprite->sprite, value);
-}
-
-void BattleCastleSprite_SetBounce(BattleCastleSprite *sprite, int value) {
-    Frontier_SetSpritePosition(sprite->sprite, sprite->x, sprite->y, value);
-}
-
-int BattleCastleSprite_IsAnimated(BattleCastleSprite *sprite) {
-    return Sprite_IsAnimated(sprite->sprite);
-}
-
-void BattleCastleSprite_ShowAnim11WithSE(BattleCastleSprite *sprite, int x, u32 y) {
-    BattleCastleSprite_SetAnim(sprite, 11);
-    BattleCastleSprite_SetPosition(sprite, x, y);
-    BattleCastleSprite_SetDrawFlag(sprite, TRUE);
-    PlaySE(SEQ_SE_DP_PIRORIRO2);
-    PlaySE(SEQ_SE_DP_DANSA4);
-}
-
-// Front picture of a mon into the sub screen sprite; species SPECIES_NONE shows a placeholder
-void BattleCastleSprite_LoadMonPic(BattleCastleSprite *sprite, BoxPokemon *boxMon, u16 species, u32 personality) {
-    PokepicTemplate pokepic;
-    TileRect rect = gBattleCastleMonPicRect;
-    NNSG2dCharacterData *charData;
-    void *file;
-    void *buffer;
-    u32 imageLocation;
-    u32 paletteLocation;
-    int narcId;
-    int plttId;
-
-    buffer = Heap_AllocAtEnd(HEAP_ID_107, 0xC80);
-    if (species != SPECIES_NONE) {
-        GetBoxmonSpriteCharAndPlttNarcIds(&pokepic, boxMon, 2, FALSE);
-        CharTiles_LoadMonRectAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, HEAP_ID_107, &rect, buffer, personality, FALSE, 2, species);
-        narcId = pokepic.narcID;
-        plttId = pokepic.palDataID;
-    } else {
-        file = GfGfxLoader_GetCharData(NARC_a_1_8_4, 0x27, TRUE, &charData, HEAP_ID_107);
-        MI_CpuCopy32(charData->pRawData, buffer, 0xC80);
-        Heap_Free(file);
-        narcId = NARC_a_1_8_4;
-        plttId = 0x3D;
-    }
-    imageLocation = NNS_G2dGetImageLocation(Sprite_GetImageProxy(sprite->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
-    DC_FlushRange(buffer, 0xC80);
-    GXS_LoadOBJ(buffer, imageLocation, 0xC80);
-    paletteLocation = NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(sprite->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
-    GfGfxLoader_GXLoadPal((NarcId)narcId, plttId, GF_PAL_LOCATION_SUB_OBJ, (enum GFPalSlotOffset)paletteLocation, 0x20, HEAP_ID_107);
-    Heap_Free(buffer);
-}
-
-// Translucent (mode 1) or normal sprites, while a list menu covers them
-void BattleCastle_SetSpritesTranslucent(BattleCastleSprite **sprites, u32 count, int mode) {
-    u32 i;
-    int oamMode = mode == 1;
-
-    for (i = 0; i < count; i++) {
-        Sprite_SetOamMode(sprites[i]->sprite, (GXOamMode)oamMode);
-    }
-}
-
-// Party index of a grid slot
-u32 BattleCastle_GetMonIndex(u32 numMons, u32 slot) {
-    return slot;
-}
-
-// Slot within its own side (the partner's slots follow the player's)
-u32 BattleCastle_GetSideSlot(u32 numOwnSlots, u32 slot) {
-    if (slot >= numOwnSlots) {
-        slot = (u8)(slot - numOwnSlots);
-    }
-    return slot;
-}
-
-u8 BattleCastle_GetRank(SaveData *saveData, u8 frontierType, u8 kind) {
-    FrontierSave *frontierSave = Save_Frontier_GetStatic(saveData);
-    int stat = BattleCastle_GetRankStat(frontierType, kind);
-
-    return FrontierSave_GetStat(frontierSave, stat, FrontierStat_GetFriendIndex(BattleCastle_GetRankStat(frontierType, kind)));
-}
-
-void BattleCastle_PlaySEOnInput(int input, u16 seqNo) {
-    if (input != LIST_NOTHING_CHOSEN) {
-        PlaySE(seqNo);
-    }
-}
-
-void BattleCastle_BufferPartnerName(MessageFormat *msgFormat, int field) {
-    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
-    BufferPlayersName(msgFormat, field, profile);
-}
-
-void BattleCastle_ClearBgToggleRequests(u32 *requests) {
-    *requests = 0;
-}
-
-// Request a BG layer toggle (value = GF_PLANE_TOGGLE_*), applied in VBlank by BattleCastle_ApplyBgToggleRequests
-void BattleCastle_RequestBgToggle(int layer, int value, u32 *requests) {
-    int shift;
-    u32 request;
-    u32 mask;
-    u32 bits;
-
-    shift = layer * 4;
-    request = value + 1;
-    mask = 0xF;
-    bits = request << shift;
-    *requests = (*requests & ((mask << shift) ^ 0xFFFFFFFF)) | bits;
-}
-
-void BattleCastle_ApplyBgToggleRequests(u32 *requests) {
-    u16 i;
-
-    for (i = 0; i <= 7; i++) {
-        u16 request = (*requests >> (i * 4)) & 0xF;
-        if (request) {
-            ToggleBgLayer((u8)i, (u8)(request - 1));
-        }
-    }
-    BattleCastle_ClearBgToggleRequests(requests);
-}
-
-void BattleCastlePrompt_Init(BattleCastlePrompt *prompt) {
-    prompt->prompt = YesNoPrompt_Create(HEAP_ID_107);
-    prompt->active = FALSE;
-}
-
-void BattleCastlePrompt_Free(BattleCastlePrompt *prompt) {
-    YesNoPrompt_Destroy(prompt->prompt);
-}
-
-void BattleCastlePrompt_Show(BattleCastlePrompt *prompt, BgConfig *bgConfig) {
-    u16 tileStart;
-    u16 tileCount;
-    YesNoPromptTemplate template;
-
-    prompt->bgConfig = bgConfig;
-    BattleCastle_GetMenuTiles(&tileStart, &tileCount);
-    template.bgConfig = bgConfig;
-    template.bgId = GF_BG_LYR_MAIN_0;
-    template.tileStart = tileStart;
-    template.plttSlot = 11;
-    template.x = 25;
-    template.y = 10;
-    template.ignoreTouchFlag = FALSE;
-    template.initialCursorPos = 0;
-    template.shapeParam = 0;
-    YesNoPrompt_InitFromTemplate(prompt->prompt, &template);
-    prompt->active = TRUE;
-}
-
-void BattleCastlePrompt_Hide(BattleCastlePrompt *prompt) {
-    if (prompt->active != FALSE) {
-        YesNoPrompt_Reset(prompt->prompt);
-        BgCommitTilemapBufferToVram(prompt->bgConfig, GF_BG_LYR_MAIN_0);
-        prompt->active = FALSE;
-    }
-}
-
-// Window set 0 (party app, 70 windows) or 1 (opponent app, 35 windows)
-void BattleCastle_AddWindows(BgConfig *bgConfig, Window *windows, u32 set) {
-    const WindowTemplate *templates = gBattleCastleWindowSets[set].templates;
-    u8 i = 0;
-    u32 count = gBattleCastleWindowSets[set].count;
-
-    for (; i < count; i++) {
-        AddWindow(bgConfig, &windows[i], &templates[i]);
-        FillWindowPixelBuffer(&windows[i], 0);
-    }
-}
-
-void BattleCastle_RemoveWindows(Window *windows, u32 set) {
-    u16 i;
-    u32 count = gBattleCastleWindowSets[set].count;
-
-    i = 0;
-    for (; i < count; i++) {
-        RemoveWindow(&windows[i]);
-    }
-}
-
-void BattleCastle_DrawWindowFrame(Window *window, int frame) {
-    LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), 0x3D9, 10, (u8)frame, HEAP_ID_107);
-    FillWindowPixelBuffer(window, 15);
-    DrawFrameAndWindow2(window, TRUE, 0x3D9, 10);
-    ScheduleWindowCopyToVram(window);
-}
-
-// VRAM tiles of the list menus and Yes/No prompts
-void BattleCastle_GetMenuTiles(u16 *tileStart, u16 *tileCount) {
-    *tileCount = 240;
-    *tileStart = 0x2E9;
-}
-
-void BattleCastle_PrintString(Window *window, String *string, int x, int y, int fontId, int color, int alignment) {
-    if (alignment == CASTLE_ALIGN_RIGHT) {
-        x -= FontID_String_GetWidth(fontId, string, 0);
-    } else if (alignment == CASTLE_ALIGN_CENTER) {
-        x -= FontID_String_GetWidth(fontId, string, 0) >> 1;
-    }
-    AddTextPrinterParameterizedWithColor(window, fontId, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
-}
-
-void BattleCastle_PrintMsg(Window *window, MsgData *msgData, s32 msgNo, int x, int y, int fontId, int color, int alignment) {
-    String *string = NewString_ReadMsgData(msgData, msgNo);
-
-    BattleCastle_PrintString(window, string, x, y, fontId, color, alignment);
-    String_Delete(string);
-}
-
-void BattleCastle_FreeGrid(GridInputHandler *grid) {
-    GridInputHandler_Free(grid);
-}
-
-// Grid callback that does nothing
-void BattleCastle_GridCallbackNoOp(void) {
-}
-
-GridInputHandler *BattleCastlePartyApp_CreatePartyGrid(BattleCastlePartyApp *app, int initialPos, int numMons) {
-    if (numMons == 3) {
-        return GridInputHandler_Create(gBattleCastlePartyGrid3Hitboxes, gBattleCastlePartyGrid3Boxes, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
-    }
-    return GridInputHandler_Create(gBattleCastlePartyGrid4Hitboxes, gBattleCastlePartyGrid4Boxes, &gBattleCastlePartyAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
-}
-
-static GridInputHandler *BattleCastleOpponentApp_CreatePartyGrid(BattleCastleOpponentApp *app, int initialPos, int numMons) {
-    if (numMons == 3) {
-        return GridInputHandler_Create(gBattleCastlePartyGrid3Hitboxes, gBattleCastlePartyGrid3Boxes, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
-    }
-    return GridInputHandler_Create(gBattleCastlePartyGrid4Hitboxes, gBattleCastlePartyGrid4Boxes, &gBattleCastleOpponentAppPartyGridCallbacks, app, TRUE, initialPos, HEAP_ID_107);
-}
-
-// Party grid input: the selected slot (CASTLE_*_GRID_EXIT for EXIT) or a GRID_MENU_* code
-int BattleCastle_HandlePartyGridInput(GridInputHandler *grid) {
-    int input = GridInputHandler_HandleInput_NoHold(grid);
-
-    switch (input) {
-    case GRID_MENU_BUTTON_MODE:
-    case GRID_MENU_CURSOR_MOVE:
-    case GRID_MENU_CANCEL:
-    case GRID_MENU_NOTHING_CHOSEN:
-        return input;
-    }
-    return gBattleCastlePartyGridSlots[input];
-}
-
-void BattleCastle_SetGridInputsToNext(GridInputHandler *grid) {
-    int input = GridInputHandler_GetNextInput(grid);
-    GridInputHandler_SetNextLastReturnInputs(grid, 0, input, input);
-}
-
-void BattleCastlePartyApp_OnPartyGridKeyMove(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
-    BattleCastlePartyApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
-}
-
-void BattleCastlePartyApp_OnPartyGridTouch(BattleCastlePartyApp *app, int newTarget, int prevTarget) {
-    BattleCastlePartyApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
-}
-
-void BattleCastleOpponentApp_OnPartyGridKeyMove(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
-    BattleCastleOpponentApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
-}
-
-void BattleCastleOpponentApp_OnPartyGridTouch(BattleCastleOpponentApp *app, int newTarget, int prevTarget) {
-    BattleCastleOpponentApp_SetCursorPos(app, gBattleCastlePartyGridSlots[newTarget], gBattleCastlePartyGridSlots[prevTarget]);
-}
-
-GridInputHandler *BattleCastlePartyApp_CreateItemGrid(BattleCastlePartyApp *app) {
-    GridInputHandler *grid = GridInputHandler_Create(gBattleCastleItemGridHitboxes, gBattleCastleItemGridBoxes, &gBattleCastleItemGridCallbacks, app, TRUE, 0, HEAP_ID_107);
-
-    BattleCastlePartyApp_SetItemCursor(app, 64, 52, 3);
-    BattleCastlePartyApp_ShowItemDescription(app, 0);
-    return grid;
-}
-
-// Rental item grid input: an item button, 6/7 for the page arrows (left/right key or touch), or a GRID_MENU_* code
-int BattleCastle_HandleItemGridInput(GridInputHandler *grid) {
-    int touched;
-    int input = GridInputHandler_HandleInput_NoHold(grid);
-
-    switch (input) {
-    case GRID_MENU_BUTTON_MODE:
-    case GRID_MENU_CURSOR_MOVE:
-    case GRID_MENU_CANCEL:
-        return input;
-    case GRID_MENU_NOTHING_CHOSEN:
-        if (gSystem.newKeys & PAD_KEY_LEFT) {
-            int next = GridInputHandler_GetNextInput(grid);
-            if (next == 0 || next == 2 || next == 4) {
-                return 6;
-            }
-        }
-        if (gSystem.newKeys & PAD_KEY_RIGHT) {
-            int next = GridInputHandler_GetNextInput(grid);
-            if (next == 1 || next == 3 || next == 5) {
-                return 7;
-            }
-        }
-        break;
-    default:
-        return gBattleCastleItemGridButtons[input];
-    }
-    touched = TouchscreenHitbox_FindRectAtTouchNew(gBattleCastleItemGridArrowHitboxes);
-    if (touched == 0) {
-        return 6;
-    }
-    if (touched == 1) {
-        return 7;
-    }
-    return -1;
-}
-
-void BattleCastlePartyApp_OnItemGridKeyMove(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, gBattleCastleItemGridBoxTops[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
-    BattleCastlePartyApp_ShowItemDescription(app, newTarget);
-}
-
-void BattleCastlePartyApp_OnItemGridTouch(BattleCastlePartyApp *app, int newTarget) {
-    BattleCastlePartyApp_SetItemCursor(app, gBattleCastleItemGridBoxes[newTarget].left, gBattleCastleItemGridBoxTops[newTarget * sizeof(DpadMenuBox)], gBattleCastleItemGridCursorAnims[newTarget]);
-    BattleCastlePartyApp_ShowItemDescription(app, newTarget);
-}
-
-TouchscreenListMenuSpawner *BattleCastle_CreateListMenuSpawner(SpriteList *spriteList, PaletteData *paletteData) {
-    return TouchscreenListMenuSpawner_Create(HEAP_ID_107, paletteData);
-}
-
-void BattleCastle_DestroyListMenuSpawner(TouchscreenListMenuSpawner *spawner) {
-    TouchscreenListMenuSpawner_Destroy(spawner);
-}
-
-TouchscreenListMenu *BattleCastle_CreateListMenu(TouchscreenListMenuSpawner *spawner, TouchscreenListMenuHeader *header, u8 x, u8 y, u8 width) {
-    return TouchscreenListMenu_Create(spawner, header, FALSE, x, y, width, 0);
-}
-
-void BattleCastle_DestroyListMenu(TouchscreenListMenu *menu) {
-    TouchscreenListMenu_Destroy(menu);
-}
-
-// A or B pressed, or the touch screen tapped
-BOOL BattleCastle_IsAdvancePressed(void) {
-    if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
-        return TRUE;
-    }
-    return System_GetTouchNew();
 }

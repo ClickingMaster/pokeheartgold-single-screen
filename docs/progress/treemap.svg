@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 9f5651078 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 4adcf44e9 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -4950,9 +4950,15 @@ src/wifi_club/wifi_club_room_maps.c</title></rect>
 <rect x="615.491" y="479.285" width="71.840" height="46.554" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_party_app.o
 20,902 bytes · C-only source
 src/frontier/battle_castle_party_app.c</title></rect>
-<rect x="615.491" y="525.839" width="71.840" height="44.247" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_opponent_app.o
-19,866 bytes · C-only source
+<rect x="615.491" y="525.839" width="58.062" height="44.247" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_opponent_app.o
+16,056 bytes · C-only source
 src/frontier/battle_castle_opponent_app.c</title></rect>
+<rect x="673.552" y="525.839" width="13.778" height="35.514" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_display.o
+3,058 bytes · C-only source
+src/frontier/battle_castle_display.c</title></rect>
+<rect x="673.552" y="561.353" width="13.778" height="8.733" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_83 / battle_castle_input.o
+752 bytes · C-only source
+src/frontier/battle_castle_input.c</title></rect>
 <rect x="615.491" y="479.285" width="71.840" height="90.801" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="687.330" y="479.285" width="42.707" height="40.088" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_38 / http_connection.o
 10,700 bytes · C-only source
@@ -5151,10 +5157,13 @@ src/application/spin_trade/spin_trade_app.c</title></rect>
 7,192 bytes · C-only source
 src/application/spin_trade/spin_trade_group_app.c</title></rect>
 <rect x="846.026" y="644.575" width="42.661" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="888.687" y="426.285" width="72.912" height="40.568" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / apricorn_box_screens.o
-18,486 bytes · C-only source
+<rect x="888.687" y="426.285" width="43.906" height="40.568" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / apricorn_box_screens.o
+11,132 bytes · C-only source
 src/application/apricorn_box/apricorn_box_screens.c</title></rect>
-<rect x="961.599" y="426.285" width="0.379" height="40.568" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / aprijuice_scene_camera.o
+<rect x="932.594" y="426.285" width="29.384" height="40.045" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / aprijuice_screen.o
+7,354 bytes · C-only source
+src/application/apricorn_box/aprijuice_screen.c</title></rect>
+<rect x="932.594" y="466.330" width="29.384" height="0.523" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_59 / aprijuice_scene_camera.o
 96 bytes · C-only source
 src/application/apricorn_box/aprijuice_scene_camera.c</title></rect>
 <rect x="888.687" y="426.285" width="73.290" height="40.568" fill="none" stroke="#101722" stroke-width="2"/>
@@ -5319,9 +5328,21 @@ src/application/move_relearner/move_relearner_app.c</title></rect>
 32 bytes · C-only source
 src/application/move_relearner/move_relearner_sub_screen.c</title></rect>
 <rect x="888.687" y="596.454" width="31.744" height="44.840" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="920.431" y="596.454" width="30.702" height="44.840" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app.o
-8,604 bytes · C-only source
+<rect x="920.431" y="596.454" width="16.964" height="28.278" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app_states.o
+2,998 bytes · C-only source
+src/application/mailbox_app_states.c</title></rect>
+<rect x="937.395" y="596.454" width="13.738" height="28.278" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app.o
+2,428 bytes · C-only source
 src/application/mailbox_app.c</title></rect>
+<rect x="920.431" y="624.732" width="16.153" height="16.562" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app_text.o
+1,672 bytes · C-only source
+src/application/mailbox_app_text.c</title></rect>
+<rect x="936.584" y="624.732" width="14.549" height="13.637" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app_sprites.o
+1,240 bytes · C-only source
+src/application/mailbox_app_sprites.c</title></rect>
+<rect x="936.584" y="638.369" width="14.549" height="2.925" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_103 / mailbox_app_input.o
+266 bytes · C-only source
+src/application/mailbox_app_input.c</title></rect>
 <rect x="920.431" y="596.454" width="30.702" height="44.840" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="951.133" y="573.547" width="30.147" height="34.287" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_17 / berry_pots_app.o
 6,460 bytes · C-only source
@@ -5330,9 +5351,15 @@ src/berry_pots_app.c</title></rect>
 2,090 bytes · C-only source
 src/berry_pots_app_tasks.c</title></rect>
 <rect x="951.133" y="573.547" width="39.900" height="34.287" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="951.133" y="607.834" width="39.900" height="33.461" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_82 / battle_hall_app.o
-8,344 bytes · C-only source
+<rect x="951.133" y="607.834" width="34.105" height="33.461" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_82 / battle_hall_app.o
+7,132 bytes · C-only source
 src/frontier/battle_hall_app.c</title></rect>
+<rect x="985.238" y="607.834" width="5.796" height="26.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_82 / battle_hall_app_sprites.o
+970 bytes · C-only source
+src/frontier/battle_hall_app_sprites.c</title></rect>
+<rect x="985.238" y="634.613" width="5.796" height="6.681" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_82 / battle_hall_app_windows.o
+242 bytes · C-only source
+src/frontier/battle_hall_app_windows.c</title></rect>
 <rect x="951.133" y="607.834" width="39.900" height="33.461" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="991.033" y="573.547" width="37.850" height="34.377" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_37 / drawing_session.o
 8,132 bytes · C-only source
@@ -5557,9 +5584,12 @@ src/field/friend_roster_app.c</title></rect>
 3,038 bytes · C-only source
 src/field/number_entry.c</title></rect>
 <rect x="1097.773" y="643.183" width="13.008" height="37.369" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1110.781" y="643.183" width="24.535" height="19.565" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_98 / pokeathlon_util.o
-3,000 bytes · C-only source
+<rect x="1110.781" y="643.183" width="19.448" height="19.565" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_98 / pokeathlon_util.o
+2,378 bytes · C-only source
 src/pokeathlon/pokeathlon_util.c</title></rect>
+<rect x="1130.229" y="643.183" width="5.087" height="19.565" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_98 / pokeathlon_util_scores.o
+622 bytes · C-only source
+src/pokeathlon/pokeathlon_util_scores.c</title></rect>
 <rect x="1110.781" y="643.183" width="24.535" height="19.565" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1110.781" y="662.748" width="24.535" height="17.804" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_117 / encounter_effect_rocket.o
 2,730 bytes · C-only source

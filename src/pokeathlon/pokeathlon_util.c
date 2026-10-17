@@ -20,14 +20,11 @@
 
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
 
-u32 MATH_CountPopulation(u32 value);
-
 static void PokeathlonUtil_LoadSpriteChars(ManagedSprite *sprite, void *data, u32 size);
 static void PokeathlonUtil_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, s32 memberNo, BOOL isMain, BOOL grayscale, enum HeapID heapId);
 static void *PokeathlonUtil_LoadCharDataFromNarc(PokeathlonSpriteContext *ctx, int member, NNSG2dCharacterData **out);
 static void PokeathlonUtil_PrintMessageEx(PokeathlonTextContext *ctx, u32 window, u32 message, BOOL center, u8 x, u8 y, u32 font, u8 fill);
 static void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 window);
-static void PokeathlonUtil_SetGfxBanks(void);
 
 static const OamManagerParam sPokeathlonUtilOamManagerParam = {
     .fromOBJmain = 0,
@@ -411,138 +408,4 @@ void *PokeathlonUtil_GetMessageFormat(PokeathlonTextContext *ctx) {
 
 static void PokeathlonUtil_ClearWindow(PokeathlonTextContext *ctx, u32 index) {
     FillWindowPixelBuffer(&ctx->windows[index], 0);
-}
-
-BOOL PokeathlonUtil_CheckExitInput(void) {
-    TouchscreenHitbox hitbox = sPokeathlonExitHitbox;
-    BOOL result = FALSE;
-    if (TouchscreenHitbox_TouchNewIsIn(&hitbox) || (gSystem.newKeys & PAD_BUTTON_B)) {
-        result = TRUE;
-    }
-    return result;
-}
-
-u32 PokeathlonUtil_GetCourseMedal(u32 value) {
-    if (value >= 450) {
-        return 2;
-    }
-    if (value >= 420) {
-        return 1;
-    }
-    return 0;
-}
-
-u8 PokeathlonUtil_GetMedalistTrophyCount(s32 value) {
-    u8 i = 0;
-    do {
-        if (sPokeathlonMedalistTrophyThresholds[i] <= value) {
-            break;
-        }
-        i++;
-    } while (i < 10);
-    return 10 - i;
-}
-
-u16 PokeathlonUtil_GetEventThreshold(u32 row, u32 column) {
-    return sPokeathlonEventThresholds[row][column];
-}
-
-BOOL PokeathlonUtil_BeatsEventThreshold(u32 direction, u32 column, u16 value) {
-    u16 limit = PokeathlonUtil_GetEventThreshold(direction, column);
-    if (value == 0xFFFF) {
-        return FALSE;
-    }
-    if (direction == 0) {
-        return value < limit;
-    }
-    return value > limit;
-}
-
-BOOL PokeathlonUtil_ReachesEventThreshold(u32 direction, u32 column, u16 value) {
-    u16 limit = PokeathlonUtil_GetEventThreshold(direction, column);
-    if (value == 0xFFFF) {
-        return FALSE;
-    }
-    if (direction == 0) {
-        return value <= limit;
-    }
-    return value >= limit;
-}
-
-u16 PokeathlonUtil_GetRecordScore(const void *records, u32 index) {
-    return *(const u16 *)((const u8 *)records + index * 8);
-}
-
-u32 PokeathlonUtil_CountSpeciesWithAllMedals(const u8 *data) {
-    int i;
-    u16 count = 0;
-    GF_ASSERT(data != NULL);
-    for (i = 0; i < 0x1ED; i++) {
-        if (MATH_CountPopulation(data[i]) == 5) {
-            count++;
-        }
-    }
-    return count;
-}
-
-u8 PokeathlonUtil_CountEventTrophies(const u16 (*records)[22]) {
-    u8 i;
-    u8 count = 0;
-    for (i = 0; i < 10; i++) {
-        u16 value = PokeathlonUtil_GetRecordScore(&records[i], 0);
-        if (PokeathlonUtil_ReachesEventThreshold(i, 1, value)) {
-            count++;
-        }
-    }
-    return count;
-}
-
-void PokeathlonUtil_ResetDisplay(void) {
-    SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
-    SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
-    Main_SetVBlankIntrCB(NULL, NULL);
-    HBlankInterruptDisable();
-    GfGfx_DisableEngineAPlanes();
-    GfGfx_DisableEngineBPlanes();
-    reg_GX_DISPCNT &= 0xFFFFE0FF;
-    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    reg_GX_POWCNT &= 0xFFFF7FFF;
-    PokeathlonUtil_SetGfxBanks();
-}
-
-void PokeathlonUtil_DisableDisplay(void) {
-    Main_SetVBlankIntrCB(NULL, NULL);
-    HBlankInterruptDisable();
-    GfGfx_DisableEngineAPlanes();
-    GfGfx_DisableEngineBPlanes();
-    reg_GX_DISPCNT &= 0xFFFFE0FF;
-    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-}
-
-u32 PokeathlonUtil_GetDecimalDigit(u32 value, u32 digit) {
-    u32 remainder;
-    GF_ASSERT(digit != 0 && digit < 5);
-    remainder = value % sPokeathlonPowersOfTen[digit];
-    digit--;
-    return remainder / sPokeathlonPowersOfTen[digit];
-}
-
-u8 PokeathlonUtil_CountDecimalDigits(s32 value) {
-    u8 count = 0;
-    if (value == 0) {
-        return 1;
-    }
-    while (1) {
-        if (value == 0) {
-            break;
-        }
-        value /= 10;
-        count++;
-    }
-    return count;
-}
-
-static void PokeathlonUtil_SetGfxBanks(void) {
-    GraphicsBanks banks = sPokeathlonUtilGraphicsBanks;
-    GfGfx_SetBanks(&banks);
 }

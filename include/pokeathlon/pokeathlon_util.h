@@ -44,12 +44,6 @@ typedef struct PokeathlonMonInfo {
     u32 personality;
 } PokeathlonMonInfo;
 
-extern const s32 sPokeathlonMedalistTrophyThresholds[10];
-extern const u16 sPokeathlonEventThresholds[][2];
-extern const u32 sPokeathlonPowersOfTen[5];
-extern const GraphicsBanks sPokeathlonUtilGraphicsBanks;
-extern const TouchscreenHitbox sPokeathlonExitHitbox;
-
 void *PokeathlonUtil_GetSpriteSystem(PokeathlonSpriteContext *ctx);
 void *PokeathlonUtil_GetSpriteManager(PokeathlonSpriteContext *ctx);
 PokeathlonSpriteContext *PokeathlonUtil_CreateSpriteContext(enum HeapID heapId, SpriteResourceCountsListUnion *counts, int maxSprites);

@@ -5,6 +5,7 @@
 
 #include "constants/pokemon.h"
 
+#include "apricorn_box.h"
 #include "apricorn_internal.h"
 #include "bag.h"
 #include "gf_gfx_planes.h"
@@ -20,7 +21,6 @@
 #include "save.h"
 #include "screen_fade.h"
 #include "system.h"
-#include "apricorn_box.h"
 
 // ApricornBoxApp.mode, the Apricorn Box screen's mode
 enum ApricornBoxMode {
@@ -70,5 +70,12 @@ typedef struct ApricornJuiceData {
 } ApricornJuiceData;
 
 void SetMasterBrightnessByColor(PMLCDTarget screen, u16 color);
+
+// Output of ApricornJuice_RankFlavors: the juice made from the blended apricorns.
+typedef struct ApricornBoxJuice {
+    ApricornJuiceEntry entries[3]; // 0x00
+    u8 flavorOrder[6];             // 0x06
+    u8 numEntries;                 // 0x0C
+} ApricornBoxJuice;
 
 #endif // OV58_PRIVATE_H

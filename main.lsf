@@ -1730,6 +1730,7 @@ Overlay OVY_59
     After OVY_58
     Object src/application/apricorn_box/apricorn_box_screens.o
     Object asm/apricorn_box_screens_data.o
+    Object src/application/apricorn_box/aprijuice_screen.o
     Object src/application/apricorn_box/aprijuice_scene_camera.o
 }
 Overlay intro_title
@@ -1947,7 +1948,8 @@ Overlay OVY_82
 {
     After OVY_80
     Object src/frontier/battle_hall_app.o
-    Object asm/battle_hall_app_data.o
+    Object src/frontier/battle_hall_app_sprites.o
+    Object src/frontier/battle_hall_app_windows.o
 }
 Overlay OVY_83
 {
@@ -1955,6 +1957,8 @@ Overlay OVY_83
     Object src/frontier/battle_castle_party_app.o
     Object src/frontier/battle_castle_opponent_app.o
     Object asm/battle_castle_data.o
+    Object src/frontier/battle_castle_display.o
+    Object src/frontier/battle_castle_input.o
 }
 Overlay OVY_84
 {
@@ -2102,7 +2106,7 @@ Overlay OVY_98
 {
     After OVY_96
     Object src/pokeathlon/pokeathlon_util.o
-    Object asm/pokeathlon_util_data.o
+    Object src/pokeathlon/pokeathlon_util_scores.o
 }
 Overlay OVY_99
 {
@@ -2189,7 +2193,10 @@ Overlay OVY_103
 {
     After OVY_102
     Object src/application/mailbox_app.o
-    Object asm/mailbox_app_data.o
+    Object src/application/mailbox_app_states.o
+    Object src/application/mailbox_app_sprites.o
+    Object src/application/mailbox_app_text.o
+    Object src/application/mailbox_app_input.o
 }
 Overlay OVY_104
 {

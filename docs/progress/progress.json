@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "9f565107800e0c6d31556b5f4c95cb9e605e9131",
+  "commit": "4adcf44e9a21ba779f5c2a2c3a81be7e0c94c90b",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "4b24414a5e5991e09ddb2237b48b795acf3f2e2f4dd50b210c7f4f900f0eadd1",
+    "ARM9": "5db4dd4798be229e342d59c301e7436168b8c2e798dddf1b57ebb9d63b1ef9d6",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -493,9 +493,41 @@
       "cpu": "ARM9",
       "module": "OVY_103",
       "object": "mailbox_app.o",
-      "bytes": 8604,
+      "bytes": 2428,
       "status": "c",
       "source": "src/application/mailbox_app.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_103",
+      "object": "mailbox_app_input.o",
+      "bytes": 266,
+      "status": "c",
+      "source": "src/application/mailbox_app_input.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_103",
+      "object": "mailbox_app_sprites.o",
+      "bytes": 1240,
+      "status": "c",
+      "source": "src/application/mailbox_app_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_103",
+      "object": "mailbox_app_states.o",
+      "bytes": 2998,
+      "status": "c",
+      "source": "src/application/mailbox_app_states.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_103",
+      "object": "mailbox_app_text.o",
+      "bytes": 1672,
+      "status": "c",
+      "source": "src/application/mailbox_app_text.c"
     },
     {
       "cpu": "ARM9",
@@ -4117,7 +4149,7 @@
       "cpu": "ARM9",
       "module": "OVY_59",
       "object": "apricorn_box_screens.o",
-      "bytes": 18486,
+      "bytes": 11132,
       "status": "c",
       "source": "src/application/apricorn_box/apricorn_box_screens.c"
     },
@@ -4128,6 +4160,14 @@
       "bytes": 96,
       "status": "c",
       "source": "src/application/apricorn_box/aprijuice_scene_camera.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_59",
+      "object": "aprijuice_screen.o",
+      "bytes": 7354,
+      "status": "c",
+      "source": "src/application/apricorn_box/aprijuice_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -5024,15 +5064,47 @@
       "cpu": "ARM9",
       "module": "OVY_82",
       "object": "battle_hall_app.o",
-      "bytes": 8344,
+      "bytes": 7132,
       "status": "c",
       "source": "src/frontier/battle_hall_app.c"
     },
     {
       "cpu": "ARM9",
+      "module": "OVY_82",
+      "object": "battle_hall_app_sprites.o",
+      "bytes": 970,
+      "status": "c",
+      "source": "src/frontier/battle_hall_app_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_82",
+      "object": "battle_hall_app_windows.o",
+      "bytes": 242,
+      "status": "c",
+      "source": "src/frontier/battle_hall_app_windows.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_83",
+      "object": "battle_castle_display.o",
+      "bytes": 3058,
+      "status": "c",
+      "source": "src/frontier/battle_castle_display.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_83",
+      "object": "battle_castle_input.o",
+      "bytes": 752,
+      "status": "c",
+      "source": "src/frontier/battle_castle_input.c"
+    },
+    {
+      "cpu": "ARM9",
       "module": "OVY_83",
       "object": "battle_castle_opponent_app.o",
-      "bytes": 19866,
+      "bytes": 16056,
       "status": "c",
       "source": "src/frontier/battle_castle_opponent_app.c"
     },
@@ -5600,9 +5672,17 @@
       "cpu": "ARM9",
       "module": "OVY_98",
       "object": "pokeathlon_util.o",
-      "bytes": 3000,
+      "bytes": 2378,
       "status": "c",
       "source": "src/pokeathlon/pokeathlon_util.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_98",
+      "object": "pokeathlon_util_scores.o",
+      "bytes": 622,
+      "status": "c",
+      "source": "src/pokeathlon/pokeathlon_util_scores.c"
     },
     {
       "cpu": "ARM9",
