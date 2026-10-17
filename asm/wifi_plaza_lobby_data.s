@@ -11,7 +11,7 @@
 
 	.data
 
-sWiFiPlazaPlayerObjectActions: ; 0x02254F28
+sWiFiPlazaPlayerObjectActions:
 	.word WiFiPlazaPlayerObject_ShowStandingSprite
 	.word WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.word WiFiPlazaPlayerObject_PlayStandingSequence

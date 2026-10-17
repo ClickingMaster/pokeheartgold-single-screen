@@ -23,7 +23,7 @@ sWobbuffetPopBalloonAirRates:
 	.byte 0x64, 0x00, 0x00, 0x00, 0x7D, 0x00, 0x00, 0x00
 	.byte 0x58, 0x00, 0x00, 0x00
 
-sWobbuffetPopCommands: ; 0x022630E4
+sWobbuffetPopCommands:
 	.word 0
 	.word CommCmd_GetSize0
 	.word 0
@@ -37,7 +37,7 @@ sWobbuffetPopCommands: ; 0x022630E4
 	.word CommCmd_GetSize0
 	.word 0
 
-sWobbuffetPopEventFuncs: ; 0x02263114
+sWobbuffetPopEventFuncs:
 	.word 0
 	.word WobbuffetPop_HandlePumpEvent
 	.word WobbuffetPop_HandlePopEvent
@@ -46,4 +46,3 @@ sWobbuffetPopEventFuncs: ; 0x02263114
 	.word WobbuffetPop_HandleFinishEvent
 	.word WobbuffetPop_HandleSyncEvent
 	.word WobbuffetPop_HandleDemoEvent
-	; 0x02263134

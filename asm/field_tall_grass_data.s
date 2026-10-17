@@ -12,11 +12,9 @@
 	.include "field_tall_grass_data.inc"
 	.include "global.inc"
 
-	.public gTallGrassEffectTemplate
-	.public sTallGrassUnusedEffectTemplate
 .rodata
 
-gTallGrassEffectTemplate: ; 0x02209138
+gTallGrassEffectTemplate:
 	.word 0x00000040
 	.word TallGrassEffect_Init
 	.word TallGrassEffect_Destroy

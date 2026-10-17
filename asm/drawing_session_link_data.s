@@ -8,10 +8,6 @@
 	.include "drawing_session_link_data.inc"
 	.include "global.inc"
 
-	.public gOverlayTemplate_Battle
-	.public gNatureStatMods
-
-	.public DrawingSessionLink_RegisterCommands
 	.public DrawingSessionLink_ReceivePictureChunk
 	.public DrawingSessionLink_ReceiveMemberStroke
 	.public DrawingSessionLink_ReceiveStrokes
@@ -24,7 +20,6 @@
 	.public DrawingSessionLink_ReceiveEvent15
 	.public DrawingSessionLink_ReceiveJoinNotice
 	.public DrawingSessionLink_ReceiveSetJoinState1
-	.public DrawingSessionLink_SendPictureChunk
 	.public DrawingSessionLink_GetChunkRecvBuffer
 	.public DrawingSessionLink_GetSize4
 	.public DrawingSessionLink_GetJoinRequestSize

@@ -1,45 +1,4 @@
 	.include "asm/macros.inc"
-	.public PokeathlonUtil_GetSpriteSystem
-	.public PokeathlonUtil_GetSpriteManager
-	.public PokeathlonUtil_CreateSpriteContext
-	.public PokeathlonUtil_FreeSpriteContext
-	.public PokeathlonUtil_DrawSprites
-	.public PokeathlonUtil_NewSprite
-	.public PokeathlonUtil_CreateSpriteRow
-	.public PokeathlonUtil_LoadMonPicSpriteResources
-	.public PokeathlonUtil_LoadMonPicSprite
-	.public PokeathlonUtil_LoadMonIconResources
-	.public PokeathlonUtil_SetMonIconSprite
-	.public PokeathlonUtil_CreateTextContext
-	.public PokeathlonUtil_FreeTextContext
-	.public PokeathlonUtil_PrintAlignedMessage
-	.public PokeathlonUtil_PrintAlignedMessageAtY
-	.public PokeathlonUtil_PrintMessageAtXY
-	.public PokeathlonUtil_PrintMessageCentered
-	.public PokeathlonUtil_PrintMessageWithNumber
-	.public PokeathlonUtil_PrintMessage
-	.public PokeathlonUtil_PrintMessageAt
-	.public PokeathlonUtil_BufferNumber
-	.public PokeathlonUtil_PrintMessageWithPlayerName
-	.public PokeathlonUtil_PrintSpeciesName
-	.public PokeathlonUtil_ClearAndCopyWindow
-	.public PokeathlonUtil_PrintString
-	.public PokeathlonUtil_ClearWindowTilemap
-	.public PokeathlonUtil_SetWindowY
-	.public PokeathlonUtil_GetMessageFormat
-	.public PokeathlonUtil_CheckExitInput
-	.public PokeathlonUtil_GetCourseMedal
-	.public PokeathlonUtil_GetMedalistTrophyCount
-	.public PokeathlonUtil_GetEventThreshold
-	.public PokeathlonUtil_BeatsEventThreshold
-	.public PokeathlonUtil_ReachesEventThreshold
-	.public PokeathlonUtil_GetRecordScore
-	.public PokeathlonUtil_CountSpeciesWithAllMedals
-	.public PokeathlonUtil_CountEventTrophies
-	.public PokeathlonUtil_ResetDisplay
-	.public PokeathlonUtil_DisableDisplay
-	.public PokeathlonUtil_GetDecimalDigit
-	.public PokeathlonUtil_CountDecimalDigits
 	.public sPokeathlonExitHitbox
 	.public sPokeathlonPowersOfTen
 	.public sPokeathlonEventThresholds
@@ -48,28 +7,26 @@
 	.include "overlay_98.inc"
 	.include "global.inc"
 
-	.text
 	.rodata
 
-sPokeathlonExitHitbox: ; 0x0221F1E0
+sPokeathlonExitHitbox:
 	.byte 0xA0, 0xC0, 0xC0, 0x00
 
-sPokeathlonPowersOfTen: ; 0x0221F1E4
+sPokeathlonPowersOfTen:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00
 	.byte 0xE8, 0x03, 0x00, 0x00, 0x10, 0x27, 0x00, 0x00
 
-sPokeathlonEventThresholds: ; 0x0221F1F8
+sPokeathlonEventThresholds:
 	.byte 0xB8, 0x0B, 0x60, 0x09, 0x23, 0x00, 0x32, 0x00
 	.byte 0x28, 0x00, 0x3C, 0x00, 0x50, 0x00, 0x82, 0x00, 0x28, 0x00, 0x46, 0x00, 0x5E, 0x01, 0xF4, 0x01
 	.byte 0x00, 0x30, 0x00, 0x40, 0x46, 0x00, 0x64, 0x00, 0x1E, 0x00, 0x37, 0x00, 0x03, 0x00, 0x09, 0x00
 
-sPokeathlonMedalistTrophyThresholds: ; 0x0221F220
+sPokeathlonMedalistTrophyThresholds:
 	.byte 0xC8, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x4B, 0x00, 0x00, 0x00
 	.byte 0x32, 0x00, 0x00, 0x00, 0x19, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-sPokeathlonUtilGraphicsBanks: ; 0x0221F248
+sPokeathlonUtilGraphicsBanks:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	; 0x0221F270

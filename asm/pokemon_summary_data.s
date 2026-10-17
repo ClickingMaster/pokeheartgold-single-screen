@@ -8,9 +8,6 @@
 	.include "pokemon_summary_data.inc"
 	.include "global.inc"
 
-	.public gOverlayTemplate_Battle
-	.public gNatureStatMods
-
 	.text
 	.public PokemonSummary_Exit
 	.public PokemonSummary_Init
@@ -85,7 +82,6 @@ gPokemonSummaryRibbonHitboxes:
 
 	; File boundary
 
-	.public gOverlayTemplate_PokemonSummary
 	.public gOverlayTemplate_PokemonSummary
 gOverlayTemplate_PokemonSummary:
 	.word PokemonSummary_Init, PokemonSummary_Main, PokemonSummary_Exit, 0xFFFFFFFF

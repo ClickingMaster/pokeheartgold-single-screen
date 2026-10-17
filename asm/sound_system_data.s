@@ -19,4 +19,3 @@ gSoundMicAutoParam:
 sSoundChatotBuffer:
 	.space 0x7D0
 
-	.text

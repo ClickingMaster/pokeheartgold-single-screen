@@ -2,1256 +2,6 @@
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
-	.public BattlePartyMenu_Create
-	.public _0221BE2E
-	.public _0221BE88
-	.public _0221BE8C
-	.public _0221BE90
-	.public _0221BE94
-	.public _0221BEA6
-	.public _0221BEB2
-	.public _0221BEE8
-	.public _0221BEF4
-	.public _0221BF00
-	.public _0221BF0C
-	.public _0221BF18
-	.public _0221BF24
-	.public _0221BF30
-	.public _0221BF3C
-	.public _0221BF48
-	.public _0221BF54
-	.public _0221BF60
-	.public _0221BF6C
-	.public _0221BF78
-	.public _0221BF84
-	.public _0221BF90
-	.public _0221BF9C
-	.public _0221BFA8
-	.public _0221BFB4
-	.public _0221BFC0
-	.public _0221BFCC
-	.public _0221BFD8
-	.public _0221BFE4
-	.public _0221BFF0
-	.public _0221BFFC
-	.public _0221C008
-	.public _0221C014
-	.public _0221C020
-	.public _0221C028
-	.public _0221C03C
-	.public _0221C040
-	.public _0221C044
-	.public _0221C068
-	.public _0221C06C
-	.public _0221C0EC
-	.public _0221C106
-	.public _0221C13C
-	.public _0221C140
-	.public _0221C144
-	.public _0221C148
-	.public _0221C162
-	.public _0221C18E
-	.public _0221C1B0
-	.public _0221C1BA
-	.public _0221C1C0
-	.public _0221C1C4
-	.public _0221C1DA
-	.public _0221C1E4
-	.public _0221C200
-	.public _0221C236
-	.public _0221C266
-	.public _0221C2D6
-	.public _0221C2DC
-	.public _0221C2E6
-	.public _0221C30C
-	.public _0221C310
-	.public _0221C314
-	.public _0221C330
-	.public _0221C338
-	.public _0221C354
-	.public _0221C35E
-	.public _0221C380
-	.public _0221C3A2
-	.public _0221C3BA
-	.public _0221C3C0
-	.public _0221C3C4
-	.public _0221C3E0
-	.public _0221C3E8
-	.public _0221C416
-	.public _0221C442
-	.public _0221C45A
-	.public _0221C478
-	.public _0221C47C
-	.public _0221C480
-	.public _0221C484
-	.public _0221C4A2
-	.public _0221C4B2
-	.public _0221C4EA
-	.public _0221C518
-	.public _0221C544
-	.public _0221C55C
-	.public _0221C57A
-	.public _0221C580
-	.public _0221C584
-	.public _0221C588
-	.public _0221C5A6
-	.public _0221C5B0
-	.public _0221C5CE
-	.public _0221C5DE
-	.public _0221C5F6
-	.public _0221C5FC
-	.public _0221C600
-	.public _0221C62E
-	.public _0221C634
-	.public _0221C644
-	.public _0221C652
-	.public _0221C67C
-	.public _0221C6BC
-	.public _0221C6DC
-	.public _0221C6E0
-	.public _0221C6E4
-	.public _0221C6E8
-	.public _0221C6EC
-	.public _0221C6F0
-	.public _0221C6F4
-	.public _0221C722
-	.public _0221C728
-	.public _0221C736
-	.public _0221C750
-	.public _0221C758
-	.public _0221C77A
-	.public _0221C780
-	.public _0221C788
-	.public _0221C78E
-	.public _0221C792
-	.public _0221C7D8
-	.public _0221C7F6
-	.public _0221C7FC
-	.public _0221C800
-	.public _0221C804
-	.public _0221C808
-	.public _0221C80C
-	.public _0221C810
-	.public _0221C842
-	.public _0221C848
-	.public _0221C858
-	.public _0221C862
-	.public _0221C8BA
-	.public _0221C8E0
-	.public _0221C8FA
-	.public _0221C900
-	.public _0221C904
-	.public _0221C908
-	.public _0221C90C
-	.public _0221C910
-	.public _0221C914
-	.public _0221C968
-	.public _0221C96E
-	.public _0221C974
-	.public _0221C994
-	.public _0221C99C
-	.public _0221C9A0
-	.public _0221C9C2
-	.public _0221C9FE
-	.public _0221CA04
-	.public _0221CA1C
-	.public _0221CA30
-	.public _0221CA46
-	.public _0221CA4C
-	.public _0221CA66
-	.public _0221CA6C
-	.public _0221CA70
-	.public _0221CA74
-	.public _0221CA88
-	.public _0221CA8C
-	.public _0221CAA0
-	.public _0221CAAC
-	.public _0221CAB6
-	.public _0221CB00
-	.public _0221CB56
-	.public _0221CB72
-	.public _0221CB7A
-	.public _0221CB9C
-	.public _0221CBA2
-	.public _0221CBD4
-	.public _0221CBDA
-	.public _0221CBFA
-	.public _0221CC1E
-	.public _0221CC24
-	.public _0221CC28
-	.public _0221CC2C
-	.public _0221CC30
-	.public _0221CC34
-	.public _0221CC54
-	.public _0221CC7C
-	.public _0221CCA0
-	.public _0221CCBE
-	.public _0221CCC6
-	.public _0221CCDE
-	.public _0221CD0C
-	.public _0221CD0E
-	.public _0221CD28
-	.public _0221CD50
-	.public _0221CD58
-	.public _0221CD5C
-	.public _0221CD60
-	.public _0221CD8C
-	.public _0221CDA8
-	.public _0221CDF4
-	.public _0221CEF4
-	.public _0221CEF8
-	.public _0221CEFC
-	.public _0221CF00
-	.public _0221CF04
-	.public _0221D0F0
-	.public _0221D13C
-	.public _0221D140
-	.public _0221D144
-	.public _0221D148
-	.public _0221D174
-	.public _0221D178
-	.public _0221D17C
-	.public _0221D180
-	.public _0221D19E
-	.public _0221D1C8
-	.public _0221D278
-	.public _0221D27E
-	.public _0221D316
-	.public _0221D322
-	.public _0221D3A0
-	.public _0221D40C
-	.public _0221D416
-	.public _0221D432
-	.public _0221D462
-	.public _0221D46C
-	.public _0221D47C
-	.public _0221D484
-	.public _0221D494
-	.public _0221D4A2
-	.public _0221D4A8
-	.public _0221D4AC
-	.public BattlePartyMenu_GetMonMenuInput
-	.public _0221D4DA
-	.public _0221D4E4
-	.public _0221D4EA
-	.public _0221D4F0
-	.public _0221D4F4
-	.public BattlePartyMenu_GetSummaryInput
-	.public _0221D522
-	.public _0221D52C
-	.public _0221D532
-	.public _0221D538
-	.public _0221D53C
-	.public BattlePartyMenu_GetCheckMovesInput
-	.public _0221D56A
-	.public _0221D574
-	.public _0221D57A
-	.public _0221D580
-	.public _0221D584
-	.public BattlePartyMenu_GetMoveDetailInput
-	.public _0221D5B2
-	.public _0221D5BC
-	.public _0221D5C2
-	.public _0221D5C8
-	.public _0221D5CC
-	.public _0221D5D8
-	.public _0221D5F2
-	.public _0221D608
-	.public _0221D60C
-	.public _0221D610
-	.public _0221D648
-	.public _0221D656
-	.public _0221D65E
-	.public _0221D664
-	.public _0221D68C
-	.public _0221D694
-	.public _0221D69A
-	.public _0221D6C0
-	.public _0221D6C8
-	.public _0221D6F6
-	.public _0221D6FA
-	.public _0221D706
-	.public _0221D70E
-	.public _0221D716
-	.public _0221D72E
-	.public _0221D734
-	.public _0221D74A
-	.public _0221D824
-	.public _0221D83C
-	.public _0221D8AC
-	.public _0221D8BE
-	.public _0221D918
-	.public _0221D978
-	.public _0221D9B4
-	.public _0221D9CA
-	.public gPokeathlonCourseEventSteps
-	.public _0221DA1C
-	.public _0221DA6C
-	.public _0221DAB4
-	.public _0221DAB8
-	.public _0221DABC
-	.public _0221DAC0
-	.public _0221DADA
-	.public _0221DADC
-	.public _0221DB00
-	.public _0221DB20
-	.public _0221DB44
-	.public _0221DB4C
-	.public _0221DB4E
-	.public _0221DB50
-	.public _0221DB64
-	.public _0221DB72
-	.public _0221DB78
-	.public _0221DBAC
-	.public _0221DBB0
-	.public _0221DBF0
-	.public _0221DC0C
-	.public _0221DC30
-	.public _0221DC34
-	.public _0221DC38
-	.public _0221DC50
-	.public _0221DC64
-	.public _0221DC6E
-	.public _0221DC78
-	.public _0221DC82
-	.public _0221DC8C
-	.public _0221DC96
-	.public gPokeathlonCirclePushContacts
-	.public _0221DCAA
-	.public _0221DCB4
-	.public _0221DCBC
-	.public _0221DCD8
-	.public _0221DCFA
-	.public _0221DCFC
-	.public _0221DD00
-	.public _0221DD04
-	.public _0221DD08
-	.public _0221DD0C
-	.public _0221DD10
-	.public _0221DD14
-	.public _0221DD18
-	.public _0221DD1C
-	.public _0221DD20
-	.public _0221DD24
-	.public _0221DD38
-	.public _0221DD3C
-	.public _0221DD56
-	.public _0221DD68
-	.public _0221DD6C
-	.public _0221DD82
-	.public _0221DD96
-	.public _0221DD9C
-	.public _0221DDA2
-	.public _0221DDA8
-	.public _0221DDAE
-	.public _0221DDB4
-	.public _0221DDBA
-	.public _0221DDC0
-	.public _0221DDC6
-	.public _0221DDCA
-	.public _0221DE4E
-	.public _0221DE6A
-	.public _0221DED2
-	.public _0221DEE6
-	.public _0221DEEE
-	.public _0221DF36
-	.public _0221DF4A
-	.public _0221DF50
-	.public _0221DF5C
-	.public _0221DF60
-	.public _0221DF64
-	.public _0221DF68
-	.public _0221DF6C
-	.public _0221DF70
-	.public _0221DF74
-	.public _0221DF78
-	.public _0221DF7C
-	.public _0221DFC4
-	.public _0221E040
-	.public _0221E044
-	.public _0221E082
-	.public _0221E08C
-	.public _0221E09E
-	.public _0221E0A0
-	.public _0221E0A4
-	.public _0221E0A6
-	.public _0221E11C
-	.public _0221E198
-	.public _0221E19C
-	.public _0221E1A0
-	.public _0221E1A4
-	.public _0221E1CC
-	.public _0221E202
-	.public _0221E234
-	.public _0221E238
-	.public _0221E23C
-	.public _0221E240
-	.public _0221E2A8
-	.public _0221E2AA
-	.public _0221E2DC
-	.public _0221E2E0
-	.public _0221E2E4
-	.public _0221E334
-	.public _0221E338
-	.public _0221E33C
-	.public _0221E398
-	.public _0221E39C
-	.public _0221E3A0
-	.public _0221E400
-	.public _0221E404
-	.public _0221E528
-	.public _0221E53C
-	.public _0221E5C4
-	.public _0221E5C8
-	.public _0221E5CC
-	.public _0221E5D0
-	.public _0221E5D4
-	.public _0221E5D8
-	.public BattlePartyMenu_PrintAttack
-	.public _0221E6C0
-	.public _0221E6C4
-	.public _0221E6C8
-	.public _0221E6CC
-	.public _0221E6D0
-	.public _0221E6D4
-	.public BattlePartyMenu_PrintDefense
-	.public _0221E7BC
-	.public _0221E7C0
-	.public _0221E7C4
-	.public _0221E7C8
-	.public _0221E7CC
-	.public _0221E7D0
-	.public BattlePartyMenu_PrintSpeed
-	.public _0221E8BC
-	.public _0221E8C0
-	.public _0221E8C4
-	.public _0221E8C8
-	.public _0221E8CC
-	.public _0221E8D0
-	.public BattlePartyMenu_PrintSpAttack
-	.public _0221E9BC
-	.public _0221E9C0
-	.public _0221E9C4
-	.public _0221E9C8
-	.public _0221E9CC
-	.public _0221E9D0
-	.public BattlePartyMenu_PrintSpDefense
-	.public _0221EABC
-	.public _0221EAC0
-	.public _0221EAC4
-	.public _0221EAC8
-	.public _0221EACC
-	.public _0221EAD0
-	.public _0221EC54
-	.public _0221EC58
-	.public _0221EC5C
-	.public _0221EC60
-	.public _0221EC64
-	.public _0221EC68
-	.public _0221ECD8
-	.public _0221ECDC
-	.public _0221ECE0
-	.public _0221ECE4
-	.public _0221ED28
-	.public _0221ED2C
-	.public _0221ED8A
-	.public _0221EE00
-	.public _0221EE0C
-	.public _0221EE10
-	.public _0221EE14
-	.public _0221EE58
-	.public _0221EE5C
-	.public _0221EEBA
-	.public _0221EF30
-	.public _0221EF3C
-	.public _0221EF40
-	.public _0221EF44
-	.public _0221EF9C
-	.public _0221EFA0
-	.public _0221EFA4
-	.public _0221F004
-	.public _0221F008
-	.public _0221F024
-	.public _0221F032
-	.public _0221F040
-	.public _0221F04C
-	.public _0221F074
-	.public _0221F078
-	.public _0221F1A0
-	.public _0221F1A4
-	.public _0221F1A8
-	.public _0221F1AC
-	.public _0221F1D0
-	.public _0221F1DA
-	.public _0221F218
-	.public _0221F21C
-	.public _0221F236
-	.public _0221F23C
-	.public _0221F278
-	.public _0221F27C
-	.public _0221F280
-	.public _0221F3C0
-	.public _0221F3C4
-	.public _0221F3C8
-	.public _0221F3CC
-	.public _0221F494
-	.public _0221F498
-	.public _0221F49C
-	.public _0221F4A0
-	.public _0221F4C2
-	.public _0221F4FE
-	.public _0221F512
-	.public _0221F52A
-	.public _0221F540
-	.public _0221F54C
-	.public _0221F5AC
-	.public _0221F5CC
-	.public _0221F63E
-	.public _0221F654
-	.public _0221F6DC
-	.public _0221F6EC
-	.public _0221F704
-	.public _0221F714
-	.public _0221F778
-	.public _0221F794
-	.public _0221F79A
-	.public _0221F7A4
-	.public _0221F7A8
-	.public _0221F7AC
-	.public _0221F7B0
-	.public _0221F7B4
-	.public _0221F7B8
-	.public _0221F7BC
-	.public _0221F85A
-	.public _0221F89C
-	.public _0221F8F0
-	.public _0221F8F4
-	.public _0221F8F8
-	.public _0221F8FC
-	.public _0221FB10
-	.public _0221FB14
-	.public _0221FC6C
-	.public _0221FC70
-	.public _0221FC74
-	.public _0221FC78
-	.public _0221FCE8
-	.public _0221FD20
-	.public _0221FD98
-	.public _0221FD9C
-	.public _0221FDA0
-	.public _0221FEE0
-	.public _0221FF56
-	.public _0221FF64
-	.public _0221FF68
-	.public _0221FF6C
-	.public _0221FFD0
-	.public _02220008
-	.public _0222002A
-	.public _02220058
-	.public _0222005C
-	.public _02220060
-	.public _02220176
-	.public _022201A4
-	.public _022201B0
-	.public _022201B4
-	.public _022201B8
-	.public _022201BC
-	.public _022201E4
-	.public _0222021C
-	.public _02220220
-	.public _02220278
-	.public _0222028C
-	.public _022202A0
-	.public _022202B4
-	.public _022202C8
-	.public _022202DC
-	.public _022202F0
-	.public _0222033A
-	.public _02220396
-	.public _022203AE
-	.public _022203BE
-	.public _022203F6
-	.public _0222042C
-	.public _02220462
-	.public _02220498
-	.public _022204CE
-	.public _02220504
-	.public _0222053A
-	.public _0222056A
-	.public _02220574
-	.public _02220578
-	.public _022205D4
-	.public _022205D8
-	.public _022205DC
-	.public _02220660
-	.public _02220664
-	.public _022206E4
-	.public _0222070E
-	.public _02220734
-	.public _02220748
-	.public _0222074C
-	.public _022207F4
-	.public _022207F8
-	.public _022207FC
-	.public _0222083C
-	.public _02220868
-	.public _0222086C
-	.public _02220870
-	.public _02220874
-	.public _0222091C
-	.public _02220920
-	.public _02220924
-	.public _022209AC
-	.public _022209B0
-	.public _022209B4
-	.public _02220A10
-	.public _02220A14
-	.public _02220A18
-	.public _02220A1C
-	.public _02220A20
-	.public _02220A24
-	.public _02220A32
-	.public _02220A4C
-	.public _02220A64
-	.public _02220A84
-	.public _02220A88
-	.public _02220AB8
-	.public _02220AD8
-	.public _02220AE8
-	.public _02220B38
-	.public _02220B88
-	.public _02220B8C
-	.public _02220BB0
-	.public _02220BF4
-	.public _02220BF8
-	.public _02220BFC
-	.public _02220C00
-	.public _02220C04
-	.public _02220C26
-	.public _02220C2E
-	.public _02220C38
-	.public _02220C5A
-	.public _02220C68
-	.public _02220C8A
-	.public _02220C9E
-	.public _02220CA6
-	.public _02220CAE
-	.public _02220CB6
-	.public _02220CBE
-	.public _02220CC6
-	.public _02220CCE
-	.public _02220CD6
-	.public _02220CDE
-	.public _02220CE6
-	.public _02220CEC
-	.public _02220CF0
-	.public _02220D0C
-	.public _02220D5A
-	.public _02220D78
-	.public _02220D7C
-	.public _02220D80
-	.public _02220D84
-	.public _02220D88
-	.public _02220D8C
-	.public _02220DE4
-	.public _02220E74
-	.public _02220E78
-	.public _02220E7C
-	.public _02220F10
-	.public _02220F36
-	.public _02220F44
-	.public _02220F48
-	.public _02220F4C
-	.public _02220F50
-	.public _02220F54
-	.public _02221010
-	.public _02221014
-	.public _02221018
-	.public _02221080
-	.public _02221084
-	.public _0222111E
-	.public _02221132
-	.public _02221140
-	.public _02221144
-	.public _02221148
-	.public _022211B0
-	.public _022211B4
-	.public _0222122C
-	.public _02221290
-	.public _022212A8
-	.public _022212DC
-	.public _02221312
-	.public _02221314
-	.public _02221318
-	.public _0222131C
-	.public _02221320
-	.public _02221324
-	.public _0222133C
-	.public _0222137A
-	.public _022213B2
-	.public _022213B4
-	.public _022213B8
-	.public _022213BC
-	.public _022213C0
-	.public _022213C4
-	.public _022213DA
-	.public _022213E0
-	.public _02221402
-	.public _02221412
-	.public _02221424
-	.public _0222143C
-	.public _02221446
-	.public _0222144A
-	.public _0222144E
-	.public _02221452
-	.public _02221456
-	.public _02221470
-	.public _022214A2
-	.public _022214B4
-	.public _022214B8
-	.public _022214E2
-	.public _02221618
-	.public _0222161C
-	.public _02221620
-	.public _02221624
-	.public _02221628
-	.public _02221688
-	.public _0222168C
-	.public _02221690
-	.public _02221694
-	.public _022216C0
-	.public _022216C4
-	.public _022216C8
-	.public _022216E4
-	.public _022216F0
-	.public _0222170C
-	.public _02221718
-	.public _02221740
-	.public _02221754
-	.public _0222176E
-	.public _02221784
-	.public _02221794
-	.public _022217A8
-	.public _022217BA
-	.public _022217BC
-	.public _022217C0
-	.public _022217C4
-	.public _022217EC
-	.public _02221AB0
-	.public _02221AB4
-	.public _02221AB8
-	.public _02221ABC
-	.public _02221AC0
-	.public _02221AC4
-	.public _02221AC8
-	.public _02221ACC
-	.public _02221AD0
-	.public _02221AD4
-	.public _02221AD8
-	.public _02221ADC
-	.public _02221AE0
-	.public _02221AE4
-	.public _02221AE8
-	.public _02221AEC
-	.public _02221AF0
-	.public _02221AF4
-	.public _02221AF8
-	.public _02221AFC
-	.public _02221B00
-	.public _02221B04
-	.public _02221B08
-	.public _02221B0C
-	.public _02221B10
-	.public _02221B14
-	.public _02221B18
-	.public _02221BC4
-	.public _02221BC8
-	.public _02221BCC
-	.public _02221BE8
-	.public _02221C00
-	.public _02221C10
-	.public _02221C1C
-	.public _02221C30
-	.public _02221C74
-	.public _02221C86
-	.public _02221C92
-	.public _02221C9E
-	.public _02221CAC
-	.public _02221CB8
-	.public _02221CC4
-	.public _02221CD0
-	.public _02221CDE
-	.public _02221CEE
-	.public _02221CFA
-	.public _02221D06
-	.public _02221D0C
-	.public _02221D10
-	.public _02221D14
-	.public _02221D18
-	.public _02221D1C
-	.public _02221D20
-	.public _02221D24
-	.public _02221D28
-	.public _02221D6E
-	.public _02221D7A
-	.public _02221D82
-	.public _02221DB4
-	.public _02221DC4
-	.public _02221DE2
-	.public _02221DF4
-	.public _02221E0C
-	.public _02221E24
-	.public _02221E3C
-	.public _02221E48
-	.public _02221E5C
-	.public _02221E60
-	.public _02221E64
-	.public _02221E68
-	.public _02221ED8
-	.public _02221EDC
-	.public _02221EE0
-	.public _02221EE4
-	.public _02221F02
-	.public _02221F08
-	.public _02221F16
-	.public _02221F1A
-	.public _02221F1E
-	.public _02221F20
-	.public _02221F54
-	.public _02221F56
-	.public _02221F86
-	.public _02221F88
-	.public _02221F8C
-	.public _02221F90
-	.public _02221F94
-	.public _02221FAE
-	.public _02221FE6
-	.public _02222024
-	.public _02222056
-	.public _0222206E
-	.public _02222086
-	.public _0222209C
-	.public _022220A0
-	.public _022220A4
-	.public _022220A8
-	.public _022220D6
-	.public _022220F4
-	.public _022220F8
-	.public _0222211C
-	.public _02222150
-	.public _02222184
-	.public _022221BC
-	.public _022221C0
-	.public _022221C4
-	.public _022221C8
-	.public _022221D6
-	.public _022221E2
-	.public _022221F6
-	.public _022221FC
-	.public _02222218
-	.public _0222222C
-	.public _0222223E
-	.public _02222260
-	.public _0222226E
-	.public _022222B0
-	.public _022222CA
-	.public _022222EC
-	.public _02222304
-	.public _0222231E
-	.public _02222340
-	.public _02222358
-	.public _0222235E
-	.public _02222386
-	.public _02222398
-	.public _022223BC
-	.public _022223CC
-	.public _022223EA
-	.public _022223FC
-	.public _02222408
-	.public _0222240E
-	.public _02222436
-	.public _02222448
-	.public _02222460
-	.public _022224C0
-	.public _022224F0
-	.public _0222251E
-	.public _02222520
-	.public _02222546
-	.public _02222560
-	.public _0222256C
-	.public _02222586
-	.public _02222598
-	.public _0222259A
-	.public _022225C4
-	.public BattleBagMenu_Create
-	.public _02222614
-	.public _02222662
-	.public _02222664
-	.public _02222668
-	.public _0222266C
-	.public _02222688
-	.public _022226A6
-	.public _022226B2
-	.public _022226BE
-	.public _022226CA
-	.public _022226D6
-	.public _022226E2
-	.public _022226EE
-	.public _022226FA
-	.public _02222706
-	.public _02222712
-	.public _0222271E
-	.public _0222272A
-	.public _02222736
-	.public _02222742
-	.public _0222274E
-	.public _02222756
-	.public _02222766
-	.public _02222768
-	.public _022227F0
-	.public _0222282A
-	.public _02222830
-	.public _02222834
-	.public _02222838
-	.public _0222283C
-	.public _02222852
-	.public _02222878
-	.public _0222287E
-	.public _0222288E
-	.public _0222289A
-	.public _022228BA
-	.public _022228EA
-	.public _02222908
-	.public _0222290C
-	.public _02222910
-	.public _02222914
-	.public _02222956
-	.public _02222974
-	.public _02222976
-	.public _02222988
-	.public _0222298C
-	.public _02222992
-	.public _022229A2
-	.public _022229B4
-	.public _022229EA
-	.public _02222A04
-	.public _02222A32
-	.public _02222A60
-	.public _02222A64
-	.public _02222A68
-	.public _02222A6C
-	.public _02222A70
-	.public _02222A74
-	.public _02222AAE
-	.public _02222ABC
-	.public _02222AC2
-	.public _02222AE8
-	.public _02222AEC
-	.public _02222B18
-	.public _02222B1E
-	.public _02222B28
-	.public _02222B5E
-	.public _02222B78
-	.public _02222B7C
-	.public _02222B80
-	.public _02222B84
-	.public _02222B88
-	.public _02222B9C
-	.public _02222C0E
-	.public _02222C34
-	.public _02222C56
-	.public _02222C9C
-	.public _02222CB6
-	.public _02222CDE
-	.public _02222D02
-	.public _02222D26
-	.public _02222D66
-	.public _02222D6C
-	.public _02222D70
-	.public _02222D74
-	.public _02222DBE
-	.public _02222DDA
-	.public _02222DE0
-	.public _02222DE4
-	.public _02222DE8
-	.public _02222DFA
-	.public _02222E00
-	.public _02222E28
-	.public _02222E40
-	.public _02222E82
-	.public _02222EAC
-	.public _02222EC0
-	.public _02222ED6
-	.public _02222EE0
-	.public _02222EEC
-	.public _02222EF6
-	.public _02222F2E
-	.public _02222F38
-	.public _02222F48
-	.public _02222F88
-	.public _02222F92
-	.public _02222FA2
-	.public _02222FE2
-	.public _02222FEA
-	.public _02222FF0
-	.public _02222FF4
-	.public _02222FF8
-	.public _02222FFC
-	.public _022230BC
-	.public _022230C0
-	.public _022230C4
-	.public _022230C8
-	.public _022231E4
-	.public _0222325A
-	.public _02223274
-	.public _02223290
-	.public _022232F6
-	.public _022232FC
-	.public _02223364
-	.public _02223370
-	.public _022233D4
-	.public _022233D8
-	.public _022233EE
-	.public _022233F8
-	.public _02223402
-	.public _0222340A
-	.public _02223426
-	.public _02223446
-	.public _02223448
-	.public _0222344C
-	.public _02223450
-	.public _02223460
-	.public _02223490
-	.public _02223496
-	.public _0222349C
-	.public _02223508
-	.public _022235CC
-	.public _022235D0
-	.public _02223666
-	.public _02223670
-	.public _02223674
-	.public _022236FA
-	.public _02223704
-	.public _02223708
-	.public _02223734
-	.public _02223736
-	.public _02223770
-	.public _02223774
-	.public _02223778
-	.public _0222379E
-	.public _022238EC
-	.public _022238F0
-	.public _0222391C
-	.public _02223924
-	.public _02223950
-	.public _0222397C
-	.public _02223994
-	.public _022239A8
-	.public _022239AC
-	.public _022239B0
-	.public _02223A34
-	.public _02223A38
-	.public _02223A98
-	.public _02223A9C
-	.public _02223AAC
-	.public _02223B14
-	.public _02223B18
-	.public _02223B1C
-	.public _02223B44
-	.public _02223B88
-	.public _02223BA2
-	.public _02223BBC
-	.public _02223BE6
-	.public _02223BF0
-	.public _02223BFE
-	.public _02223C0A
-	.public _02223C3A
-	.public _02223C6C
-	.public _02223C74
-	.public _02223C7C
-	.public _02223C8A
-	.public _02223C9A
-	.public _02223CA6
-	.public _02223CBC
-	.public _02223CC8
-	.public _02223CCC
-	.public _02223CD0
-	.public _02223CFE
-	.public _02223D00
-	.public _02223D04
-	.public _02223D7C
-	.public _02223D9E
-	.public _02223E38
-	.public _02223F00
-	.public _02223F04
-	.public _02223F08
-	.public _02223F0C
-	.public _02223F10
-	.public _02223F20
-	.public _02223F4A
-	.public _02223FA2
-	.public _02223FC0
-	.public _02223FC8
-	.public _02223FD0
-	.public _02224006
-	.public _02224008
-	.public _02224016
-	.public _0222404E
-	.public _0222405C
-	.public _02224060
-	.public _022240A0
-	.public _022240A4
-	.public _02224104
-	.public _02224130
-	.public _02224152
-	.public _0222415E
-	.public _02224174
-	.public _02224178
-	.public _022241F0
-	.public _02224218
-	.public _02224242
-	.public _0222424C
-	.public _02224250
-	.public _02224510
-	.public _02224514
-	.public _02224518
-	.public _0222451C
-	.public _02224520
-	.public _02224524
-	.public _02224528
-	.public _0222452C
-	.public _02224530
-	.public _02224534
-	.public _02224538
-	.public _0222453C
-	.public _02224540
-	.public _02224544
-	.public _02224548
-	.public _0222454C
-	.public _02224550
-	.public _02224554
-	.public _02224558
-	.public _0222455C
-	.public _02224560
-	.public _02224564
-	.public _02224568
-	.public _0222456C
-	.public _02224570
-	.public _02224574
-	.public _02224578
-	.public _0222457C
-	.public _02224580
-	.public _02224584
-	.public _02224588
-	.public _022245A4
-	.public _022245BC
-	.public _022245CC
-	.public _022245D8
-	.public _022245EC
-	.public _0222460E
-	.public _0222461E
-	.public _0222462C
-	.public _02224638
-	.public _02224644
-	.public _02224650
-	.public _0222465C
-	.public _0222466A
-	.public _02224670
-	.public _02224674
-	.public _02224678
-	.public _0222467C
-	.public _02224680
-	.public _0222468C
-	.public _0222469C
-	.public _022246BE
-	.public _022246C2
-	.public _022246C6
-	.public _022246CA
-	.public _022246D6
-	.public _022246E6
-	.public _022246EA
-	.public _022246F0
-	.public _02224704
-	.public _02224712
-	.public _02224720
-	.public _0222472C
-	.public _0222472E
-	.public _02224738
-	.public _02224754
-	.public _02224758
-	.public _0222475C
-	.public _02224760
-	.public _02224764
-	.public _022247AA
-	.public _022247C4
-	.public _022247D4
-	.public _022247D8
-	.public _022247DC
-	.public _022247E0
-	.public _02224848
-	.public _0222484C
-	.public _02224850
-	.public _02224854
-	.public _02224876
-	.public _0222487C
-	.public _0222488C
-	.public _02224894
-	.public _0222489A
-	.public _0222489C
-	.public _022248C8
-	.public _022248CC
-	.public _022248EC
-	.public _022248F6
-	.public _02224910
-	.public _0222491E
-	.public _0222492A
-	.public _02224934
-	.public _02224970
-	.public _02224994
-	.public _022249CC
-	.public _02224A04
-	.public _02224A44
-	.public _02224A48
-	.public _02224A4C
-	.public _02224A62
-	.public _02224AA6
-	.public _02224AB2
-	.public _02224AC0
-	.public _02224AC4
-	.public _02224AE2
-	.public _02224AF2
-	.public _02224B20
-	.public _02224B38
-	.public _02224B46
-	.public _02224B60
-	.public BattleDpadCursor_New
-	.public _02224B72
-	.public BattleDpadCursor_Free
-	.public _02224B80
-	.public BattleDpadCursor_GetBattleCursor
-	.public BattleDpadCursor_GetPosition
-	.public BattleDpadCursor_IsActive
-	.public BattleDpadCursor_SetActive
-	.public BattleDpadCursor_SetBattleCursor
-	.public BattleDpadCursor_SetPosition
-	.public _02224BBC
-	.public BattleDpadCursor_ResetPosition
-	.public BattleDpadCursor_SetBoxes
-	.public _02224BF6
-	.public BattleDpadCursor_SetEnabledMask
-	.public BattleDpadCursor_TryActivate
-	.public _02224C0C
-	.public _02224C38
-	.public _02224C40
-	.public _02224C44
-	.public BattleDpadCursor_HasReturnLink
-	.public _02224C58
-	.public _02224C60
-	.public _02224C6C
-	.public _02224C78
-	.public _02224C84
-	.public _02224C90
-	.public BattleDpadCursor_HandleInput
 	.public sBattlePartyWindowTemplates
 	.public sBattlePartyMoveNameMsgIds
 	.public sBattlePartyMonNameMsgIds
@@ -1375,50 +125,49 @@
 	.public sBattleBagButtonRectsHeight
 	.public sBattleBagButtonWindowLists
 
-.text
 	.rodata
 
-sBattlePartyWindowTemplates: ; 0x02224FD0
+sBattlePartyWindowTemplates:
 	.byte 0x04, 0x02, 0x15, 0x16, 0x02, 0x0F, 0x1F, 0x00, 0x04, 0x02, 0x13, 0x1B, 0x04, 0x0F, 0x1F, 0x00
 
-sBattlePartyMoveNameMsgIds: ; 0x02224FE0
+sBattlePartyMoveNameMsgIds:
 	.byte 0x3D, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x43, 0x00, 0x00, 0x00, 0x46, 0x00, 0x00, 0x00
 	.byte 0x49, 0x00, 0x00, 0x00
 
-sBattlePartyMonNameMsgIds: ; 0x02224FF4
+sBattlePartyMonNameMsgIds:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 
-sBattlePartyMonMenuWindows: ; 0x0222500C
+sBattlePartyMonMenuWindows:
 	.byte 0x05, 0x0A, 0x04, 0x0C
 	.byte 0x03, 0x09, 0x01, 0x00, 0x05, 0x0B, 0x0C, 0x0A, 0x03, 0x09, 0x25, 0x00, 0x05, 0x01, 0x14, 0x0B
 	.byte 0x03, 0x09, 0x43, 0x00, 0x05, 0x0E, 0x14, 0x0B, 0x03, 0x09, 0x64, 0x00
 
-sBattlePartyRestorePPWindows: ; 0x0222502C
+sBattlePartyRestorePPWindows:
 	.byte 0x04, 0x05, 0x01, 0x09
 	.byte 0x02, 0x0D, 0x8B, 0x00, 0x04, 0x01, 0x06, 0x0E, 0x05, 0x09, 0x9D, 0x00, 0x04, 0x11, 0x06, 0x0E
 	.byte 0x05, 0x09, 0xE3, 0x00, 0x04, 0x01, 0x0C, 0x0E, 0x05, 0x09, 0x29, 0x01, 0x04, 0x11, 0x0C, 0x0E
 	.byte 0x05, 0x09, 0x6F, 0x01
 
-sBattlePartyLearnMoveWindows: ; 0x02225054
+sBattlePartyLearnMoveWindows:
 	.byte 0x04, 0x05, 0x01, 0x09, 0x02, 0x0D, 0x85, 0x00, 0x04, 0x01, 0x06, 0x0E
 	.byte 0x05, 0x09, 0x97, 0x00, 0x04, 0x11, 0x06, 0x0E, 0x05, 0x09, 0xDD, 0x00, 0x04, 0x01, 0x0C, 0x0E
 	.byte 0x05, 0x09, 0x23, 0x01, 0x04, 0x11, 0x0C, 0x0E, 0x05, 0x09, 0x69, 0x01, 0x04, 0x09, 0x12, 0x0E
 	.byte 0x05, 0x09, 0xAF, 0x01
 
-sBattlePartyPartyListWindows: ; 0x02225084
+sBattlePartyPartyListWindows:
 	.byte 0x05, 0x00, 0x00, 0x0F, 0x05, 0x09, 0x85, 0x00, 0x05, 0x10, 0x01, 0x0F
 	.byte 0x05, 0x09, 0xD0, 0x00, 0x05, 0x00, 0x06, 0x0F, 0x05, 0x09, 0x1B, 0x01, 0x05, 0x10, 0x07, 0x0F
 	.byte 0x05, 0x09, 0x66, 0x01, 0x05, 0x00, 0x0C, 0x0F, 0x05, 0x09, 0xB1, 0x01, 0x05, 0x10, 0x0D, 0x0F
 	.byte 0x05, 0x09, 0xFC, 0x01
 
-sBattlePartyContestForgetMoveWindows: ; 0x022250B4
+sBattlePartyContestForgetMoveWindows:
 	.byte 0x05, 0x05, 0x01, 0x09, 0x02, 0x0D, 0x01, 0x00, 0x05, 0x04, 0x08, 0x0B
 	.byte 0x02, 0x0D, 0x13, 0x00, 0x05, 0x14, 0x08, 0x02, 0x02, 0x0D, 0x29, 0x00, 0x05, 0x17, 0x08, 0x05
 	.byte 0x02, 0x0D, 0x2D, 0x00, 0x05, 0x02, 0x0B, 0x0C, 0x02, 0x0D, 0x45, 0x01, 0x05, 0x10, 0x0B, 0x0F
 	.byte 0x06, 0x0D, 0x5D, 0x01, 0x05, 0x07, 0x14, 0x0C, 0x03, 0x09, 0x37, 0x00
 
-sBattlePartyCheckMovesWindows: ; 0x022250EC
+sBattlePartyCheckMovesWindows:
 	.byte 0x05, 0x05, 0x01, 0x09
 	.byte 0x02, 0x0D, 0x25, 0x01, 0x05, 0x01, 0x06, 0x0E, 0x05, 0x09, 0x49, 0x01, 0x05, 0x11, 0x06, 0x0E
 	.byte 0x05, 0x09, 0x8F, 0x01, 0x05, 0x01, 0x0C, 0x0E, 0x05, 0x09, 0xD5, 0x01, 0x05, 0x11, 0x0C, 0x0E
@@ -1427,7 +176,7 @@ sBattlePartyCheckMovesWindows: ; 0x022250EC
 	.byte 0x05, 0x09, 0xA7, 0x02, 0x05, 0x01, 0x0C, 0x0E, 0x05, 0x09, 0xED, 0x02, 0x05, 0x11, 0x0C, 0x0E
 	.byte 0x05, 0x09, 0x33, 0x03
 
-sBattlePartyForgetMoveWindows: ; 0x02225144
+sBattlePartyForgetMoveWindows:
 	.byte 0x05, 0x05, 0x01, 0x09, 0x02, 0x0D, 0x01, 0x00, 0x05, 0x04, 0x05, 0x0B
 	.byte 0x02, 0x0D, 0x13, 0x00, 0x05, 0x14, 0x05, 0x02, 0x02, 0x0D, 0x29, 0x00, 0x05, 0x17, 0x05, 0x05
 	.byte 0x02, 0x0D, 0x2D, 0x00, 0x05, 0x01, 0x10, 0x08, 0x02, 0x0D, 0x5B, 0x00, 0x05, 0x01, 0x0D, 0x08
@@ -1436,7 +185,7 @@ sBattlePartyForgetMoveWindows: ; 0x02225144
 	.byte 0x02, 0x0D, 0x1D, 0x01, 0x05, 0x06, 0x0A, 0x08, 0x02, 0x0D, 0x35, 0x01, 0x05, 0x07, 0x14, 0x0C
 	.byte 0x03, 0x09, 0x37, 0x00
 
-sBattlePartyMoveDetailWindows: ; 0x022251A4
+sBattlePartyMoveDetailWindows:
 	.byte 0x04, 0x04, 0x05, 0x0B, 0x02, 0x0D, 0x9D, 0x00, 0x04, 0x17, 0x05, 0x05
 	.byte 0x02, 0x0D, 0xB7, 0x00, 0x04, 0x0A, 0x10, 0x03, 0x02, 0x0D, 0xE1, 0x00, 0x04, 0x0A, 0x0D, 0x03
 	.byte 0x02, 0x0D, 0xE7, 0x00, 0x04, 0x10, 0x08, 0x0F, 0x0A, 0x0D, 0xED, 0x00, 0x04, 0x06, 0x0A, 0x08
@@ -1447,7 +196,7 @@ sBattlePartyMoveDetailWindows: ; 0x022251A4
 	.byte 0x02, 0x0D, 0xCB, 0x01, 0x04, 0x0A, 0x0D, 0x03, 0x02, 0x0D, 0xD1, 0x01, 0x04, 0x10, 0x08, 0x0F
 	.byte 0x0A, 0x0D, 0xD7, 0x01, 0x04, 0x06, 0x0A, 0x08, 0x02, 0x0D, 0x6D, 0x02
 
-sBattlePartySummaryWindows: ; 0x0222522C
+sBattlePartySummaryWindows:
 	.byte 0x05, 0x05, 0x01, 0x09
 	.byte 0x02, 0x0D, 0x25, 0x01, 0x05, 0x01, 0x09, 0x0B, 0x02, 0x0D, 0x49, 0x01, 0x05, 0x01, 0x0B, 0x12
 	.byte 0x04, 0x0D, 0x5F, 0x01, 0x05, 0x04, 0x10, 0x0C, 0x02, 0x0D, 0xA7, 0x01, 0x05, 0x18, 0x04, 0x07
@@ -1475,23 +224,23 @@ sBattlePartySummaryWindows: ; 0x0222522C
 	.byte 0x30, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x58, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00
 
-sBattlePartyForgetMoveTypeIconPos: ; 0x022253B4
+sBattlePartyForgetMoveTypeIconPos:
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-sBattlePartyLearnMoveTypeIconPos: ; 0x022253C4
+sBattlePartyLearnMoveTypeIconPos:
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-sBattlePartyCheckMovesTypeIconPos: ; 0x022253D4
+sBattlePartyCheckMovesTypeIconPos:
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-sBattlePartyMoveDetailTypeIconPos: ; 0x022253E4
+sBattlePartyMoveDetailTypeIconPos:
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-sBattlePartySummaryTypeIconPos: ; 0x022253F4
+sBattlePartySummaryTypeIconPos:
 	.byte 0x82, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
@@ -1499,7 +248,7 @@ sBattlePartyPage7CursorBoxes:
 	.byte 0x08, 0xA0, 0xC8, 0xB8, 0x01, 0x00, 0x00, 0x02, 0xC0, 0x08, 0xF8, 0x18
 	.byte 0x01, 0x82, 0x00, 0x01, 0xE0, 0xA0, 0xF8, 0xB8, 0x01, 0x02, 0x00, 0x02
 
-sBattlePartySpriteCapacities: ; 0x0222541C
+sBattlePartySpriteCapacities:
 	.byte 0x12, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -1509,7 +258,7 @@ sBattlePartyPage2CursorBoxes:
 	.byte 0x01, 0x01, 0x00, 0x02, 0x68, 0xA0, 0xC0, 0xB8, 0x02, 0x02, 0x01, 0x03, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x03, 0x03, 0x02, 0x03
 
-sBattlePartyCheckMovesMoveIconPos: ; 0x02225454
+sBattlePartyCheckMovesMoveIconPos:
 	.byte 0x18, 0x00, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00
 	.byte 0x50, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00
@@ -1524,7 +273,7 @@ sBattlePartyPage4CursorBoxes:
 	.byte 0x01, 0x03, 0x00, 0x04, 0x5C, 0xAD, 0x7C, 0xB5, 0x00, 0x02, 0x02, 0x03, 0x84, 0xAD, 0xA4, 0xB5
 	.byte 0x01, 0x03, 0x02, 0x04, 0xE0, 0xA0, 0xF8, 0xB8, 0x04, 0x04, 0x83, 0x04
 
-sBattlePartyPageCursorBoxes: ; 0x022254BC
+sBattlePartyPageCursorBoxes:
 	.word sBattlePartyPage0CursorBoxes
 	.word sBattlePartyPage1CursorBoxes
 	.word sBattlePartyPage2CursorBoxes
@@ -1541,19 +290,19 @@ sBattlePartyPage5CursorBoxes:
 	.byte 0x01, 0x03, 0x00, 0x01, 0x08, 0x68, 0x78, 0x88, 0x00, 0x04, 0x02, 0x03, 0x88, 0x68, 0xF8, 0x88
 	.byte 0x01, 0x04, 0x02, 0x03, 0xE0, 0xA0, 0xF8, 0xB8, 0x83, 0x04, 0x04, 0x04
 
-sBattlePartyLearnMoveMoveIconPos: ; 0x0222550C
+sBattlePartyLearnMoveMoveIconPos:
 	.byte 0x18, 0x00, 0x00, 0x00
 	.byte 0x50, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00, 0x50, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x98, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x58, 0x00, 0x00, 0x00
 	.byte 0xB0, 0x00, 0x00, 0x00
 
-sBattlePartyListIconPos: ; 0x02225534
+sBattlePartyListIconPos:
 	.byte 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00
 	.byte 0x18, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x70, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00
 	.byte 0x78, 0x00, 0x00, 0x00
 
-sBattlePartyListStatusIconPos: ; 0x02225564
+sBattlePartyListStatusIconPos:
 	.byte 0x1C, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x9C, 0x00, 0x00, 0x00
 	.byte 0x30, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x58, 0x00, 0x00, 0x00, 0x9C, 0x00, 0x00, 0x00
 	.byte 0x60, 0x00, 0x00, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x88, 0x00, 0x00, 0x00, 0x9C, 0x00, 0x00, 0x00
@@ -1579,19 +328,19 @@ sBattlePartyPage3CursorBoxes:
 	.byte 0x02, 0x05, 0x04, 0x06, 0x68, 0xA0, 0xC0, 0xB8, 0x03, 0x06, 0x05, 0x07, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x03, 0x07, 0x06, 0x07
 
-sBattlePartySpriteTemplates: ; 0x02225644
+sBattlePartySpriteTemplates:
 	.byte 0x16, 0xB0, 0x00, 0x00
 
-sBattlePartySpriteTemplatesPltt: ; 0x02225648
+sBattlePartySpriteTemplatesPltt:
 	.byte 0x0A, 0xB0, 0x00, 0x00
 
-sBattlePartySpriteTemplatesCell: ; 0x0222564C
+sBattlePartySpriteTemplatesCell:
 	.byte 0x0A, 0xB0, 0x00, 0x00
 
-sBattlePartySpriteTemplatesAnim: ; 0x02225650
+sBattlePartySpriteTemplatesAnim:
 	.byte 0x0A, 0xB0, 0x00, 0x00
 
-sBattlePartySpriteTemplatesPriority: ; 0x02225654
+sBattlePartySpriteTemplatesPriority:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x16, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00
 	.byte 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0xB0, 0x00, 0x00
 	.byte 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x0A, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1710,7 +459,7 @@ sBattlePartyButton7Windows:
 sBattlePartyButton14Windows:
 	.byte 0x07, 0x01, 0xFF, 0x00
 
-sBattlePartyButtonScrollAmounts: ; 0x022259AC
+sBattlePartyButtonScrollAmounts:
 	.byte 0x02, 0x04, 0x02, 0x00
 
 sBattlePartyButton15Windows:
@@ -1722,16 +471,16 @@ sBattlePartyButton16Windows:
 sBattlePartyButton17Windows:
 	.byte 0x0A, 0x04, 0xFF, 0x00
 
-sBattlePartySlotButtonScrollAmounts: ; 0x022259BC
+sBattlePartySlotButtonScrollAmounts:
 	.byte 0x02, 0x03, 0x01, 0x00
 
-sBattlePartyButtonSpriteOffsets: ; 0x022259C0
+sBattlePartyButtonSpriteOffsets:
 	.byte 0x02, 0x00, 0xFC, 0xFF, 0x02, 0x00
 
-sBattlePartySlotButtonSpriteOffsets: ; 0x022259C6
+sBattlePartySlotButtonSpriteOffsets:
 	.byte 0x02, 0x00, 0xFD, 0xFF, 0x01, 0x00
 
-sBattlePartyButtonWindowLists: ; 0x022259CC
+sBattlePartyButtonWindowLists:
 	.word sBattlePartyButton0Windows
 	.word sBattlePartyButton1Windows
 	.word sBattlePartyButton2Windows
@@ -1767,16 +516,16 @@ sBattlePartyButtonWindowLists: ; 0x022259CC
 	.word 0
 	.word 0
 
-sBattlePartyButtonRects: ; 0x02225A54
+sBattlePartyButtonRects:
 	.byte 0x00
 
-sBattlePartyButtonRectsY: ; 0x02225A55
+sBattlePartyButtonRectsY:
 	.byte 0x00
 
-sBattlePartyButtonRectsWidth: ; 0x02225A56
+sBattlePartyButtonRectsWidth:
 	.byte 0x10
 
-sBattlePartyButtonRectsHeight: ; 0x02225A57
+sBattlePartyButtonRectsHeight:
 	.byte 0x06, 0x10, 0x01, 0x10, 0x06, 0x00, 0x06, 0x10, 0x06
 	.byte 0x10, 0x07, 0x10, 0x06, 0x00, 0x0C, 0x10, 0x06, 0x10, 0x0D, 0x10, 0x06, 0x1B, 0x13, 0x05, 0x05
 	.byte 0x01, 0x01, 0x1E, 0x11, 0x00, 0x13, 0x0D, 0x05, 0x0C, 0x13, 0x0D, 0x05, 0x0D, 0x13, 0x0D, 0x05
@@ -1787,59 +536,59 @@ sBattlePartyButtonRectsHeight: ; 0x02225A57
 	.byte 0x08, 0x12, 0x10, 0x06, 0x00, 0x13, 0x1A, 0x05, 0x00, 0x13, 0x1A, 0x05, 0x0B, 0x13, 0x05, 0x02
 	.byte 0x10, 0x13, 0x05, 0x02, 0x0B, 0x15, 0x05, 0x02, 0x10, 0x15, 0x05, 0x02
 
-sBattleBagUseItemHitboxes: ; 0x02225ADC
+sBattleBagUseItemHitboxes:
 	.byte 0x98, 0xBF, 0x00, 0xCF
 	.byte 0x98, 0xBF, 0xD8, 0xFF, 0xFF, 0x00, 0x00, 0x00
 
-sBattleBagGraphicsModes: ; 0x02225AE8
+sBattleBagGraphicsModes:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-sBattleBagBgTemplateSub0: ; 0x02225AF8
+sBattleBagBgTemplateSub0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sBattleBagBgTemplateSub1: ; 0x02225B14
+sBattleBagBgTemplateSub1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sBattleBagBgTemplateSub2: ; 0x02225B30
+sBattleBagBgTemplateSub2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x1A, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sBattleBagPocketMenuHitboxes: ; 0x02225B4C
+sBattleBagPocketMenuHitboxes:
 	.byte 0x08, 0x4F, 0x00, 0x7F
 	.byte 0x50, 0x97, 0x00, 0x7F, 0x08, 0x4F, 0x80, 0xFF, 0x50, 0x97, 0x80, 0xFF, 0x98, 0xBF, 0x00, 0xCF
 	.byte 0x98, 0xBF, 0xD8, 0xFF, 0xFF, 0x00, 0x00, 0x00
 
-sBattleBagItemListHitboxes: ; 0x02225B68
+sBattleBagItemListHitboxes:
 	.byte 0x08, 0x37, 0x00, 0x7F, 0x08, 0x37, 0x80, 0xFF
 	.byte 0x38, 0x67, 0x00, 0x7F, 0x38, 0x67, 0x80, 0xFF, 0x68, 0x97, 0x00, 0x7F, 0x68, 0x97, 0x80, 0xFF
 	.byte 0x98, 0xBF, 0xD8, 0xFF, 0x98, 0xBF, 0x00, 0x27, 0x98, 0xBF, 0x28, 0x4F, 0xFF, 0x00, 0x00, 0x00
 
-sBattleBagMessageWindowTemplate: ; 0x02225B90
+sBattleBagMessageWindowTemplate:
 	.byte 0x04, 0x02, 0x13, 0x1B, 0x04, 0x0F, 0x76, 0x03
 
-sBattleBagUseItemWindows: ; 0x02225B98
+sBattleBagUseItemWindows:
 	.byte 0x05, 0x07, 0x04, 0x0C, 0x02, 0x04, 0xC7, 0x02
 	.byte 0x05, 0x14, 0x04, 0x04, 0x02, 0x04, 0xDF, 0x02, 0x05, 0x02, 0x09, 0x1C, 0x06, 0x04, 0xE7, 0x02
 	.byte 0x05, 0x08, 0x14, 0x0A, 0x03, 0x00, 0x8F, 0x03
 
-sBattleBagPocketMenuWindows: ; 0x02225BB8
+sBattleBagPocketMenuWindows:
 	.byte 0x04, 0x02, 0x04, 0x0C, 0x05, 0x00, 0xCE, 0x02
 	.byte 0x04, 0x02, 0x0D, 0x0C, 0x05, 0x00, 0x0A, 0x03, 0x04, 0x12, 0x05, 0x0C, 0x03, 0x00, 0x86, 0x02
 	.byte 0x04, 0x12, 0x0E, 0x0C, 0x03, 0x00, 0xAA, 0x02, 0x04, 0x05, 0x14, 0x14, 0x03, 0x00, 0x4A, 0x02
 
-sBattleBagItemEntryMsgIds: ; 0x02225BE0
+sBattleBagItemEntryMsgIds:
 	.byte 0x09, 0x00, 0x00, 0x00
 
-sBattleBagItemEntryQuantityMsgIds: ; 0x02225BE4
+sBattleBagItemEntryQuantityMsgIds:
 	.byte 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
 	.byte 0x0D, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x11, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00
 
-sBattleBagItemListWindows: ; 0x02225C10
+sBattleBagItemListWindows:
 	.byte 0x05, 0x01, 0x01, 0x0E, 0x03, 0x00, 0x01, 0x00, 0x05, 0x08, 0x04, 0x04, 0x03, 0x04, 0x2B, 0x00
 	.byte 0x05, 0x11, 0x01, 0x0E, 0x03, 0x00, 0x37, 0x00, 0x05, 0x18, 0x04, 0x04, 0x03, 0x04, 0x61, 0x00
 	.byte 0x05, 0x01, 0x07, 0x0E, 0x03, 0x00, 0x6D, 0x00, 0x05, 0x08, 0x0A, 0x04, 0x03, 0x04, 0x97, 0x00
@@ -1861,7 +610,7 @@ ov08_02225CE8:
 	.byte 0x28, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00
 	.byte 0x18, 0x00, 0x00, 0x00, 0xB2, 0x00, 0x00, 0x00
 
-sBattleBagPageCursorBoxes: ; 0x02225CF8
+sBattleBagPageCursorBoxes:
 	.word sBattleBagPage0CursorBoxes
 	.word sBattleBagPage1CursorBoxes
 	.word sBattleBagPage2CursorBoxes
@@ -1869,14 +618,14 @@ sBattleBagPageCursorBoxes: ; 0x02225CF8
 sBattleBagPage2CursorBoxes:
 	.byte 0x08, 0xA0, 0xC8, 0xB8, 0x00, 0x00, 0x00, 0x01, 0xE0, 0xA0, 0xF8, 0xB8, 0x01, 0x01, 0x00, 0x01
 
-sBattleBagSpriteCapacities: ; 0x02225D14
+sBattleBagSpriteCapacities:
 	.byte 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sBattleBagTutorialFingerPos: ; 0x02225D2C
+sBattleBagTutorialFingerPos:
 	.byte 0xC0, 0x00, 0x00, 0x00
 
-sBattleBagTutorialFingerPosY: ; 0x02225D30
+sBattleBagTutorialFingerPosY:
 	.byte 0x18, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x68, 0x00, 0x00, 0x00
 	.byte 0x98, 0x00, 0x00, 0x00
 
@@ -1886,7 +635,7 @@ sBattleBagPage0CursorBoxes:
 	.byte 0x02, 0x05, 0x01, 0x03, 0x08, 0xA0, 0xC8, 0xB8, 0x01, 0x04, 0x04, 0x05, 0xE0, 0xA0, 0xF8, 0xB8
 	.byte 0x83, 0x05, 0x04, 0x05
 
-sBattleBagItemListIconPos: ; 0x02225D74
+sBattleBagItemListIconPos:
 	.byte 0x2C, 0x00, 0x00, 0x00, 0x2D, 0x00, 0x00, 0x00, 0xAC, 0x00, 0x00, 0x00
 	.byte 0x2D, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x5D, 0x00, 0x00, 0x00, 0xAC, 0x00, 0x00, 0x00
 	.byte 0x5D, 0x00, 0x00, 0x00, 0x2C, 0x00, 0x00, 0x00, 0x8D, 0x00, 0x00, 0x00, 0xAC, 0x00, 0x00, 0x00
@@ -1898,19 +647,19 @@ sBattleBagPage1CursorBoxes:
 	.byte 0x01, 0x05, 0x02, 0x03, 0x08, 0x70, 0x78, 0x90, 0x02, 0x06, 0x04, 0x05, 0x88, 0x70, 0xF8, 0x90
 	.byte 0x03, 0x06, 0x04, 0x05, 0xE0, 0xA0, 0xF8, 0xB8, 0x85, 0x06, 0x06, 0x06
 
-sBattleBagSpriteTemplates: ; 0x02225DDC
+sBattleBagSpriteTemplates:
 	.byte 0xB7, 0xB4, 0x00, 0x00
 
-sBattleBagSpriteTemplatesPltt: ; 0x02225DE0
+sBattleBagSpriteTemplatesPltt:
 	.byte 0xB7, 0xB4, 0x00, 0x00
 
-sBattleBagSpriteTemplatesCell: ; 0x02225DE4
+sBattleBagSpriteTemplatesCell:
 	.byte 0xB7, 0xB4, 0x00, 0x00
 
-sBattleBagSpriteTemplatesAnim: ; 0x02225DE8
+sBattleBagSpriteTemplatesAnim:
 	.byte 0xB7, 0xB4, 0x00, 0x00
 
-sBattleBagSpriteTemplatesPriority: ; 0x02225DEC
+sBattleBagSpriteTemplatesPriority:
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0xB8, 0xB4, 0x00, 0x00, 0xB8, 0xB4, 0x00, 0x00, 0xB7, 0xB4, 0x00, 0x00, 0xB7, 0xB4, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0xB9, 0xB4, 0x00, 0x00, 0xB9, 0xB4, 0x00, 0x00, 0xB7, 0xB4, 0x00, 0x00
@@ -1974,23 +723,23 @@ sBattleBagButton17Windows:
 sBattleBagButton21Windows:
 	.byte 0x14, 0x15, 0xFF, 0x00
 
-sBattleBagButtonRects: ; 0x02225E9C
+sBattleBagButtonRects:
 	.byte 0x00
 
-sBattleBagButtonRectsY: ; 0x02225E9D
+sBattleBagButtonRectsY:
 	.byte 0x01
 
-sBattleBagButtonRectsWidth: ; 0x02225E9E
+sBattleBagButtonRectsWidth:
 	.byte 0x10
 
-sBattleBagButtonRectsHeight: ; 0x02225E9F
+sBattleBagButtonRectsHeight:
 	.byte 0x09
 	.byte 0x00, 0x0A, 0x10, 0x09, 0x10, 0x01, 0x10, 0x09, 0x10, 0x0A, 0x10, 0x09, 0x00, 0x13, 0x1A, 0x05
 	.byte 0x1B, 0x13, 0x05, 0x05, 0x20, 0x01, 0x10, 0x06, 0x30, 0x01, 0x10, 0x06, 0x20, 0x07, 0x10, 0x06
 	.byte 0x30, 0x07, 0x10, 0x06, 0x20, 0x0D, 0x10, 0x06, 0x30, 0x0D, 0x10, 0x06, 0x20, 0x13, 0x05, 0x05
 	.byte 0x25, 0x13, 0x05, 0x05, 0x3B, 0x13, 0x05, 0x05, 0x00, 0x33, 0x1A, 0x05, 0x1B, 0x33, 0x05, 0x05
 
-sBattleBagButtonWindowLists: ; 0x02225EE0
+sBattleBagButtonWindowLists:
 	.word sBattleBagButton0Windows
 	.word sBattleBagButton1Windows
 	.word sBattleBagButton2Windows

@@ -8,23 +8,21 @@
 	.include "overlay_12_battle_command.inc"
 	.include "global.inc"
 
-	.text
-
     .rodata
 
 .public sStandardBallCatchRates
 
-sStandardBallCatchRates: ; 0x0226C2EC
+sStandardBallCatchRates:
 	.byte 20, 15, 10, 15
 
 .public sTrumpCardPowerTable
 
-sTrumpCardPowerTable: ; 0x0226C2F0
+sTrumpCardPowerTable:
 	.byte 200, 80, 60, 50, 40
 
 .public sProtectSuccessChance
 	.balign 4, 0
-sProtectSuccessChance: ; 0x0226C2F8
+sProtectSuccessChance:
 	.short 0xFFFF
 	.short 0x7FFF
 	.short 0x3FFF
@@ -34,7 +32,7 @@ sProtectSuccessChance: ; 0x0226C2F8
 
 ; First byte: HP threshold as 64ths of max
 ; Second byte: Damage value
-sFlailDamageTable: ; 0x0226C300
+sFlailDamageTable:
 	.byte 1, 200
 	.byte 5, 150
 	.byte 12, 100
@@ -44,13 +42,13 @@ sFlailDamageTable: ; 0x0226C300
 
 .public sPickupTable2
 
-sPickupTable2: ; 0x0226C30C
+sPickupTable2:
 	.short ITEM_HYPER_POTION, ITEM_NUGGET
 	.short ITEM_KINGS_ROCK,ITEM_FULL_RESTORE, ITEM_ETHER, ITEM_IRON_BALL, ITEM_TM56, ITEM_ELIXIR, ITEM_TM86, ITEM_LEFTOVERS
 	.short ITEM_TM26
 
 	.balign 4, 0
-ov12_0226C324: ; 0x0226C324
+ov12_0226C324:
 	.word NUM_BATTLE_STATS
 	.word STAT_ATK
 	.word STAT_DEF
@@ -59,7 +57,7 @@ ov12_0226C324: ; 0x0226C324
 	.word STAT_SPEED
 
 .public sLevelUpNewStatParams
-sLevelUpNewStatParams: ; 0x0226C33C
+sLevelUpNewStatParams:
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF
@@ -68,7 +66,7 @@ sLevelUpNewStatParams: ; 0x0226C33C
 	.word MON_DATA_SPEED
 
 .public sLevelUpOldStatParams
-sLevelUpOldStatParams: ; 0x0226C354
+sLevelUpOldStatParams:
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF
@@ -77,7 +75,7 @@ sLevelUpOldStatParams: ; 0x0226C354
 	.word MON_DATA_SPEED
 
 .public sLevelUpStatNameParams
-sLevelUpStatNameParams: ; 0x0226C36C
+sLevelUpStatNameParams:
 	.word NUM_BATTLE_STATS
 	.word STAT_ATK
 	.word STAT_DEF
@@ -86,7 +84,7 @@ sLevelUpStatNameParams: ; 0x0226C36C
 	.word STAT_SPEED
 
 .public sLevelUpDiffStatParams
-sLevelUpDiffStatParams: ; 0x0226C384
+sLevelUpDiffStatParams:
 	.word MON_DATA_MAX_HP
 	.word MON_DATA_ATK
 	.word MON_DATA_DEF
@@ -106,13 +104,13 @@ sLowKickDamageTable:
 
 .public sNaturePowerMoveTable
 
-sNaturePowerMoveTable: ; 0x0226C3B4
+sNaturePowerMoveTable:
 	.short MOVE_EARTHQUAKE, MOVE_EARTHQUAKE, MOVE_SEED_BOMB, MOVE_SEED_BOMB, MOVE_ROCK_SLIDE, MOVE_ROCK_SLIDE
 	.short MOVE_BLIZZARD, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_TRI_ATTACK, MOVE_MUD_BOMB, MOVE_AIR_SLASH, MOVE_TRI_ATTACK
 
 .public sSafariCatchRateStages
 ; Numerator, Denominator
-sSafariCatchRateStages: ; 0x0226C3CE
+sSafariCatchRateStages:
 	.byte 10, 40
 	.byte 10, 35
 	.byte 10, 30
@@ -129,7 +127,7 @@ sSafariCatchRateStages: ; 0x0226C3CE
 
 .public sMoonBallPokemon
 
-sMoonBallPokemon: ; 0x0226C3E8
+sMoonBallPokemon:
 	.short SPECIES_NIDORAN_F
 	.short SPECIES_NIDORINA
 	.short SPECIES_NIDOQUEEN
@@ -147,14 +145,14 @@ sMoonBallPokemon: ; 0x0226C3E8
 
 .public sPickupTable1
 
-sPickupTable1: ; 0x0226C404
+sPickupTable1:
 	.short ITEM_POTION, ITEM_ANTIDOTE, ITEM_SUPER_POTION, ITEM_GREAT_BALL, ITEM_REPEL, ITEM_ESCAPE_ROPE
 	.short ITEM_FULL_HEAL, ITEM_HYPER_POTION, ITEM_ULTRA_BALL, ITEM_REVIVE, ITEM_RARE_CANDY, ITEM_SUN_STONE, ITEM_MOON_STONE, ITEM_HEART_SCALE
 	.short ITEM_FULL_RESTORE, ITEM_MAX_REVIVE, ITEM_PP_UP, ITEM_MAX_ELIXIR
 
 .public sLevelUpNameplateTemplate
 
-sLevelUpNameplateTemplate: ; 0x0226C428
+sLevelUpNameplateTemplate:
 	.short 0x80, 0x00, 0x00
 	.short 0
 	.word 200, 0, 1
@@ -163,7 +161,7 @@ sLevelUpNameplateTemplate: ; 0x0226C428
 
 .public sPokeIconTemplate
 
-sPokeIconTemplate: ; 0x0226C45C
+sPokeIconTemplate:
 	.short 0x98, 0x18, 0x00
 	.short 0
 	.word 100, 0, 1
@@ -172,7 +170,7 @@ sPokeIconTemplate: ; 0x0226C45C
 
 .public sSecretPowerEffectTable
 
-sSecretPowerEffectTable: ; 0x0226C490
+sSecretPowerEffectTable:
 	.word 0x8000001B
 	.word 0x8000001B
 	.word 0x80000001
@@ -189,7 +187,7 @@ sSecretPowerEffectTable: ; 0x0226C490
 
 .public sPrizeMoneyTbl
 
-sPrizeMoneyTbl: ; 0x0226C4C4
+sPrizeMoneyTbl:
 	.short TRAINERCLASS_PKMN_TRAINER_ETHAN, 0
 	.short TRAINERCLASS_PKMN_TRAINER_LYRA, 0
 	.short TRAINERCLASS_YOUNGSTER, 4
@@ -322,7 +320,7 @@ sPrizeMoneyTbl: ; 0x0226C4C4
 
 .public sBattleScriptCommandTable;
 
-sBattleScriptCommandTable: ; 0x0226C6C8
+sBattleScriptCommandTable:
 	.word BtlCmd_PlayEncounterAnimation
 	.word BtlCmd_SetPokemonEncounter
 	.word BtlCmd_PokemonSlideIn
@@ -551,18 +549,18 @@ sBattleScriptCommandTable: ; 0x0226C6C8
 
 .public sPickupWeightTable
 
-sPickupWeightTable: ; 0x0226CA4C
+sPickupWeightTable:
 	.byte 30, 40, 50, 60, 70, 80, 90, 94, 98
 
 .public sHoneyGatherChanceTable
 
 	.balign 4, 0
-sHoneyGatherChanceTable: ; 0x0226CA58
+sHoneyGatherChanceTable:
 	.byte 5, 10, 15, 20, 25, 30, 35, 40, 45, 50
 
 .public sCamouflageTypeTable
 
 	.balign 4, 0
-sCamouflageTypeTable: ; 0x0226CA64
+sCamouflageTypeTable:
 	.byte TYPE_GROUND, TYPE_GROUND, TYPE_GRASS, TYPE_GRASS, TYPE_ROCK, TYPE_ROCK, TYPE_ICE, TYPE_WATER, TYPE_ICE, TYPE_NORMAL, TYPE_GROUND, TYPE_FLYING
 	.byte TYPE_NORMAL

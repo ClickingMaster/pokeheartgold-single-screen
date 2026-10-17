@@ -9,40 +9,11 @@
 #include "fielddata/script/scr_seq/event_D24R0204.h"
 #include "constants/field_move_response.h"
 	.include "asm/macros.inc"
-	.public _02061416
-	.public _02061420
-	.public _0206144A
-	.public _02061468
-	.public _0206147E
-	.public _020614AA
-	.public _020614BC
-	.public _020614DA
-	.public _020614EE
-	.public _020614F0
-	.public _02061530
-	.public _0206154C
-	.public _0206155E
-	.public _02061570
-	.public _02061582
-	.public _02061594
-	.public _020615AA
-	.public _020615C0
-	.public _020615D4
-	.public _020615E8
-	.public _0206162A
-	.public _02061630
-	.public _0206163C
-	.public _02061642
 	.include "map_object_movement_data.inc"
 	.include "global.inc"
 
-	.text
-	.public RandomWalkMovement_Update
-	.public MapObject_GetMovementBounds
-	.public MapObject_IsWithinMovementBounds
 	.rodata
 
-	.public gPathMovementStateFuncs
 	.public gPathMovementStateFuncs
 gPathMovementStateFuncs:
 	.word PathMovement_Step
@@ -69,7 +40,6 @@ gDirectionTable12:
 gDirectionTable10:
 	.word 2, 3, -1
 	.public gBackAndForthMovementStateFuncs
-	.public gBackAndForthMovementStateFuncs
 gBackAndForthMovementStateFuncs:
 	.word BackAndForthMovement_FaceStart
 	.word BackAndForthMovement_Step
@@ -89,7 +59,6 @@ gDirectionTable27:
 	.public gDirectionTable34
 gDirectionTable34:
 	.word 0, 3, 1, 2
-	.public gAlternatingSpinMovementStateFuncs
 	.public gAlternatingSpinMovementStateFuncs
 gAlternatingSpinMovementStateFuncs:
 	.word AlternatingSpinMovement_Face
@@ -198,7 +167,6 @@ gDirectionTable38:
 gAlternatingSpinClockwiseOrder:
 	.word 0x00000000, 0x00000003, 0x00000001
 	.word 0x00000002, 0xFFFFFFFF
-	.public gRandomLookDelays
 	.public gRandomLookDelays
 gRandomLookDelays:
 	.word 0x00000010, 0x00000020

@@ -15,7 +15,7 @@
 	.rodata
 
 	.public defaultFieldEffectRenderers
-defaultFieldEffectRenderers: ; 0x02208BFC
+defaultFieldEffectRenderers:
 	.word 0x14
 	.word 0x13
 	.word 0x11
@@ -42,7 +42,7 @@ defaultFieldEffectRenderers: ; 0x02208BFC
 	.word 0x17
 
 	.public gFieldEffectRenderers
-gFieldEffectRenderers: ; 0x02208C5C
+gFieldEffectRenderers:
 	.word 0x00000000, FieldShadow_New, FieldShadow_Free
 	.word 0x00000001, Reflection_New, Reflection_Free
 	.word 0x00000002, Footprints_New, Footprints_Free

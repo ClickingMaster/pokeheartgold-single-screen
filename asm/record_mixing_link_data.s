@@ -8,12 +8,6 @@
 	.include "record_mixing_link_data.inc"
 	.include "global.inc"
 
-	.public gOverlayTemplate_Battle
-	.public gNatureStatMods
-
-	.text
-
-
 	.rodata
 
 	.public gRecordMixingLinkCommands
