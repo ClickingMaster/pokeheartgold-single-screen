@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_TOUCH_MART_APP_H
-#define POKEHEARTGOLD_TOUCH_MART_APP_H
+#ifndef POKEHEARTGOLD_FIELD_TOUCH_MART_APP_H
+#define POKEHEARTGOLD_FIELD_TOUCH_MART_APP_H
 
 #include "bg_window.h"
 #include "field_system.h"
@@ -10,4 +10,4 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSy
 void TouchMartApp_Exit(BgConfig *bgConfig, SysTask *task);
 BOOL TouchMartApp_IsExitDone(void);
 
-#endif // POKEHEARTGOLD_TOUCH_MART_APP_H
+#endif // POKEHEARTGOLD_FIELD_TOUCH_MART_APP_H

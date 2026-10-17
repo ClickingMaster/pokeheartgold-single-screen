@@ -26,7 +26,7 @@
 #include "map_events_internal.h"
 #include "map_matrix.h"
 #include "menu_input_state.h"
-#include "field_fog.h"
+#include "field/field_fog.h"
 #include "field/field_effect_manager.h"
 #include "overlay_manager.h"
 #include "photo_types_def.h"

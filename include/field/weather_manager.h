@@ -3,9 +3,9 @@
 
 #include "global.h"
 
+#include "field/field_fog.h"
 #include "field/field_texture_manager.h"
 
-#include "field_fog.h"
 #include "sprite.h"
 #include "task.h"
 

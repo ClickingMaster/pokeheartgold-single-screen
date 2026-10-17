@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_FIELD_FOG_H
-#define POKEHEARTGOLD_FIELD_FOG_H
+#ifndef POKEHEARTGOLD_FIELD_FIELD_FOG_H
+#define POKEHEARTGOLD_FIELD_FIELD_FOG_H
 
 #include "global.h"
 
@@ -28,4 +28,4 @@ void Fog_Set(FogData *fog, s32 mask, BOOL enable, GXFogBlend fogMode, GXFogSlope
 void Fog_SetColor(FogData *fog, u32 mask, u16 color, u32 alpha);
 void Fog_SetTable(FogData *fog, const void *src);
 
-#endif // POKEHEARTGOLD_FIELD_FOG_H
+#endif // POKEHEARTGOLD_FIELD_FIELD_FOG_H

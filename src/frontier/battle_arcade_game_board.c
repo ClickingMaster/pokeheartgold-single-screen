@@ -1,4 +1,4 @@
-#include "battle_arcade_game_board.h"
+#include "frontier/battle_arcade_game_board.h"
 
 #include "global.h"
 

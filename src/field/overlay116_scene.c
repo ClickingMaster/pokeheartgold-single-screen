@@ -1,4 +1,4 @@
-#include "overlay116_scene_internal.h"
+#include "field/overlay116_scene_internal.h"
 
 static void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const Ov116CameraKey *key);
 static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, const Ov116Sequence *seq);

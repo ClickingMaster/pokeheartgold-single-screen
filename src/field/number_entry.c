@@ -1,4 +1,4 @@
-#include "number_entry.h"
+#include "field/number_entry.h"
 
 #include <nitro/gx/gx_vramcnt.h>
 

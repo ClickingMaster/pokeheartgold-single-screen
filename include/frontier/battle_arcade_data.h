@@ -1,10 +1,10 @@
 #ifndef POKEHEARTGOLD_FRONTIER_BATTLE_ARCADE_DATA_H
 #define POKEHEARTGOLD_FRONTIER_BATTLE_ARCADE_DATA_H
 
+#include "frontier/battle_arcade_game_board.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_trainers.h"
 
-#include "battle_arcade_game_board.h"
 #include "save.h"
 #include "scrcmd_9.h"
 

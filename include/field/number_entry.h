@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_NUMBER_ENTRY_H
-#define POKEHEARTGOLD_NUMBER_ENTRY_H
+#ifndef POKEHEARTGOLD_FIELD_NUMBER_ENTRY_H
+#define POKEHEARTGOLD_FIELD_NUMBER_ENTRY_H
 
 #include "bg_window.h"
 #include "sys_task.h"
@@ -18,4 +18,4 @@ SysTask *NumberEntry_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void *fi
 void NumberEntry_Exit(BgConfig *bgConfig, SysTask *task);
 BOOL NumberEntry_IsExitDone(BgConfig *bgConfig);
 
-#endif // POKEHEARTGOLD_NUMBER_ENTRY_H
+#endif // POKEHEARTGOLD_FIELD_NUMBER_ENTRY_H
