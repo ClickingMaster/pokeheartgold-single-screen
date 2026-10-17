@@ -29,7 +29,7 @@ typedef struct BattleFactoryTrainer {
     u8 filler_06[0x2A];
 } BattleFactoryTrainer;
 
-extern BattleFactoryData *gBattleFactoryData;
+BattleFactoryData *gBattleFactoryData;
 extern const u8 gBattleFactoryBattlePoints[];
 extern const u8 gBattleFactoryMultiBattlePoints[];
 
@@ -57,8 +57,6 @@ int BattleFactory_PickSetIds(const u16 *species, const u16 *items, int count, in
 int BattleFactory_GetMonLevel(BattleFactoryData *data);
 BOOL BattleFactory_IsMultiType(int type);
 u16 BattleFactory_GetRound(BattleFactoryData *data);
-
-#pragma force_active on
 
 #define FACTORY_FLAGS_HAS_STREAK 10
 
@@ -141,8 +139,6 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
     return gBattleFactoryData;
 }
 
-#pragma force_active reset
-
 void BattleFactoryData_Init(BattleFactoryData *data, int resume) {
     if (resume == 0) {
         BattleFactoryData_InitNew(data);
@@ -150,8 +146,6 @@ void BattleFactoryData_Init(BattleFactoryData *data, int resume) {
         BattleFactoryData_InitResume(data);
     }
 }
-
-#pragma force_active on
 
 void BattleFactoryData_InitNew(BattleFactoryData *data) {
     FrontierMon candidates[12];
@@ -257,8 +251,6 @@ void BattleFactory_SwapRentalWithRandom(BattleFactoryData *data, int index, int 
     }
 }
 
-#pragma force_active reset
-
 void BattleFactoryData_InitResume(BattleFactoryData *data) {
     u16 setIds[FACTORY_RENTAL_COUNT];
     u8 ivs[FACTORY_RENTAL_COUNT];
@@ -336,8 +328,6 @@ int BattleFactory_GetAppResult(BattleFactoryAppLaunchArgs *args, u32 index) {
     return args->result[index];
 }
 
-#pragma force_active on
-
 // mode 2 only saves the challenge; otherwise the records and the streak flag are updated as well.
 void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     struct {
@@ -413,8 +403,6 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     }
 }
 
-#pragma force_active reset
-
 u8 BattleFactory_IncBattleNo(BattleFactoryData *data) {
     data->battleNo++;
     return data->battleNo;
@@ -445,8 +433,6 @@ void BattleFactory_CompleteRound(BattleFactoryData *data) {
     data->battleNo = 0;
     BattleFactoryData_SaveRecord(data, 0);
 }
-
-#pragma force_active on
 
 void BattleFactory_SetRentalParty(BattleFactoryData *data) {
     FrontierMon *rentals;
@@ -514,8 +500,6 @@ void BattleFactory_GenerateOpponentMons(BattleFactoryData *data) {
     // no personalities given: new ones are generated and returned through the last array
     FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, NULL, data->opponentPersonalities, num, HEAP_ID_FIELD2, NARC_a_2_0_3);
 }
-
-#pragma force_active reset
 
 void BattleFactory_TradeMon(BattleFactoryData *data) {
     if (data->selection[0] != 0xFF) {

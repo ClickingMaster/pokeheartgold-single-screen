@@ -38,10 +38,16 @@ typedef struct BattleCastleTrainerRange {
     u16 lastBattleMax;
 } BattleCastleTrainerRange;
 
-extern const u16 gBattleCastleRoundTrainerRanges[];
-extern const u16 gBattleCastleRoundTrainerMaxes[];
-extern const u16 gBattleCastleRoundLastBattleMins[];
-extern const u16 gBattleCastleRoundLastBattleMaxes[];
+static const BattleCastleTrainerRange sBattleCastleTrainerRanges[] = {
+    { 0,   99,  100, 119 },
+    { 80,  119, 120, 139 },
+    { 100, 139, 140, 159 },
+    { 120, 159, 160, 179 },
+    { 140, 179, 180, 199 },
+    { 160, 199, 200, 219 },
+    { 180, 219, 220, 239 },
+    { 200, 299, 200, 299 },
+};
 
 void *FrontierTrainer_Load(BattleCastleTrainerRecord *record, int trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleCastleTrainerRecord *record, int count, int battler, enum HeapID heapID);
@@ -67,16 +73,15 @@ int BattleCastle_GetRandomTrainerId(int type, u32 round, int battleNo) {
         round = 7;
     }
     if (battleNo == 6 || battleNo == 13) {
-        min = gBattleCastleRoundLastBattleMins[round * 4];
-        span = gBattleCastleRoundLastBattleMaxes[round * 4] - min;
+        min = sBattleCastleTrainerRanges[round].lastBattleMin;
+        span = sBattleCastleTrainerRanges[round].lastBattleMax - min;
     } else {
-        min = gBattleCastleRoundTrainerRanges[round * 4];
-        span = gBattleCastleRoundTrainerMaxes[round * 4] - min;
+        min = sBattleCastleTrainerRanges[round].min;
+        span = sBattleCastleTrainerRanges[round].max - min;
     }
     return min + LCRandom() % span;
 }
 
-#pragma force_active on
 void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count) {
     int i = 0;
     u16 *trainerId = trainerIds;
@@ -95,7 +100,6 @@ void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int c
         }
     } while (i < count);
 }
-#pragma force_active reset
 
 int BattleCastle_GetPartySize(int type, int both) {
     switch (type) {
@@ -131,7 +135,6 @@ int BattleCastle_GetOpponentMonCount(int type, int both) {
     }
 }
 
-#pragma force_active on
 BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchArgs *args) {
     int i;
     int playerCount = BattleCastle_GetPartySize(data->type, FALSE);
@@ -195,7 +198,6 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
     }
     return setup;
 }
-#pragma force_active reset
 
 u32 BattleCastle_GetBattleType(int type) {
     switch (type) {
@@ -319,7 +321,6 @@ void BattleCastle_DrawRoundTiles(BgConfig *bgConfig, BattleCastleData *data, int
     ScheduleBgTilemapBufferTransfer(bgConfig, bgId);
 }
 
-#pragma force_active on
 void BattleCastle_BuildRoundTilemap(u16 *tilemap, int round) {
     u8 tiles[10];
     u32 i, x, y;
@@ -339,7 +340,6 @@ void BattleCastle_BuildRoundTilemap(u16 *tilemap, int round) {
         }
     }
 }
-#pragma force_active reset
 
 int BattleCastle_ClampRound(int round) {
     if ((u32)round >= 8) {

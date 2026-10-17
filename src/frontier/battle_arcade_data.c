@@ -44,7 +44,6 @@ typedef void (*ArcadeEventFunc)(ArcadeContext *ctx, Party *party, int count);
 
 typedef void (*BlendPaletteWideFunc)(const void *src, void *dst, int size, int cur, int target);
 
-extern ArcadeContext *gBattleArcadeData;
 extern const u8 gBattleArcadeFaintedMonPoints[];
 extern const u8 gBattleArcadeStatusedMonPoints[];
 extern const u8 gBattleArcadeRoundCursorSpeeds[];
@@ -58,8 +57,12 @@ extern const ArcadeEventBgFiles gBattleArcadeEventBgScreenFiles[];
 extern const ArcadeEventBgFiles gBattleArcadeEventBgPaletteFiles[];
 extern const u8 gBattleArcadeRoundValues_Single[];
 extern const u8 gBattleArcadeRoundValues_Multi[];
-extern const u16 *const gBattleArcadeEventItemLists[];
-extern const ArcadeEventFunc gBattleArcadeEventFuncs[];
+extern const u16 gBattleArcadeBerries_Rank0[];
+extern const u16 gBattleArcadeBerries_Rank3[];
+extern const u16 gBattleArcadeBerries_Rank6[];
+extern const u16 gBattleArcadeItems_Rank0[];
+extern const u16 gBattleArcadeItems_Rank3[];
+extern const u16 gBattleArcadeItems_Rank6[];
 
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
 
@@ -98,23 +101,69 @@ void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_GiveBerry(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_GiveItem(ArcadeContext *ctx, Party *party, int count);
 void BattleArcade_Event_LevelUp(ArcadeContext *ctx, Party *party, int count);
-void BattleArcade_Event_Sun(ArcadeContext *ctx);
-void BattleArcade_Event_Rain(ArcadeContext *ctx);
-void BattleArcade_Event_Sandstorm(ArcadeContext *ctx);
-void BattleArcade_Event_Hail(ArcadeContext *ctx);
-void BattleArcade_Event_Fog(ArcadeContext *ctx);
-void BattleArcade_Event_TrickRoom(ArcadeContext *ctx);
-void BattleArcade_Event_SpeedUp(ArcadeContext *ctx);
-void BattleArcade_Event_SpeedDown(ArcadeContext *ctx);
-void BattleArcade_Event_Random(ArcadeContext *ctx);
-void BattleArcade_Event_SwapParties(ArcadeContext *ctx);
-void BattleArcade_Event_Dummy28(ArcadeContext *ctx);
-void BattleArcade_Event_Dummy29(ArcadeContext *ctx);
-void BattleArcade_Event_Dummy30(ArcadeContext *ctx);
+void BattleArcade_Event_Sun(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Rain(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Sandstorm(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Hail(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Fog(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_TrickRoom(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_SpeedUp(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_SpeedDown(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Random(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_SwapParties(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Dummy28(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Dummy29(ArcadeContext *ctx, Party *party, int count);
+void BattleArcade_Event_Dummy30(ArcadeContext *ctx, Party *party, int count);
+
+static const u16 *sBattleArcadeEventItemLists[] = {
+    gBattleArcadeBerries_Rank0,
+    gBattleArcadeBerries_Rank3,
+    gBattleArcadeBerries_Rank6,
+    gBattleArcadeItems_Rank0,
+    gBattleArcadeItems_Rank3,
+    gBattleArcadeItems_Rank6,
+};
+
+static ArcadeEventFunc sBattleArcadeEventFuncs[] = {
+    BattleArcade_Event_LowerHp,
+    BattleArcade_Event_Poison,
+    BattleArcade_Event_Paralyze,
+    BattleArcade_Event_Burn,
+    BattleArcade_Event_Sleep,
+    BattleArcade_Event_Freeze,
+    BattleArcade_Event_GiveBerry,
+    BattleArcade_Event_GiveItem,
+    BattleArcade_Event_LevelUp,
+    BattleArcade_Event_LowerHp,
+    BattleArcade_Event_Poison,
+    BattleArcade_Event_Paralyze,
+    BattleArcade_Event_Burn,
+    BattleArcade_Event_Sleep,
+    BattleArcade_Event_Freeze,
+    BattleArcade_Event_GiveBerry,
+    BattleArcade_Event_GiveItem,
+    BattleArcade_Event_LevelUp,
+    BattleArcade_Event_Sun,
+    BattleArcade_Event_Rain,
+    BattleArcade_Event_Sandstorm,
+    BattleArcade_Event_Hail,
+    BattleArcade_Event_Fog,
+    BattleArcade_Event_TrickRoom,
+    BattleArcade_Event_SpeedUp,
+    BattleArcade_Event_SpeedDown,
+    BattleArcade_Event_Random,
+    BattleArcade_Event_SwapParties,
+    BattleArcade_Event_Dummy28,
+    BattleArcade_Event_Dummy29,
+    BattleArcade_Event_Dummy30,
+    BattleArcade_Event_Dummy28,
+};
+
+static ArcadeContext *sBattleArcadeData;
 
 static inline void BattleArcadeData_AllocContext(void) {
     ArcadeContextStorage *storage = Heap_Alloc(HEAP_ID_FIELD2, sizeof(ArcadeContextStorage));
-    gBattleArcadeData = &storage->context;
+    sBattleArcadeData = &storage->context;
     MI_CpuFill8(storage, 0, sizeof(ArcadeContextStorage));
 }
 
@@ -126,9 +175,9 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
         u32 item;
     } data;
 
-    mon = Party_GetMonByIndex(party, gBattleArcadeData->partySlots[slot]);
-    Party_AddMon(gBattleArcadeData->playerParty, mon);
-    mon = Party_GetMonByIndex(gBattleArcadeData->playerParty, slot);
+    mon = Party_GetMonByIndex(party, sBattleArcadeData->partySlots[slot]);
+    Party_AddMon(sBattleArcadeData->playerParty, mon);
+    mon = Party_GetMonByIndex(sBattleArcadeData->playerParty, slot);
     data.item = ITEM_NONE;
     SetMonData(mon, MON_DATA_HELD_ITEM, &data.item);
     if (GetMonData(mon, MON_DATA_LEVEL, NULL) > 50) {
@@ -149,7 +198,6 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
 
 #define ARCADE_FLAGS_HAS_STREAK 8
 
-#pragma force_active on
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     u16 i;
     ArcadeContext *ctx[1];
@@ -163,11 +211,11 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
     Pokemon *mon;
 
     BattleArcadeData_AllocContext();
-    ctx[0] = gBattleArcadeData;
+    ctx[0] = sBattleArcadeData;
     ctx[0]->challenge = (u32)Save_Frontier_GetArcadeChallenge(saveData);
     ctx[0]->saveData = saveData;
     ctx[0]->heapId = HEAP_ID_FIELD2;
-    ctx[0] = gBattleArcadeData;
+    ctx[0] = sBattleArcadeData;
     ctx[0]->playerParty = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
     ctx[0]->opponentParty = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
     ((ArcadeContextStorage *)ctx[0])->resultVar = resultVar;
@@ -178,68 +226,67 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
     if (resume == FALSE) {
         u8 flag;
 
-        ctx[0] = gBattleArcadeData;
+        ctx[0] = sBattleArcadeData;
         ctx[0]->type = type;
         ctx[0]->battleNo = 0;
         ctx[0]->cursorSpeed = 3;
         ctx[0]->randomFlag = 0;
         ArcadeChallenge_Clear(record);
-        if (gBattleArcadeData->type == 3) {
-            flag = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(gBattleArcadeData->saveData));
+        if (sBattleArcadeData->type == 3) {
+            flag = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(sBattleArcadeData->saveData));
         } else {
-            flag = ArcadeFlags_GetField(typeRecord, ARCADE_FLAGS_HAS_STREAK, gBattleArcadeData->type, 0, 0);
+            flag = ArcadeFlags_GetField(typeRecord, ARCADE_FLAGS_HAS_STREAK, sBattleArcadeData->type, 0, 0);
         }
         if (flag == 1) {
-            ctx[0] = gBattleArcadeData;
+            ctx[0] = sBattleArcadeData;
             frontier = Save_Frontier_GetStatic(ctx[0]->saveData);
-            index = BattleArcade_GetWinStreakStat(gBattleArcadeData->type);
+            index = BattleArcade_GetWinStreakStat(sBattleArcadeData->type);
             ctx[0]->winStreak = FrontierSave_GetStat(frontier, index, FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx[0]->type)));
         } else {
-            gBattleArcadeData->winStreak = 0;
+            sBattleArcadeData->winStreak = 0;
         }
-        ctx[0] = gBattleArcadeData;
+        ctx[0] = sBattleArcadeData;
         ctx[0]->round = ctx[0]->winStreak / 7;
         ctx[0]->unk24 = 0;
         ctx[0]->partySlots[0] = slot0;
         ctx[0]->partySlots[1] = slot1;
         ctx[0]->partySlots[2] = slot2;
     } else {
-        gBattleArcadeData->type = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_TYPE, 0, 0, 0);
+        sBattleArcadeData->type = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_TYPE, 0, 0, 0);
         i = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_BATTLE_NO, 0, 0, 0);
-        ctx[0] = gBattleArcadeData;
+        ctx[0] = sBattleArcadeData;
         ctx[0]->battleNo = i;
         ctx[0]->cursorSpeed = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_CURSOR_SPEED, 0, 0, 0);
         ctx[0]->randomFlag = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_RANDOM_FLAG, 0, 0, 0);
-        saved = (ArcadeContext *)gBattleArcadeData;
+        saved = (ArcadeContext *)sBattleArcadeData;
         frontier = Save_Frontier_GetStatic(saved->saveData);
-        index = BattleArcade_GetWinStreakStat(gBattleArcadeData->type);
+        index = BattleArcade_GetWinStreakStat(sBattleArcadeData->type);
         saved->winStreak = FrontierSave_GetStat(frontier, index, FrontierStat_GetFriendIndex(BattleArcade_GetWinStreakStat(ctx[0]->type)));
         saved->round = saved->winStreak / 7;
         for (i = 0; i < 3; i++) {
-            ctx[0] = gBattleArcadeData;
+            ctx[0] = sBattleArcadeData;
             ctx[0]->partySlots[i] = ArcadeChallenge_GetField(record, ARCADE_CHALLENGE_PARTY_SLOTS, (u8)i, 0, 0);
         }
     }
 
     for (i = 0; i < 3; i++) {
-        ctx[0] = gBattleArcadeData;
+        ctx[0] = sBattleArcadeData;
         mon = Party_GetMonByIndex(SaveArray_Party_Get(ctx[0]->saveData), ctx[0]->partySlots[i]);
-        ctx[0] = gBattleArcadeData;
+        ctx[0] = sBattleArcadeData;
         ctx[0]->heldItems[i] = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     }
 
     party = SaveArray_Party_Get(ctx[0]->saveData);
-    count = BattleArcade_GetMonCount(gBattleArcadeData->type, 0);
+    count = BattleArcade_GetMonCount(sBattleArcadeData->type, 0);
     for (i = 0; i < count; i++) {
         BattleArcadeData_AddPartyMon(party, i);
     }
 
-    if (BattleArcade_MultiplayerCheck(gBattleArcadeData->type) == TRUE) {
-        Frontier_RecordLinkPlayerLocations(gBattleArcadeData->saveData);
+    if (BattleArcade_MultiplayerCheck(sBattleArcadeData->type) == TRUE) {
+        Frontier_RecordLinkPlayerLocations(sBattleArcadeData->saveData);
     }
-    return (u32)gBattleArcadeData;
+    return (u32)sBattleArcadeData;
 }
-#pragma force_active reset
 
 void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume) {
     if (resume == FALSE) {
@@ -273,7 +320,6 @@ static void BattleArcadeData_InitNew(ArcadeContext *ctx) {
     }
 }
 
-#pragma force_active on
 static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
     ArcadeFrontierMon frontierMons[6];
     u16 monIds[6];
@@ -298,7 +344,6 @@ static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
     }
     Heap_Free(mon);
 }
-#pragma force_active reset
 
 static void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx) {
     u8 count = Party_GetCount(ctx->playerParty);
@@ -340,7 +385,6 @@ static u16 BattleArcade_GetGameBoardResult(const GAME_BOARD_ARGS *args, u32 inde
     return args->returnWork;
 }
 
-#pragma force_active on
 void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
     struct {
         union {
@@ -408,7 +452,6 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
         ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, &value.buffer.halfword);
     }
 }
-#pragma force_active reset
 
 u32 BattleArcade_IncBattleNo(ArcadeContext *ctx) {
     ctx->battleNo++;
@@ -476,7 +519,6 @@ u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Part
     return points;
 }
 
-#pragma force_active on
 static int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party, Party *partnerParty, u8 count) {
     u8 fainted, statused;
     int result;
@@ -514,7 +556,6 @@ static int BattleArcade_GetPartyConditionPoints(ArcadeContext *ctx, Party *party
     result += gBattleArcadeFaintedMonPoints[fainted];
     return result;
 }
-#pragma force_active reset
 
 void BattleArcade_LoadEventBg(ArcadeContext *ctx, FrontierMap *map) {
     if (ctx->eventId != 0x20) {
@@ -547,7 +588,6 @@ void BattleArcade_LoadMultiBgScreen(ArcadeContext *ctx, FrontierMap *map) {
     NARC_Delete(narc);
 }
 
-#pragma force_active on
 void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent) {
     int i;
     u8 count = BattleArcade_GetMonCount(ctx->type, 1);
@@ -565,7 +605,6 @@ void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opp
         }
     }
 }
-#pragma force_active reset
 
 void BattleArcade_DeleteMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent) {
     s32 count = BattleArcade_GetMonCount(ctx->type, 1);
@@ -604,7 +643,6 @@ void BattleArcade_SetOpponentMonSpriteVisible(ArcadeContext *ctx, FrontierMap *m
     }
 }
 
-#pragma force_active on
 void BattleArcade_CreateItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent) {
     int count = BattleArcade_GetMonCount(ctx->type, 1);
     int opponentCount = BattleArcade_GetOpponentMonCount(ctx->type, 1);
@@ -626,7 +664,6 @@ void BattleArcade_CreateItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 oppo
         }
     }
 }
-#pragma force_active reset
 
 void BattleArcade_DeleteItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent) {
     s32 count = BattleArcade_GetMonCount(ctx->type, 1);
@@ -678,7 +715,6 @@ void BattleArcade_SetItemIconVisible(ArcadeContext *ctx, FrontierMap *map, u32 o
     }
 }
 
-#pragma force_active on
 void BattleArcade_LoadBlendedBgExtPalette(u32 color, u32 mode) {
     int size;
     int fileId;
@@ -707,7 +743,6 @@ void BattleArcade_LoadBlendedBgExtPalette(u32 color, u32 mode) {
     Heap_Free(buffer);
     Heap_Free(pltt);
 }
-#pragma force_active reset
 
 u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value) {
     switch (cmd) {
@@ -744,7 +779,7 @@ void BattleArcade_ApplyEvent(ArcadeContext *ctx, u8 event) {
         party = ctx->playerParty;
         count = BattleArcade_GetMonCount(ctx->type, 1);
     }
-    gBattleArcadeEventFuncs[event](ctx, party, count);
+    sBattleArcadeEventFuncs[event](ctx, party, count);
 }
 
 void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count) {
@@ -760,7 +795,6 @@ void BattleArcade_Event_LowerHp(ArcadeContext *ctx, Party *party, int count) {
     }
 }
 
-#pragma force_active on
 void BattleArcade_Event_Poison(ArcadeContext *ctx, Party *party, int count) {
     struct {
         ArcadeContext *ctx;
@@ -845,7 +879,6 @@ void BattleArcade_Event_Burn(ArcadeContext *ctx, Party *party, int count) {
         ctx->eventNoEffect = TRUE;
     }
 }
-#pragma force_active reset
 
 // Starts with the Pokemon picked by eventRandom and puts the first one that can fall asleep to sleep.
 void BattleArcade_Event_Sleep(ArcadeContext *ctx, Party *party, int count) {
@@ -908,13 +941,13 @@ void BattleArcade_Event_GiveBerry(ArcadeContext *ctx, Party *party, int count) {
     s32 i;
 
     if (rank < 3) {
-        items = gBattleArcadeEventItemLists[0];
+        items = sBattleArcadeEventItemLists[0];
         itemCount = 8;
     } else if (rank < 6) {
-        items = gBattleArcadeEventItemLists[1];
+        items = sBattleArcadeEventItemLists[1];
         itemCount = 20;
     } else {
-        items = gBattleArcadeEventItemLists[2];
+        items = sBattleArcadeEventItemLists[2];
         itemCount = 10;
     }
     item = items[ctx->eventRandom % itemCount];
@@ -931,13 +964,13 @@ void BattleArcade_Event_GiveItem(ArcadeContext *ctx, Party *party, int count) {
     s32 i;
 
     if (rank < 3) {
-        items = gBattleArcadeEventItemLists[3];
+        items = sBattleArcadeEventItemLists[3];
         itemCount = 11;
     } else if (rank < 6) {
-        items = gBattleArcadeEventItemLists[4];
+        items = sBattleArcadeEventItemLists[4];
         itemCount = 13;
     } else {
-        items = gBattleArcadeEventItemLists[5];
+        items = sBattleArcadeEventItemLists[5];
         itemCount = 11;
     }
     item = items[ctx->eventRandom % itemCount];
@@ -963,56 +996,56 @@ void BattleArcade_Event_LevelUp(ArcadeContext *ctx, Party *party, int count) {
     }
 }
 
-void BattleArcade_Event_Sun(ArcadeContext *ctx) {
+void BattleArcade_Event_Sun(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 1001;
 }
 
-void BattleArcade_Event_Rain(ArcadeContext *ctx) {
+void BattleArcade_Event_Rain(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 1;
 }
 
-void BattleArcade_Event_Sandstorm(ArcadeContext *ctx) {
+void BattleArcade_Event_Sandstorm(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 7;
 }
 
-void BattleArcade_Event_Hail(ArcadeContext *ctx) {
+void BattleArcade_Event_Hail(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 4;
 }
 
-void BattleArcade_Event_Fog(ArcadeContext *ctx) {
+void BattleArcade_Event_Fog(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 9;
 }
 
-void BattleArcade_Event_TrickRoom(ArcadeContext *ctx) {
+void BattleArcade_Event_TrickRoom(ArcadeContext *ctx, Party *party, int count) {
     ctx->weather = 1002;
 }
 
-void BattleArcade_Event_SpeedUp(ArcadeContext *ctx) {
+void BattleArcade_Event_SpeedUp(ArcadeContext *ctx, Party *party, int count) {
     if (ctx->cursorSpeed < 7) {
         ctx->cursorSpeed++;
     }
 }
 
-void BattleArcade_Event_SpeedDown(ArcadeContext *ctx) {
+void BattleArcade_Event_SpeedDown(ArcadeContext *ctx, Party *party, int count) {
     if (ctx->cursorSpeed != 0) {
         ctx->cursorSpeed--;
     }
 }
 
-void BattleArcade_Event_Random(ArcadeContext *ctx) {
+void BattleArcade_Event_Random(ArcadeContext *ctx, Party *party, int count) {
     ctx->randomFlag = 1;
 }
 
-void BattleArcade_Event_SwapParties(ArcadeContext *ctx) {
+void BattleArcade_Event_SwapParties(ArcadeContext *ctx, Party *party, int count) {
 }
 
-void BattleArcade_Event_Dummy28(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy28(ArcadeContext *ctx, Party *party, int count) {
 }
 
-void BattleArcade_Event_Dummy29(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy29(ArcadeContext *ctx, Party *party, int count) {
 }
 
-void BattleArcade_Event_Dummy30(ArcadeContext *ctx) {
+void BattleArcade_Event_Dummy30(ArcadeContext *ctx, Party *party, int count) {
 }
 
 u32 BattleArcadeData_GetRoundTableValue(ArcadeContext *ctx) {

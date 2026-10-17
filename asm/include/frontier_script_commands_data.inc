@@ -183,7 +183,6 @@
 .public gOverlayTemplate_NamingScreen
 .public gSystem
 .public WifiConnection_GetTargetFriendIndex
-.public gFrontierMovementSteps
 .public Field2DObjectManager_FindById
 .public Field2DObject_GetParam
 .public Field2DObject_GetPos
@@ -341,7 +340,6 @@
 .public FrontierHBlankDma_New
 .public FrontierHBlankDma_Delete
 .public FrontierHBlankDma_GetBuffer
-.public gFrontierScriptInitArg
 .public gFrontierCommandTable
 .public gOverlayTemplate_BattleFactoryRentalApp
 .public gOverlayTemplate_BattleFactoryTradeApp
@@ -392,14 +390,7 @@
 .public gBattleHallTrainerClasses
 .public gBattleHallSetSpecies
 .public gBattleHallSetTypes
-.public gFrontierScriptInitArg
-.public gFrontierYesNoWindowTemplate
-.public gFrontierScriptConditionTable
-.public gFrontierTransitionFuncs
 .public gFrontierCommandTable
-.public gFrontierMovementWaitFrames
-.public gFrontierMapItemIconTemplate
-.public gFrontierMapMonIconTemplate
 .public gOverlayTemplate_BattleFactoryRentalApp
 .public gOverlayTemplate_BattleFactoryTradeApp
 .public gBattleFactoryBattlePoints

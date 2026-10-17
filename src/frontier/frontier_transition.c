@@ -63,8 +63,15 @@ struct FrontierWipe {
     u8 active;
 };
 
-extern const u8 gFrontierWipeRows[2][6];
-extern const u8 gFrontierWipeColumns[2][16];
+static const u8 sFrontierWipeRows[2][6] = {
+    { 0, 1, 2, 3, 4, 5 },
+    { 5, 4, 3, 2, 1, 0 },
+};
+
+static const u8 sFrontierWipeColumns[2][16] = {
+    { 0, 1, 2, 3, 4, 5, 6, 7 },
+    { 7, 6, 5, 4, 3, 2, 1, 0 },
+};
 
 void FrontierTransition_FlashTask(SysTask *task, void *data);
 void FrontierTransition_SetBrightness(u32 screen, s32 brightness);
@@ -299,7 +306,6 @@ void FrontierWipe_Start(FrontierWipe *wipe, u8 duration, u8 delay, Window *windo
 }
 
 // 12 rows of 32x16 boxes sweeping sideways; rows are started in pairs from the top and bottom edges of both halves.
-#pragma force_active on
 BOOL FrontierWipe_UpdateHorizontal(FrontierWipe *wipe) {
     int i;
     BOOL finished;
@@ -314,19 +320,19 @@ BOOL FrontierWipe_UpdateHorizontal(FrontierWipe *wipe) {
         wipe->timer--;
         if (wipe->timer <= 0) {
             wipe->timer = wipe->delay;
-            x = gFrontierWipeColumns[wipe->side][wipe->column] * 32;
+            x = sFrontierWipeColumns[wipe->side][wipe->column] * 32;
             x1 = x + 32;
             y = wipe->row * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = gFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
+            x = sFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
             x1 = x + 32;
             y = (5 - wipe->row) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 1], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = gFrontierWipeColumns[wipe->side][wipe->column] * 32;
+            x = sFrontierWipeColumns[wipe->side][wipe->column] * 32;
             x1 = x + 32;
             y = (wipe->row + 6) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 2], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
-            x = gFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
+            x = sFrontierWipeColumns[wipe->side ^ 1][wipe->column] * 32;
             x1 = x + 32;
             y = (11 - wipe->row) * 16 + 8;
             FrontierWipeBox_Start(wipe->boxes[wipe->started + 3], x, x1, y, y, wipe->duration, wipe->window, 32, 16, wipe->color);
@@ -365,16 +371,16 @@ BOOL FrontierWipe_UpdateVertical(FrontierWipe *wipe) {
         s32 y;
         wipe->timer = wipe->delay;
         x = wipe->column * 16 + 8;
-        y = gFrontierWipeRows[wipe->side][wipe->row] * 32;
+        y = sFrontierWipeRows[wipe->side][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (7 - wipe->column) * 16 + 8;
-        y = gFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
+        y = sFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 1], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (wipe->column + 8) * 16 + 8;
-        y = gFrontierWipeRows[wipe->side][wipe->row] * 32;
+        y = sFrontierWipeRows[wipe->side][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 2], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         x = (15 - wipe->column) * 16 + 8;
-        y = gFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
+        y = sFrontierWipeRows[wipe->side ^ 1][wipe->row] * 32;
         FrontierWipeBox_Start(wipe->boxes[wipe->started + 3], x, x, y, y + 32, wipe->duration, wipe->window, 16, 32, wipe->color);
         wipe->started += 4;
         wipe->row++;
@@ -396,7 +402,6 @@ BOOL FrontierWipe_UpdateVertical(FrontierWipe *wipe) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 SysTask *FrontierScanline_CreateTask(FrontierScanline *scanline) {
     return SysTask_CreateOnVBlankQueue(FrontierScanline_VBlankTask, scanline, 1024);

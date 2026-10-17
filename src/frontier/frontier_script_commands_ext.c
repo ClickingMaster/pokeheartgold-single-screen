@@ -6,8 +6,13 @@
 #include "battle/battle_setup.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_brain_intro.h"
+#include "frontier/frontier_cmd_castle.h"
+#include "frontier/frontier_cmd_factory.h"
+#include "frontier/frontier_cmd_hall.h"
+#include "frontier/frontier_cmd_sound.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_particles.h"
+#include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_transition.h"
@@ -83,8 +88,6 @@ typedef struct FrontierCameraPos {
     s16 y;
     s16 x;
 } FrontierCameraPos;
-
-extern BOOL (*const gFrontierTransitionFuncs[])(FrontierTransitionWork *work);
 
 void *Frontier_GetMap(void *frontierWork);
 BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
@@ -197,6 +200,226 @@ BOOL FrtCmd_GetSyncAborted(FrontierScriptContext *ctx);
 BOOL FrtCmd_ClearSyncAborted(FrontierScriptContext *ctx);
 BOOL FrtCmd_MenuSetAlignRight(FrontierScriptContext *ctx);
 BOOL FrtCmd_MenuSetAlignBottom(FrontierScriptContext *ctx);
+
+static BOOL (*const sFrontierTransitionFuncs[])(FrontierTransitionWork *work) = {
+    FrontierTransition_Flash,
+    FrontierTransition_FlashWipeHorizontal,
+    FrontierTransition_FlashWipeVertical,
+    FrontierTransition_RowScroll1,
+    FrontierTransition_RowScroll2,
+    FrontierTransition_Wave,
+};
+
+const FrontierScrCmdFunc gFrontierCommandTable[] = {
+    FrtCmd_Nop,
+    FrtCmd_End,
+    FrtCmd_Exit,
+    FrtCmd_ChangeMode,
+    FrtCmd_ChangeModeWithTask,
+    FrtCmd_Wait,
+    FrtCmd_SetVar,
+    FrtCmd_CopyVar,
+    FrtCmd_AddVar,
+    FrtCmd_SubVar,
+    FrtCmd_GoTo,
+    FrtCmd_GoToIf,
+    FrtCmd_Call,
+    FrtCmd_Return,
+    FrtCmd_CallIf,
+    FrtCmd_PrintMessageInstant,
+    FrtCmd_PrintMessage,
+    FrtCmd_PrintMessageCanSpeedUp,
+    FrtCmd_CloseMessage,
+    FrtCmd_FadeScreen,
+    FrtCmd_WaitFade,
+    FrtCmd_MenuInitStdGmm,
+    FrtCmd_MenuInit,
+    FrtCmd_MenuItemAdd,
+    FrtCmd_MenuItemAddWithDescription,
+    FrtCmd_MenuExec,
+    FrtCmd_ListMenuInitStdGmm,
+    FrtCmd_ListMenuInit,
+    FrtCmd_ListMenuItemAdd,
+    FrtCmd_ListMenuExec,
+    FrtCmd_ListMenuCancel,
+    FrtCmd_YesNo,
+    FrtCmd_CompareVarToValue,
+    FrtCmd_CompareVarToVar,
+    FrtCmd_LoadObjectGfx,
+    FrtCmd_RemoveObjectGfx,
+    FrtCmd_CreateObjects,
+    FrtCmd_DeleteObject,
+    FrtCmd_SetObjectVisible,
+    FrtCmd_Dummy039,
+    FrtCmd_ApplyMovement,
+    FrtCmd_WaitMovement,
+    FrtCmd_LoadSpriteResources,
+    FrtCmd_UnloadSpriteResources,
+    FrtCmd_CreateSprites,
+    FrtCmd_DeleteSprite,
+    FrtCmd_SetSpriteDrawFlag,
+    FrtCmd_SetSpriteFlip,
+    FrtCmd_SetSpriteTranslucent,
+    FrtCmd_StartSpriteAnim,
+    FrtCmd_StopSpriteAnim,
+    FrtCmd_WaitSpriteAnim,
+    FrtCmd_LaunchNamingScreen,
+    FrtCmd_LinkSync,
+    FrtCmd_ClearLinkSyncPackets,
+    FrtCmd_ExitClubLink,
+    FrtCmd_Random,
+    FrtCmd_HealParty,
+    FrtCmd_WaitButton,
+    FrtCmd_WaitButtonOrDelay,
+    FrtCmd_Dummy060,
+    FrtCmd_SetSaveVar,
+    FrtCmd_GetSaveVar,
+    FrtCmd_BattleTransition,
+    FrtCmd_GetPlayerSpriteId,
+    FrtCmd_CreateParticleSystem,
+    FrtCmd_DestroyParticleSystem,
+    FrtCmd_CreateParticleEmitter,
+    FrtCmd_WaitParticles,
+    FrtCmd_CreatePartyMonSprite,
+    FrtCmd_DeleteMonSprite,
+    FrtCmd_BrainIntro,
+    FrtCmd_IncGameStat,
+    FrtCmd_AddGameStat,
+    FrtCmd_AddGameScore,
+    FrtCmd_CheckPlayerOrPartnerVersion0,
+    FrtCmd_ShakeMap,
+    FrtCmd_WaitShakeMap,
+    FrtCmd_SetWindowDelayed,
+    FrtCmd_WaitWindowDelayed,
+    FrtCmd_CastleShowPoints,
+    FrtCmd_CastleHidePoints,
+    FrtCmd_CastlePrintPoints,
+    FrtCmd_ClearObjectMovement,
+    FrtCmd_SetObjectLookAround,
+    FrtCmd_PlaySE,
+    FrtCmd_StopSE,
+    FrtCmd_WaitSE,
+    FrtCmd_PlayFanfare,
+    FrtCmd_WaitFanfare,
+    FrtCmd_PlayBGM,
+    FrtCmd_StopBGM,
+    FrtCmd_FactoryAlloc,
+    FrtCmd_FactoryInit,
+    FrtCmd_FactoryFree,
+    FrtCmd_FactoryLaunchRentalApp,
+    FrtCmd_FactoryEndBattle,
+    FrtCmd_FactoryStartBattle,
+    FrtCmd_FactoryLaunchTradeApp,
+    FrtCmd_FactorySetRentalParty,
+    FrtCmd_FactoryGenerateOpponent,
+    FrtCmd_FactoryTradeMon,
+    FrtCmd_FactorySetOpponentParty,
+    FrtCmd_FactoryAction,
+    FrtCmd_FactoryGetBattleResult,
+    FrtCmd_FactorySendBuffer,
+    FrtCmd_FactoryReceiveBuffer,
+    FrtCmd_FactoryPrintMsg,
+    FrtCmd_CreateBattleRecord,
+    FrtCmd_SaveBattleRecord,
+    FrtCmd_PlayBattleRecord,
+    FrtCmd_DeleteBattleRecord,
+    FrtCmd_CheckBattleRecordSlotValid,
+    FrtCmd_CheckBattleRecordAiFlagsValid,
+    FrtCmd_SaveGameNormal,
+    FrtCmd_SaveGameAsync,
+    FrtCmd_SaveWipeExtraChunks,
+    FrtCmd_CheckExtraSaveChunksExist,
+    FrtCmd_HallUpdateSpeciesRecord,
+    FrtCmd_AddWaitingIcon,
+    FrtCmd_RemoveWaitingIcon,
+    FrtCmd_BufferItemName,
+    FrtCmd_BufferInt,
+    FrtCmd_BufferPlayersName,
+    FrtCmd_BufferPartnersName,
+    FrtCmd_BufferMoveName,
+    FrtCmd_BufferSpeciesName,
+    FrtCmd_BufferTypeName,
+    FrtCmd_BufferRivalsName,
+    FrtCmd_GetBattlePoints,
+    FrtCmd_GiveBattlePoints,
+    FrtCmd_TakeBattlePoints,
+    FrtCmd_TowerAction,
+    FrtCmd_TowerPrintTrainerMessage,
+    FrtCmd_TowerFreeData,
+    FrtCmd_TowerStartBattle,
+    FrtCmd_TowerEndBattle,
+    FrtCmd_TowerSendLinkMessage,
+    FrtCmd_TowerWaitLink,
+    FrtCmd_HallAlloc,
+    FrtCmd_HallInit,
+    FrtCmd_HallFree,
+    FrtCmd_HallLaunchApp,
+    FrtCmd_HallEndBattle,
+    FrtCmd_HallStartBattle,
+    FrtCmd_HallAction,
+    FrtCmd_HallGetBattleResult,
+    FrtCmd_HallSendLinkMessage,
+    FrtCmd_HallWaitLink,
+    FrtCmd_HallPrintTrainerMessage,
+    FrtCmd_Dummy150,
+    FrtCmd_CastleAlloc,
+    FrtCmd_CastleInit,
+    FrtCmd_CastleFree,
+    FrtCmd_CastleLaunchPartyApp,
+    FrtCmd_CastleEndBattle,
+    FrtCmd_CastleStartBattle,
+    FrtCmd_CastleLaunchOpponentApp,
+    FrtCmd_CastleSetPartyBeforeBattle,
+    FrtCmd_CastleGenerateOpponents,
+    FrtCmd_CastleAction,
+    FrtCmd_CastleGetBattleResult,
+    FrtCmd_CastleSendLinkMessage,
+    FrtCmd_CastleWaitLink,
+    FrtCmd_CastleLaunchEmptyApp,
+    FrtCmd_CastleWaitLinkChoice,
+    FrtCmd_CastleGetPoints,
+    FrtCmd_CastleSpendPoints,
+    FrtCmd_CastleAddPoints,
+    FrtCmd_CastlePrintTrainerMessage,
+    FrtCmd_LinkLobbyAlloc,
+    FrtCmd_LinkLobbyFree,
+    FrtCmd_LinkLobbySend,
+    FrtCmd_LinkLobbyWaitReceive,
+    FrtCmd_LinkLobbyCheckPartnerFacility,
+    FrtCmd_LinkLobbyRunPartyApp,
+    FrtCmd_LinkLobbyGetPartyMenuResult,
+    FrtCmd_LinkLobbyGetPartnerChoice,
+    FrtCmd_LinkLobbyAction,
+    FrtCmd_LinkLobbyStartTower,
+    FrtCmd_TowerLinkSendTrainers,
+    FrtCmd_TowerLinkWaitReceive,
+    FrtCmd_TowerFree,
+    FrtCmd_UpdateWifiFriendDate,
+    FrtCmd_ArcadeAlloc,
+    FrtCmd_ArcadeInit,
+    FrtCmd_ArcadeFree,
+    FrtCmd_ArcadeEndBattle,
+    FrtCmd_ArcadeStartBattle,
+    FrtCmd_ArcadeSetPartyBeforeBattle,
+    FrtCmd_ArcadeSetPartyAfterBattle,
+    FrtCmd_ArcadeAction,
+    FrtCmd_ArcadeGetBattleResult,
+    FrtCmd_ArcadeSendBuffer,
+    FrtCmd_ArcadeReceiveBuffer,
+    FrtCmd_LaunchGameBoard,
+    FrtCmd_ArcadePrintMsg,
+    FrtCmd_ArcadeSetEvent,
+    FrtCmd_ArcadeSetItemIconVisible,
+    FrtCmd_Dummy199,
+    FrtCmd_200,
+    FrtCmd_201,
+    FrtCmd_LinkLobbyWaitReceiveOrAbort,
+    FrtCmd_LinkSyncOrAbort,
+    FrtCmd_GetSyncAborted,
+    FrtCmd_ClearSyncAborted,
+    FrtCmd_MenuSetAlignRight,
+    FrtCmd_MenuSetAlignBottom,
+};
 
 static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
     const u8 *ptr = ctx->scriptPtr;
@@ -359,7 +582,6 @@ BOOL FrontierScriptNative_WaitSaveBattleRecord(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 int FrontierScript_GetBattleRecordType(int facility, int mode) {
     int type = 15;
     switch (facility) {
@@ -477,7 +699,6 @@ int FrontierScript_GetBattleRecordType(int facility, int mode) {
     }
     return type;
 }
-#pragma force_active reset
 
 // Plays the recorded battle.
 BOOL FrtCmd_PlayBattleRecord(FrontierScriptContext *ctx) {
@@ -511,7 +732,6 @@ BOOL FrtCmd_SaveGameNormal(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_SaveGameAsync(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
@@ -537,7 +757,6 @@ BOOL FrontierScriptNative_WaitSave(FrontierScriptContext *ctx) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_SaveWipeExtraChunks(FrontierScriptContext *ctx) {
     Save_WipeExtraChunks(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
@@ -926,7 +1145,6 @@ u32 FrontierScript_PackHalfWords(u32 low, u32 high) {
     return low | (high << 16);
 }
 
-#pragma force_active on
 void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *work) {
     int i1;
     u8 *buffer1;
@@ -1051,7 +1269,6 @@ void FrontierTransition_RowScrollTask(SysTask *task, FrontierTransitionWork *wor
         }
     }
 }
-#pragma force_active reset
 
 enum {
     TRANSITION_ROW_SCROLL_START_FLASH,
@@ -1214,7 +1431,7 @@ BOOL FrontierScriptNative_WaitTransition(FrontierScriptContext *ctx) {
     FrontierTransitionWork *work;
     BOOL running;
     work = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    running = gFrontierTransitionFuncs[work->transition](work);
+    running = sFrontierTransitionFuncs[work->transition](work);
     if (running == FALSE) {
         SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
@@ -1301,7 +1518,6 @@ BOOL FrontierScriptNative_WaitShake(FrontierScriptContext *ctx) {
     return ((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->shake.task == NULL;
 }
 
-#pragma force_active on
 // Sets the main screen's window 0 (or turns it off) after a delay.
 BOOL FrtCmd_SetWindowDelayed(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
@@ -1320,7 +1536,6 @@ BOOL FrtCmd_SetWindowDelayed(FrontierScriptContext *ctx) {
     data->task = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierMap_WindowTask, data, 300);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_WaitWindowDelayed(FrontierScriptContext *ctx) {
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitWindowTask);
@@ -1336,7 +1551,6 @@ BOOL FrtCmd_Dummy150(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_CreatePartyMonSprite(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
     u32 slot = FrontierScript_ReadVar(ctx);
@@ -1350,7 +1564,6 @@ BOOL FrtCmd_CreatePartyMonSprite(FrontierScriptContext *ctx) {
     FrontierMap_CreateMonSprite(map, mon, HEAP_ID_FIELD2, id, x, y, 0, 0, 8, 0);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_DeleteMonSprite(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
@@ -1358,7 +1571,6 @@ BOOL FrtCmd_DeleteMonSprite(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_BrainIntro(FrontierScriptContext *ctx) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
     u16 brain = FrontierScriptContext_ReadHalfWord(ctx);
@@ -1369,7 +1581,6 @@ BOOL FrtCmd_BrainIntro(FrontierScriptContext *ctx) {
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitBrainIntro);
     return TRUE;
 }
-#pragma force_active reset
 
 BOOL FrontierScriptNative_WaitBrainIntro(FrontierScriptContext *ctx) {
     Frontier_GetMap(ctx->frontierSystem->frontierWork);

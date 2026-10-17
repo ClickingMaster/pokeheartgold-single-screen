@@ -35,8 +35,6 @@ struct FrontierMapBgAnim {
     u32 unused;
 };
 
-extern const u16 gFrontierMapBgAnimScreens[2];
-
 FrontierMapBgTileAnim *FrontierMapBgAnim_CreateTileAnim(BgConfig *bgConfig);
 void FrontierMapBgAnim_DestroyTileAnim(FrontierMapBgTileAnim *tileAnim);
 void FrontierMapBgAnim_TileTask(SysTask *task, void *data);
@@ -60,7 +58,8 @@ void FrontierMapBgAnim_Free(FrontierMapBgAnim *anim) {
     Heap_Free(anim);
 }
 
-#pragma force_active on
+static const u16 sFrontierMapBgAnimScreens[2] = { 20, 21 };
+
 FrontierMapBgTileAnim *FrontierMapBgAnim_CreateTileAnim(BgConfig *bgConfig) {
     NNSG2dScreenData *screenData;
     NNSG2dCharacterData *charData;
@@ -74,7 +73,7 @@ FrontierMapBgTileAnim *FrontierMapBgAnim_CreateTileAnim(BgConfig *bgConfig) {
     tileAnim->bgConfig = bgConfig;
     narc = NARC_New(NARC_a_1_8_3, HEAP_ID_101);
     for (i = 0; i < 2; i++) {
-        file = GfGfxLoader_GetScrnDataFromOpenNarc(narc, gFrontierMapBgAnimScreens[i], TRUE, &screenData, HEAP_ID_101);
+        file = GfGfxLoader_GetScrnDataFromOpenNarc(narc, sFrontierMapBgAnimScreens[i], TRUE, &screenData, HEAP_ID_101);
         MIi_CpuCopy32(screenData->rawData, tileAnim->screens[i], 0x1000);
         Heap_Free(file);
     }
@@ -90,7 +89,6 @@ FrontierMapBgTileAnim *FrontierMapBgAnim_CreateTileAnim(BgConfig *bgConfig) {
     tileAnim->task = SysTask_CreateOnMainQueue(FrontierMapBgAnim_TileTask, tileAnim, 79500);
     return tileAnim;
 }
-#pragma force_active reset
 
 void FrontierMapBgAnim_DestroyTileAnim(FrontierMapBgTileAnim *tileAnim) {
     SysTask_Destroy(tileAnim->task);

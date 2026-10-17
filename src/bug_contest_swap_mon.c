@@ -125,18 +125,6 @@ typedef struct BugContestSwapMonBgTemplates {
     BgTemplate templates[5];
 } BugContestSwapMonBgTemplates;
 
-extern const u8 gBugContestSwapMonBgIds[5];
-extern const GraphicsModes gBugContestSwapMonGraphicsModes;
-extern const OamCharTransferParam gBugContestSwapMonOamCharTransferParam;
-extern const SpriteResourceCountsListUnion gBugContestSwapMonSpriteResourceCounts;
-extern const OamManagerParam gBugContestSwapMonOamManagerParam;
-extern const GraphicsBanks gBugContestSwapMonGraphicsBanks;
-extern const ManagedSpriteTemplate gBugContestSwapMonIconSpriteTemplate;
-extern const ManagedSpriteTemplate gBugContestSwapMonSpriteTemplate;
-extern const SwapMonPanelWindowTemplate gSwapMonPanelWindowTemplates[SWAP_MON_PANEL_WINDOWS];
-extern const BugContestSwapMonBgTemplates gBugContestSwapMonBgTemplates;
-extern const BugContestSwapMonStateFunc gBugContestSwapMonStateFuncs[];
-
 static void BugContestSwapMon_ShowBothMons(BugContestSwapMon *swapMon);
 static void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon);
 static int BugContestSwapMon_GetInitialState(int noPokemonCaught);
@@ -185,6 +173,166 @@ static void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, Messag
 
 BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon);
 BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon);
+
+static const u8 sBugContestSwapMonBgIds[5] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_2, GF_BG_LYR_MAIN_3, GF_BG_LYR_SUB_0 };
+
+static const GraphicsModes sBugContestSwapMonGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+
+static const OamCharTransferParam sBugContestSwapMonOamCharTransferParam = {
+    .maxTasks = 0,
+    .sizeMain = 0x20000,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_64K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_64K,
+};
+
+static const SpriteResourceCountsListUnion sBugContestSwapMonSpriteResourceCounts = {
+    { 3, 2, 2, 2, 0, 0 }
+};
+
+static const OamManagerParam sBugContestSwapMonOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sBugContestSwapMonGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_B,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_A,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+
+static const ManagedSpriteTemplate sBugContestSwapMonIconSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0, 1, 1, 1, 0, 0 },
+    .bgPriority = 2,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sBugContestSwapMonSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 1,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 0, 0, 0, 0, 0, 0 },
+    .bgPriority = 2,
+    .vramTransfer = 0,
+};
+
+static const SwapMonPanelWindowTemplate sSwapMonPanelWindowTemplates[SWAP_MON_PANEL_WINDOWS] = {
+    { .x = -2, .y = -2, .width = 8, .height = 2, .palette = 15, .baseTile = 28 },
+    { .x = 6,  .y = -2, .width = 1, .height = 2, .palette = 15, .baseTile = 44 },
+    { .x = -8, .y = 1,  .width = 5, .height = 1, .palette = 15, .baseTile = 46 },
+    { .x = -2, .y = 1,  .width = 3, .height = 1, .palette = 15, .baseTile = 51 },
+    { .x = 1,  .y = 1,  .width = 5, .height = 1, .palette = 15, .baseTile = 54 },
+    { .x = 0,  .y = 0,  .width = 6, .height = 1, .palette = 15, .baseTile = 59 },
+};
+
+static const BugContestSwapMonBgTemplates sBugContestSwapMonBgTemplates = {
+    .templates = {
+                  {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+                  {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0800,
+            .charBase = GX_BG_CHARBASE_0x08000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+                  {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+                  {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1800,
+            .charBase = GX_BG_CHARBASE_0x10000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+                  {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0xf800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .mosaic = 0,
+        },
+                  },
+};
+
+BugContestSwapMonStateFunc gBugContestSwapMonStateFuncs[] = {
+    BugContestSwapMon_ShowCaughtMon,
+    BugContestSwapMon_ChooseMon,
+};
 
 BOOL BugContestSwapMon_Init(OverlayManager *man, int *state) {
     BugContestSwapMon *swapMon;
@@ -394,7 +542,7 @@ invalid:
 }
 
 static void BugContestSwapMon_SetBanks(void) {
-    GraphicsBanks banks = gBugContestSwapMonGraphicsBanks;
+    GraphicsBanks banks = sBugContestSwapMonGraphicsBanks;
 
     GfGfx_SetBanks(&banks);
 }
@@ -486,7 +634,6 @@ static void BugContestSwapMon_VBlank(void *data) {
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
-#pragma force_active on
 static void BugContestSwapMon_Setup(OverlayManager *man) {
     BugContestSwapMonArgs *args = OverlayManager_GetArgs(man);
     BugContestSwapMon *swapMon;
@@ -514,7 +661,6 @@ static void BugContestSwapMon_Setup(OverlayManager *man) {
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     Main_SetVBlankIntrCB(BugContestSwapMon_VBlank, swapMon);
 }
-#pragma force_active reset
 
 static void BugContestSwapMon_Teardown(OverlayManager *man) {
     BugContestSwapMon *swapMon = OverlayManager_GetData(man);
@@ -532,7 +678,6 @@ static void BugContestSwapMon_Teardown(OverlayManager *man) {
     Heap_Destroy(HEAP_ID_148);
 }
 
-#pragma force_active on
 static void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
     GraphicsModes modes;
     BugContestSwapMonBgTemplates templates;
@@ -541,10 +686,10 @@ static void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
     const BgTemplate *bgTemplate;
 
     swapMon->bgConfig = BgConfig_Alloc(swapMon->heapID);
-    modes = gBugContestSwapMonGraphicsModes;
+    modes = sBugContestSwapMonGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    templates = gBugContestSwapMonBgTemplates;
-    bgIds = gBugContestSwapMonBgIds;
+    templates = sBugContestSwapMonBgTemplates;
+    bgIds = sBugContestSwapMonBgIds;
     i = 0;
     bgTemplate = templates.templates;
     for (; i < 5; bgTemplate++, bgIds++, i++) {
@@ -554,13 +699,12 @@ static void BugContestSwapMon_InitBgs(BugContestSwapMon *swapMon) {
     }
     swapMon->narc = NARC_New(NARC_a_1_7_3, swapMon->heapID);
 }
-#pragma force_active reset
 
 static void BugContestSwapMon_FreeBgs(BugContestSwapMon *swapMon) {
     int i;
     NARC_Delete(swapMon->narc);
     for (i = 0; i < 5; i++) {
-        FreeBgTilemapBuffer(swapMon->bgConfig, gBugContestSwapMonBgIds[i]);
+        FreeBgTilemapBuffer(swapMon->bgConfig, sBugContestSwapMonBgIds[i]);
     }
     Heap_Free(swapMon->bgConfig);
 }
@@ -586,12 +730,12 @@ static void BugContestSwapMon_InitSpriteSystem(BugContestSwapMon *swapMon) {
 
     swapMon->spriteSystem = SpriteSystem_Alloc(swapMon->heapID);
     swapMon->spriteManager = SpriteManager_New(swapMon->spriteSystem);
-    oamManagerParam = gBugContestSwapMonOamManagerParam;
-    oamCharTransferParam = gBugContestSwapMonOamCharTransferParam;
+    oamManagerParam = sBugContestSwapMonOamManagerParam;
+    oamCharTransferParam = sBugContestSwapMonOamCharTransferParam;
     oamCharTransferParam.maxTasks = 32;
     SpriteSystem_Init(swapMon->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
     SpriteSystem_InitSprites(swapMon->spriteSystem, swapMon->spriteManager, 32);
-    resourceCounts = gBugContestSwapMonSpriteResourceCounts;
+    resourceCounts = sBugContestSwapMonSpriteResourceCounts;
     SpriteSystem_InitManagerWithCapacities(swapMon->spriteSystem, swapMon->spriteManager, &resourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(swapMon->spriteSystem), 0, FX32_CONST(524));
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -658,7 +802,7 @@ static void BugContestSwapMon_LoadSpriteChar(ManagedSprite *sprite, void *data, 
 }
 
 static ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 animation, u8 priority) {
-    ManagedSpriteTemplate template = gBugContestSwapMonSpriteTemplate;
+    ManagedSpriteTemplate template = sBugContestSwapMonSpriteTemplate;
     ManagedSprite *sprite;
 
     template.x = x;
@@ -671,7 +815,7 @@ static ManagedSprite *BugContestSwapMon_NewSprite(SpriteSystem *spriteSystem, Sp
 }
 
 static ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u8 slot) {
-    ManagedSpriteTemplate template = gBugContestSwapMonIconSpriteTemplate;
+    ManagedSpriteTemplate template = sBugContestSwapMonIconSpriteTemplate;
 
     if (slot >= 2) {
         GF_AssertFail();
@@ -682,7 +826,6 @@ static ManagedSprite *BugContestSwapMon_NewMonIconSprite(SpriteSystem *spriteSys
     return SpriteSystem_NewSpriteWithYOffset(spriteSystem, spriteManager, &template, FX32_CONST(524));
 }
 
-#pragma force_active on
 static SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int slot, Pokemon *mon) {
     SwapMonPanel *panel;
     u8 bgId = slot == 0 ? GF_BG_LYR_MAIN_2 : GF_BG_LYR_MAIN_3;
@@ -695,7 +838,7 @@ static SwapMonPanel *SwapMonPanel_New(SwapMonPanels *panels, u16 x, u16 y, int s
     panel->sprites[0] = BugContestSwapMon_NewSprite(panels->spriteSystem, panels->spriteManager, panel->x, panel->y, 0, 1);
     panel->sprites[1] = BugContestSwapMon_NewMonIconSprite(panels->spriteSystem, panels->spriteManager, panel->x - 44, panel->y - 8, slot);
     for (i = 0; i < SWAP_MON_PANEL_WINDOWS; i++) {
-        AddWindowParameterized(panels->bgConfig, &panel->windows[i], bgId, (u8)((u8)(x >> 3) + gSwapMonPanelWindowTemplates[i].x), (u8)((u8)(y >> 3) + gSwapMonPanelWindowTemplates[i].y), gSwapMonPanelWindowTemplates[i].width, gSwapMonPanelWindowTemplates[i].height, gSwapMonPanelWindowTemplates[i].palette, gSwapMonPanelWindowTemplates[i].baseTile);
+        AddWindowParameterized(panels->bgConfig, &panel->windows[i], bgId, (u8)((u8)(x >> 3) + sSwapMonPanelWindowTemplates[i].x), (u8)((u8)(y >> 3) + sSwapMonPanelWindowTemplates[i].y), sSwapMonPanelWindowTemplates[i].width, sSwapMonPanelWindowTemplates[i].height, sSwapMonPanelWindowTemplates[i].palette, sSwapMonPanelWindowTemplates[i].baseTile);
     }
     return panel;
 }
@@ -735,14 +878,12 @@ static void SwapMonPanel_Draw(SwapMonPanel *panel, SwapMonText *text) {
     SwapMonText_PrintNumber(text, &panel->windows[SWAP_MON_PANEL_WIN_MAX_HP], maxHp, 3, TRUE, 0);
     BugContestSwapMon_DrawHpBar(&panel->windows[SWAP_MON_PANEL_WIN_HP_BAR], (u16)hp, (u16)maxHp);
 }
-#pragma force_active reset
 
 static void SwapMonPanel_StartScroll(SwapMonPanel *panel, void *scrolling, s16 targetY) {
     panel->scrolling = scrolling;
     panel->targetY = targetY;
 }
 
-#pragma force_active on
 static void SwapMonPanel_Scroll(SwapMonPanel *panel) {
     BgConfig *bgConfig;
     Window *window;
@@ -788,7 +929,6 @@ static void SwapMonPanel_Scroll(SwapMonPanel *panel) {
     }
     BgCommitTilemapBufferToVram(bgConfig, bgId);
 }
-#pragma force_active reset
 
 static BOOL SwapMonPanel_IsScrollDone(SwapMonPanel *panel) {
     return panel->scrolling == NULL;
@@ -848,7 +988,6 @@ static void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scr
     SwapMonPanel_StartScroll(panels->panels[slot], scrolling, targetY);
 }
 
-#pragma force_active on
 static void SwapMonPanels_Scroll(SwapMonPanels *panels) {
     int i;
     u8 *slot = (u8 *)panels;
@@ -859,7 +998,6 @@ static void SwapMonPanels_Scroll(SwapMonPanels *panels) {
         }
     }
 }
-#pragma force_active reset
 
 static BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels) {
     int i;
@@ -872,7 +1010,6 @@ static BOOL SwapMonPanels_IsScrollDone(SwapMonPanels *panels) {
     return TRUE;
 }
 
-#pragma force_active on
 static SwapMonText *SwapMonText_New(enum HeapID heapID) {
     SwapMonText *text = Heap_Alloc(heapID, sizeof(SwapMonText));
     MI_CpuFill8(text, 0, sizeof(SwapMonText));
@@ -893,7 +1030,6 @@ static void SwapMonText_Init(SwapMonText *text, BgConfig *bgConfig, int bgLayer,
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_15_OFFSET, text->heapID);
     BG_FillCharDataRange(text->bgConfig, (GFBgLayer)text->bgLayer, 0, 1, 0);
 }
-#pragma force_active reset
 
 static void SwapMonText_Delete(SwapMonText *text) {
     SwapMonText_CloseMessageBox(text);
@@ -977,7 +1113,6 @@ static void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID hea
     LoadUserFrameGfx2(bgConfig, (GFBgLayer)bgLayer, 978, 13, 0, heapID);
 }
 
-#pragma force_active on
 static u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options) {
     int textSpeed;
     u8 printerId;
@@ -1008,4 +1143,3 @@ static void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, Messag
     AddTextPrinterParameterizedWithColor(window, 0, string, x, y, 0, color, NULL);
     String_Delete(string);
 }
-#pragma force_active reset

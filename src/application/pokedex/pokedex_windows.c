@@ -22,13 +22,191 @@
 #include "pokedex_util.h"
 #include "text.h"
 
-extern const WindowTemplate sListWindowTemplates[];
-extern const WindowTemplate sSearchWindowTemplates[];
-extern const WindowTemplate sAreaWindowTemplates[];
-extern const WindowTemplate sSizeCheckWindowTemplates[];
-extern const WindowTemplate sPokedexEntryMenuWindowTemplates[];
-extern const WindowTemplate sFormsWindowTemplates[];
-extern const u8 sSearchTypeMsgIds[];
+static const WindowTemplate sPokedexEntryMenuWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 9,  .height = 2, .palette = 2, .baseTile = 0x3EE },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 10, .top = 10, .width = 15, .height = 2, .palette = 1, .baseTile = 0x1E2 },
+};
+
+static const u16 sSearchTypeMsgIds[] = { 58, 50, 60, 56, 54, 48, 63, 53, 59, 61, 62, 51, 55, 49, 52, 57, 47, 64 };
+
+static const WindowTemplate sSizeCheckWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 9,  .height = 2, .palette = 2, .baseTile = 0x3EE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 4,  .top = 3,  .width = 8,  .height = 2, .palette = 1, .baseTile = 0x3DE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 20, .top = 3,  .width = 8,  .height = 2, .palette = 1, .baseTile = 0x3CE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 10, .top = 6,  .width = 12, .height = 2, .palette = 1, .baseTile = 0x3B6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 21, .width = 4,  .height = 2, .palette = 2, .baseTile = 0x3AE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 21, .width = 8,  .height = 2, .palette = 2, .baseTile = 0x39E },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 17, .top = 21, .width = 4,  .height = 2, .palette = 2, .baseTile = 0x396 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 22, .top = 21, .width = 8,  .height = 2, .palette = 2, .baseTile = 0x386 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 10, .top = 1,  .width = 12, .height = 2, .palette = 1, .baseTile = 0x1E8 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 2,  .top = 17, .width = 4,  .height = 2, .palette = 1, .baseTile = 0x1E0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 7,  .top = 17, .width = 8,  .height = 2, .palette = 1, .baseTile = 0x1D0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 17, .top = 17, .width = 4,  .height = 2, .palette = 1, .baseTile = 0x1C8 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 22, .top = 17, .width = 8,  .height = 2, .palette = 1, .baseTile = 0x1B0 },
+};
+
+static const WindowTemplate sAreaWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 9,  .height = 2, .palette = 2, .baseTile = 0x1EE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 3,  .width = 7,  .height = 2, .palette = 1, .baseTile = 0x1E0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 0,  .top = 16, .width = 9,  .height = 2, .palette = 1, .baseTile = 0x1CE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 13, .top = 12, .width = 14, .height = 2, .palette = 1, .baseTile = 0x1B2 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 1,  .top = 5,  .width = 6,  .height = 2, .palette = 1, .baseTile = 0x1F4 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 9,  .top = 1,  .width = 7,  .height = 2, .palette = 1, .baseTile = 0x1E6 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 18, .top = 1,  .width = 7,  .height = 2, .palette = 1, .baseTile = 0x1E6 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 24, .top = 1,  .width = 7,  .height = 2, .palette = 1, .baseTile = 0x1D8 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 5,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x1DC },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 8,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x1B8 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 11, .width = 18, .height = 2, .palette = 1, .baseTile = 0x194 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 14, .width = 18, .height = 2, .palette = 1, .baseTile = 0x170 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 17, .width = 18, .height = 2, .palette = 1, .baseTile = 0x14C },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 10, .top = 20, .width = 18, .height = 2, .palette = 1, .baseTile = 0x128 },
+};
+
+static const WindowTemplate sFormsWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 9,  .height = 2, .palette = 2, .baseTile = 0x3EE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 4,  .top = 5,  .width = 9,  .height = 2, .palette = 1, .baseTile = 0x3DC },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 13, .top = 5,  .width = 15, .height = 2, .palette = 1, .baseTile = 0x3BE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 5,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x39A },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 21, .top = 17, .width = 10, .height = 2, .palette = 1, .baseTile = 0x1EC },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 13, .top = 2,  .width = 6,  .height = 2, .palette = 1, .baseTile = 0x1E0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 0,  .top = 12, .width = 16, .height = 2, .palette = 1, .baseTile = 0x1C0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 16, .top = 12, .width = 16, .height = 2, .palette = 1, .baseTile = 0x1A0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 3,  .top = 20, .width = 12, .height = 3, .palette = 1, .baseTile = 0x17C },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 18, .top = 20, .width = 12, .height = 3, .palette = 1, .baseTile = 0x158 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 1,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x1DC },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 4,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x1B8 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 7,  .width = 18, .height = 2, .palette = 1, .baseTile = 0x194 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 10, .width = 18, .height = 2, .palette = 1, .baseTile = 0x170 },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 13, .width = 18, .height = 2, .palette = 1, .baseTile = 0x14C },
+    { .bgId = GF_BG_LYR_MAIN_2, .left = 8,  .top = 16, .width = 18, .height = 2, .palette = 1, .baseTile = 0x128 },
+};
+
+static const WindowTemplate sListWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 2,  .top = 9,  .width = 12, .height = 2, .palette = 9, .baseTile = 0x3E8 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 9,  .width = 12, .height = 2, .palette = 9, .baseTile = 0x3D0 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 11, .top = 11, .width = 3,  .height = 2, .palette = 9, .baseTile = 0x3CA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 11, .top = 11, .width = 3,  .height = 2, .palette = 9, .baseTile = 0x3C4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 27, .top = 11, .width = 3,  .height = 2, .palette = 9, .baseTile = 0x3BE },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 27, .top = 11, .width = 3,  .height = 2, .palette = 9, .baseTile = 0x3B8 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 10, .top = 16, .width = 11, .height = 2, .palette = 0, .baseTile = 0x1EA },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 8,  .height = 2, .palette = 2, .baseTile = 0x3F0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 3,  .width = 4,  .height = 2, .palette = 0, .baseTile = 0x3E8 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 19, .top = 3,  .width = 9,  .height = 2, .palette = 0, .baseTile = 0x3D6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 13, .top = 5,  .width = 18, .height = 2, .palette = 0, .baseTile = 0x3B2 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 17, .width = 28, .height = 6, .palette = 1, .baseTile = 0x30A },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 18, .top = 11, .width = 5,  .height = 2, .palette = 1, .baseTile = 0x300 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 23, .top = 11, .width = 8,  .height = 2, .palette = 1, .baseTile = 0x2F0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 18, .top = 13, .width = 5,  .height = 2, .palette = 1, .baseTile = 0x2E6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 23, .top = 13, .width = 8,  .height = 2, .palette = 1, .baseTile = 0x2D6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 16, .top = 8,  .width = 14, .height = 2, .palette = 1, .baseTile = 0x2B6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 16, .top = 11, .width = 3,  .height = 2, .palette = 1, .baseTile = 0x2B0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 20, .top = 11, .width = 8,  .height = 2, .palette = 1, .baseTile = 0x2A0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 13, .width = 16, .height = 2, .palette = 1, .baseTile = 0x280 },
+};
+
+static const WindowTemplate sSearchWindowTemplates[] = {
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 19, .width = 28, .height = 5,  .palette = 2, .baseTile = 0x174 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 4,  .top = 1,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0x162 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 4,  .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x158 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 7,  .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x14E },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 10, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x144 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 13, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x13A },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 1,  .top = 16, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x130 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 25, .top = 4,  .width = 6,  .height = 2,  .palette = 2, .baseTile = 0x124 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 16, .top = 1,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x10E },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 4,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xFC  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 7,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xEC  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 7,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xDC  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 10, .width = 6,  .height = 2,  .palette = 2, .baseTile = 0xD0  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 10, .width = 6,  .height = 2,  .palette = 2, .baseTile = 0xC4  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 13, .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xB2  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 18, .top = 13, .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xA0  },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 7,  .top = 16, .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x92  },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 1,  .top = 1,  .width = 8,  .height = 2,  .palette = 4, .baseTile = 0x1F0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 12, .top = 1,  .width = 8,  .height = 2,  .palette = 4, .baseTile = 0x1E0 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 23, .top = 1,  .width = 8,  .height = 2,  .palette = 4, .baseTile = 0x1D0 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 4,  .top = 1,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0x162 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 4,  .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x158 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 7,  .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x14E },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 10, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x144 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 13, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x13A },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 16, .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x130 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 25, .top = 4,  .width = 6,  .height = 2,  .palette = 2, .baseTile = 0x124 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 1,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x10E },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 4,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xFC  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 7,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xEC  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 15, .top = 7,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xDC  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 10, .width = 6,  .height = 2,  .palette = 2, .baseTile = 0xD0  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 15, .top = 10, .width = 6,  .height = 2,  .palette = 2, .baseTile = 0xC4  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 13, .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xB2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 13, .width = 9,  .height = 2,  .palette = 2, .baseTile = 0xA0  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 16, .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x92  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 1,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x1EA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 1,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x1D4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 6,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x1BE },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 6,  .width = 11, .height = 2,  .palette = 2, .baseTile = 0x1A8 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 10, .width = 11, .height = 2,  .palette = 2, .baseTile = 0x192 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 10, .width = 11, .height = 2,  .palette = 2, .baseTile = 0x17C },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 14, .width = 11, .height = 2,  .palette = 2, .baseTile = 0x166 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 14, .width = 11, .height = 2,  .palette = 2, .baseTile = 0x150 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 1,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1F2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 13, .top = 1,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x1E2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 21, .top = 1,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x1D2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 0,  .top = 5,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x1C2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 5,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x1B2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 5,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x1A2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 24, .top = 5,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x192 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 0,  .top = 8,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x182 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 8,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x172 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 8,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x162 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 24, .top = 8,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x152 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 0,  .top = 11, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x142 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 11, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x132 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 11, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x122 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 24, .top = 11, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x112 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 0,  .top = 14, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x102 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 14, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xF2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 14, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xE2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 24, .top = 14, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xD2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 0,  .top = 17, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xC2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 17, .width = 8,  .height = 2,  .palette = 2, .baseTile = 0xB2  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 1,  .width = 6,  .height = 2,  .palette = 2, .baseTile = 0x1F4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 15, .top = 1,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0x1E2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 5,  .width = 29, .height = 14, .palette = 2, .baseTile = 0x4C  },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 3,  .top = 1,  .width = 5,  .height = 2,  .palette = 2, .baseTile = 0x1F6 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 10, .top = 1,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1E8 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 19, .top = 1,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1DA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 1,  .top = 1,  .width = 6,  .height = 2,  .palette = 2, .baseTile = 0x1F4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 1,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0x1E2 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 19, .top = 1,  .width = 9,  .height = 2,  .palette = 2, .baseTile = 0x1D0 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 7,  .top = 1,  .width = 6,  .height = 2,  .palette = 2, .baseTile = 0x1F4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 16, .top = 1,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1E6 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 6,  .top = 8,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1D8 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 19, .top = 8,  .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1CA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 6,  .top = 15, .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1BC },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 19, .top = 15, .width = 7,  .height = 2,  .palette = 2, .baseTile = 0x1AE },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 8,  .top = 1,  .width = 6,  .height = 3,  .palette = 2, .baseTile = 0x1EE },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 0,  .width = 8,  .height = 2,  .palette = 2, .baseTile = 0x3F0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 3,  .width = 4,  .height = 2,  .palette = 0, .baseTile = 0x3E8 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 19, .top = 3,  .width = 9,  .height = 2,  .palette = 0, .baseTile = 0x3D6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 13, .top = 5,  .width = 18, .height = 2,  .palette = 0, .baseTile = 0x3B2 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 2,  .top = 17, .width = 28, .height = 6,  .palette = 1, .baseTile = 0x30A },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 18, .top = 11, .width = 5,  .height = 2,  .palette = 1, .baseTile = 0x300 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 23, .top = 11, .width = 8,  .height = 2,  .palette = 1, .baseTile = 0x2F0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 18, .top = 13, .width = 5,  .height = 2,  .palette = 1, .baseTile = 0x2E6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 23, .top = 13, .width = 8,  .height = 2,  .palette = 1, .baseTile = 0x2D6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 16, .top = 8,  .width = 14, .height = 2,  .palette = 1, .baseTile = 0x2B6 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 16, .top = 11, .width = 3,  .height = 2,  .palette = 1, .baseTile = 0x2B0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 20, .top = 11, .width = 8,  .height = 2,  .palette = 1, .baseTile = 0x2A0 },
+    { .bgId = GF_BG_LYR_SUB_1,  .left = 15, .top = 13, .width = 16, .height = 2,  .palette = 1, .baseTile = 0x280 },
+    { .bgId = GF_BG_LYR_MAIN_1, .left = 10, .top = 16, .width = 11, .height = 2,  .palette = 0, .baseTile = 0x1BA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 2,  .top = 9,  .width = 12, .height = 2,  .palette = 9, .baseTile = 0x3E8 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 18, .top = 9,  .width = 12, .height = 2,  .palette = 9, .baseTile = 0x3D0 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 11, .top = 11, .width = 3,  .height = 2,  .palette = 9, .baseTile = 0x3CA },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 11, .top = 11, .width = 3,  .height = 2,  .palette = 9, .baseTile = 0x3C4 },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 27, .top = 11, .width = 3,  .height = 2,  .palette = 9, .baseTile = 0x3BE },
+    { .bgId = GF_BG_LYR_MAIN_0, .left = 27, .top = 11, .width = 3,  .height = 2,  .palette = 9, .baseTile = 0x3B8 },
+};
 
 void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
@@ -46,8 +224,6 @@ void PokedexApp_AddWindows(PokedexAppData *pokedexApp, const WindowTemplate *tem
         template ++;
     }
 }
-
-#pragma force_active on
 
 void PokedexApp_RemoveAllWindows(PokedexAppData *pokedexApp) {
     u32 i;
@@ -67,8 +243,6 @@ void PokedexApp_PrintFormattedMessage(PokedexAppData *pokedexApp, MsgData *msgDa
     String_Delete(string);
 }
 
-#pragma force_active reset
-
 void PokedexApp_SetupListWindows(PokedexAppData *pokedexApp) {
     u32 cursor;
     u32 species;
@@ -82,8 +256,6 @@ void PokedexApp_SetupListWindows(PokedexAppData *pokedexApp) {
     PokedexApp_DrawListEntryHeader(pokedexApp, species, cursor);
     PokedexApp_DrawListEntryDetails(pokedexApp, species, cursor);
 }
-
-#pragma force_active on
 
 // A count label: a 12-tile bar from the graphics NARC with the message right-aligned on it.
 void PokedexApp_DrawCountLabel(PokedexAppData *pokedexApp, int windowId, u32 msgNo) {
@@ -104,14 +276,10 @@ void PokedexApp_DrawCountLabel(PokedexAppData *pokedexApp, int windowId, u32 msg
     Heap_Free(allocation);
 }
 
-#pragma force_active reset
-
 void PokedexApp_DrawCountLabelAndCopy(PokedexAppData *pokedexApp, u32 windowId, u32 msgNo) {
     PokedexApp_DrawCountLabel(pokedexApp, windowId, msgNo);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
-
-#pragma force_active on
 
 // A three-digit count on a 3-tile background.
 void PokedexApp_DrawCountNumber(PokedexAppData *pokedexApp, u32 windowId, u32 value) {
@@ -133,8 +301,6 @@ void PokedexApp_DrawCountNumber(PokedexAppData *pokedexApp, u32 windowId, u32 va
     MessagePrinter_Delete(printer);
 }
 
-#pragma force_active reset
-
 void PokedexApp_DrawCountNumberAndCopy(PokedexAppData *pokedexApp, u32 windowId, u32 value) {
     PokedexApp_DrawCountNumber(pokedexApp, windowId, value);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
@@ -146,8 +312,6 @@ void PokedexApp_DrawSeenAndCaughtCounts(PokedexAppData *pokedexApp) {
     PokedexApp_DrawCountNumberAndCopy(pokedexApp, pokedexApp->countWindowSwap + 4, pokedexApp->searchResults.caughtCount);
     pokedexApp->countWindowSwap ^= 1;
 }
-
-#pragma force_active on
 
 void PokedexApp_DrawCenteredSpeciesName(PokedexAppData *pokedexApp, u32 species, int windowId) {
     if (species) {
@@ -167,8 +331,6 @@ void PokedexApp_DrawCenteredSpeciesName(PokedexAppData *pokedexApp, u32 species,
         ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[windowId]);
     }
 }
-
-#pragma force_active reset
 
 void PokedexApp_DrawListEntryHeader(PokedexAppData *pokedexApp, u32 species, u32 entry) {
     PokedexApp_DrawInfoLabel(pokedexApp, 7);
@@ -424,8 +586,6 @@ void PokedexApp_PutSearchWindowCellTiles(PokedexAppData *pokedexApp) {
     BgCellManager_PutWindowTiles(pokedexApp->bgCellManager, 7, &pokedexApp->windows[19]);
 }
 
-#pragma force_active on
-
 // The search screen's two-line help text for each page; page 1 shows the result count.
 void PokedexApp_DrawSearchMessage(PokedexAppData *pokedexApp, u32 page) {
     Window *window = &pokedexApp->windows[0];
@@ -482,8 +642,6 @@ void PokedexApp_DrawSearchMessage(PokedexAppData *pokedexApp, u32 page) {
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active reset
-
 void PokedexApp_DrawSearchOrderLabel(PokedexAppData *pokedexApp, u32 windowId) {
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, msg_0802_00026, 36, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
@@ -519,8 +677,6 @@ void PokedexApp_DrawSearchFormLabel(PokedexAppData *pokedexApp, u32 windowId) {
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, msg_0802_00032, 24, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
-#pragma force_active on
-
 // A search screen button: an 8-tile frame with the label centred on it.
 void PokedexApp_DrawSearchButton(PokedexAppData *pokedexApp, int windowId, int msgNo) {
     u8 *windows = (u8 *)pokedexApp->windows;
@@ -543,8 +699,6 @@ void PokedexApp_DrawSearchButton(PokedexAppData *pokedexApp, int windowId, int m
     }
     CopyWindowPixelsToVram_TextMode((Window *)(windows + offset));
 }
-
-#pragma force_active reset
 
 // Search menu: labels 20-26, buttons 17-19.
 void PokedexApp_DrawSearchMenuPage(PokedexAppData *pokedexApp) {
@@ -630,8 +784,6 @@ void PokedexApp_DrawSearchOrderPage(PokedexAppData *pokedexApp) {
     }
 }
 
-#pragma force_active on
-
 // Name page: the 27 letter buttons in a 7-column grid (window 67), title 66, value 66.
 void PokedexApp_DrawSearchNamePage(PokedexAppData *pokedexApp) {
     u16 i;
@@ -658,8 +810,6 @@ void PokedexApp_DrawSearchNamePage(PokedexAppData *pokedexApp) {
     ScheduleWindowCopyToVram(&pokedexApp->windows[67]);
     ScheduleWindowCopyToVram(&pokedexApp->windows[66]);
 }
-
-#pragma force_active reset
 
 // Type page: title 44, the 18 type buttons 47-64, values 45-46.
 void PokedexApp_DrawSearchTypePage(PokedexAppData *pokedexApp) {
@@ -773,8 +923,6 @@ void PokedexApp_DrawSearchOrderValue(PokedexAppData *pokedexApp, u32 windowId) {
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_SORT_ORDER] + 41, GetWindowWidth(&pokedexApp->windows[windowId]) * 8 / 2, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
-#pragma force_active on
-
 // The selected letter (26: any).
 void PokedexApp_DrawSearchNameValue(PokedexAppData *pokedexApp, int windowId) {
     int msgNo, width;
@@ -790,15 +938,13 @@ void PokedexApp_DrawSearchNameValue(PokedexAppData *pokedexApp, int windowId) {
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, msgNo, (width * 8) / 2, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
-#pragma force_active reset
-
 // x -1: centred.
 void PokedexApp_DrawSearchTypeValue(PokedexAppData *pokedexApp, u32 type, u32 windowId, s32 x) {
     FillWindowPixelBuffer(&pokedexApp->windows[windowId], 0);
     if (x == -1) {
         x = GetWindowWidth(&pokedexApp->windows[windowId]) * 8 / 2;
     }
-    PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, ((const u16 *)sSearchTypeMsgIds)[type], x, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
+    PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, sSearchTypeMsgIds[type], x, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
 // height in 0.1 m, shown in feet and inches (999: the slider's maximum).
@@ -836,7 +982,6 @@ void PokedexApp_DrawSearchAreaValue(PokedexAppData *pokedexApp, u32 windowId) {
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_AREA] + 65, GetWindowWidth(&pokedexApp->windows[windowId]) * 8 / 2, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 // The criteria summary on the search results screen (windows 1-16).
@@ -875,7 +1020,6 @@ void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 // The search results screen's counts (labels 95-96, counts 97-100 alternating as on the list screen).
 void PokedexApp_DrawSearchResultCounts(PokedexAppData *pokedexApp) {
@@ -890,8 +1034,6 @@ void PokedexApp_DrawSearchResultCounts(PokedexAppData *pokedexApp) {
     PokedexApp_PutWindowTilemap(pokedexApp, pokedexApp->countWindowSwap + 99);
     pokedexApp->countWindowSwap = 1 ^ pokedexApp->countWindowSwap;
 }
-
-#pragma force_active on
 
 // Writes the window's tiles into cell 15's tilemap (keeping the palette bits) and copies its pixels.
 void PokedexApp_PutWindowTilemap(PokedexAppData *pokedexApp, u32 windowId) {
@@ -915,8 +1057,6 @@ void PokedexApp_PutWindowTilemap(PokedexAppData *pokedexApp, u32 windowId) {
     }
     CopyWindowPixelsToVram_TextMode(&windows[windowId]);
 }
-
-#pragma force_active reset
 
 void PokedexApp_SetSearchSummaryVisible(PokedexAppData *pokedexApp, int visible) {
     u32 i;
@@ -981,8 +1121,6 @@ void PokedexApp_SetFormsWindowCellTiles(PokedexAppData *pokedexApp) {
     }
 }
 
-#pragma force_active on
-
 // Area screen: title, species, region labels (Johto, plus Kanto in the national dex), time of day, the list.
 void PokedexApp_SetupAreaWindows(PokedexAppData *pokedexApp) {
     String *string;
@@ -1018,8 +1156,6 @@ void PokedexApp_SetupAreaWindows(PokedexAppData *pokedexApp) {
     PokedexApp_DrawAreaList(pokedexApp);
 }
 
-#pragma force_active reset
-
 void PokedexApp_FreeAreaWindows(PokedexAppData *pokedexApp) {
     u32 i;
     u8 *window = (u8 *)pokedexApp;
@@ -1038,8 +1174,6 @@ void PokedexApp_DrawTimeOfDayLabel(PokedexAppData *pokedexApp) {
     PokedexApp_PrintMessage(&pokedexApp->windows[1], pokedexApp->msgData, pokedexApp->areaTimeOfDay + 129, 28, 0, 0, MAKE_TEXT_COLOR(2, 1, 0), 2);
     ScheduleWindowCopyToVram(&pokedexApp->windows[1]);
 }
-
-#pragma force_active on
 
 // The area list: six rows (windows 8-13 on cells 17-22) around the selected area areaListPos.
 void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
@@ -1062,8 +1196,6 @@ void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
         BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, (s8)x, (s8)y);
     }
 }
-
-#pragma force_active reset
 
 // The message for area list entry index: the map's location name, or "Johto" / "Kanto" for the region entry (-2).
 u32 PokedexApp_GetAreaListEntryMsg(PokedexAppData *pokedexApp, int index) {
@@ -1110,8 +1242,6 @@ void PokedexApp_ScrollAreaList(PokedexAppData *pokedexApp, int direction) {
     CopyWindowPixelsToVram_TextMode(&app->windows[i + 8]);
 }
 
-#pragma force_active on
-
 // Size check: the species and the player, their heights (top) and weights (bottom).
 void PokedexApp_SetupSizeCheckWindows(PokedexAppData *pokedexApp) {
     PokedexApp_AddWindows(pokedexApp, sSizeCheckWindowTemplates, 13);
@@ -1145,8 +1275,6 @@ void PokedexApp_SetupSizeCheckWindows(PokedexAppData *pokedexApp) {
         ScheduleWindowCopyToVram(&pokedexApp->windows[i]);
     }
 }
-
-#pragma force_active reset
 
 void PokedexApp_FreeSizeCheckWindows(PokedexAppData *pokedexApp) {
     u32 i;
@@ -1379,8 +1507,6 @@ void PokedexApp_ClearFormCompareWindows(PokedexAppData *pokedexApp) {
     ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[7]);
 }
 
-#pragma force_active on
-
 void PokedexApp_DrawCenteredFormName(PokedexAppData *pokedexApp, int windowId, int index) {
     int msgNo, width;
 
@@ -1390,5 +1516,3 @@ void PokedexApp_DrawCenteredFormName(PokedexAppData *pokedexApp, int windowId, i
     PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, windowId, msgNo, (width * 8) / 2, 0, 0, MAKE_TEXT_COLOR(5, 9, 0), 2);
     ScheduleWindowCopyToVram(&pokedexApp->windows[windowId]);
 }
-
-#pragma force_active reset

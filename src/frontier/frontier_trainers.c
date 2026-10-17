@@ -1,12 +1,18 @@
 #include "global.h"
 
+#include "constants/items.h"
 #include "constants/maps.h"
 #include "constants/moves.h"
+#include "constants/sprites.h"
+#include "constants/trainer_class.h"
 
 #include "battle/battle_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0193.h"
 
+#include "comm_state.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "filesystem.h"
 #include "heap.h"
 #include "map_header.h"
@@ -22,9 +28,6 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "trainer_memo.h"
-#include "communication_player_state.h"
-#include "communication_core.h"
-#include "comm_state.h"
 #include "ui_util.h"
 
 // Frontier trainer and Pokemon generation helpers shared by the facilities: trainers (narc 204) list the ids of their
@@ -45,7 +48,7 @@ typedef struct FrontierTrainerRecord {
     u16 introMsgBank;
     u16 introMsgNo;
     u8 introMsgFields[4];
-    u16 messages[8]; // win and lose easy chat messages
+    u16 messages[8];     // win and lose easy chat messages
 } FrontierTrainerRecord; // size: 0x30
 
 // Pokemon set (narc 205 member).
@@ -86,10 +89,6 @@ typedef struct FrontierMonParam {
     u8 value;
     u16 move;
 } FrontierMonParam;
-
-extern const u16 gFrontierMonItems[];
-extern const u16 gFrontierTrainerClassSprites[];
-extern const u16 gFrontierTrainerClassSpriteValues[];
 
 void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId);
 void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId);
@@ -139,6 +138,8 @@ void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum He
     return trainer;
 }
 
+static const u16 sFrontierMonItems[] = { ITEM_BRIGHTPOWDER, ITEM_LUM_BERRY, ITEM_LEFTOVERS, ITEM_QUICK_CLAW };
+
 u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId) {
     FrontierMonSet set;
     int friendship;
@@ -151,7 +152,7 @@ u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, 
         if (itemIndex >= 4) {
             itemIndex = itemIndex & 3;
         }
-        mon->item = gFrontierMonItems[itemIndex];
+        mon->item = sFrontierMonItems[itemIndex];
     } else {
         mon->item = set.item;
     }
@@ -271,13 +272,79 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level) {
     CalcMonLevelAndStats(mon);
 }
 
+static const u16 sFrontierTrainerClassSprites[][2] = {
+    { TRAINERCLASS_PKMN_TRAINER_CHERYL, SPRITE_SEVEN1       },
+    { TRAINERCLASS_PKMN_TRAINER_RILEY,  SPRITE_SEVEN2       },
+    { TRAINERCLASS_PKMN_TRAINER_BUCK,   SPRITE_SEVEN3       },
+    { TRAINERCLASS_PKMN_TRAINER_MIRA,   SPRITE_SEVEN4       },
+    { TRAINERCLASS_PKMN_TRAINER_MARLEY, SPRITE_SEVEN5       },
+    { TRAINERCLASS_YOUNGSTER,           SPRITE_BOY2         },
+    { TRAINERCLASS_LASS,                SPRITE_GIRL1        },
+    { TRAINERCLASS_SCHOOL_KID_M,        SPRITE_BOY1         },
+    { TRAINERCLASS_SCHOOL_KID_F,        SPRITE_GIRL3        },
+    { TRAINERCLASS_RICH_BOY,            SPRITE_GORGGEOUSM   },
+    { TRAINERCLASS_LADY,                SPRITE_GORGGEOUSW   },
+    { TRAINERCLASS_CAMPER,              SPRITE_CAMPBOY      },
+    { TRAINERCLASS_PICNICKER,           SPRITE_PICNICGIRL   },
+    { TRAINERCLASS_TUBER_M,             SPRITE_BABYBOY1     },
+    { TRAINERCLASS_TUBER_F,             SPRITE_BABYGIRL1    },
+    { TRAINERCLASS_POKEFAN_M,           SPRITE_MIDDLEMAN1   },
+    { TRAINERCLASS_POKEFAN,             SPRITE_MIDDLEWOMAN1 },
+    { TRAINERCLASS_WAITER,              SPRITE_WAITER       },
+    { TRAINERCLASS_WAITRESS,            SPRITE_WAITRESS     },
+    { TRAINERCLASS_PKMN_BREEDER_M,      SPRITE_MAN1         },
+    { TRAINERCLASS_PKMN_BREEDER_F,      SPRITE_WOMAN1       },
+    { TRAINERCLASS_CAMERAMAN,           SPRITE_CAMERAMAN    },
+    { TRAINERCLASS_REPORTER,            SPRITE_REPORTER     },
+    { TRAINERCLASS_RANCHER,             SPRITE_FARMER       },
+    { TRAINERCLASS_COWGIRL,             SPRITE_COWGIRL      },
+    { TRAINERCLASS_CYCLIST_M,           SPRITE_CYCLEM       },
+    { TRAINERCLASS_CYCLIST_F,           SPRITE_CYCLEW       },
+    { TRAINERCLASS_BLACK_BELT,          SPRITE_FIGHTER      },
+    { TRAINERCLASS_BATTLE_GIRL,         SPRITE_GIRL2        },
+    { TRAINERCLASS_VETERAN,             SPRITE_OLDMAN1      },
+    { TRAINERCLASS_SOCIALITE,           SPRITE_LADY         },
+    { TRAINERCLASS_PSYCHIC_M,           SPRITE_MYSTERY      },
+    { TRAINERCLASS_PSYCHIC_F,           SPRITE_MYSTERY      },
+    { TRAINERCLASS_PKMN_RANGER_M,       SPRITE_MAN3         },
+    { TRAINERCLASS_PKMN_RANGER_F,       SPRITE_WOMAN3       },
+    { TRAINERCLASS_ACE_TRAINER_M,       SPRITE_MAN3         },
+    { TRAINERCLASS_ACE_TRAINER_F,       SPRITE_WOMAN3       },
+    { TRAINERCLASS_ACE_TRAINER_M_GS,    SPRITE_MAN5         },
+    { TRAINERCLASS_ACE_TRAINER_F_GS,    SPRITE_WOMAN5       },
+    { TRAINERCLASS_DRAGON_TAMER,        SPRITE_MAN3         },
+    { TRAINERCLASS_BUG_CATCHER,         SPRITE_BOY3         },
+    { TRAINERCLASS_NINJA_BOY,           SPRITE_BABYBOY1     },
+    { TRAINERCLASS_JOGGER,              SPRITE_SPORTSMAN    },
+    { TRAINERCLASS_FISHERMAN,           SPRITE_FISHING      },
+    { TRAINERCLASS_SAILOR,              SPRITE_SEAMAN       },
+    { TRAINERCLASS_HIKER,               SPRITE_MOUNT        },
+    { TRAINERCLASS_RUIN_MANIAC,         SPRITE_EXPLORE      },
+    { TRAINERCLASS_GUITARIST,           SPRITE_MAN2         },
+    { TRAINERCLASS_COLLECTOR,           SPRITE_BIGMAN       },
+    { TRAINERCLASS_ROUGHNECK,           SPRITE_BADMAN       },
+    { TRAINERCLASS_SUPER_NERD,          SPRITE_ASSISTANTM   },
+    { TRAINERCLASS_GENTLEMAN,           SPRITE_GENTLEMAN    },
+    { TRAINERCLASS_WORKER,              SPRITE_WORKMAN      },
+    { TRAINERCLASS_CLOWN,               SPRITE_CLOWN        },
+    { TRAINERCLASS_POLICEMAN,           SPRITE_POLICEMAN    },
+    { TRAINERCLASS_PI,                  SPRITE_GORGGEOUSM   },
+    { TRAINERCLASS_BIRD_KEEPER,         SPRITE_WOMAN3       },
+    { TRAINERCLASS_PARASOL_LADY,        SPRITE_AMBRELLA     },
+    { TRAINERCLASS_BEAUTY,              SPRITE_WOMAN2       },
+    { TRAINERCLASS_AROMA_LADY,          SPRITE_WOMAN1       },
+    { TRAINERCLASS_IDOL,                SPRITE_IDOL         },
+    { TRAINERCLASS_ARTIST,              SPRITE_ARTIST       },
+    { TRAINERCLASS_POKE_KID,            SPRITE_PIKACHU      },
+};
+
 u16 FrontierTrainer_GetClassSprite(u16 value) {
     u32 i = 0;
-    const u16 *key = gFrontierTrainerClassSprites;
+    const u16 *key = sFrontierTrainerClassSprites[0];
 
     do {
         if (value == *key) {
-            return gFrontierTrainerClassSpriteValues[i * 2];
+            return sFrontierTrainerClassSprites[i][1];
         }
         i++;
         key += 2;

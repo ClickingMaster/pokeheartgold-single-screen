@@ -2,6 +2,7 @@
 
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_script_ui.h"
 #include "frontier/frontier_system.h"
@@ -33,9 +34,27 @@
 
 typedef Field2DObject *(*FrontierMapGetObjectFunc)(Field2DObjectManager *objectManager, u16 id);
 
-// Result of the comparison commands (0: less, 1: equal, 2: greater) x the condition byte of a jump/call.
-extern const u8 gFrontierScriptConditionTable[][3];
-extern const WindowTemplate gFrontierYesNoWindowTemplate;
+const u32 gFrontierCommandTableSize = 208;
+
+static const WindowTemplate sFrontierYesNoWindowTemplate = {
+    .bgId = GF_BG_LYR_MAIN_1,
+    .left = 25,
+    .top = 13,
+    .width = 6,
+    .height = 4,
+    .palette = 14,
+    .baseTile = 0x355,
+};
+
+// Indexed by the condition byte of a jump/call and the result of the last comparison (0: less, 1: equal, 2: greater).
+static const u8 sFrontierScriptConditionTable[6][3] = {
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 },
+    { 1, 1, 0 },
+    { 0, 1, 1 },
+    { 1, 0, 1 },
+};
 
 void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
@@ -265,7 +284,7 @@ BOOL FrtCmd_GoTo(FrontierScriptContext *ctx) {
 BOOL FrtCmd_GoToIf(FrontierScriptContext *ctx) {
     u8 condition = FrontierScriptContext_ReadByte(ctx);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
-    if (gFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
+    if (sFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
         FrontierScript_Jump(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -282,11 +301,10 @@ BOOL FrtCmd_Return(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_CallIf(FrontierScriptContext *ctx) {
     int condition = FrontierScriptContext_ReadByte(ctx);
     int offset = FrontierScriptContext_ReadWord(ctx);
-    if (gFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
+    if (sFrontierScriptConditionTable[condition][ctx->comparisonResult] == TRUE) {
         FrontierScriptContext_Call(ctx, ctx->scriptPtr + offset);
     }
     return FALSE;
@@ -302,7 +320,6 @@ BOOL FrtCmd_PrintMessageInstant(FrontierScriptContext *ctx) {
     FrontierSystem_PrintMessage(ctx->frontierSystem, ctx->msgLoader, msgId, FALSE, &params);
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_PrintMessage(FrontierScriptContext *ctx) {
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
@@ -351,7 +368,6 @@ BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx) {
     return IsPaletteFadeFinished() == TRUE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_MenuInitStdGmm(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     int x = ReadScriptByte(ctx);
@@ -381,7 +397,6 @@ BOOL FrtCmd_MenuInit(FrontierScriptContext *ctx) {
     ctx->data[0] = varId;
     return TRUE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_MenuItemAdd(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
@@ -467,13 +482,12 @@ BOOL FrtCmd_ListMenuCancel(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-#pragma force_active on
 BOOL FrtCmd_YesNo(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     FrontierMap *map = FrontierSystem_GetFrontierMap(system);
     u16 varId = FrontierScriptContext_ReadHalfWord(ctx);
     u8 initialSelection = FrontierScriptContext_ReadByte(ctx);
-    system->yesNoMenu = CreateYesNoMenu(map->bgConfig, &gFrontierYesNoWindowTemplate, 985, 12, initialSelection, system->heapId);
+    system->yesNoMenu = CreateYesNoMenu(map->bgConfig, &sFrontierYesNoWindowTemplate, 985, 12, initialSelection, system->heapId);
     ctx->data[0] = varId;
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitYesNo);
     return TRUE;
@@ -535,7 +549,6 @@ BOOL FrtCmd_LoadObjectGfx(FrontierScriptContext *ctx) {
     ctx->scriptPtr = saved;
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_RemoveObjectGfx(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
@@ -543,7 +556,6 @@ BOOL FrtCmd_RemoveObjectGfx(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-#pragma force_active on
 // Creates the objects of a list; the player placeholder creates the player, the link placeholder the connected
 // player whose net id follows.
 BOOL FrtCmd_CreateObjects(FrontierScriptContext *ctx) {
@@ -579,7 +591,6 @@ BOOL FrtCmd_CreateObjects(FrontierScriptContext *ctx) {
     ctx->scriptPtr = saved;
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_DeleteObject(FrontierScriptContext *ctx) {
     FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);

@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_context.h"
 
 #include "filesystem.h"
@@ -10,10 +11,6 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "pm_string.h"
-
-// Script command table of the frontier scripts and its size (frontier script commands' data).
-extern const FrontierScrCmdFunc gFrontierCommandTable[];
-extern const u32 gFrontierScriptInitArg;
 
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
 FrontierMap *Frontier_GetMap(void *frontierWork);
@@ -68,7 +65,7 @@ void FrontierSystem_Delete(FrontierSystem *system) {
 void FrontierSystem_AddTask(FrontierSystem *system, u16 mapId, u32 scriptIndex) {
     FrontierScriptContext *task = Heap_Alloc(system->heapId, sizeof(FrontierScriptContext));
     MI_CpuFill8(task, 0, sizeof(FrontierScriptContext));
-    FrontierScriptContext_Init(task, gFrontierCommandTable, gFrontierScriptInitArg);
+    FrontierScriptContext_Init(task, gFrontierCommandTable, gFrontierCommandTableSize);
     task->frontierSystem = system;
     if (mapId == 0xFFFF || system->mapId == mapId) {
         task->scripts = system->scripts;

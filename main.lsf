@@ -1375,7 +1375,6 @@ Overlay OVY_34
 {
     After OVY_27
     Object src/union_chat_log.o
-    Object asm/union_chat_log_data.o
     Object src/union_chat_log_arrows.o
 }
 Overlay OVY_35
@@ -1952,11 +1951,9 @@ Overlay OVY_80
 {
     After OVY_42
     Object src/frontier/frontier_trainers.o
-    Object asm/frontier_trainers_data.o
     Object src/frontier/frontier_system.o
     Object src/frontier/frontier_script_context.o
     Object src/frontier/frontier_map_params.o
-    Object asm/frontier_map_params_data.o
     Object src/frontier/frontier_link_messages.o
     Object src/frontier/frontier_script_commands.o
     Object src/frontier/frontier_cmd_create_sprites.o
@@ -1966,14 +1963,12 @@ Overlay OVY_80
     Object src/frontier/frontier_script_tasks.o
     Object src/frontier/frontier_cmd_factory.o
     Object src/frontier/battle_factory_data.o
-    Object asm/battle_factory_data_bss.o
     Object src/frontier/frontier_cmd_hall.o
     Object src/frontier/battle_hall_data.o
     Object src/frontier/frontier_cmd_castle.o
     Object src/frontier/battle_castle_challenge.o
     Object src/frontier/frontier_cmd_arcade.o
     Object src/frontier/battle_arcade_data.o
-    Object asm/battle_arcade_data_tables.o
     Object src/frontier/frontier_cmd_sound.o
     Object src/frontier/frontier_script_commands_misc.o
     Object src/frontier/frontier_save_data_helpers.o
@@ -1984,22 +1979,14 @@ Overlay OVY_80
     Object asm/battle_factory_setup_data.o
     Object src/frontier/battle_hall_setup.o
     Object src/frontier/battle_castle_setup.o
-    Object asm/battle_castle_setup_data.o
     Object src/frontier/battle_arcade_setup.o
-    Object asm/battle_arcade_setup_data.o
     Object src/frontier/frontier_map.o
-    Object asm/frontier_map_data.o
     Object src/frontier/frontier_particles.o
     Object src/frontier/frontier_map_sprites.o
-    Object asm/frontier_map_sprites_data.o
     Object src/frontier/frontier_map_object_movement.o
-    Object asm/frontier_map_object_movement_data.o
     Object src/frontier/frontier_map_bg_animation.o
-    Object asm/frontier_map_bg_animation_data.o
     Object src/frontier/frontier_brain_intro.o
-    Object asm/frontier_brain_intro_data.o
     Object src/frontier/frontier_transition.o
-    Object asm/frontier_transition_data.o
 }
 Overlay OVY_81
 {
@@ -2301,7 +2288,6 @@ Overlay OVY_111
 {
     After main
     Object src/bug_contest_swap_mon.o
-    Object asm/bug_contest_swap_mon_data.o
 }
 Overlay OVY_112
 {

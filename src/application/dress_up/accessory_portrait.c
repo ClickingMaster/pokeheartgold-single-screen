@@ -203,8 +203,6 @@ static void AccessoryPortrait_ClearBackground(AccessoryPortrait *portrait) {
     DressUpCanvas_FreeBackdrop(&portrait->canvas);
 }
 
-#pragma force_active on
-
 static void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortraitArgs *args) {
     portrait->x = 72;
     portrait->y = 56;
@@ -217,8 +215,6 @@ static void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, Accesso
     AccessoryPortrait_SetPosition(portrait, args->x, args->y);
     portrait->unk_25C = 0x7FFF;
 }
-
-#pragma force_active reset
 
 static void AccessoryPortrait_CopyConfig(AccessoryPortraitArgs *args, const AccessoryPortraitConfig *config) {
     args->bgConfig = config->bgConfig;

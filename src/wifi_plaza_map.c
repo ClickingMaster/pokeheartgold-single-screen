@@ -12,10 +12,13 @@
 #include "overlay_42.h"
 
 // Tile attribute sets tested by the player movement handlers (rodata of this overlay)
-extern const u8 sWiFiPlazaWalkUpActionTiles[];
-extern const u8 sWiFiPlazaPropTiles[];
-extern const u8 sWiFiPlazaCheckActionTiles[];
-extern const u8 sWiFiPlazaStandActionTiles[];
+static const u8 sWiFiPlazaWalkUpActionTiles[] = { 39, 40, 41, 0 };
+
+static const u8 sWiFiPlazaPropTiles[] = { 2, 3, 4, 5 };
+
+static const u8 sWiFiPlazaCheckActionTiles[] = { 36, 37, 38, 39, 40, 41, 43, 0 };
+
+static const u8 sWiFiPlazaStandActionTiles[] = { 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 44 };
 
 void WiFiPlazaMap_PosToVecFx32(const s16 *pos, s32 *vec) {
     vec[0] = pos[0] << 12;
@@ -101,13 +104,9 @@ s32 WiFiPlazaMap_GetCollision(WiFiPlazaMap *map, u16 x, u16 y) {
     return Field2DMap_IsBlocked(map->grid, x, y);
 }
 
-#pragma force_active on
-
 u32 WiFiPlazaMap_GetTileTag(WiFiPlazaMap *map, u16 x, u16 y) {
     return Field2DMap_GetTag(map->grid, x, y) >> 15;
 }
-
-#pragma force_active reset
 
 u32 WiFiPlazaMap_GetTileAttr(WiFiPlazaMap *map, u16 x, u16 y) {
     return Field2DMap_GetTag(map->grid, x, y) & 0x7FFF;

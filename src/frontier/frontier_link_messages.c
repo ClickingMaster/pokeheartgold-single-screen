@@ -332,8 +332,6 @@ void BattleFactoryLink_ReceiveValueB(int netId, int size, const u16 *data, Battl
     }
 }
 
-#pragma force_active on
-
 // Sends the set ids, attack IVs and personalities of the player's party: {setIds[n], ivs[n], low halves[n],
 // high halves[n]} with n = the facility type's Pokemon count.
 BOOL BattleFactoryLink_SendPartyMons(BattleFactoryData *work) {
@@ -395,8 +393,6 @@ void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, BattleFa
         work->partnerRentals.personalities[i] |= data[count + pos + i] << 16;
     }
 }
-
-#pragma force_active reset
 
 // Battle Castle
 
@@ -611,8 +607,6 @@ BOOL BattleCastleLink_SendPartyMons(BattleCastleData *work) {
     return Comm_SendCommandNoCopy(0x30, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
-#pragma force_active on
-
 // Adds the partner's Pokemon to the party; the child then swaps them in front of its own.
 void BattleCastleLink_ReceivePartyMons(int netId, int size, void *data, BattleCastleData *work) {
     int i;
@@ -637,8 +631,6 @@ void BattleCastleLink_ReceivePartyMons(int netId, int size, void *data, BattleCa
         Party_SwapSlots(work->playerParty, 1, 3);
     }
 }
-
-#pragma force_active reset
 
 void *BattleCastleLink_GetRecvMonBuffer(int netId, BattleCastleData *work, int size) {
     GF_ASSERT(size <= LINK_MON_BUFFER_SIZE);
@@ -686,8 +678,6 @@ void BattleArcadeLink_ReceiveTrainerIds(int netId, int size, const u16 *data, Ar
         }
     }
 }
-
-#pragma force_active on
 
 // The message carries {setIds[4], ivs[4], personalities low halves[4], high halves[4]} of the opponents.
 BOOL BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx) {
@@ -756,8 +746,6 @@ void BattleArcadeLink_ReceiveOpponentMons(int netId, int size, ArcadeMonsMessage
     }
 }
 
-#pragma force_active reset
-
 BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u16 value) {
     ctx->linkBuffer[0] = value;
     return Comm_SendCommand(0x44, ctx->linkBuffer, 0x28) == TRUE;
@@ -799,8 +787,6 @@ BOOL BattleArcadeLink_SendPartyMons(ArcadeContext *ctx) {
     return Comm_SendCommandNoCopy(0x46, ctx->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
-#pragma force_active on
-
 // Adds the partner's Pokemon to the party; the child then swaps them in front of its own.
 void BattleArcadeLink_ReceivePartyMons(int netId, int size, void *data, ArcadeContext *ctx) {
     int i;
@@ -825,8 +811,6 @@ void BattleArcadeLink_ReceivePartyMons(int netId, int size, void *data, ArcadeCo
         Party_SwapSlots(ctx->playerParty, 1, 3);
     }
 }
-
-#pragma force_active reset
 
 void *BattleArcadeLink_GetRecvMonBuffer(int netId, ArcadeContext *ctx, int size) {
     GF_ASSERT(size <= LINK_MON_BUFFER_SIZE);

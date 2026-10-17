@@ -20,13 +20,37 @@ typedef struct WiFiPlazaObjSpawn {
     u8 pad5[3];
 } WiFiPlazaObjSpawn;
 
-extern const u8 sWiFiPlazaObjNeighborDirections[4];
-extern const u8 sWiFiPlazaObjWanderTimers[];
-extern const u8 sWiFiPlazaObjWanderDirections[];
-extern const u32 sWiFiPlazaObjLightSets[];
-extern const WiFiPlazaObjSpawn sWiFiPlazaObjMapSpawns[];
-extern const WiFiPlazaObjFunc sWiFiPlazaObjExitHandlers[];
-extern const WiFiPlazaObjFunc sWiFiPlazaObjHandlers[10];
+static const u8 sWiFiPlazaObjWanderDirections[] = { 0, 1, 2, 3 };
+
+static const u8 sWiFiPlazaObjWanderTimers[] = { 32, 64, 128, 144 };
+
+static const u8 sWiFiPlazaObjNeighborDirections[4] = { 3, 2, 1, 0 };
+
+static const u32 sWiFiPlazaObjLightSets[] = { 16, 12, 8, 6, 0, 0 };
+
+static const WiFiPlazaObjSpawn sWiFiPlazaObjMapSpawns[] = {
+    { 0x40, 2, 0x11E, 0xFF },
+    { 0x41, 1, 0x11E, 0xFF },
+    { 0x42, 1, 0x11D, 0xFF },
+    { 0x61, 1, 0x11D, 0xFE },
+};
+
+static const WiFiPlazaObjFunc sWiFiPlazaObjExitHandlers[10] = {
+    [9] = WiFiPlazaObj_HandlerResetHeight,
+};
+
+static const WiFiPlazaObjFunc sWiFiPlazaObjHandlers[10] = {
+    WiFiPlazaObj_HandlerIdle,
+    WiFiPlazaObj_HandlerPlayerInput,
+    WiFiPlazaObj_HandlerWander,
+    WiFiPlazaObj_HandlerRiseOut,
+    WiFiPlazaObj_HandlerDropIn,
+    WiFiPlazaObj_HandlerSlideUp,
+    WiFiPlazaObj_HandlerSlideDown,
+    WiFiPlazaObj_HandlerSlideLeft,
+    WiFiPlazaObj_HandlerSlideRight,
+    WiFiPlazaObj_HandlerHop,
+};
 
 WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMap *map, enum HeapID heapID, u32 loadHeapID) {
     WiFiPlazaObjManager *manager = Heap_Alloc(heapID, sizeof(WiFiPlazaObjManager));

@@ -15,7 +15,6 @@ static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
     return *(ctx->scriptPtr++);
 }
 
-#pragma force_active on
 // Creates the extra map sprites of a list: sprite id, x, y, draw flag, animation flag, slot; ends with 0xFD13.
 BOOL FrtCmd_CreateSprites(FrontierScriptContext *ctx) {
     u32 draw, y, x;

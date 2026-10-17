@@ -41,14 +41,88 @@ typedef struct UnionChatLogPeer {
 extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
 extern PlayerProfile *CommWireless_GetProfile(void);
 
-extern const int sUnionChatLogRowPressBgOffsets[];
-extern const s32 sUnionChatLogSpriteYOffsets[];
-extern const TouchscreenHitbox sUnionChatLogScrollbarHitboxes[];
-extern const BgTemplate sUnionChatLogBgTemplateSub2;
-extern const BgTemplate sUnionChatLogBgTemplateSub3;
-extern const BgTemplate sUnionChatLogBgTemplateSub1;
-extern const BgTemplate sUnionChatLogBgTemplateSub0;
-extern const TouchscreenHitbox sUnionChatLogButtonHitboxes[];
+static const int sUnionChatLogRowPressBgOffsets[] = { 0, 0, 0 };
+
+static const s32 sUnionChatLogSpriteYOffsets[] = { 0, 160, 96 };
+
+static const TouchscreenHitbox sUnionChatLogScrollbarHitboxes[] = {
+    { .rect = { 48, 144, 232, 0 } },
+    { .rect = { 16, 72, 0, 232 } },
+    { .rect = { 72, 128, 0, 232 } },
+    { .rect = { 128, 184, 0, 232 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const BgTemplate sUnionChatLogBgTemplateSub3 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sUnionChatLogBgTemplateSub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x6800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sUnionChatLogBgTemplateSub2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sUnionChatLogBgTemplateSub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x6000,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const TouchscreenHitbox sUnionChatLogButtonHitboxes[] = {
+    { .rect = { 0, 32, 232, 248 } },
+    { .rect = { 160, 32, 232, 248 } },
+    { .rect = { 16, 72, 0, 232 } },
+    { .rect = { 72, 128, 0, 232 } },
+    { .rect = { 128, 184, 0, 232 } },
+    { .rect = { 48, 144, 232, 0 } },
+    { .rect = { 0, 15, 0, 232 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
 
 void UnionChatLog_PrintMenuButton(UnionChatLogData *data);
 void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig);

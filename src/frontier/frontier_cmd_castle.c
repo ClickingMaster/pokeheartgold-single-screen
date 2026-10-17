@@ -185,7 +185,6 @@ enum {
     CASTLE_ACTION_SET_OPPONENT_PARTY,
 };
 
-#pragma force_active on
 BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *launchArgs;
     int arg;
@@ -382,7 +381,6 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL FrtCmd_CastleGetBattleResult(FrontierScriptContext *ctx) {
     u16 *result = FrontierScript_ReadVarPtr(ctx);

@@ -71,16 +71,129 @@ typedef struct DressUpSignedPoint {
     s16 y;
 } DressUpSignedPoint;
 
-extern const GraphicsManagerTemplate sDressUpGraphicsManagerTemplate;
-extern const ObjCharTransferTemplate sDressUpObjCharTransferTemplate;
-extern const BgTemplate sDressUpBgTemplate_Sub0;
-extern const BgTemplate sDressUpBgTemplate_Main1;
-extern const BgTemplate sDressUpBgTemplate_Main2;
-extern const BgTemplate sAccessoryPortraitBgTemplate_Main2;
-extern const BgTemplate sDressUpBgTemplate_Main3;
-extern const BgTemplate sDressUpBgTemplate_Sub1;
-extern const GraphicsBanks sDressUpGraphicsBanks;
-extern const GraphicsModes sDressUpGraphicsModes;
+static const GraphicsManagerTemplate sDressUpGraphicsManagerTemplate = {
+    .objectCount = 718,
+    .imageCount = 118,
+    .paletteCount = 19,
+    .heapId = HEAP_ID_14,
+};
+
+static const ObjCharTransferTemplate sDressUpObjCharTransferTemplate = {
+    .maxTasks = 8,
+    .sizeMain = 0x8000,
+    .sizeSub = 0x4000,
+    .heapID = HEAP_ID_14,
+};
+
+static const GraphicsModes sDressUpGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const BgTemplate sDressUpBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sDressUpBgTemplate_Main1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sAccessoryPortraitBgTemplate_Main2 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 2,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sDressUpBgTemplate_Main3 = {
+    .x = 0,
+    .y = 4294967151,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 3,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sDressUpBgTemplate_Sub0 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 1,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const BgTemplate sDressUpBgTemplate_Sub1 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0x7000,
+    .charBase = GX_BG_CHARBASE_0x04000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = 0,
+};
+
+static const GraphicsBanks sDressUpGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_32_FG,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
 
 // fashion save entry accessors
 void FashionEntry_MarkSaved(SaveFashionDataSub *entry);

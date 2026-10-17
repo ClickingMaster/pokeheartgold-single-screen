@@ -46,13 +46,70 @@ typedef u32 (*FrontierObjectGetPosFunc)(Field2DObject *object);
 #define FRONTIER_MON_SPRITE_ID_BASE 50000
 #define FRONTIER_MON_ICON_ID_BASE   2000
 
-extern const u8 gFrontierMovementWaitFrames[];
-extern const ManagedSpriteTemplate gFrontierMapItemIconTemplate;
-extern const ManagedSpriteTemplate gFrontierMapMonIconTemplate;
-extern const u16 gFrontierMovementSteps[];
-extern const u16 gFrontierMovementDirections[];
+static const u8 sFrontierMovementWaitFrames[] = { 1, 2, 4, 8, 15, 16, 32, 0 };
 
-#pragma force_active on
+static const ManagedSpriteTemplate sFrontierMapItemIconTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 99,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 2009, 2001, 2001, 2001, -1, -1 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+static const ManagedSpriteTemplate sFrontierMapMonIconTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 100,
+    .pal = 0,
+    .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
+    .resIdList = { 2000, 2000, 2000, 2000, -1, -1 },
+    .bgPriority = 1,
+    .vramTransfer = 0,
+};
+
+// Animation step and facing direction of each movement opcode.
+static u16 sFrontierMovementSteps[][2] = {
+    { 0,  0 },
+    { 0,  1 },
+    { 0,  2 },
+    { 0,  3 },
+    { 2,  0 },
+    { 2,  1 },
+    { 2,  2 },
+    { 2,  3 },
+    { 6,  0 },
+    { 6,  1 },
+    { 6,  2 },
+    { 6,  3 },
+    { 7,  0 },
+    { 7,  1 },
+    { 7,  2 },
+    { 7,  3 },
+    { 10, 0 },
+    { 10, 1 },
+    { 10, 2 },
+    { 10, 3 },
+    { 11, 0 },
+    { 11, 1 },
+    { 11, 2 },
+    { 11, 3 },
+    { 8,  0 },
+    { 8,  1 },
+    { 8,  2 },
+    { 8,  3 },
+    { 9,  0 },
+    { 9,  1 },
+    { 9,  2 },
+    { 9,  3 },
+};
+
 void FrontierSystem_PrintMessage(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params) {
     u8 speed, autoScroll, font;
 
@@ -69,7 +126,6 @@ void FrontierSystem_PrintMessage(FrontierSystem *system, MsgData *msgData, u16 m
     }
     FrontierSystem_StartTextPrinter(system, font, speed, canABSpeedUp, autoScroll);
 }
-#pragma force_active reset
 
 void FrontierSystem_ShowMessageWindow(FrontierSystem *system) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(system);
@@ -109,7 +165,6 @@ void FrontierSystem_CloseMessageWindow(FrontierSystem *system) {
     system->messageWindowAdded = FALSE;
 }
 
-#pragma force_active on
 void FrontierSystem_PrintMailMessage(FrontierSystem *system, int speed, u16 bank, u16 number, u16 field0, u16 field1, u8 canABSpeedUp) {
     FrontierSystem_ShowMessageWindow(system);
     FrontierScript_GetMailMessageString(system->msgBuffer, bank, number, field0, field1);
@@ -119,7 +174,6 @@ void FrontierSystem_PrintMailMessage(FrontierSystem *system, int speed, u16 bank
         FrontierSystem_StartTextPrinter(system, 1, 0, canABSpeedUp, FALSE);
     }
 }
-#pragma force_active reset
 
 void FrontierScript_GetMailMessageString(String *dest, u16 bank, u16 number, u16 field0, u16 field1) {
     MailMessage message;
@@ -134,7 +188,6 @@ void FrontierScript_GetMailMessageString(String *dest, u16 bank, u16 number, u16
     String_Delete(expanded);
 }
 
-#pragma force_active on
 void FrontierMenu_Init(FrontierSystem *system, FrontierMenu *menu, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData) {
     int i;
 
@@ -181,7 +234,6 @@ FrontierMenu *FrontierMenu_New(FrontierSystem *system, u8 x, u8 y, u8 initialSel
     FrontierMenu_Init(system, menu, x, y, initialSelection, canCancel, result, msgFormat, msgData);
     return menu;
 }
-#pragma force_active reset
 
 void FrontierMenu_AddItem(FrontierMenu *menu, u16 msgId, u16 description, u16 value) {
     FrontierMenu_AddItemInternal(menu, msgId, description, (void *)value);
@@ -250,7 +302,6 @@ u32 FrontierMenu_GetWidth(FrontierMenu *menu) {
     return width + 12;
 }
 
-#pragma force_active on
 void FrontierMenu_InitTemplate(FrontierMenu *menu) {
     menu->menuTemplate.items = menu->menuItems;
     menu->menuTemplate.window = &menu->window;
@@ -301,7 +352,6 @@ void FrontierMenu_Task(SysTask *task, FrontierMenu *menu) {
         }
     }
 }
-#pragma force_active reset
 
 void FrontierMenu_Close(FrontierMenu *menu) {
     FrontierSystem *system = menu->system;
@@ -580,7 +630,7 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
         }
         if (opcode >= 0x20 && opcode <= 0x26) {
             data->wait++;
-            if (data->wait >= gFrontierMovementWaitFrames[opcode - 0x20]) {
+            if (data->wait >= sFrontierMovementWaitFrames[opcode - 0x20]) {
                 data->wait = 0;
                 data->script += 2;
                 return;
@@ -624,8 +674,8 @@ void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data) {
 
 void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *object, u16 id, s32 opcode) {
     step->id = id;
-    step->direction = gFrontierMovementDirections[opcode * 2];
-    step->sequence = gFrontierMovementSteps[opcode * 2];
+    step->direction = sFrontierMovementSteps[opcode][1];
+    step->sequence = sFrontierMovementSteps[opcode][0];
     if (step->sequence == 2 || step->sequence == 3 || step->sequence == 6) {
         volatile u16 position[2];
         u32 raw = ((FrontierObjectGetPosFunc)Field2DObject_GetPrevPos)(object);
@@ -644,7 +694,6 @@ void FrontierScript_GetMovementStep(FrontierMovementStep *step, Field2DObject *o
     }
 }
 
-#pragma force_active on
 // Creates the battle sprite of a Pokemon as a map sprite (resource id id, slot id - 50000).
 void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, enum HeapID heapId, int id, int x, int y, int drawPriority, int bgPriority, int blend, u16 blendColor) {
     PaletteData *paletteData = map->paletteData;
@@ -697,7 +746,6 @@ void FrontierMap_CreateMonSprite(FrontierMap *map, Pokemon *mon, enum HeapID hea
     GF_ASSERT(map->monSprites[id - FRONTIER_MON_SPRITE_ID_BASE] == NULL);
     map->monSprites[id - FRONTIER_MON_SPRITE_ID_BASE] = sprite;
 }
-#pragma force_active reset
 
 void FrontierMap_DeleteMonSprite(FrontierMap *map, u32 id) {
     u32 index = id - FRONTIER_MON_SPRITE_ID_BASE;
@@ -727,7 +775,7 @@ ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, s32 ind
 
     GF_ASSERT(index < 8);
     SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(map->spriteSystem, map->spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(mon), FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, index + FRONTIER_MON_ICON_ID_BASE);
-    template = gFrontierMapMonIconTemplate;
+    template = sFrontierMapMonIconTemplate;
     template.resIdList[GF_GFX_RES_TYPE_CHAR] += index;
     template.x = x;
     template.y = y;
@@ -760,7 +808,7 @@ void FrontierMap_UnloadItemIconResources(FrontierMap *map) {
 }
 
 ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, s16 x, s16 y) {
-    ManagedSpriteTemplate template = gFrontierMapItemIconTemplate;
+    ManagedSpriteTemplate template = sFrontierMapItemIconTemplate;
     ManagedSprite *sprite;
 
     template.x = x;
