@@ -21,10 +21,6 @@ struct Alloc {
     }
 };
 
-inline void Allocate(Vec *v, u32 n, Tag t) {
-    LobbyU32Vector_Allocate(v, n, t);
-}
-
 extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap);
 
 extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap) {

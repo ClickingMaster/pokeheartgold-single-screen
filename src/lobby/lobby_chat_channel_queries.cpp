@@ -63,7 +63,7 @@ struct Handler {
     u32 a;
 };
 
-extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelKeysRequestVtable;
+extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyGetChannelKeysRequestVtable, gLobbyEnumChannelsRequestVtable, gLobbyEnumUsersRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
@@ -89,7 +89,13 @@ struct InsertResult {
 extern "C" void LobbyRequestMap_Insert(InsertResult *out, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 extern "C" void chatGetChannelKeysA(void *chat, const char *channel, const char *nick, int count, const char **keys, void (*callback)(), u32 param, u32 blocking);
+extern "C" void chatEnumChannelsA(void *chat, const char *filter, void (*callbackEach)(), void (*callbackAll)(), u32 param, u32 blocking);
+extern "C" void chatEnumUsersA(void *chat, const char *channel, void (*callback)(), u32 param, u32 blocking);
+extern "C" int chatInChannelA(void *chat, const char *channel);
 extern "C" void LobbyChat_OnGetChannelKeys();
+extern "C" void LobbyChat_OnEnumChannelsEach();
+extern "C" void LobbyChat_OnEnumChannels();
+extern "C" void LobbyChat_OnEnumUsers();
 extern "C" unsigned long strlen(const char *);
 extern "C" const char sStr_Empty_17[];
 extern "C" Str LobbyChat_GetUserNick(Mgr *m, int idx);
@@ -111,18 +117,20 @@ inline u32 NextHandlerId() {
     return n;
 }
 
-inline Handler *NewHandler(u32 callback, u32 param) {
+inline Handler *NewHandler(HandlerVtbl *vtbl, u32 callback, u32 param) {
     Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
     if (p) {
         BaseInit(p, param);
         p->id = NextHandlerId();
-        p->vtbl = &gLobbyGetChannelKeysRequestVtable;
+        p->vtbl = vtbl;
         p->a = callback;
     }
     return p;
 }
 
 extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int userId, const char *key, u32 callback, u32 param);
+extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 callback, u32 param);
+extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 callback, u32 param);
 
 struct IdTag {};
 
@@ -160,7 +168,7 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int userId, const
     }
     m = GetMgr();
     InsertResult res;
-    Handler *h = NewHandler(callback, param);
+    Handler *h = NewHandler(&gLobbyGetChannelKeysRequestVtable, callback, param);
     LobbyRequestMap_Insert(&res, m->list, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     Str s(name);
@@ -169,6 +177,63 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int userId, const
     t.destroy();
     s.destroy();
     nick.destroy();
+    return 0;
+}
+
+extern "C" int LobbyChat_EnumChannelsAsync(const char *name, u32 callback, u32 param) {
+    Mgr *m = gLobbyChatManager;
+    if (m == NULL) {
+        return 4;
+    }
+    if (m != NULL && m->state == 5) {
+        return 7;
+    }
+    if (m != NULL && GetMgr()->state != 3) {
+        return 4;
+    }
+    InsertResult res;
+    Handler *h = NewHandler(&gLobbyEnumChannelsRequestVtable, callback, param);
+    LobbyRequestMap_Insert(&res, m->list, &h);
+    u32 id = GetId(h, IdTag(), IdTag());
+    Str s(name);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatEnumChannelsA(GetMgr()->connection, t.c_str(), LobbyChat_OnEnumChannelsEach, LobbyChat_OnEnumChannels, id, 0);
+    t.destroy();
+    s.destroy();
+    return 0;
+}
+
+extern "C" int LobbyChat_EnumUsersAsync(const char *name, u32 callback, u32 param) {
+    Mgr *m = gLobbyChatManager;
+    if (m == NULL) {
+        return 4;
+    }
+    if (m != NULL && m->state == 5) {
+        return 7;
+    }
+    if (m != NULL && GetMgr()->state != 3) {
+        return 4;
+    }
+    {
+        Str s(name);
+        Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+        BOOL exists = chatInChannelA(GetMgr()->connection, t.c_str()) == 0;
+        t.destroy();
+        s.destroy();
+        if (exists) {
+            return 5;
+        }
+    }
+    m = GetMgr();
+    InsertResult res;
+    Handler *h = NewHandler(&gLobbyEnumUsersRequestVtable, callback, param);
+    LobbyRequestMap_Insert(&res, m->list, &h);
+    u32 id = GetId(h, IdTag(), IdTag());
+    Str s(name);
+    Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
+    chatEnumUsersA(GetMgr()->connection, t.c_str(), LobbyChat_OnEnumUsers, id, 0);
+    t.destroy();
+    s.destroy();
     return 0;
 }
 

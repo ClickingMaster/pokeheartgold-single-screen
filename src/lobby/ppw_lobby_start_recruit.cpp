@@ -128,15 +128,15 @@ extern "C" int PPW_LobbyStartRecruit(User *u);
 
 struct Tag {};
 
-inline Entry Conv2(Tag, const RawEntry &r) {
+inline Entry ConstructEntry(Tag, const RawEntry &r) {
     return Entry(r);
 }
 
-inline Entry Conv(Tag, const RawEntry &r) {
-    return Conv2(Tag(), r);
+inline Entry ConvertEntry(Tag, const RawEntry &r) {
+    return ConstructEntry(Tag(), r);
 }
 
-inline Result Insert2(Container *c, const Entry &e) {
+inline Result InsertEntry(Container *c, const Entry &e) {
     return LobbyTimerMap_Insert(c, e);
 }
 
@@ -178,7 +178,7 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
     Date date;
     Time time;
     DWC_GetDateTime(&date, &time);
-    Insert2(&h->entries, Conv(Tag(), LobbyTimerMap_MakeEntry(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, PPWLobby_TimerSendRecruitInfo))));
+    InsertEntry(&h->entries, ConvertEntry(Tag(), LobbyTimerMap_MakeEntry(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, PPWLobby_TimerSendRecruitInfo))));
     LobbyString_Destroy(&value);
     return 0;
 }

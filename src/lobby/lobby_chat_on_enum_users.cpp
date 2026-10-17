@@ -91,22 +91,11 @@ inline void KeyInit(Base *k, u32 id) {
     k->unk8 = 0;
 }
 
-inline Handler *Lookup(Manager *m, const It &it) {
-    return it.n == &m->map.header ? 0 : it.n->value;
-}
-
 inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
     return LobbyRequestMap_Find(&m->map, kp);
-}
-
-inline Handler *Find(Manager *m, u32 id) {
-    Base key;
-    KeyInit(&key, id);
-    Base *kp = &key;
-    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
 }
 
 struct Tag {};

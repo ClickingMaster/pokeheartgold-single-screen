@@ -11,9 +11,9 @@ typedef struct {
     volatile u32 size;
 } Container;
 
-Container *ov45_02238508(Container *);
+Container *LobbyEventDequeMap_Destroy(Container *);
 
-Container *ov45_02238508(Container *s) {
+Container *LobbyEventDequeMap_Destroy(Container *s) {
     if (s->allocator) {
         u32 start = s->size;
 

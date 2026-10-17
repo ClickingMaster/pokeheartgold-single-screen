@@ -95,10 +95,6 @@ extern "C" int LobbyChat_GetUserIdFromNick(String *s);
 extern "C" void LobbyChatManager_GetNick(String *out, Map *m);
 extern "C" int LobbyChat_AddChannelUser(Map *m, const String &name, const String &key);
 
-static inline bool SameId(int id, String *s) {
-    return id == LobbyChat_GetUserIdFromNick(s);
-}
-
 extern "C" Vec LobbyChat_AddChannelUsers(Map *map, int count, const char **names, const String &key);
 
 extern "C" Vec LobbyChat_AddChannelUsers(Map *map, int count, const char **names, const String &key) {

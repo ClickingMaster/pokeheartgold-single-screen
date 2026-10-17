@@ -73,12 +73,12 @@ struct WIt {
 
 extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
 
-inline int dist2(WIt first, WIt last) {
+inline int MapDistance(WIt first, WIt last) {
     return LobbyEventDequeMapIterator_Distance(last, first);
 }
 
 inline int distance(WIt first, WIt last) {
-    return dist2(first, last);
+    return MapDistance(first, last);
 }
 
 extern "C" It LobbyEventDequeMap_Copy(It first, It last, It dest);

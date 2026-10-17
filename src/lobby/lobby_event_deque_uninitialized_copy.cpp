@@ -96,14 +96,6 @@ inline Elem *UninitCopy(It first, It last, Elem *out, u32 *count) {
     return out;
 }
 
-inline Elem *Copy(It first, It last, Elem *out) {
-    Elem *p = first.p, *e = last.p;
-    for (; p < e; ++p, ++out) {
-        *out = *p;
-    }
-    return out;
-}
-
 extern "C" DIter LobbyEventDeque_UninitializedCopy(It first, It last, DIter result, FalseType, u32 *count) {
     if (first != last) {
         int n = last - first;

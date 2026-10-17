@@ -1,6 +1,6 @@
 {
   "section": ".text",
-  "owner": {"name": "ov45_02238508", "size": 80, "type": "FUNC"},
+  "owner": {"name": "LobbyEventDequeMap_Destroy", "size": 80, "type": "FUNC"},
   "aliases": [
     {"name": "_ZN4RingD1Ev", "offset": 0}
   ]

@@ -79,14 +79,6 @@ extern "C" void PPWLobbyPlayer_UpdateState(Obj *obj);
 extern "C" Handler *PPWLobby_GetWork(void);
 extern "C" void *LobbyByteVector_Data(void *p);
 
-inline Triple MakeAddr(Obj *o) {
-    Triple t;
-    t.c = o->unk4;
-    t.a = o->unk8;
-    t.b = o->unkC;
-    return t;
-}
-
 extern "C" void PPWLobbyPlayers_UpdateStates(Map *m);
 #pragma opt_propagation off
 

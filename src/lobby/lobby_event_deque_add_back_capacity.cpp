@@ -60,7 +60,7 @@ inline It &It::operator+=(int n) {
 extern "C" void LobbyEventDequeMap_PushBack(Ring *r, const P &v);
 extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n);
 extern "C" void LobbyEventDequeMap_InitCopy(Ring *r, CIt first, const CIt &last, Tag);
-extern "C" void ov45_02238508(Ring *r);
+extern "C" void LobbyEventDequeMap_Destroy(Ring *r);
 
 struct Empty {};
 
@@ -261,7 +261,7 @@ inline void CopyBlocks2(Ring *m, Ring *src) {
     CopyBlocks(m, src);
 }
 
-extern "C" void ov45_0223CA14(Deque *d);
+extern "C" void LobbyEventDeque_Destroy2(Deque *d);
 extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n);
 
 inline WIt::WIt(const SB &s)

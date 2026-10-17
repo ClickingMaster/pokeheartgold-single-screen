@@ -76,14 +76,6 @@ inline WIt Advance(const WIt &w, int n) {
 
 extern "C" int LobbyEventDequeMapIterator_Distance(const WIt &a, const WIt &b);
 
-inline int dist2(WIt first, WIt last) {
-    return LobbyEventDequeMapIterator_Distance(last, first);
-}
-
-inline int distance(WIt first, WIt last) {
-    return dist2(first, last);
-}
-
 struct Alloc {
     void construct(P *p, P v) {
         if (p) {

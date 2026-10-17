@@ -18,7 +18,7 @@ struct Ring {
     Buf buf;
 };
 
-extern "C" void ov45_02238508(Buf *b);
+extern "C" void LobbyEventDequeMap_Destroy(Buf *b);
 
 struct Del {
     void operator()(void *p) const {
@@ -36,9 +36,9 @@ inline u32 EndIndex(const Buf *b) {
     return e;
 }
 
-extern "C" Ring *ov45_0223CA14(Ring *r);
+extern "C" Ring *LobbyEventDeque_Destroy2(Ring *r);
 
-extern "C" Ring *ov45_0223CA14(Ring *r) {
+extern "C" Ring *LobbyEventDeque_Destroy2(Ring *r) {
     Del d = Del();
     r->unk4 = 0;
     if (r->buf.size != 0) {
@@ -58,6 +58,6 @@ extern "C" Ring *ov45_0223CA14(Ring *r) {
             }
         }
     }
-    ov45_02238508(&r->buf);
+    LobbyEventDequeMap_Destroy(&r->buf);
     return r;
 }

@@ -1500,7 +1500,7 @@ Overlay OVY_45
     Object src/lobby/lobby_char_vector_init_range.o
     Object src/lobby/lobby_timer_map_find_insert_pos.o
     Object src/lobby/lobby_string_assign_range.o
-    Object src/lobby/ov45_02238508.o
+    Object src/lobby/lobby_event_deque_map_destroy.o
     Object src/lobby/ppw_lobby_player_set_destroy_nodes.o
     Object src/lobby/lobby_string_vector_append_copies_slow.o
     Object src/lobby/lobby_string_vector_erase_at_end.o
@@ -1553,7 +1553,7 @@ Overlay OVY_45
     Object src/lobby/lobby_event_deque_map_copy_range.o
     Object src/lobby/lobby_event_deque_map_copy_backward.o
     Object src/lobby/lobby_event_deque_map_copy.o
-    Object src/lobby/ov45_0223ca14.o
+    Object src/lobby/lobby_event_deque_destroy.o
     Object src/lobby/lobby_event_deque_map_buffer.o
     Object src/lobby/lobby_event_deque_map_iterator_distance.o
     Object src/lobby/lobby_event_deque_map_init_copy.o
@@ -1603,9 +1603,7 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_shutdown.o
     Object src/lobby/lobby_chat_enter_channel.o
     Object src/lobby/lobby_chat_channel_commands.o
-    Object src/lobby/lobby_chat_get_channel_keys_async.o
-    Object src/lobby/lobby_chat_enum_channels_async.o
-    Object src/lobby/lobby_chat_enum_users_async.o
+    Object src/lobby/lobby_chat_channel_queries.o
     Object src/lobby/lobby_chat_set_channel_mode.o
     Object src/lobby/lobby_chat_get_channel_mode_async.o
     Object src/lobby/lobby_requests.o

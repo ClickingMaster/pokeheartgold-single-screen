@@ -10,8 +10,8 @@ typedef struct {
 } Container;
 
 void DWC_Free(int, void *, int);
-void ov45_02238508(void *);
-Container *ov45_0223CA14(Container *);
+void LobbyEventDequeMap_Destroy(void *);
+Container *LobbyEventDeque_Destroy2(Container *);
 
 typedef struct {
     u32 *current, *base, *split, *end;

@@ -91,22 +91,11 @@ inline void KeyInit(Base *k, u32 id) {
     k->param = 0;
 }
 
-inline Handler *Lookup(Manager *m, const It &it) {
-    return it.n == &m->map.header ? 0 : it.n->value;
-}
-
 inline It FindIt(Manager *m, u32 id) {
     Base key;
     KeyInit(&key, id);
     Base *kp = &key;
     return LobbyRequestMap_Find(&m->map, kp);
-}
-
-inline Handler *Find(Manager *m, u32 id) {
-    Base key;
-    KeyInit(&key, id);
-    Base *kp = &key;
-    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
 }
 
 struct Tag {};
@@ -145,25 +134,6 @@ struct Vec {
 extern "C" Vec LobbyChat_AddChannelUsers(Manager *map, int count, const char **names, const String &key);
 extern "C" void LobbyChat_SetChannelUsersEnumerated(Manager *m, String *s);
 extern "C" void LobbyChat_LeaveChannel(const char *s);
-
-inline Handler *Get(Manager *m, const It &it) {
-    Handler *h = 0;
-    if (it.n != &m->map.header) {
-        h = it.n->value;
-    }
-    return h;
-}
-
-inline Handler *Get2(Manager *m, It it) {
-    if (it.n != &m->map.header) {
-        return it.n->value;
-    }
-    return 0;
-}
-
-inline Handler *Get3(Node *n, Node *end) {
-    return n == end ? 0 : n->value;
-}
 
 extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id);
 #pragma push

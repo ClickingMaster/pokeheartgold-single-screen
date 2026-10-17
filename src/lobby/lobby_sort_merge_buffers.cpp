@@ -4,10 +4,6 @@
 #include <nitro/code32.h>
 #include <size_t.h>
 
-inline void *operator new(std::size_t, void *storage) {
-    return storage;
-}
-
 namespace NativeSort {
 struct Pair {
     s32 key;
