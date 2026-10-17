@@ -72,6 +72,34 @@ typedef struct Obj {
     u32 id;
 } Obj;
 
+// What a channel reports to the code that entered it, with that code's parameter.
+typedef struct LobbyChannelCallbacks {
+    void (*onUserJoined)(const char *channel, int userId, void *param);
+    void (*onUserParted)(const char *channel, int userId, void *param);
+    void (*onChannelMessage)(const char *channel, int userId, void *message, void *param);
+    void (*onBroadcastKeyChanged)(const char *channel, int userId, void *key, void *value, void *param);
+    void (*onTopicChanged)(const char *channel, void *topic, void *param);
+    void *param;
+} LobbyChannelCallbacks;
+
+typedef struct TreeHdr {
+    int count;
+    void *root;
+    void *leftmost;
+} TreeHdr;
+
+typedef struct Entry {
+    u32 a;
+    TreeHdr t;
+    u32 x10;
+    LobbyChannelCallbacks callbacks;
+} Entry;
+
+typedef struct NamedEntry {
+    Str name;
+    Entry e;
+} NamedEntry;
+
 typedef struct Node {
     void *left;
     void *right;
@@ -81,6 +109,7 @@ typedef struct Node {
         int i;
         Obj *obj;
         Str str;
+        NamedEntry channel;
     } key;
 } Node;
 
@@ -126,34 +155,6 @@ typedef struct Vec {
     u32 size;
     u32 cap;
 } Vec;
-
-// What a channel reports to the code that entered it, with that code's parameter.
-typedef struct LobbyChannelCallbacks {
-    void (*onUserJoined)(const char *channel, int userId, void *param);
-    void (*onUserParted)(const char *channel, int userId, void *param);
-    void (*onChannelMessage)(const char *channel, int userId, void *message, void *param);
-    void (*onBroadcastKeyChanged)(const char *channel, int userId, void *key, void *value, void *param);
-    void (*onTopicChanged)(const char *channel, void *topic, void *param);
-    void *param;
-} LobbyChannelCallbacks;
-
-typedef struct TreeHdr {
-    int count;
-    void *root;
-    void *leftmost;
-} TreeHdr;
-
-typedef struct Entry {
-    u32 a;
-    TreeHdr t;
-    u32 x10;
-    LobbyChannelCallbacks callbacks;
-} Entry;
-
-typedef struct NamedEntry {
-    Str name;
-    Entry e;
-} NamedEntry;
 
 extern void *gLobbyRequestVtable;
 u32 current_time(void);
@@ -317,7 +318,7 @@ void LobbyString_AssignCStr(Str *s, const char *cstr);
 int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);
 Node *LobbyTree_EraseRebalance(Node *n, void *root);
 BOOL LobbyUserIdSet_EraseKey(Tree *t, int *id);
-void LobbyUserIdSet_Insert(InsertResult *out, Tree *t, int *key);
+void LobbyUserIdSet_Insert(InsertResult *out, TreeHdr *set, int *key);
 Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res);
 void LobbyUserMap_Erase(Iter *out, Tree *t, Iter it);
 BOOL LobbyUserMap_EraseKey(Tree *t, int *key);

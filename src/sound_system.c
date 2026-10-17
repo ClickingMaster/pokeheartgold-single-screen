@@ -16,7 +16,7 @@ typedef struct WaveArcInfo {
     u32 flags : 8;
 } WaveArcInfo;
 
-extern int _021D05E8[4];
+extern int gSoundSystemFlags[4];
 extern MICAutoParam gSoundMicAutoParam;
 extern s8 sSoundChatotBuffer[2000];
 
@@ -459,9 +459,9 @@ static void Sound_PlayBGMForFieldScene(u16 seqNo, int mode) {
     }
     if (*reload != 0 || currentSeqNo != seqNo || GF_GetQueuedBGM() == SEQ_GS_BICYCLE) {
         Sound_SetReloadFieldSeqFlag(1);
-        if (_021D05E8[3] == 0 || _021D05E8[1] == 0) {
+        if (gSoundSystemFlags[3] == 0 || gSoundSystemFlags[1] == 0) {
             StopBGMSEAndCry();
-            _021D05E8[1] = 1;
+            gSoundSystemFlags[1] = 1;
         }
         if (currentSeqNo != seqNo) {
             Sound_SetPlayerPause(1, 0);
@@ -720,19 +720,19 @@ BOOL Sound_IsMicCounterFull(void) {
 
 BOOL GF_MIC_StartAutoSampling(MICAutoParam *param) {
     MICResult result = MIC_StartAutoSampling(param);
-    ((u8 *)_021D05E8)[0] = 1;
+    ((u8 *)gSoundSystemFlags)[0] = 1;
     gSoundMicAutoParam = *param;
     return result;
 }
 
 void GF_MIC_StopAutoSampling(void) {
     GetSoundDataPointer();
-    ((u8 *)_021D05E8)[0] = 0;
+    ((u8 *)gSoundSystemFlags)[0] = 0;
     MIC_StopAutoSampling();
 }
 
 void GF_MicPauseOnLidClose(void) {
-    if (((u8 *)_021D05E8)[0] != 0) {
+    if (((u8 *)gSoundSystemFlags)[0] != 0) {
         if (MIC_StopAutoSampling() != MIC_RESULT_SUCCESS) {
             GF_ASSERT(FALSE);
         }
@@ -740,7 +740,7 @@ void GF_MicPauseOnLidClose(void) {
 }
 
 void GF_MicResumeOnLidOpen(void) {
-    if (((u8 *)_021D05E8)[0] != 0) {
+    if (((u8 *)gSoundSystemFlags)[0] != 0) {
         if (MIC_StartAutoSampling(&gSoundMicAutoParam) != MIC_RESULT_SUCCESS) {
             GF_ASSERT(FALSE);
         }
@@ -963,7 +963,7 @@ void GF_SndHandleSetTempoRatio(int handleNo, int ratio) {
 
 void GF_SndSetMonoFlag(int flag) {
     NNS_SndSetMonoFlag(flag);
-    _021D05E8[2] = flag;
+    gSoundSystemFlags[2] = flag;
 }
 
 void GF_SndSetFadeTimer(u32 frames) {

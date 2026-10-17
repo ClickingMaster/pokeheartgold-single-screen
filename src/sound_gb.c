@@ -3,7 +3,7 @@
 #include "sound.h"
 #include "sound_system.h"
 
-extern int _021D05E8[4];
+extern int gSoundSystemFlags[4];
 
 static void SoundSys_SetGBSoundsState(u8 enabled);
 
@@ -241,9 +241,9 @@ void GBSounds_SetAllocatableChannels(void) {
     NNS_SndPlayerSetTrackAllocatableChannel(GF_GetSoundHandle(2), 15, 0xA7FE);
 }
 void Sound_SetFieldBGMStopOnce(BOOL enabled) {
-    _021D05E8[3] = enabled;
+    gSoundSystemFlags[3] = enabled;
 }
 void Sound_ResetFieldBGMStopOnce(void) {
-    _021D05E8[3] = 0;
-    _021D05E8[1] = 0;
+    gSoundSystemFlags[3] = 0;
+    gSoundSystemFlags[1] = 0;
 }

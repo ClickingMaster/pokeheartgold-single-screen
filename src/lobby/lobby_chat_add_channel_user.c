@@ -7,10 +7,6 @@
 
 #include "lobby_chat_internal.h"
 
-static inline NamedEntry *ChannelNodeEntry(Node *node) {
-    return (NamedEntry *)&node->key;
-}
-
 void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src) {
     LobbyString_InitCopy(&dst->name, name);
     dst->e.a = src->a;
@@ -25,8 +21,10 @@ void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src) {
 void *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key) {
     Tree *channels = (Tree *)manager->channelMap;
     Iter it;
+    Node *node;
     LobbyChannelMap_Find(&it, channels, key);
-    return it.current == &channels->head ? NULL : &ChannelNodeEntry(it.current)->e.callbacks;
+    node = it.current;
+    return node == &channels->head ? NULL : &node->key.channel.e.callbacks;
 }
 
 void LobbyChannelMap_Find(Iter *out, Tree *t, Str *key) {
@@ -55,6 +53,7 @@ int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel)
     Tree *channels = (Tree *)manager->channelMap;
     int id;
     Iter it;
+    Node *node;
     InsertResult ir;
     Tag t1;
     Tag t0;
@@ -63,10 +62,11 @@ int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel)
         return -1;
     }
     LobbyChannelMap_Find(&it, channels, channel);
-    if (it.current == &channels->head) {
+    node = it.current;
+    if (node == &channels->head) {
         return -1;
     }
-    LobbyUserIdSet_Insert(&ir, (Tree *)&ChannelNodeEntry(it.current)->e.t, &id);
+    LobbyUserIdSet_Insert(&ir, &node->key.channel.e.t, &id);
     t1 = (Tag) { 0 };
     t0 = (Tag) { 0 };
     LobbyString_Assign(&LobbyUserMap_GetOrInsert((Tree *)manager->userMap, &id)->val, nick);

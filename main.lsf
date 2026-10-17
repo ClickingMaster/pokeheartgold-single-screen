@@ -978,7 +978,7 @@ Overlay field
     Object src/field/area_data.o
     Object src/field/honey_sweet_scent.o
     Object src/field/resource_bank.o
-    Object asm/overlay_01_data_02208BFC.o
+    Object asm/field_effect_renderers_data.o
     Object src/field/fishing.o
     Object src/field/field_camera_zoom.o
     Object src/field/field_move_sweet_scent.o

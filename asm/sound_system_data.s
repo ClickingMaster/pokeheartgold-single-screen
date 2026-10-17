@@ -7,8 +7,8 @@
 
 	.bss
 
-	.public _021D05E8
-_021D05E8:
+	.public gSoundSystemFlags
+gSoundSystemFlags:
 	.space 0x10
 
 	.public gSoundMicAutoParam

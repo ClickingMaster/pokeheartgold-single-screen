@@ -92,7 +92,7 @@ struct Iter {
 };
 struct Vec;
 extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
-extern "C" const u8 *LobbyByteVector_Data(const Vec *);
+extern "C" const u8 *LobbyByteVector_Data(const void *);
 
 struct Vec {
     u8 *ptr;
@@ -194,24 +194,11 @@ struct Data {
     u8 x42;
 };
 
-struct Work {
-    int state;
-    u8 pad4[0x4c - 4];
-    int x4c;
-    int x50;
-    u8 pad54[0x6c - 0x54];
-    int x6c;
-    u8 pad70[0x110 - 0x70];
-    Vec v110;
-    u8 pad11c[0x144 - 0x11c];
-    u8 x144[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" Op *gPPWLobbyCurrentRequest;
 
-inline const Data *GetData(Work *w) {
-    return (const Data *)LobbyByteVector_Data(&w->v110);
+inline const Data *GetData(PPWLobbyWork *w) {
+    return (const Data *)LobbyByteVector_Data(&w->players.self.userProfile);
 }
 
 #define PNEW(o, a, b, c, d, e, f) new (o) Op(a, b, c, d, e, f)
@@ -223,7 +210,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     Op *o;
     int x;
     ReqMethod flag;
-    Work *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (w == 0) {
         return 4;
     }
@@ -234,7 +221,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
         return 3;
     }
     Out out;
-    if (!PPWLobbySchedule_GetQuestionnaire(w->x144, &out) || gPPWLobbyWork->x6c != 0) {
+    if (!PPWLobbySchedule_GetQuestionnaire(&w->schedule, &out) || gPPWLobbyWork->submittingQuestionnaire != 0) {
         return 4;
     }
     const Data *d = GetData(gPPWLobbyWork);
@@ -242,7 +229,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     {
         Info info;
         const Data *d2 = GetData(gPPWLobbyWork);
-        info.id = gPPWLobbyWork->x4c;
+        info.id = gPPWLobbyWork->userId;
         info.one = 1;
         info.a = d2->x42;
         info.b = d2->x39;
@@ -256,10 +243,10 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     p.d38 = d->x38;
     p.d3c = d->x3c;
     p.d3e = d->x3e;
-    x = gPPWLobbyWork->x4c;
+    x = gPPWLobbyWork->userId;
     host = gPPWLobbySubmitQuestionnaireUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest == 0) {
         o = (Op *)LobbyMem_Alloc(sizeof(Op));
         PNEW(o, flag, name, host, x, (const u8 *)&p, (const u8 *)&p + sizeof(p));
@@ -290,7 +277,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
             }
         }
     }
-    gPPWLobbyWork->x6c = 1;
+    gPPWLobbyWork->submittingQuestionnaire = 1;
     return 0;
 }
 
@@ -483,16 +470,9 @@ public:
     }
 };
 
-struct Work {
-    int state;
-    int sub;
-    u8 pad8[0xb8 - 8];
-    u8 names[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" char sStr_Empty_15[];
-extern "C" Str PPWLobby_GetChannelName(u8 *, int);
+extern "C" Str PPWLobby_GetChannelName(PPWLobbyChannel *, int);
 extern "C" int PPWLobby_EncodeMessage(int, int, int, int, int, Str *);
 extern "C" int LobbyChat_SendUserMessage(int, const char *);
 extern "C" int LobbyChat_SendChannelMessage(const char *, const char *);
@@ -517,10 +497,10 @@ inline int ErrorMap::Map(int r) const {
 }
 
 inline void SetError(int r) {
-    Work *g = gPPWLobbyWork;
+    PPWLobbyWork *g = gPPWLobbyWork;
     int state = ErrorMap().Map(r);
     if (state != 0) {
-        g->sub = state;
+        g->error = state;
         g->state = 10;
     }
 }
@@ -541,7 +521,7 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
         value.Destroy();
         return result;
     }
-    Str name = PPWLobby_GetChannelName(gPPWLobbyWork->names, key);
+    Str name = PPWLobby_GetChannelName(&gPPWLobbyWork->mainChannel, key);
     if (name == sStr_Empty_15) {
         name.Destroy();
         value.Destroy();
@@ -580,13 +560,7 @@ typedef union {
     u8 bytes[12];
 } String;
 
-typedef struct {
-    int state, error;
-    u8 p[0xb8 - 8];
-    u8 names[1];
-} Global;
-
-extern Global *gPPWLobbyWork;
+extern PPWLobbyWork *gPPWLobbyWork;
 extern char sStr_Empty_15[];
 extern int PPWLobby_EncodeMessage(void *, void *, void *, void *, void *, String *), LobbyChat_SendUserMessage(int, char *), LobbyChat_SendChannelMessage(char *, char *), LobbyString_CompareCStr(String *, char *), LobbyChat_SetChannelKey(char *, int, int, void *);
 extern void LobbyString_Destroy(String *), PPWLobby_GetChannelName(String *, void *, int), LobbyCharVector_Grow(String *, u32), LobbyCharVector_Destroy(String *);
@@ -607,7 +581,7 @@ static inline int Empty(String *s) {
 
 static inline void Status(int result) {
     volatile u8 z = 0;
-    Global *g = gPPWLobbyWork;
+    PPWLobbyWork *g = gPPWLobbyWork;
     int e = 0;
     (void)&z;
     switch (result) {
@@ -631,7 +605,7 @@ int PPWLobby_SetChannelData(int id, int key, int mode, void *data, u32 length) {
     String name, encoded;
     int result;
     char *text;
-    PPWLobby_GetChannelName(&name, gPPWLobbyWork->names, key);
+    PPWLobby_GetChannelName(&name, &gPPWLobbyWork->mainChannel, key);
     if (Empty(&name)) {
         LobbyString_Destroy(&name);
         return 5;
@@ -816,15 +790,7 @@ struct Obj {
     }
 };
 
-struct Work {
-    u8 pad0[0x4c];
-    u32 x4c;
-    u32 x50;
-    u8 pad54[0x110 - 0x54];
-    u8 field[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
@@ -835,23 +801,23 @@ extern "C" void PPWLobby_StartCheckProfile(void);
 
 extern "C" void PPWLobby_StartCheckProfile(void) {
     Info info;
-    const Config *c = (const Config *)LobbyByteVector_Data(gPPWLobbyWork->field);
-    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(gPPWLobbyWork->field);
+    const Config *c = (const Config *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
+    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
     const char *name;
     const char *host;
     Obj *o;
     u32 x;
     ReqMethod flag;
-    info.x = gPPWLobbyWork->x4c;
+    info.x = gPPWLobbyWork->userId;
     info.one = 1;
     info.a = f->version;
     info.b = f->language;
     OS_GetMacAddress(info.mac);
     info.cfg = *c;
-    x = gPPWLobbyWork->x4c;
+    x = gPPWLobbyWork->userId;
     host = gPPWLobbyCheckProfileUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -894,7 +860,6 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 
 namespace MakeChannelName {
 extern "C" {
-extern void *gPPWLobbyWork;
 extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
@@ -1193,7 +1158,7 @@ namespace EnterMainChannel {
 class Str;
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-extern "C" Str *LobbyString_Assign(Str *, const Str *);
+extern "C" Str *LobbyString_Assign(void *, const Str *);
 
 class Str {
 public:
@@ -1232,32 +1197,6 @@ public:
     }
 };
 
-struct Info {
-    int id;
-    Str name;
-    int x;
-    int y;
-
-    Info(const Str &n)
-        : id(0)
-        , name(n)
-        , x(0)
-        , y(0) {
-    }
-
-    void Destroy() const {
-        name.Destroy();
-    }
-};
-struct Work;
-
-struct Work {
-    u32 state;
-    u32 sub;
-    u8 pad8[0xb8 - 8];
-    Info self;
-};
-
 struct Callbacks {
     void (*a)();
     void (*b)();
@@ -1276,9 +1215,9 @@ struct Callbacks {
     }
 };
 
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" void PPWLobby_OnPlayerJoined(), PPWLobby_OnPlayerLeft(), PPWLobby_OnMessage(), PPWLobby_OnChannelDataChanged(), PPWLobby_OnTopicChanged(), PPWLobby_OnEnterMainChannel();
-extern "C" Str PPWLobby_GetChannelBaseName(Work *, int);
+extern "C" Str PPWLobby_GetChannelBaseName(PPWLobbyWork *, int);
 extern "C" Str PPWLobby_MakeChannelName(int, const Str &);
 extern "C" int LobbyChat_EnterChannelAsync(const char *, int, int, Callbacks *, void (*)(), int);
 extern "C" int PPWLobby_EnterMainChannel(void);
@@ -1307,11 +1246,11 @@ inline Str MakeMainChannelName(Str t) {
     return n;
 }
 
-struct Info2 {
-    int id;
+struct Channel {
+    int kind;
     u32 nm[3];
-    int x;
-    int y;
+    int usersEnumerated;
+    int modeReady;
 
     Str &name() {
         return *(Str *)nm;
@@ -1322,27 +1261,20 @@ struct Info2 {
     }
 };
 
-struct Work2 {
-    u32 state;
-    u32 sub;
-    u8 pad8[0xb8 - 8];
-    Info2 self;
-};
-
 inline void SetSelfChannel(const Str &n) {
-    Info2 i;
-    Work2 *w;
-    Info2 *p = &i;
-    i.id = 0;
-    LobbyString_InitCopy(&i.name(), &n);
-    p->x = 0;
-    p->y = 0;
-    w = (Work2 *)gPPWLobbyWork;
-    w->self.id = i.id;
-    w->self.name() = i.name();
-    w->self.x = i.x;
-    w->self.y = i.y;
-    i.Destroy();
+    Channel c;
+    PPWLobbyWork *w;
+    Channel *p = &c;
+    c.kind = 0;
+    LobbyString_InitCopy(&c.name(), &n);
+    p->usersEnumerated = 0;
+    p->modeReady = 0;
+    w = gPPWLobbyWork;
+    w->mainChannel.kind = c.kind;
+    LobbyString_Assign(&w->mainChannel.name, &c.name());
+    w->mainChannel.usersEnumerated = c.usersEnumerated;
+    w->mainChannel.modeReady = c.modeReady;
+    c.Destroy();
 }
 
 #pragma push
@@ -1353,10 +1285,10 @@ extern "C" int PPWLobby_EnterMainChannel(void) {
     Str name = MakeMainChannelName(PPWLobby_GetChannelBaseName(gPPWLobbyWork, 0));
     int result = LobbyChat_EnterChannelAsync(name.CStr(), 0, 0x14, &cb, PPWLobby_OnEnterMainChannel, 0);
     {
-        Work *w = gPPWLobbyWork;
+        PPWLobbyWork *w = gPPWLobbyWork;
         int state = ErrorMap().Map(result);
         if (state != 0) {
-            w->sub = state;
+            w->error = state;
             w->state = 10;
         }
     }
@@ -1418,61 +1350,39 @@ struct Vec {
     }
 };
 
-struct Entry {
-    int id;
-};
-
-struct Session {
-    u8 pad[0x38];
-    int active;
-};
-
-typedef void (*Handler)(int, int, int, int, int, char *, u32, int);
-
-struct Work {
-    u8 pad0[0x1c];
-    Handler handler;
-    u8 pad20[0xb8 - 0x20];
-    Entry a;
-    u8 padbc[0xd0 - 0xbc];
-    Entry b;
-    u8 padd4[0xe8 - 0xd4];
-    u8 sessions[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
-extern "C" Str PPWLobbyChannel_GetName(Entry *);
+extern "C" PPWLobbyWork *gPPWLobbyWork;
+extern "C" Str PPWLobbyChannel_GetName(PPWLobbyChannel *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
 extern "C" char *LobbyByteVector_Data(Vec *);
 extern "C" int PPWLobby_HandleLibraryData(int, int, int, int, int, char *, u32, int);
-extern "C" Session *PPWLobbyPlayers_Find(void *, int);
+extern "C" PPWLobbyPlayer *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobby_HandleReceivedData(int, int, char *, int, int, const char *, int);
 
-inline int Find(Work *w, const Str &name) {
+inline int Find(PPWLobbyWork *w, const Str &name) {
     const Str &n = name;
     int eq;
     {
-        Str t = PPWLobbyChannel_GetName(&w->a);
+        Str t = PPWLobbyChannel_GetName(&w->mainChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
     if (eq) {
-        return w->a.id;
+        return w->mainChannel.kind;
     }
     {
-        Str t = PPWLobbyChannel_GetName(&w->b);
+        Str t = PPWLobbyChannel_GetName(&w->subChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
     if (eq) {
-        return w->b.id;
+        return w->subChannel.kind;
     }
     return 5;
 }
 
-inline int IsActive(Session *s) {
-    return s != 0 && s->active != 0;
+inline int IsActive(PPWLobbyPlayer *s) {
+    return s != 0 && s->entered != 0;
 }
 
 #pragma opt_common_subs off
@@ -1503,13 +1413,13 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
         return;
     }
     if (id != -1) {
-        if (!IsActive(PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id))) {
+        if (!IsActive(PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id))) {
             data.Destroy();
             return;
         }
     }
-    Work *w = gPPWLobbyWork;
-    w->handler(a, b, kind, id, arg, LobbyByteVector_Data(&data), data.size, extra);
+    PPWLobbyWork *w = gPPWLobbyWork;
+    w->callbacks.onLocationsChanged(a, b, kind, id, arg, LobbyByteVector_Data(&data), data.size, extra);
     data.Destroy();
 }
 
@@ -1765,45 +1675,21 @@ struct Rec {
     }
 };
 
-struct Val {
-    u64 v;
-
+struct Val : PPWLobbyTime {
     Val(const u8 *d) {
-        ((u32 *)&v)[0] = ((const u32 *)d)[0];
-        ((u32 *)&v)[1] = ((const u32 *)d)[1];
+        ((u32 *)&seconds)[0] = ((const u32 *)d)[0];
+        ((u32 *)&seconds)[1] = ((const u32 *)d)[1];
     }
 
-    Val(const Val &o)
-        : v(o.v) {
-    }
-};
-
-struct Work {
-    u8 pad0[0x20];
-    void (*onQuad)(int, const Triple *);
-    void (*onData)(int, const u8 *, u32);
-    u8 pad28[0x4c - 0x28];
-    int id;
-    u8 pad50[0xe8 - 0x50];
-    u8 table[0x144 - 0xe8];
-    int status;
-    int ready;
-    Val pair;
-
-    void SetPair(Val p) {
-        ready = 1;
-        pair = p;
-    }
-
-    void OnPair(const u8 *d) {
-        SetPair(Val(d));
+    Val(const Val &o) {
+        seconds = o.seconds;
     }
 };
 
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" const char sStr_b_lib_u_user[], sStr_b_lib_u_system[], sStr_b_lib_c_time[], sStr_b_lib_c_lobby[];
 extern "C" Rec *PPWLobbyPlayers_Find(void *, int);
-extern "C" int PPWLobbySchedule_Load(int *, const u8 *, u32);
+extern "C" int PPWLobbySchedule_Load(PPWLobbySchedule *, const u8 *, u32);
 extern "C" int PPWLobby_HandleLibraryData(int, int, int, int, const char *, const u8 *, u32);
 
 inline void Rec::SetVec(const u8 *d, u32 n, TU al) {
@@ -1828,8 +1714,13 @@ inline void Rec::SetQuad(const u8 *d) {
     qRecv = 1;
 }
 
+static inline void SetChannelTime(PPWLobbyWork *work, Val time) {
+    work->schedule.hasTime = 1;
+    work->schedule.time = time;
+}
+
 static inline void OnPairFn(const u8 *d) {
-    gPPWLobbyWork->SetPair(Val(d));
+    SetChannelTime(gPPWLobbyWork, Val(d));
 }
 
 extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const char *cmd, const u8 *data, u32 len) {
@@ -1837,28 +1728,28 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
         return 0;
     }
     if (strcmp(cmd, sStr_b_lib_u_user) == 0) {
-        if (id == gPPWLobbyWork->id) {
+        if (id == gPPWLobbyWork->userId) {
             return 1;
         }
-        Rec *r = PPWLobbyPlayers_Find(gPPWLobbyWork->table, id);
+        Rec *r = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
         if (!r) {
             return 1;
         }
         TU al;
         r->SetVec(data, len, al);
         if (r->valid) {
-            gPPWLobbyWork->onData(id, data, len);
+            gPPWLobbyWork->callbacks.onPlayerUpdate(id, data, len);
         }
         return 1;
     }
     if (strcmp(cmd, sStr_b_lib_u_system) == 0) {
-        if (id == gPPWLobbyWork->id) {
+        if (id == gPPWLobbyWork->userId) {
             return 1;
         }
         if (len != 16) {
             return 1;
         }
-        Rec *r = PPWLobbyPlayers_Find(gPPWLobbyWork->table, id);
+        Rec *r = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
         if (!r) {
             return 1;
         }
@@ -1866,7 +1757,7 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
         if (r->valid && r->q.changed) {
             r->q.changed = 0;
             Triple t = r->GetTriple();
-            gPPWLobbyWork->onQuad(id, &t);
+            gPPWLobbyWork->callbacks.onPlayerRecordChanged(id, &t);
         }
         return 1;
     }
@@ -1878,10 +1769,10 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
         return 1;
     }
     if (strcmp(cmd, sStr_b_lib_c_lobby) == 0) {
-        if (!PPWLobbySchedule_Load(&gPPWLobbyWork->status, data, len)) {
+        if (!PPWLobbySchedule_Load(&gPPWLobbyWork->schedule, data, len)) {
             return 1;
         }
-        gPPWLobbyWork->status = 4;
+        gPPWLobbyWork->schedule.state = 4;
         return 1;
     }
     return 0;
@@ -1982,20 +1873,10 @@ typedef union {
         u8 header;
         char data[11];
     } small;
-} W30615String;
+} String;
 
-typedef struct {
-    u8 pad[0xb8];
-    W30615String name;
-    u32 unusedC4, a, b;
-    u8 padD0[0x18];
-    u8 collection[0x5c];
-    s32 count;
-    u32 active;
-} W30615Context;
-
-extern W30615Context *gPPWLobbyWork;
-extern void PPWLobbyChannel_GetName(W30615String *, void *), LobbyString_Destroy(W30615String *);
+extern PPWLobbyWork *gPPWLobbyWork;
+extern void PPWLobbyChannel_GetName(String *, void *), LobbyString_Destroy(String *);
 extern int LobbyChat_IsInChannel(char *), PPWLobbyPlayers_AllHaveProfiles(void *);
 int PPWLobby_IsMainChannelReady(void);
 
@@ -2012,29 +1893,29 @@ static inline int enough(s32 n) {
 #pragma opt_propagation off
 
 int PPWLobby_IsMainChannelReady(void) {
-    W30615String local;
+    String local;
     int empty;
-    W30615Context *c;
-    PPWLobbyChannel_GetName(&local, &gPPWLobbyWork->name);
+    PPWLobbyWork *c;
+    PPWLobbyChannel_GetName(&local, &gPPWLobbyWork->mainChannel);
     empty = LobbyChat_IsInChannel(!local.heap.large ? local.small.data : local.heap.ptr) == 0;
     LobbyString_Destroy(&local);
     if (empty) {
         return 0;
     }
     c = gPPWLobbyWork;
-    if (c->a == 0) {
+    if (c->mainChannel.usersEnumerated == 0) {
         return 0;
     }
-    if (c->b == 0) {
+    if (c->mainChannel.modeReady == 0) {
         return 0;
     }
-    if (c->active == 0) {
+    if (c->schedule.hasTime == 0) {
         return 0;
     }
-    if (!enough(c->count)) {
+    if (!enough(c->schedule.state)) {
         return 0;
     }
-    return PPWLobbyPlayers_AllHaveProfiles(c->collection) != 0;
+    return PPWLobbyPlayers_AllHaveProfiles(&c->players) != 0;
 }
 }
 }
@@ -2183,7 +2064,7 @@ int PPWLobby_TimerPollChannelMode(void) {
 
 int PPWLobby_TimerRequestChannelTime(void) {
     Str s;
-    if (gPPWLobbyWork->schedule.unk_04 != 0) {
+    if (gPPWLobbyWork->schedule.hasTime != 0) {
         return 0;
     }
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
@@ -2245,7 +2126,6 @@ int PPWLobby_TimerRequestLobbyData(void) {
 
 namespace WebResponse {
 extern "C" {
-extern void *gPPWLobbyWork;
 extern char *gPPWLobbyChannelNamePrefixes[];
 extern void PPWLobbyChannel_GetName(Str *, void *), LobbyString_Reserve(Str *, u32);
 extern int LobbyString_Compare(Str *, Str *), LobbyChat_IsInChannel(const char *), PPWLobbyPlayers_AllHaveProfiles(void *), PPWLobby_SetChannelData(u32, u32, const void *, const void *, u32);
@@ -2388,7 +2268,7 @@ struct Iter {
 };
 struct Vec;
 extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
-extern "C" const char *LobbyByteVector_Data(const Vec *);
+extern "C" const char *LobbyByteVector_Data(const void *);
 
 struct Vec {
     char *ptr;
@@ -2458,23 +2338,7 @@ struct Obj {
     }
 };
 
-struct Work {
-    int state;
-    int sub;
-    u8 pad8[0x34 - 8];
-    void (*cb)(int, void *, u32);
-    void *cb38;
-    void (*cb3c)(int, void *, u32);
-    u8 pad40[0x4c - 0x40];
-    u32 x4c;
-    u32 x50;
-    u8 pad54[0x110 - 0x54];
-    Vec field;
-    u8 pad11c[0x144 - 0x11c];
-    u8 x144[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
@@ -2494,7 +2358,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
@@ -2507,23 +2371,23 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     if (r == 0) {
         PPW_LobbyUpdateMyProfile(buf, len, 0);
     }
-    gPPWLobbyWork->cb(r, buf, len);
+    gPPWLobbyWork->callbacks.onOwnRecord(r, buf, len);
     if (r != 0) {
-        Work *g = gPPWLobbyWork;
-        g->sub = 6;
+        PPWLobbyWork *g = gPPWLobbyWork;
+        g->error = 6;
         g->state = 10;
         return;
     }
-    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->field);
-    info.x = gPPWLobbyWork->x4c;
+    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
+    info.x = gPPWLobbyWork->userId;
     info.one = 1;
     info.a = f->version;
     info.b = f->language;
     OS_GetMacAddress(info.mac);
-    x = gPPWLobbyWork->x4c;
+    x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetScheduleUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -2621,7 +2485,7 @@ struct Iter {
 };
 struct Vec;
 extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
-extern "C" const char *LobbyByteVector_Data(const Vec *);
+extern "C" const char *LobbyByteVector_Data(const void *);
 
 struct Vec {
     char *ptr;
@@ -2697,23 +2561,7 @@ struct Obj {
     }
 };
 
-struct Work {
-    int state;
-    int sub;
-    u8 pad8[0x34 - 8];
-    void (*cb)(int, void *, u32);
-    int (*cb38)(int, void *);
-    void (*cb3c)(int, void *, u32);
-    u8 pad40[0x4c - 0x40];
-    u32 x4c;
-    u32 x50;
-    u8 pad54[0x110 - 0x54];
-    Vec field;
-    u8 pad11c[0x144 - 0x11c];
-    u8 x144[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" int PPW_LobbyUpdateMyProfile(const void *, u32, int);
@@ -2737,41 +2585,41 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
     buf = 0;
     len = 0;
     int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
-    if (r == 0 && !PPWLobbySchedule_IsSizeValid(gPPWLobbyWork->x144, buf, len)) {
+    if (r == 0 && !PPWLobbySchedule_IsSizeValid(&gPPWLobbyWork->schedule, buf, len)) {
         r = 2;
     }
-    int ok2 = gPPWLobbyWork->cb38(r, buf);
+    int ok2 = gPPWLobbyWork->callbacks.onEvent12Result(r, buf);
     if (r != 0) {
-        Work *g = gPPWLobbyWork;
-        g->sub = 4;
+        PPWLobbyWork *g = gPPWLobbyWork;
+        g->error = 4;
         g->state = 10;
         return;
     }
     if (ok2) {
-        PPWLobbySchedule_Load(gPPWLobbyWork->x144, buf, len);
+        PPWLobbySchedule_Load(&gPPWLobbyWork->schedule, buf, len);
     }
-    const PPWLobbyUserProfile *p = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->field);
+    const PPWLobbyUserProfile *p = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
     int ret = 0;
     std::memset(&i2, 0, sizeof(i2));
-    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->field);
-    info.x = gPPWLobbyWork->x4c;
+    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
+    info.x = gPPWLobbyWork->userId;
     info.one = 1;
     info.a = f->version;
     info.b = f->language;
     OS_GetMacAddress(info.mac);
     i2.info = info;
     i2.extra = p->trainerId;
-    x = gPPWLobbyWork->x4c;
+    x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetVipUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -2868,7 +2716,7 @@ struct Iter {
 };
 struct Vec;
 extern "C" void LobbyCharVector_AssignIterRange(Vec *, Iter, Iter, TD);
-extern "C" const char *LobbyByteVector_Data(const Vec *);
+extern "C" const char *LobbyByteVector_Data(const void *);
 
 struct Vec {
     char *ptr;
@@ -2938,23 +2786,7 @@ struct Obj {
     }
 };
 
-struct Work {
-    int state;
-    int sub;
-    u8 pad8[0x34 - 8];
-    void (*cb)(int, void *, u32);
-    void *cb38;
-    void (*cb3c)(int, void *, u32);
-    u8 pad40[0x4c - 0x40];
-    u32 x4c;
-    u32 x50;
-    u8 pad54[0x110 - 0x54];
-    Vec field;
-    u8 pad11c[0x144 - 0x11c];
-    u8 x144[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" Obj *gPPWLobbyCurrentRequest;
 extern "C" int PPWLobby_ParseWebResponse(int, int, int, void **, u32 *);
 extern "C" void *LobbyMem_Alloc(u32);
@@ -2975,34 +2807,34 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     ReqMethod flag;
     void *buf;
     u32 len;
-    Work *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (w == 0 || w->state == 9) {
         return;
     }
     buf = 0;
     len = 0;
     int r = PPWLobby_ParseWebResponse(a0, a1, a2, &buf, &len);
-    if (!PPWLobbySchedule_ValidateVipRecords(gPPWLobbyWork->x144, buf, len)) {
+    if (!PPWLobbySchedule_ValidateVipRecords(&gPPWLobbyWork->schedule, buf, len)) {
         r = 2;
     }
     if (r != 0) {
-        Work *g = gPPWLobbyWork;
-        g->sub = 5;
+        PPWLobbyWork *g = gPPWLobbyWork;
+        g->error = 5;
         g->state = 10;
         return;
     }
-    PPWLobbySchedule_SetVipRecords(gPPWLobbyWork->x144, buf, len);
-    gPPWLobbyWork->cb3c(r, buf, len >> 3);
-    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->field);
-    info.x = gPPWLobbyWork->x4c;
+    PPWLobbySchedule_SetVipRecords(&gPPWLobbyWork->schedule, buf, len);
+    gPPWLobbyWork->callbacks.onSpecialVisitorsReceived(r, buf, len >> 3);
+    const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
+    info.x = gPPWLobbyWork->userId;
     info.one = 1;
     info.a = f->version;
     info.b = f->language;
     OS_GetMacAddress(info.mac);
-    x = gPPWLobbyWork->x4c;
+    x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetQuestionnaireUrl;
     name = gPPWLobbyStatsUploadKey;
-    flag = gPPWLobbyWork->x50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
+    flag = gPPWLobbyWork->unk_50 == 0 ? REQ_METHOD_GET : REQ_METHOD_POST;
     if (gPPWLobbyCurrentRequest != 0) {
         return;
     }
@@ -3046,26 +2878,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
 namespace OnGetQuestionnaire {
 extern "C" {
 
-typedef struct {
-    int state, error;
-} Status;
-
-typedef struct {
-    union {
-        struct {
-            int state, error;
-        };
-
-        Status status;
-    };
-
-    u8 p[0x40 - 8];
-    void (*callback)(int, void *);
-    u8 q[0x144 - 0x44];
-    int value;
-} Work;
-
-extern Work *gPPWLobbyWork;
+extern PPWLobbyWork *gPPWLobbyWork;
 extern int PPWLobby_ParseWebResponse(void *, void *, void *, void **, u32 *);
 extern void PPWLobbySchedule_SetQuestionnaire(void *, void *);
 void PPWLobby_OnGetQuestionnaire(void *, void *, void *);
@@ -3074,7 +2887,7 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     void *data;
     u32 size;
     int result;
-    Work *w = gPPWLobbyWork;
+    PPWLobbyWork *w = gPPWLobbyWork;
     if (!w || w->state == 9) {
         return;
     }
@@ -3086,15 +2899,15 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     }
     if (result) {
         {
-            Work *target = gPPWLobbyWork;
+            PPWLobbyWork *target = gPPWLobbyWork;
             target->error = 7;
             target->state = 10;
         }
         return;
     }
-    PPWLobbySchedule_SetQuestionnaire(&gPPWLobbyWork->value, data);
-    gPPWLobbyWork->callback(result, data);
-    gPPWLobbyWork->value = 2;
+    PPWLobbySchedule_SetQuestionnaire(&gPPWLobbyWork->schedule, data);
+    gPPWLobbyWork->callbacks.onSurveyReceived(result, data);
+    gPPWLobbyWork->schedule.state = 2;
 }
 }
 }
@@ -3710,32 +3523,15 @@ struct Session {
     int active;
 };
 
-struct Channel {
-    int id;
-};
-
-struct Work {
-    u8 pad0[0x10];
-    void (*left)(int);
-    u8 pad14[0x20 - 0x14];
-    void (*update)(int, const Summary &);
-    u8 pad24[0xb8 - 0x24];
-    Channel a;
-    u8 padbc[0xd0 - 0xbc];
-    Channel b;
-    u8 padd4[0xe8 - 0xd4];
-    u8 sessions[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
-extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
+extern "C" PPWLobbyWork *gPPWLobbyWork;
+extern "C" void PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobbyPlayers_Remove(void *, int);
 extern "C" void PPWLobby_OnPlayerJoined(char *, int);
 extern "C" void PPWLobbyPlayers_Add(void *, int);
 
-inline int Match(Channel *c, const Str &name) {
+inline int Match(PPWLobbyChannel *c, const Str &name) {
     Str t;
     int r;
     PPWLobbyChannel_GetName(&t, c);
@@ -3744,13 +3540,13 @@ inline int Match(Channel *c, const Str &name) {
     return r;
 }
 
-inline int Find(Work *w, const Str &name) {
+inline int Find(PPWLobbyWork *w, const Str &name) {
     const Str &n = name;
-    if (Match(&w->a, n)) {
-        return w->a.id;
+    if (Match(&w->mainChannel, n)) {
+        return w->mainChannel.kind;
     }
-    if (Match(&w->b, n)) {
-        return w->b.id;
+    if (Match(&w->subChannel, n)) {
+        return w->subChannel.kind;
     }
     return 5;
 }
@@ -3789,18 +3585,18 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
         return;
     }
     if (kind == 0) {
-        PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, id);
+        PPWLobbyPlayers_Add(&gPPWLobbyWork->players, id);
         return;
     }
-    Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
+    Session *s = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
     if (s == 0) {
-        PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, id);
-        s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
+        PPWLobbyPlayers_Add(&gPPWLobbyWork->players, id);
+        s = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
     }
     UpdatePlayerChannel(s, info, arg, kind);
     MakeSummary(s, arg);
     if (s->active) {
-        gPPWLobbyWork->update(id, arg);
+        gPPWLobbyWork->callbacks.onPlayerRecordChanged(id, &arg);
     }
 }
 
@@ -3892,31 +3688,14 @@ struct Session {
     int active;
 };
 
-struct Channel {
-    int id;
-};
-
-struct Work {
-    u8 pad0[0x10];
-    void (*left)(int);
-    u8 pad14[0x20 - 0x14];
-    void (*update)(int, const Summary &);
-    u8 pad24[0xb8 - 0x24];
-    Channel a;
-    u8 padbc[0xd0 - 0xbc];
-    Channel b;
-    u8 padd4[0xe8 - 0xd4];
-    u8 sessions[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
-extern "C" void PPWLobbyChannel_GetName(Str *, Channel *);
+extern "C" PPWLobbyWork *gPPWLobbyWork;
+extern "C" void PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *);
 extern "C" int LobbyString_Equals(const Str *, const Str *);
 extern "C" Session *PPWLobbyPlayers_Find(void *, int);
 extern "C" void PPWLobbyPlayers_Remove(void *, int);
 extern "C" void PPWLobby_OnPlayerLeft(char *, int);
 
-inline int Match(Channel *c, const Str &name) {
+inline int Match(PPWLobbyChannel *c, const Str &name) {
     Str t;
     int r;
     PPWLobbyChannel_GetName(&t, c);
@@ -3925,13 +3704,13 @@ inline int Match(Channel *c, const Str &name) {
     return r;
 }
 
-inline int Find(Work *w, const Str &name) {
+inline int Find(PPWLobbyWork *w, const Str &name) {
     const Str &n = name;
-    if (Match(&w->a, n)) {
-        return w->a.id;
+    if (Match(&w->mainChannel, n)) {
+        return w->mainChannel.kind;
     }
-    if (Match(&w->b, n)) {
-        return w->b.id;
+    if (Match(&w->subChannel, n)) {
+        return w->subChannel.kind;
     }
     return 5;
 }
@@ -3970,22 +3749,22 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
         return;
     }
     if (kind == 0) {
-        Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
+        Session *s = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
         if (s == 0 || s->active == 0) {
             return;
         }
-        gPPWLobbyWork->left(id);
-        PPWLobbyPlayers_Remove(gPPWLobbyWork->sessions, id);
+        gPPWLobbyWork->callbacks.onPlayerLeave(id);
+        PPWLobbyPlayers_Remove(&gPPWLobbyWork->players, id);
         return;
     }
-    Session *s = PPWLobbyPlayers_Find(gPPWLobbyWork->sessions, id);
+    Session *s = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, id);
     if (s == 0) {
         return;
     }
     UpdatePlayerChannel(s, info, arg);
     MakeSummary(s, arg);
     if (s->active) {
-        gPPWLobbyWork->update(id, arg);
+        gPPWLobbyWork->callbacks.onPlayerRecordChanged(id, &arg);
     }
 }
 
@@ -4041,7 +3820,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -4241,20 +4019,8 @@ typedef struct {
     String text;
 } Message;
 
-typedef struct {
-    u8 pad[20];
-    void (*cb0)(int, int, int, void *);
-    void (*cb1)(int, int, int, void *, u32);
-    u8 gap[156];
-    String first;
-    u8 gap2[12];
-    String second;
-    u8 gap3[12];
-    u8 map[4];
-} Context;
-
-extern Context *gPPWLobbyWork;
-extern void LobbyString_InitFromCStr(String *, void *), PPWLobbyChannel_GetName(String *, String *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
+extern PPWLobbyWork *gPPWLobbyWork;
+extern void LobbyString_InitFromCStr(String *, void *), PPWLobbyChannel_GetName(String *, PPWLobbyChannel *), LobbyString_Destroy(String *), LobbyCharVector_Destroy(String *), PPWLobby_HandleSystemMessage(Message *, int, int, void *, u32);
 extern int LobbyString_Equals(String *, String *), PPWLobby_ParseMessage(String *, Message *);
 extern PPWLobbyPlayer *PPWLobbyPlayers_Find(void *, int);
 extern void *LobbyByteVector_Data(String *);
@@ -4280,32 +4046,32 @@ static inline int validEntry(PPWLobbyPlayer *p) {
 void PPWLobby_OnMessage(void *key, int index, void *name) {
     Message m;
     String k, tmp, b, a;
-    int language = 5;
+    int channel = 5;
     if (key) {
-        Context *c;
+        PPWLobbyWork *c;
         String *kp;
         int match;
         LobbyString_InitFromCStr(&k, key);
         c = gPPWLobbyWork;
         kp = &k;
-        PPWLobbyChannel_GetName(&a, &c->first);
+        PPWLobbyChannel_GetName(&a, &c->mainChannel);
         match = LobbyString_Equals(&a, kp);
         LobbyString_Destroy(&a);
         if (match) {
-            language = c->first.a;
+            channel = c->mainChannel.kind;
         } else {
-            PPWLobbyChannel_GetName(&b, &c->second);
+            PPWLobbyChannel_GetName(&b, &c->subChannel);
             match = LobbyString_Equals(&b, kp);
             LobbyString_Destroy(&b);
             if (match) {
-                language = c->second.a;
+                channel = c->subChannel.kind;
             } else {
-                language = 5;
+                channel = 5;
             }
         }
         LobbyString_Destroy(&k);
     }
-    if (key && language == 5) {
+    if (key && channel == 5) {
         return;
     }
     {
@@ -4327,22 +4093,22 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         }
         switch (m.kind) {
         case 1: {
-            PPWLobbyPlayer *p = PPWLobbyPlayers_Find(gPPWLobbyWork->map, index);
+            PPWLobbyPlayer *p = PPWLobbyPlayers_Find(&gPPWLobbyWork->players, index);
             if (!validEntry(p)) {
                 LobbyCharVector_Destroy(&m.text);
                 return;
             }
             switch (m.type) {
             case 1: {
-                Context *c = gPPWLobbyWork;
+                PPWLobbyWork *c = gPPWLobbyWork;
                 void *t = LobbyByteVector_Data(&m.text);
-                c->cb1(index, language, m.arg, t, m.text.b);
+                c->callbacks.onMessage(index, channel, m.arg, t, m.text.b);
                 break;
             }
             case 0: {
-                Context *c = gPPWLobbyWork;
+                PPWLobbyWork *c = gPPWLobbyWork;
                 void *t = LobbyByteVector_Data(&m.text);
-                c->cb0(index, language, m.arg, t);
+                c->callbacks.onEvent3(index, channel, m.arg, t);
                 break;
             }
             }
@@ -4350,7 +4116,7 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
         }
         case 0: {
             void *t = LobbyByteVector_Data(&m.text);
-            PPWLobby_HandleSystemMessage(&m, index, language, t, m.text.b);
+            PPWLobby_HandleSystemMessage(&m, index, channel, t, m.text.b);
             break;
         }
         }
@@ -4626,16 +4392,9 @@ typedef struct {
     u32 size, cap;
 } Vec;
 
-typedef struct {
-    u32 state;
-    u8 pad[0x54];
-    String message;
-    int failed;
-} Work;
-
-extern Work *gPPWLobbyWork;
+extern PPWLobbyWork *gPPWLobbyWork;
 extern char sStr_Bang[];
-extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), LobbyStringVector_Destroy(Vec *), LobbyString_Assign(String *, String *), PPWLobby_GenerateChannelBaseName(String *);
+extern void LobbyString_InitFromCStr(String *, char *), LobbyString_Destroy(String *), LobbyStringVector_Destroy(Vec *), LobbyString_Assign(void *, String *), PPWLobby_GenerateChannelBaseName(String *);
 extern void LobbyString_Split(Vec *, String *, String *, int);
 void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
 
@@ -4667,17 +4426,17 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
             char *p = s->heap.allocated == 0 ? s->inplace.data : s->heap.data;
             LobbyString_InitFromCStr(&text, p);
         }
-        LobbyString_Assign(&gPPWLobbyWork->message, &text);
+        LobbyString_Assign(&gPPWLobbyWork->channelBaseName, &text);
         LobbyString_Destroy(&text);
-        gPPWLobbyWork->failed = 0;
+        gPPWLobbyWork->isNewChannel = 0;
         gPPWLobbyWork->state = 6;
         LobbyStringVector_Destroy(&parts);
         return;
     }
     PPWLobby_GenerateChannelBaseName(&empty);
-    LobbyString_Assign(&gPPWLobbyWork->message, &empty);
+    LobbyString_Assign(&gPPWLobbyWork->channelBaseName, &empty);
     LobbyString_Destroy(&empty);
-    gPPWLobbyWork->failed = 1;
+    gPPWLobbyWork->isNewChannel = 1;
     gPPWLobbyWork->state = 6;
 }
 }
@@ -4830,56 +4589,39 @@ struct Str {
     }
 };
 
-struct Entry {
-    int id;
-};
-
-struct Work {
-    u8 pad0[0x4c];
-    int self;
-    u8 pad50[0xb8 - 0x50];
-    Entry a;
-    u8 padbc[0xc8 - 0xbc];
-    int flag;
-    u8 padcc[0xd0 - 0xcc];
-    Entry b;
-    u8 padd4[0xe8 - 0xd4];
-    u8 sessions[4];
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" char sStr_b_lib_u_user[], sStr_b_lib_u_system[];
-extern "C" Str PPWLobbyChannel_GetName(Entry *);
+extern "C" Str PPWLobbyChannel_GetName(PPWLobbyChannel *);
 extern "C" int LobbyString_Equals(const Str &, const Str &);
 extern "C" void PPWLobbyPlayers_Add(void *, int);
 extern "C" void LobbyChat_GetChannelKeysAsync(char *, int, char *, void (*)(), int);
 extern "C" void PPWLobby_OnGetChannelKeys();
 extern "C" void PPWLobby_OnEnumUsers(int, char *, int, int *);
 
-inline int Find(Work *w, const Str &name) {
+inline int Find(PPWLobbyWork *w, const Str &name) {
     const Str &n = name;
     int eq;
     {
-        Str t = PPWLobbyChannel_GetName(&w->a);
+        Str t = PPWLobbyChannel_GetName(&w->mainChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
     if (eq) {
-        return w->a.id;
+        return w->mainChannel.kind;
     }
     {
-        Str t = PPWLobbyChannel_GetName(&w->b);
+        Str t = PPWLobbyChannel_GetName(&w->subChannel);
         eq = LobbyString_Equals(t, n);
         t.Destroy();
     }
     if (eq) {
-        return w->b.id;
+        return w->subChannel.kind;
     }
     return 5;
 }
 
 inline bool IsSelf(int id) {
-    return id == gPPWLobbyWork->self;
+    return id == gPPWLobbyWork->userId;
 }
 
 #pragma opt_common_subs off
@@ -4891,7 +4633,7 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
     }
     {
         Str name(channel);
-        Work *w = gPPWLobbyWork;
+        PPWLobbyWork *w = gPPWLobbyWork;
         result = Find(w, name);
         name.Destroy();
     }
@@ -4903,12 +4645,12 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
     }
     for (i = 0; i < count; i++) {
         if (!IsSelf(ids[i])) {
-            PPWLobbyPlayers_Add(gPPWLobbyWork->sessions, ids[i]);
+            PPWLobbyPlayers_Add(&gPPWLobbyWork->players, ids[i]);
             LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_user, PPWLobby_OnGetChannelKeys, 0);
             LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_system, PPWLobby_OnGetChannelKeys, 0);
         }
     }
-    gPPWLobbyWork->flag = 1;
+    gPPWLobbyWork->mainChannel.usersEnumerated = 1;
 }
 
 #pragma opt_common_subs reset
@@ -5147,7 +4889,7 @@ void PPWLobby_OnGetChannelMode(int a, int b, u32 *c) {
         return;
     }
     if (c[7] == 20) {
-        gPPWLobbyWork->mainChannel.unk_14 = 1;
+        gPPWLobbyWork->mainChannel.modeReady = 1;
         v = 4;
         LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &v);
         return;
@@ -5197,19 +4939,7 @@ struct DateTime {
     Time time;
 };
 
-struct Work {
-    u8 pad[0x134];
-    u8 list[0x148 - 0x134];
-    int valid;
-    Stamp stamp;
-
-    void SetStamp(const Stamp &t) {
-        valid = 1;
-        stamp = t;
-    }
-};
-
-extern "C" Work *gPPWLobbyWork;
+extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" char sStr_b_lib_c_time[];
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
 extern "C" void DWC_GetDateTime(Date *, Time *);
@@ -5225,23 +4955,23 @@ extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, 
     }
     Vec data;
     if (PPWLobby_DecodeMessageData(value, &data) == 0 || data.size != 8) {
-        Work *w = gPPWLobbyWork;
+        PPWLobbyWork *w = gPPWLobbyWork;
         DateTime now;
         DWC_GetDateTime(&now.date, &now.time);
-        w->stamp.v = RTC_ConvertDateTimeToSecond(&now.date, &now.time);
+        w->schedule.time.seconds = RTC_ConvertDateTimeToSecond(&now.date, &now.time);
         Stamp s;
-        s = w->stamp;
+        s.v = w->schedule.time.seconds;
         PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_time, &s, 8);
         data.Destroy();
         return;
     }
     {
         Stamp s = *(Stamp *)LobbyByteVector_Data(&data);
-        Work *w = gPPWLobbyWork;
-        w->valid = 1;
-        w->stamp = s;
+        PPWLobbyWork *w = gPPWLobbyWork;
+        w->schedule.hasTime = 1;
+        w->schedule.time.seconds = s.v;
         int state = 5;
-        LobbyTimerMap_EraseKey(gPPWLobbyWork->list, &state);
+        LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &state);
     }
     data.Destroy();
 }
@@ -5264,23 +4994,15 @@ typedef struct {
     u32 lo, hi;
 } Pair;
 
-typedef struct {
-    u8 p[0x134];
-    int state;
-    u8 q[0x144 - 0x138];
-    u32 stored, flag;
-    Pair time;
-} Work;
-
-extern Work *gPPWLobbyWork;
+extern PPWLobbyWork *gPPWLobbyWork;
 extern u8 sStr_b_lib_c_time[], sStr_b_lib_c_lobby[];
-extern int PPWLobby_DecodeMessageData(void *, Blob *), PPWLobbySchedule_Load(u32 *, void *, u32);
+extern int PPWLobby_DecodeMessageData(void *, Blob *), PPWLobbySchedule_Load(PPWLobbySchedule *, void *, u32);
 extern void *LobbyByteVector_Data(Blob *);
-extern void LobbyCharVector_Destroy(Blob *), PPWLobby_SetChannelData(int, int, void *, void *, int), LobbyTimerMap_EraseKey(int *, int *), PPWLobbySchedule_CopyToVector(Blob *, u32 *), DWC_GetDateTime(RTCDate *, RTCTime *);
+extern void LobbyCharVector_Destroy(Blob *), PPWLobby_SetChannelData(int, int, void *, void *, int), LobbyTimerMap_EraseKey(void *, int *), PPWLobbySchedule_CopyToVector(Blob *, PPWLobbySchedule *), DWC_GetDateTime(RTCDate *, RTCTime *);
 
 static inline int appendBlob(Blob *blob) {
-    Work *w = gPPWLobbyWork;
-    return PPWLobbySchedule_Load(&w->stored, LobbyByteVector_Data(blob), blob->size);
+    PPWLobbyWork *w = gPPWLobbyWork;
+    return PPWLobbySchedule_Load(&w->schedule, LobbyByteVector_Data(blob), blob->size);
 }
 
 void PPWLobby_OnGetChannelTime(int, int, int, int, void *), PPWLobby_OnGetLobbyData(int, int, int, int, void *);
@@ -5295,15 +5017,15 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
     blob.size = 0;
     blob.capacity = 0;
     if (!PPWLobby_DecodeMessageData(data, &blob) || blob.size == 0 || !appendBlob(&blob)) {
-        PPWLobbySchedule_CopyToVector(&copy, &gPPWLobbyWork->stored);
+        PPWLobbySchedule_CopyToVector(&copy, &gPPWLobbyWork->schedule);
         PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_lobby, LobbyByteVector_Data(&copy), copy.size);
         LobbyCharVector_Destroy(&copy);
         LobbyCharVector_Destroy(&blob);
         return;
     }
-    gPPWLobbyWork->stored = 4;
+    gPPWLobbyWork->schedule.state = 4;
     state = 6;
-    LobbyTimerMap_EraseKey(&gPPWLobbyWork->state, &state);
+    LobbyTimerMap_EraseKey(gPPWLobbyWork->timers, &state);
     LobbyCharVector_Destroy(&blob);
 }
 }
@@ -5386,7 +5108,6 @@ struct WebRequest {
     struct Vec data;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -5692,7 +5413,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -5964,7 +5684,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -6326,7 +6045,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -6881,7 +6599,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -7192,7 +6909,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -7489,7 +7205,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);
@@ -7744,7 +7459,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern u32 *gPPWLobbyWork;
 extern u8 gPPWLobbyPlayersVtable[], sStr_b_lib_u_user[], sStr_b_lib_u_system[], gPPWLobbyMainChannelMode[];
 extern void DWC_Free(int, void *, int);
 extern void *LobbyMem_Alloc(u32);

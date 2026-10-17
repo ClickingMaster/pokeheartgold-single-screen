@@ -5,21 +5,21 @@
 
 // The callbacks the game passes to PPW_LobbyInitializeAsync, in table order.
 typedef struct PPWLobbyCallbacks {
-    void (*onEnterChannel)(void);
-    void (*onPlayerEnter)(void);
-    void (*onPlayerLeave)(void);
-    void (*onEvent3)(void);
-    void (*onMessage)(void);
-    void (*onLocationsChanged)(void);
-    void (*onPlayerRecordChanged)(void);
-    void (*onPlayerUpdate)(void);
+    void (*onEnterChannel)(int, int);
+    void (*onPlayerEnter)(u32, void *, void *, u32);
+    void (*onPlayerLeave)(int);
+    void (*onEvent3)(int, int, int, void *);
+    void (*onMessage)(int, int, int, void *, u32);
+    void (*onLocationsChanged)(int, int, int, int, int, char *, u32, int);
+    void (*onPlayerRecordChanged)(int, const void *);
+    void (*onPlayerUpdate)(int, const u8 *, u32);
     void (*onMatchInfo)(int, void *);
     void (*onMatchClosed)(int, void *);
     void (*onLobbyEvent)(void);
-    void (*onOwnRecord)(void);
-    void (*onEvent12Result)(void);
-    void (*onSpecialVisitorsReceived)(void);
-    void (*onSurveyReceived)(void);
+    void (*onOwnRecord)(int, void *, u32);
+    int (*onEvent12Result)(int, void *);
+    void (*onSpecialVisitorsReceived)(int, void *, u32);
+    void (*onSurveyReceived)(int, void *);
     void (*onSurveySubmitted)(s32);
     void (*onExcessFlood)(int);
 } PPWLobbyCallbacks;
@@ -27,8 +27,8 @@ typedef struct PPWLobbyCallbacks {
 typedef struct PPWLobbyChannel {
     int kind;
     Str name;
-    u32 unk_10;
-    u32 unk_14;
+    int usersEnumerated;
+    int modeReady;
 } PPWLobbyChannel;
 
 // Uploaded as the "b_lib_u_system" channel key.
@@ -57,10 +57,16 @@ typedef struct PPWLobbyPlayers {
     PPWLobbyPlayer self;
 } PPWLobbyPlayers;
 
+// Channel time in seconds (RTC_ConvertDateTimeToSecond).
+typedef struct PPWLobbyTime {
+    s64 seconds;
+} PPWLobbyTime;
+
 typedef struct PPWLobbySchedule {
     int state;
-    int unk_04;
-    u8 unk_08[0x24];
+    int hasTime;
+    PPWLobbyTime time;
+    u8 unk_10[0x1C];
 } PPWLobbySchedule;
 
 typedef struct PPWLobbyWork {
@@ -68,7 +74,10 @@ typedef struct PPWLobbyWork {
     int error;
     PPWLobbyCallbacks callbacks;
     u32 userId;
-    u8 unk_50[0x18];
+    u32 unk_50;
+    u32 unk_54;
+    Str channelBaseName;
+    int isNewChannel;
     int recruiting;
     int submittingQuestionnaire;
     u32 unk_70;
