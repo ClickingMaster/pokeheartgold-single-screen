@@ -37,7 +37,6 @@ extern u8 gWifiSetupApBssid[6];       // BSSID of the chosen access point
 extern u8 gWifiSetupOwnMacAddress[6]; // own MAC address
 extern u8 gWifiSetupRecordBuffer[];
 extern u8 sStr_WARP[4];
-extern WifiSetupVersion sWifiSetupClientVersion;
 extern u32 gWifiSetupRecvSsid[8];
 extern u32 gWifiSetupRecvSecurity[];
 extern u8 gWifiSetupReply[];
@@ -71,6 +70,10 @@ int WifiSetup_HexToBytes(u8 *dst, const char *src, int length);
 int WifiSetup_StoreSimpleStartResult(void);
 
 #pragma optimization_level 3
+
+static const WifiSetupVersion sWifiSetupClientVersion = {
+    .bytes = { 6, 0, 1, 2, 3, 4, 5 },
+};
 
 // Scans up to 30 times for the access point until WifiSetup_PickSetupAccessPoint picks one.
 int WifiSetup_FindSetupAccessPoint(void) {

@@ -1,22 +1,7 @@
-	.extern _0222DFEE
-	.extern _0222E0E4
-	.extern _0222E21C
-	.extern _0222E2C8
-	.extern _0222E2CA
-	.extern _0222E460
-	.extern _0222E462
-	.extern _0222E5B0
-	.extern _0222E638
-	.extern _0222E63A
-	.extern _0222E788
-	.extern _0222E826
-	.extern _0222E828
-	.extern _0222E900
-	.extern _0222E964
-	.extern _0222E966
-	.extern _0222EA3C
-	.extern _0222EBD4
-	.extern _0222EC10
+	.include "asm/macros.inc"
+	.include "overlay_43.inc"
+	.include "global.inc"
+
 	.extern PalPadRoster_DeselectTab
 	.extern PalPadRoster_DrawTabsOnScroll
 	.extern PalPadDetails_PrintUnionRoomPage
@@ -29,35 +14,17 @@
 	.extern PalPadDetails_PrintReturnPage
 	.public _0222ED5C
 	.public sPalPadDetailsPagePrinters
-	.public PalPadRoster_DeselectTab
-	.public PalPadRoster_DrawTabsOnScroll
-	.public PalPadDetails_PrintUnionRoomPage
-	.public PalPadDetails_PrintBattleTowerPage
-	.public PalPadDetails_PrintBattleFactoryPage
-	.public PalPadDetails_PrintBattleCastlePage
-	.public PalPadDetails_PrintBattleHallPage
-	.public PalPadDetails_PrintBattleArcadePage
-	.public PalPadDetails_PrintWiFiPlazaPage
-	.public PalPadDetails_PrintReturnPage
-	.public sPalPadDetailsPage4WindowSpecs
-	.public sPalPadDetailsPage7WindowSpecs
-	.public sPalPadDetailsPage6WindowSpecs
-	.public sPalPadDetailsPage5WindowSpecs
-	.public sPalPadDetailsPage1WindowSpecs
 	.public sPalPadRosterPageBaseTiles
 	.public sPalPadFriendCodeHitboxes
-	.public sPalPadDetailsPage2WindowSpecs
 	.public sPalPadRosterNameColors
 	.public sPalPadRosterFriendMenuTemplate
 	.public sPalPadDetailsSlotBaseTiles
 	.public sPalPadDetailsTabX
 	.public sPalPadGraphicsModes
 	.public sPalPadObjCharTransferTemplate
-	.public sPalPadDetailsPage0WindowSpecs
 	.public sPalPadDetailsTabWidths
 	.public sPalPadPanelLayouts
 	.public sPalPadMenuHitboxes
-	.public sPalPadDetailsPage3WindowSpecs
 	.public sPalPadDetailsHitboxes
 	.public sPalPadGraphicsBanks
 	.public sPalPadDetailsFrontierHitboxes
@@ -80,36 +47,6 @@
 	.public sPalPadArrowSpriteTemplates
 	.public ov43_0222F160
 	.public sPalPadCursorSpriteTemplate
-	.extern _0222DFEE
-	.extern _0222E0E4
-	.extern _0222E21C
-	.extern _0222E2C8
-	.extern _0222E2CA
-	.extern _0222E460
-	.extern _0222E462
-	.extern _0222E5B0
-	.extern _0222E638
-	.extern _0222E63A
-	.extern _0222E788
-	.extern _0222E826
-	.extern _0222E828
-	.extern _0222E900
-	.extern _0222E964
-	.extern _0222E966
-	.extern _0222EA3C
-	.extern _0222EBD4
-	.extern _0222EC10
-	.extern PalPadDetails_PrintUnionRoomPage
-	.extern PalPadDetails_PrintBattleTowerPage
-	.extern PalPadDetails_PrintBattleFactoryPage
-	.extern PalPadDetails_PrintBattleCastlePage
-	.extern PalPadDetails_PrintBattleHallPage
-	.extern PalPadDetails_PrintBattleArcadePage
-	.extern PalPadDetails_PrintWiFiPlazaPage
-	.extern PalPadDetails_PrintReturnPage
-	.include "asm/macros.inc"
-	.include "overlay_43.inc"
-	.include "global.inc"
 
 	.rodata
 

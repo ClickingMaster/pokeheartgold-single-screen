@@ -44,7 +44,6 @@ typedef struct AossSession {
     Params params;
 } AossSession;
 
-extern const Pair _0224267C;
 extern void *ov13_0224CF9C;
 extern s8 ov13_0224CFB8[];
 extern int gWifiSetupSocket;
@@ -56,6 +55,11 @@ int WifiSetup_ConnectAccessPoint(Context *, int *);
 int WifiSetup_SendRequest(int, Config *, Params *, int);
 int WifiSetup_HandlePacket(int, Data *, int *, Params *, int);
 int WifiSetup_StoreAossResult(WifiSetupRequest *);
+
+static const Pair sWifiSetupUnsetConnection = {
+    .max = -1,
+    .delay = -1,
+};
 
 static inline void PutPort(SocAddress *address, u16 port) {
     address->port = port;
@@ -90,7 +94,7 @@ int WifiSetup_RunAossSession(WifiSetupRequest *request) {
     s16 i;
     s16 limit;
     s16 delay;
-    session.connection = _0224267C;
+    session.connection = sWifiSetupUnsetConnection;
     ClearRetry(&session.retry, &mode);
     session.option = 1;
     zero = mode;

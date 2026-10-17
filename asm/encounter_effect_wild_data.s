@@ -1,7 +1,7 @@
-	.extern WildEffectSine_Init
-	.extern WildEffectSine_Update
-	.extern WildEffectBgLoader_Start
-	.extern WildEffectBgLoader_IsDone
+	.include "asm/macros.inc"
+	.include "overlay_120.inc"
+	.include "global.inc"
+
 	.public gWildEffectWaveBgTemplate_Main1
 	.public gWildEffectWaveBgTemplate_Main3
 	.public gRedEffectSpriteResources
@@ -12,10 +12,6 @@
 	.public gWildEffectCellGridRows
 	.public gWildEffectCellGridDiagonalsA
 	.public gWildEffectCellGridRowsReverse
-	.public _0226019C
-	.include "asm/macros.inc"
-	.include "overlay_120.inc"
-	.include "global.inc"
 
 	.rodata
 

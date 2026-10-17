@@ -1,6 +1,7 @@
 	.include "asm/macros.inc"
 	.include "overlay_87.inc"
 	.include "global.inc"
+
 	.public sScratchOffCardsLastCardButtonHitbox
 	.public sScratchOffCardsNextCardButtonHitbox
 	.public sScratchOffCardsResultSpritePositions
@@ -32,7 +33,7 @@
 
 .rodata
 
-_021E8174:
+sScratchOffCardsUnusedPositions:
 	.byte 0x58, 0x00, 0xA0, 0x00, 0x44, 0x00, 0xA0, 0x00, 0x26, 0x00, 0x38, 0x00
 	.byte 0x44, 0x00, 0x44, 0x00
 

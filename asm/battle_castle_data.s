@@ -1,12 +1,8 @@
 	.include "asm/macros.inc"
+	.include "overlay_83.inc"
+	.include "global.inc"
+
 	.public gBattleCastlePartyAppHealMessages
-	.public BattleCastle_GridCallbackNoOp
-	.public BattleCastlePartyApp_OnPartyGridKeyMove
-	.public BattleCastlePartyApp_OnPartyGridTouch
-	.public BattleCastleOpponentApp_OnPartyGridKeyMove
-	.public BattleCastleOpponentApp_OnPartyGridTouch
-	.public BattleCastlePartyApp_OnItemGridKeyMove
-	.public BattleCastlePartyApp_OnItemGridTouch
 	.public gBattleCastlePartyAppBerryCounts
 	.public gBattleCastlePartyAppHealCosts
 	.public gBattleCastlePartyAppMainMenuHelpMessages
@@ -48,8 +44,6 @@
 	.public gBattleCastleOpponentAppBgTemplate_Sub0
 	.public gBattleCastleOpponentAppBgTemplate_Sub1
 	.public gBattleCastleOpponentAppGraphicsBanks
-	.include "overlay_83.inc"
-	.include "global.inc"
 
 	.rodata
 

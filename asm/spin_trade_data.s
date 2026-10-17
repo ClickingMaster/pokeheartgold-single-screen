@@ -56,43 +56,7 @@
 	.extern SpinTradeEggDrop_Fall
 	.extern SpinTradeEggDrop_Land
 	.extern SpinTrade_AddHover
-	.extern SpinTradeGroup_State_ShowPrompt
-	.extern SpinTradeGroup_State_HandleInput
-	.extern SpinTradeGroup_State_WaitTextThenResetMenu
-	.extern SpinTradeGroup_State_WaitPrinter
-	.extern SpinTradeGroup_State_ResetLeaderMenuState
-	.extern SpinTradeGroup_State_ShowCancelYesNo
-	.extern SpinTradeGroup_State_HandleCancelYesNo
-	.extern SpinTradeGroup_State_ResetLeaveWait
-	.extern SpinTradeGroup_State_SendLeave
-	.extern SpinTradeGroup_State_AbortLeave
-	.extern SpinTradeGroup_State_ShowConfirmYesNo
-	.extern SpinTradeGroup_State_HandleConfirmYesNo
-	.extern SpinTradeGroup_State_SendStartSync
-	.extern SpinTradeGroup_State_WaitSyncCount
-	.extern SpinTradeGroup_State_BeforeSave
-	.extern SpinTradeGroup_State_StartSave
-	.extern SpinTradeGroup_State_Save
-	.extern SpinTradeGroup_State_WaitAfterSave
-	.extern SpinTradeGroup_State_ShowCanceled
-	.extern SpinTradeGroup_State_FadeOutCanceled
-	.extern SpinTradeGroup_State_ShowDisbandYesNo
-	.extern SpinTradeGroup_State_HandleDisbandYesNo
-	.extern SpinTradeGroup_State_ShowDisbanded
-	.extern SpinTradeGroup_State_WaitBeforeExit
-	.extern SpinTradeGroup_State_StartExitSync
-	.extern SpinTradeGroup_State_WaitExitSync
-	.extern SpinTradeGroup_State_ShowMemberDropped
-	.extern SpinTradeGroup_State_WaitMemberDropped
-	.extern SpinTradeGroup_State_ShowMemberLeft
-	.extern SpinTradeGroup_State_StartMemberLeftWait
-	.extern SpinTradeGroup_State_WaitMemberLeft
-	.extern SpinTradeGroup_State_Proceed
 	.public gSpinTradeHoverOffsets
-	.public SpinTradeApp_Init
-	.public SpinTradeApp_Exit
-	.public SpinTradeApp_Main
-	.public SpinTrade_ClearLinkFlags
 	.public SpinTrade_State_Start
 	.public SpinTrade_State_WaitFadeIn
 	.public SpinTrade_State_WaitMembers
@@ -147,154 +111,13 @@
 	.public SpinTrade_State_FadeOut
 	.public SpinTrade_State_WaitFadeOut
 	.public SpinTrade_State_Exit
-	.public SpinTrade_VBlankCallback
-	.public SpinTrade_InitGraphics
-	.public SpinTrade_FreeGraphics
-	.public SpinTrade_Draw
-	.public SpinTrade_SetGraphicsBanks
-	.public SpinTrade_SetupPlanes
-	.public SpinTrade_DisableDisplay
-	.public SpinTrade_Init3D
-	.public SpinTrade_InitBgLayers
-	.public SpinTrade_LoadBgGraphics
-	.public SpinTrade_FreeBgLayers
-	.public SpinTrade_LoadButtonTilemap
-	.public SpinTrade_SetButtonPressed
-	.public SpinTrade_SetButtonReleased
-	.public SpinTrade_SetButtonHalfPressed
-	.public SpinTrade_InitPaletteData
-	.public SpinTrade_FreePaletteData
-	.public SpinTrade_SetSubBgFadeLevel
-	.public SpinTrade_InitSpriteSystem
-	.public SpinTrade_LoadSpriteResources
-	.public SpinTrade_FreeSpriteSystem
-	.public SpinTrade_CreateSprite
-	.public SpinTrade_InitText
-	.public SpinTrade_FreeText
-	.public SpinTrade_PrintMessage
-	.public SpinTrade_PrintPlayerMessage
-	.public SpinTrade_PrintItemMessage
-	.public SpinTrade_ClearMessage
-	.public SpinTrade_AddNameWindows
-	.public SpinTrade_RemoveNameWindows
-	.public SpinTrade_PrintNameWindow
-	.public SpinTrade_PrintPlayerName
-	.public SpinTrade_ClearNameWindow
-	.public SpinTrade_InitCamera
-	.public SpinTrade_FreeCamera
-	.public SpinTrade_UpdateTouch
-	.public SpinTrade_IsInButtonArea
-	.public SpinTrade_IsButtonTouched
-	.public SpinTrade_InitMachine
-	.public SpinTrade_FreeMachine
-	.public SpinTrade_UpdateMachinePosition
-	.public SpinTrade_DrawMachine
-	.public SpinTradeMachine_Rotate
-	.public SpinTrade_LoadObjects
-	.public SpinTrade_FreeObjects
-	.public SpinTrade_LoadObjectModels
-	.public SpinTrade_FreeObjectModels
-	.public SpinTrade_ShowEgg
-	.public SpinTrade_UpdateEggPositions
-	.public SpinTrade_DrawEggs
-	.public SpinTrade_RotateEggs
-	.public SpinTradeEgg_UpdatePosition
-	.public SpinTrade_FindEggNearestSlot
-	.public SpinTrade_ShowShadow
-	.public SpinTradeShadow_Update
-	.public SpinTrade_ShowMarker
-	.public SpinTradeMarker_Update
-	.public SpinTrade_StartEggDrop
-	.public SpinTrade_EggDropTask
 	.public SpinTradeEggDrop_Init
 	.public SpinTradeEggDrop_Fall
 	.public SpinTradeEggDrop_Land
-	.public SpinTradeBounce_Update
-	.public SpinTrade_BounceTask
-	.public SpinTrade_StartBounceTask
-	.public SpinTrade_StopBounceTask
-	.public SpinTrade_AddBounce
-	.public SpinTrade_BounceAllEggs
-	.public SpinTrade_IsAnyEggBouncing
-	.public SpinTradeSpin_Update
-	.public SpinTrade_SpinTask
-	.public SpinTrade_StartSpinTask
-	.public SpinTrade_StopSpinTask
-	.public SpinTrade_AddSpin
-	.public SpinTradeWobble_Update
-	.public SpinTrade_WobbleTask
-	.public SpinTrade_StartWobbleTask
-	.public SpinTrade_StopWobbleTask
-	.public SpinTrade_AddWobble
-	.public SpinTradeJump_Update
-	.public SpinTrade_JumpTask
-	.public SpinTrade_StartJumpTask
-	.public SpinTrade_StopJumpTask
-	.public SpinTrade_StartJump
-	.public SpinTrade_HasJumpLanded
-	.public SpinTrade_IsJumping
-	.public SpinTrade_CountdownTask
-	.public SpinTrade_StartCountdown
-	.public SpinTradeButtonFlash_Update
-	.public SpinTrade_ButtonFlashTask
-	.public SpinTrade_StartButtonFlashTask
-	.public SpinTrade_StopButtonFlashTask
-	.public SpinTrade_IsButtonFlashing
-	.public SpinTrade_StartButtonFlash
-	.public SpinTradeHover_Update
-	.public SpinTrade_HoverTask
-	.public SpinTrade_StartHoverTask
-	.public SpinTrade_StopHoverTask
 	.public SpinTrade_AddHover
-	.public SpinTrade_HoverBonusEggs
-	.public SpinTrade_SubBgFadeTask
-	.public SpinTrade_StartSubBgFade
-	.public SpinTrade_AddAngle
-	.public SpinTrade_RotateAll
-	.public SpinTrade_TickSpinTimer
-	.public SpinTrade_LoadNarcMember
-	.public SpinTrade_ReceiveJump
-	.public SpinTrade_ReceiveSpinData
-	.public SpinTrade_ClearScratch
-	.public SpinTrade_GetScratch
-	.public SpinTrade_HasReceivedStatus
-	.public SpinTrade_HaveAllMembersJoined
-	.public SpinTrade_CountMembers
-	.public SpinTrade_ReceiveMemberSlot
-	.public SpinTrade_ReceivePlayerCount
-	.public SpinTrade_IsMemberPresent
-	.public SpinTrade_ReceiveTradedMon
-	.public SpinTrade_CountReceivedParties
-	.public SpinTrade_ReceiveTradeSlot
-	.public SpinTrade_ReceiveResult
-	.public SpinTrade_IsInBonusArea
-	.public SpinTrade_PartyHasBadEgg
-	.public SpinTrade_AnyPartyHasBadEgg
-	.public SpinTrade_CountConfirmed
-	.public SpinTrade_IsCancelled
-	.public SpinTradeGroupApp_Init
-	.public SpinTradeGroupApp_Main
-	.public SpinTradeGroupApp_Exit
-	.public SpinTradeGroup_VBlankTask
-	.public SpinTradeGroup_VBlankCallback
-	.public SpinTradeGroup_SetGraphicsBanks
-	.public SpinTradeGroup_InitBgLayers
-	.public SpinTradeGroup_InitData
-	.public SpinTradeGroup_FreeData
-	.public SpinTradeGroup_FreeBgLayers
-	.public SpinTradeGroup_LoadBgGraphics
-	.public SpinTradeGroup_InitObjTransfer
-	.public SpinTradeGroup_InitSpriteResources
-	.public SpinTradeGroup_CreateAvatarSprites
-	.public SpinTradeGroup_InitWindows
-	.public SpinTradeGroup_PrintTitle
-	.public SpinTradeGroup_RemoveWindows
 	.public SpinTradeGroup_State_ShowPrompt
 	.public SpinTradeGroup_State_HandleInput
-	.public SpinTradeGroup_HandleButtons
-	.public SpinTradeGroup_UpdateDummy
 	.public SpinTradeGroup_State_WaitTextThenResetMenu
-	.public SpinTradeGroup_WaitPrinterThen
 	.public SpinTradeGroup_State_WaitPrinter
 	.public SpinTradeGroup_State_ResetLeaderMenuState
 	.public SpinTradeGroup_State_ShowCancelYesNo
@@ -324,26 +147,6 @@
 	.public SpinTradeGroup_State_StartMemberLeftWait
 	.public SpinTradeGroup_State_WaitMemberLeft
 	.public SpinTradeGroup_State_Proceed
-	.public SpinTradeGroup_HandleLinkEvent
-	.public SpinTradeGroup_HandleMemberEvent
-	.public SpinTradeGroup_CycleHighlightColor
-	.public SpinTradeGroup_CountProfiles
-	.public SpinTradeGroup_PrintMemberList
-	.public SpinTradeGroup_HandleInputDummy
-	.public SpinTradeGroup_CountMembers
-	.public SpinTradeGroup_GetMemberMask
-	.public SpinTradeGroup_UpdateMembers
-	.public SpinTradeGroup_PrintMessage
-	.public SpinTradeGroup_IsPrinterDone
-	.public SpinTradeGroup_ClearMessage
-	.public SpinTradeGroup_UpdateAvatars
-	.public SpinTradeGroup_LoadAvatarGraphics
-	.public SpinTradeGroup_LoadAvatar
-	.public SpinTradeGroup_FreeAvatarGraphics
-	.public SpinTradeGroup_GetTextSpeed
-	.public SpinTradeGroup_SetMaxConnections
-	.public SpinTradeGroup_CheckMembers
-	.public SpinTradeGroup_SaveDummy
 	.public gSpinTradeBonusRanges2P
 	.public gSpinTradeBonusRanges3P
 	.public gSpinTradeMsgWindowTemplate
@@ -376,20 +179,6 @@
 	.public gSpinTradeSlotAngles
 	.public gSpinTradeDropTargetAngles
 	.public gSpinTradeStateFuncs
-	.public gSpinTradeGroupYesNoWindowTemplate
-	.public gSpinTradeGroupAvatarCharOffsets
-	.public gSpinTradeGroupBlinkFrames
-	.public gSpinTradeGroupGraphicsModes
-	.public gSpinTradeGroupObjCharTransferTemplate
-	.public gSpinTradeGroupAvatarPositions
-	.public gSpinTradeGroupBgTemplate_Sub2
-	.public gSpinTradeGroupBgTemplate_Main0
-	.public gSpinTradeGroupBgTemplate_Main1
-	.public gSpinTradeGroupBgTemplate_Sub0
-	.public gSpinTradeGroupBgTemplate_Sub1
-	.public gSpinTradeGroupGraphicsBanks
-	.public gSpinTradeGroupStateFuncs
-	.public SpinTrade_ClearLinkFlags
 	.public SpinTrade_State_Start
 	.public SpinTrade_State_WaitMembers
 	.public SpinTrade_State_SendReady
@@ -417,41 +206,6 @@
 	.public SpinTrade_State_WaitDisconnect
 	.public SpinTrade_State_WaitFadeOut
 	.public SpinTrade_State_Exit
-	.public SpinTrade_VBlankCallback
-	.public SpinTrade_FreeGraphics
-	.public SpinTrade_SetButtonPressed
-	.public SpinTrade_SetButtonReleased
-	.public SpinTrade_SetButtonHalfPressed
-	.public SpinTrade_SetSubBgFadeLevel
-	.public SpinTrade_FreeSpriteSystem
-	.public SpinTrade_CreateSprite
-	.public SpinTrade_ClearNameWindow
-	.public SpinTrade_FreeCamera
-	.public SpinTrade_IsInButtonArea
-	.public SpinTrade_IsButtonTouched
-	.public SpinTrade_FreeMachine
-	.public SpinTrade_DrawMachine
-	.public SpinTradeMachine_Rotate
-	.public SpinTrade_LoadObjects
-	.public SpinTrade_FreeObjects
-	.public SpinTrade_BounceTask
-	.public SpinTrade_StopBounceTask
-	.public SpinTrade_AddBounce
-	.public SpinTrade_IsAnyEggBouncing
-	.public SpinTrade_SpinTask
-	.public SpinTrade_StopSpinTask
-	.public SpinTrade_WobbleTask
-	.public SpinTrade_StopWobbleTask
-	.public SpinTrade_JumpTask
-	.public SpinTrade_StopJumpTask
-	.public SpinTrade_StartJump
-	.public SpinTrade_HasJumpLanded
-	.public SpinTrade_IsJumping
-	.public SpinTrade_ButtonFlashTask
-	.public SpinTrade_StopButtonFlashTask
-	.public SpinTrade_IsButtonFlashing
-	.public SpinTrade_StartButtonFlash
-	.public SpinTrade_HoverTask
 	.include "asm/macros.inc"
 	.include "overlay_85.inc"
 	.include "global.inc"
@@ -657,93 +411,6 @@ gSpinTradeStateFuncs: ; 0x021EA800
 	.word SpinTrade_State_WaitFadeOut
 	.word SpinTrade_State_Exit
 
-gSpinTradeGroupYesNoWindowTemplate: ; 0x021EA8D8
-	.byte 0x00, 0x17, 0x0D, 0x07, 0x04, 0x0D, 0x78, 0x01
-
-gSpinTradeGroupAvatarCharOffsets: ; 0x021EA8E0
-	.byte 0xA0, 0x01, 0xA0, 0x07, 0xA0, 0x0D, 0xA0, 0x13, 0xA0, 0x19
-
-gSpinTradeGroupBlinkFrames: ; 0x021EA8EA
-	.byte 0x08, 0x02
-	.byte 0x08, 0x03
-	.byte 0x08, 0x04
-	.byte 0x18, 0x00
-	.byte 0x00, 0xFF
-
-gSpinTradeGroupGraphicsModes: ; 0x021EA8F4
-	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupObjCharTransferTemplate: ; 0x021EA904
-	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
-	.byte 0x66, 0x00, 0x00, 0x00
-
-gSpinTradeGroupAvatarPositions: ; 0x021EA914
-	.byte 0xCC, 0x00, 0x54, 0x00, 0xCC, 0x00, 0x35, 0x00, 0xE9, 0x00, 0x48, 0x00
-	.byte 0xDF, 0x00, 0x67, 0x00, 0xB8, 0x00, 0x67, 0x00, 0xAE, 0x00, 0x48, 0x00
-
-gSpinTradeGroupBgTemplate_Sub2: ; 0x021EA92C
-	.byte 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x02
-	.byte 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupBgTemplate_Main0: ; 0x021EA948
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupBgTemplate_Main1: ; 0x021EA964
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupBgTemplate_Sub0: ; 0x021EA980
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupBgTemplate_Sub1: ; 0x021EA99C
-	.byte 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
-	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupGraphicsBanks: ; 0x021EA9B8
-	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-
-gSpinTradeGroupStateFuncs: ; 0x021EA9E0
-	.word SpinTradeGroup_State_ShowPrompt
-	.word SpinTradeGroup_State_WaitTextThenResetMenu
-	.word SpinTradeGroup_State_ResetLeaderMenuState
-	.word SpinTradeGroup_State_HandleInput
-	.word SpinTradeGroup_State_ShowCancelYesNo
-	.word SpinTradeGroup_State_HandleCancelYesNo
-	.word SpinTradeGroup_State_ResetLeaveWait
-	.word SpinTradeGroup_State_SendLeave
-	.word SpinTradeGroup_State_AbortLeave
-	.word SpinTradeGroup_State_ShowCanceled
-	.word SpinTradeGroup_State_FadeOutCanceled
-	.word SpinTradeGroup_State_ShowDisbandYesNo
-	.word SpinTradeGroup_State_HandleDisbandYesNo
-	.word SpinTradeGroup_State_ShowDisbanded
-	.word SpinTradeGroup_State_WaitBeforeExit
-	.word SpinTradeGroup_State_StartExitSync
-	.word SpinTradeGroup_State_WaitExitSync
-	.word SpinTradeGroup_State_ShowMemberDropped
-	.word SpinTradeGroup_State_WaitMemberDropped
-	.word SpinTradeGroup_State_ShowMemberLeft
-	.word SpinTradeGroup_State_StartMemberLeftWait
-	.word SpinTradeGroup_State_WaitMemberLeft
-	.word SpinTradeGroup_State_ShowConfirmYesNo
-	.word SpinTradeGroup_State_HandleConfirmYesNo
-	.word SpinTradeGroup_State_SendStartSync
-	.word SpinTradeGroup_State_WaitSyncCount
-	.word SpinTradeGroup_State_BeforeSave
-	.word SpinTradeGroup_State_StartSave
-	.word SpinTradeGroup_State_Save
-	.word SpinTradeGroup_State_WaitAfterSave
-	.word SpinTradeGroup_State_WaitPrinter
-	.word SpinTradeGroup_State_Proceed
-
 	.data
 
 gSpinTradeHoverOffsets:
@@ -751,4 +418,3 @@ gSpinTradeHoverOffsets:
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
 	.byte 0x0B, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	; 0x021EAAC0
