@@ -508,8 +508,6 @@ BOOL CodeEntry_State_Input(CodeEntryApp *app) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // The digits slide to their new places; those leaving the selected group shrink, those entering it grow.
 BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app) {
     int i;
@@ -584,8 +582,6 @@ BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app) {
     }
     return FALSE;
 }
-
-#pragma force_active off
 
 static BOOL CodeEntry_RunState(CodeEntryApp *app) {
     BOOL result = sCodeEntryStates[app->state](app);
@@ -810,8 +806,6 @@ static void CodeEntry_Backspace(CodeEntryApp *app) {
     }
 }
 
-#pragma force_active on
-
 static inline void CodeEntry_CopyKeyRects(u16 *dst, const u16 *src) {
     const u16 *source = src;
     u16 *target = dst;
@@ -914,8 +908,6 @@ static void CodeEntry_OnTouch(u32 index, u32 event, void *arg) {
         }
     }
 }
-
-#pragma force_active off
 
 static void CodeEntry_RunPendingAction(CodeEntryApp *app) {
     switch (app->pendingAction) {

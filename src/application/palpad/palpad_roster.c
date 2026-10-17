@@ -132,8 +132,6 @@ void PalPadRoster_Init(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gf
     PalPadRoster_Setup(roster, shared, gfx, heapId);
 }
 
-#pragma force_active on
-
 int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int index;
     FriendRoster *wifiList;
@@ -302,13 +300,9 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
     return 0;
 }
 
-#pragma force_active reset
-
 void PalPadRoster_Exit(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     PalPadRoster_Teardown(roster, shared, gfx);
 }
-
-#pragma force_active on
 
 void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     SpriteTemplate template;
@@ -340,8 +334,6 @@ void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *g
     roster->deleteEffect = Sprite_CreateAffine(&template);
     Sprite_SetDrawFlag(roster->deleteEffect, FALSE);
 }
-
-#pragma force_active reset
 
 void PalPadRoster_Teardown(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     int i;
@@ -426,8 +418,6 @@ static int PalPadRoster_HandleAction(PalPadRoster *roster, PalPadShared *shared,
     }
     return ROSTER_ACTION_NONE;
 }
-
-#pragma force_active on
 
 // Slots 0-3 are the left column, 4-7 the right one, 8 the return button.
 static int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
@@ -530,8 +520,6 @@ static int PalPadRoster_HandleKeys(PalPadRoster *roster, PalPadShared *shared, P
     return ROSTER_ACTION_NONE;
 }
 
-#pragma force_active reset
-
 // hitboxes: 0-7 slots, 8 return, 9/10 arrows, 11-14 page tabs
 static int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, BOOL *touched) {
     u32 hit;
@@ -571,8 +559,6 @@ static int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, 
     return PalPadRoster_HandleAction(roster, shared, gfx, ROSTER_INPUT_PAGE_LEFT);
 }
 
-#pragma force_active on
-
 static int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx) {
     BOOL touched = FALSE;
     int result = PalPadRoster_HandleTouch(roster, shared, gfx, &touched);
@@ -583,8 +569,6 @@ static int PalPadRoster_HandleInput(PalPadRoster *roster, PalPadShared *shared, 
     }
     return PalPadRoster_HandleKeys(roster, shared, gfx);
 }
-
-#pragma force_active reset
 
 static void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int panel;
@@ -599,8 +583,6 @@ static void PalPadRoster_StartPageScroll(PalPadRoster *roster, PalPadShared *sha
     PalPadGfx_SetArrowsAnimActive(gfx, FALSE);
     PlaySE(SEQ_SE_DP_SELECT5);
 }
-
-#pragma force_active on
 
 static BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     NNSG2dViewRect rect;
@@ -660,8 +642,6 @@ static void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shar
     PalPadGfx_SetArrowsVisible(gfx, FALSE);
     StartBrightnessTransition(4, 8, 0, (GXBlendPlaneMask)61, SCREEN_MASK_MAIN);
 }
-
-#pragma force_active reset
 
 static int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, PalPadGfx *gfx) {
     int result;
@@ -775,8 +755,6 @@ static void PalPadRoster_StartScroll(PalPadRoster *roster, PalPadShared *shared,
     roster->scrollStep = 0;
 }
 
-#pragma force_active on
-
 static void PalPadRoster_PrintMessage(PalPadRoster *roster, PalPadGfx *gfx, int msgId, enum HeapID heapId) {
     String *buffer;
 
@@ -799,8 +777,6 @@ static BOOL PalPadRoster_IsMessageDone(PalPadRoster *roster, u32 *inputState) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 static void PalPadRoster_ClearMessage(PalPadRoster *roster) {
     ClearFrameAndWindow2(&roster->msgWindow, TRUE);
@@ -869,8 +845,6 @@ static BOOL PalPadRoster_UpdateDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx
     return FALSE;
 }
 
-#pragma force_active on
-
 static void PalPadRoster_EndDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx) {
     reg_GX_DISPCNT &= 0xFFFF1FFF;
     Sprite_SetDrawFlag(roster->deleteEffect, FALSE);
@@ -893,8 +867,6 @@ static void PalPadRosterPage_Init(PalPadRosterPage *page, PalPadGfx *gfx, const 
     }
     AddWindowParameterized(gfx->bgConfig, &page->window, GF_BG_LYR_MAIN_3, x + 4, y + 4, 26, 17, 11, baseTile);
 }
-
-#pragma force_active reset
 
 static void PalPadRosterPage_Free(PalPadRosterPage *page, PalPadGfx *gfx) {
     RemoveWindow(&page->window);
@@ -977,8 +949,6 @@ static void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx)
     }
 }
 
-#pragma force_active on
-
 static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManager *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
     int avatar, gender;
     s16 position[4];
@@ -1001,8 +971,6 @@ static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManage
     AddTextPrinterParameterizedWithColor((Window *)(owner + offsetof(PalPadRosterPage, window)), 4, string, sPalPadRosterSlotRects[slot].x * 8, sPalPadRosterSlotY[slot].y * 8 - 24, TEXT_SPEED_NOTRANSFER, sPalPadRosterNameColors[gender], NULL);
     String_Delete(string);
 }
-
-#pragma force_active reset
 
 static void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot) {
     int y = page->layout.y;

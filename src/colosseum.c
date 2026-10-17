@@ -663,8 +663,6 @@ static void Colosseum_PackMixBattleMons(ColosseumEntry *entry, BOOL ready) {
     }
 }
 
-#pragma force_active on
-
 static BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
     BOOL result;
     if ((entry->exchangeFlags & COLOSSEUM_EXCHANGE_SENT) == 0) {
@@ -683,8 +681,6 @@ static BOOL Colosseum_SendMixBattleMons(ColosseumEntry *entry) {
     }
     return result;
 }
-
-#pragma force_active off
 
 static BOOL Colosseum_MixBattleMonsExchanged(ColosseumEntry *entry) {
     return entry->exchangeFlags == COLOSSEUM_EXCHANGE_DONE;
@@ -734,8 +730,6 @@ static void Colosseum_ExchangeMixBattleMons(ColosseumEntry *entry) {
     }
 }
 
-#pragma force_active on
-
 static void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
     Window *window = &entry->monListWindow;
     u32 monSize;
@@ -767,8 +761,6 @@ static void Colosseum_ShowOpponentMons(ColosseumEntry *entry, int cursor) {
     entry->menuCount = COLOSSEUM_MIX_BATTLE_MONS + 1;
     entry->menuWindow = window;
 }
-
-#pragma force_active off
 
 // SUMMARY / OK / CANCEL for the picked Pokemon.
 static void Colosseum_ShowChoiceMenu(ColosseumEntry *entry, int cursor) {
@@ -858,8 +850,6 @@ void Colosseum_RecvMixBattleChoice(int netId, int size, const u8 *data, FieldSys
     }
 }
 
-#pragma force_active on
-
 BOOL Task_ColosseumTrainerCard(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     ColosseumTrainerCard *env = TaskManager_GetEnvironment(taskManager);
@@ -945,8 +935,6 @@ BOOL Task_ColosseumTrainerCard(TaskManager *taskManager) {
     }
     return FALSE;
 }
-
-#pragma force_active off
 
 // The player pressed A: show the Trainer Card of the player sitting opposite (on the square the player faces).
 void Colosseum_ShowOpponentTrainerCard(FieldSystem *fieldSystem) {

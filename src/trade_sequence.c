@@ -1301,8 +1301,6 @@ void TradeSequence_FreeCamera(TradeSequenceModels *models) {
 // Scene 0 of the trade animation: the sent Pokemon's picture and the "will be sent to" / "Bye-bye" messages, then
 // a flash replaces the picture by a 3D model that bounces until the screen fades out.
 
-#pragma force_active on
-
 TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts) {
     TradeSequenceSend *send = Heap_Alloc(HEAP_ID_57, sizeof(TradeSequenceSend));
     if (send) {
@@ -1341,8 +1339,6 @@ void TradeSequenceSend_Exit(TradeSequenceSend *send) {
     }
 }
 
-#pragma force_active reset
-
 BOOL TradeSequenceSend_Main(TradeSequenceSend *send, u32 *state) {
     if (*state < TRADE_SEQUENCE_SEND_NUM_STATES) {
         if (sTradeSequenceSendStates[*state](send, &send->subState)) {
@@ -1354,8 +1350,6 @@ BOOL TradeSequenceSend_Main(TradeSequenceSend *send, u32 *state) {
     }
     return TRUE;
 }
-
-#pragma force_active on
 
 void TradeSequenceSend_Draw(TradeSequenceSend *send) {
     u32 one;
@@ -1412,8 +1406,6 @@ BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
     if (*state == 0 && IsPaletteFadeFinished()) {
         Sprite_SetAnimCtrlSeq(send->sprites[0], 1);
@@ -1422,8 +1414,6 @@ BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
     switch (*state) {
@@ -1487,8 +1477,6 @@ BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state) {
     switch (*state) {

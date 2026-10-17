@@ -1920,8 +1920,6 @@ void VisitorProfilesWindowMask_SetWindow1(VisitorProfilesWindowMask *mask, s32 t
     mask->bottom1 = bottom;
 }
 
-#pragma force_active on
-
 static inline void VisitorProfilesWindowMask_SetWindow(u32 top, u32 bottom, vu16 *regs) {
     regs[0] = 255;
     regs[2] = ((top << 8) & 0xFF00) | (u8)bottom;
@@ -1959,8 +1957,6 @@ void VisitorProfilesPanel_AddWindows(VisitorProfilesPanel *panel, VisitorProfile
     AddWindowParameterized(gfx->bgConfig, &panel->blankWindow, GF_BG_LYR_SUB_1, 0, 0, 27, 6, 14, 148);
     FillWindowPixelBuffer(&panel->blankWindow, 0);
 }
-
-#pragma force_active reset
 
 void VisitorProfilesPanel_RemoveWindows(VisitorProfilesPanel *panel) {
     int i;

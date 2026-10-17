@@ -186,8 +186,6 @@ static BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadSha
     return FALSE;
 }
 
-#pragma force_active on
-
 void PalPadFriendCode_Setup(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     String *text, *buffer;
     u64 ownCode;
@@ -225,8 +223,6 @@ void PalPadFriendCode_Setup(PalPadFriendCode *friendCode, PalPadShared *shared, 
     friendCode->screenFile = GfGfxLoader_GetScrnDataFromOpenNarc(gfx->narc, 14, TRUE, &friendCode->screen, heapId);
 }
 
-#pragma force_active reset
-
 void PalPadFriendCode_Teardown(PalPadFriendCode *friendCode, PalPadShared *shared, PalPadGfx *gfx) {
     RemoveWindow(&friendCode->windows[0]);
     RemoveWindow(&friendCode->windows[1]);
@@ -258,13 +254,9 @@ static void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) 
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-#pragma force_active on
-
 static void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight) {
     PalPadButtonPalettes button = _0222ED5C.returnButton;
 
     BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_MAIN_2, 17, 20, 14, 4, button.palettes[highlight]);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
-
-#pragma force_active reset

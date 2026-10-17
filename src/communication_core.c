@@ -133,8 +133,6 @@ int Comm_InitWork(int create, int packetSize) {
     return 1;
 }
 
-#pragma force_active on
-
 static inline void ResetPacketCursors(void) {
     int i = 0;
     int offset;
@@ -198,8 +196,6 @@ void Comm_ResetBuffers(void) {
     PacketPool_Reset(gCommCore.work + 0x5a0);
     gCommCore.work[0x6b7] = 0;
 }
-
-#pragma force_active off
 
 void Comm_Reset(void) {
     gCommCore.work[0x6AF] = 0;
@@ -885,8 +881,6 @@ void Comm_SendChildFrame(void) {
     }
 }
 
-#pragma force_active on
-
 static inline u32 CommKeyWork_Random(CommKeyWork *w, u32 max) {
     CommRandom *rng = &w->random;
     rng->state = rng->multiplier * rng->state + rng->increment;
@@ -940,8 +934,6 @@ void Comm_ScrambleDirectionKeys(void) {
     ((CommKeyWork *)gCommCore.work)->buttons &= ~0xf0;
     ((CommKeyWork *)gCommCore.work)->buttons += result;
 }
-
-#pragma force_active off
 
 int Comm_ReadFrameKeys(const u8 *data, int slot) {
     u8 value;

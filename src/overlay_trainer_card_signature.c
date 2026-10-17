@@ -562,8 +562,6 @@ int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signatur
     return state;
 }
 
-#pragma force_active on
-
 int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state) {
     switch (YesNoPrompt_HandleInput(signature->yesNoPrompt)) {
     case YESNORESPONSE_YES:
@@ -604,8 +602,6 @@ int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int 
     }
     return state;
 }
-
-#pragma force_active reset
 
 int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state) {
     TrainerCardSignature_PrintMessage(signature, msg_0252_00011);

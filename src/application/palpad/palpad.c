@@ -205,15 +205,11 @@ void PalPadShared_SetNextScreen(PalPadShared *shared, u8 screen, u8 subState) {
     shared->nextSubState = subState;
 }
 
-#pragma force_active on
-
 void PalPadShared_ResetInputStateOnKey(u32 *inputState) {
     if (gSystem.newKeys & PALPAD_KEYS_ANY) {
         *inputState = 0;
     }
 }
-
-#pragma force_active reset
 
 void PalPadShared_SetNameAndCode(PalPadShared *shared, const String *name, const String *code) {
     if (name) {
@@ -223,8 +219,6 @@ void PalPadShared_SetNameAndCode(PalPadShared *shared, const String *name, const
         String_Copy(shared->code, code);
     }
 }
-
-#pragma force_active on
 
 // Returns 0 when registered, 1 for an invalid code (or own code, or no free slot), 2 if the friend
 // is already registered.
@@ -257,8 +251,6 @@ int PalPadShared_RegisterFriendCode(PalPadShared *shared, String *code, String *
     return 0;
 }
 
-#pragma force_active reset
-
 void PalPadShared_SetInitialName(PalPadShared *shared, const u16 *name) {
     shared->initialName = name;
     shared->useInitialName = TRUE;
@@ -267,8 +259,6 @@ void PalPadShared_SetInitialName(PalPadShared *shared, const u16 *name) {
 void PalPadShared_SetSelectedFriend(PalPadShared *shared, int index) {
     shared->selectedFriend = index;
 }
-
-#pragma force_active on
 
 void PalPadShared_ReadFriendList(PalPadShared *shared) {
     FriendRoster *wifiList;
@@ -306,8 +296,6 @@ static void PalPadGfx_Init(PalPadGfx *gfx, PalPadShared *shared, enum HeapID hea
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
 }
-
-#pragma force_active reset
 
 static void PalPadGfx_RenderSprites(PalPadGfx *gfx) {
     SpriteList_RenderAndAnimateSprites(gfx->spriteList);
@@ -424,8 +412,6 @@ static void PalPadGfx_FreeMsg(PalPadGfx *gfx) {
     MessageFormat_Delete(gfx->msgFormat);
 }
 
-#pragma force_active on
-
 static void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum HeapID heapId) {
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_11_OFFSET, heapId);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_14_OFFSET, heapId);
@@ -440,8 +426,6 @@ static void PalPadGfx_InitWindows(PalPadGfx *gfx, PalPadShared *shared, enum Hea
     gfx->yesNoPrompt = YesNoPrompt_Create(heapId);
 }
 
-#pragma force_active reset
-
 static void PalPadGfx_FreeWindows(PalPadGfx *gfx) {
     YesNoPrompt_Destroy(gfx->yesNoPrompt);
     TouchscreenListMenuSpawner_Destroy(gfx->listMenuSpawner);
@@ -452,8 +436,6 @@ static void PalPadGfx_FreeWindows(PalPadGfx *gfx) {
     RemoveWindow(&gfx->titleWindow);
 }
 
-#pragma force_active on
-
 static void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId) {
     int i;
 
@@ -462,8 +444,6 @@ static void PalPadGfx_LoadScreens(PalPadGfx *gfx, enum HeapID heapId) {
     }
 }
 
-#pragma force_active reset
-
 static void PalPadGfx_FreeScreens(PalPadGfx *gfx) {
     int i;
 
@@ -471,8 +451,6 @@ static void PalPadGfx_FreeScreens(PalPadGfx *gfx) {
         Heap_Free(gfx->screens.files[i]);
     }
 }
-
-#pragma force_active on
 
 void PalPadGfx_PrintTitle(PalPadGfx *gfx, Window *window, int msgId) {
     if (TextPrinterCheckActive(gfx->titlePrinterId) == TRUE) {
@@ -487,8 +465,6 @@ void PalPadGfx_PrintTitle(PalPadGfx *gfx, Window *window, int msgId) {
     ScheduleWindowCopyToVram(window);
 }
 
-#pragma force_active reset
-
 void PalPadGfx_ClearTitle(PalPadGfx *gfx) {
     if (TextPrinterCheckActive(gfx->titlePrinterId) == TRUE) {
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
@@ -497,16 +473,12 @@ void PalPadGfx_ClearTitle(PalPadGfx *gfx) {
     ClearWindowTilemapAndScheduleTransfer(&gfx->titleWindow);
 }
 
-#pragma force_active on
-
 // 12-digit friend code as three groups of four digits
 void PalPadGfx_BufferFriendCode(PalPadGfx *gfx, u64 friendCode) {
     BufferIntegerAsString(gfx->msgFormat, 1, friendCode / 100000000, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(gfx->msgFormat, 2, friendCode / 10000 % 10000, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(gfx->msgFormat, 3, friendCode % 10000, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
 }
-
-#pragma force_active reset
 
 void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId) {
     FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
@@ -526,8 +498,6 @@ void PalPadGfx_BufferFriendGroupName(PalPadGfx *gfx, SaveData *saveData, int slo
     Heap_Free(profile);
 }
 
-#pragma force_active on
-
 // Buffers the date of the last meeting; FALSE if the friend was never met.
 BOOL PalPadGfx_BufferLastDate(PalPadGfx *gfx, SaveData *saveData, int slot) {
     FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
@@ -543,8 +513,6 @@ BOOL PalPadGfx_BufferLastDate(PalPadGfx *gfx, SaveData *saveData, int slot) {
     return met;
 }
 
-#pragma force_active reset
-
 void PalPadGfx_BufferNumber(PalPadGfx *gfx, int value) {
     BufferIntegerAsString(gfx->msgFormat, 0, value, 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
 }
@@ -552,8 +520,6 @@ void PalPadGfx_BufferNumber(PalPadGfx *gfx, int value) {
 void PalPadGfx_BufferActivityName(PalPadGfx *gfx, int activity) {
     BufferWiFiPlazaActivityName(gfx->msgFormat, 0, activity);
 }
-
-#pragma force_active on
 
 static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
     SpriteResourcesHeader *header;
@@ -588,8 +554,6 @@ static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
     Sprite_SetDrawFlag(gfx->cursor, FALSE);
     Sprite_SetAnimCtrlSeq(gfx->cursor, 1);
 }
-
-#pragma force_active reset
 
 static void PalPadGfx_DeleteSprites(PalPadGfx *gfx) {
     int i;
@@ -635,8 +599,6 @@ void PalPadGfx_SetCursor(PalPadGfx *gfx, BOOL visible, int animSeq) {
     Sprite_SetDrawFlag(gfx->cursor, visible);
 }
 
-#pragma force_active on
-
 void PalPadGfx_SetCursorPriority(PalPadGfx *gfx, u8 priority, int drawPriority) {
     Sprite_SetPriority(gfx->cursor, priority);
     Sprite_SetDrawPriority(gfx->cursor, drawPriority);
@@ -658,8 +620,6 @@ void PalPadGfx_StartYesNo(u32 *inputState, PalPadGfx *gfx, int initialCursorPos)
     YesNoPrompt_InitFromTemplate(gfx->yesNoPrompt, &template);
     StartBrightnessTransition(4, 8, 0, (GXBlendPlaneMask)61, SCREEN_MASK_MAIN);
 }
-
-#pragma force_active reset
 
 int PalPadGfx_HandleYesNo(u32 *inputState, PalPadGfx *gfx) {
     int result = YesNoPrompt_HandleInput(gfx->yesNoPrompt);

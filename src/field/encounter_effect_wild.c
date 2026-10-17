@@ -483,7 +483,6 @@ BOOL WildEffectStep_Run(WildEffectStep *step, void *work) {
     return step->func(work, &step->state);
 }
 
-#pragma force_active on
 void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) {
     RedEffectWork *work = effect->work;
 
@@ -546,7 +545,6 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
-#pragma force_active reset
 
 BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state) {
     BOOL done;
@@ -635,7 +633,6 @@ void EncounterEffect_WildRowsBlack(SysTask *task, EncounterEffectTask *effect) {
     WildEffect_RunCellGridRows(task, effect, FALSE);
 }
 
-#pragma force_active on
 void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL white) {
     CellGridEffectWork *work = effect->work;
     u16 black;
@@ -699,7 +696,6 @@ void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL
         break;
     }
 }
-#pragma force_active reset
 
 void EncounterEffect_WildDiagonalsWhite(SysTask *task, EncounterEffectTask *effect) {
     WildEffect_RunCellGridDiagonals(task, effect, TRUE);
@@ -709,7 +705,6 @@ void EncounterEffect_WildDiagonalsBlack(SysTask *task, EncounterEffectTask *effe
     WildEffect_RunCellGridDiagonals(task, effect, FALSE);
 }
 
-#pragma force_active on
 void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect, BOOL white) {
     CellGridEffectWork *work = effect->work;
     u16 black;
@@ -773,7 +768,6 @@ void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect,
         break;
     }
 }
-#pragma force_active reset
 
 void EncounterEffect_WildWaveWhite(SysTask *task, EncounterEffectTask *effect) {
     WildEffect_RunWave(task, effect, TRUE);
@@ -868,7 +862,6 @@ BOOL WildEffectBgLoader_IsDone(WildEffectBgLoader *loader) {
     return loader->task == NULL;
 }
 
-#pragma force_active on
 void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) {
     WaveEffectWork *work = effect->work;
 
@@ -964,4 +957,3 @@ void WildEffect_RunWave(SysTask *task, EncounterEffectTask *effect, BOOL white) 
         ScheduleSetBgPosText(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, work->bg3Sine.value);
     }
 }
-#pragma force_active reset

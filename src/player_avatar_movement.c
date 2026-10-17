@@ -764,8 +764,6 @@ static int BikeStepKindToMoveState(int stepKind) {
     }
 }
 
-#pragma force_active on
-
 // 0: stop, 1: ride, 2: turn, 3: coast (still rolling at speed 2+).
 static int PlayerAvatar_GetBikeStepKind(PlayerAvatar *avatar, int direction) {
     int speed = PlayerAvatar_GetSpeed(avatar);
@@ -790,8 +788,6 @@ static int PlayerAvatar_GetBikeStepKind(PlayerAvatar *avatar, int direction) {
     PlayerAvatar_SetMoveState(avatar, AVATAR_MOVE_STATE_MOVING);
     return 1;
 }
-
-#pragma force_active off
 
 static void PlayerAvatar_BikeStop(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction, u16 keys, u16 heldKeys) {
     int movement = GetMovementForDirection(MapObject_GetFacingDirection(mapObject), MOVEMENT_FACE_UP);
@@ -1180,8 +1176,6 @@ int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction) {
     return moveState;
 }
 
-#pragma force_active on
-
 u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int allowRun, int collision) {
     struct {
         volatile int direction;
@@ -1241,8 +1235,6 @@ u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKe
     }
     return GetMovementForDirection(input.direction, movement);
 }
-
-#pragma force_active off
 
 BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar) {
     return MapObject_AreBitsSetForMovementScriptInit(PlayerAvatar_GetMapObject(avatar));

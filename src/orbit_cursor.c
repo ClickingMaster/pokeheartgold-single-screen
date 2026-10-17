@@ -74,8 +74,6 @@ static BOOL OrbitCursor_StepToward(s16 x, s16 y, float fx, float fy, float *outX
     return TRUE;
 }
 
-#pragma force_active on
-
 void OrbitCursor_Task(SysTask *task, void *data) {
     OrbitCursor *p = data;
     fx32 posX, posY;
@@ -133,8 +131,6 @@ void OrbitCursor_Task(SysTask *task, void *data) {
         done++;
     }
 }
-
-#pragma force_active reset
 
 void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette) {
     SpriteSystem *ss = p->spriteSys;

@@ -728,8 +728,6 @@ const int *GetDirectionTable(int id) {
     return NULL;
 }
 
-#pragma force_active on
-
 int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
     PlayerAvatar *avatar;
     int type = MapObject_GetType(object);
@@ -779,8 +777,6 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
 fail:
     return DIR_NONE;
 }
-
-#pragma force_active off
 
 int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tableId, int value) {
     const int *list;
@@ -875,8 +871,6 @@ void WalkingSpin_Init(LocalMapObject *object, u8 *state) {
     }
 }
 
-#pragma force_active on
-
 void WalkingSpin_TurnBeforeStep(LocalMapObject *object, s8 *state) {
     int facing = MapObject_GetFacingDirection(object);
     int i = 0;
@@ -895,8 +889,6 @@ void WalkingSpin_TurnBeforeStep(LocalMapObject *object, s8 *state) {
     MapObject_SetFacingDirection(object, facing);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK7);
 }
-
-#pragma force_active off
 
 void WalkingSpin_EndStep(LocalMapObject *object, u8 *state) {
     if (state[2] == 0) {

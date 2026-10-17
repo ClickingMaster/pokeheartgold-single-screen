@@ -316,8 +316,6 @@ static BOOL Wireless_StartParentRun(void) {
     return TRUE;
 }
 
-#pragma force_active on
-
 // A child connecting is refused when entry is locked or closed, the parent is full, or its connect data
 // (CommState_GetLinkMode(), gWirelessConnectTag) differ from ours.
 static void Wireless_OnParentEvent(void *arg) {
@@ -361,8 +359,6 @@ static void Wireless_OnParentEvent(void *arg) {
         break;
     }
 }
-
-#pragma force_active off
 
 static BOOL Wireless_StartParentMP(void) {
     WirelessWork *work;
@@ -493,7 +489,6 @@ BOOL Wireless_StartScan(void *callback, const u16 *bssid, u16 channel) {
     return TRUE;
 }
 
-#pragma force_active on
 #pragma optimization_level 2
 #pragma opt_common_subs off
 
@@ -612,7 +607,6 @@ static void Wireless_OnScanEvent(void *input) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active off
 
 // The scan callback ends the scan once the state left WIRELESS_STATE_SCANNING.
 BOOL Wireless_StopScan(void) {
@@ -1018,8 +1012,6 @@ u16 Wireless_SelectChannel(void) {
     return gWirelessManager.work->channel;
 }
 
-#pragma force_active on
-
 // A random channel of the bitmap channels (1-16).
 static s16 Wireless_PickChannel(u16 channels) {
     s16 result = 0, i;
@@ -1047,8 +1039,6 @@ static s16 Wireless_PickChannel(u16 channels) {
     }
     return result;
 }
-
-#pragma force_active off
 
 // buffer: Wireless_GetWorkSize() bytes + 32 for the alignment. mode 1: WM_Initialize, else for listening only.
 BOOL Wireless_Init(void *buffer, int mode) {

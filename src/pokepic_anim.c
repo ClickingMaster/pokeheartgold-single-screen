@@ -188,8 +188,6 @@ void PokepicAnimManager_Delete(PokepicAnimManager *mgr) {
     Heap_Free(mgr);
 }
 
-#pragma force_active on
-
 void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct PokepicAnimParams *params, u8 index) {
     PokepicAnimManager *mgr = managerArg;
     Pokepic *pic = picArg;
@@ -229,8 +227,6 @@ void PokepicAnimManager_StartAnim(void *managerArg, void *picArg, struct Pokepic
     mgr->anims[index].scaleY = 0;
     mgr->anims[index].rotation = 0;
 }
-
-#pragma force_active off
 
 u32 PokepicAnimManager_GetAnimState(PokepicAnimManager *mgr, u32 index) {
     GF_ASSERT(index < mgr->count);

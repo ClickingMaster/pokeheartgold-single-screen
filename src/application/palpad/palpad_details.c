@@ -90,8 +90,6 @@ void PalPadDetails_Init(PalPadDetails *details, PalPadShared *shared, PalPadGfx 
     PalPadDetails_Setup(details, shared, gfx, heapId);
 }
 
-#pragma force_active on
-
 int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     switch (shared->subState) {
     case PALPAD_DETAILS_STATE_INIT:
@@ -139,8 +137,6 @@ int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *
     return 0;
 }
 
-#pragma force_active reset
-
 void PalPadDetails_Exit(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx) {
     PalPadDetails_Teardown(details, shared, gfx);
 }
@@ -150,8 +146,6 @@ static BOOL PalPadDetails_IsLastPage(PalPadDetails *details, int page) {
     int last = (details->hasFrontierPages == TRUE ? 8 : 3) - 1;
     return page == last;
 }
-
-#pragma force_active on
 
 static int PalPadDetails_HandleAction(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, int input) {
     switch (input) {
@@ -253,8 +247,6 @@ static int PalPadDetails_HandleTouch(PalPadDetails *details, PalPadShared *share
     return PalPadDetails_HandleAction(details, shared, gfx, DETAILS_INPUT_PAGE_LEFT);
 }
 
-#pragma force_active reset
-
 static int PalPadDetails_HandleInput(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx) {
     BOOL touched = FALSE;
     int result;
@@ -283,8 +275,6 @@ static void PalPadDetails_StartPageScroll(PalPadDetails *details, PalPadShared *
     PalPadDetails_DrawPage(details, shared, gfx, panel, details->page, heapId);
     PlaySE(SEQ_SE_DP_SELECT5);
 }
-
-#pragma force_active on
 
 static BOOL PalPadDetails_UpdatePageScroll(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int offset;
@@ -339,8 +329,6 @@ void PalPadDetails_Setup(PalPadDetails *details, PalPadShared *shared, PalPadGfx
     } while (i < 3);
 }
 
-#pragma force_active reset
-
 void PalPadDetails_Teardown(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx) {
     int i;
     int j;
@@ -355,8 +343,6 @@ void PalPadDetails_Teardown(PalPadDetails *details, PalPadShared *shared, PalPad
     PalPadDetails_RemoveProfileWindows(details, gfx);
     PalPadDetails_FreeScreens(details->screens);
 }
-
-#pragma force_active on
 
 static void PalPadDetails_Show(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     NNSG2dScreenData *screen;
@@ -413,8 +399,6 @@ static void PalPadDetails_Hide(PalPadDetails *details, PalPadGfx *gfx) {
     SetBgPriority(GF_BG_LYR_MAIN_2, 2);
 }
 
-#pragma force_active reset
-
 static void PalPadDetails_HideForFriendChange(PalPadDetails *details, PalPadGfx *gfx) {
     int i;
     PalPadDetailsSlot *slot;
@@ -430,8 +414,6 @@ static void PalPadDetails_HideForFriendChange(PalPadDetails *details, PalPadGfx 
     }
     PalPadGfx_ClearTitle(gfx);
 }
-
-#pragma force_active on
 
 // Top screen: number, name (in the gender colour), group, last meeting and the Union Room avatar.
 static void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
@@ -476,8 +458,6 @@ static void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shar
     }
 }
 
-#pragma force_active reset
-
 static void PalPadDetails_ClearProfile(PalPadDetails *details) {
     int i;
     Window *window;
@@ -492,8 +472,6 @@ static inline void PalPadDetails_SetPage(PalPadDetails *details, PalPadGfx *gfx,
     PalPadDetails_SetCursor(details, gfx, page);
 }
 
-#pragma force_active on
-
 // panel 0 is the visible page; 1 / 2 are drawn off screen for a scroll to the right / left
 static void PalPadDetails_DrawPage(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, int panel, int page, enum HeapID heapId) {
     if (panel == 0) {
@@ -501,8 +479,6 @@ static void PalPadDetails_DrawPage(PalPadDetails *details, PalPadShared *shared,
     }
     PalPadDetailsSlot_DrawPage(&details->slots[panel], shared, gfx, page, &details->screens[1], details->hasFrontierPages, heapId);
 }
-
-#pragma force_active reset
 
 static void PalPadDetails_SetCursor(PalPadDetails *details, PalPadGfx *gfx, int page) {
     int animSeq;
@@ -524,8 +500,6 @@ static void PalPadDetails_HideCursor(PalPadDetails *details, PalPadGfx *gfx) {
     PalPadGfx_SetCursor(gfx, FALSE, 0xFF);
 }
 
-#pragma force_active on
-
 static void PalPadDetails_DrawTabs(PalPadDetails *details, PalPadGfx *gfx, int selected) {
     if (details->hasFrontierPages == TRUE) {
         CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, 0, 20, 32, 4, gfx->screens.data[1]->rawData, 0, 12, gfx->screens.data[1]->screenWidth >> 3, gfx->screens.data[1]->screenHeight >> 3);
@@ -539,8 +513,6 @@ static void PalPadDetails_DrawTabs(PalPadDetails *details, PalPadGfx *gfx, int s
     CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, sPalPadDetailsTabX[details->hasFrontierPages][selected], 20, sPalPadDetailsTabWidths[details->hasFrontierPages][selected], 4, gfx->screens.data[1]->rawData, sPalPadDetailsTabX[details->hasFrontierPages][selected], sPalPadDetailsTabSrcY[details->hasFrontierPages], gfx->screens.data[1]->screenWidth >> 3, gfx->screens.data[1]->screenHeight >> 3);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
-
-#pragma force_active reset
 
 static void PalPadDetails_ClearTabs(PalPadDetails *details, PalPadGfx *gfx) {
     NNSG2dScreenData *screen = gfx->screens.data[1];

@@ -232,7 +232,6 @@ static void WirelessStatusIcon_LoadChar(int engine, int isWifi, enum HeapID heap
     Heap_Free(buf);
 }
 
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 
@@ -330,7 +329,6 @@ fallback:
 }
 
 #pragma pop
-#pragma force_active off
 
 void WirelessStatusIcon_Refresh(void) {
     if (gWirelessStatusIcon != NULL) {

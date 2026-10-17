@@ -459,8 +459,6 @@ void BattleAnimFunc_OneFrameUncountedTask(BattleAnimSystem *system) {
     SysTask_CreateOnMainQueue(BattleAnimTask_OneFrameUncounted, work, 0x1000);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_SpreadSpriteCopies(SysTask *task, void *data) {
     BattleAnimSpriteCopiesWork *work = data;
     switch (work->state) {
@@ -500,8 +498,6 @@ void BattleAnimSpriteFunc_SpreadSpriteCopies(BattleAnimSystem *system, SpriteSys
     }
     BattleAnimSystem_CreateTask(system, BattleAnimTask_SpreadSpriteCopies, work, 0x1000);
 }
-
-#pragma force_active reset
 
 void BattleAnimUtil_ResetPokepicScale(Pokepic *pokepic) {
     Pokepic_SetAttr(pokepic, POKEPIC_AFFINEW, 0x100);
@@ -867,8 +863,6 @@ void BattleAnimTask_RotateBattler(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimFunc_RotateBattler(BattleAnimSystem *system) {
     BattleAnimRotateBattlerWork *work = Heap_Alloc(BattleAnimSystem_GetHeapID(system), sizeof(BattleAnimRotateBattlerWork));
     int mode;
@@ -904,8 +898,6 @@ void BattleAnimFunc_RotateBattler(BattleAnimSystem *system) {
     Pokepic_SetAttr(work->pokepic, POKEPIC_YPIVOT, work->pivotY);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_RotateBattler, work);
 }
-
-#pragma force_active reset
 
 // Moves a battler around an ellipse
 void BattleAnimTask_CircleBattler(SysTask *task, void *data) {
@@ -1036,8 +1028,6 @@ void BattleAnimTask_SpritePops(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(work->spriteManager);
 }
 
-#pragma force_active on
-
 void BattleAnimSpriteFunc_SpritePops(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpritePopWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpritePopWork));
     Pokepic *pokepic;
@@ -1056,8 +1046,6 @@ void BattleAnimSpriteFunc_SpritePops(BattleAnimSystem *system, SpriteSystem *spr
     work->y = Pokepic_GetAttr(pokepic, POKEPIC_Y);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_SpritePops, work);
 }
-
-#pragma force_active reset
 
 void BattleAnimTask_WaitPaletteFade(SysTask *task, void *data) {
     BattleAnimPaletteFadeWork *work = data;
@@ -1386,8 +1374,6 @@ void BattleAnimTask_StretchBattler(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimFunc_StretchBattler(BattleAnimSystem *system) {
     BattleAnimTarget targets[4];
     int count;
@@ -1481,8 +1467,6 @@ void BattleAnimFunc_StretchBattler(BattleAnimSystem *system) {
     BattleAnim_CreateTaskAndRun(work->system, BattleAnimTask_StretchBattler, work);
 }
 
-#pragma force_active reset
-
 void BattleAnimTask_BlendBattlerSprites(SysTask *task, void *data) {
     BattleAnimBlendBattlerSpritesWork *work = data;
     if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
@@ -1492,8 +1476,6 @@ void BattleAnimTask_BlendBattlerSprites(SysTask *task, void *data) {
         SpriteSystem_DrawSprites(work->spriteManager);
     }
 }
-
-#pragma force_active on
 
 void BattleAnimFunc_BlendBattlerSprites(BattleAnimSystem *system) {
     BattleAnimBlendBattlerSpritesWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimBlendBattlerSpritesWork));
@@ -1529,8 +1511,6 @@ void BattleAnimFunc_SetBattlerVanished(BattleAnimSystem *system) {
         }
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimTask_BlinkBattler(SysTask *task, void *data) {
     BattleAnimBlinkBattlerWork *work = data;
@@ -1774,8 +1754,6 @@ void BattleAnimFunc_ShakeAndScaleBattler(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShakeAndScaleBattler, work);
 }
 
-#pragma force_active on
-
 void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
     BattleAnimShakeAndScaleXYWork *work = data;
     switch (work->state) {
@@ -1851,8 +1829,6 @@ void BattleAnimFunc_ShakeAndScaleBattlerXY(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShakeAndScaleBattlerXY, work);
 }
 
-#pragma force_active reset
-
 void BattleAnimTask_EndObjWindow(SysTask *task, void *data) {
     BattleAnimObjWindowWork *work = data;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
@@ -1860,8 +1836,6 @@ void BattleAnimTask_EndObjWindow(SysTask *task, void *data) {
     BattleAnimSystem_DestroyTask(work->common.system, task);
     Heap_Free(work);
 }
-
-#pragma force_active on
 
 // Shows the battle background on BG2 through an OBJ window made of battler sprite 0 at 1.2 scale
 void BattleAnimFunc_ShowBattleBgInObjWindow(BattleAnimSystem *system) {
@@ -1951,8 +1925,6 @@ void BattleAnimFunc_MoveBattlerBy(BattleAnimSystem *system) {
     BattleAnim_CreateTaskAndRun(work->system, BattleAnimTask_MoveBattlerBy, work);
 }
 
-#pragma force_active reset
-
 void BattleAnimTask_MoveBattlerSin(SysTask *task, void *data) {
     BattleAnimMoveBattlerSinWork *work = data;
     if (BattleAnimUtil_UpdateSinMotionPokepic(&work->motion, work->target.pos[0], work->target.pos[1], work->target.pokepic) == FALSE) {
@@ -1962,8 +1934,6 @@ void BattleAnimTask_MoveBattlerSin(SysTask *task, void *data) {
         Heap_Free(work);
     }
 }
-
-#pragma force_active on
 
 // As BattleAnimFunc_CircleBattler with half the amplitude, on the battlers selected by flags
 void BattleAnimFunc_MoveBattlerSin(BattleAnimSystem *system) {
@@ -1979,8 +1949,6 @@ void BattleAnimFunc_MoveBattlerSin(BattleAnimSystem *system) {
     work->motion.ampY /= 2;
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveBattlerSin, work);
 }
-
-#pragma force_active reset
 
 void BattleAnimTask_MoveBattlerLinear(SysTask *task, void *data) {
     BattleAnimMoveBattlerLinearWork *work = data;
@@ -2120,8 +2088,6 @@ void BattleAnimTask_WaitPaletteBlend(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 // Blends the OBJ palette of the sprite selected by flags towards a color
 void BattleAnimFunc_BlendSpritePalette(BattleAnimSystem *system) {
     BattleAnimBlendSpritePaletteWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimBlendSpritePaletteWork));
@@ -2220,8 +2186,6 @@ void BattleAnimFunc_ChangeBattlerHeight(BattleAnimSystem *system) {
     Pokepic_SetVisible(work->target.pokepic, work->visibleX, work->visibleY, work->visibleWidth, work->visibleHeight);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_ChangeBattlerHeight, work);
 }
-
-#pragma force_active reset
 
 int BattleAnimUtil_GetRoleBattler(BattleAnimSystem *system, int role) {
     int battler = 0;
@@ -2335,8 +2299,6 @@ void BattleAnimTask_RevealBattlerUpward(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimFunc_RevealBattler(BattleAnimSystem *system) {
     BattleAnimRevealBattlerWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimRevealBattlerWork));
     int flags, count;
@@ -2412,8 +2374,6 @@ void BattleAnimTask_ShakeBg(SysTask *task, void *data) {
         break;
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimFunc_ShakeBg(BattleAnimSystem *system) {
     BattleAnimShakeBgWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimShakeBgWork));
@@ -2792,8 +2752,6 @@ void BattleAnimSpriteFunc_MoveSpriteAndAnimate(BattleAnimSystem *system, SpriteS
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_PlaySpriteAnimOnce, work);
 }
 
-#pragma force_active on
-
 enum {
     SPRITE_ORBIT_STATE_CIRCLE,
     SPRITE_ORBIT_STATE_SWING,
@@ -2860,10 +2818,6 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
     SpriteSystem_DrawSprites(work->common.spriteManager);
 }
 
-#pragma force_active reset
-
-#pragma force_active on
-
 void BattleAnimSpriteFunc_SpriteOrbit(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite) {
     BattleAnimSpriteOrbitWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimSpriteOrbitWork));
     int battler;
@@ -2884,8 +2838,6 @@ void BattleAnimSpriteFunc_SpriteOrbit(BattleAnimSystem *system, SpriteSystem *sp
     ManagedSprite_OffsetPositionXY(work->sprite, 0, 12);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_SpriteOrbit, work);
 }
-
-#pragma force_active reset
 
 void BattleAnimTask_PlaySpriteAnimOnce2(SysTask *task, void *data) {
     BattleAnimSpriteWork *work = data;
@@ -2927,8 +2879,6 @@ void BattleAnimSpriteFunc_SpriteAboveDefender(BattleAnimSystem *system, SpriteSy
     ManagedSprite_SetPriority(work->sprite, priority);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_PlaySpriteAnimOnce2, work);
 }
-
-#pragma force_active on
 
 enum {
     SPRITE_ARC_STATE_INIT,
@@ -2989,5 +2939,3 @@ void BattleAnimSpriteFunc_SpriteArc(BattleAnimSystem *system, SpriteSystem *spri
     ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBgPriority(work->common.system, 2));
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_SpriteArc, work);
 }
-
-#pragma force_active reset

@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 // A cell whose cellAttr bit 11 is set is followed by its bounding rectangle.

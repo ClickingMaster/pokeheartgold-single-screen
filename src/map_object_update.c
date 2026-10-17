@@ -375,8 +375,6 @@ void MapObject_CreateShadow(LocalMapObject *object, u8 behavior, u8 prevBehavior
     }
 }
 
-#pragma force_active on
-
 void MapObject_UpdateShadowVisibility(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     u16 previous;
     if (!MapObjectManager_NotEndMovement(MapObject_GetManager(object))) {
@@ -400,8 +398,6 @@ void MapObject_UpdateShadowVisibility(LocalMapObject *object, u8 behavior, u8 pr
         MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK20);
     }
 }
-
-#pragma force_active off
 
 void MapObject_SpawnGroundDust(LocalMapObject *object, u8 behavior, u8 prevBehavior, const MapObjectEffectFlags *flags) {
     if (MapObject_CheckWaterBehavior(object, behavior) == TRUE

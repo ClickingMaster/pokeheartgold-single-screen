@@ -43,16 +43,11 @@ static BOOL PalPadMenu_IsMessageDone(PalPadMenu *menu, u32 *inputState);
 static void PalPadMenu_ClearMessage(PalPadMenu *menu);
 static BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared);
 
-#pragma force_active on
-
 void PalPadMenu_Init(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     PalPadMenu_Setup(menu, shared, gfx, heapId);
 }
 
-#pragma force_active reset
-
 #pragma opt_pointer_analysis off
-#pragma force_active on
 
 int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int valid;
@@ -167,14 +162,11 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
     return 0;
 }
 
-#pragma force_active reset
 #pragma opt_pointer_analysis reset
 
 void PalPadMenu_Exit(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     PalPadMenu_Teardown(menu, shared, gfx);
 }
-
-#pragma force_active on
 
 void PalPadMenu_Setup(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     String *text, *buffer;
@@ -203,8 +195,6 @@ void PalPadMenu_Setup(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, en
     String_Delete(buffer);
     menu->screenFile = GfGfxLoader_GetScrnDataFromOpenNarc(gfx->narc, 11, TRUE, &menu->screen, heapId);
 }
-
-#pragma force_active reset
 
 void PalPadMenu_Teardown(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     String_Delete(menu->msgText);
@@ -313,8 +303,6 @@ static void PalPadMenu_HighlightSelection(u32 *selection, PalPadGfx *gfx) {
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
-#pragma force_active on
-
 static void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
     int i;
 
@@ -324,8 +312,6 @@ static void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
         ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
     }
 }
-
-#pragma force_active reset
 
 static void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared) {
     PalPadShared_SetNextScreen(shared, sPalPadMenuItemScreens[*selection], 0);
@@ -368,8 +354,6 @@ static void PalPadMenu_ClearMessage(PalPadMenu *menu) {
     ClearWindowTilemapAndScheduleTransfer(&menu->msgWindow);
 }
 
-#pragma force_active on
-
 // Registering needs a free roster slot.
 static BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared) {
     int i;
@@ -387,5 +371,3 @@ static BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared) {
     }
     return FALSE;
 }
-
-#pragma force_active reset

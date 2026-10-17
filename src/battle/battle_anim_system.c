@@ -1043,8 +1043,6 @@ void BattleAnimScriptCmd_JumpIfContextField01(BattleAnimSystem *system) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_CallFunc(BattleAnimSystem *system) {
     BattleAnimFunc func;
     int i;
@@ -1067,8 +1065,6 @@ void BattleAnimScriptCmd_CallFunc(BattleAnimSystem *system) {
     func(system);
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_JumpByVariantBit0(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (system->context->moveAnimVariant & 1) {
@@ -1076,8 +1072,6 @@ void BattleAnimScriptCmd_JumpByVariantBit0(BattleAnimSystem *system) {
     }
     system->scriptPtr += *system->scriptPtr;
 }
-
-#pragma force_active on
 
 void BattleAnimScriptCmd_JumpBySide(BattleAnimSystem *system) {
     u32 role;
@@ -1115,8 +1109,6 @@ void BattleAnimScriptCmd_JumpByWeather(BattleAnimSystem *system) {
     system->scriptPtr += *system->scriptPtr;
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_JumpIfField08Is1(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (BattleAnimSystem_GetField08(system) == 1) {
@@ -1126,8 +1118,6 @@ void BattleAnimScriptCmd_JumpIfField08Is1(BattleAnimSystem *system) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_JumpIfAttackerActive(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (system->context->attackerActive) {
@@ -1136,8 +1126,6 @@ void BattleAnimScriptCmd_JumpIfAttackerActive(BattleAnimSystem *system) {
         system->scriptPtr++;
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimScriptCmd_JumpIfSameSide(BattleAnimSystem *system) {
     int attackerSide, defenderSide;
@@ -1328,8 +1316,6 @@ void BattleAnimScriptCmd_Nop6(BattleAnimSystem *system) {
 void BattleAnimScriptCmd_Nop7(BattleAnimSystem *system) {
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_CopyBattlerToBg(BattleAnimSystem *system) {
     u32 role, follow;
     int battler;
@@ -1369,8 +1355,6 @@ void BattleAnimScriptCmd_CopyBattlerToBg(BattleAnimSystem *system) {
     SetBgPriority(GF_BG_LYR_MAIN_2, (u8)BattleAnimSystem_GetBasePriority(system));
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_ClearBattlerBg(BattleAnimSystem *system) {
     system->scriptPtr++;
     system->scriptPtr++; // unused argument
@@ -1406,8 +1390,6 @@ static inline u32 ReadScriptWord(BattleAnimSystem *system) {
     system->scriptPtr = ptr + 1;
     return value;
 }
-
-#pragma force_active on
 
 void BattleAnimScriptCmd_CreateBattlerSprite(BattleAnimSystem *system) {
     u8 *pixels;
@@ -1485,8 +1467,6 @@ void BattleAnimScriptCmd_CreateBattlerSprite(BattleAnimSystem *system) {
     }
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_FreeBattlerSpriteManager(BattleAnimSystem *system) {
     SpriteManager *manager;
     system->scriptPtr++;
@@ -1521,8 +1501,6 @@ void BattleAnimTask_DrawBattlerSprites(SysTask *task, void *data) {
         SpriteSystem_DrawSprites(draw->manager);
     }
 }
-
-#pragma force_active on
 
 void BattleAnimScriptCmd_StartBattlerSpriteDraw(BattleAnimSystem *system) {
     int attackerType, role, index, slot, defenderType, vanished;
@@ -1603,8 +1581,6 @@ void BattleAnimScriptCmd_StartBattlerSpriteDraw(BattleAnimSystem *system) {
         SysTask_CreateOnMainQueue(BattleAnimTask_DrawBattlerSprites, &system->battlerSpriteDraws[index], 0x1000);
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimScriptCmd_StopBattlerSpriteDraw(BattleAnimSystem *system) {
     u32 index;
@@ -2077,8 +2053,6 @@ BOOL BattleAnimBackground_EffectNone(BattleAnimBgSwitchWork *work) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL BattleAnimBackground_StartScroll(BattleAnimBgSwitchWork *work) {
     BattleAnimBgScroll *scroll = Heap_Alloc(work->system->heapId, sizeof(BattleAnimBgScroll));
     scroll->bgConfig = work->system->bgConfig;
@@ -2127,14 +2101,10 @@ BOOL BattleAnimBackground_StartWave(BattleAnimBgSwitchWork *work) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL BattleAnimBackground_MarkWaveForStop(BattleAnimBgSwitchWork *work) {
     work->stopWave = TRUE;
     return FALSE;
 }
-
-#pragma force_active on
 
 void BattleAnimTask_BgWave(SysTask *task, void *data) {
     BattleAnimBgWave *wave = data;
@@ -2295,8 +2265,6 @@ BOOL BattleAnimBackground_StartPaletteCycle(BattleAnimBgSwitchWork *work) {
     SysTask_CreateOnMainQueue(BattleAnimTask_BgPaletteCycle, cycle, 0x1001);
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimBackground_MarkPaletteCycleForStop(BattleAnimBgSwitchWork *work) {
     work->stopPaletteCycle = TRUE;
@@ -2476,8 +2444,6 @@ void BattleAnimScriptCmd_WaitForBackgroundSwitch(BattleAnimSystem *system) {
     }
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_SetBackground(BattleAnimSystem *system) {
     BattleAnimBgSwitchWork *work = BattleAnimBackground_NewSwitchWork(system);
     int bgId, member, screen;
@@ -2523,8 +2489,6 @@ void BattleAnimScriptCmd_SwitchBackgroundBySide(BattleAnimSystem *system) {
     SysTask_CreateOnMainQueue(BattleAnimTask_BackgroundSwitch, work, 1100);
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_Nop37(BattleAnimSystem *system) {
 }
 
@@ -2539,8 +2503,6 @@ void BattleAnimScriptCmd_Nop42(BattleAnimSystem *system) {
 
 void BattleAnimScriptCmd_Nop43(BattleAnimSystem *system) {
 }
-
-#pragma force_active on
 
 void BattleAnimScriptCmd_PlaySE(BattleAnimSystem *system) {
     u32 seqNo;
@@ -2653,8 +2615,6 @@ void BattleAnimScriptCmd_DelayedSE(BattleAnimSystem *system) {
     BattleAnimSystem_StartSoundTask(system, data);
 }
 
-#pragma force_active reset
-
 void BattleAnimScriptCmd_Nop28(BattleAnimSystem *system) {
 }
 
@@ -2678,8 +2638,6 @@ void BattleAnimScriptCmd_WaitForSoundTasks(BattleAnimSystem *system) {
     system->scriptPtr++;
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_SetSubScreenBlend(BattleAnimSystem *system) {
     u32 ev1, ev2;
     system->scriptPtr++;
@@ -2689,8 +2647,6 @@ void BattleAnimScriptCmd_SetSubScreenBlend(BattleAnimSystem *system) {
     system->scriptPtr++;
     G2S_SetBlendAlpha(GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG1, (u16)ev1, (u16)ev2);
 }
-
-#pragma force_active reset
 
 void BattleAnimScriptCmd_ResetBlend(BattleAnimSystem *system) {
     BattleAnimSystem_InitBlend();
@@ -2842,8 +2798,6 @@ void BattleAnimScriptCmd_Invalid55(BattleAnimSystem *system) {
     GF_AssertFail();
 }
 
-#pragma force_active on
-
 void BattleAnimScriptCmd_PlayCry(BattleAnimSystem *system) {
     u32 mode, param;
     int pan;
@@ -2872,8 +2826,6 @@ void BattleAnimScriptCmd_WaitForCry(BattleAnimSystem *system) {
         system->delay = 1;
     }
 }
-
-#pragma force_active reset
 
 void BattleAnimScriptCmd_Nop54(BattleAnimSystem *system) {
 }

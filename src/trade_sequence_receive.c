@@ -183,8 +183,6 @@ BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state) 
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *state) {
     u8 cryDelay[4];
 
@@ -296,8 +294,6 @@ BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL TradeSequenceReceive_WaitFramesAndFanfare(TradeSequenceReceive *receive, int frames) {
     if (receive->fanfarePlaying) {

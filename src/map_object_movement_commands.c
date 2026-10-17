@@ -699,8 +699,6 @@ void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int dista
     }
 }
 
-#pragma force_active on
-
 BOOL MapObjectMovementCmd092_Step1(LocalMapObject *object) {
     JumpMovementWork *work = (JumpMovementWork *)MapObject_GetMovementCmdData(object);
     VecFx32 offset;
@@ -752,8 +750,6 @@ BOOL MapObjectMovementCmd092_Step1(LocalMapObject *object) {
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL MapObjectMovementCmd044_Step0(LocalMapObject *object) {
     MapObject_StartJumpMovement(object, DIR_NORTH, 0, 16, 2, 0, 0x100);
@@ -1204,8 +1200,6 @@ BOOL MapObjectMovementCmd102_Step1(LocalMapObject *object) {
     return TRUE;
 }
 
-#pragma force_active on
-
 void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy, s16 dz, s8 direction, s16 duration, u16 animation) {
     fx32 time;
     JumpByOffsetWork *work;
@@ -1235,8 +1229,6 @@ void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy,
         PlaySE(SEQ_SE_DP_DANSA);
     }
 }
-
-#pragma force_active reset
 
 BOOL MapObjectMovementCmd108_Step1(LocalMapObject *object) {
     VecFx32 position;

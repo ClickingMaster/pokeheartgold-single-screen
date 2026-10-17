@@ -231,8 +231,6 @@ void BattleAnimEmitterCb_SetPositionAtDefenderSide(SPLEmitter *emitter) {
     SPL_SetEmitterPosition(emitter, &pos);
 }
 
-#pragma force_active on
-
 void BattleAnimEmitterCb_SetPositionByBattlerTypes(SPLEmitter *emitter) {
     s16 unused[6] = { 0 }; // unused (kept: stack layout)
     BattleAnimEmitterOffsetTable offsetsX;
@@ -255,8 +253,6 @@ void BattleAnimEmitterCb_SetPositionByBattlerTypes(SPLEmitter *emitter) {
     emitter->emtr_pos.y = offsetY + emitter->p_res->p_base->pos.y;
     emitter->emtr_pos.z = emitter->p_res->p_base->pos.z;
 }
-
-#pragma force_active reset
 
 // kind: 1 x, 2 y, 3 z, 4 xy, 5 xz, 6 yz, 7 xyz
 void BattleAnimUtil_ScaleVecComponents(int kind, int scale, VecFx32 *vec) {
@@ -291,8 +287,6 @@ void BattleAnimUtil_ScaleVecComponents(int kind, int scale, VecFx32 *vec) {
         break;
     }
 }
-
-#pragma force_active on
 
 // kind: 0 origin, 1 current convergence position mirrored by scale, 2 up, 3 battlerB, 4 battlerA, 5 script arguments;
 // relative to the emitter position origin
@@ -483,8 +477,6 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
     emitter->axis.y = axis.y;
     emitter->axis.z = axis.z;
 }
-
-#pragma force_active reset
 
 void BattleAnimEmitter_SetTransformAttackerToDefender(SPLEmitter *emitter, int mode, int kind) {
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
@@ -1006,8 +998,6 @@ void BattleAnimEmitter_ApplyConfiguredFlags(SPLEmitter *emitter, BattleAnimEmitt
     }
 }
 
-#pragma force_active on
-
 void BattleAnimEmitter_ApplyConfiguredCamera(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     BattleAnimEmitter_RunCameraCallback(config->cameraMode, emitter, config);
 }
@@ -1067,8 +1057,6 @@ void BattleAnimEmitterCb_ConfigureFromScript(SPLEmitter *emitter) {
     BattleAnimEmitter_UpdateConfigured(emitter, config);
     Heap_Free(config);
 }
-
-#pragma force_active reset
 
 // -1 when battlerA's type is 1, 3 or 5, else +1
 int BattleAnimEmitter_GetConfiguredSideSign(BattleAnimEmitterConfig *config) {
@@ -1153,8 +1141,6 @@ BOOL BattleAnimEmitterFlagCb_Nop0(SPLEmitter *emitter, BattleAnimEmitterConfig *
     return TRUE;
 }
 
-#pragma force_active on
-
 // mode 0: none (mirrored zero), 1: script value
 BOOL BattleAnimEmitterFlagCb_SetGravity(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     BattleAnimEmitterFlagParams params;
@@ -1192,8 +1178,6 @@ BOOL BattleAnimEmitterFlagCb_SetGravity(SPLEmitter *emitter, BattleAnimEmitterCo
     ParticleEmitter_SetGravity(emitter, &value);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimEmitterFlagCb_Nop2(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     return TRUE;
@@ -1338,8 +1322,6 @@ BOOL BattleAnimEmitterFlagCb_Nop11(SPLEmitter *emitter, BattleAnimEmitterConfig 
     return TRUE;
 }
 
-#pragma force_active on
-
 // mode as in SetMagnetPos; 4: battlerB position scaled by value.x / value.y
 BOOL BattleAnimEmitterFlagCb_SetConvergencePos(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     BattleAnimEmitterFlagParams params;
@@ -1417,8 +1399,6 @@ BOOL BattleAnimEmitterFlagCb_SetConvergenceForce(SPLEmitter *emitter, BattleAnim
     return TRUE;
 }
 
-#pragma force_active reset
-
 void BattleAnimEmitter_RunFlagCallback(int index, SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     sBattleAnimEmitterFlagCallbacks[index](emitter, config);
 }
@@ -1472,8 +1452,6 @@ static inline void CopyCameraAngle(volatile CameraAngle *dst, const volatile Cam
     dst->unused = unused;
 }
 
-#pragma force_active on
-
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle4(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle;
     Camera *camera;
@@ -1484,8 +1462,6 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle4(SPLEmitter *emitter, BattleAnimEm
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimEmitterCameraCb_SetAngleFromScript(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle = { 0, 0, 0, 0 };
@@ -1499,8 +1475,6 @@ BOOL BattleAnimEmitterCameraCb_SetAngleFromScript(SPLEmitter *emitter, BattleAni
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle;
     Camera *camera;
@@ -1511,8 +1485,6 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
-
-#pragma force_active reset
 
 // Preset 2 in the 0221BFC0 mode, else preset 5
 BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
@@ -1528,8 +1500,6 @@ BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmi
     }
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL BattleAnimEmitterCameraCb_SetPresetAngle0(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle;
@@ -1552,8 +1522,6 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle1(SPLEmitter *emitter, BattleAnimEm
     Camera_SetAnglePos(&angle, camera);
     return TRUE;
 }
-
-#pragma force_active reset
 
 BOOL BattleAnimEmitterCameraCb_LookAtBattlerA(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     VecFx32 target;

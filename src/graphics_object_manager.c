@@ -286,8 +286,6 @@ void GraphicsPalette_LoadToVram(NNSG2dPaletteData *palette, NNSGfdPlttKey key, N
     palette->szByte = savedSize;
 }
 
-#pragma force_active on
-
 void GraphicsObject_Draw(GraphicsObject *object) {
     int u0, u1, v0, v1;
 
