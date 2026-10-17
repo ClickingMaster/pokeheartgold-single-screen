@@ -2,6 +2,7 @@
 
 #include "constants/sndseq.h"
 
+#include "frontier/frontier_records.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0019.h"
 
@@ -81,11 +82,6 @@ typedef struct FrontierRecordsSpeciesGroup {
     u32 count;
 } FrontierRecordsSpeciesGroup;
 
-typedef struct FrontierRecordsWindowSet {
-    const WindowTemplate *templates;
-    u32 count;
-} FrontierRecordsWindowSet;
-
 // Palette flash of a pressed button: either a sprite or a rectangle of a background tilemap
 typedef struct FrontierRecordsButtonFlash {
     u8 isBg : 1;
@@ -133,9 +129,6 @@ typedef struct FrontierRecordsApp {
     PaletteBlink *scrollArrows;                      // 0x330
     u16 pageArrowTiles[3][16];                       // 0x334
 } FrontierRecordsApp;
-
-extern const u8 gFrontierRecordsLetterPositions[NUM_LETTERS];
-extern const FrontierRecordsWindowSet gFrontierRecordsWindowSets[];
 
 // Not declared by the owners' headers yet
 u32 BattleFactory_GetBestStreakStat(u8 levelMode, u8 type);
@@ -219,10 +212,6 @@ static void FrontierRecordsApp_PrintPageNumber(FrontierRecordsApp *app);
 static void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app);
 static void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app);
 static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app);
-static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set);
-static void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
-static void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);
-static void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
 
 static const TouchscreenHitbox sFrontierRecordsExitHitbox = {
     .rect = { 164, 187, 193, 254 }
@@ -1737,32 +1726,4 @@ static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app) {
     ClearWindowTilemapAndScheduleTransfer(&app->windows[1]);
     ClearWindowTilemapAndScheduleTransfer(&app->windows[2]);
     ClearWindowTilemapAndScheduleTransfer(&app->windows[3]);
-}
-
-static void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set) {
-    u8 i;
-    const WindowTemplate *templates = gFrontierRecordsWindowSets[set].templates;
-    u32 count = gFrontierRecordsWindowSets[set].count;
-
-    for (i = 0; i < count; i++) {
-        AddWindow(bgConfig, &windows[i], &templates[i]);
-        FillWindowPixelBuffer(&windows[i], 0);
-    }
-}
-
-static void FrontierRecordsApp_RemoveWindows(Window *windows, int set) {
-    u16 i;
-    u32 count = gFrontierRecordsWindowSets[set].count;
-
-    for (i = 0; i < count; i++) {
-        RemoveWindow(&windows[i]);
-    }
-}
-
-static void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window) {
-    AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_0, 25, 21, 6, 2, 13, 0x3F4);
-}
-
-static void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window) {
-    RemoveWindow(window);
 }

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "6f748a4e8b5eeddf78e64f03738f41530858cda0",
+  "commit": "c9a5e130e41e88b7557db1bdf47ab6b355f2e986",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "9481dbbba4c1aa44ce284fdaee2008bdd574c40a2f4f126ee0301015dedf4777",
+    "ARM9": "c099d06c7416a2499e225879bda4c6df2ea1ea29dd1cd4dc71dba5708593a6ed",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -5024,9 +5024,17 @@
       "cpu": "ARM9",
       "module": "OVY_86",
       "object": "frontier_records_app.o",
-      "bytes": 9574,
+      "bytes": 9416,
       "status": "c",
       "source": "src/frontier/frontier_records_app.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_86",
+      "object": "frontier_records_windows.o",
+      "bytes": 158,
+      "status": "c",
+      "source": "src/frontier/frontier_records_windows.c"
     },
     {
       "cpu": "ARM9",

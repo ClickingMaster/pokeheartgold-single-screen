@@ -1973,7 +1973,8 @@ Overlay OVY_86
 {
     After main
     Object src/frontier/frontier_records_app.o
-    Object asm/frontier_records_app_data.o
+    Object src/frontier/frontier_records_letters.o
+    Object src/frontier/frontier_records_windows.o
 }
 Overlay OVY_87
 {

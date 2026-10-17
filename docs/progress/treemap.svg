@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 6f748a4e8 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c9a5e130e · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5289,9 +5289,12 @@ src/wifi_plaza/wifi_plaza_visitor_profiles.c</title></rect>
 10,316 bytes · C-only source
 src/application/scratch_off_cards.c</title></rect>
 <rect x="1104.653" y="526.291" width="34.930" height="47.256" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1139.583" y="526.291" width="32.417" height="47.256" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_86 / frontier_records_app.o
-9,574 bytes · C-only source
+<rect x="1139.583" y="526.291" width="32.417" height="46.476" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_86 / frontier_records_app.o
+9,416 bytes · C-only source
 src/frontier/frontier_records_app.c</title></rect>
+<rect x="1139.583" y="572.767" width="32.417" height="0.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_86 / frontier_records_windows.o
+158 bytes · C-only source
+src/frontier/frontier_records_windows.c</title></rect>
 <rect x="1139.583" y="526.291" width="32.417" height="47.256" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="888.687" y="573.547" width="62.446" height="22.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / trainer_card_main / overlay_trainer_card_main.o
 8,940 bytes · C-only source
