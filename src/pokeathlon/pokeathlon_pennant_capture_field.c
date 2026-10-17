@@ -76,8 +76,6 @@ typedef struct PokeathlonPennantCaptureCollisionFrame {
     VecFx32 pointA;
 } PokeathlonPennantCaptureCollisionFrame;
 
-#pragma force_active on
-
 static void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player);
 static void PokeathlonPennantCapture_UpdateMonSwap(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u8 member, u8 *block, int isHost, int isSelf, int remote);
 static int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out);
@@ -273,8 +271,6 @@ void PokeathlonPennantCapture_UpdatePlayers(PokeathlonCourseData *course) {
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *course, PokeathlonPennantCapture *work, PokeathlonPennantCapturePlayer *player) {
     if (player->freezeTimer != 0) {
         player->freezeTimer--;
@@ -283,8 +279,6 @@ static void PokeathlonPennantCapture_TickFreezeTimer(PokeathlonCourseData *cours
 
 typedef void (*PokeathlonPennantCaptureMonSwapFunc)(PokeathlonPennantCaptureDisplay *display, PokeathlonPennantCapturePlayer *player, PokeathlonPennantCaptureFrame *frame, u8 participant, u16 member, u8 *block, int isHost, int isSelf, int remote);
 #define UpdateMonSwapAsU16 ((PokeathlonPennantCaptureMonSwapFunc)PokeathlonPennantCapture_UpdateMonSwap)
-
-#pragma force_active on
 
 void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewer, PokeathlonPennantCapturePlayer *players, PokeathlonPennantCaptureLinkData *link) {
     u32 baseX;
@@ -484,8 +478,6 @@ void PokeathlonPennantCapture_ApplyFrame(PokeathlonCourseData *course, int viewe
     }
 }
 
-#pragma force_active reset
-
 void PokeathlonPennantCapture_UpdateObstacleSprites(PokeathlonPennantCapture *work, int x, int y) {
     u8 i;
 
@@ -651,8 +643,6 @@ static void PokeathlonPennantCapture_UpdateMonSwap(PokeathlonPennantCaptureDispl
     }
 }
 
-#pragma force_active on
-
 void PokeathlonPennantCapture_SetMoveParams(PokeathlonCourseData *course, const PokeathlonPennantCaptureMoveTables *tables, int participant, u8 member, PokeathlonPennantCapturePlayer *player) {
     u8 *levels = PokeathlonCourse_GetMonStats(course, participant, member);
 
@@ -662,8 +652,6 @@ void PokeathlonPennantCapture_SetMoveParams(PokeathlonCourseData *course, const 
     player->moveParams[member].unk04 = (f32)tables->unk04[levels[1]] / 10.0;
     player->moveParams[member].knockdownTime = tables->knockdownTime[levels[3]];
 }
-
-#pragma force_active reset
 
 static void PokeathlonPennantCapture_GetObstaclesNear(PokeathlonPennantCapture *work, fx32 fieldX, fx32 fieldY, PokeathlonPennantCapturePoint **out, u8 *count) {
     int i;
@@ -722,8 +710,6 @@ static void PokeathlonPennantCapture_CalcObstacleBounds(int radius, const Pokeat
     out[10].x -= radius;
     out[11].x -= radius;
 }
-
-#pragma force_active on
 
 static int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *to, int radius, PokeathlonPennantCaptureBounds *bounds, VecFx32 *out) {
     VecFx32 *end = to;
@@ -873,8 +859,6 @@ static int PokeathlonPennantCapture_CollideWithObstacle(VecFx32 *from, VecFx32 *
     return 0;
 }
 
-#pragma force_active reset
-
 static int PokeathlonPennantCapture_CollideWithObstacles(PokeathlonPennantCapture *work, int excluded, int radius, VecFx32 *position, VecFx32 *end, VecFx32 *out) {
     u8 count;
     u8 result;
@@ -940,7 +924,6 @@ void PokeathlonPennantCapture_AddPoint2D(const Point2D *a, const Point2D *b, Poi
     out->y = a->y + b->y;
 }
 
-#pragma force_active on
 #pragma opt_loop_invariants off
 #pragma opt_strength_reduction off
 
@@ -1023,7 +1006,6 @@ static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course,
 
 #pragma opt_loop_invariants reset
 #pragma opt_strength_reduction reset
-#pragma force_active reset
 
 void PokeathlonPennantCapture_UpdateFieldDrawPriorities(PokeathlonPennantCapture *work) {
     int i;
@@ -1297,8 +1279,6 @@ static void PokeathlonPennantCapture_PlaySEIfOnScreen(int x, int y, int seq, BOO
     }
 }
 
-#pragma force_active on
-
 void PokeathlonPennantCapture_UpdateOwnScore(PokeathlonCourseData *course) {
     PokeathlonPennantCaptureFrame *frame = (PokeathlonPennantCaptureFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 240);
     PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
@@ -1312,5 +1292,3 @@ void PokeathlonPennantCapture_UpdateOwnScore(PokeathlonCourseData *course) {
     PokeathlonCourse_SetRecordScore(course, score);
     PokeathlonPennantCapture_PrintScore(work, score);
 }
-
-#pragma force_active reset

@@ -2008,9 +2008,6 @@ Overlay OVY_89
 {
     After OVY_45
     Object src/application/footprint_stamp.o
-    Object src/application/footprint_stamp_sprites.o
-    Object src/application/footprint_stamp_board.o
-    Object src/application/footprint_stamp_texture.o
     Object src/application/footprint_stamp_effects.o
     Object asm/footprint_stamp_data.o
 }

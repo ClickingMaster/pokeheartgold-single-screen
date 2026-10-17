@@ -95,7 +95,6 @@ enum BoxDisplayWindow {
     BOX_DISPLAY_WIN_ITEM,
 };
 
-#pragma force_active on
 int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     app->strollMon = NULL;
     if (app->linkAction == 1) {
@@ -132,7 +131,6 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     app->peerIdentity.hasWalkerMon = 0;
     return 2;
 }
-#pragma force_active reset
 
 int PokewalkerApp_LinkSave_Update(PokewalkerApp *app) {
     int state = sLinkSaveStates[app->state](app);
@@ -220,7 +218,6 @@ int PokewalkerApp_LinkSave_End(PokewalkerApp *app) {
 // The mode's work, reached as byte offsets from the app's selectMonState.
 #define SELECT_MON_WORK(app, member) ((u8 *)(app) + 0x1D764 + offsetof(PokewalkerSelectMonWork, member))
 
-#pragma force_active on
 int PokewalkerApp_SelectMon_Enter(PokewalkerApp *app) {
     PCStorage *storage;
     Party *party;
@@ -251,7 +248,6 @@ int PokewalkerApp_SelectMon_Enter(PokewalkerApp *app) {
 }
 
 #undef SELECT_MON_WORK
-#pragma force_active reset
 
 int PokewalkerApp_SelectMon_Update(PokewalkerApp *app) {
     PokewalkerSelectMonWork *work = (PokewalkerSelectMonWork *)&app->selectMonState;
@@ -587,7 +583,6 @@ int PokewalkerApp_StrollReport_Start(PokewalkerApp *app) {
     return STROLL_REPORT_SHOW_RESULTS;
 }
 
-#pragma force_active on
 int PokewalkerApp_StrollReport_ShowResults(PokewalkerApp *app) {
     u32 totalSteps;
     u32 totalWatts;
@@ -619,7 +614,6 @@ int PokewalkerApp_StrollReport_ShowResults(PokewalkerApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return STROLL_REPORT_WAIT_RESULTS_FADE;
 }
-#pragma force_active reset
 
 int PokewalkerApp_StrollReport_WaitResultsFade(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
@@ -730,7 +724,6 @@ int PokewalkerApp_CountReceivedMons(PokewalkerIrStatus *status, PokewalkerIrBloc
     return count;
 }
 
-#pragma force_active on
 int PokewalkerApp_StrollReport_ShowCaughtMons(PokewalkerApp *app) {
     int i;
     PokewalkerMon *mon;
@@ -772,7 +765,6 @@ int PokewalkerApp_StrollReport_ShowCaughtMons(PokewalkerApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return STROLL_REPORT_WAIT_CAUGHT_MONS_FADE;
 }
-#pragma force_active reset
 
 int PokewalkerApp_StrollReport_WaitCaughtMonsFade(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
@@ -817,7 +809,6 @@ void PokewalkerApp_AddItemToList(u16 *items, u16 item) {
 }
 
 // Items found on the Stroll plus the gift item the Pokewalker holds.
-#pragma force_active on
 int PokewalkerApp_CountReceivedItems(PokewalkerApp *app) {
     int count = 0;
     int i;
@@ -874,7 +865,6 @@ int PokewalkerApp_StrollReport_ShowItems(PokewalkerApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return STROLL_REPORT_WAIT_ITEMS_FADE;
 }
-#pragma force_active reset
 
 int PokewalkerApp_StrollReport_WaitItemsFade(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
@@ -914,7 +904,6 @@ int PokewalkerApp_StrollReport_WaitGiftsFadeOut(PokewalkerApp *app) {
     return STROLL_REPORT_WAIT_GIFTS_FADE_OUT;
 }
 
-#pragma force_active on
 int PokewalkerApp_StrollReport_ShowGifts(PokewalkerApp *app) {
     u32 strollSteps = 0;
     u32 totalSteps;
@@ -943,7 +932,6 @@ int PokewalkerApp_StrollReport_ShowGifts(PokewalkerApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return STROLL_REPORT_WAIT_GIFTS_FADE;
 }
-#pragma force_active reset
 
 int PokewalkerApp_StrollReport_WaitGiftsFade(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {
@@ -998,7 +986,6 @@ int PokewalkerApp_StrollReport_WaitRecordsFadeOut(PokewalkerApp *app) {
     return STROLL_REPORT_WAIT_RECORDS_FADE_OUT;
 }
 
-#pragma force_active on
 int PokewalkerApp_StrollReport_ShowRecords(PokewalkerApp *app) {
     u32 strollSteps = 0;
     u32 totalSteps;
@@ -1027,7 +1014,6 @@ int PokewalkerApp_StrollReport_ShowRecords(PokewalkerApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return STROLL_REPORT_WAIT_RECORDS_FADE;
 }
-#pragma force_active reset
 
 int PokewalkerApp_StrollReport_WaitRecordsFade(PokewalkerApp *app) {
     if (IsPaletteFadeFinished() == TRUE) {

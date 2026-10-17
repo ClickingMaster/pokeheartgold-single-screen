@@ -496,8 +496,6 @@ static int BattleBagMenu_HandleUseItemInput(BattleBagMenu *menu) {
     }
 }
 
-#pragma force_active on
-
 static int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
     BattleBagContext *context = menu->context;
     int slot, battleUseFunc;
@@ -777,8 +775,6 @@ static void BattleBagMenu_FreeText(BattleBagMenu *menu) {
     String_Delete(menu->string);
 }
 
-#pragma force_active reset
-
 static void BattleBagMenu_SetPageBgOffset(BattleBagMenu *menu, int page) {
     switch (page) {
     case 0:
@@ -861,8 +857,6 @@ static void BattleBagMenu_AddPageWindows(BattleBagMenu *menu, int page) {
         AddWindow(menu->bgConfig, &menu->pageWindows[i], &templates[i]);
     }
 }
-
-#pragma force_active on
 
 static void BattleBagMenu_RemovePageWindows(BattleBagMenu *menu) {
     WindowArray_Delete(menu->pageWindows, menu->pageWindowCount);
@@ -1330,8 +1324,6 @@ static void BattleBagMenu_DeactivateCursor(BattleBagMenu *menu) {
     BattleDpadCursor_ResetPosition(menu->cursor);
     BattleCursor_Disable(BattleDpadCursor_GetBattleCursor(menu->cursor));
 }
-
-#pragma force_active reset
 
 static void BattleBagMenu_CreateFinger(BattleBagMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);

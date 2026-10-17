@@ -174,7 +174,6 @@ static inline u8 PokeathlonSnowThrow_OtherMon(int own, int k) {
 
 // Set-up, a step per frame (PokeathlonCourse_GetEventInitState): heaps and screens, the top screen and the CPU,
 // sprites, the Pokemon graphics, then the field once they are loaded.
-#pragma force_active on
 
 BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
     PokeathlonCourseMonInfo infos[SNOW_THROW_MONS];
@@ -351,8 +350,6 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonSnowThrow_Draw(PokeathlonCourseData *course) {
     PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     PokeathlonSnowThrowDisplay_UpdateShake(work->display);
@@ -374,8 +371,6 @@ BOOL PokeathlonSnowThrow_ShowResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 8);
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL PokeathlonSnowThrow_Exit(PokeathlonCourseData *course) {
     PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
@@ -415,8 +410,6 @@ BOOL PokeathlonSnowThrow_Exit(PokeathlonCourseData *course) {
     Heap_Destroy(HEAP_ID_146);
     return TRUE;
 }
-
-#pragma force_active reset
 
 static void PokeathlonSnowThrow_SetGfxBanks(void) {
     GraphicsBanks banks = sSnowThrowGraphicsBanks;

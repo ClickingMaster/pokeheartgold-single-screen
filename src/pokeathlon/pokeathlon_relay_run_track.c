@@ -33,7 +33,6 @@ extern const PokeathlonRelayRunHitTable sRelayRunCornerHits; // corners: RELAY_R
 
 // Draws every team from the packet the host sent, scrolled so the player's own runner (team own) stands at
 // RELAY_RUN_RUNNER_X: positions, member swaps, dash lines, tired / exhausted marks and the bump mark.
-#pragma force_active on
 
 static void PokeathlonRelayRunTeam_DrawSwap(PokeathlonRelayRunHud *hud, PokeathlonRelayRunTeam *team, VecFx32 *ground, PokeathlonRelayRunPacket *packet, u8 teamId, u8 member, PokeathlonRelayRunTouch *touch, int isHost, int isOwn, int isCpu);
 static fx32 PokeathlonRelayRun_CalcCircleEntry(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, fx32 r);
@@ -218,8 +217,6 @@ void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, Pokeath
     PokeathlonRelayRunHud_ShowTiredMarks(relayRun->hud, (flags >> ((u8)(bench0 + own * RELAY_RUN_MEMBERS) * 2)) & 3, (flags >> ((u8)(bench1 + own * RELAY_RUN_MEMBERS) * 2)) & 3);
 }
 
-#pragma force_active reset
-
 // Places the obstacle sprites for the track scrolled to x (the player's own runner).
 void PokeathlonRelayRun_ScrollObstacles(PokeathlonRelayRun *relayRun, int x) {
     u8 i;
@@ -364,7 +361,6 @@ static void PokeathlonRelayRunTeam_EndSwap(PokeathlonRelayRunTeam *team, u8 unus
 }
 
 // Plays the member swap of a team as far as the host's packet says it has got (2 bits of swapPhases each).
-#pragma force_active on
 
 static void PokeathlonRelayRunTeam_DrawSwap(PokeathlonRelayRunHud *hud, PokeathlonRelayRunTeam *team, VecFx32 *ground, PokeathlonRelayRunPacket *packet, u8 teamId, u8 member, PokeathlonRelayRunTouch *touch, int isHost, int isOwn, int isCpu) {
     u16 changed = FALSE;
@@ -399,10 +395,7 @@ static void PokeathlonRelayRunTeam_DrawSwap(PokeathlonRelayRunHud *hud, Pokeathl
     }
 }
 
-#pragma force_active reset
-
 // Sets up a member of a team from its Pokemon's stats and the event's stat tables (setup->tables[n][stat]).
-#pragma force_active on
 
 void PokeathlonRelayRun_InitMember(PokeathlonCourseData *course, void *setupFile, u8 participant, u8 member, PokeathlonRelayRunTeam *team) {
     PokeathlonRelayRunSetup *setup = setupFile;
@@ -418,10 +411,7 @@ void PokeathlonRelayRun_InitMember(PokeathlonCourseData *course, void *setupFile
     team->members[member].recoveryTime = setup->tables[4][stats[3]];
 }
 
-#pragma force_active reset
-
 // Collects the obstacles within a screen of x: walls (kinds 1 and 2) and slow patches separately.
-#pragma force_active on
 
 static void PokeathlonRelayRun_FindNearbyObstacles(PokeathlonRelayRun *relayRun, fx32 x, s32 **walls, s32 **patches, u8 *wallCount, u8 *patchCount) {
     int i;
@@ -459,11 +449,8 @@ static void PokeathlonRelayRun_FindNearbyObstacles(PokeathlonRelayRun *relayRun,
     }
 }
 
-#pragma force_active reset
-
 // The outline of an obstacle from its layout entry: a 48x48 (kind 1) or 32x32 box centred on it, with its edges
 // moved out by inset (the runner's radius); a slow patch is the 64x64 square around it.
-#pragma force_active on
 
 void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, volatile s32 *shape) {
     s32 word = *entry;
@@ -541,12 +528,9 @@ void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, volatile s
     shape[23] -= inset;
 }
 
-#pragma force_active reset
-
 // Moves a runner from start to end past a box obstacle: returns which edge (RELAY_RUN_HIT_TOP ..) or corner
 // (RELAY_RUN_HIT_TOP_LEFT ..) it ran into and where it stops, or the side it is pushed out of when it ended up
 // inside (RELAY_RUN_HIT_INSIDE_TOP ..). 0 if it missed.
-#pragma force_active on
 
 static int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, int radius, PokeathlonRelayRunObstacleShape *shape, VecFx32 *out) {
     PokeathlonRelayRunHitTable edgeHits;
@@ -698,8 +682,6 @@ static int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, 
     return RELAY_RUN_HIT_NONE;
 }
 
-#pragma force_active reset
-
 // Whether position is on a slow patch (the 64x64 square at its shape's first corner).
 static BOOL PokeathlonRelayRun_IsOnSlowPatch(const VecFx32 *position, const PokeathlonRelayRunObstacleShape *shape) {
     s32 px = position->x;
@@ -715,7 +697,6 @@ static BOOL PokeathlonRelayRun_IsOnSlowPatch(const VecFx32 *position, const Poke
 // Moves a runner (radius) from from to to among the obstacles near it. Returns whether it is on a slow patch
 // << 8 | the wall it ran into (RELAY_RUN_HIT_*, 0: none); out gets where it stops, unless it is still touching
 // the same wall as last frame (wallState).
-#pragma force_active on
 
 u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wallState, int radius, VecFx32 *from, VecFx32 *to, VecFx32 *out) {
     s32 *walls[RELAY_RUN_OBSTACLES];
@@ -758,8 +739,6 @@ u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wa
     return (onPatch << 8) + result;
 }
 
-#pragma force_active reset
-
 // Where along the segment a -> b (0: a, 1: b) it first comes within r of c.
 static fx32 PokeathlonRelayRun_CalcCircleEntry(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, fx32 r) {
     VecFx32 d;
@@ -799,7 +778,6 @@ void PokeathlonRelayRun_AddFlick(const VecFx32 *velocity, const VecFx32 *flick, 
 // Runners bumping into each other: the one running into another stops and passes its speed (times its push
 // power, at most 11 pixels per frame) on; a tired member that is hit is exhausted; both are stunned. Returns
 // whether any two bumped, where the first two did in where.
-#pragma force_active on
 
 BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonRelayRunTeam *teams, VecFx32 *where) {
     VecFx32 posP;
@@ -917,8 +895,6 @@ BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonR
     }
     return result;
 }
-
-#pragma force_active reset
 
 // Places a mark (sprite) above a Pokemon standing at position, higher for bigger Pokemon (size class 1-3 in
 // its performance data).

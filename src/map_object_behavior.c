@@ -21,6 +21,34 @@
 #include "script_manager.h"
 #include "sys_task_api.h"
 
+static const TrainerSightFunc sTrainerSightDistanceFuncs[] = {
+    TrainerSight_GetDistanceNorth,
+    TrainerSight_GetDistanceSouth,
+    TrainerSight_GetDistanceWest,
+    TrainerSight_GetDistanceEast,
+};
+
+static const TrainerApproachStateFunc sTrainerApproachStateFuncs[] = {
+    TrainerApproach_UnpauseTrainer,
+    TrainerApproach_FaceDirection,
+    TrainerApproach_WaitForPlayer,
+    TrainerApproach_StartFace,
+    TrainerApproach_WaitFace,
+    TrainerApproach_SpawnExclamation,
+    TrainerApproach_WaitExclamation,
+    TrainerApproach_StartReveal,
+    TrainerApproach_WaitReveal,
+    TrainerApproach_Wait,
+    TrainerApproach_CheckDistance,
+    TrainerApproach_StartStep,
+    TrainerApproach_WaitStep,
+    TrainerApproach_WaitArrived,
+    TrainerApproach_TurnPlayer,
+    TrainerApproach_WaitPlayerTurn,
+    TrainerApproach_ResetTrainerMovement,
+    TrainerApproach_Finish,
+};
+
 void MapObject_InitTypeBehavior(LocalMapObject *object) {
     MapObject_CallTypeBehaviorInit(object);
 }
@@ -503,7 +531,7 @@ int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *o
 }
 
 int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused) {
-    return gTrainerSightDistanceFuncs[direction](object, range, targetX, targetZ, unused);
+    return sTrainerSightDistanceFuncs[direction](object, range, targetX, targetZ, unused);
 }
 
 int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
@@ -649,7 +677,7 @@ void TrainerApproach_DestroyTask(SysTask *task) {
 
 void TrainerApproach_Task(SysTask *task, void *data) {
     TrainerApproachWork *work = data;
-    while (gTrainerApproachStateFuncs[work->state](work) == TRUE) {}
+    while (sTrainerApproachStateFuncs[work->state](work) == TRUE) {}
 }
 
 BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {

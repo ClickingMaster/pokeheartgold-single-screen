@@ -89,5 +89,3 @@
 	.public _020FC914
 	.public _020FC934
 	.public _020FC95C
-	.public _020FC99C
-	.public gUnionRoomChatMsgs

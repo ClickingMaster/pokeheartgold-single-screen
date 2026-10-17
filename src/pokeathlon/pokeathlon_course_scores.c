@@ -70,8 +70,6 @@ static void PokeathlonCourseScoreList_Reset(PokeathlonCourseScoreList *list) {
     }
 }
 
-#pragma force_active on
-
 // Sorts the entries by score (descending for mode 0/1, ascending for mode 2; ties go to the lower participant)
 // into ranking[] and gives each entry its rank (tied entries share one).
 void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *list, int mode) {
@@ -164,8 +162,6 @@ void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *list, int mode) {
         list->ranking[i]->rank = rank;
     }
 }
-
-#pragma force_active reset
 
 PokeathlonCourseScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, u32 index) {
     if (index >= 4) {
@@ -269,8 +265,6 @@ void PokeathlonCourseCmd_RecvEvents(int netId, int size, void *data, void *conte
     PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_RUN_EVENT_OVERLAY);
 }
 
-#pragma force_active on
-
 // Host: collects every player's participant entry; once all arrived, fills the free slots with NPC teams.
 void PokeathlonCourseCmd_RecvParticipant(int netId, int size, void *data, void *context) {
     int count;
@@ -288,8 +282,6 @@ void PokeathlonCourseCmd_RecvParticipant(int netId, int size, void *data, void *
         }
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonCourseCmd_RecvAllParticipants(int netId, int size, void *data, void *context) {
     PokeathlonCourseData *course = context;

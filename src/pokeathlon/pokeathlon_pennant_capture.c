@@ -66,8 +66,6 @@ static inline void PokeathlonPennantCapture_PlaceAtStart(PokeathlonPennantCaptur
     }
 }
 
-#pragma force_active on
-
 // Set-up, a step per frame (PokeathlonCourse_GetEventInitState): heaps and screens, the top screen and the CPU,
 // sprites, the Pokemon graphics, then the field once they are loaded. The host also picks the field layout.
 BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
@@ -240,8 +238,6 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL PokeathlonPennantCapture_Draw(PokeathlonCourseData *course) {
     PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);

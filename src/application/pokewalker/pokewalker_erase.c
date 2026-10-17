@@ -52,14 +52,12 @@ int PokewalkerApp_Mode1_WaitMessage(PokewalkerApp *app) {
     return 1;
 }
 
-#pragma force_active on
 int PokewalkerApp_Mode1_WaitInput(PokewalkerApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_A || gSystem.touchNew) {
         return 3;
     }
     return 2;
 }
-#pragma force_active reset
 
 int PokewalkerApp_Mode1_End(PokewalkerApp *app) {
     return 4;
@@ -194,7 +192,6 @@ int PokewalkerApp_EraseRecords_PrintCarryOverSteps(PokewalkerApp *app) {
     return 8;
 }
 
-#pragma force_active on
 int PokewalkerApp_EraseRecords_WaitCarryOverSteps(PokewalkerApp *app) {
     if (TextPrinterCheckActive(app->textPrinterId) == FALSE) {
         return 9;
@@ -202,14 +199,12 @@ int PokewalkerApp_EraseRecords_WaitCarryOverSteps(PokewalkerApp *app) {
         return 8;
     }
 }
-#pragma force_active reset
 
 int PokewalkerApp_EraseRecords_ShowCarryOverStepsMenu(PokewalkerApp *app) {
     PokewalkerApp_ShowSaveEraseStepsMenu(app, 1);
     return 10;
 }
 
-#pragma force_active on
 int PokewalkerApp_EraseRecords_HandleCarryOverStepsMenu(PokewalkerApp *app) {
     switch (PokewalkerApp_HandleTwoChoiceMenu(app)) {
     case 0:
@@ -229,7 +224,6 @@ int PokewalkerApp_EraseRecords_HandleCarryOverStepsMenu(PokewalkerApp *app) {
     }
     return 10;
 }
-#pragma force_active reset
 
 int PokewalkerApp_EraseRecords_PrintConnect(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_0);
@@ -384,7 +378,6 @@ int PokewalkerApp_EraseRecords_WaitInitialized(PokewalkerApp *app) {
     return 21;
 }
 
-#pragma force_active on
 int PokewalkerApp_EraseRecords_PrintComeBack(PokewalkerApp *app) {
     if (app->returnedMonBox >= 0) {
         BufferBoxMonNickname(app->msgFormat, 1, &app->returnedMon);
@@ -393,7 +386,6 @@ int PokewalkerApp_EraseRecords_PrintComeBack(PokewalkerApp *app) {
     }
     return 29;
 }
-#pragma force_active reset
 
 int PokewalkerApp_EraseRecords_WaitComeBack(PokewalkerApp *app) {
     if (TextPrinterCheckActive(app->textPrinterId) == FALSE) {
@@ -409,7 +401,6 @@ int PokewalkerApp_EraseRecords_ShowReturnedMon(PokewalkerApp *app) {
     return 25;
 }
 
-#pragma force_active on
 int PokewalkerApp_EraseRecords_AnimateReturnedMon(PokewalkerApp *app) {
     app->timer++;
     if (app->timer > 180) {
@@ -421,7 +412,6 @@ int PokewalkerApp_EraseRecords_AnimateReturnedMon(PokewalkerApp *app) {
     }
     return 25;
 }
-#pragma force_active reset
 
 int PokewalkerApp_EraseRecords_AfterAnimation(PokewalkerApp *app) {
     return 27;

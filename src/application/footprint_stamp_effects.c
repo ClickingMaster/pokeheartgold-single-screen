@@ -60,8 +60,6 @@ static u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp);
 static u32 FootprintStamp_GetFootprintSize(u32 species, int form);
 static BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter);
 
-#pragma force_active on
-
 // Rotates the 16x16 2bpp footprint texture a quarter turn (direction 3: one way, 4: the other).
 static void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int direction) {
     u32 offset = texture->texInfo.ofsTex;
@@ -102,8 +100,6 @@ static void FootprintStamp_RotateFootprintTexture(NNSG3dResTex *texture, int dir
     }
     Heap_Free(copy);
 }
-
-#pragma force_active reset
 
 void FootprintStamp_DeleteStamp(FootprintStampObj *stamp) {
     ModelResource_Free(&stamp->model);
@@ -189,8 +185,6 @@ static void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id
     }
 }
 
-#pragma force_active on
-
 void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled) {
     u32 size = FootprintStamp_GetFootprintSize(mon->species, mon->form);
     fx32 x, y, z, scaleX, scaleY, scaleZ, length;
@@ -215,8 +209,6 @@ void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintSt
     }
 }
 
-#pragma force_active reset
-
 static BOOL FootprintStamp_BoundsOverlap(const FootprintStampBounds *a, const FootprintStampBounds *b) {
     if (a->left <= b->right && b->left <= a->right && a->bottom >= b->top && b->bottom >= a->top) {
         return TRUE;
@@ -239,7 +231,6 @@ static void FootprintStampBoard_NewChain(FootprintStampBoard *board, FootprintSt
     GF_AssertFail();
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int effect) {
@@ -257,7 +248,6 @@ BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int e
 }
 
 #pragma opt_common_subs reset
-#pragma force_active reset
 
 static void FootprintStampBoard_ReleaseChain(FootprintStampBoard *board, int chain) {
     int refs;
@@ -284,8 +274,6 @@ void FootprintStampBoard_StartCameraEffect(FootprintStampBoard *board) {
     board->flashDone = FALSE;
 }
 
-#pragma force_active on
-
 BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect) {
     if (stamp->effectId != FOOTPRINT_STAMP_EFFECT_NONE || stamp->pendingEffect != FOOTPRINT_STAMP_EFFECT_NONE || stamp->ready == FALSE) {
         return FALSE;
@@ -295,13 +283,9 @@ BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 static u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp) {
     return sFootprintStampNatureEffects[GetNatureFromPersonality(stamp->mon.personality)];
 }
-
-#pragma force_active on
 
 // A new stamp appears after two frames and starts its nature's effect after 40.
 BOOL FootprintStamp_UpdateIdle(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -320,13 +304,9 @@ BOOL FootprintStamp_UpdateIdle(FootprintStampBoard *board, FootprintStampObj *st
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitIdle(void) {
     return FALSE;
 }
-
-#pragma force_active on
 
 BOOL FootprintStamp_UpdateVanish(FootprintStampBoard *board, FootprintStampObj *stamp) {
     FootprintStampVanish *vanish = &stamp->effect.vanish;
@@ -366,13 +346,9 @@ void FootprintStamp_DrawVanish(FootprintStampBoard *board, FootprintStampObj *st
     ModelInstance_Draw(&stamp->instance);
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitVanish(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.vanish.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 BOOL FootprintStamp_UpdateSplit(FootprintStampBoard *board, FootprintStampObj *stamp) {
     fx32 x, y, z;
@@ -413,8 +389,6 @@ BOOL FootprintStamp_UpdateSplit(FootprintStampBoard *board, FootprintStampObj *s
     return FALSE;
 }
 
-#pragma force_active reset
-
 void FootprintStamp_DrawSplit(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
     FootprintStampModelInstance *piece;
@@ -429,8 +403,6 @@ void FootprintStamp_DrawSplit(FootprintStampBoard *board, FootprintStampObj *sta
     } while (i < 3);
     ModelInstance_Draw(&stamp->instance);
 }
-
-#pragma force_active on
 
 BOOL FootprintStamp_HitSplit(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     FootprintStampIdle *idle = &other->effect.idle;
@@ -502,13 +474,9 @@ BOOL FootprintStamp_UpdateZigzag(FootprintStampBoard *board, FootprintStampObj *
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitZigzag(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.zigzag.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 // Turns the footprint a quarter turn the other way, then waves away to the left.
 BOOL FootprintStamp_UpdateWave(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -567,13 +535,9 @@ BOOL FootprintStamp_UpdateWave(FootprintStampBoard *board, FootprintStampObj *st
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitWave(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.wave.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 // Rises off the board, leaving a trail of three copies.
 BOOL FootprintStamp_UpdateRise(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -621,8 +585,6 @@ BOOL FootprintStamp_UpdateRise(FootprintStampBoard *board, FootprintStampObj *st
     return FALSE;
 }
 
-#pragma force_active reset
-
 void FootprintStamp_DrawRise(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
     FootprintStampRise *rise = &stamp->effect.rise;
@@ -649,8 +611,6 @@ void FootprintStamp_DrawRise(FootprintStampBoard *board, FootprintStampObj *stam
 BOOL FootprintStamp_HitRise(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.rise.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 // Falls off the board swaying from side to side.
 BOOL FootprintStamp_UpdateFall(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -683,13 +643,9 @@ BOOL FootprintStamp_UpdateFall(FootprintStampBoard *board, FootprintStampObj *st
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitFall(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.fall.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 BOOL FootprintStamp_UpdateGrow(FootprintStampBoard *board, FootprintStampObj *stamp) {
     FootprintStampGrow *grow = &stamp->effect.grow;
@@ -711,13 +667,9 @@ BOOL FootprintStamp_UpdateGrow(FootprintStampBoard *board, FootprintStampObj *st
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL FootprintStamp_HitGrow(FootprintStampBoard *board, FootprintStampObj *stamp, FootprintStampObj *other) {
     return FootprintStamp_BoundsOverlap(&stamp->effect.grow.bounds, &other->effect.idle.bounds) == TRUE;
 }
-
-#pragma force_active on
 
 // Two fading copies move apart sideways.
 BOOL FootprintStamp_UpdateSpreadX(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -772,8 +724,6 @@ BOOL FootprintStamp_UpdateSpreadX(FootprintStampBoard *board, FootprintStampObj 
     return FALSE;
 }
 
-#pragma force_active reset
-
 void FootprintStamp_DrawSpreadX(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
     FootprintStampSpread *spread;
@@ -810,8 +760,6 @@ BOOL FootprintStamp_HitSpreadX(FootprintStampBoard *board, FootprintStampObj *st
     } while (i < 3);
     return FALSE;
 }
-
-#pragma force_active on
 
 // Two fading copies move apart up and down.
 BOOL FootprintStamp_UpdateSpreadY(FootprintStampBoard *board, FootprintStampObj *stamp) {
@@ -865,8 +813,6 @@ BOOL FootprintStamp_UpdateSpreadY(FootprintStampBoard *board, FootprintStampObj 
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 void FootprintStamp_DrawSpreadY(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;

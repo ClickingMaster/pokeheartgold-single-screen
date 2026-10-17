@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "6cae54b2490adcae4a38ec17cc18b99da582717d",
+  "commit": "64529187fbc80d3165727403fb816cd0870e3cc7",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "d1715c265e2525fd9476788f167f23f379d84a8d9a2ea0efabda55f3e752e5fc",
+    "ARM9": "5488c687bd6a7cf5bc17374a41292c956eb80fbaf55ef50a245d95730e58324d",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -5072,17 +5072,9 @@
       "cpu": "ARM9",
       "module": "OVY_89",
       "object": "footprint_stamp.o",
-      "bytes": 4090,
+      "bytes": 9042,
       "status": "c",
       "source": "src/application/footprint_stamp.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_89",
-      "object": "footprint_stamp_board.o",
-      "bytes": 4460,
-      "status": "c",
-      "source": "src/application/footprint_stamp_board.c"
     },
     {
       "cpu": "ARM9",
@@ -5091,22 +5083,6 @@
       "bytes": 7718,
       "status": "c",
       "source": "src/application/footprint_stamp_effects.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_89",
-      "object": "footprint_stamp_sprites.o",
-      "bytes": 172,
-      "status": "c",
-      "source": "src/application/footprint_stamp_sprites.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_89",
-      "object": "footprint_stamp_texture.o",
-      "bytes": 320,
-      "status": "c",
-      "source": "src/application/footprint_stamp_texture.c"
     },
     {
       "cpu": "ARM9",

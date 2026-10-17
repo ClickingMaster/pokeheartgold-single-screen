@@ -67,8 +67,6 @@ typedef struct PokeathlonRingDropCpuSpot {
 extern const PokeathlonRingDropCpuSpot gPokeathlonRingDropCpuSwitchSpots[];
 extern const s16 gPokeathlonRingDropCpuSwitchSpotsY[];
 
-#pragma force_active on
-
 static void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course);
 static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player);
 
@@ -95,13 +93,9 @@ PokeathlonRingDropCpu *PokeathlonRingDropCpu_New(PokeathlonCourseData *course, e
     return cpu;
 }
 
-#pragma force_active reset
-
 void PokeathlonRingDropCpu_Free(PokeathlonRingDropCpu *cpu) {
     Heap_Free(cpu);
 }
-
-#pragma force_active on
 
 void PokeathlonRingDropCpu_Update(PokeathlonRingDropCpu *cpu) {
     int i = 0;
@@ -114,8 +108,6 @@ void PokeathlonRingDropCpu_Update(PokeathlonRingDropCpu *cpu) {
         } while (i < cpu->count);
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonRingDropCpu_InitPlayer(PokeathlonRingDropCpuPlayer *player, u8 participant, PokeathlonCourseData *course) {
     MI_CpuFill8(player, 0, sizeof(*player));
@@ -142,8 +134,6 @@ static BOOL PokeathlonRingDrop_IsInDirection(const VecFx32 *a, const VecFx32 *b,
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 static void PokeathlonRingDropCpu_Decide(PokeathlonRingDropCpuPlayer *player) {
     int direction;
@@ -274,8 +264,6 @@ static void PokeathlonRingDropCpu_GoSwitch(PokeathlonRingDropCpuPlayer *player) 
     }
 }
 
-#pragma force_active reset
-
 // Switches for sure below 10% stamina, never at 50% or more.
 static BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *player) {
     s32 roll = MTRandom() % 100;
@@ -294,8 +282,6 @@ static BOOL PokeathlonRingDropCpu_ShouldSwitch(PokeathlonRingDropCpuPlayer *play
     }
     return roll < chance;
 }
-
-#pragma force_active on
 
 static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *player) {
     s16 position[2];
@@ -350,5 +336,3 @@ static void PokeathlonRingDropCpu_UpdatePlayer(PokeathlonRingDropCpuPlayer *play
         }
     }
 }
-
-#pragma force_active reset

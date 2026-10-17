@@ -116,8 +116,6 @@ extern const BgTemplate sLampJumpBgTemplate_Sub2;
 extern const GraphicsBanks sLampJumpGraphicsBanks;
 extern const u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon
 
-#pragma force_active on
-
 static void PokeathlonLampJump_SetGfxBanks(void);
 static void PokeathlonLampJump_InitBgs(BgConfig *bgConfig);
 static void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump);
@@ -284,8 +282,6 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonLampJump_Draw(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
 
@@ -310,8 +306,6 @@ BOOL PokeathlonLampJump_ShowResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList_SaveEventPoints(gfx, 5);
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
@@ -352,8 +346,6 @@ BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
     Heap_Destroy((enum HeapID)143);
     return TRUE;
 }
-
-#pragma force_active reset
 
 static void PokeathlonLampJump_SetGfxBanks(void) {
     GraphicsBanks banks = sLampJumpGraphicsBanks;
@@ -402,8 +394,6 @@ BOOL PokeathlonLampJump_Play(PokeathlonCourseData *course, u8 *state) {
     return FALSE;
 }
 
-#pragma force_active on
-
 BOOL PokeathlonLampJump_CalcScores(PokeathlonCourseData *course, u8 *state) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
     int self, i, score, participant, member, total;
@@ -449,8 +439,6 @@ BOOL PokeathlonLampJump_CalcScores(PokeathlonCourseData *course, u8 *state) {
     }
     return TRUE;
 }
-
-#pragma force_active reset
 
 static void PokeathlonLampJump_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
@@ -498,8 +486,6 @@ static void PokeathlonLampJump_LoadBgGfx(PokeathlonLampJump *lampJump) {
     lampJump->bg2ScreenFile = GfGfxLoader_GetScrnData(NARC_a_1_6_8, 14, FALSE, &lampJump->bg2Screen, lampJump->heapId);
 }
 
-#pragma force_active on
-
 static BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
     u32 *sent = (u32 *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course));
@@ -534,8 +520,6 @@ static BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
 
@@ -546,8 +530,6 @@ static void PokeathlonLampJump_UpdateDisplay(PokeathlonCourseData *course) {
     PokeathlonCourse_UpdateTimeUpCountdown(course, lampJump->timer);
     PokeathlonLampJump_Draw3D(lampJump);
 }
-
-#pragma force_active on
 
 static void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course) {
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
@@ -661,8 +643,6 @@ static void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course) {
     u8 *received;
     PokeathlonLampJump *lampJump;
@@ -692,8 +672,6 @@ static void PokeathlonLampJump_GetFlick(int touchX, int touchY, const VecFx32 *s
         flick->y = FX32_CONST(112);
     }
 }
-
-#pragma force_active on
 
 static u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 touchX, u16 touchY) {
     fx32 minDistance = PokeathlonCourse_GetTouchRadius(lampJump) << FX32_SHIFT;
@@ -740,8 +718,6 @@ static u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 to
     }
     return nearest;
 }
-
-#pragma force_active reset
 
 BOOL PokeathlonLampJump_CheckCollision(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
     VecFx32 diff;

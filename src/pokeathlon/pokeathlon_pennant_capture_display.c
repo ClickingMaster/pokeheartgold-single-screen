@@ -47,8 +47,6 @@ extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteId
 // (fields are read at their offset from the cursor); that is the form the code matches with.
 #define DISPLAY_CURSOR_STEP(cursor, size) ((PokeathlonPennantCaptureDisplay *)((u8 *)(cursor) + (size)))
 
-#pragma force_active on
-
 static void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *display, int participant, int member);
 static void PokeathlonPennantCaptureDisplay_PrintName(PokeathlonPennantCaptureDisplay *display, u32 member);
 
@@ -75,8 +73,6 @@ PokeathlonPennantCaptureDisplay *PokeathlonPennantCaptureDisplay_New(enum HeapID
     PokeathlonPennantCaptureDisplay_PrintName(display, 1);
     return display;
 }
-
-#pragma force_active reset
 
 void PokeathlonPennantCaptureDisplay_Delete(PokeathlonPennantCaptureDisplay *display) {
     int i;
@@ -317,8 +313,6 @@ void PokeathlonPennantCaptureDisplay_SetScore(PokeathlonPennantCaptureDisplay *d
     ScheduleBgTilemapBufferTransfer(display->bgConfig, 5);
 }
 
-#pragma force_active on
-
 // Slides the picture of the outgoing team member out and the incoming one in (two sprites in turn).
 BOOL PokeathlonPennantCaptureDisplay_SlideMonPic(PokeathlonPennantCaptureDisplay *display, int member) {
     int *state = &display->picState;
@@ -369,8 +363,6 @@ BOOL PokeathlonPennantCaptureDisplay_SlideMonPic(PokeathlonPennantCaptureDisplay
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL PokeathlonPennantCaptureDisplay_StepSwapWait(PokeathlonPennantCaptureDisplay *display, u32 participant) {
     if (participant == 0 || participant >= 4) {

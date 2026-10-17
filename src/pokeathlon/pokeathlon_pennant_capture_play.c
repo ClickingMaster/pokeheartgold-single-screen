@@ -58,8 +58,6 @@ typedef struct PokeathlonPennantCaptureLayout {
     u8 pennantSpots[20][2];
 } PokeathlonPennantCaptureLayout;
 
-#pragma force_active on
-
 static void PokeathlonPennantCapture_HostStep(PokeathlonCourseData *course);
 static BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course);
 static void PokeathlonPennantCapture_ShowFrame(PokeathlonCourseData *course);
@@ -96,8 +94,6 @@ void PokeathlonPennantCapture_LoadBgGfx(PokeathlonPennantCapture *work) {
     GfGfxLoader_GXLoadPal(NARC_a_2_2_4, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 64, work->heapId);
     PokeathlonPennantCaptureDisplay_LoadBgGfx(work->display);
 }
-
-#pragma force_active reset
 
 void PokeathlonPennantCapture_LoadSpriteResources(PokeathlonCourseSpritePool *pool) {
     PokeathlonCourseSpritePool_LoadChar(pool, 0xE2, 17, 0x68, 1);
@@ -170,8 +166,6 @@ void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, Poke
     }
 }
 
-#pragma force_active on
-
 // Places the obstacles, field items and pennant spots of the chosen layout, then fades in.
 BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *state) {
     PokeathlonPennantCaptureLayout layout;
@@ -239,8 +233,6 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
     PokeathlonPennantCapture_ShowFrame(course);
     return FALSE;
 }
-
-#pragma force_active reset
 
 // Start countdown, play until the time is up, then the finish and the fade out.
 BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state) {
@@ -311,8 +303,6 @@ static inline void ResetDrag(PokeathlonPennantCapturePlayer *player) {
     player->cpuFrom.z = 0;
     player->cpuTarget = player->cpuFrom;
 }
-
-#pragma force_active on
 
 // Host only: reads the participants' inputs, turns touch drags on the own Pokemon into flicks, moves everything
 // and packs the frame every participant shows.
@@ -503,8 +493,6 @@ void PokeathlonPennantCapture_PackFrame(PokeathlonPennantCapture *work, Pokeathl
     frame->words[4] |= work->finished << 31;
     frame->timeLeft = work->timeLeft;
 }
-
-#pragma force_active reset
 
 // Sends the own touch input; TRUE once the host's frame says the event is finished.
 static BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {

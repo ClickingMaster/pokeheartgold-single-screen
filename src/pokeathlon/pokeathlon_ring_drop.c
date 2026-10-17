@@ -56,8 +56,6 @@ static void PokeathlonScreenShake_Init(PokeathlonScreenShake *shake, BgConfig *b
     shake->spriteSystem = spriteSystem;
 }
 
-#pragma force_active on
-
 void PokeathlonScreenShake_Start(PokeathlonScreenShake *shake, int magnitude, int duration) {
     GF_ASSERT(shake->bgConfig != NULL);
     GF_ASSERT(shake->spriteSystem != NULL);
@@ -73,13 +71,9 @@ void PokeathlonScreenShake_Start(PokeathlonScreenShake *shake, int magnitude, in
     shake->task = SysTask_CreateOnMainQueue((SysTaskFunc)PokeathlonScreenShake_Task, shake, 2);
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonRingDrop_IsOnSwitchButton(int x, int y) {
     return x >= 104 && x < 160 && y >= 0 && y < 32;
 }
-
-#pragma force_active on
 
 BOOL PokeathlonRingDrop_IsWithinDistance(VecFx32 *a, VecFx32 *b, fx32 distance) {
     VecFx32 delta;
@@ -100,8 +94,6 @@ static void PokeathlonRingDrop_Decay(fx32 *value, fx32 amount) {
         *value -= amount * (*value > 0 ? 1 : -1);
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonRingDrop_DecayVelocity(VecFx32 *velocity, fx32 amountX, fx32 amountY) {
     PokeathlonRingDrop_Decay(&velocity->x, amountX);
@@ -311,8 +303,6 @@ s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, int participant
     return ringDrop->players[participant].mon.state;
 }
 
-#pragma force_active on
-
 VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, int participant) {
     u32 mon = (u32) & ((PokeathlonRingDrop *)PokeathlonCourse_GetWork(course))->players[participant].mon;
     return (VecFx32 *)(mon + offsetof(PokeathlonRingDropMon, position));
@@ -331,8 +321,6 @@ u32 PokeathlonRingDrop_GetMonDirection(PokeathlonCourseData *course, int partici
     return ((PokeathlonRingDrop *)PokeathlonCourse_GetWork(course))->players[participant].mon.flags.bits.direction;
 }
 
-#pragma force_active reset
-
 u8 PokeathlonRingDrop_GetMonStamina(PokeathlonCourseData *course, int participant) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     PokeathlonRingDropMember *member = ringDrop->players[participant].mon.member;
@@ -345,8 +333,6 @@ u8 PokeathlonRingDrop_GetMonStaminaPercent(PokeathlonCourseData *course, int par
     return (FX_Div(member->stamina, member->params->stamina) * 100) >> 12;
 }
 
-#pragma force_active on
-
 u32 PokeathlonRingDrop_IsMonSwitching(PokeathlonCourseData *course, int participant) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     return ringDrop->players[participant].mon.flags.bits.switching;
@@ -357,14 +343,10 @@ u32 PokeathlonRingDrop_IsMonPushed(PokeathlonCourseData *course, int participant
     return ringDrop->players[participant].mon.flags.bits.pushed;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonRingDrop_CanMonAct(PokeathlonCourseData *course, int participant) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     return PokeathlonRingDropMon_CanAct(&ringDrop->players[participant].mon);
 }
-
-#pragma force_active on
 
 void PokeathlonRingDrop_SetMonTarget(PokeathlonCourseData *course, int participant, const s16 *target) {
     u8 *ringDrop = PokeathlonCourse_GetWork(course);
@@ -387,8 +369,6 @@ void PokeathlonRingDrop_RequestJump(PokeathlonCourseData *course, int participan
     ((PokeathlonRingDropMonFlags *)((u8 *)flags + offset))->bits.jumpRequested = TRUE;
 }
 
-#pragma force_active reset
-
 void PokeathlonRingDrop_StartMonSwitch(PokeathlonCourseData *course, int participant) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
     PokeathlonRingDropMon_StartSwitch(&ringDrop->players[participant].mon);
@@ -410,7 +390,6 @@ static void PokeathlonRingDrop_SetGfxBanks(void) {
 
 // Every participant: the host first runs the ring on all inputs and sends the frame, then the
 // frame received is shown.
-#pragma force_active on
 #pragma opt_lifetimes off
 
 static void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
@@ -482,7 +461,6 @@ static void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
 }
 
 #pragma opt_lifetimes reset
-#pragma force_active reset
 
 // Callback when the course ends: reports the own score.
 static void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
@@ -496,7 +474,6 @@ static void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {
 
 // Every participant: reads the touch screen into the own input; TRUE once the host reports the
 // time is up.
-#pragma force_active on
 
 static BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
@@ -523,5 +500,3 @@ static BOOL PokeathlonRingDrop_ReadInput(PokeathlonCourseData *course) {
     }
     return FALSE;
 }
-
-#pragma force_active reset

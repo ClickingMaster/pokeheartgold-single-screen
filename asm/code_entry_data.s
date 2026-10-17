@@ -85,9 +85,3 @@ sCodeEntryOamManagerParam:
 	.data
 
 	; affine scales of a digit growing into / shrinking out of the selected group
-	.public sCodeEntryGrowScales
-sCodeEntryGrowScales:
-	.float 0.5, 0.2, 0.5, 1.0, 1.2, 1.0, 1.0
-	.public sCodeEntryShrinkScales
-sCodeEntryShrinkScales:
-	.float 0.8, 0.6, 0.4, 0.2, 0.8, 1.0, 1.0

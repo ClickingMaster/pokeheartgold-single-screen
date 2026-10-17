@@ -546,6 +546,8 @@ void BattlePartyMenu_Create(BattlePartyContext *context) {
     menu->battlerPosition = BattleSystem_GetBattlerType(context->battleSystem, context->battlerId);
 }
 
+#pragma force_active reset
+
 enum {
     BATTLE_PARTY_STATE_SETUP,
     BATTLE_PARTY_STATE_PARTY_LIST,
@@ -916,8 +918,6 @@ static int BattlePartyMenu_HandleMoveDetailInput(BattlePartyMenu *menu) {
     return BATTLE_PARTY_STATE_MOVE_DETAIL;
 }
 
-#pragma force_active reset
-
 static int BattlePartyMenu_HandleLearnMoveInput(BattlePartyMenu *menu) {
     int input = BattlePartyMenu_CheckTouchHitbox(menu, sBattlePartyLearnMoveHitboxes);
 
@@ -1053,8 +1053,6 @@ static int BattlePartyMenu_HandleRestorePPInput(BattlePartyMenu *menu) {
     }
     return BATTLE_PARTY_STATE_RESTORE_PP;
 }
-
-#pragma force_active on
 
 static int BattlePartyMenu_ShowPartyListPage(BattlePartyMenu *menu) {
     BattlePartyMenu_ChangePage(menu, 0);
@@ -1479,8 +1477,6 @@ static int BattlePartyMenu_CheckTouchHitbox(BattlePartyMenu *menu, const Touchsc
     return TouchscreenHitbox_FindRectAtTouchNew(hitboxes);
 }
 
-#pragma force_active reset
-
 // 0: empty slot, 1: a mon the player can use, 2: a mon of the partner trainer (multi battle) or a second
 // battler slot
 static int BattlePartyMenu_GetSlotType(BattlePartyMenu *menu, int slot) {
@@ -1505,8 +1501,6 @@ return_one:
 return_two:
     return 2;
 }
-
-#pragma force_active on
 
 static u8 BattlePartyMenu_FindNextMon(BattlePartyMenu *menu, int slot, int direction) {
     int start = slot;
@@ -1551,8 +1545,6 @@ static u8 BattlePartyMenu_FindNextMon(BattlePartyMenu *menu, int slot, int direc
     return 0xFF;
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_DrawExpBar(BattlePartyMenu *menu, int page) {
     u8 pixels;
     u8 i;
@@ -1596,8 +1588,6 @@ static void BattlePartyMenu_SetExpBarTile(BattlePartyMenu *menu, u16 tile, u16 x
     FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile, (u8)x, (u8)y, 1, 1, TILEMAP_FILL_KEEP_PAL);
 }
 
-#pragma force_active on
-
 // writes the 2x2 tile block at row 14 of background 7 for one of six slots
 static void BattlePartyMenu_SetContestInfoTile(BattlePartyMenu *menu, u16 tile, int pos) {
     FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile, pos * 2 + 2, 14, 1, 1, TILEMAP_FILL_KEEP_PAL);
@@ -1605,8 +1595,6 @@ static void BattlePartyMenu_SetContestInfoTile(BattlePartyMenu *menu, u16 tile, 
     FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile + 32, pos * 2 + 2, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
     FillBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_3, tile + 33, pos * 2 + 3, 15, 1, 1, TILEMAP_FILL_KEEP_PAL);
 }
-
-#pragma force_active reset
 
 static void BattlePartyMenu_ClearContestInfoTiles(BattlePartyMenu *menu) {
     u16 i;
@@ -1644,8 +1632,6 @@ static void BattlePartyMenu_LoadPageTilemaps(BattlePartyMenu *menu, int page) {
         Heap_Free(screenFile);
     }
 }
-
-#pragma force_active on
 
 // Expands message msgNo with the mon's nickname into menu->string.
 static inline void BattlePartyMenu_BufferSlotMonMessage(BattlePartyMenu *menu, BattlePartyMenuMon *slot, int msgNo) {
@@ -1728,7 +1714,6 @@ static int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 static u8 BattlePartyMenu_IsSelectedMonEgg(BattlePartyMenu *menu) {
     u8 slot = menu->context->selectedMon;
@@ -1741,8 +1726,6 @@ static u8 BattlePartyMenu_IsSelectedMonEgg(BattlePartyMenu *menu) {
 
 // Multi battles alongside an AI partner are not treated as double or multi battles here.
 #define BATTLE_TYPE_AI_MULTI (BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI)
-
-#pragma force_active on
 
 static BOOL BattlePartyMenu_IsDoubleBattle(BattlePartyMenu *menu) {
     u32 battleType = BattleSystem_GetBattleType(menu->context->battleSystem);
@@ -1790,8 +1773,6 @@ static BOOL BattlePartyMenu_IsSelectedMoveHM(BattlePartyMenu *menu) {
     return MoveIsHM(move);
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_ClearBattleMoveInfo(BattlePartyMenu *menu) {
     ManagedSprite_SetDrawFlag(menu->sprites[26], FALSE);
     ClearWindowTilemapAndScheduleTransfer(&menu->pageWindows[10]);
@@ -1799,14 +1780,10 @@ static void BattlePartyMenu_ClearBattleMoveInfo(BattlePartyMenu *menu) {
     ClearWindowTilemapAndScheduleTransfer(&menu->pageWindows[7]);
 }
 
-#pragma force_active on
-
 static void BattlePartyMenu_ClearContestMoveInfo(BattlePartyMenu *menu) {
     BattlePartyMenu_ClearContestInfoTiles(menu);
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_3);
 }
-
-#pragma force_active reset
 
 static void BattlePartyMenu_ConsumeItem(BattleSystem *battleSystem, u16 item, u8 pocket, enum HeapID heapID) {
     if (item != ITEM_BLUE_FLUTE && item != ITEM_RED_FLUTE && item != ITEM_YELLOW_FLUTE) {
@@ -1872,8 +1849,6 @@ static void BattlePartyMenu_AddPageWindows(BattlePartyMenu *menu, int page) {
         AddWindow(menu->bgConfig, &menu->pageWindows[i], &templates[i]);
     }
 }
-
-#pragma force_active on
 
 static void BattlePartyMenu_RemovePageWindows(BattlePartyMenu *menu) {
     WindowArray_Delete(menu->pageWindows, menu->pageWindowCount);
@@ -1970,8 +1945,6 @@ static void BattlePartyMenu_PrintMonName(BattlePartyMenu *menu, int window, int 
     ScheduleWindowCopyToVram(win);
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_PrintMonLevel(BattlePartyMenu *menu, int window, int slot, int x, u8 y) {
     int offset = window << 4;
     u32 level = menu->mons[slot].level;
@@ -1979,8 +1952,6 @@ static void BattlePartyMenu_PrintMonLevel(BattlePartyMenu *menu, int window, int
     MessagePrinter_PrintGlyphAndUInt(menu->msgPrinter, 1, level, 3, PRINTING_MODE_LEFT_ALIGN, (Window *)((u8 *)menu->pageWindows + offset), x + 8, y);
     ScheduleWindowCopyToVram((Window *)((u8 *)menu->pageWindows + offset));
 }
-
-#pragma force_active on
 
 static void BattlePartyMenu_PrintMonHP(BattlePartyMenu *menu, int window, int slot, u32 x, u8 y) {
     BattlePartyMenuMon *mon = &menu->mons[slot];
@@ -2023,8 +1994,6 @@ static void BattlePartyMenu_DrawHPBar(BattlePartyMenu *menu, int window, int slo
         ScheduleWindowCopyToVram(&menu->pageWindows[window]);
     }
 }
-
-#pragma force_active reset
 
 static void BattlePartyMenu_PrintAbilityName(BattlePartyMenu *menu, int window, int slot) {
     String *string = String_New(16, menu->context->heapID);
@@ -2077,8 +2046,6 @@ static void BattlePartyMenu_PrintMoveName(BattlePartyMenu *menu, int move, int w
     String_Delete(string);
     ScheduleWindowCopyToVram(win);
 }
-
-#pragma force_active on
 
 static void BattlePartyMenu_PrintPPLabel(BattlePartyMenu *menu, int window, u16 x, u32 y) {
     String *string = NewString_ReadMsgData(menu->msgData, msg_0006_00014);
@@ -2493,8 +2460,6 @@ static void BattlePartyMenu_PrintPartyMonLevel(BattlePartyMenu *menu, int slot) 
     }
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_PrintMonMenuPage(BattlePartyMenu *menu) {
     FillWindowPixelBuffer(menu->pageWindows, 0);
     FillWindowPixelBuffer(menu->pageWindows + 1, 0);
@@ -2510,8 +2475,6 @@ static void BattlePartyMenu_PrintMonMenuPage(BattlePartyMenu *menu) {
     ScheduleWindowCopyToVram(menu->pageWindows + 2);
     ScheduleWindowCopyToVram(menu->pageWindows + 3);
 }
-
-#pragma force_active on
 
 typedef struct BattlePartyMenuNameLocals {
     String *volatile name;
@@ -2602,8 +2565,6 @@ static void BattlePartyMenu_PrintCheckMovesPage(BattlePartyMenu *menu) {
     menu->windowSet ^= 1;
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_PrintSummaryPage(BattlePartyMenu *menu) {
     u32 base = (u32)menu->windowSet * 22;
 
@@ -2645,7 +2606,6 @@ static void BattlePartyMenu_PrintSummaryPage(BattlePartyMenu *menu) {
     menu->windowSet ^= 1;
 }
 
-#pragma force_active on
 #pragma opt_common_subs off
 
 // The move detail page has two sets of 11 windows (`windowSet`); windows 6-10 are shared.
@@ -3045,8 +3005,6 @@ static void BattlePartyMenu_ShowSpriteAt(ManagedSprite *sprite, int x, int y) {
     ManagedSprite_SetPositionXY(sprite, x, y);
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_SetMonIconPalettes(BattlePartyMenu *menu) {
     int i;
 
@@ -3101,8 +3059,6 @@ static void BattlePartyMenu_ShowHeldItemIcon(u16 item, ManagedSprite *sprite, in
         BattlePartyMenu_ShowSpriteAt(sprite, x, y);
     }
 }
-
-#pragma force_active on
 
 static void BattlePartyMenu_ShowCapsuleIcon(BOOL hasCapsule, ManagedSprite *sprite, int x, int y) {
     if (hasCapsule != FALSE) {
@@ -3317,8 +3273,6 @@ static void BattlePartyMenu_SetSpriteAnim(ManagedSprite *sprite, u32 anim) {
     }
 }
 
-#pragma force_active reset
-
 static int BattlePartyMenu_GetMonIconAnim(BattlePartyMenuMon *mon) {
     if (mon->hp == 0) {
         return 0;
@@ -3365,7 +3319,6 @@ static s16 BattlePartyMenu_CalcConditionMarkerCoord(u8 stat, int target, int bas
     return base + (s16)(n >> 16);
 }
 
-#pragma force_active on
 #pragma opt_propagation off
 
 static void BattlePartyMenu_ShowConditionMarkers(BattlePartyMenu *menu) {
@@ -3396,7 +3349,6 @@ static void BattlePartyMenu_ShowConditionMarkers(BattlePartyMenu *menu) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 static void BattlePartyMenu_CreateCursor(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
@@ -3429,8 +3381,6 @@ static void BattlePartyMenu_SetForgetMoveCursorMask(BattlePartyMenu *menu) {
     }
 }
 
-#pragma force_active on
-
 static void BattlePartyMenu_SetPageCursor(BattlePartyMenu *menu, u32 page) {
     BattleDpadCursor_SetBoxes(menu->cursor, sBattlePartyPageCursorBoxes[page]);
     switch (page) {
@@ -3460,15 +3410,11 @@ static void BattlePartyMenu_SetPageCursor(BattlePartyMenu *menu, u32 page) {
     }
 }
 
-#pragma force_active reset
-
 static void BattlePartyMenu_DeactivateCursor(BattlePartyMenu *menu) {
     BattleDpadCursor_SetActive(menu->cursor, 0);
     BattleDpadCursor_ResetPosition(menu->cursor);
     BattleCursor_Disable(BattleDpadCursor_GetBattleCursor(menu->cursor));
 }
-
-#pragma force_active on
 
 static void BattlePartyMenu_StoreButtonTilemaps(BattlePartyMenu *menu, const u16 *screen) {
     BattlePartyMenu_CopyTilemapRect(menu->monButtonTiles[0], screen, 0, 0, 16, 6);
@@ -3505,8 +3451,6 @@ static void BattlePartyMenu_StoreButtonTilemaps(BattlePartyMenu *menu, const u16
     BattlePartyMenu_CopyTilemapRect(menu->moveTabButtonTiles[1], screen, 5, 59, 5, 2);
     BattlePartyMenu_CopyTilemapRect(menu->moveTabButtonTiles[2], screen, 10, 59, 5, 2);
 }
-
-#pragma force_active reset
 
 static void BattlePartyMenu_StoreLargeButtonTilemaps(BattlePartyMenu *menu, const u16 *screen) {
     BattlePartyMenu_CopyTilemapRect(menu->shiftButtonTiles[0], screen, 0, 0, 30, 17);
@@ -3583,8 +3527,6 @@ static u16 *BattlePartyMenu_GetButtonTilemap(BattlePartyMenu *menu, int button, 
     }
 }
 
-#pragma force_active on
-
 // Frame 3 is the disabled look. Mon buttons are greyed for an Egg's HP bar, shown red for a fainted mon and
 // blue for a partner's mon; button 27 (the move to learn) uses palette 10.
 static void BattlePartyMenu_BuildButtonTilemap(BattlePartyMenu *menu, u16 *dst, int button, int frame, u8 palette) {
@@ -3644,8 +3586,6 @@ static void BattlePartyMenu_DrawButton(BattlePartyMenu *menu, u8 button, u8 fram
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_2);
     Heap_Free(buffer);
 }
-
-#pragma force_active reset
 
 typedef void (*ScrollWindowFunc)(Window *window, int direction, int pixels, int fillValue);
 typedef void (*OffsetSpriteFunc)(ManagedSprite *sprite, int dx, int dy);

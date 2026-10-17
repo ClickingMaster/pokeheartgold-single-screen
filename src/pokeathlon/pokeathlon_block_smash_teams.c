@@ -75,8 +75,6 @@ typedef struct PokeathlonBlockSmashAnimElement {
     s16 y;
 } PokeathlonBlockSmashAnimElement;
 
-#pragma force_active on
-
 static void PokeathlonBlockSmashMon_UpdateReady(PokeathlonBlockSmashMon *mon, BOOL stackDropping);
 static void PokeathlonBlockSmashMon_UpdateHit(PokeathlonBlockSmashMon *mon);
 static void PokeathlonBlockSmashMon_UpdateExhausted(PokeathlonBlockSmashMon *mon);
@@ -150,8 +148,6 @@ PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteS
     return mon;
 }
 
-#pragma force_active reset
-
 void PokeathlonBlockSmashMon_Delete(PokeathlonBlockSmashMon *mon) {
     s32 i;
     PokeathlonBlockSmashMon *cursor;
@@ -166,8 +162,6 @@ void PokeathlonBlockSmashMon_Delete(PokeathlonBlockSmashMon *mon) {
     }
     Heap_Free(mon);
 }
-
-#pragma force_active on
 
 // Per frame; `stackDropping`: a new stack is being dropped (no hits).
 void PokeathlonBlockSmashMon_Update(PokeathlonBlockSmashMon *mon, BOOL stackDropping) {
@@ -236,8 +230,6 @@ void PokeathlonBlockSmashMon_OnHit(PokeathlonBlockSmashMon *mon, BOOL hitSpot, u
     PokeathlonBlockSmashMon_SetMode(mon, BLOCK_SMASH_MON_HIT);
 }
 
-#pragma force_active reset
-
 void PokeathlonBlockSmashMon_StartSwitch(PokeathlonBlockSmashMon *mon) {
     GF_ASSERT(mon->mode != BLOCK_SMASH_MON_SWITCHING);
     PokeathlonBlockSmashMon_SetMode(mon, BLOCK_SMASH_MON_SWITCHING);
@@ -259,8 +251,6 @@ u32 PokeathlonBlockSmashMon_GetMode(PokeathlonBlockSmashMon *mon) {
     return mon->mode;
 }
 
-#pragma force_active on
-
 BOOL PokeathlonBlockSmashMon_CanSwitch(PokeathlonBlockSmashMon *mon) {
     BOOL result = TRUE;
     int mode = mon->mode;
@@ -274,8 +264,6 @@ PokeathlonBlockSmashMember *PokeathlonBlockSmashMon_GetActiveMember(PokeathlonBl
     GF_ASSERT(mon);
     return &mon->members[mon->member];
 }
-
-#pragma force_active reset
 
 u32 PokeathlonBlockSmashMon_IsGaugeFull(PokeathlonBlockSmashMon *mon) {
     GF_ASSERT(mon != NULL);
@@ -402,8 +390,6 @@ static void PokeathlonBlockSmashMon_UpdateExhausted(PokeathlonBlockSmashMon *mon
         PokeathlonBlockSmashMon_SetMode(mon, BLOCK_SMASH_MON_READY);
     }
 }
-
-#pragma force_active on
 
 // The switch: smoke, the ball flies up, the waiting Pokemon move up, the next one comes out.
 static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
@@ -533,8 +519,6 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
         break;
     }
 }
-
-#pragma force_active reset
 
 // The tired animation of the active Pokemon and of the waiting ones (slower with less stamina).
 static void PokeathlonBlockSmashMon_UpdateTired(PokeathlonBlockSmashMon *mon) {
@@ -991,8 +975,6 @@ static void PokeathlonBlockSmashMon_SetWaitingPosition(PokeathlonBlockSmashMon *
     ManagedSprite_SetPositionXYWithSubscreenOffset((&mon->sprites[2])[sprite], x, y - 24, FX32_CONST(256));
 }
 
-#pragma force_active on
-
 // Only the host plays the participants without a player.
 PokeathlonBlockSmashCpu *PokeathlonBlockSmashCpu_New(PokeathlonCourseData *course, enum HeapID heapId) {
     u32 i;
@@ -1017,13 +999,9 @@ PokeathlonBlockSmashCpu *PokeathlonBlockSmashCpu_New(PokeathlonCourseData *cours
     return cpu;
 }
 
-#pragma force_active reset
-
 void PokeathlonBlockSmashCpu_Delete(PokeathlonBlockSmashCpu *cpu) {
     Heap_Free(cpu);
 }
-
-#pragma force_active on
 
 void PokeathlonBlockSmashCpu_Update(PokeathlonBlockSmashCpu *cpu) {
     u32 i = 0;
@@ -1050,8 +1028,6 @@ void PokeathlonBlockSmashCpu_WriteReports(PokeathlonBlockSmashCpu *cpu) {
         } while (i < cpu->count);
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonBlockSmashCpuPlayer_Init(PokeathlonBlockSmashCpuPlayer *player, u8 participant, PokeathlonCourseData *course) {
     MI_CpuFill8(player, 0, sizeof(*player));
@@ -1149,8 +1125,6 @@ static u32 PokeathlonBlockSmashCpuPlayer_UpdateExhausted(PokeathlonBlockSmashCpu
     return 0;
 }
 
-#pragma force_active on
-
 // Hitting again right after a hit: more likely with more stamina and a fuller gauge.
 static BOOL PokeathlonBlockSmashCpuPlayer_DecideHitAgain(PokeathlonBlockSmashCpuPlayer *player) {
     int chance = 0;
@@ -1175,8 +1149,6 @@ static BOOL PokeathlonBlockSmashCpuPlayer_DecideHitAgain(PokeathlonBlockSmashCpu
     return FALSE;
 }
 
-#pragma force_active reset
-
 // The chance to hit the weak spot depends on the Pokemon's spot kind (gPokeathlonBlockSmashCpuSpotKindChances).
 static u32 PokeathlonBlockSmashCpuPlayer_DecideSpotHit(PokeathlonBlockSmashCpuPlayer *player) {
     s32 chance = 0;
@@ -1189,8 +1161,6 @@ static u32 PokeathlonBlockSmashCpuPlayer_DecideSpotHit(PokeathlonBlockSmashCpuPl
     }
     return FALSE;
 }
-
-#pragma force_active on
 
 // Switching: more likely with less stamina and a fuller gauge.
 static BOOL PokeathlonBlockSmashCpuPlayer_DecideSwitch(PokeathlonBlockSmashCpuPlayer *player) {
@@ -1216,8 +1186,6 @@ static BOOL PokeathlonBlockSmashCpuPlayer_DecideSwitch(PokeathlonBlockSmashCpuPl
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void PokeathlonBlockSmashCpuPlayer_SetMode(PokeathlonBlockSmashCpuPlayer *player, int mode) {
     if (mode != BLOCK_SMASH_CPU_SWITCHING) {
         if (mode == BLOCK_SMASH_CPU_EXHAUSTED) {
@@ -1239,8 +1207,6 @@ static void PokeathlonBlockSmashCpuPlayer_SetMode(PokeathlonBlockSmashCpuPlayer 
     player->mode = mode;
     player->modeFrames = 0;
 }
-
-#pragma force_active on
 
 // Like PokeathlonBlockSmashBlocks_Hit for the CPU: the power goes into blocks of 100 health.
 static void PokeathlonBlockSmashCpuPlayer_Hit(PokeathlonBlockSmashCpuPlayer *player, int hitSpot) {
@@ -1298,8 +1264,6 @@ static void PokeathlonBlockSmashCpuPlayer_WriteReport(PokeathlonBlockSmashCpuPla
     report->switching = player->mode == BLOCK_SMASH_CPU_SWITCHING;
 }
 
-#pragma force_active reset
-
 static void PokeathlonBlockSmashCpuPlayer_AddGauge(PokeathlonBlockSmashCpuPlayer *player, int hitSpot, u32 broken) {
     GF_ASSERT(!player->gaugeFull);
     if (hitSpot) {
@@ -1329,8 +1293,6 @@ static void PokeathlonBlockSmashCpuPlayer_UpdateGauge(PokeathlonBlockSmashCpuPla
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonBlockSmashCpuPlayer_EndFullGauge(PokeathlonBlockSmashCpuPlayer *player) {
     PokeathlonBlockSmashMember *member = &player->members[player->member];
     player->gaugeFull = FALSE;
@@ -1338,8 +1300,6 @@ static void PokeathlonBlockSmashCpuPlayer_EndFullGauge(PokeathlonBlockSmashCpuPl
     player->gauge = 0;
     member->stamina = 10;
 }
-
-#pragma force_active reset
 
 // The touch screen's sprites (resources 10000).
 ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority) {
@@ -1392,8 +1352,6 @@ static void PokeathlonBlockSmash_InitMembers(PokeathlonBlockSmashMember *members
     }
 }
 
-#pragma force_active on
-
 // Every 30 frames +5 stamina for the waiting Pokemon, every 60 frames +8 for the active one.
 static void PokeathlonBlockSmash_RecoverStamina(PokeathlonBlockSmashMember *members, u32 frames, int active) {
     int i = 0;
@@ -1414,8 +1372,6 @@ static void PokeathlonBlockSmash_RecoverStamina(PokeathlonBlockSmashMember *memb
         }
     }
 }
-
-#pragma force_active reset
 
 // A hit's stamina cost (gPokeathlonBlockSmashHitStaminaCosts, by the frames since the last hit: faster hits cost more).
 static s32 PokeathlonBlockSmash_TakeStamina(s32 stamina, u32 frames) {

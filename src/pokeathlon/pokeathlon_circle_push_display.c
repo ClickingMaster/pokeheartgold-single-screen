@@ -37,8 +37,6 @@ extern const VecFx32 sCirclePushDisplayPic0Path[4];
 extern const VecFx32 sCirclePushDisplayPic1Path[4];
 extern const u32 gPokeathlonCirclePushDisplayIdleAnims[3];
 
-#pragma force_active on
-
 static void PokeathlonCirclePushDisplay_PrintRound(PokeathlonCirclePushDisplay *display, u32 round);
 static int PokeathlonCirclePushDisplayAnim_TakeNewMon(PokeathlonCirclePushDisplayAnim *anim, const u8 *monScored);
 static void PokeathlonCirclePushDisplayAnim_Stop(PokeathlonCirclePushDisplayAnim *anim);
@@ -138,8 +136,6 @@ void PokeathlonCirclePushDisplay_CreateSprites(PokeathlonCourseSpritePool *scene
         PokeathlonCourseSpritePoolSprite_Show(anim->playerEventSprites[i], 1, 0);
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonCirclePushDisplay_PrintPlayerNames(PokeathlonCirclePushDisplay *display) {
     u8 i;
@@ -361,8 +357,6 @@ static BOOL PokeathlonCirclePushDisplayAnim_CanStart(PokeathlonCirclePushDisplay
     return FALSE;
 }
 
-#pragma force_active on
-
 static void PokeathlonCirclePushDisplayAnim_Stop(PokeathlonCirclePushDisplayAnim *anim) {
     int i;
 
@@ -379,8 +373,6 @@ static void PokeathlonCirclePushDisplayAnim_Stop(PokeathlonCirclePushDisplayAnim
     anim->scroll = 0;
     G2S_SetBG2Offset(0, anim->scroll);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCirclePushDisplayAnim_HideSprites(PokeathlonCirclePushDisplayAnim *anim) {
     u8 i;
@@ -452,8 +444,6 @@ static void PokeathlonCirclePushDisplayAnim_StartMatchup(PokeathlonCirclePushDis
     anim->active = TRUE;
 }
 
-#pragma force_active on
-
 static void PokeathlonCirclePushDisplayAnim_StartZoom(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig) {
     VecFx32 pos = { 0, 0, 0 };
     MtxFx22 matrix;
@@ -480,8 +470,6 @@ static void PokeathlonCirclePushDisplayAnim_StartZoom(PokeathlonCirclePushDispla
     anim->phase = CIRCLE_PUSH_DISPLAY_ZOOM;
     anim->active = TRUE;
 }
-
-#pragma force_active reset
 
 static void PokeathlonCirclePushDisplayAnim_StartIdle(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig) {
     PokeathlonCirclePushDisplayAnim_Stop(anim);
@@ -612,7 +600,6 @@ static void PokeathlonCirclePushDisplayAnim_SetupMatchup(PokeathlonCirclePushDis
 }
 
 // Moves a picture along path[0] -> path[1] (frames 0-5), -> path[2] (5-45), -> path[3] (45-50).
-#pragma force_active on
 
 static void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const VecFx32 *path, PokeathlonCourseSpritePoolSprite *picSprite) {
     fx32 startX;
@@ -653,8 +640,6 @@ static void PokeathlonCirclePushDisplayAnim_MovePicAlongPath(u8 frame, const Vec
     Sprite_SetMatrix(sprite, &pos);
 }
 
-#pragma force_active reset
-
 static void PokeathlonCirclePushDisplayAnim_SetupMonPic(PokeathlonCirclePushDisplayAnim *anim, int mon) {
     VecFx32 pos;
     Sprite *sprite;
@@ -669,7 +654,6 @@ static void PokeathlonCirclePushDisplayAnim_SetupMonPic(PokeathlonCirclePushDisp
 }
 
 // Slides a picture in (frames 0-15), holds it (15-60) and slides it out (60-70).
-#pragma force_active on
 
 static void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const PokeathlonCirclePushPicKeys *keys, PokeathlonCourseSpritePoolSprite *picSprite) {
     s32 y;
@@ -692,8 +676,6 @@ static void PokeathlonCirclePushDisplayAnim_MovePicVertically(u8 frame, const Po
     pos.z = 0;
     Sprite_SetMatrix(sprite, &pos);
 }
-
-#pragma force_active reset
 
 void PokeathlonCirclePushDisplayAnim_PrintScore(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig) {
     u8 srcX[3];

@@ -531,8 +531,6 @@ typedef struct PokeathlonBlockSmashMonInfo {
     u32 unkC;
 } PokeathlonBlockSmashMonInfo;
 
-#pragma force_active on
-
 // Event template entry 0: sets up the event over several frames; TRUE when done.
 BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
@@ -638,16 +636,12 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 // Event template entry 1.
 BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     SpriteSystem_DrawSprites(work->spriteManager);
     return TRUE;
 }
-
-#pragma force_active on
 
 // Event template entry 2.
 BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course) {
@@ -707,8 +701,6 @@ static void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work) {
     work->iconResources = PokeathlonCourseSprites_CreateResources(work->heapId, 743, 1);
     work->icons.narc = NARC_New(NARC_poketool_icongra_poke_icon, work->heapId);
 }
-
-#pragma force_active reset
 
 static void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work) {
     NARC_Delete(work->icons.narc);

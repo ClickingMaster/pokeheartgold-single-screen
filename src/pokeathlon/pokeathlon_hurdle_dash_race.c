@@ -301,7 +301,6 @@ static void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 
 }
 
 // The third argument (the runner's speed) is not used.
-#pragma force_active on
 
 static void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 *speed) {
     switch (mon->state) {
@@ -446,8 +445,6 @@ static void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mo
     }
 }
 
-#pragma force_active reset
-
 // Whether a Pokemon at y with the given collision radius touches the hurdle.
 static BOOL PokeathlonHurdleDash_IsTouchingHurdle(s32 y, s32 radius, const PokeathlonHurdleDashRect *rect) {
     s32 bottom = y + radius;
@@ -471,7 +468,6 @@ static BOOL PokeathlonHurdleDash_IsJumpTimed(s32 y, const PokeathlonHurdleDashRe
 #pragma opt_propagation off
 
 // Draws the finish line on the runner's two BGs when it comes into view and scrolls it away after.
-#pragma force_active on
 
 static void PokeathlonHurdleDashRunner_DrawFinishLine(BgConfig *bgConfig, PokeathlonHurdleDashRunner *runner) {
     switch (runner->finishLineState) {
@@ -547,13 +543,10 @@ static void PokeathlonHurdleDashRunner_DrawFinishLine(BgConfig *bgConfig, Pokeat
     }
 }
 
-#pragma force_active reset
-
 #pragma opt_propagation reset
 
 // Sends the own Pokemon's progress; the host also gathers everyone's, ranks the 12 Pokemon and tells
 // whether every participant is done.
-#pragma force_active on
 
 void PokeathlonHurdleDash_SyncRace(PokeathlonCourseData *course) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
@@ -590,10 +583,7 @@ void PokeathlonHurdleDash_SyncRace(PokeathlonCourseData *course) {
     PokeathlonHurdleDash_UpdateRanks(course);
 }
 
-#pragma force_active reset
-
 // Orders the standings bar by rank (ties in participant order) and shows each Pokemon's rank.
-#pragma force_active on
 
 static void PokeathlonHurdleDash_UpdateStandings(PokeathlonHurdleDash *hurdleDash, PokeathlonHurdleDashStatus *status) {
     PokeathlonHurdleDashStandingsNode nodes[13];
@@ -649,11 +639,8 @@ static void PokeathlonHurdleDash_UpdateStandings(PokeathlonHurdleDash *hurdleDas
     }
 }
 
-#pragma force_active reset
-
 // The rank badges over the own Pokemon (pop up at 1.5 times their size whenever the rank changes) and
 // the standings bar, every 30 frames once the race has run for 150; the race timer.
-#pragma force_active on
 
 static void PokeathlonHurdleDash_UpdateRanks(PokeathlonCourseData *course) {
     PokeathlonHurdleDashStatus *status;
@@ -740,8 +727,6 @@ static void PokeathlonHurdleDash_UpdateRanks(PokeathlonCourseData *course) {
     }
     PokeathlonHurdleDash_UpdateTimerDigits(hurdleDash);
 }
-
-#pragma force_active reset
 
 // Ranks the 12 Pokemon (host): finished ones by finish time, the others by distance; equal ones share a rank.
 static void PokeathlonHurdleDash_CalcRanks(PokeathlonCourseData *course) {
@@ -876,8 +861,6 @@ static BOOL PokeathlonHurdleDashRankNode_InsertRunning(PokeathlonHurdleDashRankN
 
 #pragma opt_lifetimes off
 
-#pragma force_active on
-
 static void PokeathlonHurdleDash_SetRank(PokeathlonHurdleDashStatus *status, int index, u32 rank) {
     u8 shift;
     u8 byte;
@@ -896,8 +879,6 @@ static void PokeathlonHurdleDash_SetRank(PokeathlonHurdleDashStatus *status, int
     ranks[byte] |= bits;
 }
 
-#pragma force_active reset
-
 #pragma opt_lifetimes reset
 
 BOOL PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash) {
@@ -915,7 +896,6 @@ BOOL PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash) {
 }
 
 // The host runs the Pokemon of the participants without a player.
-#pragma force_active on
 
 void PokeathlonHurdleDash_UpdateCpuParticipants(PokeathlonCourseData *course) {
     u8 *block;
@@ -954,8 +934,6 @@ void PokeathlonHurdleDash_UpdateCpuParticipants(PokeathlonCourseData *course) {
 static void PokeathlonHurdleDash_RevealHurdles(PokeathlonHurdleDash *hurdleDash, int distance, int lane) {
     PokeathlonHurdleDashTrack_RevealHurdles(hurdleDash->track, distance + 0x150, lane);
 }
-
-#pragma force_active reset
 
 // Kicks up dust behind a running Pokemon, more often the faster it is boosted.
 static void PokeathlonHurdleDashRunner_UpdateDust(PokeathlonHurdleDash *hurdleDash, PokeathlonHurdleDashRunner *runner) {
@@ -1064,7 +1042,6 @@ static inline void FramesToSeconds(u16 frames, u8 *seconds, u8 *hundredths) {
 }
 
 // The race timer: minutes, seconds and tenths.
-#pragma force_active on
 
 static void PokeathlonHurdleDash_UpdateTimerDigits(PokeathlonHurdleDash *hurdleDash) {
     u16 frames = (u16)hurdleDash->raceTime;
@@ -1078,11 +1055,8 @@ static void PokeathlonHurdleDash_UpdateTimerDigits(PokeathlonHurdleDash *hurdleD
     Sprite_SetAnimCtrlSeq(hurdleDash->sprites[5], (u8)(hundredths / 10) + 1);
 }
 
-#pragma force_active reset
-
 // A Pokemon of a participant without a player (host): it accelerates to its top speed; at each hurdle it
 // clears it with a boost (boostChance percent), clears it (up to clearChance) or trips.
-#pragma force_active on
 
 static void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, PokeathlonHurdleDash *hurdleDash, PokeathlonHurdleDashPacket *packet, u8 participant, int member, u8 cpuIndex) {
     PokeathlonHurdleDashCpuRunner *runner = &hurdleDash->cpuRunners[cpuIndex];
@@ -1139,10 +1113,7 @@ static void PokeathlonHurdleDash_UpdateCpuRunner(PokeathlonCourseData *course, P
     }
 }
 
-#pragma force_active reset
-
 // Top speed and acceleration from the Pokemon's stats, and a random hurdle skill.
-#pragma force_active on
 
 void PokeathlonHurdleDash_InitCpuRunners(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
@@ -1188,8 +1159,6 @@ void PokeathlonHurdleDash_InitCpuRunners(PokeathlonCourseData *course, const Pok
         }
     }
 }
-
-#pragma force_active reset
 
 // A timed jump over a hurdle: the next boost level (up to 4) and its speed.
 static void PokeathlonHurdleDashRunner_Boost(PokeathlonCourseData *course, PokeathlonHurdleDashRunner *runner) {
@@ -1256,8 +1225,6 @@ static void PokeathlonHurdle_SetSprites(PokeathlonHurdle *hurdle, void *standing
     hurdle->knockedSprite = knockedSprite;
 }
 
-#pragma force_active on
-
 static void PokeathlonHurdle_SetActive(PokeathlonHurdle *hurdle, BOOL active) {
     if (active) {
         hurdle->visible = TRUE;
@@ -1272,8 +1239,6 @@ static void PokeathlonHurdle_SetActive(PokeathlonHurdle *hurdle, BOOL active) {
         PokeathlonCourseSpritePoolSprite_Show(hurdle->knockedSprite, FALSE, FALSE);
     }
 }
-
-#pragma force_active reset
 
 static BOOL PokeathlonHurdle_IsVisible(PokeathlonHurdle *hurdle) {
     return hurdle->visible;
@@ -1325,7 +1290,6 @@ static void PokeathlonHurdle_GetRect(PokeathlonHurdle *hurdle, PokeathlonHurdleD
 }
 
 // Places the next of the lane's four hurdles y pixels below the top of the screen.
-#pragma force_active on
 
 static PokeathlonHurdle *PokeathlonHurdleDashTrack_PlaceHurdle(PokeathlonHurdleDashTrack *track, int lane, int y) {
     PokeathlonHurdle *hurdle;
@@ -1353,8 +1317,6 @@ static PokeathlonHurdle *PokeathlonHurdleDashTrack_PlaceHurdle(PokeathlonHurdleD
     PokeathlonHurdle_SetActive(hurdle, TRUE);
     return hurdle;
 }
-
-#pragma force_active reset
 
 PokeathlonHurdleDashTrack *PokeathlonHurdleDashTrack_New(enum HeapID heapId) {
     int i;
@@ -1423,7 +1385,6 @@ int PokeathlonHurdleDashTrack_GetLayoutSize(PokeathlonHurdleDashTrack *track) {
 }
 
 // Places a hurdle once the flag of the layout at position (8 pixels each) comes into view.
-#pragma force_active on
 
 static void PokeathlonHurdleDashTrack_RevealHurdles(PokeathlonHurdleDashTrack *track, int position, int lane) {
     int flag = position / 8;
@@ -1438,8 +1399,6 @@ static void PokeathlonHurdleDashTrack_RevealHurdles(PokeathlonHurdleDashTrack *t
     }
 }
 
-#pragma force_active reset
-
 // The host picks one of the three hurdle layouts.
 void PokeathlonHurdleDashTrack_LoadRandomLayout(PokeathlonHurdleDashTrack *track) {
     u8 layout = LCRandom() % 3;
@@ -1447,7 +1406,6 @@ void PokeathlonHurdleDashTrack_LoadRandomLayout(PokeathlonHurdleDashTrack *track
 }
 
 // The flag of the layout at position, -1 if there is no hurdle there.
-#pragma force_active on
 
 static int PokeathlonHurdleDashTrack_GetHurdleAt(PokeathlonHurdleDashTrack *track, int lane, int position) {
     position /= 8;
@@ -1457,16 +1415,12 @@ static int PokeathlonHurdleDashTrack_GetHurdleAt(PokeathlonHurdleDashTrack *trac
     return position;
 }
 
-#pragma force_active reset
-
 PokeathlonHurdleDashStandings *PokeathlonHurdleDashStandings_New(enum HeapID heapId) {
     PokeathlonHurdleDashStandings *standings = Heap_Alloc(heapId, sizeof(PokeathlonHurdleDashStandings));
     MIi_CpuClearFast(0, (u32 *)standings, sizeof(PokeathlonHurdleDashStandings));
     standings->heapId = heapId;
     return standings;
 }
-
-#pragma force_active on
 
 void PokeathlonHurdleDashStandings_Free(PokeathlonHurdleDashStandings *standings) {
     int i;
@@ -1483,8 +1437,6 @@ void PokeathlonHurdleDashStandings_Free(PokeathlonHurdleDashStandings *standings
     SpriteList_Delete(standings->spriteList);
     Heap_Free(standings);
 }
-
-#pragma force_active reset
 
 void PokeathlonHurdleDashStandings_Init(PokeathlonHurdleDashStandings *standings, PokeathlonHurdleDashStandingsMonId *mons) {
     PokeathlonHurdleDashStandings_LoadResources(standings);
@@ -1504,14 +1456,10 @@ static void PokeathlonHurdleDashStandings_SetMonX(PokeathlonHurdleDashStandings 
     Sprite_SetMatrix(standings->mons[index].rank, &position);
 }
 
-#pragma force_active on
-
 static void PokeathlonHurdleDashStandings_SetRank(PokeathlonHurdleDashStandings *standings, u32 index, u32 rank) {
     GF_ASSERT(rank != 0 && rank <= 8);
     Sprite_SetAnimCtrlSeq(standings->mons[index].rank, rank + 15);
 }
-
-#pragma force_active reset
 
 void PokeathlonHurdleDashStandings_SetDrawFlag(PokeathlonHurdleDashStandings *standings, BOOL draw) {
     int i;
@@ -1552,7 +1500,6 @@ static void PokeathlonHurdleDashStandings_InitResourcesHeader(PokeathlonHurdleDa
 
 // The icon (its own Pokemon icon tiles, 0x200 bytes each), team frame and rank of each Pokemon; Pokemon
 // that don't exist are hidden.
-#pragma force_active on
 
 static void PokeathlonHurdleDashStandings_CreateSprites(PokeathlonHurdleDashStandings *standings, PokeathlonHurdleDashStandingsMonId *mons) {
     SpriteTemplate template;
@@ -1608,8 +1555,6 @@ static void PokeathlonHurdleDashStandings_CreateSprites(PokeathlonHurdleDashStan
     NARC_Delete(narc);
 }
 
-#pragma force_active reset
-
 static void PokeathlonHurdleDashStandings_InitSpriteTemplate(SpriteTemplate *template, PokeathlonHurdleDashStandings *standings, const SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE whichScreen) {
     u32 zero = 0;
     template->spriteList = standings->spriteList;
@@ -1632,8 +1577,6 @@ PokeathlonHurdleDashDustLane *PokeathlonHurdleDashDust_New(enum HeapID heapId) {
     return lanes;
 }
 
-#pragma force_active on
-
 void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes, PokeathlonCourseSpritePool *spritePool, u16 priority) {
     u8 i;
     u8 j;
@@ -1647,8 +1590,6 @@ void PokeathlonHurdleDashDust_CreateSprites(PokeathlonHurdleDashDustLane *lanes,
         }
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonHurdleDashDust_Free(PokeathlonHurdleDashDustLane *lanes) {
     Heap_Free(lanes);

@@ -39,4 +39,3 @@
 	.public gWirelessStatusIconWifiNcgr
 	.public gWirelessStatusIconWmNcgr
 	.public gWirelessStatusIconWm256kNcgr
-	.public gWirelessStatusIcon

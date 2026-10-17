@@ -232,8 +232,6 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
     u32 spriteInfo[17];
     PokeathlonHurdleDashTable table;
@@ -463,8 +461,6 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 BOOL PokeathlonHurdleDash_Draw(PokeathlonCourseData *course) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);

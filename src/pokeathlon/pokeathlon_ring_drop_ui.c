@@ -67,8 +67,6 @@ extern const ManagedSpriteTemplate gPokeathlonRingDropUiSpriteTemplate;
 extern const ManagedSpriteTemplate gPokeathlonRingDropUiTimerSpriteTemplate;
 extern const WindowTemplate gPokeathlonRingDropUiWindowTemplates[3];
 
-#pragma force_active on
-
 static void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui);
 static void PokeathlonRingDropUi_DrawScore(PokeathlonRingDropUi *ui, s32 score);
 static void PokeathlonRingDropUi_PrintNames(PokeathlonRingDropUi *ui);
@@ -118,8 +116,6 @@ PokeathlonRingDropUi *PokeathlonRingDropUi_New(SpriteSystem *spriteSystem, Sprit
     PokeathlonRingDropUi_AddWindows(ui);
     return ui;
 }
-
-#pragma force_active reset
 
 void PokeathlonRingDropUi_Init(PokeathlonRingDropUi *ui) {
     PokeathlonRingDropUi_CreateSprites(ui);
@@ -182,7 +178,6 @@ void PokeathlonRingDropUi_StopAnimations(PokeathlonRingDropUi *ui) {
 }
 
 // sorted: the participants by score, (score, participant) pairs. Ties share a rank. Redraws the own score.
-#pragma force_active on
 
 void PokeathlonRingDropUi_SetRanks(PokeathlonRingDropUi *ui, u16 participant, u16 score, const u8 *sorted) {
     int rank;
@@ -202,8 +197,6 @@ void PokeathlonRingDropUi_SetRanks(PokeathlonRingDropUi *ui, u16 participant, u1
         ui->score = score;
     }
 }
-
-#pragma force_active reset
 
 // The ranks are hidden in the first and the last ten seconds.
 void PokeathlonRingDropUi_SetTimer(PokeathlonRingDropUi *ui, s32 seconds) {
@@ -243,7 +236,6 @@ u16 PokeathlonRingDropUi_GetScore(PokeathlonRingDropUi *ui) {
 
 // The own switch: the next team member's picture moves down to the front, the one after it comes in at the back.
 // TRUE when done.
-#pragma force_active on
 
 BOOL PokeathlonRingDropUi_RunSwitch(PokeathlonRingDropUi *ui, u8 participant, u8 member) {
     u8 own = PokeathlonCourse_GetNetId(ui->course);
@@ -316,8 +308,6 @@ BOOL PokeathlonRingDropUi_RunSwitch(PokeathlonRingDropUi *ui, u8 participant, u8
     return FALSE;
 }
 
-#pragma force_active reset
-
 // The computer participants' switches take 13 frames. TRUE when done.
 BOOL PokeathlonRingDropUi_WaitSwitch(PokeathlonRingDropUi *ui, u8 participant, u8 member) {
     if (participant == 0 || participant >= RING_DROP_PARTICIPANTS) {
@@ -348,8 +338,6 @@ void PokeathlonRingDropUi_SetSwitching(PokeathlonRingDropUi *ui, u8 participant,
     PokeathlonRingDropUi_ShowSwitching(ui, participant, switching);
 }
 
-#pragma force_active on
-
 static ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
     ManagedSpriteTemplate template = gPokeathlonRingDropUiSpriteTemplate;
     ManagedSprite *sprite;
@@ -363,8 +351,6 @@ static ManagedSprite *PokeathlonRingDropUi_NewSprite(SpriteSystem *spriteSystem,
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
     return sprite;
 }
-
-#pragma force_active reset
 
 static void PokeathlonRingDropUi_AddWindows(PokeathlonRingDropUi *ui) {
     u8 i;
@@ -427,8 +413,6 @@ static void PokeathlonRingDropUi_PrintMessageAt(Window *window, MessageFormat *m
     CopyWindowToVram(window);
 }
 
-#pragma force_active on
-
 static void PokeathlonRingDropUi_CreateSprites(PokeathlonRingDropUi *ui) {
     ManagedSpriteTemplate template = { 0 };
     int i;
@@ -465,8 +449,6 @@ static void PokeathlonRingDropUi_CreateSprites(PokeathlonRingDropUi *ui) {
     }
     PokeathlonRingDropUi_CreateTimerSprites(ui);
 }
-
-#pragma force_active reset
 
 static void PokeathlonRingDropUi_LoadMonPic(PokeathlonCourseData *course, enum HeapID heapId, ManagedSprite *sprite, u32 participant, u8 member) {
     u32 info[4];

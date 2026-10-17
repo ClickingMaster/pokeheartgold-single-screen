@@ -100,8 +100,6 @@ extern const u8 sResultsAnnouncementBgTypes[6];  // BG types
 extern const GraphicsBanks sResultsAnnouncementGraphicsBanks;
 extern const VecFx32 sResultsAnnouncementPlatePos;
 
-#pragma force_active on
-
 static void PokeathlonResults_SetGfxBanks(void);
 static void PokeathlonResults_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
 static void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcement);
@@ -257,8 +255,6 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonResults_Draw(PokeathlonCourseData *course) {
     PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(announcement->scene);
@@ -299,8 +295,6 @@ static void PokeathlonResults_SetGfxBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
-#pragma force_active on
-
 static void PokeathlonResults_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     GraphicsModes modes = sResultsAnnouncementGraphicsModes;
     PokeathlonResultsAnnouncementBgTemplates templates;
@@ -328,8 +322,6 @@ static void PokeathlonResults_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {
     } while (next < 6);
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcement) {
     GfGfxLoader_LoadCharData(NARC_a_1_6_0, 3, announcement->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, announcement->heapId);
     GfGfxLoader_LoadScrnData(NARC_a_1_6_0, 5, announcement->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, announcement->heapId);
@@ -345,8 +337,6 @@ static void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcem
 static BOOL PokeathlonResults_AllPlayersFinished(PokeathlonCourseData *course) {
     return PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0)[2];
 }
-
-#pragma force_active on
 
 // State 0 of the screen: the announcer's lines, the ranking, the winner and the scoreboard.
 BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
@@ -444,8 +434,6 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
     return done;
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_CreatePlates(PokeathlonResultsAnnouncementPlates **plates, enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course) {
     *plates = PokeathlonResults_NewPlates(heapId, bgConfig, course);
 }
@@ -453,8 +441,6 @@ static void PokeathlonResults_CreatePlates(PokeathlonResultsAnnouncementPlates *
 static inline void PokeathlonResults_SetPlateTotal(PokeathlonResultsAnnouncementRanking *ranking, u32 total) {
     ranking->total = total;
 }
-
-#pragma force_active on
 
 // The plates come in from the last place up, the winner's a little later.
 static void PokeathlonResults_StartRanking(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course, u8 total, int unused) {
@@ -483,8 +469,6 @@ static void PokeathlonResults_StartRanking(PokeathlonResultsAnnouncementRanking 
     ranking->state = RANKING_STATE_SLIDE_IN;
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_MoveSlide(PokeathlonResultsAnnouncementSlide *slide, int dx, int dy) {
     if (slide->active) {
         if (slide->delay == 0) {
@@ -500,8 +484,6 @@ static void PokeathlonResults_MoveSlide(PokeathlonResultsAnnouncementSlide *slid
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonResults_MoveSlides(PokeathlonResultsAnnouncementRanking *ranking, int dx, int dy) {
     int i;
     PokeathlonResultsAnnouncementSlide *slide;
@@ -512,8 +494,6 @@ static void PokeathlonResults_MoveSlides(PokeathlonResultsAnnouncementRanking *r
         PokeathlonResults_MoveSlide(slide, dx, dy);
     }
 }
-
-#pragma force_active reset
 
 // SLIDE_IN: in from the right (stops at x 0); SLIDE_OUT: out downwards.
 static BOOL PokeathlonResults_IsSlideDone(PokeathlonResultsAnnouncementSlide *slide, int direction) {
@@ -537,8 +517,6 @@ static void PokeathlonResults_Wait(PokeathlonResultsAnnouncementRanking *ranking
     ranking->state = RANKING_STATE_WAIT;
     ranking->timer = frames;
 }
-
-#pragma force_active on
 
 static BOOL PokeathlonResults_UpdateRanking(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course) {
     u8 *state = &ranking->state;
@@ -595,8 +573,6 @@ static BOOL PokeathlonResults_UpdateRanking(PokeathlonResultsAnnouncementRanking
     return FALSE;
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_QueueSlide(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonResultsAnnouncementPlate *plate, int delay) {
     PokeathlonResultsAnnouncementSlide *slide = &ranking->slides[ranking->slide];
     if (slide->active) {
@@ -625,8 +601,6 @@ static void PokeathlonResults_ClearSlide(PokeathlonResultsAnnouncementSlide *sli
     slide->delay = 0;
 }
 
-#pragma force_active on
-
 static BOOL PokeathlonResults_HasMorePlates(PokeathlonResultsAnnouncementRanking *ranking) {
     BOOL result = FALSE;
     if ((u32)ranking->total > (u32)ranking->count) {
@@ -643,8 +617,6 @@ static PokeathlonResultsAnnouncementPlate *PokeathlonResults_AddPlate(Pokeathlon
     ranking->next++;
     return PokeathlonResults_ShowPlate(ranking->plates, x, y, score);
 }
-
-#pragma force_active reset
 
 static void PokeathlonResults_RemoveSlide(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonResultsAnnouncementSlide *slide) {
     PokeathlonResults_HidePlate(slide->plate);
@@ -917,21 +889,15 @@ static void PokeathlonResults_SetPlatePos(PokeathlonResultsAnnouncementPlate *pl
     PokeathlonResults_SetPlateSpritePositions(x, y, plate);
 }
 
-#pragma force_active on
-
 static void PokeathlonResults_MovePlate(PokeathlonResultsAnnouncementPlate *plate, int dx, int dy) {
     plate->x += dx;
     plate->y += dy;
     PokeathlonResults_MovePlateSprites(dx, dy, plate);
 }
 
-#pragma force_active reset
-
 static u16 PokeathlonResults_GetPlateRank(PokeathlonResultsAnnouncementPlate *plate) {
     return plate->rank;
 }
-
-#pragma force_active on
 
 static void PokeathlonResults_LoadPlateResources(PokeathlonResultsAnnouncementPlates *plates) {
     int i;
@@ -946,8 +912,6 @@ static void PokeathlonResults_LoadPlateResources(PokeathlonResultsAnnouncementPl
     SpriteTransfer_CreateCharTransferTask_AllocAtEnd(plates->resources[0]);
     SpriteTransfer_CreateExtPlttTransferTask(plates->resources[1]);
 }
-
-#pragma force_active reset
 
 static void PokeathlonResults_InitPlateResourcesHeader(PokeathlonResultsAnnouncementPlates *plates) {
     CreateSpriteResourcesHeader(&plates->resourcesHeader, 103, 103, 103, 103, -1, -1, FALSE, 0, plates->resourceManagers[GF_GFX_RES_TYPE_CHAR], plates->resourceManagers[GF_GFX_RES_TYPE_PLTT], plates->resourceManagers[GF_GFX_RES_TYPE_CELL], plates->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
@@ -976,8 +940,6 @@ static Sprite *PokeathlonResults_CreatePlateSprite(SpriteTemplate *template, int
     Sprite_SetDrawPriority(sprite, priority);
     return sprite;
 }
-
-#pragma force_active on
 
 // The team picture of each plate gets its own character and palette slot.
 static void PokeathlonResults_CreatePlateSprites(PokeathlonResultsAnnouncementPlates *plates, int index, Sprite **sprites) {
@@ -1016,8 +978,6 @@ static void PokeathlonResults_CreatePlateSprites(PokeathlonResultsAnnouncementPl
     Sprite_SetPalOffset(sprite, index);
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_PrintPlateName(PokeathlonResultsAnnouncementPlates *plates, int participant, PokeathlonResultsAnnouncementPlate *plate) {
     PlayerProfile *profile = PokeathlonCourse_GetPlayerProfileFromData(plates->course, participant);
     String *name = PlayerProfile_GetPlayerName_NewString(profile, plates->heapId);
@@ -1045,8 +1005,6 @@ static void PokeathlonResults_SetPlateVisible(BOOL firstPlace, BOOL draw, Pokeat
     TextOBJ_SetSpritesDrawFlag(plate->name.textObj, draw);
     TextOBJ_SetSpritesDrawFlag(plate->text.textObj, draw);
 }
-
-#pragma force_active on
 
 static void PokeathlonResults_SetPlateSpritePositions(int x, int y, PokeathlonResultsAnnouncementPlate *plate) {
     VecFx32 pos = sResultsAnnouncementPlatePos;
@@ -1081,8 +1039,6 @@ static void PokeathlonResults_MovePlateSprites(int dx, int dy, PokeathlonResults
     TextOBJ_UpdatePosition(plate->text.textObj);
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_InitTextWindow(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, int width) {
     TextOBJLayout *layout;
     InitWindow(&window->window);
@@ -1096,8 +1052,6 @@ static void PokeathlonResults_InitTextWindows(PokeathlonResultsAnnouncementPlate
     PokeathlonResults_InitTextWindow(plates, &plates->nameWindow, 8);
     PokeathlonResults_InitTextWindow(plates, &plates->textWindow, 24);
 }
-
-#pragma force_active on
 
 static void PokeathlonResults_CreateText(PokeathlonResultsAnnouncementPlates *plates, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out) {
     TextOBJTemplate template;
@@ -1123,8 +1077,6 @@ static void PokeathlonResults_CreateText(PokeathlonResultsAnnouncementPlates *pl
     out->textObj = textObj;
     out->charSlot = charSlot;
 }
-
-#pragma force_active reset
 
 static void PokeathlonResults_DestroyText(PokeathlonResultsAnnouncementText *text) {
     if (text->textObj != NULL) {
@@ -1175,8 +1127,6 @@ static void PokeathlonResults_LoadScoreboardResources(PokeathlonResultsAnnouncem
     PokeathlonCourseSpritePool_LoadAnim(scoreboard->scene, NARC_poketool_pokezukan, 1, 104);
 }
 
-#pragma force_active on
-
 static void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonCourseData *course, int y) {
     int i;
     int j;
@@ -1222,8 +1172,6 @@ static void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreb
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonResults_SetScore(PokeathlonResultsAnnouncementScoreboard *scoreboard, u32 points, u32 team) {
     if (team >= 4) {
         GF_AssertFail();
@@ -1231,8 +1179,6 @@ static void PokeathlonResults_SetScore(PokeathlonResultsAnnouncementScoreboard *
     scoreboard->teams[team].points = points;
     PokeathlonResults_SetScoreDigits(&scoreboard->teams[team], (s32)points);
 }
-
-#pragma force_active on
 
 static void PokeathlonResults_CreateScoreboardText(PokeathlonResultsAnnouncementScoreboard *scoreboard, PokeathlonResultsAnnouncementTextWindow *window, String *string, int x, int dx, int dy, Sprite *parent, PokeathlonResultsAnnouncementText *out) {
     TextOBJTemplate template;
@@ -1258,8 +1204,6 @@ static void PokeathlonResults_CreateScoreboardText(PokeathlonResultsAnnouncement
     out->textObj = textObj;
     out->charSlot = charSlot;
 }
-
-#pragma force_active reset
 
 static void PokeathlonResults_DestroyScoreboardText(PokeathlonResultsAnnouncementText *text) {
     if (text->textObj != NULL) {

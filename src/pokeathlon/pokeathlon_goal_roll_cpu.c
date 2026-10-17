@@ -182,8 +182,6 @@ void PokeathlonGoalRollCpu_Update(PokeathlonCourseData *course, PokeathlonGoalRo
     }
 }
 
-#pragma force_active on
-
 static int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     VecFx32 *position;
     int radius, quadrant;
@@ -248,8 +246,6 @@ static int PokeathlonGoalRollCpu_ThinkChaser(PokeathlonCourseData *course, u8 pa
     return result;
 }
 
-#pragma force_active reset
-
 static int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon, const PokeathlonGoalRollBall *ball, u8 decision, int quadrant) {
     u8 random = (s32)LCRandom() % 100;
 
@@ -300,8 +296,6 @@ static int PokeathlonGoalRollCpu_ApplyChaserDecision(PokeathlonGoalRollMon *mon,
     }
     return 0;
 }
-
-#pragma force_active on
 
 static int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls) {
     int quadrant, result;
@@ -363,8 +357,6 @@ static int PokeathlonGoalRollCpu_ThinkGuard(PokeathlonCourseData *course, u8 par
     return result;
 }
 
-#pragma force_active reset
-
 static int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant) {
     volatile u16 point[2];
 
@@ -408,8 +400,6 @@ static int PokeathlonGoalRollCpu_ApplyGuardDecision(PokeathlonGoalRollMon *mon, 
         return 0;
     }
 }
-
-#pragma force_active on
 
 static int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 participant, u8 member, PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *balls, PokeathlonGoalRollCpuTeam *teams) {
     u8 i;
@@ -517,8 +507,6 @@ static int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 part
     return result;
 }
 
-#pragma force_active reset
-
 // PokeathlonGoalRollCpu_MoveToEmptierQuadrant with the participant passed as int (this call was built against such a declaration).
 typedef int (*PokeathlonGoalRollCpuSpreadFunc)(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, int participant);
 
@@ -528,8 +516,6 @@ static int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, P
     }
     return PokeathlonGoalRollCpu_ApplyGuardDecision(mon, ball, decision, participant);
 }
-
-#pragma force_active on
 
 // Sends the Pokemon to a random spot in a quadrant with fewer Pokemon than the one before it.
 static int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, u8 excluded) {
@@ -599,8 +585,6 @@ static void PokeathlonGoalRollCpu_Think(PokeathlonCourseData *course, Pokeathlon
         break;
     }
 }
-
-#pragma force_active reset
 
 // 0 top left, 1 top right, 2 bottom left, 3 bottom right of (x, y)
 static int PokeathlonGoalRollCpu_GetQuadrant(int x, int y, int pointX, int pointY) {

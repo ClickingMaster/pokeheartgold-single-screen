@@ -279,8 +279,6 @@ static void TouchscreenChoiceMenu_HideYesNo(TouchscreenChoiceMenuData *data) {
     }
 }
 
-#pragma force_active on
-
 // The list background of NARC 239 is file itemCount (2-8).
 static void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
     ListMenuItem *items = ScriptMenu_GetListItems(data->menu);
@@ -302,8 +300,6 @@ static void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
     data->itemCount = count;
 }
 
-#pragma force_active reset
-
 static void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
     int count = ScriptMenu_GetCount(data->menu);
     int i;
@@ -314,8 +310,6 @@ static void TouchscreenChoiceMenu_HideList(TouchscreenChoiceMenuData *data) {
         RemoveWindow(&data->listWindows[i]);
     }
 }
-
-#pragma force_active on
 
 static void TouchscreenChoiceMenu_LoadSpriteResources(TouchscreenChoiceMenuData *data) {
     int i;
@@ -354,8 +348,6 @@ static void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, 
     Sprite_SetAnimActiveFlag(data->cursorSprite, TRUE);
     Sprite_SetDrawFlag(data->cursorSprite, FALSE);
 }
-
-#pragma force_active reset
 
 static void TouchscreenChoiceMenu_PrintMessage(Window *window, MsgData *msgData, u32 msgId) {
     String *string = NewString_ReadMsgData(msgData, msgId);
@@ -419,8 +411,6 @@ BOOL TouchscreenChoiceMenu_State_WaitReturn(TouchscreenChoiceMenuData *data) {
     return FALSE;
 }
 
-#pragma force_active on
-
 // Touching the bottom screen while nothing is shown advances the script text like an A press.
 BOOL TouchscreenChoiceMenu_State_Idle(TouchscreenChoiceMenuData *data) {
     if (gSystem.touchHeld) {
@@ -442,8 +432,6 @@ BOOL TouchscreenChoiceMenu_State_ShowList(TouchscreenChoiceMenuData *data) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir) {
     int cur = *selection;
     s8 next = *(dir + &sTouchscreenChoiceMenuListNeighbors[count - 2][cur * 4]);
@@ -453,8 +441,6 @@ static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, i
     *selection = next;
     return TRUE;
 }
-
-#pragma force_active on
 
 #define TouchscreenChoiceMenu_NotifySelection(data)                                     \
     do {                                                                                \
@@ -509,8 +495,6 @@ BOOL TouchscreenChoiceMenu_State_ListInput(TouchscreenChoiceMenuData *data) {
 #undef TouchscreenChoiceMenu_MoveSelection
 #undef TouchscreenChoiceMenu_NotifySelection
 
-#pragma force_active reset
-
 BOOL TouchscreenChoiceMenu_State_ListEnd(TouchscreenChoiceMenuData *data) {
     if (!Sprite_IsAnimated(data->cursorSprite)) {
         Sprite_SetDrawFlag(data->cursorSprite, FALSE);
@@ -535,8 +519,6 @@ static void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *d
     Sprite_SetMatrix(data->cursorSprite, &pos);
 }
 
-#pragma force_active on
-
 static void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *data, int count, int selection) {
     VecFx32 pos;
     count -= 2;
@@ -547,8 +529,6 @@ static void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *da
     Sprite_SetAnimCtrlSeq(data->cursorSprite, sTouchscreenChoiceMenuListCursorAnim[count][selection]);
     Sprite_SetMatrix(data->cursorSprite, &pos);
 }
-
-#pragma force_active reset
 
 static void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count) {
     Sprite_SetAnimCtrlSeq(data->cursorSprite, sTouchscreenChoiceMenuListCursorAnim[count - 2][0] + 2);

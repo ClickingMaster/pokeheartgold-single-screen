@@ -203,17 +203,6 @@ typedef struct EvolutionBgTemplates {
 } EvolutionBgTemplates;
 
 extern const u8 gEvolutionSummaryPages[];
-extern const s16 gEvolutionMenuCursorX[];
-extern const s16 gEvolutionMenuCursorY[];
-extern const TouchscreenHitbox gEvolutionMenuHitboxes[];
-extern const GraphicsModes gEvolutionGraphicsModes;
-extern const OamCharTransferParam gEvolutionOamCharTransferParam;
-extern const SpriteResourceCountsListUnion gEvolutionSpriteResourceCounts;
-extern const OamManagerParam gEvolutionOamManagerParam;
-extern const GraphicsBanks gEvolutionGraphicsBanks;
-extern const ManagedSpriteTemplate gEvolutionCursorSpriteTemplate;
-extern const EvolutionBgTemplates gEvolutionMainBgTemplates;
-extern const EvolutionBgTemplates gEvolutionSubBgTemplates;
 
 static ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation);
 static void EvolutionScene_InitSprites(EvolutionTaskData *data);
@@ -235,8 +224,179 @@ static u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo);
 static BOOL EvolutionScene_TextCallback(TextPrinterTemplate *template, u16 glyphId);
 static void EvolutionScene_OpenSummary(EvolutionTaskData *data);
 
+static const s16 sEvolutionMenuCursorX[] = { 128 };
+
+static const s16 sEvolutionMenuCursorY[] = { 72, 128, 120 };
+
+static const TouchscreenHitbox sEvolutionMenuHitboxes[] = {
+    { .rect = { 50, 92, 3, 251 } },
+    { .rect = { 99, 140, 3, 251 } },
+    { .rect = { TOUCHSCREEN_RECTLIST_END } },
+};
+
+static const GraphicsModes sEvolutionGraphicsModes = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const OamCharTransferParam sEvolutionOamCharTransferParam = {
+    .maxTasks = 0,
+    .sizeMain = 0,
+    .sizeSub = 0x4000,
+    .charModeMain = GX_OBJVRAMMODE_CHAR_1D_32K,
+    .charModeSub = GX_OBJVRAMMODE_CHAR_1D_32K,
+};
+
+static const SpriteResourceCountsListUnion sEvolutionSpriteResourceCounts = {
+    .numChar = 1,
+    .numPltt = 1,
+    .numCell = 1,
+    .numAnim = 1,
+    .numMcel = 0,
+    .numManm = 0,
+};
+
+static const OamManagerParam sEvolutionOamManagerParam = {
+    .fromOBJmain = 0,
+    .numOBJmain = 128,
+    .fromAffineMain = 0,
+    .numAffineMain = 32,
+    .fromOBJsub = 0,
+    .numOBJsub = 128,
+    .fromAffineSub = 0,
+    .numAffineSub = 32,
+};
+
+static const GraphicsBanks sEvolutionGraphicsBanks = {
+    .bg = GX_VRAM_BG_128_C,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_32_H,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_64_E,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_01_FG,
+};
+
+static const ManagedSpriteTemplate sEvolutionCursorSpriteTemplate = {
+    .x = 0,
+    .y = 0,
+    .z = 0,
+    .animation = 0,
+    .drawPriority = 0,
+    .pal = 0xFFFF,
+    .vram = NNS_G2D_VRAM_TYPE_2DSUB,
+    .resIdList = { 0, 0, 0, 0, 0, 0 },
+    .bgPriority = 0,
+    .vramTransfer = 0,
+};
+
+static const EvolutionBgTemplates sEvolutionMainBgTemplates = {
+    .bg = {
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x0000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_512x512_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x512,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x1000,
+            .charBase = GX_BG_CHARBASE_0x0c000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_512x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_512x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x3000,
+            .charBase = GX_BG_CHARBASE_0x10000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 3,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           },
+};
+
+static const EvolutionBgTemplates sEvolutionSubBgTemplates = {
+    .bg = {
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x7000,
+            .charBase = GX_BG_CHARBASE_0x04000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 2,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x6800,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 1,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           {
+            .x = 0,
+            .y = 0,
+            .bufferSize = GF_BG_BUF_SIZE_256x256_4BPP,
+            .baseTile = 0,
+            .size = GF_BG_SCR_SIZE_256x256,
+            .colorMode = GX_BG_COLORMODE_16,
+            .screenBase = GX_BG_SCRBASE_0x6000,
+            .charBase = GX_BG_CHARBASE_0x00000,
+            .bgExtPltt = GX_BG_EXTPLTT_01,
+            .priority = 0,
+            .areaOver = GX_BG_AREAOVER_XLU,
+            .dummy = 0,
+            .mosaic = FALSE,
+        },
+           },
+};
+
 static ManagedSprite *EvolutionScene_CreateSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u8 animation) {
-    ManagedSpriteTemplate template = gEvolutionCursorSpriteTemplate;
+    ManagedSpriteTemplate template = sEvolutionCursorSpriteTemplate;
     ManagedSprite *sprite;
 
     template.x = x;
@@ -257,12 +417,12 @@ static void EvolutionScene_InitSprites(EvolutionTaskData *data) {
 
     data->spriteSystem = SpriteSystem_Alloc(data->heapId);
     data->spriteManager = SpriteManager_New(data->spriteSystem);
-    oamManagerParam = gEvolutionOamManagerParam;
-    oamCharTransferParam = gEvolutionOamCharTransferParam;
+    oamManagerParam = sEvolutionOamManagerParam;
+    oamCharTransferParam = sEvolutionOamCharTransferParam;
     oamCharTransferParam.maxTasks = 16;
     SpriteSystem_Init(data->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
     SpriteSystem_InitSprites(data->spriteSystem, data->spriteManager, 16);
-    resourceCounts = gEvolutionSpriteResourceCounts;
+    resourceCounts = sEvolutionSpriteResourceCounts;
     SpriteSystem_InitManagerWithCapacities(data->spriteSystem, data->spriteManager, &resourceCounts);
 
     spriteSystem = data->spriteSystem;
@@ -306,7 +466,7 @@ static void EvolutionScene_UpdateMenuCursor(EvolutionTaskData *data) {
         GF_ASSERT(FALSE);
         break;
     }
-    ManagedSprite_SetPositionXY(data->cursorSprite, gEvolutionMenuCursorX[option * 2], gEvolutionMenuCursorY[option * 2]);
+    ManagedSprite_SetPositionXY(data->cursorSprite, sEvolutionMenuCursorX[option * 2], sEvolutionMenuCursorY[option * 2]);
 }
 
 static void EvolutionScene_PrintMenuOption(EvolutionTaskData *data, Window *window, MsgData *msgData, int msgNo) {
@@ -340,7 +500,7 @@ static void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMoveProm
 
 static BOOL EvolutionScene_HandleMenuInput(EvolutionTaskData *data) {
     BOOL selected = FALSE;
-    int hitbox = TouchscreenHitbox_FindRectAtTouchNew(gEvolutionMenuHitboxes);
+    int hitbox = TouchscreenHitbox_FindRectAtTouchNew(sEvolutionMenuHitboxes);
 
     GF_ASSERT(data->spritesReady);
     if (hitbox != TOUCH_MENU_NO_INPUT) {
@@ -1061,16 +1221,16 @@ static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgCon
     NARC *narc;
 
     GfGfx_DisableEngineAPlanes();
-    banks = gEvolutionGraphicsBanks;
+    banks = sEvolutionGraphicsBanks;
     GfGfx_SetBanks(&banks);
     MI_CpuClear32((void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
-    modes = gEvolutionGraphicsModes;
+    modes = sEvolutionGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    mainTemplates = gEvolutionMainBgTemplates;
+    mainTemplates = sEvolutionMainBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &mainTemplates.bg[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &mainTemplates.bg[1], GF_BG_TYPE_TEXT);
@@ -1080,7 +1240,7 @@ static void EvolutionScene_InitGraphics(EvolutionTaskData *data, BgConfig *bgCon
     G2_SetBG0Priority(1);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 
-    subTemplates = gEvolutionSubBgTemplates;
+    subTemplates = sEvolutionSubBgTemplates;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subTemplates.bg[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &subTemplates.bg[1], GF_BG_TYPE_TEXT);

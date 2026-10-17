@@ -182,7 +182,6 @@ static inline int GetSizeClass(PokeathlonCourseData *course, int index) {
 }
 
 // Puts the Pokemon on their start places (the host also writes them into the first frame packet).
-#pragma force_active on
 
 void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
     int collisions[3][2] = { 0 };
@@ -256,11 +255,8 @@ void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work) {
     PokeathlonCourse_CreateStartSprites(course, 0, work->monPicResources, SpriteManager_GetSpriteList(work->spriteManager), 1, 3, ownPositions);
 }
 
-#pragma force_active reset
-
 // Pokemon that run into each other bounce apart: each is pushed by the other's power (a fifth more
 // for a small Pokemon), once per contact.
-#pragma force_active on
 
 static void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
     int i, j;
@@ -300,8 +296,6 @@ static void PokeathlonDiscCatch_UpdateCollisions(PokeathlonCourseData *course) {
         }
     }
 }
-
-#pragma force_active reset
 
 // The host's field step: each team's touch picks up, drags or (tapped) makes jump one of its
 // Pokemon; then the Pokemon move and bounce off each other.
@@ -351,7 +345,6 @@ void PokeathlonDiscCatch_UpdateField(PokeathlonDiscCatchTeam *teams, PokeathlonC
 }
 
 // The host's frame packet: the Pokemon's places, facings, jumps and falls, and one team's score.
-#pragma force_active on
 
 void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, PokeathlonCourseData *course) {
     int x, y;
@@ -392,8 +385,6 @@ void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, Pokea
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonDiscCatchDisc_Launch(PokeathlonDiscCatchDisc *disc, u8 speed, u8 index) {
     disc->active = TRUE;
     disc->x = 128; // overwritten below
@@ -412,7 +403,6 @@ static void PokeathlonDiscCatchDisc_Remove(PokeathlonDiscCatchDisc *disc) {
 }
 
 // Once the disc is over the touch screen: the first jumping Pokemon it is over catches it.
-#pragma force_active on
 
 static BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, PokeathlonDiscCatchTeam *teams, PokeathlonDiscCatchCatcher *catcher) {
     s16 y;
@@ -443,8 +433,6 @@ static BOOL PokeathlonDiscCatchDisc_FindCatcher(PokeathlonDiscCatchDisc *disc, P
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // The outer corners of a scoring band (the last one to three tile rows, outside a narrowing middle)
 // are worth the next band's points.
@@ -593,8 +581,6 @@ static int PokeathlonDiscCatch_GetPhase(u32 seconds) {
     return -1;
 }
 
-#pragma force_active on
-
 static void PokeathlonDiscCatchDiscs_LaunchNext(PokeathlonDiscCatchDiscs *discs, u32 seconds) {
     int count = 1;
     discs->phase = PokeathlonDiscCatch_GetPhase(seconds);
@@ -661,10 +647,7 @@ void PokeathlonDiscCatchSprites_Init(PokeathlonDiscCatchSprites *sprites, Sprite
     }
 }
 
-#pragma force_active reset
-
 // Every participant's frame: shows the host's frame packet (discs, Pokemon, a team's score, the time).
-#pragma force_active on
 
 void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, PokeathlonCourseData *course) {
     PokeathlonDiscCatchFrame *frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
@@ -686,8 +669,6 @@ void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, Poke
     PokeathlonDiscCatchScoreboard_SetSeconds(work->scoreboard, seconds);
     PokeathlonCourse_UpdateTimeUpCountdown(course, 30 * frame->seconds);
 }
-
-#pragma force_active reset
 
 void PokeathlonDiscCatchSprites_Delete(PokeathlonDiscCatchSprites *sprites) {
     s32 i;

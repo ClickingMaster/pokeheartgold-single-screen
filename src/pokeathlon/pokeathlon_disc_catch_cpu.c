@@ -28,7 +28,6 @@ static inline int GetParticipantCount(PokeathlonCourseData *course) {
 }
 
 // The CPU steers the participants after the players.
-#pragma force_active on
 
 PokeathlonDiscCatchCpu *PokeathlonDiscCatchCpu_New(PokeathlonCourseData *course, enum HeapID heapId) {
     int i, participant;
@@ -49,8 +48,6 @@ PokeathlonDiscCatchCpu *PokeathlonDiscCatchCpu_New(PokeathlonCourseData *course,
     return cpu;
 }
 
-#pragma force_active reset
-
 void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu) {
     Heap_Free(cpu);
 }
@@ -59,7 +56,6 @@ void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu) {
 // not with its own score.
 #pragma opt_lifetimes off
 #pragma opt_common_subs off
-#pragma force_active on
 
 void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(cpu->course);
@@ -82,7 +78,6 @@ void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu) {
     }
 }
 
-#pragma force_active reset
 #pragma opt_lifetimes reset
 #pragma opt_common_subs reset
 

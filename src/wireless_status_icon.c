@@ -36,7 +36,6 @@ extern const char gWirelessStatusIconWifiNcgr[];
 extern const char gWirelessStatusIconWmNcgr[];
 extern const char gWirelessStatusIconWm256kNcgr[];
 extern const u8 *gWirelessStatusIconAnims[];
-extern WirelessStatusIcon *gWirelessStatusIcon;
 
 static WirelessStatusIcon *WirelessStatusIcon_New(int a0, enum HeapID heapId, int x, int y, int isWifi, void *anims, int screen, int plttBase);
 static void WirelessStatusIcon_Task(SysTask *task, void *data);
@@ -58,6 +57,8 @@ void WirelessStatusIcon_SetLevel(s32 level);
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId);
 void WirelessStatusIcon_CreateOnScreenIfConnected(int screen);
 void WirelessStatusIcon_SetBackPriority(void);
+
+static WirelessStatusIcon *sWirelessStatusIcon;
 
 static WirelessStatusIcon *WirelessStatusIcon_New(int a0, enum HeapID heapId, int x, int y, int isWifi, void *anims, int screen, int plttBase) {
     WirelessStatusIcon *p;
@@ -331,8 +332,8 @@ fallback:
 #pragma pop
 
 void WirelessStatusIcon_Refresh(void) {
-    if (gWirelessStatusIcon != NULL) {
-        WirelessStatusIcon_WriteOam(gWirelessStatusIcon);
+    if (sWirelessStatusIcon != NULL) {
+        WirelessStatusIcon_WriteOam(sWirelessStatusIcon);
     }
 }
 
@@ -356,29 +357,29 @@ static void WirelessStatusIcon_CreateOnScreen(int screen) {
 
 static void WirelessStatusIcon_CreateAt(int x, int y, int isWifi, int screen, u32 plttBase) {
     if (CommWireless_IsOn() != 0) {
-        if (gWirelessStatusIcon != NULL) {
+        if (sWirelessStatusIcon != NULL) {
             WirelessStatusIcon_Destroy();
         }
-        gWirelessStatusIcon = WirelessStatusIcon_New(0, (enum HeapID)0x59, x, y, isWifi, gWirelessStatusIconAnims, screen, plttBase);
+        sWirelessStatusIcon = WirelessStatusIcon_New(0, (enum HeapID)0x59, x, y, isWifi, gWirelessStatusIconAnims, screen, plttBase);
     }
 }
 
 void WirelessStatusIcon_Destroy(void) {
-    if (gWirelessStatusIcon != NULL) {
-        WirelessStatusIcon_Delete(gWirelessStatusIcon);
-        gWirelessStatusIcon = NULL;
+    if (sWirelessStatusIcon != NULL) {
+        WirelessStatusIcon_Delete(sWirelessStatusIcon);
+        sWirelessStatusIcon = NULL;
     }
 }
 
 void WirelessStatusIcon_SetLevel(s32 level) {
-    if (gWirelessStatusIcon != NULL) {
-        WirelessStatusIcon_SetLevelOf(gWirelessStatusIcon, level);
+    if (sWirelessStatusIcon != NULL) {
+        WirelessStatusIcon_SetLevelOf(sWirelessStatusIcon, level);
     }
 }
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId) {
-    if (gWirelessStatusIcon != NULL) {
-        WirelessStatusIcon_ShowOnBothScreensOf(gWirelessStatusIcon, topFirst, heapId);
+    if (sWirelessStatusIcon != NULL) {
+        WirelessStatusIcon_ShowOnBothScreensOf(sWirelessStatusIcon, topFirst, heapId);
     }
 }
 
@@ -403,7 +404,7 @@ void WirelessStatusIcon_CreateOnScreenIfConnected(int screen) {
 }
 
 void WirelessStatusIcon_SetBackPriority(void) {
-    if (gWirelessStatusIcon != NULL) {
-        gWirelessStatusIcon->priority = 1;
+    if (sWirelessStatusIcon != NULL) {
+        sWirelessStatusIcon->priority = 1;
     }
 }

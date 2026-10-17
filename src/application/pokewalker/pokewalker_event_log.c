@@ -91,7 +91,6 @@ void PokewalkerBoxDisplay_TransferMonPicture(PokewalkerBoxDisplaySprites *sprite
     GXS_LoadOBJPltt(sprites->monPalette, sprites->monPlttLocation, sizeof(sprites->monPalette));
 }
 
-#pragma force_active on
 // The table is followed by the blocks themselves.
 void PokewalkerApp_WriteUploadBlocks(PokewalkerUploadBlock *blocks) {
     u16 offset = 0;
@@ -116,7 +115,6 @@ void PokewalkerApp_WriteUploadBlocks(PokewalkerUploadBlock *blocks) {
         offset += blocks[i].size;
     }
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_ResetDisplay(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -210,7 +208,6 @@ int PokewalkerEventLog_CompareEntryTimes(PokewalkerEventLogSlot *a, PokewalkerEv
     return -1;
 }
 
-#pragma force_active on
 // Sorts the valid entries by time into entries[] and counts what the stroll end message rates. The stroll end record
 // (the last one) gets the time after the previous entry.
 void PokewalkerEventLog_BuildEntryList(PokewalkerEventLog *eventLog) {
@@ -327,7 +324,6 @@ void PokewalkerEventLog_BuildEntryList(PokewalkerEventLog *eventLog) {
         eventLog->count = count;
     }
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_InitText(PokewalkerEventLog *eventLog) {
     const WindowTemplate *windowTemplate;
@@ -370,7 +366,6 @@ void PokewalkerEventLog_FreeText(PokewalkerEventLog *eventLog) {
     FontID_Release(4);
 }
 
-#pragma force_active on
 void PokewalkerEventLog_PrintToWindowWithFont(PokewalkerEventLog *eventLog, u32 windowId, u32 msgId, u16 x, int fontId) {
     String *string;
     GF_ASSERT(windowId < 4);
@@ -380,7 +375,6 @@ void PokewalkerEventLog_PrintToWindowWithFont(PokewalkerEventLog *eventLog, u32 
     String_Delete(string);
     CopyWindowToVram(&eventLog->windows[windowId]);
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_PrintToWindow(PokewalkerEventLog *eventLog, u32 windowId, u32 msgId, u16 x) {
     PokewalkerEventLog_PrintToWindowWithFont(eventLog, windowId, msgId, x, 1);
@@ -411,7 +405,6 @@ void PokewalkerEventLog_PrintMessage(PokewalkerEventLog *eventLog, int msgId, in
     CopyWindowToVram(window);
 }
 
-#pragma force_active on
 // A name without a terminator in its first `length` characters is shown as sEventLogInvalidName.
 void PokewalkerEventLog_BufferName(PokewalkerEventLog *eventLog, const u16 *name, u8 field, int length) {
     BOOL invalid = TRUE;
@@ -433,7 +426,6 @@ void PokewalkerEventLog_BufferName(PokewalkerEventLog *eventLog, const u16 *name
     BufferString(eventLog->msgFormat, field, string, 2, 1, 2);
     String_Delete(string);
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_BufferItemName(PokewalkerEventLog *eventLog, u32 item) {
     String *string;
@@ -537,7 +529,6 @@ void PokewalkerEventLog_PrintQuit(PokewalkerEventLog *eventLog) {
     PokewalkerEventLog_PrintToWindowWithFont(eventLog, 3, msg_0275_00089, 4, 4);
 }
 
-#pragma force_active on
 void PokewalkerEventLog_InitBgs(PokewalkerEventLog *eventLog) {
     GraphicsModes modes;
     EventLogBgTemplates templates;
@@ -557,7 +548,6 @@ void PokewalkerEventLog_InitBgs(PokewalkerEventLog *eventLog) {
         BG_FillCharDataRange(eventLog->bgConfig, (GFBgLayer)*layer, 0, 1, 0);
     }
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_FreeBgs(PokewalkerEventLog *eventLog) {
     int i;
@@ -600,7 +590,6 @@ void PokewalkerEventLog_PlayCourseBgm(PokewalkerEventLog *eventLog, u32 course) 
     PlayBGM(sEventLogCourseBgm[course]);
 }
 
-#pragma force_active on
 void PokewalkerEventLog_InitSpriteSystem(PokewalkerEventLog *eventLog) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamTransferParam;
@@ -618,7 +607,6 @@ void PokewalkerEventLog_InitSpriteSystem(PokewalkerEventLog *eventLog) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_FreeSprites(PokewalkerEventLog *eventLog) {
     SpriteSystem *spriteSystem = eventLog->spriteSystem;
@@ -731,7 +719,6 @@ void PokewalkerEventLog_LoadSpriteCharData(Sprite *sprite, const void *data, u32
     }
 }
 
-#pragma force_active on
 // Loads the resources of the walking Pokemon sprites over a few frames; TRUE when done.
 BOOL PokewalkerEventLog_LoadMonSpriteResources(PokewalkerEventLog *eventLog) {
     SpriteSystem *spriteSystem = eventLog->spriteSystem;
@@ -763,7 +750,6 @@ BOOL PokewalkerEventLog_LoadMonSpriteResources(PokewalkerEventLog *eventLog) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 // Diglett and Dugtrio have no shadow.
 void PokewalkerEventLog_SetMonSpriteVisible(PokewalkerEventLogMonSprite *monSprite, BOOL visible) {
@@ -830,7 +816,6 @@ void PokewalkerEventLog_CreateMonSprite(PokewalkerEventLogMonSprite *monSprite, 
     monSprite->shadowSprite = PokewalkerEventLog_CreateSprite(spriteSystem, spriteManager, x, y, 23, 4);
 }
 
-#pragma force_active on
 // Copies the 8 frames of the species' overworld model texture into the small or the large sprite.
 void PokewalkerEventLog_LoadMonSprite(PokewalkerEventLogMonSprite *monSprite, u16 species, u8 form, int gender, u8 isShiny, int heapId) {
     NARC *narc;
@@ -895,7 +880,6 @@ void PokewalkerEventLog_LoadMonSprite(PokewalkerEventLogMonSprite *monSprite, u1
     }
     ManagedSprite_SetDrawFlag(monSprite->shadowSprite, visible);
 }
-#pragma force_active reset
 
 // Shows the walking Pokemon or the other Pokemon of the shown entry on the left (side 0, facing right) or the right.
 void PokewalkerEventLog_ShowMon(PokewalkerEventLog *eventLog, int side, BOOL isWalkingMon) {
@@ -953,7 +937,6 @@ void PokewalkerEventLog_ResetFleeAnim(PokewalkerEventLog *eventLog) {
     eventLog->fleeAnim.hops = 0;
 }
 
-#pragma force_active on
 // Two hops in place, then the right-hand Pokemon runs off to the right, blinking.
 void PokewalkerEventLog_UpdateFleeAnim(PokewalkerEventLog *eventLog) {
     if (eventLog->fleeAnim.active) {
@@ -993,7 +976,6 @@ void PokewalkerEventLog_UpdateFleeAnim(PokewalkerEventLog *eventLog) {
         }
     }
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_StartCatchAnim(PokewalkerEventLog *eventLog) {
     eventLog->catchAnim.active = TRUE;
@@ -1005,7 +987,6 @@ void PokewalkerEventLog_ResetCatchAnim(PokewalkerEventLog *eventLog) {
     eventLog->catchAnim.state = 0;
 }
 
-#pragma force_active on
 // The Poke Ball, then the right-hand Pokemon disappears after 25 frames.
 void PokewalkerEventLog_UpdateCatchAnim(PokewalkerEventLog *eventLog) {
     if (eventLog->catchAnim.active) {
@@ -1031,7 +1012,6 @@ void PokewalkerEventLog_UpdateCatchAnim(PokewalkerEventLog *eventLog) {
         }
     }
 }
-#pragma force_active reset
 
 // Events 1-10 with a HeartGold / SoulSilver Pokewalker: five kinds of meeting (5 messages each), the walking
 // Pokemon wins on odd types; the second line depends on whether the step counts are 100 or more apart.
@@ -1209,7 +1189,6 @@ void PokewalkerEventLog_ShowStrollStart(PokewalkerEventLog *eventLog) {
     PokewalkerEventLog_PrintEntry(eventLog, msg_0275_00068, msgId2);
 }
 
-#pragma force_active on
 // "Returned at ..." and a rating of the Stroll: its steps, the Dowsing Machine items, the Poke Radar catches, the
 // meetings with other Pokewalkers and the gifts.
 void PokewalkerEventLog_ShowStrollEnd(PokewalkerEventLog *eventLog) {
@@ -1302,7 +1281,6 @@ void PokewalkerEventLog_ShowSteps(PokewalkerEventLog *eventLog, u32 hour) {
     }
     PokewalkerEventLog_PrintEntry(eventLog, msgId, 0);
 }
-#pragma force_active reset
 
 // Events 1-10 with a Pokewalker of another game.
 void PokewalkerEventLog_ShowDistantPeer(PokewalkerEventLog *eventLog) {
@@ -1315,7 +1293,6 @@ void PokewalkerEventLog_ShowDistantPeer(PokewalkerEventLog *eventLog) {
     PokewalkerEventLog_PrintEntry(eventLog, msg_0275_00025, 0);
 }
 
-#pragma force_active on
 void PokewalkerEventLog_ShowEntry(PokewalkerEventLog *eventLog) {
     PokewalkerIrRecord *record = eventLog->entries[eventLog->page];
     u32 hour;
@@ -1363,7 +1340,6 @@ void PokewalkerEventLog_ShowEntry(PokewalkerEventLog *eventLog) {
         PokewalkerEventLog_ShowSteps(eventLog, hour);
     }
 }
-#pragma force_active reset
 
 void PokewalkerEventLog_StartPageTurn(PokewalkerEventLog *eventLog) {
     eventLog->pageTurnActive = TRUE;
@@ -1455,7 +1431,6 @@ void PokewalkerEventLog_VBlankCB(PokewalkerEventLog *eventLog) {
     }
 }
 
-#pragma force_active on
 BOOL PokewalkerEventLog_Init(OverlayManager *manager, int *state) {
     PokewalkerEventLog *eventLog = OverlayManager_GetData(manager);
     switch (*state) {
@@ -1492,7 +1467,6 @@ BOOL PokewalkerEventLog_Init(OverlayManager *manager, int *state) {
     }
     return FALSE;
 }
-#pragma force_active reset
 
 BOOL PokewalkerEventLog_Exit(OverlayManager *manager, int *state) {
     PokewalkerEventLog *eventLog = OverlayManager_GetData(manager);

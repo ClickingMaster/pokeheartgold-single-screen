@@ -77,8 +77,6 @@ extern const DirectionMovementTable gTypeBehaviorSpinOrders;
 extern const MapObjectAction gMapObjectTypeBehaviorInits[];
 extern const MapObjectPredicate gMapObjectTypeBehaviorChecks[];
 extern const MapObjectPredicate gMapObjectTypeBehaviorUpdates[];
-extern const TrainerSightFunc gTrainerSightDistanceFuncs[];
-extern const TrainerApproachStateFunc gTrainerApproachStateFuncs[];
 
 // Defined elsewhere without a header yet.
 extern const u32 gApricornTreeSpriteIds[];

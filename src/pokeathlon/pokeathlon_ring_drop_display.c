@@ -62,8 +62,6 @@ void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *object, in
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, f32 scaleX, f32 scaleY);
 
-#pragma force_active on
-
 void PokeathlonRingDrop_InitSprites(PokeathlonRingDrop *ringDrop) {
     SpriteResourceCountsListUnion counts = gPokeathlonRingDropSpriteResourceCounts;
     OamManagerParam oamParam = gPokeathlonRingDropOamManagerParam;
@@ -79,15 +77,11 @@ void PokeathlonRingDrop_InitSprites(PokeathlonRingDrop *ringDrop) {
     ringDrop->resources = PokeathlonCourseSprites_CreateResources(ringDrop->heapId, 743, 1);
 }
 
-#pragma force_active reset
-
 void PokeathlonRingDrop_FreeSprites(PokeathlonRingDrop *ringDrop) {
     PokeathlonCourseSprites_FreeResources(ringDrop->resources);
     SpriteSystem_FreeResourcesAndManager(ringDrop->spriteSystem, ringDrop->spriteManager);
     SpriteSystem_Free(ringDrop->spriteSystem);
 }
-
-#pragma force_active on
 
 void PokeathlonRingDrop_LoadSpriteResources(PokeathlonRingDrop *ringDrop) {
     SpriteSystem *spriteSystem;
@@ -124,8 +118,6 @@ void PokeathlonRingDrop_LoadSpriteResources(PokeathlonRingDrop *ringDrop) {
     }
 }
 
-#pragma force_active reset
-
 static ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 animation, u16 drawPriority) {
     ManagedSpriteTemplate template = gPokeathlonRingDropSpriteTemplate;
     ManagedSprite *sprite;
@@ -140,8 +132,6 @@ static ManagedSprite *PokeathlonRingDrop_NewSprite(SpriteSystem *spriteSystem, S
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
     return sprite;
 }
-
-#pragma force_active on
 
 void PokeathlonRingDrop_InitBgs(PokeathlonRingDrop *ringDrop) {
     PokeathlonRingDropBgTemplates templates;
@@ -163,8 +153,6 @@ void PokeathlonRingDrop_InitBgs(PokeathlonRingDrop *ringDrop) {
     FontID_Alloc((FontID)4, ringDrop->heapId);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
 }
-
-#pragma force_active reset
 
 void PokeathlonRingDrop_FreeBgs(PokeathlonRingDrop *ringDrop) {
     int i;
@@ -196,7 +184,6 @@ void PokeathlonRingDrop_LoadBgGraphics(PokeathlonRingDrop *ringDrop) {
 }
 
 // Switch mode 1: the ball flies up off the Pokemon; then the next member is requested.
-#pragma force_active on
 
 static void PokeathlonRingDropDisplay_SwitchOut(PokeathlonRingDropMonSprites *mon, s16 *position, PokeathlonRingDropUi *ui, u8 participant, PokeathlonRingDropInput *input, BOOL cpu, BOOL own) {
     s16 x, y;
@@ -281,8 +268,6 @@ static void PokeathlonRingDropDisplay_SwitchIn(PokeathlonRingDropMonSprites *mon
     }
 }
 
-#pragma force_active reset
-
 // Switch mode 0: the new Pokemon appears.
 static void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mon, const s16 *position, PokeathlonRingDropInput *input, BOOL report, BOOL own) {
     PokeathlonCourseMonObject_SetDrawFlag(mon->monObject, 1);
@@ -294,8 +279,6 @@ static void PokeathlonRingDropDisplay_EndSwitch(PokeathlonRingDropMonSprites *mo
         input->switchState = RING_DROP_SWITCH_NONE;
     }
 }
-
-#pragma force_active on
 
 static void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *packet, PokeathlonRingDropMonSprites *mon, void *ui, PokeathlonCourseData *course, u8 participant) {
     PokeathlonRingDropInput *input;
@@ -351,8 +334,6 @@ static void PokeathlonRingDropDisplay_UpdateSwitch(PokeathlonRingDropMonPacket *
     }
 }
 
-#pragma force_active reset
-
 static int PokeathlonRingDropDisplay_CompareDepth(const void *a, const void *b) {
     if (*(const u8 *)a == *(const u8 *)b) {
         return 0;
@@ -375,7 +356,6 @@ static int PokeathlonRingDropDisplay_CompareScores(const void *a, const void *b)
 
 // Every participant: shows each Pokemon of the frame packet (sounds, hit and charge effects, the
 // marks above the Pokemon, switching, jumps and squashing), then sorts the Pokemon by depth.
-#pragma force_active on
 
 static void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay *display, PokeathlonRingDropFramePacket *framePacket, PokeathlonCourseData *course) {
     int participant;
@@ -643,8 +623,6 @@ static void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay
     }
 }
 
-#pragma force_active reset
-
 // PokeathlonCourseMonObjects_Get as the first call in PokeathlonRingDropDisplay_Init was built: with an int index.
 typedef void *(*PokeathlonRingDropGetMonObjectFunc)(void *monObjects, int index);
 
@@ -770,8 +748,6 @@ void PokeathlonRingDropDisplay_Free(PokeathlonRingDropDisplay *display) {
     }
 }
 
-#pragma force_active on
-
 void PokeathlonRingDropDisplay_StopAnimations(PokeathlonRingDropDisplay *display) {
     int i = 0;
     int j;
@@ -803,8 +779,6 @@ BOOL PokeathlonRingDropMon_CanBePushed(int state, int attackerState) {
         return TRUE;
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonRingDropMon_FaceDirection(PokeathlonRingDropMon *mon, const VecFx32 *direction) {
     if (mon->state != RING_DROP_MON_DASH && mon->state != RING_DROP_MON_JUMP_FALL) {

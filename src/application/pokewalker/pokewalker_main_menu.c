@@ -44,7 +44,6 @@ int PokewalkerApp_MainMenu_Exit(PokewalkerApp *app) {
     return 1;
 }
 
-#pragma force_active on
 int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
     struct {
         u16 unk2;
@@ -135,7 +134,6 @@ void PokewalkerApp_ShowWalkerRecords(PokewalkerApp *app, BOOL onStroll) {
     }
     PokewalkerApp_HideConnectionSprites(app);
 }
-#pragma force_active reset
 
 int PokewalkerApp_MainMenu_WaitFade(PokewalkerApp *app) {
     return IsPaletteFadeFinished() == TRUE ? 4 : 2;
@@ -305,7 +303,6 @@ int PokewalkerApp_MainMenu_WaitReceive(PokewalkerApp *app) {
 }
 
 // "Return from a Stroll" / "Receive a gift" / exit.
-#pragma force_active on
 int PokewalkerApp_MainMenu_ShowReceiveMenu(PokewalkerApp *app) {
     PokewalkerApp_LoadTilemap(app, GF_BG_LYR_MAIN_2, 11);
     PokewalkerApp_LoadTilemap(app, GF_BG_LYR_SUB_1, 16);
@@ -356,7 +353,6 @@ int PokewalkerApp_MainMenu_HandleReceiveMenu(PokewalkerApp *app) {
     }
     return 13;
 }
-#pragma force_active reset
 
 int PokewalkerApp_MainMenu_EndReceiveMenu(PokewalkerApp *app) {
     PokewalkerApp_HideCursor(app);

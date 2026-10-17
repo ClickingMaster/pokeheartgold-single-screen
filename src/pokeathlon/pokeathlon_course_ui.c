@@ -139,8 +139,6 @@ PokeathlonCourseMessageBox *PokeathlonCourseMessageBox_New(enum HeapID heapId) {
     return box;
 }
 
-#pragma force_active on
-
 void PokeathlonCourseMessageBox_Init(PokeathlonCourseMessageBox *box, BgConfig *bgConfig, u32 bgLayer, u32 linkMode, SaveData *saveData) {
     u32 textSpeed = 4;
     if (linkMode == 0) {
@@ -159,8 +157,6 @@ void PokeathlonCourseMessageBox_Init(PokeathlonCourseMessageBox *box, BgConfig *
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)480, box->heapId);
     BG_FillCharDataRange(box->bgConfig, (GFBgLayer)box->bgLayer, 0, 1, 0);
 }
-
-#pragma force_active reset
 
 void PokeathlonCourseMessageBox_Free(PokeathlonCourseMessageBox *box) {
     DestroyMsgData(box->msgData);
@@ -252,8 +248,6 @@ static void PokeathlonCourseMessageBox_LoadFrame(BgConfig *bgConfig, int layer, 
     LoadUserFrameGfx2(bgConfig, (GFBgLayer)layer, 0x3D2, 13, 0, heapId);
 }
 
-#pragma force_active on
-
 static u8 PokeathlonCourseMessageBox_PrintToWindow(BgConfig *bgConfig, Window *window, String **string, u32 textSpeed, MessageFormat *msgFormat, MsgData *msgData, u32 msgId, u8 bgLayer, enum HeapID heapId) {
     u8 printerId;
     if (window->bgConfig == NULL) {
@@ -266,23 +260,16 @@ static u8 PokeathlonCourseMessageBox_PrintToWindow(BgConfig *bgConfig, Window *w
     return printerId;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCourseMessageBox_IsBusy(PokeathlonCourseMessageBox *box) {
     return box->busy;
 }
-
-#pragma force_active on
 
 void PokeathlonCourse_LoadTrainerPic(ManagedSprite *sprite, int fileId, int index, enum HeapID heapId) {
     PokeathlonCourse_LoadTrainerPicIntoSprite(sprite->sprite, fileId, index, heapId);
 }
 
-#pragma force_active reset
-
 // Converts texture index of the overworld model fileId (NARC data/mmodel/mmodel) into the sprite's characters
 // and palette.
-#pragma force_active on
 
 void PokeathlonCourse_LoadTrainerPicIntoSprite(Sprite *sprite, int fileId, int index, enum HeapID heapId) {
     NARC *narc;
@@ -322,8 +309,6 @@ void PokeathlonCourse_LoadTeamTrainerPic(ManagedSprite **sprites, PokeathlonCour
     PokeathlonCourse_LoadPlayerTrainerPic(sprites[team]->sprite, course, team, index);
 }
 
-#pragma force_active reset
-
 void PokeathlonCourse_LoadPlayerTrainerPic(Sprite *sprite, PokeathlonCourseData *course, u32 team, u32 index) {
     PlayerProfile *profile = PokeathlonCourse_GetPlayerProfileFromData(course, team);
     enum HeapID heapId = PokeathlonCourse_GetHeapID(course);
@@ -352,7 +337,6 @@ void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCou
 }
 
 // Front picture of the Pokemon (no sprite if species is 0).
-#pragma force_active on
 
 static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
     PokepicTemplate template;
@@ -382,8 +366,6 @@ void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const u16 *monForm, int
     Heap_Free(file);
     ManagedSprite_SetPaletteOverride(sprite, palette + GetMonIconPaletteEx(monForm[0], monForm[1], FALSE));
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset) {
     NNS_G2D_VRAM_TYPE vramType = Sprite_GetVramType(sprite);

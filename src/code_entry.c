@@ -144,8 +144,6 @@ extern const CodeEntryKeyRect sCodeEntryKeyRects[12];
 extern const OamCharTransferParam sCodeEntryOamCharTransferParam;
 extern const SpriteResourceCountsListUnion sCodeEntrySpriteResourceCounts;
 extern const OamManagerParam sCodeEntryOamManagerParam;
-extern f32 sCodeEntryGrowScales[];
-extern f32 sCodeEntryShrinkScales[];
 
 static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
 static void CodeEntry_SetupBgs(BgConfig *bgConfig);
@@ -201,6 +199,10 @@ BOOL CodeEntry_State_Setup(CodeEntryApp *app);
 BOOL CodeEntry_State_FadeOut(CodeEntryApp *app);
 BOOL CodeEntry_State_Input(CodeEntryApp *app);
 BOOL CodeEntry_State_SwitchGroup(CodeEntryApp *app);
+
+static f32 sCodeEntryGrowScales[] = { 0.5f, 0.2f, 0.5f, 1.0f, 1.2f, 1.0f, 1.0f };
+
+static f32 sCodeEntryShrinkScales[] = { 0.8f, 0.6f, 0.4f, 0.2f, 0.8f, 1.0f, 1.0f };
 
 BOOL CodeEntry_Init(OverlayManager *manager, int *state) {
     CodeEntryApp *app;

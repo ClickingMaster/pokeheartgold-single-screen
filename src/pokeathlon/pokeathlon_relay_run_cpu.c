@@ -70,7 +70,6 @@ void PokeathlonRelayRunCpu_SetTeam(PokeathlonRelayRunCpu *cpu, u8 index, Pokeath
 
 // The obstacle layout as sent by the host (kind | y << 8 | x << 16 each; kind 0 ends it). Obstacles are squares
 // (walls 32 or 48 pixels, slow patches 64) centred on x, y (the track starts 32 pixels down).
-#pragma force_active on
 
 void PokeathlonRelayRunCpu_SetObstacles(PokeathlonRelayRunCpu *cpu, s32 *layout) {
     int i;
@@ -99,8 +98,6 @@ void PokeathlonRelayRunCpu_SetObstacles(PokeathlonRelayRunCpu *cpu, s32 *layout)
         }
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonRelayRunCpu_Delete(PokeathlonRelayRunCpu *cpu) {
     Heap_Free(cpu);
@@ -135,7 +132,6 @@ u8 PokeathlonRelayRunCpu_Update(PokeathlonCourseData *course, PokeathlonRelayRun
 
 // Rates the cells ahead of team `index`'s runner and flicks it to one of the best, or hands over to the
 // next member when the best is below the threshold (raised while the runner is tired).
-#pragma force_active on
 
 static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, PokeathlonRelayRunCpu *cpu, u8 index, s32 timer) {
     PokeathlonRelayRunCpuObstacle obstacles[RELAY_RUN_OBSTACLES];
@@ -290,8 +286,6 @@ static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, Pokeathlon
     }
 }
 
-#pragma force_active reset
-
 // Moves x along the lap, wrapping at its ends.
 static void PokeathlonRelayRunCpu_WrapX(s32 *x, s32 delta) {
     *x += delta;
@@ -319,7 +313,6 @@ static PokeathlonRelayRunCpuCell *PokeathlonRelayRunCpu_PickBestCell(PokeathlonR
 }
 
 // Insertion sort of the cells by score, best first (into a linked list). Returns how many share the best score.
-#pragma force_active on
 
 u8 PokeathlonRelayRunCpu_SortCells(PokeathlonRelayRunCpuCell **cells, PokeathlonRelayRunCpuCell **out) {
     PokeathlonRelayRunCpuCellNode nodes[RELAY_RUN_CPU_CELLS + 1];
@@ -371,5 +364,3 @@ u8 PokeathlonRelayRunCpu_SortCells(PokeathlonRelayRunCpuCell **cells, Pokeathlon
     GF_ASSERT(count);
     return count;
 }
-
-#pragma force_active reset

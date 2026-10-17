@@ -54,8 +54,6 @@ typedef struct PokewalkerIrWorkProgress {
     u8 buffer[0x74];
 } PokewalkerIrWorkProgress; // size: 0x7C
 
-#pragma force_active on
-
 PokewalkerIrWorkHeader ov112_021FFAA4;
 PokewalkerIrWorkBuffers ov112_021FFAC0;
 PokewalkerIrWorkSync ov112_021FFB08;

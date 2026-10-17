@@ -95,8 +95,6 @@ void PokewalkerApp_Teardown(PokewalkerApp *app) {
     app->spriteManager = NULL;
 }
 
-#pragma force_active on
-
 BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
     PokewalkerApp *app = OverlayManager_GetData(manager);
     switch (*state) {
@@ -134,8 +132,6 @@ BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokewalkerApp_Exit(OverlayManager *manager, int *state) {
     PokewalkerApp *app = OverlayManager_GetData(manager);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
@@ -162,8 +158,6 @@ static inline void SetIrqCheckFlag(u32 *dtcm) {
     dtcm[0xFFE] |= OS_IE_V_BLANK;
 }
 
-#pragma force_active on
-
 void PokewalkerApp_VBlankCB(void *arg) {
     PokewalkerApp *app = arg;
     DoScheduledBgGpuUpdates(app->bgConfig);
@@ -171,8 +165,6 @@ void PokewalkerApp_VBlankCB(void *arg) {
     SpriteSystem_TransferOam();
     SetIrqCheckFlag((u32 *)0x027E0000);
 }
-
-#pragma force_active reset
 
 void PokewalkerApp_SetGxBanks(void) {
     GraphicsBanks banks = sPokewalkerAppGraphicsBanks;
@@ -211,8 +203,6 @@ void PokewalkerApp_FreeBgs(BgConfig *bgConfig) {
     Heap_FreeExplicit(HEAP_ID_154, bgConfig);
 }
 
-#pragma force_active on
-
 void PokewalkerApp_LoadBgGraphics(PokewalkerApp *app) {
     NARC *narc = NARC_New(NARC_a_2_4_7, HEAP_ID_154);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 4, app->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_154);
@@ -227,8 +217,6 @@ void PokewalkerApp_LoadBgGraphics(PokewalkerApp *app) {
     LoadUserFrameGfx2(app->bgConfig, GF_BG_LYR_SUB_0, 994, 13, (u8)Options_GetFrame(app->options), HEAP_ID_154);
     NARC_Delete(narc);
 }
-
-#pragma force_active reset
 
 void PokewalkerApp_InitMessages(PokewalkerApp *app) {
     app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0274_bin, HEAP_ID_154);
@@ -248,8 +236,6 @@ void PokewalkerApp_LoadTilemap(PokewalkerApp *app, int bgId, int member) {
     GfGfxLoader_LoadScrnData(NARC_a_2_4_7, member, app->bgConfig, (GFBgLayer)bgId, 0, 0, TRUE, HEAP_ID_154);
 }
 
-#pragma force_active on
-
 void PokewalkerApp_StartLink(PokewalkerApp *app) {
     u8 *p = (u8 *)app;
     String *name = PlayerProfile_GetPlayerName_NewString(Save_PlayerData_GetProfile(app->saveData), HEAP_ID_154);
@@ -267,8 +253,6 @@ void PokewalkerApp_StartLink(PokewalkerApp *app) {
     PokewalkerIr_SetCompressBuffer(app->irCompressBuffer);
     String_Delete(name);
 }
-
-#pragma force_active reset
 
 void PokewalkerApp_BuildUploadData(PokewalkerApp *app) {
     PokewalkerApp_BuildUploadImage(app, app->uploadImage);

@@ -77,7 +77,6 @@ int PokewalkerApp_Link_Exit(PokewalkerApp *app) {
     return 1;
 }
 
-#pragma force_active on
 int PokewalkerApp_Link_Start(PokewalkerApp *app) {
     if (app->linkAction == 1) {
         app->nextState = 1;
@@ -102,7 +101,6 @@ int PokewalkerApp_Link_Start(PokewalkerApp *app) {
     PokewalkerApp_StartMessage(app, 2, msg_0274_00011, 3);
     return 64;
 }
-#pragma force_active reset
 
 int PokewalkerApp_Link_PrintPointAtCard(PokewalkerApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_MAIN_1);
@@ -594,7 +592,6 @@ int PokewalkerApp_UpdateLinkProgress(PokewalkerApp *app, int progress) {
     return progress;
 }
 
-#pragma force_active on
 int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
     u8 progress;
     int error;
@@ -662,7 +659,6 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
     }
     return 25;
 }
-#pragma force_active reset
 
 // Request 0x40: reads the Pokewalker's Pokemon, status and blocks.
 int PokewalkerApp_Link_StartReceive(PokewalkerApp *app) {
@@ -834,7 +830,6 @@ int PokewalkerApp_Link_StartReceiveGifts(PokewalkerApp *app) {
     return 29;
 }
 
-#pragma force_active on
 int PokewalkerApp_Link_UpdateReceiveGifts(PokewalkerApp *app) {
     int progress, error;
     RTCDate date;
@@ -918,7 +913,6 @@ int PokewalkerApp_Link_StartSendStroll(PokewalkerApp *app) {
     PokewalkerApp_ResetLinkError(app);
     return 31;
 }
-#pragma force_active reset
 
 // The walker icon (sprite 8) follows the transfer progress.
 void PokewalkerApp_SetWalkerIconFrame(PokewalkerApp *app, int progress) {
@@ -929,7 +923,6 @@ void PokewalkerApp_SetWalkerIconFrame(PokewalkerApp *app, int progress) {
     }
 }
 
-#pragma force_active on
 int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app) {
     u32 progress, error;
     int total;
@@ -1031,7 +1024,6 @@ int PokewalkerApp_GetLinkErrorMessage(int error) {
     }
     return error;
 }
-#pragma force_active reset
 
 int PokewalkerApp_Link_PrintError(PokewalkerApp *app) {
     PokewalkerApp_HideCursor(app);
@@ -1219,7 +1211,6 @@ int PokewalkerApp_Link_ShowSendBackYesNo(PokewalkerApp *app) {
     return 46;
 }
 
-#pragma force_active on
 int PokewalkerApp_Link_HandleSendBackYesNo(PokewalkerApp *app) {
     switch (PokewalkerApp_HandleTwoChoiceMenu(app)) {
     case 0:
@@ -1241,7 +1232,6 @@ int PokewalkerApp_Link_HandleSendBackYesNo(PokewalkerApp *app) {
         return 46;
     }
 }
-#pragma force_active reset
 
 int PokewalkerApp_Link_PrintWillSendBack(PokewalkerApp *app) {
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00019);

@@ -251,8 +251,6 @@ static inline u32 LoadMonInfo(PokeathlonCourseData *course, int mon, PokeathlonC
     return PokeathlonCourse_GetSpriteSizeType(PokeathlonCourse_GetPerformance(course, team, member));
 }
 
-#pragma force_active on
-
 BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
@@ -487,8 +485,6 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCirclePush_Main(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(circlePush->spritePool);
@@ -511,8 +507,6 @@ BOOL PokeathlonCirclePush_CalcResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList_SaveEventPoints(scoreList, 2);
     return TRUE;
 }
-
-#pragma force_active on
 
 BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
@@ -549,8 +543,6 @@ BOOL PokeathlonCirclePush_Exit(PokeathlonCourseData *course) {
     Heap_Destroy(HEAP_ID_140);
     return TRUE;
 }
-
-#pragma force_active reset
 
 static void PokeathlonCirclePush_SetBanks(void) {
     GraphicsBanks banks = gPokeathlonCirclePushGraphicsBanks;
@@ -699,7 +691,6 @@ static void PokeathlonCirclePush_LoadBgGfx(PokeathlonCirclePush *circlePush) {
 }
 
 // The host's state of the twelve Pokemon for the players (the packet).
-#pragma force_active on
 
 static void PokeathlonCirclePush_MakePacket(PokeathlonCirclePush *circlePush, PokeathlonCirclePushPacket *packet) {
     u8 i;
@@ -770,8 +761,6 @@ static void PokeathlonCirclePush_MakePacket(PokeathlonCirclePush *circlePush, Po
     circlePush->scoringEffect = 0;
 }
 
-#pragma force_active reset
-
 // Every player: sends the touch, follows the host's packet. Returns TRUE when the event is over.
 static BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush;
@@ -836,7 +825,6 @@ typedef struct CirclePushHostFrame {
 
 // Host: the round timer, the scoring at its end, the players' touches and the CPU teams; then
 // moves the Pokemon and makes the packet.
-#pragma force_active on
 
 static void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course) {
     CirclePushHostFrame frame;
@@ -1038,10 +1026,7 @@ static inline void SetMonAnim(PokeathlonCourseData *course, PokeathlonCirclePush
     }
 }
 
-#pragma force_active reset
-
 // Every player: draws the Pokemon, the timer and the effects from the host's packet.
-#pragma force_active on
 
 static void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
     s32 scoringMon;
@@ -1237,8 +1222,6 @@ static void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
     PokeathlonCirclePushDisplay_Update(circlePush->display, scoring, outOfRing);
 }
 
-#pragma force_active reset
-
 // Host: moves every Pokemon in the ring towards its target; a Pokemon that touches another one
 // pushes it (PokeathlonCirclePush_PushMons).
 static void PokeathlonCirclePush_MoveMons(PokeathlonCourseData *course) {
@@ -1397,7 +1380,6 @@ static void PokeathlonCirclePush_SetTarget(int x, int y, const VecFx32 *position
 }
 
 // The team's Pokemon nearest to the touch (12: none in reach).
-#pragma force_active on
 
 static u8 PokeathlonCirclePush_FindTouchedMon(PokeathlonCirclePush *circlePush, u8 team, u16 x, u16 y) {
     int range = PokeathlonCourse_GetTouchRadius(circlePush);
@@ -1436,8 +1418,6 @@ static u8 PokeathlonCirclePush_FindTouchedMon(PokeathlonCirclePush *circlePush, 
     return team * 3 + found;
 }
 
-#pragma force_active reset
-
 static BOOL PokeathlonCirclePush_MonsCollide(PokeathlonCirclePushMon *a, PokeathlonCirclePushMon *b) {
     VecFx32 delta;
     VecFx32 centerA;
@@ -1456,8 +1436,6 @@ static BOOL PokeathlonCirclePush_MonsCollide(PokeathlonCirclePushMon *a, Pokeath
     }
     return TRUE;
 }
-
-#pragma force_active on
 
 static void PokeathlonCirclePush_UpdateContacts(PokeathlonCirclePush *circlePush) {
     u8 i;
@@ -1491,8 +1469,6 @@ static void PokeathlonCirclePush_UpdateContacts(PokeathlonCirclePush *circlePush
     }
 }
 
-#pragma force_active reset
-
 // Whether no Pokemon touching mon is in the way of a move by delta.
 static BOOL PokeathlonCirclePush_CanMove(PokeathlonCirclePush *circlePush, PokeathlonCirclePushMon *mon, u32 index, const VecFx32 *delta) {
     VecFx32 toOther;
@@ -1525,7 +1501,6 @@ typedef struct CirclePushPushNode {
 // Pushing Pokemon move the Pokemon they touch, and those the ones they touch, along the push
 // (a depth-first walk over the contacts); a pushing Pokemon that ran out of stamina is
 // exhausted for 60 frames.
-#pragma force_active on
 
 static void PokeathlonCirclePush_PushMons(PokeathlonCirclePush *circlePush) {
     CirclePushPushNode nodes[12];
@@ -1650,8 +1625,6 @@ static void PokeathlonCirclePush_PushMons(PokeathlonCirclePush *circlePush) {
     }
 }
 
-#pragma force_active reset
-
 static u8 PokeathlonCirclePushStack_Push(PokeathlonCirclePushStack *stack, u8 mon) {
     s32 count;
     if (stack->count >= 12) {
@@ -1676,7 +1649,6 @@ static u8 PokeathlonCirclePushStack_Pop(PokeathlonCirclePushStack *stack) {
 }
 
 // The part of a in the direction of b.
-#pragma force_active on
 
 static void PokeathlonCirclePush_Project(VecFx32 *a, VecFx32 *b, VecFx32 *out) {
     VecFx32 normA;
@@ -1692,8 +1664,6 @@ static void PokeathlonCirclePush_Project(VecFx32 *a, VecFx32 *b, VecFx32 *out) {
     VEC_MultAdd((fx32)(((s64)dot * length + 2048) >> 12), &normB, &zero, out);
 }
 
-#pragma force_active reset
-
 static fx32 PokeathlonCirclePush_Cosine(const VecFx32 *a, const VecFx32 *b) {
     VecFx32 normA;
     VecFx32 normB;
@@ -1703,7 +1673,6 @@ static fx32 PokeathlonCirclePush_Cosine(const VecFx32 *a, const VecFx32 *b) {
 }
 
 // Host, end of a round: the Pokemon standing in bonus zones score their points.
-#pragma force_active on
 
 static void PokeathlonCirclePush_ScoreZones(PokeathlonCirclePush *circlePush) {
     u8 zoneMons[4][12];
@@ -1745,8 +1714,6 @@ static void PokeathlonCirclePush_ScoreZones(PokeathlonCirclePush *circlePush) {
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonCirclePush_DrawTimer(int time, BgConfig *bgConfig) {
     int i;
 
@@ -1781,7 +1748,6 @@ static void PokeathlonCirclePush_DrawTimerTile(u32 index, BgConfig *bgConfig) {
 }
 
 // Host: the Pokemon that fell out of the ring come back at their start.
-#pragma force_active on
 
 static void PokeathlonCirclePush_RespawnMons(PokeathlonCirclePush *circlePush) {
     int team;
@@ -1802,8 +1768,6 @@ static void PokeathlonCirclePush_RespawnMons(PokeathlonCirclePush *circlePush) {
         }
     }
 }
-
-#pragma force_active reset
 
 // Whether none of the team's Pokemon is in the game (all fell out of the ring).
 static BOOL PokeathlonCirclePush_IsTeamOut(PokeathlonCirclePush *circlePush, int team) {
@@ -1964,8 +1928,6 @@ static void PokeathlonCirclePush_ShakeTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonCirclePush_StopEffects(PokeathlonCirclePushEffects *effects) {
     effects->bounceActive = 0;
     if (effects->changeTask) {
@@ -2002,8 +1964,6 @@ static void PokeathlonCirclePush_StopEffects(PokeathlonCirclePushEffects *effect
     effects->bounceMon = 12;
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG0, 12, 4);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCirclePush_StartBounce(PokeathlonCirclePushEffects *effects, u8 mon) {
     if (effects->bounceTask == NULL) {
@@ -2097,7 +2057,6 @@ static int PokeathlonCirclePush_CompareDepth(const void *a, const void *b) {
 }
 
 // Pokemon lower on the screen are drawn in front.
-#pragma force_active on
 
 static void PokeathlonCirclePush_SortByDepth(PokeathlonCirclePush *circlePush, PokeathlonCirclePushPacket *packet) {
     CirclePushDepth depths[12];
@@ -2117,8 +2076,6 @@ static void PokeathlonCirclePush_SortByDepth(PokeathlonCirclePush *circlePush, P
         PokeathlonCourseMonObject_SetDrawPriority(circlePush->mons[team][member].object, i + 6);
     }
 }
-
-#pragma force_active reset
 
 static PokeathlonCirclePushZoneMarkers *PokeathlonCirclePushZoneMarkers_New(enum HeapID heapId) {
     PokeathlonCirclePushZoneMarkers *markers = Heap_Alloc(heapId, sizeof(PokeathlonCirclePushZoneMarkers));
@@ -2395,7 +2352,6 @@ static int PokeathlonCirclePushAi_Update(PokeathlonCirclePushAi *ai, u8 layout) 
 
 // A CPU Pokemon picks a target cell around it (or anywhere, if no cell nearby is good):
 // bonus zones, cells nobody else wants, staying away from stronger Pokemon.
-#pragma force_active on
 
 static void PokeathlonCirclePushAi_ChooseTarget(PokeathlonCirclePushAi *ai, u8 index, u8 layout) {
     PokeathlonCirclePushAiCell *all[25];
@@ -2504,8 +2460,6 @@ static void PokeathlonCirclePushAi_ChooseTarget(PokeathlonCirclePushAi *ai, u8 i
     mon->target->z = 0;
 }
 
-#pragma force_active reset
-
 // A random point of each cell (cells are 32 pixels, from (16, 16)).
 static void PokeathlonCirclePushAi_PlaceInCells(u8 count, PokeathlonCirclePushAiCell **cells) {
     u8 i;
@@ -2557,8 +2511,6 @@ static int PokeathlonCirclePushAi_GetCell(int x, int y) {
     return cell;
 }
 
-#pragma force_active on
-
 static int PokeathlonCirclePushAi_ScoreCell(PokeathlonCirclePushAi *ai, PokeathlonCirclePushAiZone *zones, int cell, PokeathlonCirclePushAiMon *mon, int x, int y, BOOL *inZone) {
     int score = 0;
     if (cell < 0) {
@@ -2600,12 +2552,9 @@ static int PokeathlonCirclePushAi_ScoreCell(PokeathlonCirclePushAi *ai, Pokeathl
     return score;
 }
 
-#pragma force_active reset
-
 #pragma opt_loop_invariants off
 
 // Minus one for every other Pokemon in the cell, two if it is a faster rival.
-#pragma force_active on
 
 static int PokeathlonCirclePushAi_CountRivals(const PokeathlonCirclePushAiMon *mons, const PokeathlonCirclePushAiMon *mon, int cell) {
     int result;
@@ -2631,8 +2580,6 @@ static int PokeathlonCirclePushAi_CountRivals(const PokeathlonCirclePushAiMon *m
     }
     return result;
 }
-
-#pragma force_active reset
 
 #pragma opt_loop_invariants reset
 
@@ -2700,7 +2647,6 @@ typedef struct CirclePushSortNode {
 } CirclePushSortNode;
 
 // Sorts the cells by score (insertion into a list); returns how many share the best score.
-#pragma force_active on
 
 static u8 PokeathlonCirclePushAi_SortCells(u32 count, PokeathlonCirclePushAiCell **cells, PokeathlonCirclePushAiCell **sorted) {
     u8 best;
@@ -2750,8 +2696,6 @@ static u8 PokeathlonCirclePushAi_SortCells(u32 count, PokeathlonCirclePushAiCell
     }
     return best;
 }
-
-#pragma force_active reset
 
 static PokeathlonCirclePushDisplay *PokeathlonCirclePushDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course) {
     PokeathlonCirclePushDisplay *display = Heap_Alloc(heapId, sizeof(PokeathlonCirclePushDisplay));
@@ -2805,7 +2749,6 @@ static void PokeathlonCirclePushDisplay_Free(PokeathlonCirclePushDisplay *displa
 }
 
 // Bottom screen frame (sub BG 1) and the screens of the top screen's animations.
-#pragma force_active on
 
 static void PokeathlonCirclePushDisplay_LoadScreens(PokeathlonCirclePushDisplay *display) {
     NNSG2dScreenData *screen;
@@ -2833,8 +2776,6 @@ static void PokeathlonCirclePushDisplay_LoadScreens(PokeathlonCirclePushDisplay 
     BgTilemapRectChangePalette(display->bgConfig, GF_BG_LYR_SUB_2, 0, 0, 32, 24, 3);
     ScheduleBgTilemapBufferTransfer(display->bgConfig, GF_BG_LYR_SUB_2);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCirclePushDisplay_LoadPics(PokeathlonCirclePushDisplay *display) {
     PokeathlonCirclePushDisplay_LoadMonPics(display);

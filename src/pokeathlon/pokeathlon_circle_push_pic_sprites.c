@@ -1,4 +1,3 @@
-#pragma force_active on
 #include "global.h"
 
 #include "pokeathlon/pokeathlon_circle_push_display.h"

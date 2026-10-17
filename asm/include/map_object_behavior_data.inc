@@ -201,5 +201,3 @@
 	.public gMapObjectTypeBehaviorInits
 	.public gMapObjectTypeBehaviorChecks
 	.public gMapObjectTypeBehaviorUpdates
-	.public gTrainerSightDistanceFuncs
-	.public gTrainerApproachStateFuncs

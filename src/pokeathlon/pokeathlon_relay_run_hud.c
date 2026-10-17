@@ -54,7 +54,6 @@ extern const VecFx32 sRelayRunMapStartOffset;              // track map: offset 
 extern const VecFx32 sRelayRunMapCenter;                   // track map: centre
 
 // Shows the lap count for a second (60 frames) each time it goes up.
-#pragma force_active on
 
 static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member);
 static void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
@@ -102,8 +101,6 @@ void PokeathlonRelayRun_UpdateLapCounter(PokeathlonRelayRunLapCounter *counter, 
         }
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonRelayRun_AddResultWindow(PokeathlonRelayRun *relayRun) {
     AddWindow(relayRun->bgConfig, &relayRun->window, &sRelayRunResultWindowTemplate);
@@ -270,7 +267,6 @@ void PokeathlonRelayRunHud_LoadSpriteGraphics(PokeathlonRelayRunHud *hud, Pokeat
 
 // The track map (an icon, a colour mark, a swap mark and a condition mark per team), the "Laps" plate and
 // the timer's sprites.
-#pragma force_active on
 
 void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonCourseSpritePool *spritePool, PokeathlonCourseSpriteResources *monResources) {
     int i, j;
@@ -313,10 +309,7 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonC
     }
 }
 
-#pragma force_active reset
-
 // The icons of every team's Pokemon (species, form pairs), shown on the track map at the start line.
-#pragma force_active on
 
 void PokeathlonRelayRunHud_LoadMonIcons(PokeathlonRelayRunHud *hud, PokeathlonCoursePoint *mons) {
     NARC *narc;
@@ -347,8 +340,6 @@ void PokeathlonRelayRunHud_LoadMonIcons(PokeathlonRelayRunHud *hud, PokeathlonCo
         PokeathlonCourseSpritePoolSprite_SetPosition(hud->map.teams[i].colorMark, &position);
     }
 }
-
-#pragma force_active reset
 
 // The pictures of the player's own three Pokemon.
 void PokeathlonRelayRunHud_LoadMonPics(PokeathlonRelayRunHud *hud, const PokeathlonCourseMonInfo *mon) {
@@ -386,7 +377,6 @@ static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 team
 }
 
 // Places a team on the track map: x along the lap turns into an angle around the oval.
-#pragma force_active on
 
 void PokeathlonRelayRunHud_SetMapPosition(PokeathlonRelayRunHud *hud, u8 teamId, u16 x) {
     VecFx32 position;
@@ -406,8 +396,6 @@ void PokeathlonRelayRunHud_SetMapPosition(PokeathlonRelayRunHud *hud, u8 teamId,
     PokeathlonCourseSpritePoolSprite_SetPosition(hud->map.teams[teamId].conditionMark, &position);
     PokeathlonCourseSpritePoolSprite_SetPosition(hud->map.teams[teamId].swapMark, &position);
 }
-
-#pragma force_active reset
 
 // The distance on the touch screen: laps (two big digits) and tenths of the lap so far (x / 102.4), copied
 // from the digit tiles (5 x 2 digits of 4 x 8 tiles).
@@ -435,7 +423,6 @@ void PokeathlonRelayRunHud_PrintDistance(PokeathlonRelayRunHud *hud, u8 laps, u3
 // The member pictures slide down one place when the members change: the leaving runner's picture drops out of
 // slot rotateSlot and comes back at the top with the next member; returns TRUE when done. member: the member
 // that ran (its name is shown for the one two places on).
-#pragma force_active on
 
 BOOL PokeathlonRelayRunHud_RotateMonPics(PokeathlonRelayRunHud *hud, int member) {
     VecFx32 position0, position2, position3;
@@ -499,8 +486,6 @@ BOOL PokeathlonRelayRunHud_RotateMonPics(PokeathlonRelayRunHud *hud, int member)
     }
     return FALSE;
 }
-
-#pragma force_active reset
 
 // The same wait for a team without a player (teamId 1-3), counted without pictures; TRUE when done.
 BOOL PokeathlonRelayRunHud_RotateCpuMonPics(PokeathlonRelayRunHud *hud, u32 teamId) {

@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 6cae54b24 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 64529187f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -5159,21 +5159,12 @@ src/aprijuice_scene_camera.c</title></rect>
 17,290 bytes · C-only source
 src/ball_capsule_editor.c</title></rect>
 <rect x="888.687" y="466.853" width="73.290" height="37.747" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="961.978" y="426.285" width="30.935" height="39.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp_effects.o
+<rect x="961.978" y="426.285" width="36.242" height="39.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp.o
+9,042 bytes · C-only source
+src/application/footprint_stamp.c</title></rect>
+<rect x="998.220" y="426.285" width="30.935" height="39.920" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp_effects.o
 7,718 bytes · C-only source
 src/application/footprint_stamp_effects.c</title></rect>
-<rect x="992.913" y="426.285" width="36.242" height="19.691" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp_board.o
-4,460 bytes · C-only source
-src/application/footprint_stamp_board.c</title></rect>
-<rect x="992.913" y="445.976" width="32.351" height="20.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp.o
-4,090 bytes · C-only source
-src/application/footprint_stamp.c</title></rect>
-<rect x="1025.263" y="445.976" width="3.892" height="13.157" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp_texture.o
-320 bytes · C-only source
-src/application/footprint_stamp_texture.c</title></rect>
-<rect x="1025.263" y="459.133" width="3.892" height="7.072" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / footprint_stamp_sprites.o
-172 bytes · C-only source
-src/application/footprint_stamp_sprites.c</title></rect>
 <rect x="961.978" y="426.285" width="67.177" height="39.920" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="961.978" y="466.205" width="67.177" height="38.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_65 / wireless_trade_select_mon.o
 16,120 bytes · C-only source

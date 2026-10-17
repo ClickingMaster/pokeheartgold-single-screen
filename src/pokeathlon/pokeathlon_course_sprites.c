@@ -8,8 +8,6 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 
-#pragma force_active on
-
 static void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources);
 static void PokeathlonCourseMonObjects_FinishLoad(SysTask *task, void *data);
 static Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObjects *objects, int priority, NNS_G2D_VRAM_TYPE whichScreen, int resourceId);
@@ -143,8 +141,6 @@ void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *reso
     Heap_Free(resources);
 }
 
-#pragma force_active reset
-
 static u8 PokeathlonCourseSprites_HasGroup(PokeathlonCourseSpriteResources *resources, u32 mask) {
     if (resources == NULL) {
         return 0;
@@ -155,8 +151,6 @@ static u8 PokeathlonCourseSprites_HasGroup(PokeathlonCourseSpriteResources *reso
 static GF_2DGfxResMan *PokeathlonCourseSprites_GetResMan(PokeathlonCourseSpriteResources *resources, int type) {
     return resources->resMans[type];
 }
-
-#pragma force_active on
 
 // Loads the character, cell and animation files of each selected group (NARC a/1/5/3) and the palettes.
 static void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResources *resources) {
@@ -246,8 +240,6 @@ static void PokeathlonCourseSprites_LoadResources(PokeathlonCourseSpriteResource
         SpriteTransfer_CreateExtPlttTransferTask(resources->extraPalette);
     }
 }
-
-#pragma force_active reset
 
 // "3, 2, 1" countdown and finish sprite (group 0x14).
 Sprite *PokeathlonCourseSprites_CreateCountdown(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, NNS_G2D_VRAM_TYPE whichScreen, enum HeapID heapId) {
@@ -504,8 +496,6 @@ Sprite *PokeathlonCourse_CreateTimerDigitSpriteAlt(PokeathlonCourseSpriteResourc
     return sprite;
 }
 
-#pragma force_active on
-
 // "Start" sprite (group 0x1F) on the given screen, with that screen's palette.
 Sprite *PokeathlonCourseSprites_CreateStart(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, NNS_G2D_VRAM_TYPE whichScreen, int priority, enum HeapID heapId) {
     SpriteResourcesHeader header;
@@ -542,8 +532,6 @@ Sprite *PokeathlonCourseSprites_CreateStart(PokeathlonCourseSpriteResources *res
     Sprite_SetDrawFlag(sprite, FALSE);
     return sprite;
 }
-
-#pragma force_active reset
 
 // Marker that follows a course object (group 0x20), drawn behind the other sprites.
 Sprite *PokeathlonCourseSprites_CreateMarker(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId) {
@@ -599,8 +587,6 @@ void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *objects) {
     PokeathlonCourseMonGfx_FreeManager(objects->gfxManager);
     Heap_Free(objects);
 }
-
-#pragma force_active on
 
 // Sets up the shadow and marker sprites of each Pokemon (if their groups are loaded) and starts loading the
 // Pokemon sprites; PokeathlonCourseMonObjects_FinishLoad links them once loaded.
@@ -667,20 +653,14 @@ void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *objects, int co
     SysTask_CreateOnMainQueue(PokeathlonCourseMonObjects_FinishLoad, objects, taskPriority);
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *objects) {
     return objects->loaded;
 }
-
-#pragma force_active on
 
 PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *objects, int index) {
     GF_ASSERT(index < objects->count);
     return &objects->objects[index];
 }
-
-#pragma force_active reset
 
 PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *object) {
     return object->gfx;
@@ -770,8 +750,6 @@ void PokeathlonCourseMonObject_SetMonDrawFlag(PokeathlonCourseMonObject *object,
     Sprite_SetDrawFlag(PokeathlonCourseMonGfx_GetSprite(object->gfx), draw);
 }
 
-#pragma force_active on
-
 // The shadow is drawn 2 steps and the marker 1 step behind the Pokemon.
 void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object, int drawPriority) {
     Sprite_SetDrawPriority(PokeathlonCourseMonGfx_GetSprite(object->gfx), drawPriority);
@@ -782,8 +760,6 @@ void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object
         Sprite_SetDrawPriority(object->markerSprite, drawPriority + object->drawPriorityStep);
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonCourseMonObject_SetDrawPriorityStep(PokeathlonCourseMonObject *object, s32 step) {
     object->drawPriorityStep = step;
@@ -800,8 +776,6 @@ void PokeathlonCourseMonObject_SetAffineMatrix(PokeathlonCourseMonObject *object
 void PokeathlonCourseMonObject_SetAnimStateRaw(PokeathlonCourseMonObject *object, u32 animState) {
     object->animState = animState;
 }
-
-#pragma force_active on
 
 // Animation state 1..6: facing / pose; selects the walk animation sequence (6 -> sequence 8).
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u32 animState) {
@@ -918,8 +892,6 @@ void PokeathlonCourseMonObject_SetAnimCode(PokeathlonCourseMonObject *object, in
     Sprite_TryChangeAnimSeq(sprite, seq);
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCourseMonObject_IsAnimated(PokeathlonCourseMonObject *object) {
     return Sprite_IsAnimated(PokeathlonCourseMonGfx_GetSprite(object->gfx));
 }
@@ -976,8 +948,6 @@ void PokeathlonCourseMonObject_GetPosition(PokeathlonCourseMonObject *object, s3
     *y = object->y;
 }
 
-#pragma force_active on
-
 void PokeathlonCourseMonObject_Move(PokeathlonCourseMonObject *object, s32 dx, s32 dy, u32 animState, BOOL moveShadow) {
     VecFx32 delta;
     VecFx32 result;
@@ -1000,5 +970,3 @@ void PokeathlonCourseMonObject_Move(PokeathlonCourseMonObject *object, s32 dx, s
         Sprite_SetMatrix(object->shadowSprite, &result);
     }
 }
-
-#pragma force_active reset

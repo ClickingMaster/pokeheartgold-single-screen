@@ -524,8 +524,6 @@ void PokewalkerIr_RequestChunk(void) {
     PokewalkerIr_Send(data, 3, 0xC, 2);
 }
 
-#pragma force_active on
-
 #define LOAD_NEXT_BLOCK()                                                                                   \
     switch (ov112_021FFAA4.blockIndex) {                                                                    \
     case 0:                                                                                                 \
@@ -710,8 +708,6 @@ void PokewalkerIr_OnReceiveComplete(void) {
         return;
     }
 }
-
-#pragma force_active reset
 
 void PokewalkerIr_OnConnect(int result) {
     u8 data[4];

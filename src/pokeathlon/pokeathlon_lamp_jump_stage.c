@@ -58,8 +58,6 @@ extern const u16 sLampJumpLampPositions[29][2]; // lamp positions, in half pixel
 extern const WindowTemplate sResultsAnnouncementWindowTemplate;
 extern u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon (not const: reloaded after every call)
 
-#pragma force_active on
-
 static int sTrampolineBlue = 20;
 static int sTrampolineGreen = 10;
 
@@ -126,16 +124,12 @@ static void PokeathlonLampJump_DrawTrampoline(PokeathlonLampJump *lampJump) {
     NNS_G3dGeBufferOP_N(G3OP_END, NULL, 0);
 }
 
-#pragma force_active reset
-
 void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump) {
     Thunk_G3X_Reset();
     Camera_PushLookAtToNNSGlb();
     PokeathlonLampJump_DrawTrampoline(lampJump);
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
 }
-
-#pragma force_active on
 
 void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump) {
     VecFx32 up;
@@ -185,8 +179,6 @@ void PokeathlonLampJump_CalcTrampolineSurface(PokeathlonLampJumpTrampoline *tram
     }
 }
 
-#pragma force_active reset
-
 // The surface from some of the parts only: bit 0 = dent 0 and line 0-1, bit 1 = dent 1 and line 1-2,
 // bit 2 = dent 2 and line 2-0.
 static void PokeathlonLampJump_CalcPartialSurface(PokeathlonLampJumpTrampoline *trampoline, int parts, s32 *heights) {
@@ -224,8 +216,6 @@ static void PokeathlonLampJump_CalcPartialSurface(PokeathlonLampJumpTrampoline *
     }
 }
 
-#pragma force_active on
-
 // The cloth between two Pokemon: a straight line between the bottoms of their dents.
 static void PokeathlonLampJump_CalcLine(PokeathlonLampJumpTrampoline *trampoline, int line, u8 monA, u8 monB) {
     s32 *left;
@@ -258,8 +248,6 @@ static void PokeathlonLampJump_CalcLine(PokeathlonLampJumpTrampoline *trampoline
         trampoline->lines[line][*left + i + 1] = start + delta * (i + 1) / span;
     }
 }
-
-#pragma force_active reset
 
 // A lamp hit: one more point than the previous lamp of the same jump (up to 5). Returns the points.
 static u8 PokeathlonLampJump_ScoreLamp(PokeathlonLampJumpMon *mon) {
@@ -336,8 +324,6 @@ void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLamp
         }
     }
 }
-
-#pragma force_active on
 
 // One Pokemon on the trampoline: pressing it down, being thrown up, flying, landing.
 static void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJump *lampJump, u8 mon) {
@@ -491,8 +477,6 @@ static void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, Pokeathl
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonLampJump_MoveSideways(PokeathlonLampJumpMon *mon, PokeathlonLampJumpJump *jump) {
     fx32 x;
     if (jump->height > 0) {
@@ -505,8 +489,6 @@ static void PokeathlonLampJump_MoveSideways(PokeathlonLampJumpMon *mon, Pokeathl
         }
     }
 }
-
-#pragma force_active on
 
 // The dent a Pokemon makes at a column: straight lines from both edges down to `depth`.
 static void PokeathlonLampJump_CalcDent(int column, int depth, s32 *dent) {
@@ -525,8 +507,6 @@ static void PokeathlonLampJump_CalcDent(int column, int depth, s32 *dent) {
         dent[(u8)(column + 1 + i)] = -((u8)(right - i) * negDepth / (right + 1));
     }
 }
-
-#pragma force_active reset
 
 // A Pokemon that is not jumping rests on the surface.
 void PokeathlonLampJump_SetRestingHeights(PokeathlonLampJump *lampJump) {
@@ -557,8 +537,6 @@ void PokeathlonLampJump_LoadSpriteResources(PokeathlonCourseSpritePool *scene) {
     PokeathlonCourseSpritePool_LoadCell(scene, NARC_a_1_6_8, 2, 101);
     PokeathlonCourseSpritePool_LoadAnim(scene, NARC_a_1_6_8, 1, 101);
 }
-
-#pragma force_active on
 
 void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCourseSpritePool *scene) {
     int i;
@@ -624,8 +602,6 @@ void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self) {
     }
 }
 
-#pragma force_active reset
-
 void PokeathlonLampJump_UpdateScoreDisplay(PokeathlonLampJump *lampJump) {
     u16 total = 0;
     int i;
@@ -637,8 +613,6 @@ void PokeathlonLampJump_UpdateScoreDisplay(PokeathlonLampJump *lampJump) {
     }
     PokeathlonLampJump_PrintScore(lampJump, total);
 }
-
-#pragma force_active on
 
 // Three digits of 4x8 tiles from the digit sheet in the BG2 screen (5 digits per row).
 static void PokeathlonLampJump_PrintScore(PokeathlonLampJump *lampJump, int score) {
@@ -661,8 +635,6 @@ static void PokeathlonLampJump_PrintScore(PokeathlonLampJump *lampJump, int scor
     }
     ScheduleBgTilemapBufferTransfer(lampJump->bgConfig, GF_BG_LYR_SUB_0);
 }
-
-#pragma force_active reset
 
 // Seconds left, two digit sprites.
 void PokeathlonLampJump_UpdateTimerDisplay(PokeathlonLampJump *lampJump, int frames) {
@@ -759,8 +731,6 @@ void PokeathlonLampJump_SetMonParams(PokeathlonCourseData *course, PokeathlonLam
     mon->stunFrames = params->velocity[stats[3]];
     mon->flickScale = params->scale[stats[4]];
 }
-
-#pragma force_active on
 
 // Two Pokemon that touch: both are stunned; in the air they swap their speeds, else they are pushed apart.
 BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLampJump *lampJump) {
@@ -859,8 +829,6 @@ BOOL PokeathlonLampJump_CollideMons(PokeathlonCourseData *course, PokeathlonLamp
     return FALSE;
 }
 
-#pragma force_active reset
-
 PokeathlonLampJumpLamps *PokeathlonLampJump_NewLamps(enum HeapID heapId) {
     PokeathlonLampJumpLamps *lamps = Heap_Alloc(heapId, sizeof(PokeathlonLampJumpLamps));
     MI_CpuFill8(lamps, 0, sizeof(PokeathlonLampJumpLamps));
@@ -934,7 +902,6 @@ static void PokeathlonLampJump_ShowLampPoints(PokeathlonLampJumpLamps *lamps, u8
     PokeathlonCourseSpritePoolSprite_Show(lamps->lamps[index].pointsSprite, 1, 1);
 }
 
-#pragma force_active on
 #pragma opt_scalarizeliveranges off
 
 // Lights up to 25 of the lamps that are out, picked at random.
@@ -974,9 +941,6 @@ static void PokeathlonLampJump_LightLamps(PokeathlonLampJumpLamps *lamps) {
 }
 
 #pragma opt_scalarizeliveranges reset
-#pragma force_active reset
-
-#pragma force_active on
 
 PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapId, u8 count, int unused, u8 *dataCopy, PokeathlonCourseData *course) {
     int i;
@@ -999,8 +963,6 @@ PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapI
     }
     return cpu;
 }
-
-#pragma force_active reset
 
 void PokeathlonLampJump_FreeCpuPlayers(PokeathlonLampJumpCpuPlayers *cpu) {
     Heap_Free(cpu);

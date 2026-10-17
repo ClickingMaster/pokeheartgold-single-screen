@@ -4,10 +4,6 @@
 
 	.bss
 
-	.public gWirelessStatusIcon
-gWirelessStatusIcon:
-	.space 0x4
-
 	.rodata
 
 	.public _020F6A9C

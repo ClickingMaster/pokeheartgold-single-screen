@@ -14,13 +14,9 @@ typedef u32 (*PokeathlonEventPointsFunc)(u32 score);
 extern void (*const gPokeathlonEventPointsCalcFuncs[])(void *list, int event);
 extern const PokeathlonEventPointsFunc gPokeathlonEventScorePointsFuncs[];
 
-#pragma force_active on
-
 void PokeathlonEvent_CalcPoints(void *list, int event) {
     gPokeathlonEventPointsCalcFuncs[event](list, event);
 }
-
-#pragma force_active reset
 
 void PokeathlonEvent_CalcPointsFromScores(void *list, int event) {
     PokeathlonEventPointsFunc func = gPokeathlonEventScorePointsFuncs[event];
@@ -43,14 +39,10 @@ void PokeathlonEvent_CalcPointsFromRanks(void *list, int event) {
     }
 }
 
-#pragma force_active on
-
 // 30 points at 0, approaching 150.
 static float PokeathlonEvent_Saturate(u32 score, float rate) {
     return (float)(150.0 - 120.0 / (1.0 + (float)score * rate));
 }
-
-#pragma force_active reset
 
 static u8 PokeathlonEvent_ClampPoints(float points) {
     u32 n = (u32)points;
@@ -60,14 +52,10 @@ static u8 PokeathlonEvent_ClampPoints(float points) {
     return (u8)n;
 }
 
-#pragma force_active on
-
 // Event 0 (Hurdle Dash): the score is the time in frames.
 u8 PokeathlonEvent_HurdleDashPoints(u32 frames) {
     return PokeathlonEvent_ClampPoints((float)(11500.0 / (double)((float)frames / 30.0f)));
 }
-
-#pragma force_active reset
 
 // Event 1 (Pennant Capture)
 u8 PokeathlonEvent_PennantCapturePoints(int score) {

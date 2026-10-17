@@ -119,7 +119,6 @@ int PokewalkerApp_StartStroll_End(PokewalkerApp *app) {
     return 8;
 }
 
-#pragma force_active on
 #pragma opt_propagation off
 
 // Puts the Pokemon back from its Stroll into the first free PC slot: the Pokemon stored in the save data, with the
@@ -161,7 +160,6 @@ void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app) {
 }
 
 #pragma opt_propagation reset
-#pragma force_active reset
 
 // Adds the steps walked as experience, at most up to the next level. Returns whether the Pokemon leveled up.
 BOOL PokewalkerApp_AddStrollExp(BoxPokemon *boxMon, Pokemon *mon, int exp) {
@@ -260,8 +258,6 @@ void PokewalkerApp_ReceiveItems(PokewalkerApp *app) {
     }
 }
 
-#pragma force_active on
-
 // Puts the Pokemon the Pokewalker caught and its gift Pokemon into the PC (from the Pokewalker's box if useWalkerBox).
 void PokewalkerApp_ReceiveMons(PokewalkerApp *app, BOOL useWalkerBox) {
     int box;
@@ -331,8 +327,6 @@ void PokewalkerApp_ReceiveMons(PokewalkerApp *app, BOOL useWalkerBox) {
     String_Delete(playerName);
     Heap_Free(mon);
 }
-
-#pragma force_active reset
 
 void PokewalkerApp_ReceiveGifts(PokewalkerApp *app) {
     PokewalkerApp_ReceiveMons(app, TRUE);

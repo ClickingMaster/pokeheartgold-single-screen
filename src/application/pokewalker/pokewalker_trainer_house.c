@@ -60,7 +60,6 @@ void PokewalkerApp_BuildTrainerHouseData(SaveData *saveData, void *dst) {
     data->crc = GF_CalcCRC16(data, offsetof(PokewalkerTrainerHouseData, crc));
 }
 
-#pragma force_active on
 void PokewalkerApp_SaveTrainerHouseData(SaveData *saveData, PokewalkerTrainerHouseData *data) {
     u8 dailyFlags[12];
     BOOL found = FALSE;
@@ -94,7 +93,6 @@ void PokewalkerApp_SaveTrainerHouseData(SaveData *saveData, PokewalkerTrainerHou
         PokewalkerApp_SetTrainerHouseDailyFlags(saveData, dailyFlags);
     }
 }
-#pragma force_active reset
 
 void PokewalkerApp_FillTrainerHouseTrainer(TrainerHouseTrainer *trainer, SaveData *saveData) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
@@ -112,7 +110,6 @@ void PokewalkerApp_FillTrainerHouseTrainer(TrainerHouseTrainer *trainer, SaveDat
     }
 }
 
-#pragma force_active on
 // Party Pokemon that are not eggs, Sky Forme Shaymin as Land Forme.
 void PokewalkerApp_FillTrainerHouseParty(TrainerHouseMon *mons, Party *party) {
     int i;
@@ -173,7 +170,6 @@ void PokewalkerApp_FillTrainerHouseParty(TrainerHouseMon *mons, Party *party) {
         }
     }
 }
-#pragma force_active reset
 
 int PokewalkerApp_CountTrainerHouseSets(TrainerHouse *trainerHouse) {
     int i;

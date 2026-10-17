@@ -42,8 +42,6 @@ extern const u8 gPokeathlonGoalRollBounceOffsets[];
 
 extern const PokeathlonGoalRollWindowData gPokeathlonGoalRollWindowData;
 
-#pragma force_active on
-
 static void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second);
 static void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side);
 static BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
@@ -506,8 +504,6 @@ void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, PokeathlonGoalRollBall *second) {
     PokeathlonGoalRollBall saved;
 
@@ -524,8 +520,6 @@ static void PokeathlonGoalRoll_CollideBallPair(PokeathlonGoalRollBall *first, Po
     PokeathlonGoalRoll_BounceBallOff(first, second, 0);
     PokeathlonGoalRoll_BounceBallOff(second, &saved, 1);
 }
-
-#pragma force_active on
 
 // Sends `ball` away from `other`, taking over the other ball's kick if it was faster.
 static void PokeathlonGoalRoll_BounceBallOff(PokeathlonGoalRollBall *ball, const PokeathlonGoalRollBall *other, int side) {
@@ -643,8 +637,6 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
     }
 }
 
-#pragma force_active reset
-
 // Pokemon low on power walk slowly.
 void PokeathlonGoalRoll_UpdateTiredMons(PokeathlonCourseData *course) {
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
@@ -671,8 +663,6 @@ void PokeathlonGoalRoll_SetTouchTarget(int x, int y, VecFx32 *out) {
     out->y = y << 12;
     out->z = 0;
 }
-
-#pragma force_active on
 
 // The member of `participant`'s team nearest to the touch point within reach, GOAL_ROLL_NO_MON if none.
 int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participant, u8 touchX, u8 touchY) {
@@ -716,15 +706,11 @@ int PokeathlonGoalRoll_GetTouchedMon(PokeathlonGoalRoll *goalRoll, u8 participan
     return best;
 }
 
-#pragma force_active reset
-
 static BOOL PokeathlonGoalRoll_CirclesOverlap(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB) {
     VecFx32 delta;
     VEC_Subtract(a, b, &delta);
     return VEC_Mag(&delta) <= radiusA + radiusB;
 }
-
-#pragma force_active on
 
 void PokeathlonGoalRoll_ResetBall(PokeathlonGoalRollBall *ball) {
     VecFx32 zero = { 0, 0, 0 };
@@ -755,8 +741,6 @@ static void PokeathlonGoalRoll_SetBallDirection(PokeathlonGoalRoll *goalRoll, Po
     ball->velocity = ball->direction;
     VEC_MultAdd(ball->speed << 12, &ball->velocity, &zero, &ball->velocity);
 }
-
-#pragma force_active reset
 
 static fx32 PokeathlonGoalRoll_CalcNormalizedDot(const VecFx32 *a, const VecFx32 *b) {
     VecFx32 normA, normB;
@@ -825,8 +809,6 @@ void PokeathlonGoalRoll_PrintTotalPoints(PokeathlonGoalRoll *goalRoll, u32 score
 
 // whole pixels to fx32
 #define TO_FX32(x) ((s32)((u32)(x) << 12))
-
-#pragma force_active on
 
 // Keeps a circle of `radius` that moved from `previous` to `position` inside the field: the four diagonal corner
 // walls (only with `checkCorners`) and the straight edges. Returns the wall hit (1 left, 2 right,
@@ -1062,8 +1044,6 @@ edges:
     return result;
 }
 
-#pragma force_active reset
-
 static BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D *c, const VecFx32 *point) {
     Point2D d;
     Point2D out;
@@ -1071,8 +1051,6 @@ static BOOL PokeathlonGoalRoll_SegmentsIntersect(Point2D *a, Point2D *b, Point2D
     d.y = point->y / FX32_ONE;
     return Point2D_CalcSegmentIntersection(a, b, c, &d, &out);
 }
-
-#pragma force_active on
 
 // Where the segment c-d crosses the axis-aligned wall a-b (into `out`); FALSE if it doesn't.
 static BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d, VecFx32 *out) {
@@ -1140,8 +1118,6 @@ static BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b,
     GF_ASSERT(FALSE);
     return FALSE;
 }
-
-#pragma force_active reset
 
 // Places a scored ball at a random one of the 15 spawn points not used by either ball.
 static void PokeathlonGoalRoll_PickBallSpawn(PokeathlonGoalRoll *goalRoll, PokeathlonGoalRollBall *ball) {
@@ -1254,8 +1230,6 @@ void PokeathlonGoalRoll_PlayGoalAreaSE(PokeathlonGoalRoll *goalRoll, u32 ballInd
     goalRoll->ballInGoalArea[ballIndex] = 0;
 }
 
-#pragma force_active on
-
 void PokeathlonGoalRoll_PrintPlate(PokeathlonGoalRoll *goalRoll, u8 participant, int mode) {
     String *string;
     u32 color;
@@ -1282,8 +1256,6 @@ void PokeathlonGoalRoll_PrintPlate(PokeathlonGoalRoll *goalRoll, u8 participant,
     }
     CopyWindowToVram(&goalRoll->nameWindows[participant]);
 }
-
-#pragma force_active reset
 
 void PokeathlonGoalRoll_LoadStrings(PokeathlonCourseData *course) {
     u8 i;

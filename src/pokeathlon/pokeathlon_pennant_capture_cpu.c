@@ -28,8 +28,6 @@ typedef struct PokeathlonPennantCaptureCellNode {
     PokeathlonPennantCaptureCpuCell *cell;
 } PokeathlonPennantCaptureCellNode;
 
-#pragma force_active on
-
 static void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, u8 who);
 static PokeathlonPennantCaptureCpuCell *PokeathlonPennantCaptureCpu_PickBestCell(PokeathlonPennantCaptureCpu *cpu);
 static u8 PokeathlonPennantCaptureCpu_SortCells(PokeathlonPennantCaptureCpuCell **cells, PokeathlonPennantCaptureCpuCell **out);
@@ -59,8 +57,6 @@ void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(PokeathlonCourseSpritePoo
         display->picPlttOffsets[i] = NNS_G2dGetImagePaletteLocation(palette, NNS_G2D_VRAM_TYPE_2DSUB);
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay *display) {
     AddWindow(display->bgConfig, &display->window, &sPokeathlonPennantCaptureWindowTemplate);
@@ -93,8 +89,6 @@ void PokeathlonPennantCaptureCpu_SetPennants(PokeathlonPennantCaptureCpu *cpu, P
     cpu->pennants = pennants;
 }
 
-#pragma force_active on
-
 // The obstacle spots: 20 (x, y) pairs in units of 8 (0, 0 = none).
 void PokeathlonPennantCaptureCpu_SetObstacles(PokeathlonPennantCaptureCpu *cpu, const u8 *spots) {
     int i;
@@ -110,8 +104,6 @@ void PokeathlonPennantCaptureCpu_SetObstacles(PokeathlonPennantCaptureCpu *cpu, 
         spots += 2;
     }
 }
-
-#pragma force_active reset
 
 void PokeathlonPennantCaptureCpu_Delete(PokeathlonPennantCaptureCpu *cpu) {
     Heap_Free(cpu);
@@ -146,8 +138,6 @@ int PokeathlonPennantCaptureCpu_Update(PokeathlonPennantCaptureCpu *cpu) {
     }
     return result;
 }
-
-#pragma force_active on
 
 // Rates the cells around the Pokemon (pennants +7, field items +2, other Pokemon -3, obstacles -2,
 // off the field -100; towards the goal rows when carrying pennants) and heads for one of the best.
@@ -275,8 +265,6 @@ static void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu
     }
 }
 
-#pragma force_active reset
-
 static PokeathlonPennantCaptureCpuCell *PokeathlonPennantCaptureCpu_PickBestCell(PokeathlonPennantCaptureCpu *cpu) {
     PokeathlonPennantCaptureCpuCell *sorted[48];
     PokeathlonPennantCaptureCpuCell *list[48];
@@ -291,8 +279,6 @@ static PokeathlonPennantCaptureCpuCell *PokeathlonPennantCaptureCpu_PickBestCell
     index = (int)LCRandom() % count;
     return sorted[index];
 }
-
-#pragma force_active on
 
 // Sorts the cells by score (insertion into a linked list, best first); returns how many share the best score.
 static u8 PokeathlonPennantCaptureCpu_SortCells(PokeathlonPennantCaptureCpuCell **cells, PokeathlonPennantCaptureCpuCell **out) {
@@ -342,5 +328,3 @@ static u8 PokeathlonPennantCaptureCpu_SortCells(PokeathlonPennantCaptureCpuCell 
     GF_ASSERT(count != 0);
     return count;
 }
-
-#pragma force_active reset

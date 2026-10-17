@@ -18,8 +18,6 @@ extern const s16 gPokeathlonDiscCatchScoreboardBadgePositions[DISC_CATCH_PARTICI
 extern const WindowTemplate gPokeathlonDiscCatchScoreboardWindowTemplates[DISC_CATCH_PARTICIPANTS];
 extern const ManagedSpriteTemplate gPokeathlonDiscCatchScoreboardSpriteTemplate;
 
-#pragma force_active on
-
 static ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority);
 static void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard);
 static void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboard *scoreboard, s32 score);
@@ -64,8 +62,6 @@ void PokeathlonDiscCatchScoreboard_Delete(PokeathlonDiscCatchScoreboard *scorebo
     Heap_Free(scoreboard);
 }
 
-#pragma force_active reset
-
 void PokeathlonDiscCatchScoreboard_Pause(PokeathlonDiscCatchScoreboard *scoreboard) {
     PokeathlonDiscCatchScoreboard_StopAnims(scoreboard);
 }
@@ -95,7 +91,6 @@ u8 PokeathlonDiscCatchScoreboard_SetOwnScore(PokeathlonDiscCatchScoreboard *scor
 }
 
 // A team scored: its badge flashes; for the own team the score is redrawn with a sound by the points.
-#pragma force_active on
 
 BOOL PokeathlonDiscCatchScoreboard_OnScore(PokeathlonDiscCatchScoreboard *scoreboard, u32 participant, u16 score) {
     int delta;
@@ -118,10 +113,7 @@ BOOL PokeathlonDiscCatchScoreboard_OnScore(PokeathlonDiscCatchScoreboard *scoreb
     return FALSE;
 }
 
-#pragma force_active reset
-
 // The seconds left; the digits turn yellow at 20 and red at 3.
-#pragma force_active on
 
 void PokeathlonDiscCatchScoreboard_SetSeconds(PokeathlonDiscCatchScoreboard *scoreboard, int seconds) {
     u8 shown = seconds % 100;
@@ -158,13 +150,9 @@ void PokeathlonDiscCatchScoreboard_SetSeconds(PokeathlonDiscCatchScoreboard *sco
     ManagedSprite_SetAnim(scoreboard->sprites[DISC_CATCH_SCOREBOARD_SECONDS + 1], ones);
 }
 
-#pragma force_active reset
-
 u16 PokeathlonDiscCatchScoreboard_GetOwnScore(PokeathlonDiscCatchScoreboard *scoreboard) {
     return scoreboard->shownScore + scoreboard->wraps * 128;
 }
-
-#pragma force_active on
 
 static ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, s16 x, s16 y, u16 animation, u16 priority) {
     ManagedSpriteTemplate template = gPokeathlonDiscCatchScoreboardSpriteTemplate;
@@ -179,8 +167,6 @@ static ManagedSprite *PokeathlonDiscCatchScoreboard_NewSprite(SpriteSystem *spri
     ManagedSprite_SetAnimateFlag(sprite, TRUE);
     return sprite;
 }
-
-#pragma force_active reset
 
 static void PokeathlonDiscCatchScoreboard_InitWindows(PokeathlonDiscCatchScoreboard *scoreboard) {
     u8 i;
@@ -214,8 +200,6 @@ static void PokeathlonDiscCatchScoreboard_DrawScore(PokeathlonDiscCatchScoreboar
     ScheduleBgTilemapBufferTransfer(scoreboard->bgConfig, GF_BG_LYR_SUB_2);
 }
 
-#pragma force_active on
-
 static void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchScoreboard *scoreboard) {
     int i, x;
     for (i = 0, x = 230; i < 2; x += 16, i++) {
@@ -223,8 +207,6 @@ static void PokeathlonDiscCatchScoreboard_NewSecondsDigits(PokeathlonDiscCatchSc
         ManagedSprite_SetPaletteOverride(scoreboard->sprites[DISC_CATCH_SCOREBOARD_SECONDS + i], 1);
     }
 }
-
-#pragma force_active reset
 
 // The players' names (the own one in the big window) and their badges.
 static void PokeathlonDiscCatchScoreboard_PrintNames(PokeathlonDiscCatchScoreboard *scoreboard) {
@@ -262,8 +244,6 @@ static inline int GetSideSign(int column) {
     return -1;
 }
 
-#pragma force_active on
-
 static void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreboard *scoreboard) {
     int row, column;
     int y, first;
@@ -279,8 +259,6 @@ static void PokeathlonDiscCatchScoreboard_NewSideMarks(PokeathlonDiscCatchScoreb
         }
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonDiscCatchScoreboard_StopAnims(PokeathlonDiscCatchScoreboard *scoreboard) {
     int i;

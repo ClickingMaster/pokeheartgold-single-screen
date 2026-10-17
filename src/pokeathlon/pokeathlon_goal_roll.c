@@ -182,8 +182,6 @@ static inline void PokeathlonGoalRoll_SetModelSize(PokeathlonCourseData *course,
 // extra (unused) argument.
 typedef PokeathlonGoalRollCpu *(*PokeathlonGoalRollCpuNewFunc)(u32 heapId, int cpuCount, int mode);
 
-#pragma force_active on
-
 BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
     PokeathlonGoalRollModelSize modelSizes[3];
     PokeathlonGoalRollSprite *sprite;
@@ -472,8 +470,6 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonGoalRoll_Draw(PokeathlonCourseData *course) {
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     PokeathlonCourseSpritePool_Draw(goalRoll->spritePool);
@@ -675,8 +671,6 @@ static BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
     PokeathlonGoalRoll_ApplyFrame(course);
     return FALSE;
 }
-
-#pragma force_active on
 
 // The host: applies all participants' inputs, runs the field and sends the frame.
 static void PokeathlonGoalRoll_HostUpdate(PokeathlonCourseData *course) {
@@ -1022,5 +1016,3 @@ static void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course) {
     goalRoll->shownScores[slot] = score;
     ((PokeathlonGoalRollSetScoreFunc)PokeathlonGoalRollDisplay_SetScore)(goalRoll->display, score, slot);
 }
-
-#pragma force_active reset

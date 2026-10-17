@@ -84,16 +84,12 @@ BOOL PokeathlonCourseMonGfx_IsLoaded(PokeathlonCourseMonGfxManager *manager) {
     return manager->loaded;
 }
 
-#pragma force_active on
-
 PokeathlonCourseMonGfx *PokeathlonCourseMonGfx_Get(PokeathlonCourseMonGfxManager *manager, int index) {
     if (index >= manager->count) {
         GF_AssertFail();
     }
     return &manager->mons[index];
 }
-
-#pragma force_active reset
 
 Sprite *PokeathlonCourseMonGfx_GetSprite(PokeathlonCourseMonGfx *mon) {
     return mon->sprite;
@@ -140,8 +136,6 @@ void PokeathlonCourseMonGfx_SetPalette(PokeathlonCourseMonGfxManager *manager, i
         GXS_LoadOBJPltt(palette, NNS_G2dGetImagePaletteLocation(paletteProxy, NNS_G2D_VRAM_TYPE_2DSUB), 0x20);
     }
 }
-
-#pragma force_active on
 
 // Adds the sprite resources of one Pokemon (cell / animation files of NARC a/1/4/9 by size and transfer mode)
 // and converts the 8 frames of its overworld model texture into sprite characters.
@@ -252,8 +246,6 @@ static void PokeathlonCourseMonGfx_Load(PokeathlonCourseMonGfxManager *manager, 
     Heap_Free(model);
 }
 
-#pragma force_active reset
-
 static void PokeathlonCourseMonGfx_CreateSprite(PokeathlonCourseMonGfxManager *manager, int priority, int vramTransfer, NNS_G2D_VRAM_TYPE whichScreen, u8 resourceId, u8 index) {
     SpriteResourcesHeader header;
     SpriteTemplate template;
@@ -299,8 +291,6 @@ static void PokeathlonCourseMonGfx_LoadTask(SysTask *task, void *data) {
     } while (load->template.loadAtOnce);
 }
 
-#pragma force_active on
-
 static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
     u8 index;
     PokeathlonCourseMonGfx *mon;
@@ -338,13 +328,9 @@ static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 u8 PokeathlonCourseMonGfx_GetTopRow(PokeathlonCourseMonGfx *mon) {
     return mon->topRow;
 }
-
-#pragma force_active on
 
 static u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon) {
     NNSG2dCharacterData *charData = GF2DGfxResObj_GetCharDataPtr(mon->charRes);
@@ -376,8 +362,6 @@ static u8 PokeathlonCourseMonGfx_FindTopRow(PokeathlonCourseMonGfx *mon) {
     GF_ASSERT(result != 255);
     return result;
 }
-
-#pragma force_active reset
 
 // Returns the first pixel row of the 8x8 tile at data + offset that is not transparent, 0xFF if none.
 static u8 PokeathlonCourseMonGfx_FindTopRowInTile(const u8 *data, u32 offset) {
@@ -450,16 +434,12 @@ BOOL PokeathlonCourseMonGfx_IsShiftedUp(PokeathlonCourseMonGfx *mon) {
     return mon->shiftedUp;
 }
 
-#pragma force_active on
-
 void PokeathlonCourse_InitObjTransfer(ObjCharTransferTemplate *charTemplate, int plttCount, enum HeapID heapId, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub) {
     ObjCharTransfer_InitEx(charTemplate, modeMain, modeSub);
     ObjPlttTransfer_Init(plttCount, heapId);
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();
 }
-
-#pragma force_active reset
 
 void PokeathlonCourse_FreeObjTransfer(void) {
     OamManager_Free();

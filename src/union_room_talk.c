@@ -110,8 +110,39 @@ extern const int _020FC8F4[4][2];
 extern const int _020FC914[4][2];
 extern const int _020FC934[6][2];
 extern const int _020FC95C[8][2];
-extern const int _020FC99C[7][2];
-extern const int gUnionRoomChatMsgs[20];
+
+static const int sSentTalkReplyMsgs[7][2] = {
+    { msg_0738_UNION_00044, msg_0738_UNION_00104 },
+    { msg_0738_UNION_00058, msg_0738_UNION_00118 },
+    { msg_0738_UNION_00066, msg_0738_UNION_00126 },
+    { msg_0738_UNION_00047, msg_0738_UNION_00107 },
+    { msg_0738_UNION_00073, msg_0738_UNION_00133 },
+    { msg_0738_UNION_00084, msg_0738_UNION_00144 },
+    { msg_0738_UNION_00084, msg_0738_UNION_00144 },
+};
+
+static const int sUnionRoomChatMsgs[20] = {
+    msg_0738_UNION_00169,
+    msg_0738_UNION_00170,
+    msg_0738_UNION_00171,
+    msg_0738_UNION_00172,
+    msg_0738_UNION_00173,
+    msg_0738_UNION_00174,
+    msg_0738_UNION_00175,
+    msg_0738_UNION_00176,
+    msg_0738_UNION_00177,
+    msg_0738_UNION_00178,
+    msg_0738_UNION_00179,
+    msg_0738_UNION_00180,
+    msg_0738_UNION_00181,
+    msg_0738_UNION_00182,
+    msg_0738_UNION_00183,
+    msg_0738_UNION_00184,
+    msg_0738_UNION_00185,
+    msg_0738_UNION_00186,
+    msg_0738_UNION_00187,
+    msg_0738_UNION_00188,
+};
 
 void UnionRoom_RecvTalkChoice(int netId, int size, u8 *data, FieldSystem *fieldSystem) {
     fieldSystem->unionRoom->talkChoiceReceived = 1;
@@ -261,7 +292,7 @@ int UnionRoom_GetPartnerHometownMsg(MessageFormat *msgFmt) {
 
 int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt) {
     if (a0 != 0) {
-        return _020FC99C[a0][gender];
+        return sSentTalkReplyMsgs[a0][gender];
     }
     return UnionRoom_GetPartnerHometownMsg(msgFmt);
 }
@@ -426,7 +457,7 @@ int UnionRoom_GetOwnChatMessageMsg(struct UnionRoom *unionRoom, MessageFormat *m
     if (word != 0xFFFF) {
         BufferECWord(msgFmt, 0, word);
     }
-    return gUnionRoomChatMsgs[msgNo];
+    return sUnionRoomChatMsgs[msgNo];
 }
 
 void UnionRoomStatus_Init(UnionRoomStatus *status) {
