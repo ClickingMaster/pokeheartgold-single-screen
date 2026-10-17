@@ -8,7 +8,7 @@
 
 // After a wireless session (ScrCmd_StartPalPadRegistration): offers to register each link partner who asked for it in the Pal Pad's
 // Friend Roster, and when the roster is full lets the player pick an entry to delete (bottom-screen Friend Roster
-// app). The touch YES/NO helpers live in bottom_screen_app.c.
+// app). The touch YES/NO helpers belong to the bottom screen apps.
 typedef struct PalPadRegistration {
     u8 unk_00[0x8];
     String *rawMessage;

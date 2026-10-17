@@ -96,7 +96,7 @@ void BoxMonSelector_VBlank(void *boxSelector);
 int BoxMonSelector_Run(void *boxSelector);
 void BoxMonSelector_RenderSprites(void *boxSelector);
 
-// Modes of the mode table in pokewalker_app.c: enter / update / exit.
+// Modes of the app's mode table: enter / update / exit.
 int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_Update(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_Exit(PokewalkerApp *app);

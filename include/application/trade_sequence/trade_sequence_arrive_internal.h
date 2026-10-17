@@ -7,7 +7,7 @@
 #include "bg_window.h"
 #include "sys_task.h"
 
-// Scene 5 of the trade animation (trade_sequence.c, trade_sequence_arrive_tasks.c).
+// Scene 5 of the trade animation.
 
 typedef struct TradeSequenceArrive {
     TradeSequence *ts;              // 0x00

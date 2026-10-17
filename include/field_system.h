@@ -261,7 +261,7 @@ struct FieldSystem {
     u8 textbox_open : 1;
     u8 suppressBottomScreenDim : 1;
     u8 startMenuCursorPos;
-    SysTask *touchSaveTask;    // bottom screen type 4 (bottom_screen_app.c)
+    SysTask *touchSaveTask;    // bottom screen type 4
     SysTask *bottomScreenTask; // the bottom-screen app manager, or the view photo task
     FieldViewPhoto *viewPhotoTask;
     int lastStartMenuAction;

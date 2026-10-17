@@ -10,9 +10,7 @@
 // Communication player manager (ARM9 static 0x02056D7C-0x02058034): the avatars of the linked players in a
 // shared field map. The host (net id 0) moves every player by its key input and sends the positions; the other
 // players walk their avatars to the positions they receive. The module's full declarations; include/unk_02056D7C.h
-// keeps the declarations other modules were matched against. comm_player_manager.c: the manager and its set-up;
-// comm_player_sync.c: the rest (one TU in the original; the lobby tables must stay outside the sync TU, whose
-// CommPlayerManager_AssignBattleSlots was matched against them as external symbols).
+// keeps the declarations other modules were matched against.
 
 typedef struct CommPlayerPosition CommPlayerPosition;
 typedef struct CommPlayerManager CommPlayerManager;

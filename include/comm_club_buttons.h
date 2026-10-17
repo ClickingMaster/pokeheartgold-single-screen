@@ -4,7 +4,7 @@
 #include "bg_window.h"
 #include "sys_task.h"
 
-// Shared with the Communication Club (overlay_03 communication_club.c, CommClubManager+0x9C).
+// Shared with the Communication Club (CommClubManager+0x9C).
 typedef struct CommClubButtonsArgs {
     u32 *msgIds;     // msg_0191 labels, one per button
     u8 count;        // 1 or 2 buttons

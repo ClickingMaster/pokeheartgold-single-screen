@@ -9,10 +9,10 @@
 
 // Owns the field effect renderers (one per renderer id, see gFieldEffectRenderers), the billboard
 // records and resource banks they load from, and the pool of running field effects. The layout is
-// private to field_effect_manager.c (field_effect_manager_internal.h).
+// private to the manager (field_effect_manager_internal.h).
 typedef struct FieldEffectManager FieldEffectManager;
 
-// A running effect of the field effect pool (field_effects.c; these four types match its private ones).
+// A running effect of the field effect pool (these four types match its private ones).
 // The pool hands each effect a zeroed state block of FieldEffectBasicTemplate.stateSize bytes; the
 // userData passed to FieldEffectManager_CreateEffect is read back with FieldEffect_GetUserData and the
 // position with FieldEffect_GetPosition.

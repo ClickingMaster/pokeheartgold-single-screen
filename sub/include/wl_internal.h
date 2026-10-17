@@ -829,7 +829,7 @@ typedef struct WlWork {
 // The parent's V-sync time (from its game information element), shared with the WMSP (WMSP_VSYNC_TIME).
 #define WL_VSYNC_TIME (*(u16 *)0x0380FFF0)
 
-// wl_task.c
+// Driver tasks
 void WlessLibReboot(void);
 u16 WL_InitDriver(WlInitParam *param);
 void *WL_GetThreadStruct(void);
@@ -847,7 +847,7 @@ void __VENEER_OS_JoinThread(OSThread *thread);
 u32 __VENEER_OS_DisableIrqMask(u32 mask);
 void __VENEER_OS_EnableIrqMask(u32 mask);
 
-// wl_heap_buf.c
+// Heap buffers
 void *AllocateHeapBuf(WlHeapBufMan *man, u32 size);
 int ReleaseHeapBuf(WlHeapBufMan *man, WlHeapBuf *buf);
 int MoveHeapBuf(WlHeapBufMan *from, WlHeapBufMan *to, WlHeapBuf *buf);
@@ -860,7 +860,7 @@ void InitializeHeapBuf(WlHeapParam *param);
 void ReleaseAllWlHeapBuf(void);
 void ReleaseAllHeapBuf(WlHeapBufMan *man);
 
-// wl_param.c
+// Parameters
 void InitializeParam(void *camTable, u32 camTableSize);
 u32 WSetMacAdrs(const u16 *addr);
 u32 WSetRetryLimit(u16 limit);
@@ -889,7 +889,7 @@ int WSetDTIMPeriod(u16 period);
 int WSetListenInterval(u32 interval);
 void WSetDefaultParameters(void);
 
-// wl_state.c
+// State
 int WSetRateSet(const u16 *rates);
 void WSetTxTimeStampOffset(void);
 int WSetPowerMgtMode(u32 mode);
@@ -911,7 +911,7 @@ void WSetMacAdrs1(u16 *dest, const u16 *addr);
 void WSetMacAdrs2(u16 *dest, const u16 *addr1, const u16 *addr2);
 void WSetMacAdrs3(u16 *dest, const u16 *addr1, const u16 *addr2, const u16 *addr3);
 
-// wl_util.c
+// Utilities
 void WInitCounter(void);
 void __VENEER_MIi_CpuClear32(u32 data, void *dest, u32 size);
 void WUpdateCounter(void);
@@ -921,7 +921,7 @@ u32 CheckEnableChannel(u32 channel);
 void WElement2RateSet(const u8 *element, WlRateSet *rateSet);
 u32 WCalcManRate(void);
 
-// wl_device.c
+// Device
 u64 __VENEER__ll_udiv(u64 dividend, u64 divisor);
 void WStop(void);
 u32 BBP_Read(u32 reg);
@@ -937,25 +937,23 @@ BOOL __VENEER_OS_IsAlarmAvailable(void);
 void TimeoutDummy(void *arg);
 void WWaitus(u32 us);
 
-// wl_start.c
+// Start
 void WStart(void);
 
-// wl_timeout_periodic.c
+// Timeouts
 void SetupPeriodicTimeOut(u32 ms, OSAlarmHandler handler);
 
-// wl_timer.c
 void __VENEER_OS_SetPeriodicAlarm(OSAlarm *alarm, OSTick start, OSTick period, OSAlarmHandler handler, void *arg);
 void ClearPeriodicTimeOut(void);
 void WIntervalTimer(void);
 
-// wl_timeout.c
 void SetupTimeOut(u32 ms, OSAlarmHandler handler);
 void SetupUsTimeOut(u32 us, OSAlarmHandler handler);
 
-// wl_set_channel.c
+// Channel
 int WSetChannel(u16 channel, int direct);
 
-// wl_mac_memory.c
+// MAC memory
 void ClearTimeOut(void);
 void DMA_Read(void *dest, const void *src, u32 size);
 void DMA_Write(void *dest, const void *src, u32 size);
@@ -964,34 +962,32 @@ void DMA_WepWriteHeaderData(void *dest, const void *header, const void *data, u3
 void WL_WriteByte(void *dest, u32 value);
 u8 WL_ReadByte(const void *src);
 
-// wl_random.c
+// Random numbers
 void RND_Init(u32 mul, u32 add);
 void RND_seed(u32 seed);
 u16 RND_rand(void);
 u16 calc_NextCRC(int data, int crc);
 
-// wl_tx_check.c
+// Transmit checks
 int WCheckTxBufIdBeforeFrame(WlTxDesc *desc);
 void WaitMacStop(void);
 void RestoreTxFrame(WlTxDesc *desc);
 void WCheckTxBuf(void);
 
-// wl_fatal_err.c
+// Fatal errors
 void SetFatalErr(u32 bits);
 void SendFatalErrMsgTask(void);
 void TerminateWlTask(void);
 void ReleaseWlTask(void);
 
-// wl_diag_mac_register.c
+// Diagnostics
 void DiagMacRegister(void);
 
-// wl_diag_mac_memory.c
 void DiagMacMemory(void);
 
-// wl_diag_base_band.c
 void DiagBaseBand(void);
 
-// wl_intr.c
+// Interrupts
 void WlIntr(void);
 void WlIntrPreTbtt(void);
 void WlIntrTbtt(void);
@@ -1002,16 +998,12 @@ void WlIntrTxErr(void);
 void WlIntrRxCntup(void);
 void WlIntrTxEnd(void);
 
-// wl_intr_rx_end.c
 void WlIntrRxEnd(void);
 
-// wl_intr_mp_end.c
 void WlIntrMpEnd(int timeout);
 
-// wl_intr_start_tx.c
 void WlIntrStartTx(void);
 
-// wl_intr_ctrl.c
 void WlIntrStartRx(void);
 void SetParentTbttTxq(void);
 void MacBugTxMp(void);
@@ -1024,27 +1016,26 @@ void ReleaseIntr(void);
 void WlIntrTxBeaconTask(void);
 void WlIntrTxEndTask(void);
 
-// wl_intr_rx_end_task.c
+// Interrupt tasks
 void WlIntrRxEndTask(void);
 
-// wl_intr_task.c
 void WlIntrMpEndTask(void);
 void SetParentTbttTxqTask(void);
 WlRxFrame *TakeoutRxFrame(u16 *src, u32 size);
 
-// wl_wait_loop.c
+// Wait loops
 void WaitLoop_ClrAid(void);
 int WaitLoop_BbpAccess(void);
 int WaitLoop_RfAccess(void);
 
-// wl_cmd_if.c
+// Command interface
 void RequestCmdTask(void);
 int CMD_ReservedReqCmd(WlCmdRequest *req, WlCmdCfm *cfm);
 void SendMessageToWmDirect(WlHeapBufMan *man, void *msg);
 void SendMessageToWmTask(void);
 void InitializeCmdIf(void);
 
-// wl_mlme_cmd.c
+// MLME commands
 int MLME_ResetReqCmd(WlMlmeResetReq *req, WlCmdCfm *cfm);
 int MLME_PwrMgtReqCmd(WlMlmePwrMgtReq *req, WlCmdCfm *cfm);
 int MLME_ScanReqCmd(WlMlmeScanReq *req, WlMlmeScanCfm *cfm);
@@ -1057,7 +1048,7 @@ int MLME_DisAssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm);
 int MLME_StartReqCmd(WlMlmeStartReq *req, WlCmdCfm *cfm);
 int MLME_MeasChanReqCmd(WlMlmeMeasChanReq *req, WlMlmeMeasChanCfm *cfm);
 
-// wl_mlme_task.c
+// MLME tasks
 void MLME_ScanTask(void);
 void MLME_ScanTimeOut(void);
 void MLME_JoinTask(void);
@@ -1071,7 +1062,7 @@ void MLME_ReAssTimeOut(void);
 void MLME_MeasChannelTask(void);
 void MLME_MeasChanTimeOut(void);
 
-// wl_mlme_ind.c
+// MLME indications
 void MLME_BeaconLostTask(void);
 void IssueMlmeConfirm(void);
 int MLME_IssueAuthIndication(const u16 *macAdrs, int algorithm);
@@ -1084,7 +1075,7 @@ int MLME_IssueBeaconSendIndication(void);
 int MLME_IssueBeaconRecvIndication(WlRxFrame *frame);
 void InitializeMLME(void);
 
-// wl_paramset_cmd.c
+// Parameter set commands
 int PARAMSET_AllReqCmd(WlParamSetAllReq *req, WlCmdCfm *cfm);
 int PARAMSET_MacAdrsReqCmd(WlParamReq *req, WlCmdCfm *cfm);
 u32 PARAMSET_RetryReqCmd(WlParamReq *req, WlCmdCfm *cfm);
@@ -1115,7 +1106,7 @@ int PARAMSET_DTIMPeriodReqCmd(WlParamReq *req, WlCmdCfm *cfm);
 int PARAMSET_ListenIntervalReqCmd(WlParamReq *req, WlCmdCfm *cfm);
 int PARAMSET_GameInfoReqCmd(WlParamReq *req, WlCmdCfm *cfm);
 
-// wl_paramget_cmd.c
+// Parameter get commands
 int PARAMGET_AllReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int PARAMGET_MacAdrsReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int PARAMGET_RetryReqCmd(WlParamReq *req, WlParamCfm *cfm);
@@ -1144,7 +1135,7 @@ int PARAMGET_DTIMPeriodReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int PARAMGET_ListenIntervalReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int PARAMGET_GameInfoReqCmd(WlParamReq *req, WlParamCfm *cfm);
 
-// wl_dev_cmd.c
+// Device commands
 int DEV_ShutdownReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int DEV_IdleReqCmd(WlParamReq *req, WlParamCfm *cfm);
 int DEV_Class1ReqCmd(WlParamReq *req, WlParamCfm *cfm);
@@ -1158,22 +1149,19 @@ int DEV_TestSignalReqCmd(WlParamReq *req, WlParamCfm *cfm);
 void IntrCarrierSuppresionSignal(void);
 int DEV_TestRxReqCmd(WlParamReq *req, WlParamCfm *cfm);
 
-// wl_ma_cmd.c
+// MA commands
 int MA_DataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm);
 int MA_KeyDataReqCmd(WlMaKeyDataReq *req, WlCmdCfm *cfm);
 
-// wl_ma_mp_cmd.c
 int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm);
 
-// wl_ma_data.c
 int MA_TestDataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm);
 int MA_ClrDataReqCmd(WlParamReq *req, WlCmdCfm *cfm);
 void IssueMaDataConfirm(WlHeapBufMan *man, WlMaDataReq *req);
 
-// wl_txq.c
+// Transmit queue and control
 void TxqPri(u32 pri);
 
-// wl_tx_ctrl.c
 void CopyTxFrmToMacBuf(void *dest, void *source);
 int CheckFrameTimeout(WlTxHeapFrame *frame);
 void TxqEndData(void *arg, u32 next);
@@ -1191,7 +1179,7 @@ void DeleteTxFrameByAdrs(const u16 *macAdrs);
 void DeleteAllTxFrames(void);
 void MessageDeleteTx(u32 pri, u32 confirm);
 
-// wl_tx_frame.c
+// Management and control frames
 void TxManCtrlFrame(WlTxHeapFrame *frame);
 void SetManCtrlFrame(WlTxHeapFrame *frame);
 void TxPsPollFrame(void);
@@ -1207,10 +1195,8 @@ WlTxHeapFrame *MakeAssResFrame(u32 station, u32 status, const u8 *element);
 WlTxHeapFrame *MakeReAssResFrame(u32 station, u32 status, const u8 *extra);
 WlTxHeapFrame *MakeProbeReqFrame(const u16 *bssid);
 
-// wl_probe_res.c
 WlTxHeapFrame *MakeProbeResFrame(const u16 *macAdrs);
 
-// wl_man_frame.c
 WlTxHeapFrame *MakeAuthFrame(const u16 *macAdrs, u16 length, u32 test);
 WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 test);
 void MakePsPollFrame(u16 aid);
@@ -1219,20 +1205,19 @@ int IsExistManFrame(const u16 *macAdrs, u16 control);
 u32 SetSSIDElement(u8 *dest);
 u32 SetSupRateSet(u8 *dest);
 
-// wl_tx_init.c
+// Transmit and receive set-up
 void InitTxCtrl(void);
 
-// wl_rx_init.c
 void __VENEER_MI_WaitDma(u32 dmaNo);
 void DefragTimerTask(void);
 void InitRxCtrl(void);
 
-// wl_ap_list.c
+// Access point list
 void UpdateApList(u32 strength, const WlRxFrame *frame, const u8 *ssid);
 void InitApList(void);
 void UpdateApListTask(void);
 
-// wl_flash.c
+// Flash
 u32 FLASH_VerifyCheckSum(u32 *out);
 void FLASH_Wait(void);
 void __VENEER_NVRAM_ReadStatusRegister(u8 *out);
@@ -1244,37 +1229,32 @@ void __VENEER_NVRAM_ReadDataBytes(u32 address, u32 length, void *out);
 void __VENEER_SPI_Unlock(u32 id);
 int FLASH_MakeImage(void);
 
-// wl_rx_data.c
+// Data frame reception
 void RxDataFrameTask(void);
 int RxMpFrame(WlRxFrame *frame);
 void RxKeyDataFrame(WlRxFrame *frame);
 int RxMpAckFrame(WlRxFrame *frame);
 
-// wl_rx_man.c
+// Management frame reception
 void RxDisAssFrame(WlRxFrame *frame);
 void RxAssReqFrame(WlRxFrame *frame);
 void RxProbeReqFrame(WlRxFrame *frame);
 
-// wl_rx_deauth.c
 void RxDeAuthFrame(WlRxFrame *frame);
 void ElementChecker(WlElements *info);
 
-// wl_rx_beacon.c
 void RxBeaconFrame(WlRxFrame *frame);
 
-// wl_rx_probe_res.c
 void RxProbeResFrame(WlRxFrame *frame, WlElements *info);
 
-// wl_rx_auth.c
 void RxAuthFrame(WlRxFrame *frame);
 
-// wl_rx_man_task.c
 void RxManCtrlTask(void);
 
-// wl_defrag.c
+// Defragmentation
 void DefragTask(void);
 
-// wl_cam.c
+// Station table
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
 void CAM_AddBcFrame(WlHeapBufMan *from, WlHeapBuf *frame);
@@ -1309,10 +1289,9 @@ void InitializeCAM(void);
 void InitCAM(void);
 void CAM_InitElement(u32 index, const u8 *addr);
 
-// wl_wait_loop_rxpe.c
+// Wait loops
 void WaitLoop_Rxpe(void);
 
-// wl_wait_loop_waitus.c
 void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
 
 // targets of the veneers (DMA, SPI and NVRAM drivers)

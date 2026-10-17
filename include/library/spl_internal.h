@@ -47,7 +47,7 @@ typedef void (*SplAnimFunc)(SPLParticle *ptcl, SPLResource *res, int life_rate);
 // particle draw function for one draw type
 typedef void (*SplDrawFunc)(SPLManager *mgr, SPLParticle *ptcl);
 
-// spl_manager.c
+// Manager
 SPLManager *SPL_Init(SPLAlloc alloc, int max_emtr_num, int max_ptcl_num, u16 fix_polygon_id, u16 min_polygon_id, u16 max_polygon_id);
 void SPL_Load(SPLManager *mgr, const void *data);
 BOOL SPL_LoadTexByVRAMManager(SPLManager *mgr);
@@ -62,16 +62,16 @@ void SPL_Draw(SPLManager *mgr, const MtxFx43 *camera);
 u32 sAllocTex(u32 size, BOOL is4x4comp);
 u32 sAllocTexPalette(u32 size, BOOL is4pltt);
 
-// spl_draw.c
+// Drawing
 void spl_draw(SPLManager *mgr);
 void sDrawChild(SPLManager *mgr);
 void sDrawParent(SPLManager *mgr);
 
-// spl_emitter.c
+// Emitters
 void spl_calc(SPLManager *mgr, SPLEmitter *emtr);
 void spl_init(SPLEmitter *emtr, SPLResource *res, const VecFx32 *pos);
 
-// spl_draw_ptcl.c
+// Particle textures and drawing
 void spl_set_tex_dummy(const SPLTexture *tex);
 void spl_set_tex(const SPLTexture *tex);
 void spl_draw_bb(SPLManager *mgr, SPLParticle *ptcl);
@@ -93,13 +93,13 @@ extern void (*const gSplRotateFuncs[2])(fx32 sin, fx32 cos, MtxFx43 *mtx);
 // (0, 1, 0): the default base vector for the emitter's cross-to-axis vectors
 extern const VecFx16 gSplAxisY;
 
-// spl_generate.c
+// Particle generation
 void spl_gen_child(SPLParticle *parent, SPLEmitter *emtr, SPLParticleList *ptcl_list);
 void spl_gen_ptcl(SPLEmitter *emtr, SPLParticleList *ptcl_list);
 void spl_set_circle_axis(VecFx32 *out, const VecFx32 *vec, const SPLEmitter *emtr);
 void spl_set_cross_to_axis(SPLEmitter *emtr);
 
-// spl_anim.c
+// Particle animations
 void spl_chld_alp_out(SPLParticle *ptcl, SPLResource *res, int life_rate);
 void spl_chld_scl_out(SPLParticle *ptcl, SPLResource *res, int life_rate);
 void spl_tex_ptn_anm(SPLParticle *ptcl, SPLResource *res, int life_rate);
@@ -107,7 +107,7 @@ void spl_alp_in_out(SPLParticle *ptcl, SPLResource *res, int life_rate);
 void spl_clr_in_out(SPLParticle *ptcl, SPLResource *res, int life_rate);
 void spl_scl_in_out(SPLParticle *ptcl, SPLResource *res, int life_rate);
 
-// spl_field.c (the SPLField p_exec functions)
+// Fields (the SPLField p_exec functions)
 // parameter blocks of the fields, in the resource after the base / animation / child blocks in this
 // order (gravity, random, magnet, spin, collision, convergence) when the base flag enables them
 typedef struct SplConvergenceField {
@@ -152,12 +152,12 @@ void spl_calc_magnet(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPLEmitte
 void spl_calc_random(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPLEmitter *emtr);
 void spl_calc_gravity(const void *obj, SPLParticle *ptcl, VecFx32 *acc, SPLEmitter *emtr);
 
-// spl_list.c
+// Lists
 SplNode *spl_del(SplList *list, SplNode *node);
 SplNode *spl_pop_front(SplList *list);
 void spl_push_front(SplList *list, SplNode *node);
 
-// spl_random.c
+// Random numbers
 extern u32 spl_rndm_seed;
 // one step of the library's linear congruential random generator; evaluates to the new seed
 #define SPL_RNDM_NEXT() (spl_rndm_seed = spl_rndm_seed * 0x5EEDF715 + 0x1B0CB173)

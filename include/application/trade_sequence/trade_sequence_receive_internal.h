@@ -11,7 +11,7 @@
 #include "sprite.h"
 #include "sys_task.h"
 
-// Scene 6 of the trade animation (trade_sequence_receive.c, trade_sequence_receive_bounce.c).
+// Scene 6 of the trade animation.
 
 typedef struct TradeSequenceReceive {
     TradeSequence *ts;                // 0x00

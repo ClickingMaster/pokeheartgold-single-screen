@@ -444,7 +444,7 @@ u32 __VENEER_MATH_CountPopulation(u32 value);
 u32 MATH_CountPopulation(u32 value);
 void __VENEER_OS_Sleep(u32 msec);
 
-// wmsp_system.c
+// System
 void WMSP_Init(u8 *driver, u32 *config);
 void *WMSP_WlRequest(void *request);
 void WmspPxiCallback(int tag, u16 *request, BOOL error);
@@ -466,12 +466,12 @@ void WMSP_SetChildMaxSize(u16 size);
 void WMSP_SetParentSize(u32 size);
 void WMSP_SetChildSize(u32 size);
 
-// wmsp_indicate.c
+// Indications
 void WMSP_IndicateThread(void *arg);
 void WmspFreeBufOfWL(void *buf);
 u8 WMSP_GetRssi8_06001B5C(int rssi);
 
-// wmsp_alarm.c
+// Alarms
 void WMSP_RequestResumeMP(void);
 void WmspMPParentIntervalAlarmCallback(void *arg);
 void WmspKickMPParent(u16 bitmap);
@@ -482,12 +482,12 @@ void WmspKickMPChild();
 void WMSP_InitAlarm(void);
 void WMSP_CancelAllAlarms(void);
 
-// wmsp_request.c
+// Requests
 void WMSP_RequestThread(void *arg);
 void WmspRequestFuncDummy(void *request);
 extern void (*WmspRequestFuncTable[])(void *request);
 
-// wmsp_wl_command.c: build a WL driver request in `buf`, run it, return its reply.
+// Build a WL driver request in `buf`, run it, return its reply.
 u16 *WMSP_WL_MlmeReset(u16 *buf, u16 arg);
 u16 *WMSP_WL_MlmePowerManagement(void *buf, u16 first, u16 second, u16 third);
 u16 *WMSP_WL_MlmeScan(void *buf, u32 size, void *peer, u16 ssidLength, void *ssid, u16 scanType, void *channels, u16 dwell);
@@ -526,17 +526,15 @@ u16 *WMSP_WL_DevGetStationState(void *buf);
 u16 *WMSP_WL_DevTestSignal(void *buf, u16 first, u16 second, u16 third, u16 fourth);
 u16 *WMSPi_WL_NoArg(u16 *buf, u16 command, u16 replyLength);
 
-// wmsp_initialize.c
+// Initialize and end
 void WMSP_Initialize(u32 *request);
 
-// wmsp_end.c
 void WmspError_06002FC0(u16 command, u16 result);
 void WMSP_End(void *request);
 void __VENEER_PM_SetLEDPattern(int pattern);
 void PM_SetLEDPattern(int pattern);
 void WMSP_SetParentParam(u32 *request);
 
-// wmsp_scan.c
 void WmspError_060033F4(u16 command, u16 result);
 void WMSP_EndParent(void *request);
 void WmspError_060035F4(u16 command, u16 result);
@@ -544,25 +542,23 @@ void WMSP_StartScan(void *request);
 u32 WMSP_GetRssi8_06003988(int rssi);
 void WMSP_AddRssiToRandomPool(u32 rssi);
 
-// wmsp_end_scan.c
 u32 __VENEER__u32_div_f(u32 dividend, u32 divisor);
 u32 _u32_div_f(u32 dividend, u32 divisor);
 void WmspError_06003ED4(u16 command, u16 result, BOOL scanEx);
 void WMSP_EndScan(void *request);
 void WmspError_06003FF0(u16 command, u16 result);
 
-// wmsp_disconnect.c
 s32 __VENEER__s32_div_f(s32 dividend, s32 divisor);
 s32 _s32_div_f(s32 dividend, s32 divisor);
 void WmspError_060045D0(u16 command, u16 result, u16 detail);
 void WMSP_Disconnect(u32 *request);
 
-// wmsp_disconnect_ind.c
+// Disconnection
 void WMSP_IndicateDisconnectionFromMyself(BOOL parent, u16 aid, void *mac);
 void WmspError_06004CB4(u16 command, u16 result, u16 aidBitmap, u16 disconnected);
 void WmspIndError(u16 a, u16 b, u16 c, u16 d);
 
-// wmsp_param.c
+// Parameters
 void WMSP_EndMP(void *request);
 void WmspError_06005328(u16 command, u16 result);
 void WMSP_StartDCF(u32 *request);
@@ -580,7 +576,7 @@ void WmspError_06005BB8(u16 command, u16 result);
 void WMSP_InitWirelessCounter(void *request);
 void WMSP_GetWirelessCounter(void *request);
 
-// wmsp_valarm.c
+// V-count alarms
 void WMSP_InitVAlarm(void);
 void WMSP_CancelVAlarm(void);
 void WMSP_SetVAlarm(void);
@@ -595,47 +591,37 @@ void WMSP_KickNextMP_Parent(u32 *request);
 void WMSP_KickNextMP_Child(void *request);
 void WMSP_KickNextMP_Resume(u32 *request);
 
-// wmsp_send_queue_init.c
+// Commands
 void WMSP_InitSendQueue(void);
 
-// wmsp_reset.c
 void WMSP_Reset(void);
 
-// wmsp_start_parent.c
 void WMSP_StartParent(u32 *request);
 
-// wmsp_start_scan_ex.c
 void WMSP_StartScanEx(WmspStartScanExRequest *request);
 
-// wmsp_start_connect_ex.c
 void WMSP_StartConnectEx(WmspStartConnectExRequest *request);
 
-// wmsp_disconnect_core.c
 BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected);
 
-// wmsp_start_mp.c
 void WMSP_StartMP(WmspStartMPRequest *request);
 
-// wmsp_set_mp_data.c
 void WMSP_SetMPData(WmspSetMPDataRequest *request);
 
-// wmsp_send_queue.c
+// Send queue
 void WMSP_ResumeMaMP(u32 bitmap);
 u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u16 *data, u16 size, void *callback, void *arg);
 
-// wmsp_send_ma.c
 void WMSP_SendMaKeyData(void);
 void WMSP_SendMaMP(u16 bitmap);
 
-// wmsp_send_queue_flush.c
 int WMSP_FlushSendQueue(int retransmit, u16 failedBitmap);
 void WMSP_CleanSendQueue(u32 aidBitmap);
 void WMSP_ParsePortPacket(u16 srcAid, u16 header, void *data, s32 size, void *context);
 
-// wmsp_get_tmptt.c
 u16 WmspGetTmptt(u32 headerSize, u32 size, u32 bitmap, u32 line);
 
-// wmsp_control.c
+// Control
 void WMSP_SetEntry(u32 *request);
 void WMSP_AutoDeAuth(void *request);
 void WMSP_Enable(void *request);

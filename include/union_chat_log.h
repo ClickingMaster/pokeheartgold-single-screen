@@ -29,7 +29,7 @@ enum UnionChatLogState {
     UNION_CHAT_LOG_STATE_FREED,
 };
 
-// The 30 chat messages the Union Room manager (field_player_effect_3.c) keeps; Manager.messages
+// The 30 chat messages the Union Room manager keeps; Manager.messages
 // points at slots[0]. Once count reaches 30 the oldest message is at head.
 typedef struct UnionChatLogMessages {
     MessageSlot slots[UNION_CHAT_LOG_NUM_MESSAGES];

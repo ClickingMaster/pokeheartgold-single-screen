@@ -150,7 +150,7 @@ typedef struct GtsSearchCursor {
     int rightRow;                 // 0x2C
 } GtsSearchCursor;
 
-// The icon of a Pokemon of the shown box, loaded into VRAM in the next VBlank (gts_select_mon.c).
+// The icon of a Pokemon of the shown box, loaded into VRAM in the next VBlank.
 typedef struct GtsMonIcon GtsMonIcon;
 
 typedef struct GtsCursorValueTable {
@@ -160,7 +160,7 @@ typedef struct GtsCursorValueTable {
     u16 unk_18[10];
 } GtsCursorValueTable;
 
-// The selector of species, gender, level and country (gts_selector.c).
+// The selector of species, gender, level and country.
 typedef struct GtsSelector GtsSelector;
 
 // What the selector is created with.
@@ -185,7 +185,7 @@ extern GtsGlobals gGtsGlobals;
 
 typedef void (*GtsVBlankFunc)(GtsApp *app);
 
-// The background palette cycle of screen 0, run as a VBlank task (gts_connection.c).
+// The background palette cycle of screen 0, run as a VBlank task.
 typedef struct GtsPaletteAnim {
     SysTask *task;         // 0x000
     BOOL active;           // 0x004
@@ -326,10 +326,10 @@ struct GtsApp {
     u32 requestFrames;                       // 0x1604, frames the request in flight took
 }; // size: 0x1608
 
-// Maps a failed request's error to its result (gts.c).
+// Maps a failed request's error to its result.
 int GtsServer_GetErrorResult(int error);
 
-// Helpers shared by the GTS screens (gts.c).
+// Helpers shared by the GTS screens.
 void Gts_SetupWindow0(void);
 void Gts_InitObjTransfer(void);
 void Gts_InitSpriteResources(GtsApp *app);
@@ -355,11 +355,11 @@ void Gts_SetSpritePosition(Sprite *sprite, int x, int y);
 void Gts_DimScreen(BOOL mainScreen);
 void Gts_ClearDim(void);
 
-// The GTS main menu (gts_main_menu.c).
+// The GTS main menu.
 void Gts_InitSubScreenBgs(BgConfig *bgConfig, int bg1Y, BOOL keepBg2Tilemap);
 void Gts_FreeSubScreenBgs(BgConfig *bgConfig);
 
-// The sub screen panel and the Pokemon summary windows (gts_summary.c).
+// The sub screen panel and the Pokemon summary windows.
 void Gts_LoadSubScreenBg(GtsApp *app);
 void Gts_ShowSubScreenPanel(GtsApp *app);
 void Gts_CreatePanelWindow(GtsApp *app, int caption);
@@ -367,7 +367,7 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
 void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows);
 void Gts_LoadMonPicture(Pokemon *mon);
 
-// SEEK POKEMON (gts_search.c; the last of them link with screen 5).
+// SEEK POKEMON (the last of them link with screen 5).
 void GtsSearch_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
 void GtsSearch_DrawFieldLabels(Window *fieldWindows, Window *lineWindow, MsgData *msgData);
 void GtsSearch_DrawResultsButton(BgConfig *bgConfig, Window *window, MsgData *msgData, BOOL enabled);
@@ -375,7 +375,7 @@ BOOL GtsSearch_IsSameSearch(GtsWantedMon *criteria, GtsWantedMon *lastSearch, u3
 void GtsSearch_ScrollBgs(GtsApp *app);
 void GtsSearch_SetBlendBrightness(int brightness);
 
-// The avatars on the sub screen (gts_avatars.c).
+// The avatars on the sub screen.
 void Gts_CreateAvatars(GtsApp *app, u32 gender);
 void Gts_StartPlayerEnterAnim(GtsApp *app, int gender);
 void Gts_StartPlayerExitAnim(GtsApp *app, int gender);
@@ -388,12 +388,12 @@ void Gts_SetAvatarMarker(GtsApp *app, u32 index, u32 scrollY);
 void Gts_ResetAvatarPositions(GtsApp *app);
 void Gts_LowerAvatars(GtsApp *app);
 
-// Choosing the Pokemon to deposit or to trade (gts_select_mon.c).
+// Choosing the Pokemon to deposit or to trade.
 BOOL Gts_IsPartyBox(int box);
 BoxPokemon *Gts_GetBoxMon(Party *party, PCStorage *pcStorage, int box, int slot);
 BOOL Gts_MonHoldsMail(Pokemon *mon);
 
-// Choosing the wanted Pokemon of a deposit (gts_wanted.c), and the helpers that follow it: the wanted Pokemon's
+// Choosing the wanted Pokemon of a deposit, and the helpers that follow it: the wanted Pokemon's
 // texts, level ranges, species and country lists, the record of a deposit or trade.
 // align: 0 left, 1 centered, 2 right in the window.
 BOOL Gts_SetFixedGender(GtsWantedMon *wanted, u32 genderRatio);
@@ -419,7 +419,7 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
 void GtsCursorValueTable_Clear(GtsCursorValueTable *arg);
 void GtsCursorValueTable_SetEntry(GtsCursorValueTable *arg, int index, u16 value1, u16 value2);
 
-// The selector (gts_selector.c). mode: 0 species, 1 gender, 2 level, 3 country. GtsSelector_Main returns -1 while
+// The selector. mode: 0 species, 1 gender, 2 level, 3 country. GtsSelector_Main returns -1 while
 // the player chooses, -2 for BACK, else the choice.
 GtsSelector *GtsSelector_New(GtsSelectorArgs *args, int bgId, int levelRangeKind);
 void GtsSelector_Start(GtsSelector *selector, int mode);
@@ -428,7 +428,7 @@ int GtsSelector_Main(GtsSelector *selector);
 // The count of the countries starting with the letter (index A = 0); unused is not read.
 int GtsSelector_CountCountriesOfLetter(void *unused, u32 letter);
 
-// Connecting to and disconnecting from Nintendo Wi-Fi Connection (screen 0, gts_connection.c), and the text helpers
+// Connecting to and disconnecting from Nintendo Wi-Fi Connection (screen 0), and the text helpers
 // every screen uses. Gts_PrintMessage prints in waitingIconWindow (the message window); align: 0 left at x,
 // 1 centered, 2 right in the window.
 // The last function of the selector (it links with screen 0): whether a letter group has a letter with countries.

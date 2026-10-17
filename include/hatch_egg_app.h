@@ -3,7 +3,7 @@
 
 #include "overlay_manager.h"
 
-// The egg hatching scene (overlay 95), run by the hatch egg task (hatch_egg_task.c): the egg shakes and
+// The egg hatching scene (overlay 95), run by the hatch egg task: the egg shakes and
 // cracks (or, for a Manaphy egg, glows), the Pokemon appears and the player is asked whether to give
 // it a nickname.
 BOOL HatchEggApp_Init(OverlayManager *man, int *state);

@@ -303,7 +303,7 @@ int BN_gen_exp_string(u8 *out, const BIGNUM *e, int window);
 void bn_mul_normal(u32 *r, u32 *a, int na, u32 *b, int nb);
 void bn_sqr_normal(u32 *r, u32 *a, int n, u32 *tmp);
 
-// allocator (nitrocrypto_alloc.c)
+// allocator
 typedef void *(*CryptoAlloc)(u32 size);
 typedef void (*CryptoFree)(void *ptr);
 
@@ -314,7 +314,7 @@ void *CRYPTOi_MyAlloc(u32 size);
 void CRYPTOi_MyFree(void *ptr);
 void CRYPTO_SetAllocator(CryptoAlloc alloc, CryptoFree free);
 
-// RSA signature check (nitrocrypto_sign.c)
+// RSA signature check
 u32 CRYPTOi_RSA(u8 *out, int outSize, const u8 *in, int inSize, const u8 *modulus, int modulusSize, int exponent);
 BOOL ASN1Skip(u8 **cursor, u32 *remaining, int tag, u32 *length);
 BOOL SkipPadding(u8 *block, u32 size, u8 **payload, u32 *payloadSize);
@@ -322,7 +322,7 @@ BOOL ParseSignHash(u8 *data, u32 size, u8 **oid, int *oidSize, u8 **hash, int *h
 BOOL CRYPTO_VerifySignatureWithHash(u8 *hash, const u8 *sign, const u8 *pubkey);
 BOOL CRYPTO_VerifySignature(const void *data, u32 dataLength, const u8 *sign, const u8 *pubkey);
 
-// RC4 (nitrocrypto_rc4.c)
+// RC4
 void CRYPTO_RC4Encrypt(void *context, const void *in, u32 length, void *out);
 
 // tables in asm/nitrocrypto_data.s

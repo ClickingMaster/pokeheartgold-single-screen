@@ -24,7 +24,7 @@
 #include "save_wifi_history.h"
 #include "sys_task_api.h"
 
-// Arguments of the Wi-Fi Plaza overlay (field_transition_tasks_2.c).
+// Arguments of the Wi-Fi Plaza overlay.
 typedef struct WiFiPlazaArgs {
     void *loginTime;
     SaveData *save;
@@ -359,7 +359,7 @@ typedef struct WiFiPlazaWork {
     u32 hasError;
 } WiFiPlazaWork;
 
-// Location tables of the earth place NARC (as in geonet_globe_app.c); y is the longitude angle.
+// Location tables of the earth place NARC (as in the Geonet globe app); y is the longitude angle.
 typedef struct WiFiPlazaEarthCountry {
     u16 kind; // 2: the country has regions
     s16 x;
@@ -371,7 +371,7 @@ typedef struct WiFiPlazaEarthRegion {
     s16 y;
 } WiFiPlazaEarthRegion;
 
-// Same layout as the box test bounds of model_box_test.c.
+// Same layout as the model box test bounds.
 typedef struct WiFiPlazaBoxTestBounds {
     s16 width;
     s16 height;
@@ -542,7 +542,7 @@ typedef struct WiFiPlazaBillboardParams {
     u32 heapID;
 } WiFiPlazaBillboardParams;
 
-// Same layout as the billboard code's gfx sequence (billboard_gfx_sequence.c).
+// Same layout as the billboard code's gfx sequence.
 typedef struct WiFiPlazaBillboardSequence {
     const u16 *startFrame;
     const u8 *textureIdx;

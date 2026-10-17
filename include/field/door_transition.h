@@ -5,7 +5,7 @@
 #include "task.h"
 
 // Door transitions: the player walks into or out of a door prop on the map while its open/close animation plays
-// and the camera zooms. The FieldTransitionWork handle is a DoorTransitionWork (door_transition.c).
+// and the camera zooms. The FieldTransitionWork handle is a DoorTransitionWork.
 FieldTransitionWork *DoorTransition_New(void);
 void DoorTransition_Free(FieldTransitionWork *work);
 void DoorTransition_SetPosition(u32 x, u32 z, FieldTransitionWork *work);

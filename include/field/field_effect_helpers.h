@@ -4,8 +4,8 @@
 #include "field/field_effect_manager.h"
 
 // What the field effect renderers share from modules that keep it to themselves for now:
-// render_animation.c's model animation and render object helpers, field_effects.c's effect accessors and
-// the billboard_lists.c object calls (billboard_lists.h has BillboardObject_SetVisible).
+// the model animation and render object helpers, the effect accessors and the billboard object
+// calls (billboard_lists.h has BillboardObject_SetVisible).
 
 // Embedded by value: one copy loaded per renderer (FieldEffectManager_LoadRenderAnimation), one per
 // running effect bound to the renderer's model (FieldEffectManager_InitRenderAnimation).
@@ -32,7 +32,7 @@ void FieldEffect_RunUpdate(FieldEffect *effect);
 BOOL BillboardObject_Delete(void *billboard);
 void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
 // TRUE once a non-looping sequence has reached its last frame: the result of BillboardSequence_Step, which
-// it ends with (billboard_lists.c types it void).
+// it ends with (its definition types it void).
 BOOL BillboardObject_AdvanceFrame(void *billboard, fx32 delta);
 void BillboardObject_SetFrame(void *billboard, fx32 frame);
 fx32 BillboardObject_GetFrame(void *billboard);

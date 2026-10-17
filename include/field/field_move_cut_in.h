@@ -87,7 +87,7 @@ Sprite *FieldMoveCutIn_CreateSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int cha
 Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int animSeq);
 Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, int drawPriority, int unused);
 
-// field_move_cut_in_effects.c
+// Cut-in window and Pokemon picture
 void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data);
 void FieldMoveCutIn_GetMonPicIds(FieldMoveCutIn *cutIn, PokepicTemplate *template);
 void *FieldMoveCutIn_LoadMonChar(Pokemon *mon, PokepicTemplate *template, enum HeapID heapID);

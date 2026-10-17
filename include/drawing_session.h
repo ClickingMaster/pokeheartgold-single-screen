@@ -15,7 +15,7 @@
 
 // Union Room group drawing (OVY_37): up to 5 members draw on a shared canvas with 8 pen colours
 // and 3 pen sizes. The leader (link id 0) collects the members' strokes and sends them to everyone;
-// the command handlers in wireless_room_packets.c write into this work and report events through
+// the link command handlers write into this work and report events through
 // DrawingSession_HandleNetEvent.
 
 #define DRAWING_SESSION_MAX_MEMBERS 5

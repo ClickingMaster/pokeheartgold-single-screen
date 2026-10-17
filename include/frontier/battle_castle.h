@@ -21,8 +21,8 @@
 #include "grid_input_handler.h"
 #include "yes_no_prompt.h"
 
-// Battle Castle (overlay 83): the party app (battle_castle_party_app.c) and the
-// opponent app (battle_castle_opponent_app.c), which also holds the helpers both use.
+// Battle Castle (overlay 83): the party app and the
+// opponent app, which also holds the helpers both use.
 
 // Sprite created by BattleCastleSprite_New / BattleCastleSprite_NewSubScreen (also used by the opponent app)
 typedef struct BattleCastleSprite {
@@ -163,7 +163,7 @@ typedef struct BattleCastlePartyApp {
     u32 bgToggleRequests;                        // 0x868 (4 bits per BG layer, applied in VBlank by BattleCastle_ApplyBgToggleRequests)
 } BattleCastlePartyApp;                          // size 0x86C
 
-// Defined in battle_castle_opponent_app.c
+// Defined with the opponent app
 BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app);
 void BattleCastle_InitSpriteGfx(BattleCastleSpriteGfx *gfx, Party *party, u8 isLink);
 void BattleCastle_FreeSpriteGfx(BattleCastleSpriteGfx *gfx);

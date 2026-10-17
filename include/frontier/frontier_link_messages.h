@@ -6,7 +6,7 @@
 #include "frontier/battle_hall_data.h"
 #include "frontier/battle_arcade_data.h"
 
-// Link messages of the facilities' script side (frontier_link_messages.c).
+// Link messages of the facilities' script side.
 typedef struct ArcadeMonsMessage ArcadeMonsMessage;
 
 void BattleHallLink_ReceiveUnused(int netId, int size, void *data, BattleHallData *work);

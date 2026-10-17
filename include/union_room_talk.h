@@ -28,7 +28,7 @@ void UnionRoom_BroadcastChatMessage(MailMessage *message);
 void UnionRoom_SetOwnChatMessage(struct UnionRoom *unionRoom, MailMessage *message);
 MailMessage *UnionRoom_TakeOwnChatMessage(struct UnionRoom *);
 
-// link command handlers (command table in field_comm_cmds.c): (netId, size, data, fieldSystem)
+// link command handlers (in the field link command table): (netId, size, data, fieldSystem)
 void UnionRoom_RecvTalkChoice(int, int, u8 *, FieldSystem *);
 void UnionRoom_RecvTalkCancel(int, int, u8 *, FieldSystem *);
 void UnionRoom_RecvTrainerCard(int, int, void *);
@@ -40,7 +40,7 @@ struct TrainerCardData *UnionRoom_AllocTrainerCards(struct UnionRoom *);
 void UnionRoom_FreeTrainerCards(struct UnionRoom *);
 BOOL UnionRoom_SendTrainerCard(struct UnionRoom *);
 
-// The profile in a player's beacon record (communication layer, wireless_connection_state_8.c), NULL if absent.
+// The profile in a player's beacon record (communication layer), NULL if absent.
 PlayerProfile *CommWireless_GetParentProfile(int);
 
 #endif // POKEHEARTGOLD_UNION_ROOM_TALK_H

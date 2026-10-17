@@ -3,7 +3,7 @@
 
 #include "overlay_manager.h"
 
-// OVY_59, launched by the Apricorn Box app (apricorn_box_overlay.c, args ApricornBoxApp).
+// OVY_59, launched by the Apricorn Box app (args ApricornBoxApp).
 
 // The Apricorn Box screen: view the apricorns, put them into the Apriblender, give them to Kurt.
 BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state);

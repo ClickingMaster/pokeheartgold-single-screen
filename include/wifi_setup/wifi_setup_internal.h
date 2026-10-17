@@ -101,7 +101,7 @@ extern WifiSetupResult gWifiSetupResult;
 
 extern const u8 sWifiSetupMd5Padding[]; // MD5 padding
 
-// wifi_setup_link.c
+// Connection manager events
 void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event);
 int WifiSetupLink_ReturnToIdle(void);
 int WifiSetupLink_CopyApList(WifiSetupApInfo *dst, int max);
@@ -122,13 +122,13 @@ int WifiSetupLink_Close(void);
 int WifiSetupLink_ConnectSelectedAp(void);
 void WifiSetupLink_DisconnectAp(void);
 
-// wifi_setup_worker.c
+// Worker thread
 int WifiSetup_RunSession(void);
 
-// wifi_setup_ap_select.c
+// Access point choice
 int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected);
 
-// wifi_setup_crypto.c
+// Thread start-up and AES key wrap
 void WifiSetup_SimpleStartThread(void *arg);
 int WifiSetup_AesKeyWrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
 int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
@@ -138,13 +138,13 @@ int WifiSetup_AesSetDecryptKey(u32 *roundKeys, const u8 *key, int keyBits);
 void WifiSetup_AesEncryptBlock(const u32 *roundKeys, int rounds, const u8 *in, u8 *out);
 void WifiSetup_AesDecryptBlock(const u32 *roundKeys, int rounds, const u8 *in, u8 *out);
 
-// wifi_setup_crypto.c (MD5) and the MD5 block transform
+// MD5
 void WifiSetup_Md5Init(WifiSetupMd5Context *context);
 void WifiSetup_Md5Update(WifiSetupMd5Context *context, const u8 *input, u32 len);
 void WifiSetup_Md5Final(u8 *digest, WifiSetupMd5Context *context);
 void WifiSetup_Md5Transform(WifiSetupMd5Context *context, const u8 *input);
 
-// wifi_setup_api.c
+// Byte order helpers
 void WifiSetup_EncodeLittleEndian(u8 *dst, const volatile u32 *src, u32 len);
 void WifiSetup_DecodeLittleEndian(u32 *dst, const u8 *src, u32 len);
 void WifiSetup_CopyBytes(u8 *dst, const u8 *src, u32 len);

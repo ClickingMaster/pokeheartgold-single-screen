@@ -143,7 +143,7 @@ typedef struct BagApp {
     int chosenAction;
 } BagApp;
 
-// bag_app.c
+// Bag app main
 void BagApp_LoadInfoPanelTilemap(BagApp *app, int mode);
 BOOL BagApp_IsBerryOrMulch(u32 pocketId, u32 itemId);
 void BagApp_AddItemListWindows(BagApp *app);
@@ -157,7 +157,7 @@ void BagApp_PrintTMHMMoveInfo(BagApp *app, u16 itemId);
 void BagApp_PrintTMHMNumber(BagApp *app, Window *window, ItemSlot *slot, int y);
 void *BagApp_LoadListIconChars(BagApp *app, NNSG2dCharacterData **charData);
 
-// bag_app_display.c
+// Item menu and display
 void BagApp_LoadItemMenuStrings(BagApp *app);
 void BagApp_FreeItemMenuStrings(BagApp *app);
 void BagApp_PrintItemSelectedMessage(BagApp *app, const u8 *actions, int count);

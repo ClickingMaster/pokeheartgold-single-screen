@@ -4,8 +4,8 @@
 #include "heap.h"
 #include "save.h"
 
-// The record types record mixing exchanges (record_mixing_exchange.c builds what is sent, record_mixing_merge.c
-// merges what was received).
+// The record types record mixing exchanges (one part builds what is sent, the other merges what was
+// received).
 
 #define RECORD_MIXING_SEND_SIZE    3000
 #define RECORD_MIXING_NUM_HANDLERS 10

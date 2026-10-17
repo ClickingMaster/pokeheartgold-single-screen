@@ -3,7 +3,7 @@
 
 #include "field_system.h"
 
-// The field's bottom-screen apps. Bottom screen types 1 and 3 (field_bottom_screen.c) run them in
+// The field's bottom-screen apps. Bottom screen types 1 and 3 run them in
 // FieldSystem.bottomScreenTask; FieldSystem_SwitchBottomScreenApp fades the sub screen out, exits the
 // current app and starts the requested one. The getters and setters for the running app are declared in
 // overlay_01.h.
