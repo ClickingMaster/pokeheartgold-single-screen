@@ -34,7 +34,14 @@ typedef struct TradeContext {
     u8 pad10[0x78];
     TradeWork *work;
 } TradeContext;
-extern const u32 gWirelessTradeCommands[];
+typedef void (*WirelessTradeRecvFunc)();
+
+typedef struct WirelessTradeCommand {
+    WirelessTradeRecvFunc receive;
+    u32 (*getSize)(void);
+    void *(*getBuffer)(int sender, TradeContext *context);
+} WirelessTradeCommand;
+
 void WirelessTradeSelectMon_SendCommandIfChanged(TradeWork *, int, int);
 void WirelessTradeSelectMon_SendPartyChunk(int, void *, int);
 

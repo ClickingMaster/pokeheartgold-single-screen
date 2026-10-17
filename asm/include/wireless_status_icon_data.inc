@@ -29,11 +29,11 @@
 .public GXS_LoadOBJ
 .public DC_FlushRange
 
-	.public _020F6A9C
-	.public _020F6AA4
-	.public _020F6AAC
-	.public _020F6AB4
-	.public _020F6ABC
+	.public sWirelessStatusIconLevel3Anim
+	.public sWirelessStatusIconLevel2Anim
+	.public sWirelessStatusIconLevel1Anim
+	.public sWirelessStatusIconLevel0Anim
+	.public sWirelessStatusIconCycleAnim
 	.public gWirelessStatusIconAnims
 	.public gWirelessStatusIconNclr
 	.public gWirelessStatusIconWifiNcgr

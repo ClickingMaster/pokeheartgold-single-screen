@@ -70,22 +70,22 @@
 	.public UnionRoom_GetSentTalkReplyMsg
 	.public UnionRoom_FillStatusMembers
 	.public UnionRoomStatus_Init
-	.public _020FC7D4
-	.public _020FC7DC
-	.public _020FC7E4
-	.public _020FC7EC
-	.public _020FC7F4
-	.public _020FC7FC
-	.public _020FC804
-	.public _020FC814
-	.public _020FC838
-	.public _020FC850
-	.public _020FC868
-	.public _020FC880
+	.public gUnionRoomTalkGreetingMsgs
+	.public gUnionRoomTalkComeBackMsgs
+	.public gUnionRoomTalkAnythingElseMsgs
+	.public gUnionRoomTalkLeaveMsgs
+	.public gUnionRoomTalkUntradeableEggMsgs
+	.public gUnionRoomActivityBusyMsgs
+	.public gUnionRoomActivityTradeMsgs
+	.public gUnionRoomActivityTrainerCardMsgs
+	.public gUnionRoomTalkJoinGroupMsgs
+	.public gUnionRoomTalkJoinAcceptedMsgs
+	.public gUnionRoomTalkJoinDeclinedMsgs
+	.public gUnionRoomTalkRequirementMsgs
 	.public gUnionRoomLanguageGreetings
-	.public _020FC8B4
-	.public _020FC8D4
-	.public _020FC8F4
-	.public _020FC914
-	.public _020FC934
-	.public _020FC95C
+	.public gUnionRoomActivityDrawingMsgs
+	.public gUnionRoomActivityBattleMsgs
+	.public gUnionRoomActivityRecordMixMsgs
+	.public gUnionRoomActivitySpinTradeMsgs
+	.public gUnionRoomTalkDeclineRequestMsgs
+	.public gUnionRoomTalkAcceptRequestMsgs

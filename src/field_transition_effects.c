@@ -35,9 +35,43 @@ typedef void (*FieldSystemFunc)(FieldSystem *);
 BOOL Task_FieldTransition(TaskManager *man);
 BOOL RoutineFieldFade(TaskManager *man);
 
-extern TaskFunc sMapEnterRoutines[9];
-extern TaskFunc sMapExitRoutines[9];
-extern FieldSystemFunc sMapEnterPlacementRoutines[9];
+// All three tables are indexed by FieldTransitionEnvironment.transitionNo.
+static const TaskFunc sMapExitRoutines[] = {
+    FieldTransition_ExitWithFade,
+    FieldTransition_ExitThroughDoor,
+    FieldTransition_ExitThroughSideDoor,
+    FieldTransition_ExitOnWarpStairs,
+    FieldTransition_ExitStairsFadeOut,
+    FieldTransition_ExitStairsFadeToWhite,
+    FieldTransition_ExitWithFade,
+    FieldTransition_ExitRising,
+    FieldTransition_ExitSinking,
+};
+
+static const TaskFunc sMapEnterRoutines[] = {
+    FieldTransition_EnterWithDirectionalFade,
+    FieldTransition_EnterWithFade,
+    FieldTransition_EnterThroughSideDoor,
+    FieldTransition_EnterFromWarpStairs,
+    FieldTransition_EnterWithFade,
+    FieldTransition_EnterWithDoorExit,
+    FieldTransition_EnterWithFade,
+    FieldTransition_EnterRising,
+    FieldTransition_EnterSinking,
+};
+
+// Places the player and camera before the enter routine runs, where the transition needs it.
+static const FieldSystemFunc sMapEnterPlacementRoutines[] = {
+    NULL,
+    NULL,
+    FieldTransition_PlaceInsideSideDoor,
+    FieldTransition_PlaceOffWarpStairs,
+    NULL,
+    NULL,
+    NULL,
+    FieldTransition_PlaceBelowFloor,
+    FieldTransition_PlaceAboveFloor,
+};
 
 void NewFieldFadeEnvironment(TaskManager *man, enum FadeMode fadeMode, enum FadeType typeTop, enum FadeType typeBottom, u16 colour, int duration, int framesPer, enum HeapID heapID) {
     FieldFadeEnvironment *sfenv = Heap_Alloc(heapID, sizeof(FieldFadeEnvironment));

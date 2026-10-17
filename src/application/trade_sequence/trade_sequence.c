@@ -322,7 +322,7 @@ extern const GXRgb sTradeSequenceDepartEdgeColors[8];
 extern const BgTemplate sTradeSequenceDepartBgTemplate_Layer2;
 extern const BgTemplate sTradeSequenceDepartBgTemplate_Layer3;
 extern const GraphicsBanks sTradeSequenceDepartGraphicsBanks;
-extern s32 ov71_0224C0C4;
+extern s32 sTradeSequenceDepartWaitFrames;
 extern CameraAngle sTradeSequenceDepartCameraAngle;
 
 TradeSequenceDepart *TradeSequenceDepart_Init(TradeSequence *ts);
@@ -1781,13 +1781,13 @@ BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
     case 0:
         if (IsPaletteFadeFinished()) {
-            ov71_0224C0C4 = 0;
+            sTradeSequenceDepartWaitFrames = 0;
             (*state)++;
         }
         break;
     case 1:
-        if (ov71_0224C0C4 < 30) {
-            ov71_0224C0C4++;
+        if (sTradeSequenceDepartWaitFrames < 30) {
+            sTradeSequenceDepartWaitFrames++;
         }
         if (depart->bgZoomFinished) {
             return TRUE;
@@ -1947,9 +1947,9 @@ void TradeSequenceDepart_Init3D(TradeSequenceDepart *depart) {
     G2_SetBG0Priority(0);
     depart->models = TradeSequence_CreateModels(1, 0, 0, 0);
     depart->ball = TradeSequence_LoadModel(depart->models, 0, NARC_a_0_8_9, 27, 0, -0x37800, 0, FALSE);
-    ((CameraAngle *)(&ov71_0224C0C4 + 1))->x = 0xEBE0;
-    ((CameraAngle *)(&ov71_0224C0C4 + 1))->y = 0;
-    ((CameraAngle *)(&ov71_0224C0C4 + 1))->z = 0;
+    ((CameraAngle *)(&sTradeSequenceDepartWaitFrames + 1))->x = 0xEBE0;
+    ((CameraAngle *)(&sTradeSequenceDepartWaitFrames + 1))->y = 0;
+    ((CameraAngle *)(&sTradeSequenceDepartWaitFrames + 1))->z = 0;
     TradeSequence_SetCameraAngle(depart->models, &sTradeSequenceDepartCameraAngle);
     TradeSequence_SetModelScale(depart->ball, 0x1C00);
 }

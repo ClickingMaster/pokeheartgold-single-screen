@@ -31,95 +31,6 @@
 	.public sSwalotPlopPopupPosX
 	.public sSwalotPlopPopupPosY
 	.public sSwalotPlopSceneNodeNames
-	.public ov91_022621BC
-	.public ov91_022621CC
-	.public ov91_022621DC
-	.public ov91_022621EC
-	.public ov91_022621FC
-	.public ov91_0226220C
-	.public ov91_0226221C
-	.public ov91_0226222C
-	.public ov91_0226223C
-	.public ov91_0226224C
-	.public ov91_0226225C
-	.public ov91_0226226C
-	.public ov91_0226227C
-	.public ov91_0226228C
-	.public ov91_0226229C
-	.public ov91_022622AC
-	.public ov91_022622BC
-	.public ov91_022622CC
-	.public ov91_022622DC
-	.public ov91_022622EC
-	.public ov91_022622FC
-	.public ov91_0226230C
-	.public ov91_0226231C
-	.public ov91_0226232C
-	.public ov91_0226233C
-	.public ov91_0226234C
-	.public ov91_0226235C
-	.public ov91_0226236C
-	.public ov91_0226237C
-	.public ov91_0226238C
-	.public ov91_0226239C
-	.public ov91_022623AC
-	.public ov91_022623BC
-	.public ov91_022623CC
-	.public ov91_022623DC
-	.public ov91_022623EC
-	.public ov91_022623FC
-	.public ov91_0226240C
-	.public ov91_0226241C
-	.public ov91_0226242C
-	.public ov91_0226243C
-	.public ov91_0226244C
-	.public ov91_0226245C
-	.public ov91_0226246C
-	.public ov91_0226247C
-	.public ov91_0226248C
-	.public ov91_0226249C
-	.public ov91_022624AC
-	.public ov91_022624BC
-	.public ov91_022624CC
-	.public ov91_022624DC
-	.public ov91_022624EC
-	.public ov91_022624FC
-	.public ov91_0226250C
-	.public ov91_0226251C
-	.public ov91_0226252C
-	.public ov91_0226253C
-	.public ov91_0226254C
-	.public ov91_0226255C
-	.public ov91_0226256C
-	.public ov91_0226257C
-	.public ov91_0226258C
-	.public ov91_0226259C
-	.public ov91_022625AC
-	.public ov91_022625BC
-	.public ov91_022625CC
-	.public ov91_022625DC
-	.public ov91_022625EC
-	.public ov91_022625FC
-	.public ov91_0226260C
-	.public ov91_0226261C
-	.public ov91_0226262C
-	.public ov91_0226263C
-	.public ov91_0226264C
-	.public ov91_0226265C
-	.public ov91_0226266C
-	.public ov91_0226267C
-	.public ov91_0226268C
-	.public ov91_0226269C
-	.public ov91_022626AC
-	.public ov91_022626BC
-	.public ov91_022626CC
-	.public ov91_022626DC
-	.public ov91_022626EC
-	.public ov91_022626FC
-	.public ov91_0226270C
-	.public ov91_0226271C
-	.public ov91_0226272C
-	.public ov91_0226273C
 	.public sSwalotPlopSceneAnimModels
 	.public sSwalotPlopCommands
 	.extern _0225C5BE
@@ -1246,276 +1157,97 @@ sSwalotPlopPopupPosY: ; 0x02261F90
 	.byte 0x60, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x30, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x90, 0x00, 0x00, 0x00
 
-sSwalotPlopSceneNodeNames: ; 0x022621AC
+sSwalotPlopSceneNodeNames:
 	.ascii "polySurface2"
-	.space 16-(.-sSwalotPlopSceneNodeNames)
-ov91_022621BC:
+	.space 4
 	.ascii "polySurface3"
-	.space 16-(.-ov91_022621BC)
-ov91_022621CC:
+	.space 4
 	.ascii "pTorus2"
-	.space 16-(.-ov91_022621CC)
-ov91_022621DC:
+	.space 9
 	.ascii "null1"
-	.space 16-(.-ov91_022621DC)
-ov91_022621EC:
-	.ascii ""
-	.space 16-(ov91_022621EC-.)
-ov91_022621FC:
-	.ascii ""
-	.space 16-(.-ov91_022621FC)
-ov91_0226220C:
-	.ascii ""
-	.space 16-(.-ov91_0226220C)
-ov91_0226221C:
-	.ascii ""
-	.space 16-(.-ov91_0226221C)
-ov91_0226222C:
-	.ascii ""
-	.space 16-(.-ov91_0226222C)
-ov91_0226223C:
-	.ascii ""
-	.space 16-(.-ov91_0226223C)
-ov91_0226224C:
-	.ascii ""
-	.space 16-(.-ov91_0226224C)
-ov91_0226225C:
-	.ascii ""
-	.space 16-(.-ov91_0226225C)
-ov91_0226226C:
-	.ascii ""
-	.space 16-(.-ov91_0226226C)
-ov91_0226227C:
-	.ascii ""
-	.space 16-(.-ov91_0226227C)
-ov91_0226228C:
-	.ascii ""
-	.space 16-(.-ov91_0226228C)
-ov91_0226229C:
+	.space 11
+	.space 16 * 11
+
 	.ascii "polySurface7"
-	.space 16-(.-ov91_0226229C)
-ov91_022622AC:
+	.space 4
 	.ascii "polySurface13"
-	.space 16-(.-ov91_022622AC)
-ov91_022622BC:
+	.space 3
 	.ascii "pSphere2"
-	.space 16-(.-ov91_022622BC)
-ov91_022622CC:
+	.space 8
 	.ascii "pSphere3"
-	.space 16-(.-ov91_022622CC)
-ov91_022622DC:
+	.space 8
 	.ascii "pSphere6"
-	.space 16-(.-ov91_022622DC)
-ov91_022622EC:
+	.space 8
 	.ascii "pSphere7"
-	.space 16-(.-ov91_022622EC)
-ov91_022622FC:
-	.ascii ""
-	.space 16-(.-ov91_022622FC)
-ov91_0226230C:
-	.ascii ""
-	.space 16-(.-ov91_0226230C)
-ov91_0226231C:
-	.ascii ""
-	.space 16-(.-ov91_0226231C)
-ov91_0226232C:
-	.ascii ""
-	.space 16-(.-ov91_0226232C)
-ov91_0226233C:
-	.ascii ""
-	.space 16-(.-ov91_0226233C)
-ov91_0226234C:
-	.ascii ""
-	.space 16-(.-ov91_0226234C)
-ov91_0226235C:
-	.ascii ""
-	.space 16-(.-ov91_0226235C)
-ov91_0226236C:
-	.ascii ""
-	.space 16-(.-ov91_0226236C)
-ov91_0226237C:
-	.ascii ""
-	.space 16-(.-ov91_0226237C)
-ov91_0226238C:
+	.space 8
+	.space 16 * 9
+
 	.ascii "polySurface13"
-	.space 16-(.-ov91_0226238C)
-ov91_0226239C:
+	.space 3
 	.ascii "pSphere7"
-	.space 16-(.-ov91_0226239C)
-ov91_022623AC:
-	.ascii ""
-	.space 16-(.-ov91_022623AC)
-ov91_022623BC:
-	.ascii ""
-	.space 16-(.-ov91_022623BC)
-ov91_022623CC:
-	.ascii ""
-	.space 16-(.-ov91_022623CC)
-ov91_022623DC:
-	.ascii ""
-	.space 16-(.-ov91_022623DC)
-ov91_022623EC:
-	.ascii ""
-	.space 16-(.-ov91_022623EC)
-ov91_022623FC:
-	.ascii ""
-	.space 16-(.-ov91_022623FC)
-ov91_0226240C:
-	.ascii ""
-	.space 16-(.-ov91_0226240C)
-ov91_0226241C:
-	.ascii ""
-	.space 16-(.-ov91_0226241C)
-ov91_0226242C:
-	.ascii ""
-	.space 16-(.-ov91_0226242C)
-ov91_0226243C:
-	.ascii ""
-	.space 16-(.-ov91_0226243C)
-ov91_0226244C:
-	.ascii ""
-	.space 16-(.-ov91_0226244C)
-ov91_0226245C:
-	.ascii ""
-	.space 16-(.-ov91_0226245C)
-ov91_0226246C:
-	.ascii ""
-	.space 16-(.-ov91_0226246C)
-ov91_0226247C:
+	.space 8
+	.space 16 * 13
+
 	.ascii "null1"
-	.space 16-(.-ov91_0226247C)
-ov91_0226248C:
+	.space 11
 	.ascii "pCylinder4"
-	.space 16-(.-ov91_0226248C)
-ov91_0226249C:
+	.space 6
 	.ascii "pCylinder5"
-	.space 16-(.-ov91_0226249C)
-ov91_022624AC:
+	.space 6
 	.ascii "pSphere2"
-	.space 16-(.-ov91_022624AC)
-ov91_022624BC:
+	.space 8
 	.ascii "pSphere3"
-	.space 16-(.-ov91_022624BC)
-ov91_022624CC:
+	.space 8
 	.ascii "pSphere6"
-	.space 16-(.-ov91_022624CC)
-ov91_022624DC:
+	.space 8
 	.ascii "pSphere7"
-	.space 16-(.-ov91_022624DC)
-ov91_022624EC:
+	.space 8
 	.ascii "pTorus1"
-	.space 16-(.-ov91_022624EC)
-ov91_022624FC:
+	.space 9
 	.ascii "pTorus2"
-	.space 16-(.-ov91_022624FC)
-ov91_0226250C:
+	.space 9
 	.ascii "polySurface13"
-	.space 16-(.-ov91_0226250C)
-ov91_0226251C:
+	.space 3
 	.ascii "polySurface8"
-	.space 16-(.-ov91_0226251C)
-ov91_0226252C:
+	.space 4
 	.ascii "polySurface2"
-	.space 16-(.-ov91_0226252C)
-ov91_0226253C:
+	.space 4
 	.ascii "polySurface3"
-	.space 16-(.-ov91_0226253C)
-ov91_0226254C:
+	.space 4
 	.ascii "polySurface7"
-	.space 16-(.-ov91_0226254C)
-ov91_0226255C:
+	.space 4
 	.ascii "polySurface12"
-	.space 16-(.-ov91_0226255C)
-ov91_0226256C:
+	.space 3
+
 	.ascii "polySurface7"
-	.space 16-(.-ov91_0226256C)
-ov91_0226257C:
+	.space 4
 	.ascii "polySurface13"
-	.space 16-(.-ov91_0226257C)
-ov91_0226258C:
+	.space 3
 	.ascii "pSphere2"
-	.space 16-(.-ov91_0226258C)
-ov91_0226259C:
+	.space 8
 	.ascii "pSphere3"
-	.space 16-(.-ov91_0226259C)
-ov91_022625AC:
+	.space 8
 	.ascii "pSphere6"
-	.space 16-(.-ov91_022625AC)
-ov91_022625BC:
+	.space 8
 	.ascii "pSphere7"
-	.space 16-(.-ov91_022625BC)
-ov91_022625CC:
+	.space 8
 	.ascii "null1"
-	.space 16-(.-ov91_022625CC)
-ov91_022625DC:
-	.ascii ""
-	.space 16-(.-ov91_022625DC)
-ov91_022625EC:
-	.ascii ""
-	.space 16-(.-ov91_022625EC)
-ov91_022625FC:
-	.ascii ""
-	.space 16-(.-ov91_022625FC)
-ov91_0226260C:
-	.ascii ""
-	.space 16-(.-ov91_0226260C)
-ov91_0226261C:
-	.ascii ""
-	.space 16-(.-ov91_0226261C)
-ov91_0226262C:
-	.ascii ""
-	.space 16-(.-ov91_0226262C)
-ov91_0226263C:
-	.ascii ""
-	.space 16-(.-ov91_0226263C)
-ov91_0226264C:
-	.ascii ""
-	.space 16-(.-ov91_0226264C)
-ov91_0226265C:
+	.space 11
+	.space 16 * 8
+
 	.ascii "polySurface7"
-	.space 16-(.-ov91_0226265C)
-ov91_0226266C:
+	.space 4
 	.ascii "polySurface13"
-	.space 16-(.-ov91_0226266C)
-ov91_0226267C:
+	.space 3
 	.ascii "pSphere2"
-	.space 16-(.-ov91_0226267C)
-ov91_0226268C:
+	.space 8
 	.ascii "pSphere3"
-	.space 16-(.-ov91_0226268C)
-ov91_0226269C:
+	.space 8
 	.ascii "pSphere6"
-	.space 16-(.-ov91_0226269C)
-ov91_022626AC:
+	.space 8
 	.ascii "pSphere7"
-	.space 16-(.-ov91_022626AC)
-ov91_022626BC:
-	.ascii ""
-	.space 16-(.-ov91_022626BC)
-ov91_022626CC:
-	.ascii ""
-	.space 16-(.-ov91_022626CC)
-ov91_022626DC:
-	.ascii ""
-	.space 16-(.-ov91_022626DC)
-ov91_022626EC:
-	.ascii ""
-	.space 16-(.-ov91_022626EC)
-ov91_022626FC:
-	.ascii ""
-	.space 16-(.-ov91_022626FC)
-ov91_0226270C:
-	.ascii ""
-	.space 16-(.-ov91_0226270C)
-ov91_0226271C:
-	.ascii ""
-	.space 16-(.-ov91_0226271C)
-ov91_0226272C:
-	.ascii ""
-	.space 16-(.-ov91_0226272C)
-ov91_0226273C:
-	.ascii ""
-	.space 16-(.-ov91_0226273C)
+	.space 8
+	.space 16 * 9
 
 sSwalotPlopSceneAnimModels: ; 0x0226274C
 	.byte 0x00, 0x00, 0x00, 0x02

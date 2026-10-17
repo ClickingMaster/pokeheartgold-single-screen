@@ -224,11 +224,9 @@ Static main
     Object src/field_overworld_transition.o
     Object src/field_time_events.o
     Object src/catching_show.o
-    Object asm/field_transition_effects_data.o
     Object src/field_transition_effects.o
     Object src/field_transition_tasks.o
     Object src/comm_player_manager.o
-    Object asm/comm_player_manager_data.o
     Object src/comm_player_sync.o
     Object src/communication_club_link.o
     Object src/colosseum.o
@@ -319,7 +317,6 @@ Static main
     Object src/ribbon.o
     Object src/trainer_memo.o
     Object src/trade_communication.o
-    Object asm/trade_communication_data.o
     Object src/drawing_session_link.o
     Object asm/drawing_session_link_data.o
     Object src/record_mixing/record_mixing_link.o
@@ -333,7 +330,6 @@ Static main
     Object src/dex_mon_measures.o
     Object src/field_comm_cmds.o
     Object src/network_overlay_loader.o
-    Object asm/network_overlay_loader_data.o
     Object src/location_gmm_dat.o
     Object src/move_relearner.o
     Object src/easy_chat_menu.o
@@ -358,7 +354,6 @@ Static main
     Object src/frontier_runtime.o
 	Object src/frontier_launch.o
     Object src/battle_frontier_communication.o
-    Object asm/battle_frontier_communication_data.o
     Object src/spin_trade_link.o
     Object asm/spin_trade_link_data.o
     Object src/spin_trade_flow.o
@@ -1669,7 +1664,6 @@ Overlay OVY_48
 {
     After OVY_45
     Object src/wifi_plaza/wifi_plaza_visitor_profiles.o
-    Object asm/wifi_plaza_visitor_profiles_data.o
 }
 Overlay OVY_49
 {
@@ -1879,7 +1873,6 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object lib/src/nitrocrypto_bn_free.o
     Object lib/src/nitrocrypto_bn_num_bits.o
     Object lib/src/nitrocrypto_alloc.o
-    Object asm/nitrocrypto_bss.o
 }
 Overlay OVY_75
 {
@@ -2291,7 +2284,6 @@ Overlay OVY_117
 {
     After OVY_31
     Object src/field/encounter_effect_rocket.o
-    Object asm/encounter_effect_rocket_data.o
 }
 Overlay OVY_118
 {

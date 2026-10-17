@@ -5,7 +5,7 @@
 
 	.public gPokewalkerIrLink
 	.public gPokewalkerIrPacket
-	.public ov112_021FFA20
+	.public gPokewalkerIrPayload
 
 	.bss
 
@@ -15,5 +15,5 @@ gPokewalkerIrLink:
 gPokewalkerIrPacket: ; 0x021FFA18
 	.space 0x8
 
-ov112_021FFA20: ; 0x021FFA20
+gPokewalkerIrPayload: ; 0x021FFA20
 	.space 0x84

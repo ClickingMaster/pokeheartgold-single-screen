@@ -132,11 +132,15 @@ enum {
 
 #define EASY_CHAT_CATEGORY_BACK 0xFE // the back button below the category list
 
-// Category grid neighbours, 4 bytes per category (13th: the back button): up, down, left, right.
-extern const u8 gEasyChatCategoryGridNeighbors[];
-extern const u8 gEasyChatCategoryGridNeighborDown[];
-extern const u8 gEasyChatCategoryGridNeighborLeft[];
-extern const u8 gEasyChatCategoryGridNeighborRight[];
+// Category reached by each direction key from a category of the grid (the 13th entry is the back button).
+typedef struct EasyChatCategoryNeighbors {
+    u8 up;
+    u8 down;
+    u8 left;
+    u8 right;
+} EasyChatCategoryNeighbors;
+
+extern const EasyChatCategoryNeighbors gEasyChatCategoryGridNeighbors[];
 
 void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg);
 EasyChatApp *EasyChatApp_Create(OverlayManager *man);
@@ -1066,19 +1070,19 @@ BOOL EasyChatApp_MoveCategoryGridCursor(EasyChatApp *app) {
     if (category != EASY_CHAT_CATEGORY_BACK) {
         app->prevCategory = category;
         if (app->repeatedKeys & PAD_KEY_UP) {
-            app->category = gEasyChatCategoryGridNeighbors[index * 4];
+            app->category = gEasyChatCategoryGridNeighbors[index].up;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_DOWN) {
-            app->category = gEasyChatCategoryGridNeighborDown[index * 4];
+            app->category = gEasyChatCategoryGridNeighbors[index].down;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_LEFT) {
-            app->category = gEasyChatCategoryGridNeighborLeft[index * 4];
+            app->category = gEasyChatCategoryGridNeighbors[index].left;
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_RIGHT) {
-            app->category = gEasyChatCategoryGridNeighborRight[index * 4];
+            app->category = gEasyChatCategoryGridNeighbors[index].right;
             return TRUE;
         }
     } else {

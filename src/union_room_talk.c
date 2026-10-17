@@ -90,26 +90,26 @@ void UnionRoomStatus_Init(UnionRoomStatus *status);
 void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
 
 // gender-indexed message ids
-extern const int _020FC7D4[2];
-extern const int _020FC7DC[2];
-extern const int _020FC7E4[2];
-extern const int _020FC7EC[2];
-extern const int _020FC7F4[2];
-extern const int _020FC7FC[2];
-extern const int _020FC804[2][2];
-extern const int _020FC814[2][2];
+extern const int gUnionRoomTalkGreetingMsgs[2];
+extern const int gUnionRoomTalkComeBackMsgs[2];
+extern const int gUnionRoomTalkAnythingElseMsgs[2];
+extern const int gUnionRoomTalkLeaveMsgs[2];
+extern const int gUnionRoomTalkUntradeableEggMsgs[2];
+extern const int gUnionRoomActivityBusyMsgs[2];
+extern const int gUnionRoomActivityTradeMsgs[2][2];
+extern const int gUnionRoomActivityTrainerCardMsgs[2][2];
 extern const u16 gUnionRoomGroupFirstSlot[10];
-extern const int _020FC838[3][2];
-extern const int _020FC850[3][2];
-extern const int _020FC868[3][2];
-extern const int _020FC880[3][2];
+extern const int gUnionRoomTalkJoinGroupMsgs[3][2];
+extern const int gUnionRoomTalkJoinAcceptedMsgs[3][2];
+extern const int gUnionRoomTalkJoinDeclinedMsgs[3][2];
+extern const int gUnionRoomTalkRequirementMsgs[3][2];
 extern const int gUnionRoomLanguageGreetings[7];
-extern const int _020FC8B4[4][2];
-extern const int _020FC8D4[4][2];
-extern const int _020FC8F4[4][2];
-extern const int _020FC914[4][2];
-extern const int _020FC934[6][2];
-extern const int _020FC95C[8][2];
+extern const int gUnionRoomActivityDrawingMsgs[4][2];
+extern const int gUnionRoomActivityBattleMsgs[4][2];
+extern const int gUnionRoomActivityRecordMixMsgs[4][2];
+extern const int gUnionRoomActivitySpinTradeMsgs[4][2];
+extern const int gUnionRoomTalkDeclineRequestMsgs[6][2];
+extern const int gUnionRoomTalkAcceptRequestMsgs[8][2];
 
 static const int sSentTalkReplyMsgs[7][2] = {
     { msg_0738_UNION_00044, msg_0738_UNION_00104 },
@@ -238,24 +238,24 @@ int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     switch (status->activity) {
     case 4:
     case 11:
-        return _020FC7FC[gender];
+        return gUnionRoomActivityBusyMsgs[gender];
     case 5:
-        return _020FC814[(s32)LCRandom() % 2][gender];
+        return gUnionRoomActivityTrainerCardMsgs[(s32)LCRandom() % 2][gender];
     case 6:
-        return _020FC8D4[(s32)LCRandom() % 4][gender];
+        return gUnionRoomActivityBattleMsgs[(s32)LCRandom() % 4][gender];
     case 7:
-        return _020FC804[(s32)LCRandom() % 2][gender];
+        return gUnionRoomActivityTradeMsgs[(s32)LCRandom() % 2][gender];
     case 1:
     case 8:
-        return _020FC8B4[(s32)LCRandom() % 4][gender];
+        return gUnionRoomActivityDrawingMsgs[(s32)LCRandom() % 4][gender];
     case 2:
     case 9:
-        return _020FC8F4[(s32)LCRandom() % 4][gender];
+        return gUnionRoomActivityRecordMixMsgs[(s32)LCRandom() % 4][gender];
     case 3:
     case 10:
     case 12:
     case 13:
-        return _020FC914[(s32)LCRandom() % 4][gender];
+        return gUnionRoomActivitySpinTradeMsgs[(s32)LCRandom() % 4][gender];
     }
     return 40;
 }
@@ -315,49 +315,49 @@ int UnionRoom_GetTalkMsg(struct UnionRoom *unionRoom, int objId, int kind, Messa
     case 1:
         return UnionRoom_GetSentTalkReplyMsg(unionRoom->sentTalkReply - 1, gender, msgFmt);
     case 2:
-        return _020FC7D4[gender];
+        return gUnionRoomTalkGreetingMsgs[gender];
     case 9:
         if (unionRoom->sentTalkReply == 0) {
             return 0;
         }
-        return _020FC95C[unionRoom->sentTalkReply][gender];
+        return gUnionRoomTalkAcceptRequestMsgs[unionRoom->sentTalkReply][gender];
     case 19:
     case 20:
     case 21:
         kind -= 19;
-        return _020FC880[kind][gender];
+        return gUnionRoomTalkRequirementMsgs[kind][gender];
     case 3:
     case 4:
     case 5:
     case 6:
     case 7:
     case 8:
-        return _020FC934[kind - 3][gender];
+        return gUnionRoomTalkDeclineRequestMsgs[kind - 3][gender];
     case 10:
     case 11:
     case 12:
         kind -= 10;
-        return _020FC838[kind][gender];
+        return gUnionRoomTalkJoinGroupMsgs[kind][gender];
     case 13:
     case 14:
     case 15:
         kind -= 13;
-        return _020FC850[kind][gender];
+        return gUnionRoomTalkJoinAcceptedMsgs[kind][gender];
     case 16:
     case 17:
     case 18:
         kind -= 16;
-        return _020FC868[kind][gender];
+        return gUnionRoomTalkJoinDeclinedMsgs[kind][gender];
     case 22:
-        return _020FC7E4[gender];
+        return gUnionRoomTalkAnythingElseMsgs[gender];
     case 23:
-        return _020FC7DC[gender];
+        return gUnionRoomTalkComeBackMsgs[gender];
     case 24:
-        return _020FC7EC[gender];
+        return gUnionRoomTalkLeaveMsgs[gender];
     case 25:
         return 0xDA;
     case 26:
-        return _020FC7F4[gender];
+        return gUnionRoomTalkUntradeableEggMsgs[gender];
     }
     GF_AssertFail();
     return 40;

@@ -89,7 +89,7 @@ void PokewalkerIr_SendPacket(const u8 *src, int len, u8 command, u8 arg, u32 ses
     packet->sessionId = sessionId;
     packet->checksumLo = 0;
     packet->checksumHi = 0;
-    dst = ov112_021FFA20;
+    dst = gPokewalkerIrPayload;
     for (i = 0; i < len;) {
         u8 b = *src;
         src++;
@@ -304,7 +304,7 @@ int PokewalkerIr_Poll(void) {
     default:
         if (gPokewalkerIrLink.closing != 1) {
             if (gPokewalkerIrLink.active) {
-                gPokewalkerIrLink.onReceive(ov112_021FFA20, (u8)(length - 8), gPokewalkerIrPacket.command, gPokewalkerIrPacket.arg);
+                gPokewalkerIrLink.onReceive(gPokewalkerIrPayload, (u8)(length - 8), gPokewalkerIrPacket.command, gPokewalkerIrPacket.arg);
             }
         }
         break;

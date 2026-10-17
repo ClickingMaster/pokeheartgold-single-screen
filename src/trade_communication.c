@@ -1,7 +1,21 @@
 #include "trade_communication_internal.h"
 
+static const WirelessTradeCommand sWirelessTradeCommands[] = {
+    { WirelessTrade_RecvPartyChunk,       WirelessTrade_GetPartyChunkSize,     WirelessTrade_GetRecvBuffer },
+    { WirelessTrade_RecvPartnerSelection, CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvSlot,             CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvUnused3,          CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvUnused4,          CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvSetState2,        CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvPalPad,           WirelessTrade_GetPalPadSize,         WirelessTrade_GetRecvBuffer },
+    { WirelessTrade_RecvPacket,           WirelessTrade_GetPacketSize,         WirelessTrade_GetRecvBuffer },
+    { WirelessTrade_RecvUnused8,          CommCmd_GetSize0,                    NULL                        },
+    { WirelessTrade_RecvRemoteState,      CommCmd_GetSize1,                    NULL                        },
+    { WirelessTrade_RecvSpecialRibbons,   WirelessTrade_GetSpecialRibbonsSize, NULL                        },
+};
+
 void WirelessTrade_RegisterCommands(TradeContext *context) {
-    Comm_RegisterCommandTable(gWirelessTradeCommands, 11, context);
+    Comm_RegisterCommandTable(sWirelessTradeCommands, NELEMS(sWirelessTradeCommands), context);
 }
 
 u32 WirelessTrade_GetPartnerSlot(u32 slot) {

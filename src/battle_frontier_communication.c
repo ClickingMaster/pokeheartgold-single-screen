@@ -1,5 +1,9 @@
+#include "battle_frontier_communication.h"
+
 #include "global.h"
 
+#include "frontier/battle_arcade_game_board.h"
+#include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_map.h"
 
 #include "communication_command.h"
@@ -9,7 +13,14 @@
 #include "player_avatar.h"
 #include "pokemon.h"
 
-extern const u32 gFrontierLinkCommands[];
+typedef void (*FrontierLinkRecvFunc)();
+
+typedef struct FrontierLinkCommand {
+    FrontierLinkRecvFunc receive;
+    u32 (*getSize)(void);
+    void *(*getBuffer)();
+} FrontierLinkCommand;
+
 typedef struct CommDataBits {
     u8 pad[0x10];
     u8 low : 3;
@@ -17,7 +28,6 @@ typedef struct CommDataBits {
     u8 mid : 1;
     u8 high : 3;
 } CommDataBits;
-void FrontierLink_RegisterCommands(void *data);
 void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, u8 *data);
 BOOL BattleTowerLink_SendTrainers(u8 *data);
 void BattleTowerLink_ReceiveTrainers(int sender, int unused, const void *src, u8 *data);
@@ -33,8 +43,63 @@ void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *src, u8
 BOOL FrontierLinkLobby_SendValue71(u8 *data, u16 value);
 void FrontierLinkLobby_ReceiveValue71(int sender, int unused, const u16 *src, u8 *data);
 
+static const FrontierLinkCommand sFrontierLinkCommands[] = {
+    { BattleFactoryLink_ReceiveRecord,          CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceiveTrainerIds,      CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceiveRentalMons,      CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceiveOpponentMons,    CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceiveValueA,          CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceiveValueB,          CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactoryLink_ReceivePartyMons,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactory_ReceivePing,                CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactory_ReceiveRentals,             CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactory_ReceiveUnused,              CommCmd_GetSizeVariable, NULL                              },
+    { BattleFactory_ReceiveSwap,                CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceiveUnused,             CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceiveEmptyRecord,        CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceiveTrainerIds,         CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceiveSetIds,             CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceiveValue,              CommCmd_GetSizeVariable, NULL                              },
+    { BattleHallLink_ReceivePartnerMon,         CommCmd_GetSizeVariable, BattleHallLink_GetRecvMonBuffer   },
+    { BattleHall_ReceivePing,                   CommCmd_GetSizeVariable, NULL                              },
+    { BattleHall_ReceiveChoice,                 CommCmd_GetSizeVariable, NULL                              },
+    { BattleHall_ReceiveAnswer,                 CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveRecord,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveTrainerIds,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveChoice,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveOpponentMons,     CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveValueA,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceiveValueB,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleLink_ReceivePartyMons,        CommCmd_GetSizeVariable, BattleCastleLink_GetRecvMonBuffer },
+    { BattleCastlePartyApp_ReceiveRanks,        CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastlePartyApp_ReceiveAction,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastlePartyApp_ReceiveCursor,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastlePartyApp_ReceiveExit,         CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleOpponentApp_ReceiveRanks,     CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleOpponentApp_ReceiveAction,    CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleOpponentApp_ReceiveCursor,    CommCmd_GetSizeVariable, NULL                              },
+    { BattleCastleOpponentApp_ReceiveExit,      CommCmd_GetSizeVariable, NULL                              },
+    { FrontierLinkLobby_ReceiveFacility,        CommCmd_GetSizeVariable, NULL                              },
+    { FrontierLinkLobby_ReceiveChoice,          CommCmd_GetSizeVariable, NULL                              },
+    { FrontierLinkLobby_ReceiveParty,           CommCmd_GetSizeVariable, NULL                              },
+    { FrontierLinkLobby_ReceiveValue74,         CommCmd_GetSizeVariable, NULL                              },
+    { FrontierLinkLobby_ReceiveValue71,         CommCmd_GetSizeVariable, NULL                              },
+    { BattleTowerLink_ReceivePartnerInfo,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleTowerLink_ReceiveTrainers,          CommCmd_GetSizeVariable, NULL                              },
+    { BattleTowerLink_ReceiveFlag,              CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceiveWinStreak,        CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceiveTrainerIds,       CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceiveOpponentMons,     CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceiveValueA,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceiveValueB,           CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeLink_ReceivePartyMons,        CommCmd_GetSizeVariable, BattleArcadeLink_GetRecvMonBuffer },
+    { BattleArcadeGameBoard_ReceiveBoardLayout, CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeGameBoard_ReceiveStopPos,     CommCmd_GetSizeVariable, NULL                              },
+    { BattleArcadeGameBoard_ReceiveCursorPos,   CommCmd_GetSizeVariable, NULL                              },
+};
+
 void FrontierLink_RegisterCommands(void *data) {
-    Comm_RegisterCommandTable(gFrontierLinkCommands, 52, data);
+    Comm_RegisterCommandTable(sFrontierLinkCommands, NELEMS(sFrontierLinkCommands), data);
 }
 
 void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16 *src, u8 *data) {

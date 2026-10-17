@@ -6,40 +6,40 @@
 
 	.rodata
 
-	.public _020F6A9C
-_020F6A9C:
-	.byte 0xFC, 0x01, 0x14, 0x00
-	.byte 0xFF, 0xFF, 0x00, 0x00
-	.public _020F6AA4
-_020F6AA4:
-	.byte 0xF8, 0x01, 0x14, 0x00
-	.byte 0xFF, 0xFF, 0x00, 0x00
-	.public _020F6AAC
-_020F6AAC:
-	.byte 0xF4, 0x01, 0x14, 0x00
-	.byte 0xFF, 0xFF, 0x00, 0x00
-	.public _020F6AB4
-_020F6AB4:
-	.byte 0xF0, 0x01, 0x14, 0x00
-	.byte 0xFF, 0xFF, 0x00, 0x00
-	.public _020F6ABC
-_020F6ABC:
-	.byte 0xF0, 0x01, 0x14, 0x00
-	.byte 0xF4, 0x01, 0x14, 0x00
-	.byte 0xF8, 0x01, 0x14, 0x00
-	.byte 0xFC, 0x01, 0x14, 0x00
-	.byte 0xFF, 0xFF, 0x00, 0x00
+	.public sWirelessStatusIconLevel3Anim
+sWirelessStatusIconLevel3Anim:
+	.short 0x1FC, 20
+	.short 0xFFFF, 0
+	.public sWirelessStatusIconLevel2Anim
+sWirelessStatusIconLevel2Anim:
+	.short 0x1F8, 20
+	.short 0xFFFF, 0
+	.public sWirelessStatusIconLevel1Anim
+sWirelessStatusIconLevel1Anim:
+	.short 0x1F4, 20
+	.short 0xFFFF, 0
+	.public sWirelessStatusIconLevel0Anim
+sWirelessStatusIconLevel0Anim:
+	.short 0x1F0, 20
+	.short 0xFFFF, 0
+	.public sWirelessStatusIconCycleAnim
+sWirelessStatusIconCycleAnim:
+	.short 0x1F0, 20
+	.short 0x1F4, 20
+	.short 0x1F8, 20
+	.short 0x1FC, 20
+	.short 0xFFFF, 0
 
 	.data
 
 	.balign 4, 0
 	.public gWirelessStatusIconAnims
 gWirelessStatusIconAnims:
-	.word _020F6AB4
-	.word _020F6AAC
-	.word _020F6AA4
-	.word _020F6A9C
-	.word _020F6ABC
+	.word sWirelessStatusIconLevel0Anim
+	.word sWirelessStatusIconLevel1Anim
+	.word sWirelessStatusIconLevel2Anim
+	.word sWirelessStatusIconLevel3Anim
+	.word sWirelessStatusIconCycleAnim
 
 	.balign 4, 0
 	.public gWirelessStatusIconNclr

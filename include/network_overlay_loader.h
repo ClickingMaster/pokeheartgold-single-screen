@@ -4,6 +4,8 @@
 #include "heap.h"
 #include "overlay_manager.h"
 
+extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_NintendoWFCSetup;
+
 BOOL LoadDwcOverlay(void);
 void UnloadDwcOverlay(void);
 BOOL LoadOVY13(void);

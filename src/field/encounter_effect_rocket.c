@@ -34,6 +34,18 @@ typedef struct TeamRocketEffectWork {
     int timer;
 } TeamRocketEffectWork;
 
+// Flight path of one "R" sprite: x and y each move from start to end with an initial velocity.
+typedef struct TeamRocketSpriteMotion {
+    fx32 startX;
+    fx32 endX;
+    fx32 velocityX;
+    fx32 startY;
+    fx32 endY;
+    fx32 velocityY;
+    int delay; // frames to wait before this sprite appears
+    int rotation;
+} TeamRocketSpriteMotion;
+
 typedef struct RocketExecutiveIntroParams {
     u8 spriteMembers[4]; // character, palette, cell, animation
     u32 trainerId;
@@ -55,17 +67,6 @@ void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member)
 String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
 void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
 
-// One entry per grunt sprite, 8 words apart: start/end/velocity of x, start/end/velocity of y,
-// delay before the sprite appears, rotation
-extern const s32 gEncounterTeamRocketSteps[];
-extern const s32 gEncounterTeamRocketStepEndX[];
-extern const s32 gEncounterTeamRocketStepVelocityX[];
-extern const s32 gEncounterTeamRocketStepStartY[];
-extern const s32 gEncounterTeamRocketStepEndY[];
-extern const s32 gEncounterTeamRocketStepVelocityY[];
-extern const s32 gEncounterTeamRocketStepDelay[];
-extern const s32 gEncounterTeamRocketStepRotation[];
-
 enum TeamRocketState {
     TEAM_ROCKET_STATE_INIT,
     TEAM_ROCKET_STATE_START_FLASH,
@@ -75,6 +76,11 @@ enum TeamRocketState {
     TEAM_ROCKET_STATE_START_FADE,
     TEAM_ROCKET_STATE_WAIT_FADE,
     TEAM_ROCKET_STATE_END,
+};
+
+static const RocketExecutiveIntroParams sEncounterRocketBossIntroParams = {
+    .spriteMembers = { 238, 239, 240, 241 },
+    .trainerId = TRAINER_ROCKET_BOSS_GIOVANNI,
 };
 
 static const RocketExecutiveIntroParams sEncounterExecutiveArianaIntroParams = {
@@ -97,9 +103,13 @@ static const RocketExecutiveIntroParams sEncounterExecutivePetrelIntroParams = {
     .trainerId = TRAINER_EXECUTIVE_PETREL_PETREL_2,
 };
 
-static const RocketExecutiveIntroParams sEncounterRocketBossIntroParams = {
-    .spriteMembers = { 238, 239, 240, 241 },
-    .trainerId = TRAINER_ROCKET_BOSS_GIOVANNI,
+static const TeamRocketSpriteMotion sTeamRocketSpriteMotions[ROCKET_EFFECT_SPRITE_COUNT] = {
+    { FX32_CONST(260), FX32_CONST(128), FX32_CONST(-30), FX32_CONST(0),   FX32_CONST(100), FX32_CONST(20),  4, 0xFFFF * 2  },
+    { FX32_CONST(-16), FX32_CONST(128), FX32_CONST(30),  FX32_CONST(160), FX32_CONST(100), FX32_CONST(-20), 3, 0xFFFF      },
+    { FX32_CONST(0),   FX32_CONST(128), FX32_CONST(30),  FX32_CONST(-16), FX32_CONST(100), FX32_CONST(20),  4, -0xFFFF * 3 },
+    { FX32_CONST(140), FX32_CONST(128), FX32_CONST(-10), FX32_CONST(160), FX32_CONST(100), FX32_CONST(-20), 2, -0xFFFF * 2 },
+    { FX32_CONST(260), FX32_CONST(128), FX32_CONST(-30), FX32_CONST(80),  FX32_CONST(100), FX32_CONST(1),   3, -0xFFFF * 3 },
+    { FX32_CONST(0),   FX32_CONST(128), FX32_CONST(30),  FX32_CONST(160), FX32_CONST(100), FX32_CONST(-20), 3, 0xFFFF      },
 };
 
 // Six "R" sprites fly in one after another, then the screen fades to black.
@@ -132,17 +142,17 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
         if (effect->fadeDone) {
             effect->state++;
             work->next = 0;
-            work->timer = gEncounterTeamRocketStepDelay[work->next * 8];
+            work->timer = sTeamRocketSpriteMotions[work->next].delay;
         }
         break;
     case TEAM_ROCKET_STATE_LAUNCH_SPRITES:
         if (--work->timer < 0) {
-            EncounterEffectQuadInterp_Init(&work->x[work->next], gEncounterTeamRocketSteps[work->next * 8], gEncounterTeamRocketStepEndX[work->next * 8], gEncounterTeamRocketStepVelocityX[work->next * 8], 8);
-            EncounterEffectQuadInterp_Init(&work->y[work->next], gEncounterTeamRocketStepStartY[work->next * 8], gEncounterTeamRocketStepEndY[work->next * 8], gEncounterTeamRocketStepVelocityY[work->next * 8], 8);
+            EncounterEffectQuadInterp_Init(&work->x[work->next], sTeamRocketSpriteMotions[work->next].startX, sTeamRocketSpriteMotions[work->next].endX, sTeamRocketSpriteMotions[work->next].velocityX, 8);
+            EncounterEffectQuadInterp_Init(&work->y[work->next], sTeamRocketSpriteMotions[work->next].startY, sTeamRocketSpriteMotions[work->next].endY, sTeamRocketSpriteMotions[work->next].velocityY, 8);
             EncounterEffectQuadInterp_Init(&work->scale[work->next], FX32_CONST(2), 41, -0x666, 8);
-            EncounterEffectInterp_Init(&work->rotation[work->next], 0, gEncounterTeamRocketStepRotation[work->next * 8], 8);
+            EncounterEffectInterp_Init(&work->rotation[work->next], 0, sTeamRocketSpriteMotions[work->next].rotation, 8);
             Sprite_SetDrawFlag(work->sprites[work->next], TRUE);
-            EncounterEffect_SetVecFx32(&position, gEncounterTeamRocketSteps[work->next * 8], gEncounterTeamRocketStepStartY[work->next * 8], 0);
+            EncounterEffect_SetVecFx32(&position, sTeamRocketSpriteMotions[work->next].startX, sTeamRocketSpriteMotions[work->next].startY, 0);
             Sprite_SetMatrix(work->sprites[work->next], &position);
             EncounterEffect_SetVecFx32(&scale, FX32_CONST(2), FX32_CONST(2), 0);
             Sprite_SetScaleAndAffineType(work->sprites[work->next], &scale, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
@@ -151,7 +161,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
             if (work->next >= ROCKET_EFFECT_SPRITE_COUNT) {
                 effect->state++;
             } else {
-                work->timer = gEncounterTeamRocketStepDelay[work->next * 8];
+                work->timer = sTeamRocketSpriteMotions[work->next].delay;
             }
         }
         break;

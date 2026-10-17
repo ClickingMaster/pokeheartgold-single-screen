@@ -21,7 +21,7 @@ typedef struct PokewalkerIrLink {
     u64 lastReceiveTick;                                        // 0x30
 } PokewalkerIrLink;
 
-// Header of an IR packet; the payload follows (ov112_021FFA20).
+// Header of an IR packet; the payload follows (gPokewalkerIrPayload).
 typedef struct PokewalkerIrPacket {
     u8 command;
     u8 arg;
@@ -78,7 +78,7 @@ typedef struct PokewalkerIrTransfer {
 extern u8 _021FF500[];
 extern PokewalkerIrLink gPokewalkerIrLink;
 extern PokewalkerIrPacket gPokewalkerIrPacket;
-extern u8 ov112_021FFA20[];
+extern u8 gPokewalkerIrPayload[];
 extern PokewalkerIrWork ov112_021FFAA4;
 extern OSMessage ov112_021FFAC0[];
 extern u8 *ov112_021FFAF0[];

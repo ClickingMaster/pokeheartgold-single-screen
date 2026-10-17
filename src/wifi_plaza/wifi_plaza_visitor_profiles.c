@@ -315,17 +315,6 @@ extern u32 WiFiPlaza_HasConnectionFailed(void);
 // FX_Sqrt has no declaration in lib/include.
 fx32 FX_Sqrt(fx32 x);
 
-extern ObjCharTransferTemplate sVisitorProfilesObjCharTransferTemplate;
-extern const u32 sVisitorProfilesBgLayers[VISITOR_PROFILES_NUM_BG_LAYERS];
-extern const YesNoPromptTemplate sVisitorProfilesYesNoTemplate;
-extern const u32 sVisitorProfilesPlaceNameColors[VISITOR_PROFILES_NUM_BG_ANIMS];
-extern const MtxFx33 sVisitorProfilesIdentityMtx;
-extern const GraphicsBanks sVisitorProfilesGraphicsBanks;
-extern const u8 sVisitorProfilesHourAnims[VISITOR_PROFILES_NUM_HOURS][2]; // background animation, sprite (one per 2 hours)
-extern const VisitorProfilesBgAnimTemplate sVisitorProfilesBgAnimTemplates[VISITOR_PROFILES_NUM_BG_ANIMS];
-extern const BgTemplate sVisitorProfilesBgTemplates[VISITOR_PROFILES_NUM_BG_LAYERS];
-extern const s16 sVisitorProfilesHourSpritePaths[VISITOR_PROFILES_NUM_HOUR_SPRITES][VISITOR_PROFILES_NUM_SHOWN_PLACES][8];
-
 BOOL VisitorProfiles_Init(OverlayManager *man, int *state);
 BOOL VisitorProfiles_Main(OverlayManager *man, int *state);
 BOOL VisitorProfiles_Exit(OverlayManager *man, int *state);
@@ -461,13 +450,13 @@ s32 VisitorProfiles_FindFirstVisitor(void *visitors);
 
 static const u8 sVisitorProfilesBgAnimPeriods[VISITOR_PROFILES_NUM_BG_ANIMS] = { 30, 30, 30, 30, 30 };
 
-static const u32 sVisitorProfilesMarkerModelFiles[VISITOR_PROFILES_NUM_MARKER_MODELS] = { 0, 1, 2 };
-
 static const VecFx32 sVisitorProfilesCameraPos = {
     .x = 0,
     .y = 0,
     .z = FX32_CONST(296),
 };
+
+static const u32 sVisitorProfilesMarkerModelFiles[VISITOR_PROFILES_NUM_MARKER_MODELS] = { 0, 1, 2 };
 
 static const VecFx32 sVisitorProfilesCameraTarget = {
     .x = 0,
@@ -480,6 +469,253 @@ static const GraphicsModes sVisitorProfilesGraphicsModes = {
     .bgMode = GX_BGMODE_0,
     .subMode = GX_BGMODE_0,
     ._2d3dMode = GX_BG0_AS_3D,
+};
+
+static const ObjCharTransferTemplate sVisitorProfilesObjCharTransferTemplate = {
+    .maxTasks = 32,
+    .sizeMain = 0x4000,
+    .sizeSub = 0x4000,
+    .heapID = HEAP_ID_112,
+};
+
+static const YesNoPromptTemplate sVisitorProfilesYesNoTemplate = {
+    .bgConfig = NULL,
+    .bgId = 1,
+    .tileStart = 160,
+    .plttSlot = 3,
+    .x = 0x19,
+    .y = 6,
+    .ignoreTouchFlag = 0,
+    .initialCursorPos = 0,
+    .shapeParam = 0,
+};
+
+static const u32 sVisitorProfilesPlaceNameColors[VISITOR_PROFILES_NUM_BG_ANIMS] = {
+    MAKE_TEXT_COLOR(5, 6, 0),
+    MAKE_TEXT_COLOR(7, 8, 0),
+    MAKE_TEXT_COLOR(9, 10, 0),
+    MAKE_TEXT_COLOR(11, 12, 0),
+    MAKE_TEXT_COLOR(11, 12, 0),
+};
+
+static const u32 sVisitorProfilesBgLayers[VISITOR_PROFILES_NUM_BG_LAYERS] = { 1, 6, 7, 4, 5 };
+
+static const MtxFx33 sVisitorProfilesIdentityMtx = { FX32_ONE, 0, 0, 0, FX32_ONE, 0, 0, 0, FX32_ONE };
+
+static const GraphicsBanks sVisitorProfilesGraphicsBanks = {
+    .bg = GX_VRAM_BG_16_F,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_16_G,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_01_AB,
+    .texpltt = GX_VRAM_TEXPLTT_0123_E,
+};
+
+// Background animation and sprite for each hour of the day
+static const u8 sVisitorProfilesHourAnims[VISITOR_PROFILES_NUM_HOURS][2] = {
+    { 0, 0  },
+    { 0, 0  },
+    { 0, 1  },
+    { 0, 1  },
+    { 0, 2  },
+    { 0, 2  },
+    { 1, 3  },
+    { 1, 3  },
+    { 1, 4  },
+    { 1, 4  },
+    { 1, 5  },
+    { 1, 5  },
+    { 2, 6  },
+    { 2, 6  },
+    { 2, 7  },
+    { 2, 7  },
+    { 3, 8  },
+    { 3, 8  },
+    { 3, 9  },
+    { 3, 9  },
+    { 4, 10 },
+    { 4, 10 },
+    { 4, 11 },
+    { 4, 11 },
+};
+
+static const VisitorProfilesBgAnimTemplate sVisitorProfilesBgAnimTemplates[VISITOR_PROFILES_NUM_BG_ANIMS] = {
+    {
+     .screenFiles = { 6, 0 },
+     .numScreens = 1,
+     .plttFile = 13,
+     .numPltts = 4,
+     .plttSlot = 0,
+     },
+    {
+     .screenFiles = { 16, 17 },
+     .numScreens = 2,
+     .plttFile = 0,
+     .numPltts = 0,
+     .plttSlot = 1,
+     },
+    {
+     .screenFiles = { 8, 0 },
+     .numScreens = 1,
+     .plttFile = 14,
+     .numPltts = 4,
+     .plttSlot = 2,
+     },
+    {
+     .screenFiles = { 9, 0 },
+     .numScreens = 1,
+     .plttFile = 15,
+     .numPltts = 16,
+     .plttSlot = 3,
+     },
+    {
+     .screenFiles = { 10, 0 },
+     .numScreens = 1,
+     .plttFile = 15,
+     .numPltts = 16,
+     .plttSlot = 3,
+     },
+};
+
+static const BgTemplate sVisitorProfilesBgTemplates[VISITOR_PROFILES_NUM_BG_LAYERS] = {
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0x3800,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd000,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 2,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe000,
+     .charBase = GX_BG_CHARBASE_0x00000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 3,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xe800,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 0,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+    {
+     .x = 0,
+     .y = 0,
+     .bufferSize = 0x800,
+     .baseTile = 0,
+     .size = GF_BG_SCR_SIZE_256x256,
+     .colorMode = GX_BG_COLORMODE_16,
+     .screenBase = GX_BG_SCRBASE_0xd800,
+     .charBase = GX_BG_CHARBASE_0x10000,
+     .bgExtPltt = GX_BG_EXTPLTT_01,
+     .priority = 1,
+     .areaOver = GX_BG_AREAOVER_XLU,
+     .mosaic = FALSE,
+     },
+};
+
+// Path of each time-of-day sprite over each shown place row: start x/y, end x/y, steps, amplitude, period
+static const s16 sVisitorProfilesHourSpritePaths[VISITOR_PROFILES_NUM_HOUR_SPRITES][VISITOR_PROFILES_NUM_SHOWN_PLACES][8] = {
+    {
+     { 160, 48, 190, 0, 319, 8, 80, 0 },
+     { 206, 96, 160, 48, 319, 8, 80, 0 },
+     { 150, 144, 206, 96, 319, 8, 80, 0 },
+     },
+    {
+     { 190, 48, 140, 0, 220, 12, 54, 0 },
+     { 150, 96, 190, 48, 220, 12, 54, 0 },
+     { 200, 144, 150, 96, 220, 12, 54, 0 },
+     },
+    {
+     { 128, 48, 160, 0, 220, 12, 54, 0 },
+     { 210, 96, 128, 48, 220, 12, 54, 0 },
+     { 160, 144, 210, 96, 220, 12, 54, 0 },
+     },
+    {
+     { 180, 48, 138, 0, 220, 12, 54, 0 },
+     { 138, 96, 180, 48, 220, 12, 54, 0 },
+     { 180, 144, 138, 96, 220, 12, 54, 0 },
+     },
+    {
+     { 180, 48, 160, 0, 399, 4, 100, 0 },
+     { 130, 96, 180, 48, 399, 4, 100, 0 },
+     { 128, 144, 130, 96, 399, 4, 100, 0 },
+     },
+    {
+     { 180, 48, 116, 0, 319, 8, 80, 0 },
+     { 116, 96, 180, 48, 319, 8, 80, 0 },
+     { 180, 144, 116, 96, 319, 8, 80, 0 },
+     },
+    {
+     { 180, 48, 240, 0, 220, 12, 54, 0 },
+     { 160, 96, 180, 48, 220, 12, 54, 0 },
+     { 96, 144, 160, 96, 220, 12, 54, 0 },
+     },
+    {
+     { 144, 48, 218, 0, 220, 12, 54, 0 },
+     { 218, 96, 144, 48, 220, 12, 54, 0 },
+     { 144, 144, 218, 96, 220, 12, 54, 0 },
+     },
+    {
+     { 160, 48, 192, 0, 399, 4, 100, 0 },
+     { 192, 96, 160, 48, 399, 4, 100, 0 },
+     { 160, 144, 192, 96, 399, 4, 100, 0 },
+     },
+    {
+     { 140, 48, 96, 0, 319, 8, 80, 0 },
+     { 190, 96, 140, 48, 319, 8, 80, 0 },
+     { 240, 144, 190, 96, 319, 8, 80, 0 },
+     },
+    {
+     { 212, 48, 160, 0, 399, 4, 100, 0 },
+     { 212, 96, 212, 48, 399, 4, 100, 0 },
+     { 160, 144, 212, 96, 399, 4, 100, 0 },
+     },
+    {
+     { 123, 48, 170, 0, 319, 8, 80, 0 },
+     { 198, 96, 123, 48, 319, 8, 80, 0 },
+     { 133, 144, 198, 96, 319, 8, 80, 0 },
+     },
 };
 
 BOOL VisitorProfiles_Init(OverlayManager *man, int *state) {

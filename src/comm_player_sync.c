@@ -33,6 +33,11 @@ BOOL PlayerAvatar_IsReadyOrBumpingWall(PlayerAvatar *avatar);
 void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
 int GetMovementForDirection(int direction, int movement);
 
+// Spots in the link room (x, z pairs) for two and for four players; a player flagged by the host
+// who stands on one has their input locked.
+static u16 sTwoPlayerLockSpots[] = { 4, 7, 11, 7 };
+static u16 sFourPlayerLockSpots[] = { 4, 6, 11, 6, 4, 8, 11, 8 };
+
 void CommPlayerManager_RemoveAllAvatars(void) {
     int i;
     if (gCommPlayerManager != NULL) {
@@ -776,7 +781,7 @@ void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void) {
     u8 i;
 
     count = Comm_GetMaxPlayers(CommState_GetLinkMode());
-    table = count == 2 ? _0210FAB4 : _0210FABC;
+    table = count == 2 ? sTwoPlayerLockSpots : sFourPlayerLockSpots;
     i = 0;
     while (i < count) {
         if (gCommPlayerManager->lockOnSpot[i] != 0) {

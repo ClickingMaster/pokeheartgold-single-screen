@@ -55,9 +55,6 @@ struct CommPlayerManager {
 extern CommPlayerManager *gCommPlayerManager;
 extern const u16 _020FC7A0[4];
 extern const u16 _020FC7A8[8];
-extern const u16 _0210FAB4[4];
-extern const u16 _0210FABC[4];
-extern const u16 _0210FAC4[4];
 
 BOOL CommPlayerManager_Init(CommPlayerManager *manager, FieldSystem *fieldSystem, int unused);
 void CommPlayerManager_RemoveAllAvatars(void);
