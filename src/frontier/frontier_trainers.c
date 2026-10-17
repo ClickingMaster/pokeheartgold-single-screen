@@ -68,14 +68,19 @@ typedef struct FrontierMon {
     u16 moves[4];
     u32 otId;
     u32 pid;
-    u32 hpIv : 5;
-    u32 atkIv : 5;
-    u32 defIv : 5;
-    u32 speedIv : 5;
-    u32 spAtkIv : 5;
-    u32 spDefIv : 5;
-    u32 hasNickname : 1;
-    u32 unused : 1;
+    union {
+        struct {
+            u32 hpIv : 5;
+            u32 atkIv : 5;
+            u32 defIv : 5;
+            u32 speedIv : 5;
+            u32 spAtkIv : 5;
+            u32 spDefIv : 5;
+            u32 hasNickname : 1;
+            u32 unused : 1;
+        };
+        u32 ivsWord;
+    };
     u8 evs[6];
     u8 ppUps;
     u8 language;
@@ -225,7 +230,7 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level) {
     } else if (level == 121) {
         level = 100;
     }
-    ivs = *(u32 *)((u8 *)frontierMon + 0x14) & 0x3FFFFFFF;
+    ivs = frontierMon->ivsWord & 0x3FFFFFFF;
     CreateMon(mon, frontierMon->species, level, ivs, TRUE, frontierMon->pid, OT_ID_RANDOM_NO_SHINY, 0);
     SetMonData(mon, MON_DATA_COMBINED_IVS, &ivs);
     CalcMonLevelAndStats(mon);

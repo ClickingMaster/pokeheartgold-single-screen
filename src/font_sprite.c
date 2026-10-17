@@ -192,8 +192,7 @@ void TextOBJ_UpdatePosition(TextOBJ *object) {
     }
 }
 
-void TextOBJ_GetPosition(void *data, int *x, int *y) {
-    TextOBJ *object = data;
+void TextOBJ_GetPosition(TextOBJ *object, int *x, int *y) {
     GF_ASSERT(object != NULL);
     GF_ASSERT(x != NULL);
     GF_ASSERT(y != NULL);

@@ -129,7 +129,7 @@ static BOOL MailView_FreeGraphics(MailView *mailView);
 static void MailView_SetGfxBanks(void);
 static void MailView_InitBgs(MailView *mailView);
 static void MailView_FreeBgs(MailView *mailView);
-static void MailView_LoadBgGraphics(void *data);
+static void MailView_LoadBgGraphics(MailView *mailView);
 static void MailView_FreeBgGraphics(MailView *mailView);
 static void MailView_CreateWindows(MailView *mailView);
 static void MailView_DeleteWindows(MailView *mailView);
@@ -703,7 +703,7 @@ static void MailView_VBlankCB(MailView *mailView) {
     }
     NNS_GfdDoVramTransfer();
     DoScheduledBgGpuUpdates(mailView->bgConfig);
-    *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void MailView_CursorBlinkTask(SysTask *task, MailView *mailView) {
@@ -813,8 +813,7 @@ static void MailView_FreeBgs(MailView *mailView) {
     Heap_Free(mailView->bgConfig);
 }
 
-static void MailView_LoadBgGraphics(void *data) {
-    MailView *mailView = data;
+static void MailView_LoadBgGraphics(MailView *mailView) {
     NARC *narc;
     void *buffer;
     int mailType;

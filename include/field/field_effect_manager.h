@@ -18,8 +18,8 @@ typedef struct FieldEffectManager FieldEffectManager;
 // position with FieldEffect_GetPosition.
 typedef struct FieldEffect FieldEffect;
 
-// A billboard graphics record (FieldEffectManager_AddRecord); layout in field_effect_manager_internal.h.
-struct FieldEffectRecord;
+// A billboard resource (FieldEffectManager_AddRecord); layout in billboard_internal.h.
+struct BillboardResource;
 
 typedef BOOL (*FieldEffectInitFunc)(FieldEffect *effect, void *state);
 typedef void (*FieldEffectFunc)(FieldEffect *effect, void *state);
@@ -57,9 +57,9 @@ void *FieldEffectManager_LoadNarcMember(FieldEffectManager *manager, u32 fileId,
 FieldEffect *FieldEffectManager_CreateEffect(FieldEffectManager *manager, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 // Callers keep the FieldEffect * from FieldEffectManager_CreateEffect as an int handle.
 void FieldEffectManager_DestroyEffect(int effect);
-void *FieldEffectManager_CreateBillboard(FieldEffectManager *manager, struct FieldEffectRecord *record, const VecFx32 *position);
+void *FieldEffectManager_CreateBillboard(FieldEffectManager *manager, struct BillboardResource *record, const VecFx32 *position);
 void *FieldEffectManager_CreateBillboardFromRecord(FieldEffectManager *manager, u32 id, const VecFx32 *position);
-struct FieldEffectRecord *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32 id, int resourceId, int sequenceId, int resId, int noTexKeys, const void *params);
+struct BillboardResource *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32 id, int resourceId, int sequenceId, int resId, int noTexKeys, const void *ranges);
 void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, u32 id);
 void FieldEffectManager_LoadBillboardResource(FieldEffectManager *manager, int id, int fileId);
 void *FieldEffectManager_GetBillboardResource(FieldEffectManager *manager, int id);

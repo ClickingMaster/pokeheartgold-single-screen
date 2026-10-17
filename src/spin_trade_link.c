@@ -15,7 +15,7 @@ typedef struct SpinTradeLinkPacket {
     u8 data[20];
 } SpinTradeLinkPacket;
 
-typedef struct SpinTradeLink {
+struct SpinTradeLink {
     SpinTradeArgs *parent;
     SpinTradeLinkPacket packet;
     u32 blocked, count, state, leaderJoinPending, participantCount, leavingMask, unk34;
@@ -26,7 +26,7 @@ typedef struct SpinTradeLink {
     u16 cancelMask, confirmMask;
     u8 *sendBuffer, *receiveBuffer;
     u32 unk54;
-} SpinTradeLink;
+};
 
 typedef struct SpinTradeJoinRequest {
     u8 sender, count, command, accepted;
@@ -88,8 +88,7 @@ void *SpinTradeLink_New(SpinTradeArgs *parent, enum HeapID heap) {
     return menu;
 }
 
-void SpinTradeLink_Free(void *ptr) {
-    SpinTradeLink *menu = ptr;
+void SpinTradeLink_Free(SpinTradeLink *menu) {
     Heap_Free(menu->sendBuffer);
     Heap_Free(menu->receiveBuffer);
     Heap_Free(menu);
@@ -99,8 +98,7 @@ void SpinTradeLink_RegisterCommands(SpinTradeLink *menu) {
     Comm_RegisterCommandTable(gSpinTradeLinkCommands, 0x87, menu);
 }
 
-void SpinTradeLink_Close(void *ptr) {
-    SpinTradeLink *menu = ptr;
+void SpinTradeLink_Close(SpinTradeLink *menu) {
     CommState_SetMaxEntries(2);
     CommState_ResumeAlternateSearch();
     UnionRoomObjects_ResetSlots(menu->parent->input.communication);

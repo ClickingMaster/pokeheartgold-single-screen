@@ -27,9 +27,10 @@ typedef struct BattleAnimMotionSprite {
 } BattleAnimMotionSprite; // size: 0x4C
 
 typedef struct BattleAnimShakeDefenderWithOverlayWork BattleAnimShakeDefenderWithOverlayWork;
+typedef struct BattleAnimDropSpriteStepwiseWork BattleAnimDropSpriteStepwiseWork;
 
 void BattleAnimFunc_SetBgPaletteGrayscale(BattleAnimSystem *system);
-void BattleAnimTask_DropSpriteStepwiseUpdate(void *data);
+void BattleAnimTask_DropSpriteStepwiseUpdate(BattleAnimDropSpriteStepwiseWork *work);
 void BattleAnimTask_DropSpriteStepwise(SysTask *task, void *data);
 void BattleAnimFunc_DropSpriteStepwise(BattleAnimSystem *system);
 void BattleAnimTask_AnimateSprites(SysTask *task, void *data);

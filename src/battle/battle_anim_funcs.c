@@ -103,7 +103,7 @@ typedef struct BattleAnimCircleBattlerWork {
 } BattleAnimCircleBattlerWork; // size: 0x30
 
 // A sprite that pops up (scales up then down) beside the defender, twice
-typedef struct BattleAnimSpritePopWork {
+struct BattleAnimSpritePopWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
@@ -117,7 +117,7 @@ typedef struct BattleAnimSpritePopWork {
     int sequenceState;
     s16 x;
     s16 y;
-} BattleAnimSpritePopWork; // size: 0x50
+}; // size: 0x50
 
 typedef struct BattleAnimPaletteFadeWork {
     BattleAnimSystem *system;
@@ -329,7 +329,7 @@ typedef struct BattleAnimSpriteMosaicWork {
 } BattleAnimSpriteMosaicWork; // size: 0x30
 
 // An emitter moved between two battlers (linear, optionally on an arc or with a vertical sine wave)
-typedef struct BattleAnimEmitterMotionWork {
+struct BattleAnimEmitterMotionWork {
     int emitterIndex;
     s16 delay;
     u16 duration;
@@ -352,7 +352,7 @@ typedef struct BattleAnimEmitterMotionWork {
     BattleAnimLinearMotion linear; // 0xA8
     BattleAnimSinMotion sin;       // 0xCC
     BattleAnimValueMotion value;   // 0xF0
-} BattleAnimEmitterMotionWork;     // size: 0x104
+}; // size: 0x104
 
 typedef struct BattleAnimEmitterSinWork {
     int emitterIndex;
@@ -946,16 +946,14 @@ void BattleAnimFunc_CircleBattler(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_CircleBattler, work);
 }
 
-void BattleAnimSpritePop_Start(void *data, s16 x, s16 y) {
-    BattleAnimSpritePopWork *work = data;
+void BattleAnimSpritePop_Start(BattleAnimSpritePopWork *work, s16 x, s16 y) {
     ManagedSprite_SetDrawFlag(work->sprite, TRUE);
     ManagedSprite_SetPositionXY(work->sprite, x, y);
     work->shrinking = FALSE;
     BattleAnimUtil_InitScaleMotion(&work->scale, 10, 10, 14, 4);
 }
 
-BOOL BattleAnimSpritePop_Update(void *data) {
-    BattleAnimSpritePopWork *work = data;
+BOOL BattleAnimSpritePop_Update(BattleAnimSpritePopWork *work) {
     if (BattleAnimUtil_UpdateScaleMotionSprite(&work->scale, work->sprite) == FALSE) {
         if (work->shrinking) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
@@ -975,8 +973,7 @@ enum {
     SPRITE_POP_SEQ_STATE_DONE,
 };
 
-BOOL BattleAnimSpritePop_RunSequence(void *data) {
-    BattleAnimSpritePopWork *work = data;
+BOOL BattleAnimSpritePop_RunSequence(BattleAnimSpritePopWork *work) {
     BOOL done = FALSE;
     switch (work->sequenceState) {
     case SPRITE_POP_SEQ_STATE_START_FIRST:
@@ -2438,8 +2435,7 @@ void BattleAnimFunc_SpriteMosaic(BattleAnimSystem *system) {
     BattleAnim_CreateTaskAndRun(work->common.system, BattleAnimTask_SpriteMosaic, work);
 }
 
-void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, void *data) {
-    BattleAnimEmitterMotionWork *work = data;
+void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, BattleAnimEmitterMotionWork *work) {
     u32 frames;
     work->emitterIndex = BattleAnimSystem_GetArg(system, 0);
     work->offsetX = BattleAnimSystem_GetArg(system, 1);

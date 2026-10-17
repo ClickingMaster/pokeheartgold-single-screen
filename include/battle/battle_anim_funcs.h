@@ -13,6 +13,9 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 
+typedef struct BattleAnimSpritePopWork BattleAnimSpritePopWork;
+typedef struct BattleAnimEmitterMotionWork BattleAnimEmitterMotionWork;
+
 void BattleAnimTask_OneFrame(SysTask *task, void *data);
 void BattleAnimFunc_OneFrameTask(BattleAnimSystem *system);
 void BattleAnimTask_OneFrameSound(SysTask *task, void *data);
@@ -32,9 +35,9 @@ void BattleAnimTask_RotateBattler(SysTask *task, void *data);
 void BattleAnimFunc_RotateBattler(BattleAnimSystem *system);
 void BattleAnimTask_CircleBattler(SysTask *task, void *data);
 void BattleAnimFunc_CircleBattler(BattleAnimSystem *system);
-void BattleAnimSpritePop_Start(void *data, s16 x, s16 y);
-BOOL BattleAnimSpritePop_Update(void *data);
-BOOL BattleAnimSpritePop_RunSequence(void *data);
+void BattleAnimSpritePop_Start(BattleAnimSpritePopWork *work, s16 x, s16 y);
+BOOL BattleAnimSpritePop_Update(BattleAnimSpritePopWork *work);
+BOOL BattleAnimSpritePop_RunSequence(BattleAnimSpritePopWork *work);
 void BattleAnimTask_SpritePops(SysTask *task, void *data);
 void BattleAnimSpriteFunc_SpritePops(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 void BattleAnimTask_WaitPaletteFade(SysTask *task, void *data);
@@ -81,7 +84,7 @@ void BattleAnimTask_ShakeBg(SysTask *task, void *data);
 void BattleAnimFunc_ShakeBg(BattleAnimSystem *system);
 void BattleAnimTask_SpriteMosaic(SysTask *task, void *data);
 void BattleAnimFunc_SpriteMosaic(BattleAnimSystem *system);
-void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, void *data);
+void BattleAnimEmitterMotion_Init(BattleAnimSystem *system, BattleAnimEmitterMotionWork *work);
 BOOL BattleAnimUtil_IsEmitterActive(SPLEmitter *emitter);
 void BattleAnimTask_MoveEmitter(SysTask *task, void *data);
 void BattleAnimFunc_MoveEmitter(BattleAnimSystem *system);

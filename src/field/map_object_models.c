@@ -9,23 +9,6 @@
 #include "filesystem_files_def.h"
 #include "heap.h"
 
-// The draw work of a following Pokemon's map object.
-typedef struct FollowMonBillboardWork {
-    Sprite *billboard;
-    VecFx32 savedState;
-    s8 direction;
-    u8 unk_11;
-    s8 shadowOffsetX; // in tiles, while the shadow is anchored
-    s8 shadowOffsetZ;
-    s8 height; // extra height in units, while the shadow is anchored
-    u8 bobbing;
-    u8 unk_16;
-    u8 paletteApplied : 1; // cleared to reload the sepia / alternate palette on the next update
-    u8 unk17_1 : 1;
-    u8 shadowAnchored : 1; // the shadow stays at shadowOffsetX/Z while the Pokemon hops (follow mon interactions)
-    u8 : 5;
-} FollowMonBillboardWork; // size: 0x18
-
 // The work of the Ho-Oh / Lugia objects (SPRITE_HOU_OBJ01, SPRITE_LUG_OBJ01): two looping sequences picked by the
 // object's animation number.
 typedef struct LegendaryBirdObject {
@@ -66,8 +49,7 @@ static const LegendaryBirdAnimateFunc sLegendaryBirdAnimateFuncs[] = {
     LegendaryBirdObject_AnimateFlap,
 };
 
-void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, void *work, u32 direction, BOOL addFacingOffset) {
-    FollowMonBillboardWork *billboardWork = work;
+void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, FollowMonBillboardWork *billboardWork, u32 direction, BOOL addFacingOffset) {
     BOOL flag4;
     int hasFollowMonSprite;
     BOOL paused;

@@ -17,7 +17,7 @@ void G3X_SetHOffset(int offset);
 
 // Screen shake shown when a poisoned party loses HP while walking: every HBlank shifts the 3D layer
 // horizontally by an offset that alternates sign every 10 lines; the amplitude ramps up and down over 6 frames.
-typedef struct PoisonEffect {
+struct PoisonEffect {
     u32 state;                  // 0x000
     s32 counter;                // 0x004
     u32 seqNo;                  // 0x008
@@ -29,7 +29,7 @@ typedef struct PoisonEffect {
     SysTask *mainTask;          // 0x31C
     SysTask *vblankTask;        // 0x320
     SysTask *swapTask;          // 0x324
-} PoisonEffect;                 // 0x328
+}; // 0x328
 
 static void PoisonEffect_Task(SysTask *task, void *data);
 static void PoisonEffect_ApplyNextLineOffset(PoisonEffect *effect);
@@ -50,8 +50,7 @@ void *PoisonEffect_New(enum HeapID heapID, HBlankSystem *hBlankSystem) {
     return effect;
 }
 
-void PoisonEffect_Delete(void *data) {
-    PoisonEffect *effect = data;
+void PoisonEffect_Delete(PoisonEffect *effect) {
     if (effect->state == 1) {
         PoisonEffect_Stop(effect);
     }
@@ -59,8 +58,7 @@ void PoisonEffect_Delete(void *data) {
     Heap_Free(effect);
 }
 
-void FieldSystem_DoPoisonEffect(void *data) {
-    PoisonEffect *effect = data;
+void FieldSystem_DoPoisonEffect(PoisonEffect *effect) {
     GF_ASSERT(effect->state == 0);
     effect->hblankTask = HBlankSystem_StartTask(effect->hBlankSystem, PoisonEffect_HBlankCallback, effect);
     effect->mainTask = SysTask_CreateOnMainQueue(PoisonEffect_Task, effect, 1024);

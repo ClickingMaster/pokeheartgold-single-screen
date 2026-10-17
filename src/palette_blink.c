@@ -69,8 +69,7 @@ PaletteBlink *PaletteBlink_New(PaletteData *plttData, PMLCDTarget screen, u32 pa
     return blink;
 }
 
-void PaletteBlink_SetState(void *blink_, s32 command) {
-    PaletteBlink *blink = blink_;
+void PaletteBlink_SetState(PaletteBlink *blink, s32 command) {
 
     switch (command) {
     case 0:

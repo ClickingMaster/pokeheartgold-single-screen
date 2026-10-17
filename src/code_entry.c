@@ -407,7 +407,7 @@ static void CodeEntry_VBlank(void *data) {
     SpriteSystem_TransferOam();
     PaletteData_PushTransparentBuffers(app->paletteData);
     DoScheduledBgGpuUpdates(app->bgConfig);
-    *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void CodeEntry_SelectGroup(CodeEntryApp *app, int group) {

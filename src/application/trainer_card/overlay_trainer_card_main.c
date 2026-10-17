@@ -930,7 +930,7 @@ static void TrainerCardMain_VBlankCB(TrainerCardMain *cardMain) {
     DoScheduledBgGpuUpdates(cardMain->bgConfig);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
-    *(vu32 *)((u8 *)OS_IRQTable + 0x3ff8) |= OS_IE_VBLANK; // OS_SetIrqCheckFlag, addressed from OS_IRQTable
+    OS_SetIrqCheckFlag(OS_IE_VBLANK);
 }
 
 static void TrainerCardMain_ResetBgAffine(void) {

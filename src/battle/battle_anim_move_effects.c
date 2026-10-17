@@ -47,7 +47,7 @@ static inline void BattleAnim_SetObjWindowInsidePlane(int wnd, BOOL effect) {
     reg_G2_WINOUT = (u16)winOut;
 }
 
-typedef struct BattleAnimDropSpriteStepwiseWork {
+struct BattleAnimDropSpriteStepwiseWork {
     BattleAnimCommonWork common;
     ManagedSprite *sprite; // 0x1C
     int spriteIndex;
@@ -58,7 +58,7 @@ typedef struct BattleAnimDropSpriteStepwiseWork {
     int windowMode;
     int drops;
     int fallStart;
-} BattleAnimDropSpriteStepwiseWork; // size: 0x40
+}; // size: 0x40
 
 typedef struct BattleAnimAnimateSpritesWork {
     BattleAnimCommonWork common;
@@ -196,8 +196,7 @@ void BattleAnimFunc_SetBgPaletteGrayscale(BattleAnimSystem *system) {
 #pragma push
 #pragma opt_propagation off
 
-void BattleAnimTask_DropSpriteStepwiseUpdate(void *data) {
-    BattleAnimDropSpriteStepwiseWork *work = data;
+void BattleAnimTask_DropSpriteStepwiseUpdate(BattleAnimDropSpriteStepwiseWork *work) {
     s16 x, y;
 
     switch (work->common.state[0]) {

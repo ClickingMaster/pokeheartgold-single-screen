@@ -1325,7 +1325,7 @@ static void EvolutionScene_VBlankCB(void *cbData) {
     GF_RunVramTransferTasks();
     PaletteData_PushTransparentBuffers(data->paletteData);
     DoScheduledBgGpuUpdates(data->bgConfig);
-    *(u32 *)((u8 *)OS_IRQTable + (HW_INTR_CHECK_BUF - HW_DTCM)) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static u8 EvolutionScene_PrintMessage(EvolutionTaskData *data, int msgNo) {

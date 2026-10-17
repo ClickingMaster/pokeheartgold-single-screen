@@ -5,6 +5,7 @@
 
 #include "global.h"
 
+#include "billboard_internal.h"
 #include "billboard_lists.h"
 #include "easy_chat.h"
 #include "filesystem.h"
@@ -524,7 +525,7 @@ typedef struct WiFiPlazaPlayerObjects {
     GF_2DGfxRawResMan *models;    // the billboard model
     GF_2DGfxRawResMan *sequences; // 2 sprite sequences (sWiFiPlazaSpriteSequenceFiles)
     GF_3DGfxRawResMan *textures;  // 20 sprites (sWiFiPlazaSpriteConfigs)
-    void *billboards;
+    Billboard *billboards;
     WiFiPlazaPlayerObject *objects;
     u32 count;
     WiFiPlazaObjectModel model;
@@ -536,36 +537,6 @@ typedef struct WiFiPlazaSpriteConfig {
     u16 fileId : 15;
     u16 ownTexture : 1; // texture loaded per object instead of once into VRAM
 } WiFiPlazaSpriteConfig;
-
-typedef struct WiFiPlazaBillboardParams {
-    u32 count;
-    u32 heapID;
-} WiFiPlazaBillboardParams;
-
-// Same layout as the billboard code's gfx sequence.
-typedef struct WiFiPlazaBillboardSequence {
-    const u16 *startFrame;
-    const u8 *textureIdx;
-    const u8 *plttIdx;
-    u32 seqCount;
-} WiFiPlazaBillboardSequence;
-
-typedef struct WiFiPlazaBillboardResource {
-    void *modelFile;
-    NNSG3dResTex *texture;
-    const void *ranges;
-    WiFiPlazaBillboardSequence sequence;
-    NNSG3dTexKey texKey;
-    NNSG3dTexKey tex4x4Key;
-    NNSG3dPlttKey plttKey;
-} WiFiPlazaBillboardResource;
-
-typedef struct WiFiPlazaBillboardCreateParams {
-    void *billboards;
-    WiFiPlazaBillboardResource *resource;
-    VecFx32 position;
-    VecFx32 scale;
-} WiFiPlazaBillboardCreateParams;
 
 // gWiFiPlazaLobbyClient->state (WiFiPlazaLobbyClient_GetState)
 #define WIFI_PLAZA_LOBBY_STATE_DISCONNECTED 0
@@ -1177,9 +1148,9 @@ BOOL WiFiPlazaSurvey_Exit(OverlayManager *man, int *state);
 void WiFiPlazaMap_PosToVecFx32(const s16 *gridPos, s32 *position);
 void WiFiPlazaMap_LoadModelFile(NNSG3dResFileHeader **file, NARC *narc, int fileId, enum HeapID heapID);
 // billboards
-void *Billboard_Create(WiFiPlazaBillboardParams *params);
+void *Billboard_Create(BillboardCreateParams *params);
 void Billboard_Delete(void *billboards);
-void *BillboardObject_Create(WiFiPlazaBillboardCreateParams *params);
+void *BillboardObject_Create(BillboardObjectCreateParams *params);
 void BillboardObject_Delete(void *sprite);
 void BillboardObject_SetCallback(void *sprite, void (*callback)(void *sprite, WiFiPlazaPlayerObject *object), WiFiPlazaPlayerObject *object);
 void BillboardObject_SetPosition(void *sprite, const VecFx32 *position);
@@ -1192,9 +1163,6 @@ u32 BillboardObject_GetSequenceFrame(void *sprite);
 void *BillboardObject_GetModelNoCast(void *sprite);
 const VecFx32 *BillboardObject_GetScale(void *sprite);
 BOOL GF3d_BoundsBoxTest(const VecFx32 *translation, const WiFiPlazaBoxTestBounds *bounds);
-void BillboardGfxSequence_Init(const void *data, WiFiPlazaBillboardSequence *sequence);
-void BillboardResource_Init(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence);
-void BillboardResource_InitWithKeys(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence, NNSG3dTexKey texKey, NNSG3dTexKey tex4x4Key, NNSG3dPlttKey plttKey);
 u32 NNS_G3dMdlGetMdlLightEnableFlag(const NNSG3dResMdl *pResMdl, u32 matID);
 void NNS_G3dMdlSetMdlLightEnableFlagAll(NNSG3dResMdl *pResMdl, u32 light);
 void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *pResMdl, u32 polygonID);

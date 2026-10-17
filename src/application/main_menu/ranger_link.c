@@ -420,8 +420,8 @@ void RangerLink_EndScanCallback(void *arg);
 void RangerLink_StartConnectCallback(void *arg);
 void RangerLink_StartAfterPowerOn(void);
 void RangerLink_StartMPCallback(void *arg);
-void RangerLink_ReceiveAck(void *arg);
-void RangerLink_ReceiveListPacket(void *arg);
+void RangerLink_ReceiveAck(RangerLinkRecvResult *recv);
+void RangerLink_ReceiveListPacket(RangerLinkRecvResult *recv);
 void RangerLink_ReceiveCommand(RangerLinkRecvResult *recv);
 void RangerLink_PortCallback(void *arg);
 void RangerLink_PowerOnCallback(void *arg);
@@ -1073,8 +1073,7 @@ void RangerLink_StartMPCallback(void *arg) {
 }
 
 // parent sending: a child answered
-void RangerLink_ReceiveAck(void *arg) {
-    RangerLinkRecvResult *recv = arg;
+void RangerLink_ReceiveAck(RangerLinkRecvResult *recv) {
     RangerLinkTransfer *transfer = RangerLink_GetTransfer();
     if (transfer->state == 1) {
         u32 *words = (u32 *)transfer->recvBuffer;
@@ -1095,8 +1094,7 @@ void RangerLink_ReceiveAck(void *arg) {
 }
 
 // child: the parent's list packet arrived, mark this child as reached
-void RangerLink_ReceiveListPacket(void *arg) {
-    RangerLinkRecvResult *recv = arg;
+void RangerLink_ReceiveListPacket(RangerLinkRecvResult *recv) {
     RangerLinkTransfer *transfer = RangerLink_GetTransfer();
     u32 *words;
     RangerLinkChild *children;

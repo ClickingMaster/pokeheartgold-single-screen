@@ -18,7 +18,7 @@ void FrontierData_SetWifiTeam(FrontierData *frontierData, u32 index, void *src);
 void FrontierData_GetWifiTeam(FrontierData *frontierData, s32 index, FrontierWifiUploadRecord *dst);
 u16 FrontierData_CalcWifiScore(FrontierData *frontierData, u32 challenge);
 u16 FrontierData_GetWifiScore(FrontierData *frontierData);
-u32 FrontierData_TowerRoundAction(void *ptr, u32 towerMode, u32 action);
+u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, u32 action);
 u32 FrontierData_SetTowerRound(FrontierData *frontierData, u32 towerMode, u16 round);
 u32 FrontierData_FlagAction(FrontierData *frontierData, u16 flag, u32 action);
 void Save_Frontier_SetTowerMessage(SaveData *saveData, int index, MailMessage *mailMessage);

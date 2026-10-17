@@ -3,6 +3,7 @@
 
 #include "global.h"
 
+#include "billboard_internal.h"
 #include "field_types_def.h"
 #include "filesystem.h"
 #include "gf_3d_loader.h"
@@ -21,23 +22,8 @@ typedef struct FieldEffectRendererEntry {
 
 typedef struct FieldEffectRecordSlot {
     u32 id; // 0xF: free
-    struct FieldEffectRecord *record;
+    BillboardResource *record;
 } FieldEffectRecordSlot;
-
-// Filled by BillboardGfxSequence_Init.
-typedef struct FieldEffectGfxSequence {
-    u32 unk_00[4];
-} FieldEffectGfxSequence;
-
-typedef struct FieldEffectRecord {
-    void *unk_00;
-    NNSG3dResTex *tex;
-    int unk_08;
-    FieldEffectGfxSequence sequence;
-    NNSG3dTexKey texKey;
-    NNSG3dTexKey tex4x4Key;
-    NNSG3dPlttKey plttKey;
-} FieldEffectRecord;
 
 typedef struct FieldEffectGfx {
     enum HeapID heapID;
@@ -45,12 +31,12 @@ typedef struct FieldEffectGfx {
     u16 resourceCount;
     u16 sequenceCount;
     u16 resCount;
-    void *billboards;
+    Billboard *billboards;
     ResourceBank *resourceBank;
     ResourceBank *sequenceBank;
     GF_3DGfxRawResMan *resMan;
     FieldEffectRecordSlot *slots;
-    FieldEffectRecord *records;
+    BillboardResource *records;
 } FieldEffectGfx;
 
 struct FieldEffectManager {
@@ -77,18 +63,6 @@ typedef struct FieldEffectTexTransfer {
     GF_3DGfxRawResMan *resMan;
 } FieldEffectTexTransfer;
 
-typedef struct FieldEffectBillboardListTemplate {
-    u32 count;
-    enum HeapID heapID;
-} FieldEffectBillboardListTemplate;
-
-typedef struct FieldEffectBillboardTemplate {
-    void *billboards;
-    FieldEffectRecord *record;
-    VecFx32 position;
-    VecFx32 scale;
-} FieldEffectBillboardTemplate;
-
 extern const FieldEffectRendererTemplate gFieldEffectRenderers[];
 
 void FieldEffectManager_InitRenderer(FieldEffectManager *manager, u32 id);
@@ -112,8 +86,8 @@ void FieldEffectManager_FreeGfx(FieldEffectManager *manager);
 void FieldEffectGfx_InitRecords(FieldEffectManager *manager, FieldEffectGfx *gfx, u32 count);
 void FieldEffectGfx_FreeRecords(FieldEffectGfx *gfx);
 void FieldEffectGfx_ReleaseRecord(FieldEffectGfx *gfx, u32 id);
-FieldEffectRecord *FieldEffectGfx_AddRecord(FieldEffectGfx *gfx, u32 id, void *a2, const FieldEffectGfxSequence *sequence, NNSG3dResTex *tex, GF_3DGfxRawResObj *texObj, int a6);
-FieldEffectRecord *FieldEffectGfx_GetRecord(FieldEffectGfx *gfx, u32 id);
+BillboardResource *FieldEffectGfx_AddRecord(FieldEffectGfx *gfx, u32 id, void *modelFile, const BillboardGfxSequence *gfxSequence, NNSG3dResTex *texture, GF_3DGfxRawResObj *texObj, const BillboardSequenceRange *ranges);
+BillboardResource *FieldEffectGfx_GetRecord(FieldEffectGfx *gfx, u32 id);
 void FieldEffectManager_ScheduleTexTransfer(FieldEffectManager *manager, int id, GF_3DGfxRawResMan *resMan);
 void FieldEffectTexTransfer_LoadVramTask(SysTask *task, void *data);
 void FieldEffectTexTransfer_FreeHeaderTask(SysTask *task, void *data);

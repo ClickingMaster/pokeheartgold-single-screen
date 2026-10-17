@@ -751,7 +751,7 @@ static void ArceusCinematic_VBlank(ArceusCinematic *arceus) {
     ArceusCinematic_TransferBgPalettes(arceus);
     DoScheduledBgGpuUpdates(arceus->bgConfig);
     SpriteSystem_TransferOam();
-    *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void ArceusCinematic_SetBanks(void) {

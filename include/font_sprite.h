@@ -34,7 +34,7 @@ typedef struct TextOBJ {
 } TextOBJ;
 
 FontSystem *FontSystem_NewInit(int count, enum HeapID heapId);
-void TextOBJ_GetPosition(void *data, int *x, int *y);
+void TextOBJ_GetPosition(TextOBJ *object, int *x, int *y);
 int FontOAM_GetCharSize(Window *window, NNS_G2D_VRAM_TYPE vram, int heapId);
 void FontSystem_Delete(FontSystem *system);
 void TextOBJ_SetDrawPriority(TextOBJ *textOBJ, int value);

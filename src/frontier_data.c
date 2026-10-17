@@ -354,8 +354,7 @@ u8 FrontierData_GetWifiWinCount(FrontierData *data) {
 }
 
 // action: 0 get, 2 reset, 3 count up (max 65534). Index 5 has no counter, index 6 uses slot 5.
-u32 FrontierData_TowerRoundAction(void *ptr, u32 towerMode, u32 action) {
-    FrontierData *data = ptr;
+u32 FrontierData_TowerRoundAction(FrontierData *data, u32 towerMode, u32 action) {
     if (towerMode == 5) {
         return 0;
     }

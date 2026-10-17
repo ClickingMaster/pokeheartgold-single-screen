@@ -311,7 +311,7 @@ static void ReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffe
     if (MapObjectRender_GetBillboardResource(MapObject_GetManager(work->args.mapObject), work->spriteId, &record) && MapObject_IsBillboardPending(work->args.mapObject) != TRUE) {
         record.modelFile = FieldEffectManager_GetBillboardResource(work->args.manager, REFLECTION_RESOURCE);
         FieldEffect_GetPosition(effect, &position);
-        work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, (struct FieldEffectRecord *)&record, &position);
+        work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, &record, &position);
         work->hasBillboard = TRUE;
     }
 }
@@ -324,7 +324,7 @@ static void BillboardReflectionEffect_CreateBillboard(FieldEffect *effect, Billb
     record = work->args.record;
     record.modelFile = FieldEffectManager_GetBillboardResource(work->args.manager, REFLECTION_RESOURCE);
     FieldEffect_GetPosition(effect, &position);
-    work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, (struct FieldEffectRecord *)&record, &position);
+    work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, &record, &position);
     source = work->args.source;
     BillboardObject_SetSequence(work->billboard, BillboardObject_GetSequence(source));
     BillboardObject_SetSequenceFrame(work->billboard, BillboardObject_GetSequenceFrame(source));
@@ -489,7 +489,7 @@ static void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, Reflec
             FollowMonBillboard_InitSequence(TRUE, work->args.mapObject, work->billboard, &record);
         }
         FieldEffect_GetPosition(effect, &position);
-        work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, (struct FieldEffectRecord *)&record, &position);
+        work->billboard = FieldEffectManager_CreateBillboard(work->args.manager, &record, &position);
         work->hasBillboard = TRUE;
     }
 }

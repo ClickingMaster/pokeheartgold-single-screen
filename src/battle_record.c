@@ -99,7 +99,7 @@ BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record);
 BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record);
 void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save);
 int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
-void BattleRecord_FillHeader(SaveData *save, void *header, void *data, int type, int arg);
+void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *data, int type, int arg);
 void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
 void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last);
 void BattleRecord_StoreSetup(BattleSetup *setup);
@@ -293,15 +293,14 @@ void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last) {
     }
 }
 
-void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int type, int arg) {
-    BattleRecordHeader *summary = header;
+void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *recordData, int type, int arg) {
     BattleRecordData *data = recordData;
     int count, partySize;
     BattlerOrder order = sBattleRecordBattlerOrder;
     MultiOrder multi = sBattleRecordMultiOrder;
     int player;
     int k;
-    MI_CpuFill8(summary, 0, sizeof(*summary));
+    MI_CpuFill8(header, 0, sizeof(*header));
     BattleRecord_GetBattlerAndPartyCount(type, &count, &partySize);
     k = 0;
     if (data->flags & BATTLE_TYPE_LINK) {
@@ -332,8 +331,8 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
         for (int j = 0; j < partySize; j++) {
             struct BattleRecordMon *mon = &data->parties[battler].mons[j];
             if (!mon->isEgg && !mon->checksumFailed) {
-                summary->species[k] = mon->species;
-                summary->forms[k] = mon->form;
+                header->species[k] = mon->species;
+                header->forms[k] = mon->form;
             }
             k++;
         }
@@ -341,34 +340,34 @@ void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int
     switch (type) {
     case 1:
     case 8:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 0);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 0);
         break;
     case 2:
     case 9:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 1);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 1);
         break;
     case 3:
     case 10:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 2);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 2);
         break;
     case 4:
     case 11:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 3);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 3);
         break;
     case 5:
     case 12:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 4);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 4);
         break;
     case 6:
     case 13:
-        summary->rules = *LinkBattleRuleset_GetRegulation(save, 5);
+        header->rules = *LinkBattleRuleset_GetRegulation(save, 5);
         break;
     default:
-        summary->rules = *LinkBattleRuleset_GetDefault();
+        header->rules = *LinkBattleRuleset_GetDefault();
         break;
     }
-    summary->arg = arg;
-    summary->type = type;
+    header->arg = arg;
+    header->type = type;
 }
 
 BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {

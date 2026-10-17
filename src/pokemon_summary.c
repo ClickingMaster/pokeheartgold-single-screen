@@ -564,7 +564,7 @@ static void PokemonSummary_VBlank(void *data) {
     PokepicManager_HandleLoadImgAndOrPltt(summary->pokepicManager);
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
-    *(u32 *)((u8 *)OS_IRQTable + 0x3FF8) |= OS_IE_VBLANK; // OS_SetIrqCheckFlag
+    OS_SetIrqCheckFlag(OS_IE_VBLANK);
 }
 
 static void PokemonSummary_SetGraphicsBanks(void) {

@@ -8,6 +8,7 @@
 #include "field/field_effect_manager.h"
 #include "field/field_follow_mon.h"
 #include "field/map_object_model_list.h"
+#include "field/map_object_models.h"
 #include "field/map_object_render.h"
 
 #include "field_system.h"
@@ -48,15 +49,6 @@ typedef struct EffectModelOffset {
     u32 spriteId;
     VecFx32 offset;
 } EffectModelOffset;
-
-typedef struct FollowMonDrawWork {
-    Sprite *sprite;
-    VecFx32 vector;
-    s8 direction;
-    u8 unk_11[6];
-    u8 active : 1;
-    u8 : 7;
-} FollowMonDrawWork;
 
 // Work of the stepped walk sequences below: the frame step list index, the previous facing and movement
 typedef struct SteppedWalkWork {
@@ -102,9 +94,6 @@ extern const u32 gEffectModelOffsets[];
 
 void *ApricornTreeObject_GetBillboard(LocalMapObject *object);
 void BillboardObject_SetVisible(void *billboard, u8 visible);
-void FollowMonBillboard_AddFacingOffset(LocalMapObject *object, u32 direction, VecFx32 *out);
-void FollowMonBillboard_Update(LocalMapObject *object, Sprite *sprite, void *work, u32 direction, BOOL update);
-BOOL MapObject_IsBillboardAnimPaused(void *object);
 void BillboardObject_SaveState(void *billboard, void *work);
 void BillboardObject_RestoreState(void *billboard, void *work);
 
@@ -397,21 +386,12 @@ void BillboardDraw_Resume(void *object) {
 }
 
 void FollowMonDraw_Init(void *object) {
-    typedef struct {
-        void *billboard;
-        u8 unk_04[0xC];
-        s8 facing;
-        u8 unk_11[4];
-        u8 unk_15;
-        u8 unk_16;
-        u8 flags;
-    } Work;
-    Work *work = (Work *)MapObject_InitDrawData(object, 0x18);
-    work->facing = -1;
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_InitDrawData(object, sizeof(FollowMonBillboardWork));
+    work->direction = -1;
     MapObject_CreateBillboard(object, work);
-    work->unk_15 = 0;
-    work->flags &= ~2;
-    work->flags &= ~1;
+    work->bobbing = 0;
+    work->spriteLoaded = FALSE;
+    work->paletteApplied = FALSE;
     if (work->billboard != NULL) {
         MapObject_CallDrawUpdate(object);
     }
@@ -422,30 +402,23 @@ void FollowMonDraw_Delete(void *object) {
 }
 
 void FollowMonDraw_Pause(void *object) {
-    u8 *work = MapObject_GetDrawData(object);
-    void *billboard = *(void **)work;
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    Sprite *billboard = work->billboard;
     if (billboard != NULL) {
-        BillboardObject_SaveState(billboard, work + 4);
+        BillboardObject_SaveState(billboard, &work->savedState);
     }
-    work[0x17] &= ~2;
-    work[0x17] &= ~1;
+    work->spriteLoaded = FALSE;
+    work->paletteApplied = FALSE;
     MapObject_DeleteBillboard(object, work);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK21);
 }
 
 // Draw callback of the following Pokemon: (re)loads the party leader's overworld sprite on first use.
 void FollowMonDraw_Resume(LocalMapObject *object) {
-    typedef struct {
-        Sprite *sprite;
-        u8 unk4[0x13];
-        u8 started : 1;
-        u8 loaded : 1;
-        u8 rest : 6;
-    } Work;
     VecFx32 pos;
     VecFx32 facing;
-    Work *work = (Work *)MapObject_GetDrawData(object);
-    if (!work->loaded && MapObject_GetID(object) == obj_partner_poke) {
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    if (!work->spriteLoaded && MapObject_GetID(object) == obj_partner_poke) {
         FieldSystem *fieldSystem = MapObjectManager_GetFieldSystem(MapObject_GetManager(object));
         Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
         int species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -454,7 +427,7 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
         u32 spriteId = FollowMon_GetSpriteID(species, form, gender);
         u8 shiny = MonIsShiny(mon);
         int x, y, z;
-        work->loaded = TRUE;
+        work->spriteLoaded = TRUE;
         FollowMon_SetObjectParams(object, species, form, (u32)shiny);
         MapObject_SetSpriteID(object, spriteId);
         MapObject_RestoreDrawUpdateCallback(object);
@@ -479,11 +452,11 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
-    if (work->sprite == NULL) {
+    if (work->billboard == NULL) {
         MapObject_CreateBillboard(object, work);
     }
-    if (work->sprite != NULL) {
-        work->started = TRUE;
+    if (work->billboard != NULL) {
+        work->paletteApplied = TRUE;
         {
             VecFx32 offset = { 0, 0, 0 };
             MapObject_CopyFacingVector(object, &facing);
@@ -493,12 +466,12 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
             facing.z = offset.z;
             MapObject_SetFacingVector(object, &facing);
             if (MapObject_HasFollowMonSprite(object)) {
-                MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
+                MapObject_SetBillboardSepia((void *)TRUE, object, work->billboard);
             } else if (MapObject_IsShinyPokemon(object)) {
-                FollowMonBillboard_SetResource(TRUE, object, work->sprite);
+                FollowMonBillboard_SetResource(TRUE, object, work->billboard);
             }
-            BillboardObject_RestoreState(work->sprite, work->unk4);
-            MapObject_UpdateBillboardPosition(object, work->sprite);
+            BillboardObject_RestoreState(work->billboard, &work->savedState);
+            MapObject_UpdateBillboardPosition(object, work->billboard);
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK21);
             MapObject_CallDrawUpdate(object);
         }
@@ -512,7 +485,7 @@ void FollowMonDraw_ClearBob(void *object) {
 }
 
 void *MapObjectManager_GetFollowMonBillboard(MapObjectManager *manager) {
-    return *(void **)MapObject_GetDrawData(MapObjectManager_GetFirstActiveObjectByID(manager, obj_partner_poke));
+    return ((FollowMonBillboardWork *)MapObject_GetDrawData(MapObjectManager_GetFirstActiveObjectByID(manager, obj_partner_poke)))->billboard;
 }
 
 void BillboardDraw_UpdateNpc(void *object) {
@@ -571,17 +544,17 @@ void BillboardDraw_UpdateLooping(void *object) {
 }
 
 void FollowMonDraw_UpdateLarge(LocalMapObject *object) {
-    FollowMonDrawWork *work = (FollowMonDrawWork *)MapObject_GetDrawData(object);
-    Sprite *sprite = work->sprite;
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    Sprite *sprite = work->billboard;
     u32 direction;
 
     if (MapObject_IsBillboardPending(object) == TRUE || sprite == NULL) {
         return;
     }
-    if (!work->active) {
-        work->active = TRUE;
+    if (!work->paletteApplied) {
+        work->paletteApplied = TRUE;
         if (MapObject_HasFollowMonSprite(object)) {
-            MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
+            MapObject_SetBillboardSepia((void *)TRUE, object, work->billboard);
         } else if (MapObject_IsShinyPokemon(object)) {
             FollowMonBillboard_SetResource(TRUE, object, sprite);
         }
@@ -594,17 +567,17 @@ void FollowMonDraw_UpdateLarge(LocalMapObject *object) {
 }
 
 void FollowMonDraw_Update(LocalMapObject *object) {
-    FollowMonDrawWork *work = (FollowMonDrawWork *)MapObject_GetDrawData(object);
-    Sprite *sprite = work->sprite;
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    Sprite *sprite = work->billboard;
     u32 direction;
 
     if (MapObject_IsBillboardPending(object) == TRUE || sprite == NULL) {
         return;
     }
-    if (!work->active) {
-        work->active = TRUE;
+    if (!work->paletteApplied) {
+        work->paletteApplied = TRUE;
         if (MapObject_HasFollowMonSprite(object)) {
-            MapObject_SetBillboardSepia((void *)TRUE, object, work->sprite);
+            MapObject_SetBillboardSepia((void *)TRUE, object, work->billboard);
         } else if (MapObject_IsShinyPokemon(object)) {
             FollowMonBillboard_SetResource(TRUE, object, sprite);
         }
@@ -617,18 +590,18 @@ void FollowMonDraw_Update(LocalMapObject *object) {
 }
 
 void FollowMonDraw_UpdatePositionOnly(LocalMapObject *object) {
-    FollowMonDrawWork *work = (FollowMonDrawWork *)MapObject_GetDrawData(object);
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
     Sprite *sprite;
 
     if (MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
-    sprite = work->sprite;
+    sprite = work->billboard;
     if (sprite == NULL) {
         return;
     }
-    if (!work->active) {
-        work->active = TRUE;
+    if (!work->paletteApplied) {
+        work->paletteApplied = TRUE;
         if (MapObject_IsShinyPokemon(object)) {
             FollowMonBillboard_SetResource(TRUE, object, sprite);
         }

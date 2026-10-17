@@ -19,7 +19,7 @@ static const u8 sWiFiPlazaTurnAroundDirections[4] = { 1, 2, 0, 3 };
 
 static const VecFx32 sWiFiPlazaPlayerSpriteScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
-static const u32 sWiFiPlazaBillboardRanges[9][3] = {
+static const BillboardSequenceRange sWiFiPlazaBillboardRanges[9] = {
     { 0,   15,  0 },
     { 16,  31,  0 },
     { 32,  47,  0 },
@@ -475,7 +475,7 @@ WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum He
     NARC *narc;
     void *file;
     GF_3DGfxRawResObj *texture;
-    WiFiPlazaBillboardParams params;
+    BillboardCreateParams params;
     int skipped;
 
     objects = Heap_Alloc(heapID, sizeof(WiFiPlazaPlayerObjects));
@@ -491,7 +491,7 @@ WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum He
     objects->textures = GF3dGfxRawResMan_Create(20, heapID);
     BillboardLists_Create(1, heapID);
     params.count = count;
-    params.heapID = heapID;
+    params.heapId = heapID;
     objects->billboards = Billboard_Create(&params);
 
     modelNarc = NARC_New(NARC_data_mmodel_mmodel, heapID);
@@ -580,9 +580,9 @@ void WiFiPlazaPlayerObjects_SetModelAlpha(WiFiPlazaPlayerObjects *objects, int a
 }
 
 WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *objects, Field2DObject *player) {
-    WiFiPlazaBillboardResource resource;
-    WiFiPlazaBillboardCreateParams create;
-    WiFiPlazaBillboardSequence sequence;
+    BillboardResource resource;
+    BillboardObjectCreateParams create;
+    BillboardGfxSequence sequence;
     Field2DPoint gridPos;
     const WiFiPlazaSpriteConfig *config;
     GF_3DGfxRawResObj *texture;
@@ -615,7 +615,7 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
     gridPos = Field2DObject_GetPos(player);
     WiFiPlazaMap_PosToVecFx32(&gridPos.unk0, &position.x);
     position.z += FX32_ONE * 16;
-    create.billboards = objects->billboards;
+    create.billboard = objects->billboards;
     create.resource = &resource;
     create.position = position;
     create.scale = scale;
