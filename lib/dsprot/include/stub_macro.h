@@ -1,9 +1,8 @@
 #ifndef DSPROT_STUB_MACRO_H
 #define DSPROT_STUB_MACRO_H
 
-// C counterparts of the macros in asm_macro.inc, for the stub sources
-// src/*_decrypter.c (decryption wrappers) and src/*_decoder.c (decoding static
-// initializers). The stubs are asm functions: see doc/ASSEMBLY.MD for why they
+// C counterparts of the macros in asm_macro.inc, for the stubs: the decryption wrappers and the
+// decoding static initializers. The stubs are asm functions: see doc/ASSEMBLY.MD for why they
 // cannot be C. Their parameters (encoded sizes and keys) are the values elfcoder
 // reports for the compiled functions; the Makefile checks them against
 // elfcoder's own output ($(BUILD_DIR)/*.ref.s) before compiling a stub.

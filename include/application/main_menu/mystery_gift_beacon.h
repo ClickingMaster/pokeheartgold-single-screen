@@ -3,8 +3,7 @@
 
 #include "global.h"
 
-// Download of a Mystery Gift from the beacons of a distribution station
-// (src/application/main_menu/mystery_gift_beacon.c).
+// Download of a Mystery Gift from the beacons of a distribution station.
 
 #define MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE 104
 

@@ -53,7 +53,6 @@ typedef struct BattleAnimFloatingSpritesWork BattleAnimFloatingSpritesWork;
 typedef struct BattleAnimWobbleOnBgWork BattleAnimWobbleOnBgWork;
 typedef struct BattleAnimObjWindowBgWork BattleAnimObjWindowBgWork;
 
-// src/battle/battle_anim_effects.c
 void BattleAnimTask_SkewSlideAttackerBgResetScroll(BattleAnimSkewSlideWork *work, u32 *buffer);
 BOOL BattleAnimTask_SkewSlideAttackerBgUpdateScroll(BattleAnimSkewSlideWork *work);
 void BattleAnimTask_SkewSlideAttackerBg(SysTask *task, void *data);
@@ -170,7 +169,7 @@ void BattleAnimFunc_ObjWindowBgScrollDown(BattleAnimSystem *system);
 void BattleAnimFunc_ObjWindowBgScrollUpAlt(BattleAnimSystem *system);
 void BattleAnimFunc_ObjWindowBgScrollDownFast(BattleAnimSystem *system);
 
-// Overlay 7 functions of src/battle/battle_anim_system.c and of sources not merged yet
+// Battle animation system accessors
 ManagedSprite *BattleAnimSystem_GetSprite(BattleAnimSystem *system, int index);
 u32 BattleAnimSystem_GetBgLayer(BattleAnimSystem *system, int index);
 u8 BattleAnimUtil_GetSpritePaletteSlot(ManagedSprite *sprite);

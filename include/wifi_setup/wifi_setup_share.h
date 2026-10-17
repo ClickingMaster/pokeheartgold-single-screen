@@ -9,7 +9,7 @@
 #include "wifi_setup/wifi_setup_local_wireless.h"
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Local wireless session of the access-point setup (ARM code in overlay 13, src/wifi_setup/wifi_setup_share.c):
+// Local wireless session of the access-point setup (ARM code in overlay 13):
 //  - WifiSetupWh_*: a small handler around the WM parent functions (initialise, parent parameters,
 //    WEP key, start parent, MP, key sharing / data sharing, channel measurement, end, reset). Its log
 //    strings call it "DWCi_MOV_WH"; the state names are in the table gWifiSetupWhStateNames.

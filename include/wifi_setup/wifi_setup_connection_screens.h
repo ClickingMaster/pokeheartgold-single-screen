@@ -6,12 +6,11 @@
 #include "wifi_setup/wifi_setup_ui.h"
 
 // Connection screens of the access-point setup (ARM code in overlay 13):
-//  - src/wifi_setup/wifi_setup_auto_setup.c: the rest of the connection settings screen (cursor, scrolling,
-//    switch buttons, completeness check), the "settings saved" screen, the four steps of the
-//    automatic setup (search, connect, receive the settings, done), the access-point scan screen;
-//  - src/wifi_setup/wifi_setup_connection_menu.c: the screen of the three connection slots, the setup method
-//    menu, the connection test with its prompt and result, and the screens around the Wi-Fi USB
-//    connector.
+//  - the rest of the connection settings screen (cursor, scrolling, switch buttons, completeness check),
+//    the "settings saved" screen, the four steps of the automatic setup (search, connect, receive the
+//    settings, done), the access-point scan screen;
+//  - the screen of the three connection slots, the setup method menu, the connection test with its
+//    prompt and result, and the screens around the Wi-Fi USB connector.
 // Every screen is a chain of state functions set with WifiSetupApp_SetStateFunc:
 // Init -> FadeIn -> WaitFadeIn -> (WaitButtonBar) -> Main (HandleInput, Update, CheckButtons each
 // frame) -> Exit -> WaitFadeOut -> End, which picks the next screen.
@@ -275,7 +274,7 @@ void WifiSetupUsbConnectorIntro_Exit(void);
 void WifiSetupUsbConnectorIntro_WaitFadeOut(void);
 void WifiSetupUsbConnectorIntro_End(void);
 
-// src/wifi_setup/wifi_setup_usb_connector_screen.c
+// Wi-Fi USB connector screen
 void WifiSetupUsbConnector_Start(void);
 void WifiSetupUsbConnector_ScanCallback(int result);
 BOOL WifiSetupUsbConnector_IsLidClosed(void);

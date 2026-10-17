@@ -4,8 +4,7 @@
 #include "global.h"
 
 // Wireless connection manager (WCM_*) wrapper of the access-point setup client. The client carries
-// two copies of it: src/wifi_setup/wifi_setup_wcm.c (first module, state gWifiSetupWcm) and
-// src/wifi_setup/wifi_setup_link.c (second module, state inside WifiSetupWork).
+// two copies of it: the first module keeps its state in gWifiSetupWcm, the second inside WifiSetupWork.
 //
 // wrapper states (gWifiSetupWcm.state)
 #define WIFI_SETUP_WCM_STATE_NONE            0

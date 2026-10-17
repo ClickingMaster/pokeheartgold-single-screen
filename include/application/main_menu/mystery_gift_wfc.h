@@ -7,7 +7,7 @@
 
 #include "overlay_manager.h"
 
-// Download of a Mystery Gift over Nintendo Wi-Fi Connection (src/application/main_menu/mystery_gift_wfc.c).
+// Download of a Mystery Gift over Nintendo Wi-Fi Connection.
 
 // results of MysteryGiftWfc_Run
 #define MYSTERY_GIFT_WFC_RESULT_RUNNING   0

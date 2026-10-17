@@ -6,8 +6,7 @@
 #include "wifi_setup/wifi_setup_wcm.h"
 
 // Access-point setup client, second module (OVY_13 Thumb 0x022230F8-0x02226F58): worker thread,
-// access-point scan, packet records, AES key wrap, MD5. Shared by src/wifi_setup/wifi_setup_packet.c,
-// src/wifi_setup/wifi_setup_crypto.c and src/wifi_setup/wifi_setup_api.c.
+// access-point scan, packet records, AES key wrap, MD5.
 
 typedef void *(*WifiSetupWorkAllocFunc)(u32 size);
 typedef void (*WifiSetupWorkFreeFunc)(void *ptr);

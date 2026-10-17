@@ -12,7 +12,7 @@
 #include "poke_overlay.h"
 #include "sys_task_api.h"
 
-// The battle overlay's main module: src/battle/battle_022378C0.c and src/battle/battle_main.c.
+// The battle overlay's main module.
 // (Kept apart from battle_022378C0.h: more declarations there renumber function-local statics in its includers.)
 
 FS_EXTERN_OVERLAY(OVY_7);

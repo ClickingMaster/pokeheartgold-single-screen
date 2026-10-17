@@ -125,7 +125,7 @@ BOOL BattleAnimSystem_ReadScriptArgs(BattleAnimSystem *system, u32 *out, int cou
 int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int battlerB);
 void BattleAnimUtil_GetScaleFloat(BattleAnimLinearMotion *motion, f32 *x, f32 *y);
 
-// src/particle_system.c (missing from particle_system.h)
+// Particle emitter parameters
 void ParticleEmitter_SetGravity(SPLEmitter *emitter, VecFx16 *value);
 void ParticleEmitter_SetMagnetPos(SPLEmitter *emitter, VecFx32 *value);
 void ParticleEmitter_GetMagnetPos(SPLEmitter *emitter, VecFx32 *value);

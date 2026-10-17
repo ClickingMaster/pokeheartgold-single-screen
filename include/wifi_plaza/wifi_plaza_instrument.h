@@ -168,7 +168,7 @@ void WiFiPlazaInstrumentWave_Init(WiFiPlazaInstrumentWave *wave, int angle, int 
 void WiFiPlazaInstrumentWave_Update(WiFiPlazaInstrumentWave *wave);
 void WiFiPlazaInstrumentWave_GetValue(WiFiPlazaInstrumentWave *wave, fx32 *value);
 
-// Internal to src/wifi_plaza/wifi_plaza_instrument.c
+// Internal to the instrument code
 void WiFiPlazaInstrument_PlaySE(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 seqNo);
 void WiFiPlazaInstrument_LoadModels(WiFiPlazaInstrumentManager *manager, NARC *narc, enum HeapID heapID);
 void WiFiPlazaInstrument_FreeModels(WiFiPlazaInstrumentManager *manager);

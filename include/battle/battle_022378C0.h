@@ -12,7 +12,7 @@ void BattleSystem_RestoreInputAfterSubMenu(BattleSystem *battleSystem);
 void BattleSystem_FreeMainBgLayers(BattleSystem *battleSystem);
 void BattleSystem_ReinitMainBgLayers(BattleSystem *battleSystem);
 
-// src/battle/battle_main.c
+// Battle overlay manager steps (link set-up, party preview, VS screen, battle, end) and their helpers
 void Battle_LinkInit(OverlayManager *man, BattleSetup *setup);
 BOOL Battle_LinkMain(OverlayManager *man);
 void Battle_LinkExit(OverlayManager *man);
@@ -28,7 +28,7 @@ BOOL Battle_EndMain(OverlayManager *man);
 void BgConfig_CleanupBattleMenuBackgrounds(BgConfig *bgConfig);
 void BattleSystem_SetupTextFlags(BattleSystem *battleSystem);
 
-// src/battle/battle_022378C0.c, src/battle/battle_main.c
+// Battle set-up helpers
 void BgConfig_CleanupBattleBackgrounds(BgConfig *config);
 void BattleSystem_FreeGraphicsDummy(BattleSystem *battleSystem);
 void BattleSystem_SetTrainerAIOverlayLoaded(BattleSystem *battleSystem, int loaded);

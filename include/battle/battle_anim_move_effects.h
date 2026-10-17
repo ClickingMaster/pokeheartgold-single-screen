@@ -28,7 +28,6 @@ typedef struct BattleAnimMotionSprite {
 
 typedef struct BattleAnimShakeDefenderWithOverlayWork BattleAnimShakeDefenderWithOverlayWork;
 
-// src/battle/battle_anim_move_effects.c
 void BattleAnimFunc_SetBgPaletteGrayscale(BattleAnimSystem *system);
 void BattleAnimTask_DropSpriteStepwiseUpdate(void *data);
 void BattleAnimTask_DropSpriteStepwise(SysTask *task, void *data);

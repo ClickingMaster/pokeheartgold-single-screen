@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-// Wireless link to Pokemon Ranger used by Connect to Pokemon Ranger (src/application/main_menu/ranger_link.c).
+// Wireless link to Pokemon Ranger used by Connect to Pokemon Ranger.
 
 void RangerLink_Init(const void *config, void *buffer);
 void RangerLink_Update(void);

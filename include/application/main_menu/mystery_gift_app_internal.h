@@ -14,8 +14,7 @@
 #include "save.h"
 #include "sprite.h"
 
-// The data of the Mystery Gift app (src/application/main_menu/mystery_gift_app.c), also used by the Nintendo WFC
-// download (mystery_gift_wfc.c).
+// The data of the Mystery Gift app, also used by the download over Nintendo Wi-Fi Connection.
 
 struct MysteryGiftAppData {
     BgConfig *bgConfig;                                // 0x0000

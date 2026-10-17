@@ -139,7 +139,6 @@ typedef struct BattleAnimPaletteBlend {
     PaletteData *paletteData;
 } BattleAnimPaletteBlend; // size: 0x1C
 
-// src/battle/battle_anim_util.c
 void BattleAnimUtil_InitSinMotionFromStep(BattleAnimSinMotion *motion, u32 startX, u32 endX, u32 startY, u16 endY, fx32 ampX, fx32 ampY, u16 step);
 BOOL BattleAnimUtil_UpdateSinMotion(BattleAnimSinMotion *motion);
 BOOL BattleAnimUtil_UpdateSinMotionSprite(BattleAnimSinMotion *motion, s16 x, s16 y, ManagedSprite *sprite);

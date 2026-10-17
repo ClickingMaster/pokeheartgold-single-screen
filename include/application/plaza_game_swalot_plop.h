@@ -111,7 +111,7 @@ typedef struct SwalotPlopShot {
     fx32 distance;               // 0x40
 } SwalotPlopShot;
 
-// The touch samples of one frame (src/touch_sampling.c).
+// The touch samples of one frame.
 typedef struct SwalotPlopTouch {
     u16 count;
     TPData samples[8];

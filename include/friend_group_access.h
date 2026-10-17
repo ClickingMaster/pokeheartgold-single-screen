@@ -3,9 +3,9 @@
 
 #include "friend_group.h"
 
-// Prototypes of src/friend_group.c as its callers were compiled; several parameter and return
-// types differ from the definitions (e.g. the group id is read back as a u8), so the definition
-// file does not include this header.
+// Friend group prototypes as their callers were compiled; several parameter and return types differ
+// from the definitions (e.g. the group id is read back as a u8), so the definition file does not
+// include this header.
 
 void Save_FriendGroup_SetGroupId(SAV_FRIEND_GRP *saveGrp, u32 grpIdx, u32 id);
 void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *saveGrp, int days);

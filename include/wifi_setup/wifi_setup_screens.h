@@ -5,8 +5,8 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Access-point setup screens (src/wifi_setup/wifi_setup_screens.c): the list screen and the text entry screen
-// shared with the screens that follow them.
+// Access-point setup screens: the list screen and the text entry screen shared with the screens that
+// follow them.
 
 // One row of the list screen (0x2A bytes).
 typedef struct WifiSetupListRow {

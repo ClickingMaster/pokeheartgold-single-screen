@@ -28,7 +28,6 @@ typedef struct WifiSetupAddressEntry {
 extern WifiSetupAddressEntry *gWifiSetupAddressEntry;
 extern int gWifiSetupErrorCode;
 
-// src/wifi_setup/wifi_setup_address_entry.c
 void WifiSetupAddressEntry_LoadGraphics(void);
 void WifiSetupAddressEntry_FadeIn(void);
 void WifiSetupAddressEntry_OpenKeypad(void);
@@ -48,7 +47,7 @@ void WifiSetupAddressEntry_FinishConfirm(void);
 void WifiSetupAddressEntry_PadFields(void);
 int WifiSetupAddressEntry_IsValid(void);
 
-// src/wifi_setup/wifi_setup_error_screen.c
+// Invalid address message
 void WifiSetupAddressEntry_WaitInvalidMessage(void);
 void WifiSetupAddressEntry_FinishInvalidMessage(void);
 void WifiSetupErrorScreen_Init(void);

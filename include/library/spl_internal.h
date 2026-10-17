@@ -1,8 +1,8 @@
 #ifndef POKEHEARTGOLD_SPL_INTERNAL_H
 #define POKEHEARTGOLD_SPL_INTERNAL_H
 
-// Software particle library: types and prototypes shared by the library's own modules
-// (lib/src/spl_*.c). Callers outside the library use spl.h.
+// Software particle library: types and prototypes shared by the library's own modules. Callers outside
+// the library use spl.h.
 
 // The library is built with MWCC 1.2, which warns (an error under -W error) about inline helpers in
 // the NitroSDK headers that drop a call's result.

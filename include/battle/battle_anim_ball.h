@@ -36,8 +36,8 @@ typedef struct BattleAnimEmitterTemplate {
     int perspective; // second argument of ParticleSystem_SetPerspectiveType
 } BattleAnimEmitterTemplate;
 
-// The battler pictures handed to the pic swap helpers (BattleAnimBattlerPicParams; its definition is in
-// battle/battle_anim_internal.h, src/battle/battle_anim_ball.c keeps a copy until it includes that header)
+// The battler pictures handed to the pic swap helpers (BattleAnimBattlerPicParams, defined in
+// battle/battle_anim_internal.h)
 struct BattleAnimBattlerPicParams;
 
 typedef struct BallSealEffect BallSealEffect;

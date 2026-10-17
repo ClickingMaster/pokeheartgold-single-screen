@@ -9,7 +9,7 @@ BallThrow *BallThrow_New(BallThrowParams *unkStruct_134);                      /
 void BallThrow_Delete(BallThrow *data);                                      // unkBallData_Destroy?
 s32 BallThrow_GetMode(BallThrow *data);
 
-// src/battle/battle_anim_system.c: the move animation system
+// The move animation system
 
 typedef struct BattleAnimSystem BattleAnimSystem;
 typedef struct BattleAnimBattlerSprites BattleAnimBattlerSprites;

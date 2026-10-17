@@ -13,7 +13,6 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 
-// src/battle/battle_anim_funcs.c
 void BattleAnimTask_OneFrame(SysTask *task, void *data);
 void BattleAnimFunc_OneFrameTask(BattleAnimSystem *system);
 void BattleAnimTask_OneFrameSound(SysTask *task, void *data);
@@ -100,7 +99,7 @@ void BattleAnimSpriteFunc_SpriteAboveDefender(BattleAnimSystem *system, SpriteSy
 void BattleAnimTask_SpriteArc(SysTask *task, void *data);
 void BattleAnimSpriteFunc_SpriteArc(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 
-// Overlay 7 functions of src/battle/battle_anim_system.c and of sources not merged yet
+// Battle animation system tasks and accessors
 void BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
 void BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
 void BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);

@@ -147,7 +147,7 @@ typedef struct BattleAnimBattlerPicParams {
     u8 battlerTypes[4];
 } BattleAnimBattlerPicParams; // size: 0x50
 
-// src/battle/battle_anim_system.c
+// Battle animation system
 void BattleAnimSystem_WaitDelay(BattleAnimSystem *system);
 void BattleAnimSystem_ExecuteCommands(BattleAnimSystem *system);
 void BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
@@ -355,11 +355,11 @@ void BattleAnimUtil_LoadMonIntoPicSameFacing(BattleAnimBattlerPicParams *params,
 void BattleAnimUtil_LoadMonIntoPicOppositeFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 
-// src/sound_se.c (missing from sound_playback.h)
+// Sound effect panning
 void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);
 void SetAllSEPan(int pan);
 
-// src/particle_runtime.c (missing from particle_system.h)
+// Particle system camera
 void ParticleSystem_GetCameraUp(SPLEmitter *particleSystem, VecFx32 *out);
 void ParticleSystem_SetCameraUp(SPLEmitter *particleSystem, VecFx32 *up);
 

@@ -18,8 +18,7 @@
 #include "yes_no_prompt.h"
 
 // Main menu > Migrate from Ruby/Sapphire/Emerald/FireRed/LeafGreen (Pal Park): pick six Pokemon from the boxes of
-// the GBA cartridge, they are sent to the Pal Park (MigratedPokemon) and erased from the GBA save
-// (src/application/main_menu/migrate_from_agb.c).
+// the GBA cartridge, they are sent to the Pal Park (MigratedPokemon) and erased from the GBA save.
 
 #define MIGRATE_FROM_AGB_MON_COUNT 6
 

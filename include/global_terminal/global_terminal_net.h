@@ -282,7 +282,7 @@ void GlobalTerminalNet_GetRankings(GlobalTerminalNet *net, void **out1, void **o
 u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out);
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max);
 
-// dress-up form converters (end of src/global_terminal/global_terminal_connect.c)
+// dress-up form converters
 void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord *src, GlobalTerminalNetDressUpForm *dst);
 void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *src, GlobalTerminalNetDressUpRecord *dst);
 

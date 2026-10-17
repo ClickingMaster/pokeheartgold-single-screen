@@ -254,7 +254,7 @@ void WiFiPlazaRoom_StartInstrument(WiFiPlazaRoomWork *room, u32 playerIndex);
 BOOL WiFiPlazaRoom_IsInstrumentFinished(WiFiPlazaRoomWork *room, u32 playerIndex);
 void WiFiPlazaRoom_SetPanelButtonPressed(WiFiPlazaRoomWork *room);
 
-// Internal to src/wifi_plaza/wifi_plaza_room.c
+// Internal to the room code
 void WiFiPlazaRoom_VBlank(void *data);
 void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID);
 void WiFiPlazaRoom_DrawSprites(WiFiPlazaRoomGraphics *graphics);
