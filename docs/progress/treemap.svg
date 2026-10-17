@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c5afd613c · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 39b0d3258 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -3724,7 +3724,7 @@ src/field/map_load_buffers.c</title></rect>
 src/field/field_bottom_screen.c</title></rect>
 <rect x="603.124" y="713.302" width="7.789" height="3.698" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / field_fog.o
 180 bytes · C-only source
-src/field_fog.c</title></rect>
+src/field/field_fog.c</title></rect>
 <rect x="610.913" y="709.030" width="4.577" height="4.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / scrcmd_moneybox.o
 132 bytes · C-only source
 src/field/scrcmd_moneybox.c</title></rect>
@@ -5259,10 +5259,10 @@ src/wii_number.c</title></rect>
 <rect x="1119.801" y="464.185" width="52.199" height="37.127" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1029.155" y="501.312" width="26.700" height="53.287" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_27 / touchscreen_menu.o
 8,892 bytes · C-only source
-src/touchscreen_menu.c</title></rect>
+src/field/touchscreen_menu.c</title></rect>
 <rect x="1029.155" y="554.598" width="26.700" height="18.949" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_27 / touchscreen_choice_menu.o
 3,162 bytes · C-only source
-src/touchscreen_choice_menu.c</title></rect>
+src/field/touchscreen_choice_menu.c</title></rect>
 <rect x="1029.155" y="501.312" width="26.700" height="72.235" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1055.855" y="501.312" width="42.355" height="36.803" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_53 / oaks_speech.o
 9,742 bytes · C-only source
@@ -5429,7 +5429,7 @@ src/choose_starter_app.c</title></rect>
 <rect x="964.432" y="641.294" width="33.387" height="32.397" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="997.819" y="641.294" width="31.688" height="32.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_31 / touch_mart_app.o
 6,416 bytes · C-only source
-src/touch_mart_app.c</title></rect>
+src/field/touch_mart_app.c</title></rect>
 <rect x="997.819" y="641.294" width="31.688" height="32.397" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="964.432" y="673.691" width="21.790" height="43.309" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_119 / encounter_effect_trainer.o
 5,898 bytes · C-only source
@@ -5457,7 +5457,7 @@ src/hall_of_fame_showcase.c</title></rect>
 <rect x="1029.507" y="620.275" width="38.235" height="22.908" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1067.742" y="573.547" width="36.475" height="23.873" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_28 / dowsing_mchn.o
 5,442 bytes · C-only source
-src/dowsing_mchn.c</title></rect>
+src/field/dowsing_mchn.c</title></rect>
 <rect x="1067.742" y="573.547" width="36.475" height="23.873" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1067.742" y="597.420" width="36.475" height="22.917" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_110 / alph_puzzle.o
 5,224 bytes · C-only source
@@ -5524,11 +5524,11 @@ src/overlay_mic_test.c</title></rect>
 <rect x="1065.546" y="684.758" width="32.227" height="16.791" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1065.546" y="701.549" width="32.227" height="15.451" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_32 / friend_roster_app.o
 3,112 bytes · C-only source
-src/friend_roster_app.c</title></rect>
+src/field/friend_roster_app.c</title></rect>
 <rect x="1065.546" y="701.549" width="32.227" height="15.451" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1097.773" y="643.183" width="13.008" height="37.369" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_29 / number_entry.o
 3,038 bytes · C-only source
-src/number_entry.c</title></rect>
+src/field/number_entry.c</title></rect>
 <rect x="1097.773" y="643.183" width="13.008" height="37.369" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1110.781" y="643.183" width="24.535" height="19.565" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_98 / pokeathlon_util.o
 3,000 bytes · C-only source
@@ -5589,7 +5589,7 @@ src/comm_club_buttons.c</title></rect>
 <rect x="1149.077" y="643.183" width="11.652" height="17.604" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1160.729" y="643.183" width="11.271" height="17.604" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_114 / overlay114_scene_transition.o
 1,240 bytes · C-only source
-src/overlay114_scene_transition.c</title></rect>
+src/field/overlay114_scene_transition.c</title></rect>
 <rect x="1160.729" y="643.183" width="11.271" height="17.604" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1135.316" y="660.786" width="18.852" height="10.354" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_105 / ship_departure_cutscene.o
 1,220 bytes · C-only source
@@ -5617,7 +5617,7 @@ src/scrcmd_size_record.c</title></rect>
 <rect x="1145.321" y="681.478" width="9.463" height="15.961" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1135.316" y="697.439" width="19.468" height="7.117" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_116 / overlay116_scene.o
 866 bytes · C-only source
-src/overlay116_scene.c</title></rect>
+src/field/overlay116_scene.c</title></rect>
 <rect x="1135.316" y="697.439" width="19.468" height="7.117" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1135.316" y="704.557" width="9.798" height="12.443" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_36 / overlay_36.o
 762 bytes · C-only source
@@ -5676,7 +5676,7 @@ sub/lib/src/wvr_shelter.c</title></rect>
 <rect x="1167.187" y="708.821" width="4.813" height="6.250" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1167.187" y="715.072" width="4.813" height="1.928" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_35 / field_hook_unused.o
 58 bytes · C-only source
-src/field_hook_unused.c</title></rect>
+src/field/field_hook_unused.c</title></rect>
 <rect x="1167.187" y="715.072" width="4.813" height="1.928" fill="none" stroke="#101722" stroke-width="2"/>
 <text x="28" y="744" font-size="14" fill="#b9c7da">Area = code-section bytes · Hover for files · Mixed objects are excluded from C + C++ source · Hand-written, generated and veneer code is excluded from compiled code</text>
 <text x="28" y="765" font-size="12" fill="#b9c7da">Source-language coverage, not a per-function matching score. Assets and unmapped padding are excluded; code literal pools are included.</text>

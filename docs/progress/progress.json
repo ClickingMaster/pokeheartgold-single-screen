@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "c5afd613c5cf2cd47bc8e9c532dc29f381f377ea",
+  "commit": "39b0d3258011c00c0a3f878099b3a7d51a3f55a5",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "7c490ed03b3c7cb455e0fffaef40f7a848cda24f47499db0d2eb50a511a77227",
+    "ARM9": "0939b141df5a0ca3c50466c9926e6b33a67a84cf9654d08965cc284eb228ad13",
     "ARM7": "985179e08068b2c1549d530df2e13c352f6e3ddc4d1f434e15b082467f2c6245"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -679,7 +679,7 @@
       "object": "overlay114_scene_transition.o",
       "bytes": 1240,
       "status": "c",
-      "source": "src/overlay114_scene_transition.c"
+      "source": "src/field/overlay114_scene_transition.c"
     },
     {
       "cpu": "ARM9",
@@ -695,7 +695,7 @@
       "object": "overlay116_scene.o",
       "bytes": 866,
       "status": "c",
-      "source": "src/overlay116_scene.c"
+      "source": "src/field/overlay116_scene.c"
     },
     {
       "cpu": "ARM9",
@@ -1799,7 +1799,7 @@
       "object": "touchscreen_choice_menu.o",
       "bytes": 3162,
       "status": "c",
-      "source": "src/touchscreen_choice_menu.c"
+      "source": "src/field/touchscreen_choice_menu.c"
     },
     {
       "cpu": "ARM9",
@@ -1807,7 +1807,7 @@
       "object": "touchscreen_menu.o",
       "bytes": 8892,
       "status": "c",
-      "source": "src/touchscreen_menu.c"
+      "source": "src/field/touchscreen_menu.c"
     },
     {
       "cpu": "ARM9",
@@ -1815,7 +1815,7 @@
       "object": "dowsing_mchn.o",
       "bytes": 5442,
       "status": "c",
-      "source": "src/dowsing_mchn.c"
+      "source": "src/field/dowsing_mchn.c"
     },
     {
       "cpu": "ARM9",
@@ -1823,7 +1823,7 @@
       "object": "number_entry.o",
       "bytes": 3038,
       "status": "c",
-      "source": "src/number_entry.c"
+      "source": "src/field/number_entry.c"
     },
     {
       "cpu": "ARM9",
@@ -1879,7 +1879,7 @@
       "object": "touch_mart_app.o",
       "bytes": 6416,
       "status": "c",
-      "source": "src/touch_mart_app.c"
+      "source": "src/field/touch_mart_app.c"
     },
     {
       "cpu": "ARM9",
@@ -1887,7 +1887,7 @@
       "object": "friend_roster_app.o",
       "bytes": 3112,
       "status": "c",
-      "source": "src/friend_roster_app.c"
+      "source": "src/field/friend_roster_app.c"
     },
     {
       "cpu": "ARM9",
@@ -1919,7 +1919,7 @@
       "object": "field_hook_unused.o",
       "bytes": 58,
       "status": "c",
-      "source": "src/field_hook_unused.c"
+      "source": "src/field/field_hook_unused.c"
     },
     {
       "cpu": "ARM9",
@@ -5992,7 +5992,7 @@
       "object": "field_fog.o",
       "bytes": 180,
       "status": "c",
-      "source": "src/field_fog.c"
+      "source": "src/field/field_fog.c"
     },
     {
       "cpu": "ARM9",

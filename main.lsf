@@ -951,7 +951,7 @@ Overlay field
     Object src/field/door_transition.o
     Object src/field/area_light.o
     Object src/field/build_model_shapes.o
-    Object src/field_fog.o
+    Object src/field/field_fog.o
     Object src/field/field_model_attributes.o
     Object src/field/field_camera.o
     Object src/field/field_bottom_screen.o
@@ -1320,20 +1320,20 @@ Overlay OVY_26
 Overlay OVY_27
 {
     After bug_contest
-    Object src/touchscreen_menu.o
-    Object src/touchscreen_choice_menu.o
+    Object src/field/touchscreen_menu.o
+    Object src/field/touchscreen_choice_menu.o
     Object asm/touchscreen_menu_data.o
 }
 Overlay OVY_28
 {
     After OVY_27
-    Object src/dowsing_mchn.o
+    Object src/field/dowsing_mchn.o
     Object asm/dowsing_mchn_data.o
 }
 Overlay OVY_29
 {
     After OVY_27
-    Object src/number_entry.o
+    Object src/field/number_entry.o
 }
 Overlay touch_save_app
 {
@@ -1343,12 +1343,12 @@ Overlay touch_save_app
 Overlay OVY_31
 {
     After OVY_27
-    Object src/touch_mart_app.o
+    Object src/field/touch_mart_app.o
 }
 Overlay OVY_32
 {
     After OVY_27
-    Object src/friend_roster_app.o
+    Object src/field/friend_roster_app.o
 }
 Overlay OVY_33
 {
@@ -1364,7 +1364,7 @@ Overlay OVY_34
 Overlay OVY_35
 {
     After npc_trade
-    Object src/field_hook_unused.o
+    Object src/field/field_hook_unused.o
 }
 Overlay OVY_36
 {
@@ -2278,7 +2278,7 @@ Overlay OVY_113
 Overlay OVY_114
 {
     After OVY_31
-    Object src/overlay114_scene_transition.o
+    Object src/field/overlay114_scene_transition.o
 }
 Overlay OVY_115
 {
@@ -2289,7 +2289,7 @@ Overlay OVY_115
 Overlay OVY_116
 {
     After OVY_31
-    Object src/overlay116_scene.o
+    Object src/field/overlay116_scene.o
 }
 Overlay OVY_117
 {
