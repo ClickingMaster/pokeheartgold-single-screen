@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_FIELD_FIELD_FOLLOW_MON_H
 #define POKEHEARTGOLD_FIELD_FIELD_FOLLOW_MON_H
 
+#include "billboard_internal.h"
 #include "field_system.h"
 #include "task.h"
 
@@ -22,7 +23,7 @@ BOOL FollowMon_CheckVisibleFlag(FieldSystem *fieldSystem);
 void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem);
 void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager);
 void FollowMonBillboard_SetResource(BOOL alternate, LocalMapObject *object, void *billboard);
-void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, void *record);
+void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, BillboardResource *resource);
 void MapObject_SetBillboardSepia(void *unused, LocalMapObject *object, void *billboard);
 void FollowMon_QueuePlayerStep(int movement, int x, int z, FollowMon *followMon);
 void FollowMon_RecreateForMap(FieldSystem *fieldSystem);

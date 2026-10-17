@@ -11,6 +11,7 @@
 #include "field/map_object_billboard_motion.h"
 #include "field/map_object_models.h"
 #include "field/map_object_render.h"
+#include "field/map_object_render_internal.h"
 #include "field/resource_bank.h"
 
 #include "field_follow_mon_ball.h"
@@ -46,19 +47,10 @@ FS_EXTERN_OVERLAY(OVY_25);
 #define BILLBOARD_SEQUENCE_FOLLOW_MON     21
 #define BILLBOARD_SEQUENCE_FOLLOW_MON_ALT 22
 
-BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, void *record);
-void BillboardGfxSequence_Init(void *sequence, void *dest);
-void BillboardObject_SetResource(void *billboard, void *record);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
 NNSG3dTexKey BillboardObject_GetTexKey(void *billboard);
 void *Texture_GetPaletteData(NNSG3dResTex *texture, u32 index);
 void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
-
-// The render data of the map object manager (MapObjectManager_GetRender); only the billboard sequence bank is used here.
-typedef struct MapObjectRenderData {
-    u8 unk_00[0xFC];
-    ResourceBank *sequenceBank;
-} MapObjectRenderData;
 
 // A billboard sequence from the sequence bank: count frames, then count u8s, then count u8 flags.
 typedef struct BillboardSequenceData {
@@ -359,7 +351,8 @@ void FollowMon_SetNoBallEffect(FieldSystem *fieldSystem) {
 }
 
 void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager) {
-    BillboardSequenceData *sequence = ResourceBank_Get(((MapObjectRenderData *)MapObjectManager_GetRender(manager))->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
+    MapObjectRender *render = MapObjectManager_GetRender(manager);
+    BillboardSequenceData *sequence = ResourceBank_Get(render->sequenceBank, BILLBOARD_SEQUENCE_FOLLOW_MON_ALT);
     int count = sequence->count, i;
     u8 *flags = (u8 *)(sequence->frames + count);
     flags += count;
@@ -369,26 +362,26 @@ void FollowMon_SetAltSequenceFrameFlags(MapObjectManager *manager) {
 }
 
 void FollowMonBillboard_SetResource(BOOL alternate, LocalMapObject *object, void *billboard) {
-    u8 record[0x28];
+    BillboardResource resource;
     MapObjectManager *manager = MapObject_GetManager(object);
     u32 spriteId = MapObject_GetSpriteID(object);
-    MapObjectRender_GetBillboardResource(manager, spriteId, record);
+    MapObjectRender_GetBillboardResource(manager, spriteId, &resource);
     {
         u32 id = MapObject_GetID(object);
         if (id != obj_partner_poke && id != obj_daycare_poke_1 && id != obj_daycare_poke_2) {
             return;
         }
-        FollowMonBillboard_InitSequence(alternate, object, billboard, record);
-        BillboardObject_SetResource(billboard, record);
+        FollowMonBillboard_InitSequence(alternate, object, billboard, &resource);
+        BillboardObject_SetResource(billboard, &resource);
         BillboardObject_SetSequence(billboard, Facing_GetBillboardStandSequence(MapObject_GetFacingDirection(object)));
         BillboardObject_SetSequenceFrame(billboard, 0);
     }
 }
 
-void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, void *record) {
-    MapObjectRenderData *renderData = MapObjectManager_GetRender(MapObject_GetManager(object));
-    void *sequence = ResourceBank_Get(renderData->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
-    BillboardGfxSequence_Init(sequence, (u8 *)record + 0xC);
+void FollowMonBillboard_InitSequence(BOOL alternate, LocalMapObject *object, void *billboard, BillboardResource *resource) {
+    MapObjectRender *render = MapObjectManager_GetRender(MapObject_GetManager(object));
+    void *sequence = ResourceBank_Get(render->sequenceBank, alternate ? BILLBOARD_SEQUENCE_FOLLOW_MON_ALT : BILLBOARD_SEQUENCE_FOLLOW_MON);
+    BillboardGfxSequence_Init(sequence, &resource->gfxSequence);
 }
 
 // Reloads the billboard's palette from the object's model file in sepia and re-uploads its texture.

@@ -3,15 +3,34 @@
 
 #include "global.h"
 
+#include "billboard_gfx_sequence.h"
 #include "gf_3d_render.h"
 #include "heap.h"
 
 typedef struct Billboard Billboard;
 typedef struct BillboardObject BillboardObject;
 typedef void (*BillboardCallback)(BillboardObject *, void *);
-typedef struct BillboardResourceData {
-    u32 words[4];
-} BillboardResourceData;
+
+// The first and last frame of one of a billboard's sequences; with stopAtEnd set it stays on its last frame
+// instead of looping.
+typedef struct BillboardSequenceRange {
+    s32 start;
+    s32 end;
+    s32 stopAtEnd;
+} BillboardSequenceRange;
+
+// The graphics of a billboard: its model file, the texture file holding every frame's texture and palette, the
+// frame ranges of its sequences and which texture/palette each frame shows. With texKey set, the texture is
+// already in VRAM under these keys.
+typedef struct BillboardResource {
+    void *modelFile;
+    NNSG3dResTex *texture;
+    const BillboardSequenceRange *ranges;
+    BillboardGfxSequence gfxSequence;
+    NNSG3dTexKey texKey;
+    NNSG3dTexKey tex4x4Key;
+    NNSG3dPlttKey plttKey;
+} BillboardResource;
 
 struct BillboardObject {
     VecFx32 position;
@@ -22,16 +41,16 @@ struct BillboardObject {
     u8 visible;
     u8 padding_25[3];
     Billboard *owner;
-    u32 resourceId;
+    const BillboardSequenceRange *ranges;
     NNSG3dRenderObj renderObj;
     NNSG3dResMdlSet *modelSet;
     NNSG3dResMdl *model;
     NNSG3dResTex *texture;
-    void *resourceHeader;
+    NNSG3dResTex *resourceTexture;
     NNSG3dTexKey texKey;
     NNSG3dTexKey tex4x4Key;
     NNSG3dPlttKey paletteKey;
-    BillboardResourceData resourceData;
+    BillboardGfxSequence gfxSequence;
     void *textureAnimation;
     u8 type;
     u8 padding_B5;
@@ -65,20 +84,15 @@ typedef struct BillboardCreateParams {
     enum HeapID heapId;
 } BillboardCreateParams;
 
-typedef struct BillboardResource {
-    u8 padding_00[8];
-    u32 resourceId;
-    BillboardResourceData data;
-    NNSG3dTexKey texKey;
-    NNSG3dTexKey tex4x4Key;
-    NNSG3dPlttKey paletteKey;
-} BillboardResource;
-
 typedef struct BillboardObjectCreateParams {
     Billboard *billboard;
-    u32 resourceIndex;
+    BillboardResource *resource;
     VecFx32 position;
     VecFx32 scale;
 } BillboardObjectCreateParams;
+
+void BillboardObject_SetResource(BillboardObject *object, BillboardResource *resource);
+void BillboardResource_InitWithKeys(BillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const BillboardSequenceRange *ranges, BillboardGfxSequence *gfxSequence, NNSG3dTexKey texKey, NNSG3dTexKey tex4x4Key, NNSG3dPlttKey plttKey);
+void BillboardResource_Init(BillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const BillboardSequenceRange *ranges, BillboardGfxSequence *gfxSequence);
 
 #endif

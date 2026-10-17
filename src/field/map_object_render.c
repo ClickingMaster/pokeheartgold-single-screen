@@ -5,6 +5,7 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/map_object_billboard_motion.h"
+#include "field/map_object_render_internal.h"
 #include "field/resource_bank.h"
 
 #include "billboard_internal.h"
@@ -15,22 +16,10 @@
 #include "metatile_behavior.h"
 #include "sys_task_api.h"
 
-// One cached billboard resource: the model and texture of a sprite, its texture ranges and gfx sequence, as
-// passed to BillboardObject_Create; one per map object.
-typedef struct MapObjectBillboardResource {
-    void *modelFile;
-    NNSG3dResTex *texture;
-    u32 ranges;
-    u8 sequence[0x10];
-    NNSG3dTexKey texKey;
-    NNSG3dTexKey tex4x4Key;
-    NNSG3dPlttKey plttKey;
-} MapObjectBillboardResource; // size: 0x28
-
 // Sprite ID -> its cached resource; spriteId 0xFFFF marks a free slot
 typedef struct BillboardResourceSlot {
     u32 spriteId;
-    MapObjectBillboardResource *resource;
+    BillboardResource *resource;
 } BillboardResourceSlot;
 
 // A map object waiting for its billboard (created by the create task once the textures are in VRAM)
@@ -70,33 +59,6 @@ typedef struct MapObjectRenderQueue {
     SysTask *releaseTask;
 } MapObjectRenderQueue; // size: 0x28
 
-// The id lists hold the resident ids first (loaded at init, kept) and the dynamic ids after them (loaded on
-// demand, released when no map object uses them any more). Free entries are 0xFF (models, sequences) or 0xFFFF
-// (textures).
-struct MapObjectRender {
-    u32 unused00;
-    u32 objectCount;
-    u32 residentModelCount;
-    u32 dynamicModelCount;
-    u32 residentSequenceCount;
-    u32 dynamicSequenceCount;
-    u32 residentTextureCount;
-    u32 dynamicTextureCount;
-    u32 modelIds[8];
-    u32 sequenceIds[8];
-    u32 textureIds[32];
-    void *billboards;
-    MapObjectBillboardResource *resources;
-    void *unk_E8;
-    void *unk_EC;
-    GF_3DGfxRawResMan *textures;
-    BillboardResourceSlot *resourceSlots;
-    ResourceBank *modelBank;
-    ResourceBank *sequenceBank;
-    MapObjectRenderQueue *queue;
-    MapObjectManager *manager;
-};
-
 // Model / gfx sequence NARC member of a billboard model or sequence id, 0xFF-terminated
 typedef struct BillboardModelEntry {
     u16 id;
@@ -115,7 +77,7 @@ typedef struct SpriteBillboardInfo {
     u8 unk_00[2];
     u8 modelId;
     u8 sequenceId;
-    u32 ranges;
+    const BillboardSequenceRange *ranges;
 } SpriteBillboardInfo;
 
 // What BillboardObject_SaveState keeps of a billboard while its map object is paused
@@ -126,13 +88,6 @@ typedef struct BillboardState {
     fx32 frame;
 } BillboardState;
 
-typedef struct MapObjectBillboardCreateParams {
-    void *billboards;
-    MapObjectBillboardResource *resource;
-    VecFx32 position;
-    VecFx32 scale;
-} MapObjectBillboardCreateParams;
-
 // Keeps a copy of the old billboard on screen while the new sprite's billboard is being loaded
 typedef struct SpriteChangeWork {
     u32 spriteId;
@@ -140,9 +95,9 @@ typedef struct SpriteChangeWork {
     void *modelFile;
     void *sequenceFile;
     NNSG3dResFileHeader *textureFile;
-    u8 sequence[0x10];
+    BillboardGfxSequence gfxSequence;
     void *billboard;
-    MapObjectBillboardResource resource;
+    BillboardResource resource;
     LocalMapObject *object;
     void *reflection;
 } SpriteChangeWork;
@@ -152,21 +107,19 @@ extern const BillboardModelEntry gBillboardSequenceNarcMembers[];
 extern const u32 gResidentBillboardModelIds[];
 extern const u32 gResidentBillboardSequenceIds[];
 extern const SpriteBillboardIndex gObjectEventGraphicsInfos[];
-extern const u8 gSpriteBillboardInfos[];
+extern const SpriteBillboardInfo gSpriteBillboardInfos[];
 
 void *Billboard_Create(BillboardCreateParams *params);
 void Billboard_Delete(void *billboards);
 BOOL Billboard_HasPendingFree(void *billboards);
-void *BillboardObject_Create(MapObjectBillboardCreateParams *params);
+void *BillboardObject_Create(BillboardObjectCreateParams *params);
 VecFx32 *BillboardObject_GetPosition(void *billboard);
 u32 BillboardObject_IsVisible(void *billboard);
-void BillboardGfxSequence_Init(void *sequenceFile, void *sequence);
-void BillboardResource_Init(MapObjectBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, u32 ranges, void *sequence);
 void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *position);
 void *ReadMModelFromNarcInternal(MapObjectManager *manager, u32 memberIdx, BOOL atStart);
 int GetMoveModelNoBySpriteId(u32 spriteId);
 void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model);
-void *Reflection_SpawnForBillboard(void *manager, MapObjectBillboardResource *resource, void *billboard, VecFx32 *position, int kind, int priority);
+void *Reflection_SpawnForBillboard(void *manager, BillboardResource *resource, void *billboard, VecFx32 *position, int kind, int priority);
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *model, int matId);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
 // The graphics info flags of a map object (bits 0-3: 1 for billboards)
@@ -188,8 +141,7 @@ static void MapObject_CreateOrQueueBillboard(LocalMapObject *object, void **bill
 static void MapObject_CancelQueuedBillboard(LocalMapObject *object);
 static void MapObjectRender_InitResourceSlots(MapObjectRender *render, u32 count);
 static void MapObjectRender_FreeResourceSlots(MapObjectRender *render);
-static MapObjectBillboardResource *MapObjectRender_GetBillboardResourceSlot(MapObjectRender *render, u32 spriteId);
-BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, MapObjectBillboardResource *dest);
+static BillboardResource *MapObjectRender_GetBillboardResourceSlot(MapObjectRender *render, u32 spriteId);
 static void MapObjectRender_ReleaseBillboardResource(MapObjectRender *render, u32 spriteId);
 static void MapObjectRender_ReleaseAllBillboardResources(MapObjectRender *render);
 static BOOL MapObjectManager_IsSpriteUsedByOther(MapObjectManager *manager, LocalMapObject *self, u32 spriteId);
@@ -270,12 +222,12 @@ static const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId);
 static u8 SpriteId_GetBillboardModelId(u32 spriteId);
 u8 MapObjectRender_GetSpriteModelId(u32 spriteId);
 static u8 SpriteId_GetBillboardSequenceId(u32 spriteId);
-static u32 SpriteId_GetBillboardRanges(u32 spriteId);
+static const BillboardSequenceRange *SpriteId_GetBillboardRanges(u32 spriteId);
 void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
 static void MapObjectRender_CreateBillboards(MapObjectRender *render, u32 count);
 static void MapObjectBillboards_Delete(void *billboards);
-static void *MapObjectBillboards_CreateBillboard(void *billboards, MapObjectBillboardResource *resource, VecFx32 *position);
-static void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId, MapObjectBillboardResource *resource);
+static void *MapObjectBillboards_CreateBillboard(void *billboards, BillboardResource *resource, VecFx32 *position);
+static void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId, BillboardResource *resource);
 static MapObjectRender *MapObject_GetRender(LocalMapObject *object);
 void MapObject_SetBillboardVisibleFromFlags(LocalMapObject *object, void *billboard);
 static int MapObjectRender_LoadOrQueueTexture(MapObjectRender *render, u32 spriteId, u32 modelId, u32 dynamic);
@@ -349,7 +301,7 @@ static void *MapObject_CreateBillboardForSprite(LocalMapObject *object, u32 spri
     VecFx32 position;
     MapObjectRender *render = MapObject_GetRender(object);
     void *billboards = MapObjectRender_GetBillboards(render);
-    MapObjectBillboardResource *resource;
+    BillboardResource *resource;
     void *billboard;
     MapObjectRender_LoadSpriteResources(render, spriteId);
     resource = MapObjectRender_GetBillboardResourceSlot(render, spriteId);
@@ -419,7 +371,7 @@ static void MapObject_CancelQueuedBillboard(LocalMapObject *object) {
 }
 
 static void MapObjectRender_InitResourceSlots(MapObjectRender *render, u32 count) {
-    MapObjectBillboardResource *resources = Heap_Alloc(HEAP_ID_FIELD1, sizeof(MapObjectBillboardResource) * count);
+    BillboardResource *resources = Heap_Alloc(HEAP_ID_FIELD1, sizeof(BillboardResource) * count);
     BillboardResourceSlot *slot;
     render->resources = resources;
     if (resources == NULL) {
@@ -444,7 +396,7 @@ static void MapObjectRender_FreeResourceSlots(MapObjectRender *render) {
     Heap_FreeExplicit(HEAP_ID_FIELD1, render->resourceSlots);
 }
 
-static MapObjectBillboardResource *MapObjectRender_GetBillboardResourceSlot(MapObjectRender *render, u32 spriteId) {
+static BillboardResource *MapObjectRender_GetBillboardResourceSlot(MapObjectRender *render, u32 spriteId) {
     u32 i;
     u32 count;
     BillboardResourceSlot *slots;
@@ -473,7 +425,7 @@ static MapObjectBillboardResource *MapObjectRender_GetBillboardResourceSlot(MapO
     return NULL;
 }
 
-BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, MapObjectBillboardResource *dest) {
+BOOL MapObjectRender_GetBillboardResource(MapObjectManager *manager, u32 spriteId, BillboardResource *dest) {
     u32 count;
     BillboardResourceSlot *slots;
     MapObjectRender *render;
@@ -1136,9 +1088,9 @@ static const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId) {
             u32 index = entry->index;
             if (index == 0xFF) {
                 GF_ASSERT(index != 0xFF);
-                return (const SpriteBillboardInfo *)gSpriteBillboardInfos;
+                return &gSpriteBillboardInfos[0];
             }
-            return (const SpriteBillboardInfo *)(gSpriteBillboardInfos + index * 8);
+            return &gSpriteBillboardInfos[index];
         }
         entry++;
     } while (entry->spriteId != 0xFFFF);
@@ -1158,7 +1110,7 @@ static u8 SpriteId_GetBillboardSequenceId(u32 spriteId) {
     return SpriteId_GetBillboardInfo(spriteId)->sequenceId;
 }
 
-static u32 SpriteId_GetBillboardRanges(u32 spriteId) {
+static const BillboardSequenceRange *SpriteId_GetBillboardRanges(u32 spriteId) {
     return SpriteId_GetBillboardInfo(spriteId)->ranges;
 }
 
@@ -1186,10 +1138,10 @@ static void MapObjectBillboards_Delete(void *billboards) {
     Billboard_Delete(billboards);
 }
 
-static void *MapObjectBillboards_CreateBillboard(void *billboards, MapObjectBillboardResource *resource, VecFx32 *position) {
-    MapObjectBillboardCreateParams params;
+static void *MapObjectBillboards_CreateBillboard(void *billboards, BillboardResource *resource, VecFx32 *position) {
+    BillboardObjectCreateParams params;
     void *billboard;
-    params.billboards = billboards;
+    params.billboard = billboards;
     params.resource = resource;
     params.position = *position;
     params.scale = sMapObjectBillboardScale;
@@ -1204,10 +1156,10 @@ static void *MapObjectBillboards_CreateBillboard(void *billboards, MapObjectBill
 }
 
 // Fills the cached resource of the sprite from the banks and the texture manager
-static void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId, MapObjectBillboardResource *resource) {
+static void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId, BillboardResource *resource) {
     GF_3DGfxRawResObj *texture;
     resource->modelFile = ResourceBank_Get(render->modelBank, SpriteId_GetBillboardModelId(spriteId));
-    BillboardGfxSequence_Init(ResourceBank_Get(render->sequenceBank, SpriteId_GetBillboardSequenceId(spriteId)), resource->sequence);
+    BillboardGfxSequence_Init(ResourceBank_Get(render->sequenceBank, SpriteId_GetBillboardSequenceId(spriteId)), &resource->gfxSequence);
     texture = GF3dGfxRawResMan_GetObjById(MapObjectRender_GetTextures(render), spriteId);
     resource->texture = GF3dGfxRawResObj_GetTex(texture);
     resource->texKey = GF3dGfxRawResObj_GetTexKey(texture);
@@ -1605,7 +1557,7 @@ static void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u
     } while (entry->id != 0xFF);
     GF_ASSERT(entry->id != 0xFF);
     work->sequenceFile = FldObjSys_ReadMModelFromNarc(render, entry->member, FALSE);
-    BillboardGfxSequence_Init(work->sequenceFile, work->sequence);
+    BillboardGfxSequence_Init(work->sequenceFile, &work->gfxSequence);
     modelNo = GetMoveModelNoBySpriteId(oldSpriteId);
     if (modelNo < 0) {
         GF_AssertFail();
@@ -1613,7 +1565,7 @@ static void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u
     }
     work->textureFile = FldObjSys_ReadMModelFromNarc(render, modelNo, FALSE);
     texture = NNS_G3dGetTex(work->textureFile);
-    BillboardResource_Init(&work->resource, work->modelFile, texture, SpriteId_GetBillboardRanges(oldSpriteId), work->sequence);
+    BillboardResource_Init(&work->resource, work->modelFile, texture, SpriteId_GetBillboardRanges(oldSpriteId), &work->gfxSequence);
     position = *BillboardObject_GetPosition(oldBillboard);
     work->billboard = MapObjectBillboards_CreateBillboard(billboards, &work->resource, &position);
     GF_ASSERT(work->billboard != NULL);
