@@ -126,11 +126,11 @@ void DrawingSessionLink_ReceiveJoinNotice(int value, void *b, void *c, DrawingSe
         GF_AssertFail();
     }
     if (Comm_GetLocalNetId() == 0) {
-        if (work->unk_93FC != 0) {
+        if (work->firstJoinSeen != 0) {
             packet = value;
             Comm_SendParentCommand(0x7b, &packet, 1);
         } else {
-            work->unk_93FC = 1;
+            work->firstJoinSeen = 1;
         }
     }
     CommState_SetErrorWatch(0, 1);

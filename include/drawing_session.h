@@ -114,7 +114,7 @@ struct DrawingSessionWork {
     YesNoPrompt *yesNoPrompt;                                                        // 0x93F0
     u32 joinState;
     BOOL yesNoActive;
-    u32 unk_93FC;
+    u32 firstJoinSeen;
     u32 waitDisconnect;
     u32 newConnection;
     u32 newConnectionBit;

@@ -237,14 +237,13 @@ void PokewalkerApp_LoadTilemap(PokewalkerApp *app, int bgId, int member) {
 }
 
 void PokewalkerApp_StartLink(PokewalkerApp *app) {
-    u8 *p = (u8 *)app;
     String *name = PlayerProfile_GetPlayerName_NewString(Save_PlayerData_GetProfile(app->saveData), HEAP_ID_154);
     app->identity.unk_00 = 1;
     app->identity.unk_08 = GAME_VERSION;
-    p[0x107F] &= ~1;
-    p[0x107E] = 0;
+    app->identity.isRegistered = FALSE;
+    app->identity.unk_5A = 0;
     app->identity.trainerId = PlayerProfile_GetTrainerID(app->profile);
-    CopyStringToU16Array(name, (u16 *)(p + 0x106C), 8);
+    CopyStringToU16Array(name, app->identity.trainerName, PLAYER_NAME_LENGTH + 1);
     app->identity.unk_04 = 1;
     app->identity.unk_0A = GAME_VERSION;
     MI_CpuCopyFast(Pokewalker_GetIrClock(app->pokewalker), &app->identity.clock, sizeof(PokewalkerIrClock));

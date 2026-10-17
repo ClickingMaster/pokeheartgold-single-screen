@@ -19,7 +19,10 @@ typedef struct PokewalkerIrIdentity {
     u16 unk_0A;
     u32 trainerId;
     PokewalkerIrClock clock; // 0x10
-    u8 unk_38[0x23];
+    u8 unk_38[0x10];
+    u16 trainerName[PLAYER_NAME_LENGTH + 1]; // 0x48
+    u8 unk_58[2];
+    u8 unk_5A;
     u8 isRegistered : 1;
     u8 hasStrollMon : 1;
     u8 hasWalkerMon : 1;

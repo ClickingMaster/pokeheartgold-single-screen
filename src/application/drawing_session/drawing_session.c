@@ -573,7 +573,7 @@ static void DrawingSession_InitWork(DrawingSessionWork *work) {
     work->yesNoActive = FALSE;
     work->connectedCount = 2;
     work->connectedBitmap = Wireless_GetConnectedBitmap();
-    work->unk_93FC = 0;
+    work->firstJoinSeen = 0;
     work->waitDisconnect = 0;
     work->subState = DRAWING_SESSION_SUB_STATE_INITIAL;
     work->newConnection = 0;
