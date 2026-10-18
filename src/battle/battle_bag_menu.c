@@ -46,6 +46,12 @@
 // In-battle bag screen (overlay 8): pocket menu (page 0), item list (page 1) and use-item page (page 2) on the
 // touch screen, plus the auto-played tutorial bag.
 
+enum BattleBagPage {
+    BATTLE_BAG_PAGE_POCKET_MENU,
+    BATTLE_BAG_PAGE_ITEM_LIST,
+    BATTLE_BAG_PAGE_USE_ITEM,
+};
+
 typedef struct BattleBagButtonRect {
     u8 x;
     u8 y;
@@ -575,17 +581,17 @@ static int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
 }
 
 static int BattleBagMenu_ShowPocketMenuPage(BattleBagMenu *menu) {
-    BattleBagMenu_ChangePage(menu, 0);
+    BattleBagMenu_ChangePage(menu, BATTLE_BAG_PAGE_POCKET_MENU);
     return BATTLE_BAG_STATE_POCKET_MENU;
 }
 
 static int BattleBagMenu_ShowItemListPage(BattleBagMenu *menu) {
-    BattleBagMenu_ChangePage(menu, 1);
+    BattleBagMenu_ChangePage(menu, BATTLE_BAG_PAGE_ITEM_LIST);
     return BATTLE_BAG_STATE_ITEM_LIST;
 }
 
 static int BattleBagMenu_ShowUseItemPage(BattleBagMenu *menu) {
-    BattleBagMenu_ChangePage(menu, 2);
+    BattleBagMenu_ChangePage(menu, BATTLE_BAG_PAGE_USE_ITEM);
     return BATTLE_BAG_STATE_USE_ITEM;
 }
 
@@ -777,15 +783,15 @@ static void BattleBagMenu_FreeText(BattleBagMenu *menu) {
 
 static void BattleBagMenu_SetPageBgOffset(BattleBagMenu *menu, int page) {
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0);
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0);
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0x100);
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0);
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, 0);
         ScheduleSetBgPosText(menu->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, 0x100);
         break;
@@ -793,7 +799,7 @@ static void BattleBagMenu_SetPageBgOffset(BattleBagMenu *menu, int page) {
 }
 
 static void BattleBagMenu_SetUseItemPagePalette(BattleBagMenu *menu, int page) {
-    if (page == 2) {
+    if (page == BATTLE_BAG_PAGE_USE_ITEM) {
         BgTilemapRectChangePalette(menu->bgConfig, GF_BG_LYR_SUB_2, 2, 0x23, 0x1C, 4, menu->pocket + 8);
         BgTilemapRectChangePalette(menu->bgConfig, GF_BG_LYR_SUB_2, 2, 0x28, 0x1C, 8, menu->pocket + 8);
     }
@@ -839,15 +845,15 @@ static void BattleBagMenu_AddPageWindows(BattleBagMenu *menu, int page) {
     u8 i;
 
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         templates = sBattleBagPocketMenuWindows;
         menu->pageWindowCount = 5;
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         templates = sBattleBagItemListWindows;
         menu->pageWindowCount = 26;
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         templates = sBattleBagUseItemWindows;
         menu->pageWindowCount = 4;
         break;
@@ -869,13 +875,13 @@ static void BattleBagMenu_RemoveWindows(BattleBagMenu *menu) {
 
 static void BattleBagMenu_PrintPageText(BattleBagMenu *menu, int page) {
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         BattleBagMenu_PrintPocketMenuPage(menu);
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         BattleBagMenu_PrintItemListPage(menu);
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         BattleBagMenu_PrintUseItemPage(menu);
         break;
     }
@@ -1250,13 +1256,13 @@ static void BattleBagMenu_ShowPageSprites(BattleBagMenu *menu, u32 page) {
         ManagedSprite_SetDrawFlag(menu->itemIcons[i], FALSE);
     }
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         BattleBagMenu_ShowLastUsedItemIcon(menu);
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         BattleBagMenu_ShowItemListIcons(menu);
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         BattleBagMenu_ShowUseItemIcon(menu);
         break;
     }
@@ -1307,13 +1313,13 @@ static void BattleBagMenu_FreeCursor(BattleBagMenu *menu) {
 static void BattleBagMenu_SetPageCursor(BattleBagMenu *menu, int page) {
     BattleDpadCursor_SetBoxes(menu->cursor, sBattleBagPageCursorBoxes[page]);
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         BattleDpadCursor_SetPosition(menu->cursor, menu->pocket);
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         BattleDpadCursor_SetPosition(menu->cursor, menu->context->pocketPositions[menu->pocket]);
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         break;
     }
 }
@@ -1452,7 +1458,7 @@ static u16 BattleBagMenu_GetButtonPalette(BattleBagMenu *menu, u32 button, u32 f
     case 11:
         return (u16)(menu->pocket + 8);
     case 15:
-        if (page == 2) {
+        if (page == BATTLE_BAG_PAGE_USE_ITEM) {
             return (u16)(menu->pocket + 8);
         }
         return 1;
@@ -1608,7 +1614,7 @@ static void BattleBagMenu_DrawPageButtons(BattleBagMenu *menu, u8 page) {
     u32 i;
 
     switch (page) {
-    case 0:
+    case BATTLE_BAG_PAGE_POCKET_MENU:
         BattleBagMenu_DrawButton(menu, 0, 0, page);
         BattleBagMenu_DrawButton(menu, 1, 0, page);
         BattleBagMenu_DrawButton(menu, 2, 0, page);
@@ -1620,7 +1626,7 @@ static void BattleBagMenu_DrawPageButtons(BattleBagMenu *menu, u8 page) {
         }
         BattleBagMenu_DrawButton(menu, 5, 0, page);
         break;
-    case 1:
+    case BATTLE_BAG_PAGE_ITEM_LIST:
         for (i = 0; i < 6; i++) {
             if (BattleBagMenu_GetItemOnPage(menu, i) == ITEM_NONE) {
                 BattleBagMenu_DrawButton(menu, i + 6, 3, page);
@@ -1637,7 +1643,7 @@ static void BattleBagMenu_DrawPageButtons(BattleBagMenu *menu, u8 page) {
         }
         BattleBagMenu_DrawButton(menu, 14, 0, page);
         break;
-    case 2:
+    case BATTLE_BAG_PAGE_USE_ITEM:
         BattleBagMenu_DrawButton(menu, 15, 0, page);
         BattleBagMenu_DrawButton(menu, 16, 0, page);
         break;

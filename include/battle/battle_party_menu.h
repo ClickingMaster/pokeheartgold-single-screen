@@ -5,6 +5,13 @@
 
 #include "party.h"
 
+enum BattlePartyMode {
+    BATTLE_PARTY_MODE_SWITCH,
+    BATTLE_PARTY_MODE_SWITCH_NO_CANCEL,
+    BATTLE_PARTY_MODE_USE_ITEM,
+    BATTLE_PARTY_MODE_LEARN_MOVE,
+};
+
 // Arguments of the in-battle party screen (overlay 8), filled by the battle controller before
 // BattlePartyMenu_Create and read back once `done` is set.
 typedef struct BattlePartyContext {

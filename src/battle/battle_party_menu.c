@@ -56,6 +56,24 @@
 // 3 move list, 4 move detail, 5 restore PP, 6 / 8 learn move (battle / contest view), 7 / 9 confirm the move to
 // forget (battle / contest view).
 
+enum BattlePartyPage {
+    BATTLE_PARTY_PAGE_PARTY_LIST,
+    BATTLE_PARTY_PAGE_MON_MENU,
+    BATTLE_PARTY_PAGE_SUMMARY,
+    BATTLE_PARTY_PAGE_CHECK_MOVES,
+    BATTLE_PARTY_PAGE_MOVE_DETAIL,
+    BATTLE_PARTY_PAGE_RESTORE_PP,
+    BATTLE_PARTY_PAGE_LEARN_MOVE,
+    BATTLE_PARTY_PAGE_FORGET_MOVE,
+    BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST,
+    BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST,
+};
+
+enum BattlePartyViewMode {
+    BATTLE_PARTY_VIEW_BATTLE,
+    BATTLE_PARTY_VIEW_CONTEST,
+};
+
 typedef struct BattlePartyMenuMove {
     u16 move;
     u8 pp;
@@ -675,11 +693,11 @@ static int BattlePartyMenu_Setup(BattlePartyMenu *menu) {
     int nextState;
 
     G2S_BlendNone();
-    if (menu->context->mode == 3) {
-        menu->page = 6;
+    if (menu->context->mode == BATTLE_PARTY_MODE_LEARN_MOVE) {
+        menu->page = BATTLE_PARTY_PAGE_LEARN_MOVE;
         nextState = BATTLE_PARTY_STATE_LEARN_MOVE;
     } else {
-        menu->page = 0;
+        menu->page = BATTLE_PARTY_PAGE_PARTY_LIST;
         nextState = BATTLE_PARTY_STATE_PARTY_LIST;
     }
     menu->cursor = BattleDpadCursor_New(menu->context->heapID);
@@ -698,7 +716,7 @@ static int BattlePartyMenu_Setup(BattlePartyMenu *menu) {
     if (menu->context->cursorActive) {
         BattleDpadCursor_SetActive(menu->cursor, 1);
     }
-    if (menu->page == 0 && BattlePartyMenu_IsPartnerMon(menu, 0) == 1) {
+    if (menu->page == BATTLE_PARTY_PAGE_PARTY_LIST && BattlePartyMenu_IsPartnerMon(menu, 0) == 1) {
         menu->context->selectedMon = 1;
     }
     BattlePartyMenu_SetPageCursor(menu, menu->page);
@@ -713,7 +731,7 @@ static int BattlePartyMenu_HandlePartyListInput(BattlePartyMenu *menu) {
     }
     if (BattlePartyMenu_HandlePartyListSelection(menu) == 1) {
         if (menu->context->selectedMon == 6) {
-            if (menu->context->mode != 1) {
+            if (menu->context->mode != BATTLE_PARTY_MODE_SWITCH_NO_CANCEL) {
                 PlaySE(SEQ_SE_DP_DECIDE);
                 BattlePartyMenu_StartButtonAnim(menu, 6);
                 return BATTLE_PARTY_STATE_FADE_OUT;
@@ -721,7 +739,7 @@ static int BattlePartyMenu_HandlePartyListInput(BattlePartyMenu *menu) {
         } else {
             PlaySE(SEQ_SE_DP_DECIDE);
             BattlePartyMenu_StartButtonAnim(menu, menu->context->selectedMon);
-            if (menu->context->mode == 2) {
+            if (menu->context->mode == BATTLE_PARTY_MODE_USE_ITEM) {
                 return BattlePartyMenu_TryUseItemOnMon(menu);
             }
             menu->nextState = BATTLE_PARTY_STATE_SHOW_MON_MENU;
@@ -975,14 +993,14 @@ static int BattlePartyMenu_HandleForgetMoveInput(BattlePartyMenu *menu) {
     switch (input) {
     case 0:
         PlaySE(SEQ_SE_DP_DECIDE);
-        if (menu->viewMode == 0) {
+        if (menu->viewMode == BATTLE_PARTY_VIEW_BATTLE) {
             BattlePartyMenu_StartButtonAnim(menu, 28);
         } else {
             BattlePartyMenu_StartButtonAnim(menu, 29);
         }
         if (BattlePartyMenu_IsSelectedMoveHM(menu) == 1) {
             BattlePartyMenu_PrintHMCantBeForgotten(menu);
-            if (menu->viewMode == 0) {
+            if (menu->viewMode == BATTLE_PARTY_VIEW_BATTLE) {
                 BattlePartyMenu_ClearBattleMoveInfo(menu);
             } else {
                 BattlePartyMenu_ClearContestMoveInfo(menu);
@@ -1055,51 +1073,51 @@ static int BattlePartyMenu_HandleRestorePPInput(BattlePartyMenu *menu) {
 }
 
 static int BattlePartyMenu_ShowPartyListPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 0);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_PARTY_LIST);
     return BATTLE_PARTY_STATE_PARTY_LIST;
 }
 
 static int BattlePartyMenu_ShowMonMenuPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 1);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_MON_MENU);
     return BATTLE_PARTY_STATE_MON_MENU;
 }
 
 static int BattlePartyMenu_ShowSummaryPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 2);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_SUMMARY);
     return BATTLE_PARTY_STATE_SUMMARY;
 }
 
 static int BattlePartyMenu_ShowCheckMovesPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 3);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_CHECK_MOVES);
     return BATTLE_PARTY_STATE_CHECK_MOVES;
 }
 
 static int BattlePartyMenu_ShowMoveDetailPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 4);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_MOVE_DETAIL);
     return BATTLE_PARTY_STATE_MOVE_DETAIL;
 }
 
 static int BattlePartyMenu_ShowLearnMovePage(BattlePartyMenu *menu) {
-    if (menu->viewMode == 0) {
-        BattlePartyMenu_ChangePage(menu, 6);
+    if (menu->viewMode == BATTLE_PARTY_VIEW_BATTLE) {
+        BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_LEARN_MOVE);
     } else {
-        BattlePartyMenu_ChangePage(menu, 8);
+        BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST);
     }
     return BATTLE_PARTY_STATE_LEARN_MOVE;
 }
 
 static int BattlePartyMenu_ShowForgetMovePage(BattlePartyMenu *menu) {
     BattlePartyMenu_ShowMoveIcons(menu);
-    if (menu->viewMode == 0) {
-        BattlePartyMenu_ChangePage(menu, 7);
+    if (menu->viewMode == BATTLE_PARTY_VIEW_BATTLE) {
+        BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_FORGET_MOVE);
     } else {
-        BattlePartyMenu_ChangePage(menu, 9);
+        BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST);
     }
     return BATTLE_PARTY_STATE_FORGET_MOVE;
 }
 
 static int BattlePartyMenu_ShowRestorePPPage(BattlePartyMenu *menu) {
-    BattlePartyMenu_ChangePage(menu, 5);
+    BattlePartyMenu_ChangePage(menu, BATTLE_PARTY_PAGE_RESTORE_PP);
     if (GetItemAttr(menu->context->item, ITEMATTR_PP_RESTORE_ALL, menu->context->heapID) != 0) {
         return BATTLE_PARTY_STATE_RESTORE_ALL_PP;
     }
@@ -1111,7 +1129,7 @@ static int BattlePartyMenu_RefreshMonPage(BattlePartyMenu *menu) {
     BattlePartyMenu_PrintPageText(menu, menu->page);
     BattlePartyMenu_DrawPageButtons(menu, menu->page);
     BattlePartyMenu_DrawExpBar(menu, menu->page);
-    if (menu->page == 2) {
+    if (menu->page == BATTLE_PARTY_PAGE_SUMMARY) {
         return BATTLE_PARTY_STATE_SUMMARY;
     }
     return BATTLE_PARTY_STATE_CHECK_MOVES;
@@ -1164,7 +1182,7 @@ static int BattlePartyMenu_AnimateItemEffect(BattlePartyMenu *menu) {
     case ITEM_EFFECT_STATE_START:
         menu->mons[context->selectedMon].mon = BattleSystem_GetPartyMon(context->battleSystem, context->battlerId, context->partyOrder[context->selectedMon]);
         BattlePartyMenu_BufferItemResultMessage(menu);
-        if (menu->page == 5) {
+        if (menu->page == BATTLE_PARTY_PAGE_RESTORE_PP) {
             menu->ppTargets[0] = GetMonData(menu->mons[context->selectedMon].mon, MON_DATA_MOVE1_PP + context->selectedMove, NULL);
             menu->effectState = ITEM_EFFECT_STATE_RESTORE_PP;
         } else {
@@ -1553,7 +1571,7 @@ static void BattlePartyMenu_DrawExpBar(BattlePartyMenu *menu, int page) {
     u32 exp;
     u32 expToNextLevel;
 
-    if (page != 2) {
+    if (page != BATTLE_PARTY_PAGE_SUMMARY) {
         return;
     }
     slot = menu->context->selectedMon;
@@ -1806,40 +1824,40 @@ static void BattlePartyMenu_AddPageWindows(BattlePartyMenu *menu, int page) {
     u8 i;
 
     switch (page) {
-    case 0:
+    case BATTLE_PARTY_PAGE_PARTY_LIST:
         templates = sBattlePartyPartyListWindows;
         menu->pageWindowCount = 6;
         break;
-    case 1:
+    case BATTLE_PARTY_PAGE_MON_MENU:
         templates = sBattlePartyMonMenuWindows;
         menu->pageWindowCount = 4;
         break;
-    case 2:
+    case BATTLE_PARTY_PAGE_SUMMARY:
         templates = sBattlePartySummaryWindows;
         menu->pageWindowCount = 35;
         break;
-    case 3:
+    case BATTLE_PARTY_PAGE_CHECK_MOVES:
         templates = sBattlePartyCheckMovesWindows;
         menu->pageWindowCount = 11;
         break;
-    case 4:
+    case BATTLE_PARTY_PAGE_MOVE_DETAIL:
         templates = sBattlePartyMoveDetailWindows;
         menu->pageWindowCount = 17;
         break;
-    case 5:
+    case BATTLE_PARTY_PAGE_RESTORE_PP:
         templates = sBattlePartyRestorePPWindows;
         menu->pageWindowCount = 5;
         break;
-    case 6:
-    case 8:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST:
         templates = sBattlePartyLearnMoveWindows;
         menu->pageWindowCount = 6;
         break;
-    case 7:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE:
         templates = sBattlePartyForgetMoveWindows;
         menu->pageWindowCount = 12;
         break;
-    case 9:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST:
         templates = sBattlePartyContestForgetMoveWindows;
         menu->pageWindowCount = 7;
         break;
@@ -1865,32 +1883,32 @@ static void BattlePartyMenu_RemoveWindows(BattlePartyMenu *menu) {
 
 static void BattlePartyMenu_PrintPageText(BattlePartyMenu *menu, int page) {
     switch (page) {
-    case 0:
+    case BATTLE_PARTY_PAGE_PARTY_LIST:
         BattlePartyMenu_PrintPartyListPage(menu);
         break;
-    case 1:
+    case BATTLE_PARTY_PAGE_MON_MENU:
         BattlePartyMenu_PrintMonMenuPage(menu);
         break;
-    case 2:
+    case BATTLE_PARTY_PAGE_SUMMARY:
         BattlePartyMenu_PrintSummaryPage(menu);
         break;
-    case 3:
+    case BATTLE_PARTY_PAGE_CHECK_MOVES:
         BattlePartyMenu_PrintCheckMovesPage(menu);
         break;
-    case 4:
+    case BATTLE_PARTY_PAGE_MOVE_DETAIL:
         BattlePartyMenu_PrintMoveDetailPage(menu);
         break;
-    case 5:
+    case BATTLE_PARTY_PAGE_RESTORE_PP:
         BattlePartyMenu_PrintRestorePPPage(menu);
         break;
-    case 6:
-    case 8:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST:
         BattlePartyMenu_PrintLearnMovePage(menu);
         break;
-    case 7:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE:
         BattlePartyMenu_PrintForgetMovePage(menu);
         break;
-    case 9:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST:
         BattlePartyMenu_PrintContestForgetMovePage(menu);
         break;
     }
@@ -2357,7 +2375,7 @@ static void BattlePartyMenu_PrintHMCantBeForgotten(BattlePartyMenu *menu) {
     Window *window;
     String *string;
 
-    if (menu->page == 7) {
+    if (menu->page == BATTLE_PARTY_PAGE_FORGET_MOVE) {
         window = &menu->pageWindows[8];
     } else {
         window = &menu->pageWindows[5];
@@ -2440,7 +2458,7 @@ static void BattlePartyMenu_PrintPartyListPage(BattlePartyMenu *menu) {
             i++;
         } while (i < Party_GetCount(menu->context->party));
     }
-    if (menu->context->mode == 2) {
+    if (menu->context->mode == BATTLE_PARTY_MODE_USE_ITEM) {
         BattlePartyMenu_PrintPrompt(menu, msg_0006_00007);
     } else {
         BattlePartyMenu_PrintPrompt(menu, msg_0006_00006);
@@ -3074,34 +3092,34 @@ static void BattlePartyMenu_ShowPageSprites(BattlePartyMenu *menu, u32 page) {
         ManagedSprite_SetDrawFlag(menu->sprites[i], FALSE);
     }
     switch (page) {
-    case 0:
+    case BATTLE_PARTY_PAGE_PARTY_LIST:
         BattlePartyMenu_ShowPartyListSprites(menu);
         break;
-    case 1:
+    case BATTLE_PARTY_PAGE_MON_MENU:
         BattlePartyMenu_ShowMonMenuSprites(menu);
         break;
-    case 2:
+    case BATTLE_PARTY_PAGE_SUMMARY:
         BattlePartyMenu_ShowSummarySprites(menu);
         break;
-    case 3:
+    case BATTLE_PARTY_PAGE_CHECK_MOVES:
         BattlePartyMenu_ShowCheckMovesSprites(menu);
         break;
-    case 4:
+    case BATTLE_PARTY_PAGE_MOVE_DETAIL:
         BattlePartyMenu_ShowMoveDetailSprites(menu);
         break;
-    case 5:
+    case BATTLE_PARTY_PAGE_RESTORE_PP:
         BattlePartyMenu_ShowRestorePPSprites(menu);
         break;
-    case 6:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE:
         BattlePartyMenu_ShowLearnMoveSprites(menu);
         break;
-    case 7:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE:
         BattlePartyMenu_ShowForgetMoveSprites(menu);
         break;
-    case 8:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST:
         BattlePartyMenu_ShowContestLearnMoveSprites(menu);
         break;
-    case 9:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST:
         BattlePartyMenu_ShowContestForgetMoveSprites(menu);
         break;
     }
@@ -3259,7 +3277,7 @@ static void BattlePartyMenu_ShowMoveContestTypeIcons(BattlePartyMenu *menu) {
 }
 
 static void BattlePartyMenu_ShowMoveIcons(BattlePartyMenu *menu) {
-    if (menu->viewMode == 0) {
+    if (menu->viewMode == BATTLE_PARTY_VIEW_BATTLE) {
         BattlePartyMenu_ShowMoveTypeIcons(menu);
     } else {
         BattlePartyMenu_ShowMoveContestTypeIcons(menu);
@@ -3384,26 +3402,26 @@ static void BattlePartyMenu_SetForgetMoveCursorMask(BattlePartyMenu *menu) {
 static void BattlePartyMenu_SetPageCursor(BattlePartyMenu *menu, u32 page) {
     BattleDpadCursor_SetBoxes(menu->cursor, sBattlePartyPageCursorBoxes[page]);
     switch (page) {
-    case 0:
+    case BATTLE_PARTY_PAGE_PARTY_LIST:
         BattleDpadCursor_SetPosition(menu->cursor, menu->context->selectedMon);
         menu->monMenuPosition = 0;
         menu->context->selectedMove = 0;
         break;
-    case 1:
+    case BATTLE_PARTY_PAGE_MON_MENU:
         BattleDpadCursor_SetPosition(menu->cursor, menu->monMenuPosition);
         menu->context->selectedMove = 0;
         break;
-    case 3:
-    case 4:
+    case BATTLE_PARTY_PAGE_CHECK_MOVES:
+    case BATTLE_PARTY_PAGE_MOVE_DETAIL:
         BattleDpadCursor_SetPosition(menu->cursor, menu->context->selectedMove);
         break;
-    case 6:
-    case 8:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST:
         BattlePartyMenu_SetLearnMoveCursorMask(menu);
         BattleDpadCursor_SetPosition(menu->cursor, menu->learnMovePosition);
         break;
-    case 7:
-    case 9:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST:
         BattlePartyMenu_SetForgetMoveCursorMask(menu);
         BattleDpadCursor_SetPosition(menu->cursor, menu->forgetMovePosition);
         break;
@@ -3720,7 +3738,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
     u16 i;
 
     switch (page) {
-    case 0:
+    case BATTLE_PARTY_PAGE_PARTY_LIST:
         for (i = 0; i < 6; i++) {
             int slotType = BattlePartyMenu_GetSlotType(menu, i);
             if (slotType == 0) {
@@ -3731,13 +3749,13 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
                 BattlePartyMenu_DrawButton(menu, (u8)i, 0, 1);
             }
         }
-        if (menu->context->mode == 1) {
+        if (menu->context->mode == BATTLE_PARTY_MODE_SWITCH_NO_CANCEL) {
             BattlePartyMenu_DrawButton(menu, 6, 3, 0);
         } else {
             BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         }
         break;
-    case 1:
+    case BATTLE_PARTY_PAGE_MON_MENU:
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         BattlePartyMenu_DrawButton(menu, 7, 0, 0);
         if (menu->mons[menu->context->selectedMon].isEgg) {
@@ -3748,7 +3766,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
             BattlePartyMenu_DrawButton(menu, 10, 0, 0);
         }
         break;
-    case 2:
+    case BATTLE_PARTY_PAGE_SUMMARY:
         if (BattlePartyMenu_HasMultipleNonEggMons(menu) == 1) {
             BattlePartyMenu_DrawButton(menu, 12, 0, 0);
             BattlePartyMenu_DrawButton(menu, 13, 0, 0);
@@ -3759,7 +3777,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
         BattlePartyMenu_DrawButton(menu, 11, 0, 0);
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         break;
-    case 3:
+    case BATTLE_PARTY_PAGE_CHECK_MOVES:
         if (BattlePartyMenu_HasMultipleNonEggMons(menu) == 1) {
             BattlePartyMenu_DrawButton(menu, 12, 0, 0);
             BattlePartyMenu_DrawButton(menu, 13, 0, 0);
@@ -3777,7 +3795,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
         BattlePartyMenu_DrawButton(menu, 9, 0, 0);
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         break;
-    case 4:
+    case BATTLE_PARTY_PAGE_MOVE_DETAIL:
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         for (i = 0; i < 4; i++) {
             if (menu->context->selectedMove == i) {
@@ -3787,7 +3805,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
             }
         }
         break;
-    case 5:
+    case BATTLE_PARTY_PAGE_RESTORE_PP:
         for (i = 0; i < 4; i++) {
             if (menu->mons[menu->context->selectedMon].moves[i].move != MOVE_NONE) {
                 BattlePartyMenu_DrawButton(menu, (u8)(i + 19), 0, 0);
@@ -3797,8 +3815,8 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
         }
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         break;
-    case 6:
-    case 8:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE:
+    case BATTLE_PARTY_PAGE_LEARN_MOVE_CONTEST:
         BattlePartyMenu_DrawButton(menu, 23, 0, 0);
         BattlePartyMenu_DrawButton(menu, 24, 0, 0);
         BattlePartyMenu_DrawButton(menu, 25, 0, 0);
@@ -3809,14 +3827,14 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
             BattlePartyMenu_DrawButton(menu, 18, 0, 0);
         }
         break;
-    case 7:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE:
         BattlePartyMenu_DrawButton(menu, 28, 0, 0);
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         if (menu->canToggleView == 1) {
             BattlePartyMenu_DrawButton(menu, 18, 0, 0);
         }
         break;
-    case 9:
+    case BATTLE_PARTY_PAGE_FORGET_MOVE_CONTEST:
         BattlePartyMenu_DrawButton(menu, 29, 0, 0);
         BattlePartyMenu_DrawButton(menu, 6, 0, 0);
         if (menu->canToggleView == 1) {
@@ -3827,7 +3845,7 @@ static void BattlePartyMenu_DrawPageButtons(BattlePartyMenu *menu, u32 page) {
 }
 
 static void BattlePartyMenu_LoadPagePalette(BattlePartyMenu *menu, int page) {
-    if (page == 3) {
+    if (page == BATTLE_PARTY_PAGE_CHECK_MOVES) {
         PaletteData_LoadPalette(menu->paletteData, menu->pagePalettes[1], PLTTBUF_SUB_BG, 0xC0, 0x20);
     } else {
         PaletteData_LoadPalette(menu->paletteData, menu->pagePalettes[0], PLTTBUF_SUB_BG, 0xC0, 0x20);

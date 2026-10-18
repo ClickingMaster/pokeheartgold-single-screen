@@ -54,6 +54,31 @@ typedef struct BattleAnimEmitterOffsetTable {
     s16 values[6][6];
 } BattleAnimEmitterOffsetTable;
 
+enum BattleAnimEmitterTargetMode {
+    BATTLE_ANIM_EMITTER_TARGET_MODE_NONE,
+    BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE,
+    BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET,
+};
+
+enum BattleAnimEmitterTargetKind {
+    BATTLE_ANIM_EMITTER_TARGET_ORIGIN,
+    BATTLE_ANIM_EMITTER_TARGET_BY_SIDE,
+    BATTLE_ANIM_EMITTER_TARGET_UP,
+    BATTLE_ANIM_EMITTER_TARGET_BATTLER_B,
+    BATTLE_ANIM_EMITTER_TARGET_BATTLER_A,
+    BATTLE_ANIM_EMITTER_TARGET_FROM_SCRIPT,
+};
+
+enum BattleAnimScaleAxes {
+    BATTLE_ANIM_SCALE_X = 1,
+    BATTLE_ANIM_SCALE_Y,
+    BATTLE_ANIM_SCALE_Z,
+    BATTLE_ANIM_SCALE_XY,
+    BATTLE_ANIM_SCALE_XZ,
+    BATTLE_ANIM_SCALE_YZ,
+    BATTLE_ANIM_SCALE_XYZ,
+};
+
 // Script arguments: a vector and the components BattleAnimUtil_ScaleVecComponents scales
 typedef struct BattleAnimEmitterTargetArgs {
     VecFx32 pos;
@@ -261,28 +286,28 @@ void BattleAnimUtil_ScaleVecComponents(int kind, int scale, VecFx32 *vec) {
     fx32 *z = &vec->z;
 
     switch (kind) {
-    case 1:
+    case BATTLE_ANIM_SCALE_X:
         vec->x *= scale;
         break;
-    case 2:
+    case BATTLE_ANIM_SCALE_Y:
         vec->y *= scale;
         break;
-    case 3:
+    case BATTLE_ANIM_SCALE_Z:
         *z *= scale;
         break;
-    case 4:
+    case BATTLE_ANIM_SCALE_XY:
         vec->x *= scale;
         vec->y *= scale;
         break;
-    case 5:
+    case BATTLE_ANIM_SCALE_XZ:
         vec->x *= scale;
         *z *= scale;
         break;
-    case 6:
+    case BATTLE_ANIM_SCALE_YZ:
         vec->y *= scale;
         *z *= scale;
         break;
-    case 7:
+    case BATTLE_ANIM_SCALE_XYZ:
         vec->x *= scale;
         vec->y *= scale;
         *z *= scale;
@@ -296,26 +321,26 @@ void BattleAnimEmitter_SetConvergenceTarget(BattleAnimSystem *system, SPLEmitter
     VecFx32 pos = { 0, 0, 0 };
 
     switch (kind) {
-    case 0:
+    case BATTLE_ANIM_EMITTER_TARGET_ORIGIN:
         break;
-    case 1:
+    case BATTLE_ANIM_EMITTER_TARGET_BY_SIDE:
         ParticleEmitter_GetConvergencePos(emitter, &pos);
         pos.x *= scale;
         pos.y *= scale;
         pos.z *= scale;
         break;
-    case 2:
+    case BATTLE_ANIM_EMITTER_TARGET_UP:
         pos.x = 0;
         pos.y = 3200 * scale;
         pos.z = 0;
         break;
-    case 3:
+    case BATTLE_ANIM_EMITTER_TARGET_BATTLER_B:
         BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerB, &pos);
         break;
-    case 4:
+    case BATTLE_ANIM_EMITTER_TARGET_BATTLER_A:
         BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerA, &pos);
         break;
-    case 5: {
+    case BATTLE_ANIM_EMITTER_TARGET_FROM_SCRIPT: {
         BattleAnimEmitterTargetArgs args = { 0 };
         BattleAnimSystem_ReadScriptArgs(system, (u32 *)&args, 4);
         pos.x = args.pos.x;
@@ -336,24 +361,24 @@ void BattleAnimEmitter_SetMagnetTarget(BattleAnimSystem *system, SPLEmitter *emi
     VecFx32 pos = { 0, 0, 0 };
 
     switch (kind) {
-    case 1:
+    case BATTLE_ANIM_EMITTER_TARGET_BY_SIDE:
         ParticleEmitter_GetMagnetPos(emitter, &pos);
         pos.x *= scale;
         pos.y *= scale;
         pos.z *= scale;
         break;
-    case 2:
+    case BATTLE_ANIM_EMITTER_TARGET_UP:
         pos.x = 0;
         pos.y = 3200 * scale;
         pos.z = 0;
         break;
-    case 3:
+    case BATTLE_ANIM_EMITTER_TARGET_BATTLER_B:
         BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerB, &pos);
         break;
-    case 4:
+    case BATTLE_ANIM_EMITTER_TARGET_BATTLER_A:
         BattleAnimUtil_GetBattlerEmitterPositionKind0(system, battlerA, &pos);
         break;
-    case 5: {
+    case BATTLE_ANIM_EMITTER_TARGET_FROM_SCRIPT: {
         s32 args[4] = { 0, 0, 0, 0 }; // BattleAnimEmitterTargetArgs
         BattleAnimSystem_ReadScriptArgs(system, (u32 *)args, 4);
         pos.x = args[0];
@@ -466,12 +491,12 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
         SPL_SetEmitterPosition(emitter, &final);
     }
     switch (mode) {
-    case 0:
+    case BATTLE_ANIM_EMITTER_TARGET_MODE_NONE:
         break;
-    case 1:
+    case BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE:
         BattleAnimEmitter_SetConvergenceTarget(system, emitter, battlerA, battlerB, kind, sign, &final);
         break;
-    case 2:
+    case BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET:
         BattleAnimEmitter_SetMagnetTarget(system, emitter, battlerA, battlerB, kind, sign, &final);
         break;
     }
@@ -488,56 +513,56 @@ void BattleAnimEmitter_SetTransformAttackerToDefender(SPLEmitter *emitter, int m
 }
 
 void BattleAnimEmitterCb_AttackerToDefender(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 0, 0);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_NONE, BATTLE_ANIM_EMITTER_TARGET_ORIGIN);
 }
 
 // Attacker to defender, then the convergence target (BattleAnimEmitter_SetConvergenceTarget kinds 1-5)
 void BattleAnimEmitterCb_ConvergeBySide(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 1, 1);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE, BATTLE_ANIM_EMITTER_TARGET_BY_SIDE);
 }
 
 void BattleAnimEmitterCb_ConvergeUp(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 1, 2);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE, BATTLE_ANIM_EMITTER_TARGET_UP);
 }
 
 void BattleAnimEmitterCb_ConvergeToDefender(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 1, 3);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE, BATTLE_ANIM_EMITTER_TARGET_BATTLER_B);
 }
 
 void BattleAnimEmitterCb_ConvergeToAttacker(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 1, 4);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE, BATTLE_ANIM_EMITTER_TARGET_BATTLER_A);
 }
 
 void BattleAnimEmitterCb_ConvergeFromScript(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 1, 5);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_CONVERGE, BATTLE_ANIM_EMITTER_TARGET_FROM_SCRIPT);
 }
 
 // Attacker to defender, then the magnet target (same kinds)
 void BattleAnimEmitterCb_MagnetBySide(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 2, 1);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET, BATTLE_ANIM_EMITTER_TARGET_BY_SIDE);
 }
 
 void BattleAnimEmitterCb_MagnetUp(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 2, 2);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET, BATTLE_ANIM_EMITTER_TARGET_UP);
 }
 
 void BattleAnimEmitterCb_MagnetToDefender(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 2, 3);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET, BATTLE_ANIM_EMITTER_TARGET_BATTLER_B);
 }
 
 void BattleAnimEmitterCb_MagnetToAttacker(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 2, 4);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET, BATTLE_ANIM_EMITTER_TARGET_BATTLER_A);
 }
 
 void BattleAnimEmitterCb_MagnetFromScript(SPLEmitter *emitter) {
-    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, 2, 5);
+    BattleAnimEmitter_SetTransformAttackerToDefender(emitter, BATTLE_ANIM_EMITTER_TARGET_MODE_MAGNET, BATTLE_ANIM_EMITTER_TARGET_FROM_SCRIPT);
 }
 
 void BattleAnimEmitterCb_DefenderToAttacker(SPLEmitter *emitter) {
     BattleAnimSystem *system = ParticleSystem_GetEmitterParam();
     int attacker = BattleAnimSystem_GetAttacker(system);
     int defender = BattleAnimSystem_GetDefender(system);
-    BattleAnimEmitter_SetTransformFromScript(system, emitter, defender, attacker, 0, 0);
+    BattleAnimEmitter_SetTransformFromScript(system, emitter, defender, attacker, BATTLE_ANIM_EMITTER_TARGET_MODE_NONE, BATTLE_ANIM_EMITTER_TARGET_ORIGIN);
 }
 
 void BattleAnimEmitter_UpdateConfigured(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {

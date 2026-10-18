@@ -575,7 +575,7 @@ BOOL FrontierScriptNative_WaitSaveBattleRecord(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(system->frontierWork);
     int result = BattleRecord_Save(args->saveData, system->recordType, system->recordAmount, 0, &system->recordSaveState, &system->recordWriteState);
     if ((u32)(result - 2) <= 1) {
-        *system->recordResult = result == 2;
+        *system->recordResult = result == WRITE_STATUS_SUCCESS;
         return TRUE;
     }
     return FALSE;
@@ -744,12 +744,12 @@ BOOL FrtCmd_SaveGameAsync(FrontierScriptContext *ctx) {
 
 BOOL FrontierScriptNative_WaitSave(FrontierScriptContext *ctx) {
     int result = Save_WriteFileAsync(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
-    if (result == 2) {
+    if (result == WRITE_STATUS_SUCCESS) {
         Sys_ClearAsyncSaveMarker();
         Sys_ClearSoftResetDisableFlag(4);
         return TRUE;
     }
-    if (result == 3) {
+    if (result == WRITE_STATUS_TOTAL_FAIL) {
         Sys_ClearAsyncSaveMarker();
         Sys_ClearSoftResetDisableFlag(4);
         return TRUE;

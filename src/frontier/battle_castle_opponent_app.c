@@ -635,9 +635,9 @@ static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app) {
             BattleCastleOpponentApp_PrintChoosePrompt(app);
             app->subState = CASTLE_OPP_STATE_RESUME;
             break;
-        case 3:
-        case 4:
-        case 5:
+        case CASTLE_OPP_ACTION_STATS:
+        case CASTLE_OPP_ACTION_MOVES:
+        case CASTLE_OPP_ACTION_RANK_UP:
         case (u32)LIST_NOTHING_CHOSEN:
             break;
         }

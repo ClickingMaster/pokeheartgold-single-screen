@@ -2375,19 +2375,19 @@ static BOOL BattleCastlePartyApp_SendLinkCommand(BattleCastlePartyApp *app, int 
     int cmd;
 
     switch (command) {
-    case 10:
+    case CASTLE_LINK_CMD_START:
         cmd = 0x31;
         BattleCastlePartyApp_PrepareLinkRanks(app, command);
         break;
-    case 11:
+    case CASTLE_LINK_CMD_ACTION:
         cmd = 0x32;
         BattleCastlePartyApp_PrepareLinkAction(app, command, param);
         break;
-    case 12:
+    case CASTLE_LINK_CMD_CURSOR:
         cmd = 0x33;
         BattleCastlePartyApp_PrepareLinkCursor(app, command);
         break;
-    case 13:
+    case CASTLE_LINK_CMD_EXIT:
         cmd = 0x34;
         BattleCastlePartyApp_PrepareLinkExit(app, command);
         break;
@@ -2518,13 +2518,13 @@ static void BattleCastlePartyApp_HealMon(BattleCastlePartyApp *app, int slot, in
     BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
     app->printerId = BattleCastlePartyApp_ShowMessage(app, gBattleCastlePartyAppHealMessages[action - 1], 1);
     switch (action) {
-    case 1:
+    case CASTLE_PARTY_ACTION_RESTORE_HP:
         BattleCastlePartyApp_UseItemOnMon(mon, ITEM_MAX_POTION);
         break;
-    case 2:
+    case CASTLE_PARTY_ACTION_RESTORE_PP:
         BattleCastlePartyApp_UseItemOnMon(mon, ITEM_MAX_ELIXIR);
         break;
-    case 3:
+    case CASTLE_PARTY_ACTION_RESTORE_ALL:
         BattleCastlePartyApp_UseItemOnMon(mon, ITEM_MAX_POTION);
         BattleCastlePartyApp_UseItemOnMon(mon, ITEM_MAX_ELIXIR);
         break;
@@ -2614,17 +2614,17 @@ static void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot
     numOwnMons = app->numOwnSlots;
     monSlot = BattleCastle_GetSideSlot(numOwnMons, slot);
     switch (action) {
-    case 1:
-    case 2:
-    case 3:
+    case CASTLE_PARTY_ACTION_RESTORE_HP:
+    case CASTLE_PARTY_ACTION_RESTORE_PP:
+    case CASTLE_PARTY_ACTION_RESTORE_ALL:
         cost = gBattleCastlePartyAppHealCosts[action - 1];
         break;
-    case 6:
-    case 7:
+    case CASTLE_PARTY_ACTION_RENT_BERRY:
+    case CASTLE_PARTY_ACTION_RENT_ITEM:
         cost = BattleCastlePartyApp_GetRentalCostByItemId(app->selectedItem);
         break;
-    case 9:
-    case 10:
+    case CASTLE_PARTY_ACTION_STATS:
+    case CASTLE_PARTY_ACTION_MOVES:
         cost = 0;
         break;
     }
@@ -2655,21 +2655,21 @@ static void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
 
     switch (action) {
-    case 1:
-    case 2:
-    case 3:
+    case CASTLE_PARTY_ACTION_RESTORE_HP:
+    case CASTLE_PARTY_ACTION_RESTORE_PP:
+    case CASTLE_PARTY_ACTION_RESTORE_ALL:
         BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
         BattleCastlePartyApp_HealMon(app, monSlot, action);
         break;
-    case 6:
-    case 7:
+    case CASTLE_PARTY_ACTION_RENT_BERRY:
+    case CASTLE_PARTY_ACTION_RENT_ITEM:
         BattleCastle_DrawWindowFrame(&app->windows[6], Options_GetFrame(app->options));
         BattleCastlePartyApp_GiveRentalItem(app, monSlot, app->selectedItem);
         break;
-    case 9:
+    case CASTLE_PARTY_ACTION_STATS:
         BattleCastlePartyApp_ShowMonStats(app, monSlot);
         break;
-    case 10:
+    case CASTLE_PARTY_ACTION_MOVES:
         BattleCastlePartyApp_ShowMonMoves(app, monSlot);
         break;
     }
