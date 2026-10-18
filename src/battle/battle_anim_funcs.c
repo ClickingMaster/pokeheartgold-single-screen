@@ -399,13 +399,18 @@ typedef struct BattleAnimSpriteArcWork {
 // X steps of the sprite of BattleAnimTask_SpriteOrbit (0: switch its priority, 255: end)
 extern const s16 sBattleAnimSpriteOrbitStepX[];
 
+enum {
+    ONE_FRAME_STATE_WAIT,
+    ONE_FRAME_STATE_END,
+};
+
 void BattleAnimTask_OneFrame(SysTask *task, void *data) {
     BattleAnimOneFrameWork *work = data;
     switch (work->state) {
-    case 0:
+    case ONE_FRAME_STATE_WAIT:
         work->state++;
         break;
-    case 1:
+    case ONE_FRAME_STATE_END:
         BattleAnimSystem_DestroyTask(work->system, task);
         Heap_Free(work);
         break;
@@ -414,7 +419,7 @@ void BattleAnimTask_OneFrame(SysTask *task, void *data) {
 
 void BattleAnimFunc_OneFrameTask(BattleAnimSystem *system) {
     BattleAnimOneFrameWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleAnimOneFrameWork));
-    work->state = 0;
+    work->state = ONE_FRAME_STATE_WAIT;
     work->system = system;
     BattleAnimSystem_CreateTask(system, BattleAnimTask_OneFrame, work, 0x1000);
 }
@@ -422,10 +427,10 @@ void BattleAnimFunc_OneFrameTask(BattleAnimSystem *system) {
 void BattleAnimTask_OneFrameSound(SysTask *task, void *data) {
     BattleAnimOneFrameWork *work = data;
     switch (work->state) {
-    case 0:
+    case ONE_FRAME_STATE_WAIT:
         work->state++;
         break;
-    case 1:
+    case ONE_FRAME_STATE_END:
         BattleAnimSystem_DestroySoundTask(work->system, task);
         Heap_Free(work);
         break;
@@ -434,7 +439,7 @@ void BattleAnimTask_OneFrameSound(SysTask *task, void *data) {
 
 void BattleAnimFunc_OneFrameSoundTask(BattleAnimSystem *system) {
     BattleAnimOneFrameWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleAnimOneFrameWork));
-    work->state = 0;
+    work->state = ONE_FRAME_STATE_WAIT;
     work->system = system;
     BattleAnimSystem_CreateSoundTask(system, BattleAnimTask_OneFrameSound, work, 0x1000);
 }
@@ -442,10 +447,10 @@ void BattleAnimFunc_OneFrameSoundTask(BattleAnimSystem *system) {
 void BattleAnimTask_OneFrameUncounted(SysTask *task, void *data) {
     BattleAnimOneFrameWork *work = data;
     switch (work->state) {
-    case 0:
+    case ONE_FRAME_STATE_WAIT:
         work->state++;
         break;
-    case 1:
+    case ONE_FRAME_STATE_END:
         SysTask_Destroy(task);
         Heap_Free(work);
         break;
@@ -454,7 +459,7 @@ void BattleAnimTask_OneFrameUncounted(SysTask *task, void *data) {
 
 void BattleAnimFunc_OneFrameUncountedTask(BattleAnimSystem *system) {
     BattleAnimOneFrameWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleAnimOneFrameWork));
-    work->state = 0;
+    work->state = ONE_FRAME_STATE_WAIT;
     work->system = system;
     SysTask_CreateOnMainQueue(BattleAnimTask_OneFrameUncounted, work, 0x1000);
 }

@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "constants/sndseq.h"
+#include "constants/wifi_plaza.h"
 
 #include "msgdata/msg/msg_0766.h"
 #include "msgdata/msg/msg_0777.h"
@@ -569,17 +570,17 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case WIFI_PLAZA_TALK_WAIT_ACCEPT:
         switch (partnerStatus) {
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             WiFiPlazaWork_SetTalkedWith(lobby, talk->partner);
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_GREET);
             break;
-        case 0:
+        case WIFI_PLAZA_TALK_STATE_NONE:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_BUSY);
             break;
-        case 1:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
             break;
-        case 3:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_INTERRUPTED);
             break;
@@ -598,7 +599,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case WIFI_PLAZA_TALK_WAIT_GREETINGS:
         switch (partnerStatus) {
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             WiFiPlazaRoom_HideWaitingIcon(room);
             if (WiFiPlazaWork_IsFirstTalk(lobby)) {
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_TIME_REMARK);
@@ -606,15 +607,15 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_REUNION);
             }
             break;
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_NONE:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -753,7 +754,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case WIFI_PLAZA_TALK_WAIT_TAP_TOY_DONE:
         switch (partnerStatus) {
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             WiFiPlazaTalk_SetHistory(talk, partner);
             if (talk->sameToy == TRUE) {
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_GOODBYE);
@@ -762,15 +763,15 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             }
             WiFiPlazaRoom_HideWaitingIcon(room);
             break;
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_NONE:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -836,7 +837,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     }
     case WIFI_PLAZA_TALK_SAY_ANSWER: // "Oh, your favorite color's ..."; our answer goes out once the partner asks for it
-        WiFiPlazaTalkReply_Start(&talk->reply, lobby, (u16)(talk->myAnswer + 6), 2);
+        WiFiPlazaTalkReply_Start(&talk->reply, lobby, (u16)(talk->myAnswer + 6), WIFI_PLAZA_TALK_STATE_ASKER_TURN);
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 357 + talk->myAnswer));
         WiFiPlazaTalk_SetNextStep(talk, 128, WIFI_PLAZA_TALK_IF_IT_WERE_ME, state, WIFI_PLAZA_TALK_WAIT_MESSAGE);
@@ -860,20 +861,20 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         break;
     case WIFI_PLAZA_TALK_WAIT_PARTNER_ANSWER:
         switch (partnerStatus) {
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             WiFiPlazaTalk_SetHistory(talk, partner);
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_PARTNER_ANSWER);
             WiFiPlazaRoom_HideWaitingIcon(room);
             break;
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_NONE:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -1034,7 +1035,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         break;
     case WIFI_PLAZA_ANSWER_WAIT_GREETINGS:
         switch (partnerStatus) {
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             WiFiPlazaRoom_HideWaitingIcon(room);
             WiFiPlazaWork_AdvanceTalk(lobby, 0);
             if (WiFiPlazaWork_IsFirstTalk(lobby)) {
@@ -1043,15 +1044,15 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_REUNION);
             }
             break;
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_NONE:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -1088,7 +1089,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         break;
     case WIFI_PLAZA_ANSWER_WAIT_PARTNER_CHOICE: // what the partner chose
         switch (partnerStatus) {
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             switch (partnerAnswer) {
             case 3: // gets our Tap Toy
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_NICE_TAP_TOY);
@@ -1113,18 +1114,18 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
             }
             WiFiPlazaRoom_HideWaitingIcon(room);
             break;
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
+        case WIFI_PLAZA_TALK_STATE_NONE:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_GOODBYE);
             WiFiPlazaRoom_HideWaitingIcon(room);
             break;
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);
@@ -1171,21 +1172,21 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         break;
     case WIFI_PLAZA_ANSWER_WAIT_QUESTION:
         switch (partnerStatus) {
-        case 3:
+        case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_PARTNER_QUESTION);
             WiFiPlazaRoom_HideWaitingIcon(room);
             WiFiPlazaWork_IncPartnerTalkCount(lobby);
             talk->answered = TRUE;
             break;
-        case 2:
+        case WIFI_PLAZA_TALK_STATE_ASKER_TURN:
             if (!WiFiPlazaRoom_IsWaitingIconShown(room)) {
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
             WiFiPlazaTalk_UpdatePartnerWait(talk, room);
             break;
-        case 0:
-        case 1:
-        case 4:
+        case WIFI_PLAZA_TALK_STATE_NONE:
+        case WIFI_PLAZA_TALK_STATE_REQUESTED:
+        case WIFI_PLAZA_TALK_STATE_ENDED:
         default:
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_ANSWER_INTERRUPTED);
             WiFiPlazaRoom_HideWaitingIcon(room);

@@ -47,6 +47,7 @@
 #include "pokemon_icon_idx.h"
 #include "pokemon_summary.h"
 #include "render_window.h"
+#include "save.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
@@ -1130,10 +1131,10 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         break;
     case 1:
         result = BattleRecord_Save(screen->args->setup->saveData, screen->args->linkBattleMode, 0, 0, &screen->recordSaveState, &screen->recordWriteState);
-        if (result == 2) {
+        if (result == WRITE_STATUS_SUCCESS) {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00006, screen->string);
             PlaySE(SEQ_SE_DP_SAVE);
-        } else if (result != 3) {
+        } else if (result != WRITE_STATUS_TOTAL_FAIL) {
             break;
         } else {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00007, screen->string);

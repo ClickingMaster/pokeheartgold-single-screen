@@ -16,6 +16,13 @@ typedef struct BattleDpadCursor {
     u32 enabledMask; // one bit per selectable box
 } BattleDpadCursor;
 
+enum BattleDpadDirection {
+    BATTLE_DPAD_DIR_UP,
+    BATTLE_DPAD_DIR_DOWN,
+    BATTLE_DPAD_DIR_LEFT,
+    BATTLE_DPAD_DIR_RIGHT,
+};
+
 BattleDpadCursor *BattleDpadCursor_New(enum HeapID heapID);
 void BattleDpadCursor_Free(BattleDpadCursor *cursor);
 struct BattleCursor *BattleDpadCursor_GetBattleCursor(const BattleDpadCursor *cursor);

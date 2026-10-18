@@ -1583,33 +1583,33 @@ BOOL Battle_EndInit(OverlayManager *man) {
     MIi_CpuClearFast(0, (u32 *)args, sizeof(LinkBattleScreenArgs));
     args->setup = setup;
     switch (setup->winFlag) {
-    case 1:
+    case BATTLE_OUTCOME_WIN:
         if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_WINS);
         } else {
             GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_WINS);
         }
         break;
-    case 2:
+    case BATTLE_OUTCOME_LOSE:
         if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_LOSSES);
         } else {
             GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_LOSSES);
         }
         break;
-    case 3:
-    case 5:
+    case BATTLE_OUTCOME_DRAW:
+    case BATTLE_OUTCOME_PLAYER_FLED:
         if (!CommState_IsWifi()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLE_DRAWS);
         } else {
             GameStats_Inc(setup->gameStats, GAME_STAT_WIFI_BATTLE_DRAWS);
         }
         break;
-    case 0:
-    case 4:
+    case BATTLE_OUTCOME_NONE:
+    case BATTLE_OUTCOME_MON_CAUGHT:
         break;
     }
-    if (setup->battleType & 8) {
+    if (setup->battleType & BATTLE_TYPE_MULTI) {
         for (i = 0; i < 4; i++) {
             args->parties[Comm_GetBattleSlot(i)] = setup->party[i];
             slot = Comm_GetBattleSlot(i);
@@ -1618,7 +1618,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
         args->heapId = HEAP_ID_BATTLE;
         args->mode = 2;
         args->multiOrSide = 1;
-        if (setup->winFlag != 5) {
+        if (setup->winFlag != BATTLE_OUTCOME_PLAYER_FLED) {
             args->outcome = setup->winFlag;
         } else {
             args->outcome = 3;
@@ -1635,7 +1635,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
         args->heapId = HEAP_ID_BATTLE;
         args->mode = 2;
         args->multiOrSide = 0;
-        if (setup->winFlag != 5) {
+        if (setup->winFlag != BATTLE_OUTCOME_PLAYER_FLED) {
             args->outcome = setup->winFlag;
         } else {
             args->outcome = 3;

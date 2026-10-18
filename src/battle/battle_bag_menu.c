@@ -1002,18 +1002,18 @@ static void BattleBagMenu_PrintPageNumber(BattleBagMenu *menu) {
 static void BattleBagMenu_PrintPocketName(BattleBagMenu *menu) {
     FillWindowPixelBuffer(&menu->pageWindows[24], 0);
     switch (menu->pocket) {
-    case 0:
+    case BTLPOCKETLIST_HP_PP_RESTORE:
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00022, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00023, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
         break;
-    case 1:
+    case BTLPOCKETLIST_STATUS_RESTORE:
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00024, 0, 4, MAKE_TEXT_COLOR(1, 2, 0));
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00025, 0, 0x14, MAKE_TEXT_COLOR(1, 2, 0));
         break;
-    case 2:
+    case BTLPOCKETLIST_BALLS:
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00026, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
         break;
-    case 3:
+    case BTLPOCKETLIST_BATTLE_ITEMS:
         BattleBagMenu_PrintCenteredText(menu, 24, msg_0005_00027, 0, 0xC, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     }

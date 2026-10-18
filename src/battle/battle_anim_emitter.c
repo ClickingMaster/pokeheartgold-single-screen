@@ -4,6 +4,8 @@
 
 #include "global.h"
 
+#include "constants/battle.h"
+
 #include "library/spl_emitter.h"
 
 #include "assert.h"
@@ -153,10 +155,10 @@ void BattleAnimEmitterCb_SetPositionAtFirstOpponent(SPLEmitter *emitter) {
     BattleAnimSystem_GetAttacker(system);
     BattleAnimSystem_GetDefender(system);
     particleSystem = BattleAnimSystem_GetCurrentParticleSystem(system);
-    if (BattleAnimUtil_GetBattlerSide(system, 1) == 3) {
-        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, 1, &pos);
+    if (BattleAnimUtil_GetBattlerSide(system, BATTLER_ENEMY) == BATTLE_ANIM_SIDE_PLAYER) {
+        BattleAnimUtil_GetBattlerEmitterPositionKind0(system, BATTLER_ENEMY, &pos);
     } else {
-        int type = BattleAnimUtil_GetBattlerType(system, 1);
+        int type = BattleAnimUtil_GetBattlerType(system, BATTLER_ENEMY);
         int opposingType = BattleAnimUtil_GetOpposingBattlerType(type);
         int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)particleSystem);
         int mode = BattleAnimSystem_GetField08(system);
@@ -213,7 +215,7 @@ void BattleAnimEmitterCb_SetPositionAtAttackerSide(SPLEmitter *emitter) {
     SPLEmitter *particleSystem = BattleAnimSystem_GetCurrentParticleSystem(system);
     int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)particleSystem);
     int attacker = BattleAnimSystem_GetAttacker(system);
-    int type = BattleAnimUtil_GetBattlerSide(system, attacker) == 3 ? 0 : 1;
+    int type = BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_PLAYER ? 0 : 1;
     int mode = BattleAnimSystem_GetField08(system);
     BattleAnimUtil_GetEmitterPositionKind0(type, &pos, mode, perspective);
     SPL_SetEmitterPosition(emitter, &pos);
@@ -225,7 +227,7 @@ void BattleAnimEmitterCb_SetPositionAtDefenderSide(SPLEmitter *emitter) {
     SPLEmitter *particleSystem = BattleAnimSystem_GetCurrentParticleSystem(system);
     int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)particleSystem);
     int defender = BattleAnimSystem_GetDefender(system);
-    int type = BattleAnimUtil_GetBattlerSide(system, defender) == 3 ? 0 : 1;
+    int type = BattleAnimUtil_GetBattlerSide(system, defender) == BATTLE_ANIM_SIDE_PLAYER ? 0 : 1;
     int mode = BattleAnimSystem_GetField08(system);
     BattleAnimUtil_GetEmitterPositionKind0(type, &pos, mode, perspective);
     SPL_SetEmitterPosition(emitter, &pos);
@@ -400,43 +402,43 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
     BattleAnimSystem_ReadScriptArgs(system, (u32 *)&axis6, 3);
     switch (typeA) {
     default:
-    case 0:
+    case BATTLER_TYPE_SOLO_PLAYER:
         SetAxis(&axis, &axis0);
         break;
-    case 1:
+    case BATTLER_TYPE_SOLO_ENEMY:
         SetAxisNegated(&axis, &axis0);
         break;
-    case 2:
-        if (typeB == 3) {
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
+        if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
             SetAxis(&axis, &axis1);
-        } else if (typeB == 5) {
+        } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
             SetAxis(&axis, &axis2);
         } else {
             SetAxis(&axis, &axis3);
         }
         break;
-    case 3:
-        if (typeB == 2) {
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
+        if (typeB == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
             SetAxisNegated(&axis, &axis1);
-        } else if (typeB == 5) {
+        } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
             SetAxisNegated(&axis, &axis3);
         } else {
             SetAxisNegated(&axis, &axis4);
         }
         break;
-    case 4:
-        if (typeB == 3) {
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
+        if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
             SetAxis(&axis, &axis4);
-        } else if (typeB == 5) {
+        } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
             SetAxis(&axis, &axis5);
         } else {
             SetAxis(&axis, &axis6);
         }
         break;
-    case 5:
-        if (typeB == 3) {
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
+        if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
             SetAxisNegated(&axis, &axis6);
-        } else if (typeB == 2) {
+        } else if (typeB == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
             SetAxisNegated(&axis, &axis2);
         } else {
             SetAxisNegated(&axis, &axis5);
@@ -558,7 +560,7 @@ void BattleAnimEmitter_GetDefenderSidePosition(SPLEmitter *emitter, BattleAnimEm
     BattleAnimSystem *system = config->system;
     int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)BattleAnimSystem_GetCurrentParticleSystem(system));
     int defender = BattleAnimSystem_GetDefender(system);
-    int type = BattleAnimUtil_GetBattlerSide(system, defender) != 3;
+    int type = BattleAnimUtil_GetBattlerSide(system, defender) != BATTLE_ANIM_SIDE_PLAYER;
     int mode = BattleAnimSystem_GetField08(system);
     BattleAnimUtil_GetEmitterPositionKind0(type, pos, mode, perspective);
 }
@@ -567,7 +569,7 @@ void BattleAnimEmitter_GetAttackerSidePosition(SPLEmitter *emitter, BattleAnimEm
     BattleAnimSystem *system = config->system;
     int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)BattleAnimSystem_GetCurrentParticleSystem(system));
     int attacker = BattleAnimSystem_GetAttacker(system);
-    int type = BattleAnimUtil_GetBattlerSide(system, attacker) != 3;
+    int type = BattleAnimUtil_GetBattlerSide(system, attacker) != BATTLE_ANIM_SIDE_PLAYER;
     int mode = BattleAnimSystem_GetField08(system);
     BattleAnimUtil_GetEmitterPositionKind0(type, pos, mode, perspective);
 }
@@ -778,7 +780,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
             SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, gBattleAnimEmitterAxes_Mode1Y, gBattleAnimEmitterAxes_Mode1Z, 2, -1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BattleAnimUtil_GetBattlerSide(config->system, config->battlerB)) {
             SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, gBattleAnimEmitterAxes_Mode1Y, gBattleAnimEmitterAxes_Mode1Z, 2, 1);
-        } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == 3) {
+        } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BATTLE_ANIM_SIDE_PLAYER) {
             SET_AXIS(3776, 2112, 1532);
         } else {
             SET_AXIS(-4228, -2728, 1532);
@@ -789,7 +791,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
             SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, gBattleAnimEmitterAxes_Mode1Y, gBattleAnimEmitterAxes_Mode1Z, 2, -1);
         } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BattleAnimUtil_GetBattlerSide(config->system, config->battlerB)) {
             SET_AXIS_FROM_TABLES(gBattleAnimEmitterAxes_Mode1, gBattleAnimEmitterAxes_Mode1Y, gBattleAnimEmitterAxes_Mode1Z, 2, 1);
-        } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == 3) {
+        } else if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BATTLE_ANIM_SIDE_PLAYER) {
             SET_AXIS(3776, 2112, 1532);
         } else {
             SET_AXIS(-4228, -2728, 1532);
@@ -881,33 +883,33 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         }
         switch (typeA) {
         default:
-        case 0:
+        case BATTLER_TYPE_SOLO_PLAYER:
             SET_AXIS_FROM_ROW(a);
             break;
-        case 1:
+        case BATTLER_TYPE_SOLO_ENEMY:
             if (a.v[3] == 1) {
                 SET_AXIS_FROM_ROW(a);
             } else {
                 SET_AXIS_FROM_ROW_NEGATED(a);
             }
             break;
-        case 2:
-            if (typeB == 3) {
+        case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
+            if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
                 SET_AXIS_FROM_ROW(b);
-            } else if (typeB == 5) {
+            } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
                 SET_AXIS_FROM_ROW(d);
             } else {
                 SET_AXIS_FROM_ROW(c);
             }
             break;
-        case 3:
-            if (typeB == 2) {
+        case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
+            if (typeB == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                 if (b.v[3] == 1) {
                     SET_AXIS_FROM_ROW(b);
                 } else {
                     SET_AXIS_FROM_ROW_NEGATED(b);
                 }
-            } else if (typeB == 5) {
+            } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
                 if (c.v[3] == 1) {
                     SET_AXIS_FROM_ROW_NEGATED(e);
                 } else {
@@ -921,23 +923,23 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
                 }
             }
             break;
-        case 4:
-            if (typeB == 3) {
+        case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
+            if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
                 SET_AXIS_FROM_ROW(f);
-            } else if (typeB == 5) {
+            } else if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
                 SET_AXIS_FROM_ROW(g);
             } else {
                 SET_AXIS_FROM_ROW(e);
             }
             break;
-        case 5:
-            if (typeB == 3) {
+        case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
+            if (typeB == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
                 if (b.v[3] == 1) {
                     SET_AXIS_FROM_ROW(e);
                 } else {
                     SET_AXIS_FROM_ROW_NEGATED(e);
                 }
-            } else if (typeB == 2) {
+            } else if (typeB == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                 if (b.v[3] == 1) {
                     SET_AXIS_FROM_ROW(d);
                 } else {
@@ -963,7 +965,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         SET_AXIS(-3440, 1952, 0);
         break;
     case 26:
-        if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == 3) {
+        if (BattleAnimUtil_GetBattlerSide(config->system, config->battlerA) == BATTLE_ANIM_SIDE_PLAYER) {
             SET_AXIS(3776, 2112, 0);
         } else {
             SET_AXIS(-6000, -2200, 0);
@@ -1012,10 +1014,10 @@ void BattleAnimEmitter_ApplyConfiguredZ(SPLEmitter *emitter, BattleAnimEmitterCo
     case 0:
         break;
     case 1:
-        z = typeB == 0 ? 256 : -5120;
+        z = typeB == BATTLER_TYPE_SOLO_PLAYER ? 256 : -5120;
         break;
     case 2:
-        z = typeB == 0 ? 0 : -5376;
+        z = typeB == BATTLER_TYPE_SOLO_PLAYER ? 0 : -5376;
         break;
     case 3:
         break;
@@ -1065,19 +1067,19 @@ int BattleAnimEmitter_GetConfiguredSideSign(BattleAnimEmitterConfig *config) {
     BattleAnimUtil_GetBattlerType(config->system, config->battlerB);
 
     switch (typeA) {
-    case 0:
+    case BATTLER_TYPE_SOLO_PLAYER:
         break;
-    case 1:
+    case BATTLER_TYPE_SOLO_ENEMY:
         sign -= 2;
         break;
-    case 2:
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
         break;
-    case 3:
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
         sign -= 2;
         break;
-    case 4:
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
         break;
-    case 5:
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
         sign -= 2;
         break;
     }
@@ -1592,10 +1594,10 @@ int BattleAnimUtil_GetBattlerSideSignByMode(BattleAnimSystem *system, int battle
     int side = BattleAnimUtil_GetBattlerSide(system, battler);
 
     if (BattleAnimSystem_GetField08(system) != 0) {
-        if (side == 3) {
+        if (side == BATTLE_ANIM_SIDE_PLAYER) {
             sign -= 2;
         }
-    } else if (side == 4) {
+    } else if (side == BATTLE_ANIM_SIDE_ENEMY) {
         sign -= 2;
     }
     return sign;
@@ -1605,7 +1607,7 @@ int BattleAnimUtil_GetBattlerSideSignByMode(BattleAnimSystem *system, int battle
 int BattleAnimUtil_GetBattlerSideSign(BattleAnimSystem *system, int battler) {
     int sign = 1;
 
-    if (BattleAnimUtil_GetBattlerSide(system, battler) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(system, battler) == BATTLE_ANIM_SIDE_ENEMY) {
         sign -= 2;
     }
     return sign;

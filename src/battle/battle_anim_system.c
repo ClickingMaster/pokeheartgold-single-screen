@@ -1320,7 +1320,7 @@ void BattleAnimScriptCmd_JumpBySide(BattleAnimSystem *system) {
     } else {
         side = BattleAnimUtil_GetBattlerSide(system, system->context->defender);
     }
-    if (side == 4) {
+    if (side == BATTLE_ANIM_SIDE_ENEMY) {
         system->scriptPtr++;
     }
     system->scriptPtr += *system->scriptPtr;
@@ -1446,7 +1446,7 @@ int BattleAnimSystem_GetBattlerByRole(BattleAnimSystem *system, u32 role) {
         battler = 0xFF;
         for (i = 0; i < 4; i++) {
             int type = BattleAnimSystem_GetBattlerType(system, i);
-            if (type == 0 || type == 2) {
+            if (type == BATTLER_TYPE_SOLO_PLAYER || type == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                 battler = i;
                 break;
             }
@@ -1459,7 +1459,7 @@ int BattleAnimSystem_GetBattlerByRole(BattleAnimSystem *system, u32 role) {
         battler = 0xFF;
         for (i = 0; i < 4; i++) {
             int type = BattleAnimSystem_GetBattlerType(system, i);
-            if (type == 1 || type == 3) {
+            if (type == BATTLER_TYPE_SOLO_ENEMY || type == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
                 battler = i;
                 break;
             }
@@ -1471,7 +1471,7 @@ int BattleAnimSystem_GetBattlerByRole(BattleAnimSystem *system, u32 role) {
     case 6:
         battler = 0xFF;
         for (i = 0; i < 4; i++) {
-            if (BattleAnimSystem_GetBattlerType(system, i) == 4) {
+            if (BattleAnimSystem_GetBattlerType(system, i) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
                 battler = i;
                 break;
             }
@@ -1483,7 +1483,7 @@ int BattleAnimSystem_GetBattlerByRole(BattleAnimSystem *system, u32 role) {
     case 7:
         battler = 0xFF;
         for (i = 0; i < 4; i++) {
-            if (BattleAnimSystem_GetBattlerType(system, i) == 5) {
+            if (BattleAnimSystem_GetBattlerType(system, i) == BATTLER_TYPE_ENEMY_SIDE_SLOT_2) {
                 battler = i;
                 break;
             }
@@ -1766,7 +1766,7 @@ void BattleAnimScriptCmd_StartBattlerSpriteDraw(BattleAnimSystem *system) {
         }
         switch (role) {
         case 0:
-            if (attackerType == 3 || attackerType == 4) {
+            if (attackerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || attackerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
             } else {
                 ManagedSprite_SetDrawFlag(system->battlerSpriteDraws[index].sprite, FALSE);
@@ -1774,7 +1774,7 @@ void BattleAnimScriptCmd_StartBattlerSpriteDraw(BattleAnimSystem *system) {
             }
             break;
         case 2:
-            if (attackerType == 5 || attackerType == 2) {
+            if (attackerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_2 || attackerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
             } else {
                 ManagedSprite_SetDrawFlag(system->battlerSpriteDraws[index].sprite, FALSE);
@@ -1783,32 +1783,32 @@ void BattleAnimScriptCmd_StartBattlerSpriteDraw(BattleAnimSystem *system) {
             break;
         case 1:
             switch (defenderType) {
-            case 2:
+            case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 255);
                 break;
-            case 3:
+            case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
                 break;
-            case 4:
+            case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
                 break;
-            case 5:
+            case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 255);
                 break;
             }
             break;
         case 3:
             switch (defenderType) {
-            case 2:
+            case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
                 break;
-            case 3:
+            case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 255);
                 break;
-            case 4:
+            case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 255);
                 break;
-            case 5:
+            case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
                 ManagedSprite_SetDrawPriority(system->battlerSpriteDraws[index].sprite, 1);
                 break;
             }
@@ -1908,12 +1908,12 @@ BOOL BattleAnimBackground_ShouldFlip(BattleAnimBgSwitchWork *work, BattleAnimSys
 
     if (arg == 2) {
         if (attackerSide == defenderSide) {
-            return defenderSide != 3;
+            return defenderSide != BATTLE_ANIM_SIDE_PLAYER;
         }
-        if (defenderSide == 3) {
+        if (defenderSide == BATTLE_ANIM_SIDE_PLAYER) {
             return TRUE;
         }
-    } else if (arg != 0 && defenderSide == 3) {
+    } else if (arg != 0 && defenderSide == BATTLE_ANIM_SIDE_PLAYER) {
         return TRUE;
     }
     return FALSE;
@@ -2179,13 +2179,20 @@ running:
     return TRUE;
 }
 
+enum {
+    BG_FADE_OUT_STEP_START_EFFECTS,
+    BG_FADE_OUT_STEP_FADE,
+    BG_FADE_OUT_STEP_RESTORE_BG,
+    BG_FADE_OUT_STEP_FADE_IN,
+};
+
 BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work) {
     switch (work->step) {
-    case 0:
+    case BG_FADE_OUT_STEP_START_EFFECTS:
         BattleAnimBackground_StartEffects(work);
         work->step++;
         // fallthrough
-    case 1:
+    case BG_FADE_OUT_STEP_FADE:
         if (work->fadeToWhite == FALSE) {
             PaletteData_ForceBeginPaletteFade(work->system->paletteData, PLTTBUF_MAIN_BG_F, 0x200, work->restoreFadeWait, 0, 16, RGB_BLACK);
             PaletteData_BlendPalettes(work->system->paletteData, PLTTBUF_MAIN_BG, work->system->battleBgPaletteMask, 16, RGB_BLACK);
@@ -2195,7 +2202,7 @@ BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work) {
         }
         work->step++;
         // fallthrough
-    case 2:
+    case BG_FADE_OUT_STEP_RESTORE_BG:
         if (PaletteData_GetSelectedBuffersBitmask(work->system->paletteData) != 0) {
             goto running;
         }
@@ -2213,7 +2220,7 @@ BOOL BattleAnimBackground_FadeOut(SysTask *task, BattleAnimBgSwitchWork *work) {
         ToggleBgLayer(GF_BG_LYR_MAIN_3, GF_PLANE_TOGGLE_ON);
         work->step++;
         // fallthrough
-    case 3:
+    case BG_FADE_OUT_STEP_FADE_IN:
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
         if (work->fadeToWhite == FALSE) {
@@ -2716,7 +2723,7 @@ void BattleAnimScriptCmd_SwitchBackgroundBySide(BattleAnimSystem *system) {
     system->scriptPtr++;
     if (BattleAnimSystem_GetField08(system) == 1) {
         work->bgId = unk08Set;
-    } else if (BattleAnimUtil_GetBattlerSide(system, system->context->defender) == 3) {
+    } else if (BattleAnimUtil_GetBattlerSide(system, system->context->defender) == BATTLE_ANIM_SIDE_PLAYER) {
         work->bgId = enemySide;
     } else {
         work->bgId = playerSide;
@@ -3081,15 +3088,15 @@ s8 BattleAnimSystem_ConvertPan(BattleAnimSystem *system, int pan) {
     int defender = BattleAnimSystem_GetDefender(system);
     BattleAnimUtil_GetBattlerSide(system, attacker);
     BattleAnimUtil_GetBattlerSide(system, defender);
-    if (BattleAnimUtil_GetBattlerSide(system, attacker) == 3 && BattleAnimUtil_GetBattlerSide(system, defender) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_PLAYER && BattleAnimUtil_GetBattlerSide(system, defender) == BATTLE_ANIM_SIDE_ENEMY) {
         // unchanged
-    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == 4 && BattleAnimUtil_GetBattlerSide(system, defender) == 3) {
+    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_ENEMY && BattleAnimUtil_GetBattlerSide(system, defender) == BATTLE_ANIM_SIDE_PLAYER) {
         pan *= -1;
-    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == 3 && BattleAnimUtil_GetBattlerSide(system, defender) == 3) {
+    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_PLAYER && BattleAnimUtil_GetBattlerSide(system, defender) == BATTLE_ANIM_SIDE_PLAYER) {
         if (pan > 0) {
             pan *= -1;
         }
-    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == 4 && BattleAnimUtil_GetBattlerSide(system, defender) == 4) {
+    } else if (BattleAnimUtil_GetBattlerSide(system, attacker) == BATTLE_ANIM_SIDE_ENEMY && BattleAnimUtil_GetBattlerSide(system, defender) == BATTLE_ANIM_SIDE_ENEMY) {
         if (pan < 0) {
             pan *= -1;
         }
@@ -3405,19 +3412,19 @@ int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int bat
     u32 type = BattleAnimUtil_GetBattlerType(system, battlerA);
     BattleAnimUtil_GetBattlerType(system, battlerB);
     switch (type) {
-    case 0:
+    case BATTLER_TYPE_SOLO_PLAYER:
         break;
-    case 2:
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
         break;
-    case 4:
+    case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
         break;
-    case 1:
+    case BATTLER_TYPE_SOLO_ENEMY:
         result -= 2;
         break;
-    case 3:
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_1:
         result -= 2;
         break;
-    case 5:
+    case BATTLER_TYPE_ENEMY_SIDE_SLOT_2:
         result -= 2;
         break;
     }

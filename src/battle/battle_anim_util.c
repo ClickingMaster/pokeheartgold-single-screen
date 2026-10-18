@@ -598,13 +598,13 @@ u32 BattleAnimUtil_PackXY(u16 x, u16 y) {
 
 void *BattleAnimUtil_GetBgOffsetRegister(int bgLayer) {
     switch (bgLayer) {
-    case 0:
+    case GF_BG_LYR_MAIN_0:
         return (void *)REG_BG0HOFS_ADDR;
-    case 1:
+    case GF_BG_LYR_MAIN_1:
         return (void *)REG_BG1HOFS_ADDR;
-    case 2:
+    case GF_BG_LYR_MAIN_2:
         return (void *)REG_BG2HOFS_ADDR;
-    case 3:
+    case GF_BG_LYR_MAIN_3:
         return (void *)REG_BG3HOFS_ADDR;
     }
     return (void *)bgLayer;

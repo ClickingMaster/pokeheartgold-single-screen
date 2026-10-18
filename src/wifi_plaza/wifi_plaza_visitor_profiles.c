@@ -296,6 +296,50 @@ typedef struct VisitorProfilesWork {
     VisitorProfilesExitPrompt exitPrompt;
 } VisitorProfilesWork; // size: 0xC724
 
+enum VisitorProfilesState {
+    VISITOR_PROFILES_STATE_FADE_IN,
+    VISITOR_PROFILES_STATE_WAIT_FADE_IN,
+    VISITOR_PROFILES_STATE_UPDATE,
+    VISITOR_PROFILES_STATE_FADE_OUT = 5,
+    VISITOR_PROFILES_STATE_WAIT_FADE_OUT,
+};
+
+enum VisitorProfilesInput {
+    VISITOR_PROFILES_INPUT_NONE,
+    VISITOR_PROFILES_INPUT_ZOOM,
+    VISITOR_PROFILES_INPUT_EXIT,
+};
+
+enum VisitorProfilesTouchValue {
+    VISITOR_PROFILES_TOUCH_RESULT,
+    VISITOR_PROFILES_TOUCH_DRAG_X,
+    VISITOR_PROFILES_TOUCH_DRAG_Y,
+};
+
+enum VisitorProfilesTouchState {
+    VISITOR_PROFILES_TOUCH_STATE_WAIT_HOLD,
+    VISITOR_PROFILES_TOUCH_STATE_DRAG,
+};
+
+enum VisitorProfilesExitPromptState {
+    VISITOR_PROFILES_EXIT_PROMPT_WAIT_PRINT,
+    VISITOR_PROFILES_EXIT_PROMPT_HANDLE_YES_NO,
+};
+
+enum VisitorProfilesPanelState {
+    VISITOR_PROFILES_PANEL_IDLE,
+    VISITOR_PROFILES_PANEL_START_REVEAL,
+    VISITOR_PROFILES_PANEL_REVEAL,
+    VISITOR_PROFILES_PANEL_START_FAST_REVEAL,
+    VISITOR_PROFILES_PANEL_FAST_REVEAL,
+};
+
+enum VisitorProfilesRowState {
+    VISITOR_PROFILES_ROW_SHOW_BLANK,
+    VISITOR_PROFILES_ROW_SHOW_PLACE,
+    VISITOR_PROFILES_ROW_DONE,
+};
+
 enum VisitorProfilesMode {
     VISITOR_PROFILES_MODE_BROWSE,
     VISITOR_PROFILES_MODE_ZOOM,
@@ -755,17 +799,17 @@ BOOL VisitorProfiles_Main(OverlayManager *man, int *state) {
     work = OverlayManager_GetData(man);
     args = OverlayManager_GetArgs(man);
     switch (*state) {
-    case 0:
+    case VISITOR_PROFILES_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_112);
         WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
-    case 1:
+    case VISITOR_PROFILES_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
         break;
-    case 2:
+    case VISITOR_PROFILES_STATE_UPDATE:
         done = VisitorProfiles_Update(work);
         VisitorProfiles_UpdatePanel(work);
         if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
@@ -776,18 +820,18 @@ BOOL VisitorProfiles_Main(OverlayManager *man, int *state) {
             done = 1;
         }
         if (done == 1) {
-            *state = 5;
+            *state = VISITOR_PROFILES_STATE_FADE_OUT;
         }
         break;
     case 3:
         break;
     case 4:
         break;
-    case 5:
+    case VISITOR_PROFILES_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_112);
         (*state)++;
         break;
-    case 6:
+    case VISITOR_PROFILES_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -961,17 +1005,17 @@ u32 VisitorProfiles_HandleGlobeInput(VisitorProfilesWork *work, u32 trg, u32 hel
     u32 dragY;
     s16 longitude;
 
-    ret = 0;
+    ret = VISITOR_PROFILES_INPUT_NONE;
     VisitorProfilesGlobe_GetRotation(&work->globe, &rotation);
-    touch = VisitorProfilesTouch_Get(&work->touch, 0);
-    dragX = VisitorProfilesTouch_Get(&work->touch, 1);
-    dragY = VisitorProfilesTouch_Get(&work->touch, 2);
+    touch = VisitorProfilesTouch_Get(&work->touch, VISITOR_PROFILES_TOUCH_RESULT);
+    dragX = VisitorProfilesTouch_Get(&work->touch, VISITOR_PROFILES_TOUCH_DRAG_X);
+    dragY = VisitorProfilesTouch_Get(&work->touch, VISITOR_PROFILES_TOUCH_DRAG_Y);
     zoomMode = VisitorProfilesCamera_GetZoomMode(&work->camera);
     latitude = rotation.x;
     longitude = rotation.y;
     if ((trg & PAD_BUTTON_A) || (touch & PAD_BUTTON_A)) {
         if (work->settings.fullGlobe == 1) {
-            ret = 1;
+            ret = VISITOR_PROFILES_INPUT_ZOOM;
         }
         return ret;
     }
@@ -1052,13 +1096,13 @@ u32 VisitorProfiles_Update(VisitorProfilesWork *work) {
     switch (work->mode) {
     case VISITOR_PROFILES_MODE_BROWSE:
         switch (VisitorProfiles_HandleInput(work)) {
-        case 0:
+        case VISITOR_PROFILES_INPUT_NONE:
             break;
-        case 1:
+        case VISITOR_PROFILES_INPUT_ZOOM:
             VisitorProfilesCamera_ToggleZoom(&work->camera);
             work->mode = VISITOR_PROFILES_MODE_ZOOM;
             break;
-        case 2:
+        case VISITOR_PROFILES_INPUT_EXIT:
             work->mode = VISITOR_PROFILES_MODE_OPEN_EXIT_PROMPT;
             break;
         }
@@ -1076,11 +1120,11 @@ u32 VisitorProfiles_Update(VisitorProfilesWork *work) {
         break;
     case VISITOR_PROFILES_MODE_EXIT_PROMPT:
         result = VisitorProfilesExitPrompt_HandleInput(&work->exitPrompt);
-        if (result != 0) {
-            if (result == 1) {
+        if (result != YESNORESPONSE_WAIT) {
+            if (result == YESNORESPONSE_YES) {
                 goto close;
             }
-            if (result != 2) {
+            if (result != YESNORESPONSE_NO) {
                 goto close;
             }
             VisitorProfilesPanel_ShowHint(&work->panel);
@@ -1127,7 +1171,7 @@ u32 VisitorProfiles_HandleInput(VisitorProfilesWork *work) {
     VisitorProfilesTouch_Update(&work->touch);
     if ((work->touch.result & PAD_BUTTON_B) != 0) {
         PlaySE(SEQ_SE_DP_DECIDE);
-        return 2;
+        return VISITOR_PROFILES_INPUT_EXIT;
     }
 
     if ((gSystem.newKeys & PAD_BUTTON_X) != 0) {
@@ -1730,7 +1774,7 @@ void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
             touch->result = PAD_BUTTON_B;
             return;
         }
-        touch->state = 0;
+        touch->state = VISITOR_PROFILES_TOUCH_STATE_WAIT_HOLD;
         touch->dragX = 0;
         touch->dragY = 0;
         touch->timer = 0;
@@ -1741,13 +1785,13 @@ void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
     }
     if (gSystem.touchHeld) {
         switch (touch->state) {
-        case 0:
+        case VISITOR_PROFILES_TOUCH_STATE_WAIT_HOLD:
             if (!touch->timer) {
                 touch->state++;
             } else {
                 touch->timer--;
             }
-        case 1:
+        case VISITOR_PROFILES_TOUCH_STATE_DRAG:
             VisitorProfiles_GetTouchDrag(touch->x, touch->y, &dirX, &distX, &dirY, &distY);
             touch->result = dirX | dirY;
             touch->dragX = distX;
@@ -1760,7 +1804,7 @@ void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
         if (touch->timer) {
             touch->result = PAD_BUTTON_A;
         }
-        touch->state = 0;
+        touch->state = VISITOR_PROFILES_TOUCH_STATE_WAIT_HOLD;
         touch->dragX = 0;
         touch->dragY = 0;
         touch->timer = 0;
@@ -1769,11 +1813,11 @@ void VisitorProfilesTouch_Update(VisitorProfilesTouch *touch) {
 
 u32 VisitorProfilesTouch_Get(VisitorProfilesTouch *touch, s32 which) {
     switch (which) {
-    case 0:
+    case VISITOR_PROFILES_TOUCH_RESULT:
         return touch->result;
-    case 1:
+    case VISITOR_PROFILES_TOUCH_DRAG_X:
         return touch->dragX;
-    case 2:
+    case VISITOR_PROFILES_TOUCH_DRAG_Y:
         return touch->dragY;
     }
 }
@@ -1812,16 +1856,16 @@ void VisitorProfilesExitPrompt_Open(VisitorProfilesExitPrompt *prompt) {
     DrawFrameAndWindow2(&prompt->window, TRUE, 1, 2);
     ScheduleWindowCopyToVram(&prompt->window);
     prompt->printerId = AddTextPrinterParameterized(&prompt->window, 1, prompt->string, 0, 0, prompt->textSpeed, NULL);
-    prompt->state = 0;
+    prompt->state = VISITOR_PROFILES_EXIT_PROMPT_WAIT_PRINT;
 }
 
 int VisitorProfilesExitPrompt_HandleInput(VisitorProfilesExitPrompt *prompt) {
     int result;
 
     switch (prompt->state) {
-    case 0: {
+    case VISITOR_PROFILES_EXIT_PROMPT_WAIT_PRINT: {
         YesNoPromptTemplate template;
-        result = 0;
+        result = YESNORESPONSE_WAIT;
         if (TextPrinterCheckActive((u8)prompt->printerId)) {
             break;
         }
@@ -1831,7 +1875,7 @@ int VisitorProfilesExitPrompt_HandleInput(VisitorProfilesExitPrompt *prompt) {
         prompt->state++;
         break;
     }
-    case 1:
+    case VISITOR_PROFILES_EXIT_PROMPT_HANDLE_YES_NO:
         result = YesNoPrompt_HandleInput(prompt->prompt);
         break;
     }
@@ -1847,7 +1891,7 @@ void VisitorProfilesExitPrompt_Close(VisitorProfilesExitPrompt *prompt) {
 void VisitorProfilesPanel_Init(VisitorProfilesPanel *panel, VisitorProfilesGraphics *gfx, VisitorProfilesMsg *msg, enum HeapID heapID) {
     int i;
 
-    panel->state = 0;
+    panel->state = VISITOR_PROFILES_PANEL_IDLE;
     VisitorProfilesPanel_InitHistory(panel);
     for (i = 0; i < VISITOR_PROFILES_NUM_BG_ANIMS; i++) {
         VisitorProfilesBgAnim_Init(&panel->bgAnims[i], gfx, &sVisitorProfilesBgAnimTemplates[i], sVisitorProfilesBgAnimPeriods[i], heapID);
@@ -1878,27 +1922,27 @@ void VisitorProfilesPanel_Free(VisitorProfilesPanel *panel, VisitorProfilesGraph
 
 void VisitorProfilesPanel_Update(VisitorProfilesPanel *panel, VisitorProfilesMsg *msg, VisitorProfilesGraphics *gfx) {
     switch (panel->state) {
-    case 0:
+    case VISITOR_PROFILES_PANEL_IDLE:
         VisitorProfilesPanel_AnimateBgs(panel, gfx);
         VisitorProfilesHourSprites_Update(&panel->hourSprites, &panel->windowMask);
         break;
-    case 1:
+    case VISITOR_PROFILES_PANEL_START_REVEAL:
         VisitorProfilesPanel_StartReveal(panel, msg);
-        panel->state = 2;
+        panel->state = VISITOR_PROFILES_PANEL_REVEAL;
         break;
-    case 2:
+    case VISITOR_PROFILES_PANEL_REVEAL:
         if (VisitorProfilesPanel_RevealSlow(panel, gfx) == TRUE) {
-            panel->state = 0;
+            panel->state = VISITOR_PROFILES_PANEL_IDLE;
         }
         break;
-    case 3:
+    case VISITOR_PROFILES_PANEL_START_FAST_REVEAL:
         VisitorProfilesPanel_HalveRevealTicks(panel, msg, gfx);
         VisitorProfilesPanel_RevealFast(panel, gfx);
-        panel->state = 4;
+        panel->state = VISITOR_PROFILES_PANEL_FAST_REVEAL;
         break;
-    case 4:
+    case VISITOR_PROFILES_PANEL_FAST_REVEAL:
         if (VisitorProfilesPanel_RevealFast(panel, gfx) == TRUE) {
-            panel->state = 0;
+            panel->state = VISITOR_PROFILES_PANEL_IDLE;
         }
         break;
     }
@@ -1916,15 +1960,15 @@ void VisitorProfilesPanel_ShowHint(VisitorProfilesPanel *panel) {
 
 BOOL VisitorProfilesPanel_AddPlace(VisitorProfilesPanel *panel, VisitorProfilesPlaceInfo *info) {
     switch (panel->state) {
-    case 0:
-        panel->state = 1;
+    case VISITOR_PROFILES_PANEL_IDLE:
+        panel->state = VISITOR_PROFILES_PANEL_START_REVEAL;
         break;
-    case 2:
-        panel->state = 3;
+    case VISITOR_PROFILES_PANEL_REVEAL:
+        panel->state = VISITOR_PROFILES_PANEL_START_FAST_REVEAL;
         return FALSE;
-    case 1:
-    case 3:
-    case 4:
+    case VISITOR_PROFILES_PANEL_START_REVEAL:
+    case VISITOR_PROFILES_PANEL_START_FAST_REVEAL:
+    case VISITOR_PROFILES_PANEL_FAST_REVEAL:
         return FALSE;
     }
     VisitorProfilesPanel_PushHistory(panel, info);
@@ -2094,12 +2138,12 @@ BOOL VisitorProfilesPanel_UpdateRow(VisitorProfilesPanel *panel, int row, Visito
     lineInSlot = line % 6;
     anim = panel->bgAnim[slot];
     switch (rowState) {
-    case 0:
+    case VISITOR_PROFILES_ROW_SHOW_BLANK:
         VisitorProfilesPanel_TransferRowPixels(panel, slot, lineInSlot, VisitorProfilesPanel_GetBlankRowPixels(panel, lineInSlot));
         VisitorProfilesPanel_CopyBaseRow(panel, line, gfx);
         VisitorProfilesWindowMask_SetWindow1(&panel->windowMask, (s16)(line * 8), 144);
         break;
-    case 1:
+    case VISITOR_PROFILES_ROW_SHOW_PLACE:
         VisitorProfilesPanel_TransferRowPixels(panel, slot, lineInSlot, VisitorProfilesPanel_GetRowPixels(panel, slot, lineInSlot));
         VisitorProfilesBgAnim_CopyRow(&panel->bgAnims[anim], line, gfx);
         break;

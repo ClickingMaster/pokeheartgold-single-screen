@@ -2294,13 +2294,13 @@ static void BattlePartyMenu_PrintMoveCategory(BattlePartyMenu *menu, int window,
     String *string;
 
     switch (moveClass) {
-    case 0:
+    case CATEGORY_PHYSICAL:
         string = NewString_ReadMsgData(menu->msgData, msg_0006_00054);
         break;
-    case 1:
+    case CATEGORY_SPECIAL:
         string = NewString_ReadMsgData(menu->msgData, msg_0006_00056);
         break;
-    case 2:
+    case CATEGORY_STATUS:
         string = NewString_ReadMsgData(menu->msgData, msg_0006_00055);
         break;
     }

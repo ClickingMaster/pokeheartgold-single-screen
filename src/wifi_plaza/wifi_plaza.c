@@ -4,6 +4,7 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 #include "constants/species.h"
+#include "constants/wifi_plaza.h"
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0777.h"
@@ -1014,8 +1015,8 @@ int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
         return 0;
     }
     work->talk.partnerSlot = slot;
-    work->talk.state = 1;
-    work->talk.role = 1;
+    work->talk.state = WIFI_PLAZA_TALK_STATE_REQUESTED;
+    work->talk.role = WIFI_PLAZA_TALK_ROLE_ASKER;
     WiFiPlazaTalkSession_SetMessage(&work->talk, 0);
     WiFiPlazaLobbyClient_SendToPlayer(0, WiFiPlazaLobbyClient_SlotToId(slot), &work->talk.sendMessage, 4);
     WiFiPlazaTalkSession_StartTimeout(&work->talk);
@@ -1024,12 +1025,12 @@ int WiFiPlazaWork_StartTalk(WiFiPlazaWork *work, int slot) {
 
 void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int value) {
     int flag = 0;
-    if (work->talk.role == 1) {
-        if (work->talk.state != 2) {
+    if (work->talk.role == WIFI_PLAZA_TALK_ROLE_ASKER) {
+        if (work->talk.state != WIFI_PLAZA_TALK_STATE_ASKER_TURN) {
             flag = 1;
         }
-    } else if (work->talk.role == 2) {
-        if (work->talk.state != 3) {
+    } else if (work->talk.role == WIFI_PLAZA_TALK_ROLE_ANSWERER) {
+        if (work->talk.state != WIFI_PLAZA_TALK_STATE_ANSWERER_TURN) {
             flag = 1;
         }
     }
@@ -1038,11 +1039,11 @@ void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int value) {
         return;
     }
     switch (work->talk.role) {
-    case 1:
-        work->talk.state = 3;
+    case WIFI_PLAZA_TALK_ROLE_ASKER:
+        work->talk.state = WIFI_PLAZA_TALK_STATE_ANSWERER_TURN;
         break;
-    case 2:
-        work->talk.state = 2;
+    case WIFI_PLAZA_TALK_ROLE_ANSWERER:
+        work->talk.state = WIFI_PLAZA_TALK_STATE_ASKER_TURN;
         break;
     default:
         WiFiPlazaWork_SendTalkEnd(work, WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot));
@@ -1056,8 +1057,8 @@ void WiFiPlazaWork_AdvanceTalk(WiFiPlazaWork *work, int value) {
 void WiFiPlazaWork_CancelTalkRequest(WiFiPlazaWork *work) {
     int id;
 
-    if (work->talk.state != 0 && work->talk.role == 1) {
-        work->talk.sendState = 0;
+    if (work->talk.state != WIFI_PLAZA_TALK_STATE_NONE && work->talk.role == WIFI_PLAZA_TALK_ROLE_ASKER) {
+        work->talk.sendState = WIFI_PLAZA_TALK_STATE_NONE;
         id = WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot);
         WiFiPlazaLobbyClient_SendToPlayer(3, id, &work->talk.sendMessage, 4);
         WiFiPlazaTalkSession_Reset(&work->talk);
@@ -1067,20 +1068,20 @@ void WiFiPlazaWork_CancelTalkRequest(WiFiPlazaWork *work) {
 void WiFiPlazaWork_EndTalk(WiFiPlazaWork *work) {
     int id;
 
-    if (work->talk.state != 0) {
+    if (work->talk.state != WIFI_PLAZA_TALK_STATE_NONE) {
         id = WiFiPlazaLobbyClient_SlotToId(work->talk.partnerSlot);
-        work->talk.state = 4;
-        work->talk.sendState = 4;
+        work->talk.state = WIFI_PLAZA_TALK_STATE_ENDED;
+        work->talk.sendState = WIFI_PLAZA_TALK_STATE_ENDED;
         WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
     }
 }
 
 BOOL WiFiPlazaWork_IsTalking(WiFiPlazaWork *work) {
-    return work->talk.role != 0;
+    return work->talk.role != WIFI_PLAZA_TALK_ROLE_NONE;
 }
 
 BOOL WiFiPlazaWork_WasAskedToTalk(WiFiPlazaWork *work) {
-    return work->talk.role == 2;
+    return work->talk.role == WIFI_PLAZA_TALK_ROLE_ANSWERER;
 }
 
 u16 WiFiPlazaWork_GetTalkPartner(WiFiPlazaWork *work) {
@@ -1108,7 +1109,7 @@ BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index) {
 }
 
 BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work) {
-    if (work->talk.state == 4) {
+    if (work->talk.state == WIFI_PLAZA_TALK_STATE_ENDED) {
         return TRUE;
     }
     if (WiFiPlazaTalkSession_IsWithinTimeout(&work->talk) == FALSE) {
@@ -1720,16 +1721,16 @@ void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session) {
 
 void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session) {
     session->partnerSlot = 0;
-    session->state = 0;
-    session->role = 0;
+    session->state = WIFI_PLAZA_TALK_STATE_NONE;
+    session->role = WIFI_PLAZA_TALK_ROLE_NONE;
     WiFiPlazaTalkSession_StopTimeout(session);
 }
 
 void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session) {
     session->partnerSlot = 0;
-    session->state = 4;
+    session->state = WIFI_PLAZA_TALK_STATE_ENDED;
     WiFiPlazaTalkSession_StopTimeout(session);
-    session->role = 0;
+    session->role = WIFI_PLAZA_TALK_ROLE_NONE;
 }
 
 BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
@@ -1768,14 +1769,14 @@ void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value) {
 }
 
 void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value) {
-    work->talk.sendState = 2;
+    work->talk.sendState = WIFI_PLAZA_TALK_STATE_ASKER_TURN;
     work->talk.sendMessage = value;
     WiFiPlazaLobbyClient_SendToPlayer(1, id, &work->talk.sendMessage, 4);
 }
 
 void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id) {
-    work->talk.state = 4;
-    work->talk.sendState = 4;
+    work->talk.state = WIFI_PLAZA_TALK_STATE_ENDED;
+    work->talk.sendState = WIFI_PLAZA_TALK_STATE_ENDED;
     WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
 }
 
@@ -2238,8 +2239,8 @@ void WiFiPlaza_OnTalkRequest(int id, const void *data, u32 size, void *arg) {
             work->talk.isFirstTalk = FALSE;
         }
         work->talk.partnerSlot = slot;
-        work->talk.state = 2;
-        work->talk.role = 2;
+        work->talk.state = WIFI_PLAZA_TALK_STATE_ASKER_TURN;
+        work->talk.role = WIFI_PLAZA_TALK_ROLE_ANSWERER;
         work->talk.partnerArrived = 0;
         WiFiPlazaTalkSession_StartTimeout(&work->talk);
     }
@@ -2250,14 +2251,14 @@ void WiFiPlaza_OnTalkAnswer(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const u16 *words = data;
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
-    if (work->talk.role != 0 && work->talk.partnerSlot == slot) {
+    if (work->talk.role != WIFI_PLAZA_TALK_ROLE_NONE && work->talk.partnerSlot == slot) {
         if (*words == 1) {
             if (WiFiPlazaTalkSession_HasTalkedWith(&work->talk, slot) == FALSE) {
                 work->talk.isFirstTalk = TRUE;
             } else {
                 work->talk.isFirstTalk = FALSE;
             }
-            work->talk.state = 2;
+            work->talk.state = WIFI_PLAZA_TALK_STATE_ASKER_TURN;
         } else {
             WiFiPlazaTalkSession_Reset(&work->talk);
         }
@@ -2270,7 +2271,7 @@ void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const u16 *words = data;
     int slot;
-    if (work->talk.role != 0) {
+    if (work->talk.role != WIFI_PLAZA_TALK_ROLE_NONE) {
         slot = WiFiPlazaLobbyClient_IdToSlot(id);
         if (work->talk.partnerSlot == slot) {
             if ((u16)(words[1] + 0xFFFE) <= 1) { // 2 or 3
@@ -2290,7 +2291,7 @@ void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg) {
 
 void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
-    if (work->talk.state != 0) {
+    if (work->talk.state != WIFI_PLAZA_TALK_STATE_NONE) {
         int slot = WiFiPlazaLobbyClient_IdToSlot(id);
         if (work->talk.partnerSlot == slot) {
             WiFiPlazaTalkSession_Reset(&work->talk);

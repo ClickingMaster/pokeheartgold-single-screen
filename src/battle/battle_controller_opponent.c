@@ -4,6 +4,7 @@
 
 #include "constants/abilities.h"
 #include "constants/battle.h"
+#include "constants/battle_menu.h"
 #include "constants/items.h"
 #include "constants/message_tags.h"
 #include "constants/moves.h"
@@ -47,6 +48,312 @@
 #include "system.h"
 #include "text.h"
 #include "char_tiles.h"
+
+enum {
+    ENCOUNTER_STATE_INIT,
+    ENCOUNTER_STATE_DELAY,
+    ENCOUNTER_STATE_SLIDE_IN,
+    ENCOUNTER_STATE_WAIT_MON_ANIM,
+    ENCOUNTER_STATE_SHINY_ANIM,
+    ENCOUNTER_STATE_END = 0xFF,
+};
+
+enum {
+    SLIDE_IN_STATE_INIT,
+    SLIDE_IN_STATE_LOAD_BALL_EFFECT,
+    SLIDE_IN_STATE_WAIT_BALL_OPEN,
+    SLIDE_IN_STATE_WAIT_BALL_THROW,
+    SLIDE_IN_STATE_GROW,
+    SLIDE_IN_STATE_WAIT_BALL_EFFECT,
+    SLIDE_IN_STATE_WAIT_MON_ANIM,
+    SLIDE_IN_STATE_SHINY_ANIM,
+    SLIDE_IN_STATE_END = 0xFF,
+};
+
+enum {
+    FOLLOW_SLIDE_IN_STATE_INIT,
+    FOLLOW_SLIDE_IN_STATE_CREATE_POKEPIC,
+    FOLLOW_SLIDE_IN_STATE_START_APPEAR_ANIM,
+    FOLLOW_SLIDE_IN_STATE_APPEAR_ANIM,
+    FOLLOW_SLIDE_IN_STATE_PLAY_CRY,
+    FOLLOW_SLIDE_IN_STATE_WAIT_MON_ANIM,
+    FOLLOW_SLIDE_IN_STATE_SHINY_ANIM,
+    FOLLOW_SLIDE_IN_STATE_END = 0xFF,
+};
+
+enum {
+    SEND_OUT_STATE_INIT,
+    SEND_OUT_STATE_LOAD_BALL_EFFECT,
+    SEND_OUT_STATE_WAIT_BALL_OPEN,
+    SEND_OUT_STATE_WAIT_BALL_THROW,
+    SEND_OUT_STATE_GROW,
+    SEND_OUT_STATE_WAIT_BALL_EFFECT,
+    SEND_OUT_STATE_WAIT_MON_ANIM,
+    SEND_OUT_STATE_SHINY_ANIM,
+    SEND_OUT_STATE_SUBSTITUTE_HIDE,
+    SEND_OUT_STATE_SUBSTITUTE_HIDE_ANIM,
+    SEND_OUT_STATE_SUBSTITUTE_SHOW,
+    SEND_OUT_STATE_SUBSTITUTE_SHOW_ANIM,
+    SEND_OUT_STATE_END = 0xFF,
+};
+
+enum {
+    FOLLOW_SEND_OUT_STATE_CREATE_POKEPIC,
+    FOLLOW_SEND_OUT_STATE_START_APPEAR_ANIM,
+    FOLLOW_SEND_OUT_STATE_APPEAR_ANIM,
+    FOLLOW_SEND_OUT_STATE_PLAY_CRY,
+    FOLLOW_SEND_OUT_STATE_WAIT_MON_ANIM,
+    FOLLOW_SEND_OUT_STATE_SHINY_ANIM,
+    FOLLOW_SEND_OUT_STATE_SUBSTITUTE_HIDE,
+    FOLLOW_SEND_OUT_STATE_SUBSTITUTE_HIDE_ANIM,
+    FOLLOW_SEND_OUT_STATE_SUBSTITUTE_SHOW,
+    FOLLOW_SEND_OUT_STATE_SUBSTITUTE_SHOW_ANIM,
+    FOLLOW_SEND_OUT_STATE_END = 0xFF,
+};
+
+enum {
+    RECALL_STATE_SUBSTITUTE_HIDE,
+    RECALL_STATE_SUBSTITUTE_HIDE_ANIM,
+    RECALL_STATE_SUBSTITUTE_SHOW,
+    RECALL_STATE_SUBSTITUTE_SHOW_ANIM,
+    RECALL_STATE_CREATE_BALL,
+    RECALL_STATE_WAIT_FADE,
+    RECALL_STATE_SHRINK,
+    RECALL_STATE_WAIT_BALL,
+    RECALL_STATE_END,
+};
+
+enum {
+    RECALL_FOLLOW_STATE_SUBSTITUTE_HIDE,
+    RECALL_FOLLOW_STATE_SUBSTITUTE_HIDE_ANIM,
+    RECALL_FOLLOW_STATE_SUBSTITUTE_SHOW,
+    RECALL_FOLLOW_STATE_SUBSTITUTE_SHOW_ANIM,
+    RECALL_FOLLOW_STATE_START_RECALL_ANIM,
+    RECALL_FOLLOW_STATE_RECALL_ANIM,
+    RECALL_FOLLOW_STATE_DELETE_POKEPIC,
+    RECALL_FOLLOW_STATE_END,
+};
+
+enum {
+    ENTER_BALL_STATE_SHRINK,
+    ENTER_BALL_STATE_END,
+};
+
+enum {
+    TRAINER_ENCOUNTER_STATE_INIT,
+    TRAINER_ENCOUNTER_STATE_DELAY,
+    TRAINER_ENCOUNTER_STATE_SLIDE_IN,
+    TRAINER_ENCOUNTER_STATE_ANIMATE,
+    TRAINER_ENCOUNTER_STATE_END,
+};
+
+enum {
+    THROW_BALL_STATE_INIT,
+    THROW_BALL_STATE_ENEMY_SLIDE_OUT,
+    THROW_BALL_STATE_PLAYER_SLIDE_OUT,
+    THROW_BALL_STATE_THROW,
+    THROW_BALL_STATE_DELAY,
+    THROW_BALL_STATE_WAIT_BALL,
+    THROW_BALL_STATE_END,
+};
+
+enum {
+    FOLLOW_THROW_BALL_STATE_ENEMY_SLIDE_OUT,
+    FOLLOW_THROW_BALL_STATE_PLAYER_SLIDE_OUT,
+    FOLLOW_THROW_BALL_STATE_END,
+};
+
+enum {
+    TRAINER_SLIDE_OUT_STATE_MOVE,
+    TRAINER_SLIDE_OUT_STATE_END,
+};
+
+enum {
+    TRAINER_SLIDE_IN_STATE_MOVE,
+    TRAINER_SLIDE_IN_STATE_END,
+};
+
+enum {
+    HP_BAR_SLIDE_IN_STATE_DELAY,
+    HP_BAR_SLIDE_IN_STATE_WAIT,
+};
+
+enum {
+    SELECT_COMMAND_STATE_INIT,
+    SELECT_COMMAND_STATE_PRINT_PROMPT,
+    SELECT_COMMAND_STATE_WAIT_PROMPT,
+    SELECT_COMMAND_STATE_START_EFFECTS,
+    SELECT_COMMAND_STATE_OPEN_MENU,
+    SELECT_COMMAND_STATE_WAIT_INPUT,
+    SELECT_COMMAND_STATE_HANDLE_INPUT,
+    SELECT_COMMAND_STATE_CLOSE_MENU,
+    SELECT_COMMAND_STATE_END,
+};
+
+enum {
+    SELECT_MOVE_STATE_OPEN_MENU,
+    SELECT_MOVE_STATE_WAIT_INPUT,
+    SELECT_MOVE_STATE_REPLY,
+    SELECT_MOVE_STATE_DELAY,
+};
+
+enum {
+    SELECT_TARGET_STATE_OPEN_MENU,
+    SELECT_TARGET_STATE_WAIT_INPUT,
+    SELECT_TARGET_STATE_CLOSE_MENU,
+    SELECT_TARGET_STATE_DELAY,
+};
+
+enum {
+    SELECT_ITEM_STATE_FADE_OUT,
+    SELECT_ITEM_STATE_OPEN_BAG,
+    SELECT_ITEM_STATE_REOPEN_BAG,
+    SELECT_ITEM_STATE_WAIT_BAG,
+    SELECT_ITEM_STATE_OPEN_PARTY,
+    SELECT_ITEM_STATE_WAIT_PARTY,
+    SELECT_ITEM_STATE_FADE_IN,
+    SELECT_ITEM_STATE_CHECK_ITEM,
+    SELECT_ITEM_STATE_REPLY,
+    SELECT_ITEM_STATE_PRINT_USED_MSG,
+    SELECT_ITEM_STATE_WAIT_USED_MSG,
+    SELECT_ITEM_STATE_SELF_ANIM,
+    SELECT_ITEM_STATE_WAIT_SELF_ANIM,
+    SELECT_ITEM_STATE_EFFECT_ANIM,
+    SELECT_ITEM_STATE_WAIT_EFFECT_ANIM,
+    SELECT_ITEM_STATE_PRINT_EFFECT_MSG,
+    SELECT_ITEM_STATE_WAIT_EFFECT_MSG,
+    SELECT_ITEM_STATE_HP_MON_ANIM,
+    SELECT_ITEM_STATE_WAIT_HP_MON_ANIM,
+    SELECT_ITEM_STATE_HP_RESTORE_ANIM,
+    SELECT_ITEM_STATE_WAIT_HP_RESTORE_ANIM,
+    SELECT_ITEM_STATE_UPDATE_HP_BAR,
+    SELECT_ITEM_STATE_WAIT_HP_BAR,
+    SELECT_ITEM_STATE_PRINT_HP_MSG,
+    SELECT_ITEM_STATE_WAIT_HP_MSG,
+    SELECT_ITEM_STATE_STATUS_MON_ANIM,
+    SELECT_ITEM_STATE_WAIT_STATUS_MON_ANIM,
+    SELECT_ITEM_STATE_STATUS_RESTORE_ANIM,
+    SELECT_ITEM_STATE_WAIT_STATUS_RESTORE_ANIM,
+    SELECT_ITEM_STATE_PRINT_STATUS_MSG,
+    SELECT_ITEM_STATE_WAIT_STATUS_MSG,
+};
+
+enum {
+    MON_LIST_STATE_FADE_OUT,
+    MON_LIST_STATE_OPEN_PARTY,
+    MON_LIST_STATE_WAIT_PARTY,
+    MON_LIST_STATE_REPLY,
+};
+
+enum {
+    YES_NO_STATE_PRINT_MSG,
+    YES_NO_STATE_OPEN_MENU,
+    YES_NO_STATE_WAIT_INPUT,
+    YES_NO_STATE_CLOSE_MENU,
+    YES_NO_STATE_END,
+};
+
+enum {
+    MOVE_ANIM_STATE_SUBSTITUTE_HIDE,
+    MOVE_ANIM_STATE_SUBSTITUTE_HIDE_ANIM,
+    MOVE_ANIM_STATE_SUBSTITUTE_SHOW,
+    MOVE_ANIM_STATE_SUBSTITUTE_SHOW_ANIM,
+    MOVE_ANIM_STATE_START,
+    MOVE_ANIM_STATE_RUN,
+    MOVE_ANIM_STATE_FINISH,
+    MOVE_ANIM_STATE_RESUBSTITUTE_HIDE_ANIM,
+    MOVE_ANIM_STATE_RESUBSTITUTE_SHOW,
+    MOVE_ANIM_STATE_RESUBSTITUTE_SHOW_ANIM,
+    MOVE_ANIM_STATE_END,
+};
+
+enum {
+    HP_BAR_UPDATE_STATE_INIT,
+    HP_BAR_UPDATE_STATE_UPDATE,
+};
+
+enum {
+    EXP_BAR_UPDATE_STATE_INIT,
+    EXP_BAR_UPDATE_STATE_UPDATE,
+    EXP_BAR_UPDATE_STATE_WAIT_SOUND,
+    EXP_BAR_UPDATE_STATE_END = 100,
+};
+
+enum {
+    FAINT_STATE_SUBSTITUTE_HIDE,
+    FAINT_STATE_SUBSTITUTE_HIDE_ANIM,
+    FAINT_STATE_SUBSTITUTE_SHOW,
+    FAINT_STATE_SUBSTITUTE_SHOW_ANIM,
+    FAINT_STATE_PLAY_CRY,
+    FAINT_STATE_WAIT_CRY,
+    FAINT_STATE_PLAY_SE,
+    FAINT_STATE_SHRINK_SHADOW,
+    FAINT_STATE_START_SINK,
+    FAINT_STATE_SINK,
+    FAINT_STATE_END,
+};
+
+enum {
+    FADE_OUT_STATE_START,
+    FADE_OUT_STATE_WAIT,
+    FADE_OUT_STATE_END,
+};
+
+enum {
+    TOGGLE_VANISH_STATE_SET,
+    TOGGLE_VANISH_STATE_SUBSTITUTE_HIDE,
+    TOGGLE_VANISH_STATE_SUBSTITUTE_HIDE_ANIM,
+    TOGGLE_VANISH_STATE_SUBSTITUTE_SHOW,
+    TOGGLE_VANISH_STATE_SUBSTITUTE_SHOW_ANIM,
+    TOGGLE_VANISH_STATE_END = 0xFF,
+};
+
+enum {
+    EXP_FLASH_STATE_START,
+    EXP_FLASH_STATE_WAIT,
+};
+
+enum {
+    SELECTION_MSG_STATE_WAIT_PRINT,
+    SELECTION_MSG_STATE_WAIT_TIMER,
+};
+
+enum {
+    ENCOUNTER_ANIM_STATE_INIT,
+    ENCOUNTER_ANIM_STATE_FADE,
+    ENCOUNTER_ANIM_STATE_WAIT_EMITTER,
+    ENCOUNTER_ANIM_STATE_END,
+    ENCOUNTER_ANIM_STATE_STOP_EMITTERS,
+    ENCOUNTER_ANIM_STATE_RESET_PALETTES,
+};
+
+enum {
+    FORGET_MOVE_STATE_FADE_OUT,
+    FORGET_MOVE_STATE_OPEN_PARTY,
+    FORGET_MOVE_STATE_WAIT_PARTY,
+    FORGET_MOVE_STATE_REPLY,
+};
+
+enum {
+    MOSAIC_STATE_UPDATE,
+    MOSAIC_STATE_END,
+};
+
+enum {
+    SHOW_PARTY_GAUGE_STATE_SHOW,
+    SHOW_PARTY_GAUGE_STATE_WAIT,
+};
+
+enum {
+    HIDE_PARTY_GAUGE_STATE_HIDE,
+    HIDE_PARTY_GAUGE_STATE_WAIT,
+};
+
+enum {
+    SCREEN_FADE_STATE_START,
+    SCREEN_FADE_STATE_BLEND,
+    SCREEN_FADE_STATE_END,
+};
 
 // The command the battle controller sent to this battler (BattleController_RecvData copies it to 0x94).
 #define OPPONENT_COMMAND(opponentData) ((void *)&(opponentData)->unk8C[8])
@@ -1777,7 +2084,7 @@ void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentD
         narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
         narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
         battleInput = BattleSystem_GetBattleInput(battleSystem);
-        BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+        BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
         BattleInput_SetMenuOpenDummy(battleInput, 0);
         NARC_Delete(narc0);
         NARC_Delete(narc1);
@@ -1967,7 +2274,7 @@ void BattleControllerOpponent_ScreenFade(BattleSystem *battleSystem, OpponentDat
 void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentEncounterAnimWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentEncounterAnimWork));
     work->battleSystem = battleSystem;
-    work->state = 0;
+    work->state = ENCOUNTER_ANIM_STATE_INIT;
     work->timer = 0;
     work->fadeStep = 0;
     SysTask_CreateOnMainQueue(Task_PlayEncounterAnimation, work, 0);
@@ -1990,7 +2297,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     pokepicManager = BattleSystem_GetPokepicManager(battleSystem);
     BattleSystem_GetBattleType(battleSystem);
     work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPokemonEncounterWork));
-    work->state = 0;
+    work->state = ENCOUNTER_STATE_INIT;
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         work->facing = 2;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 1);
@@ -2181,7 +2488,7 @@ void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opp
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
     work->battlerType = opponentData->battlerType;
-    work->state = 0;
+    work->state = ENTER_BALL_STATE_SHRINK;
     work->height = packet->height;
     Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, sBallColors[packet->ball]);
     Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_AFFINE, 1);
@@ -2203,7 +2510,7 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
     TrainerPicFileIds files;
     OpponentTrainerEncounterWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentTrainerEncounterWork));
 
-    work->state = 0;
+    work->state = TRAINER_ENCOUNTER_STATE_INIT;
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         work->facing = 2;
         work->terrain = BattleSystem_GetBattleTerrain(battleSystem, 1);
@@ -2290,7 +2597,7 @@ void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *oppone
 
 void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentTrainerSlideOutWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentTrainerSlideOutWork));
-    work->state = 0;
+    work->state = TRAINER_SLIDE_OUT_STATE_MOVE;
     work->battleSystem = battleSystem;
     work->command = OPPONENT_COMMAND_ID(opponentData);
     work->battlerId = opponentData->battlerId;
@@ -2310,7 +2617,7 @@ void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *oppon
 
     BattleSystem_GetPokepicManager(battleSystem);
     work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentTrainerSlideInWork));
-    work->state = 0;
+    work->state = TRAINER_SLIDE_IN_STATE_MOVE;
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         work->facing = 2;
     } else {
@@ -2572,7 +2879,7 @@ void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponen
 
 void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
     OpponentMoveAnimationWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMoveAnimationWork));
-    work->state = 0;
+    work->state = MOVE_ANIM_STATE_SUBSTITUTE_HIDE;
     work->battleSystem = battleSystem;
     work->opponentData = opponentData;
     work->command = OPPONENT_COMMAND_ID(opponentData);
@@ -2647,7 +2954,7 @@ void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *o
     int i;
 
     work->facing = (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) ? 2 : 0;
-    work->state = 0;
+    work->state = FAINT_STATE_SUBSTITUTE_HIDE;
     work->battleSystem = battleSystem;
     work->opponentData = opponentData;
     work->command = packet->command;
@@ -2683,7 +2990,7 @@ void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData,
 
 void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentFadeOutWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentFadeOutWork));
-    work->state = 0;
+    work->state = FADE_OUT_STATE_START;
     work->battleSystem = battleSystem;
     work->command = OPPONENT_COMMAND_ID(opponentData);
     work->battlerId = opponentData->battlerId;
@@ -2698,7 +3005,7 @@ void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponen
     work->opponentData = opponentData;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
-    work->state = 0;
+    work->state = TOGGLE_VANISH_STATE_SET;
     work->vanish = packet->vanish;
     work->isSubstitute = packet->isSubstitute;
     for (i = 0; i < BATTLER_MAX; i++) {
@@ -2794,7 +3101,7 @@ void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *oppo
     work->battleSystem = battleSystem;
     work->command = OPPONENT_COMMAND_ID(opponentData);
     work->battlerId = opponentData->battlerId;
-    work->state = 0;
+    work->state = EXP_FLASH_STATE_START;
     work->hpBar = &opponentData->hpBar;
     SysTask_CreateOnMainQueue(Task_PlayExpBarFullFlash, work, 0);
 }
@@ -2809,7 +3116,7 @@ void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData
         work->battleSystem = battleSystem;
         work->command = packet->command;
         work->battlerId = opponentData->battlerId;
-        work->state = 0;
+        work->state = SELECTION_MSG_STATE_WAIT_PRINT;
         work->printerId = BattleSystem_PrintBattleMessage(battleSystem, msgData, &packet->msg, BattleSystem_GetTextFrameDelay(battleSystem));
         SysTask_CreateOnMainQueue(Task_PrintSelectionMessage, work, 0);
     } else if (inputMode == 1) {
@@ -2849,7 +3156,7 @@ void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opp
 
 void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMoveToForget *packet) {
     OpponentSelectMoveToForgetWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectMoveToForgetWork));
-    work->state = 0;
+    work->state = FORGET_MOVE_STATE_FADE_OUT;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -2860,7 +3167,7 @@ void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *o
 
 void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMosaicAnimation *packet) {
     OpponentMosaicWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMosaicWork));
-    work->state = 0;
+    work->state = MOSAIC_STATE_UPDATE;
     work->battleSystem = battleSystem;
     work->pokepic = opponentData->pokepic;
     work->command = packet->command;
@@ -2874,7 +3181,7 @@ void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *
 void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     int i;
-    work->state = 0;
+    work->state = SHOW_PARTY_GAUGE_STATE_SHOW;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -2888,7 +3195,7 @@ void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *o
 
 void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
-    work->state = 0;
+    work->state = HIDE_PARTY_GAUGE_STATE_HIDE;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -2900,7 +3207,7 @@ void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData 
 void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     int i;
-    work->state = 0;
+    work->state = SHOW_PARTY_GAUGE_STATE_SHOW;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -2914,7 +3221,7 @@ void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *oppone
 
 void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
-    work->state = 0;
+    work->state = HIDE_PARTY_GAUGE_STATE_HIDE;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->battlerId = opponentData->battlerId;
@@ -3050,7 +3357,7 @@ void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentDat
 void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet) {
     OpponentScreenFadeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentScreenFadeWork));
     MI_CpuFill8(work, 0, sizeof(OpponentScreenFadeWork));
-    work->state = 0;
+    work->state = SCREEN_FADE_STATE_START;
     work->battleSystem = battleSystem;
     work->command = packet->command;
     work->mode = packet->mode;
@@ -3071,15 +3378,15 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
     int targetX;
 
     switch (state) {
-    case 0:
+    case ENCOUNTER_STATE_INIT:
         work->delay = 28;
         work->state++;
-    case 1:
+    case ENCOUNTER_STATE_DELAY:
         if (--work->delay) {
             break;
         }
         work->state++;
-    case 2:
+    case ENCOUNTER_STATE_SLIDE_IN:
         if (work->facing == 2) {
             ManagedSprite_GetPositionXY(work->terrain->sprite, &coords[1], &coords[0]);
             if (work->battlerType == BATTLER_TYPE_SOLO_ENEMY || work->battlerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
@@ -3147,22 +3454,22 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
             work->state++;
             return;
         }
-    case 3:
+    case ENCOUNTER_STATE_WAIT_MON_ANIM:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) == 1 && !Pokepic_IsAnimFinished(work->pokepic)) {
             if (work->shiny) {
                 BattleController_InitMoveAnimData(work->battleSystem, NULL, &animData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
                 OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, anim, &animData);
-                work->state = 4;
+                work->state = ENCOUNTER_STATE_SHINY_ANIM;
             } else {
-                work->state = 0xFF;
+                work->state = ENCOUNTER_STATE_END;
             }
         }
         break;
-    case 4:
+    case ENCOUNTER_STATE_SHINY_ANIM:
         BattleAnimSystem_Execute(anim);
         if (!BattleAnimSystem_IsActive(anim)) {
             BattleAnimSystem_EndMove(anim);
-            work->state = 0xFF;
+            work->state = ENCOUNTER_STATE_END;
         }
         break;
     default:
@@ -3221,9 +3528,9 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
         if (work->shiny) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &animData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &animData);
-            work->state = 4;
+            work->state = ENCOUNTER_STATE_SHINY_ANIM;
         } else {
-            work->state = 0xFF;
+            work->state = ENCOUNTER_STATE_END;
         }
         break;
     case 4:
@@ -3232,7 +3539,7 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
             break;
         }
         BattleAnimSystem_EndMove(animSystem);
-        work->state = 0xFF;
+        work->state = ENCOUNTER_STATE_END;
         break;
     default:
         Sound_SetKeepPlayingCries(0);
@@ -3250,7 +3557,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
     PokepicAnimScript scripts[10];
 
     switch (work->state) {
-    case 0:
+    case SLIDE_IN_STATE_INIT:
         work->delay = 0;
         work->battlerSprites = NULL;
         if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_MULTI) {
@@ -3266,7 +3573,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         }
         work->state++;
         return;
-    case 1:
+    case SLIDE_IN_STATE_LOAD_BALL_EFFECT:
         memset(&openArgs, 0, sizeof(openArgs));
         openArgs.battlerType = work->battlerType;
         openArgs.mon = BattleSystem_GetPartyMon(work->battleSystem, work->battlerId, work->selectedMonIndex);
@@ -3274,7 +3581,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         BallSealEffect_LoadResources(work->ballOpenEffect);
         work->state++;
         return;
-    case 2: {
+    case SLIDE_IN_STATE_WAIT_BALL_OPEN: {
         PokepicManager *pokepicManager;
         if (BallThrow_GetMode(work->opponentData->ballData) || BallSealEffect_IsLoaded(work->ballOpenEffect) != 1 || BallThrow_HasOpened(work->opponentData->ballData) != 1) {
             break;
@@ -3308,18 +3615,18 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         work->state++;
         return;
     }
-    case 3:
+    case SLIDE_IN_STATE_WAIT_BALL_THROW:
         if (BallThrow_IsActive(work->opponentData->ballData) != 1) {
             work->state++;
         }
-    case 4:
+    case SLIDE_IN_STATE_GROW:
         if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) == 0x100 && !BallSealEffect_IsActive(work->ballOpenEffect)) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
-            work->state = 5;
+            work->state = SLIDE_IN_STATE_WAIT_BALL_EFFECT;
             return;
         }
         if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) >= 0x100) {
@@ -3330,7 +3637,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
-            work->state = 5;
+            work->state = SLIDE_IN_STATE_WAIT_BALL_EFFECT;
             return;
         } else {
             Pokepic_AddAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 32);
@@ -3338,12 +3645,12 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
             Pokepic_SetYOffsetForAffineHeight(work->opponentData->pokepic, work->shadowHeight);
         }
         return;
-    case 5:
+    case SLIDE_IN_STATE_WAIT_BALL_EFFECT:
         if (!BallSealEffect_IsActive(work->ballOpenEffect)) {
-            work->state = 6;
+            work->state = SLIDE_IN_STATE_WAIT_MON_ANIM;
         }
         return;
-    case 6:
+    case SLIDE_IN_STATE_WAIT_MON_ANIM:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) != 1 || Pokepic_IsAnimFinished(work->opponentData->pokepic)) {
             break;
         }
@@ -3354,19 +3661,19 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
             work->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &animData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &animData);
-            work->state = 7;
+            work->state = SLIDE_IN_STATE_SHINY_ANIM;
         } else {
-            work->state = 0xFF;
+            work->state = SLIDE_IN_STATE_END;
         }
         return;
-    case 7:
+    case SLIDE_IN_STATE_SHINY_ANIM:
         BattleAnimSystem_Execute(work->animSystem);
         if (BattleAnimSystem_IsActive(work->animSystem)) {
             break;
         }
         BattleAnimSystem_EndMove(work->animSystem);
         BattleAnimSystem_Delete(work->animSystem);
-        work->state = 0xFF;
+        work->state = SLIDE_IN_STATE_END;
         return;
     default:
         Sound_SetKeepPlayingCries(0);
@@ -3384,7 +3691,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
     PokepicAnimScript scripts[10];
 
     switch (work->state) {
-    case 0:
+    case FOLLOW_SLIDE_IN_STATE_INIT:
         work->delay = 0;
         work->battlerSprites = NULL;
         if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_MULTI) {
@@ -3400,7 +3707,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         }
         work->state++;
         return;
-    case 1: {
+    case FOLLOW_SLIDE_IN_STATE_CREATE_POKEPIC: {
         PokepicManager *pokepicManager;
         if (work->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
             work->delay++;
@@ -3423,13 +3730,13 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         work->state++;
         return;
     }
-    case 2:
+    case FOLLOW_SLIDE_IN_STATE_START_APPEAR_ANIM:
         work->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &animData, 1, 41, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &animData);
         work->state++;
         return;
-    case 3:
+    case FOLLOW_SLIDE_IN_STATE_APPEAR_ANIM:
         BattleAnimSystem_Execute(work->animSystem);
         if (BattleAnimSystem_IsActive(work->animSystem)) {
             break;
@@ -3438,14 +3745,14 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
         BattleAnimSystem_Delete(work->animSystem);
         work->state++;
         return;
-    case 4:
+    case FOLLOW_SLIDE_IN_STATE_PLAY_CRY:
         if (work->facing == 2) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
         }
         BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-        work->state = 5;
+        work->state = FOLLOW_SLIDE_IN_STATE_WAIT_MON_ANIM;
         return;
-    case 5:
+    case FOLLOW_SLIDE_IN_STATE_WAIT_MON_ANIM:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) != 1 || Pokepic_IsAnimFinished(work->opponentData->pokepic)) {
             break;
         }
@@ -3455,19 +3762,19 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
             work->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &shinyAnimData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &shinyAnimData);
-            work->state = 6;
+            work->state = FOLLOW_SLIDE_IN_STATE_SHINY_ANIM;
         } else {
-            work->state = 0xFF;
+            work->state = FOLLOW_SLIDE_IN_STATE_END;
         }
         return;
-    case 6:
+    case FOLLOW_SLIDE_IN_STATE_SHINY_ANIM:
         BattleAnimSystem_Execute(work->animSystem);
         if (BattleAnimSystem_IsActive(work->animSystem)) {
             break;
         }
         BattleAnimSystem_EndMove(work->animSystem);
         BattleAnimSystem_Delete(work->animSystem);
-        work->state = 0xFF;
+        work->state = FOLLOW_SLIDE_IN_STATE_END;
         return;
     default:
         Sound_SetKeepPlayingCries(0);
@@ -3493,7 +3800,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
-    case 0:
+    case SEND_OUT_STATE_INIT:
         ballParams.kind = gOpponentBallKinds[work->battlerType];
         ballParams.heapID = HEAP_ID_BATTLE;
         ballParams.resTagOffset = work->battlerId;
@@ -3521,7 +3828,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         work->battlerSprites = BattleAnimBattlerSprites_NewAll(work->battleSystem, HEAP_ID_BATTLE);
         work->state++;
         break;
-    case 1:
+    case SEND_OUT_STATE_LOAD_BALL_EFFECT:
         memset(&openArgs, 0, sizeof(openArgs));
         openArgs.battlerType = work->battlerType;
         openArgs.mon = BattleSystem_GetPartyMon(work->battleSystem, work->battlerId, work->selectedMonIndex);
@@ -3530,7 +3837,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
         BallSealEffect_LoadResources(work->ballOpenEffect);
         work->state++;
         break;
-    case 2:
+    case SEND_OUT_STATE_WAIT_BALL_OPEN:
         if ((BallThrow_GetMode(work->ballData) == 0 || work->breakOut != 0) && BallSealEffect_IsLoaded(work->ballOpenEffect) == 1 && BallThrow_HasOpened(work->ballData) == 1) {
             if (work->battlerSprites) {
                 BattleAnimBattlerSprites_Free(work->battlerSprites);
@@ -3546,18 +3853,18 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 3:
+    case SEND_OUT_STATE_WAIT_BALL_THROW:
         if (BallThrow_IsActive(work->ballData) != 1) {
             work->state++;
         }
-    case 4:
+    case SEND_OUT_STATE_GROW:
         if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) == 0x100 && BallSealEffect_IsActive(work->ballOpenEffect) == 0) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
-            work->state = 5;
+            work->state = SEND_OUT_STATE_WAIT_BALL_EFFECT;
         } else if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) >= 0x100) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0x100);
@@ -3566,50 +3873,50 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
-            work->state = 5;
+            work->state = SEND_OUT_STATE_WAIT_BALL_EFFECT;
         } else {
             Pokepic_AddAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 32);
             Pokepic_AddAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 32);
             Pokepic_SetYOffsetForAffineHeight(work->opponentData->pokepic, work->shadowHeight);
         }
         break;
-    case 5:
+    case SEND_OUT_STATE_WAIT_BALL_EFFECT:
         if (BallSealEffect_IsActive(work->ballOpenEffect) == 0) {
-            work->state = 6;
+            work->state = SEND_OUT_STATE_WAIT_MON_ANIM;
         }
         break;
-    case 6:
+    case SEND_OUT_STATE_WAIT_MON_ANIM:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) == 1 && Pokepic_IsAnimFinished(work->opponentData->pokepic) == FALSE) {
             BallThrow_Delete(work->ballData);
             BallSealEffect_Free(work->ballOpenEffect);
             if (work->shiny) {
                 BattleController_InitMoveAnimData(work->battleSystem, NULL, &shinyAnimData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
                 OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &shinyAnimData);
-                work->state = 7;
+                work->state = SEND_OUT_STATE_SHINY_ANIM;
             } else {
-                work->state = 8;
+                work->state = SEND_OUT_STATE_SUBSTITUTE_HIDE;
             }
         }
         break;
-    case 7:
-    case 9:
-    case 11:
+    case SEND_OUT_STATE_SHINY_ANIM:
+    case SEND_OUT_STATE_SUBSTITUTE_HIDE_ANIM:
+    case SEND_OUT_STATE_SUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (BattleAnimSystem_IsActive(animSystem) == FALSE) {
             BattleAnimSystem_EndMove(animSystem);
             work->state++;
         }
         break;
-    case 8:
+    case SEND_OUT_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 0xFF;
+            work->state = SEND_OUT_STATE_END;
         }
         break;
-    case 10:
+    case SEND_OUT_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -3639,7 +3946,7 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
     animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
-    case 0: {
+    case FOLLOW_SEND_OUT_STATE_CREATE_POKEPIC: {
         PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
         NARC_ReadPokepicAnimScript((NARC *)work->opponentData->pokepicAnimNarc, scripts, work->species, work->battlerType);
         work->opponentData->pokepic = BattleControllerOpponent_CreatePokepic(work->battleSystem, pokepicManager, &work->pokepicTemplate, gBattlerPokepicPositions[1][work->battlerType][0], gBattlerPokepicPositions[1][work->battlerType][1], gBattlerPokepicPositions[0][work->battlerType][2], work->height, work->shadowHeight, work->shadowXOffset, work->shadowSize, work->battlerId, scripts, NULL);
@@ -3649,49 +3956,49 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_VANISHED, 0);
         work->state++;
     } break;
-    case 1:
+    case FOLLOW_SEND_OUT_STATE_START_APPEAR_ANIM:
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &sendOutAnimData, 1, 41, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &sendOutAnimData);
         work->state++;
         break;
-    case 3:
+    case FOLLOW_SEND_OUT_STATE_PLAY_CRY:
         if (work->facing == 2) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
         }
         BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-        work->state = 4;
+        work->state = FOLLOW_SEND_OUT_STATE_WAIT_MON_ANIM;
         break;
-    case 4:
+    case FOLLOW_SEND_OUT_STATE_WAIT_MON_ANIM:
         if (PokepicAnimManager_GetAnimState(BattleSystem_GetPokepicAnimManager(work->battleSystem), work->battlerId) == 1 && Pokepic_IsAnimFinished(work->opponentData->pokepic) == FALSE) {
             if (work->shiny) {
                 BattleController_InitMoveAnimData(work->battleSystem, NULL, &shinyAnimData, 1, 11, work->battlerId, work->battlerId, MOVE_NONE);
                 OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &shinyAnimData);
-                work->state = 5;
+                work->state = FOLLOW_SEND_OUT_STATE_SHINY_ANIM;
             } else {
-                work->state = 6;
+                work->state = FOLLOW_SEND_OUT_STATE_SUBSTITUTE_HIDE;
             }
         }
         break;
-    case 2:
-    case 5:
-    case 7:
-    case 9:
+    case FOLLOW_SEND_OUT_STATE_APPEAR_ANIM:
+    case FOLLOW_SEND_OUT_STATE_SHINY_ANIM:
+    case FOLLOW_SEND_OUT_STATE_SUBSTITUTE_HIDE_ANIM:
+    case FOLLOW_SEND_OUT_STATE_SUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (BattleAnimSystem_IsActive(animSystem) == FALSE) {
             BattleAnimSystem_EndMove(animSystem);
             work->state++;
         }
         break;
-    case 6:
+    case FOLLOW_SEND_OUT_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 0xFF;
+            work->state = FOLLOW_SEND_OUT_STATE_END;
         }
         break;
-    case 8:
+    case FOLLOW_SEND_OUT_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -3721,16 +4028,16 @@ void Task_RecallPokemon(SysTask *task, void *data) {
     animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
     state = work->state;
     switch (state) {
-    case 0:
+    case RECALL_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 4;
+            work->state = RECALL_STATE_CREATE_BALL;
         }
         break;
-    case 2:
+    case RECALL_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -3738,15 +4045,15 @@ void Task_RecallPokemon(SysTask *task, void *data) {
         work->opponentData->substituteShown = 0;
         work->state++;
         break;
-    case 1:
-    case 3:
+    case RECALL_STATE_SUBSTITUTE_HIDE_ANIM:
+    case RECALL_STATE_SUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (BattleAnimSystem_IsActive(animSystem) == FALSE) {
             BattleAnimSystem_EndMove(animSystem);
             work->state++;
         }
         break;
-    case 4: {
+    case RECALL_STATE_CREATE_BALL: {
         int battlerType = work->battlerType;
         if (battlerType & BATTLER_TYPE_IS_ENEMY) {
             enemyBallParams.kind = gOpponentBallKinds[battlerType];
@@ -3772,7 +4079,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             playerBallParams.keepSubSurface = 0;
             work->ballData = BallThrow_New(&playerBallParams);
         }
-        work->state = 5;
+        work->state = RECALL_STATE_WAIT_FADE;
         Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, sBallColors[work->ball]);
         switch (work->battlerType) {
         case BATTLER_TYPE_SOLO_PLAYER:
@@ -3787,27 +4094,27 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             break;
         }
     } break;
-    case 5:
+    case RECALL_STATE_WAIT_FADE:
         if (Pokepic_ResumePaletteFade(work->pokepic) == FALSE) {
             work->state++;
         }
         break;
-    case 6:
+    case RECALL_STATE_SHRINK:
         Pokepic_AddAttr(work->pokepic, POKEPIC_AFFINEW, -32);
         Pokepic_AddAttr(work->pokepic, POKEPIC_AFFINEH, -32);
         Pokepic_SetYOffsetForAffineHeight(work->pokepic, work->height);
         if (Pokepic_GetAttr(work->pokepic, POKEPIC_AFFINEW) <= 0) {
             Pokepic_Delete(work->pokepic);
-            work->state = 7;
+            work->state = RECALL_STATE_WAIT_BALL;
         }
         break;
-    case 7:
+    case RECALL_STATE_WAIT_BALL:
         if (BallThrow_IsActive(work->ballData) == FALSE) {
             BallThrow_Delete(work->ballData);
-            work->state = 8;
+            work->state = RECALL_STATE_END;
         }
         break;
-    case 8:
+    case RECALL_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3824,16 +4131,16 @@ void Task_RecallFollowMon(SysTask *task, void *data) {
     BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
 
     switch (work->state) {
-    case 0:
+    case RECALL_FOLLOW_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 4;
+            work->state = RECALL_FOLLOW_STATE_START_RECALL_ANIM;
         }
         break;
-    case 2:
+    case RECALL_FOLLOW_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -3841,23 +4148,23 @@ void Task_RecallFollowMon(SysTask *task, void *data) {
         work->opponentData->substituteShown = 0;
         work->state++;
         break;
-    case 1:
-    case 3:
-    case 5:
+    case RECALL_FOLLOW_STATE_SUBSTITUTE_HIDE_ANIM:
+    case RECALL_FOLLOW_STATE_SUBSTITUTE_SHOW_ANIM:
+    case RECALL_FOLLOW_STATE_RECALL_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (!BattleAnimSystem_IsActive(animSystem)) {
             BattleAnimSystem_EndMove(animSystem);
             work->state++;
         }
         break;
-    case 4:
+    case RECALL_FOLLOW_STATE_START_RECALL_ANIM:
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &recallAnimData, 1, 42, work->battlerId, work->battlerId, MOVE_NONE);
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &recallAnimData);
         work->state++;
         break;
-    case 6:
+    case RECALL_FOLLOW_STATE_DELETE_POKEPIC:
         Pokepic_Delete(work->pokepic);
-    case 7:
+    case RECALL_FOLLOW_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3871,7 +4178,7 @@ void Task_PokemonEnterBall(SysTask *task, void *data) {
     OpponentPokepicShrinkWork *work = data;
 
     switch (work->state) {
-    case 0:
+    case ENTER_BALL_STATE_SHRINK:
         Pokepic_AddAttr(work->pokepic, POKEPIC_AFFINEW, -32);
         Pokepic_AddAttr(work->pokepic, POKEPIC_AFFINEH, -32);
         if (work->height != 0) {
@@ -3883,7 +4190,7 @@ void Task_PokemonEnterBall(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 1:
+    case ENTER_BALL_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -3902,19 +4209,19 @@ void Task_TrainerEncounter(SysTask *task, void *data) {
     }
 
     switch (work->state) {
-    case 0:
+    case TRAINER_ENCOUNTER_STATE_INIT:
         if (ManagedSprite_GetNumFrames(work->managedSprite) > 2) {
             ManagedSprite_SetAnimationFrame(work->managedSprite, 0);
             ManagedSprite_SetAnim(work->managedSprite, 2);
         }
         work->delay = 28;
-        work->state = 1;
-    case 1:
+        work->state = TRAINER_ENCOUNTER_STATE_DELAY;
+    case TRAINER_ENCOUNTER_STATE_DELAY:
         if (--work->delay) {
             break;
         }
-        work->state = 2;
-    case 2:
+        work->state = TRAINER_ENCOUNTER_STATE_SLIDE_IN;
+    case TRAINER_ENCOUNTER_STATE_SLIDE_IN:
         ManagedSprite_GetPositionXY(work->terrain->sprite, &x1, &y1);
         ManagedSprite_GetPositionXY(work->managedSprite, &x2, &y2);
         if (work->facing == 2) {
@@ -3947,9 +4254,9 @@ void Task_TrainerEncounter(SysTask *task, void *data) {
                     ManagedSprite_SetAnimationFrame(work->managedSprite, 0);
                     ManagedSprite_SetAnim(work->managedSprite, 1);
                     work->ballFlashStarted = 0;
-                    work->state = 3;
+                    work->state = TRAINER_ENCOUNTER_STATE_ANIMATE;
                 } else {
-                    work->state = 4;
+                    work->state = TRAINER_ENCOUNTER_STATE_END;
                 }
             }
         } else {
@@ -3984,18 +4291,18 @@ void Task_TrainerEncounter(SysTask *task, void *data) {
                 if (work->battlerType == BATTLER_TYPE_SOLO_PLAYER || work->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                     ManagedSprite_SetPositionXY(work->terrain->sprite, 64, 136);
                 }
-                work->state = 4;
+                work->state = TRAINER_ENCOUNTER_STATE_END;
             }
         }
         break;
-    case 3:
+    case TRAINER_ENCOUNTER_STATE_ANIMATE:
         if (ManagedSprite_IsAnimated(work->managedSprite) == 1) {
             if (OpponentTrainerEncounter_HandleAnimFrame(work, work->managedSprite) == FALSE) {
                 break;
             }
         }
-        work->state = 4;
-    case 4:
+        work->state = TRAINER_ENCOUNTER_STATE_END;
+    case TRAINER_ENCOUNTER_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -4011,9 +4318,9 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
     BallThrowParams ball;
 
     switch (work->state) {
-    case 0:
+    case THROW_BALL_STATE_INIT:
         if (work->throwType == 0) {
-            work->state = 1;
+            work->state = THROW_BALL_STATE_ENEMY_SLIDE_OUT;
             break;
         }
         switch (work->throwType) {
@@ -4053,9 +4360,9 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
         ManagedSprite_SetAnimationFrame(work->opponentData->managedSprite, 0);
         ManagedSprite_SetAnim(work->opponentData->managedSprite, 1);
         ManagedSprite_SetAnimateFlag(work->opponentData->managedSprite, TRUE);
-        work->state = 3;
+        work->state = THROW_BALL_STATE_THROW;
         break;
-    case 1:
+    case THROW_BALL_STATE_ENEMY_SLIDE_OUT:
         if (work->facing == 2) {
             ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, 5, 0);
             ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
@@ -4076,16 +4383,16 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
                 SpriteManager_UnloadPlttObjById(mgr, 20010 + work->opponentData->battlerType);
                 SpriteManager_UnloadCellObjById(mgr, 20007 + work->opponentData->battlerType);
                 SpriteManager_UnloadAnimObjById(mgr, 20007 + work->opponentData->battlerType);
-                work->state = 6;
+                work->state = THROW_BALL_STATE_END;
             }
         } else {
             ManagedSprite_SetAnimationFrame(work->opponentData->managedSprite, 0);
             ManagedSprite_SetAnim(work->opponentData->managedSprite, 1);
             ManagedSprite_SetAnimateFlag(work->opponentData->managedSprite, TRUE);
-            work->state = 2;
+            work->state = THROW_BALL_STATE_PLAYER_SLIDE_OUT;
         }
         break;
-    case 2:
+    case THROW_BALL_STATE_PLAYER_SLIDE_OUT:
         ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, -5, 0);
         ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
         if (work->opponentData->ballData) {
@@ -4114,15 +4421,15 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             SpriteManager_UnloadPlttObjById(mgr, 20010 + work->opponentData->battlerType);
             SpriteManager_UnloadCellObjById(mgr, 20007 + work->opponentData->battlerType);
             SpriteManager_UnloadAnimObjById(mgr, 20007 + work->opponentData->battlerType);
-            work->state = 6;
+            work->state = THROW_BALL_STATE_END;
         }
         break;
-    case 3:
+    case THROW_BALL_STATE_THROW:
         ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
         animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
         if (animFrame == 4) {
             work->delay = 8;
-            work->state = 4;
+            work->state = THROW_BALL_STATE_DELAY;
         } else if (work->opponentData->ballData && gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
             BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
             if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != work->ballTargetState) {
@@ -4135,23 +4442,23 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             }
         }
         break;
-    case 4:
+    case THROW_BALL_STATE_DELAY:
         if (--work->delay == 0) {
             if (work->ballTargetState == 3) {
-                work->state = 6;
+                work->state = THROW_BALL_STATE_END;
             } else {
-                work->state = 5;
+                work->state = THROW_BALL_STATE_WAIT_BALL;
             }
         }
         break;
-    case 5:
+    case THROW_BALL_STATE_WAIT_BALL:
         if (BallThrow_IsActive(work->opponentData->ballData) != 1) {
             BallThrow_Delete(work->opponentData->ballData);
             work->opponentData->ballData = NULL;
-            work->state = 6;
+            work->state = THROW_BALL_STATE_END;
         }
         break;
-    case 6:
+    case THROW_BALL_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -4164,7 +4471,7 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
     s16 x, y;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
     switch (work->state) {
-    case 0:
+    case FOLLOW_THROW_BALL_STATE_ENEMY_SLIDE_OUT:
         if (work->facing == 2) {
             ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, 5, 0);
             ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
@@ -4176,17 +4483,17 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
                 SpriteManager_UnloadPlttObjById(mgr, 20010 + work->opponentData->battlerType);
                 SpriteManager_UnloadCellObjById(mgr, 20007 + work->opponentData->battlerType);
                 SpriteManager_UnloadAnimObjById(mgr, 20007 + work->opponentData->battlerType);
-                work->state = 2;
+                work->state = FOLLOW_THROW_BALL_STATE_END;
             }
         } else {
             ManagedSprite_SetPriority(work->opponentData->managedSprite, 1);
             ManagedSprite_SetAnimationFrame(work->opponentData->managedSprite, 0);
             ManagedSprite_SetAnim(work->opponentData->managedSprite, 1);
             ManagedSprite_SetAnimateFlag(work->opponentData->managedSprite, TRUE);
-            work->state = 1;
+            work->state = FOLLOW_THROW_BALL_STATE_PLAYER_SLIDE_OUT;
         }
         break;
-    case 1:
+    case FOLLOW_THROW_BALL_STATE_PLAYER_SLIDE_OUT:
         ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, -5, 0);
         ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
         if (work->opponentData->ballData && (battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
@@ -4210,10 +4517,10 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
             SpriteManager_UnloadPlttObjById(mgr, 20010 + work->opponentData->battlerType);
             SpriteManager_UnloadCellObjById(mgr, 20007 + work->opponentData->battlerType);
             SpriteManager_UnloadAnimObjById(mgr, 20007 + work->opponentData->battlerType);
-            work->state = 2;
+            work->state = FOLLOW_THROW_BALL_STATE_END;
         }
         break;
-    case 2:
+    case FOLLOW_THROW_BALL_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -4227,7 +4534,7 @@ void Task_TrainerSlideOut(SysTask *task, void *data) {
     SpriteManager *spriteManager;
 
     switch (work->state) {
-    case 0:
+    case TRAINER_SLIDE_OUT_STATE_MOVE:
         if (work->facing == 2) {
             ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, 5, 0);
             ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &pos[1], &pos[0]);
@@ -4242,7 +4549,7 @@ void Task_TrainerSlideOut(SysTask *task, void *data) {
             }
         }
         break;
-    case 1:
+    case TRAINER_SLIDE_OUT_STATE_END:
         spriteManager = BattleSystem_GetSpriteManager(work->battleSystem);
         Sprite_DeleteAndFreeResources(work->opponentData->managedSprite);
         work->opponentData->managedSprite = NULL;
@@ -4262,7 +4569,7 @@ void Task_TrainerSlideIn(SysTask *task, void *data) {
     s16 pos[2];
 
     switch (work->state) {
-    case 0:
+    case TRAINER_SLIDE_IN_STATE_MOVE:
         ManagedSprite_GetPositionXY(work->managedSprite, &pos[1], &pos[0]);
         if (work->facing == 0) {
             pos[1] += 5;
@@ -4279,7 +4586,7 @@ void Task_TrainerSlideIn(SysTask *task, void *data) {
         }
         ManagedSprite_SetPositionXY(work->managedSprite, pos[1], pos[0]);
         break;
-    case 1:
+    case TRAINER_SLIDE_IN_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -4290,7 +4597,7 @@ void Task_TrainerSlideIn(SysTask *task, void *data) {
 void Task_HealthbarSlideIn(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
-    case 0:
+    case HP_BAR_SLIDE_IN_STATE_DELAY:
         if (hpBar->delay != 0) {
             hpBar->delay--;
             break;
@@ -4299,7 +4606,7 @@ void Task_HealthbarSlideIn(SysTask *task, void *data) {
         BattleHpBar_SetEnabled(hpBar, TRUE);
         hpBar->script++;
         break;
-    case 1:
+    case HP_BAR_SLIDE_IN_STATE_WAIT:
         if (hpBar->slideDone == 1) {
             hpBar->script++;
         }
@@ -4342,7 +4649,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
     }
 
     switch (work->state) {
-    case 0: {
+    case SELECT_COMMAND_STATE_INIT: {
         BattleInputMove moveDisplay;
         int i;
         for (i = 0; i < 4; i++) {
@@ -4353,7 +4660,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
         BattleInput_LoadFightMenuText(BattleSystem_GetBattleInput(work->battleSystem), work->battlerType, &moveDisplay);
         work->state++;
     }
-    case 1: {
+    case SELECT_COMMAND_STATE_PRINT_PROMPT: {
         MsgData *loader = BattleSystem_GetMessageLoader(work->battleSystem);
         BattleMessage msg;
         if (battleType & BATTLE_TYPE_TUTORIAL) {
@@ -4363,13 +4670,13 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 msg.param[0] = work->battlerId | (work->partySlot << 8);
                 msg.id = msg_0197_00921;
                 BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, TEXT_SPEED_INSTANT);
-                work->state = 3;
+                work->state = SELECT_COMMAND_STATE_START_EFFECTS;
                 break;
             case 1:
                 msg.tag = TAG_NONE;
                 msg.id = msg_0197_01226 + BattleSystem_GetTrainerGender(work->battleSystem, 0);
                 work->printerId = BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, BattleSystem_GetTextFrameDelay(work->battleSystem));
-                work->state = 2;
+                work->state = SELECT_COMMAND_STATE_WAIT_PROMPT;
                 break;
             }
         } else {
@@ -4387,20 +4694,20 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 msg.id = msg_0197_00921;
             }
             BattleSystem_PrintBattleMessage(work->battleSystem, loader, &msg, TEXT_SPEED_INSTANT);
-            work->state = 3;
+            work->state = SELECT_COMMAND_STATE_START_EFFECTS;
         }
         break;
     }
-    case 2:
+    case SELECT_COMMAND_STATE_WAIT_PROMPT:
         if (TextPrinterCheckActive(work->printerId) == FALSE) {
-            work->state = 3;
+            work->state = SELECT_COMMAND_STATE_START_EFFECTS;
         }
         break;
-    case 3:
+    case SELECT_COMMAND_STATE_START_EFFECTS:
         BattleHpBar_StartActiveEffect(work->hpBar);
         OpponentData_StartPokepicBobTask(opponent, work->battleSystem);
-        work->state = 4;
-    case 4:
+        work->state = SELECT_COMMAND_STATE_OPEN_MENU;
+    case SELECT_COMMAND_STATE_OPEN_MENU:
         if (BattleInput_CheckFeedbackDone(battleInput) != 0) {
             NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
@@ -4415,32 +4722,32 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             if (opponent->mainMenuShown != 0) {
                 BattleInput_SetMenuOpenDummy(battleInput, 1);
                 if (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 6, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_6, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_PAL_PARK) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 10, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_PAL_PARK, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_SAFARI) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 8, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_8, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 20, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_20, 0, (int *)&action);
                 } else if (action.battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2 && !(BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_MULTI)) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 4, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_4, 0, (int *)&action);
                 } else {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 3, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_3, 0, (int *)&action);
                 }
                 BattleSystem_SetField2440(work->battleSystem, 1);
             } else {
                 if (BattleSystem_GetBattleSpecial(work->battleSystem) & BATTLE_SPECIAL_FIRST_RIVAL) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 5, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_5, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_PAL_PARK) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 9, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_PAL_PARK_INITIAL, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_SAFARI) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 7, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_7, 0, (int *)&action);
                 } else if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 19, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_19, 0, (int *)&action);
                 } else if (action.battlerType != BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 1, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_MAIN_INITIAL, 0, (int *)&action);
                 } else {
-                    BattleInput_ChangeMenu(narc0, narc1, battleInput, 2, 0, (int *)&action);
+                    BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_MAIN, 0, (int *)&action);
                 }
                 opponent->mainMenuShown = 1;
             }
@@ -4452,10 +4759,10 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             if (hpBar != NULL) {
                 BattleHpBar_MenuOpenDummy(hpBar);
             }
-            work->state = 5;
+            work->state = SELECT_COMMAND_STATE_WAIT_INPUT;
         }
         break;
-    case 5:
+    case SELECT_COMMAND_STATE_WAIT_INPUT:
         if (gSystem.newKeys & PAD_BUTTON_START) {
             int i;
             for (i = 0; i < BattleSystem_GetMaxBattlers(work->battleSystem); i++) {
@@ -4467,21 +4774,21 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
         if (work->input != 0xFFFFFFFF) {
             work->unk_0B = 10;
             PlaySE(SEQ_SE_DP_DECIDE);
-            work->state = 6;
+            work->state = SELECT_COMMAND_STATE_HANDLE_INPUT;
         }
         break;
-    case 6:
+    case SELECT_COMMAND_STATE_HANDLE_INPUT:
         if (BattleInput_CheckFeedbackDone(battleInput) == 1 || work->input == 1) {
             switch (work->input) {
             case 1:
                 if (BattleSystem_GetBattleType(work->battleSystem) & (BATTLE_TYPE_SAFARI | BATTLE_TYPE_PAL_PARK)) {
-                    work->state = 7;
+                    work->state = SELECT_COMMAND_STATE_CLOSE_MENU;
                 }
                 break;
             case 2: {
                 NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
                 NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
-                BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+                BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
                 BattleInput_SetMenuOpenDummy(battleInput, 0);
                 BattleHpBar_MenuCloseDummy(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
@@ -4493,7 +4800,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
             case 3: {
                 NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
                 NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
-                BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+                BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
                 BattleInput_SetMenuOpenDummy(battleInput, 0);
                 BattleHpBar_MenuCloseDummy(hpBar);
                 BattleHpBar_StopActiveEffect(work->hpBar);
@@ -4509,7 +4816,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                     BattleHpBar_MenuCloseDummy(hpBar);
                     work->input = 0xFF;
                 }
-                BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+                BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
                 NARC_Delete(narc0);
                 NARC_Delete(narc1);
                 break;
@@ -4518,25 +4825,25 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
                 GF_ASSERT(FALSE);
                 break;
             }
-            work->state = 8;
+            work->state = SELECT_COMMAND_STATE_END;
         }
         break;
-    case 7:
+    case SELECT_COMMAND_STATE_CLOSE_MENU:
         if (BattleInput_CheckFeedbackDone(battleInput) == 1) {
             NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
             BattleInput_SetMenuOpenDummy(battleInput, 0);
             BattleHpBar_MenuCloseDummy(hpBar);
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponent);
             BattleInput_DisableBallGauge(battleInput);
-            work->state = 8;
+            work->state = SELECT_COMMAND_STATE_END;
             NARC_Delete(narc0);
             NARC_Delete(narc1);
         }
         break;
-    case 8:
+    case SELECT_COMMAND_STATE_END:
         if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
             BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, work->input);
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
@@ -4618,7 +4925,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
     }
 
     switch (work->state) {
-    case 0:
+    case SELECT_MOVE_STATE_OPEN_MENU:
         if (BattleInput_CheckFeedbackDone(battleInput) == 0) {
             break;
         }
@@ -4643,13 +4950,13 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
                 menu.ppMax[i] = work->movePP[i];
             }
             menu.battlerType = work->battlerType;
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 11, 0, (int *)&menu);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_FIGHT, 0, (int *)&menu);
             NARC_Delete(narc0);
             NARC_Delete(narc1);
             work->state++;
             return;
         }
-    case 1:
+    case SELECT_MOVE_STATE_WAIT_INPUT:
         work->input = BattleInput_CheckTouch(battleInput);
         if (work->input == 0xFFFFFFFF) {
             break;
@@ -4657,7 +4964,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
         PlaySE(SEQ_SE_DP_DECIDE);
         work->state++;
         return;
-    case 2:
+    case SELECT_MOVE_STATE_REPLY:
         if (work->input != 0xFF) {
             if (!(BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_DOUBLES)) {
                 BattleInput_SetMenuOpenDummy(battleInput, 0);
@@ -4670,7 +4977,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
         BattleController_ReplyMoveSelection(work->battleSystem, work->battlerId, work->input);
         work->state++;
         return;
-    case 3:
+    case SELECT_MOVE_STATE_DELAY:
         work->state++;
     default:
         if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
@@ -4763,7 +5070,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
     }
 
     switch (work->state) {
-    case 0:
+    case SELECT_TARGET_STATE_OPEN_MENU:
         if (BattleInput_CheckFeedbackDone(battleInput) != 0) {
             NARC *narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             NARC *narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
@@ -4775,20 +5082,20 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
             }
             menu.battlerType = work->battlerType;
             menu.selectionType = BattleInput_GetTargetSelectionType(work->moveRange, work->battlerType);
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 12, 0, (int *)&menu);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_TARGET, 0, (int *)&menu);
             NARC_Delete(narc0);
             NARC_Delete(narc1);
             work->state++;
         }
         break;
-    case 1:
+    case SELECT_TARGET_STATE_WAIT_INPUT:
         work->input = BattleInput_CheckTouch(battleInput);
         if (work->input != -1) {
             PlaySE(SEQ_SE_DP_DECIDE);
             work->state++;
         }
         break;
-    case 2:
+    case SELECT_TARGET_STATE_CLOSE_MENU:
         if (work->input != 0xFF) {
             BattleHpBar_StopActiveEffect(work->hpBar);
             OpponentData_StopPokepicBobTask(opponent);
@@ -4799,7 +5106,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
         }
         work->state++;
         break;
-    case 3:
+    case SELECT_TARGET_STATE_DELAY:
         work->state++;
     default:
         if (BattleInput_IsUnusedTaskNull(battleInput) == 1) {
@@ -4901,14 +5208,14 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
 
     switch (work->state) {
-    case 0:
+    case SELECT_ITEM_STATE_FADE_OUT:
         work->key = BattleInput_GetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem));
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 0, 7, 0);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
-    case 1:
+    case SELECT_ITEM_STATE_OPEN_BAG:
         if (!PaletteData_GetSelectedBuffersBitmask(palette)) {
             BattleSystem_FreeInputForSubMenu(work->battleSystem);
             work->bagMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleBagMenuArgs));
@@ -4925,14 +5232,14 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             work->bagMenu->targetSubstitute = work->targetSubstitute;
             work->bagMenu->embargoFlag = work->embargoFlag[work->battlerId];
             BattleBagMenu_Create(work->bagMenu);
-            work->state = 3;
+            work->state = SELECT_ITEM_STATE_WAIT_BAG;
         }
         break;
-    case 2:
+    case SELECT_ITEM_STATE_REOPEN_BAG:
         work->bagMenu->key = work->key;
         BattleBagMenu_Create(work->bagMenu);
         work->state++;
-    case 3:
+    case SELECT_ITEM_STATE_WAIT_BAG:
         if (work->bagMenu->done) {
             work->bagMenu->done = FALSE;
             work->key = work->bagMenu->key;
@@ -4940,19 +5247,19 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                 switch (work->bagMenu->pocket) {
                 case BTLPOCKETLIST_HP_PP_RESTORE:
                 case BTLPOCKETLIST_STATUS_RESTORE:
-                    work->state = 4;
+                    work->state = SELECT_ITEM_STATE_OPEN_PARTY;
                     break;
                 case BTLPOCKETLIST_BALLS:
                 case BTLPOCKETLIST_BATTLE_ITEMS:
-                    work->state = 6;
+                    work->state = SELECT_ITEM_STATE_FADE_IN;
                     break;
                 }
             } else {
-                work->state = 6;
+                work->state = SELECT_ITEM_STATE_FADE_IN;
             }
         }
         break;
-    case 4: {
+    case SELECT_ITEM_STATE_OPEN_PARTY: {
         Party *party = BattleSystem_GetParty(work->battleSystem, work->battlerId);
         int battlerId;
         int i;
@@ -4988,99 +5295,99 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         BATTLE_PARTY_MENU_START(work->partyMenu->args);
         work->state++;
     } break;
-    case 5:
+    case SELECT_ITEM_STATE_WAIT_PARTY:
         if (work->partyMenu->args->done) {
             work->key = work->partyMenu->args->key;
             work->partyMenu->args->done = FALSE;
             if (work->partyMenu->args->selectedSlot == PARTY_SIZE) {
-                work->state = 2;
+                work->state = SELECT_ITEM_STATE_REOPEN_BAG;
             } else {
-                work->state = 6;
+                work->state = SELECT_ITEM_STATE_FADE_IN;
             }
         }
         break;
-    case 6:
+    case SELECT_ITEM_STATE_FADE_IN:
         BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
         BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->key);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 7, 0, 0);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
         work->state++;
         break;
-    case 7:
+    case SELECT_ITEM_STATE_CHECK_ITEM:
         if (!PaletteData_GetSelectedBuffersBitmask(palette)) {
             PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 0);
             if (work->bagMenu->item) {
-                work->state = 9;
+                work->state = SELECT_ITEM_STATE_PRINT_USED_MSG;
                 switch (work->bagMenu->pocket) {
                 case BTLPOCKETLIST_STATUS_RESTORE:
                     // item is ITEM_REVIVE or ITEM_MAX_REVIVE (written as a u16 wrap-around add)
                     if ((u16)(work->bagMenu->item + (0x10000 - ITEM_REVIVE)) <= ITEM_MAX_REVIVE - ITEM_REVIVE) {
-                        work->state = 8;
+                        work->state = SELECT_ITEM_STATE_REPLY;
                     } else if (ITEM_TARGET_ON_FIELD(work)) {
                         if (work->bagMenu->item == ITEM_FULL_RESTORE) {
                             if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
-                                work->nextState = 17;
+                                work->nextState = SELECT_ITEM_STATE_HP_MON_ANIM;
                             } else {
                                 PlaySE_SetPan(SEQ_SE_DP_KAIFUKU, -117);
-                                work->nextState = 21;
+                                work->nextState = SELECT_ITEM_STATE_UPDATE_HP_BAR;
                             }
                         } else {
                             if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
-                                work->nextState = 25;
+                                work->nextState = SELECT_ITEM_STATE_STATUS_MON_ANIM;
                             } else {
                                 PlaySE_SetPan(SEQ_SE_DP_KAIFUKU, -117);
-                                work->nextState = 29;
+                                work->nextState = SELECT_ITEM_STATE_PRINT_STATUS_MSG;
                             }
                         }
                     } else {
-                        work->state = 8;
+                        work->state = SELECT_ITEM_STATE_REPLY;
                     }
                     break;
                 case BTLPOCKETLIST_HP_PP_RESTORE:
                     if (ITEM_TARGET_ON_FIELD(work) && GetItemAttr(work->bagMenu->item, ITEMATTR_HP_RESTORE, HEAP_ID_BATTLE)) {
                         if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
-                            work->nextState = 17;
+                            work->nextState = SELECT_ITEM_STATE_HP_MON_ANIM;
                         } else {
                             PlaySE_SetPan(SEQ_SE_DP_KAIFUKU, -117);
-                            work->nextState = 21;
+                            work->nextState = SELECT_ITEM_STATE_UPDATE_HP_BAR;
                         }
                     } else {
-                        work->state = 8;
+                        work->state = SELECT_ITEM_STATE_REPLY;
                     }
                     break;
                 case BTLPOCKETLIST_BATTLE_ITEMS:
                     // item is ITEM_POKE_DOLL or ITEM_FLUFFY_TAIL
                     if ((u16)(work->bagMenu->item + (0x10000 - ITEM_POKE_DOLL)) <= ITEM_FLUFFY_TAIL - ITEM_POKE_DOLL) {
-                        work->state = 8;
+                        work->state = SELECT_ITEM_STATE_REPLY;
                     } else if (work->bagMenu->item == ITEM_GUARD_SPEC_) {
                         if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
-                            work->nextState = 13;
+                            work->nextState = SELECT_ITEM_STATE_EFFECT_ANIM;
                         } else {
                             PlaySE_SetPan(SEQ_SE_DP_KAIFUKU, -117);
-                            work->nextState = 15;
+                            work->nextState = SELECT_ITEM_STATE_PRINT_EFFECT_MSG;
                         }
                     } else {
                         if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
-                            work->nextState = 11;
+                            work->nextState = SELECT_ITEM_STATE_SELF_ANIM;
                         } else {
                             PlaySE_SetPan(SEQ_SE_DP_KAIFUKU, -117);
-                            work->nextState = 15;
+                            work->nextState = SELECT_ITEM_STATE_PRINT_EFFECT_MSG;
                         }
                     }
                     break;
                 case BTLPOCKETLIST_BALLS:
-                    work->state = 8;
+                    work->state = SELECT_ITEM_STATE_REPLY;
                     break;
                 }
             } else {
-                work->state = 8;
+                work->state = SELECT_ITEM_STATE_REPLY;
             }
-            if (work->state != 8) {
+            if (work->state != SELECT_ITEM_STATE_REPLY) {
                 BattleSystem_SetTrainerAIOverlayLoaded(work->battleSystem, 0);
             }
         }
         break;
-    case 8:
+    case SELECT_ITEM_STATE_REPLY:
         if (work->bagMenu->item == ITEM_NONE) {
             input.item = 0xFF;
         } else {
@@ -5099,7 +5406,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
-    case 9: {
+    case SELECT_ITEM_STATE_PRINT_USED_MSG: {
         MsgData *msgData;
         usedMsg.id = msg_0197_01206;
         usedMsg.tag = TAG_ITEM;
@@ -5109,7 +5416,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->timer = 30;
         work->state++;
     } break;
-    case 10:
+    case SELECT_ITEM_STATE_WAIT_USED_MSG:
         if (!TextPrinterCheckActive(work->printerId)) {
             work->timer--;
             if (work->timer == 0) {
@@ -5117,15 +5424,15 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             }
         }
         break;
-    case 11: {
+    case SELECT_ITEM_STATE_SELF_ANIM: {
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &selfAnimData, 1, 9, work->battlerId, work->battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
         OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &selfAnimData);
         work->state++;
     } break;
-    case 17:
-    case 25: {
+    case SELECT_ITEM_STATE_HP_MON_ANIM:
+    case SELECT_ITEM_STATE_STATUS_MON_ANIM: {
         int battlerId = work->partyMenu->args->selectedSlot * 2;
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &monAnimData, 1, 9, battlerId, battlerId, MOVE_NONE);
@@ -5133,7 +5440,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &monAnimData);
         work->state++;
     } break;
-    case 13: {
+    case SELECT_ITEM_STATE_EFFECT_ANIM: {
         OpponentData *opponentData;
         if (work->bagMenu->item == ITEM_GUARD_SPEC_) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 0, 0, work->battlerId, work->battlerId, MOVE_MIST);
@@ -5150,7 +5457,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         }
         work->state++;
     } break;
-    case 15: {
+    case SELECT_ITEM_STATE_PRINT_EFFECT_MSG: {
         MsgData *msgData;
         battleItemMsg.id = msg_0197_01203;
         battleItemMsg.tag = 12;
@@ -5188,8 +5495,8 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->timer = 30;
         work->state++;
     } break;
-    case 19:
-    case 27: {
+    case SELECT_ITEM_STATE_HP_RESTORE_ANIM:
+    case SELECT_ITEM_STATE_STATUS_RESTORE_ANIM: {
         int battlerId = work->partyMenu->args->selectedSlot * 2;
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 14, battlerId, battlerId, MOVE_NONE);
@@ -5197,7 +5504,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &restoreAnimData);
         work->state++;
     } break;
-    case 21: {
+    case SELECT_ITEM_STATE_UPDATE_HP_BAR: {
         int battlerId = work->partyMenu->args->selectedSlot * 2;
         int slot = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedSlot];
         BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, battlerId);
@@ -5216,14 +5523,14 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         BattleHpBar_InitHpChange(hpBar, hpBar->gainedHp);
         work->state++;
     } break;
-    case 22: {
+    case SELECT_ITEM_STATE_WAIT_HP_BAR: {
         BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, work->partyMenu->args->selectedSlot * 2);
         if (BattleHpBar_UpdateHpChange(hpBar) == -1) {
             BattleHpBar_Draw(hpBar, 0, 0x100);
             work->state++;
         }
     } break;
-    case 23: {
+    case SELECT_ITEM_STATE_PRINT_HP_MSG: {
         MsgData *msgData = BattleSystem_GetMessageLoader(work->battleSystem);
         int battlerId = work->partyMenu->args->selectedSlot * 2;
         if (work->partyMenu->args->hp) {
@@ -5240,7 +5547,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->timer = 30;
         work->state++;
     } break;
-    case 29: {
+    case SELECT_ITEM_STATE_PRINT_STATUS_MSG: {
         int count = 0;
         int status;
         int battlerId = work->partyMenu->args->selectedSlot * 2;
@@ -5312,26 +5619,26 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->timer = 30;
         work->state++;
     } break;
-    case 12:
-    case 14:
-    case 18:
-    case 20:
-    case 26:
-    case 28:
+    case SELECT_ITEM_STATE_WAIT_SELF_ANIM:
+    case SELECT_ITEM_STATE_WAIT_EFFECT_ANIM:
+    case SELECT_ITEM_STATE_WAIT_HP_MON_ANIM:
+    case SELECT_ITEM_STATE_WAIT_HP_RESTORE_ANIM:
+    case SELECT_ITEM_STATE_WAIT_STATUS_MON_ANIM:
+    case SELECT_ITEM_STATE_WAIT_STATUS_RESTORE_ANIM:
         BattleAnimSystem_Execute((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem));
         if (!BattleAnimSystem_IsActive((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem))) {
             BattleAnimSystem_EndMove((BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem));
             work->state++;
         }
         break;
-    case 16:
-    case 24:
-    case 30:
+    case SELECT_ITEM_STATE_WAIT_EFFECT_MSG:
+    case SELECT_ITEM_STATE_WAIT_HP_MSG:
+    case SELECT_ITEM_STATE_WAIT_STATUS_MSG:
         if (!TextPrinterCheckActive(work->printerId)) {
             work->timer--;
             if (work->timer == 0) {
                 BattleSystem_SetTrainerAIOverlayLoaded(work->battleSystem, 1);
-                work->state = 8;
+                work->state = SELECT_ITEM_STATE_REPLY;
             }
         }
         break;
@@ -5407,7 +5714,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
     Party *party;
 
     switch (work->state) {
-    case 0: {
+    case MON_LIST_STATE_FADE_OUT: {
         Window *window = BattleSystem_GetWindow(work->battleSystem, 0);
         FillWindowPixelBuffer(window, 0xFF);
         CopyWindowPixelsToVram_TextMode(window);
@@ -5418,7 +5725,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
-    case 1:
+    case MON_LIST_STATE_OPEN_PARTY:
         if (PaletteData_GetSelectedBuffersBitmask(palette)) {
             break;
         }
@@ -5512,7 +5819,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         BATTLE_PARTY_MENU_START(work->partyMenu);
         work->state++;
         break;
-    case 2:
+    case MON_LIST_STATE_WAIT_PARTY:
         if (!work->partyMenu->done) {
             break;
         }
@@ -5522,7 +5829,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
         work->state++;
         break;
-    case 3:
+    case MON_LIST_STATE_REPLY:
         if (PaletteData_GetSelectedBuffersBitmask(palette)) {
             break;
         }
@@ -5643,7 +5950,7 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
         partnerHpBar = NULL;
     }
     switch (work->state) {
-    case 0:
+    case YES_NO_STATE_PRINT_MSG:
         if (BattleInput_CheckFeedbackDone(battleInput)) {
             if (work->msgId) {
                 msgData = BattleSystem_GetMessageLoader(work->battleSystem);
@@ -5656,10 +5963,10 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
                 menu.msg.id = work->msgId;
                 work->printerId = BattleSystem_PrintBattleMessage(work->battleSystem, msgData, &menu.msg, BattleSystem_GetTextFrameDelay(work->battleSystem));
             }
-            work->state = 1;
+            work->state = YES_NO_STATE_OPEN_MENU;
         }
         break;
-    case 1:
+    case YES_NO_STATE_OPEN_MENU:
         if (TextPrinterCheckActive((u8)work->printerId) && work->msgId) {
             break;
         }
@@ -5670,36 +5977,36 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
         switch (work->mode) {
         case 0:
         case 5:
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 13, 0, (int *)&menu.twoOption);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_YES_NO, 0, (int *)&menu.twoOption);
             break;
         case 1:
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 14, 0, (int *)&menu.twoOption);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_KEEP_FORGET_MOVE, 0, (int *)&menu.twoOption);
             break;
         case 2:
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 15, 0, (int *)&menu.twoOption);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_GIVE_UP_ON_MOVE, 0, (int *)&menu.twoOption);
             break;
         case 3:
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 16, 0, (int *)&menu.twoOption);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_SWITCH_OR_FLEE, 0, (int *)&menu.twoOption);
             break;
         case 4:
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 17, 0, (int *)&menu.twoOption);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_SWITCH_OR_KEEP, 0, (int *)&menu.twoOption);
             break;
         default:
             GF_ASSERT(FALSE);
             break;
         }
-        work->state = 2;
+        work->state = YES_NO_STATE_WAIT_INPUT;
         NARC_Delete(narc0);
         NARC_Delete(narc1);
         break;
-    case 2:
+    case YES_NO_STATE_WAIT_INPUT:
         work->input = BattleInput_CheckTouch(battleInput);
         if (work->input != -1) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            work->state = 3;
+            work->state = YES_NO_STATE_CLOSE_MENU;
         }
         break;
-    case 3:
+    case YES_NO_STATE_CLOSE_MENU:
         if (BattleInput_CheckFeedbackDone(battleInput) == TRUE) {
             narc0 = NARC_New(NARC_a_0_0_7, HEAP_ID_BATTLE);
             narc1 = NARC_New(NARC_a_0_0_8, HEAP_ID_BATTLE);
@@ -5707,16 +6014,16 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
             OpponentData_StopPokepicBobTask(opponentData);
             BattleHpBar_MenuCloseDummy(partnerHpBar);
             BattleInput_DisableBallGauge(battleInput);
-            BattleInput_ChangeMenu(narc0, narc1, battleInput, 0, 0, NULL);
+            BattleInput_ChangeMenu(narc0, narc1, battleInput, BATTLE_MENU_0, 0, NULL);
             if (work->input == 1) {
                 BattleInput_SetMenuOpenDummy(battleInput, 0);
             }
-            work->state = 4;
+            work->state = YES_NO_STATE_END;
             NARC_Delete(narc0);
             NARC_Delete(narc1);
         }
         break;
-    case 4:
+    case YES_NO_STATE_END:
         if (BattleInput_IsUnusedTaskNull(battleInput) == TRUE) {
             BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, work->input);
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
@@ -5769,17 +6076,17 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
     u8 battlerId;
 
     switch (work->state) {
-    case 0:
+    case MOVE_ANIM_STATE_SUBSTITUTE_HIDE:
         if (work->animData.isSubstitute && work->animData.isEffectAnim == 0 && Pokepic_GetAttr(work->pokepic, POKEPIC_VANISHED) == 0) {
             battlerId = work->battlerId;
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, battlerId, battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &substituteAnimData);
-            work->state = 1;
+            work->state = MOVE_ANIM_STATE_SUBSTITUTE_HIDE_ANIM;
         } else {
-            work->state = 4;
+            work->state = MOVE_ANIM_STATE_START;
         }
         return;
-    case 2:
+    case MOVE_ANIM_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &substituteParams, work->battlerId);
         BattleAnimUtil_RestorePic(&substituteParams, HEAP_ID_BATTLE);
         battlerId = work->battlerId;
@@ -5788,7 +6095,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         work->opponentData->substituteShown = 0;
         work->state++;
         return;
-    case 4:
+    case MOVE_ANIM_STATE_START:
         BattleSystem_SetCriticalHpMusicFlag(work->battleSystem, CRITICAL_MUSIC_OFF);
         if (work->disableHpBar) {
             BattleSystem_SetHpBarDisabled(work->battleSystem);
@@ -5799,7 +6106,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &work->animData);
         work->state++;
         return;
-    case 6:
+    case MOVE_ANIM_STATE_FINISH:
         BattleSystem_SetCriticalHpMusicFlag(work->battleSystem, 0);
         if (work->disableHpBar) {
             BattleSystem_SetHpBarEnabled(work->battleSystem);
@@ -5811,12 +6118,12 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
             battlerId = work->battlerId;
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &resubstituteAnimData, 1, 15, battlerId, battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, work->animSystem, &resubstituteAnimData);
-            work->state = 7;
+            work->state = MOVE_ANIM_STATE_RESUBSTITUTE_HIDE_ANIM;
         } else {
-            work->state = 10;
+            work->state = MOVE_ANIM_STATE_END;
         }
         return;
-    case 8:
+    case MOVE_ANIM_STATE_RESUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &resubstituteParams, work->battlerId);
         BattleAnimUtil_LoadSubstituteIntoPic(&resubstituteParams, HEAP_ID_BATTLE);
         battlerId = work->battlerId;
@@ -5825,16 +6132,16 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
         work->opponentData->substituteShown = 1;
         work->state++;
         return;
-    case 10:
+    case MOVE_ANIM_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
         return;
-    case 1:
-    case 3:
-    case 5:
-    case 7:
-    case 9:
+    case MOVE_ANIM_STATE_SUBSTITUTE_HIDE_ANIM:
+    case MOVE_ANIM_STATE_SUBSTITUTE_SHOW_ANIM:
+    case MOVE_ANIM_STATE_RUN:
+    case MOVE_ANIM_STATE_RESUBSTITUTE_HIDE_ANIM:
+    case MOVE_ANIM_STATE_RESUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(work->animSystem);
         if (BattleAnimSystem_IsActive(work->animSystem) == FALSE) {
             BattleAnimSystem_EndMove(work->animSystem);
@@ -5865,10 +6172,10 @@ void Task_MonFlicker(SysTask *task, void *data) {
 void Task_HealthbarUpdate(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
-    case 0:
+    case HP_BAR_UPDATE_STATE_INIT:
         BattleHpBar_InitHpChange(hpBar, hpBar->gainedHp);
         hpBar->script++;
-    case 1:
+    case HP_BAR_UPDATE_STATE_UPDATE:
         if (BattleHpBar_UpdateHpChange(hpBar) == -1) {
             hpBar->script++;
         }
@@ -5884,29 +6191,29 @@ void Task_HealthbarUpdate(SysTask *task, void *data) {
 void Task_ExpBarUpdate(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
-    case 0:
+    case EXP_BAR_UPDATE_STATE_INIT:
         hpBar->expSoundTimer = 0;
         PlaySE(SEQ_SE_DP_EXP);
         BattleHpBar_InitExpChange(hpBar, hpBar->gainedExp);
         hpBar->script++;
-    case 1:
+    case EXP_BAR_UPDATE_STATE_UPDATE:
         if (hpBar->expSoundTimer < 8) {
             hpBar->expSoundTimer++;
         }
         if (BattleHpBar_UpdateExpChange(hpBar) == -1) {
             if (hpBar->expSoundTimer >= 8) {
                 StopSE(SEQ_SE_DP_EXP, 0);
-                hpBar->script = 100;
+                hpBar->script = EXP_BAR_UPDATE_STATE_END;
             } else {
                 hpBar->script++;
             }
         }
         break;
-    case 2:
+    case EXP_BAR_UPDATE_STATE_WAIT_SOUND:
         hpBar->expSoundTimer++;
         if (hpBar->expSoundTimer >= 8) {
             StopSE(SEQ_SE_DP_EXP, 0);
-            hpBar->script = 100;
+            hpBar->script = EXP_BAR_UPDATE_STATE_END;
         }
         break;
     default:
@@ -5928,16 +6235,16 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
     int value;
 
     switch (work->state) {
-    case 0:
+    case FAINT_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 4;
+            work->state = FAINT_STATE_PLAY_CRY;
         }
         break;
-    case 2:
+    case FAINT_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &unsubstituteAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -5945,36 +6252,36 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
         work->opponentData->substituteShown = 0;
         work->state++;
         break;
-    case 1:
-    case 3:
+    case FAINT_STATE_SUBSTITUTE_HIDE_ANIM:
+    case FAINT_STATE_SUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (!BattleAnimSystem_IsActive(animSystem)) {
             BattleAnimSystem_EndMove(animSystem);
             work->state++;
         }
         break;
-    case 4:
+    case FAINT_STATE_PLAY_CRY:
         value = work->facing == 2 ? 117 : -117;
         PlayCryDelayedHandleChatot(BattleSystem_GetChatotVoice(work->battleSystem, work->battlerId), 5, work->species, work->form, value, 127, work->isTransformed, HEAP_ID_BATTLE, 0);
         work->state++;
-    case 5:
+    case FAINT_STATE_WAIT_CRY:
         if (!IsCryFinished()) {
             work->state++;
         }
         break;
-    case 6:
+    case FAINT_STATE_PLAY_SE:
         if (work->facing == 2) {
             PlaySE_SetPan(SEQ_SE_DP_POKE_DEAD3, 117);
         } else {
             PlaySE_SetPan(SEQ_SE_DP_POKE_DEAD3, -117);
         }
         if (Pokepic_GetAttr(work->pokepic, POKEPIC_SHADOW_H) > 0) {
-            work->state = 7;
+            work->state = FAINT_STATE_SHRINK_SHADOW;
         } else {
-            work->state = 8;
+            work->state = FAINT_STATE_START_SINK;
         }
         break;
-    case 7:
+    case FAINT_STATE_SHRINK_SHADOW:
         value = Pokepic_GetAttr(work->pokepic, POKEPIC_SHADOW_H) - 8;
         if (value < 0) {
             value = 0;
@@ -5984,12 +6291,12 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
             break;
         }
         work->state++;
-    case 8:
+    case FAINT_STATE_START_SINK:
         value = GetMonPicHeightBySpeciesGenderForm(work->species, work->gender, work->facing, work->form, work->personality);
         Pokepic_SetVisible(work->pokepic, 0, 0, 80, 80 - value);
         work->state++;
         break;
-    case 9:
+    case FAINT_STATE_SINK:
         value = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, value + 8);
         value = Pokepic_GetAttr(work->pokepic, POKEPIC_H) - 8;
@@ -6002,7 +6309,7 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 10:
+    case FAINT_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -6018,19 +6325,19 @@ void Task_FadeOutBattle(SysTask *task, void *data) {
     PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
 
     switch (work->state) {
-    case 0:
+    case FADE_OUT_STATE_START:
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_SUB_BG_F | PLTTBUF_MAIN_OBJ_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, 1, 0, 16, 0);
         Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, 0);
         GF_SndStartFadeOutBGM(0, 16);
         work->state++;
-    case 1:
+    case FADE_OUT_STATE_WAIT:
         if (PaletteData_GetSelectedBuffersBitmask(palette) != 0) {
             return;
         }
         work->state++;
         return;
-    case 2:
+    case FADE_OUT_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -6050,28 +6357,28 @@ void Task_ToggleVanish(SysTask *task, void *data) {
     BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
 
     switch (work->state) {
-    case 0:
+    case TOGGLE_VANISH_STATE_SET:
         if (work->opponentData->pokepic) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_VANISHED, work->vanish);
             if (work->vanish == TRUE) {
-                work->state = 0xFF;
+                work->state = TOGGLE_VANISH_STATE_END;
             } else {
                 work->state++;
             }
         } else {
-            work->state = 0xFF;
+            work->state = TOGGLE_VANISH_STATE_END;
         }
         break;
-    case 1:
+    case TOGGLE_VANISH_STATE_SUBSTITUTE_HIDE:
         if (work->isSubstitute && work->opponentData->substituteShown == 0) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &substituteAnimData, 1, 15, work->battlerId, work->battlerId, MOVE_NONE);
             OpponentData_StartMoveAnimation(work->battleSystem, work->opponentData, animSystem, &substituteAnimData);
             work->state++;
         } else {
-            work->state = 0xFF;
+            work->state = TOGGLE_VANISH_STATE_END;
         }
         break;
-    case 3:
+    case TOGGLE_VANISH_STATE_SUBSTITUTE_SHOW:
         BattleController_InitBattlerPicParams(work->battleSystem, &work->animData, &params, work->battlerId);
         BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 16, work->battlerId, work->battlerId, MOVE_NONE);
@@ -6079,8 +6386,8 @@ void Task_ToggleVanish(SysTask *task, void *data) {
         work->opponentData->substituteShown = 1;
         work->state++;
         break;
-    case 2:
-    case 4:
+    case TOGGLE_VANISH_STATE_SUBSTITUTE_HIDE_ANIM:
+    case TOGGLE_VANISH_STATE_SUBSTITUTE_SHOW_ANIM:
         BattleAnimSystem_Execute(animSystem);
         if (BattleAnimSystem_IsActive(animSystem) == FALSE) {
             BattleAnimSystem_EndMove(animSystem);
@@ -6100,12 +6407,12 @@ void Task_ToggleVanish(SysTask *task, void *data) {
 void Task_PlayExpBarFullFlash(SysTask *task, void *data) {
     OpponentExpBarFlashWork *work = data;
     switch (work->state) {
-    case 0:
+    case EXP_FLASH_STATE_START:
         BattleHpBar_BeginExpBarFullFlashEffect(work->hpBar, &work->done);
         PlaySE(SEQ_SE_DP_EXPMAX);
         work->state++;
         break;
-    case 1:
+    case EXP_FLASH_STATE_WAIT:
         if (work->done == TRUE) {
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work);
@@ -6131,13 +6438,13 @@ void Task_WaitBattleMessage(SysTask *task, void *data) {
 void Task_PrintSelectionMessage(SysTask *task, void *data) {
     OpponentSelectionMessageWork *work = data;
     switch (work->state) {
-    case 0:
+    case SELECTION_MSG_STATE_WAIT_PRINT:
         if (!TextPrinterCheckActive(work->printerId)) {
             work->state++;
             work->timer = 0;
         }
         break;
-    case 1:
+    case SELECTION_MSG_STATE_WAIT_TIMER:
         work->timer++;
         if (work->timer == 40) {
             BattleController_ReplySelectionMessageDone(work->battleSystem, work->battlerId);
@@ -6184,7 +6491,7 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     work->timer++;
 
     switch (work->state) {
-    case 0:
+    case ENCOUNTER_ANIM_STATE_INIT:
         work->emitterManager = BattleAnimEmitterManager_New(HEAP_ID_BATTLE, 0);
         terrain = gBattleEncounterTerrains[terrain];
         emitter.resourceId = terrain;
@@ -6195,8 +6502,8 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
         work->secondEmitter = BattleAnimEmitterManager_AddEmitter(work->emitterManager, &emitter);
         BattleAnimEmitter_Start(work->firstEmitter);
         PlaySE(SEQ_SE_DP_PASA2);
-        work->state = 1;
-    case 1:
+        work->state = ENCOUNTER_ANIM_STATE_FADE;
+    case ENCOUNTER_ANIM_STATE_FADE:
         if (work->timer == 10) {
             PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xF3FF, 0, 0, 16, (u16)color);
             PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_OBJ_F, 0x3FFF, 0, 0, 16, (u16)color);
@@ -6231,27 +6538,27 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 2:
+    case ENCOUNTER_ANIM_STATE_WAIT_EMITTER:
         if (!BattleAnimEmitter_IsActive(work->secondEmitter)) {
             BattleAnimEmitterManager_Free(work->emitterManager);
             work->state++;
         }
         break;
-    case 3:
+    case ENCOUNTER_ANIM_STATE_END:
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 0);
         Heap_Free(work);
         SysTask_Destroy(task);
         break;
-    case 4:
+    case ENCOUNTER_ANIM_STATE_STOP_EMITTERS:
         BattleAnimEmitterManager_StopAll(work->emitterManager);
         BattleAnimEmitterManager_Free(work->emitterManager);
         work->state++;
-    case 5:
+    case ENCOUNTER_ANIM_STATE_RESET_PALETTES:
         RESTORE_BG_PALETTES();
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F, 0xFFFF, 0, 0, 0, 0x7FFF);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_OBJ_F, 0x3FFF, 0, 0, 0, 0xFFFF);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, 0, 0, 0, 0x7FFF);
-        work->state = 3;
+        work->state = ENCOUNTER_ANIM_STATE_END;
         break;
     }
 }
@@ -6260,11 +6567,11 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
     OpponentSelectMoveToForgetWork *work = data;
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
     switch (work->state) {
-    case 0:
+    case FORGET_MOVE_STATE_FADE_OUT:
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 0, 16, 0);
         work->state++;
         break;
-    case 1:
+    case FORGET_MOVE_STATE_OPEN_PARTY:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
             BattleSystem_FreeInputForSubMenu(work->battleSystem);
             work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
@@ -6283,14 +6590,14 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 2:
+    case FORGET_MOVE_STATE_WAIT_PARTY:
         if (work->partyMenu->done) {
             BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
             PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
             work->state++;
         }
         break;
-    case 3:
+    case FORGET_MOVE_STATE_REPLY:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
             if (work->partyMenu->moveSlot == MAX_MON_MOVES) {
                 BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, 0xFF);
@@ -6313,7 +6620,7 @@ void Task_PlayMosaicAnimation(SysTask *task, void *data) {
     int mosaic;
 
     switch (work->state) {
-    case 0:
+    case MOSAIC_STATE_UPDATE:
         if (work->counter == work->delay) {
             work->counter = 0;
             mosaic = Pokepic_GetAttr(work->pokepic, POKEPIC_MOSAIC);
@@ -6330,7 +6637,7 @@ void Task_PlayMosaicAnimation(SysTask *task, void *data) {
             work->counter++;
         }
         break;
-    case 1:
+    case MOSAIC_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -6356,7 +6663,7 @@ void Task_ShowPartyGauge(SysTask *task, void *data) {
         break;
     }
     switch (work->state) {
-    case 0:
+    case SHOW_PARTY_GAUGE_STATE_SHOW:
         if (work->midBattle == FALSE) {
             show = 0;
             variant = 1;
@@ -6380,7 +6687,7 @@ void Task_ShowPartyGauge(SysTask *task, void *data) {
         BattleSystem_SetPartyGauge(work->battleSystem, side, (u32 *)partyGauge);
         work->state++;
         break;
-    case 1:
+    case SHOW_PARTY_GAUGE_STATE_WAIT:
         partyGauge = (PartyGauge *)BattleSystem_GetPartyGauge(work->battleSystem, side);
         if (PartyGauge_IsArrowTaskFinished(partyGauge) == TRUE) {
             work->state++;
@@ -6410,7 +6717,7 @@ void Task_HidePartyGauge(SysTask *task, void *data) {
     }
     partyGauge = (PartyGauge *)BattleSystem_GetPartyGauge(work->battleSystem, side);
     switch (work->state) {
-    case 0:
+    case HIDE_PARTY_GAUGE_STATE_HIDE:
         switch (work->midBattle) {
         case FALSE:
             hide = 0;
@@ -6422,7 +6729,7 @@ void Task_HidePartyGauge(SysTask *task, void *data) {
         PartyGauge_StartHideTask(partyGauge, hide, hide);
         work->state++;
         break;
-    case 1:
+    case HIDE_PARTY_GAUGE_STATE_WAIT:
         if (PartyGauge_IsHideTaskFinished(partyGauge) == TRUE) {
             PartyGauge_DeleteAndFreeResources(partyGauge);
             BattleSystem_SetPartyGauge(work->battleSystem, side, NULL);
@@ -6470,7 +6777,7 @@ void Task_OpponentScreenFade(SysTask *task, void *data) {
     PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
 
     switch (work->state) {
-    case 0:
+    case SCREEN_FADE_STATE_START:
         if (work->mode == 0) {
             PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
             Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, 0xFFFF);
@@ -6478,7 +6785,7 @@ void Task_OpponentScreenFade(SysTask *task, void *data) {
             GF_SndStartFadeOutBGM(0, 16);
         }
         work->state++;
-    case 1:
+    case SCREEN_FADE_STATE_BLEND:
         if (work->mode == 0) {
             PaletteData_BlendPalette(paletteData, PLTTBUF_MAIN_BG, 0, 0xA0, work->counter, 0xFFFF);
             PaletteData_BlendPalette(paletteData, PLTTBUF_MAIN_BG, 0xC0, 0x40, work->counter, 0xFFFF);
@@ -6495,7 +6802,7 @@ void Task_OpponentScreenFade(SysTask *task, void *data) {
             work->state++;
         }
         break;
-    case 2:
+    case SCREEN_FADE_STATE_END:
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work);
         SysTask_Destroy(task);

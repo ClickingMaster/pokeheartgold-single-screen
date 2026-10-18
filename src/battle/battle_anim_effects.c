@@ -2209,17 +2209,22 @@ void BattleAnimUtil_StartSpriteAnim(ManagedSprite *sprite, u32 *state, fx32 spee
     ManagedSprite_TickNFrames(sprite, FX32_CONST(55));
 }
 
+enum {
+    SPRITE_ANIM_STATE_RUNNING,
+    SPRITE_ANIM_STATE_DONE,
+};
+
 BOOL BattleAnimUtil_IsSpriteAnimDone(ManagedSprite *sprite, u32 *state) {
     BOOL done = FALSE;
 
     switch (*state) {
-    case 0:
+    case SPRITE_ANIM_STATE_RUNNING:
         if (!ManagedSprite_IsAnimated(sprite)) {
             done = TRUE;
             (*state)++;
         }
         break;
-    case 1:
+    case SPRITE_ANIM_STATE_DONE:
         done = TRUE;
         break;
     default:

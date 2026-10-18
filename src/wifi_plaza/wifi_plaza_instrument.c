@@ -5,6 +5,8 @@
 
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
+
 #include "wifi_plaza/wifi_plaza_camera.h"
 #include "wifi_plaza/wifi_plaza_light.h"
 #include "wifi_plaza/wifi_plaza_map.h"
@@ -16,6 +18,19 @@
 #include "model_animation.h"
 #include "sound_playback.h"
 #include "system.h"
+
+enum WiFiPlazaBalloonStage {
+    WIFI_PLAZA_BALLOON_START,
+    WIFI_PLAZA_BALLOON_FLASH,
+    WIFI_PLAZA_BALLOON_WAIT_FLASH,
+    WIFI_PLAZA_BALLOON_FALL,
+    WIFI_PLAZA_BALLOON_BOUNCE,
+};
+
+enum WiFiPlazaBalloonPhase {
+    WIFI_PLAZA_BALLOON_PHASE_UP,
+    WIFI_PLAZA_BALLOON_PHASE_DOWN,
+};
 
 // Entry of the type 12-14 sequences (12 steps each): show `model` at animation frame `frame`, 0 = hidden
 typedef struct WiFiPlazaInstrumentStep {
@@ -524,23 +539,23 @@ void WiFiPlazaInstrument_InitPop01(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     effect->work.fade.fade[0] = 8;
 
     switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
-    case 0:
+    case DIR_NORTH:
         a.z -= 0x1C000;
         b.z -= 0xE000;
         ModelInstance_SetRotation(&effect->models[1], 0xBFFF, 1);
         break;
-    case 1:
+    case DIR_SOUTH:
         a.z += 0x18000;
         b.z += 0xB000;
         ModelInstance_SetRotation(&effect->models[1], 0x3FFF, 1);
         break;
-    case 2:
+    case DIR_WEST:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
         ModelInstance_SetRotation(&effect->models[1], 0, 1);
         break;
-    case 3:
+    case DIR_EAST:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
@@ -568,7 +583,7 @@ void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     effect->work.fade.fade[1] = 8;
 
     switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
-    case 0:
+    case DIR_NORTH:
         a.z -= 0x1C000;
         b.z -= 0xE000;
         ModelInstance_SetRotation(&effect->models[1], 0xA38D, 1);
@@ -576,7 +591,7 @@ void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[1], a.x + 0x8000, a.y, a.z);
         ModelInstance_SetPosition(&effect->models[2], a.x - 0x8000, a.y, a.z);
         break;
-    case 1:
+    case DIR_SOUTH:
         a.z += 0x18000;
         b.z += 0xB000;
         ModelInstance_SetRotation(&effect->models[1], 0x238E, 1);
@@ -584,7 +599,7 @@ void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[1], a.x - 0x8000, a.y, a.z);
         ModelInstance_SetPosition(&effect->models[2], a.x + 0x8000, a.y, a.z);
         break;
-    case 2:
+    case DIR_WEST:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
@@ -593,7 +608,7 @@ void WiFiPlazaInstrument_InitPop02(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[1], a.x, a.y, a.z - 0x8000);
         ModelInstance_SetPosition(&effect->models[2], a.x, a.y, a.z + 0x8000);
         break;
-    case 3:
+    case DIR_EAST:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
@@ -625,7 +640,7 @@ void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     b.y += FX32_CONST(16);
 
     switch (WiFiPlazaObj_GetParam(effect->obj, 6)) {
-    case 0:
+    case DIR_NORTH:
         a.z -= 0x1C000;
         b.z -= 0xE000;
         ModelInstance_SetRotation(&effect->models[1], 0xA38D, 1);
@@ -635,7 +650,7 @@ void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[2], a.x - 0x8000, a.y, a.z);
         ModelInstance_SetPosition(&effect->models[3], a.x, a.y, a.z);
         break;
-    case 1:
+    case DIR_SOUTH:
         a.z += 0x18000;
         b.z += 0xB000;
         ModelInstance_SetRotation(&effect->models[1], 0x238E, 1);
@@ -645,7 +660,7 @@ void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[2], a.x + 0x8000, a.y, a.z);
         ModelInstance_SetPosition(&effect->models[3], a.x, a.y, a.z);
         break;
-    case 2:
+    case DIR_WEST:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
@@ -656,7 +671,7 @@ void WiFiPlazaInstrument_InitPop03(WiFiPlazaInstrumentManager *manager, WiFiPlaz
         ModelInstance_SetPosition(&effect->models[2], a.x, a.y, a.z + 0x8000);
         ModelInstance_SetPosition(&effect->models[3], a.x, a.y, a.z);
         break;
-    case 3:
+    case DIR_EAST:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
@@ -932,13 +947,13 @@ BOOL WiFiPlazaInstrument_UpdateBalloon(WiFiPlazaInstrumentManager *manager, WiFi
     u8 phase = effect->phase;
 
     switch (phase) {
-    case 0:
+    case WIFI_PLAZA_BALLOON_PHASE_UP:
         if (WiFiPlazaInstrument_UpdateBalloonUp(manager, effect) != FALSE) {
-            effect->phase = 1;
+            effect->phase = WIFI_PLAZA_BALLOON_PHASE_DOWN;
             WiFiPlazaInstrument_StartBalloonDown(manager, effect);
         }
         break;
-    case 1:
+    case WIFI_PLAZA_BALLOON_PHASE_DOWN:
         if (WiFiPlazaInstrument_UpdateBalloonDown(manager, effect) != FALSE) {
             return TRUE;
         }
@@ -1198,7 +1213,7 @@ void WiFiPlazaInstrument_StartBalloonFall(WiFiPlazaInstrumentManager *manager, W
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
     WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y - FX32_CONST(sWiFiPlazaInstrumentBalloonHeights[effect->work.hop.count - 1]), pos.z, pos.z, 10);
     effect->work.hop.timer = 0;
-    effect->work.hop.stage = 0;
+    effect->work.hop.stage = WIFI_PLAZA_BALLOON_START;
     for (i = 0; i < effect->work.hop.count; i++) {
         ModelInstance_GetPosition(&effect->models[i], &pos.x, &pos.y, &pos.z);
         switch (effect->work.hop.animKinds[i]) {
@@ -1231,7 +1246,7 @@ void WiFiPlazaInstrument_StartBalloonDrop(WiFiPlazaInstrumentManager *manager, W
     WiFiPlazaObj_GetPosition(effect->obj, &pos);
     WiFiPlazaInstrumentTween_Init(&effect->work.hop.tweens[3], pos.x, pos.x, pos.y, pos.y - FX32_CONST(2), pos.z, pos.z, 1);
     effect->work.hop.timer = 0;
-    effect->work.hop.stage = 0;
+    effect->work.hop.stage = WIFI_PLAZA_BALLOON_START;
 }
 
 BOOL WiFiPlazaInstrument_UpdateBalloonDown(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect) {
@@ -1254,40 +1269,40 @@ BOOL WiFiPlazaInstrument_UpdateBalloonFall(WiFiPlazaInstrumentManager *manager, 
     ModelInstance *model;
 
     switch (effect->work.hop.stage) {
-    case 0:
+    case WIFI_PLAZA_BALLOON_START:
         effect->work.hop.timer++;
         if (effect->work.hop.timer >= 8) {
-            effect->work.hop.stage = 1;
+            effect->work.hop.stage = WIFI_PLAZA_BALLOON_FLASH;
         }
         break;
-    case 1:
+    case WIFI_PLAZA_BALLOON_FLASH:
         WiFiPlazaObj_SetPoseLoopEffect(effect->obj, TRUE);
         effect->work.hop.timer = 16;
-        effect->work.hop.stage = 2;
+        effect->work.hop.stage = WIFI_PLAZA_BALLOON_WAIT_FLASH;
         break;
-    case 2:
+    case WIFI_PLAZA_BALLOON_WAIT_FLASH:
         effect->work.hop.timer--;
         if (effect->work.hop.timer <= 0) {
             WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
-            effect->work.hop.stage = 3;
+            effect->work.hop.stage = WIFI_PLAZA_BALLOON_FALL;
             effect->work.hop.timer = 0;
             WiFiPlazaObj_SetDirection(effect->obj, WiFiPlazaObj_GetParam(effect->obj, 6));
         }
         break;
-    case 3:
+    case WIFI_PLAZA_BALLOON_FALL:
         done = WiFiPlazaInstrumentTween_Update(&effect->work.hop.tweens[3], effect->work.hop.timer);
         effect->work.hop.timer++;
         WiFiPlazaObj_GetPosition(effect->obj, &objPos);
         WiFiPlazaInstrumentTween_GetPosition(&effect->work.hop.tweens[3], &objPos.x, &objPos.y, &objPos.z);
         WiFiPlazaObj_SetPosition(effect->obj, &objPos);
         if (done == TRUE) {
-            effect->work.hop.stage = 4;
+            effect->work.hop.stage = WIFI_PLAZA_BALLOON_BOUNCE;
             effect->work.hop.timer = 0;
             effect->work.hop.baseY = objPos.y;
             WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_SUTYA);
         }
         break;
-    case 4: {
+    case WIFI_PLAZA_BALLOON_BOUNCE: {
         u16 angle = 0x7FFF * effect->work.hop.timer / 10;
         fx32 height = FX_Mul(FX_SinIdx(angle), FX32_CONST(8));
         int next;
@@ -1345,29 +1360,29 @@ BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *manager, 
         WiFiPlazaInstrument_UpdateBalloonAnim(manager, effect, i);
     }
     switch (effect->work.hop.stage) {
-    case 0:
+    case WIFI_PLAZA_BALLOON_START:
         WiFiPlazaInstrument_PlaySE(manager, effect, SEQ_SE_PL_HIROBA20);
         for (i = 0; i < effect->work.hop.count; i++) {
             WiFiPlazaInstrument_SetBalloonAnim(manager, effect, i, 4);
         }
-        effect->work.hop.stage = 1;
+        effect->work.hop.stage = WIFI_PLAZA_BALLOON_FLASH;
         break;
-    case 1:
+    case WIFI_PLAZA_BALLOON_FLASH:
         WiFiPlazaObj_SetPoseLoopEffect(effect->obj, TRUE);
         effect->work.hop.timer = 8;
-        effect->work.hop.stage = 2;
+        effect->work.hop.stage = WIFI_PLAZA_BALLOON_WAIT_FLASH;
         break;
-    case 2:
+    case WIFI_PLAZA_BALLOON_WAIT_FLASH:
         effect->work.hop.timer--;
         if (effect->work.hop.timer <= 0) {
             WiFiPlazaObj_SetPoseLoopEffect(effect->obj, FALSE);
-            effect->work.hop.stage = 3;
+            effect->work.hop.stage = WIFI_PLAZA_BALLOON_FALL;
             effect->work.hop.timer = 0;
             result = WiFiPlazaObj_GetParam(effect->obj, 6);
             WiFiPlazaObj_SetDirection(effect->obj, result);
         }
         break;
-    case 3:
+    case WIFI_PLAZA_BALLOON_FALL:
         result = WiFiPlazaInstrumentTween_Update(&effect->work.hop.tweens[3], effect->work.hop.timer);
         effect->work.hop.timer++;
         WiFiPlazaObj_GetPosition(effect->obj, &pos);

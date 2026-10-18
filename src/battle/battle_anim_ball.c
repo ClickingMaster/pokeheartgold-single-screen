@@ -180,6 +180,37 @@ extern const BallThrowFunc sBallThrowBallAnimFuncs[];
 extern const BallThrowBounceSound sBallThrowBounceSounds[];
 extern const BallThrowSpinningKinds sBallThrowSpinningKinds;
 extern const s16 sBallThrowShakeOffsets[];
+enum BallCaptureState {
+    BALL_CAPTURE_STATE_IDLE,
+    BALL_CAPTURE_STATE_THROW,
+    BALL_CAPTURE_STATE_GO_TO_OPEN,
+    BALL_CAPTURE_STATE_OPEN,
+    BALL_CAPTURE_STATE_OPEN_DONE,
+    BALL_CAPTURE_STATE_DEFLECT,
+    BALL_CAPTURE_STATE_DEFLECT_DONE,
+    BALL_CAPTURE_STATE_START_FALL,
+    BALL_CAPTURE_STATE_GO_TO_FLASH,
+    BALL_CAPTURE_STATE_FLASH,
+    BALL_CAPTURE_STATE_GO_TO_DROP,
+    BALL_CAPTURE_STATE_DROP,
+    BALL_CAPTURE_STATE_NONE,
+    BALL_CAPTURE_STATE_BOUNCE,
+    BALL_CAPTURE_STATE_BOUNCE_DONE,
+    BALL_CAPTURE_STATE_SHAKE_WAIT,
+    BALL_CAPTURE_STATE_GO_TO_SHAKE,
+    BALL_CAPTURE_STATE_SHAKE,
+    BALL_CAPTURE_STATE_SHAKE_DONE,
+    BALL_CAPTURE_STATE_GO_TO_SKIP,
+    BALL_CAPTURE_STATE_SKIP,
+    BALL_CAPTURE_STATE_CLICK,
+    BALL_CAPTURE_STATE_CLICK_DONE,
+    BALL_CAPTURE_STATE_RESTORE_PALETTE,
+    BALL_CAPTURE_STATE_GO_TO_FADE_OUT,
+    BALL_CAPTURE_STATE_FADE_OUT,
+    BALL_CAPTURE_STATE_GO_TO_END,
+    BALL_CAPTURE_STATE_END,
+};
+
 extern const BallThrowFunc sBallThrowCaptureStateFuncs[];
 extern const s16 gBallThrowBounceSteps[]; // bounce steps of 6 bytes: y offset, then (ov07_02237310) the animation frame
 extern const u16 ov07_02237310[];
@@ -319,12 +350,20 @@ void BallSealEffect_ReadMon(BallSealEffect *effect, const BallSealEffectTemplate
 }
 
 // Loads the particle resource of each seal on the capsule, two seal slots per frame
+enum BallSealLoadState {
+    BALL_SEAL_LOAD_SEALS_1_2,
+    BALL_SEAL_LOAD_SEALS_3_4,
+    BALL_SEAL_LOAD_SEALS_5_6,
+    BALL_SEAL_LOAD_SEALS_7_8,
+    BALL_SEAL_LOADED = 0xFF,
+};
+
 void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
     BallSealEffect *effect = data;
     u8 resource0, resource3, resource2, resource1;
 
     switch (effect->state) {
-    case 0: {
+    case BALL_SEAL_LOAD_SEALS_1_2: {
         int i;
         effect->narc = NARC_New(NARC_a_0_9_5, effect->heapId);
         for (i = 0; i < 2; i++) {
@@ -352,7 +391,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
         effect->state++;
         return;
     }
-    case 1: {
+    case BALL_SEAL_LOAD_SEALS_3_4: {
         int i;
         for (i = 2; i < 4; i++) {
             SEAL *seal = CapsuleGetSealI(&effect->capsule, i);
@@ -379,7 +418,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
         effect->state++;
         return;
     }
-    case 2: {
+    case BALL_SEAL_LOAD_SEALS_5_6: {
         int i;
         for (i = 4; i < 6; i++) {
             SEAL *seal = CapsuleGetSealI(&effect->capsule, i);
@@ -406,7 +445,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
         effect->state++;
         return;
     }
-    case 3: {
+    case BALL_SEAL_LOAD_SEALS_7_8: {
         int i;
         for (i = 6; i < 8; i++) {
             SEAL *seal = CapsuleGetSealI(&effect->capsule, i);
@@ -430,7 +469,7 @@ void BallSealEffect_LoadSealParticlesTask(SysTask *task, void *data) {
                 }
             }
         }
-        effect->state = 0xFF;
+        effect->state = BALL_SEAL_LOADED;
         NARC_Delete(effect->narc);
         SysTask_Destroy(task);
         return;
@@ -443,18 +482,18 @@ void BallSealEffect_LoadResources(BallSealEffect *effect) {
         int resource = BallAnim_GetSealParticleResource(effect->ball);
         effect->count = 1;
         effect->particleSystems[0] = BattleAnimSystem_NewParticleSystemFromNarc(effect->heapId, NARC_a_0_9_5, resource, FALSE);
-        effect->state = 0xFF;
+        effect->state = BALL_SEAL_LOADED;
     } else {
         SysTask *task;
         effect->count = 0;
-        effect->state = 0;
+        effect->state = BALL_SEAL_LOAD_SEALS_1_2;
         task = SysTask_CreateOnMainQueue(BallSealEffect_LoadSealParticlesTask, effect, 1000);
         BallSealEffect_LoadSealParticlesTask(task, effect);
     }
 }
 
 BOOL BallSealEffect_IsLoaded(BallSealEffect *effect) {
-    return effect->state == 0xFF;
+    return effect->state == BALL_SEAL_LOADED;
 }
 
 #pragma force_active on
@@ -787,13 +826,13 @@ BOOL BallThrow_CaptureStateIdle(BallThrow *data) {
 
 BOOL BallThrow_CaptureStateThrow(BallThrow *data) {
     if (BallThrow_RunThrowArc(data) == FALSE) {
-        BallThrow_GoToCaptureState(data, 2);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_OPEN);
     }
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateGoToOpen(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 3);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_OPEN);
     return TRUE;
 }
 
@@ -832,7 +871,7 @@ BOOL BallThrow_CaptureStateOpen(BallThrow *data) {
         }
         break;
     default:
-        BallThrow_GoToCaptureState(data, 4);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_OPEN_DONE);
         break;
     }
     return TRUE;
@@ -851,7 +890,7 @@ BOOL BallThrow_CaptureStateDeflect(BallThrow *data) {
         data->arcHeight = 12;
         data->stateFrames++;
     } else if (BallThrow_RunThrowArc(data) == FALSE) {
-        BallThrow_GoToCaptureState(data, 6);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_DEFLECT_DONE);
     }
     return TRUE;
 }
@@ -861,12 +900,12 @@ BOOL BallThrow_CaptureStateDeflectDone(BallThrow *data) {
 }
 
 BOOL BallThrow_CaptureStateStartFall(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 8);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_FLASH);
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateGoToFlash(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 9);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_FLASH);
     return TRUE;
 }
 
@@ -887,7 +926,7 @@ BOOL BallThrow_CaptureStateFlash(BallThrow *data) {
         break;
     default:
         if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
-            BallThrow_GoToCaptureState(data, 10);
+            BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_DROP);
         }
         break;
     }
@@ -895,7 +934,7 @@ BOOL BallThrow_CaptureStateFlash(BallThrow *data) {
 }
 
 BOOL BallThrow_CaptureStateGoToDrop(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 11);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_DROP);
     return TRUE;
 }
 
@@ -913,7 +952,7 @@ BOOL BallThrow_CaptureStateDrop(BallThrow *data) {
     case 1:
         if (BattleAnimUtil_UpdateLinearMotionSprite(BALL_ARC_MOTION(data), data->managedSprite) == FALSE) {
             data->step++;
-            BallThrow_GoToCaptureState(data, 13);
+            BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_BOUNCE);
         }
         break;
     }
@@ -951,7 +990,7 @@ BOOL BallThrow_CaptureStateBounce(BallThrow *data) {
         break;
     }
     default:
-        BallThrow_GoToCaptureState(data, 14);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_BOUNCE_DONE);
         break;
     }
     return TRUE;
@@ -967,13 +1006,13 @@ BOOL BallThrow_CaptureStateShakeWait(BallThrow *data) {
     if (counter >= 14) {
         data->step++;
         data->stateFrames = 0;
-        BallThrow_GoToCaptureState(data, 16);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_SHAKE);
     }
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateGoToShake(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 17);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_SHAKE);
     return TRUE;
 }
 
@@ -995,7 +1034,7 @@ BOOL BallThrow_CaptureStateShake(BallThrow *data) {
             data->step++;
             data->shakeCount++;
             ManagedSprite_SetAffineZRotation(data->managedSprite, 0);
-            BallThrow_GoToCaptureState(data, 18);
+            BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_SHAKE_DONE);
             return TRUE;
         }
         if (data->stateFrames == 5) {
@@ -1015,12 +1054,12 @@ BOOL BallThrow_CaptureStateShakeDone(BallThrow *data) {
 }
 
 BOOL BallThrow_CaptureStateGoToSkip(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 20);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_SKIP);
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateSkip(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 27);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_END);
     return TRUE;
 }
 
@@ -1057,7 +1096,7 @@ BOOL BallThrow_CaptureStateClick(BallThrow *data) {
         break;
     default:
         if (PaletteData_GetSelectedBuffersBitmask(data->params.paletteData) == 0) {
-            BallThrow_GoToCaptureState(data, 22);
+            BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_CLICK_DONE);
         }
         break;
     }
@@ -1082,14 +1121,14 @@ BOOL BallThrow_CaptureStateRestorePalette(BallThrow *data) {
         }
         break;
     default:
-        BallThrow_GoToCaptureState(data, 24);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_FADE_OUT);
         break;
     }
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateGoToFadeOut(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 25);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_FADE_OUT);
     return TRUE;
 }
 
@@ -1112,14 +1151,14 @@ BOOL BallThrow_CaptureStateFadeOut(BallThrow *data) {
         reg_G2_BLDALPHA = data->fadeAlphaA | (data->fadeAlphaB << 8);
         break;
     default:
-        BallThrow_GoToCaptureState(data, 26);
+        BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_GO_TO_END);
         break;
     }
     return TRUE;
 }
 
 BOOL BallThrow_CaptureStateGoToEnd(BallThrow *data) {
-    BallThrow_GoToCaptureState(data, 27);
+    BallThrow_GoToCaptureState(data, BALL_CAPTURE_STATE_END);
     return TRUE;
 }
 

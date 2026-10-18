@@ -21,17 +21,17 @@ int BattleDpadCursor_HandleInput(BattleDpadCursor *cursor) {
         return -1;
     }
     if (gSystem.newKeys & PAD_KEY_UP) {
-        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, 0);
-        direction = 0;
+        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, BATTLE_DPAD_DIR_UP);
+        direction = BATTLE_DPAD_DIR_UP;
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
-        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, 1);
-        direction = 1;
+        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, BATTLE_DPAD_DIR_DOWN);
+        direction = BATTLE_DPAD_DIR_DOWN;
     } else if (gSystem.newKeys & PAD_KEY_LEFT) {
-        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, 2);
-        direction = 2;
+        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, BATTLE_DPAD_DIR_LEFT);
+        direction = BATTLE_DPAD_DIR_LEFT;
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, 3);
-        direction = 3;
+        input = DpadMenuBox_GetNeighborInDirection(cursor->boxes, NULL, NULL, NULL, NULL, cursor->position, BATTLE_DPAD_DIR_RIGHT);
+        direction = BATTLE_DPAD_DIR_RIGHT;
     } else {
         input = 0xFF;
     }

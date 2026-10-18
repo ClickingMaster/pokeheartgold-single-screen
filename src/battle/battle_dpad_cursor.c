@@ -94,22 +94,22 @@ BOOL BattleDpadCursor_TryActivate(BattleDpadCursor *cursor) {
 // the cursor came from; directions 0-3 are up, down, left, right.
 BOOL BattleDpadCursor_HasReturnLink(const DpadMenuBox *box, u32 direction) {
     switch (direction) {
-    case 0:
+    case BATTLE_DPAD_DIR_UP:
         if (box->buttonDown & 0x80) {
             return TRUE;
         }
         break;
-    case 1:
+    case BATTLE_DPAD_DIR_DOWN:
         if (box->buttonUp & 0x80) {
             return TRUE;
         }
         break;
-    case 2:
+    case BATTLE_DPAD_DIR_LEFT:
         if (box->buttonRight & 0x80) {
             return TRUE;
         }
         break;
-    case 3:
+    case BATTLE_DPAD_DIR_RIGHT:
         if (box->buttonLeft & 0x80) {
             return TRUE;
         }
