@@ -20,12 +20,6 @@ typedef struct {
 
 extern Node *LobbyTree_EraseRebalance(Node *, void *);
 
-typedef struct {
-    Node *first, *second;
-    Node **root;
-    Node *volatile cleanup;
-} Guard;
-
 void LobbyUserIdSet_Erase(Iterator *, Tree *, Iterator);
 
 void LobbyUserIdSet_Erase(Iterator *out, Tree *tree, Iterator node) {

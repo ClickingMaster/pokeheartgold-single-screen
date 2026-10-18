@@ -6,9 +6,6 @@
 #include <nitro/code32.h>
 #include <stdarg.h>
 #pragma warn_uninitializedvar off
-#define V(p, o) (*(volatile u32 *)((p) + (o)))
-#define W(p, o) (*(u32 *)((p) + (o)))
-#define H(p, o) (*(u16 *)((p) + (o)))
 
 typedef union S {
     struct {
@@ -35,14 +32,6 @@ typedef struct Node {
     u32 parent;
     u32 key;
 } Node;
-
-typedef struct Small {
-    u8 x;
-} Small;
-
-typedef struct E {
-    int key, val;
-} E;
 
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 #include "overlay45_string_search.h"

@@ -10,27 +10,8 @@ typedef struct {
     u32 len, cap;
 } Vec;
 
-typedef struct {
-    u32 a, b;
-} Pair;
-
-typedef struct {
-    Pair first, second;
-    u32 e, f;
-} Six;
-
-typedef struct {
-    u32 type;
-    Six value;
-} Record;
-
 extern void *LobbyCharVector_RecommendSize(Vec *, u32);
 extern void LobbyCharVector_Reallocate(Vec *, u32, void *);
-
-typedef struct {
-    u8 *p;
-    u32 extra;
-} Iterator;
 
 void LobbyCharVector_AssignRange(Vec *, u8 *, u8 *, int);
 

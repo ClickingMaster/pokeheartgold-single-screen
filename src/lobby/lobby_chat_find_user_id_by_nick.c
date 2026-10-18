@@ -9,11 +9,6 @@ typedef struct {
 } String;
 
 typedef struct {
-    int id;
-    String value;
-} Pair;
-
-typedef struct {
     u8 unk_00[0x70];
     u32 userMap;
     u8 userMapHead[1];

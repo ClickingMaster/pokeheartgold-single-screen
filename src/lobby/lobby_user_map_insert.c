@@ -2,9 +2,7 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(void **)((char *)(p) + (o)))
-#define A(p, o) ((void *)((char *)(p) + (o)))
 
 typedef struct Node {
     void *left, *right;

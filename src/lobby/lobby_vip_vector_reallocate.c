@@ -4,9 +4,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
-#define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
-#define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 typedef struct {
     u8 byte;

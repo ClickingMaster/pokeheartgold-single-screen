@@ -243,6 +243,7 @@ static inline void TagTemp(void) {
 }
 
 void LobbyU32Vector_PushBackSlow(Vec *v, u32 *val, Tag t);
+void *LobbyU32Vector_Data(void *vector);
 Str *LobbyString_Concat(Str *out, Str *a, Str *b);
 
 static inline BOOL StrEqC(Str *a, const char *b) {
@@ -279,6 +280,9 @@ void LobbyChannelMap_Find(Iter *out, Tree *t, Str *key);
 Node *LobbyChannelMap_LowerBound(Tree *t, Str *key, Node *n, Node *res);
 void LobbyChannelMap_MakeEntry(NamedEntry *dst, Str *name, Entry *src);
 void LobbyChatManager_GetGameKey(Str *out, LobbyChatManager *manager);
+int LobbyChat_AreChannelUsersEnumerated(LobbyChatManager *manager, Str *channel);
+int LobbyChat_SetChannelUsersEnumerated(LobbyChatManager *manager, Str *channel);
+int LobbyChat_GetChannelUserLimit(LobbyChatManager *manager, Str *channel);
 int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
 void *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key);
 void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId);
@@ -312,6 +316,8 @@ Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLe
 void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val);
 Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 insertLeft, u8 isLeftmost, Obj **val);
 void *LobbyRequest_Delete(void *p);
+void LobbyRequest_Destroy(void);
+int LobbyRequest_GetParam(void *request);
 int LobbyRequest_GetId(u8 *request);
 void LobbyString_Assign(Str *dst, Str *src);
 void LobbyString_AssignCStr(Str *s, const char *cstr);
@@ -342,6 +348,7 @@ void LobbyChatManager_GetUser(Str *out, LobbyChatManager *manager);
 int LobbyChat_FindUserIdByNick(LobbyChatManager *manager, const Str *nick);
 int LobbyChat_GetLastError(void);
 int LobbyChat_IsInChannel(char *channel);
+void LobbyChat_OnEnumChannelsEach(void *chat, int success);
 void LobbyChat_OnBroadcastKeyChanged(void *chat, char *channel, char *nick, void *key, void *value);
 void LobbyChat_OnChannelMessage(void *chat, char *channel, char *nick, void *message, int type);
 void LobbyChat_OnChannelModeChanged(void);

@@ -6,6 +6,8 @@
 
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 
 typedef struct DequeBuf {
@@ -59,7 +61,6 @@ extern u32 gLobbyEventDequeMapBufferMaxSize;
 extern u32 gLobbyEventDequeMapMaxSizeSet;
 extern u32 gLobbyEventDequeMapMaxSize;
 extern unsigned char __lower_mapC[];
-void DWC_Free(int, void *, int);
 void *LobbyMem_Alloc(u32);
 void LobbyEventDequeMap_LengthError(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -126,7 +127,7 @@ void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
 extern char sStr_TreeInsertLengthError_2[];
-void printf(const char *, ...);
+int printf(const char *, ...);
 void abort(void);
 void LobbyTree_InsertRebalance(Node *, void *);
 
@@ -181,7 +182,6 @@ static inline void SwapPtr(void **a, void **b) {
 
 void PPWLobbyPlayer_UpdateState(Session *s);
 extern VTable gPPWLobbyPlayerVtable;
-void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key);
 extern char sStr_SpaceSpace[];
 extern char sStr_Space_2[];
@@ -216,7 +216,7 @@ typedef struct SplitBuf {
 } SplitBuf;
 
 void LobbyU32VectorBuffer_Allocate(SplitBuf *b, u32 cap, Tag unused);
-void LobbyU32VectorBuffer_Destroy(SplitBuf *b);
+SplitBuf *LobbyU32VectorBuffer_Destroy(SplitBuf *b);
 BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id);
 BOOL PPWLobbyPlayers_Remove(SessionMgr *m, int id);
 Session *PPWLobbyPlayers_Find(SessionMgr *m, int id);
@@ -236,5 +236,26 @@ void LobbyVipVector_Allocate(Vec *v, u32 n);
 BOOL PPWLobbyPlayer_HasProfiles(Session *s);
 BOOL PPWLobbyPlayers_IsFull(SessionMgr *m);
 BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32 len, Str *out);
+
+// The lobby work: its channels, players, web requests and the event schedule the server sends.
+u8 *PPWLobby_GetWork(void);
+void *PPWLobby_GetChannelBaseName(u8 *out, u8 *work);
+void *PPWLobbyChannel_GetName(u8 *out, u8 *channel);
+void PPWLobby_GetChannelName(Str *out, u8 *work, int subChannel);
+u8 *PPWLobbyPlayer_Destroy(u8 *player);
+u8 *PPWLobbyPlayers_Destroy(u8 *players);
+u8 *PPWLobbyWebRequest_Delete(u8 *request);
+u8 *PPWLobbySchedule_Init(u8 *schedule);
+int PPWLobbySchedule_CanStart(void *schedule);
+int PPWLobbySchedule_Start(void *schedule);
+int PPWLobbySchedule_GetQuestionnaire(void *schedule, void *out);
+int PPWLobbySchedule_SetQuestionnaire(void *schedule, void *in);
+int PPWLobbySchedule_IsSizeValid(void *schedule, void *data, u32 size);
+int PPWLobbySchedule_Copy(u8 *schedule, u8 *out, u32 *size);
+void PPWLobbySchedule_CopyToVector(u32 *out, u8 *schedule);
+void *LobbyEventVector_Data(void *vector);
+void LobbyEventDeque_EraseAtBegin(void *deque, u32 n);
+void LobbyEventDeque_LengthError(const char *message);
+void LobbySort_GetTemporaryBuffer(void *buffer, int n);
 
 #endif // POKEHEARTGOLD_PPW_LOBBY_INTERNAL_H

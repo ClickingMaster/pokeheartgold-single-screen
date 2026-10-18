@@ -6,7 +6,6 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define W(p, o) (*(int *)((char *)(p) + (o)))
 #define P(p, o) (*(void **)((char *)(p) + (o)))
 #define A(p, o) ((void *)((char *)(p) + (o)))
 
@@ -35,11 +34,6 @@ extern void LobbyUserIdSet_DestroyNodes(void *p, void *node);
 extern void LobbyUserMap_DestroyNodes(void *p, void *node);
 extern void LobbyRequestMap_DestroyNodes(void *p, void *node);
 extern void ciCallbacksArrayElementFreeFn(void *p);
-
-typedef struct {
-    Node *node;
-    u8 ok;
-} InsertResult;
 
 Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first) {
     Node *node, *last;

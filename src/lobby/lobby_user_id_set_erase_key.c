@@ -12,11 +12,8 @@ struct S {
 
 typedef Iterator It;
 void LobbyUserIdSet_Find(It *, struct S *, void *);
-void LobbyChannelMap_Find(It *, struct S *, void *);
 void LobbyUserIdSet_Erase(It *, struct S *, Iterator);
-void LobbyChannelMap_Erase(It *, struct S *, Iterator);
 int LobbyUserIdSet_EraseKey(struct S *, void *);
-int LobbyChannelMap_EraseKey(struct S *, void *);
 
 int LobbyUserIdSet_EraseKey(struct S *s, void *k) {
     It it, out;

@@ -3,15 +3,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct {
-    u32 a, b;
-    void **data;
-    u32 start, count, capacity;
-} Container;
-
 void DWC_Free(int, void *, int);
-void LobbyEventDequeMap_Destroy(void *);
-Container *LobbyEventDeque_Destroy2(Container *);
 
 typedef struct {
     u32 *current, *base, *split, *end;

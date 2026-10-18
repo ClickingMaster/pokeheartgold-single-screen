@@ -2,11 +2,12 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "ppw_lobby_internal.h"
+
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define B(p, o) (*(u8 *)((u8 *)(p) + (o)))
-void *LobbyEventVector_Data(void *);
-int PPWLobbySchedule_Copy(u8 *, u8 *, u32 *);
 
 int PPWLobbySchedule_Copy(u8 *s, u8 *out, u32 *len) {
     u32 needed = ((W(s, 0x30) - 1) << 3) + 0x18;
