@@ -76,6 +76,25 @@ typedef char CommWirelessWorkSizeCheck[sizeof(CommWirelessWork) == 0xD98 ? 1 : -
 typedef char CommWirelessTimerCheck[offsetof(CommWirelessWork, parentTimers) == 0xD44 ? 1 : -1];
 typedef char CommBeaconSizeCheck[sizeof(CommBeacon) == 0x5C ? 1 : -1];
 
+enum CommWirelessPowerState {
+    COMM_WIRELESS_OFF,
+    COMM_WIRELESS_STARTING_UP,
+    COMM_WIRELESS_STARTED,
+};
+
+enum CommWirelessShutdown {
+    COMM_WIRELESS_SHUTDOWN_NONE,
+    COMM_WIRELESS_SHUTDOWN_STOP_AND_FREE,
+    COMM_WIRELESS_SHUTDOWN_END_MANAGER,
+    COMM_WIRELESS_SHUTDOWN_ENDED,
+};
+
+enum CommWirelessStopState {
+    COMM_WIRELESS_STOP_START,
+    COMM_WIRELESS_STOP_WAIT_SCAN,
+    COMM_WIRELESS_STOP_WAIT_IDLE,
+};
+
 typedef struct CommWireless {
     u16 tgid;
     u16 unk_02;
@@ -312,28 +331,28 @@ void CommWireless_OnStartedUp(void *unused, int failed) {
     if (failed != 0) {
         OS_Terminate();
     }
-    sCommWireless.state = 2;
+    sCommWireless.state = COMM_WIRELESS_STARTED;
 }
 
 void CommWireless_OnTerminated(void *unused) {
-    sCommWireless.state = 0;
+    sCommWireless.state = COMM_WIRELESS_OFF;
     Sys_ClearSleepDisableFlag(4);
 }
 
 void CommWireless_StartUp(void) {
     Sys_SetSleepDisableFlag(4);
-    sCommWireless.state = 1;
+    sCommWireless.state = COMM_WIRELESS_STARTING_UP;
     if (WVR_StartUpAsync(8, CommWireless_OnStartedUp, NULL) != 1) {
         OS_Terminate();
     }
 }
 
 BOOL CommWireless_IsStartedUp(void) {
-    return sCommWireless.state == 2;
+    return sCommWireless.state == COMM_WIRELESS_STARTED;
 }
 
 BOOL CommWireless_IsOn(void) {
-    return sCommWireless.state != 0;
+    return sCommWireless.state != COMM_WIRELESS_OFF;
 }
 
 void CommWireless_Terminate(void) {
@@ -367,9 +386,9 @@ void CommWireless_ResetFlags(void) {
     sCommWireless.work->parentListChanged = 0;
     sCommWireless.work->linkLost = 0;
     sCommWireless.work->lostWhenAlone = 0;
-    sCommWireless.work->shutdown = 0;
+    sCommWireless.work->shutdown = COMM_WIRELESS_SHUTDOWN_NONE;
     sCommWireless.work->shutdownRequested = 0;
-    sCommWireless.work->stopState = 0;
+    sCommWireless.work->stopState = COMM_WIRELESS_STOP_START;
     sCommWireless.work->portCallbackSet = 0;
 }
 
@@ -416,27 +435,27 @@ BOOL CommWireless_Stop(void) {
         return TRUE;
     }
     switch (sCommWireless.work->stopState) {
-    case 0:
+    case COMM_WIRELESS_STOP_START:
         if (Wireless_IsScanning() != 0) {
             Wireless_StopScan();
-            sCommWireless.work->stopState = 1;
+            sCommWireless.work->stopState = COMM_WIRELESS_STOP_WAIT_SCAN;
         } else if (Wireless_IsBusy() == 0) {
             Wireless_Stop();
-            sCommWireless.work->stopState = 2;
+            sCommWireless.work->stopState = COMM_WIRELESS_STOP_WAIT_IDLE;
         }
         break;
-    case 1:
+    case COMM_WIRELESS_STOP_WAIT_SCAN:
         if (Wireless_IsBusy() == 0) {
             Wireless_Stop();
-            sCommWireless.work->stopState = 2;
+            sCommWireless.work->stopState = COMM_WIRELESS_STOP_WAIT_IDLE;
         }
         break;
-    case 2:
+    case COMM_WIRELESS_STOP_WAIT_IDLE:
         if (Wireless_IsIdle() != 0) {
             return TRUE;
         }
         if (Wireless_HasError() != 0) {
-            sCommWireless.work->stopState = 1;
+            sCommWireless.work->stopState = COMM_WIRELESS_STOP_WAIT_SCAN;
         }
         break;
     }
@@ -444,8 +463,8 @@ BOOL CommWireless_Stop(void) {
 }
 
 BOOL CommWireless_RequestStopAndFree(void) {
-    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == 0) {
-        sCommWireless.work->shutdown = 1;
+    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_NONE) {
+        sCommWireless.work->shutdown = COMM_WIRELESS_SHUTDOWN_STOP_AND_FREE;
         Wireless_Stop();
         return 1;
     }
@@ -455,9 +474,9 @@ BOOL CommWireless_RequestStopAndFree(void) {
 void CommWireless_SetManagerEnded(BOOL end) {
     if (sCommWireless.work != NULL) {
         if (end) {
-            sCommWireless.work->shutdown = 2;
+            sCommWireless.work->shutdown = COMM_WIRELESS_SHUTDOWN_END_MANAGER;
         } else {
-            sCommWireless.work->shutdown = 0;
+            sCommWireless.work->shutdown = COMM_WIRELESS_SHUTDOWN_NONE;
             CommWireless_InitManager(1);
         }
     }
@@ -654,22 +673,22 @@ void CommWireless_Update(int count, CommWirelessWork *unused) {
     }
     switch (state) {
     case 0:
-        if (sCommWireless.work->shutdown == 1) {
+        if (sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_STOP_AND_FREE) {
             CommWireless_Free();
             return;
         }
-        if (sCommWireless.work->shutdown == 2) {
-            sCommWireless.work->shutdown = 3;
+        if (sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_END_MANAGER) {
+            sCommWireless.work->shutdown = COMM_WIRELESS_SHUTDOWN_ENDED;
             return;
         }
         break;
     case 1:
-        if (sCommWireless.work->shutdown == 1) {
+        if (sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_STOP_AND_FREE) {
             if (Wireless_End() != 0) {
                 break;
             }
         }
-        if (sCommWireless.work->shutdown == 2) {
+        if (sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_END_MANAGER) {
             if (Wireless_End() == 0) {
                 return;
             }
@@ -740,7 +759,7 @@ int CommWireless_CountConnected(void) {
 }
 
 int CommWireless_IsManagerEnded(void) {
-    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == 3) {
+    if (sCommWireless.work != NULL && sCommWireless.work->shutdown == COMM_WIRELESS_SHUTDOWN_ENDED) {
         return 1;
     }
     return 0;

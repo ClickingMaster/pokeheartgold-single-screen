@@ -1,5 +1,10 @@
 #include "battle_link_comm.h"
 
+enum BattleLinkTaskState {
+    BATTLE_LINK_STATE_RUN,
+    BATTLE_LINK_STATE_END = 255,
+};
+
 void BattleLink_Start(BattleSystem *battle) {
     BattleLinkTask *send, *recv;
     if (BattleSystem_GetBattleSpecial(battle) & BATTLE_SPECIAL_RECORDING) {
@@ -9,9 +14,9 @@ void BattleLink_Start(BattleSystem *battle) {
     recv = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleLinkTask));
     Comm_RegisterCommandTable(gBattleLinkCommands, 12, battle);
     send->battle = battle;
-    send->state = 0;
+    send->state = BATTLE_LINK_STATE_RUN;
     recv->battle = battle;
-    recv->state = 0;
+    recv->state = BATTLE_LINK_STATE_RUN;
     BattleSystem_SetLinkSendStatePtr(battle, &send->state);
     BattleSystem_SetLinkRecvStatePtr(battle, &recv->state);
     SysTask_CreateOnMainQueue(BattleLink_SendTask, send, 0);
@@ -368,7 +373,7 @@ void BattleLink_SendTask(SysTask *task, void *ptr) {
     u16 *write = BattleSystem_GetSendBufferWritePos(work->battle);
     u16 *end = BattleSystem_GetSendBufferEndPos(work->battle);
     switch (work->state) {
-    case 0: {
+    case BATTLE_LINK_STATE_RUN: {
         int size;
         if (Comm_GetSendBufferFreeSpace() != 264) {
             break;
@@ -386,7 +391,7 @@ void BattleLink_SendTask(SysTask *task, void *ptr) {
         }
         break;
     }
-    case 255:
+    case BATTLE_LINK_STATE_END:
     default:
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -401,7 +406,7 @@ void BattleLink_RecvTask(SysTask *task, void *ptr) {
     u16 *write = BattleSystem_GetRecvBufferWritePos(work->battle);
     u16 *end = BattleSystem_GetRecvBufferEndPos(work->battle);
     switch (work->state) {
-    case 0:
+    case BATTLE_LINK_STATE_RUN:
         if (*read == *write) {
             break;
         }
@@ -413,7 +418,7 @@ void BattleLink_RecvTask(SysTask *task, void *ptr) {
             *read += (buffer[*read + 2] | (buffer[*read + 3] << 8)) + 4;
         }
         break;
-    case 255:
+    case BATTLE_LINK_STATE_END:
     default:
         Heap_Free(work);
         SysTask_Destroy(task);
@@ -422,8 +427,8 @@ void BattleLink_RecvTask(SysTask *task, void *ptr) {
 }
 
 void BattleLink_RecvEnd(int sender, int unused, void *data, BattleSystem *battle) {
-    BattleSystem_SetLinkSendState(battle, 255);
-    BattleSystem_SetLinkRecvState(battle, 255);
+    BattleSystem_SetLinkSendState(battle, BATTLE_LINK_STATE_END);
+    BattleSystem_SetLinkRecvState(battle, BATTLE_LINK_STATE_END);
     BattleSystem_SetBattleFinished(battle, 1);
 }
 

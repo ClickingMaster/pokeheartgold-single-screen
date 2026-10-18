@@ -4,6 +4,12 @@
 #include "bg_window.h"
 #include "sys_task.h"
 
+enum CommClubButtonsCloseRequest {
+    COMM_CLUB_BUTTONS_CLOSE_NONE,
+    COMM_CLUB_BUTTONS_CLOSE_CLEAR,
+    COMM_CLUB_BUTTONS_CLOSE_CLEAR_AND_HOLD,
+};
+
 // Shared with the Communication Club (CommClubManager+0x9C).
 typedef struct CommClubButtonsArgs {
     u32 *msgIds;     // msg_0191 labels, one per button

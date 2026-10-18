@@ -1,5 +1,12 @@
 #include "communication_player_state_internal.h"
 
+enum CommPlayerStatus {
+    COMM_PLAYER_STATUS_NONE,
+    COMM_PLAYER_STATUS_RECEIVED,
+    COMM_PLAYER_STATUS_ACCEPTED,
+    COMM_PLAYER_STATUS_LOCAL,
+};
+
 static CommPlayerInfo *sCommPlayerInfo;
 
 void CommPlayerInfo_Init(void *save, void *rules) {
@@ -97,14 +104,14 @@ void CommPlayerInfo_RecvEntry(int netId, int size, void *packet, void *context) 
     if (PlayerProfile_IsNameEmpty(sCommPlayerInfo->profiles[sCommPlayerInfo->curIdx]) == TRUE) {
         return;
     }
-    if (sCommPlayerInfo->status[sCommPlayerInfo->curIdx] >= 2) {
+    if (sCommPlayerInfo->status[sCommPlayerInfo->curIdx] >= COMM_PLAYER_STATUS_ACCEPTED) {
         return;
     }
-    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = 1;
+    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = COMM_PLAYER_STATUS_RECEIVED;
     if (sCommPlayerInfo->curIdx != Comm_GetLocalNetId()) {
         return;
     }
-    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = 3;
+    sCommPlayerInfo->status[sCommPlayerInfo->curIdx] = COMM_PLAYER_STATUS_LOCAL;
 }
 
 void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *context) {
@@ -113,9 +120,9 @@ void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *contex
     }
     MI_CpuCopy8(src, &sCommPlayerInfo->entries[netId], sizeof(CommPlayerInfoEntry));
     CommWireless_SetMacAddress(sCommPlayerInfo->entries[netId].mac, netId);
-    sCommPlayerInfo->status[netId] = 1;
+    sCommPlayerInfo->status[netId] = COMM_PLAYER_STATUS_RECEIVED;
     if (netId == Comm_GetLocalNetId()) {
-        sCommPlayerInfo->status[netId] = 3;
+        sCommPlayerInfo->status[netId] = COMM_PLAYER_STATUS_LOCAL;
         return;
     }
     sCommPlayerInfo->hasNewEntries = 1;
@@ -132,7 +139,7 @@ BOOL CommPlayerInfo_HostRedistribute(void) {
     }
     if (Comm_ParentQueueHasCommand(5) == 0) {
         for (i = 0; i < 8; i++) {
-            if (sCommPlayerInfo->status[i] != 0) {
+            if (sCommPlayerInfo->status[i] != COMM_PLAYER_STATUS_NONE) {
                 sCommPlayerInfo->entries[i].index = i;
                 MI_CpuCopy8(sCommPlayerInfo->profiles[i], sCommPlayerInfo->entries[i].profile, PlayerProfile_sizeof());
                 Comm_SendParentCommandNoCopyUnchecked(4, &sCommPlayerInfo->entries[i], sizeof(CommPlayerInfoEntry));
@@ -151,36 +158,36 @@ u8 CommPlayerInfo_HasNewEntries(void) {
 
 void CommPlayerInfo_ClearPlayer(int netId) {
     PlayerProfile_Init(sCommPlayerInfo->profiles[netId]);
-    sCommPlayerInfo->status[netId] = 0;
+    sCommPlayerInfo->status[netId] = COMM_PLAYER_STATUS_NONE;
 }
 
 BOOL CommPlayerInfo_IsReceived(int netId) {
-    if (sCommPlayerInfo->status[netId] == 1) {
+    if (sCommPlayerInfo->status[netId] == COMM_PLAYER_STATUS_RECEIVED) {
         return TRUE;
     }
     return FALSE;
 }
 
 BOOL CommPlayerInfo_IsReceivedOrAccepted(int netId) {
-    return sCommPlayerInfo->status[netId] == 2 || sCommPlayerInfo->status[netId] == 1;
+    return sCommPlayerInfo->status[netId] == COMM_PLAYER_STATUS_ACCEPTED || sCommPlayerInfo->status[netId] == COMM_PLAYER_STATUS_RECEIVED;
 }
 
 BOOL CommPlayerInfo_IsAccepted(int netId) {
-    if (sCommPlayerInfo->status[netId] == 2) {
+    if (sCommPlayerInfo->status[netId] == COMM_PLAYER_STATUS_ACCEPTED) {
         return TRUE;
     }
     return FALSE;
 }
 
 void CommPlayerInfo_Accept(int netId) {
-    sCommPlayerInfo->status[netId] = 2;
+    sCommPlayerInfo->status[netId] = COMM_PLAYER_STATUS_ACCEPTED;
 }
 
 int CommPlayerInfo_FindReceived(void) {
     int i;
 
     for (i = 0; i < 8; i++) {
-        if (sCommPlayerInfo->status[i] == 1) {
+        if (sCommPlayerInfo->status[i] == COMM_PLAYER_STATUS_RECEIVED) {
             return i;
         }
     }
@@ -194,8 +201,8 @@ int CommPlayerInfo_CountAccepted(void) {
     count = 0;
     for (i = 0; i < 8; i++) {
         switch (sCommPlayerInfo->status[i]) {
-        case 2:
-        case 3:
+        case COMM_PLAYER_STATUS_ACCEPTED:
+        case COMM_PLAYER_STATUS_LOCAL:
             count++;
         }
     }
@@ -212,7 +219,7 @@ BOOL CommPlayerInfo_DropDisconnected(void) {
             return ret;
         }
         for (i = 0; i < 8; i++) {
-            if (!Comm_IsNetIdConnected((u16)i) && sCommPlayerInfo->status[i] != 0) {
+            if (!Comm_IsNetIdConnected((u16)i) && sCommPlayerInfo->status[i] != COMM_PLAYER_STATUS_NONE) {
                 CommPlayerInfo_ClearPlayer(i);
                 ret = TRUE;
             }
@@ -226,16 +233,16 @@ void *CommPlayerInfo_GetProfile(int netId) {
         return NULL;
     }
     switch (sCommPlayerInfo->status[netId]) {
-    case 1:
-    case 2:
-    case 3:
+    case COMM_PLAYER_STATUS_RECEIVED:
+    case COMM_PLAYER_STATUS_ACCEPTED:
+    case COMM_PLAYER_STATUS_LOCAL:
         return sCommPlayerInfo->profiles[netId];
     }
     return NULL;
 }
 
 void *CommPlayerInfo_GetExchangeToken(int netId) {
-    if (sCommPlayerInfo->status[netId] != 0) {
+    if (sCommPlayerInfo->status[netId] != COMM_PLAYER_STATUS_NONE) {
         return sCommPlayerInfo->entries[netId].token;
     }
     return NULL;
@@ -246,21 +253,21 @@ u8 CommPlayerInfo_GetFriendIndex(int a) {
 }
 
 void *CommPlayerInfo_GetGroupName(int netId) {
-    if (sCommPlayerInfo->status[netId] != 0) {
+    if (sCommPlayerInfo->status[netId] != COMM_PLAYER_STATUS_NONE) {
         return sCommPlayerInfo->entries[netId].groupName;
     }
     return NULL;
 }
 
 u8 CommPlayerInfo_GetCountry(int netId) {
-    if (sCommPlayerInfo->status[netId] != 0) {
+    if (sCommPlayerInfo->status[netId] != COMM_PLAYER_STATUS_NONE) {
         return sCommPlayerInfo->entries[netId].country;
     }
     return 0;
 }
 
 u8 CommPlayerInfo_GetRegion(int netId) {
-    if (sCommPlayerInfo->status[netId] != 0) {
+    if (sCommPlayerInfo->status[netId] != COMM_PLAYER_STATUS_NONE) {
         return sCommPlayerInfo->entries[netId].region;
     }
     return 0;
@@ -274,7 +281,7 @@ BOOL CommPlayerInfo_RulesetsMatch(void) {
         if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
-        if (sCommPlayerInfo->status[i] == 0) {
+        if (sCommPlayerInfo->status[i] == COMM_PLAYER_STATUS_NONE) {
             continue;
         }
         if (!Comm_IsNetIdConnected((u16)(i + 1))) {
@@ -306,7 +313,7 @@ void CommPlayerInfo_AddToRecords(int mode, int delta) {
         if (!Comm_IsNetIdConnected((u16)i)) {
             continue;
         }
-        if (sCommPlayerInfo->status[i] == 0) {
+        if (sCommPlayerInfo->status[i] == COMM_PLAYER_STATUS_NONE) {
             continue;
         }
         if (mode == 0) {

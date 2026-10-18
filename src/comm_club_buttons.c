@@ -42,6 +42,15 @@ typedef struct CommClubButtonsData {
     s32 pressedButton;
 } CommClubButtonsData; // size: 0x1C0
 
+enum CommClubButtonsState {
+    COMM_CLUB_BUTTONS_STATE_WAIT_TOUCH,
+    COMM_CLUB_BUTTONS_STATE_HELD,
+    COMM_CLUB_BUTTONS_STATE_CLEAR,
+    COMM_CLUB_BUTTONS_STATE_CLEARED,
+    COMM_CLUB_BUTTONS_STATE_CLEAR_AND_HOLD,
+    COMM_CLUB_BUTTONS_STATE_HOLD_TOUCH,
+};
+
 void CommClubButtons_Task(SysTask *task, void *taskData);
 void CommClubButtons_SetVramBanks(void);
 void CommClubButtons_InitBgs(BgConfig *bgConfig);
@@ -94,7 +103,7 @@ SysTask *CommClubButtons_Init(BgConfig *bgConfig, void *lastTouchMenuInput, void
     data->args = args;
     data->count = data->args->count;
     data->args->selection = 0xFFFF;
-    data->args->closeRequest = 0;
+    data->args->closeRequest = COMM_CLUB_BUTTONS_CLOSE_NONE;
     CommClubButtons_SetVramBanks();
     CommClubButtons_InitBgs(bgConfig);
     CommClubButtons_AddWindows(data);
@@ -119,49 +128,49 @@ void CommClubButtons_Task(SysTask *task, void *taskData) {
     CommClubButtonsData *data = taskData;
     const CommClubButtonsLayout *layout = &sCommClubButtonsLayouts[data->count - 1];
 
-    if (data->state < 2) {
-        if (data->args->closeRequest == 1) {
-            data->state = 2;
-        } else if (data->args->closeRequest == 2) {
-            data->state = 4;
+    if (data->state < COMM_CLUB_BUTTONS_STATE_CLEAR) {
+        if (data->args->closeRequest == COMM_CLUB_BUTTONS_CLOSE_CLEAR) {
+            data->state = COMM_CLUB_BUTTONS_STATE_CLEAR;
+        } else if (data->args->closeRequest == COMM_CLUB_BUTTONS_CLOSE_CLEAR_AND_HOLD) {
+            data->state = COMM_CLUB_BUTTONS_STATE_CLEAR_AND_HOLD;
         }
     }
 
     switch (data->state) {
-    case 0:
+    case COMM_CLUB_BUTTONS_STATE_WAIT_TOUCH:
         data->pressedButton = TouchscreenHitbox_FindRectAtTouchNew(layout->hitboxes);
         if (data->pressedButton != -1) {
             CommClubButtons_SetButtonPalette(data, 1);
             data->args->selection = data->pressedButton;
-            data->state = 1;
+            data->state = COMM_CLUB_BUTTONS_STATE_HELD;
         }
         break;
-    case 1: {
+    case COMM_CLUB_BUTTONS_STATE_HELD: {
         int touch = TouchscreenHitbox_FindRectAtTouchHeld(layout->hitboxes);
         data->args->selection = 0xFFFF;
         if (touch != data->pressedButton) {
             CommClubButtons_SetButtonPalette(data, 0);
-            data->state = 0;
+            data->state = COMM_CLUB_BUTTONS_STATE_WAIT_TOUCH;
         }
         break;
     }
-    case 2:
+    case COMM_CLUB_BUTTONS_STATE_CLEAR:
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_1);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_0);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_1);
-        data->state = 3;
+        data->state = COMM_CLUB_BUTTONS_STATE_CLEARED;
         break;
-    case 3:
+    case COMM_CLUB_BUTTONS_STATE_CLEARED:
         break;
-    case 4:
+    case COMM_CLUB_BUTTONS_STATE_CLEAR_AND_HOLD:
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_0);
         BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_SUB_1);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_0);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_1);
-        data->state = 5;
+        data->state = COMM_CLUB_BUTTONS_STATE_HOLD_TOUCH;
         break;
-    case 5:
+    case COMM_CLUB_BUTTONS_STATE_HOLD_TOUCH:
         if (gSystem.touchHeld) {
             gSystem.simulatedInputs = 1;
         }
