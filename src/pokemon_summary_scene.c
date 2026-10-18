@@ -51,7 +51,6 @@ struct PokemonSummaryArgsDataTypeView {
     u8 monDataType;
 };
 
-void NNS_G2dSetupSoftwareSpriteCamera(void);
 void PokepicManager_DrawAll(void *mgr);
 void PokepicManager_Delete(void *mgr);
 void PokepicAnimManager_StopAnim(void *a, int b);

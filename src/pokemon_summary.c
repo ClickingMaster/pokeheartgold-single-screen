@@ -34,6 +34,7 @@
 #include "pokemon.h"
 #include "pokemon_icon_idx.h"
 #include "pokemon_summary_internal.h"
+#include "pokepic_anim_internal.h"
 #include "render_window.h"
 #include "ribbon.h"
 #include "save_vars_flags.h"
@@ -64,7 +65,6 @@ extern const BgTemplate gPokemonSummaryBgTemplate4;
 extern const BgTemplate gPokemonSummaryBgTemplate5;
 extern const BgTemplate gPokemonSummaryBgTemplate6;
 
-void *PokepicAnimManager_New(enum HeapID heapId, int count, int flag);
 void PokemonSummary_Init3D(PokemonSummary *summary);
 void PokemonSummary_CreatePokepic(PokemonSummary *summary);
 void PokemonSummary_CreateCamera(PokemonSummary *summary);

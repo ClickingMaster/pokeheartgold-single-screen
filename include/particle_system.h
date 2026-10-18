@@ -25,6 +25,19 @@ int ParticleSystem_CalcAll(void);
 void *ParticleSystem_GetHeap(SPLEmitter *emitter);
 int ParticleSystem_CountActive(void);
 void ParticleEmitter_GetAxis(SPLEmitter *emitter, VecFx16 *axis);
+void ParticleEmitter_SetGravity(SPLEmitter *, VecFx16 *);
+void ParticleEmitter_SetMagnetPos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_GetMagnetPos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_SetMagnetForce(SPLEmitter *, s16 *);
+void ParticleEmitter_GetMagnetForce(SPLEmitter *, s16 *);
+void ParticleEmitter_SetSpinAngle(SPLEmitter *, u16 *);
+void ParticleEmitter_GetSpinAngle(SPLEmitter *, u16 *);
+void ParticleEmitter_SetSpinAxis(SPLEmitter *, u16 *);
+void ParticleEmitter_GetSpinAxis(SPLEmitter *, u16 *);
+void ParticleEmitter_SetConvergencePos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_GetConvergencePos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_SetConvergenceForce(SPLEmitter *, s16 *);
+void ParticleEmitter_GetConvergenceForce(SPLEmitter *, s16 *);
 void ParticleSystem_SetPerspectiveType(SPLEmitter *emitter, int type);
 
 #endif // POKEHEARTGOLD_PARTICLE_SYSTEM_H

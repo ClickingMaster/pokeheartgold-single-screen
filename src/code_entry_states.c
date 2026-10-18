@@ -10,6 +10,7 @@
 #include "sprite_system.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
+#include "wireless_status_icon.h"
 
 // Keypad cells (sCodeEntryKeyGrid / sCodeEntryKeyRects): digits 0-9 in two rows of five, then BACK and OK.
 #define CODE_ENTRY_KEY_BACK 10
@@ -35,8 +36,6 @@ typedef struct CodeEntryKeyRect {
     s16 halfWidth;
     s16 halfHeight;
 } CodeEntryKeyRect;
-
-void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 
 static void CodeEntry_SetState(CodeEntryApp *app, int state);
 static BOOL CodeEntry_State_Setup(CodeEntryApp *app);

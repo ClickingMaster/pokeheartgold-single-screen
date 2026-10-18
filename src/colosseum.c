@@ -15,6 +15,7 @@
 #include "heap.h"
 #include "launch_application.h"
 #include "link_synchronization.h"
+#include "link_synchronization_internal.h"
 #include "map_object.h"
 #include "map_object_movement_commands.h"
 #include "player_avatar.h"
@@ -98,7 +99,6 @@ int CommPlayerManager_GetPlayerZ(int netId);
 int CommPlayerManager_GetPlayerFrontX(void);
 int CommPlayerManager_GetPlayerFrontZ(int netId);
 u8 *CommClubLink_GetCard(int netId, int a1, int a2);
-int LinkSync_GetPlayerState(int netId);
 
 #define ListMenuUpdateCursorObj_Int ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
 

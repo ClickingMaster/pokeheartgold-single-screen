@@ -3,6 +3,7 @@
 #include "constants/save_arrays.h"
 
 #include "fashion_case.h"
+#include "graphics_object_manager.h"
 #include "heap.h"
 #include "pm_string.h"
 #include "pm_version.h"
@@ -79,8 +80,6 @@ static BOOL FashionEntryLarge_IsSaved(SaveFashionDataSub3FC *entry_);
 static void FashionMon_GetSecondText(SaveFashionMon *mon, String *string);
 static BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashionDataSub *candidate);
 
-u32 GraphicsObject_GetPosition(void *object);
-int GraphicsObject_GetDepth(void *object);
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
 u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
 

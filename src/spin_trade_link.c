@@ -49,7 +49,7 @@ void *SpinTradeLink_New(SpinTradeArgs *parent, enum HeapID heap);
 
 void SpinTradeLink_RegisterCommands(SpinTradeLink *menu);
 
-BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size);
+static BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size);
 BOOL SpinTradeLink_SendCommand(SpinTradeLink *menu, u32 command, void *data, u32 size);
 static void SpinTradeLink_ReceivePacket(int sender, int size, void *data, void *context);
 static void SpinTradeLink_ReceiveParty(int sender, int size, void *data, void *context);
@@ -74,7 +74,7 @@ static void SpinTradeLink_HandleConfirm(int sender, int unused, void *data, Spin
 static u32 SpinTradeLink_GetPacketSize(void);
 static u32 SpinTradeLink_GetPartySize(void);
 static void *SpinTradeLink_GetPartyRecvBuffer(int sender, void *context, int size);
-int SpinTradeLink_CountMemberProfiles(void);
+static int SpinTradeLink_CountMemberProfiles(void);
 void *SpinTradeLink_GetReceivedParty(SpinTradeLink *menu, int sender);
 
 static const SpinTradeLinkPacketHandler sSpinTradeLinkPacketHandlers[] = {
@@ -263,7 +263,7 @@ void SpinTradeLink_Close(SpinTradeLink *menu) {
     UnionRoom_SetBeaconActivity(UNION_ACTIVITY_NONE);
 }
 
-BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size) {
+static BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size) {
     SpinTradeLinkPacket *packet;
     GF_ASSERT(command < 18);
     GF_ASSERT(size + 4 <= 24);
@@ -442,7 +442,7 @@ static void *SpinTradeLink_GetPartyRecvBuffer(int sender, void *context, int siz
     return menu->sendBuffer + sender * 0x590;
 }
 
-int SpinTradeLink_CountMemberProfiles(void) {
+static int SpinTradeLink_CountMemberProfiles(void) {
     int i, count = 0;
     for (i = 0; i < 5; i++) {
         if (CommPlayerInfo_GetProfile(i) != NULL) {

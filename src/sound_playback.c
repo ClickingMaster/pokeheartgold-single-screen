@@ -1,11 +1,14 @@
 #include "sound_playback.h"
 
+#include <nnsys/snd_internal.h>
+
 #include "global.h"
 
 #include "constants/species.h"
 
 #include "heap.h"
 #include "sound.h"
+#include "sound_gb.h"
 #include "sound_radio.h"
 #include "sound_system.h"
 #include "sys_task_api.h"
@@ -42,7 +45,6 @@ static void StartFanfareWaitTimer(u16 unused);
 static BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds);
 
 int GF_GetBankBySeqNo(int seqNo);
-u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
 void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 int Sound_GetSavedHeapLevel(int state);
@@ -50,29 +52,16 @@ void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo);
 void Sound_SetReloadFieldSeqFlag(u16 seqNo);
 void GF_SndSetFadeTimer(u32 frames);
 void Sound_StopWaveOut(int handleNo);
-int Sound_IsSelectSEMuted(void);
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
-void Sound_StopWaveOutAndFreeBuffer(int handleNo);
-void Sound_FreeWaveOutChannel(int handleNo);
-BOOL Sound_IsWaveOutPlaying(int handleNo);
-void Chatot_StopCry(void);
 void GF_SndHandleSetTrackPan(int handleNo, u32 trackMask, int pan);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 trackMask, int pitch);
 void Sound_SetWaveOutPan(int handleNo, u8 pan);
-void Sound_SetWaveOutVolume(int handleNo, int volume);
-BOOL Sound_AllocWaveOutChannel(int handleNo);
 BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, int heapId);
 void Sound_SetWaveOutSpeed(int handleNo, int speed);
 void GF_GetBankInfoBySeqNo(u16 seqNo);
-void GBSounds_SetAllocatableChannels(void);
 
 // NitroSystem
 int GF_NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);
-void NNS_SndPlayerStopSeqBySeqNo(int seqNo, int fadeFrames);
-void NNS_SndPlayerStopSeqAll(int fadeFrames);
-void NNS_SndPlayerStopSeq(NNSSndHandle *handle, int fadeFrames);
-void NNS_SndPlayerSetTrackPan(NNSSndHandle *handle, u32 trackMask, int pan);
-BOOL NNS_SndArcPlayerStartSeqEx(NNSSndHandle *handle, int playerNo, int bankNo, int playerPrio, int seqNo);
 
 BOOL PlayBGMDirect(u16 seqNo);
 void StopBGMSEAndCry(void);

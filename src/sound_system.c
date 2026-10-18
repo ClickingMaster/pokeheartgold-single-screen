@@ -1,9 +1,14 @@
 #include "sound_system.h"
 
+#include <nnsys/snd_internal.h>
+
 #include "global.h"
 
+#include "communication_core_internal.h"
 #include "heap.h"
 #include "sound.h"
+#include "sound_gb.h"
+#include "sound_playback.h"
 
 // Sound state on top of the SND_WORK attributes (GF_SdatGetAttrPtr): the current BGM and the sound scenes,
 // per-sequence volume, microphone auto sampling, the two wave-out channels (14 and 15) that play reversed wave
@@ -41,38 +46,14 @@ static void Sound_PrepareBGMChange(int scene, u16 seqNo, u16 fadeOutFrames, int 
 static void GF_SndSetAllocatableChannelForBGMPlayer(u32 channels);
 static void Sound_PauseOrStopFieldBGM(void);
 
-u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
 void StopBGMSEAndCry(void);
-void Sound_Stop(void);
-BOOL Comm_IsWifiVoiceChatEnabled(void);
 
-void NNS_SndPlayerPause(NNSSndHandle *handle, BOOL pause);
-void NNS_SndPlayerMoveVolume(NNSSndHandle *handle, int volume, int frames);
-void NNS_SndPlayerSetInitialVolume(NNSSndHandle *handle, int volume);
-int NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);
 const struct NNSSndArcBankInfo *NNS_SndArcGetBankInfo(int bankNo);
 MICResult MIC_StartAutoSampling(const MICAutoParam *param);
 MICResult MIC_StopAutoSampling(void);
 const WaveArcInfo *NNS_SndArcGetWaveArcInfo(int waveArcNo);
 u32 NNS_SndArcGetFileSize(u32 fileId);
 s32 NNS_SndArcReadFile(u32 fileId, void *buffer, u32 size, s32 offset);
-NNSSndWaveOutHandle NNS_SndWaveOutAllocChannel(int channel);
-void NNS_SndWaveOutFreeChannel(NNSSndWaveOutHandle handle);
-BOOL NNS_SndWaveOutStart(NNSSndWaveOutHandle handle, NNSSndWaveFormat format, const void *data, u32 loop, u32 loopStart, u32 length, u32 sampleRate, s32 volume, u32 speed, s32 pan);
-void NNS_SndWaveOutStop(NNSSndWaveOutHandle handle);
-BOOL NNS_SndWaveOutIsPlaying(NNSSndWaveOutHandle handle);
-void NNS_SndWaveOutSetPan(NNSSndWaveOutHandle handle, u32 pan);
-void NNS_SndWaveOutSetSpeed(NNSSndWaveOutHandle handle, u32 speed);
-void NNS_SndWaveOutSetVolume(NNSSndWaveOutHandle handle, int volume);
-BOOL NNS_SndCaptureIsActive(void);
-int NNS_SndCaptureGetCaptureType(void);
-void NNS_SndCaptureStopReverb(int frames);
-void NNS_SndPlayerSetTrackPitch(NNSSndHandle *handle, u32 tracks, int pitch);
-void NNS_SndPlayerSetTrackPan(NNSSndHandle *handle, u32 tracks, int pan);
-void NNS_SndPlayerSetTempoRatio(NNSSndHandle *handle, int ratio);
-void NNS_SndSetMonoFlag(int flag);
-void NNS_SndSetMasterVolume(int volume);
-void NNS_SndPlayerSetAllocatableChannel(int playerNo, u32 channels);
 
 void Sound_ClearBGMPauseFlags(void);
 int GF_NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);

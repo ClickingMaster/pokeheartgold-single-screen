@@ -1,7 +1,6 @@
 #include "frontier_save_access.h"
 #include "save_arrays.h"
 
-u32 Save_Frontier_sizeof(void);
 void Save_Frontier_Init(FrontierSave *frontier);
 void FrontierData_Reset(void *data);
 void TowerMessages_Init(void *data);
@@ -10,14 +9,12 @@ void FactoryFlags_Init(void *state);
 void HallFlags_Init(void *state);
 void CastleFlags_Init(void *state);
 void ArcadeFlags_Init(void *state);
-void FrontierSave_ClearRows(FrontierSave *frontier);
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void FrontierSave_ClearRow(FrontierSave *frontier, int row);
 u32 FrontierSave_AddStat(FrontierSave *frontier, int stat, int index, u16 amount);
 u32 FrontierSave_SubStat(FrontierSave *frontier, int stat, int index, int amount);
-u32 FrontierSpeciesRecords_sizeof(void);
 void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data);
-int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data);
+static int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data);
 
 static FrontierSave sFrontierSave;
 
@@ -155,13 +152,13 @@ u32 *FrontierSpeciesRecords_Load(SaveData *save, u32 heapId, u32 *out) {
     return (u32 *)LoadFrontierSpeciesRecords(save, (enum HeapID)heapId, (int *)out);
 }
 
-int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data) {
+static int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data) {
     int result = SaveFrontierSpeciesRecords(save, data);
     return SaveGameNormal(save) | result;
 }
 typedef struct FrontierSpeciesRecords ExtraFrontier;
-u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 value);
-u32 FrontierSpeciesRecords_Raise(SaveData *save, u32 *data, u32 type, u32 index, u16 value);
+static u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 value);
+static u32 FrontierSpeciesRecords_Raise(SaveData *save, u32 *data, u32 type, u32 index, u16 value);
 BOOL FrontierSpeciesRecords_UpdateFromStat(SaveData *save, int stat, int indexStat, int slot, u32 type, enum HeapID heapId, u32 *loadResult, int *saveResult);
 
 u32 FrontierSpeciesRecords_Get(SaveData *save, u32 *buffer, u32 type, u32 index) {
@@ -181,7 +178,7 @@ u32 FrontierSpeciesRecords_Get(SaveData *save, u32 *buffer, u32 type, u32 index)
     return 0;
 }
 
-u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 value) {
+static u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 value) {
     if (value > 9999) {
         value = 9999;
     }
@@ -202,7 +199,7 @@ u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 val
     return value;
 }
 
-u32 FrontierSpeciesRecords_Raise(SaveData *save, u32 *data, u32 type, u32 index, u16 value) {
+static u32 FrontierSpeciesRecords_Raise(SaveData *save, u32 *data, u32 type, u32 index, u16 value) {
     if (!Save_CheckExtraChunksExist(save)) {
         return 0;
     }

@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "comm_player_manager_internal.h"
+#include "comm_state.h"
 #include "communication_player_state.h"
 #include "field_system.h"
 #include "field_terrain.h"
@@ -8,8 +9,10 @@
 #include "map_events.h"
 #include "map_events_internal.h"
 #include "map_object.h"
+#include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities.h"
 #include "player_avatar.h"
+#include "player_avatar_movement.h"
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "system.h"
@@ -26,12 +29,6 @@ int Comm_GetMoveSpeed(int netId);
 u16 Comm_TakeDirectionKeys(int netId);
 void Comm_SendFixedCommand(int command, void *data);
 void Comm_SetBattleSlot(int netId, int index);
-u8 CommState_GetLinkMode(void);
-u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int flag, int collision);
-BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
-BOOL PlayerAvatar_IsReadyOrBumpingWall(PlayerAvatar *avatar);
-void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
-int GetMovementForDirection(int direction, int movement);
 
 // Spots in the link room (x, z pairs) for two and for four players; a player flagged by the host
 // who stands on one has their input locked.

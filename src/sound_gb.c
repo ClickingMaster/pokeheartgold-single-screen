@@ -1,3 +1,7 @@
+#include "sound_gb.h"
+
+#include <nnsys/snd_internal.h>
+
 #include "constants/sndseq.h"
 
 #include "sound.h"
@@ -7,19 +11,8 @@ extern int gSoundSystemFlags[4];
 
 static void SoundSys_SetGBSoundsState(u8 enabled);
 
-BOOL NNS_SndPlayerReadVariable(NNSSndHandle *handle, u32 variable, s16 *value);
-void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u32 channels);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
 void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
-void Sound_SetKeepPlayingCries(u8 value);
-void Sound_SetChatotRecordingDisabled(u8 value);
-BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
-void Sound_ApplyFootstepVariation(u16 seqNo);
-int Sound_IsSelectSEMuted(void);
-u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo);
-u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo);
-void GBSounds_SetAllocatableChannels(void);
-void Sound_SetFieldBGMStopOnce(BOOL enabled);
 
 static const u8 sSoundFootstepVariations[8][4] = {
     { 0,  42,  0, 0 },

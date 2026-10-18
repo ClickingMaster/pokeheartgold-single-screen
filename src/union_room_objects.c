@@ -65,23 +65,23 @@ FieldEffect *UnionChatMarker_Spawn(LocalMapObject *object);
 extern const u16 gUnionRoomGroupFirstSlot[];
 
 void UnionRoomObjects_ResetSlots(UnionRoomObjects *objects);
-void UnionRoomObjects_Task(SysTask *task, void *data);
-BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad);
-void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request);
-void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad);
-void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManager *mapObjectManager);
-void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both);
-void UnionRoomSlot_TickEmote(UnionRoomSlot *slot);
-void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u32 z);
-void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object);
-void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object);
-void UnionRoomObjects_ShowRange(MapObjectManager *mapObjectManager, int first, int last);
-void UnionRoomMessage_Init(UnionRoomMessage *message);
-void UnionRoomMessages_Init(UnionRoomMessage *messages);
-void UnionRoomMessage_Free(UnionRoomMessage *message);
-void UnionRoomMessages_FreeAll(UnionRoomMessage *messages);
-UnionRoomMessage *UnionRoomMessages_New(int heapID);
-void UnionRoomMessages_Free(UnionRoomMessage *messages);
+static void UnionRoomObjects_Task(SysTask *task, void *data);
+static BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad);
+static void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request);
+static void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad);
+static void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManager *mapObjectManager);
+static void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both);
+static void UnionRoomSlot_TickEmote(UnionRoomSlot *slot);
+static void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u32 z);
+static void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object);
+static void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object);
+static void UnionRoomObjects_ShowRange(MapObjectManager *mapObjectManager, int first, int last);
+static void UnionRoomMessage_Init(UnionRoomMessage *message);
+static void UnionRoomMessages_Init(UnionRoomMessage *messages);
+static void UnionRoomMessage_Free(UnionRoomMessage *message);
+static void UnionRoomMessages_FreeAll(UnionRoomMessage *messages);
+static UnionRoomMessage *UnionRoomMessages_New(int heapID);
+static void UnionRoomMessages_Free(UnionRoomMessage *messages);
 
 UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
     UnionRoomObjects *objects = Heap_Alloc(HEAP_ID_31, sizeof(UnionRoomObjects));
@@ -124,7 +124,7 @@ void UnionRoomObjects_Delete(UnionRoomObjects *objects) {
     Heap_Free(objects);
 }
 
-void UnionRoomObjects_Task(SysTask *task, void *data) {
+static void UnionRoomObjects_Task(SysTask *task, void *data) {
     UnionRoomObjects *objects = data;
     struct UnionRoom *unionRoom = objects->unionRoom;
 
@@ -137,7 +137,7 @@ void UnionRoomObjects_Task(SysTask *task, void *data) {
 
 #pragma opt_strength_reduction off
 
-BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad) {
+static BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoomPlayerRecord *record, SavePalPad *palPad) {
     BOOL ret = FALSE;
     int i;
     int k;
@@ -194,11 +194,11 @@ BOOL UnionRoomObjects_UpdateGroup(UnionRoomObjects *objects, int index, UnionRoo
 
 #pragma opt_strength_reduction reset
 
-void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request) {
+static void UnionRoomSlots_SetRequest(UnionRoomSlot *slots, int index, u8 request) {
     slots[index].request = request;
 }
 
-void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad) {
+static void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom *unionRoom, MapObjectManager *mapObjectManager, SavePalPad *palPad) {
     int i;
 
     for (i = 0; i < 10; i++) {
@@ -243,7 +243,7 @@ void UnionRoomObjects_UpdatePlayers(UnionRoomObjects *objects, struct UnionRoom 
     }
 }
 
-void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManager *mapObjectManager) {
+static void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManager *mapObjectManager) {
     int i;
     u32 x;
     u32 z;
@@ -317,7 +317,7 @@ void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObjectManag
     UnionRoomSlot_TickEmote(&objects->slots[50]);
 }
 
-void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both) {
+static void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both) {
     if (slot->emote != NULL) {
         if (FieldEffect_IsActive(slot->emote)) {
             FieldEffect_Destroy((int)slot->emote);
@@ -332,7 +332,7 @@ void UnionRoomSlot_DestroyEffects(UnionRoomSlot *slot, BOOL both) {
     }
 }
 
-void UnionRoomSlot_TickEmote(UnionRoomSlot *slot) {
+static void UnionRoomSlot_TickEmote(UnionRoomSlot *slot) {
     if (slot->emoteActive != 0) {
         slot->emoteTimer--;
         if (slot->emoteTimer == 0) {
@@ -342,7 +342,7 @@ void UnionRoomSlot_TickEmote(UnionRoomSlot *slot) {
     }
 }
 
-void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u32 z) {
+static void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u32 z) {
     u32 initialX = MapObject_GetInitialX(object);
     u32 initialY = MapObject_GetInitialY(object);
     u32 initialZ = MapObject_GetInitialZ(object);
@@ -368,7 +368,7 @@ void UnionRoomSlot_Appear(UnionRoomSlot *slot, LocalMapObject *object, u32 x, u3
     }
 }
 
-void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
+static void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
     MapObject_SetHeldMovement(object, 0x43);
     MapObject_SetFlag19(object, TRUE);
     MapObject_ChangeMovement(object, 0);
@@ -378,7 +378,7 @@ void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
     slot->state = UNION_ROOM_SLOT_LEAVING;
 }
 
-void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object) {
+static void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object) {
     if (slot->emoteRequest == 1 && slot->emoteActive == 0) {
         slot->emote = UnionChatMarker_Spawn(object);
         slot->emoteTimer = 30;
@@ -387,7 +387,7 @@ void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object) {
     }
 }
 
-void UnionRoomObjects_ShowRange(MapObjectManager *mapObjectManager, int first, int last) {
+static void UnionRoomObjects_ShowRange(MapObjectManager *mapObjectManager, int first, int last) {
     LocalMapObject *object;
     for (; first < last; first++) {
         object = MapObjectManager_GetFirstActiveObjectByID(mapObjectManager, first);
@@ -434,7 +434,7 @@ void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, Uni
     }
 }
 
-void UnionRoomMessage_Init(UnionRoomMessage *message) {
+static void UnionRoomMessage_Init(UnionRoomMessage *message) {
     message->name = String_New(8, HEAP_ID_87);
     message->string1 = NULL;
     message->string2 = NULL;
@@ -443,7 +443,7 @@ void UnionRoomMessage_Init(UnionRoomMessage *message) {
     message->unkC = 0;
 }
 
-void UnionRoomMessages_Init(UnionRoomMessage *messages) {
+static void UnionRoomMessages_Init(UnionRoomMessage *messages) {
     int i;
     for (i = 0; i < 30; i++) {
         UnionRoomMessage_Init(&messages[i]);
@@ -452,7 +452,7 @@ void UnionRoomMessages_Init(UnionRoomMessage *messages) {
     *((u32 *)&messages[30] + 1) = 0;
 }
 
-void UnionRoomMessage_Free(UnionRoomMessage *message) {
+static void UnionRoomMessage_Free(UnionRoomMessage *message) {
     Heap_Free(message->name);
     if (message->string1 != NULL) {
         String_Delete(message->string1);
@@ -462,20 +462,20 @@ void UnionRoomMessage_Free(UnionRoomMessage *message) {
     }
 }
 
-void UnionRoomMessages_FreeAll(UnionRoomMessage *messages) {
+static void UnionRoomMessages_FreeAll(UnionRoomMessage *messages) {
     int i;
     for (i = 0; i < 30; i++) {
         UnionRoomMessage_Free(&messages[i]);
     }
 }
 
-UnionRoomMessage *UnionRoomMessages_New(int heapID) {
+static UnionRoomMessage *UnionRoomMessages_New(int heapID) {
     UnionRoomMessage *messages = Heap_Alloc((enum HeapID)heapID, 0x350);
     UnionRoomMessages_Init(messages);
     return messages;
 }
 
-void UnionRoomMessages_Free(UnionRoomMessage *messages) {
+static void UnionRoomMessages_Free(UnionRoomMessage *messages) {
     UnionRoomMessages_FreeAll(messages);
     Heap_Free(messages);
 }

@@ -1,5 +1,9 @@
 #include "nintendo_wfc_connect.h"
 
+#include <dwc/dwc_account_internal.h>
+#include <dwc/stats_upload_internal.h>
+#include <nitrowifi/wcm_internal.h>
+
 #include "global.h"
 
 #include "constants/sndseq.h"
@@ -352,7 +356,6 @@ void DWC_GetDateTime(void *date, void *time);
 void DWC_NASLoginAsync(void);
 int DWC_NASLoginProcess(void);
 void DWC_ShutdownFriendsMatch(void);
-void DWC_ShutdownGHTTP(void);
 void GameStats_Start(void);
 int GameStats_PrepareRequest(const char *url, u32 profileId, void *request, int requestSize, void *response, int responseSize);
 int GameStats_Update(void);
@@ -361,15 +364,10 @@ int GameStats_GetError(void);
 int GameStats_GetResponseLength(void);
 
 // Defined in other ARM9 sources; not declared in their headers.
-BOOL LoadOVY38(void);
-void UnloadOVY38(void);
-void CommWireless_Terminate(void);
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
 void WirelessStatusIcon_SetLevel(s32 level);
-int WCM_GetPhase(void);
-u64 DWC_CreateFriendKey(const void *data);
 u8 FrontierData_GetWifiWinCount(FrontierData *data);
 void BattleRoomDownload_MarkRoom(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);
 BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);

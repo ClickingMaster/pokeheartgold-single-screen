@@ -80,41 +80,32 @@ void ByteRing_Init(ByteRing *ring, u8 *data, u16 capacity);
 void ByteRing_Write(ByteRing *ring, const u8 *src, int count, int unused);
 int ByteRing_Read(ByteRing *ring, u8 *dst, int count);
 u8 ByteRing_ReadByte(ByteRing *ring);
-int ByteRing_Peek(ByteRing *ring, u8 *dst, int count);
+static int ByteRing_Peek(ByteRing *ring, u8 *dst, int count);
 s32 ByteRing_GetReadableSize(const ByteRing *ring);
 s32 ByteRing_GetFreeSize(const ByteRing *ring);
-s32 ByteRing_GetWritableSize(const ByteRing *ring);
-s32 ByteRing_Wrap(const ByteRing *ring, s32 pos);
+static s32 ByteRing_GetWritableSize(const ByteRing *ring);
+static s32 ByteRing_Wrap(const ByteRing *ring, s32 pos);
 void ByteRing_Commit(ByteRing *ring);
-PacketNode *PacketPool_GetFreeNode(const PacketPool *pool);
+static PacketNode *PacketPool_GetFreeNode(const PacketPool *pool);
 BOOL PacketPool_AllNodesFree(const PacketPool *pool);
-BOOL PacketQueue_PopFront(PacketQueue *queue);
-BOOL ByteWriter_PutByte(ByteWriter *writer, u8 value);
-BOOL Packet_WriteHeader(PacketNode *node, ByteWriter *writer);
-BOOL Packet_Write(PacketNode *node, ByteWriter *writer, ByteRing *ring, int force);
+static BOOL PacketQueue_PopFront(PacketQueue *queue);
+static BOOL ByteWriter_PutByte(ByteWriter *writer, u8 value);
+static BOOL Packet_WriteHeader(PacketNode *node, ByteWriter *writer);
+static BOOL Packet_Write(PacketNode *node, ByteWriter *writer, ByteRing *ring, int force);
 BOOL PacketPool_Enqueue(PacketPool *pool, int command, u8 *data, int size, int a4, int copyToRing);
-PacketNode *PacketPool_PeekNext(PacketPool *pool);
-void PacketPool_PopNext(PacketPool *pool);
+static PacketNode *PacketPool_PeekNext(PacketPool *pool);
+static void PacketPool_PopNext(PacketPool *pool);
 BOOL PacketPool_WriteFrame(PacketPool *pool, ByteWriter *writer, int next);
 void PacketPool_Init(PacketPool *pool, int count, ByteRing *ring);
 void PacketPool_Reset(PacketPool *pool);
 void PacketPool_Free(PacketPool *pool);
 BOOL PacketPool_HasCommand(PacketPool *pool, u8 command);
 int Comm_GetMaxChildren(u16 linkMode);
-int Comm_GetMinChildren(u16 linkMode);
 BOOL Comm_IsWifiLinkMode(int v);
-BOOL Comm_IsWifiPeerLinkMode(int v);
-BOOL Comm_IsLinkMode19To23Or34(int v);
-BOOL Comm_IsCommClubLinkMode(int v);
-void Comm_FreeCommandTable(void);
-u32 CommCmd_GetSize2(void);
-void Comm_CallCommandRecv(int netId, int command, int size, void *data);
-u32 Comm_GetCommandSize(int command);
-BOOL Comm_CommandHasBuffer(int command);
-void *Comm_GetCommandBuffer(int command, int netId, int size);
-void CommCmd_RecvReady(int netId, int size, void *data, void *context);
-void CommCmd_RecvShutdown(int netId, int size, void *data, void *context);
-void CommCmd_RecvNotReady(int netId, int size, void *data, void *context);
+static u32 CommCmd_GetSize2(void);
+static void CommCmd_RecvReady(int netId, int size, void *data, void *context);
+static void CommCmd_RecvShutdown(int netId, int size, void *data, void *context);
+static void CommCmd_RecvNotReady(int netId, int size, void *data, void *context);
 
 void Comm_RecvShutdown(int netId, int size, void *data, void *context);
 void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *context);
@@ -199,7 +190,7 @@ u8 ByteRing_ReadByte(ByteRing *ring) {
     return value;
 }
 
-int ByteRing_Peek(ByteRing *ring, u8 *dst, int count) {
+static int ByteRing_Peek(ByteRing *ring, u8 *dst, int count) {
     int pos = ring->read;
     int i = 0;
     for (; pos < ring->read + count; pos++) {
@@ -224,7 +215,7 @@ s32 ByteRing_GetFreeSize(const ByteRing *ring) {
     return ring->capacity - ByteRing_GetReadableSize(ring);
 }
 
-s32 ByteRing_GetWritableSize(const ByteRing *ring) {
+static s32 ByteRing_GetWritableSize(const ByteRing *ring) {
     s16 read = ring->read;
     if (read > ring->write) {
         return read - *(volatile const s16 *)&ring->write;
@@ -232,7 +223,7 @@ s32 ByteRing_GetWritableSize(const ByteRing *ring) {
     return ring->capacity - (*(volatile const s16 *)&ring->write - read);
 }
 
-s32 ByteRing_Wrap(const ByteRing *ring, s32 pos) {
+static s32 ByteRing_Wrap(const ByteRing *ring, s32 pos) {
     return pos % ring->capacity;
 }
 
@@ -240,7 +231,7 @@ void ByteRing_Commit(ByteRing *ring) {
     ring->limit = ring->write;
 }
 
-PacketNode *PacketPool_GetFreeNode(const PacketPool *pool) {
+static PacketNode *PacketPool_GetFreeNode(const PacketPool *pool) {
     register PacketNode *node = pool->nodes;
     register s32 i;
     register s32 count = pool->count;
@@ -264,7 +255,7 @@ BOOL PacketPool_AllNodesFree(const PacketPool *pool) {
     return TRUE;
 }
 
-BOOL PacketQueue_PopFront(PacketQueue *queue) {
+static BOOL PacketQueue_PopFront(PacketQueue *queue) {
     if (queue->head != NULL) {
         if (queue->head->next != NULL) {
             queue->head = queue->head->next;
@@ -278,7 +269,7 @@ BOOL PacketQueue_PopFront(PacketQueue *queue) {
     return FALSE;
 }
 
-BOOL ByteWriter_PutByte(ByteWriter *writer, u8 value) {
+static BOOL ByteWriter_PutByte(ByteWriter *writer, u8 value) {
     *writer->dest = value;
     writer->dest++;
     writer->remaining--;
@@ -289,7 +280,7 @@ BOOL ByteWriter_PutByte(ByteWriter *writer, u8 value) {
 }
 
 // The command byte, followed by the size for variable-size commands; TRUE when it does not fit.
-BOOL Packet_WriteHeader(PacketNode *node, ByteWriter *writer) {
+static BOOL Packet_WriteHeader(PacketNode *node, ByteWriter *writer) {
     u32 size = Comm_GetCommandSize(node->command);
     if (size == 0xFFFF) {
         if (writer->remaining < 3) {
@@ -313,7 +304,7 @@ BOOL Packet_WriteHeader(PacketNode *node, ByteWriter *writer) {
     return FALSE;
 }
 
-BOOL Packet_Write(PacketNode *node, ByteWriter *writer, ByteRing *ring, int force) {
+static BOOL Packet_Write(PacketNode *node, ByteWriter *writer, ByteRing *ring, int force) {
     int headerSize;
     int i;
     if (Comm_GetCommandSize(node->command) == 0xFFFF) {
@@ -389,7 +380,7 @@ BOOL PacketPool_Enqueue(PacketPool *pool, int command, u8 *data, int size, int a
     return TRUE;
 }
 
-PacketNode *PacketPool_PeekNext(PacketPool *pool) {
+static PacketNode *PacketPool_PeekNext(PacketPool *pool) {
     if (pool->current != NULL) {
         return pool->current;
     }
@@ -402,7 +393,7 @@ PacketNode *PacketPool_PeekNext(PacketPool *pool) {
     return NULL;
 }
 
-void PacketPool_PopNext(PacketPool *pool) {
+static void PacketPool_PopNext(PacketPool *pool) {
     if (pool->current != NULL) {
         pool->current = NULL;
         return;
@@ -658,12 +649,12 @@ u32 CommCmd_GetSize1(void) {
     return 1;
 }
 
-u32 CommCmd_GetSize2(void) {
+static u32 CommCmd_GetSize2(void) {
     return 2;
 }
 
 // The parent counts the players ready to switch command tables; once all are, it sends command 14.
-void CommCmd_RecvReady(int netId, int size, void *data, void *context) {
+static void CommCmd_RecvReady(int netId, int size, void *data, void *context) {
     int i;
     if (Comm_GetLocalNetId() == 0) {
         sCommCommandTable->ready[netId] = 1;
@@ -676,7 +667,7 @@ void CommCmd_RecvReady(int netId, int size, void *data, void *context) {
     }
 }
 
-void CommCmd_RecvShutdown(int netId, int size, void *data, void *context) {
+static void CommCmd_RecvShutdown(int netId, int size, void *data, void *context) {
     sCommCommandTable->commands = NULL;
     sCommCommandTable->count = 0;
     sCommCommandTable->context = NULL;
@@ -684,7 +675,7 @@ void CommCmd_RecvShutdown(int netId, int size, void *data, void *context) {
     Comm_SendFixedCommand(15, data);
 }
 
-void CommCmd_RecvNotReady(int netId, int size, void *data, void *context) {
+static void CommCmd_RecvNotReady(int netId, int size, void *data, void *context) {
     if (Comm_GetLocalNetId() == 0) {
         sCommCommandTable->ready[netId] = 0;
     }

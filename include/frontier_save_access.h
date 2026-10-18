@@ -30,9 +30,11 @@ u16 FrontierSave_GetStat(FrontierSave *, int, int);
 void Save_Frontier_Commit(SaveData *saveData);
 u32 FrontierSave_SetStat(FrontierSave *, int, int, u16);
 void FrontierSave_RaiseStat(FrontierSave *frontier, u32 stat, u32 index, u16 value);
+u32 FrontierSpeciesRecords_sizeof(void);
 u32 *FrontierSpeciesRecords_Load(SaveData *saveData, u32 heapId, u32 *out);
 u32 FrontierSpeciesRecords_Get(SaveData *saveData, u32 *buffer, u32 type, u32 index);
 u32 ArcadeChallenge_GetSaved(u32 state);
 void FrontierSave_ClearRows(FrontierSave *frontier);
+u32 Save_Frontier_sizeof(void);
 
 #endif // POKEHEARTGOLD_FRONTIER_SAVE_ACCESS_H

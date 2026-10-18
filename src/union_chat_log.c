@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0738_UNION.h"
 
+#include "comm_wireless.h"
 #include "dialog_box.h"
 #include "filesystem_files_def.h"
 #include "font.h"
@@ -39,7 +40,6 @@ typedef struct UnionChatLogPeer {
 } UnionChatLogPeer;
 
 extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
-extern PlayerProfile *CommWireless_GetProfile(void);
 
 static const int sUnionChatLogRowPressBgOffsets[] = { 0, 0, 0 };
 
@@ -124,47 +124,47 @@ static const TouchscreenHitbox sUnionChatLogButtonHitboxes[] = {
     { .rect = { TOUCHSCREEN_RECTLIST_END } },
 };
 
-void UnionChatLog_PrintMenuButton(UnionChatLogData *data);
-void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig);
-void UnionChatLog_Task(SysTask *task, void *taskData);
-void UnionChatLog_InitText(UnionChatLogData *data);
-void UnionChatLog_AddWindows(BgConfig *bgConfig, UnionChatLogRow *rows, Window *menuWindow);
-void UnionChatLog_RemoveWindows(UnionChatLogRow *rows, Window *menuWindow);
-void UnionChatLog_FreeBgs(BgConfig *bgConfig);
-void UnionChatLog_InitBgs(BgConfig *bgConfig);
-void UnionChatLog_InitSpriteResources(UnionChatLogData *data);
-void UnionChatLog_CreateSprites(UnionChatLogData *data);
-int UnionChatLog_NextLogIndex(UnionChatLogMessages *log, int index);
-int UnionChatLog_AddLogIndex(int index, int offset);
-void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot);
-void UnionChatLog_DrawRows(UnionChatLogData *data);
-void UnionChatLog_SetThumbY(Sprite *sprite, int y);
-void UnionChatLog_UpdateScrollbar(UnionChatLogData *data);
-int UnionChatLog_HandleTouchButtons(UnionChatLogData *data);
-int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data);
-void UnionChatLog_HandleScrollKeys(UnionChatLogData *data);
-void UnionChatLog_HandleInput(UnionChatLogData *data);
-void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenData, UnionChatLogRow *rows, int heldRow, int count, int *pressSum);
-String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageFormat *msgFormat, MsgData *msgData, PlayerProfile *profile);
-void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *mail, PlayerProfile *profile);
-BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 trainerId);
-void UnionChatLog_AppendMessage(UnionChatLogData *data, PlayerProfile *profile, MailMessage *mail, u32 trainerId);
-void UnionChatLog_CollectMessages(UnionChatLogData *data);
-void UnionChatLog_RequestRedraw(UnionChatLogData *data);
-void UnionChatLog_InitTouchRepeat(UnionChatLogData *data);
-void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data);
-BOOL UnionChatLog_IsTouchRepeatTick(UnionChatLogData *data);
-void UnionChatLog_SetThumbFollowsScroll(UnionChatLogData *data, BOOL follow);
-BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data);
-void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow);
+static void UnionChatLog_PrintMenuButton(UnionChatLogData *data);
+static void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig);
+static void UnionChatLog_Task(SysTask *task, void *taskData);
+static void UnionChatLog_InitText(UnionChatLogData *data);
+static void UnionChatLog_AddWindows(BgConfig *bgConfig, UnionChatLogRow *rows, Window *menuWindow);
+static void UnionChatLog_RemoveWindows(UnionChatLogRow *rows, Window *menuWindow);
+static void UnionChatLog_FreeBgs(BgConfig *bgConfig);
+static void UnionChatLog_InitBgs(BgConfig *bgConfig);
+static void UnionChatLog_InitSpriteResources(UnionChatLogData *data);
+static void UnionChatLog_CreateSprites(UnionChatLogData *data);
+static int UnionChatLog_NextLogIndex(UnionChatLogMessages *log, int index);
+static int UnionChatLog_AddLogIndex(int index, int offset);
+static void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot);
+static void UnionChatLog_DrawRows(UnionChatLogData *data);
+static void UnionChatLog_SetThumbY(Sprite *sprite, int y);
+static void UnionChatLog_UpdateScrollbar(UnionChatLogData *data);
+static int UnionChatLog_HandleTouchButtons(UnionChatLogData *data);
+static int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data);
+static void UnionChatLog_HandleScrollKeys(UnionChatLogData *data);
+static void UnionChatLog_HandleInput(UnionChatLogData *data);
+static void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenData, UnionChatLogRow *rows, int heldRow, int count, int *pressSum);
+static String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageFormat *msgFormat, MsgData *msgData, PlayerProfile *profile);
+static void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *mail, PlayerProfile *profile);
+static BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 trainerId);
+static void UnionChatLog_AppendMessage(UnionChatLogData *data, PlayerProfile *profile, MailMessage *mail, u32 trainerId);
+static void UnionChatLog_CollectMessages(UnionChatLogData *data);
+static void UnionChatLog_RequestRedraw(UnionChatLogData *data);
+static void UnionChatLog_InitTouchRepeat(UnionChatLogData *data);
+static void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data);
+static BOOL UnionChatLog_IsTouchRepeatTick(UnionChatLogData *data);
+static void UnionChatLog_SetThumbFollowsScroll(UnionChatLogData *data, BOOL follow);
+static BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data);
+static void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow);
 
-void UnionChatLog_PrintMenuButton(UnionChatLogData *data) {
+static void UnionChatLog_PrintMenuButton(UnionChatLogData *data) {
     String *string = NewString_ReadMsgData(data->msgData, msg_0738_UNION_00219);
     AddTextPrinterParameterizedWithColor(&data->menuWindow, 0, string, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 2, 0), NULL);
     String_Delete(string);
 }
 
-void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig) {
+static void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig) {
     if ((gSystem.newKeys & PAD_BUTTON_X) && FieldSystem_GetBottomScreenAppState(data->fieldSystem) == TRUE) {
         data->state = UNION_CHAT_LOG_STATE_CLOSE;
     }
@@ -176,7 +176,7 @@ void UnionChatLog_Update(UnionChatLogData *data, BgConfig *bgConfig) {
     UnionChatLog_UpdateArrows(data);
 }
 
-void UnionChatLog_Task(SysTask *task, void *taskData) {
+static void UnionChatLog_Task(SysTask *task, void *taskData) {
     UnionChatLogData *data = taskData;
     FieldSystem *fieldSystem = data->fieldSystem;
     BgConfig *bgConfig = data->bgConfig;
@@ -203,7 +203,7 @@ void UnionChatLog_Task(SysTask *task, void *taskData) {
     }
 }
 
-void UnionChatLog_InitText(UnionChatLogData *data) {
+static void UnionChatLog_InitText(UnionChatLogData *data) {
     data->redraw = FALSE;
     data->count = 0;
     data->prevCount = 0;
@@ -215,7 +215,7 @@ void UnionChatLog_InitText(UnionChatLogData *data) {
 }
 
 // Per row: the speaker's name, the chat message and the "X's friend" line, on sub BG 0-2.
-void UnionChatLog_AddWindows(BgConfig *bgConfig, UnionChatLogRow *rows, Window *menuWindow) {
+static void UnionChatLog_AddWindows(BgConfig *bgConfig, UnionChatLogRow *rows, Window *menuWindow) {
     u32 nameTile;
     u32 messageTile;
     u32 messageY;
@@ -253,7 +253,7 @@ void UnionChatLog_AddWindows(BgConfig *bgConfig, UnionChatLogRow *rows, Window *
     FillWindowPixelBuffer(menuWindow, 0);
 }
 
-void UnionChatLog_RemoveWindows(UnionChatLogRow *rows, Window *menuWindow) {
+static void UnionChatLog_RemoveWindows(UnionChatLogRow *rows, Window *menuWindow) {
     int i;
     UnionChatLogRow *row = rows;
     RemoveWindow(menuWindow);
@@ -319,14 +319,14 @@ void UnionChatLog_Exit(UnionChatLogData *data) {
     }
 }
 
-void UnionChatLog_FreeBgs(BgConfig *bgConfig) {
+static void UnionChatLog_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void UnionChatLog_InitBgs(BgConfig *bgConfig) {
+static void UnionChatLog_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg4;
     BgTemplate bg5;
     BgTemplate bg6;
@@ -353,7 +353,7 @@ void UnionChatLog_InitBgs(BgConfig *bgConfig) {
     FieldMessage_LoadTextPalettes(GF_PAL_LOCATION_SUB_BG, FALSE);
 }
 
-void UnionChatLog_InitSpriteResources(UnionChatLogData *data) {
+static void UnionChatLog_InitSpriteResources(UnionChatLogData *data) {
     int i;
     data->spriteList = G2dRenderer_Init(10, &data->renderer, HEAP_ID_FIELD1);
     for (i = 0; i < 4; i++) {
@@ -368,7 +368,7 @@ void UnionChatLog_InitSpriteResources(UnionChatLogData *data) {
 }
 
 // Up arrow, down arrow and scrollbar thumb on the right edge of the sub screen.
-void UnionChatLog_CreateSprites(UnionChatLogData *data) {
+static void UnionChatLog_CreateSprites(UnionChatLogData *data) {
     SpriteTemplate template;
     int i;
     CreateSpriteResourcesHeader(&data->header, 0x3E7, 0x3E7, 0x3E7, 0x3E7, -1, -1, 0, 0, data->resMans[GF_GFX_RES_TYPE_CHAR], data->resMans[GF_GFX_RES_TYPE_PLTT], data->resMans[GF_GFX_RES_TYPE_CELL], data->resMans[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
@@ -397,7 +397,7 @@ void UnionChatLog_CreateSprites(UnionChatLogData *data) {
     }
 }
 
-int UnionChatLog_NextLogIndex(UnionChatLogMessages *log, int index) {
+static int UnionChatLog_NextLogIndex(UnionChatLogMessages *log, int index) {
     index++;
     if (index == UNION_CHAT_LOG_NUM_MESSAGES) {
         index = 0;
@@ -405,7 +405,7 @@ int UnionChatLog_NextLogIndex(UnionChatLogMessages *log, int index) {
     return index;
 }
 
-int UnionChatLog_AddLogIndex(int index, int offset) {
+static int UnionChatLog_AddLogIndex(int index, int offset) {
     int sum = index + offset;
     if (sum >= UNION_CHAT_LOG_NUM_MESSAGES) {
         sum -= UNION_CHAT_LOG_NUM_MESSAGES;
@@ -413,7 +413,7 @@ int UnionChatLog_AddLogIndex(int index, int offset) {
     return sum;
 }
 
-void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot) {
+static void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot) {
     data->rows[row].gender = slot->gender;
     CopyToBgTilemapRect(data->bgConfig, GF_BG_LYR_SUB_3, 0, 7 * row + 2, 32, 7, data->screenData->rawData, 0, data->rows[row].gender * 24, 32, 48);
     FillWindowPixelBuffer(&data->rows[row].name, 0);
@@ -429,7 +429,7 @@ void UnionChatLog_DrawRow(UnionChatLogData *data, int row, MessageSlot *slot) {
     ScheduleWindowCopyToVram(&data->rows[row].friendOf);
 }
 
-void UnionChatLog_DrawRows(UnionChatLogData *data) {
+static void UnionChatLog_DrawRows(UnionChatLogData *data) {
     int index;
     int count;
     int i;
@@ -457,7 +457,7 @@ void UnionChatLog_DrawRows(UnionChatLogData *data) {
     }
 }
 
-void UnionChatLog_SetThumbY(Sprite *sprite, int y) {
+static void UnionChatLog_SetThumbY(Sprite *sprite, int y) {
     VecFx32 pos;
     float fy;
     pos.x = FX32_CONST(232);
@@ -473,7 +473,7 @@ void UnionChatLog_SetThumbY(Sprite *sprite, int y) {
 
 // The scrollbar appears once there are more messages than rows; while the view is at the
 // bottom it follows new messages.
-void UnionChatLog_UpdateScrollbar(UnionChatLogData *data) {
+static void UnionChatLog_UpdateScrollbar(UnionChatLogData *data) {
     data->count = data->log->count;
     if (data->count > UNION_CHAT_LOG_NUM_ROWS && data->prevCount <= UNION_CHAT_LOG_NUM_ROWS) {
         data->scrollbarVisible = TRUE;
@@ -488,7 +488,7 @@ void UnionChatLog_UpdateScrollbar(UnionChatLogData *data) {
 
 // Buttons: 0/1 arrows, 2-4 rows, 5 scrollbar, 6 "Menu" bar. Touching a row makes the avatar of
 // the message's sender react in the Union Room.
-int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
+static int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
     int hit = TouchscreenHitbox_FindRectAtTouchHeld(sUnionChatLogButtonHitboxes);
     BOOL tick = UnionChatLog_IsTouchRepeatTick(data);
     if (hit != -1) {
@@ -552,7 +552,7 @@ int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
 }
 
 // Hitbox 0 is the scrollbar strip (dragging the thumb), 1-3 the rows.
-int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data) {
+static int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data) {
     u32 x;
     u32 y;
     int hit = TouchscreenHitbox_FindRectAtTouchHeld(sUnionChatLogScrollbarHitboxes);
@@ -597,7 +597,7 @@ int UnionChatLog_HandleTouchScrollbar(UnionChatLogData *data) {
     return hit;
 }
 
-void UnionChatLog_HandleScrollKeys(UnionChatLogData *data) {
+static void UnionChatLog_HandleScrollKeys(UnionChatLogData *data) {
     u32 held = gSystem.heldKeys;
     if (held & PAD_BUTTON_L) {
         UnionChatLog_PressArrow(data, 0);
@@ -614,7 +614,7 @@ void UnionChatLog_HandleScrollKeys(UnionChatLogData *data) {
     }
 }
 
-void UnionChatLog_HandleInput(UnionChatLogData *data) {
+static void UnionChatLog_HandleInput(UnionChatLogData *data) {
     int buttonHit;
     int scrollbarHit = -1;
 
@@ -629,7 +629,7 @@ void UnionChatLog_HandleInput(UnionChatLogData *data) {
 }
 
 // A pressed row slides down with its press timer; rows that are not held count back.
-void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenData, UnionChatLogRow *rows, int heldRow, int count, int *pressSum) {
+static void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenData, UnionChatLogRow *rows, int heldRow, int count, int *pressSum) {
     int i;
     int total = 0;
     UnionChatLogRow *row;
@@ -676,7 +676,7 @@ void UnionChatLog_UpdateRowPress(BgConfig *bgConfig, NNSG2dScreenData *screenDat
 
 // "{name}'s friend" under a message whose sender is in the Pal Pad: the player's own name when
 // the sender registered the player, else the Pal Pad entry that knows the sender. NULL otherwise.
-String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageFormat *msgFormat, MsgData *msgData, PlayerProfile *profile) {
+static String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageFormat *msgFormat, MsgData *msgData, PlayerProfile *profile) {
     int status = 0;
     String *result = NULL;
 
@@ -698,7 +698,7 @@ String *UnionChatLog_GetFriendOfText(SavePalPad *palPad, u32 trainerId, MessageF
     return result;
 }
 
-void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *mail, PlayerProfile *profile) {
+static void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *mail, PlayerProfile *profile) {
     UnionChatLogMessages *log = data->log;
     SavePalPad *palPad = data->unionRoom->palPad;
     int *index;
@@ -726,7 +726,7 @@ void UnionChatLog_AddEntry(UnionChatLogData *data, u32 trainerId, MailMessage *m
     }
 }
 
-BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 trainerId) {
+static BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 trainerId) {
     int i;
 
     if (!MailMsg_IsInit(mail)) {
@@ -748,7 +748,7 @@ BOOL UnionChatLog_IsNewMessage(UnionChatLogData *data, MailMessage *mail, u32 tr
     return TRUE;
 }
 
-void UnionChatLog_AppendMessage(UnionChatLogData *data, PlayerProfile *profile, MailMessage *mail, u32 trainerId) {
+static void UnionChatLog_AppendMessage(UnionChatLogData *data, PlayerProfile *profile, MailMessage *mail, u32 trainerId) {
     BOOL atEnd = FALSE;
 
     if (data->scroll == data->count - UNION_CHAT_LOG_NUM_ROWS) {
@@ -761,7 +761,7 @@ void UnionChatLog_AppendMessage(UnionChatLogData *data, PlayerProfile *profile, 
     UnionChatLog_RequestRedraw(data);
 }
 
-void UnionChatLog_CollectMessages(UnionChatLogData *data) {
+static void UnionChatLog_CollectMessages(UnionChatLogData *data) {
     int i;
     MailMessage *mail;
 
@@ -784,18 +784,18 @@ void UnionChatLog_CollectMessages(UnionChatLogData *data) {
     }
 }
 
-void UnionChatLog_RequestRedraw(UnionChatLogData *data) {
+static void UnionChatLog_RequestRedraw(UnionChatLogData *data) {
     data->redraw = TRUE;
 }
 
-void UnionChatLog_InitTouchRepeat(UnionChatLogData *data) {
+static void UnionChatLog_InitTouchRepeat(UnionChatLogData *data) {
     data->touchTick = FALSE;
     data->touchFirstDelay = 8;
     data->touchInterval = 4;
     data->touchTimer = data->touchFirstDelay;
 }
 
-void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data) {
+static void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data) {
     data->touchTick = FALSE;
     if (gSystem.touchNew != 0) {
         data->touchTick = TRUE;
@@ -812,19 +812,19 @@ void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data) {
     }
 }
 
-BOOL UnionChatLog_IsTouchRepeatTick(UnionChatLogData *data) {
+static BOOL UnionChatLog_IsTouchRepeatTick(UnionChatLogData *data) {
     return data->touchTick;
 }
 
-void UnionChatLog_SetThumbFollowsScroll(UnionChatLogData *data, BOOL follow) {
+static void UnionChatLog_SetThumbFollowsScroll(UnionChatLogData *data, BOOL follow) {
     data->thumbFollowsScroll = follow;
 }
 
-BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data) {
+static BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data) {
     return data->thumbFollowsScroll;
 }
 
-void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow) {
+static void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow) {
     int frame = Sprite_GetAnimationFrame(data->sprites[arrow]);
     u16 anim = (int)Sprite_GetAnimationNumber(data->sprites[arrow]); // the int cast keeps a 16-bit truncation
     if (frame != 0 || anim != arrow + 4) {

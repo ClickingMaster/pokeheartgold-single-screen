@@ -29,30 +29,10 @@ static void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 void Comm_EnsureDwcUserData(FriendRoster *data);
 BOOL DWC_IsValidFriendData(void *data);
 
-u32 Save_FriendRoster_sizeof(void);
-void Save_FriendRoster_Init(FriendRoster *data);
-void *FriendRoster_GetUserData(FriendRoster *data);
-s32 FriendRoster_GetEntryField(FriendRoster *data, s32 index, s32 field);
-void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
 void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);
-u16 *FriendRoster_GetPlayerName(FriendRoster *data, s32 index);
 void FriendRoster_SetPlayerName(FriendRoster *data, int index, String *name);
-u16 *FriendRoster_GetGroupName(FriendRoster *data, s32 index);
 void FriendRoster_SetGroupName(FriendRoster *data, int index, String *name);
-BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index);
-int FriendRoster_CountFriends(FriendRoster *data);
-int FriendRoster_GetUsedSlotCount(FriendRoster *data);
-void FriendRoster_RemoveFriend(FriendRoster *data, int index);
-void FriendRoster_Compact(FriendRoster *data);
-void FriendRoster_UpdateDate(FriendRoster *data, s32 index);
-void FriendRoster_AddWinsLossesTrades(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
-void FriendRoster_AddPlazaGame0Plays(FriendRoster *data, s32 index, s32 value);
-void FriendRoster_AddPlazaGame1Plays(FriendRoster *data, s32 index, s32 value);
-void FriendRoster_AddPlazaGame2Plays(FriendRoster *data, s32 index, s32 value);
 void FriendRoster_MergeFriend(FriendRoster *data, s32 src, s32 dest);
-FriendRoster *Save_FriendRoster_Get(SaveData *saveData);
-void Save_FriendRoster_LoadFromSave(SaveData *saveData);
-void Save_FriendRoster_StoreToSave(SaveData *saveData);
 
 static FriendRoster sFriendRoster;
 

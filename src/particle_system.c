@@ -70,22 +70,22 @@ static void ParticleSystem_LoadResource(ParticleSystem *system);
 static void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system);
 static void *ParticleEmitter_FindField(SPLEmitter *emitter, int type);
 
-void *ParticleSystem_AllocSlot0(u32 size);
-void *ParticleSystem_AllocSlot1(u32 size);
-void *ParticleSystem_AllocSlot2(u32 size);
-void *ParticleSystem_AllocSlot3(u32 size);
-void *ParticleSystem_AllocSlot4(u32 size);
-void *ParticleSystem_AllocSlot5(u32 size);
-void *ParticleSystem_AllocSlot6(u32 size);
-void *ParticleSystem_AllocSlot7(u32 size);
-void *ParticleSystem_AllocSlot8(u32 size);
-void *ParticleSystem_AllocSlot9(u32 size);
-void *ParticleSystem_AllocSlot10(u32 size);
-void *ParticleSystem_AllocSlot11(u32 size);
-void *ParticleSystem_AllocSlot12(u32 size);
-void *ParticleSystem_AllocSlot13(u32 size);
-void *ParticleSystem_AllocSlot14(u32 size);
-void *ParticleSystem_AllocSlot15(u32 size);
+static void *ParticleSystem_AllocSlot0(u32 size);
+static void *ParticleSystem_AllocSlot1(u32 size);
+static void *ParticleSystem_AllocSlot2(u32 size);
+static void *ParticleSystem_AllocSlot3(u32 size);
+static void *ParticleSystem_AllocSlot4(u32 size);
+static void *ParticleSystem_AllocSlot5(u32 size);
+static void *ParticleSystem_AllocSlot6(u32 size);
+static void *ParticleSystem_AllocSlot7(u32 size);
+static void *ParticleSystem_AllocSlot8(u32 size);
+static void *ParticleSystem_AllocSlot9(u32 size);
+static void *ParticleSystem_AllocSlot10(u32 size);
+static void *ParticleSystem_AllocSlot11(u32 size);
+static void *ParticleSystem_AllocSlot12(u32 size);
+static void *ParticleSystem_AllocSlot13(u32 size);
+static void *ParticleSystem_AllocSlot14(u32 size);
+static void *ParticleSystem_AllocSlot15(u32 size);
 
 static const ParticleAllocFunc sParticleSystemAllocFuncs[16] = {
     ParticleSystem_AllocSlot0,
@@ -105,19 +105,6 @@ static const ParticleAllocFunc sParticleSystemAllocFuncs[16] = {
     ParticleSystem_AllocSlot14,
     ParticleSystem_AllocSlot15,
 };
-void ParticleEmitter_SetGravity(SPLEmitter *emitter, VecFx16 *value);
-void ParticleEmitter_SetMagnetPos(SPLEmitter *emitter, VecFx32 *value);
-void ParticleEmitter_GetMagnetPos(SPLEmitter *emitter, VecFx32 *value);
-void ParticleEmitter_SetMagnetForce(SPLEmitter *emitter, s16 *value);
-void ParticleEmitter_GetMagnetForce(SPLEmitter *emitter, s16 *value);
-void ParticleEmitter_SetSpinAngle(SPLEmitter *emitter, u16 *value);
-void ParticleEmitter_GetSpinAngle(SPLEmitter *emitter, u16 *value);
-void ParticleEmitter_SetSpinAxis(SPLEmitter *emitter, u16 *value);
-void ParticleEmitter_GetSpinAxis(SPLEmitter *emitter, u16 *value);
-void ParticleEmitter_SetConvergencePos(SPLEmitter *emitter, VecFx32 *value);
-void ParticleEmitter_GetConvergencePos(SPLEmitter *emitter, VecFx32 *value);
-void ParticleEmitter_SetConvergenceForce(SPLEmitter *emitter, s16 *value);
-void ParticleEmitter_GetConvergenceForce(SPLEmitter *emitter, s16 *value);
 
 void ParticleSystem_ZeroAll(void) {
     int i;
@@ -222,7 +209,7 @@ void ParticleSystem_FreeAll(void) {
 
 // SPL allocator of one slot: 4-aligned bump allocation in the system's heap
 #define DEFINE_SLOT_ALLOC(name, slot)                    \
-    void *name(u32 size) {                               \
+    static void *name(u32 size) {                        \
         ParticleSystem *system = sParticleSystems[slot]; \
         u8 *ret = system->heapCurrent;                   \
         u8 *next = ret + size;                           \

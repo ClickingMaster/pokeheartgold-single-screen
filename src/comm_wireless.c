@@ -1,13 +1,19 @@
+#include "comm_wireless.h"
+
+#include <nitro/wm/wm_internal.h>
 #include <stddef.h>
 
 #include "global.h"
 
 #include "constants/comm_type.h"
 
+#include "communication_command.h"
+#include "communication_core.h"
 #include "heap.h"
 #include "mail_message.h"
 #include "player_data.h"
 #include "save_link_ruleset.h"
+#include "system.h"
 
 // Wireless link layer of the communication code, above the local wireless
 // manager: wireless start-up (WVR), the beacon this game sends as a parent (trainer, link
@@ -108,20 +114,13 @@ typedef struct CommBssid {
     u8 data[6];
 } CommBssid;
 
-void OS_Terminate(void);
-void Sys_SetSleepDisableFlag(u32 flag);
-void Sys_ClearSleepDisableFlag(u32 flag);
 int WVR_StartUpAsync(int mode, void (*callback)(void *, int), void *arg);
 int WVR_TerminateAsync(void (*callback)(void *), void *arg);
-u16 WM_GetNextTgid(void);
-u16 WM_GetDispersionBeaconPeriod(void);
 int CommPlayerInfo_DropDisconnected(void);
 
 int CommState_GetLinkMode(void);
 int CommState_GetBeaconId(void);
 void CommState_ShowErrorAndHalt(u32);
-BOOL Comm_IsActive(void);
-BOOL Comm_IsUnionRoomLinkMode(int value);
 int Comm_GetMaxChildren(u16);
 void Comm_RecvChildFrameCallback(void);
 void Comm_RecvParentFrameCallback(void);
@@ -153,62 +152,25 @@ u16 Wireless_SelectChannel(void);
 BOOL Wireless_StartParent(int, u16, u16, int, u32, u32);
 void Wireless_HasSentBeacons(void);
 
-void CommWireless_Init(PlayerProfile *profile, int mode);
-BOOL CommWireless_IsInitialized(void);
-BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size);
-void CommWireless_OnParentFound(void *parentInfo);
-void CommWireless_StoreFoundParent(void);
-void CommWireless_OnStartedUp(void *unused, int failed);
-void CommWireless_OnTerminated(void *unused);
-void CommWireless_StartUp(void);
-BOOL CommWireless_IsStartedUp(void);
-BOOL CommWireless_IsOn(void);
-void CommWireless_Terminate(void);
-void CommWireless_InitManager(int mode);
-void CommWireless_ClearParents(void);
-void CommWireless_SetRenewTgid(BOOL renew);
-void CommWireless_ResetFlags(void);
-BOOL CommWireless_StartParent(int unused, BOOL renewTgid, BOOL entryFlag);
-BOOL CommWireless_StartScan(int unused, BOOL clearParents);
-BOOL CommWireless_Stop(void);
-BOOL CommWireless_RequestStopAndFree(void);
-void CommWireless_SetManagerEnded(BOOL end);
-void CommWireless_Free(void);
-int CommWireless_CountParents(void);
-int CommWireless_GetParentSlot(int ordinal);
-u8 CommWireless_IsParentListChanged(void);
-void CommWireless_ClearParentListChanged(void);
-BOOL CommWireless_GetParentMemberCount(int slot);
-void CommWireless_CopyParentProfile(int ordinal, PlayerProfile *profile);
-BOOL CommWireless_ConnectToParent(int slot);
-void CommWireless_UpdateParents(void);
-void CommWireless_BuildBeacon(void);
-void CommWireless_UpdateBeaconMemberCount(void);
-void CommWireless_Update(int count, CommWirelessWork *work);
-BOOL CommWireless_Main(int count);
-BOOL CommWireless_IsAidConnected(u16 aid);
-int CommWireless_CountConnected(void);
-int CommWireless_IsManagerEnded(void);
-BOOL CommWireless_Exists(void);
-int CommWireless_IsIdle(void);
-int CommWireless_GetConnectedChildren(void);
-BOOL CommWireless_IsLinkLost(void);
-void CommWireless_SetLostWhenAlone(BOOL value);
-void CommWireless_SetDetectDrops(BOOL value);
-u32 CommWireless_GetBeaconPeriod(u32 kind);
+static BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size);
+static void CommWireless_OnParentFound(void *parentInfo);
+static void CommWireless_StoreFoundParent(void);
+static void CommWireless_OnStartedUp(void *unused, int failed);
+static void CommWireless_OnTerminated(void *unused);
+static void CommWireless_InitManager(int mode);
+static void CommWireless_SetRenewTgid(BOOL renew);
+static void CommWireless_ResetFlags(void);
+static void CommWireless_Free(void);
+static void CommWireless_BuildBeacon(void);
+static void CommWireless_UpdateBeaconMemberCount(void);
+static void CommWireless_Update(int count, CommWirelessWork *work);
+static BOOL CommWireless_IsAidConnected(u16 aid);
+static int CommWireless_CountConnected(void);
+static u32 CommWireless_GetBeaconPeriod(u32 kind);
 void *CommWireless_GetParentInfo(int slot);
-void *CommWireless_GetProfile(void);
 void *CommWireless_GetParentProfile(int slot);
-void CommWireless_SetMacAddress(void *macAddress, int index);
-BOOL CommWireless_IsShutdownRequested(void);
-void CommWireless_RequestShutdown(void);
-void CommWireless_SetMail(void *mail);
-void CommWireless_SetRuleset(void *ruleset);
 void *CommWireless_GetRuleset(void);
-void CommWireless_RefreshBeacon(void);
 void CommWireless_HasSentBeacons(void);
-void CommWireless_SetCustomBeacon(const void *src);
-void *CommWireless_GetParentMail(int slot);
 
 static const CommBssid sCommWirelessAnyBssid = {
     .data = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
@@ -255,7 +217,7 @@ BOOL CommWireless_IsInitialized(void) {
     return sCommWireless.work != NULL;
 }
 
-BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size) {
+static BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size) {
     int i;
     for (i = 0; i < size; i++) {
         if (*a != *b) {
@@ -268,7 +230,7 @@ BOOL CommWireless_BytesEqual(const u8 *a, const u8 *b, int size) {
 }
 
 // Scan callback: keeps a parent of our link kind (and id), stored by CommWireless_StoreFoundParent.
-void CommWireless_OnParentFound(void *parentInfo) {
+static void CommWireless_OnParentFound(void *parentInfo) {
     u8 *data = parentInfo;
     u8 *beacon;
     int kind;
@@ -295,7 +257,7 @@ void CommWireless_OnParentFound(void *parentInfo) {
     sCommWireless.work->parentPending = 1;
 }
 
-void CommWireless_StoreFoundParent(void) {
+static void CommWireless_StoreFoundParent(void) {
     CommWirelessWork *work;
     u8 *received;
     u8 *slot;
@@ -329,14 +291,14 @@ void CommWireless_StoreFoundParent(void) {
     }
 }
 
-void CommWireless_OnStartedUp(void *unused, int failed) {
+static void CommWireless_OnStartedUp(void *unused, int failed) {
     if (failed != 0) {
         OS_Terminate();
     }
     sCommWireless.state = COMM_WIRELESS_STARTED;
 }
 
-void CommWireless_OnTerminated(void *unused) {
+static void CommWireless_OnTerminated(void *unused) {
     sCommWireless.state = COMM_WIRELESS_OFF;
     Sys_ClearSleepDisableFlag(4);
 }
@@ -361,7 +323,7 @@ void CommWireless_Terminate(void) {
     WVR_TerminateAsync(CommWireless_OnTerminated, NULL);
 }
 
-void CommWireless_InitManager(int mode) {
+static void CommWireless_InitManager(int mode) {
     u8 *buffer;
     u32 misalignment;
 
@@ -380,11 +342,11 @@ void CommWireless_ClearParents(void) {
     MI_CpuFill8(sCommWireless.work->parents, 0, sizeof(sCommWireless.work->parents));
 }
 
-void CommWireless_SetRenewTgid(BOOL renew) {
+static void CommWireless_SetRenewTgid(BOOL renew) {
     sCommWireless.work->renewTgid = renew;
 }
 
-void CommWireless_ResetFlags(void) {
+static void CommWireless_ResetFlags(void) {
     sCommWireless.work->parentListChanged = 0;
     sCommWireless.work->linkLost = 0;
     sCommWireless.work->lostWhenAlone = 0;
@@ -484,7 +446,7 @@ void CommWireless_SetManagerEnded(BOOL end) {
     }
 }
 
-void CommWireless_Free(void) {
+static void CommWireless_Free(void) {
     Heap_Free(sCommWireless.work->ruleset);
     Heap_Free(sCommWireless.work->managerBuffer);
     Heap_Free(sCommWireless.work->beaconBuffer);
@@ -608,7 +570,7 @@ void CommWireless_UpdateParents(void) {
     }
 }
 
-void CommWireless_BuildBeacon(void) {
+static void CommWireless_BuildBeacon(void) {
     int kind = CommState_GetLinkMode();
     PlayerProfile *profile = CommWireless_GetProfile();
 
@@ -639,7 +601,7 @@ void CommWireless_BuildBeacon(void) {
     Wireless_SetParentGameInfo(sCommWireless.work->beacon, sizeof(CommBeacon));
 }
 
-void CommWireless_UpdateBeaconMemberCount(void) {
+static void CommWireless_UpdateBeaconMemberCount(void) {
     CommBeacon *beacon = sCommWireless.work->beacon;
 
     if (beacon->memberCount != CommWireless_CountConnected()) {
@@ -652,7 +614,7 @@ void CommWireless_UpdateBeaconMemberCount(void) {
 
 // Per frame: notices a lost link (alone as parent, fewer players than at the start, players dropped, errors),
 // follows the shutdown request, and starts the parent once the channels are measured.
-void CommWireless_Update(int count, CommWirelessWork *unused) {
+static void CommWireless_Update(int count, CommWirelessWork *unused) {
     int state = Wireless_GetState(count);
     int dropped = CommPlayerInfo_DropDisconnected();
     CommWireless_UpdateBeaconMemberCount();
@@ -736,7 +698,7 @@ BOOL CommWireless_Main(int count) {
     }
 }
 
-BOOL CommWireless_IsAidConnected(u16 aid) {
+static BOOL CommWireless_IsAidConnected(u16 aid) {
     if (sCommWireless.work == NULL) {
         return FALSE;
     }
@@ -749,7 +711,7 @@ BOOL CommWireless_IsAidConnected(u16 aid) {
     return FALSE;
 }
 
-int CommWireless_CountConnected(void) {
+static int CommWireless_CountConnected(void) {
     int count = 0;
     int i;
     for (i = 0; i < 8; i++) {
@@ -808,7 +770,7 @@ void CommWireless_SetDetectDrops(BOOL value) {
 }
 
 // A quarter of the beacon period for link kinds 9, 10 and 13.
-u32 CommWireless_GetBeaconPeriod(u32 kind) {
+static u32 CommWireless_GetBeaconPeriod(u32 kind) {
     u16 period = WM_GetDispersionBeaconPeriod();
 
     GF_ASSERT(kind < 41);

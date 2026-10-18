@@ -4,6 +4,7 @@
 
 #include "assert.h"
 #include "comm_state.h"
+#include "comm_wireless.h"
 #include "communication_core.h"
 #include "heap.h"
 #include "sys_task_api.h"
@@ -48,14 +49,9 @@ static void WirelessStatusIcon_WriteOam(WirelessStatusIcon *p);
 static void WirelessStatusIcon_CreateOnScreen(int screen);
 static void WirelessStatusIcon_CreateAt(int x, int y, int isWifi, int screen, u32 plttBase);
 
-int CommWireless_IsOn(void);
-
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
-void WirelessStatusIcon_Refresh(void);
 void WirelessStatusIcon_SetLevel(s32 level);
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId);
-void WirelessStatusIcon_CreateOnScreenIfConnected(int screen);
-void WirelessStatusIcon_SetBackPriority(void);
 
 static const WirelessStatusIconAnimFrame sWirelessStatusIconLevel3Anim[] = {
     { 0x1FC,  20 },

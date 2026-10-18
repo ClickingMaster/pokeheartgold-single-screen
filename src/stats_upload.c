@@ -13,7 +13,6 @@ int snprintf(char *, u32, const char *, ...);
 int sprintf(char *, const char *, ...);
 int strncmp(const char *, const char *, size_t);
 unsigned long strtoul(const char *, char **, int);
-void MATH_CalcSHA1(void *digest, const void *data, u32 length);
 
 typedef struct HexDigits {
     char chars[17];

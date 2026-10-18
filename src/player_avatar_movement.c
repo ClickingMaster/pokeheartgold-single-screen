@@ -22,6 +22,7 @@
 #include "overlay_04.h"
 #include "player_avatar.h"
 #include "player_avatar_actions.h"
+#include "sound_gb.h"
 #include "sound_playback.h"
 
 // Player avatar movement control: turns the d-pad input into the player's map object movement each frame, on foot
@@ -44,7 +45,6 @@ BOOL MapObject_IsOnBridge(LocalMapObject *object, int tile);
 BOOL MapObject_IsOutsideMovementRange(LocalMapObject *object, int x, int y, int z);
 BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int direction);
 void OffsetPositionInDirection(int direction, VecFx32 *position, int distance);
-void Sound_ApplyFootstepVariation(u16 sequence);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
 
 // PlayerAvatar_IsBikeBlockedInDirection passes the behavior as a full word (matched against int parameters).

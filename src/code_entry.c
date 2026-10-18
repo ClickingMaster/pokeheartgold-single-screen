@@ -1,5 +1,7 @@
 #include "code_entry.h"
 
+#include <dwc/net_common_internal.h>
+
 #include "global.h"
 
 #include "bg_window.h"
@@ -13,6 +15,7 @@
 #include "touch_hitbox_controller.h"
 #include "touchpad.h"
 #include "vram_transfer_manager.h"
+#include "wireless_status_icon.h"
 
 typedef struct CodeEntryMainBgTemplates {
     BgTemplate templates[3];
@@ -24,9 +27,6 @@ typedef struct CodeEntrySubBgTemplates {
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void WirelessStatusIcon_SetLevel(int level);
-void WirelessStatusIcon_Create(void);
-void WirelessStatusIcon_Destroy(void);
-int DWC_GetLinkLevel(void);
 
 static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
 static void CodeEntry_SetupBgs(BgConfig *bgConfig);

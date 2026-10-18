@@ -7,6 +7,7 @@
 
 #include "assert.h"
 #include "comm_state.h"
+#include "comm_wireless.h"
 #include "communication_core.h"
 #include "communication_player_state.h"
 #include "easy_chat.h"
@@ -72,9 +73,6 @@ struct UnionRoom {
     TrainerCardData *cards[2];        // 0x188: per net id, the trainer cards exchanged
 }; // size: 0x190
 
-void CommWireless_SetMail(MailMessage *message);
-void CommWireless_SetRuleset(UnionRoomStatus *status);
-void CommWireless_RefreshBeacon(void);
 void CommState_SetLinkMode13RequestMode0(void);
 u32 CommPlayerInfo_GetCountry(int netId);
 u32 CommPlayerInfo_GetRegion(int netId);
@@ -82,11 +80,11 @@ TrainerCardData *TrainerCardData_New(enum HeapID heapID);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 
 int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret);
-int UnionRoom_GetGroupOfMemberSlot(int slot);
-int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
-int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt);
-void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused);
-void UnionRoomStatus_Init(UnionRoomStatus *status);
+static int UnionRoom_GetGroupOfMemberSlot(int slot);
+static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
+static int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt);
+static void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused);
+static void UnionRoomStatus_Init(UnionRoomStatus *status);
 void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
 
 // gender-indexed message ids
@@ -178,7 +176,7 @@ void UnionRoom_SendBattleChoice(int choice) {
     Comm_SendCommand(0x65, &data, 1);
 }
 
-int UnionRoom_GetGroupOfMemberSlot(int slot) {
+static int UnionRoom_GetGroupOfMemberSlot(int slot) {
     int i;
     const u16 *first = gUnionRoomGroupFirstSlot;
     for (i = 0; i < 10; i++, first++) {
@@ -189,7 +187,7 @@ int UnionRoom_GetGroupOfMemberSlot(int slot) {
     return -1;
 }
 
-int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
+static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     int index, gender;
     UnionRoomPeerInfo *info;
     UnionRoomStatus *status;
@@ -270,7 +268,7 @@ int UnionRoom_GetPartnerHometownMsg(MessageFormat *msgFmt) {
     return 15;
 }
 
-int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt) {
+static int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt) {
     if (a0 != 0) {
         return sSentTalkReplyMsgs[a0][gender];
     }
@@ -350,7 +348,7 @@ u32 UnionRoom_GetPartnerGameVersion(void) {
 }
 
 // The parent lists the players connected to it (net ids 1-4) as its group.
-void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused) {
+static void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused) {
     PlayerProfile *profile;
     int netId;
     int i;
@@ -440,7 +438,7 @@ int UnionRoom_GetOwnChatMessageMsg(struct UnionRoom *unionRoom, MessageFormat *m
     return sUnionRoomChatMsgs[msgNo];
 }
 
-void UnionRoomStatus_Init(UnionRoomStatus *status) {
+static void UnionRoomStatus_Init(UnionRoomStatus *status) {
     int i;
     status->activity = 0;
     for (i = 0; i < 4; i++) {

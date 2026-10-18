@@ -7,6 +7,7 @@
 #include "comm_wireless.h"
 #include "communication_command.h"
 #include "communication_core_internal.h"
+#include "communication_player_state.h"
 #include "error_handling.h"
 #include "gf_rtc.h"
 #include "heap.h"
@@ -42,21 +43,7 @@ extern void PacketPool_Reset(void *queue);
 extern void PacketPool_Free(void *queue);
 extern int PacketPool_HasCommand(void *queue, int);
 extern int Comm_GetMaxChildren(u16);
-extern int Comm_GetMinChildren(u16);
 extern int Comm_IsWifiLinkMode(int);
-extern int Comm_IsWifiPeerLinkMode(int);
-extern int Comm_CommandHasBuffer(int command);
-extern void CommPlayerInfo_Free(void);
-extern void CommWireless_ClearParents(void);
-extern int CommWireless_StartParent(int, int, int);
-extern int CommWireless_StartScan(int, int);
-extern int CommWireless_RequestStopAndFree(void);
-extern int CommWireless_ConnectToParent(int);
-extern BOOL CommWireless_Main(int);
-extern int CommWireless_GetConnectedChildren(void);
-extern int CommWireless_IsLinkLost(void);
-extern int CommWireless_IsShutdownRequested(void);
-extern void CommWireless_RequestShutdown(void);
 
 // The bytes around the key state in the work area (Comm_ScrambleDirectionKeys).
 typedef struct CommKeyWork {
