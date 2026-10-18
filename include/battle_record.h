@@ -6,6 +6,7 @@
 
 // Battle Video functions; the record type and the recording interface are in battle_recording.h.
 
+BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battle, int index);
 BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index);
 int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState);
 BOOL BattleRecord_AreAiFlagsValid(void);

@@ -7,6 +7,7 @@
 #include "battle/battle_setup.h"
 #include "frontier/battle_castle.h"
 #include "frontier/battle_castle_data.h"
+#include "frontier/battle_castle_setup.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_commands.h"
@@ -27,12 +28,6 @@ u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 
 u32 CastleChallenge_GetSaved(void *challenge);
 u32 Comm_GetLocalNetId(void);
-BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchArgs *args);
-BOOL BattleCastle_IsMultiType(u8 type);
-void BattleCastle_SetOpponentParty(BattleCastleData *data);
-u16 BattleCastle_GetRound(BattleCastleData *data);
-void BattleCastle_DrawRoundTiles(BgConfig *bgConfig, BattleCastleData *data, int bgId);
-void BattleCastle_SpendPoints(FrontierSave *frontierSave, u8 type, int points);
 
 static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
 static void BattleCastle_OnAppExit(void *args);

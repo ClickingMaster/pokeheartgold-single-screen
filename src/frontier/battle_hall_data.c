@@ -54,7 +54,6 @@ void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum 
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 int BattleHall_GetLevelRank(BattleHallData *data);
-u8 BattleHall_GetPartySize(u8 type);
 void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index);
 void BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 

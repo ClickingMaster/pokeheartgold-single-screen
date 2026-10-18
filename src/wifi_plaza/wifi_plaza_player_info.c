@@ -1,23 +1,11 @@
 #include "global.h"
 
+#include "wifi_plaza/wifi_plaza_internal.h"
+
 #include "heap.h"
 #include "player_data.h"
 
-typedef struct WiFiPlazaPlayerInfo {
-    u8 filler_00[0x18];
-    u8 version;
-    u8 language;
-    u8 filler_1A;
-    u8 unk1B;
-    u8 filler_1C;
-    u8 avatar;
-    u8 gender;
-    u8 filler_1F[5];
-} WiFiPlazaPlayerInfo;
-
 BOOL WifiConnection_SetOwnStatusData(void *data, s32 size);
-WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId);
-void WiFiPlazaPlayerInfo_Free(void *info);
 
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId) {
     WiFiPlazaPlayerInfo *info = Heap_Alloc(heapId, sizeof(WiFiPlazaPlayerInfo));
@@ -31,6 +19,6 @@ WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID
     return info;
 }
 
-void WiFiPlazaPlayerInfo_Free(void *info) {
+void WiFiPlazaPlayerInfo_Free(WiFiPlazaPlayerInfo *info) {
     Heap_Free(info);
 }

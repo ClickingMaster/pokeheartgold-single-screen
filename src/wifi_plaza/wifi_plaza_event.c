@@ -50,11 +50,43 @@ enum WiFiPlazaSurveyGuideStep {
     WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE,
 };
 
-void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
+static void WiFiPlazaLight_Delete(WiFiPlazaLight *light);
+static void WiFiPlazaLight_Update(WiFiPlazaLight *light);
+static void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set);
+static void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set);
+static void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set);
+static void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color);
+static void WiFiPlazaLight_UnpackColor(s8 *rgb, const u16 *color);
+static void WiFiPlazaLight_LerpColor(const s8 *start, const s8 *end, s8 *dest, s32 step, s32 total);
+static inline void WiFiPlazaEvent_Clear(WiFiPlazaEvent *event);
+static int WiFiPlazaEvent_GetColorSet(int value);
+static int WiFiPlazaEvent_GetLight1Set(int value);
+static int WiFiPlazaEvent_GetThirdSet(int value);
+static void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event);
+static WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID);
+static void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect);
+static void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect);
+static void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int index, int arg);
+static void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 index, u32 arg);
+static void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list);
+static void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect);
+static void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect);
+static WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID);
+static void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work);
+static void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work);
+static u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field);
+static void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index);
+static void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn);
+static void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo);
+static void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species);
+static BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index);
+static BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+
+static void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
     Heap_Free(light);
 }
 
-void WiFiPlazaLight_Update(WiFiPlazaLight *light) {
+static void WiFiPlazaLight_Update(WiFiPlazaLight *light) {
     int i;
     int changed;
 
@@ -79,7 +111,7 @@ void WiFiPlazaLight_Update(WiFiPlazaLight *light) {
 }
 
 // Fades light 0 and the four material colours to colour set `set`.
-void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set) {
+static void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set) {
     int i;
     const u16 *colors;
 
@@ -100,7 +132,7 @@ void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set) {
     }
 }
 
-void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set) {
+static void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set) {
     light->lightsFrom[1][0] = light->lights[1][0];
     light->lightsFrom[1][1] = light->lights[1][1];
     light->lightsFrom[1][2] = light->lights[1][2];
@@ -109,20 +141,20 @@ void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set) {
     WiFiPlazaLight_UnpackColor((s8 *)light->lightsTo[1], &sWiFiPlazaLight1Colors[set]);
 }
 
-void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set) {
+static void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set) {
 }
 
-void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color) {
+static void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color) {
     *color = rgb[0] | (rgb[1] << 5) | (rgb[2] << 10);
 }
 
-void WiFiPlazaLight_UnpackColor(s8 *rgb, const u16 *color) {
+static void WiFiPlazaLight_UnpackColor(s8 *rgb, const u16 *color) {
     rgb[0] = color[0] & 0x1F;
     rgb[1] = (color[0] & (0x1F << 5)) >> 5;
     rgb[2] = (color[0] & (0x1F << 10)) >> 10;
 }
 
-void WiFiPlazaLight_LerpColor(const s8 *start, const s8 *end, s8 *dest, s32 step, s32 total) {
+static void WiFiPlazaLight_LerpColor(const s8 *start, const s8 *end, s8 *dest, s32 step, s32 total) {
     s32 dy = end[1] - start[1];
     s32 dz = end[2] - start[2];
     s32 x = start[0];
@@ -274,7 +306,7 @@ u8 WiFiPlazaEvent_GetMoverState(WiFiPlazaEvent *event, u32 index, int field) {
 }
 
 // Lobby value 1-6 -> colour set 0-5
-int WiFiPlazaEvent_GetColorSet(int value) {
+static int WiFiPlazaEvent_GetColorSet(int value) {
     switch (value) {
     case 1:
     case 2:
@@ -290,7 +322,7 @@ int WiFiPlazaEvent_GetColorSet(int value) {
 }
 
 // Lobby value 7-10 -> light 1 colour 0-3
-int WiFiPlazaEvent_GetLight1Set(int value) {
+static int WiFiPlazaEvent_GetLight1Set(int value) {
     switch (value) {
     case 7:
     case 8:
@@ -303,7 +335,7 @@ int WiFiPlazaEvent_GetLight1Set(int value) {
     }
 }
 
-int WiFiPlazaEvent_GetThirdSet(int value) {
+static int WiFiPlazaEvent_GetThirdSet(int value) {
     switch (value) {
     case 11:
     case 12:
@@ -316,11 +348,11 @@ int WiFiPlazaEvent_GetThirdSet(int value) {
     }
 }
 
-void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event) {
+static void WiFiPlazaEvent_TurnOffLight2(WiFiPlazaEvent *event) {
     NNS_G3dGlbLightColor(GX_LIGHTID_2, 0);
 }
 
-WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
+static WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlazaModels *models, enum HeapID heapID) {
     WiFiPlazaEventEffect *effect = Heap_Alloc(heapID, sizeof(WiFiPlazaEventEffect));
     u32 effectId;
     u8 *cursor = (u8 *)effect;
@@ -341,12 +373,12 @@ WiFiPlazaEventEffect *WiFiPlazaEventEffect_Create(WiFiPlazaWork *lobby, WiFiPlaz
     return effect;
 }
 
-void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect) {
+static void WiFiPlazaEventEffect_Delete(WiFiPlazaEventEffect *effect) {
     WiFiPlazaEvent_StopLoopSE(effect);
     Heap_Free(effect);
 }
 
-void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect) {
+static void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect) {
     int effectId;
     int arg;
     int count;
@@ -370,7 +402,7 @@ void WiFiPlazaEventEffect_Update(WiFiPlazaEventEffect *effect) {
     }
 }
 
-void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int index, int arg) {
+static void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int index, int arg) {
     if ((u32)index >= 6) {
         GF_AssertFail();
     }
@@ -461,7 +493,7 @@ void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value) 
     }
 }
 
-void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 index, u32 arg) {
+static void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 index, u32 arg) {
     GF_ASSERT(index < 6);
     if (index < 6) {
         u8 *step = (u8 *)&effect->step;
@@ -497,7 +529,7 @@ void WiFiPlazaEventEffect_StartPhase5(WiFiPlazaEventEffect *effect) {
     WiFiPlazaModels_SetEffectActive(effect->models, FALSE);
 }
 
-void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list) {
+static void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list) {
     switch (kind) {
     case 0:
         list->count = 6;
@@ -533,14 +565,14 @@ void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list) {
     }
 }
 
-void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect) {
+static void WiFiPlazaEvent_StartLoopSE(WiFiPlazaEventEffect *effect) {
     if (effect->seLooping == FALSE) {
         PlaySE(SEQ_SE_PL_140_3);
         effect->seLooping = TRUE;
     }
 }
 
-void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect) {
+static void WiFiPlazaEvent_StopLoopSE(WiFiPlazaEventEffect *effect) {
     if (effect->seLooping != FALSE) {
         StopSE(SEQ_SE_PL_140_3, 0);
         effect->seLooping = FALSE;
@@ -636,7 +668,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
     return FALSE;
 }
 
-WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID) {
+static WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum HeapID heapID) {
     WiFiPlazaEventMovers *work = Heap_Alloc(heapID, sizeof(WiFiPlazaEventMovers));
     int i;
     const u8 *tag;
@@ -668,11 +700,11 @@ WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room, enum 
     return work;
 }
 
-void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work) {
+static void WiFiPlazaEventMovers_Delete(WiFiPlazaEventMovers *work) {
     Heap_Free(work);
 }
 
-void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
+static void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     int selected = WiFiPlazaWork_FindGroupPlace(work->lobby, WiFiPlazaWork_GetOwnSlot(work->lobby));
     u32 column;
     int present;
@@ -711,7 +743,7 @@ void WiFiPlazaEventMovers_Update(WiFiPlazaEventMovers *work) {
     }
 }
 
-u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field) {
+static u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int field) {
     u8 *entry;
 
     if (index >= 9) {
@@ -725,7 +757,7 @@ u8 WiFiPlazaEventMovers_GetState(WiFiPlazaEventMovers *work, u32 index, int fiel
     return entry[offsetof(WiFiPlazaEventMovers, states)];
 }
 
-void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
+static void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
     int value = WiFiPlazaWork_GetGroupCounter(work->lobby, index);
     int max = WiFiPlazaWork_GetGroupDuration(work->lobby);
     fx32 ratio = FX_Div(work->range, 8192);
@@ -752,7 +784,7 @@ void WiFiPlazaEventMovers_UpdateX(WiFiPlazaEventMovers *work, int index) {
     WiFiPlazaModels_SetMoverX(work->models, index, x);
 }
 
-void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn) {
+static void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BOOL hasOwnSelection, int isOwnIndex, int ownColumn) {
     int type = WiFiPlazaWork_GetScheduleValue2(work->lobby);
     int i;
 
@@ -804,7 +836,7 @@ void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 index, BO
 }
 
 // While the own player has a selection, only the own index is heard (on the player channel for the own column).
-void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo) {
+static void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 seqNo) {
     if (hasOwnSelection != FALSE) {
         if (isOwnIndex == FALSE) {
             return;
@@ -820,7 +852,7 @@ void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isO
     PlaySE(seqNo);
 }
 
-void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species) {
+static void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species) {
     if (hasOwnSelection != FALSE) {
         if (isOwnIndex == FALSE) {
             return;
@@ -831,7 +863,7 @@ void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL is
     PlayCry(species, 0);
 }
 
-BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index) {
+static BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index) {
     if ((u32)kind >= 2) {
         GF_AssertFail();
     }
@@ -844,7 +876,7 @@ BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlaz
     return TRUE;
 }
 
-BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
+static BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     if (wobble->active != FALSE) {
         if (sWiFiPlazaEventWobbleSteps[wobble->kind](wobble, models, index) == TRUE) {
             u8 *p = (u8 *)wobble;

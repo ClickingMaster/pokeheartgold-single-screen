@@ -4,6 +4,7 @@
 #include "sprite_system.h"
 
 int TypeIcon_GetCharFile(int moveType);
+int TypeIcon_GetPlttFile(void);
 NarcId TypeIcon_GetNarc(void);
 u32 TypeIcon_GetPalette(u32 type);
 void TypeIcon_LoadPaletteBuffer(PaletteData *paletteData, int buffer, SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resource);

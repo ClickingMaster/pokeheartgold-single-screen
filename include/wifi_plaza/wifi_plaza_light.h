@@ -19,14 +19,6 @@ typedef struct WiFiPlazaLight {
 } WiFiPlazaLight;
 
 WiFiPlazaLight *WiFiPlazaLight_Create(enum HeapID heapID, u32 colorSet, u32 light1Set, u32 thirdSet);
-void WiFiPlazaLight_Delete(WiFiPlazaLight *light);
-void WiFiPlazaLight_Update(WiFiPlazaLight *light);
-void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set);
-void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set);
-void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set);
-void WiFiPlazaLight_PackColor(const s8 *rgb, u16 *color);
-void WiFiPlazaLight_UnpackColor(s8 *rgb, const u16 *color);
-void WiFiPlazaLight_LerpColor(const s8 *start, const s8 *end, s8 *dest, s32 step, s32 total);
 void WiFiPlazaLight_UnpackColorSet(s8 *dest, const u16 *colors);
 void WiFiPlazaLight_UnpackLight1(WiFiPlazaLight *light, const u16 *color);
 void WiFiPlazaLight_Apply(WiFiPlazaLight *light);

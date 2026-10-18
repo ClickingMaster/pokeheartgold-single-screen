@@ -68,16 +68,5 @@ typedef struct WiFiPlazaGameEntry {
 BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 playerIndex);
 BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index);
 BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index);
-void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep);
-void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId);
-void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg);
-void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room);
-BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex);
-void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 game, u32 showSeconds, s32 frames);
-void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room);
-void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames);
-void WiFiPlazaGameStatus_Update(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force);
-void WiFiPlazaGameStatus_UpdateInPlay(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force);
-void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force, u32 showInPlay);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_GAME_ENTRY_H

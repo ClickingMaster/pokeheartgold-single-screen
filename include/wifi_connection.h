@@ -90,7 +90,7 @@ void WifiConnection_SetVoiceUnmuted(u16 value);
 void WifiConnection_StopServerMatchingCallback(void *param);
 BOOL WifiConnection_StopServerMatching(void);
 void WifiConnection_ResetStopServerMatching(void);
-void WifiConnection_GetNumConnectionHost(void);
+int WifiConnection_GetNumConnectionHost(void);
 void WifiConnection_SetExtraHeapEnabled(BOOL enable, int heapId);
 void WifiConnection_SetDisconnectWhenAlone(u8 value);
 void WifiConnection_FreeRecvBuffer(int aid);

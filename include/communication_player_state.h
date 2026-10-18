@@ -20,5 +20,6 @@ PlayerProfile *CommPlayerInfo_GetProfile(u32 netId);
 u8 CommPlayerInfo_GetFriendIndex(int a);
 s32 CommPlayerInfo_RulesetsMatch();
 void CommPlayerInfo_RecordBattleResult(SaveData *saveData, int b);
+void CommPlayerInfo_SetProfile(void *profile);
 
 #endif // POKEHEARTGOLD_COMMUNICATION_PLAYER_STATE_H

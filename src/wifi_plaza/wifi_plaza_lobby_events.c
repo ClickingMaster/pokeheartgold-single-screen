@@ -5,11 +5,35 @@
 #include "wifi_plaza/wifi_plaza_internal.h"
 
 #include "assert.h"
+#include "wifi_connection.h"
+
+static inline BOOL IsSameId(int id, int other);
+static void WiFiPlazaLobbyMatches_Set(WiFiPlazaLobbyClient *client, int index, int hostId, const WiFiPlazaLobbyMatchInfo *info);
+static u16 WiFiPlazaLobbyMatches_CalcTimer(WiFiPlazaLobbyClient *client, int index);
+static void WiFiPlazaLobbyMatchInfo_GetStartTime(const WiFiPlazaLobbyMatchInfo *info, s64 *time);
+static void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *surveyData, const void *data, u32 count);
+static void WiFiPlazaLobbyClient_CopySurveyData(u32 *dest, const void *data);
+static const WiFiPlazaSpriteConfig *WiFiPlaza_GetSpriteConfig(int spriteId);
+static u32 WiFiPlaza_GetSpriteSequence(int standing, u32 sequence);
+static u32 WiFiPlaza_CalcSequenceFrame(u32 divisor, u16 value, u32 factor);
+static void WiFiPlazaObjectModel_Load(WiFiPlazaObjectModel *model, NARC *narc, int fileId, enum HeapID heapID);
+static void WiFiPlazaObjectModel_Free(WiFiPlazaObjectModel *model);
+static void WiFiPlazaObjectModel_SetAlpha(WiFiPlazaObjectModel *model, int alpha);
+static int WiFiPlazaObjectModel_GetAlpha(WiFiPlazaObjectModel *model);
+static void WiFiPlaza_InitModelInstance(ModelResource *resource, ModelInstance *instance);
+static WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_GetFreeObject(WiFiPlazaPlayerObjects *objects);
+static BOOL WiFiPlazaPlayerObject_IsUsed(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_Clear(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object);
 
 // The callbacks the lobby library calls (WiFiPlazaLobbyClient_InitializeEx hands them over): channel joined, players entering, leaving
 // and updating, messages, the location list, match updates and the results of the library's requests.
 
-u32 WifiConnection_GetNumConnectionHost(void);
 
 static const u16 sWiFiPlazaSpriteSequenceFiles[2] = { 0x118, 0x119 };
 
@@ -300,7 +324,7 @@ void WiFiPlazaLobbyClient_InitMatches(WiFiPlazaLobbyClient *client) {
 
 // The three matchmaking sessions of the lobby client: the info their hosts send, the start time, the countdown.
 
-void WiFiPlazaLobbyMatches_Set(WiFiPlazaLobbyClient *client, int index, int hostId, const WiFiPlazaLobbyMatchInfo *info) {
+static void WiFiPlazaLobbyMatches_Set(WiFiPlazaLobbyClient *client, int index, int hostId, const WiFiPlazaLobbyMatchInfo *info) {
     GF_ASSERT(index < 3);
     if (WiFiPlazaLobbyMatches_IsActive(client, index) == TRUE && hostId != client->matches[index].hostId) {
         return;
@@ -331,7 +355,7 @@ BOOL WiFiPlazaLobbyMatches_IsActive(WiFiPlazaLobbyClient *client, int index) {
 }
 
 // Frames left: 60 s after the start, at most 30 s of it gone.
-u16 WiFiPlazaLobbyMatches_CalcTimer(WiFiPlazaLobbyClient *client, int index) {
+static u16 WiFiPlazaLobbyMatches_CalcTimer(WiFiPlazaLobbyClient *client, int index) {
     s64 start;
     s64 elapsed;
     if (WiFiPlazaLobbyMatches_IsActive(client, index) == FALSE) {
@@ -388,7 +412,7 @@ void WiFiPlazaLobbyMatchInfo_SetStartTime(WiFiPlazaLobbyMatchInfo *info, const s
     info->startTime = *(const WiFiPlazaLobbyEntryTime *)time;
 }
 
-void WiFiPlazaLobbyMatchInfo_GetStartTime(const WiFiPlazaLobbyMatchInfo *info, s64 *time) {
+static void WiFiPlazaLobbyMatchInfo_GetStartTime(const WiFiPlazaLobbyMatchInfo *info, s64 *time) {
     *(WiFiPlazaLobbyEntryTime *)time = info->startTime;
 }
 
@@ -432,7 +456,7 @@ void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *surveyData) {
     list->items = NULL;
 }
 
-void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *surveyData, const void *data, u32 count) {
+static void WiFiPlazaLobbyIdValueList_Set(WiFiPlazaLobbySurveyData *surveyData, const void *data, u32 count) {
     WiFiPlazaLobbyIdValueList *list = (WiFiPlazaLobbyIdValueList *)surveyData;
     GF_ASSERT(count < list->capacity);
     if (count >= list->capacity) {
@@ -464,7 +488,7 @@ u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *surveyData, int
     return 0;
 }
 
-void WiFiPlazaLobbyClient_CopySurveyData(u32 *dest, const void *data) {
+static void WiFiPlazaLobbyClient_CopySurveyData(u32 *dest, const void *data) {
     memcpy(dest, data, 0x2D8);
 }
 
@@ -692,7 +716,7 @@ u32 WiFiPlazaPlayerObject_IsVisible(WiFiPlazaPlayerObject *object) {
     return object->visible;
 }
 
-const WiFiPlazaSpriteConfig *WiFiPlaza_GetSpriteConfig(int spriteId) {
+static const WiFiPlazaSpriteConfig *WiFiPlaza_GetSpriteConfig(int spriteId) {
     int i;
     for (i = 0; i < 20; i++) {
         if (spriteId == sWiFiPlazaSpriteConfigs[i].spriteId) {
@@ -704,15 +728,15 @@ const WiFiPlazaSpriteConfig *WiFiPlaza_GetSpriteConfig(int spriteId) {
 }
 
 // Sequence of a sprite: the walking one (+4) or the standing one.
-u32 WiFiPlaza_GetSpriteSequence(int standing, u32 sequence) {
+static u32 WiFiPlaza_GetSpriteSequence(int standing, u32 sequence) {
     return standing == 0 ? sequence + 4 : sequence;
 }
 
-u32 WiFiPlaza_CalcSequenceFrame(u32 divisor, u16 value, u32 factor) {
+static u32 WiFiPlaza_CalcSequenceFrame(u32 divisor, u16 value, u32 factor) {
     return ((u16)(value + 1) * factor / divisor) << FX32_SHIFT;
 }
 
-void WiFiPlazaObjectModel_Load(WiFiPlazaObjectModel *model, NARC *narc, int fileId, enum HeapID heapID) {
+static void WiFiPlazaObjectModel_Load(WiFiPlazaObjectModel *model, NARC *narc, int fileId, enum HeapID heapID) {
     NNSG3dResFileHeader *file;
 
     WiFiPlazaMap_LoadModelFile(&file, narc, fileId, heapID);
@@ -724,24 +748,24 @@ void WiFiPlazaObjectModel_Load(WiFiPlazaObjectModel *model, NARC *narc, int file
     NNS_G3dMdlSetMdlPolygonIDAll(model->resource.model, 20);
 }
 
-void WiFiPlazaObjectModel_Free(WiFiPlazaObjectModel *model) {
+static void WiFiPlazaObjectModel_Free(WiFiPlazaObjectModel *model) {
     ModelResource_Free(&model->resource);
 }
 
-void WiFiPlazaObjectModel_SetAlpha(WiFiPlazaObjectModel *model, int alpha) {
+static void WiFiPlazaObjectModel_SetAlpha(WiFiPlazaObjectModel *model, int alpha) {
     model->alpha = alpha;
     NNS_G3dMdlSetMdlAlphaAll(model->resource.model, alpha);
 }
 
-int WiFiPlazaObjectModel_GetAlpha(WiFiPlazaObjectModel *model) {
+static int WiFiPlazaObjectModel_GetAlpha(WiFiPlazaObjectModel *model) {
     return model->alpha;
 }
 
-void WiFiPlaza_InitModelInstance(ModelResource *resource, ModelInstance *instance) {
+static void WiFiPlaza_InitModelInstance(ModelResource *resource, ModelInstance *instance) {
     ModelInstance_Init(instance, resource);
 }
 
-WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_GetFreeObject(WiFiPlazaPlayerObjects *objects) {
+static WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_GetFreeObject(WiFiPlazaPlayerObjects *objects) {
     u32 i;
 
     for (i = 0; i < objects->count; i++) {
@@ -753,18 +777,18 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_GetFreeObject(WiFiPlazaPlayerObjec
     return NULL;
 }
 
-BOOL WiFiPlazaPlayerObject_IsUsed(WiFiPlazaPlayerObject *object) {
+static BOOL WiFiPlazaPlayerObject_IsUsed(WiFiPlazaPlayerObject *object) {
     if (object->player != NULL) {
         return TRUE;
     }
     return FALSE;
 }
 
-void WiFiPlazaPlayerObject_Clear(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_Clear(WiFiPlazaPlayerObject *object) {
     memset(object, 0, sizeof(*object));
 }
 
-void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
     ModelInstance_Draw(&object->model);
 }
 
@@ -846,7 +870,7 @@ void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object) {
 }
 
 // Effect 1 (sWiFiPlazaPlayerObjectEffects): turns around, one direction every 4 ticks.
-void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
     if (((int)object->timer) % 4 == 0) {
         BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, sWiFiPlazaTurnAroundDirections[(u32)object->timer >> 2]));
         BillboardObject_SetSequenceFrame(object->sprite, 0);
@@ -858,7 +882,7 @@ void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object) {
     }
 }
 
-void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object) {
     if (object->timer == 0) {
         Field2DObject_GetParam(object->player, 6);
         BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
@@ -867,7 +891,7 @@ void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object)
     }
 }
 
-void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *object) {
     if (object->timer == 0) {
         BillboardObject_SetSequence(object->sprite, WiFiPlaza_GetSpriteSequence(1, Field2DObject_GetParam(object->player, 6)));
         BillboardObject_SetSequenceFrame(object->sprite, FX32_ONE * 4);
@@ -903,7 +927,7 @@ void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object) {
     }
 }
 
-void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object) {
     if (object->culled == 0 && object->visible == 1) {
         BillboardObject_SetVisible(object->sprite, TRUE);
         ModelInstance_SetVisible(&object->model, TRUE);
@@ -913,7 +937,7 @@ void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object) {
     }
 }
 
-void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object) {
     NNSG3dResMdl *model = BillboardObject_GetModelNoCast(sprite);
     NNS_G3dMdlSetMdlLightEnableFlagAll(model, object->lightFlags);
 }

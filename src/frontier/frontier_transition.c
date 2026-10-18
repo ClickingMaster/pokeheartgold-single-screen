@@ -73,27 +73,27 @@ static const u8 sFrontierWipeColumns[2][16] = {
     { 7, 6, 5, 4, 3, 2, 1, 0 },
 };
 
-void FrontierTransition_FlashTask(SysTask *task, void *data);
-void FrontierTransition_SetBrightness(u32 screen, s32 brightness);
-void FrontierTransitionFade_Init(FrontierTransitionFade *fade, s32 start, s32 end, s32 screen, s32 duration);
-BOOL FrontierTransitionFade_Step(FrontierTransitionFade *fade);
-void FrontierTransitionFade_ApplyTask(SysTask *task, void *data);
-void FrontierTransitionLerp_Init(FrontierTransitionLerp *lerp, s32 start, s32 end, s32 duration);
-BOOL FrontierTransitionLerp_Step(FrontierTransitionLerp *lerp);
-FrontierWipeBox *FrontierWipeBox_New(enum HeapID heapID);
-void FrontierWipeBox_Free(FrontierWipeBox *box);
-void FrontierWipeBox_Start(FrontierWipeBox *box, s32 x0, s32 x1, s32 y0, s32 y1, s32 duration, Window *window, u32 width, u32 height, u8 color);
-BOOL FrontierWipeBox_Update(FrontierWipeBox *box);
-void FrontierWipeBox_FillRect(Window *window, s32 top, s32 bottom, s32 left, s32 right, u8 color);
-SysTask *FrontierScanline_CreateTask(FrontierScanline *scanline);
-void FrontierScanline_VBlankTask(SysTask *task, void *data);
-void FrontierHBlankDma_VWaitTask(SysTask *task, void *data);
-void FrontierHBlankDma_VBlankTask(SysTask *task, void *data);
-void FrontierHBlankDma_StartTasks(FrontierHBlankDma *dma, void *arg, FrontierHBlankDmaCallback onVWait, FrontierHBlankDmaCallback onVBlank);
-void FrontierHBlankDma_StopTasks(FrontierHBlankDma *dma);
-void FrontierHBlankDma_StartDma(FrontierHBlankDma *dma);
-void FrontierHBlankDma_SwapAndRestart(FrontierHBlankDma *dma);
-void FrontierHBlankDma_Restart(FrontierHBlankDma *dma);
+static void FrontierTransition_FlashTask(SysTask *task, void *data);
+static void FrontierTransition_SetBrightness(u32 screen, s32 brightness);
+static void FrontierTransitionFade_Init(FrontierTransitionFade *fade, s32 start, s32 end, s32 screen, s32 duration);
+static BOOL FrontierTransitionFade_Step(FrontierTransitionFade *fade);
+static void FrontierTransitionFade_ApplyTask(SysTask *task, void *data);
+static void FrontierTransitionLerp_Init(FrontierTransitionLerp *lerp, s32 start, s32 end, s32 duration);
+static BOOL FrontierTransitionLerp_Step(FrontierTransitionLerp *lerp);
+static FrontierWipeBox *FrontierWipeBox_New(enum HeapID heapID);
+static void FrontierWipeBox_Free(FrontierWipeBox *box);
+static void FrontierWipeBox_Start(FrontierWipeBox *box, s32 x0, s32 x1, s32 y0, s32 y1, s32 duration, Window *window, u32 width, u32 height, u8 color);
+static BOOL FrontierWipeBox_Update(FrontierWipeBox *box);
+static void FrontierWipeBox_FillRect(Window *window, s32 top, s32 bottom, s32 left, s32 right, u8 color);
+static SysTask *FrontierScanline_CreateTask(FrontierScanline *scanline);
+static void FrontierScanline_VBlankTask(SysTask *task, void *data);
+static void FrontierHBlankDma_VWaitTask(SysTask *task, void *data);
+static void FrontierHBlankDma_VBlankTask(SysTask *task, void *data);
+static void FrontierHBlankDma_StartTasks(FrontierHBlankDma *dma, void *arg, FrontierHBlankDmaCallback onVWait, FrontierHBlankDmaCallback onVBlank);
+static void FrontierHBlankDma_StopTasks(FrontierHBlankDma *dma);
+static void FrontierHBlankDma_StartDma(FrontierHBlankDma *dma);
+static void FrontierHBlankDma_SwapAndRestart(FrontierHBlankDma *dma);
+static void FrontierHBlankDma_Restart(FrontierHBlankDma *dma);
 
 void FrontierTransition_StartFlash(u32 screen, s32 brightness, s32 otherBrightness, u32 *done, u32 count) {
     FrontierTransitionFlash *flash = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierTransitionFlash));
@@ -118,7 +118,7 @@ enum {
     FLASH_FINISH,
 };
 
-void FrontierTransition_FlashTask(SysTask *task, void *data) {
+static void FrontierTransition_FlashTask(SysTask *task, void *data) {
     FrontierTransitionFlash *flash = data;
     switch (flash->state) {
     case FLASH_INIT_OTHER_SCREEN:
@@ -165,7 +165,7 @@ void FrontierTransition_FlashTask(SysTask *task, void *data) {
     FrontierTransitionFade_Step(&flash->otherFade);
 }
 
-void FrontierTransition_SetBrightness(u32 screen, s32 brightness) {
+static void FrontierTransition_SetBrightness(u32 screen, s32 brightness) {
     if (screen == 1) {
         GXx_SetMasterBrightness_(&reg_GX_MASTER_BRIGHT, brightness);
     } else {
@@ -173,24 +173,24 @@ void FrontierTransition_SetBrightness(u32 screen, s32 brightness) {
     }
 }
 
-void FrontierTransitionFade_Init(FrontierTransitionFade *fade, s32 start, s32 end, s32 screen, s32 duration) {
+static void FrontierTransitionFade_Init(FrontierTransitionFade *fade, s32 start, s32 end, s32 screen, s32 duration) {
     fade->screen = screen;
     FrontierTransitionLerp_Init(&fade->lerp, start, end, duration);
 }
 
-BOOL FrontierTransitionFade_Step(FrontierTransitionFade *fade) {
+static BOOL FrontierTransitionFade_Step(FrontierTransitionFade *fade) {
     BOOL finished = FrontierTransitionLerp_Step(&fade->lerp);
     SysTask_CreateOnVWaitQueue(FrontierTransitionFade_ApplyTask, fade, 10);
     return finished;
 }
 
-void FrontierTransitionFade_ApplyTask(SysTask *task, void *data) {
+static void FrontierTransitionFade_ApplyTask(SysTask *task, void *data) {
     FrontierTransitionFade *fade = data;
     FrontierTransition_SetBrightness(fade->screen, fade->lerp.value);
     SysTask_Destroy(task);
 }
 
-void FrontierTransitionLerp_Init(FrontierTransitionLerp *lerp, s32 start, s32 end, s32 duration) {
+static void FrontierTransitionLerp_Init(FrontierTransitionLerp *lerp, s32 start, s32 end, s32 duration) {
     lerp->value = start;
     lerp->start = start;
     lerp->delta = end - start;
@@ -198,7 +198,7 @@ void FrontierTransitionLerp_Init(FrontierTransitionLerp *lerp, s32 start, s32 en
     lerp->step = 0;
 }
 
-BOOL FrontierTransitionLerp_Step(FrontierTransitionLerp *lerp) {
+static BOOL FrontierTransitionLerp_Step(FrontierTransitionLerp *lerp) {
     s32 value = lerp->delta * lerp->step / lerp->duration;
     value += lerp->start;
     lerp->value = value;
@@ -210,17 +210,17 @@ BOOL FrontierTransitionLerp_Step(FrontierTransitionLerp *lerp) {
     return TRUE;
 }
 
-FrontierWipeBox *FrontierWipeBox_New(enum HeapID heapID) {
+static FrontierWipeBox *FrontierWipeBox_New(enum HeapID heapID) {
     FrontierWipeBox *box = Heap_Alloc(heapID, sizeof(FrontierWipeBox));
     memset(box, 0, sizeof(FrontierWipeBox));
     return box;
 }
 
-void FrontierWipeBox_Free(FrontierWipeBox *box) {
+static void FrontierWipeBox_Free(FrontierWipeBox *box) {
     Heap_Free(box);
 }
 
-void FrontierWipeBox_Start(FrontierWipeBox *box, s32 x0, s32 x1, s32 y0, s32 y1, s32 duration, Window *window, u32 width, u32 height, u8 color) {
+static void FrontierWipeBox_Start(FrontierWipeBox *box, s32 x0, s32 x1, s32 y0, s32 y1, s32 duration, Window *window, u32 width, u32 height, u8 color) {
     GF_ASSERT(box->active == FALSE);
     FrontierTransitionLerp_Init(&box->x, x0, x1, duration);
     FrontierTransitionLerp_Init(&box->y, y0, y1, duration);
@@ -231,7 +231,7 @@ void FrontierWipeBox_Start(FrontierWipeBox *box, s32 x0, s32 x1, s32 y0, s32 y1,
     box->active = TRUE;
 }
 
-BOOL FrontierWipeBox_Update(FrontierWipeBox *box) {
+static BOOL FrontierWipeBox_Update(FrontierWipeBox *box) {
     BOOL finished;
     s32 left;
     s32 top;
@@ -255,7 +255,7 @@ BOOL FrontierWipeBox_Update(FrontierWipeBox *box) {
     return finished;
 }
 
-void FrontierWipeBox_FillRect(Window *window, s32 top, s32 bottom, s32 left, s32 right, u8 color) {
+static void FrontierWipeBox_FillRect(Window *window, s32 top, s32 bottom, s32 left, s32 right, u8 color) {
     if (right > 0 && bottom > 0 && left != right && top != bottom) {
         if (left < 0) {
             left = 0;
@@ -403,11 +403,11 @@ BOOL FrontierWipe_UpdateVertical(FrontierWipe *wipe) {
     return FALSE;
 }
 
-SysTask *FrontierScanline_CreateTask(FrontierScanline *scanline) {
+static SysTask *FrontierScanline_CreateTask(FrontierScanline *scanline) {
     return SysTask_CreateOnVBlankQueue(FrontierScanline_VBlankTask, scanline, 1024);
 }
 
-void FrontierScanline_VBlankTask(SysTask *task, void *data) {
+static void FrontierScanline_VBlankTask(SysTask *task, void *data) {
     FrontierScanline *scanline = data;
     if (scanline->counter >= 2) {
         ScanlineEffect_SwapBuffers(scanline->effect);
@@ -427,7 +427,7 @@ void FrontierScanline_StartWave(FrontierScanline *scanline, u8 first, u8 last, u
     ScanlineEffect_StartWave(scanline->effect, first, last, step, amplitude, speed, destination, fill, priority);
 }
 
-void FrontierHBlankDma_VWaitTask(SysTask *task, void *data) {
+static void FrontierHBlankDma_VWaitTask(SysTask *task, void *data) {
     FrontierHBlankDma *dma = data;
     if (dma->active) {
         dma->pending = TRUE;
@@ -437,7 +437,7 @@ void FrontierHBlankDma_VWaitTask(SysTask *task, void *data) {
     }
 }
 
-void FrontierHBlankDma_VBlankTask(SysTask *task, void *data) {
+static void FrontierHBlankDma_VBlankTask(SysTask *task, void *data) {
     FrontierHBlankDma *dma = data;
     if (dma->active && dma->pending) {
         dma->onVBlank(dma->arg);
@@ -445,7 +445,7 @@ void FrontierHBlankDma_VBlankTask(SysTask *task, void *data) {
     }
 }
 
-void FrontierHBlankDma_StartTasks(FrontierHBlankDma *dma, void *arg, FrontierHBlankDmaCallback onVWait, FrontierHBlankDmaCallback onVBlank) {
+static void FrontierHBlankDma_StartTasks(FrontierHBlankDma *dma, void *arg, FrontierHBlankDmaCallback onVWait, FrontierHBlankDmaCallback onVBlank) {
     GF_ASSERT(dma != NULL);
     dma->active = TRUE;
     dma->pending = FALSE;
@@ -456,7 +456,7 @@ void FrontierHBlankDma_StartTasks(FrontierHBlankDma *dma, void *arg, FrontierHBl
     dma->vblankTask = SysTask_CreateOnVBlankQueue(FrontierHBlankDma_VBlankTask, dma, 0);
 }
 
-void FrontierHBlankDma_StopTasks(FrontierHBlankDma *dma) {
+static void FrontierHBlankDma_StopTasks(FrontierHBlankDma *dma) {
     GF_ASSERT(dma != NULL);
     if (dma->vwaitTask != NULL) {
         SysTask_Destroy(dma->vwaitTask);
@@ -467,18 +467,18 @@ void FrontierHBlankDma_StopTasks(FrontierHBlankDma *dma) {
     HBlankDma_Stop();
 }
 
-void FrontierHBlankDma_StartDma(FrontierHBlankDma *dma) {
+static void FrontierHBlankDma_StartDma(FrontierHBlankDma *dma) {
     void *buffer = DoubleBuffer_GetOther(dma->buffers);
     HBlankDma_Stop();
     HBlankDma_Start(buffer, dma->destination, sizeof(FrontierScanlineRegs), TRUE);
 }
 
-void FrontierHBlankDma_SwapAndRestart(FrontierHBlankDma *dma) {
+static void FrontierHBlankDma_SwapAndRestart(FrontierHBlankDma *dma) {
     DoubleBuffer_Swap(dma->buffers);
     FrontierHBlankDma_StartDma(dma);
 }
 
-void FrontierHBlankDma_Restart(FrontierHBlankDma *dma) {
+static void FrontierHBlankDma_Restart(FrontierHBlankDma *dma) {
     FrontierHBlankDma_StartDma(dma);
 }
 

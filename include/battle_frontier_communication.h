@@ -10,6 +10,7 @@ struct BattleCastlePartyApp;
 struct BattleCastleOpponentApp;
 
 void FrontierLink_RegisterCommands(void *data);
+BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
 
 // Link command handlers of the facility apps
 void BattleFactory_ReceivePing(int netId);

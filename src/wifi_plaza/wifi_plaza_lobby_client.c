@@ -119,17 +119,17 @@ int WiFiPlazaLobbyClient_Update(void) {
     return WiFiPlazaLobbyClient_GetState();
 }
 
-void WiFiPlazaLobbyClient_GetLastError(void) {
+u32 WiFiPlazaLobbyClient_GetLastError(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
     if (gWiFiPlazaLobbyClient->initResult != 0) {
-        PPW_LobbyInitResultToLastError();
+        return PPW_LobbyInitResultToLastError(gWiFiPlazaLobbyClient->initResult);
     } else {
-        PPW_LobbyGetLastError();
+        return PPW_LobbyGetLastError();
     }
 }
 
-void WiFiPlazaLobbyClient_ToErrorCode(void) {
-    PPW_LobbyToErrorCode();
+u32 WiFiPlazaLobbyClient_ToErrorCode(u32 error) {
+    return PPW_LobbyToErrorCode(error);
 }
 
 void WiFiPlazaLobbyClient_Initialize(int value) {

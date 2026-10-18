@@ -64,60 +64,16 @@ void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
 u16 Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
-BOOL FrtCmd_Nop(FrontierScriptContext *ctx);
-BOOL FrtCmd_End(FrontierScriptContext *ctx);
-BOOL FrtCmd_Exit(FrontierScriptContext *ctx);
-BOOL FrtCmd_ChangeMode(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx);
-BOOL FrtCmd_ChangeModeWithTask(FrontierScriptContext *ctx);
-BOOL FrtCmd_Wait(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitFrames(FrontierScriptContext *ctx);
-BOOL FrtCmd_SetVar(FrontierScriptContext *ctx);
-BOOL FrtCmd_CopyVar(FrontierScriptContext *ctx);
-BOOL FrtCmd_AddVar(FrontierScriptContext *ctx);
-BOOL FrtCmd_SubVar(FrontierScriptContext *ctx);
-u8 FrontierScript_Compare(u16 a, u16 b);
-BOOL FrtCmd_CompareVarToValue(FrontierScriptContext *ctx);
-BOOL FrtCmd_CompareVarToVar(FrontierScriptContext *ctx);
-void FrontierScript_Jump(FrontierScriptContext *ctx, const u8 *ptr);
-BOOL FrtCmd_GoTo(FrontierScriptContext *ctx);
-BOOL FrtCmd_GoToIf(FrontierScriptContext *ctx);
-BOOL FrtCmd_Call(FrontierScriptContext *ctx);
-BOOL FrtCmd_Return(FrontierScriptContext *ctx);
-BOOL FrtCmd_CallIf(FrontierScriptContext *ctx);
-BOOL FrtCmd_PrintMessageInstant(FrontierScriptContext *ctx);
-BOOL FrtCmd_PrintMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_PrintMessageCanSpeedUp(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_CloseMessage(FrontierScriptContext *ctx);
-BOOL FrtCmd_FadeScreen(FrontierScriptContext *ctx);
-BOOL FrtCmd_WaitFade(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx);
-BOOL FrtCmd_MenuInitStdGmm(FrontierScriptContext *ctx);
-BOOL FrtCmd_MenuInit(FrontierScriptContext *ctx);
-BOOL FrtCmd_MenuItemAdd(FrontierScriptContext *ctx);
-BOOL FrtCmd_MenuItemAddWithDescription(FrontierScriptContext *ctx);
-BOOL FrtCmd_MenuExec(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitMenu(FrontierScriptContext *ctx);
-BOOL FrtCmd_ListMenuInitStdGmm(FrontierScriptContext *ctx);
-BOOL FrtCmd_ListMenuInit(FrontierScriptContext *ctx);
-BOOL FrtCmd_ListMenuItemAdd(FrontierScriptContext *ctx);
-BOOL FrtCmd_ListMenuExec(FrontierScriptContext *ctx);
-BOOL FrtCmd_ListMenuCancel(FrontierScriptContext *ctx);
-BOOL FrtCmd_YesNo(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx);
-BOOL FrtCmd_LoadObjectGfx(FrontierScriptContext *ctx);
-BOOL FrtCmd_RemoveObjectGfx(FrontierScriptContext *ctx);
-BOOL FrtCmd_CreateObjects(FrontierScriptContext *ctx);
-BOOL FrtCmd_DeleteObject(FrontierScriptContext *ctx);
-BOOL FrtCmd_SetObjectVisible(FrontierScriptContext *ctx);
-BOOL FrtCmd_Dummy039(FrontierScriptContext *ctx);
-BOOL FrtCmd_ApplyMovement(FrontierScriptContext *ctx);
-void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId);
-BOOL FrtCmd_WaitMovement(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx);
-BOOL FrtCmd_LoadSpriteResources(FrontierScriptContext *ctx);
-BOOL FrtCmd_UnloadSpriteResources(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitFrames(FrontierScriptContext *ctx);
+static u8 FrontierScript_Compare(u16 a, u16 b);
+static void FrontierScript_Jump(FrontierScriptContext *ctx, const u8 *ptr);
+static BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitMenu(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx);
+static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId);
+static BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx);
 
 static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
     const u8 *ptr = ctx->scriptPtr;
@@ -194,7 +150,7 @@ BOOL FrtCmd_ChangeMode(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
@@ -217,7 +173,7 @@ BOOL FrtCmd_Wait(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitFrames(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitFrames(FrontierScriptContext *ctx) {
     u16 *counter = FrontierScript_GetVarPtr(ctx, ctx->data[0]);
     (*counter)--;
     return *counter == 0;
@@ -247,7 +203,7 @@ BOOL FrtCmd_SubVar(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-u8 FrontierScript_Compare(u16 a, u16 b) {
+static u8 FrontierScript_Compare(u16 a, u16 b) {
     if (a < b) {
         return 0;
     }
@@ -270,7 +226,7 @@ BOOL FrtCmd_CompareVarToVar(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-void FrontierScript_Jump(FrontierScriptContext *ctx, const u8 *ptr) {
+static void FrontierScript_Jump(FrontierScriptContext *ctx, const u8 *ptr) {
     ctx->scriptPtr = ptr;
 }
 
@@ -334,7 +290,7 @@ BOOL FrtCmd_PrintMessageCanSpeedUp(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx) {
     if (!TextPrinterCheckActive(ctx->frontierSystem->textPrinterId)) {
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
         return TRUE;
@@ -363,7 +319,7 @@ BOOL FrtCmd_WaitFade(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx) {
     return IsPaletteFadeFinished() == TRUE;
 }
 
@@ -420,7 +376,7 @@ BOOL FrtCmd_MenuExec(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitMenu(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitMenu(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 *result = FrontierScript_GetVarPtr(ctx, ctx->data[0]);
 
@@ -492,7 +448,7 @@ BOOL FrtCmd_YesNo(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 *result = FrontierScript_GetVarPtr(ctx, ctx->data[0]);
     int selection = Handle2dMenuInput_DeleteOnFinish(system->yesNoMenu, system->heapId);
@@ -630,7 +586,7 @@ BOOL FrtCmd_ApplyMovement(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId) {
+static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId) {
     FrontierMovementTask *data = Heap_Alloc(heapId, sizeof(FrontierMovementTask));
     MI_CpuFill8(data, 0, sizeof(FrontierMovementTask));
     data->object = object;
@@ -649,7 +605,7 @@ BOOL FrtCmd_WaitMovement(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx) {
     return ctx->frontierSystem->movementCount == 0;
 }
 

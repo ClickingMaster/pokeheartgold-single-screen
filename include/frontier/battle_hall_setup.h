@@ -13,6 +13,7 @@ void BattleHall_PickSetIds(u16 count, u16 cellType, int rank, u8 battleNo, u16 p
 BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs *args);
 u8 BattleHall_RerollPersonality(BattleHallData *data, u32 index);
 u32 BattleHall_GetBattleType(u32 type);
+u8 BattleHall_GetPartySize(u8 type);
 int BattleHall_GetOpponentMonCount(int type);
 void BattleHall_GenerateOpponentMons(FrontierMon *mons, u32 rank, u32 trainerId, u16 *setIds, int count, enum HeapID heapID, u32 narcId);
 u16 BattleHall_GetOpponentLevel(BattleHallData *data, u32 unused);

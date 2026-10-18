@@ -1164,8 +1164,8 @@ void WifiConnection_ResetStopServerMatching(void) {
     gWifiConnection->stopMatchingState = 0;
 }
 
-void WifiConnection_GetNumConnectionHost(void) {
-    DWC_GetNumConnectionHost();
+int WifiConnection_GetNumConnectionHost(void) {
+    return DWC_GetNumConnectionHost();
 }
 
 void WifiConnection_SetExtraHeapEnabled(BOOL enable, int heapId) {

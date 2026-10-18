@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 
@@ -9,7 +10,6 @@
 FrontierMap *Frontier_GetMap(void *frontierWork);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
-BOOL FrtCmd_CreateSprites(FrontierScriptContext *ctx);
 
 static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
     return *(ctx->scriptPtr++);

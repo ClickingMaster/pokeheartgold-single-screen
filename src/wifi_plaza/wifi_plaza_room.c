@@ -34,7 +34,6 @@
 #include "wireless_status_icon.h"
 
 BOOL CommState_HasPlazaLobbyFailed(void);
-int TypeIcon_GetPlttFile(void);
 
 enum WiFiPlazaRoomState {
     WIFI_PLAZA_ROOM_FADE_IN,
@@ -69,6 +68,125 @@ enum WiFiPlazaInfoPanelPage {
     WIFI_PLAZA_PANEL_PAGE_INSTRUMENT,
     WIFI_PLAZA_PANEL_PAGE_START_CARD,
 };
+
+static void WiFiPlazaRoom_VBlank(void *data);
+static void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID);
+static void WiFiPlazaRoom_DrawSprites(WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaRoom_GraphicsVBlank(WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaRoom_Setup3D(void);
+static void WiFiPlazaRoom_Update(WiFiPlazaRoomWork *room);
+static void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room);
+static void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room);
+static void WiFiPlazaMsgWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID);
+static void WiFiPlazaMsgWindow_Free(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaMsgWindow_Print(WiFiPlazaMsgWindow *window, String *string);
+static void WiFiPlazaMsgWindow_PrintInstant(WiFiPlazaMsgWindow *window, String *string);
+static void WiFiPlazaMsgWindow_ShowWaitingIcon(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaMsgWindow_HideWaitingIcon(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaMsgWindow_DeleteWaitingIcon(WiFiPlazaMsgWindow *window);
+static BOOL WiFiPlazaMsgWindow_IsWaitingIconShown(WiFiPlazaMsgWindow *window);
+static BOOL WiFiPlazaMsgWindow_IsPrintFinished(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaMsgWindow_Close(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaSignWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID);
+static void WiFiPlazaSignWindow_Free(WiFiPlazaMsgWindow *window);
+static void WiFiPlazaSignWindow_Print(WiFiPlazaMsgWindow *window, String *string);
+static void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID);
+static void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaListMenu_CreateItems(WiFiPlazaListMenu *menu, u32 count, enum HeapID heapID, int value);
+static void WiFiPlazaListMenu_DeleteItems(WiFiPlazaListMenu *menu);
+static void WiFiPlazaListMenu_AddItem(WiFiPlazaListMenu *menu, String *text, int value);
+static ListMenuItem *WiFiPlazaListMenu_GetItems(WiFiPlazaListMenu *menu);
+static BOOL WiFiPlazaListMenu_HasItemValue(WiFiPlazaListMenu *menu, int value);
+static void WiFiPlazaListMenu_Open(WiFiPlazaListMenu *menu, const ListMenuTemplate *template, WiFiPlazaRoomGraphics *graphics, u16 cursorPos, u16 itemsAbove, enum HeapID heapID, u8 x, u8 y, u8 width);
+static s32 WiFiPlazaListMenu_ProcessInput(WiFiPlazaListMenu *menu);
+static void WiFiPlazaListMenu_Close(WiFiPlazaListMenu *menu, u16 *cursorPos, u16 *itemsAbove);
+static void WiFiPlazaListMenu_OnCursorMove(ListMenu *listMenu, s32 index, u8 onInit);
+static void WiFiPlazaListMenu_SetShowArrows(WiFiPlazaListMenu *menu, BOOL show);
+static void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu);
+static void WiFiPlazaTextWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID);
+static void WiFiPlazaTextWindow_Free(Window *window);
+static void WiFiPlazaTextWindow_Open(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u8 x, u8 y, u8 width, u8 height);
+static void WiFiPlazaTextWindow_Close(Window *window);
+static void WiFiPlazaTextWindow_Print(Window *window, String *string, u32 x, u32 y);
+static void WiFiPlazaTextWindow_FillRect(Window *window, u16 x, u16 y, u16 width, u16 height);
+static void WiFiPlazaYesNoMenu_Init(WiFiPlazaYesNoMenu *menu, WiFiPlazaRoomMsg *msg, enum HeapID heapID);
+static void WiFiPlazaYesNoMenu_Free(WiFiPlazaYesNoMenu *menu);
+static void WiFiPlazaErrorWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID);
+static void WiFiPlazaErrorWindow_Free(Window *window);
+static void WiFiPlazaErrorWindow_Print(Window *window, String *string);
+static void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg);
+static void WiFiPlazaErrorWindow_PrintLobbyError(Window *window, WiFiPlazaRoomMsg *msg, u32 error);
+static void WiFiPlazaErrorWindow_PrintDisconnected(Window *window, WiFiPlazaRoomMsg *msg, u32 unused);
+static void WiFiPlazaRoomMsg_Init(WiFiPlazaRoomMsg *msg, enum HeapID heapID);
+static void WiFiPlazaRoomMsg_Free(WiFiPlazaRoomMsg *msg);
+static String *WiFiPlazaRoomMsg_GetString(WiFiPlazaRoomMsg *msg, int bank, int msgId);
+static void WiFiPlazaRoomMsg_BufferInt(WiFiPlazaRoomMsg *msg, int value, int digits, int field, int style);
+static void WiFiPlazaRoomMsg_BufferPlayerName(WiFiPlazaRoomMsg *msg, PlayerProfile *profile, u32 field);
+static void WiFiPlazaRoomMsg_BufferActivityName(WiFiPlazaRoomMsg *msg, u32 activity, u32 field);
+static void WiFiPlazaRoomMsg_BufferEventName(WiFiPlazaRoomMsg *msg, u32 event, u32 field);
+static void WiFiPlazaRoomMsg_BufferInstrumentName(WiFiPlazaRoomMsg *msg, u32 instrument, u32 field);
+static void WiFiPlazaRoomMsg_BufferCountryName(WiFiPlazaRoomMsg *msg, u32 country, u32 field);
+static void WiFiPlazaRoomMsg_BufferCityName(WiFiPlazaRoomMsg *msg, u32 country, u32 city, u32 field);
+static void WiFiPlazaRoomMsg_BufferECWord(WiFiPlazaRoomMsg *msg, u32 field, u16 word);
+static void WiFiPlazaRoomMsg_ResetBuffers(WiFiPlazaRoomMsg *msg);
+static void WiFiPlazaRoom_SetPanelButtonPressed(WiFiPlazaRoomWork *room);
+static void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPlazaRoomGraphics *graphics, PlayerProfile *profile, enum HeapID heapID);
+static void WiFiPlazaInfoPanel_Free(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *room, BOOL paused, enum HeapID heapID);
+static u8 WiFiPlazaInfoPanel_GetState(WiFiPlazaInfoPanel *panel);
+static void WiFiPlazaInfoPanel_RequestPlayerCard(WiFiPlazaInfoPanel *panel, u32 playerIndex, u32 showMessage);
+static void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 icon, enum HeapID heapID);
+static void WiFiPlazaInfoPanel_RequestOwnCard(WiFiPlazaInfoPanel *panel);
+static void WiFiPlazaInfoPanel_RequestInstrument(WiFiPlazaInfoPanel *panel);
+static u8 WiFiPlazaInfoPanel_GetCardPlayer(WiFiPlazaInfoPanel *panel);
+static BOOL WiFiPlazaInfoPanel_IsPlayerCardShown(WiFiPlazaInfoPanel *panel);
+static BOOL WiFiPlazaInfoPanel_IsPlayerCardIdle(WiFiPlazaInfoPanel *panel);
+static BOOL WiFiPlazaInfoPanel_CardShowsMessage(WiFiPlazaInfoPanel *panel);
+static BOOL WiFiPlazaInfoPanel_HasRequest(WiFiPlazaInfoPanel *panel);
+static void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon);
+static void WiFiPlazaInfoPanel_HidePlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaInfoPanel_ShowOwnCard(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, enum HeapID heapID, struct WiFiPlazaPlayer *player);
+static void WiFiPlazaInfoPanel_ShowInstrument(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u32 type);
+static void WiFiPlazaInfoPanel_HideButtonPage(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaInfoPanel_SetButtonDisabled(WiFiPlazaInfoPanel *panel, u16 disabled);
+static SysTask *WiFiPlazaInfoPanel_StartPaletteLoad(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 member, enum HeapID heapID);
+static void WiFiPlazaInfoPanel_LoadPaletteTask(SysTask *task, void *data);
+static void WiFiPlazaInfoPanel_LoadGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, NARC *narc, u32 gender, enum HeapID heapID);
+static void WiFiPlazaInfoPanel_FreeGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaInfoPanel_LoadScreen(WiFiPlazaRoomGraphics *graphics, NARC *narc, int member, int bgId, int tileOffset, enum HeapID heapID);
+static void WiFiPlazaPlayerCard_Init(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPlayerCard_Free(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaPlayerCard_Update(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow);
+static void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, NARC *narc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon);
+static void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPlayerCard *unused1, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, struct WiFiPlazaPlayer *player);
+static void WiFiPlazaPlayerCard_Clear(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *unused, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaPlayerCard_ChangeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon);
+static BOOL WiFiPlazaPlayerCard_ShowsMessage(WiFiPlazaPlayerCard *card);
+static void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon, BOOL draw);
+static void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 avatar);
+static void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt);
+static void WiFiPlazaPlayerCard_ClearWindows(WiFiPlazaPlayerCard *card);
+static void WiFiPlazaPlayerCard_Print(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 x, u8 y, u32 color);
+static void WiFiPlazaPlayerCard_PrintRightAligned(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 width, u8 y, u32 color);
+static void WiFiPlazaPlayerCard_CopyWindow(WiFiPlazaPlayerCard *card, int window);
+static void WiFiPlazaPlayerCard_BufferName(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, PlayerProfile *profile);
+static void WiFiPlazaPlayerCard_BufferLocation(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player);
+static void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, u16 *words);
+static void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *panelNarc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer);
+static void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics);
+static const WiFiPlazaCardMonInfo *WiFiPlazaPlayerCard_GetMonInfo(int species, int form, int version, int gender);
+static void WiFiPlazaPanelButton_Init(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPanelButton_Free(WiFiPlazaPanelButton *button);
+static BOOL WiFiPlazaPanelButton_Update(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPanelButton_ShowInstrument(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, u32 type, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPanelButton_Clear(WiFiPlazaPanelButton *unused, WiFiPlazaRoomGraphics *graphics);
+static void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, int index, NARC *narc, enum HeapID heapID);
+static void WiFiPlazaPanelButton_OnTouch(u32 index, u32 event, void *arg);
+static void WiFiPlazaPanelButton_ResetTimer(WiFiPlazaPanelButton *button);
 
 static const GraphicsModes sWiFiPlazaRoomGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
@@ -715,14 +833,14 @@ BOOL WiFiPlazaRoom_IsInstrumentFinished(WiFiPlazaRoomWork *room, u32 playerIndex
     return WiFiPlazaInstrument_IsFinished(room->instruments, playerIndex);
 }
 
-void WiFiPlazaRoom_VBlank(void *data) {
+static void WiFiPlazaRoom_VBlank(void *data) {
     WiFiPlazaRoomWork *room = data;
     WiFiPlazaModels_VBlank(room->models);
     WiFiPlazaObj_ClearPendingFree(room->objManager);
     WiFiPlazaRoom_GraphicsVBlank(&room->graphics);
 }
 
-void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
+static void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
     s32 i;
     s32 j;
     u8 frame;
@@ -770,12 +888,12 @@ void WiFiPlazaRoom_InitGraphics(WiFiPlazaRoomGraphics *graphics, SaveData *save,
     graphics->vramManager = GF_3DVramMan_Create(heapID, GF_3D_TEXALLOC_LNK, 2, GF_3D_PLTTALLOC_LNK, 4, WiFiPlazaRoom_Setup3D);
 }
 
-void WiFiPlazaRoom_DrawSprites(WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaRoom_DrawSprites(WiFiPlazaRoomGraphics *graphics) {
     SpriteList_RenderAndAnimateSprites(graphics->spriteList);
     thunk_UpdateCellTransferStateManager();
 }
 
-void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
     int i;
     int j;
     const u32 *bgIds;
@@ -806,13 +924,13 @@ void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
     GF_3DVramMan_Delete(graphics->vramManager);
 }
 
-void WiFiPlazaRoom_GraphicsVBlank(WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaRoom_GraphicsVBlank(WiFiPlazaRoomGraphics *graphics) {
     DoScheduledBgGpuUpdates(graphics->bgConfig);
     OamManager_ApplyAndResetBuffers();
     GF_RunVramTransferTasks();
 }
 
-void WiFiPlazaRoom_Setup3D(void) {
+static void WiFiPlazaRoom_Setup3D(void) {
     VecFx16 vec;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     G2_SetBG0Priority(1);
@@ -846,7 +964,7 @@ void WiFiPlazaRoom_Setup3D(void) {
     NNS_G3dGlbLightColor(GX_LIGHTID_3, GX_RGB(31, 31, 31));
 }
 
-void WiFiPlazaRoom_Update(WiFiPlazaRoomWork *room) {
+static void WiFiPlazaRoom_Update(WiFiPlazaRoomWork *room) {
     u32 error;
     WiFiPlazaObj_UpdateObjsAndLight(room->objManager);
     error = room->error;
@@ -874,7 +992,7 @@ void WiFiPlazaRoom_Update(WiFiPlazaRoomWork *room) {
     WiFiPlazaInstrument_Update(room->instruments);
 }
 
-void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
+static void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
     Thunk_G3X_Reset();
     WiFiPlazaCamera_Update(room->camera);
     WiFiPlazaModels_Draw(room->models);
@@ -885,7 +1003,7 @@ void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
 }
 
 // The signs of the three Pokemon match ups (WiFiPlazaLobbyClient_IsMatchActive: match state, WiFiPlazaLobbyClient_IsMatchOpen: closed for entry)
-void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
+static void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
     int i;
     u32 state;
     u32 recruiting;
@@ -905,14 +1023,14 @@ void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
     }
 }
 
-void WiFiPlazaMsgWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
+static void WiFiPlazaMsgWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
     AddWindowParameterized(graphics->bgConfig, &window->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 4, 0x5E);
     FillWindowPixelBuffer(&window->window, 15);
     window->string = String_New(0x180, heapID);
     window->textSpeed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(save));
 }
 
-void WiFiPlazaMsgWindow_Free(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaMsgWindow_Free(WiFiPlazaMsgWindow *window) {
     if (TextPrinterCheckActive((u8)window->printerId)) {
         RemoveTextPrinter((u8)window->printerId);
     }
@@ -921,7 +1039,7 @@ void WiFiPlazaMsgWindow_Free(WiFiPlazaMsgWindow *window) {
     RemoveWindow(&window->window);
 }
 
-void WiFiPlazaMsgWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
+static void WiFiPlazaMsgWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
     if (TextPrinterCheckActive((u8)window->printerId)) {
         RemoveTextPrinter((u8)window->printerId);
     }
@@ -931,7 +1049,7 @@ void WiFiPlazaMsgWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
     DrawFrameAndWindow2(&window->window, TRUE, 1, 1);
 }
 
-void WiFiPlazaMsgWindow_PrintInstant(WiFiPlazaMsgWindow *window, String *string) {
+static void WiFiPlazaMsgWindow_PrintInstant(WiFiPlazaMsgWindow *window, String *string) {
     if (TextPrinterCheckActive((u8)window->printerId)) {
         RemoveTextPrinter((u8)window->printerId);
     }
@@ -942,14 +1060,14 @@ void WiFiPlazaMsgWindow_PrintInstant(WiFiPlazaMsgWindow *window, String *string)
     ScheduleWindowCopyToVram(&window->window);
 }
 
-void WiFiPlazaMsgWindow_ShowWaitingIcon(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaMsgWindow_ShowWaitingIcon(WiFiPlazaMsgWindow *window) {
     if (window->waitingIcon != NULL) {
         GF_AssertFail();
     }
     window->waitingIcon = WaitingIcon_New(&window->window, 1);
 }
 
-void WiFiPlazaMsgWindow_HideWaitingIcon(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaMsgWindow_HideWaitingIcon(WiFiPlazaMsgWindow *window) {
     WaitingIcon *icon = window->waitingIcon;
     if (icon != NULL) {
         WaitingIcon_Delete(icon);
@@ -957,7 +1075,7 @@ void WiFiPlazaMsgWindow_HideWaitingIcon(WiFiPlazaMsgWindow *window) {
     }
 }
 
-void WiFiPlazaMsgWindow_DeleteWaitingIcon(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaMsgWindow_DeleteWaitingIcon(WiFiPlazaMsgWindow *window) {
     WaitingIcon *icon = window->waitingIcon;
     if (icon != NULL) {
         WaitingIcon_DeleteWithoutRestore(icon);
@@ -965,18 +1083,18 @@ void WiFiPlazaMsgWindow_DeleteWaitingIcon(WiFiPlazaMsgWindow *window) {
     }
 }
 
-BOOL WiFiPlazaMsgWindow_IsWaitingIconShown(WiFiPlazaMsgWindow *window) {
+static BOOL WiFiPlazaMsgWindow_IsWaitingIconShown(WiFiPlazaMsgWindow *window) {
     return window->waitingIcon != NULL;
 }
 
-BOOL WiFiPlazaMsgWindow_IsPrintFinished(WiFiPlazaMsgWindow *window) {
+static BOOL WiFiPlazaMsgWindow_IsPrintFinished(WiFiPlazaMsgWindow *window) {
     if (TextPrinterCheckActive((u8)window->printerId) == FALSE) {
         return TRUE;
     }
     return FALSE;
 }
 
-void WiFiPlazaMsgWindow_Close(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaMsgWindow_Close(WiFiPlazaMsgWindow *window) {
     if (TextPrinterCheckActive((u8)window->printerId)) {
         RemoveTextPrinter((u8)window->printerId);
     }
@@ -985,16 +1103,16 @@ void WiFiPlazaMsgWindow_Close(WiFiPlazaMsgWindow *window) {
     ClearWindowTilemapAndScheduleTransfer(&window->window);
 }
 
-void WiFiPlazaSignWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
+static void WiFiPlazaSignWindow_Init(WiFiPlazaMsgWindow *window, WiFiPlazaRoomGraphics *graphics, SaveData *save, enum HeapID heapID) {
     WiFiPlazaMsgWindow_Init(window, graphics, save, heapID);
     SetWindowPaletteNum(&window->window, 2);
 }
 
-void WiFiPlazaSignWindow_Free(WiFiPlazaMsgWindow *window) {
+static void WiFiPlazaSignWindow_Free(WiFiPlazaMsgWindow *window) {
     WiFiPlazaMsgWindow_Free(window);
 }
 
-void WiFiPlazaSignWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
+static void WiFiPlazaSignWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
     if (TextPrinterCheckActive((u8)window->printerId)) {
         RemoveTextPrinter((u8)window->printerId);
     }
@@ -1004,7 +1122,7 @@ void WiFiPlazaSignWindow_Print(WiFiPlazaMsgWindow *window, String *string) {
     DrawFrameAndWindow3(&window->window, TRUE, 0x1F, 2, 3);
 }
 
-void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
+static void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
     SpriteResourcesHeader header;
     SimpleSpriteTemplate template;
     int i;
@@ -1034,7 +1152,7 @@ void WiFiPlazaListMenu_Init(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *grap
     menu->showArrows = FALSE;
 }
 
-void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *graphics) {
     int i;
     if (menu->items) {
         WiFiPlazaListMenu_DeleteItems(menu);
@@ -1053,7 +1171,7 @@ void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphics *grap
     }
 }
 
-void WiFiPlazaListMenu_CreateItems(WiFiPlazaListMenu *menu, u32 count, enum HeapID heapID, int value) {
+static void WiFiPlazaListMenu_CreateItems(WiFiPlazaListMenu *menu, u32 count, enum HeapID heapID, int value) {
     u32 i;
     u32 offset;
     GF_ASSERT(menu->items == NULL);
@@ -1070,7 +1188,7 @@ void WiFiPlazaListMenu_CreateItems(WiFiPlazaListMenu *menu, u32 count, enum Heap
     }
 }
 
-void WiFiPlazaListMenu_DeleteItems(WiFiPlazaListMenu *menu) {
+static void WiFiPlazaListMenu_DeleteItems(WiFiPlazaListMenu *menu) {
     ListMenuItem *items = menu->items;
     if (items != NULL) {
         ListMenuItems_Delete(items);
@@ -1079,15 +1197,15 @@ void WiFiPlazaListMenu_DeleteItems(WiFiPlazaListMenu *menu) {
     }
 }
 
-void WiFiPlazaListMenu_AddItem(WiFiPlazaListMenu *menu, String *text, int value) {
+static void WiFiPlazaListMenu_AddItem(WiFiPlazaListMenu *menu, String *text, int value) {
     ListMenuItems_AddItem(menu->items, text, value);
 }
 
-ListMenuItem *WiFiPlazaListMenu_GetItems(WiFiPlazaListMenu *menu) {
+static ListMenuItem *WiFiPlazaListMenu_GetItems(WiFiPlazaListMenu *menu) {
     return menu->items;
 }
 
-BOOL WiFiPlazaListMenu_HasItemValue(WiFiPlazaListMenu *menu, int value) {
+static BOOL WiFiPlazaListMenu_HasItemValue(WiFiPlazaListMenu *menu, int value) {
     int i;
     ListMenuItem *item;
     i = 0;
@@ -1104,7 +1222,7 @@ BOOL WiFiPlazaListMenu_HasItemValue(WiFiPlazaListMenu *menu, int value) {
     return FALSE;
 }
 
-void WiFiPlazaListMenu_Open(WiFiPlazaListMenu *menu, const ListMenuTemplate *template, WiFiPlazaRoomGraphics *graphics, u16 cursorPos, u16 itemsAbove, enum HeapID heapID, u8 x, u8 y, u8 width) {
+static void WiFiPlazaListMenu_Open(WiFiPlazaListMenu *menu, const ListMenuTemplate *template, WiFiPlazaRoomGraphics *graphics, u16 cursorPos, u16 itemsAbove, enum HeapID heapID, u8 x, u8 y, u8 width) {
     if (menu->listMenu != NULL) {
         GF_AssertFail();
     }
@@ -1122,7 +1240,7 @@ void WiFiPlazaListMenu_Open(WiFiPlazaListMenu *menu, const ListMenuTemplate *tem
     ScheduleWindowCopyToVram(&menu->window);
 }
 
-s32 WiFiPlazaListMenu_ProcessInput(WiFiPlazaListMenu *menu) {
+static s32 WiFiPlazaListMenu_ProcessInput(WiFiPlazaListMenu *menu) {
     s32 input;
     if (menu->listMenu == NULL) {
         return LIST_CANCEL;
@@ -1140,7 +1258,7 @@ s32 WiFiPlazaListMenu_ProcessInput(WiFiPlazaListMenu *menu) {
     return input;
 }
 
-void WiFiPlazaListMenu_Close(WiFiPlazaListMenu *menu, u16 *cursorPos, u16 *itemsAbove) {
+static void WiFiPlazaListMenu_Close(WiFiPlazaListMenu *menu, u16 *cursorPos, u16 *itemsAbove) {
     int i;
     if (menu->listMenu != NULL) {
         DestroyListMenu(menu->listMenu, cursorPos, itemsAbove);
@@ -1155,17 +1273,17 @@ void WiFiPlazaListMenu_Close(WiFiPlazaListMenu *menu, u16 *cursorPos, u16 *items
     }
 }
 
-void WiFiPlazaListMenu_OnCursorMove(ListMenu *listMenu, s32 index, u8 onInit) {
+static void WiFiPlazaListMenu_OnCursorMove(ListMenu *listMenu, s32 index, u8 onInit) {
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-void WiFiPlazaListMenu_SetShowArrows(WiFiPlazaListMenu *menu, BOOL show) {
+static void WiFiPlazaListMenu_SetShowArrows(WiFiPlazaListMenu *menu, BOOL show) {
     menu->showArrows = show;
 }
 
-void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu) {
+static void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu) {
     u16 scroll;
     if (menu->showArrows == FALSE) {
         Sprite_SetDrawFlag(menu->arrows[0], FALSE);
@@ -1185,21 +1303,21 @@ void WiFiPlazaListMenu_UpdateArrows(WiFiPlazaListMenu *menu) {
     }
 }
 
-void WiFiPlazaTextWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
+static void WiFiPlazaTextWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
 }
 
-void WiFiPlazaTextWindow_Free(Window *window) {
+static void WiFiPlazaTextWindow_Free(Window *window) {
     WiFiPlazaTextWindow_Close(window);
 }
 
-void WiFiPlazaTextWindow_Open(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u8 x, u8 y, u8 width, u8 height) {
+static void WiFiPlazaTextWindow_Open(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u8 x, u8 y, u8 width, u8 height) {
     AddWindowParameterized(graphics->bgConfig, window, GF_BG_LYR_MAIN_1, x, y, width, height, 5, 0xCA);
     DrawFrameAndWindow1(window, TRUE, 0x55, 3);
     FillWindowPixelBuffer(window, 15);
     ScheduleWindowCopyToVram(window);
 }
 
-void WiFiPlazaTextWindow_Close(Window *window) {
+static void WiFiPlazaTextWindow_Close(Window *window) {
     if (WindowIsInUse(window) == TRUE) {
         EraseFrameAndWindow1(window, TRUE);
         ClearWindowTilemapAndScheduleTransfer(window);
@@ -1207,16 +1325,16 @@ void WiFiPlazaTextWindow_Close(Window *window) {
     }
 }
 
-void WiFiPlazaTextWindow_Print(Window *window, String *string, u32 x, u32 y) {
+static void WiFiPlazaTextWindow_Print(Window *window, String *string, u32 x, u32 y) {
     AddTextPrinterParameterizedWithColor(window, 0, string, x, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
     ScheduleWindowCopyToVram(window);
 }
 
-void WiFiPlazaTextWindow_FillRect(Window *window, u16 x, u16 y, u16 width, u16 height) {
+static void WiFiPlazaTextWindow_FillRect(Window *window, u16 x, u16 y, u16 width, u16 height) {
     FillWindowPixelRect(window, 15, x, y, width, height);
 }
 
-void WiFiPlazaYesNoMenu_Init(WiFiPlazaYesNoMenu *menu, WiFiPlazaRoomMsg *msg, enum HeapID heapID) {
+static void WiFiPlazaYesNoMenu_Init(WiFiPlazaYesNoMenu *menu, WiFiPlazaRoomMsg *msg, enum HeapID heapID) {
     String *text;
     if (menu->items != NULL) {
         GF_AssertFail();
@@ -1231,7 +1349,7 @@ void WiFiPlazaYesNoMenu_Init(WiFiPlazaYesNoMenu *menu, WiFiPlazaRoomMsg *msg, en
     menu->template.items = menu->items;
 }
 
-void WiFiPlazaYesNoMenu_Free(WiFiPlazaYesNoMenu *menu) {
+static void WiFiPlazaYesNoMenu_Free(WiFiPlazaYesNoMenu *menu) {
     ListMenuItem *items = menu->items;
     if (items != NULL) {
         ListMenuItems_Delete(items);
@@ -1239,39 +1357,39 @@ void WiFiPlazaYesNoMenu_Free(WiFiPlazaYesNoMenu *menu) {
     }
 }
 
-void WiFiPlazaErrorWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
+static void WiFiPlazaErrorWindow_Init(Window *window, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID) {
     AddWindowParameterized(graphics->bgConfig, window, GF_BG_LYR_MAIN_1, 4, 4, 23, 16, 5, 0x5E);
     FillWindowPixelBuffer(window, 15);
 }
 
-void WiFiPlazaErrorWindow_Free(Window *window) {
+static void WiFiPlazaErrorWindow_Free(Window *window) {
     RemoveWindow(window);
 }
 
-void WiFiPlazaErrorWindow_Print(Window *window, String *string) {
+static void WiFiPlazaErrorWindow_Print(Window *window, String *string) {
     AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
     DrawFrameAndWindow1(window, TRUE, 0x55, 3);
     ScheduleWindowCopyToVram(window);
 }
 
-void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg) {
+static void WiFiPlazaErrorWindow_PrintCommError(Window *window, WiFiPlazaRoomMsg *msg) {
     u32 *error = CommState_GetWifiError();
     u32 msgId = WiFiPlaza_GetErrorMessageClass(error[0], error[1]);
     WiFiPlazaRoomMsg_BufferInt(msg, error[0], 5, 0, 2);
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, msgId));
 }
 
-void WiFiPlazaErrorWindow_PrintLobbyError(Window *window, WiFiPlazaRoomMsg *msg, u32 error) {
+static void WiFiPlazaErrorWindow_PrintLobbyError(Window *window, WiFiPlazaRoomMsg *msg, u32 error) {
     u32 code = WiFiPlazaLobbyClient_ToErrorCode(error);
     WiFiPlazaRoomMsg_BufferInt(msg, code, 5, 0, 2);
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, msg_0800_00032));
 }
 
-void WiFiPlazaErrorWindow_PrintDisconnected(Window *window, WiFiPlazaRoomMsg *msg, u32 unused) {
+static void WiFiPlazaErrorWindow_PrintDisconnected(Window *window, WiFiPlazaRoomMsg *msg, u32 unused) {
     WiFiPlazaErrorWindow_Print(window, WiFiPlazaRoomMsg_GetString(msg, 2, msg_0800_00014));
 }
 
-void WiFiPlazaRoomMsg_Init(WiFiPlazaRoomMsg *msg, enum HeapID heapID) {
+static void WiFiPlazaRoomMsg_Init(WiFiPlazaRoomMsg *msg, enum HeapID heapID) {
     int i;
     msg->format = MessageFormat_New_Custom(8, 64, heapID);
     for (i = 0; i < 4; i++) {
@@ -1281,7 +1399,7 @@ void WiFiPlazaRoomMsg_Init(WiFiPlazaRoomMsg *msg, enum HeapID heapID) {
     msg->raw = String_New(0x1E0, heapID);
 }
 
-void WiFiPlazaRoomMsg_Free(WiFiPlazaRoomMsg *msg) {
+static void WiFiPlazaRoomMsg_Free(WiFiPlazaRoomMsg *msg) {
     int i;
     MessageFormat_Delete(msg->format);
     for (i = 0; i < 4; i++) {
@@ -1291,49 +1409,49 @@ void WiFiPlazaRoomMsg_Free(WiFiPlazaRoomMsg *msg) {
     String_Delete(msg->raw);
 }
 
-String *WiFiPlazaRoomMsg_GetString(WiFiPlazaRoomMsg *msg, int bank, int msgId) {
+static String *WiFiPlazaRoomMsg_GetString(WiFiPlazaRoomMsg *msg, int bank, int msgId) {
     ReadMsgDataIntoString(msg->msgData[bank], msgId, msg->raw);
     StringExpandPlaceholders(msg->format, msg->formatted, msg->raw);
     return msg->formatted;
 }
 
-void WiFiPlazaRoomMsg_BufferInt(WiFiPlazaRoomMsg *msg, int value, int digits, int field, int style) {
+static void WiFiPlazaRoomMsg_BufferInt(WiFiPlazaRoomMsg *msg, int value, int digits, int field, int style) {
     BufferIntegerAsString(msg->format, field, value, digits, (PrintingMode)style, TRUE);
 }
 
-void WiFiPlazaRoomMsg_BufferPlayerName(WiFiPlazaRoomMsg *msg, PlayerProfile *profile, u32 field) {
+static void WiFiPlazaRoomMsg_BufferPlayerName(WiFiPlazaRoomMsg *msg, PlayerProfile *profile, u32 field) {
     BufferPlayersName(msg->format, field, profile);
 }
 
-void WiFiPlazaRoomMsg_BufferActivityName(WiFiPlazaRoomMsg *msg, u32 activity, u32 field) {
+static void WiFiPlazaRoomMsg_BufferActivityName(WiFiPlazaRoomMsg *msg, u32 activity, u32 field) {
     BufferWiFiPlazaActivityName(msg->format, field, activity);
 }
 
-void WiFiPlazaRoomMsg_BufferEventName(WiFiPlazaRoomMsg *msg, u32 event, u32 field) {
+static void WiFiPlazaRoomMsg_BufferEventName(WiFiPlazaRoomMsg *msg, u32 event, u32 field) {
     BufferWiFiPlazaEventName(msg->format, field, event);
 }
 
-void WiFiPlazaRoomMsg_BufferInstrumentName(WiFiPlazaRoomMsg *msg, u32 instrument, u32 field) {
+static void WiFiPlazaRoomMsg_BufferInstrumentName(WiFiPlazaRoomMsg *msg, u32 instrument, u32 field) {
     BufferWiFiPlazaInstrumentName(msg->format, field, instrument);
 }
 
-void WiFiPlazaRoomMsg_BufferCountryName(WiFiPlazaRoomMsg *msg, u32 country, u32 field) {
+static void WiFiPlazaRoomMsg_BufferCountryName(WiFiPlazaRoomMsg *msg, u32 country, u32 field) {
     BufferCountryName(msg->format, field, country);
 }
 
-void WiFiPlazaRoomMsg_BufferCityName(WiFiPlazaRoomMsg *msg, u32 country, u32 city, u32 field) {
+static void WiFiPlazaRoomMsg_BufferCityName(WiFiPlazaRoomMsg *msg, u32 country, u32 city, u32 field) {
     BufferCityName(msg->format, field, country, city);
 }
 
-void WiFiPlazaRoomMsg_BufferECWord(WiFiPlazaRoomMsg *msg, u32 field, u16 word) {
+static void WiFiPlazaRoomMsg_BufferECWord(WiFiPlazaRoomMsg *msg, u32 field, u16 word) {
     BufferECWord(msg->format, field, word);
 }
 
-void WiFiPlazaRoomMsg_ResetBuffers(WiFiPlazaRoomMsg *msg) {
+static void WiFiPlazaRoomMsg_ResetBuffers(WiFiPlazaRoomMsg *msg) {
     MessageFormat_ResetBuffers(msg->format);
 }
 
-void WiFiPlazaRoom_SetPanelButtonPressed(WiFiPlazaRoomWork *room) {
+static void WiFiPlazaRoom_SetPanelButtonPressed(WiFiPlazaRoomWork *room) {
     room->panelButtonPressed = TRUE;
 }
 
@@ -1493,7 +1611,7 @@ static const u8 sWiFiPlazaCardTypeIconTiles[2][16] = {
     { 236, 2, 237, 2, 238, 2, 239, 2, 240, 2, 241, 2, 242, 2, 243, 2 },
 };
 
-void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPlazaRoomGraphics *graphics, PlayerProfile *profile, enum HeapID heapID) {
+static void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPlazaRoomGraphics *graphics, PlayerProfile *profile, enum HeapID heapID) {
     u32 gender = PlayerProfile_GetTrainerGender(profile);
 
     panel->narc = NARC_New(NARC_a_2_0_7, heapID);
@@ -1514,7 +1632,7 @@ void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPl
     }
 }
 
-void WiFiPlazaInfoPanel_Free(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaInfoPanel_Free(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPanelButton_Free(&panel->button);
     WiFiPlazaPlayerCard_Free(&panel->card, signWindow, graphics);
     WiFiPlazaInfoPanel_FreeGraphics(panel, graphics);
@@ -1528,7 +1646,7 @@ typedef struct WiFiPlazaInstrumentToken {
 
 #pragma opt_propagation off
 
-void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *room, BOOL paused, enum HeapID heapID) {
+static void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *room, BOOL paused, enum HeapID heapID) {
     WiFiPlazaInstrumentToken started, own;
     WiFiPlazaWork *lobby;
     int offset;
@@ -1691,17 +1809,17 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
 
 #pragma opt_propagation reset
 
-u8 WiFiPlazaInfoPanel_GetState(WiFiPlazaInfoPanel *panel) {
+static u8 WiFiPlazaInfoPanel_GetState(WiFiPlazaInfoPanel *panel) {
     return panel->state;
 }
 
-void WiFiPlazaInfoPanel_RequestPlayerCard(WiFiPlazaInfoPanel *panel, u32 playerIndex, u32 showMessage) {
+static void WiFiPlazaInfoPanel_RequestPlayerCard(WiFiPlazaInfoPanel *panel, u32 playerIndex, u32 showMessage) {
     panel->request = WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
     panel->requestPlayer = playerIndex;
     panel->requestArg = showMessage;
 }
 
-void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 icon, enum HeapID heapID) {
+static void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 icon, enum HeapID heapID) {
     GF_ASSERT(icon < 27);
     GF_ASSERT(panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD);
     if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
@@ -1709,23 +1827,23 @@ void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGrap
     }
 }
 
-void WiFiPlazaInfoPanel_RequestOwnCard(WiFiPlazaInfoPanel *panel) {
+static void WiFiPlazaInfoPanel_RequestOwnCard(WiFiPlazaInfoPanel *panel) {
     if (panel->page != WIFI_PLAZA_PANEL_PAGE_OWN_CARD) {
         panel->request = WIFI_PLAZA_PANEL_PAGE_OWN_CARD;
     }
 }
 
-void WiFiPlazaInfoPanel_RequestInstrument(WiFiPlazaInfoPanel *panel) {
+static void WiFiPlazaInfoPanel_RequestInstrument(WiFiPlazaInfoPanel *panel) {
     if (panel->page != WIFI_PLAZA_PANEL_PAGE_INSTRUMENT) {
         panel->request = WIFI_PLAZA_PANEL_PAGE_INSTRUMENT;
     }
 }
 
-u8 WiFiPlazaInfoPanel_GetCardPlayer(WiFiPlazaInfoPanel *panel) {
+static u8 WiFiPlazaInfoPanel_GetCardPlayer(WiFiPlazaInfoPanel *panel) {
     return panel->requestPlayer;
 }
 
-BOOL WiFiPlazaInfoPanel_IsPlayerCardShown(WiFiPlazaInfoPanel *panel) {
+static BOOL WiFiPlazaInfoPanel_IsPlayerCardShown(WiFiPlazaInfoPanel *panel) {
     if (panel->request == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         return TRUE;
     }
@@ -1735,19 +1853,19 @@ BOOL WiFiPlazaInfoPanel_IsPlayerCardShown(WiFiPlazaInfoPanel *panel) {
     return FALSE;
 }
 
-BOOL WiFiPlazaInfoPanel_IsPlayerCardIdle(WiFiPlazaInfoPanel *panel) {
+static BOOL WiFiPlazaInfoPanel_IsPlayerCardIdle(WiFiPlazaInfoPanel *panel) {
     return panel->request == WIFI_PLAZA_PANEL_PAGE_NONE && panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
 }
 
-BOOL WiFiPlazaInfoPanel_CardShowsMessage(WiFiPlazaInfoPanel *panel) {
+static BOOL WiFiPlazaInfoPanel_CardShowsMessage(WiFiPlazaInfoPanel *panel) {
     return WiFiPlazaPlayerCard_ShowsMessage(&panel->card);
 }
 
-BOOL WiFiPlazaInfoPanel_HasRequest(WiFiPlazaInfoPanel *panel) {
+static BOOL WiFiPlazaInfoPanel_HasRequest(WiFiPlazaInfoPanel *panel) {
     return panel->request != WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
-void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
+static void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
     if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         WiFiPlazaInfoPanel_HidePlayerCard(panel, signWindow, graphics);
     }
@@ -1755,12 +1873,12 @@ void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWi
     panel->page = WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
 }
 
-void WiFiPlazaInfoPanel_HidePlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaInfoPanel_HidePlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPlayerCard_Clear(&panel->card, signWindow, graphics);
     panel->page = WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
-void WiFiPlazaInfoPanel_ShowOwnCard(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
+static void WiFiPlazaInfoPanel_ShowOwnCard(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
     if (panel->page == WIFI_PLAZA_PANEL_PAGE_OWN_CARD || panel->page == WIFI_PLAZA_PANEL_PAGE_INSTRUMENT || panel->page == WIFI_PLAZA_PANEL_PAGE_START_CARD) {
         WiFiPlazaInfoPanel_HideButtonPage(panel, graphics);
     }
@@ -1768,7 +1886,7 @@ void WiFiPlazaInfoPanel_ShowOwnCard(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGrap
     panel->page = WIFI_PLAZA_PANEL_PAGE_OWN_CARD;
 }
 
-void WiFiPlazaInfoPanel_ShowInstrument(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u32 type) {
+static void WiFiPlazaInfoPanel_ShowInstrument(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u32 type) {
     if (panel->page == WIFI_PLAZA_PANEL_PAGE_INSTRUMENT) {
         WiFiPlazaInfoPanel_HideButtonPage(panel, graphics);
     }
@@ -1776,22 +1894,22 @@ void WiFiPlazaInfoPanel_ShowInstrument(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomG
     panel->page = WIFI_PLAZA_PANEL_PAGE_INSTRUMENT;
 }
 
-void WiFiPlazaInfoPanel_HideButtonPage(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaInfoPanel_HideButtonPage(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPanelButton_Clear(&panel->button, graphics);
     panel->page = WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
-void WiFiPlazaInfoPanel_SetButtonDisabled(WiFiPlazaInfoPanel *panel, u16 disabled) {
+static void WiFiPlazaInfoPanel_SetButtonDisabled(WiFiPlazaInfoPanel *panel, u16 disabled) {
     panel->button.disabled = disabled;
 }
 
-SysTask *WiFiPlazaInfoPanel_StartPaletteLoad(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 member, enum HeapID heapID) {
+static SysTask *WiFiPlazaInfoPanel_StartPaletteLoad(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 member, enum HeapID heapID) {
     panel->paletteMember = member;
     panel->paletteHeapID = heapID;
     return SysTask_CreateOnVWaitQueue(WiFiPlazaInfoPanel_LoadPaletteTask, panel, 0);
 }
 
-void WiFiPlazaInfoPanel_LoadPaletteTask(SysTask *task, void *data) {
+static void WiFiPlazaInfoPanel_LoadPaletteTask(SysTask *task, void *data) {
     WiFiPlazaInfoPanel *panel = data;
     NarcId narcId;
     int memberNo;
@@ -1804,7 +1922,7 @@ void WiFiPlazaInfoPanel_LoadPaletteTask(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void WiFiPlazaInfoPanel_LoadGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, NARC *narc, u32 gender, enum HeapID heapID) {
+static void WiFiPlazaInfoPanel_LoadGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, NARC *narc, u32 gender, enum HeapID heapID) {
     if (gender == 0) {
         GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0x56, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
     } else {
@@ -1814,10 +1932,10 @@ void WiFiPlazaInfoPanel_LoadGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGra
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_5_OFFSET, heapID);
 }
 
-void WiFiPlazaInfoPanel_FreeGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaInfoPanel_FreeGraphics(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics) {
 }
 
-void WiFiPlazaInfoPanel_LoadScreen(WiFiPlazaRoomGraphics *graphics, NARC *narc, int member, int bgId, int tileOffset, enum HeapID heapID) {
+static void WiFiPlazaInfoPanel_LoadScreen(WiFiPlazaRoomGraphics *graphics, NARC *narc, int member, int bgId, int tileOffset, enum HeapID heapID) {
     NNSG2dScreenData *screen;
     void *allocation;
     int i;
@@ -1835,7 +1953,7 @@ void WiFiPlazaInfoPanel_LoadScreen(WiFiPlazaRoomGraphics *graphics, NARC *narc, 
     Heap_Free(allocation);
 }
 
-void WiFiPlazaPlayerCard_Init(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
+static void WiFiPlazaPlayerCard_Init(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
     int i;
     const WindowTemplate *template = sWiFiPlazaCardWindowTemplates;
     Window *window;
@@ -1850,7 +1968,7 @@ void WiFiPlazaPlayerCard_Init(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *
     } while (i < 5);
 }
 
-void WiFiPlazaPlayerCard_Free(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPlayerCard_Free(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
     int i;
 
     if (card->iconSprite != NULL) {
@@ -1861,10 +1979,10 @@ void WiFiPlazaPlayerCard_Free(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *sig
     }
 }
 
-void WiFiPlazaPlayerCard_Update(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow) {
+static void WiFiPlazaPlayerCard_Update(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *signWindow) {
 }
 
-void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, NARC *narc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
+static void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, NARC *narc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
     int color, avatar;
     PlayerProfile *profile;
 
@@ -1937,7 +2055,7 @@ void WiFiPlazaPlayerCard_Show(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *sig
     Heap_Free(profile);
 }
 
-void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPlayerCard *unused1, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
+static void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPlayerCard *unused1, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
     s32 i = 0;
     const u16 *tileBase = sWiFiPlazaCardTypeIconTileBases;
     const u8(*tiles)[0x10] = sWiFiPlazaCardTypeIconTiles;
@@ -1965,7 +2083,7 @@ void WiFiPlazaPlayerCard_LoadTypeIcons(WiFiPlazaInfoPanel *unused0, WiFiPlazaPla
     }
 }
 
-void WiFiPlazaPlayerCard_Clear(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *unused, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPlayerCard_Clear(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *unused, WiFiPlazaRoomGraphics *graphics) {
     if (card->showsMessage == TRUE) {
         card->showsMessage = FALSE;
     } else {
@@ -1978,17 +2096,17 @@ void WiFiPlazaPlayerCard_Clear(WiFiPlazaPlayerCard *card, WiFiPlazaMsgWindow *un
     BgClearTilemapBufferAndCommit(graphics->bgConfig, GF_BG_LYR_SUB_2);
 }
 
-void WiFiPlazaPlayerCard_ChangeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon) {
+static void WiFiPlazaPlayerCard_ChangeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon) {
     WiFiPlazaPlayerCard_FreeIcon(card, graphics);
     WiFiPlazaPlayerCard_LoadIcon(card, graphics, narc, heapID, icon, TRUE);
 }
 
-BOOL WiFiPlazaPlayerCard_ShowsMessage(WiFiPlazaPlayerCard *card) {
+static BOOL WiFiPlazaPlayerCard_ShowsMessage(WiFiPlazaPlayerCard *card) {
     return card->showsMessage;
 }
 
 // Tap Toy icon: 27 icons, 3 animations per graphics set
-void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon, BOOL draw) {
+static void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 icon, BOOL draw) {
     SpriteResourcesHeader header;
     u32 set, anim;
 
@@ -2020,7 +2138,7 @@ void WiFiPlazaPlayerCard_LoadIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     Sprite_SetDrawFlag(card->iconSprite, draw);
 }
 
-void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i;
 
     Sprite_Delete(card->iconSprite);
@@ -2032,7 +2150,7 @@ void WiFiPlazaPlayerCard_FreeIcon(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     }
 }
 
-void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 avatar) {
+static void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID, u32 avatar) {
     TrainerPicFileIds files;
     SpriteResourcesHeader header;
     u16 trainerClass, x;
@@ -2070,7 +2188,7 @@ void WiFiPlazaPlayerCard_LoadAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGrap
     card->avatarSprite = Sprite_Create(&template);
 }
 
-void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i;
 
     ObjCharTransfer_DeleteTaskCopyByProxyPtr(Sprite_GetImageProxy(card->avatarSprite));
@@ -2086,7 +2204,7 @@ void WiFiPlazaPlayerCard_FreeAvatar(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGrap
 // Tints the avatar palette: grey level of each colour, mapped to a blue-green shade.
 #pragma opt_propagation off
 
-void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt) {
+static void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt) {
     int i;
     int n = pltt->szByte / 2;
     u16 *p = pltt->pRawData;
@@ -2106,7 +2224,7 @@ void WiFiPlazaInfoPanel_TintPalette(NNSG2dPaletteData *pltt) {
 
 #pragma opt_propagation reset
 
-void WiFiPlazaPlayerCard_ClearWindows(WiFiPlazaPlayerCard *card) {
+static void WiFiPlazaPlayerCard_ClearWindows(WiFiPlazaPlayerCard *card) {
     int i;
     Window *window = card->windows;
     for (i = 0; i < 5; i++, window++) {
@@ -2114,12 +2232,12 @@ void WiFiPlazaPlayerCard_ClearWindows(WiFiPlazaPlayerCard *card) {
     }
 }
 
-void WiFiPlazaPlayerCard_Print(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 x, u8 y, u32 color) {
+static void WiFiPlazaPlayerCard_Print(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 x, u8 y, u32 color) {
     String *string = WiFiPlazaRoomMsg_GetString(msg, 1, msgId);
     AddTextPrinterParameterizedWithColor(&card->windows[window], 0, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
-void WiFiPlazaPlayerCard_PrintRightAligned(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 width, u8 y, u32 color) {
+static void WiFiPlazaPlayerCard_PrintRightAligned(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, int window, int msgId, u8 width, u8 y, u32 color) {
     String *string = WiFiPlazaRoomMsg_GetString(msg, 1, msgId);
     int x = width - FontID_String_GetWidth(0, string, 0);
     if (x < 0) {
@@ -2128,22 +2246,22 @@ void WiFiPlazaPlayerCard_PrintRightAligned(WiFiPlazaPlayerCard *card, WiFiPlazaR
     AddTextPrinterParameterizedWithColor(&card->windows[window], 0, string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
-void WiFiPlazaPlayerCard_CopyWindow(WiFiPlazaPlayerCard *card, int window) {
+static void WiFiPlazaPlayerCard_CopyWindow(WiFiPlazaPlayerCard *card, int window) {
     ScheduleWindowCopyToVram(&card->windows[window]);
 }
 
-void WiFiPlazaPlayerCard_BufferName(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, PlayerProfile *profile) {
+static void WiFiPlazaPlayerCard_BufferName(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, PlayerProfile *profile) {
     WiFiPlazaRoomMsg_BufferPlayerName(msg, profile, 0);
 }
 
-void WiFiPlazaPlayerCard_BufferLocation(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player) {
+static void WiFiPlazaPlayerCard_BufferLocation(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player) {
     int country = WiFiPlazaPlayer_GetCountry(player);
     int region = WiFiPlazaPlayer_GetRegion(player);
     WiFiPlazaRoomMsg_BufferCountryName(msg, country, 0);
     WiFiPlazaRoomMsg_BufferCityName(msg, country, region, 1);
 }
 
-void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, u16 *words) {
+static void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomMsg *msg, u16 *words) {
     int i;
     for (i = 0; i < 4; i++) {
         WiFiPlazaRoomMsg_BufferECWord(msg, i, words[i]);
@@ -2152,7 +2270,7 @@ void WiFiPlazaPlayerCard_BufferMessage(WiFiPlazaPlayerCard *card, WiFiPlazaRoomM
 
 // The player's Pokemon (12 slots, species 24 = empty) with shared palettes / cells / animations per kind.
 
-void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *panelNarc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer) {
+static void WiFiPlazaPlayerCard_LoadMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics, NARC *panelNarc, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer) {
     NARC *narc = NARC_New(NARC_a_2_1_3, heapID);
     int gender;
     const VecFx32 *pos;
@@ -2233,7 +2351,7 @@ next:
     NARC_Delete(narc);
 }
 
-void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphics *graphics) {
     int i = 0;
     u8 *cursor = (u8 *)card;
     for (; i < 12; i++, cursor += 4) {
@@ -2259,14 +2377,14 @@ void WiFiPlazaPlayerCard_FreeMons(WiFiPlazaPlayerCard *card, WiFiPlazaRoomGraphi
     }
 }
 
-const WiFiPlazaCardMonInfo *WiFiPlazaPlayerCard_GetMonInfo(int species, int form, int version, int gender) {
+static const WiFiPlazaCardMonInfo *WiFiPlazaPlayerCard_GetMonInfo(int species, int form, int version, int gender) {
     if (form == version) {
         return &sWiFiPlazaCardPlayerMonInfo[gender];
     }
     return &sWiFiPlazaCardSpeciesMonInfo[species];
 }
 
-void WiFiPlazaPanelButton_Init(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
+static void WiFiPlazaPanelButton_Init(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
     s32 i;
 
     AddWindow(graphics->bgConfig, &button->window, &sWiFiPlazaPanelButtonWindowTemplate);
@@ -2277,7 +2395,7 @@ void WiFiPlazaPanelButton_Init(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphi
     button->disabled = TRUE;
 }
 
-void WiFiPlazaPanelButton_Free(WiFiPlazaPanelButton *button) {
+static void WiFiPlazaPanelButton_Free(WiFiPlazaPanelButton *button) {
     int i;
     u8 *cursor;
     TouchHitboxController_Destroy(button->touch);
@@ -2290,7 +2408,7 @@ void WiFiPlazaPanelButton_Free(WiFiPlazaPanelButton *button) {
     button->active = FALSE;
 }
 
-BOOL WiFiPlazaPanelButton_Update(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
+static BOOL WiFiPlazaPanelButton_Update(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, NARC *narc, enum HeapID heapID) {
     BOOL pressed = FALSE;
     if (button->disabled == FALSE) {
         TouchHitboxController_IsTriggered(button->touch);
@@ -2319,7 +2437,7 @@ BOOL WiFiPlazaPanelButton_Update(WiFiPlazaPanelButton *button, WiFiPlazaRoomGrap
     return pressed;
 }
 
-void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player, NARC *narc, enum HeapID heapID) {
+static void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, struct WiFiPlazaPlayer *player, NARC *narc, enum HeapID heapID) {
     String *text;
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0x37, graphics->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, heapID);
     button->instrumentMode = FALSE;
@@ -2336,7 +2454,7 @@ void WiFiPlazaPanelButton_ShowOwnCard(WiFiPlazaPanelButton *button, WiFiPlazaRoo
     }
 }
 
-void WiFiPlazaPanelButton_ShowInstrument(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, u32 type, NARC *narc, enum HeapID heapID) {
+static void WiFiPlazaPanelButton_ShowInstrument(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, u32 type, NARC *narc, enum HeapID heapID) {
     if (type >= 3) {
         GF_AssertFail();
     }
@@ -2351,7 +2469,7 @@ void WiFiPlazaPanelButton_ShowInstrument(WiFiPlazaPanelButton *button, WiFiPlaza
     }
 }
 
-void WiFiPlazaPanelButton_Clear(WiFiPlazaPanelButton *unused, WiFiPlazaRoomGraphics *graphics) {
+static void WiFiPlazaPanelButton_Clear(WiFiPlazaPanelButton *unused, WiFiPlazaRoomGraphics *graphics) {
     BgClearTilemapBufferAndCommit(graphics->bgConfig, GF_BG_LYR_SUB_0);
     BgClearTilemapBufferAndCommit(graphics->bgConfig, GF_BG_LYR_SUB_1);
     BgClearTilemapBufferAndCommit(graphics->bgConfig, GF_BG_LYR_SUB_2);
@@ -2360,7 +2478,7 @@ void WiFiPlazaPanelButton_Clear(WiFiPlazaPanelButton *unused, WiFiPlazaRoomGraph
 
 // index 0: up, 1: pressed, 2: playing
 
-void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, int index, NARC *narc, enum HeapID heapID) {
+static void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphics *graphics, int index, NARC *narc, enum HeapID heapID) {
     CopyToBgTilemapRect(graphics->bgConfig, GF_BG_LYR_SUB_1, 0, 3, 32, 21, button->screens[index]->rawData, 0, 3, 32, 32);
     ScheduleBgTilemapBufferTransfer(graphics->bgConfig, GF_BG_LYR_SUB_1);
     if (button->instrumentMode == TRUE) {
@@ -2369,7 +2487,7 @@ void WiFiPlazaPanelButton_Draw(WiFiPlazaPanelButton *button, WiFiPlazaRoomGraphi
     ScheduleSetBgPosText(graphics->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_Y, sWiFiPlazaPanelButtonScrollY[index]);
 }
 
-void WiFiPlazaPanelButton_OnTouch(u32 index, u32 event, void *arg) {
+static void WiFiPlazaPanelButton_OnTouch(u32 index, u32 event, void *arg) {
     WiFiPlazaPanelButton *button = arg;
     button->selected = event;
     if (button->selected == 0) {
@@ -2379,7 +2497,7 @@ void WiFiPlazaPanelButton_OnTouch(u32 index, u32 event, void *arg) {
     }
 }
 
-void WiFiPlazaPanelButton_ResetTimer(WiFiPlazaPanelButton *button) {
+static void WiFiPlazaPanelButton_ResetTimer(WiFiPlazaPanelButton *button) {
     button->timer = 0;
 }
 

@@ -16,7 +16,6 @@
 #include "system.h"
 
 // Communication calls without a public declaration
-void CommPlayerInfo_SetProfile(void *profile);
 void CommState_StartPlazaMatch(u8 slot);
 void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
@@ -69,6 +68,18 @@ enum WiFiPlazaSignStep {
     WIFI_PLAZA_SIGN_SHOW,
     WIFI_PLAZA_SIGN_WAIT_INPUT,
 };
+
+static void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep);
+static void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId);
+static void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg);
+static void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room);
+static BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex);
+static void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 game, u32 showSeconds, s32 frames);
+static void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room);
+static void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames);
+static void WiFiPlazaGameStatus_Update(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force);
+static void WiFiPlazaGameStatus_UpdateInPlay(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force);
+static void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force, u32 showInPlay);
 
 static const u8 sWiFiPlazaGameStatusHeights[2] = { 8, 10 };
 
@@ -685,13 +696,13 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
     return FALSE;
 }
 
-void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep) {
+static void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep) {
     WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId));
     entry->nextStep = nextStep;
     WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_WAIT_MESSAGE);
 }
 
-void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId) {
+static void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId) {
     entry->nextStep = nextStep;
     entry->syncId = syncId;
     entry->syncDelay = 0;
@@ -699,7 +710,7 @@ void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerStat
     WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_SYNC);
 }
 
-void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg) {
+static void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg) {
     u32 i;
 
     WiFiPlazaRoom_CreateListItems(room, count);
@@ -715,11 +726,11 @@ void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *r
     entry->menuTemplate.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaGameEntry_FreeMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room) {
     WiFiPlazaRoom_DeleteListItems(room);
 }
 
-BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex) {
+static BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, WiFiPlazaGameEntryParam *param, WiFiPlazaPlayerState *state, int playerIndex) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     s32 connection = CommState_GetPlazaMatchStatus();
     u32 members = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
@@ -757,7 +768,7 @@ BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWo
     return FALSE;
 }
 
-void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 game, u32 showSeconds, s32 frames) {
+static void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 game, u32 showSeconds, s32 frames) {
     GF_ASSERT(showSeconds < 2);
     status->sessionActive = 0;
     status->space = 0;
@@ -773,7 +784,7 @@ void WiFiPlazaGameStatus_Open(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *ro
     WiFiPlazaRoom_OpenTextWindow(room, 18, 3, 13, sWiFiPlazaGameStatusHeights[showSeconds]);
 }
 
-void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room) {
     status->sessionActive = 0;
     status->space = 0;
     status->accepting = 0;
@@ -785,7 +796,7 @@ void WiFiPlazaGameStatus_Close(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *r
     WiFiPlazaRoom_CloseTextWindow(room);
 }
 
-void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames) {
+static void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames) {
     s16 seconds = frames / 30;
 
     if (seconds != status->seconds) {
@@ -794,15 +805,15 @@ void WiFiPlazaGameStatus_SetFrames(WiFiPlazaGameStatus *status, s32 frames) {
     }
 }
 
-void WiFiPlazaGameStatus_Update(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force) {
+static void WiFiPlazaGameStatus_Update(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force) {
     WiFiPlazaGameStatus_Draw(status, room, force, FALSE);
 }
 
-void WiFiPlazaGameStatus_UpdateInPlay(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force) {
+static void WiFiPlazaGameStatus_UpdateInPlay(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force) {
     WiFiPlazaGameStatus_Draw(status, room, force, TRUE);
 }
 
-void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force, u32 showInPlay) {
+static void WiFiPlazaGameStatus_Draw(WiFiPlazaGameStatus *status, WiFiPlazaRoomWork *room, u32 force, u32 showInPlay) {
     u32 slot;
     u32 value;
     u32 sessionActive;

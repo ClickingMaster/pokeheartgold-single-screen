@@ -3,6 +3,7 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_link_lobby.h"
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_commands.h"
 #include "frontier/frontier_script_context.h"
 
@@ -14,6 +15,7 @@
 #include "frontier_save_access.h"
 #include "frontier_stat_ids_legacy.h"
 #include "heap.h"
+#include "link_synchronization_internal.h"
 #include "party.h"
 #include "player_avatar.h"
 #include "scrcmd_9.h"
@@ -23,28 +25,13 @@
 // Script commands of the frontier link lobby and of the link
 // Battle Tower started from it (FrontierFieldSystem).
 
-u8 LinkSync_GetPlayerState(int netId);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *frontierFsys);
 FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
 
-BOOL FrtCmd_LinkLobbyAlloc(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyFree(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbySend(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyWaitReceive(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyWaitReceiveOrAbort(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitLinkLobbyReceiveOrAbort(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyCheckPartnerFacility(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyRunPartyApp(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyGetPartyMenuResult(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyGetPartnerChoice(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyAction(FrontierScriptContext *ctx);
-BOOL FrtCmd_LinkLobbyStartTower(FrontierScriptContext *ctx);
-BOOL FrtCmd_TowerLinkSendTrainers(FrontierScriptContext *ctx);
-BOOL FrtCmd_TowerLinkWaitReceive(FrontierScriptContext *ctx);
-BOOL FrontierScriptNative_WaitTowerLinkReceive(FrontierScriptContext *ctx);
-BOOL FrtCmd_TowerFree(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitLinkLobbyReceiveOrAbort(FrontierScriptContext *ctx);
+static BOOL FrontierScriptNative_WaitTowerLinkReceive(FrontierScriptContext *ctx);
 
 BOOL FrtCmd_LinkLobbyAlloc(FrontierScriptContext *ctx) {
     FrontierLinkLobby *lobby = FrontierLinkLobby_New(Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork)->saveData);
@@ -72,7 +59,7 @@ BOOL FrtCmd_LinkLobbyWaitReceive(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx) {
     FrontierLinkLobby *lobby = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (lobby->receiveCount >= 2) {
         lobby->receiveCount = 0;
@@ -87,7 +74,7 @@ BOOL FrtCmd_LinkLobbyWaitReceiveOrAbort(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitLinkLobbyReceiveOrAbort(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitLinkLobbyReceiveOrAbort(FrontierScriptContext *ctx) {
     FrontierLinkLobby *lobby = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (lobby->receiveCount >= 2) {
         lobby->receiveCount = 0;
@@ -311,7 +298,7 @@ BOOL FrtCmd_TowerLinkWaitReceive(FrontierScriptContext *ctx) {
     return TRUE;
 }
 
-BOOL FrontierScriptNative_WaitTowerLinkReceive(FrontierScriptContext *ctx) {
+static BOOL FrontierScriptNative_WaitTowerLinkReceive(FrontierScriptContext *ctx) {
     FrontierFieldSystem *frontierFsys = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (frontierFsys->linkReceiveCount < 2) {
         return FALSE;

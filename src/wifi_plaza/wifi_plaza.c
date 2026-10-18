@@ -41,14 +41,73 @@ typedef struct WiFiPlaza {
 
 FS_EXTERN_OVERLAY(OVY_42);
 
-BOOL LoadOVY38(void);
-void UnloadOVY38(void);
 
 // What PPW_LobbyGetTimeInfo reports: the lobby time first.
 typedef struct WiFiPlazaLobbyTime {
     s64 time;
     u8 unk_08[16];
 } WiFiPlazaLobbyTime;
+
+static void WiFiPlaza_VBlankTask(SysTask *task, void *data);
+static void WiFiPlazaWork_Update(WiFiPlazaWork *work);
+static void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work);
+static u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player);
+static BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID heapID);
+static void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work);
+static void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work);
+static void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work);
+static void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work);
+static void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work);
+static void WiFiPlaza_ClearEventFlags(u32 *flags);
+static int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state);
+static void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer);
+static void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session);
+static void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session);
+static void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session);
+static void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *session, u32 slot);
+static void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value);
+static void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value);
+static void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id);
+static BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *session);
+static s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *session);
+static void WiFiPlaza_HandleChatNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleTapToyTradeNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleFootprintStampNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleVisitorProfilesNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlaza_HandleUnusedNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups);
+static int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value);
+static void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id);
+static int WiFiPlazaGroups_GetPlaceId(WiFiPlazaGroups *groups, u32 place);
+static int WiFiPlazaGroups_GetState(WiFiPlazaGroups *groups, u32 group);
+static int WiFiPlazaGroups_GetCounter(WiFiPlazaGroups *groups, u32 group);
+static void WiFiPlazaGroups_RequestAction(WiFiPlazaGroups *groups, u32 id);
+static int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place);
+static void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place);
+static int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id);
+static void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 value);
+static BOOL WiFiPlazaGroups_HasPassedMarker(WiFiPlazaGroups *groups, u32 place, u32 value);
+static u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place);
+static void WiFiPlaza_OnTalkRequest(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_OnTalkAnswer(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_OnLobbyMessage(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_RecvTapToyPlayed(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_RecvJoinGroup(int id, const void *data, u32 size, void *arg);
+static void WiFiPlaza_RecvGroupAction(int id, const void *data, u32 size, void *arg);
+static void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights);
+static u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot);
+static void WiFiPlazaWordSet_Init(WiFiPlazaWordSet *wordSet, enum HeapID heapID);
+static void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet);
+static u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot);
+static u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot);
+static void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words);
+static u32 WiFiPlazaTimer_GetCounter(WiFiPlazaTimer *timer);
+static u32 WiFiPlazaTimer_GetPhase(WiFiPlazaTimer *timer);
 
 static const WiFiPlazaTimerPhase sWiFiPlazaTimerPhases[5] = {
     { 2, 80  },
@@ -160,7 +219,7 @@ BOOL WiFiPlaza_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void WiFiPlaza_VBlankTask(SysTask *task, void *data) {
+static void WiFiPlaza_VBlankTask(SysTask *task, void *data) {
     WiFiPlaza *plaza = data;
     WiFiPlazaApps_VBlank(plaza->apps);
     WiFiPlazaWork_VBlankDummy(plaza->work);
@@ -216,7 +275,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
 }
 
 // Per frame (WiFiPlaza_Main).
-void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
+static void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
     WiFiPlazaNews_Update(work->news);
     WiFiPlazaLobbyClient_GetTime(&time);
@@ -235,7 +294,7 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     }
 }
 
-void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work) {
+static void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work) {
 }
 
 u32 WiFiPlazaWork_HasError(WiFiPlazaWork *work) {
@@ -669,7 +728,7 @@ u32 WiFiPlazaPlayer_GetLobbyId(WiFiPlazaPlayer *player) {
     return player->lobbyId;
 }
 
-u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player) {
+static u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player) {
     return player->trainerId;
 }
 
@@ -1248,7 +1307,7 @@ void WiFiPlazaWork_FreePlayerInfo(WiFiPlazaWork *work) {
 }
 
 // TRUE if the name holds a terminator (0xFFFF) within count characters; the heap ID is not used.
-BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID heapID) {
+static BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID heapID) {
     u32 i;
     for (i = 0; i < count; i++) {
         if (name[i] == 0xffff) {
@@ -1317,7 +1376,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
 }
 
 // Lobby callback: a player left the plaza.
-void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
+static void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
     int slot;
     if (id == WiFiPlazaLobbyClient_GetOwnId()) {
         return;
@@ -1340,7 +1399,7 @@ void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
 }
 
 // Lobby callback: the record of a player changed.
-void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work) {
+static void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work) {
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     work->changeFlags[3] |= 1 << slot;
     switch (WiFiPlazaPlayer_GetActivity(player)) {
@@ -1451,7 +1510,7 @@ void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
 }
 
 // Lobby callback: the own record as the lobby stores it.
-void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work) {
+static void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work) {
     if (WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save) == FALSE) {
         work->hasError = 1;
         return;
@@ -1488,7 +1547,7 @@ void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
     }
 }
 
-void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work) {
+static void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work) {
     if (work->eventSchedule.flag0 == 1 && work->eventSchedule.flag7 == 0 && WiFiPlazaLobbyClient_GetState() == 2) {
         s64 duration = (u32)WiFiPlazaWork_GetOpenDuration(work);
         if (duration + work->lobbyOpenTime < work->lobbyTime) {
@@ -1554,7 +1613,7 @@ void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, en
     WiFiPlazaProfile_UpdateChecksum(profile, save);
 }
 
-void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work) {
+static void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work) {
     int i;
     if (WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save) == FALSE) {
         work->hasError = 1;
@@ -1594,7 +1653,7 @@ void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPl
     MI_CpuCopy8(profile->name, profile->player.name, sizeof(profile->player.name));
 }
 
-void WiFiPlaza_ClearEventFlags(u32 *flags) {
+static void WiFiPlaza_ClearEventFlags(u32 *flags) {
     flags[2] = 0;
 }
 
@@ -1671,7 +1730,7 @@ void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state) {
     state->timer = 900;
 }
 
-int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state) {
+static int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state) {
     return state->timer > 0;
 }
 
@@ -1707,7 +1766,7 @@ u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
 }
 
 // Clears the 20 bytes one at a time.
-void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
+static void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
     u32 count = 20;
     do {
         *buffer++ = 0;
@@ -1715,18 +1774,18 @@ void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
     } while (count != 0);
 }
 
-void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session) {
     memset(session, 0, sizeof(WiFiPlazaTalkSession));
 }
 
-void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session) {
     session->partnerSlot = 0;
     session->state = WIFI_PLAZA_TALK_STATE_NONE;
     session->role = WIFI_PLAZA_TALK_ROLE_NONE;
     WiFiPlazaTalkSession_StopTimeout(session);
 }
 
-void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session) {
     session->partnerSlot = 0;
     session->state = WIFI_PLAZA_TALK_STATE_ENDED;
     WiFiPlazaTalkSession_StopTimeout(session);
@@ -1758,23 +1817,23 @@ void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot) 
     }
 }
 
-void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
+static void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
     session->talkCounts[slot] = 0;
 }
 
-void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value) {
+static void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value) {
     session->sendState = session->state;
     session->sendMessage = value;
 }
 
-void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value) {
+static void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value) {
     work->talk.sendState = WIFI_PLAZA_TALK_STATE_ASKER_TURN;
     work->talk.sendMessage = value;
     WiFiPlazaLobbyClient_SendToPlayer(1, id, &work->talk.sendMessage, 4);
 }
 
-void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id) {
+static void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id) {
     work->talk.state = WIFI_PLAZA_TALK_STATE_ENDED;
     work->talk.sendState = WIFI_PLAZA_TALK_STATE_ENDED;
     WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
@@ -1800,19 +1859,19 @@ void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session) {
     }
 }
 
-BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *session) {
+static BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *session) {
     if (session->timeoutActive == 0) {
         return TRUE;
     }
     return session->timeoutCounter < 900;
 }
 
-s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *session) {
+static s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *session) {
     return session->timeoutCounter;
 }
 
 // Lobby message type 0: two players.
-void WiFiPlaza_HandleChatNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleChatNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     WiFiPlazaPairRequest req;
     int i;
     int slot;
@@ -1834,7 +1893,7 @@ void WiFiPlaza_HandleChatNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *
 }
 
 // Lobby message type 1: two players and an option.
-void WiFiPlaza_HandleTapToyTradeNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleTapToyTradeNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     WiFiPlazaPairOptionRequest req;
     int i;
     int slot;
@@ -1857,7 +1916,7 @@ void WiFiPlaza_HandleTapToyTradeNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMe
 }
 
 // Up to four players; without the flag only the first one gets a profile.
-void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     PlayerProfile *profiles[4];
     WiFiPlazaGroupFlagRequest req;
     int i;
@@ -1907,7 +1966,7 @@ void WiFiPlaza_HandleMinigameEntryNews(WiFiPlazaWork *work, const WiFiPlazaLobby
 }
 
 // Up to eight players; only the first one gets a profile.
-void WiFiPlaza_HandleFootprintStampNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleFootprintStampNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     WiFiPlazaSingleRequest req;
     int slot;
     if (msg->count > 8 || msg->count == 0) {
@@ -1925,7 +1984,7 @@ void WiFiPlaza_HandleFootprintStampNews(WiFiPlazaWork *work, const WiFiPlazaLobb
     WiFiPlazaNews_AddFootprintStampEvent(work->news, &req);
 }
 
-void WiFiPlaza_HandleVisitorProfilesNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleVisitorProfilesNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     PlayerProfile *profiles[4];
     WiFiPlazaGroupRequest req;
     int i;
@@ -1957,7 +2016,7 @@ void WiFiPlaza_HandleVisitorProfilesNews(WiFiPlazaWork *work, const WiFiPlazaLob
     WiFiPlazaNews_AddVisitorProfilesEvent(work->news, &req);
 }
 
-void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     PlayerProfile *profiles[4];
     WiFiPlazaGroupRequest req;
     int i;
@@ -1989,7 +2048,7 @@ void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMess
     WiFiPlazaNews_AddPlazaNewsEvent(work->news, &req);
 }
 
-void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
     PlayerProfile *profiles[4];
     WiFiPlazaGroupOptionRequest req;
     int i;
@@ -2022,7 +2081,7 @@ void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobb
     WiFiPlazaNews_AddMinigameResultEvent(work->news, &req);
 }
 
-void WiFiPlaza_HandleUnusedNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
+static void WiFiPlaza_HandleUnusedNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
 }
 
 void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
@@ -2043,7 +2102,7 @@ void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups) {
 
 // Advances the plaza time; group i starts counting (state 1) once the time reaches sWiFiPlazaGroupStartTimes[i] and ends (state 2)
 // after 1200 more updates.
-void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
+static void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
     int i;
     if (groups->active != 0) {
         for (i = 0; i < 9; i++) {
@@ -2066,7 +2125,7 @@ void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups) {
 
 // Puts id into the first free place of a group that has not ended and whose markerCounts count allows value; returns the
 // place (group * 3 + seat) or -1.
-int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
+static int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
     int seat;
     int base;
     int group;
@@ -2087,7 +2146,7 @@ int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value) {
     return -1;
 }
 
-void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id) {
+static void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id) {
     int place = WiFiPlazaGroups_FindPlace(groups, id);
     if (place != -1) {
         u32 group = (u32)place / 3, seat = (u32)place % 3;
@@ -2095,7 +2154,7 @@ void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id) {
     }
 }
 
-int WiFiPlazaGroups_GetPlaceId(WiFiPlazaGroups *groups, u32 place) {
+static int WiFiPlazaGroups_GetPlaceId(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2108,28 +2167,28 @@ int WiFiPlazaGroups_GetPlaceId(WiFiPlazaGroups *groups, u32 place) {
     return *slot;
 }
 
-int WiFiPlazaGroups_GetState(WiFiPlazaGroups *groups, u32 group) {
+static int WiFiPlazaGroups_GetState(WiFiPlazaGroups *groups, u32 group) {
     if (group >= 9) {
         GF_AssertFail();
     }
     return groups->states[group];
 }
 
-int WiFiPlazaGroups_GetCounter(WiFiPlazaGroups *groups, u32 group) {
+static int WiFiPlazaGroups_GetCounter(WiFiPlazaGroups *groups, u32 group) {
     if (group >= 9) {
         GF_AssertFail();
     }
     return groups->counters[group];
 }
 
-void WiFiPlazaGroups_RequestAction(WiFiPlazaGroups *groups, u32 id) {
+static void WiFiPlazaGroups_RequestAction(WiFiPlazaGroups *groups, u32 id) {
     u32 place = WiFiPlazaGroups_FindPlace(groups, id);
     if (place != (u32)-1) {
         groups->actionRequests[place / 3][place % 3] = 1;
     }
 }
 
-int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place) {
+static int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2142,7 +2201,7 @@ int WiFiPlazaGroups_GetActionRequest(WiFiPlazaGroups *groups, u32 place) {
     return *slot;
 }
 
-void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place) {
+static void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2156,7 +2215,7 @@ void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 place) {
 }
 
 // The place (group * 3 + seat) of id, or -1.
-int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
+static int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
     WiFiPlazaGroups *row = groups;
     int i;
     int j;
@@ -2171,7 +2230,7 @@ int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
     return -1;
 }
 
-void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 value) {
+static void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 value) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2184,7 +2243,7 @@ void WiFiPlazaGroups_SetMarkerPassed(WiFiPlazaGroups *groups, u32 place, u32 val
     *slot = value + 1;
 }
 
-BOOL WiFiPlazaGroups_HasPassedMarker(WiFiPlazaGroups *groups, u32 place, u32 value) {
+static BOOL WiFiPlazaGroups_HasPassedMarker(WiFiPlazaGroups *groups, u32 place, u32 value) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2200,7 +2259,7 @@ BOOL WiFiPlazaGroups_HasPassedMarker(WiFiPlazaGroups *groups, u32 place, u32 val
     return TRUE;
 }
 
-u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place) {
+static u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place) {
     u32 group;
     u32 seat;
     u32 *slot;
@@ -2217,7 +2276,7 @@ u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place) {
 // id is the sender, data the received words.
 
 // Message 0: the other player asks for an exchange; answered with WiFiPlazaWork_SendTalkAnswer (TRUE = accepted).
-void WiFiPlaza_OnTalkRequest(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_OnTalkRequest(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const u16 *words = data;
     u32 slot = WiFiPlazaLobbyClient_IdToSlot(id);
@@ -2247,7 +2306,7 @@ void WiFiPlaza_OnTalkRequest(int id, const void *data, u32 size, void *arg) {
 }
 
 // Message 1: the answer of the player asked.
-void WiFiPlaza_OnTalkAnswer(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_OnTalkAnswer(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const u16 *words = data;
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
@@ -2267,7 +2326,7 @@ void WiFiPlaza_OnTalkAnswer(int id, const void *data, u32 size, void *arg) {
 }
 
 // Message 2: the state of the other player (2 or 3), or the end of the exchange.
-void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const u16 *words = data;
     int slot;
@@ -2289,7 +2348,7 @@ void WiFiPlaza_OnTalkState(int id, const void *data, u32 size, void *arg) {
     }
 }
 
-void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     if (work->talk.state != WIFI_PLAZA_TALK_STATE_NONE) {
         int slot = WiFiPlazaLobbyClient_IdToSlot(id);
@@ -2300,7 +2359,7 @@ void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg) {
 }
 
 // A lobby message: handled by sWiFiPlazaLobbyMessageHandlers[type] (WiFiPlaza_HandleChatNews ...).
-void WiFiPlaza_OnLobbyMessage(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_OnLobbyMessage(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const WiFiPlazaLobbyMessage *msg = data;
     sWiFiPlazaLobbyMessageHandlers[msg->type](work, msg);
@@ -2308,7 +2367,7 @@ void WiFiPlaza_OnLobbyMessage(int id, const void *data, u32 size, void *arg) {
 
 // Receive callbacks: the sender id marks its lobby slot in WiFiPlazaWork.tapToyPlayed or joins a
 // group of WiFiPlazaWork.groups.
-void WiFiPlaza_RecvTapToyPlayed(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_RecvTapToyPlayed(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
@@ -2316,7 +2375,7 @@ void WiFiPlaza_RecvTapToyPlayed(int id, const void *data, u32 size, void *arg) {
     }
 }
 
-void WiFiPlaza_RecvJoinGroup(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_RecvJoinGroup(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     int slot = WiFiPlazaLobbyClient_IdToSlot(id), value;
     if (slot != -1) {
@@ -2328,7 +2387,7 @@ void WiFiPlaza_RecvJoinGroup(int id, const void *data, u32 size, void *arg) {
     }
 }
 
-void WiFiPlaza_RecvGroupAction(int id, const void *data, u32 size, void *arg) {
+static void WiFiPlaza_RecvGroupAction(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     int slot = WiFiPlazaLobbyClient_IdToSlot(id);
     if (slot != -1) {
@@ -2336,7 +2395,7 @@ void WiFiPlaza_RecvGroupAction(int id, const void *data, u32 size, void *arg) {
     }
 }
 
-void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights) {
+static void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights) {
     int i;
     memset(weights, 0, sizeof(WiFiPlazaGroupWeights));
     for (i = 0; i < 9; i++) {
@@ -2391,7 +2450,7 @@ void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value) {
     }
 }
 
-u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot) {
+static u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2401,12 +2460,12 @@ u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot) {
     return 0;
 }
 
-void WiFiPlazaWordSet_Init(WiFiPlazaWordSet *wordSet, enum HeapID heapID) {
+static void WiFiPlazaWordSet_Init(WiFiPlazaWordSet *wordSet, enum HeapID heapID) {
     MI_CpuFill8(wordSet, 0, sizeof(WiFiPlazaWordSet));
     wordSet->bank = WallpaperPasswordBank_Create(heapID);
 }
 
-void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet) {
+static void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet) {
     WallpaperPasswordBank_Delete(wordSet->bank);
 }
 
@@ -2423,7 +2482,7 @@ void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code
     }
 }
 
-u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot) {
+static u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2433,7 +2492,7 @@ u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     return 0;
 }
 
-u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot) {
+static u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2444,7 +2503,7 @@ u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot) {
 }
 
 // Four words of the bank, each picked by the sum of two neighbouring bytes of code.
-void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words) {
+static void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words) {
     union {
         u32 word;
         u8 bytes[4];
@@ -2521,10 +2580,10 @@ void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
     }
 }
 
-u32 WiFiPlazaTimer_GetCounter(WiFiPlazaTimer *timer) {
+static u32 WiFiPlazaTimer_GetCounter(WiFiPlazaTimer *timer) {
     return timer->counter;
 }
 
-u32 WiFiPlazaTimer_GetPhase(WiFiPlazaTimer *timer) {
+static u32 WiFiPlazaTimer_GetPhase(WiFiPlazaTimer *timer) {
     return timer->phase;
 }

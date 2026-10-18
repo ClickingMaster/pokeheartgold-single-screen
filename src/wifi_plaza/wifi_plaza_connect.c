@@ -1,3 +1,5 @@
+#include "wifi_plaza/wifi_plaza_connect.h"
+
 #include "global.h"
 
 #include "constants/game_stats.h"
@@ -6,6 +8,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
 #include "msgdata/msg/msg_0800.h"
+#include "wifi_plaza/wifi_plaza_internal.h"
 
 #include "bg_window.h"
 #include "comm_state.h"
@@ -100,15 +103,6 @@ extern void CommState_StartWifiPlaza(SaveData *saveData, s32 profileId);
 extern void CommState_LeaveWifiPlaza(void);
 extern int CommState_HasPlazaLobbyStarted(void);
 extern BOOL CommState_HasPlazaLobbyFailed(void);
-extern void *WiFiPlazaWork_GetMyPlayer(struct WiFiPlazaWork *lobby);
-extern void WiFiPlazaWork_NewPlayerInfo(struct WiFiPlazaWork *lobby);
-extern void WiFiPlazaWork_FreePlayerInfo(struct WiFiPlazaWork *lobby);
-extern int WiFiPlaza_GetErrorMessageClass(u32 errorCode, u32 errorType);
-extern BOOL WiFiPlaza_IsErrorRecoverable(u32 errorCode, u32 errorType);
-extern void WiFiPlazaLobbyClient_GetLastError(void);
-extern u32 WiFiPlazaLobbyClient_ToErrorCode(void);
-extern void WiFiPlazaLobbyClient_StartAddOwnLocation(void);
-extern BOOL WiFiPlazaLobbyClient_IsOwnLocationAdded(void);
 
 enum WiFiPlazaConnectState {
     WIFI_PLAZA_CONNECT_FADE_IN,
@@ -143,26 +137,21 @@ enum WiFiPlazaDisconnectState {
     WIFI_PLAZA_DISCONNECT_WAIT_FADE_OUT,
 };
 
-BOOL WiFiPlazaConnect_Init(OverlayManager *man, int *state);
-BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state);
-BOOL WiFiPlazaConnect_Exit(OverlayManager *man, int *state);
-BOOL WiFiPlazaConnect_DisconnectInit(OverlayManager *man, int *state);
-BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state);
-BOOL WiFiPlazaConnect_DisconnectExit(OverlayManager *man, int *state);
-void WiFiPlazaConnect_VBlankCB(void *data);
-void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapID);
-void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data);
-void WiFiPlazaConnect_FreeBgs(WiFiPlazaConnectWork *work);
-void WiFiPlazaConnect_DoBgUpdates(WiFiPlazaConnectWork *work);
-void WiFiPlazaConnect_InitMessageBox(WiFiPlazaConnectMessageBox *box, BgConfig *bgConfig, int frameType, int msgBank, int x, int y, int width, int height, int baseTile, SaveData *saveData, enum HeapID heapID);
-void WiFiPlazaConnect_PrintMessage(WiFiPlazaConnectMessageBox *box, int msgId);
-void WiFiPlazaConnect_ClearMessageBox(WiFiPlazaConnectMessageBox *box);
-void WiFiPlazaConnect_StartWaitingIcon(WiFiPlazaConnectMessageBox *box);
-void WiFiPlazaConnect_StopWaitingIcon(WiFiPlazaConnectMessageBox *box);
-void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box);
-void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int msgId);
-void WiFiPlazaConnect_BufferErrorCode(WiFiPlazaConnectMessageBox *box, int errorCode);
-YesNoPrompt *WiFiPlazaConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart);
+static void WiFiPlazaConnect_VBlankCB(void *data);
+static void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapID);
+static void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data);
+static void WiFiPlazaConnect_FreeBgs(WiFiPlazaConnectWork *work);
+static void WiFiPlazaConnect_DoBgUpdates(WiFiPlazaConnectWork *work);
+static void WiFiPlazaConnect_InitMessageBox(WiFiPlazaConnectMessageBox *box, BgConfig *bgConfig, int frameType, int msgBank, int x, int y, int width, int height, int baseTile, SaveData *saveData, enum HeapID heapID);
+static void WiFiPlazaConnect_PrintMessage(WiFiPlazaConnectMessageBox *box, int msgId);
+static void WiFiPlazaConnect_ClearMessageBox(WiFiPlazaConnectMessageBox *box);
+static void WiFiPlazaConnect_StartWaitingIcon(WiFiPlazaConnectMessageBox *box);
+static void WiFiPlazaConnect_StopWaitingIcon(WiFiPlazaConnectMessageBox *box);
+static void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box);
+static void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int msgId);
+static void WiFiPlazaConnect_BufferErrorCode(WiFiPlazaConnectMessageBox *box, int errorCode);
+static YesNoPrompt *WiFiPlazaConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart);
+
 
 static const u32 sWiFiPlazaConnectBgLayers[WIFI_PLAZA_CONNECT_NUM_BG_LAYERS] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_SUB_0 };
 
@@ -334,8 +323,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             msgId = WiFiPlaza_GetErrorMessageClass(error[0], error[1]);
             errorCode = error[0];
         } else {
-            WiFiPlazaLobbyClient_GetLastError();
-            errorCode = WiFiPlazaLobbyClient_ToErrorCode();
+            errorCode = WiFiPlazaLobbyClient_ToErrorCode(WiFiPlazaLobbyClient_GetLastError());
             msgId = msg_0800_00032;
         }
         WiFiPlazaWork_FreePlayerInfo(args->lobby);
@@ -551,11 +539,11 @@ BOOL WiFiPlazaConnect_DisconnectExit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void WiFiPlazaConnect_VBlankCB(void *data) {
+static void WiFiPlazaConnect_VBlankCB(void *data) {
     WiFiPlazaConnect_DoBgUpdates(data);
 }
 
-void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapID) {
+static void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapID) {
     int i;
     int j;
     const BgTemplate *template;
@@ -642,7 +630,7 @@ void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapID heapI
     NARC_Delete(narc);
 }
 
-void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data) {
+static void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data) {
     WiFiPlazaConnectPaletteCycle *cycle = data;
     if (!cycle->active) {
         return;
@@ -672,7 +660,7 @@ void WiFiPlazaConnect_PaletteCycleTask(SysTask *task, void *data) {
     }
 }
 
-void WiFiPlazaConnect_FreeBgs(WiFiPlazaConnectWork *work) {
+static void WiFiPlazaConnect_FreeBgs(WiFiPlazaConnectWork *work) {
     int i;
     for (i = 0; i < WIFI_PLAZA_CONNECT_NUM_BG_LAYERS; i++) {
         FreeBgTilemapBuffer(work->bgConfig, (u8)sWiFiPlazaConnectBgLayers[i]);
@@ -680,11 +668,11 @@ void WiFiPlazaConnect_FreeBgs(WiFiPlazaConnectWork *work) {
     Heap_Free(work->bgConfig);
 }
 
-void WiFiPlazaConnect_DoBgUpdates(WiFiPlazaConnectWork *work) {
+static void WiFiPlazaConnect_DoBgUpdates(WiFiPlazaConnectWork *work) {
     DoScheduledBgGpuUpdates(work->bgConfig);
 }
 
-void WiFiPlazaConnect_InitMessageBox(WiFiPlazaConnectMessageBox *box, BgConfig *bgConfig, int frameType, int msgBank, int x, int y, int width, int height, int baseTile, SaveData *saveData, enum HeapID heapID) {
+static void WiFiPlazaConnect_InitMessageBox(WiFiPlazaConnectMessageBox *box, BgConfig *bgConfig, int frameType, int msgBank, int x, int y, int width, int height, int baseTile, SaveData *saveData, enum HeapID heapID) {
     box->format = MessageFormat_New(heapID);
     box->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, msgBank, heapID);
     box->expanded = String_New(WIFI_PLAZA_CONNECT_MSG_STRING_LENGTH, heapID);
@@ -695,7 +683,7 @@ void WiFiPlazaConnect_InitMessageBox(WiFiPlazaConnectMessageBox *box, BgConfig *
     AddWindowParameterized(bgConfig, &box->window, GF_BG_LYR_MAIN_1, (u8)x, (u8)y, (u8)width, (u8)height, 9, (u16)baseTile);
 }
 
-void WiFiPlazaConnect_PrintMessage(WiFiPlazaConnectMessageBox *box, int msgId) {
+static void WiFiPlazaConnect_PrintMessage(WiFiPlazaConnectMessageBox *box, int msgId) {
     if (TextPrinterCheckActive((u8)box->printerId)) {
         RemoveTextPrinter((u8)box->printerId);
     }
@@ -711,7 +699,7 @@ void WiFiPlazaConnect_PrintMessage(WiFiPlazaConnectMessageBox *box, int msgId) {
     ScheduleWindowCopyToVram(&box->window);
 }
 
-void WiFiPlazaConnect_ClearMessageBox(WiFiPlazaConnectMessageBox *box) {
+static void WiFiPlazaConnect_ClearMessageBox(WiFiPlazaConnectMessageBox *box) {
     if (TextPrinterCheckActive((u8)box->printerId)) {
         RemoveTextPrinter((u8)box->printerId);
     }
@@ -727,14 +715,14 @@ void WiFiPlazaConnect_ClearMessageBox(WiFiPlazaConnectMessageBox *box) {
     ClearWindowTilemapAndScheduleTransfer(&box->window);
 }
 
-void WiFiPlazaConnect_StartWaitingIcon(WiFiPlazaConnectMessageBox *box) {
+static void WiFiPlazaConnect_StartWaitingIcon(WiFiPlazaConnectMessageBox *box) {
     if (box->frameType == 1) {
         GF_ASSERT(box->waitingIcon == NULL);
         box->waitingIcon = WaitingIcon_New(&box->window, 1);
     }
 }
 
-void WiFiPlazaConnect_StopWaitingIcon(WiFiPlazaConnectMessageBox *box) {
+static void WiFiPlazaConnect_StopWaitingIcon(WiFiPlazaConnectMessageBox *box) {
     if (box->frameType == 1) {
         GF_ASSERT(box->waitingIcon != NULL);
         WaitingIcon_Delete(box->waitingIcon);
@@ -742,7 +730,7 @@ void WiFiPlazaConnect_StopWaitingIcon(WiFiPlazaConnectMessageBox *box) {
     }
 }
 
-void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box) {
+static void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box) {
     if (TextPrinterCheckActive((u8)box->printerId)) {
         RemoveTextPrinter((u8)box->printerId);
     }
@@ -756,7 +744,7 @@ void WiFiPlazaConnect_FreeMessageBox(WiFiPlazaConnectMessageBox *box) {
     MessageFormat_Delete(box->format);
 }
 
-void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int msgId) {
+static void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int msgId) {
     int x;
     FillWindowPixelBuffer(&box->window, 0);
     ReadMsgDataIntoString(box->msgData, msgId, box->raw);
@@ -765,11 +753,11 @@ void WiFiPlazaConnect_PrintCenteredTitle(WiFiPlazaConnectMessageBox *box, int ms
     AddTextPrinterParameterizedWithColor(&box->window, 1, box->expanded, x, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 14, 0), NULL);
 }
 
-void WiFiPlazaConnect_BufferErrorCode(WiFiPlazaConnectMessageBox *box, int errorCode) {
+static void WiFiPlazaConnect_BufferErrorCode(WiFiPlazaConnectMessageBox *box, int errorCode) {
     BufferIntegerAsString(box->format, 0, errorCode, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
 }
 
-YesNoPrompt *WiFiPlazaConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart) {
+static YesNoPrompt *WiFiPlazaConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart) {
     YesNoPromptTemplate template;
     YesNoPrompt *prompt = YesNoPrompt_Create(HEAP_ID_119);
     template.bgConfig = bgConfig;

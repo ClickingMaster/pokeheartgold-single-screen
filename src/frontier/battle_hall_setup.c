@@ -52,7 +52,6 @@ extern const BattleHallSetTypes gBattleHallSetTypes[];
 u32 HallTypeRanks_Get(u32 cell, void *ranks);
 fx32 FX_Sqrt(fx32 x);
 
-int BattleHall_GetPartySize(int type);
 u8 BattleHall_GetLevelRank(BattleHallData *data);
 void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, u8 level);
@@ -325,7 +324,7 @@ u32 BattleHall_GetBattleType(u32 type) {
     return BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER;
 }
 
-int BattleHall_GetPartySize(int type) {
+u8 BattleHall_GetPartySize(u8 type) {
     if (type == 1) {
         return 2;
     }
