@@ -22,6 +22,20 @@ extern const u16 gWifiSetupErrorCodeFormat[]; // error code format
 
 extern int swprintf(u16 *, int, const u16 *, ...);
 
+static void WifiSetupAddressEntry_FinishInvalidMessage(void);
+static void WifiSetupErrorScreen_LoadGraphics(void);
+static void WifiSetupErrorScreen_DrawMessage(void);
+static void WifiSetupErrorScreen_FadeIn(void);
+static void WifiSetupErrorScreen_WaitFadeIn(void);
+static void WifiSetupErrorScreen_WaitButtonBar(void);
+static void WifiSetupErrorScreen_Main(void);
+static void WifiSetupErrorScreen_HandleKeys(void);
+static void WifiSetupErrorScreen_Update(void);
+static void WifiSetupErrorScreen_HandleButton(void);
+static void WifiSetupErrorScreen_StartClose(void);
+static void WifiSetupErrorScreen_CloseButtonBar(void);
+static void WifiSetupErrorScreen_Exit(void);
+
 void WifiSetupAddressEntry_WaitInvalidMessage(void) {
     if (WifiSetupDialog_GetSelected()) {
         return;
@@ -31,7 +45,7 @@ void WifiSetupAddressEntry_WaitInvalidMessage(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FinishInvalidMessage);
 }
 
-void WifiSetupAddressEntry_FinishInvalidMessage(void) {
+static void WifiSetupAddressEntry_FinishInvalidMessage(void) {
     if (WifiSetupDialog_IsOpen()) {
         return;
     }
@@ -45,7 +59,7 @@ void WifiSetupErrorScreen_Init(void) {
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_FadeIn);
 }
 
-void WifiSetupErrorScreen_LoadGraphics(void) {
+static void WifiSetupErrorScreen_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupErrorScreenJb4ErrorNscPath, GX_LoadBG2Scr);
     reg_G2S_DB_BG0CNT = (reg_G2S_DB_BG0CNT & ~3) | 3;
     reg_G2S_DB_BG1CNT = (reg_G2S_DB_BG1CNT & ~3) | 3;
@@ -54,7 +68,7 @@ void WifiSetupErrorScreen_LoadGraphics(void) {
     reg_G2_BG2CNT = (reg_G2_BG2CNT & ~3) | 3;
 }
 
-void WifiSetupErrorScreen_DrawMessage(void) {
+static void WifiSetupErrorScreen_DrawMessage(void) {
     int out, code;
     void *canvas, *msg;
     u16 text[8];
@@ -147,13 +161,13 @@ void WifiSetupErrorScreen_DrawMessage(void) {
     WifiSetupText_MarkDirty(canvas);
 }
 
-void WifiSetupErrorScreen_FadeIn(void) {
+static void WifiSetupErrorScreen_FadeIn(void) {
     WifiSetupFade_Start(2, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, 8);
     WifiSetupDisplay_ShowPlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_WaitFadeIn);
 }
 
-void WifiSetupErrorScreen_WaitFadeIn(void) {
+static void WifiSetupErrorScreen_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -164,7 +178,7 @@ void WifiSetupErrorScreen_WaitFadeIn(void) {
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_WaitButtonBar);
 }
 
-void WifiSetupErrorScreen_WaitButtonBar(void) {
+static void WifiSetupErrorScreen_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
@@ -172,23 +186,23 @@ void WifiSetupErrorScreen_WaitButtonBar(void) {
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_Main);
 }
 
-void WifiSetupErrorScreen_Main(void) {
+static void WifiSetupErrorScreen_Main(void) {
     WifiSetupErrorScreen_HandleKeys();
     WifiSetupErrorScreen_Update();
     WifiSetupErrorScreen_HandleButton();
 }
 
-void WifiSetupErrorScreen_HandleKeys(void) {
+static void WifiSetupErrorScreen_HandleKeys(void) {
     if (!WifiSetupInput_IsKeyPressed(PAD_BUTTON_A)) {
         return;
     }
     WifiSetupButtonBar_SelectIfNone(0);
 }
 
-void WifiSetupErrorScreen_Update(void) {
+static void WifiSetupErrorScreen_Update(void) {
 }
 
-void WifiSetupErrorScreen_HandleButton(void) {
+static void WifiSetupErrorScreen_HandleButton(void) {
     if (WifiSetupButtonBar_GetSelected()) {
         return;
     }
@@ -196,13 +210,13 @@ void WifiSetupErrorScreen_HandleButton(void) {
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_StartClose);
 }
 
-void WifiSetupErrorScreen_StartClose(void) {
+static void WifiSetupErrorScreen_StartClose(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_CloseButtonBar);
 }
 
-void WifiSetupErrorScreen_CloseButtonBar(void) {
+static void WifiSetupErrorScreen_CloseButtonBar(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -212,7 +226,7 @@ void WifiSetupErrorScreen_CloseButtonBar(void) {
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_Exit);
 }
 
-void WifiSetupErrorScreen_Exit(void) {
+static void WifiSetupErrorScreen_Exit(void) {
     int x;
     if (WifiSetupFade_IsActive(1)) {
         return;

@@ -15,15 +15,16 @@
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
 extern s32 FX_DivS32(s32, s32);
 
+static void WifiSetupScrollBar_Drag(void);
+static void WifiSetupScrollBar_PlayDragSound(int value);
+static void WifiSetupScrollBar_PressArrow(int state);
+static void WifiSetupScrollBar_JumpToTouch(void);
+static int WifiSetupScrollBar_GetTouchedPart(void);
+static int WifiSetupScrollBar_GetHeldArrow(int part);
+static void WifiSetupScrollBar_SetThumbPos(int value);
+
 void WifiSetupScrollBar_Task(void *task, void *arg);
-void WifiSetupScrollBar_Drag(void);
-void WifiSetupScrollBar_PlayDragSound(int value);
-void WifiSetupScrollBar_PressArrow(int state);
-void WifiSetupScrollBar_JumpToTouch(void);
-int WifiSetupScrollBar_GetTouchedPart(void);
-int WifiSetupScrollBar_GetHeldArrow(int part);
 void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *rect);
-void WifiSetupScrollBar_SetThumbPos(int value);
 
 u8 WifiSetupScrollBar_GetValue(void) {
     return gWifiSetupScrollBar->value;
@@ -101,7 +102,7 @@ void WifiSetupScrollBar_Task(void *task, void *arg) {
     }
 }
 
-void WifiSetupScrollBar_Drag(void) {
+static void WifiSetupScrollBar_Drag(void) {
     WifiSetupPoint p;
     WifiSetupScrollBar *s;
     int v;
@@ -131,7 +132,7 @@ void WifiSetupScrollBar_Drag(void) {
     gWifiSetupScrollBar->event = 3;
 }
 
-void WifiSetupScrollBar_PlayDragSound(int value) {
+static void WifiSetupScrollBar_PlayDragSound(int value) {
     int d = gWifiSetupScrollBar->value - value;
     int a;
     if (d < 0) {
@@ -155,12 +156,12 @@ void WifiSetupScrollBar_PlayDragSound(int value) {
     WifiSetupSound_SetTrackPitch(0xFFFF, a);
 }
 
-void WifiSetupScrollBar_PressArrow(int state) {
+static void WifiSetupScrollBar_PressArrow(int state) {
     gWifiSetupScrollBar->state = state;
     gWifiSetupScrollBar->event = (state == WIFI_SETUP_SCROLL_BAR_STATE_UP) ? 4 : 6;
 }
 
-void WifiSetupScrollBar_JumpToTouch(void) {
+static void WifiSetupScrollBar_JumpToTouch(void) {
     WifiSetupPoint p;
     WifiSetupScrollBar *s;
     u32 w;
@@ -183,7 +184,7 @@ void WifiSetupScrollBar_JumpToTouch(void) {
     gWifiSetupScrollBar->event = 3;
 }
 
-int WifiSetupScrollBar_GetTouchedPart(void) {
+static int WifiSetupScrollBar_GetTouchedPart(void) {
     WifiSetupRect r;
     int i;
     WifiSetupScrollBar_GetPartRect(WIFI_SETUP_SCROLL_BAR_THUMB, &r);
@@ -203,7 +204,7 @@ int WifiSetupScrollBar_GetTouchedPart(void) {
     return 0;
 }
 
-int WifiSetupScrollBar_GetHeldArrow(int part) {
+static int WifiSetupScrollBar_GetHeldArrow(int part) {
     WifiSetupRect r;
     int i;
     for (i = 2; i <= 3; i++) {
@@ -241,7 +242,7 @@ void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *r) {
     }
 }
 
-void WifiSetupScrollBar_SetThumbPos(int value) {
+static void WifiSetupScrollBar_SetThumbPos(int value) {
     WifiSetupOamBlock_SetPosition(gWifiSetupScrollBar->thumb, -1, gWifiSetupScrollBar->pos.x, value + gWifiSetupScrollBar->pos.y);
     gWifiSetupScrollBar->value = value;
 }

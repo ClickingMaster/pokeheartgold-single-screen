@@ -103,14 +103,11 @@ s32 WifiSetup_StrLen(const char *str);
 u16 WifiSetup_Random(void);
 void WifiSetup_ClearPollSet(SocPollFd *set);
 void WifiSetup_AddToPollSet(int socket, SocPollFd *set);
-void WifiSetup_ConvertBssDesc(const void *src, void *dst);
 void WifiSetup_CopyConnectSsid(const void *src, void *dst);
 void WifiSetup_StoreConnectResult(void *dst, const void *src, u32 value);
-BOOL WifiSetup_OnWcmNotify(void *message);
 BOOL WifiSetup_OnTimeoutAlarm(void *message);
 int WifiSetup_Startup(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free);
 int WifiSetup_Cleanup(void);
-int WifiSetup_DisconnectAccessPoint(void);
 int WifiSetup_SearchAccessPoints(void **output);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_H

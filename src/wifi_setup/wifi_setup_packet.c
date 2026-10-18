@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "nitrowifi/socl_internal.h"
 #include "wifi_setup/wifi_setup_internal.h"
 
 // Swaps the two bytes of a 16-bit value (network byte order).
@@ -46,27 +47,25 @@ extern u8 ov13_0224E0B0[];
 extern u8 ov13_0224E0C4[];
 extern WifiSetupSettings64 ov13_0224E144;
 
-int SOC_SendTo(int socket, const void *data, int length, int flags, const void *address);
-u32 SOCL_GetHostID(void);
-void SOC_U32to4U8(u32 value, void *out);
+static int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length);
+static int WifiSetup_BroadcastDatagram(int socket, const void *data, int length);
+static u8 *WifiSetup_GetPacketPayload(u8 *data, u32 *type, u32 *length);
+static u8 *WifiSetup_NextRecord(u8 **cursor, u8 *end, u32 *type, u32 *length);
+static u8 *WifiSetup_AppendRecord(u8 *out, int tag, const void *source, int size);
+static BOOL WifiSetup_GetOwnMacAddress(u8 *mac);
+static int WifiSetup_HexToBytes(u8 *dst, const char *src, int length);
+
 
 int WifiSetup_FindSetupAccessPoint(void);
-int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length);
-int WifiSetup_BroadcastDatagram(int socket, const void *data, int length);
 int WifiSetup_SendSetupPacket(int socket, int unused, const void *data, int length);
-u8 *WifiSetup_GetPacketPayload(u8 *data, u32 *type, u32 *length);
-u8 *WifiSetup_NextRecord(u8 **cursor, u8 *end, u32 *type, u32 *length);
 u8 *WifiSetup_FirstRecord(u8 *data, u32 *type, u32 *length);
 u32 WifiSetup_BuildPacket(u8 *dest, u32 type, u8 *data, u32 length, const void *key);
-u8 *WifiSetup_AppendRecord(u8 *out, int tag, const void *source, int size);
 u8 *WifiSetup_BuildSingleRecordList(u8 *dst, u16 type, const void *src, u32 length);
 int WifiSetup_CheckVersionReply(void *data, int *extended);
 int WifiSetup_ReadPacket(u8 *data, u32 expectedType, void *dst, int key);
 void WifiSetup_BuildVersionRequest(void *dst);
-BOOL WifiSetup_GetOwnMacAddress(u8 *mac);
 BOOL WifiSetup_BuildMacPair(WifiSetupMacPair *pair);
 int WifiSetup_ParseSettingsRecords(const u8 *data);
-int WifiSetup_HexToBytes(u8 *dst, const char *src, int length);
 int WifiSetup_StoreSimpleStartResult(void);
 
 #pragma optimization_level 3
@@ -207,7 +206,7 @@ done:
 
 #pragma optimization_level reset
 
-int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length) {
+static int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, const void *data, int length) {
     int result = SOC_SendTo(socket, data, length, 0, address);
     if (result < 0) {
         result = -4;
@@ -216,7 +215,7 @@ int WifiSetup_SendDatagram(int socket, const void *address, const void *unused, 
 }
 
 // Broadcast to port 0xE601 (byte-swapped 0x01E6).
-int WifiSetup_BroadcastDatagram(int socket, const void *data, int length) {
+static int WifiSetup_BroadcastDatagram(int socket, const void *data, int length) {
     WifiSetupSocketAddress address;
     address.size = 8;
     address.family = 2;
@@ -231,7 +230,7 @@ int WifiSetup_SendSetupPacket(int socket, int unused, const void *data, int leng
 }
 
 // Packet: type (2), length (2), 2 bytes, payload, 16-bit byte sum. Returns the payload or NULL.
-u8 *WifiSetup_GetPacketPayload(u8 *data, u32 *type, u32 *length) {
+static u8 *WifiSetup_GetPacketPayload(u8 *data, u32 *type, u32 *length) {
     u32 sum = 0;
     u8 *end;
     u8 *p;
@@ -248,7 +247,7 @@ u8 *WifiSetup_GetPacketPayload(u8 *data, u32 *type, u32 *length) {
 }
 
 // Next record (type, length, value padded to 8 bytes) of a record list.
-u8 *WifiSetup_NextRecord(u8 **cursor, u8 *end, u32 *type, u32 *length) {
+static u8 *WifiSetup_NextRecord(u8 **cursor, u8 *end, u32 *type, u32 *length) {
     u8 *p = *cursor;
     u32 padded;
     if (p >= end) {
@@ -309,7 +308,7 @@ u32 WifiSetup_BuildPacket(u8 *dest, u32 type, u8 *data, u32 length, const void *
 #pragma opt_propagation off
 
 // Appends one record; returns the end of it.
-u8 *WifiSetup_AppendRecord(u8 *out, int tag, const void *source, int size) {
+static u8 *WifiSetup_AppendRecord(u8 *out, int tag, const void *source, int size) {
     int aligned;
     out[0] = 0;
     out[1] = 0;
@@ -423,7 +422,7 @@ void WifiSetup_BuildVersionRequest(void *dst) {
     WifiSetup_BuildPacket(dst, 2, gWifiSetupRecordBuffer, ptr - gWifiSetupConfig.packetBuffer + 8, NULL);
 }
 
-BOOL WifiSetup_GetOwnMacAddress(u8 *mac) {
+static BOOL WifiSetup_GetOwnMacAddress(u8 *mac) {
     OS_GetMacAddress(mac);
     return TRUE;
 }
@@ -528,7 +527,7 @@ int WifiSetup_ParseSettingsRecords(const u8 *data) {
     return result;
 }
 
-int WifiSetup_HexToBytes(u8 *dst, const char *src, int length) {
+static int WifiSetup_HexToBytes(u8 *dst, const char *src, int length) {
     int len = length;
     int c;
     int nibble = 0;

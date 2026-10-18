@@ -72,5 +72,6 @@ void WifiSetupScrollBar_Disable(void);
 
 void WifiSetupApScan_AllocWork(void);
 void WifiSetupApScan_FreeWork(void);
+void WifiSetupScrollBar_Task(void *task, void *arg);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_SCROLL_BAR_H

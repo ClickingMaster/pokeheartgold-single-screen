@@ -86,6 +86,28 @@ extern void WifiSetupMethodMenu_Init(void);
 extern void WifiSetupConnectionTest_Init(void);
 extern void WifiSetupAddressEntry_Init(void);
 
+static void WifiSetupSettings_LoadGraphics(void);
+static void WifiSetupSettings_ResetPosition(void);
+static void WifiSetupSettings_FadeIn(void);
+static void WifiSetupSettings_WaitFadeIn(void);
+static void WifiSetupSettings_HandleKeys(void);
+static int WifiSetupSettings_HandleTouch(void);
+static void WifiSetupSettings_SelectItem(int item);
+static void WifiSetupSettings_SetAutoAddress(u32 on);
+static void WifiSetupSettings_SetAutoDns(int on);
+static void WifiSetupSettings_HandleScrollBar(void);
+static void WifiSetupSettings_StartClose(void);
+static void WifiSetupSettings_FadeOut(void);
+static void WifiSetupSettings_Exit(void);
+static void WifiSetupSettings_DrawValue(u32 item, int row);
+static void WifiSetupSettings_DrawButtons(u32 item, int row);
+static int WifiSetupSettings_IsItemEnabled(int item);
+static void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row);
+static void WifiSetupSettings_DrawText(u8 *text, int row);
+static void WifiSetupSettings_DrawAddress(u8 *address, int row);
+static inline void GetObjPos(const GXOamAttr *oam, u32 *x, u32 *y);
+static inline void SetObjPos(GXOamAttr *oam, u32 x, u32 y);
+
 void WifiSetupSettings_Init(void) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int i;
@@ -126,7 +148,7 @@ void WifiSetupSettings_Init(void) {
 #define REG16(a)    (*(vu16 *)(a))
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
-void WifiSetupSettings_LoadGraphics(void) {
+static void WifiSetupSettings_LoadGraphics(void) {
     WifiSetupGraphicsPath23 scrName;
     WifiSetupGraphicsPath21 plttName;
     WifiSetupGraphicsPath22 charName;
@@ -162,7 +184,7 @@ void WifiSetupSettings_LoadGraphics(void) {
     REG16(0x0400000E) = (u16)((REG16(0x0400000E) & ~3) | 2);
 }
 
-void WifiSetupSettings_ResetPosition(void) {
+static void WifiSetupSettings_ResetPosition(void) {
     int returning;
     WifiSetupConnections_GetEdit();
     WifiSetupApp_GetScreenArgs(0, &returning);
@@ -174,7 +196,7 @@ void WifiSetupSettings_ResetPosition(void) {
     gWifiSetupSettings.cursorRow = 0;
 }
 
-void WifiSetupSettings_FadeIn(void) {
+static void WifiSetupSettings_FadeIn(void) {
     WifiSetupFade_Start(2, 1, GX_BLEND_PLANEMASK_BG0, 8);
     WifiSetupFade_Start(2, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, 8);
     WifiSetupDisplay_ShowPlanes(1, GX_PLANEMASK_BG0);
@@ -182,7 +204,7 @@ void WifiSetupSettings_FadeIn(void) {
     WifiSetupApp_SetStateFunc(WifiSetupSettings_WaitFadeIn);
 }
 
-void WifiSetupSettings_WaitFadeIn(void) {
+static void WifiSetupSettings_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -197,7 +219,7 @@ void WifiSetupSettings_Main(void) {
     WifiSetupSettings_HandleScrollBar();
 }
 
-void WifiSetupSettings_HandleKeys(void) {
+static void WifiSetupSettings_HandleKeys(void) {
     if (gWifiSetupSettings.work->scrollTask || gWifiSetupSettings.work->scrollBarHeld) {
         return;
     }
@@ -273,7 +295,7 @@ void WifiSetupSettings_HandleKeys(void) {
     }
 }
 
-int WifiSetupSettings_HandleTouch(void) {
+static int WifiSetupSettings_HandleTouch(void) {
     int item;
     WifiSetupConnections_GetEdit();
     item = WifiSetupSettings_GetTouchedItem();
@@ -297,7 +319,7 @@ int WifiSetupSettings_HandleTouch(void) {
     return 1;
 }
 
-void WifiSetupSettings_SelectItem(int item) {
+static void WifiSetupSettings_SelectItem(int item) {
     if (!WifiSetupSettings_IsItemEnabled(item)) {
         WifiSetupSound_Play(9);
         return;
@@ -340,7 +362,7 @@ void WifiSetupSettings_SelectItem(int item) {
     WifiSetupApp_SetStateFunc(WifiSetupSettings_StartClose);
 }
 
-void WifiSetupSettings_SetAutoAddress(u32 on) {
+static void WifiSetupSettings_SetAutoAddress(u32 on) {
     int autoDns;
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     if (record->autoAddress == on) {
@@ -357,7 +379,7 @@ void WifiSetupSettings_SetAutoAddress(u32 on) {
     WifiSetupSettings_DrawRows();
 }
 
-void WifiSetupSettings_SetAutoDns(int on) {
+static void WifiSetupSettings_SetAutoDns(int on) {
     u32 old = WifiSetupConnections_GetEdit()->autoDns;
     if (old == (u32)on) {
         return;
@@ -367,7 +389,7 @@ void WifiSetupSettings_SetAutoDns(int on) {
     WifiSetupSettings_DrawRows();
 }
 
-void WifiSetupSettings_HandleScrollBar(void) {
+static void WifiSetupSettings_HandleScrollBar(void) {
     int rem;
     if (gWifiSetupSettings.work->scrollTask) {
         return;
@@ -442,13 +464,13 @@ end:
     return;
 }
 
-void WifiSetupSettings_StartClose(void) {
+static void WifiSetupSettings_StartClose(void) {
     WifiSetupScrollBar_Disable();
     WifiSetupFade_StartDelay(8);
     WifiSetupApp_SetStateFunc(WifiSetupSettings_FadeOut);
 }
 
-void WifiSetupSettings_FadeOut(void) {
+static void WifiSetupSettings_FadeOut(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -457,7 +479,7 @@ void WifiSetupSettings_FadeOut(void) {
     WifiSetupApp_SetStateFunc(WifiSetupSettings_Exit);
 }
 
-void WifiSetupSettings_Exit(void) {
+static void WifiSetupSettings_Exit(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -565,7 +587,7 @@ void WifiSetupSettings_DrawRows(void) {
     WifiSetupSettings_UpdateObjects();
 }
 
-void WifiSetupSettings_DrawValue(u32 item, int row) {
+static void WifiSetupSettings_DrawValue(u32 item, int row) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     switch (item) {
     case 0:
@@ -629,7 +651,7 @@ void WifiSetupSettings_DrawValue(u32 item, int row) {
 
 #pragma opt_propagation off
 
-void WifiSetupSettings_DrawButtons(u32 item, int row) {
+static void WifiSetupSettings_DrawButtons(u32 item, int row) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int type, option;
     switch (item) {
@@ -709,7 +731,7 @@ void WifiSetupSettings_DrawButtons(u32 item, int row) {
 
 #pragma opt_propagation reset
 
-int WifiSetupSettings_IsItemEnabled(int item) {
+static int WifiSetupSettings_IsItemEnabled(int item) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int enabled = 1;
     switch (item) {
@@ -741,7 +763,7 @@ int WifiSetupSettings_IsItemEnabled(int item) {
     return enabled;
 }
 
-void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row) {
+static void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row) {
     u16 x[5];
     GXOamAttr **rows = gWifiSetupSettings.work->rows;
     GXOamAttr **oam;
@@ -771,7 +793,7 @@ void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row) {
     }
 }
 
-void WifiSetupSettings_DrawText(u8 *text, int row) {
+static void WifiSetupSettings_DrawText(u8 *text, int row) {
     u16 buf[17];
     int n, i, m;
     MI_CpuFill8(buf, 0, 34);
@@ -807,7 +829,7 @@ void WifiSetupSettings_DrawText(u8 *text, int row) {
     WifiSetupText_DrawMonospace(gWifiSetupSettings.work->canvas, 72, row + 12, 2, 8, buf, 1);
 }
 
-void WifiSetupSettings_DrawAddress(u8 *address, int row) {
+static void WifiSetupSettings_DrawAddress(u8 *address, int row) {
     u16 buf[16];
     swprintf(buf, 16, gWifiSetupSettingsAddressFormat, address[0], address[1], address[2], address[3]);
     WifiSetupText_DrawMonospace(gWifiSetupSettings.work->canvas, 95, row * WIFI_SETUP_SETTINGS_ROW_HEIGHT + 8, 2, 7, buf, 1);

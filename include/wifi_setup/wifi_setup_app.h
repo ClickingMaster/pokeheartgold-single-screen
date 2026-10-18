@@ -91,12 +91,6 @@ int WifiSetupApp_Run(void *heap, s32 language, s32 flags);
 void WifiSetupApp_StartAossClient(void);
 void WifiSetupApp_StopAossClient(BOOL apply);
 int WifiSetupApp_PollAossClient(void);
-void *WifiSetupApp_AossClientAlloc(u32 size);
-void WifiSetupApp_AossClientFree(void *ptr);
-BOOL WifiSetupApp_SetParams(int language, u32 flags);
-void WifiSetupApp_InitSystem(void);
-void WifiSetupApp_InitDisplay(void);
-void WifiSetupApp_Shutdown(void);
 void WifiSetupApp_SetStateFunc(WifiSetupAppStateFunc func);
 void WifiSetupApp_SetTransition(int a, int b);
 void WifiSetupApp_GetTransition(int *a, int *b);
@@ -106,7 +100,6 @@ u8 WifiSetupApp_GetLanguage(void);
 u32 WifiSetupApp_GetKind(void);
 BOOL WifiSetupApp_HasOption(u32 mask);
 void WifiSetupApp_Exit(void);
-u8 WifiSetupApp_GetLanguageCode(void);
 
 void WifiSetupText_InitBanks(void);
 void WifiSetupText_FreeBanks(void);
@@ -117,11 +110,9 @@ u16 *WifiSetupText_GetStringWithDigit(WifiSetupTextBank *bank, u32 index, int po
 
 void WifiSetupTransfer_Start(WifiSetupSessionCallback callback);
 void WifiSetupTransfer_Cancel(void);
-void WifiSetupTransfer_CancelTask(void *task);
 BOOL WifiSetupTransfer_IsFinished(void);
 void WifiSetupTransfer_SetCallback(WifiSetupSessionCallback callback);
 void WifiSetupTransfer_StartDownload(void);
 u8 *WifiSetupTransfer_GetChildUser(void);
-void WifiSetupTransfer_Task(void *task);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_APP_H

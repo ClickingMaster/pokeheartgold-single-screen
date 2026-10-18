@@ -46,6 +46,17 @@ extern u16 *gWifiSetupKeyboardPageLabels[];
 
 extern s32 FX_DivS32(s32, s32);
 
+static void WifiSetupButtonBar_Create(int type);
+static void WifiSetupButtonBar_SetY(int y);
+static void WifiSetupButtonBar_SlideInTask(void *task);
+static void WifiSetupButtonBar_WaitTask(void *task);
+static void WifiSetupButtonBar_InputTask(void);
+static void WifiSetupButtonBar_SlideOutTask(void *task);
+static void WifiSetupButtonBar_DestroyTask(void *task);
+static void WifiSetupButtonBar_PressTask(void *task);
+static void WifiSetupBackground_TransferTask(void *task);
+static void WifiSetupSignalIcon_Task(void);
+
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;
     u32 palette;
@@ -64,7 +75,7 @@ void WifiSetupBusyIcon_Task(void *task) {
     oam->attr01 = (oam->attr01 & 0xfe00ff00) | 0xe6008b;
 }
 
-void WifiSetupButtonBar_Create(int type) {
+static void WifiSetupButtonBar_Create(int type) {
     int count = gWifiSetupButtonBarButtonCounts[type], i;
     gWifiSetupButtonBar = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupButtonBar), 4);
     gWifiSetupButtonBar->selected = -2;
@@ -116,7 +127,7 @@ void WifiSetupButtonBar_Lock(void) {
     gWifiSetupButtonBar->locked = 1;
 }
 
-void WifiSetupButtonBar_SetY(int y) {
+static void WifiSetupButtonBar_SetY(int y) {
     int count = gWifiSetupButtonBarButtonCounts[gWifiSetupButtonBar->type], i;
     WifiSetupOamBlock_SetPosition(gWifiSetupButtonBar->bar, -1, 0, y);
     for (i = 0; i < count; i++) {
@@ -124,7 +135,7 @@ void WifiSetupButtonBar_SetY(int y) {
     }
 }
 
-void WifiSetupButtonBar_SlideInTask(void *task) {
+static void WifiSetupButtonBar_SlideInTask(void *task) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupButtonBar->bar, 0, &x, &y);
     y -= 4;
@@ -136,7 +147,7 @@ void WifiSetupButtonBar_SlideInTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupButtonBar_WaitTask);
 }
 
-void WifiSetupButtonBar_WaitTask(void *task) {
+static void WifiSetupButtonBar_WaitTask(void *task) {
     gWifiSetupButtonBar->selected = -1;
     gWifiSetupButtonBar->timer++;
     if (gWifiSetupButtonBar->timer < 4) {
@@ -146,7 +157,7 @@ void WifiSetupButtonBar_WaitTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupButtonBar_InputTask);
 }
 
-void WifiSetupButtonBar_InputTask(void) {
+static void WifiSetupButtonBar_InputTask(void) {
     WifiSetupRect rect;
     int count = gWifiSetupButtonBarButtonCounts[gWifiSetupButtonBar->type], i;
     if (gWifiSetupButtonBar->locked == 0) {
@@ -176,7 +187,7 @@ void WifiSetupButtonBar_InputTask(void) {
     gWifiSetupButtonBar->selected = -1;
 }
 
-void WifiSetupButtonBar_SlideOutTask(void *task) {
+static void WifiSetupButtonBar_SlideOutTask(void *task) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupButtonBar->bar, 0, &x, &y);
     y += 4;
@@ -187,7 +198,7 @@ void WifiSetupButtonBar_SlideOutTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupButtonBar_DestroyTask);
 }
 
-void WifiSetupButtonBar_DestroyTask(void *task) {
+static void WifiSetupButtonBar_DestroyTask(void *task) {
     int i;
     WifiSetupTask_DestroyLater(0, task);
     if (gWifiSetupButtonBar->pressTask) {
@@ -204,7 +215,7 @@ void WifiSetupButtonBar_DestroyTask(void *task) {
 }
 
 // Restores the pressed button's normal graphics after 16 frames.
-void WifiSetupButtonBar_PressTask(void *task) {
+static void WifiSetupButtonBar_PressTask(void *task) {
     int count, i;
     gWifiSetupButtonBar->timer++;
     if (gWifiSetupButtonBar->timer < 16) {
@@ -411,7 +422,7 @@ void WifiSetupBackground_LoadSlotListHeader(void) {
     WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()->index + 2);
 }
 
-void WifiSetupBackground_TransferTask(void *task) {
+static void WifiSetupBackground_TransferTask(void *task) {
     DC_FlushRange(gWifiSetupBackgroundScreen, 192);
     GX_LoadBG1Scr(gWifiSetupBackgroundScreen, 0, 192);
     WifiSetupTask_DestroyLater(1, task);
@@ -446,7 +457,7 @@ void WifiSetupSignalIcon_Destroy(void) {
 }
 
 // Shows the current link level (0 when no channel is allowed) at (229, 38).
-void WifiSetupSignalIcon_Task(void) {
+static void WifiSetupSignalIcon_Task(void) {
     int level = 0;
     u16 ime = *(vu16 *)0x4000208;
     GXOamAttr *oam;

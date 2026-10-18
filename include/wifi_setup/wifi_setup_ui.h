@@ -130,7 +130,6 @@ void WifiSetupArchive_Load(void);
 void WifiSetupArchive_Unload(void);
 void *WifiSetupFile_Load(const char *path, u32 *outSize, int align);
 void WifiSetupFile_Free(void *data);
-BOOL WifiSetup_HasSameSuffix(const char *a, const char *b, int len);
 
 void WifiSetupOamBlock_InitManager(void);
 void WifiSetupOamBlock_FreeManager(void);
@@ -150,9 +149,7 @@ void WifiSetupOamTemplate_Copy(int slot, int index, GXOamAttr *dst);
 GXOamAttr *WifiSetupOamTemplate_AllocOam(int slot, int index);
 WifiSetupOamBlock *WifiSetupOamTemplate_AllocBlock(int slot, int index, int fromFront);
 
-WifiSetupPool *WifiSetupPool_New(int capacity);
 WifiSetupPool *WifiSetupPool_NewWithItems(int count, void *items, int stride);
-void WifiSetupPool_Delete(WifiSetupPool *pool);
 void *WifiSetupPool_Push(WifiSetupPool *pool, void *item);
 void *WifiSetupPool_Pop(WifiSetupPool *pool);
 
@@ -169,7 +166,6 @@ void WifiSetupText_FreeObjCanvas(WifiSetupCanvas *canvas);
 WifiSetupCanvas *WifiSetupText_InitBgCanvas(int screen, int font);
 void WifiSetupText_FreeBgCanvas(int screen);
 void WifiSetupText_Draw(WifiSetupCanvas *canvas, int x, int y, int color, u32 flags, const u16 *text);
-void WifiSetupText_DrawChar(void *charCanvas, int x, int y, int color, u16 ch, int font);
 void WifiSetupText_DrawMonospace(void *charCanvas, int x, int y, int color, int advance, const u16 *text, int font);
 void WifiSetupText_DrawInRect(WifiSetupCanvas *canvas, int x, int y, int width, int height, int color, u32 flags, const u16 *text);
 void WifiSetupText_Clear(WifiSetupCanvas *canvas, int color);
@@ -186,7 +182,6 @@ void WifiSetupDisplay_SetWindowPlanes(int screen, int window, int planes, BOOL e
 
 void WifiSetupHeap_Init(void *mem);
 void WifiSetupHeap_Destroy(void);
-void *WifiSetupHeap_Alloc(u32 size, int align);
 void *WifiSetupHeap_AllocZeroed(u32 size, int align);
 void WifiSetupHeap_FreeAndClear(void *ptr);
 void WifiSetupHeap_Free(void *mem);
@@ -208,27 +203,15 @@ void WifiSetupInput_UpdateLcdPower(void);
 void WifiSetup_InstallVBlankIntr(void);
 void WifiSetup_RestoreVBlankIntr(void);
 
-WifiSetupList *WifiSetupList_New(void);
-void WifiSetupList_Delete(WifiSetupList *list);
-void WifiSetupList_Remove(void *node);
-void WifiSetupList_InsertBefore(void *pos, void *node);
-void WifiSetupList_Append(WifiSetupList *list, void *node);
-void WifiSetupList_Prepend(WifiSetupList *list, void *node);
-
 void WifiSetupOam_Init(void);
 void WifiSetupOam_Free(void);
-GXOamAttr *WifiSetupOam_Alloc(int screen);
 void WifiSetupOam_Release(GXOamAttr *oam);
-GXOamAttr *WifiSetupOam_Get(int screen, int index);
 
 void WifiSetupCharVram_Init(void);
-void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharNo);
-void WifiSetupCharVram_Free(void *block);
 
 int WifiSetup_StrNLen(const u8 *str, int max);
 void WifiSetup_SaveVramBanks(void);
 void WifiSetup_RestoreVramBanks(void);
-void WifiSetup_ClearVram(void);
 void WifiSetupLed_SetWirelessPattern(void);
 void WifiSetupLed_SetOn(void);
 
@@ -236,7 +219,6 @@ void WifiSetupTask_InitScheduler(void);
 void WifiSetupTask_FreeScheduler(void);
 void WifiSetupTask_RunQueue(int queue);
 void *WifiSetupTask_Create(int queue, WifiSetupTaskFunc func, void *arg, u32 priority);
-WifiSetupTask *WifiSetupTask_CreateEx(int queue, WifiSetupTaskFunc func, void *arg, u32 priority, u8 ownsArg);
 void WifiSetupTask_SetFunc(WifiSetupTask *task, WifiSetupTaskFunc func);
 void WifiSetupTask_DestroyLater(int queue, void *task);
 void WifiSetupTask_Destroy(int queue, void *task);

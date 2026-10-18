@@ -31,38 +31,12 @@ extern int gWifiSetupErrorCode;
 void WifiSetupAddressEntry_LoadGraphics(void);
 void WifiSetupAddressEntry_FadeIn(void);
 void WifiSetupAddressEntry_OpenKeypad(void);
-void WifiSetupAddressEntry_WaitKeypad(void);
-void WifiSetupAddressEntry_Main(void);
-void WifiSetupAddressEntry_HandleInput(void);
-int WifiSetupAddressEntry_IsFieldAtLeast(int limit);
-void WifiSetupAddressEntry_Update(void);
-void WifiSetupAddressEntry_StartClose(void);
-void WifiSetupAddressEntry_CloseKeypad(void);
-void WifiSetupAddressEntry_WaitKeypadClosed(void);
-void WifiSetupAddressEntry_Exit(void);
 void WifiSetupAddressEntry_DrawDigits(void);
 void WifiSetupAddressEntry_UpdateCursor(void);
-void WifiSetupAddressEntry_WaitConfirm(void);
-void WifiSetupAddressEntry_FinishConfirm(void);
-void WifiSetupAddressEntry_PadFields(void);
-int WifiSetupAddressEntry_IsValid(void);
 
 // Invalid address message
 void WifiSetupAddressEntry_WaitInvalidMessage(void);
-void WifiSetupAddressEntry_FinishInvalidMessage(void);
 void WifiSetupErrorScreen_Init(void);
-void WifiSetupErrorScreen_LoadGraphics(void);
-void WifiSetupErrorScreen_DrawMessage(void);
-void WifiSetupErrorScreen_FadeIn(void);
-void WifiSetupErrorScreen_WaitFadeIn(void);
-void WifiSetupErrorScreen_WaitButtonBar(void);
-void WifiSetupErrorScreen_Main(void);
-void WifiSetupErrorScreen_HandleKeys(void);
-void WifiSetupErrorScreen_Update(void);
-void WifiSetupErrorScreen_HandleButton(void);
-void WifiSetupErrorScreen_StartClose(void);
-void WifiSetupErrorScreen_CloseButtonBar(void);
-void WifiSetupErrorScreen_Exit(void);
 void WifiSetupErrorScreen_SetCode(int code);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_ADDRESS_ENTRY_H

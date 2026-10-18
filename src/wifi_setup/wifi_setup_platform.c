@@ -41,12 +41,13 @@ typedef struct AccessPointInfo {
     int mode;
 } AccessPointInfo;
 
+static void WifiSetup_ConvertBssDesc(const void *src, void *dst);
+static BOOL WifiSetup_OnWcmNotify(void *message);
+static int WifiSetup_DisconnectAccessPoint(void);
+
 BOOL WifiSetupWcm_Init(BOOL (*callback)(void *), void *allocation, u32 size);
-BOOL WifiSetupWcm_StartCleanup(void);
-BOOL WifiSetupWcm_StartDisconnect(void);
 BOOL WifiSetupWcm_StartSearch(u32, u32, u32, u32);
 int WifiSetupWcm_CopyApList(void *, u32);
-BOOL WifiSetupWcm_StopSearch(void);
 
 void *WifiSetup_SocketAlloc(s32 unused, s32 size) {
     void *(*alloc)(s32);
@@ -195,7 +196,7 @@ void WifiSetup_AddToPollSet(int socket, SocPollFd *set) {
     set->events = 1;
 }
 
-void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
+static void WifiSetup_ConvertBssDesc(const void *src, void *dst) {
     const ScanRecord *s = src;
     AccessPointInfo *t = dst;
     int i;
@@ -241,7 +242,7 @@ void WifiSetup_StoreConnectResult(void *dst, const void *src, u32 value) {
     WifiSetup_ConvertBssDesc(src, (u8 *)dst + 4);
 }
 
-BOOL WifiSetup_OnWcmNotify(void *message) {
+static BOOL WifiSetup_OnWcmNotify(void *message) {
     return OS_SendMessage(&gWifiSetupMessageQueue, message, OS_MESSAGE_NOBLOCK);
 }
 
@@ -356,7 +357,7 @@ int WifiSetup_Cleanup(void) {
     return result;
 }
 
-int WifiSetup_DisconnectAccessPoint(void) {
+static int WifiSetup_DisconnectAccessPoint(void) {
     OSMessage message;
     int result = -1;
     BOOL running;

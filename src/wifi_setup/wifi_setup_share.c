@@ -46,6 +46,66 @@ extern FSResult WifiSetupArchive_Proc(FSFile *file, FSCommandType command);
 extern FSResult WifiSetupArchive_Read(FSArchive *arc, void *dst, u32 pos, u32 size);
 extern FSResult WifiSetupArchive_Write(FSArchive *arc, const void *src, u32 pos, u32 size);
 
+static WifiSetupMbParentChild *WifiSetupMbParent_GetChild(int aid);
+static inline int IsSameMacAddr(const u8 *mac, const u8 *other);
+static u16 WifiSetupMbParent_FindAid(const u8 *macAddr);
+static void WifiSetupWh_SetState(u32 state);
+static void WifiSetupWh_SetError(u32 code);
+static int WifiSetupWh_SetParentParameter(void);
+static void WifiSetupWh_SetParentParameterCallback(void *arg);
+static int WifiSetupWh_SetWepKey(void);
+static void WifiSetupWh_SetWepKeyCallback(void *arg);
+static int WifiSetupWh_StartParent(void);
+static void WifiSetupWh_StartParentCallback(void *arg);
+static int WifiSetupWh_StartMp(void);
+static void WifiSetupWh_StartMpCallback(void *arg);
+static int WifiSetupWh_StartKeySharing(void);
+static int WifiSetupWh_EndKeySharing(void);
+static int WifiSetupWh_EndMp(void);
+static void WifiSetupWh_EndMpCallback(void *arg);
+static int WifiSetupWh_EndParent(void);
+static void WifiSetupWh_EndParentCallback(void *arg);
+static int WifiSetupWh_StopKeySharing(void);
+static int WifiSetupWh_EndMpForDisconnect(void);
+static void WifiSetupWh_EndMpForDisconnectCallback(void *arg);
+static int WifiSetupWh_Disconnect(void);
+static void WifiSetupWh_DisconnectCallback(void *arg);
+static int WifiSetupWh_Reset(void);
+static void WifiSetupWh_ResetCallback(void *arg);
+static void WifiSetupWh_EndCallback(void *arg);
+static void WifiSetupWh_SetGgid(u32 ggid);
+static u16 WifiSetupWh_GetConnectedMask(void);
+static u32 WifiSetupWh_GetState(void);
+static int WifiSetupWh_StartMeasureChannel(void);
+static u16 WifiSetupWh_MeasureNextChannel(u16 channel);
+static void WifiSetupWh_MeasureChannelCallback(void *arg);
+static int WifiSetupWh_MeasureChannel(WmCallback callback, u16 channel);
+static u16 WifiSetupWh_DecideChannel(void);
+static s16 WifiSetupWh_PickChannel(u16 mask);
+static int WifiSetupWh_Start(void);
+static void WifiSetupWh_IndicationCallback(void *arg);
+static int WifiSetupWh_InitializeWm(void);
+static void WifiSetupWh_InitializeCallback(void *arg);
+static void WifiSetupWh_SetJudgeCallback(WifiSetupWhJudgeFunc judge);
+static void *WifiSetupWh_GetSharedData(u16 aid);
+static int WifiSetupWh_StepDataSharing(void *data);
+static void WifiSetupWh_TryReset(void);
+static void WifiSetupWh_Finalize(void);
+static int WifiSetupWh_End(void);
+static void WifiSetupShare_Reset(void);
+static void WifiSetupShare_UpdateChannelScan(void);
+static void WifiSetupShare_SetupMbParent(void);
+static void WifiSetupShare_UpdateDownload(void);
+static void WifiSetupShare_StartSharing(void);
+static void WifiSetupShare_UpdateSharing(void);
+static void WifiSetupShare_SetDone(void);
+static int WifiSetupShare_EndWireless(void);
+static BOOL WifiSetupShare_JudgeChild(WMStartParentCallback *arg);
+static void WifiSetupShare_ClearPackets(void);
+static void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data);
+static void WifiSetupShare_UpdateChild(void);
+static u16 WifiSetupShare_GetChildKind(void);
+
 int WifiSetupMbParent_GetChildState(int aid) {
     WifiSetupMbParentState state;
     OSIntrMode old = OS_DisableInterrupts();
@@ -74,7 +134,7 @@ int WifiSetupMbParent_GetChildState(int aid) {
     return WIFI_SETUP_MB_CHILD_CONNECTED;
 }
 
-WifiSetupMbParentChild *WifiSetupMbParent_GetChild(int aid) {
+static WifiSetupMbParentChild *WifiSetupMbParent_GetChild(int aid) {
     if (!(gWifiSetupMbParent->head.connectedMask & (1 << aid))) {
         return NULL;
     }
@@ -85,7 +145,7 @@ static inline int IsSameMacAddr(const u8 *mac, const u8 *other) {
     return mac[0] == other[0] && mac[1] == other[1] && mac[2] == other[2] && mac[3] == other[3] && mac[4] == other[4] && mac[5] == other[5];
 }
 
-u16 WifiSetupMbParent_FindAid(const u8 *macAddr) {
+static u16 WifiSetupMbParent_FindAid(const u8 *macAddr) {
     u16 i;
     for (i = 1; i < 2; i++) {
         if (gWifiSetupMbParent->head.connectedMask & (1 << i)) {
@@ -105,7 +165,7 @@ void WifiSetupWh_Init(u8 *work) {
     gWifiSetupWh.work->unk_13B0 = 0;
 }
 
-void WifiSetupWh_SetState(u32 state) {
+static void WifiSetupWh_SetState(u32 state) {
     if (gWifiSetupWh.log) {
         gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhFmt_StateFrom, gWifiSetupWhStateNames[gWifiSetupWh.work->state]);
     }
@@ -115,14 +175,14 @@ void WifiSetupWh_SetState(u32 state) {
     }
 }
 
-void WifiSetupWh_SetError(u32 code) {
+static void WifiSetupWh_SetError(u32 code) {
     // kept while in WIFI_SETUP_WH_STATE_ERROR or WIFI_SETUP_WH_STATE_FATAL
     if ((u32)(gWifiSetupWh.work->state - WIFI_SETUP_WH_STATE_ERROR) > 1) {
         gWifiSetupWh.work->errorCode = code;
     }
 }
 
-int WifiSetupWh_SetParentParameter(void) {
+static int WifiSetupWh_SetParentParameter(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_SetParentParameter(WifiSetupWh_SetParentParameterCallback, &gWifiSetupWh.work->parentParam);
@@ -134,7 +194,7 @@ int WifiSetupWh_SetParentParameter(void) {
     return 0;
 }
 
-void WifiSetupWh_SetParentParameterCallback(void *arg) {
+static void WifiSetupWh_SetParentParameterCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -150,7 +210,7 @@ void WifiSetupWh_SetParentParameterCallback(void *arg) {
     }
 }
 
-int WifiSetupWh_SetWepKey(void) {
+static int WifiSetupWh_SetWepKey(void) {
     int mode, result;
     int (*getWepKey)(u8 *, WifiSetupWhWork *);
     WifiSetupWhWork *work;
@@ -167,7 +227,7 @@ int WifiSetupWh_SetWepKey(void) {
     return 0;
 }
 
-void WifiSetupWh_SetWepKeyCallback(void *arg) {
+static void WifiSetupWh_SetWepKeyCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -179,7 +239,7 @@ void WifiSetupWh_SetWepKeyCallback(void *arg) {
     }
 }
 
-int WifiSetupWh_StartParent(void) {
+static int WifiSetupWh_StartParent(void) {
     int result;
     // already connected, data sharing or key sharing
     if ((u32)(gWifiSetupWh.work->state - WIFI_SETUP_WH_STATE_CONNECTED) <= 2) {
@@ -195,7 +255,7 @@ int WifiSetupWh_StartParent(void) {
     return 1;
 }
 
-void WifiSetupWh_StartParentCallback(void *arg) {
+static void WifiSetupWh_StartParentCallback(void *arg) {
     struct {
         WMStartParentCallback *arg;
         u16 mask;
@@ -250,7 +310,7 @@ void WifiSetupWh_StartParentCallback(void *arg) {
     }
 }
 
-int WifiSetupWh_StartMp(void) {
+static int WifiSetupWh_StartMp(void) {
     int result;
     if ((u32)(gWifiSetupWh.work->state - WIFI_SETUP_WH_STATE_CONNECTED) <= 2) {
         return 1;
@@ -264,7 +324,7 @@ int WifiSetupWh_StartMp(void) {
     return 0;
 }
 
-void WifiSetupWh_StartMpCallback(void *arg) {
+static void WifiSetupWh_StartMpCallback(void *arg) {
     WMStartMPCallback *cb = arg;
     int result, state;
     if (cb->errcode) {
@@ -312,7 +372,7 @@ void WifiSetupWh_StartMpCallback(void *arg) {
     }
 }
 
-int WifiSetupWh_StartKeySharing(void) {
+static int WifiSetupWh_StartKeySharing(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_KEYSHARING);
     result = WM_StartKeySharing(&gWifiSetupWh.work->keySharing, 13);
@@ -323,7 +383,7 @@ int WifiSetupWh_StartKeySharing(void) {
     return 0;
 }
 
-int WifiSetupWh_EndKeySharing(void) {
+static int WifiSetupWh_EndKeySharing(void) {
     int result;
     result = WM_EndKeySharing(&gWifiSetupWh.work->keySharing);
     if (result == WM_ERRCODE_OPERATING) {
@@ -333,7 +393,7 @@ int WifiSetupWh_EndKeySharing(void) {
     return 0;
 }
 
-int WifiSetupWh_EndMp(void) {
+static int WifiSetupWh_EndMp(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_EndMP(WifiSetupWh_EndMpCallback);
@@ -344,7 +404,7 @@ int WifiSetupWh_EndMp(void) {
     return 0;
 }
 
-void WifiSetupWh_EndMpCallback(void *arg) {
+static void WifiSetupWh_EndMpCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -360,7 +420,7 @@ void WifiSetupWh_EndMpCallback(void *arg) {
     WifiSetupWh_TryReset();
 }
 
-int WifiSetupWh_EndParent(void) {
+static int WifiSetupWh_EndParent(void) {
     int result;
     result = WM_EndParent(WifiSetupWh_EndParentCallback);
     if (result == WM_ERRCODE_OPERATING) {
@@ -370,7 +430,7 @@ int WifiSetupWh_EndParent(void) {
     return 0;
 }
 
-void WifiSetupWh_EndParentCallback(void *arg) {
+static void WifiSetupWh_EndParentCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -379,7 +439,7 @@ void WifiSetupWh_EndParentCallback(void *arg) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_IDLE);
 }
 
-int WifiSetupWh_StopKeySharing(void) {
+static int WifiSetupWh_StopKeySharing(void) {
     int result;
     if (gWifiSetupWh.work->state != WIFI_SETUP_WH_STATE_KEYSHARING) {
         return 0;
@@ -393,7 +453,7 @@ int WifiSetupWh_StopKeySharing(void) {
     return 0;
 }
 
-int WifiSetupWh_EndMpForDisconnect(void) {
+static int WifiSetupWh_EndMpForDisconnect(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_EndMP(WifiSetupWh_EndMpForDisconnectCallback);
@@ -404,7 +464,7 @@ int WifiSetupWh_EndMpForDisconnect(void) {
     return 0;
 }
 
-void WifiSetupWh_EndMpForDisconnectCallback(void *arg) {
+static void WifiSetupWh_EndMpForDisconnectCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -416,7 +476,7 @@ void WifiSetupWh_EndMpForDisconnectCallback(void *arg) {
     }
 }
 
-int WifiSetupWh_Disconnect(void) {
+static int WifiSetupWh_Disconnect(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Disconnect(WifiSetupWh_DisconnectCallback, 0);
@@ -428,7 +488,7 @@ int WifiSetupWh_Disconnect(void) {
     return 0;
 }
 
-void WifiSetupWh_DisconnectCallback(void *arg) {
+static void WifiSetupWh_DisconnectCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetError(cb->errcode);
@@ -437,7 +497,7 @@ void WifiSetupWh_DisconnectCallback(void *arg) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_IDLE);
 }
 
-int WifiSetupWh_Reset(void) {
+static int WifiSetupWh_Reset(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Reset(WifiSetupWh_ResetCallback);
@@ -448,7 +508,7 @@ int WifiSetupWh_Reset(void) {
     return 0;
 }
 
-void WifiSetupWh_ResetCallback(void *arg) {
+static void WifiSetupWh_ResetCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
@@ -458,7 +518,7 @@ void WifiSetupWh_ResetCallback(void *arg) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_IDLE);
 }
 
-void WifiSetupWh_EndCallback(void *arg) {
+static void WifiSetupWh_EndCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_FATAL);
@@ -467,19 +527,19 @@ void WifiSetupWh_EndCallback(void *arg) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_STOP);
 }
 
-void WifiSetupWh_SetGgid(u32 ggid) {
+static void WifiSetupWh_SetGgid(u32 ggid) {
     gWifiSetupWh.work->parentParam.ggid = ggid;
 }
 
-u16 WifiSetupWh_GetConnectedMask(void) {
+static u16 WifiSetupWh_GetConnectedMask(void) {
     return gWifiSetupWh.work->connectedMask;
 }
 
-u32 WifiSetupWh_GetState(void) {
+static u32 WifiSetupWh_GetState(void) {
     return gWifiSetupWh.work->state;
 }
 
-int WifiSetupWh_StartMeasureChannel(void) {
+static int WifiSetupWh_StartMeasureChannel(void) {
     WifiSetupWhWork *work;
     u16 status;
     u16 macAddr[3];
@@ -505,7 +565,7 @@ int WifiSetupWh_StartMeasureChannel(void) {
 }
 
 // returns 2 when a measurement started, 24 when there is no channel left
-u16 WifiSetupWh_MeasureNextChannel(u16 channel) {
+static u16 WifiSetupWh_MeasureNextChannel(u16 channel) {
     int allowed = WM_GetAllowedChannel();
     if (allowed == 0x8000) {
         WifiSetupWh_SetError(3);
@@ -526,7 +586,7 @@ u16 WifiSetupWh_MeasureNextChannel(u16 channel) {
     return WifiSetupWh_MeasureChannel(WifiSetupWh_MeasureChannelCallback, channel);
 }
 
-void WifiSetupWh_MeasureChannelCallback(void *arg) {
+static void WifiSetupWh_MeasureChannelCallback(void *arg) {
     WMMeasureChannelCallback *cb = arg;
     u16 channel, busyRatio;
     int result;
@@ -557,11 +617,11 @@ void WifiSetupWh_MeasureChannelCallback(void *arg) {
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_ERROR);
 }
 
-int WifiSetupWh_MeasureChannel(WmCallback callback, u16 channel) {
+static int WifiSetupWh_MeasureChannel(WmCallback callback, u16 channel) {
     return WM_MeasureChannel(callback, 3, 17, channel, 30);
 }
 
-u16 WifiSetupWh_DecideChannel(void) {
+static u16 WifiSetupWh_DecideChannel(void) {
     if (gWifiSetupWh.work->state != WIFI_SETUP_WH_STATE_MEASURECHANNEL) {
         OS_Terminate();
     }
@@ -574,7 +634,7 @@ u16 WifiSetupWh_DecideChannel(void) {
 }
 
 // a random one of the channels in mask
-s16 WifiSetupWh_PickChannel(u16 mask) {
+static s16 WifiSetupWh_PickChannel(u16 mask) {
     s16 last = 0, i;
     u16 count = 0, target;
     for (i = 0; i < 16; i++) {
@@ -603,7 +663,7 @@ s16 WifiSetupWh_PickChannel(u16 mask) {
 #pragma push
 #pragma opt_rebuildconditionals off
 
-int WifiSetupWh_Start(void) {
+static int WifiSetupWh_Start(void) {
     gWifiSetupWh.work->recvBufferSize = 0;
     gWifiSetupWh.work->sendBufferSize = 0;
     gWifiSetupWh.work->unk_48 = 0;
@@ -618,7 +678,7 @@ int WifiSetupWh_Start(void) {
 
 #pragma pop
 
-void WifiSetupWh_IndicationCallback(void *arg) {
+static void WifiSetupWh_IndicationCallback(void *arg) {
     WMCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_FIFO_ERROR) {
         return;
@@ -627,7 +687,7 @@ void WifiSetupWh_IndicationCallback(void *arg) {
     OS_Terminate();
 }
 
-int WifiSetupWh_InitializeWm(void) {
+static int WifiSetupWh_InitializeWm(void) {
     int result;
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_BUSY);
     result = WM_Initialize(gWifiSetupWh.work->wmWork, WifiSetupWh_InitializeCallback, 2);
@@ -639,7 +699,7 @@ int WifiSetupWh_InitializeWm(void) {
     return 0;
 }
 
-void WifiSetupWh_InitializeCallback(void *arg) {
+static void WifiSetupWh_InitializeCallback(void *arg) {
     WMCallback *cb = arg;
     int result;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
@@ -693,15 +753,15 @@ int WifiSetupWh_StartConnection(u32 mode, u16 tgid, u16 channel) {
 
 #pragma pop
 
-void WifiSetupWh_SetJudgeCallback(WifiSetupWhJudgeFunc judge) {
+static void WifiSetupWh_SetJudgeCallback(WifiSetupWhJudgeFunc judge) {
     gWifiSetupWh.work->judgeChild = judge;
 }
 
-void *WifiSetupWh_GetSharedData(u16 aid) {
+static void *WifiSetupWh_GetSharedData(u16 aid) {
     return WM_GetSharedDataAddress(&gWifiSetupWh.work->dataSharingInfo, &gWifiSetupWh.work->dataSet, aid);
 }
 
-int WifiSetupWh_StepDataSharing(void *data) {
+static int WifiSetupWh_StepDataSharing(void *data) {
     int result = WM_StepDataSharing(&gWifiSetupWh.work->dataSharingInfo, data, &gWifiSetupWh.work->dataSet);
     if (result == WM_ERRCODE_NO_CHILD) {
         if (gWifiSetupWh.log) {
@@ -723,14 +783,14 @@ int WifiSetupWh_StepDataSharing(void *data) {
     return 0;
 }
 
-void WifiSetupWh_TryReset(void) {
+static void WifiSetupWh_TryReset(void) {
     if (WifiSetupWh_Reset() != 0) {
         return;
     }
     WifiSetupWh_SetState(WIFI_SETUP_WH_STATE_FATAL);
 }
 
-void WifiSetupWh_Finalize(void) {
+static void WifiSetupWh_Finalize(void) {
     if (gWifiSetupWh.work->state == WIFI_SETUP_WH_STATE_IDLE) {
         if (gWifiSetupWh.log != NULL) {
             gWifiSetupWh.log(WH_LOG_LEVEL, gWifiSetupWhStr_AlreadyIdle);
@@ -772,7 +832,7 @@ void WifiSetupWh_Finalize(void) {
     }
 }
 
-int WifiSetupWh_End(void) {
+static int WifiSetupWh_End(void) {
     int result;
     if (gWifiSetupWh.work->state != WIFI_SETUP_WH_STATE_IDLE) {
         OS_Terminate();
@@ -837,7 +897,7 @@ int WifiSetupShare_Cancel(void) {
     return 0;
 }
 
-void WifiSetupShare_Reset(void) {
+static void WifiSetupShare_Reset(void) {
     WifiSetupWh_SetGgid(gWifiSetupShare->params.ggid);
     gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_IDLE;
     gWifiSetupShare->tgid = WM_GetNextTgid();
@@ -1027,7 +1087,7 @@ void *WifiSetupShare_GetChildUser(void) {
     return MB_CommGetChildUser(1);
 }
 
-void WifiSetupShare_UpdateChannelScan(void) {
+static void WifiSetupShare_UpdateChannelScan(void) {
     switch (WifiSetupWh_GetState()) {
     case WIFI_SETUP_WH_STATE_IDLE:
         WifiSetupWh_StartMeasureChannel();
@@ -1052,11 +1112,11 @@ void WifiSetupShare_UpdateChannelScan(void) {
     }
 }
 
-void WifiSetupShare_SetupMbParent(void) {
+static void WifiSetupShare_SetupMbParent(void) {
     WifiSetupMbParent_Setup(gWifiSetupShare->params.ggid, gWifiSetupShare->tgid);
 }
 
-void WifiSetupShare_UpdateDownload(void) {
+static void WifiSetupShare_UpdateDownload(void) {
     int state;
     switch (WifiSetupMbParent_GetState()) {
     case 1:
@@ -1110,13 +1170,13 @@ void WifiSetupShare_UpdateDownload(void) {
     }
 }
 
-void WifiSetupShare_StartSharing(void) {
+static void WifiSetupShare_StartSharing(void) {
     WifiSetupShare_ClearPackets();
     WifiSetupWh_SetJudgeCallback(WifiSetupShare_JudgeChild);
     gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_SHARING;
 }
 
-void WifiSetupShare_UpdateSharing(void) {
+static void WifiSetupShare_UpdateSharing(void) {
     switch (WifiSetupWh_GetState()) {
     case WIFI_SETUP_WH_STATE_IDLE:
         WifiSetupWh_StartConnection(WIFI_SETUP_WH_MODE_DS_PARENT, gWifiSetupShare->tgid + 1, gWifiSetupShare->channel);
@@ -1173,11 +1233,11 @@ void WifiSetupShare_UpdateSharing(void) {
     }
 }
 
-void WifiSetupShare_SetDone(void) {
+static void WifiSetupShare_SetDone(void) {
     gWifiSetupShare->state = WIFI_SETUP_SHARE_STATE_DONE;
 }
 
-int WifiSetupShare_EndWireless(void) {
+static int WifiSetupShare_EndWireless(void) {
     if (WifiSetupWh_GetState() != WIFI_SETUP_WH_STATE_IDLE) {
         return 0;
     }
@@ -1187,7 +1247,7 @@ int WifiSetupShare_EndWireless(void) {
 }
 
 // only the child that Download Play booted may connect
-BOOL WifiSetupShare_JudgeChild(WMStartParentCallback *arg) {
+static BOOL WifiSetupShare_JudgeChild(WMStartParentCallback *arg) {
     u16 aid = WifiSetupMbParent_FindAid(arg->macAddress);
     if (aid == 0) {
         return FALSE;
@@ -1196,13 +1256,13 @@ BOOL WifiSetupShare_JudgeChild(WMStartParentCallback *arg) {
     return TRUE;
 }
 
-void WifiSetupShare_ClearPackets(void) {
+static void WifiSetupShare_ClearPackets(void) {
     MI_CpuFill8(gWifiSetupShare->received.raw, 0, sizeof(gWifiSetupShare->received));
     MI_CpuFill8(gWifiSetupShare->send.raw, 0, sizeof(gWifiSetupShare->send));
     gWifiSetupShare->sendPacket = &gWifiSetupShare->send.packet;
 }
 
-void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data) {
+static void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data) {
     u16 i;
     if (gWifiSetupShare->sendingData == 1) {
         gWifiSetupShare->sendPacket->kind = kind;
@@ -1242,7 +1302,7 @@ void WifiSetupShare_SendPacket(u16 kind, u16 index, void *data) {
 
 // follows the child's answers: READY starts the settings blocks, then the block index advances
 // every other frame while the child keeps answering 16
-void WifiSetupShare_UpdateChild(void) {
+static void WifiSetupShare_UpdateChild(void) {
     int i, stride = sizeof(WifiSetupSharePacket);
     for (i = 0; i < 16; i++) {
         WifiSetupShare *share = gWifiSetupShare;
@@ -1274,7 +1334,7 @@ void WifiSetupShare_UpdateChild(void) {
     }
 }
 
-u16 WifiSetupShare_GetChildKind(void) {
+static u16 WifiSetupShare_GetChildKind(void) {
     return gWifiSetupShare->received.packets[1].kind;
 }
 

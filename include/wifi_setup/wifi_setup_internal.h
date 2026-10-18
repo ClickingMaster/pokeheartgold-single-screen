@@ -102,20 +102,12 @@ extern WifiSetupResult gWifiSetupResult;
 extern const u8 sWifiSetupMd5Padding[]; // MD5 padding
 
 // Connection manager events
-void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event);
-int WifiSetupLink_ReturnToIdle(void);
 int WifiSetupLink_CopyApList(WifiSetupApInfo *dst, int max);
 int WifiSetupLink_StartSearch(const u8 *bssid, const u8 *ssid, int len, int option);
-int WifiSetupLink_StartDisconnect(void);
-int WifiSetupLink_StartCleanup(void);
-int WifiSetupLink_StartConnect(void *ap, void *key, int option);
-int WifiSetupLink_Init(void (*eventCallback)(u32 event, int arg), u8 *buffer, int size);
 int WifiSetupLink_GetState(void);
 void *WifiSetupLink_Alloc(int unused, int size);
 void WifiSetupLink_Free(int unused, void *ptr, int size);
-void WifiSetupLink_ClearEvents(void);
 u32 WifiSetupLink_PopEvent(void);
-void WifiSetupLink_PushEvent(u32 event, int unused);
 void WifiSetupLink_PostEvent(u32 event);
 int WifiSetupLink_Open(u32 count);
 int WifiSetupLink_Close(void);

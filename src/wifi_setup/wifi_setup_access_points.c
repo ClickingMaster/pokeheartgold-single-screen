@@ -30,7 +30,11 @@ extern u8 gWifiSetupSoundArchivePath[];         // sound archive path
 
 extern long atol(const char *);
 
-void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb);
+static int WifiSetupApScan_Continue(void);
+static void WifiSetupApScan_Callback(void *arg);
+static void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb);
+static void WifiSetupConnections_WritePage(int index);
+static int WifiSetup_HexDigitValue(u8 c);
 
 int WifiSetupApScan_Start(void) {
     WifiSetupApScan *w;
@@ -48,7 +52,7 @@ int WifiSetupApScan_Start(void) {
     return WifiSetupApScan_Continue() ? 1 : 0;
 }
 
-int WifiSetupApScan_Continue(void) {
+static int WifiSetupApScan_Continue(void) {
     return WM_StartScanEx(WifiSetupApScan_Callback, &gWifiSetupApScan->param) == WM_ERRCODE_OPERATING ? 1 : 0;
 }
 
@@ -82,7 +86,7 @@ int WifiSetupApScan_GetEntries(WifiSetupScanEntry **out) {
     return count;
 }
 
-void WifiSetupApScan_Callback(void *arg) {
+static void WifiSetupApScan_Callback(void *arg) {
     WMStartScanExCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         return;
@@ -104,7 +108,7 @@ void WifiSetupApScan_Callback(void *arg) {
     }
 }
 
-void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb) {
+static void WifiSetupApScan_StoreResults(WMStartScanExCallback *cb) {
     WMOtherElementResults elems;
     WifiSetupScanEntry *entries;
     WMBssDesc *desc;
@@ -420,7 +424,7 @@ void WifiSetupConnections_Reset(void) {
     }
 }
 
-void WifiSetupConnections_WritePage(int index) {
+static void WifiSetupConnections_WritePage(int index) {
     BOOL changed[4];
     void *temp;
     int status = gWifiSetupConnections->pages[index].setupMethod;
@@ -472,7 +476,7 @@ void WifiSetup_ParseAddress(const char *str, u8 *out) {
     }
 }
 
-int WifiSetup_HexDigitValue(u8 c) {
+static int WifiSetup_HexDigitValue(u8 c) {
     if (c <= '9') {
         return c - '0';
     }

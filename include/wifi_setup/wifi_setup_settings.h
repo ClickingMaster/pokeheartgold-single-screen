@@ -65,27 +65,8 @@ extern WifiSetupSettings gWifiSetupSettings;
 extern const WifiSetupSettingsSwitchItems gWifiSetupSettingsSwitchItems;
 
 void WifiSetupSettings_Init(void);
-void WifiSetupSettings_LoadGraphics(void);
-void WifiSetupSettings_ResetPosition(void);
-void WifiSetupSettings_FadeIn(void);
-void WifiSetupSettings_WaitFadeIn(void);
 void WifiSetupSettings_Main(void);
-void WifiSetupSettings_HandleKeys(void);
-int WifiSetupSettings_HandleTouch(void);
-void WifiSetupSettings_SelectItem(int item);
-void WifiSetupSettings_SetAutoAddress(u32 on);
-void WifiSetupSettings_SetAutoDns(int on);
-void WifiSetupSettings_HandleScrollBar(void);
-void WifiSetupSettings_StartClose(void);
-void WifiSetupSettings_FadeOut(void);
-void WifiSetupSettings_Exit(void);
 void WifiSetupSettings_DrawRows(void);
-void WifiSetupSettings_DrawValue(u32 item, int row);
-void WifiSetupSettings_DrawButtons(u32 item, int row);
-int WifiSetupSettings_IsItemEnabled(int item);
-void WifiSetupSettings_SetButtonOam(unsigned type, int option, int row);
-void WifiSetupSettings_DrawText(u8 *text, int row);
-void WifiSetupSettings_DrawAddress(u8 *address, int row);
 void WifiSetupSettings_UpdateObjects(void);
 int WifiSetupSettings_GetTouchedItem(void);
 

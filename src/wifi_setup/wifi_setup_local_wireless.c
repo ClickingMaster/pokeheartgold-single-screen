@@ -47,6 +47,44 @@ extern u8 gWifiSetupDialogFrameTemplates[];
 extern u8 gWifiSetupDialogButtonCounts[];
 extern char *gWifiSetupBannerScreenPaths[];
 
+static inline void WifiSetupMbParent_ClearChild(u16 aid);
+static inline void WifiSetupMbParent_DisconnectChild(u16 aid);
+static void WifiSetupBanner_SlideInTask0(void *task, void *arg);
+static void WifiSetupBanner_SlideInTask1(void *task, void *arg);
+static void WifiSetupBanner_SlideInTask2(void *task, void *arg);
+static void WifiSetupBanner_SlideInTask3(void *task, void *arg);
+static void WifiSetupBanner_SlideInTask4(void *task, void *arg);
+static void WifiSetupBanner_StopTask(void *task, void *arg);
+static void WifiSetupBanner_SlideOutTask4(void *task, void *arg);
+static void WifiSetupBanner_SlideOutTask3(void *task, void *arg);
+static void WifiSetupBanner_SlideOutTask2(void *task, void *arg);
+static void WifiSetupBanner_SlideOutTask1(void *task, void *arg);
+static void WifiSetupBanner_SlideOffTask(void *task, void *arg);
+static void WifiSetupBanner_LoadScreenTask(void *task, void *arg);
+static BOOL WifiSetupUsbScan_StartScan(void);
+static void WifiSetupUsbScan_WmCallback(void *arg);
+static void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg);
+static void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg);
+static void WifiSetupUsbScan_TimeoutTask(void *task, void *arg);
+static void WifiSetupDialog_FadeInTask(void *task, void *arg);
+static void WifiSetupDialog_SlideInTask(void *task, void *arg);
+static void WifiSetupDialog_InputTask(void *task, void *arg);
+static void WifiSetupDialog_TimerTask(void *task, void *arg);
+static void WifiSetupDialog_SetY(int y);
+static void WifiSetupDialog_ClipBlock(WifiSetupOamBlock *obj, int y);
+static void WifiSetupDialog_PressButton(int i);
+static void WifiSetupDialog_CloseDelayTask(void *task, void *arg);
+static void WifiSetupDialog_SlideOutTask(void *task, void *arg);
+static void WifiSetupDialog_FadeOutTask(void *task, void *arg);
+static void WifiSetupDialog_FreeTask(void *task, void *arg);
+static BOOL WifiSetupMbParent_RegisterFile(WifiSetupMbParentFile *reg);
+static void WifiSetupMbParent_AcceptChild(u16 aid);
+static void WifiSetupMbParent_KickChild(u16 aid);
+static void WifiSetupMbParent_StartSending(u16 aid);
+static void WifiSetupMbParent_EndIfAllBooted(void);
+static void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg);
+static void WifiSetupMbParent_SetState(int state);
+
 int MB_Init(void *work, void *user, u32 ggid, u32 tgid, u32 dmaNo);
 void MB_SetParentCommParam(u16 sendSize, u16 maxChildren);
 void MB_CommSetParentStateCallback(void *callback);
@@ -62,35 +100,6 @@ void MB_End(void);
 
 int WifiSetupMbParent_GetChildState(void);
 void WifiSetupWh_Init(u8 *work);
-
-void WifiSetupBanner_SlideInTask0(void *task, void *arg);
-void WifiSetupBanner_SlideInTask1(void *task, void *arg);
-void WifiSetupBanner_SlideInTask2(void *task, void *arg);
-void WifiSetupBanner_SlideInTask3(void *task, void *arg);
-void WifiSetupBanner_SlideInTask4(void *task, void *arg);
-void WifiSetupBanner_StopTask(void *task, void *arg);
-void WifiSetupBanner_SlideOutTask4(void *task, void *arg);
-void WifiSetupBanner_SlideOutTask3(void *task, void *arg);
-void WifiSetupBanner_SlideOutTask2(void *task, void *arg);
-void WifiSetupBanner_SlideOutTask1(void *task, void *arg);
-void WifiSetupBanner_SlideOffTask(void *task, void *arg);
-void WifiSetupBanner_LoadScreenTask(void *task, void *arg);
-BOOL WifiSetupUsbScan_StartScan(void);
-void WifiSetupUsbScan_WmCallback(void *arg);
-void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg);
-void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg);
-void WifiSetupUsbScan_TimeoutTask(void *task, void *arg);
-void WifiSetupDialog_FadeInTask(void *task, void *arg);
-void WifiSetupDialog_SlideInTask(void *task, void *arg);
-void WifiSetupDialog_InputTask(void *task, void *arg);
-void WifiSetupDialog_TimerTask(void *task, void *arg);
-void WifiSetupDialog_SetY(int y);
-void WifiSetupDialog_ClipBlock(WifiSetupOamBlock *block, int y);
-void WifiSetupDialog_PressButton(int index);
-void WifiSetupDialog_CloseDelayTask(void *task, void *arg);
-void WifiSetupDialog_SlideOutTask(void *task, void *arg);
-void WifiSetupDialog_FadeOutTask(void *task, void *arg);
-void WifiSetupDialog_FreeTask(void *task, void *arg);
 
 static inline void WifiSetupMbParent_ClearChild(u16 aid) {
     u16 mask = ~(1 << aid);
@@ -2250,7 +2259,7 @@ void WifiSetupBanner_Open(int kind) {
     WifiSetupSound_Play(0xd);
 }
 
-void WifiSetupBanner_SlideInTask0(void *task, void *arg) {
+static void WifiSetupBanner_SlideInTask0(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2269,7 +2278,7 @@ void WifiSetupBanner_SlideInTask0(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideInTask1);
 }
 
-void WifiSetupBanner_SlideInTask1(void *task, void *arg) {
+static void WifiSetupBanner_SlideInTask1(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2288,7 +2297,7 @@ void WifiSetupBanner_SlideInTask1(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideInTask2);
 }
 
-void WifiSetupBanner_SlideInTask2(void *task, void *arg) {
+static void WifiSetupBanner_SlideInTask2(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2307,7 +2316,7 @@ void WifiSetupBanner_SlideInTask2(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideInTask3);
 }
 
-void WifiSetupBanner_SlideInTask3(void *task, void *arg) {
+static void WifiSetupBanner_SlideInTask3(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2329,7 +2338,7 @@ void WifiSetupBanner_SlideInTask3(void *task, void *arg) {
 #pragma push
 #pragma opt_propagation off
 
-void WifiSetupBanner_SlideInTask4(void *task, void *arg) {
+static void WifiSetupBanner_SlideInTask4(void *task, void *arg) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupBanner.banner->letters[4], 0, &x, &y);
     x += 8;
@@ -2348,7 +2357,7 @@ void WifiSetupBanner_SlideInTask4(void *task, void *arg) {
 
 #pragma pop
 
-void WifiSetupBanner_StopTask(void *task, void *arg) {
+static void WifiSetupBanner_StopTask(void *task, void *arg) {
     WifiSetupTask_DestroyLater(0, task);
     gWifiSetupBanner.banner->task = NULL;
 }
@@ -2376,7 +2385,7 @@ BOOL WifiSetupBanner_IsMoving(void) {
 #pragma push
 #pragma opt_propagation off
 
-void WifiSetupBanner_SlideOutTask4(void *task, void *arg) {
+static void WifiSetupBanner_SlideOutTask4(void *task, void *arg) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupBanner.banner->letters[4], 0, &x, &y);
     x -= 8;
@@ -2395,7 +2404,7 @@ void WifiSetupBanner_SlideOutTask4(void *task, void *arg) {
 
 #pragma pop
 
-void WifiSetupBanner_SlideOutTask3(void *task, void *arg) {
+static void WifiSetupBanner_SlideOutTask3(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2414,7 +2423,7 @@ void WifiSetupBanner_SlideOutTask3(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideOutTask2);
 }
 
-void WifiSetupBanner_SlideOutTask2(void *task, void *arg) {
+static void WifiSetupBanner_SlideOutTask2(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2433,7 +2442,7 @@ void WifiSetupBanner_SlideOutTask2(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideOutTask1);
 }
 
-void WifiSetupBanner_SlideOutTask1(void *task, void *arg) {
+static void WifiSetupBanner_SlideOutTask1(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2452,7 +2461,7 @@ void WifiSetupBanner_SlideOutTask1(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupBanner_SlideOffTask);
 }
 
-void WifiSetupBanner_SlideOffTask(void *task, void *arg) {
+static void WifiSetupBanner_SlideOffTask(void *task, void *arg) {
     int x;
     int y;
     int i;
@@ -2486,7 +2495,7 @@ void WifiSetupBanner_LoadScreen(int n) {
     WifiSetupTask_Create(1, WifiSetupBanner_LoadScreenTask, 0, 0x78);
 }
 
-void WifiSetupBanner_LoadScreenTask(void *task, void *arg) {
+static void WifiSetupBanner_LoadScreenTask(void *task, void *arg) {
     DC_FlushRange(gWifiSetupBanner.screen, 0x600);
     GXS_LoadBG1Scr(gWifiSetupBanner.screen, 0, 0x600);
     WifiSetupFile_Free(gWifiSetupBanner.screen);
@@ -2519,7 +2528,7 @@ BOOL WifiSetupUsbScan_Start(void (*cb)(int)) {
     return FALSE;
 }
 
-BOOL WifiSetupUsbScan_StartScan(void) {
+static BOOL WifiSetupUsbScan_StartScan(void) {
     return WM_StartScanEx(WifiSetupUsbScan_WmCallback, &gWifiSetupUsbScan->param) == WM_ERRCODE_OPERATING;
 }
 
@@ -2550,7 +2559,7 @@ void WifiSetupUsbScan_SetCallback(void (*cb)(int)) {
     gWifiSetupUsbScan->callback = cb;
 }
 
-void WifiSetupUsbScan_WmCallback(void *arg) {
+static void WifiSetupUsbScan_WmCallback(void *arg) {
     WMStartScanExCallback *cb = arg;
     if (cb->errcode != WM_ERRCODE_SUCCESS) {
         return;
@@ -2582,7 +2591,7 @@ void WifiSetupUsbScan_WmCallback(void *arg) {
     }
 }
 
-void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg) {
+static void WifiSetupUsbScan_StoreResults(WMStartScanExCallback *arg) {
     WMBssDesc *bss;
     int i;
     int j;
@@ -2619,7 +2628,7 @@ next:;
     }
 }
 
-void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg) {
+static void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg) {
     WMBssDesc *bss;
     int i, j;
     WifiSetupUsbScanEntry *entry;
@@ -2658,7 +2667,7 @@ void WifiSetupUsbScan_CheckResults(WMStartScanExCallback *arg) {
     } while (++i < count);
 }
 
-void WifiSetupUsbScan_TimeoutTask(void *task, void *arg) {
+static void WifiSetupUsbScan_TimeoutTask(void *task, void *arg) {
     int j;
     BOOL a;
     BOOL b;
@@ -2746,7 +2755,7 @@ BOOL WifiSetupDialog_IsOpen(void) {
     return gWifiSetupDialog != NULL;
 }
 
-void WifiSetupDialog_FadeInTask(void *task, void *arg) {
+static void WifiSetupDialog_FadeInTask(void *task, void *arg) {
     gWifiSetupDialog->brightness--;
     G2x_ChangeBlendBrightness_((u16 *)&reg_G2_BLDCNT, gWifiSetupDialog->brightness);
     if (gWifiSetupDialog->brightness > -12) {
@@ -2755,7 +2764,7 @@ void WifiSetupDialog_FadeInTask(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupDialog_SlideInTask);
 }
 
-void WifiSetupDialog_SlideInTask(void *task, void *arg) {
+static void WifiSetupDialog_SlideInTask(void *task, void *arg) {
     int x;
     int y;
     WifiSetupOamBlock_GetPosition(gWifiSetupDialog->frame, 0, &x, &y);
@@ -2773,7 +2782,7 @@ void WifiSetupDialog_SlideInTask(void *task, void *arg) {
     WifiSetupTask_DestroyLater(1, task);
 }
 
-void WifiSetupDialog_InputTask(void *task, void *arg) {
+static void WifiSetupDialog_InputTask(void *task, void *arg) {
     WifiSetupRect temp;
     int i;
     register WifiSetupDialog *w;
@@ -2803,7 +2812,7 @@ void WifiSetupDialog_InputTask(void *task, void *arg) {
     w->selected = -1;
 }
 
-void WifiSetupDialog_TimerTask(void *task, void *arg) {
+static void WifiSetupDialog_TimerTask(void *task, void *arg) {
     gWifiSetupDialog->selected = -1;
     gWifiSetupDialog->timer++;
     if (gWifiSetupDialog->timer < 0x78) {
@@ -2813,7 +2822,7 @@ void WifiSetupDialog_TimerTask(void *task, void *arg) {
     gWifiSetupDialog->task = WifiSetupTask_Create(1, WifiSetupDialog_CloseDelayTask, 0, 0x78);
 }
 
-void WifiSetupDialog_SetY(int y) {
+static void WifiSetupDialog_SetY(int y) {
     int i;
     int k;
     int top;
@@ -2847,7 +2856,7 @@ void WifiSetupDialog_SetY(int y) {
     WifiSetupDisplay_SetWindowRect(0, 0, &win);
 }
 
-void WifiSetupDialog_ClipBlock(WifiSetupOamBlock *obj, int y) {
+static void WifiSetupDialog_ClipBlock(WifiSetupOamBlock *obj, int y) {
     int n = WifiSetupOamBlock_GetCount(obj);
     int i;
     int x;
@@ -2864,7 +2873,7 @@ void WifiSetupDialog_ClipBlock(WifiSetupOamBlock *obj, int y) {
     }
 }
 
-void WifiSetupDialog_PressButton(int i) {
+static void WifiSetupDialog_PressButton(int i) {
     int k;
     WifiSetupOamTemplate_Copy(0, gWifiSetupDialogButtonTemplates[gWifiSetupDialog->kind][i] + 1, WifiSetupOamBlock_GetOam(gWifiSetupDialog->buttons[i], 0));
     k = gWifiSetupDialogButtonPositions[gWifiSetupDialog->kind][i];
@@ -2872,7 +2881,7 @@ void WifiSetupDialog_PressButton(int i) {
     WifiSetupOamBlock_SetPriority(gWifiSetupDialog->buttons[i], -1, 0);
 }
 
-void WifiSetupDialog_CloseDelayTask(void *task, void *arg) {
+static void WifiSetupDialog_CloseDelayTask(void *task, void *arg) {
     gWifiSetupDialog->closeDelay++;
     if (gWifiSetupDialog->closeDelay < 8) {
         return;
@@ -2880,7 +2889,7 @@ void WifiSetupDialog_CloseDelayTask(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupDialog_SlideOutTask);
 }
 
-void WifiSetupDialog_SlideOutTask(void *task, void *arg) {
+static void WifiSetupDialog_SlideOutTask(void *task, void *arg) {
     int x;
     int y;
     WifiSetupOamBlock_GetPosition(gWifiSetupDialog->frame, 0, &x, &y);
@@ -2896,7 +2905,7 @@ void WifiSetupDialog_SlideOutTask(void *task, void *arg) {
     }
 }
 
-void WifiSetupDialog_FadeOutTask(void *task, void *arg) {
+static void WifiSetupDialog_FadeOutTask(void *task, void *arg) {
     gWifiSetupDialog->brightness++;
     G2x_ChangeBlendBrightness_((u16 *)&reg_G2_BLDCNT, gWifiSetupDialog->brightness);
     if (gWifiSetupDialog->brightness < 0) {
@@ -2905,7 +2914,7 @@ void WifiSetupDialog_FadeOutTask(void *task, void *arg) {
     WifiSetupTask_SetFunc(task, WifiSetupDialog_FreeTask);
 }
 
-void WifiSetupDialog_FreeTask(void *task, void *arg) {
+static void WifiSetupDialog_FreeTask(void *task, void *arg) {
     int i;
     GX_SetVisibleWnd(GX_WNDMASK_NONE);
     WifiSetupOamBlock_Free(gWifiSetupDialog->frame);
@@ -2956,7 +2965,7 @@ void WifiSetupMbParent_Start(WifiSetupMbParentFile *reg, u32 channel) {
     }
 }
 
-BOOL WifiSetupMbParent_RegisterFile(WifiSetupMbParentFile *reg) {
+static BOOL WifiSetupMbParent_RegisterFile(WifiSetupMbParentFile *reg) {
     FSFile file;
     FSFile *fp;
     BOOL ok = FALSE;
@@ -2983,14 +2992,14 @@ BOOL WifiSetupMbParent_RegisterFile(WifiSetupMbParentFile *reg) {
     return ok;
 }
 
-void WifiSetupMbParent_AcceptChild(u16 aid) {
+static void WifiSetupMbParent_AcceptChild(u16 aid) {
     if (MB_CommResponseRequest(aid, 1)) {
         return;
     }
     WifiSetupMbParent_DisconnectChild(aid);
 }
 
-void WifiSetupMbParent_KickChild(u16 aid) {
+static void WifiSetupMbParent_KickChild(u16 aid) {
     OSIntrMode e;
     if (!MB_CommResponseRequest(aid, 0)) {
         WifiSetupMbParent_DisconnectChild(aid);
@@ -3002,7 +3011,7 @@ void WifiSetupMbParent_KickChild(u16 aid) {
     OS_RestoreInterrupts(e);
 }
 
-void WifiSetupMbParent_StartSending(u16 aid) {
+static void WifiSetupMbParent_StartSending(u16 aid) {
     OSIntrMode e;
     if (!MB_CommResponseRequest(aid, 2)) {
         WifiSetupMbParent_DisconnectChild(aid);
@@ -3067,13 +3076,13 @@ void WifiSetupMbParent_End(void) {
     MB_End();
 }
 
-void WifiSetupMbParent_EndIfAllBooted(void) {
+static void WifiSetupMbParent_EndIfAllBooted(void) {
     if (gWifiSetupMbParent->head.state == 4 && gWifiSetupMbParent->head.connectedMask == gWifiSetupMbParent->head.bootableMask) {
         MB_End();
     }
 }
 
-void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg) {
+static void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg) {
     WifiSetupMbParentState *w;
     OSIntrMode e;
     void *user;
@@ -3168,7 +3177,7 @@ void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg) {
     }
 }
 
-void WifiSetupMbParent_SetState(int state) {
+static void WifiSetupMbParent_SetState(int state) {
     gWifiSetupMbParent->head.state = state;
 }
 

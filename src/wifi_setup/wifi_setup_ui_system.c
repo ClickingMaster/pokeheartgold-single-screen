@@ -125,6 +125,38 @@ typedef struct WifiSetupIrqSave {
 // its own literal-pool slot.
 #define MODULE_BSS_ADDR(addr) ((void *)(gWifiSetupShare + ((addr) - 0x0224F5C8)))
 
+static inline int GX_GetVisiblePlane13(void);
+static inline int GXS_GetVisiblePlane13(void);
+static inline void OamSetPosition(GXOamAttr *oam, int x, int y);
+static inline void OamGetPosition(const GXOamAttr *oam, s32 *x, s32 *y);
+static void WifiSetupArchive_ReadDone(void *arg);
+static BOOL WifiSetup_HasSameSuffix(const char *a, const char *b, int len);
+static WifiSetupPool *WifiSetupPool_New(int capacity);
+static void WifiSetupPool_Delete(WifiSetupPool *pool);
+static void WifiSetupFade_Task(void *task, WifiSetupFade *fade);
+static void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade);
+static void WifiSetupText_BgTransferTask(void *task, u8 *dirty);
+static void WifiSetupText_DrawChar(void *charCanvas, int x, int y, int color, u16 ch, int font);
+static void *WifiSetupHeap_Alloc(u32 size, int align);
+static void WifiSetupInput_UpdatePad(void);
+static void WifiSetupInput_UpdateTouch(void);
+static inline volatile u32 *WifiSetup_GetIrqCheckBase(void);
+static void WifiSetup_VBlankIntr(void);
+static WifiSetupList *WifiSetupList_New(void);
+static void WifiSetupList_Delete(WifiSetupList *list);
+static void WifiSetupList_Remove(void *node);
+static void WifiSetupList_InsertBefore(void *pos, void *node);
+static void WifiSetupList_Append(WifiSetupList *list, void *node);
+static void WifiSetupList_Prepend(WifiSetupList *list, void *node);
+static void WifiSetupOam_TransferTask(void);
+static GXOamAttr *WifiSetupOam_Alloc(int screen);
+static GXOamAttr *WifiSetupOam_Get(int screen, int index);
+static void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharNo);
+static void WifiSetupCharVram_Free(void *block);
+static void WifiSetup_ClearVram(void);
+static WifiSetupTask *WifiSetupTask_CreateEx(int queue, WifiSetupTaskFunc func, void *arg, u32 priority, u8 ownsArg);
+static void WifiSetupTask_DestroyNow(int queue, WifiSetupTask *task);
+
 static inline int GX_GetVisiblePlane13(void) {
     return (int)((reg_GX_DISPCNT & 0x1F00) >> 8);
 }
@@ -192,17 +224,8 @@ void NNS_G2dMapScrToCharText(void *screen, u32 width, u32 height, u32 left, u32 
 
 int WifiSetupArchive_Proc(FSArchive *arc, int command);
 int WifiSetupArchive_Read(FSArchive *arc, void *dst, u32 pos, u32 len);
-void WifiSetupArchive_ReadDone(void *arg);
 int WifiSetupArchive_Write(void);
-void WifiSetupFade_Task(void *task, WifiSetupFade *fade);
-void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade);
-void WifiSetupText_BgTransferTask(void *task, u8 *dirty);
 void WifiSetupText_FreeCanvas(WifiSetupCanvas *canvas);
-void WifiSetupInput_UpdatePad(void);
-void WifiSetupInput_UpdateTouch(void);
-void WifiSetup_VBlankIntr(void);
-void WifiSetupOam_TransferTask(void);
-void WifiSetupTask_DestroyNow(int queue, WifiSetupTask *task);
 
 void WifiSetupArchive_Unload(void) {
     FS_ChangeDir(gWifiSetupRomPrefix);
@@ -236,7 +259,7 @@ int WifiSetupArchive_Read(FSArchive *arc, void *dst, u32 pos, u32 len) {
     return 6;
 }
 
-void WifiSetupArchive_ReadDone(void *arg) {
+static void WifiSetupArchive_ReadDone(void *arg) {
     FS_NotifyArchiveAsyncEnd(arg, FS_RESULT_SUCCESS);
 }
 
@@ -287,7 +310,7 @@ void WifiSetupFile_Free(void *data) {
     WifiSetupPool_Push(gWifiSetupArchive->filePool, data);
 }
 
-BOOL WifiSetup_HasSameSuffix(const char *a, const char *b, int len) {
+static BOOL WifiSetup_HasSameSuffix(const char *a, const char *b, int len) {
     int lenA = strlen(a);
     int lenB = strlen(b);
     if (lenA < len || lenB < len) {
@@ -509,7 +532,7 @@ WifiSetupOamBlock *WifiSetupOamTemplate_AllocBlock(int slot, int index, int from
     return block;
 }
 
-WifiSetupPool *WifiSetupPool_New(int capacity) {
+static WifiSetupPool *WifiSetupPool_New(int capacity) {
     WifiSetupPool *pool = WifiSetupHeap_AllocZeroed((capacity + 1) * 4 + 8, 4);
     pool->size = capacity + 1;
     pool->head = 0;
@@ -528,7 +551,7 @@ WifiSetupPool *WifiSetupPool_NewWithItems(int count, void *items, int stride) {
     return pool;
 }
 
-void WifiSetupPool_Delete(WifiSetupPool *pool) {
+static void WifiSetupPool_Delete(WifiSetupPool *pool) {
     WifiSetupHeap_FreeAndClear(&pool);
 }
 
@@ -598,7 +621,7 @@ int WifiSetupFade_Start(int kind, int screen, int planes, int duration) {
     return 1;
 }
 
-void WifiSetupFade_Task(void *task, WifiSetupFade *fade) {
+static void WifiSetupFade_Task(void *task, WifiSetupFade *fade) {
     WifiSetupBrightnessTable flags = *(WifiSetupBrightnessTable *)(gWifiSetupFadeTables + 4);
     WifiSetupBrightnessTable end = *(WifiSetupBrightnessTable *)(gWifiSetupFadeTables + 0);
     int brightness;
@@ -641,7 +664,7 @@ int WifiSetupFade_StartDelay(int duration) {
     return 1;
 }
 
-void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade) {
+static void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade) {
     fade->counter++;
     if (fade->counter < fade->duration) {
         return;
@@ -738,7 +761,7 @@ WifiSetupCanvas *WifiSetupText_InitBgCanvas(int screen, int font) {
     return canvas;
 }
 
-void WifiSetupText_BgTransferTask(void *task, u8 *dirty) {
+static void WifiSetupText_BgTransferTask(void *task, u8 *dirty) {
     if (*dirty == 0) {
         return;
     }
@@ -790,7 +813,7 @@ void WifiSetupText_Draw(WifiSetupCanvas *canvas, int x, int y, int color, u32 fl
     NNSi_G2dTextCanvasDrawText(&canvas->textCanvas, x, y, color, flags, text, dir);
 }
 
-void WifiSetupText_DrawChar(void *charCanvas, int x, int y, int color, u16 ch, int font) {
+static void WifiSetupText_DrawChar(void *charCanvas, int x, int y, int color, u16 ch, int font) {
     NNS_G2dCharCanvasDrawChar(charCanvas, &gWifiSetupText->fonts[font], x, y, color, ch);
 }
 
@@ -962,7 +985,7 @@ void WifiSetupHeap_Destroy(void) {
     gWifiSetupHeap = NULL;
 }
 
-void *WifiSetupHeap_Alloc(u32 size, int align) {
+static void *WifiSetupHeap_Alloc(u32 size, int align) {
     void *mem;
     int irq;
     irq = OS_DisableIrqMask(OS_IE_V_BLANK);
@@ -1029,7 +1052,7 @@ void WifiSetupInput_Update(void) {
 }
 
 // Key repeat: first after 40 frames, then every 7 frames.
-void WifiSetupInput_UpdatePad(void) {
+static void WifiSetupInput_UpdatePad(void) {
     int i;
     u8 *holdFrames;
     WifiSetupInputState *state = gWifiSetupInput.state;
@@ -1056,7 +1079,7 @@ void WifiSetupInput_UpdatePad(void) {
     }
 }
 
-void WifiSetupInput_UpdateTouch(void) {
+static void WifiSetupInput_UpdateTouch(void) {
     int n;
     int index;
     int wasTouching;
@@ -1272,7 +1295,7 @@ static inline volatile u32 *WifiSetup_GetIrqCheckBase(void) {
 }
 
 // Runs the vblank task queue and sets the vblank bit of the interrupt check flags.
-void WifiSetup_VBlankIntr(void) {
+static void WifiSetup_VBlankIntr(void) {
     WifiSetupTask_RunQueue(1);
     {
         volatile u32 *base = WifiSetup_GetIrqCheckBase();
@@ -1284,7 +1307,7 @@ void WifiSetup_VBlankIntr(void) {
     }
 }
 
-WifiSetupList *WifiSetupList_New(void) {
+static WifiSetupList *WifiSetupList_New(void) {
     WifiSetupList *list = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupList), 4);
     list->head.prev = NULL;
     list->head.next = &list->tail;
@@ -1293,11 +1316,11 @@ WifiSetupList *WifiSetupList_New(void) {
     return list;
 }
 
-void WifiSetupList_Delete(WifiSetupList *list) {
+static void WifiSetupList_Delete(WifiSetupList *list) {
     WifiSetupHeap_FreeAndClear(&list);
 }
 
-void WifiSetupList_Remove(void *node) {
+static void WifiSetupList_Remove(void *node) {
     WifiSetupListNode *n = node;
     int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
     n->prev->next = n->next;
@@ -1307,7 +1330,7 @@ void WifiSetupList_Remove(void *node) {
     OS_EnableIrqMask(irq);
 }
 
-void WifiSetupList_InsertBefore(void *pos, void *node) {
+static void WifiSetupList_InsertBefore(void *pos, void *node) {
     WifiSetupListNode *p = pos;
     WifiSetupListNode *n = node;
     int irq = OS_DisableIrqMask(OS_IE_V_BLANK);
@@ -1318,11 +1341,11 @@ void WifiSetupList_InsertBefore(void *pos, void *node) {
     OS_EnableIrqMask(irq);
 }
 
-void WifiSetupList_Append(WifiSetupList *list, void *node) {
+static void WifiSetupList_Append(WifiSetupList *list, void *node) {
     WifiSetupList_InsertBefore(&list->tail, node);
 }
 
-void WifiSetupList_Prepend(WifiSetupList *list, void *node) {
+static void WifiSetupList_Prepend(WifiSetupList *list, void *node) {
     WifiSetupList_InsertBefore(list->head.next, node);
 }
 
@@ -1337,7 +1360,7 @@ void WifiSetupOam_Init(void) {
     gWifiSetupOamBuffer->task = WifiSetupTask_Create(1, (WifiSetupTaskFunc)WifiSetupOam_TransferTask, NULL, 0xC8);
 }
 
-void WifiSetupOam_TransferTask(void) {
+static void WifiSetupOam_TransferTask(void) {
     DC_FlushRange(gWifiSetupOamBuffer, 0x800);
     GX_LoadOAM(gWifiSetupOamBuffer->oam[0], 0, 0x400);
     GXS_LoadOAM(gWifiSetupOamBuffer->oam[1], 0, 0x400);
@@ -1348,7 +1371,7 @@ void WifiSetupOam_Free(void) {
     WifiSetupHeap_FreeAndClear(MODULE_BSS_ADDR(0x0224F608));
 }
 
-GXOamAttr *WifiSetupOam_Alloc(int screen) {
+static GXOamAttr *WifiSetupOam_Alloc(int screen) {
     return WifiSetupPool_Pop(gWifiSetupOamBuffer->pools[screen]);
 }
 
@@ -1362,7 +1385,7 @@ void WifiSetupOam_Release(GXOamAttr *oam) {
     WifiSetupPool_Push(gWifiSetupOamBuffer->pools[screen], oam);
 }
 
-GXOamAttr *WifiSetupOam_Get(int screen, int index) {
+static GXOamAttr *WifiSetupOam_Get(int screen, int index) {
     return &gWifiSetupOamBuffer->oam[screen][index];
 }
 
@@ -1380,7 +1403,7 @@ void WifiSetupCharVram_Init(void) {
 }
 
 // size in bytes; allocated in units of 4 (tile numbers 0x300-0x3FF are managed).
-void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharNo) {
+static void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharNo) {
     WifiSetupCharBlock *block;
     WifiSetupCharBlock *cur;
     int irq;
@@ -1426,7 +1449,7 @@ void *WifiSetupCharVram_Alloc(int screen, int size, int fromFront, u32 *outCharN
     return block;
 }
 
-void WifiSetupCharVram_Free(void *block) {
+static void WifiSetupCharVram_Free(void *block) {
     int screen = 0;
     WifiSetupList_Remove(block);
     if ((u32)block >= (u32)&gWifiSetupCharVram[1]) {
@@ -1497,7 +1520,7 @@ void WifiSetup_RestoreVramBanks(void) {
     OS_RestoreInterrupts(irq);
 }
 
-void WifiSetup_ClearVram(void) {
+static void WifiSetup_ClearVram(void) {
     GX_SetBankForLCDC((GXVRamLCDC)0x1F3);
     MIi_CpuClearFast(0, (void *)0x06800000, 0x40000);
     MIi_CpuClearFast(0, (void *)0x06880000, 0x24000);
@@ -1574,7 +1597,7 @@ void *WifiSetupTask_Create(int queue, WifiSetupTaskFunc func, void *arg, u32 pri
     return WifiSetupTask_CreateEx(queue, func, arg, priority, 0);
 }
 
-WifiSetupTask *WifiSetupTask_CreateEx(int queue, WifiSetupTaskFunc func, void *arg, u32 priority, u8 ownsArg) {
+static WifiSetupTask *WifiSetupTask_CreateEx(int queue, WifiSetupTaskFunc func, void *arg, u32 priority, u8 ownsArg) {
     WifiSetupTask *task;
     WifiSetupTask *cur;
     int irq;
@@ -1606,7 +1629,7 @@ void WifiSetupTask_Destroy(int queue, void *task) {
     WifiSetupTask_DestroyNow(queue, task);
 }
 
-void WifiSetupTask_DestroyNow(int queue, WifiSetupTask *task) {
+static void WifiSetupTask_DestroyNow(int queue, WifiSetupTask *task) {
     if (task->ownsArg) {
         WifiSetupHeap_FreeAndClear(&task->arg);
     }

@@ -141,17 +141,10 @@ BOOL WifiSetupDialog_IsOpen(void);
 void WifiSetupMbParent_Init(void *buf);
 void WifiSetupMbParent_Setup(u32 ggid, u32 tgid);
 void WifiSetupMbParent_Start(WifiSetupMbParentFile *file, u32 channel);
-BOOL WifiSetupMbParent_RegisterFile(WifiSetupMbParentFile *file);
-void WifiSetupMbParent_AcceptChild(u16 aid);
-void WifiSetupMbParent_KickChild(u16 aid);
-void WifiSetupMbParent_StartSending(u16 aid);
 void WifiSetupMbParent_StartDownload(void);
 BOOL WifiSetupMbParent_AreAllBootable(void);
 void WifiSetupMbParent_BootChildren(void);
 void WifiSetupMbParent_End(void);
-void WifiSetupMbParent_EndIfAllBooted(void);
-void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg);
-void WifiSetupMbParent_SetState(int state);
 u16 WifiSetupMbParent_GetState(void);
 u16 WifiSetupMbParent_GetMask(int index);
 

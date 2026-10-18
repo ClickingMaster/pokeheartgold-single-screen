@@ -59,10 +59,8 @@ extern WifiSetupConnections *gWifiSetupConnections;
 extern WifiSetupSound *gWifiSetupSound;
 
 int WifiSetupApScan_Start(void);
-int WifiSetupApScan_Continue(void);
 int WifiSetupApScan_End(void);
 int WifiSetupApScan_GetEntries(WifiSetupScanEntry **out);
-void WifiSetupApScan_Callback(void *arg);
 void WifiSetupConnections_Load(void);
 void WifiSetupConnections_Free(void);
 WifiSetupConnection *WifiSetupConnections_GetEdit(void);
@@ -89,9 +87,7 @@ void WifiSetupConnections_SetFromInfo(u8 *info);
 WifiSetupConnections *WifiSetupConnections_Get(void);
 void WifiSetupConnections_Erase(int index);
 void WifiSetupConnections_Reset(void);
-void WifiSetupConnections_WritePage(int index);
 void WifiSetup_ParseAddress(const char *text, u8 *address);
-int WifiSetup_HexDigitValue(u8 c);
 void WifiSetupSound_Init(void);
 void WifiSetupSound_Free(void);
 

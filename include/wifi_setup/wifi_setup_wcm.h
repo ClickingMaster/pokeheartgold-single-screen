@@ -73,5 +73,9 @@ int WCM_DisconnectAsync(void);
 int WCM_LockApList(int lock);
 int WCM_CountApList(void);
 void *WCM_PointApList(u16 index);
+s32 WifiSetup_NotifyStatus(s32 arg);
+int WifiSetupWcm_StartCleanup(void);
+int WifiSetupWcm_StartDisconnect(void);
+int WifiSetupWcm_StopSearch(void);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_WCM_H

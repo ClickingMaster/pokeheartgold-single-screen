@@ -30,6 +30,17 @@ extern void WifiSetupShare_GetState(u8 *event, u8 *ok);
 extern u16 *WifiSetupShare_GetChildUser(void);
 extern void GXx_SetMasterBrightness_(vu16 *reg, int brightness);
 
+static void *WifiSetupApp_AossClientAlloc(u32 size);
+static void WifiSetupApp_AossClientFree(void *ptr);
+static BOOL WifiSetupApp_SetParams(int language, u32 flags);
+static void WifiSetupApp_InitSystem(void);
+static inline void ResetWindows(vu32 *dispcnt);
+static void WifiSetupApp_InitDisplay(void);
+static void WifiSetupApp_Shutdown(void);
+static u8 WifiSetupApp_GetLanguageCode(void);
+static void WifiSetupTransfer_CancelTask(void *task);
+static void WifiSetupTransfer_Task(void *task);
+
 // Starts the setup client: requests settings 0 and 1 with the setup key, one connection attempt and
 // one receive attempt with default timing, from this console's MAC address.
 void WifiSetupApp_StartAossClient(void) {
@@ -92,11 +103,11 @@ int WifiSetupApp_PollAossClient(void) {
     return WIFI_SETUP_CLIENT_FAILED;
 }
 
-void *WifiSetupApp_AossClientAlloc(u32 size) {
+static void *WifiSetupApp_AossClientAlloc(u32 size) {
     return WifiSetupHeap_AllocZeroed(size, 32);
 }
 
-void WifiSetupApp_AossClientFree(void *ptr) {
+static void WifiSetupApp_AossClientFree(void *ptr) {
     WifiSetupHeap_Free(ptr);
 }
 
@@ -123,7 +134,7 @@ int WifiSetupApp_Run(void *heap, s32 language, s32 flags) {
     return 0;
 }
 
-BOOL WifiSetupApp_SetParams(int language, u32 flags) {
+static BOOL WifiSetupApp_SetParams(int language, u32 flags) {
     gWifiSetupApp.language = language;
     gWifiSetupApp.flags.raw = flags;
     if (language < 0 || language > 6) {
@@ -144,7 +155,7 @@ BOOL WifiSetupApp_SetParams(int language, u32 flags) {
     return TRUE;
 }
 
-void WifiSetupApp_InitSystem(void) {
+static void WifiSetupApp_InitSystem(void) {
     void *work;
     (void)OS_DisableIrq();
     GX_DispOff();
@@ -186,7 +197,7 @@ static inline void ResetWindows(vu32 *dispcnt) {
 }
 
 // Main screen: BG mode 0, BG VRAM bank A, OBJ bank B (1D mapping); sub screen: banks H and I.
-void WifiSetupApp_InitDisplay(void) {
+static void WifiSetupApp_InitDisplay(void) {
     GX_VBlankIntr(FALSE);
     GX_SetBankForBG(GX_VRAM_BG_128_A);
     GX_SetBankForOBJ(GX_VRAM_OBJ_128_B);
@@ -238,7 +249,7 @@ void WifiSetupApp_InitDisplay(void) {
     GX_VBlankIntr(TRUE);
 }
 
-void WifiSetupApp_Shutdown(void) {
+static void WifiSetupApp_Shutdown(void) {
     GX_DispOff();
     GXS_DispOff();
     WifiSetupLed_SetOn();
@@ -304,7 +315,7 @@ void WifiSetupApp_Exit(void) {
 }
 
 // Character naming the language's files: '1' + language, with two exceptions.
-u8 WifiSetupApp_GetLanguageCode(void) {
+static u8 WifiSetupApp_GetLanguageCode(void) {
     u8 language = gWifiSetupApp.language;
     if (language == 6) {
         return '8';
@@ -376,7 +387,7 @@ void WifiSetupTransfer_Cancel(void) {
     WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupTransfer_CancelTask, NULL, 120);
 }
 
-void WifiSetupTransfer_CancelTask(void *task) {
+static void WifiSetupTransfer_CancelTask(void *task) {
     if (WifiSetupShare_Cancel() == 0) {
         return;
     }
@@ -402,7 +413,7 @@ u8 *WifiSetupTransfer_GetChildUser(void) {
 
 WifiSetupSession *gWifiSetupSession;
 
-void WifiSetupTransfer_Task(void *task) {
+static void WifiSetupTransfer_Task(void *task) {
     u8 event;
     u8 ok;
 

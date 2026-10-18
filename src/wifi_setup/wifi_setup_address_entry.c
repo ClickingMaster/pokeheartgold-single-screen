@@ -48,6 +48,22 @@ extern char gWifiSetupAddressEntryYbObjMainNclPath[];
 
 extern long atol(const char *);
 
+static void WifiSetupAddressEntry_WaitKeypad(void);
+static void WifiSetupAddressEntry_Main(void);
+static void WifiSetupAddressEntry_HandleInput(void);
+static int WifiSetupAddressEntry_IsFieldAtLeast(int limit);
+static void WifiSetupAddressEntry_Update(void);
+static void WifiSetupAddressEntry_StartClose(void);
+static void WifiSetupAddressEntry_CloseKeypad(void);
+static void WifiSetupAddressEntry_WaitKeypadClosed(void);
+static void WifiSetupAddressEntry_Exit(void);
+static inline void DrawDigit(WifiSetupCanvas *canvas, u16 x, volatile u16 *rect, u16 *text);
+static inline void SetOamPos(u32 *attr01, int x, int y);
+static void WifiSetupAddressEntry_WaitConfirm(void);
+static void WifiSetupAddressEntry_FinishConfirm(void);
+static void WifiSetupAddressEntry_PadFields(void);
+static int WifiSetupAddressEntry_IsValid(void);
+
 void WifiSetupAddressEntry_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupAddressEntryYbObjKbNclPath, GX_LoadOBJPltt);
     WifiSetup_LoadGraphics(gWifiSetupAddressEntryJbBgStep3NcgPath, GX_LoadBG2Char);
@@ -89,19 +105,19 @@ void WifiSetupAddressEntry_OpenKeypad(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_WaitKeypad);
 }
 
-void WifiSetupAddressEntry_WaitKeypad(void) {
+static void WifiSetupAddressEntry_WaitKeypad(void) {
     if (WifiSetupKeypad_GetInput() == 31) {
         return;
     }
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_Main);
 }
 
-void WifiSetupAddressEntry_Main(void) {
+static void WifiSetupAddressEntry_Main(void) {
     WifiSetupAddressEntry_HandleInput();
     WifiSetupAddressEntry_Update();
 }
 
-void WifiSetupAddressEntry_HandleInput(void) {
+static void WifiSetupAddressEntry_HandleInput(void) {
     int key = WifiSetupKeypad_GetInput();
     switch (key) {
     case WIFI_SETUP_KEYPAD_INPUT_NONE:
@@ -189,7 +205,7 @@ void WifiSetupAddressEntry_HandleInput(void) {
 
 // Whether the current field is full (three digits) or its value is at least limit, so that no
 // further digit can be typed into it.
-int WifiSetupAddressEntry_IsFieldAtLeast(int limit) {
+static int WifiSetupAddressEntry_IsFieldAtLeast(int limit) {
     u8 buf[4], *p;
     int i;
     u8 *text = gWifiSetupAddressEntry->digits + gWifiSetupAddressEntry->field * 3;
@@ -208,15 +224,15 @@ int WifiSetupAddressEntry_IsFieldAtLeast(int limit) {
     return atol((char *)buf) >= limit;
 }
 
-void WifiSetupAddressEntry_Update(void) {
+static void WifiSetupAddressEntry_Update(void) {
 }
 
-void WifiSetupAddressEntry_StartClose(void) {
+static void WifiSetupAddressEntry_StartClose(void) {
     WifiSetupFade_StartDelay(8);
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_CloseKeypad);
 }
 
-void WifiSetupAddressEntry_CloseKeypad(void) {
+static void WifiSetupAddressEntry_CloseKeypad(void) {
     if (WifiSetupFade_IsActive(1)) {
         return;
     }
@@ -225,7 +241,7 @@ void WifiSetupAddressEntry_CloseKeypad(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_WaitKeypadClosed);
 }
 
-void WifiSetupAddressEntry_WaitKeypadClosed(void) {
+static void WifiSetupAddressEntry_WaitKeypadClosed(void) {
     if (WifiSetupKeypad_Exists()) {
         return;
     }
@@ -242,7 +258,7 @@ void WifiSetupAddressEntry_WaitKeypadClosed(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_WaitConfirm);
 }
 
-void WifiSetupAddressEntry_Exit(void) {
+static void WifiSetupAddressEntry_Exit(void) {
     int kind;
     WifiSetupMessage_Hide();
     WifiSetupOam_Release(gWifiSetupAddressEntry->cursor);
@@ -296,7 +312,7 @@ void WifiSetupAddressEntry_UpdateCursor(void) {
     SetOamPos(&gWifiSetupAddressEntry->cursor->attr01, gWifiSetupAddressEntryDigitX[field * 3 + 2], 0x28);
 }
 
-void WifiSetupAddressEntry_WaitConfirm(void) {
+static void WifiSetupAddressEntry_WaitConfirm(void) {
     gWifiSetupAddressEntry->result = WifiSetupDialog_GetSelected();
     switch (gWifiSetupAddressEntry->result) {
     case 0:
@@ -312,7 +328,7 @@ void WifiSetupAddressEntry_WaitConfirm(void) {
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FinishConfirm);
 }
 
-void WifiSetupAddressEntry_FinishConfirm(void) {
+static void WifiSetupAddressEntry_FinishConfirm(void) {
     WifiSetupAddressFunc store[5];
     int kind;
     *(WifiSetupAddressFuncs *)store = gWifiSetupAddressEntryFuncs;
@@ -331,7 +347,7 @@ void WifiSetupAddressEntry_FinishConfirm(void) {
 
 // Pads every field to three characters: empty or zero digits before the last one become spaces,
 // an empty last digit becomes '0'.
-void WifiSetupAddressEntry_PadFields(void) {
+static void WifiSetupAddressEntry_PadFields(void) {
     u8 *p;
     int i = 0;
     int j;
@@ -356,7 +372,7 @@ void WifiSetupAddressEntry_PadFields(void) {
 
 // Every field must be at most 255. A subnet mask (kind 1) must be contiguous ones followed by
 // zeros; other addresses are checked by DWC_BACKUPlCheckAddress.
-int WifiSetupAddressEntry_IsValid(void) {
+static int WifiSetupAddressEntry_IsValid(void) {
     WifiSetupFieldLimit limit = gWifiSetupAddressLayout;
     int i;
     int kind;
