@@ -58,6 +58,13 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define NO_SAVED_CURSOR   117
 #define MAX_TYPE_RANK     10
 
+enum HallCellState {
+    HALL_CELL_NORMAL,
+    HALL_CELL_SELECTED,
+    HALL_CELL_PARTNER_CHOICE,
+    HALL_CELL_UNAVAILABLE,
+};
+
 // Main loop states
 #define HALL_STATE_FADE_IN      0
 #define HALL_STATE_SUMMARY      1
@@ -540,7 +547,7 @@ static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         if (!BattleHall_IsMultiType(app->mode)) {
-            BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 1);
+            BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, HALL_CELL_SELECTED);
             ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         }
         app->brightness = 0;
@@ -590,9 +597,9 @@ static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
         BattleHallApp_SetBrightness(-app->brightness);
         if (app->brightness <= 0) {
             BattleHallApp_CancelConfirm(app);
-            if (app->matronMode == 1) {
+            if (app->matronMode == TRUE) {
                 app->subState = HALL_SELECT_INIT;
-            } else if (app->matronMode == 0) {
+            } else if (app->matronMode == FALSE) {
                 app->subState = HALL_SELECT_INPUT;
             } else {
                 GF_AssertFail();
@@ -609,10 +616,10 @@ static BOOL BattleHallApp_SelectType(BattleHallApp *app) {
     case HALL_SELECT_WAIT_MATRON_MESSAGE:
         if (!TextPrinterCheckActive(app->printerId)) {
             int x, y;
-            app->matronMode = 1;
+            app->matronMode = TRUE;
             BattleHallApp_ClearMessage(app);
             BattleHallSprite_SetAnim(app->cursorSprite, 1);
-            BattleHallApp_SetCellPalette(app->bgConfig, TYPE_CELL_MATRON, 0);
+            BattleHallApp_SetCellPalette(app->bgConfig, TYPE_CELL_MATRON, HALL_CELL_NORMAL);
             BattleHallApp_GrayOutTypes(app, app->bgConfig);
             app->cursor = TYPE_CELL_MATRON;
             x = BattleHallApp_GetCursorX(app);
@@ -692,7 +699,7 @@ static BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
         Frontier_BufferPartnerName(app->msgFormat, 0);
         app->printerId = BattleHallApp_ShowMessage(app, msg_0441_00011, 1);
         app->timer = 10;
-        BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, 2);
+        BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, HALL_CELL_PARTNER_CHOICE);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         app->subState = HALL_LINK_DECIDE_WAIT_PARTNER_ANSWER;
         break;
@@ -703,7 +710,7 @@ static BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
                 return TRUE;
             }
             BattleHallApp_ClearMessage(app);
-            BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, 0);
+            BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, HALL_CELL_NORMAL);
             ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
             app->partnerCursor = NO_LINK_CHOICE;
             app->partnerAnswer = 0;
@@ -713,7 +720,7 @@ static BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
         }
         break;
     case HALL_LINK_DECIDE_CONFIRM:
-        BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 1);
+        BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, HALL_CELL_SELECTED);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         BattleHallApp_ShowConfirmPrompt(app);
         app->subState = HALL_LINK_DECIDE_HANDLE_YES_NO;
@@ -1302,15 +1309,15 @@ static void BattleHallApp_GrayOutTypes(BattleHallApp *app, BgConfig *bgConfig) {
 
     if (BattleHallApp_IsMatronMode(app) == 1) {
         for (i = 0; i < 17; i++) {
-            BattleHallApp_SetCellPalette(bgConfig, (u8)i, 3);
+            BattleHallApp_SetCellPalette(bgConfig, (u8)i, HALL_CELL_UNAVAILABLE);
         }
     } else {
         for (i = 0; i < 17; i++) {
             if (HallTypeRanks_Get((u8)i, app->hallRecords) >= MAX_TYPE_RANK) {
-                BattleHallApp_SetCellPalette(bgConfig, (u8)i, 3);
+                BattleHallApp_SetCellPalette(bgConfig, (u8)i, HALL_CELL_UNAVAILABLE);
             }
         }
-        BattleHallApp_SetCellPalette(bgConfig, TYPE_CELL_MATRON, 3);
+        BattleHallApp_SetCellPalette(bgConfig, TYPE_CELL_MATRON, HALL_CELL_UNAVAILABLE);
     }
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_MAIN_3);
 }
@@ -1324,11 +1331,11 @@ static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int stat
     u8 height;
     u8 y;
 
-    if (state == 0) {
+    if (state == HALL_CELL_NORMAL) {
         palette = 0;
-    } else if (state == 1) {
+    } else if (state == HALL_CELL_SELECTED) {
         palette = 5;
-    } else if (state == 2) {
+    } else if (state == HALL_CELL_PARTNER_CHOICE) {
         palette = 4;
     } else {
         palette = 3;
@@ -1353,7 +1360,7 @@ static void BattleHallApp_SetCellPalette(BgConfig *bgConfig, int index, int stat
         y = 18;
     }
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_MAIN_3, cellX, y, 8, height, palette);
-    if (state == 0) {
+    if (state == HALL_CELL_NORMAL) {
         cellX = x;
         if (column < 4) {
             height = 2;
@@ -1517,7 +1524,7 @@ static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app) {
 
 static void BattleHallApp_CancelConfirm(BattleHallApp *app) {
     BattleHallApp_ClearMessage(app);
-    BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, 0);
+    BattleHallApp_SetCellPalette(app->bgConfig, app->cursor, HALL_CELL_NORMAL);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
     BattleHallSprite_SetAnim(app->cursorSprite, 1);
 }

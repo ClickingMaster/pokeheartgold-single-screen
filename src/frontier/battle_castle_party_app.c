@@ -3286,6 +3286,6 @@ static void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app) 
 
 static void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button) {
     app->pressedButton = button;
-    app->buttonAnimState = 0;
+    app->buttonAnimState = CASTLE_BUTTON_ANIM_HIGHLIGHT;
     app->buttonAnimTimer = 0;
 }

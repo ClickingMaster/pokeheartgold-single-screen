@@ -37,6 +37,73 @@
 
 FS_EXTERN_OVERLAY(OVY_80);
 
+enum ArcadeBoardState {
+    ARCADE_BOARD_STATE_INIT,
+    ARCADE_BOARD_STATE_MOVE_CURSOR,
+    ARCADE_BOARD_STATE_LINK_STOP,
+    ARCADE_BOARD_STATE_LINK_END,
+    ARCADE_BOARD_STATE_END,
+};
+
+enum ArcadeBoardInitStep {
+    ARCADE_BOARD_INIT_START_SYNC,
+    ARCADE_BOARD_INIT_WAIT_SYNC,
+    ARCADE_BOARD_INIT_BUILD_EVENT_POOL,
+    ARCADE_BOARD_INIT_COUNT_EVENT_COLORS,
+    ARCADE_BOARD_INIT_FILL_PANELS,
+    ARCADE_BOARD_INIT_START_PANEL_SYNC,
+    ARCADE_BOARD_INIT_WAIT_PANEL_SYNC,
+    ARCADE_BOARD_INIT_SEND_LAYOUT,
+    ARCADE_BOARD_INIT_WAIT_LAYOUT,
+    ARCADE_BOARD_INIT_WAIT_FADE,
+};
+
+enum ArcadeBoardCursorStep {
+    ARCADE_BOARD_CURSOR_START,
+    ARCADE_BOARD_CURSOR_DELAY,
+    ARCADE_BOARD_CURSOR_OPEN_PANELS,
+    ARCADE_BOARD_CURSOR_TURN_PANELS,
+    ARCADE_BOARD_CURSOR_TURN_PANELS_AGAIN,
+    ARCADE_BOARD_CURSOR_SHOW_EVENTS,
+    ARCADE_BOARD_CURSOR_RUN,
+    ARCADE_BOARD_CURSOR_STOP,
+    ARCADE_BOARD_CURSOR_WAIT_STOP,
+};
+
+enum ArcadeBoardLinkStopStep {
+    ARCADE_BOARD_LINK_STOP_SEND,
+    ARCADE_BOARD_LINK_STOP_DELAY,
+    ARCADE_BOARD_LINK_STOP_WAIT_POS,
+    ARCADE_BOARD_LINK_STOP_START_SYNC,
+    ARCADE_BOARD_LINK_STOP_WAIT_SYNC,
+};
+
+enum ArcadeBoardLinkEndStep {
+    ARCADE_BOARD_LINK_END_START,
+    ARCADE_BOARD_LINK_END_START_SYNC,
+    ARCADE_BOARD_LINK_END_WAIT_SYNC,
+};
+
+enum ArcadeBoardEndStep {
+    ARCADE_BOARD_END_FADE_OUT,
+    ARCADE_BOARD_END_WAIT_FADE,
+};
+
+enum ArcadeBoardSyncId {
+    ARCADE_BOARD_SYNC_STOP = 151,
+    ARCADE_BOARD_SYNC_END,
+    ARCADE_BOARD_SYNC_START = 199,
+    ARCADE_BOARD_SYNC_PANELS = 201,
+};
+
+enum ArcadeBoardLinkType {
+    ARCADE_BOARD_LINK_LAYOUT = 30,
+    ARCADE_BOARD_LINK_STOP_POS,
+    ARCADE_BOARD_LINK_CURSOR_POS,
+};
+
+#define ARCADE_BOARD_NO_STOP_POS 0xFF
+
 static u8 s_0223FA20[2];
 
 static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work);
@@ -120,7 +187,7 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
     work->options = Save_PlayerData_GetOptionsAddr(work->saveData);
     work->playerParty = args->playerParty;
     work->opponentParty = args->opponentParty;
-    work->stopPos = 0xff;
+    work->stopPos = ARCADE_BOARD_NO_STOP_POS;
     work->frontierSaveData = Save_Frontier_GetStatic(work->saveData);
     work->weather = args->weather;
     work->cursorSpeed = args->cursorSpeed;
@@ -148,7 +215,7 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
         FrontierLink_RegisterCommands(work);
     }
 
-    *state = 0;
+    *state = ARCADE_BOARD_STATE_INIT;
     s_0223FA20[0] = 0;
     s_0223FA20[1] = 0;
 
@@ -158,40 +225,40 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
 BOOL BattleArcadeGameBoard_Main(OverlayManager *man, int *state) {
     GAME_BOARD_WORK *work = OverlayManager_GetData(man);
 
-    if (work->stopPos != 0xff && *state == 1) {
+    if (work->stopPos != ARCADE_BOARD_NO_STOP_POS && *state == ARCADE_BOARD_STATE_MOVE_CURSOR) {
         BattleArcadeGameBoard_PressButton(work);
         work->stopRequestPos = BattleArcadeGameBoard_WrapPos(work->boardArea, work->stopPos);
-        BattleArcadeGameBoard_SetState(work, state, 2);
+        BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_LINK_STOP);
     }
 
     switch (*state) {
-    case 0:
+    case ARCADE_BOARD_STATE_INIT:
         if (BattleArcadeGameBoard_Init(work) == TRUE) {
-            BattleArcadeGameBoard_SetState(work, state, 1);
+            BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_MOVE_CURSOR);
         }
         break;
-    case 1:
+    case ARCADE_BOARD_STATE_MOVE_CURSOR:
         if (BattleArcadeGameBoard_MoveCursor(work) == TRUE) {
             if (work->stopRequested == 1) {
-                BattleArcadeGameBoard_SetState(work, state, 2);
+                BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_LINK_STOP);
             } else if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-                BattleArcadeGameBoard_SetState(work, state, 3);
+                BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_LINK_END);
             } else {
-                BattleArcadeGameBoard_SetState(work, state, 4);
+                BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_END);
             }
         }
         break;
-    case 2:
+    case ARCADE_BOARD_STATE_LINK_STOP:
         if (BattleArcadeGameBoard_StopCursorMulti(work) == TRUE) {
-            BattleArcadeGameBoard_SetState(work, state, 3);
+            BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_LINK_END);
         }
         break;
-    case 3:
+    case ARCADE_BOARD_STATE_LINK_END:
         if (BattleArcadeGameBoard_EndMulti(work) == TRUE) {
-            BattleArcadeGameBoard_SetState(work, state, 4);
+            BattleArcadeGameBoard_SetState(work, state, ARCADE_BOARD_STATE_END);
         }
         break;
-    case 4:
+    case ARCADE_BOARD_STATE_END:
         if (BattleArcadeGameBoard_End(work) == TRUE) {
             return TRUE;
         }
@@ -229,18 +296,18 @@ BOOL BattleArcadeGameBoard_Exit(OverlayManager *man, int *state) {
 
 static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
     switch (work->substate) {
-    case 0:
+    case ARCADE_BOARD_INIT_START_SYNC:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
             LinkSync_ClearPackets();
-            LinkSync_StartSync(199);
+            LinkSync_StartSync(ARCADE_BOARD_SYNC_START);
             work->substate++;
         } else {
             work->substate++;
         }
         break;
-    case 1:
+    case ARCADE_BOARD_INIT_WAIT_SYNC:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            if (LinkSync_IsSynced(199) == TRUE) {
+            if (LinkSync_IsSynced(ARCADE_BOARD_SYNC_START) == TRUE) {
                 LinkSync_ClearPackets();
                 work->substate++;
             }
@@ -248,30 +315,30 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
             work->substate++;
         }
         break;
-    case 2:
+    case ARCADE_BOARD_INIT_BUILD_EVENT_POOL:
         BattleArcadeGameBoard_BuildEventPool(work);
         work->substate++;
         break;
-    case 3:
+    case ARCADE_BOARD_INIT_COUNT_EVENT_COLORS:
         BattleArcadeGameBoard_CountEventColors(work);
         work->substate++;
         break;
-    case 4:
+    case ARCADE_BOARD_INIT_FILL_PANELS:
         BattleArcadeGameBoard_FillPanels(work);
         work->substate++;
         break;
-    case 5:
+    case ARCADE_BOARD_INIT_START_PANEL_SYNC:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
             LinkSync_ClearPackets();
-            LinkSync_StartSync(201);
+            LinkSync_StartSync(ARCADE_BOARD_SYNC_PANELS);
             work->substate++;
         } else {
             work->substate++;
         }
         break;
-    case 6:
+    case ARCADE_BOARD_INIT_WAIT_PANEL_SYNC:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            if (LinkSync_IsSynced(201) == TRUE) {
+            if (LinkSync_IsSynced(ARCADE_BOARD_SYNC_PANELS) == TRUE) {
                 LinkSync_ClearPackets();
                 work->substate++;
             }
@@ -279,9 +346,9 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
             work->substate++;
         }
         break;
-    case 7:
+    case ARCADE_BOARD_INIT_SEND_LAYOUT:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            if (BattleArcadeGameBoard_SendCommand(work, 30, 0) == TRUE) {
+            if (BattleArcadeGameBoard_SendCommand(work, ARCADE_BOARD_LINK_LAYOUT, 0) == TRUE) {
                 work->substate++;
             }
         } else {
@@ -289,7 +356,7 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
             work->substate++;
         }
         break;
-    case 8:
+    case ARCADE_BOARD_INIT_WAIT_LAYOUT:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
             if (work->linkMessageCount >= 2) {
                 work->linkMessageCount = 0;
@@ -300,7 +367,7 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
             work->substate++;
         }
         break;
-    case 9:
+    case ARCADE_BOARD_INIT_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -312,20 +379,20 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
 static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
     int i;
     switch (work->substate) {
-    case 0:
+    case ARCADE_BOARD_CURSOR_START:
         work->wait = 0;
         work->cursorPos = work->cursorPosStart;
         BattleArcadeGameBoard_SetCursorPos(work, work->cursorPos);
-        work->substate = 1;
+        work->substate = ARCADE_BOARD_CURSOR_DELAY;
         break;
-    case 1:
+    case ARCADE_BOARD_CURSOR_DELAY:
         work->wait++;
         if (work->wait >= 10) {
             work->wait = 0;
-            work->substate = 2;
+            work->substate = ARCADE_BOARD_CURSOR_OPEN_PANELS;
         }
         break;
-    case 2:
+    case ARCADE_BOARD_CURSOR_OPEN_PANELS:
         for (i = 0; i < 16; i++) {
             if (work->panel[i] != NULL) {
                 BattleArcadeObj_SetAnimation(work->panel[i], 32);
@@ -335,9 +402,9 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         BattleArcadeGameBoard_LoadBoardScreen121(work, GF_BG_LYR_MAIN_3);
         PlaySE(SEQ_SE_DP_WIN_OPEN2);
         work->wait = 24;
-        work->substate = 3;
+        work->substate = ARCADE_BOARD_CURSOR_TURN_PANELS;
         break;
-    case 3:
+    case ARCADE_BOARD_CURSOR_TURN_PANELS:
         work->wait--;
         if (work->wait > 0) {
             break;
@@ -349,9 +416,9 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         }
         PlaySE(SEQ_SE_DP_WIN_OPEN2);
         work->wait = 24;
-        work->substate = 4;
+        work->substate = ARCADE_BOARD_CURSOR_TURN_PANELS_AGAIN;
         break;
-    case 4:
+    case ARCADE_BOARD_CURSOR_TURN_PANELS_AGAIN:
         work->wait--;
         if (work->wait > 0) {
             break;
@@ -363,9 +430,9 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         }
         PlaySE(SEQ_SE_DP_WIN_OPEN2);
         work->wait = 24;
-        work->substate = 5;
+        work->substate = ARCADE_BOARD_CURSOR_SHOW_EVENTS;
         break;
-    case 5:
+    case ARCADE_BOARD_CURSOR_SHOW_EVENTS:
         work->wait--;
         if (work->wait > 0) {
             break;
@@ -378,9 +445,9 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         BattleArcadeObj_SetVisible(work->cursor, 1);
         PlaySE(SEQ_SE_DP_UG_020);
         BattleArcadeObj_SetAnimation(work->button, 0);
-        work->substate = 6;
+        work->substate = ARCADE_BOARD_CURSOR_RUN;
         break;
-    case 6:
+    case ARCADE_BOARD_CURSOR_RUN:
         BattleArcadeGameBoard_UpdateCursor(work, gSystem.newKeys);
         if (Comm_GetLocalNetId() == 0) {
             if (work->autoStopTimer > 0) {
@@ -390,19 +457,19 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
         if (BattleArcadeGameBoard_CheckButtonPress(work) == TRUE || work->autoStopTimer == 0) {
             BattleArcadeGameBoard_StartCursorSlowdown(work);
             if (BattleArcade_MultiplayerCheck(work->type) == FALSE) {
-                work->substate = 7;
+                work->substate = ARCADE_BOARD_CURSOR_STOP;
             } else {
                 work->stopRequested = 1;
                 return TRUE;
             }
         }
         break;
-    case 7:
+    case ARCADE_BOARD_CURSOR_STOP:
         BattleArcadeGameBoard_StopCursor(work, work->cursorPos);
         work->wait = 30;
-        work->substate = 8;
+        work->substate = ARCADE_BOARD_CURSOR_WAIT_STOP;
         break;
-    case 8:
+    case ARCADE_BOARD_CURSOR_WAIT_STOP:
         work->wait--;
         if (work->wait == 0) {
             return TRUE;
@@ -414,32 +481,32 @@ static BOOL BattleArcadeGameBoard_MoveCursor(GAME_BOARD_WORK *work) {
 
 static BOOL BattleArcadeGameBoard_StopCursorMulti(GAME_BOARD_WORK *work) {
     switch (work->substate) {
-    case 0:
-        if (BattleArcadeGameBoard_SendCommand(work, 31, work->stopRequestPos) == TRUE) {
+    case ARCADE_BOARD_LINK_STOP_SEND:
+        if (BattleArcadeGameBoard_SendCommand(work, ARCADE_BOARD_LINK_STOP_POS, work->stopRequestPos) == TRUE) {
             work->stopRequested = 0;
             work->substate++;
         }
         break;
-    case 1:
+    case ARCADE_BOARD_LINK_STOP_DELAY:
         work->substate++;
         break;
-    case 2:
-        if (work->stopPos != 255) {
+    case ARCADE_BOARD_LINK_STOP_WAIT_POS:
+        if (work->stopPos != ARCADE_BOARD_NO_STOP_POS) {
             work->linkMessageCount = 0;
             BattleArcadeGameBoard_StopCursor(work, work->stopPos);
             work->substate++;
         }
         break;
-    case 3:
+    case ARCADE_BOARD_LINK_STOP_START_SYNC:
         LinkSync_ClearPackets();
-        LinkSync_StartSync(151);
+        LinkSync_StartSync(ARCADE_BOARD_SYNC_STOP);
         work->substate++;
         break;
-    case 4:
-        if (LinkSync_IsSynced(151) == TRUE) {
+    case ARCADE_BOARD_LINK_STOP_WAIT_SYNC:
+        if (LinkSync_IsSynced(ARCADE_BOARD_SYNC_STOP) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_Init(HEAP_ID_GAME_BOARD);
-            work->stopPos = 255;
+            work->stopPos = ARCADE_BOARD_NO_STOP_POS;
             return TRUE;
         }
         break;
@@ -449,22 +516,22 @@ static BOOL BattleArcadeGameBoard_StopCursorMulti(GAME_BOARD_WORK *work) {
 
 static BOOL BattleArcadeGameBoard_EndMulti(GAME_BOARD_WORK *work) {
     switch (work->substate) {
-    case 0:
+    case ARCADE_BOARD_LINK_END_START:
         work->wait = 15;
         work->substate++;
         break;
-    case 1:
+    case ARCADE_BOARD_LINK_END_START_SYNC:
         if (work->wait > 0) {
             work->wait--;
         }
         if (work->wait == 0) {
             LinkSync_ClearPackets();
-            LinkSync_StartSync(152);
+            LinkSync_StartSync(ARCADE_BOARD_SYNC_END);
             work->substate++;
         }
         break;
-    case 2:
-        if (LinkSync_IsSynced(152) == TRUE) {
+    case ARCADE_BOARD_LINK_END_WAIT_SYNC:
+        if (LinkSync_IsSynced(ARCADE_BOARD_SYNC_END) == TRUE) {
             LinkSync_ClearPackets();
             return TRUE;
         }
@@ -475,11 +542,11 @@ static BOOL BattleArcadeGameBoard_EndMulti(GAME_BOARD_WORK *work) {
 
 static BOOL BattleArcadeGameBoard_End(GAME_BOARD_WORK *work) {
     switch (work->substate) {
-    case 0:
+    case ARCADE_BOARD_END_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_GAME_BOARD);
         work->substate++;
         break;
-    case 1:
+    case ARCADE_BOARD_END_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -792,15 +859,15 @@ static BOOL BattleArcadeGameBoard_SendCommand(GAME_BOARD_WORK *work, u16 type, u
     int unkA;
 
     switch (type) {
-    case 30:
+    case ARCADE_BOARD_LINK_LAYOUT:
         unkA = 71;
         BattleArcadeGameBoard_PackBoardLayout(work, type);
         break;
-    case 31:
+    case ARCADE_BOARD_LINK_STOP_POS:
         unkA = 72;
         BattleArcadeGameBoard_PackStopPos(work, type, stopPos);
         break;
-    case 32:
+    case ARCADE_BOARD_LINK_CURSOR_POS:
         unkA = 73;
         BattleArcadeGameBoard_PackCursorPos(work, type);
         break;
@@ -860,7 +927,7 @@ static void BattleArcadeGameBoard_PackStopPos(GAME_BOARD_WORK *work, u16 type, u
     work->sendBuffer[offset] = stopPos;
     offset++;
 
-    if (Comm_GetLocalNetId() == 0 && work->stopPos == 255) {
+    if (Comm_GetLocalNetId() == 0 && work->stopPos == ARCADE_BOARD_NO_STOP_POS) {
         work->stopPos = stopPos;
     }
 
@@ -888,7 +955,7 @@ void BattleArcadeGameBoard_ReceiveStopPos(int netId, int size, void *data, void 
     work->multiSelectPos = recv[1];
 
     if (Comm_GetLocalNetId() == 0) {
-        if (work->stopPos != 255) {
+        if (work->stopPos != ARCADE_BOARD_NO_STOP_POS) {
             work->multiSelectPos = 0;
         } else {
             work->stopPos = work->multiSelectPos + work->boardArea;

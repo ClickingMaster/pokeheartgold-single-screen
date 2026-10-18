@@ -86,6 +86,12 @@ typedef struct BattleCastleMonSummary {
     u8 maxPp[4];          // 0x30
 } BattleCastleMonSummary; // size 0x34
 
+enum CastleButtonAnimState {
+    CASTLE_BUTTON_ANIM_HIGHLIGHT,
+    CASTLE_BUTTON_ANIM_RESTORE,
+    CASTLE_BUTTON_ANIM_WAIT,
+};
+
 typedef struct BattleCastlePartyApp {
     OverlayManager *manager;                     // 0x000
     FrontierSave *frontierSave;                  // 0x004

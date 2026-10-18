@@ -340,12 +340,12 @@ BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
     const u8 *rect = gBattleCastlePartyAppButtonRects[app->pressedButton];
 
     switch (app->buttonAnimState) {
-    case 0:
+    case CASTLE_BUTTON_ANIM_HIGHLIGHT:
         BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, rect[0], rect[1], rect[2], rect[3], 6);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_2);
         app->buttonAnimState++;
         break;
-    case 1:
+    case CASTLE_BUTTON_ANIM_RESTORE:
         app->buttonAnimTimer++;
         if (app->buttonAnimTimer == 4) {
             BgTilemapRectChangePalette(app->bgConfig, GF_BG_LYR_MAIN_2, rect[0], rect[1], rect[2], rect[3], 5);
@@ -354,7 +354,7 @@ BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
             app->buttonAnimState++;
         }
         break;
-    case 2:
+    case CASTLE_BUTTON_ANIM_WAIT:
         app->buttonAnimTimer++;
         if (app->buttonAnimTimer == 2) {
             return FALSE;

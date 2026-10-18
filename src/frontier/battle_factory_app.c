@@ -67,6 +67,7 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define FACTORY_STATE_LINK_TRADE_RESULT  14
 
 // Link commands (sendBuf[0])
+#define FACTORY_LINK_PING    7
 #define FACTORY_LINK_RENTALS 8
 #define FACTORY_LINK_SWAP    10
 
@@ -415,7 +416,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
 BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
     BattleFactoryApp *app = OverlayManager_GetData(man);
 
-    if (app->partnerSwapState == 1) {
+    if (app->partnerSwapState == TRUE) {
         switch (*state) {
         case FACTORY_STATE_SELECT_SWAP_OUT:
         case FACTORY_STATE_CANCEL_SWAP:
@@ -543,7 +544,7 @@ BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
         break;
     case FACTORY_STATE_LINK_SEND_SWAP:
         if (BattleFactoryApp_LinkSendSwap(app) == TRUE) {
-            if (app->partnerSwapState == 1) {
+            if (app->partnerSwapState == TRUE) {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_LINK_TRADE_RESULT);
             } else {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_LINK_SYNC);
@@ -2357,7 +2358,7 @@ static BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command,
         return FALSE;
     }
     switch (command) {
-    case 7:
+    case FACTORY_LINK_PING:
         linkCommand = 29;
         BattleFactoryApp_PrepareLinkPing(app, command);
         break;
@@ -2469,14 +2470,14 @@ void BattleFactory_ReceiveSwap(int netId, int size, const BattleFactoryLinkMessa
         app->partnerSwapState = (u8)msg->accepted;
         if (Comm_GetLocalNetId() == 0) {
             if (app->swapAccepted == TRUE) {
-                app->partnerSwapState = 0;
+                app->partnerSwapState = FALSE;
                 return;
             }
-            if (app->partnerSwapState == 1) {
+            if (app->partnerSwapState == TRUE) {
                 app->picked[0] = (u8)msg->picked0;
                 app->picked[1] = (u8)msg->picked1;
             }
-        } else if (app->partnerSwapState == 1) {
+        } else if (app->partnerSwapState == TRUE) {
             app->swapAccepted = FALSE;
             app->picked[0] = (u8)msg->picked0;
             app->picked[1] = (u8)msg->picked1;
