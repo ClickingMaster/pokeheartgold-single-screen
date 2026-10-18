@@ -6,6 +6,7 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0422.h"
+#include "record_mixing/record_mixing_exchange.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -40,6 +41,7 @@
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "union_room_avatar.h"
+#include "union_room_objects.h"
 #include "union_room_talk.h"
 #include "vram_transfer_manager.h"
 #include "wireless_manager.h"
@@ -47,7 +49,6 @@
 #include "yes_no_prompt.h"
 
 #define RECORD_MIXING_MAX_MEMBERS 5
-#define RECORD_MIXING_BUFFER_SIZE 0xBC0
 
 enum RecordMixingInitState {
     RECORD_MIXING_INIT_SETUP,
@@ -213,91 +214,87 @@ typedef struct RecordMixingApp {
 
 typedef int (*RecordMixingStateFunc)(RecordMixingApp *app, int state);
 
+static void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app);
+static void RecordMixing_VBlankCB(RecordMixingApp *app);
+static void RecordMixing_SetGfxBanks(void);
+static void RecordMixing_InitBgs(BgConfig *bgConfig);
+static void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc);
+static void RecordMixing_FreeResources(RecordMixingApp *app);
+static void RecordMixing_FreeBgs(BgConfig *bgConfig);
+static void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc);
+static void RecordMixing_FreeButtonScreen(RecordMixingApp *app);
+static void RecordMixing_InitObjTransfer(void);
+static void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc);
+static void RecordMixing_CreateSprites(RecordMixingApp *app);
+static void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused);
+static void RecordMixing_PrintCenteredString(Window *window, String *string, int textSpeed);
+static void RecordMixing_RemoveWindows(RecordMixingApp *app);
+static int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state);
+static int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state);
+static BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app);
+static void RecordMixing_HandleInput(RecordMixingApp *app);
+static void RecordMixing_UpdateDummy(RecordMixingApp *app);
+static int RecordMixing_State_WaitTextThenResetMenu(RecordMixingApp *app, int state);
+static void RecordMixing_SetStateAfterText(RecordMixingApp *app, int nextState);
+static int RecordMixing_State_WaitText(RecordMixingApp *app, int state);
+static int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state);
+static void RecordMixing_ShowYesNo(RecordMixingApp *app);
+static void RecordMixing_HideYesNo(RecordMixingApp *app);
+static int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state);
+static int RecordMixing_State_SendLeave(RecordMixingApp *app, int state);
+static int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state);
+static int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state);
+static int RecordMixing_State_StartSave(RecordMixingApp *app, int state);
+static int RecordMixing_State_Save(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state);
+static int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state);
+static int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state);
+static int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state);
+static int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state);
+static int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state);
+static int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state);
+static int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state);
+static int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state);
+static int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state);
+static void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonState);
+static void RecordMixing_PrintButtons(RecordMixingApp *app);
+static void RecordMixing_PulsePalette(u16 *angle);
+static int RecordMixing_CountProfiles(void);
+static BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordMixingApp *app);
+static void RecordMixing_HandleGroupMenuDummy(RecordMixingApp *app);
+static int RecordMixing_CountMembers(void);
+static BOOL RecordMixing_UpdateMembers(RecordMixingApp *app);
+static void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate);
+static BOOL RecordMixing_IsPrinterDone(u32 printerId);
+static void RecordMixing_ClearMessageWindow(RecordMixingApp *app);
+static void RecordMixing_UpdateMemberSprites(RecordMixingApp *app);
+static void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc);
+static void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData **plttData, u32 slot, int trainerClass, int gender);
+static void RecordMixing_FreeAvatarGraphics(RecordMixingApp *app);
+static int RecordMixing_GetTextSpeed(RecordMixingApp *app);
+static void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index);
+static int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
+
 void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
 void Comm_InitSyncedSave(s32 *arg0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
-void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *manager);
 void RecordMixingLink_RegisterCommands(RecordMixingApp *app);
 
-// Record exchange, in the record data part of this overlay.
-void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
-void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[RECORD_MIXING_BUFFER_SIZE]);
-
-void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app);
-void RecordMixing_VBlankCB(RecordMixingApp *app);
-void RecordMixing_SetGfxBanks(void);
-void RecordMixing_InitBgs(BgConfig *bgConfig);
-void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc);
-void RecordMixing_FreeResources(RecordMixingApp *app);
-void RecordMixing_FreeBgs(BgConfig *bgConfig);
-void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc);
-void RecordMixing_FreeButtonScreen(RecordMixingApp *app);
-void RecordMixing_InitObjTransfer(void);
-void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc);
-void RecordMixing_CreateSprites(RecordMixingApp *app);
-void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused);
-void RecordMixing_PrintCenteredString(Window *window, String *string, int textSpeed);
-void RecordMixing_RemoveWindows(RecordMixingApp *app);
-int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state);
-int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state);
-BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app);
-void RecordMixing_HandleInput(RecordMixingApp *app);
-void RecordMixing_UpdateDummy(RecordMixingApp *app);
-int RecordMixing_State_WaitTextThenResetMenu(RecordMixingApp *app, int state);
-void RecordMixing_SetStateAfterText(RecordMixingApp *app, int nextState);
-int RecordMixing_State_WaitText(RecordMixingApp *app, int state);
-int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state);
-void RecordMixing_ShowYesNo(RecordMixingApp *app);
-void RecordMixing_HideYesNo(RecordMixingApp *app);
-int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state);
-int RecordMixing_State_SendLeave(RecordMixingApp *app, int state);
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state);
-int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state);
 void RecordMixing_StartFlash(RecordMixingApp *app);
-int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state);
-int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state);
-int RecordMixing_State_StartSave(RecordMixingApp *app, int state);
-int RecordMixing_State_Save(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state);
-int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state);
-int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state);
-int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state);
-int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state);
-int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state);
-int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state);
-int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state);
-int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state);
-int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state);
 void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId);
 void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int netId);
-void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonState);
-void RecordMixing_PrintButtons(RecordMixingApp *app);
-void RecordMixing_PulsePalette(u16 *angle);
-int RecordMixing_CountProfiles(void);
-BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordMixingApp *app);
-void RecordMixing_HandleGroupMenuDummy(RecordMixingApp *app);
-int RecordMixing_CountMembers(void);
 int RecordMixing_GetMemberCount(RecordMixingApp *app);
-BOOL RecordMixing_UpdateMembers(RecordMixingApp *app);
-void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate);
-BOOL RecordMixing_IsPrinterDone(u32 printerId);
-void RecordMixing_ClearMessageWindow(RecordMixingApp *app);
-void RecordMixing_UpdateMemberSprites(RecordMixingApp *app);
-void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc);
-void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData **plttData, u32 slot, int trainerClass, int gender);
-void RecordMixing_FreeAvatarGraphics(RecordMixingApp *app);
-int RecordMixing_GetTextSpeed(RecordMixingApp *app);
-void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index);
-int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
 
 static const u8 sRecordMixingButtonX[2] = { 16, 24 };
 
@@ -587,7 +584,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app) {
+static void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app) {
     RecordMixingFlash *flash = &app->flash;
     if (app->flash.active) {
         if (flash->timer > sRecordMixingFlashFrames[flash->frame].duration) {
@@ -604,19 +601,19 @@ void RecordMixing_VBlankTask(SysTask *task, RecordMixingApp *app) {
     }
 }
 
-void RecordMixing_VBlankCB(RecordMixingApp *app) {
+static void RecordMixing_VBlankCB(RecordMixingApp *app) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(app->bgConfig);
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-void RecordMixing_SetGfxBanks(void) {
+static void RecordMixing_SetGfxBanks(void) {
     GraphicsBanks banks = sRecordMixingGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void RecordMixing_InitBgs(BgConfig *bgConfig) {
+static void RecordMixing_InitBgs(BgConfig *bgConfig) {
     {
         GraphicsModes modes = sRecordMixingGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
@@ -645,7 +642,7 @@ void RecordMixing_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_50);
 }
 
-void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
+static void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
     s32 i;
 
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
@@ -673,7 +670,7 @@ void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
     app->yesNoActive = 0;
 }
 
-void RecordMixing_FreeResources(RecordMixingApp *app) {
+static void RecordMixing_FreeResources(RecordMixingApp *app) {
     s32 i;
 
     RecordMixing_FreeAvatarGraphics(app);
@@ -686,7 +683,7 @@ void RecordMixing_FreeResources(RecordMixingApp *app) {
     String_Delete(app->messageText);
 }
 
-void RecordMixing_FreeBgs(BgConfig *bgConfig) {
+static void RecordMixing_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -694,7 +691,7 @@ void RecordMixing_FreeBgs(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc) {
+static void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc) {
     BgConfig *bgConfig = app->bgConfig;
 
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_50);
@@ -712,12 +709,12 @@ void RecordMixing_LoadBgGraphics(RecordMixingApp *app, NARC *narc) {
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 10, 0, HEAP_ID_50);
 }
 
-void RecordMixing_FreeButtonScreen(RecordMixingApp *app) {
+static void RecordMixing_FreeButtonScreen(RecordMixingApp *app) {
     Heap_Free(app->buttonScreenRaw);
     app->buttonScreenRaw = NULL;
 }
 
-void RecordMixing_InitObjTransfer(void) {
+static void RecordMixing_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sRecordMixingObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_50);
@@ -725,7 +722,7 @@ void RecordMixing_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc) {
+static void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc) {
     int i;
     RecordMixingApp *walk;
 
@@ -749,7 +746,7 @@ void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc) {
     SpriteTransfer_CreateExtPlttTransferTask(app->plttRes);
 }
 
-void RecordMixing_CreateSprites(RecordMixingApp *app) {
+static void RecordMixing_CreateSprites(RecordMixingApp *app) {
     SpriteTemplate template;
     int i;
     const u16 *pos;
@@ -787,7 +784,7 @@ void RecordMixing_CreateSprites(RecordMixingApp *app) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused) {
+static void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused) {
     AddWindowParameterized(app->bgConfig, &app->messageWindow, GF_BG_LYR_MAIN_0, 2, 1, 27, 4, 12, 0x5B);
     FillWindowPixelBuffer(&app->messageWindow, 15);
     AddWindowParameterized(app->bgConfig, &app->buttonWindows[0], GF_BG_LYR_MAIN_0, 16, 21, 8, 2, 9, 0xC7);
@@ -802,13 +799,13 @@ void RecordMixing_AddWindows(RecordMixingApp *app, OverlayManager *unused) {
     app->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_50);
 }
 
-void RecordMixing_PrintCenteredString(Window *window, String *string, int textSpeed) {
+static void RecordMixing_PrintCenteredString(Window *window, String *string, int textSpeed) {
     int width = FontID_String_GetWidth(1, string, 0);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 1, string, (208 - width) / 2, 1, textSpeed, 0x10400, NULL);
 }
 
-void RecordMixing_RemoveWindows(RecordMixingApp *app) {
+static void RecordMixing_RemoveWindows(RecordMixingApp *app) {
     YesNoPrompt_Destroy(app->yesNoPrompt);
     RemoveWindow(&app->memberListWindow);
     RemoveWindow(&app->titleWindow);
@@ -817,7 +814,7 @@ void RecordMixing_RemoveWindows(RecordMixingApp *app) {
     RemoveWindow(&app->buttonWindows[1]);
 }
 
-int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
+static int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
     CommState_SetErrorWatch(0, 1);
     if (Comm_GetLocalNetId() == 0) {
         if (Comm_CountConnected() >= 2) {
@@ -830,7 +827,7 @@ int RecordMixing_State_PrintGroupPrompt(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state) {
+static int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state) {
     RecordMixing_HandleInput(app);
     if (Comm_GetLocalNetId() == 0) {
         if (RecordMixing_CountProfiles() != 1) {
@@ -842,7 +839,7 @@ int RecordMixing_State_HandleGroupMenu(RecordMixingApp *app, int state) {
     return state;
 }
 
-BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app) {
+static BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app) {
     if (app->menuInputState == MENU_INPUT_STATE_TOUCH) {
         if (System_GetTouchHeld()) {
             return FALSE;
@@ -863,7 +860,7 @@ BOOL RecordMixing_UpdateMenuInputState(RecordMixingApp *app) {
     return FALSE;
 }
 
-void RecordMixing_HandleInput(RecordMixingApp *app) {
+static void RecordMixing_HandleInput(RecordMixingApp *app) {
     u8 button = 0;
 
     struct {
@@ -931,21 +928,21 @@ void RecordMixing_HandleInput(RecordMixingApp *app) {
     }
 }
 
-void RecordMixing_UpdateDummy(RecordMixingApp *app) {
+static void RecordMixing_UpdateDummy(RecordMixingApp *app) {
 }
 
-int RecordMixing_State_WaitTextThenResetMenu(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitTextThenResetMenu(RecordMixingApp *app, int state) {
     RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_RESET_LEADER_MENU_STATE);
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-void RecordMixing_SetStateAfterText(RecordMixingApp *app, int nextState) {
+static void RecordMixing_SetStateAfterText(RecordMixingApp *app, int nextState) {
     app->state = RECORD_MIXING_STATE_WAIT_TEXT;
     app->nextState = nextState;
 }
 
-int RecordMixing_State_WaitText(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitText(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId)) {
         app->state = app->nextState;
         if (app->nextState == RECORD_MIXING_STATE_HANDLE_GROUP_MENU) {
@@ -961,7 +958,7 @@ int RecordMixing_State_WaitText(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state) {
+static int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state) {
     u32 data;
 
     if (Comm_GetLocalNetId() == 0) {
@@ -973,7 +970,7 @@ int RecordMixing_State_ResetLeaderMenuState(RecordMixingApp *app, int state) {
     return state;
 }
 
-void RecordMixing_ShowYesNo(RecordMixingApp *app) {
+static void RecordMixing_ShowYesNo(RecordMixingApp *app) {
     YesNoPromptTemplate template;
 
     MI_CpuFill8(&template, 0, sizeof(template));
@@ -994,7 +991,7 @@ void RecordMixing_ShowYesNo(RecordMixingApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-void RecordMixing_HideYesNo(RecordMixingApp *app) {
+static void RecordMixing_HideYesNo(RecordMixingApp *app) {
     if (app->yesNoActive != 0) {
         app->menuInputState = YesNoPrompt_IsInTouchMode(app->yesNoPrompt);
         YesNoPrompt_Reset(app->yesNoPrompt);
@@ -1008,14 +1005,14 @@ void RecordMixing_HideYesNo(RecordMixingApp *app) {
     }
 }
 
-int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_ShowCancelYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = RECORD_MIXING_STATE_HANDLE_CANCEL_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
     u32 noData;
     u8 data[4];
     int input;
@@ -1068,13 +1065,13 @@ int RecordMixing_State_HandleCancelYesNo(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitLeaveReply(RecordMixingApp *app, int state) {
     app->leaveWaitFrames = 0;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
+static int RecordMixing_State_SendLeave(RecordMixingApp *app, int state) {
     u8 data[4];
 
     if (app->assignedCount != Comm_CountConnected() || app->assignedCount != RecordMixing_CountMembers()) {
@@ -1103,14 +1100,14 @@ int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_ShowConfirmYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = RECORD_MIXING_STATE_HANDLE_CONFIRM_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
     u32 data;
     int input;
 
@@ -1144,7 +1141,7 @@ int RecordMixing_State_HandleConfirmYesNo(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state) {
+static int RecordMixing_State_SendStartMixing(RecordMixingApp *app, int state) {
     if (app->startMixingSent == 0 && Comm_SendCommand(115, NULL, 0) == TRUE) {
         app->startMixingSent = 1;
     }
@@ -1158,7 +1155,7 @@ void RecordMixing_StartFlash(RecordMixingApp *app) {
     app->flash.active = 1;
 }
 
-int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
@@ -1168,13 +1165,13 @@ int RecordMixing_State_WaitRecords(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state) {
+static int RecordMixing_State_MergeRecords(RecordMixingApp *app, int state) {
     RecordMixing_MergeReceivedRecords(app->saveData, app->receiveBuffers);
     app->state = RECORD_MIXING_STATE_START_SAVE;
     return state;
 }
 
-int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
+static int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
     gSystem.softResetDisabled = TRUE;
     GameStats_AddScore(app->args->gameStats, SCORE_EVENT_RECORDS_MIXED);
     Comm_InitSyncedSave(&app->saveState);
@@ -1182,7 +1179,7 @@ int RecordMixing_State_StartSave(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_Save(RecordMixingApp *app, int state) {
+static int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         Comm_CountConnected();
     }
@@ -1199,21 +1196,21 @@ int RecordMixing_State_Save(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitAfterSave(RecordMixingApp *app, int state) {
     if (app->counter++ > 60) {
         app->state = RECORD_MIXING_STATE_START_EXIT_SYNC;
     }
     return state;
 }
 
-int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state) {
+static int RecordMixing_State_PrintCanceled(RecordMixingApp *app, int state) {
     RecordMixing_PrintMessage(app, msg_0422_00005, FALSE);
     RecordMixing_SetStateAfterText(app, RECORD_MIXING_STATE_FADE_OUT_AFTER_DELAY);
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
+static int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 60) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
@@ -1223,14 +1220,14 @@ int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_ShowDisbandYesNo(RecordMixingApp *app, int state) {
     RecordMixing_ShowYesNo(app);
     app->state = RECORD_MIXING_STATE_HANDLE_DISBAND_YES_NO;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
+static int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     int input;
     int data;
 
@@ -1259,7 +1256,7 @@ int RecordMixing_State_HandleDisbandYesNo(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
+static int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_PrintMessage(app, msg_0422_00005, FALSE);
     } else {
@@ -1273,7 +1270,7 @@ int RecordMixing_State_PrintDisband(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 45) {
         app->state = RECORD_MIXING_STATE_START_EXIT_SYNC;
@@ -1282,14 +1279,14 @@ int RecordMixing_State_WaitDisband(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state) {
+static int RecordMixing_State_StartExitSync(RecordMixingApp *app, int state) {
     LinkSync_StartSync(201);
     app->state = RECORD_MIXING_STATE_WAIT_EXIT_SYNC;
     RecordMixing_UpdateDummy(app);
     return state;
 }
 
-int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
     if (LinkSync_IsSynced(201) != FALSE) {
         CommState_SetErrorWatch(0, 0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
@@ -1299,7 +1296,7 @@ int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
+static int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
         RecordMixing_PrintMessage(app, msg_0422_00009, FALSE);
     }
@@ -1308,7 +1305,7 @@ int RecordMixing_State_PrintMemberUnavailable(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state) {
     if (RecordMixing_IsPrinterDone(app->printerId) != FALSE) {
         app->state = RECORD_MIXING_STATE_FADE_OUT_AFTER_DELAY;
     }
@@ -1316,7 +1313,7 @@ int RecordMixing_State_WaitMemberUnavailable(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
+static int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_SetButtonState(app, 0, 2);
     }
@@ -1337,7 +1334,7 @@ int RecordMixing_State_PrintMemberLeft(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state) {
+static int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state) {
     if (app->leaveConnectedCount != 0) {
         int connected = Comm_CountConnected();
         if (app->leaveConnectedCount != connected) {
@@ -1350,7 +1347,7 @@ int RecordMixing_State_StartMemberLeftWait(RecordMixingApp *app, int state) {
     return state;
 }
 
-int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state) {
+static int RecordMixing_State_WaitMemberLeft(RecordMixingApp *app, int state) {
     if (app->leaveConnectedCount != 0) {
         int connected = Comm_CountConnected();
         if (app->leaveConnectedCount != connected) {
@@ -1449,12 +1446,12 @@ void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int ne
 }
 
 // buttonState: 0 normal, 1 pressed, 2 disabled (rows of the button screen)
-void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonState) {
+static void RecordMixing_SetButtonState(RecordMixingApp *app, int button, int buttonState) {
     NNSG2dScreenData *screen = app->buttonScreen;
     CopyToBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, sRecordMixingButtonX[button], 20, 8, 4, screen->rawData, 0, buttonState * 4, screen->screenWidth / 8, screen->screenHeight / 8);
 }
 
-void RecordMixing_PrintButtons(RecordMixingApp *app) {
+static void RecordMixing_PrintButtons(RecordMixingApp *app) {
     String *string;
     int x;
 
@@ -1475,7 +1472,7 @@ void RecordMixing_PrintButtons(RecordMixingApp *app) {
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void RecordMixing_PulsePalette(u16 *angle) {
+static void RecordMixing_PulsePalette(u16 *angle) {
     u16 color;
 
     *angle += 10;
@@ -1487,7 +1484,7 @@ void RecordMixing_PulsePalette(u16 *angle) {
     GX_LoadOBJPltt(&color, 42, 2);
 }
 
-int RecordMixing_CountProfiles(void) {
+static int RecordMixing_CountProfiles(void) {
     int i, n = 0;
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
         if (CommPlayerInfo_GetProfile(i)) {
@@ -1497,7 +1494,7 @@ int RecordMixing_CountProfiles(void) {
     return n;
 }
 
-BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordMixingApp *app) {
+static BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordMixingApp *app) {
     int i;
     int localId = Comm_GetLocalNetId();
     RecordMixingApp *memberWalk;
@@ -1538,10 +1535,10 @@ BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, RecordM
     return TRUE;
 }
 
-void RecordMixing_HandleGroupMenuDummy(RecordMixingApp *app) {
+static void RecordMixing_HandleGroupMenuDummy(RecordMixingApp *app) {
 }
 
-int RecordMixing_CountMembers(void) {
+static int RecordMixing_CountMembers(void) {
     int i, n = 0;
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
         if (CommPlayerInfo_GetProfile(i)) {
@@ -1557,7 +1554,7 @@ int RecordMixing_GetMemberCount(RecordMixingApp *app) {
 
 // memberStates: 0 none, 1 joined, 2 shown, 3 left
 
-BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
+static BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
     int i;
     BOOL changed = FALSE;
 
@@ -1593,7 +1590,7 @@ BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
     return changed;
 }
 
-void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate) {
+static void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate) {
     String *string = String_New(180, HEAP_ID_50);
     ReadMsgDataIntoString(app->msgData, msgId, string);
     StringExpandPlaceholders(app->msgFmt, app->messageText, string);
@@ -1609,7 +1606,7 @@ void RecordMixing_PrintMessage(RecordMixingApp *app, int msgId, BOOL immediate) 
     }
 }
 
-BOOL RecordMixing_IsPrinterDone(u32 printerId) {
+static BOOL RecordMixing_IsPrinterDone(u32 printerId) {
     if (printerId == 0xFF) {
         return TRUE;
     }
@@ -1619,11 +1616,11 @@ BOOL RecordMixing_IsPrinterDone(u32 printerId) {
     return FALSE;
 }
 
-void RecordMixing_ClearMessageWindow(RecordMixingApp *app) {
+static void RecordMixing_ClearMessageWindow(RecordMixingApp *app) {
     ClearFrameAndWindow2(&app->messageWindow, FALSE);
 }
 
-void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
+static void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
     int i;
     BOOL appeared = FALSE;
     int gender;
@@ -1664,14 +1661,14 @@ void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
     }
 }
 
-void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc) {
+static void RecordMixing_LoadAvatarGraphics(RecordMixingApp *app, NARC *narc) {
     app->avatarPlttRaw[0] = GfGfxLoader_GetPlttData(NARC_a_1_0_0, 9, &app->avatarPltt[0], HEAP_ID_50);
     app->avatarPlttRaw[1] = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 11, &app->avatarPltt[1], HEAP_ID_50);
     app->avatarCharRaw[0] = GfGfxLoader_GetCharData(NARC_a_1_0_0, 43, TRUE, &app->avatarChar[0], HEAP_ID_50);
     app->avatarCharRaw[1] = GfGfxLoader_GetCharDataFromOpenNarc(narc, 12, TRUE, &app->avatarChar[1], HEAP_ID_50);
 }
 
-void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData **plttData, u32 slot, int trainerClass, int gender) {
+static void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData **plttData, u32 slot, int trainerClass, int gender) {
     int avatar = SpriteToUnionRoomAvatarIdx(gender, trainerClass);
     u8 *pltt = plttData[1]->pRawData;
     u8 *chars = charData[1]->pRawData;
@@ -1679,18 +1676,18 @@ void RecordMixing_LoadAvatar(NNSG2dCharacterData **charData, NNSG2dPaletteData *
     GX_LoadOBJPltt(pltt + avatar * 0x20, (slot + 7) * 0x20, 0x20);
 }
 
-void RecordMixing_FreeAvatarGraphics(RecordMixingApp *app) {
+static void RecordMixing_FreeAvatarGraphics(RecordMixingApp *app) {
     Heap_Free(app->avatarPlttRaw[0]);
     Heap_Free(app->avatarPlttRaw[1]);
     Heap_Free(app->avatarCharRaw[0]);
     Heap_Free(app->avatarCharRaw[1]);
 }
 
-int RecordMixing_GetTextSpeed(RecordMixingApp *app) {
+static int RecordMixing_GetTextSpeed(RecordMixingApp *app) {
     return 1;
 }
 
-void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
+static void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
     if (Comm_GetLocalNetId() == 0) {
         if (index == -1) {
             CommState_SetMaxEntries(1);
@@ -1711,7 +1708,7 @@ void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index) {
     }
 }
 
-int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
+static int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
     u8 flag[1];
     int n = RecordMixing_CountMembers();
 

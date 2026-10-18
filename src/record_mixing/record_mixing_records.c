@@ -10,6 +10,14 @@
 
 #define RECORD_MIXING_MAX_GROUPS_KEPT 4
 
+static void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group);
+static void RecordMixing_RemoveGroup(FRIEND_GROUP *groups, int index);
+static BOOL RecordMixing_IsAllowedEntryKind(int idx, int val);
+static void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5);
+static int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx);
+static void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b);
+static void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx);
+
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
@@ -43,7 +51,7 @@ FRIEND_GROUP *RecordMixing_GetGroupRecord(SAV_FRIEND_GRP *friendGroup) {
 }
 
 // groups[2..5] hold the groups received by mixing, newest first
-void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group) {
+static void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group) {
     int i;
     for (i = 5; i > 2; --i) {
         groups[i] = groups[i - 1];
@@ -51,7 +59,7 @@ void RecordMixing_InsertGroup(FRIEND_GROUP *groups, const FRIEND_GROUP *group) {
     groups[2] = *group;
 }
 
-void RecordMixing_RemoveGroup(FRIEND_GROUP *groups, int index) {
+static void RecordMixing_RemoveGroup(FRIEND_GROUP *groups, int index) {
     int i;
     if (index < 2 || index > 5) {
         GF_AssertFail();
@@ -93,7 +101,7 @@ u32 RecordMixing_Block23List1_GetSize(SaveData *saveData) {
     return 4 * sizeof(RecordMixingEntry);
 }
 
-BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
+static BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
     int i;
     for (i = 0; sRecordMixingAllowedEntryKinds[idx][i] != 0xFF; i++) {
         if (val == sRecordMixingAllowedEntryKinds[idx][i]) {
@@ -103,7 +111,7 @@ BOOL RecordMixing_IsAllowedEntryKind(int idx, int val) {
     return FALSE;
 }
 
-void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
+static void RecordMixing_FillBlock23Entries(SaveData *saveData, RecordMixingEntry *out, RecordMixingEntryData *in, int count, int unused4, int unused5) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     int i;
     for (i = 0; i < count; i++, in++, out++) {
@@ -179,7 +187,7 @@ void *RecordMixing_Block23List1_Load2(SaveData *saveData, enum HeapID heapID, u3
     return out;
 }
 
-int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
+static int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, RecordMixingEntry *entry, int idx) {
     int i;
     if (entry->data.kind == 0) {
         return 0;
@@ -203,7 +211,7 @@ int RecordMixing_InsertBlock23Entry(RecordMixingEntry *entries, int count, Recor
 }
 
 // a for partners whose profile has a version set, b otherwise
-void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
+static void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
     PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
     if (!profile) {
         return NULL;
@@ -216,7 +224,7 @@ void *RecordMixing_SelectReceivedBuffer(u32 netId, void *a, void *b) {
 
 // every member takes 4 entries, from the other members in turn
 
-void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
+static void RecordMixing_MergeBlock23List(RecordMixingEntry *entries, int count, int numPlayers, int localId, RecordMixingEntry **received, void *received2, int idx) {
     u8 given[16];
     int j;
     int i;

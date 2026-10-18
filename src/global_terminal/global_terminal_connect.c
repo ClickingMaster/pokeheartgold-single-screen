@@ -169,37 +169,37 @@ u32 FashionEntry_sizeof(void);
 
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectSubBgTemplates;
 
-void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work);
-void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig);
-void GlobalTerminalConnect_FreeBgs(BgConfig *bgConfig);
-void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work);
-void GlobalTerminalConnect_PaletteCycleTask(SysTask *task, GlobalTerminalConnectPaletteCycle *cycle);
-void GlobalTerminalConnect_CreateWindows(GlobalTerminalConnectWork *work);
-void GlobalTerminalConnect_RemoveWindows(GlobalTerminalConnectWork *work);
-int GlobalTerminalConnect_GetAlignedX(Window *window, String *string, int x, int alignment, int unused, int fontId);
-void GlobalTerminalConnect_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color);
-void GlobalTerminalConnect_ShowErrorWindow(GlobalTerminalConnectWork *work, int msgId);
-void GlobalTerminalConnect_ShowErrorCode(GlobalTerminalConnectWork *work, int msgId, int errorNumber);
-BOOL GlobalTerminalConnect_IsPrinting(u32 printerId);
-void GlobalTerminalConnect_ShowWaitingIcon(GlobalTerminalConnectWork *work);
-void GlobalTerminalConnect_HideWaitingIcon(GlobalTerminalConnectWork *work);
-YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart);
-void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData *msgData, int msgId, int textSpeed, u32 color);
-void GlobalTerminalConnect_SetStateAndNext(GlobalTerminalConnectWork *work, u32 state, u32 nextState);
-BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType);
-BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateWaitMessage(GlobalTerminalConnectWork *work);
-BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work);
+static void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work);
+static void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig);
+static void GlobalTerminalConnect_FreeBgs(BgConfig *bgConfig);
+static void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work);
+static void GlobalTerminalConnect_PaletteCycleTask(SysTask *task, GlobalTerminalConnectPaletteCycle *cycle);
+static void GlobalTerminalConnect_CreateWindows(GlobalTerminalConnectWork *work);
+static void GlobalTerminalConnect_RemoveWindows(GlobalTerminalConnectWork *work);
+static int GlobalTerminalConnect_GetAlignedX(Window *window, String *string, int x, int alignment, int unused, int fontId);
+static void GlobalTerminalConnect_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color);
+static void GlobalTerminalConnect_ShowErrorWindow(GlobalTerminalConnectWork *work, int msgId);
+static void GlobalTerminalConnect_ShowErrorCode(GlobalTerminalConnectWork *work, int msgId, int errorNumber);
+static BOOL GlobalTerminalConnect_IsPrinting(u32 printerId);
+static void GlobalTerminalConnect_ShowWaitingIcon(GlobalTerminalConnectWork *work);
+static void GlobalTerminalConnect_HideWaitingIcon(GlobalTerminalConnectWork *work);
+static YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart);
+static void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData *msgData, int msgId, int textSpeed, u32 color);
+static void GlobalTerminalConnect_SetStateAndNext(GlobalTerminalConnectWork *work, u32 state, u32 nextState);
+static BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType);
+static BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateWaitMessage(GlobalTerminalConnectWork *work);
+static BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work);
 
 static BOOL (*sGlobalTerminalConnectStates[14])(GlobalTerminalConnectWork *) = {
     GlobalTerminalConnect_StateAskConnect,
@@ -398,7 +398,7 @@ BOOL GlobalTerminalConnect_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work) {
     vu32 *dtcm = (vu32 *)0x027E0000; // OS_SetIrqCheckFlag, with the DTCM address as a constant
 
     GF_RunVramTransferTasks();
@@ -407,7 +407,7 @@ void GlobalTerminalConnect_VBlankCB(GlobalTerminalConnectWork *work) {
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK;
 }
 
-void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig) {
+static void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig) {
     GraphicsBanks banks;
     GraphicsModes modes;
     GlobalTerminalConnectBgTemplates mainTemplates;
@@ -445,14 +445,14 @@ void GlobalTerminalConnect_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_124);
 }
 
-void GlobalTerminalConnect_FreeBgs(BgConfig *bgConfig) {
+static void GlobalTerminalConnect_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) {
     NNSG2dPaletteData *plttData;
     u8 *colors;
     volatile int coefficient;
@@ -535,7 +535,7 @@ void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) {
     NARC_Delete(narc);
 }
 
-void GlobalTerminalConnect_PaletteCycleTask(SysTask *task, GlobalTerminalConnectPaletteCycle *cycle) {
+static void GlobalTerminalConnect_PaletteCycleTask(SysTask *task, GlobalTerminalConnectPaletteCycle *cycle) {
     if (cycle->enabled != 0) {
         cycle->frame ^= 1;
         if (!(cycle->frame & 1)) {
@@ -562,7 +562,7 @@ void GlobalTerminalConnect_PaletteCycleTask(SysTask *task, GlobalTerminalConnect
     }
 }
 
-void GlobalTerminalConnect_CreateWindows(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_CreateWindows(GlobalTerminalConnectWork *work) {
     AddWindowParameterized(work->bgConfig, &work->errorWindow, GF_BG_LYR_MAIN_0, 4, 4, 23, 16, 13, 0x94);
     FillWindowPixelBuffer(&work->errorWindow, 0);
     AddWindowParameterized(work->bgConfig, &work->titleWindow, GF_BG_LYR_MAIN_0, 4, 1, 24, 2, 13, 0x204);
@@ -572,14 +572,14 @@ void GlobalTerminalConnect_CreateWindows(GlobalTerminalConnectWork *work) {
     FillWindowPixelBuffer(&work->messageWindow, 0);
 }
 
-void GlobalTerminalConnect_RemoveWindows(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_RemoveWindows(GlobalTerminalConnectWork *work) {
     RemoveWindow(&work->messageWindow);
     RemoveWindow(&work->titleWindow);
     RemoveWindow(&work->errorWindow);
 }
 
 // alignment 1 = centred, 2 = right-aligned, otherwise x
-int GlobalTerminalConnect_GetAlignedX(Window *window, String *string, int x, int alignment, int unused, int fontId) {
+static int GlobalTerminalConnect_GetAlignedX(Window *window, String *string, int x, int alignment, int unused, int fontId) {
     switch (alignment) {
     case 1:
         x = ((window->width << 3) - (int)FontID_String_GetWidth(fontId, string, 0)) / 2;
@@ -591,12 +591,12 @@ int GlobalTerminalConnect_GetAlignedX(Window *window, String *string, int x, int
     return x;
 }
 
-void GlobalTerminalConnect_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color) {
+static void GlobalTerminalConnect_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color) {
     x = GlobalTerminalConnect_GetAlignedX(window, string, x, alignment, color, 1);
     AddTextPrinterParameterizedWithColor(window, 1, string, x, y, TEXT_SPEED_INSTANT, color, NULL);
 }
 
-void GlobalTerminalConnect_ShowErrorWindow(GlobalTerminalConnectWork *work, int msgId) {
+static void GlobalTerminalConnect_ShowErrorWindow(GlobalTerminalConnectWork *work, int msgId) {
     String *string = String_New(256, HEAP_ID_124);
     ReadMsgDataIntoString(work->msgDataWifi, msgId, string);
     StringExpandPlaceholders(work->msgFormat, work->errorString, string);
@@ -607,7 +607,7 @@ void GlobalTerminalConnect_ShowErrorWindow(GlobalTerminalConnectWork *work, int 
     String_Delete(string);
 }
 
-void GlobalTerminalConnect_ShowErrorCode(GlobalTerminalConnectWork *work, int msgId, int errorNumber) {
+static void GlobalTerminalConnect_ShowErrorCode(GlobalTerminalConnectWork *work, int msgId, int errorNumber) {
     if (msgId == -1) {
         msgId = 11;
     }
@@ -616,27 +616,27 @@ void GlobalTerminalConnect_ShowErrorCode(GlobalTerminalConnectWork *work, int ms
     GlobalTerminalConnect_ShowErrorWindow(work, msgId);
 }
 
-BOOL GlobalTerminalConnect_IsPrinting(u32 printerId) {
+static BOOL GlobalTerminalConnect_IsPrinting(u32 printerId) {
     if (printerId == 0xFF || !TextPrinterCheckActive(printerId)) {
         return FALSE;
     }
     return TRUE;
 }
 
-void GlobalTerminalConnect_ShowWaitingIcon(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_ShowWaitingIcon(GlobalTerminalConnectWork *work) {
     if (work->waitingIcon == NULL) {
         work->waitingIcon = WaitingIcon_New(&work->messageWindow, 1);
     }
 }
 
-void GlobalTerminalConnect_HideWaitingIcon(GlobalTerminalConnectWork *work) {
+static void GlobalTerminalConnect_HideWaitingIcon(GlobalTerminalConnectWork *work) {
     if (work->waitingIcon != NULL) {
         WaitingIcon_Delete(work->waitingIcon);
         work->waitingIcon = NULL;
     }
 }
 
-YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart) {
+static YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int tileStart) {
     YesNoPromptTemplate template;
     YesNoPrompt *prompt = YesNoPrompt_Create(HEAP_ID_124);
 
@@ -654,7 +654,7 @@ YesNoPrompt *GlobalTerminalConnect_CreateYesNoPrompt(BgConfig *bgConfig, int til
 }
 
 // color is not used: the frame and printer use their defaults
-void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData *msgData, int msgId, int textSpeed, u32 color) {
+static void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData *msgData, int msgId, int textSpeed, u32 color) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     StringExpandPlaceholders(work->msgFormat, work->string, string);
     String_Delete(string);
@@ -667,12 +667,12 @@ void GlobalTerminalConnect_PrintMessage(GlobalTerminalConnectWork *work, MsgData
     }
 }
 
-void GlobalTerminalConnect_SetStateAndNext(GlobalTerminalConnectWork *work, u32 state, u32 nextState) {
+static void GlobalTerminalConnect_SetStateAndNext(GlobalTerminalConnectWork *work, u32 state, u32 nextState) {
     work->state = state;
     work->nextState = nextState;
 }
 
-BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType) {
+static BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType) {
     switch (WifiConnection_ClassifyErrorCode(errorCode, errorType)) {
     case 1:
     case 4:
@@ -692,7 +692,7 @@ BOOL GlobalTerminalConnect_ErrorAllowsRetry(int errorCode, int errorType) {
     }
 }
 
-BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
     int result;
 
     if (GlobalTerminalConnect_IsPrinting(work->printerId) == TRUE) {
@@ -727,7 +727,7 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
     case GTC_START_PRINT_CONNECTING:
         CommState_InitWfcSession(work->args->launchArgs->saveData);
@@ -752,7 +752,7 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
     u8 buffer[0x48];
 
     DWC_ProcessInet();
@@ -789,13 +789,13 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
     DWC_NASLoginAsync(work);
     work->state = GTC_STATE_4;
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     int errorCode;
     u32 errorType;
 
@@ -842,7 +842,7 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
     FriendRoster *wifiList = Save_FriendRoster_Get(work->args->launchArgs->saveData);
     SysInfo *sysInfo = Save_SysInfo_Get(work->args->launchArgs->saveData);
 
@@ -856,14 +856,14 @@ BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateShowError(GlobalTerminalConnectWork *work) {
     int msgId = WifiConnection_ClassifyErrorCode(-work->errorCode, work->errorType);
     GlobalTerminalConnect_ShowErrorCode(work, msgId, -work->errorCode);
     work->state = GTC_STATE_WAIT_ERROR_ACK;
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B) || System_GetTouchNew() == TRUE) {
         EraseFrameAndWindow1(&work->errorWindow, FALSE);
         work->substate = 0;
@@ -876,7 +876,7 @@ BOOL GlobalTerminalConnect_StateWaitErrorAck(GlobalTerminalConnectWork *work) {
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work) {
     if (work->state != GTC_STATE_EXIT_CONNECTED) {
         CommState_FreeWfcSession();
     }
@@ -887,7 +887,7 @@ BOOL GlobalTerminalConnect_StateExit(GlobalTerminalConnectWork *work) {
     return TRUE;
 }
 
-BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work) {
     int msgId = 0;
 
     switch (work->serverError + 15) {
@@ -914,7 +914,7 @@ BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work)
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
     case GTC_DISCONNECT_PRINT_DISCONNECTING:
         GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msg_0775_00186, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
@@ -946,14 +946,14 @@ BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork 
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateWaitMessage(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateWaitMessage(GlobalTerminalConnectWork *work) {
     if (!GlobalTerminalConnect_IsPrinting(work->printerId)) {
         work->state = work->nextState;
     }
     return FALSE;
 }
 
-BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
+static BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
     if (GlobalTerminalConnect_IsPrinting(work->printerId) == TRUE) {
         return FALSE;
     }

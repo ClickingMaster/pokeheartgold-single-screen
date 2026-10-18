@@ -258,19 +258,12 @@ typedef struct GlobalTerminalNetResponse {
     u16 result;
 } GlobalTerminalNetResponse;
 
-void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form);
 void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, GlobalTerminalNetDressUpRecord *record);
 void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form, enum HeapID heapID);
-void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value);
-void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const void *src, void *dst);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void GlobalTerminalNet_SetRankingsHeader(SaveData *saveData, const GlobalTerminalNetRankingsSource *src, GlobalTerminalNetRankingsHeader *dst);
 BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args);
 void GlobalTerminalNet_Free(GlobalTerminalNet *net);
-BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net);
-BOOL GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net);
-BOOL GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net);
-BOOL GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *header, const GlobalTerminalNetDressUpRecord *record);
 BOOL GlobalTerminalNet_RequestDressUpDownload(GlobalTerminalNet *net, int arg);
 BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const void *header, PCStorage *storage, int box);

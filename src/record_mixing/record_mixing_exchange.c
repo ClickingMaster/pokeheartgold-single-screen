@@ -31,7 +31,6 @@ SaveRankingsEntry *RecordMixing_Rankings_Load(SaveData *saveData, enum HeapID he
 void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args);
 void *RecordMixing_BattleRoomTrainer_Load(SaveData *saveData, enum HeapID heapID, u32 size);
 void RecordMixing_BattleRoomTrainer_Merge(RecordMixingMergeArgs *args);
-void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
 
 u32 RecordMixing_FriendGroup_GetSize(SaveData *saveData) {
     return RecordMixing_GetGroupRecordSize(Save_FriendGroup_Get(saveData));

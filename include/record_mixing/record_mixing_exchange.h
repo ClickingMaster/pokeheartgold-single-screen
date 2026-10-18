@@ -9,6 +9,7 @@
 
 #define RECORD_MIXING_SEND_SIZE    3000
 #define RECORD_MIXING_NUM_HANDLERS 10
+#define RECORD_MIXING_BUFFER_SIZE  0xBC0 // one member's records in the link transfer
 
 // What the merge function of a record type gets: the received records of every member.
 typedef struct RecordMixingMergeArgs {
@@ -28,5 +29,8 @@ typedef struct RecordMixingHandler {
 } RecordMixingHandler;
 
 extern const RecordMixingHandler sRecordMixingHandlers[RECORD_MIXING_NUM_HANDLERS];
+
+void RecordMixing_BuildSendBuffer(SaveData *, void *);
+void RecordMixing_MergeReceivedRecords(SaveData *, u8 (*)[RECORD_MIXING_BUFFER_SIZE]);
 
 #endif // POKEHEARTGOLD_RECORD_MIXING_EXCHANGE_H

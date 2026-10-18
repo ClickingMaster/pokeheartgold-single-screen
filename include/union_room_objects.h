@@ -49,6 +49,7 @@ typedef struct UnionRoomObjects {
 } UnionRoomObjects;
 
 UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom);
+void UnionRoomObjects_ResetSlots(UnionRoomObjects *);
 void UnionRoomObjects_RequestLeaveAll(UnionRoomObjects *objects);
 void UnionRoomObjects_Delete(UnionRoomObjects *objects);
 void UnionRoomObjects_RestoreAfterScript(MapObjectManager *mapObjectManager, UnionRoomObjects *objects);

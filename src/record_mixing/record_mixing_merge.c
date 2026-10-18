@@ -15,9 +15,7 @@
 void SaveBlock23_ClearArraysAndReset(SaveBlock23 *data);
 void SaveBlock23_Reset(SaveBlock23 *data);
 
-void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0]);
-
-void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0]) {
+void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[RECORD_MIXING_BUFFER_SIZE]) {
     RecordMixingMergeArgs args;
     void *records[RECORD_MIXING_MAX_MEMBERS];
     void *records2[RECORD_MIXING_MAX_MEMBERS];

@@ -153,6 +153,43 @@ extern char sGlobalTerminalServerHostName[];
 extern u8 ov39_0222AA78[];
 extern u8 sGlobalTerminalSocketCipher[];
 
+static void GlobalTerminalSocket_Reset(void);
+static int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *login);
+static void GlobalTerminalSocket_ClearRequest(void);
+static inline int GlobalTerminalSocket_FetchTokenNextState(BOOL *done);
+static void GlobalTerminalSocket_RunRequest(void);
+static int GlobalTerminalSocket_SendRequest(int command, void *payload, void *response, int payloadSize);
+static int GlobalTerminalSocket_GetStateUnlocked(void);
+static void *GlobalTerminalSocket_GetResponse(void);
+static int GlobalTerminalSocket_GetResponseSize(void);
+static int GlobalTerminalSocket_GetError(void);
+static void *GlobalTerminalSocket_Alloc(int size);
+static void GlobalTerminalSocket_Free(void *ptr);
+static void GlobalTerminalSocket_Lock(void);
+static void GlobalTerminalSocket_Unlock(void);
+static int GlobalTerminalSocket_InitMutex(void);
+static int GlobalTerminalSocket_InitSettingsStub(void *settings);
+static int GlobalTerminalSocket_InitTick(void);
+static void GlobalTerminalSocket_ResetStub(void);
+static void GlobalTerminalSocket_ThreadMain(void);
+static int GlobalTerminalSocket_StartThread(void);
+static int GlobalTerminalSocket_IsIPv4Address(signed char *str);
+static int GlobalTerminalSocket_ResolveHost(char *host, char *out);
+static int GlobalTerminalSocket_Open(void);
+static void GlobalTerminalSocket_Close(void);
+static inline u16 GlobalTerminalSocket_SwapBytes(u16 value);
+static int GlobalTerminalSocket_Connect(void);
+static int GlobalTerminalSocket_Send(void);
+static int GlobalTerminalSocket_Receive(void);
+static void GlobalTerminalSocket_Sleep(u32 msec);
+static int GlobalTerminalSocket_FetchToken(void);
+static void GlobalTerminalSocket_Encode(const u8 *src, int size, u8 *dst);
+static inline u32 GlobalTerminalSocket_Xor(u32 byte, u32 key);
+static void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst);
+static int GlobalTerminalSocket_GetRequestSize(int command);
+static int GlobalTerminalSocket_GetResponseBufferSize(int command);
+static void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg);
+
 void *DWC_Alloc(int category, int size);
 void DWC_Free(int category, void *ptr, int size);
 int gsSocketInetAddr(char *address);
@@ -169,34 +206,6 @@ int SOC_Recv(int socket, void *buffer, int length, int flags);
 int SOC_Shutdown(int socket, int how);
 int SOC_Close(int socket);
 
-void GlobalTerminalSocket_Reset(void);
-int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *login);
-void GlobalTerminalSocket_ClearRequest(void);
-void GlobalTerminalSocket_RunRequest(void);
-int GlobalTerminalSocket_SendRequest(int command, void *payload, void *response, int payloadSize);
-int GlobalTerminalSocket_GetStateUnlocked(void);
-void *GlobalTerminalSocket_GetResponse(void);
-int GlobalTerminalSocket_GetResponseSize(void);
-int GlobalTerminalSocket_GetError(void);
-void *GlobalTerminalSocket_Alloc(int size);
-void GlobalTerminalSocket_Free(void *ptr);
-void GlobalTerminalSocket_Lock(void);
-void GlobalTerminalSocket_Unlock(void);
-int GlobalTerminalSocket_InitMutex(void);
-int GlobalTerminalSocket_InitSettingsStub(void *settings);
-int GlobalTerminalSocket_InitTick(void);
-void GlobalTerminalSocket_ResetStub(void);
-void GlobalTerminalSocket_ThreadMain(void);
-int GlobalTerminalSocket_StartThread(void);
-int GlobalTerminalSocket_IsIPv4Address(signed char *str);
-int GlobalTerminalSocket_ResolveHost(char *host, char *out);
-int GlobalTerminalSocket_Open(void);
-void GlobalTerminalSocket_Close(void);
-int GlobalTerminalSocket_Connect(void);
-int GlobalTerminalSocket_Send(void);
-int GlobalTerminalSocket_Receive(void);
-void GlobalTerminalSocket_Sleep(u32 msec);
-int GlobalTerminalSocket_FetchToken(void);
 int GlobalTerminalServer_Init(GlobalTerminalNetLogin *login);
 void GlobalTerminalServer_Stop(void);
 int GlobalTerminalServer_GetState(void);
@@ -216,13 +225,8 @@ int GlobalTerminalServer_SearchVideosKind1(int *arg, void *response);
 int GlobalTerminalServer_SearchVideosKind2(int *arg, void *response);
 int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *response);
 int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response);
-void GlobalTerminalSocket_Encode(const u8 *src, int size, u8 *dst);
-void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst);
-int GlobalTerminalSocket_GetRequestSize(int command);
-int GlobalTerminalSocket_GetResponseBufferSize(int command);
-void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg);
 
-void GlobalTerminalSocket_Reset(void) {
+static void GlobalTerminalSocket_Reset(void) {
     GlobalTerminalSocket_ClearRequest();
     memset(&sGlobalTerminalSocket.login, 0, sizeof(sGlobalTerminalSocket.login));
     sGlobalTerminalSocket.hasToken = FALSE;
@@ -232,7 +236,7 @@ void GlobalTerminalSocket_Reset(void) {
     GlobalTerminalSocket_ResetStub();
 }
 
-int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *login) {
+static int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *login) {
     if (login) {
         sGlobalTerminalSocket.login = *login;
         sGlobalTerminalSocket.hasToken = FALSE;
@@ -249,7 +253,7 @@ int GlobalTerminalSocket_Start(char *host, int port, GlobalTerminalNetLogin *log
     return 1;
 }
 
-void GlobalTerminalSocket_ClearRequest(void) {
+static void GlobalTerminalSocket_ClearRequest(void) {
     GlobalTerminalSocket_Close();
     if (sGlobalTerminalSocket.request) {
         GlobalTerminalSocket_Free(sGlobalTerminalSocket.request);
@@ -278,7 +282,7 @@ static inline int GlobalTerminalSocket_FetchTokenNextState(BOOL *done) {
     return next;
 }
 
-void GlobalTerminalSocket_RunRequest(void) {
+static void GlobalTerminalSocket_RunRequest(void) {
     BOOL done;
     int next;
     for (;;) {
@@ -358,7 +362,7 @@ void GlobalTerminalSocket_RunRequest(void) {
     GlobalTerminalSocket_Unlock();
 }
 
-int GlobalTerminalSocket_SendRequest(int command, void *payload, void *response, int payloadSize) {
+static int GlobalTerminalSocket_SendRequest(int command, void *payload, void *response, int payloadSize) {
     u32 size;
     GlobalTerminalSocket_Lock();
     switch (sGlobalTerminalSocket.state) {
@@ -424,11 +428,11 @@ int GlobalTerminalSocket_SendRequest(int command, void *payload, void *response,
     return 1;
 }
 
-int GlobalTerminalSocket_GetStateUnlocked(void) {
+static int GlobalTerminalSocket_GetStateUnlocked(void) {
     return sGlobalTerminalSocket.state;
 }
 
-void *GlobalTerminalSocket_GetResponse(void) {
+static void *GlobalTerminalSocket_GetResponse(void) {
     GlobalTerminalSocket_Lock();
     if (GlobalTerminalSocket_GetStateUnlocked() != GTS_SOCKET_STATE_DONE) {
         GlobalTerminalSocket_Unlock();
@@ -438,7 +442,7 @@ void *GlobalTerminalSocket_GetResponse(void) {
     return sGlobalTerminalSocket.response + 4;
 }
 
-int GlobalTerminalSocket_GetResponseSize(void) {
+static int GlobalTerminalSocket_GetResponseSize(void) {
     GlobalTerminalSocket_Lock();
     if (GlobalTerminalSocket_GetStateUnlocked() != GTS_SOCKET_STATE_DONE) {
         GlobalTerminalSocket_Unlock();
@@ -448,7 +452,7 @@ int GlobalTerminalSocket_GetResponseSize(void) {
     return sGlobalTerminalSocket.responseSize;
 }
 
-int GlobalTerminalSocket_GetError(void) {
+static int GlobalTerminalSocket_GetError(void) {
     GlobalTerminalSocket_Lock();
     if (GlobalTerminalSocket_GetStateUnlocked() != GTS_SOCKET_STATE_ERROR) {
         GlobalTerminalSocket_Unlock();
@@ -458,34 +462,34 @@ int GlobalTerminalSocket_GetError(void) {
     return sGlobalTerminalSocket.error;
 }
 
-void *GlobalTerminalSocket_Alloc(int size) {
+static void *GlobalTerminalSocket_Alloc(int size) {
     return DWC_Alloc(0, size);
 }
 
-void GlobalTerminalSocket_Free(void *ptr) {
+static void GlobalTerminalSocket_Free(void *ptr) {
     if (ptr) {
         DWC_Free(0, ptr, 0);
     }
 }
 
-void GlobalTerminalSocket_Lock(void) {
+static void GlobalTerminalSocket_Lock(void) {
     OS_LockMutex(&sGlobalTerminalSocketMutex);
 }
 
-void GlobalTerminalSocket_Unlock(void) {
+static void GlobalTerminalSocket_Unlock(void) {
     OS_UnlockMutex(&sGlobalTerminalSocketMutex);
 }
 
-int GlobalTerminalSocket_InitMutex(void) {
+static int GlobalTerminalSocket_InitMutex(void) {
     OS_InitMutex(&sGlobalTerminalSocketMutex);
     return 1;
 }
 
-int GlobalTerminalSocket_InitSettingsStub(void *settings) {
+static int GlobalTerminalSocket_InitSettingsStub(void *settings) {
     return 1;
 }
 
-int GlobalTerminalSocket_InitTick(void) {
+static int GlobalTerminalSocket_InitTick(void) {
     if (!OS_IsTickAvailable()) {
         OS_InitTick();
     }
@@ -493,20 +497,20 @@ int GlobalTerminalSocket_InitTick(void) {
     return 1;
 }
 
-void GlobalTerminalSocket_ResetStub(void) {
+static void GlobalTerminalSocket_ResetStub(void) {
 }
 
-void GlobalTerminalSocket_ThreadMain(void) {
+static void GlobalTerminalSocket_ThreadMain(void) {
     GlobalTerminalSocket_RunRequest();
 }
 
-int GlobalTerminalSocket_StartThread(void) {
+static int GlobalTerminalSocket_StartThread(void) {
     OS_CreateThread(&sGlobalTerminalSocketThread, (void (*)(void *))GlobalTerminalSocket_ThreadMain, NULL, sGlobalTerminalSocketThreadStackEnd, 0x800, sGlobalTerminalSocket.threadPriority);
     OS_WakeupThreadDirect(&sGlobalTerminalSocketThread);
     return 1;
 }
 
-int GlobalTerminalSocket_IsIPv4Address(signed char *str) {
+static int GlobalTerminalSocket_IsIPv4Address(signed char *str) {
     int digits = 0, dots = 0;
     int c;
     while ((c = *str) != 0) {
@@ -533,7 +537,7 @@ int GlobalTerminalSocket_IsIPv4Address(signed char *str) {
     return 0;
 }
 
-int GlobalTerminalSocket_ResolveHost(char *host, char *out) {
+static int GlobalTerminalSocket_ResolveHost(char *host, char *out) {
     if (!GlobalTerminalSocket_IsIPv4Address((signed char *)host)) {
         GlobalTerminalSocketHostEntry *entry = SOC_GetHostByName(host);
         if (entry) {
@@ -548,7 +552,7 @@ int GlobalTerminalSocket_ResolveHost(char *host, char *out) {
     return 1;
 }
 
-int GlobalTerminalSocket_Open(void) {
+static int GlobalTerminalSocket_Open(void) {
     char address[16];
     sGlobalTerminalSocket.socket = SOC_Socket(2, 1, 0);
     if (sGlobalTerminalSocket.socket == -1) {
@@ -568,7 +572,7 @@ int GlobalTerminalSocket_Open(void) {
     return 1;
 }
 
-void GlobalTerminalSocket_Close(void) {
+static void GlobalTerminalSocket_Close(void) {
     if (sGlobalTerminalSocket.socket == -1) {
         return;
     }
@@ -582,7 +586,7 @@ static inline u16 GlobalTerminalSocket_SwapBytes(u16 value) {
     return ((v >> 8) & 0xFF) | ((v << 8) & 0xFF00);
 }
 
-int GlobalTerminalSocket_Connect(void) {
+static int GlobalTerminalSocket_Connect(void) {
     GlobalTerminalSocketAddress address;
     u32 start;
     int result;
@@ -622,7 +626,7 @@ int GlobalTerminalSocket_Connect(void) {
     return 1;
 }
 
-int GlobalTerminalSocket_Send(void) {
+static int GlobalTerminalSocket_Send(void) {
     int sent = 0;
     int start = OS_GetTick() / GTS_SOCKET_TICKS_PER_SECOND;
     while (1) {
@@ -659,7 +663,7 @@ int GlobalTerminalSocket_Send(void) {
     return 1;
 }
 
-int GlobalTerminalSocket_Receive(void) {
+static int GlobalTerminalSocket_Receive(void) {
     u64 start;
     u32 received = 0;
 
@@ -706,14 +710,14 @@ int GlobalTerminalSocket_Receive(void) {
     return 1;
 }
 
-void GlobalTerminalSocket_Sleep(u32 msec) {
+static void GlobalTerminalSocket_Sleep(u32 msec) {
     OS_Sleep(msec);
 }
 
 #pragma push
 #pragma opt_propagation off
 
-int GlobalTerminalSocket_FetchToken(void) {
+static int GlobalTerminalSocket_FetchToken(void) {
     int errorType, errorCode;
     GlobalTerminalSocketTokenRequest request;
     if (sGlobalTerminalSocket.hasToken == TRUE) {
@@ -869,7 +873,7 @@ int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response)
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_23003, payload, response, -1);
 }
 
-void GlobalTerminalSocket_Encode(const u8 *src, int size, u8 *dst) {
+static void GlobalTerminalSocket_Encode(const u8 *src, int size, u8 *dst) {
     int i;
     for (i = 0; i < size; i++) {
         int key;
@@ -888,7 +892,7 @@ static inline u32 GlobalTerminalSocket_Xor(u32 byte, u32 key) {
     return byte ^ key;
 }
 
-void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst) {
+static void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst) {
     int i;
     for (i = 0; i < size; i++) {
         int key;
@@ -903,7 +907,7 @@ void GlobalTerminalSocket_Decode(const u8 *src, int size, u8 *dst) {
     }
 }
 
-int GlobalTerminalSocket_GetRequestSize(int command) {
+static int GlobalTerminalSocket_GetRequestSize(int command) {
     int size;
     switch (command) {
     case 0:
@@ -946,7 +950,7 @@ int GlobalTerminalSocket_GetRequestSize(int command) {
     return size + 0x140;
 }
 
-int GlobalTerminalSocket_GetResponseBufferSize(int command) {
+static int GlobalTerminalSocket_GetResponseBufferSize(int command) {
     GlobalTerminalServerCommandIds commands = sGlobalTerminalServerCommandIds;
     int size;
     switch (command) {
@@ -1009,5 +1013,5 @@ int GlobalTerminalSocket_GetResponseBufferSize(int command) {
     return size + 8;
 }
 
-void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg) {
+static void GlobalTerminalSocket_PrepareUploadStub(void *request, void *arg) {
 }
