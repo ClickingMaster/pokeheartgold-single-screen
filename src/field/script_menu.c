@@ -700,7 +700,13 @@ void PointsBox_Delete(Window *window) {
     WindowArray_Delete(window, 1);
 }
 
-// type 0: coins, 1: Battle Points, otherwise: athlete points.
+enum PointsBoxType {
+    POINTS_BOX_COINS,
+    POINTS_BOX_BATTLE_POINTS,
+    POINTS_BOX_ATHLETE_POINTS,
+};
+
+// Any other type shows the athlete points.
 void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type) {
     MsgData *msgData;
     MessageFormat *msgFmt;
@@ -714,15 +720,15 @@ void PointsBox_Update(FieldSystem *fieldSystem, Window *window, u8 type) {
     msgFmt = MessageFormat_New(HEAP_ID_FIELD1);
     string = String_New(16, HEAP_ID_FIELD1);
     switch (type) {
-    case 0:
+    case POINTS_BOX_COINS:
         template = NewString_ReadMsgData(msgData, msg_0191_00193);
         value = Coins_GetValue(Save_PlayerData_GetCoinsAddr(fieldSystem->saveData));
         break;
-    case 1:
+    case POINTS_BOX_BATTLE_POINTS:
         template = NewString_ReadMsgData(msgData, msg_0191_00220);
         value = FrontierData_BattlePointAction(Save_FrontierData_Get(fieldSystem->saveData), 0, 0);
         break;
-    case 2:
+    case POINTS_BOX_ATHLETE_POINTS:
     default:
         template = NewString_ReadMsgData(msgData, msg_0191_00223);
         value = PokeathlonSave_GetAthletePoints(Save_Pokeathlon_Get(fieldSystem->saveData));

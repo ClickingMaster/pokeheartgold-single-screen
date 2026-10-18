@@ -24,6 +24,25 @@ enum {
     RING_DROP_STATE_FINISH,
 };
 
+enum PokeathlonRingDropStartState {
+    RING_DROP_START_FADE_IN,
+    RING_DROP_START_WAIT_FADE_IN,
+    RING_DROP_START_COUNTDOWN,
+};
+
+enum PokeathlonRingDropPlayState {
+    RING_DROP_PLAY_RUN,
+    RING_DROP_PLAY_FINISH,
+};
+
+enum PokeathlonRingDropInitState {
+    RING_DROP_INIT_CREATE,
+    RING_DROP_INIT_LOAD_BGS,
+    RING_DROP_INIT_WAIT_MONS,
+    RING_DROP_INIT_CREATE_UI,
+    RING_DROP_INIT_START,
+};
+
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, u32 planes);
 BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
@@ -123,15 +142,15 @@ BOOL PokeathlonRingDrop_State_FadeIn(PokeathlonCourseData *course, u8 *state) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
-    case 0:
+    case RING_DROP_START_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, ringDrop->heapId);
         (*state)++;
-    case 1:
+    case RING_DROP_START_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         break;
-    case 2:
+    case RING_DROP_START_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             PokeathlonCourse_SetNextState(course, RING_DROP_STATE_PLAY);
         }
@@ -147,13 +166,13 @@ BOOL PokeathlonRingDrop_State_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
-    case 0:
+    case RING_DROP_PLAY_RUN:
         PokeathlonRingDrop_Update(course);
         if (PokeathlonRingDrop_ReadInput(course)) {
             (*state)++;
         }
         break;
-    case 1:
+    case RING_DROP_PLAY_FINISH:
         PokeathlonRingDrop_Update(course);
         if (PokeathlonCourse_RunFinish(course) && PokeathlonScreenShake_IsDone(&ringDrop->shake)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, ringDrop->heapId);
@@ -192,7 +211,7 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
     PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
 
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case RING_DROP_INIT_CREATE:
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_145, 0x60000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -209,7 +228,7 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
         ringDrop->timer = RING_DROP_FRAMES;
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case RING_DROP_INIT_LOAD_BGS:
         ringDrop->bgConfig = BgConfig_Alloc(ringDrop->heapId);
         PokeathlonCourse_SetHudPlanes(course, 8);
         PokeathlonRingDrop_InitBgs(ringDrop);
@@ -219,21 +238,21 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course) {
         PokeathlonRingDrop_CreateMonObjects(ringDrop, course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case RING_DROP_INIT_WAIT_MONS:
         if (PokeathlonCourseMonObjects_IsLoaded(ringDrop->monObjects)) {
             PokeathlonRingDrop_LoadSpriteResources(ringDrop);
             Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSprites(course, 0, ringDrop->resources, SpriteManager_GetSpriteList(ringDrop->spriteManager)), 0);
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 3: {
+    case RING_DROP_INIT_CREATE_UI: {
         u8 participant = PokeathlonCourse_GetNetId(course);
         ringDrop->cpu = PokeathlonRingDropCpu_New(course, ringDrop->heapId);
         ringDrop->ui = PokeathlonRingDropUi_New(ringDrop->spriteSystem, ringDrop->spriteManager, ringDrop->resources, ringDrop->bgConfig, ringDrop->msgData, ringDrop->msgFormat, participant, ringDrop->heapId, course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 4:
+    case RING_DROP_INIT_START:
         PokeathlonRingDrop_InitMons(ringDrop, course);
         PokeathlonRingDropUi_Init(ringDrop->ui);
         PokeathlonRingDropDisplay_Init(&ringDrop->display, ringDrop->spriteSystem, ringDrop->spriteManager, ringDrop->ui, ringDrop->monObjects, ringDrop->heapId);

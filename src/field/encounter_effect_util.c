@@ -47,6 +47,11 @@ struct BlockWipe {
     u8 active;                             // 0xCA
 };
 
+enum ZigzagWipeState {
+    ZIGZAG_WIPE_STATE_RUN,
+    ZIGZAG_WIPE_STATE_END,
+};
+
 // Window 0 is closed from the left; its left edge is a zigzag (lines[], period lines per stroke) that moves
 // with the interpolated value.
 struct ZigzagWipe {
@@ -319,7 +324,7 @@ SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 dur
     }
     effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
-    wipe->state = 0;
+    wipe->state = ZIGZAG_WIPE_STATE_RUN;
     wipe->done = &effect->wipeDone;
     EncounterEffectInterp_Init(&wipe->edge, 255, 0, duration);
     for (i = 0; i < 192; i++) {
@@ -350,12 +355,12 @@ static void Task_ZigzagWipe_Begin(SysTask *task, void *data) {
 static void Task_ZigzagWipe_Update(SysTask *task, void *data) {
     ZigzagWipe *wipe = data;
     switch (wipe->state) {
-    case 0:
+    case ZIGZAG_WIPE_STATE_RUN:
         if (EncounterEffectInterp_Update(&wipe->edge) == TRUE) {
             wipe->state++;
         }
         break;
-    case 1:
+    case ZIGZAG_WIPE_STATE_END:
         ZigzagWipe_End(wipe);
         break;
     }

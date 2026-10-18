@@ -34,6 +34,16 @@ void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX
 extern const GraphicsBanks sPennantCaptureGraphicsBanks;
 extern const VecFx32 sPennantCaptureSpritePoolTemplate; // sprite pool template
 
+enum PokeathlonPennantCaptureInitState {
+    PENNANT_CAPTURE_INIT_CREATE,
+    PENNANT_CAPTURE_INIT_CREATE_DISPLAY,
+    PENNANT_CAPTURE_INIT_CREATE_SPRITES,
+    PENNANT_CAPTURE_INIT_LOAD_MONS,
+    PENNANT_CAPTURE_INIT_PLACE_MONS,
+    PENNANT_CAPTURE_INIT_CHOOSE_LAYOUT,
+    PENNANT_CAPTURE_INIT_DONE,
+};
+
 // Collision circle of a Pokemon by size (NARC a/1/7/0 member 14).
 typedef struct PokeathlonPennantCaptureCollision {
     s32 offsetY;
@@ -88,7 +98,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
 
     work = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0: {
+    case PENNANT_CAPTURE_INIT_CREATE: {
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_139, 0x68000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -118,7 +128,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 1: {
+    case PENNANT_CAPTURE_INIT_CREATE_DISPLAY: {
         work->display = PokeathlonPennantCaptureDisplay_New(work->heapId, work->bgConfig, course);
         int count = PokeathlonCourse_GetParticipantCount(course);
         int mode = PokeathlonCourse_GetMode(course);
@@ -127,7 +137,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 2:
+    case PENNANT_CAPTURE_INIT_CREATE_SPRITES:
         poolTemplate = sPennantCaptureSpritePoolTemplate;
         work->spritePool = PokeathlonCourseSpritePool_New(work->heapId, &poolTemplate);
         PokeathlonCourseSpritePool_SetSurfaceCoords(work->spritePool, 0, 0, 0, FX32_CONST(700));
@@ -144,7 +154,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonPennantCaptureDisplay_CreateSprites(work->display, work->spritePool, work->monResources);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 3: {
+    case PENNANT_CAPTURE_INIT_LOAD_MONS: {
         int i;
         for (i = 0; i < 12; i++) {
             member = i % 3;
@@ -169,7 +179,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 4: {
+    case PENNANT_CAPTURE_INIT_PLACE_MONS: {
         if (!PokeathlonCourseMonObjects_IsLoaded(work->monObjects)) {
             break;
         }
@@ -227,13 +237,13 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 5:
+    case PENNANT_CAPTURE_INIT_CHOOSE_LAYOUT:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             work->layoutChoice = LCRandom() % 20;
         }
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 6:
+    case PENNANT_CAPTURE_INIT_DONE:
         return TRUE;
     }
     return FALSE;

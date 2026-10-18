@@ -29,6 +29,49 @@
 #include "task.h"
 #include "text.h"
 
+enum LighthouseLightUpState {
+    LIGHTHOUSE_STATE_LOAD,
+    LIGHTHOUSE_STATE_ANIMATE,
+    LIGHTHOUSE_STATE_WAIT_FADE_OUT,
+    LIGHTHOUSE_STATE_SWITCH_LIGHT,
+    LIGHTHOUSE_STATE_WAIT_FADE_IN,
+};
+
+enum TrapEffectState {
+    TRAP_EFFECT_STATE_LOAD,
+    TRAP_EFFECT_STATE_ANIMATE,
+    TRAP_EFFECT_STATE_END,
+};
+
+enum LegendaryWingState {
+    LEGENDARY_WING_STATE_LOAD,
+    LEGENDARY_WING_STATE_START_ANIM,
+    LEGENDARY_WING_STATE_STOP_LOOP,
+    LEGENDARY_WING_STATE_LOOP_ANIM,
+    LEGENDARY_WING_STATE_END_ANIM,
+};
+
+enum HideoutAlarmState {
+    HIDEOUT_ALARM_STATE_LOAD,
+    HIDEOUT_ALARM_STATE_FLASH,
+    HIDEOUT_ALARM_STATE_WAIT_SIREN,
+};
+
+enum HideoutAlarmFlashState {
+    ALARM_FLASH_STATE_START,
+    ALARM_FLASH_STATE_BLEND,
+};
+
+enum AlphHiddenRoomState {
+    ALPH_ROOM_STATE_SHOW_MESSAGE,
+    ALPH_ROOM_STATE_WAIT_BUTTON,
+};
+
+enum LanceFliesAwayState {
+    LANCE_FLY_STATE_START,
+    LANCE_FLY_STATE_WAIT,
+};
+
 // A field model with a set of animations loaded from one archive.
 typedef struct FieldAnimModelTemplate {
     u16 narcId;
@@ -276,13 +319,13 @@ static LighthouseLightUpEnv *LighthouseLightUp_CreateTaskEnv(FieldSystem *fieldS
 static BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
     LighthouseLightUpEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
-    case 0:
+    case LIGHTHOUSE_STATE_LOAD:
         LighthouseLightUp_Load(env);
         env->timer = 0;
         env->seTimer = 0;
         env->state++;
         break;
-    case 1:
+    case LIGHTHOUSE_STATE_ANIMATE:
         if (env->seTimer != 255) {
             if (env->seTimer == 0 || env->seTimer == 30 || env->seTimer == 50 || env->seTimer == 60 || env->seTimer == 70 || env->seTimer == 80) {
                 PlaySE(SEQ_SE_DP_FW411);
@@ -301,14 +344,14 @@ static BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
             env->state++;
         }
         break;
-    case 2:
+    case LIGHTHOUSE_STATE_WAIT_FADE_OUT:
         LighthouseLightUp_Animate(env);
         if (IsPaletteFadeFinished()) {
             env->timer = 0;
             env->state++;
         }
         break;
-    case 3:
+    case LIGHTHOUSE_STATE_SWITCH_LIGHT:
         if (env->timer++ >= 60) {
             LighthouseLightUp_Unload(env);
             AreaLightManager_Free(&env->fieldSystem->areaLightManager);
@@ -317,7 +360,7 @@ static BOOL Task_ShowLighthouseLightUp(TaskManager *taskManager) {
             env->state++;
         }
         break;
-    case 4:
+    case LIGHTHOUSE_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             Heap_Free(env);
             return TRUE;
@@ -445,19 +488,19 @@ static BOOL Task_ShowTrapEffect(TaskManager *taskManager) {
     VecFx32 pos;
 
     switch (env->state) {
-    case 0:
+    case TRAP_EFFECT_STATE_LOAD:
         env->model = FieldAnimModel_New(&sTrapEffects[env->kind].model, env->heapId);
         PlayerAvatar_CopyPositionVector(env->fieldSystem->playerAvatar, &pos);
         Field3dObject_SetPosEx(&env->model->object, pos.x, pos.y, pos.z);
         PlaySE(sTrapEffects[env->kind].se);
         env->state++;
         break;
-    case 1:
+    case TRAP_EFFECT_STATE_ANIMATE:
         if (FieldAnimModel_Animate(env->model)) {
             env->state++;
         }
         break;
-    case 2:
+    case TRAP_EFFECT_STATE_END:
         FieldAnimModel_Delete(env->model);
         Heap_Free(env);
         return TRUE;
@@ -487,7 +530,7 @@ static LegendaryWingEnv *LegendaryWing_CreateTaskEnv(FieldSystem *fieldSystem, u
 static BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
     LegendaryWingEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
-    case 0: {
+    case LEGENDARY_WING_STATE_LOAD: {
         VecFx32 pos;
         env->model = FieldAnimModel_New(&sLegendaryWingModels[env->kind], env->heapId);
         PlayerAvatar_CopyPositionVector(env->fieldSystem->playerAvatar, &pos);
@@ -496,7 +539,7 @@ static BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
         env->state++;
         break;
     }
-    case 1:
+    case LEGENDARY_WING_STATE_START_ANIM:
         if (FieldAnimModel_Animate(env->model)) {
             FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, sLegendaryWingLoopAnimLists[env->kind * 2], 3);
             env->animTask = SysTask_CreateOnMainQueue(LegendaryWing_AnimateLoop, env, 0);
@@ -504,16 +547,16 @@ static BOOL Task_ShowLegendaryWing(TaskManager *taskManager) {
             env->state++;
         }
         break;
-    case 2:
+    case LEGENDARY_WING_STATE_STOP_LOOP:
         SysTask_Destroy(env->animTask);
         env->state++;
-    case 3:
+    case LEGENDARY_WING_STATE_LOOP_ANIM:
         if (!FieldAnimModel_Animate(env->model)) {
             break;
         }
         FieldAnimModel_SetAnimations(env->model, NARC_demo_legend, sLegendaryWingEndAnimLists[env->kind * 2], 3);
         env->state++;
-    case 4:
+    case LEGENDARY_WING_STATE_END_ANIM:
         if (!FieldAnimModel_Animate(env->model)) {
             break;
         }
@@ -550,12 +593,12 @@ static HideoutAlarmEnv *HideoutAlarm_CreateTaskEnv(FieldSystem *fieldSystem) {
 static BOOL Task_ShowHideoutAlarm(TaskManager *taskManager) {
     HideoutAlarmEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
-    case 0:
+    case HIDEOUT_ALARM_STATE_LOAD:
         HideoutAlarm_Load(env);
         PlaySE(SEQ_SE_GS_AJITO_SIREN);
         env->state++;
         break;
-    case 1:
+    case HIDEOUT_ALARM_STATE_FLASH:
         if (HideoutAlarm_Flash(env)) {
             u8 count = env->flashCount++;
             if (count >= 1) {
@@ -563,7 +606,7 @@ static BOOL Task_ShowHideoutAlarm(TaskManager *taskManager) {
             }
         }
         break;
-    case 2:
+    case HIDEOUT_ALARM_STATE_WAIT_SIREN:
         if (!IsSEPlaying(SEQ_SE_GS_AJITO_SIREN)) {
             HideoutAlarm_Unload(env);
             Heap_Free(env);
@@ -602,13 +645,13 @@ static void HideoutAlarm_Unload(HideoutAlarmEnv *env) {
 
 static BOOL HideoutAlarm_Flash(HideoutAlarmEnv *env) {
     switch (env->flashState) {
-    case 0:
+    case ALARM_FLASH_STATE_START:
         env->flashWait = 0;
         env->flashStep = 0;
         env->blend = 0;
         env->flashState++;
         break;
-    case 1: {
+    case ALARM_FLASH_STATE_BLEND: {
         u8 wait = env->flashWait++;
         if (wait == 0) {
             G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG1, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2, env->blend, 31 - env->blend);
@@ -629,7 +672,7 @@ static BOOL HideoutAlarm_Flash(HideoutAlarmEnv *env) {
     default:
         env->flashStep = 0;
         env->flashWait = 0;
-        env->flashState = 0;
+        env->flashState = ALARM_FLASH_STATE_START;
         return TRUE;
     }
     return FALSE;
@@ -750,12 +793,12 @@ static AlphHiddenRoomEnv *AlphHiddenRoom_CreateTaskEnv(FieldSystem *fieldSystem,
 static BOOL Task_OpenAlphHiddenRoom(TaskManager *taskManager) {
     AlphHiddenRoomEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
-    case 0:
+    case ALPH_ROOM_STATE_SHOW_MESSAGE:
         AlphHiddenRoom_ShowMessage(env);
         PlaySE(SEQ_SE_DP_SELECT);
         env->state++;
         break;
-    case 1:
+    case ALPH_ROOM_STATE_WAIT_BUTTON:
         if (AlphHiddenRoom_IsAButtonPressed()) {
             PlaySE(SEQ_SE_DP_SELECT);
             env->state++;
@@ -834,11 +877,11 @@ static LanceFliesAwayEnv *LanceFliesAway_CreateTaskEnv(FieldSystem *fieldSystem,
 static BOOL Task_LanceFliesAway(TaskManager *taskManager) {
     LanceFliesAwayEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
-    case 0:
+    case LANCE_FLY_STATE_START:
         env->flyTask = FieldMoveCutIn_StartFlyWithObject(env->fieldSystem, env->dragonite, env->lance, env->dragoniteObject);
         env->state++;
         break;
-    case 1:
+    case LANCE_FLY_STATE_WAIT:
         if (FieldMoveCutIn_IsFinished(env->flyTask)) {
             FieldMoveCutIn_Delete(env->flyTask);
             Heap_Free(env->dragonite);

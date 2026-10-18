@@ -736,18 +736,24 @@ static void PokeathlonCirclePush_SetBanks(void) {
     GfGfx_SetBanks(&banks);
 }
 
+enum PokeathlonCirclePushFadeInState {
+    CIRCLE_PUSH_FADE_IN_START,
+    CIRCLE_PUSH_FADE_IN_FADE,
+    CIRCLE_PUSH_FADE_IN_WAIT,
+};
+
 BOOL PokeathlonCirclePush_FadeIn(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case CIRCLE_PUSH_FADE_IN_START:
         PokeathlonCourse_SetStateTransitionType(course, 0x15);
         (*state)++;
         break;
-    case 1:
+    case CIRCLE_PUSH_FADE_IN_FADE:
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, 0, 6, 1, circlePush->heapId);
         (*state)++;
         break;
-    case 2:
+    case CIRCLE_PUSH_FADE_IN_WAIT:
         if (IsPaletteFadeFinished()) {
             PokeathlonCourse_SetNextState(course, CIRCLE_PUSH_STATE_PLAY);
         }

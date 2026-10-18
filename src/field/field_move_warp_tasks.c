@@ -43,6 +43,13 @@ enum FieldMoveWarpKind {
     FIELD_MOVE_WARP_TELEPORT,
 };
 
+enum FieldMoveWarpTaskState {
+    WARP_TASK_STATE_WAIT_FOLLOW_MON,
+    WARP_TASK_STATE_FOLLOW_MON_JUMP,
+    WARP_TASK_STATE_PLAY_CRY,
+    WARP_TASK_STATE_RUN_STEPS,
+};
+
 struct FieldMoveTaskEnvironment {
     int state;
     int spinCount;
@@ -296,13 +303,13 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
     int result;
 
     switch (*state) {
-    case 0:
+    case WARP_TASK_STATE_WAIT_FOLLOW_MON:
         if (env->withFollowMon) {
             TaskManager_Call(taskManager, Task_WaitFollowMonMovement, NULL);
         }
         (*state)++;
         break;
-    case 1:
+    case WARP_TASK_STATE_FOLLOW_MON_JUMP:
         (*state)++;
         if (env->withFollowMon) {
             u8 count;
@@ -316,7 +323,7 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
             break;
         }
         // fallthrough
-    case 2:
+    case WARP_TASK_STATE_PLAY_CRY:
         if (env->withFollowMon) {
             u32 species = GetMonData(env->mon, MON_DATA_SPECIES, NULL);
             u32 form = GetMonData(env->mon, MON_DATA_FORM, NULL);
@@ -324,7 +331,7 @@ BOOL Task_FieldDig(TaskManager *taskManager) {
         }
         (*state)++;
         // fallthrough
-    case 3:
+    case WARP_TASK_STATE_RUN_STEPS:
         do {
             if (env->withFollowMon) {
                 if (IsCryFinished()) {
@@ -384,13 +391,13 @@ BOOL Task_FieldTeleport(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
-    case 0:
+    case WARP_TASK_STATE_WAIT_FOLLOW_MON:
         if (env->withFollowMon) {
             TaskManager_Call(taskManager, Task_WaitFollowMonMovement, NULL);
         }
         ++*state;
         break;
-    case 1:
+    case WARP_TASK_STATE_FOLLOW_MON_JUMP:
         ++*state;
         if (env->withFollowMon) {
             u8 count;
@@ -404,7 +411,7 @@ BOOL Task_FieldTeleport(TaskManager *taskManager) {
             break;
         }
         // fallthrough
-    case 2:
+    case WARP_TASK_STATE_PLAY_CRY:
         if (env->withFollowMon) {
             u32 species = GetMonData(env->mon, MON_DATA_SPECIES, NULL);
             u32 form = GetMonData(env->mon, MON_DATA_FORM, NULL);
@@ -412,7 +419,7 @@ BOOL Task_FieldTeleport(TaskManager *taskManager) {
         }
         ++*state;
         // fallthrough
-    case 3: {
+    case WARP_TASK_STATE_RUN_STEPS: {
         int result;
         do {
             if (env->withFollowMon) {

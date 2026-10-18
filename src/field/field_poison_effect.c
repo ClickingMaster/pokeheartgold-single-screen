@@ -15,6 +15,18 @@
 
 void G3X_SetHOffset(int offset);
 
+enum PoisonEffectState {
+    POISON_EFFECT_IDLE,
+    POISON_EFFECT_RUNNING,
+};
+
+enum PoisonEffectSeq {
+    POISON_SEQ_START,
+    POISON_SEQ_RAMP_UP,
+    POISON_SEQ_RAMP_DOWN,
+    POISON_SEQ_STOP,
+};
+
 // Screen shake shown when a poisoned party loses HP while walking: every HBlank shifts the 3D layer
 // horizontally by an offset that alternates sign every 10 lines; the amplitude ramps up and down over 6 frames.
 struct PoisonEffect {
@@ -44,14 +56,14 @@ static void PoisonEffect_Stop(PoisonEffect *effect);
 void *PoisonEffect_New(enum HeapID heapID, HBlankSystem *hBlankSystem) {
     PoisonEffect *effect = Heap_Alloc(heapID, sizeof(PoisonEffect));
     memset(effect, 0, sizeof(PoisonEffect));
-    effect->state = 0;
+    effect->state = POISON_EFFECT_IDLE;
     effect->doubleBuffer = DoubleBuffer_New(heapID, effect->buffers[0], effect->buffers[1]);
     effect->hBlankSystem = hBlankSystem;
     return effect;
 }
 
 void PoisonEffect_Delete(PoisonEffect *effect) {
-    if (effect->state == 1) {
+    if (effect->state == POISON_EFFECT_RUNNING) {
         PoisonEffect_Stop(effect);
     }
     DoubleBuffer_Delete(effect->doubleBuffer);
@@ -59,26 +71,26 @@ void PoisonEffect_Delete(PoisonEffect *effect) {
 }
 
 void FieldSystem_DoPoisonEffect(PoisonEffect *effect) {
-    GF_ASSERT(effect->state == 0);
+    GF_ASSERT(effect->state == POISON_EFFECT_IDLE);
     effect->hblankTask = HBlankSystem_StartTask(effect->hBlankSystem, PoisonEffect_HBlankCallback, effect);
     effect->mainTask = SysTask_CreateOnMainQueue(PoisonEffect_Task, effect, 1024);
     effect->vblankTask = SysTask_CreateOnVBlankQueue(PoisonEffect_VBlankResetTask, effect, 1024);
     effect->swapTask = SysTask_CreateOnVBlankQueue(PoisonEffect_SwapBuffersTask, effect, 1024);
     memset(effect->buffers[0], 0, sizeof(effect->buffers[0]));
     memset(effect->buffers[1], 0, sizeof(effect->buffers[1]));
-    effect->state = 1;
-    effect->seqNo = 0;
+    effect->state = POISON_EFFECT_RUNNING;
+    effect->seqNo = POISON_SEQ_START;
     PlaySE(SEQ_SE_DP_DOKU2);
 }
 
 static void PoisonEffect_Task(SysTask *task, void *data) {
     PoisonEffect *effect = data;
     switch (effect->seqNo) {
-    case 0:
+    case POISON_SEQ_START:
         effect->counter = 3;
         effect->seqNo++;
         break;
-    case 1:
+    case POISON_SEQ_RAMP_UP:
         effect->counter--;
         PoisonEffect_FillOffsets(DoubleBuffer_GetCurrent(effect->doubleBuffer), 3 - effect->counter, 3);
         if (effect->counter <= 0) {
@@ -86,14 +98,14 @@ static void PoisonEffect_Task(SysTask *task, void *data) {
             effect->seqNo++;
         }
         break;
-    case 2:
+    case POISON_SEQ_RAMP_DOWN:
         effect->counter--;
         PoisonEffect_FillOffsets(DoubleBuffer_GetCurrent(effect->doubleBuffer), effect->counter, 3);
         if (effect->counter <= 0) {
             effect->seqNo++;
         }
         break;
-    case 3:
+    case POISON_SEQ_STOP:
         PoisonEffect_Stop(effect);
         G3X_SetHOffset(0);
         break;
@@ -141,7 +153,7 @@ static void PoisonEffect_HBlankCallback(HBlankTask *task, void *data) {
 }
 
 static void PoisonEffect_OnHBlank(PoisonEffect *effect) {
-    if (effect->state == 1 && effect->hblankReady == 1) {
+    if (effect->state == POISON_EFFECT_RUNNING && effect->hblankReady == 1) {
         PoisonEffect_ApplyNextLineOffset(effect);
     }
 }
@@ -151,7 +163,7 @@ static void PoisonEffect_SwapBuffersTask(SysTask *task, void *data) {
 }
 
 static void PoisonEffect_SwapBuffers(PoisonEffect *effect) {
-    if (effect->state == 1) {
+    if (effect->state == POISON_EFFECT_RUNNING) {
         DoubleBuffer_Swap(effect->doubleBuffer);
         effect->hblankReady = 1;
     }
@@ -166,5 +178,5 @@ static void PoisonEffect_Stop(PoisonEffect *effect) {
     effect->vblankTask = NULL;
     SysTask_Destroy(effect->swapTask);
     effect->swapTask = NULL;
-    effect->state = 0;
+    effect->state = POISON_EFFECT_IDLE;
 }

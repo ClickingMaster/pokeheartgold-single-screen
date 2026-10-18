@@ -39,6 +39,25 @@ enum {
     LAMP_JUMP_STATE_CALC_SCORES,
 };
 
+enum PokeathlonLampJumpPlayState {
+    LAMP_JUMP_PLAY_START,
+    LAMP_JUMP_PLAY_FADE_IN,
+    LAMP_JUMP_PLAY_WAIT_FADE_IN,
+    LAMP_JUMP_PLAY_COUNTDOWN,
+    LAMP_JUMP_PLAY_RUN,
+    LAMP_JUMP_PLAY_FINISH,
+};
+
+enum PokeathlonLampJumpInitState {
+    LAMP_JUMP_INIT_CREATE,
+    LAMP_JUMP_INIT_CREATE_LAMPS,
+    LAMP_JUMP_INIT_CREATE_SPRITES,
+    LAMP_JUMP_INIT_LOAD_MONS,
+    LAMP_JUMP_INIT_PLACE_MONS,
+    LAMP_JUMP_INIT_SET_UP,
+    LAMP_JUMP_INIT_DONE,
+};
+
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
@@ -368,7 +387,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
     void *sprite;
 
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case LAMP_JUMP_INIT_CREATE:
         Heap_Create(HEAP_ID_POKEATHLON, (enum HeapID)143, 0x50000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -398,14 +417,14 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         lampJump->cellTransferState = CreateCellTransferStateManager(12, lampJump->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case LAMP_JUMP_INIT_CREATE_LAMPS:
         lampJump->lamps = PokeathlonLampJump_NewLamps(lampJump->heapId);
         count = PokeathlonCourse_GetParticipantCount(course);
         mode = PokeathlonCourse_GetMode(course);
         lampJump->cpuPlayers = PokeathlonLampJump_NewCpuPlayers(lampJump->heapId, 4 - count, mode, PokeathlonCourse_GetDataCopyArea(course), course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case LAMP_JUMP_INIT_CREATE_SPRITES:
         sceneConfig = sLampJumpSceneConfig;
         lampJump->scene = PokeathlonCourseSpritePool_New(lampJump->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(lampJump->scene, 0, FX32_CONST(192), 0, 0);
@@ -415,7 +434,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         PokeathlonCourseSpritePool_TransferResources(lampJump->scene);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 3:
+    case LAMP_JUMP_INIT_LOAD_MONS:
         participant = PokeathlonCourse_GetNetId(course);
         for (i = 0; i < 3; i++) {
             PokeathlonCourse_GetMonInfo(course, participant, i, &views[i]);
@@ -429,7 +448,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         PokeathlonCourseMonObjects_Load(lampJump->monSpriteManager, 3, views, &info, 0, 0);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 4:
+    case LAMP_JUMP_INIT_PLACE_MONS:
         if (!PokeathlonCourseMonObjects_IsLoaded(lampJump->monSpriteManager)) {
             break;
         }
@@ -468,7 +487,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         PokeathlonLampJump_PlaceSprites(lampJump, PokeathlonCourse_GetNetId(course));
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 5:
+    case LAMP_JUMP_INIT_SET_UP:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -499,7 +518,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 6:
+    case LAMP_JUMP_INIT_DONE:
         PokeathlonLampJump_UpdateScoreDisplay(lampJump);
         return TRUE;
     }
@@ -580,35 +599,35 @@ BOOL PokeathlonLampJump_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
-    case 0:
+    case LAMP_JUMP_PLAY_START:
         PokeathlonLampJump_UpdateDisplay(course);
         PokeathlonCourse_SetStateTransitionType(course, 20);
         (*state)++;
         break;
-    case 1:
+    case LAMP_JUMP_PLAY_FADE_IN:
         PokeathlonLampJump_UpdateDisplay(course);
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, 0, 6, 1, lampJump->heapId);
         (*state)++;
         break;
-    case 2:
+    case LAMP_JUMP_PLAY_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         PokeathlonLampJump_UpdateDisplay(course);
         break;
-    case 3:
+    case LAMP_JUMP_PLAY_COUNTDOWN:
         PokeathlonLampJump_UpdateDisplay(course);
         if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
-    case 4:
+    case LAMP_JUMP_PLAY_RUN:
         PokeathlonLampJump_HandleTouch(course);
         if (PokeathlonLampJump_Update(course)) {
             (*state)++;
         }
         break;
-    case 5:
+    case LAMP_JUMP_PLAY_FINISH:
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, lampJump->heapId);
             PokeathlonCourse_SetNextState(course, LAMP_JUMP_STATE_CALC_SCORES);

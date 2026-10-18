@@ -40,6 +40,15 @@ enum {
     SNOW_THROW_STATE_SAVE_SCORES,
 };
 
+enum PokeathlonSnowThrowInitState {
+    SNOW_THROW_INIT_CREATE,
+    SNOW_THROW_INIT_CREATE_DISPLAY,
+    SNOW_THROW_INIT_CREATE_SPRITES,
+    SNOW_THROW_INIT_LOAD_MONS,
+    SNOW_THROW_INIT_PLACE_MONS,
+    SNOW_THROW_INIT_WAIT_FADE_IN,
+};
+
 typedef char PokeathlonSnowThrowSizeCheck[(sizeof(PokeathlonSnowThrow) == 0x5F4 && sizeof(PokeathlonSnowThrowBall) == 0x48 && sizeof(PokeathlonSnowThrowMon) == 0x20 && sizeof(PokeathlonSnowThrowPacket) == 0x28 && sizeof(PokeathlonSnowThrowLink) == 0x118 && offsetof(PokeathlonSnowThrow, balls) == 0xB8 && offsetof(PokeathlonSnowThrow, mons) == 0x418 && offsetof(PokeathlonSnowThrow, cpu) == 0x5DC && offsetof(PokeathlonSnowThrow, timer) == 0x5E8) ? 1 : -1];
 
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *result);
@@ -352,7 +361,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
 
     work = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0: {
+    case SNOW_THROW_INIT_CREATE: {
         ObjCharTransferTemplate charTransfer;
 
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_146, 0x40000);
@@ -386,13 +395,13 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 1:
+    case SNOW_THROW_INIT_CREATE_DISPLAY:
         work->display = PokeathlonSnowThrowDisplay_New(work->heapId, work->bgConfig, course);
         count = PokeathlonCourse_GetParticipantCount(course);
         work->cpu = PokeathlonSnowThrowCpu_New(work->heapId, SNOW_THROW_TEAMS - count, PokeathlonCourse_GetMode(course));
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2: {
+    case SNOW_THROW_INIT_CREATE_SPRITES: {
         PokeathlonCourseSpritePoolTemplate poolTemplate = sSnowThrowSpritePoolTemplate;
 
         work->spritePool = PokeathlonCourseSpritePool_New(work->heapId, &poolTemplate);
@@ -411,7 +420,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 3:
+    case SNOW_THROW_INIT_LOAD_MONS:
         // the other teams' Pokemon first, the own three last
         own = (u8)PokeathlonCourse_GetNetId(course);
         for (i = 0; i < SNOW_THROW_MONS; i++) {
@@ -439,7 +448,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         PokeathlonCourseMonObjects_Load(work->monObjectList, 9, infos, &template, 0, 0);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 4:
+    case SNOW_THROW_INIT_PLACE_MONS:
         if (!PokeathlonCourseMonObjects_IsLoaded(work->monObjectList)) {
             break;
         } else {
@@ -495,7 +504,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 5:
+    case SNOW_THROW_INIT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             GF_ASSERT(GF_heap_c_dummy_return_true(HEAP_ID_POKEATHLON));
             return TRUE;

@@ -240,6 +240,18 @@ BOOL PokeathlonHurdleDash_CalcScores(PokeathlonCourseData *course, u8 *state) {
     return TRUE;
 }
 
+enum PokeathlonHurdleDashInitState {
+    HURDLE_DASH_INIT_CREATE,
+    HURDLE_DASH_INIT_CREATE_SCENE,
+    HURDLE_DASH_INIT_CREATE_SPRITES,
+    HURDLE_DASH_INIT_WAIT_MONS,
+    HURDLE_DASH_INIT_LOAD_BG_SCREENS,
+    HURDLE_DASH_INIT_SHOW,
+    HURDLE_DASH_INIT_CHOOSE_LAYOUT,
+    HURDLE_DASH_INIT_CREATE_HURDLES,
+    HURDLE_DASH_INIT_WAIT_FADE_IN,
+};
+
 BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
     u32 spriteInfo[17];
     PokeathlonHurdleDashTable table;
@@ -255,7 +267,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     int i, j;
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0: {
+    case HURDLE_DASH_INIT_CREATE: {
         void *a, *b;
         int c;
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_138, 0x48000);
@@ -292,7 +304,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 1:
+    case HURDLE_DASH_INIT_CREATE_SCENE:
         sceneConfig = sHurdleDashSceneConfig;
         hurdleDash->scene = PokeathlonCourseSpritePool_New(hurdleDash->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(hurdleDash->scene, 0, FX32_CONST(272), 0, 0);
@@ -331,7 +343,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         hurdleDash->monSpriteManager = PokeathlonCourseMonObjects_Create(hurdleDash->heapId, 3, 4, hurdleDash->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(hurdleDash->scene));
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case HURDLE_DASH_INIT_CREATE_SPRITES:
         for (i = 0; i < 12; i++) {
             Sprite_SetDrawPriority(PokeathlonCourseSpritePool_CreateSprite(hurdleDash->scene, 1, 3, 101, 2), 27);
             Sprite_SetDrawPriority(PokeathlonCourseSpritePool_CreateSprite(hurdleDash->scene, 1, 1, 103, 6), 27);
@@ -388,14 +400,14 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         PokeathlonCourseMonObjects_Load(hurdleDash->monSpriteManager, 3, views, spriteInfo, 0, 0);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 3:
+    case HURDLE_DASH_INIT_WAIT_MONS:
         if (PokeathlonCourseMonObjects_IsLoaded(hurdleDash->monSpriteManager)) {
             PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)hurdleDash->bgConfig); // takes the BgConfig
             PokeathlonHurdleDash_LoadBgTiles(hurdleDash->bgConfig, hurdleDash->heapId);
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 4:
+    case HURDLE_DASH_INIT_LOAD_BG_SCREENS:
         PokeathlonHurdleDash_LoadBgScreens(hurdleDash->bgConfig, hurdleDash->heapId);
         {
             reg_G2_BG0OFS = 0x1400000;
@@ -407,7 +419,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         }
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 5:
+    case HURDLE_DASH_INIT_SHOW:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
@@ -416,13 +428,13 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         }
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 6:
+    case HURDLE_DASH_INIT_CHOOSE_LAYOUT:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             PokeathlonHurdleDashTrack_LoadRandomLayout(hurdleDash->track);
         }
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 7: {
+    case HURDLE_DASH_INIT_CREATE_HURDLES: {
         u8 *dataCopy;
         PokeathlonHurdleDashTrack_CreateHurdleSprites(hurdleDash->track, hurdleDash->scene);
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 272, hurdleDash->spriteResources, hurdleDash->scene), 1);
@@ -461,7 +473,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 8:
+    case HURDLE_DASH_INIT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

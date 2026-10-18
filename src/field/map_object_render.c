@@ -88,6 +88,11 @@ typedef struct BillboardState {
     fx32 frame;
 } BillboardState;
 
+enum SpriteChangeState {
+    SPRITE_CHANGE_STATE_WAIT_CHANGE,
+    SPRITE_CHANGE_STATE_WAIT_BILLBOARD,
+};
+
 // Keeps a copy of the old billboard on screen while the new sprite's billboard is being loaded
 typedef struct SpriteChangeWork {
     u32 spriteId;
@@ -1604,7 +1609,7 @@ static void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u
 static void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work) {
     LocalMapObject *object = work->object;
     switch (work->state) {
-    case 0:
+    case SPRITE_CHANGE_STATE_WAIT_CHANGE:
         if (!MapObject_CheckActive(object) || !MapObject_IsBillboardPending(object)) {
             if (work->reflection != NULL) {
                 FieldEffect_Destroy((int)work->reflection);
@@ -1621,7 +1626,7 @@ static void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work) {
             work->state++;
         }
         break;
-    case 1:
+    case SPRITE_CHANGE_STATE_WAIT_BILLBOARD:
         if (!MapObject_IsBillboardPending(object)) {
             if (work->reflection != NULL) {
                 FieldEffect_Destroy((int)work->reflection);

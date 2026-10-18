@@ -11,6 +11,15 @@
 #include "overlay_02.h"
 #include "task.h"
 
+enum SwapPositionsState {
+    SWAP_POSITIONS_STATE_UNPAUSE,
+    SWAP_POSITIONS_STATE_WAIT_READY,
+    SWAP_POSITIONS_STATE_STEP,
+    SWAP_POSITIONS_STATE_WAIT_STEP,
+    SWAP_POSITIONS_STATE_TURN,
+    SWAP_POSITIONS_STATE_WAIT_TURN,
+};
+
 // Two map objects next to each other step into each other's place (the player and the following Pokemon).
 typedef struct SwapPositionsEnv {
     u32 state;
@@ -36,7 +45,7 @@ void MapObjects_SwapPositions(LocalMapObject *object1, LocalMapObject *object2, 
 
 SwapPositionsEnv *SwapPositions_CreateTaskEnv(LocalMapObject *object1, LocalMapObject *object2) {
     SwapPositionsEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(SwapPositionsEnv));
-    env->state = 0;
+    env->state = SWAP_POSITIONS_STATE_UNPAUSE;
     env->object1 = object1;
     env->object2 = object2;
     return env;
@@ -48,10 +57,10 @@ BOOL Task_SwapMapObjectPositions(TaskManager *taskManager) {
     BOOL done = FALSE;
 
     switch (env->state) {
-    case 0:
+    case SWAP_POSITIONS_STATE_UNPAUSE:
         MapObject_UnpauseMovement(FollowMon_GetMapObject(fieldSystem));
         env->state++;
-    case 1:
+    case SWAP_POSITIONS_STATE_WAIT_READY:
         if (!MapObject_AreBitsSetForMovementScriptInit(env->object1)) {
             break;
         }
@@ -61,7 +70,7 @@ BOOL Task_SwapMapObjectPositions(TaskManager *taskManager) {
         MapObject_PauseMovement(FollowMon_GetMapObject(fieldSystem));
         env->state++;
         break;
-    case 2: {
+    case SWAP_POSITIONS_STATE_STEP: {
         u32 movement;
         env->object1X = MapObject_GetXCoord(env->object1);
         env->object1Z = MapObject_GetZCoord(env->object1);
@@ -74,7 +83,7 @@ BOOL Task_SwapMapObjectPositions(TaskManager *taskManager) {
         env->state++;
         break;
     }
-    case 3:
+    case SWAP_POSITIONS_STATE_WAIT_STEP:
         if (!MapObject_AreBitsSetForMovementScriptInit(env->object1)) {
             break;
         }
@@ -83,12 +92,12 @@ BOOL Task_SwapMapObjectPositions(TaskManager *taskManager) {
         }
         env->state++;
         break;
-    case 4:
+    case SWAP_POSITIONS_STATE_TURN:
         MapObject_SetHeldMovement(env->object1, SwapPositions_GetTurnAroundMovement(MapObject_GetFacingDirection(env->object1)));
         MapObject_SetHeldMovement(env->object2, SwapPositions_GetFaceMovement(env->object1Direction));
         env->state++;
         break;
-    case 5:
+    case SWAP_POSITIONS_STATE_WAIT_TURN:
         if (!MapObject_AreBitsSetForMovementScriptInit(env->object1)) {
             break;
         }

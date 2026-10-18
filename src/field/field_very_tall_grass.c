@@ -18,6 +18,12 @@
 
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
+enum VeryTallGrassEffectState {
+    VERY_TALL_GRASS_STATE_SHAKE,
+    VERY_TALL_GRASS_STATE_STOP,
+    VERY_TALL_GRASS_STATE_WAIT,
+};
+
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 12).
 typedef struct VeryTallGrass {
     FieldEffectManager *manager;
@@ -157,7 +163,7 @@ static BOOL VeryTallGrassEffect_Init(FieldEffect *effect, VeryTallGrassEffect *w
     if (FieldEffect_GetParam(effect) == FALSE) {
         BillboardObject_SetFrame(work->billboard, 12 * FX32_ONE);
         BillboardObject_AdvanceFrame(work->billboard, 0);
-        work->state = 2;
+        work->state = VERY_TALL_GRASS_STATE_WAIT;
     }
     return TRUE;
 }
@@ -192,19 +198,19 @@ static void VeryTallGrassEffect_Update(FieldEffect *effect, VeryTallGrassEffect 
         }
     }
     switch (work->state) {
-    case 0:
+    case VERY_TALL_GRASS_STATE_SHAKE:
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
         if (BillboardObject_GetSequenceFrame(work->billboard) / FX32_ONE < 12) {
             return;
         }
-        work->state = 1;
+        work->state = VERY_TALL_GRASS_STATE_STOP;
         return;
-    case 1:
+    case VERY_TALL_GRASS_STATE_STOP:
         BillboardObject_SetFrame(work->billboard, 12 * FX32_ONE);
         BillboardObject_AdvanceFrame(work->billboard, 0);
-        work->state = 2;
+        work->state = VERY_TALL_GRASS_STATE_WAIT;
         // fallthrough
-    case 2: {
+    case VERY_TALL_GRASS_STATE_WAIT: {
         int x = MapObject_GetXCoord(mapObject) - work->args.dx;
         int z = MapObject_GetZCoord(mapObject) - work->args.dz;
         if (work->args.x != x || work->args.z != z) {

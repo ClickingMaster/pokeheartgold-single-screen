@@ -19,6 +19,12 @@
 
 #define PARTICLE_HEAP_SIZE 0x4800
 
+enum EncounterEffectParticlesState {
+    PARTICLES_STATE_WAIT_FRAME,
+    PARTICLES_STATE_WAIT_REQUEST,
+    PARTICLES_STATE_READY,
+};
+
 struct EncounterEffectParticles {
     u16 state;                // 0x00
     u8 setupDone;             // 0x02, set once the 3D setup is complete
@@ -55,7 +61,7 @@ void EncounterEffect_StartParticleMode(FieldSystem *fieldSystem) {
     }
     gEncounterEffectState.particles = Heap_Alloc(HEAP_ID_FIELD1, sizeof(EncounterEffectParticles));
     memset(gEncounterEffectState.particles, 0, sizeof(EncounterEffectParticles));
-    gEncounterEffectState.particles->state = 0;
+    gEncounterEffectState.particles->state = PARTICLES_STATE_WAIT_FRAME;
     gEncounterEffectState.particles->setupDone = FALSE;
     gEncounterEffectState.particles->fieldSystem = fieldSystem;
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
@@ -171,10 +177,10 @@ void EncounterEffect_FreeParticles(void) {
 static void Task_ParticleSetup_VWait(SysTask *task, void *data) {
     EncounterEffectParticles *particles = data;
     switch (particles->state) {
-    case 0:
+    case PARTICLES_STATE_WAIT_FRAME:
         particles->state++;
         break;
-    case 1:
+    case PARTICLES_STATE_WAIT_REQUEST:
         if (particles->setupRequested == TRUE) {
             EncounterEffect_SetupParticleGraphics(particles->fieldSystem);
             SysTask_Destroy(task);
@@ -186,7 +192,7 @@ static void Task_ParticleSetup_VWait(SysTask *task, void *data) {
 
 static void Task_ParticleSetup_Main(SysTask *task, void *data) {
     EncounterEffectParticles *particles = data;
-    if (particles->state == 2) {
+    if (particles->state == PARTICLES_STATE_READY) {
         ParticleSystem_ZeroAll();
         VecFx32 position = { 0, 0, 0 };
         VecFx32 scale = sParticleBaseScale;

@@ -46,6 +46,12 @@ void SpinSlide_Start(FieldSystem *fieldSystem, PlayerAvatar *avatar, int directi
     FieldSystem_CreateTask(fieldSystem, Task_SpinSlide, task);
 }
 
+enum SpinSlideState {
+    SPIN_SLIDE_STATE_START,
+    SPIN_SLIDE_STATE_STEP,
+    SPIN_SLIDE_STATE_SPIN,
+};
+
 // A quarter turn counterclockwise.
 int SpinSlide_RotateDirection(int direction) {
     switch (direction) {
@@ -68,11 +74,11 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
     u8 behavior = MapObject_GetCurrentMetatileBehavior(mapObject);
 
     switch (task->state) {
-    case 0:
+    case SPIN_SLIDE_STATE_START:
         MapObject_SetFlagsBits(mapObject, MAPOBJECTFLAG_UNK8);
         task->state++;
         break;
-    case 1:
+    case SPIN_SLIDE_STATE_STEP:
         if (PlayerAvatar_IsReadyForMovement(task->avatar) == FALSE) {
             break;
         }
@@ -81,7 +87,7 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
         task->state++;
         task->countdown = 7;
         break;
-    case 2:
+    case SPIN_SLIDE_STATE_SPIN:
         if (task->countdown == 2 || task->countdown == 4 || task->countdown == 6) {
             task->direction = SpinSlide_RotateDirection(task->direction);
             PlayerAvatar_SetFacingDirection(task->avatar, task->direction);
@@ -114,7 +120,7 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
             task->direction = SpinSlide_RotateDirection(task->direction);
         }
         if (PlayerAvatar_CheckCollision(task->avatar, mapObject, task->direction) == FALSE) {
-            task->state = 1;
+            task->state = SPIN_SLIDE_STATE_STEP;
             break;
         }
         MapObject_ClearFlagsBits(mapObject, MAPOBJECTFLAG_UNK7);

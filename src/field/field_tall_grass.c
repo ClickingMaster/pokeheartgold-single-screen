@@ -16,6 +16,12 @@
 
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
+enum TallGrassEffectState {
+    TALL_GRASS_STATE_SHAKE,
+    TALL_GRASS_STATE_STOP,
+    TALL_GRASS_STATE_WAIT,
+};
+
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 8).
 typedef struct TallGrass {
     FieldEffectManager *manager;
@@ -196,7 +202,7 @@ BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work) {
     }
     if (FieldEffect_GetParam(effect) == FALSE) {
         BillboardObject_SetFrame(work->billboard, 12 * FX32_ONE);
-        work->state = 2;
+        work->state = TALL_GRASS_STATE_WAIT;
     }
     return TRUE;
 }
@@ -233,18 +239,18 @@ void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work) {
         }
     }
     switch (work->state) {
-    case 0:
+    case TALL_GRASS_STATE_SHAKE:
         if (BillboardObject_AdvanceFrame(work->billboard, FX32_ONE) == TRUE) {
         }
         if (BillboardObject_GetSequenceFrame(work->billboard) / FX32_ONE >= 12) {
-            work->state = 1;
+            work->state = TALL_GRASS_STATE_STOP;
         }
         return;
-    case 1:
+    case TALL_GRASS_STATE_STOP:
         BillboardObject_SetFrame(work->billboard, 12 * FX32_ONE);
-        work->state = 2;
+        work->state = TALL_GRASS_STATE_WAIT;
         // fallthrough
-    case 2:
+    case TALL_GRASS_STATE_WAIT:
         if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
             FieldEffectManager_DestroyEffect((int)effect);
             return;

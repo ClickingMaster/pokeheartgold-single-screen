@@ -157,6 +157,14 @@ struct MapLoadManager {
     void *mapLoadedCallbackArg;
 };
 
+enum MapModelLoadState {
+    MAP_MODEL_LOAD_READ_FIRST,
+    MAP_MODEL_LOAD_READ_NEXT,
+    MAP_MODEL_LOAD_BIND_TEXTURE,
+    MAP_MODEL_LOAD_INIT_RENDER_OBJ,
+    MAP_MODEL_LOAD_END = 5,
+};
+
 // The model load task
 typedef struct MapModelLoad {
     NARC *narc;
@@ -1501,23 +1509,23 @@ static void MapModelLoad_Cancel(SysTask *task) {
 // Reads the model in chunks of 0xE000 bytes per frame, binds the area texture and sets up the render object
 static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
     if (load->cancel == TRUE) {
-        load->state = 5;
+        load->state = MAP_MODEL_LOAD_END;
     }
     switch (load->state) {
-    case 0: {
+    case MAP_MODEL_LOAD_READ_FIRST: {
         int size;
         load->offset = 0;
         size = load->size;
         if (size <= 0xE000) {
-            load->state = 2;
+            load->state = MAP_MODEL_LOAD_BIND_TEXTURE;
         } else {
             size = 0xE000;
-            load->state = 1;
+            load->state = MAP_MODEL_LOAD_READ_NEXT;
         }
         NARC_ReadFile(load->narc, size, (u8 *)*load->modelFile + load->offset);
         load->offset += size;
     } break;
-    case 1: {
+    case MAP_MODEL_LOAD_READ_NEXT: {
         int last, size = load->size - load->offset;
         if (size > 0xE000) {
             size = 0xE000;
@@ -1527,18 +1535,18 @@ static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
         }
         NARC_ReadFile(load->narc, size, (u8 *)*load->modelFile + load->offset);
         if (last) {
-            load->state = 2;
+            load->state = MAP_MODEL_LOAD_BIND_TEXTURE;
         } else {
             load->offset += size;
         }
     } break;
-    case 2:
+    case MAP_MODEL_LOAD_BIND_TEXTURE:
         if (load->texture && GF3dRender_ResTexIsLoaded(load->texture) == TRUE) {
             GF3dRender_BindModelSet(*load->modelFile, load->texture);
         }
-        load->state = 3;
+        load->state = MAP_MODEL_LOAD_INIT_RENDER_OBJ;
         break;
-    case 3: {
+    case MAP_MODEL_LOAD_INIT_RENDER_OBJ: {
         NNSG3dResMdlSet *modelSet = NNS_G3dGetMdlSet(*load->modelFile);
         NNSG3dResMdl *model;
         GF_ASSERT(modelSet->dict.numEntry == 1);
@@ -1551,9 +1559,9 @@ static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
             AreaMapAnimation_AddToRenderObj(load->areaMapAnimation, load->renderObj);
         }
         *load->loaded = TRUE;
-        load->state = 5;
+        load->state = MAP_MODEL_LOAD_END;
     } break;
-    case 5:
+    case MAP_MODEL_LOAD_END:
         *load->loading = FALSE;
         Heap_Free(load);
         SysTask_Destroy(task);
@@ -1571,7 +1579,7 @@ static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dR
     load->modelFile = modelFile;
     load->texture = texture;
     load->areaMapAnimation = areaMapAnimation;
-    load->state = 0;
+    load->state = MAP_MODEL_LOAD_READ_FIRST;
     load->loaded = loaded;
     *loaded = FALSE;
     load->loading = loading;

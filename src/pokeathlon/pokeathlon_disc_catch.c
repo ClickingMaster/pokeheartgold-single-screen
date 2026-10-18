@@ -762,20 +762,26 @@ void PokeathlonDiscCatch_UpdateMonSprites(PokeathlonDiscCatchSprites *sprites, P
     }
 }
 
+enum PokeathlonDiscCatchIntroState {
+    DISC_CATCH_INTRO_FADE_IN,
+    DISC_CATCH_INTRO_WAIT_FADE_IN,
+    DISC_CATCH_INTRO_COUNTDOWN,
+};
+
 // Event state 0: fades in, then waits for the course to start the event.
 u32 PokeathlonDiscCatch_Intro(PokeathlonCourseData *course, u8 *state) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     PokeathlonDiscCatch_AnimateBg(&work->bgFrameTimer, work->bgConfig, work->heapId);
     switch (*state) {
-    case 0:
+    case DISC_CATCH_INTRO_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, work->heapId);
         (*state)++;
-    case 1:
+    case DISC_CATCH_INTRO_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         break;
-    case 2:
+    case DISC_CATCH_INTRO_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             PokeathlonCourse_SetNextState(course, DISC_CATCH_STATE_PLAY);
         }
@@ -796,18 +802,23 @@ void PokeathlonDiscCatch_EndGame(PokeathlonCourseData *course) {
     PokeathlonDiscCatch_PrintScore(course, score);
 }
 
+enum PokeathlonDiscCatchPlayState {
+    DISC_CATCH_PLAY_RUN,
+    DISC_CATCH_PLAY_FINISH,
+};
+
 // Event state 1: runs the game until the host reports the end and the shake is over.
 u32 PokeathlonDiscCatch_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     PokeathlonDiscCatch_AnimateBg(&work->bgFrameTimer, work->bgConfig, work->heapId);
     switch (*state) {
-    case 0:
+    case DISC_CATCH_PLAY_RUN:
         PokeathlonDiscCatch_UpdateHost(course);
         if (PokeathlonDiscCatch_UpdateFrame(course)) {
             (*state)++;
         }
         break;
-    case 1: {
+    case DISC_CATCH_PLAY_FINISH: {
         PokeathlonDiscCatchFrame *frame;
         PokeathlonDiscCatch_UpdateHost(course);
         frame = (PokeathlonDiscCatchFrame *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);

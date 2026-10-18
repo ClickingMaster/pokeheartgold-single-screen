@@ -32,6 +32,16 @@ void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScree
 
 extern u32 gPokeathlonBlockSmashFramesSinceHit;
 
+enum PokeathlonBlockSmashSwitchState {
+    BLOCK_SMASH_SWITCH_START,
+    BLOCK_SMASH_SWITCH_SHOW_BALL,
+    BLOCK_SMASH_SWITCH_BALL_UP,
+    BLOCK_SMASH_SWITCH_SHIFT_QUEUE,
+    BLOCK_SMASH_SWITCH_BALL_DOWN,
+    BLOCK_SMASH_SWITCH_SHOW_MON,
+    BLOCK_SMASH_SWITCH_END,
+};
+
 // The stamina cost was called through a declaration taking the stamina as u32 and the frames as u16
 // (the callers narrow the frames); the definition takes s32 and u32.
 typedef u8 (*PokeathlonBlockSmashTakeStaminaFunc)(u32 stamina, u16 frames);
@@ -435,13 +445,13 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
     s8 member;
     ManagedSprite *tmp;
     switch (mon->switchState) {
-    case 0:
+    case BLOCK_SMASH_SWITCH_START:
         ManagedSprite_ResetSpriteAnimCtrlState(mon->sprites[3]);
         ManagedSprite_SetDrawFlag(mon->sprites[3], TRUE);
         PlaySE(SEQ_SE_GS_W100);
         mon->switchState++;
         break;
-    case 1:
+    case BLOCK_SMASH_SWITCH_SHOW_BALL:
         if (++mon->switchFrames >= 2) {
             ManagedSprite_ResetSpriteAnimCtrlState(mon->sprites[4]);
             ManagedSprite_SetAnimateFlag(mon->sprites[4], FALSE);
@@ -453,7 +463,7 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             mon->switchState++;
         }
         break;
-    case 2:
+    case BLOCK_SMASH_SWITCH_BALL_UP:
         ManagedSprite_GetPositionXY(mon->sprites[4], &p2.x, &p2.y);
         delta = (-64 - p2.y) / 4;
         if (p2.y <= -52 || delta == 0) {
@@ -480,7 +490,7 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             PokeathlonBlockSmashMon_SetWaitingPosition(mon, 6, p2.x, p2.y);
         }
         break;
-    case 3:
+    case BLOCK_SMASH_SWITCH_SHIFT_QUEUE:
         ManagedSprite_GetPositionXYWithSubscreenOffset(mon->sprites[5], &p3.x, &p3.y, FX32_CONST(256));
         {
             int dist = 136 - p3.y;
@@ -514,7 +524,7 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             mon->switchState++;
         }
         break;
-    case 4:
+    case BLOCK_SMASH_SWITCH_BALL_DOWN:
         ManagedSprite_GetPositionXY(mon->sprites[4], &p4.x, &p4.y);
         {
             int dist = -24 - p4.y;
@@ -537,7 +547,7 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             ManagedSprite_SetPositionXYWithSubscreenOffset(mon->sprites[4], p4.x, p4.y, FX32_CONST(256));
         }
         break;
-    case 5:
+    case BLOCK_SMASH_SWITCH_SHOW_MON:
         if (++mon->switchFrames >= 2) {
             ManagedSprite_SetDrawFlag(mon->sprites[4], FALSE);
             PokeathlonBlockSmashMon_SetMonSprite(mon, 0, (u8)PokeathlonCourse_GetNetId(mon->course), (u8)mon->member, TRUE);
@@ -545,7 +555,7 @@ static void PokeathlonBlockSmashMon_UpdateSwitch(PokeathlonBlockSmashMon *mon) {
             mon->switchState++;
         }
         break;
-    case 6:
+    case BLOCK_SMASH_SWITCH_END:
         PokeathlonBlockSmashMon_SetMode(mon, BLOCK_SMASH_MON_READY);
         break;
     default:
@@ -711,13 +721,13 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
     PokeathlonBlockSmashRival *row = data;
     ManagedSprite *sprite;
     switch (row->switchState) {
-    case 0:
+    case BLOCK_SMASH_SWITCH_START:
         sprite = row->sprites[4];
         ManagedSprite_ResetSpriteAnimCtrlState(sprite);
         ManagedSprite_SetDrawFlag(sprite, TRUE);
         row->switchState++;
         return;
-    case 1:
+    case BLOCK_SMASH_SWITCH_SHOW_BALL:
         row->switchFrames++;
         if (row->switchFrames < 2) {
             break;
@@ -730,7 +740,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
         row->switchFrames = 0;
         row->switchState++;
         return;
-    case 2: {
+    case BLOCK_SMASH_SWITCH_BALL_UP: {
         s16 x, y;
         s16 step;
         ManagedSprite_GetPositionXY(row->sprites[5], &x, &y);
@@ -742,7 +752,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
         ManagedSprite_SetPositionXYWithSubscreenOffset(row->sprites[5], x, y + step, FX32_CONST(256));
         return;
     }
-    case 3:
+    case BLOCK_SMASH_SWITCH_SHIFT_QUEUE:
         row->switchFrames++;
         if (row->switchFrames < 4) {
             break;
@@ -750,7 +760,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
         row->switchFrames = 0;
         row->switchState++;
         return;
-    case 4: {
+    case BLOCK_SMASH_SWITCH_BALL_DOWN: {
         s16 x, y;
         ManagedSprite_GetPositionXY(row->sprites[5], &x, &y);
         {
@@ -772,7 +782,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
         ManagedSprite_SetPositionXYWithSubscreenOffset(row->sprites[5], x, y, FX32_CONST(256));
         return;
     }
-    case 5:
+    case BLOCK_SMASH_SWITCH_SHOW_MON:
         row->switchFrames++;
         if (row->switchFrames < 2) {
             break;
@@ -784,7 +794,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
         row->switchFrames = 0;
         row->switchState++;
         return;
-    case 6:
+    case BLOCK_SMASH_SWITCH_END:
         row->switchTask = NULL;
         row->switching = FALSE;
         SysTask_Destroy(task);
@@ -796,7 +806,7 @@ static void PokeathlonBlockSmashRival_SwitchTask(SysTask *task, void *data) {
 }
 
 static void PokeathlonBlockSmashRival_StartSwitch(PokeathlonBlockSmashRival *row) {
-    row->switchState = 0;
+    row->switchState = BLOCK_SMASH_SWITCH_START;
     row->switchFrames = 0;
     row->switching = TRUE;
     row->switchTask = SysTask_CreateOnMainQueue(PokeathlonBlockSmashRival_SwitchTask, row, 1);
@@ -892,7 +902,7 @@ static void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mo
         break;
     }
     mon->mode = mode;
-    mon->switchState = 0;
+    mon->switchState = BLOCK_SMASH_SWITCH_START;
     mon->modeFrames = 0;
 }
 

@@ -18,6 +18,12 @@
 // The height of the spin after n frames.
 #define WARP_SPIN_HEIGHT(n) ((fx32)((double)(n) * ((double)((n) << 11) + 9011.2)))
 
+enum WarpSpinState {
+    WARP_SPIN_STATE_START,
+    WARP_SPIN_STATE_SPIN,
+    WARP_SPIN_STATE_WAIT_FADE,
+};
+
 // A quarter turn counterclockwise.
 void WarpSpin_RotatePlayer(WarpSpinTask *task) {
     switch (task->facing) {
@@ -42,10 +48,10 @@ void Task_WarpSpinDeparture(SysTask *sysTask, WarpSpinTask *task) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(task->fieldSystem->playerAvatar);
 
     switch (task->state) {
-    case 0:
-        task->state = 1;
+    case WARP_SPIN_STATE_START:
+        task->state = WARP_SPIN_STATE_SPIN;
         PlaySE(SEQ_SE_DP_TELE2);
-    case 1:
+    case WARP_SPIN_STATE_SPIN:
         break;
     default:
         return;
@@ -74,7 +80,7 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
     int n;
 
     switch (task->state) {
-    case 0:
+    case WARP_SPIN_STATE_START:
         MapObject_UnpauseMovement(mapObject);
         MapObject_CopyDrawOffset(mapObject, &pos);
         n = WARP_SPIN_FRAMES - task->counter;
@@ -82,8 +88,8 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
         MapObject_SetDrawOffset(mapObject, &pos);
         MapObject_TryUpdateDraw(mapObject);
         PlaySE(SEQ_SE_DP_TELE2);
-        task->state = 1;
-    case 1:
+        task->state = WARP_SPIN_STATE_SPIN;
+    case WARP_SPIN_STATE_SPIN:
         if (task->counter % 2 != 0) {
             WarpSpin_RotatePlayer(task);
         }
@@ -96,11 +102,11 @@ void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
             BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_FIELD1);
         }
         if (task->counter > WARP_SPIN_FRAMES) {
-            task->state = 2;
+            task->state = WARP_SPIN_STATE_WAIT_FADE;
             return;
         }
         break;
-    case 2:
+    case WARP_SPIN_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             PlayerAvatar_SetFacingDirection(task->fieldSystem->playerAvatar, DIR_SOUTH);
             *task->done = 1;

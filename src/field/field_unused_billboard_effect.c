@@ -18,6 +18,12 @@
 
 BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
+enum UnusedBillboardEffectState {
+    UNUSED_BILLBOARD_STATE_ANIMATE,
+    UNUSED_BILLBOARD_STATE_STOP,
+    UNUSED_BILLBOARD_STATE_WAIT,
+};
+
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 13).
 typedef struct UnusedBillboard {
     FieldEffectManager *manager;
@@ -105,7 +111,7 @@ BOOL UnusedBillboardEffect_Init(FieldEffect *effect, UnusedBillboardEffect *work
     }
     if (FieldEffect_GetParam(effect) == 0) {
         BillboardObject_SetFrame(work->billboard, 2 * FX32_ONE);
-        work->state = 2;
+        work->state = UNUSED_BILLBOARD_STATE_WAIT;
     }
     return TRUE;
 }
@@ -144,18 +150,18 @@ void UnusedBillboardEffect_Update(FieldEffect *effect, UnusedBillboardEffect *wo
         }
     }
     switch (work->state) {
-    case 0:
+    case UNUSED_BILLBOARD_STATE_ANIMATE:
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
         if (BillboardObject_GetSequenceFrame(work->billboard) / FX32_ONE >= 2) {
-            work->state = 1;
+            work->state = UNUSED_BILLBOARD_STATE_STOP;
         }
         break;
-    case 1:
+    case UNUSED_BILLBOARD_STATE_STOP:
         BillboardObject_SetFrame(work->billboard, 2 * FX32_ONE);
         BillboardObject_AdvanceFrame(work->billboard, 0);
-        work->state = 2;
+        work->state = UNUSED_BILLBOARD_STATE_WAIT;
         // fallthrough
-    case 2:
+    case UNUSED_BILLBOARD_STATE_WAIT:
         if (!MapObject_CheckSpriteIDAndMap(mapObject, work->spriteId, work->objectId, work->mapId)) {
             FieldEffectManager_DestroyEffect((int)effect);
             return;

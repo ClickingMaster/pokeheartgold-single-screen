@@ -20,6 +20,12 @@ enum {
     PENNANT_CAPTURE_STATE_END,
 };
 
+enum PokeathlonPennantCaptureSetupState {
+    PENNANT_CAPTURE_SETUP_LAYOUT,
+    PENNANT_CAPTURE_SETUP_FADE_IN,
+    PENNANT_CAPTURE_SETUP_WAIT_FADE_IN,
+};
+
 PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int tag, int cell);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
@@ -175,7 +181,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
     u8 *fieldItem, *obstacle, *spot;
 
     switch (*state) {
-    case 0:
+    case PENNANT_CAPTURE_SETUP_LAYOUT:
         PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
         ReadWholeNarcMemberByIdPair(&layout, (NarcId)0xE3, work->layoutFileId);
         spot = layout.pennantSpots[0];
@@ -220,11 +226,11 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
         (*state)++;
         PokeathlonCourse_SetStateTransitionType(course, 0x13);
         break;
-    case 1:
+    case PENNANT_CAPTURE_SETUP_FADE_IN:
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, RGB_BLACK, 6, 1, work->heapId);
         (*state)++;
         break;
-    case 2:
+    case PENNANT_CAPTURE_SETUP_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             PokeathlonCourse_SetNextState(course, PENNANT_CAPTURE_STATE_PLAY);
         }

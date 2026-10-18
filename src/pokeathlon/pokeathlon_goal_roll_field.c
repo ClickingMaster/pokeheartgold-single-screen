@@ -31,6 +31,19 @@ extern const VecFx32 gPokeathlonGoalRollFrameLeft;
 extern const VecFx32 gPokeathlonGoalRollNormalTopRight;
 extern const VecFx32 gPokeathlonGoalRollFrameRight;
 extern const WindowTemplate gPokeathlonGoalRollNameWindowTemplates[];
+// PokeathlonGoalRoll_CollideWithWalls: the wall or corner that was hit
+enum PokeathlonGoalRollWall {
+    GOAL_ROLL_WALL_NONE,
+    GOAL_ROLL_WALL_LEFT,
+    GOAL_ROLL_WALL_RIGHT,
+    GOAL_ROLL_WALL_TOP,
+    GOAL_ROLL_WALL_BOTTOM,
+    GOAL_ROLL_WALL_TOP_LEFT,
+    GOAL_ROLL_WALL_TOP_RIGHT,
+    GOAL_ROLL_WALL_BOTTOM_LEFT,
+    GOAL_ROLL_WALL_BOTTOM_RIGHT,
+};
+
 typedef struct PokeathlonGoalRollSpawnPoint {
     s16 x;
     s16 y;
@@ -469,13 +482,13 @@ void PokeathlonGoalRoll_MoveBalls(PokeathlonCourseData *course) {
                 ball->bounced = TRUE;
             }
             switch (wall) {
-            case 3:
-            case 4:
+            case GOAL_ROLL_WALL_TOP:
+            case GOAL_ROLL_WALL_BOTTOM:
                 ball->direction.y *= -1;
                 ball->velocity.y *= -1;
                 break;
-            case 1:
-            case 2:
+            case GOAL_ROLL_WALL_LEFT:
+            case GOAL_ROLL_WALL_RIGHT:
                 ball->direction.x *= -1;
                 ball->velocity.x *= -1;
                 break;
@@ -839,7 +852,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
     } else {
         quadrant = 3;
     }
-    int result = 0;
+    int result = GOAL_ROLL_WALL_NONE;
     u8 beyondCorner = 0, crossesCorner = 0;
     if (!checkCorners) {
         goto edges;
@@ -852,7 +865,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
             cornerEnd.x = 0x60000;
             cornerEnd.y = -0x10000;
             VEC_Normalize(&normalTopLeft, &normal);
-            result = 5;
+            result = GOAL_ROLL_WALL_TOP_LEFT;
             break;
         case 1:
             cornerStart.x = 0xA0000;
@@ -860,7 +873,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
             cornerEnd.x = 0x120000;
             cornerEnd.y = 0x70000;
             VEC_Normalize(&normalTopRight, &normal);
-            result = 6;
+            result = GOAL_ROLL_WALL_TOP_RIGHT;
             break;
         case 2:
             cornerStart.x = 0x60000;
@@ -868,7 +881,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
             cornerEnd.x = -0x20000;
             cornerEnd.y = 0x60000;
             VEC_Normalize(&normalBottomLeft, &normal);
-            result = 7;
+            result = GOAL_ROLL_WALL_BOTTOM_LEFT;
             break;
         case 3:
             cornerStart.x = 0x120000;
@@ -876,7 +889,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
             cornerEnd.x = 0xA0000;
             cornerEnd.y = 0xE0000;
             VEC_Normalize(&normalBottomRight, &normal);
-            result = 8;
+            result = GOAL_ROLL_WALL_BOTTOM_RIGHT;
             break;
         default:
             GF_AssertFail();
@@ -899,7 +912,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
                 }
                 crossesCorner = 1;
             } else {
-                result = 0;
+                result = GOAL_ROLL_WALL_NONE;
             }
         }
     }
@@ -908,7 +921,7 @@ edges:
         s32 edge = (s32)((u32)radius + 16);
         if (position->y < TO_FX32(edge) && previous->y == TO_FX32((s32)(16U - (u32)radius))) {
             *out = *previous;
-            return 3;
+            return GOAL_ROLL_WALL_TOP;
         }
         edgeStart.x = 0x8000;
         edgeEnd.x = 0xF7000;
@@ -922,16 +935,16 @@ edges:
             }
             if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                 *out = *previous;
-                return 3;
+                return GOAL_ROLL_WALL_TOP;
             }
             *out = hit;
-            return 3;
+            return GOAL_ROLL_WALL_TOP;
         }
         if (position->x < 0x80000) {
             radius = (s32)((u32)radius + 8);
             if (position->x < TO_FX32(radius) && previous->x == TO_FX32(radius)) {
                 *out = *previous;
-                return 1;
+                return GOAL_ROLL_WALL_LEFT;
             }
             edgeEnd.x = edgeStart.x = TO_FX32(radius);
             edgeStart.y = 0xB7000;
@@ -945,16 +958,16 @@ edges:
                 }
                 if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
-                    return 1;
+                    return GOAL_ROLL_WALL_LEFT;
                 }
                 *out = hit;
-                return 1;
+                return GOAL_ROLL_WALL_LEFT;
             }
         } else {
             s32 edge = (s32)(247U - (u32)radius);
             if (position->x > TO_FX32(edge) && previous->x == TO_FX32(edge)) {
                 *out = *previous;
-                return 2;
+                return GOAL_ROLL_WALL_RIGHT;
             }
             edgeEnd.x = edgeStart.x = TO_FX32(edge);
             edgeStart.y = 0x10000;
@@ -968,17 +981,17 @@ edges:
                 }
                 if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
-                    return 2;
+                    return GOAL_ROLL_WALL_RIGHT;
                 }
                 *out = hit;
-                return 2;
+                return GOAL_ROLL_WALL_RIGHT;
             }
         }
     } else {
         s32 edge = (s32)(183U - (u32)radius);
         if (position->y > TO_FX32(edge) && previous->y == TO_FX32(edge)) {
             *out = *previous;
-            return 4;
+            return GOAL_ROLL_WALL_BOTTOM;
         }
         edgeStart.x = 0xF7000;
         edgeEnd.x = 0x8000;
@@ -992,16 +1005,16 @@ edges:
             }
             if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                 *out = *previous;
-                return 4;
+                return GOAL_ROLL_WALL_BOTTOM;
             }
             *out = hit;
-            return 4;
+            return GOAL_ROLL_WALL_BOTTOM;
         }
         if (position->x < 0x80000) {
             radius = (s32)((u32)radius + 8);
             if (position->x < TO_FX32(radius) && previous->x == TO_FX32(radius)) {
                 *out = *previous;
-                return 1;
+                return GOAL_ROLL_WALL_LEFT;
             }
             edgeEnd.x = edgeStart.x = TO_FX32(radius);
             edgeStart.y = 0xB7000;
@@ -1015,16 +1028,16 @@ edges:
                 }
                 if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
-                    return 1;
+                    return GOAL_ROLL_WALL_LEFT;
                 }
                 *out = hit;
-                return 1;
+                return GOAL_ROLL_WALL_LEFT;
             }
         } else {
             s32 edge = (s32)(247U - (u32)radius);
             if (position->x > TO_FX32(edge) && previous->x == TO_FX32(edge)) {
                 *out = *previous;
-                return 2;
+                return GOAL_ROLL_WALL_RIGHT;
             }
             edgeEnd.x = edgeStart.x = TO_FX32(edge);
             edgeStart.y = 0x10000;
@@ -1038,10 +1051,10 @@ edges:
                 }
                 if (checkCorners && PokeathlonGoalRoll_SegmentsIntersect(&cornerA, &cornerB, &previousPoint, &hit)) {
                     *out = *previous;
-                    return 2;
+                    return GOAL_ROLL_WALL_RIGHT;
                 }
                 *out = hit;
-                return 2;
+                return GOAL_ROLL_WALL_RIGHT;
             }
         }
     }

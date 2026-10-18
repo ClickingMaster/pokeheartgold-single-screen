@@ -340,11 +340,16 @@ BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpu
     return FALSE;
 }
 
+enum PokeathlonBlockSmashIntroState {
+    BLOCK_SMASH_INTRO_WAIT_BLOCKS,
+    BLOCK_SMASH_INTRO_COUNTDOWN,
+};
+
 // Event state 0: wait for the first stack, then show the start banner.
 BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case BLOCK_SMASH_INTRO_WAIT_BLOCKS:
         PokeathlonBlockSmashBlocks_Update(work->blocks);
         if (PokeathlonBlockSmashBlocks_GetState(work->blocks) == BLOCKS_STATE_READY) {
             PokeathlonBlockSmashBannerPosition position;
@@ -355,7 +360,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
             (*state)++;
         }
         break;
-    case 1:
+    case BLOCK_SMASH_INTRO_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             PokeathlonCourseObjects_PauseAnims(work->monPics, 0);
             PokeathlonCourse_SetNextState(course, BLOCK_SMASH_STATE_PLAY);
@@ -427,18 +432,23 @@ static BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
     return FALSE;
 }
 
+enum PokeathlonBlockSmashPlayState {
+    BLOCK_SMASH_PLAY_RUN,
+    BLOCK_SMASH_PLAY_FINISH,
+};
+
 // Event state 1: play until the host ends the event and the shake is over, then fade out.
 BOOL PokeathlonBlockSmash_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case BLOCK_SMASH_PLAY_RUN:
         PokeathlonBlockSmash_UpdateLinkData(course);
         PokeathlonBlockSmash_UpdateTeamRows(course);
         if (PokeathlonBlockSmash_UpdateGame(course)) {
             (*state)++;
         }
         break;
-    case 1:
+    case BLOCK_SMASH_PLAY_FINISH:
         if (PokeathlonCourse_RunFinish(course) && work->shakeTask == NULL) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
             PokeathlonCourse_SetNextState(course, BLOCK_SMASH_STATE_FINISH);
