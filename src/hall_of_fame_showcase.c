@@ -189,8 +189,6 @@ BOOL HallOfFameShowcase_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-#pragma force_active on
-
 BOOL HallOfFameShowcase_Main(OverlayManager *man, int *state) {
     HallOfFameShowcase *showcase = OverlayManager_GetData(man);
 
@@ -219,8 +217,6 @@ BOOL HallOfFameShowcase_Main(OverlayManager *man, int *state) {
     SpriteSystem_DrawSprites(showcase->spriteManager);
     return FALSE;
 }
-
-#pragma force_active reset
 
 void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase) {
     vu32 *dtcm = (vu32 *)0x027E0000;
@@ -298,8 +294,6 @@ void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase) {
     Heap_Free(showcase->bgConfig);
 }
 
-#pragma force_active on
-
 void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
     OamManagerParam oamParam;
     OamCharTransferParam charTransferParam;
@@ -352,8 +346,6 @@ void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-#pragma force_active reset
-
 void HallOfFameShowcase_DeleteSprite(HallOfFameShowcase *showcase, u32 index) {
     if (showcase->sprites[index] != NULL) {
         Sprite_DeleteAndFreeResources(showcase->sprites[index]);
@@ -381,8 +373,6 @@ void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase) {
     }
 }
 
-#pragma force_active on
-
 void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase) {
     showcase->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0181_bin, HEAP_ID_59);
     showcase->speciesNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, HEAP_ID_59);
@@ -396,8 +386,6 @@ void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase) {
     showcase->mon.otname = showcase->otName;
 }
 
-#pragma force_active reset
-
 void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase) {
     String_Delete(showcase->otName);
     String_Delete(showcase->nickname);
@@ -408,8 +396,6 @@ void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase) {
     DestroyMsgData(showcase->speciesNames);
     DestroyMsgData(showcase->msgData);
 }
-
-#pragma force_active on
 
 void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
     u32 i;
@@ -426,8 +412,6 @@ void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
     CopyWindowPixelsToVram_TextMode(&showcase->windows[16]);
     ScheduleWindowCopyToVram(&showcase->windows[16]);
 }
-
-#pragma force_active reset
 
 void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase) {
     u32 i;
@@ -483,8 +467,6 @@ static inline void HallOfFameShowcase_StartNextPage(HallOfFameShowcase *showcase
     HallOfFameShowcase_DeletePartyIcons(showcase);
     PlaySE(SEQ_SE_DP_SELECT);
 }
-
-#pragma force_active on
 
 int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
     u32 input;
@@ -564,8 +546,6 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
     return TRUE;
 }
 
-#pragma force_active reset
-
 void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase) {
     u32 i;
 
@@ -576,8 +556,6 @@ void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase) {
         SpriteManager_UnloadCharObjById(showcase->spriteManager, i);
     }
 }
-
-#pragma force_active on
 
 void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
     struct {
@@ -654,8 +632,6 @@ void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
     showcase->iconSet ^= 1;
 }
 
-#pragma force_active reset
-
 void HallOfFameShowcase_HideMonDetail(HallOfFameShowcase *showcase) {
     ManagedSprite_SetDrawFlag(showcase->sprites[0], FALSE);
     ManagedSprite_SetDrawFlag(showcase->sprites[1], FALSE);
@@ -705,8 +681,6 @@ static inline void HallOfFameShowcase_PrintMonDetail(HallOfFameShowcase *showcas
     }
 }
 
-#pragma force_active on
-
 void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     PokepicTemplate pokepic;
     TileRect picRect = sShowcaseMonPicRect;
@@ -752,8 +726,6 @@ void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     HallOfFameShowcase_PrintMonDetail(showcase, firstWindow, gender);
     showcase->monDetailSet ^= 1;
 }
-
-#pragma force_active reset
 
 int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase) {
     if (showcase->buttonAnimTimer == 0) {

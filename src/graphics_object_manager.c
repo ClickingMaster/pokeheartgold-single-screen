@@ -317,8 +317,6 @@ void GraphicsObject_Draw(GraphicsObject *object) {
     G3_PopMtx(1);
 }
 
-#pragma opt_treetransformation off
-
 void GraphicsObject_InitFromTemplate(GraphicsObject *object, GraphicsObjectTemplate *template) {
     u32 width, height;
     int i;

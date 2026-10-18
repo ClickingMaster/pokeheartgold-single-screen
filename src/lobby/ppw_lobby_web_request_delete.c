@@ -5,7 +5,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 extern int LobbyCharVector_Destroy();
 extern int LobbyString_Destroy();

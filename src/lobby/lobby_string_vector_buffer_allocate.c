@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 typedef union S {
     struct {
@@ -33,8 +32,6 @@ extern void *LobbyMem_Alloc(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 #include "overlay45_string_search.h"
 void LobbyStringVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
-
-#pragma optimization_level 3
 
 void LobbyStringVectorBuffer_Allocate(Vec *p, u32 n, Small tag) {
     if (n > 0x15555555) {

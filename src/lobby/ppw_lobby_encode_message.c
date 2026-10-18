@@ -1,4 +1,3 @@
-#pragma warn_uninitializedvar off
 #include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -99,6 +98,7 @@ void LobbyString_AssignCStr(Str *s, const char *arg) {
     LobbyString_ReplaceCStr(s, 0, StrSize(s), arg);
 }
 
+#pragma warn_uninitializedvar off
 void LobbyString_ReplaceCStr(Str *s, u32 a, u32 b, const char *str) {
     Tag x;
     LobbyString_ReplaceRange(s, a, b, str, str + strlen(str), x);

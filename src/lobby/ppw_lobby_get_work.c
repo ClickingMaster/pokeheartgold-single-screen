@@ -6,8 +6,6 @@
 
 #include "ppw_lobby_internal.h"
 
-#pragma warn_uninitializedvar off
-
 extern u8 *volatile gPPWLobbyWork;
 
 u8 *PPWLobby_GetWork(void) {

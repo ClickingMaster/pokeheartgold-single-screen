@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 #define V(p, o) (*(volatile u32 *)((u8 *)(p) + (o)))
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define P(p, o) (*(u8 **)((u8 *)(p) + (o)))

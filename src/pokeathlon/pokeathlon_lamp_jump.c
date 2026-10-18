@@ -1843,8 +1843,6 @@ static void PokeathlonLampJump_ShowLampPoints(PokeathlonLampJumpLamps *lamps, u8
     PokeathlonCourseSpritePoolSprite_Show(lamps->lamps[index].pointsSprite, 1, 1);
 }
 
-#pragma opt_scalarizeliveranges off
-
 // Lights up to 25 of the lamps that are out, picked at random.
 static void PokeathlonLampJump_LightLamps(PokeathlonLampJumpLamps *lamps) {
     struct {
@@ -1880,8 +1878,6 @@ static void PokeathlonLampJump_LightLamps(PokeathlonLampJumpLamps *lamps) {
         list.count--;
     }
 }
-
-#pragma opt_scalarizeliveranges reset
 
 PokeathlonLampJumpCpuPlayers *PokeathlonLampJump_NewCpuPlayers(enum HeapID heapId, int count, int unused, u8 *dataCopy, PokeathlonCourseData *course) {
     int i;

@@ -127,8 +127,6 @@ static const FadeFunc sFadeFuncPtrs[] = {
 
 static PaletteFade sPaletteFade;
 
-#pragma opt_common_subs off
-
 void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum FadeType subType, u16 color, int steps, int framesPerStep, enum HeapID heapId) {
     if (steps == 0) {
         GF_AssertFail();
@@ -160,8 +158,6 @@ void BeginNormalPaletteFade(enum FadeMode mode, enum FadeType mainType, enum Fad
         }
     }
 }
-
-#pragma opt_common_subs reset
 
 void HandleFadeUpdateFrame(void) {
     PaletteFade *fade = &sPaletteFade;

@@ -41,7 +41,6 @@ extern "C" const char *gPPWLobbyStatsUploadKey = sStr_StatsUploadKey;
 extern "C" signed char gLobbyStringInPlaceTerminator = 0;
 extern "C" u8 gLobbyTimerMapNotInserted = 0;
 #pragma explicit_zero_data reset
-#pragma push
 
 namespace SubmitQuestionnaire {
 extern "C" void OS_GetMacAddress(u8 *);
@@ -285,14 +284,10 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
 
 }
 
-#pragma pop
 #undef PNEW
-
-#pragma push
 
 namespace LastError {
 extern "C" {
-#pragma warn_uninitializedvar off
 
 typedef union S {
     struct {
@@ -392,10 +387,6 @@ int PPW_LobbyInitResultToLastError(int x) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace SendMessage {
 class Str;
@@ -513,10 +504,6 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, int d,
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace SetChannelData {
 extern "C" {
 
@@ -609,10 +596,6 @@ int PPWLobby_SetChannelData(int id, int key, int mode, void *data, u32 length) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StartCheckProfile {
 extern "C" void OS_GetMacAddress(u8 *);
@@ -831,10 +814,6 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace MakeChannelName {
 extern "C" {
 extern char *gPPWLobbyChannelNamePrefixes[];
@@ -868,7 +847,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
 void PPWLobby_OnSubmitQuestionnaire(int status);
 
-#pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
@@ -888,10 +866,6 @@ void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringConcat {
 
@@ -952,10 +926,6 @@ extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringConcatCStr {
 
 namespace LobbyStringTypes {
@@ -1010,10 +980,6 @@ extern "C" Str *LobbyString_ConcatCStr(Str *out, Str *left, char *right) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace GenerateChannelBaseName {
 extern "C" {
 extern PPWLobbyWork *gPPWLobbyWork;
@@ -1048,7 +1014,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
 void PPWLobby_OnSubmitQuestionnaire(int status);
 
-#pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
@@ -1066,9 +1031,6 @@ void PPWLobby_GenerateChannelBaseName(Str *out) {
 }
 }
 
-#pragma pop
-
-#pragma push
 using std::va_list;
 extern "C" {
 }
@@ -1126,10 +1088,6 @@ extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
     new (output) Str;
     LobbyString_InitFromCStr(output, vector.text());
 }
-
-#pragma pop
-
-#pragma push
 
 namespace EnterMainChannel {
 class Str;
@@ -1284,10 +1242,6 @@ extern "C" int PPWLobby_EnterMainChannel(void) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace HandleReceivedData {
 struct Str;
 extern "C" Str *LobbyString_InitFromCStr(Str *, char *);
@@ -1404,10 +1358,6 @@ extern "C" void PPWLobby_HandleReceivedData(int a, int b, char *channel, int id,
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace DecodeMessageData {
 extern "C" unsigned strlen(const char *);
 
@@ -1464,10 +1414,6 @@ extern "C" int PPWLobby_DecodeMessageData(const char *text, Vec *out) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringEquals {
 class String {
 public:
@@ -1499,10 +1445,6 @@ extern "C" int LobbyString_Equals(const String &a, const String &b) {
 }
 
 }
-
-#pragma pop
-
-#pragma push
 
 namespace HandleLibraryData {
 extern "C" int strcmp(const char *, const char *);
@@ -1757,10 +1699,6 @@ extern "C" int PPWLobby_HandleLibraryData(int a0, int a1, int sel, int id, const
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace HandleSystemMessage {
 extern "C" {
 
@@ -1832,10 +1770,6 @@ done:
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace IsMainChannelReady {
 extern "C" {
 
@@ -1867,8 +1801,6 @@ static inline int enough(s32 n) {
     return result;
 }
 
-#pragma opt_propagation off
-
 int PPWLobby_IsMainChannelReady(void) {
     String local;
     int empty;
@@ -1896,8 +1828,6 @@ int PPWLobby_IsMainChannelReady(void) {
 }
 }
 }
-
-#pragma pop
 
 #pragma push
 
@@ -1966,8 +1896,6 @@ int PPWLobby_TimerUploadUserProfile(void) {
 
 #pragma pop
 
-#pragma push
-
 namespace ChannelTimers {
 extern "C" {
 extern PPWLobbyWork *gPPWLobbyWork;
@@ -2002,7 +1930,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
 void PPWLobby_OnSubmitQuestionnaire(int status);
 
-#pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
@@ -2052,10 +1979,6 @@ int PPWLobby_TimerRequestChannelTime(void) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TimerRequestLobbyData {
 extern "C" {
 extern PPWLobbyWork *gPPWLobbyWork;
@@ -2097,10 +2020,6 @@ int PPWLobby_TimerRequestLobbyData(void) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace WebResponse {
 extern "C" {
 extern char *gPPWLobbyChannelNamePrefixes[];
@@ -2134,7 +2053,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
 void PPWLobby_OnSubmitQuestionnaire(int status);
 
-#pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
@@ -2183,10 +2101,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace OnCheckProfile {
 extern "C" void OS_GetMacAddress(u8 *);
@@ -2400,8 +2314,6 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
 }
 
 }
-
-#pragma pop
 
 #pragma push
 
@@ -2634,8 +2546,6 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
 
 #pragma pop
 
-#pragma push
-
 namespace OnGetVip {
 extern "C" void OS_GetMacAddress(u8 *);
 struct Str;
@@ -2848,10 +2758,6 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnGetQuestionnaire {
 extern "C" {
 
@@ -2889,10 +2795,6 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnSubmitQuestionnaire {
 extern "C" {
 extern PPWLobbyWork *gPPWLobbyWork;
@@ -2927,7 +2829,6 @@ int PPWLobby_ParseWebResponse(int valid, u8 *data, u32 size, void **output, u32 
 void PPWLobby_OnGetQuestionnaire(int valid, u8 *data, u32 size);
 void PPWLobby_OnSubmitQuestionnaire(int status);
 
-#pragma warn_uninitializedvar off
 extern Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, u8);
 
 static inline u32 short_length(Str *p) {
@@ -2946,10 +2847,6 @@ void PPWLobby_OnSubmitQuestionnaire(int status) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace OnEnterMainChannel {
 using std::memcmp;
@@ -3264,10 +3161,6 @@ extern "C" void PPWLobby_OnEnterMainChannel(int success, void *unused, void *han
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnEnterSubChannel {
 extern "C" int memcmp(const void *, const void *, unsigned);
 class Str;
@@ -3415,10 +3308,6 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
 #pragma opt_common_subs reset
 
 }
-
-#pragma pop
-
-#pragma push
 
 namespace OnPlayerJoined {
 extern "C" int memcmp(const void *, const void *, unsigned);
@@ -3580,10 +3469,6 @@ extern "C" void PPWLobby_OnPlayerJoined(char *channel, int id) {
 #pragma opt_common_subs reset
 
 }
-
-#pragma pop
-
-#pragma push
 
 namespace OnPlayerLeft {
 extern "C" int memcmp(const void *, const void *, unsigned);
@@ -3749,16 +3634,11 @@ extern "C" void PPWLobby_OnPlayerLeft(char *channel, int id) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnPlayerMessage {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -3980,8 +3860,6 @@ void PPWLobby_OnPlayerMessage(int a, int b, int c) {
 }
 }
 
-#pragma pop
-
 #pragma push
 
 namespace OnMessage {
@@ -4010,7 +3888,6 @@ static inline void zeroString(String *s) {
     *p = 0;
 }
 
-#pragma opt_lifetimes off
 #pragma opt_common_subs off
 
 static inline int validEntry(PPWLobbyPlayer *p) {
@@ -4105,14 +3982,11 @@ void PPWLobby_OnMessage(void *key, int index, void *name) {
 
 #pragma pop
 
-#pragma push
-
 namespace OnChannelEvents {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -4343,10 +4217,6 @@ void PPWLobby_OnGetChannelKeys(int a, int b, int c, int d, int e, int f) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnEnumChannels {
 extern "C" {
 
@@ -4418,10 +4288,6 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringSplit {
 struct Str;
@@ -4524,10 +4390,6 @@ extern "C" Vec LobbyString_Split(const Str &s, const Str &delim, int max) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringSubstr {
 extern "C" {
 void LobbyString_InitSubstring(void *, void *, int, int);
@@ -4539,10 +4401,6 @@ void LobbyString_Substr(void *a, void *b, int c, int d) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace OnEnumUsers {
 struct Str;
@@ -4634,16 +4492,11 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnGetChannelMode {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -4876,10 +4729,6 @@ void PPWLobby_OnGetChannelMode(int a, int b, u32 *c) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnGetChannelTime {
 struct Vec;
 extern "C" Vec *LobbyCharVector_Destroy(Vec *);
@@ -4955,10 +4804,6 @@ extern "C" void PPWLobby_OnGetChannelTime(int result, int unused1, int unused2, 
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace OnGetLobbyData {
 extern "C" {
 
@@ -5008,16 +4853,11 @@ void PPWLobby_OnGetLobbyData(int ok, int a, int b, int c, void *data) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace Destructors {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -5293,10 +5133,6 @@ void *PPWLobbyPlayer_Delete(struct Player *player) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace EventDequeDestroy {
 extern "C" {
 
@@ -5342,16 +5178,11 @@ Queue *LobbyEventDeque_Destroy(Queue *p) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace PlayerSetDestroy {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -5576,10 +5407,6 @@ void *PPWLobbyPlayerSet_Destroy(struct Tree *a) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TimerMapInsert {
 extern "C" {
 
@@ -5613,16 +5440,11 @@ void LobbyTimerMap_Insert(Result *r, void *p, u32 *v) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TimerMapErase {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -5863,10 +5685,6 @@ void LobbyTimerMap_Clear(struct Tree *a) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TimerMapInsertNode {
 extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
@@ -5974,16 +5792,11 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int l
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TimerMapDestroy {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -6220,10 +6033,6 @@ void *LobbyTimerMap_Destroy(struct Tree *a) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TreeIterator {
 
 struct TreeNode {
@@ -6267,10 +6076,6 @@ extern "C" void ov45_02236E58(Iterator *it) {
 }
 
 }
-
-#pragma pop
-
-#pragma push
 
 namespace TreeInsertRebalance {
 extern "C" {
@@ -6348,10 +6153,6 @@ void LobbyTree_InsertRebalance(Node *n, void *volatile root) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace TreeEraseRebalance {
 extern "C" {
@@ -6528,16 +6329,11 @@ Node *LobbyTree_EraseRebalance(Node *node, void *root) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace TreeRotate {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -6803,10 +6599,6 @@ void LobbyStringVector_PushBackSlow(struct Vec *a, void *b, struct Alloc unused)
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringVectorDestroy {
 extern "C" {
 
@@ -6838,16 +6630,11 @@ u32 *LobbyStringVector_Destroy(u32 *p) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace VectorDestroy {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -7101,10 +6888,6 @@ struct Vec *LobbyEventVector_Destroy(struct Vec *a) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace CharVectorGrow {
 extern "C" void *memset(void *, int, unsigned);
 
@@ -7134,16 +6917,11 @@ extern "C" void LobbyCharVector_Grow(Vec *v, u32 n) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace CharVectorAllocate {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct Str {
     union {
@@ -7366,10 +7144,6 @@ void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace CharVectorReallocate {
 extern "C" {
 
@@ -7407,16 +7181,11 @@ void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace CharVectorRecommendSize {
 extern "C" {
 void ov45_02236E58(Iterator *);
 extern int printf(const char *, ...);
 extern void abort(void);
-#pragma warn_uninitializedvar off
 
 struct TreeNode {
     void *left, *right;
@@ -7632,9 +7401,6 @@ u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
 }
 }
 
-#pragma pop
-
-#pragma push
 using std::memset;
 using namespace LobbyCharVectorTypes;
 
@@ -7652,9 +7418,6 @@ extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispat
     LobbyCharVector_AppendZerosSlow(vector, count);
 }
 
-#pragma pop
-
-#pragma push
 using LobbyStringTypes::RangeDispatch;
 using namespace LobbyCharVectorTypes;
 extern "C" void DWC_Free(int, void *, u32);
@@ -7694,10 +7457,6 @@ extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
     }
     return output;
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringInit {
 
@@ -7747,9 +7506,6 @@ extern "C" String *LobbyString_InitSubstring(String *self, String *str, u32 pos,
 
 }
 
-#pragma pop
-
-#pragma push
 using LobbyStringTypes::RangeDispatch;
 using std::strlen;
 
@@ -7773,10 +7529,6 @@ extern "C" Str *LobbyString_Destroy(Str *output) {
     }
     return output;
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringReserve {
 extern "C" {
@@ -7876,10 +7628,6 @@ void LobbyString_Reserve(Text *w, u32 size) {
 }
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringAssign {
 extern "C" {
 
@@ -7913,10 +7661,6 @@ struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringReplace {
 
@@ -7963,10 +7707,6 @@ extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
 }
 
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringReplaceSubstring {
 extern "C" int printf(const char *, ...);
@@ -8023,10 +7763,6 @@ extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, S
 
 }
 
-#pragma pop
-
-#pragma push
-
 inline StringSearchRange StringSearch::GetRange() const {
     if (raw.longForm.flag) {
         return StringSearchRange(raw.longForm.data, raw.longForm.size);
@@ -8043,9 +7779,6 @@ extern "C" int LobbyString_Find(const StringSearch *a, const StringSearch *b, u3
     return a->Find(*b, pos);
 }
 
-#pragma pop
-
-#pragma push
 extern "C" {
 
 u32 LobbyString_FindChars(const StringSearch *s, const s8 *needle, u32 start, u32 count) {
@@ -8086,9 +7819,6 @@ fail:
     return ~0U;
 }
 }
-#pragma pop
-
-#pragma push
 
 namespace StringCompare {
 extern "C" unsigned strlen(const char *);
@@ -8154,10 +7884,6 @@ extern "C" int LobbyString_CompareCStr(const String *a, const char *b) {
 
 }
 
-#pragma pop
-
-#pragma push
-
 namespace StringCompareChars {
 extern "C" {
 extern int printf(const char *, ...);
@@ -8197,10 +7923,6 @@ int LobbyString_CompareChars(const Str *s, u32 pos, u32 length, const void *othe
 }
 }
 }
-
-#pragma pop
-
-#pragma push
 
 namespace StringReplaceRange {
 extern "C" void *memcpy(void *, const void *, unsigned);
@@ -8337,5 +8059,3 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
 #pragma opt_common_subs reset
 
 }
-
-#pragma pop

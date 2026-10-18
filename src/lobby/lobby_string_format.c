@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 typedef struct Vec {
     char *data;

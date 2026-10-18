@@ -95,9 +95,6 @@ void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx3
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
-#pragma push
-#pragma opt_common_subs off
-
 static void PokeathlonRelayRun_SetGfxBanks(void);
 static void PokeathlonRelayRun_InitBgs(BgConfig *bgConfig);
 static void PokeathlonRelayRun_LoadBgGraphics(PokeathlonRelayRun *relayRun);
@@ -269,6 +266,9 @@ static const GraphicsBanks sRelayRunGraphicsBanks = {
     .tex = GX_VRAM_TEX_NONE,
     .texpltt = GX_VRAM_TEXPLTT_NONE,
 };
+
+#pragma push
+#pragma opt_common_subs off
 
 BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
     PokeathlonRelayRun *relayRun = PokeathlonCourse_GetWork(course);

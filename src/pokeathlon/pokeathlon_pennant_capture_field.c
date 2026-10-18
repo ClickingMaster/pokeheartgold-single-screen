@@ -924,9 +924,6 @@ void PokeathlonPennantCapture_AddPoint2D(const Point2D *a, const Point2D *b, Poi
     out->y = a->y + b->y;
 }
 
-#pragma opt_loop_invariants off
-#pragma opt_strength_reduction off
-
 static inline void PokeathlonPennantCapture_ZeroVec(VecFx32 *v) {
     memset(v, 0, sizeof(*v));
 }
@@ -1003,9 +1000,6 @@ static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course,
     }
     return applied;
 }
-
-#pragma opt_loop_invariants reset
-#pragma opt_strength_reduction reset
 
 void PokeathlonPennantCapture_UpdateFieldDrawPriorities(PokeathlonPennantCapture *work) {
     int i;

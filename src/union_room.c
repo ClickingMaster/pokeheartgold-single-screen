@@ -304,8 +304,6 @@ UnionRoomRecord *UnionRoom_GetRecord(struct UnionRoom *unionRoom, int netId) {
     return unionRoom->records[netId];
 }
 
-#pragma force_active on
-
 // What the player standing at map object objId is doing (record + 0x80: activity, kind at +0x1C).
 int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
     UnionRoomRecord *record;
@@ -410,8 +408,6 @@ int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind
         return 5;
     }
 }
-
-#pragma force_active off
 
 u32 UnionRoom_GetJoinStatus(struct UnionRoom *unionRoom) {
     return unionRoom->joinStatus;

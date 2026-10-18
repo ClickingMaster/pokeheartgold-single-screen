@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 #define W(p, o) (*(u32 *)((p) + (o)))
 
 typedef union S {
@@ -34,8 +33,6 @@ extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"
 void LobbyStringVectorBuffer_EraseAtEnd(Vec *p, u32 n, Small tag);
 u8 *PPWLobbySchedule_Init(u8 *p);
-
-#pragma optimization_level 3
 
 void LobbyStringVectorBuffer_EraseAtEnd(Vec *p, u32 n, Small tag) {
     S *end = p->data + p->len;

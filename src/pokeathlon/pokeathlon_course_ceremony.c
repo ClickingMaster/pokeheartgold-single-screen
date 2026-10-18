@@ -381,8 +381,6 @@ BOOL PokeathlonCourseOpening_FadeIn(PokeathlonCourseData *course, u8 *state) {
 
 // The commentator welcomes everyone to the course, then introduces every team in turn: its
 // line, its name and Pokemon, while the team's Pokemon jump and the crowd cheers.
-#pragma force_active on
-
 BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course, u8 *state) {
     int i;
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
@@ -508,8 +506,6 @@ BOOL PokeathlonCourseOpening_Introduce(PokeathlonCourseData *course, u8 *state) 
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCourseOpening_FadeOut(PokeathlonCourseData *course, u8 *state) {
     switch (*state) {
     case CEREMONY_FADE_START:
@@ -556,8 +552,6 @@ BOOL PokeathlonCourseClosing_FadeIn(PokeathlonCourseData *course, u8 *state) {
 // The awards: Challenge Bonus of every team, No-Miss Bonus, points leader and prize for effort
 // (each Pokemon's cry), then the event points of every round counted up, the winner (by drawing
 // lots when tied) with its medals and course record.
-#pragma force_active on
-
 BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     BOOL waiting = FALSE;
@@ -821,8 +815,6 @@ end:
     return FALSE;
 }
 
-#pragma force_active reset
-
 BOOL PokeathlonCourseClosing_FadeOut(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
 
@@ -891,8 +883,6 @@ static BOOL PokeathlonCourseCeremony_IsCryActive(PokeathlonCourseCeremony *cerem
     return ceremony->cryActive;
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes = sPokeathlonCourseCeremonyGraphicsModes;
     BgTemplate bg0;
@@ -915,8 +905,6 @@ static void PokeathlonCourseCeremony_InitBgs(BgConfig *bgConfig) {
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseCeremony_LoadBgGfx(BgConfig *bgConfig, enum HeapID heapId) {
     GfGfxLoader_LoadCharData(NARC_a_1_5_4, 3, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapId);
@@ -988,8 +976,6 @@ static void PokeathlonCourseCeremony_CreateTrainerSprites(PokeathlonCourseCeremo
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_CreateScoreSprites(PokeathlonCourseCeremony *ceremony) {
     ManagedSpriteTemplate template = { 0 };
     int i;
@@ -1023,8 +1009,6 @@ static void PokeathlonCourseCeremony_CreateScoreSprites(PokeathlonCourseCeremony
     }
 }
 
-#pragma force_active reset
-
 static void PokeathlonCourseCeremony_CreateMonPicSprites(PokeathlonCourseCeremony *ceremony) {
     ManagedSpriteTemplate template = { 0 };
     int i;
@@ -1054,8 +1038,6 @@ static void PokeathlonCourseCeremony_CreateMonPicSprites(PokeathlonCourseCeremon
     }
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_CreateMedalSprites(PokeathlonCourseCeremony *ceremony) {
     ManagedSpriteTemplate template = { 0 };
     int i;
@@ -1079,11 +1061,7 @@ static void PokeathlonCourseCeremony_CreateMedalSprites(PokeathlonCourseCeremony
     }
 }
 
-#pragma force_active reset
-
 // Pictures of the winning team's Pokemon, and their palettes for the overworld sprites.
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *course, int team) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     NNSG2dPaletteData *palette;
@@ -1102,8 +1080,6 @@ static void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *cou
         Heap_Free(file);
     }
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseCeremony_LoadSpriteResources(PokeathlonCourseData *course) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
@@ -1150,8 +1126,6 @@ static void PokeathlonCourseCeremony_LoadMonPicResources(PokeathlonCourseCeremon
 }
 
 // The pictures replace the overworld sprites of the winner's Pokemon on the top screen.
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_ShowWinnerTeam(PokeathlonCourseData *course, int team) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     u32 i;
@@ -1166,8 +1140,6 @@ static void PokeathlonCourseCeremony_ShowWinnerTeam(PokeathlonCourseData *course
     }
     PokeathlonCourseCeremony_LoadWinnerMonPics(course, team);
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseCeremony_LoadTrainerSprites(PokeathlonCourseData *course) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
@@ -1244,8 +1216,6 @@ static void PokeathlonCourseCeremony_FreeScores(PokeathlonCourseCeremonyScore *s
     Heap_Free(scores);
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_UpdateScores(PokeathlonCourseCeremonyScore *scores) {
     int i;
     for (i = 0; i < 4; i++) {
@@ -1263,8 +1233,6 @@ static BOOL PokeathlonCourseCeremony_AreScoresCounted(PokeathlonCourseCeremonySc
     }
     return result;
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseCeremony_AddPoints(PokeathlonCourseCeremonyScore *scores, int team, u32 points) {
     if (points != 0) {
@@ -1517,8 +1485,6 @@ static void PokeathlonCourseConfetti_Start(PokeathlonCourseConfetti *confetti, B
     GfGfxLoader_GXLoadPal(NARC_a_1_5_4, 12, GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x160, 0x20, confetti->heapId);
 }
 
-#pragma force_active on
-
 static void PokeathlonCourseConfetti_SpawnPieces(PokeathlonCourseConfetti *confetti, u8 count) {
     int spawned = 0;
     int next;
@@ -1636,15 +1602,11 @@ static BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-#pragma force_active reset
-
 static BOOL PokeathlonCourseCeremony_Main(PokeathlonCourseData *course) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     SpriteSystem_DrawSprites(ceremony->spriteManager);
     return TRUE;
 }
-
-#pragma force_active on
 
 static BOOL PokeathlonCourseCeremony_Exit(PokeathlonCourseData *course) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
@@ -1669,8 +1631,6 @@ static BOOL PokeathlonCourseCeremony_Exit(PokeathlonCourseData *course) {
     Heap_Destroy(HEAP_ID_135);
     return TRUE;
 }
-
-#pragma force_active reset
 
 // Puts the nickname of the team's member-th Pokemon into placeholder field.
 static void PokeathlonCourseCeremony_BufferMonName(PokeathlonCourseData *course, int team, int member, int field) {
@@ -1769,8 +1729,6 @@ static int PokeathlonCourseConfetti_GetRandomDelay(void) {
     return (MTRandom() & 7) + 4;
 }
 
-#pragma force_active on
-
 static u8 PokeathlonCourseCeremony_GetChallengeBonus(PokeathlonCourseData *course, u8 team) {
     u8 *copyArea = PokeathlonCourse_GetDataCopyArea(course);
     PokeathlonCourseCeremonyClosingData *data = (PokeathlonCourseCeremonyClosingData *)PokeathlonCourse_ToBytes(copyArea + 0xF0);
@@ -1790,8 +1748,6 @@ static u32 PokeathlonCourseCeremony_GetEventPoints(PokeathlonCourseData *course,
     u8 event = PokeathlonCourse_GetRoundEvent(course, round);
     return PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourse_GetGraphicsSystem(course), event, team);
 }
-
-#pragma force_active reset
 
 static int PokeathlonCourseCeremony_GetNoMissPoints(PokeathlonCourseCeremony *ceremony) {
     return 10;
@@ -2001,8 +1957,6 @@ static u32 PokeathlonCourseCeremony_ChooseEffortPrizeKind(PokeathlonCourseData *
 }
 
 // Host: the bonuses and prizes of the closing ceremony.
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_ChooseAwards(PokeathlonCourseData *course) {
     int team;
     int i;
@@ -2073,8 +2027,6 @@ static void PokeathlonCourseCeremony_ChooseAwards(PokeathlonCourseData *course) 
         index = (index + 1) % 4;
     }
 }
-
-#pragma force_active reset
 
 // The which-th (0, 1) medal for winning course; course 10 has the first course's medal only.
 static u32 PokeathlonCourseCeremony_GetCourseMedal(u32 course, u32 which) {
@@ -2147,8 +2099,6 @@ static BOOL PokeathlonCourseCeremony_NextMon(PokeathlonCourseCeremony *ceremony)
 }
 
 // Gives the next Pokemon that passes test its points: buffers its name, plays its cry.
-#pragma force_active on
-
 static BOOL PokeathlonCourseCeremony_AwardNextMon(PokeathlonCourseData *course, PokeathlonCourseCeremonyAwardTest test, int points) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     int index;
@@ -2174,11 +2124,7 @@ static BOOL PokeathlonCourseCeremony_AwardNextMon(PokeathlonCourseData *course, 
     return FALSE;
 }
 
-#pragma force_active reset
-
 // Keeps the result of the ceremony for the course statistics.
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_SaveResult(PokeathlonCourseData *course, PokeathlonCourseCeremonyScore *scores) {
     int own;
     PokeathlonCourseCeremony *ceremony;
@@ -2214,8 +2160,6 @@ static void PokeathlonCourseCeremony_SaveResult(PokeathlonCourseData *course, Po
     }
     result->place = (u16)place;
 }
-
-#pragma force_active reset
 
 static void PokeathlonCourseCeremony_BufferNumber(MessageFormat *msgFormat, s32 value, u32 digits, u32 field) {
     BufferIntegerAsString(msgFormat, field, value, digits, PRINTING_MODE_LEFT_ALIGN, TRUE);
@@ -2352,8 +2296,6 @@ typedef struct NpcIntroLocals {
 } NpcIntroLocals;
 
 // NPC team: its own line (msg 311); the cheer from its Pokemon's performance.
-#pragma force_active on
-
 static void PokeathlonCourseCeremony_ChooseNpcIntro(PokeathlonCourseCeremonyIntro *intro, PokeathlonCourseData *course, int team) {
     NpcIntroLocals locals;
     locals.team = team;
@@ -2375,8 +2317,6 @@ static void PokeathlonCourseCeremony_ChooseNpcIntro(PokeathlonCourseCeremonyIntr
     intro->value = 0;
     intro->cheer = cheer;
 }
-
-#pragma force_active reset
 
 // Place of the team, -1 if it is not ranked.
 static int PokeathlonCourseCeremony_FindPlace(const PokeathlonCourseCeremonyRank *ranks, u8 team) {

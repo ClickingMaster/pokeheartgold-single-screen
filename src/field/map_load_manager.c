@@ -1458,7 +1458,6 @@ int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 mapSlot)
     return mapLoadManager->maps[mapSlot]->matrixIndex;
 }
 
-#pragma opt_lifetimes off
 // The window cell holding tile (x, z); FALSE if its map is not loaded
 BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *mapSlot) {
     u32 matrixIndex = (z / 32) * mapLoadManager->width + x / 32;
@@ -1483,7 +1482,6 @@ BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u
     }
     return TRUE;
 }
-#pragma opt_lifetimes reset
 
 Bdhc *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 mapSlot) {
     return mapLoadManager->maps[mapSlot]->bdhc;

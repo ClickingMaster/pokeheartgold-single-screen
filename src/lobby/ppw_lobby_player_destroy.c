@@ -6,7 +6,6 @@
 
 #include "ppw_lobby_internal.h"
 
-#pragma warn_uninitializedvar off
 #define P(p, o) (*(u8 **)((u8 *)(p) + (o)))
 
 extern u8 gPPWLobbyPlayersVtable[];

@@ -408,8 +408,6 @@ static void PokeathlonRingDrop_SetGfxBanks(void) {
 
 // Every participant: the host first runs the ring on all inputs and sends the frame, then the
 // frame received is shown.
-#pragma opt_lifetimes off
-
 static void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
     int i;
     PokeathlonRingDrop *ringDrop;
@@ -477,8 +475,6 @@ static void PokeathlonRingDrop_Update(PokeathlonCourseData *course) {
     }
     PokeathlonRingDropDisplay_Update(&ringDrop->display, course);
 }
-
-#pragma opt_lifetimes reset
 
 // Callback when the course ends: reports the own score.
 static void PokeathlonRingDrop_OnFinish(PokeathlonCourseData *course) {

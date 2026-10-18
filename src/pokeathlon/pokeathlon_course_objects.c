@@ -348,9 +348,6 @@ SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool 
     return pool->spriteList;
 }
 
-#pragma opt_lifetimes off
-#pragma opt_common_subs on
-
 // Slot of resource type (0 char .. 3 animation) of the resources with the given id.
 
 SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, u32 id, u32 type) {
@@ -377,9 +374,6 @@ SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpri
     GF_AssertFail();
     return NULL;
 }
-
-#pragma opt_lifetimes reset
-#pragma opt_common_subs reset
 
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority) {
     Sprite_SetDrawPriority(entry->sprite, priority);

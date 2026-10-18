@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 typedef union S {
     struct {
@@ -37,8 +36,6 @@ Vec *LobbyCharVectorBuffer_Destroy(Vec *p);
 void LobbyCharVectorBuffer_Allocate(Vec *p, u32 n, Small tag);
 u8 *LobbyCharVectorBuffer_Deallocate(u8 *p);
 Vec *LobbyStringVectorBuffer_Deallocate(Vec *p);
-
-#pragma optimization_level 3
 
 Vec *LobbyStringVectorBuffer_Destroy(Vec *p) {
     S *first = p->data + p->extra, *end = first + p->len;

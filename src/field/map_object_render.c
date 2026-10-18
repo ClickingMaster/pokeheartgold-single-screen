@@ -1384,7 +1384,6 @@ static void MapObjectRender_TextureReleaseTask(SysTask *task, void *data) {
     queue->busy = FALSE;
 }
 
-#pragma opt_lifetimes off
 // Queues the creation of the object's billboard until its texture is in VRAM
 static void MapObjectRender_QueueBillboard(MapObjectRender *render, LocalMapObject *object, void **billboard, u32 spriteId) {
     int i = 0;
@@ -1403,7 +1402,6 @@ static void MapObjectRender_QueueBillboard(MapObjectRender *render, LocalMapObje
     }
     GF_AssertFail();
 }
-#pragma opt_lifetimes reset
 
 static void MapObjectRender_CancelQueuedBillboard(MapObjectRender *render, LocalMapObject *object) {
     MapObjectRenderQueue *queue = render->queue;

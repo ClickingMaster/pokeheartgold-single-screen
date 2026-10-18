@@ -5,7 +5,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 typedef union S {
     struct {
@@ -37,8 +36,6 @@ extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 #include "overlay45_string_search.h"
 void PPWLobbyPlayerSet_DestroyNodes(void *ctx, Node *p);
 u32 LobbyStringVector_RecommendSize(Vec *p, u32 n, ...);
-
-#pragma optimization_level 3
 
 void PPWLobbyPlayerSet_DestroyNodes(void *ctx, Node *p) {
     if (p->left) {

@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 
 typedef union S {
     struct {
@@ -32,8 +31,6 @@ typedef struct Small {
 extern int LobbyString_Destroy();
 #include "overlay45_string_search.h"
 void LobbyStringVector_EraseAtEnd(Vec *p, u32 n, Small tag);
-
-#pragma optimization_level 3
 
 void LobbyStringVector_EraseAtEnd(Vec *p, u32 n, Small tag) {
     S *end = p->data + p->len;

@@ -468,6 +468,7 @@ BOOL Wireless_StartScan(void *callback, const u16 *bssid, u16 channel) {
 #pragma opt_common_subs off
 
 static BOOL Wireless_ScanNextChannel(void) {
+    int error;
     u16 channels = WM_GetAllowedChannel();
     if (channels == 0x8000) {
         Wireless_SetError(3);
@@ -486,23 +487,18 @@ static BOOL Wireless_ScanNextChannel(void) {
                 sWirelessManager.work->scanParam.channel = 1;
             }
             if (channels & (1u << (sWirelessManager.work->scanParam.channel - 1))) {
-                goto channelSelected;
-            } else {
-                continue;
+                break;
             }
         }
     } else {
         sWirelessManager.work->scanParam.channel = sWirelessManager.work->scanChannel;
     }
-channelSelected:
     sWirelessManager.work->scanParam.time = WM_GetDispersionScanPeriod() / 3;
     sWirelessManager.work->scanParam.buffer = sWirelessManager.work->parentInfo;
-    {
-        int error = WM_StartScan(Wireless_OnScanEvent, &sWirelessManager.work->scanParam);
-        if (error != WM_OK) {
-            Wireless_SetError(error);
-            return FALSE;
-        }
+    error = WM_StartScan(Wireless_OnScanEvent, &sWirelessManager.work->scanParam);
+    if (error != WM_OK) {
+        Wireless_SetError(error);
+        return FALSE;
     }
     return TRUE;
 }

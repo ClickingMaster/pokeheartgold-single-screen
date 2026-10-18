@@ -3,7 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#pragma warn_uninitializedvar off
 #define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 extern u8 *volatile gPPWLobbyWork;

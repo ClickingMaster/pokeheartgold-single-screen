@@ -275,6 +275,7 @@ static void WirelessStatusIcon_WriteOam(WirelessStatusIcon *p) {
     volatile WirelessStatusIconOam *oam;
     s32 mode;
     u32 pal;
+    u8 prio;
     volatile WirelessStatusIconOam *old;
     switch (p->screenMode) {
     case 1:
@@ -347,10 +348,8 @@ fallback:
         oam = (volatile WirelessStatusIconOam *)0x7000400;
     }
     pal = p->palette;
-    {
-        u8 prio = p->priority;
-        oam->attr01 = ((p->x & 511) << 16) | (0x40000000 | ((p->y & 255) | (prio << 10)));
-    }
+    prio = p->priority;
+    oam->attr01 = ((p->x & 511) << 16) | (0x40000000 | ((p->y & 255) | (prio << 10)));
     oam->attr2 = (pal << 12) | tile;
     old = p->oam;
     if (oam != old) {

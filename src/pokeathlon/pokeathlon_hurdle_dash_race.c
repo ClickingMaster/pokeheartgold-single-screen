@@ -834,8 +834,6 @@ static BOOL PokeathlonHurdleDashRankNode_InsertRunning(PokeathlonHurdleDashRankN
     return FALSE;
 }
 
-#pragma opt_lifetimes off
-
 static void PokeathlonHurdleDash_SetRank(PokeathlonHurdleDashStatus *status, int index, u32 rank) {
     u8 shift;
     u8 byte;
@@ -853,8 +851,6 @@ static void PokeathlonHurdleDash_SetRank(PokeathlonHurdleDashStatus *status, int
     ranks = status->ranks;
     ranks[byte] |= bits;
 }
-
-#pragma opt_lifetimes reset
 
 BOOL PokeathlonHurdleDash_HaveAllStopped(PokeathlonHurdleDash *hurdleDash) {
     s32 i;
