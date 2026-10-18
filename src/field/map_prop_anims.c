@@ -72,8 +72,6 @@ enum HealAnimState {
     HEAL_ANIM_STATE_END,
 };
 
-BOOL PokecenterAnimRun(TaskManager *taskManager);
-
 BOOL PokecenterAnimRun(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     PokecenterAnim *anim = TaskManager_GetEnvironment(taskManager);
@@ -157,7 +155,7 @@ enum ElevatorAnimState {
     ELEVATOR_ANIM_STATE_END,
 };
 
-BOOL ElevatorAnimRun(TaskManager *taskManager);
+static BOOL ElevatorAnimRun(TaskManager *taskManager);
 
 void ElevatorAnimCreate(FieldSystem *fieldSystem, u8 direction, u8 length) {
     if (FieldSystem_FindMapProp(fieldSystem, MAP_PROP_ELEVATOR, NULL, NULL)) {
@@ -171,7 +169,7 @@ void ElevatorAnimCreate(FieldSystem *fieldSystem, u8 direction, u8 length) {
     }
 }
 
-BOOL ElevatorAnimRun(TaskManager *taskManager) {
+static BOOL ElevatorAnimRun(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     ElevatorAnim *anim = TaskManager_GetEnvironment(taskManager);
 

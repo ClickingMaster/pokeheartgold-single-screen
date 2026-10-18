@@ -6,6 +6,7 @@
 #include "billboard_lists.h"
 #include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 
 // Field effect renderer 13: a billboard over a map object's tile in the style of the grass effects (two
 // frames, then held while the object stays on the tile). Nothing creates it: its template, sUnusedBillboardEffectTemplate,
@@ -15,8 +16,6 @@
 #define UNUSED_BILLBOARD_RESOURCE 8
 #define UNUSED_BILLBOARD_SEQUENCE 8
 #define UNUSED_BILLBOARD_TEXTURE  9
-
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 enum UnusedBillboardEffectState {
     UNUSED_BILLBOARD_STATE_ANIMATE,

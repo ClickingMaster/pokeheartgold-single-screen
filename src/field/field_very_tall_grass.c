@@ -6,6 +6,7 @@
 #include "billboard_lists.h"
 #include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 
 // The very tall grass a map object stands in (field effect renderer 12): like the tall grass, a billboard
 // over the tile that rustles (12 frames) when the object walks in, then holds its last frame until the
@@ -15,8 +16,6 @@
 #define VERY_TALL_GRASS_RESOURCE 7
 #define VERY_TALL_GRASS_SEQUENCE 7
 #define VERY_TALL_GRASS_TEXTURE  8
-
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 enum VeryTallGrassEffectState {
     VERY_TALL_GRASS_STATE_SHAKE,

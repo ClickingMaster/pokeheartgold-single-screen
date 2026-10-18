@@ -37,70 +37,41 @@ void *FieldEffectPool_New(enum HeapID heapID, int count);
 void FieldEffectPool_Delete(void *pool);
 void FieldEffectPool_DrawAll(void *pool);
 
-FieldMoveCutIn *FieldMoveCutIn_New(FieldSystem *fieldSystem);
-void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn);
-void Task_FieldMoveCutIn(SysTask *task, void *data);
-void Task_FieldMoveCutInFly(SysTask *task, void *data);
-void Task_FieldMoveCutInFlyWithObject(SysTask *task, void *data);
-BOOL FieldMoveCutIn_StepLoadBannerGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepLoadSpriteGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepCreateSprites(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepInitWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWidenWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepOpenWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitBeforeMon(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepMonSlideIn(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepMonSlowDown(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitBeforeMonExit(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepMonSlideOut(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepCloseWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepFreeBannerGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepFreeSpriteGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepEndWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepFinish(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepCreateFlySprites(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepCreateFlyTrainerSprite(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepFreeMonGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepLoadFlyGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitFlyGraphics(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepStartFly(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitTakeOff(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitBeforeFlyAway(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitBeforePickUp(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitFlyAway(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepCloseFlyWindow(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitFlyEnd(FieldMoveCutIn *cutIn);
-BOOL FieldMoveCutIn_StepWaitPaletteFade(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_StartSpriteTransfer(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_StartFlySpriteTransfer(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_EndSpriteTransfer(FieldMoveCutIn *cutIn);
-void Task_FieldMoveCutIn_TransferSprites(SysTask *task, void *data);
-void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data);
-void Task_FieldMoveCutIn_TransferFlySprites(SysTask *task, void *data);
-void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data);
-void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_InitSpriteGraphics(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_FreeBannerGraphics(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_FreeSpriteGraphics(FieldMoveCutIn *cutIn);
-NARC *FieldMoveCutIn_OpenNarc(void);
-void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc);
-void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_DrawSprites(FieldMoveCutIn *cutIn);
-Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
-void CutInSprite_StartAnimation(Sprite *sprite);
-void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn);
-void CutInBanner_LoadPalette(NARC *narc, u32 fileId, NNSG2dPaletteData **pltt);
-void CutInBanner_LoadChar(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **chars);
-void CutInBanner_LoadScreen(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dScreenData **screen);
-void CutInBanner_Clear(BgConfig *bgConfig);
-void FieldMoveCutIn_StartWindow(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_EnableWindow(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_DisableWindow(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_SetWindowPlanes(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_SetWindowOutsidePlanes(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 top, fx32 right, fx32 bottom);
-void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn);
+static FieldMoveCutIn *FieldMoveCutIn_New(FieldSystem *fieldSystem);
+static void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn);
+static void Task_FieldMoveCutIn(SysTask *task, void *data);
+static void Task_FieldMoveCutInFly(SysTask *task, void *data);
+static void Task_FieldMoveCutInFlyWithObject(SysTask *task, void *data);
+static void FieldMoveCutIn_StartSpriteTransfer(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_StartFlySpriteTransfer(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_EndSpriteTransfer(FieldMoveCutIn *cutIn);
+static void Task_FieldMoveCutIn_TransferSprites(SysTask *task, void *data);
+static void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data);
+static void Task_FieldMoveCutIn_TransferFlySprites(SysTask *task, void *data);
+static void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data);
+static void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_InitSpriteGraphics(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_FreeBannerGraphics(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_FreeSpriteGraphics(FieldMoveCutIn *cutIn);
+static NARC *FieldMoveCutIn_OpenNarc(void);
+static void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc);
+static void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_DrawSprites(FieldMoveCutIn *cutIn);
+static Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
+static void CutInSprite_StartAnimation(Sprite *sprite);
+static void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn);
+static void CutInBanner_LoadPalette(NARC *narc, u32 fileId, NNSG2dPaletteData **pltt);
+static void CutInBanner_LoadChar(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **chars);
+static void CutInBanner_LoadScreen(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dScreenData **screen);
+static void CutInBanner_Clear(BgConfig *bgConfig);
+static void FieldMoveCutIn_StartWindow(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_EnableWindow(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_DisableWindow(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_SetWindowPlanes(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_SetWindowOutsidePlanes(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 top, fx32 right, fx32 bottom);
+static void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn);
 
 // overlay 2's data block
 extern const FieldMoveCutInStep sFieldMoveCutInSteps[];
@@ -165,18 +136,18 @@ void FieldMoveCutIn_Delete(void *task) {
     SysTask_Destroy(task);
 }
 
-FieldMoveCutIn *FieldMoveCutIn_New(FieldSystem *fieldSystem) {
+static FieldMoveCutIn *FieldMoveCutIn_New(FieldSystem *fieldSystem) {
     FieldMoveCutIn *cutIn = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(FieldMoveCutIn));
     memset(cutIn, 0, sizeof(FieldMoveCutIn));
     cutIn->fieldSystem = fieldSystem;
     return cutIn;
 }
 
-void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn) {
     Heap_Free(cutIn);
 }
 
-void Task_FieldMoveCutIn(SysTask *task, void *data) {
+static void Task_FieldMoveCutIn(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     const FieldMoveCutInStep *steps = sFieldMoveCutInSteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
@@ -383,7 +354,7 @@ BOOL FieldMoveCutIn_StepFinish(FieldMoveCutIn *cutIn) {
     return FALSE;
 }
 
-void Task_FieldMoveCutInFly(SysTask *task, void *data) {
+static void Task_FieldMoveCutInFly(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     const FieldMoveCutInStep *steps = sFieldMoveCutInFlySteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
@@ -396,7 +367,7 @@ void Task_FieldMoveCutInFly(SysTask *task, void *data) {
     }
 }
 
-void Task_FieldMoveCutInFlyWithObject(SysTask *task, void *data) {
+static void Task_FieldMoveCutInFlyWithObject(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     const FieldMoveCutInStep *steps = sFieldMoveCutInFlyWithObjectSteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
@@ -576,26 +547,26 @@ BOOL FieldMoveCutIn_StepWaitPaletteFade(FieldMoveCutIn *cutIn) {
 }
 
 // The sprite resources go to VRAM in the next VBlank; transferDone is set once their data is released.
-void FieldMoveCutIn_StartSpriteTransfer(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_StartSpriteTransfer(FieldMoveCutIn *cutIn) {
     cutIn->transferStep = 0;
     cutIn->transferDone = FALSE;
     cutIn->transferTask = SysTask_CreateOnVBlankQueue(Task_FieldMoveCutIn_TransferSprites, cutIn, 0x80);
 }
 
-void FieldMoveCutIn_StartFlySpriteTransfer(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_StartFlySpriteTransfer(FieldMoveCutIn *cutIn) {
     cutIn->transferStep = 0;
     cutIn->transferDone = FALSE;
     cutIn->transferTask = SysTask_CreateOnVBlankQueue(Task_FieldMoveCutIn_TransferFlySprites, cutIn, 0x80);
 }
 
-void FieldMoveCutIn_EndSpriteTransfer(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_EndSpriteTransfer(FieldMoveCutIn *cutIn) {
     if (cutIn->transferTask != NULL) {
         SysTask_Destroy(cutIn->transferTask);
         cutIn->transferTask = NULL;
     }
 }
 
-void Task_FieldMoveCutIn_TransferSprites(SysTask *task, void *data) {
+static void Task_FieldMoveCutIn_TransferSprites(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     int i;
 
@@ -621,7 +592,7 @@ void Task_FieldMoveCutIn_TransferSprites(SysTask *task, void *data) {
     }
 }
 
-void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data) {
+static void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     int i;
 
@@ -649,7 +620,7 @@ void Task_FieldMoveCutIn_ReleaseSpriteData(SysTask *task, void *data) {
     }
 }
 
-void Task_FieldMoveCutIn_TransferFlySprites(SysTask *task, void *data) {
+static void Task_FieldMoveCutIn_TransferFlySprites(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     SpriteResource *res = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], 0);
     if (cutIn->transferStep == 0) {
@@ -659,7 +630,7 @@ void Task_FieldMoveCutIn_TransferFlySprites(SysTask *task, void *data) {
     }
 }
 
-void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data) {
+static void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     SpriteResource *res = SpriteResourceCollection_Find(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], 0);
     if (cutIn->transferStep == 1) {
@@ -670,7 +641,7 @@ void Task_FieldMoveCutIn_ReleaseFlySpriteData(SysTask *task, void *data) {
 }
 
 // The banner on BG3 inside the window, above BG1; BG0 and BG3's priorities are restored by FreeBannerGraphics.
-void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn) {
     NARC *narc = FieldMoveCutIn_OpenNarc();
     FieldMoveCutIn_SetWindowRect(cutIn, 0, FX32_CONST(192), FX32_ONE, FX32_CONST(192));
     FieldMoveCutIn_StartWindow(cutIn);
@@ -694,7 +665,7 @@ void FieldMoveCutIn_InitBannerGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
 
-void FieldMoveCutIn_InitSpriteGraphics(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_InitSpriteGraphics(FieldMoveCutIn *cutIn) {
     NARC *narc = FieldMoveCutIn_OpenNarc();
     cutIn->bg0Priority = GetBgPriority(cutIn->fieldSystem->bgConfig, GF_BG_LYR_MAIN_0);
     cutIn->bg3Priority = GetBgPriority(cutIn->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3);
@@ -707,7 +678,7 @@ void FieldMoveCutIn_InitSpriteGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
 
-void FieldMoveCutIn_FreeBannerGraphics(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_FreeBannerGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     FieldEffectPool_Delete(cutIn->effectPool);
     CutInBanner_Clear(cutIn->fieldSystem->bgConfig);
@@ -718,7 +689,7 @@ void FieldMoveCutIn_FreeBannerGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
 
-void FieldMoveCutIn_FreeSpriteGraphics(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_FreeSpriteGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     FieldEffectPool_Delete(cutIn->effectPool);
     FieldMoveCutIn_FreeSpriteResources(cutIn);
@@ -728,13 +699,13 @@ void FieldMoveCutIn_FreeSpriteGraphics(FieldMoveCutIn *cutIn) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
 }
 
-NARC *FieldMoveCutIn_OpenNarc(void) {
+static NARC *FieldMoveCutIn_OpenNarc(void) {
     return NARC_New(NARC_application_choose_starter_choose_starter_sub_res, HEAP_ID_FIELD1);
 }
 
 // Sprite resource ids: char 1 effects, 2 trainer, 3 Pokemon; pltt 0 effects, then trainer (unless male), then
 // Pokemon; cell 1 effects, 2 trainer, 3 clouds; anim 0 effects, 1 trainer.
-void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
+static void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
     int i;
 
     FieldMoveCutIn_GetMonPicIds(cutIn, &cutIn->pokepicTemplate);
@@ -769,7 +740,7 @@ void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc) {
     cutIn->monPlttData = FieldMoveCutIn_LoadMonPltt(&cutIn->pokepicTemplate, HEAP_ID_FIELD1);
 }
 
-void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn) {
     int i;
 
     for (i = 0; i < 4; i++) {
@@ -800,7 +771,7 @@ void FieldMoveCutIn_FreeSpriteResources(FieldMoveCutIn *cutIn) {
     SpriteList_Delete(cutIn->spriteList);
 }
 
-void FieldMoveCutIn_DrawSprites(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_DrawSprites(FieldMoveCutIn *cutIn) {
     if (cutIn->spriteList != NULL) {
         SpriteList_RenderAndAnimateSprites(cutIn->spriteList);
     }
@@ -833,7 +804,7 @@ Sprite *FieldMoveCutIn_CreateEffectSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, i
     return sprite;
 }
 
-Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) {
+static Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) {
     int plttId = 0;
     Sprite *sprite;
     if (cutIn->trainerGraphics != 0) {
@@ -845,7 +816,7 @@ Sprite *FieldMoveCutIn_CreateTrainerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) 
     return sprite;
 }
 
-void CutInSprite_StartAnimation(Sprite *sprite) {
+static void CutInSprite_StartAnimation(Sprite *sprite) {
     Sprite_SetAnimActiveFlag(sprite, TRUE);
     Sprite_SetAnimSpeed(sprite, FX32_ONE);
 }
@@ -865,7 +836,7 @@ Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, in
 }
 
 // The flyer's char (id 0) and cell (id 0) take the first free slots, freed by FreeMonGraphics.
-void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn) {
     NARC *narc = FieldMoveCutIn_OpenNarc();
     int i;
     for (i = 0; i < 4; i++) {
@@ -885,21 +856,21 @@ void FieldMoveCutIn_LoadFlyResources(FieldMoveCutIn *cutIn) {
     NARC_Delete(narc);
 }
 
-void CutInBanner_LoadPalette(NARC *narc, u32 fileId, NNSG2dPaletteData **pltt) {
+static void CutInBanner_LoadPalette(NARC *narc, u32 fileId, NNSG2dPaletteData **pltt) {
     void *data = NARC_AllocAndReadWholeMember(narc, fileId, HEAP_ID_FIELD1);
     NNS_G2dGetUnpackedPaletteData(data, pltt);
     BG_LoadPlttData(GF_BG_LYR_MAIN_3, (*pltt)->pRawData, 0x20, 12 * 0x20);
     Heap_Free(data);
 }
 
-void CutInBanner_LoadChar(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **chars) {
+static void CutInBanner_LoadChar(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dCharacterData **chars) {
     void *data = NARC_AllocAndReadWholeMember(narc, fileId, HEAP_ID_FIELD1);
     NNS_G2dGetUnpackedCharacterData(data, chars);
     BG_LoadCharTilesData(bgConfig, GF_BG_LYR_MAIN_3, (*chars)->pRawData, (*chars)->szByte, 0);
     Heap_Free(data);
 }
 
-void CutInBanner_LoadScreen(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dScreenData **screen) {
+static void CutInBanner_LoadScreen(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dScreenData **screen) {
     void *data;
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
@@ -911,11 +882,11 @@ void CutInBanner_LoadScreen(BgConfig *bgConfig, NARC *narc, u32 fileId, NNSG2dSc
     Heap_Free(data);
 }
 
-void CutInBanner_Clear(BgConfig *bgConfig) {
+static void CutInBanner_Clear(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void FieldMoveCutIn_StartWindow(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_StartWindow(FieldMoveCutIn *cutIn) {
     FieldMoveCutIn_CreateWindowTask(cutIn);
     cutIn->windowUpdate = FALSE;
     FieldMoveCutIn_DisableWindow(cutIn);
@@ -924,40 +895,40 @@ void FieldMoveCutIn_StartWindow(FieldMoveCutIn *cutIn) {
     cutIn->windowUpdate = TRUE;
 }
 
-void FieldMoveCutIn_EnableWindow(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_EnableWindow(FieldMoveCutIn *cutIn) {
     cutIn->windowEnabled = TRUE;
 }
 
-void FieldMoveCutIn_DisableWindow(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_DisableWindow(FieldMoveCutIn *cutIn) {
     cutIn->windowEnabled = FALSE;
 }
 
 // Inside the window: the banner (BG3) and sprites. Outside: everything else, with blending.
-void FieldMoveCutIn_SetWindowPlanes(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_SetWindowPlanes(FieldMoveCutIn *cutIn) {
     cutIn->windowInsidePlanes = GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ;
     cutIn->windowInsideEffects = FALSE;
     cutIn->windowOutsidePlanes = GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_OBJ;
     cutIn->windowOutsideEffects = TRUE;
 }
 
-void FieldMoveCutIn_SetWindowOutsidePlanes(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_SetWindowOutsidePlanes(FieldMoveCutIn *cutIn) {
     cutIn->windowOutsidePlanes = GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_OBJ;
     cutIn->windowOutsideEffects = TRUE;
 }
 
-void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 top, fx32 right, fx32 bottom) {
+static void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 top, fx32 right, fx32 bottom) {
     cutIn->windowLeft = left;
     cutIn->windowRight = right;
     cutIn->windowTop = top;
     cutIn->windowBottom = bottom;
 }
 
-void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn) {
     GF_ASSERT(cutIn->windowTask == NULL);
     cutIn->windowTask = SysTask_CreateOnVBlankQueue(Task_FieldMoveCutIn_UpdateWindow, cutIn, 0x81);
 }
 
-void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn) {
     GF_ASSERT(cutIn->windowTask != NULL);
     SysTask_Destroy(cutIn->windowTask);
     GX_SetVisibleWnd(GX_WNDMASK_NONE);

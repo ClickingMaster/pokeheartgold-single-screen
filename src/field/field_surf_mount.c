@@ -8,14 +8,13 @@
 #include "field_effects.h"
 #include "geometry_math.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "render_animation.h"
 #include "render_model.h"
 
 // The Pokemon the player rides while surfing (field effect renderer 4): one model, turned to the
 // rider's facing; while bobbing it rides along with the map object, rising and sinking between one and
 // four units and lifting the rider with it.
-
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 4).
 typedef struct SurfMount {

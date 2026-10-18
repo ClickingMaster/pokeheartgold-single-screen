@@ -21,7 +21,6 @@
 
 #define FOLLOW_MON_BALL_SHRINK_FRAMES 4
 
-void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
 
 enum FollowMonBallReleaseState {

@@ -6,6 +6,7 @@
 #include "billboard_lists.h"
 #include "field_effects.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 
 // The tall grass a map object stands in (field effect renderer 8): a billboard over the tile that rustles
 // (12 frames) when the object walks in, then holds its last frame until the object leaves the tile (or
@@ -13,8 +14,6 @@
 // billboard effect (template sTallGrassUnusedEffectTemplate) that nothing in the game creates.
 
 #define TALL_GRASS_RECORD 0
-
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 enum TallGrassEffectState {
     TALL_GRASS_STATE_SHAKE,
@@ -70,8 +69,8 @@ typedef struct TallGrassUnusedEffect {
 
 TallGrass *TallGrass_New(FieldEffectManager *manager);
 void TallGrass_Free(TallGrass *grass);
-void TallGrass_LoadGfx(TallGrass *grass);
-void TallGrass_FreeGfx(TallGrass *grass);
+static void TallGrass_LoadGfx(TallGrass *grass);
+static void TallGrass_FreeGfx(TallGrass *grass);
 void TallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
 FieldEffect *TallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing);
 BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work);
@@ -106,7 +105,7 @@ void TallGrass_Free(TallGrass *grass) {
     FieldEffectManager_HeapFree(grass);
 }
 
-void TallGrass_LoadGfx(TallGrass *grass) {
+static void TallGrass_LoadGfx(TallGrass *grass) {
     FieldEffectManager_LoadBillboardResource(grass->manager, 0, 0x7E);
     FieldEffectManager_LoadBillboardResource(grass->manager, 5, 0x7F);
     FieldEffectManager_LoadBillboardSequence(grass->manager, 0, 0x8C);
@@ -123,7 +122,7 @@ void TallGrass_LoadGfx(TallGrass *grass) {
     FieldEffectManager_AddRecord(grass->manager, 7, 5, 5, 6, 0, sTallGrassRecord7Params);
 }
 
-void TallGrass_FreeGfx(TallGrass *grass) {
+static void TallGrass_FreeGfx(TallGrass *grass) {
     FieldEffectManager_FreeBillboardResource(grass->manager, 0);
     FieldEffectManager_FreeBillboardResource(grass->manager, 5);
     FieldEffectManager_FreeBillboardSequence(grass->manager, 0);

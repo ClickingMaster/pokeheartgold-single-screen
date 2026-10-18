@@ -116,4 +116,35 @@ void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn);
 
+// Steps of the cut-in kinds, run in order by the cut-in tasks.
+BOOL FieldMoveCutIn_StepLoadBannerGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepLoadSpriteGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepCreateSprites(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepInitWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWidenWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepOpenWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitBeforeMon(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepMonSlideIn(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepMonSlowDown(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitBeforeMonExit(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepMonSlideOut(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepCloseWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepFreeBannerGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepFreeSpriteGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepEndWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepFinish(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepCreateFlySprites(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepCreateFlyTrainerSprite(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepFreeMonGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepLoadFlyGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitFlyGraphics(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepStartFly(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitTakeOff(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitBeforeFlyAway(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitBeforePickUp(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitFlyAway(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepCloseFlyWindow(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitFlyEnd(FieldMoveCutIn *cutIn);
+BOOL FieldMoveCutIn_StepWaitPaletteFade(FieldMoveCutIn *cutIn);
+
 #endif // POKEHEARTGOLD_FIELD_FIELD_MOVE_CUT_IN_H

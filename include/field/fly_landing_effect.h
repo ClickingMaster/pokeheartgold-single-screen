@@ -59,4 +59,18 @@ void FieldMove_FadeInFromWhite(void);
 void FieldMove_FadeOutToWhite(void);
 void FieldMove_SetPlayerVisible(FieldSystem *fieldSystem, BOOL visible);
 
+// Callbacks of the Fly landing effect and the steps of its phases.
+BOOL FlyLandingEffect_Init(FieldEffect *effect, FlyLandingEffect *landing);
+void FlyLandingEffect_Destroy(FieldEffect *effect, FlyLandingEffect *landing);
+void FlyLandingEffect_Update(FieldEffect *effect, FlyLandingEffect *landing);
+BOOL FlyLandingEffect_Idle(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_SwoopIn(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_StartClimb(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_Climb(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_HideFlyer(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_StartFlyAway(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_FlyAway(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_ShowPlayer(FlyLandingEffect *landing);
+BOOL FlyLandingEffect_Done(FlyLandingEffect *landing);
+
 #endif // POKEHEARTGOLD_FIELD_FLY_LANDING_EFFECT_H

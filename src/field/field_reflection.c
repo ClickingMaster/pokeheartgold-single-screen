@@ -15,6 +15,7 @@
 #include "field_effects.h"
 #include "field_system.h"
 #include "map_object.h"
+#include "map_object_movement_utilities.h"
 #include "player_avatar.h"
 
 // Map object reflections (field effect renderer 1): an upside-down copy of the object's billboard below it
@@ -32,8 +33,6 @@
 #define REFLECTION_SCALE_STEP 0x40
 #define REFLECTION_SCALE_MIN  0xE00
 #define REFLECTION_SCALE_MAX  0x1200
-
-BOOL FieldSystem_SnapToTerrainHeight(FieldSystem *fieldSystem, VecFx32 *position);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 1).
 typedef struct Reflection {

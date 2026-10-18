@@ -4,6 +4,7 @@
 
 #include "field/field_camera_zoom.h"
 #include "field/field_effect_helpers.h"
+#include "field/field_move_cut_in.h"
 #include "field/sprite_gfx_manager.h"
 
 #include "field_effects.h"
@@ -18,23 +19,6 @@
 typedef BOOL (*FlyLandingStepFunc)(FlyLandingEffect *effect);
 
 FieldEffect *FieldEffectPool_AddBasicEffect(void *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
-
-FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *trainerSprite);
-void TrainerJumpEffect_StartHop(FieldEffect *effect);
-
-// Callbacks of sFlyLandingEffectTemplate and steps of sFlyLandingPhases (overlay 2's data block).
-BOOL FlyLandingEffect_Init(FieldEffect *effect, FlyLandingEffect *landing);
-void FlyLandingEffect_Destroy(FieldEffect *effect, FlyLandingEffect *landing);
-void FlyLandingEffect_Update(FieldEffect *effect, FlyLandingEffect *landing);
-BOOL FlyLandingEffect_Idle(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_SwoopIn(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_StartClimb(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_Climb(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_HideFlyer(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_StartFlyAway(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_FlyAway(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_ShowPlayer(FlyLandingEffect *landing);
-BOOL FlyLandingEffect_Done(FlyLandingEffect *landing);
 
 extern const VecFx32 sFlyLandingFlyerScale;
 extern const FieldEffectBasicTemplate sFlyLandingEffectTemplate;
