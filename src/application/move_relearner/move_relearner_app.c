@@ -1792,9 +1792,6 @@ static void MoveRelearner_AnimateScrollArrows(MoveRelearner *relearner, s32 dire
     }
 }
 
-#pragma opt_lifetimes off
-#pragma opt_common_subs on
-
 // Row backgrounds: the selected row highlighted, rows past the end of the list empty.
 static void MoveRelearner_DrawListRows(MoveRelearner *relearner, u32 selected) {
     u32 i;
@@ -1814,9 +1811,6 @@ static void MoveRelearner_DrawListRows(MoveRelearner *relearner, u32 selected) {
         i++;
     } while (i < MOVE_RELEARNER_VISIBLE_ROWS);
 }
-
-#pragma opt_common_subs reset
-#pragma opt_lifetimes reset
 
 static int MoveRelearner_StartReturnButtonFlash(MoveRelearner *relearner, int nextState) {
     MoveRelearnerButtonFlash *flash = &relearner->buttonFlash;

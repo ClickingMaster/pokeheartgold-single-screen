@@ -805,8 +805,6 @@ void PokedexApp_CreateSearchHeightGrid(PokedexAppData *pokedexApp) {
     PokedexApp_UpdateSearchHeightCursor(pokedexApp, 0);
 }
 
-#pragma opt_common_subs off
-
 // Two slider handles (targets 0 and 1): left / right move the selected one; dragging a handle selects it.
 u32 PokedexApp_HandleSearchHeightInput(PokedexAppData *pokedexApp) {
     int next = GridInputHandler_GetNextInput(pokedexApp->gridInput);
@@ -843,8 +841,6 @@ u32 PokedexApp_HandleSearchHeightInput(PokedexAppData *pokedexApp) {
     return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
 
-#pragma opt_common_subs reset
-
 // The handles sit at their slider values.
 void PokedexApp_UpdateSearchHeightCursor(PokedexAppData *pokedexApp, int target) {
     u8 x, y;
@@ -876,8 +872,6 @@ void PokedexApp_CreateSearchWeightGrid(PokedexAppData *pokedexApp) {
     PokedexApp_SetSpriteVisible(pokedexApp, 0, TRUE);
     PokedexApp_UpdateSearchWeightCursor(pokedexApp, 0);
 }
-
-#pragma opt_common_subs off
 
 // Two slider handles (targets 0 and 1): left / right move the selected one; dragging a handle selects it.
 u32 PokedexApp_HandleSearchWeightInput(PokedexAppData *pokedexApp) {
@@ -914,8 +908,6 @@ u32 PokedexApp_HandleSearchWeightInput(PokedexAppData *pokedexApp) {
     }
     return GridInputHandler_HandleInput_AllowHold(pokedexApp->gridInput);
 }
-
-#pragma opt_common_subs reset
 
 // The handles sit at their slider values.
 void PokedexApp_UpdateSearchWeightCursor(PokedexAppData *pokedexApp, int target) {

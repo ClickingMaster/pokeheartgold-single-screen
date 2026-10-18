@@ -47,8 +47,6 @@ void PalPadMenu_Init(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enu
     PalPadMenu_Setup(menu, shared, gfx, heapId);
 }
 
-#pragma opt_pointer_analysis off
-
 int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int valid;
 
@@ -161,8 +159,6 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
     }
     return 0;
 }
-
-#pragma opt_pointer_analysis reset
 
 void PalPadMenu_Exit(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx) {
     PalPadMenu_Teardown(menu, shared, gfx);

@@ -1924,8 +1924,6 @@ void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result) {
     work->battleResult = result;
 }
 
-#pragma opt_strength_reduction off
-
 // server result callback: copy the received video list
 void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
     VsRecorderNetData *net = &work->net;
@@ -1947,8 +1945,6 @@ void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
         }
     }
 }
-
-#pragma opt_strength_reduction reset
 
 // the four saved videos (header + owner card); slot 0 owner is the player
 void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {

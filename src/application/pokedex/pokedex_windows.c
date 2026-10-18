@@ -979,8 +979,6 @@ void PokedexApp_DrawSearchAreaValue(PokedexAppData *pokedexApp, u32 windowId) {
     PokedexApp_PrintMessage(&pokedexApp->windows[windowId], pokedexApp->msgData, pokedexApp->dexSearchCriteria[DEX_SEARCH_CRITERIA_AREA] + 65, GetWindowWidth(&pokedexApp->windows[windowId]) * 8 / 2, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
 }
 
-#pragma opt_common_subs off
-
 // The criteria summary on the search results screen (windows 1-16).
 void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
     u32 i;
@@ -1015,8 +1013,6 @@ void PokedexApp_DrawSearchCriteriaSummary(PokedexAppData *pokedexApp) {
         CopyWindowPixelsToVram_TextMode(window);
     }
 }
-
-#pragma opt_common_subs reset
 
 // The search results screen's counts (labels 95-96, counts 97-100 alternating as on the list screen).
 void PokedexApp_DrawSearchResultCounts(PokedexAppData *pokedexApp) {

@@ -372,9 +372,6 @@ MainMenuUtilSprites *MainMenuUtil_GetSpriteList(void) {
     return &work->sprites;
 }
 
-#pragma push
-#pragma opt_common_subs off
-
 // Loads the char/palette/cell/animation resources of one screen (0 main, 1 sub; -1: none) from a NARC
 void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 screen) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
@@ -395,12 +392,8 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
     if (animFileId != -1) {
         work->sprites.spriteRes[screen].animRes = AddCellOrAnimResObjFromNarc(work->sprites.resMan[GF_GFX_RES_TYPE_ANIM], narcId, animFileId, compressed, screen, GF_GFX_RES_TYPE_ANIM, work->heapId);
     }
-    {
-        // spriteRes[screen] through a work pointer shifted by the screen's offset, computed once
-        int offset = screen * sizeof(MainMenuUtilSpriteRes);
-        SpriteTransfer_CreateCharTransferTask(((MainMenuUtilWork *)((u8 *)work + offset))->sprites.spriteRes[0].charRes);
-        SpriteTransfer_CreatePlttTransferTask(((MainMenuUtilWork *)((u8 *)work + offset))->sprites.spriteRes[0].plttRes);
-    }
+    SpriteTransfer_CreateCharTransferTask(work->sprites.spriteRes[screen].charRes);
+    SpriteTransfer_CreatePlttTransferTask(work->sprites.spriteRes[screen].plttRes);
     CreateSpriteResourcesHeader(&work->sprites.resHeaders[screen], screen, screen, screen, screen, -1, -1, FALSE, 0, work->sprites.resMan[GF_GFX_RES_TYPE_CHAR], work->sprites.resMan[GF_GFX_RES_TYPE_PLTT], work->sprites.resMan[GF_GFX_RES_TYPE_CELL], work->sprites.resMan[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     if (screen == 0) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -409,8 +402,6 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
     }
     Main_SetVBlankIntrCB((GFIntrCB)MainMenuUtil_VBlankCB, NULL);
 }
-
-#pragma pop
 
 static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
     G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);

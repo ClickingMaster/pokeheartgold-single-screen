@@ -2382,8 +2382,6 @@ static void DressUpCanvas_GetMaxOverflow(DressUpCanvas *canvas, int *outX, int *
     *outY = maxY;
 }
 
-#pragma opt_propagation off
-
 // links the node into the mon's list if any of 16 sample points of its opaque area hits the mon, else into the
 // loose list; at the front of the list or at the back
 static void DressUpCanvas_LinkByMonOverlap(DressUpCanvas *canvas, DressUpNode *node, BOOL atFront, NNSG2dCharacterData **hitMaps) {
@@ -2434,8 +2432,6 @@ static void DressUpCanvas_LinkByMonOverlap(DressUpCanvas *canvas, DressUpNode *n
         }
     }
 }
-
-#pragma opt_propagation reset
 
 // The tray of the Dress-Up editor: owned accessories (14 pages by category) and backdrops (2 pages of 9) as objects
 // in per-page lists, the tab BG, and the page swap (old page slides out, new page slides in).
@@ -4674,9 +4670,6 @@ static void DressUpHud_CreateCountIcons(DressUpCountIcons *icons, SpriteList *sp
     }
 }
 
-#pragma push
-#pragma opt_lifetimes off
-
 // icons below count show as used (seq 0), the others as free (seq 1)
 static void DressUpHud_SetCountIcons(DressUpCountIcons *icons, int count) {
     int i = icons->count;
@@ -4691,8 +4684,6 @@ static void DressUpHud_SetCountIcons(DressUpCountIcons *icons, int count) {
     }
     icons->count = count;
 }
-
-#pragma pop
 
 static void DressUpHud_DestroyCountIcons(DressUpCountIcons *icons, GF_2DGfxResMan **resMans) {
     int i = 0;
@@ -4798,9 +4789,6 @@ static void DressUpCountdown_Sync(DressUpCountdown *countdown) {
     }
 }
 
-#pragma push
-#pragma opt_treetransformation off
-
 static void DressUpCountdown_DrawDigits(DressUpCountdown *countdown) {
     struct {
         volatile int value, digit;
@@ -4832,8 +4820,6 @@ static void DressUpCountdown_DrawDigits(DressUpCountdown *countdown) {
         cursor = (DressUpCountdown *)((u8 *)cursor + sizeof(Sprite *));
     }
 }
-
-#pragma pop
 
 static void DressUpCountdown_DecFrames(DressUpCountdown *countdown) {
     s32 frames = countdown->frames - 1;

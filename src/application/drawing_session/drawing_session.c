@@ -1592,8 +1592,6 @@ static void DrawingSession_UpdateMaxEntries(DrawingSessionWork *work, int extra)
     }
 }
 
-#pragma opt_common_subs off
-
 // TRUE for 2, 4, 8 and 16: the bit of exactly one member other than the leader.
 static inline BOOL DrawingSession_IsOneMemberBit(u32 bits) {
     BOOL result = FALSE;
@@ -1660,8 +1658,6 @@ static int DrawingSession_HandleMemberCount(DrawingSessionWork *work) {
     }
     return DRAWING_SESSION_MAIN_RUN;
 }
-
-#pragma opt_common_subs reset
 
 static void DrawingSession_SetNextSubState(DrawingSessionWork *work, int state) {
     work->nextSubState = state;

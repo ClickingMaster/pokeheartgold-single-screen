@@ -943,19 +943,17 @@ static void ApricornBoxScreen_ClearMessage(ApricornBoxScreen *screen) {
     ClearWindowTilemapAndScheduleTransfer(&screen->windows[0]);
 }
 
-#pragma opt_propagation off
-
 static void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
-    u32 offset = offsetof(ApricornBoxScreen, windows);
-    FillWindowPixelBuffer((Window *)((u8 *)screen + offset), 15);
-    DrawFrameAndWindow2((Window *)((u8 *)screen + offset), TRUE, 1, 13);
+    Window *window = &screen->windows[0];
+    FillWindowPixelBuffer(window, 15);
+    DrawFrameAndWindow2(window, TRUE, 1, 13);
     {
         int msgNo = ApricornBoxScreen_GetJuiceTasteMsg(screen, &screen->juice.entries[0], 0);
         ReadMsgDataIntoString(screen->msgData, msgNo, screen->string2);
     }
-    AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
+    AddTextPrinterParameterized(window, 1, screen->string2, 0, 0, TEXT_SPEED_NOTRANSFER, NULL);
     if (screen->juice.entries[0].stat == 5) {
-        ScheduleWindowCopyToVram((Window *)((u8 *)screen + offset));
+        ScheduleWindowCopyToVram(window);
         return;
     }
     if (screen->juice.numEntries > 1) {
@@ -963,22 +961,20 @@ static void ApricornBoxScreen_PrintJuiceTaste(ApricornBoxScreen *screen) {
             int msgNo = ApricornBoxScreen_GetJuiceTasteMsg(screen, &screen->juice.entries[1], 1);
             ReadMsgDataIntoString(screen->msgData, msgNo, screen->string2);
         }
-        AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, 16, TEXT_SPEED_NOTRANSFER, NULL);
+        AddTextPrinterParameterized(window, 1, screen->string2, 0, 16, TEXT_SPEED_NOTRANSFER, NULL);
     }
     if (screen->juice.numEntries > 2) {
         {
             int msgNo = ApricornBoxScreen_GetJuiceTasteMsg(screen, &screen->juice.entries[2], 2);
             ReadMsgDataIntoString(screen->msgData, msgNo, screen->string2);
         }
-        AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, 32, TEXT_SPEED_NOTRANSFER, NULL);
+        AddTextPrinterParameterized(window, 1, screen->string2, 0, 32, TEXT_SPEED_NOTRANSFER, NULL);
     } else if ((u8)(screen->juice.numEntries + 255) <= 1) {
         ReadMsgDataIntoString(screen->msgData, msg_0021_00122, screen->string2);
-        AddTextPrinterParameterized((Window *)((u8 *)screen + offset), 1, screen->string2, 0, (screen->juice.numEntries - 1) * 16 + 16, TEXT_SPEED_NOTRANSFER, NULL);
+        AddTextPrinterParameterized(window, 1, screen->string2, 0, (screen->juice.numEntries - 1) * 16 + 16, TEXT_SPEED_NOTRANSFER, NULL);
     }
-    ScheduleWindowCopyToVram((Window *)((u8 *)screen + offset));
+    ScheduleWindowCopyToVram(window);
 }
-
-#pragma opt_propagation reset
 
 static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
     TouchscreenListMenuHeader header;

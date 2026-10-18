@@ -1190,9 +1190,6 @@ void MysteryGiftAnim_DeleteRibbons(MysteryGiftAnimData *anim) {
     }
 }
 
-#pragma push
-#pragma opt_repositioncode off
-
 void MysteryGiftAnim_InitSparkles(MysteryGiftAnimData *anim) {
     MysteryGiftDelayTable delaysCopy;
     u32 delayPtr;
@@ -1260,8 +1257,6 @@ void MysteryGiftAnim_InitSparkles(MysteryGiftAnimData *anim) {
         i++;
     } while (i < MYSTERY_GIFT_PARTICLE_COUNT);
 }
-
-#pragma pop
 
 void MysteryGiftAnim_StartSparkleTasks(MysteryGiftAnimData *anim) {
     MysteryGiftAnimData *cursor = anim;

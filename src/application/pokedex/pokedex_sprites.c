@@ -544,8 +544,6 @@ void PokedexApp_CreateTypeIconSprites(PokedexAppData *pokedexApp, int index) {
     (pokedexApp->sprites + 3)[index] = SpriteSystem_NewSpriteWithYOffset(pokedexApp->spriteSystem, pokedexApp->spriteManager, &template, FX32_CONST(512));
 }
 
-#pragma opt_common_subs off
-
 // Hides the shown type icon pair and draws species' types into the other one (the second icon only for a
 // dual-type species).
 void PokedexApp_UpdateTypeIcons(PokedexAppData *pokedexApp, u32 species, int entry, int index) {
@@ -595,8 +593,6 @@ void PokedexApp_UpdateTypeIcons(PokedexAppData *pokedexApp, u32 species, int ent
         ManagedSprite_SetDrawFlag(*(ManagedSprite **)((u8 *)&pokedexApp->sprites[1] + offset), TRUE);
     }
 }
-
-#pragma opt_common_subs reset
 
 void PokedexApp_SetTypeIconGraphics(PokedexAppData *pokedexApp, int index, u32 type) {
     NNSG2dCharacterData *charData;

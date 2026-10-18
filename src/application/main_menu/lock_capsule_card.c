@@ -643,9 +643,6 @@ static BOOL LockCapsuleCard_UpdateFlipEffect(LockCapsuleCardView *view) {
     return FALSE;
 }
 
-#pragma push
-#pragma opt_common_subs off
-
 BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
     LockCapsuleCardView *view = OverlayManager_GetData(manager);
 
@@ -789,8 +786,6 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
     }
     return FALSE;
 }
-
-#pragma pop
 
 BOOL LockCapsuleCard_Exit(OverlayManager *manager, int *state) {
     LockCapsuleCardView *view = OverlayManager_GetData(manager);

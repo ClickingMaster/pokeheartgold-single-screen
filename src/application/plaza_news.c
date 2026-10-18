@@ -819,18 +819,19 @@ static void PlazaNewsPeople_BlinkMode2(PlazaNewsTileset *tileset, PlazaNewsGraph
     PlazaNewsPeople_DrawGrid(tileset, graphics, newsData, lobby, mode);
 }
 
-#pragma opt_propagation off
 static void PlazaNewsPeople_BlinkMode1(PlazaNewsTileset *tileset, PlazaNewsGraphics *graphics, void *newsData, void *lobby, u32 frame) {
-    if (!(frame & 7)) {
-        u32 blink = frame >> 3;
-        int mode = 1;
-        if (1 & blink) {
-            mode = 0;
-        }
-        PlazaNewsPeople_DrawGrid(tileset, graphics, newsData, lobby, mode);
+    int mode;
+    if ((frame & 7) != 0) {
+        return;
     }
+    frame >>= 3;
+    if ((frame & 1) == 0) {
+        mode = 1;
+    } else {
+        mode = 0;
+    }
+    PlazaNewsPeople_DrawGrid(tileset, graphics, newsData, lobby, mode);
 }
-#pragma opt_propagation reset
 
 static void PlazaNewsHeadlines_GetNameColors(u8 *colors, void *newsData, void *item, void *lobby) {
     int i;

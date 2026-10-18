@@ -81,24 +81,16 @@ extern const char sStr_K5WfPEw9T3cvqzHa[];
 extern const char ov74_0223D054[];
 extern u8 sMysteryGiftWfcFileList[];
 
-#pragma push
-#pragma opt_propagation off
-
 // Allocator of the Wi-Fi library: 32-byte aligned blocks, the raw block is stored in the word before
 void *MysteryGiftWfc_Alloc(void *unused, u32 size) {
     void *raw;
     u32 result;
-    size += 36;
-    size &= ~31u;
-    size += 32;
+    size = ((size + 36) & ~31u) + 32;
     raw = Heap_Alloc(HEAP_ID_84, size);
-    result = (u32)raw + 32;
-    result &= ~31u;
+    result = ((u32)raw + 32) & ~31u;
     *(void **)(result - 4) = raw;
     return (void *)result;
 }
-
-#pragma pop
 
 void MysteryGiftWfc_Free(void *unused, void *ptr) {
     if (ptr != NULL) {
