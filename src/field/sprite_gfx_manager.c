@@ -2,14 +2,14 @@
 
 #include "global.h"
 
+#include "field/field_move_cut_in.h"
+
 #include "filesystem.h"
 #include "heap.h"
 #include "sprite.h"
 #include "sprite_resource.h"
 #include "sprite_resource_header.h"
 #include "sprite_transfer.h"
-
-void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
 
 #pragma opt_optimizecontrolflow off
 

@@ -5,6 +5,7 @@
 #include "constants/sndseq.h"
 #include "constants/sprites.h"
 
+#include "field/bottom_screen_app.h"
 #include "field/field_control.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0196.h"
@@ -96,9 +97,6 @@ typedef struct DowsingMchnSpriteParams {
     u8 drawPriority;
     u8 animSeq;
 } DowsingMchnSpriteParams;
-
-BOOL IsSpriteIdWithoutTalkAction(int spriteId);
-BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 extern const TouchscreenHitbox sDowsingMchnActionButtonHitbox;
 extern const TouchscreenHitbox sDowsingMchnExitButtonHitbox;

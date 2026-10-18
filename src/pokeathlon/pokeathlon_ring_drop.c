@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_ring_drop_cpu.h"
@@ -56,8 +57,6 @@ void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *gfx)
 void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *gfx, int event);
 void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *gfx, int participant, u16 score, int idx, int digits, int msgno);
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monObjects);
-void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monObjects, int paused);
 
 extern const GraphicsBanks gPokeathlonRingDropGraphicsBanks;
 

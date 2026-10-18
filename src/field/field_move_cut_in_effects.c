@@ -174,10 +174,9 @@ extern const VecFx32 sCutInFlyerTrainerScale;
 extern const fx32 sTrainerJumpOffsets[12];
 extern const fx32 sTrainerHopOffsets[4];
 
-void Task_FlyLanding(SysTask *task, void *data);
-void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
-Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species);
-void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId);
+static void Task_FlyLanding(SysTask *task, void *data);
+static Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species);
+static void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId);
 BOOL CutInScrollSprite_Init(FieldEffect *effect, CutInScrollSprite *work);
 void CutInScrollSprite_Destroy(FieldEffect *effect, CutInScrollSprite *work);
 void CutInScrollSprite_Update(FieldEffect *effect, CutInScrollSprite *work);
@@ -194,8 +193,8 @@ BOOL CutInFlyer_PickUpTrainer(CutInFlyer *flyer);
 BOOL CutInFlyer_FlyAway(CutInFlyer *flyer);
 BOOL CutInFlyer_Done(CutInFlyer *flyer);
 BOOL TrainerJumpEffect_Init(FieldEffect *effect, TrainerJump *jump);
-void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump);
-void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump);
+static void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump);
+static void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump);
 void TrainerJumpEffect_Update(FieldEffect *effect, TrainerJump *jump);
 BOOL FlyLanding_SetPlayerVisible(FlyLanding *landing);
 BOOL FlyLanding_LoadGraphics(FlyLanding *landing);
@@ -758,7 +757,7 @@ BOOL TrainerJumpEffect_Init(FieldEffect *effect, TrainerJump *jump) {
     return TRUE;
 }
 
-void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
+static void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
         jump->offsetY = sTrainerJumpOffsets[jump->frame];
@@ -773,7 +772,7 @@ void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
     }
 }
 
-void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump) {
+static void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
         jump->offsetY = sTrainerHopOffsets[jump->frame];
@@ -815,7 +814,7 @@ void FlyLanding_Delete(SysTask *task) {
     SysTask_Destroy(task);
 }
 
-void Task_FlyLanding(SysTask *task, void *data) {
+static void Task_FlyLanding(SysTask *task, void *data) {
     FlyLanding *landing = data;
     FlyLandingStep const *steps = sFlyLandingTaskSteps;
     while (steps[landing->state](landing) == TRUE) {
@@ -1067,7 +1066,7 @@ void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *s
     }
 }
 
-void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId) {
+static void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId) {
     u8 i;
     for (i = 0; i < ROAMER_MAX; i++) {
         if (GetRoamerIsActiveByIndex(roamerSave, i) && mapId == GetRoamMapByLocationIdx(Roamer_GetLocation(roamerSave, i))) {
@@ -1076,7 +1075,7 @@ void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId) {
     }
 }
 
-Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species) {
+static Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species) {
     u8 i;
     for (i = 0; i < ROAMER_MAX; i++) {
         if (GetRoamerIsActiveByIndex(roamerSave, i)) {

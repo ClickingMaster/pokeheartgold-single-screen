@@ -1,3 +1,5 @@
+#include "field_unused_billboard_effect.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -24,9 +26,9 @@ enum UnusedBillboardEffectState {
 };
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 13).
-typedef struct UnusedBillboard {
+struct UnusedBillboard {
     FieldEffectManager *manager;
-} UnusedBillboard;
+};
 
 typedef struct UnusedBillboardEffectArgs {
     int x;
@@ -52,8 +54,6 @@ typedef struct UnusedBillboardEffect {
     void *billboard;
 } UnusedBillboardEffect;
 
-UnusedBillboard *UnusedBillboard_New(FieldEffectManager *manager);
-void UnusedBillboard_Free(UnusedBillboard *renderer);
 static void UnusedBillboard_LoadGfx(UnusedBillboard *renderer);
 static void UnusedBillboard_FreeGfx(UnusedBillboard *renderer);
 BOOL UnusedBillboardEffect_Init(FieldEffect *effect, UnusedBillboardEffect *work);

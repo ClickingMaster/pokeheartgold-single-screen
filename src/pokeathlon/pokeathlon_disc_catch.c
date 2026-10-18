@@ -7,6 +7,8 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_disc_catch_play.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -76,35 +78,12 @@ void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *monPic, s32 x
 BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
 void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *monPic, f32 scaleX, f32 scaleY);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
-void PokeathlonEvent_CalcPoints(void *graphics, u32 event);
 
 // The runtime's division, called directly once.
 s32 _s32_div_f(s32 dividend, s32 divisor);
 
 // NitroSDK (no header declares it)
 void MATH_QSort(void *head, u32 num, u32 size, s32 (*compare)(const void *, const void *), void *work);
-
-u32 PokeathlonDiscCatch_UpdateFrame(PokeathlonCourseData *course);
-PokeathlonDiscCatchStats *PokeathlonDiscCatch_GetStats(PokeathlonCourseData *course, u8 participant, u8 member);
-u16 PokeathlonDiscCatchStats_GetJumpDuration(PokeathlonDiscCatchStats *stats);
-void PokeathlonDiscCatch_CreateMonPics(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_InitMons(PokeathlonDiscCatch *work);
-void PokeathlonDiscCatch_UpdateField(PokeathlonDiscCatchTeam *teams, PokeathlonCourseData *course);
-void PokeathlonDiscCatch_WriteFramePacket(PokeathlonDiscCatchField *field, PokeathlonCourseData *course);
-void PokeathlonDiscCatchDiscs_Init(PokeathlonDiscCatchDiscs *discs, PokeathlonDiscCatchTeam *teams);
-void PokeathlonDiscCatchSprites_Init(PokeathlonDiscCatchSprites *sprites, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchDiscs_Update(PokeathlonDiscCatchDiscs *discs, u8 *area, int seconds);
-void PokeathlonDiscCatchSprites_Update(PokeathlonDiscCatchSprites *sprites, PokeathlonCourseData *course);
-void PokeathlonDiscCatchSprites_Delete(PokeathlonDiscCatchSprites *sprites);
-void PokeathlonDiscCatch_AddScoreWindow(PokeathlonDiscCatch *work);
-PokeathlonDiscCatchScoreboard *PokeathlonDiscCatchScoreboard_New(SpriteSystem *spriteSystem, SpriteManager *spriteManager, BgConfig *bgConfig, MsgData *msgData, MessageFormat *messageFormat, u8 participant, enum HeapID heapId, PokeathlonCourseData *course);
-void PokeathlonDiscCatchScoreboard_Delete(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_Pause(PokeathlonDiscCatchScoreboard *scoreboard);
-void PokeathlonDiscCatchScoreboard_SetOwnScore(PokeathlonDiscCatchScoreboard *scoreboard, u8 participant, u16 score);
-u16 PokeathlonDiscCatchScoreboard_GetOwnScore(PokeathlonDiscCatchScoreboard *scoreboard);
-PokeathlonDiscCatchCpu *PokeathlonDiscCatchCpu_New(PokeathlonCourseData *course, enum HeapID heapId);
-void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu);
-void PokeathlonDiscCatchCpu_Update(PokeathlonDiscCatchCpu *cpu);
 
 extern const VecFx32 gPokeathlonDiscCatchTouchDistances;
 extern const VecFx32 gPokeathlonDiscCatchFacingReference;

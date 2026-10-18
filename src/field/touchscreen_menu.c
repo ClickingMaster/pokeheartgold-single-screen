@@ -9,6 +9,7 @@
 #include "constants/sndseq.h"
 #include "constants/sprites.h"
 
+#include "field/bottom_screen_app.h"
 #include "field/field_control.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0196.h"
@@ -182,9 +183,6 @@ typedef struct TouchscreenMenuBgFile {
     u32 fileId;
     u32 otherColumns[2];
 } TouchscreenMenuBgFile;
-
-BOOL IsSpriteIdWithoutTalkAction(int spriteId);
-BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 BOOL CommClubLink_CardExchangeFinished(void);
 BOOL CommClubLink_IsStartingBattle(void);

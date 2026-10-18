@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
@@ -38,11 +39,6 @@ void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x
 BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, int touchX, int touchY);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *object, int paused);
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *object);
-u32 PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
-u32 PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
-void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u16 timeLeft);
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int type, int index, int value);
-void PokeathlonCourse_SetFinishCallback(PokeathlonCourseData *course, void (*callback)(PokeathlonCourseData *course));
 
 // Screen templates (asm data).
 extern const GraphicsModes sPennantCaptureGraphicsModes;

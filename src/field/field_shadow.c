@@ -1,3 +1,5 @@
+#include "field_shadow.h"
+
 #include "global.h"
 
 #include "field/field_effect_manager.h"
@@ -24,7 +26,7 @@ enum FieldShadowState {
 };
 
 // Renderer data of the field effect manager (renderer 0); 0x1C8 bytes.
-typedef struct FieldShadow {
+struct FieldShadow {
     int state;
     int timeOfDay;
     u32 unk_08;
@@ -35,7 +37,7 @@ typedef struct FieldShadow {
     SysTask *task;
     RenderModelStorage models[4];
     NNSG3dRenderObj renderObjs[4];
-} FieldShadow;
+};
 
 // The user data of the shadow effects.
 typedef struct FieldShadowEffectArgs {
@@ -54,8 +56,6 @@ typedef struct FieldShadowEffect {
     FieldShadowEffectArgs args;
 } FieldShadowEffect;
 
-FieldShadow *FieldShadow_New(FieldEffectManager *manager);
-void FieldShadow_Free(FieldShadow *shadow);
 static void FieldShadow_StartTask(FieldShadow *shadow);
 static void FieldShadow_StopTask(FieldShadow *shadow);
 static void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest);
@@ -66,8 +66,6 @@ static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow);
 static void FieldShadow_LoadModels(FieldShadow *shadow);
 static void FieldShadow_FreeModels(FieldShadow *shadow);
 static void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha);
-void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
-void FieldShadow_CreateFollowMonShadow(LocalMapObject *object);
 static BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work);
 static void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work);
 static void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work);
@@ -77,7 +75,6 @@ static void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, FieldShadowEffe
 void FieldShadow_CreateFriendShadow(LocalMapObject *object, int index);
 static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, FieldShadowEffect *work);
 static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowEffect *work);
-void FieldShadow_OffsetByFacing(u32 direction, VecFx32 *pos);
 
 static const u32 sShadowModelFiles[4] = { 31, 33, 34, 32 };
 

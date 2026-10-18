@@ -35,9 +35,7 @@ SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool 
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
 void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
-u32 GetMonIconPlttNaix(void);
 // in the object linked between the two parts of the top screen code (picture sprites)
-void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display);
 
 extern const u8 sPennantCaptureTimerDigitX[];
 extern const u8 sPennantCaptureTimerDigitAnims[];

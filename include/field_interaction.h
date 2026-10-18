@@ -9,4 +9,9 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
 u32 GetFacingSignScript(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEvents);
 u16 GetTriggeredCoordEventScript(FieldSystem *fieldSystem, const CoordEvent *coordEvent, int numEvents);
 
+// The bottom screen operations of a map without a bottom screen app.
+void BottomScreen_None_Init(FieldSystem *fieldSystem);
+void BottomScreen_None_End(FieldSystem *fieldSystem);
+BOOL BottomScreen_None_IsDone(FieldSystem *fieldSystem);
+
 #endif // POKEHEARTGOLD_FIELD_INTERACTION_H

@@ -115,4 +115,7 @@ u8 PokeathlonCirclePushDisplay_GetScore(PokeathlonCirclePushDisplay *display);
 void PokeathlonCirclePushDisplayAnim_PrintScore(PokeathlonCirclePushDisplayAnim *anim, BgConfig *bgConfig);
 void PokeathlonCirclePushDisplay_OffsetScreenTiles(int offset, NNSG2dScreenData *screen);
 
+// The Pokemon picture sprites of the display.
+void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
+
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_CIRCLE_PUSH_DISPLAY_H

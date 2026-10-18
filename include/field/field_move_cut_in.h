@@ -147,4 +147,7 @@ BOOL FieldMoveCutIn_StepCloseFlyWindow(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitFlyEnd(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitPaletteFade(FieldMoveCutIn *cutIn);
 
+// Allocates a zeroed block at the end of the heap.
+void *FlyLanding_AllocZeroed(enum HeapID heapID, u32 size);
+
 #endif // POKEHEARTGOLD_FIELD_FIELD_MOVE_CUT_IN_H

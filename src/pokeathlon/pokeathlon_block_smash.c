@@ -116,9 +116,6 @@ typedef struct PokeathlonBlockSmashRowSprites {
     u32 star;
 } PokeathlonBlockSmashRowSprites;
 
-BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
-BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
-
 static void PokeathlonBlockSmash_SetVramBanks(void);
 static void PokeathlonBlockSmash_InitSpriteSystem(PokeathlonBlockSmash *work);
 static void PokeathlonBlockSmash_FreeSpriteSystem(PokeathlonBlockSmash *work);

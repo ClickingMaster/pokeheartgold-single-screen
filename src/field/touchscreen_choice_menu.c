@@ -4,6 +4,7 @@
 
 #include "constants/sndseq.h"
 
+#include "field/script_menu.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0191.h"
 
@@ -85,10 +86,6 @@ typedef struct TouchscreenChoiceMenuData {
     void (*selectionCallback)(void *arg, int selection); // ScrCmd_MenuExec: MenuExec_PrintItemHelp
     void *selectionCallbackArg;
 } TouchscreenChoiceMenuData; // size: 0x3A4
-
-ListMenuItem *ScriptMenu_GetListItems(struct ScriptMenu *menu);
-u8 ScriptMenu_GetCount(struct ScriptMenu *menu);
-u8 ScriptMenu_IsCancellable(struct ScriptMenu *menu);
 
 typedef BOOL (*TouchscreenChoiceMenuStateFunc)(TouchscreenChoiceMenuData *data);
 

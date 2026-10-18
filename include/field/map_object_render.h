@@ -22,4 +22,9 @@ u32 Facing_GetBillboardStandSequence(u32);
 u32 Facing_GetBillboardWalkSequence(u32);
 u32 MapObjectRender_GetFacingSequence(u32);
 
+void MapObjectRender_Init(MapObjectRender *render, MapObjectManager *manager, u32 count, u32 priority, u32 textureCount, u32 residentTextureCount, const u32 *textureIds, u32 loadsPerFrame);
+void MapObjectRender_Free(MapObjectRender *render);
+u8 MapObjectRender_GetSpriteModelId(u32 spriteId);
+void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
+
 #endif // POKEHEARTGOLD_FIELD_MAP_OBJECT_RENDER_H

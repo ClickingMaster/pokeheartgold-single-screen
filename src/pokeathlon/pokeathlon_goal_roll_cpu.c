@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_goal_roll.h"
 
 #include "assert.h"
@@ -9,7 +10,6 @@
 #include "sprite_resource_header.h"
 #include "sprite_system.h"
 
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 

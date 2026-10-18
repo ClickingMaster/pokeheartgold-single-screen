@@ -52,4 +52,7 @@ TextOBJ *FontOAM_Create(TextOBJTemplate *textObjTemplate);
 void TextOBJ_SetPalOffsetRespectVramOffset(TextOBJ *textObj, int palette);
 void FontOAM_Delete(TextOBJ *textObj);
 
+void TextOBJ_UpdatePosition(TextOBJ *object);
+void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *object, int value);
+
 #endif // POKEHEARTGOLD_FONT_SPRITE_H

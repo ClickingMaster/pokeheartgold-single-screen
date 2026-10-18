@@ -1,3 +1,5 @@
+#include "field_reflection.h"
+
 #include "global.h"
 
 #include "constants/global_fieldmap.h"
@@ -35,9 +37,9 @@
 #define REFLECTION_SCALE_MAX  0x1200
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 1).
-typedef struct Reflection {
+struct Reflection {
     FieldEffectManager *manager;
-} Reflection;
+};
 
 typedef struct ReflectionEffectArgs {
     FieldSystem *fieldSystem;
@@ -83,11 +85,8 @@ typedef struct ReflectionDepths {
     fx32 depth[REFLECTION_KIND_COUNT];
 } ReflectionDepths;
 
-Reflection *Reflection_New(FieldEffectManager *manager);
-void Reflection_Free(Reflection *reflection);
 static void Reflection_LoadGfx(Reflection *reflection);
 static void Reflection_FreeGfx(Reflection *reflection);
-void Reflection_Spawn(LocalMapObject *mapObject, int kind);
 static BOOL ReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work);
 static void ReflectionEffect_Destroy(FieldEffect *effect, ReflectionEffect *work);
 static void ReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work);
@@ -96,12 +95,10 @@ static void ReflectionEffect_CalcPosition(ReflectionEffect *work, LocalMapObject
 static void ReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffect *work);
 static void BillboardReflectionEffect_CreateBillboard(FieldEffect *effect, BillboardReflectionEffect *work);
 static void BillboardReflectionEffect_CalcPosition(BillboardReflectionEffect *work, VecFx32 *position);
-FieldEffect *Reflection_SpawnForBillboard(FieldEffectManager *manager, const BillboardResource *record, void *source, const VecFx32 *position, int kind, u32 priority);
 static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, BillboardReflectionEffect *work);
 static void BillboardReflectionEffect_Destroy(FieldEffect *effect, BillboardReflectionEffect *work);
 static void BillboardReflectionEffect_Update(FieldEffect *effect, BillboardReflectionEffect *work);
 static void BillboardReflectionEffect_Draw(FieldEffect *effect, BillboardReflectionEffect *work);
-void Reflection_SpawnForFollower(LocalMapObject *mapObject, int kind);
 static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work);
 static void FollowerReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work);
 static void FollowerReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work);

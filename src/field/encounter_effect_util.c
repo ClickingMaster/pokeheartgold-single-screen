@@ -74,7 +74,6 @@ static void Task_ZigzagWipe_Begin(SysTask *task, void *data);
 static void Task_ZigzagWipe_Update(SysTask *task, void *data);
 static void HBlank_ZigzagWipe(HBlankTask *task, void *data);
 static void ZigzagWipe_End(ZigzagWipe *wipe);
-int EncounterEffect_GetDefaultEffect(BattleSetup *setup);
 static void Task_ApplyMainBrightness(SysTask *task, void *data);
 
 void EncounterEffect_InitSprites(EncounterEffectSpriteManager *spriteManager, int maxSprites, int resourceCount) {

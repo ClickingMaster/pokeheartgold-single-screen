@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "field/area_light.h"
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/map_object_billboard_motion.h"
@@ -10,9 +11,11 @@
 
 #include "billboard_internal.h"
 #include "billboard_lists.h"
+#include "field_reflection.h"
 #include "gf_3d_loader.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "sys_task_api.h"
 
@@ -123,10 +126,7 @@ u32 BillboardObject_IsVisible(void *billboard);
 void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *position);
 void *ReadMModelFromNarcInternal(MapObjectManager *manager, u32 memberIdx, BOOL atStart);
 int GetMoveModelNoBySpriteId(u32 spriteId);
-void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *model);
-void *Reflection_SpawnForBillboard(void *manager, BillboardResource *resource, void *billboard, VecFx32 *position, int kind, int priority);
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *model, int matId);
-int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
 // The graphics info flags of a map object (bits 0-3: 1 for billboards)
 typedef struct MapObjectGfxFlags {
     u16 low : 4;
@@ -134,8 +134,6 @@ typedef struct MapObjectGfxFlags {
 } MapObjectGfxFlags;
 MapObjectGfxFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 
-void MapObjectRender_Init(MapObjectRender *render, MapObjectManager *manager, u32 count, u32 priority, u32 textureCount, u32 residentTextureCount, const u32 *textureIds, u32 loadsPerFrame);
-void MapObjectRender_Free(MapObjectRender *render);
 int MapObject_RequestBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 static void *MapObject_CreateBillboardForSprite(LocalMapObject *object, u32 spriteId);
 static void MapObject_FreeBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
@@ -225,10 +223,8 @@ static u32 MapObjectRender_GetDynamicTextureCount(MapObjectRender *render);
 static void *FldObjSys_ReadMModelFromNarc(MapObjectRender *render, u32 memberIdx, BOOL atStart);
 static const SpriteBillboardInfo *SpriteId_GetBillboardInfo(u32 spriteId);
 static u8 SpriteId_GetBillboardModelId(u32 spriteId);
-u8 MapObjectRender_GetSpriteModelId(u32 spriteId);
 static u8 SpriteId_GetBillboardSequenceId(u32 spriteId);
 static const BillboardSequenceRange *SpriteId_GetBillboardRanges(u32 spriteId);
-void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
 static void MapObjectRender_CreateBillboards(MapObjectRender *render, u32 count);
 static void MapObjectBillboards_Delete(void *billboards);
 static void *MapObjectBillboards_CreateBillboard(void *billboards, BillboardResource *resource, VecFx32 *position);

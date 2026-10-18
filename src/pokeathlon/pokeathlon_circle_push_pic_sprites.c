@@ -34,8 +34,6 @@ PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCour
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 
-void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display);
-
 // The two picture sprites of the top screen, at x 64 and 192.
 void PokeathlonCirclePushDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonCirclePushDisplay *display) {
     PokeathlonCirclePushPicIds resIds = sPicResIds;

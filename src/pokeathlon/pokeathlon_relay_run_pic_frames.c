@@ -33,8 +33,6 @@ void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *ent
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
 
-void PokeathlonRelayRunHud_CreatePicFrames(PokeathlonCourseSpritePool *spritePool, PokeathlonRelayRunHud *hud);
-
 // The two picture frames of the top screen and the tired mark shown on each.
 void PokeathlonRelayRunHud_CreatePicFrames(PokeathlonCourseSpritePool *spritePool, PokeathlonRelayRunHud *hud) {
     PokeathlonRelayRunPicIds resIds = gPokeathlonRelayRunPicIds;

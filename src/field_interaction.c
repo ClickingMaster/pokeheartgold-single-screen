@@ -12,21 +12,18 @@
 #include "player_avatar.h"
 #include "script_manager.h"
 
-void BottomScreen_None_Init(void);
-void BottomScreen_None_End(void);
-BOOL BottomScreen_None_IsDone(void);
 static u32 GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z);
 static u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object);
 static u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent);
 static BOOL BgEvent_MatchesPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
 
-void BottomScreen_None_Init(void) {
+void BottomScreen_None_Init(FieldSystem *fieldSystem) {
 }
 
-void BottomScreen_None_End(void) {
+void BottomScreen_None_End(FieldSystem *fieldSystem) {
 }
 
-BOOL BottomScreen_None_IsDone(void) {
+BOOL BottomScreen_None_IsDone(FieldSystem *fieldSystem) {
     return TRUE;
 }
 

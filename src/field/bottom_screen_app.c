@@ -101,8 +101,6 @@ static void Task_BottomScreenApps(SysTask *task, void *env);
 static void *UnionChatLogApp_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 static void UnionChatLogApp_Exit(BgConfig *bgConfig, void *app);
 static BOOL UnionChatLogApp_IsExitDone(BgConfig *bgConfig);
-BOOL IsSpriteIdWithoutTalkAction(u16 spriteId);
-BOOL IsScriptIdWithoutTalkAction(int scriptId);
 
 // Facing one of these objects does not offer the touchscreen menu's talk action.
 static const u16 sSpriteIdsWithoutTalkAction[] = {
@@ -362,7 +360,7 @@ static BOOL UnionChatLogApp_IsExitDone(BgConfig *bgConfig) {
     return TRUE;
 }
 
-BOOL IsSpriteIdWithoutTalkAction(u16 spriteId) {
+BOOL IsSpriteIdWithoutTalkAction(int spriteId) {
     u32 i;
     const u16 *p = sSpriteIdsWithoutTalkAction;
     for (i = 0; i < NELEMS(sSpriteIdsWithoutTalkAction); i++, p++) {

@@ -1,3 +1,5 @@
+#include "field_footprints.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -20,13 +22,13 @@
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pMdl, u32 alpha);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 2).
-typedef struct Footprints {
+struct Footprints {
     FieldEffectManager *manager;
     RenderModelStorage modelsA[FOOTPRINT_MODEL_COUNT];
     RenderModelStorage modelsB[FOOTPRINT_MODEL_COUNT];
     NNSG3dRenderObj renderObjsA[FOOTPRINT_MODEL_COUNT];
     NNSG3dRenderObj renderObjsB[FOOTPRINT_MODEL_COUNT];
-} Footprints;
+};
 
 typedef struct FootprintEffectArgs {
     u32 kind;
@@ -44,17 +46,10 @@ typedef struct FootprintEffect {
     NNSG3dRenderObj *renderObj;
 } FootprintEffect;
 
-Footprints *Footprints_New(FieldEffectManager *manager);
-void Footprints_Free(Footprints *footprints);
 static void Footprints_LoadModels(Footprints *footprints);
 static void Footprints_FreeModels(Footprints *footprints);
 static NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 static RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
-BOOL Footprints_SpawnInSand(LocalMapObject *mapObject);
-BOOL Footprints_SpawnTracksInSand(LocalMapObject *mapObject);
-BOOL Footprints_SpawnInSnow(LocalMapObject *mapObject);
-BOOL Footprints_SpawnOnBehavior169(LocalMapObject *mapObject);
-BOOL Footprints_SpawnTracksOnBehavior169(LocalMapObject *mapObject);
 static BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind);
 static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work);
 static void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work);

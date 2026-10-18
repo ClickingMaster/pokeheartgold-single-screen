@@ -40,4 +40,7 @@ BOOL BottomScreen_Apps_IsDone(FieldSystem *fieldSystem);
 void FieldSystem_RequestTouchscreenMenuSelectedIconAnim(FieldSystem *fieldSystem);
 void FieldSystem_RequestTouchscreenMenuRegisteredItemAnim(FieldSystem *fieldSystem, int item);
 
+BOOL IsSpriteIdWithoutTalkAction(int spriteId);
+BOOL IsScriptIdWithoutTalkAction(int scriptId);
+
 #endif // POKEHEARTGOLD_FIELD_BOTTOM_SCREEN_APP_H

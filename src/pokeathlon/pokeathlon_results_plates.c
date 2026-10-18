@@ -5,6 +5,7 @@
 
 #include "bg_window.h"
 #include "font.h"
+#include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "heap.h"
 #include "math_util.h"
@@ -19,8 +20,6 @@
 
 void NNS_G2dSetImageLocation(NNSG2dImageProxy *proxy, NNS_G2D_VRAM_TYPE type, u32 addr);
 void NNS_G2dSetImagePaletteLocation(NNSG2dImagePaletteProxy *proxy, NNS_G2D_VRAM_TYPE type, u32 addr);
-void TextOBJ_UpdatePosition(TextOBJ *textObj);
-void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *textObj, int index);
 u16 PokeathlonCourse_GetNpcTeamSpriteId(u8 team);
 void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *scene, int index, int id);
 void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id, int vram);

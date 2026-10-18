@@ -12,9 +12,6 @@
 #include "math_util.h"
 #include "sprite_transfer.h"
 
-BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
-BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
-
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
 typedef struct PokeathlonPennantCaptureCpuPoint {

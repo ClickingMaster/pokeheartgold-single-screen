@@ -8,14 +8,11 @@
 #include "assert.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_movement_commands_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_04.h"
+#include "player_avatar_movement.h"
 #include "sound_playback.h"
-
-BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
-void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
-int GetMovementForDirection(int direction, int movement);
-BOOL PlayerAvatar_CheckCollision(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction);
 
 BOOL PlayerAvatar_TryStartSpinSlide(FieldSystem *fieldSystem, PlayerAvatar *avatar, int facingDirection) {
     u8 behavior = MapObject_GetCurrentMetatileBehavior(PlayerAvatar_GetMapObject(avatar));

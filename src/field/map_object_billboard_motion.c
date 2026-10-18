@@ -105,20 +105,7 @@ void BillboardObject_SetVisible(void *billboard, u8 visible);
 void BillboardObject_SaveState(void *billboard, void *work);
 void BillboardObject_RestoreState(void *billboard, void *work);
 
-void BillboardDraw_Init(void *object);
-void BillboardDraw_Delete(void *object);
-void BillboardDraw_Pause(void *object);
-void BillboardDraw_Resume(void *object);
-void FollowMonDraw_Init(void *object);
-void FollowMonDraw_Delete(void *object);
-void FollowMonDraw_Pause(void *object);
-void FollowMonDraw_Resume(LocalMapObject *object);
 void FollowMonDraw_ClearBob(void *object);
-void BillboardDraw_UpdateNpc(void *object);
-void BillboardDraw_UpdatePositionOnly(void *object);
-void BillboardDraw_UpdateLooping(void *object);
-void FollowMonDraw_UpdateLarge(LocalMapObject *object);
-void FollowMonDraw_Update(LocalMapObject *object);
 static void BillboardMotion_Stand(void *object, void *billboard, const s8 *work, int facing);
 static void BillboardMotion_AnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
 static void BillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
@@ -127,15 +114,8 @@ static void BillboardMotion_AnimateQuadSpeed(void *object, void *billboard, cons
 static void BillboardMotion_WalkSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
 static void BillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *workRaw, int facing);
 static void BillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *workRaw, int facing);
-void BillboardDraw_UpdatePcWoman(void *object);
 static void BillboardMotion_PcWomanStand(void *object, void *billboard, const s8 *work, int facing);
 static void BillboardMotion_PcWomanBow(void *object, void *billboard, const s8 *work, int facing);
-void BillboardDraw_UpdateTwoSequences(void *object);
-void PlayerDraw_Init(void *object);
-void PlayerDraw_Delete(void *object);
-void PlayerDraw_Pause(void *object);
-void PlayerDraw_Resume(void *object);
-void PlayerDraw_UpdateWalking(void *object);
 static void PlayerBillboardMotion_Stand(void *object, void *billboard, HeldStepWork *work, int facing);
 static void PlayerBillboardMotion_AnimateHalfSpeed(void *object, void *billboard, HeldStepWork *work, int facing);
 static void PlayerBillboardMotion_AnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
@@ -145,26 +125,17 @@ static void PlayerBillboardMotion_WalkSlightlyFast(void *object, void *billboard
 static void PlayerBillboardMotion_WalkSlightlyFaster(void *object, void *billboard, s8 *work, int facing);
 static void PlayerBillboardMotion_WalkEverSoSlightlyFast(void *object, void *billboard, s8 *work, int facing);
 static void PlayerBillboardMotion_Run(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_UpdateCycling(void *object);
 static void PlayerBillboardMotion_CyclingStand(void *object, void *billboard, HeldMotionWork *work, int facing);
 static void PlayerBillboardMotion_CyclingAnimateHalfSpeed(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *billboard, const s8 *work, int facing);
-void PlayerDraw_UpdateFishing(void *object);
 static void PlayerBillboardMotion_FishingIdle(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerBillboardMotion_FishingCast(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing);
 static void PlayerBillboardMotion_FishingReel(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard, u32 facing);
-void PlayerDraw_UpdateLadder(void *object);
 static void PlayerBillboardMotion_Ladder0(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerBillboardMotion_Ladder1(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, u32 facing);
-void PlayerDraw_UpdateSurfing(void *object);
-void PlayerDraw_UpdateUseHmOrSaving(void *object);
-void PlayerDraw_UpdateWatering(void *object);
-void PlayerDraw_UpdatePoketch(void *object);
-void PlayerDraw_UpdateHeal(void *object);
-void PlayerDraw_UpdateApricornShake(void *object);
 static void PlayerBillboardMotion_ApricornShake(void *object, void *billboard, const s8 *work, int facing);
 static void PlayerDraw_SetApricornShakeOffset(LocalMapObject *object, void *billboard, int facing);
 static void BillboardObject_AlignSequenceFrame(void *billboard, int divisor);
@@ -173,11 +144,6 @@ static void BillboardObject_SetSequenceKeepAlignedFrame(void *billboard, u32 seq
 static void BillboardObject_SetSequenceKeepAlignedFrameTo8(void *billboard, u32 sequence);
 static void MapObject_UpdateBillboardVisibility(LocalMapObject *object, void *billboard);
 static void MapObject_GetEffectModelOffset(u32 spriteId, VecFx32 *offset);
-void ModelObjectDraw_Init(void *object);
-void ModelObjectDraw_Update(void);
-void ModelObjectDraw_Delete(void *object);
-void ModelObjectDraw_Pause(void *object);
-void ModelObjectDraw_Resume(void *object);
 
 static const LadderBillboardMotions sPlayerApricornLadderBillboardMotions = {
     .stand = {

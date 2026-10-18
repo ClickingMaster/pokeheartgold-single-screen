@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_results_announcement.h"
 
 #include "assert.h"
@@ -108,7 +109,6 @@ void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *scene);
 void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *scene, int mainX, int mainY, int subX, int subY);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *scene);
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *scene, int paused);
-void PokeathlonEvent_CalcPoints(void *gfx, u32 event);
 
 static void PokeathlonLampJump_SetGfxBanks(void);
 static void PokeathlonLampJump_InitBgs(BgConfig *bgConfig);

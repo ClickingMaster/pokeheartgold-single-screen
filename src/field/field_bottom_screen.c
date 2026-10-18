@@ -6,13 +6,10 @@
 #include "field/bottom_screen_app.h"
 
 #include "assert.h"
+#include "field_interaction.h"
 #include "poke_overlay.h"
 
 FS_EXTERN_OVERLAY(OVY_19);
-
-void BottomScreen_None_Init(FieldSystem *fieldSystem);
-void BottomScreen_None_End(FieldSystem *fieldSystem);
-BOOL BottomScreen_None_IsDone(FieldSystem *fieldSystem);
 
 static const BottomScreenOps sBottomScreenOps[];
 

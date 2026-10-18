@@ -62,8 +62,6 @@ enum PokeathlonResultsState {
 };
 
 // Declared by no public header.
-void WirelessStatusIcon_Refresh(void);
-void WirelessStatusIcon_SetBackPriority(void);
 
 PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *scoreList, u8 rank);
 int PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *scoreList);

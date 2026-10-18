@@ -1,3 +1,5 @@
+#include "field_tall_grass.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -22,9 +24,9 @@ enum TallGrassEffectState {
 };
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 8).
-typedef struct TallGrass {
+struct TallGrass {
     FieldEffectManager *manager;
-} TallGrass;
+};
 
 typedef struct TallGrassEffectArgs {
     int x;
@@ -67,8 +69,6 @@ typedef struct TallGrassUnusedEffect {
     void *billboard;
 } TallGrassUnusedEffect;
 
-TallGrass *TallGrass_New(FieldEffectManager *manager);
-void TallGrass_Free(TallGrass *grass);
 static void TallGrass_LoadGfx(TallGrass *grass);
 static void TallGrass_FreeGfx(TallGrass *grass);
 void TallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);

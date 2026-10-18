@@ -1,3 +1,5 @@
+#include "field_emote_bubble.h"
+
 #include "global.h"
 
 #include "constants/sndseq.h"
@@ -10,6 +12,8 @@
 #include "field_system.h"
 #include "heap.h"
 #include "map_object.h"
+#include "overlay_01.h"
+#include "sound_playback.h"
 #include "task.h"
 #include "vram_transfer_manager.h"
 
@@ -25,7 +29,6 @@ void *Texture_GetImageData(NNSG3dResTex *tex, int index);
 void *Texture_GetPaletteData(NNSG3dResTex *tex, int index);
 u32 Texture_GetImageVramOffsetByIndex(NNSG3dResTex *tex, int index);
 u32 Texture_GetImageSizeByIndex(NNSG3dResTex *tex, int index);
-void PlaySE(u16 seq);
 
 #define EMOTE_BUBBLE_RECORD   0xE
 #define EMOTE_BUBBLE_RESOURCE 0xC
@@ -44,10 +47,10 @@ enum EmoteBubbleEffectState {
 };
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 0x12).
-typedef struct EmoteBubble {
+struct EmoteBubble {
     FieldEffectManager *manager;
     BOOL active;
-} EmoteBubble;
+};
 
 typedef struct EmoteBubbleEffectArgs {
     FieldEffectManager *manager;
@@ -96,10 +99,7 @@ typedef struct EmoteBubbleFiles {
     u32 sequenceFileId;
 } EmoteBubbleFiles;
 
-EmoteBubble *EmoteBubble_New(FieldEffectManager *manager);
-void EmoteBubble_Free(EmoteBubble *bubble);
 static BOOL EmoteBubble_Show(LocalMapObject *mapObject, int kind);
-void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *mapObject, int kind);
 static BOOL EmoteBubble_ShowTask(TaskManager *taskManager);
 static void EmoteBubble_LoadGfx(EmoteBubble *bubble);
 static void EmoteBubble_FreeGfx(EmoteBubble *bubble);

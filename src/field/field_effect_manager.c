@@ -1,7 +1,10 @@
 #include "global.h"
 
+#include "field/area_light.h"
 #include "field/field_effect_manager_internal.h"
 
+#include "billboard_lists.h"
+#include "field_effects.h"
 #include "field_system.h"
 #include "gf_3d_render.h"
 #include "map_object.h"
@@ -10,13 +13,9 @@ void *FieldEffectPool_New(enum HeapID heapID, u32 count);
 void FieldEffectPool_Delete(void *manager);
 void FieldEffectPool_DrawAll(void *manager);
 FieldEffect *FieldEffectPool_AddBasicEffect(void *manager, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
-void FieldEffect_Destroy(int effect);
 void *Billboard_Create(BillboardCreateParams *params);
 void Billboard_Delete(void *billboards);
 void *BillboardObject_Create(BillboardObjectCreateParams *params);
-NNSG3dResMdl *BillboardObject_GetModel(void *object);
-void AreaLight_ClearMaterialModifyFlags(NNSG3dResMdl *mdl);
-void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *mdl, int flag);
 void RenderModel_LoadFromNarc(void *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
 void RenderModel_BindTexturesOnVBlank(void *model);
 void RenderAnimation_LoadFromNarc(void *animation, int unused, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);

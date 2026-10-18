@@ -4,7 +4,9 @@
 
 #include "field/field_effect_helpers.h"
 #include "field/field_follow_mon.h"
+#include "field/map_object_render.h"
 
+#include "field_shadow.h"
 #include "filesystem.h"
 #include "filesystem_files_def.h"
 #include "heap.h"
@@ -19,17 +21,8 @@ typedef struct LegendaryBirdObject {
 
 typedef void (*LegendaryBirdAnimateFunc)(LocalMapObject *object, Sprite *billboard, LegendaryBirdObject *work);
 
-void MapObjectRender_Init(void *render, MapObjectManager *manager, u32 count, u32 priority, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame);
-void MapObjectRender_Free(void *render);
-void MapObject_CreateBillboard(LocalMapObject *object, void *work);
-void MapObject_DeleteBillboard(LocalMapObject *object, void *work);
 void BillboardObject_SaveState(Sprite *billboard, VecFx32 *state);
 void BillboardObject_RestoreState(Sprite *billboard, VecFx32 *state);
-u32 MapObjectRender_GetSpriteModelId(u32 spriteId);
-BOOL MapObject_IsBillboardPending(LocalMapObject *object);
-void MapObject_UpdateBillboardPosition(LocalMapObject *object, Sprite *billboard);
-int Facing_GetBillboardStandSequence(u32 direction);
-void FieldShadow_OffsetByFacing(u32 direction, VecFx32 *offset);
 void BillboardObject_SetVisible(Sprite *billboard, u8 visible);
 
 static BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, Sprite *billboard);
