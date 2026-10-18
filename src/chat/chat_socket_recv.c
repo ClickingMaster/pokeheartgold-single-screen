@@ -38,8 +38,10 @@ extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
         part = NULL;       \
     }
 
+static BOOL ciSocketParseNextLine(ChatSocket *socket);
+
 // Parses the first complete line of the input buffer into socket->message and removes it from the buffer.
-BOOL ciSocketParseNextLine(ChatSocket *socket) {
+static BOOL ciSocketParseNextLine(ChatSocket *socket) {
     char *line = socket->input.data, *end, *last;
     char saved;
     int i;

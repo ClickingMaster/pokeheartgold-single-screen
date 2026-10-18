@@ -108,6 +108,9 @@ extern const char sStr_StrlenNickLtMAX_NAME[];
     ASSERT(*nick, sStr_User0_Ne0, func, line); \
     ASSERT(strlen(nick) < 128, sStr_StrlenUserLtMAX_NAME, func, line);
 
+static ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel);
+static int ciEnteringChannelCompareFn(const void *a, const void *b);
+
 int ciHashString(const signed char *s, int count) {
     int value, c;
     ASSERT(s, sStr_StrNeNULL, sStr_ciHashString, 153);
@@ -120,7 +123,7 @@ int ciHashString(const signed char *s, int count) {
     return value % count;
 }
 
-ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel) {
+static ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel) {
     char key[sizeof(ChatChannel)];
     strncpy(key, channel, 257);
     key[256] = 0;
@@ -220,7 +223,7 @@ void ciChannelEntering(ChatConnection *chat, const char *channel) {
     ArrayAppend(chat->enteringChannels, &entry);
 }
 
-int ciEnteringChannelCompareFn(const void *a, const void *b) {
+static int ciEnteringChannelCompareFn(const void *a, const void *b) {
     return strnicmp((const char *)a, (const char *)b);
 }
 

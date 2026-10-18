@@ -136,6 +136,10 @@ extern int ciCookieCounter;
         return NULL;                                            \
     }
 
+static inline void ConnectFailed(ChatConnection *chat);
+static BOOL ciCheckForID(ChatConnection *chat, int id);
+static char *ciGetNextCookie(void);
+
 // Queues the connected callback with a failure (the connect attempt has ended).
 static inline void ConnectFailed(ChatConnection *chat) {
     chat->connecting = FALSE;
@@ -168,7 +172,7 @@ int ciProcessServerMessage(ChatConnection *chat, ChatMessage *message) {
 }
 
 // Whether the request id is still waiting for an answer or a callback.
-BOOL ciCheckForID(ChatConnection *chat, int id) {
+static BOOL ciCheckForID(ChatConnection *chat, int id) {
     if (ciCheckFiltersForID(chat, id) || ciCheckCallbacksForID(chat, id)) {
         return TRUE;
     }
@@ -790,7 +794,7 @@ void chatSendUserMessageA(ChatConnection *chat, const char *nick, const char *me
 }
 
 // Next request cookie, "000" .. "999".
-char *ciGetNextCookie(void) {
+static char *ciGetNextCookie(void) {
     sprintf(ciCookieBuffer, sFmt_Int_6, ciCookieCounter++);
     ciCookieCounter %= 1000;
     return ciCookieBuffer;

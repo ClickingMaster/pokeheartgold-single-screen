@@ -12,6 +12,7 @@
 #include "frontier_launch.h"
 #include "heap.h"
 #include "launch_application.h"
+#include "network_overlay_loader.h"
 #include "overlay_13_thumb_1.h"
 #include "overlay_44.h"
 #include "overlay_manager.h"
@@ -58,7 +59,6 @@ enum WifiClubGame {
     WIFI_CLUB_GAME_WOBBUFFET_POP,
 };
 
-BOOL LoadOVY13(void);
 
 enum WifiClubTaskState {
     WIFI_CLUB_TASK_INIT,
@@ -100,16 +100,16 @@ typedef struct WifiClubTask {
     u32 selection;          // 0x14: picked on the game entry screen, passed on to the minigame
 } WifiClubTask;
 
-BOOL Task_WifiClub(TaskManager *taskManager);
-WifiClubTask *WifiClubTask_New(void);
-void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game);
-u32 WifiClub_FinishGameEntry(WifiClubTask *task);
-PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
-void WifiClub_FinishSwalotPlop(PlazaGameArgs *args);
-PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
-void WifiClub_FinishMimeJrTop(PlazaGameArgs *args);
-PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
-void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args);
+static BOOL Task_WifiClub(TaskManager *taskManager);
+static WifiClubTask *WifiClubTask_New(void);
+static void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game);
+static u32 WifiClub_FinishGameEntry(WifiClubTask *task);
+static PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
+static void WifiClub_FinishSwalotPlop(PlazaGameArgs *args);
+static PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
+static void WifiClub_FinishMimeJrTop(PlazaGameArgs *args);
+static PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection);
+static void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args);
 
 // player limit of the game entry screen, by game
 static const u8 sWifiClubGameMaxPlayers[] = { 3, 4, 4, 4 };
@@ -120,7 +120,7 @@ static const OverlayManagerTemplate sOverlayTemplate_SwalotPlop = { SwalotPlop_I
 static const OverlayManagerTemplate sOverlayTemplate_WifiClub = { WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44) };
 static const OverlayManagerTemplate sOverlayTemplate_WobbuffetPop = { WobbuffetPopApp_Init, WobbuffetPopApp_Main, WobbuffetPopApp_Exit, FS_OVERLAY_ID(OVY_93) };
 
-BOOL Task_WifiClub(TaskManager *taskManager) {
+static BOOL Task_WifiClub(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     WifiClubTask *task = TaskManager_GetEnvironment(taskManager);
     switch (task->state) {
@@ -300,7 +300,7 @@ BOOL Task_WifiClub(TaskManager *taskManager) {
     return FALSE;
 }
 
-WifiClubTask *WifiClubTask_New(void) {
+static WifiClubTask *WifiClubTask_New(void) {
     WifiClubTask *task = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(WifiClubTask));
     MI_CpuFill8(task, 0, sizeof(WifiClubTask));
     task->clubArgs = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(WifiClubArgs));
@@ -321,7 +321,7 @@ void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result) {
     TaskManager_Call(taskManager, Task_WifiClub, task);
 }
 
-void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game) {
+static void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum HeapID heapID, int game) {
     WifiClubGameEntryArgs *args = Heap_Alloc(heapID, sizeof(WifiClubGameEntryArgs));
     args->game = game;
     args->minPlayers = 2;
@@ -333,7 +333,7 @@ void WifiClub_LaunchGameEntry(WifiClubTask *task, FieldSystem *fieldSystem, enum
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_WifiClubGameEntry, args);
 }
 
-u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
+static u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
     WifiClubGameEntryArgs *args = task->launchedArgs;
     if (args->result == 1) {
         switch ((enum WifiClubGame)args->game) {
@@ -356,7 +356,7 @@ u32 WifiClub_FinishGameEntry(WifiClubTask *task) {
     return task->state;
 }
 
-PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
+static PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, 0x3C);
     memset(args, 0, 0x3C);
     args->voiceChat = selection;
@@ -367,12 +367,12 @@ PlazaGameArgs *WifiClub_LaunchSwalotPlop(FieldSystem *fieldSystem, enum HeapID h
     return args;
 }
 
-void WifiClub_FinishSwalotPlop(PlazaGameArgs *args) {
+static void WifiClub_FinishSwalotPlop(PlazaGameArgs *args) {
     Heap_Free(args);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
 }
 
-PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
+static PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, sizeof(PlazaGameArgs));
     memset(args, 0, sizeof(PlazaGameArgs));
     args->mimeJrTopVoiceChat = selection;
@@ -383,12 +383,12 @@ PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum HeapID he
     return args;
 }
 
-void WifiClub_FinishMimeJrTop(PlazaGameArgs *args) {
+static void WifiClub_FinishMimeJrTop(PlazaGameArgs *args) {
     Heap_Free(args);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
 }
 
-PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
+static PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID heapID, u32 selection) {
     PlazaGameArgs *args = Heap_Alloc(heapID, 0x3C);
     MI_CpuFill8(args, 0, 0x3C);
     args->voiceChat = selection;
@@ -399,7 +399,7 @@ PlazaGameArgs *WifiClub_LaunchWobbuffetPop(FieldSystem *fieldSystem, enum HeapID
     return args;
 }
 
-void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args) {
+static void WifiClub_FinishWobbuffetPop(PlazaGameArgs *args) {
     Heap_Free(args);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_90));
 }

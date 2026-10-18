@@ -75,6 +75,9 @@ extern char ciSendfBuffer[];
         part = NULL;       \
     }
 
+static void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except);
+static BOOL ciAddParam(const char *param, ChatMessage *message);
+
 // Connects the socket to the server (a dotted address or a host name).
 BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     u32 ip;
@@ -136,7 +139,7 @@ void ciSocketDisconnect(ChatSocket *socket) {
 }
 
 // Readiness of the socket handle (each output may be NULL).
-void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
+static void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *except) {
     int r = 0, w = 0, e = 0;
     GSISocketSelect(handle, &r, &w, &e);
     if (readable) {
@@ -323,7 +326,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
 }
 
 // Appends a heap copy of param to the message's parameters.
-BOOL ciAddParam(const char *param, ChatMessage *message) {
+static BOOL ciAddParam(const char *param, ChatMessage *message) {
     char **params;
     char *copy;
     int i;
