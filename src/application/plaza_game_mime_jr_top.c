@@ -53,6 +53,121 @@ fx64c FX_SinFx64c(fx32 x);
 fx64c FX_CosFx64c(fx32 x);
 f32 _f_lltof(s64 value);
 
+enum MimeJrTopState {
+    MIME_JR_TOP_STATE_CREATE_ENTRY,
+    MIME_JR_TOP_STATE_WAIT_ENTRY,
+    MIME_JR_TOP_STATE_INIT_GAME,
+    MIME_JR_TOP_STATE_FADE_IN,
+    MIME_JR_TOP_STATE_WAIT_FADE_IN,
+    MIME_JR_TOP_STATE_START_DEMO,
+    MIME_JR_TOP_STATE_RUN_DEMO,
+    MIME_JR_TOP_STATE_WAIT_START,
+    MIME_JR_TOP_STATE_START_COUNTDOWN,
+    MIME_JR_TOP_STATE_WAIT_COUNTDOWN,
+    MIME_JR_TOP_STATE_PLAY,
+    MIME_JR_TOP_STATE_SHOW_FINISH,
+    MIME_JR_TOP_STATE_WAIT_FINISH,
+    MIME_JR_TOP_STATE_SEND_SCORE,
+    MIME_JR_TOP_STATE_WAIT_SCORES,
+    MIME_JR_TOP_STATE_FADE_OUT,
+    MIME_JR_TOP_STATE_FREE_GAME,
+    MIME_JR_TOP_STATE_SHOW_RESULTS,
+    MIME_JR_TOP_STATE_WAIT_RESULTS,
+    MIME_JR_TOP_STATE_START_SYNC,
+    MIME_JR_TOP_STATE_WAIT_SYNC,
+};
+
+enum MimeJrTopExitState {
+    MIME_JR_TOP_EXIT_STATE_FREE,
+    MIME_JR_TOP_EXIT_STATE_WAIT_SYNC,
+};
+
+enum MimeJrTopConnection {
+    MIME_JR_TOP_CONNECTED,
+    MIME_JR_TOP_CONNECTION_LOST_WAIT,
+    MIME_JR_TOP_CONNECTION_LOST_DONE,
+};
+
+enum MimeJrTopPlayerState {
+    MIME_JR_TOP_PLAYER_SPINNING,
+    MIME_JR_TOP_PLAYER_FALLEN,
+    MIME_JR_TOP_PLAYER_GETTING_UP,
+    MIME_JR_TOP_PLAYER_STEADYING,
+};
+
+enum MimeJrTopPose {
+    MIME_JR_TOP_POSE_BALANCING,
+    MIME_JR_TOP_POSE_FALLING,
+    MIME_JR_TOP_POSE_DOWN,
+};
+
+enum MimeJrTopFallState {
+    MIME_JR_TOP_FALL_START_HOP,
+    MIME_JR_TOP_FALL_HOP,
+    MIME_JR_TOP_FALL_LAND,
+    MIME_JR_TOP_FALL_LIE,
+    MIME_JR_TOP_FALL_WAIT,
+};
+
+enum MimeJrTopFallStep {
+    MIME_JR_TOP_FALL_STEP_FALL_OFF,
+    MIME_JR_TOP_FALL_STEP_CLIMB_BACK,
+};
+
+enum MimeJrTopRivalFallState {
+    MIME_JR_TOP_RIVAL_FALL_START,
+    MIME_JR_TOP_RIVAL_FALL_MOVE,
+    MIME_JR_TOP_RIVAL_FALL_WAIT,
+};
+
+enum MimeJrTopRivalTierState {
+    MIME_JR_TOP_RIVAL_TIER_START_GROW,
+    MIME_JR_TOP_RIVAL_TIER_GROW,
+    MIME_JR_TOP_RIVAL_TIER_START_SHRINK,
+    MIME_JR_TOP_RIVAL_TIER_SHRINK,
+    MIME_JR_TOP_RIVAL_TIER_START_PULSE,
+    MIME_JR_TOP_RIVAL_TIER_PULSE,
+    MIME_JR_TOP_RIVAL_TIER_HIDE = 255,
+};
+
+enum MimeJrTopTierModelsState {
+    MIME_JR_TOP_TIER_MODELS_LOAD_TOP,
+    MIME_JR_TOP_TIER_MODELS_LOAD_TOP_ANIMS,
+    MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE,
+    MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE_ANIMS,
+    MIME_JR_TOP_TIER_MODELS_WAIT_CHANGE,
+    MIME_JR_TOP_TIER_MODELS_WATCH_TIER,
+    MIME_JR_TOP_TIER_MODELS_FREE = 255,
+};
+
+enum MimeJrTopStagePhase {
+    MIME_JR_TOP_STAGE_OFF,
+    MIME_JR_TOP_STAGE_LIGHTS,
+    MIME_JR_TOP_STAGE_POPUPS,
+    MIME_JR_TOP_STAGE_AUDIENCE,
+    MIME_JR_TOP_STAGE_MORE_POPUPS,
+    MIME_JR_TOP_STAGE_STARS,
+};
+
+enum MimeJrTopSlideState {
+    MIME_JR_TOP_SLIDE_START,
+    MIME_JR_TOP_SLIDE_MOVE,
+    MIME_JR_TOP_SLIDE_DONE,
+};
+
+enum MimeJrTopDancerState {
+    MIME_JR_TOP_DANCER_START,
+    MIME_JR_TOP_DANCER_MOVE,
+    MIME_JR_TOP_DANCER_DONE,
+};
+
+enum MimeJrTopCommandId {
+    MIME_JR_TOP_CMD_START = 22,
+    MIME_JR_TOP_CMD_FINISH,
+    MIME_JR_TOP_CMD_PLAYER_STATE,
+    MIME_JR_TOP_CMD_FINAL_SCORE,
+};
+
 typedef struct MimeJrTopModelFiles {
     int files[16][2]; // model file, animation file
 } MimeJrTopModelFiles;
@@ -521,65 +636,65 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
     s32 offset;
 
     switch (MimeJrTop_HandleConnectionLost(app)) {
-    case 1:
+    case MIME_JR_TOP_CONNECTION_LOST_WAIT:
         return FALSE;
-    case 2:
+    case MIME_JR_TOP_CONNECTION_LOST_DONE:
         return TRUE;
     default:
-    case 0:
+    case MIME_JR_TOP_CONNECTED:
         switch (*state) {
-        case 0:
+        case MIME_JR_TOP_STATE_CREATE_ENTRY:
             app->entry = PlazaGameEntry_NewMimeJrTop(&app->roster, HEAP_ID_113);
-            MimeJrTop_SetStateIf(app, TRUE, 1, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_ENTRY, state);
             break;
-        case 1:
-            MimeJrTop_SetStateIf(app, PlazaGameEntry_IsDone(app->entry), 2, state);
+        case MIME_JR_TOP_STATE_WAIT_ENTRY:
+            MimeJrTop_SetStateIf(app, PlazaGameEntry_IsDone(app->entry), MIME_JR_TOP_STATE_INIT_GAME, state);
             break;
-        case 2:
+        case MIME_JR_TOP_STATE_INIT_GAME:
             app->start.selection = PlazaGameEntry_GetSelection(app->entry);
             PlazaGameEntry_Free(app->entry);
             app->entry = NULL;
             MimeJrTop_InitGame(app);
-            MimeJrTop_SetStateIf(app, TRUE, 3, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_FADE_IN, state);
             break;
-        case 3:
+        case MIME_JR_TOP_STATE_FADE_IN:
             done = MimeJrTop_StartFade(0x1B);
             MimeJrTopGame_ShowRivalNames(app, app->game);
-            MimeJrTop_SetStateIf(app, done, 4, state);
+            MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_WAIT_FADE_IN, state);
             break;
-        case 4:
-            MimeJrTop_SetStateIf(app, IsPaletteFadeFinished(), 5, state);
+        case MIME_JR_TOP_STATE_WAIT_FADE_IN:
+            MimeJrTop_SetStateIf(app, IsPaletteFadeFinished(), MIME_JR_TOP_STATE_START_DEMO, state);
             break;
-        case 5:
+        case MIME_JR_TOP_STATE_START_DEMO:
             MimeJrTopGame_ShowInstructions(app->game);
             MimeJrTopGame_StartStage(app->game);
             MimeJrTopGame_StartDance(app->game);
-            MimeJrTop_SetStateIf(app, TRUE, 6, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_RUN_DEMO, state);
             break;
-        case 6:
+        case MIME_JR_TOP_STATE_RUN_DEMO:
             done = MimeJrTopGame_RunDemo(app->game);
             if (done && MimeJrTop_IsParent(app) == TRUE) {
                 app->start.seed = app->savedSeed;
-                Comm_SendCommand(22, &app->start, sizeof(MimeJrTopStartMessage));
+                Comm_SendCommand(MIME_JR_TOP_CMD_START, &app->start, sizeof(MimeJrTopStartMessage));
             }
-            MimeJrTop_SetStateIf(app, done, 7, state);
+            MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_WAIT_START, state);
             break;
-        case 7:
-            MimeJrTop_SetStateIf(app, app->startReceived, 8, state);
+        case MIME_JR_TOP_STATE_WAIT_START:
+            MimeJrTop_SetStateIf(app, app->startReceived, MIME_JR_TOP_STATE_START_COUNTDOWN, state);
             break;
-        case 8:
+        case MIME_JR_TOP_STATE_START_COUNTDOWN:
             PlazaGameSign_StartCountdown(app->sign);
-            MimeJrTop_SetStateIf(app, TRUE, 9, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_COUNTDOWN, state);
             break;
-        case 9:
+        case MIME_JR_TOP_STATE_WAIT_COUNTDOWN:
             done = PlazaGameSign_IsDone(app->sign);
             if (done) {
                 MimeJrTopGame_HideRivalNames(app->game);
                 MimeJrTopGame_HideInstructions(app->game);
             }
-            MimeJrTop_SetStateIf(app, done, 10, state);
+            MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_PLAY, state);
             break;
-        case 10:
+        case MIME_JR_TOP_STATE_PLAY:
             done = app->finishReceived;
             if (done && app->game->frame < 0x4B0) {
                 done = FALSE;
@@ -587,22 +702,22 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             if (!done) {
                 if (MimeJrTop_IsParent(app) == TRUE && MimeJrTopClock_Tick(app->clock) == FALSE) {
                     StopSE(SEQ_SE_PL_HAND, 0);
-                    Comm_SendCommand(23, NULL, 0);
+                    Comm_SendCommand(MIME_JR_TOP_CMD_FINISH, NULL, 0);
                 }
                 MimeJrTopGame_Update(app->game);
             }
-            MimeJrTop_SetStateIf(app, done, 11, state);
+            MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_SHOW_FINISH, state);
             break;
-        case 11:
+        case MIME_JR_TOP_STATE_SHOW_FINISH:
             StopSE(SEQ_SE_PL_140_2_2, 0);
             StopSE(SEQ_SE_PL_HAND, 0);
             PlazaGameSign_StartFinish(app->sign);
-            MimeJrTop_SetStateIf(app, TRUE, 12, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_FINISH, state);
             break;
-        case 12:
-            MimeJrTop_SetStateIf(app, PlazaGameSign_IsDone(app->sign), 13, state);
+        case MIME_JR_TOP_STATE_WAIT_FINISH:
+            MimeJrTop_SetStateIf(app, PlazaGameSign_IsDone(app->sign), MIME_JR_TOP_STATE_SEND_SCORE, state);
             break;
-        case 13:
+        case MIME_JR_TOP_STATE_SEND_SCORE:
             score = 100 * ((int)app->game->score / 10);
             app->finalScore = score;
             if (score >= 100000) {
@@ -611,10 +726,10 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             if (app->game->everTouched == FALSE) {
                 app->finalScore = 1;
             }
-            Comm_SendCommand(25, &app->finalScore, 8);
-            MimeJrTop_SetStateIf(app, TRUE, 14, state);
+            Comm_SendCommand(MIME_JR_TOP_CMD_FINAL_SCORE, &app->finalScore, 8);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_SCORES, state);
             break;
-        case 14: {
+        case MIME_JR_TOP_STATE_WAIT_SCORES: {
             s32 allReceived;
             s32 i;
             s32 received;
@@ -633,20 +748,20 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             if (received == app->game->playerCount) {
                 allReceived = TRUE;
             }
-            MimeJrTop_SetStateIf(app, allReceived, 15, state);
+            MimeJrTop_SetStateIf(app, allReceived, MIME_JR_TOP_STATE_FADE_OUT, state);
             break;
         }
-        case 15:
-            MimeJrTop_SetStateIf(app, MimeJrTop_StartFade(0x1A), 16, state);
+        case MIME_JR_TOP_STATE_FADE_OUT:
+            MimeJrTop_SetStateIf(app, MimeJrTop_StartFade(0x1A), MIME_JR_TOP_STATE_FREE_GAME, state);
             break;
-        case 16:
+        case MIME_JR_TOP_STATE_FREE_GAME:
             done = IsPaletteFadeFinished();
             if (done) {
                 MimeJrTop_FreeGame(app);
             }
-            MimeJrTop_SetStateIf(app, done, 17, state);
+            MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_SHOW_RESULTS, state);
             break;
-        case 17: {
+        case MIME_JR_TOP_STATE_SHOW_RESULTS: {
             MimeJrTopApp *entry;
             i = 0;
             entry = app;
@@ -664,37 +779,37 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             } while (i < 4);
             PlazaGame_CalcRanks(&app->resultData, app->roster.count);
             app->results = PlazaGameResults_NewMimeJrTop(&app->roster, &app->resultData, HEAP_ID_113);
-            MimeJrTop_SetStateIf(app, TRUE, 18, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_RESULTS, state);
             break;
         }
-        case 18:
+        case MIME_JR_TOP_STATE_WAIT_RESULTS:
             done = PlazaGameResults_IsDone(app->results);
             if (done && (keepPlaying = PlazaGameResults_GetContinue(app->results), PlazaGameResults_Free(app->results), app->results = NULL, keepPlaying)) {
                 app->keepPlaying = TRUE;
                 MimeJrTop_ResetRound(app);
-                MimeJrTop_SetStateIf(app, done, 0, state);
+                MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_CREATE_ENTRY, state);
                 if (app->args->mimeJrTopVoiceChat) {
                     WifiConnection_StopVoiceChat();
                 }
             } else {
-                MimeJrTop_SetStateIf(app, done, 19, state);
+                MimeJrTop_SetStateIf(app, done, MIME_JR_TOP_STATE_START_SYNC, state);
             }
             break;
-        case 19:
+        case MIME_JR_TOP_STATE_START_SYNC:
             LinkSync_StartSync(0x1B);
             if (app->args->mimeJrTopVoiceChat) {
                 WifiConnection_StopVoiceChat();
             }
-            MimeJrTop_SetStateIf(app, TRUE, 20, state);
+            MimeJrTop_SetStateIf(app, TRUE, MIME_JR_TOP_STATE_WAIT_SYNC, state);
             break;
-        case 20:
+        case MIME_JR_TOP_STATE_WAIT_SYNC:
         default:
             if (LinkSync_IsSynced(0x1B) == TRUE) {
                 return TRUE;
             }
             return FALSE;
         }
-        if ((int)*state >= 3 && (int)*state < 16) {
+        if ((int)*state >= MIME_JR_TOP_STATE_FADE_IN && (int)*state < MIME_JR_TOP_STATE_FREE_GAME) {
             MimeJrTopGame_UpdateRivalSprites(app->game);
             MimeJrTop_DrawScene(app);
         }
@@ -769,7 +884,7 @@ void MimeJrTop_ResetRound(MimeJrTopApp *app) {
 
 BOOL MimeJrTop_Exit(OverlayManager *man, int *state) {
     int result;
-    if (*state == 0) {
+    if (*state == MIME_JR_TOP_EXIT_STATE_FREE) {
         result = MimeJrTop_HandleConnectionLost(OverlayManager_GetData(man));
         OverlayManager_FreeData(man);
         Heap_Destroy(HEAP_ID_113);
@@ -973,10 +1088,10 @@ int MimeJrTop_HandleConnectionLost(MimeJrTopApp *app) {
             }
             SetBothScreensBrightnessByColor(0);
             app->resources.connectionLost = TRUE;
-            return 1;
+            return MIME_JR_TOP_CONNECTION_LOST_WAIT;
         } else {
             if (PlazaGameRoster_ProcessConnectionLost(&app->roster) == FALSE) {
-                return 1;
+                return MIME_JR_TOP_CONNECTION_LOST_WAIT;
             }
             if (app->game) {
                 MimeJrTopGame_HideRivalNames(app->game);
@@ -991,10 +1106,10 @@ int MimeJrTop_HandleConnectionLost(MimeJrTopApp *app) {
                 PlazaGameEntry_Free(app->entry);
                 app->entry = NULL;
             }
-            return 2;
+            return MIME_JR_TOP_CONNECTION_LOST_DONE;
         }
     }
-    return 0;
+    return MIME_JR_TOP_CONNECTED;
 }
 
 void MimeJrTopModel_Draw(MimeJrTopModel *model, MtxFx43 *rotation, VecFx32 *position) {
@@ -1059,19 +1174,19 @@ void MimeJrTop_DrawScene(MimeJrTopApp *app) {
         ModelAnimation_AdvanceLooped(&app->game->audience[i].animations[0], FX32_ONE);
     }
     switch (app->game->mimeJrPose) {
-    case 0:
+    case MIME_JR_TOP_POSE_BALANCING:
         ModelInstance_SetVisible(&app->game->mimeJr[0].instance, TRUE);
         ModelInstance_SetVisible(&app->game->mimeJr[1].instance, FALSE);
         ModelInstance_SetVisible(&app->game->mimeJr[2].instance, FALSE);
         ModelAnimation_AdvanceLooped(&app->game->mimeJr[0].animations[app->game->mimeJr[0].animation], FX32_ONE);
         break;
-    case 1:
+    case MIME_JR_TOP_POSE_FALLING:
         ModelInstance_SetVisible(&app->game->mimeJr[0].instance, FALSE);
         ModelInstance_SetVisible(&app->game->mimeJr[1].instance, TRUE);
         ModelInstance_SetVisible(&app->game->mimeJr[2].instance, FALSE);
         ModelAnimation_Advance(&app->game->mimeJr[1].animations[0], FX32_ONE);
         break;
-    case 2:
+    case MIME_JR_TOP_POSE_DOWN:
         ModelInstance_SetVisible(&app->game->mimeJr[0].instance, FALSE);
         ModelInstance_SetVisible(&app->game->mimeJr[1].instance, FALSE);
         ModelInstance_SetVisible(&app->game->mimeJr[2].instance, TRUE);
@@ -1656,8 +1771,8 @@ SysTask *MimeJrTopGame_StartRivalFall(MimeJrTopGame *game, int player) {
     memset(task, 0, sizeof(MimeJrTopRivalFallTask));
     task->face = game->rivalFaces[game->rivalSlots[player]];
     task->body = game->rivalBodies[game->rivalSlots[player]];
-    task->state = 0;
-    task->step = 0;
+    task->state = MIME_JR_TOP_RIVAL_FALL_START;
+    task->step = MIME_JR_TOP_FALL_STEP_FALL_OFF;
     task->resources = game->resources;
     return SysTask_CreateOnMainQueue(MimeJrTopRivalFall_Task, task, 4096);
 }
@@ -1672,7 +1787,7 @@ void MimeJrTopGame_StartRivalTier(MimeJrTopGame *game, int player) {
     task->current = (int *)&game->rivalTiers[player];
     task->previous = *task->current;
     task->sprite = game->rivalBadges[game->rivalSlots[player]];
-    task->state = 0;
+    task->state = MIME_JR_TOP_RIVAL_TIER_START_GROW;
     task->mode = 0;
     task->resources = game->resources;
     SysTask_CreateOnMainQueue(MimeJrTopRivalTier_Task, task, 4096);
@@ -1688,7 +1803,7 @@ void MimeJrTopGame_StartTierModels(MimeJrTopGame *game, int player) {
         task->previous = *task->current;
         task->modelA = &game->tierModels[0];
         task->modelB = &game->tierModels[1];
-        task->state = 0;
+        task->state = MIME_JR_TOP_TIER_MODELS_LOAD_TOP;
         task->unk04 = 0;
         task->resources = game->resources;
         SysTask_CreateOnMainQueue((SysTaskFunc)MimeJrTopTierModels_Task, task, 1 << 12);
@@ -1720,8 +1835,8 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         return;
     }
     switch (task->state) {
-    case 0:
-        if (task->step == 0) {
+    case MIME_JR_TOP_FALL_START_HOP:
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             MimeJrTopTween_Init(&task->tweenY, task->mimeJr->position.y, task->mimeJr->position.y + 0xC000, 4);
             if (direction > 0) {
                 MimeJrTopTween_Init(&task->tweenZ, task->mimeJr->position.z, task->mimeJr->position.z + 0x10000, 4);
@@ -1740,7 +1855,7 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         task->timer = 0;
         task->state++;
         break;
-    case 1:
+    case MIME_JR_TOP_FALL_HOP:
         a = MimeJrTopTween_Update(&task->tweenY);
         b = MimeJrTopTween_Update(&task->tweenZ);
         task->mimeJr->position.y = task->tweenY.value;
@@ -1748,8 +1863,8 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         if (!a || !b) {
             break;
         }
-        if (task->step == 0) {
-            *task->pose = 1;
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
+            *task->pose = MIME_JR_TOP_POSE_FALLING;
             MimeJrTop_QuatIdentity(&task->mimeJr->rotation);
             MimeJrTop_QuatIdentity(&task->mimeJr->lastTurn);
             MimeJrTopModel_Turn(task->mimeJr, 0, 0, 5, 5, 0.8f, FALSE);
@@ -1770,7 +1885,7 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         }
         task->state++;
         break;
-    case 2:
+    case MIME_JR_TOP_FALL_LAND:
         a = MimeJrTopTween_Update(&task->tweenY);
         b = MimeJrTopTween_Update(&task->tweenZ);
         task->mimeJr->position.y = task->tweenY.value;
@@ -1778,13 +1893,13 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
         if (!a || !b) {
             break;
         }
-        if (task->step == 0) {
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             PlaySE(SEQ_SE_DP_SUTYA);
         }
         task->state++;
         break;
-    case 3:
-        if (task->step == 0) {
+    case MIME_JR_TOP_FALL_LIE:
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             if (task->timer == 8) {
                 PlaySE(SEQ_SE_PL_KIN);
             }
@@ -1792,21 +1907,21 @@ void MimeJrTopFall_Task(SysTask *sysTask, MimeJrTopFallTask *task) {
             if (task->timer < 40) {
                 break;
             }
-            *task->pose = 2;
+            *task->pose = MIME_JR_TOP_POSE_DOWN;
             task->state++;
         } else {
             task->state++;
         }
         break;
     default:
-        if (task->step == 0) {
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             task->timer++;
             if (task->timer < 45) {
                 break;
             }
-            *task->pose = 0;
+            *task->pose = MIME_JR_TOP_POSE_BALANCING;
             PlaySE(SEQ_SE_DP_DANSA);
-            task->state = 0;
+            task->state = MIME_JR_TOP_FALL_START_HOP;
             task->step++;
         } else {
             task->timer++;
@@ -1836,12 +1951,12 @@ void MimeJrTopRivalFall_Task(SysTask *sysTask, void *data) {
         return;
     }
     switch (task->state) {
-    case 0: {
+    case MIME_JR_TOP_RIVAL_FALL_START: {
         fx32 x;
         fx32 y;
         task->timer = 0;
         ManagedSprite_GetSpritePositionFxXY(task->face, &x, &y);
-        if (task->step == 0) {
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             MimeJrTopTween_Init(&task->tween, y, y + 0x20000, 0x10);
         } else {
             MimeJrTopTween_Init(&task->tween, y, y - 0x20000, 4);
@@ -1849,7 +1964,7 @@ void MimeJrTopRivalFall_Task(SysTask *sysTask, void *data) {
         task->state++;
         return;
     }
-    case 1: {
+    case MIME_JR_TOP_RIVAL_FALL_MOVE: {
         fx32 x;
         fx32 y;
         BOOL done = MimeJrTopTween_Update(&task->tween);
@@ -1861,10 +1976,10 @@ void MimeJrTopRivalFall_Task(SysTask *sysTask, void *data) {
         return;
     }
     default:
-        if (task->step == 0) {
+        if (task->step == MIME_JR_TOP_FALL_STEP_FALL_OFF) {
             if (++task->timer >= 35) {
                 task->step++;
-                task->state = 0;
+                task->state = MIME_JR_TOP_RIVAL_FALL_START;
             }
         } else if (++task->timer >= 10) {
             SysTask_Destroy(sysTask);
@@ -1891,7 +2006,7 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
     }
 
     switch (task->state) {
-    case 0:
+    case MIME_JR_TOP_RIVAL_TIER_START_GROW:
         ManagedSprite_SetAnim(task->sprite, 7);
         ManagedSprite_SetDrawPriority(task->sprite, 0);
         ManagedSprite_SetAffineOverwriteMode(task->sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
@@ -1905,7 +2020,7 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
         MimeJrTopTween_Init(&task->tween, rounded, 0x2000, 2);
         ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(task->sprite, *task->current - 1);
         task->state++;
-    case 1:
+    case MIME_JR_TOP_RIVAL_TIER_GROW:
         done = MimeJrTopTween_Update(&task->tween);
         scale = (f32)task->tween.value / 4096.0f;
         ManagedSprite_SetAffineScale(task->sprite, 1.0f, scale);
@@ -1913,10 +2028,10 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
             task->state++;
         }
         return;
-    case 2:
+    case MIME_JR_TOP_RIVAL_TIER_START_SHRINK:
         MimeJrTopTween_Init(&task->tween, 0x2000, 0x666, 4);
         task->state++;
-    case 3:
+    case MIME_JR_TOP_RIVAL_TIER_SHRINK:
         done = MimeJrTopTween_Update(&task->tween);
         scale = (f32)task->tween.value / 4096.0f;
         ManagedSprite_SetAffineScale(task->sprite, 1.0f, scale);
@@ -1924,9 +2039,9 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
             task->state++;
         }
         return;
-    case 4:
+    case MIME_JR_TOP_RIVAL_TIER_START_PULSE:
         if (task->previous != *task->current) {
-            task->state = 0;
+            task->state = MIME_JR_TOP_RIVAL_TIER_START_GROW;
         } else {
             if (task->mode == 0) {
                 MimeJrTopTween_Init(&task->tween, 0x666, 0xCCD, 2);
@@ -1937,15 +2052,15 @@ void MimeJrTopRivalTier_Task(SysTask *sysTask, void *data) {
         }
         task->previous = *task->current;
         if (*task->current == 0) {
-            task->state = 0xFF;
+            task->state = MIME_JR_TOP_RIVAL_TIER_HIDE;
         }
         return;
-    case 5:
+    case MIME_JR_TOP_RIVAL_TIER_PULSE:
         done = MimeJrTopTween_Update(&task->tween);
         scale = (f32)task->tween.value / 4096.0f;
         ManagedSprite_SetAffineScale(task->sprite, 1.0f, scale);
         if (done) {
-            task->state = 4;
+            task->state = MIME_JR_TOP_RIVAL_TIER_START_PULSE;
             task->mode ^= 1;
         }
         return;
@@ -1984,12 +2099,12 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         index = 0;
     }
     switch (task->state) {
-    case 0:
+    case MIME_JR_TOP_TIER_MODELS_LOAD_TOP:
         MimeJrTopModel_Load(a, task->resources->narc, sMimeJrTopTierModels[index][0]);
         MimeJrTopModel_Init(a, task->selection);
         task->state++;
         return;
-    case 1:
+    case MIME_JR_TOP_TIER_MODELS_LOAD_TOP_ANIMS:
         ModelAnimation_LoadFromNarc(&a->animations[0], &a->resource, task->resources->narc, 39, HEAP_ID_113, &task->resources->allocator);
         ModelAnimation_LoadFromNarc(&a->animations[1], &a->resource, task->resources->narc, 40, HEAP_ID_113, &task->resources->allocator);
         ModelInstance_AddAnimation(&a->instance, &a->animations[0]);
@@ -2004,12 +2119,12 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         MimeJrTopModel_Turn(a, 0, 0, -5, -5, 0.8f, FALSE);
         task->state++;
         return;
-    case 2:
+    case MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE:
         MimeJrTopModel_Load(b, task->resources->narc, ov92_02263CD4[index][0]);
         MimeJrTopModel_Init(b, task->selection);
         task->state++;
         return;
-    case 3:
+    case MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE_ANIMS:
         ModelAnimation_LoadFromNarc(&b->animations[0], &b->resource, task->resources->narc, 41, HEAP_ID_113, &task->resources->allocator);
         ModelAnimation_LoadFromNarc(&b->animations[1], &b->resource, task->resources->narc, 42, HEAP_ID_113, &task->resources->allocator);
         ModelInstance_AddAnimation(&b->instance, &b->animations[0]);
@@ -2030,7 +2145,7 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         }
         task->state++;
         return;
-    case 4:
+    case MIME_JR_TOP_TIER_MODELS_WAIT_CHANGE:
         if (!b->animate) {
             ModelInstance_SetVisible(&a->instance, TRUE);
             ModelInstance_SetVisible(&b->instance, FALSE);
@@ -2038,12 +2153,12 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
             task->state++;
         }
         return;
-    case 5:
+    case MIME_JR_TOP_TIER_MODELS_WATCH_TIER:
         if (!tier) {
-            task->state = 255;
+            task->state = MIME_JR_TOP_TIER_MODELS_FREE;
         } else if (task->previous != tier) {
             FREE_TIER_MODELS();
-            task->state = 0;
+            task->state = MIME_JR_TOP_TIER_MODELS_LOAD_TOP;
         }
         task->previous = *task->current;
         return;
@@ -2075,22 +2190,22 @@ void MimeJrTopGame_AddTierBonus(MimeJrTopGame *game) {
 BOOL MimeJrTopGame_UpdateTier(MimeJrTopGame *game) {
     switch (game->spinFrames) {
     case 119:
-        game->phase = 1;
+        game->phase = MIME_JR_TOP_STAGE_LIGHTS;
         break;
     case 269:
-        game->phase = 2;
+        game->phase = MIME_JR_TOP_STAGE_POPUPS;
         break;
     case 419:
-        game->phase = 3;
+        game->phase = MIME_JR_TOP_STAGE_AUDIENCE;
         break;
     case 569:
-        game->phase = 4;
+        game->phase = MIME_JR_TOP_STAGE_MORE_POPUPS;
         break;
     case 719:
-        game->phase = 5;
+        game->phase = MIME_JR_TOP_STAGE_STARS;
         break;
     case 0:
-        game->phase = 0;
+        game->phase = MIME_JR_TOP_STAGE_OFF;
         break;
     }
     return MimeJrTop_GetTier(game, game->spinFrames, &game->tier);
@@ -2124,7 +2239,7 @@ void MimeJrTopGame_UpdateRivals(MimeJrTopGame *game) {
             continue;
         }
         switch (game->playerStates[i]) {
-        case 0:
+        case MIME_JR_TOP_PLAYER_SPINNING:
             if (MimeJrTopGame_GetRivalAnim(game, i) != 1) {
                 MimeJrTopGame_SetRivalAnim(game, i, 1);
             }
@@ -2133,7 +2248,7 @@ void MimeJrTopGame_UpdateRivals(MimeJrTopGame *game) {
             }
             (game->rivalSpinFrames[i])++;
             break;
-        case 1:
+        case MIME_JR_TOP_PLAYER_FALLEN:
             game->levelTimer = 0;
             game->rivalSpinFrames[i] = 0;
             game->rivalTiers[i] = 0;
@@ -2144,12 +2259,12 @@ void MimeJrTopGame_UpdateRivals(MimeJrTopGame *game) {
                 game->rivalFallShown = TRUE;
             }
             break;
-        case 2:
+        case MIME_JR_TOP_PLAYER_GETTING_UP:
             game->rivalFallShown = FALSE;
             game->levelTimer = 0;
             game->rivalSpinFrames[i] = 0;
             game->rivalTiers[i] = 0;
-            game->playerStates[i] = 0;
+            game->playerStates[i] = MIME_JR_TOP_PLAYER_SPINNING;
             break;
         }
     }
@@ -2159,13 +2274,13 @@ void MimeJrTopGame_UpdateRivals(MimeJrTopGame *game) {
 void MimeJrTopGame_UpdateLocalPlayer(MimeJrTopGame *game) {
     u32 state = game->playerStates[game->localIndex];
     switch (state) {
-    case 0:
+    case MIME_JR_TOP_PLAYER_SPINNING:
         if (MimeJrTopGame_HasFallen(game, 0)) {
             game->recoverTimer = 0;
             MimeJrTopGame_StartFall(game);
             MimeJrTopGame_ResetMotion(game);
-            game->playerStates[game->localIndex] = 1;
-            Comm_SendCommand(24, &game->playerStates[game->localIndex], 4);
+            game->playerStates[game->localIndex] = MIME_JR_TOP_PLAYER_FALLEN;
+            Comm_SendCommand(MIME_JR_TOP_CMD_PLAYER_STATE, &game->playerStates[game->localIndex], 4);
             game->spinFrames = 0;
             game->levelTimer = 0;
             game->dance.enabled = FALSE;
@@ -2177,16 +2292,16 @@ void MimeJrTopGame_UpdateLocalPlayer(MimeJrTopGame *game) {
             game->rivalSpinFrames[game->localIndex]++;
         }
         break;
-    case 1:
+    case MIME_JR_TOP_PLAYER_FALLEN:
         game->recoverTimer++;
         if (game->recoverTimer >= 90) {
-            game->playerStates[game->localIndex] = 2;
+            game->playerStates[game->localIndex] = MIME_JR_TOP_PLAYER_GETTING_UP;
         }
         game->spinFrames = 0;
         game->levelTimer = 0;
         game->rivalSpinFrames[game->localIndex] = 0;
         break;
-    case 2:
+    case MIME_JR_TOP_PLAYER_GETTING_UP:
         if (game->recoverTimer) {
             game->spinFrames = 0;
             game->levelTimer = 0;
@@ -2196,17 +2311,17 @@ void MimeJrTopGame_UpdateLocalPlayer(MimeJrTopGame *game) {
                 game->level = game->previousLevel;
             }
             MimeJrTopGame_ResetBalance(game);
-            Comm_SendCommand(24, &game->playerStates[game->localIndex], 4);
+            Comm_SendCommand(MIME_JR_TOP_CMD_PLAYER_STATE, &game->playerStates[game->localIndex], 4);
         } else {
-            game->playerStates[game->localIndex] = 0;
+            game->playerStates[game->localIndex] = MIME_JR_TOP_PLAYER_SPINNING;
         }
         break;
-    case 3:
+    case MIME_JR_TOP_PLAYER_STEADYING:
         game->recoverTimer++;
         if ((u32)game->recoverTimer >= 29) {
             game->recoverTimer = 0;
             MimeJrTopGame_ResetBalance(game);
-            game->playerStates[game->localIndex] = 0;
+            game->playerStates[game->localIndex] = MIME_JR_TOP_PLAYER_SPINNING;
         }
         break;
     }
@@ -3178,29 +3293,29 @@ void MimeJrTopStage_Task(SysTask *sysTask, void *data) {
         return;
     }
     switch (*stage->phase) {
-    case 5:
+    case MIME_JR_TOP_STAGE_STARS:
         if (stage->effects[4].active == FALSE) {
             stage->effects[4].active = TRUE;
             stage->effects[4].stop = FALSE;
         }
-    case 4:
+    case MIME_JR_TOP_STAGE_MORE_POPUPS:
         if (stage->effects[3].active == FALSE) {
             PlaySE(SEQ_SE_DP_DENDOU);
             stage->effects[3].active = TRUE;
             stage->effects[3].stop = FALSE;
         }
-    case 3:
+    case MIME_JR_TOP_STAGE_AUDIENCE:
         if (stage->effects[2].active == FALSE) {
             stage->effects[2].active = TRUE;
             stage->effects[2].stop = FALSE;
         }
-    case 2:
+    case MIME_JR_TOP_STAGE_POPUPS:
         if (stage->effects[1].active == FALSE) {
             PlaySE(SEQ_SE_PL_HAND);
             stage->effects[1].active = TRUE;
             stage->effects[1].stop = FALSE;
         }
-    case 1:
+    case MIME_JR_TOP_STAGE_LIGHTS:
         if (stage->effects[0].active == FALSE) {
             stage->effects[0].active = TRUE;
             stage->effects[0].stop = FALSE;
@@ -3286,13 +3401,13 @@ void MimeJrTopDance_SlideIn(MimeJrTopDance *dance) {
     BOOL done[5];
     int i;
     switch (dance->slideState) {
-    case 0:
+    case MIME_JR_TOP_SLIDE_START:
         MimeJrTopTween_Init(&dance->slides[0], 0, 0x28000, 10);
         MimeJrTopTween_Init(&dance->slides[1], 0, 0x50000, 10);
         MimeJrTopTween_Init(&dance->slides[2], 0, -0x50000, 10);
         dance->slideState++;
         break;
-    case 1:
+    case MIME_JR_TOP_SLIDE_MOVE:
         for (i = 0; i < 3; i++) {
             done[i] = MimeJrTopTween_Update(&dance->slides[i]);
         }
@@ -3305,9 +3420,9 @@ void MimeJrTopDance_SlideIn(MimeJrTopDance *dance) {
             dance->slideState++;
         }
         break;
-    case 2:
+    case MIME_JR_TOP_SLIDE_DONE:
         dance->shown = TRUE;
-        dance->slideState = 0;
+        dance->slideState = MIME_JR_TOP_SLIDE_START;
         break;
     }
     if (*blend < 6) {
@@ -3325,13 +3440,13 @@ void MimeJrTopDance_SlideOut(MimeJrTopDance *dance) {
     BOOL done[5];
     int i;
     switch (dance->slideState) {
-    case 0:
+    case MIME_JR_TOP_SLIDE_START:
         MimeJrTopTween_Init(&dance->slides[0], 0x28000, 0, 10);
         MimeJrTopTween_Init(&dance->slides[1], 0x50000, 0, 10);
         MimeJrTopTween_Init(&dance->slides[2], -0x50000, 0, 10);
         dance->slideState++;
         break;
-    case 1:
+    case MIME_JR_TOP_SLIDE_MOVE:
         for (i = 0; i < 3; i++) {
             done[i] = MimeJrTopTween_Update(&dance->slides[i]);
         }
@@ -3344,9 +3459,9 @@ void MimeJrTopDance_SlideOut(MimeJrTopDance *dance) {
             dance->slideState++;
         }
         break;
-    case 2:
+    case MIME_JR_TOP_SLIDE_DONE:
         dance->shown = FALSE;
-        dance->slideState = 0;
+        dance->slideState = MIME_JR_TOP_SLIDE_START;
         break;
     }
     if (*blend > 4) {
@@ -3428,7 +3543,7 @@ void MimeJrTopGame_StartDance(MimeJrTopGame *game) {
     game->dance.danceBlend = &game->danceBlend;
     game->dance.resources = game->resources;
     game->dance.timer = 0;
-    game->dance.slideState = 0;
+    game->dance.slideState = MIME_JR_TOP_SLIDE_START;
     game->dance.enabled = FALSE;
     src = (u8 *)game;
     dst = (u8 *)game;
@@ -3521,14 +3636,14 @@ void MimeJrTopDance_Routine1(SysTask *sysTask, MimeJrTopDance *dance) {
 }
 
 void MimeJrTopDancer_Reset(MimeJrTopDancer *dancer) {
-    dancer->state = 0;
+    dancer->state = MIME_JR_TOP_DANCER_START;
 }
 
 BOOL MimeJrTopDancer_Slide(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 ydir) {
     fx32 x, y;
     BOOL done;
     switch (dancer->state) {
-    case 0:
+    case MIME_JR_TOP_DANCER_START:
         ManagedSprite_GetPositionFxXYWithSubscreenOffset(dancer->sprite, &x, &y, 1 << 20);
         if (xdir == 0) {
             MimeJrTopTween_Init(&dancer->tweenX, x, x - 0xb4000, MimeJrTop_GetDanceStepFrames(speed));
@@ -3541,7 +3656,7 @@ BOOL MimeJrTopDancer_Slide(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 ydi
             MimeJrTopTween_Init(&dancer->tweenY, y, y + 0x18000, MimeJrTop_GetDanceStepFrames(speed));
         }
         dancer->state++;
-    case 1:
+    case MIME_JR_TOP_DANCER_MOVE:
         done = MimeJrTopTween_Update(&dancer->tweenX);
         MimeJrTopTween_Update(&dancer->tweenY);
         ManagedSprite_SetPositionFxXYWithSubscreenOffset(dancer->sprite, dancer->tweenX.value, dancer->tweenY.value, 1 << 20);
@@ -3558,7 +3673,7 @@ BOOL MimeJrTopDancer_Slide(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 ydi
 BOOL MimeJrTopDancer_EnterLow(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 ydir) {
     BOOL done;
     switch (dancer->state) {
-    case 0:
+    case MIME_JR_TOP_DANCER_START:
         if (xdir == 0) {
             MimeJrTopTween_Init(&dancer->tweenX, 0x134000, 0x80000, MimeJrTop_GetDanceStepFrames(speed));
         } else {
@@ -3570,7 +3685,7 @@ BOOL MimeJrTopDancer_EnterLow(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 
             MimeJrTopTween_Init(&dancer->tweenY, 0xa0000, 0xb8000, MimeJrTop_GetDanceStepFrames(speed));
         }
         dancer->state++;
-    case 1:
+    case MIME_JR_TOP_DANCER_MOVE:
         done = MimeJrTopTween_Update(&dancer->tweenX);
         MimeJrTopTween_Update(&dancer->tweenY);
         ManagedSprite_SetPositionFxXYWithSubscreenOffset(dancer->sprite, dancer->tweenX.value, dancer->tweenY.value, 1 << 20);
@@ -3587,7 +3702,7 @@ BOOL MimeJrTopDancer_EnterLow(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 
 BOOL MimeJrTopDancer_EnterHigh(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 ydir) {
     BOOL done;
     switch (dancer->state) {
-    case 0:
+    case MIME_JR_TOP_DANCER_START:
         if (xdir == 0) {
             MimeJrTopTween_Init(&dancer->tweenX, 0x134000, 0x80000, MimeJrTop_GetDanceStepFrames(speed));
         } else {
@@ -3599,7 +3714,7 @@ BOOL MimeJrTopDancer_EnterHigh(MimeJrTopDancer *dancer, int speed, s32 xdir, s32
             MimeJrTopTween_Init(&dancer->tweenY, 0x60000, 0x78000, MimeJrTop_GetDanceStepFrames(speed));
         }
         dancer->state++;
-    case 1:
+    case MIME_JR_TOP_DANCER_MOVE:
         done = MimeJrTopTween_Update(&dancer->tweenX);
         MimeJrTopTween_Update(&dancer->tweenY);
         ManagedSprite_SetPositionFxXYWithSubscreenOffset(dancer->sprite, dancer->tweenX.value, dancer->tweenY.value, 1 << 20);
@@ -3617,11 +3732,11 @@ BOOL MimeJrTopDancer_Circle(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 cy
     fx32 oldX, oldY;
     fx32 x, y;
     switch (dancer->state) {
-    case 0:
+    case MIME_JR_TOP_DANCER_START:
         dancer->cycles = 0;
         dancer->angle = 0;
         dancer->state++;
-    case 1:
+    case MIME_JR_TOP_DANCER_MOVE:
         dancer->angle += 360 / MimeJrTop_GetDanceStepFrames(speed);
         if (dancer->angle >= 360) {
             dancer->angle = 0;
@@ -3641,7 +3756,7 @@ BOOL MimeJrTopDancer_Circle(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 cy
                 dancer->state++;
                 return TRUE;
             }
-            dancer->state = 1;
+            dancer->state = MIME_JR_TOP_DANCER_MOVE;
         }
         break;
     default:

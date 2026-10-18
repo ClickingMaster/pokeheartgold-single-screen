@@ -87,6 +87,33 @@ extern const PlazaGameBgTemplate sPlazaGameEntryBgTemplates[];
 extern const PlazaGameBgTemplate sPlazaGameResultsBgTemplates[];
 extern const u8 sPlazaGameCommands[];
 
+enum PlazaGameKind {
+    PLAZA_GAME_SWALOT_PLOP,
+    PLAZA_GAME_MIME_JR_TOP,
+    PLAZA_GAME_WOBBUFFET_POP,
+};
+
+enum PlazaGameTitleSlideInState {
+    PLAZA_GAME_TITLE_SLIDE_IN,
+    PLAZA_GAME_TITLE_BOUNCE_OUT,
+    PLAZA_GAME_TITLE_BOUNCE_BACK,
+    PLAZA_GAME_TITLE_SLIDE_IN_DONE,
+};
+
+enum PlazaGameTitleSlideOutState {
+    PLAZA_GAME_TITLE_SLIDE_OUT,
+    PLAZA_GAME_TITLE_CLEAR,
+};
+
+enum PlazaGameSignState {
+    PLAZA_GAME_SIGN_IDLE,
+    PLAZA_GAME_SIGN_CREATE,
+    PLAZA_GAME_SIGN_OPEN_WINDOW,
+    PLAZA_GAME_SIGN_SHOW,
+    PLAZA_GAME_SIGN_CLOSE_WINDOW,
+    PLAZA_GAME_SIGN_FREE,
+};
+
 enum PlazaGameEntryState {
     PLAZA_GAME_ENTRY_FADE_IN,
     PLAZA_GAME_ENTRY_WAIT_FADE_IN,
@@ -243,15 +270,15 @@ PlayerProfile *PlazaGameRoster_GetProfile(const PlazaGameRoster *roster, u32 net
 }
 
 PlazaGameEntry *PlazaGameEntry_NewSwalotPlop(const PlazaGameRoster *roster, enum HeapID heapId) {
-    return PlazaGameEntry_New(roster, 0, heapId);
+    return PlazaGameEntry_New(roster, PLAZA_GAME_SWALOT_PLOP, heapId);
 }
 
 PlazaGameEntry *PlazaGameEntry_NewMimeJrTop(const PlazaGameRoster *roster, enum HeapID heapId) {
-    return PlazaGameEntry_New(roster, 1, heapId);
+    return PlazaGameEntry_New(roster, PLAZA_GAME_MIME_JR_TOP, heapId);
 }
 
 PlazaGameEntry *PlazaGameEntry_NewWobbuffetPop(const PlazaGameRoster *roster, enum HeapID heapId) {
-    return PlazaGameEntry_New(roster, 2, heapId);
+    return PlazaGameEntry_New(roster, PLAZA_GAME_WOBBUFFET_POP, heapId);
 }
 
 void PlazaGameEntry_Free(PlazaGameEntry *entry) {
@@ -273,7 +300,7 @@ void PlazaGameEntry_Free(PlazaGameEntry *entry) {
 }
 
 BOOL PlazaGameEntry_IsDone(const PlazaGameEntry *entry) {
-    return entry->state >= 16;
+    return entry->state >= PLAZA_GAME_ENTRY_DONE;
 }
 
 u8 PlazaGameEntry_GetSelection(const PlazaGameEntry *entry) {
@@ -282,15 +309,15 @@ u8 PlazaGameEntry_GetSelection(const PlazaGameEntry *entry) {
 }
 
 PlazaGameResults *PlazaGameResults_NewSwalotPlop(const PlazaGameRoster *roster, const PlazaGameResultData *data, enum HeapID heapId) {
-    return PlazaGameResults_New(roster, data, 0, heapId);
+    return PlazaGameResults_New(roster, data, PLAZA_GAME_SWALOT_PLOP, heapId);
 }
 
 PlazaGameResults *PlazaGameResults_NewMimeJrTop(const PlazaGameRoster *roster, const PlazaGameResultData *data, enum HeapID heapId) {
-    return PlazaGameResults_New(roster, data, 1, heapId);
+    return PlazaGameResults_New(roster, data, PLAZA_GAME_MIME_JR_TOP, heapId);
 }
 
 PlazaGameResults *PlazaGameResults_NewWobbuffetPop(const PlazaGameRoster *roster, const PlazaGameResultData *data, enum HeapID heapId) {
-    return PlazaGameResults_New(roster, data, 2, heapId);
+    return PlazaGameResults_New(roster, data, PLAZA_GAME_WOBBUFFET_POP, heapId);
 }
 
 void PlazaGameResults_Free(PlazaGameResults *results) {
@@ -425,18 +452,18 @@ int PlazaGameSign_GetPlttOffset(PlazaGameSign *sign) {
 void PlazaGameSign_StartCountdown(PlazaGameSign *sign) {
     GF_ASSERT(sign->task == NULL);
     sign->task = SysTask_CreateOnMainQueue(PlazaGameSign_CountdownTask, sign, 0);
-    sign->state = 1;
+    sign->state = PLAZA_GAME_SIGN_CREATE;
 }
 
 void PlazaGameSign_StartFinish(PlazaGameSign *sign) {
     GF_ASSERT(sign->task == NULL);
     sign->task = SysTask_CreateOnMainQueue(PlazaGameSign_FinishTask, sign, 0);
-    sign->state = 1;
+    sign->state = PLAZA_GAME_SIGN_CREATE;
     PlaySE(SEQ_SE_DP_PINPON);
 }
 
 BOOL PlazaGameSign_IsDone(const PlazaGameSign *sign) {
-    if (sign->state == 0) {
+    if (sign->state == PLAZA_GAME_SIGN_IDLE) {
         return TRUE;
     }
     return FALSE;
@@ -956,13 +983,13 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         PlazaGameEntry_UpdatePlayers(entry);
         if (entry->roster.localIndex == 0) {
             switch (entry->game) {
-            case 0:
+            case PLAZA_GAME_SWALOT_PLOP:
                 selection = PlazaGame_PickWeighted(sPlazaGameSwalotPlopSelectionWeights, 3);
                 break;
-            case 1:
+            case PLAZA_GAME_MIME_JR_TOP:
                 selection = PlazaGame_PickWeighted(sPlazaGameMimeJrTopSelectionWeights, 2);
                 break;
-            case 2:
+            case PLAZA_GAME_WOBBUFFET_POP:
                 selection = PlazaGame_PickWeighted(sPlazaGameWobbuffetPopSelectionWeights, 3);
                 break;
             }
@@ -1050,11 +1077,11 @@ void PlazaGamePlayer_Init(PlazaGamePlayer *player, int count, int game, NNSG2dSc
     s16 spriteY;
 
     switch (game) {
-    case 0:
-    case 2:
+    case PLAZA_GAME_SWALOT_PLOP:
+    case PLAZA_GAME_WOBBUFFET_POP:
         seat = PlazaGame_GetRelativeSeat(count, index, localIndex);
         break;
-    case 1:
+    case PLAZA_GAME_MIME_JR_TOP:
         if (localIndex > index) {
             seat = index + 1;
         } else if (localIndex == index) {
@@ -1351,7 +1378,7 @@ void PlazaGameTitle_Free(PlazaGameTitle *title) {
 void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum HeapID heapId) {
     u32 width;
     title->frame = 0;
-    title->state = 0;
+    title->state = PLAZA_GAME_TITLE_SLIDE_IN;
     PlazaGameMotion_Init(&title->motion, sPlazaGameTitleSlideInStartX[title->game], sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideInVelocity[title->game], 16);
     PlazaGameTitle_SetScroll(title, bg, title->motion.current >> FX32_SHIFT);
     FontID_Alloc(2, heapId);
@@ -1363,7 +1390,7 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
 
 void PlazaGameTitle_StartSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
     title->frame = 0;
-    title->state = 0;
+    title->state = PLAZA_GAME_TITLE_SLIDE_OUT;
     PlazaGameMotion_Init(&title->motion, sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideOutEndX[title->game], sPlazaGameTitleSlideOutVelocity[title->game], 8);
     PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
 }
@@ -1372,7 +1399,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
     int done;
 
     switch (title->state) {
-    case 0:
+    case PLAZA_GAME_TITLE_SLIDE_IN:
         done = PlazaGameMotion_Update(&title->motion, title->frame);
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
@@ -1383,7 +1410,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
             title->frame = 0;
         }
         break;
-    case 1:
+    case PLAZA_GAME_TITLE_BOUNCE_OUT:
         done = PlazaGameMotion_Update(&title->motion, title->frame);
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
@@ -1393,7 +1420,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
             title->frame = 0;
         }
         break;
-    case 2:
+    case PLAZA_GAME_TITLE_BOUNCE_BACK:
         done = PlazaGameMotion_Update(&title->motion, title->frame);
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
@@ -1401,7 +1428,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
             title->state++;
         }
         break;
-    case 3:
+    case PLAZA_GAME_TITLE_SLIDE_IN_DONE:
         return TRUE;
     }
     return FALSE;
@@ -1410,7 +1437,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
 BOOL PlazaGameTitle_UpdateSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
     int done;
     switch (title->state) {
-    case 0:
+    case PLAZA_GAME_TITLE_SLIDE_OUT:
         done = PlazaGameMotion_Update(&title->motion, title->frame);
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
@@ -1418,7 +1445,7 @@ BOOL PlazaGameTitle_UpdateSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
             title->state++;
         }
         break;
-    case 1:
+    case PLAZA_GAME_TITLE_CLEAR:
         ClearWindowTilemapAndCopyToVram(&title->window);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         PlazaGameTitle_SetScroll(title, bg, 0);
@@ -1432,12 +1459,12 @@ BOOL PlazaGameTitle_UpdateSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
 
 void PlazaGameTitle_SetScroll(PlazaGameTitle *title, PlazaGameBg *bg, int value) {
     switch (title->game) {
-    case 0:
-    case 1:
+    case PLAZA_GAME_SWALOT_PLOP:
+    case PLAZA_GAME_MIME_JR_TOP:
         BgSetPosTextAndCommit(bg->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, value);
         BgSetPosTextAndCommit(bg->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, value);
         break;
-    case 2:
+    case PLAZA_GAME_WOBBUFFET_POP:
         BgSetPosTextAndCommit(bg->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, value);
         BgSetPosTextAndCommit(bg->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, value);
         break;
@@ -1449,12 +1476,12 @@ void PlazaGameTitle_SetScroll(PlazaGameTitle *title, PlazaGameBg *bg, int value)
 
 void PlazaGameTitle_ScheduleScroll(PlazaGameTitle *title, PlazaGameBg *bg, int value) {
     switch (title->game) {
-    case 0:
-    case 1:
+    case PLAZA_GAME_SWALOT_PLOP:
+    case PLAZA_GAME_MIME_JR_TOP:
         ScheduleSetBgPosText(bg->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, value);
         ScheduleSetBgPosText(bg->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, value);
         break;
-    case 2:
+    case PLAZA_GAME_WOBBUFFET_POP:
         ScheduleSetBgPosText(bg->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_Y, value);
         ScheduleSetBgPosText(bg->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, value);
         break;
@@ -1468,13 +1495,13 @@ void PlazaGame_LoadGamePalette(NARC *narc, int game, enum HeapID heapId) {
     int offset;
     int palette;
     switch (game) {
-    case 0:
+    case PLAZA_GAME_SWALOT_PLOP:
         palette = 1;
         break;
-    case 1:
+    case PLAZA_GAME_MIME_JR_TOP:
         palette = 2;
         break;
-    case 2:
+    case PLAZA_GAME_WOBBUFFET_POP:
         palette = 0;
         break;
     default:
@@ -1519,11 +1546,11 @@ PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const Plaz
     PlazaGameContinue_Init(&results->continuePrompt, &results->bg, results->roster.voiceChat, heapId);
     results->showCountries = PlazaGamePlayerInfo_HasDifferentCountries(&results->roster, results->info.countries);
     switch (results->game) {
-    case 0:
-    case 1:
+    case PLAZA_GAME_SWALOT_PLOP:
+    case PLAZA_GAME_MIME_JR_TOP:
         results->task = SysTask_CreateOnMainQueue(PlazaGameResults_RankingTask, results, 0);
         break;
-    case 2:
+    case PLAZA_GAME_WOBBUFFET_POP:
         results->task = SysTask_CreateOnMainQueue(PlazaGameResults_TeamTask, results, 0);
         break;
     default:
@@ -2307,7 +2334,7 @@ void PlazaGameResults_ShowPlayer(PlazaGameResults *results, int index, int rank)
     highlight = PlazaGameRoster_IsSpecialVisitor(&results->roster, PlazaGameRoster_GetNetId(&results->roster, index));
     PlazaGamePlayer_PrintName((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->info.profiles[index], 8, 0, highlight);
     PlazaGamePlayer_PrintLocation((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->showCountries, results->info.countries[index], results->info.regions[index], 8);
-    if (results->game == 0) {
+    if (results->game == PLAZA_GAME_SWALOT_PLOP) {
         digits = 5;
     } else {
         digits = 6;
@@ -2376,13 +2403,13 @@ void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
         case 0:
         case 1:
             switch (results->game) {
-            case 0:
+            case PLAZA_GAME_SWALOT_PLOP:
                 FriendRoster_AddPlazaGame0Plays(friends, index, 1);
                 break;
-            case 1:
+            case PLAZA_GAME_MIME_JR_TOP:
                 FriendRoster_AddPlazaGame1Plays(friends, index, 1);
                 break;
-            case 2:
+            case PLAZA_GAME_WOBBUFFET_POP:
                 FriendRoster_AddPlazaGame2Plays(friends, index, 1);
                 break;
             }
@@ -2393,11 +2420,11 @@ void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
 
 int PlazaGameResults_GetScoreThreshold(PlazaGameResults *results) {
     switch (results->game) {
-    case 0:
+    case PLAZA_GAME_SWALOT_PLOP:
         return 0;
-    case 1:
+    case PLAZA_GAME_MIME_JR_TOP:
         return 0;
-    case 2:
+    case PLAZA_GAME_WOBBUFFET_POP:
         GF_AssertFail();
         return 0;
     }
@@ -2599,19 +2626,19 @@ void PlazaGameSignWindow_HBlank(void *data) {
 void PlazaGameSign_CountdownTask(SysTask *task, void *data) {
     PlazaGameSign *sign = data;
     switch (sign->state) {
-    case 1:
+    case PLAZA_GAME_SIGN_CREATE:
         PlazaGameSignWindow_Init(&sign->window, sign->gfxRes, sign->spriteList, sign->heapId);
         sign->sprite = PlazaGameGfx_CreateSprite(sign->gfxRes, sign->spriteList, 128, 97, 64, sign->heapId);
         Sprite_SetPriority(sign->sprite, 0);
         sign->state++;
         break;
-    case 2:
+    case PLAZA_GAME_SIGN_OPEN_WINDOW:
         if (PlazaGameSignWindow_Open(&sign->window) == TRUE) {
             sign->state++;
             sign->timer = 0;
         }
         break;
-    case 3: {
+    case PLAZA_GAME_SIGN_SHOW: {
         fx32 prevFrame = Sprite_GetAnimationFrame(sign->sprite);
         fx32 frame;
         Sprite_UpdateAnim(sign->sprite, 2 * FX32_ONE);
@@ -2651,7 +2678,7 @@ void PlazaGameSign_CountdownTask(SysTask *task, void *data) {
             Sprite_SetPalOffsetRespectVramOffset(sign->sprite, 0);
         }
     } break;
-    case 4:
+    case PLAZA_GAME_SIGN_CLOSE_WINDOW:
         if (PlazaGameSignWindow_Close(&sign->window) == TRUE) {
             Sprite_Delete(sign->sprite);
             sign->sprite = NULL;
@@ -2659,10 +2686,10 @@ void PlazaGameSign_CountdownTask(SysTask *task, void *data) {
             sign->timer = 0;
         }
         break;
-    case 5:
+    case PLAZA_GAME_SIGN_FREE:
         sign->timer++;
         if (sign->timer >= 2) {
-            sign->state = 0;
+            sign->state = PLAZA_GAME_SIGN_IDLE;
             PlazaGameSignWindow_Free(&sign->window);
             SysTask_Destroy(sign->task);
             sign->task = NULL;
@@ -2674,27 +2701,27 @@ void PlazaGameSign_CountdownTask(SysTask *task, void *data) {
 void PlazaGameSign_FinishTask(SysTask *task, void *data) {
     PlazaGameSign *sign = data;
     switch (sign->state) {
-    case 1:
+    case PLAZA_GAME_SIGN_CREATE:
         PlazaGameSignWindow_Init(&sign->window, sign->gfxRes, sign->spriteList, sign->heapId);
         sign->sprite = PlazaGameGfx_CreateSprite(sign->gfxRes, sign->spriteList, 128, 97, 64, sign->heapId);
         Sprite_SetAnimCtrlSeq(sign->sprite, 1);
         Sprite_SetPriority(sign->sprite, 0);
         sign->state++;
         break;
-    case 2:
+    case PLAZA_GAME_SIGN_OPEN_WINDOW:
         if (PlazaGameSignWindow_Open(&sign->window) == TRUE) {
             Sprite_SetAnimActiveFlag(sign->sprite, TRUE);
             sign->state++;
             sign->timer = 0;
         }
         break;
-    case 3:
+    case PLAZA_GAME_SIGN_SHOW:
         sign->timer++;
         if (sign->timer >= 50) {
             sign->state++;
         }
         break;
-    case 4:
+    case PLAZA_GAME_SIGN_CLOSE_WINDOW:
         if (PlazaGameSignWindow_Close(&sign->window) == TRUE) {
             Sprite_Delete(sign->sprite);
             sign->sprite = NULL;
@@ -2702,10 +2729,10 @@ void PlazaGameSign_FinishTask(SysTask *task, void *data) {
             sign->state++;
         }
         break;
-    case 5:
+    case PLAZA_GAME_SIGN_FREE:
         sign->timer++;
         if (sign->timer >= 2) {
-            sign->state = 0;
+            sign->state = PLAZA_GAME_SIGN_IDLE;
             PlazaGameSignWindow_Free(&sign->window);
             SysTask_Destroy(sign->task);
             sign->task = NULL;

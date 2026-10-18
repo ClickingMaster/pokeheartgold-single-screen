@@ -59,6 +59,102 @@ void NNS_G3dAnmObjDisableID(NNSG3dAnmObj *anmObj, int id);
 void NNS_G3dAnmObjEnableID(NNSG3dAnmObj *anmObj, int id);
 int NNS_G3dGetResDictIdxByName(const NNSG3dResDict *dict, const NNSG3dResName *name);
 
+enum SwalotPlopState {
+    SWALOT_PLOP_STATE_CREATE_ENTRY,
+    SWALOT_PLOP_STATE_WAIT_ENTRY,
+    SWALOT_PLOP_STATE_INIT_GAME,
+    SWALOT_PLOP_STATE_FADE_IN,
+    SWALOT_PLOP_STATE_SEND_START,
+    SWALOT_PLOP_STATE_WAIT_START,
+    SWALOT_PLOP_STATE_RUN_INTRO,
+    SWALOT_PLOP_STATE_PLAY,
+    SWALOT_PLOP_STATE_SEND_SCORES,
+    SWALOT_PLOP_STATE_WAIT_SCORES,
+    SWALOT_PLOP_STATE_RUN_FINISH,
+    SWALOT_PLOP_STATE_FADE_OUT,
+    SWALOT_PLOP_STATE_WAIT_FADE_OUT,
+    SWALOT_PLOP_STATE_FREE_GAME,
+    SWALOT_PLOP_STATE_SHOW_RESULTS,
+    SWALOT_PLOP_STATE_WAIT_RESULTS,
+};
+
+enum SwalotPlopExitState {
+    SWALOT_PLOP_EXIT_STATE_FREE,
+    SWALOT_PLOP_EXIT_STATE_WAIT_SYNC,
+};
+
+enum SwalotPlopConnectionLostState {
+    SWALOT_PLOP_CONNECTION_LOST_BLACK_OUT,
+    SWALOT_PLOP_CONNECTION_LOST_WAIT,
+    SWALOT_PLOP_CONNECTION_LOST_ABORT,
+};
+
+enum SwalotPlopIntroState {
+    SWALOT_PLOP_INTRO_START_DEMO,
+    SWALOT_PLOP_INTRO_RUN_DEMO,
+    SWALOT_PLOP_INTRO_WAIT_SYNC,
+    SWALOT_PLOP_INTRO_OPEN_SCENE,
+    SWALOT_PLOP_INTRO_WAIT_READY,
+    SWALOT_PLOP_INTRO_SHOW_WINDOW,
+    SWALOT_PLOP_INTRO_COUNTDOWN,
+    SWALOT_PLOP_INTRO_WAIT,
+    SWALOT_PLOP_INTRO_DONE,
+};
+
+enum SwalotPlopFinishState {
+    SWALOT_PLOP_FINISH_START,
+    SWALOT_PLOP_FINISH_WAIT,
+    SWALOT_PLOP_FINISH_HOLD,
+    SWALOT_PLOP_FINISH_DONE,
+};
+
+enum SwalotPlopDemoState {
+    SWALOT_PLOP_DEMO_SHOW_HAND,
+    SWALOT_PLOP_DEMO_THROW,
+    SWALOT_PLOP_DEMO_PAUSE,
+    SWALOT_PLOP_DEMO_WAIT_SHOTS,
+};
+
+enum SwalotPlopMouthState {
+    SWALOT_PLOP_MOUTH_SPEED_UP,
+    SWALOT_PLOP_MOUTH_HOLD,
+    SWALOT_PLOP_MOUTH_LOOP,
+};
+
+enum SwalotPlopBgFadeState {
+    SWALOT_PLOP_BG_FADE_IDLE,
+    SWALOT_PLOP_BG_FADE_START,
+    SWALOT_PLOP_BG_FADE_CROSS,
+    SWALOT_PLOP_BG_FADE_IN,
+};
+
+enum SwalotPlopComboState {
+    SWALOT_PLOP_COMBO_HIDDEN,
+    SWALOT_PLOP_COMBO_SLIDE_IN,
+    SWALOT_PLOP_COMBO_SHOWN,
+    SWALOT_PLOP_COMBO_SLIDE_OUT,
+};
+
+enum SwalotPlopSpeedUpState {
+    SWALOT_PLOP_SPEED_UP_RAMP,
+    SWALOT_PLOP_SPEED_UP_START_FLASH,
+    SWALOT_PLOP_SPEED_UP_WAIT_FLASH,
+    SWALOT_PLOP_SPEED_UP_START_RESTORE,
+    SWALOT_PLOP_SPEED_UP_WAIT_RESTORE,
+    SWALOT_PLOP_SPEED_UP_END,
+};
+
+enum SwalotPlopCommandId {
+    SWALOT_PLOP_CMD_START = 22,
+    SWALOT_PLOP_CMD_FINISH,
+    SWALOT_PLOP_CMD_SHOT,
+    SWALOT_PLOP_CMD_FINAL_SCORE,
+    SWALOT_PLOP_CMD_SCORES,
+    SWALOT_PLOP_CMD_LEVEL,
+    SWALOT_PLOP_CMD_SCORE_REPORT,
+    SWALOT_PLOP_CMD_SYNC,
+};
+
 extern const u16 sSwalotPlopStageAnimFiles[];
 extern const u16 sSwalotPlopStageAnimModels[];
 extern const u16 sSwalotPlopSceneModelFiles[3];
@@ -127,19 +223,19 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
 
     if (PlazaGameRoster_CheckConnectionLost(&app->roster) == TRUE) {
         switch (app->connectionLostState) {
-        case 0:
+        case SWALOT_PLOP_CONNECTION_LOST_BLACK_OUT:
             if (IsPaletteFadeFinished() == TRUE) {
                 StopPaletteFade();
             }
             SetBothScreensBrightnessByColor(0);
             app->connectionLostState++;
             break;
-        case 1:
+        case SWALOT_PLOP_CONNECTION_LOST_WAIT:
             if (PlazaGameRoster_ProcessConnectionLost(&app->roster) == TRUE) {
                 app->connectionLostState++;
             }
             break;
-        case 2:
+        case SWALOT_PLOP_CONNECTION_LOST_ABORT:
             SwalotPlop_Abort(app, args);
             return TRUE;
         default:
@@ -150,11 +246,11 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
     }
 
     switch (*state) {
-    case 0:
+    case SWALOT_PLOP_STATE_CREATE_ENTRY:
         app->entry = PlazaGameEntry_NewSwalotPlop(&app->roster, HEAP_ID_106);
         (*state)++;
         break;
-    case 1:
+    case SWALOT_PLOP_STATE_WAIT_ENTRY:
         if (PlazaGameEntry_IsDone(app->entry) == TRUE) {
             app->selection = PlazaGameEntry_GetSelection(app->entry);
             PlazaGameEntry_Free(app->entry);
@@ -162,7 +258,7 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         break;
-    case 2:
+    case SWALOT_PLOP_STATE_INIT_GAME:
         if (gSystem.heldKeys & PAD_BUTTON_A) {
             break;
         }
@@ -218,17 +314,17 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         LinkSync_StartSync(1);
         (*state)++;
         break;
-    case 3:
+    case SWALOT_PLOP_STATE_FADE_IN:
         if (LinkSync_IsSynced(1) != FALSE) {
             BeginNormalPaletteFade(0, 0x1B, 0x1B, 0xFFFF, 6, 1, HEAP_ID_106);
             (*state)++;
         }
         break;
-    case 4:
+    case SWALOT_PLOP_STATE_SEND_START:
         SwalotPlopGame_RunIntro(app->game, FALSE);
         if (IsPaletteFadeFinished() != FALSE) {
             if (app->netId == 0) {
-                if (Comm_SendCommand(22, NULL, 0) != FALSE) {
+                if (Comm_SendCommand(SWALOT_PLOP_CMD_START, NULL, 0) != FALSE) {
                     (*state)++;
                 }
             } else {
@@ -236,21 +332,21 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             }
         }
         break;
-    case 5:
+    case SWALOT_PLOP_STATE_WAIT_START:
         SwalotPlopGame_RunIntro(app->game, FALSE);
         if (app->startReceived != FALSE) {
             (*state)++;
         }
         break;
-    case 6:
+    case SWALOT_PLOP_STATE_RUN_INTRO:
         if (SwalotPlopGame_RunIntro(app->game, TRUE) == FALSE) {
             (*state)++;
         }
         break;
-    case 7:
+    case SWALOT_PLOP_STATE_PLAY:
         if (app->finishReceived != FALSE) {
             msg.score = SwalotPlopGame_GetScore(app->game);
-            if (Comm_SendCommand(25, &msg.score, 4) != FALSE) {
+            if (Comm_SendCommand(SWALOT_PLOP_CMD_FINAL_SCORE, &msg.score, 4) != FALSE) {
                 (*state)++;
             }
         } else {
@@ -258,12 +354,12 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
                 u32 running = SwalotPlopTally_Update(app->tally);
                 if (SwalotPlopTally_LevelChanged(app->tally) != 0) {
                     msg.level = SwalotPlopTally_GetLevel(app->tally);
-                    if (SwalotPlop_SendCommand(app, 27, &msg.level, 4) == TRUE) {
+                    if (SwalotPlop_SendCommand(app, SWALOT_PLOP_CMD_LEVEL, &msg.level, 4) == TRUE) {
                         SwalotPlopTally_ClearLevelChanged(app->tally);
                     }
                 }
                 if (running == 0) {
-                    SwalotPlop_SendCommand(app, 23, NULL, 0);
+                    SwalotPlop_SendCommand(app, SWALOT_PLOP_CMD_FINISH, NULL, 0);
                 }
             }
             SwalotPlopGame_Update(app->game);
@@ -271,12 +367,12 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             SwalotPlop_SendScoreReport(app);
         }
         break;
-    case 8:
+    case SWALOT_PLOP_STATE_SEND_SCORES:
         SwalotPlopGame_RunFinish(app->game, FALSE);
         if (app->netId == 0) {
             if (SwalotPlopTally_HasAllScores(app->tally) == TRUE) {
                 SwalotPlopTally_GetScores(app->tally, msg.scores);
-                if (Comm_SendCommand(26, msg.scores, 0x10) != FALSE) {
+                if (Comm_SendCommand(SWALOT_PLOP_CMD_SCORES, msg.scores, 0x10) != FALSE) {
                     (*state)++;
                 }
             }
@@ -284,30 +380,30 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         break;
-    case 9:
+    case SWALOT_PLOP_STATE_WAIT_SCORES:
         SwalotPlopGame_RunFinish(app->game, FALSE);
         if (app->scoresReceived == TRUE) {
             (*state)++;
         }
         break;
-    case 10:
+    case SWALOT_PLOP_STATE_RUN_FINISH:
         if (SwalotPlopGame_RunFinish(app->game, TRUE) == FALSE) {
             (*state)++;
         }
         break;
-    case 11:
+    case SWALOT_PLOP_STATE_FADE_OUT:
         BeginNormalPaletteFade(0, 0x1A, 0x1A, 0xFFFF, 6, 1, HEAP_ID_106);
         SwalotPlopGame_RunFinish(app->game, TRUE);
         (*state)++;
         break;
-    case 12:
+    case SWALOT_PLOP_STATE_WAIT_FADE_OUT:
         SwalotPlopGame_RunFinish(app->game, TRUE);
         if (IsPaletteFadeFinished() != FALSE) {
             LinkSync_StartSync(3);
             (*state)++;
         }
         break;
-    case 13:
+    case SWALOT_PLOP_STATE_FREE_GAME:
         if (LinkSync_IsSynced(3) == FALSE) {
             return FALSE;
         }
@@ -325,12 +421,12 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         GF_DestroyVramTransferManager();
         (*state)++;
         break;
-    case 14:
+    case SWALOT_PLOP_STATE_SHOW_RESULTS:
         PlazaGame_CalcRanks(&app->resultData, app->roster.count);
         app->results = PlazaGameResults_NewSwalotPlop(&app->roster, &app->resultData, HEAP_ID_106);
         (*state)++;
         break;
-    case 15:
+    case SWALOT_PLOP_STATE_WAIT_RESULTS:
         if (PlazaGameResults_IsDone(app->results) == TRUE) {
             u32 keepPlaying = PlazaGameResults_GetContinue(app->results);
             PlazaGameResults_Free(app->results);
@@ -338,7 +434,7 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             if (keepPlaying == 0) {
                 return TRUE;
             }
-            *state = 0;
+            *state = SWALOT_PLOP_STATE_CREATE_ENTRY;
         }
         break;
     }
@@ -350,7 +446,7 @@ BOOL SwalotPlop_Exit(OverlayManager *man, int *state) {
     BOOL connectionLost;
     OverlayManager_GetArgs(man);
     switch (*state) {
-    case 0:
+    case SWALOT_PLOP_EXIT_STATE_FREE:
         connectionLost = PlazaGameRoster_CheckConnectionLost(&app->roster);
         SwalotPlop_FreeSharedData(app);
         OverlayManager_FreeData(man);
@@ -362,7 +458,7 @@ BOOL SwalotPlop_Exit(OverlayManager *man, int *state) {
         LinkSync_StartSync(4);
         (*state)++;
         break;
-    case 1:
+    case SWALOT_PLOP_EXIT_STATE_WAIT_SYNC:
         if (LinkSync_IsSynced(4) != FALSE || Comm_CountConnected() < CommPlayerInfo_CountAccepted()) {
             return TRUE;
         }
@@ -425,7 +521,7 @@ void SwalotPlop_ReceiveScoreReport(SwalotPlopApp *app, u32 score, int netId) {
         }
         if (allReported == TRUE) {
             app->syncRound++;
-            Comm_SendCommand(29, NULL, 0);
+            Comm_SendCommand(SWALOT_PLOP_CMD_SYNC, NULL, 0);
         }
     }
 }
@@ -443,7 +539,7 @@ void SwalotPlop_SendShots(SwalotPlopApp *app) {
     SwalotPlopShotRecord record;
     if (SwalotPlopGame_TakeShotReport(app->game, &record) == TRUE) {
         do {
-            SwalotPlop_SendCommand(app, 24, &record, sizeof(SwalotPlopShotRecord));
+            SwalotPlop_SendCommand(app, SWALOT_PLOP_CMD_SHOT, &record, sizeof(SwalotPlopShotRecord));
         } while (SwalotPlopGame_TakeShotReport(app->game, &record) == TRUE);
     }
 }
@@ -452,7 +548,7 @@ void SwalotPlop_SendScoreReport(SwalotPlopApp *app) {
     int frame = SwalotPlopGame_GetFrame(app->game);
     if (frame != 0 && frame % 30 == 0 && app->canSend == TRUE) {
         u32 score = SwalotPlopGame_GetScore(app->game);
-        if (!SwalotPlop_SendCommand(app, 28, &score, 4)) {
+        if (!SwalotPlop_SendCommand(app, SWALOT_PLOP_CMD_SCORE_REPORT, &score, 4)) {
             GF_AssertFail();
         }
         app->canSend = FALSE;
@@ -652,7 +748,7 @@ void SwalotPlopGame_Free(SwalotPlopGame *game) {
 
 BOOL SwalotPlopGame_RunIntro(SwalotPlopGame *game, BOOL ready) {
     BOOL result = TRUE;
-    if (game->gfx.intro.state >= 4) {
+    if (game->gfx.intro.state >= SWALOT_PLOP_INTRO_WAIT_READY) {
         int speed = game->options[1] ? -120 : 120;
         SwalotPlopBody_SetSpin(&game->body, (u16)(game->body.spin + speed));
     }
@@ -660,23 +756,23 @@ BOOL SwalotPlopGame_RunIntro(SwalotPlopGame *game, BOOL ready) {
     SwalotPlopScene_SetSpin(&game->gfx.scene, &game->body);
     SwalotPlopScene_SetScale(&game->gfx.scene, &game->body);
     switch (game->gfx.intro.state) {
-    case 0:
+    case SWALOT_PLOP_INTRO_START_DEMO:
         SwalotPlopDemo_Start(&game->demo);
         game->gfx.intro.state++;
         break;
-    case 1:
+    case SWALOT_PLOP_INTRO_RUN_DEMO:
         if (SwalotPlopDemo_Update(&game->demo, game) == TRUE) {
             game->gfx.intro.state++;
             LinkSync_StartSync(2);
         }
         break;
-    case 2:
+    case SWALOT_PLOP_INTRO_WAIT_SYNC:
         if (LinkSync_IsSynced(2)) {
             game->gfx.intro.state++;
             game->gfx.intro.counter = 65;
         }
         break;
-    case 3:
+    case SWALOT_PLOP_INTRO_OPEN_SCENE:
         game->gfx.intro.counter--;
         if (game->gfx.intro.counter == 50) {
             PlaySE(SEQ_SE_DP_KI_GASYAN);
@@ -687,30 +783,30 @@ BOOL SwalotPlopGame_RunIntro(SwalotPlopGame *game, BOOL ready) {
         SwalotPlopScene_AdvanceAnimation(&game->gfx.scene, FX32_ONE);
         if (!game->gfx.intro.counter) {
             SwalotPlopIntro_StartScene(&game->gfx.intro, &game->gfx);
-            game->gfx.intro.state = 4;
+            game->gfx.intro.state = SWALOT_PLOP_INTRO_WAIT_READY;
         }
         break;
-    case 4:
+    case SWALOT_PLOP_INTRO_WAIT_READY:
         if (ready == TRUE) {
-            game->gfx.intro.state = 5;
+            game->gfx.intro.state = SWALOT_PLOP_INTRO_SHOW_WINDOW;
         }
         break;
-    case 5:
+    case SWALOT_PLOP_INTRO_SHOW_WINDOW:
         SwalotPlopIntro_ShowWindow(&game->gfx.intro, &game->gfx);
         PlaySE(SEQ_SE_DP_DECIDE);
-        game->gfx.intro.state = 6;
+        game->gfx.intro.state = SWALOT_PLOP_INTRO_COUNTDOWN;
         break;
-    case 6:
+    case SWALOT_PLOP_INTRO_COUNTDOWN:
         if (!SwalotPlopIntro_IsCountingDown(&game->gfx.intro, &game->gfx)) {
-            game->gfx.intro.state = 7;
+            game->gfx.intro.state = SWALOT_PLOP_INTRO_WAIT;
         }
         break;
-    case 7:
+    case SWALOT_PLOP_INTRO_WAIT:
         if (!SwalotPlopIntro_Wait(&game->gfx.intro, &game->gfx)) {
-            game->gfx.intro.state = 8;
+            game->gfx.intro.state = SWALOT_PLOP_INTRO_DONE;
         }
         break;
-    case 8:
+    case SWALOT_PLOP_INTRO_DONE:
         SwalotPlopIntro_HideWindow(&game->gfx.intro, &game->gfx);
         SwalotPlopBody_SetActive(&game->body, 1);
         result = FALSE;
@@ -724,7 +820,7 @@ BOOL SwalotPlopGame_RunIntro(SwalotPlopGame *game, BOOL ready) {
 BOOL SwalotPlopGame_RunFinish(SwalotPlopGame *game, BOOL ready) {
     BOOL result = TRUE;
     switch (game->gfx.finish.state) {
-    case 0:
+    case SWALOT_PLOP_FINISH_START:
         SwalotPlopGame_DropFlyingShots(game);
         SwalotPlopGame_EndFlick(game);
         StartBrightnessTransition(24, -14, 0, (GXBlendPlaneMask)0x3F, 2);
@@ -734,7 +830,7 @@ BOOL SwalotPlopGame_RunFinish(SwalotPlopGame *game, BOOL ready) {
         SwalotPlopCombo_Hide(&game->gfx.combo);
         game->gfx.finish.state++;
         break;
-    case 1: {
+    case SWALOT_PLOP_FINISH_WAIT: {
         BOOL done = TRUE;
         if (!SwalotPlopFinish_Update(&game->gfx)) {
             done = FALSE;
@@ -756,13 +852,13 @@ BOOL SwalotPlopGame_RunFinish(SwalotPlopGame *game, BOOL ready) {
         }
         break;
     }
-    case 2:
+    case SWALOT_PLOP_FINISH_HOLD:
         game->gfx.finish.counter++;
         if (game->gfx.finish.counter >= 64) {
             game->gfx.finish.state++;
         }
         break;
-    case 3:
+    case SWALOT_PLOP_FINISH_DONE:
         result = FALSE;
         break;
     }
@@ -1190,7 +1286,7 @@ void SwalotPlopGfx_SetScenePos(SwalotPlopGfx *gfx, SwalotPlopBody *body) {
 }
 
 void SwalotPlopFinish_Init(SwalotPlopGfx *gfx, u32 playerCount, u32 localIndex, enum HeapID heapId) {
-    gfx->finish.state = 0;
+    gfx->finish.state = SWALOT_PLOP_FINISH_START;
     gfx->finish.counter = 0;
 }
 
@@ -2098,21 +2194,21 @@ void SwalotPlopDemo_Free(SwalotPlopDemo *demo, SwalotPlopGfx *gfx) {
 
 void SwalotPlopDemo_Start(SwalotPlopDemo *demo) {
     demo->active = TRUE;
-    demo->state = 0;
+    demo->state = SWALOT_PLOP_DEMO_SHOW_HAND;
     demo->count = 0;
     Sprite_SetDrawFlag(demo->sprite, TRUE);
 }
 
 BOOL SwalotPlopDemo_Update(SwalotPlopDemo *demo, SwalotPlopGame *game) {
     switch (demo->state) {
-    case 0:
+    case SWALOT_PLOP_DEMO_SHOW_HAND:
         Sprite_SetAnimationFrame(demo->sprite, 0);
         SwalotPlopCursor_Show(&game->gfx.cursor);
         SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, 177);
         demo->thrown = FALSE;
         demo->state++;
         break;
-    case 1: {
+    case SWALOT_PLOP_DEMO_THROW: {
         int frame;
         Sprite_UpdateAnim(demo->sprite, 2 * FX32_ONE);
         frame = Sprite_GetAnimationFrame(demo->sprite);
@@ -2127,9 +2223,9 @@ BOOL SwalotPlopDemo_Update(SwalotPlopDemo *demo, SwalotPlopGame *game) {
         case 11:
             demo->count++;
             if (demo->count >= 2) {
-                demo->state = 3;
+                demo->state = SWALOT_PLOP_DEMO_WAIT_SHOTS;
             } else {
-                demo->state = 2;
+                demo->state = SWALOT_PLOP_DEMO_PAUSE;
                 demo->timer = 16;
             }
             SwalotPlopCursor_Hide(&game->gfx.cursor);
@@ -2138,13 +2234,13 @@ BOOL SwalotPlopDemo_Update(SwalotPlopDemo *demo, SwalotPlopGame *game) {
         SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, sSwalotPlopDemoCursorYs[frame]);
         break;
     }
-    case 2:
+    case SWALOT_PLOP_DEMO_PAUSE:
         demo->timer--;
         if (demo->timer <= 0) {
-            demo->state = 0;
+            demo->state = SWALOT_PLOP_DEMO_SHOW_HAND;
         }
         break;
-    case 3:
+    case SWALOT_PLOP_DEMO_WAIT_SHOTS:
         if (SwalotPlopGame_HasActiveShots(game) == FALSE) {
             Sprite_SetDrawFlag(demo->sprite, FALSE);
             return TRUE;
@@ -3187,7 +3283,7 @@ void SwalotPlopStage_Draw(SwalotPlopStage *stage) {
     ModelAnimation_AdvanceLooped(&stage->animations[0], stage->animSpeed);
     if (stage->mouthActive) {
         switch (stage->mouthState) {
-        case 0: {
+        case SWALOT_PLOP_MOUTH_SPEED_UP: {
             s32 step = stage->mouthStep;
             if (stage->mouthFrame + step < 0x33000) {
                 stage->mouthFrame += step;
@@ -3203,7 +3299,7 @@ void SwalotPlopStage_Draw(SwalotPlopStage *stage) {
             }
             break;
         }
-        case 1: {
+        case SWALOT_PLOP_MOUTH_HOLD: {
             s32 step = stage->mouthStep;
             if (stage->mouthFrame + step < 0x33000) {
                 stage->mouthFrame += step;
@@ -3217,7 +3313,7 @@ void SwalotPlopStage_Draw(SwalotPlopStage *stage) {
             }
             break;
         }
-        case 2:
+        case SWALOT_PLOP_MOUTH_LOOP:
             if (stage->mouthFrame + FX32_ONE < 0x64000) {
                 stage->mouthFrame += FX32_ONE;
             } else {
@@ -3243,7 +3339,7 @@ void SwalotPlopStage_StartMouth(SwalotPlopStage *stage) {
     stage->mouthFrame = 0;
     stage->mouthStep = FX32_ONE;
     stage->mouthActive = TRUE;
-    stage->mouthState = 0;
+    stage->mouthState = SWALOT_PLOP_MOUTH_SPEED_UP;
 }
 
 void SwalotPlopStage_SetAnimSpeed(SwalotPlopStage *stage, fx32 speed) {
@@ -3289,13 +3385,13 @@ void SwalotPlopBgFade_Init(SwalotPlopBgFade *fade, u8 palette) {
 void SwalotPlopBgFade_Update(SwalotPlopBgFade *fade, SwalotPlopGfx *gfx) {
     int layer, older, prev, alpha;
     switch (fade->state) {
-    case 1:
+    case SWALOT_PLOP_BG_FADE_START:
         SwalotPlopBgFade_SetLayers(gfx, (s16)(fade->layer - 1), fade->palette);
         fade->state++;
         fade->timer = 0;
-    case 2:
+    case SWALOT_PLOP_BG_FADE_CROSS:
         if (fade->timer >= 16) {
-            fade->state = 3;
+            fade->state = SWALOT_PLOP_BG_FADE_IN;
             fade->timer = 0;
             SwalotPlopBgFade_SetLayers(gfx, fade->layer, fade->palette);
             G2x_SetBlendAlpha_((u32)&reg_G2S_DB_BLDCNT, 1 << fade->layer, GX_BLEND_PLANEMASK_BG3, 0, 16);
@@ -3317,9 +3413,9 @@ void SwalotPlopBgFade_Update(SwalotPlopBgFade *fade, SwalotPlopGfx *gfx) {
         alpha = 16 - (fade->timer * 16) / 16;
         G2x_SetBlendAlpha_((u32)&reg_G2S_DB_BLDCNT, 1 << layer, GX_BLEND_PLANEMASK_BG3 | ((1 << older) | (1 << prev)), alpha, 16 - alpha);
         return;
-    case 3:
+    case SWALOT_PLOP_BG_FADE_IN:
         if (fade->timer >= 8) {
-            fade->state = 0;
+            fade->state = SWALOT_PLOP_BG_FADE_IDLE;
             reg_G2S_DB_BLDCNT = 0;
             return;
         }
@@ -3327,7 +3423,7 @@ void SwalotPlopBgFade_Update(SwalotPlopBgFade *fade, SwalotPlopGfx *gfx) {
         alpha = (fade->timer * 16) / 8;
         G2x_SetBlendAlpha_((u32)&reg_G2S_DB_BLDCNT, 1 << fade->layer, GX_BLEND_PLANEMASK_BG3, alpha, 16 - alpha);
         break;
-    case 0:
+    case SWALOT_PLOP_BG_FADE_IDLE:
     default:
         break;
     }
@@ -3336,7 +3432,7 @@ void SwalotPlopBgFade_Update(SwalotPlopBgFade *fade, SwalotPlopGfx *gfx) {
 void SwalotPlopBgFade_Step(SwalotPlopBgFade *fade) {
     fade->counter++;
     if (fade->counter >= 10) {
-        fade->state = 1;
+        fade->state = SWALOT_PLOP_BG_FADE_START;
         fade->layer = (fade->layer + 1) % 3;
         fade->counter = 0;
     }
@@ -3434,22 +3530,22 @@ void SwalotPlopCombo_Show(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, int count)
     RemoveWindow(&combo->window);
     TextOBJ_SetSpritesDrawFlag(combo->textObj, TRUE);
     Sprite_SetDrawFlag(combo->sprite, TRUE);
-    combo->state = 1;
+    combo->state = SWALOT_PLOP_COMBO_SLIDE_IN;
     combo->hideDelay = 0;
 }
 
 void SwalotPlopCombo_Hide(SwalotPlopCombo *combo) {
     u16 state = combo->state;
-    if (state != 3) {
-        if (state == 2) {
+    if (state != SWALOT_PLOP_COMBO_SLIDE_OUT) {
+        if (state == SWALOT_PLOP_COMBO_SHOWN) {
             combo->hideDelay = 12;
         }
-        combo->state = 3;
+        combo->state = SWALOT_PLOP_COMBO_SLIDE_OUT;
     }
 }
 
 void SwalotPlopCombo_SetCount(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, int count) {
-    if (combo->state != 3) {
+    if (combo->state != SWALOT_PLOP_COMBO_SLIDE_OUT) {
         String16_FormatInteger(combo->string, count, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
         AddTextWindowTopLeftCorner(gfx->bgConfig, &combo->window, 3, 2, 0, 0);
         AddTextPrinterParameterizedWithColor(&combo->window, 0, combo->string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);
@@ -3461,24 +3557,24 @@ void SwalotPlopCombo_SetCount(SwalotPlopCombo *combo, SwalotPlopGfx *gfx, int co
 
 void SwalotPlopCombo_Update(SwalotPlopCombo *combo) {
     switch (combo->state) {
-    case 0:
+    case SWALOT_PLOP_COMBO_HIDDEN:
         break;
-    case 1:
+    case SWALOT_PLOP_COMBO_SLIDE_IN:
         if (combo->slideFrame < 8) {
             combo->slideFrame++;
         } else {
-            combo->state = 2;
+            combo->state = SWALOT_PLOP_COMBO_SHOWN;
         }
         break;
-    case 2:
+    case SWALOT_PLOP_COMBO_SHOWN:
         break;
-    case 3:
+    case SWALOT_PLOP_COMBO_SLIDE_OUT:
         if (combo->hideDelay > 0) {
             combo->hideDelay--;
         } else if (combo->slideFrame > 0) {
             combo->slideFrame--;
         } else {
-            combo->state = 0;
+            combo->state = SWALOT_PLOP_COMBO_HIDDEN;
             TextOBJ_SetSpritesDrawFlag(combo->textObj, FALSE);
             Sprite_SetDrawFlag(combo->sprite, FALSE);
         }
@@ -3502,7 +3598,7 @@ void SwalotPlopCombo_Update(SwalotPlopCombo *combo) {
 }
 
 void SwalotPlopSpeedUp_Start(SwalotPlopSpeedUp *speedUp) {
-    speedUp->state = 0;
+    speedUp->state = SWALOT_PLOP_SPEED_UP_RAMP;
     speedUp->active = TRUE;
     speedUp->frame = 0;
     PlaySE(SEQ_SE_PL_PINPON);
@@ -3513,7 +3609,7 @@ void SwalotPlopSpeedUp_Update(SwalotPlopSpeedUp *speedUp, SwalotPlopStage *stage
         return;
     }
     switch (speedUp->state) {
-    case 0:
+    case SWALOT_PLOP_SPEED_UP_RAMP:
         speedUp->frame++;
         SwalotPlopStage_SetAnimSpeed(stage, speedUp->frame * 102400 / 58 + FX32_ONE);
         GF_SndHandleSetTempoRatio(7, speedUp->frame * 150 / 58 + 256);
@@ -3524,11 +3620,11 @@ void SwalotPlopSpeedUp_Update(SwalotPlopSpeedUp *speedUp, SwalotPlopStage *stage
             speedUp->state++;
         }
         break;
-    case 1:
+    case SWALOT_PLOP_SPEED_UP_START_FLASH:
         StartBrightnessTransition(4, 16, 0, (GXBlendPlaneMask)0x3F, 1);
         speedUp->state++;
         break;
-    case 2:
+    case SWALOT_PLOP_SPEED_UP_WAIT_FLASH:
         if (IsBrightnessTransitionActive(1) == TRUE) {
             SwalotPlopStage_StartMouth(stage);
             SwalotPlopStage_SetAnimSpeed(stage, 2 * FX32_ONE);
@@ -3536,18 +3632,18 @@ void SwalotPlopSpeedUp_Update(SwalotPlopSpeedUp *speedUp, SwalotPlopStage *stage
             speedUp->state++;
         }
         break;
-    case 3:
+    case SWALOT_PLOP_SPEED_UP_START_RESTORE:
         StartBrightnessTransition(14, 0, 16, (GXBlendPlaneMask)0x3F, 1);
         speedUp->state++;
         break;
-    case 4:
+    case SWALOT_PLOP_SPEED_UP_WAIT_RESTORE:
         if (IsBrightnessTransitionActive(1) == TRUE) {
             speedUp->state++;
         }
         break;
-    case 5:
+    case SWALOT_PLOP_SPEED_UP_END:
         speedUp->active = FALSE;
-        speedUp->state = 0;
+        speedUp->state = SWALOT_PLOP_SPEED_UP_RAMP;
         break;
     }
 }
@@ -3561,7 +3657,7 @@ const SwalotPlopCommand *SwalotPlop_GetCommandTable(void) {
 }
 
 int SwalotPlop_GetCommandCount(void) {
-    return 8;
+    return NELEMS(sSwalotPlopCommands);
 }
 
 void SwalotPlop_RegisterCommands(SwalotPlopApp *app) {

@@ -80,6 +80,29 @@ enum WobbuffetPopEventKind {
     WOBBUFFET_POP_EVENT_DEMO,
 };
 
+enum WobbuffetPopScreenId {
+    WOBBUFFET_POP_SCREEN_PLAYER_LIST,
+    WOBBUFFET_POP_SCREEN_GAME,
+    WOBBUFFET_POP_SCREEN_RESULTS,
+};
+
+enum WobbuffetPopConnectionLostState {
+    WOBBUFFET_POP_CONNECTION_LOST_BLACK_OUT,
+    WOBBUFFET_POP_CONNECTION_LOST_WAIT,
+    WOBBUFFET_POP_CONNECTION_LOST_FREE,
+};
+
+enum WobbuffetPopSyncKind {
+    WOBBUFFET_POP_SYNC_NONE,
+    WOBBUFFET_POP_SYNC_START,
+    WOBBUFFET_POP_SYNC_COUNTDOWN,
+    WOBBUFFET_POP_SYNC_FINISH,
+    WOBBUFFET_POP_SYNC_NEW_BALLOON,
+    WOBBUFFET_POP_SYNC_POP,
+    WOBBUFFET_POP_SYNC_DEMO,
+    WOBBUFFET_POP_SYNC_WAITING,
+};
+
 // State of the host's game steps (start, play, finish).
 typedef struct WobbuffetPopSequence {
     u32 step;     // 0x00

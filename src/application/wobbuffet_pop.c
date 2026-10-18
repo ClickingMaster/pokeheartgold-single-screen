@@ -76,6 +76,58 @@ extern const BgTemplate sWobbuffetPopMainBgTemplates[3];
 extern const BgTemplate sWobbuffetPopSubBgTemplates[4];
 extern const s32 sWobbuffetPopBalloonAirRates[];
 
+enum WobbuffetPopAppState {
+    WOBBUFFET_POP_APP_START_PLAYER_LIST,
+    WOBBUFFET_POP_APP_RUN_PLAYER_LIST,
+    WOBBUFFET_POP_APP_START_GAME,
+    WOBBUFFET_POP_APP_RUN_GAME,
+    WOBBUFFET_POP_APP_START_RESULTS,
+    WOBBUFFET_POP_APP_RUN_RESULTS,
+    WOBBUFFET_POP_APP_START_SYNC,
+    WOBBUFFET_POP_APP_WAIT_SYNC,
+    WOBBUFFET_POP_APP_DONE,
+};
+
+enum WobbuffetPopState {
+    WOBBUFFET_POP_STATE_WAIT_FADE_IN,
+    WOBBUFFET_POP_STATE_START_SYNC,
+    WOBBUFFET_POP_STATE_WAIT_SYNC,
+    WOBBUFFET_POP_STATE_SEND_PLAYER_VALUE,
+    WOBBUFFET_POP_STATE_WAIT_PLAYERS,
+    WOBBUFFET_POP_STATE_PLAY,
+    WOBBUFFET_POP_STATE_WAIT_FADE_OUT,
+};
+
+enum WobbuffetPopHostStep {
+    WOBBUFFET_POP_HOST_START,
+    WOBBUFFET_POP_HOST_PLAY,
+    WOBBUFFET_POP_HOST_FINISH,
+    WOBBUFFET_POP_HOST_DONE,
+};
+
+enum WobbuffetPopHostStartState {
+    WOBBUFFET_POP_HOST_START_QUEUE_SYNC,
+    WOBBUFFET_POP_HOST_START_WAIT_SYNC,
+    WOBBUFFET_POP_HOST_START_QUEUE_DEMO,
+    WOBBUFFET_POP_HOST_START_WAIT_DEMO,
+    WOBBUFFET_POP_HOST_START_QUEUE_COUNTDOWN,
+    WOBBUFFET_POP_HOST_START_WAIT_COUNTDOWN,
+};
+
+enum WobbuffetPopHostPlayState {
+    WOBBUFFET_POP_HOST_PLAY_QUEUE_BALLOON,
+    WOBBUFFET_POP_HOST_PLAY_WAIT_BALLOON,
+    WOBBUFFET_POP_HOST_PLAY_WATCH_AIR,
+    WOBBUFFET_POP_HOST_PLAY_WAIT_POP,
+};
+
+enum WobbuffetPopHostFinishState {
+    WOBBUFFET_POP_HOST_FINISH_QUEUE,
+    WOBBUFFET_POP_HOST_FINISH_WAIT_SYNC,
+    WOBBUFFET_POP_HOST_FINISH_WAIT_SIGN,
+    WOBBUFFET_POP_HOST_FINISH_SEND,
+};
+
 static void WobbuffetPopApp_InitRoster(WobbuffetPopApp *app, PlazaGameArgs *args);
 static BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app);
 static void WobbuffetPop_VBlankCB(void *data);
@@ -175,55 +227,55 @@ BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state) {
     }
 
     switch (*state) {
-    case 0:
-        app->screenId = 0;
+    case WOBBUFFET_POP_APP_START_PLAYER_LIST:
+        app->screenId = WOBBUFFET_POP_SCREEN_PLAYER_LIST;
         app->screen = OverlayManager_New(&sWobbuffetPopPlazaScreenOverlayTemplate, app, HEAP_ID_117);
         (*state)++;
         break;
-    case 1:
+    case WOBBUFFET_POP_APP_RUN_PLAYER_LIST:
         if (OverlayManager_Run(app->screen) == TRUE) {
             OverlayManager_Delete(app->screen);
             app->screen = NULL;
             (*state)++;
         }
         break;
-    case 2:
-        app->screenId = 1;
+    case WOBBUFFET_POP_APP_START_GAME:
+        app->screenId = WOBBUFFET_POP_SCREEN_GAME;
         app->screen = OverlayManager_New(&sWobbuffetPopGameOverlayTemplate, app, HEAP_ID_117);
         (*state)++;
         break;
-    case 3:
+    case WOBBUFFET_POP_APP_RUN_GAME:
         if (OverlayManager_Run(app->screen) == TRUE) {
             OverlayManager_Delete(app->screen);
             app->screen = NULL;
             (*state)++;
         }
         break;
-    case 4:
+    case WOBBUFFET_POP_APP_START_RESULTS:
         if (args->voiceChat) {
             WifiConnection_StopVoiceChat();
         }
-        app->screenId = 2;
+        app->screenId = WOBBUFFET_POP_SCREEN_RESULTS;
         app->screen = OverlayManager_New(&sWobbuffetPopPlazaScreenOverlayTemplate, app, HEAP_ID_117);
         (*state)++;
         break;
-    case 5:
+    case WOBBUFFET_POP_APP_RUN_RESULTS:
         if (OverlayManager_Run(app->screen) == TRUE) {
             OverlayManager_Delete(app->screen);
             app->screen = NULL;
             if (app->playAgain == TRUE) {
-                *state = 0;
+                *state = WOBBUFFET_POP_APP_START_PLAYER_LIST;
             } else {
                 (*state)++;
             }
         }
         break;
-    case 6:
+    case WOBBUFFET_POP_APP_START_SYNC:
         CommState_SetErrorWatch(0, 1);
         LinkSync_StartSync(222);
         (*state)++;
         break;
-    case 7:
+    case WOBBUFFET_POP_APP_WAIT_SYNC:
         if (LinkSync_IsSynced(222) != TRUE) {
             int count = Comm_CountConnected();
             if (count >= CommPlayerInfo_CountAccepted()) {
@@ -232,7 +284,7 @@ BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state) {
         }
         (*state)++;
         break;
-    case 8:
+    case WOBBUFFET_POP_APP_DONE:
     default:
         return TRUE;
     }
@@ -364,7 +416,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
 
     if (game->app->connectionLost == TRUE) {
         switch (game->app->connectionLostState) {
-        case 0:
+        case WOBBUFFET_POP_CONNECTION_LOST_BLACK_OUT:
             if (IsPaletteFadeFinished() == TRUE) {
                 StopPaletteFade();
             }
@@ -372,7 +424,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
             GX_SetVisibleWnd(GX_WNDMASK_NONE);
             game->app->connectionLostState++;
             break;
-        case 1:
+        case WOBBUFFET_POP_CONNECTION_LOST_WAIT:
         default:
             if (PlazaGameRoster_ProcessConnectionLost(&game->app->roster) == TRUE) {
                 return TRUE;
@@ -383,32 +435,32 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
     }
 
     switch (*state) {
-    case 0:
+    case WOBBUFFET_POP_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
         break;
-    case 1:
+    case WOBBUFFET_POP_STATE_START_SYNC:
         LinkSync_StartSync(211);
         (*state)++;
         break;
-    case 2:
+    case WOBBUFFET_POP_STATE_WAIT_SYNC:
         if (LinkSync_IsSynced(211) == TRUE) {
             (*state)++;
         }
         break;
-    case 3:
+    case WOBBUFFET_POP_STATE_SEND_PLAYER_VALUE:
         if (WobbuffetPop_SendPlayerValue() == TRUE) {
             (*state)++;
         }
         break;
-    case 4:
+    case WOBBUFFET_POP_STATE_WAIT_PLAYERS:
         if (game->readyCount >= game->app->playerCount) {
             WobbuffetPop_ChooseHost(game);
             (*state)++;
         }
         break;
-    case 5:
+    case WOBBUFFET_POP_STATE_PLAY:
         if (game->finished == TRUE) {
             WobbuffetPop_CreateScoreLabels(game);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)26, (enum FadeType)26, RGB_BLACK, 6, 1, HEAP_ID_117);
@@ -463,7 +515,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
             }
         }
         break;
-    case 6:
+    case WOBBUFFET_POP_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -1341,7 +1393,7 @@ static int WobbuffetPop_GetPlayerIndex(WobbuffetPop *game, int netId) {
 }
 
 void WobbuffetPop_RequestSync(WobbuffetPop *game, u32 kind, u32 syncId) {
-    GF_ASSERT(game->syncKind == 0);
+    GF_ASSERT(game->syncKind == WOBBUFFET_POP_SYNC_NONE);
     game->syncKind = kind;
     game->syncId = syncId;
 }
@@ -1350,26 +1402,26 @@ static BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
     BOOL ready = FALSE;
 
     switch (game->syncKind) {
-    case 1:
+    case WOBBUFFET_POP_SYNC_START:
         ready = TRUE;
         break;
-    case 2:
+    case WOBBUFFET_POP_SYNC_COUNTDOWN:
         ready = TRUE;
         break;
-    case 3:
+    case WOBBUFFET_POP_SYNC_FINISH:
         ready = TRUE;
         break;
-    case 4:
+    case WOBBUFFET_POP_SYNC_NEW_BALLOON:
         if (game->balloonInPlay == TRUE) {
             ready = TRUE;
         }
         break;
-    case 5:
+    case WOBBUFFET_POP_SYNC_POP:
         if (game->confetti.active == FALSE) {
             ready = TRUE;
         }
         break;
-    case 6:
+    case WOBBUFFET_POP_SYNC_DEMO:
         if (game->demoDone == TRUE) {
             ready = TRUE;
         }
@@ -1380,9 +1432,9 @@ static BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
     if (ready == TRUE) {
         LinkSync_StartSync((u8)game->syncId);
         if (WobbuffetPop_IsHost(game) == TRUE) {
-            game->syncKind = 7;
+            game->syncKind = WOBBUFFET_POP_SYNC_WAITING;
         } else {
-            game->syncKind = 0;
+            game->syncKind = WOBBUFFET_POP_SYNC_NONE;
         }
         return TRUE;
     }
@@ -1390,14 +1442,14 @@ static BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
 }
 
 static BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId) {
-    if (game->syncKind != 7) {
+    if (game->syncKind != WOBBUFFET_POP_SYNC_WAITING) {
         return FALSE;
     }
     if (game->syncId != syncId) {
         return FALSE;
     }
     if (LinkSync_IsSynced((u8)game->syncId) == TRUE) {
-        game->syncKind = 0;
+        game->syncKind = WOBBUFFET_POP_SYNC_NONE;
         return TRUE;
     }
     return FALSE;
@@ -1405,31 +1457,31 @@ static BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId) {
 
 BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequence) {
     switch (sequence->state) {
-    case 0:
-        WobbuffetPop_QueueSyncEvent(game, 1, sequence->syncId);
+    case WOBBUFFET_POP_HOST_START_QUEUE_SYNC:
+        WobbuffetPop_QueueSyncEvent(game, WOBBUFFET_POP_SYNC_START, sequence->syncId);
         sequence->state++;
         break;
-    case 1:
+    case WOBBUFFET_POP_HOST_START_WAIT_SYNC:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
             sequence->state++;
         }
         break;
-    case 2:
+    case WOBBUFFET_POP_HOST_START_QUEUE_DEMO:
         WobbuffetPop_QueueDemoEvent(game, sequence->syncId);
         sequence->state++;
         break;
-    case 3:
+    case WOBBUFFET_POP_HOST_START_WAIT_DEMO:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
             sequence->state++;
         }
         break;
-    case 4:
+    case WOBBUFFET_POP_HOST_START_QUEUE_COUNTDOWN:
         WobbuffetPop_QueueCountdownEvent(game, sequence->syncId);
         sequence->state++;
         break;
-    case 5:
+    case WOBBUFFET_POP_HOST_START_WAIT_COUNTDOWN:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
             return TRUE;
@@ -1444,29 +1496,29 @@ BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequenc
         return TRUE;
     }
     switch (sequence->state) {
-    case 0: {
+    case WOBBUFFET_POP_HOST_PLAY_QUEUE_BALLOON: {
         int value = WobbuffetPop_GetBalloonSize(game->balloonIndex);
         WobbuffetPop_QueueNewBalloonEvent(game, game->balloonIndex, value, sequence->syncId);
         sequence->state++;
         break;
     }
-    case 1:
+    case WOBBUFFET_POP_HOST_PLAY_WAIT_BALLOON:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
             sequence->state++;
         }
         break;
-    case 2:
+    case WOBBUFFET_POP_HOST_PLAY_WATCH_AIR:
         if (game->inflation.capacity != 0 && game->inflation.air >= game->inflation.capacity) {
             game->balloonIndex++;
             WobbuffetPop_QueuePopEvent(game, WobbuffetPop_GetBalloonIndex(game), sequence->syncId);
             sequence->state++;
         }
         break;
-    case 3:
+    case WOBBUFFET_POP_HOST_PLAY_WAIT_POP:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
-            sequence->state = 0;
+            sequence->state = WOBBUFFET_POP_HOST_PLAY_QUEUE_BALLOON;
         }
         break;
     }
@@ -1475,22 +1527,22 @@ BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequenc
 
 BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *sequence) {
     switch (sequence->state) {
-    case 0:
+    case WOBBUFFET_POP_HOST_FINISH_QUEUE:
         WobbuffetPop_QueueFinishEvent(game, sequence->syncId);
         sequence->state++;
         break;
-    case 1:
+    case WOBBUFFET_POP_HOST_FINISH_WAIT_SYNC:
         if (WobbuffetPop_IsSyncDone(game, sequence->syncId) == TRUE) {
             sequence->syncId++;
             sequence->state++;
         }
         break;
-    case 2:
+    case WOBBUFFET_POP_HOST_FINISH_WAIT_SIGN:
         if (game->gameState == WOBBUFFET_POP_GAME_FINISHED) {
             sequence->state++;
         }
         break;
-    case 3:
+    case WOBBUFFET_POP_HOST_FINISH_SEND:
         sequence->timer++;
         if (sequence->timer >= 90 && WobbuffetPop_SendFinished(game) == TRUE) {
             return TRUE;
@@ -1507,7 +1559,7 @@ static BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
         return FALSE;
     }
     sequence = &game->sequence;
-    if (game->sequence.step >= 3) {
+    if (game->sequence.step >= WOBBUFFET_POP_HOST_DONE) {
         return TRUE;
     }
     if (sWobbuffetPopHostSteps[game->sequence.step](game, sequence) == TRUE) {

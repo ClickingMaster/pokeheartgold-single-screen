@@ -34,6 +34,34 @@ typedef struct WobbuffetPopInflationGfx {
     s32 scale;
 } WobbuffetPopInflationGfx;
 
+enum WobbuffetPopPlazaScreenState {
+    WOBBUFFET_POP_PLAZA_SCREEN_START,
+    WOBBUFFET_POP_PLAZA_SCREEN_CREATE_ENTRY,
+    WOBBUFFET_POP_PLAZA_SCREEN_WAIT_ENTRY,
+    WOBBUFFET_POP_PLAZA_SCREEN_CREATE_RESULTS,
+    WOBBUFFET_POP_PLAZA_SCREEN_WAIT_RESULTS,
+    WOBBUFFET_POP_PLAZA_SCREEN_DONE,
+};
+
+enum WobbuffetPopCommandId {
+    WOBBUFFET_POP_CMD_PLAYER_VALUE = 23,
+    WOBBUFFET_POP_CMD_EVENT,
+    WOBBUFFET_POP_CMD_FINISHED,
+};
+
+enum WobbuffetPopBonusPopupState {
+    WOBBUFFET_POP_BONUS_POPUP_START,
+    WOBBUFFET_POP_BONUS_POPUP_DROP_IN,
+    WOBBUFFET_POP_BONUS_POPUP_HIT,
+    WOBBUFFET_POP_BONUS_POPUP_WAIT_HIT,
+    WOBBUFFET_POP_BONUS_POPUP_RISE_OUT,
+};
+
+enum WobbuffetPopScoreDisplayState {
+    WOBBUFFET_POP_SCORE_DISPLAY_CHECK,
+    WOBBUFFET_POP_SCORE_DISPLAY_ROLL,
+};
+
 extern const u32 sWobbuffetPopCommands[];
 extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
@@ -1628,7 +1656,7 @@ static void WobbuffetPop_ShowBonusPopup(WobbuffetPop *game, WobbuffetPopBonusPop
     Sprite_TickFrame(popup->sprite->sprite);
     popup->bonus = bonusCopy;
     popup->delay = delay - 12;
-    popup->state = 0;
+    popup->state = WOBBUFFET_POP_BONUS_POPUP_START;
     popup->active = TRUE;
 }
 
@@ -1649,12 +1677,12 @@ static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, Wobbuf
     s16 y;
 
     switch (popup->state) {
-    case 0:
+    case WOBBUFFET_POP_BONUS_POPUP_START:
         ManagedSprite_GetPositionXYWithSubscreenOffset(popup->sprite, &x, &y, 0x160000);
         popup->x = x << FX32_SHIFT;
         popup->y = y << FX32_SHIFT;
         popup->state++;
-    case 1:
+    case WOBBUFFET_POP_BONUS_POPUP_DROP_IN:
         if (popup->delay > 0) {
             popup->delay--;
             break;
@@ -1666,7 +1694,7 @@ static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, Wobbuf
             popup->state++;
         }
         break;
-    case 2:
+    case WOBBUFFET_POP_BONUS_POPUP_HIT:
         ManagedSprite_GetPositionXYWithSubscreenOffset(popup->sprite, &x, &y, 0x160000);
         ManagedSprite_SetPositionXYWithSubscreenOffset(popup->effect, x, y - 32, 0x160000);
         ManagedSprite_SetAnim(popup->effect, 33);
@@ -1676,7 +1704,7 @@ static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, Wobbuf
         popup->timer = 8;
         popup->state++;
         break;
-    case 3:
+    case WOBBUFFET_POP_BONUS_POPUP_WAIT_HIT:
         popup->timer--;
         if (popup->timer == 3) {
             ManagedSprite_TickNFrames(popup->effect, 0x4000);
@@ -1687,11 +1715,11 @@ static BOOL WobbuffetPopBonusPopup_Update(WobbuffetPopBonusPopup *popups, Wobbuf
             popup->state++;
         }
         break;
-    case 4:
+    case WOBBUFFET_POP_BONUS_POPUP_RISE_OUT:
         popup->y -= 0x8000;
         if (popup->y / FX32_ONE <= popup->targetY - 96) {
             ManagedSprite_SetDrawFlag(popup->sprite, FALSE);
-            popup->state = 0;
+            popup->state = WOBBUFFET_POP_BONUS_POPUP_START;
             popup->active = FALSE;
             return FALSE;
         }
@@ -1785,13 +1813,13 @@ void WobbuffetPopScoreDisplay_Update(WobbuffetPop *game, WobbuffetPopScoreDispla
         return;
     }
     switch (display->state) {
-    case 0:
+    case WOBBUFFET_POP_SCORE_DISPLAY_CHECK:
         if (WobbuffetPopScoreDisplay_IsSettled(display) == TRUE) {
             WobbuffetPopScoreDisplay_StartRoll(display);
             return;
         }
         display->state++;
-    case 1:
+    case WOBBUFFET_POP_SCORE_DISPLAY_ROLL:
         done = WobbuffetPopScoreDisplay_RollDigits(display);
         WobbuffetPopScoreDisplay_PlaceDigits(display);
         if (done == TRUE) {
@@ -2083,19 +2111,19 @@ BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state) {
 
     if (screen->app->connectionLost == TRUE) {
         switch (screen->app->connectionLostState) {
-        case 0:
+        case WOBBUFFET_POP_CONNECTION_LOST_BLACK_OUT:
             if (IsPaletteFadeFinished() == TRUE) {
                 StopPaletteFade();
             }
             SetBothScreensBrightnessByColor(0);
             screen->app->connectionLostState++;
             break;
-        case 1:
+        case WOBBUFFET_POP_CONNECTION_LOST_WAIT:
             if (PlazaGameRoster_ProcessConnectionLost(&screen->app->roster) == TRUE) {
                 screen->app->connectionLostState++;
             }
             break;
-        case 2:
+        case WOBBUFFET_POP_CONNECTION_LOST_FREE:
         default:
             if (screen->entry) {
                 PlazaGameEntry_Free(screen->entry);
@@ -2110,38 +2138,38 @@ BOOL WobbuffetPopPlazaScreen_Main(OverlayManager *man, int *state) {
         return FALSE;
     }
     switch (*state) {
-    case 0:
-        if (screen->app->screenId == 0) {
-            *state = 1;
+    case WOBBUFFET_POP_PLAZA_SCREEN_START:
+        if (screen->app->screenId == WOBBUFFET_POP_SCREEN_PLAYER_LIST) {
+            *state = WOBBUFFET_POP_PLAZA_SCREEN_CREATE_ENTRY;
         } else {
-            *state = 3;
+            *state = WOBBUFFET_POP_PLAZA_SCREEN_CREATE_RESULTS;
         }
         break;
-    case 1:
+    case WOBBUFFET_POP_PLAZA_SCREEN_CREATE_ENTRY:
         screen->entry = PlazaGameEntry_NewWobbuffetPop(&screen->app->roster, HEAP_ID_117);
         (*state)++;
         break;
-    case 2:
+    case WOBBUFFET_POP_PLAZA_SCREEN_WAIT_ENTRY:
         if (PlazaGameEntry_IsDone(screen->entry) == TRUE) {
             screen->app->selection = PlazaGameEntry_GetSelection(screen->entry);
             PlazaGameEntry_Free(screen->entry);
             screen->entry = NULL;
-            *state = 5;
+            *state = WOBBUFFET_POP_PLAZA_SCREEN_DONE;
         }
         break;
-    case 3:
+    case WOBBUFFET_POP_PLAZA_SCREEN_CREATE_RESULTS:
         screen->results = PlazaGameResults_NewWobbuffetPop(&screen->app->roster, &screen->app->results, HEAP_ID_117);
         (*state)++;
         break;
-    case 4:
+    case WOBBUFFET_POP_PLAZA_SCREEN_WAIT_RESULTS:
         if (PlazaGameResults_IsDone(screen->results) == TRUE) {
             screen->app->playAgain = PlazaGameResults_GetContinue(screen->results);
             PlazaGameResults_Free(screen->results);
             screen->results = NULL;
-            *state = 5;
+            *state = WOBBUFFET_POP_PLAZA_SCREEN_DONE;
         }
         break;
-    case 5:
+    case WOBBUFFET_POP_PLAZA_SCREEN_DONE:
     default:
         return TRUE;
     }
@@ -2171,7 +2199,7 @@ void WobbuffetPop_RecvEvent(int netId, int size, void *data, void *arg) {
 }
 
 BOOL WobbuffetPop_SendEvent(WobbuffetPop *game, WobbuffetPopEvent *event) {
-    if (Comm_SendCommand(0x18, event, sizeof(WobbuffetPopEvent)) == TRUE) {
+    if (Comm_SendCommand(WOBBUFFET_POP_CMD_EVENT, event, sizeof(WobbuffetPopEvent)) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -2184,7 +2212,7 @@ void WobbuffetPop_RecvFinished(int netId, int size, void *data, void *arg) {
 }
 
 BOOL WobbuffetPop_SendFinished(WobbuffetPop *game) {
-    if (Comm_SendCommand(0x19, NULL, 0) == TRUE) {
+    if (Comm_SendCommand(WOBBUFFET_POP_CMD_FINISHED, NULL, 0) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -2208,7 +2236,7 @@ void WobbuffetPop_RecvPlayerValue(int netId, int size, const void *data, void *a
 BOOL WobbuffetPop_SendPlayerValue(void) {
     u32 value = 100;
 
-    if (Comm_SendCommand(0x17, &value, sizeof(value)) == TRUE) {
+    if (Comm_SendCommand(WOBBUFFET_POP_CMD_PLAYER_VALUE, &value, sizeof(value)) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -2244,7 +2272,7 @@ void WobbuffetPop_QueuePopEvent(WobbuffetPop *game, u32 balloonIndex, u8 syncId)
     MI_CpuFill8(&event, 0, sizeof(event));
     event.kind = WOBBUFFET_POP_EVENT_POP;
     event.data.halves.h4 = balloonIndex;
-    event.data.halves.b6 = 5;
+    event.data.halves.b6 = WOBBUFFET_POP_SYNC_POP;
     event.data.halves.b7 = syncId;
     WobbuffetPop_QueueEvent(game, &event);
 }
@@ -2262,7 +2290,7 @@ void WobbuffetPop_QueueNewBalloonEvent(WobbuffetPop *game, int balloonIndex, int
     event.kind = WOBBUFFET_POP_EVENT_NEW_BALLOON;
     event.data.halves.h4 = balloonIndex;
     event.data.halves.b6 = size;
-    event.data.halves.b7 = 4;
+    event.data.halves.b7 = WOBBUFFET_POP_SYNC_NEW_BALLOON;
     event.data.halves.b8 = syncId;
     WobbuffetPop_QueueEvent(game, &event);
 }
@@ -2279,7 +2307,7 @@ void WobbuffetPop_QueueCountdownEvent(WobbuffetPop *game, u8 syncId) {
 
     MI_CpuFill8(&event, 0, sizeof(event));
     event.kind = WOBBUFFET_POP_EVENT_COUNTDOWN;
-    event.data.bytes.b4 = 2;
+    event.data.bytes.b4 = WOBBUFFET_POP_SYNC_COUNTDOWN;
     event.data.bytes.b5 = syncId;
     WobbuffetPop_QueueEvent(game, &event);
 }
@@ -2294,7 +2322,7 @@ void WobbuffetPop_QueueFinishEvent(WobbuffetPop *game, u8 syncId) {
 
     MI_CpuFill8(&event, 0, sizeof(event));
     event.kind = WOBBUFFET_POP_EVENT_FINISH;
-    event.data.bytes.b4 = 3;
+    event.data.bytes.b4 = WOBBUFFET_POP_SYNC_FINISH;
     event.data.bytes.b5 = syncId;
     WobbuffetPop_QueueEvent(game, &event);
 }
@@ -2324,7 +2352,7 @@ void WobbuffetPop_QueueDemoEvent(WobbuffetPop *game, u8 syncId) {
 
     MI_CpuFill8(&event, 0, sizeof(event));
     event.kind = WOBBUFFET_POP_EVENT_DEMO;
-    event.data.bytes.b4 = 6;
+    event.data.bytes.b4 = WOBBUFFET_POP_SYNC_DEMO;
     event.data.bytes.b5 = syncId;
     WobbuffetPop_QueueEvent(game, &event);
 }
