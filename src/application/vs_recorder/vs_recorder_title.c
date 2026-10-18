@@ -18,6 +18,37 @@
 // VS Recorder title screen (VS_RECORDER_SCREEN_TITLE): fade in, drop the orbit cursors, "TOUCH HERE!", then show the
 // menu and slide its choice rows in.
 
+enum VsRecorderTitleIntroStep {
+    TITLE_INTRO_STEP_FADE_IN,
+    TITLE_INTRO_STEP_LAUNCH_CURSOR,
+    TITLE_INTRO_STEP_LAUNCH_SECOND_CURSOR,
+    TITLE_INTRO_STEP_SHOW_TOUCH_HERE,
+    TITLE_INTRO_STEP_BRIGHTEN,
+    TITLE_INTRO_STEP_DARKEN,
+    TITLE_INTRO_STEP_WAIT_TOUCH,
+    TITLE_INTRO_STEP_DONE,
+};
+
+enum VsRecorderTitleShowMenuStep {
+    TITLE_SHOW_MENU_STEP_CREATE_MENU,
+    TITLE_SHOW_MENU_STEP_FADE_IN,
+    TITLE_SHOW_MENU_STEP_LOAD_SCREEN,
+    TITLE_SHOW_MENU_STEP_DONE,
+};
+
+enum VsRecorderTitleFlashStep {
+    TITLE_FLASH_STEP_BRIGHTEN,
+    TITLE_FLASH_STEP_HOLD,
+    TITLE_FLASH_STEP_DARKEN,
+    TITLE_FLASH_STEP_DONE,
+};
+
+enum VsRecorderSlideInChoiceRowsStep {
+    SLIDE_IN_CHOICE_ROWS_STEP_INIT,
+    SLIDE_IN_CHOICE_ROWS_STEP_SLIDE,
+    SLIDE_IN_CHOICE_ROWS_STEP_DONE,
+};
+
 // one choice row sliding up along a sine curve
 typedef struct VsRecorderChoiceSlide {
     int delay;
@@ -47,7 +78,7 @@ const VsRecorderScreenFunc gVsRecorderTitleSubStates[4] = {
 
 BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
     switch (work->step) {
-    case 0:
+    case TITLE_INTRO_STEP_FADE_IN:
         if (VsRecorder_HasResumeScreen(work) == TRUE) {
             VsRecorder_SetSubState(work, TITLE_SHOW_MENU);
             break;
@@ -61,7 +92,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         OrbitCursor_SetAltAnim(work->orbitCursors[0]);
         work->step++;
         break;
-    case 1:
+    case TITLE_INTRO_STEP_LAUNCH_CURSOR:
         if (!IsPaletteFadeFinished()) {
             break;
         }
@@ -72,7 +103,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         PlaySE(SEQ_SE_PL_BREC11_2);
         work->step++;
         break;
-    case 2:
+    case TITLE_INTRO_STEP_LAUNCH_SECOND_CURSOR:
         work->counter++;
         if (work->counter < 25) {
             break;
@@ -84,7 +115,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         OrbitCursor_SetActive(work->orbitCursors[0], TRUE);
         work->step++;
         break;
-    case 3:
+    case TITLE_INTRO_STEP_SHOW_TOUCH_HERE:
         work->counter++;
         if (work->counter < 18) {
             break;
@@ -94,7 +125,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
         work->counter = 0;
         work->step++;
         break;
-    case 4:
+    case TITLE_INTRO_STEP_BRIGHTEN:
         if (work->counter < 16) {
             work->counter += 4;
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_BG, 0xF000, (u8)work->counter, 0xFFFF);
@@ -102,7 +133,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 5:
+    case TITLE_INTRO_STEP_DARKEN:
         if (work->counter > 0) {
             work->counter -= 4;
             PaletteData_BlendPalettes(work->plttData, PLTTBUF_MAIN_BG, 0xF000, (u8)work->counter, 0xFFFF);
@@ -110,7 +141,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 6:
+    case TITLE_INTRO_STEP_WAIT_TOUCH:
         if (System_GetTouchHeld() == TRUE) {
             VsRecorder_HideTouchHere(work);
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
@@ -128,7 +159,7 @@ BOOL VsRecorder_TitleIntro(VsRecorderWork *work) {
 
 BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work) {
     switch (work->step) {
-    case 0:
+    case TITLE_SHOW_MENU_STEP_CREATE_MENU:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_LoadDecorGfx(work);
         VsRecorder_CreateDecorSprites(work);
@@ -155,7 +186,7 @@ BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work) {
         work->counter = 16;
         work->step++;
         break;
-    case 1:
+    case TITLE_SHOW_MENU_STEP_FADE_IN:
         if (VsRecorder_HasResumeScreen(work) == TRUE) {
             if (IsPaletteFadeFinished() == TRUE) {
                 work->step++;
@@ -174,7 +205,7 @@ BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 2:
+    case TITLE_SHOW_MENU_STEP_LOAD_SCREEN:
         if (work->mode == 0) {
             GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 0x45, work->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_109);
         } else {
@@ -193,7 +224,7 @@ BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work) {
 
 BOOL VsRecorder_TitleFlash(VsRecorderWork *work) {
     switch (work->step) {
-    case 0:
+    case TITLE_FLASH_STEP_BRIGHTEN:
         OrbitCursor_SetPosition(work->orbitCursors[0], 128, 96);
         OrbitCursor_SetTarget(work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
@@ -205,11 +236,11 @@ BOOL VsRecorder_TitleFlash(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 1:
+    case TITLE_FLASH_STEP_HOLD:
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)work->counter, (u16)work->blendColor);
         work->step++;
         break;
-    case 2:
+    case TITLE_FLASH_STEP_DARKEN:
         work->counter--;
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)work->counter, (u16)work->blendColor);
         if (work->counter == 0) {
@@ -247,7 +278,7 @@ BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work) {
     fx32 x;
 
     switch (work->step) {
-    case 0:
+    case SLIDE_IN_CHOICE_ROWS_STEP_INIT:
         data = Heap_Alloc(HEAP_ID_109, sizeof(VsRecorderChoiceSlideIn));
         MI_CpuFill8(data, 0, sizeof(VsRecorderChoiceSlideIn));
         work->screenWork = data;
@@ -265,7 +296,7 @@ BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work) {
         }
         work->step++;
         break;
-    case 1:
+    case SLIDE_IN_CHOICE_ROWS_STEP_SLIDE:
         data = work->screenWork;
         if (data->fade != 0) {
             data->fade--;

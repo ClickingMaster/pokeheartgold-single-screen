@@ -43,6 +43,28 @@ enum BugContestSwapMonState {
     SWAP_MON_STATE_CHOOSE_MON,
 };
 
+enum SwapMonShowCaughtState {
+    SWAP_MON_SHOW_CAUGHT_PRINT,
+    SWAP_MON_SHOW_CAUGHT_WAIT_PRINT,
+    SWAP_MON_SHOW_CAUGHT_WAIT_INPUT,
+    SWAP_MON_SHOW_CAUGHT_DONE,
+};
+
+enum SwapMonChooseState {
+    SWAP_MON_CHOOSE_SHOW_MONS,
+    SWAP_MON_CHOOSE_OPEN_PROMPT,
+    SWAP_MON_CHOOSE_HANDLE_PROMPT,
+    SWAP_MON_CHOOSE_SCROLL_KEEP_NEW,
+    SWAP_MON_CHOOSE_SCROLL_KEEP_CURRENT,
+    SWAP_MON_CHOOSE_WAIT_INPUT,
+    SWAP_MON_CHOOSE_DONE,
+};
+
+enum SwapMonChoice {
+    SWAP_MON_CHOICE_KEEP_NEW = 1,
+    SWAP_MON_CHOICE_KEEP_CURRENT,
+};
+
 enum SwapMonPanelWindow {
     SWAP_MON_PANEL_WIN_NAME,
     SWAP_MON_PANEL_WIN_GENDER,
@@ -398,25 +420,25 @@ BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon) {
         return FALSE;
     }
     switch (swapMon->substate) {
-    case 0:
+    case SWAP_MON_SHOW_CAUGHT_PRINT:
         mon = swapMon->args->newlyCaughtMon;
         SwapMonPanels_Add(swapMon->panels, 0, 128, 72, mon);
         BufferBoxMonSpeciesName(messageFormat, 0, Mon_GetBoxMon(mon));
-        msgId = 0;
-        swapMon->substate = 2;
+        msgId = msg_0029_00000;
+        swapMon->substate = SWAP_MON_SHOW_CAUGHT_WAIT_INPUT;
         break;
-    case 1:
+    case SWAP_MON_SHOW_CAUGHT_WAIT_PRINT:
         if (!SwapMonText_IsPrinting(swapMon->text)) {
-            swapMon->substate = 2;
+            swapMon->substate = SWAP_MON_SHOW_CAUGHT_WAIT_INPUT;
         }
         break;
-    case 2:
+    case SWAP_MON_SHOW_CAUGHT_WAIT_INPUT:
         if (System_GetTouchNew() || (gSystem.newKeys & PAD_BUTTON_A)) {
             PlaySE(SEQ_SE_DP_SELECT);
-            swapMon->substate = 3;
+            swapMon->substate = SWAP_MON_SHOW_CAUGHT_DONE;
         }
         break;
-    case 3:
+    case SWAP_MON_SHOW_CAUGHT_DONE:
         return TRUE;
     default:
         GF_AssertFail();
@@ -435,56 +457,56 @@ BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon) {
         return FALSE;
     }
     switch (swapMon->substate) {
-    case 0:
-        msgId = 1;
+    case SWAP_MON_CHOOSE_SHOW_MONS:
+        msgId = msg_0029_00001;
         BugContestSwapMon_ShowBothMons(swapMon);
         swapMon->substate = msgId;
         break;
-    case 1:
+    case SWAP_MON_CHOOSE_OPEN_PROMPT:
         BugContestSwapMon_InitYesNoPrompt(swapMon);
-        swapMon->substate = 2;
+        swapMon->substate = SWAP_MON_CHOOSE_HANDLE_PROMPT;
         break;
-    case 2:
+    case SWAP_MON_CHOOSE_HANDLE_PROMPT:
         switch (YesNoPrompt_HandleInput(swapMon->yesNoPrompt)) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(swapMon->yesNoPrompt);
             ManagedSprite_SetDrawFlag(swapMon->cursorSprite, FALSE);
             SwapMonPanels_StartScroll(swapMon->panels, 0, (void *)TRUE, 72);
             SwapMonPanels_StartScroll(swapMon->panels, 1, (void *)TRUE, 242);
-            BugContestSwapMon_SetResult(swapMon, 1);
-            swapMon->substate = 3;
+            BugContestSwapMon_SetResult(swapMon, SWAP_MON_CHOICE_KEEP_NEW);
+            swapMon->substate = SWAP_MON_CHOOSE_SCROLL_KEEP_NEW;
             break;
         case YESNORESPONSE_NO:
             YesNoPrompt_Reset(swapMon->yesNoPrompt);
             ManagedSprite_SetDrawFlag(swapMon->cursorSprite, FALSE);
             SwapMonPanels_StartScroll(swapMon->panels, 0, (void *)TRUE, -50);
             SwapMonPanels_StartScroll(swapMon->panels, 1, (void *)TRUE, 72);
-            BugContestSwapMon_SetResult(swapMon, 2);
-            swapMon->substate = 4;
+            BugContestSwapMon_SetResult(swapMon, SWAP_MON_CHOICE_KEEP_CURRENT);
+            swapMon->substate = SWAP_MON_CHOOSE_SCROLL_KEEP_CURRENT;
             break;
         }
         break;
-    case 3:
+    case SWAP_MON_CHOOSE_SCROLL_KEEP_NEW:
         SwapMonPanels_Scroll(swapMon->panels);
         if (SwapMonPanels_IsScrollDone(swapMon->panels)) {
-            msgId = 2;
-            swapMon->substate = 5;
+            msgId = msg_0029_00002;
+            swapMon->substate = SWAP_MON_CHOOSE_WAIT_INPUT;
         }
         break;
-    case 4:
+    case SWAP_MON_CHOOSE_SCROLL_KEEP_CURRENT:
         SwapMonPanels_Scroll(swapMon->panels);
         if (SwapMonPanels_IsScrollDone(swapMon->panels)) {
-            msgId = 3;
-            swapMon->substate = 5;
+            msgId = msg_0029_00003;
+            swapMon->substate = SWAP_MON_CHOOSE_WAIT_INPUT;
         }
         break;
-    case 5:
+    case SWAP_MON_CHOOSE_WAIT_INPUT:
         if (System_GetTouchNew() || (gSystem.newKeys & PAD_BUTTON_A)) {
             PlaySE(SEQ_SE_DP_SELECT);
-            swapMon->substate = 6;
+            swapMon->substate = SWAP_MON_CHOOSE_DONE;
         }
         break;
-    case 6:
+    case SWAP_MON_CHOOSE_DONE:
         return TRUE;
     default:
         GF_AssertFail();
@@ -558,12 +580,12 @@ static void BugContestSwapMon_ResetDisplay(void) {
 
 static void BugContestSwapMon_SetResult(BugContestSwapMon *swapMon, int choice) {
     switch (choice) {
-    case 1: {
+    case SWAP_MON_CHOICE_KEEP_NEW: {
         BugContestSwapMonArgs *args = swapMon->args;
         args->keptMon = args->newlyCaughtMon;
         return;
     }
-    case 2: {
+    case SWAP_MON_CHOICE_KEEP_CURRENT: {
         BugContestSwapMonArgs *args = swapMon->args;
         args->keptMon = args->currentMon;
         return;

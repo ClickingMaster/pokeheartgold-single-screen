@@ -72,6 +72,17 @@ enum MailViewScreen {
     MAIL_VIEW_SCREEN_CONFIRM_QUIT,
 };
 
+enum MailViewEmptyWarningState {
+    MAIL_VIEW_EMPTY_WARNING_SHOW,
+    MAIL_VIEW_EMPTY_WARNING_WAIT_INPUT,
+};
+
+enum MailViewConfirmQuitState {
+    MAIL_VIEW_CONFIRM_QUIT_PRINT,
+    MAIL_VIEW_CONFIRM_QUIT_OPEN_PROMPT,
+    MAIL_VIEW_CONFIRM_QUIT_HANDLE_PROMPT,
+};
+
 typedef struct MailView {
     enum HeapID heapID;                        // 0x00
     u32 state;                                 // 0x04
@@ -512,7 +523,7 @@ static BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
     String *string = NULL;
 
     switch (mailView->subState) {
-    case 0:
+    case MAIL_VIEW_EMPTY_WARNING_SHOW:
         DrawFrameAndWindow2(&mailView->windows[5], TRUE, 10, 6);
         FillWindowPixelBuffer(&mailView->windows[5], 0xFF);
         string = String_New(76, mailView->heapID);
@@ -520,7 +531,7 @@ static BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
         AddTextPrinterParameterizedWithColor(&mailView->windows[5], 1, string, 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(1, 2, 15), NULL);
         String_Delete(string);
         break;
-    case 1:
+    case MAIL_VIEW_EMPTY_WARNING_WAIT_INPUT:
         if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
             done = TRUE;
             mailView->inputMode = MENU_INPUT_STATE_BUTTONS;
@@ -534,7 +545,7 @@ static BOOL MailView_ShowEmptyMailWarning(MailView *mailView) {
         }
         ClearFrameAndWindow2(&mailView->windows[5], TRUE);
         ClearWindowTilemapAndCopyToVram(&mailView->windows[5]);
-        mailView->subState = 0;
+        mailView->subState = MAIL_VIEW_EMPTY_WARNING_SHOW;
         mailView->screen = mailView->returnScreen;
         return FALSE;
     }
@@ -591,7 +602,7 @@ static BOOL MailView_ConfirmQuit(MailView *mailView) {
     int answer;
 
     switch (mailView->subState) {
-    case 0:
+    case MAIL_VIEW_CONFIRM_QUIT_PRINT:
         mailView->cursorBlinkPaused = TRUE;
         DrawFrameAndWindow2(&mailView->windows[5], TRUE, 10, 6);
         FillWindowPixelBuffer(&mailView->windows[5], 0xFF);
@@ -602,20 +613,20 @@ static BOOL MailView_ConfirmQuit(MailView *mailView) {
         MailView_ResetCursorHighlight(mailView);
         mailView->prevCursorPos = mailView->cursorPos;
         break;
-    case 1:
+    case MAIL_VIEW_CONFIRM_QUIT_OPEN_PROMPT:
         if (TextPrinterCheckActive(mailView->textPrinterId)) {
             return FALSE;
         }
         MailView_InitYesNoPrompt(mailView);
         break;
-    case 2:
+    case MAIL_VIEW_CONFIRM_QUIT_HANDLE_PROMPT:
         answer = MailView_HandleYesNoPrompt(mailView);
         if (answer < 0) {
             return FALSE;
         }
         ClearFrameAndWindow2(&mailView->windows[5], TRUE);
         ClearWindowTilemapAndCopyToVram(&mailView->windows[5]);
-        mailView->subState = 0;
+        mailView->subState = MAIL_VIEW_CONFIRM_QUIT_PRINT;
         if (answer != FALSE) {
             mailView->args->screenOrResult = 0xFFFF;
             return TRUE;

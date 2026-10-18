@@ -40,6 +40,112 @@
 
 FS_EXTERN_OVERLAY(OVY_41);
 
+enum VsRecorderFrontierExitStep {
+    FRONTIER_EXIT_STEP_SPIN_OUT,
+    FRONTIER_EXIT_STEP_WAIT,
+    FRONTIER_EXIT_STEP_FREE,
+    FRONTIER_EXIT_STEP_REBUILD_MENU,
+    FRONTIER_EXIT_STEP_RESET_FADE,
+    FRONTIER_EXIT_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderDressUpEnterStep {
+    DRESS_UP_ENTER_STEP_FADE_OUT_MENU,
+    DRESS_UP_ENTER_STEP_HIDE_CURSOR,
+    DRESS_UP_ENTER_STEP_FLIP_SCREENS,
+    DRESS_UP_ENTER_STEP_DONE,
+};
+
+enum VsRecorderDressUpSendShowStep {
+    DRESS_UP_SEND_SHOW_STEP_CREATE_PHOTO,
+    DRESS_UP_SEND_SHOW_STEP_LOAD_PALETTE,
+    DRESS_UP_SEND_SHOW_STEP_FADE_IN,
+    DRESS_UP_SEND_SHOW_STEP_DONE,
+};
+
+enum VsRecorderDressUpSendUploadStep {
+    DRESS_UP_SEND_UPLOAD_STEP_FREE_CARD,
+    DRESS_UP_SEND_UPLOAD_STEP_FADE_OUT,
+    DRESS_UP_SEND_UPLOAD_STEP_SHOW_SENDING,
+    DRESS_UP_SEND_UPLOAD_STEP_REQUEST,
+    DRESS_UP_SEND_UPLOAD_STEP_CHECK_RESULT,
+    DRESS_UP_SEND_UPLOAD_STEP_HIDE_CURSOR,
+    DRESS_UP_SEND_UPLOAD_STEP_REBUILD_MENU,
+    DRESS_UP_SEND_UPLOAD_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderDressUpSendExitStep {
+    DRESS_UP_SEND_EXIT_STEP_FREE_CARD,
+    DRESS_UP_SEND_EXIT_STEP_FADE_OUT,
+    DRESS_UP_SEND_EXIT_STEP_REBUILD_MENU,
+    DRESS_UP_SEND_EXIT_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderDressUpViewSelectCategoryStep {
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_LOAD_SCREEN,
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_FADE_IN,
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_INPUT,
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_REMOVE_WINDOWS,
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_FADE_OUT,
+    DRESS_UP_VIEW_SELECT_CATEGORY_STEP_DONE,
+};
+
+enum VsRecorderDressUpViewSelectSpeciesStep {
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_LOAD_SCREEN,
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_CREATE_LIST,
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_INPUT,
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_REMOVE_LIST,
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_FADE_OUT,
+    DRESS_UP_VIEW_SELECT_SPECIES_STEP_DONE,
+};
+
+enum VsRecorderDressUpViewExitStep {
+    DRESS_UP_VIEW_EXIT_STEP_FREE_CARD,
+    DRESS_UP_VIEW_EXIT_STEP_FADE_OUT,
+    DRESS_UP_VIEW_EXIT_STEP_REBUILD_MENU,
+    DRESS_UP_VIEW_EXIT_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderDressUpViewDownloadStep {
+    DRESS_UP_VIEW_DOWNLOAD_STEP_SHOW_RECEIVING,
+    DRESS_UP_VIEW_DOWNLOAD_STEP_REQUEST,
+    DRESS_UP_VIEW_DOWNLOAD_STEP_CHECK_RESULT,
+    DRESS_UP_VIEW_DOWNLOAD_STEP_HIDE_CURSOR,
+    DRESS_UP_VIEW_DOWNLOAD_STEP_CHECK_FOUND,
+    DRESS_UP_VIEW_DOWNLOAD_STEP_WAIT_NOT_FOUND,
+};
+
+enum VsRecorderDressUpViewShowPhotoStep {
+    DRESS_UP_VIEW_SHOW_PHOTO_STEP_CREATE_PHOTO,
+    DRESS_UP_VIEW_SHOW_PHOTO_STEP_LOAD_PALETTE,
+    DRESS_UP_VIEW_SHOW_PHOTO_STEP_FADE_IN,
+    DRESS_UP_VIEW_SHOW_PHOTO_STEP_DONE,
+};
+
+enum VsRecorderDressUpViewClosePhotoStep {
+    DRESS_UP_VIEW_CLOSE_PHOTO_STEP_REMOVE_CAPTION,
+    DRESS_UP_VIEW_CLOSE_PHOTO_STEP_FADE_OUT,
+    DRESS_UP_VIEW_CLOSE_PHOTO_STEP_DONE,
+};
+
+enum VsRecorderDressUpViewToggleProfileStep {
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_REMOVE_CAPTION,
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_BLEND_OUT,
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_CREATE,
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_LOAD_PALETTE,
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_BLEND_IN,
+    DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_DONE,
+};
+
+enum VsRecorderDressUpViewChangePhotoStep {
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_REMOVE_CAPTION,
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_BLEND_OUT,
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_CREATE_PHOTO,
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_LOAD_PALETTE,
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_BLEND_IN,
+    DRESS_UP_VIEW_CHANGE_PHOTO_STEP_DONE,
+};
+
 extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[]; // species groups (9)
 
 // substates of sending a Dress-Up photo (gVsRecorderDressUpSendSubStates)
@@ -150,7 +256,7 @@ BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case FRONTIER_EXIT_STEP_SPIN_OUT:
         if (record->fade == 0) {
             PlaySE(SEQ_SE_PL_BREC21);
         }
@@ -164,9 +270,9 @@ BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 1:
+    case FRONTIER_EXIT_STEP_WAIT:
         work->step++;
-    case 2:
+    case FRONTIER_EXIT_STEP_FREE:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeFrontierSprites(work);
         VsRecorder_FreeFrontierButtons(work);
@@ -178,7 +284,7 @@ BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
         record->fade = 0;
         work->step++;
         break;
-    case 3:
+    case FRONTIER_EXIT_STEP_REBUILD_MENU:
         VsRecorder_SetScreensFlipped(TRUE);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -189,7 +295,7 @@ BOOL VsRecorder_FrontierExit(VsRecorderWork *work) {
         BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
         work->step++;
         break;
-    case 4:
+    case FRONTIER_EXIT_STEP_RESET_FADE:
         if (record->fade != 0) {
             record->fade -= 2;
             break;
@@ -245,7 +351,7 @@ BOOL VsRecorder_DressUpEnter(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_ENTER_STEP_FADE_OUT_MENU:
         if (VsRecorder_StepFade(&dressUp->fade, 1)) {
             work->step++;
         }
@@ -253,7 +359,7 @@ BOOL VsRecorder_DressUpEnter(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)dressUp->fade, (u16)work->blendColor);
         break;
-    case 1:
+    case DRESS_UP_ENTER_STEP_HIDE_CURSOR:
         SetBgPriority(GF_BG_LYR_MAIN_0, 0);
         SetBgPriority(GF_BG_LYR_MAIN_2, 0);
         SetBgPriority(GF_BG_LYR_MAIN_1, 3);
@@ -265,7 +371,7 @@ BOOL VsRecorder_DressUpEnter(VsRecorderWork *work) {
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         work->step++;
         break;
-    case 2:
+    case DRESS_UP_ENTER_STEP_FLIP_SCREENS:
         VsRecorder_StartFlipScreens(work, 0);
         VsRecorder_SetVBlankPaused(work, TRUE);
         work->step++;
@@ -291,7 +397,7 @@ BOOL VsRecorder_DressUpSendShow(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_SEND_SHOW_STEP_CREATE_PHOTO:
         VsRecorder_SetPhotoWindow();
         VsRecorder_LoadScreen(work, 35, GF_BG_LYR_MAIN_3);
         VsRecorder_LoadScreen(work, 37, GF_BG_LYR_SUB_3);
@@ -309,11 +415,11 @@ BOOL VsRecorder_DressUpSendShow(VsRecorderWork *work) {
         Main_SetVBlankIntrCB(VsRecorder_DressUpVBlankCB, work);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_SEND_SHOW_STEP_LOAD_PALETTE:
         PaletteData_LoadPaletteSlotFromHardware(work->plttData, PLTTBUF_MAIN_BG, 0, 0x200);
         work->step++;
         break;
-    case 2:
+    case DRESS_UP_SEND_SHOW_STEP_FADE_IN:
         VsRecorder_StepFade(&dressUp->fade, 0);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 0)) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -363,7 +469,7 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         return FALSE;
     }
     switch (work->step) {
-    case 0:
+    case DRESS_UP_SEND_UPLOAD_STEP_FREE_CARD:
         SetBgPriority(GF_BG_LYR_MAIN_0, 1);
         SetBgPriority(GF_BG_LYR_MAIN_1, 3);
         SetBgPriority(GF_BG_LYR_MAIN_2, 2);
@@ -379,7 +485,7 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         VsRecorder_RemovePhotoCaption(work);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_SEND_UPLOAD_STEP_FADE_OUT:
         VsRecorder_StepFade(&dressUp->fade, 1);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 0)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -393,7 +499,7 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case DRESS_UP_SEND_UPLOAD_STEP_SHOW_SENDING:
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -403,17 +509,17 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
-    case 3:
+    case DRESS_UP_SEND_UPLOAD_STEP_REQUEST:
         if (GlobalTerminalNet_RequestDressUpUpload(VsRecorder_GetNet(work), dressUp->uploadCard, (GlobalTerminalNetDressUpRecord *)dressUp->ownPhoto) == TRUE) {
             FrontierCard_Delete(dressUp->uploadCard);
             work->step++;
         }
         break;
-    case 4:
+    case DRESS_UP_SEND_UPLOAD_STEP_CHECK_RESULT:
         VsRecorder_HideTopMessage(work);
         if (GlobalTerminalNet_GetError(VsRecorder_GetNet(work), &error) == TRUE) {
             StopSE(SEQ_SE_PL_BREC80, 0);
-            VsRecorder_ShowMessageScreen(work, 0, error->code, error->type);
+            VsRecorder_ShowMessageScreen(work, VS_RECORDER_REQUEST_DRESS_UP_UPLOAD, error->code, error->type);
             work->step++;
         } else {
             StopSE(SEQ_SE_PL_BREC80, 0);
@@ -422,12 +528,12 @@ BOOL VsRecorder_DressUpSendUpload(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 5:
+    case DRESS_UP_SEND_UPLOAD_STEP_HIDE_CURSOR:
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
         work->step++;
         break;
-    case 6:
+    case DRESS_UP_SEND_UPLOAD_STEP_REBUILD_MENU:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_ResetFade(&dressUp->fade);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -471,7 +577,7 @@ BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_SEND_EXIT_STEP_FREE_CARD:
         SetBgPriority(GF_BG_LYR_MAIN_0, 1);
         SetBgPriority(GF_BG_LYR_MAIN_1, 3);
         SetBgPriority(GF_BG_LYR_MAIN_2, 2);
@@ -487,7 +593,7 @@ BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work) {
         VsRecorder_RemovePhotoCaption(work);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_SEND_EXIT_STEP_FADE_OUT:
         VsRecorder_StepFade(&dressUp->fade, 1);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 0) != FALSE) {
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -499,7 +605,7 @@ BOOL VsRecorder_DressUpSendExit(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case DRESS_UP_SEND_EXIT_STEP_REBUILD_MENU:
         VsRecorder_ResetFade(&dressUp->fade);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -555,7 +661,7 @@ BOOL VsRecorder_DressUpViewInit(VsRecorderWork *work) {
 BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_LOAD_SCREEN:
         VsRecorder_LoadScreen(work, 60, GF_BG_LYR_SUB_3);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
@@ -564,7 +670,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         dressUp->hitboxes = TouchHitboxController_Create(sVsRecorderSpeciesGroupHitboxes, 9, VsRecorder_OnDressUpCategoryTouch, work, HEAP_ID_109);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_FADE_IN:
         VsRecorder_StepFade(&dressUp->fade, 0);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 0)) {
             VsRecorder_ShowTopMessage(work, msg_0013_00114);
@@ -573,20 +679,20 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_INPUT:
         TouchHitboxController_IsTriggered(dressUp->hitboxes);
         if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDressUpCenterButtonHitbox) || dressUp->categoryChosen == TRUE) {
             VsRecorder_OnTouchConfirm(work);
             work->step++;
         }
         break;
-    case 3:
+    case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_REMOVE_WINDOWS:
         VsRecorder_RemoveDressUpCategoryWindows(work);
         TouchHitboxController_Destroy(dressUp->hitboxes);
         VsRecorder_HideTopMessage(work);
         work->step++;
         // fallthrough
-    case 4:
+    case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_FADE_OUT:
         if (dressUp->categoryChosen == TRUE) {
             if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 2)) {
                 work->step++;
@@ -614,12 +720,12 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
 BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_SELECT_SPECIES_STEP_LOAD_SCREEN:
         VsRecorder_SetDressUpSendButtonHidden(work, TRUE);
         VsRecorder_LoadScreen(work, 58, GF_BG_LYR_SUB_3);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_SELECT_SPECIES_STEP_CREATE_LIST:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 2)) {
             VsRecorder_ShowTopMessage(work, msg_0013_00114);
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -636,7 +742,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 2: {
+    case DRESS_UP_VIEW_SELECT_SPECIES_STEP_INPUT: {
         int species;
         VsRecorder_UpdateTouchScroll(&work->touchScroll);
         VsRecorder_ListScroll(&work->listWindow, work->touchScroll.direction);
@@ -652,7 +758,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
         }
         break;
     }
-    case 3:
+    case DRESS_UP_VIEW_SELECT_SPECIES_STEP_REMOVE_LIST:
         VsRecorder_HideTopMessage(work);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeTouchScroll(&work->touchScroll);
@@ -661,7 +767,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
         // fallthrough
-    case 4:
+    case DRESS_UP_VIEW_SELECT_SPECIES_STEP_FADE_OUT:
         VsRecorder_StepFade(&dressUp->fade, 1);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 0)) {
             work->step++;
@@ -684,7 +790,7 @@ BOOL VsRecorder_DressUpViewSelectSpecies(VsRecorderWork *work) {
 BOOL VsRecorder_DressUpViewExit(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_EXIT_STEP_FREE_CARD:
         SetBgPriority(GF_BG_LYR_MAIN_0, 1);
         SetBgPriority(GF_BG_LYR_MAIN_1, 3);
         SetBgPriority(GF_BG_LYR_MAIN_2, 2);
@@ -699,7 +805,7 @@ BOOL VsRecorder_DressUpViewExit(VsRecorderWork *work) {
         BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_EXIT_STEP_FADE_OUT:
         VsRecorder_StepFade(&dressUp->fade, 1);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 0)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -711,7 +817,7 @@ BOOL VsRecorder_DressUpViewExit(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)dressUp->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case DRESS_UP_VIEW_EXIT_STEP_REBUILD_MENU:
         VsRecorder_ResetFade(&dressUp->fade);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -760,7 +866,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         return FALSE;
     }
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_DOWNLOAD_STEP_SHOW_RECEIVING:
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -768,16 +874,16 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_DOWNLOAD_STEP_REQUEST:
         if (GlobalTerminalNet_RequestDressUpDownload(VsRecorder_GetNet(work), dressUp->species) == TRUE) {
             work->step++;
         }
         break;
-    case 2:
+    case DRESS_UP_VIEW_DOWNLOAD_STEP_CHECK_RESULT:
         VsRecorder_HideTopMessage(work);
         if (GlobalTerminalNet_GetError(VsRecorder_GetNet(work), &error) == TRUE) {
             StopSE(SEQ_SE_PL_BREC80, 0);
-            VsRecorder_ShowMessageScreen(work, 1, error->code, error->type);
+            VsRecorder_ShowMessageScreen(work, VS_RECORDER_REQUEST_DRESS_UP_DOWNLOAD, error->code, error->type);
             dressUp->downloadCount = 0;
             work->counter = 0;
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
@@ -788,7 +894,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 3:
+    case DRESS_UP_VIEW_DOWNLOAD_STEP_HIDE_CURSOR:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -796,7 +902,7 @@ BOOL VsRecorder_DressUpViewDownload(VsRecorderWork *work) {
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
         work->step++;
         break;
-    case 4:
+    case DRESS_UP_VIEW_DOWNLOAD_STEP_CHECK_FOUND:
         if (dressUp->downloadCount != 0) {
             dressUp->photoIndex = 0;
             dressUp->unk_230 = 0;
@@ -824,7 +930,7 @@ BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_SHOW_PHOTO_STEP_CREATE_PHOTO:
         dressUp->showProfile = FALSE;
         {
             VsRecorderDressUpDownload *download = dressUp->downloads[dressUp->photoIndex];
@@ -843,11 +949,11 @@ BOOL VsRecorder_DressUpViewShowPhoto(VsRecorderWork *work) {
         Main_SetVBlankIntrCB(VsRecorder_DressUpVBlankCB, work);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_SHOW_PHOTO_STEP_LOAD_PALETTE:
         PaletteData_LoadPaletteSlotFromHardware(work->plttData, PLTTBUF_MAIN_BG, 0, 0x200);
         work->step++;
         break;
-    case 2:
+    case DRESS_UP_VIEW_SHOW_PHOTO_STEP_FADE_IN:
         VsRecorder_StepFade(&dressUp->fade, 0);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 0)) {
             AccessoryPortrait_SetMonVisible(dressUp->portrait, TRUE);
@@ -911,7 +1017,7 @@ BOOL VsRecorder_DressUpViewClosePhoto(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_CLOSE_PHOTO_STEP_REMOVE_CAPTION:
         if (dressUp->showProfile == FALSE) {
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
@@ -924,7 +1030,7 @@ BOOL VsRecorder_DressUpViewClosePhoto(VsRecorderWork *work) {
         VsRecorder_RemoveDressUpToggleWindow(work);
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_CLOSE_PHOTO_STEP_FADE_OUT:
         VsRecorder_StepFade(&dressUp->fade, 1);
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 0)) {
             if (dressUp->portrait != NULL) {
@@ -954,7 +1060,7 @@ BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_REMOVE_CAPTION:
         if (dressUp->showProfile == FALSE) {
             VsRecorder_RemovePhotoCaption(work);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
@@ -965,7 +1071,7 @@ BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
         }
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_BLEND_OUT:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 1)) {
             if (dressUp->showProfile == FALSE) {
                 if (dressUp->portrait != NULL) {
@@ -982,7 +1088,7 @@ BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 2:
+    case DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_CREATE:
         if (dressUp->showProfile == FALSE) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             GlobalTerminalNet_CopyRequestHeader(dressUp->downloads[dressUp->photoIndex], dressUp->profile.card);
@@ -1003,13 +1109,13 @@ BOOL VsRecorder_DressUpViewToggleProfile(VsRecorderWork *work) {
         }
         work->step++;
         break;
-    case 3:
+    case DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_LOAD_PALETTE:
         if (dressUp->showProfile != FALSE) {
             PaletteData_LoadPaletteSlotFromHardware(work->plttData, PLTTBUF_MAIN_BG, 0, 0x200);
         }
         work->step++;
         break;
-    case 4:
+    case DRESS_UP_VIEW_TOGGLE_PROFILE_STEP_BLEND_IN:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 1)) {
             if (dressUp->showProfile == FALSE) {
                 VsRecorder_SetProfileDrawFlag(&dressUp->profile, TRUE);
@@ -1037,7 +1143,7 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
     VsRecorderDressUp *dressUp = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_REMOVE_CAPTION:
         if (dressUp->showProfile == FALSE) {
             VsRecorder_RemovePhotoCaption(work);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
@@ -1048,7 +1154,7 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
         }
         work->step++;
         break;
-    case 1:
+    case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_BLEND_OUT:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, TRUE, 1)) {
             if (dressUp->showProfile == FALSE) {
                 if (dressUp->portrait != NULL) {
@@ -1065,7 +1171,7 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 2:
+    case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_CREATE_PHOTO:
         VsRecorder_SetVBlankPaused(work, TRUE);
         if (dressUp->showProfile == FALSE) {
             GlobalTerminalNet_UnpackDressUpPhoto(&dressUp->downloads[dressUp->photoIndex]->form, (GlobalTerminalNetDressUpRecord *)dressUp->photo);
@@ -1087,13 +1193,13 @@ BOOL VsRecorder_DressUpViewChangePhoto(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
         break;
-    case 3:
+    case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_LOAD_PALETTE:
         if (dressUp->showProfile == FALSE) {
             PaletteData_LoadPaletteSlotFromHardware(work->plttData, PLTTBUF_MAIN_BG, 0, 0x200);
         }
         work->step++;
         break;
-    case 4:
+    case DRESS_UP_VIEW_CHANGE_PHOTO_STEP_BLEND_IN:
         if (VsRecorder_StepBlend(&dressUp->eva, &dressUp->evb, FALSE, 1)) {
             if (dressUp->showProfile == FALSE) {
                 VsRecorder_PrintPhotoCaption(work, dressUp->photoIndex);

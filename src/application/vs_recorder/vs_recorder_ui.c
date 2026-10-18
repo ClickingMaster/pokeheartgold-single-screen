@@ -45,6 +45,13 @@ typedef struct VsRecorderAngles {
     int values[6];
 } VsRecorderAngles;
 
+enum VsRecorderDecorState {
+    VS_RECORDER_DECOR_WAIT,
+    VS_RECORDER_DECOR_WOBBLE_IN,
+    VS_RECORDER_DECOR_SLIDE,
+    VS_RECORDER_DECOR_SWAY,
+};
+
 BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
 void TextOBJ_SetParentSprite(TextOBJ *textOBJ, const Sprite *sprite);
 
@@ -139,49 +146,49 @@ void VsRecorder_MenuRunAction(VsRecorderWork *work) {
         VsRecorderApp_SetResult(work->result, 0, 0);
         VsRecorder_SetSubState(work, 2);
         break;
-    case 4:
+    case VS_RECORDER_MENU_ACTION_SAVED_VIDEO:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_SAVED_VIDEO, TRUE, work->screenPtr);
         break;
-    case 5:
+    case VS_RECORDER_MENU_ACTION_FRONTIER:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_FRONTIER, TRUE, work->screenPtr);
         break;
-    case 8:
+    case VS_RECORDER_MENU_ACTION_DRESS_UP_SEND:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_DRESS_UP_SEND, TRUE, work->screenPtr);
         break;
-    case 9:
+    case VS_RECORDER_MENU_ACTION_DRESS_UP_VIEW:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_DRESS_UP_VIEW, TRUE, work->screenPtr);
         break;
-    case 10:
+    case VS_RECORDER_MENU_ACTION_BOX_DATA_SEND:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_BOX_DATA_SEND, TRUE, work->screenPtr);
         break;
-    case 11:
+    case VS_RECORDER_MENU_ACTION_BOX_DATA_VIEW:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_BOX_DATA_VIEW, TRUE, work->screenPtr);
         break;
-    case 12:
+    case VS_RECORDER_MENU_ACTION_RANKINGS:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_RANKINGS, TRUE, work->screenPtr);
         break;
-    case 13:
+    case VS_RECORDER_MENU_ACTION_RANKINGS_LAST:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_RANKINGS_LAST, TRUE, work->screenPtr);
         break;
-    case 14:
+    case VS_RECORDER_MENU_ACTION_COLOSSEUM_TOP:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_COLOSSEUM_TOP, TRUE, work->screenPtr);
         break;
-    case 15:
+    case VS_RECORDER_MENU_ACTION_FRONTIER_TOP:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_FRONTIER_TOP, TRUE, work->screenPtr);
         break;
-    case 16:
+    case VS_RECORDER_MENU_ACTION_NEWEST:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_NEWEST, TRUE, work->screenPtr);
         break;
-    case 17:
+    case VS_RECORDER_MENU_ACTION_SEARCH:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_SEARCH, TRUE, work->screenPtr);
         break;
-    case 18:
+    case VS_RECORDER_MENU_ACTION_SEARCH_NUMBER:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_SEARCH_NUMBER, TRUE, work->screenPtr);
         break;
-    case 19:
+    case VS_RECORDER_MENU_ACTION_SEND_VIDEO:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_SEND_VIDEO, TRUE, work->screenPtr);
         break;
-    case 7:
+    case VS_RECORDER_MENU_ACTION_DELETE:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_DELETE, TRUE, work->screenPtr);
         break;
     }
@@ -210,13 +217,13 @@ static BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
         }
         break;
     case 6:
-        if (selection == 100 && VsRecorder_IsBoxUploaded(work)) {
+        if (selection == VS_RECORDER_SELECTION_SEND && VsRecorder_IsBoxUploaded(work)) {
             VsRecorder_ShowNotice(work, msg_0013_00273);
             result = FALSE;
         }
         break;
     case 2:
-        if (selection == 9999 && work->savedVideos[0] == NULL) {
+        if (selection == VS_RECORDER_SELECTION_SEND_VIDEO && work->savedVideos[0] == NULL) {
             VsRecorder_ShowNotice(work, msg_0013_00129);
             result = FALSE;
         }
@@ -262,11 +269,11 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
         VsRecorder_ClearMenuHitboxes(work);
         OrbitCursor_SetVisible(work->orbitCursors[0], 1);
     }
-    if (work->selection == 999) {
+    if (work->selection == VS_RECORDER_SELECTION_CANCEL) {
         VsRecorder_ShowMenuNotice(work, msg_0013_00193);
         return;
     }
-    if (work->selection == 9999) {
+    if (work->selection == VS_RECORDER_SELECTION_SEND_VIDEO) {
         VsRecorder_ShowMenuNotice(work, msg_0013_00301);
         return;
     }
@@ -499,7 +506,7 @@ void VsRecorder_CreateDecorSprites(VsRecorderWork *work) {
             ManagedSprite_SetAffineScale(work->decor[i].sprites[j], scales.v[i], 1.0f);
             work->decor[i].counter = 0;
             work->decor[i].phase = i % 3;
-            work->decor[i].state = 0;
+            work->decor[i].state = VS_RECORDER_DECOR_WAIT;
             work->decor[i].scale = scales.v[i];
             work->decor[i].duration = xs.v[i] * 2 + 10;
             if (i < 3) {
@@ -805,7 +812,7 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
         return;
     }
     switch (decor->state) {
-    case 0:
+    case VS_RECORDER_DECOR_WAIT:
         if (decor->counter == 3) {
             decor->state++;
             decor->counter = 0;
@@ -813,7 +820,7 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
             decor->counter++;
         }
         break;
-    case 1:
+    case VS_RECORDER_DECOR_WOBBLE_IN:
         if (decor->counter == 4) {
             decor->state++;
             decor->counter = 0;
@@ -829,7 +836,7 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
             decor->counter++;
         }
         break;
-    case 2:
+    case VS_RECORDER_DECOR_SLIDE:
         f.angles = sVsRecorderDecorAngles;
         ManagedSprite_GetPositionXY(decor->sprites[0], &f.p.x, &f.p.y1);
         ManagedSprite_GetPositionXY(decor->sprites[1], &f.p.x, &f.p.y2);
@@ -849,7 +856,7 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
         ManagedSprite_SetPositionXY(decor->sprites[0], f.p.x, f.p.y1);
         ManagedSprite_SetPositionXY(decor->sprites[1], f.p.x, f.p.y2);
         break;
-    case 3:
+    case VS_RECORDER_DECOR_SWAY:
         if (decor->counter == 0) {
             ManagedSprite_GetSpritePositionFxXY(decor->sprites[0], &decor->startX, &f.y1);
             decor->counter++;
@@ -868,7 +875,7 @@ static void VsRecorder_DecorTask(SysTask *task, void *data) {
         ManagedSprite_SetPositonFxXY(decor->sprites[1], f.x2, f.y2);
         break;
     }
-    if (decor->state >= 2 && decor->scale > 0.1f) {
+    if (decor->state >= VS_RECORDER_DECOR_SLIDE && decor->scale > 0.1f) {
         decor->scale -= 0.1f;
         ManagedSprite_SetAffineScale(decor->sprites[0], decor->scale, 1.0f);
         ManagedSprite_SetAffineScale(decor->sprites[1], decor->scale, 1.0f);

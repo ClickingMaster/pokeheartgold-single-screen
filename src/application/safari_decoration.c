@@ -112,6 +112,32 @@ typedef struct SafariDecorationModelInfo {
     u32 animIds[4];
 } SafariDecorationModelInfo;
 
+enum SafariDecorationState {
+    SAFARI_DECORATION_STATE_FADE_IN,
+    SAFARI_DECORATION_STATE_SELECT_OBJECT,
+    SAFARI_DECORATION_STATE_CONFIRM_PLACE,
+    SAFARI_DECORATION_STATE_FADE_OUT,
+    SAFARI_DECORATION_STATE_EXIT,
+};
+
+enum SafariDecorationSelectState {
+    SAFARI_DECORATION_SELECT_INPUT,
+    SAFARI_DECORATION_SELECT_CONFIRM,
+    SAFARI_DECORATION_SELECT_MESSAGE,
+    SAFARI_DECORATION_SELECT_LEAVE,
+};
+
+enum SafariDecorationConfirmState {
+    SAFARI_DECORATION_CONFIRM_OPEN_PROMPT,
+    SAFARI_DECORATION_CONFIRM_HANDLE_PROMPT,
+    SAFARI_DECORATION_CONFIRM_CANCEL,
+};
+
+enum SafariDecorationFadeState {
+    SAFARI_DECORATION_FADE_START,
+    SAFARI_DECORATION_FADE_WAIT,
+};
+
 typedef struct SafariDecoration {
     enum HeapID heapId;                  // 0x000
     int state;                           // 0x004
@@ -334,19 +360,19 @@ BOOL SafariDecoration_Main(OverlayManager *man, int *state) {
     SafariDecoration *decor = OverlayManager_GetData(man);
 
     switch (*state) {
-    case 0:
+    case SAFARI_DECORATION_STATE_FADE_IN:
         *state = SafariDecoration_State_FadeIn(decor);
         break;
-    case 1:
+    case SAFARI_DECORATION_STATE_SELECT_OBJECT:
         *state = SafariDecoration_State_SelectObject(decor);
         break;
-    case 2:
+    case SAFARI_DECORATION_STATE_CONFIRM_PLACE:
         *state = SafariDecoration_State_ConfirmPlace(decor);
         break;
-    case 3:
+    case SAFARI_DECORATION_STATE_FADE_OUT:
         *state = SafariDecoration_State_FadeOut(decor);
         break;
-    case 4:
+    case SAFARI_DECORATION_STATE_EXIT:
         return TRUE;
     }
     SpriteSystem_DrawSprites(decor->spriteManager);
@@ -419,82 +445,82 @@ static void SafariDecoration_ResetGraphics(void) {
 
 static int SafariDecoration_State_SelectObject(SafariDecoration *decor) {
     switch (decor->state) {
-    case 0:
+    case SAFARI_DECORATION_SELECT_INPUT:
         decor->state = SafariDecoration_HandleListInput(decor);
         break;
-    case 1:
-        decor->state = 0;
-        return 2;
-    case 2:
+    case SAFARI_DECORATION_SELECT_CONFIRM:
+        decor->state = SAFARI_DECORATION_SELECT_INPUT;
+        return SAFARI_DECORATION_STATE_CONFIRM_PLACE;
+    case SAFARI_DECORATION_SELECT_MESSAGE:
         decor->state = SafariDecoration_WaitMessageDismiss(decor);
         break;
-    case 3:
-        decor->state = 0;
+    case SAFARI_DECORATION_SELECT_LEAVE:
+        decor->state = SAFARI_DECORATION_SELECT_INPUT;
         return decor->nextState;
     }
-    return 1;
+    return SAFARI_DECORATION_STATE_SELECT_OBJECT;
 }
 
 static int SafariDecoration_State_ConfirmPlace(SafariDecoration *decor) {
     switch (decor->state) {
-    case 0:
+    case SAFARI_DECORATION_CONFIRM_OPEN_PROMPT:
         SafariDecoration_SetConfirmMode(decor, TRUE);
         SafariDecoration_OpenYesNoPrompt(decor);
         decor->state++;
         break;
-    case 1: {
+    case SAFARI_DECORATION_CONFIRM_HANDLE_PROMPT: {
         int response = SafariDecoration_HandleYesNoPrompt(decor);
         if (response < 0) {
             break;
         }
         if (response == TRUE) {
             SafariDecoration_PlaceObject(decor);
-            decor->state = 0;
-            return 3;
+            decor->state = SAFARI_DECORATION_CONFIRM_OPEN_PROMPT;
+            return SAFARI_DECORATION_STATE_FADE_OUT;
         }
         decor->state++;
         break;
     }
     default:
         SafariDecoration_SetConfirmMode(decor, FALSE);
-        decor->state = 0;
-        return 1;
+        decor->state = SAFARI_DECORATION_CONFIRM_OPEN_PROMPT;
+        return SAFARI_DECORATION_STATE_SELECT_OBJECT;
     }
-    return 2;
+    return SAFARI_DECORATION_STATE_CONFIRM_PLACE;
 }
 
 static int SafariDecoration_State_FadeIn(SafariDecoration *decor) {
     switch (decor->state) {
-    case 0:
+    case SAFARI_DECORATION_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, decor->heapId);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         decor->state++;
         break;
-    case 1:
+    case SAFARI_DECORATION_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            decor->state = 0;
-            return 1;
+            decor->state = SAFARI_DECORATION_FADE_START;
+            return SAFARI_DECORATION_STATE_SELECT_OBJECT;
         }
         break;
     }
-    return 0;
+    return SAFARI_DECORATION_STATE_FADE_IN;
 }
 
 static int SafariDecoration_State_FadeOut(SafariDecoration *decor) {
     switch (decor->state) {
-    case 0:
+    case SAFARI_DECORATION_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, decor->heapId);
         decor->state++;
         break;
-    case 1:
+    case SAFARI_DECORATION_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            decor->state = 0;
-            return 4;
+            decor->state = SAFARI_DECORATION_FADE_START;
+            return SAFARI_DECORATION_STATE_EXIT;
         }
         break;
     }
-    return 3;
+    return SAFARI_DECORATION_STATE_FADE_OUT;
 }
 
 static void SafariDecoration_PlaceObject(SafariDecoration *decor) {
@@ -784,9 +810,9 @@ static int SafariDecoration_WaitMessageDismiss(SafariDecoration *decor) {
         PlaySE(SEQ_SE_DP_BUTTON3);
         ClearFrameAndWindow2(&decor->windows[1], TRUE);
         ClearWindowTilemapAndScheduleTransfer(&decor->windows[1]);
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
-    return 2;
+    return SAFARI_DECORATION_SELECT_MESSAGE;
 }
 
 static void SafariDecoration_SetConfirmMode(SafariDecoration *decor, BOOL confirm) {
@@ -851,25 +877,25 @@ static int SafariDecoration_ChooseObject(SafariDecoration *decor, u32 cursorPos)
     if (cursorPos >= NUM_OBJECTS_PER_PAGE) {
         PlaySE(SEQ_SE_DP_SELECT);
         SafariDecoration_SetBackButtonState(decor, 1);
-        decor->nextState = 3;
-        return 3;
+        decor->nextState = SAFARI_DECORATION_STATE_FADE_OUT;
+        return SAFARI_DECORATION_SELECT_LEAVE;
     }
 
     decor->selection = decor->cursorPos + NUM_OBJECTS_PER_PAGE * decor->page;
     if (decor->selection >= decor->numObjects) {
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
 
     result = SafariDecoration_CheckObjectPlaceable(decor, decor->selection);
     if (result != 0) {
         PlaySE(SEQ_SE_DP_BOX03);
         SafariDecoration_ShowErrorMessage(decor, result - 1);
-        return 2;
+        return SAFARI_DECORATION_SELECT_MESSAGE;
     }
 
     PlaySE(SEQ_SE_DP_SELECT);
     decor->selectedObjectId = decor->objects[decor->selection].objectId;
-    return 1;
+    return SAFARI_DECORATION_SELECT_CONFIRM;
 }
 
 static int SafariDecoration_HandleListButtons(SafariDecoration *decor) {
@@ -889,34 +915,34 @@ static int SafariDecoration_HandleListButtons(SafariDecoration *decor) {
         return SafariDecoration_ChooseObject(decor, decor->cursorPos);
     }
     if (!(keys & (PAD_KEY_RIGHT | PAD_KEY_LEFT | PAD_KEY_UP | PAD_KEY_DOWN))) {
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
     column = (int)decor->cursorPos % 2;
     row = decor->cursorPos / 2;
     if (keys & PAD_KEY_RIGHT) {
         if (row == 3) {
-            return 0;
+            return SAFARI_DECORATION_SELECT_INPUT;
         }
         if (column == 1) {
             if (decor->page < decor->numPages - 1 && row < 3) {
                 decor->page++;
                 scroll = 2;
             } else {
-                return 0;
+                return SAFARI_DECORATION_SELECT_INPUT;
             }
         } else {
             column++;
         }
     } else if (keys & PAD_KEY_LEFT) {
         if (row == 3) {
-            return 0;
+            return SAFARI_DECORATION_SELECT_INPUT;
         }
         if (column == 0) {
             if (decor->page && row < 3) {
                 decor->page--;
                 scroll = 1;
             } else {
-                return 0;
+                return SAFARI_DECORATION_SELECT_INPUT;
             }
         } else {
             column--;
@@ -929,12 +955,12 @@ static int SafariDecoration_HandleListButtons(SafariDecoration *decor) {
     decor->cursorPos = column + row * 2;
     if (scroll) {
         SafariDecoration_StartPageScroll(decor, scroll - 1, &decor->scrollTasks, 0);
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
     PlaySE(SEQ_SE_DP_BUTTON3);
     SafariDecoration_MoveCursor(decor, decor->cursorPos);
     SafariDecoration_PrintObjectDescription(decor);
-    return 0;
+    return SAFARI_DECORATION_SELECT_INPUT;
 }
 
 static int SafariDecoration_HandleListTouch(SafariDecoration *decor, u32 *touched) {
@@ -942,7 +968,7 @@ static int SafariDecoration_HandleListTouch(SafariDecoration *decor, u32 *touche
 
     if (hit == -1) {
         *touched = FALSE;
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
     if (hit == 7) {
         if (decor->page != 0) {
@@ -950,7 +976,7 @@ static int SafariDecoration_HandleListTouch(SafariDecoration *decor, u32 *touche
             SafariDecoration_StartPageScroll(decor, 0, &decor->scrollTasks, 0);
             *touched = TRUE;
         }
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
     if (hit == 8) {
         if (decor->page < decor->numPages - 1) {
@@ -958,7 +984,7 @@ static int SafariDecoration_HandleListTouch(SafariDecoration *decor, u32 *touche
             SafariDecoration_StartPageScroll(decor, 1, &decor->scrollTasks, 0);
             *touched = TRUE;
         }
-        return 0;
+        return SAFARI_DECORATION_SELECT_INPUT;
     }
     if (hit != decor->cursorPos) {
         decor->cursorPos = hit;

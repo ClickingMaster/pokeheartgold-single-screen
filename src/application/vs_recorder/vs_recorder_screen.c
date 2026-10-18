@@ -2516,54 +2516,54 @@ u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index,
     work->messageScreen.savedStep = work->step;
     work->messageScreen.returnScreen = *work->screenPtr;
     work->messageScreen.active = TRUE;
-    result = 194;
+    result = msg_0013_00194;
     switch (type) {
     case 0:
         switch (index) {
         case 0:
-            result = 244;
+            result = msg_0013_00244;
             break;
         case 1:
-            result = 245;
+            result = msg_0013_00245;
             break;
         case 2:
-            result = 246;
+            result = msg_0013_00246;
             break;
         case 3:
-            result = 247;
+            result = msg_0013_00247;
             break;
         case 4:
-            result = 248;
+            result = msg_0013_00248;
             break;
         case 5:
-            result = 249;
+            result = msg_0013_00249;
             break;
         case 6:
-            result = 250;
+            result = msg_0013_00250;
             break;
         case 7:
-            result = 251;
+            result = msg_0013_00251;
             break;
         case 8:
-            result = 252;
+            result = msg_0013_00252;
             break;
         case 9:
-            result = 253;
+            result = msg_0013_00253;
             break;
         case 10:
-            result = 254;
+            result = msg_0013_00254;
             break;
         case 11:
-            result = 255;
+            result = msg_0013_00255;
             break;
         case 12:
-            result = 256;
+            result = msg_0013_00256;
             break;
         case 13:
-            result = 257;
+            result = msg_0013_00257;
             break;
         case 14:
-            result = 258;
+            result = msg_0013_00258;
             break;
         default:
             GF_AssertFail();
@@ -2573,34 +2573,34 @@ u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index,
     case 1:
         switch (index) {
         case 0:
-            result = 259;
+            result = msg_0013_00259;
             break;
         case 1:
-            result = 260;
+            result = msg_0013_00260;
             break;
         case 2:
-            result = 261;
+            result = msg_0013_00261;
             break;
         case 3:
-            result = 262;
+            result = msg_0013_00262;
             break;
         case 4:
-            result = 263;
+            result = msg_0013_00263;
             break;
         case 5:
-            result = 264;
+            result = msg_0013_00264;
             break;
         case 6:
-            result = 265;
+            result = msg_0013_00265;
             break;
         case 7:
-            result = 266;
+            result = msg_0013_00266;
             break;
         case 8:
-            result = 267;
+            result = msg_0013_00267;
             break;
         case 9:
-            result = 268;
+            result = msg_0013_00268;
             break;
         default:
             GF_AssertFail();
@@ -2609,201 +2609,201 @@ u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index,
         break;
     case 2:
         switch (group) {
-        case 0:
+        case VS_RECORDER_REQUEST_DRESS_UP_UPLOAD:
             switch (index) {
             case 0:
-                result = 194;
+                result = msg_0013_00194;
                 break;
             case 1:
-                result = 195;
+                result = msg_0013_00195;
                 break;
             case 2:
-                result = 196;
+                result = msg_0013_00196;
                 break;
             case 3:
-                result = 197;
+                result = msg_0013_00197;
                 break;
             case 4:
-                result = 198;
+                result = msg_0013_00198;
                 break;
             case 5:
-                result = 199;
+                result = msg_0013_00199;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 1:
+        case VS_RECORDER_REQUEST_DRESS_UP_DOWNLOAD:
             switch (index) {
             case 0:
-                result = 200;
+                result = msg_0013_00200;
                 break;
             case 1:
-                result = 201;
+                result = msg_0013_00201;
                 break;
             case 2:
-                result = 202;
+                result = msg_0013_00202;
                 break;
             case 3:
-                result = 203;
+                result = msg_0013_00203;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 2:
+        case VS_RECORDER_REQUEST_BOX_UPLOAD:
             switch (index) {
             case 0:
-                result = 204;
+                result = msg_0013_00204;
                 break;
             case 1:
-                result = 205;
+                result = msg_0013_00205;
                 break;
             case 2:
-                result = 206;
+                result = msg_0013_00206;
                 break;
             case 3:
-                result = 207;
+                result = msg_0013_00207;
                 break;
             case 4:
-                result = 208;
+                result = msg_0013_00208;
                 break;
             case 5:
-                result = 209;
+                result = msg_0013_00209;
                 break;
             case 6:
-                result = 210;
+                result = msg_0013_00210;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 3:
+        case VS_RECORDER_REQUEST_BOX_DOWNLOAD:
             switch (index) {
             case 0:
-                result = 211;
+                result = msg_0013_00211;
                 break;
             case 1:
-                result = 212;
+                result = msg_0013_00212;
                 break;
             case 2:
-                result = 213;
+                result = msg_0013_00213;
                 break;
             case 3:
-                result = 214;
+                result = msg_0013_00214;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 4:
+        case VS_RECORDER_REQUEST_RANKINGS_HEADER:
             switch (index) {
             case 0:
-                result = 215;
+                result = msg_0013_00215;
                 break;
             case 1:
-                result = 216;
+                result = msg_0013_00216;
                 break;
             case 2:
-                result = 217;
+                result = msg_0013_00217;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 5:
+        case VS_RECORDER_REQUEST_RANKINGS:
             switch (index) {
             case 0:
-                result = 218;
+                result = msg_0013_00218;
                 break;
             case 1:
-                result = 219;
+                result = msg_0013_00219;
                 break;
             case 2:
-                result = 220;
+                result = msg_0013_00220;
                 break;
             case 3:
-                result = 221;
+                result = msg_0013_00221;
                 break;
             case 4:
-                result = 222;
+                result = msg_0013_00222;
                 break;
             case 5:
-                result = 223;
+                result = msg_0013_00223;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 6:
+        case VS_RECORDER_REQUEST_VIDEO_UPLOAD:
             switch (index) {
             case 0:
-                result = 224;
+                result = msg_0013_00224;
                 break;
             case 1:
-                result = 225;
+                result = msg_0013_00225;
                 break;
             case 2:
-                result = 226;
+                result = msg_0013_00226;
                 break;
             case 3:
-                result = 227;
+                result = msg_0013_00227;
                 break;
             case 4:
-                result = 228;
+                result = msg_0013_00228;
                 break;
             case 5:
-                result = 229;
+                result = msg_0013_00229;
                 break;
             case 6:
-                result = 230;
+                result = msg_0013_00230;
                 break;
             case 7:
-                result = 231;
+                result = msg_0013_00231;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 7:
+        case VS_RECORDER_REQUEST_VIDEO_SEARCH:
             switch (index) {
             case 0:
-                result = 232;
+                result = msg_0013_00232;
                 break;
             case 1:
-                result = 233;
+                result = msg_0013_00233;
                 break;
             case 2:
-                result = 234;
+                result = msg_0013_00234;
                 break;
             case 3:
-                result = 235;
+                result = msg_0013_00235;
                 break;
             default:
                 GF_AssertFail();
                 break;
             }
             break;
-        case 8:
+        case VS_RECORDER_REQUEST_VIDEO_DOWNLOAD:
             switch (index) {
             case 0:
-                result = 236;
+                result = msg_0013_00236;
                 break;
             case 1:
-                result = 237;
+                result = msg_0013_00237;
                 break;
             case 2:
-                result = 238;
+                result = msg_0013_00238;
                 break;
             case 3:
-                result = 239;
+                result = msg_0013_00239;
                 break;
             default:
                 GF_AssertFail();
@@ -2825,7 +2825,7 @@ void VsRecorder_ShowMessageScreen(VsRecorderWork *work, int group, u32 index, u3
     work->messageScreen.savedSubState = work->subState;
     work->messageScreen.savedStep = work->step;
     work->messageScreen.returnScreen = *work->screenPtr;
-    work->messageScreen.step = 0;
+    work->messageScreen.step = VS_RECORDER_MESSAGE_SCREEN_SHOW;
     work->messageScreen.timer = 0;
     work->messageScreen.msgId = VsRecorder_SetupMessageScreenMsg(work, group, index, type);
     work->messageScreen.active = TRUE;
@@ -2834,7 +2834,7 @@ void VsRecorder_ShowMessageScreen(VsRecorderWork *work, int group, u32 index, u3
 
 void VsRecorder_MessageScreen(VsRecorderWork *work) {
     switch (work->messageScreen.step) {
-    case 0:
+    case VS_RECORDER_MESSAGE_SCREEN_SHOW:
         if (work->messageScreen.timer < 8) {
             work->messageScreen.timer = work->messageScreen.timer + 1;
         } else {
@@ -2842,7 +2842,7 @@ void VsRecorder_MessageScreen(VsRecorderWork *work) {
             work->messageScreen.step = work->messageScreen.step + 1;
         }
         break;
-    case 1:
+    case VS_RECORDER_MESSAGE_SCREEN_WAIT_TOUCH:
         if (System_GetTouchNew()) {
             VsRecorder_HideTopMessage(work);
             work->messageScreen.step = work->messageScreen.step + 1;

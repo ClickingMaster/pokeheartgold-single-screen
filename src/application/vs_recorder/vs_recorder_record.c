@@ -21,6 +21,11 @@
 #define RECORD_HEADER_CRC_LEN 0x58
 #define RECORD_DATA_CRC       0x1C64
 
+enum VsRecorderRecordWriteState {
+    VS_RECORDER_RECORD_WRITE_PREPARE,
+    VS_RECORDER_RECORD_WRITE_SLOT,
+};
+
 // msg_0013 #332, used for names the font can't show
 void VsRecorder_LoadPlaceholderTrainerName(String *str, enum HeapID heapID) {
     MsgData *msgData;
@@ -34,7 +39,7 @@ void VsRecorder_LoadPlaceholderTrainerName(String *str, enum HeapID heapID) {
 u32 VsRecorder_WriteRecordAsync(SaveData *saveData, u32 index, u32 sealed, u16 *state, void *writeState) {
     u16 crc;
     switch (*state) {
-    case 0:
+    case VS_RECORDER_RECORD_WRITE_PREPARE:
         if (gBattleRecord == NULL) {
             GF_AssertFail();
         }
@@ -47,7 +52,7 @@ u32 VsRecorder_WriteRecordAsync(SaveData *saveData, u32 index, u32 sealed, u16 *
         BattleRecord_Encrypt(gBattleRecord->data, RECORD_DATA_CRC, crc + (((u32)(crc ^ 0xFFFF)) << 16));
         (*state)++;
         break;
-    case 1:
+    case VS_RECORDER_RECORD_WRITE_SLOT:
         return BattleRecord_WriteSlot(saveData, gBattleRecord, index, writeState);
     }
     return 0;
@@ -67,7 +72,7 @@ void VsRecorder_EncryptRecord(SaveData *saveData) {
 int VsRecorder_SaveRecordNumber(SaveData *saveData, u32 numberLow, u32 numberHigh, u16 *state, u16 *writeState) {
     BattleRecord *record;
     switch (*state) {
-    case 0:
+    case VS_RECORDER_RECORD_WRITE_PREPARE:
         if (gBattleRecord == NULL) {
             GF_AssertFail();
         }
@@ -76,7 +81,7 @@ int VsRecorder_SaveRecordNumber(SaveData *saveData, u32 numberLow, u32 numberHig
         *(u32 *)(record->header + RECORD_HEADER_NUMBER + 4) = numberHigh;
         (*state)++;
         break;
-    case 1:
+    case VS_RECORDER_RECORD_WRITE_SLOT:
         return BattleRecord_WriteSlot(saveData, gBattleRecord, 0, writeState);
     }
     return 0;

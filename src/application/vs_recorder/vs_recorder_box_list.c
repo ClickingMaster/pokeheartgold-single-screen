@@ -28,6 +28,58 @@ extern const VsRecorderListConfig sVsRecorderBoxListConfig; // box list
 #define BOX_DATA_VIEW_BOX_LIST_MAIN   5
 #define BOX_DATA_VIEW_BOX_MAIN        10
 
+enum VsRecorderBoxDataViewDownloadStep {
+    BOX_DATA_VIEW_DOWNLOAD_STEP_REMOVE_CATEGORIES,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_FADE_OUT,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_RECEIVING,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_REQUEST,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_CHECK_RESULT,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_CHECK_FOUND,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_NOT_FOUND,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_BLEND_OUT,
+    BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_CATEGORIES,
+};
+
+enum VsRecorderBoxListBackStep {
+    BOX_LIST_BACK_STEP_FREE_LIST,
+    BOX_LIST_BACK_STEP_BLEND_OUT,
+    BOX_LIST_BACK_STEP_SHOW_CATEGORIES,
+};
+
+enum VsRecorderBoxDataViewOpenBoxStep {
+    BOX_DATA_VIEW_OPEN_BOX_STEP_REMOVE_LIST,
+    BOX_DATA_VIEW_OPEN_BOX_STEP_BLEND_OUT,
+    BOX_DATA_VIEW_OPEN_BOX_STEP_SHOW_BOX,
+    BOX_DATA_VIEW_OPEN_BOX_STEP_BLEND_IN,
+    BOX_DATA_VIEW_OPEN_BOX_STEP_FADE_IN,
+};
+
+enum VsRecorderBoxDataViewCloseBoxStep {
+    BOX_DATA_VIEW_CLOSE_BOX_STEP_FREE_BOX,
+    BOX_DATA_VIEW_CLOSE_BOX_STEP_HIDE_PROFILE,
+    BOX_DATA_VIEW_CLOSE_BOX_STEP_BLEND_OUT,
+    BOX_DATA_VIEW_CLOSE_BOX_STEP_SHOW_LIST,
+};
+
+enum VsRecorderBoxListShowProfileStep {
+    BOX_LIST_SHOW_PROFILE_STEP_REMOVE_LIST,
+    BOX_LIST_SHOW_PROFILE_STEP_CREATE_PROFILE,
+    BOX_LIST_SHOW_PROFILE_STEP_BLEND_IN,
+};
+
+enum VsRecorderBoxListHideProfileStep {
+    BOX_LIST_HIDE_PROFILE_STEP_CLEAR_FLAG,
+    BOX_LIST_HIDE_PROFILE_STEP_FREE_PROFILE,
+    BOX_LIST_HIDE_PROFILE_STEP_BLEND_OUT,
+    BOX_LIST_HIDE_PROFILE_STEP_SHOW_LIST,
+};
+
+enum VsRecorderBoxDataViewExitStep {
+    BOX_DATA_VIEW_EXIT_STEP_FREE,
+    BOX_DATA_VIEW_EXIT_STEP_REBUILD_MENU,
+    BOX_DATA_VIEW_EXIT_STEP_FADE_IN_MENU,
+};
+
 static void VsRecorder_CreateBoxListItems(VsRecorderWork *work);
 static void VsRecorder_FreeBoxListItems(VsRecorderWork *work);
 
@@ -40,7 +92,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         return FALSE;
     }
     switch (work->step) {
-    case 0:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_REMOVE_CATEGORIES:
         OrbitCursor_SetVisible(work->orbitCursors[1], FALSE);
         VsRecorder_RemoveBoxDataWindows(work);
         VsRecorder_RemoveBoxDataCategoryButtons(work);
@@ -49,7 +101,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         // fallthrough
-    case 1:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_FADE_OUT:
         VsRecorder_StepFade(&boxData->fade, 1);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 0)) {
             GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 62, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_109);
@@ -59,7 +111,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)boxData->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_RECEIVING:
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -67,16 +119,16 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
-    case 3:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_REQUEST:
         if (GlobalTerminalNet_RequestBoxDownload(VsRecorder_GetNet(work), boxData->category) == TRUE) {
             work->step++;
         }
         break;
-    case 4:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_CHECK_RESULT:
         VsRecorder_HideTopMessage(work);
         if (GlobalTerminalNet_GetError(VsRecorder_GetNet(work), &error) == TRUE) {
             StopSE(SEQ_SE_PL_BREC80, 0);
-            VsRecorder_ShowMessageScreen(work, 3, error->code, error->type);
+            VsRecorder_ShowMessageScreen(work, VS_RECORDER_REQUEST_BOX_DOWNLOAD, error->code, error->type);
             boxData->downloadCount = 0;
             boxData->showProfile = FALSE;
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -88,14 +140,14 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
             BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);
             VsRecorder_SetVBlankPaused(work, FALSE);
-            work->step = 7;
+            work->step = BOX_DATA_VIEW_DOWNLOAD_STEP_BLEND_OUT;
         } else {
             StopSE(SEQ_SE_PL_BREC80, 0);
             PlaySE(SEQ_SE_PL_BREC12);
             work->step++;
         }
         break;
-    case 5:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_CHECK_FOUND:
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 0, 0);
         if (boxData->downloadCount == 0) {
@@ -103,10 +155,10 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             work->counter = 0;
             VsRecorder_ShowTopMessage(work, msg_0013_00294); // No matching Box Data was found...
         } else {
-            work->step = 0xFF;
+            work->step = VS_RECORDER_STEP_FINISH;
         }
         break;
-    case 6:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_NOT_FOUND:
         work->counter++;
         if (work->counter >= 60 || System_GetTouchNew() == TRUE) {
             work->counter = 0;
@@ -124,7 +176,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 7:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_BLEND_OUT:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 0)) {
             break;
         }
@@ -133,7 +185,7 @@ BOOL VsRecorder_BoxDataViewDownload(VsRecorderWork *work) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 79, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         work->step++;
         break;
-    case 8:
+    case BOX_DATA_VIEW_DOWNLOAD_STEP_SHOW_CATEGORIES:
         VsRecorder_StepFade(&boxData->fade, 0);
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             VsRecorder_LoadBoxDataMessageBg(work, GF_BG_LYR_MAIN_2);
@@ -228,7 +280,7 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_LIST_BACK_STEP_FREE_LIST:
         VsRecorder_FreeBoxListItems(work);
         VsRecorder_RemoveBoxListButtons(work);
         if (boxData->showProfile == FALSE) {
@@ -257,14 +309,14 @@ BOOL VsRecorder_BoxListBack(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
         // fallthrough
-    case 1:
+    case BOX_LIST_BACK_STEP_BLEND_OUT:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 0)) {
             break;
         }
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 79, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         work->step++;
         break;
-    case 2:
+    case BOX_LIST_BACK_STEP_SHOW_CATEGORIES:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 2)) {
             break;
         }
@@ -286,7 +338,7 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_DATA_VIEW_OPEN_BOX_STEP_REMOVE_LIST:
         VsRecorder_RemoveBoxListButtons(work);
         if (boxData->showProfile == FALSE) {
             VsRecorder_RemoveBoxListTitle(work);
@@ -308,12 +360,12 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         // fallthrough
-    case 1:
+    case BOX_DATA_VIEW_OPEN_BOX_STEP_BLEND_OUT:
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 0)) {
             work->step++;
         }
         break;
-    case 2:
+    case BOX_DATA_VIEW_OPEN_BOX_STEP_SHOW_BOX:
         VsRecorder_SetVBlankPaused(work, TRUE);
         boxData->form = boxData->downloads[work->listWindow.cursor]->form;
         VsRecorder_SelectFirstBoxMon(boxData);
@@ -330,7 +382,7 @@ BOOL VsRecorder_BoxDataViewOpenBox(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         work->step++;
         break;
-    case 3:
+    case BOX_DATA_VIEW_OPEN_BOX_STEP_BLEND_IN:
         if (VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 0)) {
             VsRecorder_SetBoxMonPicVanished(work, FALSE);
             VsRecorder_SetBoxMonIconsDrawFlag(work, TRUE);
@@ -374,7 +426,7 @@ BOOL VsRecorder_BoxDataViewCloseBox(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_DATA_VIEW_CLOSE_BOX_STEP_FREE_BOX:
         VsRecorder_ApplyBlend(&boxData->eva, &boxData->evb, 8, 18, 8, 18, 1);
         VsRecorder_FreeBoxMonPic(work);
         VsRecorder_FreeBoxMonIcons(work);
@@ -384,11 +436,11 @@ BOOL VsRecorder_BoxDataViewCloseBox(VsRecorderWork *work) {
         VsRecorder_RemoveNextMonButton(work);
         work->step++;
         // fallthrough
-    case 1:
+    case BOX_DATA_VIEW_CLOSE_BOX_STEP_HIDE_PROFILE:
         boxData->showProfile = FALSE;
         work->step++;
         // fallthrough
-    case 2:
+    case BOX_DATA_VIEW_CLOSE_BOX_STEP_BLEND_OUT:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 0)) {
             break;
         }
@@ -435,7 +487,7 @@ BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_LIST_SHOW_PROFILE_STEP_REMOVE_LIST:
         OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
         if (boxData->showProfile == FALSE) {
             VsRecorder_RemoveBoxListTitle(work);
@@ -449,7 +501,7 @@ BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         // fallthrough
-    case 1:
+    case BOX_LIST_SHOW_PROFILE_STEP_CREATE_PROFILE:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 1)) {
             break;
         }
@@ -462,7 +514,7 @@ BOOL VsRecorder_BoxListShowProfile(VsRecorderWork *work) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 80, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_109);
         work->step++;
         break;
-    case 2:
+    case BOX_LIST_SHOW_PROFILE_STEP_BLEND_IN:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, FALSE, 1)) {
             break;
         }
@@ -481,18 +533,18 @@ BOOL VsRecorder_BoxListHideProfile(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_LIST_HIDE_PROFILE_STEP_CLEAR_FLAG:
         boxData->showProfile = FALSE;
         work->step++;
         break;
-    case 1:
+    case BOX_LIST_HIDE_PROFILE_STEP_FREE_PROFILE:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeProfile(&boxData->profile, work);
         VsRecorder_FreeBoxDataOwner(work);
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
         // fallthrough
-    case 2:
+    case BOX_LIST_HIDE_PROFILE_STEP_BLEND_OUT:
         if (!VsRecorder_StepBlend(&boxData->eva, &boxData->evb, TRUE, 1)) {
             break;
         }
@@ -534,7 +586,7 @@ BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work) {
     VsRecorderBoxData *boxData = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case BOX_DATA_VIEW_EXIT_STEP_FREE:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_RemoveBoxDataWindows(work);
         VsRecorder_FreeBoxDataButtons(work);
@@ -546,7 +598,7 @@ BOOL VsRecorder_BoxDataViewExit(VsRecorderWork *work) {
         VsRecorder_StartFlipScreens(work, 1);
         work->step++;
         break;
-    case 1:
+    case BOX_DATA_VIEW_EXIT_STEP_REBUILD_MENU:
         if (VsRecorder_IsFlipScreensDone(work) != 0) {
             int i;
             for (i = 0; i < 5; i++) {

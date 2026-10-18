@@ -62,6 +62,23 @@ enum HatchEggSceneState {
     HATCH_EGG_SCENE_FREE,
 };
 
+enum HatchEggYesNo {
+    HATCH_EGG_YES_NO_NONE,
+    HATCH_EGG_YES_NO_YES,
+    HATCH_EGG_YES_NO_NO,
+};
+
+enum HatchEggYesNoMenuState {
+    HATCH_EGG_YES_NO_MENU_INPUT,
+    HATCH_EGG_YES_NO_MENU_WAIT_PRESS,
+};
+
+enum HatchEggAppState {
+    HATCH_EGG_APP_STATE_INIT,
+    HATCH_EGG_APP_STATE_RUN_SCENE,
+    HATCH_EGG_APP_STATE_WAIT_FADE,
+};
+
 typedef BOOL (*HatchEggSceneFunc)(HatchEggApp *app);
 
 static BOOL HatchEggApp_RunScene(HatchEggApp *app);
@@ -260,11 +277,11 @@ static BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         break;
     case HATCH_EGG_SCENE_HANDLE_YES_NO:
         switch (HatchEggYesNoMenu_Run(app->yesNoMenu)) {
-        case 1:
+        case HATCH_EGG_YES_NO_YES:
             app->args->wantToNameNewMon = TRUE;
             app->state++;
             break;
-        case 2:
+        case HATCH_EGG_YES_NO_NO:
             app->args->wantToNameNewMon = FALSE;
             app->state++;
             break;
@@ -373,11 +390,11 @@ static BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         break;
     case HATCH_EGG_SCENE_HANDLE_YES_NO:
         switch (HatchEggYesNoMenu_Run(app->yesNoMenu)) {
-        case 1:
+        case HATCH_EGG_YES_NO_YES:
             app->args->wantToNameNewMon = TRUE;
             app->state++;
             break;
-        case 2:
+        case HATCH_EGG_YES_NO_NO:
             app->args->wantToNameNewMon = FALSE;
             app->state++;
             break;
@@ -735,7 +752,7 @@ BOOL HatchEggApp_Init(OverlayManager *man, int *state) {
 BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
     HatchEggApp *app = OverlayManager_GetData(man);
     switch (*state) {
-    case 0: {
+    case HATCH_EGG_APP_STATE_INIT: {
         u32 species;
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
@@ -749,7 +766,7 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
         }
         break;
     }
-    case 1:
+    case HATCH_EGG_APP_STATE_RUN_SCENE:
         if (HatchEggApp_RunScene(app) == FALSE) {
             (*state)++;
         } else {
@@ -871,8 +888,8 @@ static void HatchEggYesNoMenu_LoadGfx(HatchEggYesNoMenu *menu, PaletteData *pale
 static void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 noMsgId) {
     HatchEggYesNoMenu_PrintButton(menu, &menu->buttons[0], yesMsgId);
     HatchEggYesNoMenu_PrintButton(menu, &menu->buttons[1], noMsgId);
-    menu->state = 0;
-    menu->selection = 1;
+    menu->state = HATCH_EGG_YES_NO_MENU_INPUT;
+    menu->selection = HATCH_EGG_YES_NO_YES;
     HatchEggYesNoMenu_UpdateCursor(menu);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
     ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_ON);
@@ -883,12 +900,12 @@ static void HatchEggYesNoMenu_Show(HatchEggYesNoMenu *menu, u32 yesMsgId, u32 no
 // Returns the selection (1 = yes, 2 = no) once a button was pressed and its animation has ended, else 0.
 static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
     switch (menu->state) {
-    case 0:
+    case HATCH_EGG_YES_NO_MENU_INPUT:
         if (HatchEggYesNoMenu_HandleInput(menu)) {
             menu->state++;
         }
         break;
-    case 1:
+    case HATCH_EGG_YES_NO_MENU_WAIT_PRESS:
         if (HatchEggYesNoMenu_IsPressAnimFinished(menu)) {
             GF_ASSERT(menu->selection);
             ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
@@ -902,7 +919,7 @@ static int HatchEggYesNoMenu_Run(HatchEggYesNoMenu *menu) {
         GF_ASSERT(0);
         break;
     }
-    return 0;
+    return HATCH_EGG_YES_NO_NONE;
 }
 
 static void HatchEggYesNoMenu_AddWindows(HatchEggYesNoMenu *menu) {
@@ -963,10 +980,10 @@ static void HatchEggYesNoMenu_UpdateCursor(HatchEggYesNoMenu *menu) {
         GF_AssertFail();
     }
     switch (menu->selection) {
-    case 1:
+    case HATCH_EGG_YES_NO_YES:
         index = 0;
         break;
-    case 2:
+    case HATCH_EGG_YES_NO_NO:
         index = 1;
         break;
     default:
@@ -983,11 +1000,11 @@ static BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
         PlaySE(SEQ_SE_DP_SELECT);
         switch (hit) {
         case 0:
-            menu->selection = 1;
+            menu->selection = HATCH_EGG_YES_NO_YES;
             pressed = TRUE;
             break;
         case 1:
-            menu->selection = 2;
+            menu->selection = HATCH_EGG_YES_NO_NO;
             pressed = TRUE;
             break;
         default:
@@ -997,25 +1014,25 @@ static BOOL HatchEggYesNoMenu_HandleInput(HatchEggYesNoMenu *menu) {
     } else {
         u32 keys = gSystem.newKeys;
         if (keys & PAD_KEY_UP) {
-            if (menu->selection != 1) {
-                menu->selection = 1;
+            if (menu->selection != HATCH_EGG_YES_NO_YES) {
+                menu->selection = HATCH_EGG_YES_NO_YES;
                 HatchEggYesNoMenu_UpdateCursor(menu);
                 PlaySE(SEQ_SE_DP_SELECT);
             }
         } else if (keys & PAD_KEY_DOWN) {
-            if (menu->selection != 2) {
-                menu->selection = 2;
+            if (menu->selection != HATCH_EGG_YES_NO_NO) {
+                menu->selection = HATCH_EGG_YES_NO_NO;
                 HatchEggYesNoMenu_UpdateCursor(menu);
                 PlaySE(SEQ_SE_DP_SELECT);
             }
         } else if (keys & PAD_BUTTON_A) {
-            if (menu->selection == 0) {
+            if (menu->selection == HATCH_EGG_YES_NO_NONE) {
                 GF_AssertFail();
-                menu->selection = 2;
+                menu->selection = HATCH_EGG_YES_NO_NO;
             }
             pressed = TRUE;
         } else if (keys & PAD_BUTTON_B) {
-            menu->selection = 2;
+            menu->selection = HATCH_EGG_YES_NO_NO;
             pressed = TRUE;
         }
     }

@@ -23,6 +23,15 @@
 // VS Recorder Frontier record screen (VS_RECORDER_SCREEN_FRONTIER): the five Battle Frontier prints spinning in around
 // the player, the Battle Point count and the exit button. Starts with the saved video screen's exit button cleanup.
 
+enum VsRecorderFrontierEnterStep {
+    FRONTIER_ENTER_STEP_INIT,
+    FRONTIER_ENTER_STEP_FADE_OUT_MENU,
+    FRONTIER_ENTER_STEP_FLIP_SCREENS,
+    FRONTIER_ENTER_STEP_CREATE,
+    FRONTIER_ENTER_STEP_SPIN_IN,
+    FRONTIER_ENTER_STEP_DONE,
+};
+
 typedef struct VsRecorderIntSet5 {
     int values[5];
 } VsRecorderIntSet5;
@@ -469,7 +478,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
     VsRecorderFrontierRecord *record;
     int i;
 
-    if (work->step == 0) {
+    if (work->step == FRONTIER_ENTER_STEP_INIT) {
         record = Heap_Alloc(HEAP_ID_109, sizeof(VsRecorderFrontierRecord));
         MI_CpuFill8(record, 0, sizeof(VsRecorderFrontierRecord));
         work->screenWork = record;
@@ -495,7 +504,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
         record = work->screenWork;
     }
     switch (work->step) {
-    case 1:
+    case FRONTIER_ENTER_STEP_FADE_OUT_MENU:
         if (VsRecorder_StepFade(&record->fade, 1)) {
             record->battlePoints = FrontierData_BattlePointAction(Save_FrontierData_Get(work->saveData), 0, 0);
             work->step++;
@@ -504,7 +513,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)record->fade, (u16)work->blendColor);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, (u8)record->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case FRONTIER_ENTER_STEP_FLIP_SCREENS:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeMenuRows(work);
         VsRecorder_SetVBlankPaused(work, FALSE);
@@ -516,7 +525,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 28, (u8)record->fade, (u16)work->blendColor);
         work->step++;
         break;
-    case 3:
+    case FRONTIER_ENTER_STEP_CREATE:
         if (VsRecorder_IsFlipScreensDone(work)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             VsRecorder_CreateFrontierButtons(work);
@@ -528,7 +537,7 @@ BOOL VsRecorder_FrontierEnter(VsRecorderWork *work) {
             work->step++;
         }
         break;
-    case 4: {
+    case FRONTIER_ENTER_STEP_SPIN_IN: {
         BOOL spinning = VsRecorder_SpinInFrontierSprites(work);
         VsRecorder_StepBlend(&record->eva, &record->evb, FALSE, 0);
         VsRecorder_StepFade(&record->fade, 0);

@@ -39,6 +39,14 @@ typedef union PlazaNewsTime {
     } hms;
 } PlazaNewsTime;
 
+enum PlazaNewsState {
+    PLAZA_NEWS_STATE_FADE_IN,
+    PLAZA_NEWS_STATE_WAIT_FADE_IN,
+    PLAZA_NEWS_STATE_SHOW_NEWS,
+    PLAZA_NEWS_STATE_FADE_OUT,
+    PLAZA_NEWS_STATE_WAIT_FADE_OUT,
+};
+
 typedef struct PlazaNewsArgs {
     void *newsData;
     const PlazaNewsTime *time;
@@ -391,22 +399,22 @@ BOOL PlazaNews_Main(OverlayManager *man, int *state) {
     PlazaNewsWork *work = OverlayManager_GetData(man);
     PlazaNewsArgs *args = OverlayManager_GetArgs(man);
     switch (*state) {
-    case 0:
+    case PLAZA_NEWS_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_114);
         WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
-    case 1:
+    case PLAZA_NEWS_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
         break;
-    case 2:
+    case PLAZA_NEWS_STATE_SHOW_NEWS:
         if ((gSystem.newKeys & PAD_BUTTON_B) || WiFiPlazaWork_IsClosing(args->lobby) == 1 || WiFiPlaza_HasConnectionFailed() == 1) {
             if (WiFiPlazaWork_IsClosing(args->lobby) == 1) {
                 WiFiPlazaWork_SetAppQuitForClosing(args->lobby);
             }
-            *state = 3;
+            *state = PLAZA_NEWS_STATE_FADE_OUT;
         } else {
             if (PlazaNewsClock_UpdateTime(&work->clock, work->newsData, work->time) == TRUE) {
                 PlazaNewsTitles_StartFlash(&work->titles, 1);
@@ -419,11 +427,11 @@ BOOL PlazaNews_Main(OverlayManager *man, int *state) {
             }
         }
         break;
-    case 3:
+    case PLAZA_NEWS_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_114);
         (*state)++;
         break;
-    case 4:
+    case PLAZA_NEWS_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }

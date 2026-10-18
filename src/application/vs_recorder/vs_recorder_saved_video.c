@@ -24,6 +24,71 @@
 // VS Recorder saved video screen (VS_RECORDER_SCREEN_SAVED_VIDEO): the battle video in the chosen save slot with its
 // owner's profile, play (after saving the game if needed) and exit. Also the menu's next-colour-scheme substate.
 
+enum VsRecorderSavedVideoEnterStep {
+    SAVED_VIDEO_ENTER_STEP_FADE_OUT_MENU,
+    SAVED_VIDEO_ENTER_STEP_FREE_MENU,
+    SAVED_VIDEO_ENTER_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoShowStep {
+    SAVED_VIDEO_SHOW_STEP_LOAD_SCREEN,
+    SAVED_VIDEO_SHOW_STEP_CREATE_HITBOXES,
+    SAVED_VIDEO_SHOW_STEP_CREATE_INFO,
+    SAVED_VIDEO_SHOW_STEP_FADE_IN,
+    SAVED_VIDEO_SHOW_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoToggleProfileStep {
+    SAVED_VIDEO_TOGGLE_PROFILE_STEP_FREE,
+    SAVED_VIDEO_TOGGLE_PROFILE_STEP_BLEND_OUT,
+    SAVED_VIDEO_TOGGLE_PROFILE_STEP_CREATE,
+    SAVED_VIDEO_TOGGLE_PROFILE_STEP_BLEND_IN,
+    SAVED_VIDEO_TOGGLE_PROFILE_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoSavePromptStep {
+    SAVED_VIDEO_SAVE_PROMPT_STEP_FREE,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_OUT,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_SHOW_PROMPT,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_IN,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_INPUT,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_SAVE,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_HIDE_PROMPT,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_OUT_PROMPT,
+    SAVED_VIDEO_SAVE_PROMPT_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoSaveStep {
+    SAVED_VIDEO_SAVE_STEP_FADE_OUT,
+    SAVED_VIDEO_SAVE_STEP_WAIT_FADE,
+    SAVED_VIDEO_SAVE_STEP_SAVE,
+    SAVED_VIDEO_SAVE_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoPlayStep {
+    SAVED_VIDEO_PLAY_STEP_FADE_OUT,
+    SAVED_VIDEO_PLAY_STEP_WAIT_FADE,
+    SAVED_VIDEO_PLAY_STEP_FREE,
+    SAVED_VIDEO_PLAY_STEP_DONE,
+};
+
+enum VsRecorderSavedVideoExitStep {
+    SAVED_VIDEO_EXIT_STEP_FREE,
+    SAVED_VIDEO_EXIT_STEP_FADE_OUT,
+    SAVED_VIDEO_EXIT_STEP_REBUILD_MENU,
+    SAVED_VIDEO_EXIT_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderSavedVideoResumeStep {
+    SAVED_VIDEO_RESUME_STEP_LOAD_SCREEN,
+    SAVED_VIDEO_RESUME_STEP_CREATE_HITBOXES,
+    SAVED_VIDEO_RESUME_STEP_CREATE_INFO,
+    SAVED_VIDEO_RESUME_STEP_BLEND_IN,
+    SAVED_VIDEO_RESUME_STEP_FADE_IN,
+    SAVED_VIDEO_RESUME_STEP_WAIT_FADE,
+    SAVED_VIDEO_RESUME_STEP_DONE,
+};
+
 // substates of the saved video screen (gVsRecorderSavedVideoSubStates)
 #define SAVED_VIDEO_ENTER          1
 #define SAVED_VIDEO_SHOW           2
@@ -139,7 +204,7 @@ BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work) {
     int ok;
 
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_ENTER_STEP_FADE_OUT_MENU:
         if (VsRecorder_StepFade(&savedVideo->fade, 1)) {
             work->step++;
         }
@@ -147,7 +212,7 @@ BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, savedVideo->fade, work->blendColor);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, savedVideo->fade, work->blendColor);
         break;
-    case 1:
+    case SAVED_VIDEO_ENTER_STEP_FREE_MENU:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeMenuRows(work);
         VsRecorder_SetVBlankPaused(work, FALSE);
@@ -196,17 +261,17 @@ BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_SHOW_STEP_LOAD_SCREEN:
         VsRecorder_CreateExitButton(work);
         VsRecorder_LoadScreen(work, 6, GF_BG_LYR_SUB_3);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_SHOW_STEP_CREATE_HITBOXES:
         VsRecorder_SetSavedVideoSlot(work);
         savedVideo->hitboxes = TouchHitboxController_Create(sVsRecorderSavedVideoHitboxes, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
         work->step++;
         break;
-    case 2:
+    case SAVED_VIDEO_SHOW_STEP_CREATE_INFO:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&savedVideo->info, work);
         VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&savedVideo->info), GF_BG_LYR_MAIN_3);
@@ -218,7 +283,7 @@ BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         break;
-    case 3:
+    case SAVED_VIDEO_SHOW_STEP_FADE_IN:
         VsRecorder_StepFade(&savedVideo->fade, 0);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, FALSE, 0)) {
             VsRecorder_SetVideoPartyIconsDrawFlag(&savedVideo->info, TRUE);
@@ -246,7 +311,7 @@ BOOL VsRecorder_SavedVideoMain(VsRecorderWork *work) {
 BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_TOGGLE_PROFILE_STEP_FREE:
         if (savedVideo->showProfile == FALSE) {
             VsRecorder_FreeVideoInfo(&savedVideo->info, work);
         } else {
@@ -255,12 +320,12 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_TOGGLE_PROFILE_STEP_BLEND_OUT:
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, TRUE, 1)) {
             work->step++;
         }
         break;
-    case 2:
+    case SAVED_VIDEO_TOGGLE_PROFILE_STEP_CREATE:
         VsRecorder_SetVBlankPaused(work, TRUE);
         if (savedVideo->showProfile == FALSE) {
             VsRecorder_CreateProfile(&savedVideo->profile, work);
@@ -274,7 +339,7 @@ BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work) {
         VsRecorder_SetVBlankPaused(work, FALSE);
         work->step++;
         break;
-    case 3:
+    case SAVED_VIDEO_TOGGLE_PROFILE_STEP_BLEND_IN:
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, FALSE, 1)) {
             if (savedVideo->showProfile == FALSE) {
                 VsRecorder_SetProfileDrawFlag(&savedVideo->profile, TRUE);
@@ -329,7 +394,7 @@ static void VsRecorder_HideYesNoWindows(VsRecorderWork *work) {
 BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_FREE:
         TouchHitboxController_Destroy(savedVideo->hitboxes);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -344,7 +409,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         savedVideo->exitMode = 0;
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_OUT:
         VsRecorder_StepFade(&savedVideo->fade, 1);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, TRUE, 0)) {
             VsRecorder_SetVBlankPaused(work, TRUE);
@@ -354,7 +419,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)savedVideo->fade, (u16)work->blendColor);
         break;
-    case 2:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_SHOW_PROMPT:
         VsRecorder_ShowYesNoWindows(work);
         VsRecorder_ShowTopMessage(work, msg_0013_00296);
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 84, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
@@ -362,7 +427,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         work->step++;
         break;
-    case 3:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_IN:
         VsRecorder_StepFade(&savedVideo->fade, 0);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, FALSE, 2)) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -371,7 +436,7 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)savedVideo->fade, (u16)work->blendColor);
         break;
-    case 4:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_INPUT:
         if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderSaveYesHitbox) != FALSE) {
             savedVideo->exitMode = 1;
             VsRecorder_OnTouchConfirm(work);
@@ -384,19 +449,19 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
         } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderSaveNoHitbox) != FALSE) {
             savedVideo->exitMode = 2;
             VsRecorder_OnTouchConfirm(work);
-            work->step = 6;
+            work->step = SAVED_VIDEO_SAVE_PROMPT_STEP_HIDE_PROMPT;
         }
         break;
-    case 5:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_SAVE:
         SaveGameNormal(work->saveData);
         work->step++;
         break;
-    case 6:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_HIDE_PROMPT:
         VsRecorder_HideTopMessage(work);
         VsRecorder_HideYesNoWindows(work);
         work->step++;
         break;
-    case 7:
+    case SAVED_VIDEO_SAVE_PROMPT_STEP_FADE_OUT_PROMPT:
         VsRecorder_StepFade(&savedVideo->fade, 1);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, TRUE, 2)) {
             work->step++;
@@ -419,17 +484,17 @@ BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work) {
 // back from playback of a video that was not saved yet: save it into its slot and reload the slots
 BOOL VsRecorder_SavedVideoSave(VsRecorderWork *work) {
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_SAVE_STEP_FADE_OUT:
         VsRecorder_ShowTopMessage(work, msg_0013_00299);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_109);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_SAVE_STEP_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             work->step++;
         }
         break;
-    case 2:
+    case SAVED_VIDEO_SAVE_STEP_SAVE:
         if (work->battleResult == 0) {
             int result;
             BattleRecord_Load(work->saveData, HEAP_ID_109, &result, NULL, work->selection);
@@ -454,16 +519,16 @@ BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_PLAY_STEP_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, HEAP_ID_109);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_PLAY_STEP_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             work->step++;
         }
         break;
-    case 2:
+    case SAVED_VIDEO_PLAY_STEP_FREE:
         if (savedVideo->exitMode == 0) {
             VsRecorder_SetVBlankPaused(work, TRUE);
             if (savedVideo->showProfile == FALSE) {
@@ -494,7 +559,7 @@ BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_EXIT_STEP_FREE:
         TouchHitboxController_Destroy(savedVideo->hitboxes);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
@@ -506,7 +571,7 @@ BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work) {
         VsRecorder_RemoveProfileButton(work);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_EXIT_STEP_FADE_OUT:
         VsRecorder_StepFade(&savedVideo->fade, 1);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, TRUE, 0)) {
             VsRecorder_FreeExitButton(work);
@@ -514,7 +579,7 @@ BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, savedVideo->fade, work->blendColor);
         break;
-    case 2:
+    case SAVED_VIDEO_EXIT_STEP_REBUILD_MENU:
         VsRecorder_StartFlipScreens(work, 1);
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -549,18 +614,18 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
     VsRecorderSavedVideo *savedVideo = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case SAVED_VIDEO_RESUME_STEP_LOAD_SCREEN:
         VsRecorder_LoadScreen(work, 6, GF_BG_LYR_SUB_3);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         work->step++;
         break;
-    case 1:
+    case SAVED_VIDEO_RESUME_STEP_CREATE_HITBOXES:
         VsRecorder_SetSavedVideoSlot(work);
         savedVideo->hitboxes = TouchHitboxController_Create(sVsRecorderSavedVideoHitboxes, 3, VsRecorder_OnSavedVideoTouch, work, HEAP_ID_109);
         work->step++;
         break;
-    case 2:
+    case SAVED_VIDEO_RESUME_STEP_CREATE_INFO:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_CreateVideoInfo(&savedVideo->info, work);
         VsRecorder_LoadScreen(work, VsRecorderVideoInfo_GetScreenId(&savedVideo->info), GF_BG_LYR_MAIN_3);
@@ -572,7 +637,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         break;
-    case 3:
+    case SAVED_VIDEO_RESUME_STEP_BLEND_IN:
         VsRecorder_StepFade(&savedVideo->fade, 0);
         if (VsRecorder_StepBlend(&savedVideo->eva, &savedVideo->evb, FALSE, 0)) {
             VsRecorder_SetVideoPartyIconsDrawFlag(&savedVideo->info, TRUE);
@@ -580,7 +645,7 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
             if (savedVideo->exitMode == 1) {
-                work->step = 0xFF;
+                work->step = VS_RECORDER_STEP_FINISH;
             } else {
                 work->step++;
             }
@@ -588,11 +653,11 @@ BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work) {
         }
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 0xC, savedVideo->fade, work->blendColor);
         break;
-    case 4:
+    case SAVED_VIDEO_RESUME_STEP_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_109);
         work->step++;
         break;
-    case 5:
+    case SAVED_VIDEO_RESUME_STEP_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             work->step++;
         }

@@ -29,6 +29,47 @@
 // VS Recorder rankings screens: this week's rankings (VS_RECORDER_SCREEN_RANKINGS) and last week's results
 // (VS_RECORDER_SCREEN_RANKINGS_LAST) of the Global Terminal. Starts with the box data screens' server response handlers.
 
+enum VsRecorderRankingsEnterStep {
+    RANKINGS_ENTER_STEP_FADE_OUT_MENU,
+    RANKINGS_ENTER_STEP_FLIP_SCREENS,
+    RANKINGS_ENTER_STEP_DONE,
+};
+
+enum VsRecorderRankingsDownloadStep {
+    RANKINGS_DOWNLOAD_STEP_SHOW_RECEIVING,
+    RANKINGS_DOWNLOAD_STEP_REQUEST_HEADER,
+    RANKINGS_DOWNLOAD_STEP_CHECK_HEADER,
+    RANKINGS_DOWNLOAD_STEP_REQUEST_RANKINGS,
+    RANKINGS_DOWNLOAD_STEP_CHECK_RANKINGS,
+    RANKINGS_DOWNLOAD_STEP_FREE,
+    RANKINGS_DOWNLOAD_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderRankingsShowStep {
+    RANKINGS_SHOW_STEP_CREATE,
+    RANKINGS_SHOW_STEP_FADE_IN,
+    RANKINGS_SHOW_STEP_DONE,
+};
+
+enum VsRecorderRankingsCloseListStep {
+    RANKINGS_CLOSE_LIST_STEP_REMOVE_LIST,
+    RANKINGS_CLOSE_LIST_STEP_FADE_OUT,
+    RANKINGS_CLOSE_LIST_STEP_DONE,
+};
+
+enum VsRecorderRankingsExitStep {
+    RANKINGS_EXIT_STEP_FREE,
+    RANKINGS_EXIT_STEP_REBUILD_MENU,
+    RANKINGS_EXIT_STEP_FADE_IN_MENU,
+};
+
+enum VsRecorderRankingsSwitchStep {
+    RANKINGS_SWITCH_STEP_REMOVE_LIST,
+    RANKINGS_SWITCH_STEP_BLEND_OUT,
+    RANKINGS_SWITCH_STEP_CREATE_LIST,
+    RANKINGS_SWITCH_STEP_DONE,
+};
+
 // window position and size in tiles
 typedef struct VsRecorderRankingsWindowRect {
     u32 x;
@@ -457,7 +498,7 @@ BOOL VsRecorder_RankingsEnter(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case RANKINGS_ENTER_STEP_FADE_OUT_MENU:
         if (VsRecorder_StepFade(&rankings->fade, 1)) {
             work->step++;
         }
@@ -465,7 +506,7 @@ BOOL VsRecorder_RankingsEnter(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, rankings->fade, work->blendColor);
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_BG, 2, rankings->fade, work->blendColor);
         break;
-    case 1:
+    case RANKINGS_ENTER_STEP_FLIP_SCREENS:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeMenuRows(work);
         VsRecorder_CreateRankingsButtons(work);
@@ -502,7 +543,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         return FALSE;
     }
     switch (work->step) {
-    case 0:
+    case RANKINGS_DOWNLOAD_STEP_SHOW_RECEIVING:
         VsRecorder_PlaceOrbitCursor(work, work->orbitCursors[0], 128, 96);
         OrbitCursor_SetVisible(work->orbitCursors[0], TRUE);
         OrbitCursor_SetRadius(work->orbitCursors[0], 24, 24);
@@ -510,18 +551,18 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         PlaySE(SEQ_SE_PL_BREC80);
         work->step++;
         break;
-    case 1:
+    case RANKINGS_DOWNLOAD_STEP_REQUEST_HEADER:
         if (GlobalTerminalNet_RequestRankingsHeader(VsRecorder_GetNet(work)) == TRUE) {
             work->step++;
         }
         break;
-    case 2:
+    case RANKINGS_DOWNLOAD_STEP_CHECK_HEADER:
         if (GlobalTerminalNet_GetError(VsRecorder_GetNet(work), &error) == TRUE) {
             StopSE(SEQ_SE_PL_BREC80, 0);
             VsRecorder_HideTopMessage(work);
-            VsRecorder_ShowMessageScreen(work, 4, error->code, error->type);
+            VsRecorder_ShowMessageScreen(work, VS_RECORDER_REQUEST_RANKINGS_HEADER, error->code, error->type);
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-            work->step = 5;
+            work->step = RANKINGS_DOWNLOAD_STEP_FREE;
             break;
         }
         rankings->recordIds = rankings->recordIdsBuf;
@@ -537,18 +578,18 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         StopSE(SEQ_SE_PL_BREC80, 0);
         work->step++;
         break;
-    case 3:
+    case RANKINGS_DOWNLOAD_STEP_REQUEST_RANKINGS:
         if (GlobalTerminalNet_RequestRankings(VsRecorder_GetNet(work), (const GlobalTerminalNetRankingsSource *)work->videoOwners[0], (const GlobalTerminalNetPair *)rankings->scores) == TRUE) {
             work->step++;
         }
         break;
-    case 4:
+    case RANKINGS_DOWNLOAD_STEP_CHECK_RANKINGS:
         VsRecorder_HideTopMessage(work);
         if (GlobalTerminalNet_GetError(VsRecorder_GetNet(work), &error) == TRUE) {
             StopSE(SEQ_SE_PL_BREC80, 0);
-            VsRecorder_ShowMessageScreen(work, 5, error->code, error->type);
+            VsRecorder_ShowMessageScreen(work, VS_RECORDER_REQUEST_RANKINGS, error->code, error->type);
             OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-            work->step = 5;
+            work->step = RANKINGS_DOWNLOAD_STEP_FREE;
             break;
         }
         {
@@ -566,17 +607,17 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
             }
             if (missing) {
                 VsRecorder_ShowMessageScreen(work, 5, 0, 0);
-                work->messageScreen.msgId = 300; // There is no ranking data...
+                work->messageScreen.msgId = msg_0013_00300; // There is no ranking data...
                 OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
-                work->step = 5;
+                work->step = RANKINGS_DOWNLOAD_STEP_FREE;
             } else {
                 StopSE(SEQ_SE_PL_BREC80, 0);
                 PlaySE(SEQ_SE_PL_BREC12);
-                work->step = 0xFF;
+                work->step = VS_RECORDER_STEP_FINISH;
             }
         }
         break;
-    case 5:
+    case RANKINGS_DOWNLOAD_STEP_FREE:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeRankingsButtons(work);
         TouchHitboxController_Destroy(rankings->hitboxController);
@@ -590,7 +631,7 @@ BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
         VsRecorder_StartFlipScreens(work, 1);
         work->step++;
         break;
-    case 6:
+    case RANKINGS_DOWNLOAD_STEP_FADE_IN_MENU:
         if (VsRecorder_IsFlipScreensDone(work)) {
             if (VsRecorder_StepFade(&rankings->fade, 0)) {
                 VsRecorder_ClearPaletteBlend(work);
@@ -620,7 +661,7 @@ BOOL VsRecorder_RankingsShow(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case RANKINGS_SHOW_STEP_CREATE:
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 62, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 62, work->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_109);
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 33, work->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, FALSE, HEAP_ID_109);
@@ -640,7 +681,7 @@ BOOL VsRecorder_RankingsShow(VsRecorderWork *work) {
             work->step = step;
         }
         break;
-    case 1:
+    case RANKINGS_SHOW_STEP_FADE_IN:
         VsRecorder_StepFade(&rankings->fade, 0);
         if (VsRecorder_StepBlend(&rankings->eva, &rankings->evb, FALSE, 0)) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -673,7 +714,7 @@ BOOL VsRecorder_RankingsCloseList(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case RANKINGS_CLOSE_LIST_STEP_REMOVE_LIST:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_FreeTouchScroll(&work->touchScroll);
         VsRecorder_RemoveListWindow(&work->listWindow);
@@ -687,7 +728,7 @@ BOOL VsRecorder_RankingsCloseList(VsRecorderWork *work) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         work->step++;
         break;
-    case 1:
+    case RANKINGS_CLOSE_LIST_STEP_FADE_OUT:
         VsRecorder_StepFade(&rankings->fade, 1);
         if (VsRecorder_StepBlend(&rankings->eva, &rankings->evb, TRUE, 0)) {
             work->step++;
@@ -707,7 +748,7 @@ BOOL VsRecorder_RankingsExit(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case RANKINGS_EXIT_STEP_FREE:
         VsRecorder_RemoveRankingsButtonLabels(work);
         VsRecorder_RemoveRankingsWindows(work);
         VsRecorder_SetVBlankPaused(work, TRUE);
@@ -716,7 +757,7 @@ BOOL VsRecorder_RankingsExit(VsRecorderWork *work) {
         TouchHitboxController_Destroy(rankings->hitboxController);
         work->step++;
         break;
-    case 1:
+    case RANKINGS_EXIT_STEP_REBUILD_MENU:
         VsRecorder_SetVBlankPaused(work, TRUE);
         VsRecorder_ResetFade(&rankings->fade);
         VsRecorder_RebuildMenuRowsParent(work);
@@ -760,7 +801,7 @@ BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     switch (work->step) {
-    case 0:
+    case RANKINGS_SWITCH_STEP_REMOVE_LIST:
         VsRecorder_FillRankingEntries(work);
         VsRecorder_UpdateRankingTeamCount(rankings);
         VsRecorder_RemoveRankingsWindows(work);
@@ -771,12 +812,12 @@ BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work) {
         VsRecorder_FreeListArrows(&work->listWindow, work);
         work->step++;
         break;
-    case 1:
+    case RANKINGS_SWITCH_STEP_BLEND_OUT:
         if (VsRecorder_StepBlend(&rankings->eva, &rankings->evb, TRUE, 1)) {
             work->step++;
         }
         break;
-    case 2:
+    case RANKINGS_SWITCH_STEP_CREATE_LIST:
         if (VsRecorder_StepBlend(&rankings->eva, &rankings->evb, FALSE, 1)) {
             VsRecorder_CreateRankingsWindows(work);
             VsRecorder_PrintRankingsInfo(work);

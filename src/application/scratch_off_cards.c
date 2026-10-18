@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/items.h"
+
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0432.h"
 
@@ -49,6 +51,64 @@ enum ScratchOffCardsState {
     SCRATCH_OFF_CARDS_STATE_PLAY_CARD,
     SCRATCH_OFF_CARDS_STATE_SLIDE_OUT_CARD,
     SCRATCH_OFF_CARDS_STATE_FADE_OUT,
+};
+
+enum ScratchOffCardsFadeInState {
+    SCRATCH_OFF_CARDS_FADE_IN_START,
+    SCRATCH_OFF_CARDS_FADE_IN_WAIT,
+};
+
+enum ScratchOffCardsSlideInState {
+    SCRATCH_OFF_CARDS_SLIDE_IN_START,
+    SCRATCH_OFF_CARDS_SLIDE_IN_MOVE,
+    SCRATCH_OFF_CARDS_SLIDE_IN_DONE,
+};
+
+enum ScratchOffCardsSelectState {
+    SCRATCH_OFF_CARDS_SELECT_START,
+    SCRATCH_OFF_CARDS_SELECT_INPUT,
+    SCRATCH_OFF_CARDS_SELECT_DONE,
+};
+
+enum ScratchOffCardsZoomState {
+    SCRATCH_OFF_CARDS_ZOOM_START,
+    SCRATCH_OFF_CARDS_ZOOM_GROW,
+    SCRATCH_OFF_CARDS_ZOOM_SLIDE_OUT,
+    SCRATCH_OFF_CARDS_ZOOM_DONE,
+};
+
+enum ScratchOffCardsShowState {
+    SCRATCH_OFF_CARDS_SHOW_INIT,
+    SCRATCH_OFF_CARDS_SHOW_PLACE_SPRITES,
+    SCRATCH_OFF_CARDS_SHOW_SLIDE_IN,
+    SCRATCH_OFF_CARDS_SHOW_DONE,
+};
+
+enum ScratchOffCardsPlayState {
+    SCRATCH_OFF_CARDS_PLAY_INIT,
+    SCRATCH_OFF_CARDS_PLAY_SHOW_WINDOWS,
+    SCRATCH_OFF_CARDS_PLAY_SHOW_MESSAGE,
+    SCRATCH_OFF_CARDS_PLAY_SCRATCH,
+    SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_IN,
+    SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_OUT,
+    SCRATCH_OFF_CARDS_PLAY_SHOW_WIN,
+    SCRATCH_OFF_CARDS_PLAY_SHOW_TOO_BAD,
+    SCRATCH_OFF_CARDS_PLAY_WAIT_TOO_BAD,
+    SCRATCH_OFF_CARDS_PLAY_CONFIRM_NEXT_CARD,
+    SCRATCH_OFF_CARDS_PLAY_CONFIRM_STOP,
+    SCRATCH_OFF_CARDS_PLAY_WAIT_RELEASE,
+};
+
+enum ScratchOffCardsSlideOutState {
+    SCRATCH_OFF_CARDS_SLIDE_OUT_START,
+    SCRATCH_OFF_CARDS_SLIDE_OUT_MOVE,
+    SCRATCH_OFF_CARDS_SLIDE_OUT_DONE,
+};
+
+enum ScratchOffCardsFadeOutState {
+    SCRATCH_OFF_CARDS_FADE_OUT_START,
+    SCRATCH_OFF_CARDS_FADE_OUT_DELAY,
+    SCRATCH_OFF_CARDS_FADE_OUT_WAIT,
 };
 
 typedef struct ScratchOffCardsSprite {
@@ -389,11 +449,11 @@ BOOL ScratchOffCards_Exit(OverlayManager *man, int *state) {
 
 static int ScratchOffCards_FadeIn(ScratchOffCardsWork *work) {
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_FADE_IN_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 3, HEAP_ID_122);
         work->subState++;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_FADE_IN_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             work->cardNo = 0;
             return TRUE;
@@ -406,7 +466,7 @@ static int ScratchOffCards_FadeIn(ScratchOffCardsWork *work) {
 static int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
     int i;
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_SLIDE_IN_START:
         work->slideX = -256;
         for (i = 0; i < 4; i++) {
             ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[i], work->slideX + sScratchOffCardsCardChoicePositions[i].x, sScratchOffCardsCardChoicePositions[i].y);
@@ -417,14 +477,14 @@ static int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         work->bgScrollX = 3; // used here as the index of the card sliding in
         PlaySE(SEQ_SE_PL_SYU03);
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_SLIDE_IN_MOVE;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_SLIDE_IN_MOVE:
         work->slideX += 32;
         ScratchOffCardsSprite_SetPosition(work->cardChoiceSprites[work->bgScrollX], work->slideX + sScratchOffCardsCardChoicePositions[work->bgScrollX].x, sScratchOffCardsCardChoicePositionsY[work->bgScrollX].x);
         if (work->slideX >= 0) {
             if (work->bgScrollX == 0) {
-                work->subState = 2;
+                work->subState = SCRATCH_OFF_CARDS_SLIDE_IN_DONE;
             } else {
                 PlaySE(SEQ_SE_PL_SYU03);
                 work->bgScrollX--;
@@ -432,7 +492,7 @@ static int ScratchOffCards_SlideInCardChoices(ScratchOffCardsWork *work) {
             }
         }
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_SLIDE_IN_DONE:
         work->slideX = 0;
         return TRUE;
     }
@@ -443,12 +503,12 @@ static int ScratchOffCards_SelectCard(ScratchOffCardsWork *work) {
     int hit;
     u32 x, y;
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_SELECT_START:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         work->delay = 30;
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_SELECT_INPUT;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_SELECT_INPUT:
         if (work->delay == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
             ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
@@ -465,10 +525,10 @@ static int ScratchOffCards_SelectCard(ScratchOffCardsWork *work) {
             System_GetTouchHeldCoords(&x, &y);
             ClearFrameAndWindow2(&work->windows[15], FALSE);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
-            work->subState = 2;
+            work->subState = SCRATCH_OFF_CARDS_SELECT_DONE;
         }
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_SELECT_DONE:
         return TRUE;
     }
     return FALSE;
@@ -480,16 +540,16 @@ static int ScratchOffCards_ZoomSelectedCard(ScratchOffCardsWork *work) {
     index--;
     selected = work->chosenCards[index];
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_ZOOM_START:
         work->cardScale.x = FX32_ONE;
         work->cardScale.y = FX32_ONE;
         work->cardScale.z = FX32_ONE;
         work->slideX = 0;
         work->flags.bounceStep = 0;
         ScratchOffCardsSprite_SetDrawPriority(work->cardChoiceSprites[selected], 0);
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_ZOOM_GROW;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_ZOOM_GROW:
         ScratchOffCards_BounceCardChoice(work, (u8)selected);
         work->cardScale.x += 0x100;
         work->cardScale.y += 0x100;
@@ -502,10 +562,10 @@ static int ScratchOffCards_ZoomSelectedCard(ScratchOffCardsWork *work) {
             work->cardScale.y = FX32_ONE;
             work->cardScale.z = FX32_ONE;
             PlaySE(SEQ_SE_PL_SYU03);
-            work->subState = 2;
+            work->subState = SCRATCH_OFF_CARDS_ZOOM_SLIDE_OUT;
         }
         break;
-    case 2: {
+    case SCRATCH_OFF_CARDS_ZOOM_SLIDE_OUT: {
         int i;
         work->slideX += 16;
         i = 0;
@@ -516,11 +576,11 @@ static int ScratchOffCards_ZoomSelectedCard(ScratchOffCardsWork *work) {
         }
         if (work->slideX >= 256) {
             ScratchOffCardsSprite_ResetScale(work->cardChoiceSprites[selected], 0);
-            work->subState = 3;
+            work->subState = SCRATCH_OFF_CARDS_ZOOM_DONE;
         }
         break;
     }
-    case 3:
+    case SCRATCH_OFF_CARDS_ZOOM_DONE:
         work->slideX = 0;
         return TRUE;
     }
@@ -530,7 +590,7 @@ static int ScratchOffCards_ZoomSelectedCard(ScratchOffCardsWork *work) {
 static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
     int i;
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_SHOW_INIT:
         ScratchOffCards_ResetScratchPixels(work);
         BG_LoadCharTilesData(work->bgConfig, GF_BG_LYR_MAIN_0, work->scratchPixels, work->scratchLayer->szByte, 0);
         BgCommitTilemapBufferToVram(work->bgConfig, GF_BG_LYR_MAIN_0);
@@ -552,9 +612,9 @@ static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
         ScratchOffCards_ChoosePrizes(work, work->unk_019[work->cardNo]);
         ScratchOffCards_ClearTouchedCells(work);
         ScratchOffCards_ClearRevealedCells(work);
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_SHOW_PLACE_SPRITES;
         break;
-    case 1: {
+    case SCRATCH_OFF_CARDS_SHOW_PLACE_SPRITES: {
         int j = 0;
         int y = 26;
         ScratchOffCardsWork *cursor = work; // advanced by one sprite pointer per iteration
@@ -592,16 +652,16 @@ static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
         ScratchOffCards_SetBgPalette(work, GF_BG_LYR_MAIN_1, (u8)(work->chosenCards[work->cardNo] + 4), 32, 24);
         ScratchOffCards_SetBgPalette(work, GF_BG_LYR_SUB_2, (u8)(work->chosenCards[work->cardNo] + 1), 32, 24);
         PlaySE(SEQ_SE_PL_SYU03);
-        work->subState = 2;
+        work->subState = SCRATCH_OFF_CARDS_SHOW_SLIDE_IN;
         break;
     }
-    case 2:
+    case SCRATCH_OFF_CARDS_SHOW_SLIDE_IN:
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, work->bgScrollX);
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, work->bgScrollX);
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, work->bgScrollX);
         work->bgScrollX -= 16;
         if (work->slideX >= 0) {
-            work->subState = 3;
+            work->subState = SCRATCH_OFF_CARDS_SHOW_DONE;
         } else {
             int y;
             ScratchOffCardsWork *cursor;
@@ -625,7 +685,7 @@ static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
         }
         work->slideX += 16;
         break;
-    case 3:
+    case SCRATCH_OFF_CARDS_SHOW_DONE:
         work->slideX = 0;
         work->bgScrollX = 0;
         return TRUE;
@@ -637,7 +697,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
     int i;
     int hit;
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_PLAY_INIT:
         if (work->cardNo == 2) {
             ClearWindowTilemapAndCopyToVram(&work->windows[13]);
             ScratchOffCards_PrintCancelButton(work);
@@ -656,24 +716,24 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
         ScratchOffCardsSprite_SetVisible(work->buttonSprite, TRUE);
         ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, FALSE);
         PlaySE(SEQ_SE_PL_UG_020);
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_PLAY_SHOW_WINDOWS;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_PLAY_SHOW_WINDOWS:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
-        work->subState = 2;
+        work->subState = SCRATCH_OFF_CARDS_PLAY_SHOW_MESSAGE;
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_PLAY_SHOW_MESSAGE:
         if (work->delay == 0) {
             ScratchOffCardsSprite_SetVisible(work->messageSprite, FALSE);
             FillWindowPixelBuffer(&work->windows[10], 0);
             ScheduleWindowCopyToVram(&work->windows[10]);
-            work->subState = 3;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_SCRATCH;
         } else {
             work->delay--;
         }
         break;
-    case 3:
+    case SCRATCH_OFF_CARDS_PLAY_SCRATCH:
         GF_TouchpadUpdate(&work->touch, 4, 2);
         hit = TouchscreenHitbox_FindRectAtTouchHeld(sScratchOffCardsCellHitboxes);
         if (hit != -1) {
@@ -692,14 +752,14 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
                 StopSE(SEQ_SE_PL_KEZURI, 0);
                 ScratchOffCardsSprite_SetVisible(work->messageSprite, TRUE);
                 work->prizeItems[work->cardNo] = work->prizes[work->matchedSymbol];
-                if (work->prizes[work->matchedSymbol] == 92) {
+                if (work->prizes[work->matchedSymbol] == ITEM_NUGGET) {
                     work->prizeKinds[work->cardNo] = 1;
                 } else {
                     work->prizeKinds[work->cardNo] = 3;
                 }
                 work->delay = ScratchOffCards_StartWildcardMosaic(work) == TRUE ? 30 : 0;
                 ScratchOffCards_ShowResult(work);
-                work->subState = 4;
+                work->subState = SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_IN;
                 return FALSE;
             }
             if (work->revealedCount >= 3) {
@@ -707,7 +767,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
                 work->delay = 60;
                 ScratchOffCardsSprite_SetVisible(work->messageSprite, TRUE);
                 ScratchOffCards_PrintTooBadMessage(work);
-                work->subState = 7;
+                work->subState = SCRATCH_OFF_CARDS_PLAY_SHOW_TOO_BAD;
                 return FALSE;
             }
         } else {
@@ -726,7 +786,7 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCardsSprite_SetAnim(work->buttonSprite, 0);
             ScratchOffCards_CreateYesNoPrompt(work);
             ScratchOffCards_ShowYesNoPrompt(work);
-            work->subState = 10;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_CONFIRM_STOP;
         } else {
             if (TouchscreenHitbox_FindRectAtTouchNew(sScratchOffCardsNextCardButtonHitbox) == -1) {
                 break;
@@ -737,25 +797,25 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             ScratchOffCardsSprite_SetAnim(work->buttonSprite, 1);
             ScratchOffCards_CreateYesNoPrompt(work);
             ScratchOffCards_ShowYesNoPrompt(work);
-            work->subState = 9;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_CONFIRM_NEXT_CARD;
         }
         break;
-    case 4:
+    case SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_IN:
         if (work->delay == 0) {
             if (!ScratchOffCards_UpdateWildcardMosaic(work, FALSE)) {
-                work->subState = 5;
+                work->subState = SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_OUT;
             }
         } else {
             work->delay--;
         }
         break;
-    case 5:
+    case SCRATCH_OFF_CARDS_PLAY_WILDCARD_MOSAIC_OUT:
         if (!ScratchOffCards_UpdateWildcardMosaic(work, TRUE)) {
             work->delay = 0;
-            work->subState = 6;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_SHOW_WIN;
         }
         break;
-    case 6:
+    case SCRATCH_OFF_CARDS_PLAY_SHOW_WIN:
         if (ScratchOffCardsSprite_IsAnimated(work->winSprite) == TRUE) {
             break;
         }
@@ -770,24 +830,24 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
         }
         work->delay--;
         break;
-    case 7:
+    case SCRATCH_OFF_CARDS_PLAY_SHOW_TOO_BAD:
         if (work->delay == 0) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
             ScratchOffCards_AdvanceCard(work);
             ScratchOffCards_HideStartCardMessage(work);
             work->delay = 30;
-            work->subState = 8;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_WAIT_TOO_BAD;
         } else {
             work->delay--;
         }
         break;
-    case 8:
+    case SCRATCH_OFF_CARDS_PLAY_WAIT_TOO_BAD:
         if (work->delay == 0) {
             return TRUE;
         }
         work->delay--;
         break;
-    case 9:
+    case SCRATCH_OFF_CARDS_PLAY_CONFIRM_NEXT_CARD:
         hit = (int)YesNoPrompt_HandleInputForSave(work->yesNoPrompt);
         if (hit == YESNORESPONSE_YES) {
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, FALSE);
@@ -802,10 +862,10 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             EraseFrameAndWindow1(&work->windows[0], FALSE);
             ClearWindowTilemapAndCopyToVram(&work->windows[0]);
             ScratchOffCards_DestroyYesNoPrompt(work);
-            work->subState = 11;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_WAIT_RELEASE;
         }
         break;
-    case 10:
+    case SCRATCH_OFF_CARDS_PLAY_CONFIRM_STOP:
         hit = (int)YesNoPrompt_HandleInputForSave(work->yesNoPrompt);
         if (hit == YESNORESPONSE_YES) {
             ScratchOffCardsSprite_SetAnimActive(work->buttonSprite, FALSE);
@@ -820,12 +880,12 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
             EraseFrameAndWindow1(&work->windows[0], FALSE);
             ClearWindowTilemapAndCopyToVram(&work->windows[0]);
             ScratchOffCards_DestroyYesNoPrompt(work);
-            work->subState = 11;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_WAIT_RELEASE;
         }
         break;
-    case 11:
+    case SCRATCH_OFF_CARDS_PLAY_WAIT_RELEASE:
         if (!System_GetTouchHeld()) {
-            work->subState = 3;
+            work->subState = SCRATCH_OFF_CARDS_PLAY_SCRATCH;
         }
         break;
     }
@@ -834,22 +894,22 @@ static int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
 
 static int ScratchOffCards_SlideOutCard(ScratchOffCardsWork *work) {
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_SLIDE_OUT_START:
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         ScratchOffCardsSprite_SetVisible(work->buttonSprite, FALSE);
         work->slideX = 0;
         work->bgScrollX = 0;
         PlaySE(SEQ_SE_PL_SYU03);
-        work->subState = 1;
+        work->subState = SCRATCH_OFF_CARDS_SLIDE_OUT_MOVE;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_SLIDE_OUT_MOVE:
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_SUB_2, BG_POS_OP_SET_X, work->bgScrollX);
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, work->bgScrollX);
         BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, work->bgScrollX);
         work->bgScrollX -= 16;
         if (work->slideX >= 256) {
-            work->subState = 2;
+            work->subState = SCRATCH_OFF_CARDS_SLIDE_OUT_DONE;
         } else {
             int i;
             int y;
@@ -867,7 +927,7 @@ static int ScratchOffCards_SlideOutCard(ScratchOffCardsWork *work) {
         }
         work->slideX += 16;
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_SLIDE_OUT_DONE:
         work->slideX = 0;
         work->bgScrollX = 0;
         return TRUE;
@@ -877,11 +937,11 @@ static int ScratchOffCards_SlideOutCard(ScratchOffCardsWork *work) {
 
 static int ScratchOffCards_FadeOut(ScratchOffCardsWork *work) {
     switch (work->subState) {
-    case 0:
+    case SCRATCH_OFF_CARDS_FADE_OUT_START:
         work->timer = 10;
         work->subState++;
         break;
-    case 1:
+    case SCRATCH_OFF_CARDS_FADE_OUT_DELAY:
         work->timer--;
         if (work->timer == 0) {
             ClearFrameAndWindow2(&work->windows[0], FALSE);
@@ -889,7 +949,7 @@ static int ScratchOffCards_FadeOut(ScratchOffCardsWork *work) {
             work->subState++;
         }
         break;
-    case 2:
+    case SCRATCH_OFF_CARDS_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -1362,7 +1422,7 @@ static void ScratchOffCards_ChoosePrizes(ScratchOffCardsWork *work, int unused) 
     loop.current = choices;
     for (loop.i = 0; loop.i < 4; loop.i++, loop.current++) {
         if (loop.i == loop.wildcardSlot) {
-            work->prizes[loop.i] = 92;
+            work->prizes[loop.i] = ITEM_NUGGET;
         } else {
             do {
                 *loop.current = (u32)LCRandom() % 23;
