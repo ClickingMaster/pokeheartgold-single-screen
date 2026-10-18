@@ -6,6 +6,20 @@
 #include "save.h"
 #include "frontier_wifi_upload_record.h"
 
+enum BattleTowerChallengeField {
+    TOWER_CHALLENGE_MODE,
+    TOWER_CHALLENGE_BATTLE_NO,
+    TOWER_CHALLENGE_TIMES_FAINTED,
+    TOWER_CHALLENGE_TURNS,
+    TOWER_CHALLENGE_DAMAGE,
+    TOWER_CHALLENGE_PARTY_SLOTS,
+    TOWER_CHALLENGE_ALLY_DATA,
+    TOWER_CHALLENGE_ALLY_REPLACE_ITEM,
+    TOWER_CHALLENGE_TRAINERS,
+    TOWER_CHALLENGE_ALLY_ID,
+    TOWER_CHALLENGE_RANDOM_STATE,
+};
+
 void BattleTowerChallenge_Clear(u32 challenge);
 u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out);
 void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value);

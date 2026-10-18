@@ -6,6 +6,19 @@
 #include "gf_3d_render.h"
 #include "heap.h"
 
+enum BillboardObjectType {
+    BILLBOARD_OBJECT_FREE,
+    BILLBOARD_OBJECT_NEW,
+    BILLBOARD_OBJECT_OWN_TEXTURE,
+    BILLBOARD_OBJECT_SHARED_TEXTURE,
+};
+
+enum BillboardFreeState {
+    BILLBOARD_FREE_NONE,
+    BILLBOARD_FREE_REQUESTED,
+    BILLBOARD_FREE_PENDING,
+};
+
 static void Billboard_Clear(Billboard *billboard);
 static void BillboardObject_Clear(BillboardObject *object);
 static BOOL Billboard_DeleteAllObjects(Billboard *billboard);
@@ -87,7 +100,7 @@ static void Billboard_Clear(Billboard *billboard) {
     billboard->usedCount = 0;
     billboard->allocator = NULL;
     billboard->textureAnimationPool = NULL;
-    billboard->state = 0;
+    billboard->state = BILLBOARD_FREE_NONE;
 }
 
 static void BillboardObject_Clear(BillboardObject *object) {
@@ -110,7 +123,7 @@ static void BillboardObject_Clear(BillboardObject *object) {
     object->scale.z = FX32_ONE;
     object->rotation = 0;
     object->sequence = 0;
-    object->type = 0;
+    object->type = BILLBOARD_OBJECT_FREE;
     object->next = NULL;
     object->prev = 0;
     object->visible = 0;
@@ -146,8 +159,8 @@ void BillboardLists_Draw(void) {
         if (sBillboardLists.list[i].draw == 1) {
             Billboard_Draw(&sBillboardLists.list[i]);
         }
-        if (sBillboardLists.list[i].state == 1) {
-            sBillboardLists.list[i].state = 2;
+        if (sBillboardLists.list[i].state == BILLBOARD_FREE_REQUESTED) {
+            sBillboardLists.list[i].state = BILLBOARD_FREE_PENDING;
         }
     }
 }
@@ -209,7 +222,7 @@ static BOOL Billboard_DeleteAllObjects(Billboard *billboard) {
 
 BOOL Billboard_HasPendingFree(Billboard *billboard) {
     GF_ASSERT(billboard != NULL);
-    if (billboard->state == 0) {
+    if (billboard->state == BILLBOARD_FREE_NONE) {
         return FALSE;
     }
     return TRUE;
@@ -217,8 +230,8 @@ BOOL Billboard_HasPendingFree(Billboard *billboard) {
 
 void Billboard_ClearPendingFree(void *data) {
     Billboard *billboard = data;
-    if (billboard->state == 2) {
-        billboard->state = 0;
+    if (billboard->state == BILLBOARD_FREE_PENDING) {
+        billboard->state = BILLBOARD_FREE_NONE;
     }
 }
 
@@ -244,9 +257,9 @@ static void Billboard_Draw(Billboard *billboard) {
                 object->callback(object, object->callbackArg);
             }
             BillboardObject_BindTexture(object);
-            if (object->type == 3) {
+            if (object->type == BILLBOARD_OBJECT_SHARED_TEXTURE) {
                 BillboardObject_UpdateTexPlttSequence(object);
-            } else if (object->type == 2) {
+            } else if (object->type == BILLBOARD_OBJECT_OWN_TEXTURE) {
                 BillboardObject_UpdateTextureAnimation(object);
             }
             GF3dRender_DrawModel(&object->renderObj, &object->position, object->rotation != NULL ? object->rotation : &identity, &object->scale);
@@ -261,10 +274,10 @@ static void BillboardObject_LoadResource(BillboardObject *object, BillboardResou
     BillboardObject_RemoveTextureAnimation(billboard, object);
     BillboardObject_LoadModel(object, resource);
     BillboardObject_AddTextureAnimation(billboard, object, resource);
-    if (object->type == 1) {
+    if (object->type == BILLBOARD_OBJECT_NEW) {
         BillboardObject_InsertBefore(&billboard->root, object);
     }
-    object->type = 2;
+    object->type = BILLBOARD_OBJECT_OWN_TEXTURE;
     object->ranges = resource->ranges;
     object->sequence = 0;
     object->frame = 0;
@@ -273,7 +286,7 @@ static void BillboardObject_LoadResource(BillboardObject *object, BillboardResou
 static void BillboardObject_LoadResourceWithKeys(BillboardObject *object, BillboardResource *resource) {
     Billboard *billboard = object->owner;
     BillboardObject_RemoveTextureAnimation(billboard, object);
-    if (object->type == 2) {
+    if (object->type == BILLBOARD_OBJECT_OWN_TEXTURE) {
         Billboard_FreeTextureVram(&object->texKey, &object->tex4x4Key, &object->paletteKey);
     }
     object->texKey = resource->texKey;
@@ -281,10 +294,10 @@ static void BillboardObject_LoadResourceWithKeys(BillboardObject *object, Billbo
     object->paletteKey = resource->plttKey;
     BillboardObject_LoadModelWithKeys(object, resource);
     BillboardObject_SetResourceData(object, resource);
-    if (object->type == 1) {
+    if (object->type == BILLBOARD_OBJECT_NEW) {
         BillboardObject_InsertBefore(&billboard->root, object);
     }
-    object->type = 3;
+    object->type = BILLBOARD_OBJECT_SHARED_TEXTURE;
     object->ranges = resource->ranges;
     object->sequence = 0;
     object->frame = 0;
@@ -367,13 +380,13 @@ static void BillboardObject_LoadModel(BillboardObject *object, BillboardResource
     BOOL same;
     object->modelSet = BillboardResource_GetModelSet(resource, &object->model, &object->texture);
     NNS_G3dRenderObjInit(&object->renderObj, object->model);
-    if (object->type != 3) {
+    if (object->type != BILLBOARD_OBJECT_SHARED_TEXTURE) {
         same = Billboard_TexturesNeedSameVram(oldTexture, object->texture);
     } else {
         same = FALSE;
     }
     if (!same) {
-        if (object->type == 2) {
+        if (object->type == BILLBOARD_OBJECT_OWN_TEXTURE) {
             Billboard_FreeTextureVram(&object->texKey, &object->tex4x4Key, &object->paletteKey);
         }
         Billboard_AllocTextureVram(object->texture, &object->texKey, &object->tex4x4Key, &object->paletteKey);
@@ -415,7 +428,7 @@ BillboardObject *BillboardObject_Create(BillboardObjectCreateParams *params) {
     object->scale = params->scale;
     object->sequence = 0;
     object->visible = TRUE;
-    object->type = 1;
+    object->type = BILLBOARD_OBJECT_NEW;
     BillboardObject_ApplyResource(object, params->resource);
     return object;
 }
@@ -423,18 +436,18 @@ BillboardObject *BillboardObject_Create(BillboardObjectCreateParams *params) {
 BOOL BillboardObject_Delete(BillboardObject *object) {
     Billboard *billboard;
     GF_ASSERT(object != NULL);
-    GF_ASSERT(object->type != 1);
+    GF_ASSERT(object->type != BILLBOARD_OBJECT_NEW);
     billboard = object->owner;
-    if (object->type == 0) {
+    if (object->type == BILLBOARD_OBJECT_FREE) {
         return FALSE;
     }
     BillboardObject_Unlink(object);
-    if (object->type == 2) {
+    if (object->type == BILLBOARD_OBJECT_OWN_TEXTURE) {
         Billboard_FreeTextureVram(&object->texKey, &object->tex4x4Key, &object->paletteKey);
     }
     BillboardObject_RemoveTextureAnimation(billboard, object);
     Billboard_FreeObject(billboard, object);
-    billboard->state = 1;
+    billboard->state = BILLBOARD_FREE_REQUESTED;
     return TRUE;
 }
 
@@ -558,7 +571,7 @@ NNSG3dPlttKey BillboardObject_GetPlttKey(BillboardObject *object) {
 }
 
 void BillboardObject_UpdateTextureAnimation(BillboardObject *object) {
-    if (object->type == 2) {
+    if (object->type == BILLBOARD_OBJECT_OWN_TEXTURE) {
         TextureAnimation_SetFrame(object->textureAnimation, object->frame);
     }
 }

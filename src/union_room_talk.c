@@ -216,25 +216,25 @@ int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
         gender = PlayerProfile_GetTrainerGender(profile);
     }
     switch (status->activity) {
-    case 4:
-    case 11:
+    case UNION_ACTIVITY_BUSY:
+    case UNION_ACTIVITY_LINKED:
         return gUnionRoomActivityBusyMsgs[gender];
-    case 5:
+    case UNION_ACTIVITY_TRAINER_CARD:
         return gUnionRoomActivityTrainerCardMsgs[(s32)LCRandom() % 2][gender];
-    case 6:
+    case UNION_ACTIVITY_BATTLE:
         return gUnionRoomActivityBattleMsgs[(s32)LCRandom() % 4][gender];
-    case 7:
+    case UNION_ACTIVITY_TRADE:
         return gUnionRoomActivityTradeMsgs[(s32)LCRandom() % 2][gender];
-    case 1:
-    case 8:
+    case UNION_ACTIVITY_DRAWING_RECRUIT:
+    case UNION_ACTIVITY_DRAWING:
         return gUnionRoomActivityDrawingMsgs[(s32)LCRandom() % 4][gender];
-    case 2:
-    case 9:
+    case UNION_ACTIVITY_RECORD_MIX_RECRUIT:
+    case UNION_ACTIVITY_RECORD_MIX:
         return gUnionRoomActivityRecordMixMsgs[(s32)LCRandom() % 4][gender];
     case 3:
     case 10:
-    case 12:
-    case 13:
+    case UNION_ACTIVITY_SPIN_TRADE:
+    case UNION_ACTIVITY_SPIN_TRADE_RECRUIT:
         return gUnionRoomActivitySpinTradeMsgs[(s32)LCRandom() % 4][gender];
     }
     return 40;
@@ -373,32 +373,32 @@ void UnionRoom_SetBeaconActivity(int activity) {
     UnionRoomStatus status;
     MI_CpuFill8(&status, 0, sizeof(status));
     switch (activity) {
-    case 11:
+    case UNION_ACTIVITY_LINKED:
         UnionRoom_FillStatusMembers(&status, 2);
         break;
-    case 5:
-    case 6:
-    case 7:
+    case UNION_ACTIVITY_TRAINER_CARD:
+    case UNION_ACTIVITY_BATTLE:
+    case UNION_ACTIVITY_TRADE:
         UnionRoom_FillStatusMembers(&status, 2);
         break;
-    case 8:
+    case UNION_ACTIVITY_DRAWING:
         UnionRoom_FillStatusMembers(&status, 5);
         break;
-    case 1:
+    case UNION_ACTIVITY_DRAWING_RECRUIT:
         UnionRoom_FillStatusMembers(&status, 4);
         break;
-    case 9:
+    case UNION_ACTIVITY_RECORD_MIX:
         UnionRoom_FillStatusMembers(&status, 5);
         break;
-    case 2:
+    case UNION_ACTIVITY_RECORD_MIX_RECRUIT:
         UnionRoom_FillStatusMembers(&status, 4);
         break;
     case 10:
-    case 12:
+    case UNION_ACTIVITY_SPIN_TRADE:
         UnionRoom_FillStatusMembers(&status, 5);
         break;
     case 3:
-    case 13:
+    case UNION_ACTIVITY_SPIN_TRADE_RECRUIT:
         UnionRoom_FillStatusMembers(&status, 4);
         break;
     }

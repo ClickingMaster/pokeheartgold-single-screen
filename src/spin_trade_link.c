@@ -260,7 +260,7 @@ void SpinTradeLink_Close(SpinTradeLink *menu) {
     CommState_SetMaxEntries(2);
     CommState_ResumeAlternateSearch();
     UnionRoomObjects_ResetSlots(menu->parent->input.communication);
-    UnionRoom_SetBeaconActivity(0);
+    UnionRoom_SetBeaconActivity(UNION_ACTIVITY_NONE);
 }
 
 BOOL SpinTradeLink_SendPacket(SpinTradeLink *menu, u32 command, void *data, u32 size) {

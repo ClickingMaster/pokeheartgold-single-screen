@@ -84,6 +84,15 @@ typedef struct VariableSpeedWalkWork {
     s16 index;
 } VariableSpeedWalkWork;
 
+enum MovementScriptMachineState {
+    MOVEMENT_SCRIPT_INIT,
+    MOVEMENT_SCRIPT_WAIT_READY,
+    MOVEMENT_SCRIPT_SET_COMMAND,
+    MOVEMENT_SCRIPT_WAIT_COMMAND,
+    MOVEMENT_SCRIPT_LOOP_CHECK,
+    MOVEMENT_SCRIPT_DONE,
+};
+
 int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
 void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 void TrainerReveal_Spawn(LocalMapObject *object);
@@ -207,7 +216,7 @@ void MovementScriptMachine(SysTask *task, void *data) {
 
 BOOL MovementScriptMachineSub_Init(EventObjectMovementWork *work) {
     work->index = 0;
-    work->state = 1;
+    work->state = MOVEMENT_SCRIPT_WAIT_READY;
     return TRUE;
 }
 
@@ -215,13 +224,13 @@ BOOL MovementScriptMachineSub_WaitReady(EventObjectMovementWork *work) {
     if (!MapObject_AreBitsSetForMovementScriptInit(work->object)) {
         return FALSE;
     }
-    work->state = 2;
+    work->state = MOVEMENT_SCRIPT_SET_COMMAND;
     return TRUE;
 }
 
 BOOL MovementScriptMachineSub_SetMovementCommand(EventObjectMovementWork *work) {
     MapObject_SetHeldMovement(work->object, work->command->command);
-    work->state = 3;
+    work->state = MOVEMENT_SCRIPT_WAIT_COMMAND;
     return FALSE;
 }
 
@@ -229,7 +238,7 @@ BOOL MovementScriptMachineSub_WaitMovementCommand(EventObjectMovementWork *work)
     if (!MapObject_IsMovementPaused(work->object)) {
         return FALSE;
     }
-    work->state = 4;
+    work->state = MOVEMENT_SCRIPT_LOOP_CHECK;
     return TRUE;
 }
 
@@ -239,16 +248,16 @@ BOOL MovementScriptMachineSub_LoopCheck(EventObjectMovementWork *work) {
     index++;
     work->index = index;
     if (index < command->length) {
-        work->state = 1;
+        work->state = MOVEMENT_SCRIPT_WAIT_READY;
         return TRUE;
     }
     work->command = command + 1;
     if (command[1].command != MOVEMENT_STEP_END) {
-        work->state = 0;
+        work->state = MOVEMENT_SCRIPT_INIT;
         return TRUE;
     }
     work->finished = TRUE;
-    work->state = 5;
+    work->state = MOVEMENT_SCRIPT_DONE;
     return FALSE;
 }
 

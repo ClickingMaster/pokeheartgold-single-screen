@@ -10,6 +10,14 @@
 #include "player_avatar.h"
 #include "player_avatar_movement.h"
 
+enum RandomWalkState {
+    RANDOM_WALK_FACE,
+    RANDOM_WALK_WAIT_FACE,
+    RANDOM_WALK_WAIT_DELAY,
+    RANDOM_WALK_START_STEP,
+    RANDOM_WALK_WAIT_STEP,
+};
+
 static BOOL SpinMovement_FaceNearbyPlayer(LocalMapObject *object, void *data);
 static BOOL SpinMovement_WaitFace(LocalMapObject *object, void *data);
 static BOOL SpinMovement_Wait(LocalMapObject *object, void *data);
@@ -291,43 +299,43 @@ void RandomWalkMovement_Update(LocalMapObject *object) {
     LocalMovementState *state = (LocalMovementState *)MapObject_GetMovementData(object);
     int direction;
     switch (state->state) {
-    case 0:
+    case RANDOM_WALK_FACE:
         MapObject_ClearSingleMovement(object);
         MapObject_ClearEndMovement(object);
         direction = GetMovementForDirection(MapObject_GetFacingDirection(object), MOVEMENT_FACE_UP);
         MapObject_ForceSetHeldMovement(object, direction);
         state->state++;
         break;
-    case 1:
+    case RANDOM_WALK_WAIT_FACE:
         if (!MapObject_RunForcedMovement(object)) {
             break;
         }
         state->delay = DirectionList_GetRandom(sRandomLookDelays, -1);
         state->state++;
-    case 2:
+    case RANDOM_WALK_WAIT_DELAY:
         state->delay--;
         if (state->delay != 0) {
             break;
         }
         state->state++;
-    case 3:
+    case RANDOM_WALK_START_STEP:
         direction = GetRandomDirectionFromTable(state->directionTable, -1);
         MapObject_SetOrQueueFacing(object, direction);
         if (state->restrictToRange == 1 && !MapObject_IsWithinMovementBounds(object, direction)) {
-            state->state = 0;
+            state->state = RANDOM_WALK_FACE;
             break;
         }
         if (MapObject_CheckCollisionInDirection(object, direction)) {
-            state->state = 0;
+            state->state = RANDOM_WALK_FACE;
             break;
         }
         MapObject_ForceSetHeldMovement(object, GetMovementForDirection(direction, state->heldMovement));
         MapObject_SetSingleMovement(object);
         state->state++;
-    case 4:
+    case RANDOM_WALK_WAIT_STEP:
         if (MapObject_RunForcedMovement(object)) {
             MapObject_ClearSingleMovement(object);
-            state->state = 0;
+            state->state = RANDOM_WALK_FACE;
         }
         break;
     }

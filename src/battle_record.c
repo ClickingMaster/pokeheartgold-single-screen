@@ -175,32 +175,32 @@ BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battl
         gBattleRecord = NULL;
     }
     gBattleRecord = LoadBattleRecord(save, heapId, out, index);
-    if (*out != 1) {
-        *out = 3;
+    if (*out != LOAD_STATUS_IS_GOOD) {
+        *out = LOAD_STATUS_TOTAL_FAIL;
         return TRUE;
     }
     BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
     u32 crc = data->crc;
     BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (BattleRecord_IsEmpty(save, gBattleRecord) == TRUE) {
-        *out = 0;
+        *out = LOAD_STATUS_NOT_EXIST;
         return TRUE;
     }
     if (!BattleRecord_IsValid(save, gBattleRecord)) {
-        *out = 2;
+        *out = LOAD_STATUS_SLOT_FAIL;
         return TRUE;
     }
     if (battle != NULL) {
         BattleRecord_RestoreSetup(battle, save);
     }
-    *out = 1;
+    *out = LOAD_STATUS_IS_GOOD;
     return TRUE;
 }
 
 BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index) {
     BattleRecord *record = LoadBattleRecord(save, heapId, out, index);
-    if (*out != 1) {
-        *out = 3;
+    if (*out != LOAD_STATUS_IS_GOOD) {
+        *out = LOAD_STATUS_TOTAL_FAIL;
         Heap_Free(record);
         return FALSE;
     }
@@ -208,16 +208,16 @@ BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int 
     u32 crc = data->crc;
     BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (BattleRecord_IsEmpty(save, record) == TRUE) {
-        *out = 0;
+        *out = LOAD_STATUS_NOT_EXIST;
         Heap_Free(record);
         return FALSE;
     }
     if (!BattleRecord_IsValid(save, record)) {
-        *out = 2;
+        *out = LOAD_STATUS_SLOT_FAIL;
         Heap_Free(record);
         return FALSE;
     }
-    *out = 1;
+    *out = LOAD_STATUS_IS_GOOD;
     Heap_Free(record);
     return TRUE;
 }
@@ -228,17 +228,17 @@ int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 
         Sys_SetSoftResetDisableFlag(8);
         Sys_SetAsyncSaveMarker(HEAP_ID_FIELD2);
         int result = SaveBattleRecord(save, record, index);
-        if (result == 2) {
+        if (result == WRITE_STATUS_SUCCESS) {
             Save_PrepareForAsyncWrite(save, 2);
             (*state)++;
-            return 0;
+            return WRITE_STATUS_CONTINUE;
         }
         Sys_ClearSoftResetDisableFlag(8);
         return result;
     }
     case 1: {
         int result = Save_WriteFileAsync(save);
-        if (result == 2 || result == 3) {
+        if (result == WRITE_STATUS_SUCCESS || result == WRITE_STATUS_TOTAL_FAIL) {
             *state = 0;
             Sys_ClearAsyncSaveMarker();
             Sys_ClearSoftResetDisableFlag(8);
@@ -246,14 +246,14 @@ int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 
         return result;
     }
     }
-    return 0;
+    return WRITE_STATUS_CONTINUE;
 }
 
 int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState) {
     switch (*state) {
     case 0: {
         if (gBattleRecord == NULL) {
-            return 3;
+            return WRITE_STATUS_TOTAL_FAIL;
         }
         BattleRecordHeader *header = (BattleRecordHeader *)gBattleRecord->header;
         BattleRecordData *data = (BattleRecordData *)gBattleRecord->data;
@@ -271,7 +271,7 @@ int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, 
     case 1:
         return BattleRecord_WriteSlot(save, gBattleRecord, index, writeState);
     }
-    return 0;
+    return WRITE_STATUS_CONTINUE;
 }
 
 void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last) {

@@ -8,6 +8,14 @@
 #include "berry_pots.h"
 #include "poke_overlay.h"
 
+enum BerryPotsMainState {
+    BERRY_POTS_MAIN_START_APP,
+    BERRY_POTS_MAIN_RUN_APP,
+    BERRY_POTS_MAIN_START_BAG,
+    BERRY_POTS_MAIN_RUN_BAG,
+    BERRY_POTS_MAIN_EXIT,
+};
+
 FS_EXTERN_OVERLAY(OVY_15);
 FS_EXTERN_OVERLAY(OVY_17);
 
@@ -84,19 +92,19 @@ BOOL BerryPots_Main(OverlayManager *manager, int *state) {
     BerryPotsOverlayData *unk = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case BERRY_POTS_MAIN_START_APP:
         *state = BerryPots_MainSeq_StartApp(unk);
         break;
-    case 1:
+    case BERRY_POTS_MAIN_RUN_APP:
         *state = BerryPots_MainSeq_RunApp(unk);
         break;
-    case 2:
+    case BERRY_POTS_MAIN_START_BAG:
         *state = BerryPots_MainSeq_StartBag(unk);
         break;
-    case 3:
+    case BERRY_POTS_MAIN_RUN_BAG:
         *state = BerryPots_MainSeq_RunBag(unk);
         break;
-    case 4:
+    case BERRY_POTS_MAIN_EXIT:
         return TRUE;
     }
 
@@ -128,19 +136,19 @@ static void BerryPots_FreeBagCursors(BerryPotsOverlayData *unk) {
 
 static u32 BerryPots_MainSeq_StartApp(BerryPotsOverlayData *unk) {
     unk->ovyManager = OverlayManager_New(&sBerryPotsAppTemplate, unk, unk->heapID);
-    return 1;
+    return BERRY_POTS_MAIN_RUN_APP;
 }
 
 static u32 BerryPots_MainSeq_RunApp(BerryPotsOverlayData *unk) {
     if (!BerryPots_RunSubApp(&unk->ovyManager)) {
-        return 1;
+        return BERRY_POTS_MAIN_RUN_APP;
     }
 
     if ((u8)(unk->itemAction + 0xFF) <= 1) {
-        return 2;
+        return BERRY_POTS_MAIN_START_BAG;
     }
 
-    return 4;
+    return BERRY_POTS_MAIN_EXIT;
 }
 
 static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *unk) {
@@ -165,17 +173,17 @@ static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *unk) {
     }
 
     unk->ovyManager = OverlayManager_New(&sBerryPotsBagTemplate, unk->bagView, unk->heapID);
-    return 3;
+    return BERRY_POTS_MAIN_RUN_BAG;
 }
 
 static u32 BerryPots_MainSeq_RunBag(BerryPotsOverlayData *unk) {
     if (!BerryPots_RunSubApp(&unk->ovyManager)) {
-        return 3;
+        return BERRY_POTS_MAIN_RUN_BAG;
     }
 
     unk->itemId = ((u8)BagView_GetSelectedAction(unk->bagView) == 4) ? BagView_GetItemId(unk->bagView) : 0xFFFF;
     Heap_Free(unk->bagView);
     unk->bagView = NULL;
 
-    return 0;
+    return BERRY_POTS_MAIN_START_APP;
 }

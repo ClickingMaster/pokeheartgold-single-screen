@@ -173,19 +173,19 @@ static u32 Texture_GetImageSize(NNSG3dResTex *texture, u32 *entry) {
     u32 packed = *entry;
     u32 divisor;
     switch ((packed & (7 << 26)) >> 26) {
-    case 2:
+    case GX_TEXFMT_PLTT4:
         divisor = 4;
         break;
-    case 3:
+    case GX_TEXFMT_PLTT16:
         divisor = 2;
         break;
-    case 4:
+    case GX_TEXFMT_PLTT256:
         divisor = 1;
         break;
-    case 1:
+    case GX_TEXFMT_A3I5:
         divisor = 1;
         break;
-    case 6:
+    case GX_TEXFMT_A5I3:
         divisor = 1;
         break;
     default:

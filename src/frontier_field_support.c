@@ -419,7 +419,7 @@ u32 BattleTower_AdvanceSeed(SaveData *saveData) {
     u32 next;
     FrontierData_SetTowerSeed(frontierData, value);
     next = BattleTower_NextRandom(value);
-    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &next);
+    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), TOWER_CHALLENGE_RANDOM_STATE, &next);
     return next;
 }
 
@@ -429,12 +429,12 @@ u32 BattleTower_RestoreRandom(SaveData *saveData) {
     u32 value = BattleTower_NextRandom(FrontierData_GetTowerSeed(frontierData));
     s32 i;
     s32 count;
-    count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(challenge, 0, 0), 0) * 24;
+    count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(challenge, TOWER_CHALLENGE_MODE, 0), 0) * 24;
     i = 0;
     for (i = 0; i < count; i++) {
         value = BattleTower_NextRandom(value);
     }
-    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &value);
+    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), TOWER_CHALLENGE_RANDOM_STATE, &value);
     return value;
 }
 

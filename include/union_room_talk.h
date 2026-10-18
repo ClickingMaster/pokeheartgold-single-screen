@@ -11,6 +11,21 @@
 struct UnionRoom;
 struct TrainerCardData;
 
+enum UnionRoomActivityKind {
+    UNION_ACTIVITY_NONE,
+    UNION_ACTIVITY_DRAWING_RECRUIT,
+    UNION_ACTIVITY_RECORD_MIX_RECRUIT,
+    UNION_ACTIVITY_BUSY = 4,
+    UNION_ACTIVITY_TRAINER_CARD,
+    UNION_ACTIVITY_BATTLE,
+    UNION_ACTIVITY_TRADE,
+    UNION_ACTIVITY_DRAWING,
+    UNION_ACTIVITY_RECORD_MIX,
+    UNION_ACTIVITY_LINKED = 11,
+    UNION_ACTIVITY_SPIN_TRADE,
+    UNION_ACTIVITY_SPIN_TRADE_RECRUIT,
+};
+
 // message ids per gender of the talking player, and the Union Room's member slots per group
 extern const int gUnionRoomTalkGreetingMsgs[2];
 extern const int gUnionRoomTalkComeBackMsgs[2];

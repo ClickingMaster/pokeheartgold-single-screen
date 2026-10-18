@@ -128,30 +128,30 @@ void BattleRoomDownload_Init(void *data) {
 u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
     BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
     switch (field) {
-    case 0:
+    case TOWER_CHALLENGE_MODE:
         return c->towerMode;
-    case 1:
+    case TOWER_CHALLENGE_BATTLE_NO:
         return c->battleNumber;
-    case 2:
+    case TOWER_CHALLENGE_TIMES_FAINTED:
         return c->totalTimesFainted;
-    case 3:
+    case TOWER_CHALLENGE_TURNS:
         return c->totalTurns;
-    case 4:
+    case TOWER_CHALLENGE_DAMAGE:
         return c->totalDamage;
-    case 5:
+    case TOWER_CHALLENGE_PARTY_SLOTS:
         MI_CpuCopy8(c->partySlots, out, 4);
         return 0;
-    case 6:
+    case TOWER_CHALLENGE_ALLY_DATA:
         MI_CpuCopy8(c->multiAllyData, out, 16);
         return 0;
-    case 7:
+    case TOWER_CHALLENGE_ALLY_REPLACE_ITEM:
         return c->allyReplaceItem;
-    case 8:
+    case TOWER_CHALLENGE_TRAINERS:
         MI_CpuCopy8(c->trainers, out, 28);
         return 0;
-    case 9:
+    case TOWER_CHALLENGE_ALLY_ID:
         return c->multiAllyId;
-    case 10:
+    case TOWER_CHALLENGE_RANDOM_STATE:
         return c->randomState;
     }
     return 0;
@@ -160,37 +160,37 @@ u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
 void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
     BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
     switch (field) {
-    case 0:
+    case TOWER_CHALLENGE_MODE:
         c->towerMode = *(u8 *)value;
         break;
-    case 1:
+    case TOWER_CHALLENGE_BATTLE_NO:
         c->battleNumber = *(u8 *)value;
         break;
-    case 2:
+    case TOWER_CHALLENGE_TIMES_FAINTED:
         c->totalTimesFainted = *(u8 *)value;
         break;
-    case 3:
+    case TOWER_CHALLENGE_TURNS:
         c->totalTurns = *(u16 *)value;
         break;
-    case 4:
+    case TOWER_CHALLENGE_DAMAGE:
         c->totalDamage = *(u16 *)value;
         break;
-    case 5:
+    case TOWER_CHALLENGE_PARTY_SLOTS:
         MI_CpuCopy8(value, c->partySlots, 4);
         break;
-    case 6:
+    case TOWER_CHALLENGE_ALLY_DATA:
         MI_CpuCopy8(value, c->multiAllyData, 16);
         break;
-    case 7:
+    case TOWER_CHALLENGE_ALLY_REPLACE_ITEM:
         c->allyReplaceItem = *(u8 *)value;
         break;
-    case 8:
+    case TOWER_CHALLENGE_TRAINERS:
         MI_CpuCopy8(value, c->trainers, 28);
         break;
-    case 10:
+    case TOWER_CHALLENGE_RANDOM_STATE:
         c->randomState = *(u32 *)value;
         break;
-    case 9:
+    case TOWER_CHALLENGE_ALLY_ID:
         c->multiAllyId = *(u8 *)value;
         break;
     }
