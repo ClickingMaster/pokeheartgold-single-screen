@@ -12,6 +12,7 @@
 #include "screen_fade.h"
 #include "sound.h"
 #include "sound_playback.h"
+#include "sound_system.h"
 
 // Arceus script commands: an opcode followed by its arguments. A command returns one of these.
 enum ArceusScriptResult {
@@ -59,8 +60,6 @@ static int ArceusCinematic_GetOverworldModel(int species, int form, int gender);
 static void ArceusCinematic_LoadArceusSprite(LegendaryCinematic *cinematic);
 static void ArceusCinematic_LoadBgPalette(ArceusCinematic *arceus, int bgId, int fileId);
 static void ArceusCinematic_TransferBgPalettes(ArceusCinematic *arceus);
-
-u16 GF_GetCurrentPlayingBGM();
 
 static int ArceusCinematic_Init(LegendaryCinematic *cinematic);
 static int ArceusCinematic_Exit(LegendaryCinematic *cinematic);

@@ -206,26 +206,26 @@ BOOL SpinTradeLink_SendCommand(SpinTradeGroupMenu *menu, int command, void *data
 BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state);
 BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state);
 BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state);
-void SpinTradeGroup_VBlankTask(SysTask *task, void *data);
-void SpinTradeGroup_VBlankCallback(void *data);
-void SpinTradeGroup_SetGraphicsBanks(void);
-void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig);
-void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc);
-void SpinTradeGroup_FreeData(SpinTradeGroupApp *app);
-void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig);
-void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc);
-void SpinTradeGroup_InitObjTransfer(void);
-void SpinTradeGroup_InitSpriteResources(SpinTradeGroupApp *app, NARC *narc);
-void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app);
-void SpinTradeGroup_InitWindows(SpinTradeGroupApp *app);
-void SpinTradeGroup_PrintTitle(Window *window, String *str, u32 speed);
-void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app);
+static void SpinTradeGroup_VBlankTask(SysTask *task, void *data);
+static void SpinTradeGroup_VBlankCallback(void *data);
+static void SpinTradeGroup_SetGraphicsBanks(void);
+static void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig);
+static void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc);
+static void SpinTradeGroup_FreeData(SpinTradeGroupApp *app);
+static void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig);
+static void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc);
+static void SpinTradeGroup_InitObjTransfer(void);
+static void SpinTradeGroup_InitSpriteResources(SpinTradeGroupApp *app, NARC *narc);
+static void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app);
+static void SpinTradeGroup_InitWindows(SpinTradeGroupApp *app);
+static void SpinTradeGroup_PrintTitle(Window *window, String *str, u32 speed);
+static void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app);
 int SpinTradeGroup_State_ShowPrompt(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_HandleInput(SpinTradeGroupApp *app, int state);
-void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app);
-void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app);
+static void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app);
+static void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app);
 int SpinTradeGroup_State_WaitTextThenResetMenu(SpinTradeGroupApp *app, int state);
-void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState);
+static void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState);
 int SpinTradeGroup_State_WaitPrinter(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ResetLeaderMenuState(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_ShowCancelYesNo(SpinTradeGroupApp *app, int state);
@@ -257,24 +257,24 @@ int SpinTradeGroup_State_WaitMemberLeft(SpinTradeGroupApp *app, int state);
 int SpinTradeGroup_State_Proceed(SpinTradeGroupApp *app, int state);
 void SpinTradeGroup_HandleLinkEvent(SpinTradeGroupApp *app, int msg, int value);
 void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int netId);
-void SpinTradeGroup_CycleHighlightColor(u16 *p);
-int SpinTradeGroup_CountProfiles(void);
-BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app);
-void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app);
-int SpinTradeGroup_CountMembers(void);
-u32 SpinTradeGroup_GetMemberMask(void);
-BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app);
-void SpinTradeGroup_PrintMessage(SpinTradeGroupApp *app, int msgId, int instant);
-BOOL SpinTradeGroup_IsPrinterDone(u32 printerId);
-void SpinTradeGroup_ClearMessage(SpinTradeGroupApp *app);
-void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app);
-void SpinTradeGroup_LoadAvatarGraphics(SpinTradeGroupApp *app, NARC *narc);
-void SpinTradeGroup_LoadAvatar(NNSG2dCharacterData **chars, NNSG2dPaletteData **pltts, int slot, int avatar, int gender);
-void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app);
-int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app);
-void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries);
-int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries);
-void SpinTradeGroup_SaveDummy(void *a0, void *a1);
+static void SpinTradeGroup_CycleHighlightColor(u16 *p);
+static int SpinTradeGroup_CountProfiles(void);
+static BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app);
+static void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app);
+static int SpinTradeGroup_CountMembers(void);
+static u32 SpinTradeGroup_GetMemberMask(void);
+static BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app);
+static void SpinTradeGroup_PrintMessage(SpinTradeGroupApp *app, int msgId, int instant);
+static BOOL SpinTradeGroup_IsPrinterDone(u32 printerId);
+static void SpinTradeGroup_ClearMessage(SpinTradeGroupApp *app);
+static void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app);
+static void SpinTradeGroup_LoadAvatarGraphics(SpinTradeGroupApp *app, NARC *narc);
+static void SpinTradeGroup_LoadAvatar(NNSG2dCharacterData **chars, NNSG2dPaletteData **pltts, int slot, int avatar, int gender);
+static void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app);
+static int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app);
+static void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries);
+static int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries);
+static void SpinTradeGroup_SaveDummy(void *a0, void *a1);
 
 static const WindowTemplate sSpinTradeGroupYesNoWindowTemplate = {
     .bgId = GF_BG_LYR_MAIN_0,
@@ -575,7 +575,7 @@ BOOL SpinTradeGroupApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
+static void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
     SpinTradeGroupApp *app = data;
     SpinTradeGroupBlink *blink = &app->blink;
     if (app->blink.active != FALSE) {
@@ -594,7 +594,7 @@ void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
 }
 
 // VBlank callback; registered with the app pointer as its argument
-void SpinTradeGroup_VBlankCallback(void *data) {
+static void SpinTradeGroup_VBlankCallback(void *data) {
     volatile u32 *a = (volatile u32 *)0x027e0000;
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
@@ -602,12 +602,12 @@ void SpinTradeGroup_VBlankCallback(void *data) {
     a[0x3ff8 / 4] |= 1;
 }
 
-void SpinTradeGroup_SetGraphicsBanks(void) {
+static void SpinTradeGroup_SetGraphicsBanks(void) {
     GraphicsBanks banks = sSpinTradeGroupGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
+static void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
     GraphicsModes modes = sSpinTradeGroupGraphicsModes;
     BgTemplate subBg0, subBg1, subBg2, mainBg0, mainBg1;
 
@@ -629,7 +629,7 @@ void SpinTradeGroup_InitBgLayers(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_102);
 }
 
-void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
+static void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     int i;
     for (i = 0; i < 5; i++) {
         app->names[i] = String_New(8, HEAP_ID_102);
@@ -652,7 +652,7 @@ void SpinTradeGroup_InitData(SpinTradeGroupApp *app, NARC *narc) {
     app->menu->participantCount = 2;
 }
 
-void SpinTradeGroup_FreeData(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_FreeData(SpinTradeGroupApp *app) {
     int i;
     SpinTradeGroup_FreeAvatarGraphics(app);
     Heap_Free(app->blink.plttFile);
@@ -664,7 +664,7 @@ void SpinTradeGroup_FreeData(SpinTradeGroupApp *app) {
     String_Delete(app->msgString);
 }
 
-void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig) {
+static void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
@@ -673,7 +673,7 @@ void SpinTradeGroup_FreeBgLayers(BgConfig *bgConfig) {
     Heap_Free(bgConfig);
 }
 
-void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
+static void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
     BgConfig *bgConfig = app->bgConfig;
 
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x200, HEAP_ID_102);
@@ -688,7 +688,7 @@ void SpinTradeGroup_LoadBgGraphics(SpinTradeGroupApp *app, NARC *narc) {
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 31, 11, 0, HEAP_ID_102);
 }
 
-void SpinTradeGroup_InitObjTransfer(void) {
+static void SpinTradeGroup_InitObjTransfer(void) {
     ObjCharTransferTemplate tmpl = sSpinTradeGroupObjCharTransferTemplate;
     ObjCharTransfer_Init(&tmpl);
     ObjPlttTransfer_Init(0x14, HEAP_ID_102);
@@ -696,7 +696,7 @@ void SpinTradeGroup_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void SpinTradeGroup_InitSpriteResources(SpinTradeGroupApp *app, NARC *narc) {
+static void SpinTradeGroup_InitSpriteResources(SpinTradeGroupApp *app, NARC *narc) {
     int i;
 
     NNS_G2dInitOamManagerModule();
@@ -717,7 +717,7 @@ void SpinTradeGroup_InitSpriteResources(SpinTradeGroupApp *app, NARC *narc) {
     SpriteTransfer_CreateExtPlttTransferTask(app->plttRes);
 }
 
-void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app) {
     SpriteTemplate tmpl;
     int i;
 
@@ -746,7 +746,7 @@ void SpinTradeGroup_CreateAvatarSprites(SpinTradeGroupApp *app) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void SpinTradeGroup_InitWindows(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_InitWindows(SpinTradeGroupApp *app) {
     AddWindowParameterized(app->bgConfig, &app->unk_308, GF_BG_LYR_SUB_1, 0x1A, 0x14, 6, 2, 0xD, 0x1C3);
     FillWindowPixelBuffer(&app->unk_308, 0);
     AddWindowParameterized(app->bgConfig, &app->msgWindow, GF_BG_LYR_MAIN_0, 2, 0x13, 0x1B, 4, 0xD, 0x28);
@@ -758,13 +758,13 @@ void SpinTradeGroup_InitWindows(SpinTradeGroupApp *app) {
     SpinTradeGroup_PrintMemberList(&app->memberWindow, 0, 0x10300, app);
 }
 
-void SpinTradeGroup_PrintTitle(Window *window, String *str, u32 speed) {
+static void SpinTradeGroup_PrintTitle(Window *window, String *str, u32 speed) {
     u32 width = FontID_String_GetWidth(1, str, 0);
     FillWindowPixelBuffer(window, 0);
     AddTextPrinterParameterizedWithColor(window, 1, str, (u32)((0xD0 - (int)width) / 2), 1, speed, 0x10400, NULL);
 }
 
-void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_RemoveWindows(SpinTradeGroupApp *app) {
     RemoveWindow(&app->memberWindow);
     RemoveWindow(&app->titleWindow);
     RemoveWindow(&app->unk_308);
@@ -796,7 +796,7 @@ int SpinTradeGroup_State_HandleInput(SpinTradeGroupApp *app, int state) {
     return state;
 }
 
-void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
     u8 a;
     u8 b;
     u8 c;
@@ -840,7 +840,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
     }
 }
 
-void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_UpdateDummy(SpinTradeGroupApp *app) {
 #pragma unused(app)
 }
 
@@ -850,7 +850,7 @@ int SpinTradeGroup_State_WaitTextThenResetMenu(SpinTradeGroupApp *app, int state
     return state;
 }
 
-void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState) {
+static void SpinTradeGroup_WaitPrinterThen(SpinTradeGroupApp *app, u32 nextSubState) {
     app->subState = SPIN_TRADE_GROUP_STATE_WAIT_PRINTER;
     app->nextSubState = nextSubState;
 }
@@ -1320,7 +1320,7 @@ void SpinTradeGroup_HandleMemberEvent(SpinTradeGroupApp *app, int event, int net
     }
 }
 
-void SpinTradeGroup_CycleHighlightColor(u16 *p) {
+static void SpinTradeGroup_CycleHighlightColor(u16 *p) {
     u16 color;
     *p += 10;
     if (*p > 360) {
@@ -1331,7 +1331,7 @@ void SpinTradeGroup_CycleHighlightColor(u16 *p) {
     GX_LoadOBJPltt(&color, 42, 2);
 }
 
-int SpinTradeGroup_CountProfiles(void) {
+static int SpinTradeGroup_CountProfiles(void) {
     int i;
     int count;
     count = 0;
@@ -1344,7 +1344,7 @@ int SpinTradeGroup_CountProfiles(void) {
     return count;
 }
 
-BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app) {
+static BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinTradeGroupApp *app) {
     int i;
     int sel;
     String *str;
@@ -1375,11 +1375,11 @@ BOOL SpinTradeGroup_PrintMemberList(Window *window, u32 unused, u32 color, SpinT
     return TRUE;
 }
 
-void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_HandleInputDummy(SpinTradeGroupApp *app) {
 #pragma unused(app)
 }
 
-int SpinTradeGroup_CountMembers(void) {
+static int SpinTradeGroup_CountMembers(void) {
     int i;
     int count;
     count = 0;
@@ -1392,7 +1392,7 @@ int SpinTradeGroup_CountMembers(void) {
     return count;
 }
 
-u32 SpinTradeGroup_GetMemberMask(void) {
+static u32 SpinTradeGroup_GetMemberMask(void) {
     int i;
     u32 mask;
     mask = 0;
@@ -1405,7 +1405,7 @@ u32 SpinTradeGroup_GetMemberMask(void) {
     return mask;
 }
 
-BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
+static BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
     int i;
     BOOL changed = FALSE;
     for (i = 0; i < 5; i++) {
@@ -1440,7 +1440,7 @@ BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
     return changed;
 }
 
-void SpinTradeGroup_PrintMessage(SpinTradeGroupApp *app, int msgId, int instant) {
+static void SpinTradeGroup_PrintMessage(SpinTradeGroupApp *app, int msgId, int instant) {
     String *str = String_New(0xB4, HEAP_ID_102);
     ReadMsgDataIntoString(app->msgData, msgId, str);
     StringExpandPlaceholders(app->msgFormat, app->msgString, str);
@@ -1455,7 +1455,7 @@ void SpinTradeGroup_PrintMessage(SpinTradeGroupApp *app, int msgId, int instant)
     }
 }
 
-BOOL SpinTradeGroup_IsPrinterDone(u32 printerId) {
+static BOOL SpinTradeGroup_IsPrinterDone(u32 printerId) {
     if (printerId == 0xFF) {
         return TRUE;
     }
@@ -1465,11 +1465,11 @@ BOOL SpinTradeGroup_IsPrinterDone(u32 printerId) {
     return FALSE;
 }
 
-void SpinTradeGroup_ClearMessage(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_ClearMessage(SpinTradeGroupApp *app) {
     ClearFrameAndWindow2(&app->msgWindow, FALSE);
 }
 
-void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app) {
     int i;
     int played = 0;
     for (i = 0; i < 5; i++) {
@@ -1512,33 +1512,33 @@ void SpinTradeGroup_UpdateAvatars(SpinTradeGroupApp *app) {
     }
 }
 
-void SpinTradeGroup_LoadAvatarGraphics(SpinTradeGroupApp *app, NARC *narc) {
+static void SpinTradeGroup_LoadAvatarGraphics(SpinTradeGroupApp *app, NARC *narc) {
     app->plttFiles[0] = GfGfxLoader_GetPlttData(NARC_a_1_0_0, 9, (NNSG2dPaletteData **)&app->pltts[0], HEAP_ID_102);
     app->plttFiles[1] = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 7, (NNSG2dPaletteData **)&app->pltts[1], HEAP_ID_102);
     app->charFiles[0] = GfGfxLoader_GetCharData(NARC_a_1_0_0, 0x2B, TRUE, (NNSG2dCharacterData **)&app->chars[0], HEAP_ID_102);
     app->charFiles[1] = GfGfxLoader_GetCharDataFromOpenNarc(narc, 9, TRUE, (NNSG2dCharacterData **)&app->chars[1], HEAP_ID_102);
 }
 
-void SpinTradeGroup_LoadAvatar(NNSG2dCharacterData **chars, NNSG2dPaletteData **pltts, int slot, int avatar, int gender) {
+static void SpinTradeGroup_LoadAvatar(NNSG2dCharacterData **chars, NNSG2dPaletteData **pltts, int slot, int avatar, int gender) {
     int idx = SpriteToUnionRoomAvatarIdx(gender, avatar);
     void *pltt = pltts[1]->pRawData;
     GX_LoadOBJ((u8 *)chars[1]->pRawData + idx * 0x600, sSpinTradeGroupAvatarCharOffsets[slot], 0x600);
     GX_LoadOBJPltt((u8 *)pltt + idx * 0x20, (slot + 7) * 0x20, 0x20);
 }
 
-void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app) {
+static void SpinTradeGroup_FreeAvatarGraphics(SpinTradeGroupApp *app) {
     Heap_Free(app->plttFiles[0]);
     Heap_Free(app->plttFiles[1]);
     Heap_Free(app->charFiles[0]);
     Heap_Free(app->charFiles[1]);
 }
 
-int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app) {
+static int SpinTradeGroup_GetTextSpeed(SpinTradeGroupApp *app) {
 #pragma unused(app)
     return 1;
 }
 
-void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries) {
+static void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries) {
     if (Comm_GetLocalNetId() == 0) {
         if (extraEntries == -1) {
             CommState_SetMaxEntries(1);
@@ -1559,7 +1559,7 @@ void SpinTradeGroup_SetMaxConnections(SpinTradeGroupApp *app, int extraEntries) 
     }
 }
 
-int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries) {
+static int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries) {
     int v = SpinTradeGroup_CountMembers();
     if (v > (int)app->menu->participantCount) {
         u8 x = 1;
@@ -1608,7 +1608,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int extraEntries) {
     return 1;
 }
 
-void SpinTradeGroup_SaveDummy(void *a0, void *a1) {
+static void SpinTradeGroup_SaveDummy(void *a0, void *a1) {
 #pragma unused(a0)
 #pragma unused(a1)
 }

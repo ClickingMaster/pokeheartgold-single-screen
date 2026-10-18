@@ -193,8 +193,8 @@ static void SwapMonText_LoadGfx(BgConfig *bgConfig, int bgLayer, enum HeapID hea
 static u8 SwapMonText_ShowMessageBox(BgConfig *bgConfig, Window *window, String **string, MessageFormat *messageFormat, MsgData *msgData, int msgId, u8 bgLayer, enum HeapID heapID, Options *options);
 static void SwapMonText_PrintOnWindow(BgConfig *bgConfig, Window *window, MessageFormat *messageFormat, MsgData *msgData, int msgId, int bgLayer, u8 x, u8 y, u32 color, enum HeapID heapID);
 
-BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon);
-BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon);
+static BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon);
+static BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon);
 
 static const u8 sBugContestSwapMonBgIds[5] = { GF_BG_LYR_MAIN_0, GF_BG_LYR_MAIN_1, GF_BG_LYR_MAIN_2, GF_BG_LYR_MAIN_3, GF_BG_LYR_SUB_0 };
 
@@ -412,7 +412,7 @@ BOOL BugContestSwapMon_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon) {
+static BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon) {
     int msgId = -1;
     Pokemon *mon;
     MessageFormat *messageFormat = SwapMonText_GetMessageFormat(swapMon->text);
@@ -450,7 +450,7 @@ BOOL BugContestSwapMon_ShowCaughtMon(BugContestSwapMon *swapMon) {
     return FALSE;
 }
 
-BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon) {
+static BOOL BugContestSwapMon_ChooseMon(BugContestSwapMon *swapMon) {
     int msgId = -1;
     SwapMonText_GetMessageFormat(swapMon->text);
     if (SwapMonText_IsPrinting(swapMon->text)) {

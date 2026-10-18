@@ -61,8 +61,6 @@ enum TradeSequenceReceiveMessageStep {
 
 typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32 *state);
 
-void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
-
 static void TradeSequenceReceive_Draw(TradeSequenceReceive *receive);
 static BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32 *state);
 static BOOL TradeSequenceReceive_WaitFadeIn(TradeSequenceReceive *receive, u32 *state);

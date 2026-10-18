@@ -39,8 +39,6 @@ void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 u32 WiFiPlazaWork_IsClosing(void *lobby);
 BOOL WiFiPlaza_HasConnectionFailed(void);
 void WiFiPlazaLobbyClient_ClearChannelCommands(void);
-void HBlankInterruptDisable(void);
-int GetUserFrameGfx2PaletteMember(int frame);
 void ModelResource_LoadFromNarc(FootprintStampModel *model, NARC *narc, int fileId, enum HeapID heapId);
 void ModelResource_Free(FootprintStampModel *model);
 void ModelInstance_Init(FootprintStampModelInstance *instance, FootprintStampModel *model);

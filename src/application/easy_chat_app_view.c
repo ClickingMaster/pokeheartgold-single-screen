@@ -3,7 +3,7 @@
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"
-#include "easy_chat_app_internal.h"
+#include "easy_chat_app_panels.h"
 #include "filesystem.h"
 #include "font.h"
 #include "font_sprite.h"
@@ -22,12 +22,6 @@
 #include "system.h"
 #include "text.h"
 #include "wireless_status_icon.h"
-
-typedef struct EasyChatSentenceView EasyChatSentenceView;
-typedef struct EasyChatMenuView EasyChatMenuView;
-typedef struct EasyChatCategoryView EasyChatCategoryView;
-typedef struct EasyChatWordListView EasyChatWordListView;
-typedef struct EasyChatPageButtonsView EasyChatPageButtonsView;
 
 typedef struct EasyChatButtonText {
     TextOBJ *textObj;                  // 0x00
@@ -84,87 +78,17 @@ extern const BgTemplate gEasyChatBgTemplate_Sub0;
 extern const GraphicsBanks gEasyChatAppViewGraphicsBanks;
 extern const EasyChatViewCommandFunc gEasyChatViewCommandFuncs[];
 
-EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc);
-void EasyChatSentenceView_StartScroll(EasyChatSentenceView *sentence, int direction);
-BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_DrawSentence(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, TouchscreenHitbox *hitbox, u8 slot);
-u32 EasyChatSentenceView_GetNumSlots(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_SelectMessageWindow(EasyChatSentenceView *sentence, int index);
-void EasyChatSentenceView_PrintMessage(EasyChatSentenceView *sentence, int message);
-void EasyChatSentenceView_DeactivateCursor(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_ActivateCursor(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_SetCursorVisible(EasyChatSentenceView *sentence, int draw);
-void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence);
-Sprite *EasyChatSentenceView_GetSliderThumb(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_MoveCursorToSlot(EasyChatSentenceView *sentence, u16 slot);
-void EasyChatSentenceView_StartYesNo(EasyChatSentenceView *sentence, u32 initialCursorPos);
-int EasyChatSentenceView_HandleYesNo(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_DrawYesNoCursor(EasyChatSentenceView *sentence, u8 index);
-EasyChatMenuView *EasyChatMenuView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatMenuView_Delete(EasyChatMenuView *menuView);
-void EasyChatMenuView_Load(EasyChatMenuView *menuView, NARC *narc);
-void EasyChatMenuView_DrawMainButtons(EasyChatMenuView *menuView, int draw, int showCursor);
-void EasyChatMenuView_DeactivateCursor(EasyChatMenuView *menuView);
-void EasyChatMenuView_ActivateCursor(EasyChatMenuView *menuView);
-void EasyChatMenuView_SetCursorVisible(EasyChatMenuView *menuView, int draw);
-void EasyChatMenuView_MoveCursor(EasyChatMenuView *menuView, u16 cursor);
-void EasyChatMenuView_StartModeSwitch(EasyChatMenuView *menuView);
-BOOL EasyChatMenuView_IsModeSwitchDone(EasyChatMenuView *menuView);
-void EasyChatMenuView_ShowListButton(EasyChatMenuView *menuView);
-void EasyChatMenuView_ShowMainButtons(EasyChatMenuView *menuView);
-EasyChatCategoryView *EasyChatCategoryView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatCategoryView_Delete(EasyChatCategoryView *categories);
-void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc);
-void EasyChatCategoryView_SetCursorVisible(EasyChatCategoryView *categories, int draw);
-void EasyChatCategoryView_MoveCursor(EasyChatCategoryView *categories, u16 category);
-void EasyChatCategoryView_StartOpen(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateOpen(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartClose(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateClose(EasyChatCategoryView *categories);
-void EasyChatCategoryView_ResetScrollY(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartDim(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateDim(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartFadeOut(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateFadeOut(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartFadeIn(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateFadeIn(EasyChatCategoryView *categories);
-void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateModeScroll(EasyChatCategoryView *categories);
-EasyChatWordListView *EasyChatWordListView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatWordListView_Delete(EasyChatWordListView *wordList);
-void EasyChatWordListView_Load(EasyChatWordListView *wordList);
-void EasyChatWordListView_DrawWords(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_StartFadeIn(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_UpdateFadeIn(EasyChatWordListView *wordList);
-void EasyChatWordListView_StartFadeOut(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_UpdateFadeOut(EasyChatWordListView *wordList);
-void EasyChatWordListView_SetCursorVisible(EasyChatWordListView *wordList, int draw);
-void EasyChatWordListView_MoveCursor(EasyChatWordListView *wordList, int cursor);
-void EasyChatWordListView_StartScroll(EasyChatWordListView *wordList, int scroll);
-BOOL EasyChatWordListView_UpdateScroll(EasyChatWordListView *wordList);
-EasyChatPageButtonsView *EasyChatPageButtonsView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatPageButtonsView_Delete(EasyChatPageButtonsView *pageButtons);
-void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *narc);
-void EasyChatPageButtonsView_SetEnabled(EasyChatPageButtonsView *pageButtons, int a1);
-void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int button, int pressed);
-
-void EasyChatAppView_InitCharTransfer(EasyChatAppView *view);
-void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view);
-void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view);
-void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view);
-SysTask *EasyChatAppView_CreateVBlankTask(SysTaskFunc func, void *data, u32 priority);
-void EasyChatAppView_MainTask(SysTask *task, void *data);
-void EasyChatAppView_VBlankTask(SysTask *task, void *data);
-void EasyChatAppView_EndCommand(EasyChatViewCommand *command);
+static void EasyChatAppView_InitCharTransfer(EasyChatAppView *view);
+static void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view);
+static void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view);
+static void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view);
+static void EasyChatAppView_MainTask(SysTask *task, void *data);
+static void EasyChatAppView_VBlankTask(SysTask *task, void *data);
+static void EasyChatAppView_EndCommand(EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_Load(SysTask *task, EasyChatViewCommand *command);
-void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc);
+static void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc);
 void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command);
-void EasyChatAppView_InitBgs(EasyChatViewCommand *command);
+static void EasyChatAppView_InitBgs(EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_FadeIn(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_RedrawSentence(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_Nop(SysTask *task, EasyChatViewCommand *command);
@@ -195,10 +119,6 @@ void EasyChatAppView_Cmd_PressPageUp(SysTask *task, EasyChatViewCommand *command
 void EasyChatAppView_Cmd_PressPageDown(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ReleasePageUp(SysTask *task, EasyChatViewCommand *command);
 void EasyChatAppView_Cmd_ReleasePageDown(SysTask *task, EasyChatViewCommand *command);
-BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view);
-SpriteList *EasyChatAppView_GetSpriteList(EasyChatAppView *view);
-void EasyChatAppView_InitSpriteHeader(EasyChatAppView *view, SpriteResourcesHeader *header, u32 index, u8 priority);
-Sprite *EasyChatAppView_CreateSprite(EasyChatAppView *view, SpriteResourcesHeader *header, s32 x, s32 y, u32 priority, NNS_G2D_VRAM_TYPE whichScreen);
 
 EasyChatAppView *EasyChatAppView_Create(EasyChatApp *app, ECMenu *menu) {
     EasyChatAppView *view = Heap_Alloc(HEAP_ID_35, sizeof(EasyChatAppView));
@@ -245,7 +165,7 @@ void EasyChatAppView_Delete(EasyChatAppView *view) {
     Heap_Free(view);
 }
 
-void EasyChatAppView_InitCharTransfer(EasyChatAppView *view) {
+static void EasyChatAppView_InitCharTransfer(EasyChatAppView *view) {
 #pragma unused(view)
     ObjCharTransferTemplate template = gEasyChatObjCharTransferTemplate;
 
@@ -253,12 +173,12 @@ void EasyChatAppView_InitCharTransfer(EasyChatAppView *view) {
     ObjCharTransfer_ClearBuffers();
 }
 
-void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view) {
+static void EasyChatAppView_FreeCharTransfer(EasyChatAppView *view) {
 #pragma unused(view)
     ObjCharTransfer_Destroy();
 }
 
-void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
+static void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
     TextOBJTemplate template;
     int i;
     u32 charSize;
@@ -311,7 +231,7 @@ void EasyChatAppView_CreateButtonTexts(EasyChatAppView *view) {
     DestroyMsgData(msgData);
 }
 
-void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view) {
+static void EasyChatAppView_DeleteButtonTexts(EasyChatAppView *view) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -328,10 +248,10 @@ SysTask *EasyChatAppView_CreateVBlankTask(SysTaskFunc func, void *data, u32 prio
     return SysTask_CreateOnVBlankQueue(func, data, priority);
 }
 
-void EasyChatAppView_MainTask(SysTask *task, void *data) {
+static void EasyChatAppView_MainTask(SysTask *task, void *data) {
 }
 
-void EasyChatAppView_VBlankTask(SysTask *task, void *data) {
+static void EasyChatAppView_VBlankTask(SysTask *task, void *data) {
     EasyChatAppView *view = data;
     volatile u32 *dtcm = (volatile u32 *)0x027E0000; // OS_SetIrqCheckFlag with the DTCM address as a constant
 
@@ -392,7 +312,7 @@ BOOL EasyChatAppView_IsCommandDone(EasyChatAppView *view, u32 command) {
     return TRUE;
 }
 
-void EasyChatAppView_EndCommand(EasyChatViewCommand *command) {
+static void EasyChatAppView_EndCommand(EasyChatViewCommand *command) {
     SysTask_Destroy(command->view->commandTasks[command->slot]);
     command->view->commandTasks[command->slot] = NULL;
     Heap_Free(command);
@@ -428,7 +348,7 @@ void EasyChatAppView_Cmd_Load(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView_EndCommand(command);
 }
 
-void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc) {
+static void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc) {
     EasyChatAppView *view = command->view;
     int i;
 
@@ -483,7 +403,7 @@ void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command) {
     }
 }
 
-void EasyChatAppView_InitBgs(EasyChatViewCommand *command) {
+static void EasyChatAppView_InitBgs(EasyChatViewCommand *command) {
     int i;
     EasyChatAppView *view = command->view;
 

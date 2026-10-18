@@ -41,9 +41,9 @@ void SetBothScreensBrightnessByColor(u16 color);
 // Defined in the other parts of the overlay.
 
 // Defined in this file.
-BOOL WobbuffetPop_Init(OverlayManager *man, int *state);
-BOOL WobbuffetPop_Main(OverlayManager *man, int *state);
-BOOL WobbuffetPop_Exit(OverlayManager *man, int *state);
+static BOOL WobbuffetPop_Init(OverlayManager *man, int *state);
+static BOOL WobbuffetPop_Main(OverlayManager *man, int *state);
+static BOOL WobbuffetPop_Exit(OverlayManager *man, int *state);
 BOOL WobbuffetPop_AddModelSlot(WobbuffetPop *game, u32 amount);
 void WobbuffetPop_QueuePlayerEvent(WobbuffetPop *game, int netId, const WobbuffetPopEvent *event);
 void WobbuffetPop_QueueEvent(WobbuffetPop *game, const WobbuffetPopEvent *event);
@@ -331,7 +331,7 @@ static BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app) {
     return FALSE;
 }
 
-BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
+static BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
     WobbuffetPop *game;
     NARC *narc;
 
@@ -411,7 +411,7 @@ BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
+static BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
     WobbuffetPop *game = OverlayManager_GetData(man);
 
     if (game->app->connectionLost == TRUE) {
@@ -526,7 +526,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL WobbuffetPop_Exit(OverlayManager *man, int *state) {
+static BOOL WobbuffetPop_Exit(OverlayManager *man, int *state) {
     WobbuffetPop *game;
     Window *window;
     int i;

@@ -425,15 +425,11 @@ extern const u16 gSpinTradeDropTargetAngles[][5];
 extern int (*const gSpinTradeStateFuncs[])(SpinTradeApp *app);
 extern const int gSpinTradeHoverOffsets[];
 
-void Sys_SetSoftResetDisableFlag(int flag);
-void Sys_ClearSoftResetDisableFlag(int flag);
-int GetUserFrameGfx2PaletteMember(int frame);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);
 BOOL Comm_SyncedSave(SaveData *saveData, int unused, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
-void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *SpinTradeLink_GetReceivedParty(SpinTradeLinkMenu *menu, int netId);
 void RenderModel_LoadFromNarc(RenderModelStorage *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
@@ -449,7 +445,7 @@ void RenderObj_DrawRotated(NNSG3dRenderObj *obj, const VecFx32 *position, const 
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state);
 BOOL SpinTradeApp_Exit(OverlayManager *man, int *state);
 BOOL SpinTradeApp_Main(OverlayManager *man, int *state);
-void SpinTrade_ClearLinkFlags(SpinTradeApp *app);
+static void SpinTrade_ClearLinkFlags(SpinTradeApp *app);
 BOOL SpinTrade_State_Start(SpinTradeApp *app);
 BOOL SpinTrade_State_WaitFadeIn(SpinTradeApp *app);
 BOOL SpinTrade_State_WaitMembers(SpinTradeApp *app);
@@ -504,131 +500,131 @@ BOOL SpinTrade_State_WaitDisconnect(SpinTradeApp *app);
 BOOL SpinTrade_State_FadeOut(SpinTradeApp *app);
 BOOL SpinTrade_State_WaitFadeOut(SpinTradeApp *app);
 int SpinTrade_State_Exit(SpinTradeApp *app);
-void SpinTrade_VBlankCallback(void *data);
-void SpinTrade_InitGraphics(SpinTradeApp *app);
-void SpinTrade_FreeGraphics(SpinTradeApp *app);
-void SpinTrade_Draw(SpinTradeApp *app);
-void SpinTrade_SetGraphicsBanks(SpinTradeApp *app);
-void SpinTrade_SetupPlanes(SpinTradeApp *app);
-void SpinTrade_DisableDisplay(SpinTradeApp *app);
-void SpinTrade_Init3D(SpinTradeApp *app);
-void SpinTrade_InitBgLayers(SpinTradeApp *app);
-void SpinTrade_LoadBgGraphics(SpinTradeApp *app);
-void SpinTrade_FreeBgLayers(SpinTradeApp *app);
-void SpinTrade_LoadButtonTilemap(SpinTradeApp *app, u32 member);
-void SpinTrade_SetButtonPressed(SpinTradeApp *app);
-void SpinTrade_SetButtonReleased(SpinTradeApp *app);
-void SpinTrade_SetButtonHalfPressed(SpinTradeApp *app);
-void SpinTrade_InitPaletteData(SpinTradeApp *app);
-void SpinTrade_FreePaletteData(SpinTradeApp *app);
-void SpinTrade_SetSubBgFadeLevel(SpinTradeApp *app, u32 level);
-void SpinTrade_InitSpriteSystem(SpinTradeApp *app);
-void SpinTrade_LoadSpriteResources(SpinTradeApp *app);
-void SpinTrade_FreeSpriteSystem(SpinTradeApp *app);
-ManagedSprite *SpinTrade_CreateSprite(SpinTradeApp *app, const ManagedSpriteTemplate *template);
-void SpinTrade_InitText(SpinTradeApp *app);
-void SpinTrade_FreeText(SpinTradeApp *app);
-void SpinTrade_PrintMessage(SpinTradeApp *app, int msgNo);
-void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *profile);
-void SpinTrade_PrintItemMessage(SpinTradeApp *app, int msgNo, int item);
-void SpinTrade_ClearMessage(SpinTradeApp *app);
-void SpinTrade_AddNameWindows(SpinTradeApp *app, int count);
-void SpinTrade_RemoveNameWindows(SpinTradeApp *app);
-void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 color);
-void SpinTrade_PrintPlayerName(SpinTradeApp *app, String *name, int index, u32 netId);
-void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index);
-void SpinTrade_InitCamera(SpinTradeApp *app);
-void SpinTrade_FreeCamera(SpinTradeApp *app);
-void SpinTrade_UpdateTouch(SpinTradeApp *app);
-BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch);
-BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app);
-void SpinTrade_InitMachine(SpinTradeApp *app);
-void SpinTrade_FreeMachine(SpinTradeApp *app);
-void SpinTrade_UpdateMachinePosition(SpinTradeApp *app);
-void SpinTrade_DrawMachine(SpinTradeApp *app);
-void SpinTradeMachine_Rotate(SpinTradeMachine *machine, fx32 delta);
-void SpinTrade_LoadObjects(SpinTradeApp *app);
-void SpinTrade_FreeObjects(SpinTradeApp *app);
-void SpinTrade_LoadObjectModels(SpinTradeApp *app);
-void SpinTrade_FreeObjectModels(SpinTradeApp *app);
-void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTrade_UpdateEggPositions(SpinTradeApp *app);
-void SpinTrade_DrawEggs(SpinTradeApp *app);
-void SpinTrade_RotateEggs(SpinTradeApp *app, fx32 delta);
-void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset);
-SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app);
-void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTradeShadow_Update(SpinTradeApp *app, SpinTradeShadow *shadow);
-void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTradeMarker_Update(SpinTradeApp *app, SpinTradeMarker *marker);
-void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, int angle, u32 angleOffset, SpinTradeEgg *egg);
-void SpinTrade_EggDropTask(SysTask *task, void *data);
+static void SpinTrade_VBlankCallback(void *data);
+static void SpinTrade_InitGraphics(SpinTradeApp *app);
+static void SpinTrade_FreeGraphics(SpinTradeApp *app);
+static void SpinTrade_Draw(SpinTradeApp *app);
+static void SpinTrade_SetGraphicsBanks(SpinTradeApp *app);
+static void SpinTrade_SetupPlanes(SpinTradeApp *app);
+static void SpinTrade_DisableDisplay(SpinTradeApp *app);
+static void SpinTrade_Init3D(SpinTradeApp *app);
+static void SpinTrade_InitBgLayers(SpinTradeApp *app);
+static void SpinTrade_LoadBgGraphics(SpinTradeApp *app);
+static void SpinTrade_FreeBgLayers(SpinTradeApp *app);
+static void SpinTrade_LoadButtonTilemap(SpinTradeApp *app, u32 member);
+static void SpinTrade_SetButtonPressed(SpinTradeApp *app);
+static void SpinTrade_SetButtonReleased(SpinTradeApp *app);
+static void SpinTrade_SetButtonHalfPressed(SpinTradeApp *app);
+static void SpinTrade_InitPaletteData(SpinTradeApp *app);
+static void SpinTrade_FreePaletteData(SpinTradeApp *app);
+static void SpinTrade_SetSubBgFadeLevel(SpinTradeApp *app, u32 level);
+static void SpinTrade_InitSpriteSystem(SpinTradeApp *app);
+static void SpinTrade_LoadSpriteResources(SpinTradeApp *app);
+static void SpinTrade_FreeSpriteSystem(SpinTradeApp *app);
+static ManagedSprite *SpinTrade_CreateSprite(SpinTradeApp *app, const ManagedSpriteTemplate *template);
+static void SpinTrade_InitText(SpinTradeApp *app);
+static void SpinTrade_FreeText(SpinTradeApp *app);
+static void SpinTrade_PrintMessage(SpinTradeApp *app, int msgNo);
+static void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *profile);
+static void SpinTrade_PrintItemMessage(SpinTradeApp *app, int msgNo, int item);
+static void SpinTrade_ClearMessage(SpinTradeApp *app);
+static void SpinTrade_AddNameWindows(SpinTradeApp *app, int count);
+static void SpinTrade_RemoveNameWindows(SpinTradeApp *app);
+static void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 color);
+static void SpinTrade_PrintPlayerName(SpinTradeApp *app, String *name, int index, u32 netId);
+static void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index);
+static void SpinTrade_InitCamera(SpinTradeApp *app);
+static void SpinTrade_FreeCamera(SpinTradeApp *app);
+static void SpinTrade_UpdateTouch(SpinTradeApp *app);
+static BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch);
+static BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app);
+static void SpinTrade_InitMachine(SpinTradeApp *app);
+static void SpinTrade_FreeMachine(SpinTradeApp *app);
+static void SpinTrade_UpdateMachinePosition(SpinTradeApp *app);
+static void SpinTrade_DrawMachine(SpinTradeApp *app);
+static void SpinTradeMachine_Rotate(SpinTradeMachine *machine, fx32 delta);
+static void SpinTrade_LoadObjects(SpinTradeApp *app);
+static void SpinTrade_FreeObjects(SpinTradeApp *app);
+static void SpinTrade_LoadObjectModels(SpinTradeApp *app);
+static void SpinTrade_FreeObjectModels(SpinTradeApp *app);
+static void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTrade_UpdateEggPositions(SpinTradeApp *app);
+static void SpinTrade_DrawEggs(SpinTradeApp *app);
+static void SpinTrade_RotateEggs(SpinTradeApp *app, fx32 delta);
+static void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset);
+static SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app);
+static void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTradeShadow_Update(SpinTradeApp *app, SpinTradeShadow *shadow);
+static void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTradeMarker_Update(SpinTradeApp *app, SpinTradeMarker *marker);
+static void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, int angle, u32 angleOffset, SpinTradeEgg *egg);
+static void SpinTrade_EggDropTask(SysTask *task, void *data);
 int SpinTradeEggDrop_Init(SpinTradeEggDropTask *task);
 int SpinTradeEggDrop_Fall(SpinTradeEggDropTask *task);
 int SpinTradeEggDrop_Land(SpinTradeEggDropTask *task);
-void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce);
-void SpinTrade_BounceTask(SysTask *task, void *data);
-void SpinTrade_StartBounceTask(SpinTradeApp *app);
-void SpinTrade_StopBounceTask(SpinTradeApp *app);
-void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTrade_BounceAllEggs(SpinTradeApp *app);
-BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app);
-void SpinTradeSpin_Update(SpinTradeSpin *spin);
-void SpinTrade_SpinTask(SysTask *task, void *data);
-void SpinTrade_StartSpinTask(SpinTradeApp *app);
-void SpinTrade_StopSpinTask(SpinTradeApp *app);
-void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTradeWobble_Update(SpinTradeWobble *wobble);
-void SpinTrade_WobbleTask(SysTask *task, void *data);
-void SpinTrade_StartWobbleTask(SpinTradeApp *app);
-void SpinTrade_StopWobbleTask(SpinTradeApp *app);
-void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump);
-void SpinTrade_JumpTask(SysTask *task, void *data);
-void SpinTrade_StartJumpTask(SpinTradeApp *app);
-void SpinTrade_StopJumpTask(SpinTradeApp *app);
-void SpinTrade_StartJump(SpinTradeApp *app);
-BOOL SpinTrade_HasJumpLanded(SpinTradeApp *app);
-BOOL SpinTrade_IsJumping(SpinTradeApp *app);
-void SpinTrade_CountdownTask(SysTask *task, void *data);
-SysTask *SpinTrade_StartCountdown(SpinTradeApp *app);
-void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash);
-void SpinTrade_ButtonFlashTask(SysTask *task, void *data);
-void SpinTrade_StartButtonFlashTask(SpinTradeApp *app);
-void SpinTrade_StopButtonFlashTask(SpinTradeApp *app);
-u16 SpinTrade_IsButtonFlashing(SpinTradeApp *app);
-void SpinTrade_StartButtonFlash(SpinTradeApp *app);
-void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover);
-void SpinTrade_HoverTask(SysTask *task, void *data);
-void SpinTrade_StartHoverTask(SpinTradeApp *app);
-void SpinTrade_StopHoverTask(SpinTradeApp *app);
+static void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce);
+static void SpinTrade_BounceTask(SysTask *task, void *data);
+static void SpinTrade_StartBounceTask(SpinTradeApp *app);
+static void SpinTrade_StopBounceTask(SpinTradeApp *app);
+static void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTrade_BounceAllEggs(SpinTradeApp *app);
+static BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app);
+static void SpinTradeSpin_Update(SpinTradeSpin *spin);
+static void SpinTrade_SpinTask(SysTask *task, void *data);
+static void SpinTrade_StartSpinTask(SpinTradeApp *app);
+static void SpinTrade_StopSpinTask(SpinTradeApp *app);
+static void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTradeWobble_Update(SpinTradeWobble *wobble);
+static void SpinTrade_WobbleTask(SysTask *task, void *data);
+static void SpinTrade_StartWobbleTask(SpinTradeApp *app);
+static void SpinTrade_StopWobbleTask(SpinTradeApp *app);
+static void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg);
+static void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump);
+static void SpinTrade_JumpTask(SysTask *task, void *data);
+static void SpinTrade_StartJumpTask(SpinTradeApp *app);
+static void SpinTrade_StopJumpTask(SpinTradeApp *app);
+static void SpinTrade_StartJump(SpinTradeApp *app);
+static BOOL SpinTrade_HasJumpLanded(SpinTradeApp *app);
+static BOOL SpinTrade_IsJumping(SpinTradeApp *app);
+static void SpinTrade_CountdownTask(SysTask *task, void *data);
+static SysTask *SpinTrade_StartCountdown(SpinTradeApp *app);
+static void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash);
+static void SpinTrade_ButtonFlashTask(SysTask *task, void *data);
+static void SpinTrade_StartButtonFlashTask(SpinTradeApp *app);
+static void SpinTrade_StopButtonFlashTask(SpinTradeApp *app);
+static u16 SpinTrade_IsButtonFlashing(SpinTradeApp *app);
+static void SpinTrade_StartButtonFlash(SpinTradeApp *app);
+static void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover);
+static void SpinTrade_HoverTask(SysTask *task, void *data);
+static void SpinTrade_StartHoverTask(SpinTradeApp *app);
+static void SpinTrade_StopHoverTask(SpinTradeApp *app);
 void SpinTrade_AddHover(SpinTradeApp *app, SpinTradeEgg *egg);
-void SpinTrade_HoverBonusEggs(SpinTradeApp *app);
-void SpinTrade_SubBgFadeTask(SysTask *task, void *data);
-void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut);
-void SpinTrade_AddAngle(fx32 *angle, fx32 delta);
-void SpinTrade_RotateAll(SpinTradeApp *app, fx32 delta);
-BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app);
-void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart);
+static void SpinTrade_HoverBonusEggs(SpinTradeApp *app);
+static void SpinTrade_SubBgFadeTask(SysTask *task, void *data);
+static void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut);
+static void SpinTrade_AddAngle(fx32 *angle, fx32 delta);
+static void SpinTrade_RotateAll(SpinTradeApp *app, fx32 delta);
+static BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app);
+static void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart);
 void SpinTrade_ReceiveJump(SpinTradeApp *app, u8 jump);
 void SpinTrade_ReceiveSpinData(SpinTradeApp *app, const u16 *data);
-void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size);
-void *SpinTrade_GetScratch(SpinTradeApp *app);
-BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status);
-BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app);
-int SpinTrade_CountMembers(SpinTradeApp *app);
+static void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size);
+static void *SpinTrade_GetScratch(SpinTradeApp *app);
+static BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status);
+static BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app);
+static int SpinTrade_CountMembers(SpinTradeApp *app);
 void SpinTrade_ReceiveMemberSlot(SpinTradeApp *app, SpinTradeMember *member);
 void SpinTrade_ReceivePlayerCount(SpinTradeApp *app, u32 count);
-BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId);
-void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId);
-int SpinTrade_CountReceivedParties(SpinTradeApp *app);
+static BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId);
+static void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId);
+static int SpinTrade_CountReceivedParties(SpinTradeApp *app);
 void SpinTrade_ReceiveTradeSlot(SpinTradeApp *app, int netId, u32 slot);
 void SpinTrade_ReceiveResult(SpinTradeApp *app, const u16 *src);
-BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount);
-BOOL SpinTrade_PartyHasBadEgg(Party *party);
-BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app);
-int SpinTrade_CountConfirmed(SpinTradeApp *app);
-BOOL SpinTrade_IsCancelled(SpinTradeApp *app);
+static BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount);
+static BOOL SpinTrade_PartyHasBadEgg(Party *party);
+static BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app);
+static int SpinTrade_CountConfirmed(SpinTradeApp *app);
+static BOOL SpinTrade_IsCancelled(SpinTradeApp *app);
 
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     SpinTradeArgs *args = OverlayManager_GetArgs(man);
@@ -722,7 +718,7 @@ BOOL SpinTradeApp_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void SpinTrade_ClearLinkFlags(SpinTradeApp *app) {
+static void SpinTrade_ClearLinkFlags(SpinTradeApp *app) {
     app->remoteJump = FALSE;
     app->spinReceived = FALSE;
 }
@@ -1437,7 +1433,7 @@ int SpinTrade_State_Exit(SpinTradeApp *app) {
     return 2;
 }
 
-void SpinTrade_VBlankCallback(void *data) {
+static void SpinTrade_VBlankCallback(void *data) {
     SpinTradeApp *app = data;
 
     GF_RunVramTransferTasks();
@@ -1446,7 +1442,7 @@ void SpinTrade_VBlankCallback(void *data) {
     DoScheduledBgGpuUpdates(app->bgConfig);
 }
 
-void SpinTrade_InitGraphics(SpinTradeApp *app) {
+static void SpinTrade_InitGraphics(SpinTradeApp *app) {
     SpinTrade_SetGraphicsBanks(app);
     SpinTrade_Init3D(app);
     SpinTrade_InitCamera(app);
@@ -1459,7 +1455,7 @@ void SpinTrade_InitGraphics(SpinTradeApp *app) {
     SpinTrade_SetupPlanes(app);
 }
 
-void SpinTrade_FreeGraphics(SpinTradeApp *app) {
+static void SpinTrade_FreeGraphics(SpinTradeApp *app) {
     SpinTrade_DisableDisplay(app);
     SpinTrade_FreeSpriteSystem(app);
     SpinTrade_FreeText(app);
@@ -1468,7 +1464,7 @@ void SpinTrade_FreeGraphics(SpinTradeApp *app) {
     SpinTrade_FreeCamera(app);
 }
 
-void SpinTrade_Draw(SpinTradeApp *app) {
+static void SpinTrade_Draw(SpinTradeApp *app) {
     Thunk_G3X_Reset();
     Camera_PushLookAtToNNSGlb();
     NNS_G3dGlbLightVector(GX_LIGHTID_0, 0, -FX16_ONE, 0);
@@ -1481,12 +1477,12 @@ void SpinTrade_Draw(SpinTradeApp *app) {
     SpriteSystem_DrawSprites(app->spriteManager);
 }
 
-void SpinTrade_SetGraphicsBanks(SpinTradeApp *app) {
+static void SpinTrade_SetGraphicsBanks(SpinTradeApp *app) {
     GraphicsBanks banks = gSpinTradeGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void SpinTrade_SetupPlanes(SpinTradeApp *app) {
+static void SpinTrade_SetupPlanes(SpinTradeApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, TRUE);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, TRUE);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, TRUE);
@@ -1508,7 +1504,7 @@ void SpinTrade_SetupPlanes(SpinTradeApp *app) {
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_BD, 11, 10);
 }
 
-void SpinTrade_DisableDisplay(SpinTradeApp *app) {
+static void SpinTrade_DisableDisplay(SpinTradeApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, FALSE);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, FALSE);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, FALSE);
@@ -1521,7 +1517,7 @@ void SpinTrade_DisableDisplay(SpinTradeApp *app) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, FALSE);
 }
 
-void SpinTrade_Init3D(SpinTradeApp *app) {
+static void SpinTrade_Init3D(SpinTradeApp *app) {
     int i;
 
     NNS_G3dInit();
@@ -1542,7 +1538,7 @@ void SpinTrade_Init3D(SpinTradeApp *app) {
     GF_3DVramMan_InitFramePlttVramManager(0x4000, TRUE);
 }
 
-void SpinTrade_InitBgLayers(SpinTradeApp *app) {
+static void SpinTrade_InitBgLayers(SpinTradeApp *app) {
     app->bgConfig = BgConfig_Alloc(HEAP_ID_102);
     reg_GX_POWCNT |= 0x8000; // main engine on the bottom screen
     {
@@ -1577,7 +1573,7 @@ void SpinTrade_InitBgLayers(SpinTradeApp *app) {
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void SpinTrade_LoadBgGraphics(SpinTradeApp *app) {
+static void SpinTrade_LoadBgGraphics(SpinTradeApp *app) {
     void *buf;
 
     buf = SpinTrade_LoadNarcMember(app, 17, FALSE);
@@ -1632,7 +1628,7 @@ void SpinTrade_LoadBgGraphics(SpinTradeApp *app) {
     Heap_Free(buf);
 }
 
-void SpinTrade_FreeBgLayers(SpinTradeApp *app) {
+static void SpinTrade_FreeBgLayers(SpinTradeApp *app) {
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
@@ -1641,7 +1637,7 @@ void SpinTrade_FreeBgLayers(SpinTradeApp *app) {
     Heap_Free(app->bgConfig);
 }
 
-void SpinTrade_LoadButtonTilemap(SpinTradeApp *app, u32 member) {
+static void SpinTrade_LoadButtonTilemap(SpinTradeApp *app, u32 member) {
     void *buf = SpinTrade_LoadNarcMember(app, member, FALSE);
     NNS_G2dGetUnpackedScreenData(buf, &app->screenData);
     BG_LoadScreenTilemapData(app->bgConfig, GF_BG_LYR_SUB_2, app->screenData->rawData, app->screenData->szByte);
@@ -1649,19 +1645,19 @@ void SpinTrade_LoadButtonTilemap(SpinTradeApp *app, u32 member) {
     Heap_Free(buf);
 }
 
-void SpinTrade_SetButtonPressed(SpinTradeApp *app) {
+static void SpinTrade_SetButtonPressed(SpinTradeApp *app) {
     SpinTrade_LoadButtonTilemap(app, 26);
 }
 
-void SpinTrade_SetButtonReleased(SpinTradeApp *app) {
+static void SpinTrade_SetButtonReleased(SpinTradeApp *app) {
     SpinTrade_LoadButtonTilemap(app, 24);
 }
 
-void SpinTrade_SetButtonHalfPressed(SpinTradeApp *app) {
+static void SpinTrade_SetButtonHalfPressed(SpinTradeApp *app) {
     SpinTrade_LoadButtonTilemap(app, 25);
 }
 
-void SpinTrade_InitPaletteData(SpinTradeApp *app) {
+static void SpinTrade_InitPaletteData(SpinTradeApp *app) {
     app->paletteData = PaletteData_Init(HEAP_ID_102);
     PaletteData_SetAutoTransparent(app->paletteData, TRUE);
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_102);
@@ -1670,7 +1666,7 @@ void SpinTrade_InitPaletteData(SpinTradeApp *app) {
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_SUB_OBJ, 0x200, HEAP_ID_102);
 }
 
-void SpinTrade_FreePaletteData(SpinTradeApp *app) {
+static void SpinTrade_FreePaletteData(SpinTradeApp *app) {
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_BG);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_OBJ);
     PaletteData_FreeBuffers(app->paletteData, PLTTBUF_SUB_BG);
@@ -1678,11 +1674,11 @@ void SpinTrade_FreePaletteData(SpinTradeApp *app) {
     PaletteData_Free(app->paletteData);
 }
 
-void SpinTrade_SetSubBgFadeLevel(SpinTradeApp *app, u32 level) {
+static void SpinTrade_SetSubBgFadeLevel(SpinTradeApp *app, u32 level) {
     PaletteData_BlendPalettes(app->paletteData, PLTTBUF_SUB_BG, 0xFFFF, level, RGB_BLACK);
 }
 
-void SpinTrade_InitSpriteSystem(SpinTradeApp *app) {
+static void SpinTrade_InitSpriteSystem(SpinTradeApp *app) {
     OamManagerParam oamParam = gSpinTradeOamManagerParam;
     OamCharTransferParam transferParam = gSpinTradeOamCharTransferParam;
     SpriteResourceCountsListUnion counts;
@@ -1699,7 +1695,7 @@ void SpinTrade_InitSpriteSystem(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_LoadSpriteResources(SpinTradeApp *app) {
+static void SpinTrade_LoadSpriteResources(SpinTradeApp *app) {
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
     PaletteData *paletteData = app->paletteData;
@@ -1721,16 +1717,16 @@ void SpinTrade_LoadSpriteResources(SpinTradeApp *app) {
     Heap_Free(raw);
 }
 
-void SpinTrade_FreeSpriteSystem(SpinTradeApp *app) {
+static void SpinTrade_FreeSpriteSystem(SpinTradeApp *app) {
     SpriteSystem_FreeResourcesAndManager(app->spriteSystem, app->spriteManager);
     SpriteSystem_Free(app->spriteSystem);
 }
 
-ManagedSprite *SpinTrade_CreateSprite(SpinTradeApp *app, const ManagedSpriteTemplate *template) {
+static ManagedSprite *SpinTrade_CreateSprite(SpinTradeApp *app, const ManagedSpriteTemplate *template) {
     return SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, template);
 }
 
-void SpinTrade_InitText(SpinTradeApp *app) {
+static void SpinTrade_InitText(SpinTradeApp *app) {
     SpinTradeText *text = &app->text;
     int i;
 
@@ -1748,7 +1744,7 @@ void SpinTrade_InitText(SpinTradeApp *app) {
     SpinTrade_AddNameWindows(app, app->args->playerCount);
 }
 
-void SpinTrade_FreeText(SpinTradeApp *app) {
+static void SpinTrade_FreeText(SpinTradeApp *app) {
     SpinTradeText *text = &app->text;
     Window *window = &text->msgWindow;
     int i;
@@ -1764,7 +1760,7 @@ void SpinTrade_FreeText(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_PrintMessage(SpinTradeApp *app, int msgNo) {
+static void SpinTrade_PrintMessage(SpinTradeApp *app, int msgNo) {
     SpinTradeText *text = &app->text;
     Window *window = &text->msgWindow;
 
@@ -1776,7 +1772,7 @@ void SpinTrade_PrintMessage(SpinTradeApp *app, int msgNo) {
     ScheduleWindowCopyToVram(window);
 }
 
-void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *profile) {
+static void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *profile) {
     SpinTradeText *text = &app->text;
     Window *window = &text->msgWindow;
     String *template;
@@ -1793,7 +1789,7 @@ void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *p
     ScheduleWindowCopyToVram(window);
 }
 
-void SpinTrade_PrintItemMessage(SpinTradeApp *app, int msgNo, int item) {
+static void SpinTrade_PrintItemMessage(SpinTradeApp *app, int msgNo, int item) {
     SpinTradeText *text = &app->text;
     Window *window = &text->msgWindow;
     String *template;
@@ -1809,7 +1805,7 @@ void SpinTrade_PrintItemMessage(SpinTradeApp *app, int msgNo, int item) {
     ScheduleWindowCopyToVram(window);
 }
 
-void SpinTrade_ClearMessage(SpinTradeApp *app) {
+static void SpinTrade_ClearMessage(SpinTradeApp *app) {
     Window *window = &app->text.msgWindow;
 
     ClearFrameAndWindow2(window, TRUE);
@@ -1817,7 +1813,7 @@ void SpinTrade_ClearMessage(SpinTradeApp *app) {
     ScheduleWindowCopyToVram(window);
 }
 
-void SpinTrade_AddNameWindows(SpinTradeApp *app, int count) {
+static void SpinTrade_AddNameWindows(SpinTradeApp *app, int count) {
     int i;
     SpinTradeText *text = &app->text;
     const WindowTemplate *templates = gSpinTradeNameWindowTemplates[count];
@@ -1828,7 +1824,7 @@ void SpinTrade_AddNameWindows(SpinTradeApp *app, int count) {
     }
 }
 
-void SpinTrade_RemoveNameWindows(SpinTradeApp *app) {
+static void SpinTrade_RemoveNameWindows(SpinTradeApp *app) {
     int i;
     SpinTradeText *text = &app->text;
 
@@ -1838,7 +1834,7 @@ void SpinTrade_RemoveNameWindows(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 color) {
+static void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 color) {
     Window *window = &app->text.nameWindows[index];
     s32 x;
 
@@ -1850,7 +1846,7 @@ void SpinTrade_PrintNameWindow(SpinTradeApp *app, String *name, int index, u32 c
 }
 
 // The local player's name is printed in a different color
-void SpinTrade_PrintPlayerName(SpinTradeApp *app, String *name, int index, u32 netId) {
+static void SpinTrade_PrintPlayerName(SpinTradeApp *app, String *name, int index, u32 netId) {
     u32 color = MAKE_TEXT_COLOR(1, 2, 0);
     if (netId == Comm_GetLocalNetId()) {
         color = MAKE_TEXT_COLOR(3, 4, 0);
@@ -1858,7 +1854,7 @@ void SpinTrade_PrintPlayerName(SpinTradeApp *app, String *name, int index, u32 n
     SpinTrade_PrintNameWindow(app, name, index, color);
 }
 
-void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index) {
+static void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index) {
     Window *window = &app->text.nameWindows[index];
 
     ClearFrameAndWindow2(window, TRUE);
@@ -1866,7 +1862,7 @@ void SpinTrade_ClearNameWindow(SpinTradeApp *app, int index) {
     ScheduleWindowCopyToVram(window);
 }
 
-void SpinTrade_InitCamera(SpinTradeApp *app) {
+static void SpinTrade_InitCamera(SpinTradeApp *app) {
     SpinTradeCamera *camera = &app->camera;
     VecFx32 up;
 
@@ -1887,12 +1883,12 @@ void SpinTrade_InitCamera(SpinTradeApp *app) {
     Camera_SetStaticPtr(camera->camera);
 }
 
-void SpinTrade_FreeCamera(SpinTradeApp *app) {
+static void SpinTrade_FreeCamera(SpinTradeApp *app) {
     Camera_Delete(app->camera.camera);
 }
 
 // Takes the newest valid touch sample of this frame
-void SpinTrade_UpdateTouch(SpinTradeApp *app) {
+static void SpinTrade_UpdateTouch(SpinTradeApp *app) {
     int i = 3;
     u32 held = 0;
     SpinTradeTouch *touch = &app->touch;
@@ -1910,7 +1906,7 @@ void SpinTrade_UpdateTouch(SpinTradeApp *app) {
     touch->held = held;
 }
 
-BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch) {
+static BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch) {
     s32 x = touch->x;
     s32 y = touch->y;
     if (y >= 32 && y <= 159 && x >= 64 && x <= 191) {
@@ -1919,7 +1915,7 @@ BOOL SpinTrade_IsInButtonArea(SpinTradeTouch *touch) {
     return FALSE;
 }
 
-BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app) {
+static BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app) {
     SpinTradeTouch *touch = &app->touch;
     if (touch->pressed && SpinTrade_IsInButtonArea(touch) == 1) {
         return TRUE;
@@ -1927,7 +1923,7 @@ BOOL SpinTrade_IsButtonTouched(SpinTradeApp *app) {
     return FALSE;
 }
 
-void SpinTrade_InitMachine(SpinTradeApp *app) {
+static void SpinTrade_InitMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     int playerCount = app->args->playerCount;
 
@@ -1948,11 +1944,11 @@ void SpinTrade_InitMachine(SpinTradeApp *app) {
     machine->drawPosition = machine->position;
 }
 
-void SpinTrade_FreeMachine(SpinTradeApp *app) {
+static void SpinTrade_FreeMachine(SpinTradeApp *app) {
     RenderModel_Free(&app->machine.model);
 }
 
-void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
+static void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     fx32 angle = machine->angle;
 
@@ -1964,24 +1960,24 @@ void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
     machine->drawPosition.z = machine->shakeOffset.z + (machine->position.z + machine->jumpOffset.z);
 }
 
-void SpinTrade_DrawMachine(SpinTradeApp *app) {
+static void SpinTrade_DrawMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     RenderObj_DrawRotated(&machine->renderObj, &machine->drawPosition, &machine->scale, machine->rotation);
 }
 
-void SpinTradeMachine_Rotate(SpinTradeMachine *machine, fx32 delta) {
+static void SpinTradeMachine_Rotate(SpinTradeMachine *machine, fx32 delta) {
     SpinTrade_AddAngle(&machine->angle, delta);
 }
 
-void SpinTrade_LoadObjects(SpinTradeApp *app) {
+static void SpinTrade_LoadObjects(SpinTradeApp *app) {
     SpinTrade_LoadObjectModels(app);
 }
 
-void SpinTrade_FreeObjects(SpinTradeApp *app) {
+static void SpinTrade_FreeObjects(SpinTradeApp *app) {
     SpinTrade_FreeObjectModels(app);
 }
 
-void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
+static void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     volatile int i;
     const int *modelIds;
     const int *animIds;
@@ -2017,7 +2013,7 @@ void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     } while (i < 5);
 }
 
-void SpinTrade_FreeObjectModels(SpinTradeApp *app) {
+static void SpinTrade_FreeObjectModels(SpinTradeApp *app) {
     int i;
     SpinTradeObjects *objects = &app->objects;
 
@@ -2029,14 +2025,14 @@ void SpinTrade_FreeObjectModels(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg) {
     RenderObj_InitFromModel(&egg->renderObj, &app->objects.eggModel);
     egg->visible = TRUE;
     SpinTrade_ShowShadow(app, egg);
     SpinTrade_ShowMarker(app, egg);
 }
 
-void SpinTrade_UpdateEggPositions(SpinTradeApp *app) {
+static void SpinTrade_UpdateEggPositions(SpinTradeApp *app) {
     int i = 0;
     int count = app->playerCount;
     SpinTradeObjects *objects = &app->objects;
@@ -2054,7 +2050,7 @@ void SpinTrade_UpdateEggPositions(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_DrawEggs(SpinTradeApp *app) {
+static void SpinTrade_DrawEggs(SpinTradeApp *app) {
     int count = app->playerCount;
     int i = 0;
     SpinTradeObjects *objects = &app->objects;
@@ -2081,7 +2077,7 @@ void SpinTrade_DrawEggs(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_RotateEggs(SpinTradeApp *app, fx32 delta) {
+static void SpinTrade_RotateEggs(SpinTradeApp *app, fx32 delta) {
     int count = app->playerCount;
     int i = 0;
     SpinTradeObjects *objects = &app->objects;
@@ -2094,7 +2090,7 @@ void SpinTrade_RotateEggs(SpinTradeApp *app, fx32 delta) {
 }
 
 // Eggs sit on a circle of radius 22 around the table and follow its jump offset
-void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset) {
+static void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset) {
     fx32 angle = egg->angle;
     u16 degrees;
 
@@ -2109,7 +2105,7 @@ void SpinTradeEgg_UpdatePosition(SpinTradeEgg *egg, const VecFx32 *machineOffset
 }
 
 // The egg that stopped closest (turning forward) to this player's seat
-SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
+static SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
     int distances[SPIN_TRADE_MAX_PLAYERS];
     int order[SPIN_TRADE_MAX_PLAYERS];
     int j;
@@ -2149,7 +2145,7 @@ SpinTradeEgg *SpinTrade_FindEggNearestSlot(SpinTradeApp *app) {
     return &objects->eggs[order[0]];
 }
 
-void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg) {
     SpinTradeObjects *objects = &app->objects;
     SpinTradeShadow *shadow = &objects->shadows[egg->slot];
 
@@ -2159,7 +2155,7 @@ void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg) {
     SpinTradeShadow_Update(app, shadow);
 }
 
-void SpinTradeShadow_Update(SpinTradeApp *app, SpinTradeShadow *shadow) {
+static void SpinTradeShadow_Update(SpinTradeApp *app, SpinTradeShadow *shadow) {
     s32 shrink;
 
     shadow->rotation[0] = 0;
@@ -2183,7 +2179,7 @@ void SpinTradeShadow_Update(SpinTradeApp *app, SpinTradeShadow *shadow) {
     shadow->scale.z = FX32_ONE - shrink;
 }
 
-void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg) {
     SpinTradeObjects *objects = &app->objects;
     SpinTradeMarker *marker = &objects->markers[egg->slot];
 
@@ -2192,13 +2188,13 @@ void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg) {
     RenderObj_InitWithAnimation(&marker->renderObj, &objects->markerModels[egg->slot], &objects->markerAnims[egg->slot]);
 }
 
-void SpinTradeMarker_Update(SpinTradeApp *app, SpinTradeMarker *marker) {
+static void SpinTradeMarker_Update(SpinTradeApp *app, SpinTradeMarker *marker) {
     marker->position = marker->egg->position;
     marker->position.y += FX32_CONST(20);
     RenderAnimation_Advance(&app->objects.markerAnims[marker->egg->slot], FX32_ONE, TRUE);
 }
 
-void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, int angle, u32 angleOffset, SpinTradeEgg *egg) {
+static void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, int angle, u32 angleOffset, SpinTradeEgg *egg) {
     SpinTradeEggDropTask *task;
 
     egg->netId = netId;
@@ -2216,7 +2212,7 @@ void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, i
     SysTask_CreateOnMainQueue(SpinTrade_EggDropTask, task, 0);
 }
 
-void SpinTrade_EggDropTask(SysTask *sysTask, void *data) {
+static void SpinTrade_EggDropTask(SysTask *sysTask, void *data) {
     SpinTradeEggDropTask *task = data;
     int ret;
 
@@ -2276,7 +2272,7 @@ int SpinTradeEggDrop_Land(SpinTradeEggDropTask *task) {
     return 0;
 }
 
-void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce) {
+static void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce) {
     SpinTradeEgg *egg = bounce->egg;
 
     switch (bounce->state) {
@@ -2304,7 +2300,7 @@ void SpinTradeBounce_Update(SpinTradeApp *app, SpinTradeBounce *bounce) {
     }
 }
 
-void SpinTrade_BounceTask(SysTask *task, void *data) {
+static void SpinTrade_BounceTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     s32 i;
     SpinTradeBounce *bounce = app->bounces;
@@ -2316,17 +2312,17 @@ void SpinTrade_BounceTask(SysTask *task, void *data) {
     }
 }
 
-void SpinTrade_StartBounceTask(SpinTradeApp *app) {
+static void SpinTrade_StartBounceTask(SpinTradeApp *app) {
     memset(app->bounces, 0, sizeof(app->bounces));
     app->bounceTask = SysTask_CreateOnMainQueue(SpinTrade_BounceTask, app, 256);
     GF_ASSERT(app->bounceTask != NULL);
 }
 
-void SpinTrade_StopBounceTask(SpinTradeApp *app) {
+static void SpinTrade_StopBounceTask(SpinTradeApp *app) {
     SysTask_Destroy(app->bounceTask);
 }
 
-void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg) {
     s32 i;
     SpinTradeBounce *bounce = app->bounces;
 
@@ -2340,7 +2336,7 @@ void SpinTrade_AddBounce(SpinTradeApp *app, SpinTradeEgg *egg) {
     GF_AssertFail();
 }
 
-void SpinTrade_BounceAllEggs(SpinTradeApp *app) {
+static void SpinTrade_BounceAllEggs(SpinTradeApp *app) {
     SpinTradeObjects *objects = &app->objects;
     int count = app->playerCount;
     int i = 0;
@@ -2353,7 +2349,7 @@ void SpinTrade_BounceAllEggs(SpinTradeApp *app) {
     } while (i < count);
 }
 
-BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app) {
+static BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app) {
     s32 i;
     SpinTradeBounce *bounce = app->bounces;
 
@@ -2365,7 +2361,7 @@ BOOL SpinTrade_IsAnyEggBouncing(SpinTradeApp *app) {
     return FALSE;
 }
 
-void SpinTradeSpin_Update(SpinTradeSpin *spin) {
+static void SpinTradeSpin_Update(SpinTradeSpin *spin) {
     SpinTradeEgg *egg = spin->egg;
 
     switch (spin->state) {
@@ -2386,7 +2382,7 @@ void SpinTradeSpin_Update(SpinTradeSpin *spin) {
     }
 }
 
-void SpinTrade_SpinTask(SysTask *task, void *data) {
+static void SpinTrade_SpinTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     s32 i;
     SpinTradeSpin *spin = app->spins;
@@ -2398,7 +2394,7 @@ void SpinTrade_SpinTask(SysTask *task, void *data) {
     }
 }
 
-void SpinTrade_StartSpinTask(SpinTradeApp *app) {
+static void SpinTrade_StartSpinTask(SpinTradeApp *app) {
     memset(app->spins, 0, sizeof(app->spins));
     app->spinTask = SysTask_CreateOnMainQueue(SpinTrade_SpinTask, app, 257);
     if (app->spinTask == NULL) {
@@ -2406,12 +2402,12 @@ void SpinTrade_StartSpinTask(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_StopSpinTask(SpinTradeApp *app) {
+static void SpinTrade_StopSpinTask(SpinTradeApp *app) {
     SysTask_Destroy(app->spinTask);
 }
 
 // Restarts the spin of an egg that is already spinning
-void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg) {
     int i;
     SpinTradeSpin *scan;
     SpinTradeSpin *spin;
@@ -2435,7 +2431,7 @@ void SpinTrade_AddSpin(SpinTradeApp *app, SpinTradeEgg *egg) {
 }
 
 // Rocks the egg from side to side with a decaying amplitude
-void SpinTradeWobble_Update(SpinTradeWobble *wobble) {
+static void SpinTradeWobble_Update(SpinTradeWobble *wobble) {
     SpinTradeEgg *egg = wobble->egg;
     fx32 oldPhase;
 
@@ -2466,7 +2462,7 @@ void SpinTradeWobble_Update(SpinTradeWobble *wobble) {
     }
 }
 
-void SpinTrade_WobbleTask(SysTask *task, void *data) {
+static void SpinTrade_WobbleTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     s32 i;
     SpinTradeWobble *wobble = app->wobbles;
@@ -2478,7 +2474,7 @@ void SpinTrade_WobbleTask(SysTask *task, void *data) {
     }
 }
 
-void SpinTrade_StartWobbleTask(SpinTradeApp *app) {
+static void SpinTrade_StartWobbleTask(SpinTradeApp *app) {
     memset(app->wobbles, 0, sizeof(app->wobbles));
     app->wobbleTask = SysTask_CreateOnMainQueue(SpinTrade_WobbleTask, app, 258);
     if (app->wobbleTask == NULL) {
@@ -2486,12 +2482,12 @@ void SpinTrade_StartWobbleTask(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_StopWobbleTask(SpinTradeApp *app) {
+static void SpinTrade_StopWobbleTask(SpinTradeApp *app) {
     SysTask_Destroy(app->wobbleTask);
 }
 
 // Restarts the wobble of an egg that is already wobbling
-void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg) {
+static void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg) {
     int i = 0;
     SpinTradeWobble *scan;
     SpinTradeWobble *wobble;
@@ -2520,7 +2516,7 @@ void SpinTrade_AddWobble(SpinTradeApp *app, SpinTradeEgg *egg) {
 }
 
 // The machine dips, jumps back up (all eggs bounce on landing), shakes and waits for the eggs to settle
-void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump) {
+static void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump) {
     SpinTradeMachine *machine = &app->machine;
 
     switch (jump->state) {
@@ -2568,22 +2564,22 @@ void SpinTradeJump_Update(SpinTradeApp *app, SpinTradeJump *jump) {
     }
 }
 
-void SpinTrade_JumpTask(SysTask *task, void *data) {
+static void SpinTrade_JumpTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     SpinTradeJump_Update(app, &app->jump);
 }
 
-void SpinTrade_StartJumpTask(SpinTradeApp *app) {
+static void SpinTrade_StartJumpTask(SpinTradeApp *app) {
     memset(&app->jump, 0, sizeof(app->jump));
     app->jumpTask = SysTask_CreateOnMainQueue(SpinTrade_JumpTask, app, 255);
     GF_ASSERT(app->jumpTask);
 }
 
-void SpinTrade_StopJumpTask(SpinTradeApp *app) {
+static void SpinTrade_StopJumpTask(SpinTradeApp *app) {
     SysTask_Destroy(app->jumpTask);
 }
 
-void SpinTrade_StartJump(SpinTradeApp *app) {
+static void SpinTrade_StartJump(SpinTradeApp *app) {
     SpinTradeJump *jump = &app->jump;
     if (jump->landed) {
         GF_AssertFail();
@@ -2592,16 +2588,16 @@ void SpinTrade_StartJump(SpinTradeApp *app) {
     jump->state = 1;
 }
 
-BOOL SpinTrade_HasJumpLanded(SpinTradeApp *app) {
+static BOOL SpinTrade_HasJumpLanded(SpinTradeApp *app) {
     return app->jump.landed;
 }
 
-BOOL SpinTrade_IsJumping(SpinTradeApp *app) {
+static BOOL SpinTrade_IsJumping(SpinTradeApp *app) {
     return app->jump.active;
 }
 
 // "3, 2, 1, go" sprite animation before the table starts turning
-void SpinTrade_CountdownTask(SysTask *task, void *data) {
+static void SpinTrade_CountdownTask(SysTask *task, void *data) {
     SpinTradeCountdownTask *countdown = data;
 
     switch (countdown->state) {
@@ -2628,7 +2624,7 @@ void SpinTrade_CountdownTask(SysTask *task, void *data) {
     }
 }
 
-SysTask *SpinTrade_StartCountdown(SpinTradeApp *app) {
+static SysTask *SpinTrade_StartCountdown(SpinTradeApp *app) {
     SpinTradeCountdownTask *countdown;
     ManagedSpriteTemplate template;
     SysTask *task;
@@ -2658,7 +2654,7 @@ SysTask *SpinTrade_StartCountdown(SpinTradeApp *app) {
     return task;
 }
 
-void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash) {
+static void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash) {
     switch (flash->state) {
     case 1:
         SpinTrade_SetButtonPressed(app);
@@ -2692,12 +2688,12 @@ void SpinTradeButtonFlash_Update(SpinTradeApp *app, SpinTradeButtonFlash *flash)
     }
 }
 
-void SpinTrade_ButtonFlashTask(SysTask *task, void *data) {
+static void SpinTrade_ButtonFlashTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     SpinTradeButtonFlash_Update(app, &app->buttonFlash);
 }
 
-void SpinTrade_StartButtonFlashTask(SpinTradeApp *app) {
+static void SpinTrade_StartButtonFlashTask(SpinTradeApp *app) {
     memset(&app->buttonFlash, 0, sizeof(app->buttonFlash));
     app->buttonFlashTask = SysTask_CreateOnMainQueue(SpinTrade_ButtonFlashTask, app, 259);
     if (app->buttonFlashTask == NULL) {
@@ -2705,15 +2701,15 @@ void SpinTrade_StartButtonFlashTask(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_StopButtonFlashTask(SpinTradeApp *app) {
+static void SpinTrade_StopButtonFlashTask(SpinTradeApp *app) {
     SysTask_Destroy(app->buttonFlashTask);
 }
 
-u16 SpinTrade_IsButtonFlashing(SpinTradeApp *app) {
+static u16 SpinTrade_IsButtonFlashing(SpinTradeApp *app) {
     return app->buttonFlash.active;
 }
 
-void SpinTrade_StartButtonFlash(SpinTradeApp *app) {
+static void SpinTrade_StartButtonFlash(SpinTradeApp *app) {
     SpinTradeButtonFlash *flash = &app->buttonFlash;
     if (flash->active != 0) {
         GF_AssertFail();
@@ -2722,7 +2718,7 @@ void SpinTrade_StartButtonFlash(SpinTradeApp *app) {
     flash->state = 1;
 }
 
-void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
+static void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
     switch (hover->state) {
     case 0:
         break;
@@ -2744,7 +2740,7 @@ void SpinTradeHover_Update(SpinTradeApp *app, SpinTradeHover *hover) {
     }
 }
 
-void SpinTrade_HoverTask(SysTask *task, void *data) {
+static void SpinTrade_HoverTask(SysTask *task, void *data) {
     SpinTradeApp *app = data;
     s32 i;
     SpinTradeHover *hover = app->hovers;
@@ -2754,7 +2750,7 @@ void SpinTrade_HoverTask(SysTask *task, void *data) {
     }
 }
 
-void SpinTrade_StartHoverTask(SpinTradeApp *app) {
+static void SpinTrade_StartHoverTask(SpinTradeApp *app) {
     memset(app->hovers, 0, sizeof(app->hovers));
     app->hoverTask = SysTask_CreateOnMainQueue(SpinTrade_HoverTask, app, 260);
     if (app->hoverTask == NULL) {
@@ -2762,7 +2758,7 @@ void SpinTrade_StartHoverTask(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_StopHoverTask(SpinTradeApp *app) {
+static void SpinTrade_StopHoverTask(SpinTradeApp *app) {
     SysTask_Destroy(app->hoverTask);
 }
 
@@ -2782,7 +2778,7 @@ void SpinTrade_AddHover(SpinTradeApp *app, SpinTradeEgg *egg) {
 }
 
 // Eggs that stopped in a bonus area float up and down
-void SpinTrade_HoverBonusEggs(SpinTradeApp *app) {
+static void SpinTrade_HoverBonusEggs(SpinTradeApp *app) {
     u32 mask = app->bonusMask;
     int count = app->playerCount;
     int i = 0;
@@ -2795,7 +2791,7 @@ void SpinTrade_HoverBonusEggs(SpinTradeApp *app) {
     }
 }
 
-void SpinTrade_SubBgFadeTask(SysTask *task, void *data) {
+static void SpinTrade_SubBgFadeTask(SysTask *task, void *data) {
     SpinTradeFadeTask *fade = data;
     BOOL done = FALSE;
 
@@ -2819,7 +2815,7 @@ void SpinTrade_SubBgFadeTask(SysTask *task, void *data) {
     }
 }
 
-void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut) {
+static void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut) {
     s32 startLevels[2];
     SpinTradeFadeTask *fade;
 
@@ -2834,7 +2830,7 @@ void SpinTrade_StartSubBgFade(SpinTradeApp *app, int fadeOut) {
     }
 }
 
-void SpinTrade_AddAngle(fx32 *angle, fx32 delta) {
+static void SpinTrade_AddAngle(fx32 *angle, fx32 delta) {
     *angle += delta;
     while (*angle < 0) {
         *angle += SPIN_TRADE_ANGLE_FULL;
@@ -2842,12 +2838,12 @@ void SpinTrade_AddAngle(fx32 *angle, fx32 delta) {
     *angle %= SPIN_TRADE_ANGLE_FULL;
 }
 
-void SpinTrade_RotateAll(SpinTradeApp *app, fx32 delta) {
+static void SpinTrade_RotateAll(SpinTradeApp *app, fx32 delta) {
     SpinTradeMachine_Rotate(&app->machine, delta);
     SpinTrade_RotateEggs(app, delta);
 }
 
-BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app) {
+static BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app) {
     app->frame++;
     if (app->frame < 600) {
         return FALSE;
@@ -2856,7 +2852,7 @@ BOOL SpinTrade_TickSpinTimer(SpinTradeApp *app) {
     return TRUE;
 }
 
-void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart) {
+static void *SpinTrade_LoadNarcMember(SpinTradeApp *app, u32 member, int atStart) {
     void *buf;
     u32 size = NARC_GetMemberSize(app->narc, member);
     if (atStart == 1) {
@@ -2883,7 +2879,7 @@ void SpinTrade_ReceiveSpinData(SpinTradeApp *app, const u16 *data) {
     app->spinData.angle = data[3];
 }
 
-void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size) {
+static void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size) {
     if (size >= sizeof(app->scratch)) {
         GF_AssertFail();
     }
@@ -2891,11 +2887,11 @@ void *SpinTrade_ClearScratch(SpinTradeApp *app, u32 size) {
     return app->scratch;
 }
 
-void *SpinTrade_GetScratch(SpinTradeApp *app) {
+static void *SpinTrade_GetScratch(SpinTradeApp *app) {
     return app->scratch;
 }
 
-BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status) {
+static BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status) {
     SpinTradeLinkMenu *menu = app->menu;
     if ((menu->receivedStatus & status) != 0) {
         return TRUE;
@@ -2903,7 +2899,7 @@ BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status) {
     return FALSE;
 }
 
-BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app) {
+static BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     SpinTradeArgs *args = app->args;
     u32 count = 0;
@@ -2920,7 +2916,7 @@ BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app) {
     return FALSE;
 }
 
-int SpinTrade_CountMembers(SpinTradeApp *app) {
+static int SpinTrade_CountMembers(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     u32 count = 0;
     u32 mask = menu->memberMask;
@@ -2946,7 +2942,7 @@ void SpinTrade_ReceivePlayerCount(SpinTradeApp *app, u32 count) {
     app->playerCount = count;
 }
 
-BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId) {
+static BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId) {
     if (netId != 0) {
         if ((app->menu->memberMask & (1 << netId)) == 0) {
             return FALSE;
@@ -2956,7 +2952,7 @@ BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId) {
 }
 
 // Replaces the offered party slot with the Pokemon (egg) offered by netId
-void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
+static void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
     Party *party = app->party;
     Party *otherParty = SpinTradeLink_GetReceivedParty(app->menu, netId);
     int otherSlot = app->tradeSlots[netId];
@@ -2967,7 +2963,7 @@ void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
     CopyPokemonToPokemon(mon, dest);
 }
 
-int SpinTrade_CountReceivedParties(SpinTradeApp *app) {
+static int SpinTrade_CountReceivedParties(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     u32 count = 0;
     u32 mask = menu->partyReceivedMask;
@@ -2996,7 +2992,7 @@ void SpinTrade_ReceiveResult(SpinTradeApp *app, const u16 *src) {
     app->resultReceived = TRUE;
 }
 
-BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
+static BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
     s32 position;
     u32 a, count;
     s32 b;
@@ -3024,7 +3020,7 @@ BOOL SpinTrade_IsInBonusArea(SpinTradeApp *app, fx32 angle, int playerCount) {
     return FALSE;
 }
 
-BOOL SpinTrade_PartyHasBadEgg(Party *party) {
+static BOOL SpinTrade_PartyHasBadEgg(Party *party) {
     Pokemon *mon;
     int i;
     int count = Party_GetCount(party);
@@ -3042,7 +3038,7 @@ BOOL SpinTrade_PartyHasBadEgg(Party *party) {
     return FALSE;
 }
 
-BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app) {
+static BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app) {
     int i;
 
     if (SpinTrade_PartyHasBadEgg(app->party) == 1) {
@@ -3058,7 +3054,7 @@ BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app) {
     return FALSE;
 }
 
-int SpinTrade_CountConfirmed(SpinTradeApp *app) {
+static int SpinTrade_CountConfirmed(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     u32 count = 0;
     u32 mask = menu->confirmMask;
@@ -3070,7 +3066,7 @@ int SpinTrade_CountConfirmed(SpinTradeApp *app) {
     return count;
 }
 
-BOOL SpinTrade_IsCancelled(SpinTradeApp *app) {
+static BOOL SpinTrade_IsCancelled(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
     if (menu->cancelled != 0) {
         return TRUE;

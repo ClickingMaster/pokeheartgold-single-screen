@@ -1,15 +1,9 @@
 #include "constants/gx.h"
 
 #include "application/apricorn_box/apricorn_box_overlay_internal.h"
+#include "application/apricorn_box/apricorn_box_screens.h"
 
 FS_EXTERN_OVERLAY(OVY_59);
-
-BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state);
-BOOL ApricornBoxScreen_Main(OverlayManager *man, int *state);
-BOOL ApricornBoxScreen_Exit(OverlayManager *man, int *state);
-BOOL AprijuiceScreen_Init(OverlayManager *man, int *state);
-BOOL AprijuiceScreen_Main(OverlayManager *man, int *state);
-BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state);
 
 BOOL ApricornBox_Init(OverlayManager *man, int *state);
 BOOL ApricornBox_Main(OverlayManager *man, int *state);

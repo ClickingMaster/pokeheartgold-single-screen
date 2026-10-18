@@ -20,6 +20,7 @@
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "system.h"
+#include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
@@ -37,7 +38,6 @@ typedef struct MailboxAppSubApp {
     int nextState;
 } MailboxAppSubApp;
 
-u8 TextPrinterCheckActive(u8 printerId);
 void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
 
 static int MailboxApp_StartFadeIn(MailboxApp *app, int nextState);

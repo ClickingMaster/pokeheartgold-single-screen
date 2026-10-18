@@ -1,3 +1,5 @@
+#include "easy_chat_app_panels.h"
+
 #include "global.h"
 
 #include "msgdata/msg.naix"
@@ -6,7 +8,6 @@
 
 #include "bg_window.h"
 #include "easy_chat.h"
-#include "easy_chat_app_internal.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -24,12 +25,6 @@
 #include "system.h"
 #include "text.h"
 #include "yes_no_prompt.h"
-
-typedef struct EasyChatSentenceView EasyChatSentenceView;
-typedef struct EasyChatMenuView EasyChatMenuView;
-typedef struct EasyChatCategoryView EasyChatCategoryView;
-typedef struct EasyChatWordListView EasyChatWordListView;
-typedef struct EasyChatPageButtonsView EasyChatPageButtonsView;
 
 // Scrolls a BG layer by a fixed amount over a number of frames (VBlank task).
 typedef struct EasyChatBgScroll {
@@ -204,130 +199,51 @@ typedef struct EasyChatInitialGridCell {
 #define GetECWordIntoStringByIndexInt ((void (*)(int, String *))GetECWordIntoStringByIndex)
 #define ListMenuUpdateCursorObjInt    ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
 
-void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
-// easy chat save data (category / initial unlocked)
-u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
-u32 ECMenu_GetInitialCount(ECMenu *menu, u32 group);
-
 extern const WindowTemplate gEasyChatMenuViewWindowTemplates[3];
 extern const EasyChatInitialGridCell gEasyChatInitialGridCells[EC_INITIAL_GRID_CELLS];
 
-BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view);
-SpriteList *EasyChatAppView_GetSpriteList(EasyChatAppView *view);
-SysTask *EasyChatAppView_CreateVBlankTask(SysTaskFunc func, void *data, u32 priority);
-void EasyChatAppView_InitSpriteHeader(EasyChatAppView *view, SpriteResourcesHeader *header, u32 index, u8 priority);
-Sprite *EasyChatAppView_CreateSprite(EasyChatAppView *view, SpriteResourcesHeader *header, s32 x, s32 y, u32 priority, NNS_G2D_VRAM_TYPE whichScreen);
-
-EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc);
-void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_ToggleScrollWindows(EasyChatSentenceView *sentence, BOOL enable);
-void EasyChatSentenceView_StartScroll(EasyChatSentenceView *sentence, u8 direction);
-BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *narc);
-void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_DrawSentence(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, TouchscreenHitbox *hitbox, u32 slot);
-int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *window);
-void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence);
-void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence);
-void EasyChatMessageParser_Free(EasyChatMessageParser *parser);
-int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest);
-void EasyChatSentenceView_GetSlotTextPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *textPos);
-void EasyChatSentenceView_GetSlotCursorPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *cursorPos);
-void EasyChatSentenceView_ClearSlot(Window *window, const EasyChatWordSlotPos *slot);
-void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *window, const EasyChatWordSlotPos *slot, int word);
-u32 EasyChatSentenceView_GetNumSlots(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_SelectMessageWindow(EasyChatSentenceView *sentence, u32 index);
-void EasyChatSentenceView_PrintMessage(EasyChatSentenceView *sentence, u32 message);
-void EasyChatSentenceView_DeactivateCursor(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_ActivateCursor(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_SetCursorVisible(EasyChatSentenceView *sentence, BOOL draw);
-void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence);
-Sprite *EasyChatSentenceView_GetSliderThumb(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_MoveCursorToSlot(EasyChatSentenceView *sentence, u16 slot);
-void EasyChatSentenceView_SetCursorActive(EasyChatSentenceView *sentence, BOOL active);
-void EasyChatSentenceView_StartYesNo(EasyChatSentenceView *sentence, int initialCursorPos);
-int EasyChatSentenceView_HandleYesNo(EasyChatSentenceView *sentence);
-void EasyChatSentenceView_DrawYesNoCursor(EasyChatSentenceView *sentence, int index);
-EasyChatMenuView *EasyChatMenuView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatMenuView_Delete(EasyChatMenuView *menuView);
-void EasyChatMenuView_Load(EasyChatMenuView *menuView, NARC *narc);
-void EasyChatMenuView_Unload(EasyChatMenuView *menuView);
-void EasyChatMenuView_DrawMainButtons(EasyChatMenuView *menuView, BOOL draw, BOOL showCursor);
-void EasyChatMenuView_DrawListButton(EasyChatMenuView *menuView, BOOL draw);
-void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig);
-void EasyChatMenuView_CreateCursor(EasyChatMenuView *menuView);
-void EasyChatMenuView_DeactivateCursor(EasyChatMenuView *menuView);
-void EasyChatMenuView_ActivateCursor(EasyChatMenuView *menuView);
-void EasyChatMenuView_SetCursorVisible(EasyChatMenuView *menuView, BOOL draw);
-void EasyChatMenuView_MoveCursor(EasyChatMenuView *menuView, u16 cursor);
-void EasyChatMenuView_DrawModeButton(EasyChatMenuView *menuView, int mode, int selected);
-void EasyChatMenuView_ModeSwitchTask(SysTask *task, void *data);
-void EasyChatMenuView_StartModeSwitch(EasyChatMenuView *menuView);
-BOOL EasyChatMenuView_IsModeSwitchDone(EasyChatMenuView *menuView);
-void EasyChatMenuView_ShowListButton(EasyChatMenuView *menuView);
-void EasyChatMenuView_ShowMainButtons(EasyChatMenuView *menuView);
-EasyChatCategoryView *EasyChatCategoryView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatCategoryView_Delete(EasyChatCategoryView *categories);
-void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc);
-u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
-u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
-u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
-void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories);
-void EasyChatCategoryView_SetCursorVisible(EasyChatCategoryView *categories, BOOL draw);
-void EasyChatCategoryView_MoveCursor(EasyChatCategoryView *categories, u32 category);
-void EasyChatCategoryView_StartOpen(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateOpen(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartClose(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateClose(EasyChatCategoryView *categories);
-void EasyChatCategoryView_ResetScrollY(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartDim(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateDim(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartFadeOut(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateFadeOut(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartFadeIn(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateFadeIn(EasyChatCategoryView *categories);
-void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories);
-void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories);
-BOOL EasyChatCategoryView_UpdateModeScroll(EasyChatCategoryView *categories);
-EasyChatWordListView *EasyChatWordListView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatWordListView_Delete(EasyChatWordListView *wordList);
-void EasyChatWordListView_Load(EasyChatWordListView *wordList);
-void EasyChatWordListView_CreateSprites(EasyChatWordListView *wordList);
-void EasyChatWordListView_DrawWords(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_StartFadeIn(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_UpdateFadeIn(EasyChatWordListView *wordList);
-void EasyChatWordListView_StartFadeOut(EasyChatWordListView *wordList);
-BOOL EasyChatWordListView_UpdateFadeOut(EasyChatWordListView *wordList);
-void EasyChatWordListView_SetCursorVisible(EasyChatWordListView *wordList, BOOL draw);
-void EasyChatWordListView_MoveCursor(EasyChatWordListView *wordList, u32 cursor);
-void EasyChatWordListView_StartScroll(EasyChatWordListView *wordList, int rows);
-BOOL EasyChatWordListView_UpdateScroll(EasyChatWordListView *wordList);
-void EasyChatWordListView_ClearRows(EasyChatWordListView *wordList, int rows);
-void EasyChatWordListView_ResetScroll(EasyChatWordListView *wordList);
-void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u32 y);
-EasyChatPageButtonsView *EasyChatPageButtonsView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void EasyChatPageButtonsView_Delete(EasyChatPageButtonsView *pageButtons);
-void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *narc);
-void EasyChatPageButtonsView_SetEnabled(void);
-void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int button, int pressed);
-void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames);
-BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll);
-void EasyChatBgScroll_Task(SysTask *task, void *data);
-void EasyChatBlendFade_StartAlpha(EasyChatBlendFade *fade, u32 plane1, u32 plane2, s32 start, s32 target, s32 frames);
-BOOL EasyChatBlendFade_IsAlphaDone(EasyChatBlendFade *fade);
-void EasyChatBlendFade_AlphaTask(SysTask *task, void *data);
-void EasyChatBlendFade_StartBrightness(EasyChatBlendFade *fade, u32 plane, s32 start, s32 target, s32 frames);
-BOOL EasyChatBlendFade_IsBrightnessDone(EasyChatBlendFade *fade);
-void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data);
-u32 EasyChatInitialGrid_GetCount(void);
-void EasyChatInitialGrid_GetLetter(u32 cell, String *dest);
-void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y);
+static void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence);
+static void EasyChatSentenceView_ToggleScrollWindows(EasyChatSentenceView *sentence, BOOL enable);
+static void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *narc);
+static void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence);
+static void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence);
+static void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence);
+static int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *window);
+static void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence);
+static void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence);
+static void EasyChatMessageParser_Free(EasyChatMessageParser *parser);
+static int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest);
+static void EasyChatSentenceView_GetSlotTextPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *textPos);
+static void EasyChatSentenceView_GetSlotCursorPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *cursorPos);
+static void EasyChatSentenceView_ClearSlot(Window *window, const EasyChatWordSlotPos *slot);
+static void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *window, const EasyChatWordSlotPos *slot, int word);
+static void EasyChatSentenceView_SetCursorActive(EasyChatSentenceView *sentence, BOOL active);
+static void EasyChatMenuView_Unload(EasyChatMenuView *menuView);
+static void EasyChatMenuView_DrawListButton(EasyChatMenuView *menuView, BOOL draw);
+static void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig);
+static void EasyChatMenuView_CreateCursor(EasyChatMenuView *menuView);
+static void EasyChatMenuView_DrawModeButton(EasyChatMenuView *menuView, int mode, int selected);
+static void EasyChatMenuView_ModeSwitchTask(SysTask *task, void *data);
+static u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
+static u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
+static u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile);
+static void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories);
+static void EasyChatWordListView_CreateSprites(EasyChatWordListView *wordList);
+static void EasyChatWordListView_ClearRows(EasyChatWordListView *wordList, int rows);
+static void EasyChatWordListView_ResetScroll(EasyChatWordListView *wordList);
+static void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u32 y);
+static void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames);
+static BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll);
+static void EasyChatBgScroll_Task(SysTask *task, void *data);
+static void EasyChatBlendFade_StartAlpha(EasyChatBlendFade *fade, u32 plane1, u32 plane2, s32 start, s32 target, s32 frames);
+static BOOL EasyChatBlendFade_IsAlphaDone(EasyChatBlendFade *fade);
+static void EasyChatBlendFade_AlphaTask(SysTask *task, void *data);
+static void EasyChatBlendFade_StartBrightness(EasyChatBlendFade *fade, u32 plane, s32 start, s32 target, s32 frames);
+static BOOL EasyChatBlendFade_IsBrightnessDone(EasyChatBlendFade *fade);
+static void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data);
+static u32 EasyChatInitialGrid_GetCount(void);
+static void EasyChatInitialGrid_GetLetter(u32 cell, String *dest);
+static void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y);
 
 // Sentence panel
 
@@ -428,7 +344,7 @@ void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc) {
     }
 }
 
-void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence) {
+static void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence) {
     BgConfig *bgConfig = EasyChatAppView_GetBgConfig(sentence->view);
 
     if (GX_GetVCount() < 48) {
@@ -438,7 +354,7 @@ void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence) {
     }
 }
 
-void EasyChatSentenceView_ToggleScrollWindows(EasyChatSentenceView *sentence, BOOL enable) {
+static void EasyChatSentenceView_ToggleScrollWindows(EasyChatSentenceView *sentence, BOOL enable) {
 #pragma unused(sentence)
     volatile u16 *winIn = (volatile u16 *)0x04000048;
     volatile u16 *winOut = (volatile u16 *)0x0400004A;
@@ -505,7 +421,7 @@ BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence) {
     return FALSE;
 }
 
-void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *narc) {
+static void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *narc) {
     NNSG2dPaletteData *paletteData;
     void *file;
 
@@ -517,7 +433,7 @@ void EasyChatSentenceView_LoadPalettes(EasyChatSentenceView *sentence, NARC *nar
     Heap_Free(file);
 }
 
-void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence) {
+static void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence) {
     if (EasyChatApp_GetType(sentence->app) == EASY_CHAT_TYPE_MESSAGE) {
         u32 palette = EasyChatApp_GetMsgBank(sentence->app) + 1;
         GX_LoadBGPltt(&sentence->palettes[palette * 16], 0, 32);
@@ -528,7 +444,7 @@ void EasyChatSentenceView_ApplyPalette(EasyChatSentenceView *sentence) {
     }
 }
 
-void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence) {
+static void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence) {
     switch (EasyChatApp_GetType(sentence->app)) {
     case EASY_CHAT_TYPE_WORD:
         sentence->slotPositions[0].x = 104;
@@ -548,7 +464,7 @@ void EasyChatSentenceView_InitSlotPositions(EasyChatSentenceView *sentence) {
     }
 }
 
-void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence) {
+static void EasyChatSentenceView_CreateSprites(EasyChatSentenceView *sentence) {
     SpriteResourcesHeader mainHeader, subHeader;
     EasyChatWordSlotPos pos;
 
@@ -618,7 +534,7 @@ void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, Touchscr
     hitbox->rect.bottom = hitbox->rect.top + 16;
 }
 
-int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *window) {
+static int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *window) {
     String *string;
     int x, y;
     int count, running;
@@ -668,7 +584,7 @@ int EasyChatSentenceView_DrawMessage(EasyChatSentenceView *sentence, Window *win
     return count;
 }
 
-void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence) {
+static void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence) {
     u8 index = EasyChatApp_GetMessageIndex(sentence->app);
 
     if (sentence->sliderThumb != NULL) {
@@ -676,7 +592,7 @@ void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentence) {
     }
 }
 
-void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence) {
+static void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence) {
     parser->string = EasyChatApp_GetMessageString(sentence->app, HEAP_ID_35);
     parser->cursor = String_cstr(parser->string);
     if (*parser->cursor == 0xFFFE) {
@@ -686,11 +602,11 @@ void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceV
     }
 }
 
-void EasyChatMessageParser_Free(EasyChatMessageParser *parser) {
+static void EasyChatMessageParser_Free(EasyChatMessageParser *parser) {
     String_Delete(parser->string);
 }
 
-int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest) {
+static int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest) {
     const u16 *start = parser->cursor;
     int result;
 
@@ -743,24 +659,24 @@ int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *dest) {
     return result;
 }
 
-void EasyChatSentenceView_GetSlotTextPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *textPos) {
+static void EasyChatSentenceView_GetSlotTextPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *textPos) {
     textPos->x = slot->x - 48;
     textPos->y = slot->y - 8;
 }
 
-void EasyChatSentenceView_GetSlotCursorPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *cursorPos) {
+static void EasyChatSentenceView_GetSlotCursorPos(const EasyChatWordSlotPos *slot, EasyChatWordSlotPos *cursorPos) {
     cursorPos->x = slot->x + 24;
     cursorPos->y = slot->y + 8;
 }
 
-void EasyChatSentenceView_ClearSlot(Window *window, const EasyChatWordSlotPos *slot) {
+static void EasyChatSentenceView_ClearSlot(Window *window, const EasyChatWordSlotPos *slot) {
     EasyChatWordSlotPos pos;
 
     EasyChatSentenceView_GetSlotTextPos(slot, &pos);
     FillWindowPixelRect(window, 14, pos.x, pos.y, 96, 16);
 }
 
-void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *window, const EasyChatWordSlotPos *slot, int word) {
+static void EasyChatSentenceView_DrawWord(EasyChatSentenceView *sentence, Window *window, const EasyChatWordSlotPos *slot, int word) {
     EasyChatWordSlotPos pos;
 
     if (word != EC_WORD_NULL) {
@@ -884,7 +800,7 @@ void EasyChatSentenceView_MoveCursorToSlot(EasyChatSentenceView *sentence, u16 s
     EasyChatSentenceView_SetCursorActive(sentence, TRUE);
 }
 
-void EasyChatSentenceView_SetCursorActive(EasyChatSentenceView *sentence, BOOL active) {
+static void EasyChatSentenceView_SetCursorActive(EasyChatSentenceView *sentence, BOOL active) {
     if (sentence->numSlots != 0) {
         if (active) {
             Sprite_SetAnimCtrlSeq(sentence->slotCursor, 0);
@@ -978,7 +894,7 @@ void EasyChatMenuView_Load(EasyChatMenuView *menuView, NARC *narc) {
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void EasyChatMenuView_Unload(EasyChatMenuView *menuView) {
+static void EasyChatMenuView_Unload(EasyChatMenuView *menuView) {
     BgConfig *bgConfig = EasyChatAppView_GetBgConfig(menuView->view);
     Window *window;
     int i;
@@ -1019,7 +935,7 @@ void EasyChatMenuView_DrawMainButtons(EasyChatMenuView *menuView, BOOL draw, BOO
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void EasyChatMenuView_DrawListButton(EasyChatMenuView *menuView, BOOL draw) {
+static void EasyChatMenuView_DrawListButton(EasyChatMenuView *menuView, BOOL draw) {
     BgConfig *bgConfig = EasyChatAppView_GetBgConfig(menuView->view);
     int x;
 
@@ -1036,7 +952,7 @@ void EasyChatMenuView_DrawListButton(EasyChatMenuView *menuView, BOOL draw) {
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig) {
+static void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig) {
     u32 i;
     const WindowTemplate *template;
     Window *window;
@@ -1054,7 +970,7 @@ void EasyChatMenuView_AddWindows(EasyChatMenuView *menuView, BgConfig *bgConfig)
     FillWindowPixelBuffer(&menuView->windows[1], 14);
 }
 
-void EasyChatMenuView_CreateCursor(EasyChatMenuView *menuView) {
+static void EasyChatMenuView_CreateCursor(EasyChatMenuView *menuView) {
     SpriteResourcesHeader header;
 
     EasyChatAppView_InitSpriteHeader(menuView->view, &header, 0, 0);
@@ -1090,13 +1006,13 @@ void EasyChatMenuView_MoveCursor(EasyChatMenuView *menuView, u16 cursor) {
     Sprite_SetAnimCtrlSeq(menuView->cursor, 2);
 }
 
-void EasyChatMenuView_DrawModeButton(EasyChatMenuView *menuView, int mode, int selected) {
+static void EasyChatMenuView_DrawModeButton(EasyChatMenuView *menuView, int mode, int selected) {
     NNSG2dScreenData *screen = menuView->modesScreen;
 
     CopyToBgTilemapRect(menuView->bgConfig, GF_BG_LYR_MAIN_3, mode * 17 + 2, 0, 11, 6, screen->rawData, 0, selected * 6, screen->screenWidth >> 3, screen->screenHeight >> 3);
 }
 
-void EasyChatMenuView_ModeSwitchTask(SysTask *task, void *data) {
+static void EasyChatMenuView_ModeSwitchTask(SysTask *task, void *data) {
     EasyChatModeSwitch *modeSwitch = data;
 
     switch (modeSwitch->state) {
@@ -1187,7 +1103,7 @@ void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc) {
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_1);
 }
 
-u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
+static u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
     Window window;
     int y;
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0282_bin, HEAP_ID_35);
@@ -1223,7 +1139,7 @@ u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConf
     return tile;
 }
 
-u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
+static u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
     Window window;
     String *string;
     u32 count;
@@ -1250,12 +1166,12 @@ u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig
     return tile + 200;
 }
 
-u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
+static u32 EasyChatCategoryView_LoadGfxDummy(EasyChatCategoryView *categories, BgConfig *bgConfig, u32 tile) {
 #pragma unused(categories, bgConfig)
     return tile;
 }
 
-void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories) {
+static void EasyChatCategoryView_CreateCursor(EasyChatCategoryView *categories) {
     SpriteResourcesHeader header;
 
     EasyChatAppView_InitSpriteHeader(categories->view, &header, 0, 0);
@@ -1457,7 +1373,7 @@ void EasyChatWordListView_Load(EasyChatWordListView *wordList) {
     ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
 }
 
-void EasyChatWordListView_CreateSprites(EasyChatWordListView *wordList) {
+static void EasyChatWordListView_CreateSprites(EasyChatWordListView *wordList) {
     SpriteResourcesHeader header;
 
     EasyChatAppView_InitSpriteHeader(wordList->view, &header, 0, 0);
@@ -1609,7 +1525,7 @@ BOOL EasyChatWordListView_UpdateScroll(EasyChatWordListView *wordList) {
     }
 }
 
-void EasyChatWordListView_ClearRows(EasyChatWordListView *wordList, int rows) {
+static void EasyChatWordListView_ClearRows(EasyChatWordListView *wordList, int rows) {
     int start;
     int end;
 
@@ -1628,13 +1544,13 @@ void EasyChatWordListView_ClearRows(EasyChatWordListView *wordList, int rows) {
     }
 }
 
-void EasyChatWordListView_ResetScroll(EasyChatWordListView *wordList) {
+static void EasyChatWordListView_ResetScroll(EasyChatWordListView *wordList) {
     wordList->scrollY = 48;
     wordList->topRow = 0;
     BgSetPosTextAndCommit(wordList->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, 0);
 }
 
-void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u32 y) {
+static void EasyChatWordListView_DrawWord(EasyChatWordListView *wordList, int index, u32 y) {
     u32 x, height;
 
     EasyChatApp_GetCategoryWord(wordList->app, index, wordList->word);
@@ -1677,7 +1593,8 @@ void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *na
     BgCommitTilemapBufferToVram(pageButtons->bgConfig, GF_BG_LYR_SUB_1);
 }
 
-void EasyChatPageButtonsView_SetEnabled(void) {
+void EasyChatPageButtonsView_SetEnabled(EasyChatPageButtonsView *pageButtons, BOOL enabled) {
+#pragma unused(pageButtons, enabled)
 }
 
 void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int button, int pressed) {
@@ -1686,7 +1603,7 @@ void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, in
 
 // BG scroll and blend fade tasks
 
-void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames) {
+static void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int layer, int axis, int delta, int frames) {
     scroll->bgConfig = bgConfig;
     scroll->layer = layer;
     if (axis == 0) {
@@ -1704,7 +1621,7 @@ void EasyChatBgScroll_Start(EasyChatBgScroll *scroll, BgConfig *bgConfig, int la
     scroll->state = 0;
 }
 
-BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll) {
+static BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll) {
     switch (scroll->state) {
     case 0:
         scroll->task = EasyChatAppView_CreateVBlankTask(EasyChatBgScroll_Task, scroll, 0);
@@ -1723,7 +1640,7 @@ BOOL EasyChatBgScroll_Update(EasyChatBgScroll *scroll) {
     return FALSE;
 }
 
-void EasyChatBgScroll_Task(SysTask *task, void *data) {
+static void EasyChatBgScroll_Task(SysTask *task, void *data) {
     EasyChatBgScroll *scroll = data;
 
     if (scroll->frames != 0) {
@@ -1735,7 +1652,7 @@ void EasyChatBgScroll_Task(SysTask *task, void *data) {
     }
 }
 
-void EasyChatBlendFade_StartAlpha(EasyChatBlendFade *fade, u32 plane1, u32 plane2, s32 start, s32 target, s32 frames) {
+static void EasyChatBlendFade_StartAlpha(EasyChatBlendFade *fade, u32 plane1, u32 plane2, s32 start, s32 target, s32 frames) {
     fade->plane1 = plane1;
     fade->plane2 = plane2;
     fade->frames = frames;
@@ -1746,7 +1663,7 @@ void EasyChatBlendFade_StartAlpha(EasyChatBlendFade *fade, u32 plane1, u32 plane
     fade->task = EasyChatAppView_CreateVBlankTask(EasyChatBlendFade_AlphaTask, fade, 0);
 }
 
-BOOL EasyChatBlendFade_IsAlphaDone(EasyChatBlendFade *fade) {
+static BOOL EasyChatBlendFade_IsAlphaDone(EasyChatBlendFade *fade) {
     if (fade->done == 0) {
         if (fade->frames == 0) {
             SysTask_Destroy(fade->task);
@@ -1759,7 +1676,7 @@ BOOL EasyChatBlendFade_IsAlphaDone(EasyChatBlendFade *fade) {
     return FALSE;
 }
 
-void EasyChatBlendFade_AlphaTask(SysTask *task, void *data) {
+static void EasyChatBlendFade_AlphaTask(SysTask *task, void *data) {
     EasyChatBlendFade *fade = data;
     s32 value;
 
@@ -1776,7 +1693,7 @@ void EasyChatBlendFade_AlphaTask(SysTask *task, void *data) {
     G2_SetBlendAlpha(fade->plane1, fade->plane2, value, 16 - value);
 }
 
-void EasyChatBlendFade_StartBrightness(EasyChatBlendFade *fade, u32 plane, s32 start, s32 target, s32 frames) {
+static void EasyChatBlendFade_StartBrightness(EasyChatBlendFade *fade, u32 plane, s32 start, s32 target, s32 frames) {
     G2_SetBlendBrightness(plane, start);
     fade->plane1 = plane;
     fade->frames = frames;
@@ -1787,7 +1704,7 @@ void EasyChatBlendFade_StartBrightness(EasyChatBlendFade *fade, u32 plane, s32 s
     fade->task = EasyChatAppView_CreateVBlankTask(EasyChatBlendFade_BrightnessTask, fade, 0);
 }
 
-BOOL EasyChatBlendFade_IsBrightnessDone(EasyChatBlendFade *fade) {
+static BOOL EasyChatBlendFade_IsBrightnessDone(EasyChatBlendFade *fade) {
     if (fade->done == 0) {
         if (fade->frames == 0) {
             SysTask_Destroy(fade->task);
@@ -1800,7 +1717,7 @@ BOOL EasyChatBlendFade_IsBrightnessDone(EasyChatBlendFade *fade) {
     return FALSE;
 }
 
-void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data) {
+static void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data) {
     EasyChatBlendFade *fade = data;
     s32 value;
 
@@ -1816,16 +1733,16 @@ void EasyChatBlendFade_BrightnessTask(SysTask *task, void *data) {
 
 // Initial letter grid
 
-u32 EasyChatInitialGrid_GetCount(void) {
+static u32 EasyChatInitialGrid_GetCount(void) {
     return EC_INITIAL_GRID_CELLS;
 }
 
-void EasyChatInitialGrid_GetLetter(u32 cell, String *dest) {
+static void EasyChatInitialGrid_GetLetter(u32 cell, String *dest) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
     CopyU16ArrayToStringN(dest, &gEasyChatInitialGridCells[cell].letter, 2);
 }
 
-void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y) {
+static void EasyChatInitialGrid_GetPosition(u32 cell, u32 *x, u32 *y) {
     GF_ASSERT(cell < EC_INITIAL_GRID_CELLS);
     *x = gEasyChatInitialGridCells[cell].x;
     *y = gEasyChatInitialGridCells[cell].y;

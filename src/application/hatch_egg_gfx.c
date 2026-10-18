@@ -36,8 +36,6 @@ static SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, 
 static void HatchEggParticles_EmitterCB(SPLEmitter *emitter);
 static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern);
 
-u32 GetUserFrameGfx2PaletteMember(u32 frame);
-
 static const GraphicsModes sHatchEggAppGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
     .bgMode = GX_BGMODE_0,

@@ -217,7 +217,7 @@ static void AprijuiceScene_SetEmitterPosition(SPLEmitter *emitter);
 static SPLEmitter *AprijuiceScene_CreateParticleSystem(enum HeapID heapId);
 static void AprijuiceScene_InitParticles(AprijuiceScene *scene);
 static void AprijuiceScene_FreeParticles(AprijuiceScene *scene);
-void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan);
+static void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan);
 
 static const u32 sAprijuiceButtonColors[] = {
     MAKE_TEXT_COLOR(3, 15, 0),
@@ -1522,7 +1522,7 @@ static void AprijuiceScene_Init3D(void) {
     reg_G3_VIEWPORT = 0xBFFF0000;
 }
 
-void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan) { // vramMan is unused
+static void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan) { // vramMan is unused
     u32 tex = NNS_GfdDefaultFuncAllocTexVram(0x8000, FALSE, 0);
     u32 pltt = NNS_GfdDefaultFuncAllocPlttVram(0xA0, FALSE, 0);
     if (tex == 0) {

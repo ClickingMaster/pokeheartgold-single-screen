@@ -11,11 +11,6 @@ void VsRecorder_OnDressUpUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnDressUpListReceived(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnBoxUploaded(void *arg, GlobalTerminalNetError *error);
 void VsRecorder_OnBoxListReceived(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_OnRankingsHeaderReceived(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_OnVideoUploaded(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_OnVideoDownloaded(void *arg, GlobalTerminalNetError *error);
-void VsRecorder_OnVideoSaveReported(void *arg, GlobalTerminalNetError *error);
 
 // the Global Terminal client is embedded in the work (only started in the Global Terminal modes)
 static inline GlobalTerminalNet *VsRecorder_NetClient(VsRecorderWork *work) {

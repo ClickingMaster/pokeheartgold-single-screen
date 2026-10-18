@@ -9,6 +9,7 @@
 #include "constants/species.h"
 
 #include "application/choose_starter/choose_starter_sub_res.naix"
+#include "application/pokewalker/pokewalker_app.h"
 #include "application/pokewalker/pokewalker_modes2.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0274.h"
@@ -41,7 +42,6 @@ extern const OverlayManagerTemplate sEventLogAppTemplate;
 extern const BgTemplate sBoxDisplayBgTemplateSub1;
 extern const BgTemplate sBoxDisplayBgTemplateSub3;
 
-void PokewalkerApp_ShowMonPicture(PokewalkerApp *app);
 BOOL IsFanfarePlayingOrWaiting(void);
 void NNS_G2dInitOamManagerModule(void);
 

@@ -24,6 +24,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
+#include "wireless_status_icon.h"
 
 enum VsRecorderVideoListDownloadVideoStep {
     VIDEO_LIST_DOWNLOAD_VIDEO_STEP_HIDE_INFO,

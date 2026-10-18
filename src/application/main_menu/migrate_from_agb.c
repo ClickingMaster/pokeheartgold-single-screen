@@ -59,8 +59,6 @@ BOOL NNS_G2dGetUnpackedBGCharacterData(void *file, NNSG2dCharacterData **charDat
 BOOL OS_IsTickAvailable(void);
 void OS_InitTick(void);
 u64 OS_GetTick(void);
-void Sys_SetSoftResetDisableFlag(int flag);
-void Sys_ClearSoftResetDisableFlag(int flag);
 
 extern int gAgbCartridgePulledOutInSleep;
 extern MigrateFromAgbIcon *sMigrateFromAgbIcons;

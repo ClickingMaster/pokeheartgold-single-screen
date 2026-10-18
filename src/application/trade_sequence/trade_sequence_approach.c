@@ -89,8 +89,6 @@ enum TradeSequenceApproachFlightState {
 
 typedef BOOL (*TradeSequenceApproachStateFunc)(TradeSequenceApproach *approach, u32 *state);
 
-void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
-
 static BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, u32 *state);
 static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state);
 static void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach);

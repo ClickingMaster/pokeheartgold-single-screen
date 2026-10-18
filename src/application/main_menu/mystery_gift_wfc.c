@@ -7,9 +7,11 @@
 
 #include "comm_wireless.h"
 #include "heap.h"
+#include "network_overlay_loader.h"
 #include "overlay_manager.h"
 #include "system.h"
 #include "wifi_connection.h"
+#include "wireless_status_icon.h"
 
 // Mystery Gift > Get via Nintendo Wi-Fi Connection: connects, downloads the gift file of the game (into
 // MysteryGiftAppData.wfcRecvBuffer) and disconnects. MysteryGiftApp_RunWfcDownload runs MysteryGiftWfc_Run every frame.
@@ -71,12 +73,6 @@ int DWC_NdGetProgress(u32 *received, u32 *total);
 void Comm_InitDwc(int heapID);
 void CommState_InitMysteryGiftWfcSession(SaveData *saveData);
 void CommState_FreeMysteryGiftWfcSession(void);
-void LoadDwcOverlay(void);
-void UnloadDwcOverlay(void);
-void LoadOVY38(void);
-void UnloadOVY38(void);
-void WirelessStatusIcon_Create(void);
-void WirelessStatusIcon_Destroy(void);
 void CommWireless_Terminate(void);
 
 extern MysteryGiftWfcStatus sMysteryGiftWfcStatus;

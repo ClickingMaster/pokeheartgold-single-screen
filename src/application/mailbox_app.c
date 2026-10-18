@@ -21,12 +21,11 @@
 #include "party.h"
 #include "player_data.h"
 #include "pm_string.h"
+#include "render_text.h"
 #include "render_window.h"
 #include "sprite_system.h"
 #include "touchscreen_list_menu.h"
 #include "yes_no_prompt.h"
-
-void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
 void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
 void BgCellManager_DrawCell(BgCellManager *manager, int index);

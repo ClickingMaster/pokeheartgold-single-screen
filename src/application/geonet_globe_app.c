@@ -169,40 +169,40 @@ typedef union GeonetGlobePosition {
     int values[2];
 } GeonetGlobePosition;
 
-void GeonetGlobe_SetGfxBanks(void);
-void GeonetGlobe_SetGraphicsModes(void);
-void GeonetGlobe_LoadLocations(GeonetGlobe *globe);
-void GeonetGlobe_SetLocation(GeonetGlobe *globe, u32 index, s32 x, s32 y, u16 country, u16 region);
-void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe);
-int GeonetGlobe_GetPlaceIndex(int country);
-void GeonetGlobe_HandleTouch(GeonetGlobe *globe);
-void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u32 *distY);
-void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc);
-void GeonetGlobe_FreeBgs(GeonetGlobe *globe);
-BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait);
-void GeonetGlobe_ListMenuMoveCursor(struct ListMenu *menu, s32 index, u8 onInit);
-void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, const GeonetGlobeMenuEntry *entries);
-void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, int msgBank, const u8 *msgIds, u32 count);
-void GeonetGlobe_DestroyListMenu(GeonetGlobe *globe);
-void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe);
-void GeonetGlobe_ShowLocation(GeonetGlobe *globe, int country, int region);
-void GeonetGlobe_HideLocationWindow(GeonetGlobe *globe);
-BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index);
-void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe);
-void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc);
-void GeonetGlobe_FreeModels(GeonetGlobe *globe);
-void GeonetGlobe_ResetTransform(GeonetGlobe *globe);
-void GeonetGlobe_InitCamera(GeonetGlobe *globe);
-void GeonetGlobe_InitLight(GeonetGlobe *globe);
-void GeonetGlobe_CalcGlobeRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle);
-void GeonetGlobe_CalcLocationRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle);
-BOOL GeonetGlobe_HandleRotationInput(GeonetGlobe *globe, u32 newKeys, u32 heldKeys);
-BOOL GeonetGlobe_StepZoom(GeonetGlobe *globe);
-void GeonetGlobe_Draw(GeonetGlobe *globe);
-BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, String *regionName, enum HeapID heapID);
-BOOL GeonetGlobe_CountryHasRegions(int country);
-void GeonetGlobe_WrapPosition(int *position);
-int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b);
+static void GeonetGlobe_SetGfxBanks(void);
+static void GeonetGlobe_SetGraphicsModes(void);
+static void GeonetGlobe_LoadLocations(GeonetGlobe *globe);
+static void GeonetGlobe_SetLocation(GeonetGlobe *globe, u32 index, s32 x, s32 y, u16 country, u16 region);
+static void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe);
+static int GeonetGlobe_GetPlaceIndex(int country);
+static void GeonetGlobe_HandleTouch(GeonetGlobe *globe);
+static void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u32 *distY);
+static void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc);
+static void GeonetGlobe_FreeBgs(GeonetGlobe *globe);
+static BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait);
+static void GeonetGlobe_ListMenuMoveCursor(struct ListMenu *menu, s32 index, u8 onInit);
+static void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, const GeonetGlobeMenuEntry *entries);
+static void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, int msgBank, const u8 *msgIds, u32 count);
+static void GeonetGlobe_DestroyListMenu(GeonetGlobe *globe);
+static void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe);
+static void GeonetGlobe_ShowLocation(GeonetGlobe *globe, int country, int region);
+static void GeonetGlobe_HideLocationWindow(GeonetGlobe *globe);
+static BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index);
+static void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe);
+static void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc);
+static void GeonetGlobe_FreeModels(GeonetGlobe *globe);
+static void GeonetGlobe_ResetTransform(GeonetGlobe *globe);
+static void GeonetGlobe_InitCamera(GeonetGlobe *globe);
+static void GeonetGlobe_InitLight(GeonetGlobe *globe);
+static void GeonetGlobe_CalcGlobeRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle);
+static void GeonetGlobe_CalcLocationRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle);
+static BOOL GeonetGlobe_HandleRotationInput(GeonetGlobe *globe, u32 newKeys, u32 heldKeys);
+static BOOL GeonetGlobe_StepZoom(GeonetGlobe *globe);
+static void GeonetGlobe_Draw(GeonetGlobe *globe);
+static BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, String *regionName, enum HeapID heapID);
+static BOOL GeonetGlobe_CountryHasRegions(int country);
+static void GeonetGlobe_WrapPosition(int *position);
+static int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b);
 
 static const WindowTemplate sGeonetPlaceListWindowTemplate = {
     .bgId = GF_BG_LYR_SUB_2,
@@ -735,17 +735,17 @@ BOOL GeonetGlobe_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void GeonetGlobe_SetGfxBanks(void) {
+static void GeonetGlobe_SetGfxBanks(void) {
     GraphicsBanks banks = sGeonetGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
-void GeonetGlobe_SetGraphicsModes(void) {
+static void GeonetGlobe_SetGraphicsModes(void) {
     GraphicsModes modes = sGeonetGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 }
 
-void GeonetGlobe_LoadLocations(GeonetGlobe *globe) {
+static void GeonetGlobe_LoadLocations(GeonetGlobe *globe) {
     u32 countrySize;
     u32 regionSize;
     NARC *narc;
@@ -791,7 +791,7 @@ void GeonetGlobe_LoadLocations(GeonetGlobe *globe) {
     NARC_Delete(narc);
 }
 
-void GeonetGlobe_SetLocation(GeonetGlobe *globe, u32 index, s32 x, s32 y, u16 country, u16 region) {
+static void GeonetGlobe_SetLocation(GeonetGlobe *globe, u32 index, s32 x, s32 y, u16 country, u16 region) {
     GeonetGlobe *work;
     MtxFx33 rotation;
     GeonetGlobeAngle angle;
@@ -810,7 +810,7 @@ void GeonetGlobe_SetLocation(GeonetGlobe *globe, u32 index, s32 x, s32 y, u16 co
     work->locations[index].region = (s16)region;
 }
 
-void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe) {
+static void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe) {
     u32 i;
     GeonetGlobe *shifted;
 
@@ -825,12 +825,12 @@ void GeonetGlobe_MarkPlayerLocation(GeonetGlobe *globe) {
     }
 }
 
-int GeonetGlobe_GetPlaceIndex(int country) {
+static int GeonetGlobe_GetPlaceIndex(int country) {
     return LocationGmmDatIndexGetByCountryMsgNo(country);
 }
 
 // Turns touch input into button bits: the two touch buttons (B / X), a short tap (A) and drags (D-pad).
-void GeonetGlobe_HandleTouch(GeonetGlobe *globe) {
+static void GeonetGlobe_HandleTouch(GeonetGlobe *globe) {
     u32 button = 0;
 
     globe->touch.input = 0;
@@ -886,7 +886,7 @@ void GeonetGlobe_HandleTouch(GeonetGlobe *globe) {
     }
 }
 
-void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u32 *distY) {
+static void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u32 *distY) {
     u32 horizontal = 0;
     u32 vertical = 0;
     int dx = 0;
@@ -916,7 +916,7 @@ void GeonetGlobe_GetTouchDrag(int x, int y, u32 *dirX, u32 *distX, u32 *dirY, u3
     *distY = dy & 0x3F;
 }
 
-void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
+static void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     u16 colors[4];
     String *string;
 
@@ -969,7 +969,7 @@ void GeonetGlobe_InitBgs(GeonetGlobe *globe, NARC *narc) {
     FontID_Release(4);
 }
 
-void GeonetGlobe_FreeBgs(GeonetGlobe *globe) {
+static void GeonetGlobe_FreeBgs(GeonetGlobe *globe) {
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_EXIT_BUTTON]);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_INFO_BUTTON]);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_MESSAGE]);
@@ -979,7 +979,7 @@ void GeonetGlobe_FreeBgs(GeonetGlobe *globe) {
     FreeBgTilemapBuffer(globe->bgConfig, GF_BG_LYR_SUB_3);
 }
 
-BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait) {
+static BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait) {
     BOOL done = FALSE;
 
     switch (globe->printState) {
@@ -1006,13 +1006,13 @@ BOOL GeonetGlobe_PrintMessage(GeonetGlobe *globe, int msgId, BOOL noWait) {
     return done;
 }
 
-void GeonetGlobe_ListMenuMoveCursor(struct ListMenu *menu, s32 index, u8 onInit) {
+static void GeonetGlobe_ListMenuMoveCursor(struct ListMenu *menu, s32 index, u8 onInit) {
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, const GeonetGlobeMenuEntry *entries) {
+static void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, const GeonetGlobeMenuEntry *entries) {
     ListMenuTemplate template;
     int i;
 
@@ -1036,7 +1036,7 @@ void GeonetGlobe_CreateMenu(GeonetGlobe *globe, Window *window, const WindowTemp
     CopyWindowToVram(window);
 }
 
-void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, int msgBank, const u8 *msgIds, u32 count) {
+static void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const WindowTemplate *windowTemplate, const ListMenuTemplate *menuTemplate, int msgBank, const u8 *msgIds, u32 count) {
     ListMenuTemplate template;
     MsgData *msgData;
     u32 i;
@@ -1058,14 +1058,14 @@ void GeonetGlobe_CreatePlaceList(GeonetGlobe *globe, Window *window, const Windo
     CopyWindowToVram(window);
 }
 
-void GeonetGlobe_DestroyListMenu(GeonetGlobe *globe) {
+static void GeonetGlobe_DestroyListMenu(GeonetGlobe *globe) {
     EraseFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_LIST], FALSE);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_LIST]);
     DestroyListMenu(globe->listMenu, NULL, NULL);
     ListMenuItems_Delete(globe->listMenuItems);
 }
 
-void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe) {
+static void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe) {
     String *string = String_New(1024, globe->heapID);
     String *template = String_New(1024, globe->heapID);
 
@@ -1082,7 +1082,7 @@ void GeonetGlobe_ShowPlayerLocation(GeonetGlobe *globe) {
     CopyWindowToVram(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION]);
 }
 
-void GeonetGlobe_ShowLocation(GeonetGlobe *globe, int country, int region) {
+static void GeonetGlobe_ShowLocation(GeonetGlobe *globe, int country, int region) {
     String *countryName = String_New(64, globe->heapID);
     String *regionName = String_New(64, globe->heapID);
 
@@ -1099,13 +1099,13 @@ void GeonetGlobe_ShowLocation(GeonetGlobe *globe, int country, int region) {
     CopyWindowToVram(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION]);
 }
 
-void GeonetGlobe_HideLocationWindow(GeonetGlobe *globe) {
+static void GeonetGlobe_HideLocationWindow(GeonetGlobe *globe) {
     EraseFrameAndWindow1(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION], FALSE);
     RemoveWindow(&globe->windows[GEONET_GLOBE_WINDOW_LOCATION]);
 }
 
 // Finds the seen location nearest to the globe's current orientation (within 128 units in x and y).
-BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index) {
+static BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index) {
     BOOL found = FALSE;
     int posX = globe->rotation.x;
     int posY = globe->rotation.y;
@@ -1168,7 +1168,7 @@ BOOL GeonetGlobe_FindNearestLocation(GeonetGlobe *globe, int *index) {
     return found;
 }
 
-void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe) {
+static void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe) {
     String *countryName;
     String *regionName;
     int index;
@@ -1199,7 +1199,7 @@ void GeonetGlobe_UpdateLocationName(GeonetGlobe *globe) {
     }
 }
 
-void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc) {
+static void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc) {
     globe->globeFile = NARC_AllocAndReadWholeMember(narc, 0, globe->heapID);
     GF3dRender_InitObjFromHeader(&globe->globeObj, &globe->globeMdl, (NNSG3dResFileHeader **)&globe->globeFile);
     globe->markerFiles[3] = NARC_AllocAndReadWholeMember(narc, 1, globe->heapID);
@@ -1212,7 +1212,7 @@ void GeonetGlobe_LoadModels(GeonetGlobe *globe, NARC *narc) {
     GF3dRender_InitObjFromHeader(&globe->markerObjs[2], &globe->markerMdls[2], (NNSG3dResFileHeader **)&globe->markerFiles[2]);
 }
 
-void GeonetGlobe_FreeModels(GeonetGlobe *globe) {
+static void GeonetGlobe_FreeModels(GeonetGlobe *globe) {
     Heap_Free(globe->markerFiles[2]);
     Heap_Free(globe->markerFiles[1]);
     Heap_Free(globe->cursorFile);
@@ -1220,7 +1220,7 @@ void GeonetGlobe_FreeModels(GeonetGlobe *globe) {
     Heap_Free(globe->globeFile);
 }
 
-void GeonetGlobe_ResetTransform(GeonetGlobe *globe) {
+static void GeonetGlobe_ResetTransform(GeonetGlobe *globe) {
     globe->translation.x = 0;
     globe->translation.y = 0;
     globe->translation.z = 0;
@@ -1235,7 +1235,7 @@ void GeonetGlobe_ResetTransform(GeonetGlobe *globe) {
     globe->markerScale.z = FX32_ONE;
 }
 
-void GeonetGlobe_InitCamera(GeonetGlobe *globe) {
+static void GeonetGlobe_InitCamera(GeonetGlobe *globe) {
     VecFx32 target = { 0, 0, 0 };
     VecFx32 position = sGeonetCameraPosition;
 
@@ -1252,14 +1252,14 @@ void GeonetGlobe_InitCamera(GeonetGlobe *globe) {
     }
 }
 
-void GeonetGlobe_InitLight(GeonetGlobe *globe) {
+static void GeonetGlobe_InitLight(GeonetGlobe *globe) {
     globe->lightVector.x = 0;
     globe->lightVector.y = 0;
     globe->lightVector.z = -0xFFF;
     NNS_G3dGlbLightVector(GX_LIGHTID_0, (s16)globe->lightVector.x, (s16)globe->lightVector.y, (s16)globe->lightVector.z);
 }
 
-void GeonetGlobe_CalcGlobeRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle) {
+static void GeonetGlobe_CalcGlobeRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle) {
     MtxFx33 mtx;
 
     MTX_RotY33_(dst, FX_SinIdx((u16)angle->y), FX_CosIdx((u16)angle->y));
@@ -1269,7 +1269,7 @@ void GeonetGlobe_CalcGlobeRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle) 
     MTX_Concat33(dst, &mtx, dst);
 }
 
-void GeonetGlobe_CalcLocationRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle) {
+static void GeonetGlobe_CalcLocationRotation(MtxFx33 *dst, const GeonetGlobeAngle *angle) {
     MtxFx33 mtx;
 
     MTX_RotY33_(dst, FX_SinIdx((u16)angle->x), FX_CosIdx((u16)angle->x));
@@ -1279,7 +1279,7 @@ void GeonetGlobe_CalcLocationRotation(MtxFx33 *dst, const GeonetGlobeAngle *angl
     MTX_Concat33(dst, &mtx, dst);
 }
 
-BOOL GeonetGlobe_HandleRotationInput(GeonetGlobe *globe, u32 newKeys, u32 heldKeys) {
+static BOOL GeonetGlobe_HandleRotationInput(GeonetGlobe *globe, u32 newKeys, u32 heldKeys) {
     BOOL moved = FALSE;
     u16 stepY;
     u16 stepX;
@@ -1356,7 +1356,7 @@ BOOL GeonetGlobe_HandleRotationInput(GeonetGlobe *globe, u32 newKeys, u32 heldKe
     return moved;
 }
 
-BOOL GeonetGlobe_StepZoom(GeonetGlobe *globe) {
+static BOOL GeonetGlobe_StepZoom(GeonetGlobe *globe) {
     fx32 distance = Camera_GetDistance(globe->camera);
     BOOL done = FALSE;
 
@@ -1386,7 +1386,7 @@ BOOL GeonetGlobe_StepZoom(GeonetGlobe *globe) {
     return done;
 }
 
-void GeonetGlobe_Draw(GeonetGlobe *globe) {
+static void GeonetGlobe_Draw(GeonetGlobe *globe) {
     MtxFx33 globeRotation = sGeonetGlobeRotationInit;
 
     switch (globe->drawState) {
@@ -1421,7 +1421,7 @@ void GeonetGlobe_Draw(GeonetGlobe *globe) {
     }
 }
 
-BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, String *regionName, enum HeapID heapID) {
+static BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, String *regionName, enum HeapID heapID) {
     BOOL hasRegions;
     int placeIndex = GeonetGlobe_GetPlaceIndex(country);
     enum HeapID heap = *(volatile enum HeapID *)&heapID;
@@ -1442,14 +1442,14 @@ BOOL GeonetGlobe_GetLocationNames(int country, int region, String *countryName, 
     return hasRegions;
 }
 
-BOOL GeonetGlobe_CountryHasRegions(int country) {
+static BOOL GeonetGlobe_CountryHasRegions(int country) {
     if (GeonetGlobe_GetPlaceIndex(country) != 0) {
         return TRUE;
     }
     return FALSE;
 }
 
-void GeonetGlobe_WrapPosition(int *position) {
+static void GeonetGlobe_WrapPosition(int *position) {
     if (position[0] >= 0) {
         position[0] %= 65535;
     } else {
@@ -1462,7 +1462,7 @@ void GeonetGlobe_WrapPosition(int *position) {
     }
 }
 
-int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b) {
+static int GeonetGlobe_CalcDistance(const GeonetGlobePoint *a, const GeonetGlobePoint *b) {
     int dx = a->x - b->x;
     int dy;
     int half;

@@ -133,10 +133,10 @@ static void WobbuffetPop_QueuePumpEvent(WobbuffetPop *game, const WobbuffetPopPu
 void TextOBJ_SetPalOffset(TextOBJ *object);
 void SetBothScreensBrightnessByColor(u16 color);
 
-u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
-u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+static u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+static u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+static u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
+static u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target);
 u32 WobbuffetPop_GetEventCommandSize(void);
 u32 WobbuffetPop_GetPlayerValueCommandSize(void);
 void WobbuffetPop_RecvEvent(int netId, int size, void *data, void *arg);
@@ -1416,12 +1416,12 @@ static u32 WobbuffetPopBonusTarget_Run(WobbuffetPop *game, WobbuffetPopBonusRing
     return sWobbuffetPopBonusTargetStateFuncs[target->state](game, ring, target);
 }
 
-u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
+static u32 WobbuffetPopBonusTarget_Idle(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     target->atFront = FALSE;
     return TRUE;
 }
 
-u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
+static u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     struct {
         s16 y;
         s16 x;
@@ -1494,7 +1494,7 @@ u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     return TRUE;
 }
 
-u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
+static u32 WobbuffetPopBonusTarget_Walk(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     s32 bob;
     s32 x;
     s32 y;
@@ -1529,7 +1529,7 @@ static inline void WobbuffetPopBonusTarget_StartHop(WobbuffetPopBonusTarget *tar
     target->step = (u8)(target->step + 1);
 }
 
-u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
+static u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring, WobbuffetPopBonusTarget *target) {
     s16 originX;
     s16 originY;
     s16 x;

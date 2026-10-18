@@ -12,7 +12,6 @@
 BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
 // main ARM9 (no public header)
-void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 
 extern BattleRecord *gBattleRecord;

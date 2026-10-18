@@ -1,17 +1,20 @@
 #ifndef POKEHEARTGOLD_EASY_CHAT_APP_INTERNAL_H
 #define POKEHEARTGOLD_EASY_CHAT_APP_INTERNAL_H
 
+#include "bg_window.h"
+#include "easy_chat_menu.h"
 #include "heap.h"
 #include "menu_input_state.h"
 #include "pm_string.h"
+#include "sprite.h"
 #include "sprite_system.h"
+#include "sys_task.h"
 #include "touchscreen.h"
 
 // Overlay 102 (easy chat): the app logic (EasyChatApp) drives a screen object (EasyChatAppView) by starting
 // numbered view commands; the view reads the app state back through the getters below.
 typedef struct EasyChatApp EasyChatApp;
 typedef struct EasyChatAppView EasyChatAppView;
-typedef struct ECMenu ECMenu;
 
 // what the app edits (EasyChatArgs type, EasyChatApp_GetType)
 enum {
@@ -72,6 +75,11 @@ Sprite *EasyChatAppView_GetSliderSprite(EasyChatAppView *view);
 u32 EasyChatAppView_GetNumWordSlots(EasyChatAppView *view);
 void EasyChatAppView_GetWordSlotHitbox(EasyChatAppView *view, TouchscreenHitbox *hitbox, u8 slot);
 int EasyChatAppView_GetYesNoResult(EasyChatAppView *view);
+BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view);
+SpriteList *EasyChatAppView_GetSpriteList(EasyChatAppView *view);
+SysTask *EasyChatAppView_CreateVBlankTask(SysTaskFunc func, void *data, u32 priority);
+void EasyChatAppView_InitSpriteHeader(EasyChatAppView *view, SpriteResourcesHeader *header, u32 index, u8 priority);
+Sprite *EasyChatAppView_CreateSprite(EasyChatAppView *view, SpriteResourcesHeader *header, s32 x, s32 y, u32 priority, NNS_G2D_VRAM_TYPE whichScreen);
 u8 EasyChatInitialGrid_GetUp(u32 category);
 u8 EasyChatInitialGrid_GetDown(u32 category);
 u8 EasyChatInitialGrid_GetLeft(u32 category);

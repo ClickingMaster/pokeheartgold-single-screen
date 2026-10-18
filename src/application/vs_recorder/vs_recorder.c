@@ -40,7 +40,6 @@ void *OrbitCursor_New(VsRecorderBannerArgs args, SpriteSystem *spriteSystem, Spr
 BOOL OrbitCursor_Start(void *banner, int colorScheme);
 BOOL OrbitCursor_SetActive(void *banner, int active);
 BOOL OrbitCursor_SetVisible(void *banner, int flag);
-void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 

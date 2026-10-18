@@ -23,6 +23,7 @@
 #include "text.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
+#include "wireless_status_icon.h"
 
 // VS Recorder video transfers: the end of the video search (download a found video, back from playing it), the
 // video number search (VS_RECORDER_SCREEN_SEARCH_NUMBER), sending the own video (VS_RECORDER_SCREEN_SEND_VIDEO),

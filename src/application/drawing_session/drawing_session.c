@@ -128,29 +128,29 @@ static BOOL DrawingSession_ShowYesNo(DrawingSessionWork *work, const YesNoPrompt
 static void DrawingSession_HideYesNo(DrawingSessionWork *work);
 static BOOL DrawingSession_IsYesNoAreaTouched(DrawingSessionWork *work);
 
-int DrawingSession_StateDraw(DrawingSessionWork *work, int state);
-int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state);
-int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state);
-int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state);
-int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state);
-int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitLeaveReply(DrawingSessionWork *work, int state);
-int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state);
-int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state);
-int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state);
-int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state);
-int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state);
-int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state);
-int DrawingSession_StateNone(DrawingSessionWork *work, int state);
-int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state);
-int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state);
-int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state);
+static int DrawingSession_StateDraw(DrawingSessionWork *work, int state);
+static int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state);
+static int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state);
+static int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state);
+static int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state);
+static int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitLeaveReply(DrawingSessionWork *work, int state);
+static int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state);
+static int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state);
+static int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state);
+static int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state);
+static int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state);
+static int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state);
+static int DrawingSession_StateNone(DrawingSessionWork *work, int state);
+static int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state);
+static int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state);
+static int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state);
 
 static const TouchscreenHitbox sDrawingSessionCanvasHitbox[] = {
     { .rect = { 16, 136, 8, 248 } },
@@ -875,7 +875,7 @@ static void DrawingSession_SetQuitButtonPressed(Sprite **buttons, BOOL pressed) 
     }
 }
 
-int DrawingSession_StateDraw(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateDraw(DrawingSessionWork *work, int state) {
     DrawingSession_HandleTouch(work);
     if (Comm_GetLocalNetId() == 0) {
         if (DrawingSession_CountPlayerProfiles() != 1) {
@@ -894,7 +894,7 @@ static void DrawingSession_UpdateCanvas(DrawingSessionWork *work) {
     DrawingSession_DrawStrokes(&work->canvasWindow, work->strokes, work->lastPoints, FALSE);
 }
 
-int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state) {
     if (work->joinedMember == Comm_GetLocalNetId()) {
         DrawingSession_PrintMessage(work, msg_0252_00013, 0);
     } else {
@@ -907,7 +907,7 @@ int DrawingSession_StateMemberJoined(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state) {
     int i;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
         Sprite_SetDrawFlag(work->penCursors[i], FALSE);
@@ -915,7 +915,7 @@ int DrawingSession_StateHidePenCursors(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
     G2_BlendNone();
     DrawingSession_UpdateMaxEntries(work, 1);
     DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
@@ -924,7 +924,7 @@ int DrawingSession_StateResumeDrawing(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state) {
     YesNoPromptTemplate template;
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         MI_CpuFill8(&template, 0, sizeof(YesNoPromptTemplate));
@@ -944,7 +944,7 @@ int DrawingSession_StateShowQuitPrompt(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
     u8 packet[4];
     u32 memberCount;
 
@@ -1001,14 +1001,14 @@ int DrawingSession_StateHandleQuitPrompt(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateWaitLeaveReply(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitLeaveReply(DrawingSessionWork *work, int state) {
     work->ownStroke.count = 0;
     work->networkCounter = 0;
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
-int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
     u8 packet[4];
 
     work->ownStroke.count = 0;
@@ -1031,7 +1031,7 @@ int DrawingSession_StateLeaveAccepted(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state) {
     work->ownStroke.count = 0;
     work->leaveRequested = 0;
     DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_DRAW);
@@ -1040,14 +1040,14 @@ int DrawingSession_StateLeaveRefused(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state) {
+static int DrawingSession_StatePrintSessionEnded(DrawingSessionWork *work, int state) {
     DrawingSession_PrintMessage(work, msg_0252_00006, 1);
     DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_SESSION_ENDED_MSG);
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
-int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         work->counter = 0;
         DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_AND_FADE_OUT);
@@ -1056,7 +1056,7 @@ int DrawingSession_StateWaitSessionEndedMsg(DrawingSessionWork *work, int state)
     return state;
 }
 
-int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state) {
     work->counter++;
     if (work->counter > 60) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)0x10, (enum FadeType)0x10, RGB_BLACK, 0x10, 1, HEAP_ID_39);
@@ -1066,7 +1066,7 @@ int DrawingSession_StateWaitAndFadeOut(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state) {
     YesNoPromptTemplate template;
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         template.bgConfig = work->bgConfig;
@@ -1085,7 +1085,7 @@ int DrawingSession_StateShowDisbandPrompt(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state) {
     YesNoResponse input;
 
     input = YesNoPrompt_HandleInput(work->yesNoPrompt);
@@ -1116,7 +1116,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
     return state;
 }
 
-int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
+static int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
     BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
     DrawingSession_PrintMessage(work, msg_0252_00003, 1);
     DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_LEADER_LEFT_MSG);
@@ -1124,7 +1124,7 @@ int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_SYNC_AND_FADE_OUT);
         LinkSync_StartSync(200);
@@ -1133,7 +1133,7 @@ int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) {
     if (LinkSync_IsSynced(200) || Comm_CountConnected() == 1) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)0x10, (enum FadeType)0x10, RGB_BLACK, 0x10, 1, HEAP_ID_39);
         state = DRAWING_SESSION_MAIN_WAIT_FADE_OUT;
@@ -1142,19 +1142,19 @@ int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) 
     return state;
 }
 
-int DrawingSession_StateNone(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateNone(DrawingSessionWork *work, int state) {
 #pragma unused(work)
     return state;
 }
 
-int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state) {
+static int DrawingSession_StatePrintNoMembers(DrawingSessionWork *work, int state) {
     DrawingSession_PrintMessage(work, msg_0252_00005, 1);
     DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_NO_MEMBERS_MSG);
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
-int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         DrawingSession_SetNextSubState(work, DRAWING_SESSION_SUB_STATE_WAIT_AND_FADE_OUT);
     }
@@ -1162,7 +1162,7 @@ int DrawingSession_StateWaitNoMembersMsg(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
+static int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
     if (work->printerId != 0xFF && !DrawingSession_IsPrinterDone(work->printerId)) {
         RemoveTextPrinter(work->printerId);
     }
@@ -1177,7 +1177,7 @@ int DrawingSession_StatePrintMemberLeft(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
     if (work->leaveConnectedCount != 0) {
         if (work->leaveConnectedCount != Comm_CountConnected()) {
             work->leaveConnectedCount = 0;
@@ -1191,7 +1191,7 @@ int DrawingSession_StateWaitMemberLeftMsg(DrawingSessionWork *work, int state) {
     return state;
 }
 
-int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state) {
+static int DrawingSession_StateWaitAfterMemberLeft(DrawingSessionWork *work, int state) {
     if (work->leaveConnectedCount != 0) {
         if (work->leaveConnectedCount != Comm_CountConnected()) {
             work->leaveConnectedCount = 0;

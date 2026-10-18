@@ -4,6 +4,7 @@
 
 #include "application/wii_message/wii_message_settings_internal.h"
 #include "application/wii_message/wii_number.h"
+#include "gts/gts_server.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0188.h"
 #include "msgdata/msg/msg_0775.h"
@@ -174,11 +175,6 @@ void DWC_ShutdownGHTTP(void);
 void DWC_ShutdownFriendsMatch(void);
 s32 WifiConnection_ClassifyErrorCode(s32 errorCode, u32 errorType);
 u64 DWC_CreateFriendKey(void *userData);
-void GtsServer_Init(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
-void GtsServer_Exit(void);
-BOOL GtsServer_IsRequestDone(void);
-int GtsServer_GetResult(void);
-void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
 enum WiiMessageSettingsScreenMainState {
     WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_IN,
@@ -208,46 +204,46 @@ static int WiiMessageSettingsScreen_GetAlignedX(Window *window, String *string, 
 static int WiiMessageSettingsScreen_PrintAligned(Window *window, String *string, int x, int y, int alignment, u32 color);
 static void WiiMessageSettingsScreen_PrintError(WiiMessageSettingsScreen *screen, int msgId);
 static void WiiMessageSettingsScreen_PrintErrorCode(WiiMessageSettingsScreen *screen, int msgId, int errorCode);
-BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartCheckWiiNumber(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_DeleteSettings(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartWiiNumberEntry(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartRegistrationCodeEntry(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_SaveSettings(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_SaveGame(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ShowConnectionError(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ShowYesNoPrompt(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitMessage(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *screen);
-BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen);
-void WiiMessageSettingsScreen_RegisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
-void WiiMessageSettingsScreen_UnregisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
+static BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartCheckWiiNumber(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_DeleteSettings(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartWiiNumberEntry(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartRegistrationCodeEntry(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_SaveSettings(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_SaveGame(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ShowConnectionError(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ShowYesNoPrompt(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitMessage(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *screen);
+static BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen);
+static void WiiMessageSettingsScreen_RegisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
+static void WiiMessageSettingsScreen_UnregisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit);
 
 static const WiiMessageSettingsWindowRect sWiiMessageSettingsRegisteredMenuWindow = {
     .x = 0xB,
@@ -835,7 +831,7 @@ static YesNoPrompt *WiiMessageSettingsScreen_CreateYesNoPrompt(BgConfig *bgConfi
     return prompt;
 }
 
-BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen) {
     ListMenuTemplate template;
     const WiiMessageSettingsWindowRect *rect;
     const WiiMessageSettingsMenuEntry *entries;
@@ -906,14 +902,14 @@ BOOL WiiMessageSettingsScreen_MainMenu(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartCheckWiiNumber(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartCheckWiiNumber(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_CHECK_PASSWORD, WII_MESSAGE_SETTINGS_APP_SET_PASSWORD);
     WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_CHECK_PASSWORD);
     screen->state = WMS_STATE_FADE_OUT;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *screen) {
     int input;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -949,7 +945,7 @@ BOOL WiiMessageSettingsScreen_SetMessageReception(WiiMessageSettingsScreen *scre
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_DeleteSettings(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_DeleteSettings(WiiMessageSettingsScreen *screen) {
     int input;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -1171,7 +1167,7 @@ static int WiiMessageSettingsScreen_RunExplanation(WiiMessageSettingsScreen *scr
     return 0;
 }
 
-BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen) {
     int input;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -1223,14 +1219,14 @@ BOOL WiiMessageSettingsScreen_RegisterWiiNumber(WiiMessageSettingsScreen *screen
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartWiiNumberEntry(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartWiiNumberEntry(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_WII_NUMBER_ENTRY, 0);
     WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_CHECK_WII_NUMBER_ENTRY);
     screen->state = WMS_STATE_FADE_OUT;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *screen) {
     switch (WiiMessageSettings_GetWiiNumberEntryState(screen->app)) {
     case WII_NUMBER_ENTRY_CANCELLED:
         screen->state = WMS_STATE_MAIN_MENU;
@@ -1247,7 +1243,7 @@ BOOL WiiMessageSettingsScreen_CheckWiiNumberEntry(WiiMessageSettingsScreen *scre
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen) {
     int input;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -1290,7 +1286,7 @@ BOOL WiiMessageSettingsScreen_ConfirmConnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *screen) {
     int input = YesNoPrompt_HandleInput(screen->yesNoPrompt);
 
     if (input == YESNORESPONSE_YES) {
@@ -1308,13 +1304,13 @@ BOOL WiiMessageSettingsScreen_HandleConnectYesNo(WiiMessageSettingsScreen *scree
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_PrintDisconnecting(WiiMessageSettingsScreen *screen) {
     WiiMessageSettingsScreen_PrintMessage(screen, screen->wfcErrorMsgData, msg_0800_00026, 1, 0xF0F);
     WiiMessageSettingsScreen_SetState(screen, WMS_STATE_WAIT_MESSAGE, WMS_STATE_DISCONNECT);
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
     CommState_FreeWiiMessageWfcSession();
     DWC_CleanupInet();
     WirelessStatusIcon_Destroy();
@@ -1327,13 +1323,13 @@ BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_PrintDisconnected(WiiMessageSettingsScreen *screen) {
     WiiMessageSettingsScreen_PrintMessage(screen, screen->wfcErrorMsgData, msg_0800_00027, 1, 0xF0F);
     WiiMessageSettingsScreen_SetState(screen, WMS_STATE_WAIT_MESSAGE_AND_DELAY, WMS_STATE_FADE_OUT);
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
     switch (screen->subState) {
     case 0:
         CommState_InitWiiMessageWfcSession(screen->app->saveData);
@@ -1358,7 +1354,7 @@ BOOL WiiMessageSettingsScreen_StartConnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
     struct {
         int error;
         u32 errorType;
@@ -1407,13 +1403,13 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartAuth(WiiMessageSettingsScreen *screen) {
     DWC_NASLoginAsync();
     screen->state = WMS_STATE_WAIT_AUTH;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     int errorCode;
     u32 errorType;
 
@@ -1466,7 +1462,7 @@ BOOL WiiMessageSettingsScreen_WaitAuth(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen) {
     void *wifiList = Save_FriendRoster_Get(screen->app->saveData);
     SysInfo *sysInfo = Save_SysInfo_Get(screen->app->saveData);
     void *userData = FriendRoster_GetUserData(wifiList);
@@ -1484,7 +1480,7 @@ BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *scree
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_InitRequest(screen->app);
     WiiMessageSettings_SetRequestWiiAddress(screen->app);
     GtsServer_RequestSetProfile(&screen->app->request, &screen->app->responseStatus);
@@ -1493,7 +1489,7 @@ BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen) {
     if (GtsServer_IsRequestDone()) {
         int result = GtsServer_GetResult();
         screen->timeoutTimer = 0;
@@ -1578,7 +1574,7 @@ BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen 
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
         return FALSE;
     }
@@ -1611,14 +1607,14 @@ BOOL WiiMessageSettingsScreen_RegistrationCodeSent(WiiMessageSettingsScreen *scr
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartRegistrationCodeEntry(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartRegistrationCodeEntry(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_SetNextApp(screen->app, WII_MESSAGE_SETTINGS_APP_REGISTRATION_CODE_ENTRY, WII_MESSAGE_SETTINGS_APP_WII_NUMBER_ENTRY);
     WiiMessageSettings_SetScreenStartState(screen->app, WMS_STATE_CONFIRM_REGISTRATION_CODE);
     screen->state = WMS_STATE_FADE_OUT_ONLINE;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen *screen) {
     int input;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -1648,7 +1644,7 @@ BOOL WiiMessageSettingsScreen_ConfirmCancelRegistration(WiiMessageSettingsScreen
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *screen) {
     int result;
 
     if (WiiMessageSettings_GetRegistrationCode(screen->app) == -1) {
@@ -1750,7 +1746,7 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
         return FALSE;
     }
@@ -1769,7 +1765,7 @@ BOOL WiiMessageSettingsScreen_StartPasswordEntry(WiiMessageSettingsScreen *scree
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_SaveSettings(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_SaveSettings(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
         return FALSE;
     }
@@ -1789,7 +1785,7 @@ BOOL WiiMessageSettingsScreen_SaveSettings(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_SaveGame(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_SaveGame(WiiMessageSettingsScreen *screen) {
     switch (screen->subState) {
     case 0:
         WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00032, 0, 0xF0F);
@@ -1825,7 +1821,7 @@ BOOL WiiMessageSettingsScreen_SaveGame(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
         return FALSE;
     }
@@ -1867,14 +1863,14 @@ BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_ShowConnectionError(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ShowConnectionError(WiiMessageSettingsScreen *screen) {
     s32 msgId = WifiConnection_ClassifyErrorCode(-screen->connectionErrorCode, screen->connectionErrorType);
     WiiMessageSettingsScreen_PrintErrorCode(screen, msgId, -screen->connectionErrorCode);
     screen->state = WMS_STATE_WAIT_CLOSE_ERROR;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen) {
     u32 keys = gSystem.newKeys;
 
     if ((keys & PAD_BUTTON_A) || (keys & PAD_BUTTON_B)) {
@@ -1884,7 +1880,7 @@ BOOL WiiMessageSettingsScreen_WaitCloseError(WiiMessageSettingsScreen *screen) {
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen) {
     if (screen->state != WMS_STATE_FADE_OUT_ONLINE) {
         CommState_FreeWiiMessageWfcSession();
     }
@@ -1895,13 +1891,13 @@ BOOL WiiMessageSettingsScreen_FadeOut(WiiMessageSettingsScreen *screen) {
     return TRUE;
 }
 
-BOOL WiiMessageSettingsScreen_ShowYesNoPrompt(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ShowYesNoPrompt(WiiMessageSettingsScreen *screen) {
     screen->yesNoPrompt = WiiMessageSettingsScreen_CreateYesNoPrompt(screen->bgConfig, 0x234, 0);
     screen->state = screen->nextState;
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *screen) {
     int fromGtsMsgs = 0;
     int msgId;
 
@@ -1970,7 +1966,7 @@ BOOL WiiMessageSettingsScreen_ShowRegistrationError(WiiMessageSettingsScreen *sc
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen) {
     switch (screen->subState) {
     case 0:
         WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00015, 1, 0xF0F);
@@ -2009,14 +2005,14 @@ BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitMessage(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitMessage(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == FALSE) {
         screen->state = screen->nextState;
     }
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *screen) {
     if (!WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId)) {
         if (screen->timer > 30) {
             screen->state = screen->nextState;
@@ -2026,7 +2022,7 @@ BOOL WiiMessageSettingsScreen_WaitMessageAndDelay(WiiMessageSettingsScreen *scre
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_WaitMessageAndShowYesNo(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == FALSE) {
         screen->yesNoPrompt = WiiMessageSettingsScreen_CreateYesNoPrompt(screen->bgConfig, 0x234, 0);
         screen->state = screen->nextState;
@@ -2055,7 +2051,7 @@ static BOOL WiiMessageSettingsScreen_IsPrinterActive(u32 printerId) {
     return TRUE;
 }
 
-BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *screen) {
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
         return FALSE;
     }
@@ -2071,7 +2067,7 @@ BOOL WiiMessageSettingsScreen_PrintWiiNumberReentry(WiiMessageSettingsScreen *sc
     return FALSE;
 }
 
-BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen) {
+static BOOL WiiMessageSettingsScreen_CheckPassword(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings *app = screen->app;
 
     if (WiiMessageSettingsScreen_IsPrinterActive(screen->textPrinterId) == TRUE) {
@@ -2145,13 +2141,13 @@ static void WiiMessageSettingsScreen_PrintErrorCode(WiiMessageSettingsScreen *sc
     WiiMessageSettingsScreen_PrintError(screen, msgId);
 }
 
-void WiiMessageSettingsScreen_RegisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit) {
+static void WiiMessageSettingsScreen_RegisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit) {
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-void WiiMessageSettingsScreen_UnregisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit) {
+static void WiiMessageSettingsScreen_UnregisteredMenuMoveCursor(ListMenu *menu, s32 index, BOOL onInit) {
     if (onInit == FALSE) {
         PlaySE(SEQ_SE_DP_SELECT);
     }

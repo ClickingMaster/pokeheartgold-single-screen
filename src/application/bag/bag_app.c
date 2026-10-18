@@ -1687,13 +1687,13 @@ static int BagApp_State_RunItemAction(BagApp *app) {
 }
 
 int BagApp_ItemAction_Use(BagApp *app) {
-    void *useFunc;
+    ItemCheckUseFunc checkUseFunc;
     int result;
 
     BagApp_ShowCancelButton(app, FALSE);
     BagApp_HideCursor(app);
-    useFunc = GetItemFieldUseFunc(2, GetItemAttr(app->bagView->itemId, ITEMATTR_FIELDUSEFUNC, HEAP_ID_6));
-    if (useFunc != NULL && (result = ((int (*)(ItemCheckUseData *))useFunc)(app->bagView->checkUseData)) != 0) {
+    checkUseFunc = GetItemFieldUseFunc(USE_ITEM_TASK_CHECK, GetItemAttr(app->bagView->itemId, ITEMATTR_FIELDUSEFUNC, HEAP_ID_6));
+    if (checkUseFunc != NULL && (result = checkUseFunc(app->bagView->checkUseData)) != 0) {
         GetItemUseErrorMessage(app->profile, app->msgBuf, app->bagView->itemId, (enum ItemUseError)result, HEAP_ID_6);
         app->printerId = BagApp_PrintMessage(app, FALSE);
         return BAG_STATE_WAIT_ITEM_MESSAGE;
