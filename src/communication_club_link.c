@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "communication_club_link_internal.h"
 #include "communication_player_state.h"
 #include "script_manager.h"
@@ -362,12 +364,12 @@ void CommClubLink_StartBattle(void) {
     }
     battleType = 5;
     switch (CommState_GetLinkMode()) {
-    case 4:
-    case 5:
+    case COMM_TYPE_MULTI_BATTLE_1:
+    case COMM_TYPE_MULTI_BATTLE_2:
         battleType = 15;
         break;
-    case 2:
-    case 38:
+    case COMM_TYPE_DOUBLE_BATTLE:
+    case COMM_TYPE_FLAT_BATTLE_2:
         battleType = 7;
         break;
     }

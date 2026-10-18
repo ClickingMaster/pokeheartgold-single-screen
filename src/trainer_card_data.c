@@ -17,6 +17,13 @@
 #include "task.h"
 #include "union_room_talk.h"
 
+enum LinkTrainerCardState {
+    LINK_TRAINER_CARD_SEND,
+    LINK_TRAINER_CARD_WAIT_PARTNER,
+    LINK_TRAINER_CARD_LAUNCH = 10,
+    LINK_TRAINER_CARD_WAIT_APP,
+};
+
 typedef struct LinkTrainerCardTaskEnv {
     int state;
     TrainerCardData *partnerCard;
@@ -221,7 +228,7 @@ static void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *field
 
 void LinkTrainerCard_StartTask(FieldSystem *fieldSystem) {
     LinkTrainerCardTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LinkTrainerCardTaskEnv));
-    env->state = 0;
+    env->state = LINK_TRAINER_CARD_SEND;
     env->partnerCard = UnionRoom_AllocTrainerCards(fieldSystem->unionRoom);
     TaskManager_Call(fieldSystem->taskman, Task_LinkTrainerCard, env);
 }
@@ -231,20 +238,20 @@ static BOOL Task_LinkTrainerCard(TaskManager *taskManager) {
     LinkTrainerCardTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (env->state) {
-    case 0:
+    case LINK_TRAINER_CARD_SEND:
         UnionRoom_SendTrainerCard(fieldSystem->unionRoom);
-        env->state = 1;
-    case 1:
+        env->state = LINK_TRAINER_CARD_WAIT_PARTNER;
+    case LINK_TRAINER_CARD_WAIT_PARTNER:
         if (env->partnerCard->received != 0) {
-            env->state = 10;
+            env->state = LINK_TRAINER_CARD_LAUNCH;
         }
         break;
-    case 10:
+    case LINK_TRAINER_CARD_LAUNCH:
         MI_CpuCopy8(env->partnerCard, &env->args, sizeof(TrainerCardData));
         TrainerCard_LaunchApp(fieldSystem, &env->args);
-        env->state = 11;
+        env->state = LINK_TRAINER_CARD_WAIT_APP;
         break;
-    case 11:
+    case LINK_TRAINER_CARD_WAIT_APP:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             UnionRoom_FreeTrainerCards(fieldSystem->unionRoom);
             Heap_Free(env);

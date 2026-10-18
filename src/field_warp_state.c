@@ -46,6 +46,16 @@ struct FlyTaskEnv {
 u32 GetSpawnIdForFlyMap(u32 mapId);
 void FlypointFlagAction(FieldSystem *fieldSystem, u32 mapId);
 
+enum FlyTaskState {
+    FLY_TASK_WAIT_FOLLOW_MON,
+    FLY_TASK_CHECK_FOLLOW_MON,
+    FLY_TASK_PLAY_CRY,
+    FLY_TASK_WAIT_CRY,
+    FLY_TASK_START_MOVEMENT,
+    FLY_TASK_START_CUT_IN,
+    FLY_TASK_WARP,
+};
+
 static const MovementScriptCommand sFollowMovement[] = {
     { MOVEMENT_UNK_73,   1 },
     { 33,                1 },
@@ -109,10 +119,10 @@ void FieldSystem_ResetStateOnWarp(FieldSystem *fieldSystem) {
         SysFlagDefogClear(flags);
     }
     player = LocalFieldData_GetPlayer(Save_LocalFieldData_Get(fieldSystem->saveData));
-    if (player->state == 1 && !MapHeader_IsBikeAllowed(fieldSystem->location->mapId)) {
-        player->state = 0;
-    } else if (player->state == 2) {
-        player->state = 0;
+    if (player->state == PLAYER_STATE_CYCLING && !MapHeader_IsBikeAllowed(fieldSystem->location->mapId)) {
+        player->state = PLAYER_STATE_WALKING;
+    } else if (player->state == PLAYER_STATE_SURFING) {
+        player->state = PLAYER_STATE_WALKING;
     }
 }
 
@@ -158,21 +168,21 @@ BOOL FieldTask_Fly(TaskManager *task) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(task);
     struct FlyTaskEnv *env = TaskManager_GetEnvironment(task);
     switch (env->state) {
-    case 0:
+    case FLY_TASK_WAIT_FOLLOW_MON:
         TaskManager_Call(task, Task_WaitFollowMonMovement, NULL);
         env->state++;
         break;
-    case 1: {
+    case FLY_TASK_CHECK_FOLLOW_MON: {
         int avatarState = PlayerAvatar_GetState(fieldSystem->playerAvatar);
-        if (avatarState == 1 || avatarState == 2) {
-            env->state = 4;
+        if (avatarState == PLAYER_STATE_CYCLING || avatarState == PLAYER_STATE_SURFING) {
+            env->state = FLY_TASK_START_MOVEMENT;
             env->flag = 0;
             break;
         }
     }
         if (env->partySlot != GetIdxOfFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData))) {
             FollowMon_StartRecall(env->fieldSystem);
-            env->state = 4;
+            env->state = FLY_TASK_START_MOVEMENT;
             env->flag = 0;
             break;
         }
@@ -185,29 +195,29 @@ BOOL FieldTask_Fly(TaskManager *task) {
             }
             FollowMon_JumpOnSpot(fieldSystem, kind);
             env->flag = 1;
-            env->state = 2;
+            env->state = FLY_TASK_PLAY_CRY;
         } else {
-            env->state = 4;
+            env->state = FLY_TASK_START_MOVEMENT;
             env->flag = 0;
         }
         break;
-    case 2: {
+    case FLY_TASK_PLAY_CRY: {
         u32 species = GetMonData(env->mon, MON_DATA_SPECIES, NULL);
         u32 form = GetMonData(env->mon, MON_DATA_FORM, NULL);
         PlayCry((u16)species, (u8)form);
         env->state++;
         break;
     }
-    case 3:
+    case FLY_TASK_WAIT_CRY:
         if (!IsCryFinished()) {
             env->state++;
         }
         break;
-    case 4:
+    case FLY_TASK_START_MOVEMENT:
         env->movement = EventObjectMovementMan_Create(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar), sFollowMovement);
         env->state++;
         break;
-    case 5:
+    case FLY_TASK_START_CUT_IN:
         if (EventObjectMovementMan_IsFinish(env->movement)) {
             EventObjectMovementMan_Delete(env->movement);
             if (env->flag == 0) {
@@ -218,7 +228,7 @@ BOOL FieldTask_Fly(TaskManager *task) {
             env->state++;
         }
         break;
-    case 6:
+    case FLY_TASK_WARP:
         if (FieldMoveCutIn_IsFinished(env->effect)) {
             LocalFieldData *local;
             u16 map;

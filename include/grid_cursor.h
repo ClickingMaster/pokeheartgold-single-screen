@@ -14,6 +14,14 @@ typedef struct GridPosition {
     u8 padding;
 } GridPosition;
 
+enum GridExit {
+    GRID_EXIT_NONE,
+    GRID_EXIT_LEFT,
+    GRID_EXIT_RIGHT,
+    GRID_EXIT_UP,
+    GRID_EXIT_DOWN,
+};
+
 typedef struct GridMove {
     u32 type;
     u8 value;

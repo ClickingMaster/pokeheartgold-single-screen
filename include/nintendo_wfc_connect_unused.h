@@ -82,6 +82,12 @@ enum NintendoWfcUnusedState {
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 
+enum NintendoWfcUnusedPaletteScreens {
+    NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS,
+    NINTENDO_WFC_UNUSED_PALETTE_MAIN_SCREEN,
+    NINTENDO_WFC_UNUSED_PALETTE_SUB_SCREEN,
+};
+
 typedef struct NintendoWfcUnusedPaletteCycle {
     SysTask *task;               // 0x000
     int active;                  // 0x004

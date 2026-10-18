@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "dwc/dwc_account_internal.h"
 #include "dwc/dwc_main_internal.h"
 #include "dwc/net_common_internal.h"
@@ -13,6 +15,12 @@
 #include "frontier_save_access.h"
 #include "heap.h"
 #include "voice_chat.h"
+
+enum WifiMatchType {
+    WIFI_MATCH_TYPE_ANYBODY,
+    WIFI_MATCH_TYPE_HOST,
+    WIFI_MATCH_TYPE_CLIENT,
+};
 
 // 0x1108 bytes, 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
 struct WifiConnection {
@@ -256,7 +264,7 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     gWifiConnection->state = WIFI_CONNECTION_STATE_MATCHING;
     gWifiConnection->maxPlayers = maxPlayers;
     DWC_ConnectToAnybodyAsync((u8)maxPlayers, gWifiConnection->matchFilter, WifiConnection_AnybodyMatchedCallback, 0, WifiConnection_EvalPlayerCallback, 0);
-    gWifiConnection->matchType = 0;
+    gWifiConnection->matchType = WIFI_MATCH_TYPE_ANYBODY;
     DWC_SetUserSendCallback(WifiConnection_SendDoneCallback);
     DWC_SetUserRecvCallback(WifiConnection_ReceiveCallback);
     DWC_SetConnectionClosedCallback(WifiConnection_ConnectionClosedCallback, NULL);
@@ -280,7 +288,7 @@ int WifiConnection_Update(int success) {
         if (success) {
             gWifiConnection->state = WIFI_CONNECTION_STATE_MATCHED;
         }
-        if (gWifiConnection->matchType == 2 && gWifiConnection->targetFriendIndex >= 0 && gWifiConnection->friendStatus[gWifiConnection->targetFriendIndex] != 6) {
+        if (gWifiConnection->matchType == WIFI_MATCH_TYPE_CLIENT && gWifiConnection->targetFriendIndex >= 0 && gWifiConnection->friendStatus[gWifiConnection->targetFriendIndex] != DWC_STATUS_MATCH_SC_SV) {
             gWifiConnection->state = WIFI_CONNECTION_STATE_CANCEL_REQUESTED;
         }
         break;
@@ -624,22 +632,22 @@ int WifiConnection_CheckError(void) {
         case 6:
             if (gWifiConnection) {
                 switch ((u32)gWifiConnection->state) {
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 12:
-                case 16:
-                case 17:
-                case 18:
+                case WIFI_CONNECTION_STATE_LOGGING_IN:
+                case WIFI_CONNECTION_STATE_LOGGED_IN:
+                case WIFI_CONNECTION_STATE_MATCHING:
+                case WIFI_CONNECTION_STATE_MATCHED:
+                case WIFI_CONNECTION_STATE_CONNECTED:
+                case WIFI_CONNECTION_STATE_CONNECTED_VOICE:
+                case WIFI_CONNECTION_STATE_CANCELLED:
+                case WIFI_CONNECTION_STATE_ERROR:
+                case WIFI_CONNECTION_STATE_DISCONNECTING:
+                case WIFI_CONNECTION_STATE_DISCONNECTED:
+                case WIFI_CONNECTION_STATE_TIMED_OUT:
                     DWC_ShutdownFriendsMatch();
-                case 0:
-                case 1:
-                case 2:
-                    if (CommState_GetLinkMode() != 33) {
+                case WIFI_CONNECTION_STATE_INIT:
+                case WIFI_CONNECTION_STATE_WAIT_LINK:
+                case WIFI_CONNECTION_STATE_LOGIN:
+                    if (CommState_GetLinkMode() != COMM_TYPE_WIFI_PLAZA) {
                         DWC_CleanupInet();
                     }
                     break;
@@ -1011,10 +1019,10 @@ int WifiConnection_StartMatchmaking(int friendIndex, int maxPlayers, BOOL altern
     gWifiConnection->matchInProgress = 1;
     if (friendIndex < 0) {
         result = DWC_SetupGameServer(maxPlayers, WifiConnection_GameServerMatchedCallback, NULL, WifiConnection_NewClientCallback, NULL);
-        gWifiConnection->matchType = 1;
+        gWifiConnection->matchType = WIFI_MATCH_TYPE_HOST;
     } else {
         result = DWC_ConnectToGameServerAsync(friendIndex, WifiConnection_ConnectedToServerCallback, NULL, WifiConnection_NewClientCallback, NULL);
-        gWifiConnection->matchType = 2;
+        gWifiConnection->matchType = WIFI_MATCH_TYPE_CLIENT;
     }
     if (!result) {
         gWifiConnection->retryCount++;

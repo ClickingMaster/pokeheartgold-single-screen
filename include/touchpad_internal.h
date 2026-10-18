@@ -5,6 +5,12 @@
 
 #include "touchpad.h"
 
+enum TouchpadMode {
+    TOUCHPAD_MODE_OFF,
+    TOUCHPAD_MODE_RECORDING,
+    TOUCHPAD_MODE_SAMPLING,
+};
+
 typedef struct TouchpadState {
     TPData *buffer; // record buffer of GF_TouchpadStartRecording
     u32 capacity;

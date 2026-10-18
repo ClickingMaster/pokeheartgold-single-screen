@@ -10,6 +10,15 @@
 #include "task.h"
 #include "comm_state.h"
 
+enum SpinTradeFlowState {
+    SPIN_TRADE_FLOW_LAUNCH_GROUP_APP,
+    SPIN_TRADE_FLOW_WAIT_GROUP_APP,
+    SPIN_TRADE_FLOW_WAIT_PARTY_MENU,
+    SPIN_TRADE_FLOW_WAIT_SUMMARY,
+    SPIN_TRADE_FLOW_WAIT_SPIN_TRADE_APP,
+    SPIN_TRADE_FLOW_FINISH,
+};
+
 typedef struct SpinTradeFlow {
     u32 state;
     u32 selection;
@@ -84,7 +93,7 @@ BOOL SpinTradeFlow_Run(void *data) {
 
 BOOL SpinTradeFlow_LaunchGroupApp(SpinTradeFlow *work) {
     work->subwork = SpinTradeArgs_New((const SpinTradeCommonArgs *)work->sendData, HEAP_ID_FIELD2);
-    work->state = 1;
+    work->state = SPIN_TRADE_FLOW_WAIT_GROUP_APP;
     FieldSystem_LaunchApplication(work->fieldSystem, &gOverlayTemplate_SpinTradeGroup, work->subwork);
     return FALSE;
 }
@@ -92,12 +101,12 @@ BOOL SpinTradeFlow_LaunchGroupApp(SpinTradeFlow *work) {
 BOOL SpinTradeFlow_WaitGroupApp(SpinTradeFlow *work) {
     if (!FieldSystem_ApplicationIsRunning(work->fieldSystem)) {
         if (SpinTradeArgs_GetResult(work->subwork) == 0) {
-            work->state = 5;
+            work->state = SPIN_TRADE_FLOW_FINISH;
         } else {
             CommState_SetErrorWatch(1, 1);
             work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
             work->subwork->unk_00 = 1;
-            work->state = 2;
+            work->state = SPIN_TRADE_FLOW_WAIT_PARTY_MENU;
         }
     }
     return FALSE;
@@ -113,12 +122,12 @@ BOOL SpinTradeFlow_WaitPartyMenu(SpinTradeFlow *work) {
             work->selection = slot;
             work->summary->partySlot = slot;
             PokemonSummary_LearnForget_LaunchApp(work->fieldSystem, work->summary);
-            work->state = 3;
+            work->state = SPIN_TRADE_FLOW_WAIT_SUMMARY;
         } else {
             work->subwork->partySlot = slot;
             FieldSystem_LaunchApplication(work->fieldSystem, &gOverlayTemplate_SpinTrade, work->subwork);
             work->subwork->unk_00 = 3;
-            work->state = 4;
+            work->state = SPIN_TRADE_FLOW_WAIT_SPIN_TRADE_APP;
         }
     }
     return FALSE;
@@ -128,14 +137,14 @@ BOOL SpinTradeFlow_WaitSummary(SpinTradeFlow *work) {
     if (!FieldSystem_ApplicationIsRunning(work->fieldSystem)) {
         Heap_Free(work->summary);
         work->partyMenu = PartyMenu_LaunchApp_SpinTrade(work->fieldSystem, work->selection);
-        work->state = 2;
+        work->state = SPIN_TRADE_FLOW_WAIT_PARTY_MENU;
     }
     return FALSE;
 }
 
 BOOL SpinTradeFlow_WaitSpinTradeApp(SpinTradeFlow *work) {
     if (!FieldSystem_ApplicationIsRunning(work->fieldSystem)) {
-        work->state = 5;
+        work->state = SPIN_TRADE_FLOW_FINISH;
     }
     return FALSE;
 }

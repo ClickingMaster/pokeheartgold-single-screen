@@ -447,12 +447,12 @@ static void BoxMonSelector_ShowConfirmPrompt(BoxMonSelector *selector) {
 
 static void BoxMonSelector_HandleConfirmPrompt(BoxMonSelector *selector) {
     switch (YesNoPrompt_HandleInput(selector->yesNoPrompt)) {
-    case 1:
+    case YESNORESPONSE_YES:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
         YesNoPrompt_Reset(selector->yesNoPrompt);
         selector->state = BOX_MON_SELECTOR_STATE_FINISH;
         break;
-    case 2:
+    case YESNORESPONSE_NO:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
         YesNoPrompt_Reset(selector->yesNoPrompt);
         BoxMonSelector_RemovePick(selector, selector->lastPick);
@@ -481,7 +481,7 @@ static void BoxMonSelector_ShowRemovePrompt(BoxMonSelector *selector) {
 
 static void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector) {
     switch (YesNoPrompt_HandleInput(selector->yesNoPrompt)) {
-    case 1:
+    case YESNORESPONSE_YES:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
         YesNoPrompt_Reset(selector->yesNoPrompt);
         BoxMonSelector_RemovePick(selector, selector->dragIndex);
@@ -492,7 +492,7 @@ static void BoxMonSelector_HandleRemovePrompt(BoxMonSelector *selector) {
         BoxMonSelector_NotifyCursorMove(selector);
         selector->state = BOX_MON_SELECTOR_STATE_SELECT;
         break;
-    case 2:
+    case YESNORESPONSE_NO:
         BoxMonSelector_ClearMessageWindow(&selector->messageWindow, TRUE);
         YesNoPrompt_Reset(selector->yesNoPrompt);
         BoxMonSelector_EndDrag(selector, 0);

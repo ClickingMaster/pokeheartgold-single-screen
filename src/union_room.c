@@ -10,6 +10,19 @@
 #include "comm_state.h"
 #include "field_comm_cmds.h"
 
+enum UnionRoomJoinStatus {
+    UNION_ROOM_JOIN_PENDING,
+    UNION_ROOM_JOIN_JOINED,
+    UNION_ROOM_JOIN_FAILED,
+    UNION_ROOM_JOIN_HOSTING,
+};
+
+enum UnionRoomConnectRequest {
+    UNION_ROOM_CONNECT_NONE,
+    UNION_ROOM_CONNECT_JOIN,
+    UNION_ROOM_CONNECT_DRAWING,
+};
+
 // Communication core and Union Room message functions, declared with the types their call sites were matched
 // against.
 BOOL Comm_GetLocalNetId(void);
@@ -103,9 +116,9 @@ void UnionRoom_Search(struct UnionRoom *unionRoom) {
         UnionRoom_SetState(unionRoom, UnionRoom_ParentLinked, 0);
         return;
     }
-    if (unionRoom->connectRequest != 0) {
+    if (unionRoom->connectRequest != UNION_ROOM_CONNECT_NONE) {
         unionRoom->unk28 = 2;
-        if (unionRoom->connectRequest == 1) {
+        if (unionRoom->connectRequest == UNION_ROOM_CONNECT_JOIN) {
             if (unionRoom->talkReply == 5) {
                 CommState_JoinRecordMixing(unionRoom->partnerNetId);
             } else if (unionRoom->talkReply == 6) {
@@ -113,7 +126,7 @@ void UnionRoom_Search(struct UnionRoom *unionRoom) {
             } else {
                 CommState_JoinParent(unionRoom->partnerNetId);
             }
-        } else if (unionRoom->connectRequest == 2) {
+        } else if (unionRoom->connectRequest == UNION_ROOM_CONNECT_DRAWING) {
             DrawingSessionLink_RegisterCommands(0);
             CommState_ReconnectToParent(unionRoom->partnerNetId);
         }
@@ -227,15 +240,15 @@ void UnionRoom_WaitJoin(struct UnionRoom *unionRoom) {
         return;
     }
     if (Comm_GetConnectedChildren() != 0) {
-        unionRoom->connectRequest = 0;
-        unionRoom->joinStatus = 3;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_NONE;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_HOSTING;
         UnionRoom_SetState(unionRoom, UnionRoom_ParentLinked, 0);
     }
     if (CommState_GetJoinResult() != 0) {
         UnionRoom_SetState(unionRoom, UnionRoom_WaitFieldTask, 2);
         unionRoom->unk24 = 0;
-        unionRoom->joinStatus = 2;
-        unionRoom->connectRequest = 0;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_FAILED;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_NONE;
         unionRoom->partnerCancelled = 0;
     }
 }
@@ -252,8 +265,8 @@ void UnionRoom_WaitFieldTask(struct UnionRoom *unionRoom) {
 void UnionRoom_WaitJoinedProfile(struct UnionRoom *unionRoom) {
     if (CommState_GetJoinResult() == TRUE) {
         if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId()) != NULL) {
-            unionRoom->connectRequest = 0;
-            unionRoom->joinStatus = 1;
+            unionRoom->connectRequest = UNION_ROOM_CONNECT_NONE;
+            unionRoom->joinStatus = UNION_ROOM_JOIN_JOINED;
             unionRoom->partnerCancelled = 0;
             CommState_SetErrorWatch(1, 1);
             UnionRoom_SetState(unionRoom, UnionRoom_ChildInSession, 3);
@@ -263,8 +276,8 @@ void UnionRoom_WaitJoinedProfile(struct UnionRoom *unionRoom) {
         UnionRoom_ResetTalk(unionRoom);
         UnionRoom_SetState(unionRoom, UnionRoom_WaitSearchReady, 2);
         unionRoom->unk24 = 0;
-        unionRoom->joinStatus = 2;
-        unionRoom->connectRequest = 0;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_FAILED;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_NONE;
         unionRoom->partnerCancelled = 0;
     }
 }
@@ -353,27 +366,27 @@ int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind
         }
         unionRoom->talkReply = 5;
         unionRoom->partnerNetId = objId;
-        unionRoom->connectRequest = 1;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_JOIN;
         unionRoom->unk24 = 0;
-        unionRoom->joinStatus = 0;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_PENDING;
         return 1;
     case 0:
         if (kind != 1) {
             return 5;
         }
         unionRoom->partnerNetId = objId;
-        unionRoom->connectRequest = 1;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_JOIN;
         unionRoom->unk24 = 0;
-        unionRoom->joinStatus = 0;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_PENDING;
         return 1;
     case 1:
         if (kind != 2) {
             return 5;
         }
         unionRoom->partnerNetId = objId;
-        unionRoom->connectRequest = 2;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_DRAWING;
         unionRoom->unk24 = 0;
-        unionRoom->joinStatus = 0;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_PENDING;
         return 1;
     case 3:
     case 13:
@@ -382,8 +395,8 @@ int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind
         }
         unionRoom->talkReply = 6;
         unionRoom->partnerNetId = objId;
-        unionRoom->connectRequest = 1;
-        unionRoom->joinStatus = 0;
+        unionRoom->connectRequest = UNION_ROOM_CONNECT_JOIN;
+        unionRoom->joinStatus = UNION_ROOM_JOIN_PENDING;
         return 1;
     case 4:
     case 5:

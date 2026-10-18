@@ -10,6 +10,18 @@
 
 // Field tasks that leave the overworld (unload the field map) or bring it back, with or without a screen fade.
 
+enum FadeOutAndLeaveOverworldState {
+    FADE_OUT_AND_LEAVE_FADE,
+    FADE_OUT_AND_LEAVE_LEAVE,
+    FADE_OUT_AND_LEAVE_DONE,
+};
+
+enum RestoreOverworldAndFadeInState {
+    RESTORE_AND_FADE_IN_RESTORE,
+    RESTORE_AND_FADE_IN_FADE,
+    RESTORE_AND_FADE_IN_DONE,
+};
+
 static BOOL Task_LeaveOverworld(TaskManager *taskManager);
 static BOOL Task_RestoreOverworld(TaskManager *taskManager);
 static BOOL Task_WaitPaletteFade(TaskManager *taskManager);
@@ -81,15 +93,15 @@ void CallTask_FadeFromBlack(TaskManager *taskManager) {
 static BOOL Task_FadeOutAndLeaveOverworld(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     switch (*state) {
-    case 0:
+    case FADE_OUT_AND_LEAVE_FADE:
         PaletteFadeUntilFinished(taskManager);
         (*state)++;
         break;
-    case 1:
+    case FADE_OUT_AND_LEAVE_LEAVE:
         CallTask_LeaveOverworld(taskManager);
         (*state)++;
         break;
-    case 2:
+    case FADE_OUT_AND_LEAVE_DONE:
         return TRUE;
     }
     return FALSE;
@@ -103,16 +115,16 @@ static BOOL Task_RestoreOverworldAndFadeIn(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     switch (*state) {
-    case 0:
+    case RESTORE_AND_FADE_IN_RESTORE:
         CallTask_RestoreOverworld(taskManager);
         (*state)++;
         break;
-    case 1:
+    case RESTORE_AND_FADE_IN_FADE:
         FieldSystem_DrawMapNameAnimation(fieldSystem);
         CallTask_FadeFromBlack(taskManager);
         (*state)++;
         break;
-    case 2:
+    case RESTORE_AND_FADE_IN_DONE:
         return TRUE;
     }
     return FALSE;

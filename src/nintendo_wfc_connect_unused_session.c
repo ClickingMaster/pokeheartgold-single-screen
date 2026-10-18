@@ -24,6 +24,13 @@
 #include "text.h"
 #include "wireless_status_icon.h"
 
+enum NintendoWfcUnusedDisconnectStep {
+    NINTENDO_WFC_UNUSED_DISCONNECT_PRINT,
+    NINTENDO_WFC_UNUSED_DISCONNECT_CLEANUP,
+    NINTENDO_WFC_UNUSED_DISCONNECT_PRINT_DONE,
+    NINTENDO_WFC_UNUSED_DISCONNECT_WAIT_PRINT,
+};
+
 static void NintendoWfcUnused_InitBgs(BgConfig *bgConfig);
 static void NintendoWfcUnused_FreeBgs(BgConfig *bgConfig);
 static void NintendoWfcUnused_LoadBgGraphics(NintendoWfcUnused *wfc);
@@ -319,7 +326,7 @@ static void NintendoWfcUnused_LoadBgGraphics(NintendoWfcUnused *wfc) {
     }
     DC_FlushRange(wfc->paletteCycle.cyclePltt, sizeof(wfc->paletteCycle.cyclePltt));
     wfc->paletteCycle.active = 1;
-    wfc->paletteCycle.screens = 0;
+    wfc->paletteCycle.screens = NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS;
     wfc->paletteCycle.task = SysTask_CreateOnVBlankQueue(NintendoWfcUnused_PaletteCycleTask, &wfc->paletteCycle, 20);
     NARC_Delete(narc);
 }
@@ -329,10 +336,10 @@ static void NintendoWfcUnused_PaletteCycleTask(SysTask *task, void *data) {
     if (cycle->active != 0) {
         cycle->tick ^= 1;
         if ((cycle->tick & 1) == 0) {
-            if (cycle->screens <= 1) {
+            if (cycle->screens <= NINTENDO_WFC_UNUSED_PALETTE_MAIN_SCREEN) {
                 GX_LoadBGPltt(cycle->cyclePltt + cycle->index * 16, 0, 0x20);
             }
-            if (cycle->screens == 0 || cycle->screens == 2) {
+            if (cycle->screens == NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS || cycle->screens == NINTENDO_WFC_UNUSED_PALETTE_SUB_SCREEN) {
                 GXS_LoadBGPltt(cycle->cyclePltt + cycle->index * 16, 0, 0x20);
             }
             if (cycle->direction == 0) {
@@ -1268,22 +1275,22 @@ int NintendoWfcUnused_ShowHttpError(NintendoWfcUnused *wfc) {
 
 int NintendoWfcUnused_Disconnect(NintendoWfcUnused *wfc) {
     switch (wfc->subState) {
-    case 0:
+    case NINTENDO_WFC_UNUSED_DISCONNECT_PRINT:
         NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00016, 1, 0xF0F);
         wfc->subState++;
         break;
-    case 1:
+    case NINTENDO_WFC_UNUSED_DISCONNECT_CLEANUP:
         if (!TextPrinterCheckActive((u8)wfc->textPrinterId)) {
             CommState_FreeWfcSession();
             DWC_CleanupInet();
             wfc->subState++;
         }
         break;
-    case 2:
+    case NINTENDO_WFC_UNUSED_DISCONNECT_PRINT_DONE:
         NintendoWfcUnused_PrintMessage(wfc, wfc->msgDataTower, msg_0799_00017, 1, 0xF0F);
         wfc->subState++;
         break;
-    case 3:
+    case NINTENDO_WFC_UNUSED_DISCONNECT_WAIT_PRINT:
         if (!TextPrinterCheckActive((u8)wfc->textPrinterId)) {
             wfc->subState++;
         }

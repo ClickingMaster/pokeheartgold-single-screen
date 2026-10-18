@@ -43,16 +43,16 @@ WiiMessageSave *Save_WiiMessage_Get(SaveData *saveData) {
 void Save_WiiMessage_SetParam(SaveData *saveData, u32 param, u32 value) {
     WiiMessageSave *ptr = (WiiMessageSave *)(SaveArray_Get(saveData, SAVE_UNK_31));
     switch (param) {
-    case 0:
+    case WII_MESSAGE_PARAM_NOTIFICATIONS:
         ptr->notificationsEnabled = value;
         break;
-    case 1:
+    case WII_MESSAGE_PARAM_REGISTRATION_CODE_PREFIX:
         ptr->registrationCodePrefix = value;
         break;
-    case 2:
+    case WII_MESSAGE_PARAM_REGISTRATION_CODE:
         ptr->registrationCode = value;
         break;
-    case 3:
+    case WII_MESSAGE_PARAM_PASSWORD:
         ptr->password = value;
         break;
     }
@@ -62,13 +62,13 @@ void Save_WiiMessage_SetParam(SaveData *saveData, u32 param, u32 value) {
 u32 Save_WiiMessage_GetParam(SaveData *saveData, u32 param) {
     WiiMessageSave *ptr = (WiiMessageSave *)(SaveArray_Get(saveData, SAVE_UNK_31));
     switch (param) {
-    case 0:
+    case WII_MESSAGE_PARAM_NOTIFICATIONS:
         return ptr->notificationsEnabled;
-    case 1:
+    case WII_MESSAGE_PARAM_REGISTRATION_CODE_PREFIX:
         return ptr->registrationCodePrefix;
-    case 2:
+    case WII_MESSAGE_PARAM_REGISTRATION_CODE:
         return ptr->registrationCode;
-    case 3:
+    case WII_MESSAGE_PARAM_PASSWORD:
         return ptr->password;
     }
     return 0;

@@ -24,6 +24,19 @@ typedef struct LegendaryCinematicAppTaskEnv {
 
 LegendaryCinematicArgs *LegendaryCinematic_LaunchApp(FieldSystem *fieldSystem, ModelAttributesStorage *modelAttributes, int scene, int timeOfDay, enum HeapID heapID);
 
+enum LegendaryCinematicTaskState {
+    LEGENDARY_CINEMATIC_LEAVE_OVERWORLD,
+    LEGENDARY_CINEMATIC_RUN_APP,
+    LEGENDARY_CINEMATIC_RESTORE_OVERWORLD,
+    LEGENDARY_CINEMATIC_FREE,
+};
+
+enum LegendaryCinematicAppState {
+    LEGENDARY_CINEMATIC_APP_LAUNCH,
+    LEGENDARY_CINEMATIC_APP_WAIT,
+    LEGENDARY_CINEMATIC_APP_FREE,
+};
+
 static BOOL Task_LegendaryCinematic(TaskManager *taskManager);
 static void CallTask_LegendaryCinematicApp(FieldSystem *fieldSystem, LegendaryCinematicTaskEnv *cinematic);
 static BOOL Task_LegendaryCinematicApp(TaskManager *taskManager);
@@ -32,7 +45,7 @@ void CallTask_LegendaryCinematic(FieldSystem *fieldSystem, u16 scene) {
     LegendaryCinematicTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LegendaryCinematicTaskEnv));
     env->modelAttributes = *(ModelAttributesStorage *)fieldSystem->modelAttributes;
     env->scene = scene;
-    env->state = 0;
+    env->state = LEGENDARY_CINEMATIC_LEAVE_OVERWORLD;
 
     // The scene is lit as day, evening or night.
     switch (Field_GetTimeOfDay(fieldSystem)) {
@@ -61,19 +74,19 @@ static BOOL Task_LegendaryCinematic(TaskManager *taskManager) {
     LegendaryCinematicTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (env->state) {
-    case 0:
+    case LEGENDARY_CINEMATIC_LEAVE_OVERWORLD:
         CallTask_LeaveOverworld(taskManager);
         env->state++;
         break;
-    case 1:
+    case LEGENDARY_CINEMATIC_RUN_APP:
         CallTask_LegendaryCinematicApp(fieldSystem, env);
         env->state++;
         break;
-    case 2:
+    case LEGENDARY_CINEMATIC_RESTORE_OVERWORLD:
         CallTask_RestoreOverworld(taskManager);
         env->state++;
         break;
-    case 3:
+    case LEGENDARY_CINEMATIC_FREE:
         Heap_Free(env);
         return TRUE;
     }
@@ -83,7 +96,7 @@ static BOOL Task_LegendaryCinematic(TaskManager *taskManager) {
 static void CallTask_LegendaryCinematicApp(FieldSystem *fieldSystem, LegendaryCinematicTaskEnv *cinematic) {
     LegendaryCinematicAppTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(LegendaryCinematicAppTaskEnv));
     env->cinematic = cinematic;
-    env->state = 0;
+    env->state = LEGENDARY_CINEMATIC_APP_LAUNCH;
     TaskManager_Call(fieldSystem->taskman, Task_LegendaryCinematicApp, env);
 }
 
@@ -93,16 +106,16 @@ static BOOL Task_LegendaryCinematicApp(TaskManager *taskManager) {
     LegendaryCinematicTaskEnv *cinematic = env->cinematic;
 
     switch (env->state) {
-    case 0:
+    case LEGENDARY_CINEMATIC_APP_LAUNCH:
         env->args = LegendaryCinematic_LaunchApp(fieldSystem, &cinematic->modelAttributes, cinematic->scene, cinematic->timeOfDay, HEAP_ID_FIELD2);
         env->state++;
         break;
-    case 1:
+    case LEGENDARY_CINEMATIC_APP_WAIT:
         if (!FieldSystem_ApplicationIsRunning(fieldSystem)) {
             env->state++;
         }
         break;
-    case 2:
+    case LEGENDARY_CINEMATIC_APP_FREE:
         Heap_Free(env->args);
         Heap_Free(env);
         return TRUE;

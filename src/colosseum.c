@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "field/fieldmap.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0014.h"
@@ -372,7 +374,7 @@ static BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     case COLOSSEUM_ENTRY_STATE_PARTY_CONFIRMED:
         FieldSystem_LoadFieldOverlay(entry->fieldSystem);
 
-        if (entry->linkMode != 3) {
+        if (entry->linkMode != COMM_TYPE_MIX_BATTLE) {
             entry->timer = 5;
             entry->state = COLOSSEUM_ENTRY_STATE_RETURN_TO_FIELD;
         } else {
@@ -390,7 +392,7 @@ static BOOL Task_ColosseumEntry(TaskManager *taskManager) {
     case COLOSSEUM_ENTRY_STATE_PARTY_CANCELLED:
         FieldSystem_LoadFieldOverlay(entry->fieldSystem);
 
-        if (entry->linkMode != 3) {
+        if (entry->linkMode != COMM_TYPE_MIX_BATTLE) {
             entry->state = COLOSSEUM_ENTRY_STATE_RETURN_CANCELLED;
         } else {
             entry->state = COLOSSEUM_ENTRY_STATE_MIX_START_SYNC;
@@ -659,7 +661,7 @@ void Colosseum_StartEntry(FieldSystem *fieldSystem, ColosseumEntryCallback callb
     entry->netId = Comm_GetLocalNetId();
     entry->opponentProfile = CommPlayerInfo_GetProfile(1 ^ entry->netId);
     switch (entry->linkMode) {
-    case 3:
+    case COMM_TYPE_MIX_BATTLE:
         size = Colosseum_GetMixBattleMonsSize();
         entry->sentMons = Heap_AllocAtEnd(HEAP_ID_FIELD2, size);
         entry->receivedMons = Heap_AllocAtEnd(HEAP_ID_FIELD2, size);
@@ -668,7 +670,7 @@ void Colosseum_StartEntry(FieldSystem *fieldSystem, ColosseumEntryCallback callb
         entry->delay = 5;
         entry->state = COLOSSEUM_ENTRY_STATE_MIX_DELAY;
         break;
-    case 4:
+    case COMM_TYPE_MULTI_BATTLE_1:
         entry->state = COLOSSEUM_ENTRY_STATE_START_CHOOSE;
         break;
     default:

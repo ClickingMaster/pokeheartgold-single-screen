@@ -19,6 +19,19 @@
 // Window decorations: the text printer's down arrow and the waiting icon (NARC a/0/3/8 members 0x16/0x17 drawn
 // over frame tiles 10-11), map signposts (NARC a/0/3/6) and the framed Pokemon picture window (a/0/3/8 0x2F-0x32).
 
+enum WaitingIconState {
+    WAITING_ICON_RUNNING,
+    WAITING_ICON_DELETE,
+    WAITING_ICON_DELETE_WITHOUT_RESTORE,
+};
+
+enum PokemonPicWindowState {
+    POKEMON_PIC_WINDOW_IDLE,
+    POKEMON_PIC_WINDOW_CLOSE,
+    POKEMON_PIC_WINDOW_START_ANIM,
+    POKEMON_PIC_WINDOW_ANIMATING,
+};
+
 struct WaitingIcon {
     Window *window;
     u8 frameTiles[8][0x80];
@@ -221,7 +234,7 @@ WaitingIcon *WaitingIcon_New(Window *window, int baseTile) {
     icon->baseTile = baseTile;
     icon->timer = 0;
     icon->frame = 0;
-    icon->state = 0;
+    icon->state = WAITING_ICON_RUNNING;
     SysTask_CreateOnVBlankQueue((SysTaskFunc)WaitingIcon_Task, icon, 0);
     WaitingIcon_Draw(icon, 1);
     return icon;
@@ -253,8 +266,8 @@ void WaitingIcon_Draw(WaitingIcon *icon, int mode) {
 }
 
 void WaitingIcon_Task(SysTask *task, WaitingIcon *icon) {
-    if (icon->state != 0) {
-        if (icon->state == 1) {
+    if (icon->state != WAITING_ICON_RUNNING) {
+        if (icon->state == WAITING_ICON_DELETE) {
             WaitingIcon_Draw(icon, 2);
         }
         SysTask_Destroy(task);
@@ -275,12 +288,12 @@ void WaitingIcon_FreeTask(SysTask *task, void *icon) {
 
 void WaitingIcon_Delete(WaitingIcon *icon) {
     SysTask_CreateOnVWaitQueue(WaitingIcon_FreeTask, icon, 0);
-    icon->state = 1;
+    icon->state = WAITING_ICON_DELETE;
 }
 
 void WaitingIcon_DeleteWithoutRestore(WaitingIcon *icon) {
     SysTask_CreateOnVWaitQueue(WaitingIcon_FreeTask, icon, 0);
-    icon->state = 2;
+    icon->state = WAITING_ICON_DELETE_WITHOUT_RESTORE;
 }
 
 // The returned pointer is the picture's state byte: set it to 1 to close the picture, 2 to play its animation.
@@ -312,19 +325,19 @@ u8 *DrawPokemonPicFromMon(BgConfig *bgConfig, u8 layer, u8 x, u8 y, u8 paletteNu
 
 void PokemonPicWindow_Task(SysTask *task, PokemonPicWindow *picWindow) {
     switch (picWindow->state) {
-    case 1:
+    case POKEMON_PIC_WINDOW_CLOSE:
         PokemonPicWindow_ClearFrame(picWindow);
         Sprite_DeleteAndFreeResources(picWindow->sprite);
         FieldSpriteManager_ReleaseWithoutResDat(&picWindow->spriteManager);
         DestroySysTaskAndEnvironment(task);
         return;
-    case 2:
-        picWindow->state = 3;
+    case POKEMON_PIC_WINDOW_START_ANIM:
+        picWindow->state = POKEMON_PIC_WINDOW_ANIMATING;
         Sprite_SetAnimCtrlSeq(picWindow->sprite->sprite, 1);
         break;
-    case 3:
+    case POKEMON_PIC_WINDOW_ANIMATING:
         if (Sprite_GetAnimationFrame(picWindow->sprite->sprite) == 6) {
-            picWindow->state = 0;
+            picWindow->state = POKEMON_PIC_WINDOW_IDLE;
         }
         break;
     }
@@ -335,7 +348,7 @@ void PokemonPicWindow_Task(SysTask *task, PokemonPicWindow *picWindow) {
 
 PokemonPicWindow *PokemonPicWindow_New(BgConfig *bgConfig, u8 layer, u8 x, u8 y, u32 heapId) {
     PokemonPicWindow *picWindow = SysTask_GetData(CreateSysTaskAndEnvironment((SysTaskFunc)PokemonPicWindow_Task, sizeof(PokemonPicWindow), 0, (enum HeapID)heapId));
-    picWindow->state = 0;
+    picWindow->state = POKEMON_PIC_WINDOW_IDLE;
     picWindow->bgConfig = bgConfig;
     picWindow->layer = layer;
     picWindow->x = x;

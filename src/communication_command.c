@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "assert.h"
 #include "heap.h"
 
@@ -487,11 +489,11 @@ int Comm_GetMinChildren(u16 linkMode) {
 
 BOOL Comm_IsUnionRoomLinkMode(int v) {
     switch (v) {
-    case 7:
-    case 9:
-    case 13:
-    case 18:
-    case 26:
+    case COMM_TYPE_MIX_RECORDS:
+    case COMM_TYPE_UNION:
+    case COMM_TYPE_13:
+    case COMM_TYPE_UNION_APP:
+    case COMM_TYPE_SPIN_TRADE:
         return TRUE;
     default:
         return FALSE;
@@ -519,7 +521,7 @@ BOOL Comm_IsWifiLinkMode(int v) {
 }
 
 BOOL Comm_IsWifiPeerLinkMode(int v) {
-    if (v == 29 || v == 33 || v == 35) {
+    if (v == COMM_TYPE_29 || v == COMM_TYPE_WIFI_PLAZA || v == COMM_TYPE_CLUB_WIFI) {
         return TRUE;
     }
     return FALSE;
@@ -541,16 +543,16 @@ BOOL Comm_IsLinkMode19To23Or34(int v) {
 
 BOOL Comm_IsCommClubLinkMode(int v) {
     switch (v) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 8:
-    case 37:
-    case 38:
-    case 39:
-    case 40:
+    case COMM_TYPE_SINGLE_BATTLE:
+    case COMM_TYPE_DOUBLE_BATTLE:
+    case COMM_TYPE_MIX_BATTLE:
+    case COMM_TYPE_MULTI_BATTLE_1:
+    case COMM_TYPE_MULTI_BATTLE_2:
+    case COMM_TYPE_8:
+    case COMM_TYPE_FLAT_BATTLE_1:
+    case COMM_TYPE_FLAT_BATTLE_2:
+    case COMM_TYPE_SAFARI_ZONE:
+    case COMM_TYPE_POKEATHLON:
         return TRUE;
     default:
         return FALSE;

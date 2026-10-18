@@ -198,6 +198,11 @@ struct EvolutionTaskData {
     BOOL spritesReady;                      // 0xB8
 }; // size: 0xBC
 
+enum EvolutionMenuState {
+    EVO_MENU_STATE_INPUT,
+    EVO_MENU_STATE_WAIT_CURSOR,
+};
+
 typedef struct EvolutionBgTemplates {
     BgTemplate bg[3];
 } EvolutionBgTemplates;
@@ -490,7 +495,7 @@ static void EvolutionScene_ShowMenu(EvolutionTaskData *data, BOOL deleteMoveProm
     }
     EvolutionScene_PrintMenuOption(data, &data->menuWindows[0], data->msgData, topMsg);
     EvolutionScene_PrintMenuOption(data, &data->menuWindows[1], data->msgData, bottomMsg);
-    data->menuState = 0;
+    data->menuState = EVO_MENU_STATE_INPUT;
     data->menuResult = EVO_MENU_TOP;
     EvolutionScene_UpdateMenuCursor(data);
     ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_ON);
@@ -559,12 +564,12 @@ static BOOL EvolutionScene_IsMenuCursorAnimDone(EvolutionTaskData *data) {
 
 static int EvolutionScene_RunMenu(EvolutionTaskData *data) {
     switch (data->menuState) {
-    case 0:
+    case EVO_MENU_STATE_INPUT:
         if (EvolutionScene_HandleMenuInput(data)) {
             data->menuState++;
         }
         break;
-    case 1:
+    case EVO_MENU_STATE_WAIT_CURSOR:
         if (EvolutionScene_IsMenuCursorAnimDone(data)) {
             GF_ASSERT(data->spritesReady);
             GF_ASSERT(data->menuResult != EVO_MENU_NONE);

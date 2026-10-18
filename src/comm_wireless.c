@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "heap.h"
 #include "mail_message.h"
 #include "player_data.h"
@@ -276,9 +278,9 @@ void CommWireless_OnParentFound(void *parentInfo) {
     id = CommState_GetBeaconId();
     beacon = data + 0x50;
 
-    if (kind != 14) {
+    if (kind != COMM_TYPE_14) {
         if (!Comm_IsUnionRoomLinkMode(beacon[4]) || !Comm_IsUnionRoomLinkMode(kind)) {
-            if (beacon[0x54] != 0 && beacon[4] == 10) {
+            if (beacon[0x54] != 0 && beacon[4] == COMM_TYPE_10) {
                 return;
             }
             if (beacon[4] != kind) {
@@ -286,7 +288,7 @@ void CommWireless_OnParentFound(void *parentInfo) {
             }
         }
     }
-    if (kind != 14 && beacon[5] != id) {
+    if (kind != COMM_TYPE_14 && beacon[5] != id) {
         return;
     }
     MI_CpuCopy8(data, &sCommWireless.work->received, 0xC0);

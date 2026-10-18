@@ -28,6 +28,13 @@ typedef struct {
     u16 registrationCode;
 } WifiServerProfile;
 
+enum WiiMessageParam {
+    WII_MESSAGE_PARAM_NOTIFICATIONS,
+    WII_MESSAGE_PARAM_REGISTRATION_CODE_PREFIX,
+    WII_MESSAGE_PARAM_REGISTRATION_CODE,
+    WII_MESSAGE_PARAM_PASSWORD,
+};
+
 u32 Save_WiiMessage_sizeof(void);
 void Save_WiiMessage_Init(WiiMessageSave *wiiMessage);
 void Save_WiiMessage_Reset(SaveData *saveData);

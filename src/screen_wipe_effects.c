@@ -5,6 +5,12 @@
 
 #include "assert.h"
 
+enum RectShutterWipePhase {
+    RECT_SHUTTER_WIPE_FIRST,
+    RECT_SHUTTER_WIPE_SECOND,
+    RECT_SHUTTER_WIPE_DONE,
+};
+
 u32 FX_Sqrt(u32 value);
 
 void RectWipe_Begin(ScreenFade *fade, const RectWipeConfig *config) {
@@ -1011,26 +1017,26 @@ void RectShutterWipe_InitRectFirst(RectShutterWipe *wipe, const RectShutterWipeC
         ScreenFade_SetWindowVisible(regQueue, GX_WNDMASK_W1, screen, config->rect.queued);
     }
 
-    wipe->phase = 0;
+    wipe->phase = RECT_SHUTTER_WIPE_FIRST;
 }
 
 BOOL RectShutterWipe_StepRectFirst(RectShutterWipe *wipe, ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (wipe->phase) {
-    case 0:
+    case RECT_SHUTTER_WIPE_FIRST:
         if (RectWipe_Step(&wipe->rect) == TRUE) {
             wipe->phase++;
             LineShutterWipe_Init(&wipe->shutter, &wipe->config->shutter, wipe->laterSteps, fade->framesPerStep, fade->screen, fade->regQueue, fade->blankPair, fade->heapId);
         }
         break;
-    case 1:
+    case RECT_SHUTTER_WIPE_SECOND:
         if (LineShutterWipe_Step(&wipe->shutter) == TRUE) {
             done = TRUE;
             wipe->phase++;
         }
         break;
-    case 2:
+    case RECT_SHUTTER_WIPE_DONE:
         done = TRUE;
         break;
     }
@@ -1049,14 +1055,14 @@ void RectShutterWipe_InitShutterFirst(RectShutterWipe *wipe, const RectShutterWi
 
     LineShutterWipe_Init(&wipe->shutter, &wipe->config->shutter, shutterSteps, framesPerStep, screen, regQueue, blankPair, heapId);
 
-    wipe->phase = 0;
+    wipe->phase = RECT_SHUTTER_WIPE_FIRST;
 }
 
 BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenFade *fade) {
     BOOL done = FALSE;
 
     switch (wipe->phase) {
-    case 0:
+    case RECT_SHUTTER_WIPE_FIRST:
         if (LineShutterWipe_Step(&wipe->shutter) == TRUE) {
             wipe->phase++;
             RectWipe_Init(&wipe->rect, &wipe->config->rect, wipe->laterSteps, fade->framesPerStep, fade->screen, fade->regQueue);
@@ -1068,13 +1074,13 @@ BOOL RectShutterWipe_StepShutterFirst(RectShutterWipe *wipe, ScreenFade *fade) {
             }
         }
         break;
-    case 1:
+    case RECT_SHUTTER_WIPE_SECOND:
         if (RectWipe_Step(&wipe->rect) == TRUE) {
             done = TRUE;
             wipe->phase++;
         }
         break;
-    case 2:
+    case RECT_SHUTTER_WIPE_DONE:
         done = TRUE;
         break;
     }

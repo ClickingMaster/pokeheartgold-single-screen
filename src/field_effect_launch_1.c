@@ -9,6 +9,21 @@
 #include "sound_playback.h"
 #include "sound_system.h"
 
+enum MagnetTrainRideState {
+    MAGNET_TRAIN_RIDE_FADE_OUT,
+    MAGNET_TRAIN_RIDE_LEAVE_OVERWORLD,
+    MAGNET_TRAIN_RIDE_CUTSCENE,
+    MAGNET_TRAIN_RIDE_CHANGE_MAP,
+    MAGNET_TRAIN_RIDE_RETURN_TO_OVERWORLD,
+    MAGNET_TRAIN_RIDE_FREE,
+};
+
+enum MagnetTrainCutsceneState {
+    MAGNET_TRAIN_CUTSCENE_LAUNCH,
+    MAGNET_TRAIN_CUTSCENE_WAIT,
+    MAGNET_TRAIN_CUTSCENE_FREE,
+};
+
 void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
@@ -18,7 +33,7 @@ void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u3
     env->x = x;
     env->y = y;
     LoadAreaOrDungeonLightTxt(0, &env->light);
-    env->state = 0;
+    env->state = MAGNET_TRAIN_RIDE_FADE_OUT;
     TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainRide, env);
 }
 
@@ -52,15 +67,15 @@ BOOL Task_MagnetTrainCutscene(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
-    case 0:
+    case MAGNET_TRAIN_CUTSCENE_LAUNCH:
         MagnetTrainCutscene_LaunchApp(fieldSystem, env);
         break;
-    case 1:
+    case MAGNET_TRAIN_CUTSCENE_WAIT:
         if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
             return FALSE;
         }
         break;
-    case 2:
+    case MAGNET_TRAIN_CUTSCENE_FREE:
         Heap_Free(env);
         return TRUE;
     }
@@ -73,33 +88,33 @@ BOOL Task_MagnetTrainRide(TaskManager *taskManager) {
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 
     switch (env->state) {
-    case 0:
+    case MAGNET_TRAIN_RIDE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, HEAP_ID_FIELD2);
         GF_SndStartFadeOutBGM(0, 6);
-        env->state = 1;
+        env->state = MAGNET_TRAIN_RIDE_LEAVE_OVERWORLD;
         break;
-    case 1:
+    case MAGNET_TRAIN_RIDE_LEAVE_OVERWORLD:
         if (!IsPaletteFadeFinished() || GF_SndGetFadeTimer() != 0) {
             return FALSE;
         }
         StopBGM(GF_GetCurrentPlayingBGM(), 0);
         CallTask_LeaveOverworld(taskManager);
-        env->state = 2;
+        env->state = MAGNET_TRAIN_RIDE_CUTSCENE;
         break;
-    case 2:
+    case MAGNET_TRAIN_RIDE_CUTSCENE:
         CallTask_MagnetTrainCutscene(fieldSystem, env->param1, &env->light);
-        env->state = 3;
+        env->state = MAGNET_TRAIN_RIDE_CHANGE_MAP;
         break;
-    case 3:
+    case MAGNET_TRAIN_RIDE_CHANGE_MAP:
         CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->param2);
-        env->state = 4;
+        env->state = MAGNET_TRAIN_RIDE_RETURN_TO_OVERWORLD;
         break;
-    case 4:
+    case MAGNET_TRAIN_RIDE_RETURN_TO_OVERWORLD:
         FieldBGM_PlayForMapHeader(fieldSystem, env->mapId, FALSE);
         CallTask_RestoreOverworldAndFadeIn(taskManager);
-        env->state = 5;
+        env->state = MAGNET_TRAIN_RIDE_FREE;
         break;
-    case 5:
+    case MAGNET_TRAIN_RIDE_FREE:
         Heap_Free(env);
         return TRUE;
     }

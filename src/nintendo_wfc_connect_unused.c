@@ -32,6 +32,11 @@
 
 extern const u16 sNintendoWfcUnusedArrowPositions[2][2];
 
+enum NintendoWfcUnusedInitState {
+    NINTENDO_WFC_UNUSED_INIT_SETUP,
+    NINTENDO_WFC_UNUSED_INIT_START_WIRELESS,
+};
+
 static void NintendoWfcUnused_VBlankCB(void *arg);
 static void NintendoWfcUnused_SetGfxBanks(void);
 static void NintendoWfcUnused_InitArgs(NintendoWfcUnused *wfc, OverlayManager *man);
@@ -88,7 +93,7 @@ BOOL NintendoWfcUnused_Init(OverlayManager *man, int *state) {
     void *heapMem;
 
     switch (*state) {
-    case 0:
+    case NINTENDO_WFC_UNUSED_INIT_SETUP:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -115,13 +120,13 @@ BOOL NintendoWfcUnused_Init(OverlayManager *man, int *state) {
         wfc->expHeap = NNS_FndCreateExpHeapEx((void *)(((u32)heapMem + 31) & ~31), 0x20000, 0);
         Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
         reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
-        *state = 1;
+        *state = NINTENDO_WFC_UNUSED_INIT_START_WIRELESS;
         break;
-    case 1:
+    case NINTENDO_WFC_UNUSED_INIT_START_WIRELESS:
         LoadDwcOverlay();
         LoadOVY38();
         CommWireless_StartUp();
-        *state = 0;
+        *state = NINTENDO_WFC_UNUSED_INIT_SETUP;
         return TRUE;
     default:
         break;

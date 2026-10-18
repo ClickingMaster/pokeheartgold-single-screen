@@ -53,6 +53,12 @@ void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *avatar);
 #define MetatileBehavior_IsVeryTallGrass_Int(behavior) ((BOOL(*)(u32))MetatileBehavior_IsVeryTallGrass)(behavior)
 #define MetatileBehavior_IsMud_Int(behavior)           ((BOOL(*)(u32))MetatileBehavior_IsMud)(behavior)
 
+enum PlayerAvatarSlope {
+    PLAYER_AVATAR_SLOPE_FLAT,
+    PLAYER_AVATAR_SLOPE_UP,
+    PLAYER_AVATAR_SLOPE_DOWN,
+};
+
 static int PlayerAvatar_IsReadyToMove(PlayerAvatar *avatar, int direction);
 static void PlayerAvatar_StoreHeldDirections(PlayerAvatar *avatar, int direction, int keys, int heldKeys);
 static void PlayerAvatar_ClearFlag1IfFlag6Moving(PlayerAvatar *avatar);
@@ -516,22 +522,22 @@ static int PlayerAvatar_GetSlopeInDirection(PlayerAvatar *avatar, int direction)
     position = original;
     OffsetPositionInDirection(direction, &position, FX32_ONE * 4);
     if (!FieldSystem_SnapToTerrainHeight(fieldSystem, &position) || original.y == position.y) {
-        return 0;
+        return PLAYER_AVATAR_SLOPE_FLAT;
     }
     if (original.y > position.y) {
-        return 2;
+        return PLAYER_AVATAR_SLOPE_DOWN;
     }
-    return 1;
+    return PLAYER_AVATAR_SLOPE_UP;
 }
 
 static BOOL PlayerAvatar_AdjustSpeedForSlope(PlayerAvatar *avatar, int slope) {
     int speed = PlayerAvatar_GetSpeed(avatar);
-    if (slope == 1) {
+    if (slope == PLAYER_AVATAR_SLOPE_UP) {
         speed--;
         if (speed < 0) {
             return FALSE;
         }
-    } else if (slope == 2) {
+    } else if (slope == PLAYER_AVATAR_SLOPE_DOWN) {
         speed++;
         if (speed > 3) {
             speed = 3;

@@ -13,6 +13,17 @@
 #include "sound_system.h"
 #include "vs_recorder_app_internal.h"
 
+enum VsRecorderAppMainState {
+    VS_RECORDER_APP_MENU,
+    VS_RECORDER_APP_PLAYBACK,
+};
+
+enum VsRecorderPlaybackStep {
+    VS_RECORDER_PLAYBACK_UNLOAD_OVERLAYS,
+    VS_RECORDER_PLAYBACK_LOAD_RECORD,
+    VS_RECORDER_PLAYBACK_START_BATTLE,
+};
+
 static void VsRecorderApp_Create(OverlayManager *manager, u32 mode);
 static BOOL VsRecorderApp_RunMenu(VsRecorderApp *work, enum HeapID heapId);
 static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId);
@@ -92,19 +103,19 @@ BOOL VsRecorderApp_InitMode6(OverlayManager *manager, int *state) {
 BOOL VsRecorderApp_Main(OverlayManager *manager, int *state) {
     VsRecorderApp *work = OverlayManager_GetData(manager);
     switch (*state) {
-    case 0:
+    case VS_RECORDER_APP_MENU:
         if (VsRecorderApp_RunMenu(work, HEAP_ID_126)) {
             if (work->result == 1) {
-                *state = 1;
+                *state = VS_RECORDER_APP_PLAYBACK;
                 work->state = 0;
             } else {
                 return TRUE;
             }
         }
         break;
-    case 1:
+    case VS_RECORDER_APP_PLAYBACK:
         if (VsRecorderApp_RunPlayback(work, HEAP_ID_126)) {
-            *state = 0;
+            *state = VS_RECORDER_APP_MENU;
             work->state = 0;
         }
         break;
@@ -146,14 +157,14 @@ static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
     FSOverlayID overlayId;
 
     switch (work->state) {
-    case 0:
+    case VS_RECORDER_PLAYBACK_UNLOAD_OVERLAYS:
         if (work->recorder->mode != 0) {
             UnloadOverlayByID(FS_OVERLAY_ID(OVY_39));
             UnloadOVY38();
         }
         work->state++;
         break;
-    case 1:
+    case VS_RECORDER_PLAYBACK_LOAD_RECORD:
         work->setup = BattleSetup_New(heapId, 0);
         if (!BattleRecord_Exists()) {
             BattleRecord_Load(work->saveData, heapId, &result, work->setup, work->recorder->selection);
@@ -172,12 +183,12 @@ static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
         if (result != TRUE) {
             Heap_Free(work->setup->bagCursor);
             BattleSetup_Delete(work->setup);
-            work->state = 0;
+            work->state = VS_RECORDER_PLAYBACK_UNLOAD_OVERLAYS;
             return TRUE;
         }
         work->state++;
         break;
-    case 2:
+    case VS_RECORDER_PLAYBACK_START_BATTLE:
         GF_SndHandleSetPlayerVolume(1, 0x7F);
         GF_SndHandleSetPlayerVolume(7, 0x7F);
         Sound_SetChatotRecordingDisabled(TRUE);
@@ -203,7 +214,7 @@ static BOOL VsRecorderApp_RunPlayback(VsRecorderApp *work, enum HeapID heapId) {
             bgm = FieldBGM_GetEffective(work->fieldSystem, work->fieldSystem->location->mapId);
             Sound_SetFieldBGM(FieldBGM_GetForMapHeader(work->fieldSystem, work->fieldSystem->location->mapId));
             FieldBGM_Play(NULL, bgm);
-            work->state = 0;
+            work->state = VS_RECORDER_PLAYBACK_UNLOAD_OVERLAYS;
             if (work->recorder->mode != 0) {
                 LoadOVY38();
                 HandleLoadOverlay(FS_OVERLAY_ID(OVY_39), OVY_LOAD_ASYNC);

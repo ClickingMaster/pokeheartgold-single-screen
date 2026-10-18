@@ -28,6 +28,27 @@ static const TrainerSightFunc sTrainerSightDistanceFuncs[] = {
     TrainerSight_GetDistanceEast,
 };
 
+enum TrainerApproachState {
+    TRAINER_APPROACH_UNPAUSE_TRAINER,
+    TRAINER_APPROACH_FACE_DIRECTION,
+    TRAINER_APPROACH_WAIT_FOR_PLAYER,
+    TRAINER_APPROACH_START_FACE,
+    TRAINER_APPROACH_WAIT_FACE,
+    TRAINER_APPROACH_SPAWN_EXCLAMATION,
+    TRAINER_APPROACH_WAIT_EXCLAMATION,
+    TRAINER_APPROACH_START_REVEAL,
+    TRAINER_APPROACH_WAIT_REVEAL,
+    TRAINER_APPROACH_WAIT,
+    TRAINER_APPROACH_CHECK_DISTANCE,
+    TRAINER_APPROACH_START_STEP,
+    TRAINER_APPROACH_WAIT_STEP,
+    TRAINER_APPROACH_WAIT_ARRIVED,
+    TRAINER_APPROACH_TURN_PLAYER,
+    TRAINER_APPROACH_WAIT_PLAYER_TURN,
+    TRAINER_APPROACH_RESET_TRAINER_MOVEMENT,
+    TRAINER_APPROACH_FINISH,
+};
+
 static const TrainerApproachStateFunc sTrainerApproachStateFuncs[] = {
     TrainerApproach_UnpauseTrainer,
     TrainerApproach_FaceDirection,
@@ -685,7 +706,7 @@ BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         MapObject_UnpauseMovement(object);
     }
-    work->state = 1;
+    work->state = TRAINER_APPROACH_FACE_DIRECTION;
     return TRUE;
 }
 
@@ -696,7 +717,7 @@ BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work) {
     }
     MapObject_SetFacingAndUpdateDraw(work->trainer, work->direction);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_MOVEMENT_PAUSED);
-    work->state = 2;
+    work->state = TRAINER_APPROACH_WAIT_FOR_PLAYER;
     return TRUE;
 }
 
@@ -710,10 +731,10 @@ BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work) {
     case 0x34:
     case 0x35:
     case 0x36:
-        work->state = 7;
+        work->state = TRAINER_APPROACH_START_REVEAL;
         return TRUE;
     default:
-        work->state = 3;
+        work->state = TRAINER_APPROACH_START_FACE;
         return TRUE;
     }
 }
@@ -726,7 +747,7 @@ BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
         GF_AssertFail();
     }
     MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, MOVEMENT_FACE_UP));
-    work->state = 4;
+    work->state = TRAINER_APPROACH_WAIT_FACE;
     return FALSE;
 }
 
@@ -734,33 +755,33 @@ BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
     if (!MapObject_IsMovementPaused(work->trainer)) {
         return FALSE;
     }
-    work->state = 5;
+    work->state = TRAINER_APPROACH_SPAWN_EXCLAMATION;
     return TRUE;
 }
 
 BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work) {
     work->effect = EmoteMark_Spawn(work->trainer, 0, 0);
-    work->state = 6;
+    work->state = TRAINER_APPROACH_WAIT_EXCLAMATION;
     return FALSE;
 }
 
 BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work) {
     if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
-        work->state = 9;
+        work->state = TRAINER_APPROACH_WAIT;
     }
     return FALSE;
 }
 
 BOOL TrainerApproach_StartReveal(TrainerApproachWork *work) {
     MapObject_SetHeldMovement(work->trainer, 0x65);
-    work->state = 8;
+    work->state = TRAINER_APPROACH_WAIT_REVEAL;
     return FALSE;
 }
 
 BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work) {
     if (MapObject_IsMovementPaused(work->trainer) == TRUE) {
-        work->state = 9;
+        work->state = TRAINER_APPROACH_WAIT;
     }
     return FALSE;
 }
@@ -768,24 +789,24 @@ BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work) {
 BOOL TrainerApproach_Wait(TrainerApproachWork *work) {
     if (++work->timer >= 30) {
         work->timer = 0;
-        work->state = 10;
+        work->state = TRAINER_APPROACH_CHECK_DISTANCE;
     }
     return FALSE;
 }
 
 BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
     if (work->distance <= 1) {
-        work->state = 13;
+        work->state = TRAINER_APPROACH_WAIT_ARRIVED;
         return TRUE;
     }
-    work->state = 11;
+    work->state = TRAINER_APPROACH_START_STEP;
     return TRUE;
 }
 
 BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->trainer) == TRUE) {
         MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, MOVEMENT_STEP_UP));
-        work->state = 12;
+        work->state = TRAINER_APPROACH_WAIT_STEP;
     }
     return FALSE;
 }
@@ -795,7 +816,7 @@ BOOL TrainerApproach_WaitStep(TrainerApproachWork *work) {
         return FALSE;
     }
     work->distance--;
-    work->state = 10;
+    work->state = TRAINER_APPROACH_CHECK_DISTANCE;
     return TRUE;
 }
 
@@ -804,7 +825,7 @@ BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work) {
         return FALSE;
     }
     work->timer = 0;
-    work->state = 14;
+    work->state = TRAINER_APPROACH_TURN_PLAYER;
     return TRUE;
 }
 
@@ -819,10 +840,10 @@ BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
         if (MapObject_AreBitsSetForMovementScriptInit(object) == TRUE) {
             MapObject_ClearFlagsBits(object, MAPOBJECTFLAG_UNK7);
             MapObject_SetHeldMovement(object, GetMovementForDirection(direction, MOVEMENT_FACE_UP));
-            work->state = 15;
+            work->state = TRAINER_APPROACH_WAIT_PLAYER_TURN;
         }
     } else {
-        work->state = 16;
+        work->state = TRAINER_APPROACH_RESET_TRAINER_MOVEMENT;
     }
     return FALSE;
 }
@@ -833,14 +854,14 @@ BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work) {
         return FALSE;
     }
     MapObject_ClearHeldMovementIfActive(player);
-    work->state = 16;
+    work->state = TRAINER_APPROACH_RESET_TRAINER_MOVEMENT;
     return TRUE;
 }
 
 BOOL TrainerApproach_ResetTrainerMovement(TrainerApproachWork *work) {
     MapObject_ClearHeldMovementIfActive(work->trainer);
     MapObject_ChangeMovement(work->trainer, 0);
-    work->state = 17;
+    work->state = TRAINER_APPROACH_FINISH;
     return TRUE;
 }
 

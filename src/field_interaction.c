@@ -65,16 +65,16 @@ void FieldSystem_GetFacingObject(FieldSystem *fieldSystem, LocalMapObject **ret_
     u32 dir = GetCoordsOfFacingTile(fieldSystem, &x, &z);
     if (MetatileBehavior_IsCounter(GetMetatileBehavior(fieldSystem, x, z)) == TRUE) {
         switch (dir) {
-        case 0:
+        case DIR_NORTH:
             z--;
             break;
-        case 1:
+        case DIR_SOUTH:
             z++;
             break;
-        case 2:
+        case DIR_WEST:
             x--;
             break;
-        case 3:
+        case DIR_EAST:
             x++;
             break;
         }
@@ -102,7 +102,7 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
         bgEvent = bgEvents;
         do {
             if (x == bgEvent->x && z == bgEvent->z) {
-                if (bgEvent->type == 2) {
+                if (bgEvent->type == BG_TYPE_HIDDEN_ITEM) {
                     if (BgEventIsUncollectedHiddenItem(fieldSystem, &bgEvents[i]) == TRUE) {
                         return bgEvents[i].scriptId;
                     }
@@ -118,7 +118,7 @@ u16 GetInteractedBackgroundEventScript(FieldSystem *fieldSystem, BgEvent *bgEven
 }
 
 static u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent) {
-    if (bgEvent->type != 2) {
+    if (bgEvent->type != BG_TYPE_HIDDEN_ITEM) {
         return FALSE;
     }
     if (FieldSystem_FlagCheck(fieldSystem, HiddenItemScriptNoToFlagId(bgEvent->scriptId)) == TRUE) {
@@ -166,7 +166,7 @@ u32 GetFacingSignScript(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEven
     }
     GetCoordsOfFacingTile(fieldSystem, &x, &z);
     for (i = 0; i < numEvents; i++) {
-        if (x == bgEvents[i].x && z == bgEvents[i].z && bgEvents[i].type == 1) {
+        if (x == bgEvents[i].x && z == bgEvents[i].z && bgEvents[i].type == BG_TYPE_SIGNPOST) {
             return bgEvents[i].scriptId;
         }
     }

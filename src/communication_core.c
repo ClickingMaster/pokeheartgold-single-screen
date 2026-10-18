@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/comm_type.h"
+
 #include "dwc/dwc_main_internal.h"
 
 #include "comm_wireless.h"
@@ -104,7 +106,7 @@ int Comm_InitWork(int create, int packetSize) {
         *(void **)(gCommCore.work + 0x48c) = Heap_Alloc(HEAP_ID_15, *(u32 *)(gCommCore.work + 0x68c));
         *(void **)(gCommCore.work + 0x488) = Heap_Alloc(HEAP_ID_15, *(u32 *)(gCommCore.work + 0x68c));
 
-        if (CommState_GetLinkMode() == 10) {
+        if (CommState_GetLinkMode() == COMM_TYPE_10) {
             PacketPool_Init(gCommCore.work + 0x580, 100, gCommCore.work + 0x498);
             PacketPool_Init(gCommCore.work + 0x5a0, 800, gCommCore.work + 0x510);
         } else {
@@ -890,21 +892,21 @@ static inline u32 CommKeyWork_Random(CommKeyWork *w, u32 max) {
 void Comm_ScrambleDirectionKeys(void) {
     CommKeyWork *w = (CommKeyWork *)gCommCore.work;
     u16 result = 0;
-    if (w->mode == 0 || !(w->buttons & 0xf0)) {
+    if (w->mode == 0 || !(w->buttons & PAD_PLUS_KEY_MASK)) {
         return;
     }
     if (w->mode == 2) {
-        if (w->buttons & 0x20) {
-            result |= 0x10;
+        if (w->buttons & PAD_KEY_LEFT) {
+            result |= PAD_KEY_RIGHT;
         }
-        if (w->buttons & 0x10) {
-            result |= 0x20;
+        if (w->buttons & PAD_KEY_RIGHT) {
+            result |= PAD_KEY_LEFT;
         }
-        if (w->buttons & 0x40) {
-            result |= 0x80;
+        if (w->buttons & PAD_KEY_UP) {
+            result |= PAD_KEY_DOWN;
         }
-        if (w->buttons & 0x80) {
-            result |= 0x40;
+        if (w->buttons & PAD_KEY_DOWN) {
+            result |= PAD_KEY_UP;
         }
     } else if (w->direction != 0) {
         result = w->direction;
@@ -915,23 +917,23 @@ void Comm_ScrambleDirectionKeys(void) {
     } else {
         switch (CommKeyWork_Random(w, 4)) {
         case 0:
-            result = 0x20;
+            result = PAD_KEY_LEFT;
             break;
         case 1:
-            result = 0x10;
+            result = PAD_KEY_RIGHT;
             break;
         case 2:
-            result = 0x40;
+            result = PAD_KEY_UP;
             break;
         case 3:
-            result = 0x80;
+            result = PAD_KEY_DOWN;
             break;
         }
         w = (CommKeyWork *)gCommCore.work;
         w->timer = CommKeyWork_Random(w, 16);
         ((CommKeyWork *)gCommCore.work)->direction = result;
     }
-    ((CommKeyWork *)gCommCore.work)->buttons &= ~0xf0;
+    ((CommKeyWork *)gCommCore.work)->buttons &= ~PAD_PLUS_KEY_MASK;
     ((CommKeyWork *)gCommCore.work)->buttons += result;
 }
 
@@ -1067,7 +1069,7 @@ int Comm_SendCommandNoCopy(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 0)) {
         return 1;
     }
-    if (CommState_GetLinkMode() == 10) {
+    if (CommState_GetLinkMode() == COMM_TYPE_10) {
         Comm_SetLinkError();
     }
     return 0;
@@ -1080,7 +1082,7 @@ int Comm_SendCommand(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x580, command, data, size, 1, 1)) {
         return 1;
     }
-    if (CommState_GetLinkMode() == 10) {
+    if (CommState_GetLinkMode() == COMM_TYPE_10) {
         Comm_SetLinkError();
     }
     return 0;
@@ -1100,7 +1102,7 @@ int Comm_SendParentCommandNoCopy(int command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x5A0, command, data, size, 1, 0)) {
         return 1;
     }
-    if (CommState_GetLinkMode() == 10) {
+    if (CommState_GetLinkMode() == COMM_TYPE_10) {
         Comm_SetLinkError();
     }
     return 0;
@@ -1120,7 +1122,7 @@ int Comm_SendParentCommand(void *command, void *data, int size) {
     if (PacketPool_Enqueue(gCommCore.work + 0x5A0, (int)command, data, size, 1, 1)) {
         return 1;
     }
-    if (CommState_GetLinkMode() == 10) {
+    if (CommState_GetLinkMode() == COMM_TYPE_10) {
         Comm_SetLinkError();
     }
     return 0;

@@ -318,16 +318,16 @@ void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value) {
 
 int CommPlayerManager_KeysToDirection(int unused, int keys) {
     if (keys & PAD_KEY_LEFT) {
-        return 2;
+        return DIR_WEST;
     }
     if (keys & PAD_KEY_RIGHT) {
-        return 3;
+        return DIR_EAST;
     }
     if (keys & PAD_KEY_UP) {
-        return 0;
+        return DIR_NORTH;
     }
     if (keys & PAD_KEY_DOWN) {
-        return 1;
+        return DIR_SOUTH;
     }
     return -1;
 }
@@ -844,20 +844,20 @@ BOOL CommPlayerManager_StepAllPlayersBack(void) {
 }
 
 int CommPlayerManager_GetOppositeDirection(int facing) {
-    if (facing == 0) {
-        return 1;
+    if (facing == DIR_NORTH) {
+        return DIR_SOUTH;
     }
-    if (facing == 1) {
-        return 0;
+    if (facing == DIR_SOUTH) {
+        return DIR_NORTH;
     }
-    if (facing == 2) {
-        return 3;
+    if (facing == DIR_WEST) {
+        return DIR_EAST;
     }
-    if (facing == 3) {
-        return 2;
+    if (facing == DIR_EAST) {
+        return DIR_WEST;
     }
     GF_AssertFail();
-    return 2;
+    return DIR_WEST;
 }
 
 int CommPlayerManager_GetMoveTimer(int netId) {

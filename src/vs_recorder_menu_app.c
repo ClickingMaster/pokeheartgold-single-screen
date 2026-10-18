@@ -16,6 +16,13 @@
 #include "vs_recorder_app.h"
 #include "vs_recorder_app_internal.h"
 
+enum VsRecorderMenuExitState {
+    VS_RECORDER_MENU_EXIT_DESTROY_TASKS,
+    VS_RECORDER_MENU_EXIT_DELETE_SPRITES,
+    VS_RECORDER_MENU_EXIT_DELETE_CURSOR_1,
+    VS_RECORDER_MENU_EXIT_DELETE_CURSOR_2,
+};
+
 static int VsRecorderMenu_InitCommon(OverlayManager *manager, int *state, BOOL fromTerminal);
 static int VsRecorderMenu_Init(OverlayManager *manager, int *state);
 static int VsRecorderMenu_InitFromTerminal(OverlayManager *manager, int *state);
@@ -117,22 +124,22 @@ static int VsRecorderMenu_Exit(OverlayManager *manager, int *state) {
     VsRecorderWork *recorder = VsRecorderApp_GetRecorderWork(manager);
 
     switch (*state) {
-    case 0:
+    case VS_RECORDER_MENU_EXIT_DESTROY_TASKS:
         VsRecorder_DestroyDecorTasks(recorder);
         (*state)++;
         break;
-    case 1:
+    case VS_RECORDER_MENU_EXIT_DELETE_SPRITES:
         VsRecorder_DeleteDecorSprites(recorder);
         VsRecorder_DeleteMenuRowSprites(recorder);
         VsRecorder_FreeMenuRowText(recorder);
         (*state)++;
         break;
-    case 2:
+    case VS_RECORDER_MENU_EXIT_DELETE_CURSOR_1:
         if (!OrbitCursor_Delete(recorder->orbitCursors[0])) {
             (*state)++;
         }
         break;
-    case 3:
+    case VS_RECORDER_MENU_EXIT_DELETE_CURSOR_2:
         if (!OrbitCursor_Delete(recorder->orbitCursors[1])) {
             (*state)++;
         }
