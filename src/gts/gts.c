@@ -150,12 +150,11 @@ void GtsServer_RequestPost(const void *record) {
     }
 }
 
-#pragma opt_propagation off
-
 void GtsServer_RequestPostFinish(void) {
     GtsFriendKey *src = &gGtsServerFriendKey;
     GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
-    *dest = *src;
+    dest->lo = src->lo;
+    dest->hi = src->hi;
     GameStats_Start();
     if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_POST_FINISH;
@@ -165,8 +164,6 @@ void GtsServer_RequestPostFinish(void) {
         GameStats_Shutdown();
     }
 }
-
-#pragma opt_propagation reset
 
 void GtsServer_RequestGet(void *response) {
     ov70_02246900.response = response;
@@ -265,12 +262,11 @@ void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
     }
 }
 
-#pragma opt_propagation off
-
 void GtsServer_RequestExchangeFinish(void) {
     GtsFriendKey *src = &gGtsServerFriendKey;
     GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
-    *dest = *src;
+    dest->lo = src->lo;
+    dest->hi = src->hi;
     GameStats_Start();
     if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
         gGtsServer.state = GTS_SERVER_STATE_EXCHANGE_FINISH;
@@ -280,8 +276,6 @@ void GtsServer_RequestExchangeFinish(void) {
         GameStats_Shutdown();
     }
 }
-
-#pragma opt_propagation reset
 
 void GtsServer_RequestInfo(void) {
     GameStats_Start();

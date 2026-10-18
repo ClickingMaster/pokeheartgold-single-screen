@@ -1311,33 +1311,23 @@ setState:
     return -1;
 }
 
-#pragma opt_strength_reduction off
-
 int GtsSelector_ReopenSpeciesGroups(GtsSelector *selector) {
+    int i;
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 34, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_SPECIES_GROUPS);
     MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
-    // A byte offset into windows next to the index.
-    int i = 0;
-    int offset = i;
-    for (; i < 9; i++, offset += sizeof(Window)) {
+    for (i = 0; i < 9; i++) {
         String *string = NewString_ReadMsgData(selector->gtsMsgData, i + 110);
         u32 color;
-        int enabled;
-        u8 *dest;
-        // dest is &enabled[i], computed from the selector moved by i bytes.
         if (GtsSelector_GroupHasSeenSpecies(selector, i) == TRUE) {
             color = MAKE_TEXT_COLOR(15, 14, 2);
-            dest = ((GtsSelector *)((u8 *)selector + i))->enabled;
-            enabled = TRUE;
+            selector->enabled[i] = TRUE;
         } else {
             color = MAKE_TEXT_COLOR(8, 9, 2);
-            dest = ((GtsSelector *)((u8 *)selector + i))->enabled;
-            enabled = FALSE;
+            selector->enabled[i] = FALSE;
         }
-        *dest = enabled;
-        GtsSelector_PrintString(selector->cellManager, (Window *)((u8 *)selector->windows + offset), string, 2, color);
+        GtsSelector_PrintString(selector->cellManager, &selector->windows[i], string, 2, color);
         String_Delete(string);
     }
     GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);

@@ -40,7 +40,6 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out);
 // @fn WifiSetup_ConnectAccessPoint
 #pragma optimization_level 2
 #pragma opt_propagation off
-#pragma opt_loop_invariants on
 int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
     OSAlarm alarm;
     OSMessage message;
@@ -144,4 +143,3 @@ int WifiSetup_ConnectAccessPoint(ConnectParam *param, void *out) {
 }
 #pragma optimization_level reset
 #pragma opt_propagation reset
-#pragma opt_loop_invariants reset

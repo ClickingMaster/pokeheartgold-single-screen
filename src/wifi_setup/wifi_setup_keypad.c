@@ -100,21 +100,14 @@ BOOL WifiSetupKeypad_Exists(void) {
 // Each slide-in task raises one row by 12 pixels per frame until it reaches its place, then starts
 // the next row from the bottom of the screen. The row's x position is read but unused.
 
-#pragma opt_propagation off
-
 void WifiSetupKeypad_SlideInRow0Task(void *task) {
-    volatile RowPosition pos;
+    RowPosition pos;
+    RowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[0]->attr01;
-    int x;
-    int y;
-    u32 xBits = attr & 0x1ff0000;
-    y = attr & 0xff;
-    y -= 12;
-    x = xBits >> 16;
-    pos.x = x;
-    pos.y = y;
-    if (y > 76) {
-        WifiSetupKeypad_SetRowY(0, y);
+    p->x = (attr & 0x1ff0000) >> 16;
+    p->y = (attr & 0xff) - 12;
+    if (p->y > 76) {
+        WifiSetupKeypad_SetRowY(0, p->y);
         return;
     }
     WifiSetupKeypad_SetRowY(0, 76);
@@ -123,18 +116,13 @@ void WifiSetupKeypad_SlideInRow0Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow1Task(void *task) {
-    volatile RowPosition pos;
+    RowPosition pos;
+    RowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[3]->attr01;
-    int x;
-    int y;
-    u32 xBits = attr & 0x1ff0000;
-    y = attr & 0xff;
-    y -= 12;
-    x = xBits >> 16;
-    pos.x = x;
-    pos.y = y;
-    if (y > 99) {
-        WifiSetupKeypad_SetRowY(1, y);
+    p->x = (attr & 0x1ff0000) >> 16;
+    p->y = (attr & 0xff) - 12;
+    if (p->y > 99) {
+        WifiSetupKeypad_SetRowY(1, p->y);
         return;
     }
     WifiSetupKeypad_SetRowY(1, 99);
@@ -143,18 +131,13 @@ void WifiSetupKeypad_SlideInRow1Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow2Task(void *task) {
-    volatile RowPosition pos;
+    RowPosition pos;
+    RowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[6]->attr01;
-    int x;
-    int y;
-    u32 xBits = attr & 0x1ff0000;
-    y = attr & 0xff;
-    y -= 12;
-    x = xBits >> 16;
-    pos.x = x;
-    pos.y = y;
-    if (y > 122) {
-        WifiSetupKeypad_SetRowY(2, y);
+    p->x = (attr & 0x1ff0000) >> 16;
+    p->y = (attr & 0xff) - 12;
+    if (p->y > 122) {
+        WifiSetupKeypad_SetRowY(2, p->y);
         return;
     }
     WifiSetupKeypad_SetRowY(2, 122);
@@ -163,26 +146,19 @@ void WifiSetupKeypad_SlideInRow2Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow3Task(void *task) {
-    volatile RowPosition pos;
+    RowPosition pos;
+    RowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[9]->attr01;
-    int x;
-    int y;
-    u32 xBits = attr & 0x1ff0000;
-    y = attr & 0xff;
-    y -= 12;
-    x = xBits >> 16;
-    pos.x = x;
-    pos.y = y;
-    if (y > 145) {
-        WifiSetupKeypad_SetRowY(3, y);
+    p->x = (attr & 0x1ff0000) >> 16;
+    p->y = (attr & 0xff) - 12;
+    if (p->y > 145) {
+        WifiSetupKeypad_SetRowY(3, p->y);
         return;
     }
     WifiSetupKeypad_SetRowY(3, 145);
     WifiSetupKeypad_SetRowY(4, 192);
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_SlideInButtonsTask);
 }
-
-#pragma opt_propagation reset
 
 void WifiSetupKeypad_SlideInButtonsTask(void *task) {
     int x, y;

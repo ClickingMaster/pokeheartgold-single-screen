@@ -2087,8 +2087,6 @@ static void VisitorProfilesPanel_ActivateRow(VisitorProfilesPanel *panel, s32 ro
     panel->rows[row].active = 1;
 }
 
-#pragma opt_repositioncode off
-
 // Row i counts from the bottom: first the blank row and the base screen, then the place text and its background.
 static BOOL VisitorProfilesPanel_UpdateRow(VisitorProfilesPanel *panel, int row, VisitorProfilesGraphics *gfx) {
     u32 line;
@@ -2124,8 +2122,6 @@ static BOOL VisitorProfilesPanel_UpdateRow(VisitorProfilesPanel *panel, int row,
     (*state)++;
     return FALSE;
 }
-
-#pragma opt_repositioncode reset
 
 static void VisitorProfilesPanel_CopyBaseRow(VisitorProfilesPanel *panel, int row, VisitorProfilesGraphics *gfx) {
     NNSG2dScreenData *screen = panel->baseScreen;

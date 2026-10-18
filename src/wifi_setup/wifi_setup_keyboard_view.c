@@ -18,8 +18,6 @@ static inline void SetKeyPalette(GXOamAttr *oam, u32 palette) {
     oam->attr2 = (oam->attr2 & ~0xf000u) | (palette << 12);
 }
 
-#pragma opt_strength_reduction off
-
 void WifiSetupKeyboard_SetPage(int page) {
     int i;
     int altPage = FALSE, shift = FALSE;
@@ -36,8 +34,6 @@ void WifiSetupKeyboard_SetPage(int page) {
     WifiSetupKeyboard_SetKeyHighlight(WIFI_SETUP_KEY_ALT_PAGE, altPage);
     WifiSetupKeyboard_SetKeyHighlight(WIFI_SETUP_KEY_SHIFT, shift);
 }
-
-#pragma opt_strength_reduction reset
 
 void WifiSetupKeyboard_SetKeyHighlight(int key, int highlighted) {
     if (key < 0) {

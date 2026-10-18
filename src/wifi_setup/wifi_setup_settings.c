@@ -649,8 +649,6 @@ static void WifiSetupSettings_DrawValue(u32 item, int row) {
     }
 }
 
-#pragma opt_propagation off
-
 static void WifiSetupSettings_DrawButtons(u32 item, int row) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();
     int type, option;
@@ -664,11 +662,10 @@ static void WifiSetupSettings_DrawButtons(u32 item, int row) {
         }
         break;
     case 2: {
-        int on = record->autoAddress;
-        int pressed = 0, otherType;
+        int otherType, pressed = 0;
         WifiSetupSettingsWork *work;
-        int held;
-        if (on) {
+        option = 0;
+        if (record->autoAddress) {
             type = 1;
             otherType = 4;
         } else {
@@ -676,9 +673,7 @@ static void WifiSetupSettings_DrawButtons(u32 item, int row) {
             otherType = 3;
         }
         work = gWifiSetupSettings.work;
-        held = work->buttonStates[0];
-        option = pressed;
-        if (held) {
+        if (work->buttonStates[0]) {
             option = 1;
         }
         if (work->buttonStates[1]) {
@@ -728,8 +723,6 @@ static void WifiSetupSettings_DrawButtons(u32 item, int row) {
     }
     WifiSetupSettings_SetButtonOam(type, option, row);
 }
-
-#pragma opt_propagation reset
 
 static int WifiSetupSettings_IsItemEnabled(int item) {
     WifiSetupConnection *record = WifiSetupConnections_GetEdit();

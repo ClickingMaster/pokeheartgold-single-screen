@@ -639,8 +639,6 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
 
 // Parses a channel mode string ("+" / "-" then mode letters, "+" / "-" may appear again; letters b, k, l, o and v
 // take the next argument) into a 0-terminated array of changes (heap).
-#pragma opt_strength_reduction off
-
 ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) {
     ChatModeChange *changes = NULL;
     char c;
@@ -758,8 +756,6 @@ ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) 
     } while (c != '\0');
     return changes;
 }
-
-#pragma opt_strength_reduction reset
 
 // (read through a volatile view, as the original does)
 #define MODE_TYPE(change) (((volatile ChatModeChange *)(change))->type)
