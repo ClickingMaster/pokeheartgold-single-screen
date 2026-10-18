@@ -21,6 +21,19 @@
 #define GTS_REQUEST_23003             23003
 #define GTS_REQUEST_NONE              23004
 
+enum GlobalTerminalSocketState {
+    GTS_SOCKET_STATE_NONE,
+    GTS_SOCKET_STATE_READY,
+    GTS_SOCKET_STATE_FETCH_TOKEN,
+    GTS_SOCKET_STATE_OPEN,
+    GTS_SOCKET_STATE_CONNECT,
+    GTS_SOCKET_STATE_SEND,
+    GTS_SOCKET_STATE_RECEIVE,
+    GTS_SOCKET_STATE_CANCELLED,
+    GTS_SOCKET_STATE_DONE,
+    GTS_SOCKET_STATE_ERROR,
+};
+
 typedef struct GlobalTerminalNet GlobalTerminalNet;
 
 typedef struct GlobalTerminalNetError {

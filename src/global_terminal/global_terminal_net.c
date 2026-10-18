@@ -146,6 +146,12 @@ typedef struct GlobalTerminalNetVideoView {
     u8 savedNumber[8];
 } GlobalTerminalNetVideoView;
 
+enum GlobalTerminalNetStepResult {
+    GLOBAL_TERMINAL_NET_STEP_WAIT,
+    GLOBAL_TERMINAL_NET_STEP_NEXT,
+    GLOBAL_TERMINAL_NET_STEP_RESTART,
+};
+
 static const GlobalTerminalNetStepFunc sGlobalTerminalNetNoSequence[1] = {
     NULL,
 };
@@ -467,10 +473,10 @@ BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net) {
                 net->sendDelay--;
             } else {
                 switch (GlobalTerminalServer_GetState()) {
-                case 1:
-                case 7:
-                case 8:
-                case 9:
+                case GTS_SOCKET_STATE_READY:
+                case GTS_SOCKET_STATE_CANCELLED:
+                case GTS_SOCKET_STATE_DONE:
+                case GTS_SOCKET_STATE_ERROR:
                     if (GlobalTerminalNet_SendPendingRequest(net) == TRUE) {
                         net->pendingCommand = GTS_REQUEST_NONE;
                     }
@@ -495,9 +501,9 @@ BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net) {
     sequence = sGlobalTerminalNetSequences[net->sequence];
     if (sequence != NULL) {
         switch (sequence[net->sequenceStep](net, &net->stepWork)) {
-        case 0:
+        case GLOBAL_TERMINAL_NET_STEP_WAIT:
             break;
-        case 1:
+        case GLOBAL_TERMINAL_NET_STEP_NEXT:
             MI_CpuFill8(&net->stepWork, 0, sizeof(GlobalTerminalNetStepWork));
             net->sequenceStep++;
             MI_CpuFill8(&net->stepWork, 0, sizeof(GlobalTerminalNetStepWork));
@@ -506,7 +512,7 @@ BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net) {
                 net->sequence = 0;
             }
             break;
-        case 2:
+        case GLOBAL_TERMINAL_NET_STEP_RESTART:
             MI_CpuFill8(&net->stepWork, 0, sizeof(GlobalTerminalNetStepWork));
             net->sequenceStep = 0;
             break;
@@ -577,26 +583,26 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
     net->status = GlobalTerminalServer_GetState();
     if (net->status != net->prevStatus) {
         switch (net->status) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
+        case GTS_SOCKET_STATE_NONE:
+        case GTS_SOCKET_STATE_READY:
+        case GTS_SOCKET_STATE_FETCH_TOKEN:
+        case GTS_SOCKET_STATE_OPEN:
+        case GTS_SOCKET_STATE_CONNECT:
+        case GTS_SOCKET_STATE_SEND:
+        case GTS_SOCKET_STATE_RECEIVE:
             break;
-        case 7:
+        case GTS_SOCKET_STATE_CANCELLED:
             net->error.type = 1;
             net->error.command = 0;
             net->error.code = 7;
             net->error.isError = 1;
             net->completeFunc = GlobalTerminalNet_CompleteError;
             break;
-        case 8:
+        case GTS_SOCKET_STATE_DONE:
             net->completeFunc = GlobalTerminalNet_CompleteResponse;
             GlobalTerminalNet_HandleResponse(net);
             break;
-        case 9:
+        case GTS_SOCKET_STATE_ERROR:
             net->error.type = 0;
             net->error.command = 0;
             net->error.code = GlobalTerminalServer_GetError();

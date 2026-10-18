@@ -2,6 +2,18 @@
 
 #include "global_terminal/global_terminal_app_internal.h"
 
+enum GlobalTerminalAppState {
+    GLOBAL_TERMINAL_APP_LOAD_WIFI,
+    GLOBAL_TERMINAL_APP_WAIT_WIFI,
+    GLOBAL_TERMINAL_APP_START_CONNECT,
+    GLOBAL_TERMINAL_APP_RUN_CONNECT,
+    GLOBAL_TERMINAL_APP_START_VS_RECORDER,
+    GLOBAL_TERMINAL_APP_RUN_VS_RECORDER,
+    GLOBAL_TERMINAL_APP_START_DISCONNECT,
+    GLOBAL_TERMINAL_APP_RUN_DISCONNECT,
+    GLOBAL_TERMINAL_APP_END,
+};
+
 // DWC allocations of the Wi-Fi apps run by GlobalTerminalApp_Main (set once the DWC heap exists).
 static NNSFndHeapHandle sDwcHeap;
 
@@ -32,11 +44,11 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
     GlobalTerminalApp *data = OverlayManager_GetData(man);
 
     switch (*state) {
-    case 0:
+    case GLOBAL_TERMINAL_APP_LOAD_WIFI:
         GlobalTerminalApp_LoadWifi(data);
-        *state = 1;
+        *state = GLOBAL_TERMINAL_APP_WAIT_WIFI;
         break;
-    case 1:
+    case GLOBAL_TERMINAL_APP_WAIT_WIFI:
         if (CommWireless_IsStartedUp()) {
             sDwcHeap = data->dwcHeap;
             DWC_SetMemFunc(GlobalTerminalApp_DwcAlloc, GlobalTerminalApp_DwcFree);
@@ -44,45 +56,45 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
             ++*state;
         }
         break;
-    case 2:
+    case GLOBAL_TERMINAL_APP_START_CONNECT:
         data->subApp = OverlayManager_New(&sOverlayTemplate_GlobalTerminalConnect, data, HEAP_ID_123);
         ++*state;
         break;
-    case 3:
+    case GLOBAL_TERMINAL_APP_RUN_CONNECT:
         if (OverlayManager_Run(data->subApp) == TRUE) {
             OverlayManager_Delete(data->subApp);
             if (data->isConnected == 1) {
                 data->disconnect = 1;
                 ++*state;
             } else {
-                *state = 8;
+                *state = GLOBAL_TERMINAL_APP_END;
             }
         }
         break;
-    case 4: {
+    case GLOBAL_TERMINAL_APP_START_VS_RECORDER: {
         const OverlayManagerTemplate *tmpl = VsRecorderApp_GetTemplate(data->args->vsRecorderMode);
         data->subApp = OverlayManager_New(tmpl, data->args->fieldSystem, HEAP_ID_123);
         ++*state;
         break;
     }
-    case 5:
+    case GLOBAL_TERMINAL_APP_RUN_VS_RECORDER:
         if (OverlayManager_Run(data->subApp) == TRUE) {
             OverlayManager_Delete(data->subApp);
             ++*state;
         }
         break;
-    case 6:
+    case GLOBAL_TERMINAL_APP_START_DISCONNECT:
         data->subApp = OverlayManager_New(&sOverlayTemplate_GlobalTerminalConnect, data, HEAP_ID_123);
         ++*state;
         break;
-    case 7:
+    case GLOBAL_TERMINAL_APP_RUN_DISCONNECT:
         if (OverlayManager_Run(data->subApp) == TRUE) {
             OverlayManager_Delete(data->subApp);
             data->disconnect = 0;
             ++*state;
         }
         break;
-    case 8:
+    case GLOBAL_TERMINAL_APP_END:
         return TRUE;
     }
 

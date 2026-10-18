@@ -58,6 +58,33 @@ enum GlobalTerminalConnectState {
     GTC_STATE_DISCONNECT,
 };
 
+enum GlobalTerminalConnectMainState {
+    GTC_MAIN_WAIT_FADE_IN,
+    GTC_MAIN_RUN,
+    GTC_MAIN_WAIT_FADE_OUT,
+};
+
+enum GlobalTerminalConnectAskStep {
+    GTC_ASK_START,
+    GTC_ASK_PRINT_QUESTION,
+    GTC_ASK_OPEN_YES_NO,
+    GTC_ASK_HANDLE_YES_NO,
+    GTC_ASK_CONNECT,
+};
+
+enum GlobalTerminalConnectStartStep {
+    GTC_START_PRINT_CONNECTING,
+    GTC_START_WAIT_MESSAGE,
+    GTC_START_CONNECT,
+};
+
+enum GlobalTerminalConnectDisconnectStep {
+    GTC_DISCONNECT_PRINT_DISCONNECTING,
+    GTC_DISCONNECT_DISCONNECT,
+    GTC_DISCONNECT_PRINT_DISCONNECTED,
+    GTC_DISCONNECT_WAIT,
+};
+
 // The GlobalTerminalApp the connect app is started with.
 typedef struct GlobalTerminalConnectArgs {
     GlobalTerminalLaunchArgs *launchArgs; // 0x00
@@ -310,12 +337,12 @@ BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state) {
     u32 oldState;
 
     switch (*state) {
-    case 0:
+    case GTC_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
-            *state = 1;
+            *state = GTC_MAIN_RUN;
         }
         break;
-    case 1:
+    case GTC_MAIN_RUN:
         oldState = work->state;
         result = sGlobalTerminalConnectStates[oldState](work);
         if (oldState != work->state) {
@@ -324,10 +351,10 @@ BOOL GlobalTerminalConnect_Main(OverlayManager *manager, int *state) {
             work->timer = 0;
         }
         if (result == TRUE) {
-            *state = 2;
+            *state = GTC_MAIN_WAIT_FADE_OUT;
         }
         break;
-    case 2:
+    case GTC_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }
@@ -670,18 +697,18 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
         return FALSE;
     }
     switch (work->substate) {
-    case 0:
+    case GTC_ASK_START:
         work->substate++;
         break;
-    case 1:
+    case GTC_ASK_PRINT_QUESTION:
         GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00017, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
-    case 2:
+    case GTC_ASK_OPEN_YES_NO:
         work->yesNoPrompt = GlobalTerminalConnect_CreateYesNoPrompt(work->bgConfig, 0x234);
         work->substate++;
         break;
-    case 3:
+    case GTC_ASK_HANDLE_YES_NO:
         result = YesNoPrompt_HandleInput(work->yesNoPrompt);
         if (result == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(work->yesNoPrompt);
@@ -691,7 +718,7 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
             work->state = GTC_STATE_EXIT;
         }
         break;
-    case 4:
+    case GTC_ASK_CONNECT:
         work->state = GTC_STATE_START_CONNECT;
         break;
     }
@@ -700,7 +727,7 @@ BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *work) {
 
 BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
-    case 0:
+    case GTC_START_PRINT_CONNECTING:
         CommState_InitWfcSession(work->args->launchArgs->saveData);
         Sys_SetSleepDisableFlag(4);
         WirelessStatusIcon_Create();
@@ -708,12 +735,12 @@ BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
         GlobalTerminalConnect_ShowWaitingIcon(work);
         work->substate++;
         break;
-    case 1:
+    case GTC_START_WAIT_MESSAGE:
         if (GlobalTerminalConnect_IsPrinting(work->printerId) == FALSE) {
             work->substate++;
         }
         break;
-    case 2:
+    case GTC_START_CONNECT:
         DWC_InitInetEx(work->args->wifiConnection, 2, 1, 20);
         DWC_SetAuthServer(2);
         DWC_ConnectInetAsync();
@@ -863,21 +890,21 @@ BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work)
 
     switch (work->serverError + 15) {
     case 16:
-        msgId = 150;
+        msgId = msg_0775_00150;
         break;
     case 14:
     case 17:
-        msgId = 151;
+        msgId = msg_0775_00151;
         break;
     case 1:
     case 13:
-        msgId = 156;
+        msgId = msg_0775_00156;
         break;
     case 0:
     case 3:
     case 10:
     case 12:
-        msgId = 155;
+        msgId = msg_0775_00155;
         break;
     }
     GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msgId, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
@@ -887,22 +914,22 @@ BOOL GlobalTerminalConnect_StateShowServerError(GlobalTerminalConnectWork *work)
 
 BOOL GlobalTerminalConnect_StateServerErrorDisconnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
-    case 0:
+    case GTC_DISCONNECT_PRINT_DISCONNECTING:
         GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msg_0775_00186, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
-    case 1:
+    case GTC_DISCONNECT_DISCONNECT:
         if (GlobalTerminalConnect_IsPrinting(work->printerId) == FALSE) {
             CommState_FreeWfcSession();
             DWC_CleanupInet();
             work->substate++;
         }
         break;
-    case 2:
+    case GTC_DISCONNECT_PRINT_DISCONNECTED:
         GlobalTerminalConnect_PrintMessage(work, work->msgDataGts, msg_0775_00187, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
-    case 3:
+    case GTC_DISCONNECT_WAIT:
         if (GlobalTerminalConnect_IsPrinting(work->printerId) == FALSE) {
             work->substate++;
         }
@@ -929,21 +956,21 @@ BOOL GlobalTerminalConnect_StateDisconnect(GlobalTerminalConnectWork *work) {
         return FALSE;
     }
     switch (work->substate) {
-    case 0:
+    case GTC_DISCONNECT_PRINT_DISCONNECTING:
         GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00026, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
-    case 1:
+    case GTC_DISCONNECT_DISCONNECT:
         DWC_CleanupInet();
         CommState_FreeWfcSession();
         work->substate++;
         break;
-    case 2:
+    case GTC_DISCONNECT_PRINT_DISCONNECTED:
         WirelessStatusIcon_Destroy();
         GlobalTerminalConnect_PrintMessage(work, work->msgDataWifi, msg_0800_00027, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
         work->substate++;
         break;
-    case 3:
+    case GTC_DISCONNECT_WAIT:
         work->timer++;
         if (work->timer > 30) {
             work->state = work->nextState;

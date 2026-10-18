@@ -49,6 +49,25 @@
 #define RECORD_MIXING_MAX_MEMBERS 5
 #define RECORD_MIXING_BUFFER_SIZE 0xBC0
 
+enum RecordMixingInitState {
+    RECORD_MIXING_INIT_SETUP,
+    RECORD_MIXING_INIT_DONE,
+};
+
+enum RecordMixingMainState {
+    RECORD_MIXING_MAIN_WAIT_FADE_IN,
+    RECORD_MIXING_MAIN_RUN_GROUP,
+    RECORD_MIXING_MAIN_RUN,
+    RECORD_MIXING_MAIN_WAIT_FADE_OUT,
+};
+
+enum RecordMixingMemberState {
+    RECORD_MIXING_MEMBER_NONE,
+    RECORD_MIXING_MEMBER_APPEAR,
+    RECORD_MIXING_MEMBER_SHOWN,
+    RECORD_MIXING_MEMBER_LEAVE,
+};
+
 enum RecordMixingState {
     RECORD_MIXING_STATE_PRINT_GROUP_PROMPT,
     RECORD_MIXING_STATE_WAIT_TEXT_THEN_RESET_MENU,
@@ -433,7 +452,7 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
     NARC *narc;
 
     switch (*state) {
-    case 0:
+    case RECORD_MIXING_INIT_SETUP:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -481,9 +500,9 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
         NARC_Delete(narc);
         (*state)++;
         break;
-    case 1:
+    case RECORD_MIXING_INIT_DONE:
         OverlayManager_GetData(man);
-        *state = 0;
+        *state = RECORD_MIXING_INIT_SETUP;
         return TRUE;
     }
     return FALSE;
@@ -496,15 +515,15 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
         app->leavingMask &= Wireless_GetConnectedBitmap();
     }
     switch (*state) {
-    case 0:
+    case RECORD_MIXING_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 1;
+            *state = RECORD_MIXING_MAIN_RUN_GROUP;
             if (Comm_GetLocalNetId() && RecordMixing_CountMembers() > 2) {
                 Comm_SendCommand(114, NULL, 0);
             }
         }
         break;
-    case 1:
+    case RECORD_MIXING_MAIN_RUN_GROUP:
         if (sRecordMixingStateFuncs[app->state]) {
             *state = sRecordMixingStateFuncs[app->state](app, *state);
         }
@@ -514,17 +533,17 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state) {
         RecordMixing_UpdateMemberSprites(app);
         if (Comm_GetLocalNetId() == 0) {
             int value = RecordMixing_LeaderUpdateMembers(app, 1);
-            if (*state == 1) {
+            if (*state == RECORD_MIXING_MAIN_RUN_GROUP) {
                 *state = value;
             }
         }
         break;
-    case 2:
+    case RECORD_MIXING_MAIN_RUN:
         if (sRecordMixingStateFuncs[app->state]) {
             *state = sRecordMixingStateFuncs[app->state](app, *state);
         }
         break;
-    case 3:
+    case RECORD_MIXING_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -637,7 +656,7 @@ void RecordMixing_InitResources(RecordMixingApp *app, NARC *narc) {
         app->memberKeys[i].cur.s.valid = 0;
         app->memberKeys[i].prev.s.id = 0;
         app->memberKeys[i].prev.s.valid = 0;
-        app->memberStates[i] = 0;
+        app->memberStates[i] = RECORD_MIXING_MEMBER_NONE;
     }
     app->messageText = String_New(180, HEAP_ID_50);
     app->titleText = String_New(40, HEAP_ID_50);
@@ -1198,7 +1217,7 @@ int RecordMixing_State_FadeOutAfterDelay(RecordMixingApp *app, int state) {
     app->counter++;
     if (app->counter > 60) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
-        state = 3;
+        state = RECORD_MIXING_MAIN_WAIT_FADE_OUT;
     }
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1274,7 +1293,7 @@ int RecordMixing_State_WaitExitSync(RecordMixingApp *app, int state) {
     if (LinkSync_IsSynced(201) != FALSE) {
         CommState_SetErrorWatch(0, 0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
-        state = 3;
+        state = RECORD_MIXING_MAIN_WAIT_FADE_OUT;
     }
     RecordMixing_UpdateDummy(app);
     return state;
@@ -1558,16 +1577,16 @@ BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
         if (app->members[i].prev != app->members[i].cur) {
             changed = TRUE;
             if (app->members[i].cur == NULL) {
-                app->memberStates[i] = 3;
+                app->memberStates[i] = RECORD_MIXING_MEMBER_LEAVE;
             } else {
-                app->memberStates[i] = 1;
+                app->memberStates[i] = RECORD_MIXING_MEMBER_APPEAR;
             }
         } else if (app->memberKeys[i].cur.raw != app->memberKeys[i].prev.raw) {
             changed = TRUE;
             if (app->memberKeys[i].cur.s.valid == FALSE) {
-                app->memberStates[i] = 3;
+                app->memberStates[i] = RECORD_MIXING_MEMBER_LEAVE;
             } else {
-                app->memberStates[i] = 1;
+                app->memberStates[i] = RECORD_MIXING_MEMBER_APPEAR;
             }
         }
     }
@@ -1612,9 +1631,9 @@ void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
 
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
         switch (app->memberStates[i]) {
-        case 0:
+        case RECORD_MIXING_MEMBER_NONE:
             break;
-        case 1:
+        case RECORD_MIXING_MEMBER_APPEAR:
             GF_ASSERT(app->members[i].cur != NULL);
             gender = PlayerProfile_GetTrainerGender(app->members[i].cur);
             avatar = PlayerProfile_GetAvatar(app->members[i].cur);
@@ -1625,18 +1644,18 @@ void RecordMixing_UpdateMemberSprites(RecordMixingApp *app) {
                 Sprite_SetAnimCtrlSeq(app->memberSprites[i], i * 2 + 27);
             }
             Sprite_SetDrawFlag(app->memberSprites[i], TRUE);
-            app->memberStates[i] = 2;
+            app->memberStates[i] = RECORD_MIXING_MEMBER_SHOWN;
             appeared = TRUE;
             break;
-        case 2:
+        case RECORD_MIXING_MEMBER_SHOWN:
             break;
-        case 3:
+        case RECORD_MIXING_MEMBER_LEAVE:
             if (i == Comm_GetLocalNetId()) {
                 Sprite_SetAnimCtrlSeq(app->memberSprites[i], PlayerProfile_GetTrainerGender(app->members[i].cur) * 2 + 39);
             } else {
                 Sprite_SetAnimCtrlSeq(app->memberSprites[i], i * 2 + 28);
             }
-            app->memberStates[i] = 0;
+            app->memberStates[i] = RECORD_MIXING_MEMBER_NONE;
             break;
         }
     }
@@ -1704,17 +1723,17 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
         app->joinPending = 0;
     }
     if (n == app->lastMemberCount) {
-        return 1;
+        return RECORD_MIXING_MAIN_RUN_GROUP;
     }
     switch (n) {
     case 1:
         if (Comm_CountConnected() > 1 || Wireless_GetConnectedBitmap() > 1) {
-            return 1;
+            return RECORD_MIXING_MAIN_RUN_GROUP;
         }
         app->state = RECORD_MIXING_STATE_PRINT_MEMBER_UNAVAILABLE;
         RecordMixing_UpdateMaxEntries(app, -1);
         RecordMixing_HideYesNo(app);
-        return 2;
+        return RECORD_MIXING_MAIN_RUN;
     case 2:
     case 3:
     case 4:
@@ -1737,5 +1756,5 @@ int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index) {
         break;
     }
     app->lastMemberCount = RecordMixing_CountMembers();
-    return 1;
+    return RECORD_MIXING_MAIN_RUN_GROUP;
 }
