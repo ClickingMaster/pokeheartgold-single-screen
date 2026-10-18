@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 class Str;
@@ -86,10 +88,10 @@ extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) 
     if (w == 0) {
         return 4;
     }
-    if (w != 0 && w->state == 10) {
+    if (w != 0 && w->state == PPW_LOBBY_STATE_ERROR) {
         return 7;
     }
-    if (w != 0 && gPPWLobbyWork->state != 8) {
+    if (w != 0 && gPPWLobbyWork->state != PPW_LOBBY_STATE_READY) {
         return 4;
     }
     {
@@ -104,7 +106,7 @@ extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) 
             int state = ErrorMap().Map(result);
             if (state != 0) {
                 g->sub = state;
-                g->state = 10;
+                g->state = PPW_LOBBY_STATE_ERROR;
             }
         }
         name.Destroy();

@@ -168,6 +168,33 @@ enum MimeJrTopCommandId {
     MIME_JR_TOP_CMD_FINAL_SCORE,
 };
 
+enum MimeJrTopFlashState {
+    MIME_JR_TOP_FLASH_BRIGHTEN,
+    MIME_JR_TOP_FLASH_SHOW_STAGE,
+    MIME_JR_TOP_FLASH_HOLD,
+    MIME_JR_TOP_FLASH_DARKEN,
+    MIME_JR_TOP_FLASH_END,
+};
+
+enum MimeJrTopPopupsState {
+    MIME_JR_TOP_POPUPS_RISE,
+    MIME_JR_TOP_POPUPS_HOLD,
+    MIME_JR_TOP_POPUPS_SINK,
+    MIME_JR_TOP_POPUPS_END,
+};
+
+enum MimeJrTopAudienceState {
+    MIME_JR_TOP_AUDIENCE_SHOW,
+    MIME_JR_TOP_AUDIENCE_HOLD,
+    MIME_JR_TOP_AUDIENCE_HIDE,
+};
+
+enum MimeJrTopStarsState {
+    MIME_JR_TOP_STARS_START,
+    MIME_JR_TOP_STARS_HOLD,
+    MIME_JR_TOP_STARS_WAIT_END,
+};
+
 typedef struct MimeJrTopModelFiles {
     int files[16][2]; // model file, animation file
 } MimeJrTopModelFiles;
@@ -3116,7 +3143,7 @@ void MimeJrTopStage_UpdateFlash(MimeJrTopStageEffect *effect) {
 
     if (effect->active != FALSE) {
         switch (effect->state) {
-        case 0:
+        case MIME_JR_TOP_FLASH_BRIGHTEN:
             if (*level < 4) {
                 (*level)++;
             } else {
@@ -3126,17 +3153,17 @@ void MimeJrTopStage_UpdateFlash(MimeJrTopStageEffect *effect) {
             PaletteData_BlendPalettes(palette, PLTTBUF_MAIN_BG, 1, (u8)(*level + *base), RGB_BLACK);
             PaletteData_BlendPalettes(palette, PLTTBUF_SUB_BG, 1, (u8)(*level + *base), RGB_BLACK);
             break;
-        case 1:
+        case MIME_JR_TOP_FLASH_SHOW_STAGE:
             ModelInstance_SetVisible(&stage->instance, TRUE);
             effect->timer = 0;
             effect->state++;
             break;
-        case 2:
+        case MIME_JR_TOP_FLASH_HOLD:
             if (effect->stop == TRUE && ++effect->timer >= 15) {
                 effect->state++;
             }
             break;
-        case 3:
+        case MIME_JR_TOP_FLASH_DARKEN:
             if (*level > 0) {
                 (*level)--;
             } else {
@@ -3149,7 +3176,7 @@ void MimeJrTopStage_UpdateFlash(MimeJrTopStageEffect *effect) {
         default:
             effect->stop = FALSE;
             effect->active = FALSE;
-            effect->state = 0;
+            effect->state = MIME_JR_TOP_FLASH_BRIGHTEN;
             ModelInstance_SetVisible(&stage->instance, FALSE);
             break;
         }
@@ -3169,7 +3196,7 @@ void MimeJrTopStage_UpdatePopups(MimeJrTopStageEffect *effect) {
 
     if (effect->active != FALSE) {
         switch (effect->state) {
-        case 0:
+        case MIME_JR_TOP_POPUPS_RISE:
             for (i = 0; i < 4; i++) {
                 sprite = effect->targets[i];
                 if (sprite != NULL) {
@@ -3188,12 +3215,12 @@ void MimeJrTopStage_UpdatePopups(MimeJrTopStageEffect *effect) {
                 effect->state++;
             }
             break;
-        case 1:
+        case MIME_JR_TOP_POPUPS_HOLD:
             if (effect->stop == TRUE && ++effect->timer >= 15) {
                 effect->state++;
             }
             break;
-        case 2:
+        case MIME_JR_TOP_POPUPS_SINK:
             for (i = 0; i < 4; i++) {
                 sprite = effect->targets[i];
                 if (sprite != NULL) {
@@ -3212,7 +3239,7 @@ void MimeJrTopStage_UpdatePopups(MimeJrTopStageEffect *effect) {
         default:
             effect->stop = FALSE;
             effect->active = FALSE;
-            effect->state = 0;
+            effect->state = MIME_JR_TOP_POPUPS_RISE;
             break;
         }
         for (i = 0; i < 4; i++) {
@@ -3231,7 +3258,7 @@ void MimeJrTopStage_UpdateAudience(MimeJrTopStageEffect *effect) {
 
     if (effect->active != FALSE) {
         switch (effect->state) {
-        case 0:
+        case MIME_JR_TOP_AUDIENCE_SHOW:
             for (i = 0; i < 8; i++) {
                 model = effect->targets[i];
                 frame = i * 20;
@@ -3241,7 +3268,7 @@ void MimeJrTopStage_UpdateAudience(MimeJrTopStageEffect *effect) {
             effect->audienceTimer = 0;
             effect->state++;
             break;
-        case 1:
+        case MIME_JR_TOP_AUDIENCE_HOLD:
             if (effect->stop == TRUE && ++effect->audienceTimer >= 15) {
                 effect->state++;
             }
@@ -3252,7 +3279,7 @@ void MimeJrTopStage_UpdateAudience(MimeJrTopStageEffect *effect) {
             }
             effect->stop = FALSE;
             effect->active = FALSE;
-            effect->state = 0;
+            effect->state = MIME_JR_TOP_AUDIENCE_SHOW;
             break;
         }
     }
@@ -3262,12 +3289,12 @@ void MimeJrTopStage_UpdateAudience(MimeJrTopStageEffect *effect) {
 void MimeJrTopStage_UpdateStars(MimeJrTopStageEffect *effect) {
     if (effect->active != FALSE) {
         switch (effect->state) {
-        case 0:
+        case MIME_JR_TOP_STARS_START:
             MimeJrTopGame_StartStars(effect->targets[0], (s32 *)&effect->starsRunning);
             effect->timer = 0;
             effect->state++;
             break;
-        case 1:
+        case MIME_JR_TOP_STARS_HOLD:
             if (effect->stop == TRUE && ++effect->timer >= 15) {
                 effect->starsRunning = TRUE;
                 effect->state++;
@@ -3277,7 +3304,7 @@ void MimeJrTopStage_UpdateStars(MimeJrTopStageEffect *effect) {
             if (effect->starsRunning == FALSE) {
                 effect->stop = FALSE;
                 effect->active = FALSE;
-                effect->state = 0;
+                effect->state = MIME_JR_TOP_STARS_START;
             }
             break;
         }

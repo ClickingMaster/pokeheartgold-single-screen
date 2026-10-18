@@ -7,6 +7,7 @@
 #include "assert.h"
 #include "friend_roster.h"
 #include "heap.h"
+#include "ppw_lobby_state.h"
 #include "save_wifi_history.h"
 #include "wifi_connection.h"
 
@@ -72,25 +73,25 @@ int WiFiPlazaLobbyClient_Update(void) {
         return 0;
     }
     switch (PPW_LobbyProcess()) {
-    case 0:
+    case PPW_LOBBY_STATE_NOT_INITIALIZED:
         gWiFiPlazaLobbyClient->state = WIFI_PLAZA_LOBBY_STATE_DISCONNECTED;
         break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
+    case PPW_LOBBY_STATE_CONNECTING:
+    case PPW_LOBBY_STATE_CONNECTED:
+    case PPW_LOBBY_STATE_WAIT_SCHEDULE:
+    case PPW_LOBBY_STATE_ENUM_CHANNELS:
+    case PPW_LOBBY_STATE_SEARCHING_CHANNEL:
+    case PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL:
+    case PPW_LOBBY_STATE_WAIT_MAIN_CHANNEL:
         gWiFiPlazaLobbyClient->state = WIFI_PLAZA_LOBBY_STATE_CONNECTING;
         break;
-    case 8:
+    case PPW_LOBBY_STATE_READY:
         gWiFiPlazaLobbyClient->state = WIFI_PLAZA_LOBBY_STATE_IN_LOBBY;
         break;
-    case 9:
+    case PPW_LOBBY_STATE_CLOSED:
         gWiFiPlazaLobbyClient->state = WIFI_PLAZA_LOBBY_STATE_CLOSING;
         break;
-    case 10:
+    case PPW_LOBBY_STATE_ERROR:
         gWiFiPlazaLobbyClient->state = WIFI_PLAZA_LOBBY_STATE_ERROR;
         break;
     }
@@ -98,19 +99,19 @@ int WiFiPlazaLobbyClient_Update(void) {
         WiFiPlazaLobbyMatches_Update(gWiFiPlazaLobbyClient);
         PPW_LobbyGetTimeInfo(&gWiFiPlazaLobbyClient->time);
         switch (PPW_LobbyGetSubChannelState()) {
-        case 0:
+        case PPW_LOBBY_CHANNEL_STATE_NONE:
             gWiFiPlazaLobbyClient->channelState = WIFI_PLAZA_CHANNEL_STATE_NONE;
             gWiFiPlazaLobbyClient->channel = 4;
             break;
-        case 1:
+        case PPW_LOBBY_CHANNEL_STATE_JOINING:
             gWiFiPlazaLobbyClient->channelState = WIFI_PLAZA_CHANNEL_STATE_JOINING;
             break;
-        case 2:
+        case PPW_LOBBY_CHANNEL_STATE_JOINED:
             if (gWiFiPlazaLobbyClient->channelState != WIFI_PLAZA_CHANNEL_STATE_LEAVING) {
                 gWiFiPlazaLobbyClient->channelState = WIFI_PLAZA_CHANNEL_STATE_JOINED;
             }
             break;
-        case 3:
+        case PPW_LOBBY_CHANNEL_STATE_ERROR:
             gWiFiPlazaLobbyClient->channelState = WIFI_PLAZA_CHANNEL_STATE_ERROR;
             break;
         }
@@ -280,7 +281,7 @@ BOOL WiFiPlazaLobbyClient_JoinChannel(int channel) {
     result = WiFiPlazaLobbyClient_CheckResult(PPW_LobbyJoinSubChannelAsync(WiFiPlazaLobbyClient_ChannelToLib(channel)));
     if (result == TRUE) {
         gWiFiPlazaLobbyClient->channel = channel;
-        gWiFiPlazaLobbyClient->joinChannelResult = 0;
+        gWiFiPlazaLobbyClient->joinChannelResult = WIFI_PLAZA_JOIN_CHANNEL_PENDING;
     }
     return result;
 }

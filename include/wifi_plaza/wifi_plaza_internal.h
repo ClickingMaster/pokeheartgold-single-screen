@@ -552,6 +552,13 @@ typedef struct WiFiPlazaSpriteConfig {
 #define WIFI_PLAZA_CHANNEL_STATE_LEAVING 3
 #define WIFI_PLAZA_CHANNEL_STATE_ERROR   4
 
+// gWiFiPlazaLobbyClient->joinChannelResult (WiFiPlazaLobbyClient_GetJoinChannelResult)
+enum WiFiPlazaJoinChannelResult {
+    WIFI_PLAZA_JOIN_CHANNEL_PENDING,
+    WIFI_PLAZA_JOIN_CHANNEL_DONE,
+    WIFI_PLAZA_JOIN_CHANNEL_FAILED,
+};
+
 // WiFiPlazaLobbyMatchInfo.state
 #define WIFI_PLAZA_MATCH_OPEN   0
 #define WIFI_PLAZA_MATCH_CLOSED 1

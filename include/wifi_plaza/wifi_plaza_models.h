@@ -21,6 +21,14 @@
 #define WIFI_PLAZA_BASE_ANIM_COUNT  5
 
 // Prop animation modes (WiFiPlazaModelSet_StartPropAnim)
+// Animation of the paired props (kinds 11 and 12), WiFiPlazaModels_SetPairAnim
+enum WiFiPlazaPairAnimMode {
+    WIFI_PLAZA_PAIR_ANIM_REST,
+    WIFI_PLAZA_PAIR_ANIM_OPEN,
+    WIFI_PLAZA_PAIR_ANIM_CLOSE,
+    WIFI_PLAZA_PAIR_ANIM_LOOP,
+};
+
 enum WiFiPlazaPropAnimMode {
     WIFI_PLAZA_PROP_ANIM_LOOP,
     WIFI_PLAZA_PROP_ANIM_ONCE,   // then the callback runs

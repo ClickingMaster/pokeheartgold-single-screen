@@ -260,16 +260,16 @@ void WifiSetupKeyboard_SetHoveredKey(int key) {
 void WifiSetupKeyboard_HandleButtons(void) {
     int key;
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
-        WifiSetupKeyboard_MoveCursor(0);
+        WifiSetupKeyboard_MoveCursor(WIFI_SETUP_CURSOR_LEFT);
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP)) {
-        WifiSetupKeyboard_MoveCursor(1);
+        WifiSetupKeyboard_MoveCursor(WIFI_SETUP_CURSOR_UP);
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_RIGHT)) {
-        WifiSetupKeyboard_MoveCursor(2);
+        WifiSetupKeyboard_MoveCursor(WIFI_SETUP_CURSOR_RIGHT);
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN)) {
-        WifiSetupKeyboard_MoveCursor(3);
+        WifiSetupKeyboard_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
     }
     if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A)) {
         key = gWifiSetupKeyboard->cursorKey;

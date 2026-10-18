@@ -86,6 +86,36 @@ enum SafariAreaCustomizerMode {
     SAC_MODE_MOVE,
 };
 
+enum SafariAreaCustomizerSetupState {
+    SAC_SETUP_RESET_DISPLAY,
+    SAC_SETUP_LOAD,
+    SAC_SETUP_INIT_SCREEN,
+};
+
+enum SafariAreaCustomizerTeardownState {
+    SAC_TEARDOWN_FREE,
+    SAC_TEARDOWN_WAIT,
+    SAC_TEARDOWN_RESET_DISPLAY,
+};
+
+enum SafariAreaCustomizerAnimState {
+    SAC_ANIM_START,
+    SAC_ANIM_RUN,
+    SAC_ANIM_DONE,
+};
+
+enum SafariAreaCustomizerSwapState {
+    SAC_SWAP_START,
+    SAC_SWAP_MOVE_OUT,
+    SAC_SWAP_MOVE_BACK,
+    SAC_SWAP_DONE,
+};
+
+enum SafariAreaCustomizerFadeState {
+    SAC_FADE_START,
+    SAC_FADE_WAIT,
+};
+
 typedef struct SafariAreaCustomizer {
     enum HeapID heapId;                                       // 0x00000
     int state;                                                // 0x00004
@@ -430,15 +460,15 @@ int SafariAreaCustomizer_State_MoveArea(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_State_FadeIn(SafariAreaCustomizer *s) {
     switch (s->state) {
-    case 0:
+    case SAC_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, s->heapId);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         s->state++;
         break;
-    case 1:
+    case SAC_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            s->state = 0;
+            s->state = SAC_FADE_START;
             SafariAreaCustomizer_DrawSprites(s);
             return SAC_STATE_SELECT_SLOT;
         }
@@ -450,13 +480,13 @@ int SafariAreaCustomizer_State_FadeIn(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_State_FadeOut(SafariAreaCustomizer *s) {
     switch (s->state) {
-    case 0:
+    case SAC_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, s->heapId);
         s->state++;
         break;
-    case 1:
+    case SAC_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            s->state = 0;
+            s->state = SAC_FADE_START;
             SafariAreaCustomizer_DrawSprites(s);
             return SAC_STATE_TEARDOWN;
         }
@@ -468,7 +498,7 @@ int SafariAreaCustomizer_State_FadeOut(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_Setup(SafariAreaCustomizer *s) {
     switch (s->subState) {
-    case 0:
+    case SAC_SETUP_RESET_DISPLAY:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -482,7 +512,7 @@ int SafariAreaCustomizer_Setup(SafariAreaCustomizer *s) {
         GF_TouchpadResetSampling();
         GF_TouchpadStartSampling(4);
         break;
-    case 1:
+    case SAC_SETUP_LOAD:
         SafariAreaCustomizer_InitBgLayers(s);
         SafariAreaCustomizer_LoadBgGraphics(s);
         SafariAreaCustomizer_CreateStrings(s);
@@ -491,10 +521,10 @@ int SafariAreaCustomizer_Setup(SafariAreaCustomizer *s) {
         SafariAreaCustomizer_InitSprites(s);
         SafariAreaCustomizer_CreateSprites(s);
         break;
-    case 2:
+    case SAC_SETUP_INIT_SCREEN:
         SafariAreaCustomizer_InitScreen(s);
         Main_SetVBlankIntrCB(SafariAreaCustomizer_VBlankCB, s);
-        s->subState = 0;
+        s->subState = SAC_SETUP_RESET_DISPLAY;
         return TRUE;
     }
     s->subState++;
@@ -503,7 +533,7 @@ int SafariAreaCustomizer_Setup(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_Teardown(SafariAreaCustomizer *s) {
     switch (s->subState) {
-    case 0:
+    case SAC_TEARDOWN_FREE:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         SafariAreaCustomizer_DeleteSprites(s);
@@ -514,13 +544,13 @@ int SafariAreaCustomizer_Teardown(SafariAreaCustomizer *s) {
         SafariAreaCustomizer_FreeScreenData(s);
         SafariAreaCustomizer_FreeBgLayers(s);
         break;
-    case 2:
+    case SAC_TEARDOWN_RESET_DISPLAY:
         GF_TouchpadStopSampling();
         reg_GX_DISPCNT &= ~REG_GX_DISPCNT_DISPLAY_MASK;
         reg_GXS_DB_DISPCNT &= ~REG_GXS_DB_DISPCNT_DISPLAY_MASK;
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();
-        s->subState = 0;
+        s->subState = SAC_TEARDOWN_FREE;
         return TRUE;
     }
     s->subState++;
@@ -575,11 +605,11 @@ int SafariAreaCustomizer_HandleSlotMenu(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_ScrollPages(SafariAreaCustomizer *s) {
     switch (s->subState) {
-    case 0:
+    case SAC_ANIM_START:
         SafariAreaCustomizer_StartPageScroll(s);
         s->subState++;
         break;
-    case 1:
+    case SAC_ANIM_RUN:
         if (SafariAreaCustomizer_RunPageScroll(s)) {
             s->subState++;
         }
@@ -587,7 +617,7 @@ int SafariAreaCustomizer_ScrollPages(SafariAreaCustomizer *s) {
     default:
         reg_GXS_DB_DISPCNT &= ~(REG_GXS_DB_DISPCNT_W0_MASK | REG_GXS_DB_DISPCNT_W1_MASK | REG_GXS_DB_DISPCNT_OW_MASK);
         s->animFrame = 0;
-        s->subState = 0;
+        s->subState = SAC_ANIM_START;
         if (s->mode == SAC_MODE_SLOTS) {
             s->nextState = SAC_STATE_SELECT_AREA;
             SafariAreaCustomizer_PrintWindowText(s, 0, 1, TRUE);
@@ -661,18 +691,18 @@ int SafariAreaCustomizer_HandleConfirmArea(SafariAreaCustomizer *s) {
 
 int SafariAreaCustomizer_ChangePage(SafariAreaCustomizer *s) {
     switch (s->subState) {
-    case 0:
+    case SAC_ANIM_START:
         SafariAreaCustomizer_StartPageChange(s);
         s->subState++;
         break;
-    case 1:
+    case SAC_ANIM_RUN:
         if (SafariAreaCustomizer_RunPageChange(s)) {
             s->subState++;
         }
         break;
     default:
         s->spriteBank ^= 1;
-        s->subState = 0;
+        s->subState = SAC_ANIM_START;
         return SAC_INPUT_STATE_WAIT;
     }
     return SAC_INPUT_STATE_CHANGE_PAGE;
@@ -692,13 +722,13 @@ int SafariAreaCustomizer_SwapAreas(SafariAreaCustomizer *s) {
     u32 bank = s->spriteBank * NUM_AREA_SLOTS;
 
     switch (s->subState) {
-    case 0:
+    case SAC_SWAP_START:
         ManagedSprite_SetPriority(s->areaSprites[s->selectedSlot + bank], 0);
         ManagedSprite_SetPriority(s->areaSprites[s->cursorPos + bank], 0);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         s->subState++;
         break;
-    case 1:
+    case SAC_SWAP_MOVE_OUT:
         if (SafariAreaCustomizer_RunSwapAnim(s, 0)) {
             s->modified = TRUE;
             SafariZone_SwapAreasInSet(&s->areaSet, s->selectedSlot, s->cursorPos);
@@ -709,7 +739,7 @@ int SafariAreaCustomizer_SwapAreas(SafariAreaCustomizer *s) {
             s->subState++;
         }
         break;
-    case 2:
+    case SAC_SWAP_MOVE_BACK:
         if (SafariAreaCustomizer_RunSwapAnim(s, 1)) {
             ManagedSprite_SetPriority(s->areaSprites[s->selectedSlot + bank], 2);
             ManagedSprite_SetPriority(s->areaSprites[s->cursorPos + bank], 2);
@@ -720,7 +750,7 @@ int SafariAreaCustomizer_SwapAreas(SafariAreaCustomizer *s) {
     default:
         s->selectedSlot = s->cursorPos;
         SafariAreaCustomizer_EndMove(s);
-        s->subState = 0;
+        s->subState = SAC_SWAP_START;
         s->nextState = SAC_STATE_SELECT_SLOT;
         return SAC_INPUT_STATE_EXIT;
     }

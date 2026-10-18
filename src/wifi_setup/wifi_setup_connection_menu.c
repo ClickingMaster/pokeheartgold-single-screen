@@ -153,19 +153,19 @@ void WifiSetupConnectionList_HandleInput(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP)) {
-        WifiSetupConnectionList_MoveCursor(1);
+        WifiSetupConnectionList_MoveCursor(WIFI_SETUP_CURSOR_UP);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN)) {
-        WifiSetupConnectionList_MoveCursor(3);
+        WifiSetupConnectionList_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
-        WifiSetupConnectionList_MoveCursor(0);
+        WifiSetupConnectionList_MoveCursor(WIFI_SETUP_CURSOR_LEFT);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_RIGHT)) {
-        WifiSetupConnectionList_MoveCursor(2);
+        WifiSetupConnectionList_MoveCursor(WIFI_SETUP_CURSOR_RIGHT);
     }
 }
 
@@ -314,11 +314,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
     switch (gWifiSetupConnectionList.selected) {
     case 0:
         gWifiSetupConnectionList.work->column = 0;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 2;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 1;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 3;
         } else {
             gWifiSetupConnectionList.selected = 4;
@@ -326,11 +326,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
         break;
     case 1:
         gWifiSetupConnectionList.work->column = 1;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 0;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 2;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 3;
         } else {
             gWifiSetupConnectionList.selected = 5;
@@ -338,11 +338,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
         break;
     case 2:
         gWifiSetupConnectionList.work->column = 2;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 1;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 0;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 3;
         } else {
             gWifiSetupConnectionList.selected = 6;
@@ -351,9 +351,9 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
     case 3:
         c = gWifiSetupConnectionList.work->column;
         c4 = c + 4;
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = c4;
-        } else if (dir == 3) {
+        } else if (dir == WIFI_SETUP_CURSOR_DOWN) {
             gWifiSetupConnectionList.selected = c;
         } else {
             changed = FALSE;
@@ -361,11 +361,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
         break;
     case 4:
         gWifiSetupConnectionList.work->column = 0;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 6;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 5;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 0;
         } else {
             gWifiSetupConnectionList.selected = 3;
@@ -373,11 +373,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
         break;
     case 5:
         gWifiSetupConnectionList.work->column = 1;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 4;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 6;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 1;
         } else {
             gWifiSetupConnectionList.selected = 3;
@@ -385,11 +385,11 @@ void WifiSetupConnectionList_MoveCursor(int dir) {
         break;
     case 6:
         gWifiSetupConnectionList.work->column = 2;
-        if (dir == 0) {
+        if (dir == WIFI_SETUP_CURSOR_LEFT) {
             gWifiSetupConnectionList.selected = 5;
-        } else if (dir == 2) {
+        } else if (dir == WIFI_SETUP_CURSOR_RIGHT) {
             gWifiSetupConnectionList.selected = 4;
-        } else if (dir == 1) {
+        } else if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupConnectionList.selected = 2;
         } else {
             gWifiSetupConnectionList.selected = 3;
@@ -548,19 +548,19 @@ void WifiSetupMethodMenu_HandleInput(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP)) {
-        WifiSetupMethodMenu_MoveCursor(1);
+        WifiSetupMethodMenu_MoveCursor(WIFI_SETUP_CURSOR_UP);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN)) {
-        WifiSetupMethodMenu_MoveCursor(3);
+        WifiSetupMethodMenu_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
-        WifiSetupMethodMenu_MoveCursor(0);
+        WifiSetupMethodMenu_MoveCursor(WIFI_SETUP_CURSOR_LEFT);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_RIGHT)) {
-        WifiSetupMethodMenu_MoveCursor(2);
+        WifiSetupMethodMenu_MoveCursor(WIFI_SETUP_CURSOR_RIGHT);
     }
 }
 

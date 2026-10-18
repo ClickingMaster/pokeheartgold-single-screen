@@ -261,7 +261,7 @@ int GtsSearch_Init(GtsApp *app, int state) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_SEARCH_STATE_START;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsSearch_Main(GtsApp *app, int state) {
@@ -289,7 +289,7 @@ int GtsSearch_Exit(GtsApp *app, int state) {
     GtsSearch_FreeBgs(app->bgConfig);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 void GtsSearch_InitBgs(BgConfig *bgConfig) {
@@ -463,7 +463,7 @@ int GtsSearch_Start(GtsApp *app) {
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
     }
     Sprite_SetDrawFlag(app->panelSprite, TRUE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_GetTouchedButton(void) {
@@ -530,7 +530,7 @@ int GtsSearch_HandleInput(GtsApp *app) {
             PlaySE(SEQ_SE_DP_SELECT);
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_StartSearch(GtsApp *app) {
@@ -548,7 +548,7 @@ int GtsSearch_StartSearch(GtsApp *app) {
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_SEND_SEARCH);
         Gts_StopAvatarAnims(app);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Whether the player deposited (which 1) or traded (which 0) on the GTS in the last three days.
@@ -605,7 +605,7 @@ int GtsSearch_SendSearch(GtsApp *app) {
     app->requestFrames = 0;
     app->state = GTS_SEARCH_STATE_WAIT_SEARCH;
     app->hasSearchResults = FALSE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_WaitSearch(GtsApp *app) {
@@ -649,7 +649,7 @@ int GtsSearch_WaitSearch(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ShowResultCount(GtsApp *app) {
@@ -662,7 +662,7 @@ int GtsSearch_ShowResultCount(GtsApp *app) {
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_WAIT_RESULTS_SHOWN);
         app->waitFrames = 0;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_WaitResultsShown(GtsApp *app) {
@@ -672,7 +672,7 @@ int GtsSearch_WaitResultsShown(GtsApp *app) {
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
         app->hasSearchResults = TRUE;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_SearchFailed(GtsApp *app) {
@@ -680,7 +680,7 @@ int GtsSearch_SearchFailed(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00038, 1, 0, 0xF0F); // GTS check failed.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
     PlaySE(SEQ_SE_DP_BOX03);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ServerError(GtsApp *app) {
@@ -688,7 +688,7 @@ int GtsSearch_ServerError(GtsApp *app) {
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT_AND_PAUSE, GTS_SEARCH_STATE_SERVER_ERROR_EXIT);
     app->waitFrames = 0;
     PlaySE(SEQ_SE_DP_BOX03);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ServerErrorExit(GtsApp *app) {
@@ -696,7 +696,7 @@ int GtsSearch_ServerErrorExit(GtsApp *app) {
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT_AND_PAUSE, GTS_SEARCH_STATE_FADE_OUT);
     Gts_SetNextScreen(app, 0, 0);
     PlaySE(SEQ_SE_DP_BOX03);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The button under the cursor: rows 0..3 of the left column, then rows 0..2 of the right one.
@@ -780,20 +780,20 @@ int GtsSearch_FadeOut(GtsApp *app) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_SEARCH_STATE_START;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 int GtsSearch_AskSpecies(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00009, 1, 0, 0xF0F); // Please choose the Pokemon you want.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_SPECIES_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_OpenSpeciesSelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 0);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_SPECIES_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
@@ -820,20 +820,20 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
         }
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_AskGender(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_GENDER_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_OpenGenderSelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 1);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_GENDER_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleGenderSelector(GtsApp *app) {
@@ -854,13 +854,13 @@ int GtsSearch_HandleGenderSelector(GtsApp *app) {
         Gts_PrintGender(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_AskLevel(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_LEVEL_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_OpenLevelSelector(GtsApp *app) {
@@ -868,7 +868,7 @@ int GtsSearch_OpenLevelSelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 2);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_LEVEL_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleLevelSelector(GtsApp *app) {
@@ -889,13 +889,13 @@ int GtsSearch_HandleLevelSelector(GtsApp *app) {
         Gts_PrintLevelRange(&app->infoWindows[5], app->gtsMsgData, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_AskCountry(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00176, 1, 0, 0xF0F);
     Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_OPEN_COUNTRY_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_OpenCountrySelector(GtsApp *app) {
@@ -903,7 +903,7 @@ int GtsSearch_OpenCountrySelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 3);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_COUNTRY_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleCountrySelector(GtsApp *app) {
@@ -921,13 +921,13 @@ int GtsSearch_HandleCountrySelector(GtsApp *app) {
             Gts_PrintCountryName(&app->wideWindows[1], app->countryNames, app->gtsMsgData, app->searchCountry, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x120, 3, 1);
     app->state = GTS_SEARCH_STATE_HANDLE_EXIT_PROMPT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleExitPrompt(GtsApp *app) {
@@ -942,10 +942,10 @@ int GtsSearch_HandleExitPrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SEARCH_STATE_START;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ReturnToInput(GtsApp *app) {
     app->state = GTS_SEARCH_STATE_HANDLE_INPUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }

@@ -39,6 +39,23 @@
 
 #define UNOWN_ICONS_PER_SPREAD 14
 
+enum UnownReportSetupState {
+    UNOWN_REPORT_SETUP_CREATE,
+    UNOWN_REPORT_SETUP_DRAW_FIRST_PAGE,
+};
+
+enum UnownReportFadeState {
+    UNOWN_REPORT_FADE_START,
+    UNOWN_REPORT_FADE_WAIT,
+};
+
+enum UnownReportTurnPageState {
+    UNOWN_REPORT_TURN_PAGE_FADE_OUT,
+    UNOWN_REPORT_TURN_PAGE_DRAW,
+    UNOWN_REPORT_TURN_PAGE_FADE_IN,
+    UNOWN_REPORT_TURN_PAGE_WAIT,
+};
+
 enum UnownReportWindow {
     UNOWN_REPORT_WIN_TITLE,
     UNOWN_REPORT_WIN_LEFT_PAGE,
@@ -533,16 +550,16 @@ static void UnownReport_RestoreMenuInputState(UnownReportApp *app) {
 
 static BOOL UnownReport_SetupGraphics(UnownReportApp *app) {
     switch (app->subState) {
-    case 0:
+    case UNOWN_REPORT_SETUP_CREATE:
         UnownReport_CreateGraphics(app);
         app->subState++;
         break;
-    case 1:
+    case UNOWN_REPORT_SETUP_DRAW_FIRST_PAGE:
         UnownReport_DrawFirstPage(app);
         GF_TouchpadResetSampling();
         GF_TouchpadStartSampling(1);
         Sound_SetSceneAndPlayBGM(69, 0, 0);
-        app->subState = 0;
+        app->subState = UNOWN_REPORT_SETUP_CREATE;
         return TRUE;
     }
     return FALSE;
@@ -556,13 +573,13 @@ static BOOL UnownReport_Teardown(UnownReportApp *app) {
 
 static int UnownReport_FadeIn(UnownReportApp *app) {
     switch (app->subState) {
-    case 0:
+    case UNOWN_REPORT_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, app->heapID);
         app->subState++;
         break;
-    case 1:
+    case UNOWN_REPORT_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            app->subState = 0;
+            app->subState = UNOWN_REPORT_FADE_START;
             return UNOWN_REPORT_MAIN_INPUT;
         }
         break;
@@ -572,15 +589,15 @@ static int UnownReport_FadeIn(UnownReportApp *app) {
 
 static int UnownReport_FadeOut(UnownReportApp *app) {
     switch (app->subState) {
-    case 0:
+    case UNOWN_REPORT_FADE_START:
         if (UnownReport_IsBookAnimating(app) == FALSE) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, app->heapID);
             app->subState++;
         }
         break;
-    case 1:
+    case UNOWN_REPORT_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            app->subState = 0;
+            app->subState = UNOWN_REPORT_FADE_START;
             return UNOWN_REPORT_MAIN_EXIT;
         }
         break;
@@ -594,23 +611,23 @@ static int UnownReport_HandleInput(UnownReportApp *app) {
 
 static int UnownReport_TurnPage(UnownReportApp *app) {
     switch (app->subState) {
-    case 0:
+    case UNOWN_REPORT_TURN_PAGE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_UPWARD_OUT, FADE_TYPE_DOWNWARD_OUT, RGB_BLACK, 6, 1, app->heapID);
         app->subState++;
         break;
-    case 1:
+    case UNOWN_REPORT_TURN_PAGE_DRAW:
         if (IsPaletteFadeFinished()) {
             UnownReport_DrawPage(app, app->page);
             app->subState++;
         }
         break;
-    case 2:
+    case UNOWN_REPORT_TURN_PAGE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_UNK_5, RGB_BLACK, 6, 1, app->heapID);
         app->subState++;
         break;
-    case 3:
+    case UNOWN_REPORT_TURN_PAGE_WAIT:
         if (IsPaletteFadeFinished()) {
-            app->subState = 0;
+            app->subState = UNOWN_REPORT_TURN_PAGE_FADE_OUT;
             return UNOWN_REPORT_MAIN_INPUT;
         }
         break;

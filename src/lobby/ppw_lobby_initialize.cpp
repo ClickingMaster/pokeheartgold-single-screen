@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <size_t.h>
@@ -260,7 +262,7 @@ extern "C" int PPWLobby_Initialize(u32 gameName, u32 secretKey, u32 prefix, cons
         int state = ErrorMap().Map(result);
         if (state != 0) {
             g->sub = state;
-            g->state = 10;
+            g->state = PPW_LOBBY_STATE_ERROR;
         }
     }
     if (result != 0) {
@@ -273,6 +275,6 @@ extern "C" int PPWLobby_Initialize(u32 gameName, u32 secretKey, u32 prefix, cons
     }
     PPWLobbyPlayers_SetSelf(&gPPWLobbyWork->sessions, userId, playerData, playerDataSize);
     PPWLobby_StartCheckProfile();
-    gPPWLobbyWork->state = 1;
+    gPPWLobbyWork->state = PPW_LOBBY_STATE_CONNECTING;
     return 0;
 }

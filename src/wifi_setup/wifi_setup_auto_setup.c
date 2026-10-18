@@ -189,37 +189,37 @@ void WifiSetupSettings_MoveCursor(int dir) {
     WifiSetupConnection *save = WifiSetupConnections_GetEdit();
     int ret = 0;
     u8 item = gWifiSetupSettings.cursorItem;
-    if (item == WIFI_SETUP_SETTINGS_ITEM_AUTO_DNS_OFF && save->autoAddress == 0 && (dir == 0 || dir == 2)) {
+    if (item == WIFI_SETUP_SETTINGS_ITEM_AUTO_DNS_OFF && save->autoAddress == 0 && (dir == WIFI_SETUP_CURSOR_LEFT || dir == WIFI_SETUP_CURSOR_RIGHT)) {
         return;
     }
     switch (item) {
     case 0:
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupSettings.cursorItem = 11;
-        } else if (dir == 3) {
+        } else if (dir == WIFI_SETUP_CURSOR_DOWN) {
             gWifiSetupSettings.cursorRow++;
         } else {
             ret = 2;
         }
         break;
     case 10:
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupSettings.cursorRow--;
-        } else if (dir == 3) {
+        } else if (dir == WIFI_SETUP_CURSOR_DOWN) {
             gWifiSetupSettings.cursorItem = gWifiSetupSettings.work->lastButton;
         } else {
             ret = 2;
         }
         break;
     case 11:
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             if (gWifiSetupSettings.work->keyAtEnd) {
                 return;
             }
             WifiSetupSound_Play(9);
             gWifiSetupSettings.work->keyAtEnd = 1;
             return;
-        } else if (dir == 3) {
+        } else if (dir == WIFI_SETUP_CURSOR_DOWN) {
             gWifiSetupSettings.cursorItem = 0;
             gWifiSetupSettings.cursorRow = 0;
             gWifiSetupSettings.scroll = 0;
@@ -232,13 +232,13 @@ void WifiSetupSettings_MoveCursor(int dir) {
     case 12:
     case 13:
         gWifiSetupSettings.work->lastButton = item;
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             gWifiSetupSettings.cursorItem = 10;
             gWifiSetupSettings.cursorRow = 3;
             gWifiSetupSettings.scroll = WIFI_SETUP_SETTINGS_MAX_SCROLL;
             WifiSetupSettings_DrawRows();
             WifiSetupScrollBar_SetValue(0x37);
-        } else if (dir == 3) {
+        } else if (dir == WIFI_SETUP_CURSOR_DOWN) {
             if (gWifiSetupSettings.work->keyAtEnd) {
                 return;
             }
@@ -252,7 +252,7 @@ void WifiSetupSettings_MoveCursor(int dir) {
         }
         break;
     default:
-        if (dir == 1) {
+        if (dir == WIFI_SETUP_CURSOR_UP) {
             if (gWifiSetupSettings.cursorRow != 0) {
                 gWifiSetupSettings.cursorRow--;
                 break;
@@ -261,7 +261,7 @@ void WifiSetupSettings_MoveCursor(int dir) {
             gWifiSetupSettings.work->scrollTask = WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupSettings_ScrollUpTask, NULL, 120);
             return;
         }
-        if (dir == 3) {
+        if (dir == WIFI_SETUP_CURSOR_DOWN) {
             if (gWifiSetupSettings.cursorRow < 3) {
                 gWifiSetupSettings.cursorRow++;
                 break;

@@ -175,7 +175,7 @@ int GtsTransaction_Init(GtsApp *app, int state) {
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     Gts_CreateWirelessStatusIcon(app);
     app->state = GTS_TRANSACTION_STATE_START;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsTransaction_Main(GtsApp *app, int state) {
@@ -191,7 +191,7 @@ int GtsTransaction_Exit(GtsApp *app, int state) {
     GtsTransaction_RemoveWindows(app);
     GtsTransaction_FreeBgs(app->bgConfig);
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 void GtsTransaction_InitBgs(BgConfig *bgConfig) {
@@ -302,7 +302,7 @@ int GtsTransaction_Start(GtsApp *app) {
         break;
     }
     Gts_CreateWaitingIcon(app);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendPost(GtsApp *app) {
@@ -311,7 +311,7 @@ int GtsTransaction_SendPost(GtsApp *app) {
     app->state = GTS_TRANSACTION_STATE_WAIT_POST;
     app->requestFrames = 0;
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_POST_FINISH, GTS_TRANSACTION_STATE_DEPOSIT_DONE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Each request is given a minute; then the connection is dropped (CommState_ShowRestartErrorAndHalt).
@@ -360,7 +360,7 @@ int GtsTransaction_WaitPost(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendPostFinish(GtsApp *app) {
@@ -368,7 +368,7 @@ int GtsTransaction_SendPostFinish(GtsApp *app) {
     app->state = GTS_TRANSACTION_STATE_WAIT_POST_FINISH;
     app->requestFrames = 0;
     app->hasDepositedMon = TRUE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitPostFinish(GtsApp *app) {
@@ -402,7 +402,7 @@ int GtsTransaction_WaitPostFinish(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendGet(GtsApp *app) {
@@ -410,7 +410,7 @@ int GtsTransaction_SendGet(GtsApp *app) {
     app->state = GTS_TRANSACTION_STATE_WAIT_GET;
     app->requestFrames = 0;
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_RETURN, GTS_TRANSACTION_STATE_RECEIVE_DONE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The deposited Pokemon comes back unless it was traded in the meantime (then the status check takes over).
@@ -455,14 +455,14 @@ int GtsTransaction_WaitGet(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendReturn(GtsApp *app) {
     GtsServer_RequestReturn();
     app->state = GTS_TRANSACTION_STATE_WAIT_RETURN;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitReturn(GtsApp *app) {
@@ -494,7 +494,7 @@ int GtsTransaction_WaitReturn(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendExchange(GtsApp *app) {
@@ -503,7 +503,7 @@ int GtsTransaction_SendExchange(GtsApp *app) {
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_EXCHANGE_FINISH, GTS_TRANSACTION_STATE_EXCHANGE_DONE);
     app->state = GTS_TRANSACTION_STATE_WAIT_EXCHANGE;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitExchange(GtsApp *app) {
@@ -551,14 +551,14 @@ int GtsTransaction_WaitExchange(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendExchangeFinish(GtsApp *app) {
     GtsServer_RequestExchangeFinish();
     app->state = GTS_TRANSACTION_STATE_WAIT_EXCHANGE_FINISH;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitExchangeFinish(GtsApp *app) {
@@ -588,14 +588,14 @@ int GtsTransaction_WaitExchangeFinish(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendResult(GtsApp *app) {
     GtsServer_RequestResult(&app->record);
     app->state = GTS_TRANSACTION_STATE_WAIT_RESULT;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // 0: the deposited Pokemon is still offered, 1: it was traded, -3: the server has no deposit (the Pokemon in the
@@ -678,20 +678,20 @@ int GtsTransaction_WaitResult(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ExitToMainMenu(GtsApp *app) {
     Gts_SetNextScreen(app, 1, 0);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendStatusGet(GtsApp *app) {
     GtsServer_RequestGet(&app->record);
     app->state = GTS_TRANSACTION_STATE_WAIT_STATUS_GET;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitStatusGet(GtsApp *app) {
@@ -703,7 +703,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
             if (GtsTransaction_IsDepositMissingFromSave(app)) {
                 app->state = GTS_TRANSACTION_STATE_SEND_UNSAVED_RETURN;
                 app->hasDepositedMon = FALSE;
-                return 3;
+                return GTS_APP_STATE_RUN_SCREEN;
             }
             app->hasDepositedMon = TRUE;
             break;
@@ -716,10 +716,10 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
         case -2:
             app->serverResult = result;
             app->state = GTS_TRANSACTION_STATE_SERVER_ERROR_EXIT;
-            return 3;
+            return GTS_APP_STATE_RUN_SCREEN;
         case -13:
             CommState_ShowRestartErrorAndHalt();
-            return 3;
+            return GTS_APP_STATE_RUN_SCREEN;
         case -11:
         case -10:
         case -9:
@@ -738,7 +738,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Back to the screen that asked for the status check: the main menu (statusCheckCaller 1) or the summary (2).
@@ -771,14 +771,14 @@ int GtsTransaction_ReceiveTradedMon(GtsApp *app) {
     GtsSave_SetHasStoredMon((void *)app->args->gtsSave, 0);
     app->state = GTS_TRANSACTION_STATE_START_SAVE;
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SEND_DELETE, GTS_TRANSACTION_STATE_RECEIVE_DONE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SendDelete(GtsApp *app) {
     GtsServer_RequestDelete();
     app->state = GTS_TRANSACTION_STATE_WAIT_DELETE;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitDelete(GtsApp *app) {
@@ -811,7 +811,7 @@ int GtsTransaction_WaitDelete(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_Idle(void) {
@@ -822,20 +822,20 @@ int GtsTransaction_DepositDone(GtsApp *app) {
     app->hasDepositedMon = TRUE;
     Gts_SetNextScreen(app, 9, 7);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ReceiveDone(GtsApp *app) {
     app->hasDepositedMon = FALSE;
     Gts_SetNextScreen(app, 9, 8);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ExchangeDone(GtsApp *app) {
     Gts_SetNextScreen(app, 9, 9);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // No state leads here.
@@ -843,7 +843,7 @@ int GtsTransaction_TradedDone(GtsApp *app) {
     app->hasDepositedMon = FALSE;
     Gts_SetNextScreen(app, 9, 10);
     app->state = GTS_TRANSACTION_STATE_START_SAVE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The server holds a Pokemon the save does not know about: it is taken off the GTS.
@@ -851,7 +851,7 @@ int GtsTransaction_SendUnsavedReturn(GtsApp *app) {
     GtsServer_RequestReturn();
     app->state = GTS_TRANSACTION_STATE_WAIT_UNSAVED_RETURN;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
@@ -887,7 +887,7 @@ int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_AlreadyTraded(GtsApp *app) {
@@ -896,7 +896,7 @@ int GtsTransaction_AlreadyTraded(GtsApp *app) {
     Gts_SetNextScreen(app, 1, 0);
     Gts_DeleteWaitingIcon(app);
     Gts_StopAvatarAnims(app);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsTransaction_PrintServerError(GtsApp *app) {
@@ -927,7 +927,7 @@ int GtsTransaction_ServerErrorExit(GtsApp *app) {
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_FADE_OUT);
     Gts_SetNextScreen(app, 0, 0);
     Gts_DeleteWaitingIcon(app);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ServerError(GtsApp *app) {
@@ -936,13 +936,13 @@ int GtsTransaction_ServerError(GtsApp *app) {
     Gts_SetNextScreen(app, 1, 0);
     Gts_DeleteWaitingIcon(app);
     Gts_StopAvatarAnims(app);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SaveAndExit(GtsApp *app) {
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_START_SAVE);
     GtsTransaction_SetSaveStates(app, GTS_TRANSACTION_STATE_SAVE_REST, GTS_TRANSACTION_STATE_FADE_OUT);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The save starts after 2..61 frames.
@@ -951,7 +951,7 @@ int GtsTransaction_StartSave(GtsApp *app) {
     Save_PrepareForAsyncWrite(app->args->saveData, 2);
     app->state = GTS_TRANSACTION_STATE_WAIT_SAVE_DELAY;
     app->waitFrames = (u16)(LCRandom() % 60) + 2;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_WaitSaveDelay(GtsApp *app) {
@@ -959,14 +959,14 @@ int GtsTransaction_WaitSaveDelay(GtsApp *app) {
     if (app->waitFrames == 0) {
         app->state = GTS_TRANSACTION_STATE_SAVE_FIRST_PART;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SaveFirstPart(GtsApp *app) {
     if (Save_WriteFileAsync(app->args->saveData) == WRITE_STATUS_NEXT) {
         app->state = app->saveMidState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SaveRest(GtsApp *app) {
@@ -974,14 +974,14 @@ int GtsTransaction_SaveRest(GtsApp *app) {
         app->state = app->saveDoneState;
         Gts_DeleteWaitingIcon(app);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_StartSaveWithMessage(GtsApp *app) {
     SetAllPCBoxesModified();
     Save_PrepareForAsyncWrite(app->args->saveData, 2);
     app->state = GTS_TRANSACTION_STATE_SAVE_WITH_MESSAGE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_SaveWithMessage(GtsApp *app) {
@@ -991,7 +991,7 @@ int GtsTransaction_SaveWithMessage(GtsApp *app) {
         Gts_PrintMessage(app, app->gtsMsgData, app->afterSaveMsgId, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_EXIT_TO_MAIN_MENU);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_FadeOut(GtsApp *app) {
@@ -1003,14 +1003,14 @@ int GtsTransaction_FadeOut(GtsApp *app) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_TRANSACTION_STATE_START;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 int GtsTransaction_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Moves the selected Pokemon out of the box or the party into the GTS save data.

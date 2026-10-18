@@ -4,6 +4,8 @@
 
 #include "dwc/chat_internal.h"
 
+#include "chat_user_mode.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -372,14 +374,14 @@ void ciJoinHandler(ChatConnection *chat, ChatMessage *message) {
     host = message->host;
     if (*nick == '@') {
         nick++;
-        mode = 2;
+        mode = CHAT_USER_MODE_OP;
         ASSERT(*nick, sStr_NickNe0, sStr_ciJoinHandler, 1771);
     } else if (*nick == '+') {
         nick++;
-        mode = 1;
+        mode = CHAT_USER_MODE_VOICE;
         ASSERT(*nick, sStr_NickNe0, sStr_ciJoinHandler, 1777);
     } else {
-        mode = 0;
+        mode = CHAT_USER_MODE_NORMAL;
     }
     if (!strcmp(nick, chat->nick)) {
         if (!ciIsEnteringChannel(chat, channel)) {
@@ -755,14 +757,14 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
         int mode;
         if (*nick == '@') {
             ASSERT(nick[1], sStr_Nick1_Ne0, sStr_ciNameReplyHandler, 2391);
-            mode = 2;
+            mode = CHAT_USER_MODE_OP;
             nick++;
         } else if (*nick == '+') {
             ASSERT(nick[1], sStr_Nick1_Ne0, sStr_ciNameReplyHandler, 2397);
-            mode = 1;
+            mode = CHAT_USER_MODE_VOICE;
             nick++;
         } else {
-            mode = 0;
+            mode = CHAT_USER_MODE_NORMAL;
         }
         if (request->type != TYPE_JOIN) {
             if (list->count == list->capacity) {
@@ -1001,12 +1003,12 @@ void ciRplWhoReplyHandler(ChatConnection *chat, ChatMessage *message) {
             u32 mode;
             const char *flags;
             flags = message->params[6];
-            mode = 0;
+            mode = CHAT_USER_MODE_NORMAL;
             if (strchr(flags, '@') != NULL) {
-                mode |= 2;
+                mode |= CHAT_USER_MODE_OP;
             }
             if (strchr(flags, '+') != NULL) {
-                mode |= 1;
+                mode |= CHAT_USER_MODE_VOICE;
             }
             modeResult[0] = TRUE;
             modeResult[1] = (u32)channel;

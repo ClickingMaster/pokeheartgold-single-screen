@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -35,25 +37,25 @@ int PPW_LobbyGetSubChannelState(void) {
     Work *w = gPPWLobbyWork;
     int result;
     if (!w) {
-        return 3;
+        return PPW_LOBBY_CHANNEL_STATE_ERROR;
     }
-    if (w && w->state == 10) {
-        return 3;
+    if (w && w->state == PPW_LOBBY_STATE_ERROR) {
+        return PPW_LOBBY_CHANNEL_STATE_ERROR;
     }
-    if (w && gPPWLobbyWork->state != 8) {
-        return 3;
+    if (w && gPPWLobbyWork->state != PPW_LOBBY_STATE_READY) {
+        return PPW_LOBBY_CHANNEL_STATE_ERROR;
     }
     {
         BOOL enabled = active(w);
         if (enabled == 0) {
-            return 0;
+            return PPW_LOBBY_CHANNEL_STATE_NONE;
         }
     }
     PPWLobbyChannel_GetName(&text, &w->mode);
     result = LobbyChat_IsInChannel(!text.flag ? &text.bytes[1] : *(char **)&text.raw[4]);
     LobbyString_Destroy(&text);
     if (result) {
-        return 2;
+        return PPW_LOBBY_CHANNEL_STATE_JOINED;
     }
-    return 1;
+    return PPW_LOBBY_CHANNEL_STATE_JOINING;
 }

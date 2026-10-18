@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/dwc_status.h"
+
 #include "global_terminal/global_terminal_app_internal.h"
 #include "global_terminal/global_terminal_net.h"
 #include "msgdata/msg.naix"
@@ -756,7 +758,7 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
     DWC_ProcessInet();
     if (DWC_CheckInet() != 0) {
         switch (DWC_GetInetStatus()) {
-        case 7:
+        case DWC_CONNECTINET_STATE_ERROR:
             work->dwcResult = DWC_GetLastErrorEx((int *)(buffer + 8), (u32 *)(buffer + 4));
             work->errorCode = *(u32 *)(buffer + 8);
             work->errorType = *(u32 *)(buffer + 4);
@@ -765,20 +767,20 @@ BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
             GlobalTerminalConnect_HideWaitingIcon(work);
             work->state = GTC_STATE_SHOW_ERROR;
             break;
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 5:
-        case 6:
-        case 8:
+        case DWC_CONNECTINET_STATE_NOT_INITIALIZED:
+        case DWC_CONNECTINET_STATE_IDLE:
+        case DWC_CONNECTINET_STATE_OPERATING:
+        case DWC_CONNECTINET_STATE_OPERATED:
+        case DWC_CONNECTINET_STATE_DISCONNECTING:
+        case DWC_CONNECTINET_STATE_DISCONNECTED:
+        case DWC_CONNECTINET_STATE_FATAL_ERROR:
         default:
             DWC_GetLastError(buffer);
             GlobalTerminalConnect_HideWaitingIcon(work);
             work->state = GTC_STATE_SHOW_SERVER_ERROR;
             work->serverError = -2;
             break;
-        case 4:
+        case DWC_CONNECTINET_STATE_CONNECTED:
             DWC_GetApInfo(buffer + 12);
             work->state = GTC_STATE_3;
             break;
@@ -798,12 +800,12 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     u32 errorType;
 
     switch (DWC_NASLoginProcess()) {
-    case 3:
+    case DWC_NASLOGIN_STATE_SUCCESS:
         work->state = GTC_STATE_SAVE_PROFILE_ID;
         break;
-    case 0:
-    case 4:
-    case 5:
+    case DWC_NASLOGIN_STATE_DIRTY:
+    case DWC_NASLOGIN_STATE_ERROR:
+    case DWC_NASLOGIN_STATE_CANCELED:
         GlobalTerminalConnect_HideWaitingIcon(work);
         work->dwcResult = DWC_GetLastErrorEx(&errorCode, &errorType);
         work->errorCode = errorCode;
@@ -812,23 +814,23 @@ BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
         DWC_CleanupInet();
         work->state = GTC_STATE_SHOW_ERROR;
         switch (errorType) {
-        case 1:
-        case 2:
+        case DWC_ETYPE_LIGHT:
+        case DWC_ETYPE_SHOW_ERROR:
             work->state = GTC_STATE_SHOW_ERROR;
             break;
-        case 4:
+        case DWC_ETYPE_SHUTDOWN_GHTTP:
             DWC_ShutdownGHTTP();
             work->state = GTC_STATE_SHOW_ERROR;
             break;
-        case 6:
+        case DWC_ETYPE_DISCONNECT:
             work->state = GTC_STATE_SHOW_ERROR;
             break;
-        case 3:
+        case DWC_ETYPE_SHUTDOWN_FM:
             DWC_ShutdownFriendsMatch();
             work->state = GTC_STATE_SHOW_ERROR;
             break;
-        case 5:
-        case 7:
+        case DWC_ETYPE_SHUTDOWN_ND:
+        case DWC_ETYPE_FATAL:
             CommState_ShowRestartErrorAndHalt();
             break;
         }

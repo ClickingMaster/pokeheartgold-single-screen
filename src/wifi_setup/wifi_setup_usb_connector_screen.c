@@ -62,7 +62,7 @@ void WifiSetupUsbConnector_Main(void) {
 }
 
 void WifiSetupUsbConnector_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(2)) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B)) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }

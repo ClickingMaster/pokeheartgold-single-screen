@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern "C" int memcmp(const void *, const void *, unsigned);
@@ -141,7 +143,7 @@ inline Work *GetWork() {
 }
 
 inline bool IsError(Work *w) {
-    return w != 0 && w->state == 10;
+    return w != 0 && w->state == PPW_LOBBY_STATE_ERROR;
 }
 
 inline void Refresh(Work *w, Info &info) {
@@ -168,7 +170,7 @@ extern "C" int PPW_LobbyLeaveSubChannel(void) {
     if (IsError(w)) {
         return 7;
     }
-    if (w != 0 && GetWork()->state != 8) {
+    if (w != 0 && GetWork()->state != PPW_LOBBY_STATE_READY) {
         return 4;
     }
     if (!(w != 0 && w->peer.IsValid())) {
@@ -183,7 +185,7 @@ extern "C" int PPW_LobbyLeaveSubChannel(void) {
         state = ErrorMap().Map(parsed);
         if (state != 0) {
             w->sub = state;
-            w->state = 10;
+            w->state = PPW_LOBBY_STATE_ERROR;
         }
         t.Destroy();
     }

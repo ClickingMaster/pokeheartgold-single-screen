@@ -60,19 +60,19 @@ void WifiSetupKeyboard_UpdateCursor(void) {
     int templ;
     GXOamAttr *oam;
     switch (gWifiSetupKeyboard->cursorKey) {
-    case 47:
+    case WIFI_SETUP_KEY_ALT_PAGE:
         templ = 0x42;
         break;
-    case 48:
+    case WIFI_SETUP_KEY_SHIFT:
         templ = 0x41;
         break;
     case 49:
         templ = 0x43;
         break;
-    case 50:
+    case WIFI_SETUP_KEY_DELETE:
         templ = 0x41;
         break;
-    case 51:
+    case WIFI_SETUP_KEY_BUTTON_0:
     case 52:
         templ = 0x45;
         break;
@@ -91,11 +91,11 @@ void WifiSetupKeyboard_UpdateCursor(void) {
 void WifiSetupKeyboard_MoveCursor(int direction) {
     int old = gWifiSetupKeyboard->cursorKey;
     gWifiSetupKeyboard->cursorKey = gWifiSetupKeyboardCursorMoves[old][direction];
-    if (gWifiSetupKeyboard->cursorKey == 46 && direction == 3) {
+    if (gWifiSetupKeyboard->cursorKey == 46 && direction == WIFI_SETUP_CURSOR_DOWN) {
         gWifiSetupKeyboard->returnKey = old;
-    } else if (gWifiSetupKeyboard->cursorKey == 51 && (direction == 1 || direction == 3)) {
+    } else if (gWifiSetupKeyboard->cursorKey == WIFI_SETUP_KEY_BUTTON_0 && (direction == WIFI_SETUP_CURSOR_UP || direction == WIFI_SETUP_CURSOR_DOWN)) {
         gWifiSetupKeyboard->returnKey = old;
-    } else if (gWifiSetupKeyboard->cursorKey == 52 && (direction == 1 || direction == 3)) {
+    } else if (gWifiSetupKeyboard->cursorKey == 52 && (direction == WIFI_SETUP_CURSOR_UP || direction == WIFI_SETUP_CURSOR_DOWN)) {
         if (old != 46) {
             gWifiSetupKeyboard->returnKey = old;
         }
@@ -209,7 +209,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
             break;
         case 35:
         case WIFI_SETUP_KEY_DELETE:
-            gWifiSetupKeyboard->cursorKey = 50;
+            gWifiSetupKeyboard->cursorKey = WIFI_SETUP_KEY_DELETE;
             break;
         default:
             gWifiSetupKeyboard->cursorKey = 8;

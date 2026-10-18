@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "chat_user_mode.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -19,16 +21,16 @@ void LobbyChat_OnUserModeChanged(int chat, int channel, int nick, int mode) {
         words[i] = 0;
     }
     switch (mode) {
-    case 0:
+    case CHAT_USER_MODE_NORMAL:
         LobbyString_AssignCStr(&modeName, sStr_normal);
         break;
-    case 1:
+    case CHAT_USER_MODE_VOICE:
         LobbyString_AssignCStr(&modeName, sStr_voice);
         break;
-    case 2:
+    case CHAT_USER_MODE_OP:
         LobbyString_AssignCStr(&modeName, sStr_ops);
         break;
-    case 3:
+    case CHAT_USER_MODE_VOICE_OP:
         LobbyString_AssignCStr(&modeName, sStr_VoiceOps);
         break;
     default:

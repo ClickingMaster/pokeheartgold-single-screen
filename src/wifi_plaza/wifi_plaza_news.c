@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0757.h"
 #include "wifi_plaza/wifi_plaza_internal.h"
 
 #include "heap.h"
@@ -31,6 +32,20 @@ u16 (*const gWiFiPlazaNewsEventSlotGetters[9])(WiFiPlazaNewsEvent *event, u32 in
     WiFiPlazaNewsEvent_GetLobbyEventNoticeSlot,
     WiFiPlazaNewsEvent_GetSpecialVisitorSlot,
     WiFiPlazaNewsEvent_GetMinigameResultSlot,
+};
+
+// WiFiPlazaNewsEvent.type: the kind of news, an index into sWiFiPlazaNewsEventFormatters
+enum WiFiPlazaNewsEventType {
+    WIFI_PLAZA_NEWS_EVENT_CHAT,
+    WIFI_PLAZA_NEWS_EVENT_TAP_TOY_TRADE,
+    WIFI_PLAZA_NEWS_EVENT_MINIGAME_ENTRY,
+    WIFI_PLAZA_NEWS_EVENT_FOOTPRINT_STAMP,
+    WIFI_PLAZA_NEWS_EVENT_VISITOR_PROFILES,
+    WIFI_PLAZA_NEWS_EVENT_PLAZA_NEWS,
+    WIFI_PLAZA_NEWS_EVENT_LOBBY_EVENT,
+    WIFI_PLAZA_NEWS_EVENT_SPECIAL_VISITOR,
+    WIFI_PLAZA_NEWS_EVENT_MINIGAME_RESULT,
+    WIFI_PLAZA_NEWS_EVENT_COUNT,
 };
 
 static BOOL (*const sWiFiPlazaNewsEventFormatters[])(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out, enum HeapID heapID) = {
@@ -75,7 +90,7 @@ void WiFiPlazaNews_SetOldestPlayer(WiFiPlazaNews *news, int slot) {
 void WiFiPlazaNews_AddChatEvent(WiFiPlazaNews *news, WiFiPlazaPairRequest *req) {
     WiFiPlazaNewsEvent *event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 8);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, 0, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 8, 0);
+        WiFiPlazaNewsEvent_Set(event, 0, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 8, WIFI_PLAZA_NEWS_EVENT_CHAT);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -87,7 +102,7 @@ void WiFiPlazaNews_AddTapToyTradeEvent(WiFiPlazaNews *news, WiFiPlazaPairOptionR
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 7);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->option, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 7, 1);
+        WiFiPlazaNewsEvent_Set(event, req->option, 0, 0, req->profiles[0], req->profiles[1], NULL, NULL, req->slots[0], req->slots[1], 0, 0, 600, 7, WIFI_PLAZA_NEWS_EVENT_TAP_TOY_TRADE);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -109,7 +124,7 @@ void WiFiPlazaNews_AddMinigameEntryEvent(WiFiPlazaNews *news, WiFiPlazaGroupFlag
     rank = sWiFiPlazaNewsMinigameEntryRanks[type];
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, (u16)rank);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, type, req->count, req->flag, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 900, rank, 2);
+        WiFiPlazaNewsEvent_Set(event, type, req->count, req->flag, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 900, rank, WIFI_PLAZA_NEWS_EVENT_MINIGAME_ENTRY);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -121,7 +136,7 @@ void WiFiPlazaNews_AddFootprintStampEvent(WiFiPlazaNews *news, WiFiPlazaSingleRe
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, (u16)(req->option + 5));
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->option, req->count, 0, req->profile, NULL, NULL, NULL, req->slot, 0, 0, 0, 900, req->option + 5, 3);
+        WiFiPlazaNewsEvent_Set(event, req->option, req->count, 0, req->profile, NULL, NULL, NULL, req->slot, 0, 0, 0, 900, req->option + 5, WIFI_PLAZA_NEWS_EVENT_FOOTPRINT_STAMP);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -129,7 +144,7 @@ void WiFiPlazaNews_AddFootprintStampEvent(WiFiPlazaNews *news, WiFiPlazaSingleRe
 void WiFiPlazaNews_AddVisitorProfilesEvent(WiFiPlazaNews *news, WiFiPlazaGroupRequest *req) {
     WiFiPlazaNewsEvent *event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 12);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->count, 0, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, 12, 4);
+        WiFiPlazaNewsEvent_Set(event, req->count, 0, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, 12, WIFI_PLAZA_NEWS_EVENT_VISITOR_PROFILES);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -137,7 +152,7 @@ void WiFiPlazaNews_AddVisitorProfilesEvent(WiFiPlazaNews *news, WiFiPlazaGroupRe
 void WiFiPlazaNews_AddPlazaNewsEvent(WiFiPlazaNews *news, WiFiPlazaGroupRequest *req) {
     WiFiPlazaNewsEvent *event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 13);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, req->count, 0, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, 13, 5);
+        WiFiPlazaNewsEvent_Set(event, req->count, 0, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, 13, WIFI_PLAZA_NEWS_EVENT_PLAZA_NEWS);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -157,7 +172,7 @@ void WiFiPlazaNews_AddLobbyEventNotice(WiFiPlazaNews *news, WiFiPlazaLobbyNotice
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 14);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, *notice->time, notice->which, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 900, 14, 6);
+        WiFiPlazaNewsEvent_Set(event, *notice->time, notice->which, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 900, 14, WIFI_PLAZA_NEWS_EVENT_LOBBY_EVENT);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -169,7 +184,7 @@ void WiFiPlazaNews_AddSpecialVisitorEvent(WiFiPlazaNews *news, int *slot, const 
     }
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, 1);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, *slot, 0, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1800, 1, 7);
+        WiFiPlazaNewsEvent_Set(event, *slot, 0, 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 1800, 1, WIFI_PLAZA_NEWS_EVENT_SPECIAL_VISITOR);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -185,7 +200,7 @@ void WiFiPlazaNews_AddMinigameResultEvent(WiFiPlazaNews *news, WiFiPlazaGroupOpt
     rank = sWiFiPlazaNewsMinigameResultRanks[type];
     event = WiFiPlazaNewsEventList_GetFreeEvent(&news->events, rank);
     if (event != NULL) {
-        WiFiPlazaNewsEvent_Set(event, type, req->count, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, rank, 8);
+        WiFiPlazaNewsEvent_Set(event, type, req->count, 0, req->profiles[0], req->profiles[1], req->profiles[2], req->profiles[3], req->slots[0], req->slots[1], req->slots[2], req->slots[3], 450, rank, WIFI_PLAZA_NEWS_EVENT_MINIGAME_RESULT);
         WiFiPlazaNewsEventList_Insert(&news->events, event);
     }
 }
@@ -249,7 +264,7 @@ BOOL WiFiPlazaNews_FormatEvent(WiFiPlazaNews *news, const u8 *flags, int unused,
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0757_bin, heapID);
     format = MessageFormat_New(heapID);
     type = event->type;
-    if ((u32)type < 9) {
+    if ((u32)type < WIFI_PLAZA_NEWS_EVENT_COUNT) {
         result = sWiFiPlazaNewsEventFormatters[type](event, flags, format, msgData, out, heapID);
     } else {
         result = FALSE;
@@ -268,7 +283,7 @@ int WiFiPlazaNews_GetEventSlot(WiFiPlazaNews *news, int unused, int index) {
     }
     event = news->events.head.next;
     type = event->type;
-    if ((u32)type < 9) {
+    if ((u32)type < WIFI_PLAZA_NEWS_EVENT_COUNT) {
         return gWiFiPlazaNewsEventSlotGetters[type](event, index);
     }
     GF_AssertFail();
@@ -468,7 +483,7 @@ void WiFiPlazaNewsEventList_Remove(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEv
 }
 
 void WiFiPlazaNewsEvent_Set(WiFiPlazaNewsEvent *event, u32 a, u32 b, u32 c, const PlayerProfile *player0, const PlayerProfile *player1, const PlayerProfile *player2, const PlayerProfile *player3, u16 slot0, u16 slot1, u16 slot2, u16 slot3, u32 timer, u32 rank, u32 type) {
-    if (type >= 9) {
+    if (type >= WIFI_PLAZA_NEWS_EVENT_COUNT) {
         GF_AssertFail();
     }
     event->type = type;
@@ -500,7 +515,7 @@ BOOL WiFiPlazaNewsEvent_FormatChat(WiFiPlazaNewsEvent *event, const u8 *flags, M
     String *string;
     BufferString(format, 0, event->names[0], 0, 1, gGameLanguage);
     BufferString(format, 1, event->names[1], 0, 1, gGameLanguage);
-    string = NewString_ReadMsgData(msgData, 7);
+    string = NewString_ReadMsgData(msgData, msg_0757_00007);
     StringExpandPlaceholders(format, out, string);
     String_Delete(string);
     return TRUE;
@@ -512,7 +527,7 @@ BOOL WiFiPlazaNewsEvent_FormatTapToyTrade(WiFiPlazaNewsEvent *event, const u8 *f
     BufferString(format, 0, event->names[0], 0, 1, gGameLanguage);
     BufferString(format, 1, event->names[1], 0, 1, gGameLanguage);
     BufferWiFiPlazaInstrumentName(format, 2, event->a);
-    string = NewString_ReadMsgData(msgData, 8);
+    string = NewString_ReadMsgData(msgData, msg_0757_00008);
     StringExpandPlaceholders(format, out, string);
     String_Delete(string);
     return TRUE;
@@ -529,19 +544,19 @@ BOOL WiFiPlazaNewsEvent_FormatMinigameEntry(WiFiPlazaNewsEvent *event, const u8 
             BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
             BufferString(format, 2, event->names[1], 0, 1, gGameLanguage);
             BufferString(format, 3, event->names[2], 0, 1, gGameLanguage);
-            msgNo = 0x12;
+            msgNo = msg_0757_00018;
             break;
         case 2:
             BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
             BufferString(format, 2, event->names[1], 0, 1, gGameLanguage);
-            msgNo = 0x13;
+            msgNo = msg_0757_00019;
             break;
         case 4:
             BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
             BufferString(format, 2, event->names[1], 0, 1, gGameLanguage);
             BufferString(format, 3, event->names[2], 0, 1, gGameLanguage);
             BufferString(format, 4, event->names[3], 0, 1, gGameLanguage);
-            msgNo = 6;
+            msgNo = msg_0757_00006;
             break;
         default:
             return FALSE;
@@ -550,7 +565,7 @@ BOOL WiFiPlazaNewsEvent_FormatMinigameEntry(WiFiPlazaNewsEvent *event, const u8 
     } else {
         BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
         BufferIntegerAsString(format, 2, 4 - event->b, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-        string = NewString_ReadMsgData(msgData, 5);
+        string = NewString_ReadMsgData(msgData, msg_0757_00005);
     }
     StringExpandPlaceholders(format, out, string);
     String_Delete(string);
@@ -563,7 +578,7 @@ BOOL WiFiPlazaNewsEvent_FormatFootprintStamp(WiFiPlazaNewsEvent *event, const u8
     BufferWiFiPlazaActivityName(format, 0, event->a);
     BufferString(format, 1, event->names[0], 0, 1, gGameLanguage);
     BufferIntegerAsString(format, 2, 8 - event->b, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    string = NewString_ReadMsgData(msgData, 9);
+    string = NewString_ReadMsgData(msgData, msg_0757_00009);
     StringExpandPlaceholders(format, out, string);
     String_Delete(string);
     return TRUE;
@@ -576,7 +591,7 @@ BOOL WiFiPlazaNewsEvent_FormatChecking(WiFiPlazaNewsEvent *event, const u8 *flag
     for (i = 0; i < event->a; i++) {
         BufferString(format, i, event->names[i], 0, 1, gGameLanguage);
     }
-    if (event->type == 4) {
+    if (event->type == WIFI_PLAZA_NEWS_EVENT_VISITOR_PROFILES) {
         BufferWiFiPlazaActivityName(format, event->a, 5);
     } else {
         BufferWiFiPlazaActivityName(format, event->a, 6);
@@ -594,18 +609,18 @@ BOOL WiFiPlazaNewsEvent_FormatLobbyEventNotice(WiFiPlazaNewsEvent *event, const 
     switch (event->b) {
     case 0:
         BufferWiFiPlazaEventName(format, 0, 0);
-        msgNo = 0xf;
+        msgNo = msg_0757_00015;
         break;
     case 1:
         BufferWiFiPlazaEventName(format, 0, 1);
-        msgNo = 0x14;
+        msgNo = msg_0757_00020;
         break;
     case 2:
         BufferWiFiPlazaEventName(format, 0, 2);
-        msgNo = 0x10;
+        msgNo = msg_0757_00016;
         break;
     case 4:
-        msgNo = 0x11;
+        msgNo = msg_0757_00017;
         break;
     default:
         return FALSE;

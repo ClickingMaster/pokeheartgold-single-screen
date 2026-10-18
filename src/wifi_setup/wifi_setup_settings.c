@@ -249,7 +249,7 @@ void WifiSetupSettings_HandleKeys(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP)) {
-        WifiSetupSettings_MoveCursor(1);
+        WifiSetupSettings_MoveCursor(WIFI_SETUP_CURSOR_UP);
         return;
     }
     if (WifiSetupInput_IsKeyReleased(PAD_KEY_UP)) {
@@ -257,7 +257,7 @@ void WifiSetupSettings_HandleKeys(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN)) {
-        WifiSetupSettings_MoveCursor(3);
+        WifiSetupSettings_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
         return;
     }
     if (WifiSetupInput_IsKeyReleased(PAD_KEY_DOWN)) {
@@ -265,11 +265,11 @@ void WifiSetupSettings_HandleKeys(void) {
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
-        WifiSetupSettings_MoveCursor(0);
+        WifiSetupSettings_MoveCursor(WIFI_SETUP_CURSOR_LEFT);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_RIGHT)) {
-        WifiSetupSettings_MoveCursor(2);
+        WifiSetupSettings_MoveCursor(WIFI_SETUP_CURSOR_RIGHT);
     }
 }
 

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -57,10 +59,10 @@ int PPW_LobbyUpdateRecruitInfo(Packet *p) {
     if (!w) {
         return 4;
     }
-    if (w && w->state == 10) {
+    if (w && w->state == PPW_LOBBY_STATE_ERROR) {
         return 7;
     }
-    if (w && gPPWLobbyWork->state != 8) {
+    if (w && gPPWLobbyWork->state != PPW_LOBBY_STATE_READY) {
         return 4;
     }
     w = gPPWLobbyWork;
@@ -88,10 +90,10 @@ int PPW_LobbyStopRecruit(void) {
     if (!w) {
         return 4;
     }
-    if (w && w->state == 10) {
+    if (w && w->state == PPW_LOBBY_STATE_ERROR) {
         return 7;
     }
-    if (w && gPPWLobbyWork->state != 8) {
+    if (w && gPPWLobbyWork->state != PPW_LOBBY_STATE_READY) {
         return 4;
     }
     w = gPPWLobbyWork;

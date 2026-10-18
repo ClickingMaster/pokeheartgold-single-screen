@@ -43,6 +43,11 @@
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
+enum GtsInitState {
+    GTS_INIT_SETUP,
+    GTS_INIT_START_WIRELESS,
+};
+
 // One screen of the app: init, main and exit, each returns the next Gts_Main state.
 typedef struct GtsScreen {
     int (*init)(GtsApp *app, int state);
@@ -382,7 +387,7 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
     GtsApp *app;
 
     switch (*state) {
-    case 0:
+    case GTS_INIT_SETUP:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -413,12 +418,12 @@ BOOL Gts_Init(OverlayManager *man, int *state) {
         Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
         app->heapMemory = Heap_Alloc(HEAP_ID_61, 0x20020);
         app->heap = NNS_FndCreateExpHeapEx((void *)(((u32)app->heapMemory + 0x1F) & ~0x1F), 0x20000, 0);
-        *state = 1;
+        *state = GTS_INIT_START_WIRELESS;
         break;
-    case 1:
+    case GTS_INIT_START_WIRELESS:
         CommWireless_StartUp();
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-        *state = 0;
+        *state = GTS_INIT_SETUP;
         return TRUE;
     }
     return FALSE;
@@ -430,29 +435,29 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
     DWC_UpdateConnection();
     GtsServer_Update();
     switch (*state) {
-    case 0:
+    case GTS_APP_STATE_WAIT_WIRELESS:
         if (CommWireless_IsStartedUp()) {
             gGtsGlobals.heap = app->heap;
             DWC_SetMemFunc(Gts_Alloc, Gts_Free);
-            *state = 1;
+            *state = GTS_APP_STATE_INIT_SCREEN;
         }
         break;
-    case 1:
+    case GTS_APP_STATE_INIT_SCREEN:
         *state = sGtsScreens[app->screen].init(app, *state);
         Gts_SetupWindow0();
         if (app->reloadGraphics) {
             Gts_FreeGraphics(app);
         }
         break;
-    case 2:
+    case GTS_APP_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 3;
+            *state = GTS_APP_STATE_RUN_SCREEN;
         }
         break;
-    case 3:
+    case GTS_APP_STATE_RUN_SCREEN:
         *state = sGtsScreens[app->screen].main(app, *state);
         break;
-    case 4:
+    case GTS_APP_STATE_EXIT_SCREEN:
         if (IsPaletteFadeFinished()) {
             if (app->reloadGraphics) {
                 Gts_InitGraphics(app);
@@ -465,7 +470,7 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
             *state = sGtsScreens[app->screen].exit(app, *state);
         }
         break;
-    case 5:
+    case GTS_APP_STATE_END:
         return TRUE;
     }
     Gts_DecrementTimer(app);

@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <string.h>
@@ -336,7 +338,7 @@ static inline void Lobby_SetError(int code) {
     Lobby *w = gPPWLobbyWork;
     if (code != 0) {
         w->err = code;
-        w->state = 10;
+        w->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
@@ -418,7 +420,7 @@ static inline void Lobby_Fail(int r) {
     }
     if (code != 0) {
         w->err = code;
-        w->state = 10;
+        w->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
@@ -430,10 +432,10 @@ static inline int Lobby_Process(void) {
             Lobby_Delete(gPPWLobbyWork);
             gPPWLobbyWork = NULL;
         }
-        return 9;
+        return PPW_LOBBY_STATE_CLOSED;
     case 3:
-        if (gPPWLobbyWork->state == 1) {
-            gPPWLobbyWork->state = 2;
+        if (gPPWLobbyWork->state == PPW_LOBBY_STATE_CONNECTING) {
+            gPPWLobbyWork->state = PPW_LOBBY_STATE_CONNECTED;
         }
         break;
     case 5:
@@ -446,46 +448,46 @@ static inline int Lobby_Process(void) {
     }
     Lobby_UpdateTimers();
     switch (gPPWLobbyWork->state) {
-    case 0:
-        return 9;
-    case 2:
-        gPPWLobbyWork->state = 3;
+    case PPW_LOBBY_STATE_NOT_INITIALIZED:
+        return PPW_LOBBY_STATE_CLOSED;
+    case PPW_LOBBY_STATE_CONNECTED:
+        gPPWLobbyWork->state = PPW_LOBBY_STATE_WAIT_SCHEDULE;
         break;
-    case 3:
+    case PPW_LOBBY_STATE_WAIT_SCHEDULE:
         if (Lobby_IsReady(gPPWLobbyWork)) {
-            gPPWLobbyWork->state = 4;
+            gPPWLobbyWork->state = PPW_LOBBY_STATE_ENUM_CHANNELS;
         }
         break;
-    case 4: {
+    case PPW_LOBBY_STATE_ENUM_CHANNELS: {
         Lobby_Login();
-        gPPWLobbyWork->state = 5;
+        gPPWLobbyWork->state = PPW_LOBBY_STATE_SEARCHING_CHANNEL;
         break;
     }
-    case 6: {
+    case PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL: {
         int r = PPWLobby_EnterMainChannel();
         if (r != 0) {
             Lobby_Fail(r);
         } else {
-            gPPWLobbyWork->state = 7;
+            gPPWLobbyWork->state = PPW_LOBBY_STATE_WAIT_MAIN_CHANNEL;
         }
         break;
     }
-    case 7:
+    case PPW_LOBBY_STATE_WAIT_MAIN_CHANNEL:
         if (PPWLobby_IsMainChannelReady()) {
             Sub *sub = &gPPWLobbyWork->sub;
             sub->tracked.active = 0;
             Tracked t(sub->tracked.stamp.code, sub->tracked.stamp.pair, 1, 1);
             sub->tracked.Set(t);
             sub->flag = 1;
-            gPPWLobbyWork->state = 8;
+            gPPWLobbyWork->state = PPW_LOBBY_STATE_READY;
             gPPWLobbyWork->cb(1, 0);
         }
         break;
-    case 1:
-    case 5:
-    case 8:
-    case 9:
-    case 10:
+    case PPW_LOBBY_STATE_CONNECTING:
+    case PPW_LOBBY_STATE_SEARCHING_CHANNEL:
+    case PPW_LOBBY_STATE_READY:
+    case PPW_LOBBY_STATE_CLOSED:
+    case PPW_LOBBY_STATE_ERROR:
         break;
     }
     return gPPWLobbyWork->state;
@@ -495,13 +497,13 @@ int PPW_LobbyProcess(void) {
     int polled = Request_Update();
     if (polled) {
         if (gPPWLobbyWork == NULL) {
-            return 9;
+            return PPW_LOBBY_STATE_CLOSED;
         }
     } else if (gPPWLobbyWork == NULL) {
-        return 0;
+        return PPW_LOBBY_STATE_NOT_INITIALIZED;
     }
     if (Lobby_IsError()) {
-        return 10;
+        return PPW_LOBBY_STATE_ERROR;
     }
     return Lobby_Process();
 }

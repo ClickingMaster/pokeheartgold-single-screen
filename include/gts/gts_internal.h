@@ -131,6 +131,16 @@ extern GtsServerAt100 ov70_02246900;
 extern volatile GtsServerAt120 ov70_02246920; // written by the response callback
 extern u8 gGtsServerShortResponse[];
 
+// Gts_Main states; the screen functions return the next one
+enum GtsAppState {
+    GTS_APP_STATE_WAIT_WIRELESS,
+    GTS_APP_STATE_INIT_SCREEN,
+    GTS_APP_STATE_WAIT_FADE_IN,
+    GTS_APP_STATE_RUN_SCREEN,
+    GTS_APP_STATE_EXIT_SCREEN,
+    GTS_APP_STATE_END,
+};
+
 typedef struct GtsApp GtsApp;
 
 // The cursor of SEEK POKEMON (column 0: rows 0..3, column 1: rows 0..2).

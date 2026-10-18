@@ -2786,10 +2786,10 @@ void WifiSetupDialog_InputTask(void *task, void *arg) {
             break;
         }
     }
-    if (WifiSetupInput_IsKeyPressed(1)) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A)) {
         gWifiSetupDialog->selected = gWifiSetupDialogAButtonChoice[gWifiSetupDialog->kind][0];
     }
-    if (WifiSetupInput_IsKeyPressed(2)) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B)) {
         gWifiSetupDialog->selected = gWifiSetupDialogBButtonChoice[gWifiSetupDialog->kind][0];
     }
     counts = gWifiSetupDialogButtonCounts;

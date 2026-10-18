@@ -215,7 +215,7 @@ WiFiPlazaEvent *WiFiPlazaEvent_Create(enum HeapID heapID, WiFiPlazaRoomWork *roo
         WiFiPlazaModels_EnableKind1To4Lights(event->models);
     }
     if ((mode != 1) && (mode == 0) && (flagC == TRUE)) {
-        WiFiPlazaModels_SetPairAnim(event->models, 3);
+        WiFiPlazaModels_SetPairAnim(event->models, WIFI_PLAZA_PAIR_ANIM_LOOP);
     }
     if (flagB == TRUE) {
         WiFiPlazaModels_StartBaseAnim4(event->models);
@@ -251,11 +251,11 @@ void WiFiPlazaEvent_Update(WiFiPlazaEvent *event) {
         WiFiPlazaLight_FadeToThirdSet(event->light, set);
     }
     if (WiFiPlazaWork_IsLightingStarted(event->lobby) == TRUE && WiFiPlazaWork_GetFireworksState(event->lobby) == 0 && WiFiPlazaModels_GetPairAnimState(event->models) == 0) {
-        WiFiPlazaModels_SetPairAnim(event->models, 1);
+        WiFiPlazaModels_SetPairAnim(event->models, WIFI_PLAZA_PAIR_ANIM_OPEN);
     }
     if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 5) && WiFiPlazaWork_GetFireworksState(event->lobby) == 1) {
         WiFiPlazaModels_EnableKind1To4Lights(event->models);
-        WiFiPlazaModels_SetPairAnim(event->models, 2);
+        WiFiPlazaModels_SetPairAnim(event->models, WIFI_PLAZA_PAIR_ANIM_CLOSE);
     }
     if (WiFiPlazaWork_IsEventFlagSet(event->lobby, 6) && WiFiPlazaWork_IsParadeStarted(event->lobby) == TRUE) {
         WiFiPlazaModels_StartBaseAnim4(event->models);

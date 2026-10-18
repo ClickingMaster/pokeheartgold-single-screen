@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern "C" int memcmp(const void *, const void *, u32);
@@ -139,7 +141,7 @@ extern "C" int PPW_LobbyUpdateMyProfile(const u8 *data, u32 len, int flag) {
     if (w == 0) {
         return 4;
     }
-    if (w != 0 && w->state == 10) {
+    if (w != 0 && w->state == PPW_LOBBY_STATE_ERROR) {
         return 7;
     }
     if (w != 0 && (*(Work *volatile *)&gPPWLobbyWork)->state != 8) {

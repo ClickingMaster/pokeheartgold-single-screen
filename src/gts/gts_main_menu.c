@@ -241,7 +241,7 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
     app->fadedBothScreens = 0;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsMainMenu_Main(GtsApp *app, int state) {
@@ -428,12 +428,12 @@ int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
         app->statusCheckCaller = 1;
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app) {
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_2);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Returns nothing although it is a state function (the state table ignores it: Gts_Main state 3).
@@ -446,14 +446,14 @@ int GtsMainMenu_WaitFadeIn(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_WaitFadeIn2(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_ShowPrompt(GtsApp *app) {
@@ -461,7 +461,7 @@ int GtsMainMenu_ShowPrompt(GtsApp *app) {
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_HANDLE_INPUT);
     Sprite_SetAnimActiveFlag(app->cursorSprite, TRUE);
     Gts_StartCountingBoxMons(app);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_GetTouchedButton(void) {
@@ -514,7 +514,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
         cursor = app->menuCursor;
         Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorPositions[cursor][0], sGtsMainMenuCursorPositions[cursor][1]);
         GtsMainMenu_SelectButton(app, button);
-        return 3;
+        return GTS_APP_STATE_RUN_SCREEN;
     }
 
     if (gSystem.newKeys & PAD_BUTTON_B) {
@@ -537,7 +537,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
         Gts_SetSpritePositionRounded(app->cursorSprite, sGtsMainMenuCursorPositions[button][0], sGtsMainMenuCursorPositions[button][1]);
     }
 
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_StartExitAnim(GtsApp *app) {
@@ -545,14 +545,14 @@ int GtsMainMenu_StartExitAnim(GtsApp *app) {
     Gts_StartPlayerExitAnim(app, gender);
     app->state = GTS_MAIN_MENU_STATE_WAIT_EXIT_ANIM;
     app->playerAnimDone = FALSE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_WaitExitAnim(GtsApp *app) {
     if (app->playerAnimDone) {
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_FadeOut(GtsApp *app) {
@@ -562,14 +562,14 @@ int GtsMainMenu_FadeOut(GtsApp *app) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_MAIN_MENU_STATE_WAIT_ENTER_ANIM;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 int GtsMainMenu_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 258, 3, 1);
     app->state = GTS_MAIN_MENU_STATE_HANDLE_EXIT_PROMPT;
     Sprite_SetDrawFlag(app->cursorSprite, FALSE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
@@ -591,14 +591,14 @@ int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
         Sprite_SetDrawFlag(app->cursorSprite, TRUE);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsMainMenu_WaitTextAndPause(GtsApp *app) {
@@ -609,7 +609,7 @@ int GtsMainMenu_WaitTextAndPause(GtsApp *app) {
             app->state = app->nextState;
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsMainMenu_DrawButtons(GtsApp *app) {

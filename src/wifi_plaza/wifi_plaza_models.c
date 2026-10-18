@@ -1305,20 +1305,20 @@ void WiFiPlazaModels_SetPairAnim(WiFiPlazaModels *models, u32 mode) {
         case 11:
         case 12:
             switch (mode) {
-            case 0:
+            case WIFI_PLAZA_PAIR_ANIM_REST:
                 WiFiPlazaModelSet_StartPropAnim(models->set, models->props[i], 0, WIFI_PLAZA_PROP_ANIM_MANUAL);
                 models->pairAnimState = FALSE;
                 break;
-            case 1:
+            case WIFI_PLAZA_PAIR_ANIM_OPEN:
                 WiFiPlazaModelSet_StartPropAnimWithCallback(models->set, models->props[i], 0, WIFI_PLAZA_PROP_ANIM_ONCE, WiFiPlazaModels_OnPairAnimOpened);
                 models->pairAnimState = TRUE;
                 break;
-            case 2:
+            case WIFI_PLAZA_PAIR_ANIM_CLOSE:
                 WiFiPlazaModelSet_StartPropAnimWithCallback(models->set, models->props[i], 0, WIFI_PLAZA_PROP_ANIM_ONCE_BACKWARD, WiFiPlazaModels_OnPairAnimClosed);
                 WiFiPlazaModelSet_StopPropAnim(models->set, models->props[i], 1);
                 models->pairAnimState = FALSE;
                 break;
-            case 3:
+            case WIFI_PLAZA_PAIR_ANIM_LOOP:
                 WiFiPlazaModelSet_StartPropAnim(models->set, models->props[i], 1, WIFI_PLAZA_PROP_ANIM_LOOP);
                 WiFiPlazaModelSet_StopPropAnim(models->set, models->props[i], 0);
                 models->pairAnimState = TRUE;

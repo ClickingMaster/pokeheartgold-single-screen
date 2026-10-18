@@ -3,6 +3,8 @@
 // one block of file-scope data.
 #include <nitro/types.h>
 
+#include "ppw_lobby_state.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <size_t.h>
@@ -214,7 +216,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
     if (w == 0) {
         return 4;
     }
-    if (w != 0 && w->state == 10) {
+    if (w != 0 && w->state == PPW_LOBBY_STATE_ERROR) {
         return 7;
     }
     if (mode < 0 || mode > 2) {
@@ -501,7 +503,7 @@ inline void SetError(int r) {
     int state = ErrorMap().Map(r);
     if (state != 0) {
         g->error = state;
-        g->state = 10;
+        g->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
@@ -594,7 +596,7 @@ static inline void Status(int result) {
     }
     if (e) {
         g->error = e;
-        g->state = 10;
+        g->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
@@ -1289,7 +1291,7 @@ extern "C" int PPWLobby_EnterMainChannel(void) {
         int state = ErrorMap().Map(result);
         if (state != 0) {
             w->error = state;
-            w->state = 10;
+            w->state = PPW_LOBBY_STATE_ERROR;
         }
     }
     if (result != 0) {
@@ -2359,7 +2361,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     void *buf;
     u32 len;
     PPWLobbyWork *w = gPPWLobbyWork;
-    if (w == 0 || w->state == 9) {
+    if (w == 0 || w->state == PPW_LOBBY_STATE_CLOSED) {
         return;
     }
     buf = 0;
@@ -2375,7 +2377,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     if (r != 0) {
         PPWLobbyWork *g = gPPWLobbyWork;
         g->error = 6;
-        g->state = 10;
+        g->state = PPW_LOBBY_STATE_ERROR;
         return;
     }
     const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
@@ -2586,7 +2588,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     void *buf;
     u32 len;
     PPWLobbyWork *w = gPPWLobbyWork;
-    if (w == 0 || w->state == 9) {
+    if (w == 0 || w->state == PPW_LOBBY_STATE_CLOSED) {
         return;
     }
     buf = 0;
@@ -2599,7 +2601,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     if (r != 0) {
         PPWLobbyWork *g = gPPWLobbyWork;
         g->error = 4;
-        g->state = 10;
+        g->state = PPW_LOBBY_STATE_ERROR;
         return;
     }
     if (ok2) {
@@ -2808,7 +2810,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     void *buf;
     u32 len;
     PPWLobbyWork *w = gPPWLobbyWork;
-    if (w == 0 || w->state == 9) {
+    if (w == 0 || w->state == PPW_LOBBY_STATE_CLOSED) {
         return;
     }
     buf = 0;
@@ -2820,7 +2822,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     if (r != 0) {
         PPWLobbyWork *g = gPPWLobbyWork;
         g->error = 5;
-        g->state = 10;
+        g->state = PPW_LOBBY_STATE_ERROR;
         return;
     }
     PPWLobbySchedule_SetVipRecords(&gPPWLobbyWork->schedule, buf, len);
@@ -2888,7 +2890,7 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
     u32 size;
     int result;
     PPWLobbyWork *w = gPPWLobbyWork;
-    if (!w || w->state == 9) {
+    if (!w || w->state == PPW_LOBBY_STATE_CLOSED) {
         return;
     }
     data = 0;
@@ -2901,7 +2903,7 @@ void PPWLobby_OnGetQuestionnaire(void *a, void *b, void *c) {
         {
             PPWLobbyWork *target = gPPWLobbyWork;
             target->error = 7;
-            target->state = 10;
+            target->state = PPW_LOBBY_STATE_ERROR;
         }
         return;
     }
@@ -2961,7 +2963,7 @@ static inline u32 short_length(Str *p) {
 }
 
 void PPWLobby_OnSubmitQuestionnaire(int status) {
-    if (!gPPWLobbyWork || gPPWLobbyWork->state == 9) {
+    if (!gPPWLobbyWork || gPPWLobbyWork->state == PPW_LOBBY_STATE_CLOSED) {
         return;
     }
     gPPWLobbyWork->submittingQuestionnaire = 0;
@@ -3253,14 +3255,14 @@ static inline void Lobby_SetError(int code) {
     Lobby *w = gPPWLobbyWork;
     if (code != 0) {
         w->err = code;
-        w->state = 10;
+        w->state = PPW_LOBBY_STATE_ERROR;
     }
 }
 
 static inline void Lobby_OnFail(void) {
     gPPWLobbyWork->peer.Reset();
     if (Lobby_Retry(gPPWLobbyWork)) {
-        gPPWLobbyWork->state = 4;
+        gPPWLobbyWork->state = PPW_LOBBY_STATE_ENUM_CHANNELS;
     } else {
         Lobby_SetError(3);
     }
@@ -3413,7 +3415,7 @@ extern "C" void PPWLobby_OnEnterSubChannel(int result, int unused, int arg, int 
         if (name == 0) {
             Work *w = gPPWLobbyWork;
             w->sub = 1;
-            w->state = 10;
+            w->state = PPW_LOBBY_STATE_ERROR;
         }
         LobbyChat_SetChannelMode(arg, name);
         {
@@ -4429,7 +4431,7 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
         LobbyString_Assign(&gPPWLobbyWork->channelBaseName, &text);
         LobbyString_Destroy(&text);
         gPPWLobbyWork->isNewChannel = 0;
-        gPPWLobbyWork->state = 6;
+        gPPWLobbyWork->state = PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL;
         LobbyStringVector_Destroy(&parts);
         return;
     }
@@ -4437,7 +4439,7 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
     LobbyString_Assign(&gPPWLobbyWork->channelBaseName, &empty);
     LobbyString_Destroy(&empty);
     gPPWLobbyWork->isNewChannel = 1;
-    gPPWLobbyWork->state = 6;
+    gPPWLobbyWork->state = PPW_LOBBY_STATE_ENTER_MAIN_CHANNEL;
 }
 }
 }

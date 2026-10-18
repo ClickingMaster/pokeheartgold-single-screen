@@ -62,6 +62,32 @@ enum WobbuffetPopScoreDisplayState {
     WOBBUFFET_POP_SCORE_DISPLAY_ROLL,
 };
 
+enum WobbuffetPopBonus {
+    WOBBUFFET_POP_BONUS_NONE,
+    WOBBUFFET_POP_BONUS_DOUBLE,
+    WOBBUFFET_POP_BONUS_HALVE,
+    WOBBUFFET_POP_BONUS_TRIPLE,
+};
+
+enum WobbuffetPopBonusTargetState {
+    WOBBUFFET_POP_BONUS_TARGET_IDLE,
+    WOBBUFFET_POP_BONUS_TARGET_ENTER,
+    WOBBUFFET_POP_BONUS_TARGET_WALK,
+    WOBBUFFET_POP_BONUS_TARGET_HIT,
+};
+
+enum WobbuffetPopBonusTargetEnterStep {
+    WOBBUFFET_POP_BONUS_TARGET_ENTER_SHOW,
+    WOBBUFFET_POP_BONUS_TARGET_ENTER_MOVE_IN,
+};
+
+enum WobbuffetPopBonusTargetHitStep {
+    WOBBUFFET_POP_BONUS_TARGET_HIT_FLASH,
+    WOBBUFFET_POP_BONUS_TARGET_HIT_WAIT,
+    WOBBUFFET_POP_BONUS_TARGET_HIT_START_HOP,
+    WOBBUFFET_POP_BONUS_TARGET_HIT_HOP,
+};
+
 extern const u32 sWobbuffetPopCommands[];
 extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
@@ -632,19 +658,19 @@ static BOOL WobbuffetPopPuff_Move(WobbuffetPop *game, WobbuffetPopPuff *puff) {
     if ((s16)puff->netId == Comm_GetLocalNetId() && previous >= 0 && remaining <= 0) {
         puff->bonus = WobbuffetPop_FindBonusTargetAtFront(game, &target);
         switch (puff->bonus) {
-        case 1:
+        case WOBBUFFET_POP_BONUS_DOUBLE:
             puff->amount *= 2;
             break;
-        case 2:
+        case WOBBUFFET_POP_BONUS_HALVE:
             puff->amount /= 2;
             break;
-        case 3:
+        case WOBBUFFET_POP_BONUS_TRIPLE:
             puff->amount *= 3;
             break;
         }
         WobbuffetPop_SetPumpBonus(game, puff->bonus);
-        if (puff->bonus != 0) {
-            WobbuffetPopBonusTarget_SetState(target, 3);
+        if (puff->bonus != WOBBUFFET_POP_BONUS_NONE) {
+            WobbuffetPopBonusTarget_SetState(target, WOBBUFFET_POP_BONUS_TARGET_HIT);
         }
         pump = WobbuffetPop_DequeuePump(game);
         if (pump != NULL) {
@@ -1132,7 +1158,7 @@ void WobbuffetPop_InitPump(WobbuffetPop *game, u32 balloonIndex, u32 amount, Wob
     pump->balloonIndex = balloonIndex;
     pump->amount = amount;
     pump->bonusAmount = amount;
-    pump->bonus = 0;
+    pump->bonus = WOBBUFFET_POP_BONUS_NONE;
     pump->bonusSet = FALSE;
 }
 
@@ -1161,7 +1187,7 @@ static BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
     int end;
     int i;
 
-    if (game->pumpQueueRead == game->pumpQueueWrite || bonus == 0) {
+    if (game->pumpQueueRead == game->pumpQueueWrite || bonus == WOBBUFFET_POP_BONUS_NONE) {
         return FALSE;
     }
     start = game->pumpQueueRead % 8;
@@ -1199,13 +1225,13 @@ static BOOL WobbuffetPop_SetPumpBonus(WobbuffetPop *game, int bonus) {
     pump->bonus = bonus;
     pump->bonusSet = TRUE;
     switch (bonus) {
-    case 1:
+    case WOBBUFFET_POP_BONUS_DOUBLE:
         pump->bonusAmount = pump->amount * 2;
         break;
-    case 2:
+    case WOBBUFFET_POP_BONUS_HALVE:
         pump->bonusAmount = pump->amount / 2;
         break;
-    case 3:
+    case WOBBUFFET_POP_BONUS_TRIPLE:
         pump->bonusAmount = pump->amount * 3;
         break;
     }
@@ -1302,7 +1328,7 @@ void WobbuffetPopBonusRing_Init(WobbuffetPop *game, WobbuffetPopBonusRing *ring)
         angle += 90;
         target++;
     } while (i < 3);
-    ring->targets[0].state = 2;
+    ring->targets[0].state = WOBBUFFET_POP_BONUS_TARGET_WALK;
     ring->done = TRUE;
 }
 #pragma opt_strength_reduction reset
@@ -1343,7 +1369,7 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
             }
         }
         if (sum - 15 == ring->ticks) {
-            WobbuffetPopBonusTarget_SetState(&ring->targets[1], 1);
+            WobbuffetPopBonusTarget_SetState(&ring->targets[1], WOBBUFFET_POP_BONUS_TARGET_ENTER);
         }
     } else if (ring->speed == 2) {
         {
@@ -1353,7 +1379,7 @@ void WobbuffetPopBonusRing_Update(WobbuffetPop *game, WobbuffetPopBonusRing *rin
             }
         }
         if (sum - 15 == ring->ticks) {
-            WobbuffetPopBonusTarget_SetState(&ring->targets[2], 1);
+            WobbuffetPopBonusTarget_SetState(&ring->targets[2], WOBBUFFET_POP_BONUS_TARGET_ENTER);
         }
     }
     for (i = 0; i < 3; i++) {
@@ -1375,7 +1401,7 @@ static u8 WobbuffetPop_FindBonusTargetAtFront(WobbuffetPop *game, WobbuffetPopBo
         target++;
     }
     *outTarget = NULL;
-    return 0;
+    return WOBBUFFET_POP_BONUS_NONE;
 }
 
 static void WobbuffetPopBonusTarget_SetState(WobbuffetPopBonusTarget *target, u8 state) {
@@ -1405,14 +1431,14 @@ u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *rin
     position.y = target->motion.home.y;
     int offset;
     switch (target->step) {
-    case 0:
+    case WOBBUFFET_POP_BONUS_TARGET_ENTER_SHOW:
         ManagedSprite_SetDrawFlag(target->sprite, TRUE);
         ManagedSprite_SetDrawFlag(target->shadow, TRUE);
         ManagedSprite_GetPositionXYWithSubscreenOffset(target->sprite, &position.x, &position.y, 0x160000);
         target->motion.home.x = position.x;
         target->motion.home.y = position.y;
         target->step++;
-    case 1:
+    case WOBBUFFET_POP_BONUS_TARGET_ENTER_MOVE_IN:
         switch (target->angle) {
         case 0: {
             s16 delta = target->motion.home.y;
@@ -1449,7 +1475,7 @@ u32 WobbuffetPopBonusTarget_Enter(WobbuffetPop *game, WobbuffetPopBonusRing *rin
         if (target->timer >= 15) {
             ManagedSprite_SetPositionXYWithSubscreenOffset(target->sprite, target->motion.home.x, target->motion.home.y, 0x160000);
             ManagedSprite_SetPositionXYWithSubscreenOffset(target->shadow, target->motion.home.x, (s16)(target->motion.home.y + 24), 0x160000);
-            WobbuffetPopBonusTarget_SetState(target, 2);
+            WobbuffetPopBonusTarget_SetState(target, WOBBUFFET_POP_BONUS_TARGET_WALK);
             WobbuffetPopDust_Start(game, target, &target->dust);
             return TRUE;
         }
@@ -1510,7 +1536,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
     s16 y;
 
     switch (target->step) {
-    case 0:
+    case WOBBUFFET_POP_BONUS_TARGET_HIT_FLASH:
         PlaySE(SEQ_SE_PL_BALLOON05);
         ManagedSprite_GetPositionXYWithSubscreenOffset(target->sprite, &originX, &originY, 0x160000);
         ManagedSprite_SetPositionXYWithSubscreenOffset(target->effect, originX, originY - 32, 0x160000);
@@ -1521,7 +1547,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         target->halfTime = sWobbuffetPopRingSpeeds[ring->speed].timer / 2;
         target->step = (u8)(target->step + 1);
         break;
-    case 1:
+    case WOBBUFFET_POP_BONUS_TARGET_HIT_WAIT:
         if (target->timer == target->halfTime) {
             ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus] + 1);
             ManagedSprite_SetDrawFlag(target->effect, FALSE);
@@ -1535,7 +1561,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
             target->timer--;
         }
         break;
-    case 2: {
+    case WOBBUFFET_POP_BONUS_TARGET_HIT_START_HOP: {
         int duration;
         int start;
         int value = 0;
@@ -1568,7 +1594,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         y += 24;
         WobbuffetPopBonusTarget_StartHop(target, sine, cosine, x, y, duration);
     }
-    case 3: {
+    case WOBBUFFET_POP_BONUS_TARGET_HIT_HOP: {
         s64 height;
 
         target->motion.hop.x = (s32)((u32)target->motion.hop.x + (u32)target->motion.hop.dx);
@@ -1581,7 +1607,7 @@ u32 WobbuffetPopBonusTarget_Hit(WobbuffetPop *game, WobbuffetPopBonusRing *ring,
         if (target->timer == 0) {
             ManagedSprite_SetAnim(target->sprite, sWobbuffetPopBonusTargetAnims[target->bonus]);
             ManagedSprite_SetAnimationFrame(target->sprite, 0);
-            WobbuffetPopBonusTarget_SetState(target, 2);
+            WobbuffetPopBonusTarget_SetState(target, WOBBUFFET_POP_BONUS_TARGET_WALK);
             return TRUE;
         }
         break;

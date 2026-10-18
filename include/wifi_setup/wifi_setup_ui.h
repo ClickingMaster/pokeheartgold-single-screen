@@ -7,6 +7,14 @@
 // linked lists and free-item pools, OAM and character VRAM allocators, brightness fades, text
 // canvases, pad/touch input and a prioritised task scheduler.
 
+// Direction of a cursor move on the setup screens
+enum WifiSetupCursorDirection {
+    WIFI_SETUP_CURSOR_LEFT,
+    WIFI_SETUP_CURSOR_UP,
+    WIFI_SETUP_CURSOR_RIGHT,
+    WIFI_SETUP_CURSOR_DOWN,
+};
+
 typedef struct WifiSetupListNode {
     struct WifiSetupListNode *prev;
     struct WifiSetupListNode *next;

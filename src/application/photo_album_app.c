@@ -75,6 +75,33 @@ enum {
     PHOTO_MENU_MOVE,
 };
 
+enum PhotoAlbumSetupState {
+    PHOTO_ALBUM_SETUP_INIT_GRAPHICS,
+    PHOTO_ALBUM_SETUP_DRAW_SCREEN,
+};
+
+enum PhotoAlbumFadeState {
+    PHOTO_ALBUM_FADE_START,
+    PHOTO_ALBUM_FADE_WAIT,
+};
+
+enum PhotoAlbumMoveDoneState {
+    PHOTO_ALBUM_MOVE_DONE_REDRAW,
+    PHOTO_ALBUM_MOVE_DONE_WAIT_MESSAGE,
+    PHOTO_ALBUM_MOVE_DONE_FINISH,
+};
+
+enum PhotoAlbumFlipState {
+    PHOTO_ALBUM_FLIP_START,
+    PHOTO_ALBUM_FLIP_ZOOM_OUT,
+    PHOTO_ALBUM_FLIP_ZOOM_IN,
+};
+
+enum PhotoAlbumDeletePromptState {
+    PHOTO_ALBUM_DELETE_PROMPT_OPEN,
+    PHOTO_ALBUM_DELETE_PROMPT_INPUT,
+};
+
 typedef struct PhotoEntry {
     u8 idx;
     u8 filler_01[3];
@@ -549,15 +576,15 @@ static void PhotoAlbumApp_Finish(PhotoAlbumApp *app) {
 
 static BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
     switch (app->state) {
-    case 0:
+    case PHOTO_ALBUM_SETUP_INIT_GRAPHICS:
         PhotoAlbumApp_InitGraphics(app);
         ++app->state;
         break;
-    case 1:
+    case PHOTO_ALBUM_SETUP_DRAW_SCREEN:
         PhotoAlbumApp_DrawInitialScreen(app);
         GF_TouchpadResetSampling();
         GF_TouchpadStartSampling(4);
-        app->state = 0;
+        app->state = PHOTO_ALBUM_SETUP_INIT_GRAPHICS;
         return TRUE;
     }
     return FALSE;
@@ -571,13 +598,13 @@ static BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app) {
     switch (app->state) {
-    case 0:
+    case PHOTO_ALBUM_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, app->heapId);
         ++app->state;
         break;
-    case 1:
+    case PHOTO_ALBUM_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            app->state = 0;
+            app->state = PHOTO_ALBUM_FADE_START;
             return PHOTO_ALBUM_STATE_GRID;
         }
         break;
@@ -587,13 +614,13 @@ static int PhotoAlbumApp_State_FadeIn(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_State_FadeOut(PhotoAlbumApp *app) {
     switch (app->state) {
-    case 0:
+    case PHOTO_ALBUM_FADE_START:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, app->heapId);
         ++app->state;
         break;
-    case 1:
+    case PHOTO_ALBUM_FADE_WAIT:
         if (IsPaletteFadeFinished()) {
-            app->state = 0;
+            app->state = PHOTO_ALBUM_FADE_START;
             return PHOTO_ALBUM_STATE_EXIT;
         }
         break;
@@ -881,7 +908,7 @@ static int PhotoAlbumApp_HandleMoveInput(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
     switch (app->subState) {
-    case 0:
+    case PHOTO_ALBUM_MOVE_DONE_REDRAW:
         if (app->timer++ < 15) {
             return 0;
         }
@@ -890,7 +917,7 @@ static int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
         app->timer = 0;
         app->subState++;
         break;
-    case 1:
+    case PHOTO_ALBUM_MOVE_DONE_WAIT_MESSAGE:
         if (app->timer++ < 30) {
             return 0;
         }
@@ -907,7 +934,7 @@ static int PhotoAlbumApp_RunMoveDone(PhotoAlbumApp *app) {
         PhotoAlbumApp_PrintMessage(app, 0, FALSE, 0);
         ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_MAIN_3);
         app->timer = 0;
-        app->subState = 0;
+        app->subState = PHOTO_ALBUM_MOVE_DONE_REDRAW;
         return 1;
     }
     return 0;
@@ -1049,7 +1076,7 @@ static int PhotoAlbumApp_HandleMoveKeys(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
     switch (app->subState) {
-    case 0:
+    case PHOTO_ALBUM_FLIP_START:
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 0);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_RequestBgToggle(app, 1);
@@ -1060,7 +1087,7 @@ static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
         app->pageFlipPhase = 0;
         app->subState++;
         break;
-    case 1:
+    case PHOTO_ALBUM_FLIP_ZOOM_OUT:
         app->pageFlipPhase++;
         PhotoAlbumApp_SetZoom(app, sPhotoAlbumPageFlipZoom[app->pageFlipPhase]);
         if (app->pageFlipPhase >= 4) {
@@ -1069,7 +1096,7 @@ static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case PHOTO_ALBUM_FLIP_ZOOM_IN:
         app->pageFlipPhase = app->pageFlipPhase - 1;
         PhotoAlbumApp_SetZoom(app, sPhotoAlbumPageFlipZoom[app->pageFlipPhase]);
         if (app->pageFlipPhase == 0) {
@@ -1082,7 +1109,7 @@ static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
             if (app->mode == PHOTO_ALBUM_MODE_MOVE) {
                 PhotoAlbumApp_UpdateSelectionSprite(app, 1);
             }
-            app->subState = 0;
+            app->subState = PHOTO_ALBUM_FLIP_START;
             return 1;
         }
         break;
@@ -1092,7 +1119,7 @@ static int PhotoAlbumApp_FlipToPrevPage(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
     switch (app->subState) {
-    case 0:
+    case PHOTO_ALBUM_FLIP_START:
         PhotoAlbumApp_SetCursorPos(app, app->cursorX, app->cursorY, 0);
         PhotoAlbumApp_UpdateSelectionSprite(app, 0);
         PhotoAlbumApp_RequestBgToggle(app, 1);
@@ -1103,7 +1130,7 @@ static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
         app->pageFlipPhase = 0;
         app->subState++;
         break;
-    case 1:
+    case PHOTO_ALBUM_FLIP_ZOOM_OUT:
         app->pageFlipPhase++;
         PhotoAlbumApp_SetZoom(app, sPhotoAlbumPageFlipZoom[app->pageFlipPhase]);
         if (app->pageFlipPhase >= 4) {
@@ -1112,7 +1139,7 @@ static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
             app->subState++;
         }
         break;
-    case 2:
+    case PHOTO_ALBUM_FLIP_ZOOM_IN:
         app->pageFlipPhase = app->pageFlipPhase - 1;
         PhotoAlbumApp_SetZoom(app, sPhotoAlbumPageFlipZoom[app->pageFlipPhase]);
         if (app->pageFlipPhase == 0) {
@@ -1125,7 +1152,7 @@ static int PhotoAlbumApp_FlipToNextPage(PhotoAlbumApp *app) {
             if (app->mode == PHOTO_ALBUM_MODE_MOVE) {
                 PhotoAlbumApp_UpdateSelectionSprite(app, 1);
             }
-            app->subState = 0;
+            app->subState = PHOTO_ALBUM_FLIP_START;
             return 1;
         }
         break;
@@ -1143,13 +1170,13 @@ static int PhotoAlbumApp_RunContextMenu(PhotoAlbumApp *app) {
 
 static int PhotoAlbumApp_RunDeletePrompt(PhotoAlbumApp *app) {
     switch (app->subState) {
-    case 0:
+    case PHOTO_ALBUM_DELETE_PROMPT_OPEN:
         PhotoAlbumApp_OpenDeletePrompt(app);
         ++app->subState;
         break;
-    case 1:
+    case PHOTO_ALBUM_DELETE_PROMPT_INPUT:
         if (PhotoAlbumApp_HandleDeletePrompt(app) != PHOTO_ALBUM_STATE_DELETE_PROMPT) {
-            app->subState = 0;
+            app->subState = PHOTO_ALBUM_DELETE_PROMPT_OPEN;
             return PHOTO_ALBUM_STATE_GRID;
         }
         break;

@@ -154,7 +154,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
     args.johtoDexFlags = app->searchCursor->johtoDexFlags;
     app->selector = GtsSelector_New(&args, 2, 0);
     app->state = GTS_WANTED_STATE_START;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsWanted_Main(GtsApp *app, int state) {
@@ -171,7 +171,7 @@ int GtsWanted_Exit(GtsApp *app, int state) {
     GtsWanted_FreeBgs(app->bgConfig);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4) {
@@ -312,7 +312,7 @@ int GtsWanted_Start(GtsApp *app) {
         GtsWanted_PrintMessage(app, msg_0775_00009, 1, 0, 0xF0F); // Please choose the Pokemon you want.
         Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_HANDLE_INPUT);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_HandleInput(GtsApp *app) {
@@ -322,24 +322,24 @@ int GtsWanted_HandleInput(GtsApp *app) {
     }
     // Overwrites the state set by B: the species selector always opens.
     app->state = GTS_WANTED_STATE_OPEN_SPECIES_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_OpenSpeciesSelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 0);
     app->state = GTS_WANTED_STATE_HANDLE_SPECIES_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // States 4 and 5 are not used.
 int GtsWanted_InvalidState4(GtsApp *app) {
     GF_AssertFail();
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_InvalidState5(GtsApp *app) {
     GF_AssertFail();
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The gender of a species with only one.
@@ -386,20 +386,20 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
         break;
     }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_AskGender(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00010, 1, 0, 0xF0F); // Please choose its gender.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_GENDER_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_OpenGenderSelector(GtsApp *app) {
     app->unk_0118 = 0xFFFF;
     GtsSelector_Start(app->selector, 1);
     app->state = GTS_WANTED_STATE_HANDLE_GENDER_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_HandleGenderSelector(GtsApp *app) {
@@ -417,20 +417,20 @@ int GtsWanted_HandleGenderSelector(GtsApp *app) {
         Gts_DrawWantedMon(app->gtsMsgData, app->speciesNames, app->msgFormat, app->infoWindows, app->depositWanted.species, app->depositWanted.gender, -1);
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_AskLevel(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00011, 1, 0, 0xF0F); // Please choose the level.
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_OPEN_LEVEL_SELECTOR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_OpenLevelSelector(GtsApp *app) {
     GtsSelector_Start(app->selector, 2);
     app->unk_0118 = 0xFFFF;
     app->state = GTS_WANTED_STATE_HANDLE_LEVEL_SELECTOR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Canceling goes back to the gender, or to the species when it has only one gender.
@@ -457,19 +457,19 @@ int GtsWanted_HandleLevelSelector(GtsApp *app) {
         }
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_AskConfirm(GtsApp *app) {
     GtsWanted_PrintMessage(app, msg_0775_00023, 1, 0, 0xF0F); // Are these conditions OK?
     Gts_SetState(app, GTS_WANTED_STATE_WAIT_TEXT, GTS_WANTED_STATE_SHOW_CONFIRM_PROMPT);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_ShowConfirmPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x11A, 3, FALSE);
     app->state = GTS_WANTED_STATE_HANDLE_CONFIRM_PROMPT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
@@ -485,7 +485,7 @@ int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
         Gts_SetNextScreen(app, 5, 5);
         app->state = GTS_WANTED_STATE_FADE_OUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_FadeOut(GtsApp *app) {
@@ -496,14 +496,14 @@ int GtsWanted_FadeOut(GtsApp *app) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_WANTED_STATE_START;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 int GtsWanted_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The texts of a wanted Pokemon (all screens).

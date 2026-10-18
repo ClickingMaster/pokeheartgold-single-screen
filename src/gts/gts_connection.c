@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/dwc_status.h"
+
 #include "gts/gts_internal.h"
 #include "gts/gts_server.h"
 #include "msgdata/msg.naix"
@@ -35,6 +37,13 @@
 // server client, asks info.asp and sends the profile (setProfile.asp), then opens the main menu (screen 1). Entered
 // again from the GTS while connected it disconnects and leaves the app. Wi-Fi errors are shown with their error code,
 // server errors with a GTS message and a disconnection.
+
+enum GtsConnectionDisconnectStep {
+    GTS_DISCONNECT_PRINT_DISCONNECTING,
+    GTS_DISCONNECT_DISCONNECT,
+    GTS_DISCONNECT_PRINT_DISCONNECTED,
+    GTS_DISCONNECT_WAIT_MESSAGE,
+};
 
 typedef enum GtsConnectionState {
     GTS_CONNECTION_STATE_ASK_CONNECT,
@@ -199,7 +208,7 @@ int GtsConnection_Init(GtsApp *app, int state) {
         Gts_CreateWirelessStatusIcon(app);
         app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTING;
     }
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsConnection_Main(GtsApp *app, int state) {
@@ -228,9 +237,9 @@ int GtsConnection_Exit(GtsApp *app, int state) {
     app->paletteAnim.active = FALSE;
     Gts_SwitchScreen(app);
     if (app->screen == 0) {
-        return 5;
+        return GTS_APP_STATE_END;
     }
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 void GtsConnection_InitBgs(BgConfig *bgConfig) {
@@ -394,7 +403,7 @@ int GtsConnection_AskConnect(GtsApp *app) {
     Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00017, 1, 0xF0F); // Connect to Nintendo Wi-Fi Connection?
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_SHOW_YES_NO, GTS_CONNECTION_STATE_HANDLE_CONNECT_PROMPT);
     app->countingBox = 1;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_HandleConnectPrompt(GtsApp *app) {
@@ -410,13 +419,13 @@ int GtsConnection_HandleConnectPrompt(GtsApp *app) {
         Gts_SetNextScreen(app, 0, 0);
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_AskDisconnect(GtsApp *app) {
     Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00007, 1, 0xF0F); // Is it OK to disconnect from Nintendo Wi-Fi Connection?
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_SHOW_YES_NO, GTS_CONNECTION_STATE_HANDLE_DISCONNECT_MENU);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Reads a 2D menu that nothing in the GTS creates (the state before shows a Yes/No prompt instead). Cancel goes
@@ -443,13 +452,13 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
     Gts_SetNextScreen(app, 0, 0);
     app->state = GTS_CONNECTION_STATE_FADE_OUT;
 done:
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_PrintDisconnecting(GtsApp *app) {
     Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00026, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection.
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_DISCONNECT);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_Disconnect(GtsApp *app) {
@@ -457,14 +466,14 @@ int GtsConnection_Disconnect(GtsApp *app) {
     DWC_CleanupInet();
     Gts_SetNextScreen(app, 0, 0);
     app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTED;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_PrintDisconnected(GtsApp *app) {
     WirelessStatusIcon_Destroy();
     Gts_PrintMessage(app, app->wifiErrorMsgData, msg_0800_00027, 1, 0xF0F); // You have been disconnected from Nintendo Wi-Fi Connection.
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT_AND_DELAY, GTS_CONNECTION_STATE_FADE_OUT);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsConnection_StartConnect(GtsApp *app) {
@@ -488,7 +497,7 @@ int GtsConnection_WaitConnect(GtsApp *app) {
     DWC_ProcessInet();
     if (DWC_CheckInet() != 0) {
         switch (DWC_GetInetStatus()) {
-        case 7:
+        case DWC_CONNECTINET_STATE_ERROR:
             app->connectionResult = DWC_GetLastErrorEx(&locals.errorCode, &locals.errorType);
             app->connectionErrorCode = locals.errorCode;
             app->connectionErrorType = locals.errorType;
@@ -497,32 +506,32 @@ int GtsConnection_WaitConnect(GtsApp *app) {
             Gts_DeleteWaitingIcon(app);
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 5:
-        case 6:
-        case 8:
+        case DWC_CONNECTINET_STATE_NOT_INITIALIZED:
+        case DWC_CONNECTINET_STATE_IDLE:
+        case DWC_CONNECTINET_STATE_OPERATING:
+        case DWC_CONNECTINET_STATE_OPERATED:
+        case DWC_CONNECTINET_STATE_DISCONNECTING:
+        case DWC_CONNECTINET_STATE_DISCONNECTED:
+        case DWC_CONNECTINET_STATE_FATAL_ERROR:
         default:
             DWC_GetLastError(&locals.error);
             Gts_DeleteWaitingIcon(app);
             app->state = GTS_CONNECTION_STATE_PRINT_SERVER_ERROR;
             app->serverResult = -2;
             break;
-        case 4:
+        case DWC_CONNECTINET_STATE_CONNECTED:
             DWC_GetApInfo(locals.apInfo);
             app->state = GTS_CONNECTION_STATE_START_AUTH;
             break;
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_StartAuth(GtsApp *app) {
     DWC_NASLoginAsync();
     app->state = GTS_CONNECTION_STATE_WAIT_AUTH;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_WaitAuth(GtsApp *app) {
@@ -531,12 +540,12 @@ int GtsConnection_WaitAuth(GtsApp *app) {
     int result;
 
     switch (DWC_NASLoginProcess()) {
-    case 3:
+    case DWC_NASLOGIN_STATE_SUCCESS:
         app->state = GTS_CONNECTION_STATE_INIT_SERVER;
         break;
-    case 0:
-    case 4:
-    case 5:
+    case DWC_NASLOGIN_STATE_DIRTY:
+    case DWC_NASLOGIN_STATE_ERROR:
+    case DWC_NASLOGIN_STATE_CANCELED:
         Gts_DeleteWaitingIcon(app);
         result = DWC_GetLastErrorEx(&errorCode, &errorType);
         app->connectionResult = result;
@@ -545,23 +554,23 @@ int GtsConnection_WaitAuth(GtsApp *app) {
         DWC_CleanupInet();
         app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
         switch (errorType) {
-        case 1:
-        case 2:
+        case DWC_ETYPE_LIGHT:
+        case DWC_ETYPE_SHOW_ERROR:
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
-        case 4:
+        case DWC_ETYPE_SHUTDOWN_GHTTP:
             DWC_ShutdownGHTTP();
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
-        case 6:
+        case DWC_ETYPE_DISCONNECT:
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
-        case 3:
+        case DWC_ETYPE_SHUTDOWN_FM:
             DWC_ShutdownFriendsMatch();
             app->state = GTS_CONNECTION_STATE_SHOW_CONNECTION_ERROR;
             break;
-        case 5:
-        case 7:
+        case DWC_ETYPE_SHUTDOWN_ND:
+        case DWC_ETYPE_FATAL:
             CommState_ShowRestartErrorAndHalt();
             break;
         }
@@ -570,7 +579,7 @@ int GtsConnection_WaitAuth(GtsApp *app) {
         }
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_InitServer(GtsApp *app) {
@@ -587,14 +596,14 @@ int GtsConnection_InitServer(GtsApp *app) {
         GtsServer_Init(profileId, (u32)friendKey, (u32)(friendKey >> 32));
     }
     app->state = GTS_CONNECTION_STATE_SEND_INFO;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_SendInfo(GtsApp *app) {
     GtsServer_RequestInfo();
     app->state = GTS_CONNECTION_STATE_WAIT_INFO;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // Each request is given a minute; then the connection is dropped (CommState_ShowRestartErrorAndHalt).
@@ -640,7 +649,7 @@ int GtsConnection_WaitInfo(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_SendSetProfile(GtsApp *app) {
@@ -648,7 +657,7 @@ int GtsConnection_SendSetProfile(GtsApp *app) {
     GtsServer_RequestSetProfile(&app->profile, app->profileResponse);
     app->state = GTS_CONNECTION_STATE_WAIT_SET_PROFILE;
     app->requestFrames = 0;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The answer of setProfile.asp: [0] 0 accepted, 1 and 2 errors; [1] when accepted: 0 fine, 1..3 errors. The errors
@@ -732,14 +741,14 @@ int GtsConnection_WaitSetProfile(GtsApp *app) {
             CommState_ShowRestartErrorAndHalt();
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_ShowConnectionError(GtsApp *app) {
     int msgId = WifiConnection_ClassifyErrorCode(-app->connectionErrorCode, app->connectionErrorType);
     GtsConnection_PrintErrorCode(app, msgId, -app->connectionErrorCode);
     app->state = GTS_CONNECTION_STATE_WAIT_CLOSE_ERROR;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_WaitCloseError(GtsApp *app) {
@@ -747,7 +756,7 @@ int GtsConnection_WaitCloseError(GtsApp *app) {
         EraseFrameAndWindow1(&app->boxNameWindow, FALSE);
         app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_FadeOut(GtsApp *app) {
@@ -756,7 +765,7 @@ int GtsConnection_FadeOut(GtsApp *app) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
     app->fadedBothScreens = 1;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 // Nothing sets this state: Yes leaves the app, No asks to connect again.
@@ -770,7 +779,7 @@ int GtsConnection_HandleExitPrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_PrintServerError(GtsApp *app) {
@@ -778,62 +787,62 @@ int GtsConnection_PrintServerError(GtsApp *app) {
 
     switch (app->serverResult) {
     case 1:
-        msgId = 150; // The GTS is currently undergoing maintenance.
+        msgId = msg_0775_00150; // The GTS is currently undergoing maintenance.
         break;
     case -1:
     case 2:
-        msgId = 151; // The GTS is very crowded now.
+        msgId = msg_0775_00151; // The GTS is very crowded now.
         break;
     case -14:
     case -2:
-        msgId = 156; // You were disconnected from the GTS.
+        msgId = msg_0775_00156; // You were disconnected from the GTS.
         break;
     case -15:
     case -12:
     case -5:
     case -3:
     default:
-        msgId = 155; // Unable to connect to the GTS.
+        msgId = msg_0775_00155; // Unable to connect to the GTS.
         break;
     case -5003:
-        msgId = 185; // There was a Wii message authentication error.
+        msgId = msg_0775_00185; // There was a Wii message authentication error.
         break;
     case -5000:
-        msgId = 182; // There was a communication error.
+        msgId = msg_0775_00182; // There was a communication error.
         break;
     case -5001:
-        msgId = 182;
+        msgId = msg_0775_00182;
         break;
     case -5004:
-        msgId = 183; // The data was corrupted. It could not be sent.
+        msgId = msg_0775_00183; // The data was corrupted. It could not be sent.
         break;
     case -5005:
-        msgId = 184; // The server is undergoing maintenance.
+        msgId = msg_0775_00184; // The server is undergoing maintenance.
         break;
     }
     Gts_PrintMessage(app, app->gtsMsgData, msgId, 1, 0xF0F);
     Gts_SetState(app, GTS_CONNECTION_STATE_WAIT_TEXT, GTS_CONNECTION_STATE_DISCONNECT_AFTER_ERROR);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_DisconnectAfterError(GtsApp *app) {
     switch (app->subState) {
-    case 0:
+    case GTS_DISCONNECT_PRINT_DISCONNECTING:
         Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00186, 1, 0xF0F); // Disconnecting from Nintendo Wi-Fi Connection...
         app->subState++;
         break;
-    case 1:
+    case GTS_DISCONNECT_DISCONNECT:
         if (!TextPrinterCheckActive(app->textPrinterId)) {
             CommState_FreeWfcSession();
             DWC_CleanupInet();
             app->subState++;
         }
         break;
-    case 2:
+    case GTS_DISCONNECT_PRINT_DISCONNECTED:
         Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00187, 1, 0xF0F); // You have disconnected from Nintendo Wi-Fi Connection.
         app->subState++;
         break;
-    case 3:
+    case GTS_DISCONNECT_WAIT_MESSAGE:
         if (!TextPrinterCheckActive(app->textPrinterId)) {
             app->subState++;
         }
@@ -846,14 +855,14 @@ int GtsConnection_DisconnectAfterError(GtsApp *app) {
         }
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_WaitTextAndDelay(GtsApp *app) {
@@ -863,7 +872,7 @@ int GtsConnection_WaitTextAndDelay(GtsApp *app) {
         }
         app->waitFrames++;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsConnection_WaitTextAndShowYesNo(GtsApp *app) {
@@ -871,7 +880,7 @@ int GtsConnection_WaitTextAndShowYesNo(GtsApp *app) {
         app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 0x234, 8, 0);
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void Gts_PrintMessage(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4) {

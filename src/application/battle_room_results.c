@@ -35,6 +35,25 @@
 #define BATTLE_ROOM_RESULTS_NUM_LEADER_WINDOWS 35
 #define BATTLE_ROOM_RESULTS_CANCEL             12
 
+enum BattleRoomResultsSetupState {
+    BATTLE_ROOM_RESULTS_SETUP_INIT_BGS,
+    BATTLE_ROOM_RESULTS_SETUP_LOAD_BG_GFX,
+    BATTLE_ROOM_RESULTS_SETUP_INIT_SPRITES,
+    BATTLE_ROOM_RESULTS_SETUP_CREATE_SCREENS,
+    BATTLE_ROOM_RESULTS_SETUP_START_VBLANK,
+};
+
+enum BattleRoomResultsTeardownState {
+    BATTLE_ROOM_RESULTS_TEARDOWN_FREE,
+    BATTLE_ROOM_RESULTS_TEARDOWN_RESET_DISPLAY,
+};
+
+enum BattleRoomResultsFlashState {
+    BATTLE_ROOM_RESULTS_FLASH_PRESS,
+    BATTLE_ROOM_RESULTS_FLASH_RELEASE,
+    BATTLE_ROOM_RESULTS_FLASH_WAIT,
+};
+
 // One downloaded Battle Room leader.
 typedef struct BattleRoomLeader {
     String *name;         // 0x0
@@ -460,7 +479,7 @@ BOOL BattleRoomResults_Main(OverlayManager *man, int *state) {
 
 static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
     switch (results->subState) {
-    case 0:
+    case BATTLE_ROOM_RESULTS_SETUP_INIT_BGS:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
@@ -473,14 +492,14 @@ static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
         ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
         BattleRoomResults_InitBgs(results);
         break;
-    case 1:
+    case BATTLE_ROOM_RESULTS_SETUP_LOAD_BG_GFX:
         BattleRoomResults_LoadBgGraphics(results);
         BattleRoomResults_InitStrings(results);
         break;
-    case 2:
+    case BATTLE_ROOM_RESULTS_SETUP_INIT_SPRITES:
         BattleRoomResults_InitSprites(results);
         break;
-    case 3:
+    case BATTLE_ROOM_RESULTS_SETUP_CREATE_SCREENS:
         BattleRoomResults_AddWindows(results);
         if (results->showLeaders == FALSE) {
             BattleRoomResults_PrintResults(results);
@@ -491,9 +510,9 @@ static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
             BattleRoomResults_CreateGridInput(results);
         }
         break;
-    case 4:
+    case BATTLE_ROOM_RESULTS_SETUP_START_VBLANK:
         Main_SetVBlankIntrCB((GFIntrCB)BattleRoomResults_VBlankCB, results);
-        results->subState = 0;
+        results->subState = BATTLE_ROOM_RESULTS_SETUP_INIT_BGS;
         return TRUE;
     }
     results->subState++;
@@ -502,7 +521,7 @@ static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results) {
 
 static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
     switch (results->subState) {
-    case 0:
+    case BATTLE_ROOM_RESULTS_TEARDOWN_FREE:
         if (results->showLeaders != FALSE) {
             BattleRoomResults_FreeGridInput(results);
             BattleRoomResults_FreeLeaderNames(results);
@@ -512,14 +531,14 @@ static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results) {
         BattleRoomResults_FreeStrings(results);
         BattleRoomResults_FreeBgs(results);
         break;
-    case 1:
+    case BATTLE_ROOM_RESULTS_TEARDOWN_RESET_DISPLAY:
         Main_SetVBlankIntrCB(NULL, NULL);
         HBlankInterruptDisable();
         GfGfx_DisableEngineAPlanes();
         GfGfx_DisableEngineBPlanes();
         GX_SetVisiblePlane(GX_PLANEMASK_NONE);
         GXS_SetVisiblePlane(GX_PLANEMASK_NONE);
-        results->subState = 0;
+        results->subState = BATTLE_ROOM_RESULTS_TEARDOWN_FREE;
         return TRUE;
     }
     results->subState++;
@@ -1026,7 +1045,7 @@ static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int 
 
 static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
     switch (results->flash.state) {
-    case 0:
+    case BATTLE_ROOM_RESULTS_FLASH_PRESS:
         if (results->flash.isBgRect == FALSE) {
             ManagedSprite_SetPaletteOverride(results->sprites[results->flash.target], results->flash.pressedPltt);
         } else {
@@ -1035,7 +1054,7 @@ static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
         }
         results->flash.state++;
         break;
-    case 1:
+    case BATTLE_ROOM_RESULTS_FLASH_RELEASE:
         results->flash.timer++;
         if (results->flash.timer == 4) {
             if (results->flash.isBgRect == FALSE) {
@@ -1048,7 +1067,7 @@ static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {
             results->flash.state++;
         }
         break;
-    case 2:
+    case BATTLE_ROOM_RESULTS_FLASH_WAIT:
         results->flash.timer++;
         if (results->flash.timer == 2) {
             return FALSE;
@@ -1063,7 +1082,7 @@ static void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int s
     results->flash.target = (u8)sprite;
     results->flash.pressedPltt = 1;
     results->flash.normalPltt = 0;
-    results->flash.state = 0;
+    results->flash.state = BATTLE_ROOM_RESULTS_FLASH_PRESS;
     results->flash.timer = 0;
 }
 

@@ -91,11 +91,11 @@ void WiFiPlazaLobbyClient_OnEnterChannel(int result, u32 libChannel) {
     client = gWiFiPlazaLobbyClient;
     if (client->channel == WiFiPlazaLobbyClient_ChannelFromLib(libChannel)) {
         if (result == 1) {
-            client->joinChannelResult = 1;
+            client->joinChannelResult = WIFI_PLAZA_JOIN_CHANNEL_DONE;
             WiFiPlazaLobbyClient_RebuildChannelList(gWiFiPlazaLobbyClient, gWiFiPlazaLobbyClient->channel);
             WiFiPlazaLobbyClient_AddToIdList(gWiFiPlazaLobbyClient, PPW_LobbyGetMyUserId(), 1);
         } else {
-            client->joinChannelResult = 2;
+            client->joinChannelResult = WIFI_PLAZA_JOIN_CHANNEL_FAILED;
         }
     } else {
         GF_AssertFail();

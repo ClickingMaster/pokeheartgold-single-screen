@@ -71,6 +71,14 @@ enum WiFiPlazaSurveyResultsState {
 #define WIFI_PLAZA_SURVEY_BAR_LENGTH 80 // pixels
 #define WIFI_PLAZA_SURVEY_BAR_FRAMES 20
 
+enum WiFiPlazaSurveyAppState {
+    WIFI_PLAZA_SURVEY_APP_FADE_IN,
+    WIFI_PLAZA_SURVEY_APP_WAIT_FADE_IN,
+    WIFI_PLAZA_SURVEY_APP_RUN,
+    WIFI_PLAZA_SURVEY_APP_FADE_OUT,
+    WIFI_PLAZA_SURVEY_APP_WAIT_FADE_OUT,
+};
+
 static WiFiPlazaSurveyInitFunc sWiFiPlazaSurveyInitFuncs[] = {
     [WIFI_PLAZA_SURVEY_MODE_ANSWER] = WiFiPlazaSurveyAnswer_Init,
     [WIFI_PLAZA_SURVEY_MODE_RESULTS] = WiFiPlazaSurveyResults_Init,
@@ -110,17 +118,17 @@ BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state) {
     WiFiPlazaSurveyArgs *args = OverlayManager_GetArgs(man);
 
     switch (*state) {
-    case 0:
+    case WIFI_PLAZA_SURVEY_APP_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_129);
         WiFiPlazaWork_SetLowVolume(args->lobby, 1);
         (*state)++;
         break;
-    case 1:
+    case WIFI_PLAZA_SURVEY_APP_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_SURVEY_APP_RUN:
         if (IsPaletteFadeFinished() == TRUE) {
             if (WiFiPlazaWork_IsClosing(args->lobby) == TRUE) {
                 WiFiPlazaWork_SetAppQuitForClosing(args->lobby);
@@ -136,11 +144,11 @@ BOOL WiFiPlazaSurvey_Main(OverlayManager *man, int *state) {
             (*state)++;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_SURVEY_APP_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_129);
         (*state)++;
         break;
-    case 4:
+    case WIFI_PLAZA_SURVEY_APP_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             WiFiPlazaSurvey_StopWaitingIcon(&work->msgBox);
             return TRUE;

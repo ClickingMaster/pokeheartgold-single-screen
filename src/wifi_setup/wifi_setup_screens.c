@@ -403,28 +403,28 @@ void WifiSetupTopMenu_HandleInput(void) {
             return;
         }
     }
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
         return;
     }
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x40) != 0) {
-        WifiSetupTopMenu_MoveCursor(1);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP) != 0) {
+        WifiSetupTopMenu_MoveCursor(WIFI_SETUP_CURSOR_UP);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x80) != 0) {
-        WifiSetupTopMenu_MoveCursor(3);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN) != 0) {
+        WifiSetupTopMenu_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x20) != 0) {
-        WifiSetupTopMenu_MoveCursor(0);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT) != 0) {
+        WifiSetupTopMenu_MoveCursor(WIFI_SETUP_CURSOR_LEFT);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x10) != 0) {
-        WifiSetupTopMenu_MoveCursor(2);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_RIGHT) != 0) {
+        WifiSetupTopMenu_MoveCursor(WIFI_SETUP_CURSOR_RIGHT);
     }
 }
 
@@ -486,7 +486,7 @@ void WifiSetupTopMenu_End(void) {
 
 void WifiSetupTopMenu_MoveCursor(int dir) {
     int idx;
-    if (dir == 1 || dir == 3) {
+    if (dir == WIFI_SETUP_CURSOR_UP || dir == WIFI_SETUP_CURSOR_DOWN) {
         return;
     }
     gWifiSetupTopMenu.selected ^= 1;
@@ -552,10 +552,10 @@ void WifiSetupEraseConfirm_Main(void) {
 }
 
 void WifiSetupEraseConfirm_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -690,7 +690,7 @@ void WifiSetupEraseDone_Main(void) {
 }
 
 void WifiSetupEraseDone_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -811,7 +811,7 @@ void WifiSetupSystemInfo_Main(void) {
 }
 
 void WifiSetupSystemInfo_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -955,20 +955,20 @@ void WifiSetupOptions_HandleInput(void) {
             return;
         }
     }
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
         return;
     }
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x40) != 0) {
-        WifiSetupOptions_MoveCursor(1);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP) != 0) {
+        WifiSetupOptions_MoveCursor(WIFI_SETUP_CURSOR_UP);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x80) != 0) {
-        WifiSetupOptions_MoveCursor(3);
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN) != 0) {
+        WifiSetupOptions_MoveCursor(WIFI_SETUP_CURSOR_DOWN);
     }
 }
 
@@ -1055,7 +1055,7 @@ void WifiSetupOptions_End(void) {
 
 void WifiSetupOptions_MoveCursor(int dir) {
     int idx;
-    if (dir == 1) {
+    if (dir == WIFI_SETUP_CURSOR_UP) {
         gWifiSetupOptions.selected = FX_ModS32(gWifiSetupOptions.selected + 2, 3);
     } else {
         gWifiSetupOptions.selected = FX_ModS32(gWifiSetupOptions.selected + 1, 3);
@@ -1201,7 +1201,7 @@ void WifiSetupTransferDone_Main(void) {
 }
 
 void WifiSetupTransferDone_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -1289,7 +1289,7 @@ void WifiSetupTransferInfo_Main(void) {
 }
 
 void WifiSetupTransferInfo_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -1382,10 +1382,10 @@ void WifiSetupTransferIntro_Main(void) {
 }
 
 void WifiSetupTransferIntro_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -1575,10 +1575,10 @@ void WifiSetupTransferFailed_Main(void) {
 }
 
 void WifiSetupTransferFailed_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(1) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A) != 0) {
         WifiSetupButtonBar_SelectIfNone(1);
     }
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -1819,7 +1819,7 @@ void WifiSetupTransferWait_Main(void) {
 }
 
 void WifiSetupTransferWait_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
@@ -2002,7 +2002,7 @@ void WifiSetupAoss_Main(void) {
 }
 
 void WifiSetupAoss_HandleInput(void) {
-    if (WifiSetupInput_IsKeyPressed(2) != 0) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B) != 0) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
@@ -2346,44 +2346,44 @@ void WifiSetupListScreen_HandleInput(void) {
             }
         }
     }
-    if (WifiSetupInput_IsKeyPressed(1)) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_A)) {
         WifiSetupButtonBar_SelectIfNone(1);
         WifiSetupScrollBar_Disable();
         return;
     }
-    if (WifiSetupInput_IsKeyPressed(2)) {
+    if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B)) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x200)) {
+    if (WifiSetupInput_IsKeyRepeated(PAD_BUTTON_L)) {
         WifiSetupListScreen_StartScrollDown();
         return;
     }
-    if (WifiSetupInput_IsKeyReleased(0x200)) {
+    if (WifiSetupInput_IsKeyReleased(PAD_BUTTON_L)) {
         gWifiSetupListScreen.work->cursorLimitSoundPlayed = 0;
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x100)) {
+    if (WifiSetupInput_IsKeyRepeated(PAD_BUTTON_R)) {
         WifiSetupListScreen_StartScrollUp();
         return;
     }
-    if (WifiSetupInput_IsKeyReleased(0x100)) {
+    if (WifiSetupInput_IsKeyReleased(PAD_BUTTON_R)) {
         gWifiSetupListScreen.work->cursorLimitSoundPlayed = 0;
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x40)) {
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_UP)) {
         WifiSetupListScreen_MoveCursor(1);
         return;
     }
-    if (WifiSetupInput_IsKeyReleased(0x40)) {
+    if (WifiSetupInput_IsKeyReleased(PAD_KEY_UP)) {
         gWifiSetupListScreen.work->cursorLimitSoundPlayed = 0;
         return;
     }
-    if (WifiSetupInput_IsKeyRepeated(0x80)) {
+    if (WifiSetupInput_IsKeyRepeated(PAD_KEY_DOWN)) {
         WifiSetupListScreen_MoveCursor(3);
         return;
     }
-    if (WifiSetupInput_IsKeyReleased(0x80)) {
+    if (WifiSetupInput_IsKeyReleased(PAD_KEY_DOWN)) {
         gWifiSetupListScreen.work->cursorLimitSoundPlayed = 0;
     }
 }

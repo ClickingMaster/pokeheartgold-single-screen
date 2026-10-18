@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/dwc_status.h"
+
 #include "global_terminal/global_terminal_net.h"
 
 // The code below is compiled as ARM (32-bit) code.
@@ -723,18 +725,18 @@ int GlobalTerminalSocket_FetchToken(void) {
     }
     for (;;) {
         int status = DWC_SVLProcess();
-        if (status == 3) {
+        if (status == DWC_SVL_STATE_SUCCESS) {
             GlobalTerminalSocketToken *token = (GlobalTerminalSocketToken *)sGlobalTerminalSocket.login.token;
             *token = request.token;
             sGlobalTerminalSocket.hasToken = TRUE;
             return 1;
         }
-        if (status == 4) {
+        if (status == DWC_SVL_STATE_ERROR) {
             DWC_GetLastErrorEx(&errorCode, &errorType);
             sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_TOKEN;
             return 0;
         }
-        if (status == 5) {
+        if (status == DWC_SVL_STATE_CANCELED) {
             sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_TOKEN;
             return 0;
         }

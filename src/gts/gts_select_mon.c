@@ -380,14 +380,14 @@ static const TouchscreenHitbox sGtsSelectMonHitboxes[34] = {
 int GtsSearch_PrintSearchFailed(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00152, 1, 0, 0xF0F); // The search failed...
     Gts_SetState(app, 21, 1);                                 // GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_WaitTextAndPause(GtsApp *app) {
@@ -398,7 +398,7 @@ int GtsSearch_WaitTextAndPause(GtsApp *app) {
             app->state = app->nextState;
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ScrollOut(GtsApp *app) {
@@ -414,7 +414,7 @@ int GtsSearch_ScrollOut(GtsApp *app) {
         }
         Sprite_SetDrawFlag(app->panelSprite, FALSE);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_ScrollIn(GtsApp *app) {
@@ -423,7 +423,7 @@ int GtsSearch_ScrollIn(GtsApp *app) {
         app->scrollY = 0;
         app->state = 1; // GTS_SEARCH_STATE_HANDLE_INPUT
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSearch_HandleScrolledOut(GtsApp *app) {
@@ -441,7 +441,7 @@ int GtsSearch_HandleScrolledOut(GtsApp *app) {
             PlaySE(SEQ_SE_DP_SELECT);
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsSearch_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4) {
@@ -539,7 +539,7 @@ int GtsSelectMon_Init(GtsApp *app, int state) {
     GtsSelectMon_ShowBox(app, app->selectedBox);
     Gts_CreateWirelessStatusIcon(app);
     app->state = GTS_SELECT_MON_STATE_START;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsSelectMon_Main(GtsApp *app, int state) {
@@ -558,7 +558,7 @@ int GtsSelectMon_Exit(GtsApp *app, int state) {
     GtsSelectMon_FreeBgs(app->bgConfig);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 void GtsSelectMon_InitBgs(BgConfig *bgConfig) {
@@ -737,7 +737,7 @@ int GtsSelectMon_Start(GtsApp *app) {
         GtsSelectMon_PrintMessage(app, msgId, 1, 0, 0xF0F, FALSE);
         Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_HANDLE_INPUT);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
@@ -874,7 +874,7 @@ int GtsSelectMon_HandleInput(GtsApp *app) {
             }
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The D-pad; left or right off the box name shows the previous or next box.
@@ -947,7 +947,7 @@ int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00100, 3); // CANCEL
     app->menu = Gts_CreateListMenu(app, 3, 10);
     app->state = GTS_SELECT_MON_STATE_HANDLE_DEPOSIT_MENU;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
@@ -1012,7 +1012,7 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
         app->state = GTS_SELECT_MON_STATE_START;
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
@@ -1022,7 +1022,7 @@ int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00089, 3); // CANCEL
     app->menu = Gts_CreateListMenu(app, 3, 10);
     app->state = GTS_SELECT_MON_STATE_HANDLE_TRADE_MENU;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
@@ -1085,7 +1085,7 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
         app->state = GTS_SELECT_MON_STATE_START;
         break;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_FadeOut(GtsApp *app) {
@@ -1096,13 +1096,13 @@ int GtsSelectMon_FadeOut(GtsApp *app) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     app->state = GTS_SELECT_MON_STATE_START;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
 int GtsSelectMon_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_EXIT_PROMPT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
@@ -1115,19 +1115,19 @@ int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SELECT_MON_STATE_START;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app) {
     GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT_FOR_TRADE);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_CAPSULE_PROMPT_FOR_TRADE;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
@@ -1140,7 +1140,7 @@ int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
         ClearFrameAndWindow2(&app->promptWindow, FALSE);
         app->state = GTS_SELECT_MON_STATE_HANDLE_INPUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 // The search result's Pokemon comes into the party when it holds Mail (unless the offered Pokemon leaves the party).
@@ -1162,13 +1162,13 @@ BOOL GtsSelectMon_StartTrade(GtsApp *app) {
 int GtsSelectMon_AskRemoveCapsule(GtsApp *app) {
     GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT);
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_ShowCapsulePrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_CAPSULE_PROMPT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_HandleCapsulePrompt(GtsApp *app) {
@@ -1183,14 +1183,14 @@ int GtsSelectMon_HandleCapsulePrompt(GtsApp *app) {
         ClearFrameAndWindow2(&app->promptWindow, FALSE);
         app->state = GTS_SELECT_MON_STATE_HANDLE_INPUT;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsSelectMon_WaitTextAndClear(GtsApp *app) {
@@ -1198,7 +1198,7 @@ int GtsSelectMon_WaitTextAndClear(GtsApp *app) {
         ClearFrameAndWindow2(&app->promptWindow, FALSE);
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow) {
