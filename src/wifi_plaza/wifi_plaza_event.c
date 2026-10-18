@@ -4,6 +4,8 @@
 
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
+
 #include "msgdata/msg/msg_0777.h"
 #include "wifi_plaza/wifi_plaza_map.h"
 #include "wifi_plaza/wifi_plaza_room.h"
@@ -38,6 +40,15 @@ extern const u8 sWiFiPlazaMoverMarkerTags[];
 extern const u16 sWiFiPlazaMoverSounds[][6];
 extern BOOL (*const sWiFiPlazaEventWobbleSteps[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 extern BOOL (*const sWiFiPlazaEventWobbleInits[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+
+enum WiFiPlazaSurveyGuideStep {
+    WIFI_PLAZA_SURVEY_GUIDE_GREET,
+    WIFI_PLAZA_SURVEY_GUIDE_OPEN_YES_NO,
+    WIFI_PLAZA_SURVEY_GUIDE_HANDLE_YES_NO,
+    WIFI_PLAZA_SURVEY_GUIDE_EXPLAIN,
+    WIFI_PLAZA_SURVEY_GUIDE_END,
+    WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE,
+};
 
 void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
     Heap_Free(light);
@@ -546,7 +557,7 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
     WiFiPlazaObj *player = WiFiPlazaObj_GetOwnPlayer(objManager);
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
-    case 0: {
+    case WIFI_PLAZA_SURVEY_GUIDE_GREET: {
         String *message;
         u32 direction;
 
@@ -558,62 +569,62 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         WiFiPlazaObj_SetDirection(special, direction);
         if (WiFiPlazaWork_IsClosing(lobby) != 0) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00003);
-            *nextStep = 4;
+            *nextStep = WIFI_PLAZA_SURVEY_GUIDE_END;
             WiFiPlazaRoom_PrintMessage(room, message);
-            WiFiPlazaPlayerState_SetStep(state, 5);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE);
         } else if (WiFiPlazaWork_IsLightingStarted(lobby) == TRUE) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00088);
-            *nextStep = 4;
+            *nextStep = WIFI_PLAZA_SURVEY_GUIDE_END;
             WiFiPlazaRoom_PrintMessage(room, message);
-            WiFiPlazaPlayerState_SetStep(state, 5);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE);
         } else if (WiFiPlazaWork_HasAnsweredSurvey(lobby) == 1) {
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00087);
-            *nextStep = 4;
+            *nextStep = WIFI_PLAZA_SURVEY_GUIDE_END;
             WiFiPlazaRoom_PrintMessage(room, message);
-            WiFiPlazaPlayerState_SetStep(state, 5);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE);
         } else {
             message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00081);
-            *nextStep = 1;
+            *nextStep = WIFI_PLAZA_SURVEY_GUIDE_OPEN_YES_NO;
             WiFiPlazaRoom_PrintMessage(room, message);
-            WiFiPlazaPlayerState_SetStep(state, 5);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE);
         }
         break;
     }
-    case 1:
+    case WIFI_PLAZA_SURVEY_GUIDE_OPEN_YES_NO:
         WiFiPlazaRoom_OpenYesNoMenu(room);
-        WiFiPlazaPlayerState_SetStep(state, 2);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_HANDLE_YES_NO);
         break;
-    case 2:
+    case WIFI_PLAZA_SURVEY_GUIDE_HANDLE_YES_NO:
         switch (WiFiPlazaRoom_GetYesNoResult(room)) {
-        case 0:
-            WiFiPlazaPlayerState_SetStep(state, 3);
+        case WIFI_PLAZA_YES_NO_YES:
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_EXPLAIN);
             WiFiPlazaRoom_CloseYesNoMenu(room);
             break;
-        case 1:
-            WiFiPlazaPlayerState_SetStep(state, 4);
+        case WIFI_PLAZA_YES_NO_NO:
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_END);
             WiFiPlazaRoom_CloseYesNoMenu(room);
             break;
-        case 2:
+        case WIFI_PLAZA_YES_NO_OPEN:
             break;
         }
         break;
-    case 3: {
+    case WIFI_PLAZA_SURVEY_GUIDE_EXPLAIN: {
         String *message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00085);
 
-        *nextStep = 4;
+        *nextStep = WIFI_PLAZA_SURVEY_GUIDE_END;
         WiFiPlazaRoom_PrintMessage(room, message);
-        WiFiPlazaPlayerState_SetStep(state, 5);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE);
         break;
     }
-    case 4:
+    case WIFI_PLAZA_SURVEY_GUIDE_END:
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaRoom_CloseYesNoMenu(room);
         WiFiPlazaObj_SetHandler(objManager, player, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
         WiFiPlazaPlayerState_FreeWork(state);
         WiFiPlazaObj_SetAvatarMode(special, 1);
-        WiFiPlazaObj_RunCommand(objManager, special, 0, 1);
+        WiFiPlazaObj_RunCommand(objManager, special, 0, DIR_SOUTH);
         return TRUE;
-    case 5:
+    case WIFI_PLAZA_SURVEY_GUIDE_WAIT_MESSAGE:
         if (WiFiPlazaRoom_IsMessageFinished(room) == TRUE) {
             WiFiPlazaPlayerState_SetStep(state, *nextStep);
         }

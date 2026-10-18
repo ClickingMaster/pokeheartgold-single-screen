@@ -22,6 +22,54 @@ void CommState_EndPlazaMatch(void);
 s32 CommState_GetPlazaMatchStatus(void);
 void CommState_SetPlazaLinkMode(void);
 
+enum WiFiPlazaRegisterStep {
+    WIFI_PLAZA_REGISTER_INIT,
+    WIFI_PLAZA_REGISTER_CHECK_OPEN,
+    WIFI_PLAZA_REGISTER_ASK_PLAY,
+    WIFI_PLAZA_REGISTER_OPEN_MENU,
+    WIFI_PLAZA_REGISTER_HANDLE_MENU,
+    WIFI_PLAZA_REGISTER_SHOW_RULES,
+    WIFI_PLAZA_REGISTER_JOIN,
+    WIFI_PLAZA_REGISTER_WAIT_MEMBERS,
+    WIFI_PLAZA_REGISTER_WAIT_LINK,
+    WIFI_PLAZA_REGISTER_START_LINK,
+    WIFI_PLAZA_REGISTER_SEND_PLAYER_INFO,
+    WIFI_PLAZA_REGISTER_RECEIVE_PLAYER_INFO,
+    WIFI_PLAZA_REGISTER_START_ID_EXCHANGE,
+    WIFI_PLAZA_REGISTER_SEND_LOBBY_ID,
+    WIFI_PLAZA_REGISTER_RECEIVE_LOBBY_IDS,
+    WIFI_PLAZA_REGISTER_START_GAME,
+    WIFI_PLAZA_REGISTER_ASK_DROP_OUT,
+    WIFI_PLAZA_REGISTER_WAIT_ASK_DROP_OUT,
+    WIFI_PLAZA_REGISTER_OPEN_YES_NO,
+    WIFI_PLAZA_REGISTER_HANDLE_YES_NO,
+    WIFI_PLAZA_REGISTER_RESUME_WAITING,
+    WIFI_PLAZA_REGISTER_SESSION_FILLED,
+    WIFI_PLAZA_REGISTER_TIME_UP,
+    WIFI_PLAZA_REGISTER_END_LINK,
+    WIFI_PLAZA_REGISTER_WAIT_END_LINK,
+    WIFI_PLAZA_REGISTER_WAIT_MESSAGE,
+    WIFI_PLAZA_REGISTER_SYNC,
+    WIFI_PLAZA_REGISTER_WAIT_SYNC,
+    WIFI_PLAZA_REGISTER_END,
+};
+
+enum WiFiPlazaGameEntryMenuItem {
+    WIFI_PLAZA_GAME_ENTRY_MENU_JOIN,
+    WIFI_PLAZA_GAME_ENTRY_MENU_RULES,
+    WIFI_PLAZA_GAME_ENTRY_MENU_CANCEL,
+};
+
+enum WiFiPlazaEndLinkStep {
+    WIFI_PLAZA_END_LINK_START,
+    WIFI_PLAZA_END_LINK_WAIT_LOBBY,
+};
+
+enum WiFiPlazaSignStep {
+    WIFI_PLAZA_SIGN_SHOW,
+    WIFI_PLAZA_SIGN_WAIT_INPUT,
+};
+
 static const u8 sWiFiPlazaGameStatusHeights[2] = { 8, 10 };
 
 static const ListMenuTemplate sWiFiPlazaGameEntryMenuTemplate = {
@@ -92,42 +140,42 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
     // while waiting or linking: give up when the session or the link broke down
     step = WiFiPlazaPlayerState_GetStep(state);
     switch (step) {
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 26:
-    case 27:
+    case WIFI_PLAZA_REGISTER_START_LINK:
+    case WIFI_PLAZA_REGISTER_SEND_PLAYER_INFO:
+    case WIFI_PLAZA_REGISTER_RECEIVE_PLAYER_INFO:
+    case WIFI_PLAZA_REGISTER_START_ID_EXCHANGE:
+    case WIFI_PLAZA_REGISTER_SEND_LOBBY_ID:
+    case WIFI_PLAZA_REGISTER_RECEIVE_LOBBY_IDS:
+    case WIFI_PLAZA_REGISTER_SYNC:
+    case WIFI_PLAZA_REGISTER_WAIT_SYNC:
         if ((u32)entry->members > WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot)) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         } else if ((s32)entry->members > Comm_CountConnected()) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         } else if (CommState_GetPlazaMatchStatus() == 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         } else {
-        case 8:
+        case WIFI_PLAZA_REGISTER_WAIT_LINK:
             if (WiFiPlazaLobbyClient_IsMatchHost() == 1 && WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-                WiFiPlazaPlayerState_SetStep(savedState, 23);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             } else {
                 timeout = entry->timeout - 1;
                 entry->timeout = timeout;
                 if (timeout < 0) {
                     param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-                    WiFiPlazaPlayerState_SetStep(savedState, 23);
+                    WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
                 } else {
-                case 7:
-                case 17:
-                case 18:
-                case 19:
-                case 20:
-                case 21:
-                case 22:
+                case WIFI_PLAZA_REGISTER_WAIT_MEMBERS:
+                case WIFI_PLAZA_REGISTER_WAIT_ASK_DROP_OUT:
+                case WIFI_PLAZA_REGISTER_OPEN_YES_NO:
+                case WIFI_PLAZA_REGISTER_HANDLE_YES_NO:
+                case WIFI_PLAZA_REGISTER_RESUME_WAITING:
+                case WIFI_PLAZA_REGISTER_SESSION_FILLED:
+                case WIFI_PLAZA_REGISTER_TIME_UP:
                     linkError = CommState_GetWifiMatchStatus();
                     switch (linkError) {
                     case 0:
@@ -138,7 +186,7 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
                     case 4:
                     case 5:
                         param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-                        WiFiPlazaPlayerState_SetStep(savedState, 23);
+                        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
                         break;
                     }
                 }
@@ -149,48 +197,48 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
 
     step2 = WiFiPlazaPlayerState_GetStep(savedState);
     switch (step2) {
-    case 0:
+    case WIFI_PLAZA_REGISTER_INIT:
         WiFiPlazaPlayerState_AllocWork(savedState, sizeof(WiFiPlazaGameEntry));
         WiFiPlazaPlayerState_NextStep(savedState);
     default:
         break;
-    case 1:
+    case WIFI_PLAZA_REGISTER_CHECK_OPEN:
         if (WiFiPlazaWork_IsGameEntryCoolingDown(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_NOT_READY;
-            WiFiPlazaPlayerState_SetStep(savedState, 28);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
         } else if (WiFiPlazaWork_GetEventScheduleMode5(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_PLAZA_CLOSING;
-            WiFiPlazaPlayerState_SetStep(savedState, 28);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
         } else {
             PlaySE(SEQ_SE_DP_DECIDE);
             WiFiPlazaPlayerState_NextStep(savedState);
         }
         break;
-    case 2: // "Would you like to play ...?"
+    case WIFI_PLAZA_REGISTER_ASK_PLAY: // "Would you like to play ...?"
         WiFiPlazaRoom_BufferActivityName(room, param->game, 0);
-        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, msg_0776_00000, 3);
+        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, msg_0776_00000, WIFI_PLAZA_REGISTER_OPEN_MENU);
         break;
-    case 3: // JOIN / RULES / CANCEL
+    case WIFI_PLAZA_REGISTER_OPEN_MENU: // JOIN / RULES / CANCEL
         WiFiPlazaGameEntry_InitMenu(entry, room, 3, 1);
         WiFiPlazaRoom_OpenList(room, &entry->menuTemplate, 0, 0);
-        WiFiPlazaPlayerState_SetStep(savedState, 4);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_HANDLE_MENU);
         break;
-    case 4:
+    case WIFI_PLAZA_REGISTER_HANDLE_MENU:
         closeMenu = 0;
         menuResult = WiFiPlazaRoom_ProcessList(room);
         switch (menuResult) {
         case LIST_CANCEL:
-        case 2:
+        case WIFI_PLAZA_GAME_ENTRY_MENU_CANCEL:
             param->result = WIFI_PLAZA_GAME_ENTRY_CANCELLED;
-            WiFiPlazaPlayerState_SetStep(savedState, 28);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
             closeMenu = 1;
             break;
-        case 1:
-            WiFiPlazaPlayerState_SetStep(savedState, 5);
+        case WIFI_PLAZA_GAME_ENTRY_MENU_RULES:
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_SHOW_RULES);
             closeMenu = 1;
             break;
-        case 0:
-            WiFiPlazaPlayerState_SetStep(savedState, 6);
+        case WIFI_PLAZA_GAME_ENTRY_MENU_JOIN:
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_JOIN);
             closeMenu = 1;
             break;
         }
@@ -199,21 +247,21 @@ BOOL WiFiPlazaGameEntry_Register(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
             WiFiPlazaGameEntry_FreeMenu(entry, room);
         }
         break;
-    case 5: // rules
+    case WIFI_PLAZA_REGISTER_SHOW_RULES: // rules
         WiFiPlazaRoom_BufferActivityName(room, param->game, 0);
-        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, param->game + 0x22, 2);
+        WiFiPlazaGameEntry_PrintMessage(entry, savedState, room, param->game + 0x22, WIFI_PLAZA_REGISTER_ASK_PLAY);
         break;
-    case 6: // join
+    case WIFI_PLAZA_REGISTER_JOIN: // join
         if (WiFiPlazaWork_GetEventScheduleMode5(lobby) != 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_PLAZA_CLOSING;
-            WiFiPlazaPlayerState_SetStep(savedState, 28);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
         } else if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) == TRUE) {
             if (WiFiPlazaLobbyClient_GetMatchFreePlaces(param->slot) == 0 || WiFiPlazaLobbyClient_IsMatchOpen(param->slot) == FALSE) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_SESSION_FULL;
-                WiFiPlazaPlayerState_SetStep(savedState, 28);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
             } else if ((s16)WiFiPlazaLobbyClient_GetMatchTimer(param->slot) == 0) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_NOT_READY;
-                WiFiPlazaPlayerState_SetStep(savedState, 28);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
             } else {
                 goto join;
             }
@@ -236,10 +284,10 @@ join:
             }
             WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, entry->timeLeft);
             WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
-            WiFiPlazaPlayerState_SetStep(savedState, 7);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_MEMBERS);
         }
         break;
-    case 7: // waiting for members
+    case WIFI_PLAZA_REGISTER_WAIT_MEMBERS: // waiting for members
         connection = CommState_GetPlazaMatchStatus();
         members = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
         entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
@@ -253,7 +301,7 @@ join:
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         if (connection == 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         } else if (connection == 2) {
             param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
             if (members == 4) {
@@ -264,7 +312,7 @@ join:
             WiFiPlazaRoom_HideWaitingIcon(room);
             WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId2));
             WiFiPlazaRoom_ShowWaitingIcon(room);
-            WiFiPlazaPlayerState_SetStep(savedState, 9);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_START_LINK);
             entry->members = members;
             WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
             WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
@@ -273,11 +321,11 @@ join:
             if (WiFiPlazaLobbyClient_IsMatchHost() == 0) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_DROPPED_OUT;
                 WiFiPlazaRoom_HideWaitingIcon(room);
-                WiFiPlazaPlayerState_SetStep(savedState, 23);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             } else {
                 param->result = WIFI_PLAZA_GAME_ENTRY_DROPPED_OUT;
                 WiFiPlazaRoom_HideWaitingIcon(room);
-                WiFiPlazaPlayerState_SetStep(savedState, 16);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_ASK_DROP_OUT);
             }
         } else if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
             if (entry->reportedMembers != members) {
@@ -288,7 +336,7 @@ join:
             }
             if (entry->timeLeft == 0 && WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_NO_MEMBERS;
-                WiFiPlazaPlayerState_SetStep(savedState, 23);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             } else {
                 goto checkSession;
             }
@@ -296,16 +344,16 @@ join:
 checkSession:
             if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) == TRUE && WiFiPlazaLobbyClient_IsMatchOpen(param->slot) == FALSE) {
                 param->result = WIFI_PLAZA_GAME_ENTRY_IN_PLAY;
-                WiFiPlazaPlayerState_SetStep(savedState, 23);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             } else if (entry->timeLeft == 0) {
-                WiFiPlazaPlayerState_SetStep(savedState, 8);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_LINK);
                 WiFiPlazaRoom_HideWaitingIcon(room);
                 WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00018));
                 WiFiPlazaRoom_ShowWaitingIcon(room);
             }
         }
         break;
-    case 8: // time is up, waiting for the link
+    case WIFI_PLAZA_REGISTER_WAIT_LINK: // time is up, waiting for the link
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         linkState = CommState_GetPlazaMatchStatus();
@@ -315,24 +363,24 @@ checkSession:
         case 3:
         case 4:
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             break;
         }
         if (linkState == 0) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         } else if (linkState == 2) {
             param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
-            WiFiPlazaPlayerState_SetStep(savedState, 9);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_START_LINK);
             entry->members = members2;
         } else if (WiFiPlazaLobbyClient_IsMatchActive(param->slot) != TRUE || WiFiPlazaLobbyClient_IsMatchOpen(param->slot) != FALSE) {
 
         } else {
             param->result = WIFI_PLAZA_GAME_ENTRY_IN_PLAY;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         }
         break;
-    case 9: // linked: exchange the player info
+    case WIFI_PLAZA_REGISTER_START_LINK: // linked: exchange the player info
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         WiFiPlazaWork_SetActivity(WiFiPlazaRoom_GetLobby(room), param->playerStatus);
@@ -340,16 +388,16 @@ checkSession:
         CommPlayerInfo_Init(WiFiPlazaWork_GetSaveData(WiFiPlazaRoom_GetLobby(room)), 0);
         CommPlayerInfo_SetProfile(WiFiPlazaWork_GetOwnPlayerProfile(lobby));
         Comm_SetWifiContinuousSend(0);
-        WiFiPlazaGameEntry_StartSync(entry, savedState, 10, 17);
+        WiFiPlazaGameEntry_StartSync(entry, savedState, WIFI_PLAZA_REGISTER_SEND_PLAYER_INFO, 17);
         break;
-    case 10:
+    case WIFI_PLAZA_REGISTER_SEND_PLAYER_INFO:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         CommPlayerInfo_SendLocal();
         CommPlayerInfo_Accept(Comm_GetLocalNetId());
-        WiFiPlazaPlayerState_SetStep(savedState, 11);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_RECEIVE_PLAYER_INFO);
         break;
-    case 11:
+    case WIFI_PLAZA_REGISTER_RECEIVE_PLAYER_INFO:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         netId = CommPlayerInfo_FindReceived();
@@ -366,31 +414,31 @@ checkSession:
                 entry->entriesClosed = TRUE;
             }
             if (WiFiPlazaLobbyClient_IsCurrentMatchClosed() == TRUE) {
-                WiFiPlazaPlayerState_SetStep(savedState, 12);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_START_ID_EXCHANGE);
             }
         } else if (WiFiPlazaLobbyClient_IsCurrentMatchClosed() == TRUE) {
             param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
         }
         break;
-    case 12:
+    case WIFI_PLAZA_REGISTER_START_ID_EXCHANGE:
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         LinkSync_ClearPackets();
         WiFiPlazaWork_ClearGameMembers(lobby);
-        WiFiPlazaGameEntry_StartSync(entry, savedState, 13, 14);
+        WiFiPlazaGameEntry_StartSync(entry, savedState, WIFI_PLAZA_REGISTER_SEND_LOBBY_ID, 14);
         break;
-    case 13: // send our lobby id
+    case WIFI_PLAZA_REGISTER_SEND_LOBBY_ID: // send our lobby id
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         entry->lobbyId = WiFiPlazaWork_GetOwnId(lobby);
         if (LinkSync_SendPacket(Comm_GetLocalNetId(), (s16 *)&entry->lobbyId) != TRUE) {
 
         } else {
-            WiFiPlazaPlayerState_SetStep(savedState, 14);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_RECEIVE_LOBBY_IDS);
         }
         break;
-    case 14: // receive the members' lobby ids
+    case WIFI_PLAZA_REGISTER_RECEIVE_LOBBY_IDS: // receive the members' lobby ids
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, FALSE);
         failed = FALSE;
@@ -409,7 +457,7 @@ nextMember:
                     if (WiFiPlazaLobbyClient_IdToSlot(*(s32 *)packet) == -1) {
                         failed = TRUE;
                         param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-                        WiFiPlazaPlayerState_SetStep(savedState, 23);
+                        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
                     } else {
                         WiFiPlazaWork_SetGameMember(lobby, *(s32 *)packet, i);
                         if (*(s32 *)packet == hostId) {
@@ -436,49 +484,49 @@ next:
         }
         if (failed == FALSE && received == memberCount) {
             if (hostFound == TRUE) {
-                WiFiPlazaPlayerState_SetStep(savedState, 15);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_START_GAME);
             } else {
                 param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-                WiFiPlazaPlayerState_SetStep(savedState, 23);
+                WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             }
         }
         break;
-    case 15: // start the game
+    case WIFI_PLAZA_REGISTER_START_GAME: // start the game
         CommState_SetErrorWatch(0, 1);
         if (WiFiPlazaLobbyClient_IsMatchHost() == 1) {
             WiFiPlazaWork_GetGameMembers(lobby, memberIds);
             WiFiPlaza_SendActivityNews(lobby, param->game, WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot), memberIds[0], memberIds[1], memberIds[2], memberIds[3], 1);
         }
         WiFiPlazaRoom_HideWaitingIcon(room);
-        WiFiPlazaGameEntry_StartSync(entry, savedState, 28, 18);
+        WiFiPlazaGameEntry_StartSync(entry, savedState, WIFI_PLAZA_REGISTER_END, 18);
         break;
-    case 16: // the host drops out: "If you drop out, the group will be disbanded. Is that OK?"
+    case WIFI_PLAZA_REGISTER_ASK_DROP_OUT: // the host drops out: "If you drop out, the group will be disbanded. Is that OK?"
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00026));
-        WiFiPlazaPlayerState_SetStep(savedState, 17);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_ASK_DROP_OUT);
         WiFiPlazaGameStatus_Close(&entry->status, room);
         break;
-    case 17:
+    case WIFI_PLAZA_REGISTER_WAIT_ASK_DROP_OUT:
         if (WiFiPlazaGameEntry_UpdateWaiting(entry, room, param, savedState, savedPlayerIndex) == FALSE && WiFiPlazaRoom_IsMessageFinished(room) == TRUE) {
-            WiFiPlazaPlayerState_SetStep(savedState, 18);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_OPEN_YES_NO);
         }
         break;
-    case 18:
+    case WIFI_PLAZA_REGISTER_OPEN_YES_NO:
         WiFiPlazaRoom_OpenYesNoMenuDefaultNo(room);
-        WiFiPlazaPlayerState_SetStep(savedState, 19);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_HANDLE_YES_NO);
         break;
-    case 19:
+    case WIFI_PLAZA_REGISTER_HANDLE_YES_NO:
         yesNo = WiFiPlazaRoom_GetYesNoResult(room);
         switch (yesNo) {
-        case 0:
+        case WIFI_PLAZA_YES_NO_YES:
             WiFiPlazaRoom_CloseYesNoMenu(room);
-            WiFiPlazaPlayerState_SetStep(savedState, 23);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END_LINK);
             WiFiPlazaWork_StartGameEntryCooldown(lobby);
             break;
-        case 1:
+        case WIFI_PLAZA_YES_NO_NO:
             WiFiPlazaRoom_CloseYesNoMenu(room);
-            WiFiPlazaPlayerState_SetStep(savedState, 20);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_RESUME_WAITING);
             break;
-        case 2:
+        case WIFI_PLAZA_YES_NO_OPEN:
             if (WiFiPlazaGameEntry_UpdateWaiting(entry, room, param, savedState, savedPlayerIndex) != TRUE) {
 
             } else {
@@ -487,7 +535,7 @@ next:
             break;
         }
         break;
-    case 20: // stays: back to waiting
+    case WIFI_PLAZA_REGISTER_RESUME_WAITING: // stays: back to waiting
         entry->timeLeft = WiFiPlazaLobbyClient_GetMatchTimer(param->slot);
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, entry->timeLeft);
         WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
@@ -499,9 +547,9 @@ next:
         }
         WiFiPlazaRoom_PrintMessageInstant(room, message2);
         WiFiPlazaRoom_ShowWaitingIcon(room);
-        WiFiPlazaPlayerState_SetStep(savedState, 7);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_MEMBERS);
         break;
-    case 21: // the session filled up while the question was open
+    case WIFI_PLAZA_REGISTER_SESSION_FILLED: // the session filled up while the question was open
         members3 = WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot);
         param->result = WIFI_PLAZA_GAME_ENTRY_STARTED;
         if (members3 == 4) {
@@ -511,44 +559,44 @@ next:
         }
         WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId));
         WiFiPlazaRoom_ShowWaitingIcon(room);
-        WiFiPlazaPlayerState_SetStep(savedState, 9);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_START_LINK);
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, 0);
         WiFiPlazaGameStatus_UpdateInPlay(&entry->status, room, TRUE);
         break;
-    case 22: // the time ran out while the question was open
+    case WIFI_PLAZA_REGISTER_TIME_UP: // the time ran out while the question was open
         WiFiPlazaRoom_PrintMessageInstant(room, WiFiPlazaRoom_GetMsgString(room, 0, msg_0776_00018));
         WiFiPlazaRoom_ShowWaitingIcon(room);
         WiFiPlazaGameStatus_Open(&entry->status, room, param->game, TRUE, 0);
         WiFiPlazaGameStatus_SetFrames(&entry->status, 0);
         WiFiPlazaGameStatus_Update(&entry->status, room, TRUE);
-        WiFiPlazaPlayerState_SetStep(savedState, 8);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_LINK);
         break;
-    case 23: // failed: end the link
+    case WIFI_PLAZA_REGISTER_END_LINK: // failed: end the link
         CommPlayerInfo_Free();
         CommState_EndPlazaMatch();
-        WiFiPlazaPlayerState_SetStep(savedState, 24);
+        WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_END_LINK);
         break;
-    case 24:
+    case WIFI_PLAZA_REGISTER_WAIT_END_LINK:
         if (CommState_GetPlazaMatchStatus() == 0) {
-            WiFiPlazaPlayerState_SetStep(savedState, 28);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_END);
         }
         break;
-    case 25: // waiting for the message
+    case WIFI_PLAZA_REGISTER_WAIT_MESSAGE: // waiting for the message
         if (WiFiPlazaRoom_IsMessageFinished(room) == TRUE) {
             WiFiPlazaPlayerState_SetStep(savedState, entry->nextStep);
         }
         break;
-    case 26: // link sync
+    case WIFI_PLAZA_REGISTER_SYNC: // link sync
         delay = entry->syncDelay;
         if (delay > 0) {
             entry->syncDelay = delay - 1;
         }
         if (entry->syncDelay == 0) {
             LinkSync_StartSync(entry->syncId);
-            WiFiPlazaPlayerState_SetStep(savedState, 27);
+            WiFiPlazaPlayerState_SetStep(savedState, WIFI_PLAZA_REGISTER_WAIT_SYNC);
         }
         break;
-    case 27:
+    case WIFI_PLAZA_REGISTER_WAIT_SYNC:
         entry->syncTimer++;
         if (entry->syncTimer >= 150) {
             LinkSync_StartSync(entry->syncId);
@@ -558,7 +606,7 @@ next:
             WiFiPlazaPlayerState_SetStep(savedState, entry->nextStep);
         }
         break;
-    case 28:
+    case WIFI_PLAZA_REGISTER_END:
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaGameEntry_FreeMenu(entry, room);
         WiFiPlazaGameStatus_Close(&entry->status, room);
@@ -571,16 +619,16 @@ next:
 
 BOOL WiFiPlazaGameEntry_EndLink(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index) {
     switch (WiFiPlazaPlayerState_GetStep(state)) {
-    case 0:
+    case WIFI_PLAZA_END_LINK_START:
         CommState_SetErrorWatch(0, 0);
         if (CommState_IsWifiInLobby() == FALSE) {
             CommPlayerInfo_Free();
             CommState_EndPlazaMatch();
         }
         WiFiPlazaRoom_SetMode(room, 1);
-        WiFiPlazaPlayerState_SetStep(state, 1);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_END_LINK_WAIT_LOBBY);
         break;
-    case 1:
+    case WIFI_PLAZA_END_LINK_WAIT_LOBBY:
         if (CommState_IsWifiInLobby() == TRUE) {
             return TRUE;
         }
@@ -597,7 +645,7 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
     WiFiPlazaObjManager *objManager;
 
     switch (WiFiPlazaPlayerState_GetStep(state)) {
-    case 0:
+    case WIFI_PLAZA_SIGN_SHOW:
         newStatus = WiFiPlazaPlayerState_AllocWork(state, sizeof(WiFiPlazaGameStatus));
         switch (WiFiPlazaRoom_GetActionTile(room)) {
         case 0x27:
@@ -622,12 +670,12 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
         WiFiPlazaGameStatus_UpdateInPlay(newStatus, room, TRUE);
         WiFiPlazaPlayerState_NextStep(state);
         break;
-    case 1:
+    case WIFI_PLAZA_SIGN_WAIT_INPUT:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT)) != 0) {
             WiFiPlazaGameStatus_Close(status, room);
             WiFiPlazaRoom_CloseMessage(room);
             objManager = WiFiPlazaRoom_GetObjManager(room);
-            WiFiPlazaObj_SetHandler(objManager, WiFiPlazaObj_GetOwnPlayer(objManager), TRUE);
+            WiFiPlazaObj_SetHandler(objManager, WiFiPlazaObj_GetOwnPlayer(objManager), WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
             WiFiPlazaPlayerState_FreeWork(state);
             return TRUE;
         }
@@ -640,7 +688,7 @@ BOOL WiFiPlazaGameEntry_ReadSign(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork 
 void WiFiPlazaGameEntry_PrintMessage(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 msgId, u32 nextStep) {
     WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 0, msgId));
     entry->nextStep = nextStep;
-    WiFiPlazaPlayerState_SetStep(state, 25);
+    WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_WAIT_MESSAGE);
 }
 
 void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerState *state, u8 nextStep, u8 syncId) {
@@ -648,7 +696,7 @@ void WiFiPlazaGameEntry_StartSync(WiFiPlazaGameEntry *entry, WiFiPlazaPlayerStat
     entry->syncId = syncId;
     entry->syncDelay = 0;
     entry->syncTimer = 0;
-    WiFiPlazaPlayerState_SetStep(state, 26);
+    WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_SYNC);
 }
 
 void WiFiPlazaGameEntry_InitMenu(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg) {
@@ -678,12 +726,12 @@ BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWo
 
     if (connection == 0) {
         param->result = WIFI_PLAZA_GAME_ENTRY_LINK_ERROR;
-        WiFiPlazaPlayerState_SetStep(state, 23);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_END_LINK);
         return TRUE;
     }
     if (connection == 2) {
         entry->members = members;
-        WiFiPlazaPlayerState_SetStep(state, 21);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_SESSION_FILLED);
         return TRUE;
     }
     if (entry->reportedMembers != members) {
@@ -696,14 +744,14 @@ BOOL WiFiPlazaGameEntry_UpdateWaiting(WiFiPlazaGameEntry *entry, WiFiPlazaRoomWo
     if (entry->timeLeft == 0) {
         if (WiFiPlazaLobbyClient_GetMatchPlayerCount(param->slot) <= 1) {
             param->result = WIFI_PLAZA_GAME_ENTRY_NO_MEMBERS;
-            WiFiPlazaPlayerState_SetStep(state, 23);
+            WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_END_LINK);
             return TRUE;
         }
-        WiFiPlazaPlayerState_SetStep(state, 22);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_TIME_UP);
         return TRUE;
     }
     if (entry->timeLeft <= 330) {
-        WiFiPlazaPlayerState_SetStep(state, 20);
+        WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_REGISTER_RESUME_WAITING);
         return TRUE;
     }
     return FALSE;

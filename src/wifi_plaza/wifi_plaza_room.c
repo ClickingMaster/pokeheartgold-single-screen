@@ -36,6 +36,40 @@
 BOOL CommState_HasPlazaLobbyFailed(void);
 int TypeIcon_GetPlttFile(void);
 
+enum WiFiPlazaRoomState {
+    WIFI_PLAZA_ROOM_FADE_IN,
+    WIFI_PLAZA_ROOM_WAIT_FADE_IN,
+    WIFI_PLAZA_ROOM_UPDATE,
+    WIFI_PLAZA_ROOM_SHOW_ERROR,
+    WIFI_PLAZA_ROOM_WAIT_ERROR,
+    WIFI_PLAZA_ROOM_SHOW_CLOSING,
+    WIFI_PLAZA_ROOM_WAIT_CLOSING,
+    WIFI_PLAZA_ROOM_FADE_OUT,
+    WIFI_PLAZA_ROOM_WAIT_FADE_OUT,
+};
+
+enum WiFiPlazaInfoPanelState {
+    WIFI_PLAZA_PANEL_WAIT_START,
+    WIFI_PLAZA_PANEL_FADE_OUT_START,
+    WIFI_PLAZA_PANEL_SHOW_START_CARD,
+    WIFI_PLAZA_PANEL_FADE_IN_START,
+    WIFI_PLAZA_PANEL_WAIT_FADE_IN_START,
+    WIFI_PLAZA_PANEL_IDLE,
+    WIFI_PLAZA_PANEL_FADE_OUT,
+    WIFI_PLAZA_PANEL_HIDE_PAGE,
+    WIFI_PLAZA_PANEL_SHOW_PAGE,
+    WIFI_PLAZA_PANEL_FADE_IN,
+    WIFI_PLAZA_PANEL_WAIT_FADE_IN,
+};
+
+enum WiFiPlazaInfoPanelPage {
+    WIFI_PLAZA_PANEL_PAGE_NONE,
+    WIFI_PLAZA_PANEL_PAGE_OWN_CARD,
+    WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD,
+    WIFI_PLAZA_PANEL_PAGE_INSTRUMENT,
+    WIFI_PLAZA_PANEL_PAGE_START_CARD,
+};
+
 static const GraphicsModes sWiFiPlazaRoomGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
     .bgMode = GX_BGMODE_0,
@@ -217,18 +251,18 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
 
     OverlayManager_GetArgs(manager);
     switch (*state) {
-    case 0:
+    case WIFI_PLAZA_ROOM_FADE_IN:
         BeginNormalPaletteFade(0, 1, 1, 0, 6, 1, (enum HeapID)0x77);
         room->fading = TRUE;
         (*state)++;
         break;
-    case 1:
+    case WIFI_PLAZA_ROOM_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
             room->fading = FALSE;
             (*state)++;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_ROOM_UPDATE:
         if (room->mode == 1) {
             if (WiFiPlaza_HasConnectionFailed() == TRUE || WiFiPlazaWork_HasError(room->lobby) != 0) {
                 room->error = 1;
@@ -236,19 +270,19 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         }
         if (room->ignorePlazaClosing == FALSE && WiFiPlazaWork_IsClosed(room->lobby) == TRUE) {
             room->plazaClosing = TRUE;
-            WiFiPlazaRoom_SetResult(room, 8);
+            WiFiPlazaRoom_SetResult(room, WIFI_PLAZA_ROOM_RESULT_PLAZA_CLOSED);
         }
         if (room->finished == TRUE || room->error == 1 || room->plazaClosing == TRUE) {
             if (room->error != 0) {
-                *state = 3;
+                *state = WIFI_PLAZA_ROOM_SHOW_ERROR;
             } else if (room->plazaClosing == TRUE) {
-                *state = 5;
+                *state = WIFI_PLAZA_ROOM_SHOW_CLOSING;
             } else {
-                *state = 7;
+                *state = WIFI_PLAZA_ROOM_FADE_OUT;
             }
         }
         break;
-    case 3:
+    case WIFI_PLAZA_ROOM_SHOW_ERROR:
         WiFiPlazaMsgWindow_Close(&room->msgWindow);
         WiFiPlazaListMenu_Close(&room->listMenu, NULL, NULL);
         WiFiPlazaTextWindow_Close(&room->textWindow);
@@ -260,43 +294,43 @@ BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state) {
         } else {
             WiFiPlazaErrorWindow_PrintDisconnected(&room->errorWindow, &room->msg, WiFiPlazaWork_HasError(room->lobby));
         }
-        *state = 4;
+        *state = WIFI_PLAZA_ROOM_WAIT_ERROR;
         break;
-    case 4:
+    case WIFI_PLAZA_ROOM_WAIT_ERROR:
         if (gSystem.newKeys & PAD_BUTTON_A) {
-            *state = 7;
+            *state = WIFI_PLAZA_ROOM_FADE_OUT;
         }
         break;
-    case 5:
+    case WIFI_PLAZA_ROOM_SHOW_CLOSING:
         WiFiPlazaMsgWindow_Close(&room->msgWindow);
         WiFiPlazaListMenu_Close(&room->listMenu, NULL, NULL);
         WiFiPlazaTextWindow_Close(&room->textWindow);
         WiFiPlazaYesNoMenu_Free(&room->yesNoMenu);
         WiFiPlazaMsgWindow_Print(&room->msgWindow, WiFiPlazaRoomMsg_GetString(&room->msg, 1, msg_0777_00070));
-        *state = 6;
+        *state = WIFI_PLAZA_ROOM_WAIT_CLOSING;
         room->closingTimer = 60;
         break;
-    case 6:
+    case WIFI_PLAZA_ROOM_WAIT_CLOSING:
         if (WiFiPlazaMsgWindow_IsPrintFinished(&room->msgWindow) != FALSE) {
             room->closingTimer--;
             if (room->closingTimer <= 0) {
-                *state = 7;
+                *state = WIFI_PLAZA_ROOM_FADE_OUT;
             }
         }
         break;
-    case 7:
+    case WIFI_PLAZA_ROOM_FADE_OUT:
         result = WiFiPlazaInfoPanel_GetState(&room->infoPanel);
-        if (result == 5) {
+        if (result == WIFI_PLAZA_PANEL_IDLE) {
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, (enum HeapID)0x77);
             room->fading = TRUE;
             (*state)++;
-        } else if (result == 0) {
+        } else if (result == WIFI_PLAZA_PANEL_WAIT_START) {
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, (enum HeapID)0x77);
             room->fading = TRUE;
             (*state)++;
         }
         break;
-    case 8:
+    case WIFI_PLAZA_ROOM_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             room->fading = FALSE;
             return TRUE;
@@ -532,11 +566,11 @@ u32 WiFiPlazaRoom_GetYesNoResult(WiFiPlazaRoomWork *room) {
     }
     PlaySE(SEQ_SE_DP_SELECT);
 no:
-    return 1;
+    return WIFI_PLAZA_YES_NO_NO;
 yes:
-    return 0;
+    return WIFI_PLAZA_YES_NO_YES;
 open:
-    return 2;
+    return WIFI_PLAZA_YES_NO_OPEN;
 }
 
 void WiFiPlazaRoom_CloseYesNoMenu(WiFiPlazaRoomWork *room) {
@@ -1466,17 +1500,17 @@ void WiFiPlazaInfoPanel_Init(WiFiPlazaInfoPanel *panel, u16 *startParams, WiFiPl
     WiFiPlazaInfoPanel_LoadGraphics(panel, graphics, panel->narc, gender, heapID);
     WiFiPlazaPlayerCard_Init(&panel->card, graphics, panel->narc, heapID);
     WiFiPlazaPanelButton_Init(&panel->button, graphics, panel->narc, heapID);
-    panel->request = 0;
-    panel->page = 0;
+    panel->request = WIFI_PLAZA_PANEL_PAGE_NONE;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_NONE;
     if (startParams[3] == 0) {
-        panel->state = 0;
+        panel->state = WIFI_PLAZA_PANEL_WAIT_START;
         BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_OFF);
     } else {
-        panel->state = 5;
+        panel->state = WIFI_PLAZA_PANEL_IDLE;
     }
 }
 
@@ -1508,19 +1542,19 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
     lobby = room->lobby;
     offset = offsetof(WiFiPlazaRoomWork, msg);
     switch (panel->state) {
-    case 0:
+    case WIFI_PLAZA_PANEL_WAIT_START:
         if (panel->started == TRUE) {
             panel->state++;
         }
         break;
-    case 1:
+    case WIFI_PLAZA_PANEL_FADE_OUT_START:
         BeginNormalPaletteFade(4, 0, 0, RGB_WHITE, 4, 1, heapID);
         panel->state++;
         break;
-    case 2:
+    case WIFI_PLAZA_PANEL_SHOW_START_CARD:
         if (IsPaletteFadeFinished() == TRUE) {
             WiFiPlazaInfoPanel_ShowOwnCard(panel, graphics, &room->msg, heapID, WiFiPlazaWork_GetMyPlayer(lobby));
-            panel->page = 4;
+            panel->page = WIFI_PLAZA_PANEL_PAGE_START_CARD;
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
             GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
@@ -1528,27 +1562,27 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             panel->state++;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_PANEL_FADE_IN_START:
         BeginNormalPaletteFade(4, 1, 1, RGB_WHITE, 6, 1, heapID);
         panel->state++;
         break;
-    case 4:
+    case WIFI_PLAZA_PANEL_WAIT_FADE_IN_START:
         if (IsPaletteFadeFinished() == TRUE) {
             panel->state++;
         }
         break;
-    case 5:
+    case WIFI_PLAZA_PANEL_IDLE:
         if (paused != TRUE) {
             switch (panel->page) {
-            case 0:
-            case 4:
+            case WIFI_PLAZA_PANEL_PAGE_NONE:
+            case WIFI_PLAZA_PANEL_PAGE_START_CARD:
                 break;
-            case 1:
+            case WIFI_PLAZA_PANEL_PAGE_OWN_CARD:
                 if (WiFiPlazaPanelButton_Update(&panel->button, graphics, panel->narc, heapID) == TRUE) {
                     WiFiPlazaRoom_SetPanelButtonPressed(room);
                 }
                 break;
-            case 3:
+            case WIFI_PLAZA_PANEL_PAGE_INSTRUMENT:
                 if (panel->instrumentPlaying) {
                     if (WiFiPlazaEvent_GetMoverState(room->event, panel->instrumentIndex, panel->instrumentType) == 0) {
                         panel->instrumentPlaying = FALSE;
@@ -1564,7 +1598,7 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
                     panel->instrumentType = started.type;
                 }
                 break;
-            case 2:
+            case WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD:
                 WiFiPlazaPlayerCard_Update(&panel->card, (WiFiPlazaMsgWindow *)((u8 *)room + (offset + 0x3C)));
                 offset += 0x3C;
                 break;
@@ -1574,37 +1608,37 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             }
         }
         break;
-    case 6:
+    case WIFI_PLAZA_PANEL_FADE_OUT:
         BeginNormalPaletteFade(4, 1, 0, 0, 3, 1, heapID);
         panel->state++;
         break;
-    case 7:
+    case WIFI_PLAZA_PANEL_HIDE_PAGE:
         if (IsPaletteFadeFinished() != TRUE) {
             break;
         }
         switch (panel->page) {
-        case 0:
+        case WIFI_PLAZA_PANEL_PAGE_NONE:
             break;
-        case 1:
-        case 3:
-        case 4:
+        case WIFI_PLAZA_PANEL_PAGE_OWN_CARD:
+        case WIFI_PLAZA_PANEL_PAGE_INSTRUMENT:
+        case WIFI_PLAZA_PANEL_PAGE_START_CARD:
             WiFiPlazaInfoPanel_HideButtonPage(panel, graphics);
             break;
-        case 2:
+        case WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD:
             WiFiPlazaInfoPanel_HidePlayerCard(panel, &room->signWindow, graphics);
             break;
         }
         panel->state++;
         break;
-    case 8:
+    case WIFI_PLAZA_PANEL_SHOW_PAGE:
         switch (panel->request) {
-        case 0:
+        case WIFI_PLAZA_PANEL_PAGE_NONE:
             break;
-        case 1:
-        case 4:
+        case WIFI_PLAZA_PANEL_PAGE_OWN_CARD:
+        case WIFI_PLAZA_PANEL_PAGE_START_CARD:
             WiFiPlazaInfoPanel_ShowOwnCard(panel, graphics, &room->msg, heapID, WiFiPlazaWork_GetMyPlayer(lobby));
             break;
-        case 2:
+        case WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD:
             myPlayer = WiFiPlazaWork_GetMyPlayer(lobby);
             playerIndex = panel->requestPlayer;
             if (playerIndex == WiFiPlazaWork_GetOwnSlot(lobby)) {
@@ -1627,7 +1661,7 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             }
             WiFiPlazaInfoPanel_ShowPlayerCard(panel, &room->signWindow, graphics, (WiFiPlazaRoomMsg *)((u8 *)room + offset), isOwn, heapID, player, myPlayer, special, hasMessage, (u16 *)message, TRUE);
             break;
-        case 3:
+        case WIFI_PLAZA_PANEL_PAGE_INSTRUMENT:
             token = WiFiPlazaWork_FindGroupPlace(lobby, WiFiPlazaWork_GetOwnSlot(lobby));
             if (token == -1) {
                 GF_ASSERT(FALSE);
@@ -1637,19 +1671,19 @@ void WiFiPlazaInfoPanel_Update(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomWork *roo
             WiFiPlazaInfoPanel_ShowInstrument(panel, graphics, heapID, own.type);
             break;
         }
-        panel->request = 0;
+        panel->request = WIFI_PLAZA_PANEL_PAGE_NONE;
         panel->state++;
         break;
-    case 9:
+    case WIFI_PLAZA_PANEL_FADE_IN:
         BeginNormalPaletteFade(4, 1, 1, 0, 3, 1, heapID);
-        if (panel->page == 2) {
+        if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
             WiFiPlazaPlayerCard_Update(&panel->card, &room->signWindow);
         }
         panel->state++;
         break;
-    case 10:
+    case WIFI_PLAZA_PANEL_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
-            panel->state = 5;
+            panel->state = WIFI_PLAZA_PANEL_IDLE;
         }
         break;
     }
@@ -1662,28 +1696,28 @@ u8 WiFiPlazaInfoPanel_GetState(WiFiPlazaInfoPanel *panel) {
 }
 
 void WiFiPlazaInfoPanel_RequestPlayerCard(WiFiPlazaInfoPanel *panel, u32 playerIndex, u32 showMessage) {
-    panel->request = 2;
+    panel->request = WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
     panel->requestPlayer = playerIndex;
     panel->requestArg = showMessage;
 }
 
 void WiFiPlazaInfoPanel_SetCardIcon(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, u32 icon, enum HeapID heapID) {
     GF_ASSERT(icon < 27);
-    GF_ASSERT(panel->page == 2);
-    if (panel->page == 2) {
+    GF_ASSERT(panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD);
+    if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         WiFiPlazaPlayerCard_ChangeIcon(&panel->card, graphics, panel->narc, heapID, icon);
     }
 }
 
 void WiFiPlazaInfoPanel_RequestOwnCard(WiFiPlazaInfoPanel *panel) {
-    if (panel->page != 1) {
-        panel->request = 1;
+    if (panel->page != WIFI_PLAZA_PANEL_PAGE_OWN_CARD) {
+        panel->request = WIFI_PLAZA_PANEL_PAGE_OWN_CARD;
     }
 }
 
 void WiFiPlazaInfoPanel_RequestInstrument(WiFiPlazaInfoPanel *panel) {
-    if (panel->page != 3) {
-        panel->request = 3;
+    if (panel->page != WIFI_PLAZA_PANEL_PAGE_INSTRUMENT) {
+        panel->request = WIFI_PLAZA_PANEL_PAGE_INSTRUMENT;
     }
 }
 
@@ -1692,17 +1726,17 @@ u8 WiFiPlazaInfoPanel_GetCardPlayer(WiFiPlazaInfoPanel *panel) {
 }
 
 BOOL WiFiPlazaInfoPanel_IsPlayerCardShown(WiFiPlazaInfoPanel *panel) {
-    if (panel->request == 2) {
+    if (panel->request == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         return TRUE;
     }
-    if (panel->page == 2) {
+    if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         return TRUE;
     }
     return FALSE;
 }
 
 BOOL WiFiPlazaInfoPanel_IsPlayerCardIdle(WiFiPlazaInfoPanel *panel) {
-    return panel->request == 0 && panel->page == 2;
+    return panel->request == WIFI_PLAZA_PANEL_PAGE_NONE && panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
 }
 
 BOOL WiFiPlazaInfoPanel_CardShowsMessage(WiFiPlazaInfoPanel *panel) {
@@ -1710,41 +1744,41 @@ BOOL WiFiPlazaInfoPanel_CardShowsMessage(WiFiPlazaInfoPanel *panel) {
 }
 
 BOOL WiFiPlazaInfoPanel_HasRequest(WiFiPlazaInfoPanel *panel) {
-    return panel->request != 0;
+    return panel->request != WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
 void WiFiPlazaInfoPanel_ShowPlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, BOOL isOwn, enum HeapID heapID, struct WiFiPlazaPlayer *player, struct WiFiPlazaPlayer *myPlayer, int special, BOOL hasMessage, u16 *message, BOOL showIcon) {
-    if (panel->page == 2) {
+    if (panel->page == WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD) {
         WiFiPlazaInfoPanel_HidePlayerCard(panel, signWindow, graphics);
     }
     WiFiPlazaPlayerCard_Show(panel, signWindow, &panel->card, graphics, msg, isOwn, panel->narc, heapID, player, myPlayer, special, hasMessage, message, showIcon);
-    panel->page = 2;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_PLAYER_CARD;
 }
 
 void WiFiPlazaInfoPanel_HidePlayerCard(WiFiPlazaInfoPanel *panel, WiFiPlazaMsgWindow *signWindow, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPlayerCard_Clear(&panel->card, signWindow, graphics);
-    panel->page = 0;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
 void WiFiPlazaInfoPanel_ShowOwnCard(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, WiFiPlazaRoomMsg *msg, enum HeapID heapID, struct WiFiPlazaPlayer *player) {
-    if (panel->page == 1 || panel->page == 3 || panel->page == 4) {
+    if (panel->page == WIFI_PLAZA_PANEL_PAGE_OWN_CARD || panel->page == WIFI_PLAZA_PANEL_PAGE_INSTRUMENT || panel->page == WIFI_PLAZA_PANEL_PAGE_START_CARD) {
         WiFiPlazaInfoPanel_HideButtonPage(panel, graphics);
     }
     WiFiPlazaPanelButton_ShowOwnCard(&panel->button, graphics, msg, player, panel->narc, heapID);
-    panel->page = 1;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_OWN_CARD;
 }
 
 void WiFiPlazaInfoPanel_ShowInstrument(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics, enum HeapID heapID, u32 type) {
-    if (panel->page == 3) {
+    if (panel->page == WIFI_PLAZA_PANEL_PAGE_INSTRUMENT) {
         WiFiPlazaInfoPanel_HideButtonPage(panel, graphics);
     }
     WiFiPlazaPanelButton_ShowInstrument(&panel->button, graphics, type, panel->narc, heapID);
-    panel->page = 3;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_INSTRUMENT;
 }
 
 void WiFiPlazaInfoPanel_HideButtonPage(WiFiPlazaInfoPanel *panel, WiFiPlazaRoomGraphics *graphics) {
     WiFiPlazaPanelButton_Clear(&panel->button, graphics);
-    panel->page = 0;
+    panel->page = WIFI_PLAZA_PANEL_PAGE_NONE;
 }
 
 void WiFiPlazaInfoPanel_SetButtonDisabled(WiFiPlazaInfoPanel *panel, u16 disabled) {

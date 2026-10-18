@@ -36,6 +36,46 @@ typedef struct WiFiPlazaWork WiFiPlazaWork;     // OVY_45 lobby state (include/w
 typedef struct WiFiPlazaPlayer WiFiPlazaPlayer; // OVY_45 player record (include/wifi_plaza/wifi_plaza_internal.h)
 typedef struct WiFiPlazaRoomWork WiFiPlazaRoomWork;
 
+// Result of WiFiPlazaRoom_GetYesNoResult
+enum WiFiPlazaYesNoResult {
+    WIFI_PLAZA_YES_NO_YES,
+    WIFI_PLAZA_YES_NO_NO,
+    WIFI_PLAZA_YES_NO_OPEN,
+};
+
+// What the plaza does after the room closes (WiFiPlazaRoom_SetResult)
+enum WiFiPlazaRoomResult {
+    WIFI_PLAZA_ROOM_RESULT_DISCONNECT,
+    WIFI_PLAZA_ROOM_RESULT_VISITOR_PROFILES,
+    WIFI_PLAZA_ROOM_RESULT_PLAZA_NEWS,
+    WIFI_PLAZA_ROOM_RESULT_SWALOT_PLOP,
+    WIFI_PLAZA_ROOM_RESULT_MIME_JR_TOP,
+    WIFI_PLAZA_ROOM_RESULT_WOBBUFFET_POP,
+    WIFI_PLAZA_ROOM_RESULT_FOOTPRINT_STAMP_BOARD_0,
+    WIFI_PLAZA_ROOM_RESULT_FOOTPRINT_STAMP_BOARD_1,
+    WIFI_PLAZA_ROOM_RESULT_PLAZA_CLOSED,
+    WIFI_PLAZA_ROOM_RESULT_SURVEY_ANSWER,
+    WIFI_PLAZA_ROOM_RESULT_SURVEY_RESULTS,
+};
+
+// What a player is doing in the plaza (WiFiPlazaWork_SetActivity, WiFiPlazaPlayer_GetActivity)
+enum WiFiPlazaActivity {
+    WIFI_PLAZA_ACTIVITY_NONE,
+    WIFI_PLAZA_ACTIVITY_FREE,
+    WIFI_PLAZA_ACTIVITY_SWALOT_PLOP,
+    WIFI_PLAZA_ACTIVITY_MIME_JR_TOP,
+    WIFI_PLAZA_ACTIVITY_WOBBUFFET_POP,
+    WIFI_PLAZA_ACTIVITY_FOOTPRINT_STAMP_BOARD_0,
+    WIFI_PLAZA_ACTIVITY_FOOTPRINT_STAMP_BOARD_1,
+    WIFI_PLAZA_ACTIVITY_VISITOR_PROFILES,
+    WIFI_PLAZA_ACTIVITY_PLAZA_NEWS,
+    WIFI_PLAZA_ACTIVITY_TALK,
+    WIFI_PLAZA_ACTIVITY_PARADE_FLOAT,
+    WIFI_PLAZA_ACTIVITY_EXIT,
+    WIFI_PLAZA_ACTIVITY_GAME_ENTRY,
+    WIFI_PLAZA_ACTIVITY_SURVEY,
+};
+
 // Launch arguments (same layout as the OVY_45 app-0 arguments).
 typedef struct WiFiPlazaRoomArgs {
     SaveData *save;

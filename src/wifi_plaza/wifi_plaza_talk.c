@@ -552,7 +552,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaObj_SetDirection(partnerObj, direction);
         WiFiPlazaPlayerState_SetActive(stateManager, partnerIndex, 0);
         PlaySE(SEQ_SE_DP_BUTTON9);
-        WiFiPlazaWork_SetActivity(lobby, 9);
+        WiFiPlazaWork_SetActivity(lobby, WIFI_PLAZA_ACTIVITY_TALK);
         if (result == TRUE) {
             WiFiPlazaRoom_ShowPlayerCard(room, partnerIndex, 0);
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_REQUEST);
@@ -952,7 +952,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         WiFiPlazaWork_ResetTalk(lobby);
         WiFiPlazaRoom_CloseMessage(room);
-        WiFiPlazaWork_SetActivity(lobby, 1);
+        WiFiPlazaWork_SetActivity(lobby, WIFI_PLAZA_ACTIVITY_FREE);
         {
             WiFiPlazaObjManager *objManager2 = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager2, WiFiPlazaObj_GetOwnPlayer(objManager2), TRUE);
@@ -1009,7 +1009,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         partnerIndex = WiFiPlazaWork_GetTalkPartner(lobby);
         result = WiFiPlazaTalk_Init(talk, lobby, partnerIndex);
         PlaySE(SEQ_SE_DP_BUTTON9);
-        WiFiPlazaWork_SetActivity(lobby, 9);
+        WiFiPlazaWork_SetActivity(lobby, WIFI_PLAZA_ACTIVITY_TALK);
         if (result == TRUE) {
             WiFiPlazaRoom_ShowPlayerCard(room, partnerIndex, 0);
             WiFiPlazaWork_SetTalkedWith(lobby, partnerIndex);
@@ -1325,7 +1325,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         WiFiPlazaRoom_CloseMessage(room);
         WiFiPlazaTalk_Free(talk);
         WiFiPlazaPlayerState_FreeWork(state);
-        WiFiPlazaWork_SetActivity(lobby, 1);
+        WiFiPlazaWork_SetActivity(lobby, WIFI_PLAZA_ACTIVITY_FREE);
         {
             WiFiPlazaObjManager *objManager = WiFiPlazaRoom_GetObjManager(room);
             WiFiPlazaObj_SetHandler(objManager, WiFiPlazaObj_GetOwnPlayer(objManager), TRUE);

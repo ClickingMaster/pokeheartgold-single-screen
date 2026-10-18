@@ -4,6 +4,8 @@
 
 #include "global.h"
 
+#include "constants/global_fieldmap.h"
+
 #include "wifi_plaza/wifi_plaza_map.h"
 
 #include "assert.h"
@@ -12,6 +14,40 @@
 #include "overlay_42.h"
 #include "sound_playback.h"
 #include "system.h"
+
+enum WiFiPlazaWanderStep {
+    WIFI_PLAZA_WANDER_START_WAIT,
+    WIFI_PLAZA_WANDER_WAIT,
+    WIFI_PLAZA_WANDER_PICK_MOVE,
+    WIFI_PLAZA_WANDER_WAIT_TURN,
+    WIFI_PLAZA_WANDER_WAIT_MOVE,
+};
+
+enum WiFiPlazaRiseOutStep {
+    WIFI_PLAZA_RISE_OUT_START,
+    WIFI_PLAZA_RISE_OUT_WAIT,
+    WIFI_PLAZA_RISE_OUT_RISE,
+    WIFI_PLAZA_RISE_OUT_DONE,
+};
+
+enum WiFiPlazaDropInStep {
+    WIFI_PLAZA_DROP_IN_START,
+    WIFI_PLAZA_DROP_IN_DROP,
+    WIFI_PLAZA_DROP_IN_WAIT,
+    WIFI_PLAZA_DROP_IN_DONE,
+};
+
+enum WiFiPlazaSlideStep {
+    WIFI_PLAZA_SLIDE_START,
+    WIFI_PLAZA_SLIDE_SLIDE,
+    WIFI_PLAZA_SLIDE_WAIT,
+    WIFI_PLAZA_SLIDE_DONE,
+};
+
+enum WiFiPlazaHopStep {
+    WIFI_PLAZA_HOP_START,
+    WIFI_PLAZA_HOP_HOP,
+};
 
 typedef struct WiFiPlazaObjSpawn {
     u8 tag;
@@ -154,7 +190,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreateOwnPlayerAt(WiFiPlazaObjManager *manager, int i
     template.y = y << 4;
     template.id = id;
     template.action = 0;
-    template.direction = 0;
+    template.direction = DIR_NORTH;
     if (manager->mode == 0) {
         template.spriteId = 0;
     } else {
@@ -195,7 +231,7 @@ WiFiPlazaObj *WiFiPlazaObj_CreatePlayer(WiFiPlazaObjManager *manager, int id, in
     template.y = cell[0] << 4;
     template.id = id;
     template.action = 0;
-    template.direction = 1;
+    template.direction = DIR_SOUTH;
     template.spriteId = avatar;
     obj->gridObj = Field2DObjectManager_AddObject(manager->gridObjs, &template);
     obj->avatar = WiFiPlazaPlayerObjects_Add(manager->avatars, obj->gridObj);
@@ -574,34 +610,34 @@ void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *man
         command = 3;
     }
     if (input & PAD_KEY_UP) {
-        if (facing == 0) {
+        if (facing == DIR_NORTH) {
             WiFiPlazaObj_QueueMove(manager, command, facing, id);
         } else {
-            WiFiPlazaObj_QueueMove(manager, 1, 0, id);
+            WiFiPlazaObj_QueueMove(manager, 1, DIR_NORTH, id);
         }
         return;
     }
     if (input & PAD_KEY_DOWN) {
-        if (facing == 1) {
+        if (facing == DIR_SOUTH) {
             WiFiPlazaObj_QueueMove(manager, command, facing, id);
         } else {
-            WiFiPlazaObj_QueueMove(manager, 1, 1, id);
+            WiFiPlazaObj_QueueMove(manager, 1, DIR_SOUTH, id);
         }
         return;
     }
     if (input & PAD_KEY_LEFT) {
-        if (facing == 2) {
+        if (facing == DIR_WEST) {
             WiFiPlazaObj_QueueMove(manager, command, facing, id);
         } else {
-            WiFiPlazaObj_QueueMove(manager, 1, 2, id);
+            WiFiPlazaObj_QueueMove(manager, 1, DIR_WEST, id);
         }
         return;
     }
     if (input & PAD_KEY_RIGHT) {
-        if (facing == 3) {
+        if (facing == DIR_EAST) {
             WiFiPlazaObj_QueueMove(manager, command, facing, id);
         } else {
-            WiFiPlazaObj_QueueMove(manager, 1, 3, id);
+            WiFiPlazaObj_QueueMove(manager, 1, DIR_EAST, id);
         }
     }
 }
@@ -612,42 +648,42 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
     int facing;
 
     switch (obj->step) {
-    case 0:
+    case WIFI_PLAZA_WANDER_START_WAIT:
         obj->work.wander.timer = WiFiPlazaObj_RandomPick(sWiFiPlazaObjWanderTimers, 4);
         obj->step++;
         break;
-    case 1:
+    case WIFI_PLAZA_WANDER_WAIT:
         obj->work.wander.timer--;
         if (obj->work.wander.timer == 0) {
             obj->step++;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_WANDER_PICK_MOVE:
         id = Field2DObject_GetParam(obj->gridObj, 4);
         facing = Field2DObject_GetParam(obj->gridObj, 6);
         obj->work.wander.direction = WiFiPlazaObj_RandomPick(sWiFiPlazaObjWanderDirections, 4);
         if (WiFiPlazaObj_IsTagInDirection(manager, obj, obj->work.wander.direction, id + 4) == TRUE) {
             if (facing == obj->work.wander.direction) {
                 WiFiPlazaObj_QueueCommand(manager, obj, 2, obj->work.wander.direction);
-                obj->step = 4;
+                obj->step = WIFI_PLAZA_WANDER_WAIT_MOVE;
             } else {
                 WiFiPlazaObj_QueueCommand(manager, obj, 1, obj->work.wander.direction);
-                obj->step = 3;
+                obj->step = WIFI_PLAZA_WANDER_WAIT_TURN;
             }
         } else {
             WiFiPlazaObj_QueueCommand(manager, obj, 1, obj->work.wander.direction);
-            obj->step = 4;
+            obj->step = WIFI_PLAZA_WANDER_WAIT_MOVE;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_WANDER_WAIT_TURN:
         if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
             WiFiPlazaObj_QueueCommand(manager, obj, 2, obj->work.wander.direction);
             obj->step++;
         }
         break;
-    case 4:
+    case WIFI_PLAZA_WANDER_WAIT_MOVE:
         if (Field2DObject_GetParam(obj->gridObj, 5) == 0) {
-            obj->step = 0;
+            obj->step = WIFI_PLAZA_WANDER_START_WAIT;
         }
         break;
     }
@@ -659,14 +695,14 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
     VecFx32 position;
 
     switch (obj->step) {
-    case 0:
+    case WIFI_PLAZA_RISE_OUT_START:
         WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
         WiFiPlazaObj_InitTween(&obj->work.lift.tween, 0, 0x1F4000, 0x18);
         obj->work.lift.frame = 0x20;
         obj->step++;
         // fallthrough
-    case 1:
+    case WIFI_PLAZA_RISE_OUT_WAIT:
         obj->work.lift.frame--;
         if (obj->work.lift.frame == 0) {
             obj->step++;
@@ -674,7 +710,7 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
             PlaySE(SEQ_SE_DP_TELE2);
         }
         break;
-    case 2:
+    case WIFI_PLAZA_RISE_OUT_RISE:
         done = WiFiPlazaObj_UpdateTween(&obj->work.lift.tween, obj->work.lift.frame);
         obj->work.lift.frame++;
         WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
@@ -686,7 +722,7 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
             obj->finished = TRUE;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_RISE_OUT_DONE:
         break;
     }
 }
@@ -697,7 +733,7 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
     VecFx32 position;
 
     switch (obj->step) {
-    case 0:
+    case WIFI_PLAZA_DROP_IN_START:
         WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
         WiFiPlazaObj_InitTween(&obj->work.lift.tween, 0x1F4000, 0, 0x18);
@@ -705,7 +741,7 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
         obj->step++;
         PlaySE(SEQ_SE_DP_TELE2);
         // fallthrough
-    case 1:
+    case WIFI_PLAZA_DROP_IN_DROP:
         done = WiFiPlazaObj_UpdateTween(&obj->work.lift.tween, obj->work.lift.frame);
         obj->work.lift.frame++;
         WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
@@ -717,7 +753,7 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
             return;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_DROP_IN_WAIT:
         obj->work.lift.frame--;
         if (obj->work.lift.frame == 0) {
             obj->step++;
@@ -726,25 +762,25 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
             obj->finished = TRUE;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_DROP_IN_DONE:
         break;
     }
 }
 
 void WiFiPlazaObj_HandlerSlideLeft(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    WiFiPlazaObj_SlideOneCell(obj, manager, 2);
+    WiFiPlazaObj_SlideOneCell(obj, manager, DIR_WEST);
 }
 
 void WiFiPlazaObj_HandlerSlideRight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    WiFiPlazaObj_SlideOneCell(obj, manager, 3);
+    WiFiPlazaObj_SlideOneCell(obj, manager, DIR_EAST);
 }
 
 void WiFiPlazaObj_HandlerSlideUp(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    WiFiPlazaObj_SlideOneCell(obj, manager, 0);
+    WiFiPlazaObj_SlideOneCell(obj, manager, DIR_NORTH);
 }
 
 void WiFiPlazaObj_HandlerSlideDown(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
-    WiFiPlazaObj_SlideOneCell(obj, manager, 1);
+    WiFiPlazaObj_SlideOneCell(obj, manager, DIR_SOUTH);
 }
 
 // Moves the avatar one cell (16 units) in `direction` over 4 frames, waits, then moves the grid object there.
@@ -759,39 +795,39 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
     u8 dir;
 
     switch (obj->step) {
-    case 0:
+    case WIFI_PLAZA_SLIDE_START:
         WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
         WiFiPlazaPlayerObject_StartEffect(obj->avatar, 0);
         WiFiPlazaPlayerObject_SetEffectStep(obj->avatar, 2);
         WiFiPlazaObj_InitTween(&obj->work.slide.tween, 0, 0x10000, 4);
         WiFiPlazaPlayerObject_GetPosition(obj->avatar, &startPos);
         switch (direction) {
-        case 0:
-        case 1:
+        case DIR_NORTH:
+        case DIR_SOUTH:
             obj->work.slide.start = startPos.z;
             break;
-        case 2:
-        case 3:
+        case DIR_WEST:
+        case DIR_EAST:
             obj->work.slide.start = startPos.x;
             break;
         }
         obj->work.slide.frame = 0;
         obj->step++;
-    case 1:
+    case WIFI_PLAZA_SLIDE_SLIDE:
         done = WiFiPlazaObj_UpdateTween(&obj->work.slide.tween, obj->work.slide.frame);
         obj->work.slide.frame = obj->work.slide.frame + 1;
         WiFiPlazaPlayerObject_GetPosition(obj->avatar, &position);
         switch (direction) {
-        case 0:
+        case DIR_NORTH:
             position.z = obj->work.slide.start - WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
             break;
-        case 1:
+        case DIR_SOUTH:
             position.z = obj->work.slide.start + WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
             break;
-        case 2:
+        case DIR_WEST:
             position.x = obj->work.slide.start - WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
             break;
-        case 3:
+        case DIR_EAST:
             position.x = obj->work.slide.start + WiFiPlazaObj_GetTweenValue(&obj->work.slide.tween);
             break;
         }
@@ -800,19 +836,19 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
             dir = Field2D_GetOppositeDirection(direction);
             obj->work.slide.frame = 4;
             switch (dir) {
-            case 3:
+            case DIR_EAST:
                 obj->work.slide.frame += 2;
-            case 0:
+            case DIR_NORTH:
                 obj->work.slide.frame += 2;
-            case 2:
+            case DIR_WEST:
                 obj->work.slide.frame += 2;
-            case 1:
+            case DIR_SOUTH:
                 break;
             }
             obj->step++;
         }
         break;
-    case 2:
+    case WIFI_PLAZA_SLIDE_WAIT:
         obj->work.slide.frame--;
         if (obj->work.slide.frame == 0) {
             obj->step++;
@@ -826,7 +862,7 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
             obj->finished = 1;
         }
         break;
-    case 3:
+    case WIFI_PLAZA_SLIDE_DONE:
         break;
     }
 }
@@ -838,13 +874,13 @@ void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     s32 degrees;
 
     switch (obj->step) {
-    case 0:
+    case WIFI_PLAZA_HOP_START:
         WiFiPlazaPlayerObject_SetMode(obj->avatar, 0);
         WiFiPlazaPlayerObject_GetPosition(obj->avatar, &obj->work.hop.origin);
         obj->work.hop.frame = 0x1C;
         obj->step++;
         break;
-    case 1:
+    case WIFI_PLAZA_HOP_HOP:
         obj->work.hop.frame--;
         if (obj->work.hop.frame < 0) {
             obj->work.hop.frame = 0x1C;
