@@ -30,6 +30,12 @@ typedef struct TradeSequenceExchange {
     BOOL slideDone;      // 0x20
 } TradeSequenceExchange; // size: 0x24
 
+enum TradeSequenceExchangeSlideStep {
+    TRADE_EXCHANGE_SLIDE_WAIT_FADE_IN,
+    TRADE_EXCHANGE_SLIDE_WAIT_SLIDE,
+    TRADE_EXCHANGE_SLIDE_WAIT_FADE_OUT,
+};
+
 typedef BOOL (*TradeSequenceExchangeStateFunc)(TradeSequenceExchange *exchange, u32 *state);
 
 static BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state);
@@ -149,7 +155,7 @@ static BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, 
 
 static BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_EXCHANGE_SLIDE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             exchange->sentY = FX32_CONST(-384);
             exchange->receivedY = FX32_CONST(80);
@@ -161,14 +167,14 @@ static BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *st
             (*state)++;
         }
         break;
-    case 1:
+    case TRADE_EXCHANGE_SLIDE_WAIT_SLIDE:
         if (exchange->slideDone) {
             PlaySE(SEQ_SE_DP_KOUKAN03);
             BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_EXCHANGE_SLIDE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

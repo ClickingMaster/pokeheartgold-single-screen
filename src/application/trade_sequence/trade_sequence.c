@@ -108,7 +108,7 @@ typedef struct TradeSequenceScene {
     TradeSequenceSceneInitFunc init;
     TradeSequenceSceneMainFunc main;
     TradeSequenceSceneExitFunc exit;
-    u32 tradeModes; // the trade modes (1: full trade, 2: sending only, 4: receiving only) the scene plays in
+    u32 tradeModes; // TradeSequenceMode flags of the trade modes the scene plays in
 } TradeSequenceScene;
 
 static BOOL TradeSequence_BoxMonCantFlip(BoxPokemon *boxMon);
@@ -134,13 +134,13 @@ static const s32 sTradeSequenceBgZoomCenterY[] = { 144, 56 };
 static const TileRect sTradeSequenceMonPicSettings = { 0, 0, 10, 10 };
 
 static const TradeSequenceScene sTradeSequenceScenes[TRADE_SEQUENCE_NUM_SCENES] = {
-    { TradeSequenceSend_Init,     TradeSequenceSend_Main,     TradeSequenceSend_Exit,     1 | 2 },
-    { TradeSequenceDepart_Init,   TradeSequenceDepart_Main,   TradeSequenceDepart_Exit,   1 | 2 },
-    { TradeSequenceRecede_Init,   TradeSequenceRecede_Main,   TradeSequenceRecede_Exit,   1 | 2 },
-    { TradeSequenceExchange_Init, TradeSequenceExchange_Main, TradeSequenceExchange_Exit, 1     },
-    { TradeSequenceApproach_Init, TradeSequenceApproach_Main, TradeSequenceApproach_Exit, 1 | 4 },
-    { TradeSequenceArrive_Init,   TradeSequenceArrive_Main,   TradeSequenceArrive_Exit,   1 | 4 },
-    { TradeSequenceReceive_Init,  TradeSequenceReceive_Main,  TradeSequenceReceive_Exit,  1 | 4 },
+    { TradeSequenceSend_Init,     TradeSequenceSend_Main,     TradeSequenceSend_Exit,     TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_SEND_ONLY    },
+    { TradeSequenceDepart_Init,   TradeSequenceDepart_Main,   TradeSequenceDepart_Exit,   TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_SEND_ONLY    },
+    { TradeSequenceRecede_Init,   TradeSequenceRecede_Main,   TradeSequenceRecede_Exit,   TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_SEND_ONLY    },
+    { TradeSequenceExchange_Init, TradeSequenceExchange_Main, TradeSequenceExchange_Exit, TRADE_SEQUENCE_MODE_FULL                                    },
+    { TradeSequenceApproach_Init, TradeSequenceApproach_Main, TradeSequenceApproach_Exit, TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_RECEIVE_ONLY },
+    { TradeSequenceArrive_Init,   TradeSequenceArrive_Main,   TradeSequenceArrive_Exit,   TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_RECEIVE_ONLY },
+    { TradeSequenceReceive_Init,  TradeSequenceReceive_Main,  TradeSequenceReceive_Exit,  TRADE_SEQUENCE_MODE_FULL | TRADE_SEQUENCE_MODE_RECEIVE_ONLY },
 };
 
 static s32 sTradeSequenceDeferredFreeCount;
@@ -164,16 +164,16 @@ BOOL TradeSequence_Init(OverlayManager *man, int *state) {
             ts->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0179_bin, HEAP_ID_56);
             ts->msgFormat = MessageFormat_New(HEAP_ID_56);
             switch (ts->args->is_ingame) {
-            case 1: // full trade
+            case TRADE_SEQUENCE_MODE_FULL:
                 BufferBoxMonNickname(ts->msgFormat, 0, ts->args->my_boxmon);
                 BufferBoxMonNickname(ts->msgFormat, 1, ts->args->trade_boxmon);
                 BufferPlayersName(ts->msgFormat, 2, ts->args->trade_profile);
                 ts->receivedMonCantFlip = TradeSequence_BoxMonCantFlip(ts->args->trade_boxmon);
                 break;
-            case 2: // sending only (msg 0179: "will be put on offer")
+            case TRADE_SEQUENCE_MODE_SEND_ONLY:
                 BufferBoxMonNickname(ts->msgFormat, 0, ts->args->my_boxmon);
                 break;
-            case 4: // receiving only (msg 0179: "was taken out")
+            case TRADE_SEQUENCE_MODE_RECEIVE_ONLY:
                 BufferBoxMonNickname(ts->msgFormat, 1, ts->args->trade_boxmon);
                 ts->receivedMonCantFlip = TradeSequence_BoxMonCantFlip(ts->args->trade_boxmon);
                 break;

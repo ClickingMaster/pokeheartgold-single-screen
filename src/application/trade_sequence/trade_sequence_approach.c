@@ -73,6 +73,20 @@ typedef struct TradeSequenceApproach {
     TradeSequenceApproachFlight flight; // 0x34
 } TradeSequenceApproach;                // size: 0xB0
 
+enum TradeSequenceApproachStep {
+    TRADE_APPROACH_WAIT_FADE_IN,
+    TRADE_APPROACH_WAIT_SPRITE_ANIM,
+    TRADE_APPROACH_WAIT_FLIGHT,
+    TRADE_APPROACH_WAIT_FADE_OUT,
+};
+
+enum TradeSequenceApproachFlightState {
+    TRADE_APPROACH_FLIGHT_START,
+    TRADE_APPROACH_FLIGHT_LEAVE_VIEW,
+    TRADE_APPROACH_FLIGHT_FLY,
+    TRADE_APPROACH_FLIGHT_END,
+};
+
 typedef BOOL (*TradeSequenceApproachStateFunc)(TradeSequenceApproach *approach, u32 *state);
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
@@ -199,14 +213,14 @@ static BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, 
 
 static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_APPROACH_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             Sprite_SetAnimCtrlSeq(approach->sprite, 3);
             Sprite_SetDrawFlag(approach->sprite, TRUE);
             (*state)++;
         }
         break;
-    case 1:
+    case TRADE_APPROACH_WAIT_SPRITE_ANIM:
         if (!Sprite_IsAnimated(approach->sprite)) {
             PlaySE(SEQ_SE_DP_KOUKAN05);
             TradeSequenceApproach_StartFlight(approach, &approach->flight);
@@ -214,13 +228,13 @@ static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *stat
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_APPROACH_WAIT_FLIGHT:
         if (TradeSequenceApproach_IsFlightDone(&approach->flight)) {
             BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_APPROACH_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -239,25 +253,25 @@ static void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach) {
     InitBgFromTemplate(approach->bgConfig, GF_BG_LYR_SUB_3, &sTradeSequenceApproachBgTemplate, GF_BG_TYPE_TEXT);
     switch (TradeSequence_GetTimeOfDay(approach->ts)) {
     default:
-    case 0:
+    case TRADE_SEQUENCE_BACKDROP_DAY:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 0;
         break;
-    case 1:
+    case TRADE_SEQUENCE_BACKDROP_EVENING:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 32;
         break;
-    case 2:
+    case TRADE_SEQUENCE_BACKDROP_NIGHT:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 64;
         break;
-    case 3:
+    case TRADE_SEQUENCE_BACKDROP_GTS:
         scrnFile = 24;
         charFile = 25;
         palFile = 26;
@@ -364,7 +378,7 @@ static void TradeSequenceApproach_StartFlight(TradeSequenceApproach *approach, T
     flight->angleSpeed = -2736;
     flight->centerStepY = -0x10D3A;
     flight->centerStepZ = 0x936D;
-    flight->state = 0;
+    flight->state = TRADE_APPROACH_FLIGHT_START;
     flight->timer = 0;
     flight->frames = 0;
     flight->rotation.x = 0x2000;
@@ -457,7 +471,7 @@ static void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
     }
 
     switch (flight->state) {
-    case 0:
+    case TRADE_APPROACH_FLIGHT_START:
         TradeSequenceApproach_UpdateFlight(flight);
         TradeSequence_SetModelPosition(flight->ball, &flight->position);
         flight->frames++;
@@ -466,7 +480,7 @@ static void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
             flight->state++;
         }
         break;
-    case 1:
+    case TRADE_APPROACH_FLIGHT_LEAVE_VIEW:
         if (!TradeSequence_IsModelInView(flight->ball)) {
             TradeSequenceApproach_RequestScreenSwap(flight->approach);
             flight->state++;
@@ -477,7 +491,7 @@ static void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
             TradeSequence_SetModelPosition(flight->ball, &flight->position);
         }
         break;
-    case 2:
+    case TRADE_APPROACH_FLIGHT_FLY:
         flight->center.y += flight->centerStepY;
         flight->center.z += flight->centerStepZ;
         TradeSequenceApproach_UpdateFlight(flight);
@@ -488,7 +502,7 @@ static void TradeSequenceApproach_FlightTask(SysTask *task, void *data) {
             flight->state++;
         }
         break;
-    case 3:
+    case TRADE_APPROACH_FLIGHT_END:
         flight->timer++;
         if (flight->timer > 8) {
             flight->task = NULL;

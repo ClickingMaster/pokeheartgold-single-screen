@@ -10,6 +10,19 @@
 // Shared by the TUs of the trade animation app (OVY_71, trade_sequence.h): the app work and the helpers the scenes
 // use. The app's args are a TRADE_ANIM_WORK (trade_anim.h).
 
+enum TradeSequenceMode {
+    TRADE_SEQUENCE_MODE_FULL = 1,
+    TRADE_SEQUENCE_MODE_SEND_ONLY,
+    TRADE_SEQUENCE_MODE_RECEIVE_ONLY = 4,
+};
+
+enum TradeSequenceBackdrop {
+    TRADE_SEQUENCE_BACKDROP_DAY,
+    TRADE_SEQUENCE_BACKDROP_EVENING,
+    TRADE_SEQUENCE_BACKDROP_NIGHT,
+    TRADE_SEQUENCE_BACKDROP_GTS,
+};
+
 typedef struct TradeSequence TradeSequence;
 typedef struct TradeSequencePulses TradeSequencePulses;
 typedef struct TradeSequenceBgZoom TradeSequenceBgZoom;

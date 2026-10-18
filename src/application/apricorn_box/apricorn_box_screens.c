@@ -177,49 +177,49 @@ BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state) {
 BOOL ApricornBoxScreen_Main(OverlayManager *man, int *state) {
     ApricornBoxScreen *screen = OverlayManager_GetData(man);
     switch (*state) {
-    case 0:
+    case APRICORN_BOX_SCREEN_STATE_FADE_IN:
         *state = ApricornBoxScreen_FadeIn(screen);
         break;
-    case 1:
+    case APRICORN_BOX_SCREEN_STATE_FADE_OUT:
         *state = ApricornBoxScreen_FadeOut(screen);
         break;
-    case 2:
+    case APRICORN_BOX_SCREEN_STATE_BLENDER_NEWS:
         *state = ApricornBoxScreen_ShowBlenderNews(screen);
         break;
-    case 3:
+    case APRICORN_BOX_SCREEN_STATE_VIEW:
         *state = ApricornBoxScreen_ViewState(screen);
         break;
-    case 4:
+    case APRICORN_BOX_SCREEN_STATE_BLENDER:
         *state = ApricornBoxScreen_BlenderState(screen);
         break;
-    case 5:
+    case APRICORN_BOX_SCREEN_STATE_KURT:
         *state = ApricornBoxScreen_KurtState(screen);
         break;
-    case 6:
+    case APRICORN_BOX_SCREEN_STATE_KURT_QUANTITY:
         *state = ApricornBoxScreen_KurtQuantityState(screen);
         break;
-    case 7:
+    case APRICORN_BOX_SCREEN_STATE_LIFT_APRICORN:
         *state = ApricornBoxScreen_LiftApricornState(screen);
         break;
-    case 8:
+    case APRICORN_BOX_SCREEN_STATE_DRAG_APRICORN:
         *state = ApricornBoxScreen_DragApricornState(screen);
         break;
-    case 9:
+    case APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN:
         *state = ApricornBoxScreen_PutBackApricornState(screen);
         break;
-    case 10:
+    case APRICORN_BOX_SCREEN_STATE_BLEND_APRICORN:
         *state = ApricornBoxScreen_BlendApricornState(screen);
         break;
-    case 11:
+    case APRICORN_BOX_SCREEN_STATE_JUICE_MENU:
         *state = ApricornBoxScreen_JuiceMenuState(screen);
         break;
-    case 14:
+    case APRICORN_BOX_SCREEN_STATE_WAIT_MESSAGE:
         *state = ApricornBoxScreen_WaitMessageState(screen);
         break;
-    case 15:
+    case APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE:
         *state = ApricornBoxScreen_WaitJuiceTasteState(screen);
         break;
-    case 16:
+    case APRICORN_BOX_SCREEN_STATE_EXIT:
         return TRUE;
     }
     SpriteSystem_DrawSprites(screen->spriteManager);
@@ -311,19 +311,19 @@ static int ApricornBoxScreen_FadeIn(ApricornBoxScreen *screen) {
                 break;
             case APRICORN_BOX_MODE_BLENDER:
                 if (ApricornBox_GetMixState(screen->apricornBox) != 1) {
-                    return 2;
+                    return APRICORN_BOX_SCREEN_STATE_BLENDER_NEWS;
                 }
-                return 4;
+                return APRICORN_BOX_SCREEN_STATE_BLENDER;
             case APRICORN_BOX_MODE_KURT:
-                return 5;
+                return APRICORN_BOX_SCREEN_STATE_KURT;
             default:
                 break;
             }
-            return 3;
+            return APRICORN_BOX_SCREEN_STATE_VIEW;
         }
         break;
     }
-    return 0;
+    return APRICORN_BOX_SCREEN_STATE_FADE_IN;
 }
 
 static int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen) {
@@ -335,11 +335,11 @@ static int ApricornBoxScreen_FadeOut(ApricornBoxScreen *screen) {
     case 1:
         if (IsPaletteFadeFinished()) {
             screen->subState = 0;
-            return 16;
+            return APRICORN_BOX_SCREEN_STATE_EXIT;
         }
         break;
     }
-    return 1;
+    return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
 }
 
 static int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen) {
@@ -364,9 +364,9 @@ static int ApricornBoxScreen_ShowBlenderNews(ApricornBoxScreen *screen) {
         ApricornBoxScreen_SetApricornsFocus(screen, 0);
         ApricornBoxScreen_ClearMessage(screen);
         screen->subState = 0;
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 2;
+    return APRICORN_BOX_SCREEN_STATE_BLENDER_NEWS;
 }
 
 static int ApricornBoxScreen_ViewState(ApricornBoxScreen *screen) {
@@ -387,7 +387,7 @@ static int ApricornBoxScreen_BlenderState(ApricornBoxScreen *screen) {
         return result;
     }
     }
-    return 4;
+    return APRICORN_BOX_SCREEN_STATE_BLENDER;
 }
 
 static int ApricornBoxScreen_KurtState(ApricornBoxScreen *screen) {
@@ -421,7 +421,7 @@ static int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen) {
             ApricornBoxScreen_ShowQuantityPanel(screen, 0);
             ApricornBoxScreen_PrintHeader(screen, 10);
             screen->subState = 0;
-            return 5;
+            return APRICORN_BOX_SCREEN_STATE_KURT;
         }
         ApricornBoxScreen_PrintHeader(screen, 12);
         ApricornBoxScreen_ShowQuantityPanel(screen, 0);
@@ -436,16 +436,16 @@ static int ApricornBoxScreen_KurtQuantityState(ApricornBoxScreen *screen) {
         screen->subState = 0;
         if (result != 0) {
             ApricornBox_SetKurtApricorn(screen->apricornBox, screen->selectedApricorn, screen->quantity);
-            return 1;
+            return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
         }
         ApricornBoxScreen_SetApricornsFocus(screen, 0);
         ApricornBoxScreen_PrintHeader(screen, 10);
         // fallthrough
     default:
         screen->subState = 0;
-        return 5;
+        return APRICORN_BOX_SCREEN_STATE_KURT;
     }
-    return 6;
+    return APRICORN_BOX_SCREEN_STATE_KURT_QUANTITY;
 }
 
 static int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
@@ -474,12 +474,12 @@ static int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
         if (gSystem.newKeys & PAD_BUTTON_A) {
             screen->subState = 0;
             PlaySE(SEQ_SE_DP_BOX01);
-            return 10;
+            return APRICORN_BOX_SCREEN_STATE_BLEND_APRICORN;
         }
         if (gSystem.newKeys & PAD_BUTTON_B) {
             screen->subState = 0;
             PlaySE(SEQ_SE_DP_HYUN2);
-            return 9;
+            return APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN;
         }
         if (System_GetTouchNew()) {
             screen->subState = 0;
@@ -487,14 +487,14 @@ static int ApricornBoxScreen_LiftApricornState(ApricornBoxScreen *screen) {
             if (screen->menuInputState != MENU_INPUT_STATE_TOUCH) {
                 screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
             }
-            return 9;
+            return APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN;
         }
         break;
     default:
         screen->subState = 0;
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 7;
+    return APRICORN_BOX_SCREEN_STATE_LIFT_APRICORN;
 }
 
 static int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen) {
@@ -514,16 +514,16 @@ static int ApricornBoxScreen_DragApricornState(ApricornBoxScreen *screen) {
         switch (result) {
         case 0:
             screen->subState = 0;
-            return 9;
+            return APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN;
         case 1:
             screen->subState = 0;
-            return 10;
+            return APRICORN_BOX_SCREEN_STATE_BLEND_APRICORN;
         default:
             break;
         }
         break;
     }
-    return 8;
+    return APRICORN_BOX_SCREEN_STATE_DRAG_APRICORN;
 }
 
 static int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen) {
@@ -547,9 +547,9 @@ static int ApricornBoxScreen_PutBackApricornState(ApricornBoxScreen *screen) {
     default:
         ApricornBoxScreen_SetApricornsFocus(screen, 0);
         screen->subState = 0;
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 9;
+    return APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN;
 }
 
 static int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
@@ -569,7 +569,7 @@ static int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
         if (ApricornBoxScreen_IsMessageDone(screen)) {
             ApricornBoxScreen_ClearMessage(screen);
             screen->subState = 0;
-            return 9;
+            return APRICORN_BOX_SCREEN_STATE_PUT_BACK_APRICORN;
         }
         break;
     case 2:
@@ -604,9 +604,9 @@ static int ApricornBoxScreen_BlendApricornState(ApricornBoxScreen *screen) {
         ApricornBoxScreen_DrawApricornCount(screen, screen->selectedApricorn);
         ApricornBoxScreen_SetApricornsFocus(screen, 0);
         screen->subState = 0;
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 10;
+    return APRICORN_BOX_SCREEN_STATE_BLEND_APRICORN;
 }
 
 static int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
@@ -626,34 +626,34 @@ static int ApricornBoxScreen_JuiceMenuState(ApricornBoxScreen *screen) {
         screen->subState = 0;
         if ((u32)result >= 2 || result == -2) {
             ApricornBoxScreen_PrintBlenderStatus(screen);
-            return 4;
+            return APRICORN_BOX_SCREEN_STATE_BLENDER;
         }
         if (result == 1) {
             ApricornBoxScreen_PrintHeader(screen, 9);
             ApricornBoxScreen_PrintJuiceTaste(screen);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
+            return APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE;
         }
         screen->app->mode = APRICORN_BOX_MODE_USE_JUICE;
         screen->app->partySlot = 0;
         screen->app->lastRows[0] = screen->lastRowLeft;
         screen->app->lastRows[1] = screen->lastRowRight;
-        return 1;
+        return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
     }
-    return 11;
+    return APRICORN_BOX_SCREEN_STATE_JUICE_MENU;
 }
 
 static int ApricornBoxScreen_WaitMessageState(ApricornBoxScreen *screen) {
-    return ApricornBoxScreen_IsMessageDone(screen) ? 4 : 14;
+    return ApricornBoxScreen_IsMessageDone(screen) ? APRICORN_BOX_SCREEN_STATE_BLENDER : APRICORN_BOX_SCREEN_STATE_WAIT_MESSAGE;
 }
 
 static int ApricornBoxScreen_WaitJuiceTasteState(ApricornBoxScreen *screen) {
     if (ApricornBoxScreen_IsMessageDone(screen)) {
         ApricornBoxScreen_ClearMessage(screen);
         ApricornBoxScreen_PrintBlenderStatus(screen);
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 15;
+    return APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE;
 }
 
 static BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen) {

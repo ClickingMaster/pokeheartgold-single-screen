@@ -141,14 +141,14 @@ static int ApricornBoxScreen_ViewSelect(ApricornBoxScreen *screen, u32 input) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
         screen->selectedApricorn = input;
-        return 3;
+        return APRICORN_BOX_SCREEN_STATE_VIEW;
     }
     if (input == 8) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
+        return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
     }
-    return 3;
+    return APRICORN_BOX_SCREEN_STATE_VIEW;
 }
 
 static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
@@ -166,15 +166,15 @@ static int ApricornBoxScreen_ViewKeys(ApricornBoxScreen *screen) {
     if (ApricornBoxScreen_MoveCursor(screen)) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
-        return 3;
+        return APRICORN_BOX_SCREEN_STATE_VIEW;
     }
-    return 3;
+    return APRICORN_BOX_SCREEN_STATE_VIEW;
 }
 
 static int ApricornBoxScreen_ViewTouch(ApricornBoxScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
     if (input == -1 || input == 7) {
-        return 3;
+        return APRICORN_BOX_SCREEN_STATE_VIEW;
     }
     *hit = 1;
     screen->menuInputState = MENU_INPUT_STATE_TOUCH;
@@ -194,16 +194,16 @@ static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input)
     if (input <= 6) {
         ApricornBoxScreen_UpdateCursor(screen);
         if (screen->apricornCounts[input] == 0) {
-            return 4;
+            return APRICORN_BOX_SCREEN_STATE_BLENDER;
         }
         PlaySE(SEQ_SE_DP_BOX02);
         screen->selectedApricorn = input;
-        return screen->menuInputState == MENU_INPUT_STATE_BUTTONS ? 7 : 8;
+        return screen->menuInputState == MENU_INPUT_STATE_BUTTONS ? APRICORN_BOX_SCREEN_STATE_LIFT_APRICORN : APRICORN_BOX_SCREEN_STATE_DRAG_APRICORN;
     }
     if (input == 8) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
+        return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
     }
     if (input == 7) {
         PlaySE(SEQ_SE_DP_SELECT);
@@ -212,21 +212,21 @@ static int ApricornBoxScreen_BlenderSelect(ApricornBoxScreen *screen, u32 input)
         if (screen->juiceServings == 0 && screen->numBlending == 0) {
             ApricornBoxScreen_PrintMessage(screen, 25, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
+            return APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE;
         }
         if (screen->juiceServings == 0 && screen->numBlending != 0) {
             ApricornBoxScreen_PrintMessage(screen, 27, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
+            return APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE;
         }
         if (screen->juiceServings != 0 && screen->numBlending != 0) {
             ApricornBoxScreen_PrintMessage(screen, 28, TEXT_SPEED_NOTRANSFER);
             ApricornBoxScreen_SetApricornsFocus(screen, 1);
-            return 15;
+            return APRICORN_BOX_SCREEN_STATE_WAIT_JUICE_TASTE;
         }
-        return 11;
+        return APRICORN_BOX_SCREEN_STATE_JUICE_MENU;
     }
-    return 4;
+    return APRICORN_BOX_SCREEN_STATE_BLENDER;
 }
 
 static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
@@ -244,9 +244,9 @@ static int ApricornBoxScreen_BlenderKeys(ApricornBoxScreen *screen) {
     if (ApricornBoxScreen_MoveCursor(screen)) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
-    return 4;
+    return APRICORN_BOX_SCREEN_STATE_BLENDER;
 }
 
 static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
@@ -255,7 +255,7 @@ static int ApricornBoxScreen_BlenderTouch(ApricornBoxScreen *screen, int *hit) {
     input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
     value = 0;
     if (input == ~value) {
-        return 4;
+        return APRICORN_BOX_SCREEN_STATE_BLENDER;
     }
     value = 1;
     *hit = value;
@@ -284,19 +284,19 @@ static int ApricornBoxScreen_KurtSelect(ApricornBoxScreen *screen, u32 input) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
         if (screen->apricornCounts[input] == 0) {
-            return 5;
+            return APRICORN_BOX_SCREEN_STATE_KURT;
         }
         screen->selectedApricorn = input;
         screen->quantity = 1;
         screen->maxQuantity = screen->apricornCounts[screen->selectedApricorn];
-        return 6;
+        return APRICORN_BOX_SCREEN_STATE_KURT_QUANTITY;
     }
     if (input == 8) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_DrawCloseButton(screen, 1);
-        return 1;
+        return APRICORN_BOX_SCREEN_STATE_FADE_OUT;
     }
-    return 5;
+    return APRICORN_BOX_SCREEN_STATE_KURT;
 }
 
 static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
@@ -314,15 +314,15 @@ static int ApricornBoxScreen_KurtKeys(ApricornBoxScreen *screen) {
     if (ApricornBoxScreen_MoveCursor(screen)) {
         PlaySE(SEQ_SE_DP_SELECT);
         ApricornBoxScreen_UpdateCursor(screen);
-        return 5;
+        return APRICORN_BOX_SCREEN_STATE_KURT;
     }
-    return 5;
+    return APRICORN_BOX_SCREEN_STATE_KURT;
 }
 
 static int ApricornBoxScreen_KurtTouch(ApricornBoxScreen *screen, int *hit) {
     int input = TouchscreenHitbox_FindHitboxAtTouchNew(sApricornBoxHitboxes);
     if (input == -1 || input == 7) {
-        return 5;
+        return APRICORN_BOX_SCREEN_STATE_KURT;
     }
     *hit = 1;
     screen->menuInputState = MENU_INPUT_STATE_TOUCH;

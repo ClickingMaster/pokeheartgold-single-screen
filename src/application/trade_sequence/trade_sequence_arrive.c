@@ -70,6 +70,22 @@ typedef struct TradeSequenceArriveAlphaFade {
     TradeSequenceModel *model;  // 0x14
 } TradeSequenceArriveAlphaFade; // size: 0x18
 
+enum TradeSequenceArriveLowerStep {
+    TRADE_ARRIVE_LOWER_WAIT_FADE_IN,
+    TRADE_ARRIVE_LOWER_DELAY,
+    TRADE_ARRIVE_LOWER_WAIT_SCROLL,
+    TRADE_ARRIVE_LOWER_START_PULSES,
+    TRADE_ARRIVE_LOWER_DELAY_FADE,
+    TRADE_ARRIVE_LOWER_WAIT_ALPHA_FADE,
+    TRADE_ARRIVE_LOWER_WAIT_PULSES,
+};
+
+enum TradeSequenceArriveZoomStep {
+    TRADE_ARRIVE_ZOOM_START,
+    TRADE_ARRIVE_ZOOM_DELAY,
+    TRADE_ARRIVE_ZOOM_WAIT_FADE_OUT,
+};
+
 typedef BOOL (*TradeSequenceArriveStateFunc)(TradeSequenceArrive *arrive, u32 *state);
 
 static void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive);
@@ -231,44 +247,44 @@ static BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *s
 
 static BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_ARRIVE_LOWER_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             arrive->timer = 0;
             TradeSequenceArrive_StartLower(arrive, &arrive->lowerTask);
             (*state)++;
         }
         break;
-    case 1:
+    case TRADE_ARRIVE_LOWER_DELAY:
         arrive->timer++;
         if (arrive->timer > 8) {
             TradeSequenceArrive_StartScroll(arrive, &arrive->scrollTask);
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_ARRIVE_LOWER_WAIT_SCROLL:
         if (arrive->scrollTask == NULL && arrive->lowerTask == NULL) {
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_ARRIVE_LOWER_START_PULSES:
         arrive->pulses = TradeSequence_CreatePulses(&arrive->pulsesRunning, -1);
         arrive->timer = 0;
         (*state)++;
         break;
-    case 4:
+    case TRADE_ARRIVE_LOWER_DELAY_FADE:
         arrive->timer++;
         if (arrive->timer > 30) {
             TradeSequenceArrive_StartAlphaFade(arrive->ball, 31, 0, 40, &arrive->alphaFadeTask);
             (*state)++;
         }
         break;
-    case 5:
+    case TRADE_ARRIVE_LOWER_WAIT_ALPHA_FADE:
         if (arrive->alphaFadeTask == NULL) {
             TradeSequence_StopPulses(arrive->pulses);
             (*state)++;
         }
         break;
-    case 6:
+    case TRADE_ARRIVE_LOWER_WAIT_PULSES:
         if (!arrive->pulsesRunning) {
             return TRUE;
         }
@@ -279,19 +295,19 @@ static BOOL TradeSequenceArrive_LowerAndFade(TradeSequenceArrive *arrive, u32 *s
 
 static BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_ARRIVE_ZOOM_START:
         arrive->bgZoom = TradeSequence_StartBgZoom(arrive->bgConfig, FX32_ONE, 0x400, 1, 0x128, 1, &arrive->bgZoomFinished);
         arrive->timer = 0;
         (*state)++;
         break;
-    case 1:
+    case TRADE_ARRIVE_ZOOM_DELAY:
         arrive->timer++;
         if (arrive->timer > 13) {
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_57);
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_ARRIVE_ZOOM_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() && arrive->bgZoomFinished) {
             return TRUE;
         }

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/pokemon.h"
+
 #include "application/pc_box/pc_box_internal.h"
 
 #include "dpad_menu_box.h"
@@ -49,8 +51,8 @@ void PCBox_DepositGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTarget) {
     if (prevTarget != -1) {
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
             v = work->selectedSlot;
-            if (v != 0xFF && v >= 30) {
-                v -= 30;
+            if (v != PC_BOX_SLOT_NONE && v >= PC_BOX_SLOT_PARTY_START) {
+                v -= PC_BOX_SLOT_PARTY_START;
             } else {
                 v = 0;
             }
@@ -93,7 +95,7 @@ void PCBox_DepositBoxGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarge
         work->view->rowCursorPos = newTarget;
     }
     if (newTarget == 0 && prevTarget == 5) {
-        if (work->trayBox + 1 >= 18) {
+        if (work->trayBox + 1 >= NUM_BOXES) {
             work->trayBox = 0;
         } else {
             work->trayBox += 1;
@@ -109,7 +111,7 @@ void PCBox_DepositBoxGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarge
     }
     if (newTarget == 5 && prevTarget == 0) {
         if (work->trayBox - 1 < 0) {
-            work->trayBox = 17;
+            work->trayBox = NUM_BOXES - 1;
         } else {
             work->trayBox -= 1;
         }
@@ -169,7 +171,7 @@ void PCBox_WithdrawGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTarget) 
                 v = 30;
             } else if (v != 30 && v != 33) {
                 v = work->selectedSlot;
-                if (v == 0xFF || v >= 30) {
+                if (v == PC_BOX_SLOT_NONE || v >= PC_BOX_SLOT_PARTY_START) {
                     v = 0;
                 }
             }
@@ -226,7 +228,7 @@ void PCBox_MoveModeGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTarget) 
                 break;
             default:
                 v = work->selectedSlot;
-                if (v >= 30) {
+                if (v >= PC_BOX_SLOT_PARTY_START) {
                     v = 0;
                 }
                 break;
@@ -295,7 +297,7 @@ void PCBox_TrayGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget) {
         work->view->rowCursorPos = newTarget;
     }
     if (newTarget == 37 && prevTarget == 42) {
-        if (work->trayBox + 1 >= 18) {
+        if (work->trayBox + 1 >= NUM_BOXES) {
             work->trayBox = 0;
         } else {
             work->trayBox += 1;
@@ -311,7 +313,7 @@ void PCBox_TrayGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget) {
     }
     if (newTarget == 42 && prevTarget == 37) {
         if (work->trayBox - 1 < 0) {
-            work->trayBox = 17;
+            work->trayBox = NUM_BOXES - 1;
         } else {
             work->trayBox -= 1;
         }
@@ -376,8 +378,8 @@ void PCBox_MoveModePartyGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTar
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
             if ((s32)v >= 8) {
                 v = work->selectedSlot;
-                if (v >= 30) {
-                    v -= 30;
+                if (v >= PC_BOX_SLOT_PARTY_START) {
+                    v -= PC_BOX_SLOT_PARTY_START;
                 } else {
                     v = 0;
                 }
@@ -444,7 +446,7 @@ void PCBox_ItemModeGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTarget) 
                 break;
             default:
                 v = work->selectedSlot;
-                if (v >= 30) {
+                if (v >= PC_BOX_SLOT_PARTY_START) {
                     v = 0;
                 }
                 break;
@@ -488,8 +490,8 @@ void PCBox_ItemModePartyGridOnButton(PCBoxWork *work, u32 newTarget, u32 prevTar
         if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
             if ((s32)v >= 8) {
                 v = work->selectedSlot;
-                if (v >= 30) {
-                    v -= 30;
+                if (v >= PC_BOX_SLOT_PARTY_START) {
+                    v -= PC_BOX_SLOT_PARTY_START;
                 } else {
                     v = 0;
                 }
@@ -537,7 +539,7 @@ void PCBox_BoxMenuGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget) 
         work->view->rowCursorPos = newTarget;
     }
     if (newTarget == 0 && prevTarget == 5) {
-        if (work->trayBox + 1 >= 18) {
+        if (work->trayBox + 1 >= NUM_BOXES) {
             work->trayBox = 0;
         } else {
             work->trayBox += 1;
@@ -553,7 +555,7 @@ void PCBox_BoxMenuGridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget) 
     }
     if (newTarget == 5 && prevTarget == 0) {
         if (work->trayBox - 1 < 0) {
-            work->trayBox = 17;
+            work->trayBox = NUM_BOXES - 1;
         } else {
             work->trayBox -= 1;
         }

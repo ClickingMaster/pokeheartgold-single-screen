@@ -69,6 +69,22 @@ typedef struct TradeSequenceRecede {
     TradeSequenceRecedeFlight flight; // 0x34
 } TradeSequenceRecede;                // size: 0xA4
 
+enum TradeSequenceRecedeStep {
+    TRADE_RECEDE_INIT,
+    TRADE_RECEDE_DELAY,
+    TRADE_RECEDE_WAIT_FLIGHT,
+    TRADE_RECEDE_WAIT_SPRITE_ANIM,
+    TRADE_RECEDE_WAIT_FADE_OUT,
+};
+
+enum TradeSequenceRecedeFlightState {
+    TRADE_RECEDE_FLIGHT_ENTER_VIEW,
+    TRADE_RECEDE_FLIGHT_LEAVE_VIEW,
+    TRADE_RECEDE_FLIGHT_FLY,
+    TRADE_RECEDE_FLIGHT_SHRINK,
+    TRADE_RECEDE_FLIGHT_END,
+};
+
 typedef BOOL (*TradeSequenceRecedeStateFunc)(TradeSequenceRecede *recede, u32 *state);
 
 static void TradeSequenceRecede_Draw(TradeSequenceRecede *recede);
@@ -200,11 +216,11 @@ static BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *s
 
 static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_RECEDE_INIT:
         recede->timer = 0;
         (*state)++;
         break;
-    case 1:
+    case TRADE_RECEDE_DELAY:
         recede->timer++;
         if (recede->timer > 10) {
             PlaySE(SEQ_SE_DP_KOUKAN06);
@@ -213,7 +229,7 @@ static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_RECEDE_WAIT_FLIGHT:
         if (TradeSequenceRecede_IsFlightDone(&recede->flight)) {
             PlaySE(SEQ_SE_DP_KOUKAN07);
             Sprite_SetAnimCtrlSeq(recede->sprite, 3);
@@ -221,13 +237,13 @@ static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_RECEDE_WAIT_SPRITE_ANIM:
         if (!Sprite_IsAnimated(recede->sprite)) {
             BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_RECEDE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -250,25 +266,25 @@ static void TradeSequenceRecede_InitBgs(TradeSequenceRecede *recede) {
 
     switch (TradeSequence_GetTimeOfDay(recede->ts)) {
     default:
-    case 0:
+    case TRADE_SEQUENCE_BACKDROP_DAY:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 0;
         break;
-    case 1:
+    case TRADE_SEQUENCE_BACKDROP_EVENING:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 0x20;
         break;
-    case 2:
+    case TRADE_SEQUENCE_BACKDROP_NIGHT:
         scrnFile = 15;
         charFile = 16;
         palFile = 17;
         palOffset = 0x40;
         break;
-    case 3:
+    case TRADE_SEQUENCE_BACKDROP_GTS:
         scrnFile = 24;
         charFile = 25;
         palFile = 26;
@@ -371,7 +387,7 @@ static void TradeSequenceRecede_StartFlight(TradeSequenceRecede *recede, TradeSe
     flight->angleSpeed = -2736;
     flight->centerStepY = 0x134C4;
     flight->centerStepZ = -0xB2AA;
-    flight->state = 0;
+    flight->state = TRADE_RECEDE_FLIGHT_ENTER_VIEW;
     flight->timer = 0;
     flight->elapsed = 0;
     flight->rotation.x = 0x2000;
@@ -434,7 +450,7 @@ static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
         flight->elapsed++;
     }
     switch (flight->state) {
-    case 0:
+    case TRADE_RECEDE_FLIGHT_ENTER_VIEW:
         flight->center.y += flight->centerStepY;
         flight->center.z += flight->centerStepZ;
         TradeSequenceRecede_UpdateFlight(flight);
@@ -443,7 +459,7 @@ static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
             flight->state++;
         }
         break;
-    case 1:
+    case TRADE_RECEDE_FLIGHT_LEAVE_VIEW:
         if (!TradeSequence_IsModelInView(flight->ball)) {
             TradeSequenceRecede_RequestScreenSwap(flight->recede);
             flight->state++;
@@ -454,7 +470,7 @@ static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
         TradeSequenceRecede_UpdateFlight(flight);
         TradeSequence_SetModelPosition(flight->ball, &flight->position);
         return;
-    case 2:
+    case TRADE_RECEDE_FLIGHT_FLY:
         flight->center.y += flight->centerStepY;
         flight->center.z += flight->centerStepZ;
         TradeSequenceRecede_UpdateFlight(flight);
@@ -465,7 +481,7 @@ static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
             flight->state++;
         }
         break;
-    case 3:
+    case TRADE_RECEDE_FLIGHT_SHRINK:
         TradeSequenceRecede_UpdateFlight(flight);
         TradeSequence_SetModelPosition(flight->ball, &flight->position);
         flight->timer++;
@@ -475,7 +491,7 @@ static void TradeSequenceRecede_FlightTask(SysTask *task, void *data) {
             flight->state++;
         }
         break;
-    case 4:
+    case TRADE_RECEDE_FLIGHT_END:
         flight->timer++;
         if (flight->timer > 8) {
             flight->task = NULL;

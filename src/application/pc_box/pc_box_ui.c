@@ -864,12 +864,12 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
             PCBox_SetupMonMove(work, work->selectedSlot, r);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
             work->selectedSlot = PCBox_GetMoveEntryTarget(work, work->selectedSlot);
-            if (work->selectedSlot < 0x1e) {
+            if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
                 work->view->showOutlineAfterMove = 0;
             } else {
                 work->view->showOutlineAfterMove = 1;
             }
-            if (work->selectedSlot < 0x1e) {
+            if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
                 if (PCBox_GetSlotMonData(work, work->selectedSlot, MON_DATA_SPECIES_EXISTS, NULL) == 0) {
                     view->subState = 3;
                     break;
@@ -898,8 +898,8 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
     case 2:
         if (PCBox_AnimateMoveEntries(work) == 0 && a == 0 && b == 0) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
-            if (work->selectedSlot < 0x1e) {
-                work->selectedSlot = 0xff;
+            if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
+                work->selectedSlot = PC_BOX_SLOT_NONE;
             }
             PCBox_UpdateSelectedIconOutline(work);
             PCBox_SetSelectedIconOutlineVisible(work, work->view->showOutlineAfterMove);
@@ -911,7 +911,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
             PCBox_SlideInPartyPanel(work->view->panels);
             PCBox_ShowSlotMonInfo(work, 0xff);
-            work->selectedSlot = 0xff;
+            work->selectedSlot = PC_BOX_SLOT_NONE;
             view->subState++;
         }
         break;
@@ -966,7 +966,7 @@ u32 PCBox_UpdateBoxTrayDrag(PCBoxWork *work) {
         if (a == 0 && b == 0) {
             PCBoxMoveWork *m = view->temp;
             if (m->to != 0xff && (m->to & 0x80)) {
-                if (m->from >= 0x1e && m->from - 0x1e < (u32)(Party_GetCount(work->party) - 1)) {
+                if (m->from >= PC_BOX_SLOT_PARTY_START && m->from - PC_BOX_SLOT_PARTY_START < (u32)(Party_GetCount(work->party) - 1)) {
                     PCBox_SlideInSummaryButton(work->view->panels);
                 }
             } else {
@@ -1011,7 +1011,7 @@ u32 PCBox_AnimateMoveToPartyEnd(PCBoxWork *work) {
     PCBoxView *view = work->view;
     switch (view->subState) {
     case 0: {
-        u32 n = Party_GetCount(work->party) + 0x1e;
+        u32 n = Party_GetCount(work->party) + PC_BOX_SLOT_PARTY_START;
         PCBox_SetupMonMove(work, work->selectedSlot, n);
         PCBox_SetSelectedIconOutlineVisible(work, 0);
         view->subState++;
@@ -1039,7 +1039,7 @@ u32 PCBox_AnimateMoveToFirstEmptySlot(PCBoxWork *work) {
         PCStorage_FindFirstEmptySlot(work->storage, &boxno, &slotno);
         PCBox_SetupMonMove(work, work->selectedSlot, slotno);
         PCBox_SetSelectedIconOutlineVisible(work, 0);
-        work->selectedSlot = 0xff;
+        work->selectedSlot = PC_BOX_SLOT_NONE;
         view->subState++;
         break;
     case 1:
@@ -1382,7 +1382,7 @@ u32 PCBox_UpdateDepositDrag(PCBoxWork *work) {
             PCBox_SetupDepositMoveEntries(work, work->selectedSlot, value);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
             work->selectedSlot = (u8)PCBox_GetMoveEntryTarget(work, work->selectedSlot);
-            if (work->selectedSlot < 30) {
+            if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
                 view->subState = 5;
                 break;
             }
@@ -1419,7 +1419,7 @@ u32 PCBox_UpdateDepositDrag(PCBoxWork *work) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
             PCBox_ClearMonInfo(work);
             PCBox_SlideInPartyPanel(work->view->panels);
-            work->selectedSlot = 0xff;
+            work->selectedSlot = PC_BOX_SLOT_NONE;
             view->subState = 6;
         }
         break;
@@ -1465,7 +1465,7 @@ u32 PCBox_UpdateWithdrawDrag(PCBoxWork *work) {
             PCBox_SetupMonMoveToPartyEnd(work, work->selectedSlot, value);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
             work->selectedSlot = (u8)PCBox_GetMoveEntryTarget(work, work->selectedSlot);
-            if (work->selectedSlot >= 30) {
+            if (work->selectedSlot >= PC_BOX_SLOT_PARTY_START) {
                 view->subState = 5;
                 break;
             }
@@ -1513,7 +1513,7 @@ u32 PCBox_UpdateWithdrawDrag(PCBoxWork *work) {
     case 5:
         if (PCBox_AnimateMonMove(work) == 0) {
             PCBox_ApplyMoveEntryIcons(work, view->temp);
-            work->selectedSlot = 0xff;
+            work->selectedSlot = PC_BOX_SLOT_NONE;
             PCBox_SlideOutPartyPanel(work->view->panels);
             view->subState++;
         }

@@ -61,6 +61,14 @@ typedef struct PokedexEntryPopup {
     u32 done;                            // 0x254
 } PokedexEntryPopup;
 
+enum PokedexEntryPopupState {
+    POKEDEX_ENTRY_POPUP_STATE_INIT,
+    POKEDEX_ENTRY_POPUP_STATE_WAIT_FADE_IN,
+    POKEDEX_ENTRY_POPUP_STATE_PLAY_CRY,
+    POKEDEX_ENTRY_POPUP_STATE_WAIT_CRY,
+    POKEDEX_ENTRY_POPUP_STATE_DONE,
+};
+
 static void PokedexEntryPopup_Task(SysTask *task, void *data);
 static void PokedexEntryPopup_ReadMonData(PokedexEntryPopup *popup);
 static void PokedexEntryPopup_InitBgs(PokedexEntryPopup *popup);
@@ -235,7 +243,7 @@ OverlayManager *PokedexEntryPopup_Create(PokedexEntryPopupArgs *args) {
     memset(popup, 0, sizeof(PokedexEntryPopup));
     memcpy(popup, args, sizeof(PokedexEntryPopupArgs));
     popup->gfxNarc = NARC_New(NARC_graphic_zukan_gra, popup->heapId);
-    popup->state = 0;
+    popup->state = POKEDEX_ENTRY_POPUP_STATE_INIT;
     popup->done = 0;
     popup->task = SysTask_CreateOnMainQueue(PokedexEntryPopup_Task, popup, 0);
     return (OverlayManager *)popup;
@@ -261,7 +269,7 @@ static void PokedexEntryPopup_Task(SysTask *task, void *data) {
     PokedexEntryPopup *popup = data;
 
     switch (popup->state) {
-    case 0:
+    case POKEDEX_ENTRY_POPUP_STATE_INIT:
         *(vu16 *)REG_BLDCNT_ADDR = 0;
         PokedexEntryPopup_ReadMonData(popup);
         PokedexEntryPopup_InitBgs(popup);
@@ -269,24 +277,24 @@ static void PokedexEntryPopup_Task(SysTask *task, void *data) {
         PokedexEntryPopup_InitSprites(popup);
         PokedexEntryPopup_CreatePokepic(popup);
         PokedexEntryPopup_StartFadeIn(popup);
-        popup->state = 1;
+        popup->state = POKEDEX_ENTRY_POPUP_STATE_WAIT_FADE_IN;
         break;
-    case 1:
+    case POKEDEX_ENTRY_POPUP_STATE_WAIT_FADE_IN:
         if (PokedexEntryPopup_IsFadeDone(popup) == TRUE) {
-            popup->state = 2;
+            popup->state = POKEDEX_ENTRY_POPUP_STATE_PLAY_CRY;
         }
         break;
-    case 2:
+    case POKEDEX_ENTRY_POPUP_STATE_PLAY_CRY:
         PlayCryEx(14, popup->species, 0x1FF, 0x1FF, 0x1FF, 0);
-        popup->state = 3;
+        popup->state = POKEDEX_ENTRY_POPUP_STATE_WAIT_CRY;
         break;
-    case 3:
+    case POKEDEX_ENTRY_POPUP_STATE_WAIT_CRY:
         if (IsCryFinished() == FALSE) {
             popup->done = 1;
-            popup->state = 4;
+            popup->state = POKEDEX_ENTRY_POPUP_STATE_DONE;
         }
         break;
-    case 4:
+    case POKEDEX_ENTRY_POPUP_STATE_DONE:
         break;
     }
     SpriteList_RenderAndAnimateSprites(popup->spriteList);

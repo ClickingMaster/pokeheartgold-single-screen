@@ -42,6 +42,23 @@ typedef struct TradeSequenceReceiveBrightness {
     int frames;                    // 0x10
 } TradeSequenceReceiveBrightness;  // size: 0x14
 
+enum TradeSequenceReceiveMonStep {
+    TRADE_RECEIVE_MON_START_BOUNCE,
+    TRADE_RECEIVE_MON_WAIT_BOUNCE,
+    TRADE_RECEIVE_MON_DELAY,
+    TRADE_RECEIVE_MON_WAIT_BRIGHTNESS,
+    TRADE_RECEIVE_MON_WAIT_END,
+};
+
+enum TradeSequenceReceiveMessageStep {
+    TRADE_RECEIVE_MSG_INIT,
+    TRADE_RECEIVE_MSG_PRINT_RECEIVED,
+    TRADE_RECEIVE_MSG_PRINT_TAKE_CARE,
+    TRADE_RECEIVE_MSG_CLEAR,
+    TRADE_RECEIVE_MSG_FADE_OUT,
+    TRADE_RECEIVE_MSG_WAIT_FADE_OUT,
+};
+
 typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32 *state);
 
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
@@ -244,11 +261,11 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
     u8 cryDelay[4];
 
     switch (*state) {
-    case 0:
+    case TRADE_RECEIVE_MON_START_BOUNCE:
         TradeSequenceReceive_StartBounce(receive, &receive->bounceTask);
         (*state)++;
         // fallthrough
-    case 1:
+    case TRADE_RECEIVE_MON_WAIT_BOUNCE:
         if (receive->bounceTask == NULL) {
             Sprite_SetAnimCtrlSeq(receive->sprites[1], 2);
             Sprite_SetDrawFlag(receive->sprites[1], TRUE);
@@ -257,7 +274,7 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_RECEIVE_MON_DELAY:
         receive->timer++;
         if (receive->timer > 10) {
             Pokepic_SetAttr(receive->pokepic, POKEPIC_VANISHED, FALSE);
@@ -265,7 +282,7 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
             receive->subState++; // = (*state)++
         }
         break;
-    case 3:
+    case TRADE_RECEIVE_MON_WAIT_BRIGHTNESS:
         if (TradeSequenceReceive_IsBrightnessDone(receive)) {
             if (GetBoxMonData(TradeSequence_GetReceivedBoxMon(receive->ts), MON_DATA_IS_EGG, NULL) == FALSE) {
                 NARC_ReadPokepicCryDelay(receive->pokeAnimNarc, cryDelay, TradeSequence_GetReceivedSpecies(receive->ts), 1);
@@ -278,7 +295,7 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_RECEIVE_MON_WAIT_END:
         receive->timer++;
         if (receive->timer > 30) {
             return TRUE;
@@ -290,21 +307,21 @@ static BOOL TradeSequenceReceive_ShowMon(TradeSequenceReceive *receive, u32 *sta
 
 static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_RECEIVE_MSG_INIT:
         receive->timer = 0;
         ++*state;
         break;
-    case 1:
+    case TRADE_RECEIVE_MSG_PRINT_RECEIVED:
         if (++receive->timer > 10) {
             MsgData *msgData = TradeSequence_GetMsgData(receive->ts);
             MessageFormat *msgFormat = TradeSequence_GetMsgFormat(receive->ts);
             int msgId, next;
-            if (TradeSequence_GetTradeMode(receive->ts) == 1) {
+            if (TradeSequence_GetTradeMode(receive->ts) == TRADE_SEQUENCE_MODE_FULL) {
                 msgId = msg_0179_00002;
-                next = 2;
+                next = TRADE_RECEIVE_MSG_PRINT_TAKE_CARE;
             } else {
                 msgId = msg_0179_00005;
-                next = 3;
+                next = TRADE_RECEIVE_MSG_CLEAR;
             }
             ReadMsgDataIntoString(msgData, msgId, receive->msgTemplate);
             StringExpandPlaceholders(msgFormat, receive->msgString, receive->msgTemplate);
@@ -317,7 +334,7 @@ static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32
             *state = next;
         }
         break;
-    case 2:
+    case TRADE_RECEIVE_MSG_PRINT_TAKE_CARE:
         if (TradeSequenceReceive_WaitFramesAndFanfare(receive, 60)) {
             MsgData *msgData = TradeSequence_GetMsgData(receive->ts);
             MessageFormat *msgFormat = TradeSequence_GetMsgFormat(receive->ts);
@@ -330,20 +347,20 @@ static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32
             ++*state;
         }
         break;
-    case 3:
+    case TRADE_RECEIVE_MSG_CLEAR:
         if (TradeSequenceReceive_WaitFramesAndFanfare(receive, 60)) {
             ClearFrameAndWindow2(&receive->window, FALSE);
             receive->timer = 0;
             ++*state;
         }
         break;
-    case 4:
+    case TRADE_RECEIVE_MSG_FADE_OUT:
         if (++receive->timer > 10) {
             BeginNormalPaletteFade(3, 0, 0, RGB_BLACK, 16, 1, HEAP_ID_57);
             ++*state;
         }
         break;
-    case 5:
+    case TRADE_RECEIVE_MSG_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

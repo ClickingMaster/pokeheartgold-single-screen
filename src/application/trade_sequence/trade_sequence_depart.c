@@ -123,6 +123,27 @@ typedef struct TradeSequenceDepartAlphaFade {
     TradeSequenceModel *model;  // 0x10
 } TradeSequenceDepartAlphaFade; // size: 0x14
 
+enum TradeSequenceDepartZoomStep {
+    TRADE_DEPART_ZOOM_WAIT_FADE_IN,
+    TRADE_DEPART_ZOOM_WAIT_ZOOM,
+};
+
+enum TradeSequenceDepartFlyOffStep {
+    TRADE_DEPART_FLY_OFF_INIT,
+    TRADE_DEPART_FLY_OFF_DELAY,
+    TRADE_DEPART_FLY_OFF_WAIT_FLYING_AWAY,
+    TRADE_DEPART_FLY_OFF_WAIT_OUT_OF_VIEW,
+    TRADE_DEPART_FLY_OFF_SWAP_SCREENS,
+};
+
+enum TradeSequenceDepartFlyThroughStep {
+    TRADE_DEPART_FLY_THROUGH_RESTART_FLIGHT,
+    TRADE_DEPART_FLY_THROUGH_STOP_PULSES,
+    TRADE_DEPART_FLY_THROUGH_WAIT_PULSES,
+    TRADE_DEPART_FLY_THROUGH_WAIT_OUT_OF_VIEW,
+    TRADE_DEPART_FLY_THROUGH_WAIT_FADE_OUT,
+};
+
 typedef BOOL (*TradeSequenceDepartStateFunc)(TradeSequenceDepart *depart, u32 *state);
 
 static void TradeSequenceDepart_Draw(TradeSequenceDepart *depart);
@@ -305,13 +326,13 @@ static BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *s
 
 static BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_DEPART_ZOOM_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             sTradeSequenceDepartWaitFrames = 0;
             (*state)++;
         }
         break;
-    case 1:
+    case TRADE_DEPART_ZOOM_WAIT_ZOOM:
         if (sTradeSequenceDepartWaitFrames < 30) {
             sTradeSequenceDepartWaitFrames++;
         }
@@ -325,11 +346,11 @@ static BOOL TradeSequenceDepart_WaitBgZoom(TradeSequenceDepart *depart, u32 *sta
 
 static BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_DEPART_FLY_OFF_INIT:
         depart->timer = 0;
         (*state)++;
         break;
-    case 1:
+    case TRADE_DEPART_FLY_OFF_DELAY:
         if (++depart->timer > 8) {
             TradeSequenceDepart_StartAlphaFade(depart->ball, 0, 31, 24);
             depart->flightTask = TradeSequenceDepart_StartFlight(depart);
@@ -338,17 +359,17 @@ static BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_DEPART_FLY_OFF_WAIT_FLYING_AWAY:
         if (TradeSequenceDepart_IsFlightFlyingAway(depart->flightTask)) {
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_DEPART_FLY_OFF_WAIT_OUT_OF_VIEW:
         if (TradeSequenceDepart_IsFlightOutOfView(depart->flightTask)) {
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_DEPART_FLY_OFF_SWAP_SCREENS:
         TradeSequenceDepart_RequestScreenSwap(depart);
         return TRUE;
     }
@@ -357,25 +378,25 @@ static BOOL TradeSequenceDepart_FlyOffTopScreen(TradeSequenceDepart *depart, u32
 
 static BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depart, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_DEPART_FLY_THROUGH_RESTART_FLIGHT:
         TradeSequenceDepart_RestartFlightFromBelow(depart->flightTask);
         depart->timer = 0;
         (*state)++;
         break;
-    case 1:
+    case TRADE_DEPART_FLY_THROUGH_STOP_PULSES:
         if (++depart->timer > 2) {
             depart->timer = 0;
             TradeSequence_StopPulses(depart->pulses);
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_DEPART_FLY_THROUGH_WAIT_PULSES:
         if (!depart->pulsesRunning) {
             TradeSequenceDepart_StartScroll(depart, &depart->scrollTask);
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_DEPART_FLY_THROUGH_WAIT_OUT_OF_VIEW:
         if (depart->timer < 40) {
             depart->timer++;
             if (depart->timer == 40) {
@@ -387,7 +408,7 @@ static BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depa
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_DEPART_FLY_THROUGH_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

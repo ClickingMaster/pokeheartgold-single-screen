@@ -75,6 +75,22 @@ typedef struct TradeSequenceSendBounce {
     s16 spin;                       // 0x2C
 } TradeSequenceSendBounce;          // size: 0x30
 
+enum TradeSequenceSendMessageStep {
+    TRADE_SEND_MSG_INIT,
+    TRADE_SEND_MSG_PRINT_SENDING,
+    TRADE_SEND_MSG_PRINT_BYE_BYE,
+    TRADE_SEND_MSG_CLEAR,
+    TRADE_SEND_MSG_WAIT_END,
+};
+
+enum TradeSequenceSendReplaceStep {
+    TRADE_SEND_REPLACE_START_FLASH,
+    TRADE_SEND_REPLACE_WAIT_FLASH,
+    TRADE_SEND_REPLACE_WAIT_BALL_ANIM,
+    TRADE_SEND_REPLACE_WAIT_BOUNCES,
+    TRADE_SEND_REPLACE_WAIT_FADE_OUT,
+};
+
 typedef BOOL (*TradeSequenceSendStateFunc)(TradeSequenceSend *send, u32 *state);
 
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
@@ -282,21 +298,21 @@ static BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state) {
 
 static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_SEND_MSG_INIT:
         send->timer = 0;
         (*state)++;
         break;
-    case 1:
+    case TRADE_SEND_MSG_PRINT_SENDING:
         if (++send->timer > 10) {
             MsgData *msgData = TradeSequence_GetMsgData(send->ts);
             MessageFormat *msgFormat = TradeSequence_GetMsgFormat(send->ts);
             int msgId, next;
-            if (TradeSequence_GetTradeMode(send->ts) == 1) {
+            if (TradeSequence_GetTradeMode(send->ts) == TRADE_SEQUENCE_MODE_FULL) {
                 msgId = msg_0179_00000;
-                next = 2;
+                next = TRADE_SEND_MSG_PRINT_BYE_BYE;
             } else {
                 msgId = msg_0179_00004;
-                next = 3;
+                next = TRADE_SEND_MSG_CLEAR;
             }
             ReadMsgDataIntoString(msgData, msgId, send->msgTemplate);
             StringExpandPlaceholders(msgFormat, send->msgString, send->msgTemplate);
@@ -307,7 +323,7 @@ static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) 
             *state = next;
         }
         break;
-    case 2:
+    case TRADE_SEND_MSG_PRINT_BYE_BYE:
         if (++send->timer > 60) {
             MsgData *msgData = TradeSequence_GetMsgData(send->ts);
             MessageFormat *msgFormat = TradeSequence_GetMsgFormat(send->ts);
@@ -327,14 +343,14 @@ static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) 
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_SEND_MSG_CLEAR:
         if (++send->timer > 60) {
             ClearFrameAndWindow2(&send->window, FALSE);
             send->timer = 0;
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_SEND_MSG_WAIT_END:
         if (++send->timer > 20) {
             return TRUE;
         }
@@ -345,12 +361,12 @@ static BOOL TradeSequenceSend_ShowMessages(TradeSequenceSend *send, u32 *state) 
 
 static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *state) {
     switch (*state) {
-    case 0:
+    case TRADE_SEND_REPLACE_START_FLASH:
         PlaySE(SEQ_SE_DP_KOUKAN01);
         TradeSequenceSend_StartBrightness(send, 0, 16, 12);
         (*state)++;
         break;
-    case 1:
+    case TRADE_SEND_REPLACE_WAIT_FLASH:
         if (TradeSequenceSend_IsBrightnessDone(send)) {
             Pokepic_Delete(send->pokepic);
             Sprite_SetAnimCtrlSeq(send->sprites[1], 0);
@@ -358,7 +374,7 @@ static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *
             (*state)++;
         }
         break;
-    case 2:
+    case TRADE_SEND_REPLACE_WAIT_BALL_ANIM:
         if (!Sprite_IsAnimated(send->sprites[1])) {
             TradeSequence_SetModelVisible(send->model, TRUE);
             TradeSequenceSend_StartBrightness(send, 16, 0, 16);
@@ -366,13 +382,13 @@ static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *
             (*state)++;
         }
         break;
-    case 3:
+    case TRADE_SEND_REPLACE_WAIT_BOUNCES:
         if (TradeSequenceSend_GetBounceCount(send) >= 2 || TradeSequenceSend_IsBounceDone(send) == TRUE) {
             BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 24, 1, HEAP_ID_57);
             (*state)++;
         }
         break;
-    case 4:
+    case TRADE_SEND_REPLACE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() && TradeSequenceSend_IsBounceDone(send)) {
             return TRUE;
         }

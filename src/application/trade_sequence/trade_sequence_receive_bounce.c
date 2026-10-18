@@ -10,12 +10,21 @@
 
 // Scene 6 of the trade animation, continued: the ball's bounce task.
 
+enum TradeSequenceReceiveBounceState {
+    TRADE_RECEIVE_BOUNCE_FADE_IN,
+    TRADE_RECEIVE_BOUNCE_START_SPIN,
+    TRADE_RECEIVE_BOUNCE_DELAY,
+    TRADE_RECEIVE_BOUNCE_FALL,
+    TRADE_RECEIVE_BOUNCE_RISE,
+    TRADE_RECEIVE_BOUNCE_WAIT_BRIGHTNESS,
+};
+
 void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
     TradeSequenceReceiveBounce *bounce = data;
 
     TradeSequenceReceive_UpdateSpin(bounce);
     switch (bounce->state) {
-    case 0:
+    case TRADE_RECEIVE_BOUNCE_FADE_IN:
         if (bounce->alphaFrames) {
             bounce->alpha += bounce->alphaStep;
             bounce->alphaFrames--;
@@ -25,19 +34,19 @@ void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
             bounce->state++;
         }
         break;
-    case 1:
+    case TRADE_RECEIVE_BOUNCE_START_SPIN:
         TradeSequenceReceive_SetSpin(bounce, 384, 30);
         bounce->timer = 0;
         bounce->state++;
         break;
-    case 2:
+    case TRADE_RECEIVE_BOUNCE_DELAY:
         bounce->timer++;
         if (bounce->timer > 10) {
             bounce->speed = 0;
             bounce->state++;
         }
         break;
-    case 3: {
+    case TRADE_RECEIVE_BOUNCE_FALL: {
         bounce->position.y += bounce->speed;
         bounce->speed -= 1920;
         TradeSequence_SetModelPosition(bounce->ball, &bounce->position);
@@ -50,7 +59,7 @@ void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
         }
         break;
     }
-    case 4: {
+    case TRADE_RECEIVE_BOUNCE_RISE: {
         bounce->position.y += bounce->speed;
         s32 y = bounce->position.y;
         if (y >= FX32_CONST(19)) {
@@ -62,7 +71,7 @@ void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
         }
         break;
     }
-    case 5:
+    case TRADE_RECEIVE_BOUNCE_WAIT_BRIGHTNESS:
         if (TradeSequenceReceive_IsBrightnessDone(bounce->receive)) {
             TradeSequenceReceive_StopBounce(task);
         }
