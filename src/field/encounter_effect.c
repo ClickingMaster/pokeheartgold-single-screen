@@ -20,6 +20,15 @@ FS_EXTERN_OVERLAY(OVY_118);
 FS_EXTERN_OVERLAY(OVY_119);
 FS_EXTERN_OVERLAY(OVY_120);
 
+enum EncounterEffectFlashState {
+    ENCOUNTER_FLASH_STATE_FADE_OTHER,
+    ENCOUNTER_FLASH_STATE_START,
+    ENCOUNTER_FLASH_STATE_WAIT,
+    ENCOUNTER_FLASH_STATE_START_BACK,
+    ENCOUNTER_FLASH_STATE_WAIT_BACK,
+    ENCOUNTER_FLASH_STATE_END,
+};
+
 // Master brightness fade of one screen (1: main, otherwise sub).
 typedef struct BrightnessInterp {
     EncounterEffectInterp interp;
@@ -161,7 +170,7 @@ void EncounterEffect_StartFlash(int screen, int brightness, int otherBrightness,
 static void Task_EncounterEffectFlash(SysTask *task, void *data) {
     EncounterEffectFlash *flash = data;
     switch (flash->state) {
-    case 0:
+    case ENCOUNTER_FLASH_STATE_FADE_OTHER:
         if (flash->screen == 1) {
             BrightnessInterp_Init(&flash->otherFade, 0, flash->otherBrightness, 2, 8);
         } else if (flash->screen == 2) {
@@ -169,31 +178,31 @@ static void Task_EncounterEffectFlash(SysTask *task, void *data) {
         }
         ++flash->state;
         break;
-    case 1:
+    case ENCOUNTER_FLASH_STATE_START:
         BrightnessInterp_Init(&flash->flash, 0, flash->brightness, flash->screen, 3);
         ++flash->state;
         break;
-    case 2:
+    case ENCOUNTER_FLASH_STATE_WAIT:
         if (BrightnessInterp_Update(&flash->flash)) {
             ++flash->state;
         }
         break;
-    case 3:
+    case ENCOUNTER_FLASH_STATE_START_BACK:
         BrightnessInterp_Init(&flash->flash, flash->brightness, 0, flash->screen, 3);
         ++flash->state;
         break;
-    case 4:
+    case ENCOUNTER_FLASH_STATE_WAIT_BACK:
         if (BrightnessInterp_Update(&flash->flash)) {
             ++flash->flashes;
             if (flash->flashes == flash->count) {
-                flash->state = 5;
+                flash->state = ENCOUNTER_FLASH_STATE_END;
             } else {
-                flash->state = 1;
+                flash->state = ENCOUNTER_FLASH_STATE_START;
             }
         }
         break;
-    case 5:
-        flash->state = 0;
+    case ENCOUNTER_FLASH_STATE_END:
+        flash->state = ENCOUNTER_FLASH_STATE_FADE_OTHER;
         flash->flashes = 0;
         if (flash->done != NULL) {
             *flash->done = TRUE;

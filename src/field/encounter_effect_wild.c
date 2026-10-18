@@ -15,6 +15,18 @@
 // of 32x32 pixels; effect 46 (PKMN Trainer Red) fills the screen in random order and then
 // flashes the palette twice, and effects 2-3 scroll two pictures in with a wavy BG.
 
+enum WildEffectBgLoaderState {
+    BG_LOADER_STATE_LOAD,
+    BG_LOADER_STATE_LOAD_SCREENS,
+    BG_LOADER_STATE_END,
+};
+
+enum WildEffectBgLoaderVBlankState {
+    BG_LOADER_VBLANK_BG1_CHARS,
+    BG_LOADER_VBLANK_BG3_CHARS,
+    BG_LOADER_VBLANK_END,
+};
+
 #define CELL_GRID_WIDTH  8
 #define CELL_GRID_HEIGHT 6
 #define CELL_GRID_SIZE   (CELL_GRID_WIDTH * CELL_GRID_HEIGHT)
@@ -799,17 +811,17 @@ void WildEffectBgLoader_VBlankTask(SysTask *task, void *data) {
     NNSG2dCharacterData *charData;
 
     switch (loader->vBlankState) {
-    case 0:
+    case BG_LOADER_VBLANK_BG1_CHARS:
         charData = loader->charData1;
         BG_LoadCharTilesData(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_1, charData->pRawData, charData->szByte, 0);
         loader->vBlankState++;
         return;
-    case 1:
+    case BG_LOADER_VBLANK_BG3_CHARS:
         charData = loader->charData3;
         BG_LoadCharTilesData(effect->fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, charData->pRawData, charData->szByte, 0);
         loader->vBlankState++;
         return;
-    case 2:
+    case BG_LOADER_VBLANK_END:
         loader->vBlankTask = NULL;
         SysTask_Destroy(task);
         return;
@@ -824,15 +836,15 @@ void WildEffectBgLoader_Task(SysTask *task, void *data) {
 
     GF_ASSERT(effect->narc != NULL);
     switch (loader->state) {
-    case 0:
+    case BG_LOADER_STATE_LOAD:
         GfGfxLoader_GXLoadPalFromOpenNarc(effect->narc, 160, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 32, HEAP_ID_FIELD1);
         loader->charFile1 = WildEffect_LoadCharData(effect->narc, 161, &loader->charData1, HEAP_ID_FIELD1);
         loader->charFile3 = WildEffect_LoadCharData(effect->narc, 164, &loader->charData3, HEAP_ID_FIELD1);
-        loader->vBlankState = 0;
+        loader->vBlankState = BG_LOADER_VBLANK_BG1_CHARS;
         loader->vBlankTask = SysTask_CreateOnVBlankQueue(WildEffectBgLoader_VBlankTask, loader, 0);
         loader->state++;
         return;
-    case 1:
+    case BG_LOADER_STATE_LOAD_SCREENS:
         if (loader->vBlankTask != NULL) {
             return;
         }
@@ -840,7 +852,7 @@ void WildEffectBgLoader_Task(SysTask *task, void *data) {
         WildEffect_LoadScreen(effect->fieldSystem->bgConfig, effect->narc, 165, GF_BG_LYR_MAIN_3);
         loader->state++;
         return;
-    case 2:
+    case BG_LOADER_STATE_END:
         Heap_Free(loader->charFile1);
         Heap_Free(loader->charFile3);
         loader->task = NULL;
@@ -853,7 +865,7 @@ void WildEffectBgLoader_Task(SysTask *task, void *data) {
 
 void WildEffectBgLoader_Start(WildEffectBgLoader *loader, EncounterEffectTask *effect) {
     loader->effect = effect;
-    loader->state = 0;
+    loader->state = BG_LOADER_STATE_LOAD;
     loader->task = SysTask_CreateOnMainQueue(WildEffectBgLoader_Task, loader, 1);
 }
 

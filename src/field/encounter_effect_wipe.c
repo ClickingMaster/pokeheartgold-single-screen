@@ -39,6 +39,11 @@ struct SplitWipe {
     BOOL *done;                  // 0x44
 };
 
+enum EncounterWipeState {
+    WIPE_STATE_RUN,
+    WIPE_STATE_END,
+};
+
 static void Task_StripeWipe_Begin(SysTask *task, void *data);
 static void Task_StripeWipe_Update(SysTask *task, void *data);
 static void StripeWipe_End(StripeWipe *wipe);
@@ -71,7 +76,7 @@ void StripeWipe_Start(EncounterEffectTask *effect, StripeWipe *wipe, u32 stripeH
     effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->stripeHeight = stripeHeight;
-    wipe->state = 0;
+    wipe->state = WIPE_STATE_RUN;
     wipe->done = &effect->wipeDone;
     EncounterEffectQuadInterp_Init(&wipe->offset, start, end, velocity, duration);
     if (start >= 0) {
@@ -100,7 +105,7 @@ static void Task_StripeWipe_Update(SysTask *task, void *data) {
     s32 offset;
 
     switch (wipe->state) {
-    case 0:
+    case WIPE_STATE_RUN:
         if (EncounterEffectQuadInterp_Update(&wipe->offset)) {
             wipe->state++;
         }
@@ -117,7 +122,7 @@ static void Task_StripeWipe_Update(SysTask *task, void *data) {
             reg_G2_WIN1V = 192;
         }
         break;
-    case 1:
+    case WIPE_STATE_END:
         StripeWipe_End(wipe);
         break;
     }
@@ -186,7 +191,7 @@ void SplitWipe_Start(EncounterEffectTask *effect, SplitWipe *wipe, s32 duration,
     effect->wipeDone = FALSE;
     wipe->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
     wipe->middleLine = 96;
-    wipe->state = 0;
+    wipe->state = WIPE_STATE_RUN;
     wipe->done = &effect->wipeDone;
     EncounterEffectQuadInterp_Init(&wipe->x, 0, FX32_CONST(255), velocityX, duration);
     EncounterEffectQuadInterp_Init(&wipe->y, 0, FX32_CONST(96), velocityY, duration);
@@ -211,7 +216,7 @@ static void Task_SplitWipe_Update(SysTask *task, void *data) {
     s32 y;
 
     switch (wipe->state) {
-    case 0:
+    case WIPE_STATE_RUN:
         EncounterEffectQuadInterp_Update(&wipe->y);
         if (EncounterEffectQuadInterp_Update(&wipe->x)) {
             wipe->state++;
@@ -223,7 +228,7 @@ static void Task_SplitWipe_Update(SysTask *task, void *data) {
         reg_G2_WIN1H = 0xFF | ((x << 8) & 0xFF00);
         reg_G2_WIN1V = 192 | (((y + 96) << 8) & 0xFF00);
         break;
-    case 1:
+    case WIPE_STATE_END:
         SplitWipe_End(wipe);
         break;
     }

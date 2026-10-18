@@ -214,6 +214,17 @@ void EncounterEffect_TrainerSpinZoom(SysTask *task, EncounterEffectTask *effect)
     }
 }
 
+enum SpinApartState {
+    SPIN_APART_STATE_LOAD,
+    SPIN_APART_STATE_START_FLASH,
+    SPIN_APART_STATE_WAIT_FLASH,
+    SPIN_APART_STATE_START_SPIN,
+    SPIN_APART_STATE_SPIN,
+    SPIN_APART_STATE_START_WIPE,
+    SPIN_APART_STATE_ZOOM,
+    SPIN_APART_STATE_END,
+};
+
 void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect) {
     u32 state = effect->state;
     SpinApartEffectWork *work = effect->work;
@@ -230,7 +241,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
     int i;
 
     switch (state) {
-    case 0:
+    case SPIN_APART_STATE_LOAD:
         effect->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(SpinApartEffectWork));
         memset(effect->work, 0, sizeof(SpinApartEffectWork));
         work = effect->work;
@@ -246,16 +257,16 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         effect->state++;
         break;
-    case 1:
+    case SPIN_APART_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, -16, &effect->fadeDone, 2);
         effect->state++;
         break;
-    case 2:
+    case SPIN_APART_STATE_WAIT_FLASH:
         if (effect->fadeDone) {
             effect->state++;
         }
         break;
-    case 3:
+    case SPIN_APART_STATE_START_SPIN:
         EncounterEffectInterp_InitFx(&work->position, -FX32_CONST(192), FX32_CONST(192), 8);
         Sprite_SetDrawFlag(work->sprites[0], TRUE);
         Sprite_SetDrawFlag(work->sprites[1], TRUE);
@@ -268,7 +279,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         EncounterEffectInterp_Init(&work->rotation, 0, 0x1FFFE, 8);
         effect->state++;
         break;
-    case 4:
+    case SPIN_APART_STATE_SPIN:
         done = EncounterEffectInterp_UpdateFx(&work->position);
         EncounterEffect_SetVecFx32(&topPos1, FX32_CONST(128) - work->position.value, FX32_CONST(64), 0);
         top1 = topPos1;
@@ -283,20 +294,20 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
             effect->state++;
         }
         break;
-    case 5:
+    case SPIN_APART_STATE_START_WIPE:
         SplitWipe_Start(effect, work->wipe, 8, FX32_ONE, FX32_ONE);
         distance = Camera_GetDistance(work->camera);
         EncounterEffectQuadInterp_Init(&work->cameraDistance, distance, distance - (125 << 14), -FX32_CONST(10), 8);
         effect->state++;
         break;
-    case 6:
+    case SPIN_APART_STATE_ZOOM:
         EncounterEffectQuadInterp_Update(&work->cameraDistance);
         Camera_SetDistance(work->cameraDistance.value, work->camera);
         if (EncounterEffect_IsWipeDone(effect) == TRUE) {
             effect->state++;
         }
         break;
-    case 7:
+    case SPIN_APART_STATE_END:
         SetBothScreensBrightnessByColor(RGB_BLACK);
         if (effect->done != NULL) {
             *effect->done = TRUE;
@@ -310,7 +321,7 @@ void EncounterEffect_TrainerSpinApart(SysTask *task, EncounterEffectTask *effect
         EncounterEffect_Finish(effect, task);
         break;
     }
-    if (effect->state != 7) {
+    if (effect->state != SPIN_APART_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }

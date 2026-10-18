@@ -6,6 +6,30 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
 static const Ov116Sequence sLugiaSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x226000, 0x800, 5, 13 };
 static const Ov116Sequence sHoOhSequence = { 0x28, 5, 8, 0x3C, 0x100, -0x294000, 0x800, 5, 13 };
 
+enum LegendaryEffectState {
+    LEGENDARY_STATE_HIDE_BGS,
+    LEGENDARY_STATE_START_FLASH,
+    LEGENDARY_STATE_WAIT_FLASH,
+    LEGENDARY_STATE_START_PAN,
+    LEGENDARY_STATE_PAN,
+    LEGENDARY_STATE_START_FADE,
+    LEGENDARY_STATE_WAIT_FADE,
+    LEGENDARY_STATE_END,
+};
+
+enum LegendaryBirdEffectState {
+    LEGENDARY_BIRD_STATE_HIDE_BGS,
+    LEGENDARY_BIRD_STATE_START_FLASH,
+    LEGENDARY_BIRD_STATE_WAIT_FLASH,
+    LEGENDARY_BIRD_STATE_START_BLUR,
+    LEGENDARY_BIRD_STATE_PERSPECTIVE,
+    LEGENDARY_BIRD_STATE_START_ZOOM,
+    LEGENDARY_BIRD_STATE_ZOOM,
+    LEGENDARY_BIRD_STATE_START_FADE,
+    LEGENDARY_BIRD_STATE_WAIT_FADE,
+    LEGENDARY_BIRD_STATE_END,
+};
+
 static const Ov116CameraKey sPanKeys[] = {
     { 0x29AEC1, 0xD602, 0,      0x05C1, 4 },
     { 0x29AEC1, 0xCF02, 0xFF00, 0x0601, 4 },
@@ -38,7 +62,7 @@ static void LegendaryEffect_ApplyCameraKey(Ov116FieldSystem *fieldSystem, const 
 void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
     Ov116PanWork *work = task->work;
     switch (task->state) {
-    case 0:
+    case LEGENDARY_STATE_HIDE_BGS:
         task->work = Heap_Alloc(4, sizeof(Ov116PanWork));
         memset(task->work, 0, sizeof(Ov116PanWork));
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
@@ -46,22 +70,22 @@ void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, 0);
         task->state++;
         break;
-    case 1:
+    case LEGENDARY_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 0x10, 0x10, &task->done, 1);
         task->state++;
         break;
-    case 2:
+    case LEGENDARY_STATE_WAIT_FLASH:
         if (task->done != 0) {
             task->state++;
         }
         break;
-    case 3:
+    case LEGENDARY_STATE_START_PAN:
         work->effect = (void *)FieldMotionBlur_Start(3, 0xF);
         work->index = 0;
         work->delay = sPanKeys[work->index].delay;
         task->state++;
         break;
-    case 4:
+    case LEGENDARY_STATE_PAN:
         if (--work->delay < 0) {
             LegendaryEffect_ApplyCameraKey(task->fieldSystem, &sPanKeys[work->index]);
             work->index++;
@@ -72,17 +96,17 @@ void EncounterEffect_Legendary(void *sysTask, Ov116Task *task) {
             }
         }
         break;
-    case 5:
+    case LEGENDARY_STATE_START_FADE:
         BeginNormalPaletteFade(3, 0, 0, 0x7FFF, 10, 1, 4);
         task->state++;
         break;
-    case 6:
+    case LEGENDARY_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             task->done = 0;
             task->state++;
         }
         break;
-    case 7:
+    case LEGENDARY_STATE_END:
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;
@@ -99,7 +123,7 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
     Ov116MoveWork *work = task->work;
     int done;
     switch (task->state) {
-    case 0:
+    case LEGENDARY_BIRD_STATE_HIDE_BGS:
         task->work = Heap_Alloc(4, sizeof(Ov116MoveWork));
         memset(task->work, 0, sizeof(Ov116MoveWork));
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, 0);
@@ -107,16 +131,16 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, 0);
         task->state++;
         break;
-    case 1:
+    case LEGENDARY_BIRD_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 0x10, 0x10, &task->done, 1);
         task->state++;
         break;
-    case 2:
+    case LEGENDARY_BIRD_STATE_WAIT_FLASH:
         if (task->done != 0) {
             task->state++;
         }
         break;
-    case 3: {
+    case LEGENDARY_BIRD_STATE_START_BLUR: {
         s32 start;
         work->effect = (void *)FieldMotionBlur_Start(seq->angleX, seq->angleY);
         start = Camera_GetPerspectiveAngle(task->fieldSystem->camera);
@@ -124,7 +148,7 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
         task->state++;
         break;
     }
-    case 4:
+    case LEGENDARY_BIRD_STATE_PERSPECTIVE:
         done = EncounterEffectInterp_Update(&work->perspectiveInterp[0]);
         Camera_SetPerspectiveAngle((u16)work->perspectiveInterp[0], task->fieldSystem->camera);
         if (done == 1) {
@@ -132,7 +156,7 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
             work->delay = seq->delay;
         }
         break;
-    case 5: {
+    case LEGENDARY_BIRD_STATE_START_ZOOM: {
         s32 start;
         if (--work->delay < 0) {
             start = Camera_GetDistance(task->fieldSystem->camera);
@@ -141,24 +165,24 @@ static void LegendaryEffect_RunBirdSequence(void *sysTask, Ov116Task *task, cons
         }
         break;
     }
-    case 6:
+    case LEGENDARY_BIRD_STATE_ZOOM:
         done = EncounterEffectQuadInterp_Update(&work->distanceInterp[0]);
         Camera_SetDistance(work->distanceInterp[0], task->fieldSystem->camera);
         if (done == 1) {
             task->state++;
         }
         break;
-    case 7:
+    case LEGENDARY_BIRD_STATE_START_FADE:
         BeginNormalPaletteFade(3, 0, 0, 0x7FFF, seq->fadeFrames, 1, 4);
         task->state++;
         break;
-    case 8:
+    case LEGENDARY_BIRD_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             task->done = 0;
             task->state++;
         }
         break;
-    case 9:
+    case LEGENDARY_BIRD_STATE_END:
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0x7FFF);
         FieldMotionBlur_Stop(work);
         *(vu16 *)0x04000050 = 0;

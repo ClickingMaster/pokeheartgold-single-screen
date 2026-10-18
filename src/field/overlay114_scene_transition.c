@@ -1,5 +1,16 @@
 #include "overlay114_scene_transition_private.h"
 
+enum FrontierSingleEffectState {
+    FRONTIER_SINGLE_STATE_LOAD,
+    FRONTIER_SINGLE_STATE_START_FLASH,
+    FRONTIER_SINGLE_STATE_WAIT_FLASH,
+    FRONTIER_SINGLE_STATE_START_FADE_IN,
+    FRONTIER_SINGLE_STATE_FADE_IN,
+    FRONTIER_SINGLE_STATE_START_ZOOM,
+    FRONTIER_SINGLE_STATE_ZOOM,
+    FRONTIER_SINGLE_STATE_END,
+};
+
 void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ctx) {
     VecFx32 scale5;
     VecFx32 scale6;
@@ -9,7 +20,7 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
     Ov114WorkA *work = ctx->work;
 
     switch (ctx->state) {
-    case 0:
+    case FRONTIER_SINGLE_STATE_LOAD:
         ctx->work = Heap_Alloc(HEAP_ID_FIELD1, 0x1a4);
         memset(ctx->work, 0, 0x1a4);
         work = ctx->work;
@@ -21,22 +32,22 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
         ctx->state++;
         break;
-    case 1:
+    case FRONTIER_SINGLE_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, -16, &ctx->fadeDone, 2);
         ctx->state++;
         break;
-    case 2:
+    case FRONTIER_SINGLE_STATE_WAIT_FLASH:
         if (ctx->fadeDone != 0) {
             ctx->state++;
         }
         break;
-    case 3:
+    case FRONTIER_SINGLE_STATE_START_FADE_IN:
         EncounterEffectInterp_Init(&work->fade, 0, 16, 12);
         G2x_SetBlendAlpha_(0x04000050, 0, 15, work->fade.value, 16 - work->fade.value);
         Sprite_SetDrawFlag(work->sprite, TRUE);
         ctx->state++;
         break;
-    case 4:
+    case FRONTIER_SINGLE_STATE_FADE_IN:
         done = EncounterEffectInterp_Update(&work->fade);
         *(vu16 *)0x04000052 = (u16)(((16 - work->fade.value) << 8) | work->fade.value);
         if (done == TRUE) {
@@ -45,7 +56,7 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
             ctx->state++;
         }
         break;
-    case 5:
+    case FRONTIER_SINGLE_STATE_START_ZOOM:
         EncounterEffectQuadInterp_Init(&work->scale, 1 << 12, 0x19a, 1, 6);
         Sprite_SetAffineOverwriteMode(work->sprite, 2);
         EncounterEffect_SetVecFx32(&tmp5, work->scale.value, work->scale.value, work->scale.value);
@@ -55,7 +66,7 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
         BeginNormalPaletteFade(3, 0x10, 0, 0, 6, 1, HEAP_ID_FIELD1);
         ctx->state++;
         break;
-    case 6:
+    case FRONTIER_SINGLE_STATE_ZOOM:
         done = EncounterEffectQuadInterp_Update(&work->scale);
         EncounterEffect_SetVecFx32(&tmp6, work->scale.value, work->scale.value, work->scale.value);
         scale6 = tmp6;
@@ -64,7 +75,7 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
             ctx->state++;
         }
         break;
-    case 7:
+    case FRONTIER_SINGLE_STATE_END:
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0);
         HBlankSystem_Start(ctx->fieldSystem->mapSystems->hBlankSystem);
         if (ctx->done != NULL) {
@@ -77,10 +88,21 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
         break;
     }
 
-    if (ctx->state != 7) {
+    if (ctx->state != FRONTIER_SINGLE_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
+
+enum DoubleEffectState {
+    DOUBLE_EFFECT_STATE_LOAD,
+    DOUBLE_EFFECT_STATE_START_FLASH,
+    DOUBLE_EFFECT_STATE_WAIT_FLASH,
+    DOUBLE_EFFECT_STATE_START_SLIDE,
+    DOUBLE_EFFECT_STATE_SLIDE,
+    DOUBLE_EFFECT_STATE_START_FADE,
+    DOUBLE_EFFECT_STATE_WAIT_FADE,
+    DOUBLE_EFFECT_STATE_END,
+};
 
 void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
     VecFx32 matrix;
@@ -90,7 +112,7 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
     Ov114WorkB *work = ctx->work;
 
     switch (ctx->state) {
-    case 0:
+    case DOUBLE_EFFECT_STATE_LOAD:
         ctx->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(Ov114WorkB));
         memset(ctx->work, 0, sizeof(Ov114WorkB));
         work = ctx->work;
@@ -103,16 +125,16 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
         ctx->state++;
         break;
-    case 1:
+    case DOUBLE_EFFECT_STATE_START_FLASH:
         EncounterEffect_StartFlash(1, 16, -16, &ctx->fadeDone, 2);
         ctx->state++;
         break;
-    case 2:
+    case DOUBLE_EFFECT_STATE_WAIT_FLASH:
         if (ctx->fadeDone != 0) {
             ctx->state++;
         }
         break;
-    case 3:
+    case DOUBLE_EFFECT_STATE_START_SLIDE:
         EncounterEffectQuadInterp_Init(&work->horiz, 0, 2 << 18, 0x19a, 4);
         EncounterEffectQuadInterp_Init(&work->vert, 0, 10 << 16, 0x19a, 4);
         for (i = 0; i < 4; i++) {
@@ -120,7 +142,7 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
         }
         ctx->state++;
         break;
-    case 4:
+    case DOUBLE_EFFECT_STATE_SLIDE:
         i = 0;
         interp = &work->horiz;
         while (i < 2) {
@@ -140,17 +162,17 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
             ctx->state++;
         }
         break;
-    case 5:
+    case DOUBLE_EFFECT_STATE_START_FADE:
         HBlankSystem_Stop(ctx->fieldSystem->mapSystems->hBlankSystem);
         BeginNormalPaletteFade(3, 0x22, 0, 0, 8, 1, HEAP_ID_FIELD1);
         ctx->state++;
         break;
-    case 6:
+    case DOUBLE_EFFECT_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
             ctx->state++;
         }
         break;
-    case 7:
+    case DOUBLE_EFFECT_STATE_END:
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, 0);
         HBlankSystem_Start(ctx->fieldSystem->mapSystems->hBlankSystem);
         if (ctx->done != NULL) {
@@ -165,7 +187,7 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
         break;
     }
 
-    if (ctx->state != 7) {
+    if (ctx->state != DOUBLE_EFFECT_STATE_END) {
         SpriteList_RenderAndAnimateSprites(work->spriteManager.spriteList);
     }
 }
