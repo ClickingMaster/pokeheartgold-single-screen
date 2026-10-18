@@ -5,19 +5,17 @@
 #include "field_system.h"
 #include "field_terrain.h"
 #include "map_object.h"
+#include "map_object_behavior_internal.h"
+#include "map_object_follow_internal.h"
+#include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 
-void MapObject_ExecuteMovementCommand(LocalMapObject *object);
-void MapObject_InitTypeBehavior(LocalMapObject *object);
-BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object);
 const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 u32 MapObject_GetAdjacentTileBehavior(LocalMapObject *object, u32 direction);
 void Reflection_Spawn(LocalMapObject *object, int kind);
 void Reflection_SpawnForFollower(LocalMapObject *object, int kind);
-void TallGrass_Spawn(LocalMapObject *object, int mode);
-void VeryTallGrass_Spawn(LocalMapObject *object, int mode);
 void PuddleSplash_Spawn(LocalMapObject *object, int x, int y, int z);
 void MudSplash_Spawn(LocalMapObject *object, int x, int y, int z);
 void ShallowWaterRipple_Spawn(LocalMapObject *object, int value);

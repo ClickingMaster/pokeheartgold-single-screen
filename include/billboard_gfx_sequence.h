@@ -17,5 +17,6 @@ typedef struct BillboardGfxSequence {
 } BillboardGfxSequence;
 
 void BillboardGfxSequence_Init(const void *data, BillboardGfxSequence *gfxSequence);
+BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *, u32);
 
 #endif // POKEHEARTGOLD_BILLBOARD_GFX_SEQUENCE_H

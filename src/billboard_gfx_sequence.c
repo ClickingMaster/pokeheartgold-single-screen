@@ -2,9 +2,7 @@
 
 #include "global.h"
 
-BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *gfxSequence, const u16 index);
-
-BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *gfxSequence, const u16 index) {
+BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *gfxSequence, u32 index) {
     int i;
     for (i = 0; i < gfxSequence->seqCount - 1; i++) {
         if (gfxSequence->startFrame[i + 1] > index) {

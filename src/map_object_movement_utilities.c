@@ -7,8 +7,6 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 
-int FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
-int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int y, int x, int z, u8 *floorType);
 void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
 BOOL MapObject_IsTileOccupiedInLink(LocalMapObject *self, int x, int y, int z) {
@@ -212,7 +210,8 @@ int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int directi
 u8 MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction) {
     int x = MapObject_GetXCoord(object) + GetDeltaXByFacingDirection(direction);
     int z = MapObject_GetZCoord(object) + GetDeltaYByFacingDirection(direction);
-    return FieldSystem_GetTileAttrBits8To14(MapObject_GetFieldSystem(object), x, z);
+    int attr = FieldSystem_GetTileAttrBits8To14(MapObject_GetFieldSystem(object), x, z);
+    return attr;
 }
 
 void MapObject_OffsetPositionInDirection(LocalMapObject *object, int direction, int distance) {

@@ -1,48 +1,38 @@
+#include "texture_animation.h"
+
 #include "global.h"
 
+#include "ascii_util.h"
+#include "billboard_gfx_sequence.h"
 #include "heap.h"
 #include "vram_transfer_manager.h"
-typedef struct TextureAnimation {
-    void *resource;
+
+struct TextureAnimation {
+    const BillboardGfxSequence *gfxSequence;
     NNSG3dResTex *texture;
     u32 textureKey;
     u32 paletteKey;
     u8 textureIndex;
     u8 paletteIndex;
-} TextureAnimation;
-typedef struct TextureAnimationPool {
+};
+
+struct TextureAnimationPool {
     TextureAnimation *animations;
     int count;
-} TextureAnimationPool;
-typedef struct TextureFrame {
-    u8 texture;
-    u8 palette;
-} TextureFrame;
+};
 
 static void TextureAnimationPool_Clear(TextureAnimationPool *pool);
 static void TextureAnimation_Reset(TextureAnimation *animation);
 static void TextureAnimation_SetFrameIndex(TextureAnimation *animation, u16 frame);
-static void TextureAnimation_LoadTexture(TextureAnimation *animation, TextureFrame *indices);
-static void TextureAnimation_LoadPalette(TextureAnimation *animation, TextureFrame *indices);
-static void *TextureAnimation_GetTextureData(TextureAnimation *animation, TextureFrame *indices);
-static void *TextureAnimation_GetPaletteData(TextureAnimation *animation, TextureFrame *indices);
+static void TextureAnimation_LoadTexture(TextureAnimation *animation, const BillboardTexPlttIndex *indices);
+static void TextureAnimation_LoadPalette(TextureAnimation *animation, const BillboardTexPlttIndex *indices);
+static void *TextureAnimation_GetTextureData(TextureAnimation *animation, const BillboardTexPlttIndex *indices);
+static void *TextureAnimation_GetPaletteData(TextureAnimation *animation, const BillboardTexPlttIndex *indices);
 static u32 Texture_GetImageVramOffset(NNSG3dResTex *texture, u32 *entry);
 static u32 Texture_GetImageSize(NNSG3dResTex *texture, u32 *entry);
 
 void *NNS_G3dGetResDataByName(const NNSG3dResDict *, const NNSG3dResName *);
-u32 BillboardGfxSequence_GetTexPlttIndex(void *, u32);
-void Ascii_SetResName(NNSG3dResName *, const char *);
-TextureAnimationPool *TextureAnimationPool_New(int count, enum HeapID heapID);
-void TextureAnimationPool_Free(TextureAnimationPool *pool);
-TextureAnimation *TextureAnimationPool_Add(TextureAnimationPool *pool, void *resource, NNSG3dResTex *texture, u32 textureKey, u32 paletteKey, fx32 frame);
-void TextureAnimation_Remove(TextureAnimation *animation);
-void TextureAnimation_SetFrame(TextureAnimation *animation, fx32 frame);
-void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
-void *Texture_GetPaletteData(NNSG3dResTex *texture, u32 index);
-u32 Texture_GetImageVramOffsetByName(NNSG3dResTex *texture, const char *name);
-u32 Texture_GetImageVramOffsetByIndex(NNSG3dResTex *texture, u32 index);
-u32 Texture_GetImageSizeByIndex(NNSG3dResTex *texture, u32 index);
-u32 Texture_GetImageSizeByName(NNSG3dResTex *texture, const char *name);
+
 TextureAnimationPool *TextureAnimationPool_New(int count, enum HeapID heapID) {
     TextureAnimationPool *pool = Heap_Alloc(heapID, sizeof(*pool));
     int i;
@@ -58,11 +48,11 @@ void TextureAnimationPool_Free(TextureAnimationPool *pool) {
     Heap_Free(pool->animations);
     Heap_Free(pool);
 }
-TextureAnimation *TextureAnimationPool_Add(TextureAnimationPool *pool, void *resource, NNSG3dResTex *texture, u32 textureKey, u32 paletteKey, fx32 frame) {
+TextureAnimation *TextureAnimationPool_Add(TextureAnimationPool *pool, const BillboardGfxSequence *gfxSequence, NNSG3dResTex *texture, u32 textureKey, u32 paletteKey, fx32 frame) {
     TextureAnimation *animation = NULL;
     int i;
     for (i = 0; i < pool->count; i++) {
-        if (pool->animations[i].resource == NULL) {
+        if (pool->animations[i].gfxSequence == NULL) {
             animation = &pool->animations[i];
             break;
         }
@@ -70,7 +60,7 @@ TextureAnimation *TextureAnimationPool_Add(TextureAnimationPool *pool, void *res
     if (animation == NULL) {
         return NULL;
     }
-    animation->resource = resource;
+    animation->gfxSequence = gfxSequence;
     animation->texture = texture;
     animation->textureKey = textureKey;
     animation->paletteKey = paletteKey;
@@ -92,7 +82,7 @@ void TextureAnimation_SetFrame(TextureAnimation *animation, fx32 frame) {
     TextureAnimation_SetFrameIndex(animation, (u16)(frame >> 12));
 }
 static void TextureAnimation_Reset(TextureAnimation *animation) {
-    animation->resource = NULL;
+    animation->gfxSequence = NULL;
     animation->texture = NULL;
     animation->textureKey = 0;
     animation->paletteKey = 0;
@@ -100,35 +90,31 @@ static void TextureAnimation_Reset(TextureAnimation *animation) {
     animation->paletteIndex = 0;
 }
 static void TextureAnimation_SetFrameIndex(TextureAnimation *animation, u16 frame) {
-    u32 packed = BillboardGfxSequence_GetTexPlttIndex(animation->resource, frame);
-    TextureFrame indices, initial;
-    initial.texture = packed;
-    initial.palette = packed >> 8;
-    indices = initial;
-    if (animation->textureIndex != indices.texture) {
+    BillboardTexPlttIndex indices = BillboardGfxSequence_GetTexPlttIndex(animation->gfxSequence, frame);
+    if (animation->textureIndex != indices.textureIdx) {
         TextureAnimation_LoadTexture(animation, &indices);
     }
-    if (animation->paletteIndex != indices.palette) {
+    if (animation->paletteIndex != indices.plttIdx) {
         TextureAnimation_LoadPalette(animation, &indices);
     }
 }
-static void TextureAnimation_LoadTexture(TextureAnimation *animation, TextureFrame *indices) {
+static void TextureAnimation_LoadTexture(TextureAnimation *animation, const BillboardTexPlttIndex *indices) {
     void *data = TextureAnimation_GetTextureData(animation, indices);
     u32 key = animation->textureKey;
     GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_VRAM, (key & 0xFFFF) << 3, data, ((key & 0x7FFF0000) >> 16) << 4);
-    animation->textureIndex = indices->texture;
+    animation->textureIndex = indices->textureIdx;
 }
-static void TextureAnimation_LoadPalette(TextureAnimation *animation, TextureFrame *indices) {
+static void TextureAnimation_LoadPalette(TextureAnimation *animation, const BillboardTexPlttIndex *indices) {
     void *data = TextureAnimation_GetPaletteData(animation, indices);
     u32 key = animation->paletteKey;
     GF_CreateNewVramTransferTask(NNS_GFD_DST_3D_TEX_PLTT, (key & 0xFFFF) << 3, data, ((key & 0xFFFF0000) >> 16) << 3);
-    animation->paletteIndex = indices->palette;
+    animation->paletteIndex = indices->plttIdx;
 }
-static void *TextureAnimation_GetTextureData(TextureAnimation *animation, TextureFrame *indices) {
-    return Texture_GetImageData(animation->texture, indices->texture);
+static void *TextureAnimation_GetTextureData(TextureAnimation *animation, const BillboardTexPlttIndex *indices) {
+    return Texture_GetImageData(animation->texture, indices->textureIdx);
 }
-static void *TextureAnimation_GetPaletteData(TextureAnimation *animation, TextureFrame *indices) {
-    return Texture_GetPaletteData(animation->texture, indices->palette);
+static void *TextureAnimation_GetPaletteData(TextureAnimation *animation, const BillboardTexPlttIndex *indices) {
+    return Texture_GetPaletteData(animation->texture, indices->plttIdx);
 }
 void *Texture_GetImageData(NNSG3dResTex *texture, u32 index) {
     u32 *entry = texture ? NNS_G3dGetResDataByIdx(&texture->dict, index) : NULL;

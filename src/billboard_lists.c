@@ -5,6 +5,7 @@
 #include "billboard_internal.h"
 #include "gf_3d_render.h"
 #include "heap.h"
+#include "texture_animation.h"
 
 enum BillboardObjectType {
     BILLBOARD_OBJECT_FREE,
@@ -57,12 +58,6 @@ static void BillboardObject_ReleaseTexture(BillboardObject *object);
 static void *BillboardResource_GetFile(BillboardResource *resource, u32 which);
 static const BillboardSequenceRange *BillboardSequence_Get(const BillboardSequenceRange *ranges, u32 index);
 
-void *TextureAnimationPool_New(int count, enum HeapID heapId);
-void TextureAnimationPool_Free(void *arg);
-void *TextureAnimationPool_Add(void *ctx, BillboardGfxSequence *gfxSequence, NNSG3dResTex *texture, NNSG3dTexKey texKey, NNSG3dPlttKey paletteKey, u32 unkB8);
-void TextureAnimation_Remove(void *arg);
-void TextureAnimation_SetFrame(void *, fx32);
-u32 BillboardGfxSequence_GetTexPlttIndex(BillboardGfxSequence *, u32);
 void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *);
 
 Billboard *Billboard_Create(BillboardCreateParams *params);
@@ -586,14 +581,9 @@ void BillboardObject_SetCallback(BillboardObject *object, BillboardCallback call
 }
 
 static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
-    volatile u8 data[4];
-    u32 value = BillboardGfxSequence_GetTexPlttIndex(&object->gfxSequence, (object->frame << 4) >> 16);
-    data[0] = value;
-    data[1] = value >> 8;
-    data[2] = data[0];
-    data[3] = data[1];
-    Billboard_SetModelTexture(object->model, object->resourceTexture, data[2]);
-    Billboard_SetModelPltt(object->model, object->resourceTexture, data[3]);
+    BillboardTexPlttIndex index = BillboardGfxSequence_GetTexPlttIndex(&object->gfxSequence, (object->frame << 4) >> 16);
+    Billboard_SetModelTexture(object->model, object->resourceTexture, index.textureIdx);
+    Billboard_SetModelPltt(object->model, object->resourceTexture, index.plttIdx);
 }
 
 static void Billboard_SetModelTexture(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index) {

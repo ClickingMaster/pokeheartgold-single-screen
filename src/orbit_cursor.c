@@ -14,8 +14,6 @@ typedef struct Vec2f {
 static BOOL OrbitCursor_StepToward(s16 x, s16 y, float fx, float fy, float *outX, float *outY, float speed, s16 minDist);
 
 fx32 FX_Sqrt(fx32 x);
-fx32 GF_SinDeg(u16 deg);
-fx32 GF_CosDeg(u16 deg);
 u16 FX_Atan2Idx(fx32 y, fx32 x);
 
 OrbitCursor *OrbitCursor_New(volatile int count, volatile enum HeapID heapId, volatile int resBase, volatile int fixedPalette, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData) {

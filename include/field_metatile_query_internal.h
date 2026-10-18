@@ -21,40 +21,12 @@ typedef struct FieldAttrVTable {
 
 #define FS_VT(fieldSystem) ((const FieldAttrVTable *)(fieldSystem)->terrainQueries)
 
-int Terrain_AbsDiff(int lhs, int rhs);
-int FieldSystem_GetHeightStep(FieldSystem *fieldSystem, VecFx32 *playerPos, int x, int z, u8 *outKind);
-
 extern int TileIndex_GetQuadrant(int idx, int stride);
 u8 MapLoadManager_GetMapSlotOfMatrixIndex(int chunkIdx, int unused, MapLoadManager *mapLoadManager);
 extern void *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 idx);
-int Terrain_CalcHeight(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
-int Terrain_GetHeight_Bdhc(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
-int Terrain_CalcHeightWithMode(FieldSystem *fieldSystem, int objectHeightMode, int objectHeight, fx32 x, fx32 z, u8 *outKind);
-int Terrain_GetHeight_Simple(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
-BOOL Terrain_GetAttributes_Loaded(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
-BOOL Terrain_GetAttributes_Simple(FieldSystem *fieldSystem, int x, int z, u16 *outAttr);
-u8 FieldSystem_GetTileAttrBits8To14(FieldSystem *fieldSystem, int x, int z);
-int FieldSystem_GetTerrainHeight(FieldSystem *fieldSystem, int objectHeight, fx32 x, fx32 z, u8 *outKind);
 
 extern BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *outIdx);
 extern SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 idx);
 extern int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 idx);
-u32 FieldSystem_CheckCollisionHeightAndGimmick(FieldSystem *fieldSystem, VecFx32 *playerPos, u32 x, u32 y, u32 *outSlope);
-void Terrain_MakeTileRect(int x, int z, int offsetX, int offsetZ, int width, int depth, fx32 *out);
-BOOL MapProp_IsInRect(MapProp *mapProp, fx32 *rect, VecFx32 *offset);
-BOOL FieldSystem_FindMapPropInRect(FieldSystem *fieldSystem, int buildModel, fx32 *rect, MapProp **outProp);
-BOOL FieldSystem_FindMapPropOfModelsInRect(FieldSystem *fieldSystem, int *models, u32 count, fx32 *rect, MapProp **outProp, int *outModel);
-BOOL FieldSystem_FindMapProp(FieldSystem *fieldSystem, int buildModel, MapProp **outProp, int *outIdx);
-BOOL FieldSystem_FindMapPropOfModels(FieldSystem *fieldSystem, int *models, u32 count, MapProp **outProp, int *outModel);
-int *FieldSystem_CollectMapPropModelsInRect(FieldSystem *fieldSystem, u32 heapId, int count, fx32 *rect, int fill);
-void Terrain_GetChunkOrigin(int idx, int width, VecFx32 *pos);
-BOOL MapModelNo_IsInTableD0ToD3(u16 a0);
-BOOL MapModelNo_HasNoAreaMapAnimation(u16 a0);
-
-SoundplateStruct *FieldSystem_GetSoundplateAt(FieldSystem *fieldSystem, int x, int z);
-void FieldSystem_SetTerrainQueries(void **queries, int mode);
-BOOL FieldSystem_CheckTileCollision(FieldSystem *fieldSystem, int x, int z);
-u8 GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z);
-BOOL FieldSystem_CheckCollisionAndHeight(FieldSystem *fieldSystem, VecFx32 *playerPos, int xInFront, int yInFront, int outSlope);
 
 #endif

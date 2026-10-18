@@ -16,8 +16,10 @@
 #include "gymmick_init.h"
 #include "map_object.h"
 #include "map_object_movement_commands.h"
+#include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities.h"
 #include "metatile_behavior.h"
+#include "overlay_04.h"
 #include "player_avatar.h"
 #include "player_avatar_actions.h"
 #include "sound_playback.h"
@@ -37,17 +39,13 @@ typedef struct FootstepSound {
 
 typedef BOOL (*ForcedMovementFunc)(PlayerAvatar *avatar, int value);
 
-int GetMovementDirection(u32 movement);
 int MapObject_GetTileAttrBits8To14InDirection(LocalMapObject *object, int direction);
-int GetMovementForDirection(int direction, int movement);
 BOOL MapObject_IsOnBridge(LocalMapObject *object, int tile);
 BOOL MapObject_IsOutsideMovementRange(LocalMapObject *object, int x, int y, int z);
 BOOL MapObject_IsMoveBlockedByBehavior(LocalMapObject *object, int x, int z, int direction);
 void OffsetPositionInDirection(int direction, VecFx32 *position, int distance);
-void FuchsiaGymmick_CheckCollision(FieldSystem *fieldSystem, int x, int z);
 void Sound_ApplyFootstepVariation(u16 sequence);
 int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *object, int direction);
-void Field_PlayerAvatar_TryEnterPoketchPose(PlayerAvatar *avatar);
 
 // PlayerAvatar_IsBikeBlockedInDirection passes the behavior as a full word (matched against int parameters).
 #define MetatileBehavior_IsVeryTallGrass_Int(behavior) ((BOOL(*)(u32))MetatileBehavior_IsVeryTallGrass)(behavior)
@@ -107,17 +105,9 @@ static void PlayerAvatar_GetCoordsInDirection(PlayerAvatar *avatar, int directio
 static void PlayerAvatar_CountStep(PlayerAvatar *avatar);
 static BOOL PlayerAvatar_IsOnCyclingRoadSlope(PlayerAvatar *avatar, int behavior, int value);
 
-int PlayerAvatar_CheckReadyToMove(PlayerAvatar *avatar, int direction, int keys, int heldKeys);
-BOOL ForcedMovement_None(PlayerAvatar *avatar, int value);
-BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value);
-BOOL ForcedMovement_CyclingRoadSlope(PlayerAvatar *avatar, int value);
-u32 PlayerAvatar_CheckCollision(PlayerAvatar *avatar, LocalMapObject *mapObject, int direction);
-BOOL PlayerAvatar_IsReadyOrBumpingWall(PlayerAvatar *avatar);
-int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction);
-u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int allowRun, int collision);
-BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar);
-void PlayerAvatar_SetMovement(PlayerAvatar *avatar, int movement);
-void PlayerAvatar_GetMetatileBehaviorInDirection(PlayerAvatar *avatar, int direction);
+static BOOL ForcedMovement_None(PlayerAvatar *avatar, int value);
+static BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value);
+static BOOL ForcedMovement_CyclingRoadSlope(PlayerAvatar *avatar, int value);
 
 static const ForcedMovementFunc sPlayerForcedMovementFuncs[] = {
     ForcedMovement_None,
@@ -444,12 +434,12 @@ static BOOL PlayerAvatar_RunForcedMovement(PlayerAvatar *avatar, int kind, int v
     return FALSE;
 }
 
-BOOL ForcedMovement_None(PlayerAvatar *avatar, int value) {
+static BOOL ForcedMovement_None(PlayerAvatar *avatar, int value) {
     PlayerAvatar_EndForcedMovement(avatar);
     return FALSE;
 }
 
-BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value) {
+static BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     int direction = MapObject_GetNextFacingDirection(mapObject);
     int slope = PlayerAvatar_GetSlopeInDirection(avatar, direction);
@@ -485,7 +475,7 @@ BOOL ForcedMovement_Ice(PlayerAvatar *avatar, int value) {
     return TRUE;
 }
 
-BOOL ForcedMovement_CyclingRoadSlope(PlayerAvatar *avatar, int value) {
+static BOOL ForcedMovement_CyclingRoadSlope(PlayerAvatar *avatar, int value) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     if (PlayerAvatar_CheckCollision(avatar, mapObject, DIR_SOUTH) == 0) {
         PlayerAvatar_SetObjectMovement(avatar, mapObject, GetMovementForDirection(DIR_SOUTH, 0x14));

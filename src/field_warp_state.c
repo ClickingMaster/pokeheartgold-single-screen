@@ -26,6 +26,7 @@
 #include "sound_chatot.h"
 #include "sound_playback.h"
 #include "spawn_warp.h"
+#include "spawn_warp_lookup_internal.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "task.h"
@@ -42,9 +43,6 @@ struct FlyTaskEnv {
     void *effect;
     EventObjectMovementMan *movement;
 };
-
-u32 GetSpawnIdForFlyMap(u32 mapId);
-void FlypointFlagAction(FieldSystem *fieldSystem, u32 mapId);
 
 enum FlyTaskState {
     FLY_TASK_WAIT_FOLLOW_MON,

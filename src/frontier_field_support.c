@@ -67,23 +67,23 @@ typedef struct FieldSystemFrontierFsysView {
 extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
 extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
 
-u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
-u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
-u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
-u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
-BOOL Task_FrontierPartySelect(TaskManager *taskManager);
+static u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
+static u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
+static u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
+static u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
+static BOOL Task_FrontierPartySelect(TaskManager *taskManager);
 void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void **runningApp, u8 context, u8 summaryMode, u8 minMons, u8 maxMons, u8 maxLevel, u8 partySlot);
-u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
-u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
-BOOL Task_FrontierWifiConnection(TaskManager *taskManager);
+static u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
+static u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
+static BOOL Task_FrontierWifiConnection(TaskManager *taskManager);
 void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 mode, u16 outputVar, u16 connectNow);
-BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
+static BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar);
 u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
 u32 BattleTower_GetRecordMilestone(SaveData *saveData);
 void FrontierFieldSystem_AddBattleTotals(FieldSystemFrontierFsysView *outer, const int *delta);
 u32 BattleTower_NextRandom(u32 value);
-u32 BattleTower_NextSeed(u32 value);
+static u32 BattleTower_NextSeed(u32 value);
 u32 BattleTower_InitSeed(SaveData *saveData);
 u32 BattleTower_AdvanceSeed(SaveData *saveData);
 u32 BattleTower_RestoreRandom(SaveData *saveData);
@@ -100,7 +100,7 @@ enum {
 
 static const u8 sFrontierSummaryPages[] = { 0, 1, 2, 3, 4 };
 
-u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
+static u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
     PartyMenuArgs *args = Heap_AllocAtEnd(heapId, sizeof(PartyMenuArgs));
     SaveData *saveData = fieldSystem->saveData;
     u8 i;
@@ -123,7 +123,7 @@ u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem
     return PARTY_SELECT_WAIT_PARTY_MENU;
 }
 
-u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
+static u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
     PartyMenuArgs *args;
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return PARTY_SELECT_WAIT_PARTY_MENU;
@@ -144,7 +144,7 @@ u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *
     return PARTY_SELECT_LAUNCH_SUMMARY;
 }
 
-u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
+static u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
     SaveData *saveData = fieldSystem->saveData;
     PokemonSummaryArgs *args = Heap_AllocAtEnd(heapId, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
@@ -167,7 +167,7 @@ u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *
     return PARTY_SELECT_WAIT_SUMMARY;
 }
 
-u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
+static u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
     PokemonSummaryArgs *args;
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return PARTY_SELECT_WAIT_SUMMARY;
@@ -179,7 +179,7 @@ u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fi
     return PARTY_SELECT_LAUNCH_PARTY_MENU;
 }
 
-BOOL Task_FrontierPartySelect(TaskManager *taskManager) {
+static BOOL Task_FrontierPartySelect(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FrontierPartySelectEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = &env->state;
@@ -223,7 +223,7 @@ enum {
     WIFI_CONNECTION_EXIT,
 };
 
-u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
+static u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
     if (Comm_HasWifiProfile(fieldSystem->saveData)) {
         env->app = NintendoWifiConnection_LaunchApp(fieldSystem, env->arg1, env->arg2);
         return WIFI_CONNECTION_WAIT;
@@ -232,7 +232,7 @@ u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *f
     return WIFI_CONNECTION_EXIT;
 }
 
-u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
+static u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return WIFI_CONNECTION_WAIT;
     }
@@ -241,7 +241,7 @@ u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fie
     return WIFI_CONNECTION_EXIT;
 }
 
-BOOL Task_FrontierWifiConnection(TaskManager *taskManager) {
+static BOOL Task_FrontierWifiConnection(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FrontierWifiConnectionEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
@@ -269,7 +269,7 @@ void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 mode, 
     TaskManager_Call(fieldSystem->taskman, Task_FrontierWifiConnection, env);
 }
 
-BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager) {
+static BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FrontierLinkPartnerCheckEnv *env = TaskManager_GetEnvironment(taskManager);
     u16 *linkData = LinkSync_GetPacket(1 - Comm_GetLocalNetId());
@@ -403,7 +403,7 @@ u32 BattleTower_NextRandom(u32 value) {
     return value * 0x02E90EDD + 1;
 }
 
-u32 BattleTower_NextSeed(u32 value) {
+static u32 BattleTower_NextSeed(u32 value) {
     return value * 0x5D588B65 + 1;
 }
 

@@ -6,6 +6,7 @@
 #include "field_emote_mark.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_follow_internal.h"
 #include "map_object_movement_commands_internal.h"
 #include "map_object_movement_utilities.h"
 #include "map_object_movement_utilities_internal.h"
@@ -93,8 +94,6 @@ enum MovementScriptMachineState {
     MOVEMENT_SCRIPT_DONE,
 };
 
-int HiddenObjectMovement_GetCoverEffect(LocalMapObject *object);
-void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 void TrainerReveal_Spawn(LocalMapObject *object);
 
 extern const MovementScriptStateFunc sMovementScriptMachineStateFuncs[];
