@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_GTS_INTERNAL_H
 #define POKEHEARTGOLD_GTS_INTERNAL_H
 
+#include "dwc/net_common_internal.h"
 #include "nnsys/fnd/expheap.h"
 
 #include "bg_window.h"
@@ -229,7 +230,7 @@ struct GtsApp {
     int connectionErrorType;                 // 0x0048
     void *heapMemory;                        // 0x004C
     NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
-    u8 wifiConnection[0x64];                 // 0x0054, passed to DWC_InitInetEx when connecting (screen 0)
+    NetConnection wifiConnection;            // 0x0054, passed to DWC_InitInetEx when connecting (screen 0)
     OverlayManager *tradeSequence;           // 0x00B8
     PokemonSummaryArgs summaryArgs;          // 0x00BC, of screen 8
     TRADE_ANIM_WORK tradeAnim;               // 0x00F8, args of the trade sequence (OVY_71)
@@ -340,11 +341,7 @@ struct GtsApp {
 int GtsServer_GetErrorResult(int error);
 
 // Helpers shared by the GTS screens.
-void Gts_SetupWindow0(void);
-void Gts_InitObjTransfer(void);
-void Gts_InitSpriteResources(GtsApp *app);
 void Gts_InitSpriteTemplate(SpriteTemplate *template, GtsApp *app, const SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE screen);
-void Gts_InitSpriteResourcesHeaders(GtsApp *app);
 YesNoPrompt *Gts_CreateYesNoPrompt(BgConfig *bgConfig, u8 y, int tileStart, u32 palette, u8 dimScreen);
 YesNoPrompt *Gts_CreateYesNoPromptOnBg(BgConfig *bgConfig, u8 y, int tileStart, u32 palette, int bgId, u8 dimScreen);
 YesNoResponse Gts_HandleYesNoPrompt(GtsApp *app);
@@ -356,14 +353,11 @@ int Gts_GetWifiIconLevel(void);
 void Gts_SetNextScreen(GtsApp *app, int screen, int arg);
 void Gts_SwitchScreen(GtsApp *app);
 int Gts_GetTextFrameDelay(GtsApp *app);
-void Gts_InitGraphics(GtsApp *app);
-void Gts_FreeGraphics(GtsApp *app);
 void Gts_StartCountingBoxMons(GtsApp *app);
 void Gts_CreateWaitingIcon(GtsApp *app);
 void Gts_DeleteWaitingIcon(GtsApp *app);
 void Gts_SetSpritePosition(Sprite *sprite, int x, int y);
 void Gts_DimScreen(BOOL mainScreen);
-void Gts_ClearDim(void);
 
 // The GTS main menu.
 void Gts_InitSubScreenBgs(BgConfig *bgConfig, int bg1Y, BOOL keepBg2Tilemap);
@@ -414,9 +408,7 @@ void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showGend
 void Gts_PrintGenderNoTransfer(Window *window, MsgData *msgData, int gender, BOOL showGenderless, int x, int y, u32 color);
 void Gts_PrintLevelRange(Window *window, MsgData *msgData, int levelRange, int align, int y, u32 color, int kind);
 void Gts_PrintLevelRangeAt(Window *window, MsgData *msgData, int levelRange, int align, int x, int y, u32 color, int kind);
-void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
 void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
-u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count);
 u16 *Gts_LoadSpeciesByLetter(enum HeapID heapID, int letter, u32 *count);
 void *Gts_CreateJohtoDexFlags(enum HeapID heapID);
 void Gts_InitRecord(GtsRecord *record, GtsApp *app);

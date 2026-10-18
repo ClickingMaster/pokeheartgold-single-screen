@@ -148,10 +148,6 @@ typedef struct GtsSelectorLetterGroup {
     int count;
 } GtsSelectorLetterGroup;
 
-void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
-void BgCellManager_DrawCell(BgCellManager *manager, int index);
-void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
-void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 
 extern int (*const sGtsSelectorStates[])(GtsSelector *selector);
 extern const GtsSelectorWindowPosition sGtsSelectorGenderWindowPositions[];
@@ -184,29 +180,39 @@ extern const GtsSelectorLetterGroup gGtsSelectorLetterGroups[];
 // The message of each letter, A .. Z.
 extern const int sGtsSelectorLetterMsgs[];
 
-void GtsSelector_AddWindows(GtsSelector *selector, int page);
-void GtsSelector_RemoveWindows(GtsSelector *selector, int page);
-int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page);
-int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled);
-int GtsSelector_GetLetter(GtsSelector *selector, int button);
-int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled);
-int GtsSelector_CountPages(int count, int perPage);
-int GtsSelector_SelectSpeciesButton(GtsSelector *selector, int button);
-void GtsSelector_ChangeSpeciesPage(GtsSelector *selector, int direction);
-int GtsSelector_HandleSpeciesListInput(GtsSelector *selector);
-int GtsSelector_HandleGenderInput(GtsSelector *selector);
-void GtsSelector_ChangeLevelPage(GtsSelector *selector, int direction);
-int GtsSelector_SelectLevelButton(GtsSelector *selector, int button);
-int GtsSelector_HandleLevelInput(GtsSelector *selector);
-int GtsSelector_GetCountryGroup(GtsSelector *selector, int button);
-int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled);
-int GtsSelector_SelectCountryButton(GtsSelector *selector, int button);
-void GtsSelector_ChangeCountryPage(GtsSelector *selector, int direction);
-int GtsSelector_HandleCountryListInput(GtsSelector *selector);
-void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y);
-void GtsSelector_ShowGenders(GtsSelector *selector);
-void GtsSelector_ShowLevels(GtsSelector *selector);
-void GtsSelector_PrintString(BgCellManager *cellManager, Window *window, String *string, int x, u32 color);
+static void GtsSelector_AddWindows(GtsSelector *selector, int page);
+static void GtsSelector_RemoveWindows(GtsSelector *selector, int page);
+static int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page);
+static int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled);
+static int GtsSelector_GetLetter(GtsSelector *selector, int button);
+static int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled);
+static int GtsSelector_CountPages(int count, int perPage);
+static int GtsSelector_SelectSpeciesButton(GtsSelector *selector, int button);
+static void GtsSelector_ChangeSpeciesPage(GtsSelector *selector, int direction);
+static int GtsSelector_HandleSpeciesListInput(GtsSelector *selector);
+static int GtsSelector_HandleGenderInput(GtsSelector *selector);
+static void GtsSelector_ChangeLevelPage(GtsSelector *selector, int direction);
+static int GtsSelector_SelectLevelButton(GtsSelector *selector, int button);
+static int GtsSelector_HandleLevelInput(GtsSelector *selector);
+static int GtsSelector_GetCountryGroup(GtsSelector *selector, int button);
+static int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled);
+static int GtsSelector_SelectCountryButton(GtsSelector *selector, int button);
+static void GtsSelector_ChangeCountryPage(GtsSelector *selector, int direction);
+static int GtsSelector_HandleCountryListInput(GtsSelector *selector);
+static void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y);
+static void GtsSelector_ShowGenders(GtsSelector *selector);
+static void GtsSelector_ShowLevels(GtsSelector *selector);
+static void GtsSelector_PrintString(BgCellManager *cellManager, Window *window, String *string, int x, u32 color);
+static int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, const u16 *species);
+static int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex);
+static void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count);
+static void GtsSelector_PrintCountryPage(GtsSelector *selector, int page, int count);
+static void GtsSelector_PrintMessage(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId, int x, u32 color);
+static void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId);
+static void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *printer, Window *window, int page, int pageCount);
+static int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter);
+static BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group);
+
 int GtsSelector_Idle(GtsSelector *selector);
 int GtsSelector_WaitShow(GtsSelector *selector);
 int GtsSelector_WaitMove(GtsSelector *selector);
@@ -219,10 +225,6 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector);
 int GtsSelector_HandleSpeciesLetters(GtsSelector *selector);
 int GtsSelector_CloseSpeciesLetters(GtsSelector *selector);
 int GtsSelector_BackToSpeciesLetters(GtsSelector *selector);
-int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, const u16 *species);
-int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex);
-void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count);
-void GtsSelector_PrintCountryPage(GtsSelector *selector, int page, int count);
 int GtsSelector_OpenSpeciesList(GtsSelector *selector);
 int GtsSelector_HandleSpeciesList(GtsSelector *selector);
 int GtsSelector_CancelSpeciesList(GtsSelector *selector);
@@ -245,13 +247,8 @@ int GtsSelector_FinishGender(GtsSelector *selector);
 int GtsSelector_OpenLevels(GtsSelector *selector);
 int GtsSelector_HandleLevels(GtsSelector *selector);
 int GtsSelector_FinishLevel(GtsSelector *selector);
-void GtsSelector_PrintMessage(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId, int x, u32 color);
-void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId);
-void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *printer, Window *window, int page, int pageCount);
-int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter);
-BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group);
 
-void GtsSelector_AddWindows(GtsSelector *selector, int page) {
+static void GtsSelector_AddWindows(GtsSelector *selector, int page) {
     int i;
     switch (page) {
     case GTS_SELECTOR_PAGE_SPECIES_GROUPS:
@@ -323,7 +320,7 @@ void GtsSelector_AddWindows(GtsSelector *selector, int page) {
     }
 }
 
-void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
+static void GtsSelector_RemoveWindows(GtsSelector *selector, int page) {
     s8 position[2];
 
     BgCellManager_GetCellPosition(selector->cellManager, 0, &position[1], &position[0]);
@@ -497,7 +494,7 @@ int GtsSelector_Main(GtsSelector *selector) {
 }
 
 // The button touched on the page, -1 for none. Pages above 7 return the selector (never used).
-int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page) {
+static int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page) {
     int button = (int)selector;
     switch (page) {
     case GTS_SELECTOR_PAGE_SPECIES_GROUPS:
@@ -520,7 +517,7 @@ int GtsSelector_GetTouchedButton(GtsSelector *selector, u32 page) {
 
 // The 3x3 grid of letter groups (buttons 0..8) and BACK (9). Returns the group, -2 for BACK, -1 for none; groups
 // with enabled[group] FALSE cannot be chosen.
-int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
+static int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled) {
     int prevCursor = selector->cursor;
     u32 button;
     u32 keys;
@@ -602,7 +599,7 @@ none:
 }
 
 // The letter of a button of the letter page: -1 past the group's letters, -2 for BACK (3).
-int GtsSelector_GetLetter(GtsSelector *selector, int button) {
+static int GtsSelector_GetLetter(GtsSelector *selector, int button) {
     int group;
     if (button != 3) {
         group = selector->group;
@@ -620,7 +617,7 @@ int GtsSelector_GetLetter(GtsSelector *selector, int button) {
 
 // The letters of a group (buttons 0..2) and BACK (3). Returns the letter in the group, -2 for BACK, -1 for none;
 // letters with enabled[first letter of the group + letter] FALSE cannot be chosen.
-int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
+static int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enabled) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -682,7 +679,7 @@ none:
 }
 
 // At least one page, also for an empty list.
-int GtsSelector_CountPages(int count, int perPage) {
+static int GtsSelector_CountPages(int count, int perPage) {
     int add;
     if (count == 0) {
         return 1;
@@ -692,7 +689,7 @@ int GtsSelector_CountPages(int count, int perPage) {
 }
 
 // Buttons 0..3 the rows, 4 BACK, 5 and 6 the page arrows.
-int GtsSelector_SelectSpeciesButton(GtsSelector *selector, int button) {
+static int GtsSelector_SelectSpeciesButton(GtsSelector *selector, int button) {
     int index;
     switch (button) {
     case 4:
@@ -712,7 +709,7 @@ int GtsSelector_SelectSpeciesButton(GtsSelector *selector, int button) {
     return -1;
 }
 
-void GtsSelector_ChangeSpeciesPage(GtsSelector *selector, int direction) {
+static void GtsSelector_ChangeSpeciesPage(GtsSelector *selector, int direction) {
     int lastPage = GtsSelector_CountPages(selector->count, 4) - 1;
     int pageCount;
     if (lastPage == 0) {
@@ -743,7 +740,7 @@ void GtsSelector_ChangeSpeciesPage(GtsSelector *selector, int direction) {
 }
 
 // Rows 0..3 and BACK (4); left and right turn the page.
-int GtsSelector_HandleSpeciesListInput(GtsSelector *selector) {
+static int GtsSelector_HandleSpeciesListInput(GtsSelector *selector) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -792,7 +789,7 @@ int GtsSelector_HandleSpeciesListInput(GtsSelector *selector) {
 }
 
 // EITHER, male, female and BACK.
-int GtsSelector_HandleGenderInput(GtsSelector *selector) {
+static int GtsSelector_HandleGenderInput(GtsSelector *selector) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -839,7 +836,7 @@ int GtsSelector_HandleGenderInput(GtsSelector *selector) {
 }
 
 // The level lists have 3 pages.
-void GtsSelector_ChangeLevelPage(GtsSelector *selector, int direction) {
+static void GtsSelector_ChangeLevelPage(GtsSelector *selector, int direction) {
     int pageCount;
     if (direction < 0) {
         PlaySE(SEQ_SE_DP_SELECT78);
@@ -867,7 +864,7 @@ void GtsSelector_ChangeLevelPage(GtsSelector *selector, int direction) {
 
 // Buttons as GtsSelector_SelectSpeciesButton. Returns the value of the button's item of the first page (the row,
 // as the items' values are their indexes); GtsSelector_HandleLevels adds the page.
-int GtsSelector_SelectLevelButton(GtsSelector *selector, int button) {
+static int GtsSelector_SelectLevelButton(GtsSelector *selector, int button) {
     int index;
     switch (button) {
     case 4:
@@ -888,7 +885,7 @@ int GtsSelector_SelectLevelButton(GtsSelector *selector, int button) {
     return -1;
 }
 
-int GtsSelector_HandleLevelInput(GtsSelector *selector) {
+static int GtsSelector_HandleLevelInput(GtsSelector *selector) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -934,7 +931,7 @@ int GtsSelector_HandleLevelInput(GtsSelector *selector) {
 }
 
 // Buttons of the country groups: 0..8 the groups, 9 BACK (-2), 10 ANY.
-int GtsSelector_GetCountryGroup(GtsSelector *selector, int button) {
+static int GtsSelector_GetCountryGroup(GtsSelector *selector, int button) {
     switch (button) {
     case 9:
         return -2;
@@ -946,7 +943,7 @@ int GtsSelector_GetCountryGroup(GtsSelector *selector, int button) {
 }
 
 // The 3x3 grid of letter groups, BACK (9) and ANY (10). Returns the group, 10 for ANY, -2 for BACK, -1 for none.
-int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled) {
+static int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -1020,7 +1017,7 @@ int GtsSelector_HandleCountryGroupInput(GtsSelector *selector, const u8 *enabled
 }
 
 // Buttons 0..4 the rows, 5 BACK, 6 and 7 the page arrows.
-int GtsSelector_SelectCountryButton(GtsSelector *selector, int button) {
+static int GtsSelector_SelectCountryButton(GtsSelector *selector, int button) {
     int index;
     switch (button) {
     case 5:
@@ -1041,7 +1038,7 @@ int GtsSelector_SelectCountryButton(GtsSelector *selector, int button) {
     return -1;
 }
 
-void GtsSelector_ChangeCountryPage(GtsSelector *selector, int direction) {
+static void GtsSelector_ChangeCountryPage(GtsSelector *selector, int direction) {
     int lastPage = GtsSelector_CountPages(selector->count, 5) - 1;
     int pageCount;
     if (lastPage == 0) {
@@ -1072,7 +1069,7 @@ void GtsSelector_ChangeCountryPage(GtsSelector *selector, int direction) {
 }
 
 // Rows 0..4 and BACK (5); left and right turn the page.
-int GtsSelector_HandleCountryListInput(GtsSelector *selector) {
+static int GtsSelector_HandleCountryListInput(GtsSelector *selector) {
     int prevCursor = selector->cursor;
     int button;
 
@@ -1122,7 +1119,7 @@ int GtsSelector_HandleCountryListInput(GtsSelector *selector) {
 
 // The letter groups of species (GTS_SELECTOR_PAGE_SPECIES_GROUPS) or countries (GTS_SELECTOR_PAGE_COUNTRY_GROUPS,
 // with ANY), the panel at row y.
-void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
+static void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
     int fileId;
     if (page == GTS_SELECTOR_PAGE_COUNTRY_GROUPS) {
         fileId = 33;
@@ -1168,7 +1165,7 @@ void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
 }
 
 // EITHER, male, female.
-void GtsSelector_ShowGenders(GtsSelector *selector) {
+static void GtsSelector_ShowGenders(GtsSelector *selector) {
     int i;
     int offset;
     String *string;
@@ -1191,7 +1188,7 @@ void GtsSelector_ShowGenders(GtsSelector *selector) {
     BgCellManager_StartCellMove(selector->cellManager, 0, -4, 0, 4);
 }
 
-void GtsSelector_ShowLevels(GtsSelector *selector) {
+static void GtsSelector_ShowLevels(GtsSelector *selector) {
     int cursor;
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 35, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
@@ -1216,7 +1213,7 @@ void GtsSelector_ShowLevels(GtsSelector *selector) {
     selector->state = GTS_SELECTOR_STATE_HANDLE_LEVELS;
 }
 
-void GtsSelector_PrintString(BgCellManager *cellManager, Window *window, String *string, int x, u32 color) {
+static void GtsSelector_PrintString(BgCellManager *cellManager, Window *window, String *string, int x, u32 color) {
     AddTextPrinterParameterizedWithColor(window, 0, string, x, 0, TEXT_SPEED_NOTRANSFER, color, NULL);
     CopyWindowPixelsToVram_TextMode(window);
     BgCellManager_PutWindowTiles(cellManager, 0, window);
@@ -1437,7 +1434,7 @@ int GtsSelector_BackToSpeciesLetters(GtsSelector *selector) {
     return -1;
 }
 
-int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, const u16 *species) {
+static int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, const u16 *species) {
     int i = 0;
     int seen = 0;
     if (count > 0) {
@@ -1453,7 +1450,7 @@ int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int count, cons
 }
 
 // The seen species starting with the letter; returns their count.
-int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex) {
+static int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex) {
     int speciesCount;
     int i, count;
     u16 *species = Gts_LoadSpeciesByLetter(HEAP_ID_61, letter, (u32 *)&speciesCount); // compared signed below
@@ -1476,7 +1473,7 @@ int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNam
 }
 
 // 4 rows of the list (species or level ranges).
-void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count) {
+static void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count) {
     int i;
     for (i = 0; i < 4; i++) {
         FillWindowPixelBuffer(&selector->windows[i], 0x22);
@@ -1490,7 +1487,7 @@ void GtsSelector_PrintListPage(GtsSelector *selector, int page, int count) {
 }
 
 // 5 rows of the country list.
-void GtsSelector_PrintCountryPage(GtsSelector *selector, int page, int count) {
+static void GtsSelector_PrintCountryPage(GtsSelector *selector, int page, int count) {
     int i;
     for (i = 0; i < 5; i++) {
         FillWindowPixelBuffer(&selector->windows[i], 0x22);
@@ -1905,13 +1902,13 @@ int GtsSelector_FinishLevel(GtsSelector *selector) {
     return selector->levelRange;
 }
 
-void GtsSelector_PrintMessage(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId, int x, u32 color) {
+static void GtsSelector_PrintMessage(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId, int x, u32 color) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     GtsSelector_PrintString(cellManager, window, string, x, color);
     String_Delete(string);
 }
 
-void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId) {
+static void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, Window *window, int msgId) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     AddTextPrinterParameterizedWithColor(window, 4, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 2), NULL);
     CopyWindowPixelsToVram_TextMode(window);
@@ -1920,7 +1917,7 @@ void GtsSelector_PrintButtonLabel(BgCellManager *cellManager, MsgData *msgData, 
 }
 
 // "page/pageCount", page 0-based.
-void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *printer, Window *window, int page, int pageCount) {
+static void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *printer, Window *window, int page, int pageCount) {
     PrintUIntOnWindow(printer, page + 1, 2, PRINTING_MODE_RIGHT_ALIGN, window, 0, 0);
     MessagePrinter_PrintGlyph(printer, 0, window, 16, 0);
     PrintUIntOnWindow(printer, pageCount, 2, PRINTING_MODE_LEFT_ALIGN, window, 24, 0);
@@ -1928,7 +1925,7 @@ void GtsSelector_PrintPageNumber(BgCellManager *cellManager, MessagePrinter *pri
     BgCellManager_PutWindowTiles(cellManager, 0, window);
 }
 
-int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
+static int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
     u32 count;
     u16 *species = Gts_LoadSpeciesByLetter(HEAP_ID_61, letter, &count);
     int seen = GtsSelector_CountSeenSpecies(selector->johtoDexFlags, selector->pokedex, count, species);
@@ -1936,7 +1933,7 @@ int GtsSelector_CountSeenSpeciesOfLetter(GtsSelector *selector, int letter) {
     return seen;
 }
 
-BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
+static BOOL GtsSelector_GroupHasSeenSpecies(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
     int count = gGtsSelectorLetterGroups[group].count;
     if (count > 0) {

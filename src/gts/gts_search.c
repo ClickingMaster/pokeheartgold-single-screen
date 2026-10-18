@@ -3,6 +3,7 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "dwc/net_common_internal.h"
 #include "gts/gts_internal.h"
 #include "msgdata/msg/msg_0775.h"
 
@@ -16,6 +17,7 @@
 #include "options.h"
 #include "pokemon.h"
 #include "render_window.h"
+#include "save_gts.h"
 #include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
@@ -88,29 +90,30 @@ extern const GtsSearchCursorColumn sGtsSearchCursorY[];
 extern const GtsSearchCursorColumn sGtsSearchCursorAnims[];
 extern int gGtsCountryCount[];
 
-u32 GtsSave_GetDepositDate(void *gtsSave);
-u32 GtsSave_GetTradeDate(void *gtsSave);
-void DWC_GetDateTime(RTCDate *date, RTCTime *time);
+static void GtsSearch_InitBgs(BgConfig *bgConfig);
+static void GtsSearch_FreeBgs(BgConfig *bgConfig);
+static void GtsSearch_LoadGraphics(GtsApp *app);
+static void GtsSearch_CreateSprites(GtsApp *app);
+static void GtsSearch_DeleteSprites(GtsApp *app);
+static void GtsSearch_CreateWindows(GtsApp *app);
+static void GtsSearch_RemoveWindows(GtsApp *app);
+static void GtsSearch_CreateData(GtsApp *app);
+static void GtsSearch_FreeData(GtsApp *app);
+static int GtsSearch_GetTouchedButton(void);
+static void GtsSearch_SelectButton(GtsApp *app, int button);
+static BOOL GtsSearch_IsDateRecent(GtsApp *app, int which);
+static int GtsSearch_GetCursorButton(GtsApp *app);
+static void GtsSearch_MoveCursor(GtsApp *app);
+static void GtsSearch_SetCursor(GtsApp *app, int button);
+
 void CommState_ShowRestartErrorAndHalt(void);
 
 int GtsSearch_Init(GtsApp *app, int state);
 int GtsSearch_Main(GtsApp *app, int state);
 int GtsSearch_Exit(GtsApp *app, int state);
-void GtsSearch_InitBgs(BgConfig *bgConfig);
-void GtsSearch_FreeBgs(BgConfig *bgConfig);
-void GtsSearch_LoadGraphics(GtsApp *app);
-void GtsSearch_CreateSprites(GtsApp *app);
-void GtsSearch_DeleteSprites(GtsApp *app);
-void GtsSearch_CreateWindows(GtsApp *app);
-void GtsSearch_RemoveWindows(GtsApp *app);
-void GtsSearch_CreateData(GtsApp *app);
-void GtsSearch_FreeData(GtsApp *app);
 int GtsSearch_Start(GtsApp *app);
-int GtsSearch_GetTouchedButton(void);
-void GtsSearch_SelectButton(GtsApp *app, int button);
 int GtsSearch_HandleInput(GtsApp *app);
 int GtsSearch_StartSearch(GtsApp *app);
-BOOL GtsSearch_IsDateRecent(GtsApp *app, int which);
 int GtsSearch_SendSearch(GtsApp *app);
 int GtsSearch_WaitSearch(GtsApp *app);
 int GtsSearch_ShowResultCount(GtsApp *app);
@@ -118,9 +121,6 @@ int GtsSearch_WaitResultsShown(GtsApp *app);
 int GtsSearch_SearchFailed(GtsApp *app);
 int GtsSearch_ServerError(GtsApp *app);
 int GtsSearch_ServerErrorExit(GtsApp *app);
-int GtsSearch_GetCursorButton(GtsApp *app);
-void GtsSearch_MoveCursor(GtsApp *app);
-void GtsSearch_SetCursor(GtsApp *app, int button);
 int GtsSearch_FadeOut(GtsApp *app);
 int GtsSearch_AskSpecies(GtsApp *app);
 int GtsSearch_OpenSpeciesSelector(GtsApp *app);
@@ -292,7 +292,7 @@ int GtsSearch_Exit(GtsApp *app, int state) {
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsSearch_InitBgs(BgConfig *bgConfig) {
+static void GtsSearch_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0 = sGtsSearchBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
@@ -317,7 +317,7 @@ void GtsSearch_InitBgs(BgConfig *bgConfig) {
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x20, 0, HEAP_ID_61);
 }
 
-void GtsSearch_FreeBgs(BgConfig *bgConfig) {
+static void GtsSearch_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -325,7 +325,7 @@ void GtsSearch_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void GtsSearch_LoadGraphics(GtsApp *app) {
+static void GtsSearch_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
 
@@ -343,7 +343,7 @@ void GtsSearch_LoadGraphics(GtsApp *app) {
 }
 
 // The cursor and the selector's sprites.
-void GtsSearch_CreateSprites(GtsApp *app) {
+static void GtsSearch_CreateSprites(GtsApp *app) {
     SpriteTemplate template;
 
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -374,7 +374,7 @@ void GtsSearch_CreateSprites(GtsApp *app) {
     WirelessStatusIcon_Create();
 }
 
-void GtsSearch_DeleteSprites(GtsApp *app) {
+static void GtsSearch_DeleteSprites(GtsApp *app) {
     Sprite_Delete(app->cursorSprite);
     Sprite_Delete(app->selectorCursorSprite);
     Sprite_Delete(app->arrowSprites[0]);
@@ -383,7 +383,7 @@ void GtsSearch_DeleteSprites(GtsApp *app) {
 
 // The message window; the field labels and values (infoWindows[0..5]), the two wide lines (wideWindows) and three
 // more windows (infoWindows[6..8]).
-void GtsSearch_CreateWindows(GtsApp *app) {
+static void GtsSearch_CreateWindows(GtsApp *app) {
     int i;
     int baseTile;
     const GtsWindowPosition *position;
@@ -419,7 +419,7 @@ void GtsSearch_CreateWindows(GtsApp *app) {
     Gts_CreatePanelWindow(app, 4);
 }
 
-void GtsSearch_RemoveWindows(GtsApp *app) {
+static void GtsSearch_RemoveWindows(GtsApp *app) {
     int i;
     Window *window;
 
@@ -433,7 +433,7 @@ void GtsSearch_RemoveWindows(GtsApp *app) {
     }
 }
 
-void GtsSearch_CreateData(GtsApp *app) {
+static void GtsSearch_CreateData(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00042); // SEEK POKEMON
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
@@ -442,7 +442,7 @@ void GtsSearch_CreateData(GtsApp *app) {
     GtsCursorValueTable_Clear(&app->unk_1234);
 }
 
-void GtsSearch_FreeData(GtsApp *app) {
+static void GtsSearch_FreeData(GtsApp *app) {
     Heap_Free(app->searchCursor->johtoDexFlags);
     Heap_Free(app->searchCursor);
     String_Delete(app->msgBuffer);
@@ -466,12 +466,12 @@ int GtsSearch_Start(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSearch_GetTouchedButton(void) {
+static int GtsSearch_GetTouchedButton(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(sGtsSearchButtonHitboxes);
 }
 
 // Buttons: 0 POKEMON, 1 GENDER, 2 LEVEL, 3 country, 4 the results, 5 SEARCH, 6 BACK.
-void GtsSearch_SelectButton(GtsApp *app, int button) {
+static void GtsSearch_SelectButton(GtsApp *app, int button) {
     switch (button) {
     case 0:
         app->state = GTS_SEARCH_STATE_ASK_SPECIES;
@@ -552,7 +552,7 @@ int GtsSearch_StartSearch(GtsApp *app) {
 }
 
 // Whether the player deposited (which 1) or traded (which 0) on the GTS in the last three days.
-BOOL GtsSearch_IsDateRecent(GtsApp *app, int which) {
+static BOOL GtsSearch_IsDateRecent(GtsApp *app, int which) {
     RTCDate saved;
     RTCDate current;
     RTCTime time;
@@ -700,7 +700,7 @@ int GtsSearch_ServerErrorExit(GtsApp *app) {
 }
 
 // The button under the cursor: rows 0..3 of the left column, then rows 0..2 of the right one.
-int GtsSearch_GetCursorButton(GtsApp *app) {
+static int GtsSearch_GetCursorButton(GtsApp *app) {
     GtsSearchCursor *cursor = app->searchCursor;
     if (cursor->column == 0) {
         return cursor->leftRow;
@@ -708,7 +708,7 @@ int GtsSearch_GetCursorButton(GtsApp *app) {
     return cursor->rightRow + 4;
 }
 
-void GtsSearch_MoveCursor(GtsApp *app) {
+static void GtsSearch_MoveCursor(GtsApp *app) {
     int keys = gSystem.newKeys;
     GtsSearchCursor *cursor;
     int x;
@@ -757,7 +757,7 @@ void GtsSearch_MoveCursor(GtsApp *app) {
     Sprite_SetAnimCtrlSeq(app->cursorSprite, sGtsSearchCursorAnims[GtsSearch_GetCursorButton(app)].value);
 }
 
-void GtsSearch_SetCursor(GtsApp *app, int button) {
+static void GtsSearch_SetCursor(GtsApp *app, int button) {
     int x;
     int y;
 

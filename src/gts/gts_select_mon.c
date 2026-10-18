@@ -118,6 +118,41 @@ typedef struct GtsMonFields {
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsSelectMonStates[])(GtsApp *app);
+
+static void GtsSelectMon_InitBgs(BgConfig *bgConfig);
+static void GtsSelectMon_FreeBgs(BgConfig *bgConfig);
+static void GtsSelectMon_LoadGraphics(GtsApp *app);
+static void GtsSelectMon_CreateSprites(GtsApp *app);
+static void GtsSelectMon_DeleteSprites(GtsApp *app);
+static void GtsSelectMon_CreateWindows(GtsApp *app);
+static void GtsSelectMon_RemoveWindows(GtsApp *app);
+static void GtsSelectMon_CreateData(GtsApp *app);
+static void GtsSelectMon_FreeData(GtsApp *app);
+static void GtsSelectMon_SelectMonToDeposit(GtsApp *app);
+static void GtsSelectMon_SelectMonToTrade(GtsApp *app);
+static int GtsSelectMon_GetTouchedButton(void);
+static void GtsSelectMon_Leave(GtsApp *app, int mode);
+static void GtsSelectMon_MoveCursor(GtsApp *app);
+static void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position);
+static int GtsSelectMon_StepIndex(int index, int count, int step);
+static BOOL GtsSelectMon_StartTrade(GtsApp *app);
+static void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow);
+static void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **charData, enum HeapID heapID);
+static void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprite *sprite, NARC *narc, GtsMonIcon *icon);
+static void GtsSelectMon_SetSummaryLevel(BoxPokemon *boxMon, GtsMonSummary *summary);
+static void GtsSelectMon_TransferMonIcons(GtsApp *app);
+static void GtsSelectMon_ShowSlotMon(BoxPokemon *boxMon, Sprite *iconSprite, Sprite *itemSprite, u16 *species, int slot, NARC *narc, GtsMonSummary *summary, GtsMonIcon *icon);
+static void GtsSelectMon_ShowBox(GtsApp *app, int box);
+static BOOL GtsSelectMon_CanOffer(Party *party, PCStorage *pcStorage, int box, int slot);
+static BOOL GtsSelectMon_HasSpecialRibbon(BoxPokemon *boxMon);
+static int GtsSelectMon_GetFormRestriction(BoxPokemon *boxMon);
+static BOOL GtsSelectMon_HoldsGriseousOrb(BoxPokemon *boxMon);
+static int GtsSelectMon_GetSlotContent(Party *party, PCStorage *pcStorage, int box, int slot);
+static BOOL GtsSelectMon_MatchesWanted(GtsMonSummary *summary, GtsWantedMon *wanted);
+static BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted);
+static void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app);
+static void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons);
+
 // {x, y} of the cursor on each slot, on BACK and on the box name.
 // The next and previous box arrows.
 // Where the cursor goes from each position: up, down, left, right.
@@ -132,24 +167,8 @@ int GtsSearch_HandleScrolledOut(GtsApp *app);
 int GtsSelectMon_Init(GtsApp *app, int state);
 int GtsSelectMon_Main(GtsApp *app, int state);
 int GtsSelectMon_Exit(GtsApp *app, int state);
-void GtsSelectMon_InitBgs(BgConfig *bgConfig);
-void GtsSelectMon_FreeBgs(BgConfig *bgConfig);
-void GtsSelectMon_LoadGraphics(GtsApp *app);
-void GtsSelectMon_CreateSprites(GtsApp *app);
-void GtsSelectMon_DeleteSprites(GtsApp *app);
-void GtsSelectMon_CreateWindows(GtsApp *app);
-void GtsSelectMon_RemoveWindows(GtsApp *app);
-void GtsSelectMon_CreateData(GtsApp *app);
-void GtsSelectMon_FreeData(GtsApp *app);
 int GtsSelectMon_Start(GtsApp *app);
-void GtsSelectMon_SelectMonToDeposit(GtsApp *app);
-void GtsSelectMon_SelectMonToTrade(GtsApp *app);
-int GtsSelectMon_GetTouchedButton(void);
-void GtsSelectMon_Leave(GtsApp *app, int mode);
 int GtsSelectMon_HandleInput(GtsApp *app);
-void GtsSelectMon_MoveCursor(GtsApp *app);
-void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position);
-int GtsSelectMon_StepIndex(int index, int count, int step);
 int GtsSelectMon_OpenDepositMenu(GtsApp *app);
 int GtsSelectMon_HandleDepositMenu(GtsApp *app);
 int GtsSelectMon_OpenTradeMenu(GtsApp *app);
@@ -160,28 +179,11 @@ int GtsSelectMon_HandleExitPrompt(GtsApp *app);
 int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app);
 int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app);
 int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app);
-BOOL GtsSelectMon_StartTrade(GtsApp *app);
 int GtsSelectMon_AskRemoveCapsule(GtsApp *app);
 int GtsSelectMon_ShowCapsulePrompt(GtsApp *app);
 int GtsSelectMon_HandleCapsulePrompt(GtsApp *app);
 int GtsSelectMon_WaitText(GtsApp *app);
 int GtsSelectMon_WaitTextAndClear(GtsApp *app);
-void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow);
-void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **charData, enum HeapID heapID);
-void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprite *sprite, NARC *narc, GtsMonIcon *icon);
-void GtsSelectMon_SetSummaryLevel(BoxPokemon *boxMon, GtsMonSummary *summary);
-void GtsSelectMon_TransferMonIcons(GtsApp *app);
-void GtsSelectMon_ShowSlotMon(BoxPokemon *boxMon, Sprite *iconSprite, Sprite *itemSprite, u16 *species, int slot, NARC *narc, GtsMonSummary *summary, GtsMonIcon *icon);
-void GtsSelectMon_ShowBox(GtsApp *app, int box);
-BOOL GtsSelectMon_CanOffer(Party *party, PCStorage *pcStorage, int box, int slot);
-BOOL GtsSelectMon_HasSpecialRibbon(BoxPokemon *boxMon);
-int GtsSelectMon_GetFormRestriction(BoxPokemon *boxMon);
-BOOL GtsSelectMon_HoldsGriseousOrb(BoxPokemon *boxMon);
-int GtsSelectMon_GetSlotContent(Party *party, PCStorage *pcStorage, int box, int slot);
-BOOL GtsSelectMon_MatchesWanted(GtsMonSummary *summary, GtsWantedMon *wanted);
-BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted);
-void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app);
-void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons);
 
 // The last states of SEEK POKEMON (screen 4).
 
@@ -561,7 +563,7 @@ int GtsSelectMon_Exit(GtsApp *app, int state) {
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsSelectMon_InitBgs(BgConfig *bgConfig) {
+static void GtsSelectMon_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -589,7 +591,7 @@ void GtsSelectMon_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void GtsSelectMon_FreeBgs(BgConfig *bgConfig) {
+static void GtsSelectMon_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -597,7 +599,7 @@ void GtsSelectMon_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void GtsSelectMon_LoadGraphics(GtsApp *app) {
+static void GtsSelectMon_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
 
@@ -615,7 +617,7 @@ void GtsSelectMon_LoadGraphics(GtsApp *app) {
 }
 
 // The cursor, each slot's icon, held item and (in the party) Ball Capsule, the box arrows.
-void GtsSelectMon_CreateSprites(GtsApp *app) {
+static void GtsSelectMon_CreateSprites(GtsApp *app) {
     SpriteTemplate template;
     int i;
 
@@ -665,7 +667,7 @@ void GtsSelectMon_CreateSprites(GtsApp *app) {
     Gts_SetSpritePosition(app->panelSprite, 55, 424);
 }
 
-void GtsSelectMon_DeleteSprites(GtsApp *app) {
+static void GtsSelectMon_DeleteSprites(GtsApp *app) {
     int i;
 
     for (i = 0; i < 2; i++) {
@@ -682,7 +684,7 @@ void GtsSelectMon_DeleteSprites(GtsApp *app) {
 }
 
 // The box name, the message and prompt windows, the CANCEL button.
-void GtsSelectMon_CreateWindows(GtsApp *app) {
+static void GtsSelectMon_CreateWindows(GtsApp *app) {
     AddWindowParameterized(app->bgConfig, &app->boxNameWindow, GF_BG_LYR_MAIN_3, 4, 0, 13, 3, 13, 0x60);
     FillWindowPixelBuffer(&app->boxNameWindow, 0);
     CopyWindowToVram(&app->boxNameWindow);
@@ -700,7 +702,7 @@ void GtsSelectMon_CreateWindows(GtsApp *app) {
     }
 }
 
-void GtsSelectMon_RemoveWindows(GtsApp *app) {
+static void GtsSelectMon_RemoveWindows(GtsApp *app) {
     RemoveWindow(&app->panelWindow);
     RemoveWindow(&app->promptWindow);
     RemoveWindow(&app->windows[1]);
@@ -708,7 +710,7 @@ void GtsSelectMon_RemoveWindows(GtsApp *app) {
     RemoveWindow(&app->boxNameWindow);
 }
 
-void GtsSelectMon_CreateData(GtsApp *app) {
+static void GtsSelectMon_CreateData(GtsApp *app) {
     app->boxName = String_New(18, HEAP_ID_61);
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->cancelText = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00109); // CANCEL
@@ -718,7 +720,7 @@ void GtsSelectMon_CreateData(GtsApp *app) {
     app->boxSummaries = Heap_Alloc(HEAP_ID_61, sizeof(GtsMonSummary) * GTS_SELECT_MON_SLOT_COUNT);
 }
 
-void GtsSelectMon_FreeData(GtsApp *app) {
+static void GtsSelectMon_FreeData(GtsApp *app) {
     Heap_Free(app->boxSummaries);
     String_Delete(app->boxName);
     String_Delete(app->msgBuffer);
@@ -740,7 +742,7 @@ int GtsSelectMon_Start(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
+static void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
     BoxPokemon *boxMon;
 
     if (app->selectedSlot == GTS_SELECT_MON_BACK) {
@@ -773,7 +775,7 @@ void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
 }
 
 // Only the Pokemon the selected search result wants can be picked.
-void GtsSelectMon_SelectMonToTrade(GtsApp *app) {
+static void GtsSelectMon_SelectMonToTrade(GtsApp *app) {
     BoxPokemon *boxMon;
 
     if (app->selectedSlot == GTS_SELECT_MON_BACK) {
@@ -807,12 +809,12 @@ void GtsSelectMon_SelectMonToTrade(GtsApp *app) {
     }
 }
 
-int GtsSelectMon_GetTouchedButton(void) {
+static int GtsSelectMon_GetTouchedButton(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(sGtsSelectMonHitboxes);
 }
 
 // BACK: to the main menu (deposit) or back to the search result (trade).
-void GtsSelectMon_Leave(GtsApp *app, int mode) {
+static void GtsSelectMon_Leave(GtsApp *app, int mode) {
     if (mode == GTS_SELECT_MON_MODE_DEPOSIT) {
         Gts_SetNextScreen(app, 1, 0);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
@@ -878,7 +880,7 @@ int GtsSelectMon_HandleInput(GtsApp *app) {
 }
 
 // The D-pad; left or right off the box name shows the previous or next box.
-void GtsSelectMon_MoveCursor(GtsApp *app) {
+static void GtsSelectMon_MoveCursor(GtsApp *app) {
     int moved;
     int direction;
     u32 keys;
@@ -919,7 +921,7 @@ void GtsSelectMon_MoveCursor(GtsApp *app) {
     GtsSelectMon_SetCursorPosition(app->cursorSprite, app->selectedSlot);
 }
 
-void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position) {
+static void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position) {
     Gts_SetSpritePositionRounded(sprite, sGtsSelectMonCursorPositions[position].x, sGtsSelectMonCursorPositions[position].y);
     if (position == GTS_SELECT_MON_BOX_NAME || (position >= 0 && position <= 5)) {
         Sprite_SetPriority(sprite, 0);
@@ -929,7 +931,7 @@ void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position) {
 }
 
 // index + step, wrapping around in 0..count - 1.
-int GtsSelectMon_StepIndex(int index, int count, int step) {
+static int GtsSelectMon_StepIndex(int index, int count, int step) {
     index += step;
     if (index < 0) {
         return count - 1;
@@ -1144,7 +1146,7 @@ int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
 }
 
 // The search result's Pokemon comes into the party when it holds Mail (unless the offered Pokemon leaves the party).
-BOOL GtsSelectMon_StartTrade(GtsApp *app) {
+static BOOL GtsSelectMon_StartTrade(GtsApp *app) {
     if (Gts_MonHoldsMail(&app->searchResults[app->selectedResult].mon) && app->selectedBox != GTS_BOX_PARTY && Party_GetCount(app->args->party) == PARTY_SIZE) {
         GtsSelectMon_PrintMessage(app, msg_0775_00028, 1, 0, 0xF0F, TRUE); // Your party is full. You can't receive a Pokemon!
         Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT_AND_CLEAR, GTS_SELECT_MON_STATE_HANDLE_INPUT);
@@ -1201,7 +1203,7 @@ int GtsSelectMon_WaitTextAndClear(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow) {
+static void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow) {
     String *string = NewString_ReadMsgData(app->gtsMsgData, msgId);
     Window *window;
     StringExpandPlaceholders(app->msgFormat, app->msgBuffer, string);
@@ -1212,7 +1214,7 @@ void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused
     String_Delete(string);
 }
 
-void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **charData, enum HeapID heapID) {
+static void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **charData, enum HeapID heapID) {
     void *data = NARC_AllocAndReadWholeMember(narc, member, heapID);
     if (data != NULL && !NNS_G2dGetUnpackedBGCharacterData(data, charData)) {
         Heap_Free(data);
@@ -1222,7 +1224,7 @@ void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **ch
 }
 
 // Reads the icon of a Pokemon for slot's sprite (its own cell, at tile slot * 16 + 12).
-void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprite *sprite, NARC *narc, GtsMonIcon *icon) {
+static void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprite *sprite, NARC *narc, GtsMonIcon *icon) {
     NNSG2dCharacterData *charData;
     void *data;
     int member = GetMonIconNaixEx(species, isEgg, form);
@@ -1234,12 +1236,12 @@ void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprit
     Heap_Free(data);
 }
 
-void GtsSelectMon_SetSummaryLevel(BoxPokemon *boxMon, GtsMonSummary *summary) {
+static void GtsSelectMon_SetSummaryLevel(BoxPokemon *boxMon, GtsMonSummary *summary) {
     summary->level = CalcBoxMonLevel(boxMon);
 }
 
 // VBlank task: loads the icons of the shown box.
-void GtsSelectMon_TransferMonIcons(GtsApp *app) {
+static void GtsSelectMon_TransferMonIcons(GtsApp *app) {
     int i;
     GtsMonIcon *icon = app->monIcons;
     for (i = 0; i < GTS_SELECT_MON_SLOT_COUNT; i++) {
@@ -1254,7 +1256,7 @@ void GtsSelectMon_TransferMonIcons(GtsApp *app) {
 }
 
 // The icon and held item (or Mail) of a slot's Pokemon; an Egg's level is 0.
-void GtsSelectMon_ShowSlotMon(BoxPokemon *boxMon, Sprite *iconSprite, Sprite *itemSprite, u16 *species, int slot, NARC *narc, GtsMonSummary *summary, GtsMonIcon *icon) {
+static void GtsSelectMon_ShowSlotMon(BoxPokemon *boxMon, Sprite *iconSprite, Sprite *itemSprite, u16 *species, int slot, NARC *narc, GtsMonSummary *summary, GtsMonIcon *icon) {
     u32 exists;
     u32 item;
     u32 isEgg;
@@ -1294,7 +1296,7 @@ void GtsSelectMon_ShowSlotMon(BoxPokemon *boxMon, Sprite *iconSprite, Sprite *it
 
 // Shows a PC box, or the party (GTS_BOX_PARTY); the icons are loaded in the next VBlank. Trading, the Pokemon the
 // selected search result doesn't want are dimmed.
-void GtsSelectMon_ShowBox(GtsApp *app, int box) {
+static void GtsSelectMon_ShowBox(GtsApp *app, int box) {
     PCStorage *pcStorage = app->args->pcStorage;
     NARC *narc;
     GtsMonIcon *icons;
@@ -1364,14 +1366,14 @@ BoxPokemon *Gts_GetBoxMon(Party *party, PCStorage *pcStorage, int box, int slot)
 }
 
 // The last Pokemon of the party can't be offered.
-BOOL GtsSelectMon_CanOffer(Party *party, PCStorage *pcStorage, int box, int slot) {
+static BOOL GtsSelectMon_CanOffer(Party *party, PCStorage *pcStorage, int box, int slot) {
     if (Gts_IsPartyBox(box) && Party_GetCount(party) < 2) {
         return FALSE;
     }
     return TRUE;
 }
 
-BOOL GtsSelectMon_HasSpecialRibbon(BoxPokemon *boxMon) {
+static BOOL GtsSelectMon_HasSpecialRibbon(BoxPokemon *boxMon) {
     int sum = 0;
     int decrypted = AcquireBoxMonLock(boxMon);
     int i;
@@ -1382,7 +1384,7 @@ BOOL GtsSelectMon_HasSpecialRibbon(BoxPokemon *boxMon) {
     return sum != 0;
 }
 
-int GtsSelectMon_GetFormRestriction(BoxPokemon *boxMon) {
+static int GtsSelectMon_GetFormRestriction(BoxPokemon *boxMon) {
     int decrypted = AcquireBoxMonLock(boxMon);
     int species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     int form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
@@ -1400,14 +1402,14 @@ int GtsSelectMon_GetFormRestriction(BoxPokemon *boxMon) {
     return GTS_FORM_ALLOWED;
 }
 
-BOOL GtsSelectMon_HoldsGriseousOrb(BoxPokemon *boxMon) {
+static BOOL GtsSelectMon_HoldsGriseousOrb(BoxPokemon *boxMon) {
     int decrypted = AcquireBoxMonLock(boxMon);
     int item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
     ReleaseBoxMonLock(boxMon, decrypted);
     return item == ITEM_GRISEOUS_ORB;
 }
 
-int GtsSelectMon_GetSlotContent(Party *party, PCStorage *pcStorage, int box, int slot) {
+static int GtsSelectMon_GetSlotContent(Party *party, PCStorage *pcStorage, int box, int slot) {
     BoxPokemon *boxMon = Gts_GetBoxMon(party, pcStorage, box, slot);
     if (boxMon == NULL) {
         return GTS_SLOT_EMPTY;
@@ -1422,7 +1424,7 @@ int GtsSelectMon_GetSlotContent(Party *party, PCStorage *pcStorage, int box, int
 }
 
 // gender 3 (either) and levels 0 match any.
-BOOL GtsSelectMon_MatchesWanted(GtsMonSummary *summary, GtsWantedMon *wanted) {
+static BOOL GtsSelectMon_MatchesWanted(GtsMonSummary *summary, GtsWantedMon *wanted) {
     if (summary->species != wanted->species) {
         return FALSE;
     }
@@ -1441,7 +1443,7 @@ BOOL GtsSelectMon_MatchesWanted(GtsMonSummary *summary, GtsWantedMon *wanted) {
     return TRUE;
 }
 
-BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted) {
+static BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted) {
     GtsMonSummary summary;
     summary.species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     summary.gender = GetBoxMonData(boxMon, MON_DATA_GENDER, NULL) + 1;
@@ -1451,7 +1453,7 @@ BOOL GtsSelectMon_BoxMonMatchesWanted(BoxPokemon *boxMon, GtsWantedMon *wanted) 
 
 // The record sent with the trade: the offered Pokemon, its summary, and as the wanted Pokemon the species and gender
 // of the search result's Pokemon.
-void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app) {
+static void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app) {
     GtsMonFields offered;
     GtsMonFields wanted;
     BoxPokemon *boxMon;
@@ -1472,7 +1474,7 @@ void GtsSelectMon_InitTradeRecord(GtsRecord *record, GtsApp *app) {
     *(u16 *)&record->wanted.maxLevel = wanted.halves[1]; // maxLevel, unk_5
 }
 
-void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons) {
+static void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **sprites, GtsWantedMon *wanted, GtsMonIcon *icons) {
     int i;
     for (i = 0; i < GTS_SELECT_MON_SLOT_COUNT; i++, summaries++, icons++) {
         if (summaries->species != SPECIES_NONE && GtsSelectMon_MatchesWanted(summaries, wanted) == FALSE) {

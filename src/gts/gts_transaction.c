@@ -5,6 +5,7 @@
 #include "constants/pokemon.h"
 #include "constants/pokewalker_courses.h"
 
+#include "dwc/net_common_internal.h"
 #include "gts/gts_internal.h"
 #include "gts/gts_server.h"
 #include "msgdata/msg/msg_0775.h"
@@ -30,6 +31,7 @@
 #include "render_window.h"
 #include "sav_chatot.h"
 #include "save.h"
+#include "save_gts.h"
 #include "save_vars_flags.h"
 #include "screen_fade.h"
 #include "sys_vars.h"
@@ -93,27 +95,31 @@ extern const BgTemplate sGtsTransactionBg2Template;
 extern const BgTemplate sGtsTransactionSubBg0Template;
 extern const BgTemplate sGtsTransactionSubBg1Template;
 
-u16 GtsSave_HasStoredMon(void *gtsSave);
-void GtsSave_SetHasStoredMon(void *gtsSave, u16 value);
-void GtsSave_GetStoredMon(void *gtsSave, void *dest);
-void GtsSave_SetStoredMon(void *gtsSave, void *src, int box);
-void GtsSave_SetDepositDate(void *gtsSave, u32 value);
-void GtsSave_SetTradeDate(void *gtsSave, u32 value);
-u16 GtsSave_GetStoredMonBox(void *gtsSave);
+static void GtsTransaction_InitBgs(BgConfig *bgConfig);
+static void GtsTransaction_FreeBgs(BgConfig *bgConfig);
+static void GtsTransaction_LoadGraphics(GtsApp *app);
+static void GtsTransaction_CreateWindows(GtsApp *app);
+static void GtsTransaction_RemoveWindows(GtsApp *app);
+static void GtsTransaction_CreateStrings(GtsApp *app);
+static void GtsTransaction_DeleteStrings(GtsApp *app);
+static void GtsTransaction_ReturnToCaller(GtsApp *app);
+static void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon);
+static void GtsTransaction_PrintServerError(GtsApp *app);
+static void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited);
+static void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded);
+static void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box);
+static void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange);
+static void GtsTransaction_AddPartnerToWifiHistory(SaveWiFiHistory *wifiHistory, GtsRecord *record);
+static int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon);
+static void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState);
+static BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app);
+
 void WirelessStatusIcon_SetLevel(s32 level);
 void CommState_ShowRestartErrorAndHalt(void);
-void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 
 int GtsTransaction_Init(GtsApp *app, int state);
 int GtsTransaction_Main(GtsApp *app, int state);
 int GtsTransaction_Exit(GtsApp *app, int state);
-void GtsTransaction_InitBgs(BgConfig *bgConfig);
-void GtsTransaction_FreeBgs(BgConfig *bgConfig);
-void GtsTransaction_LoadGraphics(GtsApp *app);
-void GtsTransaction_CreateWindows(GtsApp *app);
-void GtsTransaction_RemoveWindows(GtsApp *app);
-void GtsTransaction_CreateStrings(GtsApp *app);
-void GtsTransaction_DeleteStrings(GtsApp *app);
 int GtsTransaction_Start(GtsApp *app);
 int GtsTransaction_SendPost(GtsApp *app);
 int GtsTransaction_WaitPost(GtsApp *app);
@@ -132,8 +138,6 @@ int GtsTransaction_WaitResult(GtsApp *app);
 int GtsTransaction_ExitToMainMenu(GtsApp *app);
 int GtsTransaction_SendStatusGet(GtsApp *app);
 int GtsTransaction_WaitStatusGet(GtsApp *app);
-void GtsTransaction_ReturnToCaller(GtsApp *app);
-void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon);
 int GtsTransaction_ReceiveTradedMon(GtsApp *app);
 int GtsTransaction_SendDelete(GtsApp *app);
 int GtsTransaction_WaitDelete(GtsApp *app);
@@ -145,7 +149,6 @@ int GtsTransaction_TradedDone(GtsApp *app);
 int GtsTransaction_SendUnsavedReturn(GtsApp *app);
 int GtsTransaction_WaitUnsavedReturn(GtsApp *app);
 int GtsTransaction_AlreadyTraded(GtsApp *app);
-void GtsTransaction_PrintServerError(GtsApp *app);
 int GtsTransaction_ServerErrorExit(GtsApp *app);
 int GtsTransaction_ServerError(GtsApp *app);
 int GtsTransaction_SaveAndExit(GtsApp *app);
@@ -157,14 +160,6 @@ int GtsTransaction_StartSaveWithMessage(GtsApp *app);
 int GtsTransaction_SaveWithMessage(GtsApp *app);
 int GtsTransaction_FadeOut(GtsApp *app);
 int GtsTransaction_WaitText(GtsApp *app);
-void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited);
-void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded);
-void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box);
-void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange);
-void GtsTransaction_AddPartnerToWifiHistory(SaveWiFiHistory *wifiHistory, GtsRecord *record);
-int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon);
-void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState);
-BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app);
 
 int GtsTransaction_Init(GtsApp *app, int state) {
     GtsTransaction_CreateStrings(app);
@@ -194,7 +189,7 @@ int GtsTransaction_Exit(GtsApp *app, int state) {
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsTransaction_InitBgs(BgConfig *bgConfig) {
+static void GtsTransaction_InitBgs(BgConfig *bgConfig) {
     GraphicsModes graphicsModes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -225,7 +220,7 @@ void GtsTransaction_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void GtsTransaction_FreeBgs(BgConfig *bgConfig) {
+static void GtsTransaction_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
@@ -234,7 +229,7 @@ void GtsTransaction_FreeBgs(BgConfig *bgConfig) {
 }
 
 // The sub screen stays dark until the player has walked in; after the trade sequence it is drawn again.
-void GtsTransaction_LoadGraphics(GtsApp *app) {
+static void GtsTransaction_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
 
     GfGfxLoader_GXLoadPal(NARC_a_1_0_0, 0, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x60, HEAP_ID_61);
@@ -252,20 +247,20 @@ void GtsTransaction_LoadGraphics(GtsApp *app) {
     }
 }
 
-void GtsTransaction_CreateWindows(GtsApp *app) {
+static void GtsTransaction_CreateWindows(GtsApp *app) {
     AddWindowParameterized(app->bgConfig, &app->waitingIconWindow, GF_BG_LYR_MAIN_0, 2, 19, 27, 4, 13, 0x28);
     FillWindowPixelBuffer(&app->waitingIconWindow, 0);
 }
 
-void GtsTransaction_RemoveWindows(GtsApp *app) {
+static void GtsTransaction_RemoveWindows(GtsApp *app) {
     RemoveWindow(&app->waitingIconWindow);
 }
 
-void GtsTransaction_CreateStrings(GtsApp *app) {
+static void GtsTransaction_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
 }
 
-void GtsTransaction_DeleteStrings(GtsApp *app) {
+static void GtsTransaction_DeleteStrings(GtsApp *app) {
     String_Delete(app->msgBuffer);
 }
 
@@ -742,7 +737,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
 }
 
 // Back to the screen that asked for the status check: the main menu (statusCheckCaller 1) or the summary (2).
-void GtsTransaction_ReturnToCaller(GtsApp *app) {
+static void GtsTransaction_ReturnToCaller(GtsApp *app) {
     switch (app->statusCheckCaller) {
     case 1:
         Gts_SetNextScreen(app, 1, 0);
@@ -756,7 +751,7 @@ void GtsTransaction_ReturnToCaller(GtsApp *app) {
 }
 
 // A Pokemon from another language opens the Pokewalker's Beyond the Sea course.
-void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon) {
+static void GtsTransaction_RecordTradeStats(GtsApp *app, Pokemon *mon) {
     GameStats_AddScore(app->args->gameStats, SCORE_EVENT_GTS_TRADE);
     GameStats_Inc(app->args->gameStats, GAME_STAT_WIFI_TRADES);
     if (gGameLanguage != GetMonData(mon, MON_DATA_LANGUAGE, NULL)) {
@@ -899,7 +894,7 @@ int GtsTransaction_AlreadyTraded(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-void GtsTransaction_PrintServerError(GtsApp *app) {
+static void GtsTransaction_PrintServerError(GtsApp *app) {
     int msgId = msg_0775_00154; // Communication error...
     // Switched over serverResult + 15 (-11..-6, -1, -14, -2; the plain switch compiles differently).
     switch (app->serverResult + 15) {
@@ -1014,7 +1009,7 @@ int GtsTransaction_WaitText(GtsApp *app) {
 }
 
 // Moves the selected Pokemon out of the box or the party into the GTS save data.
-void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited) {
+static void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited) {
     Pokemon *mon;
 
     if (app->selectedBox != GTS_BOX_PARTY) {
@@ -1039,7 +1034,7 @@ void GtsTransaction_StoreSelectedMon(GtsApp *app, BOOL setDeposited) {
 
 // Into the party, or the first free box slot when it is full (offeredBox/offeredSlot say where); the box argument
 // is not used. A traded Pokemon gets the friendship of a traded Pokemon and the date of the trade is saved.
-void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded) {
+static void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded) {
     int slot;
     int count;
     u8 friendship;
@@ -1081,7 +1076,7 @@ void GtsTransaction_ReceiveMon(GtsApp *app, Pokemon *mon, int box, int traded) {
 }
 
 // The Pokemon got by an exchange; the box argument is not used.
-void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box) {
+static void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box) {
     int slot;
     int count;
     u8 friendship;
@@ -1120,7 +1115,7 @@ void GtsTransaction_ReceiveExchangedMon(GtsApp *app, Pokemon *mon, int box) {
 
 // Today's date packed as year, month, day, weekday bytes (SEEK POKEMON reads them back): the date the deposited
 // Pokemon was traded, or (exchange) the date of the last exchange.
-void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
+static void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
     RTCDate date;
     RTCTime time;
     u32 packed;
@@ -1134,12 +1129,12 @@ void GtsTransaction_SaveTradeDate(void *gtsSave, int exchange) {
     }
 }
 
-void GtsTransaction_AddPartnerToWifiHistory(SaveWiFiHistory *wifiHistory, GtsRecord *record) {
+static void GtsTransaction_AddPartnerToWifiHistory(SaveWiFiHistory *wifiHistory, GtsRecord *record) {
     Comm_MarkLocationSeen(wifiHistory, record->country, record->city, record->language);
 }
 
 // 0: the Pokemon can be received, 1: the party and all boxes are full, 2: it holds Mail and the party is full.
-int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon) {
+static int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon) {
     if (Gts_MonHoldsMail(mon) && Party_GetCount(app->args->party) == PARTY_SIZE) {
         return 2;
     }
@@ -1149,13 +1144,13 @@ int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon) {
     return 0;
 }
 
-void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState) {
+static void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState) {
     app->saveMidState = midState;
     app->saveDoneState = doneState;
 }
 
 // The save holds no deposited Pokemon although hasDepositedMon is set.
-BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app) {
+static BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app) {
     if (!GtsSave_HasStoredMon((void *)app->args->gtsSave) && app->hasDepositedMon != FALSE) {
         return TRUE;
     }

@@ -2,6 +2,10 @@
 
 #include "constants/dwc_status.h"
 
+#include "dwc/dwc_account_internal.h"
+#include "dwc/dwc_main_internal.h"
+#include "dwc/net_common_internal.h"
+#include "dwc/stats_upload_internal.h"
 #include "gts/gts_internal.h"
 #include "gts/gts_server.h"
 #include "msgdata/msg.naix"
@@ -91,22 +95,19 @@ extern const BgTemplate sGtsConnectionSubBg1Template;
 // GTS, GTS TRADE POKEMON, GTS SUMMARY, GTS DEPOSIT POKEMON, GTS SEEK POKEMON.
 extern const u32 sGtsPanelCaptionMsgIds[];
 
-int DWC_CheckInet(void);
-void DWC_InitInetEx(void *connection, int priority, int unused, int sslPriority);
-void DWC_SetAuthServer(int server);
-void DWC_ConnectInetAsync(void);
-void DWC_ProcessInet(void);
-int DWC_GetInetStatus(void);
-int DWC_GetLastErrorEx(int *errorCode, int *errorType);
-void DWC_ClearError(void);
-void DWC_CleanupInet(void);
-int DWC_GetLastError(int *errorCode);
-int DWC_GetApInfo(void *apInfo);
-int DWC_NASLoginAsync(void);
-int DWC_NASLoginProcess(void);
-void DWC_ShutdownGHTTP(void);
-void DWC_ShutdownFriendsMatch(void);
-u64 DWC_CreateFriendKey(void *userData);
+static void GtsConnection_InitBgs(BgConfig *bgConfig);
+static void GtsConnection_FreeBgs(BgConfig *bgConfig);
+static void GtsConnection_LoadGraphics(GtsApp *app);
+static void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim);
+static void GtsConnection_CreateWindows(GtsApp *app);
+static void GtsConnection_RemoveWindows(GtsApp *app);
+static void GtsConnection_CreateStrings(GtsApp *app);
+static void GtsConnection_DeleteStrings(GtsApp *app);
+static int Gts_GetAlignedX(Window *window, String *string, int x, int align, u32 unused, u32 fontId);
+static void Gts_PrintAlignedFont1(Window *window, String *string, int x, int y, int align, u32 color);
+static void GtsConnection_PrintError(GtsApp *app, int msgId);
+static void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
+
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
@@ -115,14 +116,6 @@ void WirelessStatusIcon_SetLevel(s32 level);
 int GtsConnection_Init(GtsApp *app, int state);
 int GtsConnection_Main(GtsApp *app, int state);
 int GtsConnection_Exit(GtsApp *app, int state);
-void GtsConnection_InitBgs(BgConfig *bgConfig);
-void GtsConnection_FreeBgs(BgConfig *bgConfig);
-void GtsConnection_LoadGraphics(GtsApp *app);
-void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim);
-void GtsConnection_CreateWindows(GtsApp *app);
-void GtsConnection_RemoveWindows(GtsApp *app);
-void GtsConnection_CreateStrings(GtsApp *app);
-void GtsConnection_DeleteStrings(GtsApp *app);
 int GtsConnection_AskConnect(GtsApp *app);
 int GtsConnection_HandleConnectPrompt(GtsApp *app);
 int GtsConnection_AskDisconnect(GtsApp *app);
@@ -148,10 +141,6 @@ int GtsConnection_DisconnectAfterError(GtsApp *app);
 int GtsConnection_WaitText(GtsApp *app);
 int GtsConnection_WaitTextAndDelay(GtsApp *app);
 int GtsConnection_WaitTextAndShowYesNo(GtsApp *app);
-int Gts_GetAlignedX(Window *window, String *string, int x, int align, u32 unused, u32 fontId);
-void Gts_PrintAlignedFont1(Window *window, String *string, int x, int y, int align, u32 color);
-void GtsConnection_PrintError(GtsApp *app, int msgId);
-void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
 
 BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group) {
     int first = gGtsSelectorGroupStarts[group];
@@ -242,7 +231,7 @@ int GtsConnection_Exit(GtsApp *app, int state) {
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsConnection_InitBgs(BgConfig *bgConfig) {
+static void GtsConnection_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0 = sGtsConnectionBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
@@ -268,14 +257,14 @@ void GtsConnection_InitBgs(BgConfig *bgConfig) {
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
 }
 
-void GtsConnection_FreeBgs(BgConfig *bgConfig) {
+static void GtsConnection_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void GtsConnection_LoadGraphics(GtsApp *app) {
+static void GtsConnection_LoadGraphics(GtsApp *app) {
     NNSG2dPaletteData *pltt;
     NARC *narc;
     int group;
@@ -341,7 +330,7 @@ void GtsConnection_LoadGraphics(GtsApp *app) {
     NARC_Delete(narc);
 }
 
-void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim) {
+static void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim) {
     if (!anim->active) {
         return;
     }
@@ -370,7 +359,7 @@ void GtsConnection_AnimatePaletteTask(SysTask *task, GtsPaletteAnim *anim) {
     }
 }
 
-void GtsConnection_CreateWindows(GtsApp *app) {
+static void GtsConnection_CreateWindows(GtsApp *app) {
     AddWindowParameterized(app->bgConfig, &app->boxNameWindow, GF_BG_LYR_MAIN_0, 4, 4, 23, 16, 13, 0x94);
     FillWindowPixelBuffer(&app->boxNameWindow, 0);
     AddWindowParameterized(app->bgConfig, &app->titleWindow, GF_BG_LYR_MAIN_0, 4, 1, 24, 2, 13, 0x204);
@@ -380,19 +369,19 @@ void GtsConnection_CreateWindows(GtsApp *app) {
     FillWindowPixelBuffer(&app->waitingIconWindow, 0);
 }
 
-void GtsConnection_RemoveWindows(GtsApp *app) {
+static void GtsConnection_RemoveWindows(GtsApp *app) {
     RemoveWindow(&app->waitingIconWindow);
     RemoveWindow(&app->titleWindow);
     RemoveWindow(&app->boxNameWindow);
 }
 
-void GtsConnection_CreateStrings(GtsApp *app) {
+static void GtsConnection_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->errorBuffer = String_New(256, HEAP_ID_61);
     app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00031); // Nintendo Wi-Fi Connection
 }
 
-void GtsConnection_DeleteStrings(GtsApp *app) {
+static void GtsConnection_DeleteStrings(GtsApp *app) {
     String_Delete(app->titleString);
     String_Delete(app->errorBuffer);
     String_Delete(app->msgBuffer);
@@ -480,7 +469,7 @@ void GtsConnection_StartConnect(GtsApp *app) {
     CommState_InitWfcSession(app->args->saveData);
     Sys_SetSleepDisableFlag(4);
     Gts_CreateWirelessStatusIcon(app);
-    DWC_InitInetEx(app->wifiConnection, 2, 1, 20);
+    DWC_InitInetEx(&app->wifiConnection, 2, 1, 20);
     DWC_SetAuthServer(2);
     DWC_ConnectInetAsync();
     app->state = GTS_CONNECTION_STATE_WAIT_CONNECT;
@@ -491,7 +480,7 @@ int GtsConnection_WaitConnect(GtsApp *app) {
         int error;
         int errorType;
         int errorCode;
-        u8 apInfo[60];
+        NetApInfo apInfo;
     } locals;
 
     DWC_ProcessInet();
@@ -520,7 +509,7 @@ int GtsConnection_WaitConnect(GtsApp *app) {
             app->serverResult = -2;
             break;
         case DWC_CONNECTINET_STATE_CONNECTED:
-            DWC_GetApInfo(locals.apInfo);
+            DWC_GetApInfo(&locals.apInfo);
             app->state = GTS_CONNECTION_STATE_START_AUTH;
             break;
         }
@@ -893,7 +882,7 @@ void Gts_PrintMessage(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u
     app->waitFrames = 0;
 }
 
-int Gts_GetAlignedX(Window *window, String *string, int x, int align, u32 unused, u32 fontId) {
+static int Gts_GetAlignedX(Window *window, String *string, int x, int align, u32 unused, u32 fontId) {
     switch (align) {
     case 1: {
         int width = FontID_String_GetWidth(fontId, string, 0);
@@ -909,7 +898,7 @@ int Gts_GetAlignedX(Window *window, String *string, int x, int align, u32 unused
     return x;
 }
 
-void Gts_PrintAlignedFont1(Window *window, String *string, int x, int y, int align, u32 color) {
+static void Gts_PrintAlignedFont1(Window *window, String *string, int x, int y, int align, u32 color) {
     x = Gts_GetAlignedX(window, string, x, align, color, 1);
     AddTextPrinterParameterizedWithColor(window, 1, string, x, y, TEXT_SPEED_INSTANT, color, NULL);
 }
@@ -934,7 +923,7 @@ void Gts_CreateWirelessStatusIcon(GtsApp *app) {
     WirelessStatusIcon_Create();
 }
 
-void GtsConnection_PrintError(GtsApp *app, int msgId) {
+static void GtsConnection_PrintError(GtsApp *app, int msgId) {
     String *string = String_New(256, HEAP_ID_61);
     ReadMsgDataIntoString(app->wifiErrorMsgData, msgId, string);
     StringExpandPlaceholders(app->msgFormat, app->errorBuffer, string);
@@ -944,7 +933,7 @@ void GtsConnection_PrintError(GtsApp *app, int msgId) {
     String_Delete(string);
 }
 
-void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode) {
+static void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode) {
     if (msgId == -1) {
         msgId = 11; // Communication error. Error code: ...
     }

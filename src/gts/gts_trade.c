@@ -11,17 +11,18 @@
 #include "player_data.h"
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
+#include "save_gts.h"
 
 extern const OverlayManagerTemplate sGtsTradeSequenceTemplate;
 
-void GtsSave_GetStoredMon(void *gtsSave, void *dest);
+static PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record);
+static Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind);
+static void GtsTrade_StoreReceivedMon(GtsApp *app);
+
 
 int GtsTrade_Init(GtsApp *app, int state);
 int GtsTrade_Main(GtsApp *app, int state);
 int GtsTrade_Exit(GtsApp *app, int state);
-PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record);
-Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind);
-void GtsTrade_StoreReceivedMon(GtsApp *app);
 
 // Starts the trade sequence (OVY_71) for the kind of trade in nextScreenArg (7..10).
 int GtsTrade_Init(GtsApp *app, int state) {
@@ -153,7 +154,7 @@ int GtsTrade_Exit(GtsApp *app, int state) {
 }
 
 // The trade partner as a profile: the record's trainer name, game version and language.
-PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record) {
+static PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record) {
     PlayerProfile *profile = PlayerProfile_New(HEAP_ID_61);
     PlayerProfile_Init(profile);
     Save_Profile_PlayerName_Set(profile, record->trainerName);
@@ -162,7 +163,7 @@ PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record) {
     return profile;
 }
 
-Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind) {
+static Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind) {
     if (kind == 9) {
         return &app->searchResults[app->selectedResult].mon;
     }
@@ -178,7 +179,7 @@ Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind) {
 
 // Puts the received Pokemon where the offered one was: its party slot, or (after deleting the offered
 // Pokemon from its box) the first empty box slot.
-void GtsTrade_StoreReceivedMon(GtsApp *app) {
+static void GtsTrade_StoreReceivedMon(GtsApp *app) {
     int kind = app->nextScreenArg;
     Pokemon *mon = GtsTrade_GetReceivedMon(app, kind);
     if (app->offeredBox == GTS_BOX_PARTY) {

@@ -4,6 +4,7 @@
 #include "player_data.h"
 
 void CommWireless_StartUp(void);
+void CommWireless_Terminate(void);
 BOOL CommWireless_IsStartedUp(void);
 int CommWireless_CountParents();
 u32 CommWireless_GetParentSlot(u32 ordinal);

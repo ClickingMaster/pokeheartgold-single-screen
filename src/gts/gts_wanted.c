@@ -94,19 +94,25 @@ extern const int sGtsSpeciesLetterFiles[];
 extern const u16 sGtsCountries[];
 extern const GtsCountryGroup sGtsCountryGroups[];
 
+static void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4);
+static void GtsWanted_InitBgs(BgConfig *bgConfig);
+static void GtsWanted_FreeBgs(BgConfig *bgConfig);
+static void GtsWanted_LoadGraphics(GtsApp *app);
+static void GtsWanted_CreateWindows(GtsApp *app);
+static void GtsWanted_RemoveWindows(GtsApp *app);
+static void GtsWanted_CreateSprites(GtsApp *app);
+static void GtsWanted_DeleteSprites(GtsApp *app);
+static void GtsWanted_CreateData(GtsApp *app);
+static void GtsWanted_FreeData(GtsApp *app);
+static u32 Gts_GetGenderColor(int gender, u32 color);
+static void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
+static void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary);
+static u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count);
+static void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app);
+
 int GtsWanted_Init(GtsApp *app, int state);
 int GtsWanted_Main(GtsApp *app, int state);
 int GtsWanted_Exit(GtsApp *app, int state);
-void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4);
-void GtsWanted_InitBgs(BgConfig *bgConfig);
-void GtsWanted_FreeBgs(BgConfig *bgConfig);
-void GtsWanted_LoadGraphics(GtsApp *app);
-void GtsWanted_CreateWindows(GtsApp *app);
-void GtsWanted_RemoveWindows(GtsApp *app);
-void GtsWanted_CreateSprites(GtsApp *app);
-void GtsWanted_DeleteSprites(GtsApp *app);
-void GtsWanted_CreateData(GtsApp *app);
-void GtsWanted_FreeData(GtsApp *app);
 int GtsWanted_Start(GtsApp *app);
 int GtsWanted_HandleInput(GtsApp *app);
 int GtsWanted_OpenSpeciesSelector(GtsApp *app);
@@ -124,9 +130,6 @@ int GtsWanted_ShowConfirmPrompt(GtsApp *app);
 int GtsWanted_HandleConfirmPrompt(GtsApp *app);
 int GtsWanted_FadeOut(GtsApp *app);
 int GtsWanted_WaitText(GtsApp *app);
-u32 Gts_GetGenderColor(int gender, u32 color);
-void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary);
-void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app);
 
 int GtsWanted_Init(GtsApp *app, int state) {
     GtsSelectorArgs args;
@@ -174,7 +177,7 @@ int GtsWanted_Exit(GtsApp *app, int state) {
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4) {
+static void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4) {
     String *string = NewString_ReadMsgData(app->gtsMsgData, msgId);
     StringExpandPlaceholders(app->msgFormat, app->msgBuffer, string);
     FillWindowPixelBuffer(&app->waitingIconWindow, 15);
@@ -183,7 +186,7 @@ void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, 
     String_Delete(string);
 }
 
-void GtsWanted_InitBgs(BgConfig *bgConfig) {
+static void GtsWanted_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0;
     BgTemplate bg1;
     BgTemplate bg2;
@@ -206,7 +209,7 @@ void GtsWanted_InitBgs(BgConfig *bgConfig) {
     Gts_InitSubScreenBgs(bgConfig, 0, FALSE);
 }
 
-void GtsWanted_FreeBgs(BgConfig *bgConfig) {
+static void GtsWanted_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -214,7 +217,7 @@ void GtsWanted_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void GtsWanted_LoadGraphics(GtsApp *app) {
+static void GtsWanted_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
     GfGfxLoader_GXLoadPal(NARC_a_1_0_0, 1, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x40, HEAP_ID_61);
@@ -229,7 +232,7 @@ void GtsWanted_LoadGraphics(GtsApp *app) {
 }
 
 // The message window; the wanted Pokemon's lines (infoWindows[0..2]) and the offered Pokemon's (infoWindows[3..5]).
-void GtsWanted_CreateWindows(GtsApp *app) {
+static void GtsWanted_CreateWindows(GtsApp *app) {
     int i;
     int baseTile;
     const GtsWantedWindowPosition *position;
@@ -249,7 +252,7 @@ void GtsWanted_CreateWindows(GtsApp *app) {
     Gts_CreatePanelWindow(app, 3);
 }
 
-void GtsWanted_RemoveWindows(GtsApp *app) {
+static void GtsWanted_RemoveWindows(GtsApp *app) {
     int i;
     Window *window;
 
@@ -263,7 +266,7 @@ void GtsWanted_RemoveWindows(GtsApp *app) {
 }
 
 // The selector's sprites.
-void GtsWanted_CreateSprites(GtsApp *app) {
+static void GtsWanted_CreateSprites(GtsApp *app) {
     SpriteTemplate template;
 
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -285,13 +288,13 @@ void GtsWanted_CreateSprites(GtsApp *app) {
     Sprite_SetDrawFlag(app->arrowSprites[1], FALSE);
 }
 
-void GtsWanted_DeleteSprites(GtsApp *app) {
+static void GtsWanted_DeleteSprites(GtsApp *app) {
     Sprite_Delete(app->selectorCursorSprite);
     Sprite_Delete(app->arrowSprites[0]);
     Sprite_Delete(app->arrowSprites[1]);
 }
 
-void GtsWanted_CreateData(GtsApp *app) {
+static void GtsWanted_CreateData(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
     MI_CpuClearFast(app->searchCursor, sizeof(GtsSearchCursor));
@@ -300,7 +303,7 @@ void GtsWanted_CreateData(GtsApp *app) {
     GtsCursorValueTable_Clear(&app->unk_1234);
 }
 
-void GtsWanted_FreeData(GtsApp *app) {
+static void GtsWanted_FreeData(GtsApp *app) {
     Heap_Free(app->searchCursor->johtoDexFlags);
     Heap_Free(app->searchCursor->alphabeticalSpecies);
     Heap_Free(app->searchCursor);
@@ -541,7 +544,7 @@ void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgDat
 }
 
 // The color of the male and female symbols; color for the others.
-u32 Gts_GetGenderColor(int gender, u32 color) {
+static u32 Gts_GetGenderColor(int gender, u32 color) {
     if (gender == 1) {
         return sGtsGenderColors[0];
     }
@@ -591,7 +594,7 @@ void Gts_PrintLevelRangeAt(Window *window, MsgData *msgData, int levelRange, int
 }
 
 // WANTED, then the species and gender, then the level range (right-aligned).
-void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange) {
+static void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange) {
     String *title;
     int i;
     Window *window;
@@ -639,7 +642,7 @@ void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, Message
 }
 
 // OFFER POKEMON, then the nickname and gender, then the level; fills the Pokemon's summary.
-void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary) {
+static void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary) {
     String *title;
     String *levelString;
     String *nickname;
@@ -680,7 +683,7 @@ void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window
 
 // The species lists of the species selector.
 
-u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count) {
+static u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count) {
     u32 size;
     u16 *species = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, NARC_zukan_data_sort_order_dex_order_alphabetical, FALSE, heapID, FALSE, &size);
     *count = size >> 1;
@@ -733,7 +736,7 @@ void Gts_InitRecord(GtsRecord *record, GtsApp *app) {
     record->language = GAME_LANGUAGE;
 }
 
-void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app) {
+static void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app) {
     Gts_InitRecord(record, app);
     record->summary = app->depositSummary;
     record->wanted = app->depositWanted;

@@ -6,8 +6,10 @@
 
 #include "constants/sndseq.h"
 
+#include "dwc/net_common_internal.h"
 #include "gts/gts_internal.h"
 #include "msgdata/msg.naix"
+#include "nitrowifi/wcm_internal.h"
 
 #include "bg_window.h"
 #include "comm_state.h"
@@ -57,25 +59,24 @@ typedef struct GtsScreen {
 
 extern const GtsScreen sGtsScreens[];
 
-int WCM_GetPhase(void);
-void DWC_ClearError(void);
-void DWC_UpdateConnection(void);
-void DWC_SetMemFunc(void *(*alloc)(void *, u32, int), void (*free)(void *, void *));
-int DWC_GetLinkLevel(void);
-BOOL LoadOVY38(void);
-void UnloadOVY38(void);
-void CommWireless_Terminate(void);
+static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
+static void Gts_VBlankCB(void *arg);
+static void Gts_SetGfxBanks(void);
+static void Gts_InitData(GtsApp *app, OverlayManager *man);
+static void Gts_ExitDummy(GtsApp *app);
+static void Gts_SetupWindow0(void);
+static void Gts_InitObjTransfer(void);
+static void Gts_InitSpriteResources(GtsApp *app);
+static void Gts_InitSpriteResourcesHeaders(GtsApp *app);
+static void Gts_ListMenuCallback(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event);
+static void *Gts_Alloc(int unused, u32 size, int alignment);
+static void Gts_Free(int unused, void *ptr, u32 size);
+static void Gts_InitGraphics(GtsApp *app);
+static void Gts_FreeGraphics(GtsApp *app);
+static void Gts_DecrementTimer(GtsApp *app);
+static void Gts_CountBoxMonsStep(GtsApp *app);
+static void Gts_ClearDim(void);
 
-BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
-void Gts_VBlankCB(void *arg);
-void Gts_SetGfxBanks(void);
-void Gts_InitData(GtsApp *app, OverlayManager *man);
-void Gts_ExitDummy(GtsApp *app);
-void Gts_ListMenuCallback(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event);
-void *Gts_Alloc(void *unused, u32 size, int alignment);
-void Gts_Free(void *unused, void *ptr);
-void Gts_DecrementTimer(GtsApp *app);
-void Gts_CountBoxMonsStep(GtsApp *app);
 
 static const TouchscreenListMenuTemplate sGtsListMenuTemplate = {
     .wrapAround = 0,
@@ -308,7 +309,7 @@ void GtsServer_RequestSetProfile(void *profile, void *response) {
     }
 }
 
-BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity) {
+static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity) {
     switch (GameStats_PrepareRequest((char *)url, gGtsServer.pid, payload, payloadSize, response, responseCapacity)) {
     case 0:
         return TRUE;
@@ -508,7 +509,7 @@ BOOL Gts_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void Gts_VBlankCB(void *arg) {
+static void Gts_VBlankCB(void *arg) {
     GtsApp *app = arg;
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM base as a constant
     vu32 *dtcm = (vu32 *)0x027E0000;
@@ -526,12 +527,12 @@ void Gts_VBlankCB(void *arg) {
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
 
-void Gts_SetGfxBanks(void) {
+static void Gts_SetGfxBanks(void) {
     GraphicsBanks graphicsBanks = sGtsGraphicsBanks;
     GfGfx_SetBanks(&graphicsBanks);
 }
 
-void Gts_InitData(GtsApp *app, OverlayManager *man) {
+static void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->args = OverlayManager_GetArgs(man);
     app->screen = 0;
     Gts_SetNextScreen(app, 0, 0);
@@ -550,11 +551,11 @@ void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->searchCountry = 0;
 }
 
-void Gts_ExitDummy(GtsApp *app) {
+static void Gts_ExitDummy(GtsApp *app) {
 }
 
 // Shows window 0 (the top right corner of the main screen, 0xF0-0xFF x 0x00-0x10) on the main screen only.
-void Gts_SetupWindow0(void) {
+static void Gts_SetupWindow0(void) {
     GXS_SetVisibleWnd(GX_WNDMASK_NONE);
     GX_SetVisibleWnd(GX_WNDMASK_W0);
     G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, FALSE);
@@ -562,7 +563,7 @@ void Gts_SetupWindow0(void) {
     G2_SetWnd0Position(0xF0, 0, 0xFF, 0x10);
 }
 
-void Gts_InitObjTransfer(void) {
+static void Gts_InitObjTransfer(void) {
     ObjCharTransferTemplate template = sGtsObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_61);
@@ -570,7 +571,7 @@ void Gts_InitObjTransfer(void) {
     ObjPlttTransfer_Reset();
 }
 
-void Gts_InitSpriteResources(GtsApp *app) {
+static void Gts_InitSpriteResources(GtsApp *app) {
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
     int i;
     void *rawPalette;
@@ -640,7 +641,7 @@ void Gts_InitSpriteTemplate(SpriteTemplate *template, GtsApp *app, const SpriteR
     template->heapID = HEAP_ID_61;
 }
 
-void Gts_InitSpriteResourcesHeaders(GtsApp *app) {
+static void Gts_InitSpriteResourcesHeaders(GtsApp *app) {
     CreateSpriteResourcesHeader(&app->headers[0], 0, 0, 0, 0, -1, -1, 0, 0, app->resourceManagers[GF_GFX_RES_TYPE_CHAR], app->resourceManagers[GF_GFX_RES_TYPE_PLTT], app->resourceManagers[GF_GFX_RES_TYPE_CELL], app->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     CreateSpriteResourcesHeader(&app->headers[1], 1, 1, 1, 1, -1, -1, 0, 0, app->resourceManagers[GF_GFX_RES_TYPE_CHAR], app->resourceManagers[GF_GFX_RES_TYPE_PLTT], app->resourceManagers[GF_GFX_RES_TYPE_CELL], app->resourceManagers[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, TRUE);
@@ -699,7 +700,7 @@ TouchscreenListMenu *Gts_CreateListMenu(GtsApp *app, u8 numWindows, int y) {
     return menu;
 }
 
-void Gts_ListMenuCallback(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event) {
+static void Gts_ListMenuCallback(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event) {
     switch (event) {
     case 0:
         break;
@@ -742,14 +743,14 @@ void Gts_SetSpritePositionRounded(Sprite *sprite, int x, int y) {
     Sprite_SetMatrix(sprite, &vec);
 }
 
-void *Gts_Alloc(void *unused, u32 size, int alignment) {
+static void *Gts_Alloc(int unused, u32 size, int alignment) {
     OSIntrMode intrMode = OS_DisableInterrupts();
     void *ptr = NNS_FndAllocFromExpHeapEx(gGtsGlobals.heap, size, alignment);
     OS_RestoreInterrupts(intrMode);
     return ptr;
 }
 
-void Gts_Free(void *unused, void *ptr) {
+static void Gts_Free(int unused, void *ptr, u32 size) {
     if (ptr != NULL) {
         OSIntrMode intrMode = OS_DisableInterrupts();
         NNS_FndFreeToExpHeap(gGtsGlobals.heap, ptr);
@@ -775,7 +776,7 @@ int Gts_GetTextFrameDelay(GtsApp *app) {
     return Options_GetTextFrameDelay(app->args->options);
 }
 
-void Gts_InitGraphics(GtsApp *app) {
+static void Gts_InitGraphics(GtsApp *app) {
     Gts_SetGfxBanks();
     Gts_InitObjTransfer();
     Gts_InitSpriteResources(app);
@@ -783,7 +784,7 @@ void Gts_InitGraphics(GtsApp *app) {
     Main_SetVBlankIntrCB(Gts_VBlankCB, app);
 }
 
-void Gts_FreeGraphics(GtsApp *app) {
+static void Gts_FreeGraphics(GtsApp *app) {
     int i;
 
     Gts_FreeAvatarGraphics(app);
@@ -801,7 +802,7 @@ void Gts_FreeGraphics(GtsApp *app) {
     ObjPlttTransfer_Destroy();
 }
 
-void Gts_DecrementTimer(GtsApp *app) {
+static void Gts_DecrementTimer(GtsApp *app) {
     if (app->timer != 0) {
         app->timer--;
     }
@@ -812,7 +813,7 @@ void Gts_StartCountingBoxMons(GtsApp *app) {
     app->boxMonCount = 0;
 }
 
-void Gts_CountBoxMonsStep(GtsApp *app) {
+static void Gts_CountBoxMonsStep(GtsApp *app) {
     u16 box = app->countingBox;
     if (box != 0) {
         PCStorage *pcStorage = app->args->pcStorage;
@@ -851,7 +852,7 @@ void Gts_DimScreen(BOOL mainScreen) {
     }
 }
 
-void Gts_ClearDim(void) {
+static void Gts_ClearDim(void) {
     reg_G2_BLDCNT = 0;
     reg_G2S_DB_BLDCNT = 0;
 }

@@ -47,28 +47,30 @@ typedef enum GtsMainMenuState {
 void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsMainMenuStates[])(GtsApp *app);
+
+static void GtsMainMenu_InitBgs(BgConfig *bgConfig);
+static void GtsMainMenu_FreeBgs(BgConfig *bgConfig);
+static void GtsMainMenu_HideMainScreen(GtsApp *app);
+static void GtsMainMenu_LoadGraphics(GtsApp *app);
+static void GtsMainMenu_CreateCursor(GtsApp *app);
+static void GtsMainMenu_DeleteCursor(GtsApp *app);
+static void GtsMainMenu_CreateWindows(GtsApp *app);
+static void GtsMainMenu_RemoveWindows(GtsApp *app);
+static void GtsMainMenu_CreateStrings(GtsApp *app);
+static void GtsMainMenu_DeleteStrings(GtsApp *app);
+static int GtsMainMenu_GetTouchedButton(void);
+static void GtsMainMenu_SelectButton(GtsApp *app, int button);
+static void GtsMainMenu_DrawButtons(GtsApp *app);
+static void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
+static void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
+static void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused);
+
 // The cursor positions {x, y} of the three buttons.
 // The button labels, [hasDepositedMon][button].
 
 int GtsMainMenu_Init(GtsApp *app, int state);
 int GtsMainMenu_Main(GtsApp *app, int state);
 BOOL GtsMainMenu_Exit(GtsApp *app, int state);
-void GtsMainMenu_InitBgs(BgConfig *bgConfig);
-void GtsMainMenu_FreeBgs(BgConfig *bgConfig);
-void GtsMainMenu_HideMainScreen(GtsApp *app);
-void GtsMainMenu_LoadGraphics(GtsApp *app);
-void GtsMainMenu_CreateCursor(GtsApp *app);
-void GtsMainMenu_DeleteCursor(GtsApp *app);
-void GtsMainMenu_CreateWindows(GtsApp *app);
-void GtsMainMenu_RemoveWindows(GtsApp *app);
-void GtsMainMenu_CreateStrings(GtsApp *app);
-void GtsMainMenu_DeleteStrings(GtsApp *app);
-int GtsMainMenu_GetTouchedButton(void);
-void GtsMainMenu_SelectButton(GtsApp *app, int button);
-void GtsMainMenu_DrawButtons(GtsApp *app);
-void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
-void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
-void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused);
 int GtsMainMenu_WaitEnterAnim(GtsApp *app);
 int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app);
 void GtsMainMenu_StartFadeIn(GtsApp *app);
@@ -260,7 +262,7 @@ BOOL GtsMainMenu_Exit(GtsApp *app, int state) {
     return TRUE;
 }
 
-void GtsMainMenu_InitBgs(BgConfig *bgConfig) {
+static void GtsMainMenu_InitBgs(BgConfig *bgConfig) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -312,21 +314,21 @@ void Gts_FreeSubScreenBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_3);
 }
 
-void GtsMainMenu_FreeBgs(BgConfig *bgConfig) {
+static void GtsMainMenu_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_0);
 }
 
-void GtsMainMenu_HideMainScreen(GtsApp *app) {
+static void GtsMainMenu_HideMainScreen(GtsApp *app) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
     Sprite_SetDrawFlag(app->cursorSprite, FALSE);
 }
 
-void GtsMainMenu_LoadGraphics(GtsApp *app) {
+static void GtsMainMenu_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
 
@@ -347,7 +349,7 @@ void GtsMainMenu_LoadGraphics(GtsApp *app) {
     NARC_Delete(narc);
 }
 
-void GtsMainMenu_CreateCursor(GtsApp *app) {
+static void GtsMainMenu_CreateCursor(GtsApp *app) {
     SpriteTemplate template;
     SpriteResourcesHeader header;
 
@@ -360,11 +362,11 @@ void GtsMainMenu_CreateCursor(GtsApp *app) {
     Sprite_SetAnimCtrlSeq(app->cursorSprite, 43);
 }
 
-void GtsMainMenu_DeleteCursor(GtsApp *app) {
+static void GtsMainMenu_DeleteCursor(GtsApp *app) {
     Sprite_Delete(app->cursorSprite);
 }
 
-void GtsMainMenu_CreateWindows(GtsApp *app) {
+static void GtsMainMenu_CreateWindows(GtsApp *app) {
     int i;
     int baseTile;
     int y;
@@ -393,7 +395,7 @@ void GtsMainMenu_CreateWindows(GtsApp *app) {
     Gts_CreatePanelWindow(app, 0);
 }
 
-void GtsMainMenu_RemoveWindows(GtsApp *app) {
+static void GtsMainMenu_RemoveWindows(GtsApp *app) {
     int i;
     Window *window;
 
@@ -408,12 +410,12 @@ void GtsMainMenu_RemoveWindows(GtsApp *app) {
     RemoveWindow(&app->titleWindow);
 }
 
-void GtsMainMenu_CreateStrings(GtsApp *app) {
+static void GtsMainMenu_CreateStrings(GtsApp *app) {
     app->msgBuffer = String_New(180, HEAP_ID_61);
     app->titleString = NewString_ReadMsgData(app->gtsMsgData, msg_0775_00039); // GLOBAL TRADE SYSTEM
 }
 
-void GtsMainMenu_DeleteStrings(GtsApp *app) {
+static void GtsMainMenu_DeleteStrings(GtsApp *app) {
     String_Delete(app->msgBuffer);
     String_Delete(app->titleString);
 }
@@ -464,11 +466,11 @@ int GtsMainMenu_ShowPrompt(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_GetTouchedButton(void) {
+static int GtsMainMenu_GetTouchedButton(void) {
     return TouchscreenHitbox_FindRectAtTouchNew(sGtsMainMenuButtonHitboxes);
 }
 
-void GtsMainMenu_SelectButton(GtsApp *app, int button) {
+static void GtsMainMenu_SelectButton(GtsApp *app, int button) {
     switch (button) {
     case 0:
         if (app->hasDepositedMon == FALSE) {
@@ -612,7 +614,7 @@ int GtsMainMenu_WaitTextAndPause(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-void GtsMainMenu_DrawButtons(GtsApp *app) {
+static void GtsMainMenu_DrawButtons(GtsApp *app) {
     Window *window = app->windows;
     const u32 *msgIds = sGtsMainMenuButtonMsgs[app->hasDepositedMon];
     int i;
@@ -627,21 +629,21 @@ void GtsMainMenu_DrawButtons(GtsApp *app) {
     }
 }
 
-void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4) {
+static void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4) {
     ReadMsgDataIntoString(app->gtsMsgData, msgId, app->msgBuffer);
     FillWindowPixelBuffer(&app->waitingIconWindow, 15);
     DrawFrameAndWindow2(&app->waitingIconWindow, FALSE, 1, 14);
     app->textPrinterId = AddTextPrinterParameterized(&app->waitingIconWindow, 1, app->msgBuffer, 0, 0, textSpeed, NULL);
 }
 
-void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4) {
+static void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4) {
     ReadMsgDataIntoString(app->gtsMsgData, msgId, app->msgBuffer);
     FillWindowPixelBuffer(&app->promptWindow, 15);
     DrawFrameAndWindow2(&app->promptWindow, FALSE, 1, 14);
     app->textPrinterId = AddTextPrinterParameterized(&app->promptWindow, 1, app->msgBuffer, 0, 0, textSpeed, NULL);
 }
 
-void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused) {
+static void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int fontId, int msgId, u32 unused) {
     String *string = NewString_ReadMsgData(msgData, msgId);
     // The font id is passed without truncation to u8: the callee takes it as u32 (see the FontID TODO).
     ((u8(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(window, fontId, string, 0, 0, 0, MAKE_TEXT_COLOR(10, 9, 0), NULL);
