@@ -208,9 +208,6 @@ static const WindowTemplate sSearchWindowTemplates[] = {
     { .bgId = GF_BG_LYR_MAIN_0, .left = 27, .top = 11, .width = 3,  .height = 2,  .palette = 9, .baseTile = 0x3B8 },
 };
 
-void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
-void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
-
 // Window ids of the list screen: 0-1 seen / caught labels, 2-5 the counts (two of each, alternating),
 // 7-10 entry header, 11-19 entry details. The search screen's entry windows are 81-93 (header 81-84,
 // details 85-93).

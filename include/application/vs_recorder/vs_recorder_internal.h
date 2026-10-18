@@ -666,7 +666,7 @@ void VsRecorder_ListScroll(VsRecorderListWindow *list, s16 delta);
 void VsRecorder_RemoveListWindow(VsRecorderListWindow *list);
 void VsRecorder_ClearListWindow(VsRecorderListWindow *list);
 void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
-void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY);
+void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, s16 upY, s16 downY);
 void VsRecorder_UpdateListArrows(VsRecorderListWindow *list);
 void VsRecorder_UpdateListArrowsCursor(VsRecorderListWindow *list);
 void VsRecorder_FreeListArrows(VsRecorderListWindow *list, VsRecorderWork *work);

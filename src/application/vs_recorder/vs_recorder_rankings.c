@@ -532,8 +532,6 @@ BOOL VsRecorder_RankingsEnter(VsRecorderWork *work) {
     return FALSE;
 }
 
-BOOL VsRecorder_RankingsDownload(VsRecorderWork *work);
-
 // substate 2: receive the rankings; back to the menu if they cannot be received or are incomplete
 BOOL VsRecorder_RankingsDownload(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
@@ -793,8 +791,6 @@ BOOL VsRecorder_RankingsInvalid(VsRecorderWork *work) {
     GF_AssertFail();
     return FALSE;
 }
-
-BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work);
 
 // substate 4: SWITCH RANKINGS / SWITCH TEAMS: rebuild the list and the windows
 BOOL VsRecorder_RankingsSwitch(VsRecorderWork *work) {

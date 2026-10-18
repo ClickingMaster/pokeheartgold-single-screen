@@ -122,7 +122,7 @@ extern const u16 sAgbKeepFirstAbilitySpecies[];
 extern u16 sAgbSpeciesMap[];
 extern u16 sAgbSpeciesMapNationalDex[];
 
-void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which);
+static void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which);
 
 extern PmAgbSave sPmAgbSave;
 
@@ -509,7 +509,7 @@ void *PmAgbCartridge_GetPlayerName(void *unused) {
 
 // Substructure `which` (0 growth, 1 attacks, 2 EVs and condition, 3 misc) of the box Pokemon; the order of the four
 // depends on personality % 24
-void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
+static void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which) {
     u8 *result = NULL;
     switch (personality % 24) {
     case 0: {

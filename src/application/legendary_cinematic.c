@@ -66,41 +66,6 @@ static inline void LegendaryCinematic_SetCaptureRegister(GXCaptureSize size, GXC
     reg_GX_DISPCAPCNT = REG_GX_DISPCAPCNT_FIELD(1, mode, 0, srcB, srcA, size, 0, dest, evb, eva);
 }
 
-int HoOhCinematic_Init(LegendaryCinematic *cinematic);
-int HoOhCinematic_Exit(LegendaryCinematic *cinematic);
-int HoOhCinematic_WaitFade(LegendaryCinematic *cinematic);
-int HoOhCinematic_PlayFirstScene(LegendaryCinematic *cinematic);
-int HoOhCinematic_LoadSecondScene(LegendaryCinematic *cinematic);
-int HoOhCinematic_PlaySecondScene(LegendaryCinematic *cinematic);
-int LugiaCinematic_Init(LegendaryCinematic *cinematic);
-int LugiaCinematic_Exit(LegendaryCinematic *cinematic);
-int LugiaCinematic_WaitFade(LegendaryCinematic *cinematic);
-int LugiaCinematic_Play(LegendaryCinematic *cinematic);
-int ArceusCinematic_Init(LegendaryCinematic *cinematic);
-int ArceusCinematic_Exit(LegendaryCinematic *cinematic);
-int ArceusCinematic_WaitFade(LegendaryCinematic *cinematic);
-int ArceusCinematic_Blend(LegendaryCinematic *cinematic);
-int ArceusCinematic_RunScript(LegendaryCinematic *cinematic);
-int ArceusScriptCmd_Wait(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_FadeInFromBlack(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_FadeOutToBlack(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_FadeInFromWhite(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_FadeOutToWhite(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_WaitFade(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_LoadBg(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_ToggleBg(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SetBgPriority(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SetBlendPlane(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_StartBlend(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_ResetBlend(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SaveBgm(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_StopBgm(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_PlayBgm(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SetSpriteVisible(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SetSpritePosition(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_SetSpritePriority(LegendaryCinematic *cinematic, const int *cmd);
-int ArceusScriptCmd_Nop(void);
-
 void LegendaryCinematic_Init3D(LegendaryCinematic *cinematic) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();

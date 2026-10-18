@@ -174,11 +174,11 @@ static void MigrateFromAgb_PrintIntro(MigrateFromAgbApp *app);
 static void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app);
 static int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app);
 
-int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app);
-void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags);
-BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index);
-BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index);
-BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed);
+static int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app);
+static void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags);
+static BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index);
+static BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index);
+static BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed);
 
 static const ObjCharTransferTemplate sMigrateFromAgbObjCharTransferTemplate = {
     .maxTasks = 20,
@@ -341,7 +341,7 @@ static void MigrateFromAgb_GetAgbVersion(int *version) {
 
 // Sends the picked Pokemon to the Pal Park, saves, then erases them from the cartridge: returns 10 while busy, 11
 // when done, 12 on failure
-int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
+static int MigrateFromAgb_RunTransfer(MigrateFromAgbApp *app) {
     MigrateFromAgbSave *save = &app->save;
     u8 buffer[16];
     int result;
@@ -463,7 +463,7 @@ static int MigrateFromAgb_GetTextX(MigrateFromAgbText *text, String *string, int
 }
 
 // flags: 1 center, 2 keep the window contents, 4 don't copy to VRAM, 8 draw the frame (16: the message box frame)
-void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags) {
+static void MigrateFromAgb_PrintText(MigrateFromAgbApp *app, MigrateFromAgbText *text, int flags) {
     String *string;
     int textSpeed = text->textSpeed;
     if (!textSpeed) {
@@ -1319,7 +1319,7 @@ static int MigrateFromAgb_CheckCanMigrate(MigrateFromAgbApp *app) {
 }
 
 // Prints message sMigrateFromAgbResultMessages[index] (once) and waits for it: TRUE when done
-BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index) {
+static BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index) {
     if (app->pendingMsg != 0) {
         MigrateFromAgb_InitMsgBox(app);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
@@ -1335,7 +1335,7 @@ BOOL MigrateFromAgb_PrintResultMsg(MigrateFromAgbApp *app, int index) {
 }
 
 // The same, then shows the yes/no prompt
-BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index) {
+static BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index) {
     if (app->pendingMsg != 0) {
         MigrateFromAgb_InitMsgBox(app);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);
@@ -1352,7 +1352,7 @@ BOOL MigrateFromAgb_PrintResultMsgWithYesNo(MigrateFromAgbApp *app, int index) {
 }
 
 // Prints app->pendingMsgId: TRUE when printed (textSpeed != 0) or, if printed instantly, when a key or the screen is pressed
-BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed) {
+static BOOL MigrateFromAgb_PrintPendingMsg(MigrateFromAgbApp *app, int textSpeed) {
     if (app->pendingMsgId != -1) {
         MigrateFromAgb_InitMsgBox(app);
         TextFlags_SetCanTouchSpeedUpPrint(TRUE);

@@ -199,6 +199,8 @@ typedef struct EasyChatInitialGridCell {
 #define GetECWordIntoStringByIndexInt ((void (*)(int, String *))GetECWordIntoStringByIndex)
 #define ListMenuUpdateCursorObjInt    ((void (*)(struct ListMenuCursor *, Window *, int, int))ListMenuUpdateCursorObj)
 
+void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
+
 extern const WindowTemplate gEasyChatMenuViewWindowTemplates[3];
 extern const EasyChatInitialGridCell gEasyChatInitialGridCells[EC_INITIAL_GRID_CELLS];
 

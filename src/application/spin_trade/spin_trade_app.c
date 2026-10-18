@@ -425,6 +425,7 @@ extern const u16 gSpinTradeDropTargetAngles[][5];
 extern int (*const gSpinTradeStateFuncs[])(SpinTradeApp *app);
 extern const int gSpinTradeHoverOffsets[];
 
+int GetUserFrameGfx2PaletteMember(int frame);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);

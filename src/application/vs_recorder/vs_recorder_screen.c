@@ -1696,9 +1696,9 @@ void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *wor
     VsRecorder_UpdateListArrows(list);
 }
 
-void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY) {
-    ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[0], 0x80, upY);
-    ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(list->arrows[1], 0x80, downY);
+void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, s16 upY, s16 downY) {
+    ManagedSprite_SetPositionXY(list->arrows[0], 128, upY);
+    ManagedSprite_SetPositionXY(list->arrows[1], 128, downY);
 }
 
 // scrolled lists: hide the arrow of an end that is reached

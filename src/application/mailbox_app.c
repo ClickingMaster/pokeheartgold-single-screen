@@ -27,9 +27,6 @@
 #include "touchscreen_list_menu.h"
 #include "yes_no_prompt.h"
 
-void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
-void BgCellManager_DrawCell(BgCellManager *manager, int index);
-
 static const TouchscreenListMenuTemplate sMailboxMailMenuTemplate = {
     .wrapAround = 1,
     .centered = 1,

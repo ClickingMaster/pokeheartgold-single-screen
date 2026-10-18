@@ -13,16 +13,6 @@
 #include "text.h"
 #include "touchscreen.h"
 
-void ModelResource_Free(FootprintStampModel *model);
-void ModelInstance_Init(FootprintStampModelInstance *instance, FootprintStampModel *model);
-void ModelInstance_Draw(FootprintStampModelInstance *instance);
-void ModelInstance_SetVisible(FootprintStampModelInstance *instance, BOOL visible);
-void ModelInstance_SetPosition(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void ModelInstance_GetPosition(FootprintStampModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-void ModelInstance_SetScale(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void ModelInstance_GetScale(FootprintStampModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-void ModelInstance_SetRotation(FootprintStampModelInstance *instance, u16 rotation, int axis);
-u16 ModelInstance_GetRotation(FootprintStampModelInstance *instance, int axis);
 int WiFiPlazaLobbyClient_IdToSlot(u32 playerId);
 int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void *WiFiPlazaWork_GetPlayer(void *lobby, int slot);
@@ -211,7 +201,7 @@ static void FootprintStampBoard_FreePolygonId(FootprintStampBoard *board, int id
     }
 }
 
-void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled) {
+void FootprintStamp_GetBounds(ModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled) {
     u32 size = FootprintStamp_GetFootprintSize(mon->species, mon->form);
     fx32 x, y, z, scaleX, scaleY, scaleZ, length;
     s64 grow;
@@ -380,7 +370,7 @@ BOOL FootprintStamp_UpdateSplit(FootprintStampBoard *board, FootprintStampObj *s
     fx32 x, y, z;
     int i;
     FootprintStampSplit *split = &stamp->effect.split;
-    FootprintStampModelInstance *pieces = split->pieces;
+    ModelInstance *pieces = split->pieces;
 
     switch (split->state) {
     case FOOTPRINT_STAMP_ANIM_START:
@@ -417,11 +407,11 @@ BOOL FootprintStamp_UpdateSplit(FootprintStampBoard *board, FootprintStampObj *s
 
 void FootprintStamp_DrawSplit(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
-    FootprintStampModelInstance *piece;
+    ModelInstance *piece;
 
-    piece = (FootprintStampModelInstance *)stamp;
+    piece = (ModelInstance *)stamp;
     i = 0;
-    piece = (FootprintStampModelInstance *)((u8 *)piece + offsetof(FootprintStampObj, effect.split.pieces));
+    piece = (ModelInstance *)((u8 *)piece + offsetof(FootprintStampObj, effect.split.pieces));
     do {
         ModelInstance_Draw(piece);
         i++;
@@ -570,7 +560,7 @@ BOOL FootprintStamp_UpdateRise(FootprintStampBoard *board, FootprintStampObj *st
     FootprintStampRise *rise = &stamp->effect.rise;
     fx32 x, y, z;
     int i;
-    FootprintStampModelInstance *copy;
+    ModelInstance *copy;
 
     switch (rise->state) {
     case FOOTPRINT_STAMP_ANIM_START:
@@ -614,7 +604,7 @@ BOOL FootprintStamp_UpdateRise(FootprintStampBoard *board, FootprintStampObj *st
 void FootprintStamp_DrawRise(FootprintStampBoard *board, FootprintStampObj *stamp) {
     int i;
     FootprintStampRise *rise = &stamp->effect.rise;
-    FootprintStampModelInstance *copy;
+    ModelInstance *copy;
     u8 polygonId = rise->polygonId;
 
     if (polygonId != 0xFF) {
@@ -764,7 +754,7 @@ void FootprintStamp_DrawSpreadX(FootprintStampBoard *board, FootprintStampObj *s
     do {
         ModelInstance_Draw(&spread->copies[0]);
         i++;
-        spread = (FootprintStampSpread *)((u8 *)spread + sizeof(FootprintStampModelInstance));
+        spread = (FootprintStampSpread *)((u8 *)spread + sizeof(ModelInstance));
     } while (i < 2);
     ModelInstance_Draw(&stamp->instance);
 }
@@ -854,7 +844,7 @@ void FootprintStamp_DrawSpreadY(FootprintStampBoard *board, FootprintStampObj *s
     do {
         ModelInstance_Draw(&spread->copies[0]);
         i++;
-        spread = (FootprintStampSpread *)((u8 *)spread + sizeof(FootprintStampModelInstance));
+        spread = (FootprintStampSpread *)((u8 *)spread + sizeof(ModelInstance));
     } while (i < 2);
     ModelInstance_Draw(&stamp->instance);
 }

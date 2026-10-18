@@ -10,6 +10,7 @@
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
 #include "message_format.h"
+#include "model_animation.h"
 #include "msgdata.h"
 #include "obj_char_transfer.h"
 #include "overlay_manager.h"
@@ -61,22 +62,6 @@ typedef struct FootprintStampMon {
     u8 padding;
 } FootprintStampMon;
 
-// A loaded 3D model and its render object.
-typedef struct FootprintStampModel {
-    NNSG3dResFileHeader *file;
-    NNSG3dResMdlSet *set;
-    NNSG3dResMdl *model;
-    NNSG3dResTex *texture;
-} FootprintStampModel;
-
-typedef struct FootprintStampModelInstance {
-    NNSG3dRenderObj render;
-    VecFx32 position;
-    VecFx32 scale;
-    BOOL visible;
-    u16 rotation[3];
-} FootprintStampModelInstance;
-
 // Board-space bounding box of a stamp (FootprintStamp_GetBounds).
 typedef struct FootprintStampBounds {
     fx32 left;
@@ -101,7 +86,7 @@ typedef struct FootprintStampVanish {
 } FootprintStampVanish;
 
 typedef struct FootprintStampSplit {
-    FootprintStampModelInstance pieces[3];
+    ModelInstance pieces[3];
     u16 timer;
     u8 state;
     u8 padding;
@@ -124,7 +109,7 @@ typedef struct FootprintStampWave {
 } FootprintStampWave;
 
 typedef struct FootprintStampRise {
-    FootprintStampModelInstance trail[3];
+    ModelInstance trail[3];
     u16 timer;
     u8 trailIndex;
     u8 stop;
@@ -150,7 +135,7 @@ typedef struct FootprintStampGrow {
 } FootprintStampGrow;
 
 typedef struct FootprintStampSpread {
-    FootprintStampModelInstance copies[2];
+    ModelInstance copies[2];
     fx32 angle;
     u16 alpha;
     u8 polygonId;
@@ -169,8 +154,8 @@ typedef struct FootprintStampStretch {
 // One stamp on the board (0x244 bytes).
 typedef struct FootprintStampObj {
     FootprintStampMon mon;
-    FootprintStampModel model;
-    FootprintStampModelInstance instance;
+    ModelResource model;
+    ModelInstance instance;
 
     union {
         FootprintStampIdle idle;
@@ -314,8 +299,8 @@ typedef struct FootprintStamp {
     Camera *camera;
     fx32 viewWidth;
     fx32 viewHeight;
-    FootprintStampModel boardModel;
-    FootprintStampModelInstance boardInstance;
+    ModelResource boardModel;
+    ModelInstance boardInstance;
     NARC *narc;
     NARC *footprintNarc;
     FootprintStampLinkFilter linkFilter;
@@ -392,7 +377,7 @@ void FootprintStamp_DrawFootprintTexture(NNSG3dResTex *texture, NARC *narc, NARC
 void FootprintStamp_DeleteStamp(FootprintStampObj *stamp);
 void FootprintStampBoard_RemoveStamp(FootprintStampBoard *board, FootprintStampObj *stamp, int slot);
 void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32 *outY);
-void FootprintStamp_GetBounds(FootprintStampModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled);
+void FootprintStamp_GetBounds(ModelInstance *instance, FootprintStampMon *mon, FootprintStampBounds *bounds, BOOL scaled);
 BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int effect);
 void FootprintStampBoard_StartCameraEffect(FootprintStampBoard *board);
 BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect);

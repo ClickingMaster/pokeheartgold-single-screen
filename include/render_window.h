@@ -11,8 +11,6 @@ void LoadUserFrameGfx1(BgConfig *bg_config, GFBgLayer layer, u16 baseTile, u8 pa
 void DrawFrameAndWindow1(Window *window, BOOL dont_copy_to_vram, u16 baseTile, u8 palette_num);
 void LoadUserFrameGfx2(BgConfig *bgConfig, GFBgLayer layer, u16 baseTile, u8 paletteNum, u8 frame, enum HeapID heapID);
 void DrawFrameAndWindow2(Window *window, BOOL dont_copy_to_vram, u16 baseTile, u8 palette_num);
-void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
-u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void ClearFrameAndWindow2(Window *window, BOOL dont_copy_to_vram);
 void DrawFrameAndWindow3(Window *window, BOOL dont_copy_to_vram, u16 baseTile, u8 palette_num, u8 type);
 void EraseFrameAndWindow1(Window *window, BOOL dont_copy_to_vram);

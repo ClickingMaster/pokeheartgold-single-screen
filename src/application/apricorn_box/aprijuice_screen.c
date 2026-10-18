@@ -38,7 +38,6 @@
 #include "yes_no_prompt.h"
 
 int ApricornBox_UseJuiceServing(SaveApricornBox *box);
-void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
 void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
 
 // A party Pokemon that can drink the juice.

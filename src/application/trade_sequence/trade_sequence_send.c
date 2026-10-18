@@ -93,6 +93,8 @@ enum TradeSequenceSendReplaceStep {
 
 typedef BOOL (*TradeSequenceSendStateFunc)(TradeSequenceSend *send, u32 *state);
 
+void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
+
 static void TradeSequenceSend_Draw(TradeSequenceSend *send);
 static BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state);
 static BOOL TradeSequenceSend_WaitFadeIn(TradeSequenceSend *send, u32 *state);

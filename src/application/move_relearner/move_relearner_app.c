@@ -160,11 +160,11 @@ static int MoveRelearner_PrintLearned(MoveRelearner *relearner);
 static int MoveRelearner_AskAfterSummary(MoveRelearner *relearner);
 static int MoveRelearner_FadeOut(MoveRelearner *relearner);
 static void MoveRelearner_PrintSelectedMove(MoveRelearner *relearner);
-static void MoveRelearner_PrintString(MoveRelearner *relearner, u32 windowId, u32 fontId, u32 color, u32 alignment, u8 y);
+static void MoveRelearner_PrintString(MoveRelearner *relearner, u32 windowId, FontID fontId, u32 color, u32 alignment, u8 y);
 static void MoveRelearner_FormatNumber(MoveRelearner *relearner, u32 msgId, s32 value, u32 numDigits, u8 mode);
 static void MoveRelearner_PrintStaticTexts(MoveRelearner *relearner);
 static u32 MoveRelearner_CountEligibleMoves(MoveRelearner *relearner);
-static void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u32 x, u32 y, u32 width, u8 height, u8 srcX, u8 srcY);
+static void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u8 x, u8 y, u8 width, u8 height, u8 srcX, u8 srcY);
 static void MoveRelearner_PrintListRow(MoveRelearner *relearner, int scrollOffset, int row);
 static void MoveRelearner_PrintMoveList(MoveRelearner *relearner);
 static void MoveRelearner_InitMoveList(MoveRelearner *relearner);
@@ -182,7 +182,7 @@ static void MoveRelearner_FreeSprites(MoveRelearner *relearner);
 static void MoveRelearner_LoadSpriteResources(MoveRelearner *relearner, NARC *narc);
 static void MoveRelearner_SetTypeIcon(MoveRelearner *relearner, u16 move, u16 index);
 static void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner);
-static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, int move);
+static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, u16 move);
 static void MoveRelearner_InitSprites(MoveRelearner *relearner, NARC *narc);
 static void MoveRelearner_CreateCamera(Camera **camera, enum HeapID heapID);
 static void MoveRelearner_CreatePokepic(MoveRelearnerMonPic *monPic, Pokemon *mon, enum HeapID heapID);
@@ -972,7 +972,7 @@ static void MoveRelearner_PrintSelectedMove(MoveRelearner *relearner) {
 }
 
 // Prints relearner->string. alignment: 0 left, 1 right, 2 centered.
-static void MoveRelearner_PrintString(MoveRelearner *relearner, u32 windowId, u32 fontId, u32 color, u32 alignment, u8 y) {
+static void MoveRelearner_PrintString(MoveRelearner *relearner, u32 windowId, FontID fontId, u32 color, u32 alignment, u8 y) {
     u8 textWidth;
     u8 x;
 
@@ -992,7 +992,7 @@ static void MoveRelearner_PrintString(MoveRelearner *relearner, u32 windowId, u3
         break;
     }
 
-    ((u8(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[windowId], fontId, relearner->string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
+    AddTextPrinterParameterizedWithColor(&relearner->windows[windowId], fontId, relearner->string, x, y, TEXT_SPEED_NOTRANSFER, color, NULL);
 }
 
 static void MoveRelearner_FormatNumber(MoveRelearner *relearner, u32 msgId, s32 value, u32 numDigits, u8 mode) {
@@ -1081,10 +1081,10 @@ static u32 MoveRelearner_CountEligibleMoves(MoveRelearner *relearner) {
 }
 
 // Copies a rectangle of the button screen (screenData) to the bottom screen's bg 3.
-static void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u32 x, u32 y, u32 width, u8 height, u8 srcX, u8 srcY) {
+static void MoveRelearner_CopyButtonTiles(MoveRelearner *relearner, u8 x, u8 y, u8 width, u8 height, u8 srcX, u8 srcY) {
     NNSG2dScreenData *screenData = relearner->screenData;
 
-    ((void (*)(BgConfig *, u8, u32, u32, u32, u32, const void *, u32, u32, u32, u32))CopyToBgTilemapRect)(relearner->bgConfig, GF_BG_LYR_SUB_3, x, y, width, height, screenData->rawData, srcX, srcY, (u8)(screenData->screenWidth / 8), (u8)(screenData->screenHeight / 8));
+    CopyToBgTilemapRect(relearner->bgConfig, GF_BG_LYR_SUB_3, x, y, width, height, screenData->rawData, srcX, srcY, (u8)(screenData->screenWidth / 8), (u8)(screenData->screenHeight / 8));
     ScheduleBgTilemapBufferTransfer(relearner->bgConfig, GF_BG_LYR_SUB_3);
 }
 
@@ -1176,7 +1176,7 @@ static void MoveRelearner_PrintMoveInfo(MoveRelearner *relearner, s32 move) {
         ReadMsgDataIntoString(moveDescriptions, move, relearner->string);
         MoveRelearner_PrintString(relearner, 5, 0, MAKE_TEXT_COLOR(1, 2, 0), 0, 0);
         DestroyMsgData(moveDescriptions);
-        MoveRelearner_SetCategoryIcon(relearner, (u16)move);
+        MoveRelearner_SetCategoryIcon(relearner, move);
         ManagedSprite_SetDrawFlag(relearner->sprites[3], TRUE);
         ScheduleWindowCopyToVram(&relearner->windows[0]);
         ScheduleWindowCopyToVram(&relearner->windows[1]);
@@ -1454,8 +1454,8 @@ static void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
     }
 }
 
-static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, int move) {
-    int category = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_CLASS);
+static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, u16 move) {
+    int category = GetMoveAttr(move, MOVEATTR_CLASS);
     NarcId narc = MoveCategoryIcon_GetNarc(category);
     int file = MoveCategoryIcon_GetCharFile(category);
 

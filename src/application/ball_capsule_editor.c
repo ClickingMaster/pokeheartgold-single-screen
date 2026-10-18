@@ -271,6 +271,7 @@ s32 BallSealEffect_GetDistance(s32 x1, s32 y1, s32 x2, s32 y2);
 void *PokepicAnimManager_New(enum HeapID heapID, int count, int flag);
 void PokepicAnimManager_Delete(void *mgr);
 BOOL PokepicAnimManager_GetAnimState(void *mgr, int index);
+u32 GetUserFrameGfx2PaletteMember(u32 frame);
 
 // BallSealEffect_New argument
 typedef struct BallCapsuleEditorPokepicEffectParams {

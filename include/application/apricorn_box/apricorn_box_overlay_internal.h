@@ -78,4 +78,6 @@ typedef struct ApricornBoxJuice {
     u8 numEntries;                 // 0x0C
 } ApricornBoxJuice;
 
+void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
+
 #endif // OV58_PRIVATE_H

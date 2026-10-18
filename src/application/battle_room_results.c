@@ -157,7 +157,7 @@ static void BattleRoomResults_FreeSprites(BattleRoomResults *results);
 static void BattleRoomResults_UpdateSprites(BattleRoomResults *results);
 static void BattleRoomResults_TransferOam(void);
 static void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int index, int anim);
-static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y);
+static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, s16 x, s16 y);
 static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results);
 static void BattleRoomResults_StartSpriteFlash(BattleRoomResults *results, int sprite);
 static void BattleRoomResults_StartExitButtonFlash(BattleRoomResults *results);
@@ -1039,8 +1039,8 @@ static void BattleRoomResults_SetSpriteAnim(BattleRoomResults *results, int inde
     ManagedSprite_SetAnim(results->sprites[index], anim);
 }
 
-static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, int x, int y) {
-    ((void (*)(ManagedSprite *, int, int))ManagedSprite_SetPositionXY)(results->sprites[index], x, y);
+static void BattleRoomResults_SetSpritePosition(BattleRoomResults *results, int index, s16 x, s16 y) {
+    ManagedSprite_SetPositionXY(results->sprites[index], x, y);
 }
 
 static BOOL BattleRoomResults_UpdateButtonFlash(BattleRoomResults *results) {

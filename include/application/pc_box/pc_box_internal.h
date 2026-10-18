@@ -21,12 +21,8 @@
 #include "sys_task.h"
 #include "yes_no_prompt.h"
 
-void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
-void BgCellManager_DrawCell(BgCellManager *manager, int index);
 BOOL BgCellManager_UpdateCellMove(BgCellManager *manager, int index);
-void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 u8 BgCellManager_GetCellBgId(BgCellManager *manager, int index);
-void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
 
 TextOBJ *FontOAM_Create(TextOBJTemplate *template);
 void FontOAM_Delete(TextOBJ *object);
@@ -845,10 +841,10 @@ void PCBox_ResetSpriteAffine(PCBoxReleaseWork *releaseWork);
 void PCBox_SetIconsTranslucent(PCBoxWork *work, u32 flags, u32 enabled);
 void PCBox_SetSlotIconTranslucent(PCBoxView *view, u32 off, u32 v);
 void PCBox_ShowMonPic(PCBoxWork *work, PCBoxMonInfo *monInfo, u32 slot);
-void PCBox_LoadHeldItemIcon(PCBoxView *view, u32 item);
-void PCBox_LoadInfoItemIcon(PCBoxView *view, u32 item);
+void PCBox_LoadHeldItemIcon(PCBoxView *view, u16 item);
+void PCBox_LoadInfoItemIcon(PCBoxView *view, u16 item);
 void PCBox_SetHeldItemIconAffine(PCBoxView *view, u32 on);
-void PCBox_SetHeldItemIconPosition(PCBoxView *view, s32 x, s32 y);
+void PCBox_SetHeldItemIconPosition(PCBoxView *view, s16 x, s16 y);
 void PCBox_MoveHeldItemIconToSlot(PCBoxView *view, u32 index, u32 mode);
 void PCBox_PlaceHeldItemIconAtSlot(PCBoxView *view, u32 index, u32 mode);
 void PCBox_CreateHeldItemIconOutline(PCBoxView *view);

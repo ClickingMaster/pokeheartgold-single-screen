@@ -38,8 +38,6 @@ typedef struct MailboxAppSubApp {
     int nextState;
 } MailboxAppSubApp;
 
-void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
-
 static int MailboxApp_StartFadeIn(MailboxApp *app, int nextState);
 static int MailboxApp_StartFadeOut(MailboxApp *app, int nextState);
 static int MailboxApp_WaitForText(MailboxApp *app, u8 waitForInput, int nextState);

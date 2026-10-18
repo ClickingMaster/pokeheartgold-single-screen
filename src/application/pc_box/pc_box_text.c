@@ -51,7 +51,7 @@ extern const TouchscreenHitbox sPCBoxPartyHitboxes[];
 extern const TouchscreenHitbox sPCBoxTrayPartyHitboxes[];
 extern const PCBoxGridLayout sPCBoxGridLayouts[];
 
-static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v);
+static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s16 x, s16 y, u32 v);
 static void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index);
 static void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align);
 static void PCBox_PrintMsg(PCBoxView *view, MsgData *msgData, u32 win, u32 msgId, s32 x, s32 y, u32 font, u32 color, u32 align);
@@ -149,8 +149,8 @@ void PCBox_DrawBoxThumbnailMons(PCBoxWork *work, u32 box, void *dst) {
     }
 }
 
-static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s32 x, s32 y, u32 v) {
-    ((void (*)(ManagedSprite *, s32, s32))ManagedSprite_SetPositionXY)(view->sprites[i], x, y);
+static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s16 x, s16 y, u32 v) {
+    ManagedSprite_SetPositionXY(view->sprites[i], x, y);
     PCBox_SetSpriteVisible(view, i, v);
     PCBox_SetSpritePriority(view, i, 0);
 }

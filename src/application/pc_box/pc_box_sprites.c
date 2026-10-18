@@ -634,28 +634,28 @@ static void PCBox_CreateItemIconSprites(PCBoxView *view) {
     ManagedSprite_SetDrawFlag(view->sprites[12], 0);
 }
 
-void PCBox_LoadHeldItemIcon(PCBoxView *view, u32 item) {
+void PCBox_LoadHeldItemIcon(PCBoxView *view, u16 item) {
     NNSG2dCharacterData *charData;
     void *buf;
     u32 location;
 
-    buf = GfGfxLoader_GetCharData(NARC_itemtool_itemdata_item_icon, ((int (*)(u32, int))GetItemIndexMapping)(item, ITEMNARC_NCGR), FALSE, &charData, HEAP_ID_10);
+    buf = GfGfxLoader_GetCharData(NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, ITEMNARC_NCGR), FALSE, &charData, HEAP_ID_10);
     PCBox_LoadSpriteCharsMain(view, 11, charData->pRawData, 0x200);
     Heap_Free(buf);
     location = NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(view->sprites[11]->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
-    GfGfxLoader_GXLoadPal(NARC_itemtool_itemdata_item_icon, ((int (*)(u32, int))GetItemIndexMapping)(item, ITEMNARC_NCLR), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)location, 0x20, HEAP_ID_10);
+    GfGfxLoader_GXLoadPal(NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, ITEMNARC_NCLR), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)location, 0x20, HEAP_ID_10);
 }
 
-void PCBox_LoadInfoItemIcon(PCBoxView *view, u32 item) {
+void PCBox_LoadInfoItemIcon(PCBoxView *view, u16 item) {
     NNSG2dCharacterData *charData;
     void *buf;
     u32 location;
 
-    buf = GfGfxLoader_GetCharData(NARC_itemtool_itemdata_item_icon, ((int (*)(u32, int))GetItemIndexMapping)(item, ITEMNARC_NCGR), FALSE, &charData, HEAP_ID_10);
+    buf = GfGfxLoader_GetCharData(NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, ITEMNARC_NCGR), FALSE, &charData, HEAP_ID_10);
     PCBox_LoadSpriteCharsSub(view, 12, charData->pRawData, 0x200);
     Heap_Free(buf);
     location = NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(view->sprites[12]->sprite), NNS_G2D_VRAM_TYPE_2DSUB);
-    GfGfxLoader_GXLoadPal(NARC_itemtool_itemdata_item_icon, ((int (*)(u32, int))GetItemIndexMapping)(item, ITEMNARC_NCLR), GF_PAL_LOCATION_SUB_OBJ, (enum GFPalSlotOffset)location, 0x20, HEAP_ID_10);
+    GfGfxLoader_GXLoadPal(NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, ITEMNARC_NCLR), GF_PAL_LOCATION_SUB_OBJ, (enum GFPalSlotOffset)location, 0x20, HEAP_ID_10);
 }
 
 void PCBox_SetHeldItemIconAffine(PCBoxView *view, u32 on) {
@@ -668,8 +668,8 @@ void PCBox_SetHeldItemIconAffine(PCBoxView *view, u32 on) {
     }
 }
 
-void PCBox_SetHeldItemIconPosition(PCBoxView *view, s32 x, s32 y) {
-    ((void (*)(ManagedSprite *, s32, s32))ManagedSprite_SetPositionXY)(view->sprites[11], x, y);
+void PCBox_SetHeldItemIconPosition(PCBoxView *view, s16 x, s16 y) {
+    ManagedSprite_SetPositionXY(view->sprites[11], x, y);
 }
 
 void PCBox_MoveHeldItemIconToSlot(PCBoxView *view, u32 slot, u32 partyLayout) {

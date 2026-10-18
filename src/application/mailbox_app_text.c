@@ -24,7 +24,6 @@
 #define MAILBOX_WIN_MAIL_MSG 26 // 26-28: the three lines of the mail being read
 #define MAILBOX_WIN_AUTHOR   29
 
-void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
 static void MailboxApp_PrintString(Window *window, String *string, u32 x, u32 y, u32 fontId, u32 color, u32 align);

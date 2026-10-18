@@ -145,7 +145,7 @@ static BOOL PCBox_UpdateHeldItemMove(PCBoxWork *work, int toItemIcon) {
     } else {
         move->y -= move->dy;
     }
-    PCBox_SetHeldItemIconPosition(work->view, (s16)(move->x >> 8), (s16)(move->y >> 8));
+    PCBox_SetHeldItemIconPosition(work->view, move->x >> 8, move->y >> 8);
     PCBox_UpdateHeldItemIconOutline(work->view);
     move->frames++;
     return TRUE;
@@ -1831,7 +1831,7 @@ int PCBox_UpdateItemModeBoxDrag(PCBoxWork *work) {
             PCBox_StartHeldItemMoveWithIcon(work, raw, selected, 2);
             view->subState = 3;
         } else {
-            PCBox_SetHeldItemIconPosition(work->view, (s16)x, (s16)y);
+            PCBox_SetHeldItemIconPosition(work->view, x, y);
             PCBox_UpdateHeldItemIconOutline(work->view);
             work->view->touchX = x;
             work->view->touchY = y;
@@ -1947,7 +1947,7 @@ int PCBox_UpdateItemTrayDrag(PCBoxWork *work) {
             PCBox_StartHeldItemMoveWithIcon(work, raw, selected, 2);
             view->subState = 3;
         } else {
-            PCBox_SetHeldItemIconPosition(work->view, (s16)x, (s16)y);
+            PCBox_SetHeldItemIconPosition(work->view, x, y);
             PCBox_UpdateHeldItemIconOutline(work->view);
             work->view->touchX = x;
             work->view->touchY = y;
@@ -2212,7 +2212,7 @@ int PCBox_UpdateItemModePartyDrag(PCBoxWork *work) {
                 work->view->partyPanelLowered = 1;
                 PCBox_LowerPartyPanel(work->view->panels);
             }
-            PCBox_SetHeldItemIconPosition(work->view, (s16)x, (s16)y);
+            PCBox_SetHeldItemIconPosition(work->view, x, y);
             PCBox_UpdateHeldItemIconOutline(work->view);
             work->view->touchX = x;
             work->view->touchY = y;

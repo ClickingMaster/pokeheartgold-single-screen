@@ -39,13 +39,7 @@ void WiFiPlazaWork_SetAppQuitForClosing(void *lobby);
 u32 WiFiPlazaWork_IsClosing(void *lobby);
 BOOL WiFiPlaza_HasConnectionFailed(void);
 void WiFiPlazaLobbyClient_ClearChannelCommands(void);
-void ModelResource_LoadFromNarc(FootprintStampModel *model, NARC *narc, int fileId, enum HeapID heapId);
-void ModelResource_Free(FootprintStampModel *model);
-void ModelInstance_Init(FootprintStampModelInstance *instance, FootprintStampModel *model);
-void ModelInstance_Draw(FootprintStampModelInstance *instance);
-void ModelInstance_SetVisible(FootprintStampModelInstance *instance, BOOL visible);
-void ModelInstance_SetPosition(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void ModelInstance_SetScale(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
+int GetUserFrameGfx2PaletteMember(int frame);
 u32 WiFiPlazaLobbyClient_GetOwnId(void *unused);
 int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
@@ -104,7 +98,7 @@ static inline int FootprintStamp_InkGaugeY(int y);
 static BOOL FootprintStampBoard_AddStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
 static void FootprintStampBoard_Draw(FootprintStampBoard *board);
 static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, FootprintStampBoard *board, const FootprintStampMon *mon, NARC *narc, NARC *footprintNarc, void *unk19E0);
-static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0);
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0);
 static BOOL FootprintStamp_AllocTextureVram(NNSG3dResTex *texture);
 
 static const s16 sFootprintStampPlayerFootprintPositions[FOOTPRINT_STAMP_PLAYERS_MAX][2] = {
@@ -1564,7 +1558,7 @@ static FootprintStampObj *FootprintStampBoard_CreateStamp(FootprintStamp *work, 
     return stamp;
 }
 
-static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintStampModel *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
+static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, ModelResource *model, NARC *narc, NARC *footprintNarc, FootprintStampMon *mon, void *unk19E0) {
     model->file = GfGfxLoader_LoadFromOpenNarc(narc, 29, FALSE, HEAP_ID_125, FALSE);
     GF_ASSERT(model->file);
     model->set = NNS_G3dGetMdlSet(model->file);
@@ -1585,7 +1579,7 @@ static BOOL FootprintStamp_LoadStampModel(FootprintStampBoard *board, FootprintS
             if (model->file) {
                 Heap_Free(model->file);
             }
-            memset(model, 0, sizeof(FootprintStampModel));
+            memset(model, 0, sizeof(ModelResource));
             return FALSE;
         }
         GF3dRender_BindModelSet(model->file, model->texture);

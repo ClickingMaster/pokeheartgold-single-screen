@@ -21,8 +21,6 @@ GlobalTerminalNet *VsRecorder_GetNet(VsRecorderWork *work) {
     return &work->netClient;
 }
 
-void VsRecorder_InitNet(VsRecorderWork *work);
-
 void VsRecorder_InitNet(VsRecorderWork *work) {
     GlobalTerminalNetArgs args;
     args.dwcProfileId = Save_SysInfo_GetDwcProfileId(Save_SysInfo_Get(work->saveData));

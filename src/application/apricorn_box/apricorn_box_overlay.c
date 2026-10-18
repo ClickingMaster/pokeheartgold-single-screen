@@ -5,11 +5,6 @@
 
 FS_EXTERN_OVERLAY(OVY_59);
 
-BOOL ApricornBox_Init(OverlayManager *man, int *state);
-BOOL ApricornBox_Main(OverlayManager *man, int *state);
-BOOL ApricornBox_Exit(OverlayManager *man, int *state);
-void ApricornBox_FeedAprijuice(ApricornJuice *record, Party *party, int slot);
-
 enum ApricornBoxState {
     APRICORN_BOX_STATE_START,
     APRICORN_BOX_STATE_OPEN_BOX_SCREEN,
