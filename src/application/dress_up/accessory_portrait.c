@@ -36,6 +36,15 @@
 
 typedef struct SaveFashionMon SaveFashionMon;
 
+enum AccessoryPortraitState {
+    ACCESSORY_PORTRAIT_STATE_INIT,
+    ACCESSORY_PORTRAIT_STATE_FADE_IN,
+    ACCESSORY_PORTRAIT_STATE_WAIT_FADE_IN,
+    ACCESSORY_PORTRAIT_STATE_WAIT_INPUT,
+    ACCESSORY_PORTRAIT_STATE_FADE_OUT,
+    ACCESSORY_PORTRAIT_STATE_WAIT_FADE_OUT,
+};
+
 static void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y);
 static AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args);
 static void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
@@ -301,29 +310,29 @@ BOOL AccessoryPortrait_Main(OverlayManager *man, int *state) {
     RequestSwap3DBuffers(GX_SORTMODE_AUTO, GX_BUFFERMODE_Z);
     AccessoryPortrait_RenderSprites(&work->gfx);
     switch (*state) {
-    case 0:
+    case ACCESSORY_PORTRAIT_STATE_INIT:
         (*state)++;
         break;
-    case 1:
+    case ACCESSORY_PORTRAIT_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_UNK_5, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_13);
         (*state)++;
         break;
-    case 2:
+    case ACCESSORY_PORTRAIT_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             (*state)++;
         }
         break;
-    case 3:
+    case ACCESSORY_PORTRAIT_STATE_WAIT_INPUT:
         if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) || System_GetTouchNew()) {
             PlaySE(SEQ_SE_DP_DECIDE);
             (*state)++;
         }
         break;
-    case 4:
+    case ACCESSORY_PORTRAIT_STATE_FADE_OUT:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_DOWNWARD_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, HEAP_ID_13);
         (*state)++;
         break;
-    case 5:
+    case ACCESSORY_PORTRAIT_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

@@ -32,6 +32,7 @@
 #include "pokedex.h"
 #include "render_window.h"
 #include "save_arrays.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
@@ -74,6 +75,19 @@ struct ConnectToRangerApp {
     WonderCard wonderCard;          // 0x3180
     WaitingIcon *waitingIcon;       // 0x34D8
 }; // size: 0x34DC
+
+enum ConnectToRangerState {
+    CONNECT_TO_RANGER_STATE_SETUP,
+    CONNECT_TO_RANGER_STATE_POKEDEX_REQUIRED,
+    CONNECT_TO_RANGER_STATE_PRINT_SCREEN,
+    CONNECT_TO_RANGER_STATE_GIFTS_FULL,
+    CONNECT_TO_RANGER_STATE_TRANSFER,
+    CONNECT_TO_RANGER_STATE_SHOW_CARD,
+    CONNECT_TO_RANGER_STATE_WAIT_CARD_INPUT,
+    CONNECT_TO_RANGER_STATE_RESET = 11,
+    CONNECT_TO_RANGER_STATE_EXIT,
+    CONNECT_TO_RANGER_STATE_WAIT_FADE,
+};
 
 // Connection states of ConnectToRanger_RunTransfer
 enum {
@@ -627,69 +641,69 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
     ConnectToRangerApp *app = OverlayManager_GetData(manager);
 
     switch (*state) {
-    case 0:
+    case CONNECT_TO_RANGER_STATE_SETUP:
         ConnectToRanger_SetupGraphics(app);
         if (!Pokedex_IsEnabled(app->pokedex)) {
-            MainMenuUtil_StartFade(1, 1, state, 13);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, CONNECT_TO_RANGER_STATE_POKEDEX_REQUIRED, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         } else {
-            *state = 2;
+            *state = CONNECT_TO_RANGER_STATE_PRINT_SCREEN;
         }
         break;
-    case 1:
+    case CONNECT_TO_RANGER_STATE_POKEDEX_REQUIRED:
         if (!ConnectToRanger_ShowPokedexRequiredMessage(app)) {
-            MainMenuUtil_SetFadeWhite(1);
-            MainMenuUtil_StartFade(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(TRUE);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, CONNECT_TO_RANGER_STATE_EXIT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         }
         break;
-    case 2:
+    case CONNECT_TO_RANGER_STATE_PRINT_SCREEN:
         ConnectToRanger_PrintScreen(app);
         if (!SaveMysteryGift_FindAvailable(app->mysteryGift)) {
             app->statusText.speed = 1;
             app->textPrinterId = MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00022);
-            MainMenuUtil_StartFade(1, 3, state, 13);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, CONNECT_TO_RANGER_STATE_GIFTS_FULL, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         } else {
             app->unk_14C = 7;
-            MainMenuUtil_StartFade(1, 4, state, 13);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, CONNECT_TO_RANGER_STATE_TRANSFER, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         }
         break;
-    case 3:
+    case CONNECT_TO_RANGER_STATE_GIFTS_FULL:
         if (!TextPrinterCheckActive((u8)app->textPrinterId)) {
             if (gSystem.newKeys & PAD_BUTTON_A) {
-                MainMenuUtil_SetFadeWhite(1);
-                MainMenuUtil_StartFade(0, 12, state, 13);
+                MainMenuUtil_SetFadeWhite(TRUE);
+                MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, CONNECT_TO_RANGER_STATE_EXIT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
             }
         }
         break;
-    case 4:
+    case CONNECT_TO_RANGER_STATE_TRANSFER:
         app->connectResult = ConnectToRanger_RunTransfer(app);
         if (app->connectResult == 5) {
-            MainMenuUtil_SetFadeWhite(1);
-            MainMenuUtil_StartFade(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(TRUE);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, CONNECT_TO_RANGER_STATE_EXIT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         } else if (app->connectResult == 4) {
-            MainMenuUtil_SetFadeWhite(1);
-            MainMenuUtil_StartFade(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(TRUE);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, CONNECT_TO_RANGER_STATE_EXIT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         }
         break;
-    case 5:
+    case CONNECT_TO_RANGER_STATE_SHOW_CARD:
         ConnectToRanger_LoadSubScreenBg(app);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         WonderCardAlbum_DrawCardOnBg(app->bgConfig, &app->wonderCard, HEAP_ID_83);
-        MainMenuUtil_StartFade(1, 6, state, 13);
+        MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, CONNECT_TO_RANGER_STATE_WAIT_CARD_INPUT, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         app->wonderCard.info.unk8E_2 = FALSE;
         break;
-    case 6:
+    case CONNECT_TO_RANGER_STATE_WAIT_CARD_INPUT:
         if (gSystem.newKeys) {
-            MainMenuUtil_StartFade(0, 11, state, 13);
+            MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, CONNECT_TO_RANGER_STATE_RESET, state, CONNECT_TO_RANGER_STATE_WAIT_FADE);
         }
         break;
-    case 11:
+    case CONNECT_TO_RANGER_STATE_RESET:
         OS_ResetSystem(0);
         break;
-    case 12:
+    case CONNECT_TO_RANGER_STATE_EXIT:
         ConnectToRanger_FreeGraphics(manager);
         return TRUE;
-    case 13:
+    case CONNECT_TO_RANGER_STATE_WAIT_FADE:
         MainMenuUtil_WaitFade(state);
         break;
     }

@@ -35,6 +35,14 @@ int DWC_GetLinkLevel(void);
 void DWC_UpdateConnection(void);
 void GtsServer_Update(void);
 
+enum WiiMessageSettingsMainState {
+    WII_MESSAGE_SETTINGS_MAIN_LOAD_NETWORK,
+    WII_MESSAGE_SETTINGS_MAIN_WAIT_NETWORK,
+    WII_MESSAGE_SETTINGS_MAIN_START_APP,
+    WII_MESSAGE_SETTINGS_MAIN_RUN_APP,
+    WII_MESSAGE_SETTINGS_MAIN_EXIT,
+};
+
 static NNSFndHeapHandle sWiiMessageSettingsHeap;
 
 static void WiiMessageSettings_LoadNetworkOverlays(WiiMessageSettings *app);
@@ -95,42 +103,42 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
     }
 
     switch (*state) {
-    case 0:
+    case WII_MESSAGE_SETTINGS_MAIN_LOAD_NETWORK:
         WiiMessageSettings_LoadNetworkOverlays(app);
-        *state = 1;
+        *state = WII_MESSAGE_SETTINGS_MAIN_WAIT_NETWORK;
         break;
-    case 1:
+    case WII_MESSAGE_SETTINGS_MAIN_WAIT_NETWORK:
         if (CommWireless_IsStartedUp()) {
             sWiiMessageSettingsHeap = app->expHeap;
             DWC_SetMemFunc(WiiMessageSettings_Alloc, WiiMessageSettings_Free);
             app->networkLoaded = TRUE;
-            *state = 2;
+            *state = WII_MESSAGE_SETTINGS_MAIN_START_APP;
         }
         break;
-    case 2:
+    case WII_MESSAGE_SETTINGS_MAIN_START_APP:
         args = sWiiMessageSettingsApps[app->nextApp].createArgs(app);
         app->child = OverlayManager_New(sWiiMessageSettingsApps[app->nextApp].template, args, HEAP_ID_115);
         app->currentApp = app->nextApp;
         app->nextApp = WII_MESSAGE_SETTINGS_APP_QUIT;
-        *state = 3;
+        *state = WII_MESSAGE_SETTINGS_MAIN_RUN_APP;
         break;
-    case 3:
+    case WII_MESSAGE_SETTINGS_MAIN_RUN_APP:
         if (OverlayManager_Run(app->child) == TRUE) {
             sWiiMessageSettingsApps[app->currentApp].destroyArgs(app);
             OverlayManager_Delete(app->child);
             if (app->nextApp == WII_MESSAGE_SETTINGS_APP_QUIT) {
-                *state = 4;
+                *state = WII_MESSAGE_SETTINGS_MAIN_EXIT;
             } else if (sWiiMessageSettingsApps[app->nextApp].unloadNetwork == TRUE) {
                 WiiMessageSettings_UnloadNetworkOverlays(app);
-                *state = 2;
+                *state = WII_MESSAGE_SETTINGS_MAIN_START_APP;
             } else if (app->networkLoaded == TRUE) {
-                *state = 2;
+                *state = WII_MESSAGE_SETTINGS_MAIN_START_APP;
             } else {
-                *state = 0;
+                *state = WII_MESSAGE_SETTINGS_MAIN_LOAD_NETWORK;
             }
         }
         break;
-    case 4:
+    case WII_MESSAGE_SETTINGS_MAIN_EXIT:
         return TRUE;
     }
     return FALSE;

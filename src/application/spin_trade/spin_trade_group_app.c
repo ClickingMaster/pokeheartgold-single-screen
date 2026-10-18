@@ -801,7 +801,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
     u8 b;
     u8 c;
 
-    if (gSystem.newKeys & 1) {
+    if (gSystem.newKeys & PAD_BUTTON_A) {
         if (!Comm_GetLocalNetId()) {
             if (app->menu->participantCount == (u32)SpinTradeGroup_CountMembers() && app->menu->leavingMask == 0) {
                 a = 1;
@@ -813,7 +813,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
         }
-    } else if (gSystem.newKeys & 2) {
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
         if (Comm_GetLocalNetId()) {
             if (app->menu->leaderJoinPending == 0) {
                 SpinTradeGroup_PrintMessage(app, msg_0207_00004, 0);
@@ -888,7 +888,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
 
     if (Comm_GetLocalNetId()) {
         if (app->menu->leaderJoinPending) {
-            if (gSystem.newKeys & 0xC3) {
+            if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN)) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
             SpinTradeGroup_UpdateDummy(app);
@@ -896,7 +896,7 @@ int SpinTradeGroup_State_HandleCancelYesNo(SpinTradeGroupApp *app, int state) {
         }
     } else {
         if (app->menu->leavingMask) {
-            if (gSystem.newKeys & 0xC3) {
+            if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN)) {
                 PlaySE(SEQ_SE_DP_CUSTOM06);
             }
             SpinTradeGroup_UpdateDummy(app);

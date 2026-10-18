@@ -667,7 +667,7 @@ static BOOL ApricornBoxScreen_IsMessageDone(ApricornBoxScreen *screen) {
         screen->textPrinterId = 0xFF;
         return TRUE;
     }
-    if (gSystem.newKeys & 0xCF3) {
+    if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
         screen->menuInputState = MENU_INPUT_STATE_BUTTONS;
     }
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {

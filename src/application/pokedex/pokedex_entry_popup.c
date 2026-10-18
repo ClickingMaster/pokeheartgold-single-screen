@@ -4,6 +4,7 @@
 #include "battle/battle.h"
 #include "graphic/zukan_gra.naix"
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0802.h"
 
 #include "bg_window.h"
 #include "dex_mon_measures.h"
@@ -374,9 +375,9 @@ static void PokedexEntryPopup_DrawWindows(PokedexEntryPopup *popup) {
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0802_bin, popup->heapId);
     msgFormat = MessageFormat_New(popup->heapId);
     strbuf = String_New(0x400, popup->heapId);
-    PokedexApp_PrintMessage(&popup->windows[0], msgData, 144, 112, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
+    PokedexApp_PrintMessage(&popup->windows[0], msgData, msg_0802_00144, 112, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 2);
     BufferIntegerAsString(msgFormat, 0, Pokedex_ConvertToCurrentDexNo(popup->natDexEnabled, popup->species), 3, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    string = NewString_ReadMsgData(msgData, 9);
+    string = NewString_ReadMsgData(msgData, msg_0802_00009);
     StringExpandPlaceholders(msgFormat, strbuf, string);
     PokedexApp_PrintString(&popup->windows[1], strbuf, 1, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 0);
     String_Delete(string);

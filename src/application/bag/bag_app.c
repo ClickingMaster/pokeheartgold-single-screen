@@ -371,7 +371,7 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     }
     BagApp_Init3D(app);
     Main_SetVBlankIntrCB(BagApp_VBlankCallback, app);
-    Sound_SetSceneAndPlayBGM(0x33, 0, 0);
+    Sound_SetSceneAndPlayBGM(0x33, SEQ_NONE, 0);
     WirelessStatusIcon_CreateIfConnected();
     reg_GX_POWCNT |= 0x8000;
     ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);

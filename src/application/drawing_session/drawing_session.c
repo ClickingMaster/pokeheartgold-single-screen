@@ -385,7 +385,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         DrawingSession_InitSpriteResources(work, narc);
         DrawingSession_CreateSprites(work);
         DrawingSession_AddWindows(work, man);
-        Sound_SetSceneAndPlayBGM(0x34, 0, 0);
+        Sound_SetSceneAndPlayBGM(0x34, SEQ_NONE, 0);
         GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
         DrawingSessionLink_RegisterCommands(work);
         CommState_SetErrorWatch(0, 1);

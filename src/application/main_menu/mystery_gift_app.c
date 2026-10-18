@@ -690,7 +690,7 @@ int MysteryGiftApp_SelectCheckCard(OverlayManager *manager) {
         data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
-    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_ALBUM, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+    MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_EXIT_TO_ALBUM, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
@@ -701,7 +701,7 @@ int MysteryGiftApp_SelectViewLockCapsuleCard(OverlayManager *manager) {
         data->beaconWatchTimer = 1;
         MysteryGiftApp_UpdateBeaconWatch(data);
     }
-    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_LOCK_CAPSULE_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+    MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_EXIT_TO_LOCK_CAPSULE_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
@@ -711,8 +711,8 @@ int MysteryGiftApp_SelectExit(OverlayManager *manager) {
     if (data->beaconWatchState == MYSTERY_GIFT_BEACON_WATCH_ACTIVE) {
         data->beaconWatchTimer = 1;
     }
-    MainMenuUtil_SetFadeWhite(1);
-    MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_EXIT_TO_TITLE, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+    MainMenuUtil_SetFadeWhite(TRUE);
+    MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_EXIT_TO_TITLE, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
     return -1;
 }
 
@@ -1825,7 +1825,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     case MYSTERY_GIFT_STATE_SETUP_SCREEN:
         MysteryGiftApp_SetupScreen(manager, data);
         MysteryGiftApp_InitSprites(data);
-        MainMenuUtil_StartFade(1, MYSTERY_GIFT_STATE_MAIN_MENU, state, MYSTERY_GIFT_STATE_WAIT_FADE);
+        MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, MYSTERY_GIFT_STATE_MAIN_MENU, state, MYSTERY_GIFT_STATE_WAIT_FADE);
         break;
     case MYSTERY_GIFT_STATE_WAIT_FADE:
         MainMenuUtil_WaitFade(state);
@@ -2178,10 +2178,10 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (gSystem.newKeys) {
             PlaySE(SEQ_SE_DP_SELECT);
             if (data->receivedHeader.unk8E_2 == 1) {
-                MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_SHOW_WONDER_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+                MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_SHOW_WONDER_CARD, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
             } else {
-                MainMenuUtil_SetFadeWhite(1);
-                MainMenuUtil_StartFade(0, MYSTERY_GIFT_STATE_RESET, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+                MainMenuUtil_SetFadeWhite(TRUE);
+                MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_OUT, MYSTERY_GIFT_STATE_RESET, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
             }
         }
         break;
@@ -2194,7 +2194,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         } else {
             WonderCardAlbum_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         }
-        MainMenuUtil_StartFade(1, MYSTERY_GIFT_STATE_WAIT_FINISH, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
+        MainMenuUtil_StartFade(FADE_TYPE_BRIGHTNESS_IN, MYSTERY_GIFT_STATE_WAIT_FINISH, data->mainState, MYSTERY_GIFT_STATE_WAIT_FADE);
         data->receivedHeader.unk8E_2 = 0;
         break;
     case MYSTERY_GIFT_STATE_RESET:

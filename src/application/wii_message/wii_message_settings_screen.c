@@ -180,6 +180,12 @@ BOOL GtsServer_IsRequestDone(void);
 int GtsServer_GetResult(void);
 void GtsServer_RequestSetProfile(WifiServerProfile *request, int *response);
 
+enum WiiMessageSettingsScreenMainState {
+    WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_IN,
+    WII_MESSAGE_SETTINGS_SCREEN_MAIN_RUN,
+    WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_OUT,
+};
+
 static void WiiMessageSettingsScreen_VBlankCB(void *data);
 static void WiiMessageSettingsScreen_InitBgs(BgConfig *bgConfig);
 static void WiiMessageSettingsScreen_FreeBgs(BgConfig *bgConfig);
@@ -545,12 +551,12 @@ BOOL WiiMessageSettingsScreen_Main(OverlayManager *man, int *state) {
     BOOL done;
 
     switch (*state) {
-    case 0:
+    case WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished() == TRUE) {
-            *state = 1;
+            *state = WII_MESSAGE_SETTINGS_SCREEN_MAIN_RUN;
         }
         break;
-    case 1:
+    case WII_MESSAGE_SETTINGS_SCREEN_MAIN_RUN:
         prevState = screen->state;
         done = sWiiMessageSettingsScreenStates[prevState](screen);
         if (prevState != screen->state) {
@@ -559,10 +565,10 @@ BOOL WiiMessageSettingsScreen_Main(OverlayManager *man, int *state) {
             screen->waitTimer = 0;
         }
         if (done == TRUE) {
-            *state = 2;
+            *state = WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_OUT;
         }
         break;
-    case 2:
+    case WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished() == TRUE) {
             return TRUE;
         }

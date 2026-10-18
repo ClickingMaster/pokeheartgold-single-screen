@@ -226,6 +226,32 @@ enum {
     DRESS_UP_STATE_WAIT_FADE_OUT,
 };
 
+enum DressUpFinishTransitionStep {
+    DRESS_UP_FINISH_HIDE_TRAY,
+    DRESS_UP_FINISH_WAIT_TRAY,
+    DRESS_UP_FINISH_FADE_OUT,
+    DRESS_UP_FINISH_WAIT_FADE_OUT,
+    DRESS_UP_FINISH_LOWER_BUTTONS,
+    DRESS_UP_FINISH_SLIDE_CANVAS,
+    DRESS_UP_FINISH_SHOW_PROMPT,
+    DRESS_UP_FINISH_FADE_IN,
+    DRESS_UP_FINISH_WAIT_FADE_IN,
+    DRESS_UP_FINISH_DONE,
+};
+
+enum DressUpReturnTransitionStep {
+    DRESS_UP_RETURN_FADE_OUT,
+    DRESS_UP_RETURN_WAIT_FADE_OUT,
+    DRESS_UP_RETURN_RESTORE_LAYOUT,
+    DRESS_UP_RETURN_SLIDE_CANVAS,
+    DRESS_UP_RETURN_RAISE_BUTTONS,
+    DRESS_UP_RETURN_FADE_IN,
+    DRESS_UP_RETURN_WAIT_FADE_IN,
+    DRESS_UP_RETURN_SHOW_TRAY,
+    DRESS_UP_RETURN_WAIT_TRAY,
+    DRESS_UP_RETURN_DONE,
+};
+
 // page swap task
 typedef struct DressUpPageSwap {
     DressUpTray *tray;       // 0x00
@@ -241,6 +267,14 @@ typedef struct DressUpPageSwap {
     DressUpSlideAnim *anims; // 0x28
     int animCount;           // 0x2C
 } DressUpPageSwap;
+
+enum DressUpPageSwapState {
+    DRESS_UP_PAGE_SWAP_START,
+    DRESS_UP_PAGE_SWAP_SLIDE_OUT_OLD,
+    DRESS_UP_PAGE_SWAP_SLIDE_IN_NEW,
+    DRESS_UP_PAGE_SWAP_WAIT_TAB,
+    DRESS_UP_PAGE_SWAP_FINISH,
+};
 
 int FashionCase_GetWallpaperOrder(FashionCase *fashionCase, int index);
 
@@ -1343,7 +1377,7 @@ BOOL DressUp_Init(OverlayManager *man, int *state) {
     work->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_13);
     work->msgWindow = AllocWindows(HEAP_ID_13, 1);
     work->uiState = DRESS_UP_UI_ACCESSORIES;
-    Sound_SetSceneAndPlayBGM(0x35, 0, 0);
+    Sound_SetSceneAndPlayBGM(0x35, SEQ_NONE, 0);
     return TRUE;
 }
 
@@ -1709,33 +1743,33 @@ static void DressUp_StartFinishTransition(DressUpWork *work, u32 *done) {
     env->work = work;
     env->done = done;
     env->counter = 0;
-    env->state = 0;
+    env->state = DRESS_UP_FINISH_HIDE_TRAY;
 }
 
 // DONE: tray away, fade, slide the canvas into the middle, "Is your Pokemon all dressed up?"
 static void DressUp_FinishTransitionTask(SysTask *task, DressUpTransition *env) {
     switch (env->state) {
-    case 0:
+    case DRESS_UP_FINISH_HIDE_TRAY:
         if (!DressUpTray_AnimateToPage(&env->work->tray, 3, 0)) {
             GF_AssertFail();
         }
         env->state++;
         break;
-    case 1:
+    case DRESS_UP_FINISH_WAIT_TRAY:
         if (DressUpTray_IsIdle(&env->work->tray)) {
             env->state++;
         }
         break;
-    case 2:
+    case DRESS_UP_FINISH_FADE_OUT:
         StartBrightnessTransition(8, -16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG3), SCREEN_MASK_MAIN);
         env->state++;
         break;
-    case 3:
+    case DRESS_UP_FINISH_WAIT_FADE_OUT:
         if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
             env->state++;
         }
         break;
-    case 4:
+    case DRESS_UP_FINISH_LOWER_BUTTONS:
         DressUpButtonPanel_MoveBy(&env->work->buttonPanel, 0, 8);
         env->counter++;
         if (env->counter >= 8) {
@@ -1743,28 +1777,28 @@ static void DressUp_FinishTransitionTask(SysTask *task, DressUpTransition *env) 
             env->state++;
         }
         break;
-    case 5:
+    case DRESS_UP_FINISH_SLIDE_CANVAS:
         if (DressUp_SlideCanvasStep(env, -8, 5, 8)) {
             env->counter = 0;
             env->state++;
         }
         break;
-    case 6:
+    case DRESS_UP_FINISH_SHOW_PROMPT:
         DressUp_LoadFrameBg(env->work, 1);
         ScheduleSetBgPosText(env->work->gfx.bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, 0);
         DressUp_ShowDressedUpPrompt(env->work);
         env->state++;
         break;
-    case 7:
+    case DRESS_UP_FINISH_FADE_IN:
         StartBrightnessTransition(8, 0, -16, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG3), SCREEN_MASK_MAIN);
         env->state++;
         break;
-    case 8:
+    case DRESS_UP_FINISH_WAIT_FADE_IN:
         if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
             env->state++;
         }
         break;
-    case 9:
+    case DRESS_UP_FINISH_DONE:
         *env->done = TRUE;
         DestroySysTaskAndEnvironment(task);
         break;
@@ -1776,22 +1810,22 @@ static void DressUp_StartReturnTransition(DressUpWork *work, u32 *done) {
     env->work = work;
     env->done = done;
     env->counter = 0;
-    env->state = 0;
+    env->state = DRESS_UP_RETURN_FADE_OUT;
 }
 
 // "no" to "all dressed up?": back to editing (reverse of the finish transition)
 static void DressUp_ReturnTransitionTask(SysTask *task, DressUpTransition *env) {
     switch (env->state) {
-    case 0:
+    case DRESS_UP_RETURN_FADE_OUT:
         StartBrightnessTransition(8, -16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG3), SCREEN_MASK_MAIN);
         env->state++;
         break;
-    case 1:
+    case DRESS_UP_RETURN_WAIT_FADE_OUT:
         if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
             env->state++;
         }
         break;
-    case 2:
+    case DRESS_UP_RETURN_RESTORE_LAYOUT:
         DressUp_HidePrompt(env->work);
         DressUp_RestoreEditBgLayout(env->work);
         DressUp_ResetButtons(env->work);
@@ -1799,13 +1833,13 @@ static void DressUp_ReturnTransitionTask(SysTask *task, DressUpTransition *env) 
         ScheduleSetBgPosText(env->work->gfx.bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_Y, -40);
         env->state++;
         break;
-    case 3:
+    case DRESS_UP_RETURN_SLIDE_CANVAS:
         if (DressUp_SlideCanvasStep(env, 8, -5, 8)) {
             env->counter = 0;
             env->state++;
         }
         break;
-    case 4:
+    case DRESS_UP_RETURN_RAISE_BUTTONS:
         DressUpButtonPanel_MoveBy(&env->work->buttonPanel, 0, -8);
         env->counter++;
         if (env->counter >= 8) {
@@ -1813,27 +1847,27 @@ static void DressUp_ReturnTransitionTask(SysTask *task, DressUpTransition *env) 
             env->state++;
         }
         break;
-    case 5:
+    case DRESS_UP_RETURN_FADE_IN:
         StartBrightnessTransition(8, 0, -16, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG3), SCREEN_MASK_MAIN);
         env->state++;
         break;
-    case 6:
+    case DRESS_UP_RETURN_WAIT_FADE_IN:
         if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
             env->state++;
         }
         break;
-    case 7:
+    case DRESS_UP_RETURN_SHOW_TRAY:
         if (!DressUpTray_AnimateToPage(&env->work->tray, 0, 0)) {
             GF_AssertFail();
         }
         env->state++;
         break;
-    case 8:
+    case DRESS_UP_RETURN_WAIT_TRAY:
         if (DressUpTray_IsIdle(&env->work->tray)) {
             env->state++;
         }
         break;
-    case 9:
+    case DRESS_UP_RETURN_DONE:
         *env->done = TRUE;
         DestroySysTaskAndEnvironment(task);
         break;
@@ -2910,7 +2944,7 @@ static void DressUpTray_StartPageSwapTask(DressUpTray *tray, int fromGroup, int 
     swap->fromPage = fromPage;
     swap->toGroup = toGroup;
     swap->toPage = toPage;
-    swap->state = 0;
+    swap->state = DRESS_UP_PAGE_SWAP_START;
     swap->fromLeft = DressUpTray_CountPageObjects(tray, fromGroup, fromPage);
     swap->toLeft = DressUpTray_CountPageObjects(tray, toGroup, toPage);
     swap->animCount = swap->fromLeft + swap->toLeft;
@@ -2927,7 +2961,7 @@ static void DressUpTray_StartPageSwapTask(DressUpTray *tray, int fromGroup, int 
 static void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
     int i;
     switch (swap->state) {
-    case 0:
+    case DRESS_UP_PAGE_SWAP_START:
         DressUpTray_MovePageObjects(swap->tray, swap->toGroup, swap->toPage, 0, -132);
         DressUpTray_SetPageVisible(swap->tray, swap->toGroup, swap->toPage, TRUE);
         swap->tabSlideDone = FALSE;
@@ -2935,7 +2969,7 @@ static void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
         swap->counter = DressUp_DivFloorPlusOne(swap->fromLeft, 1);
         swap->state++;
         break;
-    case 1:
+    case DRESS_UP_PAGE_SWAP_SLIDE_OUT_OLD:
         for (i = 0; i < swap->counter; i++) {
             if (swap->fromLeft - 1 >= 0) {
                 swap->fromLeft--;
@@ -2947,7 +2981,7 @@ static void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
             swap->state++;
         }
         break;
-    case 2:
+    case DRESS_UP_PAGE_SWAP_SLIDE_IN_NEW:
         for (i = 0; i < swap->counter; i++) {
             if (swap->toLeft - 1 >= 0) {
                 swap->toLeft--;
@@ -2959,13 +2993,13 @@ static void DressUpTray_PageSwapTask(SysTask *task, DressUpPageSwap *swap) {
             swap->counter = 0;
         }
         break;
-    case 3:
+    case DRESS_UP_PAGE_SWAP_WAIT_TAB:
         swap->counter++;
         if (swap->counter > 3 && swap->tabSlideDone) {
             swap->state++;
         }
         break;
-    case 4:
+    case DRESS_UP_PAGE_SWAP_FINISH:
         DressUpTray_SetPageVisible(swap->tray, swap->fromGroup, swap->fromPage, FALSE);
         DressUpTray_MovePageObjects(swap->tray, swap->fromGroup, swap->fromPage, 0, -132);
         swap->tray->pageSwapActive = FALSE;

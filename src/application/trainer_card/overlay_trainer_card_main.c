@@ -38,6 +38,36 @@ typedef struct TrainerCardBgPair {
     BgTemplate templates[2];
 } TrainerCardBgPair;
 
+enum TrainerCardInput {
+    TRAINER_CARD_INPUT_NONE,
+    TRAINER_CARD_INPUT_FLIP = 3,
+    TRAINER_CARD_INPUT_SIGN,
+    TRAINER_CARD_INPUT_EXIT,
+};
+
+enum TrainerCardSignPromptStep {
+    TRAINER_CARD_SIGN_PROMPT_PRINT,
+    TRAINER_CARD_SIGN_PROMPT_WAIT_PRINT,
+    TRAINER_CARD_SIGN_PROMPT_HANDLE_YES_NO,
+    TRAINER_CARD_SIGN_PROMPT_WAIT_ERASE_PRINT,
+    TRAINER_CARD_SIGN_PROMPT_HANDLE_ERASE_YES_NO,
+};
+
+enum TrainerCardSignPromptResult {
+    TRAINER_CARD_SIGN_PROMPT_RUNNING,
+    TRAINER_CARD_SIGN_PROMPT_CANCEL,
+    TRAINER_CARD_SIGN_PROMPT_SIGN,
+};
+
+enum TrainerCardFlipStep {
+    TRAINER_CARD_FLIP_START,
+    TRAINER_CARD_FLIP_SHRINK,
+    TRAINER_CARD_FLIP_SWAP_SIDE,
+    TRAINER_CARD_FLIP_DRAW_SIDE,
+    TRAINER_CARD_FLIP_COPY_TO_VRAM,
+    TRAINER_CARD_FLIP_GROW,
+};
+
 static void TrainerCardMain_LoadStrings(TrainerCardMain *cardMain);
 static void TrainerCardMain_FreeStrings(TrainerCardMain *cardMain);
 static void TrainerCardMain_SetGfxBanks(void);
@@ -318,7 +348,7 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     GF_TouchpadStartSampling(4);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
-    Sound_SetSceneAndPlayBGM(0x38, 0, 0);
+    Sound_SetSceneAndPlayBGM(0x38, SEQ_NONE, 0);
     TrainerCardMain_InitUnk33A0Pairs(&cardMain->unk_33A0[0][0]);
     PlaySE(SEQ_SE_DP_CARD3);
     TrainerCardMain_InitSprites(&cardMain->sprites);
@@ -360,14 +390,14 @@ int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
         break;
     case TRAINER_CARD_MAIN_INPUT: {
         int input = TrainerCardMain_HandleInput(cardMain);
-        if (input == 3) {
-            cardMain->subState = 0;
+        if (input == TRAINER_CARD_INPUT_FLIP) {
+            cardMain->subState = TRAINER_CARD_FLIP_START;
             *state = TRAINER_CARD_MAIN_FLIP;
-        } else if (input == 4) {
+        } else if (input == TRAINER_CARD_INPUT_SIGN) {
             TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 1, 3, 1);
-            cardMain->subState = 0;
+            cardMain->subState = TRAINER_CARD_SIGN_PROMPT_PRINT;
             *state = TRAINER_CARD_MAIN_SIGN_PROMPT;
-        } else if (input == 5) {
+        } else if (input == TRAINER_CARD_INPUT_EXIT) {
             TrainerCardMain_SetButtonSpriteAnim(&cardMain->sprites, 0, 1, 1);
             BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UPWARD_OUT, FADE_TYPE_UPWARD_OUT, RGB_BLACK, 6, 1, HEAP_ID_25);
             *state = TRAINER_CARD_MAIN_WAIT_FADE_OUT;
@@ -387,10 +417,10 @@ int TrainerCardMainApp_Main(OverlayManager *manager, int *state) {
         break;
     case TRAINER_CARD_MAIN_SIGN_PROMPT: {
         switch (TrainerCardMain_RunSignPrompt(cardMain)) {
-        case 1:
+        case TRAINER_CARD_SIGN_PROMPT_CANCEL:
             *state = TRAINER_CARD_MAIN_INPUT;
             break;
-        case 2:
+        case TRAINER_CARD_SIGN_PROMPT_SIGN:
             *state = TRAINER_CARD_MAIN_EXIT_TO_SIGN;
             break;
         }
@@ -674,64 +704,64 @@ static void TrainerCardMain_DrawCard(TrainerCardMain *cardMain) {
 
 static int TrainerCardMain_RunSignPrompt(TrainerCardMain *cardMain) {
     switch (cardMain->subState) {
-    case 0:
+    case TRAINER_CARD_SIGN_PROMPT_PRINT:
         TrainerCardMain_PrintSignPrompt(cardMain, 0);
         cardMain->subState++;
         break;
-    case 1:
+    case TRAINER_CARD_SIGN_PROMPT_WAIT_PRINT:
         if (TextPrinterCheckActive(cardMain->textPrinterId)) {
-            return 0;
+            return TRAINER_CARD_SIGN_PROMPT_RUNNING;
         }
         TrainerCardMain_ShowYesNoPrompt(cardMain, 0);
         TrainerCardMain_SetButtonsHidden(cardMain, 1);
         cardMain->subState++;
         break;
-    case 2: {
+    case TRAINER_CARD_SIGN_PROMPT_HANDLE_YES_NO: {
         int result = TrainerCardMain_HandleYesNoPrompt(cardMain, FALSE);
         if (result < 0) {
             break;
         }
         if (result == 0) {
             TrainerCardMain_SetButtonsHidden(cardMain, 0);
-            return 1;
+            return TRAINER_CARD_SIGN_PROMPT_CANCEL;
         }
         if (cardMain->card->signatureExists) {
             TrainerCardMain_PrintSignPrompt(cardMain, 1);
         } else {
-            return 2;
+            return TRAINER_CARD_SIGN_PROMPT_SIGN;
         }
         cardMain->subState++;
         break;
     }
-    case 3:
+    case TRAINER_CARD_SIGN_PROMPT_WAIT_ERASE_PRINT:
         if (TextPrinterCheckActive(cardMain->textPrinterId)) {
-            return 0;
+            return TRAINER_CARD_SIGN_PROMPT_RUNNING;
         }
         TrainerCardMain_ShowYesNoPrompt(cardMain, 1);
         cardMain->subState++;
         break;
-    case 4: {
+    case TRAINER_CARD_SIGN_PROMPT_HANDLE_ERASE_YES_NO: {
         int result = TrainerCardMain_HandleYesNoPrompt(cardMain, TRUE);
         switch (result) {
         case 0:
             TrainerCardMain_SetButtonsHidden(cardMain, 0);
-            return 1;
+            return TRAINER_CARD_SIGN_PROMPT_CANCEL;
         case 1:
-            return 2;
+            return TRAINER_CARD_SIGN_PROMPT_SIGN;
         default:
             break;
         }
         break;
     }
     }
-    return 0;
+    return TRAINER_CARD_SIGN_PROMPT_RUNNING;
 }
 
 static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
     int done = 0;
 
     switch (cardMain->subState) {
-    case 0:
+    case TRAINER_CARD_FLIP_START:
         cardMain->flipSpeed = 8;
         cardMain->scaleX = 8 << 9;
         cardMain->scaleY = 8 << 9;
@@ -740,7 +770,7 @@ static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
         PlaySE(SEQ_SE_DP_CARD5);
         cardMain->subState++;
         break;
-    case 1: {
+    case TRAINER_CARD_FLIP_SHRINK: {
         int speed = cardMain->flipSpeed;
         cardMain->scaleX -= 2 << (12 - speed);
         if (cardMain->scaleX <= 0) {
@@ -753,12 +783,12 @@ static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
         }
         break;
     }
-    case 2:
+    case TRAINER_CARD_FLIP_SWAP_SIDE:
         cardMain->showingBack ^= 1;
         TrainerCardMain_LoadSideLayout(cardMain);
         cardMain->subState++;
         break;
-    case 3:
+    case TRAINER_CARD_FLIP_DRAW_SIDE:
         if (cardMain->showingBack == FALSE) {
             TrainerCardMain_DrawFrontPicture(cardMain);
             TrainerCardMain_PrintActionButton(cardMain, 1);
@@ -770,11 +800,11 @@ static int TrainerCardMain_RunFlip(TrainerCardMain *cardMain) {
         }
         cardMain->subState++;
         break;
-    case 4:
+    case TRAINER_CARD_FLIP_COPY_TO_VRAM:
         TrainerCardMain_CopySideWindowsToVram(cardMain, cardMain->windows);
         cardMain->subState++;
         break;
-    case 5:
+    case TRAINER_CARD_FLIP_GROW:
         cardMain->flipSpeed++;
         if (cardMain->flipSpeed > 8) {
             cardMain->flipSpeed = 8;
@@ -809,39 +839,39 @@ static int TrainerCardMain_HandleKeys(TrainerCardMain *cardMain) {
     if (gSystem.newKeys & PAD_BUTTON_A) {
         if (cardMain->showingBack != FALSE && cardMain->isConnected == FALSE) {
             PlaySE(SEQ_SE_DP_SELECT);
-            return 4;
+            return TRAINER_CARD_INPUT_SIGN;
         }
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        return 5;
+        return TRAINER_CARD_INPUT_EXIT;
     }
     if (gSystem.newKeys & (PAD_KEY_LEFT | PAD_KEY_RIGHT)) {
-        return 3;
+        return TRAINER_CARD_INPUT_FLIP;
     }
-    return 0;
+    return TRAINER_CARD_INPUT_NONE;
 }
 
 static int TrainerCardMain_HandleTouch(TrainerCardMain *cardMain, int *touched) {
     if (!System_GetTouchNew()) {
-        return 0;
+        return TRAINER_CARD_INPUT_NONE;
     }
     if (TouchscreenHitbox_TouchNewIsIn(&sTrainerCardCancelHitbox)) {
         *touched = 1;
         PlaySE(SEQ_SE_GS_GEARCANCEL);
-        return 5;
+        return TRAINER_CARD_INPUT_EXIT;
     }
     if (cardMain->showingBack != FALSE && cardMain->isConnected == FALSE && TouchscreenHitbox_TouchNewIsIn(&sTrainerCardSignHitbox)) {
         *touched = 1;
         PlaySE(SEQ_SE_DP_SELECT);
-        return 4;
+        return TRAINER_CARD_INPUT_SIGN;
     }
     if (TouchscreenHitbox_TouchNewIsIn(sTrainerCardCardHitbox)) {
         cardMain->touchX = gSystem.touchX;
         cardMain->touchY = gSystem.touchY;
         *touched = 1;
-        return 3;
+        return TRAINER_CARD_INPUT_FLIP;
     }
-    return 0;
+    return TRAINER_CARD_INPUT_NONE;
 }
 
 static int TrainerCardMain_HandleInput(TrainerCardMain *cardMain) {

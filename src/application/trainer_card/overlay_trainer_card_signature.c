@@ -286,7 +286,7 @@ int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
         TrainerCardSignature_InitSpriteResources(signature, narc);
         TrainerCardSignature_CreateDoneButtonSprite(signature);
         TrainerCardSignature_CreateWindows(signature, manager);
-        Sound_SetSceneAndPlayBGM(0x38, 0, 0);
+        Sound_SetSceneAndPlayBGM(0x38, SEQ_NONE, 0);
         reg_GX_POWCNT &= 0xffff7fff;
         NARC_Delete(narc);
         (*state)++;
