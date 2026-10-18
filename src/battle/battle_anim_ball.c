@@ -494,8 +494,6 @@ BOOL BallSealEffect_IsLoaded(BallSealEffect *effect) {
     return effect->state == BALL_SEAL_LOADED;
 }
 
-#pragma force_active on
-
 void BallSealEffect_StartWithCallback(BallSealEffect *effect, void (*callback)(SPLEmitter *)) {
     effect->active = TRUE;
     BattleAnimSystem_InitBlend();
@@ -507,13 +505,9 @@ void BallSealEffect_Start(BallSealEffect *effect) {
     BallSealEffect_StartWithCallback(effect, BallSealEffect_SetEmitterPosition);
 }
 
-#pragma force_active reset
-
 BOOL BallSealEffect_IsActive(BallSealEffect *effect) {
     return effect->active;
 }
-
-#pragma force_active on
 
 void BallSealEffect_WaitTask(SysTask *task, void *data) {
     BallSealEffect *effect = data;
@@ -538,8 +532,6 @@ void BallSealEffect_WaitTask(SysTask *task, void *data) {
     }
 }
 
-#pragma force_active reset
-
 void BallSealEffect_Free(BallSealEffect *effect) {
     Heap_Free(effect);
 }
@@ -556,8 +548,6 @@ void BallSealEffect_DelayedEmitTask(SysTask *task, void *data) {
         emitTask->delay--;
     }
 }
-
-#pragma force_active on
 
 void BallSealEffect_Emit(BallSealEffect *effect, void (*callback)(SPLEmitter *)) {
     BallSealEmitTask *emitTask;
@@ -624,8 +614,6 @@ void BallSealEffect_GetBasePosition(int battlerType, VecFx32 *pos) {
     pos->y -= (y + 32) * 172;
 }
 
-#pragma force_active reset
-
 void BallSealEffect_SetEmitterPosition(SPLEmitter *emitter) {
     VecFx32 pos;
     BallSealEffect *effect = ParticleSystem_GetEmitterParam();
@@ -634,8 +622,6 @@ void BallSealEffect_SetEmitterPosition(SPLEmitter *emitter) {
     emitter->emtr_pos.y = pos.y + emitter->p_res->p_base->pos.y;
     emitter->emtr_pos.z = pos.z + emitter->p_res->p_base->pos.z;
 }
-
-#pragma force_active on
 
 void BallSealEffect_SetEmitterPositionFromSeal(SPLEmitter *emitter) {
     VecFx32 pos;
@@ -652,8 +638,6 @@ void BallSealEffect_SetEmitterPositionFromSeal(SPLEmitter *emitter) {
     emitter->emtr_pos.y = pos.y + emitter->p_res->p_base->pos.y;
     emitter->emtr_pos.z = pos.z + emitter->p_res->p_base->pos.z;
 }
-
-#pragma force_active reset
 
 void BallBurstEffect_SetEmitterPosition(SPLEmitter *emitter) {
     BallBurstEffect *effect = ParticleSystem_GetEmitterParam();
@@ -1911,7 +1895,6 @@ void BattleAnimUtil_LoadMonIntoPicOppositeFacing(BattleAnimBattlerPicParams *par
 
 // Pushes the battler's pic and loads the source battler's graphics into it, facing like the battler in slot
 // target (the other way round when oppositeFacing)
-#pragma force_active on
 
 void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int target, BOOL oppositeFacing, enum HeapID heapId) {
     PokepicTemplate template;
@@ -1975,10 +1958,7 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
     }
 }
 
-#pragma force_active reset
-
 // Pops the battler's pic and reloads its own graphics
-#pragma force_active on
 #pragma push
 #pragma opt_propagation off
 
@@ -2000,17 +1980,15 @@ void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID h
     params->picData[params->battler]->paletteId = picTemplate->palDataID;
     params->picData[params->battler]->height = GetMonPicHeightBySpeciesGenderForm((u16)species, (u8)gender, (u8)facing, (u8)form, personality);
     int battler = params->battler;
-    u32 slot = battler * sizeof(Pokepic *); // byte offset of the battler's pointers, kept from before the call
+    u32 slot = battler * sizeof(Pokepic *); // byte offset of the battler's pointers
     int offset = BattleAnimUtil_GetBattlerTypeCoord(params->battlerTypes[battler], 1);
     int height = (*(MonPicData **)((u8 *)params->picData + slot))->height;
     Pokepic_SetAttr(*(Pokepic **)((u8 *)params->pokepics + slot), POKEPIC_Y, height + offset);
 }
 
 #pragma pop
-#pragma force_active reset
 
 // Loads a fixed graphic of the otherpoke NARC (not a species) into the battler's pic, front or back by its battler type
-#pragma force_active on
 
 void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, enum HeapID heapId) {
     PokepicTemplate template;
@@ -2049,8 +2027,6 @@ void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, en
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_SHADOW_H, 0);
     }
 }
-
-#pragma force_active reset
 
 s16 BattleAnimUtil_GetBattlerTypeCoord(u32 battlerType, u32 index) {
     if (index == 0) {

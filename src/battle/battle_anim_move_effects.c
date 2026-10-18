@@ -193,9 +193,6 @@ void BattleAnimFunc_SetBgPaletteGrayscale(BattleAnimSystem *system) {
     }
 }
 
-#pragma push
-#pragma opt_propagation off
-
 void BattleAnimTask_DropSpriteStepwiseUpdate(BattleAnimDropSpriteStepwiseWork *work) {
     s16 x, y;
 
@@ -283,8 +280,6 @@ void BattleAnimTask_DropSpriteStepwiseUpdate(BattleAnimDropSpriteStepwiseWork *w
         break;
     }
 }
-
-#pragma pop
 
 void BattleAnimTask_DropSpriteStepwise(SysTask *task, void *data) {
     BattleAnimDropSpriteStepwiseWork *work = data;
@@ -1305,9 +1300,6 @@ void BattleAnimFunc_AttackerSilhouette(BattleAnimSystem *system) {
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_AttackerSilhouette, work);
 }
 
-#pragma push
-#pragma opt_common_subs off
-
 enum {
     HOP_STATE_START_HOP,
     HOP_STATE_HOP,
@@ -1321,10 +1313,7 @@ void BattleAnimTask_AttackerHop(SysTask *task, void *data) {
         int row = work->hop * 5;
         BattleAnimUtil_InitScaleMotionXY(&work->scale, gBattleAnimAttackerHopScales[row], gBattleAnimAttackerHopScaleEndX[row], gBattleAnimAttackerHopScaleStartY[row], gBattleAnimAttackerHopScaleEndY[row], 100, gBattleAnimAttackerHopScaleDurations[row]);
         row = work->hop * 3;
-        {
-            int y = work->y;
-            BattleAnimUtil_InitLinearMotion(&work->offset, 0, 0, (s16)(y + gBattleAnimAttackerHopOffsets[row]), (s16)(y + gBattleAnimAttackerHopOffsetEnds[row]), gBattleAnimAttackerHopOffsetDurations[row]);
-        }
+        BattleAnimUtil_InitLinearMotion(&work->offset, 0, 0, work->y + gBattleAnimAttackerHopOffsets[row], work->y + gBattleAnimAttackerHopOffsetEnds[row], gBattleAnimAttackerHopOffsetDurations[row]);
         work->hop++;
         work->state++;
         break;
@@ -1359,8 +1348,6 @@ void BattleAnimTask_AttackerHop(SysTask *task, void *data) {
         break;
     }
 }
-
-#pragma pop
 
 void BattleAnimFunc_AttackerHop(BattleAnimSystem *system) {
     BattleAnimAttackerHopWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimAttackerHopWork));

@@ -558,8 +558,6 @@ void FrontierBrainIntro_SetVec(VecFx32 *vec, fx32 x, fx32 y, fx32 z) {
     *vec = v;
 }
 
-#pragma opt_common_subs off
-#pragma opt_propagation off
 void FrontierBrainIntro_LoadBackground(FrontierBrainIntro *intro, const FrontierBrainIntroArgs *args) {
     NNSG2dPaletteData *plttData;
     void *buffer;
@@ -580,8 +578,6 @@ void FrontierBrainIntro_LoadBackground(FrontierBrainIntro *intro, const Frontier
     Heap_Free(buffer);
     intro->paletteTask = SysTask_CreateOnMainQueue(FrontierBrainIntro_CyclePaletteTask, intro, 1100);
 }
-#pragma opt_propagation reset
-#pragma opt_common_subs reset
 
 void FrontierBrainIntro_CyclePaletteTask(SysTask *task, void *data) {
     FrontierBrainIntro *intro = data;

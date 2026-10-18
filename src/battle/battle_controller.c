@@ -882,9 +882,6 @@ void BattleController_ReplyCommandSelection(BattleSystem *battleSystem, int batt
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
 
-#pragma push
-#pragma opt_lifetimes off
-
 void BattleController_EmitSelectMove(BattleSystem *battleSystem, BattleContext *ctx, int battlerId) {
     BattleControllerPacketSelectMove packet;
     int i;
@@ -900,8 +897,6 @@ void BattleController_EmitSelectMove(BattleSystem *battleSystem, BattleContext *
     packet.unusableMovesMask = StruggleCheck(battleSystem, ctx, battlerId, 0, -1);
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
-
-#pragma pop
 
 void BattleController_ReplyMoveSelection(BattleSystem *battleSystem, int battlerId, u32 input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));

@@ -42,27 +42,21 @@ void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt) {
     YesNoPrompt_Destroy(prompt);
 }
 
-#pragma push
-#pragma opt_propagation off
 void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch) {
     YesNoPromptTemplate template;
 
     MI_CpuFill8(&template, 0, sizeof(template));
-    {
-        int zero = 0;
-        template.tileStart = 109;
-        template.plttSlot = 14;
-        template.bgConfig = bgConfig;
-        template.bgId = zero;
-        template.x = 24;
-        template.y = 10;
-        template.ignoreTouchFlag = ignoreTouch;
-        template.initialCursorPos = 0;
-        template.shapeParam = zero;
-    }
+    template.bgConfig = bgConfig;
+    template.bgId = GF_BG_LYR_MAIN_0;
+    template.tileStart = 109;
+    template.plttSlot = 14;
+    template.x = 24;
+    template.y = 10;
+    template.ignoreTouchFlag = ignoreTouch;
+    template.initialCursorPos = 0;
+    template.shapeParam = 0;
     YesNoPrompt_InitFromTemplate(prompt, &template);
 }
-#pragma pop
 
 u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt) {
     return YesNoPrompt_HandleInput(prompt);

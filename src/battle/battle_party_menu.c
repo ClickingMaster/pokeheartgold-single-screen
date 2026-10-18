@@ -1666,16 +1666,6 @@ static inline void BattlePartyMenu_BufferMonMessage(BattlePartyMenu *menu, Pokem
     String_Delete(template);
 }
 
-// A slot of the mons array addressed as base plus byte offset (the trapped-mon message reads it this way).
-typedef BattlePartyMenuMon BattlePartyMenuMons[6];
-
-typedef struct BattlePartyMenuMonRef {
-    u32 offset;
-    BattlePartyMenuMons *mons;
-} BattlePartyMenuMonRef;
-
-#pragma opt_propagation off
-
 // Buffers the reason the selected mon cannot be sent out; returns 1 if it can be.
 static int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
     BattlePartyContext *context;
@@ -1720,18 +1710,15 @@ static int BattlePartyMenu_CanSwitchToSelectedMon(BattlePartyMenu *menu) {
         }
     }
     if (context->move) {
-        u8 slot = menu->activeMon;
-        BattlePartyMenuMonRef active = { slot * sizeof(BattlePartyMenuMon), &menu->mons };
+        BattlePartyMenuMon *active = &menu->mons[menu->activeMon];
         String *template = NewString_ReadMsgData(menu->msgData, msg_0006_00078);
-        BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(*(Pokemon **)((u8 *)active.mons + active.offset)));
+        BufferBoxMonNickname(menu->msgFormat, 0, Mon_GetBoxMon(active->mon));
         StringExpandPlaceholders(menu->msgFormat, menu->string, template);
         String_Delete(template);
         return 0;
     }
     return 1;
 }
-
-#pragma opt_propagation reset
 
 static u8 BattlePartyMenu_IsSelectedMonEgg(BattlePartyMenu *menu) {
     u8 slot = menu->context->selectedMon;
@@ -2557,7 +2544,7 @@ static void BattlePartyMenu_PrintCheckMovesPage(BattlePartyMenu *menu) {
     u16 base = menu->windowSet * 6, i;
     int window1, window2, window3, window4;
 
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + base * 16), 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base], 0);
     window1 = (base + 1) * 16;
     FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + window1), 0);
     window2 = (base + 2) * 16;
@@ -2624,8 +2611,6 @@ static void BattlePartyMenu_PrintSummaryPage(BattlePartyMenu *menu) {
     menu->windowSet ^= 1;
 }
 
-#pragma opt_common_subs off
-
 // The move detail page has two sets of 11 windows (`windowSet`); windows 6-10 are shared.
 static void BattlePartyMenu_PrintMoveDetailPage(BattlePartyMenu *menu) {
     int base = menu->windowSet * 11;
@@ -2637,12 +2622,12 @@ static void BattlePartyMenu_PrintMoveDetailPage(BattlePartyMenu *menu) {
     FillWindowPixelBuffer(&menu->pageWindows[8], 0);
     FillWindowPixelBuffer(&menu->pageWindows[9], 0);
     FillWindowPixelBuffer(&menu->pageWindows[10], 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + (base + 1) * 16), 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + base * 16), 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + (base + 2) * 16), 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + (base + 3) * 16), 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + (base + 5) * 16), 0);
-    FillWindowPixelBuffer((Window *)((u8 *)menu->pageWindows + (base + 4) * 16), 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base + 1], 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base], 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base + 2], 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base + 3], 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base + 5], 0);
+    FillWindowPixelBuffer(&menu->pageWindows[base + 4], 0);
     slot = menu->context->selectedMon;
     move = &menu->mons[slot].moves[menu->context->selectedMove];
     BattlePartyMenu_PrintMonName(menu, 6, 0, slot, 0, 0);
@@ -2658,8 +2643,6 @@ static void BattlePartyMenu_PrintMoveDetailPage(BattlePartyMenu *menu) {
     BattlePartyMenu_PrintMovePP(menu, base + 1, move->pp, move->maxPP);
     menu->windowSet ^= 1;
 }
-
-#pragma opt_common_subs reset
 
 static void BattlePartyMenu_PrintLearnMovePage(BattlePartyMenu *menu) {
     u32 i;
@@ -3337,11 +3320,8 @@ static s16 BattlePartyMenu_CalcConditionMarkerCoord(u8 stat, int target, int bas
     return base + (s16)(n >> 16);
 }
 
-#pragma opt_propagation off
-
 static void BattlePartyMenu_ShowConditionMarkers(BattlePartyMenu *menu) {
-    register int offset = sizeof(BattlePartyMenuMon) * menu->context->selectedMon;
-    register BattlePartyMenuMon *mons = menu->mons;
+    BattlePartyMenuMon *mon = &menu->mons[menu->context->selectedMon];
     int x, y;
 
     BattlePartyMenu_SetSpriteAnim(menu->sprites[27], 0);
@@ -3349,24 +3329,22 @@ static void BattlePartyMenu_ShowConditionMarkers(BattlePartyMenu *menu) {
     BattlePartyMenu_SetSpriteAnim(menu->sprites[29], 3);
     BattlePartyMenu_SetSpriteAnim(menu->sprites[30], 4);
     BattlePartyMenu_SetSpriteAnim(menu->sprites[31], 2);
-    x = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[0], 144, 144);
-    y = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[0], 2, 24);
+    x = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[0], 144, 144);
+    y = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[0], 2, 24);
     BattlePartyMenu_ShowSpriteAt(menu->sprites[27], x, y);
-    x = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[1], 164, 144);
-    y = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[1], 16, 24);
+    x = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[1], 164, 144);
+    y = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[1], 16, 24);
     BattlePartyMenu_ShowSpriteAt(menu->sprites[28], x, y);
-    x = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[2], 156, 144);
-    y = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[2], 41, 24);
+    x = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[2], 156, 144);
+    y = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[2], 41, 24);
     BattlePartyMenu_ShowSpriteAt(menu->sprites[29], x, y);
-    x = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[3], 131, 143);
-    y = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[3], 41, 24);
+    x = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[3], 131, 143);
+    y = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[3], 41, 24);
     BattlePartyMenu_ShowSpriteAt(menu->sprites[30], x, y);
-    x = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[4], 123, 143);
-    y = BattlePartyMenu_CalcConditionMarkerCoord(((BattlePartyMenuMon *)((u8 *)mons + offset))->contestStats[4], 16, 24);
+    x = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[4], 123, 143);
+    y = BattlePartyMenu_CalcConditionMarkerCoord(mon->contestStats[4], 16, 24);
     BattlePartyMenu_ShowSpriteAt(menu->sprites[31], x, y);
 }
-
-#pragma opt_propagation reset
 
 static void BattlePartyMenu_CreateCursor(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);

@@ -188,26 +188,18 @@ void BattleCastleData_Init(BattleCastleData *data, u32 resume) {
     }
 }
 
-#pragma opt_movepostops off
-#pragma opt_common_subs off
 static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     int count = (u8)Party_GetCount(data->playerParty), i, battleNo;
-    u8 *cursor;
     Pokemon *mon;
     int monCount;
     u32 isLink;
-    i = 0;
-    if (count > 0) {
-        cursor = (u8 *)data;
-        do {
-            mon = Party_GetMonByIndex(data->playerParty, i);
-            ((BattleCastleData *)cursor)->startPP[0][0] = GetMonData(mon, MON_DATA_MOVE1_PP, NULL);
-            ((BattleCastleData *)cursor)->startPP[0][1] = GetMonData(mon, MON_DATA_MOVE2_PP, NULL);
-            ((BattleCastleData *)cursor)->startPP[0][2] = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
-            ((BattleCastleData *)cursor)->startPP[0][3] = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
-            i++;
-            cursor += sizeof(data->startPP[0]);
-        } while (i < count);
+
+    for (i = 0; i < count; i++) {
+        mon = Party_GetMonByIndex(data->playerParty, i);
+        data->startPP[i][0] = GetMonData(mon, MON_DATA_MOVE1_PP, NULL);
+        data->startPP[i][1] = GetMonData(mon, MON_DATA_MOVE2_PP, NULL);
+        data->startPP[i][2] = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
+        data->startPP[i][3] = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
     }
     BattleCastle_GetRoundTrainerIds(data->type, BattleCastle_GetRound(data), data->trainerIds, 14);
     battleNo = data->battleNo;
@@ -215,8 +207,6 @@ static void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
     isLink = BattleCastle_IsMultiType(data->type);
     FrontierTrainer_GenerateMons(monCount, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
 }
-#pragma opt_common_subs reset
-#pragma opt_movepostops reset
 
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     struct {

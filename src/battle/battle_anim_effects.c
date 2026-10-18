@@ -3903,9 +3903,6 @@ void BattleAnimObjWindowBg_InitParams(BattleAnimSystem *system, BattleAnimObjWin
     params->target = (s32)BattleAnimSystem_GetArg(system, 1);
 }
 
-#pragma push
-#pragma opt_propagation off
-
 void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWindowBgParams *params) {
     BattleAnimObjWindowBgWork *work = BattleAnimUtil_AllocWork(system, sizeof(BattleAnimObjWindowBgWork));
     u32 type;
@@ -3933,11 +3930,9 @@ void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWi
     }
     {
         // OBJ window inside: BG1, BG2, OBJ and blending
-        u32 winout = reg_G2_WINOUT;
-        winout &= ~0x3F00;
-        winout |= (GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_OBJ) << 8;
-        winout |= 0x2000;
-        reg_G2_WINOUT = winout;
+        u32 winout = (reg_G2_WINOUT & ~REG_G2_WINOUT_OBJWININ_MASK) | ((GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_OBJ) << REG_G2_WINOUT_OBJWININ_SHIFT);
+        winout |= 0x20 << REG_G2_WINOUT_OBJWININ_SHIFT;
+        reg_G2_WINOUT = (u16)winout;
         G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
         GX_SetVisibleWnd(GX_WNDMASK_OW);
     }
@@ -3946,8 +3941,6 @@ void BattleAnimObjWindowBg_Start(BattleAnimSystem *system, const BattleAnimObjWi
     work->params.y = 0;
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_ObjWindowBgScroll, work);
 }
-
-#pragma pop
 
 void BattleAnimFunc_ObjWindowBgScrollUp(BattleAnimSystem *system) {
     BattleAnimObjWindowBgParams params;

@@ -194,7 +194,7 @@ static void FrontierRecordsApp_MoveLetterCursor(FrontierRecordsApp *app, int sel
 static void FrontierRecordsApp_CreateLetterGrid(FrontierRecordsApp *app);
 static void FrontierRecordsApp_LetterGrid_OnKeyMove(void *data, int input, int prevInput);
 static void FrontierRecordsApp_LetterGrid_OnTouch(void *data, int input, int prevInput);
-static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter);
+static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, u32 letter);
 static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app);
 static void FrontierRecordsApp_GrayOutEmptyLetters(FrontierRecordsApp *app);
 static void FrontierRecordsApp_MoveSpeciesCursor(FrontierRecordsApp *app, int selection);
@@ -1428,21 +1428,16 @@ static inline void FrontierRecordsApp_InitLetterFlash(FrontierRecordsApp *app) {
     app->flash.paletteOff = 0;
 }
 
-#pragma push
-#pragma opt_lifetimes off
-static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, int letter) {
-    u32 position = letter;
-
+static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, u32 letter) {
     FrontierRecordsApp_InitLetterFlash(app);
-    position = gFrontierRecordsLetterPositions[position];
-    app->flash.x = ((position % 7) * 32 + 24) / 8;
-    app->flash.y = ((position / 7) * 32 + 40) / 8 + 32;
+    letter = gFrontierRecordsLetterPositions[letter];
+    app->flash.x = ((letter % 7) * 32 + 24) / 8;
+    app->flash.y = ((letter / 7) * 32 + 40) / 8 + 32;
     app->flash.width = 2;
     app->flash.height = 2;
     app->flash.state = BUTTON_FLASH_ON;
     app->flash.timer = 0;
 }
-#pragma pop
 
 static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
     u32 input;

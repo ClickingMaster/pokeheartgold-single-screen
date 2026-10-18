@@ -1997,7 +1997,6 @@ BattleAnimBgSwitchWork *BattleAnimBackground_NewSwitchWork(BattleAnimSystem *sys
     return work;
 }
 
-// the two (u8) conversions of the priority are not shared
 #pragma push
 #pragma opt_common_subs off
 
