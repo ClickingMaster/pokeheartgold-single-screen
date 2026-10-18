@@ -154,8 +154,6 @@ typedef struct BattleAnimEmitterCounts {
 // Overlay 7 functions of other modules, declared with the types this file still uses (their own headers,
 // battle/battle_anim_util.h and battle/battle_anim_internal.h, cannot be included next to the local copies above)
 void BattleAnimSystem_InitBlend(void);
-struct BattleAnimBattlerSprites *BattleAnimBattlerSprites_NewAll(BattleSystem *battleSystem, enum HeapID heapId);
-void BattleAnimBattlerSprites_Free(struct BattleAnimBattlerSprites *sprites);
 SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BOOL loadNow);
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow);
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, int member, BOOL loadNow);

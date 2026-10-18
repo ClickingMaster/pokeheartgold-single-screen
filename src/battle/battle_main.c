@@ -588,8 +588,6 @@ void BgConfig_CleanupBattleBackgrounds(BgConfig *bgConfig) {
 void BattleSystem_FreeGraphicsDummy(BattleSystem *battleSystem) {
 }
 
-void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup);
-
 void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) {
     int i, slot;
     BattlerInitData battlerInitData;

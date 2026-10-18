@@ -118,7 +118,7 @@ int BattleCastle_GetPartySize(int type, int both) {
     }
 }
 
-int BattleCastle_GetOpponentMonCount(int type, int both) {
+u8 BattleCastle_GetOpponentMonCount(int type, int both) {
     switch (type) {
     case 0:
     case 1:

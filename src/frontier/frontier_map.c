@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "frontier/frontier.h"
+#include "frontier/frontier_map_params.h"
 
 #include "bg_window.h"
 #include "field_bgm.h"
@@ -56,9 +57,6 @@ FrontierMapSpriteState *Frontier_GetMapSpriteState(void *frontier);
 void Frontier_ResetMapSpriteState(void *frontier);
 
 // Other frontier modules
-u32 FrontierMap_GetParam(u32 mapId, u32 field);
-void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
-void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
 int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 u32 FrontierParticles_New(enum HeapID heapID);
 void FrontierParticles_Free(u32 resourceManager);

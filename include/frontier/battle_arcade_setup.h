@@ -13,6 +13,7 @@ u8 BattleArcade_GetMonCount(u8 type, int both);
 u8 BattleArcade_GetOpponentMonCount(u8 type, int both);
 BattleSetup *BattleArcade_NewBattleSetup(ArcadeContext *ctx, FrontierLaunchArgs *args);
 u32 BattleArcade_GetBattleType(int type);
+void BattleArcade_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
 int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 BOOL BattleArcade_MultiplayerCheck(int type);
 void BattleArcade_SetMonOriginalTrainer(ArcadeContext *ctx, Pokemon *mon);

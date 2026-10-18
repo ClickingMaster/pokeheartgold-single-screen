@@ -807,7 +807,7 @@ void FrontierMap_UnloadItemIconResources(FrontierMap *map) {
     SpriteManager_UnloadPlttObjById(map->spriteManager, 0x7D1);
 }
 
-ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, s16 x, s16 y) {
+ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, int x, int y) {
     ManagedSpriteTemplate template = sFrontierMapItemIconTemplate;
     ManagedSprite *sprite;
 

@@ -32,10 +32,10 @@ extern BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value);
 extern const u8 gFrontierLinkLobbySummaryPages[];
 
 void FrontierLinkLobby_New(SaveData *saveData);
-void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
-void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
-void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
-void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
+static void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
+static void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
+static void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
+static void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId);
 
 FrontierLinkLobbyGlobals gFrontierLinkLobby;
 
@@ -88,7 +88,7 @@ void FrontierLinkLobby_RunPartyApp(void *frontierWork, FrontierLinkLobby *lobby,
     }
 }
 
-void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
+static void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
     u8 i;
 
     lobby->partyMenuArgs = Heap_Alloc(HEAP_ID_FIELD2, sizeof(PartyMenuArgs));
@@ -137,7 +137,7 @@ void FrontierLinkLobby_LaunchPartyMenu(void *frontierWork, FrontierLinkLobby *lo
     Frontier_LaunchApplication(frontierWork, &gOverlayTemplate_PartyMenu, lobby->partyMenuArgs, 0, NULL);
 }
 
-void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
+static void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
     switch (lobby->partyMenuArgs->partySlot) {
     case 7:
         *lobby->resultVar = 4;
@@ -158,7 +158,7 @@ void FrontierLinkLobby_ReadPartyMenuResult(void *frontierWork, FrontierLinkLobby
     }
 }
 
-void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
+static void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
     lobby->summaryArgs = Heap_AllocAtEnd(heapId, sizeof(PokemonSummaryArgs));
     MI_CpuFill8(lobby->summaryArgs, 0, sizeof(PokemonSummaryArgs));
     lobby->summaryArgs->options = Save_PlayerData_GetOptionsAddr(lobby->saveData);
@@ -177,7 +177,7 @@ void FrontierLinkLobby_LaunchSummary(void *frontierWork, FrontierLinkLobby *lobb
     Frontier_LaunchApplication(frontierWork, &gOverlayTemplate_PokemonSummary, lobby->summaryArgs, 0, NULL);
 }
 
-void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
+static void FrontierLinkLobby_ReadSummaryResult(void *frontierWork, FrontierLinkLobby *lobby, FieldSystem *fieldSystem, enum HeapID heapId) {
     lobby->partySlot = lobby->summaryArgs->partySlot;
     Heap_Free(lobby->summaryArgs);
     lobby->summaryArgs = NULL;

@@ -23,7 +23,7 @@ const BattleFactorySetRange *BattleFactory_GetTrainerSetRange(int trainerId, int
 const BattleFactorySetRange *BattleFactory_GetRentalSetRange(int round, int levelMode);
 int BattleFactory_PickSetIds(const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID, const BattleFactorySetRange *range, u16 tradeCount, u8 *ivs);
 int BattleFactory_GetPartySize(int type);
-int BattleFactory_GetOpponentMonCount(int type, int both);
+u8 BattleFactory_GetOpponentMonCount(int type, int both);
 void BattleFactory_GenerateRentalSets(int round, int levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u16 tradeCount, const u16 *excludedSetIds, const u16 *excludedItems);
 void BattleFactory_GenerateTrainerSets(u8 count, u16 trainerId, u8 levelMode, const FrontierMon *partyMons, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, int numPartyMons);
 BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunchArgs *args);

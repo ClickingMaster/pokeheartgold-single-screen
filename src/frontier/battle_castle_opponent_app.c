@@ -5,6 +5,7 @@
 
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_castle.h"
+#include "frontier/battle_castle_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0033.h"
 
@@ -42,12 +43,11 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "system.h"
+#include "text.h"
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
 FS_EXTERN_OVERLAY(OVY_80);
-
-u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
 
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 #define TEXT_SPEED_NOTRANSFER       0xFF
@@ -208,9 +208,6 @@ extern const BgTemplate gBattleCastleOpponentAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastleOpponentAppGraphicsBanks;
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
-int BattleCastle_GetPartySize(u8 frontierType, int kind);
-u8 BattleCastle_GetOpponentMonCount(u8 frontierType, int kind); // number of opponent mons (defined with an int result)
-void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
 enum {
     CASTLE_OPP_FADE_IN_START_SYNC,
@@ -241,10 +238,6 @@ enum {
 };
 
 // Entry points and link receive callbacks
-void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
-void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
 static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app);

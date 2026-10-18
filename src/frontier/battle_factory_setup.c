@@ -210,7 +210,7 @@ int BattleFactory_GetPartySize(int type) {
     return 0;
 }
 
-int BattleFactory_GetOpponentMonCount(int type, int both) {
+u8 BattleFactory_GetOpponentMonCount(int type, int both) {
     switch (type) {
     case 0:
     case 1:

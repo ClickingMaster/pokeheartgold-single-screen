@@ -6,6 +6,7 @@
 #include "constants/sndseq.h"
 
 #include "frontier/battle_hall_data.h"
+#include "frontier/battle_hall_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0441.h"
 
@@ -133,13 +134,10 @@ typedef struct BattleHallApp {
 } BattleHallApp;
 
 // Frontier helpers
-u8 BattleHall_GetCellType(u8 index);
-u32 BattleHall_IsMultiType(u8 mode);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
 // Not declared by the owners' headers yet
 u32 HallTypeRanks_Get(u8 type, void *hallRecords);
-void GX_LoadBGPltt(const void *src, u32 offset, u32 size);
 
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
@@ -193,11 +191,8 @@ static BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app);
 static u8 BattleHallApp_IsMatronMode(BattleHallApp *app);
 static BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg);
 static void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command);
-void BattleHall_ReceivePing(u32 netId);
 static void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice);
-void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
 static void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer);
-void BattleHall_ReceiveAnswer(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
 static void BattleHallApp_ResetYesNo(BattleHallApp *app);
 static void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app);
 static void BattleHallApp_CancelConfirm(BattleHallApp *app);

@@ -52,7 +52,6 @@ static const BattleArcadeTrainerRange sBattleArcadeTrainerRanges[] = {
 void *FrontierTrainer_Load(BattleArcadeTrainerRecord *record, u16 trainerId, enum HeapID heapID, int narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleArcadeTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void BattleArcade_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
 
 u32 BattleArcade_GetRandomTrainerId(u32 type, u32 round, u32 battleNo) {
     u16 min;

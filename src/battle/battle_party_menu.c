@@ -210,10 +210,10 @@ static void BattlePartyMenu_InitText(BattlePartyMenu *menu);
 static void BattlePartyMenu_FreeText(BattlePartyMenu *menu);
 static void BattlePartyMenu_LoadMonData(BattlePartyMenu *menu);
 static BOOL BattlePartyMenu_HandlePartyListSelection(BattlePartyMenu *menu);
-u8 BattlePartyMenu_GetMonMenuInput(BattlePartyMenu *menu);
-u8 BattlePartyMenu_GetSummaryInput(BattlePartyMenu *menu);
-u8 BattlePartyMenu_GetCheckMovesInput(BattlePartyMenu *menu);
-u8 BattlePartyMenu_GetMoveDetailInput(BattlePartyMenu *menu);
+static u8 BattlePartyMenu_GetMonMenuInput(BattlePartyMenu *menu);
+static u8 BattlePartyMenu_GetSummaryInput(BattlePartyMenu *menu);
+static u8 BattlePartyMenu_GetCheckMovesInput(BattlePartyMenu *menu);
+static u8 BattlePartyMenu_GetMoveDetailInput(BattlePartyMenu *menu);
 static int BattlePartyMenu_CheckTouchHitbox(BattlePartyMenu *menu, const TouchscreenHitbox *hitboxes);
 static int BattlePartyMenu_GetSlotType(BattlePartyMenu *menu, int slot);
 static u8 BattlePartyMenu_FindNextMon(BattlePartyMenu *menu, int slot, int direction);
@@ -248,11 +248,11 @@ static void BattlePartyMenu_PrintPPLabel(BattlePartyMenu *menu, int window, u16 
 static void BattlePartyMenu_PrintPrompt(BattlePartyMenu *menu, int msgNo);
 static void BattlePartyMenu_PrintButtonLabel(BattlePartyMenu *menu, int window, int msgNo);
 static void BattlePartyMenu_PrintLevelAndNextExp(BattlePartyMenu *menu, int slot);
-void BattlePartyMenu_PrintAttack(BattlePartyMenu *menu, int slot);
-void BattlePartyMenu_PrintDefense(BattlePartyMenu *menu, int slot);
-void BattlePartyMenu_PrintSpeed(BattlePartyMenu *menu, int slot);
-void BattlePartyMenu_PrintSpAttack(BattlePartyMenu *menu, int slot);
-void BattlePartyMenu_PrintSpDefense(BattlePartyMenu *menu, int slot);
+static void BattlePartyMenu_PrintAttack(BattlePartyMenu *menu, int slot);
+static void BattlePartyMenu_PrintDefense(BattlePartyMenu *menu, int slot);
+static void BattlePartyMenu_PrintSpeed(BattlePartyMenu *menu, int slot);
+static void BattlePartyMenu_PrintSpAttack(BattlePartyMenu *menu, int slot);
+static void BattlePartyMenu_PrintSpDefense(BattlePartyMenu *menu, int slot);
 static void BattlePartyMenu_PrintHPStat(BattlePartyMenu *menu, int slot);
 static void BattlePartyMenu_PrintAbilityDescription(BattlePartyMenu *menu, int slot);
 static void BattlePartyMenu_PrintAccuracyLabel(BattlePartyMenu *menu, int window);
@@ -1471,7 +1471,7 @@ fail:
 
 // Touch first, then the d-pad cursor; B picks the given button. 0xFF when nothing was pressed.
 #define DEFINE_GET_PAGE_INPUT(name, hitboxes, cancelButton)           \
-    u8 name(BattlePartyMenu *menu) {                                  \
+    static u8 name(BattlePartyMenu *menu) {                           \
         int input = BattlePartyMenu_CheckTouchHitbox(menu, hitboxes); \
         if (input == -1) {                                            \
             input = BattleDpadCursor_HandleInput(menu->cursor);       \
@@ -2139,7 +2139,7 @@ static void BattlePartyMenu_PrintLevelAndNextExp(BattlePartyMenu *menu, int slot
 }
 
 #define DEFINE_PRINT_STAT(name, labelWindow, labelMsgNo, valueMsgNo, field, valueWindow)                                                                              \
-    void name(BattlePartyMenu *menu, int slot) {                                                                                                                      \
+    static void name(BattlePartyMenu *menu, int slot) {                                                                                                               \
         u16 base = menu->windowSet * 22;                                                                                                                              \
         String *string = NewString_ReadMsgData(menu->msgData, labelMsgNo);                                                                                            \
         AddTextPrinterParameterizedWithColor(&menu->pageWindows[labelWindow], 0, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 14, 0), NULL);              \

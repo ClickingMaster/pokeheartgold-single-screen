@@ -123,7 +123,7 @@ ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, s32 ind
 void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, u32 index);
 void FrontierMap_LoadItemIconResources(FrontierMap *map);
 void FrontierMap_UnloadItemIconResources(FrontierMap *map);
-ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, s16 x, s16 y);
+ManagedSprite *FrontierMap_CreateItemIcon(FrontierMap *map, int x, int y);
 void FrontierMap_DeleteItemIcon(FrontierMap *map, ManagedSprite *sprite);
 void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, const u16 *entry);
 void FrontierScript_PrintMessageEntryFromBank(FrontierScriptContext *ctx, const u16 *entry, u32 bank);

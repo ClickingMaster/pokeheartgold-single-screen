@@ -7,6 +7,7 @@
 
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_castle.h"
+#include "frontier/battle_castle_setup.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0031.h"
 
@@ -263,20 +264,14 @@ extern const GraphicsBanks gBattleCastlePartyAppGraphicsBanks;
 // Frontier helpers
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
-int BattleCastle_GetPartySize(u8 frontierType, int kind);
-void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
 // Entry points and link receive callbacks
 static void BattleCastlePartyApp_ReloadBgPalette(void);
-void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
-void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
-void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
-void BattleCastlePartyApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 
 static BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app);
-BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app);
-BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app);
+static BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app);
+static BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app);
 static BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app);
 static BOOL BattleCastlePartyApp_FadeOut(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app);
@@ -314,8 +309,8 @@ static void BattleCastlePartyApp_OpenHealMenu(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_CloseHealMenu(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_OpenRentalMenu(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode);
-void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode);
+static void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_ShowYesNoPrompt(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintItemGridHeader(BattleCastlePartyApp *app, int mode);
 static void BattleCastlePartyApp_PrintItemNames(BattleCastlePartyApp *app);
@@ -339,7 +334,7 @@ static u16 BattleCastlePartyApp_GetRentalCost(BattleCastlePartyApp *app, int ind
 static u16 BattleCastlePartyApp_GetRentalCostByItemId(u16 itemId);
 static u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, int kind);
 static void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2);
-int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selected, u32 action);
+static int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selected, u32 action);
 static int BattleCastlePartyApp_GetMonIconHpPalette(BattleCastlePartyApp *app, u32 hpBarColor);
 static int BattleCastlePartyApp_GetHpBarAnimSeq(BattleCastlePartyApp *app, u32 hpBarColor);
 static void BattleCastlePartyApp_ScrollStatsSummary(BattleCastlePartyApp *app, int delta);
@@ -366,7 +361,7 @@ static void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action);
 static void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app, Window *window, MsgData *msgData, int msgNo, int x, int y, int fontId, int color, int alignment);
-void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintSummaryLabels(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
 static void BattleCastlePartyApp_RefreshMonSummary(BattleCastlePartyApp *app, int scheduleCopy);
@@ -374,14 +369,11 @@ static void BattleCastlePartyApp_ShowMonSummary(BattleCastlePartyApp *app, int s
 static void BattleCastlePartyApp_GetItemButtonPos(u32 slot, s16 *x, s16 *y);
 static void BattleCastlePartyApp_ShowSelectedItem(BattleCastlePartyApp *app, u32 selected);
 static void BattleCastlePartyApp_ShowItemGrid(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_SetCursorPos(BattleCastlePartyApp *app, u32 cursorPos, u32 prevCursorPos);
-void BattleCastlePartyApp_SetItemCursor(BattleCastlePartyApp *app, int x, int y, int seq);
-void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int button);
-void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u8 x, u8 y, u8 width);
+static void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u8 x, u8 y, u8 width);
 static void BattleCastlePartyApp_CreateMainMenuList(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_CreateHealMenuList(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app);
-void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app);
+static void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintMainMenuHelp(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app);
@@ -576,7 +568,7 @@ static void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app) {
     GfGfx_BothDispOn();
 }
 
-BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
+static BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
     u32 input;
     u32 rank;
     int cpStat;
@@ -1124,7 +1116,7 @@ enum {
     CASTLE_PARTY_LINK_ACTION_WAIT_SYNC,
 };
 
-BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
+static BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case CASTLE_PARTY_LINK_ACTION_SEND:
         app->flags.bits.linkResume = 0;
@@ -1769,7 +1761,7 @@ static void BattleCastlePartyApp_CloseRentalMenu(BattleCastlePartyApp *app) {
 }
 
 // mode: the rental action (6 or 7) the item grid is opened for
-void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode) {
+static void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode) {
     app->flags.bits.itemMenuOpen = TRUE;
     BattleCastlePartyApp_CloseWindow(&app->windows[6]);
     ClearWindowTilemapAndScheduleTransfer(&app->windows[6]);
@@ -1783,7 +1775,7 @@ void BattleCastlePartyApp_OpenItemGrid(BattleCastlePartyApp *app, int mode) {
     BattleCastlePartyApp_SetupItemGrid(app, mode);
 }
 
-void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_CloseItemGrid(BattleCastlePartyApp *app) {
     if (app->flags.bits.itemMenuOpen == TRUE) {
         u32 i;
 
@@ -2189,7 +2181,7 @@ static void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *a
 }
 
 // Plays the effect of the chosen action on the mon; returns TRUE once it is done
-int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selected, u32 action) {
+static int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selected, u32 action) {
     u32 slot;
     u32 hp;
     u32 iconPalette;
@@ -2799,7 +2791,7 @@ static void BattleCastlePartyApp_PrintExpandedMessage(BattleCastlePartyApp *app,
     String_Delete(string);
 }
 
-void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_LoadMonSummary(BattleCastlePartyApp *app) {
     Pokemon *mon = Party_GetMonByIndex(app->party, BattleCastle_GetMonIndex(app->numMons, app->cursorPos));
     BOOL lock = AcquireMonLock(mon);
     u16 i;
@@ -3103,7 +3095,7 @@ void BattleCastlePartyApp_ShowItemDescription(BattleCastlePartyApp *app, int but
     BattleCastlePartyApp_PrintItemDescription(app, (u16)button);
 }
 
-void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u8 x, u8 y, u8 width) {
+static void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u8 x, u8 y, u8 width) {
     TouchscreenListMenuTemplate template;
     TouchscreenListMenuHeader header;
     u16 tileStart;
@@ -3203,7 +3195,7 @@ static void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app)
     BattleCastlePartyApp_CreateListMenu(app, count, 17, gBattleCastlePartyAppListMenuY[count], 13);
 }
 
-void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app) {
+static void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app) {
     int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
 
     BattleCastle_SetSpritesTranslucent(app->monIcons, numMons, 0);

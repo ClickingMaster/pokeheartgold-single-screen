@@ -1,3 +1,5 @@
+#include "frontier/frontier_map_params.h"
+
 #include "global.h"
 
 #include "constants/sndseq.h"
@@ -35,9 +37,6 @@ typedef struct FrontierMapParams {
     u8 padding[4];
 } FrontierMapParams;
 
-u32 FrontierMap_GetParam(u32 mapId, u32 field);
-void FrontierMap_InitEffect(void *arg, void *effect, u32 mapId);
-void FrontierMap_ExitEffect(void *arg, void *effect, u32 mapId);
 void FrontierMapEffect_InitAlloc(void **args, void **effect);
 void FrontierMapEffect_ExitFree(void **args, void **effect);
 void FrontierMapEffect_InitBgAnim(void **args, void **effect);

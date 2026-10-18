@@ -5,6 +5,8 @@
 #include "constants/pokemon.h"
 
 #include "frontier/battle_castle_data.h"
+#include "frontier/battle_castle_setup.h"
+#include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_system.h"
 #include "frontier/frontier_trainers.h"
@@ -12,11 +14,14 @@
 #include "msgdata/msg/msg_0031.h"
 
 #include "bg_window.h"
+#include "communication_core.h"
+#include "communication_player_state.h"
 #include "frontier_save_access.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "party.h"
+#include "player_avatar.h"
 #include "pokemon.h"
 #include "render_window.h"
 #include "save.h"
@@ -33,7 +38,6 @@ u32 BattleCastle_GetBestStreakStat(u32 type);
 u32 BattleCastle_GetPointsStat(u32 type);
 u32 BattleCastle_GetSpentPointsStat(u32 type);
 u32 BattleCastle_GetBestStreakPointsStat(u32 type);
-u32 FrontierStat_GetFriendIndex(u32 stat);
 u32 CastleChallenge_GetField(void *challenge, u32 field, u8 index, u32 column, u32 unused);
 void CastleChallenge_SetField(void *challenge, int field, u8 index, int column, void *value);
 void CastleChallenge_SetSaved(void *challenge, int saved);
@@ -44,24 +48,6 @@ u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
 void *FrontierTrainer_Load(void *dst, u16 trainerId, u32 heapId, u32 size);
 void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 hasPartner);
 void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
-void *CommPlayerInfo_GetProfile(int netId);
-u32 Comm_GetLocalNetId(void);
-int BattleCastle_GetPartySize(u8 type, int both);
-int BattleCastle_GetOpponentMonCount(int type, int both);
-int BattleCastle_GetMonLevel(void *data);
-BOOL BattleCastle_IsMultiType(int type);
-void BattleCastle_ReviveParty(Party *party);
-void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
-void BattleCastle_AddMonToParty(BattleCastleData *data, Party *party, Pokemon *mon);
-void BattleCastle_SetOpponentParty(BattleCastleData *data);
-u16 BattleCastle_GetRound(BattleCastleData *data);
-BOOL BattleCastleLink_SendRecord(BattleCastleData *data);
-BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *data);
-BOOL BattleCastleLink_SendChoice(BattleCastleData *data);
-BOOL BattleCastleLink_SendOpponentMons(BattleCastleData *data);
-BOOL BattleCastleLink_SendValueA(BattleCastleData *data, u16 value);
-BOOL BattleCastleLink_SendValueB(BattleCastleData *data, u16 value);
-BOOL BattleCastleLink_SendPartyMons(BattleCastleData *data);
 
 static void BattleCastleData_SetupNewChallenge(BattleCastleData *data);
 static void BattleCastleData_RestoreChallenge(BattleCastleData *data);

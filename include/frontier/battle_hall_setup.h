@@ -17,7 +17,7 @@ u8 BattleHall_GetPartySize(u8 type);
 int BattleHall_GetOpponentMonCount(int type);
 void BattleHall_GenerateOpponentMons(FrontierMon *mons, u32 rank, u32 trainerId, u16 *setIds, int count, enum HeapID heapID, u32 narcId);
 u16 BattleHall_GetOpponentLevel(BattleHallData *data, u32 unused);
-u8 BattleHall_GetCellType(u32 cell);
+u8 BattleHall_GetCellType(u8 cell);
 BOOL BattleHall_IsMultiType(int type);
 u8 BattleHall_GetOpponentIVs(u32 rank);
 int BattleHall_GetTrainerAIFlags(BattleHallData *data, u32 index, int rank);

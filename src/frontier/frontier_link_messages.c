@@ -4,6 +4,8 @@
 
 #include "frontier/battle_arcade_data.h"
 #include "frontier/battle_arcade_setup.h"
+#include "frontier/battle_castle_setup.h"
+#include "frontier/battle_factory_setup.h"
 
 #include "battle_link_comm.h"
 #include "communication_core.h"
@@ -21,9 +23,6 @@
 
 // Partner Pokemon are sent as raw Pokemon structs through a large-data command.
 #define LINK_MON_BUFFER_SIZE 0x200
-
-u32 BattleCastle_GetPartySize(u8 type, int both);
-u32 BattleFactory_GetPartySize(u8 type);
 
 // Battle Hall
 
@@ -746,7 +745,7 @@ void BattleArcadeLink_ReceiveOpponentMons(int netId, int size, ArcadeMonsMessage
     }
 }
 
-BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u16 value) {
+BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u32 value) {
     ctx->linkBuffer[0] = value;
     return Comm_SendCommand(0x44, ctx->linkBuffer, 0x28) == TRUE;
 }
@@ -758,7 +757,7 @@ void BattleArcadeLink_ReceiveValueA(int netId, int size, const u16 *data, Arcade
     }
 }
 
-BOOL BattleArcadeLink_SendValueB(ArcadeContext *ctx, u16 value) {
+BOOL BattleArcadeLink_SendValueB(ArcadeContext *ctx, u32 value) {
     ctx->linkBuffer[0] = value;
     return Comm_SendCommand(0x45, ctx->linkBuffer, 0x28) == TRUE;
 }

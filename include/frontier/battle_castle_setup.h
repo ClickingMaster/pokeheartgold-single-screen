@@ -13,7 +13,7 @@
 int BattleCastle_GetRandomTrainerId(int type, u32 round, int battleNo);
 void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
 int BattleCastle_GetPartySize(int type, int both);
-int BattleCastle_GetOpponentMonCount(int type, int both);
+u8 BattleCastle_GetOpponentMonCount(int type, int both);
 BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchArgs *args);
 u32 BattleCastle_GetBattleType(int type);
 int BattleCastle_GetMonLevel(BattleCastleData *data);

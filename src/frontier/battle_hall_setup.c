@@ -361,7 +361,7 @@ u16 BattleHall_GetOpponentLevel(BattleHallData *data, u32 unused) {
     return data->opponentLevel;
 }
 
-u8 BattleHall_GetCellType(u32 cell) {
+u8 BattleHall_GetCellType(u8 cell) {
     return gBattleHallCellTypes[cell];
 }
 

@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "frontier/frontier_map.h"
+#include "frontier/frontier_map_params.h"
 #include "frontier/frontier_scrcmd.h"
 #include "frontier/frontier_script_context.h"
 
@@ -12,7 +13,6 @@
 #include "msgdata.h"
 #include "pm_string.h"
 
-u32 FrontierMap_GetParam(u32 mapId, u32 field);
 FrontierMap *Frontier_GetMap(void *frontierWork);
 
 FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u32 mapId) {
