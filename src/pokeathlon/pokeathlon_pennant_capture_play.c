@@ -239,19 +239,19 @@ BOOL PokeathlonPennantCapture_State_Play(PokeathlonCourseData *course, u8 *state
     PokeathlonPennantCapture *work = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
-    case 0:
+    case EVENT_PLAY_STATE_COUNTDOWN:
         PokeathlonPennantCapture_ShowFrame(course);
         if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
-    case 1:
+    case EVENT_PLAY_STATE_RUN:
         PokeathlonPennantCapture_HostStep(course);
         if (PokeathlonPennantCapture_SendInput(course)) {
             (*state)++;
         }
         break;
-    case 2:
+    case EVENT_PLAY_STATE_FINISH:
         PokeathlonPennantCapture_HostStep(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);

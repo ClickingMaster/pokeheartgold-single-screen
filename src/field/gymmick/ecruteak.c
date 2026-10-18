@@ -11,6 +11,12 @@
 
 #define NUM_CANDLES 4
 
+enum EcruteakCandleState {
+    CANDLE_STATE_DELAY,
+    CANDLE_STATE_SHRINK,
+    CANDLE_STATE_WAIT_SPRITE,
+};
+
 typedef struct EcruteakGymmickLocalData {
     int candleMapProps[NUM_CANDLES];
     int candleIdx;
@@ -86,7 +92,7 @@ void EcruteakGymmick_ExtinguishCandle(FieldSystem *fieldSystem, ScriptEnvField f
     localData->candleIdx = MortyGymTrainerObjectToCandleIdx(*attrPtr);
     localData->mapObject = *attrPtr;
     EcruteakExtinguishCandleTaskData *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(EcruteakExtinguishCandleTaskData));
-    taskData->state = 0;
+    taskData->state = CANDLE_STATE_DELAY;
     taskData->scaleFactor = 1;
     taskData->delayTimer = 0;
     taskData->fieldSystem = fieldSystem;
@@ -106,13 +112,13 @@ static BOOL Task_ExtinguishCandle(TaskManager *taskman) {
     EcruteakGymmickLocalData *localData = taskData->fieldSystem->mapSystems->localData;
 
     switch (taskData->state) {
-    case 0:
+    case CANDLE_STATE_DELAY:
         if (taskData->delayTimer++ >= 30) {
             PlaySE(SEQ_SE_GS_ROUSOKU_KIERU);
             ++taskData->state;
         }
         break;
-    case 1: {
+    case CANDLE_STATE_SHRINK: {
         MapProp *mapProp = MapPropManager_GetMapPropByIndex(taskData->fieldSystem->mapPropManager, localData->candleMapProps[localData->candleIdx]);
         if (taskData->scaleFactor >= 4) {
             MapProp_SetCulled(mapProp, TRUE);
@@ -129,7 +135,7 @@ static BOOL Task_ExtinguishCandle(TaskManager *taskman) {
         scale->z = FX32_ONE / taskData->scaleFactor;
         break;
     }
-    case 2:
+    case CANDLE_STATE_WAIT_SPRITE:
         if (!MapObject_IsBillboardPending(localData->mapObject)) {
             ApplyFogToMapObjects(taskData->fieldSystem);
             Heap_Free(taskData);

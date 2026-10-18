@@ -97,6 +97,14 @@ enum TouchscreenMenuLayout {
     TOUCHSCREEN_MENU_LAYOUT_BATTLE_TOWER_PARTNER_ROOM,
 };
 
+enum TouchscreenMenuActionType {
+    TOUCHSCREEN_MENU_ACTION_CHECK,
+    TOUCHSCREEN_MENU_ACTION_TALK,
+    TOUCHSCREEN_MENU_ACTION_CHECK_BG_EVENT,
+    TOUCHSCREEN_MENU_ACTION_FISHING,
+    TOUCHSCREEN_MENU_ACTION_NEXT,
+};
+
 typedef struct TouchscreenMenuIcon {
     u8 shown;
     String *label;
@@ -497,7 +505,7 @@ static void TouchscreenMenu_HandleActionButton(TouchscreenMenuData *data, int he
     }
 }
 
-// 0/2 CHECK, 1 TALK, 3 FISHING, 4 NEXT (a textbox is open).
+// The action button follows what the player faces, the fishing rod, or an open textbox.
 static int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     FieldSystem *fieldSystem = data->fieldSystem;
     LocalMapObject *playerObj;
@@ -505,24 +513,24 @@ static int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
     int actionType;
 
     if (TouchscreenMenu_IsTextboxOpen(fieldSystem)) {
-        return 4;
+        return TOUCHSCREEN_MENU_ACTION_NEXT;
     }
     if (!FieldSystem_IsPlayerMovementAllowed(fieldSystem)) {
         playerObj = PlayerAvatar_GetMapObject(FieldSystem_GetPlayerAvatar(fieldSystem));
         int facing = MapObject_GetAnimation(playerObj);
         u32 spriteId = MapObject_GetSpriteID(playerObj);
         if ((u32)(spriteId - SPRITE_FISHINGHERO) <= SPRITE_FISH_HEROINE - SPRITE_FISHINGHERO) {
-            return facing == 1 ? 3 : 4;
+            return facing == 1 ? TOUCHSCREEN_MENU_ACTION_FISHING : TOUCHSCREEN_MENU_ACTION_NEXT;
         }
-        if (data->actionType != 4) {
+        if (data->actionType != TOUCHSCREEN_MENU_ACTION_NEXT) {
             return data->actionType;
         }
     }
     actionType = FieldSystem_GetFacingActionType(fieldSystem);
-    if (actionType == 1) {
+    if (actionType == TOUCHSCREEN_MENU_ACTION_TALK) {
         FieldSystem_GetFacingObject(fieldSystem, &facingObj);
         if (IsScriptIdWithoutTalkAction(MapObject_GetScriptID(facingObj)) || IsSpriteIdWithoutTalkAction(MapObject_GetSpriteID(facingObj))) {
-            actionType = 0;
+            actionType = TOUCHSCREEN_MENU_ACTION_CHECK;
         }
     }
     return actionType;

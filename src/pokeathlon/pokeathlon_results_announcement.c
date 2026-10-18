@@ -40,6 +40,27 @@ enum {
     RANKING_STATE_WAIT,
 };
 
+enum PokeathlonResultsInitState {
+    RESULTS_INIT_CREATE,
+    RESULTS_INIT_CREATE_SCOREBOARD,
+    RESULTS_INIT_LOAD_GRAPHICS,
+    RESULTS_INIT_CHOOSE_COMMENT,
+    RESULTS_INIT_FADE_IN,
+    RESULTS_INIT_WAIT_FADE_IN,
+};
+
+enum PokeathlonResultsState {
+    RESULTS_STATE_INTRO,
+    RESULTS_STATE_RANKING,
+    RESULTS_STATE_DIM,
+    RESULTS_STATE_WAIT_DIM,
+    RESULTS_STATE_SHOW_POINTS,
+    RESULTS_STATE_WAIT_POINTS,
+    RESULTS_STATE_COMMENT,
+    RESULTS_STATE_FADE_OUT,
+    RESULTS_STATE_WAIT_FADE_OUT,
+};
+
 // Declared by no public header.
 void WirelessStatusIcon_Refresh(void);
 void WirelessStatusIcon_SetBackPriority(void);
@@ -276,7 +297,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
     int value;
 
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case RESULTS_INIT_CREATE:
         Heap_Create(HEAP_ID_POKEATHLON, (enum HeapID)137, 0x40000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -298,7 +319,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         GfGfx_SwapDisplay();
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case RESULTS_INIT_CREATE_SCOREBOARD:
         sceneConfig = sResultsAnnouncementSceneConfig;
         announcement->scene = PokeathlonCourseSpritePool_New(announcement->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(announcement->scene, 0, 0, 0, FX32_CONST(300));
@@ -314,7 +335,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_LoadTrainerPic(announcement->sprites[0], PokeathlonCourse_GetTrainerPicFileId(2), 11, announcement->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case RESULTS_INIT_LOAD_GRAPHICS:
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)announcement->bgConfig); // takes the BgConfig
         PokeathlonResults_InitBgs(announcement->bgConfig, announcement->heapId);
         PokeathlonEventBanner_AddWindows(announcement->banner, announcement->bgConfig);
@@ -338,13 +359,13 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         PokeathlonResults_PrintTitle(&announcement->window, announcement->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 3:
+    case RESULTS_INIT_CHOOSE_COMMENT:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             // the host picks the announcer's closing comment (one of 5) for everyone
             u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
             *comment = MTRandom() % 5;
         }
-        if (PokeathlonCourse_GetMode(course) == 1) {
+        if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_LINK) {
             WirelessStatusIcon_CreateOnScreenIfConnected(1);
             WirelessStatusIcon_SetBackPriority();
             WirelessStatusIcon_Refresh();
@@ -356,12 +377,12 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 4:
+    case RESULTS_INIT_FADE_IN:
         PlayBGM(SEQ_GS_PT_RESULT);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, announcement->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 5:
+    case RESULTS_INIT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }
@@ -468,7 +489,7 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
 
     done = FALSE;
     IsFanfarePlaying();
-    if (PokeathlonCourse_GetMode(course) == 1) {
+    if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_LINK) {
         waiting = PokeathlonResults_WaitForPlayers(course);
     }
     PokeathlonCourseMessageBox_Update(announcement->messageBox);
@@ -476,11 +497,11 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
         messageFormat = PokeathlonCourseMessageBox_GetMsgFormat(announcement->messageBox);
         msgId = -1;
         switch (*state) {
-        case 0:
+        case RESULTS_STATE_INTRO:
             msgId = PokeathlonResults_GetIntroMessage(course);
             (*state)++;
             break;
-        case 1:
+        case RESULTS_STATE_RANKING:
             if (!PokeathlonResults_UpdateRanking(&announcement->ranking, course)) {
                 break;
             }
@@ -496,19 +517,19 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
             }
             (*state)++;
             break;
-        case 2:
+        case RESULTS_STATE_DIM:
             StartBrightnessTransition(16, -8, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD), SCREEN_MASK_MAIN);
             UpdateMainScreenBrightnessSurface((GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD), (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD));
             reg_G2_BLDALPHA = 16;
             (*state)++;
             break;
-        case 3:
+        case RESULTS_STATE_WAIT_DIM:
             if (IsBrightnessTransitionActive(SCREEN_MASK_MAIN)) {
                 msgId = msg_0309_00255; // "This event's results will be determined by points!"
                 (*state)++;
             }
             break;
-        case 4:
+        case RESULTS_STATE_SHOW_POINTS:
             for (i = 0; i < 4; i++) {
                 u32 field3D8 = PokeathlonCourse_GetCurrentEvent(course);
                 int points = PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourse_GetGraphicsSystem(course), field3D8, i);
@@ -520,24 +541,24 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
             StartBrightnessTransition(16, 0, 16, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD), SCREEN_MASK_SUB);
             (*state)++;
             break;
-        case 5:
+        case RESULTS_STATE_WAIT_POINTS:
             if (IsBrightnessTransitionActive(SCREEN_MASK_SUB)) {
                 (*state)++;
             }
             break;
-        case 6:
+        case RESULTS_STATE_COMMENT:
             msgId = PokeathlonResults_GetCommentMessage(course);
             announcement->finished = TRUE;
             (*state)++;
             break;
-        case 7:
-            if (PokeathlonCourse_GetMode(course) == 0 || PokeathlonResults_AllPlayersFinished(course)) {
+        case RESULTS_STATE_FADE_OUT:
+            if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_SOLO || PokeathlonResults_AllPlayersFinished(course)) {
                 BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 12, 1, announcement->heapId);
                 GF_SndStartFadeOutBGM(0, 12);
                 (*state)++;
             }
             break;
-        case 8:
+        case RESULTS_STATE_WAIT_FADE_OUT:
             if (IsPaletteFadeFinished()) {
                 PokeathlonCourseMessageBox_Close(announcement->messageBox);
                 done = TRUE;
@@ -748,7 +769,7 @@ static PokeathlonResultsAnnouncementSlide *PokeathlonResults_GetLeavingSlide(Pok
 // "Results of the first event!?" etc.
 static u32 PokeathlonResults_GetIntroMessage(PokeathlonCourseData *course) {
     u32 msgId = PokeathlonCourse_GetRound(course); // the round
-    if (PokeathlonCourse_GetMode(course) == 0) {
+    if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_SOLO) {
         msgId += msg_0309_00246;
     } else {
         msgId += msg_0309_00249;
@@ -764,7 +785,7 @@ static u32 PokeathlonResults_GetCommentMessage(PokeathlonCourseData *course) {
     if (*comment >= 5) {
         GF_AssertFail();
     }
-    if (PokeathlonCourse_GetMode(course) == 0) {
+    if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_SOLO) {
         msgId = msg_0309_00256 + round * 5 + *comment;
     } else {
         msgId = msg_0309_00271 + round * 5 + *comment;

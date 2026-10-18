@@ -1,6 +1,16 @@
 #include "field_system.h"
 #include "overlay_04.h"
 
+enum CianwoodWinchState {
+    WINCH_STATE_PAN_TO_WINCH,
+    WINCH_STATE_WAIT_PAN_TO_WINCH,
+    WINCH_STATE_START_ANIM,
+    WINCH_STATE_WAIT_ANIM,
+    WINCH_STATE_PAN_BACK,
+    WINCH_STATE_WAIT_PAN_BACK,
+    WINCH_STATE_END,
+};
+
 typedef struct CianwoodGymmickLocalData {
     FieldSystem *fieldSystem;
 } CianwoodGymmickLocalData;
@@ -61,7 +71,7 @@ BOOL CianwoodGymmick_ActivateWinch(FieldSystem *fieldSystem) {
 static void CianwoodGymmick_LaunchWinchTask(CianwoodGymmickLocalData *localData) {
     GymmickUnion *gymmickUnion = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(localData->fieldSystem)), GYMMICK_CIANWOOD);
     CianwoodGymmickWinchTaskData *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(CianwoodGymmickWinchTaskData));
-    taskData->state = 0;
+    taskData->state = WINCH_STATE_PAN_TO_WINCH;
     gymmickUnion->cianwood.winch = TRUE;
     TaskManager_Call(localData->fieldSystem->taskman, Task_CianwoodGymmick_LiftWinchCutscene, taskData);
 }
@@ -72,7 +82,7 @@ static BOOL Task_CianwoodGymmick_LiftWinchCutscene(TaskManager *taskman) {
     LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
 
     switch (taskData->state) {
-    case 0: {
+    case WINCH_STATE_PAN_TO_WINCH: {
         CameraTranslationPathTemplate pathTemplate;
         CameraAngle cameraAngle = Camera_GetAngle(fieldSystem->camera);
         pathTemplate.angleX = cameraAngle.x;
@@ -87,13 +97,13 @@ static BOOL Task_CianwoodGymmick_LiftWinchCutscene(TaskManager *taskman) {
         SetCameraTranslationPath(taskData->translationWrapper, &pathTemplate, 24);
         ++taskData->state;
     } break;
-    case 1:
+    case WINCH_STATE_WAIT_PAN_TO_WINCH:
         if (IsCameraTranslationFinished(taskData->translationWrapper)) {
             DeleteCameraTranslationWrapper(taskData->translationWrapper);
             ++taskData->state;
         }
         break;
-    case 2: {
+    case WINCH_STATE_START_ANIM: {
         int num = CianwoodGymmick_RebindAnims(fieldSystem);
         MapPropAnimationData *animData;
         for (int i = 0; i < num; ++i) {
@@ -106,12 +116,12 @@ static BOOL Task_CianwoodGymmick_LiftWinchCutscene(TaskManager *taskman) {
         MapPropAnimationData_GoToFirstAnimationFrame(animData);
         ++taskData->state;
     } break;
-    case 3:
+    case WINCH_STATE_WAIT_ANIM:
         if (MapPropAnimationData_IsAnimationLoopFinished(MapPropAnimationManager_GetAnimationData(175, 0, fieldSystem->mapPropAnimationManager))) {
             ++taskData->state;
         }
         break;
-    case 4: {
+    case WINCH_STATE_PAN_BACK: {
         CameraTranslationPathTemplate pathTemplate;
         VecFx32 centerPos = { 0, 0, 0 };
         CameraAngle angle = Camera_GetAngle(fieldSystem->camera);
@@ -123,13 +133,13 @@ static BOOL Task_CianwoodGymmick_LiftWinchCutscene(TaskManager *taskman) {
         SetCameraTranslationPath(taskData->translationWrapper, &pathTemplate, 24);
         ++taskData->state;
     } break;
-    case 5:
+    case WINCH_STATE_WAIT_PAN_BACK:
         if (IsCameraTranslationFinished(taskData->translationWrapper)) {
             DeleteCameraTranslationWrapper(taskData->translationWrapper);
             ++taskData->state;
         }
         break;
-    case 6:
+    case WINCH_STATE_END:
         Heap_Free(taskData);
         return TRUE;
     }

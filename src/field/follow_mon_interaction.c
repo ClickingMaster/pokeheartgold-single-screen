@@ -85,6 +85,108 @@ typedef struct FollowMonSituation {
     u16 mapId;
 } FollowMonSituation;
 
+// FollowMonSituation.heldItemPocket / FollowMonRule.heldItem
+enum FollowMonPocket {
+    FOLLOW_MON_POCKET_BALLS = 1,
+    FOLLOW_MON_POCKET_MEDICINE,
+    FOLLOW_MON_POCKET_BATTLE_ITEMS,
+    FOLLOW_MON_POCKET_ITEMS,
+    FOLLOW_MON_POCKET_MAIL,
+    FOLLOW_MON_POCKET_BERRIES,
+    FOLLOW_MON_POCKET_TMHMS,
+    FOLLOW_MON_POCKET_NONE,
+    FOLLOW_MON_POCKET_ANY,
+};
+
+// FollowMonSituation.hpBucket / FollowMonRule.hp
+enum FollowMonHpBucket {
+    FOLLOW_MON_HP_FULL = 1,
+    FOLLOW_MON_HP_HIGH,
+    FOLLOW_MON_HP_HALF,
+    FOLLOW_MON_HP_LOW,
+    FOLLOW_MON_HP_VERY_LOW,
+};
+
+// FollowMonSituation.status / FollowMonRule.status
+enum FollowMonStatus {
+    FOLLOW_MON_STATUS_NONE = 1,
+    FOLLOW_MON_STATUS_BURN,
+    FOLLOW_MON_STATUS_FREEZE,
+    FOLLOW_MON_STATUS_PARALYSIS,
+    FOLLOW_MON_STATUS_POISON,
+    FOLLOW_MON_STATUS_ANY = 7,
+    FOLLOW_MON_STATUS_SLEEP,
+};
+
+// FollowMonSituation.gender / FollowMonRule.gender
+enum FollowMonGender {
+    FOLLOW_MON_GENDER_MALE = 1,
+    FOLLOW_MON_GENDER_NOT_MALE,
+};
+
+// FollowMonSituation.weather / FollowMonRule.weather
+enum FollowMonWeather {
+    FOLLOW_MON_WEATHER_OTHER,
+    FOLLOW_MON_WEATHER_SUNNY,
+    FOLLOW_MON_WEATHER_RAIN = 3,
+};
+
+// FollowMonSituation.encounterTile / FollowMonRule.encounterTile
+enum FollowMonTile {
+    FOLLOW_MON_TILE_ENCOUNTERS = 1,
+    FOLLOW_MON_TILE_NO_ENCOUNTERS,
+};
+
+// FollowMonSituation.timeOfDay / FollowMonRule.timeOfDay
+enum FollowMonTimeOfDay {
+    FOLLOW_MON_TIME_NONE,
+    FOLLOW_MON_TIME_MORN,
+    FOLLOW_MON_TIME_DAY,
+    FOLLOW_MON_TIME_EVE,
+    FOLLOW_MON_TIME_NITE,
+    FOLLOW_MON_TIME_LATE,
+};
+
+// FollowMonSituation.pokeathlonStat / FollowMonRule.pokeathlonStat
+enum FollowMonPokeathlonStat {
+    FOLLOW_MON_STAT_POWER = 1,
+    FOLLOW_MON_STAT_STAMINA,
+    FOLLOW_MON_STAT_SKILL,
+    FOLLOW_MON_STAT_JUMP,
+    FOLLOW_MON_STAT_SPEED,
+};
+
+// FollowMonSituation.facing / FollowMonRule.facing
+enum FollowMonFacing {
+    FOLLOW_MON_FACING_NONE,
+    FOLLOW_MON_FACING_EAST,
+    FOLLOW_MON_FACING_WEST,
+    FOLLOW_MON_FACING_NORTH,
+    FOLLOW_MON_FACING_SOUTH,
+};
+
+// FollowMonSituation.type1 / type2, FollowMonRule.type
+enum FollowMonType {
+    FOLLOW_MON_TYPE_NONE,
+    FOLLOW_MON_TYPE_NORMAL,
+    FOLLOW_MON_TYPE_FIRE,
+    FOLLOW_MON_TYPE_WATER,
+    FOLLOW_MON_TYPE_ELECTRIC,
+    FOLLOW_MON_TYPE_GRASS,
+    FOLLOW_MON_TYPE_ICE,
+    FOLLOW_MON_TYPE_FIGHTING,
+    FOLLOW_MON_TYPE_POISON,
+    FOLLOW_MON_TYPE_GROUND,
+    FOLLOW_MON_TYPE_FLYING,
+    FOLLOW_MON_TYPE_PSYCHIC,
+    FOLLOW_MON_TYPE_BUG,
+    FOLLOW_MON_TYPE_ROCK,
+    FOLLOW_MON_TYPE_GHOST,
+    FOLLOW_MON_TYPE_DRAGON,
+    FOLLOW_MON_TYPE_DARK,
+    FOLLOW_MON_TYPE_STEEL,
+};
+
 // Results of FollowMonInteraction_Run.
 enum FollowMonInteractionResult {
     FOLLOW_MON_INTERACTION_RUNNING,
@@ -92,6 +194,14 @@ enum FollowMonInteractionResult {
     FOLLOW_MON_INTERACTION_QUESTION,
     FOLLOW_MON_INTERACTION_GIVE_ACCESSORY,
     FOLLOW_MON_INTERACTION_GIVE_SHINY_LEAF,
+};
+
+// flags of FollowMonInteraction_PrintGiftMessage / FollowMon_ExpandGiftMessage
+enum FollowMonGiftMessage {
+    FOLLOW_MON_GIFT_LEAF_NOT_GIVEN,
+    FOLLOW_MON_GIFT_LEAF_GIVEN,
+    FOLLOW_MON_GIFT_ACCESSORY_NOT_GIVEN,
+    FOLLOW_MON_GIFT_ACCESSORY_GIVEN,
 };
 
 enum FollowMonInteractionState {
@@ -287,7 +397,7 @@ BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, 
         return FALSE;
     }
     if (rule->heldItem) {
-        if (rule->heldItem == 9) {
+        if (rule->heldItem == FOLLOW_MON_POCKET_ANY) {
             if (!situation->hasHeldItem) {
                 return FALSE;
             }
@@ -299,8 +409,8 @@ BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, 
         return FALSE;
     }
     if (rule->status) {
-        if (rule->status == 7) {
-            if (situation->status != 2 && situation->status != 3 && situation->status != 4 && situation->status != 5 && situation->status != 8) {
+        if (rule->status == FOLLOW_MON_STATUS_ANY) {
+            if (situation->status != FOLLOW_MON_STATUS_BURN && situation->status != FOLLOW_MON_STATUS_FREEZE && situation->status != FOLLOW_MON_STATUS_PARALYSIS && situation->status != FOLLOW_MON_STATUS_POISON && situation->status != FOLLOW_MON_STATUS_SLEEP) {
                 return FALSE;
             }
         } else if (rule->status != situation->status) {
@@ -403,37 +513,37 @@ void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situat
         situation->heldItemPocket = FollowMonSituation_ConvertItemPocket(GetItemAttr(item, ITEMATTR_FIELD_POCKET, HEAP_ID_FIELD2));
     } else {
         situation->hasHeldItem = FALSE;
-        situation->heldItemPocket = 8;
+        situation->heldItemPocket = FOLLOW_MON_POCKET_NONE;
     }
     hp = GetMonData(mon, MON_DATA_HP, NULL);
     hpPercent = hp * 100 / (int)GetMonData(mon, MON_DATA_MAX_HP, NULL);
     if (hpPercent == 100) {
-        situation->hpBucket = 1;
+        situation->hpBucket = FOLLOW_MON_HP_FULL;
     } else if (hpPercent >= 75) {
-        situation->hpBucket = 2;
+        situation->hpBucket = FOLLOW_MON_HP_HIGH;
     } else if (hpPercent >= 50) {
-        situation->hpBucket = 3;
+        situation->hpBucket = FOLLOW_MON_HP_HALF;
     } else if (hpPercent >= 25) {
-        situation->hpBucket = 4;
+        situation->hpBucket = FOLLOW_MON_HP_LOW;
     } else {
-        situation->hpBucket = 5;
+        situation->hpBucket = FOLLOW_MON_HP_VERY_LOW;
     }
     status = GetMonData(mon, MON_DATA_STATUS, NULL);
     if (status & (MON_STATUS_PSN_MASK | MON_STATUS_TOX_MASK)) {
-        situation->status = 5;
+        situation->status = FOLLOW_MON_STATUS_POISON;
     } else if (status & MON_STATUS_SLP_MASK) {
-        situation->status = 8;
+        situation->status = FOLLOW_MON_STATUS_SLEEP;
     } else if (status & MON_STATUS_BRN_MASK) {
-        situation->status = 2;
+        situation->status = FOLLOW_MON_STATUS_BURN;
     } else if (status & MON_STATUS_FRZ_MASK) {
-        situation->status = 3;
+        situation->status = FOLLOW_MON_STATUS_FREEZE;
     } else if (status & MON_STATUS_PRZ_MASK) {
-        situation->status = 4;
+        situation->status = FOLLOW_MON_STATUS_PARALYSIS;
     } else if (status == 0) {
-        situation->status = 1;
+        situation->status = FOLLOW_MON_STATUS_NONE;
     } else {
         GF_AssertFail();
-        situation->status = 1;
+        situation->status = FOLLOW_MON_STATUS_NONE;
     }
     level = GetMonData(mon, MON_DATA_LEVEL, NULL);
     if (level + 2 >= 50) {
@@ -450,9 +560,9 @@ void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situat
     situation->friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
     situation->natureGroup = sNatureGroups[GetMonNature(mon)];
     if (GetMonData(mon, MON_DATA_GENDER, NULL) == MON_MALE) {
-        situation->gender = 1;
+        situation->gender = FOLLOW_MON_GENDER_MALE;
     } else {
-        situation->gender = 2;
+        situation->gender = FOLLOW_MON_GENDER_NOT_MALE;
     }
     leafIds = sShinyLeafMonDataIds;
     situation->shinyLeaves = 0;
@@ -520,13 +630,13 @@ void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituat
 void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (LocalFieldData_GetWeatherType(Save_LocalFieldData_Get(fieldSystem->saveData))) {
     case WEATHER_SUNNY:
-        situation->weather = 1;
+        situation->weather = FOLLOW_MON_WEATHER_SUNNY;
         break;
     case WEATHER_RAIN:
-        situation->weather = 3;
+        situation->weather = FOLLOW_MON_WEATHER_RAIN;
         break;
     default:
-        situation->weather = 0;
+        situation->weather = FOLLOW_MON_WEATHER_OTHER;
         break;
     }
 }
@@ -538,9 +648,9 @@ void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation 
     situation->metatileBehavior = behavior;
     fieldSystem->followMonInteraction->metatileBehavior = behavior;
     if (MetatileBehavior_CanGenerateWalkingEncounters(behavior)) {
-        situation->encounterTile = 1;
+        situation->encounterTile = FOLLOW_MON_TILE_ENCOUNTERS;
     } else {
-        situation->encounterTile = 2;
+        situation->encounterTile = FOLLOW_MON_TILE_NO_ENCOUNTERS;
     }
 }
 
@@ -551,23 +661,23 @@ void FollowMonSituation_SetMapId(FieldSystem *fieldSystem, FollowMonSituation *s
 void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (Field_GetTimeOfDay(fieldSystem)) {
     case RTC_TIMEOFDAY_MORN:
-        situation->timeOfDay = 1;
+        situation->timeOfDay = FOLLOW_MON_TIME_MORN;
         break;
     case RTC_TIMEOFDAY_DAY:
-        situation->timeOfDay = 2;
+        situation->timeOfDay = FOLLOW_MON_TIME_DAY;
         break;
     case RTC_TIMEOFDAY_EVE:
-        situation->timeOfDay = 3;
+        situation->timeOfDay = FOLLOW_MON_TIME_EVE;
         break;
     case RTC_TIMEOFDAY_NITE:
-        situation->timeOfDay = 4;
+        situation->timeOfDay = FOLLOW_MON_TIME_NITE;
         break;
     case RTC_TIMEOFDAY_LATE:
-        situation->timeOfDay = 5;
+        situation->timeOfDay = FOLLOW_MON_TIME_LATE;
         break;
     default:
         GF_AssertFail();
-        situation->timeOfDay = 0;
+        situation->timeOfDay = FOLLOW_MON_TIME_NONE;
         break;
     }
 }
@@ -587,21 +697,21 @@ void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int spec
     Party_GetMonAprijuiceModifiers(party, &aprijuice, slot);
     CalcMonPokeathlonStars(&stars, Party_GetMonByIndex(party, slot), (s8 *)&aprijuice, HEAP_ID_FIELD2);
     best = ((PokeathlonStarBits *)&stars.stars)->power;
-    stat = 1;
+    stat = FOLLOW_MON_STAT_POWER;
     if (best < ((PokeathlonStarBits *)&stars.stars)->stamina) {
         best = ((PokeathlonStarBits *)&stars.stars)->stamina;
-        stat = 2;
+        stat = FOLLOW_MON_STAT_STAMINA;
     }
     if (best < ((PokeathlonStarBits *)&stars.stars)->jump) {
         best = ((PokeathlonStarBits *)&stars.stars)->jump;
-        stat = 4;
+        stat = FOLLOW_MON_STAT_JUMP;
     }
     if (best < ((PokeathlonStarBits *)&stars.stars)->skill) {
         best = ((PokeathlonStarBits *)&stars.stars)->skill;
-        stat = 3;
+        stat = FOLLOW_MON_STAT_SKILL;
     }
     if (best < ((PokeathlonStarBits *)&stars.stars)->speed) {
-        stat = 5;
+        stat = FOLLOW_MON_STAT_SPEED;
     }
     situation->pokeathlonStat = stat;
 }
@@ -609,19 +719,19 @@ void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int spec
 void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (MapObject_GetFacingDirection(fieldSystem->followMon.mapObject)) {
     case DIR_NORTH:
-        situation->facing = 3;
+        situation->facing = FOLLOW_MON_FACING_NORTH;
         break;
     case DIR_SOUTH:
-        situation->facing = 4;
+        situation->facing = FOLLOW_MON_FACING_SOUTH;
         break;
     case DIR_WEST:
-        situation->facing = 2;
+        situation->facing = FOLLOW_MON_FACING_WEST;
         break;
     case DIR_EAST:
-        situation->facing = 1;
+        situation->facing = FOLLOW_MON_FACING_EAST;
         break;
     default:
-        situation->facing = 0;
+        situation->facing = FOLLOW_MON_FACING_NONE;
         break;
     }
 }
@@ -640,63 +750,63 @@ void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situatio
 int FollowMonSituation_ConvertType(int type) {
     switch (type) {
     case TYPE_NORMAL:
-        return 1;
+        return FOLLOW_MON_TYPE_NORMAL;
     case TYPE_FIGHTING:
-        return 7;
+        return FOLLOW_MON_TYPE_FIGHTING;
     case TYPE_FLYING:
-        return 10;
+        return FOLLOW_MON_TYPE_FLYING;
     case TYPE_POISON:
-        return 8;
+        return FOLLOW_MON_TYPE_POISON;
     case TYPE_GROUND:
-        return 9;
+        return FOLLOW_MON_TYPE_GROUND;
     case TYPE_ROCK:
-        return 13;
+        return FOLLOW_MON_TYPE_ROCK;
     case TYPE_BUG:
-        return 12;
+        return FOLLOW_MON_TYPE_BUG;
     case TYPE_GHOST:
-        return 14;
+        return FOLLOW_MON_TYPE_GHOST;
     case TYPE_STEEL:
-        return 17;
+        return FOLLOW_MON_TYPE_STEEL;
     case TYPE_FIRE:
-        return 2;
+        return FOLLOW_MON_TYPE_FIRE;
     case TYPE_WATER:
-        return 3;
+        return FOLLOW_MON_TYPE_WATER;
     case TYPE_GRASS:
-        return 5;
+        return FOLLOW_MON_TYPE_GRASS;
     case TYPE_ELECTRIC:
-        return 4;
+        return FOLLOW_MON_TYPE_ELECTRIC;
     case TYPE_PSYCHIC:
-        return 11;
+        return FOLLOW_MON_TYPE_PSYCHIC;
     case TYPE_ICE:
-        return 6;
+        return FOLLOW_MON_TYPE_ICE;
     case TYPE_DRAGON:
-        return 15;
+        return FOLLOW_MON_TYPE_DRAGON;
     case TYPE_DARK:
-        return 16;
+        return FOLLOW_MON_TYPE_DARK;
     }
     GF_AssertFail();
-    return 0;
+    return FOLLOW_MON_TYPE_NONE;
 }
 
 int FollowMonSituation_ConvertItemPocket(int pocket) {
     switch (pocket) {
-    case 0:
-        return 4;
-    case 1:
-        return 2;
-    case 2:
-        return 1;
-    case 3:
-        return 7;
-    case 4:
-        return 6;
-    case 5:
-        return 5;
-    case 6:
-        return 3;
+    case POCKET_ITEMS:
+        return FOLLOW_MON_POCKET_ITEMS;
+    case POCKET_MEDICINE:
+        return FOLLOW_MON_POCKET_MEDICINE;
+    case POCKET_BALLS:
+        return FOLLOW_MON_POCKET_BALLS;
+    case POCKET_TMHMS:
+        return FOLLOW_MON_POCKET_TMHMS;
+    case POCKET_BERRIES:
+        return FOLLOW_MON_POCKET_BERRIES;
+    case POCKET_MAIL:
+        return FOLLOW_MON_POCKET_MAIL;
+    case POCKET_BATTLE_ITEMS:
+        return FOLLOW_MON_POCKET_BATTLE_ITEMS;
     default:
         GF_AssertFail();
-        return 8;
+        return FOLLOW_MON_POCKET_NONE;
     }
 }
 
@@ -1158,10 +1268,10 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
         }
         if (FashionCase_CanGiveAccessory(fashionCase, accessory, 1)) {
             FashionCase_GiveFashionItem(fashionCase, accessory, 1);
-            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 3);
+            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, FOLLOW_MON_GIFT_ACCESSORY_GIVEN);
             PlayFanfare(SEQ_ME_ACCE);
         } else {
-            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 2);
+            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, FOLLOW_MON_GIFT_ACCESSORY_NOT_GIVEN);
         }
         *state = FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE;
         break;
@@ -1195,10 +1305,10 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
             SetFlag99C(Save_VarsFlags_Get(fieldSystem->saveData));
             value = TRUE;
             SetMonData(mon, attr, &value);
-            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 1);
+            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, FOLLOW_MON_GIFT_LEAF_GIVEN);
             PlayFanfare(SEQ_ME_ACCE);
         } else {
-            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, 0);
+            FollowMonInteraction_PrintGiftMessage(fieldSystem, fieldSystem->followMonInteraction, FOLLOW_MON_GIFT_LEAF_NOT_GIVEN);
         }
         *state = FOLLOW_MON_TASK_STATE_WAIT_GIFT_MESSAGE;
         break;

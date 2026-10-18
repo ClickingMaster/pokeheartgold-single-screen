@@ -17,6 +17,15 @@
 
 // Pokeathlon record screens: course records, trophies, medals and event records.
 
+// Main steps of the record screens
+enum PokeathlonRecordScreenState {
+    RECORD_SCREEN_STATE_FADE_IN,
+    RECORD_SCREEN_STATE_WAIT_FADE_IN,
+    RECORD_SCREEN_STATE_INPUT,
+    RECORD_SCREEN_STATE_WAIT_FADE_OUT,
+    RECORD_SCREEN_STATE_EXIT,
+};
+
 // NitroSDK MATH (bit count); no repo header declares it
 u32 MATH_CountPopulation(u32 value);
 

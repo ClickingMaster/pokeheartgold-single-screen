@@ -1,3 +1,5 @@
+#include "constants/metatile_behavior.h"
+
 #include "field/field_3d_model.h"
 
 #include "field_system.h"
@@ -110,16 +112,16 @@ static void ViridianGymmick_StartTileAnimTask(ViridianGymmickAnimManager *animMg
     int idx = 1;
     animMgr->active = TRUE;
     switch (tile) {
-    case 64:
+    case TILE_BEHAVIOR_SLIDE_EAST:
         idx = 2;
         break;
-    case 65:
+    case TILE_BEHAVIOR_SLIDE_WEST:
         idx = 0;
         break;
-    case 66:
+    case TILE_BEHAVIOR_SLIDE_NORTH:
         idx = 3;
         break;
-    case 67:
+    case TILE_BEHAVIOR_SLIDE_SOUTH:
         idx = 1;
         break;
     default:

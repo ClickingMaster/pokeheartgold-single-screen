@@ -52,6 +52,40 @@ enum TouchMartAppWindow {
     TOUCH_MART_WINDOW_COUNT,
 };
 
+enum TouchMartAppState {
+    TOUCH_MART_STATE_WAIT_FADE,
+    TOUCH_MART_STATE_RUN,
+};
+
+// MartData.touchMartAction, set by the mart task for the touch screen
+enum TouchMartAction {
+    TOUCH_MART_ACTION_NONE,
+    TOUCH_MART_ACTION_REFRESH_LIST,
+    TOUCH_MART_ACTION_SHOW_QUANTITY,
+    TOUCH_MART_ACTION_SHOW_CONFIRM,
+    TOUCH_MART_ACTION_SHOW_LIST,
+    TOUCH_MART_ACTION_REDRAW_LIST,
+    TOUCH_MART_ACTION_UPDATE_QUANTITY,
+    TOUCH_MART_ACTION_CONFIRM_PURCHASE,
+    TOUCH_MART_ACTION_YES_NO,
+    TOUCH_MART_ACTION_PURCHASE_DONE,
+    TOUCH_MART_ACTION_CANNOT_AFFORD,
+    TOUCH_MART_ACTION_NO_ROOM,
+    TOUCH_MART_ACTION_NO_ROOM_IN_BAG,
+    TOUCH_MART_ACTION_PREMIER_BALL,
+};
+
+enum TouchMartScreen {
+    TOUCH_MART_SCREEN_LIST,
+    TOUCH_MART_SCREEN_QUANTITY,
+    TOUCH_MART_SCREEN_CONFIRM,
+};
+
+enum TouchMartButtonSet {
+    TOUCH_MART_BUTTONS_ITEM_LIST,
+    TOUCH_MART_BUTTONS_QUANTITY,
+};
+
 #define TOUCH_MART_ITEMS_PER_PAGE 6
 
 typedef struct TouchMartAppData {
@@ -289,7 +323,7 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSy
     data->options = Save_PlayerData_GetOptionsAddr(data->fieldSystem->saveData);
     data->playerProfile = Save_PlayerData_GetProfile(data->fieldSystem->saveData);
     data->pokeathlonSave = Save_Pokeathlon_Get(data->fieldSystem->saveData);
-    data->state = 0;
+    data->state = TOUCH_MART_STATE_WAIT_FADE;
     data->martData = martData;
     TouchMartApp_SetupBgs(data);
     TouchMartApp_LoadGraphics(data);
@@ -378,21 +412,21 @@ static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection)
 static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
     int selection;
     switch (data->state) {
-    case 0:
+    case TOUCH_MART_STATE_WAIT_FADE:
         if (IsPaletteFadeFinished() == TRUE) {
-            data->state = 1;
+            data->state = TOUCH_MART_STATE_RUN;
         }
         return;
-    case 1:
+    case TOUCH_MART_STATE_RUN:
         switch (data->martData->state) {
         case 3:
-            selection = TouchMartApp_GetTouchedButton(data, 0);
+            selection = TouchMartApp_GetTouchedButton(data, TOUCH_MART_BUTTONS_ITEM_LIST);
             if (selection != -1 && TouchMartApp_IsSelectionValid(data, selection)) {
                 data->martData->touchButton = selection;
             }
             break;
         case 7:
-            selection = TouchMartApp_GetTouchedButton(data, 1);
+            selection = TouchMartApp_GetTouchedButton(data, TOUCH_MART_BUTTONS_QUANTITY);
             if (selection != -1) {
                 data->martData->touchButton = selection;
             }
@@ -401,9 +435,9 @@ static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
             TouchMartApp_HandleYesNoPrompt(data);
             break;
         }
-        if (data->martData->touchMartAction != 0) {
+        if (data->martData->touchMartAction != TOUCH_MART_ACTION_NONE) {
             TouchMartApp_HandleAction(data, data->martData->touchMartAction);
-            data->martData->touchMartAction = 0;
+            data->martData->touchMartAction = TOUCH_MART_ACTION_NONE;
         }
         return;
     }
@@ -411,15 +445,15 @@ static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
 
 static void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
     switch (action) {
-    case 0:
+    case TOUCH_MART_ACTION_NONE:
         break;
-    case 1:
+    case TOUCH_MART_ACTION_REFRESH_LIST:
         TouchMartApp_PrintItemList(data);
         TouchMartApp_PrintPageNumber(data);
         TouchMartApp_PrintCancel(data, FALSE);
         break;
-    case 2:
-        TouchMartApp_LoadMainTilemap(data, 1);
+    case TOUCH_MART_ACTION_SHOW_QUANTITY:
+        TouchMartApp_LoadMainTilemap(data, TOUCH_MART_SCREEN_QUANTITY);
         TouchMartApp_RemoveItemWindows(data);
         ClearWindowTilemapAndScheduleTransfer(&data->pageWindow);
         TouchMartApp_AddDetailWindows(data);
@@ -430,8 +464,8 @@ static void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
         TouchMartApp_PrintCancel(data, TRUE);
         TouchMartApp_PrintHowMany(data);
         break;
-    case 3:
-        TouchMartApp_LoadMainTilemap(data, 2);
+    case TOUCH_MART_ACTION_SHOW_CONFIRM:
+        TouchMartApp_LoadMainTilemap(data, TOUCH_MART_SCREEN_CONFIRM);
         TouchMartApp_RemoveItemWindows(data);
         TouchMartApp_AddDetailWindows(data);
         TouchMartApp_PrintSelectedItem(data);
@@ -440,8 +474,8 @@ static void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
         ClearWindowTilemapAndScheduleTransfer(&data->pageWindow);
         ClearWindowTilemapAndScheduleTransfer(&data->cancelWindow);
         break;
-    case 4:
-        TouchMartApp_LoadMainTilemap(data, 0);
+    case TOUCH_MART_ACTION_SHOW_LIST:
+        TouchMartApp_LoadMainTilemap(data, TOUCH_MART_SCREEN_LIST);
         TouchMartApp_RemoveDetailWindows(data);
         TouchMartApp_PrintPageNumber(data);
         TouchMartApp_PrintCancel(data, FALSE);
@@ -451,39 +485,39 @@ static void TouchMartApp_HandleAction(TouchMartAppData *data, int action) {
         TouchMartApp_PrintMoney(data);
         ScheduleWindowCopyToVram(&data->cancelWindow);
         break;
-    case 5:
-        TouchMartApp_LoadMainTilemap(data, 0);
+    case TOUCH_MART_ACTION_REDRAW_LIST:
+        TouchMartApp_LoadMainTilemap(data, TOUCH_MART_SCREEN_LIST);
         TouchMartApp_PrintPageNumber(data);
         ClearFrameAndWindow2(&data->messageWindow, FALSE);
         TouchMartApp_PrintItemList(data);
         TouchMartApp_PrintMoney(data);
         break;
-    case 6:
+    case TOUCH_MART_ACTION_UPDATE_QUANTITY:
         TouchMartApp_PrintQuantity(data, data->martData->quantity);
         break;
-    case 7:
+    case TOUCH_MART_ACTION_CONFIRM_PURCHASE:
         ClearWindowTilemapAndScheduleTransfer(&data->cancelWindow);
         ClearWindowTilemapAndScheduleTransfer(&data->windows[TOUCH_MART_WINDOW_BUY]);
         TouchMartApp_PrintConfirmPurchase(data);
         break;
-    case 8:
+    case TOUCH_MART_ACTION_YES_NO:
         TouchMartApp_CreateYesNoPrompt(data);
         break;
-    case 9:
+    case TOUCH_MART_ACTION_PURCHASE_DONE:
         TouchMartApp_PrintPurchaseDone(data);
         break;
-    case 10:
+    case TOUCH_MART_ACTION_CANNOT_AFFORD:
         TouchMartApp_PrintCannotAfford(data);
         break;
-    case 11:
+    case TOUCH_MART_ACTION_NO_ROOM:
         ClearWindowTilemapAndScheduleTransfer(&data->cancelWindow);
         ClearWindowTilemapAndScheduleTransfer(&data->windows[TOUCH_MART_WINDOW_BUY]);
         TouchMartApp_PrintNoRoom(data);
         break;
-    case 12:
+    case TOUCH_MART_ACTION_NO_ROOM_IN_BAG:
         TouchMartApp_PrintNoRoomInBag(data);
         break;
-    case 13:
+    case TOUCH_MART_ACTION_PREMIER_BALL:
         TouchMartApp_PrintPremierBallBonus(data);
         break;
     }
@@ -493,21 +527,21 @@ static void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen) {
     void *raw;
     NNSG2dScreenData *screenData;
     switch (screen) {
-    case 0:
+    case TOUCH_MART_SCREEN_LIST:
         raw = GfGfxLoader_GetScrnData(NARC_a_0_6_0, 17, FALSE, &screenData, HEAP_ID_8);
         BG_LoadScreenTilemapData(data->bgConfig, GF_BG_LYR_SUB_2, screenData->rawData, screenData->szByte);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_2);
         Heap_Free(raw);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         break;
-    case 1:
+    case TOUCH_MART_SCREEN_QUANTITY:
         BgFillTilemapBufferAndSchedule(data->bgConfig, GF_BG_LYR_SUB_1, 0);
         raw = GfGfxLoader_GetScrnData(NARC_a_0_6_0, 19, FALSE, &screenData, HEAP_ID_8);
         BG_LoadScreenTilemapData(data->bgConfig, GF_BG_LYR_SUB_2, screenData->rawData, screenData->szByte);
         ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_2);
         Heap_Free(raw);
         break;
-    case 2:
+    case TOUCH_MART_SCREEN_CONFIRM:
         BgFillTilemapBufferAndSchedule(data->bgConfig, GF_BG_LYR_SUB_1, 0);
         raw = GfGfxLoader_GetScrnData(NARC_a_0_6_0, 20, FALSE, &screenData, HEAP_ID_8);
         BG_LoadScreenTilemapData(data->bgConfig, GF_BG_LYR_SUB_2, screenData->rawData, screenData->szByte);
@@ -518,7 +552,7 @@ static void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen) {
 }
 
 static int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet) {
-    GF_ASSERT(buttonSet == 0 || buttonSet == 1);
+    GF_ASSERT(buttonSet == TOUCH_MART_BUTTONS_ITEM_LIST || buttonSet == TOUCH_MART_BUTTONS_QUANTITY);
     return TouchscreenHitbox_FindRectAtTouchNew(sTouchMartButtonSets[buttonSet]);
 }
 
@@ -539,7 +573,7 @@ static void TouchMartApp_LoadGraphics(TouchMartAppData *data) {
     reg_G2S_DB_BLDCNT = 0;
     GfGfxLoader_GXLoadPal(NARC_a_0_6_0, 15, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_8);
     GfGfxLoader_LoadCharData(NARC_a_0_6_0, 16, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_8);
-    TouchMartApp_LoadMainTilemap(data, 0);
+    TouchMartApp_LoadMainTilemap(data, TOUCH_MART_SCREEN_LIST);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_11_OFFSET, HEAP_ID_8);
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_12_OFFSET, HEAP_ID_8);
     TouchMartApp_AddWindows(data);
@@ -848,12 +882,12 @@ static void TouchMartApp_PrintBuyButton(TouchMartAppData *data) {
 
 static void TouchMartApp_BufferItemName(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
-    case 0:
-    case 3:
-    case 4:
+    case MART_TYPE_NORMAL:
+    case MART_TYPE_3:
+    case MART_TYPE_4:
         BufferItemName(messageFormat, fieldno, itemId);
         break;
-    case 1:
+    case MART_TYPE_1:
         BufferDecorationName(messageFormat, fieldno, itemId);
         break;
     }
@@ -861,12 +895,12 @@ static void TouchMartApp_BufferItemName(int martType, MessageFormat *messageForm
 
 static void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
-    case 0:
-    case 3:
-    case 4:
+    case MART_TYPE_NORMAL:
+    case MART_TYPE_3:
+    case MART_TYPE_4:
         BufferItemNamePlural(messageFormat, fieldno, itemId);
         break;
-    case 1:
+    case MART_TYPE_1:
         BufferDecorationName(messageFormat, fieldno, itemId);
         break;
     }
@@ -874,12 +908,12 @@ static void TouchMartApp_BufferItemNamePlural(int martType, MessageFormat *messa
 
 static void TouchMartApp_BufferItemNameWithIndefArticle(int martType, MessageFormat *messageFormat, int itemId, int fieldno) {
     switch (martType) {
-    case 0:
-    case 3:
-    case 4:
+    case MART_TYPE_NORMAL:
+    case MART_TYPE_3:
+    case MART_TYPE_4:
         BufferItemNameWithIndefArticle(messageFormat, fieldno, itemId);
         break;
-    case 1:
+    case MART_TYPE_1:
         BufferDecorationName(messageFormat, fieldno, itemId);
         break;
     }
@@ -962,11 +996,11 @@ static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
         TouchMartApp_BufferItemName(martData->martType, data->messageFormat, martData->item, 0);
     }
     switch (data->martData->martType) {
-    case 0:
+    case MART_TYPE_NORMAL:
         template = NewString_ReadMsgData(data->msgData, msg_0435_00015);
         BufferPocketName(data->messageFormat, 1, GetItemAttr(data->martData->item, ITEMATTR_FIELD_POCKET, HEAP_ID_FIELD2));
         break;
-    case 3:
+    case MART_TYPE_3:
         if (data->martData->item >= 485 && data->martData->item <= 491) {
             template = NewString_ReadMsgData(data->msgData, msg_0435_00049);
         } else {
@@ -974,10 +1008,10 @@ static void TouchMartApp_PrintPurchaseDone(TouchMartAppData *data) {
             BufferPocketName(data->messageFormat, 1, GetItemAttr(data->martData->item, ITEMATTR_FIELD_POCKET, HEAP_ID_FIELD2));
         }
         break;
-    case 4:
+    case MART_TYPE_4:
         template = NewString_ReadMsgData(data->msgData, msg_0435_00049);
         break;
-    case 1:
+    case MART_TYPE_1:
         template = NewString_ReadMsgData(data->msgData, msg_0435_00021);
         break;
     default:
@@ -1025,15 +1059,15 @@ static String *TouchMartApp_GetCannotAffordMessage(MartData *martData, MsgData *
 
 static String *TouchMartApp_GetNoRoomMessage(const MartData *martData, MsgData *msgData) {
     int msgId;
-    if (martData->martType == 0) {
+    if (martData->martType == MART_TYPE_NORMAL) {
         msgId = msg_0435_00016;
-    } else if (martData->martType == 1) {
+    } else if (martData->martType == MART_TYPE_1) {
         msgId = msg_0435_00022;
-    } else if (martData->martType == 2) {
+    } else if (martData->martType == MART_TYPE_SEAL) {
         msgId = msg_0435_00024;
-    } else if (martData->martType == 3) {
+    } else if (martData->martType == MART_TYPE_3) {
         msgId = msg_0435_00025;
-    } else if (martData->martType == 4) {
+    } else if (martData->martType == MART_TYPE_4) {
         msgId = msg_0435_00026;
     }
     return NewString_ReadMsgData(msgData, msgId);

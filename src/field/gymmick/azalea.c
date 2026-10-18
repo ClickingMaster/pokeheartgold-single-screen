@@ -11,6 +11,27 @@
 #include "sound_playback.h"
 #include "task.h"
 
+enum AzaleaSpinarakRideState {
+    SPINARAK_RIDE_STATE_WAIT_FOLLOW_MON,
+    SPINARAK_RIDE_STATE_START,
+    SPINARAK_RIDE_STATE_STEP_ON,
+    SPINARAK_RIDE_STATE_WAIT_STEP_ON,
+    SPINARAK_RIDE_STATE_START_MOVING,
+    SPINARAK_RIDE_STATE_MOVE,
+    SPINARAK_RIDE_STATE_ARRIVE,
+    SPINARAK_RIDE_STATE_SHAKE_CAMERA,
+    SPINARAK_RIDE_STATE_STEP_OFF,
+    SPINARAK_RIDE_STATE_WAIT_STEP_OFF,
+    SPINARAK_RIDE_STATE_END,
+};
+
+// AzaleaGymmick_GetMovementDoneParams, per coordinate
+enum AzaleaRouteNodeProgress {
+    ROUTE_NODE_NOT_REACHED,
+    ROUTE_NODE_REACHED,
+    ROUTE_NODE_PASSED,
+};
+
 typedef struct AzaleaGymmickSpinarakRouteNode {
     u16 x;
     u16 z;
@@ -333,7 +354,7 @@ void FlipAzaleaGymSwitch(FieldSystem *fieldSystem, u8 switchNo) {
 void BeginAzaleaGymSpinarakRide(FieldSystem *fieldSystem, u8 spinarakNo) {
     AzaleaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
     AzaleaGymmickSpinarakRideData *rideData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AzaleaGymmickSpinarakRideData));
-    rideData->state = 0;
+    rideData->state = SPINARAK_RIDE_STATE_WAIT_FOLLOW_MON;
     rideData->fieldSystem = fieldSystem;
     localData->spinarakPair = spinarakNo;
     localData->spinarakPos.y = 0;
@@ -382,15 +403,15 @@ static BOOL Task_SpinarakRide(TaskManager *taskman) {
     AzaleaGymmickSpinarakRideData *rideData = TaskManager_GetEnvironment(taskman);
 
     switch (rideData->state) {
-    case 0:
+    case SPINARAK_RIDE_STATE_WAIT_FOLLOW_MON:
         TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++rideData->state;
         break;
-    case 1:
+    case SPINARAK_RIDE_STATE_START:
         SysTask_CreateOnMainQueue(SysTask_DoSpinarakRide, rideData, 0);
         ++rideData->state;
         break;
-    case 10:
+    case SPINARAK_RIDE_STATE_END:
         Heap_Free(rideData);
         return TRUE;
     }
@@ -421,17 +442,17 @@ static void AzaleaGymmick_GetVectorSignsXZ(const VecFx32 *deltaVec, BOOL *xzSign
 }
 
 static int AzaleaGymmick_GetMovementDoneParams(BOOL sign, fx32 cur, fx32 delta, u16 nodeComponent) {
-    int ret = 0;
+    int ret = ROUTE_NODE_NOT_REACHED;
     fx32 nodeComponentFx = nodeComponent * FX32_ONE * 16;
     if (cur + delta == nodeComponentFx) {
-        ret = 1;
+        ret = ROUTE_NODE_REACHED;
     } else if (sign) {
         if (cur + delta > nodeComponentFx) {
-            ret = 2;
+            ret = ROUTE_NODE_PASSED;
         }
     } else {
         if (cur + delta < nodeComponentFx) {
-            ret = 2;
+            ret = ROUTE_NODE_PASSED;
         }
     }
     return ret;
@@ -448,7 +469,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
     AzaleaGymmickLocalData *localData = fieldSystem->mapSystems->localData;
 
     switch (rideData->state) {
-    case 2:
+    case SPINARAK_RIDE_STATE_STEP_ON:
         if (FollowMon_IsActive(fieldSystem)) {
             LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
             LocalMapObject *followMonObject = FollowMon_GetMapObject(fieldSystem);
@@ -470,7 +491,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
             }
         }
         ++rideData->state;
-    case 3: {
+    case SPINARAK_RIDE_STATE_WAIT_STEP_ON: {
         LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         if (FollowMon_IsActive(fieldSystem)) {
             LocalMapObject *followMonObject = FollowMon_GetMapObject(fieldSystem);
@@ -488,7 +509,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         }
         break;
     }
-    case 4:
+    case SPINARAK_RIDE_STATE_START_MOVING:
         if (localData->terminalWaitCounter++ >= 4) {
             MapProp *mapProp = MapPropManager_GetMapPropByIndex(fieldSystem->mapPropManager, localData->spiderIdx);
             NNSG3dResTex *tex = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
@@ -500,7 +521,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
             ++rideData->state;
         }
         break;
-    case 5: {
+    case SPINARAK_RIDE_STATE_MOVE: {
         u16 spinarakPair;
         int length;
         int switchState;
@@ -540,13 +561,13 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         }
         xDoneState = AzaleaGymmick_GetMovementDoneParams(localData->moveVectorComponentSigns[0], localData->spinarakPos.x, localData->moveVector.x, localData->node->x);
         zDoneState = AzaleaGymmick_GetMovementDoneParams(localData->moveVectorComponentSigns[1], localData->spinarakPos.z, localData->moveVector.z, localData->node->z);
-        if (xDoneState == 2) {
+        if (xDoneState == ROUTE_NODE_PASSED) {
             localData->moveVector.x = 0;
         }
-        if (zDoneState == 2) {
+        if (zDoneState == ROUTE_NODE_PASSED) {
             localData->moveVector.z = 0;
         }
-        if (xDoneState != 0 && zDoneState != 0) {
+        if (xDoneState != ROUTE_NODE_NOT_REACHED && zDoneState != ROUTE_NODE_NOT_REACHED) {
             localData->spinarakPos.x = localData->node->x * 16 * FX32_ONE;
             localData->spinarakPos.z = localData->node->z * 16 * FX32_ONE;
             ++localData->nodeIdx;
@@ -588,7 +609,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         }
         break;
     }
-    case 6: {
+    case SPINARAK_RIDE_STATE_ARRIVE: {
         LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         MapObject_SetCurrentX(playerObject, localData->node->x);
         MapObject_SetCurrentY(playerObject, 0);
@@ -612,7 +633,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         ++rideData->state;
         break;
     }
-    case 7: {
+    case SPINARAK_RIDE_STATE_SHAKE_CAMERA: {
         VecFx32 cameraLookDelta = { 0, 0, 0 };
         cameraLookDelta.z = localData->shakeDirection;
         if (localData->shakeFrame++ == 0) {
@@ -628,7 +649,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         }
         break;
     }
-    case 8:
+    case SPINARAK_RIDE_STATE_STEP_OFF:
         if (localData->terminalWaitCounter++ >= 8) {
             LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
             if (FollowMon_IsActive(fieldSystem)) {
@@ -650,7 +671,7 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
             ++rideData->state;
         }
         break;
-    case 9: {
+    case SPINARAK_RIDE_STATE_WAIT_STEP_OFF: {
         LocalMapObject *playerObject = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         if (FollowMon_IsActive(fieldSystem)) {
             LocalMapObject *followMonObject = FollowMon_GetMapObject(fieldSystem);

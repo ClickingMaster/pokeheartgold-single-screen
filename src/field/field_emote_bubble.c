@@ -31,6 +31,18 @@ void PlaySE(u16 seq);
 #define EMOTE_BUBBLE_RESOURCE 0xC
 #define EMOTE_BUBBLE_TEXTURE  0xD
 
+enum EmoteBubbleTaskState {
+    EMOTE_BUBBLE_TASK_STATE_SHOW,
+    EMOTE_BUBBLE_TASK_STATE_WAIT,
+};
+
+enum EmoteBubbleEffectState {
+    EMOTE_BUBBLE_STATE_RISE,
+    EMOTE_BUBBLE_STATE_ANIMATE,
+    EMOTE_BUBBLE_STATE_HOLD,
+    EMOTE_BUBBLE_STATE_END,
+};
+
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 0x12).
 typedef struct EmoteBubble {
     FieldEffectManager *manager;
@@ -172,11 +184,11 @@ static BOOL EmoteBubble_ShowTask(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
     EmoteBubbleTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (*state) {
-    case 0:
+    case EMOTE_BUBBLE_TASK_STATE_SHOW:
         EmoteBubble_Show(env->mapObject, env->kind);
         (*state)++;
         break;
-    case 1: {
+    case EMOTE_BUBBLE_TASK_STATE_WAIT: {
         EmoteBubble *bubble = FieldEffectManager_GetRendererData(FieldEffectManager_GetFromMapObject(env->mapObject), 0x12);
         if (!bubble->active) {
             Heap_Free(env);
@@ -262,7 +274,7 @@ static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *wor
     result.y += 0x20000;
     result.z += FX32_ONE;
     switch (work->state) {
-    case 0: // rise into place
+    case EMOTE_BUBBLE_STATE_RISE:
         BillboardObject_SetVisible(work->billboard, 1);
         work->offset.y += work->velocity;
         if (work->offset.y > 0) {
@@ -273,19 +285,19 @@ static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *wor
             work->state++;
         }
         break;
-    case 1:
+    case EMOTE_BUBBLE_STATE_ANIMATE:
         if (EmoteBubbleAnim_Advance(&work->anim)) {
             work->state++;
         }
         break;
-    case 2:
+    case EMOTE_BUBBLE_STATE_HOLD:
         if (++work->timer >= 2) {
             work->state++;
             work->timer = 0;
             work->done = 1;
         }
         break;
-    case 3:
+    case EMOTE_BUBBLE_STATE_END:
         work->args.bubble->active = FALSE;
         FieldEffectManager_DestroyEffect((int)effect);
         return;

@@ -329,7 +329,7 @@ void MapObject_SetPositionNextTo(LocalMapObject *anchor, LocalMapObject *object,
 }
 
 void FollowMon_SpawnReleaseBall(LocalMapObject *object) {
-    FollowMonBall_Spawn(object, 0);
+    FollowMonBall_Spawn(object, FOLLOW_MON_BALL_RELEASE);
 }
 
 void FollowMon_MoveToPlayer(FieldSystem *fieldSystem, u8 direction) {
@@ -490,6 +490,23 @@ enum FollowMonRecallState {
     RECALL_STATE_END,
 };
 
+enum FollowMonHideState {
+    HIDE_STATE_RESET,
+    HIDE_STATE_STEP_TO_PLAYER,
+    HIDE_STATE_FACE_LIKE_PLAYER,
+    HIDE_STATE_WAIT,
+    HIDE_STATE_HIDE,
+    HIDE_STATE_SPAWN_BALL,
+    HIDE_STATE_END,
+};
+
+enum FollowMonFlashState {
+    FLASH_STATE_LOAD_PALETTE,
+    FLASH_STATE_FADE_TO_WHITE,
+    FLASH_STATE_FADE_BACK,
+    FLASH_STATE_END,
+};
+
 BOOL Task_WaitFollowMonMovement(TaskManager *taskMan) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
@@ -596,7 +613,7 @@ static BOOL Task_FollowMonHopIntoBall(TaskManager *taskMan) {
         break;
     }
     case HOP_STATE_SPAWN_BALL:
-        FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 3);
+        FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), FOLLOW_MON_BALL_RECALL);
         env->state++;
         break;
     case HOP_STATE_WAIT_BALL: {
@@ -677,7 +694,7 @@ static BOOL Task_FollowMonRecall(TaskManager *taskMan) {
         u8 *texture = (u8 *)NNS_G3dGetTex(file);
         MIi_CpuCopy16((u16 *)(texture + *(u32 *)(texture + 0x38)), env->palette, sizeof(env->palette));
         Heap_Free(file);
-        FollowMonBall_Spawn(mapObject, 1);
+        FollowMonBall_Spawn(mapObject, FOLLOW_MON_BALL_RECALL_WHITE);
         (*state)++;
         break;
     }
@@ -717,43 +734,43 @@ static BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
     int *timer = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
     switch (*state) {
-    case 0:
+    case HIDE_STATE_RESET:
         FollowPlayerMovement_Reset(fieldSystem->followMon.mapObject);
         MapObject_CallDrawUpdate(fieldSystem->followMon.mapObject);
         ++*state;
         break;
-    case 1:
+    case HIDE_STATE_STEP_TO_PLAYER:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
             MapObject_StepTowards(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar), fieldSystem->followMon.mapObject);
             ++*state;
         }
         break;
-    case 2:
+    case HIDE_STATE_FACE_LIKE_PLAYER:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
             MapObject_SetFacingDirection(fieldSystem->followMon.mapObject, MapObject_GetFacingDirection(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)));
             ++*state;
         }
         break;
-    case 3:
+    case HIDE_STATE_WAIT:
         if (++*timer > 10) {
             ++*state;
         }
         break;
-    case 4:
+    case HIDE_STATE_HIDE:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
             FollowMon_SetVisibleFlag(fieldSystem->followMon.mapObject, FALSE);
             MapObject_SetHeldMovement(fieldSystem->followMon.mapObject, GetMovementForDirection(MapObject_GetFacingDirection(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)), 52));
             ++*state;
         }
         break;
-    case 5:
+    case HIDE_STATE_SPAWN_BALL:
         if (MapObject_AreBitsSetForMovementScriptInit(fieldSystem->followMon.mapObject) == TRUE) {
-            FollowMonBall_Spawn(fieldSystem->followMon.mapObject, 2);
+            FollowMonBall_Spawn(fieldSystem->followMon.mapObject, FOLLOW_MON_BALL_BURST);
             FollowMon_Hide(fieldSystem);
             ++*state;
         }
         break;
-    case 6:
+    case HIDE_STATE_END:
         Heap_Free(timer);
         return TRUE;
     }
@@ -820,7 +837,7 @@ static BOOL Task_FollowMonFlash(TaskManager *taskMan) {
     FollowMonFlash *env = TaskManager_GetEnvironment(taskMan);
     u32 *state = TaskManager_GetStatePtr(taskMan);
     switch (*state) {
-    case 0: {
+    case FLASH_STATE_LOAD_PALETTE: {
         int member = SpriteId_GetModelNo(MapObject_GetSpriteID(FollowMon_GetMapObject(fieldSystem)));
         NNSG3dResFileHeader *file = NARC_AllocAndReadWholeMember(MapObjectManager_GetMapModelNarc(fieldSystem->mapObjectManager), member, HEAP_ID_FIELD2);
         u8 *texture = (u8 *)NNS_G3dGetTex(file);
@@ -829,7 +846,7 @@ static BOOL Task_FollowMonFlash(TaskManager *taskMan) {
         (*state)++;
         break;
     }
-    case 1:
+    case FLASH_STATE_FADE_TO_WHITE:
         if (env->delay) {
             env->delay--;
         } else {
@@ -848,7 +865,7 @@ static BOOL Task_FollowMonFlash(TaskManager *taskMan) {
             env->delay = env->period;
         }
         break;
-    case 2:
+    case FLASH_STATE_FADE_BACK:
         if (env->delay) {
             env->delay--;
         } else {
@@ -866,7 +883,7 @@ static BOOL Task_FollowMonFlash(TaskManager *taskMan) {
             env->delay = env->period;
         }
         break;
-    case 3:
+    case FLASH_STATE_END:
         Heap_Free(env);
         return TRUE;
     }

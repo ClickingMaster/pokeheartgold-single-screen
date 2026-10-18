@@ -42,6 +42,22 @@ static void SweetScentFollowMonAnim_Unload(SweetScentAnimWork *work);
 static BOOL SweetScentFollowMonAnims_Advance(Field3DModelAnimation *anims, u32 count);
 static void SweetScentFollowMonAnims_SetFrame(Field3DModelAnimation *anims, u32 count, fx32 frame);
 
+enum SweetScentFieldState {
+    SWEET_SCENT_STATE_ALLOC,
+    SWEET_SCENT_STATE_CHOOSE_ANIM,
+    SWEET_SCENT_STATE_START_CUT_IN,
+    SWEET_SCENT_STATE_WAIT_CUT_IN,
+    SWEET_SCENT_STATE_FOLLOW_MON_JUMP,
+    SWEET_SCENT_STATE_FOLLOW_MON_ANIM,
+    SWEET_SCENT_STATE_RUN,
+    SWEET_SCENT_STATE_END,
+};
+
+enum SweetScentFollowMonAnimState {
+    SWEET_SCENT_ANIM_STATE_RUN,
+    SWEET_SCENT_ANIM_STATE_END,
+};
+
 BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FieldMoveEnvironment *env = TaskManager_GetEnvironment(taskManager);
@@ -49,7 +65,7 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
     SweetScentFieldEnv *work = (SweetScentFieldEnv *)env->moveData;
 
     switch (*state) {
-    case 0: {
+    case SWEET_SCENT_STATE_ALLOC: {
         u32 partySlot = ((FieldMoveData *)work)->partySlot;
         Heap_Free(work);
         work = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(SweetScentFieldEnv));
@@ -58,36 +74,36 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         ++*state;
         break;
     }
-    case 1: {
+    case SWEET_SCENT_STATE_CHOOSE_ANIM: {
         u32 size = GetHoneySweetScentWorkSize();
         work->honeyWork = Heap_AllocAtEnd(HEAP_ID_FIELD2, size);
         memset(work->honeyWork, 0, size);
         {
             int avatarState = PlayerAvatar_GetState(fieldSystem->playerAvatar);
-            if (avatarState == 1 || avatarState == 2) { // walking or biking?
+            if (avatarState == PLAYER_STATE_CYCLING || avatarState == PLAYER_STATE_SURFING) {
                 ++*state;
                 break;
             }
         }
         if (work->partySlot == FieldSystem_GetLeadMonIndex(fieldSystem) && FollowMon_IsVisible(fieldSystem)) {
             TaskManager_Call(taskManager, Task_WaitFollowMonMovement, NULL);
-            *state = 4;
+            *state = SWEET_SCENT_STATE_FOLLOW_MON_JUMP;
             break;
         }
         ++*state;
         break;
     }
-    case 2:
+    case SWEET_SCENT_STATE_START_CUT_IN:
         work->effect = FieldMoveCutIn_Start(fieldSystem, 0, env->mon, PlayerAvatar_GetGender(fieldSystem->playerAvatar));
         ++*state;
         break;
-    case 3:
+    case SWEET_SCENT_STATE_WAIT_CUT_IN:
         if (FieldMoveCutIn_IsFinished(work->effect)) {
             FieldMoveCutIn_Delete(work->effect);
-            *state = 6;
+            *state = SWEET_SCENT_STATE_RUN;
         }
         break;
-    case 4: {
+    case SWEET_SCENT_STATE_FOLLOW_MON_JUMP: {
         u8 kind;
         if (FieldSystem_FirstAliveMonHasType(fieldSystem, TYPE_GRASS)) {
             kind = 2;
@@ -99,15 +115,15 @@ BOOL Task_UseSweetScentInField(TaskManager *taskManager) {
         ++*state;
         break;
     }
-    case 5:
+    case SWEET_SCENT_STATE_FOLLOW_MON_ANIM:
         FieldSystem_StartSweetScentFollowMonAnim(fieldSystem);
         ++*state;
         break;
-    case 6:
+    case SWEET_SCENT_STATE_RUN:
         TaskManager_Call(taskManager, Task_HoneyOrSweetScent, work->honeyWork);
         ++*state;
         break;
-    case 7:
+    case SWEET_SCENT_STATE_END:
         Heap_Free(work);
         Heap_Free(env);
         return TRUE;
@@ -126,13 +142,13 @@ static BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager) {
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
     switch (*state) {
-    case 0:
+    case SWEET_SCENT_ANIM_STATE_RUN:
         if (SweetScentFollowMonAnims_Advance(work->anims, 3)) {
             ++*state;
         }
         Field3dObject_Draw(&work->object);
         break;
-    case 1:
+    case SWEET_SCENT_ANIM_STATE_END:
         SweetScentFollowMonAnim_Unload(work);
         Heap_Free(work);
         return TRUE;

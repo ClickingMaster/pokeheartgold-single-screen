@@ -66,9 +66,15 @@ typedef struct CutInScrollSprite {
     CutInScrollSpriteArgs args;
 } CutInScrollSprite;
 
+enum CutInFlyerMode {
+    CUT_IN_FLYER_HIDDEN,
+    CUT_IN_FLYER_TAKE_OFF,
+    CUT_IN_FLYER_PICK_UP,
+};
+
 // The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables sCutInFlyerModeSteps).
 typedef struct CutInFlyer {
-    u8 mode; // 0: hidden, 1: take off, 2: pick up the trainer and fly away
+    u8 mode;
     u8 step;
     u8 status;      // read by FieldMoveCutIn_GetFlyerStatus
     int timer;      // 0x04
@@ -98,8 +104,21 @@ typedef struct TrainerJumpArgs {
     Sprite *sprite;
 } TrainerJumpArgs;
 
+enum TrainerJumpMode {
+    TRAINER_JUMP_IDLE,
+    TRAINER_JUMP_JUMP,
+    TRAINER_JUMP_HOP,
+};
+
+enum CutInModelEffectStep {
+    CUT_IN_MODEL_STEP_START,
+    CUT_IN_MODEL_STEP_SHOW,
+    CUT_IN_MODEL_STEP_ANIMATE,
+    CUT_IN_MODEL_STEP_DONE,
+};
+
 typedef struct TrainerJump {
-    int mode; // 0: idle, 1: jump, 2: hop
+    int mode;
     int step;
     BOOL done;
     int frame;
@@ -442,7 +461,7 @@ void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn) {
     origin = sCutInFlyerTakeOffOrigin;
     scale = sCutInFlyerTakeOffScale;
     flyer = FieldEffect_GetState(cutIn->flyerEffect);
-    flyer->mode = 1;
+    flyer->mode = CUT_IN_FLYER_TAKE_OFF;
     flyer->step = 0;
     flyer->status = 0;
     flyer->origin = origin;
@@ -510,7 +529,7 @@ void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
     CutInFlyer *flyer = FieldEffect_GetState(cutIn->flyerEffect);
     Sprite *sprite;
 
-    flyer->mode = 2;
+    flyer->mode = CUT_IN_FLYER_PICK_UP;
     flyer->step = 0;
     flyer->status = 1;
     flyer->timer = 0;
@@ -699,13 +718,13 @@ FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *tr
 }
 
 void TrainerJumpEffect_Stop(FieldEffect *effect) {
-    ((TrainerJump *)FieldEffect_GetState(effect))->mode = 0;
+    ((TrainerJump *)FieldEffect_GetState(effect))->mode = TRAINER_JUMP_IDLE;
 }
 
 void TrainerJumpEffect_StartJump(FieldEffect *effect) {
     VecFx32 pos;
     TrainerJump *jump = FieldEffect_GetState(effect);
-    jump->mode = 1;
+    jump->mode = TRAINER_JUMP_JUMP;
     jump->step = 0;
     jump->frame = 0;
     jump->done = FALSE;
@@ -720,7 +739,7 @@ void TrainerJumpEffect_StartJump(FieldEffect *effect) {
 void TrainerJumpEffect_StartHop(FieldEffect *effect) {
     VecFx32 pos;
     TrainerJump *jump = FieldEffect_GetState(effect);
-    jump->mode = 2;
+    jump->mode = TRAINER_JUMP_HOP;
     jump->step = 0;
     jump->frame = 0;
     jump->done = FALSE;
@@ -771,10 +790,10 @@ void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump) {
 
 void TrainerJumpEffect_Update(FieldEffect *effect, TrainerJump *jump) {
     switch (jump->mode) {
-    case 1:
+    case TRAINER_JUMP_JUMP:
         TrainerJumpEffect_Jump(effect, jump);
         break;
-    case 2:
+    case TRAINER_JUMP_HOP:
         TrainerJumpEffect_Hop(effect, jump);
         break;
     }
@@ -959,23 +978,23 @@ void CutInModelEffect_Destroy(FieldEffect *effect, CutInModelEffect *work) {
 void CutInModelEffect_Update(FieldEffect *effect, CutInModelEffect *work) {
     FieldMoveCutInModel *model = &work->cutIn->model;
     switch (work->step) {
-    case 0:
-        work->step = 1;
+    case CUT_IN_MODEL_STEP_START:
+        work->step = CUT_IN_MODEL_STEP_SHOW;
         break;
-    case 1:
+    case CUT_IN_MODEL_STEP_SHOW:
         Field3dObject_SetActiveFlag(&model->object, TRUE);
         Field3dModelAnimation_FrameSet(&model->animations[0], 0);
         Field3dModelAnimation_FrameSet(&model->animations[1], 0);
-        work->step = 2;
+        work->step = CUT_IN_MODEL_STEP_ANIMATE;
         // fallthrough
-    case 2:
+    case CUT_IN_MODEL_STEP_ANIMATE:
         Field3dModelAnimation_FrameAdvanceAndCheck(&model->animations[0], FX32_ONE);
         if (Field3dModelAnimation_FrameAdvanceAndCheck(&model->animations[1], FX32_ONE)) {
             work->done = TRUE;
-            work->step = 3;
+            work->step = CUT_IN_MODEL_STEP_DONE;
         }
         break;
-    case 3:
+    case CUT_IN_MODEL_STEP_DONE:
         break;
     }
 }

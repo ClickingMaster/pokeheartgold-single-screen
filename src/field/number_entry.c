@@ -47,6 +47,12 @@ enum NumberEntryState {
     NUMBER_ENTRY_STATE_DONE,
 };
 
+enum NumberEntryBlinkPhase {
+    NUMBER_ENTRY_BLINK_START,
+    NUMBER_ENTRY_BLINK_FIRST,
+    NUMBER_ENTRY_BLINK_SECOND,
+};
+
 // Descriptor for the "blink" feedback played after each input: either a sprite
 // anim-sequence flip (isBg == FALSE, target is a sprite index) or a BG tilemap
 // palette flip over a rect (isBg == TRUE, target is a BG layer).
@@ -716,11 +722,11 @@ static BOOL NumberEntry_UpdateBlink(NumberEntryData *data) {
     NumberEntryBlink *blink = &data->blink;
 
     switch (blink->phase) {
-    case 0:
+    case NUMBER_ENTRY_BLINK_START:
         NumberEntry_SetBlinkFrame(data, blink->seqA);
         blink->phase++;
         break;
-    case 1:
+    case NUMBER_ENTRY_BLINK_FIRST:
         blink->timer++;
         if (blink->timer == 4) {
             NumberEntry_SetBlinkFrame(data, blink->seqB);
@@ -728,7 +734,7 @@ static BOOL NumberEntry_UpdateBlink(NumberEntryData *data) {
             blink->phase++;
         }
         break;
-    case 2:
+    case NUMBER_ENTRY_BLINK_SECOND:
         blink->timer++;
         if (blink->timer == 2) {
             return FALSE;
@@ -741,7 +747,7 @@ static BOOL NumberEntry_UpdateBlink(NumberEntryData *data) {
 static void NumberEntry_StartSpriteBlink(NumberEntryData *data, u8 target, u8 seqA, u8 seqB, u16 nextState) {
     data->blink.isBg = FALSE;
     data->blink.timer = 0;
-    data->blink.phase = 0;
+    data->blink.phase = NUMBER_ENTRY_BLINK_START;
     data->blink.target = target;
     data->blink.seqA = seqA;
     data->blink.seqB = seqB;
@@ -752,7 +758,7 @@ static void NumberEntry_StartSpriteBlink(NumberEntryData *data, u8 target, u8 se
 static void NumberEntry_StartBgBlink(NumberEntryData *data, u8 x, u8 y, u16 nextState) {
     data->blink.isBg = TRUE;
     data->blink.timer = 0;
-    data->blink.phase = 0;
+    data->blink.phase = NUMBER_ENTRY_BLINK_START;
     data->blink.target = GF_BG_LYR_SUB_1;
     data->blink.seqA = 1;
     data->blink.seqB = 0;

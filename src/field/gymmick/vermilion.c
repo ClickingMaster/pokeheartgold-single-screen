@@ -5,6 +5,16 @@
 #include "overlay_04.h"
 #include "sound_playback.h"
 
+enum VermilionGateState {
+    GATE_STATE_FIND_STOPPERS,
+    GATE_STATE_OPEN_STOPPERS,
+    GATE_STATE_CLOSE_STOPPERS,
+    GATE_STATE_WAIT_STOPPERS,
+    GATE_STATE_OPEN_GATE,
+    GATE_STATE_CLOSE_GATE,
+    GATE_STATE_END,
+};
+
 typedef struct VermilionGymmickLocalData {
     FieldSystem *fieldSystem;
 } VermilionGymmickLocalData;
@@ -74,11 +84,11 @@ void VermilionGymmick_GateAction(FieldSystem *fieldSystem, u8 lockno, u8 relock)
     case 0:
         taskData->modelId = 199;
         if (relock) {
-            taskData->initialState = 2;
+            taskData->initialState = GATE_STATE_CLOSE_STOPPERS;
             TaskManager_Call(fieldSystem->taskman, Task_VermilionGymmick_AnimateGateAction, taskData);
             gymmickUnion->vermilion.gates[0] = FALSE;
         } else {
-            taskData->initialState = 1;
+            taskData->initialState = GATE_STATE_OPEN_STOPPERS;
             TaskManager_Call(fieldSystem->taskman, Task_VermilionGymmick_AnimateGateAction, taskData);
             gymmickUnion->vermilion.gates[0] = TRUE;
         }
@@ -89,7 +99,7 @@ void VermilionGymmick_GateAction(FieldSystem *fieldSystem, u8 lockno, u8 relock)
             GF_ASSERT(FALSE);
             Heap_Free(taskData);
         } else {
-            taskData->initialState = 1;
+            taskData->initialState = GATE_STATE_OPEN_STOPPERS;
             TaskManager_Call(fieldSystem->taskman, Task_VermilionGymmick_AnimateGateAction, taskData);
             gymmickUnion->vermilion.gates[1] = TRUE;
         }
@@ -105,7 +115,7 @@ static BOOL Task_VermilionGymmick_AnimateGateAction(TaskManager *taskman) {
     u32 *pState = TaskManager_GetStatePtr(taskman);
 
     switch (*pState) {
-    case 0:
+    case GATE_STATE_FIND_STOPPERS:
         if (taskData->modelId == 199) {
             taskData->gateStopObjects[0] = MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_T06GYM0101_stop_4);
             taskData->gateStopObjects[1] = MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_T06GYM0101_stop_5);
@@ -118,19 +128,19 @@ static BOOL Task_VermilionGymmick_AnimateGateAction(TaskManager *taskman) {
         taskData->delayCounter = 0;
         *pState = taskData->initialState;
         break;
-    case 1:
+    case GATE_STATE_OPEN_STOPPERS:
         MapObject_SetHeldMovement(taskData->gateStopObjects[0], MOVEMENT_RUN_FASTER_LEFT);
         MapObject_SetHeldMovement(taskData->gateStopObjects[1], MOVEMENT_RUN_FASTER_LEFT);
         MapObject_SetHeldMovement(taskData->gateStopObjects[2], MOVEMENT_RUN_FASTER_RIGHT);
-        *pState = 3;
+        *pState = GATE_STATE_WAIT_STOPPERS;
         break;
-    case 2:
+    case GATE_STATE_CLOSE_STOPPERS:
         MapObject_SetHeldMovement(taskData->gateStopObjects[0], MOVEMENT_RUN_FASTER_RIGHT);
         MapObject_SetHeldMovement(taskData->gateStopObjects[1], MOVEMENT_RUN_FASTER_RIGHT);
         MapObject_SetHeldMovement(taskData->gateStopObjects[2], MOVEMENT_RUN_FASTER_LEFT);
-        *pState = 3;
+        *pState = GATE_STATE_WAIT_STOPPERS;
         break;
-    case 3: {
+    case GATE_STATE_WAIT_STOPPERS: {
         u8 i;
         for (i = 0; i < 3; ++i) {
             if (!MapObject_AreBitsSetForMovementScriptInit(taskData->gateStopObjects[i])) {
@@ -140,35 +150,35 @@ static BOOL Task_VermilionGymmick_AnimateGateAction(TaskManager *taskman) {
         if (i == 3) {
             ++taskData->delayCounter;
             if (taskData->delayCounter >= 2) {
-                if (taskData->initialState == 1) {
-                    *pState = 4;
+                if (taskData->initialState == GATE_STATE_OPEN_STOPPERS) {
+                    *pState = GATE_STATE_OPEN_GATE;
                 } else {
-                    *pState = 5;
+                    *pState = GATE_STATE_CLOSE_GATE;
                 }
             } else {
                 *pState = taskData->initialState;
             }
         }
     } break;
-    case 4: {
+    case GATE_STATE_OPEN_GATE: {
         Field3dRenderObj *gateRender = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->modelId);
         u32 num = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, taskData->modelId);
         for (u8 i = 0; i < num; ++i) {
             MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &gateRender->renderObj, taskData->modelId, i);
         }
         PlaySE(SEQ_SE_DP_UG_020);
-        *pState = 6;
+        *pState = GATE_STATE_END;
     } break;
-    case 5: {
+    case GATE_STATE_CLOSE_GATE: {
         Field3dRenderObj *gateRender = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, taskData->modelId);
         u32 num = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, taskData->modelId);
         for (u8 i = 0; i < num; ++i) {
             MapPropAnimationManager_AddAnimationToRenderObj(taskData->modelId, i, FALSE, &gateRender->renderObj, fieldSystem->mapPropAnimationManager);
         }
         PlaySE(SEQ_SE_DP_UG_020);
-        *pState = 6;
+        *pState = GATE_STATE_END;
     } break;
-    case 6:
+    case GATE_STATE_END:
         Heap_Free(taskData);
         return TRUE;
     }

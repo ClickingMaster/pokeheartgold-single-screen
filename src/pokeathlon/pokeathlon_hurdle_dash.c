@@ -25,6 +25,14 @@ enum {
     HURDLE_DASH_STATE_CALC_SCORES,
 };
 
+enum PokeathlonHurdleDashPlayState {
+    HURDLE_DASH_PLAY_COUNTDOWN,
+    HURDLE_DASH_PLAY_RACE,
+    HURDLE_DASH_PLAY_FINISH,
+    HURDLE_DASH_PLAY_WAIT_PLAYERS,
+    HURDLE_DASH_PLAY_END,
+};
+
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 int PokeathlonCourse_GetSpriteSizeType(void *mon);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonHurdleDashMonView *view);
@@ -122,13 +130,13 @@ BOOL PokeathlonHurdleDash_Start(PokeathlonCourseData *course) {
 BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonHurdleDash *hurdleDash = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case HURDLE_DASH_PLAY_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             hurdleDash->started = TRUE;
             (*state)++;
         }
         break;
-    case 1: {
+    case HURDLE_DASH_PLAY_RACE: {
         BOOL finished;
         u8 i;
         u32 total;
@@ -146,7 +154,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
         }
         break;
     }
-    case 2: {
+    case HURDLE_DASH_PLAY_FINISH: {
         u8 ready = PokeathlonCourse_RunFinish(course);
         if (PokeathlonHurdleDash_HaveAllStopped(hurdleDash) && ready) {
             (*state)++;
@@ -156,7 +164,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
         PokeathlonHurdleDash_UpdateCpuParticipants(course);
         break;
     }
-    case 3: {
+    case HURDLE_DASH_PLAY_WAIT_PLAYERS: {
         u8 *block;
         PokeathlonHurdleDash_CountFrame(hurdleDash);
         PokeathlonHurdleDash_UpdateCpuParticipants(course);
@@ -169,7 +177,7 @@ BOOL PokeathlonHurdleDash_Play(PokeathlonCourseData *course, u8 *state) {
         }
         break;
     }
-    case 4:
+    case HURDLE_DASH_PLAY_END:
         if (++hurdleDash->endTimer > 90) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, hurdleDash->heapId);
             PokeathlonCourse_SetNextState(course, HURDLE_DASH_STATE_CALC_SCORES);

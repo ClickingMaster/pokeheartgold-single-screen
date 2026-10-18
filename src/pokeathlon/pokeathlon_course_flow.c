@@ -39,6 +39,19 @@ enum {
     FINISH_STATE_DONE,
 };
 
+enum PokeathlonCourseStartState {
+    START_STATE_SHOW_START,
+    START_STATE_WAIT_START,
+    START_STATE_COUNTDOWN,
+};
+
+enum PokeathlonCourseRunWaitState {
+    RUN_WAIT_STATE_INIT,
+    RUN_WAIT_STATE_INIT_EVENT,
+    RUN_WAIT_STATE_RUN,
+    RUN_WAIT_STATE_EXIT,
+};
+
 static void PokeathlonCourse_ShowStartSprites(PokeathlonCourseData *course);
 static BOOL PokeathlonCourse_IsStartAnimDone(PokeathlonCourseData *course);
 static BOOL PokeathlonCourse_SendEventResults(PokeathlonCourseData *course);
@@ -226,18 +239,18 @@ BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     BOOL done = FALSE;
     switch (layout->startState) {
-    case 0:
+    case START_STATE_SHOW_START:
         PlaySE(SEQ_SE_GS_TOUCHPEN);
         PokeathlonCourse_ShowStartSprites(course);
         layout->startState++;
         break;
-    case 1:
+    case START_STATE_WAIT_START:
         if (PokeathlonCourse_IsStartAnimDone(course)) {
             layout->startState++;
             Sound_SetPlayerPause(PLAYER_BGM, 0);
         }
         break;
-    case 2:
+    case START_STATE_COUNTDOWN:
         if (layout->hudTimer == 0) {
             PlaySE(SEQ_SE_GS_STARTCOUNT);
             Sprite_SetDrawFlag(layout->countSprite, TRUE);
@@ -457,7 +470,7 @@ u32 PokeathlonCourse_State_RunEventOverlay(PokeathlonCourseData *course) {
         PokeathlonCourseArgsLayout *args;
         OverlayManager_Delete(manager);
         args = layout->args;
-        if (args->mode == 0) {
+        if (args->mode == POKEATHLON_COURSE_MODE_SOLO) {
             if (layout->boxCancelled != 0) {
                 args->shouldFreeHeap = TRUE;
                 PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_EXIT);
@@ -476,18 +489,18 @@ u32 PokeathlonCourse_State_RunEventOverlay(PokeathlonCourseData *course) {
 u32 PokeathlonCourse_State_RunWait(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     switch (*state) {
-    case 0:
+    case RUN_WAIT_STATE_INIT:
         layout->event = &gPokeathlonCourseEvent_Wait;
         layout->eventInitState = 0;
         PokeathlonCourse_InitStateInfo(gPokeathlonCourseWaitSteps, &layout->eventStateInfo);
         (*state)++;
         break;
-    case 1:
+    case RUN_WAIT_STATE_INIT_EVENT:
         if (PokeathlonCourse_RunSubStateLoop(course)) {
             (*state)++;
         }
         break;
-    case 2:
+    case RUN_WAIT_STATE_RUN:
         if (layout->eventStateInfo.ptr == NULL) {
             (*state)++;
             break;
@@ -503,7 +516,7 @@ u32 PokeathlonCourse_State_RunWait(PokeathlonCourseData *course, u8 *state) {
             (*state)++;
         }
         break;
-    case 3:
+    case RUN_WAIT_STATE_EXIT:
         layout->event->exit(course, 0);
         if (layout->work) {
             GF_AssertFail();
@@ -985,7 +998,7 @@ u32 PokeathlonCourse_State_CreateJuiceRecords(PokeathlonCourseData *course) {
     layout->playerJuiceRecords = Heap_AllocAtEnd(layout->heapId, size);
     memset(layout->playerJuiceRecords, 0, size);
     layout->juiceRecord = ApricornRecord_New(apricornBox, profile, record->fanCount, layout->heapId);
-    if (layout->args->mode == 1) {
+    if (layout->args->mode == POKEATHLON_COURSE_MODE_LINK) {
         PokeathlonCourse_SetStateTransitionType(course, 14);
         PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_SEND_JUICE_RECORD);
     } else {
@@ -1136,7 +1149,7 @@ static void PokeathlonCourse_SaveResults(PokeathlonCourseData *course) {
         points *= 2;
     }
     PokeathlonSave_AddAthletePoints(pokeathlon, points);
-    if (layout->args->mode == 1) {
+    if (layout->args->mode == POKEATHLON_COURSE_MODE_LINK) {
         records = PokeathlonSave_GetRecordsLink2(pokeathlon);
         PokeathlonCourse_SaveLinkEventRecords(course, records);
     } else {
@@ -1151,7 +1164,7 @@ static void PokeathlonCourse_SaveResults(PokeathlonCourseData *course) {
         PokeathlonCourse_SaveSoloEventRecords(course, (PokeathlonCourseEventRecord *)PokeathlonSave_GetRecordsSolo2(pokeathlon));
     }
     PokeathlonCourse_SaveStatistics(course, PokeathlonSave_GetStatistics2(pokeathlon));
-    if (layout->args->mode == 0 && !Save_VarsFlags_CheckFlagInArray(varsFlags, FLAG_UNK_0F1) && PokeathlonCourse_BeatsAllEventTargets(course)) {
+    if (layout->args->mode == POKEATHLON_COURSE_MODE_SOLO && !Save_VarsFlags_CheckFlagInArray(varsFlags, FLAG_UNK_0F1) && PokeathlonCourse_BeatsAllEventTargets(course)) {
         Save_VarsFlags_SetFlagInArray(varsFlags, FLAG_UNK_0F1);
     }
     layout->args->totalPoints = results->totalPoints;
@@ -1414,7 +1427,7 @@ static void PokeathlonCourse_SaveStatistics(PokeathlonCourseData *course, Pokeat
     u8 j;
     u32 *counters;
     netId = (u8)PokeathlonCourse_GetNetId(course);
-    if (layout->args->mode == 1) {
+    if (layout->args->mode == POKEATHLON_COURSE_MODE_LINK) {
         AddToStatistic(1, &statistics->linkCoursesJoined);
         if (results->wonCourse) {
             AddToStatistic(1, &statistics->linkCourseFirstPlaces);
@@ -1569,7 +1582,7 @@ static void PokeathlonCourse_ChooseEvents(PokeathlonCourseArgsLayout *args, u32 
     BOOL valid = FALSE;
     eventIds[0] = 10;
     courseId = args->course;
-    if (args->mode == 1) {
+    if (args->mode == POKEATHLON_COURSE_MODE_LINK) {
         switch (courseId) {
         case 5:
         case 6:
@@ -1733,7 +1746,7 @@ static BOOL PokeathlonCourse_IsNewRecord(PokeathlonCourseData *course) {
         return FALSE;
     }
     event = PokeathlonCourse_GetCurrentEvent(course);
-    if (layout->args->mode == 1) {
+    if (layout->args->mode == POKEATHLON_COURSE_MODE_LINK) {
         record = PokeathlonSave_GetRecordsLink2(pokeathlon)[event].entries;
     } else {
         record = PokeathlonSave_GetRecordsSolo2(pokeathlon)[event].entries;

@@ -15,6 +15,18 @@
 static void PokeathlonCourseWait_Create(PokeathlonCourseData *course);
 static void PokeathlonCourseWait_Free(PokeathlonCourseData *course);
 
+enum PokeathlonCourseWaitInitState {
+    COURSE_WAIT_INIT_CREATE,
+    COURSE_WAIT_INIT_FADE_IN,
+    COURSE_WAIT_INIT_PRINT,
+    COURSE_WAIT_INIT_WAIT_PRINT,
+};
+
+enum PokeathlonCourseWaitFadeOutState {
+    COURSE_WAIT_FADE_OUT_START,
+    COURSE_WAIT_FADE_OUT_WAIT,
+};
+
 static const GraphicsModes sPokeathlonCourseWaitGraphicsModes = {
     .dispMode = GX_DISPMODE_GRAPHICS,
     .bgMode = GX_BGMODE_0,
@@ -58,24 +70,24 @@ BOOL PokeathlonCourseWait_Init(PokeathlonCourseData *course) {
     PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
 
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case COURSE_WAIT_INIT_CREATE:
         PokeathlonCourseWait_Create(course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case COURSE_WAIT_INIT_FADE_IN:
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 4, 1, wait->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case COURSE_WAIT_INIT_PRINT:
         if (IsPaletteFadeFinished()) {
             PokeathlonCourseMessageBox_Print(wait->messageBox, msg_0309_00310);
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 3:
+    case COURSE_WAIT_INIT_WAIT_PRINT:
         if (!PokeathlonCourseMessageBox_Update(wait->messageBox)) {
             PokeathlonCourseMessageBox_ShowWaitingIcon(wait->messageBox);
             PokeathlonCourse_SetStateTransitionType(course, 0x11);
@@ -173,14 +185,14 @@ static void PokeathlonCourseWait_Free(PokeathlonCourseData *course) {
 BOOL PokeathlonCourseWait_FadeOut(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCourseWait *wait = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case COURSE_WAIT_FADE_OUT_START:
         if (++wait->timer > 15) {
             PokeathlonCourseMessageBox_HideWaitingIcon(wait->messageBox);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 4, 1, wait->heapId);
             (*state)++;
         }
         break;
-    case 1:
+    case COURSE_WAIT_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished()) {
             PokeathlonCourseMessageBox_Close(wait->messageBox);
             return TRUE;

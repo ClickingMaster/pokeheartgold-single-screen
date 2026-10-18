@@ -34,6 +34,13 @@ enum {
     DISC_CATCH_STATE_FINISH,
 };
 
+enum PokeathlonDiscCatchInitState {
+    DISC_CATCH_INIT_CREATE,
+    DISC_CATCH_INIT_LOAD_BGS,
+    DISC_CATCH_INIT_WAIT_MONS,
+    DISC_CATCH_INIT_START,
+};
+
 BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
 void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
@@ -847,7 +854,7 @@ u32 PokeathlonDiscCatch_Finish(PokeathlonCourseData *course, u8 *state) {
 u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case DISC_CATCH_INIT_CREATE:
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_142, 0x60000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -865,7 +872,7 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
         work->timer = 1800;
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case DISC_CATCH_INIT_LOAD_BGS:
         work->bgConfig = BgConfig_Alloc(work->heapId);
         PokeathlonCourse_SetHudPlanes(course, 4);
         PokeathlonDiscCatch_InitBgs(work);
@@ -876,14 +883,14 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
         PokeathlonDiscCatch_CreateMonPics(work);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2:
+    case DISC_CATCH_INIT_WAIT_MONS:
         if (PokeathlonCourseMonObjects_IsLoaded(work->monPics)) {
             PokeathlonDiscCatch_LoadSpriteResources(work);
             Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSprites(course, 0, work->monPicResources, SpriteManager_GetSpriteList(work->spriteManager)), 0);
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 3: {
+    case DISC_CATCH_INIT_START: {
         u8 participant = (u8)PokeathlonCourse_GetNetId(course);
         work->scoreboard = PokeathlonDiscCatchScoreboard_New(work->spriteSystem, work->spriteManager, work->bgConfig, work->msgData, work->messageFormat, participant, work->heapId, course);
         PokeathlonDiscCatchSprites_Init(&work->sprites, work->spriteSystem, work->spriteManager, work->scoreboard);

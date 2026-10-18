@@ -37,6 +37,17 @@ enum {
     BLOCK_SMASH_STATE_FINISH,
 };
 
+enum PokeathlonBlockSmashInitState {
+    BLOCK_SMASH_INIT_CREATE,
+    BLOCK_SMASH_INIT_LOAD_BGS,
+    BLOCK_SMASH_INIT_LOAD_MONS,
+    BLOCK_SMASH_INIT_WAIT_MONS,
+    BLOCK_SMASH_INIT_CREATE_BLOCKS,
+    BLOCK_SMASH_INIT_CREATE_TEAMS,
+    BLOCK_SMASH_INIT_SEND_REPORT,
+    BLOCK_SMASH_INIT_WAIT_FADE_IN,
+};
+
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, void *out);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u32 PokeathlonCourse_GetSpriteSizeType(void *mon);
@@ -494,7 +505,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     int i, j;
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case BLOCK_SMASH_INIT_CREATE:
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_141, 0x60000);
         Main_SetVBlankIntrCB(NULL, NULL);
         Main_SetHBlankIntrCB(NULL, NULL);
@@ -511,7 +522,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         work->timer = 900;
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case BLOCK_SMASH_INIT_LOAD_BGS:
         work->bgConfig = BgConfig_Alloc(work->heapId);
         PokeathlonCourse_SetHudPlanes(course, 4);
         PokeathlonBlockSmash_InitBgs(work->bgConfig, work->heapId);
@@ -521,7 +532,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         work->monPics = PokeathlonCourseMonObjects_Create(work->heapId, 9, 32, work->iconResources, SpriteManager_GetSpriteList(work->spriteManager));
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 2: {
+    case BLOCK_SMASH_INIT_LOAD_MONS: {
         PokeathlonBlockSmashMonInfo mons[9];
         int n = 0;
         PokeathlonBlockSmashMonPicParams params = { 0 };
@@ -542,7 +553,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 3:
+    case BLOCK_SMASH_INIT_WAIT_MONS:
         if (PokeathlonCourseMonObjects_IsLoaded(work->monPics)) {
             PokeathlonBlockSmash_LoadSpriteResources(work);
             PokeathlonBlockSmash_LoadMainAndSubSpriteRes(work->spriteSystem, work->spriteManager);
@@ -550,12 +561,12 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
             PokeathlonCourse_AdvanceEventInitState(course);
         }
         break;
-    case 4:
+    case BLOCK_SMASH_INIT_CREATE_BLOCKS:
         PokeathlonBlockSmash_CreateHudSprites(work);
         work->blocks = PokeathlonBlockSmashBlocks_New(work->heapId, work->spriteSystem, work->spriteManager, course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 5:
+    case BLOCK_SMASH_INIT_CREATE_TEAMS:
         work->mon = PokeathlonBlockSmashMon_New(work->heapId, work->spriteSystem, work->spriteManager, course);
         work->rivals = PokeathlonBlockSmashRivals_New(work->heapId, work->spriteSystem, work->spriteManager, course, work->monPics);
         PokeathlonCourseObjects_PauseAnims(work->monPics, 1);
@@ -575,14 +586,14 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, work->heapId);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 6:
+    case BLOCK_SMASH_INIT_SEND_REPORT:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             PokeathlonBlockSmash_WriteReport(course);
         }
         PokeathlonBlockSmash_UpdateLinkData(course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 7:
+    case BLOCK_SMASH_INIT_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

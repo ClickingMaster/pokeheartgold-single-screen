@@ -34,6 +34,12 @@
 #define EMOTE_MARK_POP_GRAVITY (2 * FX32_ONE)
 #define EMOTE_MARK_HOLD_FRAMES 30
 
+enum EmoteMarkEffectState {
+    EMOTE_MARK_STATE_POP,
+    EMOTE_MARK_STATE_HOLD,
+    EMOTE_MARK_STATE_DONE,
+};
+
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 9).
 typedef struct EmoteMark {
     int exclamationRefCount;
@@ -266,7 +272,7 @@ void EmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     switch (work->state) {
-    case 0:
+    case EMOTE_MARK_STATE_POP:
         BillboardObject_SetVisible(work->billboard, TRUE);
         work->offset.y += work->velocity;
         if (work->offset.y != 0) {
@@ -276,7 +282,7 @@ void EmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work) {
             work->state++;
         }
         break;
-    case 1:
+    case EMOTE_MARK_STATE_HOLD:
         work->timer++;
         if (work->timer >= EMOTE_MARK_HOLD_FRAMES) {
             work->state++;
@@ -284,7 +290,7 @@ void EmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work) {
             work->done = TRUE;
         }
         break;
-    case 2:
+    case EMOTE_MARK_STATE_DONE:
         break;
     }
     FieldEffect_SetPosition(effect, &position);
@@ -353,7 +359,7 @@ void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work)
     position.y += 32 * FX32_ONE;
     position.z += FX32_ONE;
     switch (work->state) {
-    case 0:
+    case EMOTE_MARK_STATE_POP:
         BillboardObject_SetVisible(work->billboard, TRUE);
         work->offset.y += work->velocity;
         if (work->offset.y != 0) {
@@ -363,7 +369,7 @@ void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work)
             work->state++;
         }
         break;
-    case 1:
+    case EMOTE_MARK_STATE_HOLD:
         work->timer++;
         if (work->timer >= EMOTE_MARK_HOLD_FRAMES) {
             work->state++;
@@ -371,7 +377,7 @@ void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work)
             work->done = TRUE;
         }
         break;
-    case 2:
+    case EMOTE_MARK_STATE_DONE:
         break;
     }
     FieldEffect_SetPosition(effect, &position);

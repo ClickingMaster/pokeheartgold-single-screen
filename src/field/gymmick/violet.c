@@ -11,6 +11,15 @@
 #define ELEVATOR_Y_UP    (FX32_CONST(496))
 #define ELEVATOR_Y_SPEED (FX32_CONST(16))
 
+enum VioletElevatorState {
+    ELEVATOR_STATE_WAIT_FOLLOW_MON,
+    ELEVATOR_STATE_START,
+    ELEVATOR_STATE_START_MOVING,
+    ELEVATOR_STATE_MOVE,
+    ELEVATOR_STATE_STOP,
+    ELEVATOR_STATE_END,
+};
+
 typedef struct VioletGymElevatorTaskData {
     int state;
     FieldSystem *fieldSystem;
@@ -66,7 +75,7 @@ void GymmickInit_Violet(FieldSystem *fieldSystem) {
 void VioletGymmick_ElevatorAction(FieldSystem *fieldSystem) {
     VecFx32 playerPosition;
     VioletGymElevatorTaskData *taskData = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(VioletGymElevatorTaskData));
-    taskData->state = 0;
+    taskData->state = ELEVATOR_STATE_WAIT_FOLLOW_MON;
     taskData->fieldSystem = fieldSystem;
 
     GymmickUnion *gymmick = Save_Gymmick_AssertMagic_GetData(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem)), GYMMICK_VIOLET);
@@ -85,16 +94,16 @@ static BOOL Task_VioletGymmick_ElevatorUp(TaskManager *taskman) {
     VioletGymElevatorTaskData *taskData = TaskManager_GetEnvironment(taskman);
 
     switch (taskData->state) {
-    case 0:
+    case ELEVATOR_STATE_WAIT_FOLLOW_MON:
         // taskman is fieldSystem->taskman
         TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;
-    case 1:
+    case ELEVATOR_STATE_START:
         SysTask_CreateOnMainQueue(SysTask_ElevatorUp, taskData, 0);
         ++taskData->state;
         break;
-    case 5:
+    case ELEVATOR_STATE_END:
         Heap_Free(taskData);
         return TRUE;
     }
@@ -107,16 +116,16 @@ static BOOL Task_VioletGymmick_ElevatorDown(TaskManager *taskman) {
     VioletGymElevatorTaskData *taskData = TaskManager_GetEnvironment(taskman);
 
     switch (taskData->state) {
-    case 0:
+    case ELEVATOR_STATE_WAIT_FOLLOW_MON:
         // taskman is fieldSystem->taskman
         TaskManager_Call(fieldSystem->taskman, Task_WaitFollowMonMovement, NULL);
         ++taskData->state;
         break;
-    case 1:
+    case ELEVATOR_STATE_START:
         SysTask_CreateOnMainQueue(SysTask_ElevatorDown, taskData, 0);
         ++taskData->state;
         break;
-    case 5:
+    case ELEVATOR_STATE_END:
         Heap_Free(taskData);
         return TRUE;
     }
@@ -129,12 +138,12 @@ static void SysTask_ElevatorUp(SysTask *sysTask, void *taskData) {
     FieldSystem *fieldSystem = violetTaskData->fieldSystem;
 
     switch (violetTaskData->state) {
-    case 2:
+    case ELEVATOR_STATE_START_MOVING:
         PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
         PlaySE(SEQ_SE_DP_ELEBETA);
         ++violetTaskData->state;
         break;
-    case 3: {
+    case ELEVATOR_STATE_MOVE: {
         MapProp *mapProp = MapPropManager_FindMapPropByBuildModel(fieldSystem->mapPropManager, 111);
         VecFx32 elevatorTranslation;
         MapProp_GetTranslation(&elevatorTranslation, mapProp);
@@ -151,7 +160,7 @@ static void SysTask_ElevatorUp(SysTask *sysTask, void *taskData) {
         FollowMon_SetHeight(fieldSystem, playerPosition.y);
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
-    case 4:
+    case ELEVATOR_STATE_STOP:
         DynamicTerrainHeightManager_SetPlateHeight(0, ELEVATOR_Y_UP, fieldSystem->dynamicTerrainHeightManager);
         PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
         PlaySE(SEQ_SE_DP_KI_GASYAN);
@@ -166,12 +175,12 @@ static void SysTask_ElevatorDown(SysTask *sysTask, void *taskData) {
     FieldSystem *fieldSystem = violetTaskData->fieldSystem;
 
     switch (violetTaskData->state) {
-    case 2:
+    case ELEVATOR_STATE_START_MOVING:
         PlayerAvatar_ToggleAutomaticHeightUpdating(fieldSystem->playerAvatar, FALSE);
         PlaySE(SEQ_SE_DP_ELEBETA);
         ++violetTaskData->state;
         break;
-    case 3: {
+    case ELEVATOR_STATE_MOVE: {
         MapProp *mapProp = MapPropManager_FindMapPropByBuildModel(fieldSystem->mapPropManager, 111);
         VecFx32 elevatorTranslation;
         MapProp_GetTranslation(&elevatorTranslation, mapProp);
@@ -188,7 +197,7 @@ static void SysTask_ElevatorDown(SysTask *sysTask, void *taskData) {
         FollowMon_SetHeight(fieldSystem, playerPosition.y);
         MapProp_SetTranslation(mapProp, &elevatorTranslation);
     } break;
-    case 4:
+    case ELEVATOR_STATE_STOP:
         DynamicTerrainHeightManager_SetPlateHeight(0, ELEVATOR_Y_DOWN, fieldSystem->dynamicTerrainHeightManager);
         PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(fieldSystem->playerAvatar, TRUE);
         PlaySE(SEQ_SE_DP_KI_GASYAN);

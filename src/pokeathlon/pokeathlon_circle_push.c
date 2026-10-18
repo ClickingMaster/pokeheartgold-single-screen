@@ -64,6 +64,15 @@ enum {
     RING_SLIDE_IN,
 };
 
+enum PokeathlonCirclePushInitState {
+    CIRCLE_PUSH_INIT_CREATE,
+    CIRCLE_PUSH_INIT_CREATE_DISPLAY,
+    CIRCLE_PUSH_INIT_CREATE_SPRITES,
+    CIRCLE_PUSH_INIT_LOAD_MONS,
+    CIRCLE_PUSH_INIT_PLACE_MONS,
+    CIRCLE_PUSH_INIT_DONE,
+};
+
 // NitroSDK math (not declared by a header yet).
 void MATH_QSort(void *head, u32 num, u32 width, int (*compare)(const void *, const void *), void *stackBuffer);
 
@@ -432,7 +441,7 @@ static inline u32 LoadMonInfo(PokeathlonCourseData *course, int mon, PokeathlonC
 BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0: {
+    case CIRCLE_PUSH_INIT_CREATE: {
         ObjCharTransferTemplate charTemplate;
         Heap_Create(HEAP_ID_POKEATHLON, HEAP_ID_140, 0x50000);
         Main_SetVBlankIntrCB(NULL, NULL);
@@ -464,7 +473,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 1: {
+    case CIRCLE_PUSH_INIT_CREATE_DISPLAY: {
         int participants;
         circlePush->display = PokeathlonCirclePushDisplay_New(circlePush->heapId, circlePush->bgConfig, course);
         participants = PokeathlonCourse_GetParticipantCount(course);
@@ -477,7 +486,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 2: {
+    case CIRCLE_PUSH_INIT_CREATE_SPRITES: {
         int i;
         PokeathlonCourseSpritePoolTemplate template = sPokeathlonCirclePushSpritePoolTemplate;
         circlePush->spritePool = PokeathlonCourseSpritePool_New(circlePush->heapId, &template);
@@ -525,7 +534,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 3: {
+    case CIRCLE_PUSH_INIT_LOAD_MONS: {
         PokeathlonCourseObjectInfo infos[12];
         PokeathlonCourseObjectsTemplate template;
         s32 i;
@@ -546,7 +555,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 4: {
+    case CIRCLE_PUSH_INIT_PLACE_MONS: {
         s32 i;
         int own;
 
@@ -657,7 +666,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     }
-    case 5:
+    case CIRCLE_PUSH_INIT_DONE:
         return TRUE;
     }
     return FALSE;
@@ -751,18 +760,18 @@ BOOL PokeathlonCirclePush_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonCirclePush *circlePush = PokeathlonCourse_GetWork(course);
 
     switch (*state) {
-    case 0:
+    case EVENT_PLAY_STATE_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
-    case 1:
+    case EVENT_PLAY_STATE_RUN:
         PokeathlonCirclePush_RunHost(course);
         if (PokeathlonCirclePush_Update(course)) {
             (*state)++;
         }
         break;
-    case 2:
+    case EVENT_PLAY_STATE_FINISH:
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, circlePush->heapId);
             PokeathlonCourse_SetNextState(course, CIRCLE_PUSH_STATE_END);

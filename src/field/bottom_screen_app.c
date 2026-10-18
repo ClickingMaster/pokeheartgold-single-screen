@@ -23,6 +23,12 @@ typedef void *(*BottomScreenAppInitFunc)(BgConfig *bgConfig, u16 *lastTouchMenuI
 typedef void (*BottomScreenAppExitFunc)(BgConfig *bgConfig, void *app);
 typedef BOOL (*BottomScreenAppIsExitDoneFunc)(BgConfig *bgConfig);
 
+enum PalPadTouchYesNoState {
+    PAL_PAD_YES_NO_STATE_OPEN_MENU,
+    PAL_PAD_YES_NO_STATE_SHOW_BUTTONS,
+    PAL_PAD_YES_NO_STATE_WAIT_ANSWER,
+};
+
 typedef struct BottomScreenAppTemplate {
     BottomScreenAppInitFunc init;
     BottomScreenAppExitFunc exit;
@@ -416,18 +422,18 @@ BOOL PalPadRegistration_IsTouchYesNoDone(PalPadRegistration *registration) {
 // Returns FALSE once the player answered (registration->yesNoAnswer).
 BOOL PalPadRegistration_RunTouchYesNo(PalPadRegistration *registration) {
     switch (registration->yesNoState) {
-    case 0:
+    case PAL_PAD_YES_NO_STATE_OPEN_MENU:
         FieldSystem_SwitchBottomScreenApp(registration->fieldSystem, BOTTOM_SCREEN_APP_CHOICE_MENU, NULL);
         registration->yesNoState++;
         break;
-    case 1:
+    case PAL_PAD_YES_NO_STATE_SHOW_BUTTONS:
         if (PalPadRegistration_TryShowTouchYesNo(registration) == TRUE) {
             registration->yesNoState++;
         }
         break;
-    case 2:
+    case PAL_PAD_YES_NO_STATE_WAIT_ANSWER:
         if (PalPadRegistration_IsTouchYesNoDone(registration) == TRUE) {
-            registration->yesNoState = 0;
+            registration->yesNoState = PAL_PAD_YES_NO_STATE_OPEN_MENU;
             return FALSE;
         }
         break;

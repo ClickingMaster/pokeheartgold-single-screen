@@ -695,18 +695,18 @@ static void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, Pokeath
 BOOL PokeathlonSnowThrow_Play(PokeathlonCourseData *course, u8 *state) {
     PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     switch (*state) {
-    case 0:
+    case EVENT_PLAY_STATE_COUNTDOWN:
         if (PokeathlonCourse_RunStartCountdown(course)) {
             (*state)++;
         }
         break;
-    case 1:
+    case EVENT_PLAY_STATE_RUN:
         PokeathlonSnowThrow_UpdateHost(course);
         if (PokeathlonSnowThrow_Update(course)) {
             (*state)++;
         }
         break;
-    case 2:
+    case EVENT_PLAY_STATE_FINISH:
         PokeathlonSnowThrow_UpdateHost(course);
         if (PokeathlonCourse_RunFinish(course)) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);

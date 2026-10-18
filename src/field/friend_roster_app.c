@@ -48,6 +48,12 @@ enum FriendRosterAppState {
     FRIEND_ROSTER_APP_STATE_DONE,
 };
 
+enum FriendRosterAppBlinkPhase {
+    FRIEND_ROSTER_APP_BLINK_START,
+    FRIEND_ROSTER_APP_BLINK_FIRST,
+    FRIEND_ROSTER_APP_BLINK_SECOND,
+};
+
 // Blink of a touched sprite (isBg = 0, target = sprite index) or of a name rect on a sub BG.
 typedef struct FriendRosterAppBlink {
     u8 isBg : 1;
@@ -664,11 +670,11 @@ static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
     FriendRosterAppBlink *blink = &data->blink;
 
     switch (blink->phase) {
-    case 0:
+    case FRIEND_ROSTER_APP_BLINK_START:
         FriendRosterApp_SetBlinkPalette(data, blink->seqA);
         blink->phase++;
         break;
-    case 1:
+    case FRIEND_ROSTER_APP_BLINK_FIRST:
         blink->timer++;
         if (blink->timer == 4) {
             FriendRosterApp_SetBlinkPalette(data, blink->seqB);
@@ -676,7 +682,7 @@ static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
             blink->phase++;
         }
         break;
-    case 2:
+    case FRIEND_ROSTER_APP_BLINK_SECOND:
         blink->timer++;
         if (blink->timer == 2) {
             return FALSE;
@@ -689,7 +695,7 @@ static BOOL FriendRosterApp_StepBlink(FriendRosterAppData *data) {
 static int FriendRosterApp_StartSpriteBlink(FriendRosterAppData *data, u8 target, u8 seqA, u8 seqB, u8 nextState) {
     data->blink.isBg = FALSE;
     data->blink.timer = 0;
-    data->blink.phase = 0;
+    data->blink.phase = FRIEND_ROSTER_APP_BLINK_START;
     data->blink.target = target;
     data->blink.seqA = seqA;
     data->blink.seqB = seqB;
@@ -703,7 +709,7 @@ static int FriendRosterApp_StartNameBlink(FriendRosterAppData *data, u8 x, u8 y,
     flags |= 1; // isBg = TRUE
     *(u8 *)&data->blink = flags;
     data->blink.timer = 0;
-    data->blink.phase = 0;
+    data->blink.phase = FRIEND_ROSTER_APP_BLINK_START;
     data->blink.target = GF_BG_LYR_SUB_1;
     data->blink.seqA = 1;
     data->blink.seqB = 0;

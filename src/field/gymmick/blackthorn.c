@@ -41,6 +41,13 @@ typedef enum BlackthornPlatformRotationBonkState {
     ROTATE_BONK_OK,
 } BlackthornPlatformRotationBonkState;
 
+enum BlackthornPlatformMoveDirection {
+    PLATFORM_MOVE_EAST,
+    PLATFORM_MOVE_SOUTH,
+    PLATFORM_MOVE_WEST,
+    PLATFORM_MOVE_NORTH,
+};
+
 typedef struct BlackthornGymXZPoint {
     int x;
     int z;
@@ -497,16 +504,16 @@ static void BlackthornGymmick_GetLeadingWall(const BlackthornGymmickPlatformData
 
 static void BlackthornGymmick_MoveLeadingWall(const int dim, BlackthornGymMovePlatformTaskData *taskData) {
     switch (taskData->moveDirection) {
-    case 0:
+    case PLATFORM_MOVE_EAST:
         BlackthornGymmick_ApplyXTranslation(1, dim, taskData->leadingWall);
         break;
-    case 1:
+    case PLATFORM_MOVE_SOUTH:
         BlackthornGymmick_ApplyZTranslation(1, dim, taskData->leadingWall);
         break;
-    case 2:
+    case PLATFORM_MOVE_WEST:
         BlackthornGymmick_ApplyXTranslation(-1, dim, taskData->leadingWall);
         break;
-    case 3:
+    case PLATFORM_MOVE_NORTH:
         BlackthornGymmick_ApplyZTranslation(-1, dim, taskData->leadingWall);
         break;
     }
@@ -528,16 +535,16 @@ static void BlackthornGymmick_DirectionToVec(int directionId, VecFx32 *direction
     directionVec->z = 0;
 
     switch (directionId) {
-    case 0:
+    case PLATFORM_MOVE_EAST:
         directionVec->x = 8 * FX32_ONE;
         break;
-    case 1:
+    case PLATFORM_MOVE_SOUTH:
         directionVec->z = 8 * FX32_ONE;
         break;
-    case 2:
+    case PLATFORM_MOVE_WEST:
         directionVec->x = -8 * FX32_ONE;
         break;
-    case 3:
+    case PLATFORM_MOVE_NORTH:
         directionVec->z = -8 * FX32_ONE;
         break;
     }

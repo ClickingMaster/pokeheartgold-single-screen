@@ -53,6 +53,31 @@ typedef struct FieldMoveAnim {
     void *cutIn;   // 0x0C
 } FieldMoveAnim;   // size: 0x10
 
+enum PushBoulderState {
+    PUSH_BOULDER_STATE_START,
+    PUSH_BOULDER_STATE_WAIT,
+    PUSH_BOULDER_STATE_END,
+};
+
+enum SurfState {
+    SURF_STATE_START_BGM,
+    SURF_STATE_WAIT,
+    SURF_STATE_START_ANIM,
+    SURF_STATE_PLAY_CRY,
+    SURF_STATE_WAIT_CRY,
+    SURF_STATE_WAIT_CUT_IN,
+    SURF_STATE_CREATE_MOUNT,
+    SURF_STATE_WAIT_MOUNT,
+    SURF_STATE_JUMP_ON,
+    SURF_STATE_WAIT_JUMP,
+};
+
+enum StopSurfingState {
+    STOP_SURFING_STATE_JUMP_OFF,
+    STOP_SURFING_STATE_WAIT_JUMP,
+    STOP_SURFING_STATE_WAIT_RADIO,
+};
+
 typedef struct PushBoulderWork {
     u32 state;                  // 0x00
     u32 direction;              // 0x04
@@ -476,7 +501,7 @@ static BOOL Task_PushBoulder(TaskManager *taskManager) {
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->playerAvatar);
     LocalMapObject *boulder = work->boulder;
     switch (work->state) {
-    case 0:
+    case PUSH_BOULDER_STATE_START:
         if (!MapObject_AreBitsSetForMovementScriptInit(boulder)) {
             break;
         }
@@ -488,7 +513,7 @@ static BOOL Task_PushBoulder(TaskManager *taskManager) {
         PlaySE(SEQ_SE_DP_UG_023);
         work->state++;
         break;
-    case 1:
+    case PUSH_BOULDER_STATE_WAIT:
         if (!MapObject_IsMovementPaused(boulder)) {
             break;
         }
@@ -499,7 +524,7 @@ static BOOL Task_PushBoulder(TaskManager *taskManager) {
         MapObject_ClearHeldMovementIfActive(player);
         work->state++;
         // fallthrough
-    case 2: {
+    case PUSH_BOULDER_STATE_END: {
         FieldSystem *fieldSystem = work->fieldSystem;
         FieldMoveTask_FreeWork(work);
         if (fieldSystem->location->mapId == MAP_ICE_PATH_B1F) {
@@ -578,7 +603,7 @@ BOOL Field_PlayerCanSurfOnTile(PlayerAvatar *playerAvatar, int currentTile, int 
 static BOOL Task_Surf(TaskManager *taskManager) {
     SurfWork *work = TaskManager_GetEnvironment(taskManager);
     switch (work->state) {
-    case 0:
+    case SURF_STATE_START_BGM:
         if (!CheckFlag99A(Save_VarsFlags_Get(work->fieldSystem->saveData)) && !SndRadio_GetSeqNo()) {
             FieldBGM_SetOverride(work->fieldSystem, 0);
             FieldBGM_TryFadeOut(work->fieldSystem, SEQ_GS_NAMINORI, 1);
@@ -586,16 +611,16 @@ static BOOL Task_Surf(TaskManager *taskManager) {
         work->state++;
         work->state++;
         break;
-    case 1:
+    case SURF_STATE_WAIT:
         if (++work->timer > 10) {
             work->timer = 0;
             work->state++;
         }
         break;
-    case 2:
+    case SURF_STATE_START_ANIM:
         if (work->anim.useCutIn == TRUE) {
             FieldMoveAnim_Start(work->fieldSystem, &work->anim);
-            work->state = 5;
+            work->state = SURF_STATE_WAIT_CUT_IN;
         } else {
             u8 count;
             if (FieldSystem_FirstAliveMonHasType(work->fieldSystem, TYPE_WATER)) {
@@ -605,29 +630,29 @@ static BOOL Task_Surf(TaskManager *taskManager) {
                 count = 1;
             }
             FollowMon_JumpOnSpot(work->fieldSystem, count);
-            work->state = 3;
+            work->state = SURF_STATE_PLAY_CRY;
         }
         break;
-    case 3: {
+    case SURF_STATE_PLAY_CRY: {
         int species = GetMonData(work->anim.mon, MON_DATA_SPECIES, NULL);
         int form = GetMonData(work->anim.mon, MON_DATA_FORM, NULL);
         PlayCry((u16)species, (u8)form);
-        work->state = 4;
+        work->state = SURF_STATE_WAIT_CRY;
         break;
     }
-    case 4:
+    case SURF_STATE_WAIT_CRY:
         if (!IsCryFinished()) {
             FollowMon_StartHideForFieldMove(taskManager);
-            work->state = 6;
+            work->state = SURF_STATE_CREATE_MOUNT;
         }
         break;
-    case 5:
+    case SURF_STATE_WAIT_CUT_IN:
         if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
             FollowMon_StartRecall(work->fieldSystem);
-            work->state = 6;
+            work->state = SURF_STATE_CREATE_MOUNT;
         }
         break;
-    case 6: {
+    case SURF_STATE_CREATE_MOUNT: {
         int x = PlayerAvatar_GetXCoord(work->playerAvatar);
         int dx = GetDeltaXByFacingDirection(work->direction);
         int z = PlayerAvatar_GetZCoord(work->playerAvatar);
@@ -638,20 +663,20 @@ static BOOL Task_Surf(TaskManager *taskManager) {
         work->state++;
         break;
     }
-    case 7:
+    case SURF_STATE_WAIT_MOUNT:
         if (++work->timer > 10) {
             Field_PlayerAvatar_SetSprite(work->playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WALKING, PlayerAvatar_GetGender(work->playerAvatar)));
             work->timer = 0;
             work->state++;
         }
         break;
-    case 8:
+    case SURF_STATE_JUMP_ON:
         if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
             MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, 52));
             work->state++;
         }
         break;
-    case 9:
+    case SURF_STATE_WAIT_JUMP:
         if (MapObject_IsMovementPaused(work->mapObject)) {
             MapObject_ClearHeldMovementIfActive(work->mapObject);
             SurfMountEffect_SetBobbing(work->surfMount, TRUE);
@@ -705,7 +730,7 @@ static BOOL Task_StopSurfing(TaskManager *taskManager) {
     StopSurfingWork *work = TaskManager_GetEnvironment(taskManager);
 
     switch (work->state) {
-    case 0:
+    case STOP_SURFING_STATE_JUMP_OFF:
         if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
             Field_PlayerAvatar_SetSprite(work->playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(PLAYER_STATE_WALKING, PlayerAvatar_GetGender(work->playerAvatar)));
             MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, 0x34));
@@ -713,7 +738,7 @@ static BOOL Task_StopSurfing(TaskManager *taskManager) {
             work->state++;
         }
         break;
-    case 1:
+    case STOP_SURFING_STATE_WAIT_JUMP:
         if (MapObject_IsMovementPaused(work->mapObject)) {
             MapObject_ClearHeldMovementIfActive(work->mapObject);
             FieldEffectManager_DestroyEffect(work->surfMount);
@@ -738,7 +763,7 @@ static BOOL Task_StopSurfing(TaskManager *taskManager) {
             }
         }
         break;
-    case 2:
+    case STOP_SURFING_STATE_WAIT_RADIO:
         if (SndRadio_GetSeqNo() == 0) {
             FieldSystem_ProcessSoundplate(work->fieldSystem, TRUE);
             FieldMoveTask_FreeWork(work);

@@ -33,6 +33,36 @@ enum {
     EVENT_INTRO_STEP_FADE_OUT,
 };
 
+enum PokeathlonEventIntroInitState {
+    EVENT_INTRO_INIT_CREATE,
+    EVENT_INTRO_INIT_GRAPHICS,
+};
+
+enum PokeathlonEventIntroAppearState {
+    EVENT_INTRO_APPEAR_PLAY_BGM,
+    EVENT_INTRO_APPEAR_FADE_IN_SUB,
+    EVENT_INTRO_APPEAR_START_ZOOM,
+    EVENT_INTRO_APPEAR_ZOOM,
+    EVENT_INTRO_APPEAR_WAIT_FADE,
+    EVENT_INTRO_APPEAR_LINK_WAIT,
+};
+
+enum PokeathlonEventIntroDetailsState {
+    EVENT_INTRO_DETAILS_INPUT,
+    EVENT_INTRO_DETAILS_WAIT_FADE,
+};
+
+enum PokeathlonEventIntroPageState {
+    EVENT_INTRO_PAGE_STATE_FADE_IN,
+    EVENT_INTRO_PAGE_STATE_INPUT,
+    EVENT_INTRO_PAGE_STATE_WAIT_FADE,
+};
+
+enum PokeathlonEventIntroFadeOutState {
+    EVENT_INTRO_FADE_OUT_START,
+    EVENT_INTRO_FADE_OUT_WAIT,
+};
+
 FS_EXTERN_OVERLAY(OVY_98);
 
 // Not declared by a header yet.
@@ -417,11 +447,11 @@ static const EventIntroBgTemplates sPokeathlonEventIntroBgTemplates = {
 BOOL PokeathlonEventIntro_Init(PokeathlonCourseData *course) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
-    case 0:
+    case EVENT_INTRO_INIT_CREATE:
         PokeathlonEventIntro_Create(course);
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
-    case 1:
+    case EVENT_INTRO_INIT_GRAPHICS:
         PokeathlonEventIntro_InitSprites(intro);
         PokeathlonEventIntro_InitBgs(intro->bgConfig, intro->heapId);
         intro->banner = PokeathlonEventBanner_New(intro->event, intro->heapId);
@@ -530,7 +560,7 @@ static void PokeathlonEventIntro_Create(PokeathlonCourseData *course) {
     intro->bgConfig = BgConfig_Alloc(heapId);
     intro->event = PokeathlonEventIntro_GetEvent(course);
     intro->round = PokeathlonCourse_GetRound(course);
-    intro->linkMode = PokeathlonCourse_GetMode(course) == 1 ? TRUE : FALSE;
+    intro->linkMode = PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_LINK ? TRUE : FALSE;
     intro->course = course;
     intro->heapId = HEAP_ID_136;
     Main_SetVBlankIntrCB((GFIntrCB)PokeathlonEventIntro_VBlankCallback, intro);
@@ -892,23 +922,23 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(data);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*step) {
-    case 0:
+    case EVENT_INTRO_APPEAR_PLAY_BGM:
         PlayBGM(SEQ_GS_PT_TITLE);
         (*step)++;
         break;
-    case 1:
+    case EVENT_INTRO_APPEAR_FADE_IN_SUB:
         if (PokeathlonEventIntro_IsBgmAt(0, 0)) {
             BeginNormalPaletteFade(FADE_SUB_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0x7FFF, 1, 1, intro->heapId);
             (*step)++;
         }
         break;
-    case 2:
+    case EVENT_INTRO_APPEAR_START_ZOOM:
         if (PokeathlonEventIntro_IsBgmAt(0, 1)) {
             PokeathlonEventIntro_StartZoom(intro);
             (*step)++;
         }
         break;
-    case 3:
+    case EVENT_INTRO_APPEAR_ZOOM:
         if (intro->zooming != FALSE) {
             PokeathlonEventIntro_UpdateZoom(intro);
         } else if (PokeathlonEventIntro_IsBgmAt(0, 3)) {
@@ -918,7 +948,7 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
             (*step)++;
         }
         break;
-    case 4:
+    case EVENT_INTRO_APPEAR_WAIT_FADE:
         if (IsPaletteFadeFinished()) {
             if (intro->linkMode != FALSE) {
                 intro->timer = 0;
@@ -928,7 +958,7 @@ BOOL PokeathlonEventIntro_Appear(PokeathlonCourseData *course, u8 *state) {
             }
         }
         break;
-    case 5:
+    case EVENT_INTRO_APPEAR_LINK_WAIT:
         intro->timer++;
         if (intro->timer >= 180) {
             PokeathlonCourse_SetNextState(data, EVENT_INTRO_STEP_FADE_OUT);
@@ -945,7 +975,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
-    case 0:
+    case EVENT_INTRO_DETAILS_INPUT:
         if (IsPaletteFadeFinished()) {
             int button = TouchscreenHitbox_FindRectAtTouchNew(sPokeathlonEventIntroDetailsHitboxes);
             if (button != -1) {
@@ -965,7 +995,7 @@ BOOL PokeathlonEventIntro_DetailsPage(PokeathlonCourseData *course, u8 *state) {
             }
         }
         break;
-    case 1:
+    case EVENT_INTRO_DETAILS_WAIT_FADE:
         if (PokeathlonEventIntro_IsFadeFinished(course)) {
             PokeathlonEventIntro_ShowPage(course);
         }
@@ -981,11 +1011,11 @@ BOOL PokeathlonEventIntro_RulesPage(PokeathlonCourseData *course, u8 *state) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
-    case 0:
+    case EVENT_INTRO_PAGE_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0x7FFF, 4, 1, intro->heapId);
         (*state)++;
         // fallthrough
-    case 1:
+    case EVENT_INTRO_PAGE_STATE_INPUT:
         if (IsPaletteFadeFinished()) {
             int button = TouchscreenHitbox_FindRectAtTouchNew(sPokeathlonEventIntroRulesHitboxes);
             if (button == 0) {
@@ -999,7 +1029,7 @@ BOOL PokeathlonEventIntro_RulesPage(PokeathlonCourseData *course, u8 *state) {
             }
         }
         break;
-    case 2:
+    case EVENT_INTRO_PAGE_STATE_WAIT_FADE:
         if (PokeathlonEventIntro_IsFadeFinished(course)) {
             PokeathlonEventIntro_ShowPage(course);
         }
@@ -1015,11 +1045,11 @@ BOOL PokeathlonEventIntro_ControlsPage(PokeathlonCourseData *course, u8 *state) 
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
-    case 0:
+    case EVENT_INTRO_PAGE_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0x7FFF, 4, 1, intro->heapId);
         (*state)++;
         // fallthrough
-    case 1:
+    case EVENT_INTRO_PAGE_STATE_INPUT:
         if (IsPaletteFadeFinished()) {
             int button = TouchscreenHitbox_FindRectAtTouchNew(sPokeathlonEventIntroControlsHitboxes);
             if (button == 0) {
@@ -1033,7 +1063,7 @@ BOOL PokeathlonEventIntro_ControlsPage(PokeathlonCourseData *course, u8 *state) 
             }
         }
         break;
-    case 2:
+    case EVENT_INTRO_PAGE_STATE_WAIT_FADE:
         if (PokeathlonEventIntro_IsFadeFinished(course)) {
             PokeathlonEventIntro_ShowPage(course);
         }
@@ -1049,7 +1079,7 @@ BOOL PokeathlonEventIntro_FadeOut(PokeathlonCourseData *course, u8 *state) {
     PokeathlonEventIntro *intro = PokeathlonCourse_GetWork(course);
     PokeathlonEventIntro_UpdateMascot(intro);
     switch (*state) {
-    case 0:
+    case EVENT_INTRO_FADE_OUT_START:
         if (PokeathlonCourse_GetRound(course) == 0) {
             PlaySE(SEQ_SE_GS_GAMENFADEOPED);
         } else {
@@ -1059,7 +1089,7 @@ BOOL PokeathlonEventIntro_FadeOut(PokeathlonCourseData *course, u8 *state) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0x7FFF, 24, 1, intro->heapId);
         (*state)++;
         break;
-    case 1:
+    case EVENT_INTRO_FADE_OUT_WAIT:
         if (IsPaletteFadeFinished()) {
             return TRUE;
         }

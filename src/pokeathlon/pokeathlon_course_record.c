@@ -640,28 +640,28 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *man, int *state) {
         work->selection.scrolling = TRUE;
     }
     switch (*state) {
-    case 0:
+    case RECORD_SCREEN_STATE_FADE_IN:
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, work->heapId);
-        *state = 1;
+        *state = RECORD_SCREEN_STATE_WAIT_FADE_IN;
         break;
-    case 1:
+    case RECORD_SCREEN_STATE_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
-            *state = 2;
+            *state = RECORD_SCREEN_STATE_INPUT;
         }
         break;
-    case 2:
+    case RECORD_SCREEN_STATE_INPUT:
         if (PokeathlonCourseRecord_HandleInput(work) && work->selection.scrolling == FALSE) {
             PlaySE(SEQ_SE_DP_SELECT);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, work->heapId);
-            *state = 3;
+            *state = RECORD_SCREEN_STATE_WAIT_FADE_OUT;
         }
         break;
-    case 3:
+    case RECORD_SCREEN_STATE_WAIT_FADE_OUT:
         if (IsPaletteFadeFinished()) {
-            *state = 4;
+            *state = RECORD_SCREEN_STATE_EXIT;
         }
         break;
-    case 4:
+    case RECORD_SCREEN_STATE_EXIT:
         PokeathlonUtil_FreeTextContext(work->textContext, 17);
         PokeathlonCourseRecord_FreeBgs(work);
         PokeathlonUtil_FreeSpriteContext(work->spriteContext, work->sprites, 26);

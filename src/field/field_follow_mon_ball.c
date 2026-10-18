@@ -17,17 +17,29 @@
 #include "vram_transfer_manager.h"
 
 // The following Pokemon's Poke Ball: a ball model and a burst model with one animation, both kept loaded.
-// FollowMonBall_Spawn kinds:
-//   0: the ball bursts open and the Pokemon appears (it is made visible when the burst starts);
-//   1: the Pokemon's billboard turns white and shrinks into the ball (a large Pokemon is also pulled towards
-//      the tile it faces), the ball stays shown;
-//   2: the burst alone;
-//   3: as 1 without the white palette; the Pokemon is hidden once it has shrunk.
+// When it is recalled, a large Pokemon is also pulled towards the tile it faces.
 
 #define FOLLOW_MON_BALL_SHRINK_FRAMES 4
 
 void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
+
+enum FollowMonBallReleaseState {
+    BALL_RELEASE_STATE_WAIT,
+    BALL_RELEASE_STATE_OPEN,
+    BALL_RELEASE_STATE_BURST,
+};
+
+enum FollowMonBallBurstState {
+    BALL_BURST_STATE_START,
+    BALL_BURST_STATE_BURST,
+};
+
+enum FollowMonBallRecallState {
+    BALL_RECALL_STATE_START,
+    BALL_RECALL_STATE_SHRINK,
+    BALL_RECALL_STATE_SHOW_BALL,
+};
 
 typedef struct FollowMonBall {
     FieldEffectManager *manager;
@@ -173,13 +185,13 @@ FieldEffect *FollowMonBall_Spawn(LocalMapObject *mapObject, int kind) {
     args.mapObject = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
     priority = MapObject_GetPriorityPlusValue(mapObject, 2);
-    if (kind == 0) {
+    if (kind == FOLLOW_MON_BALL_RELEASE) {
         return FieldEffectManager_CreateEffect(manager, &sFollowMonBallReleaseTemplate, &position, 1, &args, priority);
     }
-    if (kind == 1) {
+    if (kind == FOLLOW_MON_BALL_RECALL_WHITE) {
         return FieldEffectManager_CreateEffect(manager, &sFollowMonBallRecallWhiteTemplate, &position, 1, &args, priority);
     }
-    if (kind == 2) {
+    if (kind == FOLLOW_MON_BALL_BURST) {
         return FieldEffectManager_CreateEffect(manager, &sFollowMonBallBurstTemplate, &position, 1, &args, priority);
     }
     return FieldEffectManager_CreateEffect(manager, &sFollowMonBallRecallTemplate, &position, 1, &args, priority);
@@ -223,19 +235,19 @@ static void FollowMonBallEffect_UpdateRelease(FieldEffect *effect, FollowMonBall
         }
     }
     switch (work->state) {
-    case 0:
+    case BALL_RELEASE_STATE_WAIT:
         if (++work->timer >= 2) {
-            work->state = 1;
+            work->state = BALL_RELEASE_STATE_OPEN;
         }
         break;
-    case 1:
+    case BALL_RELEASE_STATE_OPEN:
         Field3dObject_SetActiveFlag(&work->args.ball->ball, FALSE);
         Field3dObject_SetActiveFlag(&work->args.ball->burst, TRUE);
         FollowMon_HideUntilStep(mapObject, FALSE);
         MapObject_CallDrawUpdate(mapObject);
         Field3dModelAnimation_FrameSet(&work->args.ball->burstAnimation, 0);
-        work->state = 2;
-    case 2:
+        work->state = BALL_RELEASE_STATE_BURST;
+    case BALL_RELEASE_STATE_BURST:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(&work->args.ball->burstAnimation, FX32_ONE)) {
             FieldEffectManager_DestroyEffect((int)effect);
         }
@@ -271,12 +283,12 @@ static void FollowMonBallEffect_UpdateBurst(FieldEffect *effect, FollowMonBallEf
         }
     }
     switch (work->state) {
-    case 0:
+    case BALL_BURST_STATE_START:
         Field3dObject_SetActiveFlag(&work->args.ball->ball, FALSE);
         Field3dObject_SetActiveFlag(&work->args.ball->burst, TRUE);
         Field3dModelAnimation_FrameSet(&work->args.ball->burstAnimation, 0);
-        work->state = 1;
-    case 1:
+        work->state = BALL_BURST_STATE_BURST;
+    case BALL_BURST_STATE_BURST:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(&work->args.ball->burstAnimation, FX32_ONE)) {
             FieldEffectManager_DestroyEffect((int)effect);
         }
@@ -297,7 +309,7 @@ static void FollowMonBallEffect_DrawBurst(FieldEffect *effect, FollowMonBallEffe
 static BOOL FollowMonBallEffect_InitRecallWhite(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
     FollowMonBallEffectArgs *args = (FollowMonBallEffectArgs *)FieldEffect_GetUserData(effect);
-    work->state = 0;
+    work->state = BALL_RECALL_STATE_START;
     work->args = *args;
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -335,7 +347,7 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMon
         }
     }
     switch (work->state) {
-    case 0:
+    case BALL_RECALL_STATE_START:
         mapObject = FollowMon_GetMapObject(work->args.fieldSystem);
         billboard = MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager);
         plttKey = BillboardObject_GetPlttKey(billboard);
@@ -351,7 +363,7 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMon
             work->coordinate = NULL;
         }
         ++work->state;
-    case 1:
+    case BALL_RECALL_STATE_SHRINK:
         scale = sFollowMonBallRecallWhiteScale;
         ++work->timer;
         scale.x = FX32_ONE / work->timer;
@@ -374,7 +386,7 @@ static void FollowMonBallEffect_UpdateRecallWhite(FieldEffect *effect, FollowMon
             return;
         }
         break;
-    case 2:
+    case BALL_RECALL_STATE_SHOW_BALL:
         if (++work->timer >= FOLLOW_MON_BALL_SHRINK_FRAMES) {
             FieldEffectManager_DestroyEffect((int)effect);
         }
@@ -395,7 +407,7 @@ static void FollowMonBallEffect_DrawBall(FieldEffect *effect, FollowMonBallEffec
 static BOOL FollowMonBallEffect_InitRecall(FieldEffect *effect, FollowMonBallEffect *work) {
     VecFx32 position;
     FollowMonBallEffectArgs *args = (FollowMonBallEffectArgs *)FieldEffect_GetUserData(effect);
-    work->state = 0;
+    work->state = BALL_RECALL_STATE_START;
     work->args = *args;
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -414,7 +426,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallE
         return;
     }
     switch (work->state) {
-    case 0: {
+    case BALL_RECALL_STATE_START: {
         LocalMapObject *followMon = FollowMon_GetMapObject(work->args.fieldSystem);
         u8 direction;
         MapObjectManager_GetFollowMonBillboard(work->args.fieldSystem->mapObjectManager);
@@ -429,7 +441,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallE
         }
         work->state++;
     }
-    case 1: {
+    case BALL_RECALL_STATE_SHRINK: {
         VecFx32 scale = sFollowMonBallRecallScale;
         work->timer++;
         scale.x = FX32_ONE / work->timer;
@@ -448,7 +460,7 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallE
             work->timer = 0;
         }
     } break;
-    case 2:
+    case BALL_RECALL_STATE_SHOW_BALL:
         work->timer++;
         if (work->timer >= 16) {
             FieldEffectManager_DestroyEffect((int)effect);
@@ -461,12 +473,12 @@ static void FollowMonBallEffect_UpdateRecall(FieldEffect *effect, FollowMonBallE
 // when facing west or east.
 static void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx32 **coordinate) {
     switch (direction) {
-    case 0:
-    case 1:
+    case DIR_NORTH:
+    case DIR_SOUTH:
         *coordinate = &position->z;
         break;
-    case 2:
-    case 3:
+    case DIR_WEST:
+    case DIR_EAST:
         *coordinate = &position->x;
         break;
     }
@@ -474,13 +486,13 @@ static void FollowMonBall_GetPullCoordinate(u32 direction, VecFx32 *position, fx
 
 static int FollowMonBall_GetPullStep(u32 direction) {
     switch (direction) {
-    case 0:
+    case DIR_NORTH:
         return -1;
-    case 1:
+    case DIR_SOUTH:
         return 1;
-    case 2:
+    case DIR_WEST:
         return -10;
-    case 3:
+    case DIR_EAST:
         return 10;
     default:
         GF_AssertFail();

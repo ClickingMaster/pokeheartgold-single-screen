@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "constants/scrcmd.h"
+#include "constants/sprites.h"
 
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
@@ -18,6 +19,13 @@
 #include "party.h"
 #include "pokemon.h"
 #include "script_pokemon_util.h"
+
+// PlayerBillboardMotion_FishingBite: the rod bobs while a Pokemon bites
+enum FishingBiteBillboardPhase {
+    FISHING_BITE_PHASE_DIP,
+    FISHING_BITE_PHASE_RISE,
+    FISHING_BITE_PHASE_PAUSE,
+};
 
 // Billboard sequence callback: called with the map object, its billboard, the object's draw work and the facing
 // direction.
@@ -311,37 +319,37 @@ Sprite *MapObject_GetBillboard(LocalMapObject *object) {
     int spriteId = MapObject_GetSpriteID(object);
 
     switch (spriteId) {
-    case 0:
-    case 0x15:
-    case 0x61:
-    case 0x62:
-    case 0xB0:
-    case 0xB1:
-    case 0xB2:
-    case 0xB3:
-    case 0xB4:
-    case 0xB5:
-    case 0xBC:
-    case 0xBD:
-    case 0xC4:
-    case 0xC5:
-    case 0xC6:
-    case 0xC7:
-    case 0xC8:
-    case 0xC9:
-    case 0xF8:
-    case 0xF9:
-    case 0x102:
-    case 0x103:
-    case 0x104:
-    case 0x105:
+    case SPRITE_HERO:
+    case SPRITE_CYCLEHERO:
+    case SPRITE_HEROINE:
+    case SPRITE_CYCLEHEROINE:
+    case SPRITE_SPHERO:
+    case SPRITE_SPHEROINE:
+    case SPRITE_SWIMHERO:
+    case SPRITE_SWIMHEROINE:
+    case SPRITE_WATERHERO:
+    case SPRITE_WATERHEROINE:
+    case SPRITE_FISHINGHERO:
+    case SPRITE_FISH_HEROINE:
+    case SPRITE_POKEHERO:
+    case SPRITE_POKEHEROINE:
+    case SPRITE_SAVEHERO:
+    case SPRITE_SAVEHEROINE:
+    case SPRITE_BANZAIHERO:
+    case SPRITE_BANZAIHEROINE:
+    case SPRITE_LADDERHERO:
+    case SPRITE_LADDERHEROINE:
+    case SPRITE_RHERO:
+    case SPRITE_RHEROINE:
+    case SPRITE_RBANZAIHERO:
+    case SPRITE_RBANZAIINE:
         return ((void **)MapObject_GetDrawData(object))[1];
     }
 
-    if (spriteId >= 0x1AC && spriteId <= 0x3E1) {
+    if (spriteId >= SPRITE_FOLLOWER_MON_BULBASAUR && spriteId <= SPRITE_FOLLOWER_MON_ARCEUS_DARK) {
         return ((void **)MapObject_GetDrawData(object))[0];
     }
-    if (spriteId >= 0x106 && spriteId <= 0x10D) {
+    if (spriteId >= SPRITE_BONGURI && spriteId <= SPRITE_BONGURI_BK) {
         return ApricornTreeObject_GetBillboard(object);
     }
     return ((void **)MapObject_GetDrawData(object))[1];
@@ -1104,28 +1112,28 @@ static void PlayerBillboardMotion_FishingBite(void *object, void *billboard, voi
     if (facing != work->facing || work->movement != 2) {
         BillboardObject_SetSequence(billboard, sPlayerFishingSequences[facing]);
         BillboardObject_SetSequenceFrame(billboard, 15 * FX32_ONE);
-        work->phase = 0;
+        work->phase = FISHING_BITE_PHASE_DIP;
     }
     frame = BillboardObject_GetSequenceFrame(billboard);
     switch (work->phase) {
-    case 0:
+    case FISHING_BITE_PHASE_DIP:
         frame -= FX32_ONE;
         if (frame <= 10 * FX32_ONE) {
             work->phase = (u8)(work->phase + 1);
         }
         break;
-    case 1:
+    case FISHING_BITE_PHASE_RISE:
         frame += FX32_ONE;
         if (frame >= 15 * FX32_ONE) {
             work->phase = (u8)(work->phase + 1);
             work->ticks = 0;
         }
         break;
-    case 2:
+    case FISHING_BITE_PHASE_PAUSE:
         work->ticks++;
         if (work->ticks >= 30) {
             work->ticks = 0;
-            work->phase = 0;
+            work->phase = FISHING_BITE_PHASE_DIP;
         }
         break;
     }
@@ -1141,21 +1149,21 @@ static void PlayerDraw_SetFishingOffset(LocalMapObject *object, void *billboard,
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
-    case 0:
+    case DIR_NORTH:
         break;
-    case 1:
+    case DIR_SOUTH:
         if (frame >= 24) {
             offset.z = 6 * FX32_ONE;
         }
         break;
-    case 2:
+    case DIR_WEST:
         if (frame < 40) {
             offset.x = FX32_ONE;
         } else {
             offset.x = -5 * FX32_ONE;
         }
         break;
-    case 3:
+    case DIR_EAST:
         if (frame < 56) {
             offset.x = -FX32_ONE;
         } else {
@@ -1201,21 +1209,21 @@ static void PlayerDraw_SetLadderOffset(LocalMapObject *object, void *billboard, 
     VecFx32 offset = { 0, 0, 0 };
     int frame = BillboardObject_GetFrame(billboard) / FX32_ONE;
     switch (facing) {
-    case 0:
+    case DIR_NORTH:
         break;
-    case 1:
+    case DIR_SOUTH:
         if (frame >= 24) {
             offset.z = 6 * FX32_ONE;
         }
         break;
-    case 2:
+    case DIR_WEST:
         if (frame < 40) {
             offset.x = FX32_ONE;
         } else {
             offset.x = -5 * FX32_ONE;
         }
         break;
-    case 3:
+    case DIR_EAST:
         if (frame < 56) {
             offset.x = -FX32_ONE;
         } else {

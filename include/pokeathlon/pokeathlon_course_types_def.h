@@ -34,7 +34,20 @@ struct PokeathlonCourseSpritePoolTemplate {
     u8 resCounts[4];   // 0x08: char, palette, cell, animation
 };
 
+// PokeathlonCourse_GetMode, PokeathlonCourseArgsLayout.mode
+enum PokeathlonCourseMode {
+    POKEATHLON_COURSE_MODE_SOLO,
+    POKEATHLON_COURSE_MODE_LINK,
+};
+
 // One step of a course scene; returns TRUE when the step is done.
 typedef BOOL (*PokeathlonCourseStepFunc)(struct PokeathlonCourseData *course, u8 *state);
+
+// Steps of an event's play state: the start countdown, the event itself, then the finish
+enum PokeathlonEventPlayState {
+    EVENT_PLAY_STATE_COUNTDOWN,
+    EVENT_PLAY_STATE_RUN,
+    EVENT_PLAY_STATE_FINISH,
+};
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_TYPES_DEF_H

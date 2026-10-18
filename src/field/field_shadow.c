@@ -17,6 +17,12 @@ void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
 void RenderObj_Draw(void *renderObj, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 
+enum FieldShadowState {
+    FIELD_SHADOW_STATE_INIT,
+    FIELD_SHADOW_STATE_WAIT,
+    FIELD_SHADOW_STATE_FADE,
+};
+
 // Renderer data of the field effect manager (renderer 0); 0x1C8 bytes.
 typedef struct FieldShadow {
     int state;
@@ -178,19 +184,19 @@ static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
 
     state = shadow->state;
     switch (state) {
-    case 0:
+    case FIELD_SHADOW_STATE_INIT:
         shadow->timeOfDay = timeOfDay;
         FieldShadow_SetTimeOfDayParams(shadow, timeOfDay);
         FieldShadow_SetAlpha(shadow, FieldShadow_FxToAlpha(shadow->alpha));
         shadow->state++;
         break;
-    case 1:
+    case FIELD_SHADOW_STATE_WAIT:
         if (shadow->timeOfDay == timeOfDay) {
             break;
         }
         shadow->state = state + 1;
         // fallthrough
-    case 2:
+    case FIELD_SHADOW_STATE_FADE:
         alpha = sShadowAlphaByTimeOfDay[timeOfDay];
         scale = sShadowScaleByTimeOfDay[timeOfDay];
         FieldShadow_StepTowards(&shadow->scale.x, scale.x, 0x10);
@@ -202,7 +208,7 @@ static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
         FieldShadow_SetAlpha(shadow, FieldShadow_FxToAlpha(shadow->alpha));
         if (scale.x == shadow->scale.x && y == shadow->scale.y && z == shadow->scale.z && alpha == shadow->alpha) {
             shadow->timeOfDay = timeOfDay;
-            shadow->state = 1;
+            shadow->state = FIELD_SHADOW_STATE_WAIT;
         }
         break;
     }
@@ -400,16 +406,16 @@ static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowE
 
 void FieldShadow_OffsetByFacing(u32 direction, VecFx32 *pos) {
     switch (direction) {
-    case 0:
+    case DIR_NORTH:
         pos->z += 0x2000;
         break;
-    case 1:
+    case DIR_SOUTH:
         pos->z -= 0x2000;
         break;
-    case 2:
+    case DIR_WEST:
         pos->x += 0x6000;
         break;
-    case 3:
+    case DIR_EAST:
         pos->x -= 0x6000;
         break;
     }
