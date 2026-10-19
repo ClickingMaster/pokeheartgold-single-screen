@@ -17,6 +17,33 @@
 #include "overlay_01.h"
 #include "player_avatar.h"
 
+static BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
+static void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMovementState *state);
+static void FollowPlayerMovement_UpdatePlayerCoords(LocalMapObject *object, FollowPlayerMovementState *state);
+static int FollowMon_GetMovement(LocalMapObject *object);
+static int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object);
+static BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state);
+static BOOL FollowPlayerMovement_StartStep(LocalMapObject *object);
+static BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object);
+static BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state);
+static BOOL FollowPartnerState_Moving(LocalMapObject *object, FollowPartnerMovementState *state);
+static BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMovementState *state);
+static void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovementState *state, LocalMapObject *partner);
+static BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartnerMovementState *state);
+static BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state);
+static void HiddenObjectMovement_Init(LocalMapObject *object, int coverType);
+static BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state);
+static BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state);
+static int GetMovementSpeed(u32 movement);
+static void FollowMon_SpawnGrassEffects(LocalMapObject *object);
+
 void FollowPlayerMovement_Init(LocalMapObject *object) {
     FollowPlayerMovementState *state = (FollowPlayerMovementState *)MapObject_InitMovementData(object, sizeof(FollowPlayerMovementState));
     FollowPlayerMovement_CheckPlayer(object, state);
@@ -135,7 +162,7 @@ static inline void FollowMon_SpawnStepEffects(LocalMapObject *object) {
     FollowMon_SpawnGrassEffects(object);
 }
 
-BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMovementState *state) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
@@ -171,7 +198,7 @@ BOOL FollowPlayerState_FollowMonStart(LocalMapObject *object, FollowPlayerMoveme
     return FALSE;
 }
 
-BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *state) {
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
     if (FollowPlayerMovement_HasPlayerMoved(object, state) == TRUE) {
@@ -188,7 +215,7 @@ BOOL FollowPlayerState_Start(LocalMapObject *object, FollowPlayerMovementState *
     return FALSE;
 }
 
-BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementState *state) {
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
     if (FollowPlayerMovement_HasPlayerMoved(object, state) == TRUE) {
@@ -202,7 +229,7 @@ BOOL FollowPlayerState_MirrorStart(LocalMapObject *object, FollowPlayerMovementS
     return FALSE;
 }
 
-BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState *state) {
     if (MapObject_RunForcedMovement(object) == TRUE) {
         MapObject_ClearSingleMovement(object);
         state->state = 0;
@@ -210,7 +237,7 @@ BOOL FollowPlayerState_Moving(LocalMapObject *object, FollowPlayerMovementState 
     return FALSE;
 }
 
-BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *state) {
     if (MapObject_RunForcedMovement(object) == TRUE) {
         state->hopCount++;
         if (state->hopCount >= 2) {
@@ -226,7 +253,7 @@ BOOL FollowPlayerState_Hop(LocalMapObject *object, FollowPlayerMovementState *st
     return FALSE;
 }
 
-BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *state) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     LocalMapObject *player = PlayerAvatar_GetMapObject(avatar);
     if (MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK4) == TRUE && MapObject_TestFlagsBits(player, MAPOBJECTFLAG_UNK5) == TRUE) {
@@ -238,7 +265,7 @@ BOOL FollowPlayerState_Wait(LocalMapObject *object, FollowPlayerMovementState *s
     return FALSE;
 }
 
-BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMovementState *state) {
     if (MapObjectManager_GetFirstActiveObjectWithMovement1(MapObject_GetManager(object)) == NULL) {
         state->playerKnown = FALSE;
         return FALSE;
@@ -249,7 +276,7 @@ BOOL FollowPlayerMovement_CheckPlayer(LocalMapObject *object, FollowPlayerMoveme
     return TRUE;
 }
 
-void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovementState *state) {
+static void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovementState *state) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     state->playerKnown = TRUE;
     state->playerX = PlayerAvatar_GetXCoord(avatar);
@@ -257,7 +284,7 @@ void FollowPlayerMovement_RecordPlayer(LocalMapObject *object, FollowPlayerMovem
     state->unk8 = 0xff;
 }
 
-BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMovementState *state) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     if (avatar != NULL) {
         int x = PlayerAvatar_GetXCoord(avatar);
@@ -269,14 +296,14 @@ BOOL FollowPlayerMovement_HasPlayerMoved(LocalMapObject *object, FollowPlayerMov
     return FALSE;
 }
 
-void FollowPlayerMovement_UpdatePlayerCoords(LocalMapObject *object, FollowPlayerMovementState *state) {
+static void FollowPlayerMovement_UpdatePlayerCoords(LocalMapObject *object, FollowPlayerMovementState *state) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     state->playerX = PlayerAvatar_GetXCoord(avatar);
     state->playerZ = PlayerAvatar_GetZCoord(avatar);
 }
 
 // Movements 0x58-0x5B are the run movements under another speed; the follower uses the plain run movements.
-int FollowMon_GetMovement(LocalMapObject *object) {
+static int FollowMon_GetMovement(LocalMapObject *object) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
     FieldSystem_GetPlayerAvatar(fieldSystem);
     switch (fieldSystem->followMon.queuedMovement) {
@@ -293,7 +320,7 @@ int FollowMon_GetMovement(LocalMapObject *object) {
     }
 }
 
-int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object) {
+static int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object) {
     int movement = MapObject_GetMovementCommand(PlayerAvatar_GetMapObject(FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object))));
     switch (movement) {
     case 0x58:
@@ -311,7 +338,7 @@ int FollowPlayerMovement_GetPlayerMovement(LocalMapObject *object) {
 
 // Steps the following Pokemon onto the player's previous tile, at the player's speed. A pending hop movement of the
 // Pokemon (FollowMon_GetPendingHop) is played instead, twice (FollowPlayerState_Hop).
-BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state) {
+static BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlayerMovementState *state) {
     u8 nextState;
     u32 x, z, previousX, previousZ, movement;
     int playerMovement, direction, fastMovement;
@@ -361,7 +388,7 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
     return FALSE;
 }
 
-BOOL FollowPlayerMovement_StartStep(LocalMapObject *object) {
+static BOOL FollowPlayerMovement_StartStep(LocalMapObject *object) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
@@ -381,7 +408,7 @@ BOOL FollowPlayerMovement_StartStep(LocalMapObject *object) {
     return FALSE;
 }
 
-BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object) {
+static BOOL FollowPlayerMovement_StartMirrorStep(LocalMapObject *object) {
     PlayerAvatar *avatar = FieldSystem_GetPlayerAvatar(MapObject_GetFieldSystem(object));
     MapObject_GetXCoord(object);
     MapObject_GetZCoord(object);
@@ -421,7 +448,7 @@ void FollowPartnerMovement_Resume(LocalMapObject *object) {
     ((FollowPartnerMovementState *)MapObject_GetMovementData(object))->partnerKnown = FALSE;
 }
 
-BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state) {
+static BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState *state) {
     MapObject_ClearSingleMovement(object);
     MapObject_ClearEndMovement(object);
     if (FollowPartnerMovement_HasPartnerMoved(object, state) == TRUE && FollowPartnerMovement_StartStep(object, state) == TRUE) {
@@ -432,7 +459,7 @@ BOOL FollowPartnerState_Start(LocalMapObject *object, FollowPartnerMovementState
     return FALSE;
 }
 
-BOOL FollowPartnerState_Moving(LocalMapObject *object, FollowPartnerMovementState *state) {
+static BOOL FollowPartnerState_Moving(LocalMapObject *object, FollowPartnerMovementState *state) {
     if (!MapObject_RunForcedMovement(object)) {
         return FALSE;
     }
@@ -470,7 +497,7 @@ LocalMapObject *MapObject_FindTrainerPartner(LocalMapObject *object) {
     return NULL;
 }
 
-BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMovementState *state) {
+static BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMovementState *state) {
     u32 mapId;
     u32 trainerNum;
     MapObjectManager *manager;
@@ -496,7 +523,7 @@ BOOL FollowPartnerMovement_FindPartner(LocalMapObject *object, FollowPartnerMove
     return FALSE;
 }
 
-void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovementState *state, LocalMapObject *partner) {
+static void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovementState *state, LocalMapObject *partner) {
     state->partnerKnown = TRUE;
     state->partnerX = MapObject_GetXCoord(partner);
     state->partnerZ = MapObject_GetZCoord(partner);
@@ -504,7 +531,7 @@ void FollowPartnerMovement_SetPartner(LocalMapObject *object, FollowPartnerMovem
     state->partner = partner;
 }
 
-BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartnerMovementState *state) {
+static BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartnerMovementState *state) {
     LocalMapObject *partner = state->partner;
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
@@ -516,7 +543,7 @@ BOOL FollowPartnerMovement_HasPartnerMoved(LocalMapObject *object, FollowPartner
     return FALSE;
 }
 
-BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state) {
+static BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMovementState *state) {
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
     int partnerX = MapObject_GetXCoord(state->partner);
@@ -537,7 +564,7 @@ BOOL FollowPartnerMovement_StartStep(LocalMapObject *object, FollowPartnerMoveme
     return FALSE;
 }
 
-void HiddenObjectMovement_Init(LocalMapObject *object, int coverType) {
+static void HiddenObjectMovement_Init(LocalMapObject *object, int coverType) {
     HiddenObjectMovementState *state = (HiddenObjectMovementState *)MapObject_InitMovementData(object, sizeof(HiddenObjectMovementState));
     state->coverType = coverType;
     MapObject_SetAnimation(object, 0);
@@ -589,7 +616,7 @@ void HiddenObjectMovement_Resume(LocalMapObject *object) {
     }
 }
 
-BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state) {
+static BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (state->revealed == FALSE) {
         HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
     }
@@ -599,7 +626,7 @@ BOOL HiddenObjectState_CreateCover(LocalMapObject *object, HiddenObjectMovementS
     return FALSE;
 }
 
-BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state) {
+static BOOL HiddenObjectState_Wait(LocalMapObject *object, HiddenObjectMovementState *state) {
     if (state->revealed == FALSE) {
         if (HiddenObjectMovement_GetCoverEffect(object) == 0 && MapObject_IsDrawInitialized(object) == TRUE) {
             HiddenObjectMovement_SetCoverEffect(object, HiddenObjectCover_Spawn(object, state->coverType));
@@ -624,7 +651,7 @@ void HiddenObjectMovement_SetRevealed(LocalMapObject *object) {
 }
 
 // 3 for the step movements, 2 for the run movements, 1 for the fast run movements.
-int GetMovementSpeed(u32 movement) {
+static int GetMovementSpeed(u32 movement) {
     MovementList step = gStepMovements;
     MovementList run = gRunMovements;
     MovementList fastRun = gFastRunMovements;
@@ -649,7 +676,7 @@ int GetMovementSpeed(u32 movement) {
     return 0;
 }
 
-void FollowMon_SpawnGrassEffects(LocalMapObject *object) {
+static void FollowMon_SpawnGrassEffects(LocalMapObject *object) {
     FieldSystem *fieldSystem = MapObject_GetFieldSystem(object);
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);

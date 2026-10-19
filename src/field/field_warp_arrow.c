@@ -1,3 +1,5 @@
+#include "field_warp_arrow.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -47,21 +49,20 @@ WarpArrow *WarpArrow_New(FieldEffectManager *manager);
 void WarpArrow_Free(WarpArrow *arrow);
 static void WarpArrow_LoadModel(WarpArrow *arrow);
 static void WarpArrow_FreeModel(WarpArrow *arrow);
-void WarpArrow_Spawn(PlayerAvatar *playerAvatar);
-static BOOL WarpArrowEffect_Init(FieldEffect *effect, WarpArrowEffect *work);
-static void WarpArrowEffect_Destroy(FieldEffect *effect, WarpArrowEffect *work);
-static void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work);
-static void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work);
+static BOOL WarpArrowEffect_Init(FieldEffect *effect, void *state);
+static void WarpArrowEffect_Destroy(FieldEffect *effect, void *state);
+static void WarpArrowEffect_Update(FieldEffect *effect, void *state);
+static void WarpArrowEffect_Draw(FieldEffect *effect, void *state);
 static int WarpArrow_GetWarpDirection(u8 behavior);
 
 static const VecFx32 sWarpArrowScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
 static const FieldEffectBasicTemplate sWarpArrowTemplate = {
     sizeof(WarpArrowEffect),
-    (FieldEffectInitFunc)WarpArrowEffect_Init,
-    (FieldEffectFunc)WarpArrowEffect_Destroy,
-    (FieldEffectFunc)WarpArrowEffect_Update,
-    (FieldEffectFunc)WarpArrowEffect_Draw,
+    WarpArrowEffect_Init,
+    WarpArrowEffect_Destroy,
+    WarpArrowEffect_Update,
+    WarpArrowEffect_Draw,
 };
 
 // The arrow's two positions per direction: on the tile, then 2 units towards the exit.
@@ -105,7 +106,8 @@ void WarpArrow_Spawn(PlayerAvatar *playerAvatar) {
     FieldEffectManager_CreateEffect(manager, &sWarpArrowTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-static BOOL WarpArrowEffect_Init(FieldEffect *effect, WarpArrowEffect *work) {
+static BOOL WarpArrowEffect_Init(FieldEffect *effect, void *state) {
+    WarpArrowEffect *work = state;
     WarpArrowEffectArgs *args = (WarpArrowEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(args->playerAvatar);
@@ -115,10 +117,12 @@ static BOOL WarpArrowEffect_Init(FieldEffect *effect, WarpArrowEffect *work) {
     return TRUE;
 }
 
-static void WarpArrowEffect_Destroy(FieldEffect *effect, WarpArrowEffect *work) {
+static void WarpArrowEffect_Destroy(FieldEffect *effect, void *state) {
+    WarpArrowEffect *work = state;
 }
 
-static void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work) {
+static void WarpArrowEffect_Update(FieldEffect *effect, void *state) {
+    WarpArrowEffect *work = state;
     VecFx32 objectPos;
     VecFx32 position;
 
@@ -157,7 +161,8 @@ static void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work) {
     }
 }
 
-static void WarpArrowEffect_Draw(FieldEffect *effect, WarpArrowEffect *work) {
+static void WarpArrowEffect_Draw(FieldEffect *effect, void *state) {
+    WarpArrowEffect *work = state;
     MtxFx33 rotation;
     VecFx32 position;
     VecFx32 scale;

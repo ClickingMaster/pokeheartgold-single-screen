@@ -7,6 +7,7 @@
 #include "frontier/battle_castle_setup.h"
 #include "frontier/battle_factory_setup.h"
 
+#include "battle_frontier_communication.h"
 #include "battle_link_comm.h"
 #include "communication_core.h"
 #include "frontier_save_access.h"
@@ -35,7 +36,7 @@ void BattleHallLink_ReceiveUnused(int netId, int size, void *data, BattleHallDat
 
 BOOL BattleHallLink_SendEmptyRecord(BattleHallData *work) {
     Save_PlayerData_GetProfile(work->saveData);
-    return Comm_SendCommand(0x22, work->linkBuffer, 0x2C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_HALL_EMPTY_RECORD, work->linkBuffer, 0x2C) == TRUE;
 }
 
 void BattleHallLink_ReceiveEmptyRecord(int netId, int size, void *data, BattleHallData *work) {
@@ -46,57 +47,49 @@ void BattleHallLink_ReceiveEmptyRecord(int netId, int size, void *data, BattleHa
 }
 
 BOOL BattleHallLink_SendTrainerIds(BattleHallData *work) {
-    u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     u16 *dst = buffer;
     int i;
     for (i = 0; i < 20; i++) {
-        *dst++ = ((BattleHallData *)p)->trainerIds[0];
-        p += 2;
+        *dst++ = work->trainerIds[i];
     }
-    return Comm_SendCommand(0x23, buffer, 0x2C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_HALL_TRAINER_IDS, buffer, 0x2C) == TRUE;
 }
 
 void BattleHallLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleHallData *work) {
-    u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
-            ((BattleHallData *)p)->trainerIds[0] = *data++;
-            p += 2;
+            work->trainerIds[i] = *data++;
         }
     }
 }
 
 BOOL BattleHallLink_SendSetIds(BattleHallData *work) {
-    u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     int i = 0;
     u16 *dst = buffer;
     while (i < 20) {
-        *dst++ = ((BattleHallData *)p)->setIds[0];
-        p += 2;
+        *dst++ = work->setIds[i];
         i++;
     }
-    return Comm_SendCommand(0x24, buffer, 0x2C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_HALL_SET_IDS, buffer, 0x2C) == TRUE;
 }
 
 void BattleHallLink_ReceiveSetIds(int netId, int size, const u16 *data, BattleHallData *work) {
-    u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 20; i++) {
-            ((BattleHallData *)p)->setIds[0] = *data++;
-            p += 2;
+            work->setIds[i] = *data++;
         }
     }
 }
 
 BOOL BattleHallLink_SendValue(BattleHallData *work, u16 value) {
     work->linkBuffer[0] = value;
-    return Comm_SendCommand(0x25, work->linkBuffer, 0x2C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_HALL_VALUE, work->linkBuffer, 0x2C) == TRUE;
 }
 
 void BattleHallLink_ReceiveValue(int netId, int size, const u16 *data, BattleHallData *work) {
@@ -110,7 +103,7 @@ BOOL BattleHallLink_SendPartyMon(BattleHallData *work) {
     u32 size = SizeOfStructPokemon();
     Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(work->saveData), work->partySlots[0]);
     MI_CpuCopy8(mon, work->linkMonBuffer, size);
-    return Comm_SendCommandNoCopy(0x26, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(FRONTIER_LINK_CMD_HALL_PARTNER_MON, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, BattleHallData *work) {
@@ -133,7 +126,7 @@ BOOL BattleFactoryLink_SendRecord(BattleFactoryData *work) {
     buffer[1] = work->tradeCount;
     buffer[2] = work->winStreak;
     buffer[3] = work->round;
-    return Comm_SendCommand(0x16, buffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_RECORD, buffer, 0x3C) == TRUE;
 }
 
 void BattleFactoryLink_ReceiveRecord(int netId, int size, const u16 *data, BattleFactoryData *work) {
@@ -146,25 +139,21 @@ void BattleFactoryLink_ReceiveRecord(int netId, int size, const u16 *data, Battl
 }
 
 BOOL BattleFactoryLink_SendTrainerIds(BattleFactoryData *work) {
-    u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     u16 *dst = buffer;
     int i;
     for (i = 0; i < 14; i++) {
-        *dst++ = ((BattleFactoryData *)p)->trainerIds[0];
-        p += 2;
+        *dst++ = work->trainerIds[i];
     }
-    return Comm_SendCommand(0x17, buffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_TRAINER_IDS, buffer, 0x3C) == TRUE;
 }
 
 void BattleFactoryLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleFactoryData *work) {
-    u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
-            ((BattleFactoryData *)p)->trainerIds[0] = *data++;
-            p += 2;
+            work->trainerIds[i] = *data++;
         }
     }
 }
@@ -205,7 +194,7 @@ BOOL BattleFactoryLink_SendRentalMons(BattleFactoryData *work) {
             dst += 2;
         }
     }
-    return Comm_SendCommand(0x18, buffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_RENTAL_MONS, buffer, 0x3C) == TRUE;
 }
 
 typedef struct FactoryMonsMessage6 {
@@ -231,10 +220,9 @@ void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, B
     i = 0;
     data += 12;
     for (; i < 6; i++) {
-        work->rentals.personalities[0] = data[0];
-        work->rentals.personalities[0] |= data[6] << 16;
+        work->rentals.personalities[i] = data[0];
+        work->rentals.personalities[i] |= data[6] << 16;
         data++;
-        work = (BattleFactoryData *)((u8 *)work + 4);
     }
 }
 
@@ -274,7 +262,7 @@ BOOL BattleFactoryLink_SendOpponentMons(BattleFactoryData *work) {
             dst += 2;
         }
     }
-    return Comm_SendCommand(0x19, buffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_OPPONENT_MONS, buffer, 0x3C) == TRUE;
 }
 
 typedef struct FactoryMonsMessage4 {
@@ -300,16 +288,15 @@ void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data,
     i = 0;
     data += 8;
     for (; i < 4; i++) {
-        work->opponentPersonalities[0] = data[0];
-        work->opponentPersonalities[0] |= data[4] << 16;
+        work->opponentPersonalities[i] = data[0];
+        work->opponentPersonalities[i] |= data[4] << 16;
         data++;
-        work = (BattleFactoryData *)((u8 *)work + 4);
     }
 }
 
 BOOL BattleFactoryLink_SendValueA(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
-    return Comm_SendCommand(0x1A, work->linkBuffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_VALUE_A, work->linkBuffer, 0x3C) == TRUE;
 }
 
 void BattleFactoryLink_ReceiveValueA(int netId, int size, const u16 *data, BattleFactoryData *work) {
@@ -321,7 +308,7 @@ void BattleFactoryLink_ReceiveValueA(int netId, int size, const u16 *data, Battl
 
 BOOL BattleFactoryLink_SendValueB(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
-    return Comm_SendCommand(0x1B, work->linkBuffer, 0x3C) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_VALUE_B, work->linkBuffer, 0x3C) == TRUE;
 }
 
 void BattleFactoryLink_ReceiveValueB(int netId, int size, const u16 *data, BattleFactoryData *work) {
@@ -363,7 +350,7 @@ BOOL BattleFactoryLink_SendPartyMons(BattleFactoryData *work) {
         buffer[pos + i] = personalities[i];
         buffer[count + pos + i] = personalities[i] >> 16;
     }
-    if (Comm_SendCommand(0x1C, buffer, 0x3C) == TRUE) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_FACTORY_PARTY_MONS, buffer, 0x3C) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -406,7 +393,7 @@ BOOL BattleCastleLink_SendRecord(BattleCastleData *work) {
     stat = BattleCastle_GetPointsStat(work->type);
     substat = FrontierStat_GetFriendIndex(BattleCastle_GetPointsStat(work->type));
     work->linkBuffer[11] = FrontierSave_GetStat(frontierSave, stat, substat);
-    return Comm_SendCommand(0x2A, work->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_RECORD, work->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleCastleLink_ReceiveRecord(int netId, int size, const u16 *data, BattleCastleData *work) {
@@ -420,23 +407,19 @@ void BattleCastleLink_ReceiveRecord(int netId, int size, const u16 *data, Battle
 
 BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *work) {
     int i = 0;
-    u8 *p = (u8 *)work;
     while (i < 14) {
-        ((BattleCastleData *)p)->linkBuffer[0] = ((BattleCastleData *)p)->trainerIds[0];
-        p += 2;
+        work->linkBuffer[i] = work->trainerIds[i];
         i++;
     }
-    return Comm_SendCommand(0x2B, work->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_TRAINER_IDS, work->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleCastleLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleCastleData *work) {
-    u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
-            ((BattleCastleData *)p)->trainerIds[0] = *data++;
-            p += 2;
+            work->trainerIds[i] = *data++;
         }
     }
 }
@@ -453,7 +436,7 @@ BOOL BattleCastleLink_SendChoice(BattleCastleData *work) {
         work->decidedChoice = work->choice + 6;
     }
     work->linkBuffer[1] = work->decidedChoice;
-    return Comm_SendCommand(0x2C, work->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_CHOICE, work->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleCastleLink_ReceiveChoice(int netId, int size, void *data, BattleCastleData *work) {
@@ -525,7 +508,7 @@ BOOL BattleCastleLink_SendOpponentMons(BattleCastleData *work) {
 
     offset += 4 * 2;
 
-    if (Comm_SendCommand(0x2D, work->linkBuffer, size) == TRUE) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_OPPONENT_MONS, work->linkBuffer, size) == TRUE) {
         result = TRUE;
     } else {
         result = FALSE;
@@ -567,7 +550,7 @@ void BattleCastleLink_ReceiveOpponentMons(int netId, int size, void *data, Battl
 
 BOOL BattleCastleLink_SendValueA(BattleCastleData *work, u16 value) {
     work->linkBuffer[0] = value;
-    return Comm_SendCommand(0x2E, work->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_VALUE_A, work->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleCastleLink_ReceiveValueA(int netId, int size, const u16 *data, BattleCastleData *work) {
@@ -579,7 +562,7 @@ void BattleCastleLink_ReceiveValueA(int netId, int size, const u16 *data, Battle
 
 BOOL BattleCastleLink_SendValueB(BattleCastleData *work, u16 value) {
     work->linkBuffer[0] = value;
-    return Comm_SendCommand(0x2F, work->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_CASTLE_VALUE_B, work->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleCastleLink_ReceiveValueB(int netId, int size, const u16 *data, BattleCastleData *work) {
@@ -603,7 +586,7 @@ BOOL BattleCastleLink_SendPartyMons(BattleCastleData *work) {
             offset += size;
         } while (i < count);
     }
-    return Comm_SendCommandNoCopy(0x30, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(FRONTIER_LINK_CMD_CASTLE_PARTY_MONS, work->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 // Adds the partner's Pokemon to the party; the child then swaps them in front of its own.
@@ -642,7 +625,7 @@ BOOL BattleArcadeLink_SendWinStreak(ArcadeContext *ctx) {
     Save_Frontier_GetArcadeFlags(ctx->saveData);
     ctx->linkBuffer[1] = ctx->winStreak;
     ctx->linkBuffer[2] = ctx->round;
-    return Comm_SendCommand(0x41, ctx->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_ARCADE_WIN_STREAK, ctx->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleArcadeLink_ReceiveWinStreak(int netId, int size, const u16 *data, ArcadeContext *ctx) {
@@ -655,25 +638,21 @@ void BattleArcadeLink_ReceiveWinStreak(int netId, int size, const u16 *data, Arc
 
 BOOL BattleArcadeLink_SendTrainerIds(ArcadeContext *ctx) {
     int i = 0;
-    u8 *p = (u8 *)ctx;
     while (i < 14) {
-        ((ArcadeContext *)p)->linkBuffer[0] = ((ArcadeContext *)p)->trainerIds[0];
-        p += 2;
+        ctx->linkBuffer[i] = ctx->trainerIds[i];
         i++;
     }
-    return Comm_SendCommand(0x42, ctx->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_ARCADE_TRAINER_IDS, ctx->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleArcadeLink_ReceiveTrainerIds(int netId, int size, const u16 *data, ArcadeContext *ctx) {
-    u8 *p = (u8 *)ctx;
     int i;
     ctx->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
             u16 value = *data;
-            ((ArcadeContext *)p)->trainerIds[0] = value;
+            ctx->trainerIds[i] = value;
             data++;
-            p += 2;
         }
     }
 }
@@ -706,7 +685,7 @@ BOOL BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx) {
             ((ArcadeContext *)packet)->linkBuffer[4] = ((ArcadeContext *)word)->personalities[0] >> 16;
         }
     }
-    if (Comm_SendCommand(0x43, ctx->linkBuffer, 40) == TRUE) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_ARCADE_OPPONENT_MONS, ctx->linkBuffer, 40) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -747,7 +726,7 @@ void BattleArcadeLink_ReceiveOpponentMons(int netId, int size, ArcadeMonsMessage
 
 BOOL BattleArcadeLink_SendValueA(ArcadeContext *ctx, u32 value) {
     ctx->linkBuffer[0] = value;
-    return Comm_SendCommand(0x44, ctx->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_ARCADE_VALUE_A, ctx->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleArcadeLink_ReceiveValueA(int netId, int size, const u16 *data, ArcadeContext *ctx) {
@@ -759,7 +738,7 @@ void BattleArcadeLink_ReceiveValueA(int netId, int size, const u16 *data, Arcade
 
 BOOL BattleArcadeLink_SendValueB(ArcadeContext *ctx, u32 value) {
     ctx->linkBuffer[0] = value;
-    return Comm_SendCommand(0x45, ctx->linkBuffer, 0x28) == TRUE;
+    return Comm_SendCommand(FRONTIER_LINK_CMD_ARCADE_VALUE_B, ctx->linkBuffer, 0x28) == TRUE;
 }
 
 void BattleArcadeLink_ReceiveValueB(int netId, int size, const u16 *data, ArcadeContext *ctx) {
@@ -783,7 +762,7 @@ BOOL BattleArcadeLink_SendPartyMons(ArcadeContext *ctx) {
             offset += size;
         } while (i < count);
     }
-    return Comm_SendCommandNoCopy(0x46, ctx->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
+    return Comm_SendCommandNoCopy(FRONTIER_LINK_CMD_ARCADE_PARTY_MONS, ctx->linkMonBuffer, LINK_MON_BUFFER_SIZE) == TRUE;
 }
 
 // Adds the partner's Pokemon to the party; the child then swaps them in front of its own.

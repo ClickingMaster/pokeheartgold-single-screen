@@ -35,6 +35,7 @@
 #include "script_pokemon_util.h"
 #include "sys_task_api.h"
 #include "task.h"
+#include "texture_animation.h"
 #include "vram_transfer_manager.h"
 
 FS_EXTERN_OVERLAY(OVY_25);
@@ -49,8 +50,6 @@ FS_EXTERN_OVERLAY(OVY_25);
 
 NNSG3dPlttKey BillboardObject_GetPlttKey(void *billboard);
 NNSG3dTexKey BillboardObject_GetTexKey(void *billboard);
-void *Texture_GetPaletteData(NNSG3dResTex *texture, u32 index);
-void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
 
 // A billboard sequence from the sequence bank: count frames, then count u8s, then count u8 flags.
 typedef struct BillboardSequenceData {
@@ -129,6 +128,9 @@ static BOOL Task_FollowMonRecall(TaskManager *taskMan);
 static BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan);
 static BOOL Task_FollowMonFlash(TaskManager *taskMan);
 
+static u8 FollowMon_GetShapeParamHigh(LocalMapObject *object);
+static void MapObject_StepTowards(LocalMapObject *target, LocalMapObject *object);
+static int SpriteId_GetModelNo(u32 spriteId);
 BOOL ScrCmd_TrainerHouseBattle(ScriptContext *ctx) {
     u16 trainerNum = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
     FSOverlayID overlay = FS_OVERLAY_ID(OVY_25);
@@ -203,7 +205,7 @@ BOOL MapObject_HasFollowMonSprite(LocalMapObject *object) {
     return spriteId >= SPRITE_FOLLOWER_MON && spriteId <= SPRITE_FOLLOWER_MON_6;
 }
 
-u8 FollowMon_GetShapeParamHigh(LocalMapObject *object) {
+static u8 FollowMon_GetShapeParamHigh(LocalMapObject *object) {
     u16 shape = MapObject_GetParam(object, FOLLOW_MON_PARAM_SHAPE);
     if (MapObject_GetID(object) != obj_partner_poke) {
         return 0;
@@ -778,7 +780,7 @@ static BOOL Task_FollowMonHideForFieldMove(TaskManager *taskMan) {
 }
 
 // Starts object walking one tile towards target.
-void MapObject_StepTowards(LocalMapObject *target, LocalMapObject *object) {
+static void MapObject_StepTowards(LocalMapObject *target, LocalMapObject *object) {
     int targetX = MapObject_GetXCoord(target);
     int targetZ = MapObject_GetZCoord(target);
     int x = MapObject_GetXCoord(object);
@@ -797,7 +799,7 @@ void MapObject_StepTowards(LocalMapObject *target, LocalMapObject *object) {
     }
 }
 
-int SpriteId_GetModelNo(u32 spriteId) {
+static int SpriteId_GetModelNo(u32 spriteId) {
     int modelNo = GetMoveModelNoBySpriteId(spriteId);
     if (modelNo < 0) {
         GF_ASSERT(FALSE);

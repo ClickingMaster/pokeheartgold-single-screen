@@ -14,8 +14,7 @@
 #include "sprite.h"
 
 // Starts the effect task and runs it once right away.
-typedef SysTask *(*BattleAnimCreateTaskReturningFunc)(BattleAnimSystem *system, SysTaskFunc func, void *data);
-#define BattleAnim_CreateTaskAndRun(system, func, work) func(((BattleAnimCreateTaskReturningFunc)BattleAnimSystem_CreateTaskDefaultPriority)(system, func, work), work)
+#define BattleAnim_CreateTaskAndRun(system, func, work) func(BattleAnimSystem_CreateTaskDefaultPriority(system, func, work), work)
 
 typedef BattleAnimScanlineWave *(*BattleAnimScanlineNewWaveFunc)(u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, int bgLayer, u32 priority, u32 fill, enum HeapID heapId);
 #define BattleAnimScanline_NewWaveU32Step ((BattleAnimScanlineNewWaveFunc)BattleAnimScanline_NewWave)
@@ -442,7 +441,7 @@ void BattleAnimFunc_AnimateSprites(BattleAnimSystem *system) {
             ManagedSprite_SetDrawPriorityInt(work->sprites[i], drawPriorities[i]);
         }
     }
-    BattleAnimTask_AnimateSprites(((BattleAnimCreateTaskReturningFunc)BattleAnimSystem_CreateTaskDefaultPriority)(work->common.system, BattleAnimTask_AnimateSprites, work), work);
+    BattleAnimTask_AnimateSprites(BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_AnimateSprites, work), work);
 }
 
 enum {

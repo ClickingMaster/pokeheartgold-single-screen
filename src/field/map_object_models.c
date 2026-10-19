@@ -15,14 +15,12 @@
 // object's animation number.
 typedef struct LegendaryBirdObject {
     Sprite *billboard;
-    VecFx32 savedState;
+    BillboardState savedState;
     u32 sequence;
 } LegendaryBirdObject;
 
 typedef void (*LegendaryBirdAnimateFunc)(LocalMapObject *object, Sprite *billboard, LegendaryBirdObject *work);
 
-void BillboardObject_SaveState(Sprite *billboard, VecFx32 *state);
-void BillboardObject_RestoreState(Sprite *billboard, VecFx32 *state);
 void BillboardObject_SetVisible(Sprite *billboard, u8 visible);
 
 static BOOL FollowMonBillboard_IsBobFrame(u8 direction, LocalMapObject *object, Sprite *billboard);
@@ -35,12 +33,16 @@ static void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object);
 // Per sprite id: the graphics info (terminated by spriteId 0xFFFF) and the effect flags
 // its effectFlagsIdx field selects.
 extern ObjectEventGraphicsInfo gObjectEventGraphicsInfos[];
-extern u16 sSpriteEffectFlags[];
+extern const MapObjectEffectFlags sSpriteEffectFlags[];
 
 static const LegendaryBirdAnimateFunc sLegendaryBirdAnimateFuncs[] = {
     LegendaryBirdObject_AnimateIdle,
     LegendaryBirdObject_AnimateFlap,
 };
+
+static void FldObjSys_OpenMModelNarc(MapObjectManager *manager);
+static void FldObjSys_CloseMModelNarc(MapObjectManager *manager);
+static const MapObjectEffectFlags *SpriteId_GetEffectFlags(u32 spriteId);
 
 void FollowMonBillboard_Update(LocalMapObject *object, Sprite *billboard, FollowMonBillboardWork *billboardWork, u32 direction, BOOL addFacingOffset) {
     BOOL flag4;
@@ -326,11 +328,11 @@ void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager) {
     FldObjSys_CloseMModelNarc(mapObjectManager);
 }
 
-void FldObjSys_OpenMModelNarc(MapObjectManager *manager) {
+static void FldObjSys_OpenMModelNarc(MapObjectManager *manager) {
     MapObjectManager_SetMapModelNarc(manager, NARC_New(NARC_data_mmodel_mmodel, HEAP_ID_FIELD1));
 }
 
-void FldObjSys_CloseMModelNarc(MapObjectManager *manager) {
+static void FldObjSys_CloseMModelNarc(MapObjectManager *manager) {
     NARC_Delete(MapObjectManager_GetMapModelNarc(manager));
 }
 
@@ -367,11 +369,11 @@ int GetMoveModelNoBySpriteId(u32 spriteId) {
     return info->mapModelId;
 }
 
-const u16 *MapObject_GetEffectFlags(LocalMapObject *object) {
+const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object) {
     return SpriteId_GetEffectFlags(MapObject_GetSpriteID(object));
 }
 
-const u16 *SpriteId_GetEffectFlags(u32 spriteId) {
+static const MapObjectEffectFlags *SpriteId_GetEffectFlags(u32 spriteId) {
     ObjectEventGraphicsInfo *info = ObjectEvent_GetGraphicsInfo(spriteId);
     if (info == NULL) {
         return NULL;

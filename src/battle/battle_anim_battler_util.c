@@ -16,9 +16,9 @@ typedef struct BattleAnimEmitterPositions {
     VecFx32 positions[8][24];
 } BattleAnimEmitterPositions;
 
-extern const VecFx32 sBattleAnimFlippedCameraUp;
-extern const BattleAnimBattlerTypePositions sBattleAnimBattlerTypePositions;
-extern const BattleAnimEmitterPositions sBattleAnimEmitterPositions;
+extern const VecFx32 gBattleAnimFlippedCameraUp;
+extern const BattleAnimBattlerTypePositions gBattleAnimBattlerTypePositions;
+extern const BattleAnimEmitterPositions gBattleAnimEmitterPositions;
 
 int BattleAnimUtil_GetBattlerType(BattleAnimSystem *system, int battler) {
     return BattleAnimSystem_GetBattlerType(system, battler);
@@ -109,7 +109,7 @@ int BattleAnimUtil_GetOpposingBattlerType(int battlerType) {
 }
 
 void BattleAnimUtil_GetBattlerTypePosition(int battlerType, int unused, BattleAnimPosition *pos) {
-    BattleAnimBattlerTypePositions table = sBattleAnimBattlerTypePositions;
+    BattleAnimBattlerTypePositions table = gBattleAnimBattlerTypePositions;
     *pos = table.positions[battlerType];
 }
 
@@ -120,7 +120,7 @@ void BattleAnimUtil_GetBattlerPosition(BattleAnimSystem *system, int battler, Ba
 }
 
 void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused, int perspective, int kind) {
-    BattleAnimEmitterPositions table = sBattleAnimEmitterPositions;
+    BattleAnimEmitterPositions table = gBattleAnimEmitterPositions;
     VecFx32 *positions = table.positions[battlerType];
     int index = perspective + kind * 2;
     fx32 z = positions[index].z;
@@ -186,7 +186,7 @@ void BattleAnimUtil_GetCameraUp(BOOL flipped, VecFx32 *up) {
     if (flipped == FALSE) {
         ParticleSystem_GetDefaultCameraUp(up);
     } else {
-        *up = sBattleAnimFlippedCameraUp;
+        *up = gBattleAnimFlippedCameraUp;
     }
 }
 

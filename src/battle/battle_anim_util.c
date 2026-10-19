@@ -11,8 +11,8 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 
-extern const BattleAnimFunc sBattleAnimFuncTable[];
-extern const BattleAnimSpriteFunc sBattleAnimSpriteFuncTable[];
+extern const BattleAnimFunc gBattleAnimFuncTable[];
+extern const BattleAnimSpriteFunc gBattleAnimSpriteFuncTable[];
 
 void BattleAnimUtil_InitSinMotionFromStep(BattleAnimSinMotion *motion, u32 startX, u32 endX, u32 startY, u16 endY, fx32 ampX, fx32 ampY, u16 step) {
     s16 signedStep;
@@ -754,14 +754,14 @@ BattleAnimFunc BattleAnimSystem_GetFunc(u32 id) {
     if (id >= 0x54) {
         return NULL;
     }
-    return sBattleAnimFuncTable[id];
+    return gBattleAnimFuncTable[id];
 }
 
 BattleAnimSpriteFunc BattleAnimSystem_GetSpriteFunc(u32 id) {
     if (id >= 0x21) {
         return NULL;
     }
-    return sBattleAnimSpriteFuncTable[id];
+    return gBattleAnimSpriteFuncTable[id];
 }
 
 void BattleAnimFunc_None(BattleAnimSystem *system) {

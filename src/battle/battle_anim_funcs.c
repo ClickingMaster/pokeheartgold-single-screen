@@ -37,8 +37,7 @@
 #define BATTLE_ANIM_EMITTER_PIXEL 172
 
 // Starts the effect task and runs it once right away
-typedef SysTask *(*BattleAnimCreateTaskReturningFunc)(BattleAnimSystem *system, SysTaskFunc func, void *data);
-#define BattleAnim_CreateTaskAndRun(system, func, work) func(((BattleAnimCreateTaskReturningFunc)BattleAnimSystem_CreateTaskDefaultPriority)(system, func, work), work)
+#define BattleAnim_CreateTaskAndRun(system, func, work) func(BattleAnimSystem_CreateTaskDefaultPriority(system, func, work), work)
 
 typedef struct BattleAnimOneFrameWork {
     u8 state;
@@ -396,7 +395,7 @@ typedef struct BattleAnimSpriteArcWork {
 } BattleAnimSpriteArcWork;
 
 // X steps of the sprite of BattleAnimTask_SpriteOrbit (0: switch its priority, 255: end)
-extern const s16 sBattleAnimSpriteOrbitStepX[];
+extern const s16 gBattleAnimSpriteOrbitStepX[];
 
 enum {
     ONE_FRAME_STATE_WAIT,
@@ -2757,12 +2756,12 @@ enum {
     SPRITE_ORBIT_STATE_SWING,
 };
 
-// Moves the sprite sideways by the steps of sBattleAnimSpriteOrbitStepX (passing behind the battler), then rocks it
+// Moves the sprite sideways by the steps of gBattleAnimSpriteOrbitStepX (passing behind the battler), then rocks it
 void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
     BattleAnimSpriteOrbitWork *work = data;
     switch (work->common.state[0]) {
     case SPRITE_ORBIT_STATE_CIRCLE: {
-        s16 dx = sBattleAnimSpriteOrbitStepX[work->step];
+        s16 dx = gBattleAnimSpriteOrbitStepX[work->step];
         work->step++;
         if (dx != 255) {
             if (dx == 0) {

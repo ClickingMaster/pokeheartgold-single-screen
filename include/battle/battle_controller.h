@@ -46,7 +46,14 @@ void BattleController_EmitCommandComplete(BattleSystem *battleSystem, int battle
 void BattleController_ReplyCommandSelection(BattleSystem *battleSystem, int battlerId, u32 input);
 void BattleController_ReplyMoveSelection(BattleSystem *battleSystem, int battlerId, u32 input);
 void BattleController_ReplyTargetSelection(BattleSystem *battleSystem, int battlerId, u32 input);
-void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, u32 input);
+// An item selection reply
+typedef struct BattleItemInput {
+    u16 item;
+    u8 pocket;
+    u8 target;
+} BattleItemInput;
+
+void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, BattleItemInput input);
 void BattleController_ReplyPartySelection(BattleSystem *battleSystem, int battlerId, u32 input);
 void BattleController_ReplySelectionMessageDone(BattleSystem *battleSystem, int battlerId);
 void BattleController_InitMoveAnimData(BattleSystem *battleSystem, BattleContext *ctx, MoveAnimData *animData, int isEffectAnim, int effectAnimId, int attacker, int defender, u16 move);

@@ -7,7 +7,6 @@
 
 #include "sprite_system.h"
 
-FrontierMap *Frontier_GetMap(void *frontierWork);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 

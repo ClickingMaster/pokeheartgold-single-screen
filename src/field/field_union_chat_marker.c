@@ -40,17 +40,17 @@ void UnionChatMarker_Free(UnionChatMarker *marker);
 static void UnionChatMarker_LoadGfx(UnionChatMarker *marker);
 static void UnionChatMarker_FreeGfx(UnionChatMarker *marker);
 FieldEffect *UnionChatMarker_Spawn(LocalMapObject *mapObject);
-static BOOL UnionChatMarkerEffect_Init(FieldEffect *effect, UnionChatMarkerEffect *work);
-static void UnionChatMarkerEffect_Destroy(FieldEffect *effect, UnionChatMarkerEffect *work);
-static void UnionChatMarkerEffect_Update(FieldEffect *effect, UnionChatMarkerEffect *work);
-static void UnionChatMarkerEffect_Draw(FieldEffect *effect, UnionChatMarkerEffect *work);
+static BOOL UnionChatMarkerEffect_Init(FieldEffect *effect, void *state);
+static void UnionChatMarkerEffect_Destroy(FieldEffect *effect, void *state);
+static void UnionChatMarkerEffect_Update(FieldEffect *effect, void *state);
+static void UnionChatMarkerEffect_Draw(FieldEffect *effect, void *state);
 
 static const FieldEffectBasicTemplate sUnionChatMarkerEffectTemplate = {
     sizeof(UnionChatMarkerEffect),
-    (FieldEffectInitFunc)UnionChatMarkerEffect_Init,
-    (FieldEffectFunc)UnionChatMarkerEffect_Destroy,
-    (FieldEffectFunc)UnionChatMarkerEffect_Update,
-    (FieldEffectFunc)UnionChatMarkerEffect_Draw,
+    UnionChatMarkerEffect_Init,
+    UnionChatMarkerEffect_Destroy,
+    UnionChatMarkerEffect_Update,
+    UnionChatMarkerEffect_Draw,
 };
 
 static const u32 sUnionChatMarkerRecordParams[6] = { 0, 1, 1, 0, 0, 2 };
@@ -93,7 +93,8 @@ FieldEffect *UnionChatMarker_Spawn(LocalMapObject *mapObject) {
     }
 }
 
-static BOOL UnionChatMarkerEffect_Init(FieldEffect *effect, UnionChatMarkerEffect *work) {
+static BOOL UnionChatMarkerEffect_Init(FieldEffect *effect, void *state) {
+    UnionChatMarkerEffect *work = state;
     VecFx32 position = { 0, 0, 0 };
     work->args = *(UnionChatMarkerEffectArgs *)FieldEffect_GetUserData(effect);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -103,17 +104,20 @@ static BOOL UnionChatMarkerEffect_Init(FieldEffect *effect, UnionChatMarkerEffec
     return TRUE;
 }
 
-static void UnionChatMarkerEffect_Destroy(FieldEffect *effect, UnionChatMarkerEffect *work) {
+static void UnionChatMarkerEffect_Destroy(FieldEffect *effect, void *state) {
+    UnionChatMarkerEffect *work = state;
     BillboardObject_Delete(work->billboard);
 }
 
-static void UnionChatMarkerEffect_Update(FieldEffect *effect, UnionChatMarkerEffect *work) {
+static void UnionChatMarkerEffect_Update(FieldEffect *effect, void *state) {
+    UnionChatMarkerEffect *work = state;
     if (!MapObject_CheckIDAndMap(work->args.mapObject, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
     }
 }
 
-static void UnionChatMarkerEffect_Draw(FieldEffect *effect, UnionChatMarkerEffect *work) {
+static void UnionChatMarkerEffect_Draw(FieldEffect *effect, void *state) {
+    UnionChatMarkerEffect *work = state;
     LocalMapObject *mapObject = work->args.mapObject;
     VecFx32 position;
     VecFx32 facing;

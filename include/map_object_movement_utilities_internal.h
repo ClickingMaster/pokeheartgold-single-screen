@@ -3,15 +3,6 @@
 
 #include "map_object_movement_utilities.h"
 
-// The ground effect bits of a map object's graphics info (MapObject_GetEffectFlags).
-typedef struct MapObjectEffectFlags {
-    u16 unk0 : 4;
-    u16 shadow : 3;
-    u16 footprints : 4;
-    u16 reflection : 2;
-    u16 unk13 : 3;
-} MapObjectEffectFlags;
-
 typedef BOOL (*TileTestFunc)(u8 behavior);
 
 extern const TileTestFunc gMetatileBlocksExitTests[4];

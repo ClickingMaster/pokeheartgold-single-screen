@@ -614,7 +614,7 @@ void BattleController_EmitSelectItem(BattleSystem *battleSystem, BattleContext *
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
 }
 
-void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, u32 input) {
+void BattleController_ReplyItemSelection(BattleSystem *battleSystem, int battlerId, BattleItemInput input) {
     BattleController_EmitPacket(battleSystem, 0, battlerId, &input, sizeof(input));
 }
 

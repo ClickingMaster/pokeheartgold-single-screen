@@ -54,19 +54,19 @@ static void RockClimb_LoadGfxIfUnused(RockClimb *rockClimb);
 static void RockClimb_FreeGfxIfUnused(RockClimb *rockClimb);
 FieldEffect *RockClimbEffect_Create(LocalMapObject *mapObject, int x, int z, int direction, BOOL follow);
 void RockClimbEffect_SetFollow(FieldEffect *effect, BOOL follow);
-static BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work);
-static void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work);
-static void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work);
-static void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work);
+static BOOL RockClimbEffect_Init(FieldEffect *effect, void *state);
+static void RockClimbEffect_Destroy(FieldEffect *effect, void *state);
+static void RockClimbEffect_Update(FieldEffect *effect, void *state);
+static void RockClimbEffect_Draw(FieldEffect *effect, void *state);
 
 static const VecFx32 sRockClimbScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
 static const FieldEffectBasicTemplate sRockClimbEffectTemplate = {
     sizeof(RockClimbEffect),
-    (FieldEffectInitFunc)RockClimbEffect_Init,
-    (FieldEffectFunc)RockClimbEffect_Destroy,
-    (FieldEffectFunc)RockClimbEffect_Update,
-    (FieldEffectFunc)RockClimbEffect_Draw,
+    RockClimbEffect_Init,
+    RockClimbEffect_Destroy,
+    RockClimbEffect_Update,
+    RockClimbEffect_Draw,
 };
 
 RockClimb *RockClimb_New(FieldEffectManager *manager) {
@@ -144,7 +144,8 @@ void RockClimbEffect_SetFollow(FieldEffect *effect, BOOL follow) {
     work->follow = follow;
 }
 
-static BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work) {
+static BOOL RockClimbEffect_Init(FieldEffect *effect, void *state) {
+    RockClimbEffect *work = state;
     RockClimbEffectArgs *args = (RockClimbEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     work->direction = args->direction;
@@ -154,12 +155,14 @@ static BOOL RockClimbEffect_Init(FieldEffect *effect, RockClimbEffect *work) {
     return TRUE;
 }
 
-static void RockClimbEffect_Destroy(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Destroy(FieldEffect *effect, void *state) {
+    RockClimbEffect *work = state;
     RockClimb_Release(work->args.rockClimb);
     RockClimb_FreeGfxIfUnused(work->args.rockClimb);
 }
 
-static void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Update(FieldEffect *effect, void *state) {
+    RockClimbEffect *work = state;
     VecFx32 offset;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
@@ -172,7 +175,8 @@ static void RockClimbEffect_Update(FieldEffect *effect, RockClimbEffect *work) {
     }
 }
 
-static void RockClimbEffect_Draw(FieldEffect *effect, RockClimbEffect *work) {
+static void RockClimbEffect_Draw(FieldEffect *effect, void *state) {
+    RockClimbEffect *work = state;
     MtxFx33 rotation;
     VecFx32 position;
     VecFx32 scale;

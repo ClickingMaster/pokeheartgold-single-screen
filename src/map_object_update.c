@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "field/map_object_models.h"
+
 #include "comm_state.h"
 #include "communication_command.h"
 #include "field_footprints.h"
@@ -19,7 +21,6 @@
 #include "metatile_behavior.h"
 #include "overlay_01.h"
 
-const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 u32 MapObject_GetAdjacentTileBehavior(LocalMapObject *object, u32 direction);
 
 static BOOL MapObject_CanUpdateMovement(LocalMapObject *object);

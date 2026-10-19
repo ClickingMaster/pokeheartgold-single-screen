@@ -21,6 +21,47 @@
 #include "script_manager.h"
 #include "sys_task_api.h"
 
+static void MapObject_CallTypeBehaviorInit(LocalMapObject *object);
+static BOOL MapObject_CallTypeBehaviorCheck(LocalMapObject *object);
+static BOOL MapObject_CallTypeBehaviorUpdate(LocalMapObject *object);
+static BOOL MapObject_IsOffPreviousTile(LocalMapObject *object);
+static BOOL MapObject_IsOnPreviousTile(LocalMapObject *object);
+static u32 GetApricornTreeSpriteId(int apricorn, int apricornCount);
+static BOOL CheckSeenByNpcTrainers(FieldSystem *fieldSystem, MapObjectManager *manager, PlayerAvatar *avatar, LocalMapObject *exclude, EngageParams *out);
+static void GetEngagingTrainerParams(EngageParams *out, LocalMapObject *object, int x, int z);
+static int MapObject_GetTrainerSightType(LocalMapObject *object);
+static int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *outDir);
+static int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused);
+static int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+static int TrainerSight_GetDistanceSouth(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+static int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+static int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX, int targetZ, int unused);
+static int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distance);
+static u32 MapObject_GetTrainerNum(LocalMapObject *object);
+static LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum);
+static SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex);
+static BOOL TrainerApproach_GetDone(SysTask *task);
+static void TrainerApproach_DestroyTask(SysTask *task);
+static void TrainerApproach_Task(SysTask *task, void *data);
+static BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work);
+static BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work);
+static BOOL TrainerApproach_StartFace(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitFace(TrainerApproachWork *work);
+static BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work);
+static BOOL TrainerApproach_StartReveal(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work);
+static BOOL TrainerApproach_Wait(TrainerApproachWork *work);
+static BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work);
+static BOOL TrainerApproach_StartStep(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitStep(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work);
+static BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work);
+static BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work);
+static BOOL TrainerApproach_ResetTrainerMovement(TrainerApproachWork *work);
+static BOOL TrainerApproach_Finish(TrainerApproachWork *work);
+
 static const TrainerSightFunc sTrainerSightDistanceFuncs[] = {
     TrainerSight_GetDistanceNorth,
     TrainerSight_GetDistanceSouth,
@@ -84,19 +125,19 @@ BOOL MapObject_UpdateTypeBehavior(LocalMapObject *object) {
     return FALSE;
 }
 
-void MapObject_CallTypeBehaviorInit(LocalMapObject *object) {
+static void MapObject_CallTypeBehaviorInit(LocalMapObject *object) {
     gMapObjectTypeBehaviorInits[MapObject_GetType(object)](object);
 }
 
-BOOL MapObject_CallTypeBehaviorCheck(LocalMapObject *object) {
+static BOOL MapObject_CallTypeBehaviorCheck(LocalMapObject *object) {
     return gMapObjectTypeBehaviorChecks[MapObject_GetType(object)](object);
 }
 
-BOOL MapObject_CallTypeBehaviorUpdate(LocalMapObject *object) {
+static BOOL MapObject_CallTypeBehaviorUpdate(LocalMapObject *object) {
     return gMapObjectTypeBehaviorUpdates[MapObject_GetType(object)](object);
 }
 
-BOOL MapObject_IsOffPreviousTile(LocalMapObject *object) {
+static BOOL MapObject_IsOffPreviousTile(LocalMapObject *object) {
     int x = MapObject_GetXCoord(object);
     if (x != MapObject_GetPreviousXCoord(object)) {
         return TRUE;
@@ -108,7 +149,7 @@ BOOL MapObject_IsOffPreviousTile(LocalMapObject *object) {
     return FALSE;
 }
 
-BOOL MapObject_IsOnPreviousTile(LocalMapObject *object) {
+static BOOL MapObject_IsOnPreviousTile(LocalMapObject *object) {
     int x = MapObject_GetXCoord(object);
     if (x != MapObject_GetPreviousXCoord(object)) {
         return FALSE;
@@ -419,7 +460,7 @@ void *ApricornTreeObject_GetBillboard(LocalMapObject *object) {
     return ((ApricornTreeState *)MapObject_GetDrawData(object))->billboard;
 }
 
-u32 GetApricornTreeSpriteId(int apricorn, int apricornCount) {
+static u32 GetApricornTreeSpriteId(int apricorn, int apricornCount) {
     if (apricornCount == 0) {
         return 0x106;
     }
@@ -463,7 +504,7 @@ BOOL TryGetSeenByNpcTrainers(FieldSystem *fieldSystem, BOOL doublesEligible) {
     return FALSE;
 }
 
-BOOL CheckSeenByNpcTrainers(FieldSystem *fieldSystem, MapObjectManager *manager, PlayerAvatar *avatar, LocalMapObject *exclude, EngageParams *out) {
+static BOOL CheckSeenByNpcTrainers(FieldSystem *fieldSystem, MapObjectManager *manager, PlayerAvatar *avatar, LocalMapObject *exclude, EngageParams *out) {
     int x;
     int index = 0;
     int direction;
@@ -485,7 +526,7 @@ BOOL CheckSeenByNpcTrainers(FieldSystem *fieldSystem, MapObjectManager *manager,
     return FALSE;
 }
 
-void GetEngagingTrainerParams(EngageParams *out, LocalMapObject *object, int x, int z) {
+static void GetEngagingTrainerParams(EngageParams *out, LocalMapObject *object, int x, int z) {
     out->x = x;
     out->z = z;
     out->scriptId = MapObject_GetScriptID(object);
@@ -494,7 +535,7 @@ void GetEngagingTrainerParams(EngageParams *out, LocalMapObject *object, int x, 
     out->object = object;
 }
 
-int MapObject_GetTrainerSightType(LocalMapObject *object) {
+static int MapObject_GetTrainerSightType(LocalMapObject *object) {
     int type = MapObject_GetType(object);
     switch (type) {
     case 0:
@@ -513,7 +554,7 @@ int MapObject_GetTrainerSightType(LocalMapObject *object) {
     return type;
 }
 
-int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *outDir) {
+static int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *outDir) {
     int mode = MapObject_GetTrainerSightType(object);
 
     if (mode == 1) {
@@ -545,11 +586,11 @@ int TrainerSight_FindPlayer(LocalMapObject *object, PlayerAvatar *player, int *o
     return -1;
 }
 
-int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused) {
+static int TrainerSight_GetDistanceInDirection(LocalMapObject *object, int direction, int range, int targetX, int targetZ, int unused) {
     return sTrainerSightDistanceFuncs[direction](object, range, targetX, targetZ, unused);
 }
 
-int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
+static int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
     int z, x = MapObject_GetXCoord(object);
     if (x == targetX) {
         z = MapObject_GetZCoord(object);
@@ -560,7 +601,7 @@ int TrainerSight_GetDistanceNorth(LocalMapObject *object, int range, int targetX
     return -1;
 }
 
-int TrainerSight_GetDistanceSouth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
+static int TrainerSight_GetDistanceSouth(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
     int z, x = MapObject_GetXCoord(object);
     if (x == targetX) {
         z = MapObject_GetZCoord(object);
@@ -571,7 +612,7 @@ int TrainerSight_GetDistanceSouth(LocalMapObject *object, int range, int targetX
     return -1;
 }
 
-int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
+static int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
     int x, z = MapObject_GetZCoord(object);
     if (z == targetZ) {
         x = MapObject_GetXCoord(object);
@@ -582,7 +623,7 @@ int TrainerSight_GetDistanceWest(LocalMapObject *object, int range, int targetX,
     return -1;
 }
 
-int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
+static int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX, int targetZ, int unused) {
     int x, z = MapObject_GetZCoord(object);
     if (z == targetZ) {
         x = MapObject_GetXCoord(object);
@@ -593,7 +634,7 @@ int TrainerSight_GetDistanceEast(LocalMapObject *object, int range, int targetX,
     return -1;
 }
 
-int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distance) {
+static int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distance) {
     int x;
     int y;
     int z;
@@ -620,7 +661,7 @@ int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distan
     return TRUE;
 }
 
-u32 MapObject_GetTrainerNum(LocalMapObject *object) {
+static u32 MapObject_GetTrainerNum(LocalMapObject *object) {
     return ScriptNumToTrainerNum((u16)MapObject_GetScriptID(object));
 }
 
@@ -628,7 +669,7 @@ u32 MapObjectBehavior_GetTrainerNum(LocalMapObject *object) {
     return MapObject_GetTrainerNum(object);
 }
 
-LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum) {
+static LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum) {
     s32 index = 0;
     LocalMapObject *object;
     if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &object, &index, MAPOBJECTFLAG_ACTIVE)) {
@@ -657,7 +698,7 @@ void TrainerApproach_Delete(SysTask *task) {
     TrainerApproach_DestroyTask(task);
 }
 
-SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex) {
+static SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex) {
     TrainerApproachWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(TrainerApproachWork));
     SysTask *task;
     if (work == NULL) {
@@ -679,23 +720,23 @@ SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *tr
     return task;
 }
 
-BOOL TrainerApproach_GetDone(SysTask *task) {
+static BOOL TrainerApproach_GetDone(SysTask *task) {
     TrainerApproachWork *work = SysTask_GetData(task);
     return work->done;
 }
 
-void TrainerApproach_DestroyTask(SysTask *task) {
+static void TrainerApproach_DestroyTask(SysTask *task) {
     void *work = SysTask_GetData(task);
     Heap_FreeExplicit(HEAP_ID_FIELD1, work);
     SysTask_Destroy(task);
 }
 
-void TrainerApproach_Task(SysTask *task, void *data) {
+static void TrainerApproach_Task(SysTask *task, void *data) {
     TrainerApproachWork *work = data;
     while (sTrainerApproachStateFuncs[work->state](work) == TRUE) {}
 }
 
-BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {
+static BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {
     LocalMapObject *object = work->trainer;
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         MapObject_UnpauseMovement(object);
@@ -704,7 +745,7 @@ BOOL TrainerApproach_UnpauseTrainer(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work) {
+static BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work) {
     LocalMapObject *object = work->trainer;
     if (MapObject_CheckSingleMovement(object) == TRUE) {
         return FALSE;
@@ -715,7 +756,7 @@ BOOL TrainerApproach_FaceDirection(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work) {
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->player);
     if (!MapObject_IsMovementPaused(player)) {
         return FALSE;
@@ -733,7 +774,7 @@ BOOL TrainerApproach_WaitForPlayer(TrainerApproachWork *work) {
     }
 }
 
-BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
+static BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
     if (!MapObject_AreBitsSetForMovementScriptInit(work->trainer)) {
         return FALSE;
     }
@@ -745,7 +786,7 @@ BOOL TrainerApproach_StartFace(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
     if (!MapObject_IsMovementPaused(work->trainer)) {
         return FALSE;
     }
@@ -753,13 +794,13 @@ BOOL TrainerApproach_WaitFace(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work) {
+static BOOL TrainerApproach_SpawnExclamation(TrainerApproachWork *work) {
     work->effect = EmoteMark_Spawn(work->trainer, 0, 0);
     work->state = TRAINER_APPROACH_WAIT_EXCLAMATION;
     return FALSE;
 }
 
-BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work) {
     if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
         work->state = TRAINER_APPROACH_WAIT;
@@ -767,20 +808,20 @@ BOOL TrainerApproach_WaitExclamation(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL TrainerApproach_StartReveal(TrainerApproachWork *work) {
+static BOOL TrainerApproach_StartReveal(TrainerApproachWork *work) {
     MapObject_SetHeldMovement(work->trainer, 0x65);
     work->state = TRAINER_APPROACH_WAIT_REVEAL;
     return FALSE;
 }
 
-BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitReveal(TrainerApproachWork *work) {
     if (MapObject_IsMovementPaused(work->trainer) == TRUE) {
         work->state = TRAINER_APPROACH_WAIT;
     }
     return FALSE;
 }
 
-BOOL TrainerApproach_Wait(TrainerApproachWork *work) {
+static BOOL TrainerApproach_Wait(TrainerApproachWork *work) {
     if (++work->timer >= 30) {
         work->timer = 0;
         work->state = TRAINER_APPROACH_CHECK_DISTANCE;
@@ -788,7 +829,7 @@ BOOL TrainerApproach_Wait(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
+static BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
     if (work->distance <= 1) {
         work->state = TRAINER_APPROACH_WAIT_ARRIVED;
         return TRUE;
@@ -797,7 +838,7 @@ BOOL TrainerApproach_CheckDistance(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
+static BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->trainer) == TRUE) {
         MapObject_SetHeldMovement(work->trainer, GetMovementForDirection(work->direction, MOVEMENT_STEP_UP));
         work->state = TRAINER_APPROACH_WAIT_STEP;
@@ -805,7 +846,7 @@ BOOL TrainerApproach_StartStep(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL TrainerApproach_WaitStep(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitStep(TrainerApproachWork *work) {
     if (!MapObject_IsMovementPaused(work->trainer)) {
         return FALSE;
     }
@@ -814,7 +855,7 @@ BOOL TrainerApproach_WaitStep(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work) {
     if (++work->timer < 8) {
         return FALSE;
     }
@@ -823,7 +864,7 @@ BOOL TrainerApproach_WaitArrived(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
+static BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
     LocalMapObject *object = PlayerAvatar_GetMapObject(work->player);
     int x = MapObject_GetXCoord(object);
     int z = MapObject_GetZCoord(object);
@@ -842,7 +883,7 @@ BOOL TrainerApproach_TurnPlayer(TrainerApproachWork *work) {
     return FALSE;
 }
 
-BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work) {
+static BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work) {
     LocalMapObject *player = PlayerAvatar_GetMapObject(work->player);
     if (!MapObject_IsMovementPaused(player)) {
         return FALSE;
@@ -852,14 +893,14 @@ BOOL TrainerApproach_WaitPlayerTurn(TrainerApproachWork *work) {
     return TRUE;
 }
 
-BOOL TrainerApproach_ResetTrainerMovement(TrainerApproachWork *work) {
+static BOOL TrainerApproach_ResetTrainerMovement(TrainerApproachWork *work) {
     MapObject_ClearHeldMovementIfActive(work->trainer);
     MapObject_ChangeMovement(work->trainer, 0);
     work->state = TRAINER_APPROACH_FINISH;
     return TRUE;
 }
 
-BOOL TrainerApproach_Finish(TrainerApproachWork *work) {
+static BOOL TrainerApproach_Finish(TrainerApproachWork *work) {
     work->done = TRUE;
     return FALSE;
 }

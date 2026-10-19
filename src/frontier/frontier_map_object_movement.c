@@ -6,8 +6,6 @@
 
 typedef BOOL (*FrontierMapMovementFunc)(void *frontier, FrontierMapObject *object);
 
-FrontierMap *Frontier_GetMap(void *frontier);
-FrontierMapObject *Frontier_GetMapObjects(void *frontier);
 void FrontierScript_GetMovementStep(Field2DMoveQueueEntry *command, Field2DObject *object, u16 id, s32 direction);
 
 void FrontierMap_SetObjectMovement(void *frontier, u32 id, u32 type, const s16 *params, s32 count) {

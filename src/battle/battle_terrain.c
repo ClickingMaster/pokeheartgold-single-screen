@@ -23,7 +23,6 @@ static void BattleTerrain_LoadResources(BattleTerrain *terrain);
 static void BattleTerrain_CreateSprite(BattleTerrain *terrain);
 static void BattleTerrain_DeleteSprite(BattleTerrain *terrain);
 static void BattleTerrain_UnloadResources(BattleTerrain *terrain);
-void BattleTerrain_Init(BattleTerrain *terrain, BattleSystem *battleSystem, s32 side, s32 terrainId);
 
 static const u16 sEnemyTerrainCharFiles[] = {
     0x88,

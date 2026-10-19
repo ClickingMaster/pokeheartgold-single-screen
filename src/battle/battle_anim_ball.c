@@ -31,14 +31,14 @@
 
 fx32 FX_Sqrt(fx32 x);
 
-#define BALL_ROTATION(data)     ((BattleAnimValueMotion *)&(data)->throwMotions[0x34 - 0x34]) // value motion of the rotation
-#define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[0x48 - 0x34])                  // linear part of the throw arc
-#define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[0x6C - 0x34])                  // height part of the throw arc
-#define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0xB8 - 0xB8])                   // sprite position at the mode start
-#define BALL_Y(data)            (*(s16 *)&(data)->throwCoords[0xBA - 0xB8])
-#define BALL_TARGET_X(data)     (*(s16 *)&(data)->throwCoords[0xBC - 0xB8]) // end of the throw arc
-#define BALL_TARGET_Y(data)     (*(s16 *)&(data)->throwCoords[0xBE - 0xB8])
-#define BALL_ARC_DURATION(data) (*(int *)&(data)->throwCoords[0xC0 - 0xB8])
+#define BALL_ROTATION(data)     ((BattleAnimValueMotion *)&(data)->throwMotions[0]) // value motion of the rotation
+#define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[20])                 // linear part of the throw arc
+#define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[56])                 // height part of the throw arc
+#define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0])                   // sprite position at the mode start
+#define BALL_Y(data)            (*(s16 *)&(data)->throwCoords[2])
+#define BALL_TARGET_X(data)     (*(s16 *)&(data)->throwCoords[4]) // end of the throw arc
+#define BALL_TARGET_Y(data)     (*(s16 *)&(data)->throwCoords[6])
+#define BALL_ARC_DURATION(data) (*(int *)&(data)->throwCoords[8])
 
 typedef BOOL (*BallThrowFunc)(BallThrow *data);
 
@@ -121,13 +121,13 @@ typedef struct BattleAnimEmitterCounts {
     u32 counts[22];
 } BattleAnimEmitterCounts;
 
-extern const BallThrowStaticSpriteKinds sBallThrowStaticSpriteKinds;
-extern const BallThrowFlashingKinds sBallThrowFlashingKinds;
-extern const BallThrowFunc sBallThrowModeFuncs[];
-extern const BallThrowFunc sBallThrowBallAnimFuncs[];
-extern const BallThrowBounceSound sBallThrowBounceSounds[];
-extern const BallThrowSpinningKinds sBallThrowSpinningKinds;
-extern const s16 sBallThrowShakeOffsets[];
+extern const BallThrowStaticSpriteKinds gBallThrowStaticSpriteKinds;
+extern const BallThrowFlashingKinds gBallThrowFlashingKinds;
+extern const BallThrowFunc gBallThrowModeFuncs[];
+extern const BallThrowFunc gBallThrowBallAnimFuncs[];
+extern const BallThrowBounceSound gBallThrowBounceSounds[];
+extern const BallThrowSpinningKinds gBallThrowSpinningKinds;
+extern const s16 gBallThrowShakeOffsets[];
 enum BallCaptureState {
     BALL_CAPTURE_STATE_IDLE,
     BALL_CAPTURE_STATE_THROW,
@@ -159,7 +159,7 @@ enum BallCaptureState {
     BALL_CAPTURE_STATE_END,
 };
 
-extern const BallThrowFunc sBallThrowCaptureStateFuncs[];
+extern const BallThrowFunc gBallThrowCaptureStateFuncs[];
 extern const s16 gBallThrowBounceSteps[]; // bounce steps: y offset, then the animation frame
 extern const u16 gBallThrowBounceFrames[];
 // Per ball (BallAnim_GetBallTableIndex) tables
@@ -168,9 +168,9 @@ extern const u32 gBallAnimSealEmitterCounts[][2];
 extern const u32 gBallAnimBurstParticles[][3]; // burst particle resource
 extern const u32 gBallAnimBurstSkippedEmitters[][3];
 extern const u32 gBallAnimBurstEmitterCounts[][3];
-extern const u32 sBallSpriteResources[][4];
-extern const BallSealEmitDelays sBallSealEmitDelays;
-extern const BattleAnimEmitterCounts sBattleAnimEmitterCounts;
+extern const u32 gBallSpriteResources[][4];
+extern const BallSealEmitDelays gBallSealEmitDelays;
+extern const BattleAnimEmitterCounts gBattleAnimEmitterCounts;
 extern const s16 gBattlerSlideInTargetX[][2];
 extern const s16 gBattlerPokepicPositions[][3];
 
@@ -185,7 +185,7 @@ int BallAnim_GetBallTableIndex(int ball) {
 }
 
 BOOL BallThrow_IsSpinningKind(u32 kind) {
-    BallThrowSpinningKinds list = sBallThrowSpinningKinds;
+    BallThrowSpinningKinds list = gBallThrowSpinningKinds;
     BOOL result = FALSE;
     u32 i = result;
     u32 *ptr = list.kinds;
@@ -201,7 +201,7 @@ BOOL BallThrow_IsSpinningKind(u32 kind) {
 }
 
 BOOL BallThrow_IsFlashingKind(u32 kind) {
-    BallThrowFlashingKinds list = sBallThrowFlashingKinds;
+    BallThrowFlashingKinds list = gBallThrowFlashingKinds;
     BOOL result = FALSE;
     u32 i = result;
     u32 *ptr = list.kinds;
@@ -217,7 +217,7 @@ BOOL BallThrow_IsFlashingKind(u32 kind) {
 }
 
 BOOL BallThrow_ShouldAnimateSprite(u32 kind) {
-    BallThrowStaticSpriteKinds list = sBallThrowStaticSpriteKinds;
+    BallThrowStaticSpriteKinds list = gBallThrowStaticSpriteKinds;
     BOOL result = TRUE;
     u32 i = 0;
     u32 *ptr = list.kinds;
@@ -253,7 +253,7 @@ u32 BallAnim_GetBurstSkippedEmitter(int ball) {
 }
 
 u32 BallAnim_GetSpriteResource(int ball, int index) {
-    return sBallSpriteResources[BallAnim_GetBallTableIndex(ball)][index];
+    return gBallSpriteResources[BallAnim_GetBallTableIndex(ball)][index];
 }
 
 BallSealEffect *BallSealEffect_Alloc(enum HeapID heapId) {
@@ -651,9 +651,9 @@ void BallBurstEffect_Free(BallBurstEffect *effect) {
 BOOL BallThrow_BallAnimThrow(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 1);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_THROW);
     }
-    if (BallThrow_IsCaptureState(data, 2) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_GO_TO_OPEN) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -662,9 +662,9 @@ BOOL BallThrow_BallAnimThrow(BallThrow *data) {
 BOOL BallThrow_BallAnimOpen(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 3);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_OPEN);
     }
-    if (BallThrow_IsCaptureState(data, 4) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_OPEN_DONE) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -673,9 +673,9 @@ BOOL BallThrow_BallAnimOpen(BallThrow *data) {
 BOOL BallThrow_BallAnimDeflect(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 5);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_DEFLECT);
     }
-    if (BallThrow_IsCaptureState(data, 6) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_DEFLECT_DONE) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -684,9 +684,9 @@ BOOL BallThrow_BallAnimDeflect(BallThrow *data) {
 BOOL BallThrow_BallAnimFall(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 7);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_START_FALL);
     }
-    if (BallThrow_IsCaptureState(data, 14) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_BOUNCE_DONE) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -695,9 +695,9 @@ BOOL BallThrow_BallAnimFall(BallThrow *data) {
 BOOL BallThrow_BallAnimShake(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 15);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_SHAKE_WAIT);
     }
-    if (BallThrow_IsCaptureState(data, 18) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_SHAKE_DONE) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -706,9 +706,9 @@ BOOL BallThrow_BallAnimShake(BallThrow *data) {
 BOOL BallThrow_BallAnimSkip(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 19);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_GO_TO_SKIP);
     }
-    if (BallThrow_IsCaptureState(data, 27) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_END) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -717,9 +717,9 @@ BOOL BallThrow_BallAnimSkip(BallThrow *data) {
 BOOL BallThrow_BallAnimClick(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 21);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_CLICK);
     }
-    if (BallThrow_IsCaptureState(data, 22) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_CLICK_DONE) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -728,9 +728,9 @@ BOOL BallThrow_BallAnimClick(BallThrow *data) {
 BOOL BallThrow_BallAnimFade(BallThrow *data) {
     if (data->ballAnimStarted == 0) {
         data->ballAnimStarted++;
-        BallThrow_SetCaptureState(data, 23);
+        BallThrow_SetCaptureState(data, BALL_CAPTURE_STATE_RESTORE_PALETTE);
     }
-    if (BallThrow_IsCaptureState(data, 27) == TRUE) {
+    if (BallThrow_IsCaptureState(data, BALL_CAPTURE_STATE_END) == TRUE) {
         return FALSE;
     }
     return TRUE;
@@ -742,7 +742,7 @@ void BallThrow_SetBallAnimation(BallThrow *data, s32 ballAnim) {
 }
 
 BOOL BallThrow_IsBallAnimationPlaying(BallThrow *data, s32 ballAnim_Unused) {
-    return sBallThrowBallAnimFuncs[data->ballAnim](data);
+    return gBallThrowBallAnimFuncs[data->ballAnim](data);
 }
 
 void BallThrow_GoToCaptureState(BallThrow *data, int state) {
@@ -909,8 +909,8 @@ BOOL BallThrow_CaptureStateBounce(BallThrow *data) {
         ManagedSprite_SetAnimationFrame(data->managedSprite, frame);
         data->stateFrames++;
         for (int i = 0; i < 5; i++) {
-            if (data->stateFrames == sBallThrowBounceSounds[i].frame) {
-                PlaySE_SetPan(sBallThrowBounceSounds[i].seqNo, 117);
+            if (data->stateFrames == gBallThrowBounceSounds[i].frame) {
+                PlaySE_SetPan(gBallThrowBounceSounds[i].seqNo, 117);
             }
         }
         if (data->stateFrames > 20 || dy == 0xFF) {
@@ -957,7 +957,7 @@ BOOL BallThrow_CaptureStateShake(BallThrow *data) {
         // fallthrough
     case 1: {
         int shake = data->shakeCount;
-        const s16 *offsets = (const s16 *)((const u8 *)sBallThrowShakeOffsets + shake * 24);
+        const s16 *offsets = (const s16 *)((const u8 *)gBallThrowShakeOffsets + shake * 24);
         int index = data->stateFrames;
         s16 dx = offsets[index];
         data->stateFrames++;
@@ -1098,7 +1098,7 @@ BOOL BallThrow_CaptureStateEnd(BallThrow *data) {
 }
 
 BOOL BallThrow_RunCaptureState(BallThrow *data) {
-    return sBallThrowCaptureStateFuncs[data->captureState](data);
+    return gBallThrowCaptureStateFuncs[data->captureState](data);
 }
 
 BOOL BallThrow_RunThrowArc(BallThrow *data) {
@@ -1367,7 +1367,7 @@ void BallThrow_Task(SysTask *task, void *data) {
             SpriteSystem_DrawSprites(ballData->spriteManager);
             return;
         }
-        if (!sBallThrowModeFuncs[ballData->params.mode](ballData)) {
+        if (!gBallThrowModeFuncs[ballData->params.mode](ballData)) {
             ballData->modeRunning = FALSE;
         }
         if (ballData->animateSprite == TRUE) {
@@ -1705,7 +1705,7 @@ s32 BallSealEffect_GetSealDistance(const SEAL *seal) {
 }
 
 u8 BallSealEffect_GetSealEmitDelay(const SEAL *seal) {
-    BallSealEmitDelays delays = sBallSealEmitDelays;
+    BallSealEmitDelays delays = gBallSealEmitDelays;
     int band;
 
     if (!Seal_IsLetterSeal((u8)SealOnCapsuleGetID(seal))) {
@@ -1825,7 +1825,7 @@ void *BattleAnimEmitter_GetEmitterParam(void) {
 }
 
 int BattleAnimEmitter_GetEmitterCount(int resourceId) {
-    BattleAnimEmitterCounts counts = sBattleAnimEmitterCounts;
+    BattleAnimEmitterCounts counts = gBattleAnimEmitterCounts;
     u32 index = resourceId - 5;
     if (index >= 22) {
         GF_AssertFail();

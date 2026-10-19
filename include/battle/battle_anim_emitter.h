@@ -21,7 +21,7 @@ typedef struct BattleAnimEmitterConfig {
     u32 battlerOrder;
     int positionMode;
     int axisMode;
-    u32 flags; // a flag callback runs for every mask of sBattleAnimEmitterFlagMasks set here
+    u32 flags; // a flag callback runs for every mask of gBattleAnimEmitterFlagMasks set here
     int cameraMode;
     int battlerA;
     int battlerB;

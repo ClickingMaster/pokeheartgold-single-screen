@@ -159,9 +159,9 @@ struct BattleAnimBattlerSprites {
     Pokepic *pokepics[4];
 };
 
-extern void (*const sBattleAnimEmitterCallbackTable[])(SPLEmitter *);
+extern void (*const gBattleAnimEmitterCallbackTable[])(SPLEmitter *);
 // assert messages; GF_ASSERT(message == NULL) is an assert that always fails
-extern const char sStr_HaikeiSubSystemLaunchLimit[];
+extern const char gStr_HaikeiSubSystemLaunchLimit[];
 extern const char gBattleAnimNoBgPaletteAnimMsg[];
 extern const char gBattleAnimInvalidExFlagMsg[];
 
@@ -431,7 +431,7 @@ void BattleAnimSystem_ExecuteCommands(BattleAnimSystem *system) {
     } while (system->delay == 0 && system->active == TRUE);
 }
 
-void BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
+SysTask *BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
     switch (kind) {
     case 1:
         system->taskCount++;
@@ -443,7 +443,7 @@ void BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTa
         GF_AssertFail();
         break;
     }
-    SysTask_CreateOnMainQueue(func, data, priority);
+    return SysTask_CreateOnMainQueue(func, data, priority);
 }
 
 void BattleAnimSystem_DestroyTaskOfKind(int kind, BattleAnimSystem *system, SysTask *task) {
@@ -643,16 +643,16 @@ BOOL BattleAnimSystem_IsInitialized(BattleAnimSystem *system) {
     return system->initialized == TRUE;
 }
 
-void BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
-    BattleAnimSystem_CreateTaskOfKind(1, system, func, data, priority);
+SysTask *BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
+    return BattleAnimSystem_CreateTaskOfKind(1, system, func, data, priority);
 }
 
-void BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data) {
-    BattleAnimSystem_CreateTaskOfKind(1, system, func, data, 1100);
+SysTask *BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data) {
+    return BattleAnimSystem_CreateTaskOfKind(1, system, func, data, 1100);
 }
 
-void BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
-    BattleAnimSystem_CreateTaskOfKind(2, system, func, data, priority);
+SysTask *BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority) {
+    return BattleAnimSystem_CreateTaskOfKind(2, system, func, data, priority);
 }
 
 void BattleAnimSystem_DestroyTask(BattleAnimSystem *system, SysTask *task) {
@@ -1885,7 +1885,7 @@ void BattleAnimSystem_RegisterBgEffect(BattleAnimBgEffect **effects, void *effec
             return;
         }
     }
-    GF_ASSERT(sStr_HaikeiSubSystemLaunchLimit == NULL);
+    GF_ASSERT(gStr_HaikeiSubSystemLaunchLimit == NULL);
 }
 
 void *BattleAnimSystem_FindBgEffect(BattleAnimBgEffect **effects, int kind) {
@@ -3394,7 +3394,7 @@ SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum Heap
 }
 
 SPLEmitter *BattleAnimSystem_CreateEmitter(SPLEmitter *particleSystem, int resId, int callback, BattleAnimSystem *system) {
-    ParticleSystem_CreateEmitterWithParam(particleSystem, resId, sBattleAnimEmitterCallbackTable[callback], system);
+    ParticleSystem_CreateEmitterWithParam(particleSystem, resId, gBattleAnimEmitterCallbackTable[callback], system);
 }
 
 void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem) {

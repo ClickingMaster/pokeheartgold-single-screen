@@ -101,18 +101,18 @@ static BOOL EmoteBubble_ShowTask(TaskManager *taskManager);
 static void EmoteBubble_LoadGfx(EmoteBubble *bubble);
 static void EmoteBubble_FreeGfx(EmoteBubble *bubble);
 static void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecFx32 *position);
-static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work);
-static void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work);
-static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work);
-static void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work);
+static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, void *state);
+static void EmoteBubbleEffect_Destroy(FieldEffect *effect, void *state);
+static void EmoteBubbleEffect_Update(FieldEffect *effect, void *state);
+static void EmoteBubbleEffect_Draw(FieldEffect *effect, void *state);
 static BOOL EmoteBubbleAnim_Advance(EmoteBubbleAnim *anim);
 
 static const FieldEffectBasicTemplate sEmoteBubbleEffectTemplate = {
     sizeof(EmoteBubbleEffect),
-    (FieldEffectInitFunc)EmoteBubbleEffect_Init,
-    (FieldEffectFunc)EmoteBubbleEffect_Destroy,
-    (FieldEffectFunc)EmoteBubbleEffect_Update,
-    (FieldEffectFunc)EmoteBubbleEffect_Draw,
+    EmoteBubbleEffect_Init,
+    EmoteBubbleEffect_Destroy,
+    EmoteBubbleEffect_Update,
+    EmoteBubbleEffect_Draw,
 };
 
 static const u32 sEmoteBubbleRecordParams[6] = { 0, 1, 0, 0, 0, 2 };
@@ -217,7 +217,8 @@ static void *EmoteBubble_CreateBillboard(FieldEffectManager *manager, const VecF
     return billboard;
 }
 
-static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work) {
+static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, void *state) {
+    EmoteBubbleEffect *work = state;
     VecFx32 position;
 
     work->args = *(EmoteBubbleEffectArgs *)FieldEffect_GetUserData(effect);
@@ -244,13 +245,15 @@ static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work)
     return TRUE;
 }
 
-static void EmoteBubbleEffect_Destroy(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Destroy(FieldEffect *effect, void *state) {
+    EmoteBubbleEffect *work = state;
     BillboardObject_Delete(work->billboard);
     Heap_Free(work->anim.sequenceFile);
     Heap_Free(work->anim.texFile);
 }
 
-static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Update(FieldEffect *effect, void *state) {
+    EmoteBubbleEffect *work = state;
     VecFx32 result;
     VecFx32 position;
     VecFx32 facing;
@@ -302,7 +305,8 @@ static void EmoteBubbleEffect_Update(FieldEffect *effect, EmoteBubbleEffect *wor
     FieldEffect_SetPosition(effect, &result);
 }
 
-static void EmoteBubbleEffect_Draw(FieldEffect *effect, EmoteBubbleEffect *work) {
+static void EmoteBubbleEffect_Draw(FieldEffect *effect, void *state) {
+    EmoteBubbleEffect *work = state;
     VecFx32 position;
 
     if (work->hidden != 1) {

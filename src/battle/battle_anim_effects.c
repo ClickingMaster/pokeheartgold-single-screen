@@ -15,8 +15,6 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 
-typedef SysTask *(*BattleAnimCreateTaskFunc)(BattleAnimSystem *system, SysTaskFunc func, void *data);
-
 typedef BattleAnimScanlineWave *(*BattleAnimScanlineNewWaveFunc)(u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, int bgLayer, u32 priority, u32 fill, enum HeapID heapId);
 #define BattleAnimScanline_NewWaveU32Step ((BattleAnimScanlineNewWaveFunc)BattleAnimScanline_NewWave)
 
@@ -582,7 +580,7 @@ void BattleAnimFunc_SkewSlideAttackerBg(BattleAnimSystem *system) {
 
     memset(work, 0, sizeof(BattleAnimSkewSlideWork));
     work->system = system;
-    task = ((BattleAnimCreateTaskFunc)BattleAnimSystem_CreateTaskDefaultPriority)(system, BattleAnimTask_SkewSlideAttackerBg, work);
+    task = BattleAnimSystem_CreateTaskDefaultPriority(system, BattleAnimTask_SkewSlideAttackerBg, work);
     work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->x = Pokepic_GetAttr(work->pokepic, POKEPIC_X);
     work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);

@@ -1,13 +1,13 @@
 #include "global.h"
 
+#include "field/field_follow_mon.h"
+
 #include "field_system.h"
 #include "field_terrain.h"
 #include "map_object.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "overlay_01.h"
-
-void MapObject_GetPreviousCoordsBehind(LocalMapObject *object, int *x, int *z);
 
 BOOL MapObject_IsTileOccupiedInLink(LocalMapObject *self, int x, int y, int z) {
     MapObjectManager *manager = MapObject_GetManager(self);

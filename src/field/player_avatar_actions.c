@@ -217,22 +217,22 @@ static int RockClimb_Finish(RockClimbWork *work, TaskManager *taskManager);
 static WaterfallWork *Waterfall_NewWork(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim);
 static void Field_StartWaterfallTask(FieldSystem *fieldSystem, u32 direction);
 static BOOL Task_Waterfall(TaskManager *taskManager);
-static int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager);
-static int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager);
+static int WaterfallUp_StartCutIn(WaterfallWork *work);
+static int WaterfallUp_WaitCutIn(WaterfallWork *work);
+static int WaterfallUp_Init(WaterfallWork *work);
+static int WaterfallUp_Rise(WaterfallWork *work);
+static int WaterfallUp_Climb(WaterfallWork *work);
+static int WaterfallDown_StartCutIn(WaterfallWork *work);
+static int WaterfallDown_WaitCutIn(WaterfallWork *work);
+static int WaterfallDown_Init(WaterfallWork *work);
+static int WaterfallDown_Advance(WaterfallWork *work);
+static int WaterfallDown_Descend(WaterfallWork *work);
 static void Field_StartWhirlpoolTask(FieldSystem *fieldSystem, int direction, FieldMoveAnim *anim);
 static BOOL Task_Whirlpool(TaskManager *taskManager);
-static int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager);
-static int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager);
-static int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager);
+static int Whirlpool_StartCutIn(WaterfallWork *work);
+static int Whirlpool_WaitCutIn(WaterfallWork *work);
+static int Whirlpool_CreateEffect(WaterfallWork *work);
+static int Whirlpool_StartStep(WaterfallWork *work);
 static int Whirlpool_CheckNextTile(WaterfallWork *work);
 static void PlayerMovementSaving_Update(SysTask *task, void *data);
 static void FieldMoveAnim_Init(FieldSystem *fieldSystem, Pokemon *mon, FieldMoveAnim *anim);
@@ -245,26 +245,26 @@ static void FieldMoveTask_FreeWork(void *work);
 static Pokemon *Field_GetPartyMon(FieldSystem *fieldSystem, int partySlot);
 
 static const WaterfallStepFunc sWaterfallDownSteps[5] = {
-    (WaterfallStepFunc)WaterfallDown_StartCutIn,
-    (WaterfallStepFunc)WaterfallDown_WaitCutIn,
-    (WaterfallStepFunc)WaterfallDown_Init,
-    (WaterfallStepFunc)WaterfallDown_Advance,
-    (WaterfallStepFunc)WaterfallDown_Descend,
+    WaterfallDown_StartCutIn,
+    WaterfallDown_WaitCutIn,
+    WaterfallDown_Init,
+    WaterfallDown_Advance,
+    WaterfallDown_Descend,
 };
 
 static const WaterfallStepFunc sWaterfallUpSteps[5] = {
-    (WaterfallStepFunc)WaterfallUp_StartCutIn,
-    (WaterfallStepFunc)WaterfallUp_WaitCutIn,
-    (WaterfallStepFunc)WaterfallUp_Init,
-    (WaterfallStepFunc)WaterfallUp_Rise,
-    (WaterfallStepFunc)WaterfallUp_Climb,
+    WaterfallUp_StartCutIn,
+    WaterfallUp_WaitCutIn,
+    WaterfallUp_Init,
+    WaterfallUp_Rise,
+    WaterfallUp_Climb,
 };
 
 static const WaterfallStepFunc sWhirlpoolSteps[5] = {
-    (WaterfallStepFunc)Whirlpool_StartCutIn,
-    (WaterfallStepFunc)Whirlpool_WaitCutIn,
-    (WaterfallStepFunc)Whirlpool_CreateEffect,
-    (WaterfallStepFunc)Whirlpool_StartStep,
+    Whirlpool_StartCutIn,
+    Whirlpool_WaitCutIn,
+    Whirlpool_CreateEffect,
+    Whirlpool_StartStep,
     Whirlpool_CheckNextTile,
 };
 
@@ -1016,7 +1016,7 @@ static BOOL Task_Waterfall(TaskManager *taskManager) {
     return FALSE;
 }
 
-static int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_StartCutIn(WaterfallWork *work) {
     if (work->anim.useCutIn == TRUE) {
         FieldMoveAnim_Start(work->fieldSystem, &work->anim);
         work->state++;
@@ -1026,7 +1026,7 @@ static int WaterfallUp_StartCutIn(WaterfallWork *work, TaskManager *taskManager)
     return FIELD_MOVE_TASK_STEP_DONE;
 }
 
-static int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_WaitCutIn(WaterfallWork *work) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         PlaySE(SEQ_SE_DP_FW463);
         work->state++;
@@ -1034,7 +1034,7 @@ static int WaterfallUp_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) 
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Init(WaterfallWork *work) {
     VecFx32 position;
     VecFx32 step;
     u8 kind;
@@ -1060,7 +1060,7 @@ static int WaterfallUp_Init(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Rise(WaterfallWork *work) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1076,7 +1076,7 @@ static int WaterfallUp_Rise(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallUp_Climb(WaterfallWork *work) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1102,7 +1102,7 @@ static int WaterfallUp_Climb(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_DONE;
 }
 
-static int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_StartCutIn(WaterfallWork *work) {
     if (work->anim.useCutIn == TRUE) {
         FieldMoveAnim_Start(work->fieldSystem, &work->anim);
         work->state++;
@@ -1112,7 +1112,7 @@ static int WaterfallDown_StartCutIn(WaterfallWork *work, TaskManager *taskManage
     return FIELD_MOVE_TASK_STEP_NEXT;
 }
 
-static int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_WaitCutIn(WaterfallWork *work) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         PlaySE(SEQ_SE_DP_FW463);
         work->state++;
@@ -1120,7 +1120,7 @@ static int WaterfallDown_WaitCutIn(WaterfallWork *work, TaskManager *taskManager
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Init(WaterfallWork *work) {
     VecFx32 position;
     VecFx32 step;
     int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(DIR_SOUTH) << 1);
@@ -1149,7 +1149,7 @@ static int WaterfallDown_Init(WaterfallWork *work, TaskManager *taskManager) {
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Advance(WaterfallWork *work) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.z += work->step.z;
@@ -1167,7 +1167,7 @@ static int WaterfallDown_Advance(WaterfallWork *work, TaskManager *taskManager) 
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int WaterfallDown_Descend(WaterfallWork *work, TaskManager *taskManager) {
+static int WaterfallDown_Descend(WaterfallWork *work) {
     VecFx32 position;
     MapObject_CopyPositionVector(work->mapObject, &position);
     position.y += work->step.y;
@@ -1229,20 +1229,20 @@ static BOOL Task_Whirlpool(TaskManager *taskManager) {
     return result;
 }
 
-static int Whirlpool_StartCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_StartCutIn(WaterfallWork *work) {
     FieldMoveAnim_Start(work->fieldSystem, &work->anim);
     work->state++;
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int Whirlpool_WaitCutIn(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_WaitCutIn(WaterfallWork *work) {
     if (FieldMoveAnim_CheckFinished(&work->anim) == TRUE) {
         work->state++;
     }
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_CreateEffect(WaterfallWork *work) {
     if (FollowMon_IsActive(work->fieldSystem)) {
         MapObject_UnpauseMovement(FollowMon_GetMapObject(work->fieldSystem));
     }
@@ -1252,7 +1252,7 @@ static int Whirlpool_CreateEffect(WaterfallWork *work, TaskManager *taskManager)
     return FIELD_MOVE_TASK_STEP_WAIT;
 }
 
-static int Whirlpool_StartStep(WaterfallWork *work, TaskManager *taskManager) {
+static int Whirlpool_StartStep(WaterfallWork *work) {
     if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
         MapObject_SetHeldMovement(work->mapObject, GetMovementForDirection(work->direction, 4));
         work->state++;

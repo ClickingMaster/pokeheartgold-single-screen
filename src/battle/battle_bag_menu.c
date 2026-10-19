@@ -186,35 +186,27 @@ static void BattleBagMenu_StartButtonAnim(BattleBagMenu *menu, u8 button, u8 mod
 static void BattleBagMenu_UpdateButtonAnim(BattleBagMenu *menu);
 static void BattleBagMenu_DrawPageButtons(BattleBagMenu *menu, u8 page);
 
-extern const GraphicsModes sBattleBagGraphicsModes;
-extern const BgTemplate sBattleBagBgTemplateSub0;
-extern const BgTemplate sBattleBagBgTemplateSub1;
-extern const BgTemplate sBattleBagBgTemplateSub2;
-extern const TouchscreenHitbox sBattleBagPocketMenuHitboxes[];
-extern const TouchscreenHitbox sBattleBagItemListHitboxes[];
-extern const TouchscreenHitbox sBattleBagUseItemHitboxes[];
-extern const WindowTemplate sBattleBagMessageWindowTemplate;
-extern const WindowTemplate sBattleBagPocketMenuWindows[];
-extern const WindowTemplate sBattleBagItemListWindows[];
-extern const WindowTemplate sBattleBagUseItemWindows[];
-extern const u32 sBattleBagItemEntryMsgIds[][2];
-extern const u32 sBattleBagItemEntryQuantityMsgIds[][2];
-extern const SpriteResourceCountsListUnion sBattleBagSpriteCapacities;
-extern const int sBattleBagSpriteTemplates[][5];
-extern const int sBattleBagSpriteTemplatesPltt[][5];
-extern const int sBattleBagSpriteTemplatesCell[][5];
-extern const int sBattleBagSpriteTemplatesAnim[][5];
-extern const int sBattleBagSpriteTemplatesPriority[][5];
-extern const u8 sBattleBagPocketOrder[];
-extern const s32 sBattleBagItemListIconPos[][2];
-extern const DpadMenuBox *const sBattleBagPageCursorBoxes[];
-extern const s32 sBattleBagTutorialFingerPos[][2];
-extern const s32 sBattleBagTutorialFingerPosY[][2];
-extern const BattleBagButtonRect sBattleBagButtonRects[];
-extern const u8 sBattleBagButtonRectsY[];
-extern const u8 sBattleBagButtonRectsWidth[];
-extern const u8 sBattleBagButtonRectsHeight[];
-extern const u8 *const sBattleBagButtonWindowLists[];
+extern const GraphicsModes gBattleBagGraphicsModes;
+extern const BgTemplate gBattleBagBgTemplateSub0;
+extern const BgTemplate gBattleBagBgTemplateSub1;
+extern const BgTemplate gBattleBagBgTemplateSub2;
+extern const TouchscreenHitbox gBattleBagPocketMenuHitboxes[];
+extern const TouchscreenHitbox gBattleBagItemListHitboxes[];
+extern const TouchscreenHitbox gBattleBagUseItemHitboxes[];
+extern const WindowTemplate gBattleBagMessageWindowTemplate;
+extern const WindowTemplate gBattleBagPocketMenuWindows[];
+extern const WindowTemplate gBattleBagItemListWindows[];
+extern const WindowTemplate gBattleBagUseItemWindows[];
+extern const u32 gBattleBagItemEntryMsgIds[][2];
+extern const u32 gBattleBagItemEntryQuantityMsgIds[][2];
+extern const SpriteResourceCountsListUnion gBattleBagSpriteCapacities;
+extern const int gBattleBagSpriteTemplates[][5];
+extern const u8 gBattleBagPocketOrder[];
+extern const s32 gBattleBagItemListIconPos[][2];
+extern const DpadMenuBox *const gBattleBagPageCursorBoxes[];
+extern const s32 gBattleBagTutorialFingerPos[][2];
+extern const BattleBagButtonRect gBattleBagButtonRects[];
+extern const u8 *const gBattleBagButtonWindowLists[];
 
 void BattleBagMenu_Create(BattleBagContext *context) {
     BattleBagMenu *menu;
@@ -347,7 +339,7 @@ static int BattleBagMenu_HandlePocketMenuInput(BattleBagMenu *menu) {
     if (PaletteData_GetSelectedBuffersBitmask(menu->paletteData)) {
         return BATTLE_BAG_STATE_POCKET_MENU;
     }
-    input = BattleBagMenu_CheckTouchHitbox(menu, sBattleBagPocketMenuHitboxes);
+    input = BattleBagMenu_CheckTouchHitbox(menu, gBattleBagPocketMenuHitboxes);
     if (input == -1) {
         input = BattleDpadCursor_HandleInput(menu->cursor);
         if (input == -2) {
@@ -388,7 +380,7 @@ static int BattleBagMenu_HandlePocketMenuInput(BattleBagMenu *menu) {
 }
 
 static int BattleBagMenu_HandleItemListInput(BattleBagMenu *menu) {
-    u32 input = BattleBagMenu_CheckTouchHitbox(menu, sBattleBagItemListHitboxes);
+    u32 input = BattleBagMenu_CheckTouchHitbox(menu, gBattleBagItemListHitboxes);
 
     if (input == -1u) {
         int wasActive = BattleDpadCursor_IsActive(menu->cursor);
@@ -472,7 +464,7 @@ static int BattleBagMenu_ChangeItemPage(BattleBagMenu *menu) {
 }
 
 static int BattleBagMenu_HandleUseItemInput(BattleBagMenu *menu) {
-    int input = BattleBagMenu_CheckTouchHitbox(menu, sBattleBagUseItemHitboxes);
+    int input = BattleBagMenu_CheckTouchHitbox(menu, gBattleBagUseItemHitboxes);
 
     if (input == -1) {
         input = BattleDpadCursor_HandleInput(menu->cursor);
@@ -717,19 +709,19 @@ static int BattleBagMenu_RunTutorial(BattleBagMenu *menu) {
 }
 
 static void BattleBagMenu_InitBgs(BattleBagMenu *menu) {
-    GraphicsModes graphicsModes = sBattleBagGraphicsModes;
+    GraphicsModes graphicsModes = gBattleBagGraphicsModes;
     SetScreenModeAndDisable(&graphicsModes, SCREEN_SUB);
     {
-        BgTemplate template = sBattleBagBgTemplateSub2;
+        BgTemplate template = gBattleBagBgTemplateSub2;
         InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_2, &template, GF_BG_TYPE_TEXT);
     }
     {
-        BgTemplate template = sBattleBagBgTemplateSub1;
+        BgTemplate template = gBattleBagBgTemplateSub1;
         InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_1);
     {
-        BgTemplate template = sBattleBagBgTemplateSub0;
+        BgTemplate template = gBattleBagBgTemplateSub0;
         InitBgFromTemplate(menu->bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(menu->bgConfig, GF_BG_LYR_SUB_0);
@@ -835,7 +827,7 @@ static void BattleBagMenu_ConsumeItem(BattleSystem *battleSystem, u16 item, u8 p
 }
 
 static void BattleBagMenu_AddWindows(BattleBagMenu *menu) {
-    AddWindow(menu->bgConfig, &menu->messageWindow, &sBattleBagMessageWindowTemplate);
+    AddWindow(menu->bgConfig, &menu->messageWindow, &gBattleBagMessageWindowTemplate);
     BattleBagMenu_AddPageWindows(menu, menu->page);
 }
 
@@ -845,15 +837,15 @@ static void BattleBagMenu_AddPageWindows(BattleBagMenu *menu, int page) {
 
     switch (page) {
     case BATTLE_BAG_PAGE_POCKET_MENU:
-        templates = sBattleBagPocketMenuWindows;
+        templates = gBattleBagPocketMenuWindows;
         menu->pageWindowCount = 5;
         break;
     case BATTLE_BAG_PAGE_ITEM_LIST:
-        templates = sBattleBagItemListWindows;
+        templates = gBattleBagItemListWindows;
         menu->pageWindowCount = 26;
         break;
     case BATTLE_BAG_PAGE_USE_ITEM:
-        templates = sBattleBagUseItemWindows;
+        templates = gBattleBagUseItemWindows;
         menu->pageWindowCount = 4;
         break;
     }
@@ -927,7 +919,7 @@ static void BattleBagMenu_PrintItemName(BattleBagMenu *menu, int slot, int entry
 
     FillWindowPixelBuffer(&windows[window], 0);
     if (menu->pocketItems[menu->pocket][slot].id != ITEM_NONE) {
-        string = NewString_ReadMsgData(menu->msgData, sBattleBagItemEntryMsgIds[entry][0]);
+        string = NewString_ReadMsgData(menu->msgData, gBattleBagItemEntryMsgIds[entry][0]);
         BufferItemName(menu->msgFormat, 0, menu->pocketItems[menu->pocket][slot].id);
         StringExpandPlaceholders(menu->msgFormat, menu->string, string);
         width = FontID_String_GetWidth(fontId, menu->string, 0);
@@ -944,7 +936,7 @@ static void BattleBagMenu_PrintItemQuantity(BattleBagMenu *menu, int slot, int e
 
     FillWindowPixelBuffer(&windows[window], 0);
     if (menu->pocketItems[menu->pocket][slot].quantity) {
-        string = NewString_ReadMsgData(menu->msgData, sBattleBagItemEntryQuantityMsgIds[entry][0]);
+        string = NewString_ReadMsgData(menu->msgData, gBattleBagItemEntryQuantityMsgIds[entry][0]);
         BufferIntegerAsString(menu->msgFormat, 0, menu->pocketItems[menu->pocket][slot].quantity, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(menu->msgFormat, menu->string, string);
         ((AddTextPrinterWithColorFunc)AddTextPrinterParameterizedWithColor)(&windows[window], fontId, menu->string, 0, y, TEXT_SPEED_NOTRANSFER, color, NULL);
@@ -1112,8 +1104,8 @@ static inline void AddItemToBattlePockets(BattleBagMenu *menu, ItemSlot *item) {
 
     for (i = 0; i < 5; i++) {
         if (battlePockets & (1 << i)) {
-            menu->pocketItems[sBattleBagPocketOrder[i]][menu->itemCounts[sBattleBagPocketOrder[i]]] = *item;
-            menu->itemCounts[sBattleBagPocketOrder[i]]++;
+            menu->pocketItems[gBattleBagPocketOrder[i]][menu->itemCounts[gBattleBagPocketOrder[i]]] = *item;
+            menu->itemCounts[gBattleBagPocketOrder[i]]++;
         }
     }
 }
@@ -1168,7 +1160,7 @@ static void BattleBagMenu_InitSprites(BattleBagMenu *menu) {
 }
 
 static void BattleBagMenu_CreateSpriteManager(BattleBagMenu *menu) {
-    SpriteResourceCountsListUnion capacities = sBattleBagSpriteCapacities;
+    SpriteResourceCountsListUnion capacities = gBattleBagSpriteCapacities;
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
     menu->spriteManager = SpriteManager_New(spriteSystem);
     SpriteSystem_InitSprites(spriteSystem, menu->spriteManager, 12);
@@ -1208,13 +1200,13 @@ static ManagedSprite *BattleBagMenu_CreateSprite(BattleBagMenu *menu, int index)
     template.y = 0;
     template.z = 0;
     template.animation = 0;
-    template.drawPriority = sBattleBagSpriteTemplatesPriority[index][0];
+    template.drawPriority = gBattleBagSpriteTemplates[index][4];
     template.pal = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
-    template.resIdList[GF_GFX_RES_TYPE_CHAR] = sBattleBagSpriteTemplates[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_PLTT] = sBattleBagSpriteTemplatesPltt[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_CELL] = sBattleBagSpriteTemplatesCell[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_ANIM] = sBattleBagSpriteTemplatesAnim[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_CHAR] = gBattleBagSpriteTemplates[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_PLTT] = gBattleBagSpriteTemplates[index][1];
+    template.resIdList[GF_GFX_RES_TYPE_CELL] = gBattleBagSpriteTemplates[index][2];
+    template.resIdList[GF_GFX_RES_TYPE_ANIM] = gBattleBagSpriteTemplates[index][3];
     template.bgPriority = 1;
     template.vramTransfer = FALSE;
     return SpriteSystem_NewSprite(spriteSystem, menu->spriteManager, &template);
@@ -1282,7 +1274,7 @@ static void BattleBagMenu_ShowItemListIcons(BattleBagMenu *menu) {
         if (item != ITEM_NONE) {
             BattleBagMenu_SetItemIconGraphics(menu, item, 0xB4B7 + i);
             BattleBagMenu_SetItemIconPalette(menu, item, (u16)i, 0xB4B7 + i);
-            BattleBagMenu_ShowSpriteAt(menu->itemIcons[i], sBattleBagItemListIconPos[i][0], sBattleBagItemListIconPos[i][1]);
+            BattleBagMenu_ShowSpriteAt(menu->itemIcons[i], gBattleBagItemListIconPos[i][0], gBattleBagItemListIconPos[i][1]);
         }
     }
 }
@@ -1307,7 +1299,7 @@ static void BattleBagMenu_FreeCursor(BattleBagMenu *menu) {
 }
 
 static void BattleBagMenu_SetPageCursor(BattleBagMenu *menu, int page) {
-    BattleDpadCursor_SetBoxes(menu->cursor, sBattleBagPageCursorBoxes[page]);
+    BattleDpadCursor_SetBoxes(menu->cursor, gBattleBagPageCursorBoxes[page]);
     switch (page) {
     case BATTLE_BAG_PAGE_POCKET_MENU:
         BattleDpadCursor_SetPosition(menu->cursor, menu->pocket);
@@ -1343,7 +1335,7 @@ static void BattleBagMenu_FreeFinger(BattleBagMenu *menu) {
 
 static void BattleBagMenu_UpdateTutorialFinger(BattleBagMenu *menu, int page) {
     if (menu->context->isTutorial == 1) {
-        BattleFinger_Enable(menu->finger, sBattleBagTutorialFingerPos[page][0], sBattleBagTutorialFingerPosY[page][0]);
+        BattleFinger_Enable(menu->finger, gBattleBagTutorialFingerPos[page][0], gBattleBagTutorialFingerPos[page][1]);
         BattleFinger_SetTouchDelay(menu->finger, 60);
     } else {
         BattleFinger_Disable(menu->finger);
@@ -1491,19 +1483,18 @@ static void BattleBagMenu_BuildButtonTilemap(BattleBagMenu *menu, u16 *dst, u8 b
     u16 palette = BattleBagMenu_GetButtonPalette(menu, button, frame, page) << 12;
     u16 i;
 
-    for (i = 0; i < sBattleBagButtonRects[button].width * sBattleBagButtonRects[button].height; i++) {
+    for (i = 0; i < gBattleBagButtonRects[button].width * gBattleBagButtonRects[button].height; i++) {
         dst[i] = (src[i] & 0xFFF) | palette;
     }
     BattleBagMenu_CopyPocketIconTiles(menu, dst, button, frame);
 }
 
 static void BattleBagMenu_DrawButton(BattleBagMenu *menu, u8 button, u8 frame, u8 page) {
-    int index = button * 4;
-    int height = sBattleBagButtonRectsHeight[index];
-    int width = sBattleBagButtonRectsWidth[index];
+    int height = gBattleBagButtonRects[button].height;
+    int width = gBattleBagButtonRects[button].width;
     u16 *buffer = Heap_Alloc(menu->context->heapID, width * height * 2);
     BattleBagMenu_BuildButtonTilemap(menu, buffer, button, frame, page);
-    LoadRectToBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_2, buffer, ((const u8 *)sBattleBagButtonRects)[index], sBattleBagButtonRectsY[index], width, height);
+    LoadRectToBgTilemapRect(menu->bgConfig, GF_BG_LYR_SUB_2, buffer, gBattleBagButtonRects[button].x, gBattleBagButtonRects[button].y, width, height);
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, GF_BG_LYR_SUB_2);
     Heap_Free(buffer);
 }
@@ -1514,9 +1505,9 @@ static void BattleBagMenu_ScrollButtonWindows(BattleBagMenu *menu, u8 button, in
     u16 i;
 
     if (button >= 6 && button <= 11 && menu->itemListWindowBank == 0) {
-        windowList = sBattleBagButtonWindowLists[button + 11];
+        windowList = gBattleBagButtonWindowLists[button + 11];
     } else {
-        windowList = sBattleBagButtonWindowLists[button];
+        windowList = gBattleBagButtonWindowLists[button];
     }
     if (!windowList) {
         return;

@@ -189,4 +189,14 @@ BOOL FrontierMapMovement_LookAround(void *frontier, FrontierMapObject *object);
 FrontierMapBgAnim *FrontierMapBgAnim_Create(BgConfig *bgConfig, PaletteData *paletteData);
 void FrontierMapBgAnim_Free(FrontierMapBgAnim *anim);
 
+// The map parts of the frontier app's work (frontier_runtime.c)
+FrontierMap *Frontier_GetMap(void *);
+void Frontier_RequestExit(void *);
+void Frontier_ChangeMode(void *, u16, u16);
+FrontierMapObjectGfx *Frontier_GetMapObjectGfx(void *);
+FrontierMapObject *Frontier_GetMapObjects(void *);
+FrontierMapObject *Frontier_GetMapObject(void *, int);
+FrontierMapSpriteState *Frontier_GetMapSpriteState(void *);
+void Frontier_ResetMapSpriteState(void *);
+
 #endif

@@ -131,10 +131,10 @@ extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode18Z[6][6];
 extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20[6][6];
 extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20Y[6][6];
 extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20Z[6][6];
-extern BattleAnimEmitterConfigCb sBattleAnimEmitterFlagCallbacks[];
-extern const BattleAnimEmitterFlagMasks sBattleAnimEmitterFlagMasks; // terminated
-extern CameraAngle sBattleAnimEmitterCameraAngles[];
-extern BattleAnimEmitterConfigCb sBattleAnimEmitterCameraCallbacks[];
+extern BattleAnimEmitterConfigCb gBattleAnimEmitterFlagCallbacks[];
+extern const BattleAnimEmitterFlagMasks gBattleAnimEmitterFlagMasks; // terminated
+extern CameraAngle gBattleAnimEmitterCameraAngles[];
+extern BattleAnimEmitterConfigCb gBattleAnimEmitterCameraCallbacks[];
 // (x, y) per battler slot: set 0 singles, set 1 doubles
 extern const s16 gBattleAnimBattlerScreenPositions[][12];
 extern const s16 gBattleAnimBattlerScreenPositionsY[][12];
@@ -1393,11 +1393,11 @@ BOOL BattleAnimEmitterFlagCb_SetConvergenceForce(SPLEmitter *emitter, BattleAnim
 }
 
 void BattleAnimEmitter_RunFlagCallback(int index, SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
-    sBattleAnimEmitterFlagCallbacks[index](emitter, config);
+    gBattleAnimEmitterFlagCallbacks[index](emitter, config);
 }
 
 int BattleAnimEmitter_GetFlagMask(int index) {
-    BattleAnimEmitterFlagMasks table = sBattleAnimEmitterFlagMasks;
+    BattleAnimEmitterFlagMasks table = gBattleAnimEmitterFlagMasks;
     return table.masks[index];
 }
 
@@ -1448,7 +1448,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle4(SPLEmitter *emitter, BattleAnimEm
     CameraAngle angle;
     Camera *camera;
 
-    CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[4]);
+    CopyCameraAngle(&angle, &gBattleAnimEmitterCameraAngles[4]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
     ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
@@ -1471,7 +1471,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
     CameraAngle angle;
     Camera *camera;
 
-    CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[3]);
+    CopyCameraAngle(&angle, &gBattleAnimEmitterCameraAngles[3]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
     ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
@@ -1479,8 +1479,8 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
 }
 
 BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
-    CameraAngle angle1 = sBattleAnimEmitterCameraAngles[2];
-    CameraAngle angle2 = sBattleAnimEmitterCameraAngles[5];
+    CameraAngle angle1 = gBattleAnimEmitterCameraAngles[2];
+    CameraAngle angle2 = gBattleAnimEmitterCameraAngles[5];
     Camera *camera = ParticleSystem_GetCamera(config->particleSystem);
 
     ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
@@ -1496,7 +1496,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle0(SPLEmitter *emitter, BattleAnimEm
     CameraAngle angle;
     Camera *camera;
 
-    CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[0]);
+    CopyCameraAngle(&angle, &gBattleAnimEmitterCameraAngles[0]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
     ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
@@ -1507,7 +1507,7 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle1(SPLEmitter *emitter, BattleAnimEm
     CameraAngle angle;
     Camera *camera;
 
-    CopyCameraAngle(&angle, &sBattleAnimEmitterCameraAngles[1]);
+    CopyCameraAngle(&angle, &gBattleAnimEmitterCameraAngles[1]);
     camera = ParticleSystem_GetCamera(config->particleSystem);
     ParticleSystem_SetPerspectiveType(config->particleSystem, CAMERA_PERSPECTIVE_TYPE_ORTHOGRAPHIC);
     Camera_SetAnglePos(&angle, camera);
@@ -1531,7 +1531,7 @@ BOOL BattleAnimEmitterCameraCb_LookAtBattlerB(SPLEmitter *emitter, BattleAnimEmi
 }
 
 void BattleAnimEmitter_RunCameraCallback(int index, SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
-    sBattleAnimEmitterCameraCallbacks[index](emitter, config);
+    gBattleAnimEmitterCameraCallbacks[index](emitter, config);
 }
 
 void BattleAnimUtil_LookupScreenPos(int set, int index, s16 *x, s16 *y) {

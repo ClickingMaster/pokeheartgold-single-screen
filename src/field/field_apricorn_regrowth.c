@@ -51,19 +51,19 @@ static void ApricornRegrowth_FreeGfx(ApricornRegrowth *regrowth);
 static void ApricornRegrowth_LoadGfxIfUnused(ApricornRegrowth *regrowth);
 static void ApricornRegrowth_FreeGfxIfUnused(ApricornRegrowth *regrowth);
 void ApricornRegrowth_Spawn(LocalMapObject *mapObject);
-static BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, ApricornRegrowthEffect *work);
-static void ApricornRegrowthEffect_Destroy(FieldEffect *effect, ApricornRegrowthEffect *work);
-static void ApricornRegrowthEffect_Update(FieldEffect *effect, ApricornRegrowthEffect *work);
-static void ApricornRegrowthEffect_Draw(FieldEffect *effect, ApricornRegrowthEffect *work);
+static BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, void *state);
+static void ApricornRegrowthEffect_Destroy(FieldEffect *effect, void *state);
+static void ApricornRegrowthEffect_Update(FieldEffect *effect, void *state);
+static void ApricornRegrowthEffect_Draw(FieldEffect *effect, void *state);
 
 static const u32 sApricornRegrowthRecordParams[6] = { 0, 9, 1, 0, 0, 2 };
 
 static const FieldEffectBasicTemplate sApricornRegrowthTemplate = {
     sizeof(ApricornRegrowthEffect),
-    (FieldEffectInitFunc)ApricornRegrowthEffect_Init,
-    (FieldEffectFunc)ApricornRegrowthEffect_Destroy,
-    (FieldEffectFunc)ApricornRegrowthEffect_Update,
-    (FieldEffectFunc)ApricornRegrowthEffect_Draw,
+    ApricornRegrowthEffect_Init,
+    ApricornRegrowthEffect_Destroy,
+    ApricornRegrowthEffect_Update,
+    ApricornRegrowthEffect_Draw,
 };
 
 ApricornRegrowth *ApricornRegrowth_New(FieldEffectManager *manager) {
@@ -132,7 +132,8 @@ void ApricornRegrowth_Spawn(LocalMapObject *mapObject) {
     FieldEffectManager_CreateEffect(manager, &sApricornRegrowthTemplate, &position, 0, &args, 0xFF);
 }
 
-static BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, ApricornRegrowthEffect *work) {
+static BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, void *state) {
+    ApricornRegrowthEffect *work = state;
     VecFx32 position;
     work->args = *(ApricornRegrowthEffectArgs *)FieldEffect_GetUserData(effect);
     ApricornRegrowth_LoadGfxIfUnused(work->args.regrowth);
@@ -142,13 +143,15 @@ static BOOL ApricornRegrowthEffect_Init(FieldEffect *effect, ApricornRegrowthEff
     return TRUE;
 }
 
-static void ApricornRegrowthEffect_Destroy(FieldEffect *effect, ApricornRegrowthEffect *work) {
+static void ApricornRegrowthEffect_Destroy(FieldEffect *effect, void *state) {
+    ApricornRegrowthEffect *work = state;
     BillboardObject_Delete(work->billboard);
     ApricornRegrowth_Release(work->args.regrowth);
     ApricornRegrowth_FreeGfxIfUnused(work->args.regrowth);
 }
 
-static void ApricornRegrowthEffect_Update(FieldEffect *effect, ApricornRegrowthEffect *work) {
+static void ApricornRegrowthEffect_Update(FieldEffect *effect, void *state) {
+    ApricornRegrowthEffect *work = state;
     static const ApricornRegrowthSpeeds sSpeeds = {
         { FX32_ONE, FX32_ONE, 2 * FX32_ONE, 2 * FX32_ONE, FX32_ONE }
     };
@@ -168,7 +171,8 @@ static void ApricornRegrowthEffect_Update(FieldEffect *effect, ApricornRegrowthE
     }
 }
 
-static void ApricornRegrowthEffect_Draw(FieldEffect *effect, ApricornRegrowthEffect *work) {
+static void ApricornRegrowthEffect_Draw(FieldEffect *effect, void *state) {
+    ApricornRegrowthEffect *work = state;
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     BillboardObject_SetPosition(work->billboard, &position);

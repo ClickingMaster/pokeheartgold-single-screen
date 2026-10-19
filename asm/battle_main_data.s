@@ -1,6 +1,6 @@
 	.public gBattleBgTemplates
-	.public sBattleBgFillColors
-	.public sDoublesBattlerTypes
+	.public gBattleBgFillColors
+	.public gDoublesBattlerTypes
 
 	.rodata
 
@@ -15,7 +15,7 @@ gBattleBgTemplates:
 	.byte 3, 1, 6, 4, 0, 3, 0, 0
 	.word 0
 
-sBattleBgFillColors:
+gBattleBgFillColors:
 	.word 0x7B51, 0x023E, 0x5E00
 	.word 0x7B51, 0x023E, 0x5E00
 	.word 0x7B51, 0x023E, 0x5E00
@@ -40,5 +40,5 @@ sBattleBgFillColors:
 	.word 0x7FFF, 0x7FFF, 0x7FFF
 	.word 0x7FFF, 0x7FFF, 0x7FFF
 
-sDoublesBattlerTypes:
+gDoublesBattlerTypes:
 	.byte 2, 3, 4, 5

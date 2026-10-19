@@ -59,10 +59,6 @@ static const u8 sFrontierScriptConditionTable[6][3] = {
     { 1, 0, 1 },
 };
 
-void *Frontier_GetMap(void *frontierWork);
-void Frontier_RequestExit(void *frontierWork);
-void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
-
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 static BOOL FrontierScriptNative_WaitFrame(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitFrames(FrontierScriptContext *ctx);

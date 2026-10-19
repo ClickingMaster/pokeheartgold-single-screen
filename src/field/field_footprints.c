@@ -50,17 +50,17 @@ static void Footprints_FreeModels(Footprints *footprints);
 static NNSG3dRenderObj *Footprints_GetRenderObj(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 static RenderModelStorage *Footprints_GetModel(Footprints *footprints, u32 kind, u32 direction, u32 prevDirection);
 static BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind);
-static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work);
-static void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work);
-static void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work);
-static void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work);
+static BOOL FootprintEffect_Init(FieldEffect *effect, void *state);
+static void FootprintEffect_Destroy(FieldEffect *effect, void *state);
+static void FootprintEffect_Update(FieldEffect *effect, void *state);
+static void FootprintEffect_Draw(FieldEffect *effect, void *state);
 
 static const FieldEffectBasicTemplate sFootprintEffectTemplate = {
     sizeof(FootprintEffect),
-    (FieldEffectInitFunc)FootprintEffect_Init,
-    (FieldEffectFunc)FootprintEffect_Destroy,
-    (FieldEffectFunc)FootprintEffect_Update,
-    (FieldEffectFunc)FootprintEffect_Draw,
+    FootprintEffect_Init,
+    FootprintEffect_Destroy,
+    FootprintEffect_Update,
+    FootprintEffect_Draw,
 };
 
 // model files of bank B (bank A below)
@@ -257,7 +257,8 @@ static BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind) {
     return (BOOL)FieldEffectManager_CreateEffect(manager, &sFootprintEffectTemplate, &position, 0, &args, priority);
 }
 
-static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work) {
+static BOOL FootprintEffect_Init(FieldEffect *effect, void *state) {
+    FootprintEffect *work = state;
     FootprintEffectArgs *args;
 
     work->kind = FieldEffect_GetParam(effect);
@@ -269,10 +270,12 @@ static BOOL FootprintEffect_Init(FieldEffect *effect, FootprintEffect *work) {
     return TRUE;
 }
 
-static void FootprintEffect_Destroy(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Destroy(FieldEffect *effect, void *state) {
+    FootprintEffect *work = state;
 }
 
-static void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Update(FieldEffect *effect, void *state) {
+    FootprintEffect *work = state;
     switch (work->state) {
     case 0:
         work->timer++;
@@ -289,7 +292,8 @@ static void FootprintEffect_Update(FieldEffect *effect, FootprintEffect *work) {
     }
 }
 
-static void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work) {
+static void FootprintEffect_Draw(FieldEffect *effect, void *state) {
+    FootprintEffect *work = state;
     VecFx32 position;
 
     if (work->hidden == FALSE) {

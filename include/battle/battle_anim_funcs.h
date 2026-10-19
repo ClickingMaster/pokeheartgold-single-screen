@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_FUNCS_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_FUNCS_H
 
-// Overlay 7: effect functions of the battle move animation scripts (sBattleAnimFuncTable / sprite function table
+// Overlay 7: effect functions of the battle move animation scripts (gBattleAnimFuncTable / sprite function table
 // entries) and the tasks they start, 0x02223064-0x02226C4C.
 
 #include "battle/battle_anim_util.h"
@@ -103,9 +103,9 @@ void BattleAnimTask_SpriteArc(SysTask *task, void *data);
 void BattleAnimSpriteFunc_SpriteArc(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 
 // Battle animation system tasks and accessors
-void BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
-void BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
-void BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
+SysTask *BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
+SysTask *BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
+SysTask *BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
 void BattleAnimSystem_DestroyTask(BattleAnimSystem *system, SysTask *task);
 void BattleAnimSystem_DestroySoundTask(BattleAnimSystem *system, SysTask *task);
 SPLEmitter *BattleAnimSystem_GetParticleSystem(BattleAnimSystem *system, int index);

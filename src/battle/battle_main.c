@@ -17,6 +17,7 @@
 #include "battle/battle_recording_stop.h"
 #include "battle/battle_setup.h"
 #include "battle/battle_system.h"
+#include "battle/battle_terrain.h"
 #include "battle/battle_util.h"
 #include "battle/link_battle_screen.h"
 #include "dwc/net_common_internal.h"
@@ -26,6 +27,7 @@
 #include "bag.h"
 #include "bag_cursor.h"
 #include "battle_link_comm.h"
+#include "battle_record.h"
 #include "comm_state.h"
 #include "comm_wireless.h"
 #include "communication_core.h"
@@ -41,6 +43,7 @@
 #include "message_printer.h"
 #include "msgdata.h"
 #include "overlay_06.h"
+#include "overlay_07.h"
 #include "palette.h"
 #include "palette_blink.h"
 #include "palette_vram_addr.h"
@@ -79,12 +82,9 @@ typedef struct BattlerInitData {
 // The overlay 5 link battle screen arguments, held by the battle system while that screen runs.
 #define LINK_SCREEN_ARGS(battleSystem) ((LinkBattleScreenArgs *)(battleSystem)->linkScreenArgs)
 
-extern const u32 sBattleBgFillColors[23][3];
-extern const u8 sDoublesBattlerTypes[4];
+extern const u32 gBattleBgFillColors[23][3];
+extern const u8 gDoublesBattlerTypes[4];
 
-extern u32 *BattleAnimSystem_New(enum HeapID heapId);
-extern void BattleAnimSystem_Delete(u32 *animSystem);
-extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
 extern void CommState_FrameDummy(int heapId, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
@@ -310,7 +310,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     PokepicManager_SetPlttBaseAddrAndSize(battleSystem->pokepicManager, 0, 192);
     BattleSystem_HpBar_Init(battleSystem);
     Battle_ReserveTexAndPlttVram();
-    battleSystem->animSystem = BattleAnimSystem_New(HEAP_ID_BATTLE);
+    battleSystem->animSystem = (u32 *)BattleAnimSystem_New(HEAP_ID_BATTLE);
     BattleSystem_InitTerrainsAndBalls(battleSystem);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
@@ -321,9 +321,9 @@ void Battle_BattleInit(OverlayManager *manager) {
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_BG), battleSystem->bgPaletteBackup, 224);
     MIi_CpuCopy16(PaletteData_GetUnfadedBuf(battleSystem->palette, PLTTBUF_MAIN_OBJ), battleSystem->objPaletteBackup, 224);
     colorIndex = BattleSystem_GetBgTimeOfDay(battleSystem);
-    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 112);
-    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 192, 256);
-    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_OBJ, PLTTSEL_BOTH, (u16)sBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 223);
+    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)gBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 112);
+    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, (u16)gBattleBgFillColors[battleSystem->backgroundId][colorIndex], 192, 256);
+    PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_OBJ, PLTTSEL_BOTH, (u16)gBattleBgFillColors[battleSystem->backgroundId][colorIndex], 0, 223);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_TRANSPARENT, 0, 160, 192);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_BG, PLTTSEL_TRANSPARENT, 0, 0, 255);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_OBJ, PLTTSEL_TRANSPARENT, 65535, 0, 255);
@@ -445,7 +445,7 @@ void Battle_BattleExit(OverlayManager *man) {
     MessageFormat_Delete(battleSystem->msgFormat);
     PokepicAnimManager_Delete(battleSystem->pokepicAnimManager);
     ParticleSystem_FreeAll();
-    BattleAnimSystem_Delete(battleSystem->animSystem);
+    BattleAnimSystem_Delete((BattleAnimSystem *)battleSystem->animSystem);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         OpponentData_Free(battleSystem, battleSystem->opponentData[i], battleSystem->graphicsMode);
@@ -657,7 +657,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         if (battleSystem->battleType & BATTLE_TYPE_FRONTIER) {
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
-                battlerInitData.battlerType = sDoublesBattlerTypes[i];
+                battlerInitData.battlerType = gDoublesBattlerTypes[i];
                 battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             }
 
@@ -758,7 +758,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         int playerSlot;
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
-            battlerInitData.battlerType = sDoublesBattlerTypes[i];
+            battlerInitData.battlerType = gDoublesBattlerTypes[i];
             battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
@@ -792,7 +792,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     } else if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
-            battlerInitData.battlerType = sDoublesBattlerTypes[i];
+            battlerInitData.battlerType = gDoublesBattlerTypes[i];
             battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
@@ -816,7 +816,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     } else if (battleSystem->battleType & BATTLE_TYPE_DOUBLES) {
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
-            battlerInitData.battlerType = sDoublesBattlerTypes[i];
+            battlerInitData.battlerType = gDoublesBattlerTypes[i];
             battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }

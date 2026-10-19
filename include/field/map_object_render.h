@@ -9,6 +9,14 @@
 // queue that loads them over several frames. It lives inside MapObjectManager (MapObjectManager_GetRender).
 typedef struct MapObjectRender MapObjectRender;
 
+// What BillboardObject_SaveState keeps of a billboard while its map object is paused
+typedef struct BillboardState {
+    u32 visible;
+    u16 unused4;
+    u16 sequence;
+    fx32 frame;
+} BillboardState;
+
 void MapObjectRender_ReleaseUnused(MapObjectManager *manager, MapObjectRender *render);
 void *MapObjectRender_GetBillboards(MapObjectRender *render);
 BOOL MapObject_IsBillboardPending(LocalMapObject *object);
@@ -26,5 +34,7 @@ void MapObjectRender_Init(MapObjectRender *render, MapObjectManager *manager, u3
 void MapObjectRender_Free(MapObjectRender *render);
 u8 MapObjectRender_GetSpriteModelId(u32 spriteId);
 void MapObject_SetBillboardPending(LocalMapObject *object, BOOL set);
+void BillboardObject_SaveState(void *billboard, BillboardState *state);
+void BillboardObject_RestoreState(void *billboard, BillboardState *state);
 
 #endif // POKEHEARTGOLD_FIELD_MAP_OBJECT_RENDER_H

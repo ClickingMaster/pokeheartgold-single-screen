@@ -34,17 +34,17 @@ typedef struct MudSplashEffect {
 
 static void MudSplash_LoadGfx(MudSplash *splash);
 static void MudSplash_FreeGfx(MudSplash *splash);
-static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work);
-static void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work);
-static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work);
-static void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work);
+static BOOL MudSplashEffect_Init(FieldEffect *effect, void *state);
+static void MudSplashEffect_Destroy(FieldEffect *effect, void *state);
+static void MudSplashEffect_Update(FieldEffect *effect, void *state);
+static void MudSplashEffect_Draw(FieldEffect *effect, void *state);
 
 static const FieldEffectBasicTemplate sMudSplashEffectTemplate = {
     sizeof(MudSplashEffect),
-    (FieldEffectInitFunc)MudSplashEffect_Init,
-    (FieldEffectFunc)MudSplashEffect_Destroy,
-    (FieldEffectFunc)MudSplashEffect_Update,
-    (FieldEffectFunc)MudSplashEffect_Draw,
+    MudSplashEffect_Init,
+    MudSplashEffect_Destroy,
+    MudSplashEffect_Update,
+    MudSplashEffect_Draw,
 };
 
 MudSplash *MudSplash_New(FieldEffectManager *manager) {
@@ -80,7 +80,8 @@ void MudSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z) {
     FieldEffectManager_CreateEffect(args.manager, &sMudSplashEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work) {
+static BOOL MudSplashEffect_Init(FieldEffect *effect, void *state) {
+    MudSplashEffect *work = state;
     MudSplashEffectArgs *args = (MudSplashEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     FieldEffectManager_InitRenderAnimation(work->args.manager, &work->animation, &work->args.splash->model, &work->args.splash->animation, 0);
@@ -88,11 +89,13 @@ static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work) {
     return TRUE;
 }
 
-static void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Destroy(FieldEffect *effect, void *state) {
+    MudSplashEffect *work = state;
     RenderAnimation_Free(&work->animation);
 }
 
-static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Update(FieldEffect *effect, void *state) {
+    MudSplashEffect *work = state;
     if (RenderAnimation_IsDone(&work->animation) == TRUE) {
         FieldEffectManager_DestroyEffect((int)effect);
     } else {
@@ -100,7 +103,8 @@ static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
     }
 }
 
-static void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work) {
+static void MudSplashEffect_Draw(FieldEffect *effect, void *state) {
+    MudSplashEffect *work = state;
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     RenderObj_DrawAt(&work->renderObj, &position);

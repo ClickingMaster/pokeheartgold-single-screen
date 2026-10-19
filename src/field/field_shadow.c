@@ -61,44 +61,44 @@ static void FieldShadow_GetScale(FieldShadow *shadow, VecFx32 *dest);
 static int FieldShadow_FxToAlpha(fx32 value);
 static void FieldShadow_SetTimeOfDayParams(FieldShadow *shadow, int timeOfDay);
 static void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step);
-static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow);
+static void FieldShadow_UpdateTask(SysTask *task, void *data);
 static void FieldShadow_LoadModels(FieldShadow *shadow);
 static void FieldShadow_FreeModels(FieldShadow *shadow);
 static void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha);
-static BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work);
-static void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work);
-static void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work);
-static BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, FieldShadowEffect *work);
-static void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work);
-static void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, FieldShadowEffect *work);
+static BOOL FieldShadowEffect_Init(FieldEffect *effect, void *state);
+static void FieldShadowEffect_Destroy(FieldEffect *effect, void *state);
+static void FieldShadowEffect_Update(FieldEffect *effect, void *state);
+static BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, void *state);
+static void FieldShadowEffect_Draw(FieldEffect *effect, void *state);
+static void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, void *state);
 void FieldShadow_CreateFriendShadow(LocalMapObject *object, int index);
-static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, FieldShadowEffect *work);
-static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowEffect *work);
+static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, void *state);
+static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, void *state);
 
 static const u32 sShadowModelFiles[4] = { 31, 33, 34, 32 };
 
 static const FieldEffectBasicTemplate sMapObjectShadowTemplate = {
     sizeof(FieldShadowEffect),
-    (FieldEffectInitFunc)FieldShadowEffect_Init,
-    (FieldEffectFunc)FieldShadowEffect_Destroy,
-    (FieldEffectFunc)FieldShadowEffect_Update,
-    (FieldEffectFunc)FieldShadowEffect_Draw,
+    FieldShadowEffect_Init,
+    FieldShadowEffect_Destroy,
+    FieldShadowEffect_Update,
+    FieldShadowEffect_Draw,
 };
 
 static const FieldEffectBasicTemplate sFriendShadowTemplate = {
     sizeof(FieldShadowEffect),
-    (FieldEffectInitFunc)FieldShadowEffect_Init,
-    (FieldEffectFunc)FieldShadowEffect_Destroy,
-    (FieldEffectFunc)FieldShadowEffect_UpdateFriendShadow,
-    (FieldEffectFunc)FieldShadowEffect_DrawFriendShadow,
+    FieldShadowEffect_Init,
+    FieldShadowEffect_Destroy,
+    FieldShadowEffect_UpdateFriendShadow,
+    FieldShadowEffect_DrawFriendShadow,
 };
 
 static const FieldEffectBasicTemplate sFollowMonShadowTemplate = {
     sizeof(FieldShadowEffect),
-    (FieldEffectInitFunc)FieldShadowEffect_InitFollowMon,
-    (FieldEffectFunc)FieldShadowEffect_Destroy,
-    (FieldEffectFunc)FieldShadowEffect_Update,
-    (FieldEffectFunc)FieldShadowEffect_DrawFollowMon,
+    FieldShadowEffect_InitFollowMon,
+    FieldShadowEffect_Destroy,
+    FieldShadowEffect_Update,
+    FieldShadowEffect_DrawFollowMon,
 };
 
 static const fx32 sShadowAlphaByTimeOfDay[5] = { FX32_CONST(14), FX32_CONST(18), FX32_CONST(18), FX32_CONST(8), FX32_CONST(4) };
@@ -132,7 +132,7 @@ void FieldShadow_Free(FieldShadow *shadow) {
 static void FieldShadow_StartTask(FieldShadow *shadow) {
     FieldSystem *fieldSystem = FieldEffectManager_GetFieldSystem(shadow->manager);
     u32 priority = MapObjectManager_GetPriority(fieldSystem->mapObjectManager) - 1;
-    shadow->task = SysTask_CreateOnMainQueue((SysTaskFunc)FieldShadow_UpdateTask, shadow, priority);
+    shadow->task = SysTask_CreateOnMainQueue(FieldShadow_UpdateTask, shadow, priority);
 }
 
 static void FieldShadow_StopTask(FieldShadow *shadow) {
@@ -170,7 +170,8 @@ static void FieldShadow_StepTowards(fx32 *value, fx32 target, fx32 step) {
 }
 
 // Fades alpha and scale to the values of the current time of day.
-static void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
+static void FieldShadow_UpdateTask(SysTask *task, void *data) {
+    FieldShadow *shadow = data;
     fx32 y;
     VecFx32 scale;
     fx32 alpha;
@@ -252,7 +253,8 @@ void FieldShadow_CreateFollowMonShadow(LocalMapObject *object) {
     FieldEffectManager_CreateEffect(manager, &sFollowMonShadowTemplate, &pos, 3, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
-static BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work) {
+static BOOL FieldShadowEffect_Init(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     work->args = *(FieldShadowEffectArgs *)FieldEffect_GetUserData(effect);
     work->parameter = FieldEffect_GetParam(effect);
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
@@ -265,10 +267,12 @@ static BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work)
     return TRUE;
 }
 
-static void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_Destroy(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
 }
 
-static void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_Update(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
     if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
@@ -288,7 +292,8 @@ static void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *wor
     FieldEffect_SetPosition(effect, &pos);
 }
 
-static BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, FieldShadowEffect *work) {
+static BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     work->args = *(FieldShadowEffectArgs *)FieldEffect_GetUserData(effect);
     work->parameter = FieldEffect_GetParam(effect);
     work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
@@ -302,7 +307,8 @@ static BOOL FieldShadowEffect_InitFollowMon(FieldEffect *effect, FieldShadowEffe
     return TRUE;
 }
 
-static void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_Draw(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     VecFx32 pos;
     VecFx32 scale;
     MtxFx33 mtx;
@@ -320,7 +326,8 @@ static void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work)
     RenderObj_Draw(&shadow->renderObjs[0], &pos, &scale, &mtx);
 }
 
-static void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_DrawFollowMon(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     VecFx32 pos;
     VecFx32 scale;
     MtxFx33 mtx;
@@ -366,7 +373,8 @@ void FieldShadow_CreateFriendShadow(LocalMapObject *object, int index) {
     FieldEffectManager_CreateEffect(manager, &sFriendShadowTemplate, &pos, index, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
-static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     VecFx32 pos;
     LocalMapObject *object = work->args.mapObject;
     if (!MapObject_CheckSpriteIDAndMap(object, work->spriteId, work->objectId, work->mapId)) {
@@ -382,7 +390,8 @@ static void FieldShadowEffect_UpdateFriendShadow(FieldEffect *effect, FieldShado
     FieldEffect_SetPosition(effect, &pos);
 }
 
-static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowEffect *work) {
+static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, void *state) {
+    FieldShadowEffect *work = state;
     VecFx32 pos;
 
     if (work->hidden == 1) {

@@ -40,17 +40,17 @@ typedef struct GroundDustEffect {
 
 static void GroundDust_LoadGfx(GroundDust *dust);
 static void GroundDust_FreeGfx(GroundDust *dust);
-static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work);
-static void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work);
-static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work);
-static void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work);
+static BOOL GroundDustEffect_Init(FieldEffect *effect, void *state);
+static void GroundDustEffect_Destroy(FieldEffect *effect, void *state);
+static void GroundDustEffect_Update(FieldEffect *effect, void *state);
+static void GroundDustEffect_Draw(FieldEffect *effect, void *state);
 
 static const FieldEffectBasicTemplate sGroundDustEffectTemplate = {
     sizeof(GroundDustEffect),
-    (FieldEffectInitFunc)GroundDustEffect_Init,
-    (FieldEffectFunc)GroundDustEffect_Destroy,
-    (FieldEffectFunc)GroundDustEffect_Update,
-    (FieldEffectFunc)GroundDustEffect_Draw,
+    GroundDustEffect_Init,
+    GroundDustEffect_Destroy,
+    GroundDustEffect_Update,
+    GroundDustEffect_Draw,
 };
 
 static const u32 sGroundDustRecordParams[6] = { 0, 9, 1, 0, 0, 2 };
@@ -99,7 +99,8 @@ void GroundDust_Spawn(LocalMapObject *mapObject) {
     FieldEffectManager_CreateEffect(manager, &sGroundDustEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work) {
+static BOOL GroundDustEffect_Init(FieldEffect *effect, void *state) {
+    GroundDustEffect *work = state;
     VecFx32 position;
     work->args = *(GroundDustEffectArgs *)FieldEffect_GetUserData(effect);
     work->objectId = MapObject_GetID(work->args.mapObject);
@@ -109,11 +110,13 @@ static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work) {
     return TRUE;
 }
 
-static void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Destroy(FieldEffect *effect, void *state) {
+    GroundDustEffect *work = state;
     BillboardObject_Delete(work->billboard);
 }
 
-static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Update(FieldEffect *effect, void *state) {
+    GroundDustEffect *work = state;
     if (work->paused == FALSE) {
         fx32 frame;
         BillboardObject_AdvanceFrame(work->billboard, FX32_ONE);
@@ -124,7 +127,8 @@ static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work)
     }
 }
 
-static void GroundDustEffect_Draw(FieldEffect *effect, GroundDustEffect *work) {
+static void GroundDustEffect_Draw(FieldEffect *effect, void *state) {
+    GroundDustEffect *work = state;
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     position.z += 0x8000;

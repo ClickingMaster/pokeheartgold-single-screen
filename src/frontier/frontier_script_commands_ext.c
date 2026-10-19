@@ -93,7 +93,6 @@ typedef struct FrontierCameraPos {
     s16 x;
 } FrontierCameraPos;
 
-void *Frontier_GetMap(void *frontierWork);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 static BOOL FrontierScriptNative_WaitSpriteAnim(FrontierScriptContext *ctx);
 static void FrontierScript_SetObjectMovement(FrontierScriptContext *ctx, int unused, int count);

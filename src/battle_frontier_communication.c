@@ -112,7 +112,7 @@ static void BattleTowerLink_ReceivePartnerInfo(int sender, int unused, const u16
 
 BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *tower) {
     MI_CpuCopy8(tower->trainersInCurrentRound, tower->linkSendBuffer, sizeof(tower->trainersInCurrentRound));
-    if (Comm_SendCommand(0x3F, tower->linkSendBuffer, sizeof(tower->trainersInCurrentRound)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_TOWER_TRAINERS, tower->linkSendBuffer, sizeof(tower->trainersInCurrentRound)) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -142,7 +142,7 @@ BOOL FrontierLinkLobby_SendFacility(FrontierLinkLobby *lobby) {
     stat = FrontierLinkLobby_GetWinStreakStat(lobby->facility);
     frontier = Save_Frontier_GetStatic(lobby->saveData);
     lobby->sendBuffer[1] = FrontierSave_GetStat(frontier, stat, FrontierStat_GetFriendIndex(stat));
-    if (Comm_SendCommand(0x39, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_LOBBY_FACILITY, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -158,7 +158,7 @@ static void FrontierLinkLobby_ReceiveFacility(int sender, int unused, const u16 
 
 BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 value) {
     lobby->sendBuffer[0] = value;
-    if (Comm_SendCommand(0x3A, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_LOBBY_CHOICE, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -193,7 +193,7 @@ BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second
     lobby->sendBuffer[1] = lobby->items[0];
     lobby->sendBuffer[2] = lobby->species[1];
     lobby->sendBuffer[3] = lobby->items[1];
-    if (Comm_SendCommand(0x3B, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_LOBBY_PARTY, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -211,7 +211,7 @@ static void FrontierLinkLobby_ReceiveParty(int sender, int unused, const u16 *sr
 
 BOOL FrontierLinkLobby_SendValue74(FrontierLinkLobby *lobby, u16 value) {
     lobby->sendBuffer[0] = value;
-    if (Comm_SendCommand(0x3C, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_LOBBY_VALUE74, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
         return TRUE;
     }
     return FALSE;
@@ -226,7 +226,7 @@ static void FrontierLinkLobby_ReceiveValue74(int sender, int unused, const u16 *
 
 BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value) {
     lobby->sendBuffer[0] = value;
-    if (Comm_SendCommand(0x3D, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
+    if (Comm_SendCommand(FRONTIER_LINK_CMD_LOBBY_VALUE71, lobby->sendBuffer, sizeof(lobby->sendBuffer)) == 1) {
         return TRUE;
     }
     return FALSE;

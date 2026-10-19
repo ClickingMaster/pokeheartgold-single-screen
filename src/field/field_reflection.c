@@ -85,21 +85,21 @@ typedef struct ReflectionDepths {
 
 static void Reflection_LoadGfx(Reflection *reflection);
 static void Reflection_FreeGfx(Reflection *reflection);
-static BOOL ReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work);
-static void ReflectionEffect_Destroy(FieldEffect *effect, ReflectionEffect *work);
-static void ReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work);
-static void ReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work);
+static BOOL ReflectionEffect_Init(FieldEffect *effect, void *state);
+static void ReflectionEffect_Destroy(FieldEffect *effect, void *state);
+static void ReflectionEffect_Update(FieldEffect *effect, void *state);
+static void ReflectionEffect_Draw(FieldEffect *effect, void *state);
 static void ReflectionEffect_CalcPosition(ReflectionEffect *work, LocalMapObject *mapObject, VecFx32 *position);
 static void ReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffect *work);
 static void BillboardReflectionEffect_CreateBillboard(FieldEffect *effect, BillboardReflectionEffect *work);
 static void BillboardReflectionEffect_CalcPosition(BillboardReflectionEffect *work, VecFx32 *position);
-static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, BillboardReflectionEffect *work);
-static void BillboardReflectionEffect_Destroy(FieldEffect *effect, BillboardReflectionEffect *work);
-static void BillboardReflectionEffect_Update(FieldEffect *effect, BillboardReflectionEffect *work);
-static void BillboardReflectionEffect_Draw(FieldEffect *effect, BillboardReflectionEffect *work);
-static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work);
-static void FollowerReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work);
-static void FollowerReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work);
+static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, void *state);
+static void BillboardReflectionEffect_Destroy(FieldEffect *effect, void *state);
+static void BillboardReflectionEffect_Update(FieldEffect *effect, void *state);
+static void BillboardReflectionEffect_Draw(FieldEffect *effect, void *state);
+static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, void *state);
+static void FollowerReflectionEffect_Update(FieldEffect *effect, void *state);
+static void FollowerReflectionEffect_Draw(FieldEffect *effect, void *state);
 static void FollowerReflectionEffect_CreateBillboard(FieldEffect *effect, ReflectionEffect *work);
 
 static const ReflectionDepths sReflectionDepths = {
@@ -108,26 +108,26 @@ static const ReflectionDepths sReflectionDepths = {
 
 static const FieldEffectBasicTemplate sBillboardReflectionTemplate = {
     56,
-    (FieldEffectInitFunc)BillboardReflectionEffect_Init,
-    (FieldEffectFunc)BillboardReflectionEffect_Destroy,
-    (FieldEffectFunc)BillboardReflectionEffect_Update,
-    (FieldEffectFunc)BillboardReflectionEffect_Draw,
+    BillboardReflectionEffect_Init,
+    BillboardReflectionEffect_Destroy,
+    BillboardReflectionEffect_Update,
+    BillboardReflectionEffect_Draw,
 };
 
 static const FieldEffectBasicTemplate sMapObjectReflectionTemplate = {
     sizeof(ReflectionEffect),
-    (FieldEffectInitFunc)ReflectionEffect_Init,
-    (FieldEffectFunc)ReflectionEffect_Destroy,
-    (FieldEffectFunc)ReflectionEffect_Update,
-    (FieldEffectFunc)ReflectionEffect_Draw,
+    ReflectionEffect_Init,
+    ReflectionEffect_Destroy,
+    ReflectionEffect_Update,
+    ReflectionEffect_Draw,
 };
 
 static const FieldEffectBasicTemplate sFollowerReflectionTemplate = {
     sizeof(ReflectionEffect),
-    (FieldEffectInitFunc)FollowerReflectionEffect_Init,
-    (FieldEffectFunc)ReflectionEffect_Destroy,
-    (FieldEffectFunc)FollowerReflectionEffect_Update,
-    (FieldEffectFunc)FollowerReflectionEffect_Draw,
+    FollowerReflectionEffect_Init,
+    ReflectionEffect_Destroy,
+    FollowerReflectionEffect_Update,
+    FollowerReflectionEffect_Draw,
 };
 
 static inline void Reflection_SpawnWithTemplate(LocalMapObject *mapObject, int kind, const FieldEffectBasicTemplate *template) {
@@ -171,7 +171,8 @@ void Reflection_Spawn(LocalMapObject *mapObject, int kind) {
     Reflection_SpawnWithTemplate(mapObject, kind, &sMapObjectReflectionTemplate);
 }
 
-static BOOL ReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work) {
+static BOOL ReflectionEffect_Init(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 position;
     work->args = *(ReflectionEffectArgs *)FieldEffect_GetUserData(effect);
     work->kind = FieldEffect_GetParam(effect);
@@ -191,13 +192,15 @@ static BOOL ReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work) {
     return TRUE;
 }
 
-static void ReflectionEffect_Destroy(FieldEffect *effect, ReflectionEffect *work) {
+static void ReflectionEffect_Destroy(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     if (work->hasBillboard == TRUE) {
         BillboardObject_Delete(work->billboard);
     }
 }
 
-static void ReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work) {
+static void ReflectionEffect_Update(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
@@ -219,7 +222,8 @@ static void ReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work)
     }
 }
 
-static void ReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work) {
+static void ReflectionEffect_Draw(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 facing;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
@@ -350,7 +354,8 @@ FieldEffect *Reflection_SpawnForBillboard(FieldEffectManager *manager, const Bil
     return FieldEffectManager_CreateEffect(manager, &sBillboardReflectionTemplate, position, kind, &args, priority);
 }
 
-static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, BillboardReflectionEffect *work) {
+static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, void *state) {
+    BillboardReflectionEffect *work = state;
     VecFx32 position;
     work->args = *(BillboardReflectionArgs *)FieldEffect_GetUserData(effect);
     work->kind = FieldEffect_GetParam(effect);
@@ -369,11 +374,13 @@ static BOOL BillboardReflectionEffect_Init(FieldEffect *effect, BillboardReflect
     return TRUE;
 }
 
-static void BillboardReflectionEffect_Destroy(FieldEffect *effect, BillboardReflectionEffect *work) {
+static void BillboardReflectionEffect_Destroy(FieldEffect *effect, void *state) {
+    BillboardReflectionEffect *work = state;
     BillboardObject_Delete(work->billboard);
 }
 
-static void BillboardReflectionEffect_Update(FieldEffect *effect, BillboardReflectionEffect *work) {
+static void BillboardReflectionEffect_Update(FieldEffect *effect, void *state) {
+    BillboardReflectionEffect *work = state;
     VecFx32 position;
     work->scale.x += work->scaleStep;
     if (work->scale.x >= REFLECTION_SCALE_MAX) {
@@ -387,7 +394,8 @@ static void BillboardReflectionEffect_Update(FieldEffect *effect, BillboardRefle
     FieldEffect_SetPosition(effect, &position);
 }
 
-static void BillboardReflectionEffect_Draw(FieldEffect *effect, BillboardReflectionEffect *work) {
+static void BillboardReflectionEffect_Draw(FieldEffect *effect, void *state) {
+    BillboardReflectionEffect *work = state;
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     BillboardObject_SetPosition(work->billboard, &position);
@@ -398,7 +406,8 @@ void Reflection_SpawnForFollower(LocalMapObject *mapObject, int kind) {
     Reflection_SpawnWithTemplate(mapObject, kind, &sFollowerReflectionTemplate);
 }
 
-static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, ReflectionEffect *work) {
+static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 position;
     work->args = *(ReflectionEffectArgs *)FieldEffect_GetUserData(effect);
     work->kind = FieldEffect_GetParam(effect);
@@ -419,7 +428,8 @@ static BOOL FollowerReflectionEffect_Init(FieldEffect *effect, ReflectionEffect 
     return TRUE;
 }
 
-static void FollowerReflectionEffect_Update(FieldEffect *effect, ReflectionEffect *work) {
+static void FollowerReflectionEffect_Update(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
     if (ReflectionEffect_IsObjectGone(work, mapObject)) {
@@ -442,7 +452,8 @@ static void FollowerReflectionEffect_Update(FieldEffect *effect, ReflectionEffec
     }
 }
 
-static void FollowerReflectionEffect_Draw(FieldEffect *effect, ReflectionEffect *work) {
+static void FollowerReflectionEffect_Draw(FieldEffect *effect, void *state) {
+    ReflectionEffect *work = state;
     VecFx32 position;
     LocalMapObject *mapObject = work->args.mapObject;
     Sprite *source;

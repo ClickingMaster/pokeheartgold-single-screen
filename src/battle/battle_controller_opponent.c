@@ -4,6 +4,7 @@
 
 #include "constants/abilities.h"
 #include "constants/battle.h"
+#include "constants/battle/trainer_ai.h"
 #include "constants/battle_menu.h"
 #include "constants/items.h"
 #include "constants/message_tags.h"
@@ -45,6 +46,7 @@
 #include "pokepic_anim_internal.h"
 #include "render_window.h"
 #include "sound.h"
+#include "sound_gb.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
 #include "sys_task_api.h"
@@ -360,26 +362,9 @@ enum {
 
 // The command the battle controller sent to this battler
 #define OPPONENT_COMMAND(opponentData) ((void *)&(opponentData)->unk8C[8])
-
-#define MOVE_STATUS_IMMUNE (MOVE_STATUS_NO_EFFECT | MOVE_STATUS_WONDER_GUARD_IMMUNE | MOVE_STATUS_LEVITATE_IMMUNE | MOVE_STATUS_MAGNET_RISE_IMMUNE)
-
 #define OPPONENT_COMMAND_ID(opponentData) ((opponentData)->unk8C[0x08])
 // The OAM copy of the battler's pokepic
 #define OPPONENT_SPRITE_OAM(opponentData) (*(void **)&(opponentData)->unk8C[0x00])
-
-// The battle party menu overlay's entry point
-#define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyContext *))TrainerAI_Init)(args)
-
-// An item selection reply
-typedef struct BattleItemInput {
-    u16 item;
-    u8 pocket;
-    u8 target;
-} BattleItemInput;
-
-#define REPLY_ITEM_SELECTION(battleSystem, battlerId, input) ((void (*)(BattleSystem *, int, BattleItemInput))BattleController_ReplyItemSelection)(battleSystem, battlerId, input)
-
-void Sound_SetKeepPlayingCries(u8 value);
 
 extern const s16 gBattlerSlideInTargetX[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
@@ -391,17 +376,15 @@ typedef struct OpponentBallKindTable {
     int kinds[6];
 } OpponentBallKindTable;
 
-extern const OpponentCommandHandler sOpponentCommandHandlers[];
 extern const u8 gOpponentBallKinds[];
 extern const OpponentBallKindTable gOpponentRecallBallKinds;
-extern u8 gSafariFleeRateStages[][2];
-extern u8 gSafariFleeRateDenominators[][2];
-extern const u16 sBallColors[];
+// Safari Zone flee rate multiplier {numerator, denominator} per stage
+extern u8 gSafariFleeRates[][2];
+extern const u16 gBallColors[];
 extern const u32 gBattleEncounterFadeColors[];
+// Ball position offsets {x, y} per backpic and animation frame (0x7FFF: no ball)
 extern const s16 gBallThrowOffsets[][6][2];
-extern const s16 gBallThrowOffsetsY[][6][2];
 extern const u8 gBattleEncounterTerrains[];
-
 
 // Task data of the command workers.
 typedef struct OpponentEncounterAnimWork {
@@ -795,208 +778,280 @@ typedef struct OpponentScreenFadeWork {
     u8 counter;
 } OpponentScreenFadeWork;
 
-int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler);
-void BattleControllerOpponent_Nop(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_DeletePokemon(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_CancelSelection(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PartyStatusHeal(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SetBattleBackground(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_LoadBallGfx(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_DeleteBallGfx(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_IncrementGameStat(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_SetBattleResults(BattleSystem *battleSystem, OpponentData *opponentData);
-void BattleControllerOpponent_BlankMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_ClearCommand(OpponentData *opponentData);
-void BattleControllerOpponent_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEncounter *packet);
-void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet);
-void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet);
-void OpponentData_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecallPokemon *packet);
-void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEnterBall *packet);
-void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerEncounter *packet);
-void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketThrowPokeball *packet);
-void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerSlideIn *packet);
-void OpponentData_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarSlideIn *packet);
-void OpponentData_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
-SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectCommand *packet);
-void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMove *packet);
-void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectTarget *packet);
-SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectItem *packet);
-void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketShowMonList *packet);
-void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketYesNoBox *packet);
-void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketAttackMessage *packet);
-void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
-void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
-void OpponentData_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarUpdate *packet);
-void OpponentData_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketExpBarUpdate *packet);
-void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFaintAnimation *packet);
-void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySE *packet);
-void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketToggleVanish *packet);
-void OpponentData_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarStatus *packet);
-void OpponentData_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerMessage *packet);
-void OpponentData_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet);
-void OpponentData_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet);
-void OpponentData_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet);
-void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectionMessage *packet);
-void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRefreshHealthbar *packet);
-void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMoveToForget *packet);
-void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMosaicAnimation *packet);
-void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
-void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
-void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
-void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
-void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
-void OpponentData_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet);
-void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
-void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
-void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMoveSE *packet);
-void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySong *packet);
-void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet);
-void Task_PokemonEncounter(SysTask *task, void *data);
-void Task_GiratinaEncounter(SysTask *task, void *data);
-void Task_PokemonSlideIn(SysTask *task, void *data);
-void Task_FollowMonSlideIn(SysTask *task, void *data);
-void Task_PokemonSendOut(SysTask *task, void *data);
-void Task_FollowMonSendOut(SysTask *task, void *data);
-void Task_RecallPokemon(SysTask *task, void *data);
-void Task_RecallFollowMon(SysTask *task, void *data);
-void Task_PokemonEnterBall(SysTask *task, void *data);
-void Task_TrainerEncounter(SysTask *task, void *data);
-void Task_ThrowPokeball(SysTask *task, void *data);
-void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data);
-void Task_TrainerSlideOut(SysTask *task, void *data);
-void Task_TrainerSlideIn(SysTask *task, void *data);
-void Task_HealthbarSlideIn(SysTask *task, void *data);
-void Task_HealthbarSlideOut(SysTask *task, void *data);
-void Task_PlayerSelectCommand(SysTask *task, void *data);
-void Task_AISelectCommand(SysTask *task, void *data);
-void Task_LinkSelectCommand(SysTask *task, void *data);
-void Task_SafariSelectCommand(SysTask *task, void *data);
-void Task_PalParkSelectCommand(SysTask *task, void *data);
-void Task_RecordedSelectCommand(SysTask *task, void *data);
-void Task_PlayerSelectMove(SysTask *task, void *data);
-void Task_AISelectMove(SysTask *task, void *data);
-void Task_LinkSelectMove(SysTask *task, void *data);
-void Task_RecordedSelectMove(SysTask *task, void *data);
-void Task_PlayerSelectTarget(SysTask *task, void *data);
-void Task_AISelectTarget(SysTask *task, void *data);
-void Task_LinkSelectTarget(SysTask *task, void *data);
-void Task_RecordedSelectTarget(SysTask *task, void *data);
-void Task_PlayerSelectItem(SysTask *task, void *data);
-void Task_AISelectItem(SysTask *task, void *data);
-void Task_LinkSelectItem(SysTask *task, void *data);
-void Task_RecordedSelectItem(SysTask *task, void *data);
-void Task_PlayerShowMonList(SysTask *task, void *data);
-void Task_AIShowMonList(SysTask *task, void *data);
-void Task_LinkShowMonList(SysTask *task, void *data);
-void Task_RecordedShowMonList(SysTask *task, void *data);
-void Task_PlayerDrawYesNoBox(SysTask *task, void *data);
-void Task_AIDrawYesNoBox(SysTask *task, void *data);
-void Task_LinkDrawYesNoBox(SysTask *task, void *data);
-void Task_RecordedDrawYesNoBox(SysTask *task, void *data);
-void Task_PlayMoveAnimation(SysTask *task, void *data);
-void Task_MonFlicker(SysTask *task, void *data);
-void Task_HealthbarUpdate(SysTask *task, void *data);
-void Task_ExpBarUpdate(SysTask *task, void *data);
-void Task_PlayFaintAnimation(SysTask *task, void *data);
-void Task_FadeOutBattle(SysTask *task, void *data);
-void Task_ToggleVanish(SysTask *task, void *data);
-void Task_PlayExpBarFullFlash(SysTask *task, void *data);
-void Task_WaitBattleMessage(SysTask *task, void *data);
-void Task_PrintSelectionMessage(SysTask *task, void *data);
-void Task_PlayEncounterAnimation(SysTask *task, void *data);
-void Task_SelectMoveToForget(SysTask *task, void *data);
-void Task_PlayMosaicAnimation(SysTask *task, void *data);
-void Task_ShowPartyGauge(SysTask *task, void *data);
-void Task_HidePartyGauge(SysTask *task, void *data);
-void Task_SpriteToOAM(SysTask *task, void *data);
-void Task_OAMToSprite(SysTask *task, void *data);
-void Task_OpponentScreenFade(SysTask *task, void *data);
-void OpponentData_ResetCursorPosition(OpponentData *opponentData);
-Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, PokepicManager *pokepicManager, PokepicTemplate *template, int x, int y, int z, int height, int shadowHeight, int shadowXOffset, int shadowSize, int battlerId, PokepicAnimScript *animScript, PokepicCallback callback);
-void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg);
-void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg);
-void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
-void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet, BattleMessage *msg);
-void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
-void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet, BattleMessage *msg);
-void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
-ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battleSystem, int position, int trainerClass, int resTag, BOOL isLink, s16 x, s16 y);
-void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData);
-void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimData *animData, BattleAnimBattlerPicParams *params, u32 battlerId);
-void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move);
-BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused);
-void Task_FlashBrightness(SysTask *task, s32 *state);
-void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem);
-void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem);
-u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass);
+static int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler);
+static void BattleControllerOpponent_Nop(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_DeletePokemon(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_CancelSelection(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PartyStatusHeal(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SetBattleBackground(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_LoadBallGfx(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_DeleteBallGfx(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_IncrementGameStat(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_SetBattleResults(BattleSystem *battleSystem, OpponentData *opponentData);
+static void BattleControllerOpponent_BlankMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_ClearCommand(OpponentData *opponentData);
+static void BattleControllerOpponent_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEncounter *packet);
+static void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet);
+static void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet);
+static void OpponentData_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecallPokemon *packet);
+static void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEnterBall *packet);
+static void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerEncounter *packet);
+static void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketThrowPokeball *packet);
+static void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerSlideIn *packet);
+static void OpponentData_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarSlideIn *packet);
+static void OpponentData_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData);
+static SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectCommand *packet);
+static void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMove *packet);
+static void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectTarget *packet);
+static SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectItem *packet);
+static void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketShowMonList *packet);
+static void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketYesNoBox *packet);
+static void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketAttackMessage *packet);
+static void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
+static void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
+static void OpponentData_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarUpdate *packet);
+static void OpponentData_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketExpBarUpdate *packet);
+static void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFaintAnimation *packet);
+static void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySE *packet);
+static void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketToggleVanish *packet);
+static void OpponentData_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarStatus *packet);
+static void OpponentData_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerMessage *packet);
+static void OpponentData_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet);
+static void OpponentData_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet);
+static void OpponentData_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet);
+static void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectionMessage *packet);
+static void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRefreshHealthbar *packet);
+static void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMoveToForget *packet);
+static void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMosaicAnimation *packet);
+static void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
+static void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
+static void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
+static void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet);
+static void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
+static void OpponentData_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet);
+static void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData);
+static void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData);
+static void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMoveSE *packet);
+static void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySong *packet);
+static void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet);
+static void Task_PokemonEncounter(SysTask *task, void *data);
+static void Task_GiratinaEncounter(SysTask *task, void *data);
+static void Task_PokemonSlideIn(SysTask *task, void *data);
+static void Task_FollowMonSlideIn(SysTask *task, void *data);
+static void Task_PokemonSendOut(SysTask *task, void *data);
+static void Task_FollowMonSendOut(SysTask *task, void *data);
+static void Task_RecallPokemon(SysTask *task, void *data);
+static void Task_RecallFollowMon(SysTask *task, void *data);
+static void Task_PokemonEnterBall(SysTask *task, void *data);
+static void Task_TrainerEncounter(SysTask *task, void *data);
+static void Task_ThrowPokeball(SysTask *task, void *data);
+static void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data);
+static void Task_TrainerSlideOut(SysTask *task, void *data);
+static void Task_TrainerSlideIn(SysTask *task, void *data);
+static void Task_HealthbarSlideIn(SysTask *task, void *data);
+static void Task_HealthbarSlideOut(SysTask *task, void *data);
+static void Task_PlayerSelectCommand(SysTask *task, void *data);
+static void Task_AISelectCommand(SysTask *task, void *data);
+static void Task_LinkSelectCommand(SysTask *task, void *data);
+static void Task_SafariSelectCommand(SysTask *task, void *data);
+static void Task_PalParkSelectCommand(SysTask *task, void *data);
+static void Task_RecordedSelectCommand(SysTask *task, void *data);
+static void Task_PlayerSelectMove(SysTask *task, void *data);
+static void Task_AISelectMove(SysTask *task, void *data);
+static void Task_LinkSelectMove(SysTask *task, void *data);
+static void Task_RecordedSelectMove(SysTask *task, void *data);
+static void Task_PlayerSelectTarget(SysTask *task, void *data);
+static void Task_AISelectTarget(SysTask *task, void *data);
+static void Task_LinkSelectTarget(SysTask *task, void *data);
+static void Task_RecordedSelectTarget(SysTask *task, void *data);
+static void Task_PlayerSelectItem(SysTask *task, void *data);
+static void Task_AISelectItem(SysTask *task, void *data);
+static void Task_LinkSelectItem(SysTask *task, void *data);
+static void Task_RecordedSelectItem(SysTask *task, void *data);
+static void Task_PlayerShowMonList(SysTask *task, void *data);
+static void Task_AIShowMonList(SysTask *task, void *data);
+static void Task_LinkShowMonList(SysTask *task, void *data);
+static void Task_RecordedShowMonList(SysTask *task, void *data);
+static void Task_PlayerDrawYesNoBox(SysTask *task, void *data);
+static void Task_AIDrawYesNoBox(SysTask *task, void *data);
+static void Task_LinkDrawYesNoBox(SysTask *task, void *data);
+static void Task_RecordedDrawYesNoBox(SysTask *task, void *data);
+static void Task_PlayMoveAnimation(SysTask *task, void *data);
+static void Task_MonFlicker(SysTask *task, void *data);
+static void Task_HealthbarUpdate(SysTask *task, void *data);
+static void Task_ExpBarUpdate(SysTask *task, void *data);
+static void Task_PlayFaintAnimation(SysTask *task, void *data);
+static void Task_FadeOutBattle(SysTask *task, void *data);
+static void Task_ToggleVanish(SysTask *task, void *data);
+static void Task_PlayExpBarFullFlash(SysTask *task, void *data);
+static void Task_WaitBattleMessage(SysTask *task, void *data);
+static void Task_PrintSelectionMessage(SysTask *task, void *data);
+static void Task_PlayEncounterAnimation(SysTask *task, void *data);
+static void Task_SelectMoveToForget(SysTask *task, void *data);
+static void Task_PlayMosaicAnimation(SysTask *task, void *data);
+static void Task_ShowPartyGauge(SysTask *task, void *data);
+static void Task_HidePartyGauge(SysTask *task, void *data);
+static void Task_SpriteToOAM(SysTask *task, void *data);
+static void Task_OAMToSprite(SysTask *task, void *data);
+static void Task_OpponentScreenFade(SysTask *task, void *data);
+static void OpponentData_ResetCursorPosition(OpponentData *opponentData);
+static Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, PokepicManager *pokepicManager, PokepicTemplate *template, int x, int y, int z, int height, int shadowHeight, int shadowXOffset, int shadowSize, int battlerId, PokepicAnimScript *animScript, PokepicCallback callback);
+static void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg);
+static void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg);
+static void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
+static void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet, BattleMessage *msg);
+static void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
+static void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet, BattleMessage *msg);
+static void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg);
+static ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battleSystem, int position, int trainerClass, int resTag, BOOL isLink, s16 x, s16 y);
+static void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData);
+static void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimData *animData, BattleAnimBattlerPicParams *params, u32 battlerId);
+static void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move);
+static BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused);
+static void Task_FlashBrightness(SysTask *task, s32 *state);
+static void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem);
+static void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem);
+static u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass);
+
+// One handler per battle controller command (OpponentData_RunCommand)
+static const OpponentCommandHandler sOpponentCommandHandlers[] = {
+    BattleControllerOpponent_Nop,
+    BattleControllerOpponent_PlayEncounterAnimation,
+    BattleControllerOpponent_PokemonEncounter,
+    BattleControllerOpponent_PokemonSlideIn,
+    BattleControllerOpponent_PokemonSendOut,
+    BattleControllerOpponent_RecallPokemon,
+    BattleControllerOpponent_PokemonEnterBall,
+    BattleControllerOpponent_DeletePokemon,
+    BattleControllerOpponent_TrainerEncounter,
+    BattleControllerOpponent_ThrowPokeball,
+    BattleControllerOpponent_TrainerSlideOut,
+    BattleControllerOpponent_TrainerSlideIn,
+    BattleControllerOpponent_HealthbarSlideIn,
+    BattleControllerOpponent_HealthbarSlideOut,
+    BattleControllerOpponent_SelectCommand,
+    BattleControllerOpponent_SelectMove,
+    BattleControllerOpponent_SelectTarget,
+    BattleControllerOpponent_SelectItem,
+    BattleControllerOpponent_ShowMonList,
+    BattleControllerOpponent_DrawYesNoBox,
+    BattleControllerOpponent_PrintAttackMessage,
+    BattleControllerOpponent_PrintMessage,
+    BattleControllerOpponent_PlayMoveAnimation,
+    BattleControllerOpponent_MonFlicker,
+    BattleControllerOpponent_HealthbarUpdate,
+    BattleControllerOpponent_ExpBarUpdate,
+    BattleControllerOpponent_PlayFaintAnimation,
+    BattleControllerOpponent_PlaySE,
+    BattleControllerOpponent_FadeOutBattle,
+    BattleControllerOpponent_ToggleVanish,
+    BattleControllerOpponent_HealthbarStatus,
+    BattleControllerOpponent_PrintTrainerMessage,
+    BattleControllerOpponent_PrintReturnMessage,
+    BattleControllerOpponent_PrintSendOutMessage,
+    BattleControllerOpponent_PrintEncounterMessage,
+    BattleControllerOpponent_PrintFirstSendOutMessage,
+    BattleControllerOpponent_ExpBarFullFlash,
+    BattleControllerOpponent_PrintSelectionMessage,
+    BattleControllerOpponent_RefreshHealthbar,
+    BattleControllerOpponent_BattleMonToPartyMonCopy,
+    BattleControllerOpponent_BackgroundSlideIn,
+    BattleControllerOpponent_CancelSelection,
+    BattleControllerOpponent_PartyStatusHeal,
+    BattleControllerOpponent_SelectMoveToForget,
+    BattleControllerOpponent_PlayMosaicAnimation,
+    BattleControllerOpponent_ChangeForm,
+    BattleControllerOpponent_SetBattleBackground,
+    BattleControllerOpponent_EndSelection,
+    BattleControllerOpponent_InitStartBallGauge,
+    BattleControllerOpponent_DeleteStartBallGauge,
+    BattleControllerOpponent_InitBallGauge,
+    BattleControllerOpponent_DeleteBallGauge,
+    BattleControllerOpponent_LoadBallGfx,
+    BattleControllerOpponent_DeleteBallGfx,
+    BattleControllerOpponent_IncrementGameStat,
+    BattleControllerOpponent_ShowWaitMessage,
+    BattleControllerOpponent_RestoreSprite,
+    BattleControllerOpponent_SpriteToOAM,
+    BattleControllerOpponent_OAMToSprite,
+    BattleControllerOpponent_PrintResultMessage,
+    BattleControllerOpponent_RunAwayMessage,
+    BattleControllerOpponent_ForfeitMessage,
+    BattleControllerOpponent_SwapToSubstituteSprite,
+    BattleControllerOpponent_PlayMoveSE,
+    BattleControllerOpponent_PlaySong,
+    BattleControllerOpponent_SetBattleResults,
+    BattleControllerOpponent_BlankMessage,
+    BattleControllerOpponent_ScreenFade,
+};
 
 int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
     int i, j;
@@ -1163,7 +1218,7 @@ int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
     return picked;
 }
 
-int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler) {
+static int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler) {
     BattleContext *ctx = BattleSystem_GetBattleContext(battleSystem);
     return ctx->aiSwitchedPartySlot[battler];
 }
@@ -1327,125 +1382,125 @@ void OpponentData_Free(BattleSystem *battleSystem, OpponentData *opponentData, i
     Heap_Free(opponentData);
 }
 
-void BattleControllerOpponent_Nop(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_Nop(BattleSystem *battleSystem, OpponentData *opponentData) {
 }
 
-void BattleControllerOpponent_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleSystem_SetRandTemp(battleSystem, ((BattleControllerPacketEncounterAnimation *)OPPONENT_COMMAND(opponentData))->randTemp);
     OpponentData_PlayEncounterAnimation(battleSystem, opponentData);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 1);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PokemonEncounter(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PokemonSlideIn(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PokemonSendOut(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_RecallPokemon(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PokemonEnterBall(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_DeletePokemon(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_DeletePokemon(BattleSystem *battleSystem, OpponentData *opponentData) {
     Pokepic_Delete(opponentData->pokepic);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 7);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_TrainerEncounter(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ThrowPokeball(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_TrainerSlideOut(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_TrainerSlideIn(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_HealthbarSlideIn(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_HealthbarSlideOut(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketSelectCommand *packet = OPPONENT_COMMAND(opponentData);
     BattleSystem_SetSwitchingOrCanPickCommandMask(battleSystem, packet->switchingOrCanPickCommandMask);
     OpponentData_SelectCommand(battleSystem, opponentData, packet);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SelectMove(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SelectTarget(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SelectItem(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ShowMonList(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_DrawYesNoBox(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintAttackMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlayMoveAnimation(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData) {
     if (Pokepic_GetAttr(opponentData->pokepic, POKEPIC_VANISHED) == TRUE) {
         BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 23);
     } else {
@@ -1454,82 +1509,82 @@ void BattleControllerOpponent_MonFlicker(BattleSystem *battleSystem, OpponentDat
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_HealthbarUpdate(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ExpBarUpdate(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlayFaintAnimation(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlaySE(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_FadeOutBattle(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ToggleVanish(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_HealthbarStatus(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintTrainerMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintReturnMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintSendOutMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintEncounterMessage(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintFirstSendOutMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ExpBarFullFlash(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintSelectionMessage(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_RefreshHealthbar(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketBattleMonToPartyMonCopy *packet = OPPONENT_COMMAND(opponentData);
     Pokemon *mon = BattleSystem_GetPartyMon(battleSystem, opponentData->battlerId, packet->selectedMonIndex);
     int i;
@@ -1558,7 +1613,7 @@ void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     BattleInput *battleInput = BattleSystem_GetBattleInput(battleSystem);
 
@@ -1571,14 +1626,14 @@ void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, Oppo
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_CancelSelection(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_CancelSelection(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleHpBar_StopActiveEffect(&opponentData->hpBar);
     OpponentData_StopPokepicBobTask(opponentData);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, OPPONENT_COMMAND_ID(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PartyStatusHeal(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PartyStatusHeal(BattleSystem *battleSystem, OpponentData *opponentData) {
     int status = 0;
     BattleControllerPacketPartyStatusHeal *packet = OPPONENT_COMMAND(opponentData);
     int partySize = BattleSystem_GetPartySize(battleSystem, opponentData->battlerId);
@@ -1600,17 +1655,17 @@ void BattleControllerOpponent_PartyStatusHeal(BattleSystem *battleSystem, Oppone
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SelectMoveToForget(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlayMosaicAnimation(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentData *opponentData) {
     PokepicTemplate template;
     BattleControllerPacketChangeForm *packet = OPPONENT_COMMAND(opponentData);
     int facing;
@@ -1640,13 +1695,13 @@ void BattleControllerOpponent_ChangeForm(BattleSystem *battleSystem, OpponentDat
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SetBattleBackground(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SetBattleBackground(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleSystem_SetBackground(battleSystem);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 46);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentData *opponentData) {
     NARC *narc0;
     NARC *narc1;
     BattleInput *battleInput;
@@ -1672,17 +1727,17 @@ void BattleControllerOpponent_EndSelection(BattleSystem *battleSystem, OpponentD
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_InitStartBallGauge(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_DeleteStartBallGauge(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketBallGauge *packet = OPPONENT_COMMAND(opponentData);
     if (BattleSystem_GetFieldSide(battleSystem, opponentData->battlerId) != 0) {
         OpponentData_InitBallGauge(battleSystem, opponentData, packet);
@@ -1692,7 +1747,7 @@ void BattleControllerOpponent_InitBallGauge(BattleSystem *battleSystem, Opponent
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketBallGauge *packet = OPPONENT_COMMAND(opponentData);
     if (BattleSystem_GetFieldSide(battleSystem, opponentData->battlerId) != 0) {
         OpponentData_DeleteBallGauge(battleSystem, opponentData, packet);
@@ -1702,7 +1757,7 @@ void BattleControllerOpponent_DeleteBallGauge(BattleSystem *battleSystem, Oppone
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_LoadBallGfx(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_LoadBallGfx(BattleSystem *battleSystem, OpponentData *opponentData) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(battleSystem);
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(battleSystem);
     PaletteData *paletteData = BattleSystem_GetPaletteData(battleSystem);
@@ -1711,13 +1766,13 @@ void BattleControllerOpponent_LoadBallGfx(BattleSystem *battleSystem, OpponentDa
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_DeleteBallGfx(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_DeleteBallGfx(BattleSystem *battleSystem, OpponentData *opponentData) {
     PartyGauge_FreeGraphics(BattleSystem_GetSpriteManager(battleSystem));
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 53);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_IncrementGameStat(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_IncrementGameStat(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketIncrementGameStat *packet = OPPONENT_COMMAND(opponentData);
     if (packet->flag == 0) {
         if (opponentData->inputMode == 0) {
@@ -1730,63 +1785,63 @@ void BattleControllerOpponent_IncrementGameStat(BattleSystem *battleSystem, Oppo
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketRecordData *packet = OPPONENT_COMMAND(opponentData);
     BattleSystem_UnpackRecordUpdate(battleSystem, packet->recordSize, packet->record);
     OpponentData_ShowWaitMessage(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_RestoreSprite(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SpriteToOAM(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_OAMToSprite(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PrintResultMessage(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketRecordData *packet = OPPONENT_COMMAND(opponentData);
     BattleSystem_UnpackRecordUpdate(battleSystem, packet->recordSize, packet->record);
     OpponentData_RunAwayMessage(battleSystem, opponentData, packet);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketRecordData *packet = OPPONENT_COMMAND(opponentData);
     BattleSystem_UnpackRecordUpdate(battleSystem, packet->recordSize, packet->record);
     OpponentData_ForfeitMessage(battleSystem, opponentData);
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_SwapToSubstituteSprite(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlayMoveSE(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_PlaySong(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_SetBattleResults(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_SetBattleResults(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleControllerPacketBattleResults *packet = OPPONENT_COMMAND(opponentData);
     u32 playerSideHp = 0;
     int i;
@@ -1824,7 +1879,7 @@ void BattleControllerOpponent_SetBattleResults(BattleSystem *battleSystem, Oppon
     OpponentData_ClearCommand(opponentData);
 }
 
-void BattleControllerOpponent_BlankMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_BlankMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     Window *window = BattleSystem_GetWindow(battleSystem, 0);
     FillWindowPixelBuffer(window, 0xFF);
     CopyWindowPixelsToVram_TextMode(window);
@@ -1832,16 +1887,16 @@ void BattleControllerOpponent_BlankMessage(BattleSystem *battleSystem, OpponentD
     OpponentData_ClearCommand(opponentData);
 }
 
-void OpponentData_ClearCommand(OpponentData *opponentData) {
+static void OpponentData_ClearCommand(OpponentData *opponentData) {
     OPPONENT_COMMAND_ID(opponentData) = 0;
 }
 
-void BattleControllerOpponent_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void BattleControllerOpponent_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentData_ScreenFade(battleSystem, opponentData, OPPONENT_COMMAND(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
 
-void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentEncounterAnimWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentEncounterAnimWork));
     work->battleSystem = battleSystem;
     work->state = ENCOUNTER_ANIM_STATE_INIT;
@@ -1854,7 +1909,7 @@ void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentDat
 #define READ_POKEPIC_SHADOW_X_OFFSET(narc, ret, species) ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowXOffset)(narc, ret, species)
 #define READ_POKEPIC_SHADOW_SIZE(narc, ret, species)     ((void (*)(NARC *, u8 *, u16))NARC_ReadPokepicShadowSize)(narc, ret, species)
 
-void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEncounter *packet) {
+static void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEncounter *packet) {
     PokepicTemplate pokepicTemplate;
     OpponentPokepicAnimParams anim;
     PokepicManager *pokepicManager;
@@ -1918,7 +1973,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     Sound_SetKeepPlayingCries(1);
 }
 
-void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet) {
+static void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet) {
     OpponentPokemonSendOutWork *work;
     u32 battleType;
 
@@ -1965,7 +2020,7 @@ void OpponentData_PokemonSlideIn(BattleSystem *battleSystem, OpponentData *oppon
     SysTask_CreateOnMainQueue(Task_PokemonSlideIn, work, 0);
 }
 
-void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet) {
+static void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonSendOut *packet) {
     int i;
     OpponentPokemonSendOutWork *work;
 
@@ -2016,7 +2071,7 @@ void OpponentData_PokemonSendOut(BattleSystem *battleSystem, OpponentData *oppon
     }
 }
 
-void OpponentData_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecallPokemon *packet) {
+static void OpponentData_RecallPokemon(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecallPokemon *packet) {
     int i;
     OpponentRecallPokemonWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentRecallPokemonWork));
 
@@ -2048,7 +2103,7 @@ void OpponentData_RecallPokemon(BattleSystem *battleSystem, OpponentData *oppone
     }
 }
 
-void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEnterBall *packet) {
+static void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPokemonEnterBall *packet) {
     OpponentPokepicShrinkWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPokepicShrinkWork));
     work->battleSystem = battleSystem;
     work->pokepic = opponentData->pokepic;
@@ -2057,7 +2112,7 @@ void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opp
     work->battlerType = opponentData->battlerType;
     work->state = ENTER_BALL_STATE_SHRINK;
     work->height = packet->height;
-    Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, sBallColors[packet->ball]);
+    Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, gBallColors[packet->ball]);
     Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_AFFINE, 1);
     SysTask_CreateOnMainQueue(Task_PokemonEnterBall, work, 0);
 }
@@ -2065,7 +2120,7 @@ void OpponentData_PokemonEnterBall(BattleSystem *battleSystem, OpponentData *opp
 #pragma push
 #pragma opt_common_subs off
 
-void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerEncounter *packet) {
+static void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerEncounter *packet) {
     PokepicManager *pokepicManager;
     u32 battleType;
     BOOL isLink;
@@ -2132,7 +2187,7 @@ void OpponentData_TrainerEncounter(BattleSystem *battleSystem, OpponentData *opp
 
 #pragma pop
 
-void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketThrowPokeball *packet) {
+static void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketThrowPokeball *packet) {
     OpponentThrowPokeballWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentThrowPokeballWork));
     int backpic;
 
@@ -2159,7 +2214,7 @@ void OpponentData_ThrowPokeball(BattleSystem *battleSystem, OpponentData *oppone
     }
 }
 
-void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentTrainerSlideOutWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentTrainerSlideOutWork));
     work->state = TRAINER_SLIDE_OUT_STATE_MOVE;
     work->battleSystem = battleSystem;
@@ -2174,7 +2229,7 @@ void OpponentData_TrainerSlideOut(BattleSystem *battleSystem, OpponentData *oppo
     SysTask_CreateOnMainQueue(Task_TrainerSlideOut, work, 0);
 }
 
-void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerSlideIn *packet) {
+static void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerSlideIn *packet) {
     OpponentTrainerSlideInWork *work;
 
     BattleSystem_GetPokepicManager(battleSystem);
@@ -2194,7 +2249,7 @@ void OpponentData_TrainerSlideIn(BattleSystem *battleSystem, OpponentData *oppon
     SysTask_CreateOnMainQueue(Task_TrainerSlideIn, work, 0);
 }
 
-void OpponentData_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarSlideIn *packet) {
+static void OpponentData_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarSlideIn *packet) {
     BattleHpBar *hpBar = &opponentData->hpBar;
     MIi_CpuClearFast(0, (u32 *)hpBar, 1);
     hpBar->battleSystem = battleSystem;
@@ -2218,7 +2273,7 @@ void OpponentData_HealthbarSlideIn(BattleSystem *battleSystem, OpponentData *opp
     hpBar->task = SysTask_CreateOnMainQueue(Task_HealthbarSlideIn, hpBar, 1000);
 }
 
-void OpponentData_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleHpBar *hpBar = &opponentData->hpBar;
     MIi_CpuClearFast(0, (u32 *)hpBar, 1);
     hpBar->battleSystem = battleSystem;
@@ -2228,7 +2283,7 @@ void OpponentData_HealthbarSlideOut(BattleSystem *battleSystem, OpponentData *op
     hpBar->task = SysTask_CreateOnMainQueue(Task_HealthbarSlideOut, hpBar, 1000);
 }
 
-SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectCommand *packet) {
+static SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectCommand *packet) {
     OpponentSelectCommandWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectCommandWork));
     int i;
     int j;
@@ -2269,7 +2324,7 @@ SysTask *OpponentData_SelectCommand(BattleSystem *battleSystem, OpponentData *op
     return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[0], work, 0);
 }
 
-void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMove *packet) {
+static void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMove *packet) {
     OpponentSelectMoveWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectMoveWork));
     int i = 0;
 
@@ -2289,7 +2344,7 @@ void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentD
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[1], work, 0);
 }
 
-void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectTarget *packet) {
+static void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectTarget *packet) {
     OpponentSelectTargetWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectTargetWork));
     u8 battlerTypes[8];
     int maxBattlers;
@@ -2312,7 +2367,7 @@ void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponen
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[2], work, 0);
 }
 
-SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectItem *packet) {
+static SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectItem *packet) {
     OpponentSelectItemWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectItemWork));
     int i;
     int j;
@@ -2338,7 +2393,7 @@ SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *oppon
     return SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[3], work, 0);
 }
 
-void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketShowMonList *packet) {
+static void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketShowMonList *packet) {
     OpponentShowMonListWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentShowMonListWork));
     int i;
     int j;
@@ -2361,7 +2416,7 @@ void OpponentData_ShowMonList(BattleSystem *battleSystem, OpponentData *opponent
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[4], work, 0);
 }
 
-void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketYesNoBox *packet) {
+static void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketYesNoBox *packet) {
     OpponentYesNoWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentYesNoWork));
     work->state = 0;
     work->battleSystem = battleSystem;
@@ -2375,7 +2430,7 @@ void OpponentData_DrawYesNoBox(BattleSystem *battleSystem, OpponentData *opponen
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[5], work, 0);
 }
 
-void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketAttackMessage *packet) {
+static void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketAttackMessage *packet) {
     MsgData *msgData = (MsgData *)BattleSystem_GetAttackMessageLoader(battleSystem);
     OpponentMessageWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMessageWork));
     BattleMessage msg;
@@ -2394,7 +2449,7 @@ void OpponentData_PrintAttackMessage(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
+static void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
     MsgData *msgData = BattleSystem_GetMessageLoader(battleSystem);
     OpponentMessageWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMessageWork));
     work->battleSystem = battleSystem;
@@ -2404,7 +2459,7 @@ void OpponentData_PrintMessage(BattleSystem *battleSystem, OpponentData *opponen
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
+static void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
     OpponentMoveAnimationWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMoveAnimationWork));
     work->state = MOVE_ANIM_STATE_SUBSTITUTE_HIDE;
     work->battleSystem = battleSystem;
@@ -2424,7 +2479,7 @@ void OpponentData_PlayMoveAnimation(BattleSystem *battleSystem, OpponentData *op
     SysTask_CreateOnMainQueue(Task_PlayMoveAnimation, work, 0);
 }
 
-void OpponentData_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentMonFlickerWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMonFlickerWork));
     work->count = 0;
     work->battleSystem = battleSystem;
@@ -2434,7 +2489,7 @@ void OpponentData_MonFlicker(BattleSystem *battleSystem, OpponentData *opponentD
     SysTask_CreateOnMainQueue(Task_MonFlicker, work, 0);
 }
 
-void OpponentData_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarUpdate *packet) {
+static void OpponentData_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarUpdate *packet) {
     BattleHpBar *hpBar;
 
     GF_ASSERT(opponentData->hpBar.boxObj != NULL);
@@ -2455,7 +2510,7 @@ void OpponentData_HealthbarUpdate(BattleSystem *battleSystem, OpponentData *oppo
     hpBar->task = SysTask_CreateOnMainQueue(Task_HealthbarUpdate, hpBar, 1000);
 }
 
-void OpponentData_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketExpBarUpdate *packet) {
+static void OpponentData_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketExpBarUpdate *packet) {
     BattleHpBar *hpBar;
 
     GF_ASSERT(opponentData->hpBar.boxObj != NULL);
@@ -2474,7 +2529,7 @@ void OpponentData_ExpBarUpdate(BattleSystem *battleSystem, OpponentData *opponen
     }
 }
 
-void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFaintAnimation *packet) {
+static void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFaintAnimation *packet) {
     OpponentFaintWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentFaintWork));
     int i;
 
@@ -2501,7 +2556,7 @@ void OpponentData_PlayFaintAnimation(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_PlayFaintAnimation, work, 0);
 }
 
-void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySE *packet) {
+static void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySE *packet) {
     s32 pan;
 
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
@@ -2513,7 +2568,7 @@ void OpponentData_PlaySE(BattleSystem *battleSystem, OpponentData *opponentData,
     PlaySE_SetPan(packet->sndSeqNo, pan);
 }
 
-void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentFadeOutWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentFadeOutWork));
     work->state = FADE_OUT_STATE_START;
     work->battleSystem = battleSystem;
@@ -2522,7 +2577,7 @@ void OpponentData_FadeOutBattle(BattleSystem *battleSystem, OpponentData *oppone
     SysTask_CreateOnMainQueue(Task_FadeOutBattle, work, 0);
 }
 
-void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketToggleVanish *packet) {
+static void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketToggleVanish *packet) {
     OpponentToggleVanishWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentToggleVanishWork));
     int i;
 
@@ -2543,14 +2598,14 @@ void OpponentData_ToggleVanish(BattleSystem *battleSystem, OpponentData *opponen
     SysTask_CreateOnMainQueue(Task_ToggleVanish, work, 0);
 }
 
-void OpponentData_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarStatus *packet) {
+static void OpponentData_HealthbarStatus(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketHealthbarStatus *packet) {
     GF_ASSERT(opponentData->hpBar.boxObj != NULL);
     opponentData->hpBar.status = packet->status;
     BattleHpBar_Draw(&opponentData->hpBar, opponentData->hpBar.hp, 0x100);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, packet->command);
 }
 
-void OpponentData_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerMessage *packet) {
+static void OpponentData_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketTrainerMessage *packet) {
     int trainerIndex = BattleSystem_GetTrainerIndex(battleSystem, opponentData->battlerId);
     OpponentMessageWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMessageWork));
 
@@ -2561,7 +2616,7 @@ void OpponentData_PrintTrainerMessage(BattleSystem *battleSystem, OpponentData *
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet) {
+static void OpponentData_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet) {
     BattleMessage msg;
     OpponentMessageWork *work;
     MsgData *msgData;
@@ -2576,7 +2631,7 @@ void OpponentData_PrintReturnMessage(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet) {
+static void OpponentData_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet) {
     BattleMessage msg;
     OpponentMessageWork *work;
     MsgData *msgData;
@@ -2591,7 +2646,7 @@ void OpponentData_PrintSendOutMessage(BattleSystem *battleSystem, OpponentData *
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleMessage msg;
     OpponentMessageWork *work;
     MsgData *msgData;
@@ -2606,7 +2661,7 @@ void OpponentData_PrintEncounterMessage(BattleSystem *battleSystem, OpponentData
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet) {
+static void OpponentData_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet) {
     BattleMessage msg;
     OpponentMessageWork *work;
     MsgData *msgData;
@@ -2621,7 +2676,7 @@ void OpponentData_PrintFirstSendOutMessage(BattleSystem *battleSystem, OpponentD
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentExpBarFlashWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentExpBarFlashWork));
     work->battleSystem = battleSystem;
     work->command = OPPONENT_COMMAND_ID(opponentData);
@@ -2631,7 +2686,7 @@ void OpponentData_ExpBarFullFlash(BattleSystem *battleSystem, OpponentData *oppo
     SysTask_CreateOnMainQueue(Task_PlayExpBarFullFlash, work, 0);
 }
 
-void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectionMessage *packet) {
+static void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectionMessage *packet) {
     u8 inputMode = opponentData->inputMode;
     if (inputMode == 0) {
         MsgData *msgData = BattleSystem_GetMessageLoader(battleSystem);
@@ -2653,7 +2708,7 @@ void OpponentData_PrintSelectionMessage(BattleSystem *battleSystem, OpponentData
     }
 }
 
-void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRefreshHealthbar *packet) {
+static void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRefreshHealthbar *packet) {
     BattleHpBar *hpBar = &opponentData->hpBar;
     MIi_CpuClearFast(0, (u32 *)hpBar, 1);
     hpBar->battleSystem = battleSystem;
@@ -2675,7 +2730,7 @@ void OpponentData_RefreshHealthbar(BattleSystem *battleSystem, OpponentData *opp
     BattleController_EmitCommandComplete(hpBar->battleSystem, hpBar->battlerId, hpBar->command);
 }
 
-void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMoveToForget *packet) {
+static void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSelectMoveToForget *packet) {
     OpponentSelectMoveToForgetWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectMoveToForgetWork));
     work->state = FORGET_MOVE_STATE_FADE_OUT;
     work->battleSystem = battleSystem;
@@ -2686,7 +2741,7 @@ void OpponentData_SelectMoveToForget(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_SelectMoveToForget, work, 0);
 }
 
-void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMosaicAnimation *packet) {
+static void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMosaicAnimation *packet) {
     OpponentMosaicWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentMosaicWork));
     work->state = MOSAIC_STATE_UPDATE;
     work->battleSystem = battleSystem;
@@ -2699,7 +2754,7 @@ void OpponentData_PlayMosaicAnimation(BattleSystem *battleSystem, OpponentData *
     SysTask_CreateOnMainQueue(Task_PlayMosaicAnimation, work, 0);
 }
 
-void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
+static void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     int i;
     work->state = SHOW_PARTY_GAUGE_STATE_SHOW;
@@ -2714,7 +2769,7 @@ void OpponentData_InitStartBallGauge(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_ShowPartyGauge, work, 0);
 }
 
-void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
+static void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     work->state = HIDE_PARTY_GAUGE_STATE_HIDE;
     work->battleSystem = battleSystem;
@@ -2725,7 +2780,7 @@ void OpponentData_DeleteStartBallGauge(BattleSystem *battleSystem, OpponentData 
     SysTask_CreateOnMainQueue(Task_HidePartyGauge, work, 0);
 }
 
-void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
+static void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     int i;
     work->state = SHOW_PARTY_GAUGE_STATE_SHOW;
@@ -2740,7 +2795,7 @@ void OpponentData_InitBallGauge(BattleSystem *battleSystem, OpponentData *oppone
     SysTask_CreateOnMainQueue(Task_ShowPartyGauge, work, 0);
 }
 
-void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
+static void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketBallGauge *packet) {
     OpponentPartyGaugeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentPartyGaugeWork));
     work->state = HIDE_PARTY_GAUGE_STATE_HIDE;
     work->battleSystem = battleSystem;
@@ -2751,7 +2806,7 @@ void OpponentData_DeleteBallGauge(BattleSystem *battleSystem, OpponentData *oppo
     SysTask_CreateOnMainQueue(Task_HidePartyGauge, work, 0);
 }
 
-void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleMessage msg;
     WaitingIcon *waitingIcon;
     MsgData *msgData;
@@ -2767,14 +2822,14 @@ void OpponentData_ShowWaitMessage(BattleSystem *battleSystem, OpponentData *oppo
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, 55);
 }
 
-void OpponentData_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
+static void OpponentData_RestoreSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
     BattleAnimBattlerPicParams params;
     BattleController_InitBattlerPicParams(battleSystem, animData, &params, opponentData->battlerId);
     BattleAnimUtil_RestorePic(&params, HEAP_ID_BATTLE);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, animData->command);
 }
 
-void OpponentData_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentSpriteOamWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSpriteOamWork));
     work->state = 0;
     work->battleSystem = battleSystem;
@@ -2785,7 +2840,7 @@ void OpponentData_SpriteToOAM(BattleSystem *battleSystem, OpponentData *opponent
     SysTask_CreateOnMainQueue(Task_SpriteToOAM, work, 0);
 }
 
-void OpponentData_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponentData) {
     OpponentSpriteOamWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSpriteOamWork));
     work->state = 0;
     work->battleSystem = battleSystem;
@@ -2796,7 +2851,7 @@ void OpponentData_OAMToSprite(BattleSystem *battleSystem, OpponentData *opponent
     SysTask_CreateOnMainQueue(Task_OAMToSprite, work, 0);
 }
 
-void OpponentData_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_PrintResultMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleMessage msg;
     MsgData *msgData;
     OpponentMessageWork *work;
@@ -2811,7 +2866,7 @@ void OpponentData_PrintResultMessage(BattleSystem *battleSystem, OpponentData *o
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet) {
+static void OpponentData_RunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet) {
     BattleMessage msg;
     MsgData *msgData;
     OpponentMessageWork *work;
@@ -2826,7 +2881,7 @@ void OpponentData_RunAwayMessage(BattleSystem *battleSystem, OpponentData *oppon
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
+static void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData) {
     BattleMessage msg;
     MsgData *msgData;
     OpponentMessageWork *work;
@@ -2841,14 +2896,14 @@ void OpponentData_ForfeitMessage(BattleSystem *battleSystem, OpponentData *oppon
     SysTask_CreateOnMainQueue(Task_WaitBattleMessage, work, 0);
 }
 
-void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
+static void OpponentData_SwapToSubstituteSprite(BattleSystem *battleSystem, OpponentData *opponentData, MoveAnimData *animData) {
     BattleAnimBattlerPicParams params;
     BattleController_InitBattlerPicParams(battleSystem, animData, &params, opponentData->battlerId);
     BattleAnimUtil_LoadSubstituteIntoPic(&params, HEAP_ID_BATTLE);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, animData->command);
 }
 
-void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMoveSE *packet) {
+static void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketMoveSE *packet) {
     int pan;
 
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
@@ -2870,12 +2925,12 @@ void OpponentData_PlayMoveSE(BattleSystem *battleSystem, OpponentData *opponentD
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, packet->command);
 }
 
-void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySong *packet) {
+static void OpponentData_PlaySong(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketPlaySong *packet) {
     PlayBGM(packet->song);
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, packet->command);
 }
 
-void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet) {
+static void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketScreenFade *packet) {
     OpponentScreenFadeWork *work = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentScreenFadeWork));
     MI_CpuFill8(work, 0, sizeof(OpponentScreenFadeWork));
     work->state = SCREEN_FADE_STATE_START;
@@ -2887,7 +2942,7 @@ void OpponentData_ScreenFade(BattleSystem *battleSystem, OpponentData *opponentD
     SysTask_CreateOnMainQueue(Task_OpponentScreenFade, work, 0);
 }
 
-void Task_PokemonEncounter(SysTask *task, void *data) {
+static void Task_PokemonEncounter(SysTask *task, void *data) {
     OpponentPokemonEncounterWork *work = data;
     BattleAnimSystem *animSystem = (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem);
     u8 state = work->state;
@@ -3000,7 +3055,7 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
     }
 }
 
-void Task_GiratinaEncounter(SysTask *task, void *data) {
+static void Task_GiratinaEncounter(SysTask *task, void *data) {
     OpponentPokemonEncounterWork *work = data;
     MoveAnimData animData;
     s16 coords[2]; // [1] = x, [0] = y
@@ -3069,7 +3124,7 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
     }
 }
 
-void Task_PokemonSlideIn(SysTask *task, void *data) {
+static void Task_PokemonSlideIn(SysTask *task, void *data) {
     OpponentPokemonSendOutWork *work = data;
     MoveAnimData animData;
     BallSealEffectTemplate openArgs;
@@ -3119,7 +3174,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEH, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_VANISHED, 1);
-        Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 16, 0, sBallColors[work->ball]);
+        Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 16, 0, gBallColors[work->ball]);
         Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_VANISHED, 0);
         BallSealEffect_Start(work->ballOpenEffect);
         if (work->facing == 2) {
@@ -3144,7 +3199,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
+            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, gBallColors[work->ball]);
             work->state = SLIDE_IN_STATE_WAIT_BALL_EFFECT;
             return;
         }
@@ -3155,7 +3210,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
+            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, gBallColors[work->ball]);
             work->state = SLIDE_IN_STATE_WAIT_BALL_EFFECT;
             return;
         } else {
@@ -3203,7 +3258,7 @@ void Task_PokemonSlideIn(SysTask *task, void *data) {
     }
 }
 
-void Task_FollowMonSlideIn(SysTask *task, void *data) {
+static void Task_FollowMonSlideIn(SysTask *task, void *data) {
     OpponentPokemonSendOutWork *work = data;
     MoveAnimData animData;
     MoveAnimData shinyAnimData;
@@ -3304,7 +3359,7 @@ void Task_FollowMonSlideIn(SysTask *task, void *data) {
     }
 }
 
-void Task_PokemonSendOut(SysTask *task, void *data) {
+static void Task_PokemonSendOut(SysTask *task, void *data) {
     BattleAnimSystem *animSystem;
     OpponentPokemonSendOutWork *work = data;
     MoveAnimData shinyAnimData;
@@ -3361,7 +3416,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
             if (work->battlerSprites) {
                 BattleAnimBattlerSprites_Free(work->battlerSprites);
             }
-            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 16, 0, sBallColors[work->ball]);
+            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 16, 0, gBallColors[work->ball]);
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_VANISHED, 0);
             BallSealEffect_Start(work->ballOpenEffect);
             if (work->facing == 2) {
@@ -3382,7 +3437,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
+            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, gBallColors[work->ball]);
             work->state = SEND_OUT_STATE_WAIT_BALL_EFFECT;
         } else if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) >= 0x100) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 0x100);
@@ -3391,7 +3446,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
             BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->pokepicAnimNarc, work->species, work->form, work->facing, work->cryParam);
-            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
+            Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, gBallColors[work->ball]);
             work->state = SEND_OUT_STATE_WAIT_BALL_EFFECT;
         } else {
             Pokepic_AddAttr(work->opponentData->pokepic, POKEPIC_AFFINEW, 32);
@@ -3451,7 +3506,7 @@ void Task_PokemonSendOut(SysTask *task, void *data) {
     }
 }
 
-void Task_FollowMonSendOut(SysTask *task, void *data) {
+static void Task_FollowMonSendOut(SysTask *task, void *data) {
     BattleAnimSystem *animSystem;
     OpponentPokemonSendOutWork *work = data;
     MoveAnimData sendOutAnimData;
@@ -3533,7 +3588,7 @@ void Task_FollowMonSendOut(SysTask *task, void *data) {
     }
 }
 
-void Task_RecallPokemon(SysTask *task, void *data) {
+static void Task_RecallPokemon(SysTask *task, void *data) {
     BattleAnimSystem *animSystem;
     OpponentRecallPokemonWork *work = data;
     MoveAnimData substituteAnimData;
@@ -3599,7 +3654,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
             work->ballData = BallThrow_New(&playerBallParams);
         }
         work->state = RECALL_STATE_WAIT_FADE;
-        Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, sBallColors[work->ball]);
+        Pokepic_StartPaletteFade(work->pokepic, 0, 16, 0, gBallColors[work->ball]);
         switch (work->battlerType) {
         case BATTLER_TYPE_SOLO_PLAYER:
         case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
@@ -3641,7 +3696,7 @@ void Task_RecallPokemon(SysTask *task, void *data) {
     }
 }
 
-void Task_RecallFollowMon(SysTask *task, void *data) {
+static void Task_RecallFollowMon(SysTask *task, void *data) {
     OpponentRecallPokemonWork *work = data;
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
@@ -3691,7 +3746,7 @@ void Task_RecallFollowMon(SysTask *task, void *data) {
     }
 }
 
-void Task_PokemonEnterBall(SysTask *task, void *data) {
+static void Task_PokemonEnterBall(SysTask *task, void *data) {
     OpponentPokepicShrinkWork *work = data;
 
     switch (work->state) {
@@ -3715,7 +3770,7 @@ void Task_PokemonEnterBall(SysTask *task, void *data) {
     }
 }
 
-void Task_TrainerEncounter(SysTask *task, void *data) {
+static void Task_TrainerEncounter(SysTask *task, void *data) {
     OpponentTrainerEncounterWork *work = data;
     s16 x1, y1, x2, y2;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
@@ -3827,7 +3882,7 @@ void Task_TrainerEncounter(SysTask *task, void *data) {
     }
 }
 
-void Task_ThrowPokeball(SysTask *task, void *data) {
+static void Task_ThrowPokeball(SysTask *task, void *data) {
     OpponentThrowPokeballWork *work = data;
     s16 x, y;
     int animFrame;
@@ -3916,13 +3971,13 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
                 BallThrow_SetDrawFlag(work->opponentData->ballData, 1);
-                BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
+                BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsets[work->backpic][animFrame][1]);
                 if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != 0) {
                     BallThrow_SetMode(work->opponentData->ballData, 0);
                     BallThrow_SetAnimateSprite(work->opponentData->ballData, 1);
                     if ((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
                         OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                        BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
+                        BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsets[work->backpic][animFrame][1]);
                         BallThrow_SetDrawFlag(partner->ballData, 1);
                         BallThrow_SetMode(partner->ballData, 0);
                         BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -3948,7 +4003,7 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             work->delay = 8;
             work->state = THROW_BALL_STATE_DELAY;
         } else if (work->opponentData->ballData && gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
-            BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
+            BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsets[work->backpic][animFrame][1]);
             if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != work->ballTargetState) {
                 BallThrow_SetMode(work->opponentData->ballData, work->ballTargetState);
                 BallThrow_SetPriority(work->opponentData->ballData, 1);
@@ -3983,7 +4038,7 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
     }
 }
 
-void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
+static void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
     OpponentThrowPokeballWork *work = data;
     s16 x, y;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
@@ -4018,7 +4073,7 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
             if (gBallThrowOffsets[work->backpic][frame][0] != 0x7FFF) {
                 OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
                 if (frame == 3 && BallThrow_GetMode(partner->ballData) != 0) {
-                    BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][frame][0], y + gBallThrowOffsetsY[work->backpic][frame][0]);
+                    BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][frame][0], y + gBallThrowOffsets[work->backpic][frame][1]);
                     BallThrow_SetDrawFlag(partner->ballData, 1);
                     BallThrow_SetMode(partner->ballData, 0);
                     BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -4045,7 +4100,7 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
     }
 }
 
-void Task_TrainerSlideOut(SysTask *task, void *data) {
+static void Task_TrainerSlideOut(SysTask *task, void *data) {
     OpponentTrainerSlideOutWork *work = data;
     s16 pos[2];
     SpriteManager *spriteManager;
@@ -4081,7 +4136,7 @@ void Task_TrainerSlideOut(SysTask *task, void *data) {
     }
 }
 
-void Task_TrainerSlideIn(SysTask *task, void *data) {
+static void Task_TrainerSlideIn(SysTask *task, void *data) {
     OpponentTrainerSlideInWork *work = data;
     s16 pos[2];
 
@@ -4111,7 +4166,7 @@ void Task_TrainerSlideIn(SysTask *task, void *data) {
     }
 }
 
-void Task_HealthbarSlideIn(SysTask *task, void *data) {
+static void Task_HealthbarSlideIn(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
     case HP_BAR_SLIDE_IN_STATE_DELAY:
@@ -4136,7 +4191,7 @@ void Task_HealthbarSlideIn(SysTask *task, void *data) {
     }
 }
 
-void Task_HealthbarSlideOut(SysTask *task, void *data) {
+static void Task_HealthbarSlideOut(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     if (hpBar->script == 0) {
         if (hpBar->slideDone == 1) {
@@ -4150,7 +4205,7 @@ void Task_HealthbarSlideOut(SysTask *task, void *data) {
     }
 }
 
-void Task_PlayerSelectCommand(SysTask *task, void *data) {
+static void Task_PlayerSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     BattleSystem_GetBgConfig(work->battleSystem);
     BattleInput *battleInput = BattleSystem_GetBattleInput(work->battleSystem);
@@ -4371,7 +4426,7 @@ void Task_PlayerSelectCommand(SysTask *task, void *data) {
     }
 }
 
-void Task_AISelectCommand(SysTask *task, void *data) {
+static void Task_AISelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     u32 input = TrainerAI_SelectCommand(work->battleSystem, work->battlerId);
     BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, input);
@@ -4380,20 +4435,20 @@ void Task_AISelectCommand(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_LinkSelectCommand(SysTask *task, void *data) {
+static void Task_LinkSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_SafariSelectCommand(SysTask *task, void *data) {
+static void Task_SafariSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     int stage = BattleSystem_GetSafariRunAttempts(work->battleSystem);
     u16 species = GetBattlerVar(BattleSystem_GetBattleContext(work->battleSystem), work->battlerId, BMON_DATA_SPECIES, NULL);
     int fleeRate = GetMonBaseStat(species, BASE_GREAT_MARSH_RATE);
-    int scaled = gSafariFleeRateStages[stage][0] * fleeRate;
-    int chance = scaled / gSafariFleeRateDenominators[stage][0];
+    int scaled = gSafariFleeRates[stage][0] * fleeRate;
+    int chance = scaled / gSafariFleeRates[stage][1];
     if (BattleSystem_Random(work->battleSystem) % 0xFF <= chance) {
         BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, 4);
     } else {
@@ -4404,7 +4459,7 @@ void Task_SafariSelectCommand(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PalParkSelectCommand(SysTask *task, void *data) {
+static void Task_PalParkSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, 4);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
@@ -4412,7 +4467,7 @@ void Task_PalParkSelectCommand(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_RecordedSelectCommand(SysTask *task, void *data) {
+static void Task_RecordedSelectCommand(SysTask *task, void *data) {
     OpponentSelectCommandWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
@@ -4427,7 +4482,7 @@ void Task_RecordedSelectCommand(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PlayerSelectMove(SysTask *task, void *data) {
+static void Task_PlayerSelectMove(SysTask *task, void *data) {
     OpponentSelectMoveWork *work = data;
     BattleSystem_GetBgConfig(work->battleSystem);
     BattleInput *battleInput = BattleSystem_GetBattleInput(work->battleSystem);
@@ -4507,7 +4562,7 @@ void Task_PlayerSelectMove(SysTask *task, void *data) {
     }
 }
 
-void Task_AISelectMove(SysTask *task, void *data) {
+static void Task_AISelectMove(SysTask *task, void *data) {
     OpponentSelectMoveWork *work = data;
     u32 battleType = BattleSystem_GetBattleType(work->battleSystem);
     BattleContext *ctx = BattleSystem_GetBattleContext(work->battleSystem);
@@ -4543,14 +4598,14 @@ void Task_AISelectMove(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_LinkSelectMove(SysTask *task, void *data) {
+static void Task_LinkSelectMove(SysTask *task, void *data) {
     OpponentSelectMoveWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_RecordedSelectMove(SysTask *task, void *data) {
+static void Task_RecordedSelectMove(SysTask *task, void *data) {
     OpponentSelectMoveWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
@@ -4570,7 +4625,7 @@ void Task_RecordedSelectMove(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PlayerSelectTarget(SysTask *task, void *data) {
+static void Task_PlayerSelectTarget(SysTask *task, void *data) {
     OpponentSelectTargetWork *work = data;
     BattleSystem_GetBgConfig(work->battleSystem);
     OpponentData *opponent = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
@@ -4645,7 +4700,7 @@ void Task_PlayerSelectTarget(SysTask *task, void *data) {
     }
 }
 
-void Task_AISelectTarget(SysTask *task, void *data) {
+static void Task_AISelectTarget(SysTask *task, void *data) {
     OpponentSelectTargetWork *work = data;
     int input = BattleContext_Get(work->battleSystem, BattleSystem_GetBattleContext(work->battleSystem), 11, work->battlerId) + 1;
     GF_ASSERT(input < 5);
@@ -4655,14 +4710,14 @@ void Task_AISelectTarget(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_LinkSelectTarget(SysTask *task, void *data) {
+static void Task_LinkSelectTarget(SysTask *task, void *data) {
     OpponentSelectTargetWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_RecordedSelectTarget(SysTask *task, void *data) {
+static void Task_RecordedSelectTarget(SysTask *task, void *data) {
     OpponentSelectTargetWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
@@ -4705,7 +4760,7 @@ void Task_RecordedSelectTarget(SysTask *task, void *data) {
 // Can the item be used on the selected party slot (an active battler)?
 #define ITEM_TARGET_ON_FIELD(work) (((work)->partyMenu->args->selectedMon < 2 && (BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES) || BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG))) || (work)->partyMenu->args->selectedMon < 1)
 
-void Task_PlayerSelectItem(SysTask *task, void *data) {
+static void Task_PlayerSelectItem(SysTask *task, void *data) {
     OpponentSelectItemWork *work = data;
     MoveAnimData selfAnimData;
     MoveAnimData monAnimData;
@@ -4803,7 +4858,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             work->partyMenu->args->embargo[0] = work->embargoFlag[work->battlerId];
             work->partyMenu->args->embargo[1] = work->embargoFlag[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
         }
-        BATTLE_PARTY_MENU_START(work->partyMenu->args);
+        BattlePartyMenu_Create(work->partyMenu->args);
         work->state++;
     } break;
     case SELECT_ITEM_STATE_WAIT_PARTY:
@@ -4908,7 +4963,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                 input.target = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedMon] + 1;
             }
         }
-        REPLY_ITEM_SELECTION(work->battleSystem, work->battlerId, input);
+        BattleController_ReplyItemSelection(work->battleSystem, work->battlerId, input);
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work->partyMenu->args->party);
         Heap_Free(work->partyMenu->args);
@@ -5156,11 +5211,11 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     }
 }
 
-void Task_AISelectItem(SysTask *task, void *data) {
+static void Task_AISelectItem(SysTask *task, void *data) {
     OpponentSelectItemWork *work = data;
     BattleItemInput input;
     input.item = 1;
-    REPLY_ITEM_SELECTION(work->battleSystem, work->battlerId, input);
+    BattleController_ReplyItemSelection(work->battleSystem, work->battlerId, input);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work->partyMenu->args->party);
     Heap_Free(work->partyMenu->args);
@@ -5169,7 +5224,7 @@ void Task_AISelectItem(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_LinkSelectItem(SysTask *task, void *data) {
+static void Task_LinkSelectItem(SysTask *task, void *data) {
     OpponentSelectItemWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work->partyMenu->args->party);
@@ -5179,7 +5234,7 @@ void Task_LinkSelectItem(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_RecordedSelectItem(SysTask *task, void *data) {
+static void Task_RecordedSelectItem(SysTask *task, void *data) {
     OpponentSelectItemWork *work = data;
 
     struct {
@@ -5201,7 +5256,7 @@ void Task_RecordedSelectItem(SysTask *task, void *data) {
     }
     recorded.input.pocket = recorded.value & 0xF;
     recorded.input.target = 0;
-    REPLY_ITEM_SELECTION(work->battleSystem, work->battlerId, recorded.input);
+    BattleController_ReplyItemSelection(work->battleSystem, work->battlerId, recorded.input);
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work->partyMenu->args->party);
     Heap_Free(work->partyMenu->args);
@@ -5210,7 +5265,7 @@ void Task_RecordedSelectItem(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PlayerShowMonList(SysTask *task, void *data) {
+static void Task_PlayerShowMonList(SysTask *task, void *data) {
     OpponentShowMonListWork *work = data;
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
     int firstBattler;
@@ -5301,7 +5356,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         } else {
             work->partyMenu->battlingMons[1] = PARTY_SIZE;
         }
-        BATTLE_PARTY_MENU_START(work->partyMenu);
+        BattlePartyMenu_Create(work->partyMenu);
         work->state++;
         break;
     case MON_LIST_STATE_WAIT_PARTY:
@@ -5333,7 +5388,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
     }
 }
 
-void Task_AIShowMonList(SysTask *task, void *data) {
+static void Task_AIShowMonList(SysTask *task, void *data) {
     OpponentShowMonListWork *work = data;
     int battlerId;
     int selected;
@@ -5369,14 +5424,14 @@ void Task_AIShowMonList(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_LinkShowMonList(SysTask *task, void *data) {
+static void Task_LinkShowMonList(SysTask *task, void *data) {
     OpponentShowMonListWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_RecordedShowMonList(SysTask *task, void *data) {
+static void Task_RecordedShowMonList(SysTask *task, void *data) {
     OpponentShowMonListWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
@@ -5410,7 +5465,7 @@ void Task_RecordedShowMonList(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
+static void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
     OpponentYesNoWork *work = data;
     BattleInput *battleInput;
     OpponentData *opponentData;
@@ -5515,21 +5570,21 @@ void Task_PlayerDrawYesNoBox(SysTask *task, void *data) {
     }
 }
 
-void Task_AIDrawYesNoBox(SysTask *task, void *data) {
+static void Task_AIDrawYesNoBox(SysTask *task, void *data) {
     OpponentYesNoWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_LinkDrawYesNoBox(SysTask *task, void *data) {
+static void Task_LinkDrawYesNoBox(SysTask *task, void *data) {
     OpponentYesNoWork *work = data;
     BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
     Heap_Free(work);
     SysTask_Destroy(task);
 }
 
-void Task_RecordedDrawYesNoBox(SysTask *task, void *data) {
+static void Task_RecordedDrawYesNoBox(SysTask *task, void *data) {
     OpponentYesNoWork *work = data;
     u8 input;
     if (BattleSystem_ReadRecordedInput(work->battleSystem, work->battlerId, &input) == TRUE) {
@@ -5544,7 +5599,7 @@ void Task_RecordedDrawYesNoBox(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_PlayMoveAnimation(SysTask *task, void *data) {
+static void Task_PlayMoveAnimation(SysTask *task, void *data) {
     OpponentMoveAnimationWork *work = data;
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams substituteParams;
@@ -5630,7 +5685,7 @@ void Task_PlayMoveAnimation(SysTask *task, void *data) {
     }
 }
 
-void Task_MonFlicker(SysTask *task, void *data) {
+static void Task_MonFlicker(SysTask *task, void *data) {
     OpponentMonFlickerWork *work = data;
     if (work->count < 6) {
         if (work->delay == 0) {
@@ -5648,7 +5703,7 @@ void Task_MonFlicker(SysTask *task, void *data) {
     }
 }
 
-void Task_HealthbarUpdate(SysTask *task, void *data) {
+static void Task_HealthbarUpdate(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
     case HP_BAR_UPDATE_STATE_INIT:
@@ -5667,7 +5722,7 @@ void Task_HealthbarUpdate(SysTask *task, void *data) {
     }
 }
 
-void Task_ExpBarUpdate(SysTask *task, void *data) {
+static void Task_ExpBarUpdate(SysTask *task, void *data) {
     BattleHpBar *hpBar = data;
     switch (hpBar->script) {
     case EXP_BAR_UPDATE_STATE_INIT:
@@ -5703,7 +5758,7 @@ void Task_ExpBarUpdate(SysTask *task, void *data) {
     }
 }
 
-void Task_PlayFaintAnimation(SysTask *task, void *data) {
+static void Task_PlayFaintAnimation(SysTask *task, void *data) {
     OpponentFaintWork *work = data;
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
@@ -5794,7 +5849,7 @@ void Task_PlayFaintAnimation(SysTask *task, void *data) {
     }
 }
 
-void Task_FadeOutBattle(SysTask *task, void *data) {
+static void Task_FadeOutBattle(SysTask *task, void *data) {
     OpponentFadeOutWork *work = data;
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
     PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
@@ -5822,7 +5877,7 @@ void Task_FadeOutBattle(SysTask *task, void *data) {
     }
 }
 
-void Task_ToggleVanish(SysTask *task, void *data) {
+static void Task_ToggleVanish(SysTask *task, void *data) {
     OpponentToggleVanishWork *work = data;
     MoveAnimData substituteAnimData;
     BattleAnimBattlerPicParams params;
@@ -5875,7 +5930,7 @@ void Task_ToggleVanish(SysTask *task, void *data) {
     }
 }
 
-void Task_PlayExpBarFullFlash(SysTask *task, void *data) {
+static void Task_PlayExpBarFullFlash(SysTask *task, void *data) {
     OpponentExpBarFlashWork *work = data;
     switch (work->state) {
     case EXP_FLASH_STATE_START:
@@ -5893,7 +5948,7 @@ void Task_PlayExpBarFullFlash(SysTask *task, void *data) {
     }
 }
 
-void Task_WaitBattleMessage(SysTask *task, void *data) {
+static void Task_WaitBattleMessage(SysTask *task, void *data) {
     OpponentMessageWork *work = data;
     if (BattleSystem_GetWaitingIcon(work->battleSystem) != NULL) {
         WaitingIcon_Delete(BattleSystem_GetWaitingIcon(work->battleSystem));
@@ -5906,7 +5961,7 @@ void Task_WaitBattleMessage(SysTask *task, void *data) {
     }
 }
 
-void Task_PrintSelectionMessage(SysTask *task, void *data) {
+static void Task_PrintSelectionMessage(SysTask *task, void *data) {
     OpponentSelectionMessageWork *work = data;
     switch (work->state) {
     case SELECTION_MSG_STATE_WAIT_PRINT:
@@ -5945,7 +6000,7 @@ void Task_PrintSelectionMessage(SysTask *task, void *data) {
         MIi_CpuCopy16(BattleSystem_GetObjPaletteBackup(work->battleSystem), dest, 0x80);                                                   \
     }
 
-void Task_PlayEncounterAnimation(SysTask *task, void *data) {
+static void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     OpponentEncounterAnimWork *work = data;
     PaletteData *palette;
     int terrain;
@@ -6033,7 +6088,7 @@ void Task_PlayEncounterAnimation(SysTask *task, void *data) {
     }
 }
 
-void Task_SelectMoveToForget(SysTask *task, void *data) {
+static void Task_SelectMoveToForget(SysTask *task, void *data) {
     OpponentSelectMoveToForgetWork *work = data;
     PaletteData *palette = BattleSystem_GetPaletteData(work->battleSystem);
     switch (work->state) {
@@ -6056,7 +6111,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
             work->partyMenu->item = ITEM_NONE;
             work->partyMenu->battlerId = work->battlerId;
             work->partyMenu->cursorActive = 0;
-            BATTLE_PARTY_MENU_START(work->partyMenu);
+            BattlePartyMenu_Create(work->partyMenu);
             work->state++;
         }
         break;
@@ -6083,7 +6138,7 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
     }
 }
 
-void Task_PlayMosaicAnimation(SysTask *task, void *data) {
+static void Task_PlayMosaicAnimation(SysTask *task, void *data) {
     OpponentMosaicWork *work = data;
     int mosaic;
 
@@ -6113,7 +6168,7 @@ void Task_PlayMosaicAnimation(SysTask *task, void *data) {
     }
 }
 
-void Task_ShowPartyGauge(SysTask *task, void *data) {
+static void Task_ShowPartyGauge(SysTask *task, void *data) {
     OpponentPartyGaugeWork *work = data;
     int show;
     int variant;
@@ -6169,7 +6224,7 @@ void Task_ShowPartyGauge(SysTask *task, void *data) {
     }
 }
 
-void Task_HidePartyGauge(SysTask *task, void *data) {
+static void Task_HidePartyGauge(SysTask *task, void *data) {
     OpponentPartyGaugeWork *work = data;
     int side;
     int hide;
@@ -6212,7 +6267,7 @@ void Task_HidePartyGauge(SysTask *task, void *data) {
     }
 }
 
-void Task_SpriteToOAM(SysTask *task, void *data) {
+static void Task_SpriteToOAM(SysTask *task, void *data) {
     OpponentSpriteOamWork *work = data;
     if (work->state == 0) {
         GF_ASSERT(OPPONENT_SPRITE_OAM(work->opponentData) == NULL);
@@ -6225,7 +6280,7 @@ void Task_SpriteToOAM(SysTask *task, void *data) {
     }
 }
 
-void Task_OAMToSprite(SysTask *task, void *data) {
+static void Task_OAMToSprite(SysTask *task, void *data) {
     OpponentSpriteOamWork *work = data;
     GF_ASSERT(OPPONENT_SPRITE_OAM(work->opponentData) != NULL);
     if (BattleAnimIndexedBytes_GetCurrentValue(OPPONENT_SPRITE_OAM(work->opponentData)) == 3 && work->state < 5) {
@@ -6239,7 +6294,7 @@ void Task_OAMToSprite(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void Task_OpponentScreenFade(SysTask *task, void *data) {
+static void Task_OpponentScreenFade(SysTask *task, void *data) {
     OpponentScreenFadeWork *work = data;
     PaletteData *paletteData = BattleSystem_GetPaletteData(work->battleSystem);
     PokepicManager *pokepicManager = BattleSystem_GetPokepicManager(work->battleSystem);
@@ -6418,7 +6473,7 @@ BattleCursorPosition *OpponentData_GetCursorPosition(OpponentData *opponentData)
     return (BattleCursorPosition *)&opponentData->cursorPosition;
 }
 
-void OpponentData_ResetCursorPosition(OpponentData *opponentData) {
+static void OpponentData_ResetCursorPosition(OpponentData *opponentData) {
     MI_CpuFill8(&opponentData->cursorPosition, 0, 8);
 }
 
@@ -6428,7 +6483,7 @@ void OpponentData_SetSpriteDrawFlag(OpponentData *opponentData, s32 drawFlag) {
     }
 }
 
-Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, PokepicManager *pokepicManager, PokepicTemplate *template, int x, int y, int z, int height, int shadowHeight, int shadowXOffset, int shadowSize, int battlerId, PokepicAnimScript *animScript, PokepicCallback callback) {
+static Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, PokepicManager *pokepicManager, PokepicTemplate *template, int x, int y, int z, int height, int shadowHeight, int shadowXOffset, int shadowSize, int battlerId, PokepicAnimScript *animScript, PokepicCallback callback) {
     u8 *charData;
     int isEnemy;
     Pokepic *pokepic;
@@ -6462,7 +6517,7 @@ Pokepic *BattleControllerOpponent_CreatePokepic(BattleSystem *battleSystem, Poke
     return pokepic;
 }
 
-void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
+static void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK) {
             msg->id = msg_0197_00990;
@@ -6498,7 +6553,7 @@ void BattleControllerOpponent_GetReturnMessage(BattleSystem *battleSystem, Oppon
     }
 }
 
-void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
+static void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketSwitchMessage *packet, BattleMessage *msg) {
     if (opponentData->battlerType & BATTLER_TYPE_IS_ENEMY) {
         if (!(BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK)) {
             msg->id = msg_0197_00972;
@@ -6534,7 +6589,7 @@ void BattleControllerOpponent_GetSendOutMessage(BattleSystem *battleSystem, Oppo
     }
 }
 
-void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
+static void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     u32 enemy1;
     u32 enemy2;
@@ -6579,7 +6634,7 @@ void BattleControllerOpponent_GetEncounterMessage(BattleSystem *battleSystem, Op
     }
 }
 
-void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet, BattleMessage *msg) {
+static void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketFirstSendOutMessage *packet, BattleMessage *msg) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     u32 battler;
     u32 partner;
@@ -6716,7 +6771,7 @@ void BattleControllerOpponent_GetFirstSendOutMessage(BattleSystem *battleSystem,
     }
 }
 
-void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
+static void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     u32 outcome = BattleSystem_GetBattleOutcomeFlags(battleSystem);
     u32 enemy1;
@@ -6769,7 +6824,7 @@ void BattleControllerOpponent_GetResultMessage(BattleSystem *battleSystem, Oppon
     }
 }
 
-void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet, BattleMessage *msg) {
+static void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleControllerPacketRecordData *packet, BattleMessage *msg) {
     int i;
     int playerSide = 0;
     int enemySide = 0;
@@ -6812,7 +6867,7 @@ void BattleControllerOpponent_GetRunAwayMessage(BattleSystem *battleSystem, Oppo
     BattleSystem_SetBattleOutcomeFlags(battleSystem, 0xC0 | BATTLE_OUTCOME_WIN);
 }
 
-void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
+static void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, OpponentData *opponentData, BattleMessage *msg) {
     msg->id = msg_0197_00956;
     msg->tag = TAG_TRNAME;
     if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_LINK) {
@@ -6828,7 +6883,7 @@ void BattleControllerOpponent_GetForfeitMessage(BattleSystem *battleSystem, Oppo
     BattleSystem_SetBattleOutcomeFlags(battleSystem, 0xC0 | BATTLE_OUTCOME_LOSE);
 }
 
-ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battleSystem, int position, int trainerClass, int resTag, BOOL isLink, s16 x, s16 y) {
+static ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battleSystem, int position, int trainerClass, int resTag, BOOL isLink, s16 x, s16 y) {
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     PaletteData *paletteData;
@@ -6845,7 +6900,7 @@ ManagedSprite *BattleControllerOpponent_CreateTrainerSprite(BattleSystem *battle
     return CreateTrainerPicSprite(spriteSystem, spriteManager, paletteData, x, y, trainerClass, battlerPosition, isLink, resTag, HEAP_ID_BATTLE);
 }
 
-void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData) {
+static void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *opponentData, BattleAnimSystem *animSystem, MoveAnimData *animData) {
     BattleAnimSetup setup;
     u32 move;
     int i;
@@ -6884,7 +6939,7 @@ void OpponentData_StartMoveAnimation(BattleSystem *battleSystem, OpponentData *o
     BattleAnimSystem_StartMove(animSystem, animData, move, &setup);
 }
 
-void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimData *animData, BattleAnimBattlerPicParams *params, u32 battlerId) {
+static void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimData *animData, BattleAnimBattlerPicParams *params, u32 battlerId) {
     int i;
     params->battler = battlerId;
     params->sourceBattler = battlerId;
@@ -6900,7 +6955,7 @@ void BattleController_InitBattlerPicParams(BattleSystem *battleSystem, MoveAnimD
     BattleSystem_GetPokepics(battleSystem, (void **)params->pokepics);
 }
 
-void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move) {
+static void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int effect, u16 move) {
     if (!isEffect) {
         const u16 moveNo = move;
         if (!(GetMoveAttr(moveNo, MOVEATTR_UNK9) & 0x40)) {
@@ -6943,7 +6998,7 @@ void MoveAnim_GetDisplayFlags(u8 *disableHpBar, u8 *updateG3, BOOL isEffect, int
     }
 }
 
-BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused) {
+static BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work, ManagedSprite *unused) {
     u32 attr;
     BOOL done = FALSE;
 
@@ -6976,7 +7031,7 @@ BOOL OpponentTrainerEncounter_HandleAnimFrame(OpponentTrainerEncounterWork *work
     return done;
 }
 
-void Task_FlashBrightness(SysTask *task, s32 *state) {
+static void Task_FlashBrightness(SysTask *task, s32 *state) {
     s32 current;
 
     current = *state;
@@ -7005,17 +7060,17 @@ void Task_FlashBrightness(SysTask *task, s32 *state) {
     }
 }
 
-void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem) {
+static void BattleSystem_StopRecordingDataCorrupted(BattleSystem *battleSystem) {
     BattleSystem_PauseRecording(battleSystem, 1);
     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
 }
 
-void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem) {
+static void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem) {
     BattleSystem_PauseRecording(battleSystem, 2);
     BattleController_TryEmitExitRecording(battleSystem, BattleSystem_GetBattleContext(battleSystem));
 }
 
-u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass) {
+static u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass) {
     int version;
     u8 newTrainerClass;
 

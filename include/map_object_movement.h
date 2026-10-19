@@ -50,7 +50,6 @@ typedef struct MovementListEntry {
 
 typedef BOOL (*MovementStateFunc)(LocalMapObject *object, void *data);
 
-void RandomLookMovement_Init(LocalMapObject *object, u32 value);
 void RandomLookMovement_InitAnyDirection(LocalMapObject *object);
 void RandomLookMovement_InitUpLeft(LocalMapObject *object);
 void RandomLookMovement_InitUpRight(LocalMapObject *object);
@@ -67,17 +66,12 @@ void RandomLookMovement_Delete(LocalMapObject *object);
 void RandomWalkMovement_InitAnyDirection(LocalMapObject *object);
 void RandomWalkMovement_InitUpDown(LocalMapObject *object);
 void RandomWalkMovement_InitLeftRight(LocalMapObject *object);
-void RandomWalkMovement_Init(LocalMapObject *object, u32 first, u32 second, u32 third);
 void RandomWalkMovement_Update(LocalMapObject *object);
-void MapObject_GetMovementBounds(LocalMapObject *object, LocalMovementBounds *bounds);
-BOOL MapObject_IsWithinMovementBounds(LocalMapObject *object, int direction);
-void FaceDirectionMovement_Init(LocalMapObject *object, u32 direction);
 void FaceDirectionMovement_Update(LocalMapObject *object);
 void FaceDirectionMovement_InitUp(LocalMapObject *object);
 void FaceDirectionMovement_InitDown(LocalMapObject *object);
 void FaceDirectionMovement_InitLeft(LocalMapObject *object);
 void FaceDirectionMovement_InitRight(LocalMapObject *object);
-void SpinMovement_Init(LocalMapObject *object, u32 value);
 void SpinMovement_InitCounterclockwise(LocalMapObject *object);
 void SpinMovement_InitClockwise(LocalMapObject *object);
 void SpinMovement_Update(LocalMapObject *object);
@@ -85,7 +79,6 @@ void AlternatingSpinMovement_Init(LocalMapObject *object);
 void AlternatingSpinMovement_Update(LocalMapObject *object);
 void BackAndForthMovement_Init(LocalMapObject *object);
 void BackAndForthMovement_Update(LocalMapObject *object);
-void PathMovement_Init(LocalMapObject *object, u32 first, u32 second, u32 value);
 void PathMovement_InitTable14(LocalMapObject *object);
 void PathMovement_InitTable15(LocalMapObject *object);
 void PathMovement_InitTable16(LocalMapObject *object);
@@ -111,15 +104,5 @@ void PathMovement_InitTable34(LocalMapObject *object);
 void PathMovement_InitTable35(LocalMapObject *object);
 void PathMovement_InitTable36(LocalMapObject *object);
 void PathMovement_InitTable37(LocalMapObject *object);
-int DirectionList_Count(const int *list, int value);
-int DirectionList_GetRandom(const int *list, int value);
-int GetRandomDirectionFromTable(int tableId, int value);
-const int *GetDirectionTable(int id);
-int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object);
-int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tableId, int value);
-BOOL MapObject_SpinsWhileWalking(LocalMapObject *object);
-void WalkingSpin_Init(LocalMapObject *object, u8 *state);
-void WalkingSpin_TurnBeforeStep(LocalMapObject *object, s8 *state);
-void WalkingSpin_EndStep(LocalMapObject *object, u8 *state);
 
 #endif // POKEHEARTGOLD_MAP_OBJECT_MOVEMENT_H

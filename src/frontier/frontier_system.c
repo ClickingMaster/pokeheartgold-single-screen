@@ -13,8 +13,6 @@
 #include "msgdata.h"
 #include "pm_string.h"
 
-FrontierMap *Frontier_GetMap(void *frontierWork);
-
 FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u32 mapId) {
     FrontierSystem *system = Heap_Alloc(heapId, sizeof(FrontierSystem));
     MI_CpuFill8(system, 0, sizeof(FrontierSystem));

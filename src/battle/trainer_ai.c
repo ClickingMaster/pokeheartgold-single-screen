@@ -13,29 +13,6 @@
 
 #include "system.h"
 
-// Current-tree field names for the same verified layouts.
-#define moveScore                           movePoints
-#define attacker                            battlerIdAttacker
-#define defender                            battlerIdTarget
-#define usedItemType                        useItem
-#define embargoTurns                        embargoFlag
-#define AI_FLAG_BASIC                       (1 << 0)
-#define AI_FLAG_DOUBLES                     AI_DOUBLES
-#define AI_FLAG_ROAMING_POKEMON             AI_29
-#define BATTLER_SIDE_PLAYER                 0
-#define BATTLE_TYPE_TRAINER_WITH_AI_PARTNER (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI)
-#define MAX_TRAINER_ITEMS                   4
-#define MAX_BATTLERS_PER_SIDE               2
-#define MOVE_STATUS_IMMUNE                  (MOVE_STATUS_NO_EFFECT | MOVE_STATUS_WONDER_GUARD_IMMUNE | MOVE_STATUS_LEVITATE_IMMUNE | MOVE_STATUS_MAGNET_RISE_IMMUNE)
-#define STATUS2_TRAPPED                     (STATUS2_BIND | STATUS2_MEAN_LOOK)
-#define TYPE_MULTI_IMMUNE                   0
-#define TYPE_MULTI_QUARTER_DAMAGE           10
-#define TYPE_MULTI_HALF_DAMAGE              20
-#define TYPE_MULTI_BASE_DAMAGE              40
-#define TYPE_MULTI_STAB_DAMAGE              60
-#define TYPE_MULTI_DOUBLE_DAMAGE            80
-#define TYPE_MULTI_QUADRUPLE_DAMAGE         160
-
 extern const u16 sNoDamageCalcMoveEffects[]; /*= {
     MOVE_EFFECT_HALVE_DEFENSE,
     MOVE_EFFECT_RECOVER_DAMAGE_SLEEP,
@@ -217,9 +194,9 @@ void TrainerAI_Init(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID
 
     for (i = 0; i < MAX_MON_MOVES; i++) {
         if (initScore & 1) {
-            ctx->trainerAIData.moveScore[i] = 100;
+            ctx->trainerAIData.movePoints[i] = 100;
         } else {
-            ctx->trainerAIData.moveScore[i] = 0;
+            ctx->trainerAIData.movePoints[i] = 0;
         }
         initScore >>= 1;
     }
@@ -228,7 +205,7 @@ void TrainerAI_Init(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID
     invalidMoves = StruggleCheck(battleSystem, ctx, battlerID, 0, -1); // BattleSystem_CheckInvalidMoves
     for (i = 0; i < MAX_MON_MOVES; i++) {
         if (invalidMoves & MaskOfFlagNo(i)) {
-            ctx->trainerAIData.moveScore[i] = 0;
+            ctx->trainerAIData.movePoints[i] = 0;
         }
         ctx->trainerAIData.moveDamageRolls[i] = 100 - (BattleSystem_Random(battleSystem) % 16);
     }
@@ -236,14 +213,14 @@ void TrainerAI_Init(BattleSystem *battleSystem, BattleContext *ctx, u8 battlerID
     ctx->trainerAIData.scriptStackSize = 0;
 
     if (battleSystem->battleType & BATTLE_TYPE_ROAMER) {
-        ctx->trainerAIData.aiFlags = AI_FLAG_ROAMING_POKEMON;
+        ctx->trainerAIData.aiFlags = AI_ROAMING_POKEMON;
     } else {
         ctx->trainerAIData.aiFlags = battleSystem->trainers[battlerID].data.aiFlags;
     }
 
     // Force double-battle strategies, if applicable.
     if (battleSystem->battleType & BATTLE_TYPE_DOUBLES) {
-        ctx->trainerAIData.aiFlags |= AI_FLAG_DOUBLES;
+        ctx->trainerAIData.aiFlags |= AI_DOUBLES;
     }
 }
 
@@ -252,10 +229,10 @@ u8 TrainerAI_SelectMove(BattleSystem *battleSystem, u8 battlerID) {
     BattleContext *ctx = battleSystem->ctx;
 
     if (!(ctx->trainerAIData.stateFlags & AI_STATUS_FLAG_CONTINUE)) {
-        ctx->trainerAIData.attacker = battlerID;
-        ctx->trainerAIData.defender = Battler_GetRandomOpposingBattlerId(battleSystem, ctx, battlerID);
+        ctx->trainerAIData.battlerIdAttacker = battlerID;
+        ctx->trainerAIData.battlerIdTarget = Battler_GetRandomOpposingBattlerId(battleSystem, ctx, battlerID);
 
-        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
+        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, AI_INIT_SCORE_ALL_MOVES);
     }
 
     if ((battleSystem->battleType & BATTLE_TYPE_DOUBLES) == FALSE) {
@@ -297,21 +274,21 @@ static u8 TrainerAI_MainSingles(BattleSystem *battleSystem, BattleContext *ctx) 
     } else {
         // Get the move with the highest score; break ties randomly.
         numMaxScoreMoves = 1;
-        maxScoreMoves[0] = ctx->trainerAIData.moveScore[0];
+        maxScoreMoves[0] = ctx->trainerAIData.movePoints[0];
         maxScoreMoveSlots[0] = 0; // AI_ENEMY_ATTACK_1
 
         for (int moveSlot = 1; moveSlot < MAX_MON_MOVES; moveSlot++) {
-            if (ctx->battleMons[ctx->trainerAIData.attacker].moves[moveSlot]) { // Attacker has a move in this slot.
+            if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[moveSlot]) { // Attacker has a move in this slot.
                 // Append to the list of max-score moves if it has an equal score to the current max.
-                if (maxScoreMoves[0] == ctx->trainerAIData.moveScore[moveSlot]) {
-                    maxScoreMoves[numMaxScoreMoves] = ctx->trainerAIData.moveScore[moveSlot];
+                if (maxScoreMoves[0] == ctx->trainerAIData.movePoints[moveSlot]) {
+                    maxScoreMoves[numMaxScoreMoves] = ctx->trainerAIData.movePoints[moveSlot];
                     maxScoreMoveSlots[numMaxScoreMoves++] = moveSlot;
                 }
 
                 // Set to be the maximum score if it has higher score than the current max.
-                if (maxScoreMoves[0] < ctx->trainerAIData.moveScore[moveSlot]) {
+                if (maxScoreMoves[0] < ctx->trainerAIData.movePoints[moveSlot]) {
                     numMaxScoreMoves = 1;
-                    maxScoreMoves[0] = ctx->trainerAIData.moveScore[moveSlot];
+                    maxScoreMoves[0] = ctx->trainerAIData.movePoints[moveSlot];
                     maxScoreMoveSlots[0] = moveSlot;
                 }
             }
@@ -320,7 +297,7 @@ static u8 TrainerAI_MainSingles(BattleSystem *battleSystem, BattleContext *ctx) 
         action = maxScoreMoveSlots[BattleSystem_Random(battleSystem) % numMaxScoreMoves];
     }
 
-    ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker] = ctx->trainerAIData.defender;
+    ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker] = ctx->trainerAIData.battlerIdTarget;
     return action;
 }
 
@@ -334,17 +311,17 @@ static u8 TrainerAI_MainDoubles(BattleSystem *battleSystem, BattleContext *ctx) 
     s8 moveSlot;
 
     for (battlerID = 0; battlerID < BATTLER_MAX; battlerID++) {
-        if (battlerID == ctx->trainerAIData.attacker || ctx->battleMons[battlerID].hp == 0) {
+        if (battlerID == ctx->trainerAIData.battlerIdAttacker || ctx->battleMons[battlerID].hp == 0) {
             actionForBattler[battlerID] = -1;
             maxScoreForBattler[battlerID] = -1;
             continue;
         }
 
-        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.attacker, AI_INIT_SCORE_ALL_MOVES);
+        TrainerAI_Init(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, AI_INIT_SCORE_ALL_MOVES);
 
         // Record the last moves of enemy battlers.
-        ctx->trainerAIData.defender = battlerID;
-        if ((battlerID & 1) != (ctx->trainerAIData.attacker & 1)) { // Side 1 has even-numbered IDs, side 2 has odd-numbered battle IDs.
+        ctx->trainerAIData.battlerIdTarget = battlerID;
+        if ((battlerID & 1) != (ctx->trainerAIData.battlerIdAttacker & 1)) { // Side 1 has even-numbered IDs, side 2 has odd-numbered battle IDs.
             TrainerAI_RecordLastMove(battleSystem, ctx);
         }
 
@@ -377,22 +354,22 @@ static u8 TrainerAI_MainDoubles(BattleSystem *battleSystem, BattleContext *ctx) 
             int numMaxScoreMoves, i;
 
             // Pick a random move from among the highest-scored moves on this target.
-            tmpMaxScores[0] = ctx->trainerAIData.moveScore[0];
+            tmpMaxScores[0] = ctx->trainerAIData.movePoints[0];
             tmpMaxScoreMoveSlots[0] = 0;
             numMaxScoreMoves = 1;
 
             for (i = 1; i < MAX_MON_MOVES; i++) {
-                if (ctx->battleMons[ctx->trainerAIData.attacker].moves[i]) {
+                if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i]) {
                     // Same score as max: append to list of possible max-score moves.
-                    if (tmpMaxScores[0] == ctx->trainerAIData.moveScore[i]) {
-                        tmpMaxScores[numMaxScoreMoves] = ctx->trainerAIData.moveScore[i];
+                    if (tmpMaxScores[0] == ctx->trainerAIData.movePoints[i]) {
+                        tmpMaxScores[numMaxScoreMoves] = ctx->trainerAIData.movePoints[i];
                         tmpMaxScoreMoveSlots[numMaxScoreMoves] = i;
                         numMaxScoreMoves++;
                     }
 
                     // Higher score than max: set as new max score.
-                    if (tmpMaxScores[0] < ctx->trainerAIData.moveScore[i]) {
-                        tmpMaxScores[0] = ctx->trainerAIData.moveScore[i];
+                    if (tmpMaxScores[0] < ctx->trainerAIData.movePoints[i]) {
+                        tmpMaxScores[0] = ctx->trainerAIData.movePoints[i];
                         tmpMaxScoreMoveSlots[0] = i;
                         numMaxScoreMoves = 1;
                     }
@@ -403,7 +380,7 @@ static u8 TrainerAI_MainDoubles(BattleSystem *battleSystem, BattleContext *ctx) 
             maxScoreForBattler[battlerID] = tmpMaxScores[0];
 
             // Score moves on an ally below 100 to -1 (basically, never use them).
-            if (battlerID == (ctx->trainerAIData.attacker ^ 2)) {
+            if (battlerID == (ctx->trainerAIData.battlerIdAttacker ^ 2)) {
                 if (maxScoreForBattler[battlerID] < 100) {
                     maxScoreForBattler[battlerID] = -1;
                 }
@@ -428,18 +405,18 @@ static u8 TrainerAI_MainDoubles(BattleSystem *battleSystem, BattleContext *ctx) 
     }
 
     // Pick a random target from among the maximum-scored targets.
-    ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker] = battlerTemp[(BattleSystem_Random(battleSystem) % battlerCount)];
-    moveSlot = actionForBattler[ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker]];
-    move = ctx->battleMons[ctx->trainerAIData.attacker].moves[moveSlot];
+    ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker] = battlerTemp[(BattleSystem_Random(battleSystem) % battlerCount)];
+    moveSlot = actionForBattler[ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker]];
+    move = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[moveSlot];
 
     // Override targets as needed.
     if (ctx->trainerAIData.moveData[move].range == RANGE_SINGLE_TARGET_USER_SIDE
-        && BattleSystem_GetFieldSide(battleSystem, ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker]) == 0) {
-        ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker] = ctx->trainerAIData.attacker;
+        && BattleSystem_GetFieldSide(battleSystem, ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker]) == 0) {
+        ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker] = ctx->trainerAIData.battlerIdAttacker;
     }
 
-    if (move == MOVE_CURSE && CurseUserIsGhost(ctx, move, ctx->trainerAIData.attacker) == FALSE) {
-        ctx->trainerAIData.selectedTarget[ctx->trainerAIData.attacker] = ctx->trainerAIData.attacker;
+    if (move == MOVE_CURSE && CurseUserIsGhost(ctx, move, ctx->trainerAIData.battlerIdAttacker) == FALSE) {
+        ctx->trainerAIData.selectedTarget[ctx->trainerAIData.battlerIdAttacker] = ctx->trainerAIData.battlerIdAttacker;
     }
 
     return moveSlot;
@@ -451,10 +428,10 @@ static void TrainerAI_EvaluateMoves(BattleSystem *battleSystem, BattleContext *c
         case AI_EVAL_STEP_INIT:
             ctx->aiScriptCursor = ctx->aiScriptTemp[ctx->trainerAIData.aiBitShift];
 
-            if (ctx->battleMons[ctx->trainerAIData.attacker].movePPCur[ctx->trainerAIData.moveSlot] == 0) {
+            if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].movePPCur[ctx->trainerAIData.moveSlot] == 0) {
                 ctx->trainerAIData.move = MOVE_NONE;
             } else {
-                ctx->trainerAIData.move = ctx->battleMons[ctx->trainerAIData.attacker].moves[ctx->trainerAIData.moveSlot];
+                ctx->trainerAIData.move = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[ctx->trainerAIData.moveSlot];
             }
 
             ctx->trainerAIData.evalStep++;
@@ -464,7 +441,7 @@ static void TrainerAI_EvaluateMoves(BattleSystem *battleSystem, BattleContext *c
             if (ctx->trainerAIData.move != MOVE_NONE) {
                 sAICommandTable[ctx->aiScriptTemp[ctx->aiScriptCursor]](battleSystem, ctx);
             } else {
-                ctx->trainerAIData.moveScore[ctx->trainerAIData.moveSlot] = 0;
+                ctx->trainerAIData.movePoints[ctx->trainerAIData.moveSlot] = 0;
                 ctx->trainerAIData.stateFlags |= AI_STATUS_FLAG_DONE;
             }
 
@@ -535,10 +512,10 @@ void AICmd_AddToMoveScore(BattleSystem *battleSystem, BattleContext *ctx) {
     AIScript_IncrementCursor(ctx, 1);
 
     int val = AIScript_Read(ctx);
-    ctx->trainerAIData.moveScore[ctx->trainerAIData.moveSlot] += val;
+    ctx->trainerAIData.movePoints[ctx->trainerAIData.moveSlot] += val;
 
-    if (ctx->trainerAIData.moveScore[ctx->trainerAIData.moveSlot] < 0) {
-        ctx->trainerAIData.moveScore[ctx->trainerAIData.moveSlot] = 0;
+    if (ctx->trainerAIData.movePoints[ctx->trainerAIData.moveSlot] < 0) {
+        ctx->trainerAIData.movePoints[ctx->trainerAIData.moveSlot] = 0;
     }
 }
 
@@ -831,8 +808,8 @@ void AICmd_IfAttackerHasDamagingMoves(BattleSystem *battleSystem, BattleContext 
 
     int i;
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        if (ctx->battleMons[ctx->trainerAIData.attacker].moves[i] != MOVE_NONE
-            && ctx->trainerAIData.moveData[ctx->battleMons[ctx->trainerAIData.attacker].moves[i]].power) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i] != MOVE_NONE
+            && ctx->trainerAIData.moveData[ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i]].power) {
             break;
         }
     }
@@ -848,8 +825,8 @@ void AICmd_IfAttackerHasNoDamagingMoves(BattleSystem *battleSystem, BattleContex
 
     int i;
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        if (ctx->battleMons[ctx->trainerAIData.attacker].moves[i] != MOVE_NONE
-            && ctx->trainerAIData.moveData[ctx->battleMons[ctx->trainerAIData.attacker].moves[i]].power) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i] != MOVE_NONE
+            && ctx->trainerAIData.moveData[ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i]].power) {
             break;
         }
     }
@@ -872,19 +849,19 @@ void AICmd_LoadTypeFrom(BattleSystem *battleSystem, BattleContext *ctx) {
 
     switch (param) {
     case LOAD_ATTACKER_TYPE_1:
-        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_TYPE_1, NULL);
+        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_TYPE_1, NULL);
         break;
 
     case LOAD_DEFENDER_TYPE_1:
-        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.defender, BMON_DATA_TYPE_1, NULL);
+        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdTarget, BMON_DATA_TYPE_1, NULL);
         break;
 
     case LOAD_ATTACKER_TYPE_2:
-        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_TYPE_2, NULL);
+        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_TYPE_2, NULL);
         break;
 
     case LOAD_DEFENDER_TYPE_2:
-        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.defender, BMON_DATA_TYPE_2, NULL);
+        ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdTarget, BMON_DATA_TYPE_2, NULL);
         break;
 
     case LOAD_MOVE_TYPE:
@@ -892,22 +869,22 @@ void AICmd_LoadTypeFrom(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
 
     case LOAD_ATTACKER_PARTNER_TYPE_1:
-        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.attacker);
+        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.battlerIdAttacker);
         ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, partner, BMON_DATA_TYPE_1, NULL);
         break;
 
     case LOAD_DEFENDER_PARTNER_TYPE_1:
-        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.defender);
+        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.battlerIdTarget);
         ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, partner, BMON_DATA_TYPE_1, NULL);
         break;
 
     case LOAD_ATTACKER_PARTNER_TYPE_2:
-        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.attacker);
+        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.battlerIdAttacker);
         ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, partner, BMON_DATA_TYPE_2, NULL);
         break;
 
     case LOAD_DEFENDER_PARTNER_TYPE_2:
-        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.defender);
+        partner = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.battlerIdTarget);
         ctx->trainerAIData.calcTemp = GetBattlerVar(ctx, partner, BMON_DATA_TYPE_1, NULL); // BUG: Checks type 1 again instead of type 2.
         break;
 
@@ -965,18 +942,18 @@ void AICmd_FlagMoveDamageScore(BattleSystem *battleSystem, BattleContext *ctx) {
         || (ctx->trainerAIData.moveData[ctx->trainerAIData.move].power > 1 && sNoDamageCalcMoveEffects[noDamageCalcIndex] == 0xFFFF)) {
         int i;
         for (i = 0; i < NUM_STATS; i++) {
-            ivs[i] = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_HP_IV + i, NULL);
+            ivs[i] = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_HP_IV + i, NULL);
         }
 
         TrainerAI_CalcAllDamage(battleSystem,
             ctx,
-            ctx->trainerAIData.attacker,
-            ctx->battleMons[ctx->trainerAIData.attacker].moves,
+            ctx->trainerAIData.battlerIdAttacker,
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves,
             moveDamage,
-            ctx->battleMons[ctx->trainerAIData.attacker].item,
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].item,
             ivs,
-            GetBattlerAbility(ctx, ctx->trainerAIData.attacker),
-            ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.embargoTurns,
+            GetBattlerAbility(ctx, ctx->trainerAIData.battlerIdAttacker),
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.embargoFlag,
             varyDamage);
 
         for (i = 0; i < MAX_MON_MOVES; i++) {
@@ -1032,7 +1009,7 @@ void AICmd_IfSpeedCompareEqualTo(BattleSystem *battleSystem, BattleContext *ctx)
     int val = AIScript_Read(ctx);
     int jump = AIScript_Read(ctx);
 
-    if (CheckSortSpeed(battleSystem, ctx, ctx->trainerAIData.attacker, ctx->trainerAIData.defender, TRUE) == val) { // BattleSystem_CompareBattlerSpeed in pokeplatinum
+    if (CheckSortSpeed(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, ctx->trainerAIData.battlerIdTarget, TRUE) == val) { // BattleSystem_CompareBattlerSpeed in pokeplatinum
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -1043,7 +1020,7 @@ void AICmd_IfSpeedCompareNotEqualTo(BattleSystem *battleSystem, BattleContext *c
     int val = AIScript_Read(ctx);
     int jump = AIScript_Read(ctx);
 
-    if (CheckSortSpeed(battleSystem, ctx, ctx->trainerAIData.attacker, ctx->trainerAIData.defender, TRUE) != val) {
+    if (CheckSortSpeed(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, ctx->trainerAIData.battlerIdTarget, TRUE) != val) {
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -1097,7 +1074,7 @@ void AICmd_LoadBattlerAbility(BattleSystem *battleSystem, BattleContext *ctx) {
 
     if (ctx->battleMons[battler].moveEffectFlags & MOVE_EFFECT_FLAG_ABILITY_SUPPRESSED) {
         ctx->trainerAIData.calcTemp = ABILITY_NONE;
-    } else if (ctx->trainerAIData.attacker != battler && inBattler != AI_BATTLER_ATTACKER_PARTNER) {
+    } else if (ctx->trainerAIData.battlerIdAttacker != battler && inBattler != AI_BATTLER_ATTACKER_PARTNER) {
         // If we already know an opponent's ability, load that ability.
         if (ctx->trainerAIData.abilities[battler]) {
             ctx->trainerAIData.calcTemp = ctx->trainerAIData.abilities[battler];
@@ -1194,16 +1171,16 @@ void AICmd_CalcMaxEffectiveness(BattleSystem *battleSystem, BattleContext *ctx) 
     for (int i = 0; i < MAX_MON_MOVES; i++) {
         u32 damage = TYPE_MULTI_BASE_DAMAGE;
         u32 effectiveness = 0;
-        u16 move = ctx->battleMons[ctx->trainerAIData.attacker].moves[i];
-        int moveType = TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.attacker, move);
+        u16 move = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves[i];
+        int moveType = TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, move);
 
         if (move) {
             damage = BattleSystem_ApplyTypeEffectiveness(battleSystem,
                 ctx,
                 move,
                 moveType,
-                ctx->trainerAIData.attacker,
-                ctx->trainerAIData.defender,
+                ctx->trainerAIData.battlerIdAttacker,
+                ctx->trainerAIData.battlerIdTarget,
                 damage,
                 &effectiveness);
 
@@ -1239,9 +1216,9 @@ void AICmd_IfMoveEffectivenessEquals(BattleSystem *battleSystem, BattleContext *
     damage = BattleSystem_ApplyTypeEffectiveness(battleSystem,
         ctx,
         ctx->trainerAIData.move,
-        TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.attacker, ctx->trainerAIData.move),
-        ctx->trainerAIData.attacker,
-        ctx->trainerAIData.defender,
+        TrainerAI_MoveType(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, ctx->trainerAIData.move),
+        ctx->trainerAIData.battlerIdAttacker,
+        ctx->trainerAIData.battlerIdTarget,
         damage,
         &effectiveness);
 
@@ -1465,20 +1442,20 @@ void AICmd_IfCurrentMoveKOs(BattleSystem *battleSystem, BattleContext *ctx) {
         || (ctx->trainerAIData.moveData[ctx->trainerAIData.move].power > 1 && sNoDamageCalcMoveEffects[noDamageCalcIndex] == 0xFFFF)) {
         u8 ivs[NUM_STATS];
         for (int stat = STAT_HP; stat < NUM_STATS; stat++) {
-            ivs[stat] = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_HP_IV + stat, NULL);
+            ivs[stat] = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_HP_IV + stat, NULL);
         }
 
         u32 damage = TrainerAI_CalcDamage(battleSystem,
             ctx,
             ctx->trainerAIData.move,
-            ctx->battleMons[ctx->trainerAIData.attacker].item,
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].item,
             ivs,
-            ctx->trainerAIData.attacker,
-            GetBattlerAbility(ctx, ctx->trainerAIData.attacker),
-            ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.embargoTurns,
+            ctx->trainerAIData.battlerIdAttacker,
+            GetBattlerAbility(ctx, ctx->trainerAIData.battlerIdAttacker),
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.embargoFlag,
             roll);
 
-        if (ctx->battleMons[ctx->trainerAIData.defender].hp <= damage) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdTarget].hp <= damage) {
             AIScript_IncrementCursor(ctx, jump);
         }
     }
@@ -1517,20 +1494,20 @@ void AICmd_IfCurrentMoveDoesNotKO(BattleSystem *battleSystem, BattleContext *ctx
         || (ctx->trainerAIData.moveData[ctx->trainerAIData.move].power > 1 && sNoDamageCalcMoveEffects[noDamageCalcIndex] == 0xFFFF)) {
         u8 ivs[NUM_STATS];
         for (int stat = STAT_HP; stat < NUM_STATS; stat++) {
-            ivs[stat] = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_HP_IV + stat, NULL);
+            ivs[stat] = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_HP_IV + stat, NULL);
         }
 
         u32 damage = TrainerAI_CalcDamage(battleSystem,
             ctx,
             ctx->trainerAIData.move,
-            ctx->battleMons[ctx->trainerAIData.attacker].item,
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].item,
             ivs,
-            ctx->trainerAIData.attacker,
-            GetBattlerAbility(ctx, ctx->trainerAIData.attacker),
-            ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.embargoTurns,
+            ctx->trainerAIData.battlerIdAttacker,
+            GetBattlerAbility(ctx, ctx->trainerAIData.battlerIdAttacker),
+            ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.embargoFlag,
             roll);
 
-        if (ctx->battleMons[ctx->trainerAIData.defender].hp > damage) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdTarget].hp > damage) {
             AIScript_IncrementCursor(ctx, jump);
         }
     }
@@ -1764,13 +1741,13 @@ void AICmd_IfCurrentMoveMatchesEffect(BattleSystem *battleSystem, BattleContext 
 
     switch (check) {
     case CHECK_DISABLE:
-        if (ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.disabledMove == ctx->trainerAIData.move) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.disabledMove == ctx->trainerAIData.move) {
             AIScript_IncrementCursor(ctx, jump);
         }
         break;
 
     case CHECK_ENCORE:
-        if (ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.encoredMove == ctx->trainerAIData.move) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.encoredMove == ctx->trainerAIData.move) {
             AIScript_IncrementCursor(ctx, jump);
         }
         break;
@@ -1808,7 +1785,7 @@ void AICmd_LoadHeldItemEffect(BattleSystem *battleSystem, BattleContext *ctx) {
     int inBattler = AIScript_Read(ctx);
     u8 battler = AIScript_Battler(ctx, inBattler);
 
-    if (ctx->trainerAIData.attacker != battler) {
+    if (ctx->trainerAIData.battlerIdAttacker != battler) {
         ctx->trainerAIData.calcTemp = GetItemVar(ctx, ctx->trainerAIData.heldItems[battler], ITEMATTR_HOLD_EFFECT); // GetItemVar in pokeplatinum
     } else {
         ctx->trainerAIData.calcTemp = GetItemVar(ctx, ctx->battleMons[battler].item, ITEMATTR_HOLD_EFFECT);
@@ -1824,7 +1801,7 @@ void AICmd_IfHeldItemEqualTo(BattleSystem *battleSystem, BattleContext *ctx) {
     u8 battler = AIScript_Battler(ctx, inBattler);
     u16 heldItem;
 
-    if ((battler & 1) == (ctx->trainerAIData.attacker & 1)) {
+    if ((battler & 1) == (ctx->trainerAIData.battlerIdAttacker & 1)) {
         heldItem = ctx->battleMons[battler].item;
     } else {
         heldItem = ctx->trainerAIData.heldItems[battler];
@@ -1920,7 +1897,7 @@ void AICmd_LoadFlingPower(BattleSystem *battleSystem, BattleContext *ctx) {
 
 void AICmd_LoadCurrentMovePP(BattleSystem *battleSystem, BattleContext *ctx) {
     AIScript_IncrementCursor(ctx, 1);
-    ctx->trainerAIData.calcTemp = ctx->battleMons[ctx->trainerAIData.attacker].movePPCur[ctx->trainerAIData.moveSlot];
+    ctx->trainerAIData.calcTemp = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].movePPCur[ctx->trainerAIData.moveSlot];
 }
 
 void AICmd_IfCanUseLastResort(BattleSystem *battleSystem, BattleContext *ctx) {
@@ -1943,7 +1920,7 @@ void AICmd_LoadCurrentMoveCategory(BattleSystem *battleSystem, BattleContext *ct
 
 void AICmd_LoadDefenderLastUsedMoveCategory(BattleSystem *battleSystem, BattleContext *ctx) {
     AIScript_IncrementCursor(ctx, 1);
-    ctx->trainerAIData.calcTemp = ctx->trainerAIData.moveData[ctx->moveNoBattlerPrev[ctx->trainerAIData.defender]].category;
+    ctx->trainerAIData.calcTemp = ctx->trainerAIData.moveData[ctx->moveNoBattlerPrev[ctx->trainerAIData.battlerIdTarget]].category;
 }
 
 void AICmd_LoadBattlerSpeedOrderPosition(BattleSystem *battleSystem, BattleContext *ctx) {
@@ -2011,7 +1988,7 @@ void AICmd_IfPartyMemberDealsMoreDamage(BattleSystem *battleSystem, BattleContex
 
     varyDamage = AIScript_Read(ctx);
     jump = AIScript_Read(ctx);
-    battler = ctx->trainerAIData.attacker;
+    battler = ctx->trainerAIData.battlerIdAttacker;
 
     for (i = 0; i < NUM_STATS; i++) {
         ivs[i] = GetBattlerVar(ctx, battler, BMON_DATA_HP_IV + i, NULL);
@@ -2019,13 +1996,13 @@ void AICmd_IfPartyMemberDealsMoreDamage(BattleSystem *battleSystem, BattleContex
 
     activeMonDamage = TrainerAI_CalcAllDamage(battleSystem,
         ctx,
-        ctx->trainerAIData.attacker,
+        ctx->trainerAIData.battlerIdAttacker,
         ctx->battleMons[battler].moves,
         allDamageVals,
         ctx->battleMons[battler].item,
         ivs,
         GetBattlerAbility(ctx, battler),
-        ctx->battleMons[battler].moveEffectData.embargoTurns,
+        ctx->battleMons[battler].moveEffectData.embargoFlag,
         varyDamage);
 
     for (i = 0; i < BattleSystem_GetPartySize(battleSystem, battler); i++) {
@@ -2045,7 +2022,7 @@ void AICmd_IfPartyMemberDealsMoreDamage(BattleSystem *battleSystem, BattleContex
 
                 partyMonDamage = TrainerAI_CalcAllDamage(battleSystem,
                     ctx,
-                    ctx->trainerAIData.attacker,
+                    ctx->trainerAIData.battlerIdAttacker,
                     partyMonMoves,
                     allDamageVals,
                     GetMonData(partyMon, MON_DATA_HELD_ITEM, NULL),
@@ -2068,7 +2045,7 @@ void AICmd_IfHasSuperEffectiveMove(BattleSystem *battleSystem, BattleContext *ct
 
     int jump = AIScript_Read(ctx);
 
-    if (AI_HasSuperEffectiveMove(battleSystem, ctx, ctx->trainerAIData.attacker, TRUE) == TRUE) {
+    if (AI_HasSuperEffectiveMove(battleSystem, ctx, ctx->trainerAIData.battlerIdAttacker, TRUE) == TRUE) {
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -2092,18 +2069,18 @@ void AICmd_IfBattlerDealsMoreDamage(BattleSystem *battleSystem, BattleContext *c
     jump = AIScript_Read(ctx);
 
     for (i = 0; i < NUM_STATS; i++) {
-        ivs[i] = GetBattlerVar(ctx, ctx->trainerAIData.attacker, BMON_DATA_HP_IV + i, NULL);
+        ivs[i] = GetBattlerVar(ctx, ctx->trainerAIData.battlerIdAttacker, BMON_DATA_HP_IV + i, NULL);
     }
 
     aiDamage = TrainerAI_CalcAllDamage(battleSystem,
         ctx,
-        ctx->trainerAIData.attacker,
-        ctx->battleMons[ctx->trainerAIData.attacker].moves,
+        ctx->trainerAIData.battlerIdAttacker,
+        ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moves,
         damageVals,
-        ctx->battleMons[ctx->trainerAIData.attacker].item,
+        ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].item,
         ivs,
-        GetBattlerAbility(ctx, ctx->trainerAIData.attacker),
-        ctx->battleMons[ctx->trainerAIData.attacker].moveEffectData.embargoTurns,
+        GetBattlerAbility(ctx, ctx->trainerAIData.battlerIdAttacker),
+        ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].moveEffectData.embargoFlag,
         varyDamage);
     battler = AIScript_Battler(ctx, inBattler);
 
@@ -2120,7 +2097,7 @@ void AICmd_IfBattlerDealsMoreDamage(BattleSystem *battleSystem, BattleContext *c
         ivs,
         battler,
         GetBattlerAbility(ctx, battler),
-        ctx->battleMons[battler].moveEffectData.embargoTurns,
+        ctx->battleMons[battler].moveEffectData.embargoFlag,
         roll);
 
     if (battlerDamage > aiDamage) {
@@ -2150,7 +2127,7 @@ void AICmd_DiffStatStages(BattleSystem *battleSystem, BattleContext *ctx) {
     int stat = AIScript_Read(ctx);
     int battler = AIScript_Battler(ctx, inBattler);
 
-    ctx->trainerAIData.calcTemp = ctx->battleMons[battler].statChanges[stat] - ctx->battleMons[ctx->trainerAIData.attacker].statChanges[stat];
+    ctx->trainerAIData.calcTemp = ctx->battleMons[battler].statChanges[stat] - ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].statChanges[stat];
 }
 
 void AICmd_IfBattlerHasHigherStat(BattleSystem *battleSystem, BattleContext *ctx) {
@@ -2213,32 +2190,32 @@ void AICmd_IfBattlerHasEqualStat(BattleSystem *battleSystem, BattleContext *ctx)
 static void TrainerAI_GetStats(BattleContext *ctx, int battler, int *buf1, int *buf2, int stat) {
     switch (stat) {
     case STAT_HP:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].hp;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].hp;
         *buf2 = ctx->battleMons[battler].hp;
         break;
 
     case STAT_ATK:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].atk;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].atk;
         *buf2 = ctx->battleMons[battler].atk;
         break;
 
     case STAT_DEF:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].def;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].def;
         *buf2 = ctx->battleMons[battler].def;
         break;
 
     case STAT_SPATK:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].spAtk;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].spAtk;
         *buf2 = ctx->battleMons[battler].spAtk;
         break;
 
     case STAT_SPDEF:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].spDef;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].spDef;
         *buf2 = ctx->battleMons[battler].spDef;
         break;
 
     case STAT_SPEED:
-        *buf1 = ctx->battleMons[ctx->trainerAIData.attacker].speed;
+        *buf1 = ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].speed;
         *buf2 = ctx->battleMons[battler].speed;
         break;
 
@@ -2277,7 +2254,7 @@ void AICmd_CheckIfHighestDamageWithPartner(BattleSystem *battleSystem, BattleCon
 
     if (sAltPowerMoveEffects[k] != 0xFFFF
         || (ctx->trainerAIData.moveData[ctx->trainerAIData.move].power > 1 && sNoDamageCalcMoveEffects[j] == 0xFFFF)) {
-        battler = ctx->trainerAIData.attacker;
+        battler = ctx->trainerAIData.battlerIdAttacker;
 
         for (j = 0; j < MAX_BATTLERS_PER_SIDE; j++) {
             for (i = STAT_HP; i < NUM_STATS; i++) {
@@ -2292,11 +2269,11 @@ void AICmd_CheckIfHighestDamageWithPartner(BattleSystem *battleSystem, BattleCon
                 ctx->battleMons[battler].item,
                 ivs,
                 GetBattlerAbility(ctx, battler),
-                ctx->battleMons[battler].moveEffectData.embargoTurns,
+                ctx->battleMons[battler].moveEffectData.embargoFlag,
                 varyDamage);
 
             // Update to the partner for the next iteration
-            battler = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.attacker);
+            battler = BattleSystem_GetBattlerIdPartner(battleSystem, ctx->trainerAIData.battlerIdAttacker);
 
             if (j == 0) {
                 moveDamage = damageVals[ctx->trainerAIData.moveSlot];
@@ -2455,19 +2432,19 @@ void AICmd_IfLevel(BattleSystem *battleSystem, BattleContext *ctx) {
 
     switch (op) {
     case CHECK_LEVEL_HIGHER_THAN_TARGET:
-        if (ctx->battleMons[ctx->trainerAIData.attacker].level > ctx->battleMons[ctx->trainerAIData.defender].level) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].level > ctx->battleMons[ctx->trainerAIData.battlerIdTarget].level) {
             AIScript_IncrementCursor(ctx, jump);
         }
         break;
 
     case CHECK_LEVEL_LOWER_THAN_TARGET:
-        if (ctx->battleMons[ctx->trainerAIData.attacker].level < ctx->battleMons[ctx->trainerAIData.defender].level) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].level < ctx->battleMons[ctx->trainerAIData.battlerIdTarget].level) {
             AIScript_IncrementCursor(ctx, jump);
         }
         break;
 
     case CHECK_LEVEL_EQUAL_TO_TARGET:
-        if (ctx->battleMons[ctx->trainerAIData.attacker].level == ctx->battleMons[ctx->trainerAIData.defender].level) {
+        if (ctx->battleMons[ctx->trainerAIData.battlerIdAttacker].level == ctx->battleMons[ctx->trainerAIData.battlerIdTarget].level) {
             AIScript_IncrementCursor(ctx, jump);
         }
         break;
@@ -2481,7 +2458,7 @@ void AICmd_IfTargetIsTaunted(BattleSystem *battleSystem, BattleContext *ctx) {
     AIScript_IncrementCursor(ctx, 1);
     int jump = AIScript_Read(ctx);
 
-    if (ctx->battleMons[ctx->trainerAIData.defender].moveEffectData.tauntTurns) {
+    if (ctx->battleMons[ctx->trainerAIData.battlerIdTarget].moveEffectData.tauntTurns) {
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -2490,7 +2467,7 @@ void AICmd_IfTargetIsNotTaunted(BattleSystem *battleSystem, BattleContext *ctx) 
     AIScript_IncrementCursor(ctx, 1);
     int jump = AIScript_Read(ctx);
 
-    if (ctx->battleMons[ctx->trainerAIData.defender].moveEffectData.tauntTurns == 0) {
+    if (ctx->battleMons[ctx->trainerAIData.battlerIdTarget].moveEffectData.tauntTurns == 0) {
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -2500,7 +2477,7 @@ void AICmd_IfTargetIsPartner(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int jump = AIScript_Read(ctx);
 
-    if ((ctx->trainerAIData.attacker & 1) == (ctx->trainerAIData.defender & 1)) {
+    if ((ctx->trainerAIData.battlerIdAttacker & 1) == (ctx->trainerAIData.battlerIdTarget & 1)) {
         AIScript_IncrementCursor(ctx, jump);
     }
 }
@@ -2567,12 +2544,12 @@ static BOOL AIScript_PopCursor(BattleSystem *battleSystem, BattleContext *ctx) {
  */
 static void TrainerAI_RecordLastMove(BattleSystem *battleSystem, BattleContext *ctx) {
     for (int i = 0; i < MAX_MON_MOVES; i++) {
-        if (ctx->trainerAIData.moves[ctx->trainerAIData.defender][i] == ctx->moveNoBattlerPrev[ctx->trainerAIData.defender]) {
+        if (ctx->trainerAIData.moves[ctx->trainerAIData.battlerIdTarget][i] == ctx->moveNoBattlerPrev[ctx->trainerAIData.battlerIdTarget]) {
             break;
         }
 
-        if (ctx->trainerAIData.moves[ctx->trainerAIData.defender][i] == MOVE_NONE) {
-            ctx->trainerAIData.moves[ctx->trainerAIData.defender][i] = ctx->moveNoBattlerPrev[ctx->trainerAIData.defender];
+        if (ctx->trainerAIData.moves[ctx->trainerAIData.battlerIdTarget][i] == MOVE_NONE) {
+            ctx->trainerAIData.moves[ctx->trainerAIData.battlerIdTarget][i] = ctx->moveNoBattlerPrev[ctx->trainerAIData.battlerIdTarget];
             break;
         }
     }
@@ -2625,17 +2602,17 @@ static u8 AIScript_Battler(BattleContext *ctx, u8 inBattler) {
     // The order of this switch statement must be maintained to match.
     switch (inBattler) {
     case AI_BATTLER_ATTACKER:
-        return ctx->trainerAIData.attacker;
+        return ctx->trainerAIData.battlerIdAttacker;
 
     case AI_BATTLER_DEFENDER:
     default:
-        return ctx->trainerAIData.defender;
+        return ctx->trainerAIData.battlerIdTarget;
 
     case AI_BATTLER_ATTACKER_PARTNER:
-        return ctx->trainerAIData.attacker ^ 2;
+        return ctx->trainerAIData.battlerIdAttacker ^ 2;
 
     case AI_BATTLER_DEFENDER_PARTNER:
-        return ctx->trainerAIData.defender ^ 2;
+        return ctx->trainerAIData.battlerIdTarget ^ 2;
     }
 }
 
@@ -2741,7 +2718,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
     u32 effectivenessFlags;
     s32 damage;
 
-    defendingSide = BattleSystem_GetFieldSide(battleSystem, ctx->trainerAIData.defender);
+    defendingSide = BattleSystem_GetFieldSide(battleSystem, ctx->trainerAIData.battlerIdTarget);
     damage = 0;
     power = 0;
     type = 0;
@@ -2859,7 +2836,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
         break;
 
     case MOVE_GYRO_BALL:
-        power = 1 + 25 * ctx->effectiveSpeed[ctx->trainerAIData.defender] / ctx->effectiveSpeed[attacker];
+        power = 1 + 25 * ctx->effectiveSpeed[ctx->trainerAIData.battlerIdTarget] / ctx->effectiveSpeed[attacker];
 
         if (power > 150) {
             power = 150;
@@ -2922,7 +2899,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
     case MOVE_GRASS_KNOT: {
         int i = 0;
         do {
-            if (sWeightToPower[i][WEIGHT_TO_POWER_WEIGHT] >= ctx->battleMons[ctx->trainerAIData.defender].weight) {
+            if (sWeightToPower[i][WEIGHT_TO_POWER_WEIGHT] >= ctx->battleMons[ctx->trainerAIData.battlerIdTarget].weight) {
                 break;
             }
             i++;
@@ -2953,7 +2930,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
             power,
             type,
             attacker,
-            ctx->trainerAIData.defender,
+            ctx->trainerAIData.battlerIdTarget,
             1);
     } else {
         ctx->battleStatus |= BATTLE_STATUS_IGNORE_TYPE_EFFECTIVENESS;
@@ -2964,7 +2941,7 @@ static s32 TrainerAI_CalcDamage(BattleSystem *battleSystem, BattleContext *ctx, 
         move,
         type,
         attacker,
-        ctx->trainerAIData.defender,
+        ctx->trainerAIData.battlerIdTarget,
         damage,
         &effectivenessFlags);
     ctx->battleStatus &= ~BATTLE_STATUS_IGNORE_TYPE_EFFECTIVENESS;
@@ -3951,7 +3928,7 @@ static BOOL TrainerAI_ShouldUseItem(BattleSystem *battleSystem, int battler) {
             if (item == ITEM_FULL_RESTORE) {
                 if (ctx->battleMons[battler].hp < (ctx->battleMons[battler].maxHp / 4)
                     && ctx->battleMons[battler].hp) {
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_FULL_RESTORE;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_FULL_RESTORE;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_HP_RESTORE)) {
@@ -3963,81 +3940,81 @@ static BOOL TrainerAI_ShouldUseItem(BattleSystem *battleSystem, int battler) {
                     if (ctx->battleMons[battler].hp
                         && (ctx->battleMons[battler].hp < (ctx->battleMons[battler].maxHp / 4)
                             || (ctx->battleMons[battler].maxHp - ctx->battleMons[battler].hp) > hpRestore)) {
-                        ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_HP;
+                        ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_HP;
                         result = TRUE;
                     }
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_SLP_HEAL)) {
                 if (ctx->battleMons[battler].status & STATUS_SLEEP) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(5);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_PSN_HEAL)) {
                 if ((ctx->battleMons[battler].status & STATUS_POISON)
                     || (ctx->battleMons[battler].status & STATUS_BAD_POISON)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(4);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_BRN_HEAL)) {
                 if (ctx->battleMons[battler].status & STATUS_BURN) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(3);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_FRZ_HEAL)) {
                 if (ctx->battleMons[battler].status & STATUS_FREEZE) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(2);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_PRZ_HEAL)) {
                 if (ctx->battleMons[battler].status & STATUS_PARALYSIS) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(1);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
             } else if (GetItemVar(ctx, item, ITEMATTR_CFS_HEAL)) {
                 if (ctx->battleMons[battler].status2 & STATUS2_CONFUSION) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] |= MaskOfFlagNo(0);
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_RECOVER_STATUS;
                     result = TRUE;
                 }
                 // Don't try to use any of these until after the first turn that a mon is in play.
             } else if ((ctx->battleMons[battler].moveEffectData.fakeOutCount - ctx->totalTurns) >= 0) {
                 if (GetItemVar(ctx, item, ITEMATTR_ATK_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_ATK;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_DEF_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_DEF;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_SPATK_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_SPATK;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_SPDEF_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_SPDEF;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_SPEED_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_SPEED;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_ACCURACY_STAGES)) {
                     ctx->trainerAIData.usedItemCondition[battler >> 1] = STAT_ACC;
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_STAT_BOOSTER;
                     result = TRUE;
                 } else if (GetItemVar(ctx, item, ITEMATTR_GUARD_SPEC)
                     && (ctx->fieldSideConditionFlags[1] & SIDE_CONDITION_MIST) == FALSE) {
-                    ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_GUARD_SPEC;
+                    ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_GUARD_SPEC;
                     result = TRUE;
                 }
             } else {
                 // Unrecognized item type
-                ctx->trainerAIData.usedItemType[battler >> 1] = ITEM_AI_CATEGORY_MAX;
+                ctx->trainerAIData.useItem[battler >> 1] = ITEM_AI_CATEGORY_MAX;
             }
 
             if (result == TRUE) {

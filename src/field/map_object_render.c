@@ -6,6 +6,7 @@
 #include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/map_object_billboard_motion.h"
+#include "field/map_object_models.h"
 #include "field/map_object_render_internal.h"
 #include "field/resource_bank.h"
 
@@ -15,6 +16,7 @@
 #include "gf_3d_loader.h"
 #include "heap.h"
 #include "map_object.h"
+#include "map_object_behavior_internal.h"
 #include "map_object_movement_utilities_internal.h"
 #include "metatile_behavior.h"
 #include "sys_task_api.h"
@@ -83,14 +85,6 @@ typedef struct SpriteBillboardInfo {
     const BillboardSequenceRange *ranges;
 } SpriteBillboardInfo;
 
-// What BillboardObject_SaveState keeps of a billboard while its map object is paused
-typedef struct BillboardState {
-    u32 visible;
-    u16 unused4;
-    u16 sequence;
-    fx32 frame;
-} BillboardState;
-
 enum SpriteChangeState {
     SPRITE_CHANGE_STATE_WAIT_CHANGE,
     SPRITE_CHANGE_STATE_WAIT_BILLBOARD,
@@ -123,23 +117,10 @@ BOOL Billboard_HasPendingFree(void *billboards);
 void *BillboardObject_Create(BillboardObjectCreateParams *params);
 VecFx32 *BillboardObject_GetPosition(void *billboard);
 u32 BillboardObject_IsVisible(void *billboard);
-void MapObject_GetDrawPosition(LocalMapObject *object, VecFx32 *position);
-void *ReadMModelFromNarcInternal(MapObjectManager *manager, u32 memberIdx, BOOL atStart);
-int GetMoveModelNoBySpriteId(u32 spriteId);
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *model, int matId);
-// The graphics info flags of a map object (bits 0-3: 1 for billboards)
-typedef struct MapObjectGfxFlags {
-    u16 low : 4;
-    u16 rest : 12;
-} MapObjectGfxFlags;
-MapObjectGfxFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 
-int MapObject_RequestBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 static void *MapObject_CreateBillboardForSprite(LocalMapObject *object, u32 spriteId);
 static void MapObject_FreeBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
-void MapObject_CancelAndFreeBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
-void BillboardObject_SaveState(void *billboard, BillboardState *state);
-void BillboardObject_RestoreState(void *billboard, BillboardState *state);
 static void MapObject_CreateOrQueueBillboard(LocalMapObject *object, void **billboard, u32 spriteId);
 static void MapObject_CancelQueuedBillboard(LocalMapObject *object);
 static void MapObjectRender_InitResourceSlots(MapObjectRender *render, u32 count);
@@ -230,7 +211,6 @@ static void MapObjectBillboards_Delete(void *billboards);
 static void *MapObjectBillboards_CreateBillboard(void *billboards, BillboardResource *resource, VecFx32 *position);
 static void MapObjectRender_InitBillboardResource(MapObjectRender *render, u32 spriteId, BillboardResource *resource);
 static MapObjectRender *MapObject_GetRender(LocalMapObject *object);
-void MapObject_SetBillboardVisibleFromFlags(LocalMapObject *object, void *billboard);
 static int MapObjectRender_LoadOrQueueTexture(MapObjectRender *render, u32 spriteId, u32 modelId, u32 dynamic);
 static void MapObjectRender_CancelTextureLoad(MapObjectRender *render, u32 spriteId);
 static int MapObjectRender_GetTextureLoadState(MapObjectRender *render, u32 spriteId);
@@ -248,7 +228,7 @@ static void MapObjectRender_CreatePendingBillboard(MapObjectRender *render, Pend
 static void MapObjectRender_CreateQueue(MapObjectRender *render, u32 count, u32 loadsPerFrame);
 static void MapObjectRender_DestroyQueue(MapObjectRender *render);
 static void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u32 spriteId);
-static void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work);
+static void SpriteChangeWork_Task(SysTask *task, void *data);
 
 static const VecFx32 sMapObjectBillboardScale = { FX32_ONE, FX32_ONE, FX32_ONE };
 
@@ -944,7 +924,7 @@ static BOOL MapObjectManager_IsModelInUse(MapObjectManager *manager, u32 modelId
     u32 spriteId;
     if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &object, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
         do {
-            if ((skip == NULL || skip != object) && (spriteId = MapObject_GetSpriteID(object)) != 0xFFFF && MapObject_GetEffectFlags(object)->low == 1 && spriteId != 0xFFFF && SpriteId_GetBillboardModelId(spriteId) == modelId) {
+            if ((skip == NULL || skip != object) && (spriteId = MapObject_GetSpriteID(object)) != 0xFFFF && MapObject_GetEffectFlags(object)->drawType == 1 && spriteId != 0xFFFF && SpriteId_GetBillboardModelId(spriteId) == modelId) {
                 return TRUE;
             }
         } while (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &object, &index, MAPOBJECTFLAG_ACTIVE) == TRUE);
@@ -959,7 +939,7 @@ static BOOL MapObjectManager_IsSequenceInUse(MapObjectManager *manager, u32 sequ
     u32 spriteId;
     if (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &object, &index, MAPOBJECTFLAG_ACTIVE) == TRUE) {
         do {
-            if ((skip == NULL || object != skip) && spriteId != 0xFFFF && MapObject_GetEffectFlags(object)->low == 1 && (spriteId = MapObject_GetSpriteID(object)) != 0xFFFF && SpriteId_GetBillboardSequenceId(spriteId) == sequenceId) {
+            if ((skip == NULL || object != skip) && spriteId != 0xFFFF && MapObject_GetEffectFlags(object)->drawType == 1 && (spriteId = MapObject_GetSpriteID(object)) != 0xFFFF && SpriteId_GetBillboardSequenceId(spriteId) == sequenceId) {
                 return TRUE;
             }
         } while (MapObjectManager_GetNextObjectWithFlagFromIndex(manager, &object, &index, MAPOBJECTFLAG_ACTIVE) == TRUE);
@@ -1593,13 +1573,14 @@ static void MapObject_ChangeBillboardSpriteKeepingCopy(LocalMapObject *object, u
     MapObjectRender_ReleaseSpriteResources(render->manager, oldSpriteId, object);
     MapObject_SetSpriteAndInitDraw(object, spriteId);
     MapObjectManager_GetPriority(render->manager);
-    task = SysTask_CreateOnVWaitQueue((SysTaskFunc)SpriteChangeWork_Task, work, 0xFF);
+    task = SysTask_CreateOnVWaitQueue(SpriteChangeWork_Task, work, 0xFF);
     GF_ASSERT(task != NULL);
     SpriteChangeWork_Task(task, work);
 }
 
 // Deletes the old billboard's copy once the object's new billboard exists (or the object is gone)
-static void SpriteChangeWork_Task(SysTask *task, SpriteChangeWork *work) {
+static void SpriteChangeWork_Task(SysTask *task, void *data) {
+    SpriteChangeWork *work = data;
     LocalMapObject *object = work->object;
     switch (work->state) {
     case SPRITE_CHANGE_STATE_WAIT_CHANGE:

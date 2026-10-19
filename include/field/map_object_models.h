@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_FIELD_MAP_OBJECT_MODELS_H
 #define POKEHEARTGOLD_FIELD_MAP_OBJECT_MODELS_H
 
+#include "field/map_object_render.h"
+
 #include "field_system.h"
 #include "map_object.h"
 #include "sprite.h"
@@ -8,10 +10,19 @@
 // Map object models: the map model NARC and the billboard renderer's lifetime, the graphics info of each sprite id,
 // and the billboard callbacks of the following Pokemon, the Ho-Oh / Lugia objects and the camera focus object.
 
+// The draw and ground effect bits of a sprite's graphics info (MapObject_GetEffectFlags).
+typedef struct MapObjectEffectFlags {
+    u16 drawType : 4; // 1: billboard
+    u16 shadow : 3;
+    u16 footprints : 4;
+    u16 reflection : 2;
+    u16 unk13 : 3;
+} MapObjectEffectFlags;
+
 // The draw work of a following Pokemon's map object.
 typedef struct FollowMonBillboardWork {
     Sprite *billboard;
-    VecFx32 savedState;
+    BillboardState savedState;
     s8 direction;
     u8 unk_11;
     s8 shadowOffsetX; // in tiles, while the shadow is anchored
@@ -27,14 +38,11 @@ typedef struct FollowMonBillboardWork {
 
 void MapObjectManager_InitRender(MapObjectManager *mapObjectManager, int textureCount, int objectsToPreload, const int *objectIDs, int loadsPerFrame);
 void MapObjectManager_FreeRender(MapObjectManager *mapObjectManager);
-void FldObjSys_OpenMModelNarc(MapObjectManager *manager);
-void FldObjSys_CloseMModelNarc(MapObjectManager *manager);
 void *ReadMModelFromNarcInternal(MapObjectManager *manager, u32 memberIdx, BOOL atStart);
 
 ObjectEventGraphicsInfo *ObjectEvent_GetGraphicsInfo(u32 spriteId);
 int GetMoveModelNoBySpriteId(u32 spriteId);
-const u16 *MapObject_GetEffectFlags(LocalMapObject *object);
-const u16 *SpriteId_GetEffectFlags(u32 spriteId);
+const MapObjectEffectFlags *MapObject_GetEffectFlags(LocalMapObject *object);
 
 BOOL MapObject_IsBillboardAnimPaused(LocalMapObject *object);
 // Where the object's billboard is drawn: its position plus its facing vector and the two sprite offset vectors.

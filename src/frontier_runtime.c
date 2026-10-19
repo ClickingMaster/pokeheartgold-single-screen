@@ -154,7 +154,8 @@ void *Frontier_GetLaunchArgs(FrontierWork *work) {
     return work->launchArgs;
 }
 
-void *Frontier_GetMap(FrontierWork *work) {
+FrontierMap *Frontier_GetMap(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     return work->map;
 }
 
@@ -176,33 +177,40 @@ void Frontier_LaunchApplication(FrontierWork *work, const OverlayManagerTemplate
     work->childExit = exit;
 }
 
-void Frontier_RequestExit(FrontierWork *work) {
+void Frontier_RequestExit(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     work->exitRequested = 1;
 }
 
-void Frontier_ChangeMode(FrontierWork *work, u8 mode, u16 taskId) {
+void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId) {
+    FrontierWork *work = frontierWork;
     ((FrontierLaunchArgsInternal *)work->launchArgs)->mode = mode;
     work->rebuildPending = 1;
     work->taskId = taskId;
 }
 
-void *Frontier_GetMapObjectGfx(FrontierWork *work) {
+FrontierMapObjectGfx *Frontier_GetMapObjectGfx(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     return work->objectGfx;
 }
 
-void *Frontier_GetMapObjects(FrontierWork *work) {
+FrontierMapObject *Frontier_GetMapObjects(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     return work->objects;
 }
 
-void *Frontier_GetMapObject(FrontierWork *work, int index) {
+FrontierMapObject *Frontier_GetMapObject(void *frontierWork, int index) {
+    FrontierWork *work = frontierWork;
     return &work->objects[index];
 }
 
-void *Frontier_GetMapSpriteState(FrontierWork *work) {
+FrontierMapSpriteState *Frontier_GetMapSpriteState(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     return &work->spriteState;
 }
 
-void Frontier_ResetMapSpriteState(FrontierWork *work) {
+void Frontier_ResetMapSpriteState(void *frontierWork) {
+    FrontierWork *work = frontierWork;
     int i;
     MI_CpuFill8(work->spriteState.resourceIds, 0, 8);
     i = 0;

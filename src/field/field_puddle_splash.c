@@ -34,17 +34,17 @@ typedef struct PuddleSplashEffect {
 
 static void PuddleSplash_LoadGfx(PuddleSplash *splash);
 static void PuddleSplash_FreeGfx(PuddleSplash *splash);
-static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work);
-static void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work);
-static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work);
-static void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work);
+static BOOL PuddleSplashEffect_Init(FieldEffect *effect, void *state);
+static void PuddleSplashEffect_Destroy(FieldEffect *effect, void *state);
+static void PuddleSplashEffect_Update(FieldEffect *effect, void *state);
+static void PuddleSplashEffect_Draw(FieldEffect *effect, void *state);
 
 static const FieldEffectBasicTemplate sPuddleSplashEffectTemplate = {
     sizeof(PuddleSplashEffect),
-    (FieldEffectInitFunc)PuddleSplashEffect_Init,
-    (FieldEffectFunc)PuddleSplashEffect_Destroy,
-    (FieldEffectFunc)PuddleSplashEffect_Update,
-    (FieldEffectFunc)PuddleSplashEffect_Draw,
+    PuddleSplashEffect_Init,
+    PuddleSplashEffect_Destroy,
+    PuddleSplashEffect_Update,
+    PuddleSplashEffect_Draw,
 };
 
 PuddleSplash *PuddleSplash_New(FieldEffectManager *manager) {
@@ -84,7 +84,8 @@ void PuddleSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z) {
     FieldEffectManager_CreateEffect(args.manager, &sPuddleSplashEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
-static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work) {
+static BOOL PuddleSplashEffect_Init(FieldEffect *effect, void *state) {
+    PuddleSplashEffect *work = state;
     PuddleSplashEffectArgs *args = (PuddleSplashEffectArgs *)FieldEffect_GetUserData(effect);
     work->args = *args;
     FieldEffectManager_InitRenderAnimation(work->args.manager, &work->animation, &work->args.splash->model, &work->args.splash->animation, 0);
@@ -92,11 +93,13 @@ static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *wor
     return TRUE;
 }
 
-static void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Destroy(FieldEffect *effect, void *state) {
+    PuddleSplashEffect *work = state;
     RenderAnimation_Free(&work->animation);
 }
 
-static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Update(FieldEffect *effect, void *state) {
+    PuddleSplashEffect *work = state;
     if (RenderAnimation_IsDone(&work->animation) == TRUE) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
@@ -104,7 +107,8 @@ static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *w
     RenderAnimation_Advance(&work->animation, FX32_ONE, FALSE);
 }
 
-static void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work) {
+static void PuddleSplashEffect_Draw(FieldEffect *effect, void *state) {
+    PuddleSplashEffect *work = state;
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
     RenderObj_DrawAt(&work->renderObj, &position);

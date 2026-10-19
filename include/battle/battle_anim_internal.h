@@ -146,13 +146,13 @@ typedef struct BattleAnimBattlerPicParams {
 
 void BattleAnimSystem_WaitDelay(BattleAnimSystem *system);
 void BattleAnimSystem_ExecuteCommands(BattleAnimSystem *system);
-void BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
+SysTask *BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
 void BattleAnimSystem_DestroyTaskOfKind(int kind, BattleAnimSystem *system, SysTask *task);
 int BattleAnimSystem_GetField08(BattleAnimSystem *system);
 BOOL BattleAnimSystem_IsInitialized(BattleAnimSystem *system);
-void BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
-void BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
-void BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
+SysTask *BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
+SysTask *BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
+SysTask *BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
 void BattleAnimSystem_DestroyTask(BattleAnimSystem *system, SysTask *task);
 void BattleAnimSystem_DestroySoundTask(BattleAnimSystem *system, SysTask *task);
 u16 BattleAnimSystem_GetAttacker(BattleAnimSystem *system);
