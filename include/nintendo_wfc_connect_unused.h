@@ -6,6 +6,7 @@
 #include "frontier_wifi_upload_record.h"
 #include "msgdata.h"
 #include "nintendo_wfc_connect.h"
+#include "nintendo_wfc_connect_internal.h"
 #include "render_window.h"
 #include "save_wii_message.h"
 #include "sprite.h"
@@ -82,23 +83,6 @@ enum NintendoWfcUnusedState {
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 
-enum NintendoWfcUnusedPaletteScreens {
-    NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS,
-    NINTENDO_WFC_UNUSED_PALETTE_MAIN_SCREEN,
-    NINTENDO_WFC_UNUSED_PALETTE_SUB_SCREEN,
-};
-
-typedef struct NintendoWfcUnusedPaletteCycle {
-    SysTask *task;               // 0x000
-    int active;                  // 0x004
-    u16 basePltt[64];            // 0x008
-    u16 cyclePltt[21 * 16];      // 0x088
-    s16 index;                   // 0x328
-    s8 direction;                // 0x32A
-    u8 tick;                     // 0x32B
-    u32 screens;                 // 0x32C, 0: both, 1: main only, 2: sub only
-} NintendoWfcUnusedPaletteCycle; // size: 0x330
-
 typedef struct NintendoWfcUnused {
     NintendoWifiConnectArgs *args;              // 0x0000
     BgConfig *bgConfig;                         // 0x0004
@@ -153,7 +137,7 @@ typedef struct NintendoWfcUnused {
     s16 subState;                               // 0x0F90
     s16 subTimer;                               // 0x0F92
     int timeoutCounter;                         // 0x0F94
-    NintendoWfcUnusedPaletteCycle paletteCycle; // 0x0F98
+    NintendoWfcPaletteCycle paletteCycle;       // 0x0F98
     YesNoPrompt *yesNoPrompt;                   // 0x12C8
 } NintendoWfcUnused;                            // size: 0x12CC
 

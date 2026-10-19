@@ -292,7 +292,7 @@ static void NintendoWfcUnused_LoadBgGraphics(NintendoWfcUnused *wfc) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 12, bgConfig, GF_BG_LYR_SUB_1, 0, 0x600, FALSE, HEAP_ID_150);
     BG_SetMaskColor(GF_BG_LYR_MAIN_0, 0);
     BG_SetMaskColor(GF_BG_LYR_SUB_0, 0);
-    MI_CpuFill8(&wfc->paletteCycle, 0, sizeof(NintendoWfcUnusedPaletteCycle));
+    MI_CpuFill8(&wfc->paletteCycle, 0, sizeof(NintendoWfcPaletteCycle));
     raw = GfGfxLoader_GetPlttDataFromOpenNarc(narc, 5, &plttData, HEAP_ID_150);
     MIi_CpuCopy16(plttData->pRawData, wfc->paletteCycle.basePltt, 0x80);
     MIi_CpuCopy16(plttData->pRawData, wfc->paletteCycle.cyclePltt, 0x80);
@@ -326,20 +326,20 @@ static void NintendoWfcUnused_LoadBgGraphics(NintendoWfcUnused *wfc) {
     }
     DC_FlushRange(wfc->paletteCycle.cyclePltt, sizeof(wfc->paletteCycle.cyclePltt));
     wfc->paletteCycle.active = 1;
-    wfc->paletteCycle.screens = NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS;
+    wfc->paletteCycle.screens = NINTENDO_WFC_PALETTE_BOTH_SCREENS;
     wfc->paletteCycle.task = SysTask_CreateOnVBlankQueue(NintendoWfcUnused_PaletteCycleTask, &wfc->paletteCycle, 20);
     NARC_Delete(narc);
 }
 
 static void NintendoWfcUnused_PaletteCycleTask(SysTask *task, void *data) {
-    NintendoWfcUnusedPaletteCycle *cycle = data;
+    NintendoWfcPaletteCycle *cycle = data;
     if (cycle->active != 0) {
         cycle->tick ^= 1;
         if ((cycle->tick & 1) == 0) {
-            if (cycle->screens <= NINTENDO_WFC_UNUSED_PALETTE_MAIN_SCREEN) {
+            if (cycle->screens <= NINTENDO_WFC_PALETTE_MAIN_SCREEN) {
                 GX_LoadBGPltt(cycle->cyclePltt + cycle->index * 16, 0, 0x20);
             }
-            if (cycle->screens == NINTENDO_WFC_UNUSED_PALETTE_BOTH_SCREENS || cycle->screens == NINTENDO_WFC_UNUSED_PALETTE_SUB_SCREEN) {
+            if (cycle->screens == NINTENDO_WFC_PALETTE_BOTH_SCREENS || cycle->screens == NINTENDO_WFC_PALETTE_SUB_SCREEN) {
                 GXS_LoadBGPltt(cycle->cyclePltt + cycle->index * 16, 0, 0x20);
             }
             if (cycle->direction == 0) {

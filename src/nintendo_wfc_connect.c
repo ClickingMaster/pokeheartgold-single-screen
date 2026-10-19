@@ -28,6 +28,7 @@
 #include "message_format.h"
 #include "msgdata.h"
 #include "network_overlay_loader.h"
+#include "nintendo_wfc_connect_internal.h"
 #include "oam_manager.h"
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
@@ -161,24 +162,6 @@ enum NintendoWfcYesNoState {
     NINTENDO_WFC_YES_NO_WAIT_CLOSE,
 };
 
-// Touch YES/NO menu on the sub screen (texts from message bank 191).
-typedef struct NintendoWfcYesNoMenu {
-    BgConfig *bgConfig;   // 0x00
-    Sprite *cursorSprite; // 0x04
-    Window yesWindow;     // 0x08
-    Window noWindow;      // 0x18
-    enum HeapID heapID;   // 0x28
-    u8 initialChoice;     // 0x2C
-    u8 state;             // 0x2D, index into sNintendoWfcYesNoStates
-    u8 bgPltt;            // 0x2E
-    u8 bgLayer;           // 0x2F
-    u8 fontPltt;          // 0x30
-    u8 baseTile;          // 0x31
-    u8 textBgLayer;       // 0x32
-    u8 choice;            // 0x33, 0: yes, 1: no
-    int cursorOffsetY;    // 0x34
-} NintendoWfcYesNoMenu;   // size: 0x38
-
 // Number pad on the sub screen (rank / Battle Room number entry).
 typedef struct NintendoWfcNumberInput {
     u8 unk_0;             // 0x0
@@ -205,24 +188,6 @@ typedef struct NintendoWfcButtonFlash {
     u16 pressedPltt;      // 0x8
     u16 normalPltt;       // 0xA
 } NintendoWfcButtonFlash; // size: 0xC
-
-enum NintendoWfcPaletteScreens {
-    NINTENDO_WFC_PALETTE_BOTH_SCREENS,
-    NINTENDO_WFC_PALETTE_MAIN_SCREEN,
-    NINTENDO_WFC_PALETTE_SUB_SCREEN,
-};
-
-// Background palette cycling (VBlank task).
-typedef struct NintendoWfcPaletteCycle {
-    SysTask *task;          // 0x000
-    int active;             // 0x004
-    u16 basePltt[64];       // 0x008
-    u16 cyclePltt[21 * 16]; // 0x088
-    s16 index;              // 0x328
-    s8 direction;           // 0x32A
-    u8 tick;                // 0x32B
-    u32 screens;            // 0x32C, 0: both, 1: main only, 2: sub only
-} NintendoWfcPaletteCycle;  // size: 0x330
 
 #define NINTENDO_WFC_SPRITE_DIGIT_0       0
 #define NINTENDO_WFC_SPRITE_PAD_CURSOR    3
@@ -491,7 +456,6 @@ static void NintendoWfcYesNo_ShowCursor(NintendoWfcYesNoMenu *menu);
 
 void NintendoWfcHttp_Update(void);
 s32 NintendoWfcHttp_GetResult(void);
-void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoMenu *menu, int choice);
 void NintendoWfcHttp_Init(u32 profileId, u64 friendKey);
 BOOL NintendoWfcHttp_IsDone(void);
 void NintendoWfcHttp_RequestRoomCount(int rank);
