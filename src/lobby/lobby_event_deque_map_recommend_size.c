@@ -1,19 +1,19 @@
 #include "global.h"
 
+#include "lobby_event_deque.h"
+#include "ppw_lobby_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct {
-    u32 *data;
-    u32 start, size, capacity;
-} Queue;
-
 extern u32 gLobbyEventDequeMapMaxSizeSet;
 extern u32 gLobbyEventDequeMapMaxSize;
-extern void LobbyEventDequeMap_LengthError(void);
+extern char sStr_CdequeLengthError[];
 
-static inline u32 Count(Queue *q) {
-    return q->capacity == 0 ? 0 : q->capacity - 1;
+u32 LobbyEventDequeMap_RecommendSize(LobbyEventDequeMap *, u32, ...);
+
+static inline u32 Count(LobbyEventDequeMap *map) {
+    return map->capacity == 0 ? 0 : map->capacity - 1;
 }
 
 static inline u32 Limit(void) {
@@ -28,79 +28,10 @@ static inline const u32 *Max(const u32 *a, const u32 *b) {
     return *a > *b ? a : b;
 }
 
-u32 LobbyEventDequeMap_RecommendSize(Queue *, u32, ...);
-
-typedef struct {
-    Queue q;
-    u32 *capacity;
-} Temp;
-
-typedef struct {
-    u32 *current, *begin, *end, *limit;
-} Iter;
-
-typedef struct {
-    u8 byte;
-} Empty;
-
-static inline void Init(Temp *t, Queue *q) {
-    t->q.data = 0;
-    t->q.start = 0;
-    t->q.size = 0;
-    t->q.capacity = 0;
-    t->capacity = &q->capacity;
-}
-
-static inline Empty MakeEmpty(void) {
-    Empty e;
-    e.byte = 0;
-    return e;
-}
-
-static inline void Begin(Iter *i, Queue *q) {
-    i->current = q->data + (q->capacity ? (q->start + q->size) % q->capacity : 0);
-    {
-        u32 *data = q->data;
-        i->begin = data;
-        i->end = data + q->start;
-        i->limit = data + q->capacity;
-    }
-}
-
-static inline void End(Iter *i, Queue *q) {
-    i->current = q->data + q->start;
-    {
-        u32 *data = q->data;
-        i->begin = data;
-        i->end = data + q->start;
-        i->limit = data + q->capacity;
-    }
-}
-
-static inline void Swap(Queue *a, Queue *b) {
-    u32 *p;
-    u32 n;
-    p = a->data;
-    a->data = b->data;
-    b->data = p;
-    n = a->start;
-    a->start = b->start;
-    b->start = n;
-    n = a->size;
-    a->size = b->size;
-    b->size = n;
-    {
-        u32 *last = &b->capacity;
-        n = a->capacity;
-        a->capacity = *last;
-        *last = n;
-    }
-}
-
-u32 LobbyEventDequeMap_RecommendSize(Queue *q, u32 extra, ...) {
+u32 LobbyEventDequeMap_RecommendSize(LobbyEventDequeMap *map, u32 extra, ...) {
     u32 size, limit, first, second;
     limit = Limit();
-    size = Count(q);
+    size = Count(map);
     if (extra > limit - size) {
         LobbyEventDequeMap_LengthError();
     }
@@ -112,4 +43,9 @@ u32 LobbyEventDequeMap_RecommendSize(Queue *q, u32 extra, ...) {
         return size + *Max(&extra, &second);
     }
     return limit;
+}
+
+void LobbyEventDequeMap_LengthError(void) {
+    printf(sStr_CdequeLengthError);
+    abort();
 }

@@ -1,13 +1,49 @@
 #include "global.h"
 
 #include "dwc/net_common_internal.h"
-
+#include "lobby_chat_manager.h"
 #include "lobby_tree.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern LobbyUserIdSetNode *LobbyMem_Alloc(u32);
+extern u8 ov45_02255358[];
+extern LobbyUserIdSetNode *LobbyTree_EraseRebalance(LobbyUserIdSetNode *, void *);
+extern void *LobbyMem_Alloc(u32);
+
+void *LobbyChannelMap_Destroy(LobbyChannelMap *map) {
+    if (map->root) {
+        LobbyChannelMap_DestroyNodes(map, map->root);
+    }
+    return map;
+}
+
+void LobbyUserIdSet_Insert(LobbyUserIdSetInsertResult *out, LobbyUserIdSet *set, int *key) {
+    LobbyUserIdSetNode *prev;
+    u8 left, first;
+    LobbyUserIdSetNode *last;
+    last = LobbyUserIdSet_FindInsertPos(set, key, &prev, &left, &first);
+    if (!prev || prev->userId < *key) {
+        out->node = LobbyUserIdSet_InsertNode(set, last, left, first, key);
+        out->inserted = ov45_02255358[3];
+    } else {
+        out->node = prev;
+        out->inserted = ov45_02255358[7];
+    }
+}
+
+void LobbyUserIdSet_Erase(Iterator *out, LobbyUserIdSet *set, Iterator node) {
+    LobbyUserIdSetNode *old = node.current;
+    if (node.current == set->first) {
+        LobbyTreeIterator_Advance(&node);
+        set->first = node.current;
+    }
+    out->current = LobbyTree_EraseRebalance(old, set->root);
+    if (old) {
+        DWC_Free(0, old, 0);
+    }
+    set->count--;
+}
 
 void LobbyUserIdSet_Assign(LobbyUserIdSet *set, LobbyUserIdSet *other) {
     struct {

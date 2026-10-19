@@ -1484,31 +1484,20 @@ Overlay OVY_45
     Object src/lobby/lobby_string_vector_append_copies_slow.o
     Object src/lobby/lobby_string_vector_erase_at_end.o
     Object src/lobby/lobby_char_vector_append_zeros_slow.o
-    Object src/lobby/lobby_char_vector_buffer.o
-    Object src/lobby/lobby_char_vector_buffer_deallocate.o
-    Object src/lobby/lobby_string_vector_buffer_allocate.o
-    Object src/lobby/lobby_string_vector_buffer_deallocate.o
+    Object src/lobby/lobby_vector_buffer.o
     Object src/lobby/ppw_lobby_schedule_init.o
     Object src/lobby/ppw_lobby_schedule_copy.o
     Object src/lobby/ppw_lobby_schedule_copy_to_vector.o
     Object src/lobby/ppw_lobby_schedule_load.o
     Object src/lobby/lobby_event_deque_assign.o
     Object src/lobby/lobby_event_deque_append_range.o
-    Object src/lobby/lobby_event_deque_uninitialized_copy.o
     Object src/lobby/lobby_event_deque_copy.o
     Object src/lobby/lobby_sort_stable_sort.o
-    Object src/lobby/lobby_sort_stable_sort_adaptive.o
-    Object src/lobby/lobby_sort_merge_adaptive.o
+    Object src/lobby/lobby_sort_adaptive.o
     Object src/lobby/lobby_sort_rotate.o
-    Object src/lobby/lobby_sort_lower_bound.o
-    Object src/lobby/lobby_sort_upper_bound.o
     Object src/lobby/lobby_sort_merge_backward.o
     Object src/lobby/lobby_sort_merge_buffer_forward.o
-    Object src/lobby/lobby_sort_merge_buffers.o
-    Object src/lobby/lobby_sort_stable_sort_to_buffer.o
-    Object src/lobby/lobby_sort_merge.o
-    Object src/lobby/lobby_sort_insertion_sort_to_buffer.o
-    Object src/lobby/lobby_sort_insertion_sort.o
+    Object src/lobby/lobby_sort_buffer.o
     Object src/lobby/lobby_event_vector_assign_range.o
     Object src/lobby/ppw_lobby_schedule_set_vip_records.o
     Object src/lobby/lobby_vip_vector_assign_range.o
@@ -1521,25 +1510,17 @@ Overlay OVY_45
     Object src/lobby/lobby_event_deque_erase_at_end.o
     Object src/lobby/lobby_event_deque_erase_at_begin.o
     Object src/lobby/lobby_event_deque_map_reserve.o
-    Object src/lobby/lobby_event_deque_map_push_back.o
     Object src/lobby/lobby_event_deque_map_recommend_size.o
-    Object src/lobby/lobby_event_deque_map_length_error.o
     Object src/lobby/lobby_vip_vector_reallocate.o
     Object src/lobby/lobby_vip_vector_recommend_size.o
     Object src/lobby/lobby_event_vector_reallocate.o
-    Object src/lobby/lobby_event_vector_recommend_size.o
     Object src/lobby/lobby_event_deque_map_insert_range.o
     Object src/lobby/lobby_event_deque_map_copy_range.o
-    Object src/lobby/lobby_event_deque_map_copy_backward.o
     Object src/lobby/lobby_event_deque_map_copy.o
     Object src/lobby/lobby_event_deque_destroy.o
     Object src/lobby/lobby_event_deque_map_buffer.o
-    Object src/lobby/lobby_event_deque_map_iterator_distance.o
-    Object src/lobby/lobby_event_deque_map_init_copy.o
-    Object src/lobby/lobby_event_deque_map_append_range.o
     Object src/lobby/lobby_event_deque_map_copy_to_array.o
     Object src/lobby/lobby_event_deque_map_allocate.o
-    Object src/lobby/lobby_event_deque_map_iterator_distance2.o
     Object src/lobby/ppw_lobby_parse_message.o
     Object src/lobby/lobby_string_compare_no_case.o
     Object src/lobby/ppw_lobby_encode_message.o
@@ -1553,7 +1534,6 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_players_update_states.o
     Object src/lobby/ppw_lobby_player_set.o
     Object src/lobby/lobby_u32_vector_buffer.o
-    Object src/lobby/lobby_u32_vector_buffer_deallocate.o
     Object src/lobby/lobby_chat_on_disconnected.o
     Object src/lobby/lobby_chat_on_private_message.o
     Object src/lobby/lobby_chat_split_string.o
@@ -1594,12 +1574,8 @@ Overlay OVY_45
     Object src/lobby/lobby_user_map_make_entry.o
     Object src/lobby/lobby_channel_map.o
     Object src/lobby/lobby_channel_map_insert_node.o
-    Object src/lobby/lobby_user_id_set_insert.o
-    Object src/lobby/lobby_user_id_set_erase.o
-    Object src/lobby/lobby_user_id_set_assign.o
+    Object src/lobby/lobby_user_id_set.o
     Object src/lobby/lobby_user_id_set_copy_nodes.o
-    Object src/lobby/lobby_user_id_set_insert_node.o
-    Object src/lobby/lobby_user_map_insert.o
     Object src/lobby/lobby_user_map.o
     Object src/lobby/lobby_tree_nodes.o
     Object src/chat/chat_callbacks.o

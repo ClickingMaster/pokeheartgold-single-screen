@@ -3,6 +3,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+// Rotation and binary search over sorted runs: the sort merges with these in place when its buffer is too small.
+
 typedef struct {
     int key;
     int value;
@@ -13,6 +15,8 @@ typedef struct {
 } It;
 
 void LobbySort_Rotate(It *out, It first, It middle, It last);
+void LobbySort_LowerBound(It *out, It first, It last, const int *key);
+void LobbySort_UpperBound(It *out, It first, It last, const int *key);
 
 void LobbySort_Rotate(It *out, It first, It middle, It last) {
     Pair *m, *a, *b, *result;
@@ -65,4 +69,38 @@ void LobbySort_Rotate(It *out, It first, It middle, It last) {
         }
     }
     out->p = result;
+}
+
+void LobbySort_LowerBound(It *out, It first, It last, const int *key) {
+    It start = first;
+    int count = last.p - start.p;
+    while (count > 0) {
+        int half = count / 2;
+        It mid;
+        mid.p = first.p + half;
+        if (mid.p->key < *key) {
+            first.p = mid.p + 1;
+            count -= half + 1;
+        } else {
+            count = half;
+        }
+    }
+    *out = first;
+}
+
+void LobbySort_UpperBound(It *out, It first, It last, const int *key) {
+    It start = first;
+    int count = last.p - start.p;
+    while (count > 0) {
+        int half = count / 2;
+        It mid;
+        mid.p = first.p + half;
+        if (!(*key < mid.p->key)) {
+            first.p = mid.p + 1;
+            count -= half + 1;
+        } else {
+            count = half;
+        }
+    }
+    *out = first;
 }

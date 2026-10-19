@@ -5,11 +5,17 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+inline void *operator new(unsigned long, void *p) {
+    return p;
+}
+
 struct Tag {};
 
 extern "C" void LobbyEventDequeMapBuffer_Allocate(LobbyEventDequeMapBuffer *buffer, u32 n, Tag);
 extern "C" void LobbyEventDequeMapBuffer_AppendRange(LobbyEventDequeMapBuffer *buffer, const LobbyEventDequeMapIterator &first, const LobbyEventDequeMapIterator &last, Tag);
+extern "C" void LobbyEventDequeMapBuffer_PrependRange(LobbyEventDequeMapBuffer *buffer, const LobbyEventDequeMapIterator &first, const LobbyEventDequeMapIterator &last, Tag);
 extern "C" void LobbyEventDequeMapBuffer_Destroy(LobbyEventDequeMapBuffer *buffer);
+extern "C" u32 LobbyEventDequeMap_RecommendSize(LobbyEventDequeMap *map, u32 n);
 
 inline void Swap(u32 &a, u32 &b) {
     u32 t = a;
@@ -50,6 +56,10 @@ inline void InitBuffer(LobbyEventDequeMapBuffer *buffer, u32 *allocator) {
     buffer->map.capacity = 0;
 }
 
+inline void Allocate(LobbyEventDequeMapBuffer *buffer, u32 n, Tag t) {
+    LobbyEventDequeMapBuffer_Allocate(buffer, n, t);
+}
+
 struct Alloc {
     void destroy(LobbyEvent **, u32) {
     }
@@ -65,6 +75,38 @@ extern "C" void LobbyEventDequeMap_Reserve(LobbyEventDequeMap *map, u32 n) {
     InitBuffer(&tmp, &map->capacity);
     LobbyEventDequeMapBuffer_Allocate(&tmp, n, Tag());
     LobbyEventDequeMapBuffer_AppendRange(&tmp, Begin(map), End(map), Tag());
+    Alloc a = Alloc();
+    a.destroy(map->blocks, map->size);
+    map->size = 0;
+    u32 &c = tmp.map.capacity;
+    Swap(map->blocks, tmp.map.blocks);
+    Swap(map->start, tmp.map.start);
+    Swap(map->size, tmp.map.size);
+    Swap(map->capacity, c);
+    LobbyEventDequeMapBuffer_Destroy(&tmp);
+}
+
+extern "C" void LobbyEventDequeMap_PushBack(LobbyEventDequeMap *map, LobbyEvent *const &block);
+
+extern "C" void LobbyEventDequeMap_PushBack(LobbyEventDequeMap *map, LobbyEvent *const &block) {
+    if (map->size + 1 < map->capacity) {
+        LobbyEvent **p = map->blocks + (map->start + map->size) % map->capacity;
+        new (p) LobbyEvent *(block);
+        ++map->size;
+        return;
+    }
+    LobbyEventDequeMapBuffer tmp;
+    tmp.map.blocks = 0;
+    tmp.map.start = 0;
+    tmp.map.size = 0;
+    tmp.map.capacity = 0;
+    tmp.allocator = &map->capacity;
+    u32 n = LobbyEventDequeMap_RecommendSize(map, 1);
+    Allocate(&tmp, n, Tag(Tag()));
+    tmp.map.start = map->size;
+    new (tmp.map.blocks + tmp.map.start) LobbyEvent *(block);
+    ++tmp.map.size;
+    LobbyEventDequeMapBuffer_PrependRange(&tmp, Begin(map), End(map), Tag());
     Alloc a = Alloc();
     a.destroy(map->blocks, map->size);
     map->size = 0;

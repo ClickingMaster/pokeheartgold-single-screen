@@ -42,6 +42,27 @@ inline LobbyEvent *Copy(LobbyEventVectorIterator first, LobbyEventVectorIterator
     return CopyRange(first, last, out);
 }
 
+extern "C" LobbyEventDequeIterator LobbyEventDeque_UninitializedCopy(LobbyEventVectorIterator first, LobbyEventVectorIterator last, LobbyEventDequeIterator result, FalseType, u32 *count) {
+    if (first != last) {
+        int n = last - first;
+        for (;;) {
+            int m;
+            LobbyEventVectorIterator mid;
+            int room = result.SegmentEnd() - result.cur;
+            m = Min(n, room);
+            mid = first + m;
+            UninitCopy(first, mid, result.cur, count);
+            n -= m;
+            result += m;
+            if (n == 0) {
+                break;
+            }
+            first = mid;
+        }
+    }
+    return result;
+}
+
 extern "C" LobbyEventDequeIterator LobbyEventDeque_Copy(LobbyEventVectorIterator first, LobbyEventVectorIterator last, LobbyEventDequeIterator result) {
     if (first != last) {
         int n = last - first;

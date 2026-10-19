@@ -1,26 +1,39 @@
 #include "global.h"
 
+#include "dwc/net_common_internal.h"
+#include "ppw_lobby_internal.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "ppw_lobby_internal.h"
+static SplitBuf *LobbyU32VectorBuffer_Deallocate(SplitBuf *b);
 
-#define W(p, n) (*(int *)((u8 *)(p) + (n)))
-#define U(p, n) (*(unsigned *)((u8 *)(p) + (n)))
-#define P(p, n) (*(void **)((u8 *)(p) + (n)))
-
-void *LobbyU32VectorBuffer_Deallocate(void *p);
-
-SplitBuf *LobbyU32VectorBuffer_Destroy(SplitBuf *p) {
-    W(p, 4) = 0;
-    LobbyU32VectorBuffer_Deallocate(p);
-    return p;
+SplitBuf *LobbyU32VectorBuffer_Destroy(SplitBuf *b) {
+    b->size = 0;
+    LobbyU32VectorBuffer_Deallocate(b);
+    return b;
 }
 
-void LobbyU32VectorBuffer_Allocate(SplitBuf *p, u32 n, Tag unused) {
-    if (n > 0x3fffffff) {
+void LobbyU32VectorBuffer_Allocate(SplitBuf *b, u32 cap, Tag unused) {
+    if (cap > 0x3fffffff) {
         _ZNSt15__vector_commonILb1EE18throw_length_errorEv();
     }
-    P(p, 0) = LobbyMem_Alloc(n * 4);
-    U(p, 8) = n;
+    b->ptr = LobbyMem_Alloc(cap * 4);
+    b->cap = cap;
+}
+
+static SplitBuf *LobbyU32VectorBuffer_Deallocate(SplitBuf *b) {
+    if (b->ptr) {
+        u32 old = b->size;
+
+        struct {
+            volatile u8 zero;
+        } init = { 0 };
+
+        b->size -= old;
+        if (b->ptr) {
+            DWC_Free(0, b->ptr, 0);
+        }
+    }
+    return b;
 }

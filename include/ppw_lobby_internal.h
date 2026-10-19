@@ -206,7 +206,7 @@ void LobbyEventDequeMapBuffer_AppendRange(DequeBuf *d, Iter *a, Iter *b);
 Vec *LobbyEventDequeMapBuffer_Destroy(Vec *v);
 void LobbyEventDequeMapBuffer_PrependRange(DequeBuf *d, Iter *a, Iter *b);
 void LobbyEventDequeMapIterator_Advance(Iter *it, int n);
-void LobbyEventDequeMapIterator_Advance2(Iter *it, int n);
+Iter *LobbyEventDequeMapIterator_Advance2(Iter *it, int n);
 void LobbyEventDequeMap_InitCopy(DequeBuf *d, Iter a, Iter *b);
 void LobbyEventVector_Allocate(Vec *v, u32 n);
 int LobbyString_CompareSubstring(const u8 *s, u32 a, u32 b, const u8 *o);

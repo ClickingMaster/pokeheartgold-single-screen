@@ -1,59 +1,89 @@
 #include "global.h"
 
+#include "lobby_event_deque.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-void DWC_Free(int, void *, int);
+void LobbyEventDequeMap_CopyBackward(LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *);
+void LobbyEventDequeMap_Copy(LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *);
 
-typedef struct {
-    u32 *current, *base, *split, *end;
-} Iter;
-
-void LobbyEventDequeMap_Copy(Iter *, Iter *, Iter *, Iter *);
-
-static inline void copyspan(u32 *first, u32 *last, u32 *dst) {
-    u32 *a = first;
-    u32 *b = last;
-    memmove(dst, a, (b - a) * 4);
-}
-
-static inline const int *minref(const int *a, const int *b) {
+static inline const int *Minimum(const int *a, const int *b) {
     return *a < *b ? a : b;
 }
 
-static inline void destroy(u8 *allocator, void *p) {
-    DWC_Free(0, p, 0);
-    (void)allocator;
+static inline void CopyBackward(LobbyEvent **first, LobbyEvent **last, LobbyEvent **dest) {
+    int count = last - first;
+    memmove(dest - count, first, count * sizeof(LobbyEvent *));
 }
 
-void LobbyEventDequeMap_Copy(Iter *out, Iter *first, Iter *last, Iter *dst) {
-    while (first->current != last->current) {
-        int room = dst->end - dst->current;
-        int n;
-        if ((first->current >= first->split) == (last->current >= last->split)) {
-            int span = last->current - first->current;
-            n = *minref(&room, &span);
+static inline void CopyForward(LobbyEvent **first, LobbyEvent **last, LobbyEvent **dest) {
+    LobbyEvent **a = first;
+    LobbyEvent **b = last;
+    memmove(dest, a, (b - a) * sizeof(LobbyEvent *));
+}
+
+#pragma opt_propagation off
+
+void LobbyEventDequeMap_CopyBackward(LobbyEventDequeMapIterator *out, LobbyEventDequeMapIterator *first, LobbyEventDequeMapIterator *last, LobbyEventDequeMapIterator *dest) {
+    while (first->cur != last->cur) {
+        int cap, amount;
+        if (last->cur == last->first) {
+            last->cur = last->last;
+        }
+        --last->cur;
+        if (dest->cur == dest->first) {
+            dest->cur = dest->last;
+        }
+        --dest->cur;
+        cap = dest->cur - (dest->cur < dest->mid ? dest->first : dest->mid);
+        if ((first->cur >= first->mid) == (last->cur >= last->mid)) {
+            int n = last->cur - first->cur;
+            amount = *Minimum(&cap, &n);
         } else {
-            int span = first->end - first->current;
-            n = *minref(&room, &span);
+            int n = last->cur - (last->cur < last->mid ? last->first : last->mid);
+            amount = *Minimum(&cap, &n);
+        }
+        last->cur -= amount;
+        CopyBackward(last->cur, last->cur + (amount + 1), dest->cur + 1);
+        dest->cur -= amount;
+    }
+    out->cur = dest->cur;
+    out->first = dest->first;
+    out->mid = dest->mid;
+    out->last = dest->last;
+}
+
+#pragma opt_propagation reset
+
+void LobbyEventDequeMap_Copy(LobbyEventDequeMapIterator *out, LobbyEventDequeMapIterator *first, LobbyEventDequeMapIterator *last, LobbyEventDequeMapIterator *dest) {
+    while (first->cur != last->cur) {
+        int room = dest->last - dest->cur;
+        int n;
+        if ((first->cur >= first->mid) == (last->cur >= last->mid)) {
+            int span = last->cur - first->cur;
+            n = *Minimum(&room, &span);
+        } else {
+            int span = first->last - first->cur;
+            n = *Minimum(&room, &span);
         }
         {
-            u32 *end = (u32 *)((u32)first->current + n * 4);
-            copyspan(first->current, end, dst->current);
+            LobbyEvent **end = (LobbyEvent **)((u32)first->cur + n * sizeof(LobbyEvent *));
+            CopyForward(first->cur, end, dest->cur);
         };
-        first->current += n - 1;
-        first->current++;
-        if (first->current == first->end) {
-            first->current = first->base;
+        first->cur += n - 1;
+        first->cur++;
+        if (first->cur == first->last) {
+            first->cur = first->first;
         }
-        dst->current += n - 1;
-        dst->current++;
-        if (dst->current == dst->end) {
-            dst->current = dst->base;
+        dest->cur += n - 1;
+        dest->cur++;
+        if (dest->cur == dest->last) {
+            dest->cur = dest->first;
         }
     }
-    out->current = dst->current;
-    out->base = dst->base;
-    out->split = dst->split;
-    out->end = dst->end;
+    out->cur = dest->cur;
+    out->first = dest->first;
+    out->mid = dest->mid;
+    out->last = dest->last;
 }

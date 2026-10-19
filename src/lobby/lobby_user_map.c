@@ -1,21 +1,94 @@
 #include "global.h"
 
 #include "dwc/net_common_internal.h"
-
 #include "lobby_tree.h"
-
-extern int printf(const char *, ...);
-extern void abort(void);
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern void LobbyString_Destroy(void *);
-extern LobbyUserMapNode *LobbyTree_EraseRebalance(LobbyUserMapNode *, void *);
-extern void *LobbyMem_Alloc(int);
-extern void LobbyString_InitCopy(void *, void *);
-extern void LobbyTree_InsertRebalance(LobbyUserMapNode *, void *);
+extern int printf(const char *, ...);
+extern void abort(void);
+
+extern u8 ov45_02255358[];
 extern char sStr_TreeInsertLengthError_4[];
+extern void *LobbyMem_Alloc(u32);
+extern void LobbyTree_InsertRebalance(void *, void *);
+extern void *LobbyTree_EraseRebalance(void *, void *);
+extern void LobbyString_Destroy(void *);
+extern void LobbyString_InitCopy(void *, void *);
+
+LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *set, LobbyUserIdSetNode *parent, int left, int last, const int *key) {
+    struct {
+        volatile u8 byte;
+        u8 pad[3];
+        LobbyUserIdSetNode *volatile a, *volatile b;
+        void *volatile owner;
+        LobbyUserIdSetNode *volatile cleanup;
+    } f;
+
+    LobbyUserIdSetNode *n;
+    int *userId;
+    u32 *link;
+    if (set->count == -1) {
+        printf(sStr_TreeInsertLengthError_4);
+        abort();
+    }
+    f.byte = 0;
+    n = LobbyMem_Alloc(16);
+    f.owner = &set->root;
+    userId = &n->userId;
+    f.cleanup = n;
+    f.a = n;
+    if (userId) {
+        *userId = *key;
+    }
+    n->right = 0;
+    f.cleanup = 0;
+    n->left = 0;
+    link = &n->parent;
+    if (link) {
+        *link = (u32)parent;
+    }
+    if (left) {
+        parent->left = n;
+    } else {
+        parent->right = n;
+    }
+    set->count++;
+    f.b = n;
+    LobbyTree_InsertRebalance(n, set->root);
+    if (last) {
+        set->first = n;
+    }
+    {
+        LobbyUserIdSetNode *cleanup = f.cleanup;
+        if (cleanup) {
+            DWC_Free(0, cleanup, 0);
+        }
+    };
+    return n;
+}
+
+void *LobbyUserIdSet_Destroy(LobbyUserIdSet *set) {
+    if (set->root) {
+        LobbyUserIdSet_DestroyNodes(set, set->root);
+    }
+    return set;
+}
+
+void LobbyUserMap_Insert(LobbyUserMapInsertResult *out, LobbyUserMap *map, LobbyUserMapEntry *entry) {
+    LobbyUserMapNode *prev;
+    u8 left, first;
+    LobbyUserMapNode *last;
+    last = LobbyUserMap_FindInsertPos(map, &entry->userId, &prev, &left, &first);
+    if (!prev || prev->entry.userId < entry->userId) {
+        out->node = LobbyUserMap_InsertNode(map, last, left, first, entry);
+        out->inserted = ov45_02255358[0];
+    } else {
+        out->node = prev;
+        out->inserted = ov45_02255358[1];
+    }
+}
 
 void LobbyUserMap_Erase(Iterator *out, LobbyUserMap *map, Iterator node) {
     LobbyUserMapNode *old = node.current;
