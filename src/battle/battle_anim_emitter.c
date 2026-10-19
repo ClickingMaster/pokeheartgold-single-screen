@@ -92,7 +92,7 @@ typedef struct BattleAnimEmitterAxisPositions {
     int pos[6][2];
 } BattleAnimEmitterAxisPositions;
 
-// One VecFx32 per (attacker type, defender type); each table is referenced through three labels (x, y, z)
+// One VecFx32 per (attacker type, defender type)
 typedef struct BattleAnimEmitterAxisEntry {
     int v[3];
 } BattleAnimEmitterAxisEntry;
@@ -136,10 +136,10 @@ extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20[6][6];
 extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20Y[6][6];
 extern const BattleAnimEmitterAxisEntry gBattleAnimEmitterAxes_Mode20Z[6][6];
 extern BattleAnimEmitterConfigCb sBattleAnimEmitterFlagCallbacks[];
-extern const BattleAnimEmitterFlagMasks sBattleAnimEmitterFlagMasks; // 0xFEFE-terminated
+extern const BattleAnimEmitterFlagMasks sBattleAnimEmitterFlagMasks; // terminated
 extern CameraAngle sBattleAnimEmitterCameraAngles[];
 extern BattleAnimEmitterConfigCb sBattleAnimEmitterCameraCallbacks[];
-// s16 [2][6][2]: (x, y) per battler slot, set 0 singles (+2: the 0221BFC0 mode), set 1 doubles; y read via its own label
+// (x, y) per battler slot: set 0 singles, set 1 doubles
 extern const s16 gBattleAnimBattlerScreenPositions[][12];
 extern const s16 gBattleAnimBattlerScreenPositionsY[][12];
 
@@ -235,7 +235,7 @@ void BattleAnimEmitterCb_SetPositionAtDefenderSide(SPLEmitter *emitter) {
 }
 
 void BattleAnimEmitterCb_SetPositionByBattlerTypes(SPLEmitter *emitter) {
-    s16 unused[6] = { 0 }; // unused (kept: stack layout)
+    s16 unused[6] = { 0 };
     BattleAnimEmitterOffsetTable offsetsX;
     BattleAnimEmitterOffsetTable offsetsY;
     BattleAnimSystem *system;
@@ -446,7 +446,6 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
         }
         break;
     }
-    // called as returning s8 (the result is not truncated again)
     sign = ((s8(*)(BattleAnimSystem *, int, int))BattleAnimSystem_GetSideSign)(system, battlerA, battlerB);
     memset((void *)&posArg, 0, sizeof(posArg));
     BattleAnimSystem_ReadScriptArgs(system, (u32 *)&posArg, 3);
@@ -978,7 +977,6 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         SET_AXIS(positions.pos[type][0], positions.pos[type][1], 0);
         break;
     }
-    // read back as unsigned halfwords
     emitter->axis.x = ((volatile BattleAnimEmitterAxis *)&axis)->x;
     emitter->axis.y = ((volatile BattleAnimEmitterAxis *)&axis)->y;
     emitter->axis.z = ((volatile BattleAnimEmitterAxis *)&axis)->z;
@@ -1443,7 +1441,6 @@ BOOL BattleAnimEmitterCameraCb_ResetAngle(SPLEmitter *emitter, BattleAnimEmitter
     return TRUE;
 }
 
-// Field by field through volatile pointers
 static inline void CopyCameraAngle(volatile CameraAngle *dst, const volatile CameraAngle *src) {
     u16 z, unused;
 
@@ -1489,7 +1486,6 @@ BOOL BattleAnimEmitterCameraCb_SetPresetAngle3(SPLEmitter *emitter, BattleAnimEm
     return TRUE;
 }
 
-// Preset 2 in the 0221BFC0 mode, else preset 5
 BOOL BattleAnimEmitterCameraCb_SetAngleByMode(SPLEmitter *emitter, BattleAnimEmitterConfig *config) {
     CameraAngle angle1 = sBattleAnimEmitterCameraAngles[2];
     CameraAngle angle2 = sBattleAnimEmitterCameraAngles[5];

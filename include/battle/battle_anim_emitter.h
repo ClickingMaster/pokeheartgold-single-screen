@@ -1,8 +1,8 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_EMITTER_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_EMITTER_H
 
-// Overlay 7: the SPL emitter callbacks of the battle animation system (sBattleAnimEmitterCallbackTable), the emitter
-// configured from script arguments with its flag and camera callbacks, battler screen positions and motion helpers.
+// SPL emitter callbacks of the battle animations, the emitter configured from script arguments with its flag and camera
+// callbacks, battler screen positions and motion helpers.
 
 #include "battle/battle_anim_battler_util.h"
 #include "battle/battle_anim_util.h"
@@ -17,16 +17,16 @@ typedef struct BattleAnimEmitterConfig {
     BattleAnimSystem *system;
     SPLEmitter *particleSystem;
     s8 sideSign; // +1 / -1 by the side of battlerA, see BattleAnimEmitter_GetConfiguredSideSign
-    u32 zMode;   // 0x0C, first script argument
+    u32 zMode;   // first script argument
     u32 battlerOrder;
     int positionMode;
     int axisMode;
     u32 flags; // a flag callback runs for every mask of sBattleAnimEmitterFlagMasks set here
     int cameraMode;
-    int battlerA; // 0x24
+    int battlerA;
     int battlerB;
     VecFx32 position;
-} BattleAnimEmitterConfig; // size: 0x38
+} BattleAnimEmitterConfig;
 
 // Script arguments of the flag callbacks (BattleAnimEmitter_ReadFlagCbParams)
 typedef struct BattleAnimEmitterFlagParams {
@@ -117,8 +117,6 @@ void BattleAnimUtil_SetPokepicPosWithOffset(void *position, Pokepic *pokepic, in
 void BattleAnimUtil_SetPokepicScale(BattleAnimLinearMotion *scale, Pokepic *pokepic);
 void BattleAnimUtil_InitSinMotion(BattleAnimSinMotion *motion, int startX, int endX, int startY, u16 endY, fx32 ampX, fx32 ampY, int duration);
 
-// overlay 7 functions defined in sources not merged yet (switch to battle/battle_anim_internal.h when it lands;
-// the other accessors this file uses are declared in battle/battle_anim_battler_util.h)
 BOOL BattleAnimSystem_ReadScriptArgs(BattleAnimSystem *system, u32 *out, int count);
 int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int battlerB);
 void BattleAnimUtil_GetScaleFloat(BattleAnimLinearMotion *motion, f32 *x, f32 *y);

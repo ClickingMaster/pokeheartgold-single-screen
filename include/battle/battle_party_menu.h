@@ -12,7 +12,7 @@ enum BattlePartyMode {
     BATTLE_PARTY_MODE_LEARN_MOVE,
 };
 
-// Arguments of the in-battle party screen (overlay 8), filled by the battle controller before
+// Arguments of the in-battle party screen, filled by the battle controller before
 // BattlePartyMenu_Create and read back once `done` is set.
 typedef struct BattlePartyContext {
     Party *party;

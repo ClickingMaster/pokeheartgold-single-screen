@@ -36,8 +36,7 @@
 // Emitter position units per screen pixel
 #define BATTLE_ANIM_EMITTER_PIXEL 172
 
-// Starts the effect task and runs it once right away: the task argument is what BattleAnimSystem_CreateTaskDefaultPriority (declared void)
-// leaves in r0, the new task
+// Starts the effect task and runs it once right away
 typedef SysTask *(*BattleAnimCreateTaskReturningFunc)(BattleAnimSystem *system, SysTaskFunc func, void *data);
 #define BattleAnim_CreateTaskAndRun(system, func, work) func(((BattleAnimCreateTaskReturningFunc)BattleAnimSystem_CreateTaskDefaultPriority)(system, func, work), work)
 
@@ -57,15 +56,15 @@ typedef struct BattleAnimSpriteCopiesWork {
 
 typedef struct BattleAnimShakeTargetsWork {
     int targetCount;
-    BattleAnimCommonWork common; // 0x04
+    BattleAnimCommonWork common;
     s16 ampX;
     s16 ampY;
     s16 interval;
     s16 count;
     u32 flags;
-    BattleAnimTarget targets[4]; // 0x2C
-    BattleAnimShake shake;       // 0x7C
-} BattleAnimShakeTargetsWork;    // size: 0xA0
+    BattleAnimTarget targets[4];
+    BattleAnimShake shake;
+} BattleAnimShakeTargetsWork;
 
 typedef struct BattleAnimSlidingBgWork {
     BOOL mirror;
@@ -79,28 +78,28 @@ typedef struct BattleAnimSlidingBgWork {
     u16 slowdownTimer;
     u16 curEva;
     u16 curEvb;
-    BattleAnimCommonWork common; // 0x1C
+    BattleAnimCommonWork common;
     u8 unk_38[0x80];
-} BattleAnimSlidingBgWork; // size: 0xB8
+} BattleAnimSlidingBgWork;
 
 typedef struct BattleAnimRotateBattlerWork {
     u8 state;
     BattleAnimSystem *system;
     Pokepic *pokepic;
-    BattleAnimValueMotion rotation; // 0x0C
+    BattleAnimValueMotion rotation;
     int startAngle;
     int duration;
     s16 pivotX;
     s16 pivotY;
-} BattleAnimRotateBattlerWork; // size: 0x2C
+} BattleAnimRotateBattlerWork;
 
 typedef struct BattleAnimCircleBattlerWork {
     BattleAnimSystem *system;
-    BattleAnimSinMotion motion; // 0x04
+    BattleAnimSinMotion motion;
     Pokepic *pokepic;
     s16 x;
     s16 y;
-} BattleAnimCircleBattlerWork; // size: 0x30
+} BattleAnimCircleBattlerWork;
 
 // A sprite that pops up (scales up then down) beside the defender, twice
 struct BattleAnimSpritePopWork {
@@ -110,14 +109,14 @@ struct BattleAnimSpritePopWork {
     int state;
     u8 unk_10[4];
     ManagedSprite *sprite;
-    BattleAnimLinearMotion scale; // 0x18
+    BattleAnimLinearMotion scale;
     int side;
     int shrinking;
     int delay;
     int sequenceState;
     s16 x;
     s16 y;
-}; // size: 0x50
+};
 
 typedef struct BattleAnimPaletteFadeWork {
     BattleAnimSystem *system;
@@ -133,7 +132,7 @@ typedef struct BattleAnimBattlerPaletteFadeWork {
     int color;
     int strength;
     int delay;
-} BattleAnimBattlerPaletteFadeWork; // size: 0x20
+} BattleAnimBattlerPaletteFadeWork;
 
 typedef struct BattleAnimPulseBattlerSpriteWork {
     BattleAnimSystem *system;
@@ -142,7 +141,7 @@ typedef struct BattleAnimPulseBattlerSpriteWork {
     s16 y;
     s16 height;
     ManagedSprite *sprite;
-    BattleAnimLinearMotion scale; // 0x14
+    BattleAnimLinearMotion scale;
     int eva;
     int start;
     int end;
@@ -150,7 +149,7 @@ typedef struct BattleAnimPulseBattlerSpriteWork {
     int count;
     int durations; // high half: growing, low half: shrinking
     BOOL flipX;
-} BattleAnimPulseBattlerSpriteWork; // size: 0x54
+} BattleAnimPulseBattlerSpriteWork;
 
 typedef struct BattleAnimStretchBattlerWork {
     BattleAnimSystem *system;
@@ -158,7 +157,7 @@ typedef struct BattleAnimStretchBattlerWork {
     s16 y;
     s16 height;
     Pokepic *pokepic;
-    BattleAnimLinearMotion scale; // 0x10
+    BattleAnimLinearMotion scale;
     int startX;
     int endX;
     int startY;
@@ -167,13 +166,13 @@ typedef struct BattleAnimStretchBattlerWork {
     int count;
     int durations; // high half: stretching, low half: back
     int holdFrames;
-} BattleAnimStretchBattlerWork; // size: 0x54
+} BattleAnimStretchBattlerWork;
 
 typedef struct BattleAnimBlendBattlerSpritesWork {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
     BattleAnimBlendAlphaMotion blend;
-} BattleAnimBlendBattlerSpritesWork; // size: 0x30
+} BattleAnimBlendBattlerSpritesWork;
 
 typedef struct BattleAnimBlinkBattlerWork {
     int count;
@@ -182,9 +181,9 @@ typedef struct BattleAnimBlinkBattlerWork {
     u8 unk_0C[8];
     Pokepic *pokepic;
     u8 unk_18[8];
-    BattleAnimCommonWork common; // 0x20
+    BattleAnimCommonWork common;
     BattleAnimSystem *system;
-} BattleAnimBlinkBattlerWork; // size: 0x40
+} BattleAnimBlinkBattlerWork;
 
 typedef struct BattleAnimSlideBattlerWork {
     int unk_00;
@@ -192,23 +191,23 @@ typedef struct BattleAnimSlideBattlerWork {
     int duration;
     s16 dx;
     u8 unk_0E[2];
-    BattleAnimTarget target;       // 0x10
-    BattleAnimCommonWork common;   // 0x24
-    BattleAnimLinearMotion motion; // 0x40
+    BattleAnimTarget target;
+    BattleAnimCommonWork common;
+    BattleAnimLinearMotion motion;
     BattleAnimSystem *system;
-} BattleAnimSlideBattlerWork; // size: 0x68
+} BattleAnimSlideBattlerWork;
 
 typedef struct BattleAnimMoveBattlerWork {
     int unk_00;
     u8 unk_04[4];
     int duration;
-    BattleAnimTarget target;       // 0x0C
-    BattleAnimCommonWork common;   // 0x20
-    BattleAnimLinearMotion motion; // 0x3C
+    BattleAnimTarget target;
+    BattleAnimCommonWork common;
+    BattleAnimLinearMotion motion;
     BattleAnimSystem *system;
     s16 dx;
     s16 dy;
-} BattleAnimMoveBattlerWork; // size: 0x68
+} BattleAnimMoveBattlerWork;
 
 typedef struct BattleAnimShakeAndScaleWork {
     u8 state;
@@ -221,9 +220,9 @@ typedef struct BattleAnimShakeAndScaleWork {
     u8 unk_0B;
     BattleAnimSystem *system;
     Pokepic *pokepic;
-    BattleAnimLinearMotion scale; // 0x14
-    BattleAnimShake shake;        // 0x38
-} BattleAnimShakeAndScaleWork;    // size: 0x5C
+    BattleAnimLinearMotion scale;
+    BattleAnimShake shake;
+} BattleAnimShakeAndScaleWork;
 
 typedef struct BattleAnimShakeAndScaleXYWork {
     u8 state;
@@ -239,41 +238,41 @@ typedef struct BattleAnimShakeAndScaleXYWork {
     int duration;
     BattleAnimSystem *system;
     Pokepic *pokepic;
-    BattleAnimLinearMotion scale; // 0x20
-    BattleAnimShake shake;        // 0x44
-} BattleAnimShakeAndScaleXYWork;  // size: 0x68
+    BattleAnimLinearMotion scale;
+    BattleAnimShake shake;
+} BattleAnimShakeAndScaleXYWork;
 
 typedef struct BattleAnimObjWindowWork {
     u32 unk_00;
-    BattleAnimCommonWork common; // 0x04
+    BattleAnimCommonWork common;
     u32 unk_20;
     ManagedSprite *sprite;
-} BattleAnimObjWindowWork; // size: 0x28
+} BattleAnimObjWindowWork;
 
 typedef struct BattleAnimMoveBattlerSinWork {
     BattleAnimCommonWork common;
-    BattleAnimTarget target;    // 0x1C
-    BattleAnimSinMotion motion; // 0x30
-} BattleAnimMoveBattlerSinWork; // size: 0x54
+    BattleAnimTarget target;
+    BattleAnimSinMotion motion;
+} BattleAnimMoveBattlerSinWork;
 
 typedef struct BattleAnimMoveBattlerLinearWork {
     BattleAnimCommonWork common;
-    BattleAnimTarget target;       // 0x1C
-    BattleAnimLinearMotion motion; // 0x30
+    BattleAnimTarget target;
+    BattleAnimLinearMotion motion;
     BattleAnimPosition home;
     s16 offscreenX;
     s16 unk_5A;
-} BattleAnimMoveBattlerLinearWork; // size: 0x5C
+} BattleAnimMoveBattlerLinearWork;
 
 typedef struct BattleAnimBlendSpritePaletteWork {
     BattleAnimCommonWork common;
-    BattleAnimTarget target; // 0x1C
+    BattleAnimTarget target;
     BattleAnimPaletteBlend *blend;
-} BattleAnimBlendSpritePaletteWork; // size: 0x34
+} BattleAnimBlendSpritePaletteWork;
 
 typedef struct BattleAnimBattlerHeightWork {
     BattleAnimCommonWork common;
-    BattleAnimTarget target; // 0x1C
+    BattleAnimTarget target;
     int visibleX;
     int visibleY;
     int visibleWidth;
@@ -285,20 +284,20 @@ typedef struct BattleAnimBattlerHeightWork {
     int timer;
     int y;
     int height;
-} BattleAnimBattlerHeightWork; // size: 0x58
+} BattleAnimBattlerHeightWork;
 
 typedef struct BattleAnimRevealBattlerWork {
     BattleAnimCommonWork common;
     s16 step;
     int interval;
     int timer;
-    BattleAnimTarget target; // 0x28
+    BattleAnimTarget target;
     int height;
     int maxHeight;
     int y;
     int baseY;
     u8 unk_4C[4];
-} BattleAnimRevealBattlerWork; // size: 0x50
+} BattleAnimRevealBattlerWork;
 
 typedef struct BattleAnimShakeBgWork {
     u8 state;
@@ -316,8 +315,8 @@ typedef struct BattleAnimShakeBgWork {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
     u8 unk_34[0xA0];
-    BattleAnimShake shake; // 0xD4
-} BattleAnimShakeBgWork;   // size: 0xF8
+    BattleAnimShake shake;
+} BattleAnimShakeBgWork;
 
 typedef struct BattleAnimSpriteMosaicWork {
     BattleAnimCommonWork common;
@@ -326,7 +325,7 @@ typedef struct BattleAnimSpriteMosaicWork {
     int sizeH;
     int sizeV;
     int target;
-} BattleAnimSpriteMosaicWork; // size: 0x30
+} BattleAnimSpriteMosaicWork;
 
 // An emitter moved between two battlers (linear, optionally on an arc or with a vertical sine wave)
 struct BattleAnimEmitterMotionWork {
@@ -345,14 +344,14 @@ struct BattleAnimEmitterMotionWork {
     int counter;
     int angle;
     BOOL wave;
-    ParticleSystem *particleSystem; // 0x34
+    ParticleSystem *particleSystem;
     SPLEmitter *emitter;
-    BattleAnimCommonWork common; // 0x3C
+    BattleAnimCommonWork common;
     u8 unk_58[0x50];
-    BattleAnimLinearMotion linear; // 0xA8
-    BattleAnimSinMotion sin;       // 0xCC
-    BattleAnimValueMotion value;   // 0xF0
-}; // size: 0x104
+    BattleAnimLinearMotion linear;
+    BattleAnimSinMotion sin;
+    BattleAnimValueMotion value;
+};
 
 typedef struct BattleAnimEmitterSinWork {
     int emitterIndex;
@@ -366,35 +365,35 @@ typedef struct BattleAnimEmitterSinWork {
     int useDefender;
     int battler;
     u8 unk_28[0xC];
-    ParticleSystem *particleSystem; // 0x34
+    ParticleSystem *particleSystem;
     SPLEmitter *emitter;
-    BattleAnimCommonWork common; // 0x3C
-    BattleAnimSinMotion motion;  // 0x58
+    BattleAnimCommonWork common;
+    BattleAnimSinMotion motion;
     u8 unk_7C[0xC];
-    VecFx32 base;           // 0x88
-} BattleAnimEmitterSinWork; // size: 0x94
+    VecFx32 base;
+} BattleAnimEmitterSinWork;
 
 typedef struct BattleAnimSpriteWork {
     BattleAnimCommonWork common;
-    ManagedSprite *sprite; // 0x1C
-} BattleAnimSpriteWork;    // size: 0x20
+    ManagedSprite *sprite;
+} BattleAnimSpriteWork;
 
 typedef struct BattleAnimSpriteOrbitWork {
     BattleAnimCommonWork common;
-    ManagedSprite *sprite;       // 0x1C
-    BattleAnimValueMotion angle; // 0x20
+    ManagedSprite *sprite;
+    BattleAnimValueMotion angle;
     int step;
-} BattleAnimSpriteOrbitWork; // size: 0x38
+} BattleAnimSpriteOrbitWork;
 
 typedef struct BattleAnimSpriteArcWork {
     BattleAnimCommonWork common;
-    ManagedSprite *sprite; // 0x1C
+    ManagedSprite *sprite;
     u8 eva;
     u8 evb;
     u8 unk_22[2];
-    BattleAnimLinearMotion linear; // 0x24
-    BattleAnimSinMotion sin;       // 0x48
-} BattleAnimSpriteArcWork;         // size: 0x6C
+    BattleAnimLinearMotion linear;
+    BattleAnimSinMotion sin;
+} BattleAnimSpriteArcWork;
 
 // X steps of the sprite of BattleAnimTask_SpriteOrbit (0: switch its priority, 255: end)
 extern const s16 sBattleAnimSpriteOrbitStepX[];

@@ -40,7 +40,6 @@
 
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, PrinterCallback_t callback);
 
-// Frontier helpers
 void Frontier_SetSpriteAnim(Sprite *sprite, int value);
 void Frontier_SetSpritePosition(Sprite *sprite, s16 x, s16 y, int value);
 

@@ -266,7 +266,7 @@ s16 BattleAnimUtil_CalcScaleYOffset(int y, int inset, fx32 scale) {
 void BattleAnimUtil_AlignPokepicToScale(Pokepic *pokepic, int y, int inset, fx32 scale, int mode) {
     int offset = BattleAnimUtil_CalcScaleYOffset(y, inset, scale);
     if (mode == 1) {
-        offset = (s16)(offset * ~0u); // negated by a multiply
+        offset = (s16)(offset * ~0u);
         y = (s16)(y - inset);
     }
     Pokepic_SetAttr(pokepic, POKEPIC_Y, y + offset);
@@ -277,7 +277,7 @@ void BattleAnimUtil_AlignSpriteToScale(ManagedSprite *sprite, int y, int inset, 
     s16 spriteY;
     int offset = BattleAnimUtil_CalcScaleYOffset(y, inset, scale);
     if (mode == 1) {
-        offset = (s16)(offset * ~0u); // negated by a multiply
+        offset = (s16)(offset * ~0u);
         y = (s16)(y - inset);
     }
     ManagedSprite_GetPositionXY(sprite, &spriteX, &spriteY);

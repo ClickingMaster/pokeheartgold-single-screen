@@ -10,7 +10,6 @@
 // Screen transition effects of the frontier script system: master brightness flashes, window wipes made of 96
 // growing boxes, a scanline wave and a double-buffered HBlank DMA of the BG2/BG3 affine registers.
 
-// Not declared in the game headers (NitroSDK GX).
 extern void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
 typedef struct FrontierTransitionLerp {

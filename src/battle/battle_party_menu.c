@@ -52,7 +52,7 @@
 #include "type_icon_resources.h"
 #include "ui_util.h"
 
-// In-battle party screen (overlay 8). Pages: 0 party list, 1 mon menu (SHIFT / SUMMARY / CHECK MOVES), 2 summary,
+// In-battle party screen. Pages: 0 party list, 1 mon menu (SHIFT / SUMMARY / CHECK MOVES), 2 summary,
 // 3 move list, 4 move detail, 5 restore PP, 6 / 8 learn move (battle / contest view), 7 / 9 confirm the move to
 // forget (battle / contest view).
 
@@ -97,7 +97,7 @@ typedef struct BattlePartyMenuMon {
     u8 type1;
     u8 type2;
     u8 level : 7;
-    u8 hideGender : 1; // clear when GetMonData(MON_DATA_NO_PRINT_GENDER) returns 1
+    u8 hideGender : 1;
     u8 gender : 3;
     u8 status : 4; // status icon id, 7 for none
     u8 isEgg : 1;
@@ -148,7 +148,7 @@ typedef struct BattlePartyMenu {
     Window *pageWindows;
     u8 pageWindowCount;
     u8 windowSet;    // the summary, move list and move detail pages alternate between two sets of windows
-    u8 activeMon;    // party slot selected on entry (msg 78)
+    u8 activeMon;    // party slot selected on entry
     u8 viewMode : 4; // 0 battle, 1 contest move view
     u8 canToggleView : 4;
     u8 state;
@@ -163,7 +163,7 @@ typedef struct BattlePartyMenu {
     u8 learnMovePosition;
     u8 forgetMovePosition;
     u8 battlerPosition;
-} BattlePartyMenu; // size: 0x2090
+} BattlePartyMenu;
 
 typedef struct BattlePartyMenuPos {
     int x;
@@ -366,7 +366,7 @@ extern const BattlePartyMenuPos sBattlePartyLearnMoveMoveIconPos[];
 extern const BattlePartyMenuPos sBattlePartyListIconPos[];
 extern const BattlePartyMenuPos sBattlePartyListStatusIconPos[];
 extern const SpriteResourceCountsListUnion sBattlePartySpriteCapacities;
-// {char, palette, cell, anim, draw priority} per sprite; the interior labels collapse once the table moves to C
+// {char, palette, cell, anim, draw priority} per sprite
 extern const int sBattlePartySpriteTemplates[][5];
 extern const int sBattlePartySpriteTemplatesPltt[][5];
 extern const int sBattlePartySpriteTemplatesCell[][5];
@@ -377,7 +377,7 @@ extern const u8 sBattlePartySlotButtonScrollAmounts[];
 extern const s16 sBattlePartyButtonSpriteOffsets[];
 extern const s16 sBattlePartySlotButtonSpriteOffsets[];
 extern const u8 *const sBattlePartyButtonWindowLists[];
-// {x, y, width, height} per button, read as bytes through labels on its members
+// {x, y, width, height} per button
 extern const u8 sBattlePartyButtonRects[];
 extern const u8 sBattlePartyButtonRectsY[];
 extern const u8 sBattlePartyButtonRectsWidth[];
@@ -2422,7 +2422,6 @@ static void BattlePartyMenu_UpdateMoveListPP(BattlePartyMenu *menu, BattlePartyM
     ScheduleWindowCopyToVram(win);
 }
 
-// The party list passes the slot to BattlePartyMenu_PrintMonName as a u16, without the u8 narrowing.
 typedef void (*PrintMonNameFunc)(BattlePartyMenu *menu, int window, int fontId, int slot, int x, int y);
 
 static void BattlePartyMenu_PrintPartyListPage(BattlePartyMenu *menu) {
@@ -2951,7 +2950,7 @@ static void BattlePartyMenu_LoadHeldItemIconResources(BattlePartyMenu *menu) {
     NARC_Delete(narc);
 }
 
-// resources 0xB00B / 0xB017 from NARC a/0/7/1 (probably the contest condition markers)
+// resources 0xB00B / 0xB017 from NARC a/0/7/1
 static void BattlePartyMenu_LoadSpriteResB00B(BattlePartyMenu *menu) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(menu->context->battleSystem);
 
@@ -3301,7 +3300,6 @@ static void BattlePartyMenu_UpdateMonIcons(BattlePartyMenu *menu) {
     for (i = 0; i < Party_GetCount(menu->context->party); i++) {
         if (menu->mons[i].species != SPECIES_NONE) {
             int anim = BattlePartyMenu_GetMonIconAnim(&menu->mons[i]);
-            // addressed as menu + i * 4 + the offset of the first icon
             ManagedSprite **sprite = (ManagedSprite **)((u8 *)menu + i * sizeof(ManagedSprite *) + offsetof(BattlePartyMenu, sprites[7]));
             BattlePartyMenu_SetSpriteAnim(*sprite, (u8)anim);
             ManagedSprite_TickNFrames(*sprite, FX32_ONE);
@@ -3571,7 +3569,6 @@ static void BattlePartyMenu_BuildButtonTilemap(BattlePartyMenu *menu, u16 *dst, 
 }
 
 static void BattlePartyMenu_DrawButton(BattlePartyMenu *menu, u8 button, u8 frame, u8 palette) {
-    // the table is read here as bytes, through labels on its members
     int index = button * 4;
     int height = sBattlePartyButtonRectsHeight[index];
     int width = sBattlePartyButtonRectsWidth[index];

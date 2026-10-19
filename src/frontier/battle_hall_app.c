@@ -76,67 +76,65 @@ enum HallCellState {
 #define HALL_STATE_CLOSE_PROMPT 6
 
 typedef struct BattleHallApp {
-    OverlayManager *manager;         // 0x000
-    OverlayManager *summaryApp;      // 0x004
-    u8 subState;                     // 0x008
-    u8 mode;                         // 0x009
-    u8 printerId;                    // 0x00A
-    u8 openSummary;                  // 0x00B
-    u8 prevCursor;                   // 0x00C
-    u8 cursor;                       // 0x00D
-    u8 unk_00E;                      // 0x00E
-    u8 yesNoActive;                  // 0x00F
-    u16 summaryPending;              // 0x010
-    u16 linkReady;                   // 0x012
-    s16 brightness;                  // 0x014
-    u8 recvCount;                    // 0x016
-    u8 linkDecided;                  // 0x017
-    u8 linkChoice;                   // 0x018
-    u8 reselect;                     // 0x019
-    u8 linkCursor;                   // 0x01A
-    u8 timer;                        // 0x01B
-    u16 battleNo;                    // 0x01C
-    u8 matronMode;                   // 0x01E
-    u8 savedCursor;                  // 0x01F
-    MsgData *msgData;                // 0x020
-    MessageFormat *msgFormat;        // 0x024
-    String *expandedString;          // 0x028
-    String *rawString;               // 0x02C
-    String *strings[2];              // 0x030
-    u8 unk_038[0x10];                // 0x038
-    BgConfig *bgConfig;              // 0x048
-    Window windows[4];               // 0x04C
-    YesNoPrompt *yesNoPrompt;        // 0x08C
-    u8 usedTouch;                    // 0x090
-    u8 unk_091[3];                   // 0x091
-    PaletteData *paletteData;        // 0x094
-    MessagePrinter *messagePrinter;  // 0x098
-    Options *options;                // 0x09C
-    SaveData *saveData;              // 0x0A0
-    PokemonSummaryArgs *summaryArgs; // 0x0A4
-    BattleHallSpriteGfx spriteGfx;   // 0x0A8
-    BattleHallSprite *cursorSprite;  // 0x204
-    BattleHallSprite *monIcon;       // 0x208
-    u32 summaryResult;               // 0x20C
-    u16 *resultOut;                  // 0x210
-    Party *party;                    // 0x214
-    void *hallRecords;               // 0x218
-    u16 *partnerLevel;               // 0x21C
-    NARC *narc;                      // 0x220
-    u16 linkCommand;                 // 0x224
-    u16 linkArg;                     // 0x226
-    u16 linkChoiceSent;              // 0x228
-    u16 linkLevel;                   // 0x22A
-    u8 unk_22C[0x50];                // 0x22C
-    u8 partnerCursor;                // 0x27C
-    u8 partnerAnswer;                // 0x27D
-    u8 unk_27E[6];                   // 0x27E
+    OverlayManager *manager;
+    OverlayManager *summaryApp;
+    u8 subState;
+    u8 mode;
+    u8 printerId;
+    u8 openSummary;
+    u8 prevCursor;
+    u8 cursor;
+    u8 unk_00E;
+    u8 yesNoActive;
+    u16 summaryPending;
+    u16 linkReady;
+    s16 brightness;
+    u8 recvCount;
+    u8 linkDecided;
+    u8 linkChoice;
+    u8 reselect;
+    u8 linkCursor;
+    u8 timer;
+    u16 battleNo;
+    u8 matronMode;
+    u8 savedCursor;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *expandedString;
+    String *rawString;
+    String *strings[2];
+    u8 unk_038[0x10];
+    BgConfig *bgConfig;
+    Window windows[4];
+    YesNoPrompt *yesNoPrompt;
+    u8 usedTouch;
+    u8 unk_091[3];
+    PaletteData *paletteData;
+    MessagePrinter *messagePrinter;
+    Options *options;
+    SaveData *saveData;
+    PokemonSummaryArgs *summaryArgs;
+    BattleHallSpriteGfx spriteGfx;
+    BattleHallSprite *cursorSprite;
+    BattleHallSprite *monIcon;
+    u32 summaryResult;
+    u16 *resultOut;
+    Party *party;
+    void *hallRecords;
+    u16 *partnerLevel;
+    NARC *narc;
+    u16 linkCommand;
+    u16 linkArg;
+    u16 linkChoiceSent;
+    u16 linkLevel;
+    u8 unk_22C[0x50];
+    u8 partnerCursor;
+    u8 partnerAnswer;
+    u8 unk_27E[6];
 } BattleHallApp;
 
-// Frontier helpers
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
-// Not declared by the owners' headers yet
 u32 HallTypeRanks_Get(u8 type, void *hallRecords);
 
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))

@@ -38,7 +38,7 @@ void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 int FrontierTrainer_GetClassSprite(int trainerClass);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
-// opponent Pokemon count of a type (defined returning int; the count is read as a u8 here)
+// opponent Pokemon count of a type
 
 #define FACTORY_FLAGS_HAS_STREAK 10
 

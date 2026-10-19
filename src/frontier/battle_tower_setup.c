@@ -45,7 +45,7 @@ struct BattleTowerTrainerSets {
     u16 setIds[1];
 };
 
-// A sample room trainer: the u16 stored at FrontierTrainer+6 and the indexes of its four Pokemon.
+// A sample room trainer: a FrontierTrainer field and the indexes of its four Pokemon.
 typedef struct BattleTowerSampleTrainer {
     u16 unk_00;
     u8 monIndexes[4];

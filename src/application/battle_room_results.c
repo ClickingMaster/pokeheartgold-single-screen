@@ -56,72 +56,72 @@ enum BattleRoomResultsFlashState {
 
 // One downloaded Battle Room leader.
 typedef struct BattleRoomLeader {
-    String *name;         // 0x0
-    u8 gender;            // 0x4
-    u8 country;           // 0x5
-    u8 region;            // 0x6
-    u8 useDefaultName;    // 0x7
-    MailMessage greeting; // 0x8
-} BattleRoomLeader;       // size: 0x10
+    String *name;
+    u8 gender;
+    u8 country;
+    u8 region;
+    u8 useDefaultName;
+    MailMessage greeting;
+} BattleRoomLeader;
 
 // Brief palette flash of a pressed button: a sprite, or a rectangle of a bg layer.
 typedef struct BattleRoomResultsFlash {
-    u8 isBgRect : 1;    // 0x0
-    u8 target : 7;      // sprite index or bg layer
-    u8 pressedPltt : 4; // 0x1
+    u8 isBgRect : 1;
+    u8 target : 7; // sprite index or bg layer
+    u8 pressedPltt : 4;
     u8 normalPltt : 4;
-    u8 state;             // 0x2
-    u8 timer;             // 0x3
-    u8 x;                 // 0x4
-    u8 y;                 // 0x5
-    u8 width;             // 0x6
-    u8 height;            // 0x7
-} BattleRoomResultsFlash; // size: 0x8
+    u8 state;
+    u8 timer;
+    u8 x;
+    u8 y;
+    u8 width;
+    u8 height;
+} BattleRoomResultsFlash;
 
 typedef struct BattleRoomResults {
-    enum HeapID heapID;                                        // 0x000
-    u32 subState;                                              // 0x004
-    u16 showLeaders;                                           // 0x008
-    u8 unk_0A;                                                 // 0x00A
-    u8 filler_0B[5];                                           // 0x00B
-    BgConfig *bgConfig;                                        // 0x010
-    u8 filler_14[4];                                           // 0x014
-    Options *options;                                          // 0x018
-    FrontierSave *frontierSave;                                // 0x01C
-    FrontierData *frontierData;                                // 0x020
-    u32 downloadData;                                          // 0x024, BattleRoomDownload (Save_BattleRoomDownload_Get)
-    MsgData *msgData;                                          // 0x028
-    MessageFormat *msgFormat;                                  // 0x02C
-    String *string;                                            // 0x030
-    u8 filler_34[0x30];                                        // 0x034
-    String *defaultNames[2];                                   // 0x064
-    Window windows[BATTLE_ROOM_RESULTS_NUM_LEADER_WINDOWS];    // 0x06C
-    BattleRoomLeader leaders[BATTLE_ROOM_RESULTS_NUM_LEADERS]; // 0x29C
-    SpriteSystem *spriteSystem;                                // 0x47C
-    SpriteManager *spriteManager;                              // 0x480
-    ManagedSprite *sprites[4];                                 // 0x484
-    BattleRoomResultsFlash flash;                              // 0x494
-    int nextState;                                             // 0x49C
-    u16 page;                                                  // 0x4A0
-    u8 nameWindowSet;                                          // 0x4A2
-    u8 infoWindowSet;                                          // 0x4A3
-    GridInputHandler *gridInput;                               // 0x4A4
-    int pageChange;                                            // 0x4A8
-} BattleRoomResults;                                           // size: 0x4AC
+    enum HeapID heapID;
+    u32 subState;
+    u16 showLeaders;
+    u8 unk_0A;
+    u8 filler_0B[5];
+    BgConfig *bgConfig;
+    u8 filler_14[4];
+    Options *options;
+    FrontierSave *frontierSave;
+    FrontierData *frontierData;
+    u32 downloadData; // BattleRoomDownload
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    u8 filler_34[0x30];
+    String *defaultNames[2];
+    Window windows[BATTLE_ROOM_RESULTS_NUM_LEADER_WINDOWS];
+    BattleRoomLeader leaders[BATTLE_ROOM_RESULTS_NUM_LEADERS];
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[4];
+    BattleRoomResultsFlash flash;
+    int nextState;
+    u16 page;
+    u8 nameWindowSet;
+    u8 infoWindowSet;
+    GridInputHandler *gridInput;
+    int pageChange;
+} BattleRoomResults;
 
 // The leader records as downloaded.
 typedef struct BattleRoomLeaderRecord {
-    u16 name[PLAYER_NAME_LENGTH + 1]; // 0x00
-    u8 filler_10[2];                  // 0x10
-    u8 country;                       // 0x12
-    u8 region;                        // 0x13
-    u8 filler_14[4];                  // 0x14
-    u8 greeting[8];                   // 0x18
-    u8 useDefaultName : 1;            // 0x20
+    u16 name[PLAYER_NAME_LENGTH + 1];
+    u8 filler_10[2];
+    u8 country;
+    u8 region;
+    u8 filler_14[4];
+    u8 greeting[8];
+    u8 useDefaultName : 1;
     u8 gender : 1;
     u8 unk_20_2 : 6;
-    u8 unk_21;            // 0x21
-} BattleRoomLeaderRecord; // size: 0x22
+    u8 unk_21;
+} BattleRoomLeaderRecord;
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 

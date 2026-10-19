@@ -29,30 +29,12 @@
 #include "char_tiles.h"
 #include "seal_data.h"
 
-fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
+fx32 FX_Sqrt(fx32 x);
 
-// BallThrow (battle/battle.h) as this module uses it:
-//   ballAnim         BALL_ANIM_* animation run by BallThrow_IsBallAnimationPlaying (sBallThrowBallAnimFuncs)
-//   ballAnimStarted  set once that animation has entered its first capture state
-//   step             step of the current mode / capture state
-//   stateFrames      frame counter of the capture states, wobbleDir wobble direction, shakeCount shake count
-//   captureState     capture state (sBallThrowCaptureStateFuncs)
-//   modeRunning      TRUE while the mode handler runs
-//   fadeAlphaA/B     blend alpha of the fade out, randomDir random direction (+1/-1)
-//   animateSprite    the task ticks the sprite animation
-//   opened           set when the thrown ball has opened
-//   modeFrames       frame counter of the modes, arcHeight height of the throw arc
-//   task             the update task, burstEffect the BallBurstEffect, paletteFlash the palette flash,
-//                    battlerSprites the battler sprites
-//   startDelay       frames the task waits before running the mode
-//   params           the BallThrowParams it was created from: kind (start / target position, arc), mode
-//                    (sBallThrowModeFuncs), resTagOffset resource tag offset, bgPriority sprite BG priority,
-//                    keepSubSurface keep the renderer's sub surface
-// Members its declaration still keeps as byte arrays:
-#define BALL_ROTATION(data)     ((BattleAnimValueMotion *)&(data)->throwMotions[0x34 - 0x34])  // 0x34, value motion of the rotation
-#define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[0x48 - 0x34]) // 0x48, linear part of the throw arc
-#define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[0x6C - 0x34]) // 0x6C, height part of the throw arc
-#define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0xB8 - 0xB8]) // sprite position at the mode start
+#define BALL_ROTATION(data)     ((BattleAnimValueMotion *)&(data)->throwMotions[0x34 - 0x34]) // value motion of the rotation
+#define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[0x48 - 0x34])                  // linear part of the throw arc
+#define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[0x6C - 0x34])                  // height part of the throw arc
+#define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0xB8 - 0xB8])                   // sprite position at the mode start
 #define BALL_Y(data)            (*(s16 *)&(data)->throwCoords[0xBA - 0xB8])
 #define BALL_TARGET_X(data)     (*(s16 *)&(data)->throwCoords[0xBC - 0xB8]) // end of the throw arc
 #define BALL_TARGET_Y(data)     (*(s16 *)&(data)->throwCoords[0xBE - 0xB8])
@@ -63,18 +45,18 @@ typedef BOOL (*BallThrowFunc)(BallThrow *data);
 struct BallSealEffect {
     enum HeapID heapId;
     BallSealEffectTemplate template;
-    int count;                      // 0x10, particle systems in use
-    SPLEmitter *particleSystems[9]; // 0x14
-    SEAL *seals[9];                 // 0x38
-    BOOL emitted[9];                // 0x5C
+    int count; // particle systems in use
+    SPLEmitter *particleSystems[9];
+    SEAL *seals[9];
+    BOOL emitted[9];
     u8 unk_80[4];
-    SysTask *task; // 0x84
-    BOOL active;   // 0x88
-    NARC *narc;    // 0x8C
-    int state;     // 0x90, 0xFF: resources loaded
+    SysTask *task;
+    BOOL active;
+    NARC *narc;
+    int state; // 0xFF: resources loaded
     BOOL hasCapsule;
-    int ball;      // 0x98
-    int capsuleId; // 0x9C
+    int ball;
+    int capsuleId;
     CAPSULE capsule;
 };
 
@@ -87,25 +69,25 @@ typedef struct BallSealEmitTask {
     SPLEmitter *particleSystem;
     SEAL *seal;
     void (*callback)(SPLEmitter *emitter);
-} BallSealEmitTask; // size: 0x1C
+} BallSealEmitTask;
 
 struct BallBurstEffect {
     BallBurstEffectTemplate template;
     u32 unk_14;
-    SPLEmitter *particleSystem; // 0x18
-    int emitterCount;           // 0x1C
-    int resource;               // 0x20
-}; // size: 0x24
+    SPLEmitter *particleSystem;
+    int emitterCount;
+    int resource;
+};
 
 struct BattleAnimEmitter {
     int index;
     enum HeapID heapId;
     BattleAnimEmitterTemplate template;
-    SPLEmitter *particleSystem; // 0x10
+    SPLEmitter *particleSystem;
     u32 unk_14;
-    SysTask *task; // 0x18
+    SysTask *task;
     int emitterCount;
-    BOOL active; // 0x20
+    BOOL active;
 };
 
 struct BattleAnimEmitterManager {
@@ -139,7 +121,6 @@ typedef struct BattleAnimEmitterCounts {
     u32 counts[22];
 } BattleAnimEmitterCounts;
 
-// asm/battle_anim_data.s
 extern const BallThrowStaticSpriteKinds sBallThrowStaticSpriteKinds;
 extern const BallThrowFlashingKinds sBallThrowFlashingKinds;
 extern const BallThrowFunc sBallThrowModeFuncs[];
@@ -179,9 +160,9 @@ enum BallCaptureState {
 };
 
 extern const BallThrowFunc sBallThrowCaptureStateFuncs[];
-extern const s16 gBallThrowBounceSteps[]; // bounce steps of 6 bytes: y offset, then (ov07_02237310) the animation frame
+extern const s16 gBallThrowBounceSteps[]; // bounce steps: y offset, then the animation frame
 extern const u16 ov07_02237310[];
-// Per ball (BallAnim_GetBallTableIndex) tables; the inner labels are offsets into the same rows
+// Per ball (BallAnim_GetBallTableIndex) tables
 extern const u32 gBallAnimSealParticles[][2]; // seal particle resource
 extern const u32 ov07_02237390[][2]; // seal particle emitter count
 extern const u32 gBallAnimBurstParticles[][3]; // burst particle resource
@@ -803,7 +784,6 @@ BOOL BallThrow_CaptureStateOpen(BallThrow *data) {
         break;
     }
     case 1:
-        // compared as a signed int, as the original called it
         if (((int (*)(ManagedSprite *))ManagedSprite_GetAnimationFrame)(data->managedSprite) >= 2) {
             data->animateSprite = FALSE;
             data->step++;
@@ -1912,7 +1892,6 @@ void BattleAnimUtil_LoadMonIntoPic(BattleAnimBattlerPicParams *params, int targe
         Pokepic_SetAttr(params->pokepics[params->battler], POKEPIC_Y, y + height);
         if (facing == 2) {
             NARC *narc = NARC_New(NARC_a_1_8_0, heapId);
-            // the shadow readers' fourth parameter is not passed
             ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(narc, &shadow.shadowHeight, species);
             ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowXOffset)(narc, &shadow.shadowXOffset, species);
             ((void (*)(NARC *, u8 *, u16))NARC_ReadPokepicShadowSize)(narc, &shadow.shadowSize, species);

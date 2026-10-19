@@ -6,7 +6,7 @@
 #include "bag.h"
 #include "player_data.h"
 
-// Arguments of the in-battle bag screen (overlay 8), filled by the battle controller before
+// Arguments of the in-battle bag screen, filled by the battle controller before
 // BattleBagMenu_Create and read back once `done` is set.
 typedef struct BattleBagContext {
     BattleSystem *battleSystem;

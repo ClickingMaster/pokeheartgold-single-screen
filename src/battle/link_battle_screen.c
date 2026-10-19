@@ -65,20 +65,20 @@
 
 // One party mon as shown on the party preview panels.
 typedef struct LinkBattleScreenMonInfo {
-    u32 iconNaix;          // 0x00
-    u16 species;           // 0x04
-    u16 hp;                // 0x06
-    u16 maxHp;             // 0x08
-    u16 heldItem;          // 0x0A
-    u8 level;              // 0x0C
-    u8 gender;             // 0x0D
-    u8 hideGender;         // 0x0E, 0 when MON_DATA_NO_PRINT_GENDER is 1
-    u8 isEgg;              // 0x0F
-    u8 ballCapsule;        // 0x10, MON_DATA_BALL_CAPSULE_ID
-    u8 form;               // 0x11
-    u8 unk_12[2];          // 0x12
-    u32 statusIcon;        // 0x14
-} LinkBattleScreenMonInfo; // size: 0x18
+    u32 iconNaix;
+    u16 species;
+    u16 hp;
+    u16 maxHp;
+    u16 heldItem;
+    u8 level;
+    u8 gender;
+    u8 hideGender;
+    u8 isEgg;
+    u8 ballCapsule;
+    u8 form;
+    u8 unk_12[2];
+    u32 statusIcon;
+} LinkBattleScreenMonInfo;
 
 typedef struct LinkBattleScreen LinkBattleScreen;
 
@@ -87,56 +87,56 @@ typedef struct LinkBattleScreen LinkBattleScreen;
 typedef int (*LinkBattleScreenStepFunc)(LinkBattleScreen *screen);
 
 struct LinkBattleScreen {
-    LinkBattleScreenArgs *args;                                     // 0x000
-    const LinkBattleScreenStepFunc *sequence;                       // 0x004
-    PaletteData *paletteData;                                       // 0x008
-    BgConfig *bgConfig;                                             // 0x00C
-    Window partyWindows[LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT];     // 0x010, name/level/HP/HP bar of each mon
-    SpriteSystem *spriteSystem;                                     // 0x190
-    SpriteManager *spriteManager;                                   // 0x194
-    ManagedSprite *sprites[6 * LINK_BATTLE_SCREEN_SPRITES_PER_MON]; // 0x198
-    u32 spriteCount;                                                // 0x210
-    LinkBattleScreenMonInfo monInfo[PARTY_SIZE];                    // 0x214
-    u16 panelTilemaps[3][16 * 6];                                   // 0x2A4, lead / occupied / empty panel
-    u16 panelPalettes[3][16];                                       // 0x4E4
-    u16 stashedBg1Tiles[24][16];                                    // 0x544
-    u16 stashedBg2Tiles[24][16];                                    // 0x844
-    FontSystem *fontSystem;                                         // 0xB44
-    TextOBJ *nameTextObjs[4];                                       // 0xB48
-    GF3DVramMan *gfx3DVramMan;                                      // 0xB58
-    SPLEmitter *particleSystem;                                     // 0xB5C
-    void *particleHeap;                                             // 0xB60
-    u8 ballRowX[4];                                                 // 0xB64
-    u8 ballRowY[4];                                                 // 0xB68
-    u8 nameX[4];                                                    // 0xB6C
-    u8 nameY[4];                                                    // 0xB70
-    int slideSpeed;                                                 // 0xB74
-    s16 shakeX;                                                     // 0xB78
-    s16 shakeY;                                                     // 0xB7A
-    s8 shakeRangeX;                                                 // 0xB7C
-    s8 shakeRangeY;                                                 // 0xB7D
-    u8 nudgeDirection;                                              // 0xB7E
-    u8 taskState;                                                   // 0xB7F
-    u8 sequenceIndex;                                               // 0xB80
-    u8 delayFrames;                                                 // 0xB81
-    u8 frame;                                                       // 0xB82
-    u8 unk_B83;                                                     // 0xB83
-    u16 recordSaveState;                                            // 0xB84, battle record save state
-    u16 recordWriteState;                                           // 0xB86, battle record save state
-    Window msgWindow;                                               // 0xB88
-    Window yesNoWindow;                                             // 0xB98
-    BOOL use3D;                                                     // 0xBA8
-    MsgData *msgData;                                               // 0xBAC
-    MessageFormat *msgFormat;                                       // 0xBB0
-    String *string;                                                 // 0xBB4
-    u32 printerId;                                                  // 0xBB8
-    int videoPromptState;                                           // 0xBBC
-    struct ListMenu2D *yesNoMenu;                                   // 0xBC0
-    WaitingIcon *waitingIcon;                                       // 0xBC4
-    BOOL canSaveVideo;                                              // 0xBC8
-    int savedVideoCheck;                                            // 0xBCC
-    u32 hasVersionZeroPlayer;                                       // 0xBD0, set when a linked player's version is 0
-}; // size: 0xBD4
+    LinkBattleScreenArgs *args;
+    const LinkBattleScreenStepFunc *sequence;
+    PaletteData *paletteData;
+    BgConfig *bgConfig;
+    Window partyWindows[LINK_BATTLE_SCREEN_PARTY_WINDOW_COUNT]; // name/level/HP/HP bar of each mon
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[6 * LINK_BATTLE_SCREEN_SPRITES_PER_MON];
+    u32 spriteCount;
+    LinkBattleScreenMonInfo monInfo[PARTY_SIZE];
+    u16 panelTilemaps[3][16 * 6]; // lead / occupied / empty panel
+    u16 panelPalettes[3][16];
+    u16 stashedBg1Tiles[24][16];
+    u16 stashedBg2Tiles[24][16];
+    FontSystem *fontSystem;
+    TextOBJ *nameTextObjs[4];
+    GF3DVramMan *gfx3DVramMan;
+    SPLEmitter *particleSystem;
+    void *particleHeap;
+    u8 ballRowX[4];
+    u8 ballRowY[4];
+    u8 nameX[4];
+    u8 nameY[4];
+    int slideSpeed;
+    s16 shakeX;
+    s16 shakeY;
+    s8 shakeRangeX;
+    s8 shakeRangeY;
+    u8 nudgeDirection;
+    u8 taskState;
+    u8 sequenceIndex;
+    u8 delayFrames;
+    u8 frame;
+    u8 unk_B83;
+    u16 recordSaveState;
+    u16 recordWriteState;
+    Window msgWindow;
+    Window yesNoWindow;
+    BOOL use3D;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    u32 printerId;
+    int videoPromptState;
+    struct ListMenu2D *yesNoMenu;
+    WaitingIcon *waitingIcon;
+    BOOL canSaveVideo;
+    int savedVideoCheck;
+    u32 hasVersionZeroPlayer;
+};
 
 // The 7 words a sprite of this screen is made from (see LinkBattleScreen_CreateSprite).
 typedef struct LinkBattleScreenSpriteTemplate {
@@ -1331,7 +1331,7 @@ static void LinkBattleScreen_VBlankCallback(void *data) {
     PaletteData_PushTransparentBuffers(screen->paletteData);
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
-    // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address as a literal
+    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
     dtcm = (vu32 *)0x027E0000;
     dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK;
 }

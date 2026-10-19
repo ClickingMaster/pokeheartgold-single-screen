@@ -72,17 +72,16 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define FACTORY_LINK_SWAP    10
 
 typedef struct BattleFactoryAppArgs {
-    SaveData *saveData; // 0x00
-    u8 frontierType;    // 0x04
-    u8 levelMode;       // 0x05
-    u8 screen;          // 0x06
-    u8 unk_07;          // 0x07
-    Party *party;       // 0x08
-    Party *otherParty;  // 0x0C
-    u16 result[3];      // 0x10
+    SaveData *saveData;
+    u8 frontierType;
+    u8 levelMode;
+    u8 screen;
+    u8 unk_07;
+    Party *party;
+    Party *otherParty;
+    u16 result[3];
 } BattleFactoryAppArgs;
 
-// Frontier helpers
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
 
 static BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app);
@@ -1871,7 +1870,7 @@ static void BattleFactoryApp_VBlankCallback(BattleFactoryApp *app) {
         GF_RunVramTransferTasks();
         OamManager_ApplyAndResetBuffers();
         {
-            // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
+            // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
             vu32 *dtcm = (vu32 *)0x027E0000;
             dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
         }

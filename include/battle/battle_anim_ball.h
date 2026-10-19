@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BALL_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BALL_H
 
-// Overlay 7: Poke Ball throw / capture animation (BallThrow), the ball capsule seal and ball burst
+// Poke Ball throw / capture animation (BallThrow), the ball capsule seal and ball burst
 // particles, a generic particle emitter manager and the battler pic graphic swap helpers.
 
 #include "battle/battle.h"
@@ -27,17 +27,15 @@ typedef struct BallBurstEffectTemplate {
     s16 y;
     int ball;
     enum HeapID heapId;
-    int emitter;  // 0xFF: all emitters of the ball's burst (see BallBurstEffect_Start)
+    int emitter;  // all emitters of the ball's burst (see BallBurstEffect_Start)
     BOOL generic; // the burst of ball 1027 with all its emitters
 } BallBurstEffectTemplate;
 
 typedef struct BattleAnimEmitterTemplate {
-    int resourceId;  // particle resource of overlay 7 (5..26)
+    int resourceId;  // particle resource (5..26)
     int perspective; // second argument of ParticleSystem_SetPerspectiveType
 } BattleAnimEmitterTemplate;
 
-// The battler pictures handed to the pic swap helpers (BattleAnimBattlerPicParams, defined in
-// battle/battle_anim_internal.h)
 struct BattleAnimBattlerPicParams;
 
 typedef struct BallSealEffect BallSealEffect;

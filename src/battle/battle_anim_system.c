@@ -43,7 +43,7 @@ struct BattleAnimSoundTaskData {
     u16 seqNo;
     u8 unk_1C[0x1C];
     BattleAnimSystem *system;
-}; // size: 0x3C
+};
 
 typedef BOOL (*BattleAnimSoundFunc)(BattleAnimSoundTaskData *data);
 
@@ -76,7 +76,7 @@ struct BattleAnimBgSwitchWork {
     u16 stopPaletteCycle : 1;
     u16 unk_44_3 : 13;
     BattleAnimSystem *system;
-}; // size: 0x4C
+};
 
 typedef BOOL (*BattleAnimBgSwitchFunc)(SysTask *task, BattleAnimBgSwitchWork *work);
 typedef BOOL (*BattleAnimBgEffectFunc)(BattleAnimBgSwitchWork *work);
@@ -139,7 +139,6 @@ typedef struct BattleAnimPaletteCycle {
     BattleAnimPaletteCycleData *data;
 } BattleAnimPaletteCycle;
 
-// unknown object read by Ov07UnkFE70_GetCurrentValue
 struct BattleAnimIndexedBytes {
     u8 unk_00[4];
     u32 index;
@@ -2474,7 +2473,7 @@ BOOL BattleAnimBackground_StartPaletteCycle(BattleAnimBgSwitchWork *work) {
         member = 0;
         break;
     }
-    // member: the palette offsets (0xFF-terminated) and, at 0x80, the frame durations (0xFF98-terminated);
+    // member: the palette offsets (0xFF-terminated) and the frame durations (0xFF98-terminated);
     // member + 1: the palettes
     file = GfGfxLoader_LoadFromNarc(NARC_a_0_0_9, member, FALSE, system->heapId, TRUE);
     GF_ASSERT(file != NULL);
@@ -3397,7 +3396,6 @@ SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum Heap
     return particleSystem;
 }
 
-// ParticleSystem_CreateEmitterWithParam is declared void; its emitter result is what the callers store
 SPLEmitter *BattleAnimSystem_CreateEmitter(SPLEmitter *particleSystem, int resId, int callback, BattleAnimSystem *system) {
     ParticleSystem_CreateEmitterWithParam(particleSystem, resId, sBattleAnimEmitterCallbackTable[callback], system);
 }

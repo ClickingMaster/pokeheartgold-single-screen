@@ -48,7 +48,7 @@ extern const u8 gBattleArcadeRoundCursorSpeeds[];
 extern const u8 gBattleArcadeRankBattlePoints[];
 extern const ArcadeSpritePos gBattleArcadePlayerMonIconPositions[];
 extern const ArcadeSpritePos gBattleArcadeOpponentMonIconPositions[];
-// Per event {character, screen, palette} file ids; the three labels point at the first entry's members.
+// Per event {character, screen, palette} file ids
 typedef u16 ArcadeEventBgFiles[3];
 extern const ArcadeEventBgFiles gBattleArcadeEventBgFiles[];
 extern const ArcadeEventBgFiles gBattleArcadeEventBgScreenFiles[];
@@ -671,7 +671,6 @@ void BattleArcade_SetItemIconVisible(ArcadeContext *ctx, FrontierMap *map, u32 o
     s32 count = BattleArcade_GetMonCount(ctx->type, 1);
     s32 opponentCount = BattleArcade_GetOpponentMonCount(ctx->type, 1);
 
-    // visible is passed on the stack and read as a u16
     if (opponent == FALSE) {
         if ((s32)slot < count) {
             u32 item = GetMonData(Party_GetMonByIndex(ctx->playerParty, slot), MON_DATA_HELD_ITEM, NULL);

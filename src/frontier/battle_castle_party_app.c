@@ -61,8 +61,7 @@
 
 FS_EXTERN_OVERLAY(OVY_80);
 
-// Battle Castle party app: manage your own party with
-// Castle Points (HEAL / RENTAL / RESTORE HP / RANK UP). Texts: msg_0031.
+// Battle Castle party app: manage your own party with Castle Points (HEAL / RENTAL / RESTORE HP / RANK UP).
 
 // Main loop states (*state of Main)
 #define CASTLE_PARTY_MAIN_FADE_IN     0
@@ -200,7 +199,6 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define CASTLE_PARTY_TEXT_COLOR_FEMALE    MAKE_TEXT_COLOR(3, 4, 0) // female symbol and names
 #define CASTLE_PARTY_TEXT_COLOR_MALE_NAME MAKE_TEXT_COLOR(7, 8, 0)
 
-// BattleCastlePartyApp_PrintExpandedMessage / BattleCastle_PrintString / BattleCastle_PrintMsg alignment
 #define CASTLE_ALIGN_LEFT   0
 #define CASTLE_ALIGN_RIGHT  1
 #define CASTLE_ALIGN_CENTER 2
@@ -210,14 +208,14 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define CASTLE_PARTY_NARC_ITEM_DETAIL_SCREEN 39
 
 typedef struct BattleCastlePartyAppArgs {
-    SaveData *saveData; // 0x00
-    u8 frontierType;    // 0x04
-    u8 unk_05[0x13];    // 0x05
-    Party *party;       // 0x18
-    u8 unk_1C[4];       // 0x1C
-    u16 selection;      // 0x20
-    u8 unk_22[6];       // 0x22
-    u16 partnerPoints;  // 0x28
+    SaveData *saveData;
+    u8 frontierType;
+    u8 unk_05[0x13];
+    Party *party;
+    u8 unk_1C[4];
+    u16 selection;
+    u8 unk_22[6];
+    u16 partnerPoints;
 } BattleCastlePartyAppArgs;
 
 // Entry of the HEAL / RENTAL list menus
@@ -233,14 +231,13 @@ typedef struct BattleCastleMenuItem {
     int value;
 } BattleCastleMenuItem;
 
-// Data tables in assembly
-extern const u16 gBattleCastlePartyAppHealMessages[];         // heal result messages, by action - 1; bytes 0x1E.. hold the list menu template
+extern const u16 gBattleCastlePartyAppHealMessages[];         // heal result messages, by action - 1
 extern const u16 gBattleCastlePartyAppBerryCounts[];          // number of rentable berries, by rental rank - 1
 extern const u16 gBattleCastlePartyAppHealCosts[];            // CP cost of RESTORE HP / PP / ALL
 extern const u16 gBattleCastlePartyAppMainMenuHelpMessages[]; // main menu help messages, by cursor position
 extern const u16 gBattleCastlePartyAppItemCounts[];           // number of rentable items, by rental rank - 1
 extern const u16 gBattleCastlePartyAppRankUpCosts[2][3];      // CP cost of the next rank, by rank kind (CASTLE_RANK_*) and rank
-extern const u16 gBattleCastlePartyAppRentalRankUpCosts[];    // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL] (referenced by its own label)
+extern const u16 gBattleCastlePartyAppRentalRankUpCosts[];    // = gBattleCastlePartyAppRankUpCosts[CASTLE_RANK_RENTAL]
 extern const u16 gBattleCastlePartyAppRankUpMessages[2][3];   // "gained the ability to..." messages, by rank kind and rank
 extern const BattleCastleMenuItem gBattleCastlePartyAppMainMenuItems[];
 extern const BattleCastleMenuOption gBattleCastlePartyAppRentalMenuOptions[]; // BERRIES / ITEMS / RANK UP / CANCEL
@@ -261,11 +258,9 @@ extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub0;
 extern const BgTemplate gBattleCastlePartyAppBgTemplate_Sub1;
 extern const GraphicsBanks gBattleCastlePartyAppGraphicsBanks;
 
-// Frontier helpers
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 
-// Entry points and link receive callbacks
 static void BattleCastlePartyApp_ReloadBgPalette(void);
 
 static BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app);
@@ -379,7 +374,6 @@ static void BattleCastlePartyApp_PrintHealMenuHelp(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app);
 static void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button);
 
-// BattleCastlePartyApp init
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app;
     BattleCastlePartyAppArgs *args;
@@ -421,7 +415,6 @@ BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-// BattleCastlePartyApp main
 int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
 
@@ -482,7 +475,6 @@ int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-// BattleCastlePartyApp exit
 BOOL BattleCastlePartyApp_Exit(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
 
@@ -1405,7 +1397,7 @@ static void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig) {
 }
 
 static void BattleCastlePartyApp_VBlankCallback(void *arg) {
-    // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
+    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
     vu32 *dtcm = (vu32 *)0x027E0000;
     BattleCastlePartyApp *app = arg;
 

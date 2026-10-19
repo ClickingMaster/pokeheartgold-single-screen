@@ -43,7 +43,7 @@
 #include "text.h"
 #include "touchscreen.h"
 
-// In-battle bag screen (overlay 8): pocket menu (page 0), item list (page 1) and use-item page (page 2) on the
+// In-battle bag screen: pocket menu (page 0), item list (page 1) and use-item page (page 2) on the
 // touch screen, plus the auto-played tutorial bag.
 
 enum BattleBagPage {
@@ -100,7 +100,7 @@ typedef struct BattleBagMenu {
     u8 lastPages[5];
     u8 tutorialState;
     u8 tutorialTimer;
-} BattleBagMenu; // size: 0x115C
+} BattleBagMenu;
 
 static void BattleBagMenu_Task(SysTask *task, void *data);
 static int BattleBagMenu_Setup(BattleBagMenu *menu);
@@ -197,7 +197,6 @@ extern const WindowTemplate sBattleBagMessageWindowTemplate;
 extern const WindowTemplate sBattleBagPocketMenuWindows[];
 extern const WindowTemplate sBattleBagItemListWindows[];
 extern const WindowTemplate sBattleBagUseItemWindows[];
-// The tables below are still assembly data; some members are addressed through their own labels.
 extern const u32 sBattleBagItemEntryMsgIds[][2];
 extern const u32 sBattleBagItemEntryQuantityMsgIds[][2];
 extern const SpriteResourceCountsListUnion sBattleBagSpriteCapacities;
@@ -988,7 +987,6 @@ static void BattleBagMenu_PrintPageNumber(BattleBagMenu *menu) {
     windows = menu->pageWindows;
     slash = NewString_ReadMsgData(menu->msgData, msg_0005_00028);
     width = FontID_String_GetWidth(0, slash, 0);
-    // the window is addressed through an integer offset (pointer indexing changes the code)
     x = (GetWindowWidth(PAGE_NUMBER_WINDOW(windows)) * 8 - width) / 2;
     AddTextPrinterParameterizedWithColor(PAGE_NUMBER_WINDOW(windows), 0, slash, x, 4, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(slash);
@@ -1046,7 +1044,6 @@ static void BattleBagMenu_PrintUseItemName(BattleBagMenu *menu, int slot) {
 static void BattleBagMenu_PrintItemDescription(BattleBagMenu *menu, int slot) {
     Window *window = &menu->pageWindows[2];
     String *string = String_New(130, menu->context->heapID);
-    // the heap id is passed truncated to 16 bits
     GetItemDescIntoString(string, menu->pocketItems[menu->pocket][slot].id, (enum HeapID)(u16)menu->context->heapID);
     AddTextPrinterParameterizedWithColor(window, 0, string, 4, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     String_Delete(string);
@@ -1121,7 +1118,6 @@ static inline void AddItemToBattlePockets(BattleBagMenu *menu, ItemSlot *item) {
     }
 }
 
-// This function was built against a Bag_GetPocketSlotN prototype taking 16-bit pocket and slot numbers.
 typedef ItemSlot *(*BagGetPocketSlotFunc)(Bag *bag, u16 pocket, u16 slot);
 
 static void BattleBagMenu_SortItemsIntoPockets(BattleBagMenu *menu) {
@@ -1502,7 +1498,6 @@ static void BattleBagMenu_BuildButtonTilemap(BattleBagMenu *menu, u16 *dst, u8 b
 }
 
 static void BattleBagMenu_DrawButton(BattleBagMenu *menu, u8 button, u8 frame, u8 page) {
-    // the table is read here as bytes, through labels on its members
     int index = button * 4;
     int height = sBattleBagButtonRectsHeight[index];
     int width = sBattleBagButtonRectsWidth[index];

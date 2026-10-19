@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BATTLER_UTIL_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BATTLER_UTIL_H
 
-// Overlay 7: battle animation helpers shared by the effect functions (battler types and positions, emitter
+// Battle animation helpers shared by the effect functions (battler types and positions, emitter
 // positions, blend/window setup, target collection, work allocation).
 
 #include "bg_window.h"
@@ -29,7 +29,7 @@ typedef struct BattleAnimCommonWork {
     SpriteManager *spriteManager;
     BgConfig *bgConfig;
     PaletteData *paletteData;
-} BattleAnimCommonWork; // size: 0x1C
+} BattleAnimCommonWork;
 
 // One target of an effect (BattleAnimUtil_CollectPicsByFlags / CollectSpritesByFlags)
 typedef struct BattleAnimTarget {
@@ -38,7 +38,7 @@ typedef struct BattleAnimTarget {
     Pokepic *pokepic;
     ManagedSprite *sprite;
     int battler;
-} BattleAnimTarget; // size: 0x14
+} BattleAnimTarget;
 
 int BattleAnimUtil_GetBattlerType(BattleAnimSystem *system, int battler);
 int BattleAnimUtil_GetBattlerSide(BattleAnimSystem *system, int battler);
@@ -87,7 +87,6 @@ void BattleAnimUtil_CollectSpritesByFlags(BattleAnimSystem *system, u32 flags, B
 void *BattleAnimUtil_AllocWork(BattleAnimSystem *system, u32 size);
 void BattleAnimUtil_FreeWork(void *work);
 
-// overlay 7 functions defined in sources not merged yet (switch to battle/battle_anim_internal.h when it lands)
 int BattleAnimSystem_GetField08(BattleAnimSystem *system);
 enum HeapID BattleAnimSystem_GetHeapID(BattleAnimSystem *system);
 u16 BattleAnimSystem_GetAttacker(BattleAnimSystem *system);

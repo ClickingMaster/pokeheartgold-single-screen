@@ -20,8 +20,7 @@
 #include "sys_vars.h"
 #include "touchscreen.h"
 
-// VS Recorder Frontier record screen (VS_RECORDER_SCREEN_FRONTIER): the five Battle Frontier prints spinning in around
-// the player, the Battle Point count and the exit button. Starts with the saved video screen's exit button cleanup.
+// VS Recorder Frontier record screen (VS_RECORDER_SCREEN_FRONTIER): the five Battle Frontier prints spinning in around the player, the Battle Point count and the exit button.
 
 enum VsRecorderFrontierEnterStep {
     FRONTIER_ENTER_STEP_INIT,

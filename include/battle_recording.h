@@ -7,10 +7,10 @@
 // A recorded battle (battle video): the record in progress or one loaded from the extra save chunks.
 typedef struct BattleRecord {
     u32 unk_0000;
-    u8 profile[0x80];  // 0x0004, BattleRecord_GetProfile
-    u8 header[0x64];   // 0x0084, BattleRecordHeader: what the battle video lists show
-    u8 data[0x1C68];   // 0x00E8, BattleRecordData, encrypted while stored (magic + CRC at the end)
-} BattleRecord;        // size = 0x1D50
+    u8 profile[0x80]; // BattleRecord_GetProfile
+    u8 header[0x64];  // BattleRecordHeader: what the battle video lists show
+    u8 data[0x1C68];  // BattleRecordData, encrypted while stored (magic + CRC at the end)
+} BattleRecord;
 
 void BattleRecord_Create(SaveData *save, enum HeapID heapID, u32 *out);
 BOOL BattleRecord_Exists(void);

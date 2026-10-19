@@ -27,7 +27,7 @@ typedef struct BattleTowerChallenge {
     u8 trainers[28];      // 8, 14 trainer ids
     u32 randomState;      // 10
     u8 multiAllyData[16]; // 6
-} BattleTowerChallenge;   // size = 0x3C
+} BattleTowerChallenge;
 
 struct FrontierData {
     u16 battlePoints;
@@ -46,7 +46,7 @@ struct FrontierData {
     u16 towerRounds[6]; // per tower mode
     u16 wifiScore;
     u8 wifiTeams[2][0xA8];
-}; // size = 0x168
+};
 
 // One trainer of a downloaded Wi-Fi Battle Room.
 typedef struct BattleRoomTrainer {
@@ -56,7 +56,7 @@ typedef struct BattleRoomTrainer {
     u8 trainerClass;
     u8 messages[24];
     u16 score;
-} BattleRoomTrainer; // size = 0xE4
+} BattleRoomTrainer;
 
 typedef struct BattleRoomDownload {
     u32 markDate;      // year, month, day, hour of the last mark, one byte each
@@ -65,7 +65,7 @@ typedef struct BattleRoomDownload {
     u8 trainersRoom, trainersRank, leadersRoom, leadersRank;
     BattleRoomTrainer trainers[7];
     Ov67DownloadRecords leaders;
-} BattleRoomDownload; // size = 0xB3C
+} BattleRoomDownload;
 
 typedef struct BattleTowerOpponent {
     u32 id;

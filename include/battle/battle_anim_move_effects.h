@@ -1,9 +1,6 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_MOVE_EFFECTS_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_MOVE_EFFECTS_H
 
-// Overlay 7: effect functions of the battle move animation scripts (sBattleAnimFuncTable / sBattleAnimSpriteFuncTable
-// entries) and the tasks they start, 0x02226C90-0x0222C850.
-
 #include "battle/battle_anim_funcs.h"
 #include "battle/battle_anim_internal.h"
 
@@ -16,15 +13,15 @@
 // A sprite circling a point: the angle step of its orbit oscillates (speed), then it runs a second circle
 typedef struct BattleAnimMotionSprite {
     ManagedSprite *sprite;
-    BattleAnimSinMotion orbit; // 0x04
-    BattleAnimCosMotion speed; // 0x28, added to baseAngleStep
-    s16 baseAngleStep;         // 0x3C
-    s16 x;                     // center of the orbit
+    BattleAnimSinMotion orbit;
+    BattleAnimCosMotion speed; // added to baseAngleStep
+    s16 baseAngleStep;
+    s16 x; // center of the orbit
     s16 y;
     u16 unk_42;
-    int state; // 0x44
+    int state;
     BOOL active;
-} BattleAnimMotionSprite; // size: 0x4C
+} BattleAnimMotionSprite;
 
 typedef struct BattleAnimShakeDefenderWithOverlayWork BattleAnimShakeDefenderWithOverlayWork;
 typedef struct BattleAnimDropSpriteStepwiseWork BattleAnimDropSpriteStepwiseWork;
@@ -117,8 +114,6 @@ void BattleAnimTask_ShakeDefenderWithOverlayApply(BattleAnimShakeDefenderWithOve
 void BattleAnimTask_ShakeDefenderWithOverlay(SysTask *task, void *data);
 void BattleAnimFunc_ShakeDefenderWithOverlay(BattleAnimSystem *system);
 
-// Overlay 7 functions declared in battle/battle_anim_emitter.h, which cannot be included together with
-// battle/battle_anim_util.h
 s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
 int BattleAnimUtil_GetBattlerSideSign(BattleAnimSystem *system, int battler);
 

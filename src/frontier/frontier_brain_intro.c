@@ -73,7 +73,7 @@ typedef struct FrontierBrainIntroSprites {
     int timer;
     FrontierBrainIntroText name;
     ManagedSprite *brainSprite;
-} FrontierBrainIntroSprites; // size: 0x94
+} FrontierBrainIntroSprites;
 
 typedef struct FrontierBrainIntroWindowAnim {
     fx32 top;
@@ -119,7 +119,7 @@ typedef struct FrontierBrainIntro {
     FrontierBrainIntroSlide slide;
     u32 brainPaletteSlot;
     u32 paletteMask;
-} FrontierBrainIntro; // size: 0x168
+} FrontierBrainIntro;
 
 void FrontierBrainIntro_Finish(FrontierBrainIntro *intro, SysTask *task);
 void FrontierBrainIntro_UpdateWindows(SysTask *task, void *data);

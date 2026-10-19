@@ -52,9 +52,7 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 #define TEXT_SPEED_NOTRANSFER       0xFF
 
-// Battle Castle opponent app: spend Castle Points on
-// information about the opponent's party (CHECK / LEVEL / SUMMARY). Texts: msg_0033.
-// The file ends with the sprite, prompt, window and grid helpers both Battle Castle apps use.
+// Battle Castle opponent app: spend Castle Points on information about the opponent's party (CHECK / LEVEL / SUMMARY).
 
 // Main loop states (*state of Main)
 #define CASTLE_OPP_MAIN_FADE_IN     0
@@ -175,21 +173,20 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define CASTLE_OPP_TEXT_COLOR_MALE_NAME MAKE_TEXT_COLOR(7, 8, 0)
 
 typedef struct BattleCastleOpponentAppArgs {
-    SaveData *saveData; // 0x00
-    u8 frontierType;    // 0x04
-    u8 unk_05[3];       // 0x05
-    u8 checked[4];      // 0x08
-    u8 levelChanges[4]; // 0x0C
-    u8 statsBought[4];  // 0x10
-    u8 movesBought[4];  // 0x14
-    u8 unk_18[4];       // 0x18
-    Party *party;       // 0x1C
-    u16 selection;      // 0x20
-    u8 unk_22[6];       // 0x22
-    u16 partnerPoints;  // 0x28
+    SaveData *saveData;
+    u8 frontierType;
+    u8 unk_05[3];
+    u8 checked[4];
+    u8 levelChanges[4];
+    u8 statsBought[4];
+    u8 movesBought[4];
+    u8 unk_18[4];
+    Party *party;
+    u16 selection;
+    u8 unk_22[6];
+    u16 partnerPoints;
 } BattleCastleOpponentAppArgs;
 
-// Data tables in assembly
 extern const u8 gBattleCastlePartyAppButtonRects[][4]; // party app button rects (x, y, width, height in tiles)
 extern const u8 gBattleCastleOpponentAppListMenuY[];   // list menu y, by number of entries
 extern const TouchscreenListMenuTemplate gBattleCastleOpponentAppListMenuTemplate;
@@ -237,7 +234,6 @@ enum {
     CASTLE_OPP_FADE_OUT_WAIT,
 };
 
-// Entry points and link receive callbacks
 static BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
 static void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
 static BOOL BattleCastleOpponentApp_HandleMenu(BattleCastleOpponentApp *app);
@@ -357,7 +353,6 @@ BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
     return TRUE;
 }
 
-// BattleCastleOpponentApp init
 BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     BattleCastleOpponentApp *app;
     BattleCastleOpponentAppArgs *args;
@@ -399,7 +394,6 @@ BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-// BattleCastleOpponentApp main
 BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state) {
     BattleCastleOpponentApp *app = OverlayManager_GetData(manager);
 
@@ -463,7 +457,6 @@ BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state) {
     return FALSE;
 }
 
-// BattleCastleOpponentApp exit
 BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager, int *state) {
     BattleCastleOpponentApp *app = OverlayManager_GetData(manager);
 
@@ -1222,7 +1215,7 @@ static void BattleCastleOpponentApp_FreeBgLayers(BgConfig *bgConfig) {
 }
 
 static void BattleCastleOpponentApp_VBlankCallback(void *arg) {
-    // OS_SetIrqCheckFlag(OS_IE_V_BLANK) with the DTCM address written out
+    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
     vu32 *dtcm = (vu32 *)0x027E0000;
     BattleCastleOpponentApp *app = arg;
 

@@ -96,41 +96,39 @@ typedef struct FrontierRecordsButtonFlash {
     u8 height;
 } FrontierRecordsButtonFlash;
 
-// size: 0x394
 typedef struct FrontierRecordsApp {
-    OverlayManager *manager;                         // 0x000
-    u8 state;                                        // 0x004
-    u8 nextState;                                    // 0x005
-    u8 mode;                                         // 0x006
-    u8 facility;                                     // 0x007
-    u16 species;                                     // 0x008
-    u16 unk_00A;                                     // 0x00A
-    BgConfig *bgConfig;                              // 0x00C
-    Window windows[32];                              // 0x010
-    MsgData *msgData;                                // 0x210
-    MessageFormat *msgFormat;                        // 0x214
-    String *string;                                  // 0x218
-    PaletteData *paletteData;                        // 0x21C
-    Options *options;                                // 0x220
-    SaveData *saveData;                              // 0x224
-    FrontierSave *frontierSave;                      // 0x228
-    SpriteSystem *spriteSystem;                      // 0x22C
-    SpriteManager *spriteManager;                    // 0x230
-    ManagedSprite *sprites[2];                       // 0x234
-    Window returnButtonWindow;                       // 0x23C
-    FrontierRecordsButtonFlash flash;                // 0x24C
-    GridInputHandler *gridInput;                     // 0x254
-    u16 letter;                                      // 0x258
-    u16 speciesIndex;                                // 0x25A
-    s8 page;                                         // 0x25C
-    s8 lastPage;                                     // 0x25D
-    u16 speciesWindowBank;                           // 0x25E
-    FrontierRecordsSpeciesGroup groups[NUM_LETTERS]; // 0x260
-    PaletteBlink *scrollArrows;                      // 0x330
-    u16 pageArrowTiles[3][16];                       // 0x334
+    OverlayManager *manager;
+    u8 state;
+    u8 nextState;
+    u8 mode;
+    u8 facility;
+    u16 species;
+    u16 unk_00A;
+    BgConfig *bgConfig;
+    Window windows[32];
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    PaletteData *paletteData;
+    Options *options;
+    SaveData *saveData;
+    FrontierSave *frontierSave;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[2];
+    Window returnButtonWindow;
+    FrontierRecordsButtonFlash flash;
+    GridInputHandler *gridInput;
+    u16 letter;
+    u16 speciesIndex;
+    s8 page;
+    s8 lastPage;
+    u16 speciesWindowBank;
+    FrontierRecordsSpeciesGroup groups[NUM_LETTERS];
+    PaletteBlink *scrollArrows;
+    u16 pageArrowTiles[3][16];
 } FrontierRecordsApp;
 
-// Not declared by the owners' headers yet
 u32 BattleFactory_GetBestStreakStat(u8 levelMode, u8 type);
 u32 BattleFactory_GetBestTradeCountStat(u8 levelMode, u8 type);
 u32 BattleCastle_GetBestStreakStat(u8 type);

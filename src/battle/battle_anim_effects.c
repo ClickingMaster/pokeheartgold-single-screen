@@ -15,463 +15,458 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 
-// BattleAnimSystem_CreateTaskDefaultPriority (BattleAnimSystem_CreateTaskDefaultPriority) is void but leaves the new task in r0;
-// BattleAnimFunc_SkewSlideAttackerBg reads it from there
 typedef SysTask *(*BattleAnimCreateTaskFunc)(BattleAnimSystem *system, SysTaskFunc func, void *data);
 
-// BattleAnimScanline_NewWave takes the step as a u8; these callers pass it untruncated (as a u32)
 typedef BattleAnimScanlineWave *(*BattleAnimScanlineNewWaveFunc)(u8 firstLine, u8 lastLine, u32 step, fx32 amplitude, s16 speed, int bgLayer, u32 priority, u32 fill, enum HeapID heapId);
 #define BattleAnimScanline_NewWaveU32Step ((BattleAnimScanlineNewWaveFunc)BattleAnimScanline_NewWave)
 
-// ManagedSprite_SetPaletteOverrideOffset takes a u8; BattleAnimTask_PaletteCycleSprite passes the offset untruncated
 typedef void (*ManagedSpriteSetPaletteOffsetFunc)(ManagedSprite *managedSprite, int offset);
 
-// SetBgPriority takes the priority as a u16; BattleAnimFunc_WobbleDefenderOnBg truncates it to a u8
 typedef void (*SetBgPriorityU8Func)(u8 bgId, u8 priority);
 
 struct BattleAnimSkewSlideWork {
     BattleAnimSystem *system;
     int state;
     int timer;
-    Pokepic *pokepic;                 // 0x0C
-    s16 x;                            // 0x10, BG scroll position of the pic copy
-    s16 y;                            // 0x12
-    s16 top;                          // 0x14, scanline range of the wave
-    s16 bottom;                       // 0x16
-    BattleAnimScanlineWave *wave;     // 0x18
-    BattleAnimLinearMotion slide;     // 0x1C
-    BattleAnimBlendAlphaMotion blend; // 0x40
-}; // size: 0x68
+    Pokepic *pokepic;
+    s16 x; // BG scroll position of the pic copy
+    s16 y;
+    s16 top; // scanline range of the wave
+    s16 bottom;
+    BattleAnimScanlineWave *wave;
+    BattleAnimLinearMotion slide;
+    BattleAnimBlendAlphaMotion blend;
+};
 
 typedef struct BattleAnimFadeInShrinkSpriteWork {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
     int state;
     int timer;
-    ManagedSprite *sprite;          // 0x10
-    BattleAnimLinearMotion scale;   // 0x14
-    BattleAnimValueMotion blend;    // 0x38
-    BOOL flipX;                     // 0x4C
-} BattleAnimFadeInShrinkSpriteWork; // size: 0x50
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion scale;
+    BattleAnimValueMotion blend;
+    BOOL flipX;
+} BattleAnimFadeInShrinkSpriteWork;
 
 typedef struct BattleAnimShakeDefenderBlackFlashWork {
     BattleAnimSystem *system;
     int state;
     Pokepic *pokepic;
-    ManagedSprite *sprite;               // 0x0C, battler sprite 1, used when the defender is the attacker's partner
-    BOOL withSprite;                     // 0x10
-    BattleAnimShake shake;               // 0x14
-    s16 x;                               // 0x38
-    s16 y;                               // 0x3A
-    int shadowHeight;                    // 0x3C
-} BattleAnimShakeDefenderBlackFlashWork; // size: 0x40
+    ManagedSprite *sprite; // battler sprite 1, used when the defender is the attacker's partner
+    BOOL withSprite;
+    BattleAnimShake shake;
+    s16 x;
+    s16 y;
+    int shadowHeight;
+} BattleAnimShakeDefenderBlackFlashWork;
 
 struct BattleAnimWaveOnBgWork {
     BattleAnimSystem *system;
     int state;
-    int blendState; // 0x08, state of BattleAnimTask_WaveDefenderOnBgUpdate
+    int blendState; // state of BattleAnimTask_WaveDefenderOnBgUpdate
     u32 unk_0C;
-    Pokepic *pokepic;                 // 0x10
-    BattleAnimScanlineWave *wave;     // 0x14
-    PaletteData *paletteData;         // 0x18
-    BattleAnimBlendAlphaMotion blend; // 0x1C
-    int timer;                        // 0x44
-    ManagedSprite *sprite;            // 0x48
-}; // size: 0x4C
+    Pokepic *pokepic;
+    BattleAnimScanlineWave *wave;
+    PaletteData *paletteData;
+    BattleAnimBlendAlphaMotion blend;
+    int timer;
+    ManagedSprite *sprite;
+};
 
 typedef struct BattleAnimGrowRockShrinkSpriteWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    ManagedSprite *sprite;            // 0x10
-    BattleAnimLinearMotion scale;     // 0x14
-    BattleAnimValueMotion rotation;   // 0x38
-    int rocks;                        // 0x4C
-    int prevRotation;                 // 0x50
-    int sign;                         // 0x54, x scale sign
-} BattleAnimGrowRockShrinkSpriteWork; // size: 0x58
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion scale;
+    BattleAnimValueMotion rotation;
+    int rocks;
+    int prevRotation;
+    int sign; // x scale sign
+} BattleAnimGrowRockShrinkSpriteWork;
 
 typedef struct BattleAnimStackedSpritesWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    int timer;                        // 0x10
-    int index;                        // 0x14
-    Pokepic *pokepic;                 // 0x18
-    s16 x;                            // 0x1C
-    s16 y;                            // 0x1E
-    BattleAnimShake shake;            // 0x20
-    BattleAnimScaleSprite sprites[4]; // 0x44
+    int timer;
+    int index;
+    Pokepic *pokepic;
+    s16 x;
+    s16 y;
+    BattleAnimShake shake;
+    BattleAnimScaleSprite sprites[4];
     u32 unk_124;
-} BattleAnimStackedSpritesWork; // size: 0x128
+} BattleAnimStackedSpritesWork;
 
 typedef struct BattleAnimBoomerangSpriteWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *attackerPokepic;      // 0x10
-    s16 attackerX;                 // 0x14
-    s16 attackerY;                 // 0x16
-    BattleAnimLinearMotion lean;   // 0x18
-    int direction;                 // 0x3C
-    Pokepic *defenderPokepic;      // 0x40
-    s16 defenderX;                 // 0x44
-    s16 defenderY;                 // 0x46
-    ManagedSprite *sprite;         // 0x48
-    BattleAnimLinearMotion arc;    // 0x4C
-    BattleAnimSinMotion arcHeight; // 0x70
-} BattleAnimBoomerangSpriteWork;   // size: 0x94
+    Pokepic *attackerPokepic;
+    s16 attackerX;
+    s16 attackerY;
+    BattleAnimLinearMotion lean;
+    int direction;
+    Pokepic *defenderPokepic;
+    s16 defenderX;
+    s16 defenderY;
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion arc;
+    BattleAnimSinMotion arcHeight;
+} BattleAnimBoomerangSpriteWork;
 
 typedef struct BattleAnimWork0222DB14 {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
     int state;
     int timer;
-    Pokepic *pokepic;                 // 0x10
-    ManagedSprite *sprite;            // 0x14
-    s16 x;                            // 0x18
-    s16 y;                            // 0x1A
-    BattleAnimSinMotion motion;       // 0x1C
-    BattleAnimBlendAlphaMotion blend; // 0x40
-    s16 shadowHeight;                 // 0x68
-} BattleAnimWork0222DB14;             // size: 0x6C
+    Pokepic *pokepic;
+    ManagedSprite *sprite;
+    s16 x;
+    s16 y;
+    BattleAnimSinMotion motion;
+    BattleAnimBlendAlphaMotion blend;
+    s16 shadowHeight;
+} BattleAnimWork0222DB14;
 
 struct BattleAnimRisingSpriteStretchWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *pokepic;                   // 0x10
-    BattleAnimLinearMotion picScale;    // 0x14
-    int picState;                       // 0x38
-    ManagedSprite *sprite;              // 0x3C
-    int spriteState;                    // 0x40
-    BattleAnimLinearMotion spriteScale; // 0x44
-    BattleAnimLinearMotion rise;        // 0x68
-    BattleAnimBlendAlphaMotion blend;   // 0x8C
-    s16 x;                              // 0xB4
-    s16 y;                              // 0xB6
-}; // size: 0xB8
+    Pokepic *pokepic;
+    BattleAnimLinearMotion picScale;
+    int picState;
+    ManagedSprite *sprite;
+    int spriteState;
+    BattleAnimLinearMotion spriteScale;
+    BattleAnimLinearMotion rise;
+    BattleAnimBlendAlphaMotion blend;
+    s16 x;
+    s16 y;
+};
 
 struct BattleAnimZigzagSlashWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *pokepic;                 // 0x10
-    ManagedSprite *sprite;            // 0x14
-    BattleAnimLinearMotion leg;       // 0x18
-    BattleAnimBlendAlphaMotion blend; // 0x3C
-    s16 x;                            // 0x64
-    s16 y;                            // 0x66
-    int legIndex;                     // 0x68
-    int timer;                        // 0x6C
-}; // size: 0x70
+    Pokepic *pokepic;
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion leg;
+    BattleAnimBlendAlphaMotion blend;
+    s16 x;
+    s16 y;
+    int legIndex;
+    int timer;
+};
 
 struct BattleAnimZigzagFlashWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *pokepic;           // 0x10
-    Pokepic *pokepics[4];       // 0x14
-    ManagedSprite *sprite;      // 0x24
-    BattleAnimLinearMotion leg; // 0x28
-    s16 x;                      // 0x4C
-    s16 y;                      // 0x4E
-    int legIndex;               // 0x50, also the blinks left at the end
-    int timer;                  // 0x54
-    BOOL draw;                  // 0x58
-}; // size: 0x5C
+    Pokepic *pokepic;
+    Pokepic *pokepics[4];
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion leg;
+    s16 x;
+    s16 y;
+    int legIndex; // also the blinks left at the end
+    int timer;
+    BOOL draw;
+};
 
 struct BattleAnimWaddlePicWork {
     int state;
     BattleAnimSystem *system;
     Pokepic *pokepic;
-    s16 x;                      // 0x0C
-    s16 y;                      // 0x0E
-    BattleAnimValueMotion tilt; // 0x10
-    BattleAnimLinearMotion hop; // 0x24
-    int steps;                  // 0x48
-    int stepState;              // 0x4C
-    int stepTimer;              // 0x50
-    BOOL direction;             // 0x54
-}; // size: 0x58
+    s16 x;
+    s16 y;
+    BattleAnimValueMotion tilt;
+    BattleAnimLinearMotion hop;
+    int steps;
+    int stepState;
+    int stepTimer;
+    BOOL direction;
+};
 
 struct BattleAnimAttackerStretchUpWork {
     BattleAnimSystem *system;
     int state;
     int timer;
-    Pokepic *pokepic;             // 0x0C
-    BattleAnimLinearMotion scale; // 0x10
-    int delay;                    // 0x34
-    int stepState;                // 0x38
-    int y;                        // 0x3C
-    int height;                   // 0x40
-}; // size: 0x44
+    Pokepic *pokepic;
+    BattleAnimLinearMotion scale;
+    int delay;
+    int stepState;
+    int y;
+    int height;
+};
 
 struct BattleAnimPulseSpriteWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    int timer;                        // 0x10
-    ManagedSprite *sprite;            // 0x14
-    BattleAnimLinearMotion scale;     // 0x18
-    BattleAnimBlendAlphaMotion blend; // 0x3C
-    int pulseState;                   // 0x64
-    int pulseCount;                   // 0x68
-    int repeats;                      // 0x6C
-    int duration;                     // 0x70, x100
-    int scaleA;                       // 0x74, x100
-    int scaleB;                       // 0x78, x100
-    int roundState;                   // 0x7C
-}; // size: 0x80
+    int timer;
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion scale;
+    BattleAnimBlendAlphaMotion blend;
+    int pulseState;
+    int pulseCount;
+    int repeats;
+    int duration; // x100
+    int scaleA;   // x100
+    int scaleB;   // x100
+    int roundState;
+};
 
 struct BattleAnimAttackerDipWork {
     int state;
     BattleAnimSystem *system;
     Pokepic *pokepic;
-    s16 x;                       // 0x0C
-    s16 y;                       // 0x0E
-    BattleAnimLinearMotion move; // 0x10
-    int leg;                     // 0x34
-}; // size: 0x38
+    s16 x;
+    s16 y;
+    BattleAnimLinearMotion move;
+    int leg;
+};
 
-// move1 and move2 are used as linear (x) and as sine motions (BattleAnimSinMotion view)
+// move1 and move2 are used as linear (x) and as sine motions
 typedef struct BattleAnimLungeKnockbackWork {
     int state;
     BattleAnimSystem *system;
-    int direction;            // 0x08
-    Pokepic *attackerPokepic; // 0x0C
-    s16 attackerX;            // 0x10
-    s16 attackerY;            // 0x12
+    int direction;
+    Pokepic *attackerPokepic;
+    s16 attackerX;
+    s16 attackerY;
 
     union {
         BattleAnimSinMotion sin; // the dip before the lunge
         BattleAnimLinearMotion linear;
-    } attackerMove; // 0x14
+    } attackerMove;
 
-    Pokepic *defenderPokepic;            // 0x38
-    s16 defenderX;                       // 0x3C
-    s16 defenderY;                       // 0x3E
-    BattleAnimLinearMotion defenderMove; // 0x40
-} BattleAnimLungeKnockbackWork;          // size: 0x64
+    Pokepic *defenderPokepic;
+    s16 defenderX;
+    s16 defenderY;
+    BattleAnimLinearMotion defenderMove;
+} BattleAnimLungeKnockbackWork;
 
 struct BattleAnimFanSpritesWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    int index; // 0x10
+    int index;
     u32 unk_14;
-    Pokepic *pokepic;             // 0x18
-    BattleAnimLinearMotion pulse; // 0x1C
-    int pulseState;               // 0x40
-    s16 y;                        // 0x44
-    s16 height;                   // 0x46
-    ManagedSprite *sprites[6];    // 0x48
-    u32 animStates[6];            // 0x60
-    int timers[6];                // 0x78
-}; // size: 0x90
+    Pokepic *pokepic;
+    BattleAnimLinearMotion pulse;
+    int pulseState;
+    s16 y;
+    s16 height;
+    ManagedSprite *sprites[6];
+    u32 animStates[6];
+    int timers[6];
+};
 
 typedef struct BattleAnimShrinkIntoSpriteWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *pokepic;             // 0x10
-    BattleAnimLinearMotion scale; // 0x14
-    BattleAnimLinearMotion move;  // 0x38
-    ManagedSprite *sprite;        // 0x5C
-    BattleAnimLinearMotion leave; // 0x60
+    Pokepic *pokepic;
+    BattleAnimLinearMotion scale;
+    BattleAnimLinearMotion move;
+    ManagedSprite *sprite;
+    BattleAnimLinearMotion leave;
     u32 unk_84;
-    s16 x;                        // 0x88
-    s16 y;                        // 0x8A
-} BattleAnimShrinkIntoSpriteWork; // size: 0x8C
+    s16 x;
+    s16 y;
+} BattleAnimShrinkIntoSpriteWork;
 
 struct BattleAnimDarkSpriteJumpWork {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
     int state;
     int timer;
-    int height;                       // 0x10
-    int y;                            // 0x14
-    ManagedSprite *sprites[4];        // 0x18, rise, drop, and an extra sprite per part
-    BattleAnimLinearMotion stretch;   // 0x28
-    BattleAnimLinearMotion scale;     // 0x4C
-    BattleAnimLinearMotion drop;      // 0x70
-    int partState;                    // 0x94
-    int partTimer;                    // 0x98
-    BattleAnimBlendAlphaMotion blend; // 0x9C
-    PaletteData *paletteData;         // 0xC4
-    BOOL flipRise;                    // 0xC8
-    BOOL flipDrop;                    // 0xCC
-}; // size: 0xD0
+    int height;
+    int y;
+    ManagedSprite *sprites[4]; // rise, drop, and an extra sprite per part
+    BattleAnimLinearMotion stretch;
+    BattleAnimLinearMotion scale;
+    BattleAnimLinearMotion drop;
+    int partState;
+    int partTimer;
+    BattleAnimBlendAlphaMotion blend;
+    PaletteData *paletteData;
+    BOOL flipRise;
+    BOOL flipDrop;
+};
 
 struct BattleAnimScaleSpritesWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    Pokepic *pokepic;                  // 0x10
-    BattleAnimShake shake;             // 0x14
-    s16 x;                             // 0x38
-    s16 y;                             // 0x3A
-    ManagedSprite *sprites[3];         // 0x3C
-    BattleAnimSpriteSequence sequence; // 0x48
-    BattleAnimLinearMotion scale;      // 0xF8
-}; // size: 0x11C
+    Pokepic *pokepic;
+    BattleAnimShake shake;
+    s16 x;
+    s16 y;
+    ManagedSprite *sprites[3];
+    BattleAnimSpriteSequence sequence;
+    BattleAnimLinearMotion scale;
+};
 
 struct BattleAnimOrbitSpritesWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    int timer;                        // 0x10
-    int direction;                    // 0x14
-    ManagedSprite *sprites[6];        // 0x18
-    BattleAnimSinMotion paths[6];     // 0x30
-    BattleAnimBlendAlphaMotion blend; // 0x108
-    s16 x;                            // 0x130
-    s16 y;                            // 0x132
-}; // size: 0x134
+    int timer;
+    int direction;
+    ManagedSprite *sprites[6];
+    BattleAnimSinMotion paths[6];
+    BattleAnimBlendAlphaMotion blend;
+    s16 x;
+    s16 y;
+};
 
 struct BattleAnimFloatingSpritesWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     u32 unk_0C;
-    int dirX;                           // 0x10
-    int dirY;                           // 0x14
-    ManagedSprite *sprites[15];         // 0x18
-    BattleAnimLinearMotion motions[15]; // 0x54
-    int timer;                          // 0x270
-    int count;                          // 0x274
-}; // size: 0x278
+    int dirX;
+    int dirY;
+    ManagedSprite *sprites[15];
+    BattleAnimLinearMotion motions[15];
+    int timer;
+    int count;
+};
 
 struct BattleAnimWobbleOnBgWork {
     BattleAnimSystem *system;
     BattleAnimScanline *scanline;
     int state;
-    Pokepic *pokepic; // 0x0C
-    int top;          // 0x10
-    int center;       // 0x14
-    u32 angle;        // 0x18
-    fx32 amplitude;   // 0x1C
-    int alternation;  // 0x20, +1/-1, flipped every frame
-    int slope;        // 0x24
-    int timer;        // 0x28
-    int phase;        // 0x2C
-    u32 scroll;       // 0x30, packed BG offset (x, y)
-}; // size: 0x34
+    Pokepic *pokepic;
+    int top;
+    int center;
+    u32 angle;
+    fx32 amplitude;
+    int alternation; // +1/-1, flipped every frame
+    int slope;
+    int timer;
+    int phase;
+    u32 scroll; // packed BG offset (x, y)
+};
 
 typedef struct BattleAnimWindowSweepWork {
     BattleAnimSystem *system;
     int state;
     int timer;
-    BattleAnimLinearMotion sweep; // 0x0C
+    BattleAnimLinearMotion sweep;
     u32 unk_30;
-} BattleAnimWindowSweepWork; // size: 0x34
+} BattleAnimWindowSweepWork;
 
 typedef struct BattleAnimFadeSpriteAnimWork {
     BattleAnimSystem *system;
     SpriteSystem *spriteSystem;
     SpriteManager *spriteManager;
     int state;
-    ManagedSprite *sprite;            // 0x10
-    BattleAnimBlendAlphaMotion blend; // 0x14
-} BattleAnimFadeSpriteAnimWork;       // size: 0x3C
+    ManagedSprite *sprite;
+    BattleAnimBlendAlphaMotion blend;
+} BattleAnimFadeSpriteAnimWork;
 
 typedef struct BattleAnimStretchShakeWork {
     BattleAnimSystem *system;
     int state;
-    s16 y;      // 0x08
-    s16 x;      // 0x0A
-    s16 height; // 0x0C
+    s16 y;
+    s16 x;
+    s16 height;
     s16 unk_0E;
-    Pokepic *pokepic;             // 0x10
-    BattleAnimLinearMotion scale; // 0x14
-    BattleAnimShake shake;        // 0x38
-    int startX;                   // 0x5C, scales x10
-    int endX;                     // 0x60
-    int startY;                   // 0x64
-    int endY;                     // 0x68
-    int divisor;                  // 0x6C
-    int repeats;                  // 0x70
-    u32 durations;                // 0x74, frames out << 16 | frames back
-} BattleAnimStretchShakeWork;     // size: 0x78
+    Pokepic *pokepic;
+    BattleAnimLinearMotion scale;
+    BattleAnimShake shake;
+    int startX; // scales x10
+    int endX;
+    int startY;
+    int endY;
+    int divisor;
+    int repeats;
+    u32 durations; // frames out << 16 | frames back
+} BattleAnimStretchShakeWork;
 
 typedef struct BattleAnimShootSpriteWork {
     BattleAnimSystem *system;
     SpriteManager *spriteManager;
-    BattleAnimLinearMotion motion; // 0x08
-    ManagedSprite *sprite;         // 0x2C
-} BattleAnimShootSpriteWork;       // size: 0x30
+    BattleAnimLinearMotion motion;
+    ManagedSprite *sprite;
+} BattleAnimShootSpriteWork;
 
 typedef struct BattleAnimShakeLungeWork {
     BattleAnimSystem *system;
     int state;
     int timer;
-    int dirX;                    // 0x0C
-    int dirY;                    // 0x10
-    Pokepic *pokepic;            // 0x14
-    s16 x;                       // 0x18
-    s16 y;                       // 0x1A
-    BattleAnimLinearMotion move; // 0x1C
-    BattleAnimShake shake;       // 0x40
-} BattleAnimShakeLungeWork;      // size: 0x64
+    int dirX;
+    int dirY;
+    Pokepic *pokepic;
+    s16 x;
+    s16 y;
+    BattleAnimLinearMotion move;
+    BattleAnimShake shake;
+} BattleAnimShakeLungeWork;
 
 typedef struct BattleAnimKnockbackWork {
     BattleAnimSystem *system;
     int state;
-    int dirX;                    // 0x08
-    int dirY;                    // 0x0C
-    Pokepic *pokepic;            // 0x10
-    s16 x;                       // 0x14
-    s16 y;                       // 0x16
-    BattleAnimLinearMotion move; // 0x18
-    BattleAnimShake shake;       // 0x3C
-} BattleAnimKnockbackWork;       // size: 0x60
+    int dirX;
+    int dirY;
+    Pokepic *pokepic;
+    s16 x;
+    s16 y;
+    BattleAnimLinearMotion move;
+    BattleAnimShake shake;
+} BattleAnimKnockbackWork;
 
 typedef struct BattleAnimRisingShrinkSpritesWork {
     BattleAnimSystem *system;
     int state;
     int timer;
     SpriteManager *spriteManager;
-    int direction;                    // 0x10
-    ManagedSprite *sprites[2];        // 0x14
-    BattleAnimLinearMotion moves[2];  // 0x1C
-    BattleAnimLinearMotion scales[2]; // 0x64
-} BattleAnimRisingShrinkSpritesWork;  // size: 0xAC
+    int direction;
+    ManagedSprite *sprites[2];
+    BattleAnimLinearMotion moves[2];
+    BattleAnimLinearMotion scales[2];
+} BattleAnimRisingShrinkSpritesWork;
 
 typedef struct BattleAnimPaletteCycleSpriteWork {
     BattleAnimSystem *system;
     int state;
     int paletteOffset;
     SpriteManager *spriteManager;
-    ManagedSprite *sprite;            // 0x10
-    BattleAnimBlendAlphaMotion blend; // 0x14
-} BattleAnimPaletteCycleSpriteWork;   // size: 0x3C
+    ManagedSprite *sprite;
+    BattleAnimBlendAlphaMotion blend;
+} BattleAnimPaletteCycleSpriteWork;
 
 typedef struct BattleAnimSpriteRowWork {
     BattleAnimSystem *system;
     int state;
     SpriteManager *spriteManager;
-    ManagedSprite *sprites[6]; // 0x0C
-    int visibleTimes[6];       // 0x24
-    int delays[6];             // 0x3C
-} BattleAnimSpriteRowWork;     // size: 0x54
+    ManagedSprite *sprites[6];
+    int visibleTimes[6];
+    int delays[6];
+} BattleAnimSpriteRowWork;
 
 struct BattleAnimObjWindowBgWork {
     BattleAnimObjWindowBgParams params;
-    BattleAnimCommonWork common; // 0x18
-    ManagedSprite *sprites[3];   // 0x34
-    u8 timer;                    // 0x40
-}; // size: 0x44
+    BattleAnimCommonWork common;
+    ManagedSprite *sprites[3];
+    u8 timer;
+};
 
 extern const u16 gBattleAnimDarkSpriteDrawFlags[6];
 // NARC members of each background the object window effect can show
@@ -1650,7 +1645,7 @@ void BattleAnimSpriteFunc_ZigzagFlash(BattleAnimSystem *system, SpriteSystem *sp
 void BattleAnimTask_WaddlePicStartStep(BattleAnimWaddlePicWork *work, BOOL flip) {
     BattleAnimUtil_InitValueMotionFx(&work->tilt, 0, 0xAAA, 3);
     if (flip != FALSE) {
-        work->tilt.step = work->tilt.step * ~0u; // negated by a multiply
+        work->tilt.step = work->tilt.step * ~0u;
         Pokepic_SetAttr(work->pokepic, POKEPIC_XPIVOT, 16);
     } else {
         Pokepic_SetAttr(work->pokepic, POKEPIC_XPIVOT, -16);
@@ -1762,7 +1757,7 @@ void BattleAnimFunc_WaddlePic(BattleAnimSystem *system) {
         }
         work->direction = flip;
     }
-    BattleAnimTask_WaddlePicStartStep(work, *(volatile BOOL *)&work->direction); // read back from memory, as in the original
+    BattleAnimTask_WaddlePicStartStep(work, *(volatile BOOL *)&work->direction);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WaddlePic, work);
 }
 
@@ -2747,7 +2742,6 @@ void BattleAnimTask_SpritesOrbitAttackerBobbingInit(BattleAnimOrbitSpritesWork *
     BattleAnimSinMotion *path = work->paths;
     u32 angle = i;
 
-    // the members are updated through the work pointer, moved along by one path per iteration (as in the original)
     do {
         BattleAnimUtil_InitSinMotion(path, 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
         work->paths[0].angleX += angle;
@@ -2859,7 +2853,7 @@ void BattleAnimTask_FloatingSpriteStreamLaunch(ManagedSprite *sprite, BattleAnim
     s16 y;
 
     ManagedSprite_GetPositionXY(sprite, &x, &y);
-    int startY = y; // widened to int (y first) before the s16 arguments are formed, as in the original
+    int startY = y;
     int startX = x;
     BattleAnimUtil_InitLinearMotion(motion, startX, startX + (dirX << 8), startY, startY + dirY * -128, 59);
     ManagedSprite_SetDrawFlag(sprite, TRUE);
@@ -3652,7 +3646,7 @@ void BattleAnimTask_SpriteRowSequencePlace(ManagedSprite *sprite, int *visibleTi
     *delay = index * 2;
     *visibleTime = 16;
     ManagedSprite_GetPositionXY(sprite, &x, &y);
-    int delta = 2; // the step is formed from a variable, as in the original
+    int delta = 2;
     delta = (delta - 14) * index + 40;
     x += direction * delta;
     y += 40;
@@ -3710,7 +3704,6 @@ void BattleAnimTask_SpritesOrbitAttackerInit(BattleAnimOrbitSpritesWork *work, i
     BattleAnimSinMotion *path = work->paths;
     u32 angle = i;
 
-    // the members are updated through the work pointer, moved along by one path per iteration (as in the original)
     do {
         BattleAnimUtil_InitSinMotion(path, 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
         work->paths[0].angleX += angle;

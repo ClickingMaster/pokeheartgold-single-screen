@@ -358,19 +358,19 @@ enum {
     SCREEN_FADE_STATE_END,
 };
 
-// The command the battle controller sent to this battler (BattleController_RecvData copies it to 0x94).
+// The command the battle controller sent to this battler
 #define OPPONENT_COMMAND(opponentData) ((void *)&(opponentData)->unk8C[8])
 
 #define MOVE_STATUS_IMMUNE (MOVE_STATUS_NO_EFFECT | MOVE_STATUS_WONDER_GUARD_IMMUNE | MOVE_STATUS_LEVITATE_IMMUNE | MOVE_STATUS_MAGNET_RISE_IMMUNE)
 
 #define OPPONENT_COMMAND_ID(opponentData) ((opponentData)->unk8C[0x08])
-// The OAM copy of the battler's pokepic (BattleAnimBattlerSprites_New) is kept at 0x8C.
+// The OAM copy of the battler's pokepic
 #define OPPONENT_SPRITE_OAM(opponentData) (*(void **)&(opponentData)->unk8C[0x00])
 
-// The battle party menu overlay's entry point, which is linked at the same address as TrainerAI_Init.
+// The battle party menu overlay's entry point
 #define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyContext *))TrainerAI_Init)(args)
 
-// An item selection reply. It is passed by value as a struct: battle_controller.h declares the u32 it amounts to.
+// An item selection reply
 typedef struct BattleItemInput {
     u16 item;
     u8 pocket;
@@ -379,14 +379,12 @@ typedef struct BattleItemInput {
 
 #define REPLY_ITEM_SELECTION(battleSystem, battlerId, input) ((void (*)(BattleSystem *, int, BattleItemInput))BattleController_ReplyItemSelection)(battleSystem, battlerId, input)
 
-// Functions of other modules no header declares yet.
 void Sound_SetKeepPlayingCries(u8 value);
 
 extern const s16 gBattlerSlideInTargetX[][2];
 // Pokemon/trainer positions (x, y, z) by battler type: [0] on the field, [1] off screen where a slide-in starts.
 extern const s16 gBattlerPokepicPositions[2][6][3];
 
-// Data in asm/battle_controller_opponent_data.s
 typedef void (*OpponentCommandHandler)(BattleSystem *battleSystem, OpponentData *opponentData);
 
 typedef struct OpponentBallKindTable {
@@ -396,7 +394,6 @@ typedef struct OpponentBallKindTable {
 extern const OpponentCommandHandler sOpponentCommandHandlers[];
 extern const u8 gOpponentBallKinds[];
 extern const OpponentBallKindTable gOpponentRecallBallKinds;
-// not const: Task_SafariSelectCommand reads them before BattleSystem_Random, a const table would be read after it
 extern u8 gSafariFleeRateStages[][2];
 extern u8 ov12_0226D141[][2];
 extern const u16 sBallColors[];
@@ -798,7 +795,6 @@ typedef struct OpponentScreenFadeWork {
     u8 counter;
 } OpponentScreenFadeWork;
 
-// Functions of this module, in link order.
 int TrainerAI_GetSwitchedPartySlot(BattleSystem *battleSystem, int battler);
 void BattleControllerOpponent_Nop(BattleSystem *battleSystem, OpponentData *opponentData);
 void BattleControllerOpponent_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentData *opponentData);
@@ -1003,7 +999,6 @@ void BattleSystem_StopRecordingTooLong(BattleSystem *battleSystem);
 u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, int battlerId, u8 trainerClass);
 
 int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler) {
-    // Must keep C89-style declaration to match
     int i, j;
     u8 opponentType1, opponentType2;
     u8 monType1, monType2;
@@ -1571,7 +1566,6 @@ void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, Oppo
     if (opponentData->inputMode == 0) {
         multi = battleType & BATTLE_TYPE_MULTI;
         if (multi == 0) {
-            // never true; needed to match
             if (multi != 0) {
                 goto done;
             }
@@ -1865,7 +1859,6 @@ void OpponentData_PlayEncounterAnimation(BattleSystem *battleSystem, OpponentDat
     SysTask_CreateOnMainQueue(Task_PlayEncounterAnimation, work, 0);
 }
 
-// The NARC readers take a fourth parameter these calls never set.
 #define READ_POKEPIC_SHADOW_HEIGHT(narc, ret, species)   ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowHeight)(narc, ret, species)
 #define READ_POKEPIC_SHADOW_X_OFFSET(narc, ret, species) ((void (*)(NARC *, s8 *, u16))NARC_ReadPokepicShadowXOffset)(narc, ret, species)
 #define READ_POKEPIC_SHADOW_SIZE(narc, ret, species)     ((void (*)(NARC *, u8 *, u16))NARC_ReadPokepicShadowSize)(narc, ret, species)
@@ -1901,7 +1894,6 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     NARC_ReadPokepicAnimScript((NARC *)opponentData->pokepicAnimNarc, anim.scripts, packet->species, opponentData->battlerType);
 
     battlerType = opponentData->battlerType;
-    // volatile only to match: the new pokepic is stored and read back
     *(Pokepic *volatile *)&opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, gBattlerPokepicPositions[0][battlerType][0], gBattlerPokepicPositions[0][battlerType][1], gBattlerPokepicPositions[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
     work->pokepic = *(Pokepic *volatile *)&opponentData->pokepic;
 
@@ -4868,7 +4860,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                 work->state = SELECT_ITEM_STATE_PRINT_USED_MSG;
                 switch (work->bagMenu->selectedPocket) {
                 case BTLPOCKETLIST_STATUS_RESTORE:
-                    // item is ITEM_REVIVE or ITEM_MAX_REVIVE (written as a u16 wrap-around add)
+                    // item is ITEM_REVIVE or ITEM_MAX_REVIVE
                     if ((u16)(work->bagMenu->selectedItem + (0x10000 - ITEM_REVIVE)) <= ITEM_MAX_REVIVE - ITEM_REVIVE) {
                         work->state = SELECT_ITEM_STATE_REPLY;
                     } else if (ITEM_TARGET_ON_FIELD(work)) {

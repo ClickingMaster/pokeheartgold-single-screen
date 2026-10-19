@@ -1,9 +1,6 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_EFFECTS_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_EFFECTS_H
 
-// Overlay 7: effect functions of the battle move animation scripts (sBattleAnimFuncTable / sBattleAnimSpriteFuncTable
-// entries) and the tasks they start, 0x0222C850-0x022318F8.
-
 #include "battle/battle_anim_funcs.h"
 #include "battle/battle_anim_util.h"
 
@@ -16,12 +13,12 @@
 // One sprite of BattleAnimSpriteFunc_StackedSpritesOnDefender, pulsing its x scale
 typedef struct BattleAnimScaleSprite {
     ManagedSprite *sprite;
-    BattleAnimLinearMotion scale; // 0x04
-    BOOL flip;                    // 0x28
-    int repeats;                  // 0x2C
-    int start;                    // 0x30, start and end scale (x10) swap after each pulse
-    int end;                      // 0x34
-} BattleAnimScaleSprite;          // size: 0x38
+    BattleAnimLinearMotion scale;
+    BOOL flip;
+    int repeats;
+    int start; // start and end scale (x10) swap after each pulse
+    int end;
+} BattleAnimScaleSprite;
 
 // Parameters of the OBJ window BG scroll effects (BattleAnimObjWindowBg_Start)
 typedef struct BattleAnimObjWindowBgParams {
@@ -34,7 +31,7 @@ typedef struct BattleAnimObjWindowBgParams {
     s16 y;
     u16 eva;
     u16 evb;
-} BattleAnimObjWindowBgParams; // size: 0x18
+} BattleAnimObjWindowBgParams;
 
 typedef struct BattleAnimSkewSlideWork BattleAnimSkewSlideWork;
 typedef struct BattleAnimWaveOnBgWork BattleAnimWaveOnBgWork;

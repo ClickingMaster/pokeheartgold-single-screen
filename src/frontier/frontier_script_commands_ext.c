@@ -71,21 +71,21 @@ typedef struct FrontierRowScrollLine {
 // Rows of the two affine backgrounds (BG2/BG3) that drift apart (transitions 3 and 4).
 typedef struct FrontierRowScroll {
     FrontierRowScrollLine lines[96];
-    FrontierHBlankDma *dma; // 0x600
-    u32 mode;               // 0x604, 1 or 2
+    FrontierHBlankDma *dma;
+    u32 mode; // 1 or 2
 } FrontierRowScroll;
 
 typedef struct FrontierTransitionWork {
-    FrontierMap *map;          // 0x00
-    u32 state;                 // 0x04
-    u32 transition;            // 0x08
-    u32 flashDone;             // 0x0C
-    u32 finished;              // 0x10
-    void *prevData;            // 0x14, the frontier app's data before the transition
-    FrontierScanline scanline; // 0x18
-    FrontierRowScroll *rows;   // 0x24
-    Window *window;            // 0x28
-    FrontierWipe *wipe;        // 0x2C
+    FrontierMap *map;
+    u32 state;
+    u32 transition;
+    u32 flashDone;
+    u32 finished;
+    void *prevData; // the frontier app's data before the transition
+    FrontierScanline scanline;
+    FrontierRowScroll *rows;
+    Window *window;
+    FrontierWipe *wipe;
 } FrontierTransitionWork;
 
 typedef struct FrontierCameraPos {

@@ -1,8 +1,6 @@
 #ifndef POKEHEARTGOLD_BATTLE_BATTLE_ANIM_INTERNAL_H
 #define POKEHEARTGOLD_BATTLE_BATTLE_ANIM_INTERNAL_H
 
-// Overlay 7: the battle move animation system (script interpreter and effect library).
-
 #include "battle/battle.h"
 #include "battle/battle_anim_util.h"
 
@@ -23,8 +21,7 @@ typedef struct BattleAnimBrightnessFlashWork BattleAnimBrightnessFlashWork;
 typedef struct BattleAnimBgSwitchWork BattleAnimBgSwitchWork;
 typedef struct BattleAnimIndexedBytes BattleAnimIndexedBytes;
 
-// Per-move data (a copy of the battle's move animation packet) and the battlers' state, filled by
-// BattleAnimSystem_StartMove.
+// Per-move data (a copy of the battle's move animation packet) and the battlers' state
 typedef struct BattleAnimContext {
     u8 command;
     u8 unk_01;
@@ -38,28 +35,28 @@ typedef struct BattleAnimContext {
     u16 attacker;
     u16 defender;
     int currentParticleSystem;
-    SPLEmitter *particleSystems[16]; // 0x1C
-    SPLEmitter *emitters[16];        // 0x5C
+    SPLEmitter *particleSystems[16];
+    SPLEmitter *emitters[16];
     u8 unk_9C[0x10];
-    SpriteSystem *spriteSystem;        // 0xAC
-    MonPicData *picData[4]; // 0xB0
-    u8 battlerTypes[4];                // 0xC0
-    Pokepic *pokepics[4];              // 0xC4
-    u32 battleType;                    // 0xD4
-    u16 species[4];                    // 0xD8
-    u8 genders[4];                     // 0xE0
-    u8 shiny[4];                       // 0xE4
-    u8 forms[4];                       // 0xE8
-    u32 personalities[4];              // 0xEC
-    u32 moveEffectFlags[4];            // 0xFC
-    SOUND_CHATOT *chatotCry;           // 0x10C
-    u8 *battleBgTiles;                 // 0x110
-    u16 *battleBgPalette;              // 0x114
-    int isTransformed : 1;             // 0x118
+    SpriteSystem *spriteSystem;
+    MonPicData *picData[4];
+    u8 battlerTypes[4];
+    Pokepic *pokepics[4];
+    u32 battleType;
+    u16 species[4];
+    u8 genders[4];
+    u8 shiny[4];
+    u8 forms[4];
+    u32 personalities[4];
+    u32 moveEffectFlags[4];
+    SOUND_CHATOT *chatotCry;
+    u8 *battleBgTiles;
+    u16 *battleBgPalette;
+    int isTransformed : 1;
     int attackerActive : 1;
     int defenderActive : 1;
     int unk_118_3 : 29;
-} BattleAnimContext; // size: 0x11C
+} BattleAnimContext;
 
 // BeginLoop/EndLoop state
 typedef struct BattleAnimScriptLoop {
@@ -101,37 +98,37 @@ struct BattleAnimSystem {
     BOOL active;
     void *scriptData;
     u32 *scriptPtr;
-    u32 *returnStack[3];                               // 0x1C
-    BattleAnimScriptLoop loops[3];                     // 0x28
-    BattleAnimBattlerSpriteDraw battlerSpriteDraws[2]; // 0x4C
-    u8 particlePerspective[16];                        // 0x6C, per particle system (ParticleSystem_SetPerspectiveType)
-    u8 particleFlipY[16];                              // 0x7C
+    u32 *returnStack[3];
+    BattleAnimScriptLoop loops[3];
+    BattleAnimBattlerSpriteDraw battlerSpriteDraws[2];
+    u8 particlePerspective[16]; // per particle system
+    u8 particleFlipY[16];
     u8 unk_8C;
     u8 delay;
     u16 taskCount;
     u16 soundTaskCount;
-    u32 args[10];                         // 0x94
-    BattleAnimRunner runner;              // 0xBC
-    BattleAnimContext *context;           // 0xC0
-    BgConfig *bgConfig;                   // 0xC4
-    PaletteData *paletteData;             // 0xC8
-    SpriteManager *spriteManagers[4];     // 0xCC
-    ManagedSprite *sprites[10];           // 0xDC
-    ManagedSpriteTemplate spriteTemplate; // 0x104
-    SpriteManager *battlerSpriteManager;  // 0x138
-    ManagedSprite *battlerSprites[5];     // 0x13C
-    BOOL battlerSpriteActive[5];          // 0x150
-    BattleAnimFollowWork *followWorks[6]; // 0x164, [5]: the battler copy on BG2
-    u8 bgSwitchState;                     // 0x17C
+    u32 args[10];
+    BattleAnimRunner runner;
+    BattleAnimContext *context;
+    BgConfig *bgConfig;
+    PaletteData *paletteData;
+    SpriteManager *spriteManagers[4];
+    ManagedSprite *sprites[10];
+    ManagedSpriteTemplate spriteTemplate;
+    SpriteManager *battlerSpriteManager;
+    ManagedSprite *battlerSprites[5];
+    BOOL battlerSpriteActive[5];
+    BattleAnimFollowWork *followWorks[6]; // [5]: the battler copy on BG2
+    u8 bgSwitchState;
     u8 seWaitTimer;
     u8 endPhase;
     u8 unk_17F;
-    BattleAnimBgEffect *bgEffects[4]; // 0x180
-    BattleAnimBgGraphics battleBg;    // 0x190
-    u32 battleBgPaletteMask;          // 0x1A8
-    u8 bgPriorities[4];               // 0x1AC
-    NARC *narcs[6];                   // 0x1B0
-}; // size: 0x1C8
+    BattleAnimBgEffect *bgEffects[4];
+    BattleAnimBgGraphics battleBg;
+    u32 battleBgPaletteMask;
+    u8 bgPriorities[4];
+    NARC *narcs[6];
+};
 
 // Battler picture data handed to the pic swap helpers (BattleAnimSystem_BuildBattlerPicParams)
 typedef struct BattleAnimBattlerPicParams {
@@ -145,9 +142,8 @@ typedef struct BattleAnimBattlerPicParams {
     u8 forms[4];
     u32 personalities[4];
     u8 battlerTypes[4];
-} BattleAnimBattlerPicParams; // size: 0x50
+} BattleAnimBattlerPicParams;
 
-// Battle animation system
 void BattleAnimSystem_WaitDelay(BattleAnimSystem *system);
 void BattleAnimSystem_ExecuteCommands(BattleAnimSystem *system);
 void BattleAnimSystem_CreateTaskOfKind(int kind, BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
@@ -348,7 +344,6 @@ void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem);
 int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int battlerB);
 void BattleAnimEmitterCb_Dummy(void);
 
-// overlay 7 functions defined in sources not merged yet
 s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
 void BattleAnimUtil_LoadSubstituteIntoPic(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicSameFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
