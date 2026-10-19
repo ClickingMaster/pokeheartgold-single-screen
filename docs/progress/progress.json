@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "2fc93ea893b6976c0006c9a77a34c99b7995471b",
+  "commit": "ecb1f4e5b371657b26717122a2881f38da105353",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a7bce1f1405bc292f139b7cef99742bb2340ae69d22de0e36cd6746cb8041770",
+    "ARM9": "a2abbc9f9845fc97f8db2b4d5c1a4a06a207950624f7e27ec09811d50f20e813",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
-    "c": 3989744,
+    "c": 3988736,
     "original_asm": 26078,
-    "cpp": 55220,
+    "cpp": 56228,
     "generated": 2264,
     "inline_asm": 1536,
     "veneer": 512
@@ -20,12 +20,12 @@
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989744,
-      "percent": 97.89932359250264
+      "bytes": 3988736,
+      "percent": 97.87458954485918
     },
     "cpp": {
-      "bytes": 55220,
-      "percent": 1.3549743163415988
+      "bytes": 56228,
+      "percent": 1.3797083639850674
     },
     "combined": {
       "bytes": 4044964,
@@ -732,10 +732,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_114",
-      "object": "overlay114_scene_transition.o",
+      "object": "encounter_effect_frontier_link.o",
       "bytes": 1240,
       "status": "c",
-      "source": "src/field/overlay114_scene_transition.c"
+      "source": "src/field/encounter_effect_frontier_link.c"
     },
     {
       "cpu": "ARM9",
@@ -1973,17 +1973,9 @@
       "cpu": "ARM9",
       "module": "OVY_37",
       "object": "drawing_session.o",
-      "bytes": 8132,
+      "bytes": 8266,
       "status": "c",
       "source": "src/application/drawing_session/drawing_session.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "drawing_session_stroke.o",
-      "bytes": 134,
-      "status": "c",
-      "source": "src/application/drawing_session/drawing_session_stroke.c"
     },
     {
       "cpu": "ARM9",
@@ -2524,26 +2516,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_char_vector_append_zeros_slow.o",
-      "bytes": 316,
+      "object": "lobby_char_vector_assign.o",
+      "bytes": 252,
       "status": "cpp",
-      "source": "src/lobby/lobby_char_vector_append_zeros_slow.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_char_vector_assign_iter_range.o",
-      "bytes": 164,
-      "status": "cpp",
-      "source": "src/lobby/lobby_char_vector_assign_iter_range.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_char_vector_assign_range.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "src/lobby/lobby_char_vector_assign_range.c"
+      "source": "src/lobby/lobby_char_vector_assign.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2804,6 +2780,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
+      "object": "lobby_event_deque_capacity.o",
+      "bytes": 1472,
+      "status": "cpp",
+      "source": "src/lobby/lobby_event_deque_capacity.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
       "object": "lobby_event_deque_copy.o",
       "bytes": 724,
       "status": "cpp",
@@ -2816,22 +2800,6 @@
       "bytes": 160,
       "status": "cpp",
       "source": "src/lobby/lobby_event_deque_destroy.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_event_deque_erase_at_begin.o",
-      "bytes": 196,
-      "status": "c",
-      "source": "src/lobby/lobby_event_deque_erase_at_begin.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_event_deque_erase_at_end.o",
-      "bytes": 184,
-      "status": "cpp",
-      "source": "src/lobby/lobby_event_deque_erase_at_end.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2896,22 +2864,6 @@
       "bytes": 1440,
       "status": "cpp",
       "source": "src/lobby/lobby_event_deque_map_insert_range.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_event_deque_map_recommend_size.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/lobby/lobby_event_deque_map_recommend_size.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_event_deque_map_reserve.o",
-      "bytes": 796,
-      "status": "cpp",
-      "source": "src/lobby/lobby_event_deque_map_reserve.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3036,22 +2988,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_string_vector_append_copies_slow.o",
-      "bytes": 368,
-      "status": "cpp",
-      "source": "src/lobby/lobby_string_vector_append_copies_slow.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_string_vector_erase_at_end.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/lobby/lobby_string_vector_erase_at_end.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_timer_map_find.o",
       "bytes": 132,
       "status": "c",
@@ -3164,10 +3100,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_vector_buffer.o",
-      "bytes": 368,
-      "status": "c",
-      "source": "src/lobby/lobby_vector_buffer.c"
+      "object": "lobby_vector_growth.o",
+      "bytes": 1112,
+      "status": "cpp",
+      "source": "src/lobby/lobby_vector_growth.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3837,17 +3773,9 @@
       "cpu": "ARM9",
       "module": "OVY_68",
       "object": "move_relearner_app.o",
-      "bytes": 8864,
+      "bytes": 8896,
       "status": "c",
       "source": "src/application/move_relearner/move_relearner_app.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_68",
-      "object": "move_relearner_sub_screen.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/application/move_relearner/move_relearner_sub_screen.c"
     },
     {
       "cpu": "ARM9",
@@ -4655,16 +4583,8 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "frontier_script_tasks.o",
-      "bytes": 274,
-      "status": "c",
-      "source": "src/frontier/frontier_script_tasks.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "frontier_script_ui.o",
-      "bytes": 4718,
+      "bytes": 4992,
       "status": "c",
       "source": "src/frontier/frontier_script_ui.c"
     },
@@ -5782,17 +5702,9 @@
       "cpu": "ARM9",
       "module": "field",
       "object": "field_effect_manager.o",
-      "bytes": 1888,
+      "bytes": 1928,
       "status": "c",
       "source": "src/field/field_effect_manager.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_effect_manager_texture.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/field/field_effect_manager_texture.c"
     },
     {
       "cpu": "ARM9",
@@ -6557,14 +6469,6 @@
       "bytes": 154,
       "status": "c",
       "source": "src/apricorn_tree_sys.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "area_light_tasks_1.o",
-      "bytes": 462,
-      "status": "c",
-      "source": "src/area_light_tasks_1.c"
     },
     {
       "cpu": "ARM9",
@@ -7480,26 +7384,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "field_cinematic_tasks_1.o",
-      "bytes": 346,
-      "status": "c",
-      "source": "src/field_cinematic_tasks_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "field_comm_cmds.o",
       "bytes": 68,
       "status": "c",
       "source": "src/field_comm_cmds.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "field_effect_launch_1.o",
-      "bytes": 474,
-      "status": "c",
-      "source": "src/field_effect_launch_1.c"
     },
     {
       "cpu": "ARM9",
@@ -9054,6 +8942,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "legendary_cinematic_task.o",
+      "bytes": 346,
+      "status": "c",
+      "source": "src/legendary_cinematic_task.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "libsyscall.a _secure_ipke.o",
       "bytes": 2048,
       "status": "original_asm",
@@ -9125,6 +9021,14 @@
       "bytes": 232,
       "status": "c",
       "source": "src/location_gmm_dat.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "magnet_train_ride.o",
+      "bytes": 474,
+      "status": "c",
+      "source": "src/magnet_train_ride.c"
     },
     {
       "cpu": "ARM9",
@@ -11665,6 +11569,14 @@
       "bytes": 132,
       "status": "c",
       "source": "src/seal_data.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "ship_voyage.o",
+      "bytes": 462,
+      "status": "c",
+      "source": "src/ship_voyage.c"
     },
     {
       "cpu": "ARM9",

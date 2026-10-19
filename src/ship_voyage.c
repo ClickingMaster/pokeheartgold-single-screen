@@ -1,12 +1,28 @@
-#include "area_light_tasks_internal.h"
+#include "ship_voyage.h"
+
+#include "global.h"
+
+#include "field/area_light.h"
+
 #include "field_bgm.h"
+#include "field_overworld_transition.h"
+#include "field_system.h"
 #include "field_time_events.h"
 #include "field_warp_tasks.h"
 #include "heap.h"
+#include "launch_application.h"
+#include "ride_cutscene_task.h"
 #include "screen_fade.h"
 #include "sound.h"
 #include "sound_playback.h"
 #include "sound_system.h"
+#include "task.h"
+
+typedef struct NightTaskEnv {
+    u8 port, night;
+    u8 pad02[2];
+    void *modelAttributes;
+} NightTaskEnv;
 
 enum ShipVoyageState {
     SHIP_VOYAGE_FADE_OUT,

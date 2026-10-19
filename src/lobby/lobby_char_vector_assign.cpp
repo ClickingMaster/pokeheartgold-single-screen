@@ -10,8 +10,12 @@ public:
     u32 recommend(LobbyCharVector *vector, u32 growth);
 };
 
-extern "C" u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
-extern "C" void LobbyCharVector_Reallocate(LobbyCharVector *, u32, u32);
+extern "C" {
+void *memmove(void *, const void *, u32);
+u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
+void LobbyCharVector_Reallocate(LobbyCharVector *, u32, u32);
+void LobbyCharVector_AssignRange(LobbyCharVector *v, const char *first, const char *last, int unused);
+}
 
 inline u32 Allocator::recommend(LobbyCharVector *vector, u32 growth) {
     return LobbyCharVector_RecommendSize(vector, growth);
@@ -58,6 +62,16 @@ inline char Cast(const Iter &i) {
 }
 
 extern "C" void LobbyCharVector_AssignIterRange(LobbyCharVector *v, Iter first, Iter last);
+
+extern "C" void LobbyCharVector_AssignRange(LobbyCharVector *v, const char *first, const char *last, int unused) {
+    u32 len = last - first;
+    if (len > v->capacity) {
+        volatile u8 tag = 0;
+        LobbyCharVector_Reallocate(v, len, LobbyCharVector_RecommendSize(v, len - v->capacity));
+    }
+    memmove(v->data, first, (u32)last - (u32)first);
+    v->size = len;
+}
 
 extern "C" void LobbyCharVector_AssignIterRange(LobbyCharVector *v, Iter first, Iter last) {
     u32 n = last.p - first.p;

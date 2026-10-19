@@ -1,13 +1,31 @@
+#include "magnet_train_ride.h"
+
+#include "global.h"
+
+#include "field/area_light.h"
+
 #include "field_bgm.h"
-#include "field_effect_launch_internal.h"
+#include "field_overworld_transition.h"
+#include "field_system.h"
 #include "field_time_events.h"
 #include "field_warp_tasks.h"
 #include "heap.h"
+#include "launch_application.h"
 #include "player_data.h"
+#include "ride_cutscene_task.h"
 #include "screen_fade.h"
 #include "sound.h"
 #include "sound_playback.h"
 #include "sound_system.h"
+#include "task.h"
+
+typedef struct GenderTaskEnv {
+    u8 variant;
+    u8 gender;
+    u8 night;
+    u8 pad03;
+    void *lighting;
+} GenderTaskEnv;
 
 enum MagnetTrainRideState {
     MAGNET_TRAIN_RIDE_FADE_OUT,
@@ -24,6 +42,10 @@ enum MagnetTrainCutsceneState {
     MAGNET_TRAIN_CUTSCENE_FREE,
 };
 
+static void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 variant, void *lighting);
+static BOOL Task_MagnetTrainCutscene(TaskManager *taskManager);
+static BOOL Task_MagnetTrainRide(TaskManager *taskManager);
+
 void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 variant, u8 direction, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
@@ -37,7 +59,7 @@ void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 variant, u8 direction
     TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainRide, env);
 }
 
-void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 variant, void *lighting) {
+static void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 variant, void *lighting) {
     GenderTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GenderTaskEnv));
 
     env->lighting = lighting;
@@ -61,7 +83,7 @@ void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 variant, void *li
     TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainCutscene, env);
 }
 
-BOOL Task_MagnetTrainCutscene(TaskManager *taskManager) {
+static BOOL Task_MagnetTrainCutscene(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     GenderTaskEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -83,7 +105,7 @@ BOOL Task_MagnetTrainCutscene(TaskManager *taskManager) {
     return FALSE;
 }
 
-BOOL Task_MagnetTrainRide(TaskManager *taskManager) {
+static BOOL Task_MagnetTrainRide(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     AreaLightTaskEnv *env = TaskManager_GetEnvironment(taskManager);
 

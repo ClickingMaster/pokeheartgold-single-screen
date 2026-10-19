@@ -60,6 +60,13 @@ static void WiiMessageSettings_FinishPasswordEntry(WiiMessageSettings *app);
 static void *WiiMessageSettings_CreateWifiClubArgs(WiiMessageSettings *app);
 static void WiiMessageSettings_FinishWifiClub(WiiMessageSettings *app);
 
+const OverlayManagerTemplate gApp_MainMenu_SelectOption_WiiMessageSettings = {
+    .init = WiiMessageSettings_Init,
+    .exec = WiiMessageSettings_Main,
+    .exit = WiiMessageSettings_Exit,
+    .ovy_id = FS_OVERLAY_ID_NONE,
+};
+
 static const OverlayManagerTemplate sWiiMessageSettingsScreenTemplate = { WiiMessageSettingsScreen_Init, WiiMessageSettingsScreen_Main, WiiMessageSettingsScreen_Exit, FS_OVERLAY_ID_NONE };
 static const OverlayManagerTemplate sWiiMessageSettingsWifiClubTemplate = { WifiClub_Init, WifiClub_Main, WifiClub_Exit, FS_OVERLAY_ID(OVY_44) };
 

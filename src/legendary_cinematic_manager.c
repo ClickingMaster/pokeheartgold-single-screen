@@ -1,6 +1,15 @@
+#include "legendary_cinematic_manager.h"
+
 #include "global.h"
 
-#include "legendary_cinematic_manager_private.h"
+#include "heap.h"
+#include "legendary_cinematic.h"
+#include "overlay_manager.h"
+
+typedef struct LegendaryCinematicData {
+    LegendaryCinematicArgs *args;
+    u8 rest[0x418];
+} LegendaryCinematicData;
 
 static int (*const sLegendaryCinematicScripts[])(void *) = {
     ScriptCinematic_HoOh,

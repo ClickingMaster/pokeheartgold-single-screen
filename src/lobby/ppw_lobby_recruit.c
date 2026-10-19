@@ -41,16 +41,16 @@ static inline int release(Work *w) {
 extern void PPWLobby_SendMessage(int, int, int, int, int, void *, int);
 extern void LobbyTimerMap_Find(void *, void *, void *);
 extern void LobbyTimerMap_Erase(void *, void *, void *);
-char *LobbyCharVector_Data(Vec *);
+char *LobbyCharVector_Data(LobbyCharVector *);
 int PPW_LobbyUpdateRecruitInfo(Packet *);
 int PPW_LobbyStopRecruit(void);
 int LobbyTimerMap_EraseKey(void *, void *);
 
-char *LobbyCharVector_Data(Vec *p) {
+char *LobbyCharVector_Data(LobbyCharVector *p) {
     if (p->size == 0) {
         return 0;
     }
-    return p->ptr;
+    return p->data;
 }
 
 int PPW_LobbyUpdateRecruitInfo(Packet *p) {

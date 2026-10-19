@@ -1,3 +1,5 @@
+#include "legendary_cinematic_task.h"
+
 #include "global.h"
 
 #include "field_overworld_restore.h"
@@ -6,7 +8,6 @@
 #include "field_time_events.h"
 #include "heap.h"
 #include "legendary_cinematic_manager.h"
-#include "legendary_cinematic_task.h"
 #include "task.h"
 
 typedef struct LegendaryCinematicTaskEnv {

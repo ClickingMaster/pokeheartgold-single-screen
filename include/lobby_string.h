@@ -20,8 +20,14 @@ typedef union Str {
         char buf[11];
     } s;
 
+    u32 words[3];
+
 #ifdef __cplusplus
     Str() {
+    }
+
+    u32 size() const {
+        return !l.isLong ? s.len : l.size;
     }
 
     const char *c_str() const {

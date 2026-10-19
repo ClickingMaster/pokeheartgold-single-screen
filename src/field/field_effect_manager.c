@@ -499,3 +499,14 @@ void FieldEffectManager_LoadModel(FieldEffectManager *manager, u32 fileId, BOOL 
     *ppRes = FieldEffectManager_LoadNarcMember(manager, fileId, atEnd);
     FieldEffectManager_InitModel(manager, renderObj, ppMdl, ppRes);
 }
+
+NNSG3dResTex *FieldEffectManager_GetTexture(FieldEffectManager *manager, u32 id) {
+    NNSG3dResTex *tex;
+    GF_3DGfxRawResObj *texObj = GF3dGfxRawResMan_GetObjById(manager->gfx->resMan, id);
+    tex = NULL;
+    GF_ASSERT(texObj);
+    if (texObj != NULL) {
+        tex = GF3dGfxRawResObj_GetTex(texObj);
+    }
+    return tex;
+}

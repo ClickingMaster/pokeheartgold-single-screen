@@ -122,6 +122,5 @@ struct DrawingSessionWork {
 
 void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 member);
 u32 DrawingSession_GetMemberCount(void);
-void DrawingSession_BuildStroke(DrawingSessionStroke *stroke, TouchOutput *touch, int color, int size);
 
 #endif // POKEHEARTGOLD_DRAWING_SESSION_H

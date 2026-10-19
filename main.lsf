@@ -350,10 +350,10 @@ Static main
     Object src/wifi_club/wifi_club_comm.o
     Object src/safari_zone_encounters.o
     Object src/safari_decoration_task.o
-    Object src/field_effect_launch_1.o
-    Object src/area_light_tasks_1.o
+    Object src/magnet_train_ride.o
+    Object src/ship_voyage.o
     Object src/legendary_cinematic_manager.o
-    Object src/field_cinematic_tasks_1.o
+    Object src/legendary_cinematic_task.o
     Object src/view_rankings_task.o
     Object src/pokemon_mood.o
     Object src/swarm.o
@@ -947,7 +947,6 @@ Overlay field
     Object asm/encounter_effect_data.o
     Object src/field/encounter_effect_wave_direction.o
     Object src/field/field_effect_manager.o
-    Object src/field/field_effect_manager_texture.o
     Object src/field/player_avatar_actions.o
     Object src/field/spin_slide.o
     Object src/field/warp_spin.o
@@ -1352,7 +1351,6 @@ Overlay OVY_37
 {
     After main
     Object src/application/drawing_session/drawing_session.o
-    Object src/application/drawing_session/drawing_session_stroke.o
 }
 Overlay OVY_38
 {
@@ -1467,8 +1465,7 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_get_channel_name.o
     Object src/lobby/lobby_u32_vector_data2.o
     Object src/lobby/ppw_lobby_update_my_profile.o
-    Object src/lobby/lobby_char_vector_assign_range.o
-    Object src/lobby/lobby_char_vector_assign_iter_range.o
+    Object src/lobby/lobby_char_vector_assign.o
     Object src/lobby/ppw_lobby_start_recruit.o
     Object src/lobby/lobby_timer_map_make_entry.o
     Object src/lobby/lobby_string_format.o
@@ -1481,10 +1478,7 @@ Overlay OVY_45
     Object src/lobby/lobby_string_assign_range.o
     Object src/lobby/lobby_event_deque_map_destroy.o
     Object src/lobby/ppw_lobby_player_set_destroy_nodes.o
-    Object src/lobby/lobby_string_vector_append_copies_slow.o
-    Object src/lobby/lobby_string_vector_erase_at_end.o
-    Object src/lobby/lobby_char_vector_append_zeros_slow.o
-    Object src/lobby/lobby_vector_buffer.o
+    Object src/lobby/lobby_vector_growth.o
     Object src/lobby/ppw_lobby_schedule_init.o
     Object src/lobby/ppw_lobby_schedule_copy.o
     Object src/lobby/ppw_lobby_schedule_copy_to_vector.o
@@ -1507,10 +1501,7 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_schedule_start.o
     Object src/lobby/lobby_event_deque_iterator_at.o
     Object src/lobby/lobby_event_deque_add_back_capacity.o
-    Object src/lobby/lobby_event_deque_erase_at_end.o
-    Object src/lobby/lobby_event_deque_erase_at_begin.o
-    Object src/lobby/lobby_event_deque_map_reserve.o
-    Object src/lobby/lobby_event_deque_map_recommend_size.o
+    Object src/lobby/lobby_event_deque_capacity.o
     Object src/lobby/lobby_vip_vector_reallocate.o
     Object src/lobby/lobby_vip_vector_recommend_size.o
     Object src/lobby/lobby_event_vector_reallocate.o
@@ -1726,7 +1717,6 @@ Overlay OVY_68
 {
     After main
     Object src/application/move_relearner/move_relearner_app.o
-    Object src/application/move_relearner/move_relearner_sub_screen.o
 }
 Overlay OVY_69
 {
@@ -1819,7 +1809,6 @@ Overlay OVY_75
 {
     After OVY_70
     Object src/application/wii_message/wii_message_settings.o
-    Object src/application/wii_message/wii_message_settings_template.o
     Object src/application/wii_message/wii_message_settings_screen.o
     Object src/application/wii_message/wii_number.o
 }
@@ -1855,7 +1844,6 @@ Overlay OVY_80
     Object src/frontier/frontier_cmd_create_sprites.o
     Object src/frontier/frontier_script_commands_ext.o
     Object src/frontier/frontier_script_ui.o
-    Object src/frontier/frontier_script_tasks.o
     Object src/frontier/frontier_cmd_factory.o
     Object src/frontier/battle_factory_data.o
     Object src/frontier/frontier_cmd_hall.o
@@ -1924,7 +1912,6 @@ Overlay OVY_86
 {
     After main
     Object src/frontier/frontier_records_app.o
-    Object src/frontier/frontier_records_letters.o
     Object src/frontier/frontier_records_windows.o
 }
 Overlay OVY_87
@@ -2228,7 +2215,7 @@ Overlay OVY_113
 Overlay OVY_114
 {
     After OVY_31
-    Object src/field/overlay114_scene_transition.o
+    Object src/field/encounter_effect_frontier_link.o
 }
 Overlay OVY_115
 {

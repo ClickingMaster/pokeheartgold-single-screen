@@ -3,8 +3,6 @@
 
 #include "bg_window.h"
 
-extern const u8 gFrontierRecordsLetterPositions[];
-
 void FrontierRecordsApp_AddWindows(BgConfig *bgConfig, Window *windows, int set);
 void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
 void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);

@@ -42,7 +42,7 @@ typedef struct PPWLobbyPlayer {
     const void *vtable;
     PPWLobbySystemProfile systemProfile;
     int systemProfileChanged;
-    Vec userProfile;
+    LobbyCharVector userProfile;
     int userProfileChanged;
     int state;
     int id;

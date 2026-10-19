@@ -211,6 +211,9 @@ static void FrontierRecordsApp_ResetCursor(FrontierRecordsApp *app);
 static void FrontierRecordsApp_SelectSpecies(FrontierRecordsApp *app);
 static void FrontierRecordsApp_ClearRecordWindows(FrontierRecordsApp *app);
 
+// Grid slot of each letter on the letter picker
+static const u8 sFrontierRecordsLetterPositions[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 };
+
 static const TouchscreenHitbox sFrontierRecordsExitHitbox = {
     .rect = { 164, 187, 193, 254 }
 };
@@ -1386,7 +1389,7 @@ static void FrontierRecordsApp_PrintLetters(FrontierRecordsApp *app) {
     int position, column;
 
     for (i = 0; i < NUM_LETTERS; i++) {
-        position = gFrontierRecordsLetterPositions[i];
+        position = sFrontierRecordsLetterPositions[i];
         column = position % 7;
         FrontierRecordsApp_PrintMessage(app, 4, i + msg_0019_00056, (column << 5) + 24, (position / 7) << 5, 4, COLOR_BUTTON, 2);
     }
@@ -1428,7 +1431,7 @@ static inline void FrontierRecordsApp_InitLetterFlash(FrontierRecordsApp *app) {
 
 static void FrontierRecordsApp_StartLetterFlash(FrontierRecordsApp *app, u32 letter) {
     FrontierRecordsApp_InitLetterFlash(app);
-    letter = gFrontierRecordsLetterPositions[letter];
+    letter = sFrontierRecordsLetterPositions[letter];
     app->flash.x = ((letter % 7) * 32 + 24) / 8;
     app->flash.y = ((letter / 7) * 32 + 40) / 8 + 32;
     app->flash.width = 2;
@@ -1523,7 +1526,7 @@ static void FrontierRecordsApp_StartSpeciesFlash(FrontierRecordsApp *app, int sl
     app->flash.index = GF_BG_LYR_MAIN_2;
     app->flash.paletteOn = 2;
     app->flash.paletteOff = 0;
-    position = gFrontierRecordsLetterPositions[slot];
+    position = sFrontierRecordsLetterPositions[slot];
     app->flash.x = (position & 1) * 13 + 38;
     app->flash.y = (position / 2) * 4 + 37;
     app->flash.width = 9;

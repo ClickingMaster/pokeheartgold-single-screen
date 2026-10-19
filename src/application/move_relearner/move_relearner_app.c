@@ -220,7 +220,7 @@ static int MoveRelearner_OnForgetMoveNo(MoveRelearner *relearner);
 static void MoveRelearner_GridNoop(void *data, int input, int prevInput);
 static void MoveRelearner_GridOnKeyMove(void *data, int input, int direction);
 static void MoveRelearner_GridOnTouch(void *data, int input, int prevInput);
-void MoveRelearner_DimSubScreen(int on);
+static void MoveRelearner_DimSubScreen(int on);
 
 static const VecFx32 sMoveRelearnerCameraPos = {
     .x = 0,
@@ -1889,4 +1889,13 @@ static int MoveRelearner_AskTeach(MoveRelearner *relearner) {
     relearner->question = question;
     relearner->nextState = MOVE_RELEARNER_STATE_SHOW_YES_NO;
     return MOVE_RELEARNER_STATE_WAIT_MESSAGE;
+}
+
+// Darkens the bottom screen behind the move relearner's yes/no prompt (on: 1) or restores it (on: 0).
+static void MoveRelearner_DimSubScreen(int on) {
+    if (on == 1) {
+        G2S_SetBlendBrightness(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ, -8);
+    } else {
+        G2S_BlendNone();
+    }
 }

@@ -182,6 +182,8 @@ void EncounterEffect_EliteFourKoga(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_EliteFourBruno(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_EliteFourKaren(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_Champion(SysTask *task, EncounterEffectTask *effect);
+void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *effect);
+void EncounterEffect_Double(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_ExecutivePetrel(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_ExecutiveProton(SysTask *task, EncounterEffectTask *effect);

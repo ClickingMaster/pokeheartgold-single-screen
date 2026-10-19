@@ -30,6 +30,8 @@ inline void *operator new(std::size_t, void *p) {
     return p;
 }
 
+extern "C" int LobbyString_Compare(const Str *, const Str *);
+
 extern "C" char sStr_WebEncLobbySubmitQuestionnaireAsp[], sStr_WebEncLobbyGetQuestionnaireAsp[], sStr_StatsUploadKey[], sStr_WebEncLobbyGetScheduleAsp[], sStr_WebEncLobbyGetVIP_Asp[], sStr_WebEncLobbyCheckProfileAsp[];
 #pragma explicit_zero_data on
 extern "C" u8 gLobbyTimerMapInserted = 1;
@@ -763,33 +765,8 @@ void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
 }
 
 namespace StringConcat {
-namespace LobbyStringTypes {
-    union Str {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    };
-
-    class RangeDispatch {};
-
-    typedef char ActualString12[sizeof(Str) == 12 ? 1 : -1];
-    typedef char ActualCarrier1[sizeof(RangeDispatch) == 1 ? 1 : -1];
-}
 
 using namespace LobbyStringTypes;
-extern "C" void LobbyString_Reserve(Str *, u32);
-extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
 extern "C" Str *LobbyString_Concat(Str *, Str *, Str *);
 
 extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
@@ -799,19 +776,19 @@ extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
     for (i = 0; i < 3; i++) {
         out->words[i] = 0;
     }
-    if (left->l.flag) {
+    if (left->l.isLong) {
         n1 = left->l.size;
-        p1 = left->l.data;
+        p1 = left->l.ptr;
     } else {
-        n1 = left->s.size;
-        p1 = left->s.data;
+        n1 = left->s.len;
+        p1 = left->s.buf;
     }
-    if (right->l.flag) {
-        p2 = right->l.data;
+    if (right->l.isLong) {
+        p2 = right->l.ptr;
         n2 = right->l.size;
     } else {
-        p2 = right->s.data;
-        n2 = right->s.size;
+        p2 = right->s.buf;
+        n2 = right->s.len;
     }
     LobbyString_Reserve(out, n1 + n2);
     out = LobbyString_ReplaceRange(out, 0, 0, p1, p1 + n1, first);
@@ -820,33 +797,8 @@ extern "C" Str *LobbyString_Concat(Str *out, Str *left, Str *right) {
 }
 
 namespace StringConcatCStr {
-namespace LobbyStringTypes {
-    union Str {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    };
-
-    class RangeDispatch {};
-
-    typedef char ActualString12[sizeof(Str) == 12 ? 1 : -1];
-    typedef char ActualCarrier1[sizeof(RangeDispatch) == 1 ? 1 : -1];
-}
 
 using namespace LobbyStringTypes;
-extern "C" void LobbyString_Reserve(Str *, u32);
-extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
 extern "C" unsigned strlen(const char *);
 extern "C" Str *LobbyString_ConcatCStr(Str *, Str *, char *);
 
@@ -858,12 +810,12 @@ extern "C" Str *LobbyString_ConcatCStr(Str *out, Str *left, char *right) {
         out->words[i] = 0;
     }
     const u32 n2 = strlen(right);
-    if (left->l.flag) {
-        p1 = left->l.data;
+    if (left->l.isLong) {
+        p1 = left->l.ptr;
         n1 = left->l.size;
     } else {
-        p1 = left->s.data;
-        n1 = left->s.size;
+        p1 = left->s.buf;
+        n1 = left->s.len;
     }
     LobbyString_Reserve(out, n1 + n2);
     out = LobbyString_ReplaceRange(out, 0, 0, p1, p1 + n1, first);
@@ -891,12 +843,12 @@ using namespace LobbyCharVectorTypes;
 
 namespace StringFormat {
 struct Vector {
-    Vec repr;
+    LobbyCharVector repr;
 
     Vector() {
-        repr.ptr = 0;
+        repr.data = 0;
         repr.size = 0;
-        repr.cap = 0;
+        repr.capacity = 0;
     }
 
     ~Vector() {
@@ -936,7 +888,7 @@ extern "C" void LobbyString_Format(Str *output, const char *format, ...) {
     count = OS_VSNPrintf(0, 0, format, args) + 1;
     vector.resize(count);
     OS_VSNPrintf(vector.text(), count, format, args);
-    vector.repr.ptr[count - 1] = 0;
+    vector.repr.data[count - 1] = 0;
     va_end(args);
     new (output) Str;
     LobbyString_InitFromCStr(output, vector.text());
@@ -1265,33 +1217,11 @@ extern "C" int PPWLobby_DecodeMessageData(const char *text, Vec *out) {
 }
 
 namespace StringEquals {
-class String {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
 
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-    } raw;
+extern "C" int LobbyString_Equals(const Str &, const Str &);
 
-    u32 Size() const {
-        return !raw.l.flag ? raw.s.size : raw.l.size;
-    }
-};
-
-extern "C" int LobbyString_Compare(const String *, const String *);
-extern "C" int LobbyString_Equals(const String &, const String &);
-
-extern "C" int LobbyString_Equals(const String &a, const String &b) {
-    return a.Size() == b.Size() && LobbyString_Compare(&a, &b) == 0;
+extern "C" int LobbyString_Equals(const Str &a, const Str &b) {
+    return a.size() == b.size() && LobbyString_Compare(&a, &b) == 0;
 }
 }
 
@@ -1744,7 +1674,7 @@ int PPWLobby_TimerSendRecruitInfo(void) {
 int PPWLobby_TimerPollChannelMode(void) {
     Str s;
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
-    LobbyChat_GetChannelModeAsync(!s.l.flag ? s.s.data : s.l.data, PPWLobby_OnGetChannelMode, 0);
+    LobbyChat_GetChannelModeAsync(!s.l.isLong ? s.s.buf : s.l.ptr, PPWLobby_OnGetChannelMode, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -1755,7 +1685,7 @@ int PPWLobby_TimerRequestChannelTime(void) {
         return 0;
     }
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
-    LobbyChat_GetChannelKeysAsync(!s.l.flag ? s.s.data : s.l.data, -1, sStr_b_lib_c_time, PPWLobby_OnGetChannelTime, 0);
+    LobbyChat_GetChannelKeysAsync(!s.l.isLong ? s.s.buf : s.l.ptr, -1, sStr_b_lib_c_time, PPWLobby_OnGetChannelTime, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -4776,11 +4706,11 @@ void LobbyCharVector_Reallocate(Buffer *b, Allocator incoming, u32 n) {
 
 namespace CharVectorRecommendSize {
 extern "C" {
-extern u32 LobbyCharVector_RecommendSize(Vec *, u32);
+extern u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 
-u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
-    u32 cap = a->cap;
+u32 LobbyCharVector_RecommendSize(LobbyCharVector *a, u32 n) {
+    u32 cap = a->capacity;
     u32 growth;
     if (n > ~0u - cap) {
         _ZNSt15__vector_commonILb1EE18throw_length_errorEv();
@@ -4800,14 +4730,14 @@ u32 LobbyCharVector_RecommendSize(Vec *a, u32 n) {
 
 using std::memset;
 
-extern "C" void LobbyCharVector_AppendZeros(Vec *vector, u32 count, ResizeDispatch) {
-    u32 capacity = vector->cap;
+extern "C" void LobbyCharVector_AppendZeros(LobbyCharVector *vector, u32 count, ResizeDispatch) {
+    u32 capacity = vector->capacity;
     if (count > capacity || vector->size > capacity - count) {
         u32 additional = vector->size + count - capacity;
         Allocator allocator = Allocator();
         allocator.recommend(vector, additional);
     } else {
-        memset(vector->ptr + vector->size, 0, count);
+        memset(vector->data + vector->size, 0, count);
         vector->size += count;
         return;
     }
@@ -4828,18 +4758,18 @@ struct CharacterAllocator {
 };
 }
 
-extern "C" Vec *LobbyCharVector_Destroy(Vec *vector) {
-    if (vector->ptr) {
+extern "C" LobbyCharVector *LobbyCharVector_Destroy(LobbyCharVector *vector) {
+    if (vector->data) {
         u32 count = vector->size;
         CharacterAllocator allocator = CharacterAllocator();
         vector->size -= count;
-        allocator.release(vector->ptr);
+        allocator.release(vector->data);
     }
     return vector;
 }
 
 extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
-    if (!input->l.flag) {
+    if (!input->l.isLong) {
         *output = *input;
     } else {
         u32 index;
@@ -4848,51 +4778,27 @@ extern "C" Str *LobbyString_InitCopy(Str *output, Str *input) {
             output->words[index] = 0;
         }
         LobbyString_Reserve(output, input->l.size);
-        LobbyString_ReplaceRange(output, 0, 0, input->l.data, input->l.data + input->l.size, dispatch);
+        LobbyString_ReplaceRange(output, 0, 0, input->l.ptr, input->l.ptr + input->l.size, dispatch);
     }
     return output;
 }
 
 namespace StringInit {
-class String {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
 
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    } raw;
-
-    u32 Size() const {
-        return !raw.l.flag ? raw.s.size : raw.l.size;
-    }
-};
-
-extern "C" void LobbyString_Reserve(String *, u32);
-extern "C" String *LobbyString_ReplaceSubstring(String *, u32, u32, String *, u32, u32);
-extern "C" String *LobbyString_InitSubstring(String *, String *, u32, u32);
+extern "C" Str *LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
+extern "C" Str *LobbyString_InitSubstring(Str *, Str *, u32, u32);
 
 template <class T>
 inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" String *LobbyString_InitSubstring(String *self, String *str, u32 pos, u32 n) {
+extern "C" Str *LobbyString_InitSubstring(Str *self, Str *str, u32 pos, u32 n) {
     u32 i;
     for (i = 0; i < 3; i++) {
-        self->raw.words[i] = 0;
+        self->words[i] = 0;
     }
-    u32 size = str->Size();
+    u32 size = str->size();
     LobbyString_Reserve(self, pos <= size ? Min(size - pos, n) : 0);
     LobbyString_ReplaceSubstring(self, 0, 0, str, pos, n);
     return self;
@@ -4914,8 +4820,8 @@ extern "C" Str *LobbyString_InitFromCStr(Str *output, char *text) {
 }
 
 extern "C" Str *LobbyString_Destroy(Str *output) {
-    if (output->l.flag && output->l.data) {
-        DWC_Free(0, output->l.data, 0);
+    if (output->l.isLong && output->l.ptr) {
+        DWC_Free(0, output->l.ptr, 0);
     }
     return output;
 }
@@ -4928,51 +4834,23 @@ void abort(void);
 void *LobbyMem_Alloc(u32);
 void DWC_Free(int, void *, int);
 
-typedef union {
-    u32 raw;
+void LobbyString_Reserve(Str *w, u32 size);
 
-    struct {
-        u32 heap : 1;
-        u32 capacity : 31;
-    } h;
-
-    struct {
-        u8 heap : 1;
-        u8 smallSize : 7;
-        u8 rest[3];
-    } small;
-} Header;
-
-typedef union {
-    struct {
-        Header header;
-        u32 length;
-        u8 *ptr;
-    } heap;
-
-    struct {
-        u8 header;
-        u8 data[11];
-    } inplace;
-} Text;
-
-void LobbyString_Reserve(Text *w, u32 size);
-
-void LobbyString_Reserve(Text *w, u32 size) {
+void LobbyString_Reserve(Str *w, u32 size) {
     u32 len, capacity;
-    u8 *dst, *old;
+    char *dst, *old;
     int wasHeap, makeHeap;
     if (size > 0x7ffffffe) {
         printf(sStr_BasicStringReserveLengthError);
         abort();
     }
-    wasHeap = w->heap.header.h.heap != 0;
+    wasHeap = w->l.isLong != 0;
     if (wasHeap) {
-        capacity = w->heap.header.raw >> 1;
-        len = w->heap.length;
+        capacity = w->l.capacity;
+        len = w->l.size;
     } else {
         capacity = 11;
-        len = w->heap.header.small.smallSize;
+        len = w->s.len;
     }
     if (size < len) {
         size = len;
@@ -4986,19 +4864,19 @@ void LobbyString_Reserve(Text *w, u32 size) {
         return;
     }
     if (size == 11) {
-        dst = w->inplace.data;
-        old = w->heap.ptr;
+        dst = w->s.buf;
+        old = w->l.ptr;
         makeHeap = 0;
     } else {
         if (size > capacity) {
-            dst = (u8 *)LobbyMem_Alloc(size);
+            dst = (char *)LobbyMem_Alloc(size);
         } else {
-            dst = (u8 *)LobbyMem_Alloc(size);
+            dst = (char *)LobbyMem_Alloc(size);
             if (!dst) {
                 return;
             }
         }
-        old = wasHeap ? w->heap.ptr : w->inplace.data;
+        old = wasHeap ? w->l.ptr : w->s.buf;
         makeHeap = 1;
     }
     memmove(dst, old, len);
@@ -5006,13 +4884,13 @@ void LobbyString_Reserve(Text *w, u32 size) {
     if (wasHeap && old) {
         DWC_Free(0, old, 0);
     }
-    w->heap.header.h.heap = makeHeap;
+    w->l.isLong = makeHeap;
     if (!makeHeap) {
-        w->heap.header.small.smallSize = (u8)len;
+        w->s.len = len;
     } else {
-        w->heap.length = len;
-        w->heap.ptr = dst;
-        w->heap.header.raw = (w->heap.header.raw & 1) | (size << 1);
+        w->l.size = len;
+        w->l.ptr = dst;
+        w->l.capacity = size;
     }
 }
 }
@@ -5020,76 +4898,35 @@ void LobbyString_Reserve(Text *w, u32 size) {
 
 namespace StringAssign {
 extern "C" {
-struct StrRaw {
-    u32 w[3];
-};
+extern Str *LobbyString_Replace(Str *, u32, u32, Str *);
+Str *LobbyString_Assign(Str *, Str *);
 
-struct Str {
-    union {
-        u32 flags;
-
-        struct {
-            u32 large : 1;
-            u32 cap : 31;
-        } bits;
-    } u;
-
-    u32 size;
-    char *ptr;
-};
-extern struct Str *LobbyString_Replace(struct Str *, u32, u32, struct Str *);
-struct Str *LobbyString_Assign(struct Str *, struct Str *);
-
-struct Str *LobbyString_Assign(struct Str *dst, struct Str *src) {
-    BOOL isLong = dst->u.bits.large ? TRUE : FALSE;
-    if (!isLong && !src->u.bits.large) {
-        *(struct StrRaw *)dst = *(struct StrRaw *)src;
+Str *LobbyString_Assign(Str *dst, Str *src) {
+    BOOL isLong = dst->l.isLong ? TRUE : FALSE;
+    if (!isLong && !src->l.isLong) {
+        *dst = *src;
         return dst;
     }
-    return LobbyString_Replace(dst, 0, isLong ? dst->size : ((u32)((const u8 *)dst)[0] << 24) >> 25, src);
+    return LobbyString_Replace(dst, 0, isLong ? dst->l.size : dst->s.len, src);
 }
 }
 }
 
 namespace StringReplace {
-namespace LobbyStringTypes {
-    union Str {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-
-        u32 words[3];
-    };
-
-    class RangeDispatch {};
-
-    typedef char ActualString12[sizeof(Str) == 12 ? 1 : -1];
-    typedef char ActualCarrier1[sizeof(RangeDispatch) == 1 ? 1 : -1];
-}
 
 using namespace LobbyStringTypes;
-extern "C" Str *LobbyString_ReplaceRange(Str *, u32, u32, char *, char *, RangeDispatch);
 extern "C" Str *LobbyString_Replace(Str *, u32, u32, Str *);
 
 extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, Str *input) {
     char *data;
     u32 size;
     RangeDispatch dispatch;
-    if (input->l.flag) {
-        data = input->l.data;
+    if (input->l.isLong) {
+        data = input->l.ptr;
         size = input->l.size;
     } else {
-        data = input->s.data;
-        size = input->s.size;
+        data = input->s.buf;
+        size = input->s.len;
     }
     return LobbyString_ReplaceRange(out, pos, remove, data, data + size, dispatch);
 }
@@ -5100,44 +4937,23 @@ extern "C" int printf(const char *, ...);
 extern "C" void abort(void);
 extern "C" char sStr_BasicStringOutOfRange[];
 
-class RangeDispatch {};
-
-class String {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
-
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-    } raw;
-};
-
-extern "C" String *LobbyString_ReplaceRange(String *, u32, u32, char *, char *, RangeDispatch);
-extern "C" String *LobbyString_ReplaceSubstring(String *, u32, u32, String *, u32, u32);
+extern "C" Str *LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
 
 template <class T>
 inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" String *LobbyString_ReplaceSubstring(String *self, u32 pos, u32 n1, String *str, u32 pos2, u32 n2) {
+extern "C" Str *LobbyString_ReplaceSubstring(Str *self, u32 pos, u32 n1, Str *str, u32 pos2, u32 n2) {
     char *data;
     u32 size;
     RangeDispatch dispatch;
-    if (str->raw.l.flag) {
-        data = str->raw.l.data;
-        size = str->raw.l.size;
+    if (str->l.isLong) {
+        data = str->l.ptr;
+        size = str->l.size;
     } else {
-        data = str->raw.s.data;
-        size = str->raw.s.size;
+        data = str->s.buf;
+        size = str->s.len;
     }
     if (pos2 > size) {
         printf(sStr_BasicStringOutOfRange);
@@ -5208,63 +5024,34 @@ fail:
 namespace StringCompare {
 extern "C" unsigned strlen(const char *);
 
-class String {
-public:
-    union {
-        struct {
-            u32 flag : 1;
-            u32 capacity : 31;
-            u32 size;
-            char *data;
-        } l;
+extern "C" int LobbyString_CompareChars(const Str *, u32, u32, const char *, u32);
+extern "C" int LobbyString_Compare(const Str *, const Str *);
+extern "C" int LobbyString_CompareCStr(const Str *, const char *);
 
-        struct {
-            u8 flag : 1;
-            u8 size : 7;
-            char data[11];
-        } s;
-    } raw;
-
-    u32 Size() const {
-        return !raw.l.flag ? raw.s.size : raw.l.size;
-    }
-
-    const char *Data() const {
-        return !raw.l.flag ? raw.s.data : raw.l.data;
-    }
-
-    int Compare(const String &other) const;
-    int Compare(const char *text) const;
-};
-
-extern "C" int LobbyString_CompareChars(const String *, u32, u32, const char *, u32);
-extern "C" int LobbyString_Compare(const String *, const String *);
-extern "C" int LobbyString_CompareCStr(const String *, const char *);
-
-inline int String::Compare(const String &other) const {
+static inline int Compare(const Str *self, const Str &other) {
     const char *d;
     u32 n;
-    if (!other.raw.l.flag) {
-        d = other.raw.s.data;
-        n = other.raw.s.size;
+    if (!other.l.isLong) {
+        d = other.s.buf;
+        n = other.s.len;
     } else {
-        d = other.raw.l.data;
-        n = other.raw.l.size;
+        d = other.l.ptr;
+        n = other.l.size;
     }
-    return LobbyString_CompareChars(this, 0, Size(), d, n);
+    return LobbyString_CompareChars(self, 0, self->size(), d, n);
 }
 
-inline int String::Compare(const char *text) const {
+static inline int Compare(const Str *self, const char *text) {
     u32 n = strlen(text);
-    return LobbyString_CompareChars(this, 0, Size(), text, n);
+    return LobbyString_CompareChars(self, 0, self->size(), text, n);
 }
 
-extern "C" int LobbyString_Compare(const String *a, const String *b) {
-    return a->Compare(*b);
+extern "C" int LobbyString_Compare(const Str *a, const Str *b) {
+    return Compare(a, *b);
 }
 
-extern "C" int LobbyString_CompareCStr(const String *a, const char *b) {
-    return a->Compare(b);
+extern "C" int LobbyString_CompareCStr(const Str *a, const char *b) {
+    return Compare(a, b);
 }
 }
 
@@ -5283,12 +5070,12 @@ int LobbyString_CompareChars(const Str *s, u32 pos, u32 length, const void *othe
     const char *data;
     u32 size, n, remaining;
     int r;
-    if (s->l.flag) {
-        data = s->l.data;
+    if (s->l.isLong) {
+        data = s->l.ptr;
         size = s->l.size;
     } else {
-        data = s->s.data;
-        size = s->s.size;
+        data = s->s.buf;
+        size = s->s.len;
     }
     if (pos > size) {
         printf(sStr_StringComparePosGtLen);
