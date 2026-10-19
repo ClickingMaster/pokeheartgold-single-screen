@@ -67,7 +67,7 @@ typedef struct GlobalTerminalLaunchArgs {
     FieldSystem *fieldSystem;
     SaveData *saveData;
     int connectDirectly;
-    u8 unkC;
+    u8 vsRecorderMode;
 } GlobalTerminalLaunchArgs;
 
 struct LinkBattleScriptWork {

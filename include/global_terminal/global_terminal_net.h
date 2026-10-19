@@ -173,25 +173,30 @@ typedef struct GlobalTerminalNetVideoSearch {
     u32 unk_0C;
 } GlobalTerminalNetVideoSearch;
 
+// What the uploads send: the request header, then the form
+typedef struct GlobalTerminalNetDressUpUpload {
+    u8 header[0x80];
+    GlobalTerminalNetDressUpForm form;
+} GlobalTerminalNetDressUpUpload;
+
+typedef struct GlobalTerminalNetBoxUpload {
+    u8 header[0x80];
+    GlobalTerminalNetBoxForm form;
+} GlobalTerminalNetBoxUpload;
+
+typedef struct GlobalTerminalNetRankingsRequest {
+    GlobalTerminalNetRankingsHeader header;
+    u32 playTime;
+    GlobalTerminalNetPair pairs[3];
+} GlobalTerminalNetRankingsRequest;
+
 typedef union GlobalTerminalNetRequest {
-    struct {
-        u8 header[0x80];
-
-        union {
-            GlobalTerminalNetDressUpForm dressUp;
-            GlobalTerminalNetBoxForm box;
-        } form;
-    } upload; // 20000, 21000
-
-    struct {
-        GlobalTerminalNetRankingsHeader header;
-        u32 playTime;
-        GlobalTerminalNetPair pairs[3];
-    } rankings; // 22001
-
-    void *video;                         // 23000
-    GlobalTerminalNetVideoSearch search; // 23001 kind 0
-    u32 unk_00;                          // 23001 kinds 1 and 2
+    GlobalTerminalNetDressUpUpload dressUpUpload; // 20000
+    GlobalTerminalNetBoxUpload boxUpload;         // 21000
+    GlobalTerminalNetRankingsRequest rankings;    // 22001
+    void *video;                                  // 23000
+    GlobalTerminalNetVideoSearch search;          // 23001 kind 0
+    u32 unk_00;                                   // 23001 kinds 1 and 2
 } GlobalTerminalNetRequest;
 
 typedef struct GlobalTerminalNetStepWork {
@@ -287,6 +292,7 @@ BOOL GlobalTerminalNet_RequestTopFrontierVideos(GlobalTerminalNet *net);
 BOOL GlobalTerminalNet_RequestVideoDownload(GlobalTerminalNet *net, u32 numberLow, u32 numberHigh);
 BOOL GlobalTerminalNet_ReportVideoSaved(GlobalTerminalNet *net, u32 argLow, u32 argHigh);
 BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net);
+BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 u32 GlobalTerminalNet_GetError(GlobalTerminalNet *net, GlobalTerminalNetError **error);
 u64 GlobalTerminalNet_GetUploadedVideoNumber(GlobalTerminalNet *net);
 int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max);

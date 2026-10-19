@@ -39,7 +39,7 @@ typedef struct WirelessStatusIcon {
 
 static WirelessStatusIcon *WirelessStatusIcon_New(int a0, enum HeapID heapId, int x, int y, int isWifi, const WirelessStatusIconAnimFrame **anims, int screen, int plttBase);
 static void WirelessStatusIcon_Task(SysTask *task, void *data);
-static void WirelessStatusIcon_SetLevelOf(WirelessStatusIcon *p, s32 level);
+static void WirelessStatusIcon_SetLevelOf(WirelessStatusIcon *p, int level);
 static void WirelessStatusIcon_Delete(WirelessStatusIcon *p);
 static void WirelessStatusIcon_ShowOnBothScreensOf(WirelessStatusIcon *p, int topFirst, enum HeapID heapId);
 static void WirelessStatusIcon_LoadPalette(int engine, int isWifi, u32 plttBase, enum HeapID heapId);
@@ -48,10 +48,6 @@ static void WirelessStatusIcon_LoadChar(int engine, int isWifi, enum HeapID heap
 static void WirelessStatusIcon_WriteOam(WirelessStatusIcon *p);
 static void WirelessStatusIcon_CreateOnScreen(int screen);
 static void WirelessStatusIcon_CreateAt(int x, int y, int isWifi, int screen, u32 plttBase);
-
-void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
-void WirelessStatusIcon_SetLevel(s32 level);
-void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapId);
 
 static const WirelessStatusIconAnimFrame sWirelessStatusIconLevel3Anim[] = {
     { 0x1FC,  20 },
@@ -118,7 +114,7 @@ static void WirelessStatusIcon_Task(SysTask *task, void *data) {
     WirelessStatusIcon_WriteOam(data);
 }
 
-static void WirelessStatusIcon_SetLevelOf(WirelessStatusIcon *p, s32 level) {
+static void WirelessStatusIcon_SetLevelOf(WirelessStatusIcon *p, int level) {
     if (level < 4) {
         p->level = level;
         p->animTimer = 0;
@@ -401,7 +397,7 @@ void WirelessStatusIcon_Destroy(void) {
     }
 }
 
-void WirelessStatusIcon_SetLevel(s32 level) {
+void WirelessStatusIcon_SetLevel(int level) {
     if (sWirelessStatusIcon != NULL) {
         WirelessStatusIcon_SetLevelOf(sWirelessStatusIcon, level);
     }

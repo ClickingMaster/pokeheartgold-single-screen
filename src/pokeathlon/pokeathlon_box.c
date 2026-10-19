@@ -2,6 +2,7 @@
 
 #include "constants/species.h"
 
+#include "box_mon_selector.h"
 #include "font.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -25,13 +26,6 @@ enum {
 };
 
 // Functions in assembly
-int BoxMonSelector_Run(int);
-void BoxMonSelector_RenderSprites(u32);
-void BoxMonSelector_Delete(u32);
-u32 BoxMonSelector_New(u32, u32, u32);
-void BoxMonSelector_Init(u32, BgConfig *, PCStorage *, Party *, u32, u32, BOOL, u32, void *, void *, void *, void *, PokeathlonBox *);
-void BoxMonSelector_VBlank(u32);
-s8 PokemonSummary_GetPokeathlonStarStates(void *, u8, u8, u32, s8);
 
 static BOOL PokeathlonBox_RunSetup(OverlayManager *manager);
 static BOOL PokeathlonBox_Setup(OverlayManager *manager);
@@ -40,12 +34,14 @@ static void PokeathlonBox_SetGraphicsModes(BgConfig *bgConfig);
 static void PokeathlonBox_SetObjCharTransferTemplate();
 static void PokeathlonBox_CreateOamManager(PokeathlonBox *data);
 static void PokeathlonBox_VBlankCallback(void *data);
-static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *out);
-static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno);
+s8 PokemonSummary_GetPokeathlonStarStates(void *, u8, u8, u32, s8);
+
+static BOOL PokeathlonBox_GetLightBoxMon(void *storage, u32 boxno, int slotno, BoxMonSelectorMon *mon);
+static void PokeathlonBox_GetBoxName(String *dest, void *storage, int boxno);
 static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args);
 static void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_MonStats *stats);
 static void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats);
-static void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data);
+static void PokeathlonBox_ShowMonInfo(int boxno, int slot, void *arg);
 static void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon);
 
 static const ObjCharTransferTemplate sPokeathlonBoxObjCharTransferTemplate = {
@@ -193,7 +189,7 @@ static BOOL PokeathlonBox_Setup(OverlayManager *manager) {
 
     PCStorage *pcStorage = SaveArray_PCStorage_Get(courseArgs->saveData);
     Party *party = SaveArray_Party_Get(courseArgs->saveData);
-    BoxMonSelector_Init(data->monSelector, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, &PokeathlonBox_GetLightBoxMon, &PokeathlonBox_GetBoxName, data->selectedMons, &PokeathlonBox_ShowMonInfo, data);
+    BoxMonSelector_Init(data->monSelector, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, PokeathlonBox_GetLightBoxMon, PokeathlonBox_GetBoxName, data->selectedMons, PokeathlonBox_ShowMonInfo, data);
 
     WirelessStatusIcon_CreateOnScreenIfConnected(2);
     PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->isSupreme);
@@ -241,7 +237,7 @@ static BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, P
         out->personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
         out->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
         out->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
-        out->unkC = 0;
+        out->heldItem = 0;
         out->unkE = 0;
         GetBoxMonData(boxMon, MON_DATA_NICKNAME, out->nickname);
         out->isShiny = BoxMonIsShiny(boxMon);
@@ -252,21 +248,22 @@ static BOOL PokeathlonBox_GetBoxMon(PCStorage *storage, u32 boxno, u32 slotno, P
     out->personality = 0;
     out->isEgg = 0;
     out->form = 0;
-    out->unkC = 0;
+    out->heldItem = 0;
     out->unkE = 0;
     out->isShiny = 0;
     out->gender = 0;
     return FALSE;
 }
 
-static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slotno, PokeathlonBox_BoxMon *out) {
+static BOOL PokeathlonBox_GetLightBoxMon(void *storage, u32 boxno, int slotno, BoxMonSelectorMon *mon) {
+    PokeathlonBox_BoxMon *out = (PokeathlonBox_BoxMon *)mon;
     BoxPokemon *boxMon = PCStorage_GetMonByIndexPair(storage, boxno, slotno);
     if (GetBoxMonData(boxMon, MON_DATA_SPECIES_EXISTS, NULL)) {
         out->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
         out->personality = 0;
         out->isEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG, NULL);
         out->form = GetBoxMonData(boxMon, MON_DATA_FORM, NULL);
-        out->unkC = 0;
+        out->heldItem = 0;
         out->unkE = 0;
         out->isShiny = 0;
         out->gender = 0;
@@ -276,14 +273,14 @@ static BOOL PokeathlonBox_GetLightBoxMon(PCStorage *storage, u32 boxno, u32 slot
     out->personality = 0;
     out->isEgg = 0;
     out->form = 0;
-    out->unkC = 0;
+    out->heldItem = 0;
     out->unkE = 0;
     out->isShiny = 0;
     out->gender = 0;
     return FALSE;
 }
 
-static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno) {
+static void PokeathlonBox_GetBoxName(String *dest, void *storage, int boxno) {
     PCStorage_GetBoxName(storage, boxno, dest);
 }
 
@@ -293,7 +290,7 @@ static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArg
     args->cancelled = data->cancelled;
     if (data->cancelled == 0) {
         for (int i = 0; i < 3; i++) {
-            if (data->selectedMons[i].boxno == NUM_BOXES) {
+            if (data->selectedMons[i].page == NUM_BOXES) {
                 Pokemon *partyMon = Party_GetMonByIndex(SaveArray_Party_Get(args->courseArgs->saveData), data->selectedMons[i].slot);
                 args->selectedMons[i].species = GetMonData(partyMon, MON_DATA_SPECIES, NULL);
                 args->selectedMons[i].personality = GetMonData(partyMon, MON_DATA_PERSONALITY, NULL);
@@ -303,14 +300,14 @@ static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArg
                 args->selectedMons[i].gender = GetMonData(partyMon, MON_DATA_GENDER, NULL);
                 PokeathlonBox_GetPartyMonStats(SaveArray_Party_Get(args->courseArgs->saveData), data->selectedMons[i].slot, &args->selectedMons[i].stats);
             } else {
-                PokeathlonBox_GetBoxMon(SaveArray_PCStorage_Get(args->courseArgs->saveData), data->selectedMons[i].boxno, data->selectedMons[i].slot, &boxMon);
+                PokeathlonBox_GetBoxMon(SaveArray_PCStorage_Get(args->courseArgs->saveData), data->selectedMons[i].page, data->selectedMons[i].slot, &boxMon);
                 args->selectedMons[i].species = boxMon.species;
                 args->selectedMons[i].personality = boxMon.personality;
                 args->selectedMons[i].form = boxMon.form;
                 CopyU16StringArrayN(args->selectedMons[i].nickname, boxMon.nickname, 11);
                 args->selectedMons[i].isShiny = boxMon.isShiny;
                 args->selectedMons[i].gender = boxMon.gender;
-                PokeathlonBox_GetBoxMonStats(PCStorage_GetMonByIndexPair(SaveArray_PCStorage_Get(args->courseArgs->saveData), data->selectedMons[i].boxno, data->selectedMons[i].slot), &args->selectedMons[i].stats);
+                PokeathlonBox_GetBoxMonStats(PCStorage_GetMonByIndexPair(SaveArray_PCStorage_Get(args->courseArgs->saveData), data->selectedMons[i].page, data->selectedMons[i].slot), &args->selectedMons[i].stats);
             }
         }
     }
@@ -361,7 +358,8 @@ static void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_
     stats->speed = performance.stats[PERFORMANCE_SPEED].hi;
 }
 
-static void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
+static void PokeathlonBox_ShowMonInfo(int boxno, int slot, void *arg) {
+    PokeathlonBox *data = arg;
     PokeathlonBox_MonInfo monInfo;
     u32 medalShifts[5];
 

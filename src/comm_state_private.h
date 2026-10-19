@@ -85,7 +85,6 @@ void Wireless_SetEntry(int enabled);
 void Wireless_SetEntryLocked(int locked);
 void Wireless_SetMaxEntries(int maxEntries);
 void Wireless_SetEntryClosed(int closed);
-void WirelessStatusIcon_SetLevel(int level);
 int DWC_GetLinkLevel(void);
 s32 WM_GetLinkLevel(void);
 int CommWireless_IsIdle(void);

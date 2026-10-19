@@ -5,6 +5,8 @@
 
 #include "pokeathlon/pokeathlon.h"
 
+#include "box_mon_selector.h"
+
 #include "bg_window.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -53,18 +55,13 @@ typedef struct PokeathlonBox_BoxMon {
     u32 personality;
     u16 isEgg;
     u16 form;
-    u16 unkC;
+    u16 heldItem;
     u16 unkE;
     u16 isShiny;
     u16 gender;
     u8 padding_14[4];
     u16 nickname[11];
 } PokeathlonBox_BoxMon;
-
-typedef struct PokeathlonBox_SelectedMon {
-    u32 boxno;
-    u32 slot;
-} PokeathlonBox_SelectedMon;
 
 // How a performance stat changes for the selected course, and its star display.
 typedef struct PokeathlonBox_StatChange {
@@ -137,9 +134,9 @@ typedef struct PokeathlonBox_Graphics {
 typedef struct PokeathlonBox {
     BgConfig *bgConfig;
     u32 state;
-    u32 monSelector;
+    BoxMonSelector *monSelector;
     PokeathlonBox_Graphics *graphics;
-    PokeathlonBox_SelectedMon selectedMons[3];
+    BoxMonSelectorResult selectedMons[3];
     BOOL cancelled;
     SaveData *saveData;
     u32 courseId;

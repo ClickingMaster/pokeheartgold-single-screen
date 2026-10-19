@@ -142,7 +142,7 @@ typedef struct PokeathlonCirclePushAiCell {
     int y;
     int pixelX;
     int pixelY;
-    void *inRing;
+    BOOL inRing;
     int cellIndex;
     int score;
     int index;

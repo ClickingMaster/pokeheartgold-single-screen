@@ -919,9 +919,8 @@ static BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
             PokeathlonCourse_SetFinishCallback(course, PokeathlonRelayRun_SaveResult);
             if (!PokeathlonCourse_GetNetId(course)) {
                 for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-                    PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + i * sizeof(PokeathlonRelayRunTeam));
                     for (j = 0; j < RELAY_RUN_MEMBERS; j++) {
-                        s32 distance = shifted->teams[0].distance[j] / RELAY_RUN_TRACK_LENGTH;
+                        s32 distance = relayRun->teams[i].distance[j] / RELAY_RUN_TRACK_LENGTH;
                         PokeathlonCourse_AddMonCounter(course, i, j, 3, (u8)(distance / FX32_ONE));
                     }
                 }
@@ -2038,8 +2037,9 @@ BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonR
                         VEC_MultAdd(FX32_CONST(11), &q->velocity, &zero2, &q->velocity);
                     }
                 }
+                // BUG: memberP is p's running member, so this checks (and exhausts) that member of q's team.
                 if (q->members[memberP].condition == RELAY_RUN_TIRED) {
-                    *(int *)&q->members[memberP].energy = 0;
+                    q->members[memberP].energy = 0;
                     q->members[memberP].condition = RELAY_RUN_EXHAUSTED;
                     q->recoveryTimer = q->members[memberP].recoveryTime;
                     PokeathlonCourse_AddMonCounter(course, q->owner, q->current, 1, 1);
@@ -2048,14 +2048,17 @@ BOOL PokeathlonRelayRun_CollideRunners(PokeathlonCourseData *course, PokeathlonR
                     VecFx32 stop = { 0, 0, 0 };
                     p->velocity = stop;
                 }
+                // BUG: pushMember is only set when p was moving; otherwise it keeps an older value.
                 if (p->members[pushMember].condition == RELAY_RUN_TIRED) {
-                    *(int *)&p->members[pushMember].energy = 0;
+                    p->members[pushMember].energy = 0;
                     p->members[pushMember].condition = RELAY_RUN_EXHAUSTED;
                     p->recoveryTimer = p->members[pushMember].recoveryTime;
                     PokeathlonCourse_AddMonCounter(course, p->owner, p->current, 1, 1);
                 }
                 GF_ASSERT(p->bumpedInto[j] == 0);
                 GF_ASSERT(q->bumpedInto[i] == 0);
+                // BUG: the asserts above and the reset below use p->bumpedInto[j] and q->bumpedInto[i]; these marks
+                // go to the other two entries.
                 q->bumpedInto[j] = 1;
                 p->bumpedInto[i] = 1;
                 if (!result) {
@@ -2241,12 +2244,11 @@ void PokeathlonRelayRun_PlaySEIfOnScreen(int x, int seqNo, int isOwn) {
 // 3 a swap is not possible now (swapping, stunned or exhausted), 4 pressed while it is not possible.
 void PokeathlonRelayRun_UpdateSwapSign(PokeathlonRelayRun *relayRun, u8 teamId, int touchingSwapButton) {
     u8 *signs = relayRun->swapSigns;
-    PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + teamId * sizeof(PokeathlonRelayRunTeam));
     u8 sign = 0;
-    u8 condition = shifted->teams[0].members[shifted->teams[0].current].condition;
-    if (shifted->teams[0].swapping != FALSE) {
+    u8 condition = relayRun->teams[teamId].members[relayRun->teams[teamId].current].condition;
+    if (relayRun->teams[teamId].swapping != FALSE) {
         sign = 3;
-    } else if (shifted->teams[0].stunTimer != 0) {
+    } else if (relayRun->teams[teamId].stunTimer != 0) {
         sign = 3;
     } else if (condition == RELAY_RUN_EXHAUSTED) {
         sign = 3;

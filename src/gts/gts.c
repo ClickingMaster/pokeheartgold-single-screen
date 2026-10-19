@@ -55,8 +55,6 @@ typedef struct GtsScreen {
     int (*exit)(GtsApp *app, int state);
 } GtsScreen;
 
-extern const GtsScreen sGtsScreens[];
-
 static void Gts_VBlankCB(void *arg);
 static void Gts_SetGfxBanks(void);
 static void Gts_InitData(GtsApp *app, OverlayManager *man);
@@ -85,6 +83,19 @@ static const TouchscreenListMenuTemplate sGtsListMenuTemplate = {
     .baseTile = 0x180,
     .charOffset = 0x1BC,
     .unkA = 60,
+};
+
+static GtsScreen sGtsScreens[] = {
+    { GtsConnection_Init, GtsConnection_Main, GtsConnection_Exit },
+    { GtsMainMenu_Init, GtsMainMenu_Main, GtsMainMenu_Exit },
+    { GtsSummary_Init, GtsSummary_Main, GtsSummary_Exit },
+    { GtsSearchResult_Init, GtsSearchResult_Main, GtsSearchResult_Exit },
+    { GtsSearch_Init, GtsSearch_Main, GtsSearch_Exit },
+    { GtsSelectMon_Init, GtsSelectMon_Main, GtsSelectMon_Exit },
+    { GtsWanted_Init, GtsWanted_Main, GtsWanted_Exit },
+    { GtsTransaction_Init, GtsTransaction_Main, GtsTransaction_Exit },
+    { GtsViewMon_Init, GtsViewMon_Main, GtsViewMon_Exit },
+    { GtsTrade_Init, GtsTrade_Main, GtsTrade_Exit },
 };
 
 static const GraphicsModes sGtsGraphicsModes = {
@@ -265,8 +276,8 @@ static void Gts_SetGfxBanks(void) {
 
 static void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->args = OverlayManager_GetArgs(man);
-    app->screen = 0;
-    Gts_SetNextScreen(app, 0, 0);
+    app->screen = GTS_SCREEN_CONNECTION;
+    Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
     app->menuCursor = 0;
     app->searchCriteria.species = 0;
     app->searchCriteria.gender = 3;

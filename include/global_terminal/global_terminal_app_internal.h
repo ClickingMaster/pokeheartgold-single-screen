@@ -4,40 +4,28 @@
 
 #include "comm_state.h"
 #include "comm_wireless.h"
+#include "dwc/net_common_internal.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
+#include "launch_application.h"
 #include "network_overlay_loader.h"
 #include "overlay_manager.h"
 #include "sound_system.h"
 #include "system.h"
 
-typedef struct GlobalTerminalAppArgs {
-    void *fieldSystem;
-    u32 unk04;
-    u32 unk08;
-    u8 vsRecorderMode;
-    u8 padding[3];
-} GlobalTerminalAppArgs;
-
 // Also the args of the Global Terminal connect app.
 typedef struct GlobalTerminalApp {
-    GlobalTerminalAppArgs *args;
+    GlobalTerminalLaunchArgs *args;
     int disconnect; // set for the second connect app run: only disconnect
     OverlayManager *subApp;
     void *heapBuffer;
     NNSFndHeapHandle dwcHeap; // inside heapBuffer, 32-byte aligned
-    u8 wifiConnection[0x78 - 0x14];
+    NetConnection wifiConnection;
     int wifiLoaded;
     int isConnected; // set by the connect app
 } GlobalTerminalApp;
 
-void WirelessStatusIcon_SetLevel(int level);
 const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 mode);
-BOOL CommWireless_IsStartedUp(void);
-void CommWireless_Terminate(void);
-void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *, u32));
-int DWC_GetLinkLevel(void);
-void DWC_UpdateConnection(void);
 
 BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state);
 BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state);

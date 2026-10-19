@@ -29,8 +29,8 @@
 
 typedef enum GtsMainMenuState {
     GTS_MAIN_MENU_STATE_WAIT_ENTER_ANIM,
-    GTS_MAIN_MENU_STATE_1,
-    GTS_MAIN_MENU_STATE_2,
+    GTS_MAIN_MENU_STATE_WAIT_TEXT_BEFORE_FADE_IN,
+    GTS_MAIN_MENU_STATE_START_FADE_IN,
     GTS_MAIN_MENU_STATE_WAIT_FADE_IN,
     GTS_MAIN_MENU_STATE_WAIT_FADE_IN_2,
     GTS_MAIN_MENU_STATE_SHOW_PROMPT,
@@ -44,10 +44,6 @@ typedef enum GtsMainMenuState {
     GTS_MAIN_MENU_STATE_HANDLE_EXIT_PROMPT,
 } GtsMainMenuState;
 
-void WirelessStatusIcon_SetLevel(s32 level);
-
-extern int (*const sGtsMainMenuStates[])(GtsApp *app);
-
 static void GtsMainMenu_InitBgs(BgConfig *bgConfig);
 static void GtsMainMenu_FreeBgs(BgConfig *bgConfig);
 static void GtsMainMenu_HideMainScreen(GtsApp *app);
@@ -58,8 +54,22 @@ static void GtsMainMenu_CreateWindows(GtsApp *app);
 static void GtsMainMenu_RemoveWindows(GtsApp *app);
 static void GtsMainMenu_CreateStrings(GtsApp *app);
 static void GtsMainMenu_DeleteStrings(GtsApp *app);
+static int GtsMainMenu_WaitEnterAnim(GtsApp *app);
+static int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app);
+static void GtsMainMenu_StartFadeIn(GtsApp *app);
+static int GtsMainMenu_WaitFadeIn(GtsApp *app);
+static int GtsMainMenu_WaitFadeIn2(GtsApp *app);
+static int GtsMainMenu_ShowPrompt(GtsApp *app);
 static int GtsMainMenu_GetTouchedButton(void);
 static void GtsMainMenu_SelectButton(GtsApp *app, int button);
+static int GtsMainMenu_HandleInput(GtsApp *app);
+static int GtsMainMenu_StartExitAnim(GtsApp *app);
+static int GtsMainMenu_WaitExitAnim(GtsApp *app);
+static int GtsMainMenu_FadeOut(GtsApp *app);
+static int GtsMainMenu_ShowExitPrompt(GtsApp *app);
+static int GtsMainMenu_HandleExitPrompt(GtsApp *app);
+static int GtsMainMenu_WaitText(GtsApp *app);
+static int GtsMainMenu_WaitTextAndPause(GtsApp *app);
 static void GtsMainMenu_DrawButtons(GtsApp *app);
 static void GtsMainMenu_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
 static void GtsMainMenu_PrintPrompt(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
@@ -68,36 +78,11 @@ static void GtsMainMenu_PrintButtonLabel(Window *window, MsgData *msgData, int f
 // The cursor positions {x, y} of the three buttons.
 // The button labels, [hasDepositedMon][button].
 
-int GtsMainMenu_Init(GtsApp *app, int state);
-int GtsMainMenu_Main(GtsApp *app, int state);
-BOOL GtsMainMenu_Exit(GtsApp *app, int state);
-int GtsMainMenu_WaitEnterAnim(GtsApp *app);
-int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app);
-void GtsMainMenu_StartFadeIn(GtsApp *app);
-int GtsMainMenu_WaitFadeIn(GtsApp *app);
-int GtsMainMenu_WaitFadeIn2(GtsApp *app);
-int GtsMainMenu_ShowPrompt(GtsApp *app);
-int GtsMainMenu_HandleInput(GtsApp *app);
-int GtsMainMenu_StartExitAnim(GtsApp *app);
-int GtsMainMenu_WaitExitAnim(GtsApp *app);
-int GtsMainMenu_FadeOut(GtsApp *app);
-int GtsMainMenu_ShowExitPrompt(GtsApp *app);
-int GtsMainMenu_HandleExitPrompt(GtsApp *app);
-int GtsMainMenu_WaitText(GtsApp *app);
-int GtsMainMenu_WaitTextAndPause(GtsApp *app);
-
 // Cursor position (x, y) of each main menu button.
 static const u16 sGtsMainMenuCursorPositions[3][2] = {
     { 128, 56  },
     { 128, 96  },
     { 128, 136 },
-};
-
-static const TouchscreenHitbox sGtsMainMenuButtonHitboxes[4] = {
-    { 40,  71,  24, 231 },
-    { 80,  111, 24, 231 },
-    { 120, 151, 24, 231 },
-    { 255, 0,   0,  0   }
 };
 
 static const GraphicsModes sGtsMainMenuGraphicsModes = {
@@ -107,9 +92,31 @@ static const GraphicsModes sGtsMainMenuGraphicsModes = {
     ._2d3dMode = GX_BG0_AS_2D,
 };
 
+static const TouchscreenHitbox sGtsMainMenuButtonHitboxes[4] = {
+    { 40,  71,  24, 231 },
+    { 80,  111, 24, 231 },
+    { 120, 151, 24, 231 },
+    { 255, 0,   0,  0   }
+};
+
 static const u32 sGtsMainMenuButtonMsgs[2][3] = {
     { 41, 42, 43 },
     { 40, 42, 43 }
+};
+
+static const BgTemplate sGtsMainMenuBg0Template = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = GF_BG_SCR_SIZE_256x256,
+    .colorMode = GX_BG_COLORMODE_16,
+    .screenBase = GX_BG_SCRBASE_0xf800,
+    .charBase = GX_BG_CHARBASE_0x00000,
+    .bgExtPltt = GX_BG_EXTPLTT_01,
+    .priority = 0,
+    .areaOver = GX_BG_AREAOVER_XLU,
+    .mosaic = FALSE,
 };
 
 static const BgTemplate sGtsSubBg0Template = {
@@ -157,17 +164,17 @@ static const BgTemplate sGtsMainMenuBg1Template = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate sGtsMainMenuBg0Template = {
+static const BgTemplate sGtsMainMenuBg2Template = {
     .x = 0,
     .y = 0,
     .bufferSize = 0x800,
     .baseTile = 0,
     .size = GF_BG_SCR_SIZE_256x256,
     .colorMode = GX_BG_COLORMODE_16,
-    .screenBase = GX_BG_SCRBASE_0xf800,
-    .charBase = GX_BG_CHARBASE_0x00000,
+    .screenBase = GX_BG_SCRBASE_0xe800,
+    .charBase = GX_BG_CHARBASE_0x08000,
     .bgExtPltt = GX_BG_EXTPLTT_01,
-    .priority = 0,
+    .priority = 1,
     .areaOver = GX_BG_AREAOVER_XLU,
     .mosaic = FALSE,
 };
@@ -187,21 +194,6 @@ static const BgTemplate sGtsSubBg1Template = {
     .mosaic = FALSE,
 };
 
-static const BgTemplate sGtsMainMenuBg2Template = {
-    .x = 0,
-    .y = 0,
-    .bufferSize = 0x800,
-    .baseTile = 0,
-    .size = GF_BG_SCR_SIZE_256x256,
-    .colorMode = GX_BG_COLORMODE_16,
-    .screenBase = GX_BG_SCRBASE_0xe800,
-    .charBase = GX_BG_CHARBASE_0x08000,
-    .bgExtPltt = GX_BG_EXTPLTT_01,
-    .priority = 1,
-    .areaOver = GX_BG_AREAOVER_XLU,
-    .mosaic = FALSE,
-};
-
 static const BgTemplate sGtsSubBg3Template = {
     .x = 0,
     .y = 0,
@@ -215,6 +207,23 @@ static const BgTemplate sGtsSubBg3Template = {
     .priority = 0,
     .areaOver = GX_BG_AREAOVER_XLU,
     .mosaic = FALSE,
+};
+
+static int (*sGtsMainMenuStates[])(GtsApp *app) = {
+    GtsMainMenu_WaitEnterAnim,
+    GtsMainMenu_WaitTextBeforeFadeIn,
+    (int (*)(GtsApp *))GtsMainMenu_StartFadeIn,
+    GtsMainMenu_WaitFadeIn,
+    GtsMainMenu_WaitFadeIn2,
+    GtsMainMenu_ShowPrompt,
+    GtsMainMenu_HandleInput,
+    GtsMainMenu_StartExitAnim,
+    GtsMainMenu_WaitExitAnim,
+    GtsMainMenu_FadeOut,
+    GtsMainMenu_WaitText,
+    GtsMainMenu_WaitTextAndPause,
+    GtsMainMenu_ShowExitPrompt,
+    GtsMainMenu_HandleExitPrompt,
 };
 
 int GtsMainMenu_Init(GtsApp *app, int state) {
@@ -251,7 +260,7 @@ int GtsMainMenu_Main(GtsApp *app, int state) {
     return sGtsMainMenuStates[app->state](app);
 }
 
-BOOL GtsMainMenu_Exit(GtsApp *app, int state) {
+int GtsMainMenu_Exit(GtsApp *app, int state) {
     WirelessStatusIcon_Destroy();
     GtsMainMenu_DeleteCursor(app);
     GtsMainMenu_DeleteStrings(app);
@@ -259,7 +268,7 @@ BOOL GtsMainMenu_Exit(GtsApp *app, int state) {
     GtsMainMenu_FreeBgs(app->bgConfig);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
     Gts_SwitchScreen(app);
-    return TRUE;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 static void GtsMainMenu_InitBgs(BgConfig *bgConfig) {
@@ -421,44 +430,44 @@ static void GtsMainMenu_DeleteStrings(GtsApp *app) {
 }
 
 // Waits for the player to walk in, then checks the GTS's status (screen 7).
-int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
+static int GtsMainMenu_WaitEnterAnim(GtsApp *app) {
     if (app->playerAnimDone) {
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
-        Gts_SetNextScreen(app, 7, 11);
+        Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 11);
         app->statusCheckCaller = 1;
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app) {
-    Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_2);
+static int GtsMainMenu_WaitTextBeforeFadeIn(GtsApp *app) {
+    Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_START_FADE_IN);
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-// Returns nothing although it is a state function (the state table ignores it: Gts_Main state 3).
-void GtsMainMenu_StartFadeIn(GtsApp *app) {
+// BUG: returns no value, although it is a state function: what Gts_Main gets back is undefined.
+static void GtsMainMenu_StartFadeIn(GtsApp *app) {
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_MAIN_MENU_STATE_WAIT_FADE_IN;
 }
 
-int GtsMainMenu_WaitFadeIn(GtsApp *app) {
+static int GtsMainMenu_WaitFadeIn(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_WaitFadeIn2(GtsApp *app) {
+static int GtsMainMenu_WaitFadeIn2(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
         app->state = GTS_MAIN_MENU_STATE_SHOW_PROMPT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_ShowPrompt(GtsApp *app) {
+static int GtsMainMenu_ShowPrompt(GtsApp *app) {
     GtsMainMenu_PrintMessage(app, msg_0775_00004, 1, 0, 0xF0F); // Are you seeking or offering a Pokemon?
     Gts_SetState(app, GTS_MAIN_MENU_STATE_WAIT_TEXT, GTS_MAIN_MENU_STATE_HANDLE_INPUT);
     Sprite_SetAnimActiveFlag(app->cursorSprite, TRUE);
@@ -474,11 +483,11 @@ static void GtsMainMenu_SelectButton(GtsApp *app, int button) {
     switch (button) {
     case 0:
         if (app->hasDepositedMon == FALSE) {
-            Gts_SetNextScreen(app, 5, 5);
+            Gts_SetNextScreen(app, GTS_SCREEN_SELECT_MON, 5);
             app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
             PlaySE(SEQ_SE_DP_SELECT);
         } else if (app->timer == 0) {
-            Gts_SetNextScreen(app, 7, 11);
+            Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 11);
             app->statusCheckCaller = 2;
             app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
             app->timer = 30 * 60;
@@ -493,7 +502,7 @@ static void GtsMainMenu_SelectButton(GtsApp *app, int button) {
         break;
     case 1:
         app->hasSearchResults = 0;
-        Gts_SetNextScreen(app, 4, 13);
+        Gts_SetNextScreen(app, GTS_SCREEN_SEARCH, 13);
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
         PlaySE(SEQ_SE_DP_SELECT);
         break;
@@ -506,7 +515,7 @@ static void GtsMainMenu_SelectButton(GtsApp *app, int button) {
     }
 }
 
-int GtsMainMenu_HandleInput(GtsApp *app) {
+static int GtsMainMenu_HandleInput(GtsApp *app) {
     int button = GtsMainMenu_GetTouchedButton();
     int cursor;
 
@@ -542,7 +551,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_StartExitAnim(GtsApp *app) {
+static int GtsMainMenu_StartExitAnim(GtsApp *app) {
     int gender = PlayerProfile_GetTrainerGender(app->args->profile);
     Gts_StartPlayerExitAnim(app, gender);
     app->state = GTS_MAIN_MENU_STATE_WAIT_EXIT_ANIM;
@@ -550,15 +559,15 @@ int GtsMainMenu_StartExitAnim(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_WaitExitAnim(GtsApp *app) {
+static int GtsMainMenu_WaitExitAnim(GtsApp *app) {
     if (app->playerAnimDone) {
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_FadeOut(GtsApp *app) {
-    if (app->nextScreen == 0) {
+static int GtsMainMenu_FadeOut(GtsApp *app) {
+    if (app->nextScreen == GTS_SCREEN_CONNECTION) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     } else {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
@@ -567,14 +576,14 @@ int GtsMainMenu_FadeOut(GtsApp *app) {
     return GTS_APP_STATE_EXIT_SCREEN;
 }
 
-int GtsMainMenu_ShowExitPrompt(GtsApp *app) {
+static int GtsMainMenu_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 258, 3, 1);
     app->state = GTS_MAIN_MENU_STATE_HANDLE_EXIT_PROMPT;
     Sprite_SetDrawFlag(app->cursorSprite, FALSE);
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
+static int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -583,7 +592,7 @@ int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
         ClearWindowTilemapAndCopyToVram(&app->panelWindow);
         ToggleBgLayer(GF_BG_LYR_SUB_2, GF_PLANE_TOGGLE_OFF);
         Sprite_SetDrawFlag(app->panelSprite, FALSE);
-        Gts_SetNextScreen(app, 0, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
         app->state = GTS_MAIN_MENU_STATE_START_EXIT_ANIM;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -596,14 +605,14 @@ int GtsMainMenu_HandleExitPrompt(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_WaitText(GtsApp *app) {
+static int GtsMainMenu_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsMainMenu_WaitTextAndPause(GtsApp *app) {
+static int GtsMainMenu_WaitTextAndPause(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->waitFrames++;
         if (app->waitFrames > 45) {

@@ -507,11 +507,9 @@ BOOL PokeathlonEventIntro_Exit(PokeathlonCourseData *course) {
 }
 
 static void PokeathlonEventIntro_VBlankCallback(PokeathlonEventIntro *intro) {
-    vu32 *dtcm = (vu32 *)0x027E0000;
-
     SpriteSystem_TransferOam();
     DoScheduledBgGpuUpdates(intro->bgConfig);
-    dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void PokeathlonEventIntro_SetBanks(void) {

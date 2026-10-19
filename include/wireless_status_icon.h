@@ -11,6 +11,7 @@ void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 
 void WirelessStatusIcon_Refresh(void);
+void WirelessStatusIcon_SetLevel(int);
 void WirelessStatusIcon_SetBackPriority(void);
 
 #endif // POKEHEARTGOLD_WIRELESS_STATUS_ICON_H

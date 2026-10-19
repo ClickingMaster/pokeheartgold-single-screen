@@ -242,7 +242,7 @@ u32 PokeathlonDiscCatch_Exit(PokeathlonCourseData *course);
 s16 PokeathlonDiscCatch_GetDiscX(int progress, int path);
 BOOL PokeathlonDiscCatch_IsMonInPlay(PokeathlonDiscCatch *work, u32 participant, u32 member);
 PokeathlonDiscCatchDisc *PokeathlonDiscCatch_GetDisc(PokeathlonDiscCatch *work, u32 index);
-void PokeathlonDiscCatch_GetMonPosition(PokeathlonDiscCatch *work, u32 participant, u32 member, s16 *position, void **radius);
+void PokeathlonDiscCatch_GetMonPosition(PokeathlonDiscCatch *work, u32 participant, u32 member, s16 *position, s32 *radius);
 u8 PokeathlonDiscCatch_CountTeamsAhead(PokeathlonCourseData *course, u32 participant);
 void PokeathlonDiscCatch_SetMonTarget(PokeathlonDiscCatch *work, const s16 *position, u32 participant, u32 member);
 void PokeathlonDiscCatch_MakeMonJump(PokeathlonDiscCatch *work, u32 participant, u32 member);

@@ -22,13 +22,13 @@ enum {
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
-Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
+Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 priority);
-PokeathlonGoalRollSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonGoalRollSpritePool *pool, int priority, int whichScreen, int resId, u8 kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonGoalRollSpritePool *pool);
+PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, u8 kind);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, BOOL shown, BOOL show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, const VecFx32 *position);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *pool);
 
 extern PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
 
@@ -336,10 +336,10 @@ void PokeathlonGoalRollDisplay_LoadBgGfx(PokeathlonGoalRollDisplay *display) {
     PokeathlonGoalRollDisplay_DrawScore(display, 0);
 }
 
-void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool, PokeathlonGoalRollDisplay *display, PokeathlonGoalRollResources *resources) {
+void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonCourseSpritePool *pool, PokeathlonGoalRollDisplay *display, PokeathlonCourseSpriteResources *resources) {
     VecFx32 numberPosition = sPokeathlonGoalRollNumberPosition;
     VecFx32 labelPosition = sPokeathlonGoalRollLabelPosition;
-    PokeathlonGoalRollSprite *sprite;
+    PokeathlonCourseSpritePoolSprite *sprite;
     u8 i;
 
     sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 0, 2, 102, 9);

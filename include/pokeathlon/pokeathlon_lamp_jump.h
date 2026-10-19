@@ -94,30 +94,6 @@ typedef struct PokeathlonLampJump {
     NNSG2dCellTransferState *cellTransferState;
 } PokeathlonLampJump;
 
-// What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team.
-typedef struct PokeathlonLampJumpMonView {
-    u32 data[4];
-} PokeathlonLampJumpMonView;
-
-typedef struct PokeathlonLampJumpSceneConfig {
-    int capacity;
-    int resourceCount;
-    int resCounts;
-} PokeathlonLampJumpSceneConfig;
-
-typedef struct PokeathlonLampJumpSpriteConfig {
-    int narcId;
-    int mainSize;
-    int subSize;
-    int heapId;
-} PokeathlonLampJumpSpriteConfig;
-
-typedef struct PokeathlonLampJumpMonSpriteInfo {
-    int settings[5];
-    int sizeTypes[3]; // per Pokemon: PokeathlonCourse_GetSpriteSizeType of the Pokemon
-    int unk20[9];
-} PokeathlonLampJumpMonSpriteInfo;
-
 // NARC a/1/7/0 member 6: parameters per performance level.
 typedef struct PokeathlonLampJumpMonParams {
     u32 acceleration[5];
@@ -130,11 +106,6 @@ typedef struct PokeathlonLampJumpSpriteOffset {
     int x;
     int y;
 } PokeathlonLampJumpSpriteOffset;
-
-typedef struct PokeathlonLampJumpScreenPos {
-    u16 x;
-    u16 y;
-} PokeathlonLampJumpScreenPos;
 
 // A block of the link data exchanged every frame (PokeathlonCourse_GetDataCopyArea).
 typedef union PokeathlonLampJumpSyncBlock {

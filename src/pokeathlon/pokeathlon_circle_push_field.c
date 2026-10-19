@@ -525,9 +525,9 @@ static void PokeathlonCirclePushAi_ChooseTarget(PokeathlonCirclePushAi *ai, u8 i
         work->cells[i].x = i % 5 - 2 + column;
         work->cells[i].y = i / 5 - 2 + row;
         if (work->cells[i].x < 0 || work->cells[i].y < 0 || work->cells[i].x >= 7 || work->cells[i].y >= 5) {
-            work->cells[i].inRing = NULL;
+            work->cells[i].inRing = FALSE;
         } else {
-            work->cells[i].inRing = (void *)1;
+            work->cells[i].inRing = TRUE;
         }
         dx = work->cells[i].x - column;
         dy = work->cells[i].y - row;
@@ -569,7 +569,7 @@ static void PokeathlonCirclePushAi_PlaceInCells(u8 count, PokeathlonCirclePushAi
 
     for (i = 0; i < count; i++) {
         PokeathlonCirclePushAiCell *cell = cells[i];
-        if (cell->inRing != NULL) {
+        if (cell->inRing) {
             cell->pixelX = cell->x * 32 + 16 + LCRandom() % 32;
             cell = cells[i];
             cell->pixelY = cell->y * 32 + 16 + LCRandom() % 32;
@@ -587,7 +587,7 @@ static void PokeathlonCirclePushAi_ScoreCells(PokeathlonCirclePushAi *ai, u8 cou
     u8 i;
 
     for (i = 0; i < count; i++) {
-        if (cells[i]->inRing == NULL) {
+        if (!cells[i]->inRing) {
             cells[i]->score = -100;
         } else {
             BOOL inZone;
@@ -807,11 +807,10 @@ PokeathlonCirclePushDisplay *PokeathlonCirclePushDisplay_New(enum HeapID heapId,
 }
 
 void PokeathlonCirclePushDisplay_Free(PokeathlonCirclePushDisplay *display) {
-    s32 i = 0;
-    PokeathlonCirclePushDisplay *view = display;
-    for (; i < 12; i++, view = (PokeathlonCirclePushDisplay *)((u8 *)view + sizeof(PokeathlonCirclePushMonPic))) {
-        Heap_Free(view->anim.monPics[0].charData);
-        Heap_Free(view->anim.monPics[0].paletteData);
+    s32 i;
+    for (i = 0; i < 12; i++) {
+        Heap_Free(display->anim.monPics[i].charData);
+        Heap_Free(display->anim.monPics[i].paletteData);
     }
     {
         PokeathlonCirclePushDisplay *fileView;

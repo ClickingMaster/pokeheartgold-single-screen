@@ -343,11 +343,9 @@ BOOL PokeathlonTrophies_Main(OverlayManager *man, int *state) {
 }
 
 static void PokeathlonTrophies_VBlankCallback(PokeathlonTrophies *work) {
-    vu8 *dtcm = (vu8 *)0x027E0000;
-
     SpriteSystem_TransferOam();
     DoScheduledBgGpuUpdates(work->bgConfig);
-    *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void PokeathlonTrophies_InitBgs(PokeathlonTrophies *work) {

@@ -37,8 +37,8 @@ typedef enum GtsWantedState {
     GTS_WANTED_STATE_HANDLE_INPUT,
     GTS_WANTED_STATE_FADE_OUT,
     GTS_WANTED_STATE_OPEN_SPECIES_SELECTOR,
-    GTS_WANTED_STATE_4,
-    GTS_WANTED_STATE_5,
+    GTS_WANTED_STATE_INVALID_4,
+    GTS_WANTED_STATE_INVALID_5,
     GTS_WANTED_STATE_HANDLE_SPECIES_SELECTOR,
     GTS_WANTED_STATE_ASK_GENDER,
     GTS_WANTED_STATE_OPEN_GENDER_SELECTOR,
@@ -67,29 +67,26 @@ typedef struct GtsLevelRange {
     s16 maxLevel; // 0: none
 } GtsLevelRange;
 
-// The countries in list order, in groups by initial letter: {first index in sGtsCountries, group}.
+// The countries in list order, in groups by initial letter: {first index in gGtsCountries, group}.
 typedef struct GtsCountryGroup {
     u8 start;
     u8 group;
 } GtsCountryGroup;
 
-void WirelessStatusIcon_SetLevel(s32 level);
-
-extern int (*const sGtsWantedStates[])(GtsApp *app);
-extern const BgTemplate sGtsWantedBg0Template;
-extern const BgTemplate sGtsWantedBg1Template;
-extern const BgTemplate sGtsWantedBg2Template;
-extern const BgTemplate sGtsWantedBg3Template;
-extern const GtsWantedWindowPosition sGtsWantedWindowPositions[];
-extern u32 sGtsGenderSymbolMsgs[];
+extern int (*const gGtsWantedStates[])(GtsApp *app);
+extern const BgTemplate gGtsWantedBg0Template;
+extern const BgTemplate gGtsWantedBg1Template;
+extern const BgTemplate gGtsWantedBg2Template;
+extern const BgTemplate gGtsWantedBg3Template;
+extern const GtsWantedWindowPosition gGtsWantedWindowPositions[];
 // The text colors of the male and female symbols.
-extern u32 sGtsGenderColors[];
-extern const GtsLevelRange sGtsWantedLevelRanges[];
-extern const GtsLevelRange sGtsSearchLevelRanges[];
+extern u32 gGtsGenderColors[];
+extern const GtsLevelRange gGtsWantedLevelRanges[];
+extern const GtsLevelRange gGtsSearchLevelRanges[];
 // NARC_zukan_data_sort_order_letters_*.
-extern const int sGtsSpeciesLetterFiles[];
-extern const u16 sGtsCountries[];
-extern const GtsCountryGroup sGtsCountryGroups[];
+extern const int gGtsSpeciesLetterFiles[];
+extern const u16 gGtsCountries[];
+extern const GtsCountryGroup gGtsCountryGroups[];
 
 static void GtsWanted_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4);
 static void GtsWanted_InitBgs(BgConfig *bgConfig);
@@ -107,9 +104,6 @@ static void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat,
 static u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count);
 static void GtsWanted_InitDepositRecord(GtsRecord *record, GtsApp *app);
 
-int GtsWanted_Init(GtsApp *app, int state);
-int GtsWanted_Main(GtsApp *app, int state);
-int GtsWanted_Exit(GtsApp *app, int state);
 int GtsWanted_Start(GtsApp *app);
 int GtsWanted_HandleInput(GtsApp *app);
 int GtsWanted_OpenSpeciesSelector(GtsApp *app);
@@ -159,7 +153,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
 
 int GtsWanted_Main(GtsApp *app, int state) {
     WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
-    return sGtsWantedStates[app->state](app);
+    return gGtsWantedStates[app->state](app);
 }
 
 int GtsWanted_Exit(GtsApp *app, int state) {
@@ -189,16 +183,16 @@ static void GtsWanted_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg2;
     BgTemplate bg3;
 
-    bg0 = sGtsWantedBg0Template;
+    bg0 = gGtsWantedBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    bg1 = sGtsWantedBg1Template;
+    bg1 = gGtsWantedBg1Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
-    bg2 = sGtsWantedBg2Template;
+    bg2 = gGtsWantedBg2Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     FillBgTilemapRect(bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, 0);
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_2);
-    bg3 = sGtsWantedBg3Template;
+    bg3 = gGtsWantedBg3Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_61);
@@ -237,7 +231,7 @@ static void GtsWanted_CreateWindows(GtsApp *app) {
 
     AddWindowParameterized(app->bgConfig, &app->waitingIconWindow, GF_BG_LYR_MAIN_0, 2, 21, 27, 2, 13, 96);
     FillWindowPixelBuffer(&app->waitingIconWindow, 0);
-    position = sGtsWantedWindowPositions;
+    position = gGtsWantedWindowPositions;
     i = 0;
     baseTile = 150;
     window = app->infoWindows;
@@ -317,7 +311,7 @@ int GtsWanted_Start(GtsApp *app) {
 
 int GtsWanted_HandleInput(GtsApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        Gts_SetNextScreen(app, 5, 5);
+        Gts_SetNextScreen(app, GTS_SCREEN_SELECT_MON, 5);
         app->state = GTS_WANTED_STATE_FADE_OUT;
     }
     // Overwrites the state set by B: the species selector always opens.
@@ -364,7 +358,7 @@ int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
     switch (selection) {
     case -2:
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
-        Gts_SetNextScreen(app, 5, 5);
+        Gts_SetNextScreen(app, GTS_SCREEN_SELECT_MON, 5);
         app->state = GTS_WANTED_STATE_FADE_OUT;
         GtsCursorValueTable_SetEntry(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         break;
@@ -476,20 +470,20 @@ int GtsWanted_HandleConfirmPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        Gts_SetNextScreen(app, 7, 7);
+        Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 7);
         app->state = GTS_WANTED_STATE_FADE_OUT;
         app->fadedBothScreens = 1;
         GtsWanted_InitDepositRecord(&app->record, app);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        Gts_SetNextScreen(app, 5, 5);
+        Gts_SetNextScreen(app, GTS_SCREEN_SELECT_MON, 5);
         app->state = GTS_WANTED_STATE_FADE_OUT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsWanted_FadeOut(GtsApp *app) {
-    if (app->nextScreen == 0) {
+    if (app->nextScreen == GTS_SCREEN_CONNECTION) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
         app->fadedBothScreens = 1;
     } else {
@@ -543,10 +537,10 @@ void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgDat
 // The color of the male and female symbols; color for the others.
 static u32 Gts_GetGenderColor(int gender, u32 color) {
     if (gender == 1) {
-        return sGtsGenderColors[0];
+        return gGtsGenderColors[0];
     }
     if (gender == 2) {
-        color = sGtsGenderColors[1];
+        color = gGtsGenderColors[1];
     }
     return color;
 }
@@ -555,7 +549,7 @@ static u32 Gts_GetGenderColor(int gender, u32 color) {
 void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showAny, int y, int xOrAlign, u32 color) {
     String *string;
     if (showAny || gender != GTS_GENDER_ANY) {
-        string = NewString_ReadMsgData(msgData, sGtsGenderSymbolMsgs[gender]);
+        string = NewString_ReadMsgData(msgData, gGtsGenderSymbolMsgs[gender]);
         if (xOrAlign > 3) {
             Gts_PrintAlignedFont0(window, string, xOrAlign, y, 0, Gts_GetGenderColor(gender, color));
         } else {
@@ -568,7 +562,7 @@ void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showAny,
 void Gts_PrintGenderNoTransfer(Window *window, MsgData *msgData, int gender, BOOL showAny, int x, int y, u32 color) {
     String *string;
     if (showAny || gender != GTS_GENDER_ANY) {
-        string = NewString_ReadMsgData(msgData, sGtsGenderSymbolMsgs[gender]);
+        string = NewString_ReadMsgData(msgData, gGtsGenderSymbolMsgs[gender]);
         AddTextPrinterParameterizedWithColor(window, 0, string, x, y, TEXT_SPEED_NOTRANSFER, Gts_GetGenderColor(gender, color), NULL);
         String_Delete(string);
     }
@@ -583,7 +577,7 @@ void Gts_PrintLevelRangeAt(Window *window, MsgData *msgData, int levelRange, int
     const GtsLevelRange *ranges;
     String *string;
     if (levelRange != -1) {
-        ranges = kind == 0 ? sGtsWantedLevelRanges : sGtsSearchLevelRanges;
+        ranges = kind == 0 ? gGtsWantedLevelRanges : gGtsSearchLevelRanges;
         string = NewString_ReadMsgData(msgData, ranges[levelRange].msgId);
         Gts_PrintAlignedFont0(window, string, x, y, align, color);
         String_Delete(string);
@@ -658,7 +652,7 @@ static void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat,
     BufferIntegerAsString(msgFormat, 3, level, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     levelString = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0775_00108, HEAP_ID_61); // Lv. {level}
     if (gender != GTS_GENDER_ANY) {
-        ReadMsgDataIntoString(msgData, sGtsGenderSymbolMsgs[gender], genderSymbol);
+        ReadMsgDataIntoString(msgData, gGtsGenderSymbolMsgs[gender], genderSymbol);
     }
     for (i = 0, window = windows; i < 3; i++, window++) {
         FillWindowPixelBuffer(window, 0);
@@ -667,7 +661,7 @@ static void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat,
     Gts_PrintAlignedFont0(&windows[1], nickname, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     Gts_PrintAlignedFont0(&windows[2], levelString, 0, 0, 2, MAKE_TEXT_COLOR(1, 2, 0));
     if (gender != GTS_GENDER_ANY) {
-        Gts_PrintAlignedFont0(&windows[1], genderSymbol, 70, 0, 0, sGtsGenderColors[gender - 1]);
+        Gts_PrintAlignedFont0(&windows[1], genderSymbol, 70, 0, 0, gGtsGenderColors[gender - 1]);
     }
     summary->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     summary->gender = gender;
@@ -689,7 +683,7 @@ static u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *cou
 
 u16 *Gts_LoadSpeciesByLetter(enum HeapID heapID, int letter, u32 *count) {
     u32 size;
-    u16 *species = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, sGtsSpeciesLetterFiles[letter], FALSE, heapID, TRUE, &size);
+    u16 *species = GfGfxLoader_LoadFromNarc_GetSizeOut(NARC_application_zukanlist_zkn_data_zukan_data, gGtsSpeciesLetterFiles[letter], FALSE, heapID, TRUE, &size);
     *count = size >> 1;
     return species;
 }
@@ -747,10 +741,10 @@ int Gts_CreateLevelRangeListItems(ListMenuItem **items, MsgData *msgData, int ki
     int count;
 
     if (kind == 0) {
-        ranges = sGtsWantedLevelRanges;
+        ranges = gGtsWantedLevelRanges;
         count = 12;
     } else {
-        ranges = sGtsSearchLevelRanges;
+        ranges = gGtsSearchLevelRanges;
         count = 11;
     }
     *items = ListMenuItems_New(count, HEAP_ID_61);
@@ -769,10 +763,10 @@ int Gts_CreateLevelRangeListItems(ListMenuItem **items, MsgData *msgData, int ki
 void Gts_SetLevelRange(GtsWantedMon *wanted, int levelRange, int kind) {
     const GtsLevelRange *ranges;
     if (kind == 0) {
-        ranges = sGtsWantedLevelRanges;
+        ranges = gGtsWantedLevelRanges;
         GF_ASSERT(levelRange < 12);
     } else {
-        ranges = sGtsSearchLevelRanges;
+        ranges = gGtsSearchLevelRanges;
         GF_ASSERT(levelRange < 11);
     }
     wanted->minLevel = ranges[levelRange].minLevel;
@@ -785,10 +779,10 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind) {
     int count;
 
     if (kind == 0) {
-        ranges = sGtsWantedLevelRanges;
+        ranges = gGtsWantedLevelRanges;
         count = 12;
     } else {
-        ranges = sGtsSearchLevelRanges;
+        ranges = gGtsSearchLevelRanges;
         count = 11;
     }
     for (kind = 0; kind < count; kind++) {
@@ -799,7 +793,7 @@ int Gts_FindLevelRange(int minLevel, int maxLevel, int kind) {
     return 0;
 }
 
-// index: 0 for any country, else 1 + the country's index in sGtsCountries.
+// index: 0 for any country, else 1 + the country's index in gGtsCountries.
 void Gts_SetSearchCountry(GtsApp *app, int index) {
     if (index == 0) {
         app->searchCountry = 0;
@@ -807,24 +801,24 @@ void Gts_SetSearchCountry(GtsApp *app, int index) {
     }
     index--;
     if ((u32)index < 130) { // the count of countries (gGtsCountryCount)
-        app->searchCountry = sGtsCountries[index];
+        app->searchCountry = gGtsCountries[index];
     }
 }
 
-// The countries of a group: returns their count, *start their first index in sGtsCountries.
+// The countries of a group: returns their count, *start their first index in gGtsCountries.
 int Gts_GetCountryGroupRange(int group, int *start) {
-    const GtsCountryGroup *entry = sGtsCountryGroups;
+    const GtsCountryGroup *entry = gGtsCountryGroups;
     int i = 0;
     for (; (u32)i < 22; i++, entry++) {
         if (group == entry->group) {
-            *start = sGtsCountryGroups[i].start;
-            return sGtsCountryGroups[i + 1].start - sGtsCountryGroups[i].start;
+            *start = gGtsCountryGroups[i].start;
+            return gGtsCountryGroups[i + 1].start - gGtsCountryGroups[i].start;
         }
     }
     return 0;
 }
 
-// The country list of a group; each item's value is 1 + the country's index in sGtsCountries.
+// The country list of a group; each item's value is 1 + the country's index in gGtsCountries.
 #pragma opt_rotateloops off
 #pragma opt_common_subs off
 
@@ -834,7 +828,7 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
     int i;
     *items = ListMenuItems_New(count, HEAP_ID_61);
     for (i = 0; i < count; i++) {
-        ListMenuItems_AppendFromMsgData(*items, msgData, sGtsCountries[start + i], start + i + 1);
+        ListMenuItems_AppendFromMsgData(*items, msgData, gGtsCountries[start + i], start + i + 1);
     }
     return count;
 }

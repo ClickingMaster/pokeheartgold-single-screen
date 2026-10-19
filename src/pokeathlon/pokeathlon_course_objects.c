@@ -317,8 +317,8 @@ BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(PokeathlonCourseSpritePoolSprit
     return Sprite_IsAnimated(entry->sprite);
 }
 
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position) {
-    Sprite_SetMatrix(entry->sprite, position);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, const VecFx32 *position) {
+    Sprite_SetMatrix(entry->sprite, (VecFx32 *)position);
 }
 
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry) {

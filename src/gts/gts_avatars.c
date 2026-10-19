@@ -28,46 +28,29 @@ typedef struct GtsPlayerAnim {
 } GtsPlayerAnim;
 
 // The OBJ char offset of each trainer avatar.
-extern const u16 sGtsAvatarCharOffsets[];
+extern const u16 gGtsAvatarCharOffsets[];
 
-typedef struct GtsAvatarY {
+typedef struct GtsAvatarPosition {
+    u16 x;
     u16 y;
-    u16 nextX;
-} GtsAvatarY;
+} GtsAvatarPosition;
 
-extern const u16 sGtsAvatarPositions[];
-extern const GtsAvatarY sGtsAvatarY[];
-extern const TouchscreenHitbox sGtsAvatarHitboxes[];
-extern const u8 sGtsViewMonSummaryPages[];
+extern const GtsAvatarPosition gGtsAvatarPositions[];
+extern const TouchscreenHitbox gGtsAvatarHitboxes[];
+extern const u8 gGtsViewMonSummaryPages[];
 
-void Gts_CreateAvatars(GtsApp *app, u32 gender);
-void Gts_StartPlayerEnterAnim(GtsApp *app, int gender);
-void Gts_SetPlayerAnim(GtsPlayerAnim *anim, int seq);
-void Gts_PlayerEnterTask(SysTask *task, GtsPlayerAnim *anim);
-void Gts_StartPlayerExitAnim(GtsApp *app, int gender);
-void Gts_PlayerExitTask(SysTask *task, GtsPlayerAnim *anim);
-void Gts_SetAvatarPosition(Sprite *sprite, int x, int y);
-int Gts_GetTouchedAvatar(int count);
-void Gts_ShowResultAvatars(GtsApp *app, int count, int animate);
-int Gts_GetAvatarAnimSeq(int index);
-void Gts_StopAvatarAnims(GtsApp *app);
-void Gts_LoadAvatarGraphics(GtsApp *app);
-void Gts_LoadAvatar(NNSG2dCharacterData *charData, NNSG2dPaletteData *plttData, u32 index, int trainerClass, int gender);
-void Gts_FreeAvatarGraphics(GtsApp *app);
-void Gts_SetAvatarMarker(GtsApp *app, u32 index, u32 scrollY);
-void Gts_ResetAvatarPositions(GtsApp *app);
-void Gts_LowerAvatars(GtsApp *app);
-int GtsViewMon_Init(GtsApp *app, int state);
-int GtsViewMon_Main(GtsApp *app, int state);
-int GtsViewMon_Exit(GtsApp *app, int state);
+static void Gts_SetPlayerAnim(GtsPlayerAnim *anim, int seq);
+static void Gts_PlayerEnterTask(SysTask *task, GtsPlayerAnim *anim);
+static void Gts_PlayerExitTask(SysTask *task, GtsPlayerAnim *anim);
+static void Gts_SetAvatarPosition(Sprite *sprite, int x, int y);
+static int Gts_GetAvatarAnimSeq(int index);
+static void Gts_LoadAvatarGraphics(GtsApp *app);
+static void Gts_LoadAvatar(NNSG2dCharacterData *charData, NNSG2dPaletteData *plttData, u32 index, int trainerClass, int gender);
 
 // The player at the GTS counter, the seven trainer avatars, the marker and the sub screen panel's sprite.
 void Gts_CreateAvatars(GtsApp *app, u32 gender) {
     SpriteTemplate template;
     int i;
-    const u16 *position;
-    GtsApp *slot;
-    int seq;
 
     Gts_LoadAvatarGraphics(app);
     Gts_InitSpriteTemplate(&template, app, &app->headers[1], NNS_G2D_VRAM_TYPE_2DSUB);
@@ -79,20 +62,13 @@ void Gts_CreateAvatars(GtsApp *app, u32 gender) {
     Sprite_SetPriority(app->avatarSprites[0], 2);
     Sprite_SetAnimCtrlSeq(app->avatarSprites[0], gender * 7 + 3);
     Sprite_SetDrawFlag(app->avatarSprites[0], TRUE);
-    i = 0;
-    position = sGtsAvatarPositions;
-    slot = app;
-    seq = 14;
-    for (; i < 7; i++) {
-        slot->avatarSprites[1] = Sprite_CreateAffine(&template);
-        Sprite_SetAnimActiveFlag(slot->avatarSprites[1], TRUE);
-        Sprite_SetAnimCtrlSeq(slot->avatarSprites[1], seq);
-        Sprite_SetDrawFlag(slot->avatarSprites[1], FALSE);
-        Gts_SetAvatarPosition(slot->avatarSprites[1], position[0], position[1]);
-        Sprite_SetPriority(slot->avatarSprites[1], 2);
-        slot = (GtsApp *)((u8 *)slot + sizeof(Sprite *));
-        seq += 4;
-        position += 2;
+    for (i = 0; i < 7; i++) {
+        app->avatarSprites[1 + i] = Sprite_CreateAffine(&template);
+        Sprite_SetAnimActiveFlag(app->avatarSprites[1 + i], TRUE);
+        Sprite_SetAnimCtrlSeq(app->avatarSprites[1 + i], 14 + i * 4);
+        Sprite_SetDrawFlag(app->avatarSprites[1 + i], FALSE);
+        Gts_SetAvatarPosition(app->avatarSprites[1 + i], gGtsAvatarPositions[i].x, gGtsAvatarPositions[i].y);
+        Sprite_SetPriority(app->avatarSprites[1 + i], 2);
     }
     app->avatarMarkerSprite = Sprite_CreateAffine(&template);
     Sprite_SetAnimActiveFlag(app->avatarMarkerSprite, TRUE);
@@ -105,12 +81,10 @@ void Gts_CreateAvatars(GtsApp *app, u32 gender) {
     Sprite_SetAnimCtrlSeq(app->panelSprite, 42);
     Gts_SetSpritePosition(app->panelSprite, 55, app->scrollY + 424);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
-    slot = app;
     for (i = 0; i < 8; i++) {
-        VecFx32 *matrix = Sprite_GetMatrixPtr(slot->avatarSprites[0]);
-        slot->avatarPositions[0][0] = matrix->x / FX32_ONE;
-        slot->avatarPositions[0][1] = matrix->y / FX32_ONE;
-        slot = (GtsApp *)((u8 *)slot + sizeof(Sprite *));
+        VecFx32 *matrix = Sprite_GetMatrixPtr(app->avatarSprites[i]);
+        app->avatarPositions[i][0] = matrix->x / FX32_ONE;
+        app->avatarPositions[i][1] = matrix->y / FX32_ONE;
     }
 }
 
@@ -131,12 +105,12 @@ void Gts_StartPlayerEnterAnim(GtsApp *app, int gender) {
     PlaySE(SEQ_SE_DP_PYUU);
 }
 
-void Gts_SetPlayerAnim(GtsPlayerAnim *anim, int seq) {
+static void Gts_SetPlayerAnim(GtsPlayerAnim *anim, int seq) {
     Sprite *sprite = anim->app->avatarSprites[0];
     Sprite_SetAnimCtrlSeq(sprite, seq + 7 * anim->gender);
 }
 
-void Gts_PlayerEnterTask(SysTask *task, GtsPlayerAnim *anim) {
+static void Gts_PlayerEnterTask(SysTask *task, GtsPlayerAnim *anim) {
     GtsApp *app = anim->app;
     switch (anim->state) {
     case 0:
@@ -188,7 +162,7 @@ void Gts_StartPlayerExitAnim(GtsApp *app, int gender) {
     PlaySE(SEQ_SE_DP_PC_LOGOFF);
 }
 
-void Gts_PlayerExitTask(SysTask *task, GtsPlayerAnim *anim) {
+static void Gts_PlayerExitTask(SysTask *task, GtsPlayerAnim *anim) {
     GtsApp *app = anim->app;
     switch (anim->state) {
     case 0:
@@ -223,7 +197,7 @@ void Gts_PlayerExitTask(SysTask *task, GtsPlayerAnim *anim) {
 }
 
 // The avatars are on the sub screen, 256 px below the main screen; y is their feet.
-void Gts_SetAvatarPosition(Sprite *sprite, int x, int y) {
+static void Gts_SetAvatarPosition(Sprite *sprite, int x, int y) {
     VecFx32 position;
     float f;
 
@@ -245,7 +219,7 @@ void Gts_SetAvatarPosition(Sprite *sprite, int x, int y) {
 }
 
 int Gts_GetTouchedAvatar(int count) {
-    int avatar = TouchscreenHitbox_FindRectAtTouchNew(sGtsAvatarHitboxes);
+    int avatar = TouchscreenHitbox_FindRectAtTouchNew(gGtsAvatarHitboxes);
     if (avatar == -1 || avatar >= count) {
         avatar = -1;
     }
@@ -287,7 +261,7 @@ void Gts_ShowResultAvatars(GtsApp *app, int count, int animate) {
     }
 }
 
-int Gts_GetAvatarAnimSeq(int index) {
+static int Gts_GetAvatarAnimSeq(int index) {
     return index * 4 + 14;
 }
 
@@ -308,16 +282,16 @@ void Gts_StopAvatarAnims(GtsApp *app) {
 }
 
 // The Union Room avatar graphics the trainers are drawn with.
-void Gts_LoadAvatarGraphics(GtsApp *app) {
+static void Gts_LoadAvatarGraphics(GtsApp *app) {
     app->avatarPlttAlloc = GfGfxLoader_GetPlttData(NARC_application_record_record, 11, &app->avatarPlttData, HEAP_ID_61);
     app->avatarCharAlloc = GfGfxLoader_GetCharData(NARC_application_record_record, 12, TRUE, &app->avatarCharData, HEAP_ID_61);
     DC_FlushRange(app->avatarCharData, 0x8000);
 }
 
-void Gts_LoadAvatar(NNSG2dCharacterData *charData, NNSG2dPaletteData *plttData, u32 index, int trainerClass, int gender) {
+static void Gts_LoadAvatar(NNSG2dCharacterData *charData, NNSG2dPaletteData *plttData, u32 index, int trainerClass, int gender) {
     u32 avatar = SpriteToUnionRoomAvatarIdx(gender, trainerClass);
     void *palettes = plttData->pRawData;
-    GXS_LoadOBJ((u8 *)charData->pRawData + avatar * 0x600, sGtsAvatarCharOffsets[index], 0x200);
+    GXS_LoadOBJ((u8 *)charData->pRawData + avatar * 0x600, gGtsAvatarCharOffsets[index], 0x200);
     GXS_LoadOBJPltt((u8 *)palettes + avatar * 0x20, (index + 2) * 0x20, 0x20);
 }
 
@@ -330,7 +304,7 @@ void Gts_FreeAvatarGraphics(GtsApp *app) {
 }
 
 void Gts_SetAvatarMarker(GtsApp *app, u32 index, u32 scrollY) {
-    Gts_SetAvatarPosition(app->avatarMarkerSprite, sGtsAvatarPositions[index * 2], scrollY + (sGtsAvatarY[index].y + 32));
+    Gts_SetAvatarPosition(app->avatarMarkerSprite, gGtsAvatarPositions[index].x, scrollY + (gGtsAvatarPositions[index].y + 32));
 }
 
 void Gts_ResetAvatarPositions(GtsApp *app) {
@@ -360,18 +334,18 @@ int GtsViewMon_Init(GtsApp *app, int state) {
     app->summaryArgs.options = app->args->options;
     app->summaryArgs.ribbons = Save_SpecialRibbons_Get(app->args->saveData);
     app->summaryArgs.isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(app->args->saveData);
-    PokemonSummary_SetPages(&app->summaryArgs, sGtsViewMonSummaryPages);
+    PokemonSummary_SetPages(&app->summaryArgs, gGtsViewMonSummaryPages);
     PokemonSummaryArgs_SetPlayer(&app->summaryArgs, app->args->profile);
     app->tradeSequence = OverlayManager_New(&gOverlayTemplate_PokemonSummary, &app->summaryArgs, HEAP_ID_61);
     app->reloadGraphics = TRUE;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsViewMon_Main(GtsApp *app, int state) {
     int ret = 3;
     if (OverlayManager_Run(app->tradeSequence)) {
         OverlayManager_Delete(app->tradeSequence);
-        Gts_SetNextScreen(app, 5, app->nextScreenArg);
+        Gts_SetNextScreen(app, GTS_SCREEN_SELECT_MON, app->nextScreenArg);
         ret = 4;
     }
     return ret;
@@ -379,5 +353,5 @@ int GtsViewMon_Main(GtsApp *app, int state) {
 
 int GtsViewMon_Exit(GtsApp *app, int state) {
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }

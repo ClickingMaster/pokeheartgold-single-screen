@@ -1364,7 +1364,7 @@ void GlobalTerminal_LaunchApp(FieldSystem *fieldSystem, u16 connectDirectly, u16
     args->fieldSystem = fieldSystem;
     args->saveData = fieldSystem->saveData;
     args->connectDirectly = connectDirectly;
-    args->unkC = a2;
+    args->vsRecorderMode = a2;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }
 

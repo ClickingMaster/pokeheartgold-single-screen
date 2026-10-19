@@ -296,6 +296,8 @@ static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
     PokeathlonCourseMonGfx *mon;
     switch (load->state) {
     case MON_GFX_LOAD_GRAPHICS:
+        // BUG: the infos were copied to infos[0..count) but are read at baseIndex + current; every caller passes
+        // a baseIndex of 0.
         index = (u8)(load->baseIndex + load->current);
         PokeathlonCourseMonGfx_Load(load->manager, &load->manager->mons[index], (PokeathlonCourseMonInfo *)((u32)load->infos + (u32)index * sizeof(PokeathlonCourseMonInfo)), load->template.vram, index, load->template.vramTransfer);
         load->manager->mons[index].info = load->infos[index];
@@ -316,6 +318,8 @@ static BOOL PokeathlonCourseMonGfx_LoadStep(PokeathlonCourseMonGfxLoad *load) {
         }
         break;
     case MON_GFX_LOAD_CREATE_SPRITES:
+        // BUG: the infos were copied to infos[0..count) but are read at baseIndex + current; every caller passes
+        // a baseIndex of 0.
         index = (u8)(load->baseIndex + load->current);
         PokeathlonCourseMonGfx_CreateSprite(load->manager, load->template.priority, load->template.vramTransfer, load->template.whichScreen, index, index);
         load->current++;

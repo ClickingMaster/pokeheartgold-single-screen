@@ -713,22 +713,22 @@
 	.public gPokeathlonCourseCmds
 	.public gPokeathlonCirclePushNameplateCoords
 	.public gPokeathlonRelayRunPicIds
-	.public sRelayRunMapStartOffset
-	.public sRelayRunMapCenter
-	.public sPennantCaptureScoreWindowTemplate
-	.public sPennantCaptureReferenceVector
-	.public sPennantCaptureSpritePoolTemplate
-	.public sPennantCaptureCornerHits
-	.public sPennantCaptureGraphicsModes
-	.public sPennantCaptureEdgeHits
-	.public sPennantCaptureBgTemplate_Sub0
-	.public sPennantCaptureBgTemplate_Sub1
-	.public sPennantCaptureBgTemplate_Sub2
-	.public sPennantCaptureBgTemplate_Main0
-	.public sPennantCaptureBgTemplate_Main3
-	.public sPennantCaptureGraphicsBanks
-	.public sPennantCaptureTimerDigitX
-	.public sPennantCaptureTimerDigitAnims
+	.public gRelayRunMapStartOffset
+	.public gRelayRunMapCenter
+	.public gPennantCaptureScoreWindowTemplate
+	.public gPennantCaptureReferenceVector
+	.public gPennantCaptureSpritePoolTemplate
+	.public gPennantCaptureCornerHits
+	.public gPennantCaptureGraphicsModes
+	.public gPennantCaptureEdgeHits
+	.public gPennantCaptureBgTemplate_Sub0
+	.public gPennantCaptureBgTemplate_Sub1
+	.public gPennantCaptureBgTemplate_Sub2
+	.public gPennantCaptureBgTemplate_Main0
+	.public gPennantCaptureBgTemplate_Main3
+	.public gPennantCaptureGraphicsBanks
+	.public gPennantCaptureTimerDigitX
+	.public gPennantCaptureTimerDigitAnims
 	.public gPokeathlonPennantCaptureSpriteIds
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind2
 	.public gPokeathlonBlockSmashSpotHitboxes_Kind1
@@ -744,7 +744,6 @@
 	.public gPokeathlonDiscCatchOamManagerParam
 	.public gPokeathlonDiscCatchGraphicsBanks
 	.public gPokeathlonDiscCatchMonStartPositions
-	.public gPokeathlonDiscCatchMonStartPositionsY
 	.public gPokeathlonDiscCatchDiscTopSpriteTemplate
 	.public gPokeathlonDiscCatchDiscTouchSpriteTemplate
 	.public gPokeathlonDiscCatchEffectSpriteTemplate

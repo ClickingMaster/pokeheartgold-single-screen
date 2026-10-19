@@ -164,7 +164,7 @@ static void PokeathlonDiscCatchCpuMon_Think(PokeathlonDiscCatchCpuMon *mon) {
 // (by the member's chance; never while the team leads the average by more than 20).
 static void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16 average, u16 score) {
     s16 position[2];
-    void *radius;
+    s32 radius;
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     int roll;
     int chance;
@@ -201,14 +201,14 @@ static void PokeathlonDiscCatchCpuMon_Update(PokeathlonDiscCatchCpuMon *mon, u16
 
 static BOOL PokeathlonDiscCatchCpuMon_IsNearDisc(PokeathlonDiscCatchCpuMon *mon, int index, int reach) {
     s16 position[2];
-    void *radius;
+    s32 radius;
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(mon->course);
     PokeathlonDiscCatchDisc *disc = PokeathlonDiscCatch_GetDisc(work, (u8)index);
     if (disc->progress < 288) {
         return FALSE;
     }
     PokeathlonDiscCatch_GetMonPosition(work, (u8)mon->participant, (u8)mon->member, position, &radius);
-    return PokeathlonDiscCatch_CirclesOverlap(position[0], position[1], (int)radius, disc->x, disc->progress - 288, reach);
+    return PokeathlonDiscCatch_CirclesOverlap(position[0], position[1], radius, disc->x, disc->progress - 288, reach);
 }
 
 static BOOL PokeathlonDiscCatch_CirclesOverlap(s16 x0, s16 y0, int radius0, s16 x1, s16 y1, int radius1) {

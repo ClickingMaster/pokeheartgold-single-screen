@@ -74,23 +74,14 @@ typedef enum GtsConnectionState {
     GTS_CONNECTION_STATE_WAIT_CLOSE_ERROR,
 } GtsConnectionState;
 
-// The selector's tables of the letter groups: the first letter of each group and {first letter,
-// letter count} of each group.
-typedef struct GtsLetterGroup {
-    int first;
-    int count;
-} GtsLetterGroup;
 
-extern const int gGtsSelectorGroupStarts[];
-extern const GtsLetterGroup gGtsSelectorLetterGroups[];
-
-extern int (*const sGtsConnectionStates[])(GtsApp *app);
-extern const BgTemplate sGtsConnectionBg0Template;
-extern const BgTemplate sGtsConnectionBg1Template;
-extern const BgTemplate sGtsConnectionSubBg0Template;
-extern const BgTemplate sGtsConnectionSubBg1Template;
+extern int (*const gGtsConnectionStates[])(GtsApp *app);
+extern const BgTemplate gGtsConnectionBg0Template;
+extern const BgTemplate gGtsConnectionBg1Template;
+extern const BgTemplate gGtsConnectionSubBg0Template;
+extern const BgTemplate gGtsConnectionSubBg1Template;
 // GTS, GTS TRADE POKEMON, GTS SUMMARY, GTS DEPOSIT POKEMON, GTS SEEK POKEMON.
-extern const u32 sGtsPanelCaptionMsgIds[];
+extern const u32 gGtsPanelCaptionMsgIds[];
 
 static void GtsConnection_InitBgs(BgConfig *bgConfig);
 static void GtsConnection_FreeBgs(BgConfig *bgConfig);
@@ -108,11 +99,7 @@ static void GtsConnection_PrintErrorCode(GtsApp *app, int msgId, int errorCode);
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
-void WirelessStatusIcon_SetLevel(s32 level);
 
-int GtsConnection_Init(GtsApp *app, int state);
-int GtsConnection_Main(GtsApp *app, int state);
-int GtsConnection_Exit(GtsApp *app, int state);
 int GtsConnection_AskConnect(GtsApp *app);
 int GtsConnection_HandleConnectPrompt(GtsApp *app);
 int GtsConnection_AskDisconnect(GtsApp *app);
@@ -203,7 +190,7 @@ int GtsConnection_Main(GtsApp *app, int state) {
 
     WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
     prevState = app->state;
-    result = sGtsConnectionStates[prevState](app);
+    result = gGtsConnectionStates[prevState](app);
     if (prevState != app->state) {
         app->subState = 0;
         app->subTimer = 0;
@@ -222,30 +209,30 @@ int GtsConnection_Exit(GtsApp *app, int state) {
     GtsConnection_FreeBgs(app->bgConfig);
     app->paletteAnim.active = FALSE;
     Gts_SwitchScreen(app);
-    if (app->screen == 0) {
+    if (app->screen == GTS_SCREEN_CONNECTION) {
         return GTS_APP_STATE_END;
     }
     return GTS_APP_STATE_INIT_SCREEN;
 }
 
 static void GtsConnection_InitBgs(BgConfig *bgConfig) {
-    BgTemplate bg0 = sGtsConnectionBg0Template;
+    BgTemplate bg0 = gGtsConnectionBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     {
-        BgTemplate bg1 = sGtsConnectionBg1Template;
+        BgTemplate bg1 = gGtsConnectionBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     }
     {
-        BgTemplate subBg0 = sGtsConnectionSubBg0Template;
+        BgTemplate subBg0 = gGtsConnectionSubBg0Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subBg0, GF_BG_TYPE_TEXT);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
     {
-        BgTemplate subBg1 = sGtsConnectionSubBg1Template;
+        BgTemplate subBg1 = gGtsConnectionSubBg1Template;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &subBg1, GF_BG_TYPE_TEXT);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     }
@@ -402,7 +389,7 @@ int GtsConnection_HandleConnectPrompt(GtsApp *app) {
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         CommState_FreeWfcSession();
-        Gts_SetNextScreen(app, 0, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
@@ -423,7 +410,7 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
             if (DWC_CheckInet() == 0) {
                 app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
             } else {
-                Gts_SetNextScreen(app, 7, 11);
+                Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 11);
                 app->statusCheckCaller = 1;
                 app->state = GTS_CONNECTION_STATE_FADE_OUT;
             }
@@ -432,7 +419,7 @@ int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
                 DWC_CleanupInet();
             }
             CommState_FreeWfcSession();
-            Gts_SetNextScreen(app, 0, 0);
+            Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
             app->state = GTS_CONNECTION_STATE_FADE_OUT;
         }
     }
@@ -448,7 +435,7 @@ int GtsConnection_PrintDisconnecting(GtsApp *app) {
 int GtsConnection_Disconnect(GtsApp *app) {
     CommState_FreeWfcSession();
     DWC_CleanupInet();
-    Gts_SetNextScreen(app, 0, 0);
+    Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
     app->state = GTS_CONNECTION_STATE_PRINT_DISCONNECTED;
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -460,6 +447,7 @@ int GtsConnection_PrintDisconnected(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
+// BUG: returns no value, although it is a state function: what Gts_Main gets back is undefined.
 void GtsConnection_StartConnect(GtsApp *app) {
     CommState_InitWfcSession(app->args->saveData);
     Sys_SetSleepDisableFlag(4);
@@ -657,7 +645,7 @@ int GtsConnection_WaitSetProfile(GtsApp *app) {
             case 0:
                 switch (app->profileResponse[1]) {
                 case 0:
-                    Gts_SetNextScreen(app, 1, 0);
+                    Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
                     app->state = GTS_CONNECTION_STATE_FADE_OUT;
                     break;
                 case 3:
@@ -757,7 +745,7 @@ int GtsConnection_HandleExitPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
-        Gts_SetNextScreen(app, 0, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
         app->state = GTS_CONNECTION_STATE_FADE_OUT;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -834,7 +822,7 @@ int GtsConnection_DisconnectAfterError(GtsApp *app) {
     default:
         app->subTimer++;
         if (app->subTimer > 30) {
-            Gts_SetNextScreen(app, 0, 0);
+            Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
             app->state = GTS_CONNECTION_STATE_FADE_OUT;
         }
         break;
@@ -909,7 +897,7 @@ void Gts_PrintAlignedFont4(Window *window, String *string, int x, int y, int ali
 }
 
 void Gts_PrintPanelCaption(Window *window, MsgData *msgData, int caption) {
-    String *string = NewString_ReadMsgData(msgData, sGtsPanelCaptionMsgIds[caption]);
+    String *string = NewString_ReadMsgData(msgData, gGtsPanelCaptionMsgIds[caption]);
     Gts_PrintAlignedFont0(window, string, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     String_Delete(string);
 }

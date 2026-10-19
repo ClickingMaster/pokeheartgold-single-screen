@@ -117,9 +117,8 @@ static void PokeathlonCourseWait_SetBanks(void) {
 
 static void PokeathlonCourseWait_VBlankCallback(void *data) {
     PokeathlonCourseWait *wait = data;
-    vu32 *dtcm = (vu32 *)0x027E0000;
     DoScheduledBgGpuUpdates(wait->bgConfig);
-    dtcm[0x3FF8 / sizeof(u32)] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void PokeathlonCourseWait_InitBgs(BgConfig *bgConfig, enum HeapID heapId) {

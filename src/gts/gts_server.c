@@ -9,6 +9,7 @@
 #include "game_stats_request.h"
 
 static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
+static int GtsServer_GetErrorResult(int error);
 
 void GtsServer_Init(u32 pid, u32 friendKeyLo, u32 friendKeyHi) {
     gGtsServer.state = GTS_SERVER_STATE_IDLE;
@@ -629,7 +630,7 @@ static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSi
 
 // Maps a failed request's error to a result: -13 (failed), -15, -2; on a connection
 // error (not -13), -14 when the wireless connection is no longer up.
-int GtsServer_GetErrorResult(int error) {
+static int GtsServer_GetErrorResult(int error) {
     int result;
 
     switch (error) {

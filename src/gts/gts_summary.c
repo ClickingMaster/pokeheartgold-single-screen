@@ -50,39 +50,29 @@ typedef struct GtsWindowRect {
     u32 height;
 } GtsWindowRect;
 
-extern int (*const sGtsSummaryStates[])(GtsApp *app);
-extern u32 sGtsGenderSymbolMsgs[];
-extern u32 sGtsGenderSymbolColors[];
 
-void Gts_LoadSubScreenBg(GtsApp *app);
-void Gts_ShowSubScreenPanel(GtsApp *app);
-void Gts_CreatePanelWindow(GtsApp *app, int caption);
-int GtsSummary_Init(GtsApp *app, int state);
-int GtsSummary_Main(GtsApp *app, int state);
-BOOL GtsSummary_Exit(GtsApp *app, int state);
-void GtsSummary_InitBgs(BgConfig *bgConfig);
-void GtsSummary_FreeBgs(BgConfig *bgConfig);
-void GtsSummary_LoadGraphics(GtsApp *app);
-void GtsSummary_CreateMonSprite(GtsApp *app);
-void GtsSummary_DeleteMonSprite(GtsApp *app);
-void GtsSummary_CreateWindows(GtsApp *app);
-void GtsSummary_RemoveWindows(GtsApp *app);
-void GtsSummary_CreateStrings(GtsApp *app);
-void GtsSummary_DeleteStrings(GtsApp *app);
-int GtsSummary_Start(GtsApp *app);
-int GtsSummary_HandleInput(GtsApp *app);
-int GtsSummary_FadeOut(GtsApp *app);
-int GtsSummary_ShowTakeBackPrompt(GtsApp *app);
-int GtsSummary_HandleTakeBackPrompt(GtsApp *app);
-int GtsSummary_ShowMenu(GtsApp *app);
-int GtsSummary_HandleMenu(GtsApp *app);
-int GtsSummary_WaitText(GtsApp *app);
-int GtsSummary_WaitTextAndPause(GtsApp *app);
-void GtsSummary_PrintMonMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4, Pokemon *mon);
-void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary);
-void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows);
-void Gts_LoadMonPicture(Pokemon *mon);
-void GtsSummary_DrawWanted(GtsApp *app);
+static void GtsSummary_InitBgs(BgConfig *bgConfig);
+static void GtsSummary_FreeBgs(BgConfig *bgConfig);
+static void GtsSummary_LoadGraphics(GtsApp *app);
+static void GtsSummary_CreateMonSprite(GtsApp *app);
+static void GtsSummary_DeleteMonSprite(GtsApp *app);
+static void GtsSummary_CreateWindows(GtsApp *app);
+static void GtsSummary_RemoveWindows(GtsApp *app);
+static void GtsSummary_CreateStrings(GtsApp *app);
+static void GtsSummary_DeleteStrings(GtsApp *app);
+static int GtsSummary_Start(GtsApp *app);
+static int GtsSummary_HandleInput(GtsApp *app);
+static int GtsSummary_FadeOut(GtsApp *app);
+static int GtsSummary_ShowTakeBackPrompt(GtsApp *app);
+static int GtsSummary_HandleTakeBackPrompt(GtsApp *app);
+static int GtsSummary_ShowMenu(GtsApp *app);
+static int GtsSummary_HandleMenu(GtsApp *app);
+static int GtsSummary_WaitText(GtsApp *app);
+static int GtsSummary_WaitTextAndPause(GtsApp *app);
+static void GtsSummary_PrintMonMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4, Pokemon *mon);
+static void GtsSummary_DrawWanted(GtsApp *app);
+
+static u32 sGtsGenderSymbolColors[] = { 0, MAKE_TEXT_COLOR(5, 6, 0), MAKE_TEXT_COLOR(3, 4, 0) };
 
 static const BgTemplate sGtsSummaryBg0Template = {
     .x = 0,
@@ -161,6 +151,18 @@ static const GtsWindowRect sGtsSummaryInfoWindowRects[14] = {
     { 8,  7,  8,  2 },
 };
 
+static int (*sGtsSummaryStates[])(GtsApp *app) = {
+    GtsSummary_Start,
+    GtsSummary_HandleInput,
+    GtsSummary_FadeOut,
+    GtsSummary_WaitText,
+    GtsSummary_WaitTextAndPause,
+    GtsSummary_ShowTakeBackPrompt,
+    GtsSummary_HandleTakeBackPrompt,
+    GtsSummary_ShowMenu,
+    GtsSummary_HandleMenu,
+};
+
 void Gts_LoadSubScreenBg(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
 
@@ -199,24 +201,24 @@ int GtsSummary_Init(GtsApp *app, int state) {
     Gts_LoadMonPicture(&app->record.mon);
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_SUMMARY_STATE_START;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 int GtsSummary_Main(GtsApp *app, int state) {
     return sGtsSummaryStates[app->state](app);
 }
 
-BOOL GtsSummary_Exit(GtsApp *app, int state) {
+int GtsSummary_Exit(GtsApp *app, int state) {
     GtsSummary_DeleteMonSprite(app);
     GtsSummary_DeleteStrings(app);
     GtsSummary_RemoveWindows(app);
     GtsSummary_FreeBgs(app->bgConfig);
     Sprite_SetDrawFlag(app->panelSprite, FALSE);
     Gts_SwitchScreen(app);
-    return TRUE;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
-void GtsSummary_InitBgs(BgConfig *bgConfig) {
+static void GtsSummary_InitBgs(BgConfig *bgConfig) {
     BgTemplate bg0;
     BgTemplate bg1;
     BgTemplate bg2;
@@ -237,7 +239,7 @@ void GtsSummary_InitBgs(BgConfig *bgConfig) {
     Gts_InitSubScreenBgs(bgConfig, 0, FALSE);
 }
 
-void GtsSummary_FreeBgs(BgConfig *bgConfig) {
+static void GtsSummary_FreeBgs(BgConfig *bgConfig) {
     Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_2);
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_1);
@@ -245,7 +247,7 @@ void GtsSummary_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_MAIN_3);
 }
 
-void GtsSummary_LoadGraphics(GtsApp *app) {
+static void GtsSummary_LoadGraphics(GtsApp *app) {
     BgConfig *bgConfig = app->bgConfig;
     NARC *narc = NARC_New(NARC_a_1_0_0, HEAP_ID_61);
 
@@ -261,7 +263,7 @@ void GtsSummary_LoadGraphics(GtsApp *app) {
     NARC_Delete(narc);
 }
 
-void GtsSummary_CreateMonSprite(GtsApp *app) {
+static void GtsSummary_CreateMonSprite(GtsApp *app) {
     SpriteTemplate template;
 
     Gts_InitSpriteTemplate(&template, app, &app->headers[0], NNS_G2D_VRAM_TYPE_2DMAIN);
@@ -274,11 +276,11 @@ void GtsSummary_CreateMonSprite(GtsApp *app) {
     WirelessStatusIcon_Create();
 }
 
-void GtsSummary_DeleteMonSprite(GtsApp *app) {
+static void GtsSummary_DeleteMonSprite(GtsApp *app) {
     Sprite_Delete(app->monSprite);
 }
 
-void GtsSummary_CreateWindows(GtsApp *app) {
+static void GtsSummary_CreateWindows(GtsApp *app) {
     int i;
     int baseTile;
 
@@ -294,7 +296,7 @@ void GtsSummary_CreateWindows(GtsApp *app) {
     Gts_CreatePanelWindow(app, 2);
 }
 
-void GtsSummary_RemoveWindows(GtsApp *app) {
+static void GtsSummary_RemoveWindows(GtsApp *app) {
     int i;
 
     RemoveWindow(&app->panelWindow);
@@ -305,7 +307,7 @@ void GtsSummary_RemoveWindows(GtsApp *app) {
     }
 }
 
-void GtsSummary_CreateStrings(GtsApp *app) {
+static void GtsSummary_CreateStrings(GtsApp *app) {
     int i;
 
     app->msgBuffer = String_New(180, HEAP_ID_61);
@@ -315,7 +317,7 @@ void GtsSummary_CreateStrings(GtsApp *app) {
     }
 }
 
-void GtsSummary_DeleteStrings(GtsApp *app) {
+static void GtsSummary_DeleteStrings(GtsApp *app) {
     int i;
 
     for (i = 0; i < 10; i++) {
@@ -325,43 +327,43 @@ void GtsSummary_DeleteStrings(GtsApp *app) {
     String_Delete(app->titleString);
 }
 
-int GtsSummary_Start(GtsApp *app) {
+static int GtsSummary_Start(GtsApp *app) {
     app->state = GTS_SUMMARY_STATE_HANDLE_INPUT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_HandleInput(GtsApp *app) {
+static int GtsSummary_HandleInput(GtsApp *app) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || gSystem.touchNew) {
         GtsSummary_PrintMonMessage(app, msg_0775_00005, 1, 0, 0xF0F, &app->record.mon); // Do what with this Pokemon?
         Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_SHOW_MENU);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
         app->state = GTS_SUMMARY_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         PlaySE(SEQ_SE_DP_SELECT);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_FadeOut(GtsApp *app) {
+static int GtsSummary_FadeOut(GtsApp *app) {
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_SUMMARY_STATE_START;
-    return 4;
+    return GTS_APP_STATE_EXIT_SCREEN;
 }
 
-int GtsSummary_ShowTakeBackPrompt(GtsApp *app) {
+static int GtsSummary_ShowTakeBackPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x16A, 8, 1);
     app->state = GTS_SUMMARY_STATE_HANDLE_TAKE_BACK_PROMPT;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_HandleTakeBackPrompt(GtsApp *app) {
+static int GtsSummary_HandleTakeBackPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SUMMARY_STATE_FADE_OUT;
         app->fadedBothScreens = 1;
-        Gts_SetNextScreen(app, 7, 8);
+        Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 8);
         GtsSummary_DrawWanted(app);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -369,20 +371,20 @@ int GtsSummary_HandleTakeBackPrompt(GtsApp *app) {
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
         GtsSummary_DrawWanted(app);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_ShowMenu(GtsApp *app) {
+static int GtsSummary_ShowMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(2, HEAP_ID_61);
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00055, 1); // TAKE BACK
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00056, 2); // LEAVE AS IS
     app->menu = Gts_CreateListMenu(app, 2, 13);
     Gts_DimScreen(TRUE);
     app->state = GTS_SUMMARY_STATE_HANDLE_MENU;
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_HandleMenu(GtsApp *app) {
+static int GtsSummary_HandleMenu(GtsApp *app) {
     int result = TouchscreenListMenu_HandleInput(app->menu);
     if (result == 1) {
         Gts_DestroyListMenu(app);
@@ -391,7 +393,7 @@ int GtsSummary_HandleMenu(GtsApp *app) {
         if (Gts_MonHoldsMail(mon) && Party_GetCount(app->args->party) == PARTY_SIZE) {
             GtsSummary_PrintMonMessage(app, msg_0775_00036, 1, 0, 0xF0F, mon); // Your party is full (the Pokemon holds Mail).
             Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_HANDLE_INPUT);
-            return 3;
+            return GTS_APP_STATE_RUN_SCREEN;
         }
         GtsSummary_PrintMonMessage(app, msg_0775_00006, 1, 0, 0xF0F, mon); // Will you take this Pokemon?
         Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_SHOW_TAKE_BACK_PROMPT);
@@ -400,20 +402,20 @@ int GtsSummary_HandleMenu(GtsApp *app) {
         Gts_DestroyListMenu(app);
         ListMenuItems_Delete(app->listItems);
         app->state = GTS_SUMMARY_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         GtsSummary_DrawWanted(app);
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_WaitText(GtsApp *app) {
+static int GtsSummary_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSummary_WaitTextAndPause(GtsApp *app) {
+static int GtsSummary_WaitTextAndPause(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->waitFrames++;
         if (app->waitFrames > 45) {
@@ -421,10 +423,10 @@ int GtsSummary_WaitTextAndPause(GtsApp *app) {
             app->state = app->nextState;
         }
     }
-    return 3;
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
-void GtsSummary_PrintMonMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4, Pokemon *mon) {
+static void GtsSummary_PrintMonMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4, Pokemon *mon) {
     BoxPokemon *boxMon = Mon_GetBoxMon(mon);
     String *string;
 
@@ -461,7 +463,7 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
     monLevel = summary->level;
     item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
     itemLabel = NewString_ReadMsgData(msgData, msg_0775_00073); // ITEM
-    genderSymbol = NewString_ReadMsgData(msgData, sGtsGenderSymbolMsgs[gender]);
+    genderSymbol = NewString_ReadMsgData(msgData, gGtsGenderSymbolMsgs[gender]);
     levelLabel = NewString_ReadMsgData(msgData, msg_0775_00106); // Lv.
     BufferIntegerAsString(msgFormat, 3, monLevel, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
     level = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0775_00107, HEAP_ID_61);
@@ -528,7 +530,7 @@ void Gts_LoadMonPicture(Pokemon *mon) {
     Heap_Free(buf);
 }
 
-void GtsSummary_DrawWanted(GtsApp *app) {
+static void GtsSummary_DrawWanted(GtsApp *app) {
     int levelRange = Gts_FindLevelRange(app->record.wanted.minLevel, app->record.wanted.maxLevel, 0);
     Gts_DrawWantedMonLevelLeft(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[9], app->record.wanted.species, app->record.wanted.gender, levelRange);
 }

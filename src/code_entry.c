@@ -26,7 +26,6 @@ typedef struct CodeEntrySubBgTemplates {
 } CodeEntrySubBgTemplates;
 
 void WirelessStatusIcon_ShowOnBothScreens(int topFirst, enum HeapID heapID);
-void WirelessStatusIcon_SetLevel(int level);
 
 static CodeEntryArgs *CodeEntryArgs_Alloc(enum HeapID heapID, u32 length, const int *groupLengths, Options *options, int promptMsg, u32 showWirelessIcon);
 static void CodeEntry_SetupBgs(BgConfig *bgConfig);

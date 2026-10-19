@@ -1,6 +1,7 @@
 #include "constants/sndseq.h"
 
 #include "global_terminal/global_terminal_app_internal.h"
+#include "wireless_status_icon.h"
 
 enum GlobalTerminalAppState {
     GLOBAL_TERMINAL_APP_LOAD_WIFI,

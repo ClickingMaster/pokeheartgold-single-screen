@@ -9,8 +9,6 @@
 // VS Recorder: the Global Terminal screens (video lists, video search, video number keypad, delete)
 // and the battle video helpers used outside the app.
 
-BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
-
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 
 // VsRecorderWork.screenWork of the delete screen

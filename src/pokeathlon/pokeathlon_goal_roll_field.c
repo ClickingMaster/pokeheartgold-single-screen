@@ -4,6 +4,8 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_goal_roll.h"
 
 #include "assert.h"
@@ -14,14 +16,6 @@
 #include "player_data.h"
 #include "sound_playback.h"
 #include "text.h"
-
-u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
-int PokeathlonCourse_GetTouchRadius(void);
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
-BOOL PokeathlonCourse_IsInRange(int x, int y, int touchX, int touchY, int radius, int *distance);
-void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
 
 extern const VecFx32 gPokeathlonGoalRollNormalTopLeft;
 extern const VecFx32 gPokeathlonGoalRollNormalBottomRight;
@@ -625,9 +619,9 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
                     goalRoll->scores[ball->lastKicker / 3]--;
                 }
                 index = ball->lastKicker;
-                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 8, 1);
+                PokeathlonCourse_AddMonCounter(course, index / 3, index % 3, 8, 1);
                 index = ball->lastKicker;
-                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 1, 1);
+                PokeathlonCourse_AddMonCounter(course, index / 3, index % 3, 1, 1);
             } else {
                 points = 0;
                 if (ball->kind == GOAL_ROLL_BALL_SMALL) {
@@ -647,7 +641,7 @@ void PokeathlonGoalRoll_CheckGoals(PokeathlonCourseData *course) {
                     goalRoll->scores[goal]--;
                 }
                 index = ball->lastKicker;
-                PokeathlonCourse_AddMonCounter(course, (u8)(index / 3), (u8)(index % 3), 3, 1);
+                PokeathlonCourse_AddMonCounter(course, index / 3, index % 3, 3, 1);
             }
         }
     }

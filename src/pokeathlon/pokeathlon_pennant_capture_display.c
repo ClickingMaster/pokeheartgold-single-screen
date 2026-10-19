@@ -24,8 +24,8 @@
 #include "sprite.h"
 #include "text.h"
 
-extern const u8 sPennantCaptureTimerDigitX[];
-extern const u8 sPennantCaptureTimerDigitAnims[];
+extern const u8 gPennantCaptureTimerDigitX[];
+extern const u8 gPennantCaptureTimerDigitAnims[];
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
 #define DISPLAY_CURSOR_STEP(cursor, size) ((PokeathlonPennantCaptureDisplay *)((u8 *)(cursor) + (size)))
@@ -161,11 +161,11 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     for (i = 0; i < 2; i++) {
         display->timerDigits[i] = PokeathlonCourseSprites_CreateTimerDigit(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
-        digitPosition.x = sPennantCaptureTimerDigitX[i] << FX32_SHIFT;
+        digitPosition.x = gPennantCaptureTimerDigitX[i] << FX32_SHIFT;
         digitPosition.y = 0x2C4000;
         digitPosition.z = 0;
         Sprite_SetMatrix(display->timerDigits[i], &digitPosition);
-        Sprite_SetAnimCtrlSeq(display->timerDigits[i], sPennantCaptureTimerDigitAnims[i]);
+        Sprite_SetAnimCtrlSeq(display->timerDigits[i], gPennantCaptureTimerDigitAnims[i]);
     }
 }
 

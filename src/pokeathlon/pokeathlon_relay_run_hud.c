@@ -26,8 +26,8 @@
 #include "text.h"
 
 extern const u32 gPokeathlonRelayRunPicIds[];              // touch screen sprite resource ids
-extern const VecFx32 sRelayRunMapStartOffset;              // track map: offset of the start from its centre
-extern const VecFx32 sRelayRunMapCenter;                   // track map: centre
+extern const VecFx32 gRelayRunMapStartOffset;              // track map: offset of the start from its centre
+extern const VecFx32 gRelayRunMapCenter;                   // track map: centre
 
 static void PokeathlonRelayRunHud_SetMonIcon(PokeathlonRelayRunHud *hud, u8 teamId, int member);
 static void PokeathlonRelayRunHud_PrintMonName(PokeathlonRelayRunHud *hud, s32 member);
@@ -233,8 +233,8 @@ void PokeathlonRelayRunHud_SetMapPosition(PokeathlonRelayRunHud *hud, u8 teamId,
     int lapX = x % RELAY_RUN_TRACK_LENGTH;
     u16 angle = lapX * 65536 / RELAY_RUN_TRACK_LENGTH;
     angle = 65536 - angle;
-    offset = sRelayRunMapStartOffset;
-    centre = sRelayRunMapCenter;
+    offset = gRelayRunMapStartOffset;
+    centre = gRelayRunMapCenter;
     MTX_RotZ33_(&rotation, FX_SinCosTable_[(angle >> 4) * 2], FX_SinCosTable_[(angle >> 4) * 2 + 1]);
     MTX_MultVec33(&offset, &rotation, &offset);
     VEC_Add(&centre, &offset, &position);

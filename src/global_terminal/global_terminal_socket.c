@@ -2,7 +2,7 @@
 
 #include "constants/dwc_status.h"
 
-#include "global_terminal/global_terminal_net.h"
+#include "global_terminal/global_terminal_server.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -95,10 +95,6 @@ typedef struct GlobalTerminalServerHeader {
     u8 bytes[4];
 } GlobalTerminalServerHeader;
 
-typedef struct GlobalTerminalServerDressUpUpload {
-    u32 data[56];
-} GlobalTerminalServerDressUpUpload;
-
 typedef struct GlobalTerminalServerIdRequest {
     u16 unk_00;
     u16 unk_02;
@@ -106,31 +102,15 @@ typedef struct GlobalTerminalServerIdRequest {
     int idHigh;
 } GlobalTerminalServerIdRequest;
 
-typedef struct GlobalTerminalServerBoxData {
-    u32 data[135];
-} GlobalTerminalServerBoxData;
-
 typedef struct GlobalTerminalServerBoxUpload {
     int tray;
-    GlobalTerminalServerBoxData box;
+    GlobalTerminalNetBoxUpload box;
 } GlobalTerminalServerBoxUpload;
-
-typedef struct GlobalTerminalServerRankingsRequest {
-    u32 data[9];
-} GlobalTerminalServerRankingsRequest;
-
-typedef struct GlobalTerminalServerVideoUpload {
-    u32 data[1875];
-} GlobalTerminalServerVideoUpload;
-
-typedef struct GlobalTerminalServerVideoSearchParams {
-    u32 data[4];
-} GlobalTerminalServerVideoSearchParams;
 
 typedef struct GlobalTerminalServerVideoSearch {
     u16 kind;
     u16 unk_02;
-    GlobalTerminalServerVideoSearchParams params;
+    GlobalTerminalNetVideoSearch search;
     int unk_14[2];
 } GlobalTerminalServerVideoSearch;
 
@@ -204,26 +184,6 @@ int SOC_Send(int socket, void *buffer, int length, int flags);
 int SOC_Recv(int socket, void *buffer, int length, int flags);
 int SOC_Shutdown(int socket, int how);
 int SOC_Close(int socket);
-
-int GlobalTerminalServer_Init(GlobalTerminalNetLogin *login);
-void GlobalTerminalServer_Stop(void);
-int GlobalTerminalServer_GetState(void);
-int GlobalTerminalServer_GetError(void);
-int GlobalTerminalServer_UploadDressUp(GlobalTerminalServerDressUpUpload *upload, void *response);
-int GlobalTerminalServer_DownloadDressUp(int id, void *response);
-int GlobalTerminalServer_UploadBox(int tray, GlobalTerminalServerBoxData *box, void *response);
-int GlobalTerminalServer_DownloadBox(int id, void *response);
-int GlobalTerminalServer_GetResponseSize(void);
-void *GlobalTerminalServer_GetResponse(void);
-int GlobalTerminalServer_GetResponseBufferSize(int command);
-int GlobalTerminalServer_SendRequest22000(void *response);
-int GlobalTerminalServer_GetRankings(GlobalTerminalServerRankingsRequest *request, void *response);
-int GlobalTerminalServer_UploadVideo(GlobalTerminalServerVideoUpload *video, void *response);
-int GlobalTerminalServer_SearchVideos(GlobalTerminalServerVideoSearchParams *params, void *response);
-int GlobalTerminalServer_SearchVideosKind1(int *arg, void *response);
-int GlobalTerminalServer_SearchVideosKind2(int *arg, void *response);
-int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *response);
-int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response);
 
 static void GlobalTerminalSocket_Reset(void) {
     GlobalTerminalSocket_ClearRequest();
@@ -756,7 +716,7 @@ static int GlobalTerminalSocket_FetchToken(void) {
 
 #pragma pop
 
-int GlobalTerminalServer_Init(GlobalTerminalNetLogin *login) {
+BOOL GlobalTerminalServer_Init(GlobalTerminalNetLogin *login) {
     return GlobalTerminalSocket_Start(sGlobalTerminalServerHostName, 12400, login);
 }
 
@@ -776,13 +736,13 @@ int GlobalTerminalServer_GetError(void) {
     return GlobalTerminalSocket_GetError();
 }
 
-int GlobalTerminalServer_UploadDressUp(GlobalTerminalServerDressUpUpload *upload, void *response) {
-    GlobalTerminalServerDressUpUpload payload = *upload;
+BOOL GlobalTerminalServer_UploadDressUp(GlobalTerminalNetDressUpUpload *upload, void *response) {
+    GlobalTerminalNetDressUpUpload payload = *upload;
     GlobalTerminalSocket_PrepareUploadStub(upload, ov39_0222AA78);
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_DRESS_UP_UPLOAD, &payload, response, -1);
 }
 
-int GlobalTerminalServer_DownloadDressUp(int id, void *response) {
+BOOL GlobalTerminalServer_DownloadDressUp(int id, void *response) {
     GlobalTerminalServerIdRequest payload;
     payload.unk_00 = 0;
     payload.unk_02 = 0;
@@ -791,7 +751,7 @@ int GlobalTerminalServer_DownloadDressUp(int id, void *response) {
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_DRESS_UP_DOWNLOAD, &payload, response, -1);
 }
 
-int GlobalTerminalServer_UploadBox(int tray, GlobalTerminalServerBoxData *box, void *response) {
+BOOL GlobalTerminalServer_UploadBox(int tray, GlobalTerminalNetBoxUpload *box, void *response) {
     GlobalTerminalServerBoxUpload payload;
     payload.tray = tray;
     payload.box = *box;
@@ -799,7 +759,7 @@ int GlobalTerminalServer_UploadBox(int tray, GlobalTerminalServerBoxData *box, v
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_BOX_UPLOAD, &payload, response, -1);
 }
 
-int GlobalTerminalServer_DownloadBox(int id, void *response) {
+BOOL GlobalTerminalServer_DownloadBox(int id, void *response) {
     GlobalTerminalServerIdRequest payload;
     payload.unk_00 = 0;
     payload.unk_02 = 0;
@@ -820,44 +780,44 @@ int GlobalTerminalServer_GetResponseBufferSize(int command) {
     return GlobalTerminalSocket_GetResponseBufferSize(command);
 }
 
-int GlobalTerminalServer_SendRequest22000(void *response) {
+BOOL GlobalTerminalServer_SendRequest22000(void *response) {
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_22000, NULL, response, -1);
 }
 
-int GlobalTerminalServer_GetRankings(GlobalTerminalServerRankingsRequest *request, void *response) {
-    GlobalTerminalServerRankingsRequest payload = *request;
+BOOL GlobalTerminalServer_GetRankings(GlobalTerminalNetRankingsRequest *request, void *response) {
+    GlobalTerminalNetRankingsRequest payload = *request;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_RANKINGS, &payload, response, -1);
 }
 
-int GlobalTerminalServer_UploadVideo(GlobalTerminalServerVideoUpload *video, void *response) {
+BOOL GlobalTerminalServer_UploadVideo(GlobalTerminalServerVideoUpload *video, void *response) {
     GlobalTerminalServerVideoUpload payload = *video;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_UPLOAD, &payload, response, -1);
 }
 
-int GlobalTerminalServer_SearchVideos(GlobalTerminalServerVideoSearchParams *params, void *response) {
+BOOL GlobalTerminalServer_SearchVideos(GlobalTerminalNetVideoSearch *search, void *response) {
     GlobalTerminalServerVideoSearch payload;
     payload.kind = 0;
-    payload.params = *params;
+    payload.search = *search;
     payload.kind = 0;
     payload.unk_02 = 0;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_SEARCH, &payload, response, -1);
 }
 
-int GlobalTerminalServer_SearchVideosKind1(int *arg, void *response) {
+BOOL GlobalTerminalServer_SearchVideosKind1(u32 *arg, void *response) {
     GlobalTerminalServerVideoList payload = { 0 };
     payload.kind = 1;
     payload.data[2] = *arg;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_SEARCH, &payload, response, -1);
 }
 
-int GlobalTerminalServer_SearchVideosKind2(int *arg, void *response) {
+BOOL GlobalTerminalServer_SearchVideosKind2(u32 *arg, void *response) {
     GlobalTerminalServerVideoList payload = { 0 };
     payload.kind = 2;
     payload.data[2] = *arg;
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_SEARCH, &payload, response, -1);
 }
 
-int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *response) {
+BOOL GlobalTerminalServer_DownloadVideo(u32 idLow, u32 idHigh, int arg2, void *response) {
     int payload[3];
     payload[0] = idLow;
     payload[1] = idHigh;
@@ -865,7 +825,7 @@ int GlobalTerminalServer_DownloadVideo(int idLow, int idHigh, int arg2, void *re
     return GlobalTerminalSocket_SendRequest(GTS_REQUEST_VIDEO_DOWNLOAD, payload, response, -1);
 }
 
-int GlobalTerminalServer_SendRequest23003(int idLow, int idHigh, void *response) {
+BOOL GlobalTerminalServer_SendRequest23003(u32 idLow, u32 idHigh, void *response) {
     int payload[2];
     payload[0] = idLow;
     payload[1] = idHigh;
@@ -913,7 +873,7 @@ static int GlobalTerminalSocket_GetRequestSize(int command) {
         size = 0x400;
         break;
     case GTS_REQUEST_DRESS_UP_UPLOAD:
-        size = sizeof(GlobalTerminalServerDressUpUpload);
+        size = sizeof(GlobalTerminalNetDressUpUpload);
         break;
     case GTS_REQUEST_DRESS_UP_DOWNLOAD:
         size = sizeof(GlobalTerminalServerIdRequest);
@@ -928,7 +888,7 @@ static int GlobalTerminalSocket_GetRequestSize(int command) {
         size = 0;
         break;
     case GTS_REQUEST_RANKINGS:
-        size = sizeof(GlobalTerminalServerRankingsRequest);
+        size = sizeof(GlobalTerminalNetRankingsRequest);
         break;
     case GTS_REQUEST_VIDEO_UPLOAD:
         size = sizeof(GlobalTerminalServerVideoUpload);

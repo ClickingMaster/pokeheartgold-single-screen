@@ -915,11 +915,9 @@ static void PokeathlonCourseRecord_PrintTotalLabel(PokeathlonCourseRecord *work)
 }
 
 static void PokeathlonCourseRecord_VBlankCallback(PokeathlonCourseRecord *work) {
-    vu8 *dtcm = (vu8 *)0x027E0000;
-
     SpriteSystem_TransferOam();
     DoScheduledBgGpuUpdates(work->bgConfig);
-    *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void PokeathlonCourseRecord_LoadSpriteResources(PokeathlonCourseRecord *work) {

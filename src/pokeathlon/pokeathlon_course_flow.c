@@ -1065,7 +1065,7 @@ void PokeathlonCourse_VBlankCallback(void *bgConfig) {
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(bgConfig);
     GF_RunVramTransferTasks();
-    ((vu32 *)0x027E0000)[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 // Host: sends every player's event result to the others.

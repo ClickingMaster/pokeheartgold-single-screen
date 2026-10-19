@@ -21,8 +21,8 @@
 #include "system.h"
 #include "wireless_status_icon.h"
 
-extern const GraphicsBanks sPennantCaptureGraphicsBanks;
-extern const PokeathlonCourseSpritePoolTemplate sPennantCaptureSpritePoolTemplate;
+extern const GraphicsBanks gPennantCaptureGraphicsBanks;
+extern const PokeathlonCourseSpritePoolTemplate gPennantCaptureSpritePoolTemplate;
 
 enum PokeathlonPennantCaptureInitState {
     PENNANT_CAPTURE_INIT_CREATE,
@@ -128,7 +128,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         break;
     }
     case PENNANT_CAPTURE_INIT_CREATE_SPRITES:
-        poolTemplate = sPennantCaptureSpritePoolTemplate;
+        poolTemplate = gPennantCaptureSpritePoolTemplate;
         work->spritePool = PokeathlonCourseSpritePool_New(work->heapId, &poolTemplate);
         PokeathlonCourseSpritePool_SetSurfaceCoords(work->spritePool, 0, 0, 0, FX32_CONST(700));
         work->monObjects = PokeathlonCourseMonObjects_Create(work->heapId, 12, 2, work->monResources, PokeathlonCourseSpritePool_GetSpriteList(work->spritePool));
@@ -292,6 +292,6 @@ BOOL PokeathlonPennantCapture_Exit(PokeathlonCourseData *course) {
 }
 
 static void PokeathlonPennantCapture_SetGfxBanks(void) {
-    GraphicsBanks banks = sPennantCaptureGraphicsBanks;
+    GraphicsBanks banks = gPennantCaptureGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

@@ -112,10 +112,6 @@ typedef struct GtsMonFields {
     };
 } GtsMonFields;
 
-void WirelessStatusIcon_SetLevel(s32 level);
-
-extern int (*const sGtsSelectMonStates[])(GtsApp *app);
-
 static void GtsSelectMon_InitBgs(BgConfig *bgConfig);
 static void GtsSelectMon_FreeBgs(BgConfig *bgConfig);
 static void GtsSelectMon_LoadGraphics(GtsApp *app);
@@ -125,14 +121,31 @@ static void GtsSelectMon_CreateWindows(GtsApp *app);
 static void GtsSelectMon_RemoveWindows(GtsApp *app);
 static void GtsSelectMon_CreateData(GtsApp *app);
 static void GtsSelectMon_FreeData(GtsApp *app);
+static int GtsSelectMon_Start(GtsApp *app);
 static void GtsSelectMon_SelectMonToDeposit(GtsApp *app);
 static void GtsSelectMon_SelectMonToTrade(GtsApp *app);
 static int GtsSelectMon_GetTouchedButton(void);
 static void GtsSelectMon_Leave(GtsApp *app, int mode);
+static int GtsSelectMon_HandleInput(GtsApp *app);
 static void GtsSelectMon_MoveCursor(GtsApp *app);
 static void GtsSelectMon_SetCursorPosition(Sprite *sprite, int position);
 static int GtsSelectMon_StepIndex(int index, int count, int step);
+static int GtsSelectMon_OpenDepositMenu(GtsApp *app);
+static int GtsSelectMon_HandleDepositMenu(GtsApp *app);
+static int GtsSelectMon_OpenTradeMenu(GtsApp *app);
+static int GtsSelectMon_HandleTradeMenu(GtsApp *app);
+static int GtsSelectMon_FadeOut(GtsApp *app);
+static int GtsSelectMon_ShowExitPrompt(GtsApp *app);
+static int GtsSelectMon_HandleExitPrompt(GtsApp *app);
+static int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app);
+static int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app);
+static int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app);
 static BOOL GtsSelectMon_StartTrade(GtsApp *app);
+static int GtsSelectMon_AskRemoveCapsule(GtsApp *app);
+static int GtsSelectMon_ShowCapsulePrompt(GtsApp *app);
+static int GtsSelectMon_HandleCapsulePrompt(GtsApp *app);
+static int GtsSelectMon_WaitText(GtsApp *app);
+static int GtsSelectMon_WaitTextAndClear(GtsApp *app);
 static void GtsSelectMon_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, int unused4, BOOL inPromptWindow);
 static void *GtsSelectMon_LoadCharData(NARC *narc, int member, NNSG2dCharacterData **charData, enum HeapID heapID);
 static void GtsSelectMon_LoadMonIcon(int species, int form, BOOL isEgg, int slot, Sprite *sprite, NARC *narc, GtsMonIcon *icon);
@@ -154,33 +167,6 @@ static void GtsSelectMon_DimUnwantedIcons(GtsMonSummary *summaries, Sprite **spr
 // The next and previous box arrows.
 // Where the cursor goes from each position: up, down, left, right.
 // The Ribbons that can't be traded (MON_DATA_*).
-
-int GtsSearch_PrintSearchFailed(GtsApp *app);
-int GtsSearch_WaitText(GtsApp *app);
-int GtsSearch_WaitTextAndPause(GtsApp *app);
-int GtsSearch_ScrollOut(GtsApp *app);
-int GtsSearch_ScrollIn(GtsApp *app);
-int GtsSearch_HandleScrolledOut(GtsApp *app);
-int GtsSelectMon_Init(GtsApp *app, int state);
-int GtsSelectMon_Main(GtsApp *app, int state);
-int GtsSelectMon_Exit(GtsApp *app, int state);
-int GtsSelectMon_Start(GtsApp *app);
-int GtsSelectMon_HandleInput(GtsApp *app);
-int GtsSelectMon_OpenDepositMenu(GtsApp *app);
-int GtsSelectMon_HandleDepositMenu(GtsApp *app);
-int GtsSelectMon_OpenTradeMenu(GtsApp *app);
-int GtsSelectMon_HandleTradeMenu(GtsApp *app);
-int GtsSelectMon_FadeOut(GtsApp *app);
-int GtsSelectMon_ShowExitPrompt(GtsApp *app);
-int GtsSelectMon_HandleExitPrompt(GtsApp *app);
-int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app);
-int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app);
-int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app);
-int GtsSelectMon_AskRemoveCapsule(GtsApp *app);
-int GtsSelectMon_ShowCapsulePrompt(GtsApp *app);
-int GtsSelectMon_HandleCapsulePrompt(GtsApp *app);
-int GtsSelectMon_WaitText(GtsApp *app);
-int GtsSelectMon_WaitTextAndClear(GtsApp *app);
 
 // The last states of SEEK POKEMON (screen 4).
 
@@ -207,6 +193,26 @@ static const u16 sGtsSpecialRibbons[10] = {
     MON_DATA_CARNIVAL_RIBBON,
     MON_DATA_CLASSIC_RIBBON,
     MON_DATA_PREMIER_RIBBON,
+};
+
+static int (*sGtsSelectMonStates[])(GtsApp *app) = {
+    GtsSelectMon_Start,
+    GtsSelectMon_HandleInput,
+    GtsSelectMon_FadeOut,
+    GtsSelectMon_WaitText,
+    GtsSelectMon_WaitTextAndClear,
+    GtsSelectMon_ShowExitPrompt,
+    GtsSelectMon_HandleExitPrompt,
+    GtsSelectMon_OpenDepositMenu,
+    GtsSelectMon_HandleDepositMenu,
+    GtsSelectMon_OpenTradeMenu,
+    GtsSelectMon_HandleTradeMenu,
+    GtsSelectMon_AskRemoveCapsuleForTrade,
+    GtsSelectMon_ShowCapsulePromptForTrade,
+    GtsSelectMon_HandleCapsulePromptForTrade,
+    GtsSelectMon_AskRemoveCapsule,
+    GtsSelectMon_ShowCapsulePrompt,
+    GtsSelectMon_HandleCapsulePrompt,
 };
 
 static const BgTemplate sGtsSelectMonBg2Template = {
@@ -378,7 +384,7 @@ static const TouchscreenHitbox sGtsSelectMonHitboxes[34] = {
 
 int GtsSearch_PrintSearchFailed(GtsApp *app) {
     GtsSearch_PrintMessage(app, msg_0775_00152, 1, 0, 0xF0F); // The search failed...
-    Gts_SetState(app, 21, 1);                                 // GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT
+    Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_HANDLE_INPUT);
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
@@ -407,8 +413,8 @@ int GtsSearch_ScrollOut(GtsApp *app) {
         app->scrollY = -16;
         if (app->hasSearchResults) {
             Sprite_SetAnimCtrlSeq(app->avatarSprites[1], 16);
-            app->state = 2; // GTS_SEARCH_STATE_FADE_OUT
-            Gts_SetNextScreen(app, 3, 16);
+            app->state = GTS_SEARCH_STATE_FADE_OUT;
+            Gts_SetNextScreen(app, GTS_SCREEN_SEARCH_RESULT, 16);
             app->selectedResult = 0;
         }
         Sprite_SetDrawFlag(app->panelSprite, FALSE);
@@ -420,7 +426,7 @@ int GtsSearch_ScrollIn(GtsApp *app) {
     app->scrollY--;
     if (IsPaletteFadeFinished()) {
         app->scrollY = 0;
-        app->state = 1; // GTS_SEARCH_STATE_HANDLE_INPUT
+        app->state = GTS_SEARCH_STATE_HANDLE_INPUT;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -434,8 +440,8 @@ int GtsSearch_HandleScrolledOut(GtsApp *app) {
         index = Gts_GetTouchedAvatar(app->searchResultCount);
         if (app->hasSearchResults && index >= 0) {
             Sprite_SetAnimCtrlSeq(app->avatarSprites[index + 1], index * 4 + 16);
-            app->state = 2; // GTS_SEARCH_STATE_FADE_OUT
-            Gts_SetNextScreen(app, 3, 0);
+            app->state = GTS_SEARCH_STATE_FADE_OUT;
+            Gts_SetNextScreen(app, GTS_SCREEN_SEARCH_RESULT, 0);
             app->selectedResult = index;
             PlaySE(SEQ_SE_DP_SELECT);
         }
@@ -724,7 +730,7 @@ static void GtsSelectMon_FreeData(GtsApp *app) {
     String_Delete(app->cancelText);
 }
 
-int GtsSelectMon_Start(GtsApp *app) {
+static int GtsSelectMon_Start(GtsApp *app) {
     int msgId;
 
     if (IsPaletteFadeFinished()) {
@@ -743,7 +749,7 @@ static void GtsSelectMon_SelectMonToDeposit(GtsApp *app) {
     BoxPokemon *boxMon;
 
     if (app->selectedSlot == GTS_SELECT_MON_BACK) {
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
         PlaySE(SEQ_SE_DP_SELECT);
         return;
@@ -813,17 +819,17 @@ static int GtsSelectMon_GetTouchedButton(void) {
 // BACK: to the main menu (deposit) or back to the search result (trade).
 static void GtsSelectMon_Leave(GtsApp *app, int mode) {
     if (mode == GTS_SELECT_MON_MODE_DEPOSIT) {
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (mode == GTS_SELECT_MON_MODE_TRADE) {
-        Gts_SetNextScreen(app, 3, 17);
+        Gts_SetNextScreen(app, GTS_SCREEN_SEARCH_RESULT, 17);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-int GtsSelectMon_HandleInput(GtsApp *app) {
+static int GtsSelectMon_HandleInput(GtsApp *app) {
     int button = GtsSelectMon_GetTouchedButton();
 
     if (button != -1) {
@@ -939,7 +945,7 @@ static int GtsSelectMon_StepIndex(int index, int count, int step) {
     return index;
 }
 
-int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
+static int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(3, HEAP_ID_61);
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00098, 1); // SUMMARY
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00099, 2); // OFFER
@@ -949,7 +955,7 @@ int GtsSelectMon_OpenDepositMenu(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
+static int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
     u32 input;
     BoxPokemon *boxMon;
     BOOL hasCapsule;
@@ -961,7 +967,7 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
         ListMenuItems_Delete(app->listItems);
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 8, 5);
+        Gts_SetNextScreen(app, GTS_SCREEN_VIEW_MON, 5);
         break;
     case 2: // OFFER
         Gts_DestroyListMenu(app);
@@ -1000,7 +1006,7 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
         if (!hasCapsule) {
             app->selectedMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
             app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-            Gts_SetNextScreen(app, 6, 0);
+            Gts_SetNextScreen(app, GTS_SCREEN_WANTED, 0);
         }
         break;
     case 3: // CANCEL
@@ -1014,7 +1020,7 @@ int GtsSelectMon_HandleDepositMenu(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
+static int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
     app->listItems = ListMenuItems_New(3, HEAP_ID_61);
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00087, 1); // SUMMARY
     ListMenuItems_AppendFromMsgData(app->listItems, app->gtsMsgData, msg_0775_00088, 2); // TRADE
@@ -1024,7 +1030,7 @@ int GtsSelectMon_OpenTradeMenu(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
+static int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
     u32 input;
     BoxPokemon *boxMon;
     BOOL hasCapsule;
@@ -1035,7 +1041,7 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
         Gts_DestroyListMenu(app);
         ListMenuItems_Delete(app->listItems);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 8, 6);
+        Gts_SetNextScreen(app, GTS_SCREEN_VIEW_MON, 6);
         break;
     case 2: // TRADE
         Gts_DestroyListMenu(app);
@@ -1087,8 +1093,8 @@ int GtsSelectMon_HandleTradeMenu(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_FadeOut(GtsApp *app) {
-    if (app->nextScreen == 0 || app->nextScreen == 8 || app->nextScreen == 3) {
+static int GtsSelectMon_FadeOut(GtsApp *app) {
+    if (app->nextScreen == GTS_SCREEN_CONNECTION || app->nextScreen == GTS_SCREEN_VIEW_MON || app->nextScreen == GTS_SCREEN_SEARCH_RESULT) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
         app->fadedBothScreens = 1;
     } else {
@@ -1098,18 +1104,18 @@ int GtsSelectMon_FadeOut(GtsApp *app) {
     return GTS_APP_STATE_EXIT_SCREEN;
 }
 
-int GtsSelectMon_ShowExitPrompt(GtsApp *app) {
+static int GtsSelectMon_ShowExitPrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 12, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_EXIT_PROMPT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
+static int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 0, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SELECT_MON_STATE_START;
@@ -1117,19 +1123,19 @@ int GtsSelectMon_HandleExitPrompt(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app) {
+static int GtsSelectMon_AskRemoveCapsuleForTrade(GtsApp *app) {
     GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT_FOR_TRADE);
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app) {
+static int GtsSelectMon_ShowCapsulePromptForTrade(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_CAPSULE_PROMPT_FOR_TRADE;
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
+static int GtsSelectMon_HandleCapsulePromptForTrade(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
@@ -1152,31 +1158,31 @@ static BOOL GtsSelectMon_StartTrade(GtsApp *app) {
     app->selectedMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
     app->state = GTS_SELECT_MON_STATE_FADE_OUT;
     app->fadedBothScreens = 1;
-    Gts_SetNextScreen(app, 7, 9);
+    Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 9);
     GtsSelectMon_InitTradeRecord(&app->record, app);
     app->searchResultCount = 0;
     return TRUE;
 }
 
-int GtsSelectMon_AskRemoveCapsule(GtsApp *app) {
+static int GtsSelectMon_AskRemoveCapsule(GtsApp *app) {
     GtsSelectMon_PrintMessage(app, msg_0775_00025, 1, 0, 0xF0F, TRUE); // The Ball Capsule will be detached. Is that OK?
     Gts_SetState(app, GTS_SELECT_MON_STATE_WAIT_TEXT, GTS_SELECT_MON_STATE_SHOW_CAPSULE_PROMPT);
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_ShowCapsulePrompt(GtsApp *app) {
+static int GtsSelectMon_ShowCapsulePrompt(GtsApp *app) {
     app->yesNoPrompt = Gts_CreateYesNoPrompt(app->bgConfig, 10, 0x1AD, 8, TRUE);
     app->state = GTS_SELECT_MON_STATE_HANDLE_CAPSULE_PROMPT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_HandleCapsulePrompt(GtsApp *app) {
+static int GtsSelectMon_HandleCapsulePrompt(GtsApp *app) {
     int response = Gts_HandleYesNoPrompt(app);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->selectedMon = Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
         app->state = GTS_SELECT_MON_STATE_FADE_OUT;
-        Gts_SetNextScreen(app, 6, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_WANTED, 0);
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         ClearFrameAndWindow2(&app->promptWindow, FALSE);
@@ -1185,14 +1191,14 @@ int GtsSelectMon_HandleCapsulePrompt(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_WaitText(GtsApp *app) {
+static int GtsSelectMon_WaitText(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         app->state = app->nextState;
     }
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsSelectMon_WaitTextAndClear(GtsApp *app) {
+static int GtsSelectMon_WaitTextAndClear(GtsApp *app) {
     if (!TextPrinterCheckActive(app->textPrinterId)) {
         ClearFrameAndWindow2(&app->promptWindow, FALSE);
         app->state = app->nextState;

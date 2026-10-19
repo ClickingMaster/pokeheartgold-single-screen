@@ -71,7 +71,7 @@ typedef struct PokeathlonPennantCapturePlayer {
 
 // An obstacle block (32 x 32 units).
 typedef struct PokeathlonPennantCaptureObstacle {
-    void *object; // NULL ends the list
+    BOOL placed; // FALSE ends the list
     PokeathlonCourseSpritePoolSprite *sprite;
     u16 x;
     u16 y;
@@ -79,7 +79,7 @@ typedef struct PokeathlonPennantCaptureObstacle {
 
 // One of the ten two-sprite field objects; the CPU players head for them.
 typedef struct PokeathlonPennantCaptureFieldItem {
-    void *object; // NULL ends the list
+    BOOL placed; // FALSE ends the list
     PokeathlonCourseSpritePoolSprite *sprite;
     PokeathlonCourseSpritePoolSprite *shadowSprite;
     u16 x;
@@ -163,11 +163,11 @@ typedef struct PokeathlonPennantCapture {
 
 // The frame state the host sends to all participants.
 // words[0-3]: per participant x (bits 0-8), y (9-17), score (18-27), pennants (28-31).
-// words[4]: drop effect x, y, bit 18 new drop effect, bits 19-22 hidden participants,
-//           bits 23-30 swap state per participant (2 bits each).
+// words[4]: drop effect x, y, bit 18 new drop effect, bits 19-22 depositing participants,
+//           bits 23-30 knocked-down contacts, bit 31 finished.
 // words[5]: pickup effect x, y, bit 18 new pickup effect, bits 19-22 "pennants full" per participant.
-// spots[0-4]: bits 0-4 spot of pennant i; for i < 4 also member (bits 5-6), size - 1 (7-8),
-//             active (9) and bonus points (11-15) of participant i.
+// spots[0-4]: bits 0-4 spot of pennant i; for i < 4 also member (bits 5-6), direction - 1 (7-8),
+//             knocked down (9) and points to add (11-15) of participant i.
 typedef struct PokeathlonPennantCaptureFrame {
     u32 words[6];
     u16 spots[5];

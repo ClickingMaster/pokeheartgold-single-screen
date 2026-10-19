@@ -5,10 +5,16 @@
 
 #include "global.h"
 
+#include "constants/pokemon.h"
+#include "constants/species.h"
+
 #include "msgdata/msg.naix"
 
+#include "application/vs_recorder/vs_recorder_screens.h"
 #include "assert.h"
 #include "battle_record.h"
+#include "dwc/net_common_internal.h"
+#include "global_terminal/global_terminal_server.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -20,33 +26,7 @@
 #include "string_util.h"
 #include "system.h"
 
-BOOL GlobalTerminalServer_Init(GlobalTerminalNetLogin *login);
-void GlobalTerminalServer_Stop(void);
-int GlobalTerminalServer_GetState(void);
-int GlobalTerminalServer_GetError(void);
-BOOL GlobalTerminalServer_UploadDressUp(void *request, void *response);
-BOOL GlobalTerminalServer_DownloadDressUp(int arg, void *response);
-BOOL GlobalTerminalServer_UploadBox(int arg, void *request, void *response);
-BOOL GlobalTerminalServer_DownloadBox(int arg, void *response);
-void GlobalTerminalServer_GetResponseSize(GlobalTerminalNetResponse *response);
-void *GlobalTerminalServer_GetResponse(GlobalTerminalNet *net);
-int GlobalTerminalServer_GetResponseBufferSize(int command);
-BOOL GlobalTerminalServer_SendRequest22000(void *response);
-BOOL GlobalTerminalServer_GetRankings(void *request, void *response);
-BOOL GlobalTerminalServer_UploadVideo(void *request, void *response);
-BOOL GlobalTerminalServer_SearchVideos(void *request, void *response);
-BOOL GlobalTerminalServer_SearchVideosKind1(void *request, void *response);
-BOOL GlobalTerminalServer_SearchVideosKind2(void *request, void *response);
-BOOL GlobalTerminalServer_DownloadVideo(u32 argLow, u32 argHigh, int arg2, void *response);
-BOOL GlobalTerminalServer_SendRequest23003(u32 argLow, u32 argHigh, void *response);
-
-void DWC_ClearError(void);
-void DWC_CleanupInet(void);
 void CommState_FreeWfcSession(void);
-void VsRecorder_EncryptRecord(SaveData *saveData);
-int VsRecorder_SaveRecordNumber(SaveData *saveData, int numberLow, int numberHigh, void *out1, void *out2);
-
-BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
 // 20001 response: list of dress-up photos
 typedef struct GlobalTerminalNetDressUpEntry {
@@ -129,10 +109,10 @@ enum GlobalTerminalNetStepResult {
 static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form);
 static void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value);
 static void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const void *src, void *dst);
-static BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net);
-static BOOL GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net);
-static BOOL GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net);
-static BOOL GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net);
+static int GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net, void *stepWork);
+static int GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net, void *stepWork);
+static int GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net, void *stepWork);
+static int GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net, void *stepWork);
 static BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net);
 static BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net);
 static BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
@@ -163,13 +143,14 @@ static const GlobalTerminalNetStepFunc sGlobalTerminalNetNoSequence[1] = {
 };
 
 static const GlobalTerminalNetStepFunc sGlobalTerminalNetErrorSequence[5] = {
-    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqDisconnect,
-    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqStopClient,
-    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqShowError,
-    (GlobalTerminalNetStepFunc)GlobalTerminalNet_SeqWaitButton,
+    GlobalTerminalNet_SeqDisconnect,
+    GlobalTerminalNet_SeqStopClient,
+    GlobalTerminalNet_SeqShowError,
+    GlobalTerminalNet_SeqWaitButton,
     NULL,
 };
 
+// Nothing sets net->sequence, so the error sequence never runs.
 static const GlobalTerminalNetStepFunc *const sGlobalTerminalNetSequences[3] = {
     NULL,
     sGlobalTerminalNetErrorSequence,
@@ -180,7 +161,7 @@ static OSHeapHandle sGlobalTerminalNetOsHeap;
 
 static void GlobalTerminalNet_PackDressUpPhoto(SaveData *saveData, const GlobalTerminalNetDressUpRecord *record, GlobalTerminalNetDressUpForm *form) {
     GlobalTerminalNet_DressUpToUploadForm(record, form);
-    form->crc = SaveArray_CalcCRC16(saveData, form, 0x5C);
+    form->crc = SaveArray_CalcCRC16(saveData, form, offsetof(GlobalTerminalNetDressUpForm, crc));
 }
 
 void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *form, GlobalTerminalNetDressUpRecord *record) {
@@ -190,31 +171,29 @@ void GlobalTerminalNet_UnpackDressUpPhoto(const GlobalTerminalNetDressUpForm *fo
 void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int box, GlobalTerminalNetBoxForm *form, enum HeapID heapID) {
     String *name;
     int i;
-    u8 *halves;
-    u8 *words;
 
     MI_CpuFill8(form, 0, sizeof(GlobalTerminalNetBoxForm));
     name = String_New(60, heapID);
     PCStorage_GetBoxName(storage, box, name);
     CopyStringToU16Array(name, form->name, 20);
     String_Delete(name);
-    for (i = 0, halves = (u8 *)form, words = (u8 *)form; i < 30; i++, halves += 2, words += 4) {
-        *(u16 *)(halves + 40) = PCStorage_GetMonDataByIndexPair(storage, box, i, 5, NULL);
-        *(u32 *)(words + 100) = PCStorage_GetMonDataByIndexPair(storage, box, i, 0, NULL);
-        *(u32 *)(words + 220) = PCStorage_GetMonDataByIndexPair(storage, box, i, 7, NULL);
-        if (PCStorage_GetMonDataByIndexPair(storage, box, i, 174, NULL) == 494) {
+    for (i = 0; i < 30; i++) {
+        form->species[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, MON_DATA_SPECIES, NULL);
+        form->personality[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, MON_DATA_PERSONALITY, NULL);
+        form->otIds[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, MON_DATA_OT_ID, NULL);
+        if (PCStorage_GetMonDataByIndexPair(storage, box, i, MON_DATA_SPECIES_OR_EGG, NULL) == SPECIES_EGG) {
             form->eggFlags |= 1 << i;
         }
-        form->forms[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, 112, NULL);
+        form->forms[i] = PCStorage_GetMonDataByIndexPair(storage, box, i, MON_DATA_FORM, NULL);
     }
     form->wallpaper = PCStorage_GetBoxWallpaper(storage, box);
     form->category = 0;
-    form->crc = SaveArray_CalcCRC16(saveData, form, 408);
+    form->crc = SaveArray_CalcCRC16(saveData, form, offsetof(GlobalTerminalNetBoxForm, crc));
 }
 
 static void GlobalTerminalNet_SealBoxData(SaveData *saveData, GlobalTerminalNetBoxForm *form, int value) {
     form->category = value;
-    form->crc = SaveArray_CalcCRC16(saveData, form, 0x198);
+    form->crc = SaveArray_CalcCRC16(saveData, form, offsetof(GlobalTerminalNetBoxForm, crc));
 }
 
 static void GlobalTerminalNet_SetRequestHeader(SaveData *saveData, const void *src, void *dst) {
@@ -272,41 +251,41 @@ void GlobalTerminalNet_Free(GlobalTerminalNet *net) {
     Heap_Free(net->osHeapMemory);
 }
 
-static BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net) {
+static int GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net, void *stepWork) {
     GlobalTerminalServer_Stop();
     net->isRunning = 0;
-    return TRUE;
+    return GLOBAL_TERMINAL_NET_STEP_NEXT;
 }
 
-static BOOL GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net) {
+static int GlobalTerminalNet_SeqDisconnect(GlobalTerminalNet *net, void *stepWork) {
     DWC_ClearError();
     DWC_CleanupInet();
     CommState_FreeWfcSession();
     net->unk_3C8 = 0;
-    return TRUE;
+    return GLOBAL_TERMINAL_NET_STEP_NEXT;
 }
 
-static BOOL GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net) {
+static int GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net, void *stepWork) {
     int msgId = WifiConnection_ClassifyErrorCode(-net->errorCode, net->errorType);
     GlobalTerminalNet_ShowErrorMessage(net, msgId, -net->errorCode);
-    return TRUE;
+    return GLOBAL_TERMINAL_NET_STEP_NEXT;
 }
 
-static BOOL GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net) {
+static int GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net, void *stepWork) {
     u32 keys = gSystem.newKeys;
     if ((keys & PAD_BUTTON_A) || (keys & PAD_BUTTON_B)) {
         GlobalTerminalNet_PrintMessage(net, NULL);
-        return TRUE;
+        return GLOBAL_TERMINAL_NET_STEP_NEXT;
     }
-    return FALSE;
+    return GLOBAL_TERMINAL_NET_STEP_WAIT;
 }
 
 BOOL GlobalTerminalNet_RequestDressUpUpload(GlobalTerminalNet *net, const void *header, const GlobalTerminalNetDressUpRecord *record) {
     if (GlobalTerminalNet_IsIdle(net) == FALSE) {
         return FALSE;
     }
-    GlobalTerminalNet_SetRequestHeader(net->saveData, header, net->request.upload.header);
-    GlobalTerminalNet_PackDressUpPhoto(net->saveData, record, &net->request.upload.form.dressUp);
+    GlobalTerminalNet_SetRequestHeader(net->saveData, header, net->request.dressUpUpload.header);
+    GlobalTerminalNet_PackDressUpPhoto(net->saveData, record, &net->request.dressUpUpload.form);
     net->sendDelay = 60;
     net->pendingCommand = GTS_REQUEST_DRESS_UP_UPLOAD;
     return TRUE;
@@ -327,9 +306,9 @@ BOOL GlobalTerminalNet_RequestBoxUpload(GlobalTerminalNet *net, int value, const
     }
     net->requestArg.bytes[0] = value;
     net->requestArg.bytes[1] = box;
-    GlobalTerminalNet_SetRequestHeader(net->saveData, header, net->request.upload.header);
-    GlobalTerminalNet_PackBoxData(net->saveData, storage, box, &net->request.upload.form.box, net->heapID);
-    GlobalTerminalNet_SealBoxData(net->saveData, &net->request.upload.form.box, value);
+    GlobalTerminalNet_SetRequestHeader(net->saveData, header, net->request.boxUpload.header);
+    GlobalTerminalNet_PackBoxData(net->saveData, storage, box, &net->request.boxUpload.form, net->heapID);
+    GlobalTerminalNet_SealBoxData(net->saveData, &net->request.boxUpload.form, value);
     net->sendDelay = 60;
     net->pendingCommand = GTS_REQUEST_BOX_UPLOAD;
     return TRUE;
@@ -531,13 +510,13 @@ static BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
 
     switch (net->pendingCommand) {
     case GTS_REQUEST_DRESS_UP_UPLOAD:
-        result = GlobalTerminalServer_UploadDressUp(&net->request, net->responseBuffer);
+        result = GlobalTerminalServer_UploadDressUp(&net->request.dressUpUpload, net->responseBuffer);
         break;
     case GTS_REQUEST_DRESS_UP_DOWNLOAD:
         result = GlobalTerminalServer_DownloadDressUp(net->requestArg.half, net->responseBuffer);
         break;
     case GTS_REQUEST_BOX_UPLOAD:
-        result = GlobalTerminalServer_UploadBox(net->requestArg.bytes[0], &net->request, net->responseBuffer);
+        result = GlobalTerminalServer_UploadBox(net->requestArg.bytes[0], &net->request.boxUpload, net->responseBuffer);
         break;
     case GTS_REQUEST_BOX_DOWNLOAD:
         result = GlobalTerminalServer_DownloadBox(net->requestArg.bytes[0], net->responseBuffer);
@@ -546,7 +525,7 @@ static BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
         result = GlobalTerminalServer_SendRequest22000(net->responseBuffer);
         break;
     case GTS_REQUEST_RANKINGS:
-        result = GlobalTerminalServer_GetRankings(&net->request, net->responseBuffer);
+        result = GlobalTerminalServer_GetRankings(&net->request.rankings, net->responseBuffer);
         break;
     case GTS_REQUEST_VIDEO_UPLOAD:
         result = GlobalTerminalServer_UploadVideo(net->request.video, net->responseBuffer);
@@ -554,13 +533,13 @@ static BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
     case GTS_REQUEST_VIDEO_SEARCH:
         switch (net->searchKind) {
         case 0:
-            result = GlobalTerminalServer_SearchVideos(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideos(&net->request.search, net->responseBuffer);
             break;
         case 1:
-            result = GlobalTerminalServer_SearchVideosKind1(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideosKind1(&net->request.unk_00, net->responseBuffer);
             break;
         case 2:
-            result = GlobalTerminalServer_SearchVideosKind2(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideosKind2(&net->request.unk_00, net->responseBuffer);
             break;
         }
         break;
@@ -630,7 +609,7 @@ static BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, 
 
 // stores the server's number for the uploaded video in the recording and saves it; done when the save finished
 static BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
-    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
+    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse();
     int result = VsRecorder_SaveRecordNumber(net->saveData, response->numberLow, response->numberHigh, &pending->saveState, &pending->saveWriteState);
     return (u32)(result - 2) <= 1;
 }
@@ -649,9 +628,9 @@ static BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTermin
 
 static BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
     BOOL result = TRUE;
-    GlobalTerminalNetResponse *response = GlobalTerminalServer_GetResponse(net);
+    GlobalTerminalNetResponse *response = GlobalTerminalServer_GetResponse();
 
-    GlobalTerminalServer_GetResponseSize(response);
+    GlobalTerminalServer_GetResponseSize();
     GF_ASSERT(net->activeCommand == response->command);
     net->pendingResponse.func = NULL;
     switch (response->command) {
@@ -802,7 +781,7 @@ static BOOL GlobalTerminalNet_CheckDressUpDownloadResult(GlobalTerminalNet *net,
 }
 
 int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max) {
-    GlobalTerminalNetDressUpList *list = &((GlobalTerminalNetDressUpListResponse *)GlobalTerminalServer_GetResponse(net))->list;
+    GlobalTerminalNetDressUpList *list = &((GlobalTerminalNetDressUpListResponse *)GlobalTerminalServer_GetResponse())->list;
     int count = list->count;
     int i;
     GlobalTerminalNetDressUpEntry *entry;
@@ -858,7 +837,7 @@ static BOOL GlobalTerminalNet_CheckBoxDownloadResult(GlobalTerminalNet *net, Glo
 
 int GlobalTerminalNet_GetBoxList(GlobalTerminalNet *net, void **out, int max) {
     int count;
-    int *base = &((GlobalTerminalNetBoxListResponse *)GlobalTerminalServer_GetResponse(net))->count;
+    int *base = &((GlobalTerminalNetBoxListResponse *)GlobalTerminalServer_GetResponse())->count;
     int i;
     GlobalTerminalNetBoxEntry *entry;
 
@@ -901,7 +880,7 @@ static BOOL GlobalTerminalNet_Check22000Result(GlobalTerminalNet *net, GlobalTer
 }
 
 void GlobalTerminalNet_GetRankingsHeader(GlobalTerminalNet *net, void **out) {
-    GlobalTerminalNetBlockResponse *response = GlobalTerminalServer_GetResponse(net);
+    GlobalTerminalNetBlockResponse *response = GlobalTerminalServer_GetResponse();
     *out = &response->data;
 }
 
@@ -922,7 +901,7 @@ static BOOL GlobalTerminalNet_CheckRankingsResult(GlobalTerminalNet *net, Global
 }
 
 void GlobalTerminalNet_GetRankings(GlobalTerminalNet *net, void **out1, void **out2) {
-    u8 *data = (u8 *)&((GlobalTerminalNetBlockResponse *)GlobalTerminalServer_GetResponse(net))->data;
+    u8 *data = (u8 *)&((GlobalTerminalNetBlockResponse *)GlobalTerminalServer_GetResponse())->data;
     *out1 = data;
     *out2 = data + 0x558;
 }
@@ -946,7 +925,7 @@ static BOOL GlobalTerminalNet_CheckVideoUploadResult(GlobalTerminalNet *net, Glo
 }
 
 u64 GlobalTerminalNet_GetUploadedVideoNumber(GlobalTerminalNet *net) {
-    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
+    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse();
     return *(u64 *)&response->numberLow;
 }
 
@@ -965,7 +944,7 @@ static BOOL GlobalTerminalNet_CheckVideoSearchResult(GlobalTerminalNet *net, Glo
 }
 
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max) {
-    GlobalTerminalNetVideoList *list = &((GlobalTerminalNetVideoListResponse *)GlobalTerminalServer_GetResponse(net))->list;
+    GlobalTerminalNetVideoList *list = &((GlobalTerminalNetVideoListResponse *)GlobalTerminalServer_GetResponse())->list;
     int count = list->count;
     GlobalTerminalNetVideoEntry *entry;
     int i;
@@ -1004,7 +983,7 @@ static BOOL GlobalTerminalNet_CheckVideoDownloadResult(GlobalTerminalNet *net, G
 }
 
 u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out) {
-    GlobalTerminalNetVideoResponse *response = GlobalTerminalServer_GetResponse(net);
+    GlobalTerminalNetVideoResponse *response = GlobalTerminalServer_GetResponse();
     GlobalTerminalNetVideoView *view = (GlobalTerminalNetVideoView *)((u8 *)response + 4);
 
     *out = (u8 *)((u32)view + 12);

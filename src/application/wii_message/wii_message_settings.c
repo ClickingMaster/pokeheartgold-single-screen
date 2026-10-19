@@ -16,6 +16,7 @@
 #include "sound_system.h"
 #include "sys_flags.h"
 #include "title_screen.h"
+#include "wireless_status_icon.h"
 
 FS_EXTERN_OVERLAY(OVY_44);
 FS_EXTERN_OVERLAY(OVY_70);
@@ -27,7 +28,6 @@ typedef struct WiiMessageSettingsAppEntry {
     u32 unloadNetwork;
 } WiiMessageSettingsAppEntry;
 
-void WirelessStatusIcon_SetLevel(int level);
 void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *));
 int DWC_GetLinkLevel(void);
 void DWC_UpdateConnection(void);

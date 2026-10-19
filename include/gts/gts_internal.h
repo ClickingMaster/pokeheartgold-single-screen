@@ -128,6 +128,32 @@ extern GtsServerPending gGtsServerPending;
 extern volatile GtsServerAnswer gGtsServerAnswer; // written by the response callback
 extern u8 gGtsServerShortResponse[];
 
+// {first letter, letter count} of the letter groups ABC .. YZ.
+typedef struct GtsLetterGroup {
+    int first;
+    int count;
+} GtsLetterGroup;
+
+// The first letter of each letter group.
+extern const int gGtsSelectorGroupStarts[];
+extern const GtsLetterGroup gGtsSelectorLetterGroups[];
+// The gender symbol message of each GTS gender (1 male, 2 female, 0 and 3 either).
+extern u32 gGtsGenderSymbolMsgs[];
+
+// The screens of the app, in sGtsScreens order
+enum GtsScreenId {
+    GTS_SCREEN_CONNECTION,
+    GTS_SCREEN_MAIN_MENU,
+    GTS_SCREEN_SUMMARY,
+    GTS_SCREEN_SEARCH_RESULT,
+    GTS_SCREEN_SEARCH,
+    GTS_SCREEN_SELECT_MON,
+    GTS_SCREEN_WANTED,
+    GTS_SCREEN_TRANSACTION,
+    GTS_SCREEN_VIEW_MON,
+    GTS_SCREEN_TRADE,
+};
+
 // Gts_Main states; the screen functions return the next one
 enum GtsAppState {
     GTS_APP_STATE_WAIT_WIRELESS,
@@ -208,7 +234,7 @@ struct GtsApp {
     GtsArgs *args;
     BgConfig *bgConfig;
     u8 padding_0008[0xC];
-    int screen; // index into sGtsScreens
+    int screen; // enum GtsScreenId
     int nextScreen;
     int statusCheckCaller;
     int prevScreen;
@@ -333,9 +359,6 @@ struct GtsApp {
     u32 requestFrames;          // frames the request in flight took
 };
 
-// Maps a failed request's error to its result.
-int GtsServer_GetErrorResult(int error);
-
 // Helpers shared by the GTS screens.
 void Gts_InitSpriteTemplate(SpriteTemplate *template, GtsApp *app, const SpriteResourcesHeader *header, NNS_G2D_VRAM_TYPE screen);
 YesNoPrompt *Gts_CreateYesNoPrompt(BgConfig *bgConfig, u8 y, int tileStart, u32 palette, u8 dimScreen);
@@ -379,7 +402,6 @@ void GtsSearch_SetBlendBrightness(int brightness);
 void Gts_CreateAvatars(GtsApp *app, u32 gender);
 void Gts_StartPlayerEnterAnim(GtsApp *app, int gender);
 void Gts_StartPlayerExitAnim(GtsApp *app, int gender);
-void Gts_SetAvatarPosition(Sprite *sprite, int x, int y);
 int Gts_GetTouchedAvatar(int count);
 void Gts_ShowResultAvatars(GtsApp *app, int count, int animate);
 void Gts_StopAvatarAnims(GtsApp *app);
@@ -397,6 +419,83 @@ BOOL Gts_MonHoldsMail(Pokemon *mon);
 // texts, level ranges, species and country lists, the record of a deposit or trade.
 // align: 0 left, 1 centered, 2 right in the window.
 BOOL Gts_SetFixedGender(GtsWantedMon *wanted, u32 genderRatio);
+
+// The screens: init, main and exit return the next Gts_Main state.
+int GtsConnection_Init(GtsApp *, int);
+int GtsConnection_Main(GtsApp *, int);
+int GtsConnection_Exit(GtsApp *, int);
+int GtsMainMenu_Init(GtsApp *, int);
+int GtsMainMenu_Main(GtsApp *, int);
+int GtsMainMenu_Exit(GtsApp *, int);
+int GtsSummary_Init(GtsApp *, int);
+int GtsSummary_Main(GtsApp *, int);
+int GtsSummary_Exit(GtsApp *, int);
+int GtsSearchResult_Init(GtsApp *, int);
+int GtsSearchResult_Main(GtsApp *, int);
+int GtsSearchResult_Exit(GtsApp *, int);
+int GtsSearch_Init(GtsApp *, int);
+int GtsSearch_Main(GtsApp *, int);
+int GtsSearch_Exit(GtsApp *, int);
+int GtsSelectMon_Init(GtsApp *, int);
+int GtsSelectMon_Main(GtsApp *, int);
+int GtsSelectMon_Exit(GtsApp *, int);
+int GtsWanted_Init(GtsApp *, int);
+int GtsWanted_Main(GtsApp *, int);
+int GtsWanted_Exit(GtsApp *, int);
+int GtsTransaction_Init(GtsApp *, int);
+int GtsTransaction_Main(GtsApp *, int);
+int GtsTransaction_Exit(GtsApp *, int);
+
+// The search screen states; some of them are next to the Pokemon selection screen
+typedef enum GtsSearchState {
+    GTS_SEARCH_STATE_START,
+    GTS_SEARCH_STATE_HANDLE_INPUT,
+    GTS_SEARCH_STATE_FADE_OUT,
+    GTS_SEARCH_STATE_ASK_SPECIES,
+    GTS_SEARCH_STATE_OPEN_SPECIES_SELECTOR,
+    GTS_SEARCH_STATE_HANDLE_SPECIES_SELECTOR,
+    GTS_SEARCH_STATE_ASK_GENDER,
+    GTS_SEARCH_STATE_OPEN_GENDER_SELECTOR,
+    GTS_SEARCH_STATE_HANDLE_GENDER_SELECTOR,
+    GTS_SEARCH_STATE_ASK_LEVEL,
+    GTS_SEARCH_STATE_OPEN_LEVEL_SELECTOR,
+    GTS_SEARCH_STATE_HANDLE_LEVEL_SELECTOR,
+    GTS_SEARCH_STATE_ASK_COUNTRY,
+    GTS_SEARCH_STATE_OPEN_COUNTRY_SELECTOR,
+    GTS_SEARCH_STATE_HANDLE_COUNTRY_SELECTOR,
+    GTS_SEARCH_STATE_START_SEARCH,
+    GTS_SEARCH_STATE_SEND_SEARCH,
+    GTS_SEARCH_STATE_WAIT_SEARCH,
+    GTS_SEARCH_STATE_SHOW_RESULT_COUNT,
+    GTS_SEARCH_STATE_WAIT_RESULTS_SHOWN,
+    GTS_SEARCH_STATE_SEARCH_FAILED,
+    GTS_SEARCH_STATE_WAIT_TEXT,
+    GTS_SEARCH_STATE_WAIT_TEXT_AND_PAUSE,
+    GTS_SEARCH_STATE_SHOW_EXIT_PROMPT,
+    GTS_SEARCH_STATE_HANDLE_EXIT_PROMPT,
+    GTS_SEARCH_STATE_RETURN_TO_INPUT,
+    GTS_SEARCH_STATE_PRINT_SEARCH_FAILED,
+    GTS_SEARCH_STATE_SERVER_ERROR,
+    GTS_SEARCH_STATE_SERVER_ERROR_EXIT,
+    GTS_SEARCH_STATE_SCROLL_OUT,
+    GTS_SEARCH_STATE_SCROLL_IN,
+    GTS_SEARCH_STATE_SCROLLED_OUT,
+} GtsSearchState;
+
+int GtsSearch_PrintSearchFailed(GtsApp *);
+int GtsSearch_WaitText(GtsApp *);
+int GtsSearch_WaitTextAndPause(GtsApp *);
+int GtsSearch_ScrollOut(GtsApp *);
+int GtsSearch_ScrollIn(GtsApp *);
+int GtsSearch_HandleScrolledOut(GtsApp *);
+
+int GtsViewMon_Init(GtsApp *, int);
+int GtsViewMon_Main(GtsApp *, int);
+int GtsViewMon_Exit(GtsApp *, int);
+int GtsTrade_Init(GtsApp *, int);
+int GtsTrade_Main(GtsApp *, int);
+int GtsTrade_Exit(GtsApp *, int);
+
 void Gts_PrintSpeciesName(Window *window, MsgData *speciesNames, int species, int align, int y, u32 color);
 void Gts_PrintSpeciesNameNoTransfer(Window *window, MsgData *speciesNames, int species, int y, u32 color);
 void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgData, u32 country, int align, int y, u32 color);

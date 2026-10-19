@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_goal_roll.h"
 
 #include "assert.h"
@@ -9,9 +10,6 @@
 #include "math_util.h"
 #include "sprite_resource_header.h"
 #include "sprite_system.h"
-
-s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL shown, BOOL show);
 
 // Per goal (indexed by participant - 1 or by 3 - quadrant): three guard points (x, y) in front of it.
 extern const u16 gPokeathlonGoalRollCpuGuardPoints[][3][2];

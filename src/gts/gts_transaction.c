@@ -84,13 +84,13 @@ typedef enum GtsTransactionState {
     GTS_TRANSACTION_STATE_SERVER_ERROR,
 } GtsTransactionState;
 
-extern int (*const sGtsTransactionStates[])(GtsApp *app);
-extern const GraphicsModes sGtsTransactionGraphicsModes;
-extern const BgTemplate sGtsTransactionBg0Template;
-extern const BgTemplate sGtsTransactionBg1Template;
-extern const BgTemplate sGtsTransactionBg2Template;
-extern const BgTemplate sGtsTransactionSubBg0Template;
-extern const BgTemplate sGtsTransactionSubBg1Template;
+extern int (*const gGtsTransactionStates[])(GtsApp *app);
+extern const GraphicsModes gGtsTransactionGraphicsModes;
+extern const BgTemplate gGtsTransactionBg0Template;
+extern const BgTemplate gGtsTransactionBg1Template;
+extern const BgTemplate gGtsTransactionBg2Template;
+extern const BgTemplate gGtsTransactionSubBg0Template;
+extern const BgTemplate gGtsTransactionSubBg1Template;
 
 static void GtsTransaction_InitBgs(BgConfig *bgConfig);
 static void GtsTransaction_FreeBgs(BgConfig *bgConfig);
@@ -111,12 +111,8 @@ static int GtsTransaction_CheckCanReceive(GtsApp *app, Pokemon *mon);
 static void GtsTransaction_SetSaveStates(GtsApp *app, u16 midState, u16 doneState);
 static BOOL GtsTransaction_IsDepositMissingFromSave(GtsApp *app);
 
-void WirelessStatusIcon_SetLevel(s32 level);
 void CommState_ShowRestartErrorAndHalt(void);
 
-int GtsTransaction_Init(GtsApp *app, int state);
-int GtsTransaction_Main(GtsApp *app, int state);
-int GtsTransaction_Exit(GtsApp *app, int state);
 int GtsTransaction_Start(GtsApp *app);
 int GtsTransaction_SendPost(GtsApp *app);
 int GtsTransaction_WaitPost(GtsApp *app);
@@ -138,7 +134,7 @@ int GtsTransaction_WaitStatusGet(GtsApp *app);
 int GtsTransaction_ReceiveTradedMon(GtsApp *app);
 int GtsTransaction_SendDelete(GtsApp *app);
 int GtsTransaction_WaitDelete(GtsApp *app);
-int GtsTransaction_Idle(void);
+int GtsTransaction_Idle(GtsApp *app);
 int GtsTransaction_DepositDone(GtsApp *app);
 int GtsTransaction_ReceiveDone(GtsApp *app);
 int GtsTransaction_ExchangeDone(GtsApp *app);
@@ -172,7 +168,7 @@ int GtsTransaction_Init(GtsApp *app, int state) {
 
 int GtsTransaction_Main(GtsApp *app, int state) {
     WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
-    return sGtsTransactionStates[app->state](app);
+    return gGtsTransactionStates[app->state](app);
 }
 
 int GtsTransaction_Exit(GtsApp *app, int state) {
@@ -194,21 +190,21 @@ static void GtsTransaction_InitBgs(BgConfig *bgConfig) {
     BgTemplate subBg0;
     BgTemplate subBg1;
 
-    graphicsModes = sGtsTransactionGraphicsModes;
+    graphicsModes = gGtsTransactionGraphicsModes;
     SetBothScreensModesAndDisable(&graphicsModes);
-    bg0 = sGtsTransactionBg0Template;
+    bg0 = gGtsTransactionBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    bg1 = sGtsTransactionBg1Template;
+    bg1 = gGtsTransactionBg1Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
-    bg2 = sGtsTransactionBg2Template;
+    bg2 = gGtsTransactionBg2Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
-    subBg0 = sGtsTransactionSubBg0Template;
+    subBg0 = gGtsTransactionSubBg0Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &subBg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    subBg1 = sGtsTransactionSubBg1Template;
+    subBg1 = gGtsTransactionSubBg1Template;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &subBg1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_61);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_61);
@@ -238,7 +234,7 @@ static void GtsTransaction_LoadGraphics(GtsApp *app) {
         ToggleBgLayer(GF_BG_LYR_SUB_1, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
     }
-    if (app->prevScreen == 9) {
+    if (app->prevScreen == GTS_SCREEN_TRADE) {
         Gts_LoadSubScreenBg(app);
         Gts_ShowSubScreenPanel(app);
     }
@@ -286,7 +282,7 @@ int GtsTransaction_Start(GtsApp *app) {
         break;
     case 12:
         Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00148, 1, 0xF0F); // Saving... Do not turn off the power.
-        app->nextScreen = 1;
+        app->nextScreen = GTS_SCREEN_MAIN_MENU;
         app->state = GTS_TRANSACTION_STATE_SAVE_AND_EXIT;
         break;
     default:
@@ -674,7 +670,7 @@ int GtsTransaction_WaitResult(GtsApp *app) {
 }
 
 int GtsTransaction_ExitToMainMenu(GtsApp *app) {
-    Gts_SetNextScreen(app, 1, 0);
+    Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -737,11 +733,11 @@ int GtsTransaction_WaitStatusGet(GtsApp *app) {
 static void GtsTransaction_ReturnToCaller(GtsApp *app) {
     switch (app->statusCheckCaller) {
     case 1:
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         app->state = GTS_TRANSACTION_STATE_FADE_OUT;
         break;
     case 2:
-        Gts_SetNextScreen(app, 2, 3);
+        Gts_SetNextScreen(app, GTS_SCREEN_SUMMARY, 3);
         app->state = GTS_TRANSACTION_STATE_FADE_OUT;
         break;
     }
@@ -806,26 +802,26 @@ int GtsTransaction_WaitDelete(GtsApp *app) {
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
-int GtsTransaction_Idle(void) {
-    return 3;
+int GtsTransaction_Idle(GtsApp *app) {
+    return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_DepositDone(GtsApp *app) {
     app->hasDepositedMon = TRUE;
-    Gts_SetNextScreen(app, 9, 7);
+    Gts_SetNextScreen(app, GTS_SCREEN_TRADE, 7);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ReceiveDone(GtsApp *app) {
     app->hasDepositedMon = FALSE;
-    Gts_SetNextScreen(app, 9, 8);
+    Gts_SetNextScreen(app, GTS_SCREEN_TRADE, 8);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
 
 int GtsTransaction_ExchangeDone(GtsApp *app) {
-    Gts_SetNextScreen(app, 9, 9);
+    Gts_SetNextScreen(app, GTS_SCREEN_TRADE, 9);
     app->state = GTS_TRANSACTION_STATE_FADE_OUT;
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -833,7 +829,7 @@ int GtsTransaction_ExchangeDone(GtsApp *app) {
 // No state leads here.
 int GtsTransaction_TradedDone(GtsApp *app) {
     app->hasDepositedMon = FALSE;
-    Gts_SetNextScreen(app, 9, 10);
+    Gts_SetNextScreen(app, GTS_SCREEN_TRADE, 10);
     app->state = GTS_TRANSACTION_STATE_START_SAVE;
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -885,7 +881,7 @@ int GtsTransaction_WaitUnsavedReturn(GtsApp *app) {
 int GtsTransaction_AlreadyTraded(GtsApp *app) {
     Gts_PrintMessage(app, app->gtsMsgData, msg_0775_00147, 1, 0xF0F); // Unfortunately, it was traded to another Trainer.
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_FADE_OUT);
-    Gts_SetNextScreen(app, 1, 0);
+    Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
     Gts_DeleteWaitingIcon(app);
     Gts_StopAvatarAnims(app);
     return GTS_APP_STATE_RUN_SCREEN;
@@ -917,7 +913,7 @@ static void GtsTransaction_PrintServerError(GtsApp *app) {
 int GtsTransaction_ServerErrorExit(GtsApp *app) {
     GtsTransaction_PrintServerError(app);
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_FADE_OUT);
-    Gts_SetNextScreen(app, 0, 0);
+    Gts_SetNextScreen(app, GTS_SCREEN_CONNECTION, 0);
     Gts_DeleteWaitingIcon(app);
     return GTS_APP_STATE_RUN_SCREEN;
 }
@@ -925,7 +921,7 @@ int GtsTransaction_ServerErrorExit(GtsApp *app) {
 int GtsTransaction_ServerError(GtsApp *app) {
     GtsTransaction_PrintServerError(app);
     Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_FADE_OUT);
-    Gts_SetNextScreen(app, 1, 0);
+    Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
     Gts_DeleteWaitingIcon(app);
     Gts_StopAvatarAnims(app);
     return GTS_APP_STATE_RUN_SCREEN;
@@ -978,7 +974,7 @@ int GtsTransaction_StartSaveWithMessage(GtsApp *app) {
 
 int GtsTransaction_SaveWithMessage(GtsApp *app) {
     if (Save_WriteFileAsync(app->args->saveData) == WRITE_STATUS_SUCCESS) {
-        Gts_SetNextScreen(app, 1, 0);
+        Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
         Gts_DeleteWaitingIcon(app);
         Gts_PrintMessage(app, app->gtsMsgData, app->afterSaveMsgId, 1, 0xF0F);
         Gts_SetState(app, GTS_TRANSACTION_STATE_WAIT_TEXT, GTS_TRANSACTION_STATE_EXIT_TO_MAIN_MENU);

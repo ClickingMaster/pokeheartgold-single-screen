@@ -13,16 +13,11 @@
 #include "pokemon_storage_system.h"
 #include "save_gts.h"
 
-extern const OverlayManagerTemplate sGtsTradeSequenceTemplate;
+extern const OverlayManagerTemplate gGtsTradeSequenceTemplate;
 
 static PlayerProfile *GtsTrade_CreatePartnerProfile(GtsRecord *record);
 static Pokemon *GtsTrade_GetReceivedMon(GtsApp *app, int kind);
 static void GtsTrade_StoreReceivedMon(GtsApp *app);
-
-
-int GtsTrade_Init(GtsApp *app, int state);
-int GtsTrade_Main(GtsApp *app, int state);
-int GtsTrade_Exit(GtsApp *app, int state);
 
 // Starts the trade sequence for the kind of trade in nextScreenArg (7..10).
 int GtsTrade_Init(GtsApp *app, int state) {
@@ -64,9 +59,9 @@ int GtsTrade_Init(GtsApp *app, int state) {
         break;
     }
     app->tradeAnim.options = app->args->options;
-    app->tradeSequence = OverlayManager_New(&sGtsTradeSequenceTemplate, &app->tradeAnim, HEAP_ID_61);
+    app->tradeSequence = OverlayManager_New(&gGtsTradeSequenceTemplate, &app->tradeAnim, HEAP_ID_61);
     app->reloadGraphics = TRUE;
-    return 2;
+    return GTS_APP_STATE_WAIT_FADE_IN;
 }
 
 // After the trade sequence the received Pokemon may evolve by trade (kind 9; kinds 8 and 10 only when it is
@@ -95,7 +90,7 @@ int GtsTrade_Main(GtsApp *app, int state) {
                 app->evolutionTask = EvolutionScene_New(NULL, mon, species, args->options, args->unk38, args->pokedex, args->bag, args->gameStats, method, 4, HEAP_ID_61);
                 app->state = 1;
             } else {
-                Gts_SetNextScreen(app, 1, 0);
+                Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
                 ret = 4;
             }
         } else if (kind == 8 || kind == 10) {
@@ -109,16 +104,16 @@ int GtsTrade_Main(GtsApp *app, int state) {
                     app->evolutionTask = EvolutionScene_New(NULL, mon, species, args->options, args->unk38, args->pokedex, args->bag, args->gameStats, methodAfterCheck, 4, HEAP_ID_61);
                     app->state = 1;
                 } else {
-                    Gts_SetNextScreen(app, 1, 0);
+                    Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
                     ret = 4;
                 }
             } else {
-                Gts_SetNextScreen(app, 1, 0);
+                Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
                 ret = 4;
             }
             Heap_Free(deposited);
         } else {
-            Gts_SetNextScreen(app, 1, 0);
+            Gts_SetNextScreen(app, GTS_SCREEN_MAIN_MENU, 0);
             ret = 4;
         }
         break;
@@ -127,7 +122,7 @@ int GtsTrade_Main(GtsApp *app, int state) {
             EvolutionScene_Delete(app->evolutionTask);
             GtsTrade_StoreReceivedMon(app);
             reg_GX_DISPCNT &= 0xFFFF1FFF;
-            Gts_SetNextScreen(app, 7, 12);
+            Gts_SetNextScreen(app, GTS_SCREEN_TRANSACTION, 12);
             ret = 4;
         }
         break;
@@ -139,7 +134,7 @@ int GtsTrade_Exit(GtsApp *app, int state) {
     Heap_Free(app->depositedMon);
     Heap_Free(app->partnerProfile);
     Gts_SwitchScreen(app);
-    return 1;
+    return GTS_APP_STATE_INIT_SCREEN;
 }
 
 // The trade partner as a profile: the record's trainer name, game version and language.

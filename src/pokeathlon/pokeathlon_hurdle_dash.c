@@ -36,20 +36,20 @@ enum PokeathlonHurdleDashPlayState {
     HURDLE_DASH_PLAY_END,
 };
 
-extern const PokeathlonCourseSpritePoolTemplate sHurdleDashSceneConfig;
-extern const PokeathlonHurdleDashNumberX sHurdleDashNumberX;
-extern const u8 sHurdleDashTimerDigitX[8];
-extern const u8 sHurdleDashTimerDigitAnims[8];
-extern const GraphicsModes sHurdleDashGraphicsModes;
-extern const BgTemplate sHurdleDashBgTemplate_Sub0;
-extern const BgTemplate sHurdleDashBgTemplate_Sub1;
-extern const BgTemplate sHurdleDashBgTemplate_Main0;
-extern const BgTemplate sHurdleDashBgTemplate_Main1;
-extern const BgTemplate sHurdleDashBgTemplate_Main2;
-extern const BgTemplate sHurdleDashBgTemplate_Main3;
-extern const BgTemplate sHurdleDashBgTemplate_Sub3;
-extern const BgTemplate sHurdleDashBgTemplate_Sub2;
-extern const GraphicsBanks sHurdleDashGraphicsBanks;
+extern const PokeathlonCourseSpritePoolTemplate gHurdleDashSceneConfig;
+extern const PokeathlonHurdleDashNumberX gHurdleDashNumberX;
+extern const u8 gHurdleDashTimerDigitX[8];
+extern const u8 gHurdleDashTimerDigitAnims[8];
+extern const GraphicsModes gHurdleDashGraphicsModes;
+extern const BgTemplate gHurdleDashBgTemplate_Sub0;
+extern const BgTemplate gHurdleDashBgTemplate_Sub1;
+extern const BgTemplate gHurdleDashBgTemplate_Main0;
+extern const BgTemplate gHurdleDashBgTemplate_Main1;
+extern const BgTemplate gHurdleDashBgTemplate_Main2;
+extern const BgTemplate gHurdleDashBgTemplate_Main3;
+extern const BgTemplate gHurdleDashBgTemplate_Sub3;
+extern const BgTemplate gHurdleDashBgTemplate_Sub2;
+extern const GraphicsBanks gHurdleDashGraphicsBanks;
 
 static void PokeathlonHurdleDash_SetGfxBanks(void);
 static void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig);
@@ -239,7 +239,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         break;
     }
     case HURDLE_DASH_INIT_CREATE_SCENE:
-        sceneConfig = sHurdleDashSceneConfig;
+        sceneConfig = gHurdleDashSceneConfig;
         hurdleDash->scene = PokeathlonCourseSpritePool_New(hurdleDash->heapId, &sceneConfig);
         PokeathlonCourseSpritePool_SetSurfaceCoords(hurdleDash->scene, 0, FX32_CONST(272), 0, 0);
         PokeathlonCourseSpritePool_SetResourceId(hurdleDash->scene, 0, 101);
@@ -298,11 +298,11 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         for (i = 0; i < 6; i++) {
             hurdleDash->sprites[i] = PokeathlonCourse_CreateTimerDigitSprite(hurdleDash->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(hurdleDash->scene), 0, hurdleDash->heapId);
             Sprite_SetDrawFlag(hurdleDash->sprites[i], TRUE);
-            spritePos.x = sHurdleDashTimerDigitX[i] << FX32_SHIFT;
+            spritePos.x = gHurdleDashTimerDigitX[i] << FX32_SHIFT;
             spritePos.y = FX32_CONST(456);
             spritePos.z = 0;
             Sprite_SetMatrix(hurdleDash->sprites[i], &spritePos);
-            Sprite_SetAnimCtrlSeq(hurdleDash->sprites[i], sHurdleDashTimerDigitAnims[i]);
+            Sprite_SetAnimCtrlSeq(hurdleDash->sprites[i], gHurdleDashTimerDigitAnims[i]);
         }
         PokeathlonHurdleDashDust_CreateSprites(hurdleDash->dust, hurdleDash->scene, 1);
         hurdleDash->standings = PokeathlonHurdleDashStandings_New(hurdleDash->heapId);
@@ -372,7 +372,7 @@ BOOL PokeathlonHurdleDash_Init(PokeathlonCourseData *course) {
         u8 *dataCopy;
         PokeathlonHurdleDashTrack_CreateHurdleSprites(hurdleDash->track, hurdleDash->scene);
         Sprite_SetDrawPriority(*PokeathlonCourse_CreateHudSpritesInPool(course, 272, hurdleDash->spriteResources, hurdleDash->scene), 1);
-        numberX = sHurdleDashNumberX;
+        numberX = gHurdleDashNumberX;
         ReadWholeNarcMemberByIdPair(&params, NARC_a_1_7_0, 10);
         ReadWholeNarcMemberByIdPair(&table, NARC_a_1_7_0, 0);
         {
@@ -480,50 +480,50 @@ BOOL PokeathlonHurdleDash_Exit(PokeathlonCourseData *course) {
 }
 
 static void PokeathlonHurdleDash_SetGfxBanks(void) {
-    GraphicsBanks banks = sHurdleDashGraphicsBanks;
+    GraphicsBanks banks = gHurdleDashGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 static void PokeathlonHurdleDash_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = sHurdleDashGraphicsModes;
+    GraphicsModes modes = gHurdleDashGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Main0;
+        BgTemplate bg = gHurdleDashBgTemplate_Main0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Main1;
+        BgTemplate bg = gHurdleDashBgTemplate_Main1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Main2;
+        BgTemplate bg = gHurdleDashBgTemplate_Main2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Main3;
+        BgTemplate bg = gHurdleDashBgTemplate_Main3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Sub0;
+        BgTemplate bg = gHurdleDashBgTemplate_Sub0;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Sub1;
+        BgTemplate bg = gHurdleDashBgTemplate_Sub1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Sub2;
+        BgTemplate bg = gHurdleDashBgTemplate_Sub2;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
     }
     {
-        BgTemplate bg = sHurdleDashBgTemplate_Sub3;
+        BgTemplate bg = gHurdleDashBgTemplate_Sub3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &bg, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
     }

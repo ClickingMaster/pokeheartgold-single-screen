@@ -12,6 +12,9 @@
 #include "assert.h"
 #include "bg_window.h"
 #include "comm_state.h"
+#include "dwc/dwc_main_internal.h"
+#include "dwc/net_common_internal.h"
+#include "dwc/stats_upload_internal.h"
 #include "filesystem.h"
 #include "font.h"
 #include "friend_roster.h"
@@ -88,14 +91,6 @@ enum GlobalTerminalConnectDisconnectStep {
 };
 
 // The GlobalTerminalApp the connect app is started with.
-typedef struct GlobalTerminalConnectArgs {
-    GlobalTerminalLaunchArgs *launchArgs;
-    BOOL disconnect; // second run after the VS Recorder: only disconnect
-    u8 unk_08[0x14 - 0x08];
-    u8 wifiConnection[0x7C - 0x14];
-    BOOL isConnected;
-} GlobalTerminalConnectArgs;
-
 typedef struct GlobalTerminalConnectBgTemplates {
     BgTemplate templates[2];
 } GlobalTerminalConnectBgTemplates;
@@ -113,7 +108,7 @@ typedef struct GlobalTerminalConnectPaletteCycle {
 } GlobalTerminalConnectPaletteCycle;
 
 typedef struct GlobalTerminalConnectWork {
-    GlobalTerminalConnectArgs *args;
+    GlobalTerminalApp *app;
     BgConfig *bgConfig;
     u32 state;
     u32 nextState;
@@ -148,24 +143,18 @@ typedef struct GlobalTerminalConnectWork {
 void GF_TouchpadResetSampling(void);
 void GF_TouchpadStartSampling(int frequency);
 void GF_TouchpadStopSampling(void);
-void DWC_GetLastError(void *out);
-int DWC_GetLastErrorEx(int *errorCode, u32 *errorType);
-void DWC_ClearError(void);
-void DWC_InitInetEx(void *connection, u32 priority, u32 unused, u32 sslPriority);
-void DWC_ConnectInetAsync(void);
-int DWC_CheckInet(void);
-void DWC_ProcessInet(void);
-int DWC_GetInetStatus(void);
-void DWC_CleanupInet(void);
-void DWC_GetApInfo(void *out);
-void DWC_NASLoginAsync(GlobalTerminalConnectWork *work);
-u32 DWC_NASLoginProcess(void);
-void DWC_ShutdownFriendsMatch(void);
-void DWC_ShutdownGHTTP(void);
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
 u32 FashionEntry_sizeof(void);
+
+// What GlobalTerminalConnect_StateWaitConnect reads back from the connection.
+typedef struct GlobalTerminalConnectInetResult {
+    int lastError;
+    int errorType;
+    int errorCode;
+    NetApInfo apInfo;
+} GlobalTerminalConnectInetResult;
 
 extern const GlobalTerminalConnectBgTemplates sGlobalTerminalConnectSubBgTemplates;
 
@@ -287,7 +276,7 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     Heap_Create(HEAP_ID_3, HEAP_ID_124, 0x50000);
     work = OverlayManager_CreateAndGetData(manager, sizeof(GlobalTerminalConnectWork), HEAP_ID_124);
     MI_CpuFill8(work, 0, sizeof(GlobalTerminalConnectWork));
-    work->args = OverlayManager_GetArgs(manager);
+    work->app = OverlayManager_GetArgs(manager);
     work->bgConfig = BgConfig_Alloc(HEAP_ID_124);
     GF_CreateVramTransferManager(64, HEAP_ID_124);
     SetKeyRepeatTimers(4, 8);
@@ -318,18 +307,18 @@ BOOL GlobalTerminalConnect_Init(OverlayManager *manager, int *state) {
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     Main_SetVBlankIntrCB((GFIntrCB)GlobalTerminalConnect_VBlankCB, work);
-    if (work->args->disconnect) {
+    if (work->app->disconnect) {
         WirelessStatusIcon_Create();
         GlobalTerminalConnect_SetStateAndNext(work, GTC_STATE_DISCONNECT, GTC_STATE_EXIT);
     } else {
-        if (work->args->launchArgs->connectDirectly != 0) {
+        if (work->app->args->connectDirectly != 0) {
             work->state = GTC_STATE_START_CONNECT;
         } else {
             work->state = GTC_STATE_ASK_CONNECT;
         }
     }
-    work->textSpeed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(work->args->launchArgs->saveData));
-    work->args->isConnected = FALSE;
+    work->textSpeed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(work->app->args->saveData));
+    work->app->isConnected = FALSE;
     return TRUE;
 }
 
@@ -467,7 +456,7 @@ static void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) 
     GfGfxLoader_GXLoadPalFromOpenNarc(narc, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, HEAP_ID_124);
     LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_124);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, HEAP_ID_124);
-    LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, 1, 10, Options_GetFrame(Save_PlayerData_GetOptionsAddr(work->args->launchArgs->saveData)), HEAP_ID_124);
+    LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_0, 1, 10, Options_GetFrame(Save_PlayerData_GetOptionsAddr(work->app->args->saveData)), HEAP_ID_124);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_0, 0x1F, 11, 0, HEAP_ID_124);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 2, bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_124);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 6, bgConfig, GF_BG_LYR_MAIN_1, 0, 0x600, FALSE, HEAP_ID_124);
@@ -728,7 +717,7 @@ static BOOL GlobalTerminalConnect_StateAskConnect(GlobalTerminalConnectWork *wor
 static BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *work) {
     switch (work->substate) {
     case GTC_START_PRINT_CONNECTING:
-        CommState_InitWfcSession(work->args->launchArgs->saveData);
+        CommState_InitWfcSession(work->app->args->saveData);
         Sys_SetSleepDisableFlag(4);
         WirelessStatusIcon_Create();
         GlobalTerminalConnect_PrintMessage(work, work->msgDataConnecting, msg_0778_00001, work->textSpeed, MAKE_TEXT_COLOR(0, 15, 15));
@@ -741,7 +730,7 @@ static BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *w
         }
         break;
     case GTC_START_CONNECT:
-        DWC_InitInetEx(work->args->wifiConnection, 2, 1, 20);
+        DWC_InitInetEx(&work->app->wifiConnection, 2, 1, 20);
         DWC_SetAuthServer(2);
         DWC_ConnectInetAsync();
         work->state = GTC_STATE_WAIT_CONNECT;
@@ -751,15 +740,15 @@ static BOOL GlobalTerminalConnect_StateStartConnect(GlobalTerminalConnectWork *w
 }
 
 static BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *work) {
-    u8 buffer[0x48];
+    GlobalTerminalConnectInetResult result;
 
     DWC_ProcessInet();
     if (DWC_CheckInet() != 0) {
         switch (DWC_GetInetStatus()) {
         case DWC_CONNECTINET_STATE_ERROR:
-            work->dwcResult = DWC_GetLastErrorEx((int *)(buffer + 8), (u32 *)(buffer + 4));
-            work->errorCode = *(u32 *)(buffer + 8);
-            work->errorType = *(u32 *)(buffer + 4);
+            work->dwcResult = DWC_GetLastErrorEx(&result.errorCode, &result.errorType);
+            work->errorCode = result.errorCode;
+            work->errorType = result.errorType;
             DWC_ClearError();
             DWC_CleanupInet();
             GlobalTerminalConnect_HideWaitingIcon(work);
@@ -773,13 +762,13 @@ static BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *wo
         case DWC_CONNECTINET_STATE_DISCONNECTED:
         case DWC_CONNECTINET_STATE_FATAL_ERROR:
         default:
-            DWC_GetLastError(buffer);
+            DWC_GetLastError(&result.lastError);
             GlobalTerminalConnect_HideWaitingIcon(work);
             work->state = GTC_STATE_SHOW_SERVER_ERROR;
             work->serverError = -2;
             break;
         case DWC_CONNECTINET_STATE_CONNECTED:
-            DWC_GetApInfo(buffer + 12);
+            DWC_GetApInfo(&result.apInfo);
             work->state = GTC_STATE_3;
             break;
         }
@@ -788,14 +777,14 @@ static BOOL GlobalTerminalConnect_StateWaitConnect(GlobalTerminalConnectWork *wo
 }
 
 static BOOL GlobalTerminalConnect_StateStartAuth(GlobalTerminalConnectWork *work) {
-    DWC_NASLoginAsync(work);
+    DWC_NASLoginAsync();
     work->state = GTC_STATE_4;
     return FALSE;
 }
 
 static BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work) {
     int errorCode;
-    u32 errorType;
+    int errorType;
 
     switch (DWC_NASLoginProcess()) {
     case DWC_NASLOGIN_STATE_SUCCESS:
@@ -841,8 +830,8 @@ static BOOL GlobalTerminalConnect_StateWaitAuth(GlobalTerminalConnectWork *work)
 }
 
 static BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
-    FriendRoster *wifiList = Save_FriendRoster_Get(work->args->launchArgs->saveData);
-    SysInfo *sysInfo = Save_SysInfo_Get(work->args->launchArgs->saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(work->app->args->saveData);
+    SysInfo *sysInfo = Save_SysInfo_Get(work->app->args->saveData);
 
     FriendRoster_GetUserData(wifiList);
     if (Save_SysInfo_GetDwcProfileId(sysInfo) == 0) {
@@ -850,7 +839,7 @@ static BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *
     }
     Save_SysInfo_GetDwcProfileId(sysInfo);
     work->state = GTC_STATE_EXIT_CONNECTED;
-    work->args->isConnected = TRUE;
+    work->app->isConnected = TRUE;
     return FALSE;
 }
 
