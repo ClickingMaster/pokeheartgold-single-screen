@@ -8,6 +8,8 @@
 
 #include "dwc/net_common_internal.h"
 
+#include "lobby_string.h"
+
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 
 typedef struct DequeBuf {
@@ -29,21 +31,6 @@ typedef struct Vec {
     u32 size;
     u32 cap;
 } Vec;
-
-typedef union Str {
-    struct {
-        u32 isLong : 1;
-        u32 pad : 31;
-        u32 size;
-        char *ptr;
-    } l;
-
-    struct {
-        u8 isLong : 1;
-        u8 len : 7;
-        char buf[11];
-    } s;
-} Str;
 
 typedef struct VObj VObj;
 
@@ -73,14 +60,6 @@ typedef struct Tag {
 
 void LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, Tag);
 int LobbyString_CompareChars(const u8 *, u32, u32, const void *, u32);
-
-static inline BOOL StrIsShort(const Str *s) {
-    return !s->l.isLong;
-}
-
-static inline u32 StrSize(Str *s) {
-    return StrIsShort(s) ? s->s.len : s->l.size;
-}
 
 typedef struct Session {
     VTable *vt;

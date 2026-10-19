@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "lobby_string.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -24,39 +26,22 @@ struct It {
     }
 };
 
-union Str {
-    struct {
-        u32 flag : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } l;
+inline It Begin(Str *s) {
+    return It(!s->l.isLong ? s->s.buf : s->l.ptr);
+}
 
-    struct {
-        u8 flag : 1;
-        u8 size : 7;
-        char data[11];
-    } s;
-
-    u32 words[3];
-
-    It begin() {
-        return It(!l.flag ? s.data : l.data);
+inline It End(Str *s) {
+    char *p;
+    u32 n;
+    if (!s->l.isLong) {
+        p = s->s.buf;
+        n = s->s.len;
+    } else {
+        p = s->l.ptr;
+        n = s->l.size;
     }
-
-    It end() {
-        char *p;
-        u32 n;
-        if (!l.flag) {
-            p = s.data;
-            n = s.size;
-        } else {
-            p = l.data;
-            n = l.size;
-        }
-        return It(p + n);
-    }
-};
+    return It(p + n);
+}
 
 extern "C" int LobbyString_ToLowerChar(int c);
 extern "C" void LobbyString_CompareSubstring(Str *a, int, void *c, Str *b);
@@ -71,7 +56,7 @@ inline It Transform(It first, It last, It out, int (*f)(int)) {
 extern "C" void LobbyString_CompareNoCase(Str *a, Str *b, void *c);
 
 extern "C" void LobbyString_CompareNoCase(Str *a, Str *b, void *c) {
-    Transform(a->begin(), a->end(), a->begin(), LobbyString_ToLowerChar);
-    Transform(b->begin(), b->end(), b->begin(), LobbyString_ToLowerChar);
+    Transform(Begin(a), End(a), Begin(a), LobbyString_ToLowerChar);
+    Transform(Begin(b), End(b), Begin(b), LobbyString_ToLowerChar);
     LobbyString_CompareSubstring(a, 0, c, b);
 }

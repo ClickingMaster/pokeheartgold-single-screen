@@ -1,48 +1,35 @@
 #include <nitro/types.h>
 
+#include "lobby_sort.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct Elem {
-    int key;
-    u32 val;
-};
+using namespace LobbySort;
 
-struct It {
-    Elem *p;
-};
-
-struct Less {
-    bool operator()(const Elem &a, const Elem &b) const {
-        return a.key < b.key;
-    }
-};
-
-static inline Elem *Next(const It &it) {
-    return it.p + 1;
+static inline Pair *Next(const Cursor &it) {
+    return it.position + 1;
 }
 
-extern "C" void LobbySort_InsertionSort(It first, It last, Less comp);
+extern "C" void LobbySort_InsertionSort(Cursor first, Cursor last, const Less &comp) {
+    Pair *i;
+    Pair *k;
 
-extern "C" void LobbySort_InsertionSort(It first, It last, Less comp) {
-    Elem *i;
-    Elem *k;
-
-    if (first.p == last.p) {
+    if (first.position == last.position) {
         return;
     }
     i = Next(first);
-    if (i == last.p) {
+    if (i == last.position) {
         return;
     }
-    for (; i != last.p; ++i) {
-        Elem *j = i;
+    for (; i != last.position; ++i) {
+        Pair *j = i;
         --j;
         if (comp(*i, *j)) {
-            Elem tmp = *i;
+            Pair tmp = *i;
             k = j;
             *i = *j;
-            while (j != first.p && comp(tmp, *--j)) {
+            while (j != first.position && comp(tmp, *--j)) {
                 *k = *j;
                 --k;
             }

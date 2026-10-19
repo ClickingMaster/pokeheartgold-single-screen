@@ -1,43 +1,39 @@
 #include "global.h"
 
+#include "lobby_event_deque.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
-typedef struct {
-    int *cur, *begin, *middle, *end;
-    u8 flag;
-    u8 pad[3];
-} Iterator;
 
 static inline const int *Minimum(const int *a, const int *b) {
     return *a < *b ? a : b;
 }
 
-static inline void Copy(int *first, int *last, int *dest) {
+static inline void Copy(LobbyEvent **first, LobbyEvent **last, LobbyEvent **dest) {
     int count = last - first;
-    memmove(dest - count, first, count * 4);
+    memmove(dest - count, first, count * sizeof(LobbyEvent *));
 }
 
-void LobbyEventDequeMap_CopyBackward(Iterator *, Iterator *, Iterator *, Iterator *);
+void LobbyEventDequeMap_CopyBackward(LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *, LobbyEventDequeMapIterator *);
 #pragma opt_propagation off
 
-void LobbyEventDequeMap_CopyBackward(Iterator *out, Iterator *first, Iterator *last, Iterator *dest) {
+void LobbyEventDequeMap_CopyBackward(LobbyEventDequeMapIterator *out, LobbyEventDequeMapIterator *first, LobbyEventDequeMapIterator *last, LobbyEventDequeMapIterator *dest) {
     while (first->cur != last->cur) {
         int cap, amount;
-        if (last->cur == last->begin) {
-            last->cur = last->end;
+        if (last->cur == last->first) {
+            last->cur = last->last;
         }
         --last->cur;
-        if (dest->cur == dest->begin) {
-            dest->cur = dest->end;
+        if (dest->cur == dest->first) {
+            dest->cur = dest->last;
         }
         --dest->cur;
-        cap = dest->cur - (dest->cur < dest->middle ? dest->begin : dest->middle);
-        if ((first->cur >= first->middle) == (last->cur >= last->middle)) {
+        cap = dest->cur - (dest->cur < dest->mid ? dest->first : dest->mid);
+        if ((first->cur >= first->mid) == (last->cur >= last->mid)) {
             int n = last->cur - first->cur;
             amount = *Minimum(&cap, &n);
         } else {
-            int n = last->cur - (last->cur < last->middle ? last->begin : last->middle);
+            int n = last->cur - (last->cur < last->mid ? last->first : last->mid);
             amount = *Minimum(&cap, &n);
         }
         last->cur -= amount;
@@ -45,7 +41,7 @@ void LobbyEventDequeMap_CopyBackward(Iterator *out, Iterator *first, Iterator *l
         dest->cur -= amount;
     }
     out->cur = dest->cur;
-    out->begin = dest->begin;
-    out->middle = dest->middle;
-    out->end = dest->end;
+    out->first = dest->first;
+    out->mid = dest->mid;
+    out->last = dest->last;
 }

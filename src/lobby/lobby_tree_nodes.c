@@ -2,49 +2,32 @@
 
 #include "dwc/net_common_internal.h"
 
-#include "overlay45_format_buffer_private.h"
+#include "lobby_tree.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #define P(p, o) (*(void **)((char *)(p) + (o)))
 #define A(p, o) ((void *)((char *)(p) + (o)))
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent;
-    int key;
-} Node;
-
-typedef struct {
-    int count;
-    void *root, *last;
-} Tree;
-
 extern void __msl_assertion_failed(char *, char *, char *, int);
 extern char sStr_DataNeNULL[];
 extern char sStr_ChatCallbacksC[];
 extern char sStr_ciCallbacksArrayElementFreeFn[];
-extern void *LobbyUserIdSet_Destroy(void *p);
-extern Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
-extern Node *LobbyUserMap_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
+extern void LobbyString_Destroy(Str *);
 extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
-extern void *LobbyUserIdSet_Destroy2(void *p);
-extern void LobbyUserIdSet_Swap(Tree *p, Tree *q);
-extern void LobbyUserIdSet_DestroyNodes(void *p, void *node);
-extern void LobbyUserMap_DestroyNodes(void *p, void *node);
 extern void LobbyRequestMap_DestroyNodes(void *p, void *node);
 extern void ciCallbacksArrayElementFreeFn(void *p);
 
-Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first) {
-    Node *node, *last;
+LobbyUserIdSetNode *LobbyUserIdSet_FindInsertPos(LobbyUserIdSet *set, int *key, LobbyUserIdSetNode **prev, u8 *left, u8 *first) {
+    LobbyUserIdSetNode *node, *last;
     *prev = 0;
-    node = p->root;
+    node = set->root;
     *left = 1;
     *first = 1;
-    last = (Node *)&p->root;
+    last = (LobbyUserIdSetNode *)&set->root;
     while (node) {
         last = node;
-        if (*key < node->key) {
+        if (*key < node->userId) {
             node = node->left;
             *left = 1;
         } else {
@@ -57,16 +40,16 @@ Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 
     return last;
 }
 
-Node *LobbyUserMap_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first) {
-    Node *node, *last;
+LobbyUserMapNode *LobbyUserMap_FindInsertPos(LobbyUserMap *map, int *key, LobbyUserMapNode **prev, u8 *left, u8 *first) {
+    LobbyUserMapNode *node, *last;
     *prev = 0;
-    node = p->root;
+    node = map->root;
     *left = 1;
     *first = 1;
-    last = (Node *)&p->root;
+    last = (LobbyUserMapNode *)&map->root;
     while (node) {
         last = node;
-        if (*key < node->key) {
+        if (*key < node->entry.userId) {
             node = node->left;
             *left = 1;
         } else {
@@ -93,16 +76,16 @@ void LobbyChannelMap_DestroyNodes(void *p, void *node) {
     }
 }
 
-void *LobbyUserIdSet_Destroy2(void *p) {
-    if (P(p, 4)) {
-        LobbyUserIdSet_DestroyNodes(p, P(p, 4));
+void *LobbyUserIdSet_Destroy2(LobbyUserIdSet *set) {
+    if (set->root) {
+        LobbyUserIdSet_DestroyNodes(set, set->root);
     }
-    return p;
+    return set;
 }
 
-void LobbyUserIdSet_Swap(Tree *p, Tree *q) {
+void LobbyUserIdSet_Swap(LobbyUserIdSet *p, LobbyUserIdSet *q) {
     int n;
-    Node *v;
+    LobbyUserIdSetNode *v;
     if (p == q) {
         return;
     }
@@ -112,41 +95,41 @@ void LobbyUserIdSet_Swap(Tree *p, Tree *q) {
     v = p->root;
     p->root = q->root;
     q->root = v;
-    v = p->last;
-    p->last = q->last;
-    q->last = v;
+    v = p->first;
+    p->first = q->first;
+    q->first = v;
     if (!p->root) {
-        p->last = (Node *)&p->root;
+        p->first = (LobbyUserIdSetNode *)&p->root;
     } else {
-        ((Node *)p->root)->parent = (u32)&p->root | (((Node *)p->root)->parent & 1);
+        p->root->parent = (u32)&p->root | (p->root->parent & 1);
     }
     if (!q->root) {
-        q->last = (Node *)&q->root;
+        q->first = (LobbyUserIdSetNode *)&q->root;
     } else {
-        ((Node *)q->root)->parent = (u32)&q->root | (((Node *)q->root)->parent & 1);
+        q->root->parent = (u32)&q->root | (q->root->parent & 1);
     }
 }
 
-void LobbyUserIdSet_DestroyNodes(void *p, void *node) {
-    if (P(node, 0)) {
-        LobbyUserIdSet_DestroyNodes(p, P(node, 0));
+void LobbyUserIdSet_DestroyNodes(LobbyUserIdSet *set, LobbyUserIdSetNode *node) {
+    if (node->left) {
+        LobbyUserIdSet_DestroyNodes(set, node->left);
     }
-    if (P(node, 4)) {
-        LobbyUserIdSet_DestroyNodes(p, P(node, 4));
+    if (node->right) {
+        LobbyUserIdSet_DestroyNodes(set, node->right);
     }
     if (node) {
         DWC_Free(0, node, 0);
     }
 }
 
-void LobbyUserMap_DestroyNodes(void *p, void *node) {
-    if (P(node, 0)) {
-        LobbyUserMap_DestroyNodes(p, P(node, 0));
+void LobbyUserMap_DestroyNodes(LobbyUserMap *map, LobbyUserMapNode *node) {
+    if (node->left) {
+        LobbyUserMap_DestroyNodes(map, node->left);
     }
-    if (P(node, 4)) {
-        LobbyUserMap_DestroyNodes(p, P(node, 4));
+    if (node->right) {
+        LobbyUserMap_DestroyNodes(map, node->right);
     }
-    LobbyString_Destroy(A(node, 16));
+    LobbyString_Destroy(&node->entry.nick);
     if (node) {
         DWC_Free(0, node, 0);
     }

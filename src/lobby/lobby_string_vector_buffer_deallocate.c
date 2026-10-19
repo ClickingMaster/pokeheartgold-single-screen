@@ -1,29 +1,20 @@
 #include "global.h"
 
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct Tag {
-    u8 value;
-} Tag;
+void LobbyStringVectorBuffer_EraseAtEnd(LobbyStringVectorBuffer *, u32, LobbyTag, u32);
+void DWC_Free(u32, void *, u32);
 
-void LobbyStringVectorBuffer_EraseAtEnd(u32 *, u32, Tag, u32);
-void DWC_Free(u32, u32, u32);
-u32 *LobbyStringVectorBuffer_Deallocate(u32 *);
-
-static inline Tag tag(void) {
-    Tag t;
-    t.value = 0;
-    return t;
-}
-
-u32 *LobbyStringVectorBuffer_Deallocate(u32 *p) {
-    if (p[0]) {
-        u32 current = p[1];
-        Tag t = { 0 };
+LobbyStringVectorBuffer *LobbyStringVectorBuffer_Deallocate(LobbyStringVectorBuffer *p) {
+    if (p->data) {
+        u32 current = p->size;
+        LobbyTag t = { 0 };
         LobbyStringVectorBuffer_EraseAtEnd(p, current, t, 0);
-        if (p[0]) {
-            DWC_Free(0, p[0], 0);
+        if (p->data) {
+            DWC_Free(0, p->data, 0);
         }
     }
     return p;

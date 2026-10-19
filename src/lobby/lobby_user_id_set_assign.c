@@ -2,69 +2,51 @@
 
 #include "dwc/net_common_internal.h"
 
+#include "lobby_tree.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent, value;
-} Node;
+extern LobbyUserIdSetNode *LobbyMem_Alloc(u32);
 
-typedef struct {
-    Node *unused;
-    void *root;
-} Work;
-
-typedef struct {
-    u32 count;
-    void *root;
-    void *last;
-} Tree;
-
-extern Node *LobbyMem_Alloc(u32);
-extern void LobbyUserIdSet_CopyNodes(Tree *, Node *, Node *, int);
-extern void LobbyUserIdSet_Swap(void *, Tree *);
-extern void LobbyUserIdSet_Destroy2(Tree *);
-void LobbyUserIdSet_Assign(u8 *, Work *);
-
-void LobbyUserIdSet_Assign(u8 *owner, Work *w) {
+void LobbyUserIdSet_Assign(LobbyUserIdSet *set, LobbyUserIdSet *other) {
     struct {
         u8 pad0;
         volatile u8 byte;
         u8 pad[2];
-        Node *volatile a, *volatile b;
+        LobbyUserIdSetNode *volatile a, *volatile b;
         void *volatile owner;
-        Node *volatile cleanup;
-        Tree tree;
+        LobbyUserIdSetNode *volatile cleanup;
+        LobbyUserIdSet tree;
     } f;
 
-    Node *n;
-    u32 target;
+    LobbyUserIdSetNode *n;
+    int *userId;
     u32 flag;
-    if (!w->root) {
+    if (!other->root) {
         return;
     }
     f.byte = 0;
     n = LobbyMem_Alloc(16);
-    f.owner = owner + 4;
+    f.owner = &set->root;
     f.a = n;
     f.b = n;
     f.cleanup = n;
-    target = (u32)n + 12;
+    userId = &n->userId;
     {
-        Node *root = w->root;
-        if (target) {
-            *(u32 *)target = root->value;
+        LobbyUserIdSetNode *root = other->root;
+        if (userId) {
+            *userId = root->userId;
         }
     };
     f.tree.count = 0;
     f.tree.root = 0;
-    f.tree.last = (Node *)&f.tree.root;
+    f.tree.first = (LobbyUserIdSetNode *)&f.tree.root;
     n = f.cleanup;
     n->right = 0;
     n->left = 0;
     n->parent = (u32)&f.tree.root | (n->parent & 1);
-    flag = (((Node *)w->root)->parent & 1) != 0;
+    flag = (other->root->parent & 1) != 0;
     n = f.cleanup;
     if (flag) {
         n->parent |= 1;
@@ -74,21 +56,21 @@ void LobbyUserIdSet_Assign(u8 *owner, Work *w) {
     n = f.cleanup;
     f.tree.root = n;
     f.tree.count = 1;
-    f.tree.last = n;
+    f.tree.first = n;
     {
-        Node *root = w->root;
+        LobbyUserIdSetNode *root = other->root;
         f.cleanup = 0;
         if (root->right) {
             LobbyUserIdSet_CopyNodes(&f.tree, n, root, 0);
         }
     }
-    if (((Node *)w->root)->left) {
-        LobbyUserIdSet_CopyNodes(&f.tree, f.tree.root, w->root, 1);
+    if (other->root->left) {
+        LobbyUserIdSet_CopyNodes(&f.tree, f.tree.root, other->root, 1);
     }
-    LobbyUserIdSet_Swap(owner, &f.tree);
+    LobbyUserIdSet_Swap(set, &f.tree);
     LobbyUserIdSet_Destroy2(&f.tree);
     {
-        Node *cleanup = f.cleanup;
+        LobbyUserIdSetNode *cleanup = f.cleanup;
         if (cleanup) {
             DWC_Free(0, cleanup, 0);
         }

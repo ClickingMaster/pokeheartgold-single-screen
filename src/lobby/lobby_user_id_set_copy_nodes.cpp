@@ -1,5 +1,7 @@
 #include <nitro/types.h>
 
+#include "lobby_tree.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
@@ -10,59 +12,47 @@ inline void *operator new(unsigned long, void *p) {
 extern "C" void DWC_Free(int, void *, u32);
 extern "C" void *LobbyMem_Alloc(u32 size);
 
-struct Node {
-    Node *left, *right;
-    u32 pc;
-    u32 value;
-
-    void set_parent(Node *p) {
-        pc = (u32)p | (pc & 1);
-    }
-
-    enum Color {
-        black,
-        red_
-    };
-
-    Color color() const {
-        return (pc & 1) ? red_ : black;
-    }
-
-    void set_color(Color c) {
-        if (c) {
-            pc |= 1;
-        } else {
-            pc &= ~1;
-        }
-    }
+enum Color {
+    black,
+    red_
 };
+
+inline void SetParent(LobbyUserIdSetNode *node, LobbyUserIdSetNode *p) {
+    node->parent = (u32)p | (node->parent & 1);
+}
+
+inline Color GetColor(const LobbyUserIdSetNode *node) {
+    return (node->parent & 1) ? red_ : black;
+}
+
+inline void SetColor(LobbyUserIdSetNode *node, Color c) {
+    if (c) {
+        node->parent |= 1;
+    } else {
+        node->parent &= ~1;
+    }
+}
 
 struct Alloc {
-    Node *allocate() {
-        return (Node *)LobbyMem_Alloc(sizeof(Node));
+    LobbyUserIdSetNode *allocate() {
+        return (LobbyUserIdSetNode *)LobbyMem_Alloc(sizeof(LobbyUserIdSetNode));
     }
-};
-
-struct Tree {
-    u32 size;
-    Alloc alloc;
-    Node *leftmost;
 };
 
 struct Holder {
-    Node *a, *b;
-    Alloc *alloc;
-    Node *ptr;
+    LobbyUserIdSetNode *a, *b;
+    void *alloc;
+    LobbyUserIdSetNode *ptr;
 
-    Holder(Node *p, Alloc *al)
+    Holder(LobbyUserIdSetNode *p, void *al)
         : a(p)
         , b(p)
         , alloc(al)
         , ptr(p) {
     }
 
-    Node *release() {
-        Node *r = ptr;
+    LobbyUserIdSetNode *release() {
+        LobbyUserIdSetNode *r = ptr;
         ptr = 0;
         return r;
     }
@@ -74,40 +64,39 @@ inline void Destroy(Holder *h) {
     }
 }
 
-inline void Construct(u32 *p, const u32 &v) {
-    new (p) u32(v);
+inline void Construct(int *p, const int &v) {
+    new (p) int(v);
 }
 
-extern "C" void LobbyUserIdSet_CopyNodes(Tree *t, Node *parent, Node *src, BOOL left);
 #pragma opt_scalarize off
 #pragma opt_common_subs off
 
-extern "C" void LobbyUserIdSet_CopyNodes(Tree *t, Node *parent, Node *src, BOOL left) {
+extern "C" void LobbyUserIdSet_CopyNodes(LobbyUserIdSet *set, LobbyUserIdSetNode *parent, LobbyUserIdSetNode *src, BOOL left) {
     Alloc a = Alloc();
-    Node *p = a.allocate();
-    Holder h(p, &t->alloc);
+    LobbyUserIdSetNode *p = a.allocate();
+    Holder h(p, &set->root);
     p->right = 0;
     p->left = 0;
-    p->set_parent(parent);
+    SetParent(p, parent);
     if (left) {
-        Construct(&h.ptr->value, src->left->value);
-        t->leftmost = h.ptr;
+        Construct(&h.ptr->userId, src->left->userId);
+        set->first = h.ptr;
         parent->left = h.ptr;
         parent = h.release();
         src = src->left;
     } else {
-        Construct(&h.ptr->value, src->right->value);
+        Construct(&h.ptr->userId, src->right->userId);
         parent->right = h.ptr;
         parent = h.release();
         src = src->right;
     }
-    parent->set_color(src->color());
-    ++t->size;
+    SetColor(parent, GetColor(src));
+    ++set->count;
     if (src->right) {
-        LobbyUserIdSet_CopyNodes(t, parent, src, FALSE);
+        LobbyUserIdSet_CopyNodes(set, parent, src, FALSE);
     }
     if (src->left) {
-        LobbyUserIdSet_CopyNodes(t, parent, src, TRUE);
+        LobbyUserIdSet_CopyNodes(set, parent, src, TRUE);
     }
     Destroy(&h);
 }

@@ -1,48 +1,39 @@
 #include "global.h"
 
+#include "lobby_tree.h"
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
-#include "../../lib/NitroDWC/src/tree-iterator4.h"
-
-typedef struct Node {
-    u8 pad[12];
-    void *value;
-} Node;
 
 typedef struct {
     Iterator advance;
     void *other;
 } Iter;
 
-typedef struct {
-    void **data;
-    u32 count, capacity;
-} Vector;
-
 void ov45_02236E58(Iterator *);
-void *LobbyU32Vector_RecommendSize(Vector *, u32);
-void LobbyU32Vector_Reallocate(Vector *, u32, void *);
-void LobbyU32Vector_AssignFromSet(Vector *, Iter, Iter);
+u32 LobbyU32Vector_RecommendSize(LobbyU32Vector *, u32);
+void LobbyU32Vector_Reallocate(LobbyU32Vector *, u32, u32);
+void LobbyU32Vector_AssignFromSet(LobbyU32Vector *, Iter, Iter);
 
 typedef struct {
     volatile u8 fillFlag, reserveFlag;
     u8 pad[2];
 
     volatile struct {
-        Node *a;
-        void *b;
-        Node *c;
+        LobbyUserIdSetNode *a;
+        int b;
+        LobbyUserIdSetNode *c;
     } tail;
 
     Iter fill, count;
 } Frame;
 
-void LobbyU32Vector_AssignFromSet(Vector *v, Iter first, Iter last) {
+void LobbyU32Vector_AssignFromSet(LobbyU32Vector *v, Iter first, Iter last) {
     Frame frame;
-    Node *node;
-    void *value;
-    void **out;
+    LobbyUserIdSetNode *node;
+    int value;
+    u32 *out;
     u32 n, capacity;
     frame.count = first;
     Iter *counter = &frame.count;
@@ -54,7 +45,7 @@ void LobbyU32Vector_AssignFromSet(Vector *v, Iter first, Iter last) {
     capacity = v->capacity;
     if (n > capacity) {
         frame.reserveFlag = 0;
-        void *p = LobbyU32Vector_RecommendSize(v, n - capacity);
+        u32 p = LobbyU32Vector_RecommendSize(v, n - capacity);
         LobbyU32Vector_Reallocate(v, n, p);
     }
     out = v->data;
@@ -63,7 +54,7 @@ void LobbyU32Vector_AssignFromSet(Vector *v, Iter first, Iter last) {
         do {
             node = *(void *volatile *)&frame.fill.advance.current;
             frame.fillFlag = 0;
-            value = *(void *volatile *)&node->value;
+            value = *(volatile int *)&node->userId;
             *out++ = value;
             ov45_02236E58(&frame.fill.advance);
         } while (frame.fill.advance.current != last.advance.current);
@@ -71,5 +62,5 @@ void LobbyU32Vector_AssignFromSet(Vector *v, Iter first, Iter last) {
         frame.tail.a = node;
         frame.tail.c = node;
     }
-    v->count = n;
+    v->size = n;
 }

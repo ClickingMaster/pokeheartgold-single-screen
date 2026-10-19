@@ -2,72 +2,62 @@
 
 #include "dwc/net_common_internal.h"
 
+#include "lobby_tree.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern int printf(const char *, ...);
 extern void abort(void);
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent;
-    u32 value;
-} Node;
-
-typedef struct {
-    int count;
-    void *alloc;
-    void *last;
-} Tree;
-
 extern const char sStr_TreeInsertLengthError_4[];
-extern Node *LobbyMem_Alloc(u32);
-extern void LobbyTree_InsertRebalance(Node *, void *);
-Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, const u32 *);
+extern LobbyUserIdSetNode *LobbyMem_Alloc(u32);
+extern void LobbyTree_InsertRebalance(LobbyUserIdSetNode *, void *);
 
-Node *LobbyUserIdSet_InsertNode(Tree *t, Node *parent, int left, int last, const u32 *value) {
+LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *set, LobbyUserIdSetNode *parent, int left, int last, const int *key) {
     struct {
         volatile u8 byte;
         u8 pad[3];
-        Node *volatile a, *volatile b;
+        LobbyUserIdSetNode *volatile a, *volatile b;
         void *volatile owner;
-        Node *volatile cleanup;
+        LobbyUserIdSetNode *volatile cleanup;
     } f;
 
-    Node *n;
-    u32 address;
-    if (t->count == -1) {
+    LobbyUserIdSetNode *n;
+    int *userId;
+    u32 *link;
+    if (set->count == -1) {
         printf(sStr_TreeInsertLengthError_4);
         abort();
     }
     f.byte = 0;
     n = LobbyMem_Alloc(16);
-    f.owner = &t->alloc;
-    address = (u32)n + 12;
+    f.owner = &set->root;
+    userId = &n->userId;
     f.cleanup = n;
     f.a = n;
-    if (address) {
-        *(u32 *)address = *value;
+    if (userId) {
+        *userId = *key;
     }
     n->right = 0;
     f.cleanup = 0;
     n->left = 0;
-    address = (u32)n + 8;
-    if (address) {
-        *(u32 *)address = (u32)parent;
+    link = &n->parent;
+    if (link) {
+        *link = (u32)parent;
     }
     if (left) {
-        *(void **)parent = n;
+        parent->left = n;
     } else {
-        *(void **)((u8 *)parent + 4) = n;
+        parent->right = n;
     }
-    t->count++;
+    set->count++;
     f.b = n;
-    LobbyTree_InsertRebalance(n, t->alloc);
+    LobbyTree_InsertRebalance(n, set->root);
     if (last) {
-        t->last = n;
+        set->first = n;
     }
     {
-        Node *cleanup = f.cleanup;
+        LobbyUserIdSetNode *cleanup = f.cleanup;
         if (cleanup) {
             DWC_Free(0, cleanup, 0);
         }

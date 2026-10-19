@@ -1,85 +1,11 @@
 #include <nitro/types.h>
 
+#include "lobby_sort.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct Pair {
-    s32 key;
-    u32 payload;
-};
-
-struct Buffer {
-    s32 capacity, count;
-    Pair *data;
-};
-
-struct Cursor {
-    Pair *position;
-
-    explicit Cursor(Pair *p)
-        : position(p) {
-    }
-
-    Cursor() {
-    }
-
-    Pair &operator*() const {
-        return *position;
-    }
-
-    Pair *base() const {
-        return position;
-    }
-
-    Cursor &operator++() {
-        ++position;
-        return *this;
-    }
-
-    Cursor &operator--() {
-        --position;
-        return *this;
-    }
-
-    bool operator==(const Cursor &other) const {
-        return position == other.position;
-    }
-};
-
-inline bool operator!=(const Cursor &a, const Cursor &b) {
-    return !(a == b);
-}
-
-struct ConstructingOut {
-    Pair *position;
-    Buffer *buffer;
-
-    ConstructingOut(Pair *p, Buffer *b)
-        : position(p)
-        , buffer(b) {
-    }
-
-    ConstructingOut() {
-    }
-
-    operator Pair *() const {
-        return position;
-    }
-
-    ConstructingOut &operator++() {
-        ++position;
-        return *this;
-    }
-
-    ConstructingOut &operator--() {
-        --position;
-        return *this;
-    }
-};
-
-inline bool Less(const Pair &a, const Pair &b) {
-    return a.key < b.key;
-}
+using namespace LobbySort;
 
 inline Cursor CopyA(Cursor first, Cursor last, Cursor result) {
     Pair *l = last.base();
@@ -93,20 +19,18 @@ inline Cursor CopyA(Cursor first, Cursor last, Cursor result) {
 
 inline Cursor CopyB(ConstructingOut first, ConstructingOut last, Cursor result) {
     for (; first != last; ++first, ++result) {
-        *result = *first;
+        *result = *first.base();
     }
     return result;
 }
 
-extern "C" Cursor LobbySort_MergeBufferForward(ConstructingOut first1, ConstructingOut last1, Cursor first2, Cursor last2, Cursor result, void *ctx);
-
-extern "C" Cursor LobbySort_MergeBufferForward(ConstructingOut first1, ConstructingOut last1, Cursor first2, Cursor last2, Cursor result, void *ctx) {
+extern "C" Cursor LobbySort_MergeBufferForward(ConstructingOut first1, ConstructingOut last1, Cursor first2, Cursor last2, Cursor result, const Less &comp) {
     while (first1 != last1 && first2 != last2) {
-        if (Less(*first2, *first1)) {
+        if (comp(*first2, *first1.base())) {
             *result = *first2;
             ++first2;
         } else {
-            *result = *first1;
+            *result = *first1.base();
             ++first1;
         }
         ++result;

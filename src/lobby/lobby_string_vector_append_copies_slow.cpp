@@ -1,82 +1,39 @@
 #include <nitro/types.h>
 
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#include <size_t.h>
-
-inline void *operator new(std::size_t, void *p) {
-    return p;
-}
-struct Str;
-extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
-
-struct Str {
-    u32 words[3];
-
-    Str(const Str &o) {
-        LobbyString_InitCopy(this, &o);
-    }
-};
-
-class Tag {};
 
 class FalseType {};
 
-struct Vec {
-    Str *ptr;
-    u32 size, cap;
-};
+extern "C" Str *LobbyString_InitCopy(Str *, const Str *);
+extern "C" u32 LobbyStringVector_RecommendSize(LobbyStringVector *, u32);
+extern "C" void LobbyStringVector_AppendCopiesSlow(LobbyStringVector *, u32, const Str &);
 
-struct CapPair {
-    u32 cap;
-    u32 *alloc;
+static inline void InitBuffer(LobbyStringVectorBuffer *b, u32 *allocator) {
+    b->data = 0;
+    b->size = 0;
+    b->capacity.value = 0;
+    b->capacity.allocator = allocator;
+    b->start = 0;
+}
 
-    CapPair(u32 *a)
-        : cap(0)
-        , alloc(a) {
-    }
+inline u32 &Value(LobbyVectorBufferCapacity &c) {
+    return c.value;
+}
 
-    u32 &First() {
-        return cap;
-    }
-};
+inline u32 &EndCapacity(LobbyStringVectorBuffer &b) {
+    return Value(b.capacity);
+}
 
-struct Buf {
-    Str *ptr;
-    u32 size;
-    CapPair pair;
-    u32 start;
+inline void Allocate(LobbyStringVectorBuffer &b, u32 n, LobbyTag t) {
+    LobbyStringVectorBuffer_Allocate(&b, n, t);
+}
 
-    Buf(u32 *a)
-        : ptr(0)
-        , size(0)
-        , pair(a)
-        , start(0) {
-    }
-
-    u32 &EndCap() {
-        return pair.First();
-    }
-
-    void Allocate(u32 n, Tag t);
-
-    Tag get_tag() const {
-        return Tag();
-    }
-
-    void Allocate2(u32 n);
-    void Allocate3(u32 n);
-    void Allocate4(u32 n);
-    void Allocate5(u32 n, Tag t);
-    void AllocA(u32 n);
-    void AllocB(u32 n);
-    void AllocC(u32 n, const Tag &t);
-};
-
-extern "C" u32 LobbyStringVector_RecommendSize(Vec *, u32);
-extern "C" void LobbyStringVectorBuffer_Allocate(Buf *, u32, Tag);
-extern "C" void LobbyStringVectorBuffer_Destroy(Buf *);
-extern "C" void LobbyStringVector_AppendCopiesSlow(Vec *, u32, const Str &);
+inline void AllocA(LobbyStringVectorBuffer &b, u32 n) {
+    Allocate(b, n, LobbyTag());
+}
 
 template <class T>
 inline void Swap(T &a, T &b) {
@@ -85,94 +42,50 @@ inline void Swap(T &a, T &b) {
     b = t;
 }
 
-inline Buf *Self(FalseType, Buf &b) {
-    return &b;
-}
-
-inline void Buf::Allocate(u32 n, Tag t) {
-    LobbyStringVectorBuffer_Allocate(this, n, t);
-}
-
-inline void Buf::Allocate2(u32 n) {
-    LobbyStringVectorBuffer_Allocate(this, n, get_tag());
-}
-
-inline void Buf::Allocate3(u32 n) {
-    Tag t = get_tag();
-    LobbyStringVectorBuffer_Allocate(this, n, t);
-}
-
-inline void Buf::Allocate4(u32 n) {
-    Tag t = get_tag();
-    (void)t;
-    LobbyStringVectorBuffer_Allocate(this, n, Tag());
-}
-
-inline void Buf::Allocate5(u32 n, Tag t) {
-    Tag u = get_tag();
-    (void)u;
-    LobbyStringVectorBuffer_Allocate(this, n, t);
-}
-
-inline Tag MakeTag() {
-    return Tag();
-}
-
-inline void Buf::AllocA(u32 n) {
-    Allocate(n, Tag());
-}
-
-inline void Buf::AllocB(u32 n) {
-    Allocate(n, MakeTag());
-}
-
-inline void Buf::AllocC(u32 n, const Tag &t) {
-    Allocate(n, t);
-}
-
-inline const Tag &TagRef(const Tag &t) {
-    return t;
-}
-
-inline void FillN(Buf &b, u32 n, const Str &x) {
+inline void FillN(LobbyStringVectorBuffer &b, u32 n, const Str &x) {
     FalseType f = FalseType();
     (void)f;
-    Str *p = b.ptr + b.start + b.size;
+    Str *p = b.data + b.start + b.size;
     for (; n != 0; n--, b.size++, p++) {
-        new (p) Str(x);
+        if (p) {
+            LobbyString_InitCopy(p, &x);
+        }
     }
 }
 
-inline void MoveBack(Buf &b, Vec *v) {
-    Str *first = v->ptr;
+inline void MoveBack(LobbyStringVectorBuffer &b, LobbyStringVector *v) {
+    Str *first = v->data;
     Str *last = first + v->size;
     FalseType f = FalseType();
     (void)f;
-    Str *out = b.ptr + b.start;
+    Str *out = b.data + b.start;
     while (last > first) {
         --last;
         --out;
-        new (out) Str(*last);
+        if (out) {
+            LobbyString_InitCopy(out, last);
+        }
         b.start--;
         b.size++;
     }
 }
 
-inline void Release(Vec *) {
+inline void Release(LobbyStringVector *) {
     FalseType f = FalseType();
     (void)f;
 }
 
-extern "C" void LobbyStringVector_AppendCopiesSlow(Vec *v, u32 n, const Str &x) {
-    Buf b(&v->cap);
-    u32 len = LobbyStringVector_RecommendSize(v, v->size + n - v->cap);
-    b.AllocA(len);
+extern "C" void LobbyStringVector_AppendCopiesSlow(LobbyStringVector *v, u32 n, const Str &x) {
+    LobbyStringVectorBuffer b;
+    InitBuffer(&b, &v->capacity);
+    u32 len = LobbyStringVector_RecommendSize(v, v->size + n - v->capacity);
+    AllocA(b, len);
     b.start = v->size;
     FillN(b, n, x);
     MoveBack(b, v);
     Release(v);
-    Swap(v->cap, b.EndCap());
-    Swap(v->ptr, b.ptr);
+    Swap(v->capacity, EndCapacity(b));
+    Swap(v->data, b.data);
     Swap(v->size, b.size);
     LobbyStringVectorBuffer_Destroy(&b);
 }

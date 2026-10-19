@@ -1,26 +1,19 @@
 #include <nitro/types.h>
 
+#include "lobby_tree.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "../../lib/NitroDWC/src/tree-iterator4.h"
-
-struct S {
-    int a;
-    void *anchor;
-};
-
 typedef Iterator It;
-void LobbyUserIdSet_Find(It *, struct S *, void *);
-void LobbyUserIdSet_Erase(It *, struct S *, Iterator);
-int LobbyUserIdSet_EraseKey(struct S *, void *);
+void LobbyUserIdSet_Find(It *, LobbyUserIdSet *, void *);
 
-int LobbyUserIdSet_EraseKey(struct S *s, void *k) {
+int LobbyUserIdSet_EraseKey(LobbyUserIdSet *set, void *k) {
     It it, out;
-    LobbyUserIdSet_Find(&it, s, k);
-    if (it.current == &s->anchor) {
+    LobbyUserIdSet_Find(&it, set, k);
+    if (it.current == &set->root) {
         return 0;
     }
-    LobbyUserIdSet_Erase(&out, s, (Iterator) { it.current });
+    LobbyUserIdSet_Erase(&out, set, (Iterator) { it.current });
     return 1;
 }

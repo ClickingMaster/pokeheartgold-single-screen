@@ -1,19 +1,15 @@
 #include <nitro/types.h>
 
+#include "lobby_event_deque.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
 struct Tag {};
-struct Ring;
 
-struct It {
-    u32 *cur, *first, *mid, *last;
-    inline It(Ring *r, u32 i);
-};
-
-extern "C" void LobbyEventDequeMapBuffer_Allocate(Ring *r, u32 n, Tag);
-extern "C" void LobbyEventDequeMapBuffer_AppendRange(Ring *r, const It &first, const It &last, Tag);
-extern "C" void LobbyEventDequeMapBuffer_Destroy(Ring *r);
+extern "C" void LobbyEventDequeMapBuffer_Allocate(LobbyEventDequeMapBuffer *buffer, u32 n, Tag);
+extern "C" void LobbyEventDequeMapBuffer_AppendRange(LobbyEventDequeMapBuffer *buffer, const LobbyEventDequeMapIterator &first, const LobbyEventDequeMapIterator &last, Tag);
+extern "C" void LobbyEventDequeMapBuffer_Destroy(LobbyEventDequeMapBuffer *buffer);
 
 inline void Swap(u32 &a, u32 &b) {
     u32 t = a;
@@ -21,76 +17,61 @@ inline void Swap(u32 &a, u32 &b) {
     b = t;
 }
 
-inline void Swap(u32 *&a, u32 *&b) {
-    u32 *t = a;
+inline void Swap(LobbyEvent **&a, LobbyEvent **&b) {
+    LobbyEvent **t = a;
     a = b;
     b = t;
 }
 
-struct Ring {
-    u32 *ptr;
-    u32 start, size, cap;
-
-    u32 capacity() const {
-        return cap == 0 ? 0 : cap - 1;
-    }
-
-    u32 endIndex() const {
-        if (cap == 0) {
-            return 0;
-        }
-        return (start + size) % cap;
-    }
-
-    It begin() {
-        return It(this, start);
-    }
-
-    It end() {
-        return It(this, endIndex());
-    }
-};
-
-inline It::It(Ring *r, u32 i)
-    : cur(r->ptr + i)
-    , first(r->ptr)
-    , mid(first + r->start)
-    , last(first + r->cap) {
+inline u32 Capacity(const LobbyEventDequeMap *map) {
+    return map->capacity == 0 ? 0 : map->capacity - 1;
 }
 
-struct RingBuf : Ring {
-    u32 *alloc;
-
-    RingBuf(u32 *a)
-        : alloc(a) {
-        ptr = 0;
-        start = 0;
-        size = 0;
-        cap = 0;
+inline u32 EndIndex(const LobbyEventDequeMap *map) {
+    if (map->capacity == 0) {
+        return 0;
     }
-};
+    return (map->start + map->size) % map->capacity;
+}
+
+inline LobbyEventDequeMapIterator Begin(LobbyEventDequeMap *map) {
+    return LobbyEventDequeMapIterator(map, map->start);
+}
+
+inline LobbyEventDequeMapIterator End(LobbyEventDequeMap *map) {
+    return LobbyEventDequeMapIterator(map, EndIndex(map));
+}
+
+inline void InitBuffer(LobbyEventDequeMapBuffer *buffer, u32 *allocator) {
+    buffer->allocator = allocator;
+    buffer->map.blocks = 0;
+    buffer->map.start = 0;
+    buffer->map.size = 0;
+    buffer->map.capacity = 0;
+}
 
 struct Alloc {
-    void destroy(u32 *, u32) {
+    void destroy(LobbyEvent **, u32) {
     }
 };
 
-extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n);
+extern "C" void LobbyEventDequeMap_Reserve(LobbyEventDequeMap *map, u32 n);
 
-extern "C" void LobbyEventDequeMap_Reserve(Ring *r, u32 n) {
-    if (n <= r->capacity()) {
+extern "C" void LobbyEventDequeMap_Reserve(LobbyEventDequeMap *map, u32 n) {
+    if (n <= Capacity(map)) {
         return;
     }
-    RingBuf tmp(&r->cap);
+    LobbyEventDequeMapBuffer tmp;
+    InitBuffer(&tmp, &map->capacity);
     LobbyEventDequeMapBuffer_Allocate(&tmp, n, Tag());
-    LobbyEventDequeMapBuffer_AppendRange(&tmp, r->begin(), r->end(), Tag());
+    LobbyEventDequeMapBuffer_AppendRange(&tmp, Begin(map), End(map), Tag());
     Alloc a = Alloc();
-    a.destroy(r->ptr, r->size);
-    r->size = 0;
-    u32 &c = tmp.cap;
-    Swap(r->ptr, tmp.ptr);
-    Swap(r->start, tmp.start);
-    Swap(r->size, tmp.size);
-    Swap(r->cap, c);
+    a.destroy(map->blocks, map->size);
+    map->size = 0;
+    u32 &c = tmp.map.capacity;
+    Swap(map->blocks, tmp.map.blocks);
+    Swap(map->start, tmp.map.start);
+    Swap(map->size, tmp.map.size);
+    Swap(map->capacity, c);
     LobbyEventDequeMapBuffer_Destroy(&tmp);
 }

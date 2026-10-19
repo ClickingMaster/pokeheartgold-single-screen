@@ -10,22 +10,9 @@
 
 #include "lobby_chat_request.h"
 
+#include "lobby_string.h"
+
 #include "../lib/NitroDWC/src/tree-iterator4.h"
-
-typedef union Str {
-    struct {
-        u32 isLong : 1;
-        u32 pad : 31;
-        u32 size;
-        char *ptr;
-    } l;
-
-    struct {
-        u8 isLong : 1;
-        u8 len : 7;
-        char buf[11];
-    } s;
-} Str;
 
 typedef struct IntStrPair {
     int key;
@@ -45,18 +32,6 @@ static inline void StrInit(Str *s) {
 static inline void PairInit(IntStrPair *p, int *k, Str *v) {
     p->key = *k;
     LobbyString_InitCopy(&p->val, v);
-}
-
-static inline BOOL StrIsShort(Str *s) {
-    return !s->l.isLong;
-}
-
-static inline u32 StrSize(Str *s) {
-    return StrIsShort(s) ? s->s.len : s->l.size;
-}
-
-static inline const char *StrData(Str *s) {
-    return StrIsShort(s) ? s->s.buf : s->l.ptr;
 }
 
 void LobbyString_Substr(void *a, void *b, u32 len, int d);

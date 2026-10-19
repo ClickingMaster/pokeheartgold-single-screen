@@ -1,70 +1,45 @@
 #include <nitro/types.h>
 
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern "C" void *memset(void *p, int c, u32 n);
 extern "C" void *memcpy(void *d, const void *s, u32 n);
 
-struct Tag {};
-
-struct Vec8 {
-    u8 *ptr;
-    u32 size;
-    u32 cap;
-
-    u8 *begin() {
-        return ptr;
-    }
-
-    u8 *end() {
-        return ptr + size;
-    }
-};
-
-struct Buf {
-    u8 *ptr;
-    u32 size;
-    u32 cap;
-    u32 *alloc;
-    u32 start;
-
-    Buf(u32 *a) {
-        ptr = 0;
-        size = 0;
-        cap = 0;
-        start = 0;
-        alloc = a;
-    }
-};
-struct Buf;
+static inline void InitBuffer(LobbyCharVectorBuffer *b, u32 *allocator) {
+    b->data = 0;
+    b->size = 0;
+    b->capacity.value = 0;
+    b->start = 0;
+    b->capacity.allocator = allocator;
+}
 
 struct Alloc {
-    void fill(u8 *p, u8 v, u32 n) {
+    void fill(char *p, u8 v, u32 n) {
         memset(p, v, n);
     }
 
-    void move(u8 *d, u8 *s, u32 n) {
+    void move(char *d, char *s, u32 n) {
         memcpy(d, s, n);
         memset(s, 0, n);
     }
 
-    u32 moveBack(Buf *t, u8 *first, u8 *last) {
+    u32 moveBack(LobbyCharVectorBuffer *t, char *first, char *last) {
         u32 n = last - first;
         t->start -= n;
-        memcpy(t->ptr + t->start, first, n);
+        memcpy(t->data + t->start, first, n);
         memset(first, 0, n);
         return n;
     }
 
-    void destroy(u8 *, u32) {
+    void destroy(char *, u32) {
     }
 };
 
-extern "C" u32 LobbyCharVector_RecommendSize(Vec8 *v, u32 n);
-extern "C" void LobbyCharVectorBuffer_Allocate(Buf *b, u32 n, Tag t);
-extern "C" void LobbyCharVectorBuffer_Destroy(Buf *b);
+extern "C" u32 LobbyCharVector_RecommendSize(LobbyCharVector *v, u32 n);
 
-inline void Allocate(Buf *b, u32 n, Tag t) {
+inline void Allocate(LobbyCharVectorBuffer *b, u32 n, LobbyTag t) {
     LobbyCharVectorBuffer_Allocate(b, n, t);
 }
 
@@ -74,33 +49,34 @@ inline void Swap(u32 &a, u32 &b) {
     b = t;
 }
 
-inline void Swap(u8 *&a, u8 *&b) {
-    u8 *t = a;
+inline void Swap(char *&a, char *&b) {
+    char *t = a;
     a = b;
     b = t;
 }
 
-extern "C" void LobbyCharVector_AppendFillSlow(Vec8 *v, u32 n, const u8 *val);
+extern "C" void LobbyCharVector_AppendFillSlow(LobbyCharVector *v, u32 n, const u8 *val);
 
-extern "C" void LobbyCharVector_AppendFillSlow(Vec8 *v, u32 n, const u8 *val) {
-    Buf tmp(&v->cap);
-    u32 c = LobbyCharVector_RecommendSize(v, v->size + n - v->cap);
-    Allocate(&tmp, c, Tag(Tag()));
+extern "C" void LobbyCharVector_AppendFillSlow(LobbyCharVector *v, u32 n, const u8 *val) {
+    LobbyCharVectorBuffer tmp;
+    InitBuffer(&tmp, &v->capacity);
+    u32 c = LobbyCharVector_RecommendSize(v, v->size + n - v->capacity);
+    Allocate(&tmp, c, LobbyTag(LobbyTag()));
     tmp.start = v->size;
     Alloc a = Alloc();
-    a.fill(tmp.ptr + tmp.start + tmp.size, *val, n);
+    a.fill(tmp.data + tmp.start + tmp.size, *val, n);
     tmp.size += n;
-    u8 *first = v->begin();
-    u8 *last = v->end();
+    char *first = v->data;
+    char *last = v->data + v->size;
     Alloc b = Alloc();
     u32 sz = b.moveBack(&tmp, first, last);
     tmp.size += sz;
     Alloc d = Alloc();
-    d.destroy(v->ptr, v->size);
+    d.destroy(v->data, v->size);
     v->size = 0;
-    u32 &tc = tmp.cap;
-    Swap(v->cap, tc);
-    Swap(v->ptr, tmp.ptr);
+    u32 &tc = tmp.capacity.value;
+    Swap(v->capacity, tc);
+    Swap(v->data, tmp.data);
     Swap(v->size, tmp.size);
     LobbyCharVectorBuffer_Destroy(&tmp);
 }

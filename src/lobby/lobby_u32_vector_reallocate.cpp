@@ -1,17 +1,14 @@
 #include <nitro/types.h>
 
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
-struct Vec {
-    u32 *ptr;
-    u32 size, cap;
-};
 
 struct Tag {};
 
 extern "C" void DWC_Free(int, void *, u32);
-extern "C" void LobbyU32Vector_Allocate(Vec *v, u32 n, Tag t);
+extern "C" void LobbyU32Vector_Allocate(LobbyU32Vector *v, u32 n, Tag t);
 
 struct Alloc {
     void release(u32 *p) {
@@ -21,16 +18,16 @@ struct Alloc {
     }
 };
 
-extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap);
+extern "C" void LobbyU32Vector_Reallocate(LobbyU32Vector *v, u32 size, u32 cap);
 
-extern "C" void LobbyU32Vector_Reallocate(Vec *v, u32 size, u32 cap) {
+extern "C" void LobbyU32Vector_Reallocate(LobbyU32Vector *v, u32 size, u32 cap) {
     u32 n = v->size;
     Alloc a = Alloc();
     v->size -= n;
-    if (v->ptr) {
-        a.release(v->ptr);
-        v->ptr = 0;
-        v->cap = 0;
+    if (v->data) {
+        a.release(v->data);
+        v->data = 0;
+        v->capacity = 0;
     }
     LobbyU32Vector_Allocate(v, cap, Tag(Tag()));
 }

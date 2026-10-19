@@ -1,24 +1,13 @@
 #include <nitro/types.h>
 
+#include "lobby_event_deque.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct Tag {};
-
 extern "C" void DWC_Free(int, void *, u32);
 
-struct Buf {
-    void **ptr;
-    u32 start, size, cap;
-};
-
-struct Ring {
-    u32 unk0;
-    u32 unk4;
-    Buf buf;
-};
-
-extern "C" void LobbyEventDequeMap_Destroy(Buf *b);
+extern "C" void LobbyEventDequeMap_Destroy(LobbyEventDequeMap *map);
 
 struct Del {
     void operator()(void *p) const {
@@ -28,29 +17,29 @@ struct Del {
     }
 };
 
-inline u32 EndIndex(const Buf *b) {
+inline u32 EndIndex(const LobbyEventDequeMap *map) {
     u32 e = 0;
-    if (b->cap != 0) {
-        e = (b->start + b->size) % b->cap;
+    if (map->capacity != 0) {
+        e = (map->start + map->size) % map->capacity;
     }
     return e;
 }
 
-extern "C" Ring *LobbyEventDeque_Destroy2(Ring *r);
+extern "C" LobbyEventDeque *LobbyEventDeque_Destroy2(LobbyEventDeque *deque);
 
-extern "C" Ring *LobbyEventDeque_Destroy2(Ring *r) {
+extern "C" LobbyEventDeque *LobbyEventDeque_Destroy2(LobbyEventDeque *deque) {
     Del d = Del();
-    r->unk4 = 0;
-    if (r->buf.size != 0) {
-        u32 e = EndIndex(&r->buf);
-        void **end;
-        void **cur;
-        void **base;
-        void **lim;
-        base = r->buf.ptr;
+    deque->size = 0;
+    if (deque->map.size != 0) {
+        u32 e = EndIndex(&deque->map);
+        LobbyEvent **end;
+        LobbyEvent **cur;
+        LobbyEvent **base;
+        LobbyEvent **lim;
+        base = deque->map.blocks;
         end = base + e;
-        lim = base + r->buf.cap;
-        cur = base + r->buf.start;
+        lim = base + deque->map.capacity;
+        cur = base + deque->map.start;
         while (cur != end) {
             d(*cur);
             if (++cur == lim) {
@@ -58,6 +47,6 @@ extern "C" Ring *LobbyEventDeque_Destroy2(Ring *r) {
             }
         }
     }
-    LobbyEventDequeMap_Destroy(&r->buf);
-    return r;
+    LobbyEventDequeMap_Destroy(&deque->map);
+    return deque;
 }

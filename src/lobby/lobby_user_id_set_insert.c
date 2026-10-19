@@ -1,32 +1,15 @@
 #include "global.h"
 
+#include "lobby_tree.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #define P(p, o) (*(void **)((char *)(p) + (o)))
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent;
-    int key;
-} Node;
-
-typedef struct {
-    int count;
-    void *root, *last;
-} Tree;
-
-extern Node *LobbyUserIdSet_FindInsertPos(Tree *p, int *key, Node **prev, u8 *left, u8 *first);
 extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
 extern void *LobbyChannelMap_Destroy(void *p);
 
-typedef struct {
-    Node *node;
-    u8 ok;
-} InsertResult;
-
-extern Node *LobbyUserIdSet_InsertNode(Tree *, Node *, int, int, int *);
 extern u8 ov45_02255358[];
-extern void LobbyUserIdSet_Insert(InsertResult *, Tree *, int *);
 
 void *LobbyChannelMap_Destroy(void *p) {
     if (P(p, 4)) {
@@ -35,16 +18,16 @@ void *LobbyChannelMap_Destroy(void *p) {
     return p;
 }
 
-void LobbyUserIdSet_Insert(InsertResult *out, Tree *p, int *key) {
-    Node *prev;
+void LobbyUserIdSet_Insert(LobbyUserIdSetInsertResult *out, LobbyUserIdSet *set, int *key) {
+    LobbyUserIdSetNode *prev;
     u8 left, first;
-    Node *last;
-    last = LobbyUserIdSet_FindInsertPos(p, key, &prev, &left, &first);
-    if (!prev || prev->key < *key) {
-        out->node = LobbyUserIdSet_InsertNode(p, last, left, first, key);
-        out->ok = ov45_02255358[3];
+    LobbyUserIdSetNode *last;
+    last = LobbyUserIdSet_FindInsertPos(set, key, &prev, &left, &first);
+    if (!prev || prev->userId < *key) {
+        out->node = LobbyUserIdSet_InsertNode(set, last, left, first, key);
+        out->inserted = ov45_02255358[3];
     } else {
         out->node = prev;
-        out->ok = ov45_02255358[7];
+        out->inserted = ov45_02255358[7];
     }
 }

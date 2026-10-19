@@ -1,22 +1,19 @@
 #include <nitro/types.h>
 
+#include "lobby_vector.h"
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct Vec {
-    char *ptr;
-    u32 size, cap;
-};
-
 class Allocator {
 public:
-    u32 recommend(Vec *vector, u32 growth);
+    u32 recommend(LobbyCharVector *vector, u32 growth);
 };
 
-extern "C" u32 LobbyCharVector_RecommendSize(Vec *, u32);
-extern "C" void LobbyCharVector_Reallocate(Vec *, u32, u32);
+extern "C" u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
+extern "C" void LobbyCharVector_Reallocate(LobbyCharVector *, u32, u32);
 
-inline u32 Allocator::recommend(Vec *vector, u32 growth) {
+inline u32 Allocator::recommend(LobbyCharVector *vector, u32 growth) {
     return LobbyCharVector_RecommendSize(vector, growth);
 }
 
@@ -60,11 +57,11 @@ inline char Cast(const Iter &i) {
     return n(*i);
 }
 
-extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last);
+extern "C" void LobbyCharVector_AssignIterRange(LobbyCharVector *v, Iter first, Iter last);
 
-extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last) {
+extern "C" void LobbyCharVector_AssignIterRange(LobbyCharVector *v, Iter first, Iter last) {
     u32 n = last.p - first.p;
-    u32 cap = v->cap;
+    u32 cap = v->capacity;
     if (n > cap) {
         u32 growth = n - cap;
         Allocator a = Allocator();
@@ -72,7 +69,7 @@ extern "C" void LobbyCharVector_AssignIterRange(Vec *v, Iter first, Iter last) {
     }
     {
         Iter it = first;
-        char *dst = v->ptr;
+        char *dst = v->data;
         for (; it != last; ++it) {
             *dst++ = Cast(it);
         }
