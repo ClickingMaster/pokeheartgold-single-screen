@@ -10,7 +10,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Vertical scroll bar and the access-point scan work allocation.
+// Vertical scroll bar.
 
 extern u8 gWifiSetupScrollBarThumbLengths[]; // thumb length per kind
 extern s32 FX_DivS32(s32, s32);
@@ -25,6 +25,14 @@ static void WifiSetupScrollBar_SetThumbPos(int value);
 
 void WifiSetupScrollBar_Task(void *task, void *arg);
 void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *rect);
+
+WifiSetupScrollBar *gWifiSetupScrollBar;
+
+void WifiSetupScrollBar_Destroy(void) {
+    WifiSetupTask_Destroy(0, gWifiSetupScrollBar->task);
+    WifiSetupOamBlock_Free(gWifiSetupScrollBar->thumb);
+    WifiSetupHeap_FreeAndClear(&gWifiSetupScrollBar);
+}
 
 u8 WifiSetupScrollBar_GetValue(void) {
     return gWifiSetupScrollBar->value;
@@ -245,11 +253,4 @@ void WifiSetupScrollBar_GetPartRect(int part, WifiSetupRect *r) {
 static void WifiSetupScrollBar_SetThumbPos(int value) {
     WifiSetupOamBlock_SetPosition(gWifiSetupScrollBar->thumb, -1, gWifiSetupScrollBar->pos.x, value + gWifiSetupScrollBar->pos.y);
     gWifiSetupScrollBar->value = value;
-}
-
-void WifiSetupApScan_AllocWork(void) {
-    if (gWifiSetupApScan != NULL) {
-        return;
-    }
-    gWifiSetupApScan = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupApScan), 0x20);
 }

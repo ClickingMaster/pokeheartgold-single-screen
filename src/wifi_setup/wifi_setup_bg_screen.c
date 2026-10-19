@@ -15,6 +15,12 @@ extern u8 gWifiSetupScrollBarThumbTemplates[]; // thumb template per kind
 static void WifiSetupPalette_LoadRowTask(void *task, void *arg);
 static void WifiSetupPalette_LoadTask(void *task, void *arg);
 
+WifiSetupBgScreenState gWifiSetupBgScreen;
+
+void WifiSetupBgScreen_Destroy(void) {
+    WifiSetupTask_Destroy(1, gWifiSetupBgScreen.screen->task);
+    WifiSetupHeap_FreeAndClear(&gWifiSetupBgScreen);
+}
 
 void WifiSetupBgScreen_MarkDirty(void) {
     gWifiSetupBgScreen.screen->dirty = 1;

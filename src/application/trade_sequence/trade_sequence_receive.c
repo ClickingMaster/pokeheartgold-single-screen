@@ -5,7 +5,6 @@
 
 #include "application/trade_sequence/trade_sequence_internal.h"
 #include "application/trade_sequence/trade_sequence_models.h"
-#include "application/trade_sequence/trade_sequence_receive_internal.h"
 #include "msgdata/msg/msg_0179.h"
 
 #include "bg_window.h"
@@ -30,6 +29,47 @@
 
 // Scene 6 of the trade animation (trades and receiving): the ball lands with a flash, the received Pokemon appears
 // with its cry and its message, and the screen fades out.
+
+typedef struct TradeSequenceReceive {
+    TradeSequence *ts;
+    u32 subState;
+    int timer;
+    BOOL fanfarePlaying;
+    PokepicManager *pokepicManager;
+    Pokepic *pokepic;
+    PokepicAnimScript animScript[10];
+    Sprite *sprites[2];
+    TradeSequenceCellAnim cellAnim;
+    BgConfig *bgConfig;
+    Window window;
+    String *msgTemplate;
+    String *msgString;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    SysTask *brightnessTask;
+    SysTask *bounceTask;
+    NARC *pokeAnimNarc;
+} TradeSequenceReceive;
+
+// The ball fades in, spins faster, rises, falls and bounces once, then lands while the screen brightens.
+typedef struct TradeSequenceReceiveBounce {
+    SysTask **task;
+    int state;
+    TradeSequenceReceive *receive;
+    int timer;
+    TradeSequenceModels *models;
+    TradeSequenceModel *ball;
+    fx32 alpha;
+    fx32 alphaStep;
+    int alphaFrames;
+    VecFx32 position;
+    fx32 speed;
+    TradeSequenceRotation rotation;
+    s16 spinSpeed;
+    s16 spinStep;
+    s16 spinTarget;
+    u32 spinFrames;
+} TradeSequenceReceiveBounce;
 
 #define TRADE_SEQUENCE_RECEIVE_NUM_STATES 4
 
@@ -58,6 +98,15 @@ enum TradeSequenceReceiveMessageStep {
     TRADE_RECEIVE_MSG_WAIT_FADE_OUT,
 };
 
+enum TradeSequenceReceiveBounceState {
+    TRADE_RECEIVE_BOUNCE_FADE_IN,
+    TRADE_RECEIVE_BOUNCE_START_SPIN,
+    TRADE_RECEIVE_BOUNCE_DELAY,
+    TRADE_RECEIVE_BOUNCE_FALL,
+    TRADE_RECEIVE_BOUNCE_RISE,
+    TRADE_RECEIVE_BOUNCE_WAIT_BRIGHTNESS,
+};
+
 typedef BOOL (*TradeSequenceReceiveStateFunc)(TradeSequenceReceive *receive, u32 *state);
 
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
@@ -75,6 +124,12 @@ static void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive);
 static void TradeSequenceReceive_StopBrightness(TradeSequenceReceive *receive);
 static void TradeSequenceReceive_BrightnessTask(SysTask *task, void *data);
 static void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysTask **task);
+static void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int start, int target, int frames);
+static BOOL TradeSequenceReceive_IsBrightnessDone(TradeSequenceReceive *receive);
+static void TradeSequenceReceive_StopBounce(SysTask *task);
+static void TradeSequenceReceive_UpdateSpin(TradeSequenceReceiveBounce *bounce);
+static void TradeSequenceReceive_SetSpin(TradeSequenceReceiveBounce *bounce, int target, int frames);
+static void TradeSequenceReceive_BounceTask(SysTask *task, void *data);
 
 static const TradeSequenceRotation sTradeSequenceReceiveModelRotation = {
     .x = 0,
@@ -442,7 +497,7 @@ static void TradeSequenceReceive_DeleteSprites(TradeSequenceReceive *receive) {
     TradeSequence_FreeCellAnim(&receive->cellAnim);
 }
 
-void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int start, int target, int frames) {
+static void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int start, int target, int frames) {
     TradeSequenceReceiveBrightness *brightness = Heap_Alloc(HEAP_ID_57, sizeof(*brightness));
     if (brightness) {
         brightness->receive = receive;
@@ -455,7 +510,7 @@ void TradeSequenceReceive_StartBrightness(TradeSequenceReceive *receive, int sta
     }
 }
 
-BOOL TradeSequenceReceive_IsBrightnessDone(TradeSequenceReceive *receive) {
+static BOOL TradeSequenceReceive_IsBrightnessDone(TradeSequenceReceive *receive) {
     if (receive->brightnessTask == NULL) {
         return TRUE;
     }
@@ -512,7 +567,7 @@ static void TradeSequenceReceive_StartBounce(TradeSequenceReceive *receive, SysT
     }
 }
 
-void TradeSequenceReceive_StopBounce(SysTask *task) {
+static void TradeSequenceReceive_StopBounce(SysTask *task) {
     TradeSequenceReceiveBounce *bounce;
     if (task != NULL) {
         bounce = SysTask_GetData(task);
@@ -522,7 +577,7 @@ void TradeSequenceReceive_StopBounce(SysTask *task) {
     }
 }
 
-void TradeSequenceReceive_UpdateSpin(TradeSequenceReceiveBounce *bounce) {
+static void TradeSequenceReceive_UpdateSpin(TradeSequenceReceiveBounce *bounce) {
     if (bounce->spinFrames != 0) {
         bounce->spinSpeed += bounce->spinStep;
         bounce->spinFrames--;
@@ -534,9 +589,69 @@ void TradeSequenceReceive_UpdateSpin(TradeSequenceReceiveBounce *bounce) {
     TradeSequence_SetModelRotation(bounce->ball, &bounce->rotation);
 }
 
-void TradeSequenceReceive_SetSpin(TradeSequenceReceiveBounce *bounce, int target, int frames) {
+static void TradeSequenceReceive_SetSpin(TradeSequenceReceiveBounce *bounce, int target, int frames) {
     if (frames != 0) {
         bounce->spinStep = (target - bounce->spinSpeed) / frames;
         bounce->spinFrames = frames;
+    }
+}
+
+static void TradeSequenceReceive_BounceTask(SysTask *task, void *data) {
+    TradeSequenceReceiveBounce *bounce = data;
+
+    TradeSequenceReceive_UpdateSpin(bounce);
+    switch (bounce->state) {
+    case TRADE_RECEIVE_BOUNCE_FADE_IN:
+        if (bounce->alphaFrames) {
+            bounce->alpha += bounce->alphaStep;
+            bounce->alphaFrames--;
+            TradeSequence_SetModelAlpha(bounce->ball, bounce->alpha >> FX32_SHIFT);
+        } else {
+            TradeSequence_SetModelAlpha(bounce->ball, 31);
+            bounce->state++;
+        }
+        break;
+    case TRADE_RECEIVE_BOUNCE_START_SPIN:
+        TradeSequenceReceive_SetSpin(bounce, 384, 30);
+        bounce->timer = 0;
+        bounce->state++;
+        break;
+    case TRADE_RECEIVE_BOUNCE_DELAY:
+        bounce->timer++;
+        if (bounce->timer > 10) {
+            bounce->speed = 0;
+            bounce->state++;
+        }
+        break;
+    case TRADE_RECEIVE_BOUNCE_FALL: {
+        bounce->position.y += bounce->speed;
+        bounce->speed -= 1920;
+        TradeSequence_SetModelPosition(bounce->ball, &bounce->position);
+        s32 y = bounce->position.y;
+        if (y < FX32_CONST(-11)) {
+            PlaySE(SEQ_SE_DP_KON);
+            bounce->speed *= -1;
+            TradeSequenceReceive_StartBrightness(bounce->receive, 0, 16, 8);
+            bounce->state++;
+        }
+        break;
+    }
+    case TRADE_RECEIVE_BOUNCE_RISE: {
+        bounce->position.y += bounce->speed;
+        s32 y = bounce->position.y;
+        if (y >= FX32_CONST(19)) {
+            bounce->position.y = FX32_CONST(19);
+        }
+        TradeSequence_SetModelPosition(bounce->ball, &bounce->position);
+        if (bounce->position.y == FX32_CONST(19)) {
+            bounce->state++;
+        }
+        break;
+    }
+    case TRADE_RECEIVE_BOUNCE_WAIT_BRIGHTNESS:
+        if (TradeSequenceReceive_IsBrightnessDone(bounce->receive)) {
+            TradeSequenceReceive_StopBounce(task);
+        }
+        break;
     }
 }

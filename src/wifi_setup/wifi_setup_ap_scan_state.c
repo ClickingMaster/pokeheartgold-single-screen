@@ -9,6 +9,13 @@
 
 WifiSetupApScan *gWifiSetupApScan;
 
+void WifiSetupApScan_AllocWork(void) {
+    if (gWifiSetupApScan != NULL) {
+        return;
+    }
+    gWifiSetupApScan = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupApScan), 0x20);
+}
+
 void WifiSetupApScan_FreeWork(void) {
     if (gWifiSetupApScan == NULL) {
         return;

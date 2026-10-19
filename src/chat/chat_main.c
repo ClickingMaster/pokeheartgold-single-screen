@@ -8,6 +8,7 @@
 
 extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern int sprintf(char *, const char *, ...);
+extern char *strchr(const char *, int);
 extern int gChatCryptVersion; // 0, the number sent with the CRYPT command
 extern const char sStr_ciThink[];
 extern const char sStr_ciSendNick[];
@@ -28,6 +29,7 @@ extern const char sStr_chatGetChannelKeysA[];
 extern const char sStr_chatSetChannelKeysA[];
 extern const char sStr_chatSetChannelModeA[];
 extern const char sStr_chatGetChannelModeA[];
+extern const char sStr_ciNickError[];
 extern const char sStr_chatSetChannelLimitA[];
 extern const char sStr_chatSendUserMessageA[];
 extern const char sStr_ciProcessServerMessage[];
@@ -37,6 +39,7 @@ extern const char sStr_chatSendChannelMessageA[];
 extern const char sStr_MessageNeNULL_2[];
 extern const char sStr_ChatMainC[];
 extern const char sStr_ChatNeNULL_4[];
+extern const char sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3[];
 extern const char sStr_Disconnected[];
 extern const ChatBytes2 sStr_Star_3;
 extern const char sFmt_NICK[];
@@ -904,5 +907,42 @@ void chatGetChannelKeysA(ChatConnection *chat, const char *channel, const char *
             ciThink(chat, id);
             msleep(10);
         } while (ciCheckForID(chat, id) != 0);
+    }
+}
+
+// Checks a nick: 0 = valid, 6 = too long, 2 = empty, bad first character or a character outside sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3.
+int ciNickIsValid(const char *nick) {
+    if (strlen(nick) >= 21) {
+        return 6;
+    }
+    if (!nick || !*nick) {
+        return 2;
+    }
+    if (*nick == '@' || *nick == '#' || *nick == '+' || *nick == ':') {
+        return 2;
+    }
+    while (*nick) {
+        if (!strchr(sStr_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuv_3, *nick++)) {
+            return 2;
+        }
+    }
+    return 0;
+}
+
+// The nick was refused: queue the nick error callback, or end the connect attempt without one.
+void ciNickError(ChatConnection *chat, int type, const char *nick, int unk_0C, int unk_10) {
+    ASSERT_CHAT(chat, sStr_ciNickError, 3017);
+    if (chat->nickErrorCallback) {
+        ChatNickErrorArgs args = { 0 };
+        args.suggestedNicks = unk_10;
+        args.type = type;
+        args.nick = nick;
+        args.numSuggestedNicks = unk_0C;
+        ciAddCallback_(chat, CALLBACK_NICK_ERROR, chat->nickErrorCallback, (u32 *)&args, chat->connectParam, 0, NULL, sizeof(args));
+        return;
+    }
+    chat->connecting = FALSE;
+    if (chat->connectedCallback) {
+        ((ChatConnectedFunc)chat->connectedCallback)(chat, FALSE, 1, chat->connectParam);
     }
 }

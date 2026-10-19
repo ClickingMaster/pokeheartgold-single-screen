@@ -13,7 +13,47 @@ extern char sStr_DataNeNULL[];
 extern char sStr_ChatCallbacksC[];
 extern char sStr_ciCallbacksArrayElementFreeFn[];
 extern void LobbyString_Destroy(Str *);
+extern int LobbyString_Compare(Str *, Str *);
 extern void ciCallbacksArrayElementFreeFn(void *p);
+
+void *LobbyUserMap_Destroy(LobbyUserMap *map) {
+    if (map->root) {
+        LobbyUserMap_DestroyNodes(map, map->root);
+    }
+    return map;
+}
+
+void *LobbyRequestMap_Destroy(LobbyRequestMap *map) {
+    if (map->root) {
+        LobbyRequestMap_DestroyNodes(map, map->root);
+    }
+    return map;
+}
+
+LobbyChannelMapNode *LobbyChannelMap_FindInsertPos(LobbyChannelMap *map, Str *key, LobbyChannelMapNode **found, u8 *left, u8 *empty) {
+    LobbyChannelMapNode *parent;
+    LobbyChannelMapNode *p;
+    _Bool comparison;
+    *found = 0;
+    p = map->root;
+    *left = 1;
+    *empty = 1;
+    parent = (LobbyChannelMapNode *)&map->root;
+    while (p) {
+        parent = p;
+        comparison = (_Bool)(LobbyString_Compare(key, &p->entry.name) < 0);
+        if (comparison) {
+            p = p->left;
+            *left = 1;
+        } else {
+            *found = p;
+            p = p->right;
+            *left = 0;
+            *empty = 0;
+        }
+    }
+    return parent;
+}
 
 LobbyUserIdSetNode *LobbyUserIdSet_FindInsertPos(LobbyUserIdSet *set, int *key, LobbyUserIdSetNode **prev, u8 *left, u8 *first) {
     LobbyUserIdSetNode *node, *last;

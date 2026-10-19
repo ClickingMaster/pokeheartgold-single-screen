@@ -83,6 +83,5 @@ BOOL WiFiPlazaTalk_Survey(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
 void WiFiPlazaEventWobble_InitSmall(WiFiPlazaEventWobble *wobble);
 void WiFiPlazaEventWobble_InitLarge(WiFiPlazaEventWobble *wobble);
 BOOL WiFiPlazaEventWobble_Step(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-void WiFiPlazaEvent_UpdateMoverMarkers(WiFiPlazaEventMovers *work, int index);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_EVENT_H

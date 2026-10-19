@@ -19,6 +19,7 @@
 #include "pm_string.h"
 #include "save_palpad.h"
 #include "sound_playback.h"
+#include "sprite.h"
 #include "sprite_transfer.h"
 #include "systask_environment.h"
 #include "system.h"
@@ -156,6 +157,7 @@ static void UnionChatLog_UpdateTouchRepeat(UnionChatLogData *data);
 static BOOL UnionChatLog_IsTouchRepeatTick(UnionChatLogData *data);
 static void UnionChatLog_SetThumbFollowsScroll(UnionChatLogData *data, BOOL follow);
 static BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data);
+static void UnionChatLog_UpdateArrows(UnionChatLogData *data);
 static void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow);
 
 static void UnionChatLog_PrintMenuButton(UnionChatLogData *data) {
@@ -831,4 +833,19 @@ static void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow) {
         Sprite_SetAnimCtrlSeq(data->sprites[arrow], arrow + 4);
     }
     data->arrowPressed[arrow] = TRUE;
+}
+
+// An arrow pressed this frame stops animating; once released it restarts from frame 1.
+static void UnionChatLog_UpdateArrows(UnionChatLogData *data) {
+    int i;
+    for (i = 0; i < UNION_CHAT_LOG_NUM_ARROWS; i++) {
+        Sprite_GetAnimationFrame(data->sprites[i]);
+        if (data->arrowPressed[i] == TRUE) {
+            Sprite_SetAnimActiveFlag(data->sprites[i], FALSE);
+            data->arrowPressed[i] = FALSE;
+        } else if (!Sprite_GetAnimActiveFlag(data->sprites[i])) {
+            Sprite_SetAnimActiveFlag(data->sprites[i], TRUE);
+            Sprite_SetAnimationFrame(data->sprites[i], 1);
+        }
+    }
 }

@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "e6fbfad1ca8c7397f1b674f0138df3ea2ebc7d21",
+  "commit": "9bc4887d9e7ce38fe9c2fcf76e012f104b4f3d02",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "e4d8faf49e823df94754ed950cec2f5f928424546315328089e1495744607555",
+    "ARM9": "79269abb208eefb744bc3ac7445373fb15db047ee4c1737d6872602c8105e0d1",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
-    "c": 3989992,
+    "c": 3989744,
     "original_asm": 26078,
-    "cpp": 54972,
+    "cpp": 55220,
     "generated": 2264,
     "inline_asm": 1536,
     "veneer": 512
@@ -20,12 +20,12 @@
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989992,
-      "percent": 97.9054089534308
+      "bytes": 3989744,
+      "percent": 97.89932359250264
     },
     "cpp": {
-      "bytes": 54972,
-      "percent": 1.3488889554134438
+      "bytes": 55220,
+      "percent": 1.3549743163415988
     },
     "combined": {
       "bytes": 4044964,
@@ -1141,7 +1141,7 @@
       "cpu": "ARM9",
       "module": "OVY_13",
       "object": "wifi_setup_ap_scan_state.o",
-      "bytes": 52,
+      "bytes": 104,
       "status": "c",
       "source": "src/wifi_setup/wifi_setup_ap_scan_state.c"
     },
@@ -1181,17 +1181,9 @@
       "cpu": "ARM9",
       "module": "OVY_13",
       "object": "wifi_setup_bg_screen.o",
-      "bytes": 608,
+      "bytes": 652,
       "status": "c",
       "source": "src/wifi_setup/wifi_setup_bg_screen.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_13",
-      "object": "wifi_setup_bg_screen_state.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/wifi_setup/wifi_setup_bg_screen_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1357,17 +1349,9 @@
       "cpu": "ARM9",
       "module": "OVY_13",
       "object": "wifi_setup_scroll_bar.o",
-      "bytes": 1508,
+      "bytes": 1516,
       "status": "c",
       "source": "src/wifi_setup/wifi_setup_scroll_bar.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_13",
-      "object": "wifi_setup_scroll_bar_state.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/wifi_setup/wifi_setup_scroll_bar_state.c"
     },
     {
       "cpu": "ARM9",
@@ -1965,17 +1949,9 @@
       "cpu": "ARM9",
       "module": "OVY_34",
       "object": "union_chat_log.o",
-      "bytes": 4348,
+      "bytes": 4448,
       "status": "c",
       "source": "src/union_chat_log.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_34",
-      "object": "union_chat_log_arrows.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/union_chat_log_arrows.c"
     },
     {
       "cpu": "ARM9",
@@ -2485,7 +2461,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "chat_handlers.o",
-      "bytes": 17600,
+      "bytes": 24336,
       "status": "c",
       "source": "src/chat/chat_handlers.c"
     },
@@ -2493,41 +2469,17 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "chat_main.o",
-      "bytes": 9424,
+      "bytes": 9764,
       "status": "c",
       "source": "src/chat/chat_main.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "chat_requests.o",
-      "bytes": 6736,
-      "status": "c",
-      "source": "src/chat/chat_requests.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "chat_socket.o",
-      "bytes": 6652,
+      "bytes": 8560,
       "status": "c",
       "source": "src/chat/chat_socket.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "chat_socket_buffer.o",
-      "bytes": 1248,
-      "status": "c",
-      "source": "src/chat/chat_socket_buffer.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "chat_socket_recv.o",
-      "bytes": 1392,
-      "status": "c",
-      "source": "src/chat/chat_socket_recv.c"
     },
     {
       "cpu": "ARM9",
@@ -2552,14 +2504,6 @@
       "bytes": 80,
       "status": "c",
       "source": "src/lobby/lobby_channel_map_erase_key.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_channel_map_find_insert_pos.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "src/lobby/lobby_channel_map_find_insert_pos.c"
     },
     {
       "cpu": "ARM9",
@@ -2660,6 +2604,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
+      "object": "lobby_chat_channel_callbacks.o",
+      "bytes": 2036,
+      "status": "cpp",
+      "source": "src/lobby/lobby_chat_channel_callbacks.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
       "object": "lobby_chat_channel_commands.o",
       "bytes": 1264,
       "status": "c",
@@ -2740,42 +2692,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_chat_map_destroy.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_map_destroy.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_broadcast_key_changed.o",
-      "bytes": 248,
-      "status": "c",
-      "source": "src/lobby/lobby_chat_on_broadcast_key_changed.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_chat_on_disconnected.o",
       "bytes": 216,
       "status": "c",
       "source": "src/lobby/lobby_chat_on_disconnected.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_enter_channel.o",
-      "bytes": 608,
-      "status": "cpp",
-      "source": "src/lobby/lobby_chat_on_enter_channel.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_enter_channel_enum_users.o",
-      "bytes": 472,
-      "status": "cpp",
-      "source": "src/lobby/lobby_chat_on_enter_channel_enum_users.cpp"
     },
     {
       "cpu": "ARM9",
@@ -2792,22 +2712,6 @@
       "bytes": 448,
       "status": "cpp",
       "source": "src/lobby/lobby_chat_on_enum_users.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_get_channel_keys.o",
-      "bytes": 396,
-      "status": "cpp",
-      "source": "src/lobby/lobby_chat_on_get_channel_keys.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_chat_on_get_channel_mode.o",
-      "bytes": 312,
-      "status": "cpp",
-      "source": "src/lobby/lobby_chat_on_get_channel_mode.cpp"
     },
     {
       "cpu": "ARM9",
@@ -3132,16 +3036,8 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_request_map_insert_node.o",
-      "bytes": 216,
-      "status": "c",
-      "source": "src/lobby/lobby_request_map_insert_node.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_requests.o",
-      "bytes": 396,
+      "bytes": 612,
       "status": "c",
       "source": "src/lobby/lobby_requests.c"
     },
@@ -3341,7 +3237,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "lobby_tree_nodes.o",
-      "bytes": 772,
+      "bytes": 976,
       "status": "c",
       "source": "src/lobby/lobby_tree_nodes.c"
     },
@@ -3805,7 +3701,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "stats_upload.o",
-      "bytes": 2896,
+      "bytes": 3288,
       "status": "c",
       "source": "src/stats_upload.c"
     },
@@ -3909,7 +3805,7 @@
       "cpu": "ARM9",
       "module": "OVY_49",
       "object": "wifi_plaza_event.o",
-      "bytes": 4272,
+      "bytes": 4368,
       "status": "c",
       "source": "src/wifi_plaza/wifi_plaza_event.c"
     },
@@ -3944,14 +3840,6 @@
       "bytes": 8736,
       "status": "c",
       "source": "src/wifi_plaza/wifi_plaza_models.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_49",
-      "object": "wifi_plaza_mover_markers.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/wifi_plaza/wifi_plaza_mover_markers.c"
     },
     {
       "cpu": "ARM9",
@@ -4229,7 +4117,7 @@
       "cpu": "ARM9",
       "module": "OVY_70",
       "object": "gts.o",
-      "bytes": 4282,
+      "bytes": 2998,
       "status": "c",
       "source": "src/gts/gts.c"
     },
@@ -4293,7 +4181,7 @@
       "cpu": "ARM9",
       "module": "OVY_70",
       "object": "gts_server.o",
-      "bytes": 1644,
+      "bytes": 2928,
       "status": "c",
       "source": "src/gts/gts_server.c"
     },
@@ -4381,17 +4269,9 @@
       "cpu": "ARM9",
       "module": "OVY_71",
       "object": "trade_sequence_receive.o",
-      "bytes": 2422,
+      "bytes": 2702,
       "status": "c",
       "source": "src/application/trade_sequence/trade_sequence_receive.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_71",
-      "object": "trade_sequence_receive_bounce.o",
-      "bytes": 280,
-      "status": "c",
-      "source": "src/application/trade_sequence/trade_sequence_receive_bounce.c"
     },
     {
       "cpu": "ARM9",
@@ -4405,17 +4285,9 @@
       "cpu": "ARM9",
       "module": "OVY_72",
       "object": "nintendo_wfc_connect.o",
-      "bytes": 14870,
+      "bytes": 14922,
       "status": "c",
       "source": "src/nintendo_wfc_connect.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_72",
-      "object": "nintendo_wfc_connect_cursor.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/nintendo_wfc_connect_cursor.c"
     },
     {
       "cpu": "ARM9",
@@ -4445,17 +4317,9 @@
       "cpu": "ARM9",
       "module": "OVY_73",
       "object": "record_mixing_exchange.o",
-      "bytes": 364,
+      "bytes": 696,
       "status": "c",
       "source": "src/record_mixing/record_mixing_exchange.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "record_mixing_merge.o",
-      "bytes": 332,
-      "status": "c",
-      "source": "src/record_mixing/record_mixing_merge.c"
     },
     {
       "cpu": "ARM9",

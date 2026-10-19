@@ -9,14 +9,12 @@
 #include "dwc/net_common_internal.h"
 #include "gts/gts_internal.h"
 #include "msgdata/msg.naix"
-#include "nitrowifi/wcm_internal.h"
 
 #include "bg_window.h"
 #include "comm_state.h"
 #include "comm_wireless.h"
 #include "filesystem.h"
 #include "font.h"
-#include "game_stats_request.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -59,7 +57,6 @@ typedef struct GtsScreen {
 
 extern const GtsScreen sGtsScreens[];
 
-static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
 static void Gts_VBlankCB(void *arg);
 static void Gts_SetGfxBanks(void);
 static void Gts_InitData(GtsApp *app, OverlayManager *man);
@@ -76,7 +73,6 @@ static void Gts_FreeGraphics(GtsApp *app);
 static void Gts_DecrementTimer(GtsApp *app);
 static void Gts_CountBoxMonsStep(GtsApp *app);
 static void Gts_ClearDim(void);
-
 
 static const TouchscreenListMenuTemplate sGtsListMenuTemplate = {
     .wrapAround = 0,
@@ -117,265 +113,6 @@ static const GraphicsBanks sGtsGraphicsBanks = {
     .tex = GX_VRAM_TEX_0_B,
     .texpltt = GX_VRAM_TEXPLTT_01_FG,
 };
-
-void GtsServer_Exit(void) {
-    gGtsServer.state = GTS_SERVER_STATE_NONE;
-}
-
-BOOL GtsServer_IsRequestDone(void) {
-    switch (gGtsServer.state) {
-    case GTS_SERVER_STATE_IDLE:
-        return TRUE;
-    case GTS_SERVER_STATE_DONE:
-        gGtsServer.state = GTS_SERVER_STATE_IDLE;
-        return TRUE;
-    default:
-        return FALSE;
-    }
-}
-
-int GtsServer_GetResult(void) {
-    return gGtsServer.result;
-}
-
-void GtsServer_RequestPost(const void *record) {
-    memcpy(gGtsServerRequest, record, GTS_RECORD_SIZE);
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post.asp", gGtsServerRequest, GTS_RECORD_SIZE, gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_POST;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestPostFinish(void) {
-    GtsFriendKey *src = &gGtsServerFriendKey;
-    GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
-    dest->lo = src->lo;
-    dest->hi = src->hi;
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_POST_FINISH;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestGet(void *response) {
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/get.asp", gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
-        gGtsServer.state = GTS_SERVER_STATE_GET;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestResult(void *response) {
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/result.asp", gGtsServerRequest, 0, response, GTS_RECORD_SIZE)) {
-        gGtsServer.state = GTS_SERVER_STATE_RESULT;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestDelete(void) {
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/delete.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_DELETE;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestReturn(void) {
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/return.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_RETURN;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestSearch(const void *criteria, int count, void *response) {
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    *(GtsSearchCriteria *)gGtsServerRequest = *(const GtsSearchCriteria *)criteria;
-    gGtsServer.request.search.count = count;
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/search.asp", gGtsServerRequest, 7, response, GTS_RECORD_SIZE * count)) {
-        gGtsServer.state = GTS_SERVER_STATE_SEARCH;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestSearchEx(const void *criteria, void *response) {
-    u32 i;
-    const u8 *src;
-    u8 *dest;
-
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    src = criteria;
-    dest = gGtsServerRequest;
-    i = sizeof(GtsSearchCriteriaEx);
-    do {
-        *dest++ = *src++;
-        i--;
-    } while (i != 0);
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/search.asp", gGtsServerRequest, sizeof(GtsSearchCriteriaEx), response, ((const GtsSearchCriteriaEx *)criteria)->count * GTS_RECORD_SIZE)) {
-        gGtsServer.state = GTS_SERVER_STATE_SEARCH;
-        return;
-    }
-    gGtsServer.state = GTS_SERVER_STATE_DONE;
-    gGtsServer.result = -13;
-    GameStats_Shutdown();
-}
-
-void GtsServer_RequestExchange(void *arg, const void *record, void *response) {
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    memcpy(gGtsServerRequest, record, GTS_RECORD_SIZE);
-    gGtsServerPending.exchangeArg = arg;
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange.asp", gGtsServerRequest, GTS_RECORD_SIZE + 4, response, GTS_RECORD_SIZE)) {
-        gGtsServer.state = GTS_SERVER_STATE_EXCHANGE;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestExchangeFinish(void) {
-    GtsFriendKey *src = &gGtsServerFriendKey;
-    GtsFriendKey *dest = (GtsFriendKey *)gGtsServerRequest;
-    dest->lo = src->lo;
-    dest->hi = src->hi;
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange_finish.asp", gGtsServerRequest, sizeof(GtsFriendKey), gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_EXCHANGE_FINISH;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-void GtsServer_RequestInfo(void) {
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/info.asp", gGtsServerRequest, 0, gGtsServerShortResponse, 2)) {
-        gGtsServer.state = GTS_SERVER_STATE_INFO;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-// profile is a WifiServerProfile; the console's MAC address is filled in.
-void GtsServer_RequestSetProfile(void *profile, void *response) {
-    OS_GetMacAddress((u8 *)profile + 0x1C);
-    memcpy(gGtsServerRequest, profile, 0x64);
-    gGtsServerPending.response = response;
-    GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp", gGtsServerRequest, 0x64, gGtsServerPending.response, 8)) {
-        gGtsServer.state = GTS_SERVER_STATE_SET_PROFILE;
-    } else {
-        gGtsServer.state = GTS_SERVER_STATE_DONE;
-        gGtsServer.result = -13;
-        GameStats_Shutdown();
-    }
-}
-
-static BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity) {
-    switch (GameStats_PrepareRequest((char *)url, gGtsServer.pid, payload, payloadSize, response, responseCapacity)) {
-    case 0:
-        return TRUE;
-    case 1:
-        break;
-    case 2:
-        break;
-    }
-    return FALSE;
-}
-
-// Maps a failed request's error to a result: -13 (failed), -15, -2; on a connection
-// error (not -13), -14 when the wireless connection is no longer up.
-int GtsServer_GetErrorResult(int error) {
-    int result;
-
-    switch (error) {
-    case 0:
-    case 1:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 9:
-    case 10:
-    case 14:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-    case 32:
-        result = -13;
-        break;
-    case 2:
-    case 8:
-    case 25:
-        result = -13;
-        break;
-    case 11:
-        result = -15;
-        break;
-    case 12:
-    case 13:
-        result = -15;
-        break;
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 26:
-    case 27:
-    case 28:
-    case 29:
-    case 31:
-        result = -2;
-        break;
-    case 15:
-    case 30:
-        result = -2;
-        break;
-    default:
-        result = -13;
-        break;
-    }
-    if (result != -13) {
-        if (WCM_GetPhase() != 9) {
-            result = -14;
-        }
-        DWC_ClearError();
-    }
-    return result;
-}
 
 BOOL Gts_Init(OverlayManager *man, int *state) {
     GraphicsModes graphicsModes;

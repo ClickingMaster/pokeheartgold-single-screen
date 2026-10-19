@@ -43,6 +43,69 @@ static int StatsUpload_EncodeData(char *out, const u8 *first, int firstLength, c
 static void StatsUpload_SetFailed(void);
 static int StatsUpload_PrepareUpload(char *name, int pid, const void *data, int size, StatsUploadResponseFunc callback, BOOL useLastHash);
 
+// Length of the base64 encoding of length bytes.
+u32 StatsUpload_GetBase64Length(u32 length) {
+    return 4 * (length / 3 + (length % 3 != 0));
+}
+
+void StatsUpload_SeedRandom(u32 seed) {
+    gStatsUploadRandomState = seed | (seed << 16);
+}
+
+// Next byte of the random number generator.
+int StatsUpload_RandomByte(void) {
+    gStatsUploadRandomState = (gStatsUpload.multiplier * gStatsUploadRandomState + gStatsUpload.increment) % gStatsUpload.modulus;
+    return ((int)gStatsUploadRandomState >> 16) & 0xFF;
+}
+
+// Sets the game name (< 32 characters), the 20 character secret key and the random number generator constants
+// (multiplier 8n + 5, odd increment, power of two modulus) used by the uploads.
+BOOL StatsUpload_SetKey(char *gameName, char *secretKey, u32 multiplier, u32 increment, u32 modulus, u32 checksumKey) {
+    int i, bits;
+    u32 count;
+    u8 *dst;
+    gStatsUpload.keyReady = FALSE;
+    if (strlen(gameName) >= 32) {
+        return FALSE;
+    }
+    if (strlen(secretKey) != 20) {
+        return FALSE;
+    }
+    if ((multiplier - 5) & 7) {
+        return FALSE;
+    }
+    if (!(increment & 1)) {
+        return FALSE;
+    }
+    bits = 0;
+    for (i = 0; i < 32; i++) {
+        if (((modulus >> i) & 1) == 1) {
+            bits++;
+        }
+    }
+    if (bits != 1) {
+        return FALSE;
+    }
+    strncpy(gStatsUploadGameName, gameName, 32);
+    count = 10;
+    dst = gStatsUploadSecretKey;
+    {
+        do {
+            u8 x = ((u8 *)secretKey)[0], y = ((u8 *)secretKey)[1];
+            secretKey += 2;
+            dst[0] = x;
+            dst[1] = y;
+            dst += 2;
+        } while (--count != 0);
+    }
+    gStatsUpload.multiplier = multiplier;
+    gStatsUpload.increment = increment;
+    gStatsUpload.modulus = modulus;
+    gStatsUpload.checksumKey = checksumKey;
+    gStatsUpload.keyReady = TRUE;
+    return TRUE;
+}
+
 // Checks the 40 hex digit SHA-1 at the end of the response: it is computed over the base64 encoding of the rest,
 // between two copies of the secret key. On success the rest becomes the body.
 static BOOL StatsUpload_CheckResponseHash(const char *response, int length) {

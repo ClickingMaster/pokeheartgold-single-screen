@@ -44,6 +44,4 @@ typedef struct NintendoWfcYesNoMenu {
     int cursorOffsetY;
 } NintendoWfcYesNoMenu;
 
-void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoMenu *, int);
-
 #endif // POKEHEARTGOLD_NINTENDO_WFC_CONNECT_INTERNAL_H

@@ -1194,9 +1194,7 @@ Overlay OVY_13
     Object src/wifi_setup/wifi_setup_auto_setup.o
     Object src/wifi_setup/wifi_setup_connection_menu.o
     Object src/wifi_setup/wifi_setup_usb_connector_screen.o
-    Object src/wifi_setup/wifi_setup_bg_screen_state.o
     Object src/wifi_setup/wifi_setup_bg_screen.o
-    Object src/wifi_setup/wifi_setup_scroll_bar_state.o
     Object src/wifi_setup/wifi_setup_scroll_bar.o
     Object src/wifi_setup/wifi_setup_ap_scan_state.o
     Object lib/NitroDWC/asm/wifi_setup_access_points_bss.o
@@ -1339,7 +1337,6 @@ Overlay OVY_34
 {
     After OVY_27
     Object src/union_chat_log.o
-    Object src/union_chat_log_arrows.o
 }
 Overlay OVY_35
 {
@@ -1565,11 +1562,7 @@ Overlay OVY_45
     Object src/lobby/lobby_request_map_find.o
     Object src/lobby/lobby_chat_on_enum_users.o
     Object src/lobby/lobby_u32_vector_assign_range.o
-    Object src/lobby/lobby_chat_on_enter_channel_enum_users.o
-    Object src/lobby/lobby_chat_on_enter_channel.o
-    Object src/lobby/lobby_chat_on_get_channel_keys.o
-    Object src/lobby/lobby_chat_on_broadcast_key_changed.o
-    Object src/lobby/lobby_chat_on_get_channel_mode.o
+    Object src/lobby/lobby_chat_channel_callbacks.o
     Object src/lobby/lobby_chat_timer_connect_timeout.o
     Object src/lobby/lobby_chat_process.o
     Object src/lobby/lobby_chat_is_in_channel.o
@@ -1582,7 +1575,6 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_set_channel_mode.o
     Object src/lobby/lobby_chat_get_channel_mode_async.o
     Object src/lobby/lobby_requests.o
-    Object src/lobby/lobby_request_map_insert_node.o
     Object src/lobby/lobby_u32_vector_reallocate.o
     Object src/lobby/lobby_string_find_first_of.o
     Object src/lobby/lobby_mem.o
@@ -1609,18 +1601,13 @@ Overlay OVY_45
     Object src/lobby/lobby_user_id_set_insert_node.o
     Object src/lobby/lobby_user_map_insert.o
     Object src/lobby/lobby_user_map.o
-    Object src/lobby/lobby_chat_map_destroy.o
-    Object src/lobby/lobby_channel_map_find_insert_pos.o
     Object src/lobby/lobby_tree_nodes.o
     Object src/chat/chat_callbacks.o
     Object src/chat/chat_channel.o
     Object src/chat/chat_cipher.o
-    Object src/chat/chat_requests.o
     Object src/chat/chat_handlers.o
     Object src/chat/chat_main.o
-    Object src/chat/chat_socket_buffer.o
     Object src/chat/chat_socket.o
-    Object src/chat/chat_socket_recv.o
     Object src/stats_upload.o
 }
 Overlay OVY_46
@@ -1652,7 +1639,6 @@ Overlay OVY_49
     Object src/wifi_plaza/wifi_plaza_instrument.o
     Object src/wifi_plaza/wifi_plaza_event.o
     Object asm/wifi_plaza_map_rodata.o
-    Object src/wifi_plaza/wifi_plaza_mover_markers.o
 }
 Overlay trainer_card
 {
@@ -1800,14 +1786,12 @@ Overlay OVY_71
     Object src/application/trade_sequence/trade_sequence_approach.o
     Object src/application/trade_sequence/trade_sequence_arrive.o
     Object src/application/trade_sequence/trade_sequence_receive.o
-    Object src/application/trade_sequence/trade_sequence_receive_bounce.o
 }
 Overlay OVY_72
 {
     After OVY_7
     Object src/nintendo_wfc_connect.o
     Object asm/nintendo_wfc_connect_data.o
-    Object src/nintendo_wfc_connect_cursor.o
 }
 Overlay OVY_73
 {
@@ -1819,7 +1803,6 @@ Overlay OVY_73
     Object src/nintendo_wfc_connect_unused_session.o
     Object src/record_mixing/record_mixing_exchange.o
     Object asm/record_mixing_data.o
-    Object src/record_mixing/record_mixing_merge.o
 }
 Overlay OVY_74
 {

@@ -386,6 +386,14 @@ extern const TouchscreenHitbox gNintendoWfcYesNoHitboxes[];
 extern const TouchscreenHitbox gNintendoWfcPadHitboxes_Max100[];
 extern const TouchscreenHitbox gNintendoWfcPadHitboxes[];
 
+// cursor x/y of the touch YES/NO menu per choice
+typedef struct NintendoWfcCursorPos {
+    u16 x;
+    u16 y;
+} NintendoWfcCursorPos;
+
+extern const NintendoWfcCursorPos gNintendoWfcYesNoCursorPositions[];
+
 static BOOL NintendoWfcHttp_StartRequest(const char *url, void *request, int requestSize, void *response, int responseSize);
 static int NintendoWfcHttp_ConvertError(int error);
 static void NintendoWfc_VBlankCB(void *arg);
@@ -451,6 +459,7 @@ static void NintendoWfcYesNo_LoadGraphics(NintendoWfcYesNoMenu *menu);
 static void NintendoWfcYesNo_AddWindows(NintendoWfcYesNoMenu *menu);
 static void NintendoWfcYesNo_RemoveWindows(NintendoWfcYesNoMenu *menu);
 static void NintendoWfcYesNo_ShowCursor(NintendoWfcYesNoMenu *menu);
+static void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoMenu *menu, int choice);
 
 void NintendoWfcHttp_Update(void);
 s32 NintendoWfcHttp_GetResult(void);
@@ -3025,4 +3034,12 @@ static void NintendoWfcYesNo_RemoveWindows(NintendoWfcYesNoMenu *menu) {
 static void NintendoWfcYesNo_ShowCursor(NintendoWfcYesNoMenu *menu) {
     Sprite_SetDrawFlag(menu->cursorSprite, TRUE);
     NintendoWfcYesNo_MoveCursor(menu, menu->initialChoice);
+}
+
+static void NintendoWfcYesNo_MoveCursor(NintendoWfcYesNoMenu *menu, int choice) {
+    VecFx32 pos;
+    pos.x = gNintendoWfcYesNoCursorPositions[choice].x << FX32_SHIFT;
+    pos.y = (menu->cursorOffsetY + gNintendoWfcYesNoCursorPositions[choice].y) << FX32_SHIFT;
+    pos.z = 0;
+    Sprite_SetMatrix(menu->cursorSprite, &pos);
 }

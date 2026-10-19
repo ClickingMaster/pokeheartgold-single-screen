@@ -76,6 +76,5 @@ typedef struct UnionChatLogData {
 
 UnionChatLogData *UnionChatLog_Init(FieldSystem *fieldSystem);
 void UnionChatLog_Exit(UnionChatLogData *data);
-void UnionChatLog_UpdateArrows(UnionChatLogData *data);
 
 #endif // POKEHEARTGOLD_UNION_CHAT_LOG_H

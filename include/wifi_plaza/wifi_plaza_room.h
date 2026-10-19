@@ -348,6 +348,8 @@ int WiFiPlazaWork_GetScheduleValue2(WiFiPlazaWork *lobby);
 int WiFiPlazaWork_GetGroupState(WiFiPlazaWork *lobby, int index);
 int WiFiPlazaWork_GetGroupCounter(WiFiPlazaWork *lobby, int index);
 int WiFiPlazaWork_GetGroupDuration(WiFiPlazaWork *lobby);
+int WiFiPlazaWork_GetGroupMarkerCount(WiFiPlazaWork *lobby, int place);
+void WiFiPlazaWork_SetGroupMarkerPassed(WiFiPlazaWork *lobby, int place, int value);
 int WiFiPlazaWork_FindGroupPlace(WiFiPlazaWork *lobby, int index);
 int WiFiPlazaWork_GetGroupActionRequest(WiFiPlazaWork *lobby, int index);
 void WiFiPlazaWork_ClearGroupActionRequest(WiFiPlazaWork *lobby, int index);

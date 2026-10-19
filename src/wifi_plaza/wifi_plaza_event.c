@@ -81,6 +81,7 @@ static void WiFiPlazaEventMovers_PlaySE(BOOL hasOwnSelection, BOOL isOwnIndex, B
 static void WiFiPlazaEventMovers_PlayCry(BOOL hasOwnSelection, BOOL isOwnIndex, BOOL isOwnColumn, u32 species);
 static BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, WiFiPlazaModels *models, int index);
 static BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+static void WiFiPlazaEvent_UpdateMoverMarkers(WiFiPlazaEventMovers *work, int index);
 
 static void WiFiPlazaLight_Delete(WiFiPlazaLight *light) {
     Heap_Free(light);
@@ -959,4 +960,28 @@ BOOL WiFiPlazaEventWobble_Step(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *mo
     WiFiPlazaModels_SetMoverAngle(models, index, angle);
     WiFiPlazaModels_SetMoverOffset(models, index, &offset);
     return done;
+}
+
+// For each of the three sides of mover `index` (lobby slot index * 3 + side), reports to the lobby every marker
+// from the count the lobby already holds on that the front of the side has passed (movers travel towards -x:
+// front x below the marker x plus one cell).
+static void WiFiPlazaEvent_UpdateMoverMarkers(WiFiPlazaEventMovers *work, int index) {
+    struct {
+        int index, base;
+    } input;
+
+    input.index = index;
+    int i = 0, j;
+    int twice = (s32)((u32)index * 2);
+    input.base = (s32)((u32)input.index + (u32)twice);
+    VecFx32 front;
+    for (i = 0; i < 3; i++) {
+        j = WiFiPlazaWork_GetGroupMarkerCount(work->lobby, (s32)((u32)i + (u32)input.base));
+        WiFiPlazaModels_GetMoverFrontPos(work->models, input.index, i, &front);
+        for (; j < 3; j++) {
+            if ((work->points[j].x + 16) * FX32_ONE > front.x) {
+                WiFiPlazaWork_SetGroupMarkerPassed(work->lobby, (s32)((u32)i + (u32)input.base), j);
+            }
+        }
+    }
 }
