@@ -41,12 +41,6 @@ void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *sprite);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
-void ov96_02208374(PokeathlonPennantCaptureDisplay *display, u16 score);
-BOOL ov96_02208448(PokeathlonPennantCaptureDisplay *display, int member);
-BOOL ov96_02208608(PokeathlonPennantCaptureDisplay *display, int participant);
-void ov96_02208658(PokeathlonPennantCaptureDisplay *display, u8 participant, u16 member, u8 hidden, u8 active);
-void ov96_02208840(PokeathlonPennantCaptureDisplay *display, int participant, u8 pennants);
-void ov96_02208864(PokeathlonPennantCaptureDisplay *display, int participant);
 
 extern const WindowTemplate sPennantCaptureScoreWindowTemplate;
 extern const VecFx32 sPennantCaptureReferenceVector;

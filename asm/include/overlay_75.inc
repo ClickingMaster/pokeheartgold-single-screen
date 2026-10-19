@@ -192,4 +192,4 @@
 .public GtsServer_IsRequestDone
 .public GtsServer_GetResult
 .public GtsServer_RequestSetProfile
-.public ov75_App_MainMenu_SelectOption_WiiMessageSettings
+.public gApp_MainMenu_SelectOption_WiiMessageSettings

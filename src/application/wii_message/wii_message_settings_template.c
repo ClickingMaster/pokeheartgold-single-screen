@@ -2,7 +2,7 @@
 
 #include "application/wii_message/wii_message_settings_internal.h"
 
-const OverlayManagerTemplate ov75_App_MainMenu_SelectOption_WiiMessageSettings = {
+const OverlayManagerTemplate gApp_MainMenu_SelectOption_WiiMessageSettings = {
     .init = WiiMessageSettings_Init,
     .exec = WiiMessageSettings_Main,
     .exit = WiiMessageSettings_Exit,

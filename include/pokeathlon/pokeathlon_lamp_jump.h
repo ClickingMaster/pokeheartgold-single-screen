@@ -60,7 +60,7 @@ typedef struct PokeathlonLampJump {
     void *bg2ScreenFile;
     NNSG2dScreenData *bg2Screen;
     PokeathlonCourseSpritePool *scene;
-    void *unk64;
+    void *timerLabel;
     void *playerSprites[4];
     void *effectSprites[3];
     void *timerDigits[2];

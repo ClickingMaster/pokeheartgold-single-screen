@@ -69,8 +69,8 @@ extern enum HeapID sMainMenuUtilCryptoHeapId; // heap of the crypto library
 extern MainMenuUtilWork gMainMenuUtilWork;
 extern MainMenuUtilSprites sMainMenuUtilSprites;
 extern G2dRenderer sMainMenuUtilRenderer;
-extern u32 ov74_0223D654[];
-extern u32 ov74_0223E2D4[];
+extern u32 sMainMenuUtilGiftSpriteWork[];
+extern u32 sMainMenuUtilVBlankWork[];
 extern const u8 sGiftCartridgePublicKey[];
 extern const ObjCharTransferTemplate sMainMenuUtilObjCharTransferTemplate;
 extern const BgTemplate sMainMenuUtilBgTemplate;
@@ -357,7 +357,7 @@ void MainMenuUtil_InitSprites(void) {
     OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, gMainMenuUtilWork.heapId);
     gMainMenuUtilWork.sprites.spriteList = G2dRenderer_Init(128, &sMainMenuUtilRenderer, gMainMenuUtilWork.heapId);
     G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, 0, FX32_CONST(256));
-    *(fx32 *)((u8 *)ov74_0223D654 + 0x10) = FX32_CONST(192);
+    *(fx32 *)((u8 *)sMainMenuUtilGiftSpriteWork + 0x10) = FX32_CONST(192);
     for (i = 0; i < 6; i++) {
         work->sprites.resMan[i] = Create2DGfxResObjMan(32, (GfGfxResType)i, work->heapId);
     }
@@ -402,7 +402,7 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 
 static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
     G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);
-    *(fx32 *)((u8 *)ov74_0223D654 + 0x10) = y;
+    *(fx32 *)((u8 *)sMainMenuUtilGiftSpriteWork + 0x10) = y;
 }
 
 void MainMenuUtil_UpdateSprites(void) {
@@ -412,7 +412,7 @@ void MainMenuUtil_UpdateSprites(void) {
 // Per frame: the gift sprite of the sub screen appears after its delay and slides down; renders the sprites
 void MainMenuUtil_UpdateGiftSprite(int hideGiftSprite) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    if (ov74_0223D654[2]) {
+    if (sMainMenuUtilGiftSpriteWork[2]) {
         if (work->giftSpriteDelay == 0) {
             VecFx32 *pos;
             if (!Sprite_GetDrawFlag(work->giftSprite) && hideGiftSprite == FALSE) {
@@ -465,7 +465,7 @@ void MainMenuUtil_FreeSprites(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
     MainMenuUtilSprites *sprites = &sMainMenuUtilSprites;
     int i;
-    if (ov74_0223D654[2]) {
+    if (sMainMenuUtilGiftSpriteWork[2]) {
         Sprite_Delete(work->giftSprite);
         work->giftSprite = NULL;
     }
@@ -499,7 +499,7 @@ u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
 
 static void MainMenuUtil_VBlankCB(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    if (ov74_0223E2D4[9]) {
+    if (sMainMenuUtilVBlankWork[9]) {
         work->vblankCallback(work);
         work->vblankCallback = NULL;
     }

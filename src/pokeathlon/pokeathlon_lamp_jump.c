@@ -166,7 +166,7 @@ static const VecFx32 sLampJumpTrampolineScale = { FX32_ONE, FX32_ONE, FX32_ONE }
 
 static const VecFx32 sLampJumpCameraOffset = { 0, 0, FX32_ONE };
 
-static const VecFx32 ov96_0221C0C4 = { FX32_CONST(168), FX32_CONST(8), 0 };
+static const VecFx32 sLampJumpTimerLabelPos = { FX32_CONST(168), FX32_CONST(8), 0 };
 
 static const VecFx32 sLampJumpFirstOtherPlayerPos = { FX32_CONST(166), FX32_CONST(40), 0 };
 
@@ -1481,9 +1481,9 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCo
     VecFx32 pos;
 
     PokeathlonLampJump_CreateLampSprites(lampJump->lamps, scene, 2);
-    lampJump->unk64 = PokeathlonCourseSpritePool_CreateAndTake(scene, 1, 3, 101, 3);
-    PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->unk64, 12);
-    PokeathlonCourseSpritePoolSprite_Show(lampJump->unk64, 1, 1);
+    lampJump->timerLabel = PokeathlonCourseSpritePool_CreateAndTake(scene, 1, 3, 101, 3);
+    PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->timerLabel, 12);
+    PokeathlonCourseSpritePoolSprite_Show(lampJump->timerLabel, 1, 1);
     for (i = 0; i < 4; i++) {
         lampJump->playerSprites[i] = PokeathlonCourseSpritePool_CreateAndTake(scene, 1, 3, 101, 4);
         PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->playerSprites[i], 13 + i);
@@ -1521,8 +1521,8 @@ void PokeathlonLampJump_PlaceSprites(PokeathlonLampJump *lampJump, u8 self) {
     u8 n;
 
     PokeathlonLampJump_PlaceLamps(lampJump->lamps);
-    pos = ov96_0221C0C4;
-    PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->unk64, &pos);
+    pos = sLampJumpTimerLabelPos;
+    PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->timerLabel, &pos);
     ownPos = sLampJumpOwnPlayerPos;
     PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->playerSprites[self], &ownPos);
     firstOtherPos = sLampJumpFirstOtherPlayerPos;

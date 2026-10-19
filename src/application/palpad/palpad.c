@@ -33,7 +33,7 @@ extern const u8 sPalPadScreenFileIds[2];
 extern NNSG2dViewRect sPalPadRenderSurfaceRect;
 extern SpriteTemplate sPalPadArrowSpriteTemplates[2];
 extern SpriteTemplate sPalPadCursorSpriteTemplate;
-extern u8 ov43_0222F160[];
+extern u8 sPalPadArrowTemplateScale[];
 
 enum {
     PALPAD_STATE_RUN_SCREEN,
@@ -547,9 +547,9 @@ static void PalPadGfx_CreateSprites(PalPadGfx *gfx, enum HeapID heapId) {
         arrowSlot = (PalPadGfx *)((u8 *)arrowSlot + sizeof(Sprite *));
         animSeq += 2;
     }
-    ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->spriteList = gfx->spriteList;
-    ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->header = &gfx->spriteHeader;
-    ((SpriteTemplate *)(ov43_0222F160 + 0x4C))->heapID = heapId;
+    ((SpriteTemplate *)(sPalPadArrowTemplateScale + 0x4C))->spriteList = gfx->spriteList;
+    ((SpriteTemplate *)(sPalPadArrowTemplateScale + 0x4C))->header = &gfx->spriteHeader;
+    ((SpriteTemplate *)(sPalPadArrowTemplateScale + 0x4C))->heapID = heapId;
     gfx->cursor = Sprite_CreateAffine(&sPalPadCursorSpriteTemplate);
     Sprite_SetDrawFlag(gfx->cursor, FALSE);
     Sprite_SetAnimCtrlSeq(gfx->cursor, 1);

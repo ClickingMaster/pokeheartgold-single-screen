@@ -26,11 +26,11 @@
 	.public sFmt_NotMyParentGgid
 	.public sStr_IPGE
 	.public sStr_K5WfPEw9T3cvqzHa
-	.public ov74_0223D054
+	.public sMysteryGiftWfcEmptyString
 	.public sMainMenuUtilSprites
 	.public sMainMenuUtilRenderer
-	.public ov74_0223D654
-	.public ov74_0223E2D4
+	.public sMainMenuUtilGiftSpriteWork
+	.public sMainMenuUtilVBlankWork
 	.public sMysteryGiftBeacon
 	.public sMysteryGiftWfcStatus
 	.public sMysteryGiftWfcFileList
@@ -412,7 +412,7 @@ sStr_K5WfPEw9T3cvqzHa:
 	.asciz "K5WfPEw9T3cvqzHa"
 	.balign 4, 0
 
-ov74_0223D054:
+sMysteryGiftWfcEmptyString:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 	.bss
@@ -423,10 +423,10 @@ sMainMenuUtilSprites:
 sMainMenuUtilRenderer:
 	.space 0x1C8
 
-ov74_0223D654:
+sMainMenuUtilGiftSpriteWork:
 	.space 0xC80
 
-ov74_0223E2D4:
+sMainMenuUtilVBlankWork:
 	.space 0x28
 
 sMysteryGiftBeacon:

@@ -23,7 +23,7 @@ BOOL CTRDG_IsAgbCartridge(void);
 void CTRDG_TerminateForPulledOut(void);
 
 extern enum HeapID sMainMenuUtilCryptoHeapId;
-extern u32 ov74_0223E2D4[];
+extern u32 sMainMenuUtilVBlankWork[];
 
 u32 gMainMenuUtilWork[13];
 
@@ -47,7 +47,7 @@ void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card) {
     Heap_Free(file);
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_SUB_1, 0, 0, 32, 24, palette + 8);
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_SUB_1);
-    ov74_0223E2D4[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette;
+    sMainMenuUtilVBlankWork[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette;
     sMainMenuUtilWork->bgConfig = bgConfig;
     switch (tag) {
     case MG_TAG_BATTLE_RULES:

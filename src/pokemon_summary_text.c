@@ -28,7 +28,7 @@
 
 extern const s8 gNatureStatMods[][5];
 
-#define sub_0208E600_3(mon, isMine, heapID) ((TrainerMemo * (*)(void *, int, enum HeapID)) TrainerMemo_New)(mon, isMine, heapID)
+#define PokemonSummary_NewTrainerMemo(mon, isMine, heapID) ((TrainerMemo * (*)(void *, int, enum HeapID)) TrainerMemo_New)(mon, isMine, heapID)
 
 static int PokemonSummary_IsPlayersMon(PokemonSummary *summary);
 static void PokemonSummary_PrintBuffer(PokemonSummary *summary, Window *window, u32 color, int alignment);
@@ -483,7 +483,7 @@ static void PokemonSummary_PrintInfo(PokemonSummary *summary) {
 
 // The trainer memo: nature, where and when it was met, characteristic, egg watch.
 static void PokemonSummary_PrintTrainerMemo(Window *window, void *mon, int isMine) {
-    TrainerMemo *memo = sub_0208E600_3(mon, isMine, HEAP_ID_19);
+    TrainerMemo *memo = PokemonSummary_NewTrainerMemo(mon, isMine, HEAP_ID_19);
     if (memo->notepad.nature != NULL) {
         AddTextPrinterParameterizedWithColor(window, 0, memo->notepad.nature, 6, (memo->notepad.natureLine - 1) * 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
     }

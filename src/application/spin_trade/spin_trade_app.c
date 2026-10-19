@@ -418,7 +418,7 @@ extern const BgTemplate gSpinTradeSubBg3Template;
 extern const OamManagerParam gSpinTradeOamManagerParam;
 extern const GraphicsBanks gSpinTradeGraphicsBanks;
 extern u32 gSpinTradeBonusBerryRanges[][2];
-extern u32 ov85_021EA72C[][2];
+extern u32 gSpinTradeBonusBerryRangeEnds[][2];
 extern const SpinTradeBonusAreas gSpinTradeBonusAreas[];
 extern const u16 gSpinTradeSlotAngles[][5];
 extern const u16 gSpinTradeDropTargetAngles[][5];
@@ -1277,7 +1277,7 @@ BOOL SpinTrade_State_GiveBonusBerry(SpinTradeApp *app) {
     }
     playerCount = app->playerCount;
     item = gSpinTradeBonusBerryRanges[playerCount][0];
-    high = ov85_021EA72C[playerCount][0];
+    high = gSpinTradeBonusBerryRangeEnds[playerCount][0];
     item += LCRandom() % (high - item + 1);
     if (item < gSpinTradeBonusBerryRanges[playerCount][0]) {
         item = gSpinTradeBonusBerryRanges[playerCount][0];

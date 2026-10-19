@@ -78,7 +78,7 @@ void CommWireless_Terminate(void);
 extern MysteryGiftWfcStatus sMysteryGiftWfcStatus;
 extern const char sStr_IPGE[];
 extern const char sStr_K5WfPEw9T3cvqzHa[];
-extern const char ov74_0223D054[];
+extern const char sMysteryGiftWfcEmptyString[];
 extern u8 sMysteryGiftWfcFileList[];
 
 // Allocator of the Wi-Fi library: 32-byte aligned blocks, the raw block is stored in the word before
@@ -246,7 +246,7 @@ int MysteryGiftWfc_Run(OverlayManager *manager, int *state) {
         if (data->wfcCancel == TRUE) {
             MysteryGiftWfc_StartCleanup(data, MYSTERY_GIFT_WFC_RESULT_CANCELLED, state, WFC_STATE_CLEANUP, WFC_STATE_CLEANUP);
         } else {
-            if (!DWC_NdSetAttr(ov74_0223D054, ov74_0223D054, ov74_0223D054)) { // ""
+            if (!DWC_NdSetAttr(sMysteryGiftWfcEmptyString, sMysteryGiftWfcEmptyString, sMysteryGiftWfcEmptyString)) { // ""
                 *state = MysteryGiftWfc_HandleError(data);
             } else {
                 *state = WFC_STATE_GET_FILE_COUNT;

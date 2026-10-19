@@ -165,7 +165,7 @@ extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MigrateFromAgb;
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_ConnectToRanger;
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_NintendoWFCSetup;
 extern const OverlayManagerTemplate ov112_App_MainMenu_SelectOption_ConnectToPokewalker;
-extern const OverlayManagerTemplate ov75_App_MainMenu_SelectOption_WiiMessageSettings;
+extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_WiiMessageSettings;
 
 static u32 MainMenu_GetNewInput(MainMenuAppData *data) {
     if (gSystem.newKeys & (PAD_BUTTON_Y | PAD_BUTTON_X | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT | PAD_BUTTON_B | PAD_BUTTON_A)) {
@@ -1476,7 +1476,7 @@ static void MainMenu_QueueSelectedApp(MainMenuAppData *data) {
         break;
     case APPOPTION_WII_SETTINGS:
         Sound_Stop();
-        RegisterMainOverlay(FS_OVERLAY_ID(OVY_75), &ov75_App_MainMenu_SelectOption_WiiMessageSettings);
+        RegisterMainOverlay(FS_OVERLAY_ID(OVY_75), &gApp_MainMenu_SelectOption_WiiMessageSettings);
         break;
     case APPOPTION_TITLE_SCREEN:
         RegisterMainOverlay(FS_OVERLAY_ID(intro_title), &gApplication_TitleScreen);
