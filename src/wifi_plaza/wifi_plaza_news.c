@@ -10,7 +10,7 @@
 #include "player_data.h"
 #include "pm_string.h"
 
-// The plaza news (WiFiPlazaWork.news, shown by the plaza news app): the time the lobby opened, the state of every
+// The plaza news (shown by the plaza news app): the time the lobby opened, the state of every
 // lobby slot and a list of events (topics) built from the lobby requests.
 
 static const u8 sWiFiPlazaNewsMinigameResultRanks[3] = { 11, 10, 9 };
@@ -375,8 +375,7 @@ u16 WiFiPlazaNewsSlots_GetChange(WiFiPlazaNewsSlots *slots) {
 }
 
 // The event list of the plaza news: 8 events in a list ordered by rank (head = WiFiPlazaNewsEventList.head); a new
-// event takes a free one or replaces one of at least its rank. Each event type has a message (sWiFiPlazaNewsEventFormatters) and a
-// lobby slot getter (gWiFiPlazaNewsEventSlotGetters).
+// event takes a free one or replaces one of at least its rank.
 
 BOOL WiFiPlazaNewsSlots_IsLastJoined(WiFiPlazaNewsSlots *slots, u32 slot) {
     if (slot >= 20) {

@@ -6,7 +6,7 @@
 #include "wifi_plaza/wifi_plaza_obj.h"
 #include "wifi_plaza/wifi_plaza_room.h"
 
-// Per-player state machines of the Wi-Fi Plaza room (room work +0x3F0). Every lobby player index (0-19) has a
+// Per-player state machines of the Wi-Fi Plaza room. Every lobby player index (0-19) has a
 // slot running a handler pair: `update` before the room's objects move, `lateUpdate` after them. A handler
 // keeps its progress in a step counter and an optional heap work buffer. Push suspends the current handler
 // and runs another one; when that one returns TRUE the suspended handler resumes.
@@ -24,8 +24,8 @@ typedef struct WiFiPlazaPlayerStateHandlers {
 
 typedef struct WiFiPlazaPlayerStateFrame {
     const WiFiPlazaPlayerStateHandlers *handlers; // NULL: no handler
-    void *work;                                   // WiFiPlazaPlayerState_AllocWork
-    void *arg;                                    // given to Set / Push
+    void *work;
+    void *arg; // given to Set / Push
     u32 step;
 } WiFiPlazaPlayerStateFrame;
 
@@ -33,19 +33,18 @@ struct WiFiPlazaPlayerState {
     u16 heapID;
     u8 active;
     u8 index;
-    WiFiPlazaPlayerStateFrame current; // 0x04
-    WiFiPlazaPlayerStateFrame saved;   // 0x14 suspended by Push
+    WiFiPlazaPlayerStateFrame current;
+    WiFiPlazaPlayerStateFrame saved; // suspended by Push
 };
 
 typedef struct WiFiPlazaPlayerStateManager {
     enum HeapID heapID;
     WiFiPlazaRoomWork *room;
     WiFiPlazaPlayerState states[WIFI_PLAZA_PLAYER_STATE_COUNT];
-    WiFiPlazaPlayerState exclusive; // 0x2D8 while it has a handler, the only slot that runs
+    WiFiPlazaPlayerState exclusive; // while it has a handler, the only slot that runs
 } WiFiPlazaPlayerStateManager;
 
-// Map tile actions (tables of WiFiPlazaPlayerState_RunTileAction), terminated by action
-// WIFI_PLAZA_TILE_ACTION_END
+// Map tile actions, terminated by action WIFI_PLAZA_TILE_ACTION_END
 enum {
     WIFI_PLAZA_TILE_ACTION_SET,  // free the caller's work and replace its handler
     WIFI_PLAZA_TILE_ACTION_PUSH, // call `callback`, then push the handler

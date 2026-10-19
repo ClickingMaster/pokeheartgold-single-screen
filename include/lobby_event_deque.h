@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_EVENT_DEQUE_H
 #define POKEHEARTGOLD_LOBBY_EVENT_DEQUE_H
 
-// The deque of lobby schedule events (overlay 45). The events are kept in blocks of 128; the deque's map is a ring
+// The deque of lobby schedule events. The events are kept in blocks of 128; the deque's map is a ring
 // buffer of block pointers that grows at both ends.
 
 #include <nitro/types.h>

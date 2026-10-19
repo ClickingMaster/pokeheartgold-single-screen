@@ -8,9 +8,8 @@
 #include "heap.h"
 #include "overlay_42.h"
 
-// Objects of the Wi-Fi Plaza room: an OVY_42 grid object (cell position, direction, queued moves) paired with an
-// OVY_45 billboard avatar, driven by a per-object handler (table sWiFiPlazaObjHandlers).
-// Directions: 0 up, 1 down, 2 left, 3 right. Move commands: 1 turn, 2 walk, 3 run.
+// Objects of the Wi-Fi Plaza room: a grid object (cell position, direction, queued moves) paired with a billboard
+// avatar. Directions: 0 up, 1 down, 2 left, 3 right. Move commands: 1 turn, 2 walk, 3 run.
 
 typedef struct WiFiPlazaObj WiFiPlazaObj;
 typedef struct WiFiPlazaObjManager WiFiPlazaObjManager;
@@ -38,11 +37,11 @@ typedef struct WiFiPlazaObjTween {
 } WiFiPlazaObjTween;
 
 struct WiFiPlazaObj {
-    Field2DObject *gridObj; // 0x00
-    void *avatar;                     // 0x04
-    u16 step;                         // 0x08
-    u8 finished;                      // 0x0A
-    u8 handler;                       // 0x0B
+    Field2DObject *gridObj;
+    void *avatar;
+    u16 step;
+    u8 finished;
+    u8 handler;
 
     union {
         u8 raw[0x18];
@@ -67,9 +66,9 @@ struct WiFiPlazaObj {
             s32 frame;
             VecFx32 origin;
         } hop;
-    } work; // 0x0C
+    } work;
 
-    WiFiPlazaObjFunc update; // 0x24
+    WiFiPlazaObjFunc update;
 };
 
 // Brightness of the avatars, faded over 60 frames when the room's light set changes
@@ -83,16 +82,16 @@ typedef struct WiFiPlazaObjLight {
 } WiFiPlazaObjLight;
 
 struct WiFiPlazaObjManager {
-    Field2DObjectManager *gridObjs; // 0x00
-    void *avatars;                     // 0x04 OVY_45 avatar manager
-    WiFiPlazaObj *objs;                // 0x08
-    u16 count;                         // 0x0C
-    u16 mode;                          // 0x0E nonzero: own player avatar 0x61
-    Field2DCommandQueue *commands; // 0x10 queued move commands
-    WiFiPlazaMap *map;                 // 0x14
-    WiFiPlazaObjLight light;           // 0x18
-    WiFiPlazaObj *ownPlayer;           // 0x20
-    WiFiPlazaObj *special;             // 0x24 object spawned on map tag 97
+    Field2DObjectManager *gridObjs;
+    void *avatars;
+    WiFiPlazaObj *objs;
+    u16 count;
+    u16 mode; // nonzero: own player avatar 0x61
+    Field2DCommandQueue *commands;
+    WiFiPlazaMap *map;
+    WiFiPlazaObjLight light;
+    WiFiPlazaObj *ownPlayer;
+    WiFiPlazaObj *special; // object spawned on map tag 97
 };
 
 WiFiPlazaObjManager *WiFiPlazaObj_CreateManager(u32 count, u32 mode, WiFiPlazaMap *map, enum HeapID heapID, u32 loadHeapID);
@@ -161,7 +160,7 @@ void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value);
 void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value);
 BOOL WiFiPlazaObj_UpdateLight(WiFiPlazaObjLight *light, void *avatars);
 
-// OVY_45 avatar manager (no header yet), with the types this overlay calls them with
+// Avatar manager
 void *WiFiPlazaPlayerObjects_New(u32 count, u32 mode, enum HeapID heapID, u32 loadHeapID);
 void WiFiPlazaPlayerObjects_Delete(void *avatars);
 void WiFiPlazaPlayerObjects_Update(void *avatars);

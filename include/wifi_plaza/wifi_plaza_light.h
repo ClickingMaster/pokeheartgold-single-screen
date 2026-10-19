@@ -8,14 +8,14 @@
 // Light and material colours of the room, each faded over 60 frames to a new colour set.
 // Colours are 5-bit r, g, b components (4th byte unused).
 typedef struct WiFiPlazaLight {
-    u8 lights[2][4];        // 0x00 lights 0 and 1
-    u8 materials[4][4];     // 0x08 diffuse, ambient, specular, emission
-    u8 lightsFrom[2][4];    // 0x18
-    u8 materialsFrom[4][4]; // 0x20
-    u8 lightsTo[2][4];      // 0x30
-    u8 materialsTo[4][4];   // 0x38
-    s32 lightTimers[2];     // 0x48 frame of the fade, 60 = done
-    s32 materialTimers[4];  // 0x50
+    u8 lights[2][4];    // lights 0 and 1
+    u8 materials[4][4]; // diffuse, ambient, specular, emission
+    u8 lightsFrom[2][4];
+    u8 materialsFrom[4][4];
+    u8 lightsTo[2][4];
+    u8 materialsTo[4][4];
+    s32 lightTimers[2]; // frame of the fade, 60 = done
+    s32 materialTimers[4];
 } WiFiPlazaLight;
 
 WiFiPlazaLight *WiFiPlazaLight_Create(enum HeapID heapID, u32 colorSet, u32 light1Set, u32 thirdSet);

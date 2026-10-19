@@ -45,12 +45,8 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// Wi-Fi Plaza "Visitor Profiles", an OverlayManager app started by the Wi-Fi Plaza lobby overlay (OVY_45).
-// The top screen shows a 3D globe with one dot per country / region of the earth-place tables; dots where a
-// current Plaza visitor lives get a marker model. The D-pad or a touch drag rotates the globe, A or a tap
-// toggles the zoom, X picks the dot nearest to the centre and adds it to a 3-entry history shown on the
-// bottom screen (place name, and the local time there shown by an animated background and a sprite flying
-// over the row). The EXIT box opens a yes/no prompt.
+// Wi-Fi Plaza "Visitor Profiles": the top screen shows a 3D globe with one dot per country / region; dots where a
+// current Plaza visitor lives get a marker model.
 
 #define VISITOR_PROFILES_NUM_VISITORS      50 // entries of the lobby's visitor table
 #define VISITOR_PROFILES_MAX_PLACES        1024
@@ -64,7 +60,7 @@
 #define VISITOR_PROFILES_NUM_BG_LAYERS     5
 #define VISITOR_PROFILES_NUM_HOURS         24
 
-// Entry of the lobby's visitor table as VisitorProfiles_InitSettings reads it directly.
+// Entry of the lobby's visitor table.
 typedef struct VisitorProfilesVisitor {
     u16 country;
     u8 region;
@@ -72,7 +68,6 @@ typedef struct VisitorProfilesVisitor {
     u8 language : 4;
 } VisitorProfilesVisitor;
 
-// Passed by value to VisitorProfilesPlaces_Init and VisitorProfilesCamera_Init.
 typedef struct VisitorProfilesSettings {
     u32 fullGlobe : 1; // clear: rotation range clamped, camera near, small markers
     u32 japaneseGame : 1;
@@ -94,14 +89,14 @@ typedef struct VisitorProfilesGraphics {
     GF_2DGfxResMan *resMan[4];
     GF3DVramMan *vramMan;
     NARC *narc;
-} VisitorProfilesGraphics; // size: 0x148
+} VisitorProfilesGraphics;
 
 typedef struct VisitorProfilesMsg {
     MsgData *msgData;
     MessageFormat *format;
     String *buffer;
     String *raw;
-} VisitorProfilesMsg; // size: 0x10
+} VisitorProfilesMsg;
 
 typedef struct VisitorProfilesGlobe {
     VecFx32 position;
@@ -109,7 +104,7 @@ typedef struct VisitorProfilesGlobe {
     VecFx32 rotation; // x: latitude, y: longitude (angle indices)
     ModelInstance model;
     ModelResource resource;
-} VisitorProfilesGlobe; // size: 0xAC
+} VisitorProfilesGlobe;
 
 typedef struct VisitorProfilesPlace {
     s16 latitude;
@@ -118,7 +113,7 @@ typedef struct VisitorProfilesPlace {
     s16 marker; // marker model, VISITOR_PROFILES_NO_MARKER if nobody lives there
     s16 country;
     s16 region;
-} VisitorProfilesPlace; // size: 0x30
+} VisitorProfilesPlace;
 
 typedef struct VisitorProfilesPlaces {
     u32 count;
@@ -126,7 +121,7 @@ typedef struct VisitorProfilesPlaces {
     VecFx32 markerScale;
     ModelInstance markers[VISITOR_PROFILES_NUM_MARKER_MODELS];
     ModelResource markerResources[VISITOR_PROFILES_NUM_MARKER_MODELS];
-} VisitorProfilesPlaces; // size: 0xC1A8
+} VisitorProfilesPlaces;
 
 typedef struct VisitorProfilesCamera {
     Camera *camera;
@@ -135,7 +130,7 @@ typedef struct VisitorProfilesCamera {
     fx32 distance;
     u16 zoomedIn; // 1: near (distance 0x50000), 0: far (0x128000); toggled by A / a tap
     u16 zooming;
-} VisitorProfilesCamera; // size: 0x14
+} VisitorProfilesCamera;
 
 // Touch input; the result uses the key bit layout (PAD_BUTTON_A = tap, PAD_BUTTON_B = EXIT box, PAD_KEY_* = drag).
 typedef struct VisitorProfilesTouch {
@@ -147,7 +142,7 @@ typedef struct VisitorProfilesTouch {
     u32 dragY;
     int timer;
     Window exitButton;
-} VisitorProfilesTouch; // size: 0x2C
+} VisitorProfilesTouch;
 
 typedef struct VisitorProfilesRow {
     u8 active;
@@ -171,7 +166,7 @@ typedef struct VisitorProfilesBgAnim {
     u8 curPltt;
     u8 plttSlot;
     u8 unk_27;
-} VisitorProfilesBgAnim; // size: 0x28
+} VisitorProfilesBgAnim;
 
 typedef struct VisitorProfilesBgAnimTemplate {
     u16 screenFiles[2];
@@ -187,10 +182,10 @@ typedef struct VisitorProfilesHourSpriteMotion {
     s16 y;
     s16 step;
     s16 phase;
-    u16 joinNext;                  // the next row shows the same time of day
-    u16 joinPrev;                  // the previous row shows the same time of day
-    const s16 *path;               // start x/y, end x/y, steps, amplitude, period (sVisitorProfilesHourSpritePaths)
-} VisitorProfilesHourSpriteMotion; // size: 0x10
+    u16 joinNext;    // the next row shows the same time of day
+    u16 joinPrev;    // the previous row shows the same time of day
+    const s16 *path; // start x/y, end x/y, steps, amplitude, period (sVisitorProfilesHourSpritePaths)
+} VisitorProfilesHourSpriteMotion;
 
 typedef struct VisitorProfilesHourSprites {
     VisitorProfilesHourSpriteMotion motions[VISITOR_PROFILES_NUM_SHOWN_PLACES];
@@ -201,7 +196,7 @@ typedef struct VisitorProfilesHourSprites {
     Sprite *sprites[VISITOR_PROFILES_NUM_HOUR_SPRITES];
     // indexed by GfGfxResType (char, pltt, cell, anim)
     SpriteResource *resources[VISITOR_PROFILES_NUM_HOUR_SPRITES][4];
-} VisitorProfilesHourSprites; // size: 0x12C
+} VisitorProfilesHourSprites;
 
 // Sub-screen window 0 / window 1 vertical ranges, written on VBlank.
 typedef struct VisitorProfilesWindowMask {
@@ -212,7 +207,7 @@ typedef struct VisitorProfilesWindowMask {
     s16 top1;
     s16 bottom1;
     SysTask *task;
-} VisitorProfilesWindowMask; // size: 0x10
+} VisitorProfilesWindowMask;
 
 // Bottom screen: the place history and its row-by-row reveal.
 typedef struct VisitorProfilesPanel {
@@ -234,7 +229,7 @@ typedef struct VisitorProfilesPanel {
     Window hintWindow;
     VisitorProfilesHourSprites hourSprites;
     VisitorProfilesWindowMask windowMask;
-} VisitorProfilesPanel; // size: 0x2F4
+} VisitorProfilesPanel;
 
 typedef struct VisitorProfilesExitPrompt {
     u32 state;
@@ -243,7 +238,7 @@ typedef struct VisitorProfilesExitPrompt {
     String *string;
     Window window;
     YesNoPrompt *prompt;
-} VisitorProfilesExitPrompt; // size: 0x24
+} VisitorProfilesExitPrompt;
 
 typedef struct VisitorProfilesWork {
     u16 mode;
@@ -262,7 +257,7 @@ typedef struct VisitorProfilesWork {
     VisitorProfilesTouch touch;
     VisitorProfilesPanel panel;
     VisitorProfilesExitPrompt exitPrompt;
-} VisitorProfilesWork; // size: 0xC724
+} VisitorProfilesWork;
 
 enum VisitorProfilesState {
     VISITOR_PROFILES_STATE_FADE_IN,
@@ -447,7 +442,6 @@ static String *VisitorProfilesMsg_GetCountryName(VisitorProfilesMsg *msg, u32 co
 static String *VisitorProfilesMsg_GetRegionName(VisitorProfilesMsg *msg, u32 country, u32 region);
 static s32 VisitorProfiles_FindFirstVisitor(void *visitors);
 
-// FX_Sqrt has no declaration in lib/include.
 fx32 FX_Sqrt(fx32 x);
 
 

@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_VECTOR_H
 #define POKEHEARTGOLD_LOBBY_VECTOR_H
 
-// The lobby vectors (overlay 45) and the buffers they grow through: a growing vector builds its new storage in a
+// The lobby vectors and the buffers they grow through: a growing vector builds its new storage in a
 // buffer, filled from start, and then takes the buffer's storage over.
 
 #include <nitro/types.h>

@@ -14,14 +14,14 @@ typedef struct WiFiPlazaEventModelList {
     u32 count;
 } WiFiPlazaEventModelList;
 
-// Plaza-wide effect selected by the lobby (6 kinds, init and per-frame tables in rodata)
+// Plaza-wide effect selected by the lobby (6 kinds)
 typedef struct WiFiPlazaEventEffect {
     WiFiPlazaWork *lobby;
     WiFiPlazaModels *models;
-    u8 effect;       // 0x08
-    u8 seLooping;    // 0x09 SEQ 0x5B5 is playing
-    u16 activeCount; // 0x0A
-    u32 step;        // 0x0C
+    u8 effect;
+    u8 seLooping; // SEQ 0x5B5 is playing
+    u16 activeCount;
+    u32 step;
 } WiFiPlazaEventEffect;
 
 // Rocking / hopping animation of one model (angle and height follow a sine over `duration` frames)
@@ -42,17 +42,17 @@ typedef struct WiFiPlazaMoverMarker {
 
 // Nine models whose x position follows lobby values; three markers from the map grid
 typedef struct WiFiPlazaEventMovers {
-    WiFiPlazaRoomWork *room;                 // 0x00
-    WiFiPlazaWork *lobby;                    // 0x04
-    WiFiPlazaModels *models;                 // 0x08
-    WiFiPlazaMap *map;                       // 0x0C
-    u8 states[9][3];                         // 0x10
-    u8 unk_2B;                               // 0x2B
-    WiFiPlazaEventWobble wobbles[9];         // 0x2C
-    WiFiPlazaMoverMarker points[3]; // 0xAA cell positions (pixels) of the map tags
-    u8 unk_B6[6];                            // 0xB6
-    fx32 baseX;                              // 0xBC
-    fx32 range;                              // 0xC0
+    WiFiPlazaRoomWork *room;
+    WiFiPlazaWork *lobby;
+    WiFiPlazaModels *models;
+    WiFiPlazaMap *map;
+    u8 states[9][3];
+    u8 unk_2B;
+    WiFiPlazaEventWobble wobbles[9];
+    WiFiPlazaMoverMarker points[3]; // cell positions (pixels) of the map tags
+    u8 unk_B6[6];
+    fx32 baseX;
+    fx32 range;
 } WiFiPlazaEventMovers;
 
 typedef struct WiFiPlazaEvent {

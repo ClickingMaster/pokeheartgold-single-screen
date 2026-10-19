@@ -7,48 +7,44 @@
 
 #include "list_menu.h"
 
-// Conversations in the Wi-Fi Plaza room, run as player state handlers: chatting with another visitor (message
-// bank 3 of the room, msg 766) - greetings in both players' languages, remarks on their local time of day,
-// comparing and sharing Tap Toys, and asking each other questions - and the staff at the general-inquiries
-// counter and the reception (bank 1, msg 777). The two players' handlers stay in step through the lobby
-// (WiFiPlazaWork_AdvanceTalk sends our talk status / answer, WiFiPlazaWork_GetTalkState / WiFiPlazaWork_GetTalkPartnerMessage read the partner's).
+// Conversations in the Wi-Fi Plaza room: chatting with another visitor, and the staff at the general-inquiries
+// counter and the reception. The two players' handlers stay in step through the lobby.
 
-// A list menu of the room (items set up through WiFiPlazaRoom_CreateListItems / WiFiPlazaRoom_AddListItem)
 typedef struct WiFiPlazaTalkMenu {
-    ListMenuTemplate template; // 0x00
-    u32 count;                 // 0x20
+    ListMenuTemplate template;
+    u32 count;
 } WiFiPlazaTalkMenu;
 
 // Sends a value to the partner once the partner's talk status reaches the awaited one
 typedef struct WiFiPlazaTalkReply {
-    u16 active;      // 0x00
-    u16 value;       // 0x02
-    u16 awaited;     // 0x04
-    u16 startStatus; // 0x06 the partner's status when it was started; a change to another status cancels it
-    u32 status;      // 0x08 the partner's latest status
+    u16 active;
+    u16 value;
+    u16 awaited;
+    u16 startStatus; // the partner's status when it was started; a change to another status cancels it
+    u32 status;      // the partner's latest status
 } WiFiPlazaTalkReply;
 
 typedef struct WiFiPlazaTalk {
-    u8 question;              // 0x00
-    u8 myAnswer;              // 0x01 question * 4 + choice
-    u8 partnerAnswer;         // 0x02
-    u8 partner;               // 0x03 player index
-    u8 myTimeOfDay;           // 0x04 WiFiPlazaTalk_GetTimeOfDay
-    u8 partnerTimeOfDay;      // 0x05
-    u8 timer;                 // 0x06 WiFiPlazaTalk_SetNextStep
-    u8 nextStep;              // 0x07
-    u16 me;                   // 0x08 own player index
-    u16 talking;              // 0x0A
-    u8 sameToy;               // 0x0C both players have the same Tap Toy
-    u8 menuOpen;              // 0x0D
-    u16 menuTimer;            // 0x0E frames the menu is open
-    WiFiPlazaObj *partnerObj;         // 0x10 started by us: the partner's room object
-    WiFiPlazaTalkMenu menu;   // 0x14
-    WiFiPlazaTalkReply reply; // 0x38
-    u16 historyPending;       // 0x44 WiFiPlazaTalk_SetHistory
-    u16 historyAvatar;        // 0x46
-    u32 historyId;            // 0x48
-    u32 answered;             // 0x4C
+    u8 question;
+    u8 myAnswer; // question * 4 + choice
+    u8 partnerAnswer;
+    u8 partner; // player index
+    u8 myTimeOfDay;
+    u8 partnerTimeOfDay;
+    u8 timer;
+    u8 nextStep;
+    u16 me; // own player index
+    u16 talking;
+    u8 sameToy; // both players have the same Tap Toy
+    u8 menuOpen;
+    u16 menuTimer;            // frames the menu is open
+    WiFiPlazaObj *partnerObj; // started by us: the partner's room object
+    WiFiPlazaTalkMenu menu;
+    WiFiPlazaTalkReply reply;
+    u16 historyPending;
+    u16 historyAvatar;
+    u32 historyId;
+    u32 answered;
 } WiFiPlazaTalk;
 
 BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 playerIndex);

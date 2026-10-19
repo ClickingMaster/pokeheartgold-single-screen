@@ -1002,7 +1002,7 @@ static void WiFiPlazaRoom_Draw(WiFiPlazaRoomWork *room) {
     WiFiPlazaRoom_DrawSprites(&room->graphics);
 }
 
-// The signs of the three Pokemon match ups (WiFiPlazaLobbyClient_IsMatchActive: match state, WiFiPlazaLobbyClient_IsMatchOpen: closed for entry)
+// The signs of the three Pokemon match ups
 static void WiFiPlazaRoom_UpdateMatchSigns(WiFiPlazaRoomWork *room) {
     int i;
     u32 state;
@@ -1457,7 +1457,7 @@ static void WiFiPlazaRoom_SetPanelButtonPressed(WiFiPlazaRoomWork *room) {
 
 // The touch screen of the plaza room: the own trainer card (with a button that plays the own Tap Toy), the
 // card of another player (name, ID, country, easy chat message or Pokemon, Tap Toy icon, avatar) and the Tap Toy
-// panel. Page switches fade the sub screen out and in (WiFiPlazaInfoPanel_Update).
+// panel. Page switches fade the sub screen out and in.
 
 static const u8 sWiFiPlazaPanelButtonScreenBases[4] = { 0, 1, 0, 0 };
 

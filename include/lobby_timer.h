@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_TIMER_H
 #define POKEHEARTGOLD_LOBBY_TIMER_H
 
-// Lobby (overlay 45): the repeating timers of the chat session and the PPW lobby, kept in a map by id. The process
+// Lobby: the repeating timers of the chat session and the PPW lobby, kept in a map by id. The process
 // functions run a timer's callback once its interval has passed since it last ran, and drop the timer when the
 // callback returns FALSE.
 

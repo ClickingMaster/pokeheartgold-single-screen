@@ -17,9 +17,8 @@
 #include "sprite_resource.h"
 #include "sprite_resource_header.h"
 
-// Wi-Fi Plaza "Plaza Survey", started by the Wi-Fi Plaza lobby overlay (OVY_45): mode 0 asks the
-// player to take part and answer this week's question, mode 1 shows the results of this Wi-Fi Plaza
-// and of all Wi-Fi Plazas last week as bar graphs.
+// Wi-Fi Plaza "Plaza Survey": mode 0 asks the player to take part and answer this week's question, mode 1 shows
+// the results of this Wi-Fi Plaza and of all Wi-Fi Plazas last week as bar graphs.
 
 #define WIFI_PLAZA_SURVEY_NUM_MSG_BANKS      9
 #define WIFI_PLAZA_SURVEY_NUM_ANSWERS        3
@@ -30,7 +29,6 @@ enum WiFiPlazaSurveyMode {
     WIFI_PLAZA_SURVEY_MODE_RESULTS,
 };
 
-// Arguments built by OVY_45.
 typedef struct WiFiPlazaSurveyArgs {
     SaveData *saveData;
     struct WiFiPlazaWork *lobby;
@@ -50,12 +48,12 @@ typedef struct WiFiPlazaSurveyQuestion {
     u32 hasCustomText; // texts sent by the server instead of the message banks
     String *question;
     String *answers[WIFI_PLAZA_SURVEY_NUM_ANSWERS];
-} WiFiPlazaSurveyQuestion; // size: 0x20
+} WiFiPlazaSurveyQuestion;
 
 typedef struct WiFiPlazaSurveyTally {
     u32 counts[WIFI_PLAZA_SURVEY_NUM_ANSWERS];
     u64 total;
-} WiFiPlazaSurveyTally; // size: 0x14
+} WiFiPlazaSurveyTally;
 
 typedef struct WiFiPlazaSurveyMessages {
     MsgData *msgData[WIFI_PLAZA_SURVEY_NUM_MSG_BANKS]; // msg_0777, questions 0761/0765, answers 0758-0760/0762-0764
@@ -63,7 +61,7 @@ typedef struct WiFiPlazaSurveyMessages {
     String *expanded;
     String *raw;
     struct WiFiPlazaWork *lobby;
-} WiFiPlazaSurveyMessages; // size: 0x34
+} WiFiPlazaSurveyMessages;
 
 typedef struct WiFiPlazaSurveyMessageBox {
     u32 printerId;
@@ -72,7 +70,7 @@ typedef struct WiFiPlazaSurveyMessageBox {
     String *string;
     WaitingIcon *waitingIcon;
     struct ListMenu2D *yesNoMenu;
-} WiFiPlazaSurveyMessageBox; // size: 0x24
+} WiFiPlazaSurveyMessageBox;
 
 // Mode 0: answer this week's survey.
 typedef struct WiFiPlazaSurveyAnswer {
@@ -83,7 +81,7 @@ typedef struct WiFiPlazaSurveyAnswer {
     u16 state;
     u16 nextState;
     WiFiPlazaSurveyQuestion question;
-} WiFiPlazaSurveyAnswer; // size: 0x4C
+} WiFiPlazaSurveyAnswer;
 
 // Mode 1: results of this plaza and of all plazas last week.
 typedef struct WiFiPlazaSurveyResults {
@@ -99,7 +97,7 @@ typedef struct WiFiPlazaSurveyResults {
     WiFiPlazaSurveyQuestion lastWeek;
     WiFiPlazaSurveyTally plazaTally;
     WiFiPlazaSurveyTally lastWeekTally;
-} WiFiPlazaSurveyResults; // size: 0xF0
+} WiFiPlazaSurveyResults;
 
 typedef union WiFiPlazaSurveyModeWork {
     WiFiPlazaSurveyAnswer answer;
@@ -115,9 +113,8 @@ typedef struct WiFiPlazaSurveyWork {
     WiFiPlazaSurveyMessages messages;
     WiFiPlazaSurveyModeWork mode;
     WiFiPlazaSurveyMessageBox msgBox;
-} WiFiPlazaSurveyWork; // size: 0x28C
+} WiFiPlazaSurveyWork;
 
-// The OVY_45 lobby has no public header.
 extern BOOL WiFiPlazaWork_IsClosing(struct WiFiPlazaWork *lobby);
 extern void WiFiPlazaWork_SetAppQuitForClosing(struct WiFiPlazaWork *lobby);
 extern void WiFiPlazaWork_SetLowVolume(struct WiFiPlazaWork *lobby, int value);

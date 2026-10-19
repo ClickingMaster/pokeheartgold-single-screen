@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_CHAT_MANAGER_H
 #define POKEHEARTGOLD_LOBBY_CHAT_MANAGER_H
 
-// Lobby chat (overlay 45): the chat session and the channels it is in, for the C and C++ chat sources.
+// Lobby chat: the chat session and the channels it is in, for the C and C++ chat sources.
 
 #include <nitro/types.h>
 

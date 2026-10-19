@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_WIFI_PLAZA_INTERNAL_H
 #define POKEHEARTGOLD_WIFI_PLAZA_INTERNAL_H
 
-// Wi-Fi Plaza (overlay 45): the overlay's work data and the functions shared between its source files.
+// Wi-Fi Plaza: the work data and the functions shared between its source files.
 
 #include "global.h"
 
@@ -25,27 +25,26 @@
 #include "save_wifi_history.h"
 #include "sys_task_api.h"
 
-// Arguments of the Wi-Fi Plaza overlay.
 typedef struct WiFiPlazaArgs {
     void *loginTime;
     SaveData *save;
     u32 skipPrompt;
 } WiFiPlazaArgs;
 
-// Second part of a plaza player record (copied to the save data when the plaza is left, WiFiPlazaWork_Delete).
+// Second part of a plaza player record (copied to the save data when the plaza is left).
 typedef struct WiFiPlazaPlayerSurvey {
     u32 surveyId;
     u32 answer; // < 3
 } WiFiPlazaPlayerSurvey;
 
 // A player in the plaza lobby: the own one is WiFiPlazaWork.profile.player, the others come from the lobby
-// library (WiFiPlazaLobbyClient_GetPlayer).
+// library.
 typedef struct WiFiPlazaPlayer {
     u32 lobbyId;
     u32 trainerId;
     u16 name[8];
-    u32 entryTime;   // WiFiPlaza_SecondsToTime of the entry time (WiFiPlaza_OnPlayerEnter)
-    void *localTime; // WiFiPlazaTime: local time of the location (WiFiPlaza_GetLocalTime)
+    u32 entryTime;   // WiFiPlaza_SecondsToTime of the entry time
+    void *localTime; // WiFiPlazaTime: local time of the location
     u16 species[6];
     u8 forms[6];
     u8 isEgg[6];
@@ -66,54 +65,50 @@ typedef struct WiFiPlazaPlayer {
     WiFiPlazaPlayerSurvey survey;
 } WiFiPlazaPlayer;
 
-// The own plaza profile (WiFiPlazaProfile_InitFromSave); WiFiPlazaProfile_UpdateChecksum and WiFiPlazaProfile_IsChecksumValid keep its CRC.
 typedef struct WiFiPlazaProfile {
     u16 name[8];
-    u16 lobbyName[8]; // the name received from the lobby (WiFiPlazaProfile_SetFromLobbyRecord)
+    u16 lobbyName[8]; // the name received from the lobby
     WiFiPlazaPlayer player;
     u32 crc; // of player
 } WiFiPlazaProfile;
 
-// The ids of the players in the lobby (WiFiPlazaLobbyClient_GetPlayerList): -1 = free.
+// The ids of the players in the lobby: -1 = free.
 typedef struct WiFiPlazaPlayerList {
     s32 count;
     s32 *ids;
 } WiFiPlazaPlayerList;
 
-// Entry of the avatar table gWiFiPlazaAvatars.
 typedef struct WiFiPlazaAvatarEntry {
     u16 avatar;
     u16 unk_02;
 } WiFiPlazaAvatarEntry;
 
-// Part of WiFiPlazaWork at 0x1C0: an exchange with one other player of the lobby (WiFiPlazaWork_StartTalk starts it
-// for a lobby slot, WiFiPlazaWork_AdvanceTalk / WiFiPlazaWork_CancelTalkRequest / WiFiPlazaWork_EndTalk answer or end it).
+// An exchange with one other player of the lobby.
 typedef struct WiFiPlazaTalkSession {
-    u32 talkedWith;  // bit per lobby slot (WiFiPlazaTalkSession_HasTalkedWith / WiFiPlazaTalkSession_SetTalkedWith / WiFiPlazaTalkSession_ClearTalkedWith)
-    u16 partnerSlot; // lobby slot of the other player
+    u32 talkedWith; // bit per lobby slot
+    u16 partnerSlot;
     u8 state;
     u8 partnerArrived;
     u16 partnerMessage;
-    u8 role; // 0 = none, 1 = asked the other player, 2 = asked by it (WiFiPlazaWork_IsTalking / WiFiPlazaWork_WasAskedToTalk)
+    u8 role; // 0 = none, 1 = asked the other player, 2 = asked by it
     u8 isFirstTalk;
-    u8 talkCounts[20]; // per lobby slot, counts up to 6 (WiFiPlazaTalkSession_IncTalkCount; WiFiPlazaWork_CanTalkWith)
-    u16 sendMessage;   // sent with WiFiPlazaLobbyClient_SendToPlayer (4 bytes from here)
+    u8 talkCounts[20]; // per lobby slot, counts up to 6
+    u16 sendMessage;
     u16 sendState;
-    u16 timeoutActive;  // WiFiPlazaTalkSession_StartTimeout sets it, WiFiPlazaTalkSession_StopTimeout clears it
-    s16 timeoutCounter; // counts up to 900 while timeoutActive is set (WiFiPlazaTalkSession_UpdateTimeout)
+    u16 timeoutActive;
+    s16 timeoutCounter; // counts up to 900 while timeoutActive is set
 } WiFiPlazaTalkSession;
 
-// A message to the lobby (WiFiPlazaLobbyClient_SendToLobby type 4).
+// A message to the lobby (type 4).
 typedef struct WiFiPlazaLobbyMessage {
     u32 ids[4]; // WiFiPlazaLobbyClient_SlotToId of lobby slots
-    u8 count;   // of ids
+    u8 count;
     u8 type;
     u8 tapToy;
     u8 option : 7;
     u8 allPlayers : 1;
 } WiFiPlazaLobbyMessage;
 
-// Part of WiFiPlazaWork at 0x1FC (WiFiPlazaEventSchedule_Update / WiFiPlazaEventSchedule_Init / WiFiPlazaEventSchedule_ApplyVolume work on it).
 typedef struct WiFiPlazaEventSchedule {
     u8 flag0 : 1;
     u8 flag1 : 1;
@@ -135,16 +130,15 @@ typedef struct WiFiPlazaEventSchedule {
     u8 high : 4;
 } WiFiPlazaEventSchedule;
 
-// Part of WiFiPlazaWork at 0x3A0.
 typedef struct WiFiPlazaSessionState {
-    s16 timer; // WiFiPlazaSessionState_StartCooldown starts it, WiFiPlazaSessionState_UpdateCooldown counts it down
-    u8 appQuitForClosing; // WiFiPlazaSessionState_SetAppQuitForClosing / WiFiPlazaSessionState_DidAppQuitForClosing
+    s16 timer;
+    u8 appQuitForClosing;
     u8 unk_03;
-    u8 flags[8]; // WiFiPlazaWork_MarkActivityDone sets one, WiFiPlazaWork_GetNextUndoneActivity finds a clear one
+    u8 flags[8];
 } WiFiPlazaSessionState;
 
-// Own status data sent to the other players of the lobby session (WifiConnection_SetOwnStatusData); the same
-// record as WifiClubPlayerStatus, of which the plaza fills in only the trainer.
+// Own status data sent to the other players of the lobby session; the same record as WifiClubPlayerStatus, of
+// which the plaza fills in only the trainer.
 typedef struct WiFiPlazaPlayerInfo {
     u16 species[6];
     u16 heldItems[6];
@@ -162,16 +156,15 @@ typedef struct WiFiPlazaPlayerInfo {
     u8 unk_23;
 } WiFiPlazaPlayerInfo;
 
-// Part of WiFiPlazaWork at 0x49C: a timer in 1/30 s of the lobby time (WiFiPlazaTimer_Init sets it up, WiFiPlazaTimer_Start
-// starts it, WiFiPlazaTimer_Update runs it).
+// A timer in 1/30 s of the lobby time.
 typedef struct WiFiPlazaTimer {
     u32 active;
-    s64 start; // WiFiPlazaLobbyClient_GetTime
+    s64 start;
     s32 elapsed;
     s32 duration;
-    u32 phase;                       // sWiFiPlazaTimerPhases[].phase, then 5 at the end
-    u32 counter;                     // updates in the current phase
-    WiFiPlazaPlayerInfo *playerInfo; // WiFiPlazaPlayerInfo_New (WiFiPlazaWork_NewPlayerInfo / WiFiPlazaWork_FreePlayerInfo)
+    u32 phase;   // sWiFiPlazaTimerPhases[].phase, then 5 at the end
+    u32 counter; // updates in the current phase
+    WiFiPlazaPlayerInfo *playerInfo;
 } WiFiPlazaTimer;
 
 // A phase of WiFiPlazaTimer and its share of the duration (in 1/256).
@@ -180,46 +173,44 @@ typedef struct WiFiPlazaTimerPhase {
     u16 length;
 } WiFiPlazaTimerPhase;
 
-// Part of WiFiPlazaWork at 0x3AC: the chance of each group of WiFiPlazaWork.groups (WiFiPlazaGroupWeights_PickGroup).
+// The chance of each group of WiFiPlazaWork.groups.
 typedef struct WiFiPlazaGroupWeights {
     u8 weights[9];
     u8 padding_09[3];
-    u8 seen[20]; // per lobby slot (WiFiPlazaGroupWeights_ReportPlace)
+    u8 seen[20]; // per lobby slot
 } WiFiPlazaGroupWeights;
 
-// Four words per lobby slot, made from a code (WiFiPlazaWordSet_Set).
+// Four words per lobby slot, made from a code.
 typedef struct WiFiPlazaWordSet {
     u8 flags[20];
     u16 words[20][4];
     WallpaperPasswordBank *bank;
 } WiFiPlazaWordSet;
 
-// The survey tally of this plaza, cached by the survey results screen (WiFiPlazaSurveyTally, 0x14 bytes).
+// The survey tally of this plaza (WiFiPlazaSurveyTally), cached by the survey results screen.
 typedef struct WiFiPlazaTallyCache {
     u32 words[5];
 } WiFiPlazaTallyCache;
 
-// Part of WiFiPlazaWork at 0x508 (WiFiPlaza_NewPlayerProfile / WiFiPlaza_FreePlayerProfile set it up and free it).
 typedef struct WiFiPlazaOwnProfileData {
-    PlayerProfile *profile; // the own profile as the lobby sees it (WiFiPlazaProfile_CopyToPlayerProfile)
+    PlayerProfile *profile; // the own profile as the lobby sees it
     BOOL gameConnectionLost;
-    WiFiPlazaTallyCache tally; // WiFiPlazaWork_SetSurveyTally / WiFiPlazaWork_GetSurveyTally
+    WiFiPlazaTallyCache tally;
     BOOL hasTally;
 } WiFiPlazaOwnProfileData;
 
-// Plaza work data shared by the sub-applications (WiFiPlazaWork_New).
-// Part of WiFiPlazaWork at 0x20C: nine groups of three lobby slots (WiFiPlazaGroups_Init clears it).
+// Nine groups of three lobby slots.
 typedef struct WiFiPlazaGroups {
-    u32 active; // WiFiPlazaGroups_Start sets it
+    u32 active;
     s32 time;
     s32 counters[9];
     u32 states[9];
-    u32 ids[9][3]; // -1 = free (WiFiPlazaGroups_Init)
+    u32 ids[9][3]; // -1 = free
     u32 markerCounts[9][3];
     u32 actionRequests[9][3];
 } WiFiPlazaGroups;
 
-// A time of day (WiFiPlaza_SecondsToTime / WiFiPlazaTime_Add / WiFiPlazaTime_Subtract).
+// A time of day.
 typedef union WiFiPlazaTime {
     u32 word;
 
@@ -234,7 +225,7 @@ typedef union WiFiPlazaTime {
     s8 signedValue[4];
 } WiFiPlazaTime;
 
-// A country and region (WiFiPlazaPlaces_Add adds them to a list of 50).
+// A country and region.
 typedef struct WiFiPlazaPlace {
     u16 country;
     u8 region;
@@ -242,8 +233,8 @@ typedef struct WiFiPlazaPlace {
     u8 occupied : 4;
 } WiFiPlazaPlace;
 
-// Part of WiFiPlazaWork at 0x4BC: the last activities of the own player (id < 24, 24 = none; value -1 = none), a ring
-// of 13 entries; crc covers everything before save (WiFiPlazaHistory_UpdateChecksum / WiFiPlazaHistory_CheckChecksum).
+// The last activities of the own player (id < 24, 24 = none; value -1 = none), a ring of 13 entries; crc covers
+// everything before save.
 typedef struct WiFiPlazaHistory {
     s32 values[13];
     u8 ids[13];
@@ -307,7 +298,6 @@ typedef struct WiFiPlazaGroupOptionRequest {
     u16 slots[4];
 } WiFiPlazaGroupOptionRequest;
 
-// What WiFiPlazaWork_AddLobbyEventNotice passes to WiFiPlazaNews_AddLobbyEventNotice.
 typedef struct WiFiPlazaLobbyNotice {
     u32 *time;
     u32 which;
@@ -316,13 +306,13 @@ typedef struct WiFiPlazaLobbyNotice {
 // A lobby slot in the plaza news.
 typedef struct WiFiPlazaNewsSlot {
     u16 state; // 2: empty
-    u16 flags; // bit 1: the slot of WiFiPlazaNews_SetOldestPlayer
+    u16 flags; // bit 1: the oldest player
 } WiFiPlazaNewsSlot;
 
 typedef struct WiFiPlazaNewsSlots {
     WiFiPlazaNewsSlot slots[20];
-    u16 change;   // 1: a player came, 2: a player left (WiFiPlazaNewsSlots_SetChange)
-    u16 lastSlot; // WiFiPlazaNewsSlots_SetLastJoined
+    u16 change; // 1: a player came, 2: a player left
+    u16 lastSlot;
 } WiFiPlazaNewsSlots;
 
 // An event (topic) of the plaza news: type 0-8 (message sWiFiPlazaNewsEventFormatters[type]), up to four player names and slots.
@@ -344,9 +334,9 @@ typedef struct WiFiPlazaNewsEventList {
     WiFiPlazaNewsEvent head; // of the list ordered by rank
 } WiFiPlazaNewsEventList;
 
-// The plaza news (WiFiPlazaWork.news, WiFiPlazaNews_New), handed to the plaza news app.
+// The plaza news, handed to the plaza news app.
 typedef struct WiFiPlazaNews {
-    u32 openTime; // WiFiPlazaTime of the lobby opening (WiFiPlazaNews_SetOpenTime)
+    u32 openTime; // WiFiPlazaTime of the lobby opening
     u32 isOpen;
     WiFiPlazaNewsSlots slots;
     WiFiPlazaNewsEventList events;
@@ -356,12 +346,12 @@ typedef struct WiFiPlazaWork {
     SaveData *save;
     WiFiPlazaNews *news;
     u32 lightingStarted;
-    WiFiPlazaPlace places[50]; // filled by WiFiPlaza_FillPlaces from the profile
+    WiFiPlazaPlace places[50]; // filled from the profile
     u32 currentTime;
-    s64 lobbyTime;     // WiFiPlazaLobbyClient_GetTime, refreshed every frame
-    s64 lobbyOpenTime; // PPW_LobbyGetTimeInfo when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
+    s64 lobbyTime;     // refreshed every frame
+    s64 lobbyOpenTime; // PPW_LobbyGetTimeInfo when the lobby opened
     PlayerProfile *profiles[4];
-    u32 changeFlags[4]; // per lobby slot: entered, left, events, updated (WiFiPlazaWork_TakePlayerEntered / A25C / A288 / A2A0)
+    u32 changeFlags[4]; // per lobby slot: entered, left, events, updated
     WiFiPlazaProfile profile;
     WiFiPlazaTalkSession talk;
     u8 tapToyPlayed[0x14];
@@ -369,7 +359,7 @@ typedef struct WiFiPlazaWork {
     WiFiPlazaGroups groups;
     WiFiPlazaSessionState sessionState;
     WiFiPlazaGroupWeights groupWeights;
-    u8 specialVisitors[0x14]; // per lobby slot (WiFiPlaza_SetSlotFlag); copied out by WiFiPlazaWork_GetSpecialVisitors
+    u8 specialVisitors[0x14]; // per lobby slot
     u8 gameMembers[4];
     WiFiPlazaWordSet wordSet;
     WiFiPlazaTimer timer;
@@ -402,7 +392,7 @@ typedef struct WiFiPlazaBoxTestBounds {
     fx32 scaleZ;
 } WiFiPlazaBoxTestBounds;
 
-// Lobby callbacks given to WiFiPlazaLobbyClient_Init (with the work as the last argument).
+// Lobby callbacks (with the work as the last argument).
 typedef struct WiFiPlazaCallbacks {
     void (*onPlayerEnter)(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn);
     void (*onPlayerLeave)(int id, WiFiPlazaWork *work);
@@ -411,16 +401,16 @@ typedef struct WiFiPlazaCallbacks {
     void (*onOwnRecord)(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work);
 } WiFiPlazaCallbacks;
 
-// The time a player entered the lobby (an s64 kept as two words, WiFiPlazaLobbyClient_GetPlayerRecord).
+// The time a player entered the lobby (an s64 kept as two words).
 typedef struct WiFiPlazaLobbyEntryTime {
     u32 lo;
     u32 hi;
 } WiFiPlazaLobbyEntryTime;
 
-// What the lobby keeps per player (WiFiPlazaLobbyClient_SetPlayerRecord / WiFiPlazaLobbyClient_GetPlayerRecord).
+// What the lobby keeps per player.
 typedef struct WiFiPlazaLobbyPlayerRecord {
     WiFiPlazaLobbyEntryTime entryTime;
-    u32 channel; // lobby library channel (WiFiPlazaLobbyClient_ChannelToLib), 5 = none
+    u32 channel; // lobby library channel, 5 = none
 } WiFiPlazaLobbyPlayerRecord;
 
 // The ids of the players in the lobby (list 0) and in the own channel (list 1), -1 = free.
@@ -430,8 +420,7 @@ typedef struct WiFiPlazaLobbyIdList {
     s32 *ids;
 } WiFiPlazaLobbyIdList;
 
-// A message type of the lobby client (WiFiPlazaLobbyClient_SetLobbyCommands / _SetChannelCommands): its receive
-// callback and the size of its data.
+// A message type of the lobby client: its receive callback and the size of its data.
 typedef struct WiFiPlazaLobbyCommand {
     void (*callback)(int id, const void *data, u32 size, void *arg);
     u32 size;
@@ -443,31 +432,28 @@ typedef struct WiFiPlazaLobbyCommandTable {
     void *arg;
 } WiFiPlazaLobbyCommandTable;
 
-// Country and region of a lobby slot (WiFiPlazaLobbyClient_GetLocationCountry / WiFiPlazaLobbyClient_GetLocationRegion).
 typedef struct WiFiPlazaLobbyLocation {
     u16 country;
     u8 region;
     u8 active;
 } WiFiPlazaLobbyLocation;
 
-// What the host of a matchmaking session sends about it (WiFiPlazaLobbyClient_OnMatchInfo).
+// What the host of a matchmaking session sends about it.
 typedef struct WiFiPlazaLobbyMatchInfo {
     int index;
     int maxPlayers;
     int playerCount; // WifiConnection_GetNumConnectionHost for the own session
-    int state;       // WIFI_PLAZA_MATCH_*, closed by the host (WiFiPlazaLobbyClient_CloseMatch)
+    int state;       // WIFI_PLAZA_MATCH_*
     WiFiPlazaLobbyEntryTime startTime;
     u8 padding_18[0x18];
     char name[0x14];
 } WiFiPlazaLobbyMatchInfo;
 
-// A matchmaking session of the lobby client: WiFiPlazaLobbyClient_HostMatch hosts it, WiFiPlazaLobbyClient_JoinMatch joins it (WifiConnection_StartAnybodyMatchmaking with its
-// name, its player count and timer / 30 seconds).
 typedef struct WiFiPlazaLobbyMatch {
     WiFiPlazaLobbyMatchInfo info;
     u16 active;
     u16 timer;  // frames left, 1800 at the start
-    int hostId; // own id when hosting (WiFiPlazaLobbyClient_HostMatch)
+    int hostId; // own id when hosting
 } WiFiPlazaLobbyMatch;
 
 typedef struct WiFiPlazaLobbyKeyValue {
@@ -480,7 +466,7 @@ typedef struct WiFiPlazaLobbyIdValue {
     u32 value;
 } WiFiPlazaLobbyIdValue;
 
-// The special visitors of the lobby with their codes (WiFiPlazaLobbyClient_OnSpecialVisitorsReceived).
+// The special visitors of the lobby with their codes.
 typedef struct WiFiPlazaLobbyIdValueList {
     WiFiPlazaLobbyIdValue *items;
     u16 capacity;
@@ -494,10 +480,9 @@ typedef struct WiFiPlazaLobbySchedule {
     u8 roomType;
     u8 season;
     volatile u16 count;
-    WiFiPlazaLobbyKeyValue values[126]; // WiFiPlazaLobbySchedule_FindValue
+    WiFiPlazaLobbyKeyValue values[126];
 } WiFiPlazaLobbySchedule;
 
-// WiFiPlazaLobbyClient_GetSurveyValue / WiFiPlazaLobbyClient_GetSurveyText / WiFiPlazaLobbyClient_GetSurveyFlag read the two halves.
 typedef struct WiFiPlazaLobbySurvey {
     u32 surveyId;
     s32 questionNo;
@@ -507,27 +492,27 @@ typedef struct WiFiPlazaLobbySurvey {
     u32 isSpecial;
 } WiFiPlazaLobbySurvey;
 
-// This week's and last week's survey (WiFiPlazaLobbyClient_OnSurveyReceived) and last week's results.
+// This week's and last week's survey and last week's results.
 typedef struct WiFiPlazaLobbySurveyData {
     WiFiPlazaLobbySurvey surveys[2];
     u32 unk_2D0[3];
     u32 lastWeekTotals[3];
 } WiFiPlazaLobbySurveyData;
 
-// A player on the plaza map (overlay 49): a billboard sprite of the field character models with a model under it.
+// A player on the plaza map: a billboard sprite of the field character models with a model under it.
 typedef struct WiFiPlazaPlayerObject {
-    u8 mode : 4;         // 0: plays `effect` (WiFiPlazaPlayerObject_UpdateEffect), else follows the player's action (WiFiPlazaPlayerObject_FollowPlayer)
-    u8 culled : 2;       // WiFiPlazaPlayerObject_UpdateCulling
-    u8 visible : 2;      // WiFiPlazaPlayerObject_SetVisible
-    u8 effectActive : 1; // WiFiPlazaPlayerObject_StartEffect
-    u8 effect : 7;       // index into sWiFiPlazaPlayerObjectEffects
+    u8 mode : 4; // 0: plays `effect`, else follows the player's action
+    u8 culled : 2;
+    u8 visible : 2;
+    u8 effectActive : 1;
+    u8 effect : 7; // index into sWiFiPlazaPlayerObjectEffects
     u8 timer;
     u8 step;
     Field2DObject *player; // NULL = free slot
-    void *sprite;                    // billboard object
+    void *sprite;          // billboard object
     ModelInstance model;
     u8 action;        // Field2DObject_GetParam field 5
-    u8 savedSequence; // sequence and frame when an action of WiFiPlazaPlayerObject_ActionKeepsSequence ended
+    u8 savedSequence; // sequence and frame when an action that keeps the sequence ended
     u16 actionFrame;  // Field2DObject_GetParam field 8
     u32 savedFrame;
     u32 lightFlags;
@@ -535,10 +520,9 @@ typedef struct WiFiPlazaPlayerObject {
 
 typedef struct WiFiPlazaObjectModel {
     ModelResource resource;
-    int alpha; // 0 = the models are not drawn (WiFiPlazaPlayerObjects_Draw)
+    int alpha; // 0 = the models are not drawn
 } WiFiPlazaObjectModel;
 
-// The player objects (WiFiPlazaPlayerObjects_New).
 typedef struct WiFiPlazaPlayerObjects {
     GF_2DGfxRawResMan *models;    // the billboard model
     GF_2DGfxRawResMan *sequences; // 2 sprite sequences (sWiFiPlazaSpriteSequenceFiles)
@@ -556,7 +540,7 @@ typedef struct WiFiPlazaSpriteConfig {
     u16 ownTexture : 1; // texture loaded per object instead of once into VRAM
 } WiFiPlazaSpriteConfig;
 
-// gWiFiPlazaLobbyClient->state (WiFiPlazaLobbyClient_GetState)
+// gWiFiPlazaLobbyClient->state
 #define WIFI_PLAZA_LOBBY_STATE_DISCONNECTED 0
 #define WIFI_PLAZA_LOBBY_STATE_CONNECTING   1
 #define WIFI_PLAZA_LOBBY_STATE_IN_LOBBY     2
@@ -570,7 +554,7 @@ typedef struct WiFiPlazaSpriteConfig {
 #define WIFI_PLAZA_CHANNEL_STATE_LEAVING 3
 #define WIFI_PLAZA_CHANNEL_STATE_ERROR   4
 
-// gWiFiPlazaLobbyClient->joinChannelResult (WiFiPlazaLobbyClient_GetJoinChannelResult)
+// gWiFiPlazaLobbyClient->joinChannelResult
 enum WiFiPlazaJoinChannelResult {
     WIFI_PLAZA_JOIN_CHANNEL_PENDING,
     WIFI_PLAZA_JOIN_CHANNEL_DONE,
@@ -587,25 +571,25 @@ typedef struct WiFiPlazaLobbyClient {
     FriendRoster *friendRoster;
     SaveWiFiHistory *wifiHistory;
     WiFiPlazaCallbacks callbacks;
-    void *callbackArg;  // last argument of the callbacks
-    u8 *playerData;     // playerDataSize bytes per lobby slot
-    u32 playerDataSize; // WiFiPlazaLobbyClient_AllocPlayerData
+    void *callbackArg; // last argument of the callbacks
+    u8 *playerData;    // playerDataSize bytes per lobby slot
+    u32 playerDataSize;
     WiFiPlazaLobbyPlayerRecord records[20];
     WiFiPlazaLobbyIdList idLists[2];
-    u8 state;        // WIFI_PLAZA_LOBBY_STATE_* (WiFiPlazaLobbyClient_Update)
-    u8 channel;      // 4 = none (WiFiPlazaLobbyClient_JoinChannel)
+    u8 state;        // WIFI_PLAZA_LOBBY_STATE_*
+    u8 channel;      // 4 = none
     u8 channelState; // WIFI_PLAZA_CHANNEL_STATE_*
     u8 joinChannelResult;
     u8 addingLocation;
     u8 unk_131;
-    u8 requestError;   // error
-    u8 ownRecordError; // error
+    u8 requestError;
+    u8 ownRecordError;
     WiFiPlazaLobbyLocation locations[20];
     WiFiPlazaLobbyCommandTable commandTables[2]; // lobby, channel
     s64 time;                                    // lobby time, refreshed every frame
     u8 padding_1A4[0x10];
-    WiFiPlazaLobbySchedule schedule; // received with PPW_LobbyGetSchedule (WiFiPlazaLobbyClient_OnEnterChannel)
-    u32 scheduleSize;                   // its size
+    WiFiPlazaLobbySchedule schedule; // received with PPW_LobbyGetSchedule
+    u32 scheduleSize;
     WiFiPlazaLobbyMatch matches[3];
     u16 currentMatch; // 3 = none
     u8 isMatchHost;
@@ -1050,7 +1034,6 @@ extern u16 (*const gWiFiPlazaNewsEventSlotGetters[9])(WiFiPlazaNewsEvent *event,
 extern const char *gWiFiPlazaLocationListKey;                                                 // lobby data key of the location list
 extern void (*const sWiFiPlazaPlayerObjectActions[])(WiFiPlazaPlayerObject *object);       // per player action
 
-// defined in the other overlay 45 files
 // lobby library
 int PPW_LobbyGetSchedule(WiFiPlazaLobbySchedule *data, u32 *size);
 int PPW_LobbySetChannelData(int a0, int a1, const char *key, const void *data, u32 size);
@@ -1074,7 +1057,6 @@ int PPW_LobbyToErrorCode(int error);
 int PPW_LobbyInitResultToLastError(int result);
 void PPW_LobbyGetTimeInfo(void *a0);
 
-// defined in other overlays / the ARM9 static part
 BOOL WiFiPlazaRoom_Init(OverlayManager *manager, int *state);
 BOOL WiFiPlazaRoom_Main(OverlayManager *manager, int *state);
 BOOL WiFiPlazaRoom_Exit(OverlayManager *manager, int *state);

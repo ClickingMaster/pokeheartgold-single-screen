@@ -196,8 +196,8 @@ enum WiFiPlazaOtherActivityStep {
     WIFI_PLAZA_OTHER_ACTIVITY_END,
 };
 
-// Where and how the own player re-enters the room (room args, see WiFiPlazaRoom_GetStartParams); entryMode picks the own
-// player's first handler from sWiFiPlazaPlayerStateOwnEntries
+// Where and how the own player re-enters the room; entryMode picks the own player's first handler from
+// sWiFiPlazaPlayerStateOwnEntries
 typedef struct WiFiPlazaRoomEntry {
     u16 x; // cell
     u16 y;
@@ -251,7 +251,7 @@ typedef struct WiFiPlazaOtherRideWork {
 typedef struct WiFiPlazaPlacement {
     u8 x; // cell
     u8 y;
-    u8 kind;            // lobby activity of the player (WiFiPlazaPlayer_GetActivity)
+    u8 kind;            // lobby activity of the player
     u8 besideOwnPlayer; // placed next to the own player
     u8 justAppeared;    // the object was just created: drop it in without rising out first
 } WiFiPlazaPlacement;
@@ -1253,7 +1253,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromAttraction(WiFiPlazaPlayerState *s
         break;
     case WIFI_PLAZA_RETURN_START_WALK:
         WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
-        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room); // the manager, in the state variable
+        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room);
         WiFiPlazaPlayerState_Set((WiFiPlazaPlayerStateManager *)state, WiFiPlazaRoom_GetOwnPlayerIndex(room), &sWiFiPlazaPlayerStateOwnWalk, NULL);
         break;
     }
@@ -1312,7 +1312,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromMinigame(WiFiPlazaPlayerState *sta
         break;
     case WIFI_PLAZA_RETURN_START_WALK:
         WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
-        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room); // the manager, in the state variable
+        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room);
         WiFiPlazaPlayerState_Set((WiFiPlazaPlayerStateManager *)state, WiFiPlazaRoom_GetOwnPlayerIndex(room), &sWiFiPlazaPlayerStateOwnWalk, NULL);
         break;
     }
@@ -1361,7 +1361,7 @@ static BOOL WiFiPlazaPlayerState_OwnReturnFromSurvey(WiFiPlazaPlayerState *state
         break;
     case WIFI_PLAZA_RETURN_START_WALK:
         WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);
-        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room); // the manager, in the state variable
+        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room);
         WiFiPlazaPlayerState_Set((WiFiPlazaPlayerStateManager *)state, WiFiPlazaRoom_GetOwnPlayerIndex(room), &sWiFiPlazaPlayerStateOwnWalk, NULL);
         break;
     }
@@ -1605,7 +1605,7 @@ static BOOL WiFiPlazaPlayerState_OwnExit(WiFiPlazaPlayerState *state, WiFiPlazaR
     case WIFI_PLAZA_EXIT_WAIT_STEP_BACK:
         WiFiPlazaWork_SetActivity(WiFiPlazaRoom_GetLobby(room), WIFI_PLAZA_ACTIVITY_FREE);
         objManager = WiFiPlazaRoom_GetObjManager(room);
-        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room); // the manager, in the state variable
+        state = (WiFiPlazaPlayerState *)WiFiPlazaRoom_GetPlayerStates(room);
         ownPlayer = WiFiPlazaObj_GetOwnPlayer(objManager);
         if (WiFiPlazaObj_GetParam(ownPlayer, 5) == 0) {
             WiFiPlazaObj_SetHandler(objManager, ownPlayer, WIFI_PLAZA_OBJ_HANDLER_PLAYER_INPUT);

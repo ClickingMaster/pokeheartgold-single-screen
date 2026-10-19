@@ -20,8 +20,8 @@
 #include "sound_playback.h"
 
 typedef struct WiFiPlazaModelsSpawn {
-    u16 tag;  // map cell tag (WiFiPlazaMap_FindTileTag)
-    u16 kind; // prop kind
+    u16 tag; // map cell tag
+    u16 kind;
 } WiFiPlazaModelsSpawn;
 
 typedef struct WiFiPlazaMoverSpawn {
@@ -724,7 +724,7 @@ static void WiFiPlazaModelSet_ResetBase(WiFiPlazaModelSet *set, WiFiPlazaBaseRes
 }
 
 static void WiFiPlazaModelSet_UpdateBase(WiFiPlazaModelSet *set, WiFiPlazaBaseResources *res) {
-    WiFiPlazaModelSet *cursor; // advanced by one animation slot (4 bytes) per step
+    WiFiPlazaModelSet *cursor;
     ModelAnimation *anim;
     fx32 *frame;
     ModelAnimation *setAnim;

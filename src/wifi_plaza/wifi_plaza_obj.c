@@ -353,7 +353,7 @@ u32 WiFiPlazaObj_IsCulled(WiFiPlazaObj *obj) {
 }
 
 WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
-    volatile WiFiPlazaObjManager *volatileManager = manager; // entries and count are reloaded in the loop
+    volatile WiFiPlazaObjManager *volatileManager = manager;
     Field2DPoint pos;
     Field2DObject *gridObj;
     u8 *entry;

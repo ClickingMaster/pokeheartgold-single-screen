@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_SORT_H
 #define POKEHEARTGOLD_LOBBY_SORT_H
 
-// Stable merge sort of the lobby schedule's key/payload pairs (overlay 45), ordered by key. The sort merges through a
+// Stable merge sort of the lobby schedule's key/payload pairs, ordered by key. The sort merges through a
 // temporary buffer when one can be allocated and falls back to rotations when it is too small.
 
 #include <nitro/types.h>

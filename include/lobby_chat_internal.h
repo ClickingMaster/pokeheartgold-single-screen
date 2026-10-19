@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_CHAT_INTERNAL_H
 #define POKEHEARTGOLD_LOBBY_CHAT_INTERNAL_H
 
-// Lobby chat (overlay 45): the chat manager, its string, map and request types, and the functions shared
+// Lobby chat: the chat manager, its string, map and request types, and the functions shared
 // between the chat source files.
 
 #include "global.h"

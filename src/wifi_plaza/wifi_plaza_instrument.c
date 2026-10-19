@@ -970,7 +970,7 @@ BOOL WiFiPlazaInstrument_UpdatePop(WiFiPlazaInstrumentManager *manager, WiFiPlaz
     done = TRUE;
     ModelInstance *model = &effect->models[0];
     model++;
-    WiFiPlazaInstrumentEffect *descView = (WiFiPlazaInstrumentEffect *)((u8 *)effect + 4); // descView->descs[0] is descs[i]
+    WiFiPlazaInstrumentEffect *descView = (WiFiPlazaInstrumentEffect *)((u8 *)effect + 4);
     for (; i <= 3; i++, model++, descView = (WiFiPlazaInstrumentEffect *)((u8 *)descView + 4)) {
         if (WiFiPlazaInstrument_HasModel(effect, i) == TRUE) {
             if (effect->frame > i - 1) {
@@ -978,7 +978,6 @@ BOOL WiFiPlazaInstrument_UpdatePop(WiFiPlazaInstrumentManager *manager, WiFiPlaz
                 if (WiFiPlazaInstrument_PlayAnimBy(manager, effect, i, 0, FX32_CONST(2.5)) == FALSE) {
                     done = FALSE;
                 } else {
-                    // fadeView->work.fade.fade[0] is work.fade.fade[i - 1]
                     volatile WiFiPlazaInstrumentEffect *fadeView = (WiFiPlazaInstrumentEffect *)((u8 *)effect + (i - 1) * 4);
                     if (fadeView->work.fade.fade[0] == 0) {
                         ModelInstance_SetVisible(model, FALSE);
@@ -1457,7 +1456,7 @@ static BOOL WiFiPlazaInstrument_UpdateBalloonDrop(WiFiPlazaInstrumentManager *ma
     return FALSE;
 }
 
-// Places the models (up to 3) next to the object while it rises; the float conversions are kept as calls.
+// Places the models (up to 3) next to the object while it rises.
 static void WiFiPlazaInstrument_PlaceBalloons(WiFiPlazaInstrumentEffect *effect) {
     VecFx32 pos;
     int count;

@@ -11,9 +11,8 @@
 #include "save_wifi_history.h"
 #include "wifi_connection.h"
 
-// The lobby client of the Wi-Fi Plaza (gWiFiPlazaLobbyClient): one instance for the plaza and its apps on top of the lobby
-// library (PPW_LobbyInitializeAsync ..). It keeps the lobby state, the location of every lobby slot, the message tables, the
-// lobby time and up to three matchmaking sessions.
+// The lobby client of the Wi-Fi Plaza, on top of the lobby library: the lobby state, the location of every lobby
+// slot, the message tables, the lobby time and up to three matchmaking sessions.
 
 WiFiPlazaLobbyClient *gWiFiPlazaLobbyClient;
 
@@ -433,7 +432,6 @@ void WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, vo
     gWiFiPlazaLobbyClient->commandTables[1].arg = arg;
 }
 
-// Clears the 12 bytes one at a time.
 void WiFiPlazaLobbyClient_ClearLobbyCommands(void) {
     u8 *bytes;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -880,7 +878,6 @@ WiFiPlazaLobbyPlayerRecord *WiFiPlazaLobbyClient_GetPlayerRecord(WiFiPlazaLobbyC
     return &client->records[slot];
 }
 
-// Clears the 12 bytes one at a time.
 void WiFiPlazaLobbyClient_ClearPlayerRecord(WiFiPlazaLobbyClient *client, int id) {
     int slot = WiFiPlazaLobbyClient_FindInIdList(client, id, 0);
     u8 *bytes;
@@ -915,7 +912,6 @@ void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCa
         p->idLists[0].ids = Heap_Alloc(heapID, capacity * 4);
         p->idLists[0].capacity = capacity;
         WiFiPlazaLobbyClient_ClearIdList(client, i);
-        // step to the next id list
         p = (WiFiPlazaLobbyClient *)((u8 *)p + sizeof(WiFiPlazaLobbyIdList));
     }
 }
@@ -927,7 +923,6 @@ void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
         GF_ASSERT(p->idLists[0].ids != NULL);
         Heap_Free(p->idLists[0].ids);
         p->idLists[0].ids = NULL;
-        // step to the next id list
         p = (WiFiPlazaLobbyClient *)((u8 *)p + sizeof(WiFiPlazaLobbyIdList));
     }
 }

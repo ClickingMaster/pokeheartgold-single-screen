@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_CHAT_REQUEST_H
 #define POKEHEARTGOLD_LOBBY_CHAT_REQUEST_H
 
-// Lobby chat (overlay 45): the commands waiting for the server's answer. The chat manager keeps each request in its
+// Lobby chat: the commands waiting for the server's answer. The chat manager keeps each request in its
 // request map, keyed by id; the answer callback looks the request up, reports to the caller's callback with the
 // caller's parameter and deletes the request.
 

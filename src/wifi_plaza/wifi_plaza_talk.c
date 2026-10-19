@@ -586,7 +586,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         }
         break;
-    case WIFI_PLAZA_TALK_GREET: // greetings
+    case WIFI_PLAZA_TALK_GREET:
         IncrementGameStat47(lobby);
         WiFiPlazaWork_MarkActivityDone(lobby, 7);
         WiFiPlazaTalk_PrintGreeting(talk, lobby, room, talk->myTimeOfDay, me, partner);
@@ -686,7 +686,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         }
         break;
     }
-    case WIFI_PLAZA_TALK_COMPARE_TAP_TOYS: { // compare Tap Toys
+    case WIFI_PLAZA_TALK_COMPARE_TAP_TOYS: {
         myToy = WiFiPlazaPlayer_GetTapToy(me);
         if (myToy == WiFiPlazaPlayer_GetTapToy(partner)) {
             talk->sameToy = TRUE;
@@ -809,7 +809,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, 477 + talk->question));
         WiFiPlazaTalk_SetNextStep(talk, 128, WIFI_PLAZA_TALK_OPEN_ANSWER_MENU, state, WIFI_PLAZA_TALK_WAIT_MESSAGE);
         break;
-    case WIFI_PLAZA_TALK_OPEN_ANSWER_MENU: // our own answer
+    case WIFI_PLAZA_TALK_OPEN_ANSWER_MENU:
         WiFiPlazaTalkMenu_Init(&talk->menu, room, 4, (talk->question << 2) + 115, 0);
         WiFiPlazaRoom_OpenList(room, &talk->menu.template, 0, 0);
         WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_HANDLE_ANSWER_MENU);
@@ -881,7 +881,7 @@ BOOL WiFiPlazaTalk_Start(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u
             break;
         }
         break;
-    case WIFI_PLAZA_TALK_PARTNER_ANSWER: // the partner's answer
+    case WIFI_PLAZA_TALK_PARTNER_ANSWER:
         answer = (u16)(partnerAnswer - 6);
         if (partnerAnswer >= 126 || partnerAnswer < 6) {
             WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_TALK_HARD_TO_SAY);
@@ -1020,7 +1020,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         }
         break;
     }
-    case WIFI_PLAZA_ANSWER_PARTNER_GREETING: // greetings
+    case WIFI_PLAZA_ANSWER_PARTNER_GREETING:
         if (!WiFiPlazaWork_HasTalkPartnerArrived(lobby)) {
             break;
         }
@@ -1087,7 +1087,7 @@ BOOL WiFiPlazaTalk_Answer(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, 
         WiFiPlazaRoom_PrintMessage(room, WiFiPlazaTalk_GetMsg(room, talk->partner, msg_0766_00053));
         WiFiPlazaTalk_SetNextStep(talk, 128, WIFI_PLAZA_ANSWER_WAIT_PARTNER_CHOICE, state, WIFI_PLAZA_ANSWER_WAIT_MESSAGE);
         break;
-    case WIFI_PLAZA_ANSWER_WAIT_PARTNER_CHOICE: // what the partner chose
+    case WIFI_PLAZA_ANSWER_WAIT_PARTNER_CHOICE:
         switch (partnerStatus) {
         case WIFI_PLAZA_TALK_STATE_ANSWERER_TURN:
             switch (partnerAnswer) {
@@ -1627,7 +1627,7 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
     case WIFI_PLAZA_RECEPTION_START:
         PlaySE(SEQ_SE_DP_SELECT);
         if (WiFiPlazaWork_IsClosing(lobby) == 0) {
-            if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) { // the Pokemon Parade is on
+            if (WiFiPlazaWork_IsParadeStarted(lobby) == TRUE) {
                 message = WiFiPlazaRoom_GetMsgString(room, 1, msg_0777_00078);
                 WiFiPlazaRoom_PrintMessage(room, message);
                 WiFiPlazaPlayerState_SetStep(state, WIFI_PLAZA_RECEPTION_WAIT_MESSAGE);

@@ -19,9 +19,6 @@
 
 // The applications of the plaza, one overlay at a time. Each app has an entry in the four tables below (index =
 // app): make its arguments, free them, start its overlay, and pick the next app when the overlay has finished.
-//   0 the plaza itself (OVY_49)   1 visitor profiles (OVY_48)   2 plaza news (OVY_88)   3, 4 footprint stamp (OVY_89)
-//   5 connect (OVY_46)   6, 7, 8 the games (OVY_91, OVY_92, OVY_93, with OVY_90)   9, 10 disconnect (OVY_46)
-//   11, 12 the app of sWiFiPlazaSurveyOverlayTemplate
 
 FS_EXTERN_OVERLAY(OVY_46);
 FS_EXTERN_OVERLAY(OVY_47);
@@ -50,13 +47,13 @@ enum WiFiPlazaApp {
     WIFI_PLAZA_APP_SURVEY_RESULTS,
 };
 
-// Arguments of app 0, the plaza (WiFiPlazaRoomArgs of the room overlay).
+// Arguments of app 0, the plaza.
 typedef struct WiFiPlazaMainArgs {
     SaveData *save;
     int group;
     int variant;
     u16 startParams[6];
-    u32 result; // what to do next (WiFiPlazaApps_EndMain)
+    u32 result; // what to do next
     WiFiPlazaWork *work;
 } WiFiPlazaMainArgs;
 
@@ -612,7 +609,7 @@ static void WiFiPlazaApps_NewMimeJrTopArgs(WiFiPlazaApps *apps, void **out, enum
     memset(*out, 0, sizeof(PlazaGameArgs));
     p = *out;
     ((PlazaGameArgs *)p)->mimeJrTopVoiceChat = 0;
-    *(u32 *)&((PlazaGameArgs *)p)->voiceChat = 1; // this game reads voiceChat as a whole word
+    *(u32 *)&((PlazaGameArgs *)p)->voiceChat = 1;
     ((PlazaGameArgs *)p)->saveData = apps->save;
     WiFiPlazaGameArgs_NewProfiles((PlazaGameArgs *)p, heapID);
 }

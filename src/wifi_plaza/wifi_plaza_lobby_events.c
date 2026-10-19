@@ -31,9 +31,8 @@ static void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *objec
 static void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object);
 
-// The callbacks the lobby library calls (WiFiPlazaLobbyClient_InitializeEx hands them over): channel joined, players entering, leaving
-// and updating, messages, the location list, match updates and the results of the library's requests.
-
+// The callbacks the lobby library calls: channel joined, players entering, leaving and updating, messages, the
+// location list, match updates and the results of the library's requests.
 
 static const u16 sWiFiPlazaSpriteSequenceFiles[2] = { 0x118, 0x119 };
 
@@ -377,8 +376,7 @@ WiFiPlazaLobbyMatch *WiFiPlazaLobbyMatches_Get(WiFiPlazaLobbyClient *client, int
     return &client->matches[index];
 }
 
-// Once per frame (WiFiPlazaLobbyClient_Update; works on gWiFiPlazaLobbyClient): the player count of the own session, the
-// countdowns.
+// Once per frame: the player count of the own session, the countdowns.
 void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
     int i;
     if (gWiFiPlazaLobbyClient->isMatchHost == 1) {
@@ -392,7 +390,6 @@ void WiFiPlazaLobbyMatches_Update(WiFiPlazaLobbyClient *client) {
         }
     }
     for (i = 0; i < 3; i++) {
-        // p->matches[0] is match i
         WiFiPlazaLobbyClient *p = (WiFiPlazaLobbyClient *)((u8 *)gWiFiPlazaLobbyClient + i * 0x4C);
         if (*(volatile u16 *)&p->matches[0].active == 1) {
             u32 frames;
@@ -420,7 +417,7 @@ void WiFiPlazaLobbyClient_OnMatchClientDummy(int result, void *arg) {
 }
 
 // Wi-Fi Plaza player objects: one billboard sprite (field character model) plus a model under it for every player
-// on the plaza map (overlay 49 drives them). The first functions are the last lobby client helpers.
+// on the plaza map.
 
 void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg) {
     WiFiPlazaLobbyClient *client = arg;
@@ -786,7 +783,7 @@ static void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
     ModelInstance_Draw(&object->model);
 }
 
-// Follows the player's action (ov42 field 5) and its frame (field 8) and moves the sprite to the player's position.
+// Follows the player's action (field 5) and its frame (field 8) and moves the sprite to the player's position.
 void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
     int action;
     u32 actionFrame;

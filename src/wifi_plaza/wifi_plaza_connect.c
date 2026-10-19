@@ -37,10 +37,8 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// Wi-Fi Plaza connect / disconnect screens, two OverlayManager templates started by the Wi-Fi Plaza
-// lobby overlay (OVY_45): "Connect to Nintendo Wi-Fi Connection?" + DWC login with error handling and
-// reconnect, and "Disconnecting from Nintendo Wi-Fi Connection." + logout. The BG palette of both
-// screens cycles through 21 pre-blended palettes on a VBlank task.
+// Wi-Fi Plaza connect / disconnect screens: "Connect to Nintendo Wi-Fi Connection?" with login, error handling and
+// reconnect, and "Disconnecting from Nintendo Wi-Fi Connection." with logout.
 
 #define WIFI_PLAZA_CONNECT_NUM_BG_LAYERS     3
 #define WIFI_PLAZA_CONNECT_NUM_PALETTES      21
@@ -56,7 +54,7 @@ typedef struct WiFiPlazaConnectMessageBox {
     WaitingIcon *waitingIcon;
     int textSpeed;
     int printerId;
-} WiFiPlazaConnectMessageBox; // size: 0x30
+} WiFiPlazaConnectMessageBox;
 
 // Block handed to the VBlank palette-cycle task.
 typedef struct WiFiPlazaConnectPaletteCycle {
@@ -66,9 +64,9 @@ typedef struct WiFiPlazaConnectPaletteCycle {
     u16 blendedPalettes[WIFI_PLAZA_CONNECT_NUM_PALETTES][16];
     s16 index; // ping-pongs 0..20
     s8 direction;
-    u8 frameParity;             // the palette is loaded on every second frame
-    u32 mode;                   // 0: both screens, 1: main screen, 2: sub screen
-} WiFiPlazaConnectPaletteCycle; // size: 0x330
+    u8 frameParity; // the palette is loaded on every second frame
+    u32 mode;       // 0: both screens, 1: main screen, 2: sub screen
+} WiFiPlazaConnectPaletteCycle;
 
 typedef struct WiFiPlazaConnectWork {
     SaveData *saveData;
@@ -81,7 +79,7 @@ typedef struct WiFiPlazaConnectWork {
     WiFiPlazaConnectMessageBox errorBox;  // msg_0800
     YesNoPrompt *yesNoPrompt;
     WiFiPlazaConnectPaletteCycle paletteCycle;
-} WiFiPlazaConnectWork; // size: 0x404
+} WiFiPlazaConnectWork;
 
 extern void CommState_StartWifiPlaza(SaveData *saveData, s32 profileId);
 extern void CommState_LeaveWifiPlaza(void);
@@ -583,7 +581,6 @@ static void WiFiPlazaConnect_InitGraphics(WiFiPlazaConnectWork *work, enum HeapI
         WiFiPlazaConnectWork *next;
         amount = 0;
         final = FALSE;
-        // a work pointer shifted by one palette per step: next->paletteCycle.baseColors[0] is baseColors[target + 1]
         next = (WiFiPlazaConnectWork *)((u8 *)work + (target + 1) * 32);
         while (TRUE) {
             GF_ASSERT(count < WIFI_PLAZA_CONNECT_NUM_PALETTES);

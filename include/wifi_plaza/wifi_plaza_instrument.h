@@ -11,10 +11,8 @@
 #include "heap.h"
 #include "model_animation.h"
 
-// Tap Toy (instrument) effects of the Wi-Fi Plaza room: one effect slot per player (20), each drawing up to
-// 18 models from NARC 0xD1 above the player's object. There are 27 effect types (9 kinds x 3 levels), each
-// with an init and an update handler (tables sWiFiPlazaInstrumentInitFuncs / sWiFiPlazaInstrumentUpdateFuncs)
-// and a sound effect played when it starts.
+// Tap Toy (instrument) effects of the Wi-Fi Plaza room: one effect slot per player, each drawing up to 18 models
+// above the player's object. There are 27 effect types (9 kinds x 3 levels).
 
 #define WIFI_PLAZA_INSTRUMENT_PLAYERS       20
 #define WIFI_PLAZA_INSTRUMENT_EFFECT_TYPES  27
@@ -52,15 +50,15 @@ typedef struct WiFiPlazaInstrumentModelDesc {
 
 // Four models flying out of the player and back (effect types 0-8)
 typedef struct WiFiPlazaInstrumentBurst {
-    s16 frame;                          // 0x00
-    u16 kind;                           // 0x02 sWiFiPlazaInstrumentBurstStartFuncs / UpdateFuncs index (< 3)
-    u16 count;                          // 0x04
-    u8 active;                          // 0x06
-    u8 phase;                           // 0x07
-    WiFiPlazaInstrumentTween tweens[4]; // 0x08
-    WiFiPlazaInstrumentWave waves[4];   // 0xA8
-    ModelInstance *models[4];           // 0xD8
-    WiFiPlazaObj *obj;                  // 0xE8
+    s16 frame;
+    u16 kind; // sWiFiPlazaInstrumentBurstStartFuncs / UpdateFuncs index (< 3)
+    u16 count;
+    u8 active;
+    u8 phase;
+    WiFiPlazaInstrumentTween tweens[4];
+    WiFiPlazaInstrumentWave waves[4];
+    ModelInstance *models[4];
+    WiFiPlazaObj *obj;
 } WiFiPlazaInstrumentBurst;
 
 // Schedule entry: at `frame`, start burst `burst` with `count` models
@@ -72,23 +70,23 @@ typedef struct WiFiPlazaInstrumentBurstEvent {
 
 // Bursts started on a schedule (effect types 0-8)
 typedef struct WiFiPlazaInstrumentBurstWork {
-    WiFiPlazaInstrumentBurst bursts[4];          // 0x000
-    const WiFiPlazaInstrumentBurstEvent *events; // 0x3B0
-    u16 eventCount;                              // 0x3B4
-    u16 duration;                                // 0x3B6
-    u16 flashActive;                             // 0x3B8 models 16 and 17
-    u16 flashFrame;                              // 0x3BA
+    WiFiPlazaInstrumentBurst bursts[4];
+    const WiFiPlazaInstrumentBurstEvent *events;
+    u16 eventCount;
+    u16 duration;
+    u16 flashActive; // models 16 and 17
+    u16 flashFrame;
 } WiFiPlazaInstrumentBurstWork;
 
 typedef struct WiFiPlazaInstrumentEffect {
-    u8 type;                                                                        // 0x000
-    u8 phase;                                                                       // 0x001
-    s16 frame;                                                                      // 0x002
-    u32 polygonID;                                                                  // 0x004 object parameter 5 + 0x28
-    WiFiPlazaObj *obj;                                                              // 0x008 NULL: slot free
-    ModelInstance models[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS];                      // 0x00C
-    const WiFiPlazaInstrumentModelDesc *descs[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS]; // 0x87C
-    fx32 animFrames[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS][2];                        // 0x8C4
+    u8 type;
+    u8 phase;
+    s16 frame;
+    u32 polygonID;     // object parameter 5 + 0x28
+    WiFiPlazaObj *obj; // NULL: slot free
+    ModelInstance models[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS];
+    const WiFiPlazaInstrumentModelDesc *descs[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS];
+    fx32 animFrames[WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS][2];
 
     union {
         u8 raw[0x3BC];
@@ -123,32 +121,32 @@ typedef struct WiFiPlazaInstrumentEffect {
             WiFiPlazaInstrumentTween tweens[16];
         } shower;
 
-        struct {                                // types 24-26
-            s8 stage;                           // 0x954
-            s8 count;                           // 0x955
-            s16 timer;                          // 0x956
-            fx32 baseY;                         // 0x958
-            u8 animTimers[4];                   // 0x95C
-            u8 animKinds[4];                    // 0x960
-            u8 tick;                            // 0x964
-            u8 onTile42;                        // 0x965 the object stands on map attribute 42
-            WiFiPlazaInstrumentWave waves[3];   // 0x968
-            WiFiPlazaInstrumentTween tweens[4]; // 0x98C [3] moves the player's object
-            WiFiPlazaInstrumentWave objWave;    // 0xA2C
+        struct { // types 24-26
+            s8 stage;
+            s8 count;
+            s16 timer;
+            fx32 baseY;
+            u8 animTimers[4];
+            u8 animKinds[4];
+            u8 tick;
+            u8 onTile42; // the object stands on map attribute 42
+            WiFiPlazaInstrumentWave waves[3];
+            WiFiPlazaInstrumentTween tweens[4]; // [3] moves the player's object
+            WiFiPlazaInstrumentWave objWave;
         } hop;
-    } work; // 0x954
+    } work;
 } WiFiPlazaInstrumentEffect;
 
 typedef struct WiFiPlazaInstrumentManager {
-    struct WiFiPlazaWork *lobby;                                      // 0x00000 OVY_45 lobby
-    WiFiPlazaObjManager *objManager;                                  // 0x00004
-    WiFiPlazaCamera *camera;                                          // 0x00008
-    WiFiPlazaMap *map;                                                // 0x0000C
-    WiFiPlazaInstrumentEffect effects[WIFI_PLAZA_INSTRUMENT_PLAYERS]; // 0x00010
-    ModelResource models[15];                                         // 0x10550 NARC 0xD1 members 0x81-0x8F
-    NNSG3dResFileHeader *textures[39];                                // 0x10640 members 0x90-0xB6
-    ModelAnimation anims[16];                                         // 0x106DC members 0xB7-0xC6
-    NNSFndAllocator allocator;                                        // 0x1081C
+    struct WiFiPlazaWork *lobby;
+    WiFiPlazaObjManager *objManager;
+    WiFiPlazaCamera *camera;
+    WiFiPlazaMap *map;
+    WiFiPlazaInstrumentEffect effects[WIFI_PLAZA_INSTRUMENT_PLAYERS];
+    ModelResource models[15];          // NARC 0xD1 members 0x81-0x8F
+    NNSG3dResFileHeader *textures[39]; // members 0x90-0xB6
+    ModelAnimation anims[16];          // members 0xB7-0xC6
+    NNSFndAllocator allocator;
 } WiFiPlazaInstrumentManager;
 
 typedef void (*WiFiPlazaInstrumentInitFunc)(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect);

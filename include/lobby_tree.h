@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_LOBBY_TREE_H
 #define POKEHEARTGOLD_LOBBY_TREE_H
 
-// The red-black trees behind the lobby's user id sets and user maps (overlay 45). A tree keeps its node count, its
+// The red-black trees behind the lobby's user id sets and user maps. A tree keeps its node count, its
 // root and its leftmost node. The root field is also the tree's end node: end() points at it and the root's parent
 // is its address. A node's parent field holds the parent's address with the node's colour in bit 0 (set: red).
 

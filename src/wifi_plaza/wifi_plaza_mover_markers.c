@@ -6,13 +6,13 @@
 // Marker progress of the nine movers of the room event.
 typedef struct WiFiPlazaMoverMarkerWork {
     int room;
-    struct WiFiPlazaWork *lobby;    // 0x04
-    struct WiFiPlazaModels *models; // 0x08
+    struct WiFiPlazaWork *lobby;
+    struct WiFiPlazaModels *models;
     u8 gap[0x9E];
 
     struct {
         s16 x, z;
-    } markers[3]; // 0xAA cell positions (pixels) of the three marker map tags
+    } markers[3]; // cell positions (pixels) of the three marker map tags
 } WiFiPlazaMoverMarkerWork;
 
 void WiFiPlazaEvent_UpdateMoverMarkers(void *parent, int index);

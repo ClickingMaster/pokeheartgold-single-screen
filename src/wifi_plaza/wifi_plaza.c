@@ -31,7 +31,6 @@
 #include "sound_system.h"
 #include "system.h"
 
-// Overlay data of the Wi-Fi Plaza overlay.
 typedef struct WiFiPlaza {
     SaveData *save;
     WiFiPlazaWork *work;
@@ -274,7 +273,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     Heap_Free(work);
 }
 
-// Per frame (WiFiPlaza_Main).
+// Per frame.
 static void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
     WiFiPlazaNews_Update(work->news);
@@ -1519,8 +1518,8 @@ static void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPla
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
 }
 
-// Fills out (200 bytes) with the country and region of the own player, of every player in the lobby and of the
-// 20 lobby entries of WiFiPlazaLobbyClient_GetLocationCountry / WiFiPlazaLobbyClient_GetLocationRegion.
+// Fills out with the country and region of the own player, of every player in the lobby and of the 20 lobby
+// location entries.
 void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
     WiFiPlazaPlayerList list;
     int country;
@@ -1765,7 +1764,6 @@ u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
     return state->appQuitForClosing;
 }
 
-// Clears the 20 bytes one at a time.
 static void WiFiPlaza_ClearTapToyPlayedFlags(volatile u8 *buffer) {
     u32 count = 20;
     do {
@@ -2272,7 +2270,7 @@ static u32 WiFiPlazaGroups_GetMarkerCount(WiFiPlazaGroups *groups, u32 place) {
     return *slot;
 }
 
-// Receive callbacks of the exchange with one other player (WiFiPlazaWork.talk; WiFiPlazaLobbyClient_SendToPlayer sends its messages):
+// Receive callbacks of the exchange with one other player:
 // id is the sender, data the received words.
 
 // Message 0: the other player asks for an exchange; answered with WiFiPlazaWork_SendTalkAnswer (TRUE = accepted).
@@ -2358,7 +2356,7 @@ static void WiFiPlaza_OnTalkCancel(int id, const void *data, u32 size, void *arg
     }
 }
 
-// A lobby message: handled by sWiFiPlazaLobbyMessageHandlers[type] (WiFiPlaza_HandleChatNews ...).
+// A lobby message: handled by sWiFiPlazaLobbyMessageHandlers[type].
 static void WiFiPlaza_OnLobbyMessage(int id, const void *data, u32 size, void *arg) {
     WiFiPlazaWork *work = arg;
     const WiFiPlazaLobbyMessage *msg = data;
