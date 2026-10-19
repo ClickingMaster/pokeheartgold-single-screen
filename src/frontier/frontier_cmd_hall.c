@@ -14,6 +14,7 @@
 #include "frontier/frontier_script_context.h"
 #include "frontier/frontier_trainers.h"
 
+#include "frontier_save_access.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "launch_application.h"
@@ -23,9 +24,6 @@
 
 FS_EXTERN_OVERLAY(OVY_82);
 
-u32 HallChallenge_GetSaved(void *challenge);
-u32 HallTypeRanks_Get(u8 cell, void *ranks);
-void HallTypeRanks_Set(u8 cell, void *ranks, u8 rank);
 u32 BattleHallData_GetTrainerSprite(BattleHallData *data, u8 index);
 u32 BattleHallData_SendLinkMessage(BattleHallData *data, u32 kind, u32 value);
 void FrontierLink_RegisterCommands(void);
@@ -188,7 +186,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
         *result = BattleHallData_NextBattle(data);
         break;
     case HALL_ACTION_GET_ROUND:
-        if (data->type == 2) {
+        if (data->type == FRONTIER_CHALLENGE_MULTI) {
             *result = 10;
         } else {
             *result = data->round;
@@ -273,7 +271,7 @@ BOOL FrtCmd_HallAction(FrontierScriptContext *ctx) {
     case HALL_ACTION_GET_MATRON_BATTLE:
         // The Hall Matron appears in the single battle streak
         *result = 0;
-        if (data->type == 0) {
+        if (data->type == FRONTIER_CHALLENGE_SINGLE) {
             if (data->winStreak + 1 == 50) {
                 *result = 1;
             } else if (data->winStreak + 1 == 170) {

@@ -22,7 +22,6 @@
 void *FriendRoster_GetDwcFriendData(FriendRoster *roster, int slot);
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int slot);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int slot);
-void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 int Comm_CountConnected(void);
 BOOL Comm_RegisterLinkedFriends(SaveData *saveData, u32 *requests, enum HeapID heapID);
 void Comm_StoreFriendFromPlayer(SaveData *saveData, u32 netId, int slot, enum HeapID heapID, int mode);

@@ -5,13 +5,14 @@
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_trainers.h"
 
+#include "frontier_save_access.h"
 #include "save.h"
 #include "scrcmd_9.h"
 
 typedef struct ArcadeContext {
     u32 heapId;
     SaveData *saveData;
-    u32 challenge; // the ArcadeChallenge save record (Save_Frontier_GetArcadeChallenge)
+    ArcadeChallenge *challenge;
     BattleSetup *battleSetup;
     u8 type;
     u8 battleNo; // battle number in the current round (0-6)

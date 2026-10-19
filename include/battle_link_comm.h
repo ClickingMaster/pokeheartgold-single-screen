@@ -5,6 +5,7 @@
 #include "battle/battle_setup.h"
 #include "battle/battle_system.h"
 
+#include "battle_record.h"
 #include "bg_window.h"
 #include "communication_command.h"
 #include "communication_core.h"
@@ -45,7 +46,6 @@ typedef struct BattleLinkHeader {
 extern const u32 gBattleLinkCommands[];
 int Comm_GetSendBufferFreeSpace(void);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
-void BattleRecord_SetAiFlags(int sender, u32 flags);
 BOOL BattleController_RecvLinkData(BattleSystem *battle, u8 *data);
 void BattleLink_Start(BattleSystem *battle);
 void BattleLink_RegisterSetupCommands(BattleLinkWork *work);

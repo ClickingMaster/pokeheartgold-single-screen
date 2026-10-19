@@ -47,14 +47,12 @@ static const BattleCastleTrainerRange sBattleCastleTrainerRanges[] = {
 
 void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-void FrontierSave_SubStat(FrontierSave *frontierSave, int stat, int substat, int amount);
-void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 
 int BattleCastle_GetRandomTrainerId(int type, u32 round, int battleNo) {
     int min;
     int span;
 
-    if (type == 0) {
+    if (type == FRONTIER_CHALLENGE_SINGLE) {
         int battle = battleNo + 1;
         int number = 7 * round + battle;
         if (number == 21) {
@@ -215,8 +213,8 @@ int BattleCastle_GetMonLevel(BattleCastleData *data) {
 
 BOOL BattleCastle_IsMultiType(int type) {
     switch (type) {
-    case 2:
-    case 3:
+    case FRONTIER_CHALLENGE_MULTI:
+    case FRONTIER_CHALLENGE_LINK_MULTI:
         return TRUE;
     default:
         return FALSE;
@@ -277,7 +275,7 @@ int BattleCastle_GetTrainerAIFlags(BattleCastleData *data) {
     int round;
     int aiFlags;
 
-    if (data->type == 0 && (data->trainerIds[data->battleNo] == 313 || data->trainerIds[data->battleNo] == 314)) {
+    if (data->type == FRONTIER_CHALLENGE_SINGLE && (data->trainerIds[data->battleNo] == 313 || data->trainerIds[data->battleNo] == 314)) {
         return 7;
     }
     round = BattleCastle_GetRound(data);

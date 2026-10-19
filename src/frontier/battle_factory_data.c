@@ -26,12 +26,6 @@
 
 BattleFactoryData *gBattleFactoryData;
 
-void *Save_Frontier_GetFactoryChallenge(SaveData *saveData);
-void FactoryChallenge_Clear(void *challenge);
-u32 FactoryChallenge_GetField(void *challenge, int field, u8 index, int unused);
-void FactoryChallenge_SetField(void *challenge, int field, u8 index, void *value);
-void FactoryChallenge_SetSaved(void *challenge, int saved);
-int FactoryFlags_GetField(int flags, int field, u8 index, int unused);
 u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
 u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
@@ -39,8 +33,6 @@ int FrontierTrainer_GetClassSprite(int trainerClass);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
 // opponent Pokemon count of a type
-
-#define FACTORY_FLAGS_HAS_STREAK 10
 
 static const u8 sBattleFactoryBattlePoints[12] = { 0, 5, 5, 5, 5, 7, 7, 8, 9 };
 
@@ -76,7 +68,7 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
             initial->battleNo = 0;
         }
         FactoryChallenge_Clear(challenge);
-        if (gBattleFactoryData->type == 3) {
+        if (gBattleFactoryData->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             hasStreak = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(gBattleFactoryData->saveData));
         } else {
             hasStreak = FactoryFlags_GetField(flags, FACTORY_FLAGS_HAS_STREAK, (u8)(gBattleFactoryData->levelMode * 4 + gBattleFactoryData->type), 0);
@@ -103,11 +95,11 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
         BattleFactoryData *initial;
         FrontierSave *frontier;
         int stat;
-        u8 savedType = FactoryChallenge_GetField(challenge, 1, 0, 0);
+        u8 savedType = FactoryChallenge_GetField(challenge, FACTORY_CHALLENGE_TYPE, 0, 0);
         initial = gBattleFactoryData;
         initial->type = savedType;
-        initial->levelMode = FactoryChallenge_GetField(challenge, 0, 0, 0);
-        initial->battleNo = FactoryChallenge_GetField(challenge, 2, 0, 0);
+        initial->levelMode = FactoryChallenge_GetField(challenge, FACTORY_CHALLENGE_LEVEL_MODE, 0, 0);
+        initial->battleNo = FactoryChallenge_GetField(challenge, FACTORY_CHALLENGE_BATTLE_NO, 0, 0);
         first = gBattleFactoryData;
         frontier = Save_Frontier_GetStatic(first->saveData);
         stat = BattleFactory_GetWinStreakStat(first->levelMode, first->type);
@@ -243,22 +235,17 @@ void BattleFactoryData_InitResume(BattleFactoryData *data) {
     u32 personalities[FACTORY_RENTAL_COUNT];
     FrontierMon mons[FACTORY_RENTAL_COUNT];
     Pokemon *mon;
-    u16 *trainerId;
     int i;
 
     BattleFactory_GetPartySize(data->type);
-    i = 0;
-    trainerId = (u16 *)data;
-    do {
-        trainerId[12] = FactoryChallenge_GetField(data->challenge, 3, (u8)i, 0);
-        i++;
-        trainerId++;
-    } while (i < 14);
+    for (i = 0; i < 14; i++) {
+        data->trainerIds[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_TRAINER_IDS, (u8)i, 0);
+    }
 
     for (i = 0; i < FACTORY_OPPONENT_COUNT; i++) {
-        setIds[i] = FactoryChallenge_GetField(data->challenge, 4, (u8)i, 0);
-        personalities[i] = FactoryChallenge_GetField(data->challenge, 6, (u8)i, 0);
-        ivs[i] = FactoryChallenge_GetField(data->challenge, 5, (u8)i, 0);
+        setIds[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_RENTAL_SET_IDS, (u8)i, 0);
+        personalities[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_RENTAL_PERSONALITIES, (u8)i, 0);
+        ivs[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_RENTAL_IVS, (u8)i, 0);
         data->partySetIds[i] = setIds[i];
     }
     FrontierMon_GenerateList(mons, setIds, ivs, personalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
@@ -270,9 +257,9 @@ void BattleFactoryData_InitResume(BattleFactoryData *data) {
     Heap_Free(mon);
 
     for (i = 0; i < FACTORY_OPPONENT_COUNT; i++) {
-        setIds[i] = FactoryChallenge_GetField(data->challenge, 7, (u8)i, 0);
-        personalities[i] = FactoryChallenge_GetField(data->challenge, 9, (u8)i, 0);
-        ivs[i] = FactoryChallenge_GetField(data->challenge, 8, (u8)i, 0);
+        setIds[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_SET_IDS, (u8)i, 0);
+        personalities[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_PERSONALITIES, (u8)i, 0);
+        ivs[i] = FactoryChallenge_GetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_IVS, (u8)i, 0);
         data->opponentSetIds[i] = setIds[i];
     }
     FrontierMon_GenerateList(mons, setIds, ivs, personalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
@@ -333,12 +320,12 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     BattleFactory_GetOpponentMonCount(data->type, 1);
 
     value.byte = data->levelMode;
-    FactoryChallenge_SetField(data->challenge, 0, 0, &value.byte);
+    FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_LEVEL_MODE, 0, &value.byte);
     value.byte = data->type;
-    FactoryChallenge_SetField(data->challenge, 1, 0, &value.byte);
+    FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_TYPE, 0, &value.byte);
     FactoryChallenge_SetSaved(data->challenge, 1);
     value.byte = data->battleNo;
-    FactoryChallenge_SetField(data->challenge, 2, 0, &value.byte);
+    FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_BATTLE_NO, 0, &value.byte);
     FrontierSave_SetStat(frontier, BattleFactory_GetTradeCountStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetTradeCountStat(data->levelMode, data->type)), data->tradeCount);
     FrontierSave_SetStat(frontier, BattleFactory_GetWinStreakStat(data->levelMode, data->type), FrontierStat_GetFriendIndex(BattleFactory_GetWinStreakStat(data->levelMode, data->type)), data->winStreak);
     if (mode != 2) {
@@ -353,7 +340,7 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
         }
         value.byte = data->hasStreak;
         FactoryFlags_SetField(flags, FACTORY_FLAGS_HAS_STREAK, (u8)(data->type + data->levelMode * 4), &value.byte);
-        if (data->type == 3) {
+        if (data->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             int stat;
             if (data->levelMode == 0) {
                 stat = 102;
@@ -365,27 +352,27 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     }
     for (i = 0; i < 14; i++) {
         value.half = data->trainerIds[i];
-        FactoryChallenge_SetField(data->challenge, 3, (u8)i, &value.half);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_TRAINER_IDS, (u8)i, &value.half);
     }
     count = Party_GetCount(data->playerParty);
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(data->playerParty, i);
         value.half = data->partySetIds[i];
-        FactoryChallenge_SetField(data->challenge, 4, (u8)i, &value.half);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_RENTAL_SET_IDS, (u8)i, &value.half);
         value.byte = GetMonData(mon, MON_DATA_ATK_IV, NULL);
-        FactoryChallenge_SetField(data->challenge, 5, (u8)i, &value.byte);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_RENTAL_IVS, (u8)i, &value.byte);
         value.word = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-        FactoryChallenge_SetField(data->challenge, 6, (u8)i, &value.word);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_RENTAL_PERSONALITIES, (u8)i, &value.word);
     }
     count = Party_GetCount(data->opponentParty);
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(data->opponentParty, i);
         value.half = data->opponentSetIds[i];
-        FactoryChallenge_SetField(data->challenge, 7, (u8)i, &value.half);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_SET_IDS, (u8)i, &value.half);
         value.byte = GetMonData(mon, MON_DATA_ATK_IV, NULL);
-        FactoryChallenge_SetField(data->challenge, 8, (u8)i, &value.byte);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_IVS, (u8)i, &value.byte);
         value.word = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-        FactoryChallenge_SetField(data->challenge, 9, (u8)i, &value.word);
+        FactoryChallenge_SetField(data->challenge, FACTORY_CHALLENGE_OPPONENT_PERSONALITIES, (u8)i, &value.word);
     }
 }
 
@@ -566,7 +553,7 @@ int BattleFactory_GetWonBattlePoints(BattleFactoryData *data) {
         points = round >= 8 ? 21 : sBattleFactoryMultiBattlePoints[round];
     }
     // the Factory Head's battles (21st and 49th)
-    if (type == 0) {
+    if (type == FRONTIER_CHALLENGE_SINGLE) {
         u16 winStreak = data->winStreak;
         if (winStreak == 21 || winStreak == 49) {
             points = 20;

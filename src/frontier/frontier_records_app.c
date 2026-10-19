@@ -133,8 +133,6 @@ u32 BattleFactory_GetBestStreakStat(u8 levelMode, u8 type);
 u32 BattleFactory_GetBestTradeCountStat(u8 levelMode, u8 type);
 u32 BattleCastle_GetBestStreakStat(u8 type);
 u32 BattleCastle_GetBestStreakPointsStat(u8 type);
-u32 FactoryFlags_GetField(int flags, u32 field, u8 index, u32 unused);
-
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
 static BOOL FrontierRecordsApp_FadeIn(FrontierRecordsApp *app);
@@ -863,8 +861,6 @@ static void FrontierRecordsApp_PrintFactoryOpenLevelRecords(FrontierRecordsApp *
     ScheduleWindowCopyToVram(&app->windows[6]);
 }
 
-#define FACTORY_FLAGS_HAS_STREAK 10
-
 // Returns CURRENT if the streak is still running, PREV otherwise
 static u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level) {
     u32 stat;
@@ -983,8 +979,6 @@ static void FrontierRecordsApp_PrintCastleRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[3]);
 }
 
-#define CASTLE_FLAGS_HAS_STREAK 9
-
 static u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
     u32 result;
     u8 mode = app->mode;
@@ -1023,8 +1017,6 @@ static void FrontierRecordsApp_PrintArcadeRecords(FrontierRecordsApp *app) {
     ScheduleWindowCopyToVram(&app->windows[1]);
     ScheduleWindowCopyToVram(&app->windows[2]);
 }
-
-#define ARCADE_FLAGS_HAS_STREAK 8
 
 static u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
     u32 result;

@@ -64,10 +64,6 @@ extern const u16 gBattleArcadeItems_Rank6[];
 
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar);
 
-u32 ArcadeChallenge_GetField(void *record, int kind, u8 index, int unused, void *dst);
-void ArcadeChallenge_Clear(void *record);
-void ArcadeChallenge_SetSaved(void *record, int value);
-void ArcadeChallenge_SetField(void *record, int kind, u8 index, int unused, void *src);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 multiplayer);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
@@ -173,24 +169,13 @@ static inline void BattleArcadeData_AddPartyMon(Party *party, u16 slot) {
     }
 }
 
-#define ARCADE_CHALLENGE_TYPE         0
-#define ARCADE_CHALLENGE_RANDOM_FLAG  1
-#define ARCADE_CHALLENGE_BATTLE_NO    2
-#define ARCADE_CHALLENGE_CURSOR_SPEED 3
-#define ARCADE_CHALLENGE_HELD_ITEMS   4
-#define ARCADE_CHALLENGE_TRAINER_IDS  5
-#define ARCADE_CHALLENGE_PARTY_SLOTS  6
-#define ARCADE_CHALLENGE_SET_IDS      7
-
-#define ARCADE_FLAGS_HAS_STREAK 8
-
 u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u16 slot1, u16 slot2, u16 *resultVar) {
     u16 i;
     ArcadeContext *ctx[1];
     ArcadeContext *saved;
     u32 index;
     int count;
-    void *record;
+    ArcadeChallenge *record;
     void *typeRecord;
     FrontierSave *frontier;
     Party *party;
@@ -198,7 +183,7 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
 
     BattleArcadeData_AllocContext();
     ctx[0] = sBattleArcadeData;
-    ctx[0]->challenge = (u32)Save_Frontier_GetArcadeChallenge(saveData);
+    ctx[0]->challenge = Save_Frontier_GetArcadeChallenge(saveData);
     ctx[0]->saveData = saveData;
     ctx[0]->heapId = HEAP_ID_FIELD2;
     ctx[0] = sBattleArcadeData;
@@ -206,7 +191,7 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
     ctx[0]->opponentParty = SaveArray_Party_Alloc(HEAP_ID_FIELD2);
     ((ArcadeContextStorage *)ctx[0])->resultVar = resultVar;
     ctx[0]->eventId = 0x20;
-    record = (void *)ctx[0]->challenge;
+    record = ctx[0]->challenge;
     typeRecord = Save_Frontier_GetArcadeFlags(saveData);
 
     if (resume == FALSE) {
@@ -218,7 +203,7 @@ u32 BattleArcadeData_Alloc(SaveData *saveData, u32 resume, u8 type, u8 slot0, u1
         ctx[0]->cursorSpeed = 3;
         ctx[0]->randomFlag = 0;
         ArcadeChallenge_Clear(record);
-        if (sBattleArcadeData->type == 3) {
+        if (sBattleArcadeData->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             flag = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(sBattleArcadeData->saveData));
         } else {
             flag = ArcadeFlags_GetField(typeRecord, ARCADE_FLAGS_HAS_STREAK, sBattleArcadeData->type, 0, 0);
@@ -316,10 +301,10 @@ static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
 
     BattleArcadeData_RestoreHeldItems(ctx);
     for (i = 0; i < 14; i++) {
-        ctx->trainerIds[i] = ArcadeChallenge_GetField((void *)ctx->challenge, ARCADE_CHALLENGE_TRAINER_IDS, (u8)i, 0, 0);
+        ctx->trainerIds[i] = ArcadeChallenge_GetField(ctx->challenge, ARCADE_CHALLENGE_TRAINER_IDS, (u8)i, 0, 0);
     }
     for (i = 0; i < 4; i++) {
-        monIds[i] = ArcadeChallenge_GetField((void *)ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, 0);
+        monIds[i] = ArcadeChallenge_GetField(ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, 0);
         ctx->setIds[i] = monIds[i];
     }
     FrontierMon_GenerateList(frontierMons, monIds, (u8 *)ivs, NULL, personalities, 4, HEAP_ID_FIELD2, 205);
@@ -337,7 +322,7 @@ static void BattleArcadeData_RestoreHeldItems(ArcadeContext *ctx) {
 
     for (i = 0; i < count; i++) {
         Pokemon *mon = Party_GetMonByIndex(ctx->playerParty, i);
-        u16 item = ArcadeChallenge_GetField((void *)ctx->challenge, ARCADE_CHALLENGE_HELD_ITEMS, (u8)i, 0, NULL);
+        u16 item = ArcadeChallenge_GetField(ctx->challenge, ARCADE_CHALLENGE_HELD_ITEMS, (u8)i, 0, 0);
         SetMonData(mon, MON_DATA_HELD_ITEM, &item);
     }
 }
@@ -390,14 +375,14 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
     BattleArcade_GetOpponentMonCount(ctx->type, 1);
 
     value.byte = ctx->type;
-    ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_TYPE, 0, 0, &value.byte);
-    ArcadeChallenge_SetSaved((void *)ctx->challenge, 1);
+    ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_TYPE, 0, 0, &value.byte);
+    ArcadeChallenge_SetSaved(ctx->challenge, 1);
     value.byte = ctx->battleNo;
-    ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_BATTLE_NO, 0, 0, &value.byte);
+    ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_BATTLE_NO, 0, 0, &value.byte);
     value.byte = ctx->cursorSpeed;
-    ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_CURSOR_SPEED, 0, 0, &value.byte);
+    ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_CURSOR_SPEED, 0, 0, &value.byte);
     value.byte = ctx->randomFlag;
-    ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_RANDOM_FLAG, 0, 0, &value.byte);
+    ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_RANDOM_FLAG, 0, 0, &value.byte);
 
     frontier = Save_Frontier_GetStatic(ctx->saveData);
     index = BattleArcade_GetWinStreakStat(ctx->type);
@@ -411,7 +396,7 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
         FrontierSave_RaiseStat(frontier, index, key, ctx->winStreak);
         value.byte = ctx->hasStreak;
         ArcadeFlags_SetField(typeRecord, ARCADE_FLAGS_HAS_STREAK, ctx->type, 0, &value.byte);
-        if (ctx->type == 3) {
+        if (ctx->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             frontier = Save_Frontier_GetStatic(ctx->saveData);
             key = FrontierStat_GetFriendIndex(110);
             FrontierSave_SetStat(frontier, 110, key, ctx->hasStreak);
@@ -420,22 +405,22 @@ void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode) {
 
     for (i = 0; i < 14; i = (u16)(i + 1)) {
         value.buffer.halfword = ctx->trainerIds[i];
-        ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_TRAINER_IDS, (u8)i, 0, &value.buffer.halfword);
+        ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_TRAINER_IDS, (u8)i, 0, &value.buffer.halfword);
     }
     for (i = 0; i < 3; i = (u16)(i + 1)) {
         value.byte = ctx->partySlots[i];
-        ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_PARTY_SLOTS, (u8)i, 0, &value.byte);
+        ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_PARTY_SLOTS, (u8)i, 0, &value.byte);
     }
     count = Party_GetCount(ctx->playerParty);
     for (i = 0; i < count; i = (u16)(i + 1)) {
         value.buffer.halfword = (u16)GetMonData(Party_GetMonByIndex(ctx->playerParty, i), MON_DATA_HELD_ITEM, NULL);
-        ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_HELD_ITEMS, (u8)i, 0, &value.buffer.halfword);
+        ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_HELD_ITEMS, (u8)i, 0, &value.buffer.halfword);
     }
     count = Party_GetCount(ctx->opponentParty);
     for (i = 0; i < count; i = (u16)(i + 1)) {
         Party_GetMonByIndex(ctx->opponentParty, i);
         value.buffer.halfword = ctx->setIds[i];
-        ArcadeChallenge_SetField((void *)ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, &value.buffer.halfword);
+        ArcadeChallenge_SetField(ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, &value.buffer.halfword);
     }
 }
 
@@ -1043,7 +1028,7 @@ u32 BattleArcadeData_GetRoundTableValue(ArcadeContext *ctx) {
     } else {
         result = round >= 8 ? 0x11 : gBattleArcadeRoundValues_Multi[round];
     }
-    if (type == 0) {
+    if (type == FRONTIER_CHALLENGE_SINGLE) {
         u16 winStreak = ctx->winStreak;
         if (winStreak == 0x15 || winStreak == 0x31) {
             result = 0x14;

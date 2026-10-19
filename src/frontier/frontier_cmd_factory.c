@@ -16,6 +16,7 @@
 
 #include "battle_frontier_communication.h"
 #include "bg_window.h"
+#include "frontier_save_access.h"
 #include "heap.h"
 #include "launch_application.h"
 #include "message_format.h"
@@ -25,7 +26,6 @@
 
 FS_EXTERN_OVERLAY(OVY_81);
 
-u32 FactoryChallenge_GetSaved(void *challenge);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 
 static void BattleFactory_OnAppExit(void *args);
@@ -362,7 +362,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
     // 1 before the Factory Head's first battle (21st), 2 before the second (49th)
     case FACTORY_ACTION_GET_BRAIN_BATTLE:
         *var = 0;
-        if (data->type == 0) {
+        if (data->type == FRONTIER_CHALLENGE_SINGLE) {
             int battle = data->winStreak + 1;
             if (battle == 21) {
                 *var = 1;

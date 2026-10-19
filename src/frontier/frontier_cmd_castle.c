@@ -26,7 +26,6 @@ FS_EXTERN_OVERLAY(OVY_83);
 
 u16 *FrontierScript_GetVarPtr(FrontierScriptContext *ctx, u32 index);
 
-u32 CastleChallenge_GetSaved(void *challenge);
 u32 Comm_GetLocalNetId(void);
 
 static void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
@@ -346,13 +345,13 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         *result = BattleCastleData_GetRoundTableValue(data);
         break;
     case 39:
-        *result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), 10, 0, 0, 0);
+        *result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), CASTLE_FLAGS_ONCE, 0, 0, 0);
         byteValue = 1;
-        CastleFlags_SetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), 10, 0, 0, &byteValue);
+        CastleFlags_SetField(Save_Frontier_GetCastleFlags(launchArgs->saveData), CASTLE_FLAGS_ONCE, 0, 0, &byteValue);
         break;
     case CASTLE_ACTION_GET_BRAIN_BATTLE:
         *result = 0;
-        if (data->type == 0) {
+        if (data->type == FRONTIER_CHALLENGE_SINGLE) {
             u32 wins = data->winStreak + 1;
             if (wins == 21) {
                 *result = 1;
@@ -373,7 +372,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         break;
     case 44: {
         u8 type = data->type;
-        if (type == 3) {
+        if (type == FRONTIER_CHALLENGE_LINK_MULTI) {
             FrontierSave *frontierSave;
             if (arg == 0) {
                 frontierSave = Save_Frontier_GetStatic(launchArgs->saveData);

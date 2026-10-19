@@ -6,6 +6,7 @@
 #include "application/dress_up/accessory_portrait.h"
 #include "global_terminal/global_terminal_net.h"
 
+#include "battle_record.h"
 #include "bg_window.h"
 #include "fashion_case.h"
 #include "filesystem.h"
@@ -44,12 +45,6 @@ FrontierCard *FrontierCard_New(enum HeapID heapID);
 void FrontierCard_Delete(FrontierCard *card);
 void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
 
-BOOL BattleRecord_Load(SaveData *save, enum HeapID heapID, int *out, void *battle, int index);
-void BattleRecord_Delete(void);
-void *BattleRecord_CopyHeader(enum HeapID heapID);
-FrontierCard *BattleRecord_CopyProfile(enum HeapID heapID);
-void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
-u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 
 SaveFashionDataSub *FashionEntry_New(enum HeapID heapID);
 void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);

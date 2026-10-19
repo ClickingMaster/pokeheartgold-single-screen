@@ -39,11 +39,6 @@ u32 BattleCastle_GetBestStreakStat(u32 type);
 u32 BattleCastle_GetPointsStat(u32 type);
 u32 BattleCastle_GetSpentPointsStat(u32 type);
 u32 BattleCastle_GetBestStreakPointsStat(u32 type);
-u32 CastleChallenge_GetField(void *challenge, u32 field, u8 index, u32 column, u32 unused);
-void CastleChallenge_SetField(void *challenge, int field, u8 index, int column, void *value);
-void CastleChallenge_SetSaved(void *challenge, int saved);
-void CastleChallenge_Clear(void *challenge);
-void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, u32 amount);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
 void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 hasPartner);
@@ -55,18 +50,6 @@ static void BattleCastleData_RestoreParty(BattleCastleData *data);
 static u16 BattleCastleAppArgs_GetSelection(BattleCastleAppArgs *args, u32 index);
 static void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window);
 static void BattleCastle_PrintPlayerPoints(FrontierSystem *system, Window *window, PlayerProfile *profile, u16 points);
-
-#define CASTLE_CHALLENGE_TYPE        0
-#define CASTLE_CHALLENGE_BATTLE_NO   1
-#define CASTLE_CHALLENGE_HP          2
-#define CASTLE_CHALLENGE_PP          3
-#define CASTLE_CHALLENGE_STATUS      4
-#define CASTLE_CHALLENGE_HELD_ITEM   5
-#define CASTLE_CHALLENGE_TRAINER_IDS 6
-#define CASTLE_CHALLENGE_PARTY_SLOTS 7
-#define CASTLE_CHALLENGE_SET_IDS     8
-
-#define CASTLE_FLAGS_HAS_STREAK 9
 
 static const u8 sBattleCastleRoundValues_Single[12] = { 0, 3, 3, 4, 4, 5, 5, 7, 7 };
 
@@ -102,7 +85,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         data->type = type;
         data->battleNo = 0;
         CastleChallenge_Clear(challenge);
-        if (sBattleCastleData->type == 3) {
+        if (sBattleCastleData->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             hasStreak = Save_VarsFlags_GetVar4052(Save_VarsFlags_Get(sBattleCastleData->saveData));
         } else {
             hasStreak = CastleFlags_GetField(castleFlags, CASTLE_FLAGS_HAS_STREAK, sBattleCastleData->type, 0, 0);
@@ -339,7 +322,7 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
         }
         value.byte = data->hasStreak;
         CastleFlags_SetField(castleFlags, CASTLE_FLAGS_HAS_STREAK, data->type, 0, &value.byte);
-        if (data->type == 3) {
+        if (data->type == FRONTIER_CHALLENGE_LINK_MULTI) {
             FrontierSave_SetStat(frontierSave, 108, FrontierStat_GetFriendIndex(108), data->hasStreak);
         }
     }
@@ -710,7 +693,7 @@ u32 BattleCastleData_GetRoundTableValue(BattleCastleData *data) {
     } else {
         result = round >= 8 ? 0x12 : sBattleCastleRoundValues_Multi[round];
     }
-    if (type == 0) {
+    if (type == FRONTIER_CHALLENGE_SINGLE) {
         u16 winStreak = data->winStreak;
         if (winStreak == 21 || winStreak == 49) {
             result = 0x14;

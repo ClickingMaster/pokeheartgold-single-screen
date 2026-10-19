@@ -88,7 +88,6 @@ extern int sprintf(char *dest, const char *format, ...);
 
 extern void *FriendRoster_GetDwcFriendData(void *, int);
 extern void FriendRoster_MergeFriend(void *, int, int);
-extern void FrontierSave_ClearRow(void *, int, int);
 extern int Comm_IsWifiPeerLinkMode(void);
 extern int Comm_IsLinkMode19To23Or34(void);
 extern void CommState_SetWifiError(int, u32, int);

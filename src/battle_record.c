@@ -8,6 +8,7 @@
 #include "battle/battle_setup.h"
 
 #include "battle_recording.h"
+#include "frontier_save_access.h"
 #include "link_ruleset_data.h"
 #include "math_util.h"
 #include "pokemon.h"
@@ -75,51 +76,13 @@ typedef struct {
     u16 magic, crc;
 } BattleRecordData;
 
-// The saved Battle Factory challenge, kept in the frontier save.
-typedef struct {
-    u8 flag0 : 1, flag1 : 3, flag4 : 1, rest : 3;
-    u8 value;
-    u16 padding;
-    u16 values4[14];
-    u16 values20[4];
-    u8 values28[4];
-    u32 values2c[4];
-    u16 values3c[4];
-    u8 values44[4];
-    u32 values48[4];
-} FrontierRecord;
 
-u32 BattleRecord_sizeof(void);
-void BattleRecord_Init(BattleRecord *record);
-BattleRecord *BattleRecord_Get(void);
-void *BattleRecord_GetProfile2(void);
-BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battle, int index);
-void BattleRecord_Decrypt(void *data, u32 size, u32 seed);
-BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record);
-BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record);
-void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save);
-int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
-void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *data, int type, int arg);
-void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
-void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last);
-void BattleRecord_StoreSetup(BattleSetup *setup);
-void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record);
-void BattleRecord_SetAiFlags(int battlerId, u32 flags);
-void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party);
-void *BattleRecord_CopyHeader(enum HeapID heapId);
-void *BattleRecord_CopyProfile(enum HeapID heapId);
-void *BattleRecord_GetProfile(void);
-void *BattleRecord_GetHeader(void);
-void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
-u64 BattleRecordHeader_GetField(void *summary, int field, int index);
-void *BattleRecordHeader_New(enum HeapID heapId);
-void BattleRecordHeader_Free(void *summary);
-void FactoryChallenge_Clear(void *record);
-void *Save_Frontier_GetFactoryChallenge(SaveData *save);
-u32 FactoryChallenge_GetSaved(FrontierRecord *record);
-void FactoryChallenge_SetSaved(FrontierRecord *record, int flag);
-void FactoryChallenge_SetField(FrontierRecord *record, int field, int index, void *value);
-u32 FactoryChallenge_GetField(FrontierRecord *record, int field, int index);
+static void BattleRecord_Decrypt(void *data, u32 size, u32 seed);
+static BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record);
+static BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record);
+static void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *data, int type, int arg);
+static void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record);
+static void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party);
 
 static const MultiOrder sBattleRecordMultiOrder = {
     .order = { 0, 2, 1, 3 },
@@ -293,7 +256,7 @@ void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last) {
     }
 }
 
-void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *recordData, int type, int arg) {
+static void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *recordData, int type, int arg) {
     BattleRecordData *data = recordData;
     int count, partySize;
     BattlerOrder order = sBattleRecordBattlerOrder;
@@ -370,7 +333,7 @@ void BattleRecord_FillHeader(SaveData *save, BattleRecordHeader *header, void *r
     header->type = type;
 }
 
-BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
+static BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
     BattleRecordData *data = (BattleRecordData *)record->data;
     BattleRecordHeader *header = (BattleRecordHeader *)record->header;
     if (!Save_CheckExtraChunksExist(save)) {
@@ -382,7 +345,7 @@ BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
     return FALSE;
 }
 
-BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
+static BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
     BattleRecordData *data = (BattleRecordData *)record->data;
     BattleRecordHeader *header = (BattleRecordHeader *)record->header;
     if (data->magic != BATTLE_RECORD_MAGIC || header->magic != BATTLE_RECORD_MAGIC) {
@@ -419,7 +382,7 @@ void BattleRecord_Encrypt(void *data, u32 size, u32 seed) {
     _MonEncryptSegment(data, size, seed);
 }
 
-void BattleRecord_Decrypt(void *data, u32 size, u32 seed) {
+static void BattleRecord_Decrypt(void *data, u32 size, u32 seed) {
     _MonDecryptSegment(data, size, seed);
 }
 
@@ -536,7 +499,7 @@ void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save) {
     }
 }
 
-void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
+static void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
     MI_CpuFill8(record, 0, sizeof(*record));
     record->capacity = Party_GetMaxCount(party);
     record->count = Party_GetCount(party);
@@ -545,7 +508,7 @@ void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
     }
 }
 
-void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
+static void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
     u8 value = 0;
     Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
     Party_InitWithMaxSize(party, record->capacity);
@@ -634,79 +597,79 @@ void BattleRecordHeader_Free(void *summary) {
     Heap_Free(summary);
 }
 
-void FactoryChallenge_Clear(void *record) {
-    MI_CpuFill8(record, 0, sizeof(FrontierRecord));
+void FactoryChallenge_Clear(FactoryChallenge *challenge) {
+    MI_CpuFill8(challenge, 0, sizeof(FactoryChallenge));
 }
 
-void *Save_Frontier_GetFactoryChallenge(SaveData *save) {
-    return (u8 *)Save_Frontier_GetStatic(save) + 0x8e0;
+FactoryChallenge *Save_Frontier_GetFactoryChallenge(SaveData *save) {
+    return (FactoryChallenge *)((u8 *)Save_Frontier_GetStatic(save) + 0x8e0);
 }
 
-u32 FactoryChallenge_GetSaved(FrontierRecord *record) {
-    return record->flag4;
+u32 FactoryChallenge_GetSaved(FactoryChallenge *challenge) {
+    return challenge->saved;
 }
 
-void FactoryChallenge_SetSaved(FrontierRecord *record, int flag) {
-    record->flag4 = (u8)flag;
+void FactoryChallenge_SetSaved(FactoryChallenge *challenge, int saved) {
+    challenge->saved = (u8)saved;
 }
 
-void FactoryChallenge_SetField(FrontierRecord *record, int field, int index, void *value) {
+void FactoryChallenge_SetField(FactoryChallenge *challenge, int field, u8 index, void *value) {
     switch (field) {
-    case 0:
-        record->flag0 = *(u8 *)value;
+    case FACTORY_CHALLENGE_LEVEL_MODE:
+        challenge->levelMode = *(u8 *)value;
         break;
-    case 1:
-        record->flag1 = *(u8 *)value;
+    case FACTORY_CHALLENGE_TYPE:
+        challenge->type = *(u8 *)value;
         break;
-    case 2:
-        record->value = *(u8 *)value;
+    case FACTORY_CHALLENGE_BATTLE_NO:
+        challenge->battleNo = *(u8 *)value;
         break;
-    case 3:
-        record->values4[index] = *(u16 *)value;
+    case FACTORY_CHALLENGE_TRAINER_IDS:
+        challenge->trainerIds[index] = *(u16 *)value;
         break;
-    case 4:
-        record->values20[index] = *(u16 *)value;
+    case FACTORY_CHALLENGE_RENTAL_SET_IDS:
+        challenge->rentalSetIds[index] = *(u16 *)value;
         break;
-    case 5:
-        record->values28[index] = *(u8 *)value;
+    case FACTORY_CHALLENGE_RENTAL_IVS:
+        challenge->rentalIvs[index] = *(u8 *)value;
         break;
-    case 6:
-        record->values2c[index] = *(u32 *)value;
+    case FACTORY_CHALLENGE_RENTAL_PERSONALITIES:
+        challenge->rentalPersonalities[index] = *(u32 *)value;
         break;
-    case 7:
-        record->values3c[index] = *(u16 *)value;
+    case FACTORY_CHALLENGE_OPPONENT_SET_IDS:
+        challenge->opponentSetIds[index] = *(u16 *)value;
         break;
-    case 8:
-        record->values44[index] = *(u8 *)value;
+    case FACTORY_CHALLENGE_OPPONENT_IVS:
+        challenge->opponentIvs[index] = *(u8 *)value;
         break;
-    case 9:
-        record->values48[index] = *(u32 *)value;
+    case FACTORY_CHALLENGE_OPPONENT_PERSONALITIES:
+        challenge->opponentPersonalities[index] = *(u32 *)value;
         break;
     }
 }
 
-u32 FactoryChallenge_GetField(FrontierRecord *record, int field, int index) {
+u32 FactoryChallenge_GetField(FactoryChallenge *challenge, int field, u8 index, int unused) {
     switch (field) {
-    case 1:
-        return record->flag1;
-    case 0:
-        return record->flag0;
-    case 2:
-        return record->value;
-    case 3:
-        return record->values4[index];
-    case 4:
-        return record->values20[index];
-    case 5:
-        return record->values28[index];
-    case 6:
-        return record->values2c[index];
-    case 7:
-        return record->values3c[index];
-    case 8:
-        return record->values44[index];
-    case 9:
-        return record->values48[index];
+    case FACTORY_CHALLENGE_TYPE:
+        return challenge->type;
+    case FACTORY_CHALLENGE_LEVEL_MODE:
+        return challenge->levelMode;
+    case FACTORY_CHALLENGE_BATTLE_NO:
+        return challenge->battleNo;
+    case FACTORY_CHALLENGE_TRAINER_IDS:
+        return challenge->trainerIds[index];
+    case FACTORY_CHALLENGE_RENTAL_SET_IDS:
+        return challenge->rentalSetIds[index];
+    case FACTORY_CHALLENGE_RENTAL_IVS:
+        return challenge->rentalIvs[index];
+    case FACTORY_CHALLENGE_RENTAL_PERSONALITIES:
+        return challenge->rentalPersonalities[index];
+    case FACTORY_CHALLENGE_OPPONENT_SET_IDS:
+        return challenge->opponentSetIds[index];
+    case FACTORY_CHALLENGE_OPPONENT_IVS:
+        return challenge->opponentIvs[index];
+    case FACTORY_CHALLENGE_OPPONENT_PERSONALITIES:
+        return challenge->opponentPersonalities[index];
     }
     return 0;
 }

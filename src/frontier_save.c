@@ -1,19 +1,8 @@
 #include "frontier_save_access.h"
+
+#include "frontier_data_access.h"
 #include "save_arrays.h"
 
-void Save_Frontier_Init(FrontierSave *frontier);
-void FrontierData_Reset(void *data);
-void TowerMessages_Init(void *data);
-void BattleRoomDownload_Init(void *data);
-void FactoryFlags_Init(void *state);
-void HallFlags_Init(void *state);
-void CastleFlags_Init(void *state);
-void ArcadeFlags_Init(void *state);
-void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
-void FrontierSave_ClearRow(FrontierSave *frontier, int row);
-u32 FrontierSave_AddStat(FrontierSave *frontier, int stat, int index, u16 amount);
-u32 FrontierSave_SubStat(FrontierSave *frontier, int stat, int index, int amount);
-void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data);
 static int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRecords *data);
 
 static FrontierSave sFrontierSave;
@@ -22,7 +11,8 @@ u32 Save_Frontier_sizeof(void) {
     return sizeof(FrontierSave);
 }
 
-void Save_Frontier_Init(FrontierSave *frontier) {
+void Save_Frontier_Init(void *data) {
+    FrontierSave *frontier = data;
     MI_CpuFill8(frontier, 0, sizeof(*frontier));
     FrontierData_Reset((u8 *)frontier + 0x954);
     TowerMessages_Init((u8 *)frontier + 0xabc);
@@ -94,7 +84,7 @@ u32 FrontierSave_SetStat(FrontierSave *frontier, int stat, int index, u16 value)
 }
 
 void FrontierSave_ClearRows(FrontierSave *frontier) {
-    MI_CpuFill8(frontier->rowStats, 0, 2048);
+    MI_CpuFill8(frontier->rowStats, 0, sizeof(frontier->rowStats));
     for (int i = 100; i <= 111; i++) {
         frontier->stats[i] = 0;
     }
@@ -103,7 +93,7 @@ void FrontierSave_ClearRows(FrontierSave *frontier) {
 void FrontierSave_DeleteRow(FrontierSave *frontier, int row) {
     GF_ASSERT(row != 255);
     for (; row < 31; row++) {
-        MI_CpuCopy8(frontier->rowStats[row + 1], frontier->rowStats[row], 64);
+        MI_CpuCopy8(frontier->rowStats[row + 1], frontier->rowStats[row], sizeof(frontier->rowStats[0]));
         for (int i = 100; i < 111; i += 2) {
             FrontierSave_SetStat(frontier, i, row, FrontierSave_GetStat(frontier, i, row + 1));
         }
@@ -111,11 +101,11 @@ void FrontierSave_DeleteRow(FrontierSave *frontier, int row) {
     MI_CpuFill8((u8 *)frontier->rowStats + 31 * sizeof(frontier->rowStats[0]), 0, sizeof(frontier->rowStats[0]));
 }
 
-void FrontierSave_ClearRow(FrontierSave *frontier, int row) {
-    MI_CpuFill8(frontier->rowStats[row], 0, 64);
+void FrontierSave_ClearRow(FrontierSave *frontier, int row, int unused) {
+    MI_CpuFill8(frontier->rowStats[row], 0, sizeof(frontier->rowStats[0]));
 }
 
-u32 FrontierSave_AddStat(FrontierSave *frontier, int stat, int index, u16 amount) {
+u32 FrontierSave_AddStat(FrontierSave *frontier, int stat, int index, int amount) {
     u16 value = FrontierSave_GetStat(frontier, stat, index);
     value += amount;
     return FrontierSave_SetStat(frontier, stat, index, value);
@@ -142,9 +132,10 @@ u32 FrontierSpeciesRecords_sizeof(void) {
     return sizeof(struct FrontierSpeciesRecords);
 }
 
-void FrontierSpeciesRecords_Init(struct FrontierSpeciesRecords *data) {
-    MI_CpuFill8(data, 0, sizeof(*data));
-    data->saveKey = -1;
+void FrontierSpeciesRecords_Init(void *data) {
+    struct FrontierSpeciesRecords *records = data;
+    MI_CpuFill8(records, 0, sizeof(*records));
+    records->saveKey = -1;
 }
 
 u32 *FrontierSpeciesRecords_Load(SaveData *save, u32 heapId, u32 *out) {
@@ -158,7 +149,6 @@ static int FrontierSpeciesRecords_Save(SaveData *save, struct FrontierSpeciesRec
 typedef struct FrontierSpeciesRecords ExtraFrontier;
 static u32 FrontierSpeciesRecords_Set(ExtraFrontier *data, int type, int index, u16 value);
 static u32 FrontierSpeciesRecords_Raise(SaveData *save, u32 *data, u32 type, u32 index, u16 value);
-BOOL FrontierSpeciesRecords_UpdateFromStat(SaveData *save, int stat, int indexStat, int slot, u32 type, enum HeapID heapId, u32 *loadResult, int *saveResult);
 
 u32 FrontierSpeciesRecords_Get(SaveData *save, u32 *buffer, u32 type, u32 index) {
     ExtraFrontier *data = (ExtraFrontier *)buffer;

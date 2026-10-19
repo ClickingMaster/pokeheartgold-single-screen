@@ -15,6 +15,7 @@
 #include "communication_core.h"
 #include "filesystem.h"
 #include "font.h"
+#include "frontier_save_access.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -134,8 +135,6 @@ typedef struct BattleHallApp {
 } BattleHallApp;
 
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, u32 field);
-
-u32 HallTypeRanks_Get(u8 type, void *hallRecords);
 
 #define MAKE_TEXT_COLOR(fg, sh, bg) ((((fg) & 0xFF) << 16) | (((sh) & 0xFF) << 8) | (((bg) & 0xFF) << 0))
 u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);

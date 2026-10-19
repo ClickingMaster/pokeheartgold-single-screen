@@ -13,14 +13,6 @@ BOOL GlobalTerminalNet_IsIdle(GlobalTerminalNet *net);
 
 BOOL VsRecorderApp_HasVisitedBattleFrontier(void *work);
 
-extern BattleRecord *gBattleRecord;
-void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *partySize);
-int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
-void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
-void *BattleRecord_GetHeader(void);
-void *BattleRecordHeader_New(enum HeapID heapID);
-void BattleRecordHeader_Free(void *header);
-
 // VsRecorderWork.screenWork of the delete screen
 typedef struct VsRecorderDeleteVideo {
     int eva; // top screen blend

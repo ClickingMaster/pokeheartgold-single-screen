@@ -88,7 +88,6 @@
 #define WIRELESS_TRADE_ANSWER_CONFIRM 3
 #define WIRELESS_TRADE_ANSWER_REFUSE  4
 
-
 typedef struct WirelessTradeSlotPos {
     int x;
     int y;
@@ -118,7 +117,6 @@ void WirelessTrade_SetWork(FieldSystem *fieldSystem, WirelessTradeSelectMon *wor
 
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
-void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
 void CommPlayerInfo_RecordTrades(SaveData *saveData, int count);
 int Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);

@@ -123,10 +123,6 @@ typedef struct BattleRoomLeaderRecord {
     u8 unk_21;
 } BattleRoomLeaderRecord;
 
-typedef struct BattleRoomDownload BattleRoomDownload;
-
-void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *data, enum HeapID heapID);
-
 static BOOL BattleRoomResults_SetupScreens(BattleRoomResults *results);
 static BOOL BattleRoomResults_TeardownScreens(BattleRoomResults *results);
 static void BattleRoomResults_SetGfxBanks(void);
@@ -825,7 +821,7 @@ static void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
     BattleRoomLeaderRecord *record;
     u8 *nameRecord;
 
-    query.records = BattleRoomDownload_CopyLeaders((BattleRoomDownload *)results->downloadData, results->heapID);
+    query.records = BattleRoomDownload_CopyLeaders(results->downloadData, results->heapID);
     query.index = 0;
     leader = results->leaders;
     record = query.records;

@@ -12,6 +12,8 @@ typedef struct BattleRecord {
     u8 data[0x1C68];  // BattleRecordData, encrypted while stored (magic + CRC at the end)
 } BattleRecord;
 
+extern BattleRecord *gBattleRecord;
+
 void BattleRecord_Create(SaveData *save, enum HeapID heapID, u32 *out);
 BOOL BattleRecord_Exists(void);
 void BattleRecord_SetCommand(int battlerId, u32 offset, u8 data);

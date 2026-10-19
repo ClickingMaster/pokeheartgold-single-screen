@@ -13,6 +13,7 @@
 
 #include "communication_core.h"
 #include "communication_player_state.h"
+#include "frontier_save_access.h"
 #include "heap.h"
 #include "math_util.h"
 #include "party.h"
@@ -50,7 +51,6 @@ extern const u16 gBattleHallTrainerClasses[];
 extern const u16 gBattleHallSetSpecies[];
 extern const BattleHallSetTypes gBattleHallSetTypes[];
 
-u32 HallTypeRanks_Get(u32 cell, void *ranks);
 fx32 FX_Sqrt(fx32 x);
 
 u8 BattleHall_GetLevelRank(BattleHallData *data);
@@ -96,7 +96,7 @@ void BattleHall_PickTrainerIds(int type, int count, int round, u32 rank, u8 batt
     picked = 0;
     index = (battleNo & 0x7F) * 2;
     clampedRank = BattleHall_ClampRank(rank);
-    if (type == 0) {
+    if (type == FRONTIER_CHALLENGE_SINGLE) {
         if (battleNo + 1 + round * 10 == 50) {
             trainerIds[index] = HALL_MATRON_SILVER;
             return;
@@ -262,7 +262,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY, HEAP_ID_FIELD2);
     Party_InitWithMaxSize(setup->party[BATTLER_ENEMY], opponentCount);
     rank = HallTypeRanks_Get(data->cell, data->typeRanks[data->type]);
-    if (data->type == 2) {
+    if (data->type == FRONTIER_CHALLENGE_MULTI) {
         rank = 9;
     }
     aiFlags = BattleHall_GetTrainerAIFlags(data, index, rank);
@@ -325,14 +325,14 @@ u32 BattleHall_GetBattleType(u32 type) {
 }
 
 u8 BattleHall_GetPartySize(u8 type) {
-    if (type == 1) {
+    if (type == FRONTIER_CHALLENGE_DOUBLE) {
         return 2;
     }
     return 1;
 }
 
 int BattleHall_GetOpponentMonCount(int type) {
-    if (type == 1) {
+    if (type == FRONTIER_CHALLENGE_DOUBLE) {
         return 2;
     }
     return 1;
@@ -367,8 +367,8 @@ u8 BattleHall_GetCellType(u8 cell) {
 
 BOOL BattleHall_IsMultiType(int type) {
     switch (type) {
-    case 2:
-    case 3:
+    case FRONTIER_CHALLENGE_MULTI:
+    case FRONTIER_CHALLENGE_LINK_MULTI:
         return TRUE;
     }
     return FALSE;
@@ -393,12 +393,12 @@ int BattleHall_GetTrainerAIFlags(BattleHallData *data, u32 index, int rank) {
     } else {
         aiFlags = 0;
     }
-    if (data->type == 0) {
+    if (data->type == FRONTIER_CHALLENGE_SINGLE) {
         if (IS_HALL_MATRON(data->trainerIds[(index & 0x7F) * 2])) {
             aiFlags = 7;
         }
     }
-    if (data->type == 2) {
+    if (data->type == FRONTIER_CHALLENGE_MULTI) {
         aiFlags = 7;
     }
     return aiFlags;

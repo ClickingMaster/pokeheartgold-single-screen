@@ -76,22 +76,8 @@ typedef struct BattleTowerOpponent {
     u8 team[0xA8];
 } BattleTowerOpponent;
 
-u32 BattleRoomTrainer_sizeof(void);
-void FrontierData_Reset(void *data);
-void TowerMessages_Init(void *data);
-void BattleRoomDownload_Init(void *data);
-u8 FrontierData_GetWifiWinCount(FrontierData *data);
-void FrontierData_SetTowerSeed(FrontierData *data, u32 value);
-u32 FrontierData_GetTowerSeed(FrontierData *data);
-void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
 static void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download);
 static BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored);
-BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
-void BattleRoomDownload_SetTrainers(BattleRoomDownload *download, void *trainers, u32 rank, u32 room);
-void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out);
-void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOpponent *out, u32 index);
-void BattleRoomDownload_SetLeaders(BattleRoomDownload *download, void *leaders, u32 rank, u32 room);
-void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *download, enum HeapID heapID);
 
 static const MailMessageTemplate sTowerMessageTemplates[4] = {
     { 0, 0, { 4, -1 }, { 7, 0 }  },
@@ -506,23 +492,24 @@ void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out) {
     out[1] = download->trainersRoom;
 }
 
-void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOpponent *out, u32 index) {
-    BattleRoomTrainer *trainers = download->trainers;
-    u32 offset = index * sizeof(BattleRoomTrainer);
+void BattleRoomDownload_GetTrainer(u32 addr, FrontierTrainer *trainer, int index) {
+    BattleRoomDownload *download = (BattleRoomDownload *)addr;
+    BattleTowerOpponent *out = (BattleTowerOpponent *)trainer;
+    BattleRoomTrainer *roomTrainer = &download->trainers[index];
     u8 *team = out->team;
     out->id = 10000;
-    out->trainerClass = ((BattleRoomTrainer *)((u8 *)trainers + offset))->trainerClass;
-    if (((BattleRoomTrainer *)((u8 *)trainers + offset))->useDefaultName) {
+    out->trainerClass = roomTrainer->trainerClass;
+    if (roomTrainer->useDefaultName) {
         MsgData *msg = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0028_bin, HEAP_ID_FIELD2);
-        ReadMsgDataIntoU16Array(msg, (((BattleRoomTrainer *)((u8 *)trainers + offset))->gender) + msg_0028_00033, out->name);
+        ReadMsgDataIntoU16Array(msg, roomTrainer->gender + msg_0028_00033, out->name);
         DestroyMsgData(msg);
     } else {
-        MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->name, out->name, 16);
+        MI_CpuCopy8(roomTrainer->name, out->name, 16);
     }
-    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages, out->messages, 8);
-    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages + 8, out->messages + 8, 8);
-    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages + 16, out->messages + 16, 8);
-    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->team, team, 0xA8);
+    MI_CpuCopy8(roomTrainer->messages, out->messages, 8);
+    MI_CpuCopy8(roomTrainer->messages + 8, out->messages + 8, 8);
+    MI_CpuCopy8(roomTrainer->messages + 16, out->messages + 16, 8);
+    MI_CpuCopy8(roomTrainer->team, team, 0xA8);
 }
 
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *download, void *leaders, u32 rank, u32 room) {
@@ -538,7 +525,8 @@ void BattleRoomDownload_GetLeadersRoom(u32 addr, u8 *out) {
     out[1] = download->leadersRoom;
 }
 
-void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *download, enum HeapID heapID) {
+void *BattleRoomDownload_CopyLeaders(u32 addr, enum HeapID heapID) {
+    BattleRoomDownload *download = (BattleRoomDownload *)addr;
     void *out = Heap_Alloc(heapID, sizeof(download->leaders));
     MI_CpuCopy8(download->leaders, out, sizeof(download->leaders));
     return out;
