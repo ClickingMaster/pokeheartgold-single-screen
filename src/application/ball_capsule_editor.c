@@ -3238,7 +3238,7 @@ static void BallCapsuleEditor_StartPreviewPokepicAnim(BallCapsuleEditor *editor)
     int species = GetMonData(editor->previewMon, MON_DATA_SPECIES, NULL);
 
     GetMonNature(editor->previewMon);
-    ((void (*)(Pokepic *, int))Pokepic_StartAnim)(editor->display.pokepic, 1);
+    Pokepic_StartAnim(editor->display.pokepic, 1);
     NARC_StartPokepicAnim(editor->pokepicAnimNarc, editor->pokepicAnim, editor->display.pokepic, (u16)species, 2, 0, 0);
 }
 

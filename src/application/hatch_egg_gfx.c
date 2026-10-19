@@ -540,8 +540,7 @@ void HatchEggApp_CreatePokepic(HatchEggApp *app) {
 void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
     u32 species = GetMonData(app->args->args.mon, MON_DATA_SPECIES, NULL);
     GetMonNature(app->args->args.mon);
-    // The call passes an argument Pokepic_StartAnim does not take.
-    ((void (*)(Pokepic *, int))Pokepic_StartAnim)(app->pokepic, 1);
+    Pokepic_StartAnim(app->pokepic, 1);
     NARC_StartPokepicAnim(app->gfx.narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
 }
 

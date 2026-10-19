@@ -76,9 +76,6 @@ void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 col
 
 BOOL PlayBGMDirect(u16 seqNo);
 
-// The scene calls Pokepic_StartAnim() with a second argument, which the function ignores.
-#define EVO_START_POKEPIC_ANIM(pokepic) ((void (*)(Pokepic *, int))Pokepic_StartAnim)(pokepic, 0)
-
 // the scene's state machine (EvolutionScene_Run)
 enum EvolutionSceneState {
     EVO_STATE_WAIT_FADE_IN,
@@ -773,7 +770,7 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
             NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->species, 1);
             Pokepic_SetAnimScript(data->oldPokepic, animScript);
-            EVO_START_POKEPIC_ANIM(data->oldPokepic);
+            Pokepic_StartAnim(data->oldPokepic, 0);
             PlayCry(data->species, data->form);
             BufferBoxMonNickname(data->msgFormat, 0, Mon_GetBoxMon(data->mon));
             if (data->flags & EVO_FLAG_PRINT_WHAT) {
@@ -864,7 +861,7 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
             NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->newPokepic, data->newSpecies, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->newSpecies, 1);
             Pokepic_SetAnimScript(data->newPokepic, animScript);
-            EVO_START_POKEPIC_ANIM(data->newPokepic);
+            Pokepic_StartAnim(data->newPokepic, 0);
             PlayCry(data->newSpecies, data->form);
             data->state++;
         }
@@ -1119,7 +1116,7 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
             NARC_StartPokepicAnim(data->pokegraNarc, data->pokepicAnimManager, data->oldPokepic, data->species, 2, 0, 0);
             NARC_ReadPokepicAnimScript(data->pokegraNarc, animScript, data->species, 1);
             Pokepic_SetAnimScript(data->oldPokepic, animScript);
-            EVO_START_POKEPIC_ANIM(data->oldPokepic);
+            Pokepic_StartAnim(data->oldPokepic, 0);
             PlayCry(data->species, data->form);
             data->state++;
         }

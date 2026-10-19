@@ -7095,16 +7095,13 @@ u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, i
     return newTrainerClass;
 }
 
-// Pokepic_StartAnim takes a second argument here; pokepic.h declares it with one.
-#define POKEPIC_START_ANIM(pokepic, arg) ((void (*)(Pokepic *, int))Pokepic_StartAnim)(pokepic, arg)
-
 // Starts the battler's pokepic animation (when battle animations are on) and plays its cry, panned towards its side.
 void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam) {
     u8 cryDelay = 0;
     int pan;
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) {
-        POKEPIC_START_ANIM(pokepic, 1);
+        Pokepic_StartAnim(pokepic, 1);
         NARC_StartPokepicAnim((NARC *)narc, BattleSystem_GetPokepicAnimManager(battleSystem), pokepic, species, facing, 0, battlerId);
         NARC_ReadPokepicCryDelay((NARC *)narc, &cryDelay, species, battlerType);
     }

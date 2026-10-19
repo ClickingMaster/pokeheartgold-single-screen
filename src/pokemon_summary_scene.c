@@ -263,7 +263,7 @@ void PokemonSummary_StartPokepicAnim(PokemonSummary *summary) {
     if (summary->mon.isEgg) {
         NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, 0, 2, summary->pokepicAnimReverseX, 0);
     } else {
-        ((void (*)(Pokepic *, int))Pokepic_StartAnim)(summary->pokepic, 1);
+        Pokepic_StartAnim(summary->pokepic, 1);
         NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, summary->mon.species, 2, summary->pokepicAnimReverseX, 0);
     }
 }
