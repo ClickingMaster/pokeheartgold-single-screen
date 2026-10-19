@@ -23,38 +23,37 @@ void LobbyVipVector_AssignRange(Vec *p, Pair *first, Pair *last) {
     if (p->capacity < n) {
         a = 0;
         growth = LobbyVipVector_RecommendSize(p, n - p->capacity);
-        goto alloc;
-    }
-    end = first;
-    end += *(p->size < n ? &p->size : &n);
-    dest = p->data;
-    while (first < end) {
-        dest->a = first->a;
-        dest->b = first->b;
-        ++first;
-        ++dest;
-    }
-    if (n < p->size) {
-        u32 old = p->size;
-        c = 0;
-        p->size = *(volatile u32 *)&p->size - (old - n);
-        return;
-    }
-    if (p->size >= n) {
-        return;
-    }
-    d = 0;
-    dest = *(Pair *volatile *)&p->data + *(volatile u32 *)&p->size;
-    while (end != last) {
-        if (dest) {
-            *dest = *end;
+    } else {
+        end = first;
+        end += *(p->size < n ? &p->size : &n);
+        dest = p->data;
+        while (first < end) {
+            dest->a = first->a;
+            dest->b = first->b;
+            ++first;
+            ++dest;
         }
-        ++p->size;
-        ++end;
-        ++dest;
+        if (n < p->size) {
+            u32 old = p->size;
+            c = 0;
+            p->size = *(volatile u32 *)&p->size - (old - n);
+            return;
+        }
+        if (p->size >= n) {
+            return;
+        }
+        d = 0;
+        dest = *(Pair *volatile *)&p->data + *(volatile u32 *)&p->size;
+        while (end != last) {
+            if (dest) {
+                *dest = *end;
+            }
+            ++p->size;
+            ++end;
+            ++dest;
+        }
+        return;
     }
-    return;
-alloc:
     LobbyVipVector_Reallocate(p, n, growth);
     b = 0;
     dest = p->data + *(volatile u32 *)&p->size;

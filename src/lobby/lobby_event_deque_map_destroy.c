@@ -8,7 +8,7 @@
 typedef struct {
     void *allocator;
     u32 unused;
-    volatile u32 size;
+    u32 size;
 } Container;
 
 Container *LobbyEventDequeMap_Destroy(Container *);

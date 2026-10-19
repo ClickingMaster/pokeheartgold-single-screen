@@ -15,22 +15,6 @@ typedef struct WifiSetupAossAddresses {
     u32 gateway;
 } WifiSetupAossAddresses;
 
-typedef struct WifiSetupAossConnectInfo {
-    u8 bytes[60];
-} WifiSetupAossConnectInfo;
-
-typedef struct WifiSetupAossPacketParams {
-    u8 bytes[24];
-} WifiSetupAossPacketParams;
-
-// Packet received from the access point (gWifiSetupState.data)
-typedef struct WifiSetupAossReceived {
-    int socket;
-    int length;
-    u8 padding_08[4];
-    u8 bytes[1500];
-} WifiSetupAossReceived;
-
 typedef struct AossSession {
     SocAddress address;
     WifiSetupPollTime time;
@@ -371,7 +355,7 @@ restart:
             continue;
         }
         session.length = 8;
-        tmp = WifiSetup_RecvFrom(gWifiSetupSocket, data->bytes, 1500, 0, &session.remote, &session.length);
+        tmp = WifiSetup_RecvFrom(gWifiSetupSocket, &data->packet, sizeof(WifiSetupAossPacket), 0, &session.remote, &session.length);
         data->socket = gWifiSetupSocket;
         data->length = WifiSetup_NetToHost16((u16)tmp);
         nextMode = WifiSetup_HandlePacket(mode, data, &session.attempts, &session.params, gWifiSetupSocket);

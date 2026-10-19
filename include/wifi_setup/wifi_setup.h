@@ -60,6 +60,72 @@ typedef struct WifiSetupCipher {
     u32 size;
 } WifiSetupCipher;
 
+// Access point the AOSS exchange runs on (see WifiSetup_InitAossConnectInfo)
+typedef struct WifiSetupAossConnectInfo {
+    u32 ssidLength;
+    u8 ssid[32];
+    int mode;
+    u32 keyLength;
+    u8 key[16];
+} WifiSetupAossConnectInfo;
+
+// Address and sequence number carried, scrambled, in each AOSS packet
+typedef struct WifiSetupAossTag {
+    u8 mac[6];
+    u16 sequence;
+} WifiSetupAossTag;
+
+// Tags of the join, settings and done requests
+typedef struct WifiSetupAossPacketParams {
+    WifiSetupAossTag tags[3];
+} WifiSetupAossPacketParams;
+
+// One record of a packet body: type, length of the data, data
+typedef struct WifiSetupAossRecord {
+    u8 type;
+    u8 reserved;
+    u16 length;
+    union {
+        u32 status;
+        u8 bytes[1];
+    } data;
+} WifiSetupAossRecord;
+
+typedef struct WifiSetupAossEncryptedBody {
+    u16 length;
+    u16 seed;
+    u8 data[1];
+} WifiSetupAossEncryptedBody;
+
+typedef union WifiSetupAossBody {
+    WifiSetupAossRecord record;
+    WifiSetupAossEncryptedBody encrypted;
+    u8 bytes[1476];
+} WifiSetupAossBody;
+
+// Packet header (see WifiSetup_WritePacketHeader) followed by the body
+typedef struct WifiSetupAossPacket {
+    u16 version;
+    u16 unk_02;
+    u16 unk_04;
+    u16 kind;
+    u16 unk_08;
+    u16 bodyLength;
+    u16 flags;
+    u8 checksum;
+    u8 protocol;
+    WifiSetupAossTag tag;
+    WifiSetupAossBody body;
+} WifiSetupAossPacket;
+
+// Packet received from the access point (gWifiSetupState.data)
+typedef struct WifiSetupAossReceived {
+    int socket;
+    int length;
+    u8 padding_08[4];
+    WifiSetupAossPacket packet;
+} WifiSetupAossReceived;
+
 typedef struct WifiSetupPollTime {
     int seconds;
     int microseconds;

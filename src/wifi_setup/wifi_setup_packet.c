@@ -340,17 +340,17 @@ u8 *WifiSetup_BuildSingleRecordList(u8 *dst, u16 type, const void *src, u32 leng
 
 // Reply of type 1: records 1 and 2 must be 1; record 5 >= 1 asks for the extended request.
 int WifiSetup_CheckVersionReply(void *data, int *extended) {
-    int type;
-    volatile int length;
-    int tag;
-    int size;
-    u8 *volatile cursor;
-    u8 *blob = WifiSetup_GetPacketPayload(data, (u32 *)&type, (u32 *)&length);
+    u32 type;
+    u32 length;
+    u32 tag;
+    u32 size;
+    u8 *cursor;
+    u8 *blob = WifiSetup_GetPacketPayload(data, &type, &length);
     int record1 = 0;
     int record2;
     int record5 = 0;
     const u16 *value;
-    int limit;
+    u8 *end;
     cursor = blob;
     record2 = 0;
     if (!blob) {
@@ -359,9 +359,9 @@ int WifiSetup_CheckVersionReply(void *data, int *extended) {
     if (type != 1) {
         return 0;
     }
-    limit = length;
+    end = blob + length;
     cursor = blob + 8;
-    while ((value = (const u16 *)WifiSetup_NextRecord((u8 **)&cursor, blob + limit, (u32 *)&tag, (u32 *)&size)) != 0) {
+    while ((value = (const u16 *)WifiSetup_NextRecord(&cursor, end, &tag, &size)) != 0) {
         switch (tag) {
         case 1:
             record1 = Swap16(*value);
@@ -581,23 +581,23 @@ static int WifiSetup_HexToBytes(u8 *dst, const char *src, int length) {
 // Copies the received settings into the result block; WEP keys of 5/13/16 characters or
 // 10/26/32 hex digits.
 int WifiSetup_StoreSimpleStartResult(void) {
-    volatile int result = 1;
+    int result = 1;
     int i;
     u8 *src;
     char buf[33];
     char *p;
     u8 *out;
     strcpy((char *)&gWifiSetupResult, (char *)gWifiSetupRecvSsid);
-    switch (*(u32 *)gWifiSetupRecvSecurity) {
+    switch (gWifiSetupRecvSecurity[0]) {
     case 0:
         *(u32 *)(ov13_0224E0B0 + 0xC) = 0;
         break;
     case 1:
-        if (*(u32 *)((u8 *)gWifiSetupRecvSecurity + 4) == 0) {
+        if (gWifiSetupRecvSecurity[1] == 0) {
             result = -7;
             break;
         }
-        *(u32 *)(ov13_0224E0B0 + 0x10) = *(u32 *)((u8 *)gWifiSetupRecvSecurity + 4);
+        *(u32 *)(ov13_0224E0B0 + 0x10) = gWifiSetupRecvSecurity[1];
         src = (u8 *)gWifiSetupRecvWepKeys;
         out = gWifiSetupResultWepKeys;
         i = 0;

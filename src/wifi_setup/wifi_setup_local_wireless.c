@@ -2785,9 +2785,7 @@ static void WifiSetupDialog_SlideInTask(void *task, void *arg) {
 static void WifiSetupDialog_InputTask(void *task, void *arg) {
     WifiSetupRect temp;
     int i;
-    register WifiSetupDialog *w;
     int j;
-    u8 *counts;
     for (i = 0; i < gWifiSetupDialogButtonCounts[gWifiSetupDialog->kind]; i++) {
         WifiSetup_RectFromPosSize(&gWifiSetupDialogButtonPos[gWifiSetupDialog->kind][gWifiSetupDialogButtonPositions[gWifiSetupDialog->kind][i]], &gWifiSetupDialogButtonSizes[gWifiSetupDialog->kind], &temp);
         if (WifiSetupInput_IsTouchPressed(&temp)) {
@@ -2801,15 +2799,13 @@ static void WifiSetupDialog_InputTask(void *task, void *arg) {
     if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B)) {
         gWifiSetupDialog->selected = gWifiSetupDialogBButtonChoice[gWifiSetupDialog->kind][0];
     }
-    counts = gWifiSetupDialogButtonCounts;
-    w = gWifiSetupDialog;
-    for (j = 0; j < counts[((volatile WifiSetupDialog *)w)->kind]; j++) {
-        if (j == w->selected) {
+    for (j = 0; j < gWifiSetupDialogButtonCounts[gWifiSetupDialog->kind]; j++) {
+        if (j == gWifiSetupDialog->selected) {
             WifiSetupDialog_PressButton(j);
             return;
         }
     }
-    w->selected = -1;
+    gWifiSetupDialog->selected = -1;
 }
 
 static void WifiSetupDialog_TimerTask(void *task, void *arg) {
@@ -2930,7 +2926,7 @@ static void WifiSetupDialog_FreeTask(void *task, void *arg) {
 
 void WifiSetupMbParent_Init(void *buf) {
     gWifiSetupMbParent = buf;
-    WifiSetupWh_Init((u8 *)buf + 0x1B160);
+    WifiSetupWh_Init(gWifiSetupMbParent->whWork);
     gWifiSetupMbParent->mbWorkPtr = NULL;
     gWifiSetupMbParent->segmentPtr = NULL;
 }
@@ -3185,12 +3181,12 @@ u16 WifiSetupMbParent_GetState(void) {
 }
 
 u16 WifiSetupMbParent_GetMask(int index) {
-    u8 *base = (u8 *)gWifiSetupMbParent;
-    gWifiSetupMbParentData.masks[0] = (u16 *)(base + 2);
-    gWifiSetupMbParentData.masks[1] = (u16 *)(base + 4);
-    gWifiSetupMbParentData.masks[2] = (u16 *)(base + 6);
-    gWifiSetupMbParentData.masks[3] = (u16 *)(base + 8);
-    gWifiSetupMbParentData.masks[4] = (u16 *)(base + 10);
-    gWifiSetupMbParentData.masks[5] = (u16 *)(base + 12);
+    WifiSetupMbParentState *head = &gWifiSetupMbParent->head;
+    gWifiSetupMbParentData.masks[0] = &head->connectedMask;
+    gWifiSetupMbParentData.masks[1] = &head->requestedMask;
+    gWifiSetupMbParentData.masks[2] = &head->waitingMask;
+    gWifiSetupMbParentData.masks[3] = &head->sendingMask;
+    gWifiSetupMbParentData.masks[4] = &head->sentMask;
+    gWifiSetupMbParentData.masks[5] = &head->bootableMask;
     return *gWifiSetupMbParentData.masks[index];
 }

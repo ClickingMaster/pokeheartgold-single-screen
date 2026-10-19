@@ -103,6 +103,8 @@ typedef struct WifiSetupMbParent {
     u8 mbWork[0x1B140 - 0x10040];
     void *mbWorkPtr;
     void *segmentPtr;
+    u8 padding_1B148[0x18];
+    u8 whWork[0x1D780 - 0x1B160]; // WifiSetupWhWork
 } WifiSetupMbParent;
 
 extern WifiSetupBannerState gWifiSetupBanner;

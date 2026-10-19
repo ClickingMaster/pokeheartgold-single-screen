@@ -10,9 +10,9 @@ u32 **LobbyEventDequeMap_CopyToArray(Iter a, Iter b, u32 **out);
 
 Vec *LobbyEventDequeMapBuffer_Destroy(Vec *v) {
     if (v->ptr != NULL) {
-        u32 n = *(volatile u32 *)&v->cap;
-        volatile Tag a = { 0 };
-        *(volatile u32 *)&v->cap -= n;
+        u32 n = v->cap;
+        Tag a = { 0 };
+        v->cap -= n;
         if (v->ptr != NULL) {
             DWC_Free(0, v->ptr, 0);
         }

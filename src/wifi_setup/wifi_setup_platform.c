@@ -85,16 +85,10 @@ int WifiSetup_CleanupSocket(void) {
 
 int WifiSetup_MemCompare(const u8 *a, const u8 *b, int n) {
     int diff = 0;
-    goto check;
-    do {
+    while (n-- > 0 && (diff = *a - *b) == 0) {
         a++;
         b++;
-check:
-        if (n-- <= 0) {
-            break;
-        }
-        diff = *a - *b;
-    } while (diff == 0);
+    }
     return diff;
 }
 

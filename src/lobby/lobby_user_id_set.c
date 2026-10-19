@@ -48,11 +48,11 @@ void LobbyUserIdSet_Erase(Iterator *out, LobbyUserIdSet *set, Iterator node) {
 void LobbyUserIdSet_Assign(LobbyUserIdSet *set, LobbyUserIdSet *other) {
     struct {
         u8 pad0;
-        volatile u8 byte;
+        u8 byte;
         u8 pad[2];
-        LobbyUserIdSetNode *volatile a, *volatile b;
-        void *volatile owner;
-        LobbyUserIdSetNode *volatile cleanup;
+        LobbyUserIdSetNode *a, *b;
+        void *owner;
+        LobbyUserIdSetNode *cleanup;
         LobbyUserIdSet tree;
     } f;
 

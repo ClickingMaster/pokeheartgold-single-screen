@@ -1066,10 +1066,8 @@ void WifiSetupShare_Update(void) {
     case WIFI_SETUP_SHARE_STATE_FATAL:
     case WIFI_SETUP_SHARE_STATE_END:
     default:
-        goto done;
+        break;
     }
-done:
-    return;
 }
 
 void WifiSetupShare_GetState(u8 *state, u8 *changed) {

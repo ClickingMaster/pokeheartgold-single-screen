@@ -214,7 +214,7 @@ static LobbyCharVectorBuffer *LobbyCharVectorBuffer_Deallocate(LobbyCharVectorBu
         u32 old = p->size;
 
         struct {
-            volatile u8 zero;
+            u8 zero;
         } init = { 0 };
 
         p->size -= old;

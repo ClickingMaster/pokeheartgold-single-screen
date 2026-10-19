@@ -27,7 +27,7 @@ static SplitBuf *LobbyU32VectorBuffer_Deallocate(SplitBuf *b) {
         u32 old = b->size;
 
         struct {
-            volatile u8 zero;
+            u8 zero;
         } init = { 0 };
 
         b->size -= old;

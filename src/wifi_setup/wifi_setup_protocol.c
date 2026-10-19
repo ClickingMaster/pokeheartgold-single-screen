@@ -8,7 +8,7 @@ extern u32 gWifiSetupCrc32Table[256];
 
 typedef struct WifiSetupAossApEntry {
     u32 length;
-    u8 data[0x4c];
+    u8 data[76];
     u32 flags;
 } WifiSetupAossApEntry;
 
@@ -19,42 +19,20 @@ typedef struct WifiSetupAossApList {
 
 extern char sStr_ESSID_AOSS[];
 extern char sStr_MELCO[];
-#define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 extern u8 gWifiSetupJoinReply[];
 extern u8 gWifiSetupSecurityRecords[];
 
-// Packet header (see WifiSetup_WritePacketHeader) followed by the body
-typedef struct WifiSetupAossPacket {
-    u16 version;
-    u8 padding_02[4];
-    u16 kind;
-    u8 padding_08[2];
-    u16 result;
-    u16 flags;
-    u8 mode;
-    u8 protocol;
-    u8 address[8];
-    u16 length;
-    u16 other;
-    u8 data[1];
-} WifiSetupAossPacket;
-
 extern u8 gWifiSetupPeerAddress[];
 extern u8 sWifiSetupSecurityRecordTypes[];
-
-typedef struct WifiSetupAossRecordHeader {
-    u8 type, reserved;
-    u16 length;
-} WifiSetupAossRecordHeader;
 
 extern s8 ov13_0224CFB8[];
 extern u8 gWifiSetupCipherSeed[];
 extern u8 gWifiSetupCipherKey[];
 
-static int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context);
-static int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context);
+static int WifiSetup_HandleJoinReply(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params);
+static int WifiSetup_HandleSettingsReply(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params);
 static int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void *context);
 static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p);
 static int WifiSetup_CheckPeer(int value, const void *data);
@@ -66,12 +44,12 @@ static int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst);
 static int WifiSetup_ParseType70Record(const u8 *a, void *dst);
 static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other);
 static int WifiSetup_IsEncryptionRequested(int value);
-static int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg);
-static int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg);
-static int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg);
+static int WifiSetup_SendJoinRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg);
+static int WifiSetup_SendSettingsRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg);
+static int WifiSetup_SendDoneRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg);
 static int WifiSetup_BuildJoinPayload(u8 *dst);
-static void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra);
-static void WifiSetup_WritePacketHeader(u8 *dst, int type, int length, int flags, s8 value, s8 a5, const void *src);
+static void WifiSetup_WriteBody(int mode, WifiSetupAossBody *body, const void *src, s16 *length, u16 *flag, const void *extra);
+static void WifiSetup_WritePacketHeader(WifiSetupAossPacket *packet, int kind, int length, int flags, s8 checksum, s8 protocol, const void *tag);
 static void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket);
 static int WifiSetup_Encrypt(void *src, void *dst, int size, u8 *checksum, void *seedDst, const void *seedSrc, int seedSize);
 static int WifiSetup_Decrypt(void *dst, const void *src, int size, int expected, void *seedDst, const void *seedSrc, int seedSize);
@@ -88,10 +66,10 @@ static void WifiSetup_ScrambleSwapHalves(u8 *dst, s32 size, u8 *tmp);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length);
 int WifiSetup_FindAossAccessPoint(WifiSetupAossApList *list);
-int WifiSetup_InitAossConnectInfo(void *out);
-void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src);
-int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context);
-int WifiSetup_SendRequest(int which, void *a, void *b, void *c);
+int WifiSetup_InitAossConnectInfo(WifiSetupAossConnectInfo *info);
+void WifiSetup_InitPacketAddresses(int count, WifiSetupAossPacketParams *params, const void *mac);
+int WifiSetup_HandlePacket(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params);
+int WifiSetup_SendRequest(int which, void *a, WifiSetupAossPacketParams *params, void *c);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length) {
     int i;
@@ -132,26 +110,26 @@ int WifiSetup_FindAossAccessPoint(WifiSetupAossApList *list) {
     return result;
 }
 
-int WifiSetup_InitAossConnectInfo(void *out) {
-    u8 *p = out;
-    *(u32 *)p = WifiSetup_StrLen(sStr_ESSID_AOSS);
-    WifiSetup_MemCopy(p + 4, sStr_ESSID_AOSS, *(u32 *)p);
-    *(u32 *)(p + 0x24) = 1;
-    *(u32 *)(p + 0x28) = WifiSetup_StrLen(sStr_MELCO);
-    if (*(u32 *)(p + 0x28) > 13) {
+int WifiSetup_InitAossConnectInfo(WifiSetupAossConnectInfo *info) {
+    info->ssidLength = WifiSetup_StrLen(sStr_ESSID_AOSS);
+    WifiSetup_MemCopy(info->ssid, sStr_ESSID_AOSS, info->ssidLength);
+    info->mode = 1;
+    info->keyLength = WifiSetup_StrLen(sStr_MELCO);
+    if (info->keyLength > 13) {
         return -1;
     }
-    WifiSetup_MemCopy(p + 0x2C, sStr_MELCO, *(u32 *)(p + 0x28));
+    WifiSetup_MemCopy(info->key, sStr_MELCO, info->keyLength);
     return 0;
 }
 
-void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src) {
+void WifiSetup_InitPacketAddresses(int count, WifiSetupAossPacketParams *params, const void *mac) {
+    WifiSetupAossTag *tag = params->tags;
     int i;
     for (i = 0; i < count; i++) {
-        WifiSetup_MemCopy(dst, src, 6);
-        *(u16 *)(dst + 6) = WifiSetup_Random();
-        *(u16 *)(dst + 6) = WifiSetup_HostToNet16(*(u16 *)(dst + 6));
-        dst += 8;
+        WifiSetup_MemCopy(tag->mac, mac, 6);
+        tag->sequence = WifiSetup_Random();
+        tag->sequence = WifiSetup_HostToNet16(tag->sequence);
+        tag++;
     }
 }
 
@@ -167,8 +145,8 @@ int WifiSetup_SetStatus(int value) {
     return 0;
 }
 
-int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context) {
-    WifiSetupAossPacket *header = (WifiSetupAossPacket *)((u8 *)packet + 0xC);
+int WifiSetup_HandlePacket(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params) {
+    WifiSetupAossPacket *header = &received->packet;
     int type;
 
     if (WifiSetup_NetToHost16(header->version) < 1) {
@@ -179,50 +157,50 @@ int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context)
         (*counter)++;
         return state;
     }
-    if (WifiSetup_DecryptPacket((WifiSetupAossPacket *)((u8 *)packet + 0xC)) > 0) {
+    if (WifiSetup_DecryptPacket(&received->packet) > 0) {
         (*counter)++;
         return state;
     }
     type = WifiSetup_NetToHost16(header->kind);
     switch (type) {
     case 0x1010:
-        state = WifiSetup_HandleJoinReply(state, packet, counter, context);
+        state = WifiSetup_HandleJoinReply(state, received, counter, params);
         break;
     case 0x2010:
-        state = WifiSetup_HandleSettingsReply(state, packet, counter, context);
+        state = WifiSetup_HandleSettingsReply(state, received, counter, params);
         break;
     case 0x3010:
-        state = WifiSetup_HandleDoneReply(state, packet, counter, context);
+        state = WifiSetup_HandleDoneReply(state, received, counter, params);
         break;
     }
     return state;
 }
 
-static int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context) {
-    u8 *header;
-    u8 *body;
+static int WifiSetup_HandleJoinReply(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params) {
+    WifiSetupAossPacket *header;
+    WifiSetupAossBody *body;
     int value;
 
     if (state != 0) {
         (*counter)++;
         return state;
     }
-    header = (u8 *)packet + 0xC;
-    body = (u8 *)packet + 0x24;
-    if (WifiSetup_CheckReplySequence(context, header + 0x10) < 0) {
+    header = &received->packet;
+    body = &received->packet.body;
+    if (WifiSetup_CheckReplySequence(params->tags[0].mac, header->tag.mac) < 0) {
         (*counter)++;
         return state;
     }
-    if (WifiSetup_NetToHost16(U16_AT(body, 2)) == 0) {
+    if (WifiSetup_NetToHost16(body->record.length) == 0) {
         (*counter)++;
         return state;
     }
-    if (body[0] == 7) {
-        value = WifiSetup_NetToHost32(U32_AT(body, 4));
+    if (body->record.type == 7) {
+        value = WifiSetup_NetToHost32(body->record.data.status);
         if (value == -2) {
             WifiSetup_SetError(0x14);
         } else {
-            value = WifiSetup_NetToHost32(U32_AT(body, 4));
+            value = WifiSetup_NetToHost32(body->record.data.status);
             if (value == -3) {
                 WifiSetup_SetError(0x15);
             } else {
@@ -231,11 +209,11 @@ static int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void
         }
         return -1;
     }
-    if (body[0] != 1) {
+    if (body->record.type != 1) {
         (*counter)++;
         return state;
     }
-    value = WifiSetup_ParseJoinReply(body + 4, gWifiSetupJoinReply);
+    value = WifiSetup_ParseJoinReply(body->record.data.bytes, gWifiSetupJoinReply);
     if (value < 0) {
         if (value == -2) {
             WifiSetup_SetError(0x16);
@@ -244,36 +222,36 @@ static int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void
         (*counter)++;
         return state;
     }
-    gWifiSetupState.encryptBody = WifiSetup_IsEncryptionRequested(WifiSetup_NetToHost16(U16_AT(header, 0xC)));
+    gWifiSetupState.encryptBody = WifiSetup_IsEncryptionRequested(WifiSetup_NetToHost16(header->flags));
     *counter = 0;
     return 1;
 }
 
-static int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context) {
-    u8 *header;
-    u8 *body;
+static int WifiSetup_HandleSettingsReply(int state, WifiSetupAossReceived *received, int *counter, WifiSetupAossPacketParams *params) {
+    WifiSetupAossPacket *header;
+    WifiSetupAossBody *body;
     int value;
 
     if (state != 1) {
         (*counter)++;
         return state;
     }
-    header = (u8 *)packet + 0xC;
-    body = (u8 *)packet + 0x24;
-    if (WifiSetup_CheckReplySequence((u8 *)context + 8, header + 0x10) < 0) {
+    header = &received->packet;
+    body = &received->packet.body;
+    if (WifiSetup_CheckReplySequence(params->tags[1].mac, header->tag.mac) < 0) {
         (*counter)++;
         return state;
     }
-    if (WifiSetup_NetToHost16(U16_AT(body, 2)) == 0) {
+    if (WifiSetup_NetToHost16(body->record.length) == 0) {
         (*counter)++;
         return state;
     }
-    if (body[0] == 7) {
-        value = WifiSetup_NetToHost32(U32_AT(body, 4));
+    if (body->record.type == 7) {
+        value = WifiSetup_NetToHost32(body->record.data.status);
         if (value == -2) {
             WifiSetup_SetError(0x14);
         } else {
-            value = WifiSetup_NetToHost32(U32_AT(body, 4));
+            value = WifiSetup_NetToHost32(body->record.data.status);
             if (value == -3) {
                 WifiSetup_SetError(0x15);
             } else {
@@ -283,8 +261,8 @@ static int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, 
         return -1;
     }
     WifiSetup_MemFill(gWifiSetupSecurityRecords, 0, 0x6A0);
-    value = WifiSetup_NetToHost16(U16_AT(header, 0xA));
-    if (WifiSetup_ParseSecurityRecords(0, body, value, gWifiSetupSecurityRecords, gWifiSetupJoinReply) < 0) {
+    value = WifiSetup_NetToHost16(header->bodyLength);
+    if (WifiSetup_ParseSecurityRecords(0, body->bytes, value, gWifiSetupSecurityRecords, gWifiSetupJoinReply) < 0) {
         (*counter)++;
         return state;
     }
@@ -338,9 +316,9 @@ static int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void
 
 static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p) {
     u8 address[8];
-    u16 *body = &p->length;
+    WifiSetupAossEncryptedBody *body = &p->body.encrypted;
     int result;
-    WifiSetup_MemCopy(address, p->address, 8);
+    WifiSetup_MemCopy(address, &p->tag, 8);
     result = WifiSetup_Scramble(address, 8, sStr_MELCO, WifiSetup_StrLen(sStr_MELCO));
     if (result == -1) {
         WifiSetup_SetError(2);
@@ -356,13 +334,13 @@ static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p) {
         if ((WifiSetup_NetToHost16(p->flags) & 15) == 0) {
             return 0;
         }
-        size = WifiSetup_NetToHost16(*body);
+        size = WifiSetup_NetToHost16(body->length);
         buffer = WifiSetup_Alloc(size);
         if (buffer == 0) {
             WifiSetup_SetError(2);
             return 100;
         }
-        if (WifiSetup_Decrypt(body + 2, buffer, size, p->mode, body + 1, gWifiSetupPeerAddress, 8) < 0) {
+        if (WifiSetup_Decrypt(body->data, buffer, size, p->checksum, &body->seed, gWifiSetupPeerAddress, 8) < 0) {
             WifiSetup_Free(buffer);
             if (WifiSetup_GetError() == 2) {
                 return 100;
@@ -370,7 +348,7 @@ static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p) {
             return 200;
         }
         WifiSetup_MemCopy(body, buffer, size);
-        p->result = WifiSetup_HostToNet16((u16)size);
+        p->bodyLength = WifiSetup_HostToNet16((u16)size);
         WifiSetup_Free(buffer);
         result = 0;
     }
@@ -615,9 +593,9 @@ static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out,
     if (remaining <= 0) {
         return -2;
     }
-    WifiSetupAossRecordHeader *record;
+    WifiSetupAossRecord *record;
     for (;;) {
-        record = (WifiSetupAossRecordHeader *)p;
+        record = (WifiSetupAossRecord *)p;
         if (record->type == sWifiSetupSecurityRecordTypes[id]) {
             break;
         }
@@ -684,23 +662,23 @@ static int WifiSetup_IsEncryptionRequested(int value) {
     return result;
 }
 
-int WifiSetup_SendRequest(int which, void *a, void *b, void *c) {
+int WifiSetup_SendRequest(int which, void *a, WifiSetupAossPacketParams *params, void *c) {
     switch (which) {
     case 0:
         WifiSetup_SetStatus(2);
-        return WifiSetup_SendJoinRequest(a, b, c);
+        return WifiSetup_SendJoinRequest(a, params, c);
     case 1:
         WifiSetup_SetStatus(3);
-        return WifiSetup_SendSettingsRequest(a, b, c);
+        return WifiSetup_SendSettingsRequest(a, params, c);
     case 2:
         WifiSetup_SetStatus(5);
-        return WifiSetup_SendDoneRequest(a, b, c);
+        return WifiSetup_SendDoneRequest(a, params, c);
     default:
         return -1;
     }
 }
 
-static int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
+static int WifiSetup_SendJoinRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg) {
     struct Header {
         s8 value;
         u8 pad;
@@ -710,23 +688,23 @@ static int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
 
     u8 data[8];
     struct Header header;
-    u8 *work;
+    WifiSetupAossPacket *packet;
     u8 *payload;
-    u8 *encoded;
+    WifiSetupAossBody *body;
 
     header.value = 0;
     header.length = 0;
     header.flag = 0;
-    work = gWifiSetupState.data;
-    WifiSetup_MemFill(work, 0, 0x5DC);
+    packet = gWifiSetupState.data;
+    WifiSetup_MemFill(packet, 0, sizeof(WifiSetupAossPacket));
     payload = WifiSetup_Alloc(0x210);
     if (payload == NULL) {
         WifiSetup_SetError(2);
         return -1;
     }
     WifiSetup_MemFill(payload, 0, 0x210);
-    encoded = work + 0x18;
-    WifiSetup_MemCopy(gWifiSetupPeerAddress, src, 8);
+    body = &packet->body;
+    WifiSetup_MemCopy(gWifiSetupPeerAddress, &params->tags[0], 8);
     WifiSetup_MemCopy(data, gWifiSetupPeerAddress, 8);
     header.length = WifiSetup_BuildJoinPayload(payload + 4);
     if (header.length < 0) {
@@ -739,7 +717,7 @@ static int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
     payload[0] = 0;
     *(u16 *)(payload + 2) = WifiSetup_HostToNet16((u16)header.length);
     header.length += 4;
-    WifiSetup_WriteBody(0, encoded, payload, &header.length, (u16 *)&header.flag, &header);
+    WifiSetup_WriteBody(0, body, payload, &header.length, (u16 *)&header.flag, &header);
     header.flag |= 0x10;
     if (WifiSetup_Scramble(data, 8, sStr_MELCO, 6) != 0) {
         WifiSetup_SetError(2);
@@ -748,16 +726,16 @@ static int WifiSetup_SendJoinRequest(void *unused, const u8 *src, void *arg) {
         }
         return -1;
     }
-    WifiSetup_WritePacketHeader(work, 1 << 12, header.length, header.flag, header.value, 0x11, data);
+    WifiSetup_WritePacketHeader(packet, 1 << 12, header.length, header.flag, header.value, 0x11, data);
     header.length += 0x18;
-    WifiSetup_SendPacket(work, (void *)(int)header.length, 0xFF, arg);
+    WifiSetup_SendPacket(packet, (void *)(int)header.length, 0xFF, arg);
     if (payload != NULL) {
         WifiSetup_Free(payload);
     }
     return 0;
 }
 
-static int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg) {
+static int WifiSetup_SendSettingsRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg) {
     struct Header {
         s8 value;
         u8 pad;
@@ -767,47 +745,47 @@ static int WifiSetup_SendSettingsRequest(void *unused, const u8 *src, void *arg)
     };
 
     u8 data[8];
-    u8 packet[8];
+    WifiSetupAossRecord record;
     struct Header header;
-    u8 *work;
+    WifiSetupAossPacket *packet;
     int size;
 
     header.value = 0;
     header.length = 0;
     header.flag = 0;
-    work = gWifiSetupState.data;
-    WifiSetup_MemFill(packet, 0, 8);
-    WifiSetup_MemFill(work, 0, 0x5DC);
-    packet[0] = 2;
-    packet[1] = 0;
-    *(u16 *)(packet + 2) = WifiSetup_HostToNet16(4);
-    *(u32 *)(packet + 4) = gWifiSetupState.requestedMask;
-    *(u32 *)(packet + 4) = WifiSetup_HostToNet32(*(u32 *)(packet + 4));
+    packet = gWifiSetupState.data;
+    WifiSetup_MemFill(&record, 0, sizeof(WifiSetupAossRecord));
+    WifiSetup_MemFill(packet, 0, sizeof(WifiSetupAossPacket));
+    record.type = 2;
+    record.reserved = 0;
+    record.length = WifiSetup_HostToNet16(4);
+    record.data.status = gWifiSetupState.requestedMask;
+    record.data.status = WifiSetup_HostToNet32(record.data.status);
     header.length = 8;
-    WifiSetup_WriteBody(gWifiSetupState.encryptBody, work + 0x18, packet, &header.length, (u16 *)&header.flag, &header);
-    WifiSetup_MemCopy(data, src + 8, 8);
+    WifiSetup_WriteBody(gWifiSetupState.encryptBody, &packet->body, &record, &header.length, (u16 *)&header.flag, &header);
+    WifiSetup_MemCopy(data, &params->tags[1], 8);
     size = WifiSetup_Scramble(data, 8, sStr_MELCO, 6);
     if (size != 0) {
         WifiSetup_SetError(2);
         return -1;
     }
-    WifiSetup_WritePacketHeader(work, 2 << 12, header.length, header.flag, header.value, 0x11, data);
+    WifiSetup_WritePacketHeader(packet, 2 << 12, header.length, header.flag, header.value, 0x11, data);
     header.length += 0x18;
-    WifiSetup_SendPacket(work, (void *)(int)header.length, 0, arg);
+    WifiSetup_SendPacket(packet, (void *)(int)header.length, 0, arg);
     return 0;
 }
 
-static int WifiSetup_SendDoneRequest(void *unused, const u8 *src, void *arg) {
+static int WifiSetup_SendDoneRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg) {
     u8 data[8];
-    u8 *work = gWifiSetupState.data;
+    WifiSetupAossPacket *packet = gWifiSetupState.data;
     int size;
 
-    WifiSetup_MemFill(work, 0, 0x5DC);
-    WifiSetup_MemCopy(data, src + 0x10, 8);
+    WifiSetup_MemFill(packet, 0, sizeof(WifiSetupAossPacket));
+    WifiSetup_MemCopy(data, &params->tags[2], 8);
     size = WifiSetup_StrLen(sStr_MELCO);
     WifiSetup_Scramble(data, 8, sStr_MELCO, size);
-    WifiSetup_WritePacketHeader(work, 3 << 12, 0, 0, 0, 0x11, data);
-    WifiSetup_SendPacket(work, (void *)0x18, 0, arg);
+    WifiSetup_WritePacketHeader(packet, 3 << 12, 0, 0, 0, 0x11, data);
+    WifiSetup_SendPacket(packet, (void *)0x18, 0, arg);
     return 0;
 }
 
@@ -838,28 +816,28 @@ static int WifiSetup_BuildJoinPayload(u8 *dst) {
     return total;
 }
 
-static void WifiSetup_WriteBody(int mode, u8 *dst, const void *src, s16 *length, u16 *flag, const void *extra) {
+static void WifiSetup_WriteBody(int mode, WifiSetupAossBody *body, const void *src, s16 *length, u16 *flag, const void *extra) {
     if (mode == 1) {
         *flag = 1;
-        WifiSetup_Encrypt(src, dst + 4, *length, extra, dst + 2, gWifiSetupPeerAddress, 8);
-        *(u16 *)dst = WifiSetup_HostToNet16((u16)*length);
+        WifiSetup_Encrypt(src, body->encrypted.data, *length, extra, &body->encrypted.seed, gWifiSetupPeerAddress, 8);
+        body->encrypted.length = WifiSetup_HostToNet16((u16)*length);
         *length += 4;
     } else {
-        WifiSetup_MemCopy(dst, src, *length);
+        WifiSetup_MemCopy(body, src, *length);
     }
 }
 
-static void WifiSetup_WritePacketHeader(u8 *dst, int type, int length, int flags, s8 value, s8 a5, const void *src) {
-    *(u16 *)(dst + 0) = WifiSetup_HostToNet16(1);
-    *(u16 *)(dst + 2) = 0;
-    *(u16 *)(dst + 4) = 0;
-    *(u16 *)(dst + 6) = WifiSetup_HostToNet16((u16)type);
-    *(u16 *)(dst + 8) = 0;
-    *(u16 *)(dst + 10) = WifiSetup_HostToNet16((u16)length);
-    *(u16 *)(dst + 12) = WifiSetup_HostToNet16((u16)flags);
-    dst[14] = value;
-    dst[15] = a5;
-    WifiSetup_MemCopy(dst + 16, src, 8);
+static void WifiSetup_WritePacketHeader(WifiSetupAossPacket *packet, int kind, int length, int flags, s8 checksum, s8 protocol, const void *tag) {
+    packet->version = WifiSetup_HostToNet16(1);
+    packet->unk_02 = 0;
+    packet->unk_04 = 0;
+    packet->kind = WifiSetup_HostToNet16((u16)kind);
+    packet->unk_08 = 0;
+    packet->bodyLength = WifiSetup_HostToNet16((u16)length);
+    packet->flags = WifiSetup_HostToNet16((u16)flags);
+    packet->checksum = checksum;
+    packet->protocol = protocol;
+    WifiSetup_MemCopy(&packet->tag, tag, 8);
 }
 
 static void WifiSetup_SendPacket(void *buffer, void *size, int index, void *socket) {

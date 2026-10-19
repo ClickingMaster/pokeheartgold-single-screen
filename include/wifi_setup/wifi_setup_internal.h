@@ -140,7 +140,7 @@ void WifiSetup_Md5Final(u8 *digest, WifiSetupMd5Context *context);
 void WifiSetup_Md5Transform(WifiSetupMd5Context *context, const u8 *input);
 
 // Byte order helpers
-void WifiSetup_EncodeLittleEndian(u8 *dst, const volatile u32 *src, u32 len);
+void WifiSetup_EncodeLittleEndian(u8 *dst, const u32 *src, u32 len);
 void WifiSetup_DecodeLittleEndian(u32 *dst, const u8 *src, u32 len);
 void WifiSetup_CopyBytes(u8 *dst, const u8 *src, u32 len);
 void WifiSetup_FillBytes(void *dst, int value, u32 count);

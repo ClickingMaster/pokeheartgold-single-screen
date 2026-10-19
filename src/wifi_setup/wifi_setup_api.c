@@ -2,7 +2,7 @@
 
 #include "wifi_setup/wifi_setup_internal.h"
 
-void WifiSetup_EncodeLittleEndian(u8 *dst, const volatile u32 *src, u32 len) {
+void WifiSetup_EncodeLittleEndian(u8 *dst, const u32 *src, u32 len) {
     u32 i = 0;
     while (i < len) {
         u8 *p = dst + i;
