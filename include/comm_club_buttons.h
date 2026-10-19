@@ -10,7 +10,7 @@ enum CommClubButtonsCloseRequest {
     COMM_CLUB_BUTTONS_CLOSE_CLEAR_AND_HOLD,
 };
 
-// Shared with the Communication Club (CommClubManager+0x9C).
+// Shared with the Communication Club.
 typedef struct CommClubButtonsArgs {
     u32 *msgIds;     // msg_0191 labels, one per button
     u8 count;        // 1 or 2 buttons

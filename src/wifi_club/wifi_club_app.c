@@ -3134,7 +3134,7 @@ s32 WifiClub_State_OpenApplyMenu(WifiClubApp *app, s32 mainState) {
     }
     AddWindowParameterized(app->bgConfig, &app->menuWindow, 2, 16, ((3 - itemCount) * 2) + 11, 15, itemCount * 2, 13, 59);
     DrawFrameAndWindow1(&app->menuWindow, TRUE, 473, 11);
-    listMenuTemplate.items = app->menuItems; // itemPrintFunc
+    listMenuTemplate.items = app->menuItems;
     listMenuTemplate.window = &app->menuWindow;
     app->listMenu = ListMenuInit(&listMenuTemplate, 0, 0, HEAP_ID_53);
     ScheduleWindowCopyToVram(&app->menuWindow);

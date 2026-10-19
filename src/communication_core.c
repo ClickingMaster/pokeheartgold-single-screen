@@ -48,13 +48,13 @@ extern int Comm_IsWifiLinkMode(int);
 // The bytes around the key state in the work area (Comm_ScrambleDirectionKeys).
 typedef struct CommKeyWork {
     u8 filler_000[0x62C];
-    CommRandom random; // 0x62C
+    CommRandom random;
     u8 filler_644[0x18];
-    u16 buttons; // 0x65C
+    u16 buttons;
     u16 unk_65E;
-    u8 mode;       // 0x660
-    s8 timer;      // 0x661
-    u16 direction; // 0x662
+    u8 mode;
+    s8 timer;
+    u16 direction;
 } CommKeyWork;
 
 CommCore gCommCore;

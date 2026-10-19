@@ -4,16 +4,15 @@
 #include "comm_state_private.h"
 // clang-format on
 
-#include "communication_error.h"
-#include "dwcaccount.h"
-#include "overlay_00_thumb.h"
-#include "overlay_13_arm_2.h"
-/* overlay 45 prototypes in private header */
 #include "comm_wireless.h"
 #include "communication_command.h"
+#include "communication_error.h"
 #include "communication_player_state.h"
+#include "dwcaccount.h"
 #include "link_synchronization.h"
 #include "network_overlay_loader.h"
+#include "overlay_00_thumb.h"
+#include "overlay_13_arm_2.h"
 #include "sound_playback.h"
 #include "system.h"
 #include "wireless_manager.h"
@@ -1781,7 +1780,7 @@ void Comm_MarkLocationSeen(SaveWiFiHistory *history, s32 country, s32 region, u8
 
 s32 Comm_InitDwc(enum HeapID heapID) {
     void *work = Heap_Alloc(heapID, 1824);
-    s32 result = DWC_Init(((u32)work + 31) & ~31); // TODO
+    s32 result = DWC_Init(((u32)work + 31) & ~31);
     Heap_Free(work);
     return result;
 }

@@ -182,7 +182,7 @@ static void RecordMixing_UpdateMaxEntries(RecordMixingApp *app, int index);
 static int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
 
 void CommState_SetRecordMixingLinkMode(void);
-void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
+void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *arg0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
 
@@ -623,7 +623,6 @@ static void RecordMixing_InitSpriteGraphics(RecordMixingApp *app, NARC *narc) {
     OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, HEAP_ID_50);
     app->spriteList = G2dRenderer_Init(30, &app->renderer, HEAP_ID_50);
     G2dRenderer_SetSubSurfaceCoords(&app->renderer, 0, FX32_CONST(256));
-    // walks resMan[] with a pointer to the work struct shifted by 4 bytes per entry
     i = 0;
     walk = app;
     while (i < 4) {
@@ -662,7 +661,6 @@ static void RecordMixing_CreateSprites(RecordMixingApp *app) {
     Sprite_SetAnimActiveFlag(app->playerSprite, TRUE);
     Sprite_SetDrawFlag(app->playerSprite, TRUE);
     Sprite_SetDrawPriority(app->playerSprite, 100);
-    // walks memberSprites[] with a pointer to the work struct shifted by 4 bytes per entry
     for (i = 0, pos = &sRecordMixingSpritePositions[0][0], walk = app; i < RECORD_MIXING_MAX_MEMBERS; i++, pos += 2, walk = (RecordMixingApp *)((u8 *)walk + 4)) {
         template.position.x = pos[2] << FX32_SHIFT;
         template.position.y = pos[3] << FX32_SHIFT;
@@ -1398,7 +1396,6 @@ static BOOL RecordMixing_PrintMemberList(Window *window, int unused, u32 color, 
         return FALSE;
     }
     FillWindowPixelBuffer(window, 0);
-    // walks members[] and memberNames[] with pointers to the work struct shifted per entry
     memberWalk = app;
     i = 0;
     nameWalk = app;

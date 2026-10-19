@@ -7,10 +7,8 @@
 #include "player_avatar.h"
 #include "sys_task_api.h"
 
-// Communication player manager (ARM9 static 0x02056D7C-0x02058034): the avatars of the linked players in a
-// shared field map. The host (net id 0) moves every player by its key input and sends the positions; the other
-// players walk their avatars to the positions they receive. The module's full declarations; include/unk_02056D7C.h
-// keeps the declarations other modules were matched against.
+// Communication player manager: the avatars of the linked players in a shared field map. The host (net id 0) moves
+// every player and sends the positions; the other players walk their avatars to the positions they receive.
 
 typedef struct CommPlayerPosition CommPlayerPosition;
 typedef struct CommPlayerManager CommPlayerManager;
@@ -18,38 +16,38 @@ typedef struct CommPlayerManager CommPlayerManager;
 // A player's position on the map. hostPositions: where the host (net id 0) has placed each player;
 // positions: the positions received from the host, which the avatars walk to.
 struct CommPlayerPosition {
-    u16 x;     // 0x0
-    u16 z;     // 0x2
-    s8 facing; // 0x4
-    u8 speed;  // 0x5
-    u8 unk_6;  // 0x6
-    u8 bumped; // 0x7: the last step was refused (target occupied)
+    u16 x;
+    u16 z;
+    s8 facing;
+    u8 speed;
+    u8 unk_6;
+    u8 bumped; // the last step was refused (target occupied)
 };
 
 struct CommPlayerManager {
-    u8 unk_00[4];                        // 0x00
-    PlayerAvatar *avatars[8];            // 0x04
-    u8 active[8];                        // 0x24
-    SysTask *task;                       // 0x2C
-    FieldSystem *fieldSystem;            // 0x30
-    CommPlayerPosition hostPositions[8]; // 0x34
-    CommPlayerPosition positions[8];     // 0x74
-    u8 moveEnabled[8];                        // 0xB4
-    u8 inputLocked[8];                        // 0xBC
-    u8 unk_C4[8];                        // 0xC4
-    u8 positionChanged[8];               // 0xCC: the host must send this player's position
-    u8 hostMoveTimer[8];                 // 0xD4
-    u8 moveTimer[8];                     // 0xDC
-    u8 unk_E4[2];                        // 0xE4
-    u8 lockOnSpot[5];                        // 0xE6
-    u8 localPositionSent;                // 0xEB
-    u8 sendAllPositions;                 // 0xEC
-    u8 localMoveEnabled;                           // 0xED: sent with command 0x3E
-    u8 unk_EE;                           // 0xEE
-    u8 fieldResumed;                           // 0xEF
-    u8 localMoveDelay;                   // 0xF0
-    u8 localWalkEnabled;                           // 0xF1
-    u8 unk_F2[2];                        // 0xF2
+    u8 unk_00[4];
+    PlayerAvatar *avatars[8];
+    u8 active[8];
+    SysTask *task;
+    FieldSystem *fieldSystem;
+    CommPlayerPosition hostPositions[8];
+    CommPlayerPosition positions[8];
+    u8 moveEnabled[8];
+    u8 inputLocked[8];
+    u8 unk_C4[8];
+    u8 positionChanged[8]; // the host must send this player's position
+    u8 hostMoveTimer[8];
+    u8 moveTimer[8];
+    u8 unk_E4[2];
+    u8 lockOnSpot[5];
+    u8 localPositionSent;
+    u8 sendAllPositions;
+    u8 localMoveEnabled; // sent with command 0x3E
+    u8 unk_EE;
+    u8 fieldResumed;
+    u8 localMoveDelay;
+    u8 localWalkEnabled;
+    u8 unk_F2[2];
 };
 
 extern CommPlayerManager *gCommPlayerManager;

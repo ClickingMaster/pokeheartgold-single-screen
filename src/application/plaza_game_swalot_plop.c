@@ -567,7 +567,6 @@ void SwalotPlop_LoadSharedData(SwalotPlopApp *app, int heapId) {
         roster = (PlazaGameRoster *)app;
         walker = app;
         roster = (PlazaGameRoster *)((u8 *)roster + 8);
-        // walks profiles[] and nameFlags[] through a pointer advanced by 4 bytes per player
         do {
             walker->shared.profiles[0] = PlazaGameRoster_GetProfile(roster, i);
             walker->shared.nameFlags[0] = PlazaGameRoster_IsSpecialVisitor(roster, i);
@@ -1169,7 +1168,6 @@ void SwalotPlopPopups_UpdateSeat(SwalotPlopPopups *popups) {
     int i;
     SwalotPlopPopups *slot;
     i = 0;
-    // slot i is addressed as the struct shifted by 4 * i (sprites[] and timers[] are both 4 bytes wide)
     slot = popups;
     while (i < 3) {
         if (Sprite_GetDrawFlag(slot->sprites[0]) == TRUE) {
@@ -2479,7 +2477,6 @@ void SwalotPlopGfx_InitSprites(SwalotPlopGfx *gfx, enum HeapID heapId) {
     gfx->spriteList = G2dRenderer_Init(0x80, &gfx->renderer, heapId);
     G2dRenderer_SetSubSurfaceCoords(&gfx->renderer, 0, 2 << 20);
     i = 0;
-    // resMan[i] is addressed as the struct shifted by 4 * i
     walker = gfx;
     while (i < 4) {
         walker->resMan[0] = Create2DGfxResObjMan(0x10, (GfGfxResType)i, heapId);

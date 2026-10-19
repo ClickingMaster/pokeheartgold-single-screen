@@ -5,8 +5,6 @@
 #include "script.h"
 
 // Union Room talk: talking to another player in the Union Room.
-// Note: MWCC numbers function-local statics by the named parameters declared before them, so the declarations
-// added after the matched includers were written leave their parameters unnamed.
 
 struct UnionRoom;
 struct TrainerCardData;

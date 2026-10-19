@@ -15,62 +15,59 @@
 #include "save_link_ruleset.h"
 #include "system.h"
 
-// Wireless link layer of the communication code, above the local wireless
-// manager: wireless start-up (WVR), the beacon this game sends as a parent (trainer, link
-// kind, member count, profile, ruleset), the list of parents found while scanning (kept 300 frames after their
-// last beacon), connecting to one of them, the parent's start sequence (measure channels, pick one, start) and
-// the shutdown sequences.
+// Wireless link layer of the communication code, above the local wireless manager: the beacon, the parents found
+// while scanning (kept 300 frames after their last beacon), connecting, and the start and shutdown sequences.
 
 // The game info sent in the beacons, also read from a scanned parent's description.
 typedef struct CommBeacon {
     u32 trainerId;
-    u8 kind;        // 0x04: link kind (CommState_GetLinkMode)
-    u8 id;          // 0x05: CommState_GetBeaconId
-    u8 memberCount; // 0x06: connected players
+    u8 kind;        // link kind (CommState_GetLinkMode)
+    u8 id;          // CommState_GetBeaconId
+    u8 memberCount; // connected players
     u8 unk_07;
-    MailMessage mail; // 0x08
-    u8 profile[0x20]; // 0x10: PlayerProfile
-    u8 ruleset[0x20]; // 0x30: LinkBattleRuleset
+    MailMessage mail;
+    u8 profile[0x20]; // PlayerProfile
+    u8 ruleset[0x20]; // LinkBattleRuleset
     u8 unk_50[4];
-    u8 entryLocked; // 0x54: Wireless_IsEntryLocked
+    u8 entryLocked; // Wireless_IsEntryLocked
     u8 unk_55[7];
 } CommBeacon;
 
-// A parent found while scanning: its description (0xC0 bytes, as Wireless_StartChild takes it).
+// A parent found while scanning: its description, as Wireless_StartChild takes it.
 typedef struct CommParentInfo {
     u8 unk_00[4];
-    u8 macAddress[6]; // 0x04
+    u8 macAddress[6];
     u8 unk_0A[0x2C];
-    u16 channel; // 0x36
+    u16 channel;
     u8 unk_38[0x18];
-    CommBeacon beacon; // 0x50
+    CommBeacon beacon;
     u8 unk_AC[0x14];
 } CommParentInfo;
 
 typedef struct CommWirelessWork {
-    u8 customBeacon[0x54];      // 0x000: sent instead of the beacon in link kind 15
-    CommParentInfo received;    // 0x054: last parent reported by the scan
-    CommParentInfo parents[16]; // 0x114
-    u8 macAddresses[8][6];      // 0xD14
-    u16 parentTimers[16];       // 0xD44: frames left until a parent is dropped (0: free slot)
-    void *managerBuffer;        // 0xD64: Wireless_Init buffer
-    MailMessage mail;           // 0xD68
+    u8 customBeacon[0x54];   // sent instead of the beacon in link kind 15
+    CommParentInfo received; // last parent reported by the scan
+    CommParentInfo parents[16];
+    u8 macAddresses[8][6];
+    u16 parentTimers[16]; // frames left until a parent is dropped (0: free slot)
+    void *managerBuffer;  // Wireless_Init buffer
+    MailMessage mail;
     u32 unk_D70;
-    u8 parentListChanged; // 0xD74
+    u8 parentListChanged;
     u8 unk_D75[3];
-    PlayerProfile *profile;     // 0xD78
-    LinkBattleRuleset *ruleset; // 0xD7C
-    u32 ggid;                   // 0xD80
-    void *beaconBuffer;         // 0xD84
-    CommBeacon *beacon;         // 0xD88: beaconBuffer aligned to 32 bytes
-    u16 channel;                // 0xD8C
-    u16 firstCount;             // 0xD8E: 0xFFFF until the first CommWireless_Update
-    u8 currentChannel;          // 0xD90
-    u8 channelTimer;            // 0xD91
-    u8 shutdown;                // 0xD92: 0 none, 1 stop and free, 2 end the manager, 3 ended
-    u8 portCallbackSet;         // 0xD93
-    u8 stopState;               // 0xD94
-    u8 linkLost : 1;            // 0xD95
+    PlayerProfile *profile;
+    LinkBattleRuleset *ruleset;
+    u32 ggid;
+    void *beaconBuffer;
+    CommBeacon *beacon; // beaconBuffer aligned to 32 bytes
+    u16 channel;
+    u16 firstCount; // 0xFFFF until the first CommWireless_Update
+    u8 currentChannel;
+    u8 channelTimer;
+    u8 shutdown; // 0 none, 1 stop and free, 2 end the manager, 3 ended
+    u8 portCallbackSet;
+    u8 stopState;
+    u8 linkLost : 1;
     u8 detectDrops : 1;
     u8 lostWhenAlone : 1;
     u8 renewTgid : 1;

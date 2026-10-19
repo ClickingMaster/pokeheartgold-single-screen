@@ -15,22 +15,18 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// Mime Jr. Top (overlay 92), a Wi-Fi Plaza game: Mime Jr. balances on a spinning top and every
-// player rubs the touch screen to keep the top upright. While the top keeps spinning the score
-// grows, the spin tier rises (bonus points, new effects on the top) and the stage gets livelier;
-// when the top tilts too far Mime Jr. falls off and the spin starts over. The other players'
-// tops are shown as small sprites. The player list and the results screen come from the shared
-// Plaza game code (application/plaza_game.h). The parent keeps the game clock.
+// Mime Jr. Top, a Wi-Fi Plaza game: Mime Jr. balances on a spinning top and every player rubs the
+// touch screen to keep the top upright.
 
 // A value moving from start to start + delta over duration frames (linear, or with a start
 // velocity and constant acceleration).
 typedef struct MimeJrTopTween {
-    fx32 value;    // 0x00
-    fx32 start;    // 0x04
-    fx32 velocity; // 0x08
-    fx32 delta;    // 0x0C, acceleration for the accelerated tween
-    int frame;     // 0x10
-    int duration;  // 0x14
+    fx32 value;
+    fx32 start;
+    fx32 velocity;
+    fx32 delta; // acceleration for the accelerated tween
+    int frame;
+    int duration;
 } MimeJrTopTween;
 
 typedef struct MimeJrTopQuat {
@@ -43,105 +39,104 @@ typedef struct MimeJrTopFloatMatrix {
 
 // A 3D model with its own rotation (a quaternion turned by touch input).
 typedef struct MimeJrTopModel {
-    ModelInstance instance;              // 0x000
-    ModelResource resource;              // 0x078
-    ModelAnimation animations[3];        // 0x088
-    u8 unkC4[0x8C];                      // 0x0C4
-    MimeJrTopFloatMatrix rotationMatrix; // 0x150
-    MimeJrTopQuat rotation;              // 0x190
-    MimeJrTopQuat lastTurn;              // 0x1A0
-    MtxFx43 rotationFx;                  // 0x1B0
-    VecFx32 position;                    // 0x1E0
-    BOOL animate;                        // 0x1EC
-    BOOL loaded;                         // 0x1F0
-    int animation;                       // 0x1F4, the animation added to the instance
-    int spinFrames;                      // 0x1F8, frames the last flick keeps turning the model
-    f32 spinX;                           // 0x1FC
-    f32 spinY;                           // 0x200
-    f32 spinStepX;                       // 0x204
-    f32 spinStepY;                       // 0x208
+    ModelInstance instance;
+    ModelResource resource;
+    ModelAnimation animations[3];
+    u8 unkC4[0x8C];
+    MimeJrTopFloatMatrix rotationMatrix;
+    MimeJrTopQuat rotation;
+    MimeJrTopQuat lastTurn;
+    MtxFx43 rotationFx;
+    VecFx32 position;
+    BOOL animate;
+    BOOL loaded;
+    int animation;
+    int spinFrames; // frames the last flick keeps turning the model
+    f32 spinX;
+    f32 spinY;
+    f32 spinStepX;
+    f32 spinStepY;
 } MimeJrTopModel;
 
 // Part of MimeJrTopApp handed to the game screen.
 typedef struct MimeJrTopResources {
-    NARC *narc;                   // 0x00, NARC 193 (models, sprites, BGs)
-    NARC *unkNarc;                // 0x04, NARC 189 (opened, not read here)
-    SpriteSystem *spriteSystem;   // 0x08
-    SpriteManager *spriteManager; // 0x0C
-    BgConfig *bgConfig;           // 0x10
-    PaletteData *palette;         // 0x14
-    GF3DVramMan *vramMan;         // 0x18
-    Camera *camera;               // 0x1C
-    u32 unk20;                    // 0x20
-    NNSFndAllocator allocator;    // 0x24
-    u8 connectionLost;            // 0x34, every task stops when set
-    u8 unk35[3];                  // 0x35
+    NARC *narc;    // NARC 193 (models, sprites, BGs)
+    NARC *unkNarc; // NARC 189 (opened, not read here)
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    BgConfig *bgConfig;
+    PaletteData *palette;
+    GF3DVramMan *vramMan;
+    Camera *camera;
+    u32 unk20;
+    NNSFndAllocator allocator;
+    u8 connectionLost; // every task stops when set
+    u8 unk35[3];
 } MimeJrTopResources;
 
 // Run on the parent only: the game clock.
 typedef struct MimeJrTopClock {
-    u32 unk00;                     // 0x00
-    u32 playerCount;               // 0x04
-    s16 timer;                     // 0x08
-    u16 unk0A;                     // 0x0A
-    MimeJrTopResources *resources; // 0x0C
+    u32 unk00;
+    u32 playerCount;
+    s16 timer;
+    u16 unk0A;
+    MimeJrTopResources *resources;
 } MimeJrTopClock;
 
-// Mime Jr. falling off the top.
 typedef struct MimeJrTopFallTask {
-    int state;                     // 0x00
-    int step;                      // 0x04, 0 = falling off, 1 = climbing back
-    int timer;                     // 0x08
-    int *pose;                     // 0x0C
-    MimeJrTopModel *mimeJr;        // 0x10
-    MimeJrTopModel *top;           // 0x14
-    u8 unk18[8];                   // 0x18
-    VecFx32 tilt;                  // 0x20
-    u8 unk2C[0x18];                // 0x2C
-    MimeJrTopTween tweenY;         // 0x44
-    MimeJrTopTween tweenZ;         // 0x5C
-    BOOL selection;                // 0x74
-    MimeJrTopResources *resources; // 0x78
+    int state;
+    int step; // 0 = falling off, 1 = climbing back
+    int timer;
+    int *pose;
+    MimeJrTopModel *mimeJr;
+    MimeJrTopModel *top;
+    u8 unk18[8];
+    VecFx32 tilt;
+    u8 unk2C[0x18];
+    MimeJrTopTween tweenY;
+    MimeJrTopTween tweenZ;
+    BOOL selection;
+    MimeJrTopResources *resources;
 } MimeJrTopFallTask;
 
 // Another player's top falling over.
 typedef struct MimeJrTopRivalFallTask {
-    int state;                     // 0x00
-    int step;                      // 0x04
-    int timer;                     // 0x08
-    ManagedSprite *face;           // 0x0C
-    ManagedSprite *body;           // 0x10
-    MimeJrTopTween tween;          // 0x14
-    MimeJrTopResources *resources; // 0x2C
+    int state;
+    int step;
+    int timer;
+    ManagedSprite *face;
+    ManagedSprite *body;
+    MimeJrTopTween tween;
+    MimeJrTopResources *resources;
 } MimeJrTopRivalFallTask;
 
 // Another player's tier badge (pulses while the tier holds).
 typedef struct MimeJrTopRivalTierTask {
-    int state;                     // 0x00
-    int mode;                      // 0x04
-    int counter;                   // 0x08
-    ManagedSprite *sprite;         // 0x0C
-    MimeJrTopTween tween;          // 0x10
-    int previous;                  // 0x28
-    int *current;                  // 0x2C
-    BOOL active;                   // 0x30
-    u8 unk34[8];                   // 0x34
-    MimeJrTopResources *resources; // 0x3C
-    BOOL selection;                // 0x40
+    int state;
+    int mode;
+    int counter;
+    ManagedSprite *sprite;
+    MimeJrTopTween tween;
+    int previous;
+    int *current;
+    BOOL active;
+    u8 unk34[8];
+    MimeJrTopResources *resources;
+    BOOL selection;
 } MimeJrTopRivalTierTask;
 
 // The local player's tier models (swapped in when the tier changes).
 typedef struct MimeJrTopTierModelsTask {
-    int state;                     // 0x00
-    int unk04;                     // 0x04
-    u8 unk08[0x20];                // 0x08
-    int previous;                  // 0x28
-    int *current;                  // 0x2C
-    BOOL active;                   // 0x30
-    MimeJrTopModel *modelA;        // 0x34
-    MimeJrTopModel *modelB;        // 0x38
-    MimeJrTopResources *resources; // 0x3C
-    BOOL selection;                // 0x40
+    int state;
+    int unk04;
+    u8 unk08[0x20];
+    int previous;
+    int *current;
+    BOOL active;
+    MimeJrTopModel *modelA;
+    MimeJrTopModel *modelB;
+    MimeJrTopResources *resources;
+    BOOL selection;
 } MimeJrTopTierModelsTask;
 
 typedef union MimeJrTopPlayerTask {
@@ -151,212 +146,209 @@ typedef union MimeJrTopPlayerTask {
 
 // Three sparks thrown out where the screen is rubbed.
 typedef struct MimeJrTopBurst {
-    BOOL active;                   // 0x00
-    int state;                     // 0x04
-    ManagedSprite *sprites[3];     // 0x08
-    MimeJrTopTween tweens[3][2];   // 0x14, x and y per spark
-    MimeJrTopResources *resources; // 0xA4
+    BOOL active;
+    int state;
+    ManagedSprite *sprites[3];
+    MimeJrTopTween tweens[3][2]; // x and y per spark
+    MimeJrTopResources *resources;
 } MimeJrTopBurst;
 
-// One star of the star shower.
 typedef struct MimeJrTopStar {
-    ManagedSprite *sprite; // 0x00
-    fx32 driftX;           // 0x04
-    fx32 driftY;           // 0x08
-    fx32 originX;          // 0x0C
-    fx32 originY;          // 0x10
-    fx32 jitterX;          // 0x14
-    fx32 jitterY;          // 0x18
-    fx32 circleX;          // 0x1C
-    fx32 circleY;          // 0x20
-    u8 type;               // 0x24
-    u8 visible;            // 0x25
-    u8 delay;              // 0x26
-    u8 jitterPhase;        // 0x27
-    int angle;             // 0x28
-    s16 fallSpeed;         // 0x2C
-    s16 radiusX;           // 0x2E
-    s16 radiusY;           // 0x30
-    s16 timer;             // 0x32
+    ManagedSprite *sprite;
+    fx32 driftX;
+    fx32 driftY;
+    fx32 originX;
+    fx32 originY;
+    fx32 jitterX;
+    fx32 jitterY;
+    fx32 circleX;
+    fx32 circleY;
+    u8 type;
+    u8 visible;
+    u8 delay;
+    u8 jitterPhase;
+    int angle;
+    s16 fallSpeed;
+    s16 radiusX;
+    s16 radiusY;
+    s16 timer;
 } MimeJrTopStar;
 
 typedef struct MimeJrTopGame MimeJrTopGame;
 
 typedef struct MimeJrTopStarsTask {
-    MimeJrTopGame *game;     // 0x000
-    s32 state;               // 0x004
-    s32 timer;               // 0x008
-    s32 group;               // 0x00C
-    s32 *stop;               // 0x010
-    MimeJrTopStar stars[36]; // 0x014
+    MimeJrTopGame *game;
+    s32 state;
+    s32 timer;
+    s32 group;
+    s32 *stop;
+    MimeJrTopStar stars[36];
 } MimeJrTopStarsTask;
 
 // One effect of the stage animation (flash, pop-ups, audience, stars).
 typedef struct MimeJrTopStageEffect {
-    int state;         // 0x00
-    BOOL active;       // 0x04
-    void *targets[8];  // 0x08
-    int timer;         // 0x28
-    u8 unk2C[0x20];    // 0x2C
-    int audienceTimer; // 0x4C
-    BOOL stop;         // 0x50
-    BOOL starsRunning; // 0x54
-    u8 unk58[0x20];    // 0x58
+    int state;
+    BOOL active;
+    void *targets[8];
+    int timer;
+    u8 unk2C[0x20];
+    int audienceTimer;
+    BOOL stop;
+    BOOL starsRunning;
+    u8 unk58[0x20];
 } MimeJrTopStageEffect;
 
 // Stage effects started by the phase (how long the top has kept spinning).
 typedef struct MimeJrTopStage {
-    u32 previousPhase;               // 0x000
-    u32 *phase;                      // 0x004
-    MimeJrTopStageEffect effects[5]; // 0x008
-    SysTask *task;                   // 0x260
-    MimeJrTopResources *resources;   // 0x264
+    u32 previousPhase;
+    u32 *phase;
+    MimeJrTopStageEffect effects[5];
+    SysTask *task;
+    MimeJrTopResources *resources;
 } MimeJrTopStage;
 
 // A sub screen dancer moved along tweens or circles.
 typedef struct MimeJrTopDancer {
-    ManagedSprite *sprite; // 0x00
-    int state;             // 0x04
-    s16 angle;             // 0x08
-    u8 unk0A[6];           // 0x0A
-    int cycles;            // 0x10
-    s16 baseX;             // 0x14
-    s16 baseY;             // 0x16
-    fx32 radiusX;          // 0x18
-    fx32 radiusY;          // 0x1C
-    MimeJrTopTween tweenX; // 0x20
-    MimeJrTopTween tweenY; // 0x38
+    ManagedSprite *sprite;
+    int state;
+    s16 angle;
+    u8 unk0A[6];
+    int cycles;
+    s16 baseX;
+    s16 baseY;
+    fx32 radiusX;
+    fx32 radiusY;
+    MimeJrTopTween tweenX;
+    MimeJrTopTween tweenY;
 } MimeJrTopDancer;
 
 // The sub screen dance shown from level 1 on (one routine per level).
 typedef struct MimeJrTopDance {
-    MimeJrTopDancer dancers[4];    // 0x000, two front and two back dancers
-    int count;                     // 0x140
-    int backSpeed;                 // 0x144
-    int frontSpeed;                // 0x148
-    int loopCount;                 // 0x14C
-    u8 unk150[4];                  // 0x150
-    SysTask *task;                 // 0x154
-    u32 *level;                    // 0x158
-    int *flashBlend;               // 0x15C
-    int *danceBlend;               // 0x160
-    u32 timer;                     // 0x164
-    int routineState;              // 0x168
-    u8 unk16C[4];                  // 0x16C
-    u32 slideState;                // 0x170
-    BOOL enabled;                  // 0x174
-    BOOL shown;                    // 0x178
-    MimeJrTopResources *resources; // 0x17C
-    MimeJrTopTween slides[3];      // 0x180
+    MimeJrTopDancer dancers[4]; // two front and two back dancers
+    int count;
+    int backSpeed;
+    int frontSpeed;
+    int loopCount;
+    u8 unk150[4];
+    SysTask *task;
+    u32 *level;
+    int *flashBlend;
+    int *danceBlend;
+    u32 timer;
+    int routineState;
+    u8 unk16C[4];
+    u32 slideState;
+    BOOL enabled;
+    BOOL shown;
+    MimeJrTopResources *resources;
+    MimeJrTopTween slides[3];
 } MimeJrTopDance;
 
-// Game screen work.
 struct MimeJrTopGame {
-    int localIndex;                     // 0x0000
-    int playerCount;                    // 0x0004
-    int demoFrame;                      // 0x0008
-    int demoStep;                       // 0x000C
-    u32 unk10;                          // 0x0010
-    MimeJrTopResources *resources;      // 0x0014
-    u8 unk18[4];                        // 0x0018
-    ManagedSprite *rivalFaces[3];       // 0x001C
-    ManagedSprite *rivalBodies[3];      // 0x0028
-    ManagedSprite *rivalBadges[3];      // 0x0034
-    ManagedSprite *stars[36];           // 0x0040
-    ManagedSprite *popups[4];           // 0x00D0
-    ManagedSprite *backDancers[2];      // 0x00E0
-    ManagedSprite *frontDancers[2];     // 0x00E8
-    ManagedSprite *demoHand;            // 0x00F0
-    u16 rivalSlots[4];                  // 0x00F4
-    u8 unkFC[0xC];                      // 0x00FC
-    int flashBlend;                     // 0x0108
-    int danceBlend;                     // 0x010C
-    int mimeJrPose;                     // 0x0110
-    MimeJrTopModel top;                 // 0x0114
-    MimeJrTopModel mimeJr[3];           // 0x0320
-    MimeJrTopModel stage;               // 0x0944
-    MimeJrTopModel audience[8];         // 0x0B50
-    MimeJrTopModel tierModels[2];       // 0x1BB0
-    VecFx32 tilt;                       // 0x1FC8
-    int lastTouchX;                     // 0x1FD4
-    int lastTouchY;                     // 0x1FD8
-    u8 unk1FDC[4];                      // 0x1FDC
-    Window instructions;                // 0x1FE0
-    Window nameWindows[3];              // 0x1FF0
-    u8 unk2020[0x10];                   // 0x2020
-    MimeJrTopDance dance;               // 0x2030
-    u8 unk21F8[0x30];                   // 0x21F8
-    MimeJrTopStage stageEffects;        // 0x2228
-    MimeJrTopBurst bursts[8];           // 0x2490
-    MimeJrTopPlayerTask playerTasks[4]; // 0x29D0
-    int wobbleTick;                     // 0x2AE0
-    int frame;                          // 0x2AE4
-    u32 phase;                          // 0x2AE8
-    u32 tier;                           // 0x2AEC
-    u32 score;                          // 0x2AF0
-    u32 level;                          // 0x2AF4
-    u32 previousLevel;                  // 0x2AF8
-    s16 recoverTimer;                   // 0x2AFC
-    s16 levelTimer;                     // 0x2AFE
-    s16 rivalSpinFrames[4];             // 0x2B00
-    u32 rivalTiers[4];                  // 0x2B08
-    int spinFrames;                     // 0x2B18
-    s16 wobbleX;                        // 0x2B1C
-    s16 wobbleY;                        // 0x2B1E
-    s16 wobbleTime;                     // 0x2B20
-    s16 wobbleStep;                     // 0x2B22
-    MimeJrTopTween settleX;             // 0x2B24
-    MimeJrTopTween settleY;             // 0x2B3C
-    MimeJrTopTween kickX;               // 0x2B54
-    MimeJrTopTween kickY;               // 0x2B6C
-    BOOL touched;                       // 0x2B84
-    BOOL settled;                       // 0x2B88
-    BOOL wobbleDue;                     // 0x2B8C
-    BOOL wobbling;                      // 0x2B90
-    BOOL everTouched;                   // 0x2B94
-    s16 nextWobbleX;                    // 0x2B98
-    s16 nextWobbleY;                    // 0x2B9A
-    u32 playerStates[4];                // 0x2B9C
-    u32 unk2BAC;                        // 0x2BAC
-    u32 seed;                           // 0x2BB0
-    BOOL selection;                     // 0x2BB4
-    BOOL rivalFallShown;                // 0x2BB8
+    int localIndex;
+    int playerCount;
+    int demoFrame;
+    int demoStep;
+    u32 unk10;
+    MimeJrTopResources *resources;
+    u8 unk18[4];
+    ManagedSprite *rivalFaces[3];
+    ManagedSprite *rivalBodies[3];
+    ManagedSprite *rivalBadges[3];
+    ManagedSprite *stars[36];
+    ManagedSprite *popups[4];
+    ManagedSprite *backDancers[2];
+    ManagedSprite *frontDancers[2];
+    ManagedSprite *demoHand;
+    u16 rivalSlots[4];
+    u8 unkFC[0xC];
+    int flashBlend;
+    int danceBlend;
+    int mimeJrPose;
+    MimeJrTopModel top;
+    MimeJrTopModel mimeJr[3];
+    MimeJrTopModel stage;
+    MimeJrTopModel audience[8];
+    MimeJrTopModel tierModels[2];
+    VecFx32 tilt;
+    int lastTouchX;
+    int lastTouchY;
+    u8 unk1FDC[4];
+    Window instructions;
+    Window nameWindows[3];
+    u8 unk2020[0x10];
+    MimeJrTopDance dance;
+    u8 unk21F8[0x30];
+    MimeJrTopStage stageEffects;
+    MimeJrTopBurst bursts[8];
+    MimeJrTopPlayerTask playerTasks[4];
+    int wobbleTick;
+    int frame;
+    u32 phase;
+    u32 tier;
+    u32 score;
+    u32 level;
+    u32 previousLevel;
+    s16 recoverTimer;
+    s16 levelTimer;
+    s16 rivalSpinFrames[4];
+    u32 rivalTiers[4];
+    int spinFrames;
+    s16 wobbleX;
+    s16 wobbleY;
+    s16 wobbleTime;
+    s16 wobbleStep;
+    MimeJrTopTween settleX;
+    MimeJrTopTween settleY;
+    MimeJrTopTween kickX;
+    MimeJrTopTween kickY;
+    BOOL touched;
+    BOOL settled;
+    BOOL wobbleDue;
+    BOOL wobbling;
+    BOOL everTouched;
+    s16 nextWobbleX;
+    s16 nextWobbleY;
+    u32 playerStates[4];
+    u32 unk2BAC;
+    u32 seed;
+    BOOL selection;
+    BOOL rivalFallShown;
 };
 
 // Command 22: sent by the parent to start the game.
 typedef struct MimeJrTopStartMessage {
-    u8 selection; // 0x00
-    u8 unk01[3];  // 0x01
-    u32 seed;     // 0x04
+    u8 selection;
+    u8 unk01[3];
+    u32 seed;
 } MimeJrTopStartMessage;
 
 typedef struct MimeJrTopPlayerScore {
-    u32 score; // 0x00
-    u32 unk04; // 0x04
+    u32 score;
+    u32 unk04;
 } MimeJrTopPlayerScore;
 
-// Overlay work (heap 0x71).
 typedef struct MimeJrTopApp {
-    MimeJrTopClock *clock;          // 0x00
-    MimeJrTopGame *game;            // 0x04
-    BOOL startReceived;             // 0x08
-    BOOL finishReceived;            // 0x0C
-    u32 unk10;                      // 0x10
-    MimeJrTopStartMessage start;    // 0x14
-    u32 finalScore;                 // 0x1C, command 25 (8 bytes)
-    u8 unk20[4];                    // 0x20
-    MimeJrTopPlayerScore scores[4]; // 0x24
-    int netId;                      // 0x44
-    MimeJrTopResources resources;   // 0x48
-    u32 savedSeed;                  // 0x80
-    PlazaGameSign *sign;            // 0x84
-    PlazaGameArgs *args;            // 0x88
-    PlazaGameRoster roster;         // 0x8C
-    PlazaGameEntry *entry;          // 0x9C
-    PlazaGameResultData resultData; // 0xA0
-    PlazaGameResults *results;      // 0xB8
-    u32 netIds[4];                  // 0xBC
-    BOOL keepPlaying;               // 0xCC
+    MimeJrTopClock *clock;
+    MimeJrTopGame *game;
+    BOOL startReceived;
+    BOOL finishReceived;
+    u32 unk10;
+    MimeJrTopStartMessage start;
+    u32 finalScore; // command 25
+    u8 unk20[4];
+    MimeJrTopPlayerScore scores[4];
+    int netId;
+    MimeJrTopResources resources;
+    u32 savedSeed;
+    PlazaGameSign *sign;
+    PlazaGameArgs *args;
+    PlazaGameRoster roster;
+    PlazaGameEntry *entry;
+    PlazaGameResultData resultData;
+    PlazaGameResults *results;
+    u32 netIds[4];
+    BOOL keepPlaying;
 } MimeJrTopApp;
 
 typedef void (*MimeJrTopReceiveFunc)(int netId, int size, void *data, MimeJrTopApp *app);

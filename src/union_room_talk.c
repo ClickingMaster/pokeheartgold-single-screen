@@ -22,10 +22,8 @@
 #include "union_room_avatar.h"
 #include "union_room_internal.h"
 
-// Union Room talk: the part of the Union Room object (FieldSystem.unionRoom) used while the player talks to another player: the link commands of the talk menu (choice,
-// reply, cancel, battle party choice, trainer card exchange), the script messages for what a player is doing,
-// the activity and chat message broadcast in the player's beacon, and the language greeting learned from a
-// foreign player.
+// Union Room talk: the link commands of the talk menu, the script messages for what a player is doing, the activity
+// and chat message broadcast in the player's beacon, and the language greeting learned from a foreign player.
 
 void CommState_SetLinkMode13RequestMode0(void);
 u32 CommPlayerInfo_GetCountry(int netId);
@@ -158,7 +156,7 @@ static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot)
     }
     profile = CommWireless_GetParentProfile(index);
     info = &unionRoom->records[index]->info;
-    status = (UnionRoomStatus *)((u8 *)info + 0x30); // the two offsets are added one after the other
+    status = (UnionRoomStatus *)((u8 *)info + 0x30);
     if (profile == NULL) {
         return 40;
     }

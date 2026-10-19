@@ -32,8 +32,8 @@ typedef struct UnionChatLogRow {
     Window name;
     Window message;
     Window friendOf;
-    int gender;     // 0x30: selects the row background
-    int pressTimer; // 0x34: grows while the row is held, shrinks after release
+    int gender;     // selects the row background
+    int pressTimer; // grows while the row is held, shrinks after release
 } UnionChatLogRow;
 
 typedef struct UnionChatLogData {
@@ -54,7 +54,7 @@ typedef struct UnionChatLogData {
     SpriteResourcesHeader header;
     Sprite *sprites[3];
     u8 unk_1A4[0x20];
-    int touchedButton; // 0x1C4: button hitbox - 2, so the rows are 0-2
+    int touchedButton; // button hitbox - 2, so the rows are 0-2
     UnionChatLogRow rows[UNION_CHAT_LOG_NUM_ROWS];
     UnionChatLogMessages *log;
     Window menuWindow;
@@ -72,7 +72,7 @@ typedef struct UnionChatLogData {
     BOOL thumbFollowsScroll; // FALSE while the scrollbar is dragged
     u16 arrowPressed[UNION_CHAT_LOG_NUM_ARROWS];
     SysTask *task;
-} UnionChatLogData; // size: 0x2A8
+} UnionChatLogData;
 
 UnionChatLogData *UnionChatLog_Init(FieldSystem *fieldSystem);
 void UnionChatLog_Exit(UnionChatLogData *data);

@@ -3,15 +3,15 @@
 
 #include "global.h"
 
-// Communication core (ARM9 static 0x02035900-0x020379A0): the work area of the active link, the per-frame update,
-// parent/child frame exchange and the command send queues.
+// Communication core: the work area of the active link, the per-frame update, parent/child frame exchange and the
+// command send queues.
 
 typedef struct CommCore {
     u8 initialized; // the parent frame for the current slot is filled in
     u8 updateLock;  // set by the frame update, cleared by the VBlank send task
     u8 unk_02[2];
     void *allocation;
-    u8 *work; // 32-byte aligned inside allocation, 0x6C0 bytes
+    u8 *work; // 32-byte aligned inside allocation
 } CommCore;
 
 // Receive state of one command stream (a command id, its size and the bytes received so far).
@@ -19,7 +19,7 @@ typedef struct PacketCursor {
     int received;
     u8 *data;
     u16 size;
-    u8 command; // 0xEE: none
+    u8 command; // none
     u8 unk_0B;
 } PacketCursor;
 
@@ -42,7 +42,6 @@ typedef struct CommRing {
 } CommRing;
 
 // Send stage of the parent frame ([0]) and the child frame ([1]): 4 = idle, 0/2 = ready to send, odd = sending.
-// The object is word-aligned and 4 bytes long in the ROM.
 typedef union CommSendStages {
     volatile u8 stage[4];
     u32 align;

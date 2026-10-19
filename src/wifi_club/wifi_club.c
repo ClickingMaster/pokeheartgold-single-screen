@@ -23,10 +23,8 @@
 #include "wifi_club_app.h"
 #include "wobbuffet_pop.h"
 
-// Wi-Fi Club: the field task that runs the Wi-Fi Club (overlay 44) and whatever
-// the player chose there: a link battle (free, level 50 or level 100; single or double), a trade, the Battle Frontier,
-// one of the three minigames (each behind the game entry screen of overlay 44), or the Wi-Fi settings, which reset
-// the system afterwards. The Wi-Fi Club comes back after each of them until the player leaves.
+// Wi-Fi Club: the field task that runs the Wi-Fi Club and whatever the player chose there (a link battle, a trade,
+// the Battle Frontier, a minigame or the Wi-Fi settings); the club comes back after each until the player leaves.
 
 FS_EXTERN_OVERLAY(OVY_44);
 FS_EXTERN_OVERLAY(OVY_90);
@@ -34,7 +32,7 @@ FS_EXTERN_OVERLAY(OVY_91);
 FS_EXTERN_OVERLAY(OVY_92);
 FS_EXTERN_OVERLAY(OVY_93);
 
-// What the player chose in the Wi-Fi Club (WifiClubArgs.unk4, written by overlay 44).
+// What the player chose in the Wi-Fi Club (WifiClubArgs.unk4).
 enum WifiClubChoice {
     WIFI_CLUB_BATTLE_SINGLE_LV50 = 1,
     WIFI_CLUB_BATTLE_SINGLE_LV100,
@@ -90,14 +88,14 @@ enum WifiClubTaskState {
 };
 
 typedef struct WifiClubTask {
-    WifiClubArgs *clubArgs; // 0x00
-    u32 state;              // 0x04
-    u16 *result;            // 0x08: script variable, 1 when the player cancelled
-    u8 maxLevel;            // 0x0C: of the link battle, 0 for no limit
-    u8 doubleBattle;        // 0x0D
-    u8 pad0E[2];            // 0x0E
-    void *launchedArgs;     // 0x10: of the game entry screen or minigame
-    u32 selection;          // 0x14: picked on the game entry screen, passed on to the minigame
+    WifiClubArgs *clubArgs;
+    u32 state;
+    u16 *result; // script variable, 1 when the player cancelled
+    u8 maxLevel; // of the link battle, 0 for no limit
+    u8 doubleBattle;
+    u8 pad0E[2];
+    void *launchedArgs; // of the game entry screen or minigame
+    u32 selection;      // picked on the game entry screen, passed on to the minigame
 } WifiClubTask;
 
 static BOOL Task_WifiClub(TaskManager *taskManager);
@@ -310,13 +308,13 @@ static WifiClubTask *WifiClubTask_New(void) {
 
 void CallTask_WifiClub(TaskManager *taskManager) {
     WifiClubTask *task = WifiClubTask_New();
-    task->clubArgs->choice = 2; // start mode for overlay 44
+    task->clubArgs->choice = 2; // start mode of the Wi-Fi Club
     TaskManager_Call(taskManager, Task_WifiClub, task);
 }
 
 void CallTask_WifiClubWithResult(TaskManager *taskManager, u16 *result) {
     WifiClubTask *task = WifiClubTask_New();
-    task->clubArgs->choice = 1; // start mode for overlay 44; may end at once (result 0)
+    task->clubArgs->choice = 1; // start mode of the Wi-Fi Club; may end at once (result 0)
     task->result = result;
     TaskManager_Call(taskManager, Task_WifiClub, task);
 }
@@ -376,7 +374,7 @@ static PlazaGameArgs *WifiClub_LaunchMimeJrTop(FieldSystem *fieldSystem, enum He
     PlazaGameArgs *args = Heap_Alloc(heapID, sizeof(PlazaGameArgs));
     memset(args, 0, sizeof(PlazaGameArgs));
     args->mimeJrTopVoiceChat = selection;
-    *(u32 *)&args->voiceChat = 0; // read as one word: launched from the lobby
+    *(u32 *)&args->voiceChat = 0; // launched from the lobby
     args->saveData = fieldSystem->saveData;
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_90), OVY_LOAD_ASYNC);
     FieldSystem_LaunchApplication(fieldSystem, &sOverlayTemplate_MimeJrTop, args);

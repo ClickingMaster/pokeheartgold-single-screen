@@ -1044,7 +1044,6 @@ BOOL PlazaGameEntry_UpdatePlayers(PlazaGameEntry *entry) {
     allDone = TRUE;
     i = 0;
     if (i < entry->roster.count) {
-        // The sprite check walks its own pointer over the rows.
         PlazaGamePlayer *player = entry->players;
         u8 *row = (u8 *)entry;
         PlazaGamePlayer *scrollPlayer = player;
@@ -1334,7 +1333,6 @@ int PlazaGamePlayerInfo_HasDifferentCountries(const PlazaGameRoster *roster, con
     int result;
     result = 0;
     i = 0;
-    // The count is reloaded every iteration.
     for (; i < roster->count - 1; i++) {
         int next = countries[i + 1];
         int current = countries[i];
@@ -1523,7 +1521,6 @@ typedef struct PlazaGameResultDataBytes {
 PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const PlazaGameResultData *data, u8 game, enum HeapID heapId) {
     PlazaGameResults *results = Heap_Alloc(heapId, sizeof(PlazaGameResults));
     memset(results, 0, sizeof(PlazaGameResults));
-    // Both are copied byte by byte.
     *(PlazaGameResultDataBytes *)&results->data = *(const PlazaGameResultDataBytes *)data;
     *(PlazaGameRosterBytes *)&results->roster = *(const PlazaGameRosterBytes *)roster;
     results->game = game;
@@ -2257,7 +2254,6 @@ void PlazaGameBalloons_Init(PlazaGameBalloons *balloons, PlazaGameBg *bg, PlazaG
         col = 0;
         spriteY = y;
         for (; col < 5; col++, x += 24) {
-            // Addressed as the struct shifted by whole sprite slots.
             PlazaGameBalloons *slot = (PlazaGameBalloons *)((u8 *)balloons + 4 * (col + base));
             slot->sprites[0] = PlazaGameGfx_CreateSprite(balloons->gfxRes, sprites->spriteList, (s16)x, spriteY, 0, heapId);
             Sprite_SetDrawFlag(slot->sprites[0], FALSE);
@@ -2355,7 +2351,6 @@ BOOL PlazaGameResults_UpdatePlayers(PlazaGameResults *results) {
     i = 0;
     if (i < results->roster.count) {
         player = results->players;
-        // The sprite check walks its own pointer over the rows.
         row = (u8 *)results;
         scrollPlayer = player;
         do {

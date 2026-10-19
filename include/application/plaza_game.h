@@ -14,9 +14,8 @@
 #include "sprite_resource.h"
 #include "yes_no_prompt.h"
 
-// Shared code of the Wi-Fi Plaza games (SWALOT Plop, MIME JR. Top and WOBBUFFET Pop,
-// overlays 91, 92 and 93): the player list shown before a game, the results screen
-// shown after it, and the countdown / finish sign used during the game.
+// Shared code of the Wi-Fi Plaza games (SWALOT Plop, MIME JR. Top and WOBBUFFET Pop): the player list
+// shown before a game, the results screen shown after it, and the countdown / finish sign.
 
 // Launch arguments of a Plaza Game, shared with the Wi-Fi Plaza lobby.
 typedef struct PlazaGameArgs {
@@ -34,25 +33,25 @@ typedef struct PlazaGameArgs {
 } PlazaGameArgs;
 
 typedef struct PlazaGameRoster {
-    SaveData *saveData;   // 0x0
-    u8 netIds[4];         // 0x4
-    u8 count;             // 0x8
-    u8 localIndex;        // 0x9
-    u8 voiceChat;              // 0xA
-    u8 launchedFromField; // 0xB
-    PlazaGameArgs *args;  // 0xC
+    SaveData *saveData;
+    u8 netIds[4];
+    u8 count;
+    u8 localIndex;
+    u8 voiceChat;
+    u8 launchedFromField;
+    PlazaGameArgs *args;
 } PlazaGameRoster;
 
 typedef struct PlazaGameResultData {
-    u32 scores[4]; // 0x00
-    u8 ranks[4];   // 0x10
-    u32 total;     // 0x14
+    u32 scores[4];
+    u8 ranks[4];
+    u32 total;
 } PlazaGameResultData;
 
 typedef struct PlazaGamePlayerInfo {
-    u8 countries[4];            // 0x00
-    u8 regions[4];              // 0x04
-    PlayerProfile *profiles[4]; // 0x08
+    u8 countries[4];
+    u8 regions[4];
+    PlayerProfile *profiles[4];
 } PlazaGamePlayerInfo;
 
 typedef struct PlazaGameBgTemplate {
@@ -74,11 +73,11 @@ typedef struct PlazaGameText {
 } PlazaGameText;
 
 typedef struct PlazaGameMessageBox {
-    Window windows[2];            // 0x00
-    u16 printerIds[2];            // 0x20
-    String *strings[2];           // 0x24
-    WaitingIcon *waitingIcons[2]; // 0x2C
-    u32 colorVariant;             // 0x34
+    Window windows[2];
+    u16 printerIds[2];
+    String *strings[2];
+    WaitingIcon *waitingIcons[2];
+    u32 colorVariant;
 } PlazaGameMessageBox;
 
 typedef struct PlazaGameSprites {
@@ -109,26 +108,26 @@ typedef struct PlazaGameMotion {
 
 // The game name banner that slides in at the top of the player list and the results screen.
 typedef struct PlazaGameTitle {
-    Window window;          // 0x00
-    u32 game;               // 0x10
-    String *string;         // 0x14
-    PlazaGameMotion motion; // 0x18
-    s16 frame;              // 0x2C
-    s16 state;              // 0x2E
+    Window window;
+    u32 game;
+    String *string;
+    PlazaGameMotion motion;
+    s16 frame;
+    s16 state;
 } PlazaGameTitle;
 
 // One row of the player list.
 typedef struct PlazaGamePlayer {
-    Window window;          // 0x00
-    Sprite *sprite;         // 0x10
-    Sprite *rankSprite;     // 0x14
-    u16 count;              // 0x18
-    u8 index;               // 0x1A
-    u8 seat;                // 0x1B
-    PlazaGameMotion motion; // 0x1C
-    s16 frame;              // 0x30
-    s16 delay;              // 0x32
-    u32 se;                 // 0x34
+    Window window;
+    Sprite *sprite;
+    Sprite *rankSprite;
+    u16 count;
+    u8 index;
+    u8 seat;
+    PlazaGameMotion motion;
+    s16 frame;
+    s16 delay;
+    u32 se;
 } PlazaGamePlayer;
 
 // Per-scanline horizontal scroll of the player rows.
@@ -146,120 +145,119 @@ typedef struct PlazaGameWindowBits {
 
 // Window 0 frame around the countdown / finish sign, opened by two sliding bars.
 typedef struct PlazaGameSignWindow {
-    Sprite *sprites[2];               // 0x000
-    s16 step;                         // 0x008
-    s16 offset;                       // 0x00A
-    u8 lines[192];                    // 0x00C
-    u8 pendingLines[192];             // 0x0CC
-    SysTask *task;                    // 0x18C
-    PlazaGameWindowBits savedOutside; // 0x190
-    PlazaGameWindowBits signOutside;  // 0x191
-    u8 unk192[2];                     // 0x192
-    u32 savedWindows;                 // 0x194
+    Sprite *sprites[2];
+    s16 step;
+    s16 offset;
+    u8 lines[192];
+    u8 pendingLines[192];
+    SysTask *task;
+    PlazaGameWindowBits savedOutside;
+    PlazaGameWindowBits signOutside;
+    u8 unk192[2];
+    u32 savedWindows;
 } PlazaGameSignWindow;
 
 typedef struct PlazaGameSign {
-    enum HeapID heapId;         // 0x000
-    u16 state;                  // 0x004
-    s16 timer;                  // 0x006
-    SpriteList *spriteList;     // 0x008
-    NARC *narc;                 // 0x00C
-    PlazaGameGfx gfx;           // 0x010
-    PlazaGameGfxRes *gfxRes;    // 0x028
-    SysTask *task;              // 0x02C
-    Sprite *sprite;             // 0x030
-    PlazaGameSignWindow window; // 0x034
+    enum HeapID heapId;
+    u16 state;
+    s16 timer;
+    SpriteList *spriteList;
+    NARC *narc;
+    PlazaGameGfx gfx;
+    PlazaGameGfxRes *gfxRes;
+    SysTask *task;
+    Sprite *sprite;
+    PlazaGameSignWindow window;
 } PlazaGameSign;
 
 // "Would you like to keep playing?" prompt and the vote of all players.
 typedef struct PlazaGameContinue {
-    u8 state;                     // 0x00
-    u8 voiceChat;                     // 0x01
-    u16 timer;                    // 0x02
-    YesNoPrompt *prompt;          // 0x04
-    YesNoPromptTemplate template; // 0x08
-    u8 votes;                     // 0x1C
-    u8 allYes;                    // 0x1D
-    u8 received;                  // 0x1E
-    u8 result;                    // 0x1F
+    u8 state;
+    u8 voiceChat;
+    u16 timer;
+    YesNoPrompt *prompt;
+    YesNoPromptTemplate template;
+    u8 votes;
+    u8 allYes;
+    u8 received;
+    u8 result;
 } PlazaGameContinue;
 
 // Popped balloon counter of the WOBBUFFET Pop results.
 typedef struct PlazaGameBalloons {
-    void *screenRaw;          // 0x00
-    NNSG2dScreenData *screen; // 0x04
-    Sprite *sprites[15];      // 0x08
-    PlazaGameGfxRes *gfxRes;  // 0x44
-    u8 state;                 // 0x48
-    u8 timer;                 // 0x49
-    u8 count;                 // 0x4A
-    u8 total;                 // 0x4B
+    void *screenRaw;
+    NNSG2dScreenData *screen;
+    Sprite *sprites[15];
+    PlazaGameGfxRes *gfxRes;
+    u8 state;
+    u8 timer;
+    u8 count;
+    u8 total;
 } PlazaGameBalloons;
 
 // Player list shown before a game ("These players have been accepted.").
 typedef struct PlazaGameEntry {
-    u8 state;                       // 0x000
-    u8 timer;                       // 0x001
-    u16 heapId;                     // 0x002
-    u16 game;                       // 0x004
-    u8 selection;                   // 0x006
-    u8 selectionReceived;           // 0x007
-    PlazaGameRoster roster;         // 0x008
-    PlazaGamePlayerInfo info;       // 0x018
-    PlazaGameBg bg;                 // 0x030
-    PlazaGameText text;             // 0x03C
-    PlazaGameMessageBox messageBox; // 0x04C
-    PlazaGameSprites sprites;       // 0x084
-    PlazaGameGfx gfx;               // 0x1B0
-    PlazaGameGfxRes *gfxRes;        // 0x1C8
-    PlazaGameTitle title;           // 0x1CC
-    void *screenRaw;                // 0x1FC
-    NNSG2dScreenData *screen;       // 0x200
-    PlazaGamePlayer players[4];     // 0x204
-    PlazaGameLineScroll lineScroll; // 0x2E4
-    SysTask *task;                  // 0x5EC
-    SysTask *vblankTask;            // 0x5F0
+    u8 state;
+    u8 timer;
+    u16 heapId;
+    u16 game;
+    u8 selection;
+    u8 selectionReceived;
+    PlazaGameRoster roster;
+    PlazaGamePlayerInfo info;
+    PlazaGameBg bg;
+    PlazaGameText text;
+    PlazaGameMessageBox messageBox;
+    PlazaGameSprites sprites;
+    PlazaGameGfx gfx;
+    PlazaGameGfxRes *gfxRes;
+    PlazaGameTitle title;
+    void *screenRaw;
+    NNSG2dScreenData *screen;
+    PlazaGamePlayer players[4];
+    PlazaGameLineScroll lineScroll;
+    SysTask *task;
+    SysTask *vblankTask;
 } PlazaGameEntry;
 
 // Results screen shown after a game ("Here are the results!").
 typedef struct PlazaGameResults {
-    u16 timer;                        // 0x000
-    u16 heapId;                       // 0x002
-    u8 state;                         // 0x004
-    u8 showCountries;                 // 0x005
-    u8 done;                          // 0x006
-    u8 game;                          // 0x007
-    u8 continueResult;                // 0x008
-    u8 tapToyPoweredUp;               // 0x009
-    u8 unk0A[2];                      // 0x00A
-    PlazaGameRoster roster;           // 0x00C
-    PlazaGameResultData data;         // 0x01C
-    PlazaGamePlayerInfo info;         // 0x034
-    PlazaGameBg bg;                   // 0x04C
-    PlazaGameText text;               // 0x058
-    PlazaGameMessageBox messageBox;   // 0x068
-    PlazaGameSprites sprites;         // 0x0A0
-    PlazaGameGfx gfx;                 // 0x1CC
-    PlazaGameGfxRes *gfxRes;          // 0x1E4
-    PlazaGameContinue continuePrompt; // 0x1E8
-    PlazaGameBalloons balloons;       // 0x208
-    void *screenRaw;                  // 0x254
-    NNSG2dScreenData *screen;         // 0x258
-    PlazaGamePlayer players[4];       // 0x25C
-    PlazaGameLineScroll lineScroll;   // 0x33C
-    SysTask *task;                    // 0x644
-    SysTask *vblankTask;              // 0x648
-    u32 prevTapToy;                   // 0x64C
-    u16 rankStep;                     // 0x650
-    u16 delay;                        // 0x652
-    void *flashPlttRaw;               // 0x654
-    NNSG2dPaletteData *flashPltt;     // 0x658
-    u16 flashFrame;                   // 0x65C
-    u16 flashEnabled;                 // 0x65E
-    u32 fanfareState;                 // 0x660
+    u16 timer;
+    u16 heapId;
+    u8 state;
+    u8 showCountries;
+    u8 done;
+    u8 game;
+    u8 continueResult;
+    u8 tapToyPoweredUp;
+    u8 unk0A[2];
+    PlazaGameRoster roster;
+    PlazaGameResultData data;
+    PlazaGamePlayerInfo info;
+    PlazaGameBg bg;
+    PlazaGameText text;
+    PlazaGameMessageBox messageBox;
+    PlazaGameSprites sprites;
+    PlazaGameGfx gfx;
+    PlazaGameGfxRes *gfxRes;
+    PlazaGameContinue continuePrompt;
+    PlazaGameBalloons balloons;
+    void *screenRaw;
+    NNSG2dScreenData *screen;
+    PlazaGamePlayer players[4];
+    PlazaGameLineScroll lineScroll;
+    SysTask *task;
+    SysTask *vblankTask;
+    u32 prevTapToy;
+    u16 rankStep;
+    u16 delay;
+    void *flashPlttRaw;
+    NNSG2dPaletteData *flashPltt;
+    u16 flashFrame;
+    u16 flashEnabled;
+    u32 fanfareState;
 } PlazaGameResults;
 
-// Used by overlays 91, 92 and 93.
 void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u8 unkA, PlazaGameArgs *args);
 int PlazaGameRoster_GetIndexOfNetId(const PlazaGameRoster *roster, u32 netId);
 u8 PlazaGameRoster_GetNetId(const PlazaGameRoster *roster, u32 index);

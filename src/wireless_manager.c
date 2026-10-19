@@ -7,12 +7,8 @@
 
 #include "WM.h"
 
-// Local wireless manager: drives the WM library for the communication layer.
-// A parent sets its parent parameters, starts the parent and MP communication and accepts or refuses the
-// children that connect; a child scans for a parent (all allowed channels in turn, or one), connects to it and
-// starts MP communication. Every request is asynchronous: the state is WIRELESS_STATE_BUSY until its callback
-// arrives. Errors of the library are kept in error and move the state to WIRELESS_STATE_ERROR (recoverable by a
-// reset) or WIRELESS_STATE_FATAL.
+// Local wireless manager: drives the WM library for the communication layer. Every request is asynchronous: the
+// state is WIRELESS_STATE_BUSY until its callback arrives.
 
 #define WIRELESS_STATE_STOPPED  0
 #define WIRELESS_STATE_IDLE     1
@@ -44,11 +40,11 @@ typedef struct WirelessParentEvent {
     u16 apiid;
     u16 errcode;
     u8 unk_04[4];
-    u16 state; // 0x08: 0 parent started, 2 beacon sent, 7 child connected, 9 child disconnected
+    u16 state; // 0 parent started, 2 beacon sent, 7 child connected, 9 child disconnected
     u8 unk_0A[6];
-    u16 aid; // 0x10
+    u16 aid;
     u8 unk_12[2];
-    u8 connectData[4]; // 0x14: the child's WM_StartConnectEx data
+    u8 connectData[4]; // the child's WM_StartConnectEx data
 } WirelessParentEvent;
 
 // WM_StartConnectEx callback argument.
@@ -56,19 +52,19 @@ typedef struct WirelessConnectEvent {
     u16 apiid;
     u16 errcode;
     u8 unk_04[4];
-    u16 state; // 0x08: 7 connected, 9 disconnected
-    u16 aid;   // 0x0A
+    u16 state; // 7 connected, 9 disconnected
+    u16 aid;
 } WirelessConnectEvent;
 
 // Port callback argument (WM_SetPortCallback).
 typedef struct WirelessPortEvent {
     u16 apiid;
     u16 errcode;
-    u16 state; // 0x04: 9 disconnected, 0x15 data received, 0x19 callback set
+    u16 state; // 9 disconnected, 0x15 data received, 0x19 callback set
     u8 unk_06[6];
-    void *data; // 0x0C
-    u16 length; // 0x10
-    u16 aid;    // 0x12: sender
+    void *data;
+    u16 length;
+    u16 aid; // sender
 } WirelessPortEvent;
 
 // WM_SetMPDataToPortEx callback argument.
@@ -76,72 +72,72 @@ typedef struct WirelessSendEvent {
     u16 apiid;
     u16 errcode;
     u8 unk_04[0x1C];
-    WirelessSentFunc callback; // 0x20: the request's argument
+    WirelessSentFunc callback; // the request's argument
 } WirelessSendEvent;
 
-// Parent parameters handed to WM_SetParentParameter (0x40 bytes).
+// Parent parameters handed to WM_SetParentParameter.
 typedef struct WirelessParentParam {
-    void *gameInfo;     // 0x00
-    u16 gameInfoLength; // 0x04
+    void *gameInfo;
+    u16 gameInfoLength;
     u16 unk_06;
-    u32 ggid;      // 0x08
-    u16 tgid;      // 0x0C
-    u16 entryFlag; // 0x0E
-    u16 maxEntry;  // 0x10
+    u32 ggid;
+    u16 tgid;
+    u16 entryFlag;
+    u16 maxEntry;
     u16 multiBoot;
-    u16 keySharing; // 0x14: 1 in mode 2
+    u16 keySharing; // 1 in mode 2
     u16 continuousSend;
-    u16 beaconPeriod; // 0x18
+    u16 beaconPeriod;
     u8 unk_1A[0x18];
-    u16 channel;       // 0x32
-    u16 parentMaxSize; // 0x34
-    u16 childMaxSize;  // 0x36
+    u16 channel;
+    u16 parentMaxSize;
+    u16 childMaxSize;
     u8 unk_38[8];
 } WirelessParentParam;
 
 // WM_StartScan parameters.
 typedef struct WirelessScanParam {
-    void *buffer; // 0x12E0: parentInfo
-    u16 channel;  // 0x12E4
-    u16 time;     // 0x12E6
-    u16 bssid[3]; // 0x12E8: address of the parent looked for
+    void *buffer; // parentInfo
+    u16 channel;
+    u16 time;
+    u16 bssid[3]; // address of the parent looked for
 } WirelessScanParam;
 
 // The work buffer (Wireless_Init aligns it to 32 bytes; Wireless_GetWorkSize).
 typedef struct WirelessWork {
-    WirelessParentParam parentParam; // 0x0000
-    u8 systemBuffer[0xF00];          // 0x0040: WM_Initialize
-    u8 sendBuffer[0xE0];             // 0x0F40: MP send buffer
-    u8 receiveBuffer[0x200];         // 0x1020: MP receive buffer
-    u8 parentInfo[0xC0];             // 0x1220: the parent found by the scan / connected to
-    WirelessScanParam scanParam;     // 0x12E0
+    WirelessParentParam parentParam;
+    u8 systemBuffer[0xF00];  // WM_Initialize
+    u8 sendBuffer[0xE0];     // MP send buffer
+    u8 receiveBuffer[0x200]; // MP receive buffer
+    u8 parentInfo[0xC0];     // the parent found by the scan / connected to
+    WirelessScanParam scanParam;
     u8 unk_12F0[0x10];
-    void (*parentFoundCallback)(void *parentInfo); // 0x1300
-    u32 sendBufferSize;                            // 0x1304
-    u32 receiveBufferSize;                         // 0x1308
-    u16 scanChannel;                               // 0x130C: 0: every allowed channel in turn
-    u16 connectAfterScan;                          // 0x130E
-    u32 state;                                     // 0x1310: WIRELESS_STATE_*
-    u32 mode;                                      // 0x1314: 0, 2, 4 parent; 1, 3, 5 child
-    WirelessReceiveFunc receiveCallback;           // 0x1318
+    void (*parentFoundCallback)(void *parentInfo);
+    u32 sendBufferSize;
+    u32 receiveBufferSize;
+    u16 scanChannel; // 0: every allowed channel in turn
+    u16 connectAfterScan;
+    u32 state; // WIRELESS_STATE_*
+    u32 mode;  // 0, 2, 4 parent; 1, 3, 5 child
+    WirelessReceiveFunc receiveCallback;
     u32 unk_131C;
-    void (*beaconCallback)(u32 ggid, u8 info); // 0x1320: every beacon seen while scanning
-    void (*childLeftCallback)(u16 aid);        // 0x1324
-    void (*childJoinedCallback)(u16 aid);      // 0x1328
-    u16 aid;                                   // 0x132C: own AID (0: parent)
-    u16 connectedBitmap;                       // 0x132E: bit per connected AID, the parent included
-    u32 error;                                 // 0x1330
-    u8 maxEntries;                             // 0x1334
-    u8 connectBlocked;                         // 0x1335
+    void (*beaconCallback)(u32 ggid, u8 info); // every beacon seen while scanning
+    void (*childLeftCallback)(u16 aid);
+    void (*childJoinedCallback)(u16 aid);
+    u16 aid;             // own AID (0: parent)
+    u16 connectedBitmap; // bit per connected AID, the parent included
+    u32 error;
+    u8 maxEntries;
+    u8 connectBlocked;
     u8 unk_1336[2];
-    u32 random;        // 0x1338
-    u16 channel;       // 0x133C
-    u16 minBusyRatio;  // 0x133E
-    u16 quietChannels; // 0x1340: channels with minBusyRatio
-    u8 entryLocked;    // 0x1342
-    u8 entryClosed;    // 0x1343
-    u8 entrySet;       // 0x1344
-    u8 beaconCount;    // 0x1345
+    u32 random;
+    u16 channel;
+    u16 minBusyRatio;
+    u16 quietChannels; // channels with minBusyRatio
+    u8 entryLocked;
+    u8 entryClosed;
+    u8 entrySet;
+    u8 beaconCount;
     u8 unk_1346[0x3A];
 } WirelessWork;
 
@@ -511,15 +507,15 @@ typedef struct WirelessScanEvent {
     u16 apiid;
     u16 errcode;
     u8 unk_04[4];
-    u16 state; // 0x08: 3 nothing found, 4 channel done, 5 parent found
+    u16 state; // 3 nothing found, 4 channel done, 5 parent found
     u8 unk_0A[0x2C];
-    u16 gameInfoLength; // 0x36
+    u16 gameInfoLength;
     u8 unk_38[4];
-    u32 ggid; // 0x3C
+    u32 ggid;
     u8 unk_40[3];
-    u8 attribute; // 0x43
+    u8 attribute;
     u8 unk_44[4];
-    u8 gameInfo[5]; // 0x48
+    u8 gameInfo[5];
 } WirelessScanEvent;
 
 #pragma opt_propagation off
@@ -1133,7 +1129,7 @@ BOOL Wireless_StartParent(int mode, u16 tgid, u16 channel, u16 maxEntry, u16 bea
     return FALSE;
 }
 
-// Connects as a child (mode 1, 3 or 5) to the parent described by parentInfo (0xC0 bytes).
+// Connects as a child (mode 1, 3 or 5) to the parent described by parentInfo.
 BOOL Wireless_StartChild(int mode, const void *parentInfo) {
     if (Comm_IsCommClubLinkMode(CommState_GetLinkMode())) {
         WM_SetLifeTime(Wireless_OnLifeTimeSet, 0xFFFF, 100, 5, 100);

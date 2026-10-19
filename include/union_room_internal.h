@@ -8,10 +8,8 @@
 #include "save.h"
 #include "sys_task_api.h"
 
-// Union Room connection manager (ARM9 static 0x02059DB0-0x0205A44C): FieldSystem.unionRoom while the player is in the
-// Union Room. A SysTask polls the other players' records every frame and runs the current state function, which
-// drives the wireless connection (searching, connecting as parent or child, disconnecting). The rest of the object
-// (talk messages, 0x0205A44C+) is handled by the Union Room talk code.
+// Union Room connection manager: FieldSystem.unionRoom while the player is in the Union Room. A SysTask polls the
+// other players' records every frame and runs the current state function, which drives the wireless connection.
 
 // What a Union Room player broadcasts in its beacon besides its profile and chat message: the activity it is busy
 // with and, for a parent, the members of its group.
@@ -23,7 +21,7 @@ typedef struct UnionRoomStatus {
     u8 activity;
 } UnionRoomStatus;
 
-// A player's beacon record as seen by the Union Room (communication layer, 0xC0 bytes each).
+// A player's beacon record as seen by the Union Room (communication layer).
 typedef struct UnionRoomRecordInfo {
     u8 unk00[0x30]; // chat message, profile
     UnionRoomStatus status;
@@ -31,7 +29,7 @@ typedef struct UnionRoomRecordInfo {
 
 typedef struct UnionRoomRecord {
     u8 unk00[0x50];
-    UnionRoomRecordInfo info; // 0x50
+    UnionRoomRecordInfo info;
 } UnionRoomRecord;
 
 typedef void (*UnionRoomStateFunc)(struct UnionRoom *unionRoom);
@@ -39,35 +37,35 @@ typedef void (*UnionRoomStateFunc)(struct UnionRoom *unionRoom);
 #define UNION_ROOM_MAX_RECORDS 16
 
 struct UnionRoom {
-    FieldSystem *fieldSystem;               // 0x00
-    SaveData *saveData;                     // 0x04
-    PlayerProfile *profile;                 // 0x08
-    SysTask *task;                          // 0x0C
-    UnionRoomStateFunc state;               // 0x10
-    int timer;                              // 0x14: frames before the state function runs
-    int partnerNetId;                       // 0x18: the player talked to
-    u32 joinStatus;                         // 0x1C
-    u32 connectRequest;                     // 0x20: connection request, 1 or 2
-    u32 unk24;                              // 0x24
-    u32 unk28;                              // 0x28
-    u32 talkChoiceReceived;                 // 0x2C
-    u32 talkReply;                          // 0x30
-    u32 sentTalkReply;                              // 0x34
-    u8 pad38[4];                            // 0x38
-    u32 unk3C;                              // 0x3C
-    int talkChoice;                         // 0x40
-    u32 partnerCancelled;                   // 0x44
-    u8 pad48[0x110 - 0x48];                 // 0x48
-    UnionRoomRecord *records[UNION_ROOM_MAX_RECORDS]; // 0x110: the players' records, refreshed every frame
-    u8 random[0x18];                        // 0x150: CommRandom (communication_core_internal.h)
-    u8 pad168[0xC];                         // 0x168
-    u16 unk174;                             // 0x174
-    u8 battleChoice[2];                     // 0x176: per net id; 2 = cancelled the battle party selection
-    MailMessage ownChatMessage;             // 0x178: the player's own chat message, read by the chat log
-    u32 ownChatMessageIsNew;                // 0x180
-    struct TrainerCardData *ownCard;        // 0x184
-    struct TrainerCardData *cards[2];       // 0x188: per net id, link receive buffers
-}; // size: 0x190
+    FieldSystem *fieldSystem;
+    SaveData *saveData;
+    PlayerProfile *profile;
+    SysTask *task;
+    UnionRoomStateFunc state;
+    int timer;        // frames before the state function runs
+    int partnerNetId; // the player talked to
+    u32 joinStatus;
+    u32 connectRequest; // connection request, 1 or 2
+    u32 unk24;
+    u32 unk28;
+    u32 talkChoiceReceived;
+    u32 talkReply;
+    u32 sentTalkReply;
+    u8 pad38[4];
+    u32 unk3C;
+    int talkChoice;
+    u32 partnerCancelled;
+    u8 pad48[0x110 - 0x48];
+    UnionRoomRecord *records[UNION_ROOM_MAX_RECORDS]; // the players' records, refreshed every frame
+    u8 random[0x18];                                  // CommRandom
+    u8 pad168[0xC];
+    u16 unk174;
+    u8 battleChoice[2];         // per net id; 2 = cancelled the battle party selection
+    MailMessage ownChatMessage; // the player's own chat message, read by the chat log
+    u32 ownChatMessageIsNew;
+    struct TrainerCardData *ownCard;
+    struct TrainerCardData *cards[2]; // per net id, link receive buffers
+};
 
 // Mirror of the last record looked at and the last choice received (written only).
 typedef struct UnionRoomScratch {

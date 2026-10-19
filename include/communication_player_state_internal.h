@@ -4,36 +4,36 @@
 #include "global.h"
 
 typedef struct CommPlayerInfoEntry {
-    /* 0x00 */ u8 rules[0x20];
-    /* 0x20 */ u8 profile[0x20];
-    /* 0x40 */ u8 token[0xC];
-    /* 0x4C */ u8 groupName[0x10];
-    /* 0x5C */ u8 mac[6];
-    /* 0x62 */ u8 index;
-    /* 0x63 */ u8 country;
-    /* 0x64 */ u8 region;
-    /* 0x65 */ u8 unk65;
-    /* 0x66 */ u8 pad66[2];
+    u8 rules[0x20];
+    u8 profile[0x20];
+    u8 token[0xC];
+    u8 groupName[0x10];
+    u8 mac[6];
+    u8 index;
+    u8 country;
+    u8 region;
+    u8 unk65;
+    u8 pad66[2];
 } CommPlayerInfoEntry;
 
 typedef struct CommPlayerRecord {
-    /* 0x0 */ u16 wins;
-    /* 0x2 */ u16 losses;
-    /* 0x4 */ u16 trades;
+    u16 wins;
+    u16 losses;
+    u16 trades;
 } CommPlayerRecord;
 
 typedef struct CommPlayerInfo {
-    /* 0x000 */ void *localProfile;
-    /* 0x004 */ void *rules;
-    /* 0x008 */ void *save;
-    /* 0x00C */ CommPlayerInfoEntry entries[8];
-    /* 0x34C */ void *profiles[8];
-    /* 0x36C */ CommPlayerRecord scores[8];
-    /* 0x39C */ u8 status[8];
-    /* 0x3A4 */ u8 unk3A4;
-    /* 0x3A5 */ u8 hasNewEntries;
-    /* 0x3A6 */ u8 curIdx;
-    /* 0x3A7 */ u8 unk3A7;
+    void *localProfile;
+    void *rules;
+    void *save;
+    CommPlayerInfoEntry entries[8];
+    void *profiles[8];
+    CommPlayerRecord scores[8];
+    u8 status[8];
+    u8 unk3A4;
+    u8 hasNewEntries;
+    u8 curIdx;
+    u8 unk3A7;
 } CommPlayerInfo;
 
 void *Heap_Alloc(u32 heapId, u32 size);

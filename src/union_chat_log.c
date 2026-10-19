@@ -36,7 +36,7 @@ typedef struct UnionChatLogPeerChat {
 
 typedef struct UnionChatLogPeer {
     u8 unk_00[0x50];
-    UnionChatLogPeerChat chat; // 0x50
+    UnionChatLogPeerChat chat;
 } UnionChatLogPeer;
 
 extern UnionChatLogPeer *CommWireless_GetParentInfo(int index);
@@ -826,7 +826,7 @@ static BOOL UnionChatLog_GetThumbFollowsScroll(UnionChatLogData *data) {
 
 static void UnionChatLog_PressArrow(UnionChatLogData *data, int arrow) {
     int frame = Sprite_GetAnimationFrame(data->sprites[arrow]);
-    u16 anim = (int)Sprite_GetAnimationNumber(data->sprites[arrow]); // the int cast keeps a 16-bit truncation
+    u16 anim = (int)Sprite_GetAnimationNumber(data->sprites[arrow]);
     if (frame != 0 || anim != arrow + 4) {
         Sprite_SetAnimCtrlSeq(data->sprites[arrow], arrow + 4);
     }

@@ -7,10 +7,8 @@
 #include "assert.h"
 #include "heap.h"
 
-// Link command layer: byte rings and packet queues that cut the outgoing
-// commands into frames, and the command table: 22 commands of the communication layer itself, followed by the
-// table an application registers (Comm_RegisterCommandTable). Each command has a receive handler, a size
-// function (CommCmd_GetSizeVariable: the size travels with the packet) and an optional receive buffer getter.
+// Link command layer: byte rings and packet queues that cut the outgoing commands into frames, and the command
+// table: the communication layer's own commands, followed by the table an application registers.
 
 // A ring of bytes: data is written at write, made readable up to limit by ByteRing_Commit, read from read.
 typedef struct ByteRing {

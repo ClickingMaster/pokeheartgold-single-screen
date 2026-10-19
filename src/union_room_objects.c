@@ -46,13 +46,13 @@ typedef struct UnionRoomGroup {
 typedef struct UnionRoomPlayer {
     u32 id; // changes when the player is replaced
     u8 unk_04[0xC];
-    PlayerProfile profile; // 0x10
-    UnionRoomGroup group;  // 0x30
+    PlayerProfile profile;
+    UnionRoomGroup group;
 } UnionRoomPlayer;
 
 typedef struct UnionRoomPlayerRecord {
     u8 unk_00[0x50];
-    UnionRoomPlayer player; // 0x50
+    UnionRoomPlayer player;
 } UnionRoomPlayerRecord;
 
 FieldSystem *UnionRoom_GetFieldSystem(struct UnionRoom *unionRoom);
@@ -248,7 +248,7 @@ static void UnionRoomObjects_UpdateMapObjects(UnionRoomObjects *objects, MapObje
     u32 x;
     u32 z;
     UnionRoomSlot *slot;
-    UnionRoomObjects *cursor; // steps one slot per iteration: cursor->slots[0] is slot i
+    UnionRoomObjects *cursor;
     LocalMapObject *object;
 
     GF_ASSERT(objects->avatar != NULL);

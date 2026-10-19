@@ -237,11 +237,11 @@ typedef struct MimeJrTopWobbleIntervals {
 } MimeJrTopWobbleIntervals;
 
 typedef struct MimeJrTopTouchData {
-    TouchscreenHitbox hitboxes[2];            // 0x00
-    u8 unk08[8];                              // 0x08, ov92_02263C3C
-    MimeJrTopTierPoints tierScores;           // 0x10, points per frame
-    MimeJrTopTierPoints tierBonus;            // 0x18, points for reaching a tier
-    MimeJrTopWobbleIntervals wobbleIntervals; // 0x20
+    TouchscreenHitbox hitboxes[2];
+    u8 unk08[8];
+    MimeJrTopTierPoints tierScores; // points per frame
+    MimeJrTopTierPoints tierBonus;  // points for reaching a tier
+    MimeJrTopWobbleIntervals wobbleIntervals;
 } MimeJrTopTouchData;
 
 typedef struct MimeJrTopWobbleChoice {
@@ -562,7 +562,6 @@ BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
     } while (i < 4);
 
     args = app->args;
-    // The launch arguments are read as words here.
     ((MimeJrTopRosterInitFunc)PlazaGameRoster_Init)(&app->roster, *(u32 *)&args->voiceChat, args->saveData, args->mimeJrTopVoiceChat, args);
     return TRUE;
 }
@@ -4262,7 +4261,7 @@ void MimeJrTop_QuatMul(f32 *dst, const f32 *a, const f32 *b) {
     dst[3] = a[3] * b[0] + (a[0] * b[3] + a[1] * b[2] - a[2] * b[1]);
 }
 
-// As written: w * w + 2x + 2y + 2z.
+// Computes w * w + 2x + 2y + 2z.
 f32 MimeJrTop_QuatLengthSq(const MimeJrTopQuat *quat) {
     f32 a = quat->v[3] + quat->v[3];
     f32 b = quat->v[2] + quat->v[2];

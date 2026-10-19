@@ -643,7 +643,6 @@ static BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         int j;
         u16 species;
         u8 *shifted;
-        // The work pointer shifted by j entries: mons[0] through it is mons[j].
         shifted = (u8 *)work;
         j = 0;
         species = j;
@@ -691,7 +690,6 @@ static BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             WirelessTradeSelectMon_LoadPartyIcons(work->party, 0, work);
             WirelessTradeSelectMon_LoadPartyIcons(work->partnerParty, 6, work);
-            // Walks the work pointer by one sprite slot: cursorSprites[0] through it is cursorSprites[i].
             for (i = 0; i < 2; i++, work = (WirelessTradeSelectMon *)((u8 *)work + sizeof(Sprite *))) {
                 Sprite_SetDrawFlag(work->cursorSprites[0], TRUE);
             }
@@ -840,7 +838,6 @@ static void WirelessTradeSelectMon_FreeSprites(WirelessTradeSelectMon *work) {
     SpriteTransfer_DeleteCharTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_DeletePlttTransferTask(work->resObjs[0][GF_GFX_RES_TYPE_PLTT]);
     SpriteTransfer_DeletePlttTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_PLTT]);
-    // resMan[i], addressed through the work pointer walked by i slots.
     offset = 0xB3 * 4;
     i = 0;
     shifted = (u8 *)work;
@@ -1160,7 +1157,6 @@ static void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Par
     sprites = work->detailSprites;
     f.sideOffset = side * sizeof(Sprite *);
     Sprite_SetDrawFlag(*(Sprite **)((u8 *)sprites + f.sideOffset), TRUE);
-    // ov65_0221FEA8 is sWirelessTradeSelectMonDetailSpritePos[0].y.
     WirelessTradeSelectMon_SetSpritePos(*(Sprite **)((u8 *)sprites + f.sideOffset), sWirelessTradeSelectMonDetailSpritePos[side].x, f.yOffset + ov65_0221FEA8[side].x + 192);
     if (side == 0) {
         ((void (*)(Sprite *, int))Sprite_SetFlipMode)(*(Sprite **)((u8 *)sprites + f.sideOffset), work->mons[f.slot].flip);
@@ -1169,7 +1165,6 @@ static void WirelessTradeSelectMon_ShowMonDetails(Window *windows, int side, Par
     Sprite_SetDrawFlag(work->detailSprites[side + 2], TRUE);
     WirelessTradeSelectMon_PrintMonNickname(&windows[side + 26], f.party, f.slot, 9, 6);
 
-    // The work pointer shifted by the mon's row: mons[0] through it is mons[f.slot + side * 6].
     f.row = (f.slot + side * 6) * sizeof(WirelessTradeMonInfo);
     f.shifted = (u8 *)work + f.row;
     genderSymbol = WirelessTradeSelectMon_GetGenderSymbol((WirelessTradeMonInfo *)((u8 *)work->mons + f.row), f.party, f.slot, ((WirelessTradeSelectMon *)f.shifted)->mons[0].gender);
@@ -1393,7 +1388,6 @@ static void WirelessTradeSelectMon_SetCursorSprite(int cursor, Sprite *sprite, i
     VecFx32 pos;
 
     GF_ASSERT(cursor < WIRELESS_TRADE_NUM_SLOTS + 1);
-    // ov65_0221FF50 is sWirelessTradeSelectMonSlotPos[0].y.
     pos.x = sWirelessTradeSelectMonSlotPos[cursor].x * FX32_ONE;
     pos.y = ov65_0221FF50[cursor].x * FX32_ONE;
     if (cursor == WIRELESS_TRADE_SLOT_CANCEL) {
@@ -1984,7 +1978,6 @@ static void WirelessTradeSelectMon_RestoreIcons(WirelessTradeSelectMon *work) {
 
     ClearWindowTilemapAndScheduleTransfer(&work->windows[19]);
     ClearWindowTilemapAndScheduleTransfer(&work->windows[20]);
-    // Both work pointers are walked: one by a mon info, one by a sprite slot per slot.
     shiftedMon = (u8 *)work;
     pos = sWirelessTradeSelectMonSlotPos;
     i = 0;
@@ -2253,7 +2246,6 @@ static s32 WirelessTradeSelectMon_HasOtherNonEggMon(WirelessTradeSelectMon *work
 
     if (count > 0) {
         cursor = work->cursor;
-        // The work pointer is walked by one mon info per slot.
         do {
             if (i != cursor) {
                 eggs += work->mons[0].isEgg;
@@ -2381,7 +2373,6 @@ static u32 WirelessTradeSelectMon_PrintMessage(Window *window, u32 msgId, u32 fr
         DrawFrameAndWindow1(window, TRUE, 1015, 11);
     }
     FillWindowPixelBuffer(window, 15);
-    // The font id is the frame argument (1), passed without truncation.
     printerId = ((u32(*)(Window *, u32, String *, u32, u32, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(window, frame, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 15), NULL);
     ScheduleWindowCopyToVram(window);
     String_Delete(string);

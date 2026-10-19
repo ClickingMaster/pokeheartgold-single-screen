@@ -21,20 +21,17 @@
 #include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
-// SWALOT Plop (overlay 91), a Wi-Fi Plaza game: every player flicks berries on the touch
-// screen towards a spinning SWALOT; berries that land in its mouth score points, and
-// consecutive hits build a combo. The player list and the results screen come from the
-// shared Plaza game code (application/plaza_game.h). The parent keeps the game clock and
-// the hit count (SwalotPlopTally) and tells the others when to speed SWALOT up.
+// SWALOT Plop, a Wi-Fi Plaza game: every player flicks berries on the touch screen towards a
+// spinning SWALOT; berries that land in its mouth score points, and consecutive hits build a combo.
 
 // One entry of the level table (NARC 212 file 0).
 typedef struct SwalotPlopLevel {
-    int hitCount;     // 0x00, hits needed to reach this level
-    u32 spinSpeed;    // 0x04
-    u32 cameraHeight; // 0x08
-    u32 cameraPitch;  // 0x0C
-    u32 mouthOffset;  // 0x10
-    u32 scale;        // 0x14
+    int hitCount; // hits needed to reach this level
+    u32 spinSpeed;
+    u32 cameraHeight;
+    u32 cameraPitch;
+    u32 mouthOffset;
+    u32 scale;
 } SwalotPlopLevel;
 
 typedef struct SwalotPlopLevelTable {
@@ -44,9 +41,9 @@ typedef struct SwalotPlopLevelTable {
 
 // Part of SwalotPlopApp shared with the game screen and the tally.
 typedef struct SwalotPlopShared {
-    SwalotPlopLevelTable levelTable; // 0x00
-    PlayerProfile *profiles[4];      // 0x08
-    u32 nameFlags[4];                // 0x18
+    SwalotPlopLevelTable levelTable;
+    PlayerProfile *profiles[4];
+    u32 nameFlags[4];
 } SwalotPlopShared;
 
 typedef struct SwalotPlopScores {
@@ -56,37 +53,37 @@ typedef struct SwalotPlopScores {
 // Run on the parent only: game clock, the scores reported at the end, and the hit count
 // that selects the level.
 typedef struct SwalotPlopTally {
-    int timer;                // 0x00
-    BOOL running;             // 0x04
-    u32 playerCount;          // 0x08
-    u32 scores[4];            // 0x0C
-    u32 receivedMask;         // 0x1C
-    u8 unk20[0x10];           // 0x20
-    SwalotPlopShared *shared; // 0x30
-    u16 hitCount;             // 0x34
-    volatile u8 level;        // 0x36
-    u8 levelChanged;          // 0x37
+    int timer;
+    BOOL running;
+    u32 playerCount;
+    u32 scores[4];
+    u32 receivedMask;
+    u8 unk20[0x10];
+    SwalotPlopShared *shared;
+    u16 hitCount;
+    volatile u8 level;
+    u8 levelChanged;
 } SwalotPlopTally;
 
 // What a shot looks like on the link (command 24).
 typedef struct SwalotPlopShotRecord {
-    u16 owner;    // 0x00
-    u16 caught;   // 0x02
-    s16 dir[3];   // 0x04
-    s16 start[3]; // 0x0A
-    s16 speed;    // 0x10
-    s8 combo;     // 0x12
-    u8 big;       // 0x13
+    u16 owner;
+    u16 caught;
+    s16 dir[3];
+    s16 start[3];
+    s16 speed;
+    s8 combo;
+    u8 big;
 } SwalotPlopShotRecord;
 
 typedef struct SwalotPlopShotParams {
-    u16 owner;         // 0x00
-    u16 caught;        // 0x02
-    VecFx32 direction; // 0x04
-    fx32 speed;        // 0x10
-    VecFx32 start;     // 0x14
-    u32 combo;         // 0x20
-    u32 big;           // 0x24
+    u16 owner;
+    u16 caught;
+    VecFx32 direction;
+    fx32 speed;
+    VecFx32 start;
+    u32 combo;
+    u32 big;
 } SwalotPlopShotParams;
 
 enum SwalotPlopShotState {
@@ -100,15 +97,15 @@ enum SwalotPlopShotState {
 
 // A berry in flight.
 typedef struct SwalotPlopShot {
-    u8 state;                    // 0x00
-    u8 remove;                   // 0x01
-    u16 frames;                  // 0x02
-    SwalotPlopShotParams params; // 0x04
-    VecFx32 position;            // 0x2C
-    s16 timer;                   // 0x38
-    u16 combo;                   // 0x3A
-    BOOL crossedRim;             // 0x3C
-    fx32 distance;               // 0x40
+    u8 state;
+    u8 remove;
+    u16 frames;
+    SwalotPlopShotParams params;
+    VecFx32 position;
+    s16 timer;
+    u16 combo;
+    BOOL crossedRim;
+    fx32 distance;
 } SwalotPlopShot;
 
 // The touch samples of one frame.
@@ -129,72 +126,72 @@ typedef struct SwalotPlopPoint {
 } SwalotPlopPoint;
 
 typedef struct SwalotPlopFlickQueue {
-    BOOL active;               // 0x00
-    SwalotPlopFlick points[8]; // 0x04
-    u16 read;                  // 0x24
-    u16 write;                 // 0x26
+    BOOL active;
+    SwalotPlopFlick points[8];
+    u16 read;
+    u16 write;
 } SwalotPlopFlickQueue;
 
 // SWALOT itself: orientation, mouth and body measurements (scaled per level).
 typedef struct SwalotPlopBody {
-    u8 active;            // 0x00
-    u8 mouthOpen;         // 0x01
-    u16 spin;             // 0x02
-    u16 tilt;             // 0x04
-    u16 spinSpeed;        // 0x06
-    fx32 mouthDepth;      // 0x08
-    MtxFx33 tiltMtx;      // 0x0C
-    MtxFx33 spinMtx;      // 0x30
-    MtxFx33 rotation;     // 0x54
-    VecFx32 normal;       // 0x78
-    VecFx32 mouthPos;     // 0x84
-    fx32 mouthPlane;      // 0x90
-    fx32 pushRadius;      // 0x94
-    fx32 pushStrength;    // 0x98
-    VecFx32 offset;       // 0x9C
-    fx32 scale;           // 0xA8
-    fx32 mouthDepthRange; // 0xAC
-    fx32 mouthDepthMin;   // 0xB0
-    fx32 unkB4;           // 0xB4
-    fx32 mouthOffsetX;    // 0xB8
-    fx32 mouthOffsetY;    // 0xBC
-    fx32 heightMin;       // 0xC0
-    fx32 heightRange;     // 0xC4
-    fx32 topRadius;       // 0xC8
-    fx32 radius;          // 0xCC
-    fx32 slope;           // 0xD0
-    fx32 modelScale;      // 0xD4
-    VecFx32 position;     // 0xD8
-    fx32 height;          // 0xE4
+    u8 active;
+    u8 mouthOpen;
+    u16 spin;
+    u16 tilt;
+    u16 spinSpeed;
+    fx32 mouthDepth;
+    MtxFx33 tiltMtx;
+    MtxFx33 spinMtx;
+    MtxFx33 rotation;
+    VecFx32 normal;
+    VecFx32 mouthPos;
+    fx32 mouthPlane;
+    fx32 pushRadius;
+    fx32 pushStrength;
+    VecFx32 offset;
+    fx32 scale;
+    fx32 mouthDepthRange;
+    fx32 mouthDepthMin;
+    fx32 unkB4;
+    fx32 mouthOffsetX;
+    fx32 mouthOffsetY;
+    fx32 heightMin;
+    fx32 heightRange;
+    fx32 topRadius;
+    fx32 radius;
+    fx32 slope;
+    fx32 modelScale;
+    VecFx32 position;
+    fx32 height;
 } SwalotPlopBody;
 
 // SWALOT's model, its three animations and the mouth animation.
 typedef struct SwalotPlopStage {
-    ModelInstance models[3];      // 0x000
-    ModelResource resources[3];   // 0x168
-    ModelAnimation animations[3]; // 0x198
-    fx32 animSpeed;               // 0x1D4
-    u8 mouthActive;               // 0x1D8
-    u8 mouthState;                // 0x1D9
-    s16 mouthTimer;               // 0x1DA
-    fx32 mouthFrame;              // 0x1DC
-    fx32 mouthStep;               // 0x1E0
+    ModelInstance models[3];
+    ModelResource resources[3];
+    ModelAnimation animations[3];
+    fx32 animSpeed;
+    u8 mouthActive;
+    u8 mouthState;
+    s16 mouthTimer;
+    fx32 mouthFrame;
+    fx32 mouthStep;
 } SwalotPlopStage;
 
 // The points that pop up over a player's seat when a berry is caught.
 typedef struct SwalotPlopPopups {
-    Sprite *sprites[3]; // 0x00
-    s32 timers[3];      // 0x0C
-    VecFx32 pos[3];     // 0x18
-    int mode;           // 0x3C
+    Sprite *sprites[3];
+    s32 timers[3];
+    VecFx32 pos[3];
+    int mode;
 } SwalotPlopPopups;
 
 // The window with the other players' names shown during the intro.
 typedef struct SwalotPlopIntro {
-    u32 state;     // 0x00
-    s32 delay;     // 0x04
-    u32 counter;   // 0x08
-    Window window; // 0x0C
+    u32 state;
+    s32 delay;
+    u32 counter;
+    Window window;
 } SwalotPlopIntro;
 
 typedef struct SwalotPlopFinish {
@@ -204,37 +201,37 @@ typedef struct SwalotPlopFinish {
 
 // The SWALOT model of the top screen with its six animations.
 typedef struct SwalotPlopScene {
-    ModelInstance models[3];      // 0x000
-    ModelResource resources[3];   // 0x168
-    ModelAnimation animations[6]; // 0x198
-    volatile u16 current;         // 0x210
-    u16 state;                    // 0x212
-    ModelAnimation special;       // 0x214
-    volatile s32 frame;           // 0x228
-    u16 leader;                   // 0x22C
-    u16 bonus;                    // 0x22E
+    ModelInstance models[3];
+    ModelResource resources[3];
+    ModelAnimation animations[6];
+    volatile u16 current;
+    u16 state;
+    ModelAnimation special;
+    volatile s32 frame;
+    u16 leader;
+    u16 bonus;
 } SwalotPlopScene;
 
 typedef struct SwalotPlopBgFade {
-    u16 state;  // 0x0
-    s16 timer;  // 0x2
-    s16 layer;  // 0x4
-    u8 palette; // 0x6
-    u8 counter; // 0x7
+    u16 state;
+    s16 timer;
+    s16 layer;
+    u8 palette;
+    u8 counter;
 } SwalotPlopBgFade;
 
 // Sprite and shadow of a berry.
 typedef struct SwalotPlopShotView {
-    Sprite *sprite;       // 0x000
-    ModelInstance model;  // 0x004
-    ModelInstance shadow; // 0x07C
-    int state;            // 0x0F4
-    SwalotPlopShot *shot; // 0x0F8
-    u16 rotX;             // 0x0FC
-    u16 rotZ;             // 0x0FE
-    u16 rotSpeedX;        // 0x100
-    u16 rotSpeedZ;        // 0x102
-    s16 timer;            // 0x104
+    Sprite *sprite;
+    ModelInstance model;
+    ModelInstance shadow;
+    int state;
+    SwalotPlopShot *shot;
+    u16 rotX;
+    u16 rotZ;
+    u16 rotSpeedX;
+    u16 rotSpeedZ;
+    s16 timer;
 } SwalotPlopShotView;
 
 typedef struct SwalotPlopCursor {
@@ -243,11 +240,11 @@ typedef struct SwalotPlopCursor {
 } SwalotPlopCursor;
 
 typedef struct SwalotPlopParticle {
-    BOOL active;      // 0x00
-    Sprite *sprite;   // 0x04
-    VecFx32 position; // 0x08
-    s32 age;          // 0x14
-    BOOL direction;   // 0x18
+    BOOL active;
+    Sprite *sprite;
+    VecFx32 position;
+    s32 age;
+    BOOL direction;
 } SwalotPlopParticle;
 
 // Accelerated motion: value = start + slope * step + curvature * step^2 / 2.
@@ -262,90 +259,90 @@ typedef struct SwalotPlopCurve {
 
 // The combo counter that slides in on the bottom screen.
 typedef struct SwalotPlopCombo {
-    SpriteResource *res[4];          // 0x00
-    SpriteResourcesHeader header;    // 0x10
-    Sprite *sprite;                  // 0x34
-    Window window;                   // 0x38
-    TextOBJ *textObj;                // 0x48
-    TextOBJLayout *textLayout;       // 0x4C
-    ObjCharSpaceReservation charTransfer; // 0x50
-    String *string;                  // 0x5C
-    SpriteResource *textPltt;        // 0x60
-    SwalotPlopCurve slideX;          // 0x64
-    SwalotPlopCurve slideY;          // 0x7C
-    s16 slideFrame;                  // 0x94
-    s16 bounceFrame;                 // 0x96
-    u16 state;                       // 0x98
-    s16 hideDelay;                   // 0x9A
-    enum HeapID heapId;              // 0x9C
+    SpriteResource *res[4];
+    SpriteResourcesHeader header;
+    Sprite *sprite;
+    Window window;
+    TextOBJ *textObj;
+    TextOBJLayout *textLayout;
+    ObjCharSpaceReservation charTransfer;
+    String *string;
+    SpriteResource *textPltt;
+    SwalotPlopCurve slideX;
+    SwalotPlopCurve slideY;
+    s16 slideFrame;
+    s16 bounceFrame;
+    u16 state;
+    s16 hideDelay;
+    enum HeapID heapId;
 } SwalotPlopCombo;
 
 // Graphics of the game screens.
 typedef struct SwalotPlopGfx {
-    BgConfig *bgConfig;                 // 0x0000
-    MessageFormat *msgFormat;           // 0x0004
-    MsgData *msgData;                   // 0x0008
-    String *string1;                    // 0x000C
-    String *string2;                    // 0x0010
-    u32 unk14;                          // 0x0014
-    GF3DVramMan *vramMan;               // 0x0018
-    SpriteList *spriteList;             // 0x001C
-    G2dRenderer renderer;               // 0x0020
-    GF_2DGfxResMan *resMan[4];          // 0x0148
-    SpriteResourcesHeader header;       // 0x0158
-    SpriteResource *res[4];             // 0x017C
-    FontSystem *fontSystem;             // 0x018C
-    Camera *camera;                     // 0x0190
-    VecFx32 cameraTarget;               // 0x0194
-    SwalotPlopStage stage;              // 0x01A0
-    SwalotPlopPopups popups[4];         // 0x0384
-    SwalotPlopIntro intro;              // 0x0484
-    SwalotPlopFinish finish;            // 0x04A0
-    u8 unk4A8[0x18];                    // 0x04A8
-    SwalotPlopScene scene;              // 0x04C0
-    PlazaGameSign *sign;                // 0x06F0
-    SwalotPlopBgFade bgFade;            // 0x06F4
-    ModelResource shotModels[5];        // 0x06FC
-    ModelResource shadowModel;          // 0x074C
-    SpriteResource *shotRes[4];         // 0x075C
-    SpriteResourcesHeader shotHeader;   // 0x076C
-    SwalotPlopShotView shotViews[0x60]; // 0x0790
-    SwalotPlopCursor cursor;            // 0x6A90
-    SwalotPlopParticle particles[8];    // 0x6A98
-    SwalotPlopCombo combo;              // 0x6B78
+    BgConfig *bgConfig;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    String *string1;
+    String *string2;
+    u32 unk14;
+    GF3DVramMan *vramMan;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[4];
+    SpriteResourcesHeader header;
+    SpriteResource *res[4];
+    FontSystem *fontSystem;
+    Camera *camera;
+    VecFx32 cameraTarget;
+    SwalotPlopStage stage;
+    SwalotPlopPopups popups[4];
+    SwalotPlopIntro intro;
+    SwalotPlopFinish finish;
+    u8 unk4A8[0x18];
+    SwalotPlopScene scene;
+    PlazaGameSign *sign;
+    SwalotPlopBgFade bgFade;
+    ModelResource shotModels[5];
+    ModelResource shadowModel;
+    SpriteResource *shotRes[4];
+    SpriteResourcesHeader shotHeader;
+    SwalotPlopShotView shotViews[0x60];
+    SwalotPlopCursor cursor;
+    SwalotPlopParticle particles[8];
+    SwalotPlopCombo combo;
 } SwalotPlopGfx;
 
 // Interpolates the level parameters (spin, camera, scale) over 16 frames.
 typedef struct SwalotPlopLevelBlend {
-    s32 current[6]; // 0x00
-    s32 start[6];   // 0x18
-    s32 delta[6];   // 0x30
-    s32 step;       // 0x48
+    s32 current[6];
+    s32 start[6];
+    s32 delta[6];
+    s32 step;
 } SwalotPlopLevelBlend;
 
 // The hand that throws two demo berries before the game starts.
 typedef struct SwalotPlopDemo {
-    SpriteResource *res[4];       // 0x00
-    SpriteResourcesHeader header; // 0x10
-    Sprite *sprite;               // 0x34
-    u8 active;                    // 0x38
-    u8 count;                     // 0x39
-    u8 state;                     // 0x3A
-    u8 thrown;                    // 0x3B
-    int timer;                    // 0x3C
+    SpriteResource *res[4];
+    SpriteResourcesHeader header;
+    Sprite *sprite;
+    u8 active;
+    u8 count;
+    u8 state;
+    u8 thrown;
+    int timer;
 } SwalotPlopDemo;
 
 // The scores the players report every 30 frames; once all reported, the leader is shown.
 typedef struct SwalotPlopScoreReports {
-    u32 scores[4]; // 0x00
-    u32 mask;      // 0x10
-    u32 leader;    // 0x14
+    u32 scores[4];
+    u32 mask;
+    u32 leader;
 } SwalotPlopScoreReports;
 
 typedef struct SwalotPlopSpeedUp {
-    u16 state; // 0x0
-    u8 active; // 0x2
-    s8 frame;  // 0x3
+    u16 state;
+    u8 active;
+    s8 frame;
 } SwalotPlopSpeedUp;
 
 enum SwalotPlopPhase {
@@ -354,55 +351,53 @@ enum SwalotPlopPhase {
     SWALOT_PLOP_PHASE_FASTEST,
 };
 
-// The game screen (heap 0x6A).
 typedef struct SwalotPlopGame {
-    u32 phase;                           // 0x0000
-    BOOL running;                        // 0x0004
-    u32 frame;                           // 0x0008
-    u32 duration;                        // 0x000C
-    u32 playerCount;                     // 0x0010
-    u32 localIndex;                      // 0x0014
-    s32 score;                           // 0x0018
-    s32 combo;                           // 0x001C
-    SwalotPlopFlickQueue flick;          // 0x0020
-    u32 releasedFrames;                  // 0x0048
-    SwalotPlopShot shots[0x60];          // 0x004C
-    SwalotPlopBody body;                 // 0x19CC
-    SwalotPlopGfx gfx;                   // 0x1AB4
-    NNSFndAllocator allocator;           // 0x86CC
-    u32 finalScores[4];                  // 0x86DC
-    SwalotPlopTouch touch;               // 0x86EC
-    SwalotPlopLevelBlend levelBlend;     // 0x8730
-    SwalotPlopShared *shared;            // 0x877C
-    u16 level;                           // 0x8780
-    u16 prevLevel;                       // 0x8782
-    u8 options[4];                       // 0x8784
-    u32 optionsSet;                      // 0x8788
-    SwalotPlopDemo demo;                 // 0x878C
-    SwalotPlopScoreReports scoreReports; // 0x87CC
-    SwalotPlopSpeedUp speedUp;           // 0x87E4
+    u32 phase;
+    BOOL running;
+    u32 frame;
+    u32 duration;
+    u32 playerCount;
+    u32 localIndex;
+    s32 score;
+    s32 combo;
+    SwalotPlopFlickQueue flick;
+    u32 releasedFrames;
+    SwalotPlopShot shots[0x60];
+    SwalotPlopBody body;
+    SwalotPlopGfx gfx;
+    NNSFndAllocator allocator;
+    u32 finalScores[4];
+    SwalotPlopTouch touch;
+    SwalotPlopLevelBlend levelBlend;
+    SwalotPlopShared *shared;
+    u16 level;
+    u16 prevLevel;
+    u8 options[4];
+    u32 optionsSet;
+    SwalotPlopDemo demo;
+    SwalotPlopScoreReports scoreReports;
+    SwalotPlopSpeedUp speedUp;
 } SwalotPlopGame;
 
-// Overlay work (heap 0x6A).
 typedef struct SwalotPlopApp {
-    PlazaGameEntry *entry;          // 0x00
-    PlazaGameResults *results;      // 0x04
-    PlazaGameRoster roster;         // 0x08
-    PlazaGameResultData resultData; // 0x18
-    SwalotPlopTally *tally;         // 0x30
-    SwalotPlopGame *game;           // 0x34
-    BOOL startReceived;             // 0x38
-    BOOL finishReceived;            // 0x3C
-    BOOL scoresReceived;            // 0x40
-    u16 netId;                      // 0x44
-    u16 localIndex;                 // 0x46
-    SwalotPlopShared shared;        // 0x48
-    u32 selection;                  // 0x70
-    u32 playerCount;                // 0x74
-    u32 connectionLostState;        // 0x78
-    u32 syncRound;                  // 0x7C
-    BOOL canSend;                   // 0x80
-    u8 syncCounts[4];               // 0x84
+    PlazaGameEntry *entry;
+    PlazaGameResults *results;
+    PlazaGameRoster roster;
+    PlazaGameResultData resultData;
+    SwalotPlopTally *tally;
+    SwalotPlopGame *game;
+    BOOL startReceived;
+    BOOL finishReceived;
+    BOOL scoresReceived;
+    u16 netId;
+    u16 localIndex;
+    SwalotPlopShared shared;
+    u32 selection;
+    u32 playerCount;
+    u32 connectionLostState;
+    u32 syncRound;
+    BOOL canSend;
+    u8 syncCounts[4];
 } SwalotPlopApp;
 
 // Link command table entry (Comm_RegisterCommandTable).

@@ -18,24 +18,24 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// WOBBUFFET Pop, the Wi-Fi Plaza balloon game (overlay 93): every player pumps air into a balloon by
+// WOBBUFFET Pop, the Wi-Fi Plaza balloon game: every player pumps air into a balloon by
 // touching the lower screen.
 
 // Overlay manager data of the whole game: the player roster and the three screens it runs in turn.
 typedef struct WobbuffetPopApp {
-    PlazaGameRoster roster;      // 0x00
-    PlazaGameResultData results; // 0x10
-    OverlayManager *screen;      // 0x28
-    u8 netIds[4];                // 0x2C
-    u8 playerCount;              // 0x30
-    u8 screenId;                 // 0x31: 0 player list, 1 game, 2 results
-    u8 unk_32[2];                // 0x32
-    u32 selection;               // 0x34: player list result
-    u32 playAgain;               // 0x38: results screen result
-    u8 voiceChat;                // 0x3C
-    u8 connectionLost;           // 0x3D
-    u8 connectionLostState;      // 0x3E
-    u8 unk_3F;                   // 0x3F
+    PlazaGameRoster roster;
+    PlazaGameResultData results;
+    OverlayManager *screen;
+    u8 netIds[4];
+    u8 playerCount;
+    u8 screenId; // 0 player list, 1 game, 2 results
+    u8 unk_32[2];
+    u32 selection;
+    u32 playAgain;
+    u8 voiceChat;
+    u8 connectionLost;
+    u8 connectionLostState;
+    u8 unk_3F;
 } WobbuffetPopApp;
 
 // One queued game event (local and per-player queues, see WobbuffetPop).
@@ -53,7 +53,7 @@ typedef struct WobbuffetPopEvent {
             u8 b6, b7, b8;
         } halves;
     } data;
-} WobbuffetPopEvent; // size: 0x14
+} WobbuffetPopEvent;
 
 #define WOBBUFFET_POP_EVENT_QUEUE_SIZE 60
 
@@ -105,127 +105,127 @@ enum WobbuffetPopSyncKind {
 
 // State of the host's game steps (start, play, finish).
 typedef struct WobbuffetPopSequence {
-    u32 step;     // 0x00
-    u8 unk_04[8]; // 0x04
-    int state;    // 0x0C
-    u32 unk_10;   // 0x10
-    s32 timer;    // 0x14
-    u8 syncId;    // 0x18
-    u8 unk_19[3]; // 0x19
+    u32 step;
+    u8 unk_04[8];
+    int state;
+    u32 unk_10;
+    s32 timer;
+    u8 syncId;
+    u8 unk_19[3];
 } WobbuffetPopSequence;
 
 // One animated model of the upper screen, started by WobbuffetPop_AddModelSlot.
 typedef struct WobbuffetPopModelSlot {
-    u32 active;               // 0x00
-    ModelInstance instance;   // 0x04
-    ModelAnimation animation; // 0x7C
-} WobbuffetPopModelSlot;      // size: 0x90
+    u32 active;
+    ModelInstance instance;
+    ModelAnimation animation;
+} WobbuffetPopModelSlot;
 
 typedef struct WobbuffetPopModels {
-    ModelResource localResource;       // 0x000
-    ModelInstance localModel;          // 0x010
-    ModelResource slotResources[4];    // 0x088
-    WobbuffetPopModelSlot slots[8][4]; // 0x0C8
+    ModelResource localResource;
+    ModelInstance localModel;
+    ModelResource slotResources[4];
+    WobbuffetPopModelSlot slots[8][4];
 } WobbuffetPopModels;
 
 typedef struct WobbuffetPopCommonModel {
-    ModelResource resource; // 0x00
-    ModelInstance instance; // 0x10
+    ModelResource resource;
+    ModelInstance instance;
 } WobbuffetPopCommonModel;
 
-// The balloon the local player pumps (lower screen): texture, palette blend and squash/stretch.
 // One row of the touch-screen mesh: its four corners, as positions (0..128 per axis, fx32) or as
 // texture coordinates.
 typedef struct WobbuffetPopMeshQuad {
-    fx32 topLeftX;     // 0x00
-    fx32 topLeftY;     // 0x04
-    fx32 bottomLeftX;  // 0x08
-    fx32 bottomLeftY;  // 0x0C
-    fx32 topRightX;    // 0x10
-    fx32 topRightY;    // 0x14
-    fx32 bottomRightX; // 0x18
-    fx32 bottomRightY; // 0x1C
+    fx32 topLeftX;
+    fx32 topLeftY;
+    fx32 bottomLeftX;
+    fx32 bottomLeftY;
+    fx32 topRightX;
+    fx32 topRightY;
+    fx32 bottomRightX;
+    fx32 bottomRightY;
 } WobbuffetPopMeshQuad;
 
 #define WOBBUFFET_POP_MESH_ROWS 8
 
+// The balloon the local player pumps (lower screen): texture, palette blend and squash/stretch.
 typedef struct WobbuffetPopBalloon {
-    void *textureFile;                                       // 0x000
-    NNSG3dResTex *texture;                                   // 0x004
-    u32 unk_008;                                             // 0x008
-    WobbuffetPopMeshQuad vertices[WOBBUFFET_POP_MESH_ROWS];  // 0x00C: row 0 is the pushed top
-    WobbuffetPopMeshQuad texCoords[WOBBUFFET_POP_MESH_ROWS]; // 0x10C
-    s32 touch[4];                                            // 0x20C: x, y, held, new
-    s32 handleX;                                             // 0x21C
-    u32 unk_220;                                             // 0x220
-    s32 grabX;                                               // 0x224
-    s32 grabY;                                               // 0x228
-    s32 grabOffsetY;                                         // 0x22C: touch y minus the handle's y
-    fx32 pushDepth;                                          // 0x230: how far the top is pushed down
-    ManagedSprite *sprite;                                   // 0x234: the handle
-    u32 grabbing;                                            // 0x238
-    s32 lastTouchY;                                          // 0x23C
-    s32 grabAreaPercent;                                     // 0x240: mesh area when the handle was grabbed
-    s32 pumpStrength;                                        // 0x244
-    s32 reboundSpeed;                                        // 0x248: how fast the released mesh springs back
-    u16 *paletteSrc;                                         // 0x24C
-    u16 *paletteDest;                                        // 0x250
-    u32 paletteSize;                                         // 0x254
-    u32 paletteAddr;                                         // 0x258
-    s32 air;                                                 // 0x25C: 0..800
-    fx32 scaleX;                                             // 0x260
-    fx32 scaleY;                                             // 0x264
-    s16 squash;                                              // 0x268
-    s16 extraScaleYPercent;                                  // 0x26A
-    s16 extraScaleXPercent;                                  // 0x26C
-    u8 unk_26E[2];                                           // 0x26E
-    u32 selection;                                           // 0x270
-    u8 playingPumpSe;                                        // 0x274
-    u8 flashCounter;                                         // 0x275
-    u8 paletteDirty;                                         // 0x276
-    u8 unk_277;                                              // 0x277
-} WobbuffetPopBalloon;                                       // size: 0x278
+    void *textureFile;
+    NNSG3dResTex *texture;
+    u32 unk_008;
+    WobbuffetPopMeshQuad vertices[WOBBUFFET_POP_MESH_ROWS]; // row 0 is the pushed top
+    WobbuffetPopMeshQuad texCoords[WOBBUFFET_POP_MESH_ROWS];
+    s32 touch[4]; // x, y, held, new
+    s32 handleX;
+    u32 unk_220;
+    s32 grabX;
+    s32 grabY;
+    s32 grabOffsetY;       // touch y minus the handle's y
+    fx32 pushDepth;        // how far the top is pushed down
+    ManagedSprite *sprite; // the handle
+    u32 grabbing;
+    s32 lastTouchY;
+    s32 grabAreaPercent; // mesh area when the handle was grabbed
+    s32 pumpStrength;
+    s32 reboundSpeed; // how fast the released mesh springs back
+    u16 *paletteSrc;
+    u16 *paletteDest;
+    u32 paletteSize;
+    u32 paletteAddr;
+    s32 air; // 0..800
+    fx32 scaleX;
+    fx32 scaleY;
+    s16 squash;
+    s16 extraScaleYPercent;
+    s16 extraScaleXPercent;
+    u8 unk_26E[2];
+    u32 selection;
+    u8 playingPumpSe;
+    u8 flashCounter;
+    u8 paletteDirty;
+    u8 unk_277;
+} WobbuffetPopBalloon;
 
 // The balloon being inflated on the upper screen (BG 7, affine-scaled with its air).
 typedef struct WobbuffetPopInflation {
-    u32 active;       // 0x00
-    u32 size;         // 0x04: balloon size (0 small .. 2 large)
-    s32 air;          // 0x08
-    s32 capacity;     // 0x0C: pops at this much air
-    s32 pendingAir;   // 0x10: air sent but not shown yet
-    s32 airStep;      // 0x14: pendingAir / 6 is added per frame
-    s32 playerAir[4]; // 0x18: per seat
-    u32 jitterToggle; // 0x28
-    u8 showBg;        // 0x2C: show the touch screen's BG 3 at the next VBlank
-    u8 hideBg;        // 0x2D
-    u8 unk_2E[2];     // 0x2E
+    u32 active;
+    u32 size; // balloon size (0 small .. 2 large)
+    s32 air;
+    s32 capacity;     // pops at this much air
+    s32 pendingAir;   // air sent but not shown yet
+    s32 airStep;      // pendingAir / 6 is added per frame
+    s32 playerAir[4]; // per seat
+    u32 jitterToggle;
+    u8 showBg; // show the touch screen's BG 3 at the next VBlank
+    u8 hideBg;
+    u8 unk_2E[2];
 } WobbuffetPopInflation;
 
 // Two little sprites a bonus target throws off when it lands.
 typedef struct WobbuffetPopDust {
-    ManagedSprite *sprites[2]; // 0x00
-    s32 speedX[2];             // 0x08
-    s32 speedY[2];             // 0x10
-    u8 active;                 // 0x18
-    u8 timer;                  // 0x19
-    u8 unk_1A[2];              // 0x1A
+    ManagedSprite *sprites[2];
+    s32 speedX[2];
+    s32 speedY[2];
+    u8 active;
+    u8 timer;
+    u8 unk_1A[2];
 } WobbuffetPopDust;
 
 // A Wobbuffet hopping around the ring on the lower screen. A puff that reaches the ring while one stands at the
 // front (180 degrees) gets its bonus (x2, x1/2 or x3).
 typedef struct WobbuffetPopBonusTarget {
-    ManagedSprite *sprite; // 0x00
-    ManagedSprite *effect; // 0x04
-    ManagedSprite *shadow; // 0x08
-    fx32 angle;            // 0x0C
-    u8 state;              // 0x10: index into the state table
-    u8 step;               // 0x11
-    u8 timer;              // 0x12
-    u8 halfTime;           // 0x13
-    u8 bonus;              // 0x14
-    u8 atFront;            // 0x15
-    u8 unk_16[2];          // 0x16
-    s32 duration;          // 0x18
+    ManagedSprite *sprite;
+    ManagedSprite *effect;
+    ManagedSprite *shadow;
+    fx32 angle;
+    u8 state; // index into the state table
+    u8 step;
+    u8 timer;
+    u8 halfTime;
+    u8 bonus;
+    u8 atFront;
+    u8 unk_16[2];
+    s32 duration;
     union {
         struct {
             s16 x;
@@ -237,191 +237,191 @@ typedef struct WobbuffetPopBonusTarget {
             fx32 dy;
             fx32 x;
             fx32 y;
-        } hop;             // hopping to the next spot
-    } motion;              // 0x1C
-    WobbuffetPopDust dust; // 0x30
-} WobbuffetPopBonusTarget; // size: 0x4C
+        } hop; // hopping to the next spot
+    } motion;
+    WobbuffetPopDust dust;
+} WobbuffetPopBonusTarget;
 
 typedef struct WobbuffetPopBonusRing {
-    WobbuffetPopBonusTarget targets[3]; // 0x00
-    fx32 angle;                         // 0xE4
-    fx32 angleStep;                     // 0xE8
-    s32 ticks;                          // 0xEC
-    u8 position;                        // 0xF0: steps of 30 degrees
-    u8 done;                            // 0xF1
-    u8 delay;                           // 0xF2
-    u8 stepTimer;                       // 0xF3
-    u8 speed;                           // 0xF4: row of the speed table
-    u8 unk_F5[3];                       // 0xF5
+    WobbuffetPopBonusTarget targets[3];
+    fx32 angle;
+    fx32 angleStep;
+    s32 ticks;
+    u8 position; // steps of 30 degrees
+    u8 done;
+    u8 delay;
+    u8 stepTimer;
+    u8 speed; // row of the speed table
+    u8 unk_F5[3];
 } WobbuffetPopBonusRing;
 
 // Bonus another player got, dropping in from the top of the lower screen.
 typedef struct WobbuffetPopBonusPopup {
-    ManagedSprite *sprite; // 0x00
-    ManagedSprite *effect; // 0x04
-    fx32 x;                // 0x08
-    fx32 y;                // 0x0C
-    s16 targetY;           // 0x10
-    u8 bonus;              // 0x12
-    u8 state;              // 0x13
-    u8 timer;              // 0x14
-    u8 active;             // 0x15
-    s16 delay;             // 0x16
+    ManagedSprite *sprite;
+    ManagedSprite *effect;
+    fx32 x;
+    fx32 y;
+    s16 targetY;
+    u8 bonus;
+    u8 state;
+    u8 timer;
+    u8 active;
+    s16 delay;
 } WobbuffetPopBonusPopup;
 
 // A text OBJ made by WobbuffetPop_NewTextObj.
 typedef struct WobbuffetPopTextObj {
-    TextOBJ *textObj;                  // 0x00
-    ObjCharSpaceReservation charAlloc; // 0x04
-    u16 width;                         // 0x10
-    u8 unk_12[2];                      // 0x12
+    TextOBJ *textObj;
+    ObjCharSpaceReservation charAlloc;
+    u16 width;
+    u8 unk_12[2];
 } WobbuffetPopTextObj;
 
 // The score on the upper screen: six rolling digits.
 typedef struct WobbuffetPopScoreDisplay {
-    ManagedSprite *frame; // 0x000
+    ManagedSprite *frame;
     struct {
-        WobbuffetPopTextObj top;    // 0x00
-        WobbuffetPopTextObj bottom; // 0x14
-    } digits[6];                    // 0x004
-    WobbuffetPopTextObj title;      // 0x0F4
-    WobbuffetPopTextObj labels[6];  // 0x108
-    u8 current[6];                  // 0x180: roll position of each digit (16 per digit value, 160 per turn)
-    u8 goal[6];                     // 0x186
-    u8 next[6];                     // 0x18C
-    u8 passes[6];                   // 0x192
-    s8 countdown[6];                // 0x198
-    s8 delay;                       // 0x19E
-    u8 settled;                     // 0x19F
-    u8 state;                       // 0x1A0
-    u8 unk_1A1[3];                  // 0x1A1
+        WobbuffetPopTextObj top;
+        WobbuffetPopTextObj bottom;
+    } digits[6];
+    WobbuffetPopTextObj title;
+    WobbuffetPopTextObj labels[6];
+    u8 current[6]; // roll position of each digit (16 per digit value, 160 per turn)
+    u8 goal[6];
+    u8 next[6];
+    u8 passes[6];
+    s8 countdown[6];
+    s8 delay;
+    u8 settled;
+    u8 state;
+    u8 unk_1A1[3];
 } WobbuffetPopScoreDisplay;
 
 // The how-to-play demo: a stylus pressing the handle down twice, fed to the balloon as touches.
 typedef struct WobbuffetPopDemo {
-    ManagedSprite *stylus; // 0x00
-    s16 state;             // 0x04
-    vs16 timer;            // 0x06: volatile for the match
-    u32 unk_08;            // 0x08
-    s32 touch[4];          // 0x0C: x, y, held, new
+    ManagedSprite *stylus;
+    s16 state;
+    vs16 timer;
+    u32 unk_08;
+    s32 touch[4]; // x, y, held, new
 } WobbuffetPopDemo;
 
 // Air sent by one player, in the local queue until a bonus target decides its bonus.
 typedef struct WobbuffetPopPump {
-    u8 netId;         // 0x0
-    u8 bonus;         // 0x1: 0 none, 1 x2, 2 x1/2, 3 x3
-    u16 balloonIndex; // 0x2
-    s32 amount;       // 0x4
-    s32 bonusAmount;  // 0x8
-    u8 bonusSet;      // 0xC
-    u8 unk_D[3];      // 0xD
+    u8 netId;
+    u8 bonus; // 0 none, 1 x2, 2 x1/2, 3 x3
+    u16 balloonIndex;
+    s32 amount;
+    s32 bonusAmount;
+    u8 bonusSet;
+    u8 unk_D[3];
 } WobbuffetPopPump;
 
 // A puff of air flying from a player's side of the lower screen to the ring.
 typedef struct WobbuffetPopPuff {
-    u32 active;            // 0x00
-    u16 netId;             // 0x04
-    u16 balloonIndex;      // 0x06
-    s32 amount;            // 0x08
-    s16 delay;             // 0x0C
-    u8 bonus;              // 0x0E
-    u8 unk_0F;             // 0x0F
-    ManagedSprite *sprite; // 0x10
-    const u8 *config;      // 0x14: x, y, animation, palette, ..., direction (7)
+    u32 active;
+    u16 netId;
+    u16 balloonIndex;
+    s32 amount;
+    s16 delay;
+    u8 bonus;
+    u8 unk_0F;
+    ManagedSprite *sprite;
+    const u8 *config; // x, y, animation, palette, ..., direction (7)
 } WobbuffetPopPuff;
 
 // One piece of the confetti shown when a balloon pops.
 typedef struct WobbuffetPopConfettiPiece {
-    ManagedSprite *sprite; // 0x00
-    fx32 radius;           // 0x04
-    fx32 radiusSpeed;      // 0x08
-    fx32 angle;            // 0x0C
-    fx32 angleSpeed;       // 0x10
-    s16 life;              // 0x14
-    u16 unk_16;            // 0x16
+    ManagedSprite *sprite;
+    fx32 radius;
+    fx32 radiusSpeed;
+    fx32 angle;
+    fx32 angleSpeed;
+    s16 life;
+    u16 unk_16;
 } WobbuffetPopConfettiPiece;
 
 typedef struct WobbuffetPopConfetti {
-    u32 active;                                 // 0x000
-    WobbuffetPopConfettiPiece playerPieces[36]; // 0x004: in the players' colours, by share of the air
-    WobbuffetPopConfettiPiece pieces[8];        // 0x364
-    WobbuffetPopConfettiPiece balloonPieces[3]; // 0x424: in the balloon's colour
-    u32 unk_46C;                                // 0x46C
+    u32 active;
+    WobbuffetPopConfettiPiece playerPieces[36]; // in the players' colours, by share of the air
+    WobbuffetPopConfettiPiece pieces[8];
+    WobbuffetPopConfettiPiece balloonPieces[3]; // in the balloon's colour
+    u32 unk_46C;
 } WobbuffetPopConfetti;
 
 // One of the next balloons, queued at the top of the lower screen.
 typedef struct WobbuffetPopBalloonIcon {
-    ManagedSprite *sprite; // 0x0
-    u8 size;               // 0x4
-    u8 state;              // 0x5: 1 waiting, 2 nearly full, 3 popping
-    u8 position;           // 0x6: 0 is the current balloon
-    u8 unk_7;              // 0x7
-    s16 number;            // 0x8
-    u16 unk_A;             // 0xA
+    ManagedSprite *sprite;
+    u8 size;
+    u8 state;    // 1 waiting, 2 nearly full, 3 popping
+    u8 position; // 0 is the current balloon
+    u8 unk_7;
+    s16 number;
+    u16 unk_A;
 } WobbuffetPopBalloonIcon;
 
 // Overlay manager data of the game screen.
 typedef struct WobbuffetPop {
-    WobbuffetPopApp *app;                                              // 0x0000
-    u32 hostNetId;                                                     // 0x0004
-    u32 readyCount;                                                    // 0x0008
-    u32 playerValues[4];                                               // 0x000C
-    PlazaGameSign *sign;                                               // 0x001C
-    u32 gameState;                                                     // 0x0020
-    SpriteSystem *spriteSystem;                                        // 0x0024
-    SpriteManager *spriteManager;                                      // 0x0028
-    BgConfig *bgConfig;                                                // 0x002C
-    Window playerNameWindows[4];                                       // 0x0030
-    Window messageWindow;                                              // 0x0070
-    MsgData *msgData;                                                  // 0x0080
-    MessageFormat *msgFormat;                                          // 0x0084
-    String *string;                                                    // 0x0088
-    PaletteData *paletteData;                                          // 0x008C
-    FontSystem *fontSystem;                                            // 0x0090
-    SysTask *drawTask;                                                 // 0x0094
-    GF3DVramMan *vramMan;                                              // 0x0098
-    Camera *camera;                                                    // 0x009C
-    Camera *particleCamera;                                            // 0x00A0
-    SPLEmitter *particleSystem;                                        // 0x00A4
-    NNSFndAllocator allocator;                                         // 0x00A8
-    WobbuffetPopSequence sequence;                                     // 0x00B8
-    WobbuffetPopBalloon *balloon;                                      // 0x00D4
-    WobbuffetPopModels models;                                         // 0x00D8
-    WobbuffetPopCommonModel common;                                    // 0x13A0
-    WobbuffetPopInflation inflation;                                   // 0x1428
-    ManagedSprite *seatSprites[4];                                     // 0x1458: one per seat
-    WobbuffetPopBonusRing bonusRing;                                   // 0x1468
-    WobbuffetPopBonusPopup bonusPopups[3];                             // 0x1560
-    WobbuffetPopScoreDisplay scoreDisplay;                             // 0x15A8
-    WobbuffetPopDemo demo;                                             // 0x174C
-    u32 demoDone;                                                      // 0x1768
-    WobbuffetPopEvent events[WOBBUFFET_POP_EVENT_QUEUE_SIZE];          // 0x176C
-    WobbuffetPopEvent playerEvents[4][WOBBUFFET_POP_EVENT_QUEUE_SIZE]; // 0x1C1C
-    WobbuffetPopEvent currentEvent;                                    // 0x2EDC
-    WobbuffetPopEvent pendingEvent;                                    // 0x2EF0
-    s32 playerEventWriteCounts[4];                                     // 0x2F04
-    u32 playerEventReadCounts[4];                                      // 0x2F14
-    s32 eventWriteCount;                                               // 0x2F24
-    s32 eventReadCount;                                                // 0x2F28
-    WobbuffetPopPump pumpQueue[8];                                     // 0x2F2C
-    s32 pumpQueueRead;                                                 // 0x2FAC
-    s32 pumpQueueWrite;                                                // 0x2FB0
-    u32 timer;                                                         // 0x2FB4
-    u32 started;                                                       // 0x2FB8
-    u32 gameOver;                                                      // 0x2FBC: no more pumping
-    u32 finished;                                                      // 0x2FC0
-    s32 eventDelay;                                                    // 0x2FC4
-    u32 balloonIndex;                                                  // 0x2FC8
-    u32 balloonInPlay;                                                 // 0x2FCC
-    u32 total;                                                         // 0x2FD0
-    u32 syncKind;                                                      // 0x2FD4
-    u32 syncId;                                                        // 0x2FD8
-    WobbuffetPopPuff puffs[40];                                        // 0x2FDC
-    WobbuffetPopConfetti confetti;                                     // 0x339C
-    WobbuffetPopBalloonIcon balloonIcons[5];                           // 0x380C
-    s32 score;                                                         // 0x3848
-    u32 frameCounter;                                                  // 0x384C
-} WobbuffetPop;                                                        // size: 0x3850
+    WobbuffetPopApp *app;
+    u32 hostNetId;
+    u32 readyCount;
+    u32 playerValues[4];
+    PlazaGameSign *sign;
+    u32 gameState;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    BgConfig *bgConfig;
+    Window playerNameWindows[4];
+    Window messageWindow;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    PaletteData *paletteData;
+    FontSystem *fontSystem;
+    SysTask *drawTask;
+    GF3DVramMan *vramMan;
+    Camera *camera;
+    Camera *particleCamera;
+    SPLEmitter *particleSystem;
+    NNSFndAllocator allocator;
+    WobbuffetPopSequence sequence;
+    WobbuffetPopBalloon *balloon;
+    WobbuffetPopModels models;
+    WobbuffetPopCommonModel common;
+    WobbuffetPopInflation inflation;
+    ManagedSprite *seatSprites[4];
+    WobbuffetPopBonusRing bonusRing;
+    WobbuffetPopBonusPopup bonusPopups[3];
+    WobbuffetPopScoreDisplay scoreDisplay;
+    WobbuffetPopDemo demo;
+    u32 demoDone;
+    WobbuffetPopEvent events[WOBBUFFET_POP_EVENT_QUEUE_SIZE];
+    WobbuffetPopEvent playerEvents[4][WOBBUFFET_POP_EVENT_QUEUE_SIZE];
+    WobbuffetPopEvent currentEvent;
+    WobbuffetPopEvent pendingEvent;
+    s32 playerEventWriteCounts[4];
+    u32 playerEventReadCounts[4];
+    s32 eventWriteCount;
+    s32 eventReadCount;
+    WobbuffetPopPump pumpQueue[8];
+    s32 pumpQueueRead;
+    s32 pumpQueueWrite;
+    u32 timer;
+    u32 started;
+    u32 gameOver; // no more pumping
+    u32 finished;
+    s32 eventDelay;
+    u32 balloonIndex;
+    u32 balloonInPlay;
+    u32 total;
+    u32 syncKind;
+    u32 syncId;
+    WobbuffetPopPuff puffs[40];
+    WobbuffetPopConfetti confetti;
+    WobbuffetPopBalloonIcon balloonIcons[5];
+    s32 score;
+    u32 frameCounter;
+} WobbuffetPop;
 
 BOOL WobbuffetPopApp_Init(OverlayManager *man, int *state);
 BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state);
