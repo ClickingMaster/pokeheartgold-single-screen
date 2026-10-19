@@ -24,46 +24,46 @@ BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32
     if (type == 1 && len > 300) {
         return FALSE;
     }
-    LobbyString_AssignCStr(out, sStr_Empty_16);
-    LobbyString_FormatN(&s0, 3, sFmt_Hex_3, 0);
+    LobbyString_AssignCStr(out, gLobbyStr_Empty_16);
+    LobbyString_FormatN(&s0, 3, gLobbyFmt_Hex_3, 0);
     LobbyString_Append(out, &s0);
     LobbyString_Destroy(&s0);
-    LobbyString_AppendCStr(out, sStr_Space_2);
-    LobbyString_FormatN(&s1, 2, sFmt_Hex_3, 6);
+    LobbyString_AppendCStr(out, gLobbyStr_Space_2);
+    LobbyString_FormatN(&s1, 2, gLobbyFmt_Hex_3, 6);
     LobbyString_Append(out, &s1);
     LobbyString_Destroy(&s1);
-    LobbyString_AppendCStr(out, sStr_Space_2);
+    LobbyString_AppendCStr(out, gLobbyStr_Space_2);
     switch (type) {
     case 0:
-        LobbyString_AppendCStr(out, sStr_S);
+        LobbyString_AppendCStr(out, gLobbyStr_S);
         break;
     case 1:
-        LobbyString_AppendCStr(out, sStr_B);
+        LobbyString_AppendCStr(out, gLobbyStr_B);
         break;
     default:
         return FALSE;
     }
-    LobbyString_AppendCStr(out, sStr_Space_2);
+    LobbyString_AppendCStr(out, gLobbyStr_Space_2);
     switch (mode) {
     case 1:
-        LobbyString_AppendCStr(out, sStr_A);
+        LobbyString_AppendCStr(out, gLobbyStr_A);
         break;
     case 0:
-        LobbyString_AppendCStr(out, sStr_S);
+        LobbyString_AppendCStr(out, gLobbyStr_S);
         break;
     default:
         return FALSE;
     }
-    LobbyString_AppendCStr(out, sStr_Space_2);
-    LobbyString_FormatN(&s2, 8, sFmt_Hex_3, value);
+    LobbyString_AppendCStr(out, gLobbyStr_Space_2);
+    LobbyString_FormatN(&s2, 8, gLobbyFmt_Hex_3, value);
     LobbyString_Append(out, &s2);
     LobbyString_Destroy(&s2);
-    LobbyString_AppendCStr(out, sStr_Space_2);
-    LobbyString_AppendCStr(out, sStr__);
-    LobbyString_AppendCStr(out, sStr_SpaceSpace);
+    LobbyString_AppendCStr(out, gLobbyStr_Space_2);
+    LobbyString_AppendCStr(out, gLobbyStr__);
+    LobbyString_AppendCStr(out, gLobbyStr_SpaceSpace);
     switch (type) {
     case 0:
-        LobbyString_FormatN(&s3, len, sFmt_Str_3, data);
+        LobbyString_FormatN(&s3, len, gLobbyFmt_Str_3, data);
         LobbyString_Append(out, &s3);
         LobbyString_Destroy(&s3);
         break;

@@ -54,14 +54,14 @@ void LobbyChat_StripChannelPrefixes(LobbyU32Vector *out, LobbyChatManager *manag
 // Nicks are "N_<user ID>_<n>", n changing with the time so a retry gets a new nick.
 void LobbyChat_FormatNick(Str *out, int userId) {
     u32 time = current_time();
-    LobbyString_FormatN(out, 0x14, sFmt_N_UnderscoreIntUnderscoreUint, userId, time % 1000);
+    LobbyString_FormatN(out, 0x14, gLobbyFmt_N_UnderscoreIntUnderscoreUint, userId, time % 1000);
 }
 
 int LobbyChat_GetUserIdFromNick(const Str *nick) {
     LobbyStringVector parts;
     Str separator;
     int id;
-    LobbyString_InitFromCStr(&separator, sStr___2);
+    LobbyString_InitFromCStr(&separator, gLobbyStr___2);
     LobbyChat_SplitString(&parts, nick, &separator, 0);
     LobbyString_Destroy(&separator);
     if (parts.size < 2) {

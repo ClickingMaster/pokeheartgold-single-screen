@@ -2,6 +2,9 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "lobby_mem.h"
+
 extern "C" {
 #include <nitro/rtc.h>
 }
@@ -117,8 +120,7 @@ struct Callbacks {
 extern Root *gLobbyChatManager;
 extern "C" const u8 _version_NINTENDO_DWC_LOBBY[];
 extern "C" void OSi_ReferSymbol(const void *);
-extern "C" const char sStr_DWCUser[], sStr_DWCName[], sStr_Dot[], sStr_PeerchatGsNintendowifiNet[];
-extern "C" void *LobbyMem_Alloc(u32);
+extern "C" const char gLobbyStr_DWCUser[], gLobbyStr_DWCName[], gLobbyStr_Dot[], gLobbyStr_PeerchatGsNintendowifiNet[];
 struct ConnectCallbacks {
     void (*onConnected)();
     void (*onError)();
@@ -131,7 +133,7 @@ extern "C" void LobbyChat_OnRaw(void), LobbyChat_OnDisconnected(void), LobbyChat
 extern "C" int LobbyChat_TimerConnectTimeout(void);
 extern "C" u32 chatConnectSpecialA(const char *, int, const char *, const char *, const char *, const char *, Callbacks *, void (*)(void), void (*)(void), void (*)(void), void *, int);
 extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
-extern "C" void LobbyMem_ReleaseReserve(void), LobbyChatManager_Destroy(Root *), DWC_Free(int, void *, int);
+extern "C" void LobbyChatManager_Destroy(Root *), DWC_Free(int, void *, int);
 
 inline void Free(void *p) {
     if (p) {
@@ -163,8 +165,8 @@ extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, i
         return 4;
     }
     LobbyChat_FormatNick(&nick, userId);
-    LobbyString_InitFromCStr(&userName, sStr_DWCUser);
-    LobbyString_InitFromCStr(&realName, sStr_DWCName);
+    LobbyString_InitFromCStr(&userName, gLobbyStr_DWCUser);
+    LobbyString_InitFromCStr(&realName, gLobbyStr_DWCName);
     {
         int firstReady = 0, secondReady = firstReady;
         Root *created = (Root *)LobbyMem_Alloc(0xac);
@@ -201,8 +203,8 @@ extern "C" int LobbyChat_Initialize(const char *gameName, const char *gameKey, i
         callbacks.f[3] = LobbyChat_OnInvited;
         callbacks.data = config->param;
         LobbyChatManager_GetGameName(&hostGameName, gLobbyChatManager);
-        LobbyString_ConcatCStr(&hostPrefix, &hostGameName, sStr_Dot);
-        LobbyString_ConcatCStr(&host, &hostPrefix, sStr_PeerchatGsNintendowifiNet);
+        LobbyString_ConcatCStr(&hostPrefix, &hostGameName, gLobbyStr_Dot);
+        LobbyString_ConcatCStr(&host, &hostPrefix, gLobbyStr_PeerchatGsNintendowifiNet);
         LobbyChatManager_GetNick(&nickArg, gLobbyChatManager);
         LobbyChatManager_GetRealName(&realNameArg, gLobbyChatManager);
         LobbyChatManager_GetGameName(&gameNameArg, gLobbyChatManager);

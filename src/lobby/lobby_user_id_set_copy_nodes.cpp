@@ -5,12 +5,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 inline void *operator new(unsigned long, void *p) {
     return p;
 }
 
 extern "C" void DWC_Free(int, void *, u32);
-extern "C" void *LobbyMem_Alloc(u32 size);
 
 enum Color {
     black,

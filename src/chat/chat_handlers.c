@@ -13,140 +13,140 @@
 // they collect, completion, which queues the user callback, and cancellation), the channel mode strings, and the
 // handlers of the lines received from the server, one per server command.
 
-extern const char sStr_ciGetNextID[];
-extern const char sStr_ciAddFilter[];
-extern const char sStr_ciParseMode[];
-extern const char sStr_ciFindFilter[];
-extern const char sStr_ciFilterThink[];
-extern const char sStr_ciRemoveFilter[];
-extern const char sStr_ciFinishFilter[];
-extern const char sStr_ciAddJOINFilter[];
-extern const char sStr_ciDestroyFilter[];
-extern const char sStr_ciCleanupFilters[];
-extern const char sStr_ciFilterTimedout[];
-extern const char sStr_ciFindGetKeyFilter[];
-extern const char sStr_ciCheckFiltersForID[];
-extern const char sStr_ciApplyChangesToMode[];
-extern const char sStr_ChatNeNULL_3[];
-extern const char sStr_ChatHandlersC[];
-extern const char sStr_NumMatchesGt0[];
-extern const char sStr_matches[];
-extern const char sStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES[];
-extern const char sStr_channel[];
-extern const char sStr_Channel0[];
-extern const char sStr_FilterNeNULL[];
-extern const char sStr_filter[];
-extern const char sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES[];
-extern const char sStr_0_10[];
-extern const char sStr_TimedOut[];
-extern const char sStr_ID_Gt0[];
-extern const char sStr_PasswordNeNULL[];
-extern const char sStr_StrlenPasswordLtMAX_PASSWORD[];
-extern const char sStr_B_UnderscoreStar[];
-extern const char sStr_ModeNeNULL[];
-extern const char sStr_ciParseValue[];
-extern const char sStr_ciUTMHandler[];
-extern const char sStr_ciATMHandler[];
-extern const char sStr_ciPingHandler[];
-extern const char sStr_ciNickHandler[];
-extern const char sStr_ciJoinHandler[];
-extern const char sStr_ciPartHandler[];
-extern const char sStr_ciKickHandler[];
-extern const char sStr_ciQuitHandler[];
-extern const char sStr_ciKillHandler[];
-extern const char sStr_ciModeHandler[];
-extern const char sStr_ciTopicHandler[];
-extern const char sStr_ciErrorHandler[];
-extern const char sStr_ciNoticeHandler[];
-extern const char sStr_ciInviteHandler[];
-extern const char sStr_ciPrivmsgHandler[];
-extern const char sStr_ciRplListHandler[];
-extern const char sStr_ciRplCDKeyHandler[];
-extern const char sStr_ciRplLoginHandler[];
-extern const char sStr_ciRplTopicHandler[];
-extern const char sStr_ciRplGetKeyHandler[];
-extern const char sStr_ciRplUserIPHandler[];
-extern const char sStr_ciNameReplyHandler[];
-extern const char sStr_ciRplGetCKeyHandler[];
-extern const char sStr_ciEndOfNamesHandler[];
-extern const char sStr_ciRplBanListHandler[];
-extern const char sStr_ciRplNoTopicHandler[];
-extern const char sStr_ciRplWelcomeHandler[];
-extern const char sStr_ciRplWhoReplyHandler[];
-extern const char sStr_ciRplEndOfWhoHandler[];
-extern const char sStr_ciRplSecureKeyHandler[];
-extern const char sStr_ciRplEndGetKeyHandler[];
-extern const char sStr_ciRplListStartHandler[];
-extern const char sStr_ciRplWhoisUserHandler[];
-extern const char sStr_ciErrNickInUseHandler[];
-extern const char sStr_ciRplEndGetCKeyHandler[];
-extern const char sStr_ciRplGetChanKeyHandler[];
-extern const char sStr_ciRplEndOfWhoisHandler[];
-extern const char sStr_ciErrBadChanMaskHandler[];
-extern const char sStr_ciErrLoginFailedHandler[];
-extern const char sStr_ciErrNoUniqueNickHandler[];
-extern const char sStr_ciRplEndOfBanListHandler[];
-extern const char sStr_ciErrBadChannelKeyHandler[];
-extern const char sStr_ciErrNoSuchChannelHandler[];
-extern const char sStr_ciRplChannelModeIsHandler[];
-extern const char sStr_ciRplWhoisChannelsHandler[];
-extern const char sStr_ciErrChannelIsFullHandler[];
-extern const char sStr_ciQuitEnumChannelsCallback[];
-extern const char sStr_ciKillEnumChannelsCallback[];
-extern const char sStr_ciErrInviteOnlyChanHandler[];
-extern const char sStr_ciErrBannedFromChanHandler[];
-extern const char sStr_ciErrTooManyChannelsHandler[];
-extern const char sStr_ciErrErroneusNicknameHandler[];
-extern const char sStr_ciErrUniqueNickExpiredHandler[];
-extern const char sStr_ciErrRegisterNickFailedHandler[];
-extern const char sStr_MessageNumParamsEq2[];
-extern const char sStr_Empty_20[];
-extern const char sStr_ACTION[];
-extern const char sFmt_PONG[];
-extern const char sStr_MessageNumParamsEq1[];
-extern const char sStr_StrlenNewNickLtMAX_NICK[];
-extern const char sStr_NickNe0[];
-extern const char sFmt_MODE[];
-extern const char sStr_MessageNumParamsEq2_OrMessageNumParamsEq3[];
-extern const char sStr_UserNeNULL_2[];
-extern const char sStr_User0_Ne0_2[];
-extern const char sStr_ChannelNeNULL_2[];
-extern const char sStr_Channel0_Ne0_2[];
-extern const char sStr_ReasonNeNULL[];
-extern const char sStr_MessageNumParamsGe2[];
-extern const char sStr_MessageNumParamsEq4[];
-extern const char sStr_Space_3[];
-extern const char sStr_Nick0_Ne0_2[];
-extern const char sStr_Nick1_Ne0[];
-extern const char sStr_MessageNumParamsEq3[];
-extern const char sStr_Star_2[];
-extern const char sStr_ConnectionConnecting[];
-extern const char sStr_MessageNumParamsEq8[];
-extern const char sStr_flags[];
-extern const char sStr_len[];
-extern const char sStr_MessageNumParamsEq5[];
-extern const char sStr_BCAST[];
-extern const char sStr_b_[];
-extern const char sStr_MessageNumParamsGe1[];
-extern const char sStr_DataNeNULL_2[];
-extern const char sStr_MessageNumParamsGe3[];
-extern const char sStr_MessageNumParamsEq6[];
-extern const char sStr_DataChannelNeNULL[];
-extern const char sStr_DataChannel0_Ne0[];
-extern const char sFmt_MODE_B[];
-extern const char sStr_MessageNumParamsGe3_2[];
-extern const char sStr_DataNumBansGe0[];
-extern const char sStr_USRIP[];
-extern const char sStr_Backslash_2[];
+extern const char gChatStr_ciGetNextID[];
+extern const char gChatStr_ciAddFilter[];
+extern const char gChatStr_ciParseMode[];
+extern const char gChatStr_ciFindFilter[];
+extern const char gChatStr_ciFilterThink[];
+extern const char gChatStr_ciRemoveFilter[];
+extern const char gChatStr_ciFinishFilter[];
+extern const char gChatStr_ciAddJOINFilter[];
+extern const char gChatStr_ciDestroyFilter[];
+extern const char gChatStr_ciCleanupFilters[];
+extern const char gChatStr_ciFilterTimedout[];
+extern const char gChatStr_ciFindGetKeyFilter[];
+extern const char gChatStr_ciCheckFiltersForID[];
+extern const char gChatStr_ciApplyChangesToMode[];
+extern const char gChatStr_ChatNeNULL_3[];
+extern const char gChatStr_ChatHandlersC[];
+extern const char gChatStr_NumMatchesGt0[];
+extern const char gChatStr_matches[];
+extern const char gChatStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES[];
+extern const char gChatStr_channel[];
+extern const char gChatStr_Channel0[];
+extern const char gChatStr_FilterNeNULL[];
+extern const char gChatStr_filter[];
+extern const char gChatStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES[];
+extern const char gChatStr_0_10[];
+extern const char gChatStr_TimedOut[];
+extern const char gChatStr_ID_Gt0[];
+extern const char gChatStr_PasswordNeNULL[];
+extern const char gChatStr_StrlenPasswordLtMAX_PASSWORD[];
+extern const char gChatStr_B_UnderscoreStar[];
+extern const char gChatStr_ModeNeNULL[];
+extern const char gChatStr_ciParseValue[];
+extern const char gChatStr_ciUTMHandler[];
+extern const char gChatStr_ciATMHandler[];
+extern const char gChatStr_ciPingHandler[];
+extern const char gChatStr_ciNickHandler[];
+extern const char gChatStr_ciJoinHandler[];
+extern const char gChatStr_ciPartHandler[];
+extern const char gChatStr_ciKickHandler[];
+extern const char gChatStr_ciQuitHandler[];
+extern const char gChatStr_ciKillHandler[];
+extern const char gChatStr_ciModeHandler[];
+extern const char gChatStr_ciTopicHandler[];
+extern const char gChatStr_ciErrorHandler[];
+extern const char gChatStr_ciNoticeHandler[];
+extern const char gChatStr_ciInviteHandler[];
+extern const char gChatStr_ciPrivmsgHandler[];
+extern const char gChatStr_ciRplListHandler[];
+extern const char gChatStr_ciRplCDKeyHandler[];
+extern const char gChatStr_ciRplLoginHandler[];
+extern const char gChatStr_ciRplTopicHandler[];
+extern const char gChatStr_ciRplGetKeyHandler[];
+extern const char gChatStr_ciRplUserIPHandler[];
+extern const char gChatStr_ciNameReplyHandler[];
+extern const char gChatStr_ciRplGetCKeyHandler[];
+extern const char gChatStr_ciEndOfNamesHandler[];
+extern const char gChatStr_ciRplBanListHandler[];
+extern const char gChatStr_ciRplNoTopicHandler[];
+extern const char gChatStr_ciRplWelcomeHandler[];
+extern const char gChatStr_ciRplWhoReplyHandler[];
+extern const char gChatStr_ciRplEndOfWhoHandler[];
+extern const char gChatStr_ciRplSecureKeyHandler[];
+extern const char gChatStr_ciRplEndGetKeyHandler[];
+extern const char gChatStr_ciRplListStartHandler[];
+extern const char gChatStr_ciRplWhoisUserHandler[];
+extern const char gChatStr_ciErrNickInUseHandler[];
+extern const char gChatStr_ciRplEndGetCKeyHandler[];
+extern const char gChatStr_ciRplGetChanKeyHandler[];
+extern const char gChatStr_ciRplEndOfWhoisHandler[];
+extern const char gChatStr_ciErrBadChanMaskHandler[];
+extern const char gChatStr_ciErrLoginFailedHandler[];
+extern const char gChatStr_ciErrNoUniqueNickHandler[];
+extern const char gChatStr_ciRplEndOfBanListHandler[];
+extern const char gChatStr_ciErrBadChannelKeyHandler[];
+extern const char gChatStr_ciErrNoSuchChannelHandler[];
+extern const char gChatStr_ciRplChannelModeIsHandler[];
+extern const char gChatStr_ciRplWhoisChannelsHandler[];
+extern const char gChatStr_ciErrChannelIsFullHandler[];
+extern const char gChatStr_ciQuitEnumChannelsCallback[];
+extern const char gChatStr_ciKillEnumChannelsCallback[];
+extern const char gChatStr_ciErrInviteOnlyChanHandler[];
+extern const char gChatStr_ciErrBannedFromChanHandler[];
+extern const char gChatStr_ciErrTooManyChannelsHandler[];
+extern const char gChatStr_ciErrErroneusNicknameHandler[];
+extern const char gChatStr_ciErrUniqueNickExpiredHandler[];
+extern const char gChatStr_ciErrRegisterNickFailedHandler[];
+extern const char gChatStr_MessageNumParamsEq2[];
+extern const char gChatStr_Empty_20[];
+extern const char gChatStr_ACTION[];
+extern const char gChatFmt_PONG[];
+extern const char gChatStr_MessageNumParamsEq1[];
+extern const char gChatStr_StrlenNewNickLtMAX_NICK[];
+extern const char gChatStr_NickNe0[];
+extern const char gChatFmt_MODE[];
+extern const char gChatStr_MessageNumParamsEq2_OrMessageNumParamsEq3[];
+extern const char gChatStr_UserNeNULL_2[];
+extern const char gChatStr_User0_Ne0_2[];
+extern const char gChatStr_ChannelNeNULL_2[];
+extern const char gChatStr_Channel0_Ne0_2[];
+extern const char gChatStr_ReasonNeNULL[];
+extern const char gChatStr_MessageNumParamsGe2[];
+extern const char gChatStr_MessageNumParamsEq4[];
+extern const char gChatStr_Space_3[];
+extern const char gChatStr_Nick0_Ne0_2[];
+extern const char gChatStr_Nick1_Ne0[];
+extern const char gChatStr_MessageNumParamsEq3[];
+extern const char gChatStr_Star_2[];
+extern const char gChatStr_ConnectionConnecting[];
+extern const char gChatStr_MessageNumParamsEq8[];
+extern const char gChatStr_flags[];
+extern const char gChatStr_len[];
+extern const char gChatStr_MessageNumParamsEq5[];
+extern const char gChatStr_BCAST[];
+extern const char gChatStr_b_[];
+extern const char gChatStr_MessageNumParamsGe1[];
+extern const char gChatStr_DataNeNULL_2[];
+extern const char gChatStr_MessageNumParamsGe3[];
+extern const char gChatStr_MessageNumParamsEq6[];
+extern const char gChatStr_DataChannelNeNULL[];
+extern const char gChatStr_DataChannel0_Ne0[];
+extern const char gChatFmt_MODE_B[];
+extern const char gChatStr_MessageNumParamsGe3_2[];
+extern const char gChatStr_DataNumBansGe0[];
+extern const char gChatStr_USRIP[];
+extern const char gChatStr_Backslash_2[];
 
 #define ASSERT(cond, message, func, line)                                    \
     do {                                                                     \
         if (!(cond)) {                                                       \
-            __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
+            __msl_assertion_failed(message, gChatStr_ChatHandlersC, func, line); \
         }                                                                    \
     } while (0)
-#define ASSERT_CHAT(chat, func, line)          ASSERT(chat, sStr_ChatNeNULL_3, func, line)
-#define ASSERT_EXPR(cond, message, func, line) ((cond) ? (void)0 : __msl_assertion_failed(message, sStr_ChatHandlersC, func, line))
+#define ASSERT_CHAT(chat, func, line)          ASSERT(chat, gChatStr_ChatNeNULL_3, func, line)
+#define ASSERT_EXPR(cond, message, func, line) ((cond) ? (void)0 : __msl_assertion_failed(message, gChatStr_ChatHandlersC, func, line))
 
 #define REQUEST_TIMEOUT  60000 // ms
 #define NICK_LIST_GROWTH 100
@@ -157,13 +157,13 @@ ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey 
     const char *name;
     const char *name2;
     ChatRequest *request;
-    ASSERT_EXPR(chat != NULL, sStr_ChatNeNULL_3, sStr_ciFindFilter, 0x15B);
-    ASSERT_EXPR(count > 0, sStr_NumMatchesGt0, sStr_ciFindFilter, 0x15D);
-    ASSERT_EXPR(keys != NULL, sStr_matches, sStr_ciFindFilter, 0x15E);
+    ASSERT_EXPR(chat != NULL, gChatStr_ChatNeNULL_3, gChatStr_ciFindFilter, 0x15B);
+    ASSERT_EXPR(count > 0, gChatStr_NumMatchesGt0, gChatStr_ciFindFilter, 0x15D);
+    ASSERT_EXPR(keys != NULL, gChatStr_matches, gChatStr_ciFindFilter, 0x15E);
     for (request = chat->requests; request != NULL; request = request->next) {
         for (i = 0; i < count; i++) {
             const ChatRequestKey *key = &keys[i];
-            ASSERT_EXPR(key->type >= 0 && key->type < CHAT_REQUEST_TYPE_COUNT, sStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES, sStr_ciFindFilter, 0x164);
+            ASSERT_EXPR(key->type >= 0 && key->type < CHAT_REQUEST_TYPE_COUNT, gChatStr_MatchesI_TypeGe0_AndMatchesI_TypeLtNUM_TYPES, gChatStr_ciFindFilter, 0x164);
             if (request->type != key->type) {
                 continue;
             }
@@ -185,9 +185,9 @@ ChatRequest *ciFindFilter(ChatConnection *chat, int count, const ChatRequestKey 
 // Finds the channel keys request (type 12) of the channel.
 ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciFindGetKeyFilter, 0x17F);
-    ASSERT(channel, sStr_channel, sStr_ciFindGetKeyFilter, 0x181);
-    ASSERT(*channel, sStr_Channel0, sStr_ciFindGetKeyFilter, 0x182);
+    ASSERT_CHAT(chat, gChatStr_ciFindGetKeyFilter, 0x17F);
+    ASSERT(channel, gChatStr_channel, gChatStr_ciFindGetKeyFilter, 0x181);
+    ASSERT(*channel, gChatStr_Channel0, gChatStr_ciFindGetKeyFilter, 0x182);
     request = chat->requests;
     while (request) {
         if (request->type == TYPE_GETKEY && strnicmp(((ChatKeysData *)request->data)->arg.channel, channel) == 0) {
@@ -199,7 +199,7 @@ ChatRequest *ciFindGetKeyFilter(ChatConnection *chat, const char *channel) {
 }
 
 void ciDestroyFilter(ChatRequest *request) {
-    ASSERT(request, sStr_FilterNeNULL, sStr_ciDestroyFilter, 403);
+    ASSERT(request, gChatStr_FilterNeNULL, gChatStr_ciDestroyFilter, 403);
     DWCi_GsFree(request->data);
     DWCi_GsFree(request->name);
     DWCi_GsFree(request->name2);
@@ -209,8 +209,8 @@ void ciDestroyFilter(ChatRequest *request) {
 // Unlinks and frees the request.
 void ciRemoveFilter(ChatConnection *chat, ChatRequest *target) {
     ChatRequest *previous = NULL, *head, *request;
-    ASSERT_CHAT(chat, sStr_ciRemoveFilter, 0x19F);
-    ASSERT(target, sStr_FilterNeNULL, sStr_ciRemoveFilter, 0x1A1);
+    ASSERT_CHAT(chat, gChatStr_ciRemoveFilter, 0x19F);
+    ASSERT(target, gChatStr_FilterNeNULL, gChatStr_ciRemoveFilter, 0x1A1);
     head = chat->requests;
     request = head;
     while (request) {
@@ -237,12 +237,12 @@ void ciRemoveFilter(ChatConnection *chat, ChatRequest *target) {
 void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
     int i, valid;
     ChatRequestData *data;
-    ASSERT(request, sStr_filter, sStr_ciFinishFilter, 0x1C1);
+    ASSERT(request, gChatStr_filter, gChatStr_ciFinishFilter, 0x1C1);
     valid = 0;
     if (request->type >= 0 && request->type < CHAT_REQUEST_TYPE_COUNT) {
         valid = 1;
     }
-    ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFinishFilter, 0x1C2);
+    ASSERT(valid, gChatStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, gChatStr_ciFinishFilter, 0x1C2);
     if (request->type == TYPE_LIST) {
         data = request->data;
         if (request->callback2) {
@@ -359,7 +359,7 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
             ciAddCallback_(chat, CALLBACK_AUTHENTICATE_CDKEY, request->callback, results, request->param, request->id, NULL, 8);
         }
     } else {
-        __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciFinishFilter, 0x25C);
+        __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciFinishFilter, 0x25C);
     }
     ciRemoveFilter(chat, request);
 }
@@ -367,12 +367,12 @@ void ciFinishFilter(ChatConnection *chat, ChatRequest *request, u32 *results) {
 // Ends the request without an answer: completes it with failed (zeroed) results.
 void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
     BOOL valid;
-    ASSERT(request, sStr_filter, sStr_ciFilterTimedout, 0x268);
+    ASSERT(request, gChatStr_filter, gChatStr_ciFilterTimedout, 0x268);
     valid = FALSE;
     if (request->type >= 0 && request->type < CHAT_REQUEST_TYPE_COUNT) {
         valid = TRUE;
     }
-    ASSERT(valid, sStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, sStr_ciFilterTimedout, 0x269);
+    ASSERT(valid, gChatStr_FilterTypeGe0_AndFilterTypeLtNUM_TYPES, gChatStr_ciFilterTimedout, 0x269);
     if (request->type == TYPE_LIST) {
         u32 results[5];
         results[0] = 0;
@@ -516,18 +516,18 @@ void ciFilterTimedout(ChatConnection *chat, ChatRequest *request) {
     if (request->type == TYPE_CDKEY) {
         u32 results[2];
         results[0] = 0;
-        results[1] = (u32)sStr_TimedOut;
+        results[1] = (u32)gChatStr_TimedOut;
         ciFinishFilter(chat, request, results);
         return;
     }
-    __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciFilterTimedout, 0x311);
+    __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciFilterTimedout, 0x311);
 }
 
 // Ends every request whose timeout has passed.
 void ciFilterThink(ChatConnection *chat) {
     ChatRequest *request, *next;
     u32 now;
-    ASSERT_CHAT(chat, sStr_ciFilterThink, 794);
+    ASSERT_CHAT(chat, gChatStr_ciFilterThink, 794);
     now = current_time();
     for (request = chat->requests; request; request = next) {
         next = request->next;
@@ -539,7 +539,7 @@ void ciFilterThink(ChatConnection *chat) {
 
 // Returns a new request id (1 .. 0x7FFFFFFF, wrapping).
 int ciGetNextID(ChatConnection *chat) {
-    ASSERT_CHAT(chat, sStr_ciGetNextID, 813);
+    ASSERT_CHAT(chat, gChatStr_ciGetNextID, 813);
     u32 id = chat->nextRequestId;
     u32 next;
     if (id == 0x7FFFFFFF) {
@@ -554,8 +554,8 @@ int ciGetNextID(ChatConnection *chat) {
 // Returns whether the request with this id is still waiting.
 BOOL ciCheckFiltersForID(ChatConnection *chat, int id) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciCheckFiltersForID, 832);
-    ASSERT(id > 0, sStr_ID_Gt0, sStr_ciCheckFiltersForID, 834);
+    ASSERT_CHAT(chat, gChatStr_ciCheckFiltersForID, 832);
+    ASSERT(id > 0, gChatStr_ID_Gt0, gChatStr_ciCheckFiltersForID, 834);
     for (request = chat->requests; request; request = request->next) {
         if (request->id == id) {
             return TRUE;
@@ -566,7 +566,7 @@ BOOL ciCheckFiltersForID(ChatConnection *chat, int id) {
 
 // Ends all requests.
 void ciCleanupFilters(ChatConnection *chat) {
-    ASSERT_CHAT(chat, sStr_ciCleanupFilters, 851);
+    ASSERT_CHAT(chat, gChatStr_ciCleanupFilters, 851);
     while (chat->requests) {
         ciFilterTimedout(chat, chat->requests);
     }
@@ -575,7 +575,7 @@ void ciCleanupFilters(ChatConnection *chat) {
 // Appends a request (names are copied) and returns its id, 0 when out of memory.
 int ciAddFilter(ChatConnection *chat, int type, const char *name, const char *name2, void *callback, void *callback2, void *param, void *data) {
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciAddFilter, 860);
+    ASSERT_CHAT(chat, gChatStr_ciAddFilter, 860);
     request = DWCi_GsMalloc(sizeof(ChatRequest));
     if (!request) {
         return 0;
@@ -611,8 +611,8 @@ int ciAddLISTFilter(ChatConnection *chat, void *callbackEach, void *callbackAll,
 int ciAddJOINFilter(ChatConnection *chat, const char *channel, void *callback, void *param, const ChatChannelCallbacks *callbacks, const char *password) {
     ChatEnterData *data;
     int id;
-    ASSERT(password, sStr_PasswordNeNULL, sStr_ciAddJOINFilter, 913);
-    ASSERT(strlen(password) < 32, sStr_StrlenPasswordLtMAX_PASSWORD, sStr_ciAddJOINFilter, 914);
+    ASSERT(password, gChatStr_PasswordNeNULL, gChatStr_ciAddJOINFilter, 913);
+    ASSERT(strlen(password) < 32, gChatStr_StrlenPasswordLtMAX_PASSWORD, gChatStr_ciAddJOINFilter, 914);
     data = DWCi_GsMalloc(sizeof(ChatEnterData));
     if (!data) {
         return 0;
@@ -664,7 +664,7 @@ int ciAddGETCKEYFilter(ChatConnection *chat, const char *cookie, int count, cons
     j = i;
     for (; i < count; i++) {
         const char *key = keys[i];
-        if (strcmp(key, sStr_B_UnderscoreStar) != 0) {
+        if (strcmp(key, gChatStr_B_UnderscoreStar) != 0) {
             data->keys[j] = goastrdup(key);
             if (!data->keys[j]) {
                 for (j--; j >= 0; j--) {
@@ -716,7 +716,7 @@ int ciAddGETCHANKEYFilter(ChatConnection *chat, const char *cookie, int count, c
         }
         for (i = 0, j = 0; i < count; i++) {
             key = keys[i];
-            if (strcmp(key, sStr_B_UnderscoreStar) == 0) {
+            if (strcmp(key, gChatStr_B_UnderscoreStar) == 0) {
                 continue;
             }
             data->keys[j] = goastrdup(key);
@@ -746,7 +746,7 @@ ChatModeChange *ciParseMode(const char *modes, const char **args, int argCount) 
     int count;
     count = 0;
     hasArg = FALSE;
-    ASSERT(modes != NULL, sStr_ModeNeNULL, sStr_ciParseMode, 0x494);
+    ASSERT(modes != NULL, gChatStr_ModeNeNULL, gChatStr_ciParseMode, 0x494);
     if (*modes == '+') {
         set = TRUE;
     } else if (*modes == '-') {
@@ -902,7 +902,7 @@ void ciApplyChangesToMode(ChatChannelMode *mode, ChatModeChange *changes) {
             mode->opsObeyChannelLimit = changes->set;
             break;
         default:
-            __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciApplyChangesToMode, 0x56C);
+            __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciApplyChangesToMode, 0x56C);
             break;
         }
         changes++;
@@ -919,8 +919,8 @@ void ciPrivmsgHandler(ChatConnection *chat, ChatMessage *message) {
     int action = 0;
     char *text;
     int length;
-    ASSERT_CHAT(chat, sStr_ciPrivmsgHandler, 0x57C);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciPrivmsgHandler, 0x582);
+    ASSERT_CHAT(chat, gChatStr_ciPrivmsgHandler, 0x57C);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciPrivmsgHandler, 0x582);
     if (message->paramCount != 2) {
         return;
     }
@@ -928,7 +928,7 @@ void ciPrivmsgHandler(ChatConnection *chat, ChatMessage *message) {
     text = message->params[1];
     nick = message->nick;
     length = strlen(text);
-    ctcp = sStr_Empty_20;
+    ctcp = gChatStr_Empty_20;
     if ((s8)text[0] == 1 && (((s8)text[1] >= 'A' && (s8)text[1] <= 'Z') || ((s8)text[1] >= 'a' && (s8)text[1] <= 'z')) && (s8)text[length - 1] == 1) {
         char *space;
         text[length - 1] = 0;
@@ -939,7 +939,7 @@ void ciPrivmsgHandler(ChatConnection *chat, ChatMessage *message) {
             text = space + 1;
         }
     }
-    if (!strcmp(ctcp, sStr_ACTION)) {
+    if (!strcmp(ctcp, gChatStr_ACTION)) {
         action = 1;
     } else if ((s8)*ctcp) {
         return;
@@ -980,8 +980,8 @@ void ciNoticeHandler(ChatConnection *chat, ChatMessage *message) {
     ChatPrivateMessageArgs privateArgs;
     ChatChannelMessageArgs channelArgs;
     ChatChannelCallbacks *callbacks;
-    ASSERT_CHAT(chat, sStr_ciNoticeHandler, 1514);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciNoticeHandler, 1520);
+    ASSERT_CHAT(chat, gChatStr_ciNoticeHandler, 1514);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciNoticeHandler, 1520);
     if (message->paramCount != 2) {
         return;
     }
@@ -1021,8 +1021,8 @@ void ciUTMHandler(ChatConnection *chat, ChatMessage *message) {
     ChatChannelCallbacks *callbacks;
     ChatPrivateMessageArgs privateArgs;
     ChatChannelMessageArgs channelArgs;
-    ASSERT_CHAT(chat, sStr_ciUTMHandler, 1567);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciUTMHandler, 1573);
+    ASSERT_CHAT(chat, gChatStr_ciUTMHandler, 1567);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciUTMHandler, 1573);
     if (message->paramCount != 2) {
         return;
     }
@@ -1063,8 +1063,8 @@ void ciATMHandler(ChatConnection *chat, ChatMessage *message) {
     char *target;
     char *text;
     ChatChannelCallbacks *callbacks;
-    ASSERT_CHAT(chat, sStr_ciATMHandler, 1620);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciATMHandler, 1626);
+    ASSERT_CHAT(chat, gChatStr_ciATMHandler, 1620);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciATMHandler, 1626);
     if (message->paramCount != 2) {
         return;
     }
@@ -1101,23 +1101,23 @@ void ciATMHandler(ChatConnection *chat, ChatMessage *message) {
 
 // PING: answered with a PONG.
 void ciPingHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciPingHandler, 1671);
-    ciSocketSendf(&chat->socket, sFmt_PONG, message->trailing);
+    ASSERT_CHAT(chat, gChatStr_ciPingHandler, 1671);
+    ciSocketSendf(&chat->socket, gChatFmt_PONG, message->trailing);
 }
 
 // NICK: a user, the own one included, changed the nick.
 void ciNickHandler(ChatConnection *chat, ChatMessage *message) {
     char *oldNick, *newNick;
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciNickHandler, 1684);
-    ASSERT(message->paramCount == 1, sStr_MessageNumParamsEq1, sStr_ciNickHandler, 1690);
+    ASSERT_CHAT(chat, gChatStr_ciNickHandler, 1684);
+    ASSERT(message->paramCount == 1, gChatStr_MessageNumParamsEq1, gChatStr_ciNickHandler, 1690);
     if (message->paramCount != 1) {
         return;
     }
     oldNick = message->nick;
     newNick = message->params[0];
     if (!strnicmp(oldNick, chat->nick)) {
-        ASSERT(strlen(newNick) < sizeof(chat->nick), sStr_StrlenNewNickLtMAX_NICK, sStr_ciNickHandler, 1706);
+        ASSERT(strlen(newNick) < sizeof(chat->nick), gChatStr_StrlenNewNickLtMAX_NICK, gChatStr_ciNickHandler, 1706);
         strncpy(chat->nick, newNick, sizeof(chat->nick));
         chat->nick[sizeof(chat->nick) - 1] = 0;
         ChatRequestKey key = { 0 };
@@ -1147,8 +1147,8 @@ void ciJoinHandler(ChatConnection *chat, ChatMessage *message) {
     ChatUserJoinedArgs args;
     char *usersChangedArg;
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciJoinHandler, 1750);
-    ASSERT(message->paramCount == 1, sStr_MessageNumParamsEq1, sStr_ciJoinHandler, 1756);
+    ASSERT_CHAT(chat, gChatStr_ciJoinHandler, 1750);
+    ASSERT(message->paramCount == 1, gChatStr_MessageNumParamsEq1, gChatStr_ciJoinHandler, 1756);
     if (message->paramCount != 1) {
         return;
     }
@@ -1159,11 +1159,11 @@ void ciJoinHandler(ChatConnection *chat, ChatMessage *message) {
     if (*nick == '@') {
         nick++;
         mode = CHAT_USER_MODE_OP;
-        ASSERT(*nick, sStr_NickNe0, sStr_ciJoinHandler, 1771);
+        ASSERT(*nick, gChatStr_NickNe0, gChatStr_ciJoinHandler, 1771);
     } else if (*nick == '+') {
         nick++;
         mode = CHAT_USER_MODE_VOICE;
-        ASSERT(*nick, sStr_NickNe0, sStr_ciJoinHandler, 1777);
+        ASSERT(*nick, gChatStr_NickNe0, gChatStr_ciJoinHandler, 1777);
     } else {
         mode = CHAT_USER_MODE_NORMAL;
     }
@@ -1182,7 +1182,7 @@ void ciJoinHandler(ChatConnection *chat, ChatMessage *message) {
         ciChannelEntered(chat, channel, &enter->callbacks);
         ciSetChannelPassword(chat, channel, enter->password);
         enter->joined = TRUE;
-        ciSocketSendf(&chat->socket, sFmt_MODE, channel);
+        ciSocketSendf(&chat->socket, gChatFmt_MODE, channel);
         return;
     }
     if (ciInChannel(chat, channel)) {
@@ -1225,10 +1225,10 @@ void ciPartHandler(ChatConnection *chat, ChatMessage *message) {
     ChatChannelCallbacks *callbacks;
     ChatConnection *c = chat;
     const char *reason;
-    ASSERT_CHAT(c, sStr_ciPartHandler, 0x752);
+    ASSERT_CHAT(c, gChatStr_ciPartHandler, 0x752);
     nick = msg->nick;
     channel = msg->params[0];
-    reason = msg->paramCount > 1 ? msg->params[1] : sStr_Empty_20;
+    reason = msg->paramCount > 1 ? msg->params[1] : gChatStr_Empty_20;
     if (!strcmp(nick, c->nick)) {
         return;
     }
@@ -1264,8 +1264,8 @@ void ciKickHandler(ChatConnection *chat, ChatMessage *message) {
     char **params;
     int count;
     ChatChannelCallbacks *callbacks;
-    ASSERT_CHAT(chat, sStr_ciKickHandler, 0x794);
-    ASSERT(IsKickParamCount(message->paramCount), sStr_MessageNumParamsEq2_OrMessageNumParamsEq3, sStr_ciKickHandler, 0x79A);
+    ASSERT_CHAT(chat, gChatStr_ciKickHandler, 0x794);
+    ASSERT(IsKickParamCount(message->paramCount), gChatStr_MessageNumParamsEq2_OrMessageNumParamsEq3, gChatStr_ciKickHandler, 0x79A);
     count = message->paramCount;
     if (count != 2 && count != 3) {
         return;
@@ -1274,7 +1274,7 @@ void ciKickHandler(ChatConnection *chat, ChatMessage *message) {
     channel = params[0];
     nick = params[1];
     kicker = message->nick;
-    reason = count == 3 ? params[2] : sStr_Empty_20;
+    reason = count == 3 ? params[2] : gChatStr_Empty_20;
     ciUserLeftChannel(chat, nick, channel);
     callbacks = ciGetChannelCallbacks(chat, channel);
     if (!callbacks) {
@@ -1311,11 +1311,11 @@ void ciKickHandler(ChatConnection *chat, ChatMessage *message) {
 void ciQuitEnumChannelsCallback(ChatConnection *chat, const char *nick, ChatChannel *channel, void *param) {
     ChatChannelCallbacks *callbacks;
     u32 args[5], usersChangedArg;
-    ASSERT(nick, sStr_UserNeNULL_2, sStr_ciQuitEnumChannelsCallback, 2022);
-    ASSERT(*nick, sStr_User0_Ne0_2, sStr_ciQuitEnumChannelsCallback, 2022);
-    ASSERT(channel, sStr_ChannelNeNULL_2, sStr_ciQuitEnumChannelsCallback, 2023);
-    ASSERT(channel->name[0], sStr_Channel0_Ne0_2, sStr_ciQuitEnumChannelsCallback, 2023);
-    ASSERT(param, sStr_ReasonNeNULL, sStr_ciQuitEnumChannelsCallback, 2024);
+    ASSERT(nick, gChatStr_UserNeNULL_2, gChatStr_ciQuitEnumChannelsCallback, 2022);
+    ASSERT(*nick, gChatStr_User0_Ne0_2, gChatStr_ciQuitEnumChannelsCallback, 2022);
+    ASSERT(channel, gChatStr_ChannelNeNULL_2, gChatStr_ciQuitEnumChannelsCallback, 2023);
+    ASSERT(channel->name[0], gChatStr_Channel0_Ne0_2, gChatStr_ciQuitEnumChannelsCallback, 2023);
+    ASSERT(param, gChatStr_ReasonNeNULL, gChatStr_ciQuitEnumChannelsCallback, 2024);
     ciUserLeftChannel(chat, nick, channel->name);
     if (!ciWasJoinCallbackCalled(chat, channel->name)) {
         return;
@@ -1341,8 +1341,8 @@ void ciQuitEnumChannelsCallback(ChatConnection *chat, const char *nick, ChatChan
 
 // QUIT: a user left the server.
 void ciQuitHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciQuitHandler, 2067);
-    ASSERT(message->paramCount == 1, sStr_MessageNumParamsEq1, sStr_ciQuitHandler, 2073);
+    ASSERT_CHAT(chat, gChatStr_ciQuitHandler, 2067);
+    ASSERT(message->paramCount == 1, gChatStr_MessageNumParamsEq1, gChatStr_ciQuitHandler, 2073);
     if (message->paramCount != 1) {
         return;
     }
@@ -1353,11 +1353,11 @@ void ciQuitHandler(ChatConnection *chat, ChatMessage *message) {
 void ciKillEnumChannelsCallback(ChatConnection *chat, const char *nick, ChatChannel *channel, void *param) {
     ChatChannelCallbacks *callbacks;
     u32 args[5], usersChangedArg;
-    ASSERT(nick, sStr_UserNeNULL_2, sStr_ciKillEnumChannelsCallback, 2088);
-    ASSERT(*nick, sStr_User0_Ne0_2, sStr_ciKillEnumChannelsCallback, 2088);
-    ASSERT(channel, sStr_ChannelNeNULL_2, sStr_ciKillEnumChannelsCallback, 2089);
-    ASSERT(channel->name[0], sStr_Channel0_Ne0_2, sStr_ciKillEnumChannelsCallback, 2089);
-    ASSERT(param, sStr_ReasonNeNULL, sStr_ciKillEnumChannelsCallback, 2090);
+    ASSERT(nick, gChatStr_UserNeNULL_2, gChatStr_ciKillEnumChannelsCallback, 2088);
+    ASSERT(*nick, gChatStr_User0_Ne0_2, gChatStr_ciKillEnumChannelsCallback, 2088);
+    ASSERT(channel, gChatStr_ChannelNeNULL_2, gChatStr_ciKillEnumChannelsCallback, 2089);
+    ASSERT(channel->name[0], gChatStr_Channel0_Ne0_2, gChatStr_ciKillEnumChannelsCallback, 2089);
+    ASSERT(param, gChatStr_ReasonNeNULL, gChatStr_ciKillEnumChannelsCallback, 2090);
     ciUserLeftChannel(chat, nick, channel->name);
     if (!ciWasJoinCallbackCalled(chat, channel->name)) {
         return;
@@ -1382,7 +1382,7 @@ void ciKillEnumChannelsCallback(ChatConnection *chat, const char *nick, ChatChan
 }
 
 void ciKillHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciKillHandler, 2137);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciKillHandler, 2137);
     if (message->paramCount != 2) {
         return;
     }
@@ -1394,8 +1394,8 @@ void ciTopicHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel, *topic;
     ChatChannelCallbacks *callbacks;
     ChatTopicArgs args;
-    ASSERT_CHAT(chat, sStr_ciTopicHandler, 2154);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciTopicHandler, 2160);
+    ASSERT_CHAT(chat, gChatStr_ciTopicHandler, 2154);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciTopicHandler, 2160);
     if (message->paramCount != 2) {
         return;
     }
@@ -1416,7 +1416,7 @@ void ciModeHandler(ChatConnection *chat, ChatMessage *message) {
     ChatModeChange *changes, *change;
     char *channel, *modes;
     ChatChannelMode mode;
-    ASSERT(message->paramCount >= 2, sStr_MessageNumParamsGe2, sStr_ciModeHandler, 0x893);
+    ASSERT(message->paramCount >= 2, gChatStr_MessageNumParamsGe2, gChatStr_ciModeHandler, 0x893);
     if (message->paramCount < 2) {
         return;
     }
@@ -1462,7 +1462,7 @@ void ciModeHandler(ChatConnection *chat, ChatMessage *message) {
         case CHAT_MODE_E:
             break;
         default:
-            __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciModeHandler, 0x8DC);
+            __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciModeHandler, 0x8DC);
             break;
         }
         change++;
@@ -1478,8 +1478,8 @@ void ciModeHandler(ChatConnection *chat, ChatMessage *message) {
 
 // ERROR: the server closes the connection.
 void ciErrorHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciErrorHandler, 2289);
-    ASSERT(message->paramCount == 1, sStr_MessageNumParamsEq1, sStr_ciErrorHandler, 2295);
+    ASSERT_CHAT(chat, gChatStr_ciErrorHandler, 2289);
+    ASSERT(message->paramCount == 1, gChatStr_MessageNumParamsEq1, gChatStr_ciErrorHandler, 2295);
     if (message->paramCount != 1) {
         return;
     }
@@ -1490,8 +1490,8 @@ void ciErrorHandler(ChatConnection *chat, ChatMessage *message) {
 void ciInviteHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel, *nick;
     ChatInviteArgs args;
-    ASSERT_CHAT(chat, sStr_ciInviteHandler, 2308);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciInviteHandler, 2314);
+    ASSERT_CHAT(chat, gChatStr_ciInviteHandler, 2308);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciInviteHandler, 2314);
     if (message->paramCount != 2) {
         return;
     }
@@ -1510,7 +1510,7 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
     ChatRequest *request;
     char *channel;
     ChatNickListData *list = NULL;
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciNameReplyHandler, 2351);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciNameReplyHandler, 2351);
     if (message->paramCount != 4) {
         return;
     }
@@ -1531,19 +1531,19 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
     if (request->type != TYPE_JOIN) {
         list = request->data;
     }
-    char *nick = strtok(nicks, sStr_Space_3);
+    char *nick = strtok(nicks, gChatStr_Space_3);
     if (!nick) {
         return;
     }
     do {
-        ASSERT(*nick, sStr_Nick0_Ne0_2, sStr_ciNameReplyHandler, 2385);
+        ASSERT(*nick, gChatStr_Nick0_Ne0_2, gChatStr_ciNameReplyHandler, 2385);
         int mode;
         if (*nick == '@') {
-            ASSERT(nick[1], sStr_Nick1_Ne0, sStr_ciNameReplyHandler, 2391);
+            ASSERT(nick[1], gChatStr_Nick1_Ne0, gChatStr_ciNameReplyHandler, 2391);
             mode = CHAT_USER_MODE_OP;
             nick++;
         } else if (*nick == '+') {
-            ASSERT(nick[1], sStr_Nick1_Ne0, sStr_ciNameReplyHandler, 2397);
+            ASSERT(nick[1], gChatStr_Nick1_Ne0, gChatStr_ciNameReplyHandler, 2397);
             mode = CHAT_USER_MODE_VOICE;
             nick++;
         } else {
@@ -1553,13 +1553,13 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
             if (list->count == list->capacity) {
                 char **newNicks = DWCi_GsRealloc(list->nicks, (list->capacity + NICK_LIST_GROWTH) * sizeof(char *));
                 if (!newNicks) {
-                    __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciNameReplyHandler, 2413);
+                    __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciNameReplyHandler, 2413);
                     return;
                 }
                 list->nicks = newNicks;
                 int *newModes = DWCi_GsRealloc(list->modes, (list->capacity + NICK_LIST_GROWTH) * sizeof(int));
                 if (!newModes) {
-                    __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciNameReplyHandler, 2420);
+                    __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciNameReplyHandler, 2420);
                     return;
                 }
                 list->modes = newModes;
@@ -1568,7 +1568,7 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
             u32 length = strlen(nick);
             char *copy = DWCi_GsMalloc(length + 1);
             if (!copy) {
-                __msl_assertion_failed(sStr_0_10, sStr_ChatHandlersC, sStr_ciNameReplyHandler, 2433);
+                __msl_assertion_failed(gChatStr_0_10, gChatStr_ChatHandlersC, gChatStr_ciNameReplyHandler, 2433);
                 return;
             }
             memcpy(copy, nick, length + 1);
@@ -1579,7 +1579,7 @@ void ciNameReplyHandler(ChatConnection *chat, ChatMessage *message) {
         if (request->type == TYPE_JOIN || request->type == TYPE_UNQUIET) {
             ciUserEnteredChannel(chat, nick, channel, mode, NULL, NULL);
         }
-        nick = strtok(NULL, sStr_Space_3);
+        nick = strtok(NULL, gChatStr_Space_3);
     } while (nick);
 }
 
@@ -1610,13 +1610,13 @@ void ciEndOfNamesHandler(ChatConnection *chat, ChatMessage *message) {
 
     ChatRequest *request;
     char *channel;
-    ASSERT_CHAT(chat, sStr_ciEndOfNamesHandler, 0x99F);
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciEndOfNamesHandler, 0x9A5);
+    ASSERT_CHAT(chat, gChatStr_ciEndOfNamesHandler, 0x99F);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciEndOfNamesHandler, 0x9A5);
     if (message->paramCount != 3) {
         return;
     }
     channel = message->params[1];
-    if (strcmp(channel, sStr_Star_2) == 0) {
+    if (strcmp(channel, gChatStr_Star_2) == 0) {
         channel = NULL;
     }
     memset(keys, 0, sizeof(keys));
@@ -1661,7 +1661,7 @@ void ciEndOfNamesHandler(ChatConnection *chat, ChatMessage *message) {
 void ciRplTopicHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel, *topic;
     ChatRequest *request;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplTopicHandler, 2565);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplTopicHandler, 2565);
     if (message->paramCount != 3) {
         return;
     }
@@ -1694,7 +1694,7 @@ void ciRplTopicHandler(ChatConnection *chat, ChatMessage *message) {
 void ciRplNoTopicHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel;
     ChatRequest *request;
-    ASSERT(message->paramCount >= 2, sStr_MessageNumParamsGe2, sStr_ciRplNoTopicHandler, 2620);
+    ASSERT(message->paramCount >= 2, gChatStr_MessageNumParamsGe2, gChatStr_ciRplNoTopicHandler, 2620);
     if (message->paramCount < 2) {
         return;
     }
@@ -1708,7 +1708,7 @@ void ciRplNoTopicHandler(ChatConnection *chat, ChatMessage *message) {
     if (request) {
         results[0] = TRUE;
         results[1] = (u32)channel;
-        results[2] = (u32)sStr_Empty_20;
+        results[2] = (u32)gChatStr_Empty_20;
         ciFinishFilter(chat, request, results);
         return;
     }
@@ -1717,7 +1717,7 @@ void ciRplNoTopicHandler(ChatConnection *chat, ChatMessage *message) {
         return;
     }
     args.channel = channel;
-    args.topic = sStr_Empty_20;
+    args.topic = gChatStr_Empty_20;
     ciAddCallback_(chat, CALLBACK_TOPIC_CHANGED, callbacks->topicChanged, (u32 *)&args, callbacks->param, 0, channel, sizeof(args));
 }
 
@@ -1725,8 +1725,8 @@ void ciRplNoTopicHandler(ChatConnection *chat, ChatMessage *message) {
 void ciErrNickInUseHandler(ChatConnection *chat, ChatMessage *message) {
     char *oldNick, *newNick;
     ChatRequest *request;
-    ASSERT_CHAT(chat, sStr_ciErrNickInUseHandler, 2669);
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciErrNickInUseHandler, 2675);
+    ASSERT_CHAT(chat, gChatStr_ciErrNickInUseHandler, 2669);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciErrNickInUseHandler, 2675);
     if (message->paramCount != 3) {
         return;
     }
@@ -1745,7 +1745,7 @@ void ciErrNickInUseHandler(ChatConnection *chat, ChatMessage *message) {
         ciFinishFilter(chat, request, results);
         return;
     }
-    ASSERT(chat->connecting, sStr_ConnectionConnecting, sStr_ciErrNickInUseHandler, 2707);
+    ASSERT(chat->connecting, gChatStr_ConnectionConnecting, gChatStr_ciErrNickInUseHandler, 2707);
     if (!chat->connecting) {
         return;
     }
@@ -1760,7 +1760,7 @@ void ciRplWhoReplyHandler(ChatConnection *chat, ChatMessage *message) {
     u32 channelResult[5];
     char *channel, *nick, *user, *host;
     ChatRequest *request;
-    ASSERT(message->paramCount == 8, sStr_MessageNumParamsEq8, sStr_ciRplWhoReplyHandler, 2726);
+    ASSERT(message->paramCount == 8, gChatStr_MessageNumParamsEq8, gChatStr_ciRplWhoReplyHandler, 2726);
     if (message->paramCount != 8) {
         return;
     }
@@ -1820,7 +1820,7 @@ void ciRplWhoReplyHandler(ChatConnection *chat, ChatMessage *message) {
 void ciRplEndOfWhoHandler(ChatConnection *chat, ChatMessage *message) {
     char *name;
     ChatRequest *request;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplEndOfWhoHandler, 2829);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplEndOfWhoHandler, 2829);
     if (message->paramCount != 3) {
         return;
     }
@@ -1859,8 +1859,8 @@ void ciRplEndOfWhoHandler(ChatConnection *chat, ChatMessage *message) {
 char *ciParseValue(const char *text, int *length) {
     int n;
     char *field;
-    ASSERT(text, sStr_flags, sStr_ciParseValue, 2888);
-    ASSERT(length, sStr_len, sStr_ciParseValue, 2889);
+    ASSERT(text, gChatStr_flags, gChatStr_ciParseValue, 2888);
+    ASSERT(length, gChatStr_len, gChatStr_ciParseValue, 2889);
     if (!text || *text != '\\') {
         return NULL;
     }
@@ -1888,7 +1888,7 @@ void ciRplGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
     int count;
     char **values;
     int i;
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciRplGetKeyHandler, 2934);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciRplGetKeyHandler, 2934);
     if (message->paramCount != 4) {
         return;
     }
@@ -1917,7 +1917,7 @@ void ciRplGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
                 values[i] = value;
                 cursor += length;
             } else {
-                values[i] = goastrdup(sStr_Empty_20);
+                values[i] = goastrdup(gChatStr_Empty_20);
             }
         }
         results[0] = TRUE;
@@ -1942,7 +1942,7 @@ void ciRplEndGetKeyHandler(ChatConnection *chat, ChatMessage *message) {
     ChatRequest *request;
     ChatKeysData *data;
     char *cookie;
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciRplEndGetKeyHandler, 3020);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciRplEndGetKeyHandler, 3020);
     if (message->paramCount != 4) {
         return;
     }
@@ -1989,7 +1989,7 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
     u32 size;
     char **newKeys;
     char **newValues;
-    ASSERT(message->paramCount == 5, sStr_MessageNumParamsEq5, sStr_ciRplGetCKeyHandler, 3068);
+    ASSERT(message->paramCount == 5, gChatStr_MessageNumParamsEq5, gChatStr_ciRplGetCKeyHandler, 3068);
     if (message->paramCount != 5) {
         return;
     }
@@ -1998,7 +1998,7 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
     channel = params[1];
     nick = params[2];
     cursor = params[4];
-    if (strcmp(cookie, sStr_BCAST) == 0) {
+    if (strcmp(cookie, gChatStr_BCAST) == 0) {
         callbacks = ciGetChannelCallbacks(chat, channel);
         if (callbacks == NULL || callbacks->broadcastKeyChanged == NULL) {
             return;
@@ -2010,7 +2010,7 @@ void ciRplGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
             return;
         }
         do {
-            name = strstr(cursor, sStr_b_);
+            name = strstr(cursor, gChatStr_b_);
             cursor = name;
             while (*cursor != 0 && *cursor != '\\') {
                 cursor++;
@@ -2105,7 +2105,7 @@ void ciRplEndGetCKeyHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel, *cookie;
     ChatRequest *request;
     ChatKeysData *data;
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciRplEndGetCKeyHandler, 3248);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciRplEndGetCKeyHandler, 3248);
     if (message->paramCount != 4) {
         return;
     }
@@ -2141,7 +2141,7 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
     ChatRequestKey key;
     ChatBroadcastKeyArgs change;
     u32 results[6]; // success, channel, nick, count, keys, values
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciRplGetChanKeyHandler, 3297);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciRplGetChanKeyHandler, 3297);
     if (message->paramCount != 4) {
         return;
     }
@@ -2149,7 +2149,7 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
     channel = params[1];
     cookie = params[2];
     cursor = params[3];
-    if (strcmp(cookie, sStr_BCAST) == 0) {
+    if (strcmp(cookie, gChatStr_BCAST) == 0) {
         callbacks = ciGetChannelCallbacks(chat, channel);
         if (!callbacks || !callbacks->broadcastKeyChanged) {
             return;
@@ -2161,7 +2161,7 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
             return;
         }
         do {
-            char *name = strstr(cursor, sStr_b_);
+            char *name = strstr(cursor, gChatStr_b_);
             char *value;
             s8 saved;
             cursor = name;
@@ -2309,8 +2309,8 @@ void ciRplGetChanKeyHandler(ChatConnection *chat, ChatMessage *message) {
 // callback can choose the user name from it before the registration is sent.
 void ciRplUserIPHandler(ChatConnection *chat, ChatMessage *message) {
     char user[128], *address;
-    ASSERT_CHAT(chat, sStr_ciRplUserIPHandler, 3517);
-    ASSERT(message->paramCount >= 1, sStr_MessageNumParamsGe1, sStr_ciRplUserIPHandler, 3523);
+    ASSERT_CHAT(chat, gChatStr_ciRplUserIPHandler, 3517);
+    ASSERT(message->paramCount >= 1, gChatStr_MessageNumParamsGe1, gChatStr_ciRplUserIPHandler, 3523);
     if (message->paramCount < 1) {
         return;
     }
@@ -2335,7 +2335,7 @@ void ciRplListStartHandler(ChatConnection *chat, ChatMessage *message) {
         return;
     }
     data = request->data;
-    ASSERT(data, sStr_DataNeNULL_2, sStr_ciRplListStartHandler, 3567);
+    ASSERT(data, gChatStr_DataNeNULL_2, gChatStr_ciRplListStartHandler, 3567);
     data->started = TRUE;
 }
 
@@ -2349,7 +2349,7 @@ void ciRplListHandler(ChatConnection *chat, ChatMessage *message) {
     u32 length;
     int index;
     void *array;
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciRplListHandler, 3585);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciRplListHandler, 3585);
     if (message->paramCount != 4) {
         return;
     }
@@ -2362,7 +2362,7 @@ void ciRplListHandler(ChatConnection *chat, ChatMessage *message) {
             return;
         }
         data = request->data;
-        ASSERT(data, sStr_DataNeNULL_2, sStr_ciRplListHandler, 3605);
+        ASSERT(data, gChatStr_DataNeNULL_2, gChatStr_ciRplListHandler, 3605);
         length = strlen(message->params[1]);
         name = DWCi_GsMalloc(length + 1);
         if (name == NULL) {
@@ -2437,7 +2437,7 @@ void ciRplChannelModeIsHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel;
     ChatModeChange *changes;
     ChatRequest *request;
-    ASSERT(message->paramCount >= 3, sStr_MessageNumParamsGe3, sStr_ciRplChannelModeIsHandler, 3731);
+    ASSERT(message->paramCount >= 3, gChatStr_MessageNumParamsGe3, gChatStr_ciRplChannelModeIsHandler, 3731);
     if (message->paramCount < 3) {
         return;
     }
@@ -2491,8 +2491,8 @@ void ciRplWhoisUserHandler(ChatConnection *chat, ChatMessage *message) {
     ChatRequestKey keys[2];
     ChatRequest *request;
     char *nick;
-    ASSERT_CHAT(chat, sStr_ciRplWhoisUserHandler, 3797);
-    ASSERT(message->paramCount == 6, sStr_MessageNumParamsEq6, sStr_ciRplWhoisUserHandler, 3803);
+    ASSERT_CHAT(chat, gChatStr_ciRplWhoisUserHandler, 3797);
+    ASSERT(message->paramCount == 6, gChatStr_MessageNumParamsEq6, gChatStr_ciRplWhoisUserHandler, 3803);
     if (message->paramCount != 6) {
         return;
     }
@@ -2526,10 +2526,10 @@ void ciRplWhoisUserHandler(ChatConnection *chat, ChatMessage *message) {
         }
     } else if (request->type == TYPE_BAN) {
         ChatBanData *data = request->data;
-        ASSERT(data, sStr_DataNeNULL_2, sStr_ciRplWhoisUserHandler, 3869);
-        ASSERT(data->channel, sStr_DataChannelNeNULL, sStr_ciRplWhoisUserHandler, 3870);
-        ASSERT(data->channel[0], sStr_DataChannel0_Ne0, sStr_ciRplWhoisUserHandler, 3870);
-        ciSocketSendf(&chat->socket, sFmt_MODE_B, data->channel, message->params[3]);
+        ASSERT(data, gChatStr_DataNeNULL_2, gChatStr_ciRplWhoisUserHandler, 3869);
+        ASSERT(data->channel, gChatStr_DataChannelNeNULL, gChatStr_ciRplWhoisUserHandler, 3870);
+        ASSERT(data->channel[0], gChatStr_DataChannel0_Ne0, gChatStr_ciRplWhoisUserHandler, 3870);
+        ciSocketSendf(&chat->socket, gChatFmt_MODE_B, data->channel, message->params[3]);
         ciFinishFilter(chat, request, NULL);
     }
 }
@@ -2541,7 +2541,7 @@ void ciRplWhoisChannelsHandler(ChatConnection *chat, ChatMessage *message) {
     ChatWhoisData *data;
     char *token, *name;
     char **array;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplWhoisChannelsHandler, 3892);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplWhoisChannelsHandler, 3892);
     if (message->paramCount != 3) {
         return;
     }
@@ -2555,7 +2555,7 @@ void ciRplWhoisChannelsHandler(ChatConnection *chat, ChatMessage *message) {
         return;
     }
     data = request->data;
-    token = strtok(message->params[2], sStr_Space_3);
+    token = strtok(message->params[2], gChatStr_Space_3);
     if (!token) {
         return;
     }
@@ -2578,7 +2578,7 @@ void ciRplWhoisChannelsHandler(ChatConnection *chat, ChatMessage *message) {
         data->channels = array;
         data->channels[data->channelCount] = name;
         data->channelCount++;
-        token = strtok(NULL, sStr_Space_3);
+        token = strtok(NULL, gChatStr_Space_3);
     } while (token);
 }
 
@@ -2587,7 +2587,7 @@ void ciRplEndOfWhoisHandler(ChatConnection *chat, ChatMessage *message) {
     char *nick;
     ChatRequest *request;
     ChatWhoisData *data;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplEndOfWhoisHandler, 3958);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplEndOfWhoisHandler, 3958);
     if (message->paramCount != 3) {
         return;
     }
@@ -2619,7 +2619,7 @@ void ciRplBanListHandler(ChatConnection *chat, ChatMessage *message) {
     ChatBanListData *data;
     ChatRequestKey key;
     int length;
-    ASSERT(message->paramCount >= 3, sStr_MessageNumParamsGe3_2, sStr_ciRplBanListHandler, 3997);
+    ASSERT(message->paramCount >= 3, gChatStr_MessageNumParamsGe3_2, gChatStr_ciRplBanListHandler, 3997);
     if (message->paramCount < 3) {
         return;
     }
@@ -2633,8 +2633,8 @@ void ciRplBanListHandler(ChatConnection *chat, ChatMessage *message) {
         return;
     }
     data = request->data;
-    ASSERT(data, sStr_DataNeNULL_2, sStr_ciRplBanListHandler, 4015);
-    ASSERT(data->count >= 0, sStr_DataNumBansGe0, sStr_ciRplBanListHandler, 4016);
+    ASSERT(data, gChatStr_DataNeNULL_2, gChatStr_ciRplBanListHandler, 4015);
+    ASSERT(data->count >= 0, gChatStr_DataNumBansGe0, gChatStr_ciRplBanListHandler, 4016);
     copy = DWCi_GsRealloc(data->bans, (data->count + 1) * 4);
     if (copy == NULL) {
         return;
@@ -2655,7 +2655,7 @@ void ciRplEndOfBanListHandler(ChatConnection *chat, ChatMessage *message) {
     char *channel;
     ChatRequest *request;
     ChatBanListData *data;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplEndOfBanListHandler, 4047);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplEndOfBanListHandler, 4047);
     if (message->paramCount != 3) {
         return;
     }
@@ -2679,8 +2679,8 @@ void ciRplEndOfBanListHandler(ChatConnection *chat, ChatMessage *message) {
 // 001: the registration is done (the server may have changed the nick); calls the connected callback.
 void ciRplWelcomeHandler(ChatConnection *chat, ChatMessage *message) {
     char *nick;
-    ASSERT_CHAT(chat, sStr_ciRplWelcomeHandler, 4076);
-    ASSERT(message->paramCount == 2, sStr_MessageNumParamsEq2, sStr_ciRplWelcomeHandler, 4082);
+    ASSERT_CHAT(chat, gChatStr_ciRplWelcomeHandler, 4076);
+    ASSERT(message->paramCount == 2, gChatStr_MessageNumParamsEq2, gChatStr_ciRplWelcomeHandler, 4082);
     if (message->paramCount != 2) {
         return;
     }
@@ -2701,8 +2701,8 @@ void ciRplWelcomeHandler(ChatConnection *chat, ChatMessage *message) {
 void ciRplSecureKeyHandler(ChatConnection *chat, ChatMessage *message) {
     char *outputKey, *inputKey;
     int outputLength, inputLength;
-    ASSERT_CHAT(chat, sStr_ciRplSecureKeyHandler, 4117);
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplSecureKeyHandler, 4123);
+    ASSERT_CHAT(chat, gChatStr_ciRplSecureKeyHandler, 4117);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplSecureKeyHandler, 4123);
     if (message->paramCount != 3) {
         return;
     }
@@ -2718,7 +2718,7 @@ void ciRplSecureKeyHandler(ChatConnection *chat, ChatMessage *message) {
     if (chat->loginType) {
         ciSendLogin(chat);
     } else if (chat->fillInUserCallback) {
-        ciSocketSend(&chat->socket, sStr_USRIP);
+        ciSocketSend(&chat->socket, gChatStr_USRIP);
     } else {
         ciSendNickAndUser(chat);
     }
@@ -2729,7 +2729,7 @@ void ciRplCDKeyHandler(ChatConnection *chat, ChatMessage *message) {
     int result;
     char *text;
     ChatRequest *request;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciRplCDKeyHandler, 4174);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciRplCDKeyHandler, 4174);
     if (message->paramCount != 3) {
         return;
     }
@@ -2749,15 +2749,15 @@ void ciRplCDKeyHandler(ChatConnection *chat, ChatMessage *message) {
 
 // 707: the login was accepted (two numbers); then the address query or the registration is sent.
 void ciRplLoginHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciRplLoginHandler, 4201);
-    ASSERT(message->paramCount >= 3, sStr_MessageNumParamsGe3_2, sStr_ciRplLoginHandler, 4207);
+    ASSERT_CHAT(chat, gChatStr_ciRplLoginHandler, 4201);
+    ASSERT(message->paramCount >= 3, gChatStr_MessageNumParamsGe3_2, gChatStr_ciRplLoginHandler, 4207);
     if (message->paramCount < 3) {
         return;
     }
     chat->loginIds[0] = atol(message->params[1]);
     chat->loginIds[1] = atol(message->params[2]);
     if (chat->fillInUserCallback) {
-        ciSocketSend(&chat->socket, sStr_USRIP);
+        ciSocketSend(&chat->socket, gChatStr_USRIP);
     } else {
         ciSendNickAndUser(chat);
     }
@@ -2771,7 +2771,7 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
     u32 keysResult[5];
     ChatRequest *request;
     char *channel;
-    ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, sStr_ciErrNoSuchChannelHandler, 4240);
+    ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, gChatStr_ciErrNoSuchChannelHandler, 4240);
     if (message->paramCount != 3) {
         return;
     }
@@ -2815,7 +2815,7 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
     do {                                                                        \
         char *channel;                                                          \
         ChatRequest *request;                                                   \
-        ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, func, line); \
+        ASSERT(message->paramCount == 3, gChatStr_MessageNumParamsEq3, func, line); \
         if (message->paramCount != 3) {                                         \
             return;                                                             \
         }                                                                       \
@@ -2836,32 +2836,32 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
 
 // 405: too many channels.
 void ciErrTooManyChannelsHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrTooManyChannelsHandler, 4318, CHAT_ENTER_TOO_MANY_CHANNELS);
+    FAIL_ENTER(chat, message, gChatStr_ciErrTooManyChannelsHandler, 4318, CHAT_ENTER_TOO_MANY_CHANNELS);
 }
 
 // 471: the channel is full.
 void ciErrChannelIsFullHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrChannelIsFullHandler, 4353, CHAT_ENTER_CHANNEL_FULL);
+    FAIL_ENTER(chat, message, gChatStr_ciErrChannelIsFullHandler, 4353, CHAT_ENTER_CHANNEL_FULL);
 }
 
 // 473: the channel is invite only.
 void ciErrInviteOnlyChanHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrInviteOnlyChanHandler, 4388, CHAT_ENTER_INVITE_ONLY);
+    FAIL_ENTER(chat, message, gChatStr_ciErrInviteOnlyChanHandler, 4388, CHAT_ENTER_INVITE_ONLY);
 }
 
 // 474: the own user is banned from the channel.
 void ciErrBannedFromChanHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrBannedFromChanHandler, 4423, CHAT_ENTER_BANNED);
+    FAIL_ENTER(chat, message, gChatStr_ciErrBannedFromChanHandler, 4423, CHAT_ENTER_BANNED);
 }
 
 // 475: wrong channel key (password).
 void ciErrBadChannelKeyHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrBadChannelKeyHandler, 4458, CHAT_ENTER_BAD_PASSWORD);
+    FAIL_ENTER(chat, message, gChatStr_ciErrBadChannelKeyHandler, 4458, CHAT_ENTER_BAD_PASSWORD);
 }
 
 // 476: bad channel name.
 void ciErrBadChanMaskHandler(ChatConnection *chat, ChatMessage *message) {
-    FAIL_ENTER(chat, message, sStr_ciErrBadChanMaskHandler, 4493, CHAT_ENTER_BAD_CHANNEL_NAME);
+    FAIL_ENTER(chat, message, gChatStr_ciErrBadChanMaskHandler, 4493, CHAT_ENTER_BAD_CHANNEL_NAME);
 }
 
 // 401: no such nick (ignored).
@@ -2870,7 +2870,7 @@ void ciErrNoSuchNickHandler(ChatConnection *chat, ChatMessage *message) {
 
 // 432: the nick is not valid (while connecting: nick error 2).
 void ciErrErroneusNicknameHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciErrErroneusNicknameHandler, 4530);
+    ASSERT_CHAT(chat, gChatStr_ciErrErroneusNicknameHandler, 4530);
     if (!chat->connecting) {
         return;
     }
@@ -2879,7 +2879,7 @@ void ciErrErroneusNicknameHandler(ChatConnection *chat, ChatMessage *message) {
 
 // 708: the login failed (while connecting: the connect fails with reason 2).
 void ciErrLoginFailedHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciErrLoginFailedHandler, 4546);
+    ASSERT_CHAT(chat, gChatStr_ciErrLoginFailedHandler, 4546);
     if (!chat->connecting) {
         return;
     }
@@ -2891,20 +2891,20 @@ void ciErrLoginFailedHandler(ChatConnection *chat, ChatMessage *message) {
 
 // 709: (while connecting: nick error 4).
 void ciErrNoUniqueNickHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciErrNoUniqueNickHandler, 4571);
+    ASSERT_CHAT(chat, gChatStr_ciErrNoUniqueNickHandler, 4571);
     if (!chat->connecting) {
         return;
     }
-    ciNickError(chat, 4, sStr_Empty_20, 0, 0);
+    ciNickError(chat, 4, gChatStr_Empty_20, 0, 0);
 }
 
 // 710: (while connecting: nick error 3).
 void ciErrUniqueNickExpiredHandler(ChatConnection *chat, ChatMessage *message) {
-    ASSERT_CHAT(chat, sStr_ciErrUniqueNickExpiredHandler, 4587);
+    ASSERT_CHAT(chat, gChatStr_ciErrUniqueNickExpiredHandler, 4587);
     if (!chat->connecting) {
         return;
     }
-    ciNickError(chat, 3, sStr_Empty_20, 0, 0);
+    ciNickError(chat, 3, gChatStr_Empty_20, 0, 0);
 }
 
 // 711: the registered nick was refused, with a number of suggested nicks (backslash separated); while
@@ -2913,8 +2913,8 @@ void ciErrRegisterNickFailedHandler(ChatConnection *chat, ChatMessage *message) 
     int count, j;
     char **suggestions, *text, *token;
     int i;
-    ASSERT_CHAT(chat, sStr_ciErrRegisterNickFailedHandler, 4608);
-    ASSERT(message->paramCount == 4, sStr_MessageNumParamsEq4, sStr_ciErrRegisterNickFailedHandler, 4614);
+    ASSERT_CHAT(chat, gChatStr_ciErrRegisterNickFailedHandler, 4608);
+    ASSERT(message->paramCount == 4, gChatStr_MessageNumParamsEq4, gChatStr_ciErrRegisterNickFailedHandler, 4614);
     if (message->paramCount != 4) {
         return;
     }
@@ -2927,14 +2927,14 @@ void ciErrRegisterNickFailedHandler(ChatConnection *chat, ChatMessage *message) 
     if (!suggestions) {
         return;
     }
-    token = strtok(text, sStr_Backslash_2);
+    token = strtok(text, gChatStr_Backslash_2);
     i = 0;
     while (i < count && token) {
         suggestions[i] = goastrdup(token);
         if (!suggestions[i]) {
             break;
         }
-        token = strtok(NULL, sStr_Backslash_2);
+        token = strtok(NULL, gChatStr_Backslash_2);
         i++;
     }
     ciNickError(chat, 5, chat->registeredNick, i, (int)suggestions);

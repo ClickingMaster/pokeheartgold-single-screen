@@ -77,7 +77,7 @@ typedef PPWLobbyWebRequest Request;
 extern "C" Request *gPPWLobbyCurrentRequest;
 extern "C" Request *gPPWLobbyFinishedRequest;
 extern "C" u8 gPPWLobbyPlayersVtable[];
-extern "C" char sStr_Star[];
+extern "C" char gLobbyStr_Star[];
 
 // nitro/mi/memory.h does not compile as C++.
 extern "C" void MI_CpuCopy8(const void *src, void *dst, u32 size);
@@ -280,7 +280,7 @@ static inline int Lobby_IsReady(PPWLobbyWork *w) {
 static inline void Lobby_EnumChannels(void) {
     Str name;
     Str query;
-    LobbyString_InitFromCStr(&name, sStr_Star);
+    LobbyString_InitFromCStr(&name, gLobbyStr_Star);
     PPWLobby_MakeChannelName(&query, 0, &name);
     LobbyChat_EnumChannelsAsync(StrCStr(&query), PPWLobby_OnEnumChannels, 0);
     LobbyString_Destroy(&query);

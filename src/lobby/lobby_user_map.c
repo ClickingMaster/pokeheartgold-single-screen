@@ -6,12 +6,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 extern int printf(const char *, ...);
 extern void abort(void);
 
 extern u8 ov45_02255358[];
-extern char sStr_TreeInsertLengthError_4[];
-extern void *LobbyMem_Alloc(u32);
+extern char gLobbyStr_TreeInsertLengthError_4[];
 extern void LobbyTree_InsertRebalance(void *, void *);
 extern void *LobbyTree_EraseRebalance(void *, void *);
 
@@ -28,7 +29,7 @@ LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *set, LobbyUserIdSe
     int *userId;
     u32 *link;
     if (set->count == -1) {
-        printf(sStr_TreeInsertLengthError_4);
+        printf(gLobbyStr_TreeInsertLengthError_4);
         abort();
     }
     f.byte = 0;
@@ -114,7 +115,7 @@ LobbyUserMapNode *LobbyUserMap_InsertNode(LobbyUserMap *map, LobbyUserMapNode *p
     LobbyUserMapEntry *dest;
     u32 *link;
     if (map->count == -1) {
-        printf(sStr_TreeInsertLengthError_4);
+        printf(gLobbyStr_TreeInsertLengthError_4);
         abort();
     }
     guard.flag = 0;

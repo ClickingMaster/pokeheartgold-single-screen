@@ -187,19 +187,19 @@ void LobbyChat_OnUserModeChanged(int chat, int channel, int nick, int mode) {
     }
     switch (mode) {
     case CHAT_USER_MODE_NORMAL:
-        LobbyString_AssignCStr(&modeName, sStr_normal);
+        LobbyString_AssignCStr(&modeName, gLobbyStr_normal);
         break;
     case CHAT_USER_MODE_VOICE:
-        LobbyString_AssignCStr(&modeName, sStr_voice);
+        LobbyString_AssignCStr(&modeName, gLobbyStr_voice);
         break;
     case CHAT_USER_MODE_OP:
-        LobbyString_AssignCStr(&modeName, sStr_ops);
+        LobbyString_AssignCStr(&modeName, gLobbyStr_ops);
         break;
     case CHAT_USER_MODE_VOICE_OP:
-        LobbyString_AssignCStr(&modeName, sStr_VoiceOps);
+        LobbyString_AssignCStr(&modeName, gLobbyStr_VoiceOps);
         break;
     default:
-        LobbyString_AssignCStr(&modeName, sStr_invalid);
+        LobbyString_AssignCStr(&modeName, gLobbyStr_invalid);
         break;
     }
     LobbyString_Destroy(&modeName);
@@ -296,7 +296,7 @@ void LobbyChat_OnNickError(void *chat, int type) {
         LobbyString_Assign(&CurrentManager()->nick, &e);
         LobbyString_Destroy(&e);
         LobbyChatManager_GetNick(&f, CurrentManager());
-        chatRegisterUniqueNickA(chat, 2, StrData(&f), sStr_Empty_17);
+        chatRegisterUniqueNickA(chat, 2, StrData(&f), gLobbyStr_Empty_17);
         LobbyString_Destroy(&f);
     } else if (type == 5) {
         return;

@@ -77,8 +77,8 @@ struct Obj {
 };
 
 extern "C" NameTable gLobbyChatPrefixNames;
-extern "C" char sStr_GSP[];
-extern "C" char sStr_Bang_2[];
+extern "C" char gLobbyStr_GSP[];
+extern "C" char gLobbyStr_Bang_2[];
 extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const String &gameKey, int prefix, u32 userId, const String &nick, const String &userName, const String &realName, const Triple *config);
 #pragma opt_propagation off
 
@@ -115,13 +115,13 @@ extern "C" Obj *LobbyChatManager_Init(Obj *obj, const String &gameName, const St
     obj->timerMapRoot = 0;
     obj->timerMapLeftmost = &obj->timerMapRoot;
     NameTable prefixNames = gLobbyChatPrefixNames;
-    String gsp(sStr_GSP);
-    String gspSep = LobbyString_ConcatCStr(gsp, sStr_Bang_2);
+    String gsp(gLobbyStr_GSP);
+    String gspSep = LobbyString_ConcatCStr(gsp, gLobbyStr_Bang_2);
     String withGame = LobbyString_Concat(gspSep, obj->gameName);
-    String withGameSep = LobbyString_ConcatCStr(withGame, sStr_Bang_2);
+    String withGameSep = LobbyString_ConcatCStr(withGame, gLobbyStr_Bang_2);
     String prefixName(prefixNames.names[prefix]);
     String withPrefix = LobbyString_Concat(withGameSep, prefixName);
-    String channelPrefix = LobbyString_ConcatCStr(withPrefix, sStr_Bang_2);
+    String channelPrefix = LobbyString_ConcatCStr(withPrefix, gLobbyStr_Bang_2);
     const String *pr = &channelPrefix;
     LobbyString_Assign(&obj->channelPrefix, pr);
     channelPrefix.destroy();

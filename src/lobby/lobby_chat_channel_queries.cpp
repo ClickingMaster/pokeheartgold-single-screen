@@ -3,12 +3,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 #include "lobby_chat_manager.h"
 
 
 extern "C" const u32 gLobbyChatNextRequestId;
 
-extern "C" void *LobbyMem_Alloc(u32);
 
 extern "C" Str LobbyChat_GetFullChannelName(LobbyChatManager *m, const Str &s);
 extern "C" void chatGetChannelKeysA(void *chat, const char *channel, const char *nick, int count, const char **keys, void (*callback)(), u32 param, u32 blocking);
@@ -20,7 +21,7 @@ extern "C" void LobbyChat_OnEnumChannelsEach();
 extern "C" void LobbyChat_OnEnumChannels();
 extern "C" void LobbyChat_OnEnumUsers();
 extern "C" unsigned long strlen(const char *);
-extern "C" const char sStr_Empty_17[];
+extern "C" const char gLobbyStr_Empty_17[];
 extern "C" Str LobbyChat_GetUserNick(LobbyChatManager *m, int idx);
 
 inline bool StrEquals(const Str *s, const char *cstr) {
@@ -82,14 +83,14 @@ extern "C" int LobbyChat_GetChannelKeysAsync(const char *name, int userId, const
         return 3;
     }
     Str nick;
-    LobbyString_InitFromCStr(&nick, sStr_Empty_17);
+    LobbyString_InitFromCStr(&nick, gLobbyStr_Empty_17);
     if (userId == -1) {
-        LobbyString_AssignCStr(&nick, sStr_Empty_17);
+        LobbyString_AssignCStr(&nick, gLobbyStr_Empty_17);
     } else {
         Str tmp = LobbyChat_GetUserNick(GetMgr(), userId);
         LobbyString_Assign(&nick, &tmp);
         LobbyString_Destroy(&tmp);
-        if (StrEquals(&nick, sStr_Empty_17)) {
+        if (StrEquals(&nick, gLobbyStr_Empty_17)) {
             LobbyString_Destroy(&nick);
             return 3;
         }

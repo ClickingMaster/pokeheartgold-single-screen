@@ -3,12 +3,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 #include "lobby_chat_manager.h"
 
 
 extern "C" const u32 gLobbyChatNextRequestId;
 
-extern "C" void *LobbyMem_Alloc(u32);
 
 extern "C" Str LobbyChat_GetFullChannelName(LobbyChatManager *m, const Str &s);
 extern "C" void chatGetChannelModeA(void *chat, const char *channel, void (*callback)(), u32 param, u32 blocking);

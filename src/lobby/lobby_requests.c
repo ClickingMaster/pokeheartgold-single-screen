@@ -16,7 +16,7 @@ typedef struct {
 
 extern int printf(const char *, ...);
 extern void abort(void);
-extern const char sStr_TreeInsertLengthError_3[];
+extern const char gLobbyStr_TreeInsertLengthError_3[];
 extern void LobbyTree_InsertRebalance(LobbyRequestMapNode *, void *);
 
 LobbyRequest *LobbyRequest_Delete(LobbyRequest *request) {
@@ -83,11 +83,11 @@ void LobbyRequestMap_Insert(LobbyRequestMapInsertResult *out, LobbyRequestMap *m
     LobbyRequestMapNode *parent = LobbyRequestMap_FindInsertPos(map, val, &pos, &insertLeft, &isLeftmost);
     if (pos == NULL || pos->request->id < (*val)->id) {
         out->node = LobbyRequestMap_InsertNode(map, parent, insertLeft, isLeftmost, val);
-        out->inserted = sLobbyRequestMapInsertFlags[1];
+        out->inserted = gLobbyRequestMapInsertFlags[1];
         return;
     }
     out->node = pos;
-    out->inserted = sLobbyRequestMapInsertFlags[2];
+    out->inserted = gLobbyRequestMapInsertFlags[2];
 }
 
 LobbyRequestMapNode *LobbyRequestMap_InsertNode(LobbyRequestMap *map, LobbyRequestMapNode *parent, int left, int leftmost, LobbyRequest *const *request) {
@@ -96,7 +96,7 @@ LobbyRequestMapNode *LobbyRequestMap_InsertNode(LobbyRequestMap *map, LobbyReque
     LobbyRequestMapNode **parentField;
     volatile Guard guard;
     if (map->count == -1) {
-        printf(sStr_TreeInsertLengthError_3);
+        printf(gLobbyStr_TreeInsertLengthError_3);
         abort();
     }
     guard.active = 0;

@@ -7,9 +7,10 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 extern u8 ov45_02255358[];
 extern LobbyUserIdSetNode *LobbyTree_EraseRebalance(LobbyUserIdSetNode *, void *);
-extern void *LobbyMem_Alloc(u32);
 
 void *LobbyChannelMap_Destroy(LobbyChannelMap *map) {
     if (map->root) {

@@ -18,7 +18,7 @@ void abort(void);
 
 extern u32 gLobbyEventDequeMapMaxSizeSet;
 extern u32 gLobbyEventDequeMapMaxSize;
-extern char sStr_CdequeLengthError[];
+extern char gLobbyStr_CdequeLengthError[];
 
 void LobbyEventDeque_EraseAtEnd(LobbyEventDeque *d, u32 n);
 void LobbyEventDeque_EraseAtBegin(LobbyEventDeque *d, u32 n);
@@ -221,6 +221,6 @@ extern "C" u32 LobbyEventDequeMap_RecommendSize(LobbyEventDequeMap *map, u32 ext
 }
 
 extern "C" void LobbyEventDequeMap_LengthError(void) {
-    printf(sStr_CdequeLengthError);
+    printf(gLobbyStr_CdequeLengthError);
     abort();
 }

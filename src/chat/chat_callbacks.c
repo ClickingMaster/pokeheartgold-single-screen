@@ -5,66 +5,66 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern const char sStr_DataNeNULL[];
-extern const char sStr_ChatCallbacksC[];
-extern const char sStr_DataTypeGe0[];
-extern const char sStr_DataTypeLtCALLBACK_NUM[];
-extern const char sStr_DataCallbackNeNULL[];
-extern const char sStr_DataCallbackParamsNeNULL[];
-extern const char sStr_DataID_Ge0[];
-extern const char sStr_ciAddCallback_[];
-extern const char sStr_ciCallCallback[];
-extern const char sStr_ciCallCallbacks[];
-extern const char sStr_ciFreeCallbackData[];
-extern const char sStr_ciCleanupCallbacks[];
-extern const char sStr_ciGetCallbackIndexByID[];
-extern const char sStr_0_8[];
-extern const char sStr_ChatNeNULL[];
-extern const char sStr_TypeGe0[];
-extern const char sStr_TypeLtCALLBACK_NUM[];
-extern const char sStr_ConnectionCallbackListNeNULL[];
-extern const char sStr_CallbackNeNULL_2[];
-extern const char sStr_CallbackParamsNeNULL[];
-extern const char sStr_CallbackParamsSizeGt0[];
-extern const char sStr_ID_Ge0[];
-extern const char sStr_SrcParamsNumChannelsGe0[];
-extern const char sStr_SrcParamsNumUsersNeNULL[];
-extern const char sStr_SrcParamsNumUsersGe0[];
-extern const char sStr_SrcParamsModesNeNULL[];
-extern const char sStr_SrcParamsNumBansGe0[];
-extern const char sStr_SrcParamsNumSuggestedNicksGe0[];
-extern const char sStr_SrcParamsNumGe0[];
+extern const char gLobbyStr_DataNeNULL[];
+extern const char gLobbyStr_ChatCallbacksC[];
+extern const char gChatStr_DataTypeGe0[];
+extern const char gChatStr_DataTypeLtCALLBACK_NUM[];
+extern const char gChatStr_DataCallbackNeNULL[];
+extern const char gChatStr_DataCallbackParamsNeNULL[];
+extern const char gChatStr_DataID_Ge0[];
+extern const char gChatStr_ciAddCallback_[];
+extern const char gChatStr_ciCallCallback[];
+extern const char gChatStr_ciCallCallbacks[];
+extern const char gChatStr_ciFreeCallbackData[];
+extern const char gChatStr_ciCleanupCallbacks[];
+extern const char gChatStr_ciGetCallbackIndexByID[];
+extern const char gChatStr_0_8[];
+extern const char gChatStr_ChatNeNULL[];
+extern const char gChatStr_TypeGe0[];
+extern const char gChatStr_TypeLtCALLBACK_NUM[];
+extern const char gChatStr_ConnectionCallbackListNeNULL[];
+extern const char gChatStr_CallbackNeNULL_2[];
+extern const char gChatStr_CallbackParamsNeNULL[];
+extern const char gChatStr_CallbackParamsSizeGt0[];
+extern const char gChatStr_ID_Ge0[];
+extern const char gChatStr_SrcParamsNumChannelsGe0[];
+extern const char gChatStr_SrcParamsNumUsersNeNULL[];
+extern const char gChatStr_SrcParamsNumUsersGe0[];
+extern const char gChatStr_SrcParamsModesNeNULL[];
+extern const char gChatStr_SrcParamsNumBansGe0[];
+extern const char gChatStr_SrcParamsNumSuggestedNicksGe0[];
+extern const char gChatStr_SrcParamsNumGe0[];
 
 #define ASSERT_CHAT(chat, func, line)                                                 \
     do {                                                                              \
         if (!(chat)) {                                                                \
-            __msl_assertion_failed(sStr_ChatNeNULL, sStr_ChatCallbacksC, func, line); \
+            __msl_assertion_failed(gChatStr_ChatNeNULL, gLobbyStr_ChatCallbacksC, func, line); \
         }                                                                             \
     } while (0)
 #define ASSERT_CALLBACK(callback, func, line)                                                       \
     do {                                                                                            \
         if (!(callback)) {                                                                          \
-            __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, func, line);               \
+            __msl_assertion_failed(gLobbyStr_DataNeNULL, gLobbyStr_ChatCallbacksC, func, line);               \
         }                                                                                           \
         if ((callback)->type < 0) {                                                                 \
-            __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line);              \
+            __msl_assertion_failed(gChatStr_DataTypeGe0, gLobbyStr_ChatCallbacksC, func, line);              \
         }                                                                                           \
         if ((callback)->type >= CALLBACK_NUM) {                                                     \
-            __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line);   \
+            __msl_assertion_failed(gChatStr_DataTypeLtCALLBACK_NUM, gLobbyStr_ChatCallbacksC, func, line);   \
         }                                                                                           \
         if (!(callback)->callback) {                                                                \
-            __msl_assertion_failed(sStr_DataCallbackNeNULL, sStr_ChatCallbacksC, func, line);       \
+            __msl_assertion_failed(gChatStr_DataCallbackNeNULL, gLobbyStr_ChatCallbacksC, func, line);       \
         }                                                                                           \
         if (!(callback)->param) {                                                                   \
-            __msl_assertion_failed(sStr_DataCallbackParamsNeNULL, sStr_ChatCallbacksC, func, line); \
+            __msl_assertion_failed(gChatStr_DataCallbackParamsNeNULL, gLobbyStr_ChatCallbacksC, func, line); \
         }                                                                                           \
         if ((callback)->id < 0) {                                                                   \
-            __msl_assertion_failed(sStr_DataID_Ge0, sStr_ChatCallbacksC, func, line);               \
+            __msl_assertion_failed(gChatStr_DataID_Ge0, gLobbyStr_ChatCallbacksC, func, line);               \
         }                                                                                           \
     } while (0)
 
 void ciFreeCallbackData(ChatCallback *callback) {
-    ASSERT_CALLBACK(callback, sStr_ciFreeCallbackData, 171);
+    ASSERT_CALLBACK(callback, gChatStr_ciFreeCallbackData, 171);
     switch (callback->type) {
     case CALLBACK_RAW: {
         u32 *p = callback->param;
@@ -312,7 +312,7 @@ void ciFreeCallbackData(ChatCallback *callback) {
         break;
     }
     default:
-        __msl_assertion_failed(sStr_0_8, sStr_ChatCallbacksC, sStr_ciFreeCallbackData, 485);
+        __msl_assertion_failed(gChatStr_0_8, gLobbyStr_ChatCallbacksC, gChatStr_ciFreeCallbackData, 485);
         break;
     }
     DWCi_GsFree(callback->param);
@@ -326,14 +326,14 @@ ChatResult ciInitCallbacks(ChatConnection *chat) {
 void ciCleanupCallbacks(ChatConnection *chat) {
     ChatCallback *callback;
     int n, i;
-    ASSERT_CHAT(chat, sStr_ciCleanupCallbacks, 506);
+    ASSERT_CHAT(chat, gChatStr_ciCleanupCallbacks, 506);
     if (!chat->callbacks) {
         return;
     }
     n = ArrayLength(chat->callbacks);
     for (i = 0; i < n; i++) {
         callback = ArrayNth(chat->callbacks, i);
-        ASSERT_CALLBACK(callback, sStr_ciCleanupCallbacks, 525);
+        ASSERT_CALLBACK(callback, gChatStr_ciCleanupCallbacks, 525);
         ciFreeCallbackData(callback);
     }
     ArrayFree(chat->callbacks);
@@ -342,7 +342,7 @@ void ciCleanupCallbacks(ChatConnection *chat) {
 #define ASSERT(test, string, line)                                                          \
     do {                                                                                    \
         if (!(test)) {                                                                      \
-            __msl_assertion_failed(string, sStr_ChatCallbacksC, sStr_ciAddCallback_, line); \
+            __msl_assertion_failed(string, gLobbyStr_ChatCallbacksC, gChatStr_ciAddCallback_, line); \
         }                                                                                   \
     } while (0)
 #define FAIL()                     \
@@ -364,14 +364,14 @@ void ciCleanupCallbacks(ChatConnection *chat) {
 
 BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *user, int id, char *channel, int size) {
     ChatCallback item;
-    ASSERT(chat, sStr_ChatNeNULL, 0x21f);
-    ASSERT(type >= 0, sStr_TypeGe0, 0x221);
-    ASSERT(type < CALLBACK_NUM, sStr_TypeLtCALLBACK_NUM, 0x222);
-    ASSERT(chat->callbacks, sStr_ConnectionCallbackListNeNULL, 0x223);
-    ASSERT(func, sStr_CallbackNeNULL_2, 0x224);
-    ASSERT(src, sStr_CallbackParamsNeNULL, 0x225);
-    ASSERT(size, sStr_CallbackParamsSizeGt0, 0x226);
-    ASSERT(id >= 0, sStr_ID_Ge0, 0x227);
+    ASSERT(chat, gChatStr_ChatNeNULL, 0x21f);
+    ASSERT(type >= 0, gChatStr_TypeGe0, 0x221);
+    ASSERT(type < CALLBACK_NUM, gChatStr_TypeLtCALLBACK_NUM, 0x222);
+    ASSERT(chat->callbacks, gChatStr_ConnectionCallbackListNeNULL, 0x223);
+    ASSERT(func, gChatStr_CallbackNeNULL_2, 0x224);
+    ASSERT(src, gChatStr_CallbackParamsNeNULL, 0x225);
+    ASSERT(size, gChatStr_CallbackParamsSizeGt0, 0x226);
+    ASSERT(id >= 0, gChatStr_ID_Ge0, 0x227);
     {
         u32 *zero = (u32 *)&item;
         zero[0] = 0;
@@ -497,7 +497,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_ENUM_CHANNELS_ALL: {
         int i;
         u32 *dst = item.param;
-        ASSERT((int)src[1] >= 0, sStr_SrcParamsNumChannelsGe0, 0x2d3);
+        ASSERT((int)src[1] >= 0, gChatStr_SrcParamsNumChannelsGe0, 0x2d3);
         if (!src[2]) {
             dst[2] = 0;
         } else {
@@ -520,7 +520,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[1] >= 0, sStr_SrcParamsNumChannelsGe0, 0x2d4);
+        ASSERT((int)src[1] >= 0, gChatStr_SrcParamsNumChannelsGe0, 0x2d4);
         if (!src[3]) {
             dst[3] = 0;
         } else {
@@ -543,10 +543,10 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[1] >= 0, sStr_SrcParamsNumChannelsGe0, 0x2d5);
+        ASSERT((int)src[1] >= 0, gChatStr_SrcParamsNumChannelsGe0, 0x2d5);
         if ((int)src[1] > 0) {
             int bytes;
-            ASSERT(src[4], sStr_SrcParamsNumUsersNeNULL, 0x2d5);
+            ASSERT(src[4], gChatStr_SrcParamsNumUsersNeNULL, 0x2d5);
             bytes = src[1] * 4;
             dst[4] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[4]) {
@@ -590,7 +590,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_ENUM_USERS: {
         u32 *dst = item.param;
         COPY_STRING(1);
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumUsersGe0, 0x301);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumUsersGe0, 0x301);
         if (!src[3]) {
             dst[3] = 0;
         } else {
@@ -614,10 +614,10 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumUsersGe0, 0x302);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumUsersGe0, 0x302);
         if ((int)src[2] > 0) {
             int bytes;
-            ASSERT(src[4], sStr_SrcParamsModesNeNULL, 0x302);
+            ASSERT(src[4], gChatStr_SrcParamsModesNeNULL, 0x302);
             bytes = src[2] * 4;
             dst[4] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[4]) {
@@ -633,7 +633,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         COPY_STRING(2);
         COPY_STRING(3);
         COPY_STRING(4);
-        ASSERT((int)src[5] >= 0, sStr_SrcParamsNumChannelsGe0, 0x30e);
+        ASSERT((int)src[5] >= 0, gChatStr_SrcParamsNumChannelsGe0, 0x30e);
         if (!src[6]) {
             dst[6] = 0;
         } else {
@@ -683,7 +683,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_ENUM_CHANNEL_BANS: {
         u32 *dst = item.param;
         COPY_STRING(1);
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumBansGe0, 0x335);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumBansGe0, 0x335);
         if (!src[3]) {
             dst[3] = 0;
         } else {
@@ -712,7 +712,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_NICK_ERROR: {
         u32 *dst = item.param;
         COPY_STRING(1);
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumSuggestedNicksGe0, 0x33e);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumSuggestedNicksGe0, 0x33e);
         if (!src[3]) {
             dst[3] = 0;
         } else {
@@ -747,7 +747,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_NEW_USER_LIST: {
         u32 *dst = item.param;
         COPY_STRING(0);
-        ASSERT((int)src[1] >= 0, sStr_SrcParamsNumUsersGe0, 0x350);
+        ASSERT((int)src[1] >= 0, gChatStr_SrcParamsNumUsersGe0, 0x350);
         if (!src[2]) {
             dst[2] = 0;
         } else {
@@ -771,10 +771,10 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[1] >= 0, sStr_SrcParamsNumUsersGe0, 0x351);
+        ASSERT((int)src[1] >= 0, gChatStr_SrcParamsNumUsersGe0, 0x351);
         if ((int)src[1] > 0) {
             int bytes;
-            ASSERT(src[3], sStr_SrcParamsModesNeNULL, 0x351);
+            ASSERT(src[3], gChatStr_SrcParamsModesNeNULL, 0x351);
             bytes = src[1] * 4;
             dst[3] = (u32)DWCi_GsMalloc(bytes);
             if (!dst[3]) {
@@ -795,7 +795,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
     case CALLBACK_GET_GLOBAL_KEYS: {
         u32 *dst = item.param;
         COPY_STRING(1);
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumGe0, 0x365);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumGe0, 0x365);
         if (!src[3]) {
             dst[3] = 0;
         } else {
@@ -819,7 +819,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[2] >= 0, sStr_SrcParamsNumGe0, 0x366);
+        ASSERT((int)src[2] >= 0, gChatStr_SrcParamsNumGe0, 0x366);
         if (!src[4]) {
             dst[4] = 0;
         } else {
@@ -849,7 +849,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         u32 *dst = item.param;
         COPY_STRING(1);
         COPY_STRING(2);
-        ASSERT((int)src[3] >= 0, sStr_SrcParamsNumGe0, 0x370);
+        ASSERT((int)src[3] >= 0, gChatStr_SrcParamsNumGe0, 0x370);
         if (!src[4]) {
             dst[4] = 0;
         } else {
@@ -873,7 +873,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
                 }
             }
         }
-        ASSERT((int)src[3] >= 0, sStr_SrcParamsNumGe0, 0x371);
+        ASSERT((int)src[3] >= 0, gChatStr_SrcParamsNumGe0, 0x371);
         if (!src[5]) {
             dst[5] = 0;
         } else {
@@ -905,7 +905,7 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
         break;
     }
     default:
-        __msl_assertion_failed(sStr_0_8, sStr_ChatCallbacksC, sStr_ciAddCallback_, 0x380);
+        __msl_assertion_failed(gChatStr_0_8, gLobbyStr_ChatCallbacksC, gChatStr_ciAddCallback_, 0x380);
         break;
     }
     ArrayAppend(chat->callbacks, &item);
@@ -918,8 +918,8 @@ BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *
 
 void ciCallCallback(ChatConnection *chat, ChatCallback *callback) {
     void *user;
-    ASSERT_CHAT(chat, sStr_ciCallCallback, 909);
-    ASSERT_CALLBACK(callback, sStr_ciCallCallback, 911);
+    ASSERT_CHAT(chat, gChatStr_ciCallCallback, 909);
+    ASSERT_CALLBACK(callback, gChatStr_ciCallCallback, 911);
     user = callback->user;
     switch (callback->type) {
     case CALLBACK_RAW: {
@@ -1116,7 +1116,7 @@ void ciCallCallback(ChatConnection *chat, ChatCallback *callback) {
         break;
     }
     default:
-        __msl_assertion_failed(sStr_0_8, sStr_ChatCallbacksC, sStr_ciCallCallback, 0x5ef);
+        __msl_assertion_failed(gChatStr_0_8, gLobbyStr_ChatCallbacksC, gChatStr_ciCallCallback, 0x5ef);
         break;
     }
     ciFreeCallbackData(callback);
@@ -1126,11 +1126,11 @@ void ciCallCallbacks(ChatConnection *chat, int id) {
     ChatCallback *callback;
     int i;
     ChatCallback copy;
-    ASSERT_CHAT(chat, sStr_ciCallCallbacks, 0x5fc);
+    ASSERT_CHAT(chat, gChatStr_ciCallCallbacks, 0x5fc);
     i = 0;
     while (i < ArrayLength(chat->callbacks)) {
         callback = ArrayNth(chat->callbacks, i);
-        ASSERT_CALLBACK(callback, sStr_ciCallCallbacks, 0x605);
+        ASSERT_CALLBACK(callback, gChatStr_ciCallCallbacks, 0x605);
         if (callback->channel && !ciInChannel(chat, callback->channel)) {
             ciFreeCallbackData(callback);
             ArrayDeleteAt(chat->callbacks, i);
@@ -1150,11 +1150,11 @@ void ciCallCallbacks(ChatConnection *chat, int id) {
 int ciGetCallbackIndexByID(ChatConnection *chat, int id) {
     ChatCallback *callback;
     int i, count;
-    ASSERT_CHAT(chat, sStr_ciGetCallbackIndexByID, 0x63b);
+    ASSERT_CHAT(chat, gChatStr_ciGetCallbackIndexByID, 0x63b);
     count = ArrayLength(chat->callbacks);
     for (i = 0; i < count; i++) {
         callback = ArrayNth(chat->callbacks, i);
-        ASSERT_CALLBACK(callback, sStr_ciGetCallbackIndexByID, 0x648);
+        ASSERT_CALLBACK(callback, gChatStr_ciGetCallbackIndexByID, 0x648);
         if (callback->id == id) {
             return i;
         }

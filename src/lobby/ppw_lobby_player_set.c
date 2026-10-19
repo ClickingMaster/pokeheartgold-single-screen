@@ -46,7 +46,7 @@ Node *PPWLobbyPlayerSet_InsertNode(List *l, Node *parent, u8 left, u8 flag, Sess
     } h;
 
     if (l->count == (u32)-1) {
-        printf(sStr_TreeInsertLengthError_2);
+        printf(gLobbyStr_TreeInsertLengthError_2);
         abort();
     }
     {

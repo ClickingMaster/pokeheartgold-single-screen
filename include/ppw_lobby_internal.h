@@ -8,6 +8,7 @@
 
 #include "dwc/net_common_internal.h"
 
+#include "lobby_mem.h"
 #include "lobby_string.h"
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
@@ -50,7 +51,6 @@ extern u32 gLobbyEventDequeMapBufferMaxSize;
 extern u32 gLobbyEventDequeMapMaxSizeSet;
 extern u32 gLobbyEventDequeMapMaxSize;
 extern unsigned char __lower_mapC[];
-void *LobbyMem_Alloc(u32);
 void LobbyEventDequeMap_LengthError(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 
@@ -98,7 +98,7 @@ u32 LobbyU32Vector_RecommendSize(Vec *, u32);
 void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void LobbyTreeIterator_Advance(NodeIter *);
 Node *LobbyTree_EraseRebalance(Node *, void *);
-extern char sStr_TreeInsertLengthError_2[];
+extern char gLobbyStr_TreeInsertLengthError_2[];
 int printf(const char *, ...);
 void abort(void);
 void LobbyTree_InsertRebalance(Node *, void *);
@@ -155,15 +155,15 @@ static inline void SwapPtr(void **a, void **b) {
 void PPWLobbyPlayer_UpdateState(Session *s);
 extern VTable gPPWLobbyPlayerVtable;
 void PPWLobbyPlayerSet_Insert(InsertResult *out, List *l, Session **key);
-extern char sStr_SpaceSpace[];
-extern char sStr_Space_2[];
-extern char sStr_B[];
-extern char sStr_S[];
-extern char sStr_Empty_16[];
-extern char sFmt_Hex_3[];
-extern char sStr_A[];
-extern char sStr__[];
-extern char sFmt_Str_3[];
+extern char gLobbyStr_SpaceSpace[];
+extern char gLobbyStr_Space_2[];
+extern char gLobbyStr_B[];
+extern char gLobbyStr_S[];
+extern char gLobbyStr_Empty_16[];
+extern char gLobbyFmt_Hex_3[];
+extern char gLobbyStr_A[];
+extern char gLobbyStr__[];
+extern char gLobbyFmt_Str_3[];
 int DWC_Base64Encode(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 void LobbyEventDequeMap_Allocate(DequeBuf *d, u32 n, Tag unused);

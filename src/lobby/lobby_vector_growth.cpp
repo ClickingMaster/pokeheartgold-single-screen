@@ -5,6 +5,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 class FalseType {};
 
 class TrueType {};
@@ -17,7 +19,6 @@ struct ByteTag {
 extern "C" {
 void *memset(void *, int, unsigned);
 void *memcpy(void *, const void *, unsigned);
-void *LobbyMem_Alloc(u32);
 void DWC_Free(int, void *, u32);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 u32 LobbyStringVector_RecommendSize(LobbyStringVector *, u32);

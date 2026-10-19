@@ -6,7 +6,7 @@
 
 #include "lobby_chat_internal.h"
 
-extern char sStr_Empty_18[];
+extern char gLobbyStr_Empty_18[];
 
 // The ID in a nick only counts while the user map still has that nick for it.
 int LobbyChat_FindUserIdByNick(LobbyChatManager *manager, const Str *nick) {
@@ -30,7 +30,7 @@ void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId, ...)
     LobbyUserMapNode *node;
     LobbyUserMap_Find((Iter *)&node, &manager->userMap, &userId);
     if (node == (LobbyUserMapNode *)&manager->userMap.root) {
-        LobbyString_InitFromCStr(out, sStr_Empty_18);
+        LobbyString_InitFromCStr(out, gLobbyStr_Empty_18);
     } else {
         LobbyString_InitCopy(out, &node->entry.nick);
     }

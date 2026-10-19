@@ -7,6 +7,9 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "lobby_mem.h"
+
 #include <size_t.h>
 #include <stdarg.h>
 #include <string.h>
@@ -39,7 +42,7 @@ inline const T &Min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
-extern "C" const char sStr_b_lib_u_user[], sStr_b_lib_u_system[], sStr_b_lib_c_time[], sStr_b_lib_c_lobby[];
+extern "C" const char gLobbyStr_b_lib_u_user[], gLobbyStr_b_lib_u_system[], gLobbyStr_b_lib_c_time[], gLobbyStr_b_lib_c_lobby[];
 
 // What a web request reports when the server has answered: success, and the answer.
 typedef void (*PPWLobbyWebCallback)(BOOL success, u8 *data, u32 size);
@@ -90,16 +93,16 @@ public:
     }
 };
 
-extern "C" char sStr_WebEncLobbySubmitQuestionnaireAsp[], sStr_WebEncLobbyGetQuestionnaireAsp[], sStr_StatsUploadKey[], sStr_WebEncLobbyGetScheduleAsp[], sStr_WebEncLobbyGetVIP_Asp[], sStr_WebEncLobbyCheckProfileAsp[];
+extern "C" char gLobbyStr_WebEncLobbySubmitQuestionnaireAsp[], gLobbyStr_WebEncLobbyGetQuestionnaireAsp[], gLobbyStr_StatsUploadKey[], gLobbyStr_WebEncLobbyGetScheduleAsp[], gLobbyStr_WebEncLobbyGetVIP_Asp[], gLobbyStr_WebEncLobbyCheckProfileAsp[];
 #pragma explicit_zero_data on
 extern "C" u8 gLobbyTimerMapInserted = 1;
-extern "C" const char *gPPWLobbyGetScheduleUrl = sStr_WebEncLobbyGetScheduleAsp;
-extern "C" const char *gPPWLobbyGetVipUrl = sStr_WebEncLobbyGetVIP_Asp;
-extern "C" const char *gPPWLobbyGetQuestionnaireUrl = sStr_WebEncLobbyGetQuestionnaireAsp;
-extern "C" const char *gPPWLobbySubmitQuestionnaireUrl = sStr_WebEncLobbySubmitQuestionnaireAsp;
+extern "C" const char *gPPWLobbyGetScheduleUrl = gLobbyStr_WebEncLobbyGetScheduleAsp;
+extern "C" const char *gPPWLobbyGetVipUrl = gLobbyStr_WebEncLobbyGetVIP_Asp;
+extern "C" const char *gPPWLobbyGetQuestionnaireUrl = gLobbyStr_WebEncLobbyGetQuestionnaireAsp;
+extern "C" const char *gPPWLobbySubmitQuestionnaireUrl = gLobbyStr_WebEncLobbySubmitQuestionnaireAsp;
 extern "C" signed char gLobbyStringTerminator = 0;
-extern "C" const char *gPPWLobbyCheckProfileUrl = sStr_WebEncLobbyCheckProfileAsp;
-extern "C" const char *gPPWLobbyStatsUploadKey = sStr_StatsUploadKey;
+extern "C" const char *gPPWLobbyCheckProfileUrl = gLobbyStr_WebEncLobbyCheckProfileAsp;
+extern "C" const char *gPPWLobbyStatsUploadKey = gLobbyStr_StatsUploadKey;
 extern "C" signed char gLobbyStringInPlaceTerminator = 0;
 extern "C" u8 gLobbyTimerMapNotInserted = 0;
 #pragma explicit_zero_data reset
@@ -209,7 +212,6 @@ struct Op {
     }
 };
 
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, int, const u8 *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, int, const u8 *, u32, int);
@@ -349,13 +351,13 @@ int PPW_LobbyInitResultToLastError(int x) {
 }
 }
 
-extern "C" char sStr_Empty_15[];
+extern "C" char gLobbyStr_Empty_15[];
 extern "C" int PPWLobby_EncodeMessage(int, int, int, const void *, u32, Str *);
 extern "C" int LobbyChat_SendUserMessage(int, const char *);
 extern "C" int LobbyChat_SendChannelMessage(const char *, const char *);
 
 inline bool IsEmptyChannelName(const Str &name) {
-    return LobbyString_CompareCStr(&name, sStr_Empty_15) == 0;
+    return LobbyString_CompareCStr(&name, gLobbyStr_Empty_15) == 0;
 }
 
 class ErrorMap {
@@ -416,13 +418,13 @@ extern "C" int PPWLobby_SendMessage(int id, int key, int a, int b, int c, const 
 }
 
 extern "C" {
-extern char sStr_Empty_15[];
+extern char gLobbyStr_Empty_15[];
 extern int LobbyChat_SetChannelKey(const char *, int, const char *, const char *);
 extern void LobbyCharVector_Grow(LobbyCharVector *, u32);
 extern int DWC_Base64Encode(const void *, u32, char *, u32);
 
 static inline int Empty(Str *s) {
-    return LobbyString_CompareCStr(s, sStr_Empty_15) == 0;
+    return LobbyString_CompareCStr(s, gLobbyStr_Empty_15) == 0;
 }
 
 static inline void Status(int result) {
@@ -596,7 +598,6 @@ struct Obj {
 };
 
 extern "C" Obj *gPPWLobbyCurrentRequest;
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -659,12 +660,12 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
 
 extern "C" {
 extern char *gPPWLobbyChannelNamePrefixes[];
-extern char sStr_Bang[];
+extern char gLobbyStr_Bang[];
 
 void PPWLobby_MakeChannelName(Str *out, u32 id, Str *s) {
     Str b, a;
     LobbyString_InitFromCStr(&b, gPPWLobbyChannelNamePrefixes[id]);
-    LobbyString_ConcatCStr(&a, &b, sStr_Bang);
+    LobbyString_ConcatCStr(&a, &b, gLobbyStr_Bang);
     LobbyString_Concat(out, &a, s);
     LobbyString_Destroy(&a);
     LobbyString_Destroy(&b);
@@ -723,12 +724,12 @@ extern "C" Str *LobbyString_ConcatCStr(Str *out, Str *left, char *right) {
 
 extern "C" {
 extern u32 current_time(void);
-extern char sFmt_C_IntUnderscoreUint[];
+extern char gLobbyFmt_C_IntUnderscoreUint[];
 
 void PPWLobby_GenerateChannelBaseName(Str *out) {
     u32 id = gPPWLobbyWork->userId;
     u32 tick = current_time();
-    LobbyString_Format(out, sFmt_C_IntUnderscoreUint, id, tick % 1000);
+    LobbyString_Format(out, gLobbyFmt_C_IntUnderscoreUint, id, tick % 1000);
 }
 }
 
@@ -1243,7 +1244,7 @@ extern "C" int PPWLobby_HandleLibraryData(BOOL a0, BOOL a1, int sel, int id, con
     if (sel) {
         return 0;
     }
-    if (strcmp(cmd, sStr_b_lib_u_user) == 0) {
+    if (strcmp(cmd, gLobbyStr_b_lib_u_user) == 0) {
         if (id == gPPWLobbyWork->userId) {
             return 1;
         }
@@ -1258,7 +1259,7 @@ extern "C" int PPWLobby_HandleLibraryData(BOOL a0, BOOL a1, int sel, int id, con
         }
         return 1;
     }
-    if (strcmp(cmd, sStr_b_lib_u_system) == 0) {
+    if (strcmp(cmd, gLobbyStr_b_lib_u_system) == 0) {
         if (id == gPPWLobbyWork->userId) {
             return 1;
         }
@@ -1277,14 +1278,14 @@ extern "C" int PPWLobby_HandleLibraryData(BOOL a0, BOOL a1, int sel, int id, con
         }
         return 1;
     }
-    if (strcmp(cmd, sStr_b_lib_c_time) == 0) {
+    if (strcmp(cmd, gLobbyStr_b_lib_c_time) == 0) {
         if (len != 8) {
             return 1;
         }
         OnPairFn(data);
         return 1;
     }
-    if (strcmp(cmd, sStr_b_lib_c_lobby) == 0) {
+    if (strcmp(cmd, gLobbyStr_b_lib_c_lobby) == 0) {
         if (!PPWLobbySchedule_Load(&gPPWLobbyWork->schedule, data, len)) {
             return 1;
         }
@@ -1419,7 +1420,7 @@ static inline int flush(PPWLobbyWork *work) {
     work->players.self.userProfileChanged = 0;
     userId = gPPWLobbyWork->userId;
     buf = LobbyByteVector_Data(&work->players.self.userProfile);
-    PPWLobby_SetChannelData(userId, 0, sStr_b_lib_u_user, buf, work->players.self.userProfile.size);
+    PPWLobby_SetChannelData(userId, 0, gLobbyStr_b_lib_u_user, buf, work->players.self.userProfile.size);
     return 1;
 }
 
@@ -1445,7 +1446,7 @@ int PPWLobby_TimerUploadSystemProfile(void) {
         return 1;
     }
     work->players.self.systemProfileChanged = 0;
-    PPWLobby_SetChannelData(gPPWLobbyWork->userId, 0, sStr_b_lib_u_system, &work->players.self.systemProfile, 16);
+    PPWLobby_SetChannelData(gPPWLobbyWork->userId, 0, gLobbyStr_b_lib_u_system, &work->players.self.systemProfile, 16);
     return 1;
 }
 
@@ -1472,7 +1473,7 @@ int PPWLobby_TimerRequestChannelTime(void) {
         return 0;
     }
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
-    LobbyChat_GetChannelKeysAsync(!s.l.isLong ? s.s.buf : s.l.ptr, -1, sStr_b_lib_c_time, PPWLobby_OnGetChannelTime, 0);
+    LobbyChat_GetChannelKeysAsync(!s.l.isLong ? s.s.buf : s.l.ptr, -1, gLobbyStr_b_lib_c_time, PPWLobby_OnGetChannelTime, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -1493,7 +1494,7 @@ int PPWLobby_TimerRequestLobbyData(void) {
         return 0;
     }
     PPWLobbyChannel_GetName(&s, &gPPWLobbyWork->mainChannel);
-    LobbyChat_GetChannelKeysAsync(s.l.isLong == 0 ? s.s.buf : s.l.ptr, -1, sStr_b_lib_c_lobby, PPWLobby_OnGetLobbyData, 0);
+    LobbyChat_GetChannelKeysAsync(s.l.isLong == 0 ? s.s.buf : s.l.ptr, -1, gLobbyStr_b_lib_c_lobby, PPWLobby_OnGetLobbyData, 0);
     LobbyString_Destroy(&s);
     return 1;
 }
@@ -1633,7 +1634,6 @@ struct Obj {
 };
 
 extern "C" Obj *gPPWLobbyCurrentRequest;
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -1817,7 +1817,6 @@ struct Obj {
 };
 
 extern "C" Obj *gPPWLobbyCurrentRequest;
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -2002,7 +2001,6 @@ struct Obj {
 };
 
 extern "C" Obj *gPPWLobbyCurrentRequest;
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void StatsUpload_Start(int, const char *);
 extern "C" int StatsUpload_UploadWithLastHash(const char *, u32, const char *, u32, int);
 extern "C" int StatsUpload_Upload(const char *, u32, const char *, u32, int);
@@ -2969,7 +2967,7 @@ void PPWLobby_OnGetChannelKeys(BOOL a, const char *b, int c, const char *d, cons
 }
 
 extern "C" {
-extern char sStr_Bang[];
+extern char gLobbyStr_Bang[];
 extern void LobbyString_Split(LobbyStringVector *, Str *, Str *, int);
 
 void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int *types) {
@@ -2987,7 +2985,7 @@ void PPWLobby_OnEnumChannels(int valid, int count, char **names, int unused, int
             continue;
         }
         LobbyString_InitFromCStr(&item, names[i]);
-        LobbyString_InitFromCStr(&delimiter, sStr_Bang);
+        LobbyString_InitFromCStr(&delimiter, gLobbyStr_Bang);
         LobbyString_Split(&parts, &item, &delimiter, 0);
         LobbyString_Destroy(&delimiter);
         LobbyString_Destroy(&item);
@@ -3177,8 +3175,8 @@ extern "C" void PPWLobby_OnEnumUsers(int success, char *channel, int count, int 
     for (i = 0; i < count; i++) {
         if (!IsSelf(ids[i])) {
             PPWLobbyPlayers_Add(&gPPWLobbyWork->players, ids[i]);
-            LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_user, PPWLobby_OnGetChannelKeys, 0);
-            LobbyChat_GetChannelKeysAsync(channel, ids[i], sStr_b_lib_u_system, PPWLobby_OnGetChannelKeys, 0);
+            LobbyChat_GetChannelKeysAsync(channel, ids[i], gLobbyStr_b_lib_u_user, PPWLobby_OnGetChannelKeys, 0);
+            LobbyChat_GetChannelKeysAsync(channel, ids[i], gLobbyStr_b_lib_u_system, PPWLobby_OnGetChannelKeys, 0);
         }
     }
     gPPWLobbyWork->mainChannel.usersEnumerated = 1;
@@ -3250,7 +3248,7 @@ extern "C" void PPWLobby_OnGetChannelTime(BOOL result, const char *channel, int 
         w->schedule.time.seconds = RTC_ConvertDateTimeToSecond(&now.date, &now.time);
         Stamp s;
         s.v = w->schedule.time.seconds;
-        PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_time, &s, 8);
+        PPWLobby_SetChannelData(-1, 0, gLobbyStr_b_lib_c_time, &s, 8);
         data.Destroy();
         return;
     }
@@ -3285,7 +3283,7 @@ void PPWLobby_OnGetLobbyData(BOOL success, const char *channel, int userId, cons
     blob.capacity = 0;
     if (!PPWLobby_DecodeMessageData(value, &blob) || blob.size == 0 || !appendBlob(&blob)) {
         PPWLobbySchedule_CopyToVector(&copy, &gPPWLobbyWork->schedule);
-        PPWLobby_SetChannelData(-1, 0, sStr_b_lib_c_lobby, LobbyByteVector_Data(&copy), copy.size);
+        PPWLobby_SetChannelData(-1, 0, gLobbyStr_b_lib_c_lobby, LobbyByteVector_Data(&copy), copy.size);
         LobbyCharVector_Destroy(&copy);
         LobbyCharVector_Destroy(&blob);
         return;
@@ -3521,8 +3519,7 @@ void LobbyTimerMap_Clear(struct Tree *a) {
 }
 
 namespace TimerMapInsertNode {
-extern "C" char sStr_TreeInsertLengthError[];
-extern "C" void *LobbyMem_Alloc(u32);
+extern "C" char gLobbyStr_TreeInsertLengthError[];
 
 class Alloc {};
 
@@ -3594,7 +3591,7 @@ extern "C" Node *LobbyTimerMap_InsertNode(Tree *, Node *, int, int, Value *);
 
 extern "C" Node *LobbyTimerMap_InsertNode(Tree *t, Node *parent, int left, int leftmost, Value *v) {
     if (t->count == (u32)-1) {
-        printf(sStr_TreeInsertLengthError);
+        printf(gLobbyStr_TreeInsertLengthError);
         abort();
     }
     Node *n = Allocate(Alloc());
@@ -4130,7 +4127,6 @@ struct Alloc {
     u8 tag;
 };
 
-extern void *LobbyMem_Alloc(u32);
 extern void LobbyCharVector_Allocate(struct Vec *, u32, struct Alloc);
 
 void LobbyCharVector_Allocate(struct Vec *a, u32 b, struct Alloc unused) {
@@ -4277,15 +4273,14 @@ extern "C" Str *LobbyString_Destroy(Str *output) {
 }
 
 extern "C" {
-extern char sStr_BasicStringReserveLengthError[];
-void *LobbyMem_Alloc(u32);
+extern char gLobbyStr_BasicStringReserveLengthError[];
 
 void LobbyString_Reserve(Str *w, u32 size) {
     u32 len, capacity;
     char *dst, *old;
     int wasHeap, makeHeap;
     if (size > 0x7ffffffe) {
-        printf(sStr_BasicStringReserveLengthError);
+        printf(gLobbyStr_BasicStringReserveLengthError);
         abort();
     }
     wasHeap = w->l.isLong != 0;
@@ -4366,7 +4361,7 @@ extern "C" Str *LobbyString_Replace(Str *out, u32 pos, u32 remove, const Str *in
     return LobbyString_ReplaceRange(out, pos, remove, data, data + size, dispatch);
 }
 
-extern "C" char sStr_BasicStringOutOfRange[];
+extern "C" char gLobbyStr_BasicStringOutOfRange[];
 
 extern "C" Str *LobbyString_ReplaceSubstring(Str *self, u32 pos, u32 n1, Str *str, u32 pos2, u32 n2) {
     char *data;
@@ -4380,7 +4375,7 @@ extern "C" Str *LobbyString_ReplaceSubstring(Str *self, u32 pos, u32 n1, Str *st
         size = str->s.len;
     }
     if (pos2 > size) {
-        printf(sStr_BasicStringOutOfRange);
+        printf(gLobbyStr_BasicStringOutOfRange);
         abort();
     }
     data += pos2;
@@ -4471,7 +4466,7 @@ extern "C" int LobbyString_CompareCStr(const Str *a, const char *b) {
 }
 
 extern "C" {
-extern const char sStr_StringComparePosGtLen[];
+extern const char gLobbyStr_StringComparePosGtLen[];
 
 static inline const u32 *MinPtr(const u32 *a, const u32 *b) {
     return *a < *b ? a : b;
@@ -4489,7 +4484,7 @@ int LobbyString_CompareChars(const Str *s, u32 pos, u32 length, const void *othe
         size = s->s.len;
     }
     if (pos > size) {
-        printf(sStr_StringComparePosGtLen);
+        printf(gLobbyStr_StringComparePosGtLen);
         abort();
     }
     remaining = size - pos;
@@ -4506,7 +4501,7 @@ int LobbyString_CompareChars(const Str *s, u32 pos, u32 length, const void *othe
 }
 
 namespace StringReplaceRange {
-extern "C" const char sStr_BasicStringOutOfRange[], sStr_BasicStringLengthError[];
+extern "C" const char gLobbyStr_BasicStringOutOfRange[], gLobbyStr_BasicStringLengthError[];
 
 class Tag {};
 extern "C" Str *LobbyString_AssignRange(Str *, const char *, const char *, int);
@@ -4534,7 +4529,7 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
         data = s->l.ptr;
     }
     if (pos > size) {
-        printf(sStr_BasicStringOutOfRange);
+        printf(gLobbyStr_BasicStringOutOfRange);
         abort();
     }
     u32 rem = size - pos;
@@ -4542,7 +4537,7 @@ extern "C" Str *LobbyString_ReplaceRange(Str *s, u32 pos, u32 n1, const char *fi
     u32 n2 = last - first;
     u32 len;
     if (n2 > 0x7ffffffe || (len = size - n) > 0x7ffffffe - n2) {
-        printf(sStr_BasicStringLengthError);
+        printf(gLobbyStr_BasicStringLengthError);
         abort();
     }
     u32 newSize = n2 + len;

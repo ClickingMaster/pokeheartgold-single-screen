@@ -9,9 +9,9 @@
 #define P(p, o) (*(void **)((char *)(p) + (o)))
 
 extern void __msl_assertion_failed(char *, char *, char *, int);
-extern char sStr_DataNeNULL[];
-extern char sStr_ChatCallbacksC[];
-extern char sStr_ciCallbacksArrayElementFreeFn[];
+extern char gLobbyStr_DataNeNULL[];
+extern char gLobbyStr_ChatCallbacksC[];
+extern char gLobbyStr_ciCallbacksArrayElementFreeFn[];
 extern void ciCallbacksArrayElementFreeFn(void *p);
 
 void *LobbyUserMap_Destroy(LobbyUserMap *map) {
@@ -184,7 +184,7 @@ void LobbyRequestMap_DestroyNodes(LobbyRequestMap *map, LobbyRequestMapNode *nod
 
 void ciCallbacksArrayElementFreeFn(void *p) {
     if (!p) {
-        __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, sStr_ciCallbacksArrayElementFreeFn, 164);
+        __msl_assertion_failed(gLobbyStr_DataNeNULL, gLobbyStr_ChatCallbacksC, gLobbyStr_ciCallbacksArrayElementFreeFn, 164);
     }
     DWCi_GsFree(P(p, 20));
 }

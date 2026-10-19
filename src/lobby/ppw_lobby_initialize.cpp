@@ -8,10 +8,12 @@ extern "C" {
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "lobby_mem.h"
+
 #include <size_t.h>
 
 extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
-extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
 extern "C" char gPPWLobbyPlayersVtable[], gPPWLobbyPlayerVtable[];
 extern "C" void PPWLobby_OnPlayerMessage();

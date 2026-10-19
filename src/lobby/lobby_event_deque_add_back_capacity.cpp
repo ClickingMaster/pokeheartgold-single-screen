@@ -3,6 +3,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_mem.h"
+
 struct Tag {};
 
 struct Guard {
@@ -88,9 +90,8 @@ struct SourceIterator {
 };
 
 extern "C" void LobbyEventDequeMap_InsertRange(Ring *r, MapIterator pos, SourceIterator first, SourceIterator last, Tag);
-extern "C" void *LobbyMem_Alloc(u32 n);
 extern "C" void LobbyEventDeque_LengthError(char *msg);
-extern char sStr_DequeLengthError[];
+extern char gLobbyStr_DequeLengthError[];
 extern u32 gLobbyDequeMaxSizeInit;
 extern u32 gLobbyDequeMaxSize;
 
@@ -289,7 +290,7 @@ extern "C" void LobbyEventDeque_AddBackCapacity(Deque *d, u32 n) {
         return;
     }
     if (blockCount * 0x80 > max_size() || (d->map.size == 0 ? 0 : (d->map.size - 1) * 0x80) > max_size() - blockCount * 0x80) {
-        LobbyEventDeque_LengthError(sStr_DequeLengthError);
+        LobbyEventDeque_LengthError(gLobbyStr_DequeLengthError);
     }
     if (blockCount + d->map.size <= d->map.capacity()) {
         for (; blockCount != 0; --blockCount) {

@@ -53,7 +53,7 @@ struct Work {
 };
 
 extern "C" Work *gPPWLobbyWork;
-extern "C" char sStr_Empty_15[];
+extern "C" char gLobbyStr_Empty_15[];
 extern "C" Str PPWLobby_GetChannelName(u8 *, int);
 extern "C" int LobbyChat_GetChannelKeysAsync(const char *, int, int, void (*)(), int);
 extern "C" void PPWLobby_OnGetChannelKeys();
@@ -96,7 +96,7 @@ extern "C" int PPW_LobbyGetChannelDataAsync(int id, int key, int mode, int arg) 
     }
     {
         Str name = PPWLobby_GetChannelName(w->names, key);
-        if (name == sStr_Empty_15) {
+        if (name == gLobbyStr_Empty_15) {
             name.Destroy();
             return 5;
         }

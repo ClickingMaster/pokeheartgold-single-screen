@@ -9,6 +9,7 @@
 #include "dwc/net_common_internal.h"
 
 #include "lobby_chat_manager.h"
+#include "lobby_mem.h"
 #include "lobby_vector.h"
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
@@ -38,8 +39,8 @@ static inline BOOL StrLess(Str *a, Str *b) {
 }
 
 u32 current_time(void);
-extern char sFmt_N_UnderscoreIntUnderscoreUint[];
-extern char sStr___2[];
+extern char gLobbyFmt_N_UnderscoreIntUnderscoreUint[];
+extern char gLobbyStr___2[];
 void LobbyChat_SplitString(LobbyStringVector *out, const Str *s, Str *sep, int n);
 long atol(const char *s);
 int LobbyChat_GetUserIdFromNick(const Str *s);
@@ -56,7 +57,6 @@ enum LobbyChatResult {
 
 int LobbyChat_GetFullChannelName(Str *out, LobbyChatManager *manager, Str *name);
 
-void *LobbyMem_Alloc(u32 size);
 void *LobbyChatManager_Destroy(LobbyChatManager *manager);
 
 // Commands need a session that is logged in and has not failed.
@@ -110,13 +110,13 @@ void LobbyChat_StripChannelPrefixes(LobbyU32Vector *out, LobbyChatManager *manag
 void LobbyChat_FormatNick(Str *out, int userId);
 
 extern VoidFunc gLobbyMemOutOfMemoryHandler;
-extern u8 sLobbyRequestMapInsertFlags[];
-extern char sStr_Empty_17[];
-extern char sStr_normal[];
-extern char sStr_voice[];
-extern char sStr_ops[];
-extern char sStr_VoiceOps[];
-extern char sStr_invalid[];
+extern u8 gLobbyRequestMapInsertFlags[];
+extern char gLobbyStr_Empty_17[];
+extern char gLobbyStr_normal[];
+extern char gLobbyStr_voice[];
+extern char gLobbyStr_ops[];
+extern char gLobbyStr_VoiceOps[];
+extern char gLobbyStr_invalid[];
 
 LobbyChannelMapNode *LobbyChannelMap_LowerBound(LobbyChannelMap *map, Str *key, LobbyChannelMapNode *n, LobbyChannelMapNode *res);
 void LobbyChannelMap_MakeEntry(LobbyChannelMapEntry *dst, Str *name, LobbyChannel *src);
@@ -149,7 +149,6 @@ void LobbyGetChannelModeRequest_Destroy(void);
 BOOL LobbyMem_InstallOutOfMemoryHandler(LobbyChatManager *manager);
 void LobbyMem_OnOutOfMemory(void);
 void LobbyMem_OnOutOfMemoryDisconnect(void);
-void LobbyMem_ReleaseReserve(void);
 BOOL LobbyRequestMap_DeleteKey(LobbyRequestMap *map, u32 id);
 void LobbyRequestMap_Erase(Iter *out, LobbyRequestMap *map, Iter pos);
 void LobbyRequestMap_Find(Iter *out, LobbyRequestMap *map, LobbyRequest **key);

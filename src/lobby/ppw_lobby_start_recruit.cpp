@@ -112,7 +112,7 @@ struct Work {
 };
 
 extern "C" Work *gPPWLobbyWork;
-extern "C" char sFmt_M_IntUnderscoreUint[];
+extern "C" char gLobbyFmt_M_IntUnderscoreUint[];
 extern "C" void PPWLobby_TimerSendRecruitInfo();
 extern "C" u32 current_time(void);
 extern "C" Str LobbyString_FormatN(int, const char *, ...);
@@ -158,7 +158,7 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
     if (g->busy == 0) {
         g->busy = 1;
         g->user = *u;
-        Str tmp = LobbyString_FormatN(20, sFmt_M_IntUnderscoreUint, g->code, current_time() % 1000);
+        Str tmp = LobbyString_FormatN(20, gLobbyFmt_M_IntUnderscoreUint, g->code, current_time() % 1000);
         value = tmp;
         LobbyString_Destroy(&tmp);
         strncpy(g->user.name, value.CStr(), 19);

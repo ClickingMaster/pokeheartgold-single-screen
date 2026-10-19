@@ -8,54 +8,54 @@
 #include <stdarg.h>
 #include <string.h>
 
-extern const char sStr_ciParseUser[];
-extern const char sStr_ciSocketSend[];
-extern const char sStr_ciParseParam[];
-extern const char sStr_ciSocketSendf[];
-extern const char sStr_ciSocketThink[];
-extern const char sStr_ciParseMessage[];
-extern const char sStr_ciSocketConnect[];
-extern const char sStr_ciSocketThinkSend[];
-extern const char sStr_ciSocketThinkRecv[];
-extern const char sStr_ciSocketDisconnect[];
-extern const char sStr_ciBufferInit[];
-extern const char sStr_ciSocketInit[];
-extern const char sStr_ciBufferPreAppend[];
-extern const char sStr_ciBufferClipFront[];
-extern const char sStr_ciSocketRecv[];
-extern const char sStr_BufferNeNULL_2[];
-extern const char sStr_ChatSocketC[];
-extern const char sStr_BufferNeNULL_3[];
-extern const char sStr_BufferSizeGe0[];
-extern const char sStr_BufferSizeBUFFER_INC_Eq0[];
-extern const char sStr_BufferLengthGe0[];
-extern const char sStr_BufferLengthLeBufferSize[];
-extern const char sStr_LenGe0_2[];
-extern const char sStr_LenLeSHRT_MAX[];
-extern const char sStr_LenLeBufferLength[];
-extern const char sStr_SockNeNULL[];
-extern const char sStr_SockNeNULL_2[];
-extern const char sStr_SockConnectStateEqCiNotConnectedOrSock[];
-extern const char sStr_SockInputQueueNeNULL[];
-extern const char sStr_SockInputQueueSizeGe0[];
-extern const char sStr_SockInputQueueSizeBUFFER_INC_Eq0[];
-extern const char sStr_SockInputQueueLengthGe0[];
-extern const char sStr_SockInputQueueLengthLeSockInputQueueSize[];
-extern const char sStr_SockOutputQueueNeNULL[];
-extern const char sStr_SockOutputQueueSizeGe0[];
-extern const char sStr_SockOutputQueueSizeBUFFER_INC_Eq0[];
-extern const char sStr_SockOutputQueueLengthGe0[];
-extern const char sStr_SockOutputQueueLengthLeSockOutputQueueSize[];
-extern const char sStr_ServerAddressNeNULL_2[];
-extern const char sStr_PortGe0[];
-extern const char sStr_PortLeUSHRT_MAX[];
-extern const char sStr_SockConnectStateEqCiNotConnected[];
-extern const char sStr_SockConnectStateEqCiConnected[];
-extern const char sStr_0_12[];
-extern const char sStr_PTextNeNULL[];
-extern const char sStr_MessageNeNULL_3[];
-extern const char sStr_SpaceColon_2[];
-extern const char sStr_Space_4[];
+extern const char gChatStr_ciParseUser[];
+extern const char gChatStr_ciSocketSend[];
+extern const char gChatStr_ciParseParam[];
+extern const char gChatStr_ciSocketSendf[];
+extern const char gChatStr_ciSocketThink[];
+extern const char gChatStr_ciParseMessage[];
+extern const char gChatStr_ciSocketConnect[];
+extern const char gChatStr_ciSocketThinkSend[];
+extern const char gChatStr_ciSocketThinkRecv[];
+extern const char gChatStr_ciSocketDisconnect[];
+extern const char gChatStr_ciBufferInit[];
+extern const char gChatStr_ciSocketInit[];
+extern const char gChatStr_ciBufferPreAppend[];
+extern const char gChatStr_ciBufferClipFront[];
+extern const char gChatStr_ciSocketRecv[];
+extern const char gChatStr_BufferNeNULL_2[];
+extern const char gChatStr_ChatSocketC[];
+extern const char gChatStr_BufferNeNULL_3[];
+extern const char gChatStr_BufferSizeGe0[];
+extern const char gChatStr_BufferSizeBUFFER_INC_Eq0[];
+extern const char gChatStr_BufferLengthGe0[];
+extern const char gChatStr_BufferLengthLeBufferSize[];
+extern const char gChatStr_LenGe0_2[];
+extern const char gChatStr_LenLeSHRT_MAX[];
+extern const char gChatStr_LenLeBufferLength[];
+extern const char gChatStr_SockNeNULL[];
+extern const char gChatStr_SockNeNULL_2[];
+extern const char gChatStr_SockConnectStateEqCiNotConnectedOrSock[];
+extern const char gChatStr_SockInputQueueNeNULL[];
+extern const char gChatStr_SockInputQueueSizeGe0[];
+extern const char gChatStr_SockInputQueueSizeBUFFER_INC_Eq0[];
+extern const char gChatStr_SockInputQueueLengthGe0[];
+extern const char gChatStr_SockInputQueueLengthLeSockInputQueueSize[];
+extern const char gChatStr_SockOutputQueueNeNULL[];
+extern const char gChatStr_SockOutputQueueSizeGe0[];
+extern const char gChatStr_SockOutputQueueSizeBUFFER_INC_Eq0[];
+extern const char gChatStr_SockOutputQueueLengthGe0[];
+extern const char gChatStr_SockOutputQueueLengthLeSockOutputQueueSize[];
+extern const char gChatStr_ServerAddressNeNULL_2[];
+extern const char gChatStr_PortGe0[];
+extern const char gChatStr_PortLeUSHRT_MAX[];
+extern const char gChatStr_SockConnectStateEqCiNotConnected[];
+extern const char gChatStr_SockConnectStateEqCiConnected[];
+extern const char gChatStr_0_12[];
+extern const char gChatStr_PTextNeNULL[];
+extern const char gChatStr_MessageNeNULL_3[];
+extern const char gChatStr_SpaceColon_2[];
+extern const char gChatStr_Space_4[];
 
 // Line buffer of ciSocketSendf (4096 bytes).
 extern char ciSendfBuffer[];
@@ -63,31 +63,31 @@ extern char ciSendfBuffer[];
 #define ASSERT(cond, message, func, line)                                  \
     do {                                                                   \
         if (!(cond)) {                                                     \
-            __msl_assertion_failed(message, sStr_ChatSocketC, func, line); \
+            __msl_assertion_failed(message, gChatStr_ChatSocketC, func, line); \
         }                                                                  \
     } while (0)
 #define ASSERT_BUFFER(buffer, func, line)                                                      \
     do {                                                                                       \
-        ASSERT(buffer, sStr_BufferNeNULL_3, func, line);                                       \
-        ASSERT((buffer)->size >= 0, sStr_BufferSizeGe0, func, line);                           \
-        ASSERT((buffer)->size % 0x2000 == 0, sStr_BufferSizeBUFFER_INC_Eq0, func, line);       \
-        ASSERT((buffer)->length >= 0, sStr_BufferLengthGe0, func, line);                       \
-        ASSERT((buffer)->length <= (buffer)->size, sStr_BufferLengthLeBufferSize, func, line); \
+        ASSERT(buffer, gChatStr_BufferNeNULL_3, func, line);                                       \
+        ASSERT((buffer)->size >= 0, gChatStr_BufferSizeGe0, func, line);                           \
+        ASSERT((buffer)->size % 0x2000 == 0, gChatStr_BufferSizeBUFFER_INC_Eq0, func, line);       \
+        ASSERT((buffer)->length >= 0, gChatStr_BufferLengthGe0, func, line);                       \
+        ASSERT((buffer)->length <= (buffer)->size, gChatStr_BufferLengthLeBufferSize, func, line); \
     } while (0)
 #define ASSERT_SOCKET(sock, func, line)                                                                                    \
     do {                                                                                                                   \
-        ASSERT(sock, sStr_SockNeNULL_2, func, line);                                                                       \
-        ASSERT((sock)->state <= ciDisconnected, sStr_SockConnectStateEqCiNotConnectedOrSock, func, line);                  \
-        ASSERT(&(sock)->input, sStr_SockInputQueueNeNULL, func, line);                                                     \
-        ASSERT((sock)->input.size >= 0, sStr_SockInputQueueSizeGe0, func, line);                                           \
-        ASSERT((sock)->input.size % 0x2000 == 0, sStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);                       \
-        ASSERT((sock)->input.length >= 0, sStr_SockInputQueueLengthGe0, func, line);                                       \
-        ASSERT((sock)->input.length <= (sock)->input.size, sStr_SockInputQueueLengthLeSockInputQueueSize, func, line);     \
-        ASSERT(&(sock)->output, sStr_SockOutputQueueNeNULL, func, line);                                                   \
-        ASSERT((sock)->output.size >= 0, sStr_SockOutputQueueSizeGe0, func, line);                                         \
-        ASSERT((sock)->output.size % 0x2000 == 0, sStr_SockOutputQueueSizeBUFFER_INC_Eq0, func, line);                     \
-        ASSERT((sock)->output.length >= 0, sStr_SockOutputQueueLengthGe0, func, line);                                     \
-        ASSERT((sock)->output.length <= (sock)->output.size, sStr_SockOutputQueueLengthLeSockOutputQueueSize, func, line); \
+        ASSERT(sock, gChatStr_SockNeNULL_2, func, line);                                                                       \
+        ASSERT((sock)->state <= ciDisconnected, gChatStr_SockConnectStateEqCiNotConnectedOrSock, func, line);                  \
+        ASSERT(&(sock)->input, gChatStr_SockInputQueueNeNULL, func, line);                                                     \
+        ASSERT((sock)->input.size >= 0, gChatStr_SockInputQueueSizeGe0, func, line);                                           \
+        ASSERT((sock)->input.size % 0x2000 == 0, gChatStr_SockInputQueueSizeBUFFER_INC_Eq0, func, line);                       \
+        ASSERT((sock)->input.length >= 0, gChatStr_SockInputQueueLengthGe0, func, line);                                       \
+        ASSERT((sock)->input.length <= (sock)->input.size, gChatStr_SockInputQueueLengthLeSockInputQueueSize, func, line);     \
+        ASSERT(&(sock)->output, gChatStr_SockOutputQueueNeNULL, func, line);                                                   \
+        ASSERT((sock)->output.size >= 0, gChatStr_SockOutputQueueSizeGe0, func, line);                                         \
+        ASSERT((sock)->output.size % 0x2000 == 0, gChatStr_SockOutputQueueSizeBUFFER_INC_Eq0, func, line);                     \
+        ASSERT((sock)->output.length >= 0, gChatStr_SockOutputQueueLengthGe0, func, line);                                     \
+        ASSERT((sock)->output.length <= (sock)->output.size, gChatStr_SockOutputQueueLengthLeSockOutputQueueSize, func, line); \
     } while (0)
 
 // Frees a part of the message and clears it.
@@ -105,7 +105,7 @@ static BOOL ciSocketParseNextLine(ChatSocket *socket);
 
 // Allocates an empty buffer of 0x2000 bytes.
 BOOL ciBufferInit(ChatBuffer *buffer) {
-    ASSERT(buffer, sStr_BufferNeNULL_2, sStr_ciBufferInit, 95);
+    ASSERT(buffer, gChatStr_BufferNeNULL_2, gChatStr_ciBufferInit, 95);
     buffer->length = 0;
     buffer->size = 0x2000;
     buffer->data = DWCi_GsMalloc(0x2001);
@@ -124,9 +124,9 @@ void ciBufferFree(ChatBuffer *buffer) {
 BOOL ciBufferPreAppend(ChatBuffer *buffer, int length) {
     int size;
     char *data;
-    ASSERT_BUFFER(buffer, sStr_ciBufferPreAppend, 120);
-    ASSERT(length >= 0, sStr_LenGe0_2, sStr_ciBufferPreAppend, 121);
-    ASSERT(length <= 0x7FFF, sStr_LenLeSHRT_MAX, sStr_ciBufferPreAppend, 122);
+    ASSERT_BUFFER(buffer, gChatStr_ciBufferPreAppend, 120);
+    ASSERT(length >= 0, gChatStr_LenGe0_2, gChatStr_ciBufferPreAppend, 121);
+    ASSERT(length <= 0x7FFF, gChatStr_LenLeSHRT_MAX, gChatStr_ciBufferPreAppend, 122);
     if (buffer->length + length <= buffer->size) {
         return TRUE;
     }
@@ -143,9 +143,9 @@ BOOL ciBufferPreAppend(ChatBuffer *buffer, int length) {
 
 // Removes the first length bytes.
 void ciBufferClipFront(ChatBuffer *buffer, int length) {
-    ASSERT_BUFFER(buffer, sStr_ciBufferClipFront, 151);
-    ASSERT(length >= 0, sStr_LenGe0_2, sStr_ciBufferClipFront, 152);
-    ASSERT(length <= buffer->length, sStr_LenLeBufferLength, sStr_ciBufferClipFront, 153);
+    ASSERT_BUFFER(buffer, gChatStr_ciBufferClipFront, 151);
+    ASSERT(length >= 0, gChatStr_LenGe0_2, gChatStr_ciBufferClipFront, 152);
+    ASSERT(length <= buffer->length, gChatStr_LenLeBufferLength, gChatStr_ciBufferClipFront, 153);
     buffer->length -= length;
     memmove(buffer->data, buffer->data + length, buffer->length);
     buffer->data[buffer->length] = 0;
@@ -153,7 +153,7 @@ void ciBufferClipFront(ChatBuffer *buffer, int length) {
 
 // Clears the socket and allocates its two buffers (name is not used).
 BOOL ciSocketInit(ChatSocket *socket, const char *name) {
-    ASSERT(socket, sStr_SockNeNULL, sStr_ciSocketInit, 177);
+    ASSERT(socket, gChatStr_SockNeNULL, gChatStr_ciSocketInit, 177);
     memset(socket, 0, sizeof(ChatSocket));
     socket->handle = INVALID_SOCKET;
     if (!ciBufferInit(&socket->input)) {
@@ -170,11 +170,11 @@ BOOL ciSocketInit(ChatSocket *socket, const char *name) {
 BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
     u32 ip;
     ChatSocketAddress addr;
-    ASSERT_SOCKET(socket, sStr_ciSocketConnect, 216);
-    ASSERT(address, sStr_ServerAddressNeNULL_2, sStr_ciSocketConnect, 217);
-    ASSERT(port >= 0, sStr_PortGe0, sStr_ciSocketConnect, 218);
-    ASSERT(port <= 65535, sStr_PortLeUSHRT_MAX, sStr_ciSocketConnect, 219);
-    ASSERT(socket->state == ciNotConnected, sStr_SockConnectStateEqCiNotConnected, sStr_ciSocketConnect, 220);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketConnect, 216);
+    ASSERT(address, gChatStr_ServerAddressNeNULL_2, gChatStr_ciSocketConnect, 217);
+    ASSERT(port >= 0, gChatStr_PortGe0, gChatStr_ciSocketConnect, 218);
+    ASSERT(port <= 65535, gChatStr_PortLeUSHRT_MAX, gChatStr_ciSocketConnect, 219);
+    ASSERT(socket->state == ciNotConnected, gChatStr_SockConnectStateEqCiNotConnected, gChatStr_ciSocketConnect, 220);
     strncpy(socket->host, address, 255);
     socket->host[254] = 0;
     ip = gsSocketInetAddr(address);
@@ -204,7 +204,7 @@ BOOL ciSocketConnect(ChatSocket *socket, const char *address, int port) {
 // Closes the socket and frees its buffers and the last message.
 void ciSocketDisconnect(ChatSocket *socket) {
     int i;
-    ASSERT_SOCKET(socket, sStr_ciSocketDisconnect, 283);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketDisconnect, 283);
     if (socket->handle != INVALID_SOCKET) {
         gsSocketShutdown(socket->handle, 2);
         gsSocketClose(socket->handle);
@@ -243,8 +243,8 @@ static void ciSocketSelect(int handle, BOOL *readable, BOOL *writable, BOOL *exc
 
 // Sends as much of the output buffer as the socket takes (1024 bytes at a time).
 void ciSocketThinkSend(ChatSocket *socket) {
-    ASSERT_SOCKET(socket, sStr_ciSocketThinkSend, 340);
-    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkSend, 341);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketThinkSend, 340);
+    ASSERT(socket->state == ciConnected, gChatStr_SockConnectStateEqCiConnected, gChatStr_ciSocketThinkSend, 341);
     while (socket->output.length > 0) {
         BOOL writable;
         int sent;
@@ -266,8 +266,8 @@ void ciSocketThinkRecv(ChatSocket *socket) {
     BOOL readable;
     int received, length;
     u8 *data;
-    ASSERT_SOCKET(socket, sStr_ciSocketThinkRecv, 378);
-    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThinkRecv, 379);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketThinkRecv, 378);
+    ASSERT(socket->state == ciConnected, gChatStr_SockConnectStateEqCiConnected, gChatStr_ciSocketThinkRecv, 379);
     for (;;) {
         ciSocketSelect(socket->handle, &readable, NULL, NULL);
         if (!readable) {
@@ -293,8 +293,8 @@ void ciSocketThinkRecv(ChatSocket *socket) {
 
 // Sends and receives.
 void ciSocketThink(ChatSocket *socket) {
-    ASSERT_SOCKET(socket, sStr_ciSocketThink, 446);
-    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketThink, 447);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketThink, 446);
+    ASSERT(socket->state == ciConnected, gChatStr_SockConnectStateEqCiConnected, gChatStr_ciSocketThink, 447);
     if (socket->state == ciDisconnected) {
         return;
     }
@@ -307,9 +307,9 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
     int length;
     u8 *data;
     int start;
-    ASSERT_SOCKET(socket, sStr_ciSocketSend, 472);
-    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSend, 473);
-    ASSERT(line, sStr_BufferNeNULL_2, sStr_ciSocketSend, 474);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketSend, 472);
+    ASSERT(socket->state == ciConnected, gChatStr_SockConnectStateEqCiConnected, gChatStr_ciSocketSend, 473);
+    ASSERT(line, gChatStr_BufferNeNULL_2, gChatStr_ciSocketSend, 474);
     if (socket->state == ciDisconnected) {
         return TRUE;
     }
@@ -339,8 +339,8 @@ BOOL ciSocketSend(ChatSocket *socket, const char *line) {
 BOOL ciSocketSendf(ChatSocket *socket, const char *format, ...) {
     va_list args;
     int length;
-    ASSERT_SOCKET(socket, sStr_ciSocketSendf, 531);
-    ASSERT(socket->state == ciConnected, sStr_SockConnectStateEqCiConnected, sStr_ciSocketSendf, 532);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketSendf, 531);
+    ASSERT(socket->state == ciConnected, gChatStr_SockConnectStateEqCiConnected, gChatStr_ciSocketSendf, 532);
     if (socket->state == ciDisconnected) {
         return TRUE;
     }
@@ -359,7 +359,7 @@ BOOL ciParseUser(char *prefix, ChatMessage *message) {
     char *user = NULL, *host = NULL, *p;
     int nickLength = 0, userLength = 0, hostLength = 0;
     if (!prefix || !*(volatile char *)prefix) {
-        __msl_assertion_failed(sStr_0_12, sStr_ChatSocketC, sStr_ciParseUser, 562);
+        __msl_assertion_failed(gChatStr_0_12, gChatStr_ChatSocketC, gChatStr_ciParseUser, 562);
         return FALSE;
     }
     p = prefix;
@@ -438,8 +438,8 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
     char *trailing;
     char *word;
     char *copy;
-    ASSERT(params, sStr_PTextNeNULL, sStr_ciParseParam, 673);
-    ASSERT(message, sStr_MessageNeNULL_3, sStr_ciParseParam, 674);
+    ASSERT(params, gChatStr_PTextNeNULL, gChatStr_ciParseParam, 673);
+    ASSERT(message, gChatStr_MessageNeNULL_3, gChatStr_ciParseParam, 674);
     copy = DWCi_GsMalloc(strlen(params) + 1);
     if (!copy) {
         return FALSE;
@@ -449,20 +449,20 @@ BOOL ciParseParam(const char *params, ChatMessage *message) {
         copy[0] = 0;
         trailing = copy + 1;
     } else {
-        trailing = strstr(copy, sStr_SpaceColon_2);
+        trailing = strstr(copy, gChatStr_SpaceColon_2);
         if (trailing) {
             *trailing = 0;
             trailing += 2;
         }
     }
-    word = strtok(copy, sStr_Space_4);
+    word = strtok(copy, gChatStr_Space_4);
     if (word) {
         do {
             if (!ciAddParam(word, message)) {
                 DWCi_GsFree(copy);
                 return FALSE;
             }
-            word = strtok(NULL, sStr_Space_4);
+            word = strtok(NULL, gChatStr_Space_4);
         } while (word);
     }
     if (trailing && !ciAddParam(trailing, message)) {
@@ -478,7 +478,7 @@ BOOL ciParseMessage(ChatSocket *socket, char *line) {
     int prefixLength = 0, commandLength = 0, middleLength = 0, trailingLength = 0, length;
     char *start;
     if (!line || !*line) {
-        __msl_assertion_failed(sStr_0_12, sStr_ChatSocketC, sStr_ciParseMessage, 740);
+        __msl_assertion_failed(gChatStr_0_12, gChatStr_ChatSocketC, gChatStr_ciParseMessage, 740);
         return FALSE;
     }
     length = strlen(line);
@@ -654,7 +654,7 @@ static BOOL ciSocketParseNextLine(ChatSocket *socket) {
 
 // Returns the next line received from the server, or NULL.
 ChatMessage *ciSocketRecv(ChatSocket *socket) {
-    ASSERT_SOCKET(socket, sStr_ciSocketRecv, 1001);
+    ASSERT_SOCKET(socket, gChatStr_ciSocketRecv, 1001);
     if (!socket->input.length) {
         return NULL;
     }

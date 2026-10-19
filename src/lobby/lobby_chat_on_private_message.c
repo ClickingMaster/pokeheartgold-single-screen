@@ -40,9 +40,9 @@ typedef struct {
 } Work;
 
 extern Work *gLobbyChatManager;
-extern char sStr_SERVER[];
-extern char sStr_ExcessFlood[];
-extern char sStr_SpaceColon[];
+extern char gLobbyStr_SERVER[];
+extern char gLobbyStr_ExcessFlood[];
+extern char gLobbyStr_SpaceColon[];
 extern void LobbyString_InitFromCStr(Text *, char *);
 extern int LobbyString_CompareNoCase(Text *, Text *, int);
 extern void LobbyString_Destroy(Text *);
@@ -87,16 +87,16 @@ void LobbyChat_OnPrivateMessage(void *chat, char *nick, char *message, int type,
     if (gLobbyChatManager && gLobbyChatManager->state == 5) {
         return;
     }
-    serverKey = sStr_SERVER;
+    serverKey = gLobbyStr_SERVER;
     serverCmp = Compare(serverKey, nick, &frame.nickStr, &frame.serverStr, 6);
     if (serverCmp == 0) {
-        floodKey = sStr_ExcessFlood;
+        floodKey = gLobbyStr_ExcessFlood;
         floodCmp = Compare(floodKey, message, &frame.messageStr, &frame.floodStr, 12);
         if (floodCmp != 0) {
             return;
         }
         LobbyString_InitFromCStr(&frame.text, message);
-        LobbyString_InitFromCStr(&frame.separator, sStr_SpaceColon);
+        LobbyString_InitFromCStr(&frame.separator, gLobbyStr_SpaceColon);
         LobbyChat_SplitString(&frame.vector, &frame.text, &frame.separator, 0);
         LobbyString_Destroy(&frame.separator);
         LobbyString_Destroy(&frame.text);

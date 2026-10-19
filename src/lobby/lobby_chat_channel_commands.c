@@ -55,7 +55,7 @@ int LobbyChat_SendUserMessage(int userId, const char *message) {
         return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
     LobbyChat_GetUserNick(&nick, manager, userId);
-    if (StrEqC(&nick, sStr_Empty_17)) {
+    if (StrEqC(&nick, gLobbyStr_Empty_17)) {
         LobbyString_Destroy(&nick);
         return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
@@ -75,14 +75,14 @@ int LobbyChat_SetChannelKey(const char *channel, int userId, const char *key, co
     if (strlen(value) + 1 > 400 || strlen(key) + 1 > 20) {
         return LOBBY_CHAT_RESULT_INVALID_PARAM;
     }
-    LobbyString_InitFromCStr(&nick, sStr_Empty_17);
+    LobbyString_InitFromCStr(&nick, gLobbyStr_Empty_17);
     if (userId == -1) {
-        LobbyString_AssignCStr(&nick, sStr_Empty_17);
+        LobbyString_AssignCStr(&nick, gLobbyStr_Empty_17);
     } else {
         LobbyChat_GetUserNick(&userNick, gLobbyChatManager, userId);
         LobbyString_Assign(&nick, &userNick);
         LobbyString_Destroy(&userNick);
-        if (StrEqC(&nick, sStr_Empty_17)) {
+        if (StrEqC(&nick, gLobbyStr_Empty_17)) {
             LobbyString_Destroy(&nick);
             return LOBBY_CHAT_RESULT_INVALID_PARAM;
         }
