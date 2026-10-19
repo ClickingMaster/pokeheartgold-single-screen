@@ -103,26 +103,26 @@ enum VsRecorderBoxDataViewShowStep {
 };
 
 // window position and size in tiles
-typedef struct VsRecorderWindowRect {
+typedef struct VsRecorderBoxWindowRect {
     u8 x;
     u8 y;
     u8 width;
     u8 height;
-} VsRecorderWindowRect;
+} VsRecorderBoxWindowRect;
 
 typedef struct VsRecorderMsgIdPair {
     u32 msgIds[2];
 } VsRecorderMsgIdPair;
 
-extern const VsRecorderWindowRect ov40_02245268[];                           // box list title; the box list buttons' message ids follow at +0x14
-extern const TouchscreenHitbox sVsRecorderBoxDataHitboxes[];                 // box: next Pokemon, back
-extern const VsRecorderWindowRect sVsRecorderBoxListButtonWindows[];         // box list buttons (2)
-extern const TouchscreenHitbox sVsRecorderBoxListHitboxes[];                 // box list: profile button, list, back
-extern const u32 sVsRecorderBoxDataWindowFillColors[];                       // fill colours of VsRecorderBoxData.windows
-extern const VsRecorderWindowRect sVsRecorderBoxDataWindows[];               // VsRecorderBoxData.windows
-extern const TouchscreenHitbox sVsRecorderBoxDataSendHitboxes[];             // send: previous box, next box, exit, send
-extern const VsRecorderWindowRect sVsRecorderBoxDataCategoryButtonWindows[]; // category buttons (6)
-extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];         // categories (6) and cancel
+extern const VsRecorderBoxWindowRect ov40_02245268[];                           // box list title; the box list buttons' message ids follow at +0x14
+extern const TouchscreenHitbox sVsRecorderBoxDataHitboxes[];                    // box: next Pokemon, back
+extern const VsRecorderBoxWindowRect sVsRecorderBoxListButtonWindows[];         // box list buttons (2)
+extern const TouchscreenHitbox sVsRecorderBoxListHitboxes[];                    // box list: profile button, list, back
+extern const u32 sVsRecorderBoxDataWindowFillColors[];                          // fill colours of VsRecorderBoxData.windows
+extern const VsRecorderBoxWindowRect sVsRecorderBoxDataWindows[];               // VsRecorderBoxData.windows
+extern const TouchscreenHitbox sVsRecorderBoxDataSendHitboxes[];                // send: previous box, next box, exit, send
+extern const VsRecorderBoxWindowRect sVsRecorderBoxDataCategoryButtonWindows[]; // category buttons (6)
+extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];            // categories (6) and cancel
 
 // ---- dress-up photo screens: server responses
 
@@ -723,7 +723,7 @@ BOOL VsRecorder_BoxDataViewQuit(VsRecorderWork *work) {
 
 void VsRecorder_CreateBoxDataWindows(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderWindowRect *rect = sVsRecorderBoxDataWindows;
+    const VsRecorderBoxWindowRect *rect = sVsRecorderBoxDataWindows;
     const u32 *fill = sVsRecorderBoxDataWindowFillColors;
     int baseTile = 0x101;
     int i;
@@ -742,7 +742,7 @@ void VsRecorder_CreateBoxDataWindows(VsRecorderWork *work) {
 
 void VsRecorder_CreateBoxDataCategoryButtons(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderWindowRect *rect = sVsRecorderBoxDataCategoryButtonWindows;
+    const VsRecorderBoxWindowRect *rect = sVsRecorderBoxDataCategoryButtonWindows;
     int baseTile = 1;
     u32 i;
 
@@ -1176,7 +1176,7 @@ BOOL VsRecorder_BoxDataViewSelectCategory(VsRecorderWork *work) {
 void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {
     VsRecorderMsgIdPair msgIds;
     Window *window;
-    const VsRecorderWindowRect *rect;
+    const VsRecorderBoxWindowRect *rect;
     VsRecorderBoxData *boxData = *(VsRecorderBoxData *volatile *)&work->screenWork;
     u32 baseTile;
     int i;
@@ -1257,7 +1257,7 @@ void VsRecorder_CreateBoxListTitle(VsRecorderWork *work) {
     VsRecorderBoxData *boxData;
     int baseTile;
     Window *window;
-    const VsRecorderWindowRect *rect;
+    const VsRecorderBoxWindowRect *rect;
     String *str;
     u32 textX;
     u32 textY;

@@ -97,11 +97,6 @@ typedef struct VsRecorderMsgIdSet {
     u32 msgIds[6];
 } VsRecorderMsgIdSet;
 
-typedef struct VsRecorderIconPos {
-    s16 x;
-    s16 y;
-} VsRecorderIconPos;
-
 typedef struct VsRecorderIconLayout {
     VsRecorderIconPos pos[2][12];
 } VsRecorderIconLayout;

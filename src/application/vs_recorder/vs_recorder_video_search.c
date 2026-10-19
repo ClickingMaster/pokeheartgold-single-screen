@@ -138,20 +138,6 @@ enum VsRecorderVideoSearchBackToResultsStep {
     SEARCH_BACK_TO_RESULTS_STEP_DONE,
 };
 
-typedef struct VsRecorderIconPos {
-    s16 x;
-    s16 y;
-} VsRecorderIconPos;
-
-typedef struct VsRecorderIconPositions {
-    VsRecorderIconPos pos[5 * 6];
-} VsRecorderIconPositions;
-
-// party slots in icon order, by VsRecorder_HeaderUsesThreeMonLayout (0: singles, 1: the other side starts at the fourth icon)
-typedef struct VsRecorderPartyIconOrder {
-    int slots[2][6];
-} VsRecorderPartyIconOrder;
-
 typedef struct VsRecorderWindowTemplate {
     int x;
     int y;

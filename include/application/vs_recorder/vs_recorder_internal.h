@@ -223,6 +223,24 @@ typedef struct VsRecorderProfile {
     Window windows[8];
 } VsRecorderProfile; // size 0x8C
 
+typedef struct VsRecorderIconPos {
+    s16 x;
+    s16 y;
+} VsRecorderIconPos;
+
+typedef struct VsRecorderIconPositions {
+    VsRecorderIconPos pos[5 * 6];
+} VsRecorderIconPositions;
+
+// party slots in icon order, by VsRecorder_HeaderUsesThreeMonLayout (0: singles, 1: the other side starts at the fourth icon)
+typedef struct VsRecorderPartyIconOrder {
+    int slots[2][6];
+} VsRecorderPartyIconOrder;
+
+typedef struct VsRecorderSlotButtonTable {
+    int values[4];
+} VsRecorderSlotButtonTable;
+
 // one entry of a list window: message, value (message / month / species) and a ranking time
 typedef struct VsRecorderListEntry {
     u32 msgId;

@@ -152,27 +152,9 @@ enum VsRecorderVideoListResumeStep {
     VIDEO_LIST_RESUME_STEP_DONE,
 };
 
-typedef struct VsRecorderIconPos {
-    s16 x;
-    s16 y;
-} VsRecorderIconPos;
-
-typedef struct VsRecorderIconPositions {
-    VsRecorderIconPos pos[5 * 6];
-} VsRecorderIconPositions;
-
-typedef struct VsRecorderSlotButtonTable {
-    int values[4];
-} VsRecorderSlotButtonTable;
-
 typedef struct VsRecorderTitleMsgIds {
     u32 msgIds[3];
 } VsRecorderTitleMsgIds;
-
-// party slots in icon order, by VsRecorder_HeaderUsesThreeMonLayout (0: singles, 1: the other side starts at the fourth icon)
-typedef struct VsRecorderPartyIconOrder {
-    int slots[2][6];
-} VsRecorderPartyIconOrder;
 
 extern const TouchscreenHitbox sVsRecorderVideoListOpenHitbox;
 extern const TouchscreenHitbox sVsRecorderVideoListExitHitbox;

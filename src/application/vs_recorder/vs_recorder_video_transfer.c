@@ -30,10 +30,6 @@
 // and what these screens share: the found video's details, the save slots, the buttons and the touch callbacks,
 // and the server response handlers of the video requests. All of them use VsRecorderVideoSearch.
 
-typedef struct VsRecorderSlotButtonTable {
-    int values[4];
-} VsRecorderSlotButtonTable;
-
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotMsgIds;
 extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotAnims;
 extern const TouchscreenHitbox sVsRecorderSearchSaveSlotHitboxes[4];
