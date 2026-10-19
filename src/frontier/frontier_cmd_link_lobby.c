@@ -26,7 +26,6 @@
 // Battle Tower started from it (FrontierFieldSystem).
 
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-BOOL BattleTowerLink_SendTrainers(FrontierFieldSystem *frontierFsys);
 FrontierLinkLobby *FrontierLinkLobby_New(SaveData *saveData);
 
 static BOOL FrontierScriptNative_WaitLinkLobbyReceive(FrontierScriptContext *ctx);

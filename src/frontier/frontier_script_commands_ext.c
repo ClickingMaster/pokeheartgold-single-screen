@@ -10,6 +10,7 @@
 #include "frontier/frontier_cmd_factory.h"
 #include "frontier/frontier_cmd_hall.h"
 #include "frontier/frontier_cmd_sound.h"
+#include "frontier/frontier_link_lobby.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_particles.h"
 #include "frontier/frontier_scrcmd.h"
@@ -1570,22 +1571,22 @@ BOOL FrtCmd_LinkSyncOrAbort(FrontierScriptContext *ctx) {
 // As FrontierScriptNative_WaitLinkSync, but also stops waiting (system->syncAborted) when the partner's data says so.
 static BOOL FrontierScriptNative_WaitLinkSyncOrAbort(FrontierScriptContext *ctx) {
     BOOL result;
-    u8 *data;
+    FrontierLinkLobby *lobby;
     if (Comm_CountConnected() < 2) {
         result = TRUE;
     } else {
         result = LinkSync_IsSynced((u8)ctx->data[0]);
     }
     if (!result) {
-        data = Frontier_GetData(ctx->frontierSystem->frontierWork);
-        if (data != NULL && data[0x6F] != 0) {
-            if (*(u16 *)(data + 0x74) == 1 || *(u16 *)(data + 0x74) == 0xFFFE) {
+        lobby = Frontier_GetData(ctx->frontierSystem->frontierWork);
+        if (lobby != NULL && lobby->receiveCount != 0) {
+            if (lobby->partnerValue74 == 1 || lobby->partnerValue74 == 0xFFFE) {
                 ctx->frontierSystem->syncAborted = TRUE;
                 result = TRUE;
-            } else if (*(u16 *)(data + 0x74) == 0) {
+            } else if (lobby->partnerValue74 == 0) {
                 if (PlayerProfile_GetVersion(CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1)) == VERSION_PLATINUM) {
-                    data[0x6F] = 0;
-                    FrontierLinkLobby_SendValue74(data, 0);
+                    lobby->receiveCount = 0;
+                    FrontierLinkLobby_SendValue74(lobby, 0);
                 }
             }
         }

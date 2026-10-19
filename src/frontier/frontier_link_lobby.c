@@ -5,6 +5,7 @@
 #include "frontier/frontier.h"
 
 #include "bag.h"
+#include "battle_frontier_communication.h"
 #include "error_handling.h"
 #include "field_system.h"
 #include "heap.h"
@@ -24,11 +25,6 @@ typedef struct FrontierLinkLobbyGlobals {
     u8 filler_04[0xC];
 } FrontierLinkLobbyGlobals;
 
-extern BOOL FrontierLinkLobby_SendFacility(FrontierLinkLobby *lobby);
-extern BOOL FrontierLinkLobby_SendChoice(FrontierLinkLobby *lobby, u16 choice);
-extern BOOL FrontierLinkLobby_SendParty(FrontierLinkLobby *lobby, u16 first, u16 second);
-extern BOOL FrontierLinkLobby_SendValue74(FrontierLinkLobby *lobby, u16 value);
-extern BOOL FrontierLinkLobby_SendValue71(FrontierLinkLobby *lobby, u16 value);
 extern const u8 gFrontierLinkLobbySummaryPages[];
 
 void FrontierLinkLobby_New(SaveData *saveData);

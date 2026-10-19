@@ -8,9 +8,16 @@ struct BattleFactoryLinkMessage;
 struct BattleHallApp;
 struct BattleCastlePartyApp;
 struct BattleCastleOpponentApp;
+struct FrontierFieldSystem;
+struct FrontierLinkLobby;
 
 void FrontierLink_RegisterCommands(void *data);
-BOOL FrontierLinkLobby_SendValue74(u8 *data, u16 value);
+BOOL BattleTowerLink_SendTrainers(struct FrontierFieldSystem *);
+BOOL FrontierLinkLobby_SendFacility(struct FrontierLinkLobby *);
+BOOL FrontierLinkLobby_SendChoice(struct FrontierLinkLobby *, u16);
+BOOL FrontierLinkLobby_SendParty(struct FrontierLinkLobby *, u16, u16);
+BOOL FrontierLinkLobby_SendValue74(struct FrontierLinkLobby *lobby, u16 value);
+BOOL FrontierLinkLobby_SendValue71(struct FrontierLinkLobby *, u16);
 
 // Link command handlers of the facility apps
 void BattleFactory_ReceivePing(int netId);
