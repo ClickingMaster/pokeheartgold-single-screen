@@ -221,7 +221,7 @@ u8 BattleFactory_GetOpponentMonCount(int type, int both) {
 }
 
 // The caller passes excluded set ids and excluded items, but both lists are read from excludedSetIds.
-void BattleFactory_GenerateRentalSets(int round, int levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u16 tradeCount, const u16 *excludedSetIds, const u16 *excludedItems) {
+void BattleFactory_GenerateRentalSets(int round, int levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u16 tradeCount, const u16 *excludedSetIds, const u16 *excludedItems) {
     const BattleFactorySetRange *range = BattleFactory_GetRentalSetRange(round, levelMode);
 
     if (excludedSetIds == NULL) {
@@ -229,10 +229,10 @@ void BattleFactory_GenerateRentalSets(int round, int levelMode, u16 *setIds, Fro
     } else {
         BattleFactory_PickSetIds(excludedSetIds, excludedSetIds, 6, 6, setIds, HEAP_ID_FIELD2, range, tradeCount, ivs);
     }
-    FrontierMon_GenerateList(mons, setIds, ivs, NULL, otIds, 6, HEAP_ID_FIELD2, FACTORY_SETS_NARC);
+    FrontierMon_GenerateList(mons, setIds, ivs, NULL, outPids, 6, HEAP_ID_FIELD2, FACTORY_SETS_NARC);
 }
 
-void BattleFactory_GenerateTrainerSets(u8 count, u16 trainerId, u8 levelMode, const FrontierMon *partyMons, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, int numPartyMons) {
+void BattleFactory_GenerateTrainerSets(u8 count, u16 trainerId, u8 levelMode, const FrontierMon *partyMons, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *outPids, int numPartyMons) {
     FrontierMon partyMon;
     u16 species[12];
     u16 items[12];
@@ -245,7 +245,7 @@ void BattleFactory_GenerateTrainerSets(u8 count, u16 trainerId, u8 levelMode, co
         items[i] = partyMon.item;
     }
     BattleFactory_PickSetIds(species, items, numPartyMons, count, setIds, HEAP_ID_FIELD2, range, 0, ivs);
-    FrontierMon_GenerateList(mons, setIds, ivs, NULL, otIds, count, HEAP_ID_FIELD2, FACTORY_SETS_NARC);
+    FrontierMon_GenerateList(mons, setIds, ivs, NULL, outPids, count, HEAP_ID_FIELD2, FACTORY_SETS_NARC);
 }
 
 BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunchArgs *args) {

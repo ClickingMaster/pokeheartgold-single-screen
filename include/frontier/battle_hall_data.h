@@ -35,31 +35,31 @@ typedef struct BattleHallData {
     u16 trainerIds[HALL_TRAINER_COUNT]; // [battleNo * 2] and its partner [battleNo * 2 + 1]
     FrontierTrainerData trainers[2];
     u8 partySlots[2];
-    u8 filler_262[2];
+    u8 padding_262[2];
     Party *party;
     u16 setIds[HALL_TRAINER_COUNT]; // like trainerIds
     FrontierMon opponentMons[HALL_OPPONENT_COUNT];
-    u8 filler_370[0x382];
+    u8 padding_370[0x382];
     u16 cursor;  // board cell picked in the board app
     u8 cellType; // Pokemon type of the cell
     u8 cell;     // cursor clamped to the ranked cells
-    u8 filler_6F6[2];
+    u8 padding_6F6[2];
     void *challenge;
     SaveData *saveData;
     BattleSetup *battleSetup;
     u8 typeRanks[4][HALL_TYPE_RANKS_SIZE]; // per type
     u16 heldItems[2];                      // of the party, given back after the challenge
     u16 linkBuffer[22];
-    u8 filler_758[0x2C];
+    u8 padding_758[0x2C];
     u8 linkMonBuffer[HALL_LINK_MON_BUFFER_SIZE];
     u8 linkRecvMon[2][HALL_LINK_MON_BUFFER_SIZE];
     u16 partnerLevel;
-    u8 filler_D86[2];
+    u8 padding_D86[2];
     u8 partnerValue;
-    u8 filler_D89[3];
+    u8 padding_D89[3];
     Pokemon *partnerMon;
     u8 linkMessageCount;
-    u8 filler_D91[7];
+    u8 padding_D91[7];
 } BattleHallData;
 
 typedef struct BattleHallAppArgs {
@@ -72,7 +72,7 @@ typedef struct BattleHallAppArgs {
     BattleHallData *data;
     u16 *partnerLevel;
     u16 battleNo; // the win streak
-    u8 filler_1A[6];
+    u8 padding_1A[6];
 } BattleHallAppArgs;
 
 BattleHallData *BattleHallData_Alloc(SaveData *saveData, BOOL resume, u8 type, u8 slot0, u8 slot1);

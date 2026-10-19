@@ -40,30 +40,30 @@ typedef struct BattleCastleData {
     u8 opponentIVs[CASTLE_OPPONENT_COUNT];
     u32 opponentPersonalities[CASTLE_OPPONENT_COUNT];
     FrontierMon opponentMons[CASTLE_OPPONENT_COUNT];
-    u8 filler_368[2];
+    u8 padding_368[2];
     u16 heldItems[CASTLE_PARTY_SIZE]; // of the party, given back after the challenge
     u8 opponentChecked[4];            // the castle apps' result
     u8 opponentLevelChanges[4];
     u8 opponentStatsBought[4];
     u8 opponentMovesBought[4];
     u16 selections[6];
-    u8 filler_38C[8];
+    u8 padding_38C[8];
     u16 startPP[4][4]; // PP of each move when the battle started
-    u8 filler_3B4[0xC];
+    u8 padding_3B4[0xC];
     u16 linkBuffer[40];
     u8 linkMonBuffer[CASTLE_LINK_MON_BUFFER_SIZE];
     u8 linkRecvMon[2][CASTLE_LINK_MON_BUFFER_SIZE];
     u8 partnerValueA;
     u8 partnerValueB;
     u16 partnerRound;
-    u8 filler_A14[2];
+    u8 padding_A14[2];
     u16 partnerWinStreak;
     u8 choice;
     u8 partnerChoice;
     u8 linkMessageCount;
     u8 decidedChoice; // + 6 when the partner's choice was taken
     u16 partnerPoints;
-    u8 filler_A1E[2];
+    u8 padding_A1E[2];
     u16 *resultVar;
     u32 unk_A24;
 } BattleCastleData;
@@ -71,7 +71,7 @@ typedef struct BattleCastleData {
 typedef struct BattleCastleAppArgs {
     SaveData *saveData;
     u8 type;
-    u8 filler_05[3];
+    u8 padding_05[3];
     u8 checked[4];
     u8 levelChanges[4];
     u8 statsBought[4];
@@ -79,10 +79,10 @@ typedef struct BattleCastleAppArgs {
     Party *playerParty;
     Party *opponentParty;
     u16 selection; // written by the party app
-    u8 filler_22[2];
+    u8 padding_22[2];
     BattleCastleData *data;
     u16 partnerPoints;
-    u8 filler_2A[6];
+    u8 padding_2A[6];
 } BattleCastleAppArgs;
 
 BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 type, int slot0, u16 slot1, u16 slot2, u16 *resultVar);

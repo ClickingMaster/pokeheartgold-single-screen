@@ -3359,7 +3359,7 @@ void BattleAnimBattlerSprites_Free2(BattleAnimBattlerSprites *sprites, int battl
     Heap_Free(sprites);
 }
 
-u8 Ov07UnkFE70_GetCurrentValue(BattleAnimIndexedBytes *data) {
+u8 BattleAnimIndexedBytes_GetCurrentValue(BattleAnimIndexedBytes *data) {
     GF_ASSERT(data != NULL);
     return data->values[data->index];
 }

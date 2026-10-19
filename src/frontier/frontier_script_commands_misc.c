@@ -40,7 +40,7 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
         GameStats_Add(Save_GameStats_Get(args->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, *dst);
         break;
     case 0x37:
-        *dst = ov80_0223558C(data, (u8)value);
+        *dst = BattleTower_GetOverworldSprite(data, (u8)value);
         break;
     case TOWER_ACTION_GET_BATTLE_NUMBER:
         *dst = FrontierFieldSystem_GetFrontierBattleNumber(data);
@@ -52,7 +52,7 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
         *dst = FrontierFieldSystem_HasWonSet(data);
         break;
     case 0x24:
-        *dst = Overlay80Counter_GetSumCapped(data);
+        *dst = BattleTower_GetWinStreak(data);
         break;
     case TOWER_ACTION_GET_MODE:
         *dst = FrontierFieldSystem_GetBattleTowerMode(data);
@@ -95,14 +95,14 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-u32 ov80_0223558C(void *data, u32 mode) {
+u32 BattleTower_GetOverworldSprite(void *data, u32 mode) {
     u8 *p = data;
     if (mode == 2) {
         return ((u32)p[0x10] << 24) >> 29;
     }
     if (mode == 1) {
         if (p[0xF] == 2) {
-            return ov80_0223C034[((u32)p[0x10] << 24) >> 29];
+            return gBattleTowerAllySprites[((u32)p[0x10] << 24) >> 29];
         }
         if (p[0x12] != 0) {
             return 0x61;

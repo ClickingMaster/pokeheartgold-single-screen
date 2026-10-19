@@ -47,7 +47,7 @@ u32 BattleTower_IncBattleNumber(void *data) {
     return tower->currentBattleNumber;
 }
 
-u32 Overlay80Counter_GetSumCapped(void *data) {
+u32 BattleTower_GetWinStreak(void *data) {
     FrontierFieldSystem *tower = data;
     u32 streak = *(volatile u8 *)&tower->curWinStreak;
     u32 result = tower->currentBattleInSession + streak;

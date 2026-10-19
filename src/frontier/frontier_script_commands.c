@@ -72,7 +72,7 @@ static BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitPaletteFade(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitMenu(FrontierScriptContext *ctx);
 static BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx);
-static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId);
+static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *moveQueue, u8 *runningCount, enum HeapID heapId);
 static BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx);
 
 static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
@@ -586,12 +586,12 @@ BOOL FrtCmd_ApplyMovement(FrontierScriptContext *ctx) {
     return FALSE;
 }
 
-static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *unk3, u8 *runningCount, enum HeapID heapId) {
+static void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *script, void *moveQueue, u8 *runningCount, enum HeapID heapId) {
     FrontierMovementTask *data = Heap_Alloc(heapId, sizeof(FrontierMovementTask));
     MI_CpuFill8(data, 0, sizeof(FrontierMovementTask));
     data->object = object;
     data->script = (const u16 *)script; // (opcode, count) pairs
-    data->moveQueue = unk3;
+    data->moveQueue = moveQueue;
     data->id = id;
     data->runningCount = runningCount;
     if (object->movementTask != NULL) {

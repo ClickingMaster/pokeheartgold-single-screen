@@ -22,7 +22,7 @@
 
 typedef struct FrontierLinkLobbyGlobals {
     FrontierLinkLobby *lobby;
-    u8 filler_04[0xC];
+    u8 padding_04[0xC];
 } FrontierLinkLobbyGlobals;
 
 extern const u8 gFrontierLinkLobbySummaryPages[];

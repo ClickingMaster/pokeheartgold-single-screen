@@ -333,7 +333,7 @@ void BattleAnimSystem_LoadBattleBgTiles(BattleAnimSystem *system, GFBgLayer laye
 void BattleAnimSystem_LoadBattleBgPalette(BattleAnimSystem *system);
 BOOL BattleAnimSystem_ShouldFlipSide(BattleAnimSystem *system, int side);
 u32 BattleAnimSystem_GetBackgroundFile(u32 bgId, int kind);
-u8 Ov07UnkFE70_GetCurrentValue(BattleAnimIndexedBytes *data);
+u8 BattleAnimIndexedBytes_GetCurrentValue(BattleAnimIndexedBytes *data);
 void BattleAnimEmitterCb_None(SPLEmitter *emitter);
 SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BOOL loadNow);
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow);

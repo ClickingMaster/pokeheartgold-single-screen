@@ -161,13 +161,13 @@ enum BallCaptureState {
 
 extern const BallThrowFunc sBallThrowCaptureStateFuncs[];
 extern const s16 gBallThrowBounceSteps[]; // bounce steps: y offset, then the animation frame
-extern const u16 ov07_02237310[];
+extern const u16 gBallThrowBounceFrames[];
 // Per ball (BallAnim_GetBallTableIndex) tables
 extern const u32 gBallAnimSealParticles[][2]; // seal particle resource
-extern const u32 ov07_02237390[][2]; // seal particle emitter count
+extern const u32 gBallAnimSealEmitterCounts[][2];
 extern const u32 gBallAnimBurstParticles[][3]; // burst particle resource
-extern const u32 ov07_02237470[][3]; // emitter skipped by the burst
-extern const u32 ov07_02237474[][3]; // burst particle emitter count
+extern const u32 gBallAnimBurstSkippedEmitters[][3];
+extern const u32 gBallAnimBurstEmitterCounts[][3];
 extern const u32 sBallSpriteResources[][4];
 extern const BallSealEmitDelays sBallSealEmitDelays;
 extern const BattleAnimEmitterCounts sBattleAnimEmitterCounts;
@@ -237,7 +237,7 @@ u32 BallAnim_GetSealParticleResource(int ball) {
 }
 
 u32 BallAnim_GetSealParticleEmitterCount(int ball) {
-    return ov07_02237390[BallAnim_GetBallTableIndex(ball)][0];
+    return gBallAnimSealEmitterCounts[BallAnim_GetBallTableIndex(ball)][0];
 }
 
 u32 BallAnim_GetBurstParticleResource(int ball) {
@@ -245,11 +245,11 @@ u32 BallAnim_GetBurstParticleResource(int ball) {
 }
 
 u32 BallAnim_GetBurstParticleEmitterCount(int ball) {
-    return ov07_02237474[BallAnim_GetBallTableIndex(ball)][0];
+    return gBallAnimBurstEmitterCounts[BallAnim_GetBallTableIndex(ball)][0];
 }
 
 u32 BallAnim_GetBurstSkippedEmitter(int ball) {
-    return ov07_02237470[BallAnim_GetBallTableIndex(ball)][0];
+    return gBallAnimBurstSkippedEmitters[BallAnim_GetBallTableIndex(ball)][0];
 }
 
 u32 BallAnim_GetSpriteResource(int ball, int index) {
@@ -905,7 +905,7 @@ BOOL BallThrow_CaptureStateBounce(BallThrow *data) {
         int index = data->stateFrames;
         int offset = index * 6;
         s16 dy = *(const s16 *)((const u8 *)gBallThrowBounceSteps + offset);
-        int frame = *(const u16 *)((const u8 *)ov07_02237310 + offset);
+        int frame = *(const u16 *)((const u8 *)gBallThrowBounceFrames + offset);
         ManagedSprite_SetAnimationFrame(data->managedSprite, frame);
         data->stateFrames++;
         for (int i = 0; i < 5; i++) {
@@ -1377,11 +1377,11 @@ void BallThrow_Task(SysTask *task, void *data) {
     }
 }
 
-BallThrow *BallThrow_New(BallThrowParams *unkStruct_134) {
-    BallThrow *data = Heap_Alloc(unkStruct_134->heapID, sizeof(BallThrow));
+BallThrow *BallThrow_New(BallThrowParams *ballParams) {
+    BallThrow *data = Heap_Alloc(ballParams->heapID, sizeof(BallThrow));
     MI_CpuFill8(data, 0, sizeof(BallThrow));
     GF_ASSERT(data != NULL);
-    data->params = *unkStruct_134;
+    data->params = *ballParams;
     data->step = 0;
     data->wobbleDir = 0;
     data->stateFrames = 0;

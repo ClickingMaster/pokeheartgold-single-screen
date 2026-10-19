@@ -69,7 +69,7 @@ void ArcadeChallenge_Clear(void *record);
 void ArcadeChallenge_SetSaved(void *record, int value);
 void ArcadeChallenge_SetField(void *record, int kind, u8 index, int unused, void *src);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 multiplayer);
+void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 multiplayer);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void FrontierTrainer_GetClassSprite(u8 value);
 
@@ -309,8 +309,8 @@ static void BattleArcadeData_InitNew(ArcadeContext *ctx) {
 static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
     FrontierMon frontierMons[6];
     u16 monIds[6];
-    u32 unkFlags[2];
-    u32 unkValues[6];
+    u32 ivs[2];
+    u32 personalities[6];
     int i;
     Pokemon *mon;
 
@@ -322,7 +322,7 @@ static void BattleArcadeData_InitResume(ArcadeContext *ctx) {
         monIds[i] = ArcadeChallenge_GetField((void *)ctx->challenge, ARCADE_CHALLENGE_SET_IDS, (u8)i, 0, 0);
         ctx->setIds[i] = monIds[i];
     }
-    FrontierMon_GenerateList(frontierMons, monIds, (u8 *)unkFlags, NULL, unkValues, 4, HEAP_ID_FIELD2, 205);
+    FrontierMon_GenerateList(frontierMons, monIds, (u8 *)ivs, NULL, personalities, 4, HEAP_ID_FIELD2, 205);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < 4; i++) {
         FrontierMon_ToPokemon(&frontierMons[i], mon, BattleArcade_GetMonLevel(ctx));

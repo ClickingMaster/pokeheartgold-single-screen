@@ -14,6 +14,6 @@ void BattleTower_GenerateOpponents(void *data, void *saveData);
 u32 BattleTower_GetTrainerSprite(void *data, u32 index);
 void BattleTower_SetPalmerDefeated(void *data, u32 value);
 u32 BattleTower_IncBattleNumber(void *data);
-u32 Overlay80Counter_GetSumCapped(void *data);
+u32 BattleTower_GetWinStreak(void *data);
 
 #endif

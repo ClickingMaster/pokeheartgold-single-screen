@@ -90,7 +90,7 @@ typedef struct BattleBagMenu {
     u8 buttonAnimButton;
     u8 buttonAnimActive : 4;
     u8 buttonAnimMode : 4;
-    u8 filler_1142[8];
+    u8 padding_1142[8];
     u8 state;
     u8 nextState;
     u8 page;

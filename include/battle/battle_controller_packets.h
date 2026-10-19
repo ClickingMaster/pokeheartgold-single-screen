@@ -44,7 +44,7 @@ typedef struct BattleControllerPacketPokemonSendOut {
     u16 movePPCur[MAX_MON_MOVES];
     u16 movePP[MAX_MON_MOVES];
     u16 nickname[POKEMON_NAME_LENGTH + 1];
-    u8 filler_46[2];
+    u8 padding_46[2];
     u32 partnerSelectedMonIndex;
     u32 isSubstitute;
     u16 allSpecies[BATTLER_MAX];
@@ -105,7 +105,7 @@ typedef struct BattleControllerPacketHealthbarSlideIn {
     u32 maxExp;
     u32 safariBallCount;
     u8 delay;
-    u8 filler_15[3];
+    u8 padding_15[3];
 } BattleControllerPacketHealthbarSlideIn;
 
 typedef struct BattleControllerPacketSelectCommand {
@@ -158,7 +158,7 @@ typedef struct BattleControllerPacketShowMonList {
     u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
     u32 trapped;
     u8 switchInFlag;
-    u8 filler_25[3];
+    u8 padding_25[3];
 } BattleControllerPacketShowMonList;
 
 typedef struct BattleControllerPacketYesNoBox {
@@ -189,7 +189,7 @@ typedef struct BattleControllerPacketHealthbarUpdate {
 
 typedef struct BattleControllerPacketExpBarUpdate {
     u8 command;
-    u8 filler_01[3];
+    u8 padding_01[3];
     s32 prevExp;
     s32 exp;
     s32 maxExp;
@@ -250,13 +250,13 @@ typedef struct BattleControllerPacketSwitchMessage {
 
 typedef struct BattleControllerPacketFirstSendOutMessage {
     u8 command;
-    u8 filler_01[3];
+    u8 padding_01[3];
     u8 selectedMonIndex[BATTLER_MAX];
 } BattleControllerPacketFirstSendOutMessage;
 
 typedef struct BattleControllerPacketSelectionMessage {
     u8 command;
-    u8 filler_01[3];
+    u8 padding_01[3];
     BattleMessage msg;
 } BattleControllerPacketSelectionMessage;
 
@@ -284,7 +284,7 @@ typedef struct BattleControllerPacketBattleMonToPartyMonCopy {
     u16 item;
     u16 moves[MAX_MON_MOVES];
     u8 movePPCur[MAX_MON_MOVES];
-    u8 filler_1A[2];
+    u8 padding_1A[2];
     u32 status2;
     u16 form;
     u16 unk_22;
@@ -345,7 +345,7 @@ typedef struct BattleControllerPacketRecordData {
 typedef struct BattleControllerPacketMoveSE {
     u8 command;
     u8 effectiveness;
-    u8 filler_02[2];
+    u8 padding_02[2];
 } BattleControllerPacketMoveSE;
 
 typedef struct BattleControllerPacketPlaySong {

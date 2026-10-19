@@ -11,16 +11,16 @@
 // What the linked players exchange in the frontier lobby before a link challenge: the facility, the streak and the chosen party.
 typedef struct FrontierLinkLobby {
     SaveData *saveData;
-    u8 filler_04[4];
+    u8 padding_04[4];
     u16 sendBuffer[20]; // link message being sent
-    u8 filler_30[0x28];
+    u8 padding_30[0x28];
     u8 partnerGender; // copied to the tower's linkAllyGender by FrtCmd_LinkLobbyStartTower
     u8 partnerChoice;
-    u8 filler_5A[0x10];
+    u8 padding_5A[0x10];
     u8 partySlots[LINK_LOBBY_PARTY_SIZE];
     u8 partnerFacility;
     u8 receiveCount; // link messages received (both players count)
-    u8 filler_70;
+    u8 padding_70;
     u8 partnerValue71;
     u16 partnerStreak;
     u16 partnerValue74;
@@ -28,15 +28,15 @@ typedef struct FrontierLinkLobby {
     u16 items[LINK_LOBBY_PARTY_SIZE];
     u16 partnerSpecies[LINK_LOBBY_PARTY_SIZE];
     u16 partnerItems[LINK_LOBBY_PARTY_SIZE];
-    u8 filler_96[2];
+    u8 padding_96[2];
     FieldSystem *fieldSystem;
-    u8 filler_9C;
+    u8 padding_9C;
     u8 appResult;
-    u8 filler_9E;
+    u8 padding_9E;
     u8 partySlot; // cursor of the party menu / summary
     u8 facility;
     u8 selectedOrder[2];
-    u8 filler_A3[5];
+    u8 padding_A3[5];
     PartyMenuArgs *partyMenuArgs;
     PokemonSummaryArgs *summaryArgs;
     u16 *resultVar; // script variable that receives the app result

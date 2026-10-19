@@ -36,12 +36,12 @@ typedef struct BattleFactoryData {
     u16 trainerIds[14]; // 7 per round, the second half for the partner
     FrontierTrainerData trainers[2];
     BattleFactoryMonSet rentals; // the player's rentals / trade candidates
-    u8 filler_3D0[2];
+    u8 padding_3D0[2];
     u16 opponentSetIds[FACTORY_OPPONENT_COUNT];
     u8 opponentIVs[FACTORY_OPPONENT_COUNT];
     u32 opponentPersonalities[FACTORY_OPPONENT_COUNT];
     FrontierMon opponentMons[FACTORY_OPPONENT_COUNT];
-    u8 filler_4D0[4];
+    u8 padding_4D0[4];
     Party *playerParty;
     Party *opponentParty;
     u16 selection[6]; // result of the factory app (picked rentals / trade slots)
@@ -51,16 +51,16 @@ typedef struct BattleFactoryData {
     BattleSetup *battleSetup;
     SysTask *scrollTask;
     u16 linkBuffer[30]; // outgoing link message
-    u8 filler_540[0x3C];
+    u8 padding_540[0x3C];
     u8 partnerValueA; // partner's value of link message 0x1A
     u8 partnerValueB; // partner's value of link message 0x1B
     u16 partnerRound;
     u16 partnerTradeCount;
     u16 partnerWinStreak;
     BattleFactoryMonSet partnerRentals; // generated for the partner in link multi battles
-    u8 filler_700[2];
+    u8 padding_700[2];
     u8 linkMessageCount;
-    u8 filler_703[5];
+    u8 padding_703[5];
 } BattleFactoryData;
 
 typedef struct BattleFactoryAppLaunchArgs {

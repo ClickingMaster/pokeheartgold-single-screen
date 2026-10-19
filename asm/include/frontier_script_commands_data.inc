@@ -355,7 +355,7 @@
 .public gBattleArcadeEventBgPaletteFiles
 .public gBattleArcadeRoundValues_Single
 .public gBattleArcadeRoundValues_Multi
-.public ov80_0223C034
+.public gBattleTowerAllySprites
 .public gFrontierLinkLobbySummaryPages
 .public gBattleTowerReplacementItems
 .public gBattleTowerSampleTrainers
@@ -399,7 +399,7 @@
 .public gBattleArcadeEventBgPaletteFiles
 .public gBattleArcadeRoundValues_Single
 .public gBattleArcadeRoundValues_Multi
-.public ov80_0223C034
+.public gBattleTowerAllySprites
 .public gFrontierLinkLobbySummaryPages
 .public gBattleTowerReplacementItems
 .public gBattleTowerSampleTrainers

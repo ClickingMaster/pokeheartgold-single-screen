@@ -395,11 +395,11 @@ extern const OpponentCommandHandler sOpponentCommandHandlers[];
 extern const u8 gOpponentBallKinds[];
 extern const OpponentBallKindTable gOpponentRecallBallKinds;
 extern u8 gSafariFleeRateStages[][2];
-extern u8 ov12_0226D141[][2];
+extern u8 gSafariFleeRateDenominators[][2];
 extern const u16 sBallColors[];
 extern const u32 gBattleEncounterFadeColors[];
 extern const s16 gBallThrowOffsets[][6][2];
-extern const s16 ov12_0226D1EA[][6][2];
+extern const s16 gBallThrowOffsetsY[][6][2];
 extern const u8 gBattleEncounterTerrains[];
 
 
@@ -482,7 +482,7 @@ typedef struct OpponentRecallPokemonWork {
     u8 battlerType;
     u8 state;
     u8 height;
-    u8 filler_6D;
+    u8 padding_6D;
     u16 ball;
     u32 isSubstitute;
     u32 selectedMonIndex;
@@ -535,7 +535,7 @@ typedef struct OpponentTrainerSlideOutWork {
     u8 battlerId;
     u8 state;
     u8 facing;
-    u8 filler_0C[4];
+    u8 padding_0C[4];
 } OpponentTrainerSlideOutWork;
 
 typedef struct OpponentTrainerSlideInWork {
@@ -583,7 +583,7 @@ typedef struct OpponentSelectMoveWork {
     u8 battlerType;
     u8 selectedMonIndex;
     u8 state;
-    u8 filler_21;
+    u8 padding_21;
     u16 unusableMovesMask;
 } OpponentSelectMoveWork;
 
@@ -640,7 +640,7 @@ typedef struct OpponentShowMonListWork {
     u8 reservedMon;
     u8 key;
     u8 switchInFlag;
-    u8 filler_19[3];
+    u8 padding_19[3];
     u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
 } OpponentShowMonListWork;
 
@@ -751,7 +751,7 @@ typedef struct OpponentSelectMoveToForgetWork {
     u8 command;
     u8 battlerId;
     u8 state;
-    u8 filler_0B;
+    u8 padding_0B;
     u16 move;
     u8 slot;
 } OpponentSelectMoveToForgetWork;
@@ -3945,13 +3945,13 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
                 BallThrow_SetDrawFlag(work->opponentData->ballData, 1);
-                BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
                 if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != 0) {
                     BallThrow_SetMode(work->opponentData->ballData, 0);
                     BallThrow_SetAnimateSprite(work->opponentData->ballData, 1);
                     if ((battleType & BATTLE_TYPE_DOUBLES) && !(battleType & BATTLE_TYPE_MULTI)) {
                         OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                        BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+                        BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
                         BallThrow_SetDrawFlag(partner->ballData, 1);
                         BallThrow_SetMode(partner->ballData, 0);
                         BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -3977,7 +3977,7 @@ void Task_ThrowPokeball(SysTask *task, void *data) {
             work->delay = 8;
             work->state = THROW_BALL_STATE_DELAY;
         } else if (work->opponentData->ballData && gBallThrowOffsets[work->backpic][animFrame][0] != 0x7FFF) {
-            BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + ov12_0226D1EA[work->backpic][animFrame][0]);
+            BallThrow_SetPosition(work->opponentData->ballData, x + gBallThrowOffsets[work->backpic][animFrame][0], y + gBallThrowOffsetsY[work->backpic][animFrame][0]);
             if (animFrame == 3 && BallThrow_GetMode(work->opponentData->ballData) != work->ballTargetState) {
                 BallThrow_SetMode(work->opponentData->ballData, work->ballTargetState);
                 BallThrow_SetPriority(work->opponentData->ballData, 1);
@@ -4047,7 +4047,7 @@ void Task_ThrowPokeballWithFollowMon(SysTask *task, void *data) {
             if (gBallThrowOffsets[work->backpic][frame][0] != 0x7FFF) {
                 OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
                 if (frame == 3 && BallThrow_GetMode(partner->ballData) != 0) {
-                    BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][frame][0], y + ov12_0226D1EA[work->backpic][frame][0]);
+                    BallThrow_SetPosition(partner->ballData, x + gBallThrowOffsets[work->backpic][frame][0], y + gBallThrowOffsetsY[work->backpic][frame][0]);
                     BallThrow_SetDrawFlag(partner->ballData, 1);
                     BallThrow_SetMode(partner->ballData, 0);
                     BallThrow_SetAnimateSprite(partner->ballData, 1);
@@ -4422,7 +4422,7 @@ void Task_SafariSelectCommand(SysTask *task, void *data) {
     u16 species = GetBattlerVar(BattleSystem_GetBattleContext(work->battleSystem), work->battlerId, BMON_DATA_SPECIES, NULL);
     int fleeRate = GetMonBaseStat(species, BASE_GREAT_MARSH_RATE);
     int scaled = gSafariFleeRateStages[stage][0] * fleeRate;
-    int chance = scaled / ov12_0226D141[stage][0];
+    int chance = scaled / gSafariFleeRateDenominators[stage][0];
     if (BattleSystem_Random(work->battleSystem) % 0xFF <= chance) {
         BattleController_ReplyCommandSelection(work->battleSystem, work->battlerId, 4);
     } else {
@@ -6279,7 +6279,7 @@ void Task_SpriteToOAM(SysTask *task, void *data) {
 void Task_OAMToSprite(SysTask *task, void *data) {
     OpponentSpriteOamWork *work = data;
     GF_ASSERT(OPPONENT_SPRITE_OAM(work->opponentData) != NULL);
-    if (Ov07UnkFE70_GetCurrentValue(OPPONENT_SPRITE_OAM(work->opponentData)) == 3 && work->state < 5) {
+    if (BattleAnimIndexedBytes_GetCurrentValue(OPPONENT_SPRITE_OAM(work->opponentData)) == 3 && work->state < 5) {
         work->state++;
         return;
     }

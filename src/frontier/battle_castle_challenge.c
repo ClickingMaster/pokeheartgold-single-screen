@@ -308,11 +308,11 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
     FrontierSave *frontierSave = Save_Frontier_GetStatic(data->saveData);
     struct {
         u16 half;
-        u8 filler_02[6];
+        u8 padding_02[6];
         u8 byte;
-        u8 filler_09[3];
+        u8 padding_09[3];
         u32 word;
-        u8 filler_10[12];
+        u8 padding_10[12];
     } value;
     u16 i;
     u32 best;

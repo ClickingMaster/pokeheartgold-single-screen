@@ -109,7 +109,7 @@
 .public BattleAnimBattlerSprites_NewAll
 .public BattleAnimBattlerSprites_Free
 .public BattleAnimBattlerSprites_Free2
-.public Ov07UnkFE70_GetCurrentValue
+.public BattleAnimIndexedBytes_GetCurrentValue
 .public BallSealEffect_New
 .public BallSealEffect_LoadResources
 .public BallSealEffect_IsLoaded

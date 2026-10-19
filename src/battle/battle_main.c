@@ -86,7 +86,7 @@ extern u32 *BattleAnimSystem_New(enum HeapID heapId);
 extern void BattleAnimSystem_Delete(u32 *animSystem);
 extern void BattleRecord_StoreSetup(BattleSetup *setup);
 extern void Comm_SetWifiContinuousSendAndMuteVoice(int mode);
-extern void CommState_FrameDummy(int a0, BgConfig *bgConfig);
+extern void CommState_FrameDummy(int heapId, BgConfig *bgConfig);
 extern void WirelessStatusIcon_SetLevel(int linkLevel);
 
 const BattleBgTemplateSet gBattleReinitBgTemplates = {

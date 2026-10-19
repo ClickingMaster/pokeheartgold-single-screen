@@ -786,15 +786,15 @@ BOOL FrtCmd_BufferMoveName(FrontierScriptContext *ctx) {
 BOOL FrtCmd_BufferSpeciesName(FrontierScriptContext *ctx) {
     u8 field;
     u16 msgId;
-    u16 a3;
-    u8 a4;
+    u16 gender;
+    u8 isSingular;
     String *string;
     field = ReadScriptByte(ctx);
     msgId = FrontierScript_ReadVar(ctx);
-    a3 = FrontierScriptContext_ReadHalfWord(ctx);
-    a4 = ReadScriptByte(ctx);
+    gender = FrontierScriptContext_ReadHalfWord(ctx);
+    isSingular = ReadScriptByte(ctx);
     string = FrontierScript_ReadString(msgId, HEAP_ID_FIELD2);
-    BufferString(ctx->frontierSystem->msgFormat, field, string, a3, a4, 2);
+    BufferString(ctx->frontierSystem->msgFormat, field, string, gender, isSingular, 2);
     String_Delete(string);
     return FALSE;
 }

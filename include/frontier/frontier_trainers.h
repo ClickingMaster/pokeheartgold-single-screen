@@ -10,6 +10,6 @@ typedef struct FrontierTrainerData {
 } FrontierTrainerData;
 
 void FrontierTrainer_LoadRecord(FrontierTrainerData *record, u16 trainerId, u32 heapID, u32 narcId);
-void FrontierMon_GenerateList(void *mons, u16 *setIds, u8 *ivs, u32 *pids, void *otIds, u32 count, u32 heapID, u32 narcId);
+void FrontierMon_GenerateList(void *mons, u16 *setIds, u8 *ivs, u32 *pids, void *outPids, u32 count, u32 heapID, u32 narcId);
 
 #endif

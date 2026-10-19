@@ -239,9 +239,9 @@ void BattleHallData_UpdateSpeciesRecord(BattleHallData *data, u16 *result) {
 void BattleHallData_Save(BattleHallData *data, int mode) {
     struct {
         u16 value;
-        u8 filler_02[6];
+        u8 padding_02[6];
         u8 byte;
-        u8 filler_09[3];
+        u8 padding_09[3];
     } temp;
     FrontierSave *frontierSave;
     Pokemon *mon;

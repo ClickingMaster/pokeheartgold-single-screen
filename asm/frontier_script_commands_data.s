@@ -22,7 +22,7 @@
 	.public gBattleArcadeEventBgPaletteFiles
 	.public gBattleArcadeRoundValues_Single
 	.public gBattleArcadeRoundValues_Multi
-	.public ov80_0223C034
+	.public gBattleTowerAllySprites
 	.public gFrontierLinkLobbySummaryPages
 	.public gBattleTowerReplacementItems
 	.public gBattleTowerSampleTrainers
@@ -138,7 +138,7 @@ gBattleArcadeRoundValues_Multi:
 	.byte 0x00, 0x07, 0x08, 0x09, 0x0A, 0x0D, 0x0E, 0x10
 	.byte 0x11, 0x00, 0x00, 0x00
 
-ov80_0223C034:
+gBattleTowerAllySprites:
 	.byte 0x8D, 0x00, 0x91, 0x00, 0x8E, 0x00, 0x8F, 0x00, 0x90, 0x00, 0x00, 0x00
 
 gFrontierLinkLobbySummaryPages:

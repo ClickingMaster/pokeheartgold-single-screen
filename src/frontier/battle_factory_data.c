@@ -28,10 +28,10 @@ BattleFactoryData *gBattleFactoryData;
 
 void *Save_Frontier_GetFactoryChallenge(SaveData *saveData);
 void FactoryChallenge_Clear(void *challenge);
-u32 FactoryChallenge_GetField(void *challenge, int field, u8 index, int a3);
+u32 FactoryChallenge_GetField(void *challenge, int field, u8 index, int unused);
 void FactoryChallenge_SetField(void *challenge, int field, u8 index, void *value);
 void FactoryChallenge_SetSaved(void *challenge, int saved);
-int FactoryFlags_GetField(int flags, int field, u8 index, int a3);
+int FactoryFlags_GetField(int flags, int field, u8 index, int unused);
 u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
 u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
@@ -318,11 +318,11 @@ int BattleFactory_GetAppResult(BattleFactoryAppLaunchArgs *args, u32 index) {
 void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     struct {
         u16 half;
-        u8 filler_02[6];
+        u8 padding_02[6];
         u8 byte;
-        u8 filler_09[3];
+        u8 padding_09[3];
         u32 word;
-        u8 filler_10[12];
+        u8 padding_10[12];
     } value;
     int flags = Save_Frontier_GetFactoryFlags(data->saveData);
     FrontierSave *frontier = Save_Frontier_GetStatic(data->saveData);

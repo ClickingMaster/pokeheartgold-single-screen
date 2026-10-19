@@ -46,7 +46,7 @@ typedef struct FrontierMenu {
     u8 y;
     u8 unk_09A;
     u8 count;
-    u8 filler_09C[4];
+    u8 padding_09C[4];
     u16 *result;
     struct ListMenu2DTemplate menuTemplate;
     struct ListMenu2D *menu;

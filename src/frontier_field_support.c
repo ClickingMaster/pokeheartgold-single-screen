@@ -41,10 +41,10 @@ typedef struct FrontierWifiConnectionEnv {
     u32 result;
     u32 state;
     void *app;
-    u8 filler_C[4];
+    u8 padding_C[4];
     u16 outputVar;
-    u16 arg1;
-    u16 arg2;
+    u16 mode;
+    u16 connectNow;
 } FrontierWifiConnectionEnv;
 
 typedef struct FrontierLinkPartnerCheckEnv {
@@ -213,7 +213,7 @@ enum {
 
 static u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
     if (Comm_HasWifiProfile(fieldSystem->saveData)) {
-        env->app = NintendoWifiConnection_LaunchApp(fieldSystem, env->arg1, env->arg2);
+        env->app = NintendoWifiConnection_LaunchApp(fieldSystem, env->mode, env->connectNow);
         return WIFI_CONNECTION_WAIT;
     }
     env->result = 1;
@@ -251,8 +251,8 @@ void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 mode, 
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FrontierWifiConnectionEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierWifiConnectionEnv));
     MI_CpuClear8(env, sizeof(FrontierWifiConnectionEnv));
-    env->arg1 = mode;
-    env->arg2 = connectNow;
+    env->mode = mode;
+    env->connectNow = connectNow;
     env->outputVar = outputVar;
     TaskManager_Call(fieldSystem->taskman, Task_FrontierWifiConnection, env);
 }

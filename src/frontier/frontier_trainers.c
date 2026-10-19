@@ -71,10 +71,10 @@ int Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void FrontierTrainer_LoadRecord(FrontierTrainerRecord *record, int trainerId, enum HeapID heapID, NarcId narcId);
 void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler);
 u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemIndex, u8 iv, int pid, enum HeapID heapID, NarcId narcId);
-void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *otIds, int count, enum HeapID heapID, NarcId narcId);
+void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *outPids, int count, enum HeapID heapID, NarcId narcId);
 int FrontierTrainer_GetMonIv(u32 trainerIndex);
 BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
-void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 hasPartner);
+void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 hasPartner);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field);
 int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
@@ -417,17 +417,17 @@ u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemInde
     return FrontierMon_Generate(mon, setId, otId, pid, iv, (u8)itemIndex, FALSE, heapID, narcId);
 }
 
-void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *otIds, int count, enum HeapID heapID, NarcId narcId) {
+void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *outPids, int count, enum HeapID heapID, NarcId narcId) {
     int i;
     u32 pidIter;
-    u32 otIdIter;
-    u32 otId;
+    u32 outPidIter;
+    u32 generatedPid;
     u8 iv;
     u32 pid;
 
     i = 0;
     if (count > 0) {
-        otIdIter = (u32)otIds;
+        outPidIter = (u32)outPids;
         pidIter = (u32)pids;
         do {
             iv = (u8)(ivs == NULL ? 0 : ivs[i]);
@@ -436,15 +436,15 @@ void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids
             } else {
                 pid = *(u32 *)pidIter;
             }
-            otId = FrontierMon_GenerateWithRandomOtId(mons, *setIds, i, iv, pid, heapID, narcId);
-            if (otIds) {
-                *(u32 *)otIdIter = otId;
+            generatedPid = FrontierMon_GenerateWithRandomOtId(mons, *setIds, i, iv, pid, heapID, narcId);
+            if (outPids) {
+                *(u32 *)outPidIter = generatedPid;
             }
             i++;
             mons++;
             pidIter += 4;
             setIds++;
-            otIdIter += 4;
+            outPidIter += 4;
         } while (i < count);
     }
 }
@@ -516,7 +516,7 @@ BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *exclu
 
 // Generates count Pokemon for a trainer; with hasPartner, the second half comes from partnerIndex's sets and avoids
 // the species and items of the first half.
-void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 hasPartner) {
+void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *outPids, u8 hasPartner) {
     FrontierTrainerRecord record;
     FrontierMonSet set;
     u16 species[4];
@@ -545,7 +545,7 @@ void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, 
         }
     }
     Heap_Free(trainer);
-    FrontierMon_GenerateList(mons, setIds, ivs, NULL, otIds, count, HEAP_ID_FIELD2, NARC_a_2_0_3);
+    FrontierMon_GenerateList(mons, setIds, ivs, NULL, outPids, count, HEAP_ID_FIELD2, NARC_a_2_0_3);
 }
 
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field) {

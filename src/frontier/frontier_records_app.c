@@ -133,7 +133,7 @@ u32 BattleFactory_GetBestStreakStat(u8 levelMode, u8 type);
 u32 BattleFactory_GetBestTradeCountStat(u8 levelMode, u8 type);
 u32 BattleCastle_GetBestStreakStat(u8 type);
 u32 BattleCastle_GetBestStreakPointsStat(u8 type);
-u32 FactoryFlags_GetField(int flags, u32 field, u8 index, u32 a3);
+u32 FactoryFlags_GetField(int flags, u32 field, u8 index, u32 unused);
 
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 

@@ -83,9 +83,9 @@ typedef struct BattleRoomResults {
     u32 subState;
     u16 showLeaders;
     u8 unk_0A;
-    u8 filler_0B[5];
+    u8 padding_0B[5];
     BgConfig *bgConfig;
-    u8 filler_14[4];
+    u8 padding_14[4];
     Options *options;
     FrontierSave *frontierSave;
     FrontierData *frontierData;
@@ -93,7 +93,7 @@ typedef struct BattleRoomResults {
     MsgData *msgData;
     MessageFormat *msgFormat;
     String *string;
-    u8 filler_34[0x30];
+    u8 padding_34[0x30];
     String *defaultNames[2];
     Window windows[BATTLE_ROOM_RESULTS_NUM_LEADER_WINDOWS];
     BattleRoomLeader leaders[BATTLE_ROOM_RESULTS_NUM_LEADERS];
@@ -112,10 +112,10 @@ typedef struct BattleRoomResults {
 // The leader records as downloaded.
 typedef struct BattleRoomLeaderRecord {
     u16 name[PLAYER_NAME_LENGTH + 1];
-    u8 filler_10[2];
+    u8 padding_10[2];
     u8 country;
     u8 region;
-    u8 filler_14[4];
+    u8 padding_14[4];
     u8 greeting[8];
     u8 useDefaultName : 1;
     u8 gender : 1;
