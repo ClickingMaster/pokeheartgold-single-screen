@@ -9,14 +9,8 @@
 #include "wifi_setup/wifi_setup_local_wireless.h"
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Local wireless session of the access-point setup (ARM code in overlay 13):
-//  - WifiSetupWh_*: a small handler around the WM parent functions (initialise, parent parameters,
-//    WEP key, start parent, MP, key sharing / data sharing, channel measurement, end, reset). Its log
-//    strings call it "DWCi_MOV_WH"; the state names are in the table gWifiSetupWhStateNames.
-//  - WifiSetupShare_*: the session that runs on it: DS Download Play of a program to one child
-//    (WifiSetupMbParent_*), then data sharing with that child, sending the connection settings
-//    (WifiSetupConnections_Get) in 64-byte blocks.
-//  - WifiSetupArchive_Load (wifi_setup_ui.h): mounts the "rom:/dwc/utility.bin" archive.
+// Local wireless session of the access-point setup: DS Download Play of a program to one child, then data sharing
+// with that child, sending the connection settings in 64-byte blocks.
 
 // gWifiSetupWh.work->state (names from the log table)
 #define WIFI_SETUP_WH_STATE_STOP           0
@@ -97,33 +91,33 @@ typedef void (*WifiSetupWhLogFunc)(int level, char *format, ...);
 typedef BOOL (*WifiSetupWhJudgeFunc)(WMStartParentCallback *arg);
 
 typedef struct WifiSetupWhWork {
-    WmParentParam parentParam;                               // 0x0000
-    u32 state;                                               // 0x0040, WIFI_SETUP_WH_STATE_*
-    u32 connectMode;                                         // 0x0044, WIFI_SETUP_WH_MODE_*
-    u32 unk_48;                                              // 0x0048
-    WifiSetupWhJudgeFunc judgeChild;                         // 0x004C, may refuse a new child
-    u16 unk_50;                                              // 0x0050
-    u16 connectedMask;                                       // 0x0052, bit per AID, bit 0 the parent
-    u32 errorCode;                                           // 0x0054
-    u32 randomSeed;                                          // 0x0058
-    u16 channel;                                             // 0x005C, decided by the measurement
-    u16 minBusyRatio;                                        // 0x005E
-    u16 quietChannels;                                       // 0x0060, channels with the lowest busy ratio
-    u8 unk_62[0x1E];                                         // 0x0062
-    u8 wmWork[0xF00];                                        // 0x0080, WM_Initialize
-    u8 sendBuffer[0xE0];                                     // 0x0F80
-    u8 recvBuffer[0x240];                                    // 0x1060
-    u32 sendBufferSize;                                      // 0x12A0
-    u32 recvBufferSize;                                      // 0x12A4
-    u8 unk_12A8[0x100];                                      // 0x12A8
-    u32 unk_13A8;                                            // 0x13A8
-    int (*getWepKey)(u8 *key, struct WifiSetupWhWork *work); // 0x13AC, returns the WEP mode; NULL: no WEP
-    u32 unk_13B0;                                            // 0x13B0
-    u8 unk_13B4[0xC];                                        // 0x13B4
-    u8 wepKey[0x20];                                         // 0x13C0
-    WMDataSharingInfo dataSharingInfo;                       // 0x13E0
-    WMDataSet dataSet;                                       // 0x1C00
-    WMKeySetBuf keySharing;                                  // 0x1E00
+    WmParentParam parentParam;
+    u32 state;       // WIFI_SETUP_WH_STATE_*
+    u32 connectMode; // WIFI_SETUP_WH_MODE_*
+    u32 unk_48;
+    WifiSetupWhJudgeFunc judgeChild; // may refuse a new child
+    u16 unk_50;
+    u16 connectedMask; // bit per AID, bit 0 the parent
+    u32 errorCode;
+    u32 randomSeed;
+    u16 channel; // decided by the measurement
+    u16 minBusyRatio;
+    u16 quietChannels; // channels with the lowest busy ratio
+    u8 unk_62[0x1E];
+    u8 wmWork[0xF00];
+    u8 sendBuffer[0xE0];
+    u8 recvBuffer[0x240];
+    u32 sendBufferSize;
+    u32 recvBufferSize;
+    u8 unk_12A8[0x100];
+    u32 unk_13A8;
+    int (*getWepKey)(u8 *key, struct WifiSetupWhWork *work); // returns the WEP mode; NULL: no WEP
+    u32 unk_13B0;
+    u8 unk_13B4[0xC];
+    u8 wepKey[0x20];
+    WMDataSharingInfo dataSharingInfo;
+    WMDataSet dataSet;
+    WMKeySetBuf keySharing;
 } WifiSetupWhWork;
 
 typedef struct WifiSetupWh {
@@ -142,37 +136,37 @@ typedef struct WifiSetupShare {
     union {
         WifiSetupSharePacket packet;
         u8 raw[0x100];
-    } send; // 0x000
+    } send;
 
     union {
         WifiSetupSharePacket packets[2]; // by AID
         u8 raw[0x100];
-    } received; // 0x100
+    } received;
 
-    u16 blockIndex;                   // 0x200, settings block sent next (0-35, mod 16)
-    u16 unk_202;                      // 0x202
-    u32 errorCount;                   // 0x204, step failures without the child's answer
-    u32 receivedFlags[16];            // 0x208, by AID
-    u8 unk_248[0x400];                // 0x248
-    u16 tgid;                         // 0x648
-    u16 channel;                      // 0x64A
-    u8 backup[0x404];                 // 0x64C, DWCi_BACKUPlRead
-    u8 firstBlock[0x40];              // 0xA50
-    u8 state;                         // 0xA90
-    u8 prevState;                     // 0xA91
-    u8 languageCode;                  // 0xA92, sent to the child
-    u8 sendingData;                   // 0xA93, the child answered, settings blocks are sent
-    u32 frame;                        // 0xA94
-    u32 counter;                      // 0xA98
-    u32 timer;                        // 0xA9C
-    void *childUsers[1];              // 0xAA0, by AID - 1
-    u8 *data;                         // 0xAA4, the connection settings (WifiSetupConnections_Get)
-    u32 unk_AA8;                      // 0xAA8
-    u8 request;                       // 0xAAC
-    WifiSetupSharePacket *sendPacket; // 0xAB0, = &send.packet
-    WifiSetupSessionParams params;    // 0xAB4
-    u8 unk_AD0[0x30];                 // 0xAD0
-    u8 mbParent[0x1E280 - 0xB00];     // 0xB00, WifiSetupMbParent, WifiSetupWhWork at 0x1B160
+    u16 blockIndex; // settings block sent next (0-35, mod 16)
+    u16 unk_202;
+    u32 errorCount;        // step failures without the child's answer
+    u32 receivedFlags[16]; // by AID
+    u8 unk_248[0x400];
+    u16 tgid;
+    u16 channel;
+    u8 backup[0x404];
+    u8 firstBlock[0x40];
+    u8 state;
+    u8 prevState;
+    u8 languageCode; // sent to the child
+    u8 sendingData;  // the child answered, settings blocks are sent
+    u32 frame;
+    u32 counter;
+    u32 timer;
+    void *childUsers[1]; // by AID - 1
+    u8 *data;            // the connection settings (WifiSetupConnections_Get)
+    u32 unk_AA8;
+    u8 request;
+    WifiSetupSharePacket *sendPacket; // = &send.packet
+    WifiSetupSessionParams params;
+    u8 unk_AD0[0x30];
+    u8 mbParent[0x1E280 - 0xB00]; // WifiSetupMbParent
 } WifiSetupShare;
 
 extern WifiSetupWh gWifiSetupWh;

@@ -5,9 +5,8 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Address entry screen of the access-point setup (ARM code in overlay 13): an IPv4 address or
-// subnet mask typed on the numeric keypad as four fields of three digits, and the error screen that
-// shows a connection error code with its message.
+// Address entry screen of the access-point setup (an IPv4 address or subnet mask typed on the numeric keypad), and
+// the error screen that shows a connection error code with its message.
 
 #define WIFI_SETUP_ADDRESS_NUM_FIELDS 4
 #define WIFI_SETUP_ADDRESS_FIELD_LEN  3
@@ -18,11 +17,11 @@
 #define WIFI_SETUP_ADDRESS_INVALID   2
 
 typedef struct WifiSetupAddressEntry {
-    WifiSetupCanvas *canvas; // 0x00, text of the digits
-    GXOamAttr *cursor;       // 0x04, marks the field being typed
-    u8 digits[12];           // 0x08, four fields of three characters ('0'-'9', ' ' or 0)
-    u8 field;                // 0x14, field being typed (0-3)
-    u8 result;               // 0x15, WIFI_SETUP_ADDRESS_*; answer of the confirmation dialog
+    WifiSetupCanvas *canvas; // text of the digits
+    GXOamAttr *cursor;       // marks the field being typed
+    u8 digits[12];           // four fields of three characters ('0'-'9', ' ' or 0)
+    u8 field;                // field being typed (0-3)
+    u8 result;               // WIFI_SETUP_ADDRESS_*; answer of the confirmation dialog
 } WifiSetupAddressEntry;
 
 extern WifiSetupAddressEntry *gWifiSetupAddressEntry;

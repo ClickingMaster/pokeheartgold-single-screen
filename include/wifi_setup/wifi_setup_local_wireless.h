@@ -7,18 +7,13 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Local-wireless part of the access-point setup (ARM code in overlay 13): the sound player
-// controls, the title banner (five OAM letters sliding in over a BG screen), the dialog window
-// with up to two buttons, the scan for a Wi-Fi USB connector (access points whose SSID starts
-// with "NWCUSBAP") and the DS Download Play parent.
-//
-// A connector's SSID holds the tag "NWCUSBAP" (8 bytes), a flag byte at 9 (bit 0: in setup mode) and, in the scan
-// parameters, the owner's nickname from 12 on.
+// Local-wireless part of the access-point setup: the title banner, the dialog window, the scan for a Wi-Fi USB
+// connector (access points whose SSID starts with "NWCUSBAP") and the DS Download Play parent.
 
 #define WIFI_SETUP_BANNER_NUM_LETTERS   5
 #define WIFI_SETUP_USB_SCAN_NUM_ENTRIES 16
 
-// Title banner, allocated by WifiSetupBanner_Open (0x1C bytes).
+// Title banner, allocated by WifiSetupBanner_Open.
 typedef struct WifiSetupBanner {
     WifiSetupOamBlock *letters[WIFI_SETUP_BANNER_NUM_LETTERS];
     void *task; // slide task, NULL when the banner is still
@@ -36,24 +31,23 @@ typedef struct WifiSetupUsbScanEntry {
     u8 flag; // bit 0 of the byte after the SSID tag
 } WifiSetupUsbScanEntry;
 
-// Scan work (0x1BA0 bytes, 32-byte aligned; the WM work buffer comes first).
+// Scan work (32-byte aligned; the WM work buffer comes first).
 typedef struct WifiSetupUsbScan {
     u8 wmBuf[0xF00];
-    u8 scanBuf[0x400];                                              // 0xF00
-    WifiSetupUsbScanEntry entries[WIFI_SETUP_USB_SCAN_NUM_ENTRIES]; // 0x1300
-    void (*callback)(int result);                                   // 0x1370
-    WmScanExParam param;                                            // 0x1374
-    WmStatus status;                                                // 0x13B8
-    OSTick startTick;                                               // 0x1B88
-    void *task;                                                     // 0x1B90
-    vu8 endState;                                                   // 0x1B94, 1 ending, 2 ended
-    u8 found;                                                       // 0x1B95
-    u8 rescanning;                                                  // 0x1B96, set once the first scan period is over
+    u8 scanBuf[0x400];
+    WifiSetupUsbScanEntry entries[WIFI_SETUP_USB_SCAN_NUM_ENTRIES];
+    void (*callback)(int result);
+    WmScanExParam param;
+    WmStatus status;
+    OSTick startTick;
+    void *task;
+    vu8 endState; // 1 ending, 2 ended
+    u8 found;
+    u8 rescanning; // set once the first scan period is over
     u8 unk_1B97[9];
 } WifiSetupUsbScan;
 
-// Dialog window (0x20 bytes): a frame, a text line and up to two buttons sliding up from the
-// bottom of the screen.
+// Dialog window: a frame, a text line and up to two buttons sliding up from the bottom of the screen.
 typedef struct WifiSetupDialog {
     WifiSetupOamBlock *frame;
     WifiSetupOamBlock *textBlock;
@@ -106,9 +100,9 @@ typedef struct WifiSetupMbParent {
     WifiSetupMbParentState head;
     WifiSetupMbParentChild children[1]; // indexed by aid - 1
     u8 segment[0x10040 - 0x2C];
-    u8 mbWork[0x1B140 - 0x10040]; // 0x10040
-    void *mbWorkPtr;              // 0x1B140
-    void *segmentPtr;             // 0x1B144
+    u8 mbWork[0x1B140 - 0x10040];
+    void *mbWorkPtr;
+    void *segmentPtr;
 } WifiSetupMbParent;
 
 extern WifiSetupBannerState gWifiSetupBanner;

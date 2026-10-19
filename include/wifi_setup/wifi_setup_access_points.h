@@ -8,9 +8,8 @@
 #include "wifi_setup/wifi_setup_connection.h"
 #include "wifi_setup/wifi_setup_internal.h"
 
-// Access-point data of the access-point setup (ARM code in overlay 13): the scan for nearby access
-// points, the saved connection settings (four 0x100-byte backup pages, the first three editable)
-// with an edit copy of one of them, and the sound archive.
+// Access-point data of the access-point setup: the scan for nearby access points, the saved connection settings
+// (four backup pages, the first three editable) with an edit copy of one of them, and the sound archive.
 
 #define WIFI_SETUP_NUM_SCAN_ENTRIES 20
 #define WIFI_SETUP_NUM_CONNECTIONS  4
@@ -36,8 +35,8 @@ typedef struct WifiSetupApScan {
 
 typedef struct WifiSetupConnections {
     WifiSetupConnectionPage pages[WIFI_SETUP_NUM_CONNECTIONS];
-    WifiSetupConnection edit; // 0x400
-    MATHCRC16Table crcTable;  // 0x4F8
+    WifiSetupConnection edit;
+    MATHCRC16Table crcTable;
 } WifiSetupConnections;
 
 typedef struct WifiSetupSound {

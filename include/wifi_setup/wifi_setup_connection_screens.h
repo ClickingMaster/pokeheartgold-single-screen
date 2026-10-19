@@ -5,15 +5,8 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Connection screens of the access-point setup (ARM code in overlay 13):
-//  - the rest of the connection settings screen (cursor, scrolling, switch buttons, completeness check),
-//    the "settings saved" screen, the four steps of the automatic setup (search, connect, receive the
-//    settings, done), the access-point scan screen;
-//  - the screen of the three connection slots, the setup method menu, the connection test with its
-//    prompt and result, and the screens around the Wi-Fi USB connector.
-// Every screen is a chain of state functions set with WifiSetupApp_SetStateFunc:
-// Init -> FadeIn -> WaitFadeIn -> (WaitButtonBar) -> Main (HandleInput, Update, CheckButtons each
-// frame) -> Exit -> WaitFadeOut -> End, which picks the next screen.
+// Connection screens of the access-point setup. Every screen is a chain of state functions set with
+// WifiSetupApp_SetStateFunc, from Init to End, which picks the next screen.
 
 // gWifiSetupApScanScreen.result
 #define WIFI_SETUP_AP_SCAN_RUNNING  0
@@ -43,11 +36,11 @@ typedef struct WifiSetupApScanScreen {
 } WifiSetupApScanScreen;
 
 typedef struct WifiSetupConnectionListWork {
-    void *graphics;                     // 0x00, palette rows of the slots
-    WifiSetupOamBlock *slotIcons[3];    // 0x04, one per setup method, or the empty slot icon
-    WifiSetupOamBlock *eraseButtons[3]; // 0x10, NULL for an empty slot
-    u8 column;                          // 0x1C, slot the cursor left from, for the erase row
-    u8 exit;                            // 0x1D, WIFI_SETUP_CONNECTION_LIST_*
+    void *graphics;                     // palette rows of the slots
+    WifiSetupOamBlock *slotIcons[3];    // one per setup method, or the empty slot icon
+    WifiSetupOamBlock *eraseButtons[3]; // NULL for an empty slot
+    u8 column;                          // slot the cursor left from, for the erase row
+    u8 exit;                            // WIFI_SETUP_CONNECTION_LIST_*
 } WifiSetupConnectionListWork;
 
 typedef struct WifiSetupConnectionList {
@@ -68,7 +61,7 @@ extern u8 gWifiSetupAutoDoneTimer;
 extern u8 gWifiSetupAutoSearchDone;
 extern WifiSetupApScanScreen gWifiSetupApScanScreen;
 extern WifiSetupConnectionList gWifiSetupConnectionList;
-extern void *ov13_0224F570; // = gWifiSetupConnectionList.work
+extern void *ov13_0224F570;
 extern WifiSetupMethodMenu gWifiSetupMethodMenu;
 extern u8 gWifiSetupConnectionTestPassed;
 extern u8 gWifiSetupConnectionOkTimer;

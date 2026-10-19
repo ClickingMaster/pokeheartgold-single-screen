@@ -4,8 +4,8 @@
 #include "wifi_setup/wifi_setup_keyboard.h"
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Screen parts shared by the access-point setup screens (ARM code in overlay 13): busy icon, sliding
-// button bar, message window, cursors, BG1 frame, signal-strength icon and the software keyboard.
+// Screen parts shared by the access-point setup screens: busy icon, sliding button bar, message window, cursors,
+// BG1 frame, signal-strength icon and the software keyboard.
 
 // Animated busy icon in the bottom-right corner of the touch screen.
 typedef struct WifiSetupBusyIcon {

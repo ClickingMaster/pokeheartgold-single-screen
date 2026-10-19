@@ -9,9 +9,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point setup screens, application core: the setup client request, the entry point and its
-// main loop, system/display start-up and shutdown, accessors of the caller's parameters, text banks
-// and the session started from the screens.
+// Access-point setup screens, application core: the setup client request, the entry point and its main loop, text
+// banks and the session started from the screens.
 
 // The setup key sent with the client request.
 typedef struct WifiSetupRequestKey {

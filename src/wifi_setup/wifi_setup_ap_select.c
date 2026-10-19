@@ -43,7 +43,7 @@ int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const Wi
                 if (length == 0 || length > 32) {
                     break;
                 }
-                // a one-character SSID of NUL or space is hidden (compared unsigned)
+                // a one-character SSID of NUL or space is hidden
                 if (length == 1 && (((const u8 *)left->ssid)[0] == 0 || ((const u8 *)left->ssid)[0] == ' ')) {
                     break;
                 }

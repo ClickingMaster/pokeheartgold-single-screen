@@ -121,8 +121,6 @@ typedef struct WifiSetupIrqSave {
     OSIrqMask mask;
 } WifiSetupIrqSave;
 
-// The address of a global of this module, formed from the module's first .bss label so that it gets
-// its own literal-pool slot.
 #define MODULE_BSS_ADDR(addr) ((void *)(gWifiSetupShare + ((addr) - 0x0224F5C8)))
 
 static inline int GX_GetVisiblePlane13(void);

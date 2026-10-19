@@ -232,7 +232,7 @@ int WifiSetupWcm_ReturnToIdle(void) {
     return 1;
 }
 
-// Copies up to max access point descriptions (0xC0 bytes each); returns how many were found.
+// Copies up to max access point descriptions; returns how many were found.
 int WifiSetupWcm_CopyApList(u8 *dst, int max) {
     int count;
     int i;

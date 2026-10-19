@@ -10,10 +10,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point data: the scan for access points over WM, the saved
-// connection settings (read with DWCi_BACKUPlRead, one page copied to an edit copy and written back
-// with a CRC per page), helpers that parse an address from the address entry's 12 characters, and
-// the start and end of the sound archive (its task and the sound functions follow in the next file).
+// Access-point data: the scan for access points over WM, the saved connection settings (written back with a CRC per
+// page), address parsing for the address entry, and the start and end of the sound archive.
 
 typedef void (*WifiSetupTaskFunc2)(void *, void *);
 
@@ -21,12 +19,12 @@ typedef struct WifiSetupConnectionBody {
     u8 bytes[0xF0];
 } WifiSetupConnectionBody;
 
-extern u8 gWifiSetupWpaVendorPrefix[];  // vendor element prefix that marks WPA
-extern u8 gWifiSetupApScanEmptyBssid[]; // empty BSSID
+extern u8 gWifiSetupWpaVendorPrefix[]; // vendor element prefix that marks WPA
+extern u8 gWifiSetupApScanEmptyBssid[];
 extern WmScanExParam gWifiSetupApScanParam;
-extern u8 gWifiSetupZeroAddress[];              // address 0.0.0.0
-extern u8 gWifiSetupConnectionsAddressFormat[]; // address format
-extern u8 gWifiSetupSoundArchivePath[];         // sound archive path
+extern u8 gWifiSetupZeroAddress[]; // address 0.0.0.0
+extern u8 gWifiSetupConnectionsAddressFormat[];
+extern u8 gWifiSetupSoundArchivePath[];
 
 extern long atol(const char *);
 

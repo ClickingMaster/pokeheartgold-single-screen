@@ -212,8 +212,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
 }
 
 // Slide-out: each task moves one row down by 12 pixels per frame until it is off screen, then
-// starts the row above it. The row's x position is passed to WifiSetupKeyboard_SetRowY as an
-// extra, unused argument.
+// starts the row above it.
 
 void WifiSetupKeyboard_SlideOutButtonsTask(void *task) {
     WifiSetupKeyRowPosition pos;
@@ -221,7 +220,7 @@ void WifiSetupKeyboard_SlideOutButtonsTask(void *task) {
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
     WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 4, pos.y, pos.x);
-    if (*(int *)&pos < 0xc0) { // pos.y, read through memory
+    if (*(int *)&pos < 0xc0) { // pos.y
         return;
     }
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow3Task);
@@ -233,7 +232,7 @@ void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
     WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 3, pos.y, pos.x);
-    if (*(int *)&pos < 0xc0) { // pos.y, read through memory
+    if (*(int *)&pos < 0xc0) { // pos.y
         return;
     }
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow2Task);
@@ -245,7 +244,7 @@ void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
     WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 2, pos.y, pos.x);
-    if (*(int *)&pos < 0xc0) { // pos.y, read through memory
+    if (*(int *)&pos < 0xc0) { // pos.y
         return;
     }
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow1Task);
@@ -257,7 +256,7 @@ void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
     WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 1, pos.y, pos.x);
-    if (*(int *)&pos < 0xc0) { // pos.y, read through memory
+    if (*(int *)&pos < 0xc0) { // pos.y
         return;
     }
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow0Task);
@@ -269,7 +268,7 @@ void WifiSetupKeyboard_SlideOutRow0Task(void *task) {
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
     WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 0, pos.y, pos.x);
-    if (*(int *)&pos < 0xc0) { // pos.y, read through memory
+    if (*(int *)&pos < 0xc0) { // pos.y
         return;
     }
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_DestroyTask);

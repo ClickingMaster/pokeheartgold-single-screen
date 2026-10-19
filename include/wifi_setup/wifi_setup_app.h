@@ -4,9 +4,8 @@
 #include "wifi_setup/wifi_setup.h"
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Access-point setup screens (ARM code in overlay 13), application core: the entry point the game
-// calls, system and display start-up and shutdown, the per-frame main loop, the setup client
-// request, the text banks and the session started from the screens.
+// Access-point setup screens, application core: the entry point the game calls, the per-frame main loop, the setup
+// client request, the text banks and the session started from the screens.
 
 // results of WifiSetupApp_PollAossClient
 #define WIFI_SETUP_CLIENT_BUSY   0
@@ -25,22 +24,22 @@ typedef union WifiSetupAppFlags {
 } WifiSetupAppFlags;
 
 typedef struct WifiSetupApp {
-    s8 language;                     // 0x00, 0-6
-    u8 exit;                         // 0x01, ends the main loop
-    u8 unk_02[2];                    // 0x02
-    void *heap;                      // 0x04, work memory handed in by the caller
-    WifiSetupAppFlags flags;         // 0x08
-    WifiSetupAppStateFunc stateFunc; // 0x0C, called once per frame
-    int bannerMode;                  // 0x10
-    int buttonBarMode;               // 0x14
-    int screenArg0;                  // 0x18
-    int screenArg1;                  // 0x1C
+    s8 language; // 0-6
+    u8 exit;     // ends the main loop
+    u8 unk_02[2];
+    void *heap; // work memory handed in by the caller
+    WifiSetupAppFlags flags;
+    WifiSetupAppStateFunc stateFunc; // called once per frame
+    int bannerMode;
+    int buttonBarMode;
+    int screenArg0;
+    int screenArg1;
 } WifiSetupApp;
 
 typedef struct WifiSetupClient {
-    u8 done;                   // 0x00, the request finished successfully
-    u8 unk_01[3];              // 0x01
-    WifiSetupRequest *request; // 0x04
+    u8 done; // the request finished successfully
+    u8 unk_01[3];
+    WifiSetupRequest *request;
 } WifiSetupClient;
 
 // A loaded text bank: a table of offsets into a block of u16 strings.
@@ -58,12 +57,12 @@ typedef struct WifiSetupTextBanks {
 typedef void (*WifiSetupSessionCallback)(int event);
 
 typedef struct WifiSetupSession {
-    u8 share[0x1E280]; // WifiSetupShare (wifi_setup_share.h)
+    u8 share[0x1E280]; // WifiSetupShare
     u8 childUser[0x18];
-    WifiSetupSessionCallback callback; // 0x1E298
-    void *task;                        // 0x1E29C
-    u8 missedEvent;                      // 0x1E2A0, an event arrived while there was no callback
-    u8 cancelled;                      // 0x1E2A1
+    WifiSetupSessionCallback callback;
+    void *task;
+    u8 missedEvent; // an event arrived while there was no callback
+    u8 cancelled;
 } WifiSetupSession;
 
 // Parameters of the session (WifiSetupShare_Init); the first part is also the Download Play parent's
@@ -79,7 +78,7 @@ typedef struct WifiSetupSessionParams {
 } WifiSetupSessionParams;
 
 extern WifiSetupClient gWifiSetupClient;
-extern WifiSetupRequest *ov13_0224F4C8; // = gWifiSetupClient.request
+extern WifiSetupRequest *ov13_0224F4C8;
 extern WifiSetupApp gWifiSetupApp;
 extern WifiSetupTextBanks *gWifiSetupTextBanks;
 extern WifiSetupSession *gWifiSetupSession;

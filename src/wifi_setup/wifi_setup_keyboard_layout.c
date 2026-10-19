@@ -5,11 +5,11 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Software keyboard: key sizes and row placement. Compiled without -ipa file (see Makefile).
+// Software keyboard: key sizes and row placement.
 
 const WifiSetupPoint ov13_02244F60 = { 0x1C, 0x02 };
-const WifiSetupPoint gWifiSetupKeyboardButtonSize = { 120, 18 }; // button size
-const WifiSetupPoint gWifiSetupKeyboardKeySize = { 17, 18 };     // character key size
+const WifiSetupPoint gWifiSetupKeyboardButtonSize = { 120, 18 };
+const WifiSetupPoint gWifiSetupKeyboardKeySize = { 17, 18 }; // character key size
 
 // number of buttons, character keys and extra keys in each of the five rows (row 4: buttons)
 static const WifiSetupKeyRowCounts sButtonsPerRow = {

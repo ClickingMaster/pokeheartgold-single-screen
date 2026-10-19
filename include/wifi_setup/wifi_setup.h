@@ -5,52 +5,52 @@
 
 #include "nitrowifi/socl_internal.h"
 
-// Access-point setup client (OVY_13 Thumb library): scans for the access point, exchanges
-// UDP packets with it on the local network and reads the connection settings it hands out.
+// Access-point setup client: scans for the access point, exchanges UDP packets with it on the local network and
+// reads the connection settings it hands out.
 
 typedef void *(*WifiSetupAllocFunc)(u32 size);
 typedef void (*WifiSetupFreeFunc)(void *ptr);
 
 typedef struct WifiSetupRuntime {
-    WifiSetupAllocFunc alloc;   // 0x00
-    s32 (*callback)(s32 event); // 0x04, see WifiSetup_NotifyStatus
-    void *allocation;           // 0x08, wireless work buffer
-    WifiSetupFreeFunc free;     // 0x0C, also addressed through its own label gWifiSetupFreeHook
+    WifiSetupAllocFunc alloc;
+    s32 (*callback)(s32 event); // see WifiSetup_NotifyStatus
+    void *allocation;           // wireless work buffer
+    WifiSetupFreeFunc free;
 } WifiSetupRuntime;
 
 typedef struct WifiSetupState {
-    int encryptBody;      // 0x00
-    void *connection;     // 0x04
-    BOOL randomSeeded;    // 0x08
-    int *status;          // 0x0C
-    int error;            // 0x10
-    void *data;           // 0x14
-    u32 randomState;      // 0x18
-    u32 randomMultiplier; // 0x1C
-    u32 randomIncrement;  // 0x20
-    void *key;            // 0x24
-    int keyLength;        // 0x28
-    u32 requestedMask;    // 0x2C, settings the caller asked for
-    u32 receivedMask;     // 0x30, settings received so far
-    u32 address;          // 0x34
-    u32 netmask;          // 0x38
+    int encryptBody;
+    void *connection;
+    BOOL randomSeeded;
+    int *status;
+    int error;
+    void *data;
+    u32 randomState;
+    u32 randomMultiplier;
+    u32 randomIncrement;
+    void *key;
+    int keyLength;
+    u32 requestedMask; // settings the caller asked for
+    u32 receivedMask;  // settings received so far
+    u32 address;
+    u32 netmask;
 } WifiSetupState;
 
 // Request/result block passed in by the caller of WifiSetup_RunAoss.
 typedef struct WifiSetupRequest {
-    u16 requestMask;    // 0x000, which settings to fetch
-    u8 unk_002;         // 0x002
-    u8 unk_003;         // 0x003
-    u16 keyLength;      // 0x004, including the terminator
-    u8 key[256];        // 0x006
-    s16 connectRetries; // 0x106, -1 = default
-    s16 connectDelay;   // 0x108
-    s16 receiveRetries; // 0x10A
-    s16 receiveDelay;   // 0x10C
-    s16 receiveTimeout; // 0x10E
-    u8 macAddress[6];   // 0x110
-    u8 error;           // 0x116
-    u8 result[0x154];   // 0x117
+    u16 requestMask; // which settings to fetch
+    u8 unk_002;
+    u8 unk_003;
+    u16 keyLength; // including the terminator
+    u8 key[256];
+    s16 connectRetries; // -1 = default
+    s16 connectDelay;
+    s16 receiveRetries;
+    s16 receiveDelay;
+    s16 receiveTimeout;
+    u8 macAddress[6];
+    u8 error;
+    u8 result[0x154];
 } WifiSetupRequest;
 
 typedef struct WifiSetupCipher {

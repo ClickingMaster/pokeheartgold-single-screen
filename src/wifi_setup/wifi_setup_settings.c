@@ -47,8 +47,8 @@ extern u8 gWifiSetupSettingsJbBgStep2NcgPath[];
 extern u8 gWifiSetupSettingsJbBgStep21NcgPath[];
 extern u8 gWifiSetupSettingsJb3ListNscPath[];
 extern u8 gWifiSetupSettingsYbObjMainNclPath[];
-extern u16 gWifiSetupSettingsAddressFormat[]; // address format
-extern u32 ov13_0224F554[];                   // &gWifiSetupSettings.work
+extern u16 gWifiSetupSettingsAddressFormat[];
+extern u32 ov13_0224F554[];
 
 extern int WifiSetupMessage_Show();
 extern int WifiSetupMessage_Hide();

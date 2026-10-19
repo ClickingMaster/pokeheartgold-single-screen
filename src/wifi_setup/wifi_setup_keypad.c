@@ -17,7 +17,6 @@ void WifiSetupKeypad_Create(void) {
     int firstLabel;
     int labelIndex;
     int i;
-    // the label box position is the { 0, 1 } stored right after the key sizes
     box[0] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[16];
     box[1] = ((const u16 *)&gWifiSetupKeypadDigitKeySize)[17];
     box[2] = 28;
@@ -93,7 +92,7 @@ BOOL WifiSetupKeypad_Exists(void) {
 }
 
 // Each slide-in task raises one row by 12 pixels per frame until it reaches its place, then starts
-// the next row from the bottom of the screen. The row's x position is read but unused.
+// the next row from the bottom of the screen.
 
 void WifiSetupKeypad_SlideInRow0Task(void *task) {
     WifiSetupKeyRowPosition pos;

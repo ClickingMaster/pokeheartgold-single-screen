@@ -3,9 +3,8 @@
 
 #include "global.h"
 
-// UI framework of the access-point setup screens (ARM code in overlay 13): heap, file loading,
-// linked lists and free-item pools, OAM and character VRAM allocators, brightness fades, text
-// canvases, pad/touch input and a prioritised task scheduler.
+// UI framework of the access-point setup screens: heap, files, lists and pools, OAM and VRAM allocators, fades,
+// text canvases, input and a prioritised task scheduler.
 
 // Direction of a cursor move on the setup screens
 enum WifiSetupCursorDirection {
@@ -129,12 +128,12 @@ typedef struct WifiSetupCanvas {
 
 // The "rom:/dwc/utility.bin" archive (WifiSetupArchive_Load).
 typedef struct WifiSetupArchiveState {
-    void *tables;            // FS archive tables
-    u8 poolItems[0x80];      // 0x04, items of filePool
-    WifiSetupPool *filePool; // 0x84
-    FSArchive arc;           // 0x88
+    void *tables;       // FS archive tables
+    u8 poolItems[0x80]; // items of filePool
+    WifiSetupPool *filePool;
+    FSArchive arc;
     u8 unk_88[0xE4 - 0x88 - sizeof(FSArchive)];
-    u16 lockId; // 0xE4
+    u16 lockId;
 } WifiSetupArchiveState;
 
 void WifiSetupArchive_Load(void);

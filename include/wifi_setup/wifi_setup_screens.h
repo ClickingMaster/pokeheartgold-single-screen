@@ -21,7 +21,7 @@ typedef struct WifiSetupPath25 {
     char text[25];
 } WifiSetupPath25;
 
-// One row of the list screen (0x2A bytes).
+// One row of the list screen.
 typedef struct WifiSetupListRow {
     u8 text[40];
     u8 kind;
@@ -31,30 +31,30 @@ typedef struct WifiSetupListRow {
 // Work of the list screen (allocated by the screen, gWifiSetupListScreen.work).
 typedef struct WifiSetupListWork {
     union {
-        WifiSetupListRow *rows; // 0x00
+        WifiSetupListRow *rows;
         u8 *rowData;
     };
 
-    void *bgScreenFile;           // 0x04
-    void *paletteFile;           // 0x08
-    void *buffer;           // 0x0C
-    GXOamAttr *rowOams[5];  // 0x10
-    GXOamAttr *iconOams[5]; // 0x24
-    void *task;             // 0x38
-    void *scrollBgTask;           // 0x3C
-    u16 total;              // 0x40, scroll range
-    u16 rowKindChars[3];          // 0x42, character numbers per row kind
-    u16 iconChars[4];          // 0x48
-    s8 selected;            // 0x50
-    u8 count;               // 0x51, number of rows
-    u8 index;               // 0x52
-    u8 scrollBarRange;              // 0x53
-    u8 confirmed;              // 0x54
-    u8 delay;               // 0x55
-    u8 bgScrollDirty;              // 0x56
-    u8 draggingScrollBar;              // 0x57
-    u8 scrollLimitSoundPlayed;              // 0x58
-    u8 cursorLimitSoundPlayed;              // 0x59
+    void *bgScreenFile;
+    void *paletteFile;
+    void *buffer;
+    GXOamAttr *rowOams[5];
+    GXOamAttr *iconOams[5];
+    void *task;
+    void *scrollBgTask;
+    u16 total;           // scroll range
+    u16 rowKindChars[3]; // character numbers per row kind
+    u16 iconChars[4];
+    s8 selected;
+    u8 count;
+    u8 index;
+    u8 scrollBarRange;
+    u8 confirmed;
+    u8 delay;
+    u8 bgScrollDirty;
+    u8 draggingScrollBar;
+    u8 scrollLimitSoundPlayed;
+    u8 cursorLimitSoundPlayed;
 } WifiSetupListWork;
 
 typedef struct WifiSetupListScreen {

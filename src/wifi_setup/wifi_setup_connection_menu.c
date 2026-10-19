@@ -15,10 +15,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point setup: the screen of the three connection slots (edit,
-// erase, or the Wi-Fi USB connector), the menu of the four setup methods, the connection test
-// (prompt, test, "connection succeeded"), and the screens before and after the Wi-Fi USB connector
-// screen.
+// Access-point setup: the screen of the three connection slots, the menu of the four setup methods, the connection
+// test, and the screens before and after the Wi-Fi USB connector screen.
 
 typedef struct WifiSetupPaletteRows {
     u8 rows[4];

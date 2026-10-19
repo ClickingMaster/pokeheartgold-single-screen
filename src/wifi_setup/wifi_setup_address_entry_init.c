@@ -9,10 +9,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Start of the address entry screen (compiled without -ipa file, so it stays its own TU): allocates
-// gWifiSetupAddressEntry, fills its digits with the stored address of the kind given by the screen
-// arguments (the cursor then starts on the last field; an unset address is cleared and the cursor
-// starts on the first one) and runs WifiSetupAddressEntry_FadeIn next.
+// Start of the address entry screen: fills the digits with the stored address of the kind given by the screen
+// arguments (an unset address is cleared and the cursor starts on the first field, else on the last).
 
 typedef void (*WifiSetupAddressLoadFunc)(char *buf);
 
@@ -29,7 +27,7 @@ typedef struct WifiSetupAddressMessages {
 // message shown per address kind
 typedef struct WifiSetupAddressLayout {
     u8 unk_00[8];
-    WifiSetupAddressMessages messages; // 0x08
+    WifiSetupAddressMessages messages;
     u8 unk_0D[11];
 } WifiSetupAddressLayout;
 

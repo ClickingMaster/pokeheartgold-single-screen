@@ -5,9 +5,8 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Screen helpers of the access-point setup (ARM code in overlay 13): a sub-screen copy of the BG 2
-// screen flushed by a task when dirty, palette uploads, the vertical scroll bar (thumb plus two
-// arrows) and the access-point scan work allocation.
+// Screen helpers of the access-point setup: a copy of the BG 2 screen flushed by a task when dirty, palette uploads,
+// the vertical scroll bar and the access-point scan work allocation.
 
 // scroll bar parts (WifiSetupScrollBar_GetPartRect)
 #define WIFI_SETUP_SCROLL_BAR_THUMB 1
@@ -21,7 +20,7 @@
 #define WIFI_SETUP_SCROLL_BAR_STATE_UP       2
 #define WIFI_SETUP_SCROLL_BAR_STATE_DOWN     3
 
-// BG 2 screen copy (0x608 bytes).
+// BG 2 screen copy.
 typedef struct WifiSetupBgScreen {
     void *task;
     u16 data[0x300];
@@ -34,7 +33,7 @@ typedef struct WifiSetupBgScreenState {
     void *paletteDst;
 } WifiSetupBgScreenState;
 
-// Vertical scroll bar (0x20 bytes).
+// Vertical scroll bar.
 typedef struct WifiSetupScrollBar {
     WifiSetupOamBlock *thumb;
     int unk_04;

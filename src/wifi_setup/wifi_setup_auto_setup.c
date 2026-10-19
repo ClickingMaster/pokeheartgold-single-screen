@@ -14,11 +14,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Access-point setup: the rest of the connection settings screen (cursor,
-// scrolling, switch buttons, completeness check), the "settings saved"
-// screen, the four screens of the automatic setup with the setup client (WifiSetupClient_*):
-// search -> connect -> receive the settings -> done, and the access-point scan screen.
-// Ends with the start of the connection slot screen.
+// Access-point setup: the rest of the connection settings screen, the "settings saved" screen, the four screens of
+// the automatic setup (search, connect, receive the settings, done) and the access-point scan screen.
 
 // rect index in gWifiSetupSettingsCursorPairRects per cursor item
 typedef struct WifiSetupSettingsCursorRects {

@@ -14,10 +14,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Address entry screen (0x02231C8C-0x02232770). gWifiSetupAddressEntry is allocated and filled with
-// the stored address by WifiSetupAddressEntry_Init (src/wifi_setup/wifi_setup_address_entry_init.c),
-// which then runs WifiSetupAddressEntry_FadeIn. The digits are typed on the numeric keypad; OK
-// checks the address and asks for confirmation before it is stored.
+// Address entry screen: the digits are typed on the numeric keypad; OK checks the address and asks for
+// confirmation before it is stored.
 
 typedef void (*WifiSetupAddressFunc)(u8 *digits);
 
@@ -31,12 +29,9 @@ typedef struct WifiSetupFieldLimit {
     u8 digits[4];
 } WifiSetupFieldLimit;
 
-// gWifiSetupTextEntry (src/wifi_setup/wifi_setup_screens.c) directly precedes gWifiSetupAddressEntry; the
-// screen frees its work through it.
 extern void *gWifiSetupTextEntry[];
 
-// Screen layout (defined in src/wifi_setup/wifi_setup_address_entry_init.c): starts
-// with the field limit; the u16 at index 7 and 8 are the position of the digits.
+// Screen layout: starts with the field limit; the u16 at index 7 and 8 are the position of the digits.
 extern const WifiSetupFieldLimit gWifiSetupAddressLayout;
 extern WifiSetupAddressFuncs gWifiSetupAddressEntryFuncs;
 extern const u8 gWifiSetupAddressEntryDigitX[]; // x of every digit

@@ -24,13 +24,13 @@ typedef struct WifiSetupMbParentData {
     u8 rest[0x848 - 0x18];
 } WifiSetupMbParentData;
 
-extern void *ov13_0224F5B0[]; // same address as gWifiSetupBanner.banner, then gWifiSetupUsbScan, gWifiSetupDialog
+extern void *ov13_0224F5B0[];
 
-extern const u8 gWifiSetupBannerLetterTemplates[][WIFI_SETUP_BANNER_NUM_LETTERS]; // banner letter templates per kind
-extern const u8 gWifiSetupBannerLetterPalettes[][WIFI_SETUP_BANNER_NUM_LETTERS];  // banner letter palettes per kind
+extern const u8 gWifiSetupBannerLetterTemplates[][WIFI_SETUP_BANNER_NUM_LETTERS]; // per kind
+extern const u8 gWifiSetupBannerLetterPalettes[][WIFI_SETUP_BANNER_NUM_LETTERS];  // per kind
 extern WifiSetupPoint gWifiSetupBannerLetterPositions[WIFI_SETUP_BANNER_NUM_LETTERS];
-extern u8 gWifiSetupUsbScanEmptyBssid[6]; // empty BSSID
-extern u8 gWifiSetupUsbApSsid[];          // "NWCUSBAP"
+extern u8 gWifiSetupUsbScanEmptyBssid[6];
+extern u8 gWifiSetupUsbApSsid[]; // "NWCUSBAP"
 extern WmScanExParam gWifiSetupUsbScanParam;
 extern u8 gWifiSetupDialogWindowPlanes[];
 extern WifiSetupRect gWifiSetupDialogWindowRect;
@@ -2851,7 +2851,6 @@ static void WifiSetupDialog_SetY(int y) {
     if (bottom > 0xC0) {
         bottom = 0xC0;
     }
-    // called without the u16 conversions of the prototype
     ((void (*)(int, int, int, int, WifiSetupRect *))WifiSetup_SetRect)(left, top, right, bottom, &win);
     WifiSetupDisplay_SetWindowRect(0, 0, &win);
 }

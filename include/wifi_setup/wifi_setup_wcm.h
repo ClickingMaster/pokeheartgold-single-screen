@@ -3,9 +3,8 @@
 
 #include "global.h"
 
-// Wireless connection manager (WCM_*) wrapper of the access-point setup client. The client carries
-// two copies of it: the first module keeps its state in gWifiSetupWcm, the second inside WifiSetupWork.
-//
+// Wireless connection manager (WCM_*) wrapper of the access-point setup client.
+
 // wrapper states (gWifiSetupWcm.state)
 #define WIFI_SETUP_WCM_STATE_NONE            0
 #define WIFI_SETUP_WCM_STATE_READY           1 // WCM_Init done
@@ -40,25 +39,23 @@ typedef struct WifiSetupWcmEvent {
 
 // Start-up parameters handed to WCM_StartupAsync
 typedef struct WifiSetupWcmConfig {
-    u32 dmaNo;      // 0x00, always 3
-    void *buffer;   // 0x04, rest of the caller's allocation
-    u32 bufferSize; // 0x08
-    u32 apListMode; // 0x0C, always 0
+    u32 dmaNo;    // always 3
+    void *buffer; // rest of the caller's allocation
+    u32 bufferSize;
+    u32 apListMode; // always 0
 } WifiSetupWcmConfig;
 
-// gWifiSetupWcm (0x28 bytes); followed by its search filter buffers gWifiSetupWcmSearchBssid (BSSID) and
-// gWifiSetupWcmSearchSsid (SSID)
 typedef struct WifiSetupWcm {
-    void *wcmWork;                        // 0x00, WCM_Init work area
-    int searchOption;                     // 0x04
-    WifiSetupWcmConfig *config;           // 0x08
-    int connectOption;                    // 0x0C
-    void *searchBssid;                    // 0x10
-    void *searchSsid;                     // 0x14
-    int state;                            // 0x18
-    void (*callback)(int event, int arg); // 0x1C
-    void *connectAp;                      // 0x20, access point description (0xC0 bytes)
-    void *connectKey;                     // 0x24, key description (0x50 bytes)
+    void *wcmWork; // WCM_Init work area
+    int searchOption;
+    WifiSetupWcmConfig *config;
+    int connectOption;
+    void *searchBssid;
+    void *searchSsid;
+    int state;
+    void (*callback)(int event, int arg);
+    void *connectAp;  // access point description
+    void *connectKey; // key description
 } WifiSetupWcm;
 
 void WifiSetup_Sleep(s32 ticks);

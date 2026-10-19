@@ -5,7 +5,7 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Software keyboard, first part of the slide-in animation (compiled with MWCC 2.0, see Makefile):
+// Software keyboard, first part of the slide-in animation:
 // each task raises one key row by 12 pixels per frame until it reaches its place, then starts the
 // next row from the bottom of the screen.
 

@@ -5,12 +5,12 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Numeric keypad: key sizes and row placement. Compiled without -ipa file (see Makefile).
+// Numeric keypad: key sizes and row placement.
 
-const WifiSetupPoint gWifiSetupKeypadExtraKeySize = { 0x1C, 0x14 }; // extra key size
-const WifiSetupPoint gWifiSetupKeypadDigitKeySize = { 0x1C, 0x14 }; // digit key size
+const WifiSetupPoint gWifiSetupKeypadExtraKeySize = { 0x1C, 0x14 };
+const WifiSetupPoint gWifiSetupKeypadDigitKeySize = { 0x1C, 0x14 };
 static const WifiSetupPoint sUnused = { 0x0C, 0x04 };
-const WifiSetupPoint gWifiSetupKeypadButtonSize = { 0x78, 0x12 }; // button size
+const WifiSetupPoint gWifiSetupKeypadButtonSize = { 0x78, 0x12 };
 
 // number of digit keys, extra keys and buttons in each of the five rows (row 4: buttons)
 static const WifiSetupKeyRowCounts sDigitKeysPerRow = {

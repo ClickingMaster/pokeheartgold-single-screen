@@ -27,13 +27,11 @@ typedef struct WifiSetupReply {
     u32 words[149];
 } WifiSetupReply;
 
-// Both labels point into gWifiSetupWork (gWifiSetupWcmSearchSsid + 0x20 is its unk_00, gWifiSetupExtendedRequest its
-// extendedRequest); the code addresses them through these labels.
 extern u8 gWifiSetupWcmSearchSsid[];
 extern int gWifiSetupExtendedRequest[];
-extern u8 gWifiSetupSessionKey[16];     // key
-extern u8 gWifiSetupPacketBuffer[2048]; // packet buffer
-extern u8 gWifiSetupRecordBuffer[2048]; // record buffer
+extern u8 gWifiSetupSessionKey[16];
+extern u8 gWifiSetupPacketBuffer[2048];
+extern u8 gWifiSetupRecordBuffer[2048];
 extern u8 gWifiSetupSettingsKey[8];
 extern u8 gWifiSetupTimestampDigest[24];
 extern WifiSetupReply gWifiSetupReply;

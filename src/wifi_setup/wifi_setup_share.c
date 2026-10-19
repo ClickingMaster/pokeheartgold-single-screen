@@ -11,9 +11,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Local wireless session of the access-point setup (see include/wifi_setup/wifi_setup_share.h): Download Play
-// parent queries, the WM handler (WifiSetupWh_*), the session state machine (WifiSetupShare_*) and
-// the mount of the utility archive.
+// Local wireless session of the access-point setup: Download Play parent queries, the WM handler, the session
+// state machine and the mount of the utility archive.
 
 #define WH_LOG_LEVEL 0x8000000
 
@@ -36,7 +35,7 @@ extern char gWifiSetupWhStr_AlreadyIdle[];               // "already DWCi_MOV_WH
 extern char gWifiSetupWhStr_Finalize[];                  // "DWCi_MOV_WH_Finalize, state = %d\n"
 extern char gWifiSetupArchivePath[];                     // "rom:/dwc/utility.bin"
 extern char gWifiSetupArchivePrefixFormat[];             // "%s:/"
-extern char gWifiSetupArchiveName[];                     // archive name
+extern char gWifiSetupArchiveName[];
 
 extern WifiSetupArchiveState *gWifiSetupArchive;
 

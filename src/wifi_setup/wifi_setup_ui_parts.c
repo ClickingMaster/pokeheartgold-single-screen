@@ -210,7 +210,6 @@ static void WifiSetupButtonBar_DestroyTask(void *task) {
         }
     }
     WifiSetupOamBlock_Free(gWifiSetupButtonBar->bar);
-    // &gWifiSetupButtonBar, formed from the next label (own literal-pool slot, as in the original)
     WifiSetupHeap_FreeAndClear(&gWifiSetupMessageShown - 4);
 }
 
@@ -405,7 +404,7 @@ void WifiSetupBackground_Free(void) {
     WifiSetupHeap_FreeAndClear(&gWifiSetupBackgroundScreen);
 }
 
-// Replaces the first 192 bytes (3 rows) of the BG1 screen at the next vblank.
+// Replaces the first 3 rows of the BG1 screen at the next vblank.
 void WifiSetupBackground_LoadHeader(int n) {
     void *data;
     data = WifiSetupFile_Load(WifiSetup_LocalizePath(gWifiSetupBackgroundScreenPaths[n]), NULL, 4);

@@ -3,9 +3,8 @@
 #include "wifi_setup/wifi_setup_internal.h"
 #include "wifi_setup/wifi_setup_wcm.h"
 
-// Second copy of the WCM wrapper, on the worker's state gWifiSetupWork, plus
-// the worker's link steps: open (start WCM), connect to the chosen access point and start the
-// socket library, disconnect, close. WCM events are queued (gWifiSetupLinkEventQueue) and polled by the worker.
+// The WCM wrapper on the worker's state, and the worker's link steps: open, connect to the chosen access point and
+// start the socket library, disconnect, close. WCM events are queued and polled by the worker.
 
 extern void (*gWifiSetupLinkEventCallback)(u32 event, int arg);
 extern u32 gWifiSetupLinkEventQueue[4];
@@ -467,8 +466,6 @@ void WifiSetupLink_PostEvent(u32 event) {
     WifiSetupLink_PushEvent(event, 0);
 }
 
-// The mask is computed at run time (-32 as a 16-bit value) so the alignment keeps its instruction
-// sequence.
 static inline u32 AlignDown32(u32 value) {
     s16 m1 = 31;
     return value & (m1 - 63);

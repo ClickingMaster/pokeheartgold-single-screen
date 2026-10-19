@@ -3,12 +3,8 @@
 
 #include "wifi_setup/wifi_setup_ui.h"
 
-// Software keyboard of the access-point setup screens (ARM code in overlay 13).
-//
-// Keys are numbered 0-52: 0-46 are the character keys (four rows, 12 per row except the last),
-// 47-50 the extra keys on the right (47 alternate page, 48 shift, 50 delete) and 51-52 the two
-// buttons below the keyboard. The keyboard slides in row by row from the bottom of the touch
-// screen and slides out the same way when it is closed.
+// Software keyboard of the access-point setup screens. Keys 0-46 are the character keys, 47-50 the extra keys on
+// the right (47 alternate page, 48 shift, 50 delete) and 51-52 the two buttons below the keyboard.
 
 #define WIFI_SETUP_KEYBOARD_NUM_CHAR_KEYS  47
 #define WIFI_SETUP_KEYBOARD_NUM_EXTRA_KEYS 4
@@ -22,51 +18,51 @@
 #define WIFI_SETUP_KEYBOARD_INPUT_DELETE 128 // input code of the delete key and of the B button
 
 typedef struct WifiSetupKeyboard {
-    WifiSetupCanvas *rows[3][4];     // 0x000, text of the four key rows of each page
-    GXOamAttr *keys[47];             // 0x030
-    GXOamAttr *extraKeys[4];         // 0x0EC
-    WifiSetupOamBlock *buttons[2];   // 0x0FC
-    WifiSetupOamBlock *rowBlocks[4]; // 0x104, objects showing the current page's rows
-    WifiSetupOamBlock *cursor;       // 0x114
-    void *task;                      // 0x118
-    u8 input;                        // 0x11C, code of the key typed this frame, 0 if none
-    u8 page;                         // 0x11D, 0: normal, 1: shifted (one character), 2: alternate
-    s8 pressedKey;                   // 0x11E, key the stylus went down on, -1 if none
-    s8 hoveredKey;                   // 0x11F, key drawn highlighted, -1 if none
-    s8 returnKey;                    // 0x120, key the cursor came from before entering a wide key
-    s8 cursorKey;                    // 0x121
-    u8 repeatTimer;                  // 0x122, frames the delete key has been held
-    u8 canDelete;                    // 0x123
-    u8 canType;                      // 0x124
-    u8 deleteErrorPlayed;            // 0x125, B held with nothing to delete: error sound played once
+    WifiSetupCanvas *rows[3][4]; // text of the four key rows of each page
+    GXOamAttr *keys[47];
+    GXOamAttr *extraKeys[4];
+    WifiSetupOamBlock *buttons[2];
+    WifiSetupOamBlock *rowBlocks[4]; // objects showing the current page's rows
+    WifiSetupOamBlock *cursor;
+    void *task;
+    u8 input;      // code of the key typed this frame, 0 if none
+    u8 page;       // 0: normal, 1: shifted (one character), 2: alternate
+    s8 pressedKey; // key the stylus went down on, -1 if none
+    s8 hoveredKey; // key drawn highlighted, -1 if none
+    s8 returnKey;  // key the cursor came from before entering a wide key
+    s8 cursorKey;
+    u8 repeatTimer; // frames the delete key has been held
+    u8 canDelete;
+    u8 canType;
+    u8 deleteErrorPlayed; // B held with nothing to delete: error sound played once
 } WifiSetupKeyboard;
 
 extern WifiSetupKeyboard *gWifiSetupKeyboard;
 
 // layout (positions and sizes in pixels on the touch screen)
-extern const WifiSetupPoint gWifiSetupKeyboardKeyPositions[47]; // character key positions
+extern const WifiSetupPoint gWifiSetupKeyboardKeyPositions[47];
 extern const WifiSetupPoint ov13_02244F60;
-extern const WifiSetupPoint gWifiSetupKeyboardButtonSize;    // button size
-extern const WifiSetupPoint gWifiSetupKeyboardKeySize;    // character key size
-extern const WifiSetupPoint gWifiSetupKeyboardButtonPositions[2]; // button positions
-extern const WifiSetupPoint gWifiSetupKeyboardExtraKeyPositions[];  // extra key positions
-extern const WifiSetupPoint ov13_02244F88[];  // = &gWifiSetupKeyboardExtraKeyPositions[1]
-extern const WifiSetupPoint ov13_02244F8C[];  // = &gWifiSetupKeyboardExtraKeyPositions[2]
-extern const WifiSetupPoint gWifiSetupKeyboardExtraKeySizes[];  // extra key sizes
-extern const WifiSetupPoint ov13_02244F98[];  // = &gWifiSetupKeyboardExtraKeySizes[1]
-extern const WifiSetupPoint ov13_02244F9C[];  // = &gWifiSetupKeyboardExtraKeySizes[2]
-extern WifiSetupRect gWifiSetupInputPanelRect;           // whole keyboard
-extern u16 gWifiSetupKeyboardCursorX[];                   // cursor x of each key (stride 2)
-extern u16 gWifiSetupKeyboardCursorY[];                   // cursor y of each key (stride 2)
-extern const s8 gWifiSetupKeyboardCursorMoves[][4];           // cursor moves: next key for left, up, right, down
+extern const WifiSetupPoint gWifiSetupKeyboardButtonSize;
+extern const WifiSetupPoint gWifiSetupKeyboardKeySize;
+extern const WifiSetupPoint gWifiSetupKeyboardButtonPositions[2];
+extern const WifiSetupPoint gWifiSetupKeyboardExtraKeyPositions[];
+extern const WifiSetupPoint ov13_02244F88[];
+extern const WifiSetupPoint ov13_02244F8C[];
+extern const WifiSetupPoint gWifiSetupKeyboardExtraKeySizes[];
+extern const WifiSetupPoint ov13_02244F98[];
+extern const WifiSetupPoint ov13_02244F9C[];
+extern WifiSetupRect gWifiSetupInputPanelRect;
+extern u16 gWifiSetupKeyboardCursorX[];
+extern u16 gWifiSetupKeyboardCursorY[];
+extern const s8 gWifiSetupKeyboardCursorMoves[][4]; // next key for left, up, right, down
 
 // input codes
-extern u8 *gWifiSetupKeyboardPageKeyCodes[3];      // character key codes of each page
-extern u8 gWifiSetupKeyboardExtraKeyCodes[];        // extra key codes
-extern u8 gWifiSetupKeyboardButtonCodes[];        // button codes
-extern int gWifiSetupKeyboardExtraKeySounds[];       // sound of each extra key
-extern const u8 gWifiSetupKeyboardKeyPalettes[4]; // key palette: normal, highlighted
-extern const u8 gWifiSetupKeyboardButtonPalettes[4]; // button palette: normal, highlighted
+extern u8 *gWifiSetupKeyboardPageKeyCodes[3];
+extern u8 gWifiSetupKeyboardExtraKeyCodes[];
+extern u8 gWifiSetupKeyboardButtonCodes[];
+extern int gWifiSetupKeyboardExtraKeySounds[];
+extern const u8 gWifiSetupKeyboardKeyPalettes[4];    // normal, highlighted
+extern const u8 gWifiSetupKeyboardButtonPalettes[4]; // normal, highlighted
 
 void WifiSetupKeyboard_Create(void);
 void WifiSetupKeyboard_Close(void);
@@ -88,8 +84,7 @@ void WifiSetupKeyboard_ToggleShift(void);
 void WifiSetupKeyboard_HandleTouchHold(void);
 void WifiSetupKeyboard_SetHoveredKey(int key);
 void WifiSetupKeyboard_HandleButtons(void);
-// Moves row `row` (4: the buttons) of page `page` to height y. Declared without a prototype: the
-// slide-out tasks pass the row's x position as an extra argument.
+// Moves row `row` (4: the buttons) of page `page` to height y.
 void WifiSetupKeyboard_SetRowY();
 void WifiSetupKeyboard_SetPage(int page);
 void WifiSetupKeyboard_SetKeyHighlight(int key, int highlighted);
