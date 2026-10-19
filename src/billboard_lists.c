@@ -1,5 +1,7 @@
 #include "billboard_lists.h"
 
+#include <nnsys/g3d_internal.h>
+
 #include "global.h"
 
 #include "billboard_internal.h"
@@ -37,12 +39,12 @@ static void BillboardObject_LoadModel(BillboardObject *object, BillboardResource
 static void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource);
 static void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource);
 static void BillboardObject_SetResourceData(BillboardObject *object, BillboardResource *resource);
-static inline u8 *Billboard_GetIndexedData(u8 *base, u32 index);
+static inline G3dResMatData *Billboard_GetMatData(G3dResMat *mat, u32 index);
 static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object);
 static void Billboard_SetModelTexture(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index);
-static void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u32 value);
+static void Billboard_OffsetMaterialTexImage(G3dResMat *mat, G3dResBindEntry *bind, u32 value);
 static void Billboard_SetModelPltt(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index);
-static void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 value);
+static void Billboard_OffsetMaterialPltt(G3dResMat *mat, G3dResBindEntry *bind, u32 value);
 static void Billboard_InitObjectPool(Billboard *billboard);
 static BillboardObject *Billboard_AllocObject(Billboard *billboard);
 static BOOL Billboard_FreeObject(Billboard *billboard, BillboardObject *object);
@@ -52,13 +54,12 @@ static NNSG3dResMdlSet *BillboardResource_GetModelSet(BillboardResource *resourc
 static NNSG3dResTex *BillboardResource_GetTexture(BillboardResource *resource);
 static void BillboardObject_ApplyResource(BillboardObject *object, BillboardResource *resource);
 static fx32 BillboardObject_GetSequenceStart(BillboardObject *object, u32 index);
-static void BillboardObject_StepFrame(BillboardObject *object, fx32 delta);
+static BOOL BillboardObject_StepFrame(BillboardObject *object, fx32 delta);
 static void BillboardObject_BindTexture(BillboardObject *object);
 static void BillboardObject_ReleaseTexture(BillboardObject *object);
 static void *BillboardResource_GetFile(BillboardResource *resource, u32 which);
 static const BillboardSequenceRange *BillboardSequence_Get(const BillboardSequenceRange *ranges, u32 index);
-
-void NNS_G3dReleaseMdlSet(NNSG3dResMdlSet *);
+static BOOL BillboardSequence_Step(const BillboardSequenceRange *range, fx32 *frame, fx32 delta);
 
 Billboard *Billboard_Create(BillboardCreateParams *params);
 BOOL Billboard_Delete(Billboard *billboard);
@@ -72,7 +73,7 @@ VecFx32 *BillboardObject_GetScale(BillboardObject *);
 u32 BillboardObject_IsVisible(BillboardObject *);
 void BillboardObject_SetSequence(BillboardObject *, u32);
 u32 BillboardObject_GetSequence(BillboardObject *);
-void BillboardObject_AdvanceFrame(BillboardObject *, fx32);
+BOOL BillboardObject_AdvanceFrame(BillboardObject *, fx32);
 void BillboardObject_SetFrame(BillboardObject *, fx32);
 fx32 BillboardObject_GetFrame(BillboardObject *);
 void BillboardObject_SetSequenceFrame(BillboardObject *, fx32);
@@ -82,7 +83,6 @@ NNSG3dPlttKey BillboardObject_GetPlttKey(BillboardObject *);
 void BillboardObject_UpdateTextureAnimation(BillboardObject *object);
 NNSG3dResMdl *BillboardObject_GetModelNoCast(BillboardObject *);
 void BillboardObject_SetCallback(BillboardObject *, BillboardCallback, void *);
-BOOL BillboardSequence_Step(const BillboardSequenceRange *range, fx32 *frame, fx32 delta);
 
 static BillboardListManager sBillboardLists;
 
@@ -443,12 +443,12 @@ BOOL BillboardObject_Delete(BillboardObject *object) {
     return TRUE;
 }
 
-static inline u8 *Billboard_GetIndexedData(u8 *base, u32 index) {
+static inline G3dResMatData *Billboard_GetMatData(G3dResMat *mat, u32 index) {
     u32 *entry;
-    if (base != NULL) {
-        entry = NNS_G3dGetResDataByIdx((NNSG3dResDict *)(base + 4), index);
+    if (mat != NULL) {
+        entry = NNS_G3dGetResDataByIdx(&mat->dict, index);
         if (entry != NULL) {
-            return base + *entry;
+            return (G3dResMatData *)((u8 *)mat + *entry);
         }
     }
     return NULL;
@@ -520,9 +520,9 @@ u32 BillboardObject_GetSequence(BillboardObject *object) {
     return object->sequence;
 }
 
-void BillboardObject_AdvanceFrame(BillboardObject *object, fx32 delta) {
+BOOL BillboardObject_AdvanceFrame(BillboardObject *object, fx32 delta) {
     GF_ASSERT(object != NULL);
-    BillboardObject_StepFrame(object, delta);
+    return BillboardObject_StepFrame(object, delta);
 }
 
 void BillboardObject_SetFrame(BillboardObject *object, fx32 frame) {
@@ -584,86 +584,87 @@ static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
 }
 
 static void Billboard_SetModelTexture(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index) {
-    u8 *materialBlock;
-    NNSG3dResDict *materialDict;
-    u32 *entry;
-    u16 value;
+    G3dResMat *mat;
+    NNSG3dResDict *bindDict;
+    G3dResTexData *texData;
+    u16 texImageParam;
     int i;
-    void *materialData;
+    G3dResBindEntry *bind;
 
     if (model != NULL && model->ofsMat != 0) {
-        materialBlock = (u8 *)model + model->ofsMat;
+        mat = (G3dResMat *)((u8 *)model + model->ofsMat);
     } else {
-        materialBlock = NULL;
+        mat = NULL;
     }
-    materialDict = (NNSG3dResDict *)(materialBlock + *(u16 *)materialBlock);
+    // BUG: without materials (or without the texture entry below) this reads through a NULL pointer
+    bindDict = (NNSG3dResDict *)((u8 *)mat + mat->ofsDictTexToMatList);
     if (texture != NULL) {
-        entry = NNS_G3dGetResDataByIdx(&texture->dict, index);
+        texData = NNS_G3dGetResDataByIdx(&texture->dict, index);
     } else {
-        entry = NULL;
+        texData = NULL;
     }
-    value = *entry;
-    for (i = 0; i < materialDict->numEntry; i++) {
-        materialData = NNS_G3dGetResDataByIdx(materialDict, i);
-        if (*((u8 *)materialData + 3) & 1) {
-            Billboard_OffsetMaterialTexImage(materialBlock, materialData, value);
+    texImageParam = texData->texImageParam;
+    for (i = 0; i < bindDict->numEntry; i++) {
+        bind = NNS_G3dGetResDataByIdx(bindDict, i);
+        if (bind->flag & G3D_RESBIND_BOUND) {
+            Billboard_OffsetMaterialTexImage(mat, bind, texImageParam);
         }
     }
 }
 
-static void Billboard_OffsetMaterialTexImage(void *materialBlock, void *materialData, u32 value) {
-    u8 *material;
-    u8 *base = materialBlock;
+static void Billboard_OffsetMaterialTexImage(G3dResMat *mat, G3dResBindEntry *bind, u32 value) {
+    G3dResMatData *matData;
     int i;
-    u8 *indices = base + *(u16 *)materialData;
-    for (i = 0; i < *((u8 *)materialData + 2); i++) {
-        material = Billboard_GetIndexedData(base, indices[i]);
-        GF_ASSERT((u16) * (u32 *)(material + 0x14) + value <= 0xFFFF);
-        *(u32 *)(material + 0x14) += value;
+    u8 *matIndices = (u8 *)mat + bind->ofsMatIdxList;
+    for (i = 0; i < bind->numMat; i++) {
+        matData = Billboard_GetMatData(mat, matIndices[i]);
+        GF_ASSERT((u16)matData->texImageParam + value <= 0xFFFF);
+        matData->texImageParam += value;
     }
 }
 
 static void Billboard_SetModelPltt(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index) {
-    u32 value;
-    u8 *materialBlock;
-    NNSG3dResDict *shapeDict;
-    u8 *subDict;
-    u16 *entry;
+    u32 plttBase;
+    G3dResMat *mat;
+    NNSG3dResDict *bindDict;
+    u8 *plttDict;
+    G3dResPlttData *plttData;
     u32 i;
-    void *shapeData;
+    G3dResBindEntry *bind;
 
     if (model != NULL && model->ofsMat != 0) {
-        materialBlock = (u8 *)model + model->ofsMat;
+        mat = (G3dResMat *)((u8 *)model + model->ofsMat);
     } else {
-        materialBlock = NULL;
+        mat = NULL;
     }
-    shapeDict = (NNSG3dResDict *)(materialBlock + *((u16 *)materialBlock + 1));
+    // BUG: without materials (or without the texture entry below) this reads through a NULL pointer
+    bindDict = (NNSG3dResDict *)((u8 *)mat + mat->ofsDictPlttToMatList);
     if (texture != NULL && texture->plttInfo.ofsDict != 0) {
-        subDict = (u8 *)texture + texture->plttInfo.ofsDict;
-        entry = NNS_G3dGetResDataByIdx((NNSG3dResDict *)subDict, index);
+        plttDict = (u8 *)texture + texture->plttInfo.ofsDict;
+        plttData = NNS_G3dGetResDataByIdx((NNSG3dResDict *)plttDict, index);
     } else {
-        entry = NULL;
+        plttData = NULL;
     }
-    value = entry[0];
-    if (!(entry[1] & 1)) {
-        value >>= 1;
+    plttBase = plttData->offset;
+    if (!(plttData->flag & G3D_RESPLTTDATA_4COLOR)) {
+        plttBase >>= 1;
     }
-    for (i = 0; i < shapeDict->numEntry; i++) {
-        shapeData = NNS_G3dGetResDataByIdx(shapeDict, i);
-        if (*((u8 *)shapeData + 3) & 1) {
-            Billboard_OffsetMaterialPltt(materialBlock, shapeData, value);
+    for (i = 0; i < bindDict->numEntry; i++) {
+        bind = NNS_G3dGetResDataByIdx(bindDict, i);
+        if (bind->flag & G3D_RESBIND_BOUND) {
+            Billboard_OffsetMaterialPltt(mat, bind, plttBase);
         }
     }
 }
 
-static void Billboard_OffsetMaterialPltt(void *materialBlock, void *shapeData, u32 value) {
-    u8 *indices = (u8 *)materialBlock + *(u16 *)shapeData;
+static void Billboard_OffsetMaterialPltt(G3dResMat *mat, G3dResBindEntry *bind, u32 value) {
+    u8 *matIndices = (u8 *)mat + bind->ofsMatIdxList;
     u32 i;
-    u8 *shape;
-    for (i = 0; i < *((u8 *)shapeData + 2); i++) {
-        shape = Billboard_GetIndexedData(materialBlock, indices[i]);
-        GF_ASSERT((*(u16 *)(shape + 0x1C) & 0x1FFF) + value <= 0x1FFF);
-        *(u16 *)(shape + 0x1C) += value;
+    G3dResMatData *matData;
+    for (i = 0; i < bind->numMat; i++) {
+        matData = Billboard_GetMatData(mat, matIndices[i]);
+        GF_ASSERT((matData->texPlttBase & 0x1FFF) + value <= 0x1FFF);
+        matData->texPlttBase += value;
     }
 }
 
@@ -735,12 +736,12 @@ static fx32 BillboardObject_GetSequenceStart(BillboardObject *object, u32 index)
     return range->start << FX32_SHIFT;
 }
 
-static void BillboardObject_StepFrame(BillboardObject *object, fx32 delta) {
+static BOOL BillboardObject_StepFrame(BillboardObject *object, fx32 delta) {
     const BillboardSequenceRange *range = BillboardSequence_Get(object->ranges, object->sequence);
-    BillboardSequence_Step(range, &object->frame, delta);
+    return BillboardSequence_Step(range, &object->frame, delta);
 }
 
-BOOL BillboardSequence_Step(const BillboardSequenceRange *range, fx32 *frame, fx32 delta) {
+static BOOL BillboardSequence_Step(const BillboardSequenceRange *range, fx32 *frame, fx32 delta) {
     BOOL finished = FALSE;
     fx32 start = range->start << FX32_SHIFT;
     fx32 current = *frame;

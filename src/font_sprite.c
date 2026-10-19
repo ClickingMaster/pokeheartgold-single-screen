@@ -65,11 +65,7 @@ static void FontOAMCell_Delete(FontOAMCell *node);
 static void FontOAMCell_FreeList(FontOAMCell *list);
 static void FontOAMCell_InsertBefore(FontOAMCell *node, FontOAMCell *next);
 
-void TextOBJ_UpdatePosition(TextOBJ *object);
-void TextOBJ_SetPriority(TextOBJ *object, u8 priority);
-void TextOBJ_SetPalIndexRespectVramOffset(TextOBJ *object, int palette);
 void TextOBJ_SetPalOffset(TextOBJ *object, u8 palette);
-void TextOBJ_SetParentSprite(TextOBJ *object, const Sprite *sprite);
 
 static const u8 sFontOAMCellSizes[12][2] = {
     { 8, 8 },

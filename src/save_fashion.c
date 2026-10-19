@@ -1,6 +1,10 @@
+#include "save_fashion.h"
+
 #include "global.h"
 
 #include "constants/save_arrays.h"
+
+#include "application/dress_up/dress_up_internal.h"
 
 #include "fashion_case.h"
 #include "graphics_object_manager.h"
@@ -13,7 +17,7 @@
 // Fashion save data (save array 0xC): 11 dressed-up Pokemon entries, 5 larger entries and the fashion case
 // (accessory counts, backdrop order). An entry's magic is 0x1234 while empty and 0x2345 once saved.
 
-typedef struct SaveFashionMon {
+struct SaveFashionMon {
     u32 personality;
     u32 otId;
     u16 species;
@@ -24,7 +28,7 @@ typedef struct SaveFashionMon {
     u8 y;
     u8 form;
     u8 unk_34;
-} SaveFashionMon;
+};
 
 // One dressed-up Pokemon entry.
 typedef struct FashionEntry {
@@ -44,11 +48,6 @@ typedef struct FashionEntryLarge {
     u8 data[0x94];
 } FashionEntryLarge;
 
-typedef struct FashionSource {
-    u32 id;
-    void *object; // graphics object: packed x/y position, z
-} FashionSource;
-
 typedef struct FashionItemCoords {
     u16 x;
     u16 y;
@@ -56,13 +55,10 @@ typedef struct FashionItemCoords {
     u16 yCopy;
 } FashionItemCoords;
 
-extern void DressUpMon_GetCenterPos(int, int *, int *);
-extern int DressUpMon_GetPriority(int);
-
 static BOOL IsValidFashionMagic(u32 value);
-static void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ);
+static void GetFashionObjectPlacement(DressUpMonPic *monPic, u8 *outX, u8 *outY, u8 *outZ);
 static void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z);
-static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId);
+static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, DressUpMonPic *monPic);
 static void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2);
 static void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon);
 static void SetFashionItemPlacement(u8 *dst, u8 accessoryId, u8 x, u8 y, u8 z);
@@ -83,34 +79,6 @@ static BOOL Save_FashionData_IsNewEntry(SaveFashionData *fashionData, SaveFashio
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
 u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
 
-void Save_FashionData_Init(SaveFashionData *fashionData);
-u32 Save_FashionData_sizeof(void);
-u32 FashionEntry_sizeof(void);
-SaveFashionDataSub *FashionEntry_New(enum HeapID heapId);
-BOOL FashionEntry_IsSaved(SaveFashionDataSub *entry);
-u8 FashionCase_GetWallpaperOrder(FashionCase *fashionCase, int index);
-void FashionEntry_MarkSaved(SaveFashionDataSub *entry);
-void FashionEntry_Clear(SaveFashionDataSub *entry);
-void FashionEntry_SetMon(SaveFashionDataSub *entry, Pokemon *mon, int value);
-void FashionEntry_PlaceItem(SaveFashionDataSub *entry, FashionSource *source, int index);
-void FashionEntry_SetBackdrop(SaveFashionDataSub *entry, int value);
-void FashionEntry_SetMonSecondText(SaveFashionDataSub *entry, String *string, u8 value);
-BOOL FashionEntry_IsItemPlaced(SaveFashionDataSub *entry, int index);
-SaveFashionMon *FashionEntry_GetMon(SaveFashionDataSub *entry);
-u8 *FashionEntry_GetItem(SaveFashionDataSub *entry, int index);
-void FashionEntry_GetMonSecondText(SaveFashionDataSub *entry, String *string);
-u8 FashionEntry_GetBackdrop(SaveFashionDataSub *entry);
-u16 FashionEntry_GetMailMessageWord(SaveFashionDataSub *entry);
-s8 FashionMon_GetZ(SaveFashionMon *mon);
-u8 FashionMon_GetX(SaveFashionMon *mon);
-u8 FashionMon_GetY(SaveFashionMon *mon);
-void FashionMon_ToPokemon(SaveFashionMon *mon, Pokemon *pokemon);
-u8 FashionItem_GetId(u8 *data);
-u8 FashionItem_GetX(u8 *data);
-u8 FashionItem_GetY(u8 *data);
-s8 FashionItem_GetZ(s8 *data);
-void Save_FashionData_InsertEntries(u8 count, int skip, SaveFashionData *fashionData, SaveFashionDataSub **entries);
-
 static BOOL IsValidFashionMagic(u32 value) {
     if (value == 0x1234 || value == 0x2345) {
         return TRUE;
@@ -118,12 +86,12 @@ static BOOL IsValidFashionMagic(u32 value) {
     return FALSE;
 }
 
-static void GetFashionObjectPlacement(int monPicId, u8 *outX, u8 *outY, u8 *outZ) {
+static void GetFashionObjectPlacement(DressUpMonPic *monPic, u8 *outX, u8 *outY, u8 *outZ) {
     int x;
     int y;
     int z;
-    DressUpMon_GetCenterPos(monPicId, &x, &y);
-    z = DressUpMon_GetPriority(monPicId);
+    DressUpMon_GetCenterPos(monPic, &x, &y);
+    z = DressUpMon_GetPriority(monPic);
     GF_ASSERT(x < 256);
     GF_ASSERT(y < 256);
     GF_ASSERT(z > -128);
@@ -143,9 +111,9 @@ static void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z)
     dst->z = z;
 }
 
-static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId) {
+static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, DressUpMonPic *monPic) {
     u8 x, y, z;
-    GetFashionObjectPlacement(monPicId, &x, &y, &z);
+    GetFashionObjectPlacement(monPic, &x, &y, &z);
     FashionMon_Init(dst, mon, x, y, (s8)z);
 }
 
@@ -430,13 +398,13 @@ void FashionEntry_Clear(SaveFashionDataSub *entry_) {
     entry->magic = 0x1234;
 }
 
-void FashionEntry_SetMon(SaveFashionDataSub *entry_, Pokemon *mon, int value) {
+void FashionEntry_SetMon(SaveFashionDataSub *entry_, Pokemon *mon, DressUpMonPic *monPic) {
     FashionEntry *entry = (FashionEntry *)entry_;
     GF_ASSERT(IsValidFashionMagic(entry->magic));
-    FashionMon_InitAtObject(&entry->mon, mon, value);
+    FashionMon_InitAtObject(&entry->mon, mon, monPic);
 }
 
-void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, int index) {
+void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, DressUpSlot *source, int index) {
     FashionEntry *entry = (FashionEntry *)entry_;
     volatile FashionItemCoords coords;
     u32 packed;

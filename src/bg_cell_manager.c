@@ -37,13 +37,7 @@ struct BgCellManager {
     enum HeapID heapId;
 };
 
-void BgCellManager_LoadCellTilemap(BgCellManager *manager, int index, int narcId, int fileId, int compressed);
-void BgCellManager_DrawCell(BgCellManager *manager, int index);
-BOOL BgCellManager_UpdateCellMove(BgCellManager *manager, int index);
-u8 BgCellManager_GetCellBgId(BgCellManager *manager, int index);
-void BgCellManager_GetCellPosition(BgCellManager *manager, int index, s8 *x, s8 *y);
-void BgCellManager_PutWindowTiles(BgCellManager *manager, int index, Window *window);
-void BgCellManager_NoTransfer(BgConfig *bgConfig, u8 bgId);
+static void BgCellManager_NoTransfer(BgConfig *bgConfig, u8 bgId);
 
 static void (*const sBgCellTransferFuncs[])(BgConfig *, u8) = {
     BgCellManager_NoTransfer,
@@ -341,5 +335,5 @@ void BgCellManager_SetCellClipRect(BgCellManager *manager, int index, s8 xMin, s
     manager->cells[index].yMax = yMax;
 }
 
-void BgCellManager_NoTransfer(BgConfig *bgConfig, u8 bgId) {
+static void BgCellManager_NoTransfer(BgConfig *bgConfig, u8 bgId) {
 }

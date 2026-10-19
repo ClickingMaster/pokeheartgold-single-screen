@@ -4,19 +4,10 @@
 
 #include "constants/save_arrays.h"
 
+#include "friend_group_access.h"
 #include "math_util.h"
 #include "string_util.h"
 
-void Save_FriendGroup_CopyGroup(SAV_FRIEND_GRP *data, int src, int dst);
-void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *data, u32 days);
-u32 Save_FriendGroup_GetGroupId(SAV_FRIEND_GRP *data, int index);
-void Save_FriendGroup_SetGroupId(SAV_FRIEND_GRP *data, int index, u32 id);
-void Save_FriendGroup_SetName(SAV_FRIEND_GRP *data, int index, int type, String *str);
-void Save_FriendGroup_SetLeaderGender(SAV_FRIEND_GRP *data, int index, u8 gender);
-void Save_FriendGroup_SetLanguage(SAV_FRIEND_GRP *data, int index, u8 language);
-BOOL Save_FriendGroup_IsGroupValid(SAV_FRIEND_GRP *data, int index);
-BOOL Save_FriendGroup_IsCurrentGroup(SAV_FRIEND_GRP *data, int index);
-BOOL Save_FriendGroup_IsGroupNameTaken(SAV_FRIEND_GRP *data, u16 *name);
 BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
 BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
@@ -26,7 +17,7 @@ u32 Save_FriendGroup_sizeof(void) {
     return sizeof(SAV_FRIEND_GRP);
 }
 
-void Save_FriendGroup_CopyGroup(SAV_FRIEND_GRP *data, int src, int dst) {
+void Save_FriendGroup_CopyGroup(SAV_FRIEND_GRP *data, u16 src, int dst) {
     data->groups[dst] = data->groups[src];
 }
 
@@ -40,7 +31,7 @@ void Save_FriendGroup_Init(SAV_FRIEND_GRP *data) {
     sFriendGroupSave = data;
 }
 
-void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *data, u32 days) {
+void Save_FriendGroup_AdvanceSeeds(SAV_FRIEND_GRP *data, int days) {
     u32 i, j;
     for (i = 0; i < 6; i++) {
         for (j = 0; j < days; j++) {
@@ -53,7 +44,7 @@ u32 Save_FriendGroup_GetGroupId(SAV_FRIEND_GRP *data, int index) {
     return data->groups[index].id;
 }
 
-void Save_FriendGroup_SetGroupId(SAV_FRIEND_GRP *data, int index, u32 id) {
+void Save_FriendGroup_SetGroupId(SAV_FRIEND_GRP *data, u32 index, u32 id) {
     data->groups[index].id = id;
     data->groups[index].seed = PRandom(id);
 }
@@ -78,7 +69,7 @@ void Save_FriendGroup_SetName(SAV_FRIEND_GRP *data, int index, int type, String 
     }
 }
 
-void Save_FriendGroup_SetLeaderGender(SAV_FRIEND_GRP *data, int index, u8 gender) {
+void Save_FriendGroup_SetLeaderGender(SAV_FRIEND_GRP *data, int index, u32 gender) {
     data->groups[index].leaderGender = gender;
 }
 
@@ -90,7 +81,7 @@ u8 Save_FriendGroup_GetLanguage(SAV_FRIEND_GRP *data, int index) {
     return data->groups[index].language;
 }
 
-void Save_FriendGroup_SetLanguage(SAV_FRIEND_GRP *data, int index, u8 language) {
+void Save_FriendGroup_SetLanguage(SAV_FRIEND_GRP *data, int index, int language) {
     data->groups[index].language = language;
 }
 
@@ -98,11 +89,11 @@ SAV_FRIEND_GRP *Save_FriendGroup_Get(SaveData *save) {
     return SaveArray_Get(save, SAVE_FRIEND_GROUP);
 }
 
-BOOL Save_FriendGroup_IsGroupValid(SAV_FRIEND_GRP *data, int index) {
+BOOL Save_FriendGroup_IsGroupValid(SAV_FRIEND_GRP *data, u16 index) {
     return !FriendGroup_IsEmpty(&data->groups[index]);
 }
 
-BOOL Save_FriendGroup_IsCurrentGroup(SAV_FRIEND_GRP *data, int index) {
+BOOL Save_FriendGroup_IsCurrentGroup(SAV_FRIEND_GRP *data, u16 index) {
     return FriendGroup_Equals(&data->groups[1], &data->groups[index]);
 }
 

@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_FRIEND_ROSTER_H
 #define POKEHEARTGOLD_FRIEND_ROSTER_H
 
+#include "pm_string.h"
 #include "save.h"
 
 typedef struct FriendRoster FriendRoster;
@@ -25,5 +26,9 @@ void FriendRoster_RemoveFriend(FriendRoster *, int);
 void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
 void Save_FriendRoster_Init(FriendRoster *data);
 u32 Save_FriendRoster_sizeof(void);
+void *FriendRoster_GetDwcFriendData(FriendRoster *, int);
+void FriendRoster_SetPlayerName(FriendRoster *, int, String *);
+void FriendRoster_SetGroupName(FriendRoster *, int, String *);
+void FriendRoster_MergeFriend(FriendRoster *, s32, s32);
 
 #endif // POKEHEARTGOLD_FRIEND_ROSTER_H

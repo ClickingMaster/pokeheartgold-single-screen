@@ -9,10 +9,12 @@ BOOL Save_FriendGroup_IsGroupValid(SAV_FRIEND_GRP *group, u16 index);
 BOOL Save_FriendGroup_IsCurrentGroup(SAV_FRIEND_GRP *group, u16 index);
 void Save_FriendGroup_CopyGroup(SAV_FRIEND_GRP *group, u16 src, int dst);
 
-u8 Save_FriendGroup_GetGroupId(SAV_FRIEND_GRP *group, int index);
+u32 Save_FriendGroup_GetGroupId(SAV_FRIEND_GRP *group, int index);
 void Save_FriendGroup_SetName(SAV_FRIEND_GRP *group, int index, int type, String *str);
 void Save_FriendGroup_SetLeaderGender(SAV_FRIEND_GRP *group, int index, u32 gender);
 void Save_FriendGroup_SetLanguage(SAV_FRIEND_GRP *group, int index, int language);
 BOOL Save_FriendGroup_IsGroupNameTaken(SAV_FRIEND_GRP *group, u16 *name);
+BOOL FriendGroup_IsEmpty(FRIEND_GROUP *);
+BOOL FriendGroup_Equals(FRIEND_GROUP *, FRIEND_GROUP *);
 
 #endif // POKEHEARTGOLD_FRIEND_GROUP_ACCESS_H

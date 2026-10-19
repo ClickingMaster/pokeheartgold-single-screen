@@ -29,11 +29,6 @@ static void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
 void Comm_EnsureDwcUserData(FriendRoster *data);
 BOOL DWC_IsValidFriendData(void *data);
 
-void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);
-void FriendRoster_SetPlayerName(FriendRoster *data, int index, String *name);
-void FriendRoster_SetGroupName(FriendRoster *data, int index, String *name);
-void FriendRoster_MergeFriend(FriendRoster *data, s32 src, s32 dest);
-
 static FriendRoster sFriendRoster;
 
 u32 Save_FriendRoster_sizeof(void) {

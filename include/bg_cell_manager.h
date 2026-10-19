@@ -18,6 +18,8 @@ void BgCellManager_EraseCell(BgCellManager *manager, int index);
 void BgCellManager_StartCellMove(BgCellManager *manager, int index, int dx, int dy, u8 frames);
 void BgCellManager_Update(BgCellManager *manager);
 BOOL BgCellManager_IsCellMoving(BgCellManager *manager, int index);
+BOOL BgCellManager_UpdateCellMove(BgCellManager *, int);
+u8 BgCellManager_GetCellBgId(BgCellManager *, int);
 void BgCellManager_SetCellPalette(BgCellManager *manager, int index, u8 x, u8 y, u8 width, u8 height, u8 palette);
 u16 *BgCellManager_GetCellTilemap(BgCellManager *manager, int index);
 void BgCellManager_GetCellSize(BgCellManager *manager, int index, u16 *width, u16 *height);
