@@ -9,8 +9,10 @@
 #include "heap.h"
 #include "sound.h"
 #include "sound_gb.h"
+#include "sound_playback_internal.h"
 #include "sound_radio.h"
 #include "sound_system.h"
+#include "sound_system_internal.h"
 #include "sys_task_api.h"
 
 // Starting and stopping sequences by kind: BGM, sound effects, Pokemon cries and fanfares (the BGM is paused
@@ -42,34 +44,8 @@ static void StopFanfare(int fadeFrames);
 static void StartFanfareWaitTimer(u16 unused);
 static BOOL Sound_StartSeq(enum SoundHandleNo handleNo, int playerNo, int bankNo, int playerPrio, u16 seqNo, u8 useGBSounds);
 
-int GF_GetBankBySeqNo(int seqNo);
-void Sound_ReloadFieldSceneData(u16 seqNo, int bankNo);
-u8 GF_GetPlayerNoBySeq(u16 seqNo);
-int Sound_GetSavedHeapLevel(int state);
-void Sound_ApplyVoiceChatVolume(int seqNo, enum SoundHandleNo handleNo);
-void Sound_SetReloadFieldSeqFlag(u16 seqNo);
-void GF_SndSetFadeTimer(u32 frames);
-void Sound_StopWaveOut(int handleNo);
-void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
-void GF_SndHandleSetTrackPan(int handleNo, u32 trackMask, int pan);
-void GF_SndHandleSetTrackPitch(int handleNo, u32 trackMask, int pitch);
-void Sound_SetWaveOutPan(int handleNo, u8 pan);
-BOOL Sound_PlayReversedWaveArc(int waveArcNo, int volume, int pan, int channel, int heapId);
-void Sound_SetWaveOutSpeed(int handleNo, int speed);
-void GF_GetBankInfoBySeqNo(u16 seqNo);
-
 // NitroSystem
 int GF_NNS_SndPlayerGetSeqNo(NNSSndHandle *handle);
-
-BOOL PlayBGMDirect(u16 seqNo);
-void StopBGMSEAndCry(void);
-BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
-BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
-void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);
-u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
-void SetPlayerPan(int playerNo, int pan);
-void SetAllSEPan(int pan);
-BOOL IsFanfarePlayingOrWaiting(void);
 
 BOOL PlayBGMDirect(u16 seqNo) {
     BOOL success;
@@ -118,8 +94,8 @@ static BOOL PlayBGMOnBGMPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handl
 }
 
 static BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo handleNo) {
-    GF_SdatGetAttrPtr(19);
-    u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
+    GF_SdatGetAttrPtr(SOUND_ATTR_RELOAD_FIELD_SEQ);
+    u16 *fieldSeqNo = GF_SdatGetAttrPtr(SOUND_ATTR_FIELD_SEQ);
     Sound_ReloadFieldSceneData(seqNo, GF_GetBankBySeqNo(GF_NNS_SndPlayerGetSeqNo(GF_GetSoundHandle(SND_HANDLE_FIELD))));
     SndRadio_StopSeq(0);
     return Sound_StartSeq(handleNo, -1, GF_GetBankBySeqNo(*fieldSeqNo), -1, seqNo, 1);
@@ -127,7 +103,7 @@ static BOOL PlayBGMOnFieldPlayer(u16 seqNo, int playerNo, enum SoundHandleNo han
 
 BOOL PlayBGMOnBGMPlayerInField(u16 seqNo) {
     BOOL success;
-    u8 *scene = GF_SdatGetAttrPtr(21);
+    u8 *scene = GF_SdatGetAttrPtr(SOUND_ATTR_PRIMARY_SCENE);
     if (*scene != 4) {
         GF_ASSERT(FALSE);
         return FALSE;
@@ -193,7 +169,7 @@ void GF_SndStartFadeOutBGM(u16 volume, u16 frames) {
 }
 
 u32 GF_SndGetFadeTimer(void) {
-    u16 *timer = GF_SdatGetAttrPtr(7);
+    u16 *timer = GF_SdatGetAttrPtr(SOUND_ATTR_FADE_TIMER);
     return *timer;
 }
 
@@ -202,8 +178,8 @@ u32 GF_SndCountPlayingSeqBySeqNo(u16 seqNo) {
 }
 
 void Sound_Stop(void) {
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
     NNS_SndPlayerStopSeqAll(0);
     if (*firstActive == 1) {
         Sound_StopWaveOut(14);
@@ -215,8 +191,8 @@ void Sound_Stop(void) {
 }
 
 void StopBGMSEAndCry(void) {
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
     NNS_SndPlayerStopSeq(GF_GetSoundHandle(SND_HANDLE_BGM), 0);
     ClearPlayingBGM();
     for (int i = 0; i < 4; i++) {
@@ -248,7 +224,7 @@ BOOL PlaySEOnPlayer(u16 seqNo, int playerNo) {
 }
 
 BOOL PlaySEWithFieldBank(u16 seqNo) {
-    u16 *fieldSeqNo = GF_SdatGetAttrPtr(32);
+    u16 *fieldSeqNo = GF_SdatGetAttrPtr(SOUND_ATTR_FIELD_SEQ);
     enum SoundHandleNo handleNo = GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq(seqNo));
     return PlaySEEx(handleNo, -1, GF_GetBankBySeqNo(*fieldSeqNo), -1, seqNo);
 }
@@ -329,9 +305,9 @@ void SetAllSEPan(int pan) {
 }
 
 BOOL PlayCry(u16 species, u8 form) {
-    u8 *useChorus = GF_SdatGetAttrPtr(18);
-    SOUND_CHATOT **chatot = GF_SdatGetAttrPtr(36);
-    u8 *keepPlaying = GF_SdatGetAttrPtr(53);
+    u8 *useChorus = GF_SdatGetAttrPtr(SOUND_ATTR_USE_CHORUS);
+    SOUND_CHATOT **chatot = GF_SdatGetAttrPtr(SOUND_ATTR_MY_CHATOT);
+    u8 *keepPlaying = GF_SdatGetAttrPtr(SOUND_ATTR_KEEP_PLAYING_CRIES);
     BOOL success;
     if (IsShayminSkyCry(species, form) == 1) {
         species = CRY_BANK_SHAYMIN_SKY;
@@ -363,9 +339,9 @@ BOOL PlayCryDelayed(u16 species, u8 delay, u8 form) {
 }
 
 void StopCry(int fadeFrames) {
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
-    GF_SdatGetAttrPtr(15);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
+    GF_SdatGetAttrPtr(SOUND_ATTR_REVERSED_CRY_STARTED);
     NNS_SndPlayerStopSeq(GF_GetSoundHandle(SND_HANDLE_PV), fadeFrames);
     NNS_SndPlayerStopSeq(GF_GetSoundHandle(SND_HANDLE_CHORUS), fadeFrames);
     if (*firstActive == 1) {
@@ -381,10 +357,10 @@ void StopCry(int fadeFrames) {
 }
 
 BOOL IsCryFinished(void) {
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
-    GF_SdatGetAttrPtr(15);
-    GF_SdatGetAttrPtr(46);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
+    GF_SdatGetAttrPtr(SOUND_ATTR_REVERSED_CRY_STARTED);
+    GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_DELAY_0);
     if (*firstActive == 1) {
         return Sound_IsWaveOutPlaying(14);
     }
@@ -397,11 +373,11 @@ BOOL IsCryFinished(void) {
 BOOL PlayCryEx(u32 pattern, u16 species, int pan, int volume, int heapId, u8 form) {
     int wavePan;
     int chorusVolume;
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
-    u8 *useChorus = GF_SdatGetAttrPtr(18);
-    u8 *chatotMode = GF_SdatGetAttrPtr(30);
-    GF_SdatGetAttrPtr(36);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
+    u8 *useChorus = GF_SdatGetAttrPtr(SOUND_ATTR_USE_CHORUS);
+    u8 *chatotMode = GF_SdatGetAttrPtr(SOUND_ATTR_CHATOT_PLAYING);
+    GF_SdatGetAttrPtr(SOUND_ATTR_MY_CHATOT);
     if (IsShayminSkyCry(species, form) == 1) {
         species = CRY_BANK_SHAYMIN_SKY;
     }
@@ -563,7 +539,7 @@ static void Sound_SetInitialVolumeWithVoiceChat(int species, int handleNo, int v
 }
 
 static void StartCryStopTask(int frames, int heapId) {
-    SysTask **task = GF_SdatGetAttrPtr(35);
+    SysTask **task = GF_SdatGetAttrPtr(SOUND_ATTR_CRY_STOP_TASK);
     DestroyCryStopTask();
     CryStopTaskData *data = Heap_Alloc((enum HeapID)heapId, sizeof(CryStopTaskData));
     if (data == NULL) {
@@ -578,8 +554,8 @@ static void StartCryStopTask(int frames, int heapId) {
 
 static void CryStopTask(SysTask *task, void *arg) {
     CryStopTaskData *data = arg;
-    u8 *firstActive = GF_SdatGetAttrPtr(16);
-    u8 *secondActive = GF_SdatGetAttrPtr(17);
+    u8 *firstActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_14_ALLOCATED);
+    u8 *secondActive = GF_SdatGetAttrPtr(SOUND_ATTR_WAVE_OUT_15_ALLOCATED);
     if (data->frames == 10) {
         GF_SndHandleMoveVolume(SND_HANDLE_PV, 0, data->frames);
         GF_SndHandleMoveVolume(SND_HANDLE_CHORUS, 0, data->frames);
@@ -603,7 +579,7 @@ static void CryStopTask(SysTask *task, void *arg) {
 }
 
 static void DestroyCryStopTask(void) {
-    SysTask **task = GF_SdatGetAttrPtr(35);
+    SysTask **task = GF_SdatGetAttrPtr(SOUND_ATTR_CRY_STOP_TASK);
     if (*task != NULL) {
         void *data = SysTask_GetData(*task);
         SysTask_Destroy(*task);
@@ -619,22 +595,22 @@ void PlayCryDelayedEx(int pattern, u16 species, int pan, int volume, int heapId,
     int *queuedVolume;
     int *queuedHeapId;
     u8 *queuedDelay;
-    u8 *queueNo = GF_SdatGetAttrPtr(6);
-    u8 *alternateQueue = GF_SdatGetAttrPtr(53);
+    u8 *queueNo = GF_SdatGetAttrPtr(SOUND_ATTR_CRY_QUEUE);
+    u8 *alternateQueue = GF_SdatGetAttrPtr(SOUND_ATTR_KEEP_PLAYING_CRIES);
     if (*queueNo == 0) {
-        queuedPattern = GF_SdatGetAttrPtr(41);
-        queuedSpecies = GF_SdatGetAttrPtr(45);
-        queuedPan = GF_SdatGetAttrPtr(42);
-        queuedVolume = GF_SdatGetAttrPtr(43);
-        queuedHeapId = GF_SdatGetAttrPtr(44);
-        queuedDelay = GF_SdatGetAttrPtr(46);
+        queuedPattern = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PATTERN_0);
+        queuedSpecies = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_SPECIES_0);
+        queuedPan = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PAN_0);
+        queuedVolume = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_VOLUME_0);
+        queuedHeapId = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_HEAP_ID_0);
+        queuedDelay = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_DELAY_0);
     } else {
-        queuedPattern = GF_SdatGetAttrPtr(47);
-        queuedSpecies = GF_SdatGetAttrPtr(51);
-        queuedPan = GF_SdatGetAttrPtr(48);
-        queuedVolume = GF_SdatGetAttrPtr(49);
-        queuedHeapId = GF_SdatGetAttrPtr(50);
-        queuedDelay = GF_SdatGetAttrPtr(52);
+        queuedPattern = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PATTERN_1);
+        queuedSpecies = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_SPECIES_1);
+        queuedPan = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PAN_1);
+        queuedVolume = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_VOLUME_1);
+        queuedHeapId = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_HEAP_ID_1);
+        queuedDelay = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_DELAY_1);
     }
     if (*alternateQueue == 1) {
         *queueNo ^= 1;
@@ -667,18 +643,18 @@ static BOOL IsShayminSkyCry(u16 species, u8 form) {
 }
 
 static void ClearQueuedCries(void) {
-    int *pattern0 = GF_SdatGetAttrPtr(41);
-    u16 *species0 = GF_SdatGetAttrPtr(45);
-    int *pan0 = GF_SdatGetAttrPtr(42);
-    int *volume0 = GF_SdatGetAttrPtr(43);
-    int *heap0 = GF_SdatGetAttrPtr(44);
-    u8 *delay0 = GF_SdatGetAttrPtr(46);
-    int *pattern1 = GF_SdatGetAttrPtr(47);
-    u16 *species1 = GF_SdatGetAttrPtr(51);
-    int *pan1 = GF_SdatGetAttrPtr(48);
-    int *volume1 = GF_SdatGetAttrPtr(49);
-    int *heap1 = GF_SdatGetAttrPtr(50);
-    u8 *delay1 = GF_SdatGetAttrPtr(52);
+    int *pattern0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PATTERN_0);
+    u16 *species0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_SPECIES_0);
+    int *pan0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PAN_0);
+    int *volume0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_VOLUME_0);
+    int *heap0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_HEAP_ID_0);
+    u8 *delay0 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_DELAY_0);
+    int *pattern1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PATTERN_1);
+    u16 *species1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_SPECIES_1);
+    int *pan1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_PAN_1);
+    int *volume1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_VOLUME_1);
+    int *heap1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_HEAP_ID_1);
+    u8 *delay1 = GF_SdatGetAttrPtr(SOUND_ATTR_QUEUED_CRY_DELAY_1);
     *pattern0 = 0;
     *species0 = 0;
     *pan0 = 0;
@@ -694,7 +670,7 @@ static void ClearQueuedCries(void) {
 }
 
 static BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
-    u8 *useChorus = GF_SdatGetAttrPtr(18);
+    u8 *useChorus = GF_SdatGetAttrPtr(SOUND_ATTR_USE_CHORUS);
     *useChorus = 1;
     Chatot_SetForceDefaultCry(1);
     BOOL success = PlayCry(species, form);
@@ -703,7 +679,7 @@ static BOOL PlayChorusCryWithPitch(u16 species, int pitch, u8 form) {
 }
 
 static void PlayReversedCry(u16 species, int unused, int volume, int pan, int heapId) {
-    u8 *useChorus = GF_SdatGetAttrPtr(18);
+    u8 *useChorus = GF_SdatGetAttrPtr(SOUND_ATTR_USE_CHORUS);
     *useChorus = 1;
     Sound_AllocWaveOutChannel(15);
     Sound_PlayReversedWaveArc(species, volume, pan, 15, heapId);
@@ -718,7 +694,7 @@ BOOL PlayFanfare(u16 seqNo) {
     } else {
         SndRadio_PausePlayer(TRUE);
     }
-    GF_Snd_SaveState(GF_SdatGetAttrPtr(29));
+    GF_Snd_SaveState(GF_SdatGetAttrPtr(SOUND_ATTR_SAVED_HEAP_LEVEL_6));
     GF_Snd_LoadSeqEx(seqNo, 3);
     BOOL success = Sound_StartSeq(SND_HANDLE_ME, -1, -1, -1, seqNo, 0);
     Sound_ApplyVoiceChatVolume(seqNo, SND_HANDLE_ME);
@@ -726,7 +702,7 @@ BOOL PlayFanfare(u16 seqNo) {
 }
 
 BOOL IsFanfarePlayingOrWaiting(void) {
-    u16 *waitTimer = GF_SdatGetAttrPtr(14);
+    u16 *waitTimer = GF_SdatGetAttrPtr(SOUND_ATTR_AFTER_FANFARE_WAIT_TIMER);
     if (GF_SndPlayerCountPlayingSeqByPlayerNo(2) != 0) {
         return TRUE;
     }
@@ -743,7 +719,7 @@ static void StopFanfare(int fadeFrames) {
 }
 
 BOOL IsFanfarePlaying(void) {
-    GF_SdatGetAttrPtr(14);
+    GF_SdatGetAttrPtr(SOUND_ATTR_AFTER_FANFARE_WAIT_TIMER);
     if (IsFanfarePlayingOrWaiting() == 1) {
         return TRUE;
     }
@@ -757,7 +733,7 @@ BOOL IsFanfarePlaying(void) {
 }
 
 static void StartFanfareWaitTimer(u16 unused) {
-    u16 *waitTimer = GF_SdatGetAttrPtr(14);
+    u16 *waitTimer = GF_SdatGetAttrPtr(SOUND_ATTR_AFTER_FANFARE_WAIT_TIMER);
     *waitTimer = 15;
 }
 

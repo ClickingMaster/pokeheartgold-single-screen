@@ -43,6 +43,7 @@
 #include "seal_case.h"
 #include "sound_chatot.h"
 #include "sound_playback.h"
+#include "sound_playback_internal.h"
 #include "sprite_system.h"
 #include "swap_3d_buffers.h"
 #include "sys_task_api.h"
@@ -57,8 +58,6 @@
 
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 frame, enum HeapID heapId);
-
-BOOL PlayBGMDirect(u16 seqNo);
 
 // the scene's state machine (EvolutionScene_Run)
 enum EvolutionSceneState {

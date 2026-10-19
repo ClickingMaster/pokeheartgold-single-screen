@@ -6,13 +6,9 @@
 
 #include "sound.h"
 #include "sound_system.h"
-
-extern int gSoundSystemFlags[4];
+#include "sound_system_internal.h"
 
 static void SoundSys_SetGBSoundsState(u8 enabled);
-
-u8 GF_GetPlayerNoBySeq(u16 seqNo);
-void GF_SndHandleSetTrackPitch(int handleNo, u32 tracks, int pitch);
 
 static const u8 sSoundFootstepVariations[8][4] = {
     { 0,  42,  0, 0 },
@@ -165,10 +161,10 @@ static const u16 sGBSoundsSeqPairs[136][2] = {
 };
 
 void Sound_SetKeepPlayingCries(u8 value) {
-    *(u8 *)GF_SdatGetAttrPtr(53) = value;
+    *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_KEEP_PLAYING_CRIES) = value;
 }
 void Sound_SetChatotRecordingDisabled(u8 value) {
-    *(u8 *)GF_SdatGetAttrPtr(54) = value;
+    *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_CHATOT_RECORDING_DISABLED) = value;
 }
 BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
     GF_ASSERT(value != NULL);
@@ -176,7 +172,7 @@ BOOL GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value) {
     return NNS_SndPlayerReadVariable(GF_GetSoundHandle(GF_GetSndHandleByPlayerNo(GF_GetPlayerNoBySeq(seqNo))), variable, value);
 }
 void Sound_ApplyFootstepVariation(u16 seqNo) {
-    u8 *state = GF_SdatGetAttrPtr(55);
+    u8 *state = GF_SdatGetAttrPtr(SOUND_ATTR_FOOTSTEP_VARIATION);
     GF_SetVolumeBySeqNo(seqNo, sSoundFootstepVariations[state[0]][1]);
     GF_SndHandleSetTrackPitch(SND_HANDLE_SE_2, 65535, sSoundFootstepVariations[state[0]][0]);
     if (state[1] >= 8) {
@@ -184,16 +180,16 @@ void Sound_ApplyFootstepVariation(u16 seqNo) {
     }
 }
 void Sound_SetSelectSEMuted(BOOL enabled) {
-    *(u8 *)GF_SdatGetAttrPtr(56) = enabled;
+    *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_SELECT_SE_MUTED) = enabled;
 }
 int Sound_IsSelectSEMuted(void) {
-    return *(u8 *)GF_SdatGetAttrPtr(56);
+    return *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_SELECT_SE_MUTED);
 }
 static void SoundSys_SetGBSoundsState(u8 enabled) {
-    *(u8 *)GF_SdatGetAttrPtr(57) = enabled;
+    *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_GB_SOUNDS_ENABLED) = enabled;
 }
 BOOL SoundSys_GetGBSoundsState(void) {
-    return *(u8 *)GF_SdatGetAttrPtr(57);
+    return *(u8 *)GF_SdatGetAttrPtr(SOUND_ATTR_GB_SOUNDS_ENABLED);
 }
 void SoundSys_ToggleGBSounds(void) {
     if (SoundSys_GetGBSoundsState() == 0) {
@@ -234,9 +230,9 @@ void GBSounds_SetAllocatableChannels(void) {
     NNS_SndPlayerSetTrackAllocatableChannel(GF_GetSoundHandle(2), 15, 0xA7FE);
 }
 void Sound_SetFieldBGMStopOnce(BOOL enabled) {
-    gSoundSystemFlags[3] = enabled;
+    gSoundSystemFlags.fieldBGMStopOnce = enabled;
 }
 void Sound_ResetFieldBGMStopOnce(void) {
-    gSoundSystemFlags[3] = 0;
-    gSoundSystemFlags[1] = 0;
+    gSoundSystemFlags.fieldBGMStopOnce = 0;
+    gSoundSystemFlags.fieldBGMStopped = 0;
 }
