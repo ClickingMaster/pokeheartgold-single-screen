@@ -108,7 +108,7 @@ int PokewalkerApp_LinkSave_PrintSaving2(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_WaitSaving2(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_Save2(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_EndSave2(PokewalkerApp *app);
-int PokewalkerApp_LinkSave_SetNextMode2(PokewalkerApp *app);
+int PokewalkerApp_LinkSave_GoToStrollReport(PokewalkerApp *app);
 int PokewalkerApp_LinkSave_End(PokewalkerApp *app);
 int PokewalkerApp_SelectMon_Enter(PokewalkerApp *app);
 int PokewalkerApp_SelectMon_Update(PokewalkerApp *app);

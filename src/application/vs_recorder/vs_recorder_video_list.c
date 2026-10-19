@@ -941,11 +941,11 @@ BOOL VsRecorder_VideoListInit(VsRecorderWork *work) {
     memset(listWork, 0, sizeof(VsRecorderVideoListScreen));
     work->screenWork = listWork;
     if (work->selection == VS_RECORDER_SELECTION_COLOSSEUM) {
-        listWork->listType = VS_RECORDER_VIDEO_LIST_LATEST;
+        listWork->listType = VS_RECORDER_VIDEO_LIST_COLOSSEUM;
     } else if (work->selection == VS_RECORDER_SELECTION_BATTLE_FRONTIER) {
-        listWork->listType = VS_RECORDER_VIDEO_LIST_POPULAR;
+        listWork->listType = VS_RECORDER_VIDEO_LIST_BATTLE_FRONTIER;
     } else if (work->selection == VS_RECORDER_SELECTION_NEWEST_30) {
-        listWork->listType = VS_RECORDER_VIDEO_LIST_SEARCH;
+        listWork->listType = VS_RECORDER_VIDEO_LIST_NEWEST_30;
     }
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3);
@@ -1026,17 +1026,17 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
         break;
     case VIDEO_LIST_DOWNLOAD_LIST_STEP_REQUEST:
         if (work->selection == VS_RECORDER_SELECTION_COLOSSEUM) {
-            listWork->listType = VS_RECORDER_VIDEO_LIST_LATEST;
-            if (GlobalTerminalNet_RequestLatestVideos(VsRecorder_GetNet(work)) == TRUE) {
+            listWork->listType = VS_RECORDER_VIDEO_LIST_COLOSSEUM;
+            if (GlobalTerminalNet_RequestTopColosseumVideos(VsRecorder_GetNet(work)) == TRUE) {
                 work->step++;
             }
         } else if (work->selection == VS_RECORDER_SELECTION_BATTLE_FRONTIER) {
-            listWork->listType = VS_RECORDER_VIDEO_LIST_POPULAR;
-            if (GlobalTerminalNet_RequestPopularVideos(VsRecorder_GetNet(work)) == TRUE) {
+            listWork->listType = VS_RECORDER_VIDEO_LIST_BATTLE_FRONTIER;
+            if (GlobalTerminalNet_RequestTopFrontierVideos(VsRecorder_GetNet(work)) == TRUE) {
                 work->step++;
             }
         } else if (work->selection == VS_RECORDER_SELECTION_NEWEST_30) {
-            listWork->listType = VS_RECORDER_VIDEO_LIST_SEARCH;
+            listWork->listType = VS_RECORDER_VIDEO_LIST_NEWEST_30;
             if (VsRecorderApp_HasVisitedBattleFrontier(work) == TRUE) {
                 if (GlobalTerminalNet_RequestDefaultVideoSearch(VsRecorder_GetNet(work)) == TRUE) {
                     work->step++;
@@ -1059,7 +1059,7 @@ BOOL VsRecorder_VideoListDownloadList(VsRecorderWork *work) {
             PlaySE(SEQ_SE_PL_BREC12);
             if (work->net.videoList.count == 0) {
                 VsRecorder_ShowMessageScreen(work, 5, 0, 0);
-                work->messageScreen.msgId = listWork->listType == VS_RECORDER_VIDEO_LIST_SEARCH ? msg_0013_00118 : msg_0013_00300;
+                work->messageScreen.msgId = listWork->listType == VS_RECORDER_VIDEO_LIST_NEWEST_30 ? msg_0013_00118 : msg_0013_00300;
                 OrbitCursor_SetVisible(work->orbitCursors[0], FALSE);
                 work->step++;
             } else {

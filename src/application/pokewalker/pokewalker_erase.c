@@ -18,16 +18,16 @@
 
 typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 
-extern const PokewalkerAppStateFunc sMode1States[];
+extern const PokewalkerAppStateFunc sQuitMessageStates[];
 extern const PokewalkerAppStateFunc sEraseRecordsStates[];
 
-int PokewalkerApp_Mode1_Enter(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_Enter(PokewalkerApp *app) {
     BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
     return 2;
 }
 
-int PokewalkerApp_Mode1_Update(PokewalkerApp *app) {
-    app->state = sMode1States[app->state](app);
+int PokewalkerApp_QuitMessage_Update(PokewalkerApp *app) {
+    app->state = sQuitMessageStates[app->state](app);
     if (app->state == 4) {
         app->nextMode = 11;
         app->state = 0;
@@ -36,30 +36,30 @@ int PokewalkerApp_Mode1_Update(PokewalkerApp *app) {
     return 2;
 }
 
-int PokewalkerApp_Mode1_Exit(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_Exit(PokewalkerApp *app) {
     return 1;
 }
 
-int PokewalkerApp_Mode1_PrintMessage(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_Print(PokewalkerApp *app) {
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 2, msg_0274_00147);
     return 1;
 }
 
-int PokewalkerApp_Mode1_WaitMessage(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_WaitPrint(PokewalkerApp *app) {
     if (TextPrinterCheckActive(app->textPrinterId) == FALSE) {
         return 2;
     }
     return 1;
 }
 
-int PokewalkerApp_Mode1_WaitInput(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_WaitInput(PokewalkerApp *app) {
     if (gSystem.newKeys & PAD_BUTTON_A || gSystem.touchNew) {
         return 3;
     }
     return 2;
 }
 
-int PokewalkerApp_Mode1_End(PokewalkerApp *app) {
+int PokewalkerApp_QuitMessage_End(PokewalkerApp *app) {
     return 4;
 }
 
@@ -328,13 +328,13 @@ int PokewalkerApp_EraseRecords_UpdateLink(PokewalkerApp *app) {
 // Puts the Pokemon on the Pokewalker back into a PC box (preferably the one it came from); remembers the box,
 // or -1 if there was no Pokemon.
 void PokewalkerApp_ReturnWalkerMonToBox(PokewalkerApp *app) {
-    u16 unk0;
+    u16 strollState;
     u16 box2;
     int box = -1;
     int slot = 0;
     PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
     BoxPokemon *boxMon = &app->returnedMon;
-    Pokewalker_GetStrollState(app->pokewalker, &unk0, &box2);
+    Pokewalker_GetStrollState(app->pokewalker, &strollState, &box2);
     if (Pokewalker_TryGetBoxMon(app->pokewalker, boxMon)) {
         box = box2;
         PCStorage_FindFirstEmptySlot(storage, &box, &slot);

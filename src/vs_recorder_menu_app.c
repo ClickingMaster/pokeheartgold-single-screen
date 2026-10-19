@@ -163,7 +163,7 @@ static const VsRecorderMenuEntry *VsRecorderApp_GetRootMenu(int mode) {
     if (mode >= 7) {
         GF_ASSERT(mode < 7);
         // falls back to the first mode's menu (sVsRecorderRootMenu[0].child)
-        return *(const VsRecorderMenuEntry **)(_02103754 + 0x64);
+        return *(const VsRecorderMenuEntry **)(sVsRecorderMode6MenuTail + 0x64);
     }
     return sVsRecorderRootMenu[mode].child;
 }

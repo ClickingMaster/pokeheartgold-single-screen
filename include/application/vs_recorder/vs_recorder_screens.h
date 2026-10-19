@@ -43,9 +43,9 @@ typedef struct VsRecorderVideoListIcon {
 } VsRecorderVideoListIcon;
 
 // VsRecorderVideoListScreen.listType, from VsRecorderWork.selection
-#define VS_RECORDER_VIDEO_LIST_LATEST  0 // selection 300
-#define VS_RECORDER_VIDEO_LIST_POPULAR 1 // selection 301
-#define VS_RECORDER_VIDEO_LIST_SEARCH  2 // selection 200, the result of a video search
+#define VS_RECORDER_VIDEO_LIST_COLOSSEUM       0 // selection 300
+#define VS_RECORDER_VIDEO_LIST_BATTLE_FRONTIER 1 // selection 301
+#define VS_RECORDER_VIDEO_LIST_NEWEST_30       2 // selection 200
 
 // VsRecorderWork.screenWork of the video list screens: the list (with party icons), a video's details (video info /
 // owner's profile, play, save) and saving it to one of the three slots

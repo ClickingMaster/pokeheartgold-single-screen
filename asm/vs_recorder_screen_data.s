@@ -5,7 +5,7 @@
 
 	.public sVsRecorderMode3MenuNoFrontier
 	.public sVsRecorderMode0MenuNoFrontier
-	.public _02103754
+	.public sVsRecorderMode6MenuTail
 	.public sVsRecorderRootMenu
 
 	.text
@@ -166,7 +166,7 @@ sVsRecorderMode6Menu:
 	menu_entry msg_0013_00058, 1, 10, 3, 100, 0xFBFBFBFB, 0
 	menu_entry msg_0013_00002, 2, 2, 3, 999, 0xFBFBFBFB, sVsRecorderQuitMenu
 	.space 4
-_02103754:
+sVsRecorderMode6MenuTail:
 	.space 0x20
 	menu_entry_empty
 

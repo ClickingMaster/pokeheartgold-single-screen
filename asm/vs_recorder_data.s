@@ -114,7 +114,7 @@
 	.public VsRecorder_DeleteEnter
 	.public VsRecorder_DeleteMain
 	.public VsRecorder_DeleteExit
-	.public ov40_02245268
+	.public sVsRecorderBoxListTitleWindows
 	.public sVsRecorderBoxDataHitboxes
 	.public sVsRecorderBoxListButtonWindows
 	.public sVsRecorderBoxListHitboxes
@@ -188,7 +188,7 @@
 
 	.rodata
 
-ov40_02245268:
+sVsRecorderBoxListTitleWindows:
 	.byte 0x04, 0x03, 0x18, 0x02
 
 sVsRecorderBoxDataHitboxes:

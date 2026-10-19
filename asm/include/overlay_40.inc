@@ -311,8 +311,8 @@
 .public GlobalTerminalNet_RequestVideoSearch
 .public GlobalTerminalNet_RequestDefaultVideoSearchNoFrontier
 .public GlobalTerminalNet_RequestDefaultVideoSearch
-.public GlobalTerminalNet_RequestLatestVideos
-.public GlobalTerminalNet_RequestPopularVideos
+.public GlobalTerminalNet_RequestTopColosseumVideos
+.public GlobalTerminalNet_RequestTopFrontierVideos
 .public GlobalTerminalNet_RequestVideoDownload
 .public GlobalTerminalNet_ReportVideoSaved
 .public GlobalTerminalNet_Update

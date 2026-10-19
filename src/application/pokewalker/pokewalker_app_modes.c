@@ -203,7 +203,7 @@ int PokewalkerApp_LinkSave_EndSave2(PokewalkerApp *app) {
     return 9;
 }
 
-int PokewalkerApp_LinkSave_SetNextMode2(PokewalkerApp *app) {
+int PokewalkerApp_LinkSave_GoToStrollReport(PokewalkerApp *app) {
     app->nextMode = 10;
     return 10;
 }

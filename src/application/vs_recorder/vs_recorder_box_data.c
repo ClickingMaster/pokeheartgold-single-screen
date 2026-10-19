@@ -112,7 +112,7 @@ typedef struct VsRecorderMsgIdPair {
     u32 msgIds[2];
 } VsRecorderMsgIdPair;
 
-extern const VsRecorderBoxWindowRect ov40_02245268[];                           // box list title; the box list buttons' message ids follow it
+extern const VsRecorderBoxWindowRect sVsRecorderBoxListTitleWindows[];          // the box list buttons' message ids follow it
 extern const TouchscreenHitbox sVsRecorderBoxDataHitboxes[];                    // box: next Pokemon, back
 extern const VsRecorderBoxWindowRect sVsRecorderBoxListButtonWindows[];         // box list buttons (2)
 extern const TouchscreenHitbox sVsRecorderBoxListHitboxes[];                    // box list: profile button, list, back
@@ -1175,7 +1175,7 @@ void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {
     int i;
 
     baseTile = 1;
-    msgIds = *(const VsRecorderMsgIdPair *)((const u8 *)ov40_02245268 + 0x14);
+    msgIds = *(const VsRecorderMsgIdPair *)((const u8 *)sVsRecorderBoxListTitleWindows + 0x14);
     rect = sVsRecorderBoxListButtonWindows;
     i = 0;
     window = boxData->buttons;
@@ -1257,7 +1257,7 @@ void VsRecorder_CreateBoxListTitle(VsRecorderWork *work) {
     u32 i;
 
     boxData = work->screenWork;
-    rect = ov40_02245268;
+    rect = sVsRecorderBoxListTitleWindows;
     baseTile = 1;
     i = 0;
     window = boxData->windows;

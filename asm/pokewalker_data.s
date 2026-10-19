@@ -36,13 +36,13 @@
 	.extern PokewalkerApp_MainMenu_WaitMessage
 	.extern PokewalkerApp_MainMenu_WaitCursor
 	.extern PokewalkerApp_MainMenu_End
-	.extern PokewalkerApp_Mode1_Enter
-	.extern PokewalkerApp_Mode1_Update
-	.extern PokewalkerApp_Mode1_Exit
-	.extern PokewalkerApp_Mode1_PrintMessage
-	.extern PokewalkerApp_Mode1_WaitMessage
-	.extern PokewalkerApp_Mode1_WaitInput
-	.extern PokewalkerApp_Mode1_End
+	.extern PokewalkerApp_QuitMessage_Enter
+	.extern PokewalkerApp_QuitMessage_Update
+	.extern PokewalkerApp_QuitMessage_Exit
+	.extern PokewalkerApp_QuitMessage_Print
+	.extern PokewalkerApp_QuitMessage_WaitPrint
+	.extern PokewalkerApp_QuitMessage_WaitInput
+	.extern PokewalkerApp_QuitMessage_End
 	.extern PokewalkerApp_EraseRecords_Enter
 	.extern PokewalkerApp_EraseRecords_Update
 	.extern PokewalkerApp_EraseRecords_Exit
@@ -151,9 +151,9 @@
 	.extern PokewalkerApp_Link_WaitMessage
 	.extern PokewalkerApp_Link_WaitCursor
 	.extern PokewalkerApp_Link_End
-	.extern PokewalkerApp_Mode4_Enter
-	.extern PokewalkerApp_Mode4_Update
-	.extern PokewalkerApp_Mode4_Exit
+	.extern PokewalkerApp_WaitKeyToSave_Enter
+	.extern PokewalkerApp_WaitKeyToSave_Update
+	.extern PokewalkerApp_WaitKeyToSave_Exit
 	.extern PokewalkerApp_StartStroll_Enter
 	.extern PokewalkerApp_StartStroll_Update
 	.extern PokewalkerApp_StartStroll_Exit
@@ -177,7 +177,7 @@
 	.extern PokewalkerApp_LinkSave_WaitSaving2
 	.extern PokewalkerApp_LinkSave_Save2
 	.extern PokewalkerApp_LinkSave_EndSave2
-	.extern PokewalkerApp_LinkSave_SetNextMode2
+	.extern PokewalkerApp_LinkSave_GoToStrollReport
 	.extern PokewalkerApp_LinkSave_End
 	.extern PokewalkerApp_SelectMon_Enter
 	.extern PokewalkerApp_SelectMon_Update
@@ -464,7 +464,7 @@
 	.public sWindowBank4Templates
 	.public sWindowBank6Templates
 	.public sMainMenuStates
-	.public sMode1States
+	.public sQuitMessageStates
 	.public sEraseRecordsStates
 	.public sLinkStates
 	.public sStartStrollStates
@@ -4467,18 +4467,18 @@ sPokewalkerAppModeUpdate:
 
 sPokewalkerAppModeExit:
 	.word PokewalkerApp_MainMenu_Exit
-	.word PokewalkerApp_Mode1_Enter
-	.word PokewalkerApp_Mode1_Update
-	.word PokewalkerApp_Mode1_Exit
+	.word PokewalkerApp_QuitMessage_Enter
+	.word PokewalkerApp_QuitMessage_Update
+	.word PokewalkerApp_QuitMessage_Exit
 	.word PokewalkerApp_EraseRecords_Enter
 	.word PokewalkerApp_EraseRecords_Update
 	.word PokewalkerApp_EraseRecords_Exit
 	.word PokewalkerApp_Link_Enter
 	.word PokewalkerApp_Link_Update
 	.word PokewalkerApp_Link_Exit
-	.word PokewalkerApp_Mode4_Enter
-	.word PokewalkerApp_Mode4_Update
-	.word PokewalkerApp_Mode4_Exit
+	.word PokewalkerApp_WaitKeyToSave_Enter
+	.word PokewalkerApp_WaitKeyToSave_Update
+	.word PokewalkerApp_WaitKeyToSave_Exit
 	.word PokewalkerApp_StartStroll_Enter
 	.word PokewalkerApp_StartStroll_Update
 	.word PokewalkerApp_StartStroll_Exit
@@ -4604,11 +4604,11 @@ sMainMenuStates:
 	.word PokewalkerApp_MainMenu_WaitCursor
 	.word PokewalkerApp_MainMenu_End
 
-sMode1States:
-	.word PokewalkerApp_Mode1_PrintMessage
-	.word PokewalkerApp_Mode1_WaitMessage
-	.word PokewalkerApp_Mode1_WaitInput
-	.word PokewalkerApp_Mode1_End
+sQuitMessageStates:
+	.word PokewalkerApp_QuitMessage_Print
+	.word PokewalkerApp_QuitMessage_WaitPrint
+	.word PokewalkerApp_QuitMessage_WaitInput
+	.word PokewalkerApp_QuitMessage_End
 
 sEraseRecordsStates:
 	.word PokewalkerApp_EraseRecords_PrintCaution
@@ -4736,7 +4736,7 @@ sLinkSaveStates:
 	.word PokewalkerApp_LinkSave_WaitSaving2
 	.word PokewalkerApp_LinkSave_Save2
 	.word PokewalkerApp_LinkSave_EndSave2
-	.word PokewalkerApp_LinkSave_SetNextMode2
+	.word PokewalkerApp_LinkSave_GoToStrollReport
 	.word PokewalkerApp_LinkSave_End
 
 sStrollReportStates:

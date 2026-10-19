@@ -43,7 +43,7 @@ extern const VsRecorderMenuEntry sVsRecorderMode0MenuNoFrontier[];
 
 // One entry per mode; each entry's child is the first menu of that mode.
 extern const VsRecorderMenuEntry sVsRecorderRootMenu[7];
-extern const u8 _02103754[];
+extern const u8 sVsRecorderMode6MenuTail[];
 
 void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *saveData);
 void *BattleRecord_Get(void);

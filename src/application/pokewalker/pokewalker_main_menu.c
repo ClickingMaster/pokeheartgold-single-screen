@@ -47,7 +47,7 @@ int PokewalkerApp_MainMenu_Exit(PokewalkerApp *app) {
 int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
     struct {
         u16 unk2;
-        u16 unk0;
+        u16 strollState;
     } walkerState;
     PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
     BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
@@ -61,8 +61,8 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         PokewalkerApp_AddWindowBank(app, 1);
         return 23;
     }
-    Pokewalker_GetStrollState(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
-    switch (walkerState.unk0) {
+    Pokewalker_GetStrollState(app->pokewalker, &walkerState.strollState, &walkerState.unk2);
+    switch (walkerState.strollState) {
     case 0:
         app->nextMode = 3;
         app->strollMonSpecies = SPECIES_NONE;
@@ -274,9 +274,9 @@ int PokewalkerApp_MainMenu_HandleStrollMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        PokewalkerApp_MainMenu_EnterMode2(app, 3);
+        PokewalkerApp_MainMenu_StartEraseRecords(app, 3);
         return 26;
-    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
+    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TrySendMonBack(app, 3)) {
         PlaySE(SEQ_SE_DP_SELECT);
         return 26;
     }
@@ -343,10 +343,10 @@ int PokewalkerApp_MainMenu_HandleReceiveMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        PokewalkerApp_MainMenu_EnterMode2(app, 3);
+        PokewalkerApp_MainMenu_StartEraseRecords(app, 3);
         return 26;
     } else if (PokewalkerApp_IsUpSelectRHeld()) {
-        if (PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
+        if (PokewalkerApp_MainMenu_TrySendMonBack(app, 3)) {
             PlaySE(SEQ_SE_DP_SELECT);
             return 26;
         }
@@ -427,9 +427,9 @@ int PokewalkerApp_MainMenu_HandleFullMenu(PokewalkerApp *app) {
         return 25;
     } else if (PokewalkerApp_IsDownXLHeld()) {
         PlaySE(SEQ_SE_DP_SELECT);
-        PokewalkerApp_MainMenu_EnterMode2(app, 7);
+        PokewalkerApp_MainMenu_StartEraseRecords(app, 7);
         return 26;
-    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TryEnterMode3(app, 3)) {
+    } else if (PokewalkerApp_IsUpSelectRHeld() && PokewalkerApp_MainMenu_TrySendMonBack(app, 3)) {
         PlaySE(SEQ_SE_DP_SELECT);
         return 26;
     }
@@ -516,7 +516,7 @@ int PokewalkerApp_MainMenu_End(PokewalkerApp *app) {
     return 27;
 }
 
-void PokewalkerApp_MainMenu_EnterMode2(PokewalkerApp *app, int bank) {
+void PokewalkerApp_MainMenu_StartEraseRecords(PokewalkerApp *app, int bank) {
     app->nextMode = 2;
     PokewalkerApp_RemoveWindowBank(app, bank);
     PokewalkerApp_AddWindowBank(app, 1);
@@ -525,13 +525,13 @@ void PokewalkerApp_MainMenu_EnterMode2(PokewalkerApp *app, int bank) {
     PokewalkerApp_HideCursor(app);
 }
 
-BOOL PokewalkerApp_MainMenu_TryEnterMode3(PokewalkerApp *app, int bank) {
+BOOL PokewalkerApp_MainMenu_TrySendMonBack(PokewalkerApp *app, int bank) {
     struct {
         u16 unk2;
-        u16 unk0;
+        u16 strollState;
     } walkerState;
-    Pokewalker_GetStrollState(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
-    if (walkerState.unk0 != 2) {
+    Pokewalker_GetStrollState(app->pokewalker, &walkerState.strollState, &walkerState.unk2);
+    if (walkerState.strollState != 2) {
         return FALSE;
     }
     app->nextMode = 3;

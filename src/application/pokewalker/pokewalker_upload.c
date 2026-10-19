@@ -559,10 +559,10 @@ int PokewalkerApp_LoadMonPicture(BoxPokemon *boxMon, void *buffer, PokepicTempla
 }
 
 BOOL PokewalkerApp_IsStrollStateNonzero(PokewalkerApp *app) {
-    u16 unk0;
+    u16 strollState;
     u16 unk2;
-    Pokewalker_GetStrollState(app->pokewalker, &unk0, &unk2);
-    return unk0 != 0;
+    Pokewalker_GetStrollState(app->pokewalker, &strollState, &unk2);
+    return strollState != 0;
 }
 
 // Color index (0-15) of pixel (x, y) of 4bpp tile data that is widthTiles tiles wide.

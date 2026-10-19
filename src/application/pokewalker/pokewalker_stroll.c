@@ -24,11 +24,11 @@ typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 
 extern const PokewalkerAppStateFunc sStartStrollStates[];
 
-int PokewalkerApp_Mode4_Enter(PokewalkerApp *app) {
+int PokewalkerApp_WaitKeyToSave_Enter(PokewalkerApp *app) {
     return 2;
 }
 
-int PokewalkerApp_Mode4_Update(PokewalkerApp *app) {
+int PokewalkerApp_WaitKeyToSave_Update(PokewalkerApp *app) {
     if (gSystem.newKeys & PAD_KEY_DOWN) {
         app->nextMode = 6;
         return 3;
@@ -36,7 +36,7 @@ int PokewalkerApp_Mode4_Update(PokewalkerApp *app) {
     return 2;
 }
 
-int PokewalkerApp_Mode4_Exit(PokewalkerApp *app) {
+int PokewalkerApp_WaitKeyToSave_Exit(PokewalkerApp *app) {
     return 1;
 }
 

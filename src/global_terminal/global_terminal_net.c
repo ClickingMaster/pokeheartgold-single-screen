@@ -427,7 +427,7 @@ BOOL GlobalTerminalNet_RequestDefaultVideoSearch(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL GlobalTerminalNet_RequestLatestVideos(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestTopColosseumVideos(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
@@ -438,7 +438,7 @@ BOOL GlobalTerminalNet_RequestLatestVideos(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-BOOL GlobalTerminalNet_RequestPopularVideos(GlobalTerminalNet *net) {
+BOOL GlobalTerminalNet_RequestTopFrontierVideos(GlobalTerminalNet *net) {
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
