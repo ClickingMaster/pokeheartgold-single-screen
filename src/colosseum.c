@@ -126,13 +126,13 @@ static void Colosseum_CloseMenu(ColosseumEntry *entry);
 
 // Summary pages shown for a Pokemon of the party being entered.
 ALIGN(4)
-static const u8 _020FC7CC[8] = { 0, 1, 2, 3, 4, 0, 0, 0 };
+static const u8 sColosseumSummaryPages[8] = { 0, 1, 2, 3, 4, 0, 0, 0 };
 
 // Union Room state.
 ALIGN(4)
-UnionRoomScratch _021D41CC = { 0 };
+UnionRoomScratch gUnionRoomScratch = { 0 };
 ALIGN(4)
-void *_021D41D8[UNION_ROOM_MAX_RECORDS] = { 0 };
+void *gUnionRoomRecords[UNION_ROOM_MAX_RECORDS] = { 0 };
 
 static void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSystem, Party *party, int partySlot, int mode, enum HeapID heapId) {
     SaveData *saveData = fieldSystem->saveData;
@@ -151,7 +151,7 @@ static void Colosseum_OpenSummary(ColosseumEntry *entry, FieldSystem *fieldSyste
     args->ribbons = Save_SpecialRibbons_Get(saveData);
     args->menuInputStatePtr = NULL;
     args->isFlag982Set = PokemonSummary_IsPokeathlonUnlocked(saveData);
-    PokemonSummary_SetPages(args, _020FC7CC);
+    PokemonSummary_SetPages(args, sColosseumSummaryPages);
     FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
     entry->summaryArgs = args;
 }

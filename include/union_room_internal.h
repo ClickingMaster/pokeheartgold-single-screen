@@ -74,8 +74,8 @@ typedef struct UnionRoomScratch {
     u32 lastChoice;
 } UnionRoomScratch;
 
-extern UnionRoomScratch _021D41CC;
-extern void *_021D41D8[UNION_ROOM_MAX_RECORDS];
+extern UnionRoomScratch gUnionRoomScratch;
+extern void *gUnionRoomRecords[UNION_ROOM_MAX_RECORDS];
 
 struct UnionRoom *UnionRoom_Start(FieldSystem *fieldSystem);
 void UnionRoom_Stop(FieldSystem *fieldSystem);

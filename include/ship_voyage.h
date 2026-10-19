@@ -3,6 +3,6 @@
 
 #include "script.h"
 
-void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 a1, u8 a2, u32 mapId, u32 x, u32 y);
+void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 port, u8 direction, u32 mapId, u32 x, u32 y);
 
 #endif // POKEHEARTGOLD_SHIP_VOYAGE_H

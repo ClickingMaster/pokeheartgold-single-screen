@@ -1,5 +1,5 @@
-#ifndef OVERLAY_104_PRIVATE_H
-#define OVERLAY_104_PRIVATE_H
+#ifndef POKEHEARTGOLD_OVERLAY104_SCENE_INTERNAL_H
+#define POKEHEARTGOLD_OVERLAY104_SCENE_INTERNAL_H
 
 #include "global.h"
 
@@ -18,28 +18,28 @@
 
 #define HEAPID(n) ((enum HeapID)(n))
 
-typedef struct Ov104AnmHeader {
+typedef struct MagnetTrainCutsceneAnmHeader {
     u32 unk00;
     u16 numFrames;
-} Ov104AnmHeader;
+} MagnetTrainCutsceneAnmHeader;
 
-typedef struct Ov104AnmObj {
+typedef struct MagnetTrainCutsceneAnmObj {
     fx32 frame;
     u32 unk04;
-    const Ov104AnmHeader *anm;
-} Ov104AnmObj;
+    const MagnetTrainCutsceneAnmHeader *anm;
+} MagnetTrainCutsceneAnmObj;
 
-typedef struct Ov104Model {
+typedef struct MagnetTrainCutsceneModel {
     NNSG3dRenderObj obj;
     NNSG3dResMdl *mdl;
     NNSG3dResFileHeader *file;
     void *anmFile[2];
     void *anmObj[2];
-} Ov104Model;
+} MagnetTrainCutsceneModel;
 
-typedef struct Ov104Work {
+typedef struct MagnetTrainCutsceneWork {
     Camera *camera;
-    Ov104Model models[3];
+    MagnetTrainCutsceneModel models[3];
     NNSFndAllocator allocator;
     VecFx32 target;
     u8 variant;
@@ -49,9 +49,9 @@ typedef struct Ov104Work {
     u8 step;
     u8 counter;
     const u32 *seTable;
-} Ov104Work;
+} MagnetTrainCutsceneWork;
 
-typedef struct Ov104Lighting {
+typedef struct MagnetTrainCutsceneLighting {
     VecFx16 lightVec[4];
     GXRgb lightColor[4];
     GXRgb diffuse;
@@ -61,19 +61,19 @@ typedef struct Ov104Lighting {
     BOOL diffAmbFlag;
     BOOL specEmiFlag;
     u32 polygonAttr[6];
-} Ov104Lighting;
+} MagnetTrainCutsceneLighting;
 
-typedef struct Ov104Args {
+typedef struct MagnetTrainCutsceneArgs {
     u8 variant;
     u8 gender;
     u8 isNight;
-    u8 unk3;
-    const Ov104Lighting *lighting;
-} Ov104Args;
+    u8 padding_03;
+    const MagnetTrainCutsceneLighting *lighting;
+} MagnetTrainCutsceneArgs;
 
-typedef struct Ov104ModelIds {
+typedef struct MagnetTrainCutsceneModelIds {
     u32 modelFileId;
     u16 anmFileIds[2];
-} Ov104ModelIds;
+} MagnetTrainCutsceneModelIds;
 
 #endif

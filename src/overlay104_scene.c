@@ -1,15 +1,15 @@
 #include "overlay104_scene_internal.h"
 
-static void Ov104Scene_InitGraphics(void);
-static void Ov104Scene_SetupCamera(Ov104Work *work);
-static void Ov104Scene_SetGfxBanks(void);
-static void Ov104Scene_LoadModels(Ov104Work *work);
-static BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx);
-static void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId);
+static void MagnetTrainCutscene_InitGraphics(void);
+static void MagnetTrainCutscene_SetupCamera(MagnetTrainCutsceneWork *work);
+static void MagnetTrainCutscene_SetGfxBanks(void);
+static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work);
+static BOOL MagnetTrainCutscene_IsStepAnimDone(MagnetTrainCutsceneModel *model, int idx);
+static void MagnetTrainCutscene_StartStepFadeOut(int idx, enum HeapID heapId);
 
-BOOL Ov104Scene_Init(OverlayManager *man, int *state);
-BOOL Ov104Scene_Main(OverlayManager *man, int *state);
-BOOL Ov104Scene_Exit(OverlayManager *man, int *state);
+BOOL MagnetTrainCutscene_Init(OverlayManager *man, int *state);
+BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state);
+BOOL MagnetTrainCutscene_Exit(OverlayManager *man, int *state);
 
 static const u32 sSeTableA[3] = { 0x6D5, 0x6F3, 0x6F1 };
 static const VecFx32 sModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
@@ -57,64 +57,64 @@ static const CameraParam sCameraParams[2][3] = {
      { 0x00299EC1, { 0xE002, 0x0000, 0x0000, 0x0000 }, 0x00, 0x06C1, 0x00 } },
 };
 
-static Ov104ModelIds sModelIds_A[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_A[3] = {
     { 0x09, { 0x0A, 0x0B } },
     { 0x15, { 0x16, 0x17 } },
     { 0x1B, { 0x1C, 0x1D } }
 };
-static Ov104ModelIds sModelIds_B[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_B[3] = {
     { 0x24, { 0x25, 0x26 } },
     { 0x30, { 0x31, 0x32 } },
     { 0x39, { 0x3A, 0x3B } }
 };
-static Ov104ModelIds sModelIds_C[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_C[3] = {
     { 0x1E, { 0x1F, 0x20 } },
     { 0x2A, { 0x2B, 0x2C } },
     { 0x36, { 0x37, 0x38 } }
 };
-static Ov104ModelIds sModelIds_D[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_D[3] = {
     { 0x21, { 0x22, 0x23 } },
     { 0x2D, { 0x2E, 0x2F } },
     { 0x36, { 0x37, 0x38 } }
 };
-static Ov104ModelIds sModelIds_E[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_E[3] = {
     { 0x00, { 0x01, 0x02 } },
     { 0x0C, { 0x0D, 0x0E } },
     { 0x18, { 0x19, 0x1A } }
 };
-static Ov104ModelIds sModelIds_F[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_F[3] = {
     { 0x06, { 0x07, 0x08 } },
     { 0x12, { 0x13, 0x14 } },
     { 0x1B, { 0x1C, 0x1D } }
 };
-static Ov104ModelIds sModelIds_G[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_G[3] = {
     { 0x27, { 0x28, 0x29 } },
     { 0x33, { 0x34, 0x35 } },
     { 0x39, { 0x3A, 0x3B } }
 };
-static Ov104ModelIds sModelIds_H[3] = {
+static MagnetTrainCutsceneModelIds sModelIds_H[3] = {
     { 0x03, { 0x04, 0x05 } },
     { 0x0F, { 0x10, 0x11 } },
     { 0x18, { 0x19, 0x1A } }
 };
 
-BOOL Ov104Scene_Init(OverlayManager *man, int *state) {
-    Ov104Work *work;
+BOOL MagnetTrainCutscene_Init(OverlayManager *man, int *state) {
+    MagnetTrainCutsceneWork *work;
     u8 i;
-    Ov104Args *args;
+    MagnetTrainCutsceneArgs *args;
 
     Heap_Create(HEAPID(3), HEAPID(0x95), 0x31000);
-    work = OverlayManager_CreateAndGetData(man, sizeof(Ov104Work), HEAPID(0x95));
-    memset(work, 0, sizeof(Ov104Work));
+    work = OverlayManager_CreateAndGetData(man, sizeof(MagnetTrainCutsceneWork), HEAPID(0x95));
+    memset(work, 0, sizeof(MagnetTrainCutsceneWork));
     args = OverlayManager_GetArgs(man);
     work->variant = args->variant;
     work->gender = args->gender;
     work->isNight = args->isNight;
     work->unk167 = 0;
     work->camera = Camera_New(HEAPID(0x95));
-    Ov104Scene_InitGraphics();
-    Ov104Scene_LoadModels(work);
-    Ov104Scene_SetupCamera(work);
+    MagnetTrainCutscene_InitGraphics();
+    MagnetTrainCutscene_LoadModels(work);
+    MagnetTrainCutscene_SetupCamera(work);
     for (i = 0; i < 4; i++) {
         NNS_G3dGlbLightVector((GXLightId)i, args->lighting->lightVec[i].x, args->lighting->lightVec[i].y, args->lighting->lightVec[i].z);
         NNS_G3dGlbLightColor((GXLightId)i, args->lighting->lightColor[i]);
@@ -126,9 +126,9 @@ BOOL Ov104Scene_Init(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL Ov104Scene_Main(OverlayManager *man, int *state) {
-    Ov104Model *model;
-    Ov104Work *work;
+BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state) {
+    MagnetTrainCutsceneModel *model;
+    MagnetTrainCutsceneWork *work;
     BOOL ret;
     u8 i;
     MtxFx33 rot;
@@ -139,8 +139,8 @@ BOOL Ov104Scene_Main(OverlayManager *man, int *state) {
     ret = FALSE;
     switch (*state) {
     case 0:
-        if (Ov104Scene_IsStepAnimDone(model, work->step)) {
-            Ov104Scene_StartStepFadeOut(work->step, HEAPID(0x95));
+        if (MagnetTrainCutscene_IsStepAnimDone(model, work->step)) {
+            MagnetTrainCutscene_StartStepFadeOut(work->step, HEAPID(0x95));
             (*state)++;
         }
         break;
@@ -151,21 +151,21 @@ BOOL Ov104Scene_Main(OverlayManager *man, int *state) {
             if (work->counter >= 3) {
                 ret = TRUE;
             } else {
-                Ov104Scene_SetupCamera(work);
+                MagnetTrainCutscene_SetupCamera(work);
                 BeginAppScreenFade(0, HEAPID(0x95));
                 *state = 0;
             }
         }
         break;
     }
-    if (((Ov104AnmObj *)model->anmObj[0])->frame == 0) {
+    if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame == 0) {
         PlaySE((u16)work->seTable[work->step]);
         if (work->step == 2) {
             Sound_SetSceneAndPlayBGM(0x44, SEQ_GS_E_LINEAR, 1);
         }
     }
     for (i = 0; i < 2; i++) {
-        Ov104AnmObj *anmObj = model->anmObj[i];
+        MagnetTrainCutsceneAnmObj *anmObj = model->anmObj[i];
         if (anmObj->frame + FX32_ONE < anmObj->anm->numFrames * FX32_ONE) {
             anmObj->frame = anmObj->frame + FX32_ONE;
         }
@@ -182,9 +182,9 @@ BOOL Ov104Scene_Main(OverlayManager *man, int *state) {
     return ret;
 }
 
-BOOL Ov104Scene_Exit(OverlayManager *man, int *state) {
-    Ov104Work *work;
-    Ov104Model *model;
+BOOL MagnetTrainCutscene_Exit(OverlayManager *man, int *state) {
+    MagnetTrainCutsceneWork *work;
+    MagnetTrainCutsceneModel *model;
     u8 i;
     u8 j;
 
@@ -204,21 +204,21 @@ BOOL Ov104Scene_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-static void Ov104Scene_InitGraphics(void) {
+static void MagnetTrainCutscene_InitGraphics(void) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
-    Ov104Scene_SetGfxBanks();
+    MagnetTrainCutscene_SetGfxBanks();
     GF3dRender_InitSimpleManager(HEAPID(0x95));
     reg_G3X_DISP3DCNT = (u16)((reg_G3X_DISP3DCNT & ~0x3000) | 0x20);
     G3X_SetEdgeColorTable(sEdgeColors);
     GfGfx_SwapDisplay();
 }
 
-static void Ov104Scene_SetupCamera(Ov104Work *work) {
+static void MagnetTrainCutscene_SetupCamera(MagnetTrainCutsceneWork *work) {
     VecFx32 target = { 0, 0, 0 };
     u8 step;
     u8 scene;
@@ -232,18 +232,18 @@ static void Ov104Scene_SetupCamera(Ov104Work *work) {
     Camera_SetStaticPtr(work->camera);
 }
 
-static void Ov104Scene_SetGfxBanks(void) {
+static void MagnetTrainCutscene_SetGfxBanks(void) {
     GraphicsBanks banks = sBanks;
     GfGfx_SetBanks(&banks);
 }
 
-static void Ov104Scene_LoadModels(Ov104Work *work) {
+static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work) {
     u8 i;
     u8 j;
-    Ov104ModelIds *ids;
+    MagnetTrainCutsceneModelIds *ids;
     void *tex;
-    Ov104Model *model;
-    Ov104ModelIds *entry;
+    MagnetTrainCutsceneModel *model;
+    MagnetTrainCutsceneModelIds *entry;
     NARC *narc;
 
     narc = NARC_New((NarcId)0xEB, HEAPID(0x95));
@@ -303,20 +303,20 @@ static void Ov104Scene_LoadModels(Ov104Work *work) {
     NARC_Delete(narc);
 }
 
-static BOOL Ov104Scene_IsStepAnimDone(Ov104Model *model, int idx) {
+static BOOL MagnetTrainCutscene_IsStepAnimDone(MagnetTrainCutsceneModel *model, int idx) {
     if (idx + 1 >= 3) {
-        if (((Ov104AnmObj *)model->anmObj[0])->frame + FX32_ONE == 205 * FX32_ONE) {
+        if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame + FX32_ONE == 205 * FX32_ONE) {
             return TRUE;
         }
     } else {
-        if (((Ov104AnmObj *)model->anmObj[0])->frame + FX32_ONE == ((Ov104AnmObj *)model->anmObj[0])->anm->numFrames * FX32_ONE) {
+        if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame + FX32_ONE == ((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->anm->numFrames * FX32_ONE) {
             return TRUE;
         }
     }
     return FALSE;
 }
 
-static void Ov104Scene_StartStepFadeOut(int idx, enum HeapID heapId) {
+static void MagnetTrainCutscene_StartStepFadeOut(int idx, enum HeapID heapId) {
     if (idx + 1 >= 3) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, 0, 6, 1, heapId);
     } else {

@@ -39,7 +39,7 @@ typedef struct GridEntry {
 struct GridCursor {
     u8 current;
     u8 count;
-    u8 unk_02;
+    u8 canCancel;
     u8 padding;
     void *userData;
     const GridEntry *entries;
@@ -50,7 +50,7 @@ int GridCursor_StepPosition(GridCursor *cursor, GridPosition *position, const u8
 void GridCursor_SelectPanel(GridCursor *cursor, u8 type);
 void GridCursor_EnterPanel(GridCursor *cursor, u8 type, const GridMove *move);
 GridCursor *GridCursor_New(enum HeapID heapId, void *userData);
-void GridCursor_Init(GridCursor *cursor, u8 value);
+void GridCursor_Init(GridCursor *cursor, u8 canCancel);
 void GridCursor_Delete(GridCursor *cursor);
 void GridCursor_SetPosition(GridCursor *cursor, u8 type, u8 index);
 BOOL GridCursor_Move(GridCursor *cursor, s8 dx, s8 dy);

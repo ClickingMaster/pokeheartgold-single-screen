@@ -41,13 +41,13 @@ static const OverlayManagerTemplate sBerryPotsBagTemplate = {
     .ovy_id = FS_OVERLAY_ID(OVY_15),
 };
 
-static const u8 *unused_02201BA0;
+static const u8 *sBerryPotsBagPockets;
 
 typedef struct BerryPotsOverlayData {
     enum HeapID heapID;
     BerryPotsArgs *args;
     OverlayManager *ovyManager;
-    u8 unkC[0x10 - 0xC];
+    u8 padding_0C[0x10 - 0xC];
     BagView *bagView;
     u8 itemAction;
     u16 itemId;
@@ -56,12 +56,12 @@ typedef struct BerryPotsOverlayData {
 } BerryPotsOverlayData; // size: 0x20
 
 static BOOL BerryPots_RunSubApp(OverlayManager **manager);
-static void BerryPots_AllocBagCursors(BerryPotsOverlayData *unk);
-static void BerryPots_FreeBagCursors(BerryPotsOverlayData *unk);
-static u32 BerryPots_MainSeq_StartApp(BerryPotsOverlayData *unk);
-static u32 BerryPots_MainSeq_RunApp(BerryPotsOverlayData *unk);
-static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *unk);
-static u32 BerryPots_MainSeq_RunBag(BerryPotsOverlayData *unk);
+static void BerryPots_AllocBagCursors(BerryPotsOverlayData *data);
+static void BerryPots_FreeBagCursors(BerryPotsOverlayData *data);
+static u32 BerryPots_MainSeq_StartApp(BerryPotsOverlayData *data);
+static u32 BerryPots_MainSeq_RunApp(BerryPotsOverlayData *data);
+static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *data);
+static u32 BerryPots_MainSeq_RunBag(BerryPotsOverlayData *data);
 
 static BOOL BerryPots_RunSubApp(OverlayManager **manager) {
     if (*manager != NULL && OverlayManager_Run(*manager)) {
@@ -79,30 +79,30 @@ BOOL BerryPots_Init(OverlayManager *manager, int *state) {
 
     Heap_Create(HEAP_ID_3, HEAP_ID_BERRY_POTS, 0x20000);
 
-    BerryPotsOverlayData *unk = OverlayManager_CreateAndGetData(manager, sizeof(BerryPotsOverlayData), HEAP_ID_BERRY_POTS);
-    MI_CpuFill8(unk, 0, sizeof(BerryPotsOverlayData));
-    unk->heapID = HEAP_ID_BERRY_POTS;
-    unk->args = OverlayManager_GetArgs(manager);
-    BerryPots_AllocBagCursors(unk);
+    BerryPotsOverlayData *data = OverlayManager_CreateAndGetData(manager, sizeof(BerryPotsOverlayData), HEAP_ID_BERRY_POTS);
+    MI_CpuFill8(data, 0, sizeof(BerryPotsOverlayData));
+    data->heapID = HEAP_ID_BERRY_POTS;
+    data->args = OverlayManager_GetArgs(manager);
+    BerryPots_AllocBagCursors(data);
 
     return TRUE;
 }
 
 BOOL BerryPots_Main(OverlayManager *manager, int *state) {
-    BerryPotsOverlayData *unk = OverlayManager_GetData(manager);
+    BerryPotsOverlayData *data = OverlayManager_GetData(manager);
 
     switch (*state) {
     case BERRY_POTS_MAIN_START_APP:
-        *state = BerryPots_MainSeq_StartApp(unk);
+        *state = BerryPots_MainSeq_StartApp(data);
         break;
     case BERRY_POTS_MAIN_RUN_APP:
-        *state = BerryPots_MainSeq_RunApp(unk);
+        *state = BerryPots_MainSeq_RunApp(data);
         break;
     case BERRY_POTS_MAIN_START_BAG:
-        *state = BerryPots_MainSeq_StartBag(unk);
+        *state = BerryPots_MainSeq_StartBag(data);
         break;
     case BERRY_POTS_MAIN_RUN_BAG:
-        *state = BerryPots_MainSeq_RunBag(unk);
+        *state = BerryPots_MainSeq_RunBag(data);
         break;
     case BERRY_POTS_MAIN_EXIT:
         return TRUE;
@@ -112,10 +112,10 @@ BOOL BerryPots_Main(OverlayManager *manager, int *state) {
 }
 
 BOOL BerryPots_Exit(OverlayManager *manager, int *state) {
-    BerryPotsOverlayData *unk = OverlayManager_GetData(manager);
+    BerryPotsOverlayData *data = OverlayManager_GetData(manager);
     BerryPotsApp_ResetDisplay();
 
-    BerryPots_FreeBagCursors(unk);
+    BerryPots_FreeBagCursors(data);
 
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_BERRY_POTS);
@@ -124,66 +124,66 @@ BOOL BerryPots_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-static void BerryPots_AllocBagCursors(BerryPotsOverlayData *unk) {
-    unk->cursor1 = BagCursor_New(unk->heapID);
-    unk->cursor2 = BagCursor_New(unk->heapID);
+static void BerryPots_AllocBagCursors(BerryPotsOverlayData *data) {
+    data->cursor1 = BagCursor_New(data->heapID);
+    data->cursor2 = BagCursor_New(data->heapID);
 }
 
-static void BerryPots_FreeBagCursors(BerryPotsOverlayData *unk) {
-    Heap_Free(unk->cursor2);
-    Heap_Free(unk->cursor1);
+static void BerryPots_FreeBagCursors(BerryPotsOverlayData *data) {
+    Heap_Free(data->cursor2);
+    Heap_Free(data->cursor1);
 }
 
-static u32 BerryPots_MainSeq_StartApp(BerryPotsOverlayData *unk) {
-    unk->ovyManager = OverlayManager_New(&sBerryPotsAppTemplate, unk, unk->heapID);
+static u32 BerryPots_MainSeq_StartApp(BerryPotsOverlayData *data) {
+    data->ovyManager = OverlayManager_New(&sBerryPotsAppTemplate, data, data->heapID);
     return BERRY_POTS_MAIN_RUN_APP;
 }
 
-static u32 BerryPots_MainSeq_RunApp(BerryPotsOverlayData *unk) {
-    if (!BerryPots_RunSubApp(&unk->ovyManager)) {
+static u32 BerryPots_MainSeq_RunApp(BerryPotsOverlayData *data) {
+    if (!BerryPots_RunSubApp(&data->ovyManager)) {
         return BERRY_POTS_MAIN_RUN_APP;
     }
 
-    if ((u8)(unk->itemAction + 0xFF) <= 1) {
+    if ((u8)(data->itemAction + 0xFF) <= 1) {
         return BERRY_POTS_MAIN_START_BAG;
     }
 
     return BERRY_POTS_MAIN_EXIT;
 }
 
-static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *unk) {
-    Bag *bag = Save_Bag_Get(unk->args->saveData);
+static u32 BerryPots_MainSeq_StartBag(BerryPotsOverlayData *data) {
+    Bag *bag = Save_Bag_Get(data->args->saveData);
 
-    switch (unk->itemAction) {
+    switch (data->itemAction) {
     case 1:
-        unused_02201BA0 = (u8 *)sBerryPotsItemPockets;
+        sBerryPotsBagPockets = (u8 *)sBerryPotsItemPockets;
 
-        unk->bagView = Bag_CreateView(bag, sBerryPotsItemPockets, unk->heapID);
-        BagView_Init(unk->bagView, unk->args->saveData, 6, unk->cursor2, unk->args->menuInputStatePtr);
+        data->bagView = Bag_CreateView(bag, sBerryPotsItemPockets, data->heapID);
+        BagView_Init(data->bagView, data->args->saveData, 6, data->cursor2, data->args->menuInputStatePtr);
         break;
     case 2:
-        unused_02201BA0 = (u8 *)sBerryPotsBerryPockets;
+        sBerryPotsBagPockets = (u8 *)sBerryPotsBerryPockets;
 
-        unk->bagView = Bag_CreateView(bag, sBerryPotsBerryPockets, unk->heapID);
-        BagView_Init(unk->bagView, unk->args->saveData, 6, unk->cursor1, unk->args->menuInputStatePtr);
+        data->bagView = Bag_CreateView(bag, sBerryPotsBerryPockets, data->heapID);
+        BagView_Init(data->bagView, data->args->saveData, 6, data->cursor1, data->args->menuInputStatePtr);
         break;
     default:
         GF_ASSERT(FALSE);
         break;
     }
 
-    unk->ovyManager = OverlayManager_New(&sBerryPotsBagTemplate, unk->bagView, unk->heapID);
+    data->ovyManager = OverlayManager_New(&sBerryPotsBagTemplate, data->bagView, data->heapID);
     return BERRY_POTS_MAIN_RUN_BAG;
 }
 
-static u32 BerryPots_MainSeq_RunBag(BerryPotsOverlayData *unk) {
-    if (!BerryPots_RunSubApp(&unk->ovyManager)) {
+static u32 BerryPots_MainSeq_RunBag(BerryPotsOverlayData *data) {
+    if (!BerryPots_RunSubApp(&data->ovyManager)) {
         return BERRY_POTS_MAIN_RUN_BAG;
     }
 
-    unk->itemId = ((u8)BagView_GetSelectedAction(unk->bagView) == 4) ? BagView_GetItemId(unk->bagView) : 0xFFFF;
-    Heap_Free(unk->bagView);
-    unk->bagView = NULL;
+    data->itemId = ((u8)BagView_GetSelectedAction(data->bagView) == 4) ? BagView_GetItemId(data->bagView) : 0xFFFF;
+    Heap_Free(data->bagView);
+    data->bagView = NULL;
 
     return BERRY_POTS_MAIN_START_APP;
 }

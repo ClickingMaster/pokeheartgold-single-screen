@@ -65,7 +65,7 @@ static void FashionMon_Init(SaveFashionMon *dst, Pokemon *mon, u8 x, u8 y, s8 z)
 static void FashionMon_InitAtObject(SaveFashionMon *dst, Pokemon *mon, int monPicId);
 static void FashionMon_SetSecondText(SaveFashionMon *dst, String *str, u8 a2);
 static void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon);
-static void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4);
+static void SetFashionItemPlacement(u8 *dst, u8 accessoryId, u8 x, u8 y, u8 z);
 static void SetStackableAccessoryCount(u32 *data, int value, u8 index);
 static u8 GetStackableAccessoryCount(u32 *data, u8 index);
 static void SetUniqueAccessoryFlag(u32 *data, u8 value, u8 index);
@@ -160,11 +160,11 @@ static void FashionMon_CreatePokemon(SaveFashionMon *src, Pokemon *mon) {
     SetMonData(mon, MON_DATA_FORM, &src->form);
 }
 
-static void SetFashionItemPlacement(u8 *dst, u8 x, u8 y, u8 z, u8 a4) {
-    dst[0] = x;
-    dst[1] = y;
-    dst[2] = z;
-    dst[3] = a4;
+static void SetFashionItemPlacement(u8 *dst, u8 accessoryId, u8 x, u8 y, u8 z) {
+    dst[0] = accessoryId;
+    dst[1] = x;
+    dst[2] = y;
+    dst[3] = z;
 }
 
 static void SetStackableAccessoryCount(u32 *data, int value, u8 index) {

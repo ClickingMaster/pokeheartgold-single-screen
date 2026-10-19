@@ -149,7 +149,7 @@ static void GridPanel3_Move(GridCursor *cursor, GridPosition *position, const u8
         GridCursor_EnterPanel(cursor, 2, &move);
         return;
     case GRID_EXIT_DOWN:
-        if (cursor->unk_02 != 0) {
+        if (cursor->canCancel != 0) {
             GridCursor_EnterPanel(cursor, 1, &move);
         }
         return;
@@ -362,10 +362,10 @@ GridCursor *GridCursor_New(enum HeapID heapId, void *userData) {
     return cursor;
 }
 
-void GridCursor_Init(GridCursor *cursor, u8 value) {
+void GridCursor_Init(GridCursor *cursor, u8 canCancel) {
     cursor->current = 0;
     cursor->entries = sGridCursorPanels;
-    cursor->unk_02 = value;
+    cursor->canCancel = canCancel;
 }
 
 void GridCursor_Delete(GridCursor *cursor) {

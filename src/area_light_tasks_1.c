@@ -17,15 +17,15 @@ enum ShipVoyageState {
     SHIP_VOYAGE_FREE,
 };
 
-static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination);
+static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 port, void *modelAttributes);
 static BOOL Task_ShipDepartureCutscene(TaskManager *taskManager);
 static BOOL Task_ShipVoyage(TaskManager *taskManager);
 
-void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 direction, u32 mapId, u32 x, u32 y) {
+void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 port, u8 direction, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
-    env->param1 = param1;
-    env->param2 = direction;
+    env->variant = port;
+    env->direction = direction;
     env->mapId = mapId;
     env->x = x;
     env->y = y;
@@ -34,11 +34,11 @@ void CallTask_ShipVoyage(FieldSystem *fieldSystem, u8 param1, u8 direction, u32 
     TaskManager_Call(fieldSystem->taskman, Task_ShipVoyage, env);
 }
 
-static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
+static void CallTask_ShipDepartureCutscene(FieldSystem *fieldSystem, u8 port, void *modelAttributes) {
     NightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(NightTaskEnv));
 
-    env->destination = destination;
-    env->param = param;
+    env->modelAttributes = modelAttributes;
+    env->port = port;
     switch (Field_GetTimeOfDay(fieldSystem)) {
     case RTC_TIMEOFDAY_MORN:
     case RTC_TIMEOFDAY_DAY:
@@ -98,11 +98,11 @@ static BOOL Task_ShipVoyage(TaskManager *taskManager) {
         env->state = SHIP_VOYAGE_DEPARTURE_CUTSCENE;
         break;
     case SHIP_VOYAGE_DEPARTURE_CUTSCENE:
-        CallTask_ShipDepartureCutscene(fieldSystem, env->param1, &env->light);
+        CallTask_ShipDepartureCutscene(fieldSystem, env->variant, &env->light);
         env->state = SHIP_VOYAGE_CHANGE_MAP;
         break;
     case SHIP_VOYAGE_CHANGE_MAP:
-        CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->param2);
+        CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->direction);
         env->state = SHIP_VOYAGE_RETURN_TO_OVERWORLD;
         break;
     case SHIP_VOYAGE_RETURN_TO_OVERWORLD:

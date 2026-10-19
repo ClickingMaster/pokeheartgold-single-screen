@@ -110,7 +110,7 @@ void UnionRoom_WaitWireless(struct UnionRoom *unionRoom) {
 
 void UnionRoom_Search(struct UnionRoom *unionRoom) {
     if (CommState_IsAlternateLinked()) {
-        _021D41CC.waitFrames = 0;
+        gUnionRoomScratch.waitFrames = 0;
         UnionRoom_SetState(unionRoom, UnionRoom_ParentLinked, 0);
         return;
     }
@@ -158,7 +158,7 @@ void UnionRoom_ParentLinked(struct UnionRoom *unionRoom) {
         return;
     }
 
-    _021D41CC.waitFrames++;
+    gUnionRoomScratch.waitFrames++;
     profile = CommWireless_GetRuleset();
     if (Comm_GetConnectedChildren() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && profile[0x1C] != 4) {
         CommPlayerInfo_SendLocal();
@@ -208,7 +208,7 @@ void Task_UnionRoom(SysTask *task, struct UnionRoom *unionRoom) {
     }
     for (i = 0; i < UNION_ROOM_MAX_RECORDS; i++) {
         unionRoom->records[i] = CommWireless_GetParentInfo(i);
-        _021D41D8[i] = unionRoom->records[i];
+        gUnionRoomRecords[i] = unionRoom->records[i];
     }
     if (local.unionRoom->state != NULL) {
         local.unionRoom->state(local.unionRoom);
@@ -318,8 +318,8 @@ int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
         return 5;
     }
     info = &record->info;
-    _021D41CC.lastActivity = (UnionRoomStatus *)((u8 *)info + 0x30);
-    switch (_021D41CC.lastActivity->activity) {
+    gUnionRoomScratch.lastActivity = (UnionRoomStatus *)((u8 *)info + 0x30);
+    switch (gUnionRoomScratch.lastActivity->activity) {
     case 0:
         return 1;
     case 1:
@@ -354,7 +354,7 @@ int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind
         return 5;
     }
     status = &((UnionRoomRecordInfo *)(record + 0x50))->status;
-    _021D41CC.lastActivity = status;
+    gUnionRoomScratch.lastActivity = status;
     switch (status->activity) {
     case 2:
         if (kind != 3) {
@@ -478,6 +478,6 @@ void UnionRoom_RecvTalkReply(int netId, int size, const u8 *data, FieldSystem *f
     struct UnionRoom *unionRoom = fieldSystem->unionRoom;
     if (unionRoom->partnerCancelled == 0) {
         unionRoom->talkReply = *data;
-        _021D41CC.lastChoice = *data;
+        gUnionRoomScratch.lastChoice = *data;
     }
 }

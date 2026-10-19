@@ -24,11 +24,11 @@ enum MagnetTrainCutsceneState {
     MAGNET_TRAIN_CUTSCENE_FREE,
 };
 
-void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {
+void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 variant, u8 direction, u32 mapId, u32 x, u32 y) {
     AreaLightTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(AreaLightTaskEnv));
 
-    env->param1 = param1;
-    env->param2 = param2;
+    env->variant = variant;
+    env->direction = direction;
     env->mapId = mapId;
     env->x = x;
     env->y = y;
@@ -37,11 +37,11 @@ void CallTask_MagnetTrainRide(FieldSystem *fieldSystem, u8 param1, u8 param2, u3
     TaskManager_Call(fieldSystem->taskman, Task_MagnetTrainRide, env);
 }
 
-void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 param, void *destination) {
+void CallTask_MagnetTrainCutscene(FieldSystem *fieldSystem, u8 variant, void *lighting) {
     GenderTaskEnv *env = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GenderTaskEnv));
 
-    env->destination = destination;
-    env->param = param;
+    env->lighting = lighting;
+    env->variant = variant;
     switch (Field_GetTimeOfDay(fieldSystem)) {
     case RTC_TIMEOFDAY_MORN:
     case RTC_TIMEOFDAY_DAY:
@@ -102,11 +102,11 @@ BOOL Task_MagnetTrainRide(TaskManager *taskManager) {
         env->state = MAGNET_TRAIN_RIDE_CUTSCENE;
         break;
     case MAGNET_TRAIN_RIDE_CUTSCENE:
-        CallTask_MagnetTrainCutscene(fieldSystem, env->param1, &env->light);
+        CallTask_MagnetTrainCutscene(fieldSystem, env->variant, &env->light);
         env->state = MAGNET_TRAIN_RIDE_CHANGE_MAP;
         break;
     case MAGNET_TRAIN_RIDE_CHANGE_MAP:
-        CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->param2);
+        CallTask_ChangeMapToCoords(taskManager, env->mapId, -1, env->x, env->y, env->direction);
         env->state = MAGNET_TRAIN_RIDE_RETURN_TO_OVERWORLD;
         break;
     case MAGNET_TRAIN_RIDE_RETURN_TO_OVERWORLD:
