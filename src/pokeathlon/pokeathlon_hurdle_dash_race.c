@@ -45,9 +45,9 @@ void SetPlayerPan(u32 playerNo, s32 pan);
 
 s32 _s32_div_f(s32 num, s32 den);
 
-s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
-s32 PokeathlonCourseObject_GetCollisionOffsetY(PokeathlonCourseObject *object);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, f32 x, f32 y);
+s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *object);
+s32 PokeathlonCourseObject_GetCollisionOffsetY(PokeathlonCourseMonObject *object);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, f32 x, f32 y);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
 
@@ -178,7 +178,7 @@ static void PokeathlonHurdleDash_UpdateRunner(PokeathlonCourseData *course, Poke
             for (i = 0; i < 4; i++) {
                 hurdle = PokeathlonHurdleDashRunner_GetHurdle(runner, i);
                 if (PokeathlonHurdle_IsStanding(hurdle)) {
-                    PokeathlonCourseObject *monObject = runner->mon.monObject;
+                    PokeathlonCourseMonObject *monObject = runner->mon.monObject;
                     PokeathlonHurdle_GetRect(hurdle, &rect2);
                     if (PokeathlonHurdleDash_IsTouchingHurdle(runner->mon.groundY + 0x110 - PokeathlonCourseObject_GetCollisionOffsetY(monObject), (u8)PokeathlonCourseObject_GetCollisionRadius(monObject), &rect2)) {
                         PokeathlonHurdle_KnockDown(hurdle);

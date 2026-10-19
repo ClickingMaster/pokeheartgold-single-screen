@@ -15,10 +15,10 @@ PokeathlonHurdleDashMonView *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonG
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u8 mon);
 int PokeathlonCourse_GetCollisionSizeClass(void *performance);
-void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, u32 offsetY, u32 radius);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *object, u32 offsetY, u32 radius);
 int PokeathlonCourse_GetTouchRadius(void);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, u32 radius);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, int x, int y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, u32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, int x, int y);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u32 animState);
 void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object, u32 drawPriority);
 void PokeathlonCourseMonObject_SetAffineOverwriteMode(PokeathlonCourseMonObject *object, int mode);

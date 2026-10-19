@@ -72,7 +72,7 @@ PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId
 void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *monPics);
 void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void *params, int priority, int baseIndex);
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *monPics);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *monPics, int paused);
 void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
 
 typedef struct PokeathlonBlockSmashBannerPosition {

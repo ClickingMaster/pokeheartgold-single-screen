@@ -34,9 +34,9 @@ void PokeathlonCourseMonObject_SetAnimStateRaw(PokeathlonCourseMonObject *object
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, u8 size);
 void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int anim);
 void PokeathlonCourseObject_GetCollisionCircle(void *object, int x, int y, int *outX, int *outY, int *outRadius);
-int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, int x, int y);
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
+int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *object);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, int x, int y);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int show);
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
@@ -932,8 +932,8 @@ static inline void PokeathlonPennantCapture_ZeroVec(VecFx32 *v) {
 #define CONTACT(player, i) (*((u8 *)((u32)(player) + (u32)(i)) + 0x94))
 
 static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out) {
-    PokeathlonCourseObject *objectA;
-    PokeathlonCourseObject *objectB;
+    PokeathlonCourseMonObject *objectA;
+    PokeathlonCourseMonObject *objectB;
     int applied;
     int i, j;
     PokeathlonPennantCapturePlayer *a, *b;

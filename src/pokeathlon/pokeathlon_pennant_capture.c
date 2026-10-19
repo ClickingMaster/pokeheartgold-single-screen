@@ -27,8 +27,8 @@ void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *poo
 void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
 void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
 void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, s32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, s32 radius);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 
 extern const GraphicsBanks sPennantCaptureGraphicsBanks;

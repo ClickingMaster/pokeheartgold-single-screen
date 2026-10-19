@@ -27,7 +27,7 @@ void PokeathlonCourseMonObject_SetShadowDrawFlag(PokeathlonCourseMonObject *monP
 void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic, int priority);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic, int animState);
 void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *monPic, int anim);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *monPic, int x, int y);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *monPic, int x, int y);
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int mainScreen, int palette, enum HeapID heapId);
 
 extern u32 gPokeathlonBlockSmashFramesSinceHit;

@@ -6,30 +6,30 @@
 #include "heap.h"
 #include "sprite_transfer.h"
 
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, s32 radius) {
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, s32 radius) {
     object->touchRadius = radius;
 }
 
-void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, s32 offsetY, s32 radius) {
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *object, s32 offsetY, s32 radius) {
     object->collisionOffsetY = offsetY;
     object->collisionRadius = radius;
 }
 
-void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, s32 *radius) {
+void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseMonObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, s32 *radius) {
     PokeathlonCourseObject_GetCollisionCenter(object, x, y, outX, outY);
     *radius = object->collisionRadius;
 }
 
-s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object) {
+s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *object) {
     return object->collisionRadius;
 }
 
-s32 PokeathlonCourseObject_GetCollisionOffsetY(PokeathlonCourseObject *object) {
+s32 PokeathlonCourseObject_GetCollisionOffsetY(PokeathlonCourseMonObject *object) {
     return object->collisionOffsetY;
 }
 
 // Places the Pokemon so that it stands on (x, y): the shadow and the marker go to that point.
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y) {
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y) {
     VecFx32 matrix;
     VecFx32 position = { 0 };
     Sprite *sprite = PokeathlonCourseMonGfx_GetSprite(object->gfx);
@@ -58,7 +58,7 @@ void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s3
 }
 
 // Places the Pokemon so that the middle of its visible part is at (x, y).
-void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *object, int x, int y, int moveShadow) {
+void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseMonObject *object, int x, int y, int moveShadow) {
     s32 halfWidth = object->halfWidth;
     s32 topRow = object->topRow;
     s32 visibleHeight = 2 * object->halfHeight - topRow;
@@ -68,7 +68,7 @@ void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *object, in
 }
 
 // Centre of the collision circle of a Pokemon whose visible part is centred at (x, y) (fx32).
-void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY) {
+void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseMonObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY) {
     s32 frameHeight = 2 * object->halfHeight;
     s32 center = object->topRow + (frameHeight - object->topRow) / 2;
     fx32 result = y - (center << FX32_SHIFT) + ((frameHeight - object->collisionOffsetY) << FX32_SHIFT);
@@ -77,7 +77,7 @@ void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, f
 }
 
 // Ground point of a Pokemon whose visible part is centred at (x, y).
-void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY) {
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY) {
     int frameHeight;
     int center;
     if (object->shadowSprite == NULL) {
@@ -95,13 +95,13 @@ void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *object, int x
 
 // Centre of the visible part of a Pokemon that stands on (x, y).
 
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, s32 x, s32 y, s32 *outX, s32 *outY) {
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, s32 x, s32 y, s32 *outX, s32 *outY) {
     y = y + object->shadowOffsetY - object->halfHeight * 2;
     *outX = x;
     *outY = object->topRow + (y + (object->halfHeight * 2 - object->topRow) / 2);
 }
 
-BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY) {
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY) {
     VecFx32 delta;
     VecFx32 position;
     VecFx32 target;
@@ -118,22 +118,22 @@ BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 
     return FALSE;
 }
 
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, void *scale, void *scaleY) {
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, void *scale, void *scaleY) {
     PokeathlonCourseMonGfx_SetScale(PokeathlonCourseMonObject_GetGfx(object), scale, scaleY);
 }
 
-BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseObject *object) {
+BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object) {
     if (Sprite_GetDrawFlag(PokeathlonCourseMonGfx_GetSprite(object->gfx))) {
         return TRUE;
     }
     return FALSE;
 }
 
-void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseObjects *objects) {
+void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseMonObjects *objects) {
     PokeathlonCourseMonGfx_ShiftLargeUp(objects->gfxManager);
 }
 
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused) {
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused) {
     u8 i = 0;
     BOOL active;
     if (objects->count > 0) {

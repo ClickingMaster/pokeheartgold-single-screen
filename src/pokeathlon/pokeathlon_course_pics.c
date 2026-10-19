@@ -17,7 +17,7 @@
 #include "system.h"
 #include "touchscreen.h"
 
-static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette);
+static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette);
 static void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset);
 static void PokeathlonCourse_LoadSpriteChars(Sprite *sprite, void *data, u32 size);
 
@@ -363,17 +363,17 @@ u16 PokeathlonCourse_GetTrainerPicFileId(u32 kind) {
     return sPokeathlonCourseTrainerPicFileIds[kind];
 }
 
-void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId) {
+void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId) {
     PokeathlonCourse_LoadMonPicEx(sprite, info, mainScreen, palette, heapId, TRUE);
 }
 
-void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId, BOOL loadPalette) {
+void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId, BOOL loadPalette) {
     PokeathlonCourse_LoadMonPicEx(sprite, info, mainScreen, palette, heapId, loadPalette);
 }
 
 // Front picture of the Pokemon (no sprite if species is 0).
 
-static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseObjectInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
+static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 grayScale, enum HeapID heapId, BOOL loadPalette) {
     PokepicTemplate template;
     TileRect rect;
     void *buffer;
@@ -381,7 +381,7 @@ static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCours
         ManagedSprite_SetDrawFlag(sprite, FALSE);
         return;
     }
-    GetMonSpriteCharAndPlttNarcIdsEx(&template, info->species, info->gender, 2, info->shiny, (u8)info->form, info->personality);
+    GetMonSpriteCharAndPlttNarcIdsEx(&template, info->species, info->gender, 2, info->isShiny, (u8)info->form, info->personality);
     rect = sPokeathlonCourseMonPicRect;
     buffer = Heap_AllocAtEnd(heapId, 0xC80);
     CharTiles_LoadMonRectAsObjFromNarc((NarcId) template.narcID, template.charDataID, heapId, &rect, buffer, info->personality, FALSE, 2, info->species);

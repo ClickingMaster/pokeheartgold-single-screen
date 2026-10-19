@@ -58,9 +58,9 @@ void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *object
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, int anim);
 void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int anim);
 void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *monObjects, u8 index, int vram, u16 *palette);
-void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *object, int x, int y, int moveShadow);
+void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseMonObject *object, int x, int y, int moveShadow);
 void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *object, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, f32 scaleX, f32 scaleY);
 
 void PokeathlonRingDrop_InitSprites(PokeathlonRingDrop *ringDrop) {
     SpriteResourceCountsListUnion counts = gPokeathlonRingDropSpriteResourceCounts;

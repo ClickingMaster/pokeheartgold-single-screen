@@ -81,13 +81,13 @@ void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *ent
 void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
 BOOL PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused);
 void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
 void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
 void PokeathlonCourseObject_SetTouchRadius(void *object, s32 radius);
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
-s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *object);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
+s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *object);
 
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
@@ -1033,7 +1033,7 @@ static BOOL PokeathlonRelayRun_IsTouchingRunner(PokeathlonRelayRun *relayRun, in
     s32 centerX;
     s32 centerY;
     PokeathlonRelayRunTeam *team = &relayRun->teams[teamId];
-    PokeathlonCourseObject *object;
+    PokeathlonCourseMonObject *object;
     GF_ASSERT(team->current < RELAY_RUN_MEMBERS);
     object = team->monObjects[team->current];
     PokeathlonCourseObject_GroundToCenter(object, RELAY_RUN_RUNNER_X, team->position.y / FX32_ONE, &centerX, &centerY);

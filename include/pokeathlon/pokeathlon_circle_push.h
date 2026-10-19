@@ -27,7 +27,7 @@ enum PokeathlonCirclePushMonState {
 
 // One of the twelve Pokemon (0x90).
 typedef struct PokeathlonCirclePushMon {
-    PokeathlonCourseObject *object;                 // 0x00
+    PokeathlonCourseMonObject *object;              // 0x00
     PokeathlonCourseSpritePoolSprite *effectSprite; // 0x04: shadow, and the effects of scoring
     PokeathlonCourseSpritePoolSprite *tiredSprite;  // 0x08: shown while the Pokemon is exhausted
     fx32 x;                                         // 0x0C: drawn position
@@ -133,14 +133,14 @@ typedef struct PokeathlonCirclePushInput {
 
 // The CPU players (0x4EC).
 typedef struct PokeathlonCirclePushAiMon {
-    int cell;                       // 0x00: of the 7x5 grid of the ring, -1 outside
-    int speed;                      // 0x04
-    u16 *stamina;                   // 0x08
-    VecFx32 *position;              // 0x0C
-    u32 *state;                     // 0x10
-    int slot;                       // 0x14: team * 3 + member
-    VecFx32 *target;                // 0x18: NULL for the players' Pokemon
-    PokeathlonCourseObject *object; // 0x1C
+    int cell;                          // 0x00: of the 7x5 grid of the ring, -1 outside
+    int speed;                         // 0x04
+    u16 *stamina;                      // 0x08
+    VecFx32 *position;                 // 0x0C
+    u32 *state;                        // 0x10
+    int slot;                          // 0x14: team * 3 + member
+    VecFx32 *target;                   // 0x18: NULL for the players' Pokemon
+    PokeathlonCourseMonObject *object; // 0x1C
 } PokeathlonCirclePushAiMon;
 
 typedef struct PokeathlonCirclePushAiCell {
@@ -248,7 +248,7 @@ void PokeathlonCirclePushZoneMarkers_Show(PokeathlonCirclePushZoneMarkers *marke
 void PokeathlonCirclePushZoneMarkers_Hide(PokeathlonCirclePushZoneMarkers *markers, u8 layout);
 int PokeathlonCirclePush_GetPointsEffect(int points);
 PokeathlonCirclePushAi *PokeathlonCirclePushAi_New(enum HeapID heapId, int teamCount, int linkMode);
-void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseObject *object);
+void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseMonObject *object);
 void PokeathlonCirclePushAi_Free(PokeathlonCirclePushAi *ai);
 int PokeathlonCirclePushAi_Update(PokeathlonCirclePushAi *ai, u8 layout);
 PokeathlonCirclePushDisplay *PokeathlonCirclePushDisplay_New(enum HeapID heapId, BgConfig *bgConfig, PokeathlonCourseData *course);

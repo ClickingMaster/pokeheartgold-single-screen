@@ -46,18 +46,18 @@ enum PokeathlonDiscCatchMonState {
 
 // One Pokemon on the field (positions in touch screen pixels, fx32).
 typedef struct PokeathlonDiscCatchMon {
-    PokeathlonCourseData *course;    // 0x00
-    PokeathlonCourseObject *monPic;  // 0x04: its course 3D object (PokeathlonCourseMonObjects_Get)
-    PokeathlonDiscCatchStats *stats; // 0x08
-    u32 state;                       // 0x0C
-    VecFx32 target;                  // 0x10: where it walks to
-    VecFx32 position;                // 0x1C
-    VecFx32 direction;               // 0x28
-    VecFx32 velocity;                // 0x34: while knocked back
-    u32 jumpTimer : 8;               // 0x40
-    u32 jumpSignal : 8;              // frames the jump is reported in the frame packet
-    u32 index : 4;                   // 0..11
-    u32 facing : 4;                  // 1..4
+    PokeathlonCourseData *course;      // 0x00
+    PokeathlonCourseMonObject *monPic; // 0x04: its course 3D object (PokeathlonCourseMonObjects_Get)
+    PokeathlonDiscCatchStats *stats;   // 0x08
+    u32 state;                         // 0x0C
+    VecFx32 target;                    // 0x10: where it walks to
+    VecFx32 position;                  // 0x1C
+    VecFx32 direction;                 // 0x28
+    VecFx32 velocity;                  // 0x34: while knocked back
+    u32 jumpTimer : 8;                 // 0x40
+    u32 jumpSignal : 8;                // frames the jump is reported in the frame packet
+    u32 index : 4;                     // 0..11
+    u32 facing : 4;                    // 1..4
     u32 large : 2;
     u32 knockedBack : 1;
     u32 dragged : 1; // its target was set this frame
@@ -154,11 +154,11 @@ typedef struct PokeathlonDiscCatchFrame {
 
 // Squashes a Pokemon that taps without being able to jump.
 typedef struct PokeathlonDiscCatchSquash {
-    PokeathlonCourseObject *monPic; // 0x00
-    SysTask *task;                  // 0x04
-    f32 scale;                      // 0x08
-    u16 frames;                     // 0x0C
-    u16 state;                      // 0x0E
+    PokeathlonCourseMonObject *monPic; // 0x00
+    SysTask *task;                     // 0x04
+    f32 scale;                         // 0x08
+    u16 frames;                        // 0x0C
+    u16 state;                         // 0x0E
 } PokeathlonDiscCatchSquash;
 
 typedef struct PokeathlonDiscCatchMonSprites {

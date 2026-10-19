@@ -42,17 +42,6 @@ typedef struct PokeathlonCourseParticipant {
     PokeathlonCourseMon mons[3]; // 0x04
 } PokeathlonCourseParticipant;
 
-// What the Pokemon sprite loader needs to know about one Pokemon (0x10).
-struct PokeathlonCourseMonInfo {
-    u16 species;     // 0x00
-    u16 form;        // 0x02
-    u16 isLarge;     // 0x04: overworld sprite uses the 64x64 frames (follower parameter byte 1)
-    u8 isShiny;      // 0x06
-    u8 gender;       // 0x07
-    int participant; // 0x08
-    u32 personality; // 0x0C
-};
-
 // ---------------------------------------------------------------------------------------------------------
 // Score list (PokeathlonCourseData.graphicsSystem): the per-event result rows and the course point totals
 
@@ -103,7 +92,7 @@ struct PokeathlonCourseMonGfx {
     BOOL shiftedUp;               // 0x28: large frame drawn one tile row higher
 };
 
-typedef struct PokeathlonCourseMonGfxManager {
+struct PokeathlonCourseMonGfxManager {
     enum HeapID heapId;           // 0x000
     u16 count;                    // 0x004
     u16 loadedCount;              // 0x006
@@ -116,7 +105,7 @@ typedef struct PokeathlonCourseMonGfxManager {
     GF_2DGfxResMan *resMans[4];   // 0x144: char, palette, cell, animation
     PokeathlonCourseMonGfx *mons; // 0x154
     u8 buffer[0x800];             // 0x158: one frame of character data
-} PokeathlonCourseMonGfxManager;
+};
 
 struct PokeathlonCourseMonGfxTemplate {
     BOOL loadAtOnce;               // 0x00: load all Pokemon in one frame
@@ -151,38 +140,6 @@ struct PokeathlonCourseSpriteResources {
     SpriteResource *anims[12];    // 0x7C
     SpriteResource *palette;      // 0xAC
     SpriteResource *extraPalette; // 0xB0
-};
-
-// A Pokemon on the course screen: its sprite plus a shadow and a player marker (0x44).
-struct PokeathlonCourseMonObject {
-    PokeathlonCourseMonGfx *gfx; // 0x00
-    Sprite *shadowSprite;        // 0x04
-    Sprite *markerSprite;        // 0x08
-    s32 markerOffsetY;           // 0x0C
-    s32 shadowOffsetY;           // 0x10
-    s32 halfWidth;               // 0x14
-    s32 halfHeight;              // 0x18
-    u8 touchRadius[4];           // 0x1C
-    s32 x;                       // 0x20: centre
-    s32 y;                       // 0x24
-    s32 topRow;                  // 0x28
-    s32 collisionOffsetY;        // 0x2C
-    u32 collisionRadius;         // 0x30
-    u32 animState;               // 0x34
-    u32 anim;                    // 0x38
-    s32 drawPriorityStep;        // 0x3C
-    BOOL shadowHidden;           // 0x40
-};
-
-struct PokeathlonCourseMonObjects {
-    enum HeapID heapId;                         // 0x000
-    int count;                                  // 0x004
-    int baseDrawPriority;                       // 0x008
-    BOOL loaded;                                // 0x00C
-    SpriteList *spriteList;                     // 0x010
-    PokeathlonCourseMonGfxManager *gfxManager;  // 0x014
-    PokeathlonCourseSpriteResources *resources; // 0x018
-    PokeathlonCourseMonObject objects[12];      // 0x01C
 };
 
 // ---------------------------------------------------------------------------------------------------------

@@ -93,11 +93,11 @@ PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObj
 void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *sprite, int draw);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *sprite, int anim);
 void PokeathlonCourseMonObject_SetAnimCode(PokeathlonCourseMonObject *sprite, int anim);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *sprite, int radius);
-void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *sprite, int x, int y);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *sprite, int x, int y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *sprite, int radius);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *sprite, int x, int y);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *sprite, int x, int y);
 void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *manager, int paused);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *manager, int paused);
 PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(int heapId, PokeathlonLampJumpSceneConfig *config);
 void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *scene);
 void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *scene, int index, int id);

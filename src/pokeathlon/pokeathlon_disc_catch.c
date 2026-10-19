@@ -70,14 +70,14 @@ void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic
 void PokeathlonCourseMonObject_SetAffineOverwriteMode(PokeathlonCourseMonObject *monPic, int mode);
 void PokeathlonCourseMonObject_SetAffineMatrix(PokeathlonCourseMonObject *monPic, VecFx32 *center);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic, u32 anim);
-void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseObject *monPic, int x, int y, fx32 *outX, fx32 *outY, int *radius);
-void *PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *monPic);
-void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseObject *monPic, s32 x, s32 y, u32 moveShadow);
-void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *monPic, f32 scaleX, f32 scaleY);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *monPics, int paused);
+void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseMonObject *monPic, int x, int y, fx32 *outX, fx32 *outY, int *radius);
+void *PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *monPic);
+void PokeathlonCourseObject_SetCenterPosition(PokeathlonCourseMonObject *monPic, s32 x, s32 y, u32 moveShadow);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *monPic, s32 x, s32 y, s32 *outX, s32 *outY);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *monPic, fx32 x, fx32 y, s32 targetX, s32 targetY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *monPic, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *monPics, int paused);
 
 // The runtime's division, called directly once.
 s32 _s32_div_f(s32 dividend, s32 divisor);
@@ -205,7 +205,7 @@ static void PokeathlonDiscCatch_SquashTask(SysTask *task, void *data) {
     }
 }
 
-static void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseObject *monPic) {
+static void PokeathlonDiscCatch_StartSquash(PokeathlonDiscCatchSquash *squash, PokeathlonCourseMonObject *monPic) {
     if (squash->task != NULL) {
         SysTask_Destroy(squash->task);
     }

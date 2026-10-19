@@ -35,9 +35,9 @@ void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int n
 void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narc, int member, int tag, int vram, int count);
 void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narc, int member, int tag);
 void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narc, int member, int tag);
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseObject *object, fx32 x, fx32 y, int touchX, int touchY);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *object, int paused);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY);
+BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx32 x, fx32 y, int touchX, int touchY);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *object, int paused);
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *object);
 
 // Screen templates (asm data).
@@ -555,7 +555,7 @@ static BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *w
     PokeathlonPennantCapturePlayer *player = &work->players[participant];
     int monX;
     int monY;
-    PokeathlonCourseObject *object;
+    PokeathlonCourseMonObject *object;
 
     if (player->member >= 3) {
         GF_AssertFail();

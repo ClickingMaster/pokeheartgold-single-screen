@@ -403,7 +403,7 @@ PokeathlonCirclePushAi *PokeathlonCirclePushAi_New(enum HeapID heapId, int teamC
     return ai;
 }
 
-void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseObject *object) {
+void PokeathlonCirclePushAi_SetMon(PokeathlonCirclePushAi *ai, u8 slot, u16 speed, u16 *stamina, VecFx32 *position, u32 *state, VecFx32 *target, PokeathlonCourseMonObject *object) {
     PokeathlonCirclePushAiMon *mons = ai->mons;
     mons[slot].speed = speed;
     mons[slot].stamina = stamina;

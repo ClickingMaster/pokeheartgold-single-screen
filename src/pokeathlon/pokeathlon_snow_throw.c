@@ -71,8 +71,8 @@ void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePool
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
 void PokeathlonCourseSpritePoolSprite_SetScale(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *scale, int affineType);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseObjects *objects, BOOL paused);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
 
 // The animation state (facing) of each other team's Pokemon, by its place in the view.
 typedef struct PokeathlonSnowThrowViewAnims {

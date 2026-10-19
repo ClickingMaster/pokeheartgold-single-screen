@@ -98,7 +98,7 @@ FS_EXTERN_OVERLAY(OVY_98);
 PokeathlonParticipantData *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 u32 PokeathlonCourse_GetSpriteSizeType(PokeathlonParticipantData *performance);
-void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCourseObjectInfo *info);
+void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCourseMonInfo *info);
 u32 PokeathlonCourse_GetPerformanceFileId(u16 species, u16 form);
 u32 PokeathlonCourse_GetNpcTeamSpriteId(u8 npcTeam);
 u32 PokeathlonCourse_GetNpcTeamMsgId(PokeathlonCourseData *course, u8 npcTeam);
@@ -108,7 +108,7 @@ PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(enum He
 void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
 PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
 void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *objects);
-void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *objects, int count, PokeathlonCourseObjectInfo *infos, PokeathlonCourseObjectsTemplate *template, BOOL priority, BOOL baseIndex);
+void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *objects, int count, PokeathlonCourseMonInfo *infos, PokeathlonCourseObjectsTemplate *template, BOOL priority, BOOL baseIndex);
 BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *objects);
 void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *object, int draw);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *object, int state);
@@ -1065,7 +1065,7 @@ static void PokeathlonCourseCeremony_CreateMedalSprites(PokeathlonCourseCeremony
 static void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *course, int team) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
     NNSG2dPaletteData *palette;
-    PokeathlonCourseObjectInfo info;
+    PokeathlonCourseMonInfo info;
     PokepicTemplate template;
     int i;
     void *file;
@@ -1074,7 +1074,7 @@ static void PokeathlonCourseCeremony_LoadWinnerMonPics(PokeathlonCourseData *cou
     for (i = 0; i < 3; i++) {
         PokeathlonCourse_GetMonInfo(course, team, i, &info);
         PokeathlonCourse_LoadMonPicWithPalette(ceremony->monPicSprites[i], &info, TRUE, FALSE, ceremony->heapId, FALSE);
-        GetMonSpriteCharAndPlttNarcIdsEx(&template, info.species, info.gender, 2, info.shiny, info.form, info.personality);
+        GetMonSpriteCharAndPlttNarcIdsEx(&template, info.species, info.gender, 2, info.isShiny, info.form, info.personality);
         file = GfGfxLoader_GetPlttData((NarcId) template.narcID, template.palDataID, &palette, ceremony->heapId);
         PokeathlonCourseMonObjects_SetPalette(ceremony->objects, i * 3 + 1, 1, palette->pRawData);
         Heap_Free(file);
@@ -1513,7 +1513,7 @@ static void PokeathlonCourseConfetti_SpawnPieces(PokeathlonCourseConfetti *confe
 
 static BOOL PokeathlonCourseCeremony_Init(PokeathlonCourseData *course) {
     PokeathlonCourseCeremony *ceremony = PokeathlonCourse_GetWork(course);
-    PokeathlonCourseObjectInfo infos[12];
+    PokeathlonCourseMonInfo infos[12];
     int i;
     void *object;
     int mode;

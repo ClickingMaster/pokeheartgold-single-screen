@@ -15,7 +15,7 @@
 typedef char PokeathlonRelayRunCpuSizeCheck[(sizeof(PokeathlonRelayRunCpu) == 0x3E8 && offsetof(PokeathlonRelayRunCpu, cells) == 0x29C && offsetof(PokeathlonRelayRunCpu, thinking) == 0x3DC) ? 1 : -1];
 
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
+void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseMonObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
 void **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *pool, u32 id, u32 kind);
 
 // Sprite resource ids of the touch screen (pairs: the two Pokemon pictures are entries 6 and 7).

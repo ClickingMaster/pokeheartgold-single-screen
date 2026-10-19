@@ -64,7 +64,7 @@ typedef struct PokeathlonRingDropMemberParams {
 
 // A team member's 3D object and stamina.
 typedef struct PokeathlonRingDropMember {
-    PokeathlonCourseObject *object;               // 0x00: the course mon object
+    PokeathlonCourseMonObject *object;            // 0x00: the course mon object
     const PokeathlonRingDropMemberParams *params; // 0x04
     fx32 stamina;                                 // 0x08
     u32 index : 4;                                // 0x0C: of the mon object (participant * 3 + member)

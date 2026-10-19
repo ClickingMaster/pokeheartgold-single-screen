@@ -9,12 +9,12 @@
 #include "math_util.h"
 #include "sprite_system.h"
 
-void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *object, int radius);
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *object, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *object, s32 offsetY, s32 radius);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, int radius);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseMonObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
 
 // The code calls these two with u8 arguments.
 #define PokeathlonRingDrop_GetMonObject(objects, index)    (((void *(*)(void *, u8))PokeathlonCourseMonObjects_Get)((objects), (index)))

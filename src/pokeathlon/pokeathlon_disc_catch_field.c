@@ -12,7 +12,7 @@
 #include "system.h"
 #include "touchscreen.h"
 
-// What the course reports about a Pokemon for its sprite (the layout of PokeathlonCourseObjectInfo).
+// What the course reports about a Pokemon for its sprite (the layout of PokeathlonCourseMonInfo).
 typedef struct PokeathlonDiscCatchMonInfo {
     u16 species;     // 0x00
     u16 form;        // 0x02
@@ -35,7 +35,7 @@ Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, PokeathlonCours
 void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int whichScreen, int count, s16 (*positions)[2]);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, int timer);
 PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
-void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseObjects *monPics);
+void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseMonObjects *monPics);
 void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *monPics, int count, PokeathlonDiscCatchMonInfo *infos, u32 *params, int priority, int baseIndex);
 PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *monPics, u8 index);
 PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *monPic);
@@ -43,13 +43,13 @@ PokeathlonDiscCatchMonInfo *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGf
 void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *monPic, int draw);
 void PokeathlonCourseMonObject_SetDrawPriority(PokeathlonCourseMonObject *monPic, int priority);
 void PokeathlonCourseMonObject_SetAnimState(PokeathlonCourseMonObject *monPic);
-void PokeathlonCourseObject_SetCollision(PokeathlonCourseObject *monPic, int offsetY, int radius);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseObject *monPic, f32 scaleX, f32 scaleY);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseObject *monPic, int x, int y);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseObject *monPic, int radius);
-void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseObject *monPic, int x, int y, int *outX, int *outY);
-void PokeathlonCourseObject_CenterToGround(PokeathlonCourseObject *monPic, int x, int y, int *outX, int *outY);
-int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseObject *monPic);
+void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *monPic, int offsetY, int radius);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *monPic, f32 scaleX, f32 scaleY);
+void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *monPic, int x, int y);
+void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *monPic, int radius);
+void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *monPic, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *monPic, int x, int y, int *outX, int *outY);
+int PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *monPic);
 
 extern const u32 gPokeathlonDiscCatchPhaseSeconds[4];
 extern const s16 gPokeathlonDiscCatchMonStartPositions[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE][2];
