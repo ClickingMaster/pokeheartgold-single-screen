@@ -1,7 +1,10 @@
 #include "field_shadow.h"
 
+#include <nnsys/g3d_util_internal.h>
+
 #include "global.h"
 
+#include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "field/map_object_models.h"
 
@@ -14,10 +17,6 @@
 
 // Map object ground shadows: four shadow models whose alpha and scale follow the time of day.
 
-void *FieldEffect_GetParam(void *effect);
-void FieldEffect_SetPosition(void *effect, VecFx32 *position);
-void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
-void RenderObj_Draw(void *renderObj, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 
 enum FieldShadowState {
     FIELD_SHADOW_STATE_INIT,
@@ -52,7 +51,7 @@ typedef struct FieldShadowEffect {
     u32 objectId;
     u32 mapId;
     int hidden;
-    void *parameter;
+    int parameter;
     FieldShadowEffectArgs args;
 } FieldShadowEffect;
 
@@ -390,7 +389,7 @@ static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowE
         return;
     }
     {
-        u32 index = (u32)FieldEffect_GetParam(effect);
+        u32 index = FieldEffect_GetParam(effect);
         FieldShadow *shadow = work->args.shadow;
         NNSG3dRenderObj *renderObj = &shadow->renderObjs[index];
         FieldEffect_GetPosition(effect, &pos);

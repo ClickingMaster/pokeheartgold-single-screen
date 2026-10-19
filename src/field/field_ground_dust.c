@@ -1,3 +1,5 @@
+#include "field_ground_dust.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -16,9 +18,9 @@
 #define GROUND_DUST_TEXTURE  7
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 11).
-typedef struct GroundDust {
+struct GroundDust {
     FieldEffectManager *manager;
-} GroundDust;
+};
 
 typedef struct GroundDustEffectArgs {
     FieldSystem *fieldSystem;
@@ -36,11 +38,8 @@ typedef struct GroundDustEffect {
     void *billboard;
 } GroundDustEffect;
 
-GroundDust *GroundDust_New(FieldEffectManager *manager);
-void GroundDust_Free(GroundDust *dust);
 static void GroundDust_LoadGfx(GroundDust *dust);
 static void GroundDust_FreeGfx(GroundDust *dust);
-void GroundDust_Spawn(LocalMapObject *mapObject);
 static BOOL GroundDustEffect_Init(FieldEffect *effect, GroundDustEffect *work);
 static void GroundDustEffect_Destroy(FieldEffect *effect, GroundDustEffect *work);
 static void GroundDustEffect_Update(FieldEffect *effect, GroundDustEffect *work);

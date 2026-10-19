@@ -69,23 +69,23 @@ typedef struct EmoteMarkEffect {
 
 EmoteMark *EmoteMark_New(FieldEffectManager *manager);
 void EmoteMark_Free(EmoteMark *emoteMark);
-void EmoteMark_RetainExclamation(EmoteMark *emoteMark);
-void EmoteMark_ReleaseExclamation(EmoteMark *emoteMark);
-void EmoteMark_RetainQuestion(EmoteMark *emoteMark);
-void EmoteMark_ReleaseQuestion(EmoteMark *emoteMark);
-void EmoteMark_Retain(EmoteMark *emoteMark, int kind);
-void EmoteMark_Release(EmoteMark *emoteMark, int kind);
-void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark);
-void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark);
-void EmoteMark_FreeExclamationGfx(EmoteMark *emoteMark);
-void EmoteMark_FreeQuestionGfx(EmoteMark *emoteMark);
-void EmoteMark_LoadExclamationGfxIfUnused(EmoteMark *emoteMark);
-void EmoteMark_LoadQuestionGfxIfUnused(EmoteMark *emoteMark);
-void EmoteMark_FreeExclamationGfxIfUnused(EmoteMark *emoteMark);
-void EmoteMark_FreeQuestionGfxIfUnused(EmoteMark *emoteMark);
-void EmoteMark_LoadGfxIfUnused(EmoteMark *emoteMark, int kind);
-void EmoteMark_FreeGfxIfUnused(EmoteMark *emoteMark, int kind);
-void *EmoteMark_CreateBillboard(FieldEffectManager *manager, int kind, VecFx32 *position);
+static void EmoteMark_RetainExclamation(EmoteMark *emoteMark);
+static void EmoteMark_ReleaseExclamation(EmoteMark *emoteMark);
+static void EmoteMark_RetainQuestion(EmoteMark *emoteMark);
+static void EmoteMark_ReleaseQuestion(EmoteMark *emoteMark);
+static void EmoteMark_Retain(EmoteMark *emoteMark, int kind);
+static void EmoteMark_Release(EmoteMark *emoteMark, int kind);
+static void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark);
+static void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark);
+static void EmoteMark_FreeExclamationGfx(EmoteMark *emoteMark);
+static void EmoteMark_FreeQuestionGfx(EmoteMark *emoteMark);
+static void EmoteMark_LoadExclamationGfxIfUnused(EmoteMark *emoteMark);
+static void EmoteMark_LoadQuestionGfxIfUnused(EmoteMark *emoteMark);
+static void EmoteMark_FreeExclamationGfxIfUnused(EmoteMark *emoteMark);
+static void EmoteMark_FreeQuestionGfxIfUnused(EmoteMark *emoteMark);
+static void EmoteMark_LoadGfxIfUnused(EmoteMark *emoteMark, int kind);
+static void EmoteMark_FreeGfxIfUnused(EmoteMark *emoteMark, int kind);
+static void *EmoteMark_CreateBillboard(FieldEffectManager *manager, int kind, VecFx32 *position);
 BOOL EmoteMark_IsDone(FieldEffect *effect);
 void EmoteMark_Hide(FieldEffect *effect);
 BOOL EmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work);
@@ -112,27 +112,27 @@ void EmoteMark_Free(EmoteMark *emoteMark) {
     FieldEffectManager_HeapFree(emoteMark);
 }
 
-void EmoteMark_RetainExclamation(EmoteMark *emoteMark) {
+static void EmoteMark_RetainExclamation(EmoteMark *emoteMark) {
     emoteMark->exclamationRefCount++;
 }
 
-void EmoteMark_ReleaseExclamation(EmoteMark *emoteMark) {
+static void EmoteMark_ReleaseExclamation(EmoteMark *emoteMark) {
     if (--emoteMark->exclamationRefCount < 0) {
         GF_AssertFail();
     }
 }
 
-void EmoteMark_RetainQuestion(EmoteMark *emoteMark) {
+static void EmoteMark_RetainQuestion(EmoteMark *emoteMark) {
     emoteMark->questionRefCount++;
 }
 
-void EmoteMark_ReleaseQuestion(EmoteMark *emoteMark) {
+static void EmoteMark_ReleaseQuestion(EmoteMark *emoteMark) {
     if (--emoteMark->questionRefCount < 0) {
         GF_AssertFail();
     }
 }
 
-void EmoteMark_Retain(EmoteMark *emoteMark, int kind) {
+static void EmoteMark_Retain(EmoteMark *emoteMark, int kind) {
     if (kind == EMOTE_MARK_EXCLAMATION) {
         EmoteMark_RetainExclamation(emoteMark);
     } else {
@@ -140,7 +140,7 @@ void EmoteMark_Retain(EmoteMark *emoteMark, int kind) {
     }
 }
 
-void EmoteMark_Release(EmoteMark *emoteMark, int kind) {
+static void EmoteMark_Release(EmoteMark *emoteMark, int kind) {
     if (kind == EMOTE_MARK_EXCLAMATION) {
         EmoteMark_ReleaseExclamation(emoteMark);
     } else {
@@ -148,7 +148,7 @@ void EmoteMark_Release(EmoteMark *emoteMark, int kind) {
     }
 }
 
-void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark) {
+static void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark) {
     if (emoteMark->exclamationGfxLoaded == FALSE) {
         emoteMark->exclamationGfxLoaded = TRUE;
         FieldEffectManager_LoadBillboardResource(emoteMark->manager, EMOTE_MARK_EXCLAMATION_RESOURCE, 0x76);
@@ -158,7 +158,7 @@ void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark) {
     }
 }
 
-void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark) {
+static void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark) {
     if (emoteMark->questionGfxLoaded == FALSE) {
         emoteMark->questionGfxLoaded = TRUE;
         FieldEffectManager_LoadBillboardResource(emoteMark->manager, EMOTE_MARK_QUESTION_RESOURCE, 0x7D);
@@ -168,7 +168,7 @@ void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark) {
     }
 }
 
-void EmoteMark_FreeExclamationGfx(EmoteMark *emoteMark) {
+static void EmoteMark_FreeExclamationGfx(EmoteMark *emoteMark) {
     if (emoteMark->exclamationGfxLoaded == TRUE) {
         emoteMark->exclamationGfxLoaded = FALSE;
         FieldEffectManager_FreeBillboardResource(emoteMark->manager, EMOTE_MARK_EXCLAMATION_RESOURCE);
@@ -178,7 +178,7 @@ void EmoteMark_FreeExclamationGfx(EmoteMark *emoteMark) {
     }
 }
 
-void EmoteMark_FreeQuestionGfx(EmoteMark *emoteMark) {
+static void EmoteMark_FreeQuestionGfx(EmoteMark *emoteMark) {
     if (emoteMark->questionGfxLoaded == TRUE) {
         emoteMark->questionGfxLoaded = FALSE;
         FieldEffectManager_FreeBillboardResource(emoteMark->manager, EMOTE_MARK_QUESTION_RESOURCE);
@@ -188,31 +188,31 @@ void EmoteMark_FreeQuestionGfx(EmoteMark *emoteMark) {
     }
 }
 
-void EmoteMark_LoadExclamationGfxIfUnused(EmoteMark *emoteMark) {
+static void EmoteMark_LoadExclamationGfxIfUnused(EmoteMark *emoteMark) {
     if (emoteMark->exclamationRefCount == 0) {
         EmoteMark_LoadExclamationGfx(emoteMark);
     }
 }
 
-void EmoteMark_LoadQuestionGfxIfUnused(EmoteMark *emoteMark) {
+static void EmoteMark_LoadQuestionGfxIfUnused(EmoteMark *emoteMark) {
     if (emoteMark->questionRefCount == 0) {
         EmoteMark_LoadQuestionGfx(emoteMark);
     }
 }
 
-void EmoteMark_FreeExclamationGfxIfUnused(EmoteMark *emoteMark) {
+static void EmoteMark_FreeExclamationGfxIfUnused(EmoteMark *emoteMark) {
     if (emoteMark->exclamationRefCount == 0) {
         EmoteMark_FreeExclamationGfx(emoteMark);
     }
 }
 
-void EmoteMark_FreeQuestionGfxIfUnused(EmoteMark *emoteMark) {
+static void EmoteMark_FreeQuestionGfxIfUnused(EmoteMark *emoteMark) {
     if (emoteMark->questionRefCount == 0) {
         EmoteMark_FreeQuestionGfx(emoteMark);
     }
 }
 
-void EmoteMark_LoadGfxIfUnused(EmoteMark *emoteMark, int kind) {
+static void EmoteMark_LoadGfxIfUnused(EmoteMark *emoteMark, int kind) {
     if (kind == EMOTE_MARK_EXCLAMATION) {
         EmoteMark_LoadExclamationGfxIfUnused(emoteMark);
     } else {
@@ -220,7 +220,7 @@ void EmoteMark_LoadGfxIfUnused(EmoteMark *emoteMark, int kind) {
     }
 }
 
-void EmoteMark_FreeGfxIfUnused(EmoteMark *emoteMark, int kind) {
+static void EmoteMark_FreeGfxIfUnused(EmoteMark *emoteMark, int kind) {
     if (kind == EMOTE_MARK_EXCLAMATION) {
         EmoteMark_FreeExclamationGfxIfUnused(emoteMark);
     } else {
@@ -228,7 +228,7 @@ void EmoteMark_FreeGfxIfUnused(EmoteMark *emoteMark, int kind) {
     }
 }
 
-void *EmoteMark_CreateBillboard(FieldEffectManager *manager, int kind, VecFx32 *position) {
+static void *EmoteMark_CreateBillboard(FieldEffectManager *manager, int kind, VecFx32 *position) {
     int records[2] = { EMOTE_MARK_EXCLAMATION_RECORD, EMOTE_MARK_QUESTION_RECORD };
     void *billboard = FieldEffectManager_CreateBillboardFromRecord(manager, records[kind], position);
     NNSG3dResMdl *model = BillboardObject_GetModel(billboard);

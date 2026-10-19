@@ -4,6 +4,7 @@
 
 #include "constants/sndseq.h"
 
+#include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 #include "nnsys/g3d/binres/res_struct_accessor.h"
 
@@ -20,11 +21,7 @@
 // The emote bubble that pops up above a map object: one billboard that rises into place,
 // then plays one of 14 texture animations by streaming frames into its VRAM slot.
 
-void *BillboardObject_Delete(void *billboard);
-void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
 void BillboardGfxSequence_Init(void *data, void *sequence);
-void *FieldEffect_GetParam(void *effect);
-void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 void *Texture_GetImageData(NNSG3dResTex *tex, int index);
 void *Texture_GetPaletteData(NNSG3dResTex *tex, int index);
 u32 Texture_GetImageVramOffsetByIndex(NNSG3dResTex *tex, int index);
@@ -227,7 +224,7 @@ static BOOL EmoteBubbleEffect_Init(FieldEffect *effect, EmoteBubbleEffect *work)
     work->objectId = MapObject_GetID(work->args.mapObject);
     work->mapId = MapObject_GetMapID(work->args.mapObject);
     work->velocity = FX32_CONST(6);
-    u32 kind = (u32)FieldEffect_GetParam(effect);
+    u32 kind = FieldEffect_GetParam(effect);
     work->anim.texFile = FieldEffectManager_LoadNarcMember(work->args.manager, sEmoteBubbleFiles[kind].texFileId, TRUE);
     work->anim.sequenceFile = FieldEffectManager_LoadNarcMember(work->args.manager, sEmoteBubbleFiles[kind].sequenceFileId, TRUE);
     BillboardGfxSequence_Init(work->anim.sequenceFile, &work->anim);

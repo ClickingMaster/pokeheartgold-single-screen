@@ -18,7 +18,6 @@
 
 typedef BOOL (*FlyLandingStepFunc)(FlyLandingEffect *effect);
 
-FieldEffect *FieldEffectPool_AddBasicEffect(void *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 
 extern const VecFx32 sFlyLandingFlyerScale;
 extern const FieldEffectBasicTemplate sFlyLandingEffectTemplate;
@@ -29,7 +28,10 @@ extern const VecFx32 sFlyLandingTrainerScale;
 extern const VecFx32 sFlyLandingFlyAwayCenter;
 extern const VecFx32 sFlyLandingFlyAwayScale;
 
-Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager) {
+static Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager);
+static void FieldMove_FadeInFromWhite(void);
+
+static Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager) {
     VecFx32 pos = { 0, 0, 0 };
     VecFx32 affineMatrix = { 0, 0, 0 };
     VecFx32 affineScale;
@@ -352,7 +354,7 @@ NARC *FlyLanding_OpenNarc(void) {
     return NARC_New(NARC_application_choose_starter_choose_starter_sub_res, HEAP_ID_FIELD1);
 }
 
-void FieldMove_FadeInFromWhite(void) {
+static void FieldMove_FadeInFromWhite(void) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, HEAP_ID_FIELD1);
 }
 

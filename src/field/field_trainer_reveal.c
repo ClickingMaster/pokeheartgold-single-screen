@@ -1,3 +1,5 @@
+#include "field_trainer_reveal.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -16,9 +18,9 @@
 #define TRAINER_REVEAL_TEXTURE  10
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 15).
-typedef struct TrainerReveal {
+struct TrainerReveal {
     FieldEffectManager *manager;
-} TrainerReveal;
+};
 
 typedef struct TrainerRevealEffectArgs {
     FieldSystem *fieldSystem;
@@ -36,11 +38,8 @@ typedef struct TrainerRevealEffect {
     void *billboard;
 } TrainerRevealEffect;
 
-TrainerReveal *TrainerReveal_New(FieldEffectManager *manager);
-void TrainerReveal_Free(TrainerReveal *reveal);
 static void TrainerReveal_LoadGfx(TrainerReveal *reveal);
 static void TrainerReveal_FreeGfx(TrainerReveal *reveal);
-void TrainerReveal_Spawn(LocalMapObject *mapObject);
 static BOOL TrainerRevealEffect_Init(FieldEffect *effect, TrainerRevealEffect *work);
 static void TrainerRevealEffect_Destroy(FieldEffect *effect, TrainerRevealEffect *work);
 static void TrainerRevealEffect_Update(FieldEffect *effect, TrainerRevealEffect *work);

@@ -4,11 +4,9 @@
 
 #include "filesystem.h"
 #include "heap.h"
+#include "texture_animation.h"
 #include "vram_transfer_manager.h"
 
-void *Texture_GetImageData(NNSG3dResTex *texture, u32 index);
-u32 Texture_GetImageVramOffsetByName(NNSG3dResTex *texture, const char *name);
-u32 Texture_GetImageSizeByName(NNSG3dResTex *texture, const char *name);
 int sprintf(char *buf, const char *fmt, ...);
 
 static int FieldTextureManager_AddAnimatedTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource, int index, NARC *narc);

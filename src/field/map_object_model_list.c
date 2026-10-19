@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "field/field_effect_helpers.h"
+
 #include "field_effects.h"
 #include "map_object.h"
 #include "render_animation.h"
@@ -12,7 +14,6 @@
 
 #define MAP_OBJECT_MODEL_FREE 0xFFFF
 
-void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 
 typedef struct MapObjectModel {
     u32 spriteId; // MAP_OBJECT_MODEL_FREE: free

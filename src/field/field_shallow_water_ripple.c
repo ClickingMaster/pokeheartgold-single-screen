@@ -1,3 +1,5 @@
+#include "field_shallow_water_ripple.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -16,9 +18,9 @@
 #define SHALLOW_WATER_RIPPLE_TEXTURE  2
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 10).
-typedef struct ShallowWaterRipple {
+struct ShallowWaterRipple {
     FieldEffectManager *manager;
-} ShallowWaterRipple;
+};
 
 typedef struct ShallowWaterRippleEffectArgs {
     FieldSystem *fieldSystem;
@@ -37,11 +39,8 @@ typedef struct ShallowWaterRippleEffect {
     void *billboard;
 } ShallowWaterRippleEffect;
 
-ShallowWaterRipple *ShallowWaterRipple_New(FieldEffectManager *manager);
-void ShallowWaterRipple_Free(ShallowWaterRipple *ripple);
 static void ShallowWaterRipple_LoadGfx(ShallowWaterRipple *ripple);
 static void ShallowWaterRipple_FreeGfx(ShallowWaterRipple *ripple);
-void ShallowWaterRipple_Spawn(LocalMapObject *mapObject, BOOL loop);
 static BOOL ShallowWaterRippleEffect_Init(FieldEffect *effect, ShallowWaterRippleEffect *work);
 static void ShallowWaterRippleEffect_Destroy(FieldEffect *effect, ShallowWaterRippleEffect *work);
 static void ShallowWaterRippleEffect_Update(FieldEffect *effect, ShallowWaterRippleEffect *work);

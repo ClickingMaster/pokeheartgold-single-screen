@@ -1,5 +1,7 @@
 #include "field_footprints.h"
 
+#include <nnsys/g3d_util_internal.h>
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -17,7 +19,6 @@
 
 #define FOOTPRINT_MODEL_COUNT 10
 
-void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pMdl, u32 alpha);
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 2).
 struct Footprints {

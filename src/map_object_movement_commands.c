@@ -4,6 +4,7 @@
 
 #include "field_effects.h"
 #include "field_emote_mark.h"
+#include "field_trainer_reveal.h"
 #include "heap.h"
 #include "map_object.h"
 #include "map_object_follow_internal.h"
@@ -94,7 +95,6 @@ enum MovementScriptMachineState {
     MOVEMENT_SCRIPT_DONE,
 };
 
-void TrainerReveal_Spawn(LocalMapObject *object);
 
 extern const MovementScriptStateFunc sMovementScriptMachineStateFuncs[];
 extern const u32 _020FDA28[4];
@@ -104,6 +104,15 @@ extern const fx32 *gJumpHeightTables[];
 extern const u32 gVariableSpeedWalk_Cmd082[];
 extern const u32 gVariableSpeedWalk_Cmd076[];
 extern const u32 gVariableSpeedWalk_Cmd098[];
+
+static void MapObject_StartWalkMovement(LocalMapObject *object, u32 direction, u32 distance, s32 duration, u16 animation);
+static void MapObject_StartWalkInPlaceMovement(LocalMapObject *object, int direction, int duration, int animation);
+static void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int distance, s8 duration, u16 animation, s16 heightTable, u16 heightStep);
+static void MapObject_StartDelayMovement(LocalMapObject *object, s32 duration);
+static void MapObject_StartEmoteMovement(LocalMapObject *object, u32 type);
+static void MapObject_StartVariableSpeedWalk(LocalMapObject *object, u32 direction, u32 count, u32 animation);
+static BOOL MapObject_UpdateVariableSpeedWalk(LocalMapObject *object, const u32 *distances);
+static void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy, s16 dz, s8 direction, s16 duration, u16 animation);
 
 BOOL MapObject_AreBitsSetForMovementScriptInit(LocalMapObject *object) {
     if (!MapObject_TestFlagsBits(object, MAPOBJECTFLAG_ACTIVE)) {
@@ -389,7 +398,7 @@ BOOL MapObjectMovementCmd003_Step0(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartWalkMovement(LocalMapObject *object, u32 direction, u32 distance, s32 duration, u16 animation) {
+static void MapObject_StartWalkMovement(LocalMapObject *object, u32 direction, u32 distance, s32 duration, u16 animation) {
     WalkMovementWork *work = (WalkMovementWork *)MapObject_InitMovementCmdData(object, sizeof(WalkMovementWork));
 
     work->animation = animation;
@@ -560,7 +569,7 @@ BOOL MapObjectMovementCmd091_Step0(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartWalkInPlaceMovement(LocalMapObject *object, int direction, int duration, int animation) {
+static void MapObject_StartWalkInPlaceMovement(LocalMapObject *object, int direction, int duration, int animation) {
     WalkInPlaceMovementWork *work = (WalkInPlaceMovementWork *)MapObject_InitMovementCmdData(object, sizeof(WalkInPlaceMovementWork));
 
     work->animation = animation;
@@ -684,7 +693,7 @@ BOOL MapObjectMovementCmd043_Step0(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int distance, s8 duration, u16 animation, s16 heightTable, u16 heightStep) {
+static void MapObject_StartJumpMovement(LocalMapObject *object, s8 direction, int distance, s8 duration, u16 animation, s16 heightTable, u16 heightStep) {
     JumpMovementWork *work = (JumpMovementWork *)MapObject_InitMovementCmdData(object, sizeof(JumpMovementWork));
 
     work->direction = direction;
@@ -859,7 +868,7 @@ BOOL MapObjectMovementCmd095_Step0(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartDelayMovement(LocalMapObject *object, s32 duration) {
+static void MapObject_StartDelayMovement(LocalMapObject *object, s32 duration) {
     s32 *timer = (s32 *)MapObject_InitMovementCmdData(object, sizeof(s32));
 
     *timer = duration;
@@ -994,7 +1003,7 @@ BOOL MapObjectMovementCmd074_Step0(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartEmoteMovement(LocalMapObject *object, u32 type) {
+static void MapObject_StartEmoteMovement(LocalMapObject *object, u32 type) {
     EmoteMovementWork *work = (EmoteMovementWork *)MapObject_InitMovementCmdData(object, sizeof(EmoteMovementWork));
     work->type = type;
     work->effect = EmoteMark_Spawn(object, type, 1);
@@ -1021,7 +1030,7 @@ BOOL MapObjectMovementCmd103_Step0(LocalMapObject *object) {
     return FALSE;
 }
 
-void MapObject_StartVariableSpeedWalk(LocalMapObject *object, u32 direction, u32 count, u32 animation) {
+static void MapObject_StartVariableSpeedWalk(LocalMapObject *object, u32 direction, u32 count, u32 animation) {
     VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)MapObject_InitMovementCmdData(object, sizeof(VariableSpeedWalkWork));
     work->direction = direction;
     work->animation = animation;
@@ -1033,7 +1042,7 @@ void MapObject_StartVariableSpeedWalk(LocalMapObject *object, u32 direction, u32
     MapObject_IncrementMovementStep(object);
 }
 
-BOOL MapObject_UpdateVariableSpeedWalk(LocalMapObject *object, const u32 *distances) {
+static BOOL MapObject_UpdateVariableSpeedWalk(LocalMapObject *object, const u32 *distances) {
     VariableSpeedWalkWork *work = (VariableSpeedWalkWork *)MapObject_GetMovementCmdData(object);
     MapObject_OffsetPositionInDirection(object, work->direction, distances[work->index]);
     MapObject_UpdateHeight(object);
@@ -1208,7 +1217,7 @@ BOOL MapObjectMovementCmd102_Step1(LocalMapObject *object) {
     return TRUE;
 }
 
-void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy, s16 dz, s8 direction, s16 duration, u16 animation) {
+static void MapObject_StartJumpByOffsetMovement(LocalMapObject *object, int dx, int dy, s16 dz, s8 direction, s16 duration, u16 animation) {
     fx32 time;
     JumpByOffsetWork *work;
 

@@ -65,32 +65,5 @@ typedef struct FieldEffectTexTransfer {
 
 extern const FieldEffectRendererTemplate gFieldEffectRenderers[];
 
-void FieldEffectManager_InitRenderer(FieldEffectManager *manager, u32 id);
-void FieldEffectManager_OpenNarc(FieldEffectManager *manager);
-void FieldEffectManager_CloseNarc(FieldEffectManager *manager);
-void FieldEffectManager_ClearRenderers(FieldEffectManager *manager);
-void FieldEffectManager_AddRenderer(FieldEffectManager *manager, u32 id);
-void FieldEffectManager_FreeRenderer(FieldEffectManager *manager, FieldEffectRendererEntry *entry);
-void FieldEffectManager_FreeRenderers(FieldEffectManager *manager);
-FieldEffectRendererEntry *FieldEffectManager_GetFreeRendererEntry(FieldEffectManager *manager);
-FieldEffectRendererEntry *FieldEffectManager_FindRendererEntry(FieldEffectManager *manager, u32 id);
-void FieldEffectRendererEntry_Clear(FieldEffectRendererEntry *entry);
-void FieldEffectRendererEntry_Set(FieldEffectRendererEntry *entry, u32 id, void *data);
-BOOL FieldEffectRendererEntry_IsFree(FieldEffectRendererEntry *entry);
-const FieldEffectRendererTemplate *FieldEffect_GetRendererTemplate(u32 id);
-void FieldEffectManager_InitEffects(FieldEffectManager *manager);
-void FieldEffectManager_FreeEffects(FieldEffectManager *manager);
-void FieldEffectManager_DrawEffects(FieldEffectManager *manager);
-void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 resourceCount, u32 sequenceCount, u32 resCount, int resourceHeapSize, int sequenceHeapSize, int a8);
-void FieldEffectManager_FreeGfx(FieldEffectManager *manager);
-void FieldEffectGfx_InitRecords(FieldEffectManager *manager, FieldEffectGfx *gfx, u32 count);
-void FieldEffectGfx_FreeRecords(FieldEffectGfx *gfx);
-void FieldEffectGfx_ReleaseRecord(FieldEffectGfx *gfx, u32 id);
-BillboardResource *FieldEffectGfx_AddRecord(FieldEffectGfx *gfx, u32 id, void *modelFile, const BillboardGfxSequence *gfxSequence, NNSG3dResTex *texture, GF_3DGfxRawResObj *texObj, const BillboardSequenceRange *ranges);
-BillboardResource *FieldEffectGfx_GetRecord(FieldEffectGfx *gfx, u32 id);
-void FieldEffectManager_ScheduleTexTransfer(FieldEffectManager *manager, int id, GF_3DGfxRawResMan *resMan);
-void FieldEffectTexTransfer_LoadVramTask(SysTask *task, void *data);
-void FieldEffectTexTransfer_FreeHeaderTask(SysTask *task, void *data);
-void FieldEffectManager_InitModel(FieldEffectManager *manager, NNSG3dRenderObj *renderObj, NNSG3dResMdl **ppMdl, NNSG3dResFileHeader **ppRes);
 
 #endif // POKEHEARTGOLD_FIELD_FIELD_EFFECT_MANAGER_INTERNAL_H

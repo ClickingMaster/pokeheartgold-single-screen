@@ -98,22 +98,16 @@ void FieldMoveCutIn_TransferMonPltt(FieldMoveCutIn *cutIn, void *data);
 void FieldMoveCutIn_FreeMonResources(FieldMoveCutIn *cutIn);
 Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos);
 void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode);
-void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *position, const VecFx32 *velocity, u32 drawPriority, u32 animSeq, int mode);
 void FieldMoveCutIn_CreateFlyer(FieldMoveCutIn *cutIn);
 u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_DestroyFlyer(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn);
 FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *trainerSprite);
-void TrainerJumpEffect_Stop(FieldEffect *effect);
-void TrainerJumpEffect_StartJump(FieldEffect *effect);
 void TrainerJumpEffect_StartHop(FieldEffect *effect);
 void FieldMoveCutIn_SetPlayerVisible(FieldMoveCutIn *cutIn, BOOL visible);
 void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn);
 void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn);
-void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn);
 
 // Steps of the cut-in kinds, run in order by the cut-in tasks.
 BOOL FieldMoveCutIn_StepLoadBannerGraphics(FieldMoveCutIn *cutIn);

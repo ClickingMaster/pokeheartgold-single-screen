@@ -36,10 +36,6 @@
 // The effects drawn in the field move cut-in (banner sprites, the Pokemon flying off with the trainer, the trainer's
 // jump, the 3D model at a second map object), the Fly landing task, and the roamer updates after a battle.
 
-void *FieldEffectPool_New(enum HeapID heapID, u32 count);
-void FieldEffectPool_Delete(void *pool);
-void FieldEffectPool_DrawAll(void *pool);
-FieldEffect *FieldEffectPool_AddBasicEffect(void *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 
 // Effect state of the sprites scrolling across the banner, one row of the template table (two copies 256 px apart).
 typedef struct CutInScrollSpriteTemplate {
@@ -209,6 +205,13 @@ void CutInModelEffect_Draw(FieldEffect *effect, CutInModelEffect *work);
 BOOL FieldMoveCutIn_StepShowOtherObject(FieldMoveCutIn *cutIn);
 BOOL FieldMoveCutIn_StepWaitModelEffect(FieldMoveCutIn *cutIn);
 
+static void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *position, const VecFx32 *velocity, u32 drawPriority, u32 animSeq, int mode);
+static void TrainerJumpEffect_Stop(FieldEffect *effect);
+static void TrainerJumpEffect_StartJump(FieldEffect *effect);
+static void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn);
+static void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn);
+
 void Task_FieldMoveCutIn_UpdateWindow(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
     int winin;
@@ -352,7 +355,7 @@ void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode) {
     }
 }
 
-void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *position, const VecFx32 *velocity, u32 drawPriority, u32 animSeq, int mode) {
+static void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx32 *position, const VecFx32 *velocity, u32 drawPriority, u32 animSeq, int mode) {
     CutInScrollSpriteArgs args;
 
     args.drawPriority = drawPriority;
@@ -714,11 +717,11 @@ FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *tr
     return FieldEffectPool_AddBasicEffect(effectPool, &sTrainerJumpEffectTemplate, &pos, 0, &args, 0x81);
 }
 
-void TrainerJumpEffect_Stop(FieldEffect *effect) {
+static void TrainerJumpEffect_Stop(FieldEffect *effect) {
     ((TrainerJump *)FieldEffect_GetState(effect))->mode = TRAINER_JUMP_IDLE;
 }
 
-void TrainerJumpEffect_StartJump(FieldEffect *effect) {
+static void TrainerJumpEffect_StartJump(FieldEffect *effect) {
     VecFx32 pos;
     TrainerJump *jump = FieldEffect_GetState(effect);
     jump->mode = TRAINER_JUMP_JUMP;
@@ -949,7 +952,7 @@ void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn) {
     }
 }
 
-void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn) {
     VecFx32 pos = { 0, 0, 0 };
     FieldMoveCutIn *userData = cutIn;
     FieldMoveCutIn_LoadModel(cutIn);
@@ -1000,7 +1003,7 @@ void CutInModelEffect_Draw(FieldEffect *effect, CutInModelEffect *work) {
     Field3dObject_Draw(&work->cutIn->model.object);
 }
 
-void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn) {
     FieldMoveCutInModel *model = &cutIn->model;
     HeapExp_FndInitAllocator(&model->allocator, HEAP_ID_FIELD1, 0x20);
     model->modelData = AllocAtEndAndReadWholeNarcMemberByIdPair(NARC_a_1_0_3, 0x83, HEAP_ID_FIELD1);
@@ -1012,7 +1015,7 @@ void FieldMoveCutIn_LoadModel(FieldMoveCutIn *cutIn) {
     Field3dObject_AddAnimation(&model->object, &model->animations[1]);
 }
 
-void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn) {
+static void FieldMoveCutIn_UnloadModel(FieldMoveCutIn *cutIn) {
     FieldMoveCutInModel *model = &cutIn->model;
     Field3dModel_UnloadKeepData(&model->model);
     FieldEffectManager_HeapFree(model->modelData);

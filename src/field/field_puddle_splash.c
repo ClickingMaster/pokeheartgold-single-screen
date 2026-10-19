@@ -1,3 +1,5 @@
+#include "field_puddle_splash.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -13,11 +15,11 @@
 // model played once at the tile, then the effect ends.
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 6).
-typedef struct PuddleSplash {
+struct PuddleSplash {
     FieldEffectManager *manager;
     RenderModelStorage model;
     RenderAnimation animation;
-} PuddleSplash;
+};
 
 typedef struct PuddleSplashEffectArgs {
     FieldEffectManager *manager;
@@ -30,11 +32,8 @@ typedef struct PuddleSplashEffect {
     PuddleSplashEffectArgs args;
 } PuddleSplashEffect;
 
-PuddleSplash *PuddleSplash_New(FieldEffectManager *manager);
-void PuddleSplash_Free(PuddleSplash *splash);
 static void PuddleSplash_LoadGfx(PuddleSplash *splash);
 static void PuddleSplash_FreeGfx(PuddleSplash *splash);
-void PuddleSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z);
 static BOOL PuddleSplashEffect_Init(FieldEffect *effect, PuddleSplashEffect *work);
 static void PuddleSplashEffect_Destroy(FieldEffect *effect, PuddleSplashEffect *work);
 static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *work);

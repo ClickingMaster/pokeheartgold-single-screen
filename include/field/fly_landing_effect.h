@@ -47,14 +47,12 @@ typedef struct FlyLandingEffect {
     SysTask *cameraZoom;
 } FlyLandingEffect;
 
-Sprite *FlyLanding_CreateFlyerSprite(SpriteGfxManager *gfxManager);
 Sprite *FlyLanding_CreateTrainerSprite(SpriteGfxManager *gfxManager, int gender);
 FieldEffect *FlyLandingEffect_Create(FieldSystem *fieldSystem, void *effectPool, SpriteGfxManager *gfxManager, Sprite *trainerSprite);
 u8 FlyLandingEffect_GetStatus(FieldEffect *effect);
 void FlyLandingEffect_Delete(FieldEffect *effect);
 void FlyLandingEffect_Start(FieldEffect *effect);
 NARC *FlyLanding_OpenNarc(void);
-void FieldMove_FadeInFromWhite(void);
 void FieldMove_FadeOutToWhite(void);
 void FieldMove_SetPlayerVisible(FieldSystem *fieldSystem, BOOL visible);
 

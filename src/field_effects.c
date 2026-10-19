@@ -4,20 +4,22 @@
 
 #include "global.h"
 
+#include "field/field_effect_helpers.h"
 #include "field/field_effect_manager.h"
 
+#include "field_warp_reset.h"
 #include "heap.h"
 #include "sys_task_api.h"
 
 // A fixed-size pool of field effects. Each active effect runs as a main-queue SysTask that calls its update
 // callback every frame; FieldEffectPool_DrawAll calls the draw callback of every started effect.
 
-typedef struct FieldEffectPool {
+struct FieldEffectPool {
     int count;
     int activeCount;
     enum HeapID heapID;
     FieldEffect *effects;
-} FieldEffectPool;
+};
 
 #define FIELD_EFFECT_FLAG_ACTIVE  (1 << 0)
 #define FIELD_EFFECT_FLAG_STARTED (1 << 1) // the init callback succeeded
@@ -47,14 +49,9 @@ typedef struct FieldEffectTemplate {
     FieldEffectFunc extra2;
 } FieldEffectTemplate;
 
-FieldEffectPool *FieldEffectPool_New(enum HeapID heapID, int count);
 static void FieldEffectPool_Free(FieldEffectPool *pool);
-void FieldEffectPool_Delete(FieldEffectPool *pool);
 static FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const FieldEffectTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
-FieldEffect *FieldEffectPool_AddBasicEffect(FieldEffectPool *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
-void FieldEffect_Destroy(int value);
 static void FieldEffectPool_DestroyAll(FieldEffectPool *pool);
-void FieldEffectPool_DrawAll(FieldEffectPool *pool);
 static SysTask *FieldEffect_CreateTask(FieldEffect *effect, u32 priority);
 static void FieldEffect_Task(SysTask *task, void *data);
 static FieldEffectPool *FieldEffectPool_AllocHeader(enum HeapID heapID);
@@ -64,35 +61,26 @@ static void FieldEffectPool_FreeEffects(FieldEffectPool *pool);
 static void FieldEffect_Reset(FieldEffect *effect);
 static int FieldEffectPool_GetCount(FieldEffectPool *pool);
 static FieldEffect *FieldEffectPool_GetEffects(FieldEffectPool *pool);
-BOOL FieldEffect_IsActive(FieldEffect *effect);
 static void FieldEffect_SetActive(FieldEffect *effect);
 static void FieldEffect_SetFlags(FieldEffect *effect, u32 flags);
 static u32 FieldEffect_TestFlags(FieldEffect *effect, u32 flags);
 static void FieldEffect_SetInitFunc(FieldEffect *effect, FieldEffectInitFunc callback);
 static BOOL FieldEffect_RunInit(FieldEffect *effect);
 static void FieldEffect_SetUpdateFunc(FieldEffect *effect, FieldEffectFunc callback);
-void FieldEffect_RunUpdate(FieldEffect *effect);
 static void FieldEffect_SetDrawFunc(FieldEffect *effect, FieldEffectFunc callback);
 static void FieldEffect_RunDraw(FieldEffect *effect);
 static void FieldEffect_SetDestroyFunc(FieldEffect *effect, FieldEffectFunc callback);
 static void FieldEffect_RunDestroy(FieldEffect *effect);
 static void FieldEffect_SetExtraFunc1(FieldEffect *effect, FieldEffectFunc callback);
 static void FieldEffect_SetExtraFunc2(FieldEffect *effect, FieldEffectFunc callback);
-void *FieldEffect_GetState(FieldEffect *effect);
 static void FieldEffect_ClearState(FieldEffect *effect, u32 size);
 static void FieldEffect_SetParam(FieldEffect *effect, int parameter);
-int FieldEffect_GetParam(FieldEffect *effect);
 static void FieldEffect_SetUserData(FieldEffect *effect, void *userData);
-FieldEffectUserData *FieldEffect_GetUserData(void *data);
 static void FieldEffect_SetTask(FieldEffect *effect, SysTask *task);
 static SysTask *FieldEffect_GetTask(FieldEffect *effect);
 static void FieldEffect_SetPool(FieldEffect *effect, FieldEffectPool *pool);
-void FieldEffect_SetPosition(FieldEffect *effect, const VecFx32 *position);
-void FieldEffect_GetPosition(void *data, VecFx32 *position);
 static BOOL FieldEffect_DefaultInit(FieldEffect *effect, void *state);
 static void FieldEffect_DefaultUpdate(FieldEffect *effect, void *state);
-void FieldEffect_DefaultDraw(FieldEffect *effect, void *state);
-void FieldEffect_DefaultDestroy(FieldEffect *effect, void *state);
 static void FieldEffect_DefaultExtra1(FieldEffect *effect, void *state);
 static void FieldEffect_DefaultExtra2(FieldEffect *effect, void *state);
 

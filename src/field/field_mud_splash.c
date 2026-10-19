@@ -1,3 +1,5 @@
+#include "field_mud_splash.h"
+
 #include "global.h"
 
 #include "field/field_effect_helpers.h"
@@ -13,11 +15,11 @@
 // played once at the tile, then the effect ends.
 
 // Renderer data, from FieldEffectManager_GetRendererData(manager, 7).
-typedef struct MudSplash {
+struct MudSplash {
     FieldEffectManager *manager;
     RenderModelStorage model;
     RenderAnimation animation;
-} MudSplash;
+};
 
 typedef struct MudSplashEffectArgs {
     FieldEffectManager *manager;
@@ -30,11 +32,8 @@ typedef struct MudSplashEffect {
     MudSplashEffectArgs args;
 } MudSplashEffect;
 
-MudSplash *MudSplash_New(FieldEffectManager *manager);
-void MudSplash_Free(MudSplash *splash);
 static void MudSplash_LoadGfx(MudSplash *splash);
 static void MudSplash_FreeGfx(MudSplash *splash);
-void MudSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z);
 static BOOL MudSplashEffect_Init(FieldEffect *effect, MudSplashEffect *work);
 static void MudSplashEffect_Destroy(FieldEffect *effect, MudSplashEffect *work);
 static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work);
