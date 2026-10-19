@@ -290,7 +290,7 @@ static void PokeathlonBox_GetBoxName(String *dest, PCStorage *storage, u32 boxno
 static void PokeathlonBox_CopySelectedMons(PokeathlonBox *data, PokeathlonBoxArgs *args) {
     PokeathlonBox_BoxMon boxMon;
 
-    args->selectedMons[0].cancelled = data->cancelled;
+    args->cancelled = data->cancelled;
     if (data->cancelled == 0) {
         for (int i = 0; i < 3; i++) {
             if (data->selectedMons[i].boxno == NUM_BOXES) {
@@ -327,11 +327,11 @@ static void PokeathlonBox_GetPartyMonStats(Party *party, u8 slot, PokeathlonBox_
     stats->jump = ((u32)(stars.stars << 0x14) >> 0x1D);
     stats->skill = ((u32)(stars.stars << 0x1A) >> 0x1D);
     stats->speed = ((u32)(stars.stars << 0x17) >> 0x1D);
-    stats->stars = (stats->stars & ~7) | (7 & stars.color[PERFORMANCE_POWER]);
-    stats->stars = (stats->stars & ~0x38) | ((u32)(stars.color[PERFORMANCE_STAMINA] << 0x1D) >> 0x1A);
-    stats->stars = (stats->stars & 0xFFFFFE3F) | ((u32)(stars.color[PERFORMANCE_JUMP] << 0x1D) >> 0x17);
-    stats->stars = (stats->stars & 0xFFFFF1FF) | ((u32)(stars.color[PERFORMANCE_SKILL] << 0x1D) >> 0x14);
-    stats->stars = (stats->stars & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
+    stats->starColors = (stats->starColors & ~7) | (7 & stars.color[PERFORMANCE_POWER]);
+    stats->starColors = (stats->starColors & ~0x38) | ((u32)(stars.color[PERFORMANCE_STAMINA] << 0x1D) >> 0x1A);
+    stats->starColors = (stats->starColors & 0xFFFFFE3F) | ((u32)(stars.color[PERFORMANCE_JUMP] << 0x1D) >> 0x17);
+    stats->starColors = (stats->starColors & 0xFFFFF1FF) | ((u32)(stars.color[PERFORMANCE_SKILL] << 0x1D) >> 0x14);
+    stats->starColors = (stats->starColors & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
 }
 
 static void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
@@ -343,11 +343,11 @@ static void PokeathlonBox_GetBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonSt
     stats->jump = ((u32)(stars.stars << 0x14) >> 0x1D);
     stats->skill = ((u32)(stars.stars << 0x1A) >> 0x1D);
     stats->speed = ((u32)(stars.stars << 0x17) >> 0x1D);
-    stats->stars = (stats->stars & ~7) | (7 & stars.color[PERFORMANCE_POWER]);
-    stats->stars = (stats->stars & ~0x38) | ((u32)(stars.color[PERFORMANCE_STAMINA] << 0x1D) >> 0x1A);
-    stats->stars = (stats->stars & 0xFFFFFE3F) | ((u32)(stars.color[PERFORMANCE_JUMP] << 0x1D) >> 0x17);
-    stats->stars = (stats->stars & 0xFFFFF1FF) | ((u32)(stars.color[PERFORMANCE_SKILL] << 0x1D) >> 0x14);
-    stats->stars = (stats->stars & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
+    stats->starColors = (stats->starColors & ~7) | (7 & stars.color[PERFORMANCE_POWER]);
+    stats->starColors = (stats->starColors & ~0x38) | ((u32)(stars.color[PERFORMANCE_STAMINA] << 0x1D) >> 0x1A);
+    stats->starColors = (stats->starColors & 0xFFFFFE3F) | ((u32)(stars.color[PERFORMANCE_JUMP] << 0x1D) >> 0x17);
+    stats->starColors = (stats->starColors & 0xFFFFF1FF) | ((u32)(stars.color[PERFORMANCE_SKILL] << 0x1D) >> 0x14);
+    stats->starColors = (stats->starColors & 0xFFFF8FFF) | ((u32)(stars.color[PERFORMANCE_SPEED] << 0x1D) >> 0x11);
 }
 
 static void PokeathlonBox_GetLightBoxMonStats(BoxPokemon *boxMon, PokeathlonBox_MonStats *stats) {
@@ -431,9 +431,9 @@ static void PokeathlonBox_ShowMonInfo(int boxno, u8 slot, PokeathlonBox *data) {
 }
 
 static void PokeathlonBox_CalcStatChanges(PokeathlonBox_MonStats *stats1, PokeathlonBox_MonStats *stats2, PartyAprijuiceModifier *aprijuiceModifier, PokeathlonBox_MonInfo *mon) {
-    mon->statChanges[0].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->stars << 0x1D) >> 0x1D, aprijuiceModifier->stats[0]);
-    mon->statChanges[1].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->stars << 0x14) >> 0x1D, aprijuiceModifier->stats[1]);
-    mon->statChanges[2].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->stars << 0x11) >> 0x1D, aprijuiceModifier->stats[2]);
-    mon->statChanges[3].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[3].stars, stats1->jump, stats2->jump, (u32)(stats2->stars << 0x17) >> 0x1D, aprijuiceModifier->stats[3]);
-    mon->statChanges[4].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->stars << 0x1A) >> 0x1D, aprijuiceModifier->stats[4]);
+    mon->statChanges[0].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[0].stars, stats1->power, stats2->power, (u32)(stats2->starColors << 0x1D) >> 0x1D, aprijuiceModifier->stats[0]);
+    mon->statChanges[1].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[1].stars, stats1->skill, stats2->skill, (u32)(stats2->starColors << 0x14) >> 0x1D, aprijuiceModifier->stats[1]);
+    mon->statChanges[2].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[2].stars, stats1->speed, stats2->speed, (u32)(stats2->starColors << 0x11) >> 0x1D, aprijuiceModifier->stats[2]);
+    mon->statChanges[3].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[3].stars, stats1->jump, stats2->jump, (u32)(stats2->starColors << 0x17) >> 0x1D, aprijuiceModifier->stats[3]);
+    mon->statChanges[4].direction = PokemonSummary_GetPokeathlonStarStates(mon->statChanges[4].stars, stats1->stamina, stats2->stamina, (u32)(stats2->starColors << 0x1A) >> 0x1D, aprijuiceModifier->stats[4]);
 }

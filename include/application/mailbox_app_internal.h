@@ -82,7 +82,7 @@ typedef struct MailboxAppData {
     TouchscreenListMenuSpawner *listMenuSpawner; // 0x240
     TouchscreenListMenu *listMenu;               // 0x244
     ListMenuItem *listMenuItems;                 // 0x248
-    u8 filler_24C[4];                            // 0x24C
+    u8 padding_24C[4];                           // 0x24C
     SpriteSystem *spriteSystem;                  // 0x250
     SpriteManager *spriteManager;                // 0x254
     ManagedSprite *sprites[MAILBOX_NUM_SPRITES]; // 0x258: 0/1 page arrows, 2 cursor, 4-6 icons

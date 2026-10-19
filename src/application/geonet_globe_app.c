@@ -124,7 +124,7 @@ typedef struct GeonetGlobe {
     GeonetGlobeAngle rotation;                            // 0xC2C4
     VecFx32 markerScale;                                  // 0xC2D0
     Camera *camera;                                       // 0xC2DC
-    u8 filler_C2E0[8];                                    // 0xC2E0
+    u8 padding_C2E0[8];                                   // 0xC2E0
     u16 zoomedIn;                                         // 0xC2E8
     u8 filler_C2EA[2];                                    // 0xC2EA
     VecFx32 lightVector;                                  // 0xC2EC

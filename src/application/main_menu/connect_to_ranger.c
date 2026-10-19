@@ -66,11 +66,11 @@ struct ConnectToRangerApp {
     int connectState;               // 0x015C
     int timer;                      // 0x0160
     int partnerIndex;               // 0x0164
-    u8 filler_168[4];               // 0x0168
+    u8 padding_168[4];              // 0x0168
     u8 linkWork[0x3004];            // 0x016C
     Sprite *sprite;                 // 0x3170
     MysteryGiftSave *mysteryGift;   // 0x3174
-    u8 filler_3178[4];              // 0x3178
+    u8 padding_3178[4];             // 0x3178
     int textPrinterId;              // 0x317C
     WonderCard wonderCard;          // 0x3180
     WaitingIcon *waitingIcon;       // 0x34D8

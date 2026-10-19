@@ -321,7 +321,7 @@ typedef struct FootprintStamp {
     u16 playerColors[FOOTPRINT_STAMP_PLAYERS_MAX];
     int phase;
     u16 subTilemap[0x400]; // the player list tilemap, copied into BG 6 when a player joins
-    u8 unk11C0[0x800];
+    u8 padding_11C0[0x800];
     FootprintStampTextSprite exitText;
     fx32 ink;
     fx32 inkShown;

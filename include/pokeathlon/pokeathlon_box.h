@@ -26,26 +26,26 @@ typedef struct PokeathlonBox_MonStats {
     s8 skill;
     s8 speed;
     s8 padding;
-    u16 stars;
+    u16 starColors; // 3 bits per stat, in the order above
 } PokeathlonBox_MonStats;
 
+// A Pokemon picked in the box, as the course stores its participants' Pokemon.
 typedef struct PokeathlonBoxArgs_SelectedMon {
-    u32 cancelled;                // 0x00
-    u32 unk4;                     // 0x04
-    u16 species;                  // 0x08
-    u16 form;                     // 0x0A
-    u32 personality;              // 0x0C
-    PokeathlonBox_MonStats stats; // 0x10
-    u8 isShiny;                   // 0x18
-    u8 gender;                    // 0x19
-    u16 nickname[7];              // 0x1A
-} PokeathlonBoxArgs_SelectedMon;  // size: 0x28
+    u16 species;
+    u16 form;
+    u32 personality;
+    PokeathlonBox_MonStats stats;
+    u8 isShiny;
+    u8 gender;
+    u16 nickname[11];
+} PokeathlonBoxArgs_SelectedMon; // size: 0x28
 
 typedef struct PokeathlonBoxArgs {
-    PokeathlonCourseArgs *courseArgs;              // 0x00
-    PokeathlonBoxArgs_SelectedMon selectedMons[3]; // 0x04
-    u8 filler7C[8];                                // 0x7C
-    u32 courseId;                                  // 0x84
+    PokeathlonCourseArgs *courseArgs;
+    u32 cancelled;
+    u32 npcTeam;
+    PokeathlonBoxArgs_SelectedMon selectedMons[3];
+    u32 courseId;
 } PokeathlonBoxArgs;
 
 typedef struct PokeathlonBox_BoxMon {
@@ -57,7 +57,7 @@ typedef struct PokeathlonBox_BoxMon {
     u16 unkE;
     u16 isShiny;
     u16 gender;
-    u8 filler14[4];
+    u8 padding_14[4];
     u16 nickname[11];
 } PokeathlonBox_BoxMon;
 
@@ -70,7 +70,7 @@ typedef struct PokeathlonBox_SelectedMon {
 typedef struct PokeathlonBox_StatChange {
     s8 direction; // > 0 up, < 0 down, 0 unchanged
     u8 stars[5];  // per star: 0 hidden, 1-4 animation
-    u8 unk6[2];
+    u8 padding_6[2];
 } PokeathlonBox_StatChange; // size: 0x8
 
 typedef struct PokeathlonBox_MonInfo {
@@ -106,7 +106,7 @@ typedef struct PokeathlonBox_SubGraphics {
     G2dRenderer renderer;                       // 0x008 / 0x080
     GF_2DGfxResMan *mgrs[6];                    // 0x130 / 0x1A8
     PokeathlonBox_SpriteResources resources[3]; // 0x148 / 0x1C0
-    u8 filler190[0x24];                         // 0x190 / 0x208
+    u8 padding_190[0x24];                       // 0x190 / 0x208
     Sprite *sprites[5];                         // 0x1B4 / 0x22C
     Sprite *unk1C8[5];                          // 0x1C8 / 0x23C
     PokeathlonBox_StatRow statRows[5];          // 0x1DC / 0x250

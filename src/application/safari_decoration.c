@@ -74,7 +74,7 @@ typedef struct SafariDecorationAnim {
     void *resAnm;         // 0x04
     NNSG3dAnmObj *anmObj; // 0x08
     fx32 frame;           // 0x0C
-    u8 filler_10[4];      // 0x10
+    u8 padding_10[4];     // 0x10
 } SafariDecorationAnim;   // size: 0x14
 
 typedef struct SafariDecorationModel {
@@ -108,7 +108,7 @@ typedef struct SafariDecorationModelView {
 typedef struct SafariDecorationModelInfo {
     u8 animated;
     u8 type;
-    u8 filler_02[6];
+    u8 padding_02[6];
     u32 animIds[4];
 } SafariDecorationModelInfo;
 
@@ -189,7 +189,7 @@ typedef struct SafariDecorationScrollTask {
     SafariDecoration *decor;  // 0x04
     u8 dir;                   // 0x08
     u8 timer;                 // 0x09
-    u8 filler_0A[10];         // 0x0A
+    u8 padding_0A[10];        // 0x0A
 } SafariDecorationScrollTask; // size: 0x14
 
 typedef struct SafariDecorationCameraPos {

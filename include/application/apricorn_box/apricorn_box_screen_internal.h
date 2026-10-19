@@ -34,7 +34,7 @@ enum ApricornBoxScreenState {
 typedef struct ApricornBoxScreen {
     enum HeapID heapId;                  // 0x000
     ApricornBoxApp *app;                 // 0x004
-    u8 filler_08[8];                     // 0x008
+    u8 padding_08[8];                    // 0x008
     SaveApricornBox *apricornBox;        // 0x010
     u8 juiceServings;                    // 0x014, ApricornBox_GetJuiceServings
     u8 flavorTotal;                      // 0x015, ApricornJuice_GetFlavorTotal(juiceRecord)
@@ -77,7 +77,7 @@ typedef struct ApricornBoxScreen {
     String *numberTemplate;              // 0x074, message 25
     String *infoTexts[22];               // 0x078, messages 27-48
     String *apricornNames[7];            // 0x0D0, messages 7-13
-    u8 filler_EC[0x3C];                  // 0x0EC
+    u8 padding_EC[0x3C];                 // 0x0EC
     Window windows[18];                  // 0x128
     YesNoPrompt *yesNoPrompt;            // 0x248
     SpriteSystem *spriteSystem;          // 0x24C

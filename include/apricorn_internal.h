@@ -19,13 +19,21 @@ typedef struct ApricornRecord {
     ApricornJuice data;
 } ApricornRecord;
 
+typedef struct ApricornMix {
+    u8 padding[3];
+    u8 values[5];
+} ApricornMix;
+
 struct SaveApricornBox {
     u8 apricorns[7];
     u8 kurtQuantity;
     u8 kurtApricorn;
     u8 juiceServings;
     u16 queuedApricorns;
-    ApricornJuice juice;
+    union {
+        ApricornJuice juice;
+        ApricornMix juiceMix;
+    };
     u32 mixStartSteps;
     u32 juiceAgingSteps;
     union {
@@ -37,11 +45,6 @@ struct SaveApricornBox {
     };
     ApricornRecord juiceRecords[3];
 };
-
-typedef struct ApricornMix {
-    u8 padding[3];
-    u8 values[5];
-} ApricornMix;
 
 int ApricornBox_CountQueuedApricorns(SaveApricornBox *);
 BOOL ApricornBox_GetJuice(SaveApricornBox *, int, ApricornJuice *);

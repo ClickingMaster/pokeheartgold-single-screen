@@ -62,7 +62,7 @@ typedef struct AprijuiceScene {
     GF3DVramMan *vramMan;           // 0x04
     Camera *camera;                 // 0x08
     PokepicManager *pokepicManager; // 0x0C
-    u8 filler_10[0x10];             // 0x10
+    u8 padding_10[0x10];            // 0x10
     Pokepic *pokepic;               // 0x20
     SPLEmitter *emitter;            // 0x24
 } AprijuiceScene;                   // size: 0x28
@@ -72,7 +72,7 @@ typedef struct AprijuiceScreen {
     enum HeapID heapId;                         // 0x000
     ApricornBoxApp *app;                        // 0x004
     SaveData *saveData;                         // 0x008
-    u8 filler_0C[4];                            // 0x00C
+    u8 padding_0C[4];                           // 0x00C
     Party *party;                               // 0x010
     SaveApricornBox *apricornBox;               // 0x014
     ApricornJuice juiceRecord;                  // 0x018
@@ -99,7 +99,7 @@ typedef struct AprijuiceScreen {
     u8 timer;                                   // 0x051
     u8 filler_52[2];                            // 0x052
     BgConfig *bgConfig;                         // 0x054
-    u8 filler_58[4];                            // 0x058
+    u8 padding_58[4];                           // 0x058
     MsgData *msgData;                           // 0x05C
     MessageFormat *msgFormat;                   // 0x060
     String *string;                             // 0x064
@@ -114,7 +114,7 @@ typedef struct AprijuiceScreen {
     SpriteManager *spriteManager;               // 0x25C
     Sprite *sprites[34];                        // 0x260
     NARC *narc;                                 // 0x2E8
-    u8 filler_2EC[8];                           // 0x2EC
+    u8 padding_2EC[8];                          // 0x2EC
 } AprijuiceScreen;                              // size: 0x2F4
 
 // Pops a Performance star in (grows and spins) or out (shrinks and hides it) (task).

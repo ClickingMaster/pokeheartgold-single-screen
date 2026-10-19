@@ -2,32 +2,11 @@
 
 #include "camera.h"
 #include "gf_gfx_planes.h"
+#include "pokemon.h"
+#include "pokemon_summary_internal.h"
+#include "pokepic.h"
+#include "pokepic_anim_internal.h"
 #include "touchscreen.h"
-
-// The parts of the summary screen state this module uses.
-typedef struct PokemonSummaryScene {
-    u8 pad_000[0x22C];
-    void *args; // 0x22C
-    u8 pad_230[0x23C - 0x230];
-    u16 species; // 0x23C
-    u8 pad_23E[0x280 - 0x23E];
-    u32 status : 28; // 0x280
-    u32 isEgg : 1;
-    u32 unk_280_29 : 3;
-    u8 pad_284[0x29C - 0x284];
-    void *camera;             // 0x29C
-    void *pokepicManager;     // 0x2A0
-    u32 pokepicAnimScript[2]; // 0x2A4
-    u8 pad_2AC[0x2CC - 0x2AC];
-    void *pokepicAnimManager; // 0x2CC
-    void *pokepic;            // 0x2D0
-    u32 pokepicAnimReverseX;  // 0x2D4
-    u8 pad_2D8[0x7B8 - 0x2D8];
-    void *pokepicAnimNarc; // 0x7B8
-    u8 pad_7BC[3];
-    u8 unk_7BF_0 : 4; // 0x7BF
-    u8 unk_7BF_4 : 4;
-} PokemonSummaryScene;
 
 // A condition chart vertex: at 0 (min), at 255 (max), and its step per condition point.
 typedef struct ConditionChartVertexAnim {
@@ -42,43 +21,11 @@ typedef struct ConditionChartVertexAnimS {
     s16 step[3];
 } ConditionChartVertexAnimS;
 
-typedef struct ConditionChartVertex {
-    s16 x, y, z;
-} ConditionChartVertex;
-
-struct PokemonSummaryArgsDataTypeView {
-    u8 pad_00[0x11];
-    u8 monDataType;
-};
-
-void PokepicManager_DrawAll(void *mgr);
-void PokepicManager_Delete(void *mgr);
-void PokepicAnimManager_StopAnim(void *a, int b);
-void PokepicAnimManager_Delete(void *a);
-void Pokepic_StartAnim(void *p, int a);
-void NARC_StartPokepicAnim(void *a, void *b, void *c, int d, int e, u32 f, int g);
-void *PokepicManager_Create(int heapId);
-int PokemonSummary_GetShownMon(PokemonSummaryScene *summary);
-void GetPokemonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c);
-void GetBoxmonSpriteCharAndPlttNarcIds(u32 *dest, int species, int c, int d);
-void NARC_ReadPokepicAnimScript(void *narc, void *dest, u16 species, int d);
-void *PokepicManager_CreatePokepic(void *mgr, u32 *a, int x, int y, int e, int f, void *g, int h);
-void Pokepic_SetAttr(void *pic, int attr, int value);
-
-void PokemonSummary_DrawPokepic(PokemonSummaryScene *summary);
-void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary);
-void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary);
-void PokemonSummary_CreatePokepic(PokemonSummaryScene *summary);
-void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *summary);
-void PokemonSummary_ReloadPokepic(PokemonSummaryScene *summary);
-u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *summary);
-
 static void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, ConditionChartVertex *dst, int t);
 static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out);
-static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary);
+static int PokemonSummary_GetTouchedButton(PokemonSummary *summary);
 
 void PokemonSummary_Init3D(void);
-void PokemonSummary_CreateCamera(PokemonSummaryScene *summary);
 
 void PokemonSummary_Init3D(void) {
     NNS_G3dInit();
@@ -97,13 +44,13 @@ void PokemonSummary_Init3D(void) {
     G2_SetBG0Priority(2);
 }
 
-void PokemonSummary_DrawPokepic(PokemonSummaryScene *summary) {
+void PokemonSummary_DrawPokepic(PokemonSummary *summary) {
     NNS_G2dSetupSoftwareSpriteCamera();
     PokepicManager_DrawAll(summary->pokepicManager);
     *(vu32 *)0x04000540 = 1;
 }
 
-void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary) {
+void PokemonSummary_FreePokepicAndCamera(PokemonSummary *summary) {
     Camera_Delete(summary->camera);
     PokepicAnimManager_StopAnim(summary->pokepicAnimManager, 0);
     PokepicAnimManager_Delete(summary->pokepicAnimManager);
@@ -112,10 +59,10 @@ void PokemonSummary_FreePokepicAndCamera(PokemonSummaryScene *summary) {
 
 static const VecFx32 sSummaryCameraPos = { 0, 0, FX32_CONST(16) };
 
-void PokemonSummary_CreateCamera(PokemonSummaryScene *summary) {
+void PokemonSummary_CreateCamera(PokemonSummary *summary) {
     VecFx32 pos = sSummaryCameraPos;
     CameraAngle angle = { 0, 0, 0, 0 };
-    summary->camera = Camera_New((enum HeapID)0x13);
+    summary->camera = Camera_New(HEAP_ID_19);
     Camera_Init_FromPosDistanceAndAngle(&pos, 0x10000, &angle, 0x5C1, 1, summary->camera);
     Camera_SetPerspectiveClippingPlane(0, 0x64000, summary->camera);
     Camera_ClearFixedTarget(summary->camera);
@@ -139,18 +86,6 @@ static void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, Condit
     dst->y = ((const ConditionChartVertexAnimS *)src)->min[1] + ((const ConditionChartVertexAnimS *)src)->step[1] * t;
     dst->z = ((const ConditionChartVertexAnimS *)src)->min[2] + ((const ConditionChartVertexAnimS *)src)->step[2] * t;
 }
-
-typedef struct PictureVectorQuad {
-    ConditionChartVertex vectors[4];
-} PictureVectorQuad;
-
-typedef struct PictureVectorWork {
-    u8 pad_000[0x2D8];
-    PictureVectorQuad from[4];
-    PictureVectorQuad out[4];
-    PictureVectorQuad to[4];
-    u32 done;
-} PictureVectorWork;
 
 static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out) {
     int diff;
@@ -277,65 +212,63 @@ static const ConditionChartVertexAnim sConditionChartQuad0Vertex0 = {
     { 0,    12,   0 },
 };
 
-void PokemonSummary_InitConditionChart(PokemonSummaryScene *summary) {
+void PokemonSummary_InitConditionChart(PokemonSummary *summary) {
     u32 i;
-    u8 *raw = (u8 *)summary;
-    PictureVectorWork *vectors = (PictureVectorWork *)summary;
 
-    ConditionChart_GetVertex(&sConditionChartQuad0Vertex0, (ConditionChartVertex *)&raw[0x398], raw[0x275]);
-    ConditionChart_GetVertex(&sConditionChartQuad0Vertex1, (ConditionChartVertex *)&raw[0x39E], raw[0x276]);
-    ConditionChart_GetVertex(&sConditionChartQuad0Vertex3, (ConditionChartVertex *)&raw[0x3AA], raw[0x277]);
-    ConditionChart_GetVertex(&sConditionChartQuad0Vertex2, (ConditionChartVertex *)&raw[0x3A4], 0);
-    ConditionChart_GetVertex(&sConditionChartQuad1Vertex0, (ConditionChartVertex *)&raw[0x3B0], raw[0x279]);
-    ConditionChart_GetVertex(&sConditionChartQuad1Vertex1, (ConditionChartVertex *)&raw[0x3B6], raw[0x275]);
-    ConditionChart_GetVertex(&sConditionChartQuad1Vertex3, (ConditionChartVertex *)&raw[0x3C2], 0);
-    ConditionChart_GetVertex(&sConditionChartQuad1Vertex2, (ConditionChartVertex *)&raw[0x3BC], raw[0x278]);
-    ConditionChart_GetVertex(&sConditionChartQuad2Vertex0, (ConditionChartVertex *)&raw[0x3C8], raw[0x279]);
-    ConditionChart_GetVertex(&sConditionChartQuad2Vertex1, (ConditionChartVertex *)&raw[0x3CE], 0);
-    ConditionChart_GetVertex(&sConditionChartQuad2Vertex3, (ConditionChartVertex *)&raw[0x3DA], raw[0x277]);
-    ConditionChart_GetVertex(&sConditionChartQuad2Vertex2, (ConditionChartVertex *)&raw[0x3D4], raw[0x278]);
-    ConditionChart_GetVertex(&sConditionChartQuad3Vertex0, (ConditionChartVertex *)&raw[0x3E0], 0);
-    ConditionChart_GetVertex(&sConditionChartQuad3Vertex1, (ConditionChartVertex *)&raw[0x3E6], raw[0x276]);
-    ConditionChart_GetVertex(&sConditionChartQuad3Vertex3, (ConditionChartVertex *)&raw[0x3F2], raw[0x277]);
-    ConditionChart_GetVertex(&sConditionChartQuad3Vertex2, (ConditionChartVertex *)&raw[0x3EC], raw[0x278]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex0, &summary->conditionChartTo[0].vertices[0], summary->mon.contestStats[0]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex1, &summary->conditionChartTo[0].vertices[1], summary->mon.contestStats[1]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex3, &summary->conditionChartTo[0].vertices[3], summary->mon.contestStats[2]);
+    ConditionChart_GetVertex(&sConditionChartQuad0Vertex2, &summary->conditionChartTo[0].vertices[2], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex0, &summary->conditionChartTo[1].vertices[0], summary->mon.contestStats[4]);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex1, &summary->conditionChartTo[1].vertices[1], summary->mon.contestStats[0]);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex3, &summary->conditionChartTo[1].vertices[3], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad1Vertex2, &summary->conditionChartTo[1].vertices[2], summary->mon.contestStats[3]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex0, &summary->conditionChartTo[2].vertices[0], summary->mon.contestStats[4]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex1, &summary->conditionChartTo[2].vertices[1], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex3, &summary->conditionChartTo[2].vertices[3], summary->mon.contestStats[2]);
+    ConditionChart_GetVertex(&sConditionChartQuad2Vertex2, &summary->conditionChartTo[2].vertices[2], summary->mon.contestStats[3]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex0, &summary->conditionChartTo[3].vertices[0], 0);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex1, &summary->conditionChartTo[3].vertices[1], summary->mon.contestStats[1]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex3, &summary->conditionChartTo[3].vertices[3], summary->mon.contestStats[2]);
+    ConditionChart_GetVertex(&sConditionChartQuad3Vertex2, &summary->conditionChartTo[3].vertices[2], summary->mon.contestStats[3]);
 
     for (i = 0; i < 4; i++) {
-        ConditionChart_GetStep(&vectors->from[i].vectors[0], &vectors->to[i].vectors[0], &vectors->out[i].vectors[0]);
-        ConditionChart_GetStep(&vectors->from[i].vectors[1], &vectors->to[i].vectors[1], &vectors->out[i].vectors[1]);
-        ConditionChart_GetStep(&vectors->from[i].vectors[2], &vectors->to[i].vectors[2], &vectors->out[i].vectors[2]);
-        ConditionChart_GetStep(&vectors->from[i].vectors[3], &vectors->to[i].vectors[3], &vectors->out[i].vectors[3]);
+        ConditionChart_GetStep(&summary->conditionChartFrom[i].vertices[0], &summary->conditionChartTo[i].vertices[0], &summary->conditionChartStep[i].vertices[0]);
+        ConditionChart_GetStep(&summary->conditionChartFrom[i].vertices[1], &summary->conditionChartTo[i].vertices[1], &summary->conditionChartStep[i].vertices[1]);
+        ConditionChart_GetStep(&summary->conditionChartFrom[i].vertices[2], &summary->conditionChartTo[i].vertices[2], &summary->conditionChartStep[i].vertices[2]);
+        ConditionChart_GetStep(&summary->conditionChartFrom[i].vertices[3], &summary->conditionChartTo[i].vertices[3], &summary->conditionChartStep[i].vertices[3]);
     }
-    vectors->done = 0;
+    summary->conditionChartDone = 0;
 }
 
-void PokemonSummary_CreatePokepic(PokemonSummaryScene *summary) {
-    u32 pokepicTemplate[4];
-    int species;
+void PokemonSummary_CreatePokepic(PokemonSummary *summary) {
+    PokepicTemplate pokepicTemplate;
+    void *mon;
 
-    summary->pokepicManager = PokepicManager_Create(0x13);
-    species = PokemonSummary_GetShownMon(summary);
-    if (((struct PokemonSummaryArgsDataTypeView *)summary->args)->monDataType == 2) {
-        GetBoxmonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2, 0);
+    summary->pokepicManager = PokepicManager_Create(HEAP_ID_19);
+    mon = PokemonSummary_GetShownMon(summary);
+    if (summary->args->monDataType == 2) {
+        GetBoxmonSpriteCharAndPlttNarcIds(&pokepicTemplate, mon, 2, FALSE);
     } else {
-        GetPokemonSpriteCharAndPlttNarcIds(pokepicTemplate, species, 2);
+        GetPokemonSpriteCharAndPlttNarcIds(&pokepicTemplate, mon, 2);
     }
-    NARC_ReadPokepicAnimScript(summary->pokepicAnimNarc, summary->pokepicAnimScript, summary->species, 1);
+    NARC_ReadPokepicAnimScript(summary->pokepicAnimNarc, summary->pokepicAnimScript, summary->mon.species, 1);
     summary->pokepicAnimReverseX = 0;
-    summary->pokepic = PokepicManager_CreatePokepic(summary->pokepicManager, pokepicTemplate, 0xd0, 0x68, 0, 0, summary->pokepicAnimScript, 0);
+    summary->pokepic = PokepicManager_CreatePokepic(summary->pokepicManager, &pokepicTemplate, 0xd0, 0x68, 0, 0, summary->pokepicAnimScript, NULL);
     Pokepic_SetAttr(summary->pokepic, 6, 1);
     Pokepic_SetAttr(summary->pokepic, 0x23, 0);
 }
 
-void PokemonSummary_StartPokepicAnim(PokemonSummaryScene *summary) {
-    if (summary->isEgg) {
+void PokemonSummary_StartPokepicAnim(PokemonSummary *summary) {
+    if (summary->mon.isEgg) {
         NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, 0, 2, summary->pokepicAnimReverseX, 0);
     } else {
-        Pokepic_StartAnim(summary->pokepic, 1);
-        NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, summary->species, 2, summary->pokepicAnimReverseX, 0);
+        ((void (*)(Pokepic *, int))Pokepic_StartAnim)(summary->pokepic, 1);
+        NARC_StartPokepicAnim(summary->pokepicAnimNarc, summary->pokepicAnimManager, summary->pokepic, summary->mon.species, 2, summary->pokepicAnimReverseX, 0);
     }
 }
 
-void PokemonSummary_ReloadPokepic(PokemonSummaryScene *summary) {
+void PokemonSummary_ReloadPokepic(PokemonSummary *summary) {
     PokepicAnimManager_StopAnim(summary->pokepicAnimManager, 0);
     PokepicManager_Delete(summary->pokepicManager);
     PokemonSummary_CreatePokepic(summary);
@@ -370,13 +303,13 @@ static const TouchscreenHitbox sTouchButtonHitboxes[] = {
     { .rect = { TOUCHSCREEN_RECTLIST_END } },
 };
 
-static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary) {
+static int PokemonSummary_GetTouchedButton(PokemonSummary *summary) {
     int button;
 
-    if (summary->unk_7BF_0 == 0xF) {
+    if (summary->unk7BF_0 == 0xF) {
         return -1;
     }
-    if (((struct PokemonSummaryArgsDataTypeView *)summary->args)->monDataType != 2) {
+    if (summary->args->monDataType != 2) {
         button = TouchscreenHitbox_FindRectAtTouchNew(sTouchButtonHitboxes);
         if (button != -1) {
             button = sTouchButtons[button][0];
@@ -394,7 +327,7 @@ static int PokemonSummary_GetTouchedButton(PokemonSummaryScene *summary) {
     }
 }
 
-u8 PokemonSummary_CheckTouchedButton(PokemonSummaryScene *summary) {
+u8 PokemonSummary_CheckTouchedButton(PokemonSummary *summary) {
     int button = PokemonSummary_GetTouchedButton(summary);
     if (button != -1) {
         return (u8)button;

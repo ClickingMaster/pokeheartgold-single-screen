@@ -66,13 +66,6 @@ extern const BgTemplate gPokemonSummaryBgTemplate5;
 extern const BgTemplate gPokemonSummaryBgTemplate6;
 
 void PokemonSummary_Init3D(PokemonSummary *summary);
-void PokemonSummary_CreatePokepic(PokemonSummary *summary);
-void PokemonSummary_CreateCamera(PokemonSummary *summary);
-void PokemonSummary_StartPokepicAnim(PokemonSummary *summary);
-void PokemonSummary_DrawPokepic(PokemonSummary *summary);
-void PokemonSummary_FreePokepicAndCamera(PokemonSummary *summary);
-
-void PokemonSummary_InitConditionChart(PokemonSummary *summary);
 
 extern const TouchscreenHitbox gPokemonSummaryCancelButtonHitbox[];
 extern const TouchscreenHitbox gPokemonSummarySwapButtonHitbox[];
@@ -84,9 +77,6 @@ extern const TouchscreenHitbox gPokemonSummaryRibbonHitboxes[];
 
 // The EXP bar passes the tile as a u32.
 #define FillBgTilemapRect_U32(bgConfig, bgId, fillValue, x, y, width, height, mode) ((void (*)(BgConfig *, u8, u32, u8, u8, u8, u8, u8))FillBgTilemapRect)(bgConfig, bgId, fillValue, x, y, width, height, mode)
-
-u8 PokemonSummary_CheckTouchedButton(PokemonSummary *summary);
-void PokemonSummary_ReloadPokepic(PokemonSummary *summary);
 
 NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
 

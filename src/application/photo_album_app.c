@@ -163,7 +163,7 @@ typedef struct PhotoAlbumApp {
 
 typedef struct PhotoAlbumTask {
     PhotoAlbumApp *app;
-    u8 filler_04[4];
+    u8 padding_04[4];
 } PhotoAlbumTask;
 
 static void PhotoAlbumApp_ResetDisplay(void);

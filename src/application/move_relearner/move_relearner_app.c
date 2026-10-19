@@ -80,7 +80,7 @@ enum MoveRelearnerQuestion {
 typedef struct MoveRelearnerMonPic {
     Camera *camera;                 // 0x00
     PokepicManager *pokepicManager; // 0x04
-    u8 filler_08[0x10];             // 0x08
+    u8 padding_08[0x10];            // 0x08
     Pokepic *pokepic;               // 0x18
 } MoveRelearnerMonPic;              // size: 0x1C
 
@@ -104,9 +104,9 @@ typedef struct MoveRelearner {
     String *string;                                     // 0x100
     String *ppLabel;                                    // 0x104
     String *ppFormat;                                   // 0x108
-    u8 filler_10C[4];                                   // 0x10C
+    u8 padding_10C[4];                                  // 0x10C
     ListMenuItem *moveList;                             // 0x110
-    u8 filler_114[4];                                   // 0x114
+    u8 padding_114[4];                                  // 0x114
     YesNoPrompt *yesNoPrompt;                           // 0x118
     SpriteSystem *spriteSystem;                         // 0x11C
     SpriteManager *spriteManager;                       // 0x120

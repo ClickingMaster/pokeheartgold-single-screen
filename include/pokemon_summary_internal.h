@@ -87,57 +87,70 @@ typedef struct PokemonSummaryMon {
     u8 shinyLeaves[6]; // 0x64
 } PokemonSummaryMon;
 
+typedef struct ConditionChartVertex {
+    s16 x, y, z;
+} ConditionChartVertex;
+
+// One of the four quads of the condition chart.
+typedef struct ConditionChartQuad {
+    ConditionChartVertex vertices[4];
+} ConditionChartQuad;
+
 typedef struct PokemonSummary {
-    BgConfig *bgConfig;                            // 0x000
-    Window windows[34];                            // 0x004
-    Window *pageWindows;                           // 0x224: the current page's windows
-    u32 numPageWindows;                            // 0x228
-    PokemonSummaryArgs *args;                      // 0x22C
-    PokemonSummaryMon mon;                         // 0x230
-    void *camera;                                  // 0x29C
-    PokepicManager *pokepicManager;                // 0x2A0
-    u8 unk2A4[0x2CC - 0x2A4];                      // 0x2A4
-    void *pokepicAnimManager;                      // 0x2CC
-    Pokepic *pokepic;                              // 0x2D0
-    u8 unk2D4[0x3FC - 0x2D4];                      // 0x2D4
-    SpriteSystem *spriteSystem;                    // 0x3FC
-    SpriteManager *spriteManager;                  // 0x400
-    Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT]; // 0x404
-    u8 unk5D0[0x79C - 0x5D0];                      // 0x5D0
-    MessagePrinter *numberPrinter;                 // 0x79C
-    MsgData *msgData;                              // 0x7A0
-    MsgData *ribbonMsgData;                        // 0x7A4
-    MessageFormat *msgFormat;                      // 0x7A8
-    String *buffer;                                // 0x7AC
-    String *playerName;                            // 0x7B0
-    MsgData *moveNames;                            // 0x7B4
-    NARC *pokepicAnimNarc;                         // 0x7B8
-    s8 page;                                       // 0x7BC
-    u8 moveSlot : 4;                               // 0x7BD: the two move slots being swapped
+    BgConfig *bgConfig;
+    Window windows[34];
+    Window *pageWindows; // the current page's windows
+    u32 numPageWindows;
+    PokemonSummaryArgs *args;
+    PokemonSummaryMon mon;
+    void *camera;
+    PokepicManager *pokepicManager;
+    PokepicAnimScript pokepicAnimScript[10];
+    void *pokepicAnimManager;
+    Pokepic *pokepic;
+    u32 pokepicAnimReverseX;
+    ConditionChartQuad conditionChartFrom[4];
+    ConditionChartQuad conditionChartStep[4]; // per frame, from conditionChartFrom to conditionChartTo
+    ConditionChartQuad conditionChartTo[4];
+    u32 conditionChartDone;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    Sprite *sprites[POKEMON_SUMMARY_SPRITE_COUNT];
+    u8 unk5D0[0x79C - 0x5D0];
+    MessagePrinter *numberPrinter;
+    MsgData *msgData;
+    MsgData *ribbonMsgData;
+    MessageFormat *msgFormat;
+    String *buffer;
+    String *playerName;
+    MsgData *moveNames;
+    NARC *pokepicAnimNarc;
+    s8 page;
+    u8 moveSlot : 4; // the two move slots being swapped
     u8 swapMoveSlot : 4;
-    u8 unk7BE;            // 0x7BE: condition stats that changed (bits 0-4); the button flash step
-    u8 unk7BF_0 : 4;      // 0x7BF
+    u8 unk7BE; // condition stats that changed (bits 0-4); the button flash step
+    u8 unk7BF_0 : 4;
     u8 exitRequested : 4; // 1: leave the screen
-    u8 sparkleState;      // 0x7C0: sheen sparkles
-    u8 numSparkles;       // 0x7C1
-    u8 unk7C2;            // 0x7C2
-    u8 unk7C3;            // 0x7C3
-    u8 ribbonCursor;      // 0x7C4
-    u8 ribbonRow;         // 0x7C5
-    u8 ribbonCount;       // 0x7C6
-    u8 ribbonId;          // 0x7C7
-    u8 flashX;            // 0x7C8: the touched button being flashed (PokemonSummary_FlashButton)
-    u8 flashY;            // 0x7C9
-    u8 flashWidth;        // 0x7CA
-    u8 flashHeight;       // 0x7CB
-    u8 flashPalette : 4;  // 0x7CC
+    u8 sparkleState;      // sheen sparkles
+    u8 numSparkles;
+    u8 unk7C2;
+    u8 unk7C3;
+    u8 ribbonCursor;
+    u8 ribbonRow;
+    u8 ribbonCount;
+    u8 ribbonId;
+    u8 flashX; // the touched button being flashed (PokemonSummary_FlashButton)
+    u8 flashY;
+    u8 flashWidth;
+    u8 flashHeight;
+    u8 flashPalette : 4;
     u8 restorePalette : 4;
-    u8 flashBgId;               // 0x7CD
-    u8 flashTimer;              // 0x7CE
-    u8 flashNextState;          // 0x7CF
-    BgCellManager *cellManager; // 0x7D0
-    u32 boxIconSprite;          // 0x7D4: which of sprites 73/74 shows the box Pokemon's icon next
-} PokemonSummary;               // size: 0x7D8
+    u8 flashBgId;
+    u8 flashTimer;
+    u8 flashNextState;
+    BgCellManager *cellManager;
+    u32 boxIconSprite; // which of sprites 73/74 shows the box Pokemon's icon next
+} PokemonSummary;      // size: 0x7D8
 
 void PokemonSummary_AddWindows(PokemonSummary *summary);
 void PokemonSummary_AddPageWindows(PokemonSummary *summary);
@@ -162,6 +175,15 @@ int PokemonSummary_FlashButton(PokemonSummary *summary);
 void PokemonSummary_ReadMon(PokemonSummary *summary, Pokemon *mon, PokemonSummaryMon *out);
 
 void *PokemonSummary_GetShownMon(PokemonSummary *summary); // Pokemon or BoxPokemon (args->unk11 == 2)
+
+void PokemonSummary_DrawPokepic(PokemonSummary *);
+void PokemonSummary_FreePokepicAndCamera(PokemonSummary *);
+void PokemonSummary_CreateCamera(PokemonSummary *);
+void PokemonSummary_InitConditionChart(PokemonSummary *);
+void PokemonSummary_CreatePokepic(PokemonSummary *);
+void PokemonSummary_StartPokepicAnim(PokemonSummary *);
+void PokemonSummary_ReloadPokepic(PokemonSummary *);
+u8 PokemonSummary_CheckTouchedButton(PokemonSummary *);
 
 BOOL PokemonSummary_IsPokeathlonUnlocked(SaveData *saveData);
 BOOL PokemonSummary_Init(OverlayManager *manager, int *state);

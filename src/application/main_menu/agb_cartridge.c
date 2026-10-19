@@ -5,6 +5,7 @@
 #include "constants/pokemon.h"
 #include "constants/species.h"
 
+#include "CTRDG_task.h"
 #include "config.h"
 #include "item.h"
 #include "pm_version.h"
@@ -18,13 +19,7 @@ void CTRDG_Enable(BOOL enable);
 void CTRDG_CpuCopy32(const void *src, void *dest, u32 size);
 int CTRDG_IdentifyAgbBackup(int type);
 void CTRDG_ReadAgbFlash(u16 sector, u32 offset, void *dest, u32 size);
-void CTRDG_WriteAndVerifyAgbFlashAsync(u8 sector, void *src, u32 verifySize, void *callback);
-
-// A CTRDG task as passed to its callback
-typedef struct PmAgbFlashTask {
-    u8 unk_00[8];
-    s32 result;
-} PmAgbFlashTask;
+void CTRDG_WriteAndVerifyAgbFlashAsync(u8 sector, void *src, u32 verifySize, CTRDG_TASK_FUNC callback);
 
 // Save sizes of the game (read from the ROM by FireRed/LeafGreen/Emerald, fixed for Ruby/Sapphire)
 typedef struct PmAgbSaveSizes {
@@ -135,7 +130,7 @@ static void *PmAgbCartridge_GetSectorData(int id);
 static int PmAgbCartridge_CheckSaveSlot(int slot, AgbSaveSector *sector, u32 *counter);
 static int PmAgbCartridge_FindLatestSaveSlot(AgbSaveSector *sector, u32 *slot, u32 *counter);
 static void PmAgbCartridge_WriteSectorAsync(int id);
-static u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task);
+static u32 PmAgbCartridge_WriteSectorCallback(CTRDGTaskInfo *task);
 static void *PmAgbCartridge_GetTrainerInfo(void);
 static void AGB_DecryptBoxMon(AgbBoxMon *mon);
 static void AGB_EncryptBoxMon(AgbBoxMon *mon);
@@ -412,10 +407,10 @@ static void PmAgbCartridge_WriteSectorAsync(int id) {
     sector->signature = AGB_SAVE_SECTOR_SIGNATURE;
     sector->checksum = PmAgbCartridge_CalcSectorChecksum((u32 *)sector, PmAgbCartridge_GetSectorDataSize(id));
     flashSector = (id + (int)sPmAgbSave.firstSector + 1) % AGB_SAVE_SECTORS_PER_SLOT + AGB_SAVE_SECTORS_PER_SLOT * sPmAgbCartridgeSpec.saveSlot;
-    CTRDG_WriteAndVerifyAgbFlashAsync((u8)flashSector, sector, 4, (void *)PmAgbCartridge_WriteSectorCallback);
+    CTRDG_WriteAndVerifyAgbFlashAsync((u8)flashSector, sector, 4, PmAgbCartridge_WriteSectorCallback);
 }
 
-static u32 PmAgbCartridge_WriteSectorCallback(PmAgbFlashTask *task) {
+static u32 PmAgbCartridge_WriteSectorCallback(CTRDGTaskInfo *task) {
     if (task->result == 0) {
         sPmAgbSave.sectorsWritten++;
         if ((s32)sPmAgbSave.sectorsWritten >= AGB_SAVE_SECTORS_PER_SLOT) {

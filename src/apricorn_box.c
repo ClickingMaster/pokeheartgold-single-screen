@@ -36,16 +36,6 @@ typedef struct ApricornJuiceResult {
     u8 other;
 } ApricornJuiceResult;
 
-// View of SaveApricornBox used while applying the queued walking actions to the juice
-typedef struct ApricornMixState {
-    u8 pad[9];
-    u8 state;
-    u16 actions;
-    u8 base[2];
-    u8 mood;
-    u8 values[5];
-} ApricornMixState;
-
 static void InitApricornBox(SaveApricornBox *apricornBox);
 static void ApricornBox_ClearJuiceRecords(SaveApricornBox *apricornBox);
 static void ClearApricornJuice(void *ptr);
@@ -624,14 +614,13 @@ static void ApricornBox_AddJuiceMildness(SaveApricornBox *box, u8 amount) {
 }
 
 static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
-    ApricornMixState *s = (ApricornMixState *)box;
     s8 values[5], order[5];
     int n;
     u8 total, action, max, index;
-    u16 actions = s->actions;
+    u16 actions = box->queuedApricorns;
     int i, j;
     u8 reduce;
-    ApricornJuice_GetFlavors((ApricornJuice *)s->base, (u8 *)values);
+    ApricornJuice_GetFlavors(&box->juice, (u8 *)values);
     for (n = 0; n < 5; n++) {
         reduce = 0;
         action = actions & 7;
@@ -688,10 +677,10 @@ static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
         }
         actions >>= 3;
         if (reduce) {
-            if (s->mood < 10) {
-                s->mood = 0;
+            if (box->juice.mildness < 10) {
+                box->juice.mildness = 0;
             } else {
-                s->mood -= 10;
+                box->juice.mildness -= 10;
             }
         }
         if (action != 5 && total > 100) {
@@ -699,10 +688,10 @@ static void ApricornBox_MixQueuedApricorns(SaveApricornBox *box) {
         }
     }
     for (i = 0; i < 5; i++) {
-        s->values[i] = values[i];
+        box->juiceMix.values[i] = values[i];
     }
-    s->state = 3;
-    s->actions = 0;
+    box->juiceServings = 3;
+    box->queuedApricorns = 0;
 }
 
 static void ApricornJuice_GetFlavors(ApricornJuice *data, u8 *out) {

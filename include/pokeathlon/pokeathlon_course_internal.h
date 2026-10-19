@@ -25,14 +25,15 @@
 
 // One Pokemon of a participant's team (0x28).
 typedef struct PokeathlonCourseMon {
-    u16 species;      // 0x00
-    u16 form;         // 0x02
-    u32 personality;  // 0x04
-    u8 stats[5];      // 0x08: current Pokeathlon performance (speed, power, skill, stamina, jump)
-    u8 filler_0D[3];  // 0x0D
-    u8 isShiny;       // 0x10
-    u8 gender;        // 0x11
-    u16 nickname[11]; // 0x12
+    u16 species;
+    u16 form;
+    u32 personality;
+    u8 stats[5]; // current Pokeathlon performance (power, stamina, jump, skill, speed)
+    u8 padding_0D;
+    u16 starColors; // 3 bits per stat, in the order of stats
+    u8 isShiny;
+    u8 gender;
+    u16 nickname[11];
 } PokeathlonCourseMon;
 
 // A course participant (0x7C). PokeathlonCourseData stores four of them as the opaque PokeathlonParticipantData.
@@ -59,13 +60,13 @@ struct PokeathlonCourseMonInfo {
 #define POKEATHLON_COURSE_EVENT_POINTS_MAX 10
 
 struct PokeathlonCourseScore {
-    s32 participant; // 0x00
-    u8 unk04[5];     // 0x04
-    u8 rank;         // 0x09
-    u16 points;      // 0x0A
-    s32 score;       // 0x0C
-    String *text;    // 0x10
-    String *name;    // 0x14
+    s32 participant;  // 0x00
+    u8 padding_04[5]; // 0x04
+    u8 rank;          // 0x09
+    u16 points;       // 0x0A
+    s32 score;        // 0x0C
+    String *text;     // 0x10
+    String *name;     // 0x14
 };
 
 struct PokeathlonCourseScoreList {
@@ -372,9 +373,9 @@ typedef struct PokeathlonCourseResults {
 // the course through this type where they use the parts it leaves as filler.
 typedef struct PokeathlonCourseLayout {
     u32 field_0[4];                               // 0x000
-    u8 filler_10[0x14C];                          // 0x010
+    u8 padding_10[0x14C];                         // 0x010
     u8 field_15C;                                 // 0x15C
-    u8 filler_15D[0x83];                          // 0x15D
+    u8 padding_15D[0x83];                         // 0x15D
     const PokeathlonCourseEvent *event;           // 0x1E0
     void *work;                                   // 0x1E4
     u8 eventIds[4];                               // 0x1E8: event of each round, as sent to the other players

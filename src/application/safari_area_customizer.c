@@ -55,7 +55,7 @@ typedef struct SafariAreaCustomizerSpriteRes {
     SpriteList *spriteList;            // 0x010
     SpriteList *externalSpriteList;    // 0x014
     G2dRenderer renderer;              // 0x018
-    u8 filler_140[4];                  // 0x140
+    u8 padding_140[4];                 // 0x140
     GF_2DGfxResMan *resMan[4];         // 0x144
     GF_2DGfxResObjList *resObjList[4]; // 0x154
 } SafariAreaCustomizerSpriteRes;       // size: 0x164
@@ -132,7 +132,7 @@ typedef struct SafariAreaCustomizer {
     String *menuStrings[4];                                   // 0x00324
     String *pageTemplate;                                     // 0x00334
     String *countTemplate;                                    // 0x00338
-    u8 filler_33C[4];                                         // 0x0033C
+    u8 padding_33C[4];                                        // 0x0033C
     BgConfig *bgConfig;                                       // 0x00340
     TouchscreenListMenuSpawner *listMenuSpawner;              // 0x00344
     SafariAreaCustomizerSpriteRes *spriteRes;                 // 0x00348
@@ -156,7 +156,7 @@ typedef struct SafariAreaCustomizer {
     void *pageScreenFile;                                     // 0x004D0
     NNSG2dScreenData *selectFrameScreen;                      // 0x004D4
     NNSG2dScreenData *pageScreen;                             // 0x004D8
-    u8 filler_4DC[0x18000];                                   // 0x004DC
+    u8 padding_4DC[0x18000];                                  // 0x004DC
     u8 textSpeed;                                             // 0x184DC
     u8 frame;                                                 // 0x184DD
     u8 page;                                                  // 0x184DE
