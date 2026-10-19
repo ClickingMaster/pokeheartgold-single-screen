@@ -11,8 +11,8 @@
 
 static void *LobbyRequestMap_LowerBound(void *c, void *key, void *node, void *best);
 
-int LobbyRequest_GetParam(void *p) {
-    return W(p, 8);
+u32 LobbyRequest_GetParam(LobbyRequest *request) {
+    return request->param;
 }
 
 void *LobbyU32Vector_Data(void *p) {

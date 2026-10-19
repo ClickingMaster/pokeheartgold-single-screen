@@ -7,69 +7,69 @@
 
 #include "lobby_chat_internal.h"
 
-void *LobbyRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
 void LobbyGetChannelModeRequest_Destroy(void) {
 }
 
-void *LobbyGetChannelModeRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyGetChannelModeRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
 void LobbyGetChannelKeysRequest_Destroy(void) {
 }
 
-void *LobbyGetChannelKeysRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyGetChannelKeysRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
 void LobbyEnterChannelRequest_Destroy(void) {
 }
 
-void *LobbyEnterChannelRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyEnterChannelRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
 void LobbyEnumUsersRequest_Destroy(void) {
 }
 
-void *LobbyEnumUsersRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyEnumUsersRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
 void LobbyEnumChannelsRequest_Destroy(void) {
 }
 
-void *LobbyEnumChannelsRequest_Delete(void *p) {
-    if (p != NULL) {
-        DWC_Free(0, p, 0);
+LobbyRequest *LobbyEnumChannelsRequest_Delete(LobbyRequest *request) {
+    if (request != NULL) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }
 
-void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val) {
+void LobbyRequestMap_Insert(InsertResult *out, Tree *t, LobbyRequest **val) {
     Node *pos;
     u8 insertLeft;
     u8 isLeftmost;
     Node *parent = LobbyRequestMap_FindInsertPos(t, val, &pos, &insertLeft, &isLeftmost);
-    if (pos == NULL || pos->key.obj->id < (*val)->id) {
+    if (pos == NULL || pos->key.request->id < (*val)->id) {
         out->node = LobbyRequestMap_InsertNode(t, parent, insertLeft, isLeftmost, val);
         out->inserted = ov45_02255228[1];
         return;

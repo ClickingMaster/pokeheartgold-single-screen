@@ -3,84 +3,35 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_chat_request.h"
+
 struct String {
     u32 w[3];
-};
-struct Handler;
-
-struct HandlerVtbl {
-    void *f0, *f4, *f8;
-    u32 (*getArg)(Handler *h);
-};
-
-extern "C" HandlerVtbl gLobbyRequestVtable;
-
-struct Base {
-    HandlerVtbl *vtbl;
-    u32 id;
-    u32 param;
-};
-
-struct Handler {
-    virtual void f0();
-    virtual void f4();
-    virtual void f8();
-    virtual u32 getArg();
-    u32 id;
-    u32 param;
-    void (*callback)(BOOL ok, u32 a, const char *str, u32 b, u32 c, u32 extra);
-};
-
-struct Node {
-    Node *l, *r, *p;
-    Handler *value;
-};
-
-struct It {
-    Node *n;
-
-    It() {
-    }
-
-    It(Node *q)
-        : n(q) {
-    }
-};
-
-struct Map {
-    u32 size;
-    Node header;
-
-    It end() {
-        return It(&header);
-    }
 };
 
 struct Manager {
     u8 pad[0x4];
     u32 state;
     u8 pad2[0x88];
-    Map map;
+    LobbyRequestMap requestMap;
 };
 
 extern "C" Manager *gLobbyChatManager;
 extern "C" void LobbyChat_StripChannelPrefixes(String *dst, Manager *mgr, u32 a, u32 b);
-extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
 extern "C" const char *LobbyU32Vector_Data(String *s);
-extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" void LobbyU32Vector_Destroy(String *s);
 
-inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &gLobbyRequestVtable;
+inline void KeyInit(LobbyRequest *k, u32 id) {
+    k->vtable = &gLobbyRequestVtable;
     k->id = id;
     k->param = 0;
 }
 
-inline It FindIt(Manager *m, u32 id) {
-    Base key;
+inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+    LobbyRequest key;
     KeyInit(&key, id);
-    Base *kp = &key;
-    return LobbyRequestMap_Find(&m->map, kp);
+    LobbyRequest *kp = &key;
+    return LobbyRequestMap_Find(&m->requestMap, kp);
 }
 
 extern "C" void LobbyChat_OnEnumChannels(void *chat, int result, u32 count, u32 channels, u32 topics, u32 userCounts, u32 id);
@@ -95,17 +46,17 @@ extern "C" void LobbyChat_OnEnumChannels(void *chat, int result, u32 count, u32 
     LobbyChat_StripChannelPrefixes(&str, gLobbyChatManager, count, channels);
     int sid = id;
     Manager *m = gLobbyChatManager;
-    It it = FindIt(m, sid);
-    Handler *h;
-    if (it.n == &m->map.header) {
+    LobbyRequestMapIterator it = FindIt(m, sid);
+    LobbyEnumChannelsRequest *h;
+    if (it.node == &m->requestMap.header) {
         h = 0;
     } else {
-        Node *nd = it.n;
-        h = nd->value;
+        LobbyRequestMapNode *nd = it.node;
+        h = static_cast<LobbyEnumChannelsRequest *>(nd->request);
     }
-    void (*cb)(BOOL, u32, const char *, u32, u32, u32) = h->callback;
-    cb(result == 1, count, LobbyU32Vector_Data(&str), topics, userCounts, h->getArg());
-    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
+    LobbyEnumChannelsCallback cb = h->callback;
+    cb(result == 1, count, LobbyU32Vector_Data(&str), topics, userCounts, h->getParam());
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->requestMap, sid);
     LobbyU32Vector_Destroy(&str);
 }
 

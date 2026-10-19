@@ -7,8 +7,8 @@
 
 #include "lobby_chat_internal.h"
 
-int LobbyRequest_GetId(u8 *request) {
-    return *(int *)(request + 4);
+u32 LobbyRequest_GetId(LobbyRequest *request) {
+    return request->id;
 }
 
 int LobbyChat_LeaveChannel(const char *channel) {

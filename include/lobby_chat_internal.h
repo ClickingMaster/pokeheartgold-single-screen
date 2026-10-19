@@ -8,6 +8,8 @@
 
 #include "dwc/net_common_internal.h"
 
+#include "lobby_chat_request.h"
+
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 
 typedef union Str {
@@ -67,11 +69,6 @@ void LobbyChannelMap_Destroy(void *p);
 void LobbyUserMap_Destroy(void *p);
 void LobbyString_Destroy(void *p);
 
-typedef struct Obj {
-    void *vt;
-    u32 id;
-} Obj;
-
 // What a channel reports to the code that entered it, with that code's parameter.
 typedef struct LobbyChannelCallbacks {
     void (*onUserJoined)(const char *channel, int userId, void *param);
@@ -107,7 +104,7 @@ typedef struct Node {
 
     union {
         int i;
-        Obj *obj;
+        LobbyRequest *request;
         Str str;
         NamedEntry channel;
     } key;
@@ -132,31 +129,12 @@ static inline BOOL StrLess(Str *a, Str *b) {
     return LobbyString_Compare(a, b) < 0;
 }
 
-typedef struct ObjKey {
-    void *vt;
-    u32 id;
-    u32 param;
-} ObjKey;
-
-typedef struct VObj VObj;
-
-typedef struct VTable {
-    void (*f0)(VObj *);
-    void (*dtor)(VObj *);
-    void *(*f8)(VObj *);
-} VTable;
-
-struct VObj {
-    VTable *vt;
-};
-
 typedef struct Vec {
     void *ptr;
     u32 size;
     u32 cap;
 } Vec;
 
-extern void *gLobbyRequestVtable;
 u32 current_time(void);
 void LobbyString_FormatN(char *buf, u32 size, const char *fmt, ...);
 extern char sFmt_N_UnderscoreIntUnderscoreUint[];
@@ -295,15 +273,15 @@ int LobbyChat_SendUserMessage(int userId, const char *message);
 int LobbyChat_SetChannelKey(const char *channel, int userId, const char *key, const char *value);
 int LobbyChat_SetChannelMode(const char *channel, int mode);
 int LobbyChat_Shutdown(void);
-void *LobbyEnterChannelRequest_Delete(void *p);
+LobbyRequest *LobbyEnterChannelRequest_Delete(LobbyRequest *request);
 void LobbyEnterChannelRequest_Destroy(void);
-void *LobbyEnumChannelsRequest_Delete(void *p);
+LobbyRequest *LobbyEnumChannelsRequest_Delete(LobbyRequest *request);
 void LobbyEnumChannelsRequest_Destroy(void);
-void *LobbyEnumUsersRequest_Delete(void *p);
+LobbyRequest *LobbyEnumUsersRequest_Delete(LobbyRequest *request);
 void LobbyEnumUsersRequest_Destroy(void);
-void *LobbyGetChannelKeysRequest_Delete(void *p);
+LobbyRequest *LobbyGetChannelKeysRequest_Delete(LobbyRequest *request);
 void LobbyGetChannelKeysRequest_Destroy(void);
-void *LobbyGetChannelModeRequest_Delete(void *p);
+LobbyRequest *LobbyGetChannelModeRequest_Delete(LobbyRequest *request);
 void LobbyGetChannelModeRequest_Destroy(void);
 BOOL LobbyMem_InstallOutOfMemoryHandler(LobbyChatManager *manager);
 void LobbyMem_OnOutOfMemory(void);
@@ -312,13 +290,13 @@ void LobbyMem_ReleaseReserve(void);
 BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id);
 void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos);
 void LobbyRequestMap_Find(Iter *out, Tree *t, void *key);
-Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLeft, u8 *isLeftmost);
-void LobbyRequestMap_Insert(InsertResult *out, Tree *t, Obj **val);
-Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 insertLeft, u8 isLeftmost, Obj **val);
-void *LobbyRequest_Delete(void *p);
+Node *LobbyRequestMap_FindInsertPos(Tree *t, LobbyRequest **key, Node **pos, u8 *insertLeft, u8 *isLeftmost);
+void LobbyRequestMap_Insert(InsertResult *out, Tree *t, LobbyRequest **val);
+Node *LobbyRequestMap_InsertNode(Tree *t, Node *parent, u8 insertLeft, u8 isLeftmost, LobbyRequest **val);
+LobbyRequest *LobbyRequest_Delete(LobbyRequest *request);
 void LobbyRequest_Destroy(void);
-int LobbyRequest_GetParam(void *request);
-int LobbyRequest_GetId(u8 *request);
+u32 LobbyRequest_GetParam(LobbyRequest *request);
+u32 LobbyRequest_GetId(LobbyRequest *request);
 void LobbyString_Assign(Str *dst, Str *src);
 void LobbyString_AssignCStr(Str *s, const char *cstr);
 int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);

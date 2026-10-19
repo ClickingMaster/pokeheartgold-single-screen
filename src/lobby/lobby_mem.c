@@ -39,7 +39,7 @@ int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n) {
 }
 
 // Find the parent for a new node with this key, the last node not greater than it, and which side it goes on.
-Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLeft, u8 *isLeftmost) {
+Node *LobbyRequestMap_FindInsertPos(Tree *t, LobbyRequest **key, Node **pos, u8 *insertLeft, u8 *isLeftmost) {
     Node *parent;
     Node *n;
     *pos = NULL;
@@ -49,7 +49,7 @@ Node *LobbyRequestMap_FindInsertPos(Tree *t, Obj **key, Node **pos, u8 *insertLe
     parent = &t->head;
     while (n != NULL) {
         parent = n;
-        if ((*key)->id < n->key.obj->id) {
+        if ((*key)->id < n->key.request->id) {
             n = n->left;
             *insertLeft = 1;
         } else {
@@ -124,12 +124,12 @@ void LobbyMem_ReleaseReserve(void) {
 }
 
 BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id) {
-    ObjKey key;
+    LobbyRequest key;
     Iter tmp;
-    ObjKey *pk;
+    LobbyRequest *pk;
     Iter it;
     Iter res;
-    key.vt = &gLobbyRequestVtable;
+    key.vtable = &gLobbyRequestVtable;
     key.id = id;
     key.param = 0;
     pk = &key;
@@ -138,8 +138,8 @@ BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id) {
     if (it.current == &t->head) {
         return FALSE;
     }
-    if (((Node *)it.current)->key.obj != NULL) {
-        ((VObj *)((Node *)it.current)->key.obj)->vt->dtor((VObj *)((Node *)it.current)->key.obj);
+    if (((Node *)it.current)->key.request != NULL) {
+        ((Node *)it.current)->key.request->vtable->destroyAndFree(((Node *)it.current)->key.request);
     }
     LobbyRequestMap_Erase(&res, t, tmp);
     return TRUE;
@@ -151,9 +151,9 @@ void LobbyRequestMap_DeleteAll(Tree *t) {
     Iter res;
     it.current = t->head.right;
     while (it.current != &t->head) {
-        VObj *o = (VObj *)((Node *)it.current)->key.obj;
-        if (o != NULL) {
-            o->vt->dtor(o);
+        LobbyRequest *request = ((Node *)it.current)->key.request;
+        if (request != NULL) {
+            request->vtable->destroyAndFree(request);
         }
         tmp.current = it.current;
         ov45_02236E58(&it);

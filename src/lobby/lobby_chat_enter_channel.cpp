@@ -2,6 +2,9 @@
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "lobby_chat_request.h"
+
 extern "C" unsigned long strlen(const char *);
 extern "C" void MI_CpuFill8(void *, u8, u32);
 union Str;
@@ -36,42 +39,19 @@ union Str {
         return !l.flag ? s.data : l.data;
     }
 };
-struct Handler;
 
-struct HandlerVtbl {
-    void *f0, *f4;
-    u32 (*getId)(Handler *);
-};
-
-struct Handler {
-    HandlerVtbl *vtbl;
-    u32 id;
-    u32 b;
-    u32 a;
-};
-
-extern "C" HandlerVtbl gLobbyRequestVtable, gLobbyEnterChannelRequestVtable;
 extern "C" const u32 gLobbyChatNextRequestId;
 
 struct Mgr {
     void *connection;
     u32 state;
     u8 pad[0x88];
-    u8 list[1];
+    LobbyRequestMap requestMap;
 };
 
 extern "C" Mgr *gLobbyChatManager;
 extern "C" void *LobbyMem_Alloc(u32);
 
-struct InsertResult {
-    void *it;
-    bool ok;
-
-    InsertResult() {
-    }
-};
-
-extern "C" void LobbyRequestMap_Insert(InsertResult *res, void *list, Handler **h);
 extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
 
 struct Arg3 {
@@ -113,10 +93,10 @@ inline Mgr *GetMgr() {
     return gLobbyChatManager;
 }
 
-inline void BaseInit(Handler *h, u32 param) {
-    h->vtbl = &gLobbyRequestVtable;
+inline void BaseInit(LobbyRequest *h, u32 param) {
+    h->vtable = &gLobbyRequestVtable;
     h->id = 0;
-    h->b = param;
+    h->param = param;
 }
 
 // The id counter is only changed here; it is declared const so that stores through the new handler cannot alias it.
@@ -126,21 +106,21 @@ inline u32 NextHandlerId() {
     return n;
 }
 
-inline Handler *NewHandler(u32 callback, u32 param) {
-    Handler *p = (Handler *)LobbyMem_Alloc(sizeof(Handler));
+inline LobbyCallbackRequest *NewHandler(u32 callback, u32 param) {
+    LobbyCallbackRequest *p = (LobbyCallbackRequest *)LobbyMem_Alloc(sizeof(LobbyCallbackRequest));
     if (p) {
         BaseInit(p, param);
         p->id = NextHandlerId();
-        p->vtbl = &gLobbyEnterChannelRequestVtable;
-        p->a = callback;
+        p->vtable = &gLobbyEnterChannelRequestVtable;
+        p->callback = callback;
     }
     return p;
 }
 
 struct IdTag {};
 
-inline u32 GetId(Handler *h, IdTag, IdTag) {
-    return h->vtbl->getId(h);
+inline u32 GetId(LobbyCallbackRequest *h, IdTag, IdTag) {
+    return h->vtable->getId(h);
 }
 
 extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 password, u32 limit, Arg3 *channelCallbacks, u32 callback, u32 param);
@@ -159,9 +139,9 @@ extern "C" int LobbyChat_EnterChannelAsync(const char *name, u32 password, u32 l
         return 4;
     }
     strlen(name);
-    InsertResult res;
-    Handler *h = NewHandler(callback, param);
-    LobbyRequestMap_Insert(&res, m->list, &h);
+    LobbyRequestMapInsertResult res;
+    LobbyCallbackRequest *h = NewHandler(callback, param);
+    LobbyRequestMap_Insert(&res, &m->requestMap, &h);
     u32 id = GetId(h, IdTag(), IdTag());
     {
         Str s(name);

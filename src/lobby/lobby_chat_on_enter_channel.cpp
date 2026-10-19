@@ -3,6 +3,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_chat_request.h"
+
 union Str {
     struct L {
         u32 flag : 1;
@@ -23,102 +25,31 @@ union Str {
         return !l.flag ? s.data : l.data;
     }
 };
-struct Handler;
-
-struct HandlerVtbl {
-    void *f0, *f4, *f8;
-    u32 (*getArg)(Handler *h);
-};
-
-extern "C" HandlerVtbl gLobbyRequestVtable;
-
-struct Base {
-    HandlerVtbl *vtbl;
-    u32 id;
-    u32 unk8;
-
-    Base() {
-    }
-
-    Base(u32 i)
-        : vtbl(&gLobbyRequestVtable)
-        , id(i)
-        , unk8(0) {
-    }
-};
-
-struct Handler {
-    virtual void f0();
-    virtual void f4();
-    virtual void f8();
-    virtual u32 getArg();
-    u32 id;
-    u32 unk8;
-    void (*callback)(BOOL ok, int error, const char *str, u32 arg);
-};
-
-struct Node {
-    Node *l, *r, *p;
-    Handler *value;
-};
-
-struct It {
-    Node *n;
-
-    It() {
-    }
-
-    It(Node *q)
-        : n(q) {
-    }
-};
-
-struct Map {
-    u32 size;
-    Node header;
-
-    It end() {
-        return It(&header);
-    }
-};
 
 struct Manager {
     void *net;
     u32 state;
     u8 pad2[0x88];
-    Map map;
+    LobbyRequestMap requestMap;
 };
 
 extern "C" Manager *gLobbyChatManager;
-extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
-extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
 extern "C" void LobbyChat_OnChannelModeChanged(void *self, const char *name, u32 x, u32 id);
 
-inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &gLobbyRequestVtable;
+inline void KeyInit(LobbyRequest *k, u32 id) {
+    k->vtable = &gLobbyRequestVtable;
     k->id = id;
-    k->unk8 = 0;
+    k->param = 0;
 }
 
-inline Handler *Lookup(Manager *m, const It &it) {
-    return it.n == m->map.end().n ? 0 : it.n->value;
-}
-
-inline It FindIt(Manager *m, u32 id) {
-    Base key;
+inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+    LobbyRequest key;
     KeyInit(&key, id);
-    Base *kp = &key;
-    return LobbyRequestMap_Find(&m->map, kp);
-}
-
-inline Handler *Find(Manager *m, u32 id) {
-    Base key;
-    KeyInit(&key, id);
-    Base *kp = &key;
-    return Lookup(m, LobbyRequestMap_Find(&m->map, kp));
+    LobbyRequest *kp = &key;
+    return LobbyRequestMap_Find(&m->requestMap, kp);
 }
 
 extern "C" void LobbyChatManager_GetNick(Str *dst, Manager *m);
@@ -177,18 +108,18 @@ extern "C" void LobbyChat_OnEnterChannel(void *chat, int ok, int error, const ch
     }
     int sid = id;
     Manager *m = gLobbyChatManager;
-    It it = FindIt(m, sid);
-    Handler *h = it.n == &m->map.header ? 0 : it.n->value;
+    LobbyRequestMapIterator it = FindIt(m, sid);
+    LobbyEnterChannelRequest *h = it.node == &m->requestMap.header ? 0 : static_cast<LobbyEnterChannelRequest *>(it.node->request);
     Str s;
     LobbyString_InitFromCStr(&s, name);
     Str t;
     LobbyChat_StripChannelPrefix(&t, gLobbyChatManager, &s);
     const char *str = t.c_str();
-    void (*cb)(BOOL, int, const char *, u32) = h->callback;
-    cb(0, error, str, h->getArg());
+    LobbyEnterChannelCallback cb = h->callback;
+    cb(0, error, str, h->getParam());
     LobbyString_Destroy(&t);
     LobbyString_Destroy(&s);
-    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->requestMap, sid);
 }
 
 #pragma pop

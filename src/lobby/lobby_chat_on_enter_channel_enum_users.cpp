@@ -3,6 +3,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+#include "lobby_chat_request.h"
+
 union String {
     struct L {
         u32 flag : 1;
@@ -26,76 +28,29 @@ union String {
 
 extern "C" void LobbyString_InitFromCStr(String *s, const char *t);
 extern "C" void LobbyString_Destroy(String *s);
-struct Handler;
-
-struct HandlerVtbl {
-    void *f0, *f4, *f8;
-    u32 (*getArg)(Handler *h);
-};
-
-struct Base {
-    HandlerVtbl *vtbl;
-    u32 id;
-    u32 param;
-};
-
-struct Handler {
-    virtual void f0();
-    virtual void f4();
-    virtual void f8();
-    virtual u32 getArg();
-    u32 id;
-    u32 param;
-    void (*callback)(BOOL ok, u32 zero, const char *str, u32 extra);
-};
-
-extern "C" HandlerVtbl gLobbyRequestVtable;
-
-struct Node {
-    Node *l, *r, *p;
-    Handler *value;
-};
-
-struct It {
-    Node *n;
-
-    It() {
-    }
-
-    It(Node *q)
-        : n(q) {
-    }
-};
-
-struct Map {
-    u32 size;
-    Node header;
-};
 
 struct Manager {
     u8 pad[0x4];
     u32 state;
     u8 pad2[0x88];
-    Map map;
+    LobbyRequestMap requestMap;
 };
 
 extern "C" Manager *gLobbyChatManager;
-extern "C" It LobbyRequestMap_Find(Map *map, Base *const &key);
-extern "C" void LobbyRequestMap_DeleteKey(Map *map, u32 id);
 extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
 extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
 
-inline void KeyInit(Base *k, u32 id) {
-    k->vtbl = &gLobbyRequestVtable;
+inline void KeyInit(LobbyRequest *k, u32 id) {
+    k->vtable = &gLobbyRequestVtable;
     k->id = id;
     k->param = 0;
 }
 
-inline It FindIt(Manager *m, u32 id) {
-    Base key;
+inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+    LobbyRequest key;
     KeyInit(&key, id);
-    Base *kp = &key;
-    return LobbyRequestMap_Find(&m->map, kp);
+    LobbyRequest *kp = &key;
+    return LobbyRequestMap_Find(&m->requestMap, kp);
 }
 
 struct Tag {};
@@ -158,24 +113,24 @@ extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *chat, int result, const 
     }
     int sid = id;
     Manager *m = gLobbyChatManager;
-    It it = FindIt(m, sid);
-    Handler *h;
-    if (it.n == &m->map.header) {
+    LobbyRequestMapIterator it = FindIt(m, sid);
+    LobbyEnterChannelRequest *h;
+    if (it.node == &m->requestMap.header) {
         h = 0;
     } else {
-        Node *nd = it.n;
-        h = nd->value;
+        LobbyRequestMapNode *nd = it.node;
+        h = static_cast<LobbyEnterChannelRequest *>(nd->request);
     }
     String t;
     LobbyString_InitFromCStr(&t, name);
     String k;
     LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
-    void (*cb)(BOOL, u32, const char *, u32) = h->callback;
+    LobbyEnterChannelCallback cb = h->callback;
     const char *str = k.c_str();
-    cb(result == 1, 0, str, h->getArg());
+    cb(result == 1, 0, str, h->getParam());
     LobbyString_Destroy(&k);
     LobbyString_Destroy(&t);
-    LobbyRequestMap_DeleteKey(&gLobbyChatManager->map, sid);
+    LobbyRequestMap_DeleteKey(&gLobbyChatManager->requestMap, sid);
     if (result != 0) {
         return;
     }
