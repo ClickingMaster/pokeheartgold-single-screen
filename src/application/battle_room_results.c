@@ -848,10 +848,9 @@ static void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
 
 static void BattleRoomResults_FreeLeaderNames(BattleRoomResults *results) {
     int i;
-    BattleRoomResults *shifted = results; // shifted by i leaders: leaders[0] through it is leaders[i]
 
-    for (i = 0; i < BATTLE_ROOM_RESULTS_NUM_LEADERS; i++, shifted = (BattleRoomResults *)((u8 *)shifted + sizeof(BattleRoomLeader))) {
-        String_Delete(shifted->leaders[0].name);
+    for (i = 0; i < BATTLE_ROOM_RESULTS_NUM_LEADERS; i++) {
+        String_Delete(results->leaders[i].name);
     }
 }
 
@@ -920,7 +919,7 @@ static void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
 // Shows the selected leader's name, home country and region and greeting in the free set of info windows.
 static void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int leader) {
     u32 windowIndex;
-    u8 *windows;
+    Window *windows;
     u16 i;
 
     if (results->infoWindowSet == 0) {
@@ -928,44 +927,37 @@ static void BattleRoomResults_PrintLeaderInfo(BattleRoomResults *results, int le
     } else {
         windowIndex = 8;
     }
-    windows = (u8 *)results->windows;
-    windows = windows + windowIndex * sizeof(Window);
+    windows = &results->windows[windowIndex];
     for (i = 0; i < 3; i++) {
-        FillWindowPixelBuffer((Window *)(windows + i * sizeof(Window)), 0);
+        FillWindowPixelBuffer(&windows[i], 0);
     }
     if ((u32)leader < BATTLE_ROOM_RESULTS_NUM_LEADERS) {
-        u32 offset = leader * sizeof(BattleRoomLeader);
-        u8 *genders = (u8 *)results + offsetof(BattleRoomResults, leaders[0].gender);
-        u8 *countries;
-        u8 *greetings;
         String *string;
 
-        BufferString(results->msgFormat, 0, *(String **)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].name) + offset)), genders[offset], 1, 2);
-        if (genders[offset] == 0) {
+        BufferString(results->msgFormat, 0, results->leaders[leader].name, results->leaders[leader].gender, 1, 2);
+        if (results->leaders[leader].gender == 0) {
             BattleRoomResults_PrintFormattedMessage(results, windowIndex, msg_0028_00022, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         } else {
             BattleRoomResults_PrintFormattedMessage(results, windowIndex, msg_0028_00023, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
         BattleRoomResults_PrintMessage(results, windowIndex + 1, msg_0028_00028, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-        countries = (u8 *)results + offsetof(BattleRoomResults, leaders[0].country);
-        if (countries[offset] == 0) {
+        if (results->leaders[leader].country == 0) {
             BattleRoomResults_PrintMessage(results, windowIndex + 1, msg_0028_00031, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         } else {
-            BufferCountryName(results->msgFormat, 0, countries[offset]);
+            BufferCountryName(results->msgFormat, 0, results->leaders[leader].country);
             BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, msg_0028_00029, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
-        if (*(u8 *)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].region) + offset)) != 0) {
-            BufferCityName(results->msgFormat, 0, countries[offset], *(u8 *)((u8 *)results + (offsetof(BattleRoomResults, leaders[0].region) + offset)));
+        if (results->leaders[leader].region != 0) {
+            BufferCityName(results->msgFormat, 0, results->leaders[leader].country, results->leaders[leader].region);
             BattleRoomResults_PrintFormattedMessage(results, windowIndex + 1, msg_0028_00030, 0, 32, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         }
         BattleRoomResults_PrintMessage(results, windowIndex + 2, msg_0028_00032, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-        greetings = (u8 *)results + offsetof(BattleRoomResults, leaders[0].greeting);
-        string = MailMsg_GetExpandedString((MailMessage *)(greetings + offset), results->heapID);
-        BattleRoomResults_PrintString((Window *)(windows + 2 * sizeof(Window)), string, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+        string = MailMsg_GetExpandedString(&results->leaders[leader].greeting, results->heapID);
+        BattleRoomResults_PrintString(&windows[2], string, 0, 16, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
         String_Delete(string);
     }
     for (i = 0; i < 3; i++) {
-        ScheduleWindowCopyToVram((Window *)(windows + i * sizeof(Window)));
+        ScheduleWindowCopyToVram(&windows[i]);
     }
     results->infoWindowSet ^= 1;
 }
@@ -1007,13 +999,11 @@ static void BattleRoomResults_InitSprites(BattleRoomResults *results) {
 
 static void BattleRoomResults_FreeSprites(BattleRoomResults *results) {
     u32 i;
-    BattleRoomResults *shifted = results; // shifted by i sprites: sprites[0] through it is sprites[i]
 
-    for (i = 0; i < 4; i++, shifted = (BattleRoomResults *)((u8 *)shifted + sizeof(ManagedSprite *))) {
-        ManagedSprite *sprite = shifted->sprites[0];
-        if (sprite) {
-            Sprite_DeleteAndFreeResources(sprite);
-            shifted->sprites[0] = NULL;
+    for (i = 0; i < 4; i++) {
+        if (results->sprites[i]) {
+            Sprite_DeleteAndFreeResources(results->sprites[i]);
+            results->sprites[i] = NULL;
         }
     }
     SpriteSystem_FreeResourcesAndManager(results->spriteSystem, results->spriteManager);
@@ -1021,11 +1011,10 @@ static void BattleRoomResults_FreeSprites(BattleRoomResults *results) {
 }
 
 static void BattleRoomResults_UpdateSprites(BattleRoomResults *results) {
-    u32 i = 0;
-    BattleRoomResults *shifted = results; // shifted by i sprites: sprites[0] through it is sprites[i]
+    u32 i;
 
-    for (; i < 4; i++, shifted = (BattleRoomResults *)((u8 *)shifted + sizeof(ManagedSprite *))) {
-        ManagedSprite_TickFrame(shifted->sprites[0]);
+    for (i = 0; i < 4; i++) {
+        ManagedSprite_TickFrame(results->sprites[i]);
     }
     SpriteSystem_DrawSprites(results->spriteManager);
 }

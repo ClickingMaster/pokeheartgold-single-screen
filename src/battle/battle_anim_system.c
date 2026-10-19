@@ -2018,7 +2018,7 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         SetBgPriority(GF_BG_LYR_MAIN_2, (u8)priority);
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_ON);
         work->step++;
-        goto running;
+        break;
     case BG_BLEND_IN_STEP_LOAD_GRAPHICS:
         SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_CHAR_BASE, GX_BG_CHARBASE_0x0c000);
         if (BattleAnimSystem_GetField08(work->system) != 1) {
@@ -2048,13 +2048,12 @@ BOOL BattleAnimBackground_BlendIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         }
         reg_G2_BLDALPHA = work->evb | (work->eva << 8);
         if (work->step == BG_BLEND_IN_STEP_BLEND) {
-            goto running;
+            break;
         }
         return FALSE;
     default:
         return FALSE;
     }
-running:
     return TRUE;
 }
 
@@ -2105,7 +2104,7 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
             work->step++;
         }
         reg_G2_BLDALPHA = work->eva | (work->evb << 8);
-        goto running;
+        break;
     case BG_BLEND_OUT_STEP_RESTORE_BATTLE_BG:
         BattleAnimBackground_StopMarkedEffects(work);
         BgSetPosTextAndCommit(work->system->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
@@ -2121,17 +2120,16 @@ BOOL BattleAnimBackground_BlendOut(SysTask *task, BattleAnimBgSwitchWork *work) 
         }
         GfGfxLoader_LoadScrnData(work->system->battleBg.narcId, work->system->battleBg.screenMember, work->system->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, work->system->heapId);
         work->step++;
-        goto running;
+        break;
     case BG_BLEND_OUT_STEP_RESET_LAYER:
         BattleSystem_SetDefaultBlend();
         ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
         BattleAnimBackground_ResetLayer(work->system, GF_BG_LYR_MAIN_2);
         work->step++;
-        goto running;
+        break;
     default:
         return FALSE;
     }
-running:
     return TRUE;
 }
 
@@ -2154,7 +2152,7 @@ BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         // fallthrough
     case BG_FADE_IN_STEP_LOAD_GRAPHICS:
         if (PaletteData_GetSelectedBuffersBitmask(work->system->paletteData) != 0) {
-            goto running;
+            break;
         }
         SetBgControlParam(work->system->bgConfig, GF_BG_LYR_MAIN_3, GF_BG_CNT_SET_COLOR_MODE, GX_BG_COLORMODE_16);
         BattleAnimBackground_LoadGraphics(work, work->system, GF_BG_LYR_MAIN_3, work->bgId);
@@ -2166,14 +2164,13 @@ BOOL BattleAnimBackground_FadeIn(SysTask *task, BattleAnimBgSwitchWork *work) {
         BattleAnimBackground_StartEffects(work);
         work->system->bgSwitchState = 2;
         work->step++;
-        goto running;
+        break;
     default:
         if (PaletteData_GetSelectedBuffersBitmask(work->system->paletteData) == 0) {
             return FALSE;
         }
-        goto running;
+        break;
     }
-running:
     return TRUE;
 }
 

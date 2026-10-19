@@ -97,10 +97,6 @@ typedef struct BattleAnimEmitterAxisEntry {
     int v[3];
 } BattleAnimEmitterAxisEntry;
 
-typedef struct BattleAnimEmitterAxis {
-    u16 x, y, z;
-} BattleAnimEmitterAxis;
-
 typedef struct BattleAnimEmitterFlagMasks {
     int masks[15];
 } BattleAnimEmitterFlagMasks;
@@ -369,13 +365,13 @@ void BattleAnimEmitter_SetMagnetTarget(BattleAnimSystem *system, SPLEmitter *emi
     ParticleEmitter_SetMagnetPos(emitter, &pos);
 }
 
-static inline void SetAxis(volatile BattleAnimEmitterAxis *axis, VecFx32 *src) {
+static inline void SetAxis(VecFx16 *axis, VecFx32 *src) {
     axis->x = src->x;
     axis->y = src->y;
     axis->z = src->z;
 }
 
-static inline void SetAxisNegated(volatile BattleAnimEmitterAxis *axis, VecFx32 *src) {
+static inline void SetAxisNegated(VecFx16 *axis, VecFx32 *src) {
     axis->x = -src->x;
     axis->y = -src->y;
     axis->z = -src->z;
@@ -387,7 +383,7 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
     VecFx32 final, axis0, axis1, axis3, axis2, axis6, axis4, axis5;
     volatile VecFx32 posArg;
     VecFx32 pos;
-    volatile BattleAnimEmitterAxis axis;
+    VecFx16 axis;
     int typeA, typeB;
     s8 sign;
 
@@ -475,9 +471,7 @@ void BattleAnimEmitter_SetTransformFromScript(BattleAnimSystem *system, SPLEmitt
         BattleAnimEmitter_SetMagnetTarget(system, emitter, battlerA, battlerB, kind, sign, &final);
         break;
     }
-    emitter->axis.x = axis.x;
-    emitter->axis.y = axis.y;
-    emitter->axis.z = axis.z;
+    SPL_SetEmitterAxis(emitter, &axis);
 }
 
 void BattleAnimEmitter_SetTransformAttackerToDefender(SPLEmitter *emitter, int mode, int kind) {
@@ -754,7 +748,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
     BattleAnimEmitterAxisRows table;
     BattleAnimEmitterAxisRow a, b, c, d, e, f, g, base;
     BattleAnimEmitterAxisPositions positions;
-    volatile VecFx16 axis;
+    VecFx16 axis;
     int typeA = BattleAnimUtil_GetBattlerType(config->system, config->battlerA);
     int typeB = BattleAnimUtil_GetBattlerType(config->system, config->battlerB);
     int i, type;
@@ -977,9 +971,7 @@ void BattleAnimEmitter_ApplyConfiguredAxis(SPLEmitter *emitter, BattleAnimEmitte
         SET_AXIS(positions.pos[type][0], positions.pos[type][1], 0);
         break;
     }
-    emitter->axis.x = ((volatile BattleAnimEmitterAxis *)&axis)->x;
-    emitter->axis.y = ((volatile BattleAnimEmitterAxis *)&axis)->y;
-    emitter->axis.z = ((volatile BattleAnimEmitterAxis *)&axis)->z;
+    SPL_SetEmitterAxis(emitter, &axis);
 }
 
 #undef SET_AXIS

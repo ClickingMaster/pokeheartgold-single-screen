@@ -1212,7 +1212,6 @@ static BOOL FrontierTransition_RowScroll1(FrontierTransitionWork *work) {
             FrontierScanlineRegs initial;
             int i;
             int start;
-            int offset;
             MI_CpuFill8(&initial, 0, sizeof(initial));
             work->finished = FALSE;
             work->rows = Heap_Alloc(HEAP_ID_101, sizeof(FrontierRowScroll));
@@ -1220,19 +1219,17 @@ static BOOL FrontierTransition_RowScroll1(FrontierTransitionWork *work) {
             work->rows->dma = FrontierHBlankDma_New((void *)REG_BG2PA_ADDR, &initial, HEAP_ID_101);
             i = 0;
             start = 0;
-            offset = 0;
             for (; i < 96; i++) {
                 int distance;
-                *(s16 *)((u8 *)work->rows + offset) = start;
-                *(s16 *)((u8 *)work->rows + offset + 2) = *(s16 *)((u8 *)work->rows + offset) + 2;
+                work->rows->lines[i].start = start;
+                work->rows->lines[i].end = work->rows->lines[i].start + 2;
                 distance = 49 - i;
-                *(s16 *)((u8 *)work->rows + offset + 4) = distance % 8;
-                *(s16 *)((u8 *)work->rows + offset + 6) = distance / 4;
-                *(s16 *)((u8 *)work->rows + offset + 8) = 0;
-                *(s16 *)((u8 *)work->rows + offset + 10) = 0;
-                *(u32 *)((u8 *)work->rows + offset + 12) = FrontierScript_PackHalfWords(0, 0);
+                work->rows->lines[i].speedX = distance % 8;
+                work->rows->lines[i].speedY = distance / 4;
+                work->rows->lines[i].x = 0;
+                work->rows->lines[i].y = 0;
+                work->rows->lines[i].unk_0C = FrontierScript_PackHalfWords(0, 0);
                 start += 2;
-                offset += sizeof(FrontierRowScrollLine);
             }
             StartBrightnessTransition(40, -16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ), 1);
             SysTask_CreateOnMainQueue((SysTaskFunc)FrontierTransition_RowScrollTask, work, 0x1000);
@@ -1265,7 +1262,6 @@ static BOOL FrontierTransition_RowScroll2(FrontierTransitionWork *work) {
             FrontierScanlineRegs initial;
             int i;
             int start;
-            int offset;
             MI_CpuFill8(&initial, 0, sizeof(initial));
             work->finished = FALSE;
             work->rows = Heap_Alloc(HEAP_ID_101, sizeof(FrontierRowScroll));
@@ -1273,28 +1269,26 @@ static BOOL FrontierTransition_RowScroll2(FrontierTransitionWork *work) {
             work->rows->dma = FrontierHBlankDma_New((void *)REG_BG2PA_ADDR, &initial, HEAP_ID_101);
             i = 0;
             start = 0;
-            offset = 0;
             for (; i < 96; i++) {
                 int distance;
                 int speed;
-                *(s16 *)((u8 *)work->rows + offset) = start;
-                *(s16 *)((u8 *)work->rows + offset + 2) = *(s16 *)((u8 *)work->rows + offset) + 2;
+                work->rows->lines[i].start = start;
+                work->rows->lines[i].end = work->rows->lines[i].start + 2;
                 distance = 48 - i;
                 speed = distance / 8 + 1;
-                *(s16 *)((u8 *)work->rows + offset + 4) = speed;
+                work->rows->lines[i].speedX = speed;
                 if (i % 2 != 0) {
-                    *(s16 *)((u8 *)work->rows + offset + 4) *= -1;
+                    work->rows->lines[i].speedX *= -1;
                 }
                 if (i < 48) {
-                    *(s16 *)((u8 *)work->rows + offset + 6) = i;
+                    work->rows->lines[i].speedY = i;
                 } else {
-                    *(s16 *)((u8 *)work->rows + offset + 6) = 96 - i;
+                    work->rows->lines[i].speedY = 96 - i;
                 }
-                *(s16 *)((u8 *)work->rows + offset + 8) = 0;
-                *(s16 *)((u8 *)work->rows + offset + 10) = 0;
-                *(u32 *)((u8 *)work->rows + offset + 12) = FrontierScript_PackHalfWords(0, 0);
+                work->rows->lines[i].x = 0;
+                work->rows->lines[i].y = 0;
+                work->rows->lines[i].unk_0C = FrontierScript_PackHalfWords(0, 0);
                 start += 2;
-                offset += sizeof(FrontierRowScrollLine);
             }
             StartBrightnessTransition(40, -16, 0, (GXBlendPlaneMask)(GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ), 1);
             SysTask_CreateOnMainQueue((SysTaskFunc)FrontierTransition_RowScrollTask, work, 0x1000);

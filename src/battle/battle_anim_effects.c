@@ -1745,19 +1745,12 @@ void BattleAnimFunc_WaddlePic(BattleAnimSystem *system) {
         work->y = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     }
     Pokepic_SetAttr(work->pokepic, POKEPIC_YPIVOT, 50);
-    {
-        BOOL flip;
-        switch (direction) {
-        case 1:
-            flip = FALSE;
-            break;
-        default:
-            flip = TRUE;
-            break;
-        }
-        work->direction = flip;
+    if (direction == 1) {
+        work->direction = FALSE;
+    } else {
+        work->direction = TRUE;
     }
-    BattleAnimTask_WaddlePicStartStep(work, *(volatile BOOL *)&work->direction);
+    BattleAnimTask_WaddlePicStartStep(work, work->direction);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_WaddlePic, work);
 }
 
@@ -2738,19 +2731,13 @@ void BattleAnimSpriteFunc_ScaleSpritesOverDefender(BattleAnimSystem *system, Spr
 }
 
 void BattleAnimTask_SpritesOrbitAttackerBobbingInit(BattleAnimOrbitSpritesWork *work, int direction) {
-    int i = 0;
-    BattleAnimSinMotion *path = work->paths;
-    u32 angle = i;
+    int i;
 
-    do {
-        BattleAnimUtil_InitSinMotion(path, 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
-        work->paths[0].angleX += angle;
-        i++;
-        work->paths[0].stepX *= direction;
-        path++;
-        work = (BattleAnimOrbitSpritesWork *)((u8 *)work + sizeof(BattleAnimSinMotion));
-        angle += 0x2AAA;
-    } while (i < 6);
+    for (i = 0; i < 6; i++) {
+        BattleAnimUtil_InitSinMotion(&work->paths[i], 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
+        work->paths[i].angleX += i * 0x2AAA;
+        work->paths[i].stepX *= direction;
+    }
 }
 
 void BattleAnimTask_SpritesOrbitAttackerBobbingUpdate(BattleAnimOrbitSpritesWork *work) {
@@ -3700,19 +3687,13 @@ void BattleAnimTask_SpriteRowSequence(SysTask *task, void *data) {
 }
 
 void BattleAnimTask_SpritesOrbitAttackerInit(BattleAnimOrbitSpritesWork *work, int direction) {
-    int i = 0;
-    BattleAnimSinMotion *path = work->paths;
-    u32 angle = i;
+    int i;
 
-    do {
-        BattleAnimUtil_InitSinMotion(path, 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
-        work->paths[0].angleX += angle;
-        i++;
-        work->paths[0].stepX *= direction;
-        path++;
-        work = (BattleAnimOrbitSpritesWork *)((u8 *)work + sizeof(BattleAnimSinMotion));
-        angle += 0x2AAA;
-    } while (i < 6);
+    for (i = 0; i < 6; i++) {
+        BattleAnimUtil_InitSinMotion(&work->paths[i], 0, 0x7FFF, 0, 0, FX32_CONST(50), 0, 48);
+        work->paths[i].angleX += i * 0x2AAA;
+        work->paths[i].stepX *= direction;
+    }
 }
 
 void BattleAnimTask_SpritesOrbitAttackerUpdate(BattleAnimOrbitSpritesWork *work) {

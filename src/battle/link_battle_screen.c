@@ -1826,38 +1826,29 @@ static void LinkBattleScreen_RevealPanelColumns(LinkBattleScreen *screen, u8 wid
 static void LinkBattleScreen_ReadPartyMonInfo(LinkBattleScreen *screen, Party *party, int firstIndex) {
     u16 count = Party_GetCount(party);
     u16 i;
-    LinkBattleScreen *base;
-    i = 0;
-    // record i of this party is reached as monInfo[0] of the screen pointer moved by firstIndex + i records
-    base = (LinkBattleScreen *)((u8 *)screen + firstIndex * sizeof(LinkBattleScreenMonInfo));
-    for (; i < 3; i++) {
-        LinkBattleScreen *record;
+
+    for (i = 0; i < 3; i++) {
         if (count <= i) {
-            u32 iconNaix = GetMonIconNaixEx(SPECIES_NONE, FALSE, 0);
-            record = (LinkBattleScreen *)((u8 *)base + i * sizeof(LinkBattleScreenMonInfo));
-            record->monInfo[0].iconNaix = iconNaix;
+            screen->monInfo[firstIndex + i].iconNaix = GetMonIconNaixEx(SPECIES_NONE, FALSE, 0);
         } else {
             Pokemon *mon = Party_GetMonByIndex(party, i);
-            LinkBattleScreen *details;
-            record = (LinkBattleScreen *)((u8 *)base + i * sizeof(LinkBattleScreenMonInfo));
-            record->monInfo[0].iconNaix = Pokemon_GetIconNaix(mon);
-            record->monInfo[0].species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-            if (record->monInfo[0].species != SPECIES_NONE) {
-                details = (LinkBattleScreen *)((u8 *)base + i * (int)sizeof(LinkBattleScreenMonInfo));
-                details->monInfo[0].isEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
-                details->monInfo[0].hp = GetMonData(mon, MON_DATA_HP, NULL);
-                details->monInfo[0].maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-                details->monInfo[0].level = GetMonData(mon, MON_DATA_LEVEL, NULL);
-                details->monInfo[0].heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-                details->monInfo[0].ballCapsule = GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL);
-                details->monInfo[0].form = GetMonData(mon, MON_DATA_FORM, NULL);
+            screen->monInfo[firstIndex + i].iconNaix = Pokemon_GetIconNaix(mon);
+            screen->monInfo[firstIndex + i].species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+            if (screen->monInfo[firstIndex + i].species != SPECIES_NONE) {
+                screen->monInfo[firstIndex + i].isEgg = GetMonData(mon, MON_DATA_IS_EGG, NULL);
+                screen->monInfo[firstIndex + i].hp = GetMonData(mon, MON_DATA_HP, NULL);
+                screen->monInfo[firstIndex + i].maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
+                screen->monInfo[firstIndex + i].level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+                screen->monInfo[firstIndex + i].heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+                screen->monInfo[firstIndex + i].ballCapsule = GetMonData(mon, MON_DATA_BALL_CAPSULE_ID, NULL);
+                screen->monInfo[firstIndex + i].form = GetMonData(mon, MON_DATA_FORM, NULL);
                 if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == TRUE) {
-                    record->monInfo[0].hideGender = 0;
+                    screen->monInfo[firstIndex + i].hideGender = 0;
                 } else {
-                    record->monInfo[0].hideGender = 1;
+                    screen->monInfo[firstIndex + i].hideGender = 1;
                 }
-                details->monInfo[0].gender = GetMonGender(mon);
-                details->monInfo[0].statusIcon = (u8)Pokemon_GetStatusIconId(mon);
+                screen->monInfo[firstIndex + i].gender = GetMonGender(mon);
+                screen->monInfo[firstIndex + i].statusIcon = (u8)Pokemon_GetStatusIconId(mon);
             }
         }
     }

@@ -215,28 +215,24 @@ static void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
         u16 setIds[6];
         FrontierMon mons[6];
     } opponents;
-    int i, j, k;
-    u8 *dst, *frontierMon;
+    int i, j;
+    u16 *setId;
     Pokemon *mon;
 
     BattleCastleData_RestoreParty(data);
-    dst = (u8 *)data;
-    for (i = 0; i < 14; i++, dst += 2) {
-        ((BattleCastleData *)dst)->trainerIds[0] = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_TRAINER_IDS, (u8)i, 0, 0);
+    for (i = 0; i < 14; i++) {
+        data->trainerIds[i] = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_TRAINER_IDS, (u8)i, 0, 0);
     }
     j = 0;
-    u16 *setId = opponents.setIds;
-    dst = (u8 *)data;
-    for (; j < 4; j++, setId++, dst += 2) {
+    setId = opponents.setIds;
+    for (; j < 4; setId++, j++) {
         *setId = CastleChallenge_GetField(data->challenge, CASTLE_CHALLENGE_SET_IDS, (u8)j, 0, 0);
-        ((BattleCastleData *)dst)->opponentSetIds[0] = *setId;
+        data->opponentSetIds[j] = *setId;
     }
     FrontierMon_GenerateList(opponents.mons, opponents.setIds, opponents.ivs, NULL, opponents.personalities, 4, HEAP_ID_FIELD2, 205);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
-    k = 0;
-    frontierMon = (u8 *)opponents.mons;
-    for (; k < 4; k++, frontierMon += sizeof(FrontierMon)) {
-        FrontierMon_ToPokemon(frontierMon, mon, BattleCastle_GetMonLevel(data));
+    for (i = 0; i < 4; i++) {
+        FrontierMon_ToPokemon(&opponents.mons[i], mon, BattleCastle_GetMonLevel(data));
         BattleCastle_AddMonToParty(data, data->opponentParty, mon);
     }
     Heap_Free(mon);
@@ -449,11 +445,10 @@ void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
     end = count + start;
     for (; i < end; i++) {
         Pokemon *mon = Party_GetMonByIndex(data->playerParty, i);
-        u8 *dst = (u8 *)data + (i - start) * sizeof(data->startPP[0]);
-        ((BattleCastleData *)dst)->startPP[0][0] = GetMonData(mon, MON_DATA_MOVE1_PP, NULL);
-        ((BattleCastleData *)dst)->startPP[0][1] = GetMonData(mon, MON_DATA_MOVE2_PP, NULL);
-        ((BattleCastleData *)dst)->startPP[0][2] = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
-        ((BattleCastleData *)dst)->startPP[0][3] = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
+        data->startPP[i - start][0] = GetMonData(mon, MON_DATA_MOVE1_PP, NULL);
+        data->startPP[i - start][1] = GetMonData(mon, MON_DATA_MOVE2_PP, NULL);
+        data->startPP[i - start][2] = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
+        data->startPP[i - start][3] = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
     }
     BattleCastle_ReviveParty(data->playerParty);
     for (i = 0; i < 4; i++) {

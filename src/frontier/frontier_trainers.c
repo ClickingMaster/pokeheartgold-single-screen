@@ -386,29 +386,17 @@ void FrontierTrainer_LoadRecord(FrontierTrainerRecord *record, int trainerId, en
 }
 
 void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerRecord *record, int unused, int battler) {
-    FrontierTrainerRecord *source = record;
-    u8 *setup = (u8 *)battleSetup;
-    int offset;
-    u8 *nameDest;
-    u16 *nameSource;
-    *(u32 *)(setup + 0x18 + battler * 4) = source->id;
-    offset = battler;
-    offset *= sizeof(Trainer);
-    (setup + offset)[0x29] = source->trainerClass;
-    nameDest = setup;
-    nameDest += 0x3C;
-    nameSource = (u16 *)source;
-    nameDest += offset;
-    nameSource += 4;
-    CopyU16StringArray((u16 *)nameDest, nameSource);
-    *(u16 *)(setup + offset + 0x4C) = source->messages[0];
-    *(u16 *)(setup + offset + 0x4E) = source->messages[1];
-    *(u16 *)(setup + offset + 0x50) = source->messages[2];
-    *(u16 *)(setup + offset + 0x52) = source->messages[3];
-    *(u16 *)(setup + offset + 0x54) = source->messages[4];
-    *(u16 *)(setup + offset + 0x56) = source->messages[5];
-    *(u16 *)(setup + offset + 0x58) = source->messages[6];
-    *(u16 *)(setup + offset + 0x5A) = source->messages[7];
+    battleSetup->trainerId[battler] = record->id;
+    battleSetup->trainer[battler].data.trainerClass = record->trainerClass;
+    CopyU16StringArray(battleSetup->trainer[battler].name, record->name);
+    battleSetup->trainer[battler].winMessage.msg_bank = record->messages[0];
+    battleSetup->trainer[battler].winMessage.msg_no = record->messages[1];
+    battleSetup->trainer[battler].winMessage.fields[0] = record->messages[2];
+    battleSetup->trainer[battler].winMessage.fields[1] = record->messages[3];
+    battleSetup->trainer[battler].loseMessage.msg_bank = record->messages[4];
+    battleSetup->trainer[battler].loseMessage.msg_no = record->messages[5];
+    battleSetup->trainer[battler].loseMessage.fields[0] = record->messages[6];
+    battleSetup->trainer[battler].loseMessage.fields[1] = record->messages[7];
 }
 
 u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemIndex, u8 iv, int pid, enum HeapID heapID, NarcId narcId) {

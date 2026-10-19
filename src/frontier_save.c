@@ -108,8 +108,7 @@ void FrontierSave_DeleteRow(FrontierSave *frontier, int row) {
             FrontierSave_SetStat(frontier, i, row, FrontierSave_GetStat(frontier, i, row + 1));
         }
     }
-    frontier = (FrontierSave *)frontier->rowStats;
-    MI_CpuFill8((u8 *)frontier + (31 << 6), 0, 64);
+    MI_CpuFill8((u8 *)frontier->rowStats + 31 * sizeof(frontier->rowStats[0]), 0, sizeof(frontier->rowStats[0]));
 }
 
 void FrontierSave_ClearRow(FrontierSave *frontier, int row) {

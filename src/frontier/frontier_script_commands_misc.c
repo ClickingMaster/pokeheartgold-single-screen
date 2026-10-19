@@ -2,6 +2,7 @@
 #include "constants/sndseq.h"
 
 #include "frontier_script_commands_misc_internal.h"
+#include "scrcmd_9.h"
 
 BOOL FrtCmd_StopBGM(FrontierScriptContext *ctx) {
     FrontierScriptContext_ReadHalfWord(ctx);
@@ -29,7 +30,7 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
     u16 command = FrontierScriptContext_ReadHalfWord(ctx);
     u32 value = FrontierScript_ReadVar(ctx);
     u16 *dst = FrontierScript_ReadVarPtr(ctx);
-    u8 *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
+    FrontierFieldSystem *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     switch (command) {
     case TOWER_ACTION_RESET_SYSTEM:
@@ -76,10 +77,10 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
         FrontierFieldSystem_SaveChallenge(data);
         break;
     case 0x3A:
-        MI_CpuFill8(data + 0x884, 0, 0x46);
+        MI_CpuFill8(data->unk884, 0, sizeof(data->unk884));
         break;
     case 0x3B:
-        data[0x8D6] = 1;
+        data->filler8D6[0] = 1;
         break;
     case 0x64:
         if (data == NULL) {
@@ -96,20 +97,20 @@ BOOL FrtCmd_TowerAction(FrontierScriptContext *ctx) {
 }
 
 u32 BattleTower_GetOverworldSprite(void *data, u32 mode) {
-    u8 *p = data;
+    FrontierFieldSystem *tower = data;
     if (mode == 2) {
-        return ((u32)p[0x10] << 24) >> 29;
+        return tower->multiBattleAllyID;
     }
     if (mode == 1) {
-        if (p[0xF] == 2) {
-            return gBattleTowerAllySprites[((u32)p[0x10] << 24) >> 29];
+        if (tower->towerMode == TOWER_MODE_MULTI) {
+            return gBattleTowerAllySprites[tower->multiBattleAllyID];
         }
-        if (p[0x12] != 0) {
+        if (tower->linkAllyGender != 0) {
             return 0x61;
         }
         return 0;
     }
-    if (p[0x11] != 0) {
+    if (tower->trainerGender != 0) {
         return 0x61;
     }
     return 0;
@@ -117,14 +118,14 @@ u32 BattleTower_GetOverworldSprite(void *data, u32 mode) {
 
 BOOL FrtCmd_TowerPrintTrainerMessage(FrontierScriptContext *ctx) {
     u8 arg;
-    u8 *data;
+    FrontierFieldSystem *data;
     Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     arg = FrontierScriptContext_ReadByte(ctx);
     data = Frontier_GetData(ctx->frontierSystem->frontierWork);
     if (data == NULL) {
         return FALSE;
     }
-    FrontierScript_PrintMessageEntryFromBank(ctx, data + 0x90 + arg * 0x110, BattleTower_GetTrainerMessageBank(data[0xF]));
+    FrontierScript_PrintMessageEntryFromBank(ctx, &data->opponents[arg].introMessage, BattleTower_GetTrainerMessageBank(data->towerMode));
     return TRUE;
 }
 

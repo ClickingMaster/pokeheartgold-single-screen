@@ -1229,8 +1229,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_AI_FLAGS:
-        goto common;
     case LINK_STATE_PREPARE_PROFILE:
         if (BattleLink_PrepareProfile(work) == TRUE) {
             LinkSync_StartSync(0x34);
@@ -1242,8 +1240,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PROFILE:
-        goto common;
     case LINK_STATE_PREPARE_TRAINER:
         if (BattleLink_PrepareTrainer(work) == TRUE) {
             LinkSync_StartSync(0x35);
@@ -1255,8 +1251,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_TRAINER:
-        goto common;
     case LINK_STATE_PREPARE_PARTY:
         if (BattleLink_PrepareParty(work) == TRUE) {
             LinkSync_StartSync(0x36);
@@ -1268,8 +1262,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PARTY:
-        goto common;
     case LINK_STATE_PREPARE_CHATOT:
         if (BattleLink_PrepareChatot(work) == TRUE) {
             LinkSync_StartSync(0x37);
@@ -1281,8 +1273,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_CHATOT:
-        goto common;
     case LINK_STATE_PREPARE_PAL_PAD:
         if (BattleLink_PreparePalPad(work) == TRUE) {
             LinkSync_StartSync(0x38);
@@ -1294,8 +1284,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PAL_PAD:
-        goto common;
     case LINK_STATE_PREPARE_PARTNER_TRAINER_1:
         if (!(work->setup->battleType & BATTLE_TYPE_FRONTIER)) {
             work->state = LINK_STATE_FINISH;
@@ -1317,8 +1305,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PARTNER_TRAINER_1:
-        goto common;
     case LINK_STATE_PREPARE_PARTNER_TRAINER_3:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3A);
@@ -1338,8 +1324,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PARTNER_TRAINER_3:
-        goto common;
     case LINK_STATE_PREPARE_PARTNER_PARTY_1:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3B);
@@ -1359,8 +1343,6 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
-    case LINK_STATE_WAIT_PARTNER_PARTY_1:
-        goto common;
     case LINK_STATE_PREPARE_PARTNER_PARTY_3:
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3C);
@@ -1380,8 +1362,16 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             work->state++;
         }
         break;
+    case LINK_STATE_WAIT_AI_FLAGS:
+    case LINK_STATE_WAIT_PROFILE:
+    case LINK_STATE_WAIT_TRAINER:
+    case LINK_STATE_WAIT_PARTY:
+    case LINK_STATE_WAIT_CHATOT:
+    case LINK_STATE_WAIT_PAL_PAD:
+    case LINK_STATE_WAIT_PARTNER_TRAINER_1:
+    case LINK_STATE_WAIT_PARTNER_TRAINER_3:
+    case LINK_STATE_WAIT_PARTNER_PARTY_1:
     case LINK_STATE_WAIT_PARTNER_PARTY_3:
-common:
         if (work->received == Comm_CountConnected()) {
             if (work->state == LINK_STATE_WAIT_PAL_PAD) {
                 for (i = 0; i < 4; i++) {
@@ -1409,9 +1399,8 @@ common:
         }
         break;
     default:
-        goto finish;
+        break;
     }
-finish:
     return done;
 }
 
@@ -1506,11 +1495,10 @@ BOOL Battle_VsScreenInit(OverlayManager *man) {
     battleSystem->linkScreenArgs = Heap_Alloc(HEAP_ID_BATTLE, sizeof(LinkBattleScreenArgs));
     MI_CpuClearFast(battleSystem->linkScreenArgs, sizeof(LinkBattleScreenArgs));
     if (battleSystem->battleType & BATTLE_TYPE_MULTI) {
-        BattleSystem *cursor;
-        for (i = 0, cursor = battleSystem; i < 4; cursor = (BattleSystem *)((u8 *)cursor + 4), i++) {
-            LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(i)] = cursor->trainerParty[0];
+        for (i = 0; i < 4; i++) {
+            LINK_SCREEN_ARGS(battleSystem)->parties[Comm_GetBattleSlot(i)] = battleSystem->trainerParty[i];
             slot = Comm_GetBattleSlot(i);
-            LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(cursor->playerProfile[0], HEAP_ID_BATTLE);
+            LINK_SCREEN_ARGS(battleSystem)->names[slot] = PlayerProfile_GetPlayerName_NewString(battleSystem->playerProfile[i], HEAP_ID_BATTLE);
         }
         LINK_SCREEN_ARGS(battleSystem)->heapId = HEAP_ID_BATTLE;
         LINK_SCREEN_ARGS(battleSystem)->mode = 1;

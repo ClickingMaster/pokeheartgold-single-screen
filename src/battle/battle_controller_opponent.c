@@ -1561,21 +1561,12 @@ void BattleControllerOpponent_BattleMonToPartyMonCopy(BattleSystem *battleSystem
 void BattleControllerOpponent_BackgroundSlideIn(BattleSystem *battleSystem, OpponentData *opponentData) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
     BattleInput *battleInput = BattleSystem_GetBattleInput(battleSystem);
-    u32 multi;
 
     if (opponentData->inputMode == 0) {
-        multi = battleType & BATTLE_TYPE_MULTI;
-        if (multi == 0) {
-            if (multi != 0) {
-                goto done;
-            }
-            if (opponentData->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
-                goto done;
-            }
+        if ((battleType & BATTLE_TYPE_MULTI) || ((battleType & BATTLE_TYPE_MULTI) == 0 && opponentData->battlerType != BATTLER_TYPE_PLAYER_SIDE_SLOT_2)) {
+            BattleInput_StartMenuScrollHorizontalTask(battleInput, -0xD00, 0);
         }
-        BattleInput_StartMenuScrollHorizontalTask(battleInput, -0xD00, 0);
     }
-done:
     BattleController_EmitCommandComplete(battleSystem, opponentData->battlerId, OPPONENT_COMMAND_ID(opponentData));
     OpponentData_ClearCommand(opponentData);
 }
@@ -1894,8 +1885,7 @@ void OpponentData_PokemonEncounter(BattleSystem *battleSystem, OpponentData *opp
     NARC_ReadPokepicAnimScript((NARC *)opponentData->pokepicAnimNarc, anim.scripts, packet->species, opponentData->battlerType);
 
     battlerType = opponentData->battlerType;
-    *(Pokepic *volatile *)&opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, gBattlerPokepicPositions[0][battlerType][0], gBattlerPokepicPositions[0][battlerType][1], gBattlerPokepicPositions[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
-    work->pokepic = *(Pokepic *volatile *)&opponentData->pokepic;
+    work->pokepic = opponentData->pokepic = BattleControllerOpponent_CreatePokepic(battleSystem, pokepicManager, &pokepicTemplate, gBattlerPokepicPositions[0][battlerType][0], gBattlerPokepicPositions[0][battlerType][1], gBattlerPokepicPositions[0][battlerType][2], height, anim.shadowHeight, anim.shadowXOffset, anim.shadowSize, opponentData->battlerId, anim.scripts, NULL);
 
     if (work->facing == 2) {
         Pokepic_StartPaletteFade(work->pokepic, 8, 8, 0, 0);
@@ -2290,17 +2280,10 @@ void OpponentData_SelectMove(BattleSystem *battleSystem, OpponentData *opponentD
     work->battlerType = opponentData->battlerType;
     work->hpBar = &opponentData->hpBar;
     work->selectedMonIndex = packet->selectedMonIndex;
-    {
-        // walks both structs two bytes at a time
-        BattleControllerPacketSelectMove *src = packet;
-        OpponentSelectMoveWork *dst = work;
-        for (i = 0; i < MAX_MON_MOVES; i++) {
-            dst->moves[0] = src->moves[0];
-            work->movePPCur[i] = packet->movePPCur[i];
-            work->movePP[i] = packet->movePP[i];
-            src = (BattleControllerPacketSelectMove *)((u8 *)src + sizeof(u16));
-            dst = (OpponentSelectMoveWork *)((u8 *)dst + sizeof(u16));
-        }
+    for (i = 0; i < MAX_MON_MOVES; i++) {
+        work->moves[i] = packet->moves[i];
+        work->movePPCur[i] = packet->movePPCur[i];
+        work->movePP[i] = packet->movePP[i];
     }
     work->unusableMovesMask = packet->unusableMovesMask;
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[1], work, 0);
@@ -2311,7 +2294,6 @@ void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponen
     u8 battlerTypes[8];
     int maxBattlers;
     int i;
-    OpponentSelectTargetWork *dst;
 
     work->state = 0;
     work->battleSystem = battleSystem;
@@ -2324,19 +2306,8 @@ void OpponentData_SelectTarget(BattleSystem *battleSystem, OpponentData *opponen
     BattleSystem_GetBattlerTypes(battleSystem, battlerTypes);
     maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
     BattleSystem_GetBattleType(battleSystem);
-    i = 0;
-    if (maxBattlers > 0) {
-        dst = work;
-        do {
-            // copied as halfwords, walking both structs one TargetPokemon at a time
-            ((u16 *)dst->targetMons)[0] = ((u16 *)packet->targetMons)[0];
-            ((u16 *)dst->targetMons)[1] = ((u16 *)packet->targetMons)[1];
-            ((u16 *)dst->targetMons)[2] = ((u16 *)packet->targetMons)[2];
-            ((u16 *)dst->targetMons)[3] = ((u16 *)packet->targetMons)[3];
-            i++;
-            packet = (BattleControllerPacketSelectTarget *)((u8 *)packet + sizeof(TargetPokemon));
-            dst = (OpponentSelectTargetWork *)((u8 *)dst + sizeof(TargetPokemon));
-        } while (i < maxBattlers);
+    for (i = 0; i < maxBattlers; i++) {
+        work->targetMons[i] = packet->targetMons[i];
     }
     SysTask_CreateOnMainQueue((SysTaskFunc)opponentData->inputTasks[2], work, 0);
 }
@@ -5245,7 +5216,6 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
     int firstBattler;
     int secondBattler;
     int i;
-    int slot;
     Pokemon *mon;
     Party *party;
 
@@ -5282,36 +5252,15 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
                 Party_AddMon(work->partyMenu->party, mon);
             }
             Heap_Free(mon);
-            i = 0;
-            if (BattleSystem_GetPartySize(work->battleSystem, firstBattler) > 0) {
-                // walks the battler's partyOrder row through a work pointer shifted one byte per Pokemon
-                OpponentShowMonListWork *row = (OpponentShowMonListWork *)((u8 *)work + PARTY_SIZE * firstBattler);
-                slot = 0;
-                do {
-                    mon = BattleSystem_GetPartyMon(work->battleSystem, firstBattler, row->partyOrder[0][0]);
-                    CopyPokemonToPokemon(mon, Party_GetMonByIndex(work->partyMenu->party, slot));
-                    work->partyMenu->partyOrder[slot] = row->partyOrder[0][0];
-                    row = (OpponentShowMonListWork *)((u8 *)row + 1);
-                    slot += 2;
-                    i++;
-                } while (i < BattleSystem_GetPartySize(work->battleSystem, firstBattler));
+            for (i = 0; i < BattleSystem_GetPartySize(work->battleSystem, firstBattler); i++) {
+                mon = BattleSystem_GetPartyMon(work->battleSystem, firstBattler, work->partyOrder[firstBattler][i]);
+                CopyPokemonToPokemon(mon, Party_GetMonByIndex(work->partyMenu->party, i * 2));
+                work->partyMenu->partyOrder[i * 2] = work->partyOrder[firstBattler][i];
             }
-            i = 0;
-            if (BattleSystem_GetPartySize(work->battleSystem, secondBattler) > 0) {
-                int partySlot;
-                int orderSlot;
-                OpponentShowMonListWork *row = (OpponentShowMonListWork *)((u8 *)work + PARTY_SIZE * secondBattler);
-                partySlot = 1;
-                orderSlot = 0;
-                do {
-                    mon = BattleSystem_GetPartyMon(work->battleSystem, secondBattler, row->partyOrder[0][0]);
-                    CopyPokemonToPokemon(mon, Party_GetMonByIndex(work->partyMenu->party, partySlot));
-                    work->partyMenu->partyOrder[orderSlot + 1] = row->partyOrder[0][0];
-                    partySlot += 2;
-                    row = (OpponentShowMonListWork *)((u8 *)row + 1);
-                    orderSlot += 2;
-                    i++;
-                } while (i < BattleSystem_GetPartySize(work->battleSystem, secondBattler));
+            for (i = 0; i < BattleSystem_GetPartySize(work->battleSystem, secondBattler); i++) {
+                mon = BattleSystem_GetPartyMon(work->battleSystem, secondBattler, work->partyOrder[secondBattler][i]);
+                CopyPokemonToPokemon(mon, Party_GetMonByIndex(work->partyMenu->party, i * 2 + 1));
+                work->partyMenu->partyOrder[i * 2 + 1] = work->partyOrder[secondBattler][i];
             }
             if (BattleSystem_GetBattlerType(work->battleSystem, work->battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
                 work->partyMenu->selectedMon = 1;
