@@ -436,14 +436,14 @@ void BattleLink_BuildPalPad(PlayerProfile *profile, SavePalPad *friends, SavePal
     int i;
     CopyU16StringArray(out->name, PlayerProfile_GetNamePtr(profile));
     out->otid = PlayerProfile_GetTrainerID(profile);
-    out->filler_14[0] = PlayerProfile_GetLanguage(profile);
-    out->filler_14[1] = PlayerProfile_GetVersion(profile);
-    out->filler_14[2] = PlayerProfile_GetTrainerGender(profile);
+    out->language = PlayerProfile_GetLanguage(profile);
+    out->version = PlayerProfile_GetVersion(profile);
+    out->gender = PlayerProfile_GetTrainerGender(profile);
     for (i = 0; i < 16; i++) {
         out->friendOtIds[i] = friends[i].otid;
-        out->friendVersions[i] = friends[i].filler_14[1];
-        out->friendLanguages[i] = friends[i].filler_14[0];
-        out->filler_78[i] = friends[i].filler_14[2];
+        out->friendVersions[i] = friends[i].version;
+        out->friendLanguages[i] = friends[i].language;
+        out->friendGenders[i] = friends[i].gender;
     }
 }
 

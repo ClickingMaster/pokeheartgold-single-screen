@@ -1462,15 +1462,14 @@ static s32 WirelessTradeSelectMon_SendPalPad(PlayerProfile *profile, SavePalPad 
 
     CopyU16StringArray(packet->name, PlayerProfile_GetNamePtr(profile));
     packet->otid = PlayerProfile_GetTrainerID(profile);
-    // filler_14 holds the language, version and gender.
-    packet->filler_14[0] = PlayerProfile_GetLanguage(profile);
-    packet->filler_14[1] = PlayerProfile_GetVersion(profile);
-    packet->filler_14[2] = PlayerProfile_GetTrainerGender(profile);
+    packet->language = PlayerProfile_GetLanguage(profile);
+    packet->version = PlayerProfile_GetVersion(profile);
+    packet->gender = PlayerProfile_GetTrainerGender(profile);
     for (i = 0; i < NUM_FRIENDS_PER_ENTRY; i++, palPad++) {
         packet->friendOtIds[i] = palPad->otid;
-        packet->friendVersions[i] = palPad->filler_14[1];
-        packet->friendLanguages[i] = palPad->filler_14[0];
-        packet->filler_78[i] = palPad->filler_14[2];
+        packet->friendVersions[i] = palPad->version;
+        packet->friendLanguages[i] = palPad->language;
+        packet->friendGenders[i] = palPad->gender;
     }
     return Comm_SendCommandNoCopy(WIRELESS_TRADE_CMD_PALPAD, packet, sizeof(*packet));
 }
