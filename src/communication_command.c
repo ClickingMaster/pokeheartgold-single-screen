@@ -5,56 +5,11 @@
 #include "constants/comm_type.h"
 
 #include "assert.h"
+#include "communication_packet_pool.h"
 #include "heap.h"
 
 // Link command layer: byte rings and packet queues that cut the outgoing commands into frames, and the command
 // table: the communication layer's own commands, followed by the table an application registers.
-
-// A ring of bytes: data is written at write, made readable up to limit by ByteRing_Commit, read from read.
-typedef struct ByteRing {
-    u8 *data;
-    s16 read;
-    s16 limit;
-    s16 write;
-    s16 capacity;
-} ByteRing;
-
-typedef struct PacketNode {
-    u8 *data;
-    struct PacketNode *prev;
-    struct PacketNode *next;
-    u16 size;
-    u8 command; // 0: free node
-
-    union {
-        u8 raw;
-
-        struct {
-            u8 headerWritten : 1;
-            u8 inRing : 1; // the data was copied into the pool's ring
-            u8 rest : 6;
-        } b;
-    } flags;
-} PacketNode;
-
-typedef struct PacketQueue {
-    PacketNode *head;
-    PacketNode *tail;
-} PacketQueue;
-
-typedef struct PacketPool {
-    PacketQueue queue;
-    PacketQueue queue2;
-    PacketNode *current; // partly written into the last frame
-    ByteRing *ring;
-    PacketNode *nodes;
-    int count;
-} PacketPool;
-
-typedef struct ByteWriter {
-    u8 *dest;
-    int remaining;
-} ByteWriter;
 
 typedef struct CommCommandTable {
     const CommCommand *commands;
@@ -165,9 +120,9 @@ void ByteRing_Write(ByteRing *ring, const u8 *src, int count, int unused) {
         Comm_SetLinkError();
         return;
     }
-    pos = *(volatile s16 *)&ring->write;
+    pos = ring->write;
     i = 0;
-    while (pos < *(volatile s16 *)&ring->write + count) {
+    while (pos < ring->write + count) {
         GF_ASSERT(src != NULL);
         ring->data[ByteRing_Wrap(ring, pos)] = src[i];
         pos++;
@@ -204,9 +159,9 @@ static int ByteRing_Peek(ByteRing *ring, u8 *dst, int count) {
 s32 ByteRing_GetReadableSize(const ByteRing *ring) {
     s16 read = ring->read;
     if (read > ring->limit) {
-        return ring->capacity + *(volatile const s16 *)&ring->limit - read;
+        return ring->capacity + ring->limit - read;
     }
-    return *(volatile const s16 *)&ring->limit - read;
+    return ring->limit - read;
 }
 
 s32 ByteRing_GetFreeSize(const ByteRing *ring) {
@@ -216,9 +171,9 @@ s32 ByteRing_GetFreeSize(const ByteRing *ring) {
 static s32 ByteRing_GetWritableSize(const ByteRing *ring) {
     s16 read = ring->read;
     if (read > ring->write) {
-        return read - *(volatile const s16 *)&ring->write;
+        return read - ring->write;
     }
-    return ring->capacity - (*(volatile const s16 *)&ring->write - read);
+    return ring->capacity - (ring->write - read);
 }
 
 static s32 ByteRing_Wrap(const ByteRing *ring, s32 pos) {
@@ -230,9 +185,9 @@ void ByteRing_Commit(ByteRing *ring) {
 }
 
 static PacketNode *PacketPool_GetFreeNode(const PacketPool *pool) {
-    register PacketNode *node = pool->nodes;
-    register s32 i;
-    register s32 count = pool->count;
+    PacketNode *node = pool->nodes;
+    s32 i;
+    s32 count = pool->count;
     for (i = 0; i < count; i++, node++) {
         if (node->command == 0) {
             return node;
@@ -242,9 +197,9 @@ static PacketNode *PacketPool_GetFreeNode(const PacketPool *pool) {
 }
 
 BOOL PacketPool_AllNodesFree(const PacketPool *pool) {
-    register PacketNode *node = pool->nodes;
-    register s32 i;
-    register s32 count = pool->count;
+    PacketNode *node = pool->nodes;
+    s32 i;
+    s32 count = pool->count;
     for (i = 0; i < count; i++, node++) {
         if (node->command != 0) {
             return FALSE;

@@ -245,7 +245,7 @@ void CommClubButtons_LoadGraphics(CommClubButtonsData *data) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 1, data->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, HEAP_ID_8);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 9, data->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, HEAP_ID_8);
     raw = GfGfxLoader_GetScrnDataFromOpenNarc(narc, 10, FALSE, &scrnData, HEAP_ID_8);
-    MIi_CpuCopy16((u16 *)((u8 *)scrnData->rawData + 0x180), data->tilemap, 0x180);
+    MIi_CpuCopy16((u16 *)scrnData->rawData + NELEMS(data->tilemap), data->tilemap, sizeof(data->tilemap));
     Heap_Free(raw);
     NARC_Delete(narc);
 }

@@ -746,11 +746,7 @@ int WifiConnection_UpdateConnected(void) {
     if ((u32)state - WIFI_CONNECTION_STATE_CONNECTED <= 1) {
         s32 i;
         for (i = 0; i < gWifiConnection->maxPlayers; i++) {
-            u8 *timers = (u8 *)gWifiConnection + i * 4;
-            u32 next = *(u32 *)(timers + offsetof(WifiConnection, keepAliveTimers));
-            s32 old = *(volatile s32 *)(timers + offsetof(WifiConnection, keepAliveTimers));
-            *(u32 *)(timers + offsetof(WifiConnection, keepAliveTimers)) = next + 1;
-            if (old >= 120 && !gWifiConnection->sendBusy && WifiConnection_SendKeepAlive(i)) {
+            if (gWifiConnection->keepAliveTimers[i]++ >= 120 && !gWifiConnection->sendBusy && WifiConnection_SendKeepAlive(i)) {
                 WifiConnection_ResetKeepAliveTimers();
                 break;
             }

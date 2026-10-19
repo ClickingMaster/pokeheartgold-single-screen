@@ -601,41 +601,29 @@ BOOL CommPlayerManager_IsLocalPlayerConnected(void) {
 }
 
 int CommPlayerManager_GetPlayerX(int netId) {
-    CommPlayerManager *manager;
     if (gCommPlayerManager == NULL) {
         return 0xFFFF;
     }
     if (netId == Comm_GetLocalNetId()) {
         return gCommPlayerManager->positions[netId].x;
     }
-    if (CommPlayerManager_IsLocalPlayerConnected()) {
-        manager = gCommPlayerManager;
-        if (manager->active[netId] != 0) {
-            goto found;
-        }
+    if (!CommPlayerManager_IsLocalPlayerConnected() || gCommPlayerManager->active[netId] == 0) {
+        return 0xFFFF;
     }
-    return 0xFFFF;
-found:
-    return manager->positions[netId].x;
+    return gCommPlayerManager->positions[netId].x;
 }
 
 int CommPlayerManager_GetPlayerZ(int netId) {
-    CommPlayerManager *manager;
     if (gCommPlayerManager == NULL) {
         return 0xFFFF;
     }
     if (netId == Comm_GetLocalNetId()) {
         return gCommPlayerManager->positions[netId].z;
     }
-    if (CommPlayerManager_IsLocalPlayerConnected()) {
-        manager = gCommPlayerManager;
-        if (manager->active[netId] != 0) {
-            goto found;
-        }
+    if (!CommPlayerManager_IsLocalPlayerConnected() || gCommPlayerManager->active[netId] == 0) {
+        return 0xFFFF;
     }
-    return 0xFFFF;
-found:
-    return manager->positions[netId].z;
+    return gCommPlayerManager->positions[netId].z;
 }
 
 int CommPlayerManager_GetPlayerFrontX(int netId) {
@@ -694,20 +682,15 @@ int CommPlayerManager_GetHostFrontZ(int netId) {
     return gCommPlayerManager->hostPositions[netId].z + GetDeltaYByFacingDirection(gCommPlayerManager->hostPositions[netId].facing);
 }
 
-// Every access reads the manager pointer again (volatile).
-#define MANAGER_VOLATILE (*(CommPlayerManager *volatile *)&gCommPlayerManager)
-
 void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value) {
-    u8 *values = MANAGER_VOLATILE->moveEnabled;
+    u8 *values = gCommPlayerManager->moveEnabled;
     if (values[netId] != value) {
         values[netId] = value;
-        MANAGER_VOLATILE->hostPositions[netId].bumped = 0;
-        MANAGER_VOLATILE->positionChanged[netId] = 1;
-        MANAGER_VOLATILE->hostPositions[netId].speed = 2;
+        gCommPlayerManager->hostPositions[netId].bumped = 0;
+        gCommPlayerManager->positionChanged[netId] = 1;
+        gCommPlayerManager->hostPositions[netId].speed = 2;
     }
 }
-
-#undef MANAGER_VOLATILE
 
 BOOL CommPlayerManager_AssignBattleSlots(void) {
     u16 coords2[4];

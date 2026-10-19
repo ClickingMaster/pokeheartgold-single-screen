@@ -279,14 +279,14 @@ static void WirelessStatusIcon_WriteOam(WirelessStatusIcon *p) {
     volatile WirelessStatusIconOam *old;
     switch (p->screenMode) {
     case 1:
-        if (((*(volatile u16 *)0x4000304 & 0x8000) >> 15) == 1) {
+        if (((reg_GX_POWCNT & REG_GX_POWCNT_DSEL_MASK) >> REG_GX_POWCNT_DSEL_SHIFT) == 1) {
             screen = 1;
         } else {
             screen = 2;
         }
         break;
     case 2:
-        if (((*(volatile u16 *)0x4000304 & 0x8000) >> 15) == 1) {
+        if (((reg_GX_POWCNT & REG_GX_POWCNT_DSEL_MASK) >> REG_GX_POWCNT_DSEL_SHIFT) == 1) {
             screen = 2;
         } else {
             screen = 1;
@@ -343,9 +343,9 @@ fallback:
         break;
     }
     if (screen == 1) {
-        oam = (volatile WirelessStatusIconOam *)0x7000000;
+        oam = (volatile WirelessStatusIconOam *)HW_OAM;
     } else {
-        oam = (volatile WirelessStatusIconOam *)0x7000400;
+        oam = (volatile WirelessStatusIconOam *)HW_DB_OAM;
     }
     pal = p->palette;
     prio = p->priority;

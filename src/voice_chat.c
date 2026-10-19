@@ -62,7 +62,7 @@ void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32
         address += size;
     }
     // lid closed: send silence
-    if ((*(volatile u16 *)0x027FFFA8 & 0x8000) >> 15) {
+    if (PAD_DetectFold()) {
         address = gVoiceChat.work->silenceBuffer;
     }
     if (!gVoiceChat.work->muted) {
