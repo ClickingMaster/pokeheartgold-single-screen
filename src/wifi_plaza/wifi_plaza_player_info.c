@@ -10,7 +10,7 @@ BOOL WifiConnection_SetOwnStatusData(void *data, s32 size);
 WiFiPlazaPlayerInfo *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapId) {
     WiFiPlazaPlayerInfo *info = Heap_Alloc(heapId, sizeof(WiFiPlazaPlayerInfo));
     memset(info, 0, sizeof(WiFiPlazaPlayerInfo));
-    info->unk1B = 0x1C;
+    info->status = 28;
     info->gender = PlayerProfile_GetTrainerGender(profile);
     info->avatar = PlayerProfile_GetAvatar(profile);
     info->version = PlayerProfile_GetVersion(profile);

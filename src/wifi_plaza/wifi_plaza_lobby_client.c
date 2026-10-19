@@ -53,13 +53,13 @@ void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, Wi
     WiFiPlazaLobbyClient_AllocPlayerData(gWiFiPlazaLobbyClient, count, heapID);
     WiFiPlazaLobbyClient_AllocIdLists(gWiFiPlazaLobbyClient, 20, 8, heapID);
     WiFiPlazaLobbyClient_InitMatches(gWiFiPlazaLobbyClient);
-    WiFiPlazaLobbyIdValueList_Init(&gWiFiPlazaLobbyClient->surveyData, 128, heapID);
+    WiFiPlazaLobbyIdValueList_Init(&gWiFiPlazaLobbyClient->specialVisitors, 128, heapID);
     gWiFiPlazaLobbyClient->initResult = 0;
 }
 
 void WiFiPlazaLobbyClient_Free(void) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    WiFiPlazaLobbyIdValueList_Free(&gWiFiPlazaLobbyClient->surveyData);
+    WiFiPlazaLobbyIdValueList_Free(&gWiFiPlazaLobbyClient->specialVisitors);
     WiFiPlazaLobbyClient_FreeIdLists(gWiFiPlazaLobbyClient);
     WiFiPlazaLobbyClient_FreePlayerData(gWiFiPlazaLobbyClient);
     Heap_Free(gWiFiPlazaLobbyClient);
@@ -650,12 +650,12 @@ u8 WiFiPlazaLobbyClient_IsMatchHost(void) {
 
 int WiFiPlazaLobbyClient_IsSpecialVisitor(int id) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return WiFiPlazaLobbyIdValueList_Contains(&gWiFiPlazaLobbyClient->surveyData, id);
+    return WiFiPlazaLobbyIdValueList_Contains(&gWiFiPlazaLobbyClient->specialVisitors, id);
 }
 
 int WiFiPlazaLobbyClient_GetSpecialVisitorCode(int id) {
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
-    return WiFiPlazaLobbyIdValueList_GetValue(&gWiFiPlazaLobbyClient->surveyData, id);
+    return WiFiPlazaLobbyIdValueList_GetValue(&gWiFiPlazaLobbyClient->specialVisitors, id);
 }
 
 void WiFiPlazaLobbyClient_SubmitSurveyAnswer(int index) {
@@ -680,7 +680,7 @@ u32 WiFiPlazaLobbyClient_GetSurveyValue(int field) {
     case 1:
         return gWiFiPlazaLobbyClient->surveyData.surveys[0].questionNo;
     case 2:
-        return gWiFiPlazaLobbyClient->surveyData.surveys[1].unk_00;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[0].isSpecial;
     case 3:
         return gWiFiPlazaLobbyClient->surveyData.surveys[0].questionNo >= 1000;
     case 4:
@@ -688,7 +688,7 @@ u32 WiFiPlazaLobbyClient_GetSurveyValue(int field) {
     case 5:
         return gWiFiPlazaLobbyClient->surveyData.surveys[1].questionNo;
     case 6:
-        return gWiFiPlazaLobbyClient->surveyData.lastWeekIsSpecial;
+        return gWiFiPlazaLobbyClient->surveyData.surveys[1].isSpecial;
     case 7:
         return gWiFiPlazaLobbyClient->surveyData.surveys[1].questionNo >= 1000;
     case 8:

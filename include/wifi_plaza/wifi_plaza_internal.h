@@ -143,17 +143,23 @@ typedef struct WiFiPlazaSessionState {
     u8 flags[8]; // WiFiPlazaWork_MarkActivityDone sets one, WiFiPlazaWork_GetNextUndoneActivity finds a clear one
 } WiFiPlazaSessionState;
 
-// Own status data sent to the other players of the lobby session (WifiConnection_SetOwnStatusData).
+// Own status data sent to the other players of the lobby session (WifiConnection_SetOwnStatusData); the same
+// record as WifiClubPlayerStatus, of which the plaza fills in only the trainer.
 typedef struct WiFiPlazaPlayerInfo {
-    u8 filler_00[0x18];
+    u16 species[6];
+    u16 heldItems[6];
     u8 version;
     u8 language;
-    u8 filler_1A;
-    u8 unk1B;
-    u8 filler_1C;
+    u8 hasNationalDex;
+    u8 status; // 28 in the Wi-Fi Plaza
+    u8 unk_1C;
     u8 avatar;
     u8 gender;
-    u8 filler_1F[5];
+    u8 country;
+    u8 region;
+    u8 voiceChat;
+    u8 voiceChatSetting;
+    u8 unk_23;
 } WiFiPlazaPlayerInfo;
 
 // Part of WiFiPlazaWork at 0x49C: a timer in 1/30 s of the lobby time (WiFiPlazaTimer_Init sets it up, WiFiPlazaTimer_Start
@@ -177,7 +183,7 @@ typedef struct WiFiPlazaTimerPhase {
 // Part of WiFiPlazaWork at 0x3AC: the chance of each group of WiFiPlazaWork.groups (WiFiPlazaGroupWeights_PickGroup).
 typedef struct WiFiPlazaGroupWeights {
     u8 weights[9];
-    u8 unk_09[3];
+    u8 padding_09[3];
     u8 seen[20]; // per lobby slot (WiFiPlazaGroupWeights_ReportPlace)
 } WiFiPlazaGroupWeights;
 
@@ -196,7 +202,7 @@ typedef struct WiFiPlazaTallyCache {
 // Part of WiFiPlazaWork at 0x508 (WiFiPlaza_NewPlayerProfile / WiFiPlaza_FreePlayerProfile set it up and free it).
 typedef struct WiFiPlazaOwnProfileData {
     PlayerProfile *profile; // the own profile as the lobby sees it (WiFiPlazaProfile_CopyToPlayerProfile)
-    void *gameConnectionLost;
+    BOOL gameConnectionLost;
     WiFiPlazaTallyCache tally; // WiFiPlazaWork_SetSurveyTally / WiFiPlazaWork_GetSurveyTally
     BOOL hasTally;
 } WiFiPlazaOwnProfileData;
@@ -451,7 +457,7 @@ typedef struct WiFiPlazaLobbyMatchInfo {
     int playerCount; // WifiConnection_GetNumConnectionHost for the own session
     int state;       // WIFI_PLAZA_MATCH_*, closed by the host (WiFiPlazaLobbyClient_CloseMatch)
     WiFiPlazaLobbyEntryTime startTime;
-    u8 unk_18[0x18];
+    u8 padding_18[0x18];
     char name[0x14];
 } WiFiPlazaLobbyMatchInfo;
 
@@ -474,7 +480,7 @@ typedef struct WiFiPlazaLobbyIdValue {
     u32 value;
 } WiFiPlazaLobbyIdValue;
 
-// Overlays the first 8 bytes of WiFiPlazaLobbyClient.surveyData (WiFiPlazaLobbyIdValueList_Init).
+// The special visitors of the lobby with their codes (WiFiPlazaLobbyClient_OnSpecialVisitorsReceived).
 typedef struct WiFiPlazaLobbyIdValueList {
     WiFiPlazaLobbyIdValue *items;
     u16 capacity;
@@ -493,19 +499,18 @@ typedef struct WiFiPlazaLobbySchedule {
 
 // WiFiPlazaLobbyClient_GetSurveyValue / WiFiPlazaLobbyClient_GetSurveyText / WiFiPlazaLobbyClient_GetSurveyFlag read the two halves.
 typedef struct WiFiPlazaLobbySurvey {
-    u32 unk_00;
     u32 surveyId;
     s32 questionNo;
     u8 questionText[0xDC];
     u8 answerTexts[3][0x24];
     u8 languageFlags[12];
+    u32 isSpecial;
 } WiFiPlazaLobbySurvey;
 
+// This week's and last week's survey (WiFiPlazaLobbyClient_OnSurveyReceived) and last week's results.
 typedef struct WiFiPlazaLobbySurveyData {
-    u32 unk_00;
     WiFiPlazaLobbySurvey surveys[2];
-    u32 lastWeekIsSpecial;
-    u32 unk_2c8[3];
+    u32 unk_2D0[3];
     u32 lastWeekTotals[3];
 } WiFiPlazaLobbySurveyData;
 
@@ -598,13 +603,14 @@ typedef struct WiFiPlazaLobbyClient {
     WiFiPlazaLobbyLocation locations[20];
     WiFiPlazaLobbyCommandTable commandTables[2]; // lobby, channel
     s64 time;                                    // lobby time, refreshed every frame
-    u8 unk_1a4[0x10];
+    u8 padding_1A4[0x10];
     WiFiPlazaLobbySchedule schedule; // received with PPW_LobbyGetSchedule (WiFiPlazaLobbyClient_OnEnterChannel)
     u32 scheduleSize;                   // its size
     WiFiPlazaLobbyMatch matches[3];
     u16 currentMatch; // 3 = none
     u8 isMatchHost;
     u8 matchCancelled;
+    WiFiPlazaLobbyIdValueList specialVisitors;
     WiFiPlazaLobbySurveyData surveyData;
     u32 surveySubmitState;
     int initResult; // PPW_LobbyInitializeAsync
@@ -636,8 +642,8 @@ u32 WiFiPlazaWork_GetLight1Event(WiFiPlazaWork *work);
 u32 WiFiPlazaWork_GetThirdEvent(WiFiPlazaWork *work);
 void WiFiPlazaWork_StartGameEntryCooldown(WiFiPlazaWork *work);
 int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work);
-void *WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work);
-void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, void *value);
+BOOL WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work);
+void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, BOOL value);
 void WiFiPlazaWork_ClearGameMembers(WiFiPlazaWork *work);
 void WiFiPlazaWork_SetGameMember(WiFiPlazaWork *work, int id, u32 index);
 void WiFiPlazaWork_SetOwnGameMember(WiFiPlazaWork *work, u32 index);
@@ -1001,10 +1007,10 @@ void WiFiPlazaLobbyClient_OnMatchClientDummy(int result, void *arg);
 
 void WiFiPlazaLobbyClient_OnMatchDisconnect(int result, void *arg);
 u32 WiFiPlazaLobbySchedule_FindValue(WiFiPlazaLobbySchedule *schedule, int key);
-void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbySurveyData *surveyData, int count, enum HeapID heapID);
-void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbySurveyData *surveyData);
-BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbySurveyData *surveyData, int id);
-u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbySurveyData *surveyData, int id);
+void WiFiPlazaLobbyIdValueList_Init(WiFiPlazaLobbyIdValueList *list, int count, enum HeapID heapID);
+void WiFiPlazaLobbyIdValueList_Free(WiFiPlazaLobbyIdValueList *list);
+BOOL WiFiPlazaLobbyIdValueList_Contains(WiFiPlazaLobbyIdValueList *list, int id);
+u32 WiFiPlazaLobbyIdValueList_GetValue(WiFiPlazaLobbyIdValueList *list, int id);
 WiFiPlazaPlayerObjects *WiFiPlazaPlayerObjects_New(u32 count, BOOL mode, enum HeapID heapID, enum HeapID loadHeapID);
 void WiFiPlazaPlayerObjects_Delete(WiFiPlazaPlayerObjects *objects);
 void WiFiPlazaPlayerObjects_Update(WiFiPlazaPlayerObjects *objects);

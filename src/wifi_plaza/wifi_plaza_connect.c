@@ -46,22 +46,6 @@
 #define WIFI_PLAZA_CONNECT_NUM_PALETTES      21
 #define WIFI_PLAZA_CONNECT_MSG_STRING_LENGTH 0x100
 
-// Arguments of the connect screen (built by OVY_45).
-typedef struct WiFiPlazaConnectArgs {
-    SaveData *saveData;
-    struct WiFiPlazaWork *lobby;
-    BOOL skipPrompt;
-    s64 *loginTime;
-    BOOL connected;
-} WiFiPlazaConnectArgs;
-
-// Arguments of the disconnect screen (built by OVY_45).
-typedef struct WiFiPlazaDisconnectArgs {
-    SaveData *saveData;
-    struct WiFiPlazaWork *lobby;
-    BOOL mode;
-} WiFiPlazaDisconnectArgs;
-
 typedef struct WiFiPlazaConnectMessageBox {
     MessageFormat *format;
     MsgData *msgData;
@@ -285,7 +269,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         break;
     }
     case WIFI_PLAZA_CONNECT_CONNECT:
-        CommState_StartWifiPlaza(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->lobby));
+        CommState_StartWifiPlaza(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->work));
         WiFiPlazaConnect_PrintMessage(&work->statusBox, msg_0800_00023);
         WiFiPlazaConnect_StartWaitingIcon(&work->statusBox);
         (*state)++;
@@ -296,7 +280,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             *state = WIFI_PLAZA_CONNECT_SHOW_ERROR;
         }
         if (CommState_HasPlazaLobbyStarted() == 1) {
-            WiFiPlazaWork_NewPlayerInfo(args->lobby);
+            WiFiPlazaWork_NewPlayerInfo(args->work);
             (*state)++;
         }
         break;
@@ -326,7 +310,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
             errorCode = WiFiPlazaLobbyClient_ToErrorCode(WiFiPlazaLobbyClient_GetLastError());
             msgId = msg_0800_00032;
         }
-        WiFiPlazaWork_FreePlayerInfo(args->lobby);
+        WiFiPlazaWork_FreePlayerInfo(args->work);
         WiFiPlazaConnect_ClearMessageBox(&work->msgBox);
         WiFiPlazaConnect_ClearMessageBox(&work->statusBox);
         WiFiPlazaConnect_BufferErrorCode(&work->errorBox, errorCode);
@@ -490,7 +474,7 @@ BOOL WiFiPlazaConnect_DisconnectMain(OverlayManager *man, int *state) {
         if (!CommState_Exists()) {
             // the status box is not set up on this screen (frame type 0): this does nothing
             WiFiPlazaConnect_StopWaitingIcon(&work->statusBox);
-            WiFiPlazaWork_FreePlayerInfo(args->lobby);
+            WiFiPlazaWork_FreePlayerInfo(args->work);
             *state = WIFI_PLAZA_DISCONNECT_PRINT_DISCONNECTED;
         }
         break;

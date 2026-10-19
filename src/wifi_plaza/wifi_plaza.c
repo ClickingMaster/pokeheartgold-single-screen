@@ -441,11 +441,11 @@ int WiFiPlazaWork_IsGameEntryCoolingDown(WiFiPlazaWork *work) {
     return WiFiPlazaSessionState_IsCoolingDown(&work->sessionState);
 }
 
-void *WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work) {
+BOOL WiFiPlazaWork_GetGameConnectionLost(WiFiPlazaWork *work) {
     return work->ownProfileData.gameConnectionLost;
 }
 
-void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, void *value) {
+void WiFiPlazaWork_SetGameConnectionLost(WiFiPlazaWork *work, BOOL value) {
     work->ownProfileData.gameConnectionLost = value;
 }
 

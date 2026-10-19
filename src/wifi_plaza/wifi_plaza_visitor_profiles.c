@@ -64,20 +64,6 @@
 #define VISITOR_PROFILES_NUM_BG_LAYERS     5
 #define VISITOR_PROFILES_NUM_HOURS         24
 
-// Copied around as one word; only its low byte, the current hour (0-23), is read.
-typedef union VisitorProfilesClock {
-    u32 raw;
-    u8 hour;
-} VisitorProfilesClock;
-
-// Arguments built by the lobby overlay.
-typedef struct VisitorProfilesArgs {
-    void *visitors; // lobby visitor table (OVY_45), read through WiFiPlazaPlaces_GetCountry and friends
-    SaveData *saveData;
-    VisitorProfilesClock clock;
-    void *lobby;
-} VisitorProfilesArgs;
-
 // Entry of the lobby's visitor table as VisitorProfiles_InitSettings reads it directly.
 typedef struct VisitorProfilesVisitor {
     u16 country;
