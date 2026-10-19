@@ -51,10 +51,10 @@ typedef struct WirelessTradeMonInfo {
 typedef struct WirelessTradeSlide {
     fx32 startX;
     fx32 startY;
-    u8 filler_08[4];
+    u8 padding_08[4];
     fx32 endX;
     fx32 endY;
-    u8 filler_14[4];
+    u8 padding_14[4];
 } WirelessTradeSlide;
 
 // The partner's Chatot cry as received.
@@ -81,16 +81,16 @@ struct WirelessTradeSelectMon {
     u32 tradeAccepted;
     u32 answers[2]; // per player, written by the receive handlers
     u32 resultMsg;
-    u8 filler_78[0x1C];
+    u8 padding_78[0x1C];
     int cursor;
     int partnerCursor;
     u16 cursorBlinkAngle;
-    u8 filler_9E[0xAE];
+    u8 padding_9E[0xAE];
     u32 selectResult;
-    u8 filler_150[8];
+    u8 padding_150[8];
     int dpadDir;
     int partnerDpadDir;
-    u8 filler_160[0x18];
+    u8 padding_160[0x18];
     u32 unk_178;
     u32 unk_17C;
     BgConfig *bgConfig;
@@ -98,7 +98,7 @@ struct WirelessTradeSelectMon {
     MessageFormat *nicknameFormat;
     MessageFormat *unk_18C;
     MsgData *msgData;
-    u8 filler_194[4];
+    u8 padding_194[4];
     String *playerName;
     String *itemLabel;
     SpriteList *spriteList;
@@ -107,35 +107,35 @@ struct WirelessTradeSelectMon {
     SpriteResource *resObjs[2][4]; // char/pltt/cell/anim, main and sub screen
     SpriteResourcesHeader resHeaders[2];
     Sprite *cursorSprites[2];
-    u8 filler_34C[0x30];
+    u8 padding_34C[0x30];
     Sprite *iconSprites[WIRELESS_TRADE_NUM_SLOTS];
     Sprite *itemSprites[WIRELESS_TRADE_NUM_SLOTS];
     Sprite *capsuleSprites[WIRELESS_TRADE_NUM_SLOTS];
     Sprite *detailSprites[6]; // mon pic, ball, gender; own and partner
     Sprite *tradeSprite;
-    u8 filler_428[0x1C];
+    u8 padding_428[0x1C];
     Window windows[WIRELESS_TRADE_NUM_WINDOWS];
     u8 unk_664[4];
     ListMenuItem *menuItems;
-    u8 filler_66C[4];
+    u8 padding_66C[4];
     u32 yesNoState;
     u32 unk_674;
-    u8 filler_678[0x24];
+    u8 padding_678[0x24];
     WirelessTradeMonInfo mons[WIRELESS_TRADE_NUM_SLOTS + 1]; // the last one is the "Quit" button
-    u8 filler_76C[0x30];
+    u8 padding_76C[0x30];
     void *iconCharBuffers[WIRELESS_TRADE_NUM_SLOTS];
     NNSG2dCharacterData *iconCharData[WIRELESS_TRADE_NUM_SLOTS];
     u8 monPics[2][WIRELESS_TRADE_MON_PIC_SIZE];
     PokepicTemplate monPicTemplates[2];
     int pendingMonPic; // 1 + side of the pic to upload in vblank
-    u8 filler_2120[0x100];
+    u8 padding_2120[0x100];
     WirelessTradeSelectMonFunc callback;
     Party *party;
     Party *partnerParty;
     u32 unk_222C;
     SavePalPad *palPad;
     SavePalPad palPadPacket;
-    u8 filler_22BC[8];
+    u8 padding_22BC[8];
     int bgScrollY;
     u32 slideStep;
     int startDelay; // written by the receive handlers

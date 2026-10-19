@@ -41,7 +41,7 @@ void CommState_JoinSpinTrade(int netId);
 void CommState_SetMaxEntries(int mode);
 BOOL Comm_GetConnectedChildren(void);
 BOOL CommState_ReportsErrors(void);
-void DrawingSessionLink_RegisterCommands(int a0);
+void DrawingSessionLink_RegisterCommands(int context);
 void CommRandom_Init(void *random);
 SaveData *FieldSystem_GetSaveData(FieldSystem *fieldSystem);
 BOOL FieldSystem_TaskIsRunning(FieldSystem *fieldSystem);

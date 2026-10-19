@@ -183,8 +183,8 @@ static int RecordMixing_LeaderUpdateMembers(RecordMixingApp *app, int index);
 
 void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count);
-void Comm_InitSyncedSave(s32 *arg0);
-s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
+void Comm_InitSyncedSave(s32 *state);
+s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *state);
 
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state);
 int RecordMixing_GetMemberCount(RecordMixingApp *app);

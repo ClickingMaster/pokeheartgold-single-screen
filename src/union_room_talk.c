@@ -34,7 +34,7 @@ BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 int UnionRoom_TrySendTalkCancel(struct UnionRoom *unionRoom, int ret);
 static int UnionRoom_GetGroupOfMemberSlot(int slot);
 static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot);
-static int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt);
+static int UnionRoom_GetSentTalkReplyMsg(int reply, int gender, MessageFormat *msgFmt);
 static void UnionRoom_FillStatusMembers(UnionRoomStatus *status, int unused);
 static void UnionRoomStatus_Init(UnionRoomStatus *status);
 void UnionRoom_ResetTalk(struct UnionRoom *unionRoom);
@@ -220,9 +220,9 @@ int UnionRoom_GetPartnerHometownMsg(MessageFormat *msgFmt) {
     return 15;
 }
 
-static int UnionRoom_GetSentTalkReplyMsg(int a0, int gender, MessageFormat *msgFmt) {
-    if (a0 != 0) {
-        return sSentTalkReplyMsgs[a0][gender];
+static int UnionRoom_GetSentTalkReplyMsg(int reply, int gender, MessageFormat *msgFmt) {
+    if (reply != 0) {
+        return sSentTalkReplyMsgs[reply][gender];
     }
     return UnionRoom_GetPartnerHometownMsg(msgFmt);
 }
