@@ -8,31 +8,15 @@
 #include "communication_command.h"
 #include "communication_core.h"
 #include "comm_state.h"
-typedef struct TradePacket {
-    u32 data[0xFB];
-} TradePacket;
-typedef struct TradeWork {
-    u8 pad0[0x5c];
-    int sequence, state, count;
-    u32 unk68;
-    u32 slots[2];
-    u8 pad74[0x24];
-    u32 selection;
-    u8 pad9c[0x2188];
-    void *send, *receive;
-    u32 unk222c;
-    SavePalPad *palPad;
-    u8 pad2234[0x98];
-    u32 remoteState;
-    u8 pad22d0[0x30];
-    u8 buffers[2][0x590];
-    TradePacket packets[2];
-} TradeWork;
+#include "wireless_trade_select_mon_internal.h"
+
+// The field system as seen by the link command handlers: the selection screen's work is kept in the field
+// system's filler_88 while the screen runs (WirelessTrade_SetWork).
 typedef struct TradeContext {
     u8 pad0[12];
     SaveData *saveData;
     u8 pad10[0x78];
-    TradeWork *work;
+    WirelessTradeSelectMon *work;
 } TradeContext;
 typedef void (*WirelessTradeRecvFunc)();
 
@@ -42,7 +26,7 @@ typedef struct WirelessTradeCommand {
     void *(*getBuffer)(int sender, TradeContext *context);
 } WirelessTradeCommand;
 
-void WirelessTradeSelectMon_SendCommandIfChanged(TradeWork *, int, int);
+void WirelessTradeSelectMon_SendCommandIfChanged(WirelessTradeSelectMon *, int, int);
 void WirelessTradeSelectMon_SendPartyChunk(int, void *, int);
 
 void WirelessTrade_RegisterCommands(TradeContext *context);
@@ -58,7 +42,7 @@ void WirelessTrade_RecvRemoteState(int sender, int unused, u8 *data, TradeContex
 void WirelessTrade_RecvSpecialRibbons(int sender, int unused, u8 *data, TradeContext *context);
 void WirelessTrade_RecvPalPad(int sender, int unused, SavePalPad *data, TradeContext *context);
 void WirelessTrade_RecvPacket(int sender, int unused, void *data, TradeContext *context);
-void WirelessTrade_SetWork(TradeContext *context, TradeWork *work);
+void WirelessTrade_SetWork(TradeContext *context, WirelessTradeSelectMon *work);
 u32 WirelessTrade_GetPacketSize(void);
 u32 WirelessTrade_GetSpecialRibbonsSize(void);
 u32 WirelessTrade_GetPalPadSize(void);
@@ -78,7 +62,7 @@ void WirelessTrade_RecvRemoteState(int sender, int unused, u8 *data, TradeContex
 void WirelessTrade_RecvSpecialRibbons(int sender, int unused, u8 *data, TradeContext *context);
 void WirelessTrade_RecvPalPad(int sender, int unused, SavePalPad *data, TradeContext *context);
 void WirelessTrade_RecvPacket(int sender, int unused, void *data, TradeContext *context);
-void WirelessTrade_SetWork(TradeContext *context, TradeWork *work);
+void WirelessTrade_SetWork(TradeContext *context, WirelessTradeSelectMon *work);
 u32 WirelessTrade_GetPacketSize(void);
 u32 WirelessTrade_GetSpecialRibbonsSize(void);
 u32 WirelessTrade_GetPalPadSize(void);

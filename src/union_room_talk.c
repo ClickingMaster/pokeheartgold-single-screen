@@ -20,58 +20,12 @@
 #include "player_data.h"
 #include "trainer_card_data.h"
 #include "union_room_avatar.h"
+#include "union_room_internal.h"
 
 // Union Room talk: the part of the Union Room object (FieldSystem.unionRoom) used while the player talks to another player: the link commands of the talk menu (choice,
 // reply, cancel, battle party choice, trainer card exchange), the script messages for what a player is doing,
 // the activity and chat message broadcast in the player's beacon, and the language greeting learned from a
 // foreign player.
-
-// What a Union Room player broadcasts in its beacon besides its profile and chat message: the activity it is busy
-// with and, for a parent, the members of its group.
-typedef struct UnionRoomStatus {
-    u32 memberIds[4];    // 0x00: trainer ids of net ids 1-4
-    u8 unk10[4];         // 0x10
-    u8 unk14[4];         // 0x14
-    u8 memberAvatars[4]; // 0x18: avatar | gender << 7
-    u8 activity;         // 0x1C
-} UnionRoomStatus;       // size: 0x20
-
-// A player's beacon record as seen by the Union Room (communication layer, 0xC0 bytes each).
-typedef struct UnionRoomPeerInfo {
-    u8 unk00[0x30];         // chat message, profile
-    UnionRoomStatus status; // 0x30
-} UnionRoomPeerInfo;
-
-typedef struct UnionRoomPeerRecord {
-    u8 unk00[0x50];
-    UnionRoomPeerInfo info; // 0x50
-} UnionRoomPeerRecord;
-
-// The Union Room object; only the fields used here.
-struct UnionRoom {
-    FieldSystem *fieldSystem;         // 0x000
-    SaveData *saveData;               // 0x004
-    PlayerProfile *profile;           // 0x008
-    u8 unk00C[0x20 - 0x0C];           // 0x00C
-    u32 connectRequest;               // 0x020
-    u32 unk24;                        // 0x024
-    u32 unk28;                        // 0x028
-    u32 talkChoiceReceived;           // 0x02C: set by link command 0x67
-    u32 talkReply;                    // 0x030: the partner's answer (link command 0x63)
-    u32 sentTalkReply;                // 0x034
-    u8 unk038[0x40 - 0x38];           // 0x038
-    u32 talkChoice;                   // 0x040: what the partner chose to do (link command 0x67)
-    u32 partnerCancelled;             // 0x044: link command 0x68
-    u8 unk048[0x110 - 0x48];          // 0x048
-    UnionRoomPeerRecord *records[16]; // 0x110: the players' beacon records, NULL if absent
-    u8 unk150[0x174 - 0x150];         // 0x150
-    u16 unk174;                       // 0x174
-    u8 battleChoice[2];               // 0x176: per net id, link command 0x65 (2: cancelled)
-    MailMessage ownChatMessage;       // 0x178: the player's last chat message
-    u32 ownChatMessageIsNew;          // 0x180
-    TrainerCardData *ownCard;         // 0x184
-    TrainerCardData *cards[2];        // 0x188: per net id, the trainer cards exchanged
-}; // size: 0x190
 
 void CommState_SetLinkMode13RequestMode0(void);
 u32 CommPlayerInfo_GetCountry(int netId);
@@ -189,7 +143,7 @@ static int UnionRoom_GetGroupOfMemberSlot(int slot) {
 
 static int UnionRoom_GetPlayerActivityMsg(struct UnionRoom *unionRoom, int slot) {
     int index, gender;
-    UnionRoomPeerInfo *info;
+    UnionRoomRecordInfo *info;
     UnionRoomStatus *status;
     PlayerProfile *profile;
 

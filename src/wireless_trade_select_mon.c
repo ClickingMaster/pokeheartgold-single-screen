@@ -70,15 +70,8 @@
 #include "update_dex_received.h"
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
+#include "wireless_trade_select_mon_internal.h"
 #include "yes_no_prompt.h"
-
-#define WIRELESS_TRADE_NUM_SLOTS   12 // 6 own party slots, then the partner's 6
-#define WIRELESS_TRADE_SLOT_CANCEL 12 // the cursor position of the "Quit" button
-#define WIRELESS_TRADE_NUM_WINDOWS 34
-
-// Party data travels in chunks of this size.
-#define WIRELESS_TRADE_PARTY_CHUNK_SIZE 0x590
-#define WIRELESS_TRADE_MON_PIC_SIZE     0xC80
 
 // Communication commands
 #define WIRELESS_TRADE_CMD_PARTY_CHUNK 0x16
@@ -95,134 +88,6 @@
 #define WIRELESS_TRADE_ANSWER_CONFIRM 3
 #define WIRELESS_TRADE_ANSWER_REFUSE  4
 
-// What the screen shows of one party slot.
-typedef struct WirelessTradeMonInfo {
-    u16 species;        // 0x0, 0: empty slot
-    u16 heldItem;       // 0x2, 0: none, 1: item, 2: mail
-    u8 ball;            // 0x4
-    u8 isEgg;           // 0x5
-    u8 form;            // 0x6
-    u8 padding_7;       // 0x7
-    u16 gender;         // 0x8
-    u16 flip;           // 0xA, BASE_FLIP of the species
-    u32 capsule;        // 0xC, ball capsule id
-} WirelessTradeMonInfo; // size: 0x10
-
-// A straight-line slide of a party icon to its place above the trade question.
-typedef struct WirelessTradeSlide {
-    fx32 startX;      // 0x00
-    fx32 startY;      // 0x04
-    u8 filler_08[4];  // 0x08
-    fx32 endX;        // 0x0C
-    fx32 endY;        // 0x10
-    u8 filler_14[4];  // 0x14
-} WirelessTradeSlide; // size: 0x18
-
-// The partner's Chatot cry as received.
-typedef struct WirelessTradeChatotData {
-    u32 data[0xFB];
-} WirelessTradeChatotData; // size: 0x3EC
-
-typedef struct WirelessTradeSelectMon WirelessTradeSelectMon;
-typedef int (*WirelessTradeSelectMonFunc)(WirelessTradeSelectMon *work);
-
-struct WirelessTradeSelectMon {
-    FieldSystem *fieldSystem;                                    // 0x0000
-    SaveData *saveData;                                          // 0x0004
-    WirelessTradeSelectMonArgs *args;                            // 0x0008
-    PokemonSummaryArgs summaryArgs;                              // 0x000C
-    u32 summaryOfPartner;                                        // 0x0048
-    OverlayManager *summaryApp;                                  // 0x004C
-    u32 summaryActive;                                           // 0x0050
-    u32 state;                                                   // 0x0054
-    int exchangeState;                                           // 0x0058
-    int sentChunks;                                              // 0x005C
-    int commState;                                               // 0x0060, written by the receive handlers
-    int receivedChunks;                                          // 0x0064
-    u32 tradeAccepted;                                           // 0x0068
-    u32 answers[2];                                              // 0x006C, per player, written by the receive handlers
-    u32 resultMsg;                                               // 0x0074
-    u8 filler_78[0x1C];                                          // 0x0078
-    int cursor;                                                  // 0x0094
-    int partnerCursor;                                           // 0x0098
-    u16 cursorBlinkAngle;                                        // 0x009C
-    u8 filler_9E[0xAE];                                          // 0x009E
-    u32 selectResult;                                            // 0x014C
-    u8 filler_150[8];                                            // 0x0150
-    int dpadDir;                                                 // 0x0158
-    int partnerDpadDir;                                          // 0x015C
-    u8 filler_160[0x18];                                         // 0x0160
-    u32 unk_178;                                                 // 0x0178
-    u32 unk_17C;                                                 // 0x017C
-    BgConfig *bgConfig;                                          // 0x0180
-    MessageFormat *msgFormat;                                    // 0x0184
-    MessageFormat *nicknameFormat;                               // 0x0188
-    MessageFormat *unk_18C;                                      // 0x018C
-    MsgData *msgData;                                            // 0x0190
-    u8 filler_194[4];                                            // 0x0194
-    String *playerName;                                          // 0x0198
-    String *itemLabel;                                           // 0x019C
-    SpriteList *spriteList;                                      // 0x01A0
-    G2dRenderer renderer;                                        // 0x01A4
-    GF_2DGfxResMan *resMan[4];                                   // 0x02CC
-    SpriteResource *resObjs[2][4];                               // 0x02DC, char/pltt/cell/anim, main and sub screen
-    SpriteResourcesHeader resHeaders[2];                         // 0x02FC
-    Sprite *cursorSprites[2];                                    // 0x0344
-    u8 filler_34C[0x30];                                         // 0x034C
-    Sprite *iconSprites[WIRELESS_TRADE_NUM_SLOTS];               // 0x037C
-    Sprite *itemSprites[WIRELESS_TRADE_NUM_SLOTS];               // 0x03AC
-    Sprite *capsuleSprites[WIRELESS_TRADE_NUM_SLOTS];            // 0x03DC
-    Sprite *detailSprites[6];                                    // 0x040C, mon pic, ball, gender; own and partner
-    Sprite *tradeSprite;                                         // 0x0424
-    u8 filler_428[0x1C];                                         // 0x0428
-    Window windows[WIRELESS_TRADE_NUM_WINDOWS];                  // 0x0444
-    u8 unk_664[4];                                               // 0x0664
-    ListMenuItem *menuItems;                                     // 0x0668
-    u8 filler_66C[4];                                            // 0x066C
-    u32 yesNoState;                                              // 0x0670
-    u32 unk_674;                                                 // 0x0674
-    u8 filler_678[0x24];                                         // 0x0678
-    WirelessTradeMonInfo mons[WIRELESS_TRADE_NUM_SLOTS + 1];     // 0x069C, the last one is the "Quit" button
-    u8 filler_76C[0x30];                                         // 0x076C
-    void *iconCharBuffers[WIRELESS_TRADE_NUM_SLOTS];             // 0x079C
-    NNSG2dCharacterData *iconCharData[WIRELESS_TRADE_NUM_SLOTS]; // 0x07CC
-    u8 monPics[2][WIRELESS_TRADE_MON_PIC_SIZE];                  // 0x07FC
-    PokepicTemplate monPicTemplates[2];                          // 0x20FC
-    int pendingMonPic;                                           // 0x211C, 1 + side of the pic to upload in vblank
-    u8 filler_2120[0x100];                                       // 0x2120
-    WirelessTradeSelectMonFunc callback;                         // 0x2220
-    Party *party;                                                // 0x2224
-    Party *partnerParty;                                         // 0x2228
-    u32 unk_222C;                                                // 0x222C
-    SavePalPad *palPad;                                          // 0x2230
-    SavePalPad palPadPacket;                                     // 0x2234
-    u8 filler_22BC[8];                                           // 0x22BC
-    int bgScrollY;                                               // 0x22C4
-    u32 slideStep;                                               // 0x22C8
-    int startDelay;                                              // 0x22CC, written by the receive handlers
-    WirelessTradeSlide slides[2];                                // 0x22D0
-    u8 partyChunks[2][WIRELESS_TRADE_PARTY_CHUNK_SIZE];          // 0x2300, receive buffers
-    WirelessTradeChatotData chatot[2];                           // 0x2E20
-    u32 friendStates[32];                                        // 0x35F8
-    int friendNetId;                                             // 0x3678
-    int chosenRosterSlot;                                        // 0x367C
-    MessageFormat *rosterMsgFormat;                              // 0x3680
-    MsgData *rosterMsgData;                                      // 0x3684
-    ListMenuItem *rosterItems;                                   // 0x3688
-    ListMenu *rosterMenu;                                        // 0x368C
-    Window rosterWindow;                                         // 0x3690
-    FriendRoster *roster;                                        // 0x36A0
-    u32 tradesDone;                                              // 0x36A4
-    s32 saveState;                                               // 0x36A8
-    int lastSentValue;                                           // 0x36AC
-    int lastSentCommand;                                         // 0x36B0
-    WaitingIcon *waitingIcon;                                    // 0x36B4
-    u32 timeoutActive;                                           // 0x36B8
-    int timeoutCounter;                                          // 0x36BC
-    YesNoPrompt *yesNoPrompt;                                    // 0x36C0
-    TouchscreenListMenuSpawner *touchMenuSpawner;                // 0x36C4
-    TouchscreenListMenu *touchMenu;                              // 0x36C8
-}; // size: 0x36CC
 
 typedef struct WirelessTradeSlotPos {
     int x;

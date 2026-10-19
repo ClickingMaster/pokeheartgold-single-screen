@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0422.h"
 #include "record_mixing/record_mixing_exchange.h"
+#include "record_mixing/record_mixing_internal.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -47,8 +48,6 @@
 #include "wireless_manager.h"
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
-
-#define RECORD_MIXING_MAX_MEMBERS 5
 
 enum RecordMixingInitState {
     RECORD_MIXING_INIT_SETUP,
@@ -103,114 +102,12 @@ enum RecordMixingState {
     RECORD_MIXING_STATE_WAIT_TEXT,
 };
 
-typedef struct RecordMixingMember {
-    PlayerProfile *cur;
-    PlayerProfile *prev;
-} RecordMixingMember;
-
-// Trainer id of the member in a slot, compared as one 64-bit value.
-typedef union RecordMixingMemberKey {
-    struct {
-        u32 id;
-        u32 valid;
-    } s;
-
-    u64 raw;
-} RecordMixingMemberKey;
-
-typedef struct RecordMixingMemberKeys {
-    RecordMixingMemberKey cur;
-    RecordMixingMemberKey prev;
-} RecordMixingMemberKeys;
-
 // One step of the player sprite flash; a palette of 0xFF restarts the cycle.
 typedef struct RecordMixingFlashFrame {
     u8 duration;
     u8 palette;
 } RecordMixingFlashFrame;
 
-// Palette flash of the player sprite while records are mixed.
-typedef struct RecordMixingFlash {
-    u32 active;
-    u32 frame;
-    s32 timer;
-    void *plttRaw;
-    NNSG2dPaletteData *pltt;
-} RecordMixingFlash;
-
-typedef struct RecordMixingApp {
-    BgConfig *bgConfig;                                                      // 0x0000
-    u32 unk_0004;                                                            // 0x0004
-    RecordMixingArgs *args;                                                  // 0x0008
-    RecordMixingFlash flash;                                                 // 0x000C
-    SysTask *task;                                                           // 0x0020
-    MessageFormat *msgFmt;                                                   // 0x0024
-    MsgData *msgData;                                                        // 0x0028
-    String *memberNames[RECORD_MIXING_MAX_MEMBERS];                          // 0x002C
-    u32 unk_0040;                                                            // 0x0040
-    String *messageText;                                                     // 0x0044
-    String *titleText;                                                       // 0x0048
-    u32 printerId;                                                           // 0x004C
-    SpriteList *spriteList;                                                  // 0x0050
-    G2dRenderer renderer;                                                    // 0x0054
-    GF_2DGfxResMan *resMan[4];                                               // 0x017C
-    u8 unk_018C[0x20];                                                       // 0x018C
-    SpriteResource *charRes;                                                 // 0x01AC
-    SpriteResource *plttRes;                                                 // 0x01B0
-    SpriteResource *cellRes;                                                 // 0x01B4
-    SpriteResource *animRes;                                                 // 0x01B8
-    u8 unk_01BC[0x48];                                                       // 0x01BC
-    SpriteResourcesHeader spriteHeader;                                      // 0x0204
-    Sprite *playerSprite;                                                    // 0x0228
-    Sprite *memberSprites[RECORD_MIXING_MAX_MEMBERS];                        // 0x022C
-    u8 unk_0240[0x58];                                                       // 0x0240
-    Window memberListWindow;                                                 // 0x0298
-    Window messageWindow;                                                    // 0x02A8
-    Window buttonWindows[2];                                                 // 0x02B8
-    Window titleWindow;                                                      // 0x02D8
-    YesNoPrompt *yesNoPrompt;                                                // 0x02E8
-    void *avatarCharRaw[2];                                                  // 0x02EC
-    NNSG2dCharacterData *avatarChar[2];                                      // 0x02F4
-    void *avatarPlttRaw[2];                                                  // 0x02FC
-    NNSG2dPaletteData *avatarPltt[2];                                        // 0x0304
-    NNSG2dScreenData *buttonScreen;                                          // 0x030C
-    void *buttonScreenRaw;                                                   // 0x0310
-    MenuInputState menuInputState;                                           // 0x0314
-    int state;                                                               // 0x0318
-    int nextState;                                                           // 0x031C
-    u32 unk_0320;                                                            // 0x0320
-    s32 counter;                                                             // 0x0324
-    u8 unk_0328[0x10];                                                       // 0x0328
-    RecordMixingMember members[RECORD_MIXING_MAX_MEMBERS];                   // 0x0338
-    int memberStates[RECORD_MIXING_MAX_MEMBERS];                             // 0x0360
-    s32 saveState;                                                           // 0x0374
-    u16 pulseAngle;                                                          // 0x0378
-    u8 unk_037A[2];                                                          // 0x037A
-    u16 *avatarPalette;                                                      // 0x037C
-    u8 unk_0380[8];                                                          // 0x0380
-    u8 sendBuffer[RECORD_MIXING_BUFFER_SIZE];                                // 0x0388
-    u8 receiveBuffers[RECORD_MIXING_MAX_MEMBERS][RECORD_MIXING_BUFFER_SIZE]; // 0x0F48
-    u32 recordsReceived;                                                     // 0x4A08
-    SaveData *saveData;                                                      // 0x4A0C
-    u32 leaderJoinPending;                                                   // 0x4A10
-    u8 isMixing;                                                             // 0x4A14
-    u8 yesNoActive;                                                          // 0x4A15
-    u16 unk_4A16;                                                            // 0x4A16
-    int lastMemberCount;                                                     // 0x4A18
-    int participantCount;                                                    // 0x4A1C
-    int joinPending;                                                         // 0x4A20
-    u32 leavingMask;                                                         // 0x4A24
-    u8 leaveRequested;                                                       // 0x4A28
-    s8 maxEntriesMode;                                                       // 0x4A29
-    u8 startMemberCount;                                                     // 0x4A2A
-    u8 startMixingSent;                                                      // 0x4A2B
-    int leaveConnectedCount;                                                 // 0x4A2C
-    u16 assignedCount;                                                       // 0x4A30
-    s16 leaveWaitFrames;                                                     // 0x4A32
-    s32 leaveTimeout;                                                        // 0x4A34
-    s32 buttonHighlightTimer;                                                // 0x4A38
-    RecordMixingMemberKeys memberKeys[RECORD_MIXING_MAX_MEMBERS];            // 0x4A3C
-} RecordMixingApp;                                                           // size: 0x4A8C
 
 typedef int (*RecordMixingStateFunc)(RecordMixingApp *app, int state);
 
@@ -288,12 +185,8 @@ void CommState_SetRecordMixingLinkMode(void);
 void CommState_SetMaxEntries(int count); // defined with an s8 parameter; the callers pass an int untruncated
 void Comm_InitSyncedSave(s32 *arg0);
 s32 Comm_SyncedSave(SaveData *saveData, s32 arg1, u32 *arg2);
-void RecordMixingLink_RegisterCommands(RecordMixingApp *app);
 
 int RecordMixing_State_AbortLeave(RecordMixingApp *app, int state);
-void RecordMixing_StartFlash(RecordMixingApp *app);
-void RecordMixing_SetStateFromLink(RecordMixingApp *app, int state, int netId);
-void RecordMixing_SetStateFromLinkInMenu(RecordMixingApp *app, int state, int netId);
 int RecordMixing_GetMemberCount(RecordMixingApp *app);
 
 static const u8 sRecordMixingButtonX[2] = { 16, 24 };
@@ -492,7 +385,7 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
             UnionRoom_SetBeaconActivity(2);
         }
         WirelessStatusIcon_Create();
-        RecordMixing_BuildSendBuffer(app->saveData, app->sendBuffer);
+        RecordMixing_BuildSendBuffer(app->saveData, &app->sendBuffer);
         app->task = SysTask_CreateOnVBlankQueue((SysTaskFunc)RecordMixing_VBlankTask, app, 5);
         NARC_Delete(narc);
         (*state)++;

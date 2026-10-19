@@ -128,18 +128,18 @@ static const CommCommand sRecordMixingLinkCommands[] = {
     { CommCmd_RecvIgnored,                  RecordMixingLink_GetSize0,           NULL                           },
 };
 
-void RecordMixingLink_RegisterCommands(RecordMixingLinkWork *room) {
+void RecordMixingLink_RegisterCommands(RecordMixingApp *room) {
     Comm_RegisterCommandTable(sRecordMixingLinkCommands, NELEMS(sRecordMixingLinkCommands), room);
 }
 
 static void RecordMixingLink_RecvRecords(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
 
     room->recordsReceived++;
 }
 
 static void RecordMixingLink_RecvLeaderMenuState(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
     u8 *state = data;
 
     if (sender == 0) {
@@ -148,7 +148,7 @@ static void RecordMixingLink_RecvLeaderMenuState(int sender, int size, void *dat
 }
 
 static void RecordMixingLink_RecvStartMixing(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
 
     room->recordsReceived = 0;
     room->isMixing = 1;
@@ -160,13 +160,13 @@ static void RecordMixingLink_RecvStartMixing(int sender, int size, void *data, v
 }
 
 static void RecordMixingLink_RecvClearMessage(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
 
     RecordMixing_SetStateFromLink(room, 2, 0);
 }
 
 static void RecordMixingLink_HandleJoinRequest(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
     RecordMixingJoinRequest *src = data;
 
     if (sender != 0) {
@@ -214,12 +214,12 @@ static void RecordMixingLink_HandleJoinRequest(int sender, int size, void *data,
 }
 
 static void RecordMixingLink_RecvMemberJoined(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
     u8 *member = data;
 
     RecordMixing_SetStateFromLinkInMenu(room, 1, *member);
     if (Comm_GetLocalNetId() == 0) {
-        room->flag = 0;
+        room->unk_0384 = 0;
     }
 }
 
@@ -230,7 +230,7 @@ static void RecordMixingLink_RecvUnused109(int sender, int size, void *data, voi
 }
 
 static void RecordMixingLink_RecvCloseYesNo(int sender, int size, void *data, void *context) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
 
     if (Comm_GetLocalNetId() != 0) {
         RecordMixing_SetStateFromLink(room, 13, 0);
@@ -244,17 +244,17 @@ static void RecordMixingLink_RecvJoinNotice(int sender, int size, void *data, vo
     }
 }
 
-void RecordMixingLink_SendRecords(RecordMixingLinkWork *room, int unused) {
+void RecordMixingLink_SendRecords(RecordMixingApp *room, int unused) {
     int i;
     u32 checksum = 0;
-    u32 *p = room->send;
+    u32 *p = room->sendBuffer.records;
     for (i = 0; i < 0x2ee; i++) {
         checksum ^= *p;
         p++;
     }
-    room->checksum = checksum;
-    room->random = LCRandom();
-    Comm_SendCommandNoCopy(116, room->send, 0xbc0);
+    room->sendBuffer.checksum = checksum;
+    room->sendBuffer.random = LCRandom();
+    Comm_SendCommandNoCopy(116, &room->sendBuffer, 0xbc0);
 }
 
 static u32 RecordMixingLink_GetSize0(void) {
@@ -270,7 +270,7 @@ static u32 RecordMixingLink_GetJoinRequestSize(void) {
 }
 
 static void *RecordMixingLink_GetRecvBuffer(int sender, void *context, int size) {
-    RecordMixingLinkWork *room = context;
+    RecordMixingApp *room = context;
 
-    return room->receive[sender];
+    return room->receiveBuffers[sender];
 }

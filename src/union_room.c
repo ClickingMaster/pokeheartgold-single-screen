@@ -304,7 +304,7 @@ UnionRoomRecord *UnionRoom_GetRecord(struct UnionRoom *unionRoom, int netId) {
     return unionRoom->records[netId];
 }
 
-// What the player standing at map object objId is doing (record + 0x80: activity, kind at +0x1C).
+// What the player standing at map object objId is doing (the activity in its beacon record).
 int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
     UnionRoomRecord *record;
     UnionRoomRecordInfo *info;
@@ -318,8 +318,8 @@ int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
         return 5;
     }
     info = &record->info;
-    _021D41CC.lastActivity = (UnionRoomActivity *)((u8 *)info + 0x30);
-    switch (_021D41CC.lastActivity->kind) {
+    _021D41CC.lastActivity = (UnionRoomStatus *)((u8 *)info + 0x30);
+    switch (_021D41CC.lastActivity->activity) {
     case 0:
         return 1;
     case 1:
@@ -347,15 +347,15 @@ unsupported:
 
 int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind) {
     u8 *record;
-    UnionRoomActivity *activity;
+    UnionRoomStatus *status;
     objId--;
     record = (u8 *)unionRoom->records[objId];
     if (record == NULL) {
         return 5;
     }
-    activity = &((UnionRoomRecordInfo *)(record + 0x50))->activity;
-    _021D41CC.lastActivity = activity;
-    switch (activity->kind) {
+    status = &((UnionRoomRecordInfo *)(record + 0x50))->status;
+    _021D41CC.lastActivity = status;
+    switch (status->activity) {
     case 2:
         if (kind != 3) {
             return 5;

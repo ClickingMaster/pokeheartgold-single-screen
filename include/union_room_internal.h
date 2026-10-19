@@ -11,18 +11,22 @@
 // Union Room connection manager (ARM9 static 0x02059DB0-0x0205A44C): FieldSystem.unionRoom while the player is in the
 // Union Room. A SysTask polls the other players' records every frame and runs the current state function, which
 // drives the wireless connection (searching, connecting as parent or child, disconnecting). The rest of the object
-// (talk messages, 0x0205A44C+) is handled by the Union Room talk code, which keeps its own view of this struct
-// with the same unkXX field names.
+// (talk messages, 0x0205A44C+) is handled by the Union Room talk code.
 
-// A player's record as polled by the Union Room task; the activity kind is what the player is doing.
-typedef struct UnionRoomActivity {
-    u8 unk00[0x1C];
-    u8 kind; // 0x1C
-} UnionRoomActivity;
+// What a Union Room player broadcasts in its beacon besides its profile and chat message: the activity it is busy
+// with and, for a parent, the members of its group.
+typedef struct UnionRoomStatus {
+    u32 memberIds[4];    // trainer ids of net ids 1-4
+    u8 unk10[4];
+    u8 unk14[4];
+    u8 memberAvatars[4]; // avatar | gender << 7
+    u8 activity;
+} UnionRoomStatus;
 
+// A player's beacon record as seen by the Union Room (communication layer, 0xC0 bytes each).
 typedef struct UnionRoomRecordInfo {
-    u8 unk00[0x30];
-    UnionRoomActivity activity; // 0x30
+    u8 unk00[0x30]; // chat message, profile
+    UnionRoomStatus status;
 } UnionRoomRecordInfo;
 
 typedef struct UnionRoomRecord {
@@ -68,7 +72,7 @@ struct UnionRoom {
 // Mirror of the last record looked at and the last choice received (written only).
 typedef struct UnionRoomScratch {
     u32 waitFrames;
-    UnionRoomActivity *lastActivity;
+    UnionRoomStatus *lastActivity;
     u32 lastChoice;
 } UnionRoomScratch;
 
