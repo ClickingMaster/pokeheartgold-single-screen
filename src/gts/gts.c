@@ -548,7 +548,7 @@ static void Gts_InitData(GtsApp *app, OverlayManager *man) {
 static void Gts_ExitDummy(GtsApp *app) {
 }
 
-// Shows window 0 (the top right corner of the main screen, 0xF0-0xFF x 0x00-0x10) on the main screen only.
+// Shows window 0 (the top right corner of the main screen) on the main screen only.
 static void Gts_SetupWindow0(void) {
     GXS_SetVisibleWnd(GX_WNDMASK_NONE);
     GX_SetVisibleWnd(GX_WNDMASK_W0);
@@ -595,7 +595,7 @@ static void Gts_InitSpriteResources(GtsApp *app) {
     SpriteTransfer_CreateExtPlttTransferTask(app->resources[1]);
     SpriteTransfer_CreateExtPlttTransferTask(app->resources[5]);
 
-    // The Pokemon icon palettes, at 0x60 and darkened (each color component halved) at 0xC0.
+    // The Pokemon icon palettes, then a darkened copy (each color component halved).
     rawPalette = GfGfxLoader_GetPlttData(NARC_poketool_icongra_poke_icon, GetMonIconPlttNaix(), &palette, HEAP_ID_61);
     DC_FlushRange(palette->pRawData, 0x60);
     GX_LoadOBJPltt(palette->pRawData, 0x60, 0x60);

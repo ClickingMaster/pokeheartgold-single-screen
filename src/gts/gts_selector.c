@@ -21,11 +21,7 @@
 #include "touchscreen.h"
 
 // The selector of SEEK POKEMON (screen 4) and of the wanted Pokemon of a deposit (screen 6): a panel that slides in
-// on the main screen and returns the chosen species, gender, level range or country (GtsSelector_Start's mode).
-// Species: a grid of letter groups (ABC .. YZ), then the letters of the group, then the list of the species starting
-// with the letter that the player has seen. Countries: the same letter groups plus ANY, the letters, then the list.
-// Gender and level: a list. Groups and letters without any species seen (any country) are greyed out.
-// GtsSelector_Main returns -1 while the player chooses.
+// on the main screen and returns the chosen species, gender, level range or country.
 
 typedef enum GtsSelectorMode {
     GTS_SELECTOR_MODE_SPECIES,
@@ -85,39 +81,39 @@ typedef enum GtsSelectorState {
 } GtsSelectorState;
 
 struct GtsSelector {
-    BgConfig *bgConfig;         // 0x00
-    Window *windows;            // 0x04, the screen's windows[16]
-    Window *messageWindow;      // 0x08
-    Sprite *cursorSprite;       // 0x0C
-    Sprite *rightArrowSprite;   // 0x10
-    Sprite *leftArrowSprite;    // 0x14
-    Sprite *screenCursorSprite; // 0x18, the screen's own cursor (may be NULL), hidden under the panel
-    BgCellManager *cellManager; // 0x1C, slides the panel
-    Pokedex *pokedex;           // 0x20
-    MsgData *gtsMsgData;        // 0x24
-    MsgData *speciesNames;      // 0x28
-    MsgData *countryNames;      // 0x2C
-    void *johtoDexFlags;        // 0x30
-    ListMenuItem *listItems;    // 0x34
-    MessagePrinter *printer;    // 0x38, of the page numbers
-    s16 group;                  // 0x3C, letter group 0..8; -1 none, -2 ANY (countries)
-    s16 letter;                 // 0x3E, in the group, -1 none
-    s16 species;                // 0x40, the result of GTS_SELECTOR_MODE_SPECIES
-    s16 country;                // 0x42, the result of GTS_SELECTOR_MODE_COUNTRY
-    s8 gender;                  // 0x44, the result of GTS_SELECTOR_MODE_GENDER
-    s8 levelRange;              // 0x45, the result of GTS_SELECTOR_MODE_LEVEL
-    u8 filler_46[2];            // 0x46
-    s32 cursor;                 // 0x48
-    int state;                  // 0x4C, GtsSelectorState
-    int nextState;              // 0x50
-    u32 bgId;                   // 0x54, of the windows
-    s16 mode;                   // 0x58, GtsSelectorMode
-    s16 page;                   // 0x5A, of the list
-    int count;                  // 0x5C, of listItems
-    int levelRangeKind;         // 0x60, see Gts_CreateLevelRangeListItems
-    u8 enabled[26];             // 0x64, of the groups or letters shown
-    u8 savedCursor;             // 0x7E, the grid cursor while on a button below the grid
-}; // size: 0x80
+    BgConfig *bgConfig;
+    Window *windows; // the screen's windows[16]
+    Window *messageWindow;
+    Sprite *cursorSprite;
+    Sprite *rightArrowSprite;
+    Sprite *leftArrowSprite;
+    Sprite *screenCursorSprite; // the screen's own cursor (may be NULL), hidden under the panel
+    BgCellManager *cellManager; // slides the panel
+    Pokedex *pokedex;
+    MsgData *gtsMsgData;
+    MsgData *speciesNames;
+    MsgData *countryNames;
+    void *johtoDexFlags;
+    ListMenuItem *listItems;
+    MessagePrinter *printer; // of the page numbers
+    s16 group;               // letter group 0..8; -1 none, -2 ANY (countries)
+    s16 letter;              // in the group, -1 none
+    s16 species;             // the result of GTS_SELECTOR_MODE_SPECIES
+    s16 country;             // the result of GTS_SELECTOR_MODE_COUNTRY
+    s8 gender;               // the result of GTS_SELECTOR_MODE_GENDER
+    s8 levelRange;           // the result of GTS_SELECTOR_MODE_LEVEL
+    u8 filler_46[2];
+    s32 cursor;
+    int state; // GtsSelectorState
+    int nextState;
+    u32 bgId;           // of the windows
+    s16 mode;           // GtsSelectorMode
+    s16 page;           // of the list
+    int count;          // of listItems
+    int levelRangeKind; // see Gts_CreateLevelRangeListItems
+    u8 enabled[26];     // of the groups or letters shown
+    u8 savedCursor;     // the grid cursor while on a button below the grid
+};
 
 typedef struct GtsSelectorWindowPosition {
     u8 x;
@@ -1172,7 +1168,6 @@ static void GtsSelector_ShowGenders(GtsSelector *selector) {
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 31, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_GENDERS);
-    // A byte offset into windows next to the index.
     i = 0;
     offset = i;
     do {
@@ -1443,7 +1438,7 @@ static int GtsSelector_CountSeenSpecies(void *unused, Pokedex *pokedex, int coun
 static int GtsSelector_CreateSpeciesListItems(ListMenuItem **items, MsgData *speciesNames, MsgData *unused2, void *unused3, int letter, Pokedex *pokedex) {
     int speciesCount;
     int i, count;
-    u16 *species = Gts_LoadSpeciesByLetter(HEAP_ID_61, letter, (u32 *)&speciesCount); // compared signed below
+    u16 *species = Gts_LoadSpeciesByLetter(HEAP_ID_61, letter, (u32 *)&speciesCount);
     u16 *entry;
     count = GtsSelector_CountSeenSpecies(unused3, pokedex, speciesCount, species);
     *items = ListMenuItems_New(count + 1, HEAP_ID_61);
@@ -1661,7 +1656,6 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_LETTERS);
     MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, selector->windows, selector->group + 110, 2, MAKE_TEXT_COLOR(15, 14, 2));
-    // A byte offset into windows next to the index.
     i = 1;
     offset = sizeof(Window);
     do {

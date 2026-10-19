@@ -29,11 +29,8 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// The wanted Pokemon of a deposit (screen 6): after the Pokemon to deposit is chosen (screen 5), the player picks the
-// species, the gender (unless the species has only one) and the level range with the selector; "Are these conditions
-// OK?" then deposits (screen 7), B or No goes back to screen 5.
-// The helpers that follow are shared by the screens: the texts of a wanted Pokemon, the level ranges, the species and
-// country lists, the record of a deposit or trade.
+// The wanted Pokemon of a deposit (screen 6), and helpers shared by the screens: the texts of a wanted Pokemon, the
+// level ranges, the species and country lists, the record of a deposit or trade.
 
 typedef enum GtsWantedState {
     GTS_WANTED_STATE_START,
@@ -757,7 +754,6 @@ int Gts_CreateLevelRangeListItems(ListMenuItem **items, MsgData *msgData, int ki
         count = 11;
     }
     *items = ListMenuItems_New(count, HEAP_ID_61);
-    // An explicit guarded do-while (a for loop compiles differently).
     i = 0;
     range = ranges;
     if (i < count) {

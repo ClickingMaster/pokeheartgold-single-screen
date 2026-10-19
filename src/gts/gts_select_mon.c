@@ -33,10 +33,7 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// Choosing a Pokemon (screen 5): the party and the PC boxes are shown one at a time; with nextScreenArg
-// GTS_SELECT_MON_MODE_DEPOSIT the chosen Pokemon is offered for deposit (then the wanted Pokemon is chosen, screen
-// 6), with GTS_SELECT_MON_MODE_TRADE it is offered for the Pokemon of the selected search result (only Pokemon the
-// depositor wants can be picked, the others are dimmed). Pokemon with a special Ribbon, in a special form, holding the
+// Choosing the Pokemon to deposit or to trade (screen 5). Pokemon with a special Ribbon, in a special form, holding the
 // Griseous Orb, and Eggs can't be offered; the Ball Capsule of a party Pokemon is detached first.
 
 typedef enum GtsSelectMonMode {

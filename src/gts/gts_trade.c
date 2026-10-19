@@ -24,7 +24,7 @@ int GtsTrade_Init(GtsApp *app, int state);
 int GtsTrade_Main(GtsApp *app, int state);
 int GtsTrade_Exit(GtsApp *app, int state);
 
-// Starts the trade sequence (OVY_71) for the kind of trade in nextScreenArg (7..10).
+// Starts the trade sequence for the kind of trade in nextScreenArg (7..10).
 int GtsTrade_Init(GtsApp *app, int state) {
     app->depositedMon = AllocMonZeroed(HEAP_ID_61);
     switch (app->nextScreenArg) {

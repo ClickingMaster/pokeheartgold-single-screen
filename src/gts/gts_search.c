@@ -597,7 +597,6 @@ int GtsSearch_SendSearch(GtsApp *app) {
         request.country = app->searchCountry;
         GtsServer_RequestSearchEx(&request, app->searchResults);
     }
-    // Copied as halfword pairs.
     *(u16 *)&app->lastSearch.species = *(u16 *)&app->searchCriteria.species;
     *(u16 *)&app->lastSearch.gender = *(u16 *)&app->searchCriteria.gender;
     *(u16 *)&app->lastSearch.maxLevel = *(u16 *)&app->searchCriteria.maxLevel;

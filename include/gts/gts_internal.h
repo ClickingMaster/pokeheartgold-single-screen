@@ -48,21 +48,21 @@ typedef struct GtsWantedMon {
 } GtsWantedMon;
 
 typedef struct GtsRecord {
-    Pokemon mon;                             // 0x000
-    GtsMonSummary summary;                   // 0x0EC
-    GtsWantedMon wanted;                     // 0x0F0
-    u8 trainerGender;                        // 0x0F6
-    u8 unk_0F7[0x11];                        // 0x0F7
-    u32 exchangeId;                          // 0x108, exchange.asp is sent it after the offered record to pick this one
-    u16 trainerName[PLAYER_NAME_LENGTH + 1]; // 0x10C
-    u16 trainerId;                           // 0x11C
-    u8 country;                              // 0x11E
-    u8 city;                                 // 0x11F
-    u8 trainerClass;                         // 0x120
-    s8 isTraded;                             // 0x121, nonzero once the Pokemon was traded (get.asp)
-    u8 version;                              // 0x122
-    u8 language;                             // 0x123
-} GtsRecord;                                 // size: GTS_RECORD_SIZE
+    Pokemon mon;
+    GtsMonSummary summary;
+    GtsWantedMon wanted;
+    u8 trainerGender;
+    u8 unk_0F7[0x11];
+    u32 exchangeId; // exchange.asp is sent it after the offered record to pick this one
+    u16 trainerName[PLAYER_NAME_LENGTH + 1];
+    u16 trainerId;
+    u8 country;
+    u8 city;
+    u8 trainerClass;
+    s8 isTraded; // nonzero once the Pokemon was traded (get.asp)
+    u8 version;
+    u8 language;
+} GtsRecord;
 
 typedef enum GtsServerState {
     GTS_SERVER_STATE_NONE,
@@ -81,10 +81,6 @@ typedef enum GtsServerState {
     GTS_SERVER_STATE_DONE = 24,
 } GtsServerState;
 
-// The server client keeps its state in one .bss block (defined in the overlay's data asm, gGtsServer).
-// The code reaches parts of the block from nearer base addresses, so the asm labels those parts too:
-// gGtsServerFriendKey (+0x0C), gGtsServerRequest (+0x14), ov70_02246900 (+0x100), ov70_02246920 (+0x120),
-// gGtsServerShortResponse (+0x13C). The views below follow that split.
 // What search.asp is sent: the species and further criteria, then the number of records wanted.
 typedef struct GtsSearchCriteria {
     u8 bytes[6];
@@ -92,20 +88,20 @@ typedef struct GtsSearchCriteria {
 
 typedef struct GtsSearchCriteriaEx {
     u8 bytes[6];
-    s8 count; // 0x6
+    s8 count;
     u8 unk_7;
 } GtsSearchCriteriaEx;
 
 typedef struct GtsServer {
-    int state;        // 0x00, GtsServerState
-    int result;       // 0x04
-    int pid;          // 0x08
-    u32 friendKey[2]; // 0x0C
+    int state; // GtsServerState
+    int result;
+    int pid;
+    u32 friendKey[2];
 
     union {
         u8 bytes[GTS_RECORD_SIZE + 4];
         GtsSearchCriteriaEx search;
-    } request; // 0x14, the payload of the request in flight
+    } request; // the payload of the request in flight
 } GtsServer;
 
 typedef struct GtsFriendKey {
@@ -115,14 +111,14 @@ typedef struct GtsFriendKey {
 
 typedef struct GtsServerAt100 {
     u8 filler_00[0x38];
-    void *exchangeArg; // 0x38, sent after the record by exchange.asp
+    void *exchangeArg; // sent after the record by exchange.asp
     u8 filler_3C[4];
-    u8 *response; // 0x40, buffer of the request in flight
+    u8 *response; // buffer of the request in flight
 } GtsServerAt100;
 
 typedef struct GtsServerAt120 {
     u8 filler_00[0x1C];
-    u8 shortResponse[4]; // 0x1C, gGtsServerShortResponse; [0] is the server's answer code
+    u8 shortResponse[4]; // [0] is the server's answer code
 } GtsServerAt120;
 
 extern volatile GtsServer gGtsServer; // polled every frame (GtsServer_Update)
@@ -153,12 +149,12 @@ typedef struct GtsSearchCursor {
     u16 unk_0A;
     u8 unk_0C[8];
     void *johtoDexFlags;
-    u16 *alphabeticalSpecies;     // 0x18
-    u32 alphabeticalSpeciesCount; // 0x1C
-    u32 genderRatio;              // 0x20, of the wanted species
-    int column;                   // 0x24
-    int leftRow;                  // 0x28
-    int rightRow;                 // 0x2C
+    u16 *alphabeticalSpecies;
+    u32 alphabeticalSpeciesCount;
+    u32 genderRatio; // of the wanted species
+    int column;
+    int leftRow;
+    int rightRow;
 } GtsSearchCursor;
 
 // The icon of a Pokemon of the shown box, loaded into VRAM in the next VBlank.
@@ -188,8 +184,8 @@ typedef struct GtsSelectorArgs {
 } GtsSelectorArgs;
 
 typedef struct GtsGlobals {
-    NNSFndHeapHandle heap; // 0x0, allocations of the network library
-    GtsApp *app;           // 0x4
+    NNSFndHeapHandle heap; // allocations of the network library
+    GtsApp *app;
 } GtsGlobals;
 
 extern GtsGlobals gGtsGlobals;
@@ -198,144 +194,144 @@ typedef void (*GtsVBlankFunc)(GtsApp *app);
 
 // The background palette cycle of screen 0, run as a VBlank task.
 typedef struct GtsPaletteAnim {
-    SysTask *task;         // 0x000
-    BOOL active;           // 0x004
-    u16 basePltt[4 * 16];  // 0x008
-    u16 fadePltt[21 * 16]; // 0x088, palette 0 blended in 7 steps towards each of palettes 1, 2 and 3
-    s16 frame;             // 0x328, in fadePltt
-    s8 reverse;            // 0x32A
-    u8 skipFrame;          // 0x32B, the palette changes every other frame
-    u32 screens;           // 0x32C, 0: both, 1: main, 2: sub
-} GtsPaletteAnim;          // size: 0x330
+    SysTask *task;
+    BOOL active;
+    u16 basePltt[4 * 16];
+    u16 fadePltt[21 * 16]; // palette 0 blended in 7 steps towards each of palettes 1, 2 and 3
+    s16 frame;             // in fadePltt
+    s8 reverse;
+    u8 skipFrame; // the palette changes every other frame
+    u32 screens;  // 0: both, 1: main, 2: sub
+} GtsPaletteAnim;
 
 struct GtsApp {
-    GtsArgs *args;                           // 0x0000
-    BgConfig *bgConfig;                      // 0x0004
-    u8 filler_0008[0xC];                     // 0x0008
-    int screen;                              // 0x0014, index into sGtsScreens
-    int nextScreen;                          // 0x0018
-    int statusCheckCaller;                   // 0x001C
-    int prevScreen;                          // 0x0020
-    int nextScreenArg;                       // 0x0024
-    int afterSaveMsgId;                      // 0x0028, printed once the save of screen 7 is written
-    int state;                               // 0x002C, of the current screen
-    int nextState;                           // 0x0030
-    u16 mainMenuShown;                       // 0x0034, the main menu was entered before
-    u16 hasDepositedMon;                     // 0x0036, the player has a Pokemon on the GTS
-    u8 filler_0038[2];                       // 0x0038
-    u16 timer;                               // 0x003A, frames until the GTS may be checked again
-    int serverResult;                        // 0x003C, of the failed request (screen 7 picks the error message from it)
-    int connectionResult;                    // 0x0040, of a failed Wi-Fi connection (DWC_GetLastErrorEx)
-    int connectionErrorCode;                 // 0x0044
-    int connectionErrorType;                 // 0x0048
-    void *heapMemory;                        // 0x004C
-    NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
-    NetConnection wifiConnection;            // 0x0054, passed to DWC_InitInetEx when connecting (screen 0)
-    OverlayManager *tradeSequence;           // 0x00B8
-    PokemonSummaryArgs summaryArgs;          // 0x00BC, of screen 8
-    TRADE_ANIM_WORK tradeAnim;               // 0x00F8, args of the trade sequence (OVY_71)
-    EvolutionTaskData *evolutionTask;        // 0x0110
-    u32 reloadGraphics;                      // 0x0114, the screen asks Gts_Main to rebuild the graphics
-    u16 unk_0118;                            // 0x0118
-    u8 filler_011A[2];                       // 0x011A
-    u16 menuCursor;                          // 0x011C
-    u8 filler_011E[2];                       // 0x011E
-    u16 selectedBox;                         // 0x0120, shown by screen 5, GTS_BOX_PARTY for the party
-    u16 selectedSlot;                        // 0x0122, screen 5's cursor: slot 0..29, 30 BACK, 31 the box name
-    BoxPokemon *selectedMon;                 // 0x0124, the Pokemon to deposit or to trade
-    u32 searchResultCount;                   // 0x0128, in searchResults
-    int selectedResult;                      // 0x012C, in searchResults
-    PlayerProfile *partnerProfile;           // 0x0130
-    u32 offeredBox;                          // 0x0134, GTS_BOX_PARTY for the party
-    u32 offeredSlot;                         // 0x0138
-    GtsRecord record;                        // 0x013C
-    GtsRecord searchResults[8];              // 0x0260, [7] also receives the record of an exchange (screen 7)
-    GtsMonSummary depositSummary;            // 0x0B80, of the Pokemon to deposit
-    GtsWantedMon depositWanted;              // 0x0B84, what the player wants for it
-    GtsWantedMon searchCriteria;             // 0x0B8A, of SEEK POKEMON
-    GtsWantedMon lastSearch;                 // 0x0B90
-    u8 filler_0B96[2];                       // 0x0B96
-    u32 lastSearchCountry;                   // 0x0B98
-    MessageFormat *msgFormat;                // 0x0B9C
-    MsgData *gtsMsgData;                     // 0x0BA0, message bank 775
-    MsgData *speciesNames;                   // 0x0BA4
-    MsgData *wifiMsgData;                    // 0x0BA8, message bank 778
-    MsgData *wifiErrorMsgData;               // 0x0BAC, message bank 800
-    MsgData *countryNames;                   // 0x0BB0
-    String *boxName;                         // 0x0BB4
-    String *cancelText;                      // 0x0BB8
-    String *msgBuffer;                       // 0x0BBC
-    String *titleString;                     // 0x0BC0
-    String *infoStrings[10];                 // 0x0BC4
-    String *errorBuffer;                     // 0x0BEC, the Wi-Fi error message of screen 0
-    int textPrinterId;                       // 0x0BF0
-    SpriteList *spriteList;                  // 0x0BF4
-    G2dRenderer renderer;                    // 0x0BF8
-    GF_2DGfxResMan *resourceManagers[4];     // 0x0D20, char/pltt/cell/anim
-    SpriteResource *resources[8];            // 0x0D30, [main/sub screen][char/pltt/cell/anim]
-    u8 filler_0D50[0x10];                    // 0x0D50
-    SpriteResourcesHeader headers[2];        // 0x0D60
-    u8 filler_0DA8[0x24];                    // 0x0DA8
-    Sprite *cursorSprite;                    // 0x0DCC
-    Sprite *selectorCursorSprite;            // 0x0DD0
-    u8 filler_0DD4[4];                       // 0x0DD4
-    Sprite *monIconSprites[30];              // 0x0DD8, of the shown box
-    Sprite *heldItemSprites[30];             // 0x0E50
-    Sprite *capsuleSprites[6];               // 0x0EC8, the party's Ball Capsules
-    Sprite *monSprite;                       // 0x0EE0
-    Sprite *avatarSprites[8];                // 0x0EE4, [0] the player, [1 + i] the trainer of searchResults[i]
-    Sprite *arrowSprites[2];                 // 0x0F04, screen 5's box arrows; the selector's on screen 4
-    Sprite *avatarMarkerSprite;              // 0x0F0C, over the selected trainer
-    Sprite *panelSprite;                     // 0x0F10, of the sub screen panel
-    int scrollY;                             // 0x0F14, of a search result's screens
-    Window waitingIconWindow;                // 0x0F18, also the message window
-    u8 filler_0F28[0x10];                    // 0x0F28
-    Window titleWindow;                      // 0x0F38
-    Window boxNameWindow;                    // 0x0F48, of screen 5; screen 0's Wi-Fi error window
-    Window windows[16];                      // 0x0F58, each screen's own windows
-    Window infoWindows[16];                  // 0x1058, a Pokemon's summary, trainer and wanted Pokemon
-    Window promptWindow;                     // 0x1158, the message window of a Yes/No prompt
-    Window selectorWindow;                   // 0x1168
-    Window wideWindows[2];                   // 0x1178
-    Window panelWindow;                      // 0x1198, the caption of the sub screen panel
-    GtsSelector *selector;                   // 0x11A8, the species/gender/level/country selector
-    ListMenuItem *listItems;                 // 0x11AC
-    struct ListMenu2D *disconnectMenu;       // 0x11B0, only read by screen 0 (GtsConnection_HandleDisconnectMenu)
-    u8 filler_11B4[8];                       // 0x11B4
-    WaitingIcon *waitingIcon;                // 0x11BC
-    int waitFrames;                          // 0x11C0
-    GtsSearchCursor *searchCursor;           // 0x11C4
-    YesNoPrompt *yesNoPrompt;                // 0x11C8
-    TouchscreenListMenuSpawner *menuSpawner; // 0x11CC
-    TouchscreenListMenu *menu;               // 0x11D0
-    u16 saveMidState;                        // 0x11D4, screen 7's state once the first part of the save is written
-    u16 saveDoneState;                       // 0x11D6, and once the save is complete
-    SysTask *playerAnimTask;                 // 0x11D8
-    u16 playerAnimDone;                      // 0x11DC, set by the player's walk in/out task (Gts_StartPlayer*Anim)
-    u16 hasSearchResults;                    // 0x11DE
-    void *avatarCharAlloc;                   // 0x11E0
-    NNSG2dCharacterData *avatarCharData;     // 0x11E4
-    void *avatarPlttAlloc;                   // 0x11E8
-    NNSG2dPaletteData *avatarPlttData;       // 0x11EC
-    Pokemon *depositedMon;                   // 0x11F0, copy of the deposited Pokemon (GtsTrade)
-    GtsMonSummary *boxSummaries;             // 0x11F4, of the shown box's Pokemon
-    u16 boxMonCount;                         // 0x11F8, Pokemon and Eggs in the PC, counted one box per frame
-    u16 countingBox;                         // 0x11FA, 1-based box being counted, 0 when done
-    int fadedBothScreens;                    // 0x11FC
-    GtsMonIcon *monIcons;                    // 0x1200, of the shown box, freed by the VBlank task
-    GtsVBlankFunc vblankTask;                // 0x1204, run once
-    GtsVBlankFunc vblankFunc;                // 0x1208, run every frame
-    s16 avatarPositions[8][2];               // 0x120C, {x, y} of avatarSprites
-    u8 filler_122C[8];                       // 0x122C
-    GtsCursorValueTable unk_1234;                     // 0x1234
-    WifiServerProfile profile;                     // 0x1260, sent by GtsServer_RequestSetProfile (screen 0)
-    u32 profileResponse[2];                  // 0x12C4, its answer
-    u32 searchCountry;                       // 0x12CC, of SEEK POKEMON, 0 for any
-    GtsPaletteAnim paletteAnim;              // 0x12D0, of screen 0
-    s16 subState;                            // 0x1600, of screen 0's state, reset when the state changes
-    s16 subTimer;                            // 0x1602, likewise
-    u32 requestFrames;                       // 0x1604, frames the request in flight took
-}; // size: 0x1608
+    GtsArgs *args;
+    BgConfig *bgConfig;
+    u8 filler_0008[0xC];
+    int screen; // index into sGtsScreens
+    int nextScreen;
+    int statusCheckCaller;
+    int prevScreen;
+    int nextScreenArg;
+    int afterSaveMsgId; // printed once the save of screen 7 is written
+    int state;          // of the current screen
+    int nextState;
+    u16 mainMenuShown;   // the main menu was entered before
+    u16 hasDepositedMon; // the player has a Pokemon on the GTS
+    u8 filler_0038[2];
+    u16 timer;            // frames until the GTS may be checked again
+    int serverResult;     // of the failed request (screen 7 picks the error message from it)
+    int connectionResult; // of a failed Wi-Fi connection (DWC_GetLastErrorEx)
+    int connectionErrorCode;
+    int connectionErrorType;
+    void *heapMemory;
+    NNSFndHeapHandle heap;        // in heapMemory
+    NetConnection wifiConnection; // passed to DWC_InitInetEx when connecting (screen 0)
+    OverlayManager *tradeSequence;
+    PokemonSummaryArgs summaryArgs; // of screen 8
+    TRADE_ANIM_WORK tradeAnim;
+    EvolutionTaskData *evolutionTask;
+    u32 reloadGraphics; // the screen asks Gts_Main to rebuild the graphics
+    u16 unk_0118;
+    u8 filler_011A[2];
+    u16 menuCursor;
+    u8 filler_011E[2];
+    u16 selectedBox;         // shown by screen 5, GTS_BOX_PARTY for the party
+    u16 selectedSlot;        // screen 5's cursor: slot 0..29, 30 BACK, 31 the box name
+    BoxPokemon *selectedMon; // the Pokemon to deposit or to trade
+    u32 searchResultCount;   // in searchResults
+    int selectedResult;      // in searchResults
+    PlayerProfile *partnerProfile;
+    u32 offeredBox; // GTS_BOX_PARTY for the party
+    u32 offeredSlot;
+    GtsRecord record;
+    GtsRecord searchResults[8];   // [7] also receives the record of an exchange (screen 7)
+    GtsMonSummary depositSummary; // of the Pokemon to deposit
+    GtsWantedMon depositWanted;   // what the player wants for it
+    GtsWantedMon searchCriteria;  // of SEEK POKEMON
+    GtsWantedMon lastSearch;
+    u8 filler_0B96[2];
+    u32 lastSearchCountry;
+    MessageFormat *msgFormat;
+    MsgData *gtsMsgData;
+    MsgData *speciesNames;
+    MsgData *wifiMsgData;
+    MsgData *wifiErrorMsgData;
+    MsgData *countryNames;
+    String *boxName;
+    String *cancelText;
+    String *msgBuffer;
+    String *titleString;
+    String *infoStrings[10];
+    String *errorBuffer; // the Wi-Fi error message of screen 0
+    int textPrinterId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resourceManagers[4]; // char/pltt/cell/anim
+    SpriteResource *resources[8];        // [main/sub screen][char/pltt/cell/anim]
+    u8 filler_0D50[0x10];
+    SpriteResourcesHeader headers[2];
+    u8 filler_0DA8[0x24];
+    Sprite *cursorSprite;
+    Sprite *selectorCursorSprite;
+    u8 filler_0DD4[4];
+    Sprite *monIconSprites[30]; // of the shown box
+    Sprite *heldItemSprites[30];
+    Sprite *capsuleSprites[6]; // the party's Ball Capsules
+    Sprite *monSprite;
+    Sprite *avatarSprites[8];   // [0] the player, [1 + i] the trainer of searchResults[i]
+    Sprite *arrowSprites[2];    // screen 5's box arrows; the selector's on screen 4
+    Sprite *avatarMarkerSprite; // over the selected trainer
+    Sprite *panelSprite;        // of the sub screen panel
+    int scrollY;                // of a search result's screens
+    Window waitingIconWindow;   // also the message window
+    u8 filler_0F28[0x10];
+    Window titleWindow;
+    Window boxNameWindow;   // of screen 5; screen 0's Wi-Fi error window
+    Window windows[16];     // each screen's own windows
+    Window infoWindows[16]; // a Pokemon's summary, trainer and wanted Pokemon
+    Window promptWindow;    // the message window of a Yes/No prompt
+    Window selectorWindow;
+    Window wideWindows[2];
+    Window panelWindow;    // the caption of the sub screen panel
+    GtsSelector *selector; // the species/gender/level/country selector
+    ListMenuItem *listItems;
+    struct ListMenu2D *disconnectMenu; // only read by screen 0 (GtsConnection_HandleDisconnectMenu)
+    u8 filler_11B4[8];
+    WaitingIcon *waitingIcon;
+    int waitFrames;
+    GtsSearchCursor *searchCursor;
+    YesNoPrompt *yesNoPrompt;
+    TouchscreenListMenuSpawner *menuSpawner;
+    TouchscreenListMenu *menu;
+    u16 saveMidState;  // screen 7's state once the first part of the save is written
+    u16 saveDoneState; // and once the save is complete
+    SysTask *playerAnimTask;
+    u16 playerAnimDone; // set by the player's walk in/out task (Gts_StartPlayer*Anim)
+    u16 hasSearchResults;
+    void *avatarCharAlloc;
+    NNSG2dCharacterData *avatarCharData;
+    void *avatarPlttAlloc;
+    NNSG2dPaletteData *avatarPlttData;
+    Pokemon *depositedMon;       // copy of the deposited Pokemon (GtsTrade)
+    GtsMonSummary *boxSummaries; // of the shown box's Pokemon
+    u16 boxMonCount;             // Pokemon and Eggs in the PC, counted one box per frame
+    u16 countingBox;             // 1-based box being counted, 0 when done
+    int fadedBothScreens;
+    GtsMonIcon *monIcons;      // of the shown box, freed by the VBlank task
+    GtsVBlankFunc vblankTask;  // run once
+    GtsVBlankFunc vblankFunc;  // run every frame
+    s16 avatarPositions[8][2]; // {x, y} of avatarSprites
+    u8 filler_122C[8];
+    GtsCursorValueTable unk_1234;
+    WifiServerProfile profile;  // sent by GtsServer_RequestSetProfile (screen 0)
+    u32 profileResponse[2];     // its answer
+    u32 searchCountry;          // of SEEK POKEMON, 0 for any
+    GtsPaletteAnim paletteAnim; // of screen 0
+    s16 subState;               // of screen 0's state, reset when the state changes
+    s16 subTimer;               // likewise
+    u32 requestFrames;          // frames the request in flight took
+};
 
 // Maps a failed request's error to its result.
 int GtsServer_GetErrorResult(int error);
@@ -371,7 +367,7 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
 void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows);
 void Gts_LoadMonPicture(Pokemon *mon);
 
-// SEEK POKEMON (the last of them link with screen 5).
+// SEEK POKEMON.
 void GtsSearch_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unused3, u32 unused4);
 void GtsSearch_DrawFieldLabels(Window *fieldWindows, Window *lineWindow, MsgData *msgData);
 void GtsSearch_DrawResultsButton(BgConfig *bgConfig, Window *window, MsgData *msgData, BOOL enabled);
@@ -433,7 +429,6 @@ int GtsSelector_CountCountriesOfLetter(void *unused, u32 letter);
 // Connecting to and disconnecting from Nintendo Wi-Fi Connection (screen 0), and the text helpers
 // every screen uses. Gts_PrintMessage prints in waitingIconWindow (the message window); align: 0 left at x,
 // 1 centered, 2 right in the window.
-// The last function of the selector (it links with screen 0): whether a letter group has a letter with countries.
 BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group);
 void Gts_PrintMessage(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4);
 void Gts_PrintAlignedFont0(Window *window, String *string, int x, int y, int align, u32 color);

@@ -38,11 +38,8 @@
 #include "text.h"
 #include "wireless_status_icon.h"
 
-// Talking to the GTS server (screen 7), entered with nextScreenArg: 7 deposit the selected Pokemon (post.asp,
-// post_finish.asp), 8 take the deposited Pokemon back (get.asp, return.asp), 9 trade for the selected search result
-// (exchange.asp, exchange_finish.asp), 10 receive the Pokemon the deposited one was traded for, 11 check the GTS's
-// status (result.asp, get.asp), 12 only save. The game is saved in two parts with the request that completes the
-// transaction in between; then the trade sequence (screen 9) shows the Pokemon that came or went.
+// Talking to the GTS server (screen 7): deposit, take back, trade, receive, status check. The game is saved in two
+// parts with the request that completes the transaction in between.
 
 typedef enum GtsTransactionState {
     GTS_TRANSACTION_STATE_START,
@@ -896,7 +893,7 @@ int GtsTransaction_AlreadyTraded(GtsApp *app) {
 
 static void GtsTransaction_PrintServerError(GtsApp *app) {
     int msgId = msg_0775_00154; // Communication error...
-    // Switched over serverResult + 15 (-11..-6, -1, -14, -2; the plain switch compiles differently).
+    // Switched over serverResult + 15: -11..-6, -1, -14, -2.
     switch (app->serverResult + 15) {
     case 4:
     case 5:

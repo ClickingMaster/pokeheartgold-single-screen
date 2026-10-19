@@ -36,11 +36,8 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// Connecting to Nintendo Wi-Fi Connection (screen 0, the first and last screen of the GTS). Entered at the start it
-// asks whether to connect (unless GtsArgs.connectDirectly says to connect directly), connects, authenticates, starts the GTS
-// server client, asks info.asp and sends the profile (setProfile.asp), then opens the main menu (screen 1). Entered
-// again from the GTS while connected it disconnects and leaves the app. Wi-Fi errors are shown with their error code,
-// server errors with a GTS message and a disconnection.
+// Connecting to Nintendo Wi-Fi Connection (screen 0): the first screen of the GTS, and the last one, which
+// disconnects.
 
 enum GtsConnectionDisconnectStep {
     GTS_DISCONNECT_PRINT_DISCONNECTING,

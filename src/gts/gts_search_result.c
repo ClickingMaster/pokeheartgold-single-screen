@@ -25,9 +25,7 @@
 #include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
-// GTS search result (screen 3): the Pokemon, its trainer and where they live, the wanted Pokemon; left/right (or
-// touching the trainers) switches between the results, TRADE asks to trade with the trainer (screen 5 picks the
-// Pokemon to offer), CANCEL scrolls back up to the search screen (4).
+// GTS search result (screen 3): the Pokemon, its trainer and where they live, and the wanted Pokemon.
 
 typedef enum GtsSearchResultState {
     GTS_SEARCH_RESULT_STATE_START,
@@ -524,6 +522,4 @@ void GtsSearchResult_ScrollBgs(GtsApp *app) {
     BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_3, BG_POS_OP_SET_Y, -app->scrollY);
 }
 
-// SEEK POKEMON (screen 4): the player sets the wanted Pokemon (species, gender, level, the trainer's country) with
-// the selector, SEARCH asks search.asp, the trainers found stand on the top screen; touching one, or the results
-// button, shows it (screen 3).
+// SEEK POKEMON (screen 4): the trainers found stand on the top screen; touching one shows its result (screen 3).
