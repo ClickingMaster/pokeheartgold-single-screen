@@ -950,20 +950,9 @@ int MapObject_GetDirectionToNearbyPlayer(LocalMapObject *object) {
     maxX = objectX + distance;
     minZ = objectZ - distance;
     maxZ = objectZ + distance;
-    if (minZ > z) {
-        goto fail;
+    if (minZ <= z && maxZ >= z && minX <= x && maxX >= x) {
+        return GetDirectionTowards(objectX, objectZ, x, z);
     }
-    if (maxZ < z) {
-        goto fail;
-    }
-    if (minX > x) {
-        goto fail;
-    }
-    if (maxX < x) {
-        goto fail;
-    }
-    return GetDirectionTowards(objectX, objectZ, x, z);
-fail:
     return DIR_NONE;
 }
 
@@ -987,12 +976,12 @@ int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tabl
     }
     direction = MapObject_GetDirectionToNearbyPlayer(object);
     if (direction == DIR_NONE) {
-        goto done;
+        return direction;
     }
     i = 0;
     do {
         if (list[i] == direction) {
-            goto done;
+            return direction;
         }
         i++;
     } while (i < count);
@@ -1039,9 +1028,7 @@ int MapObject_GetAllowedDirectionToNearbyPlayer(LocalMapObject *object, int tabl
             i++;
         } while (i < count);
     }
-    direction = DIR_NONE;
-done:
-    return direction;
+    return DIR_NONE;
 }
 
 BOOL MapObject_SpinsWhileWalking(LocalMapObject *object) {

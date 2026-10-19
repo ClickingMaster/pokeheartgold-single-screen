@@ -260,21 +260,15 @@ BOOL TypeBehavior_SpinCheck(LocalMapObject *object) {
 
 BOOL TypeBehavior_SpinUpdate(LocalMapObject *object) {
     DirectionMovementTable spinOrders = gTypeBehaviorSpinOrders;
-    volatile TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
+    TrainerBehaviorState *state = (TrainerBehaviorState *)MapObject_GetBehaviorData(object);
     int i;
     int dir;
     switch (state->turnState) {
     case TRAINER_TURN_STATE_INIT:
         dir = MapObject_GetFacingDirection(object);
         i = 0;
-        goto search_check;
-search_next:
-        i++;
-search_check:
-        if (i < 4) {
-            if (dir != spinOrders.values[state->sequence][i]) {
-                goto search_next;
-            }
+        while (i < 4 && dir != spinOrders.values[state->sequence][i]) {
+            i++;
         }
         if (i >= 4) {
             GF_AssertFail();

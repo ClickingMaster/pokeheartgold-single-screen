@@ -453,8 +453,8 @@ void FollowMonDraw_Resume(LocalMapObject *object) {
 }
 
 void FollowMonDraw_ClearBob(void *object) {
-    u8 *work = MapObject_GetDrawData(object);
-    work[0x15] = 0;
+    FollowMonBillboardWork *work = (FollowMonBillboardWork *)MapObject_GetDrawData(object);
+    work->bobbing = 0;
     MapObject_GetFacingVector(object)->y = 0;
 }
 
@@ -470,23 +470,21 @@ void BillboardDraw_UpdateNpc(void *object) {
         u8 movement;
         void *billboard;
     } Work;
-    struct {
-        volatile int value;
-    } facing;
+    int facing;
     Work *work = (Work *)MapObject_GetDrawData(object);
     void *billboard = work->billboard;
     int movement;
     if (MapObject_IsBillboardPending(object) == TRUE || billboard == NULL) {
         return;
     }
-    facing.value = MapObject_GetFacingDirection(object);
+    facing = MapObject_GetFacingDirection(object);
     movement = MapObject_GetAnimation(object);
     if (movement >= 9) {
         GF_AssertFail();
     }
-    sNpcBillboardMotions[movement](object, billboard, work, facing.value);
+    sNpcBillboardMotions[movement](object, billboard, work, facing);
     MapObject_GetFacingVector(object)->z = FX32_CONST(0.5);
-    work->facing = facing.value;
+    work->facing = facing;
     work->movement = MapObject_GetAnimation(object);
     MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
@@ -701,21 +699,21 @@ void BillboardDraw_UpdatePcWoman(void *object) {
         u8 movement;
         void *billboard;
     } Work;
-    volatile int facing[1];
-    Work *work[1];
+    int facing;
+    Work *work;
     int movement;
     void *billboard;
-    work[0] = (Work *)MapObject_GetDrawData(object);
-    billboard = work[0]->billboard;
+    work = (Work *)MapObject_GetDrawData(object);
+    billboard = work->billboard;
     if (MapObject_IsBillboardPending(object) != TRUE && billboard != NULL) {
-        facing[0] = MapObject_GetFacingDirection(object);
+        facing = MapObject_GetFacingDirection(object);
         movement = MapObject_GetAnimation(object);
         if (movement >= 10) {
             GF_AssertFail();
         }
-        sPcWomanBillboardMotions[movement](object, billboard, work[0], facing[0]);
-        work[0]->facing = facing[0];
-        work[0]->movement = MapObject_GetAnimation(object);
+        sPcWomanBillboardMotions[movement](object, billboard, work, facing);
+        work->facing = facing;
+        work->movement = MapObject_GetAnimation(object);
         MapObject_UpdateBillboardPosition(object, billboard);
         MapObject_UpdateBillboardVisibility(object, billboard);
     }
@@ -744,7 +742,7 @@ void BillboardDraw_UpdateTwoSequences(void *object) {
         s8 unk_00;
         s8 unk_01;
         s8 facing;
-        volatile s8 movement;
+        s8 movement;
         void *billboard;
     } Work;
     int facing;
@@ -1035,23 +1033,21 @@ static void PlayerBillboardMotion_CyclingAnimateNormalSpeed(void *object, void *
 }
 
 void PlayerDraw_UpdateFishing(void *object) {
-    struct {
-        volatile int value;
-    } facing;
+    int facing;
     FacingMotionWork *work = (FacingMotionWork *)MapObject_GetDrawData(object);
     void *billboard = work->billboard;
     int movement;
     if (billboard == NULL || MapObject_IsBillboardPending(object) == TRUE) {
         return;
     }
-    facing.value = MapObject_GetFacingDirection(object);
+    facing = MapObject_GetFacingDirection(object);
     movement = MapObject_GetAnimation(object);
     if (movement >= 4) {
         GF_AssertFail();
     }
-    sPlayerFishingBillboardMotions[movement](object, billboard, work, facing.value);
-    PlayerDraw_SetFishingOffset(object, billboard, facing.value);
-    work->facing = facing.value;
+    sPlayerFishingBillboardMotions[movement](object, billboard, work, facing);
+    PlayerDraw_SetFishingOffset(object, billboard, facing);
+    work->facing = facing;
     work->movement = MapObject_GetAnimation(object);
     MapObject_UpdateBillboardPosition(object, billboard);
     MapObject_UpdateBillboardVisibility(object, billboard);
@@ -1068,7 +1064,7 @@ static void PlayerBillboardMotion_FishingCast(void *object, void *billboard, con
 static void PlayerBillboardMotion_FishingBite(void *object, void *billboard, void *workRaw, int facing) {
     typedef struct {
         s8 facing;
-        volatile s8 ticks;
+        s8 ticks;
         s8 movement;
         u8 unk3_0 : 1;
         u8 phase : 7;

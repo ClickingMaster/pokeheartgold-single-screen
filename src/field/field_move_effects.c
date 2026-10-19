@@ -99,7 +99,7 @@ typedef struct HeadbuttEffect {
     VecFx32 cameraPos;
     VecFx32 cameraTarget;
     VecFx32 shakeOffset;
-    volatile s8 shakeTimer;
+    s8 shakeTimer;
     u8 shaken;
     u8 numShakes;
     u8 state;

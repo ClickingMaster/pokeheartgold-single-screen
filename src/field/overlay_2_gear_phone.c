@@ -244,15 +244,12 @@ static u8 GearPhoneRingManager_PickCallTrigger(GearPhoneRingManager *gearPhone, 
         }
         PhoneBookEntry *entry = &phoneBook->entries[sPhoneCallTriggers[i].callerId];
         if (entry->id == PHONE_CONTACT_DAY_C_MAN) {
-            if (SavePokegear_IsNumberRegistered(gearPhone->pokegearData, PHONE_CONTACT_DAY_C_MAN) != 0xFF) {
-                goto LABEL;
-            } else {
+            if (SavePokegear_IsNumberRegistered(gearPhone->pokegearData, PHONE_CONTACT_DAY_C_MAN) == 0xFF) {
                 continue;
             }
         } else if (entry->mapId == mapId) {
             continue;
         }
-LABEL:
         triggers[count++] = i;
     }
 

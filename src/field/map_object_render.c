@@ -150,7 +150,7 @@ static void MapObjectRender_ReleaseAllBillboardResources(MapObjectRender *render
 static BOOL MapObjectManager_IsSpriteUsedByOther(MapObjectManager *manager, LocalMapObject *self, u32 spriteId);
 static void MapObjectRender_CreateResourceBanks(MapObjectRender *render, u32 modelCount, u32 residentModelCount, u32 sequenceCount, u32 residentSequenceCount, u32 textureCount, u32 residentTextureCount);
 static void MapObjectRender_DestroyResourceBanks(MapObjectRender *render);
-static void *BillboardModelEntries_Find(int id, int terminator, const BillboardModelEntry *entries);
+static const BillboardModelEntry *BillboardModelEntries_Find(int id, int terminator, const BillboardModelEntry *entries);
 static BOOL MapObjectRender_LoadIntoBank(MapObjectRender *render, ResourceBank *bank, int id, int terminator, const BillboardModelEntry *entries);
 static int MapObjectRender_LoadSpriteTexture(MapObjectRender *render, u32 dynamic, u32 spriteId);
 static void MapObjectRender_LoadResidentSpriteTexture(MapObjectRender *render, u32 spriteId);
@@ -519,14 +519,13 @@ static void MapObjectRender_DestroyResourceBanks(MapObjectRender *render) {
     GF3dGfxRawResMan_Destroy(MapObjectRender_GetTextures(render));
 }
 
-static void *BillboardModelEntries_Find(int id, int terminator, const BillboardModelEntry *entries) {
-    volatile u16 *scan = (volatile u16 *)entries;
+static const BillboardModelEntry *BillboardModelEntries_Find(int id, int terminator, const BillboardModelEntry *entries) {
     for (;;) {
-        if (*scan == id) {
-            return (void *)scan;
+        if (entries->id == id) {
+            return entries;
         }
-        scan += 2;
-        if (*scan == terminator) {
+        entries++;
+        if (entries->id == terminator) {
             return NULL;
         }
     }

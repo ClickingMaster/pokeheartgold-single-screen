@@ -176,22 +176,19 @@ BOOL DoorTransition_WalkIntoDoor(FieldSystem *fieldSystem, FieldTransitionWork *
             }
         }
         Heap_Free(props);
-        if (!found) {
-            goto no_prop;
-        }
-        animationCount = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, modelId0);
-        if (animationCount == 0) {
+        if (found) {
+            animationCount = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, modelId0);
+            if (animationCount == 0) {
+                return TRUE;
+            }
+            texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
+            renderObj = MapProp_GetRenderSurface(prop);
+            model = MapProp_GetResModel(prop);
+            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
+            MapPropOneShotAnimationManager_SetAnimationField35(fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, 1);
+        } else {
             return TRUE;
         }
-        texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
-        renderObj = MapProp_GetRenderSurface(prop);
-        model = MapProp_GetResModel(prop);
-        MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
-        MapPropOneShotAnimationManager_SetAnimationField35(fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, 1);
-        goto prop_loaded;
-no_prop:
-        return TRUE;
-prop_loaded:
         work->cameraPathIndex = DoorTransition_GetCameraPathIndex(modelId0);
         if (work->cameraPathIndex != 0xFFFF) {
             work->state = WALK_INTO_DOOR_STATE_CAMERA_PAN;
@@ -305,25 +302,22 @@ BOOL DoorTransition_WalkOutOfDoor(FieldSystem *fieldSystem, FieldTransitionWork 
             }
         }
         Heap_Free(props);
-        if (!found) {
-            goto no_prop;
-        }
-        animationCount = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, modelId0);
-        if (animationCount == 0) {
+        if (found) {
+            animationCount = MapPropAnimationManager_GetPropAnimationCount(fieldSystem->mapPropAnimationManager, modelId0);
+            if (animationCount == 0) {
+                FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
+                work->state = WALK_OUT_OF_DOOR_STATE_WAIT_FADE;
+                return FALSE;
+            }
+            texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
+            renderObj = MapProp_GetRenderSurface(prop);
+            model = MapProp_GetResModel(prop);
+            MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
+        } else {
             FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
             work->state = WALK_OUT_OF_DOOR_STATE_WAIT_FADE;
             return FALSE;
         }
-        texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);
-        renderObj = MapProp_GetRenderSurface(prop);
-        model = MapProp_GetResModel(prop);
-        MapPropOneShotAnimationManager_LoadPropAnimations(fieldSystem->mapPropAnimationManager, fieldSystem->mapPropOneShotAnimationManager, DOOR_ANIM_TAG, modelId0, renderObj, model, texture, animationCount, 1, FALSE);
-        goto prop_loaded;
-no_prop:
-        FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_IN);
-        work->state = WALK_OUT_OF_DOOR_STATE_WAIT_FADE;
-        return FALSE;
-prop_loaded:
         work->cameraAngle = Camera_GetPerspectiveAngle(fieldSystem->camera);
         if (!DoorTransition_ModelSkipsCameraZoom(fieldSystem, modelId0)) {
             Camera_AdjustPerspectiveAngle(-96, fieldSystem->camera);

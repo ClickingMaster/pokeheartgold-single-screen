@@ -315,9 +315,8 @@ void ZigzagWipe_Free(ZigzagWipe *wipe) {
     Heap_Free(wipe);
 }
 
-SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, volatile u32 width, u32 insidePlanes, u32 outsidePlanes) {
+SysTask *ZigzagWipe_Start(EncounterEffectTask *effect, ZigzagWipe *wipe, s32 duration, u32 period, u32 width, u32 insidePlanes, u32 outsidePlanes) {
     int i;
-    width = width;
     if (wipe->task) {
         GF_AssertFail();
     }

@@ -321,46 +321,43 @@ BOOL FollowPlayerMovement_StartFollowMonStep(LocalMapObject *object, FollowPlaye
     z = MapObject_GetZCoord(object);
     previousX = PlayerAvatar_GetPreviousXCoord(avatar);
     previousZ = PlayerAvatar_GetPreviousZCoord(avatar);
-    if (x == previousX && z == previousZ) {
-        goto none;
-    }
-
-    playerMovement = FollowMon_GetMovement(object);
-    direction = GetDirectionTowards((int)x, (int)z, (int)previousX, (int)previousZ);
-    movement = FollowMon_GetPendingHop(object);
-    fastMovement = IsMovement56To59(playerMovement);
-    nextState = 1;
-    if (movement) {
-        if (fastMovement) {
-            movement = FollowMon_GetFasterMovement(movement, GetMovement8ForDirection(movement));
-            state->hopSpeed = GetMovementSpeed(movement);
-            FollowMon_SetHopMovement(object, (u8)movement);
-            nextState = 2;
-            state->hopCount = 0;
-            state->hopFrame = 0;
+    if (x != previousX || z != previousZ) {
+        playerMovement = FollowMon_GetMovement(object);
+        direction = GetDirectionTowards((int)x, (int)z, (int)previousX, (int)previousZ);
+        movement = FollowMon_GetPendingHop(object);
+        fastMovement = IsMovement56To59(playerMovement);
+        nextState = 1;
+        if (movement) {
+            if (fastMovement) {
+                movement = FollowMon_GetFasterMovement(movement, GetMovement8ForDirection(movement));
+                state->hopSpeed = GetMovementSpeed(movement);
+                FollowMon_SetHopMovement(object, (u8)movement);
+                nextState = 2;
+                state->hopCount = 0;
+                state->hopFrame = 0;
+                FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
+            } else {
+                if (!PlayerAvatar_CheckFlag6(avatar)) {
+                    return FALSE;
+                }
+                movement = FollowMon_GetFasterMovement(movement, (u32)playerMovement);
+                state->hopSpeed = GetMovementSpeed(movement);
+                FollowMon_SetHopMovement(object, (u8)movement);
+                nextState = 2;
+                state->hopCount = 0;
+                state->hopFrame = 0;
+                FollowMon_SetPendingHop(object, 0);
+            }
+        } else if (fastMovement) {
+            movement = GetMovement8ForDirection(direction);
             FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
         } else {
-            if (!PlayerAvatar_CheckFlag6(avatar)) {
-                return FALSE;
-            }
-            movement = FollowMon_GetFasterMovement(movement, (u32)playerMovement);
-            state->hopSpeed = GetMovementSpeed(movement);
-            FollowMon_SetHopMovement(object, (u8)movement);
-            nextState = 2;
-            state->hopCount = 0;
-            state->hopFrame = 0;
-            FollowMon_SetPendingHop(object, 0);
+            movement = GetMovementForDirection(direction, (u32)playerMovement);
         }
-    } else if (fastMovement) {
-        movement = GetMovement8ForDirection(direction);
-        FollowMon_SetPendingHop(object, (u8)PlayerAvatar_GetFacingDirection(avatar));
-    } else {
-        movement = GetMovementForDirection(direction, (u32)playerMovement);
+        MapObject_ForceSetHeldMovement(object, movement);
+        state->state = nextState;
+        return TRUE;
     }
-    MapObject_ForceSetHeldMovement(object, movement);
-    state->state = nextState;
-    return TRUE;
-none:
     return FALSE;
 }
 

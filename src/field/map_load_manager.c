@@ -952,7 +952,6 @@ static void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadM
     VecFx32 scale;
     MtxFx33 rotation;
     LoadedMap *map;
-    volatile void *volatile savedModelAttributes = modelAttributes;
 
     CalcMapPosition(mapLoadManager->maps[mapSlot]->matrixIndex, mapLoadManager->width, mapLoadManager->mapMatrix, &pos);
     if (mapLoadManager->maps[mapSlot]->modelLoaded == TRUE) {
@@ -963,7 +962,7 @@ static void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadM
     map = mapLoadManager->maps[mapSlot];
     if (map->modelLoaded == TRUE) {
         BOOL lit = AreaDataManager_IsLit(mapLoadManager->areaDataManager);
-        MapPropManager_DrawWithOffset(&pos, mapLoadManager->areaDataManager, lit, (ModelAttributes *)savedModelAttributes, map->propManager);
+        MapPropManager_DrawWithOffset(&pos, mapLoadManager->areaDataManager, lit, modelAttributes, map->propManager);
     }
 }
 

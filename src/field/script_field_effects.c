@@ -145,7 +145,7 @@ typedef struct CameraShake {
     s16 amplitudeX;
     s16 amplitudeY;
     u16 unk_0C;
-    volatile u16 repeats;
+    u16 repeats;
     u16 ticks;
     u16 period;
     fx32 angleStep;

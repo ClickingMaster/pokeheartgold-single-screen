@@ -228,18 +228,13 @@ void EncounterEffectInterp_Init(EncounterEffectInterp *interp, s32 start, s32 en
 
 BOOL EncounterEffectInterp_Update(EncounterEffectInterp *interp) {
     s32 value = interp->delta * interp->frame / interp->duration;
-    s32 frame;
-    s32 duration;
     value += interp->start;
     interp->value = value;
-    frame = interp->frame;
-    duration = *(volatile s32 *)&interp->duration;
-    frame++;
-    if (frame <= duration) {
-        interp->frame = frame;
+    if (interp->frame + 1 <= interp->duration) {
+        interp->frame++;
         return FALSE;
     }
-    interp->frame = duration;
+    interp->frame = interp->duration;
     return TRUE;
 }
 
@@ -253,19 +248,14 @@ void EncounterEffectInterp_InitFx(EncounterEffectInterp *interp, s32 start, s32 
 
 BOOL EncounterEffectInterp_UpdateFx(EncounterEffectInterp *interp) {
     s64 product = (s64)interp->delta * (interp->frame << FX32_SHIFT);
-    s32 frame;
-    s32 duration;
     s32 value = FX_Div((s32)((product + FX32_HALF) >> FX32_SHIFT), interp->duration << FX32_SHIFT);
     value += interp->start;
     interp->value = value;
-    frame = interp->frame;
-    duration = *(volatile s32 *)&interp->duration;
-    frame++;
-    if (frame <= duration) {
-        interp->frame = frame;
+    if (interp->frame + 1 <= interp->duration) {
+        interp->frame++;
         return FALSE;
     }
-    interp->frame = duration;
+    interp->frame = interp->duration;
     return TRUE;
 }
 
@@ -289,9 +279,8 @@ BOOL EncounterEffectQuadInterp_Update(EncounterEffectQuadInterp *interp) {
     s32 square = (frame * frame) << FX32_SHIFT;
     s32 quad = (s32)(((s64)interp->acceleration * square + FX32_HALF) >> FX32_SHIFT);
     interp->value = linear + FX_Div(quad, FX32_CONST(2)) + interp->start;
-    frame = *(volatile s32 *)&interp->frame;
-    if (frame + 1 <= interp->duration) {
-        interp->frame = frame + 1;
+    if (interp->frame + 1 <= interp->duration) {
+        interp->frame++;
         return FALSE;
     }
     interp->frame = interp->duration;

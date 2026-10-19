@@ -139,7 +139,6 @@ static const FootstepSound sPlayerFootstepSounds[] = {
 };
 
 void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManager, int direction, u16 keys, u16 heldKeys, int allowTurn) {
-    register MapLoadManager *manager = mapLoadManager;
     if (direction == DIR_NONE) {
         direction = PlayerAvatar_ChooseInputDirection(avatar, keys, heldKeys);
     }
@@ -157,7 +156,7 @@ void PlayerAvatar_MoveControl(PlayerAvatar *avatar, MapLoadManager *mapLoadManag
                 Field_PlayerAvatar_TryEnterPoketchPose(avatar);
             }
         }
-        PlayerAvatar_MoveByState(avatar, manager, direction, keys, heldKeys);
+        PlayerAvatar_MoveByState(avatar, mapLoadManager, direction, keys, heldKeys);
         PlayerAvatar_ClearFlag1IfFlag6Moving(avatar);
         PlayerAvatar_PlayTerrainSounds(avatar);
     }
@@ -1198,21 +1197,18 @@ int PlayerAvatar_GetMoveStateForDirection(PlayerAvatar *avatar, int direction) {
 }
 
 u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKeys, u32 speed, int allowRun, int collision) {
-    struct {
-        volatile int direction;
-    } input;
-
+    int direction;
     int moveState;
     int movement;
 
-    input.direction = PlayerAvatar_ChooseInputDirection(avatar, keys, heldKeys);
-    moveState = PlayerAvatar_GetMoveStateForDirection(avatar, input.direction);
+    direction = PlayerAvatar_ChooseInputDirection(avatar, keys, heldKeys);
+    moveState = PlayerAvatar_GetMoveStateForDirection(avatar, direction);
     PlayerAvatar_SetMoveState(avatar, moveState);
     if (moveState == AVATAR_MOVE_STATE_NONE) {
         return GetMovementForDirection(PlayerAvatar_GetFacingDirection(avatar), MOVEMENT_FACE_UP);
     }
     if (moveState == AVATAR_MOVE_STATE_TURNING) {
-        return GetMovementForDirection(input.direction, 0x28);
+        return GetMovementForDirection(direction, 0x28);
     }
     PlayerAvatar_GetMapObject(avatar);
     movement = 4;
@@ -1254,7 +1250,7 @@ u32 PlayerAvatar_GetMovementFromInput(PlayerAvatar *avatar, int keys, int heldKe
             }
         }
     }
-    return GetMovementForDirection(input.direction, movement);
+    return GetMovementForDirection(direction, movement);
 }
 
 BOOL PlayerAvatar_IsReadyForMovement(PlayerAvatar *avatar) {
