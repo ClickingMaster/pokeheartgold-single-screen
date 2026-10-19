@@ -9,6 +9,8 @@
 #include "constants/species.h"
 
 #include "battle/battle.h"
+#include "battle/battle_anim_emitter.h"
+#include "battle/battle_anim_internal.h"
 
 #include "camera.h"
 #include "filesystem.h"
@@ -47,7 +49,7 @@ fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 //                    (sBallThrowModeFuncs), resTagOffset resource tag offset, bgPriority sprite BG priority,
 //                    keepSubSurface keep the renderer's sub surface
 // Members its declaration still keeps as byte arrays:
-#define BALL_ROTATION(data)     ((s32 *)&(data)->throwMotions[0x34 - 0x34])  // 0x34, value motion of the rotation
+#define BALL_ROTATION(data)     ((BattleAnimValueMotion *)&(data)->throwMotions[0x34 - 0x34])  // 0x34, value motion of the rotation
 #define BALL_ARC_MOTION(data)   ((void *)&(data)->throwMotions[0x48 - 0x34]) // 0x48, linear part of the throw arc
 #define BALL_ARC_MOTION2(data)  ((void *)&(data)->throwMotions[0x6C - 0x34]) // 0x6C, height part of the throw arc
 #define BALL_X(data)            (*(s16 *)&(data)->throwCoords[0xB8 - 0xB8]) // sprite position at the mode start
@@ -57,20 +59,6 @@ fx32 FX_Sqrt(fx32 x); // not declared by the lib/include fx headers
 #define BALL_ARC_DURATION(data) (*(int *)&(data)->throwCoords[0xC0 - 0xB8])
 
 typedef BOOL (*BallThrowFunc)(BallThrow *data);
-
-// Copy of battle/battle_anim_internal.h's definition (follow-up: include that header once it is on master)
-typedef struct BattleAnimBattlerPicParams {
-    int battler;
-    int sourceBattler;
-    MonPicData *picData[4];
-    Pokepic *pokepics[4];
-    u16 species[4];
-    u8 genders[4];
-    u8 shiny[4];
-    u8 forms[4];
-    u32 personalities[4];
-    u8 battlerTypes[4];
-} BattleAnimBattlerPicParams; // size: 0x50
 
 struct BallSealEffect {
     enum HeapID heapId;
@@ -150,25 +138,6 @@ typedef struct BallSealEmitDelays {
 typedef struct BattleAnimEmitterCounts {
     u32 counts[22];
 } BattleAnimEmitterCounts;
-
-// Overlay 7 functions of other modules, declared with the types this file still uses (their own headers,
-// battle/battle_anim_util.h and battle/battle_anim_internal.h, cannot be included next to the local copies above)
-void BattleAnimSystem_InitBlend(void);
-SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, int resId, BOOL loadNow);
-SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int resId, BOOL loadNow);
-SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, int member, BOOL loadNow);
-void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem);
-void BattleAnimUtil_LookupScreenPos(int set, int battlerType, s16 *x, s16 *y);
-void BattleAnimUtil_InitLinearMotion(void *motion, s16 startX, s16 endX, s16 startY, s16 endY, int duration);
-BOOL BattleAnimUtil_UpdateLinearMotionSprite(void *motion, ManagedSprite *sprite);
-void BattleAnimUtil_InitLinearSinMotion(void *motion, void *motion2, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 height);
-BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(void *motion, void *motion2, ManagedSprite *sprite);
-void BattleAnimUtil_InitValueMotion(s32 *motion, int start, int end, int duration);
-BOOL BattleAnimUtil_UpdateValueMotion(s32 *motion);
-void *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, int bufferId, u16 offset, u16 count, s8 delay, s8 step, u8 start, u8 end, u16 color, u32 priority);
-BOOL BattleAnimUtil_IsPaletteBlendActive(void *blend);
-void BattleAnimUtil_FreePaletteBlend(void *blend);
-void BattleAnimUtil_GetEmitterPositionKind0Alt(int battlerType, VecFx32 *pos, int unused, int perspective);
 
 // asm/battle_anim_data.s
 extern const BallThrowStaticSpriteKinds sBallThrowStaticSpriteKinds;
@@ -1170,7 +1139,7 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->modeFrames++;
@@ -1183,10 +1152,10 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
         break;
     case 2:
         if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
+            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+            BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
             data->opened = TRUE;
             return FALSE;
         }
@@ -1208,17 +1177,17 @@ BOOL BallThrow_RunThrowArc(BallThrow *data) {
     default:
         if (data->modeFrames == 5) {
             if (data->params.kind != 12 && data->params.kind != 13) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
             data->opened = TRUE;
         }
         data->modeFrames++;
         if (data->modeFrames > 15) {
             if (data->params.kind != 12 && data->params.kind != 13) {
-                if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
+                if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
                     break;
                 }
-                BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+                BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
             }
             return FALSE;
         }
@@ -1245,7 +1214,7 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->modeFrames == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->modeFrames++;
@@ -1258,10 +1227,10 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
         break;
     case 2:
         if (BallThrow_IsFlashingKind(data->params.kind) == TRUE && data->paletteFlash != 0) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) == TRUE) {
+            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) == TRUE) {
                 break;
             }
-            BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+            BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
             data->opened = TRUE;
             return FALSE;
         }
@@ -1280,13 +1249,13 @@ BOOL BallThrow_ThrowArcAndOpen(BallThrow *data) {
     default:
         if (data->modeFrames == 5) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            data->paletteFlash = (int)BattleAnimUtil_StartPaletteBlend(data->params.paletteData, data->params.heapID, PLTTBUF_MAIN_OBJ, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             data->opened = TRUE;
         }
         data->modeFrames++;
         if (data->modeFrames > 15) {
-            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->paletteFlash) != TRUE) {
-                BattleAnimUtil_FreePaletteBlend((void *)data->paletteFlash);
+            if (BattleAnimUtil_IsPaletteBlendActive((BattleAnimPaletteBlend *)data->paletteFlash) != TRUE) {
+                BattleAnimUtil_FreePaletteBlend((BattleAnimPaletteBlend *)data->paletteFlash);
                 return FALSE;
             }
         }
@@ -1378,7 +1347,7 @@ BOOL BallThrow_Wobble(BallThrow *data) {
         data->step++;
         break;
     case 1:
-        ManagedSprite_SetAffineZRotation(data->managedSprite, *BALL_ROTATION(data));
+        ManagedSprite_SetAffineZRotation(data->managedSprite, BALL_ROTATION(data)->value);
         if (!BattleAnimUtil_UpdateValueMotion(BALL_ROTATION(data))) {
             if (data->stateFrames >= 1) {
                 data->step++;

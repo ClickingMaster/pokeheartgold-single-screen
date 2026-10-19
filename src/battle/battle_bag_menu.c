@@ -550,19 +550,19 @@ static int BattleBagMenu_TryUseItem(BattleBagMenu *menu) {
         return BATTLE_BAG_STATE_WAIT_MESSAGE;
     }
     if (menu->pocket == BTLPOCKETLIST_BALLS) {
-        if (context->ballBlocked[0] == 1) {
+        if (context->twoTargets == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00044, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
             return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
-        if (context->ballBlocked[1] == 1) {
+        if (context->targetSemiInvulnerable == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00047, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;
             return BATTLE_BAG_STATE_WAIT_MESSAGE;
         }
-        if (context->ballBlocked[2] == 1) {
+        if (context->targetSubstitute == 1) {
             ReadMsgDataIntoString(menu->msgData, msg_0005_00048, menu->string);
             BattleBagMenu_ShowMessage(menu);
             menu->nextState = BATTLE_BAG_STATE_CLOSE_MESSAGE;

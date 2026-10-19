@@ -664,7 +664,7 @@ typedef struct {
 typedef struct TargetPokemon {
     u8 selectedMon;
     u8 gender : 2;
-    u8 hide : 1;
+    u8 exists : 1;
     u8 unused1_3 : 5;
     u8 status;
     u8 unused3;

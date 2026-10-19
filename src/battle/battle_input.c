@@ -2264,7 +2264,7 @@ static void BattleInput_CreateTargetMenuObjects(BattleInput *battleInput, int me
     for (i = MENUTXT_MON_NAME_1; i < MENUTXT_MON_NAME_4 + 1; i++) {
         battlerId = battlerIds[2 + i];
 
-        if ((menu->targetMons[battlerId].hide == 1) && (monsHit[i] == 1)) {
+        if ((menu->targetMons[battlerId].exists == 1) && (monsHit[i] == 1)) {
             if (menu->targetMons[battlerId].gender == MON_MALE) {
                 strGenderMarker = NewString_ReadMsgData(msgLoader, msg_0197_00962); // ♂
             } else if (menu->targetMons[battlerId].gender == MON_FEMALE) {
@@ -3096,7 +3096,7 @@ static void BattleInput_GetMonsHitArray(BattleInput *battleInput, u8 *monsHit, i
     for (i = 0; i < 4; i++) {
         battlerId = battlerIdBuffer[2 + i];
 
-        if ((checkMonExists == TRUE) && (menu->targetMons[battlerId].hide == FALSE)) {
+        if ((checkMonExists == TRUE) && (menu->targetMons[battlerId].exists == FALSE)) {
             monsHit[i] = 0;
         } else {
             monsHit[i] = sMoveRangeHitMons[battleInput->monTargetType][i];

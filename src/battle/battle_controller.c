@@ -9,6 +9,7 @@
 #include "constants/species.h"
 
 #include "battle/battle.h"
+#include "battle/battle_controller_packets.h"
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
 
@@ -18,385 +19,6 @@
 #include "move.h"
 #include "party.h"
 #include "pokemon.h"
-
-// Packets sent by the BattleController_Emit* functions. The first byte is the command that
-// OpponentData_RunCommand dispatches on.
-
-typedef struct BattleControllerPacketEncounterAnimation {
-    u32 command;
-    u32 randTemp;
-} BattleControllerPacketEncounterAnimation;
-
-typedef struct BattleControllerPacketPokemonEncounter {
-    u8 command;
-    u8 gender : 2;
-    u8 shiny : 1;
-    u8 form : 5;
-    u16 species;
-    u32 personality;
-    u32 battlerType;
-    u16 moves[MAX_MON_MOVES];
-    u16 movePPCur[MAX_MON_MOVES];
-    u16 movePP[MAX_MON_MOVES];
-    u16 nickname[POKEMON_NAME_LENGTH + 1];
-} BattleControllerPacketPokemonEncounter;
-
-// Shared by the slide-in (3) and send-out (4) commands
-typedef struct BattleControllerPacketPokemonSendOut {
-    u8 command;
-    u8 gender : 2;
-    u8 shiny : 1;
-    u8 form : 5;
-    u16 species;
-    u32 personality;
-    u32 battlerType;
-    u32 selectedMonIndex;
-    u32 ball;
-    u32 breakOut;
-    u16 moves[MAX_MON_MOVES];
-    u16 movePPCur[MAX_MON_MOVES];
-    u16 movePP[MAX_MON_MOVES];
-    u16 nickname[POKEMON_NAME_LENGTH + 1];
-    u8 filler_46[2];
-    u32 partnerSelectedMonIndex;
-    u32 isSubstitute;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketPokemonSendOut;
-
-typedef struct BattleControllerPacketRecallPokemon {
-    u8 command;
-    u8 height;
-    u16 ball;
-    u32 isSubstitute;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-    u32 selectedMonIndex;
-} BattleControllerPacketRecallPokemon;
-
-typedef struct BattleControllerPacketPokemonEnterBall {
-    u8 command;
-    u8 height;
-    u16 ball;
-} BattleControllerPacketPokemonEnterBall;
-
-typedef struct BattleControllerPacketTrainerEncounter {
-    u8 command;
-    u8 trainerGender;
-    u16 trainerClass;
-} BattleControllerPacketTrainerEncounter;
-
-typedef struct BattleControllerPacketThrowPokeball {
-    u8 command;
-    u8 throwType;
-    u16 partnerSelectedMonIndex;
-} BattleControllerPacketThrowPokeball;
-
-typedef struct BattleControllerPacketTrainerSlideIn {
-    u8 command;
-    u8 trainerGender;
-    u16 trainerClass;
-    u32 index;
-} BattleControllerPacketTrainerSlideIn;
-
-typedef struct BattleControllerPacketHealthbarSlideIn {
-    u8 command;
-    u8 level;
-    u16 hp;
-    u16 maxHp;
-    u8 selectedMonIndex;
-    u8 status : 5;
-    u8 gender : 2;
-    u8 caught : 1;
-    u32 exp;
-    u32 maxExp;
-    u32 safariBallCount;
-    u8 delay;
-    u8 filler_15[3];
-} BattleControllerPacketHealthbarSlideIn;
-
-typedef struct BattleControllerPacketSelectCommand {
-    u8 command;
-    u8 partySlot;
-    u8 expPercents[PARTY_SIZE];
-    u8 ballStatus[2][PARTY_SIZE];
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 movePP[MAX_MON_MOVES];
-    s16 hp;
-    u16 maxHp;
-    u8 ballStatusBattler;
-    u8 switchingOrCanPickCommandMask;
-    u16 unk_2A;
-} BattleControllerPacketSelectCommand;
-
-typedef struct BattleControllerPacketSelectMove {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 unusableMovesMask;
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 movePP[MAX_MON_MOVES];
-} BattleControllerPacketSelectMove;
-
-typedef struct BattleControllerTargetGauge {
-    u8 selectedMonIndex;
-    u8 gender : 2;
-    u8 exists : 1;
-    u8 unk_01_3 : 5;
-    u8 status;
-    u8 unk_03;
-    u16 hp;
-    u16 maxHp;
-} BattleControllerTargetGauge;
-
-typedef struct BattleControllerPacketSelectTarget {
-    u8 command;
-    u8 isLastSelection;
-    u16 moveRange;
-    BattleControllerTargetGauge gauges[BATTLER_MAX];
-} BattleControllerPacketSelectTarget;
-
-typedef struct BattleControllerPacketSelectItem {
-    u8 command;
-    u8 twoTargets;
-    u8 targetSemiInvulnerable;
-    u8 targetSubstitute;
-    u8 selectedMonIndex[BATTLER_MAX];
-    u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u8 embargoFlag[BATTLER_MAX];
-} BattleControllerPacketSelectItem;
-
-typedef struct BattleControllerPacketShowMonList {
-    u8 command;
-    u8 battlerId;
-    u8 mode;
-    u8 reservedMon;
-    u8 selectedMonIndex[BATTLER_MAX];
-    u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u32 trapped;
-    u8 switchInFlag;
-    u8 filler_29[3];
-} BattleControllerPacketShowMonList;
-
-typedef struct BattleControllerPacketYesNoBox {
-    u8 command;
-    u8 mode;
-    u16 msgId;
-    u32 value;
-    u32 param;
-} BattleControllerPacketYesNoBox;
-
-typedef struct BattleControllerPacketAttackMessage {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 move;
-} BattleControllerPacketAttackMessage;
-
-typedef struct BattleControllerPacketHealthbarUpdate {
-    u8 command;
-    u8 level;
-    u16 hp;
-    u16 maxHp;
-    u8 unk_06;
-    u8 gender;
-    u32 hpCalc;
-    u32 exp;
-    u32 maxExp;
-} BattleControllerPacketHealthbarUpdate;
-
-typedef struct BattleControllerPacketExpBarUpdate {
-    u8 command;
-    u8 filler_01[3];
-    u32 prevExp;
-    u32 exp;
-    u32 maxExp;
-} BattleControllerPacketExpBarUpdate;
-
-typedef struct BattleControllerPacketFaintAnimation {
-    u8 command;
-    u8 gender;
-    u16 species;
-    u32 personality;
-    u8 form;
-    u8 isSubstitute;
-    u8 isTransformed;
-    u8 unk_0B;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketFaintAnimation;
-
-typedef struct BattleControllerPacketPlaySE {
-    u8 command;
-    u8 unk_01;
-    u16 sndSeqNo;
-} BattleControllerPacketPlaySE;
-
-typedef struct BattleControllerPacketToggleVanish {
-    u8 command;
-    u8 vanish;
-    u8 isSubstitute;
-    u8 unk_03;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketToggleVanish;
-
-typedef struct BattleControllerPacketHealthbarStatus {
-    u8 command;
-    u8 status;
-    u16 unk_02;
-} BattleControllerPacketHealthbarStatus;
-
-typedef struct BattleControllerPacketTrainerMessage {
-    u8 command;
-    u8 msg;
-    u16 unk_02;
-} BattleControllerPacketTrainerMessage;
-
-// Recall (32) and send-out (33) messages; the value grades the enemy's remaining HP
-typedef struct BattleControllerPacketSwitchMessage {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 value;
-} BattleControllerPacketSwitchMessage;
-
-typedef struct BattleControllerPacketFirstSendOutMessage {
-    u8 command;
-    u8 filler_01[3];
-    u8 selectedMonIndex[BATTLER_MAX];
-} BattleControllerPacketFirstSendOutMessage;
-
-typedef struct BattleControllerPacketSelectionMessage {
-    u8 command;
-    u8 filler_01[3];
-    BattleMessage msg;
-} BattleControllerPacketSelectionMessage;
-
-typedef struct BattleControllerPacketRefreshHealthbar {
-    u8 command;
-    u8 level;
-    u16 hp;
-    u16 maxHp;
-    u8 selectedMonIndex;
-    u8 status : 5;
-    u8 gender : 2;
-    u8 caught : 1;
-    u32 exp;
-    u32 maxExp;
-    u32 safariBallCount;
-} BattleControllerPacketRefreshHealthbar;
-
-typedef struct BattleControllerPacketBattleMonToPartyMonCopy {
-    u8 command;
-    u8 selectedMonIndex : 4;
-    u8 mimicedMoveIndex : 4;
-    s16 hp;
-    u32 status;
-    u32 battlerBitKnockedOffItem;
-    u16 item;
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 filler_1A[2];
-    u32 status2;
-    u16 form;
-    u16 unk_22;
-    u32 ability;
-    u16 recalcMonStats;
-    u16 formChange;
-} BattleControllerPacketBattleMonToPartyMonCopy;
-
-typedef struct BattleControllerPacketPartyStatusHeal {
-    u8 command;
-    u8 ability;
-    u16 moveNo;
-} BattleControllerPacketPartyStatusHeal;
-
-typedef struct BattleControllerPacketSelectMoveToForget {
-    u8 command;
-    u8 slot;
-    u16 move;
-} BattleControllerPacketSelectMoveToForget;
-
-typedef struct BattleControllerPacketMosaicAnimation {
-    u8 command;
-    u8 mosaic;
-    u8 delay;
-    u8 unk_03;
-} BattleControllerPacketMosaicAnimation;
-
-typedef struct BattleControllerPacketChangeForm {
-    u8 command;
-    u8 form;
-    u16 species;
-    u8 gender;
-    u8 shiny;
-    u16 unk_06;
-    u32 personality;
-} BattleControllerPacketChangeForm;
-
-typedef struct BattleControllerPacketBallGauge {
-    u8 command;
-    u8 unk_01;
-    u8 status[PARTY_SIZE];
-} BattleControllerPacketBallGauge;
-
-typedef struct BattleControllerPacketIncrementGameStat {
-    u8 command;
-    u8 flag;
-    u16 id;
-} BattleControllerPacketIncrementGameStat;
-
-// Commands that also carry the record data of a recorded link battle (see BattleSystem_PackRecordUpdate)
-typedef struct BattleControllerPacketRecordData {
-    u8 command;
-    u8 escapedMask;
-    u16 recordSize;
-    u8 record[28];
-} BattleControllerPacketRecordData;
-
-typedef struct BattleControllerPacketMoveSE {
-    u8 command;
-    u8 effectiveness;
-    u8 filler_02[2];
-} BattleControllerPacketMoveSE;
-
-typedef struct BattleControllerPacketPlaySong {
-    u8 command;
-    u8 unk_01;
-    u16 song;
-} BattleControllerPacketPlaySong;
-
-typedef struct BattleControllerPacketBattleResults {
-    u8 command;
-    u8 unk_01;
-    vu16 recordSize;
-    u32 outcomeFlags;
-    u8 record[28];
-} BattleControllerPacketBattleResults;
-
-typedef struct BattleControllerPacketCommandComplete {
-    u8 command;
-    u8 netId;
-    u16 unk_02;
-} BattleControllerPacketCommandComplete;
-
-typedef struct BattleControllerPacketScreenFade {
-    u8 command;
-    u8 mode;
-    u16 unk_02;
-} BattleControllerPacketScreenFade;
 
 static void BattleController_InitBallGaugePacket(BattleSystem *battleSystem, BattleContext *ctx, BattleControllerPacketBallGauge *packet, int command, int battlerId);
 
@@ -530,7 +152,7 @@ void BattleController_EmitPokemonEncounter(BattleSystem *battleSystem, int battl
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
+    packet.cryParam = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     for (i = 0; i < MAX_MON_MOVES; i++) {
         packet.moves[i] = GetBattlerVar(battleSystem->ctx, battlerId, BMON_DATA_MOVE1 + i, NULL);
@@ -550,7 +172,7 @@ void BattleController_EmitPokemonSlideIn(BattleSystem *battleSystem, int battler
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
     packet.personality = battleSystem->ctx->battleMons[battlerId].personality;
-    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
+    packet.cryParam = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), TRUE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     packet.ball = battleSystem->ctx->battleMons[battlerId].ball;
@@ -578,7 +200,7 @@ void BattleController_EmitPokemonSendOut(BattleSystem *battleSystem, int battler
     }
     packet.shiny = battleSystem->ctx->battleMons[battlerId].shiny;
     packet.species = battleSystem->ctx->battleMons[battlerId].species;
-    packet.battlerType = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), FALSE);
+    packet.cryParam = BattleContext_GetLowHpOrStatusCode(battleSystem->ctx, battlerId, BattleSystem_GetBattlerType(battleSystem, battlerId), FALSE);
     packet.selectedMonIndex = battleSystem->ctx->selectedMonIndex[battlerId];
     packet.form = battleSystem->ctx->battleMons[battlerId].form;
     if (ball) {
@@ -918,23 +540,23 @@ void BattleController_EmitSelectTarget(BattleSystem *battleSystem, BattleContext
     }
     for (i = 0; i < BATTLER_MAX; i++) {
         if (ctx->battleMons[i].hp) {
-            packet.gauges[i].hp = ctx->battleMons[i].hp;
-            packet.gauges[i].maxHp = ctx->battleMons[i].maxHp;
-            packet.gauges[i].exists = TRUE;
+            packet.targetMons[i].hp = ctx->battleMons[i].hp;
+            packet.targetMons[i].hpMax = ctx->battleMons[i].maxHp;
+            packet.targetMons[i].exists = TRUE;
             if ((ctx->battleMons[i].species == SPECIES_NIDORAN_F || ctx->battleMons[i].species == SPECIES_NIDORAN_M) && !ctx->battleMons[i].hasNickname) {
-                packet.gauges[i].gender = MON_GENDERLESS;
+                packet.targetMons[i].gender = MON_GENDERLESS;
             } else {
-                packet.gauges[i].gender = ctx->battleMons[i].gender;
+                packet.targetMons[i].gender = ctx->battleMons[i].gender;
             }
-            packet.gauges[i].selectedMonIndex = ctx->selectedMonIndex[i];
+            packet.targetMons[i].selectedMon = ctx->selectedMonIndex[i];
             if (ctx->battleMons[i].status) {
-                packet.gauges[i].status = 3;
+                packet.targetMons[i].status = 3;
             } else {
-                packet.gauges[i].status = 1;
+                packet.targetMons[i].status = 1;
             }
         } else {
-            packet.gauges[i].exists = FALSE;
-            packet.gauges[i].status = 2;
+            packet.targetMons[i].exists = FALSE;
+            packet.targetMons[i].status = 2;
         }
     }
     BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
@@ -1074,7 +696,7 @@ void BattleController_EmitHealthbarUpdate(BattleSystem *battleSystem, BattleCont
     packet.level = ctx->battleMons[battlerId].level;
     packet.hp = ctx->battleMons[battlerId].hp;
     packet.maxHp = ctx->battleMons[battlerId].maxHp;
-    packet.hpCalc = ctx->hpCalc;
+    packet.gainedHp = ctx->hpCalc;
     if ((ctx->battleMons[battlerId].species == SPECIES_NIDORAN_F || ctx->battleMons[battlerId].species == SPECIES_NIDORAN_M) && !ctx->battleMons[battlerId].hasNickname) {
         packet.gender = MON_GENDERLESS;
     } else {

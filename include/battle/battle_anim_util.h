@@ -25,7 +25,7 @@ typedef struct BattleAnimLinearMotion {
     fx32 stepY;
     fx32 curX;
     fx32 curY;
-    u8 unk_18[0xC];
+    u8 padding_18[0xC];
 } BattleAnimLinearMotion; // size: 0x24
 
 typedef struct BattleAnimSinMotion {

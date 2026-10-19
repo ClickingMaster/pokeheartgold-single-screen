@@ -19,30 +19,6 @@
 #include "sprite.h"
 #include "sprite_system.h"
 
-struct BattleAnimLinearMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    fx32 stepX;
-    fx32 stepY;
-    fx32 curX;
-    fx32 curY;
-    u8 unk_18[0xC];
-};
-
-struct BattleAnimSinMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    int angleX;
-    int ampX;
-    int angleY;
-    int ampY;
-    int stepX;
-    int stepY;
-    int unk_24;
-};
-
 // Head of the motion structs: the current offset
 typedef struct BattleAnimMotionOffset {
     s16 x;

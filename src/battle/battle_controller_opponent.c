@@ -17,10 +17,13 @@
 #include "battle/battle_anim_ball.h"
 #include "battle/battle_pokepic_bob.h"
 #include "battle/battle_anim_internal.h"
+#include "battle/battle_bag_menu.h"
 #include "battle/battle_controller.h"
+#include "battle/battle_controller_packets.h"
 #include "battle/battle_cursor.h"
 #include "battle/battle_hp_bar.h"
 #include "battle/battle_input.h"
+#include "battle/battle_party_menu.h"
 #include "battle/battle_system.h"
 #include "battle/battle_util.h"
 #include "battle/party_gauge.h"
@@ -365,7 +368,7 @@ enum {
 #define OPPONENT_SPRITE_OAM(opponentData) (*(void **)&(opponentData)->unk8C[0x00])
 
 // The battle party menu overlay's entry point, which is linked at the same address as TrainerAI_Init.
-#define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyMenuArgs *))TrainerAI_Init)(args)
+#define BATTLE_PARTY_MENU_START(args) ((void (*)(BattlePartyContext *))TrainerAI_Init)(args)
 
 // An item selection reply. It is passed by value as a struct: battle_controller.h declares the u32 it amounts to.
 typedef struct BattleItemInput {
@@ -402,408 +405,6 @@ extern const s16 gBallThrowOffsets[][6][2];
 extern const s16 ov12_0226D1EA[][6][2];
 extern const u8 gBattleEncounterTerrains[];
 
-// Commands received from the battle controller (the BattleController_Emit* packets).
-typedef struct BattleControllerPacketEncounterAnimation {
-    u32 command;
-    u32 randTemp;
-} BattleControllerPacketEncounterAnimation;
-
-typedef struct BattleControllerPacketPokemonEncounter {
-    u8 command;
-    u8 gender : 2;
-    u8 shiny : 1;
-    u8 form : 5;
-    u16 species;
-    u32 personality;
-    u32 cryParam;
-} BattleControllerPacketPokemonEncounter;
-
-typedef struct BattleControllerPacketPokemonSendOut {
-    u8 command;
-    u8 gender : 2;
-    u8 shiny : 1;
-    u8 form : 5;
-    u16 species;
-    u32 personality;
-    u32 cryParam;
-    u32 selectedMonIndex;
-    u32 ball;
-    u32 breakOut;
-    u16 moves[MAX_MON_MOVES];
-    u16 movePPCur[MAX_MON_MOVES];
-    u16 movePP[MAX_MON_MOVES];
-    u16 nickname[POKEMON_NAME_LENGTH + 1];
-    u8 filler_46[2];
-    u32 partnerSelectedMonIndex;
-    u32 isSubstitute;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketPokemonSendOut;
-
-typedef struct BattleControllerPacketRecallPokemon {
-    u8 command;
-    u8 height;
-    u16 ball;
-    u32 isSubstitute;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-    u32 selectedMonIndex;
-} BattleControllerPacketRecallPokemon;
-
-typedef struct BattleControllerPacketPokemonEnterBall {
-    u8 command;
-    u8 height;
-    u16 ball;
-} BattleControllerPacketPokemonEnterBall;
-
-typedef struct BattleControllerPacketTrainerEncounter {
-    u8 command;
-    u8 trainerGender;
-    u16 trainerClass;
-} BattleControllerPacketTrainerEncounter;
-
-typedef struct BattleControllerPacketThrowPokeball {
-    u8 command;
-    u8 throwType;
-    u16 partnerSelectedMonIndex;
-} BattleControllerPacketThrowPokeball;
-
-typedef struct BattleControllerPacketTrainerSlideIn {
-    u8 command;
-    u8 trainerGender;
-    u16 trainerClass;
-    u32 index;
-} BattleControllerPacketTrainerSlideIn;
-
-typedef struct BattleControllerPacketHealthbarSlideIn {
-    u8 command;
-    u8 level;
-    s16 hp;
-    u16 maxHp;
-    u8 selectedMonIndex;
-    u8 status : 5;
-    u8 gender : 2;
-    u8 caught : 1;
-    u32 exp;
-    u32 maxExp;
-    u32 safariBallCount;
-    u8 delay;
-    u8 filler_15[3];
-} BattleControllerPacketHealthbarSlideIn;
-
-typedef struct BattleControllerPacketSelectCommand {
-    u8 command;
-    u8 partySlot;
-    u8 expPercents[PARTY_SIZE];
-    u8 ballStatus[2][PARTY_SIZE];
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 movePP[MAX_MON_MOVES];
-    s16 hp;
-    u16 maxHp;
-    u8 ballStatusBattler;
-    u8 switchingOrCanPickCommandMask;
-    u16 unk_2A;
-} BattleControllerPacketSelectCommand;
-
-typedef struct BattleControllerPacketSelectMove {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 unusableMovesMask;
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 movePP[MAX_MON_MOVES];
-} BattleControllerPacketSelectMove;
-
-typedef struct BattleControllerPacketSelectTarget {
-    u8 command;
-    u8 isLastSelection;
-    u16 moveRange;
-    TargetPokemon targetMons[BATTLER_MAX];
-} BattleControllerPacketSelectTarget;
-
-typedef struct BattleControllerPacketSelectItem {
-    u8 command;
-    u8 twoTargets;
-    u8 targetSemiInvulnerable;
-    u8 targetSubstitute;
-    u8 selectedMonIndex[BATTLER_MAX];
-    u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u8 embargoFlag[BATTLER_MAX];
-} BattleControllerPacketSelectItem;
-
-typedef struct BattleControllerPacketShowMonList {
-    u8 command;
-    u8 battlerId;
-    u8 mode;
-    u8 reservedMon;
-    u8 selectedMonIndex[BATTLER_MAX];
-    u8 partyOrder[BATTLER_MAX][PARTY_SIZE];
-    u32 trapped;
-    u8 switchInFlag;
-    u8 filler_25[3];
-} BattleControllerPacketShowMonList;
-
-typedef struct BattleControllerPacketYesNoBox {
-    u8 command;
-    u8 mode;
-    u16 msgId;
-    u32 value;
-    u32 param;
-} BattleControllerPacketYesNoBox;
-
-typedef struct BattleControllerPacketAttackMessage {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 move;
-} BattleControllerPacketAttackMessage;
-
-typedef struct BattleControllerPacketHealthbarUpdate {
-    u8 command;
-    u8 level;
-    s16 hp;
-    u16 maxHp;
-    u8 filler_06[2];
-    s32 gainedHp;
-} BattleControllerPacketHealthbarUpdate;
-
-typedef struct BattleControllerPacketExpBarUpdate {
-    u8 command;
-    u8 filler_01[3];
-    s32 prevExp;
-    s32 exp;
-    s32 maxExp;
-} BattleControllerPacketExpBarUpdate;
-
-typedef struct BattleControllerPacketFaintAnimation {
-    u8 command;
-    u8 gender;
-    u16 species;
-    u32 personality;
-    u8 form;
-    u8 isSubstitute;
-    u8 isTransformed;
-    u8 unk_0B;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketFaintAnimation;
-
-typedef struct BattleControllerPacketPlaySE {
-    u8 command;
-    u8 unk_01;
-    u16 sndSeqNo;
-} BattleControllerPacketPlaySE;
-
-typedef struct BattleControllerPacketToggleVanish {
-    u8 command;
-    u8 vanish;
-    u8 isSubstitute;
-    u8 unk_03;
-    u16 allSpecies[BATTLER_MAX];
-    u8 allGender[BATTLER_MAX];
-    u8 allShiny[BATTLER_MAX];
-    u8 allForm[BATTLER_MAX];
-    u32 allPersonality[BATTLER_MAX];
-} BattleControllerPacketToggleVanish;
-
-typedef struct BattleControllerPacketHealthbarStatus {
-    u8 command;
-    u8 status;
-    u16 unk_02;
-} BattleControllerPacketHealthbarStatus;
-
-typedef struct BattleControllerPacketTrainerMessage {
-    u8 command;
-    u8 msg;
-    u16 unk_02;
-} BattleControllerPacketTrainerMessage;
-
-typedef struct BattleControllerPacketSwitchMessage {
-    u8 command;
-    u8 selectedMonIndex;
-    u16 value;
-} BattleControllerPacketSwitchMessage;
-
-typedef struct BattleControllerPacketFirstSendOutMessage {
-    u8 command;
-    u8 filler_01[3];
-    u8 selectedMonIndex[BATTLER_MAX];
-} BattleControllerPacketFirstSendOutMessage;
-
-typedef struct BattleControllerPacketSelectionMessage {
-    u8 command;
-    u8 filler_01[3];
-    BattleMessage msg;
-} BattleControllerPacketSelectionMessage;
-
-typedef struct BattleControllerPacketRefreshHealthbar {
-    u8 command;
-    u8 level;
-    s16 hp;
-    u16 maxHp;
-    u8 selectedMonIndex;
-    u8 status : 5;
-    u8 gender : 2;
-    u8 caught : 1;
-    u32 exp;
-    u32 maxExp;
-    u32 safariBallCount;
-} BattleControllerPacketRefreshHealthbar;
-
-typedef struct BattleControllerPacketBattleMonToPartyMonCopy {
-    u8 command;
-    u8 selectedMonIndex : 4;
-    u8 mimicedMoveIndex : 4;
-    s16 hp;
-    u32 status;
-    u32 battlerBitKnockedOffItem;
-    u16 item;
-    u16 moves[MAX_MON_MOVES];
-    u8 movePPCur[MAX_MON_MOVES];
-    u8 filler_1A[2];
-    u32 status2;
-    u16 form;
-    u16 unk_22;
-    u32 ability;
-    u16 recalcMonStats;
-    u16 formChange;
-} BattleControllerPacketBattleMonToPartyMonCopy;
-
-typedef struct BattleControllerPacketPartyStatusHeal {
-    u8 command;
-    u8 ability;
-    u16 moveNo;
-} BattleControllerPacketPartyStatusHeal;
-
-typedef struct BattleControllerPacketSelectMoveToForget {
-    u8 command;
-    u8 slot;
-    u16 move;
-} BattleControllerPacketSelectMoveToForget;
-
-typedef struct BattleControllerPacketMosaicAnimation {
-    u8 command;
-    u8 mosaic;
-    u8 delay;
-    u8 unk_03;
-} BattleControllerPacketMosaicAnimation;
-
-typedef struct BattleControllerPacketChangeForm {
-    u8 command;
-    u8 form;
-    u16 species;
-    u8 gender;
-    u8 shiny;
-    u16 unk_06;
-    u32 personality;
-} BattleControllerPacketChangeForm;
-
-typedef struct BattleControllerPacketBallGauge {
-    u8 command;
-    u8 unk_01;
-    u8 status[PARTY_SIZE];
-} BattleControllerPacketBallGauge;
-
-typedef struct BattleControllerPacketIncrementGameStat {
-    u8 command;
-    u8 flag;
-    u16 id;
-} BattleControllerPacketIncrementGameStat;
-
-typedef struct BattleControllerPacketRecordData {
-    u8 command;
-    u8 escapedMask;
-    u16 recordSize;
-    u8 record[28];
-} BattleControllerPacketRecordData;
-
-typedef struct BattleControllerPacketMoveSE {
-    u8 command;
-    u8 effectiveness;
-    u8 filler_02[2];
-} BattleControllerPacketMoveSE;
-
-typedef struct BattleControllerPacketPlaySong {
-    u8 command;
-    u8 unk_01;
-    u16 song;
-} BattleControllerPacketPlaySong;
-
-typedef struct BattleControllerPacketBattleResults {
-    u8 command;
-    u8 unk_01;
-    u16 recordSize;
-    u32 outcomeFlags;
-    u8 record[28];
-} BattleControllerPacketBattleResults;
-
-typedef struct BattleControllerPacketScreenFade {
-    u8 command;
-    u8 mode;
-    u16 unk_02;
-} BattleControllerPacketScreenFade;
-
-// Arguments of the battle party menu (BATTLE_PARTY_MENU_START), also used to pick the move to forget.
-typedef struct BattlePartyMenuArgs {
-    Party *party;
-    u32 unk_04;
-    BattleSystem *battleSystem;
-    enum HeapID heapID;
-    u8 unk_10;
-    u8 selectedSlot;
-    u8 reservedMon;
-    u8 unk_13;
-    u8 selectedMonIndex;
-    u8 partnerSelectedMonIndex;
-    u8 filler_16[2];
-    u32 embargoFlag;
-    u32 partnerEmbargoFlag;
-    u16 hp;
-    u16 item;
-    u16 move;
-    u8 filler_26[2];
-    u32 battlerId;
-    u8 partyOrder[PARTY_SIZE];
-    u8 key;
-    u8 pocket;
-    u8 moveSlot;
-    u8 mode;
-    u8 done;
-    u8 filler_37;
-} BattlePartyMenuArgs;
-
-// Arguments of the battle bag (BattleBagMenu_Create).
-typedef struct BattleBagMenuArgs {
-    BattleSystem *battleSystem;
-    PlayerProfile *playerProfile;
-    Bag *bag;
-    enum HeapID heapID;
-    u32 battlerId;
-    u32 isTutorial;
-    u32 embargoFlag;
-    u16 item;
-    u8 pocket;
-    u8 lastUsedPocket;
-    u8 unk_20;
-    u8 unk_21;
-    u8 twoTargets;
-    u8 targetSemiInvulnerable;
-    u8 targetSubstitute;
-    u8 key;
-    u8 done;
-    u8 filler_27[13];
-} BattleBagMenuArgs;
-
-void BattleBagMenu_Create(BattleBagMenuArgs *args);
 
 // Task data of the command workers.
 typedef struct OpponentEncounterAnimWork {
@@ -1004,15 +605,15 @@ typedef struct OpponentSelectTargetWork {
 
 typedef struct OpponentSelectItemPartyMenu {
     u32 unk_00;
-    BattlePartyMenuArgs *args;
-    u8 unk_08[4];
+    BattlePartyContext *args;
+    u8 padding_08[4];
     u8 selectedMonIndex[BATTLER_MAX];
-    u8 unk_10[0x24];
+    u8 padding_10[0x24];
 } OpponentSelectItemPartyMenu;
 
 typedef struct OpponentSelectItemWork {
     BattleSystem *battleSystem;
-    BattleBagMenuArgs *bagMenu;
+    BattleBagContext *bagMenu;
     OpponentSelectItemPartyMenu *partyMenu;
     u8 command;
     u8 battlerId;
@@ -1031,7 +632,7 @@ typedef struct OpponentSelectItemWork {
 
 typedef struct OpponentShowMonListWork {
     BattleSystem *battleSystem;
-    BattlePartyMenuArgs *partyMenu;
+    BattlePartyContext *partyMenu;
     u8 command;
     u8 battlerId;
     u8 state;
@@ -1149,7 +750,7 @@ typedef struct OpponentExpBarFlashWork {
 
 typedef struct OpponentSelectMoveToForgetWork {
     BattleSystem *battleSystem;
-    BattlePartyMenuArgs *partyMenu;
+    BattlePartyContext *partyMenu;
     u8 command;
     u8 battlerId;
     u8 state;
@@ -2754,7 +2355,7 @@ SysTask *OpponentData_SelectItem(BattleSystem *battleSystem, OpponentData *oppon
     int j;
 
     work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(OpponentSelectItemPartyMenu));
-    work->partyMenu->args = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
+    work->partyMenu->args = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyContext));
     work->partyMenu->args->party = SaveArray_Party_Alloc(HEAP_ID_BATTLE);
     work->state = 0;
     work->battleSystem = battleSystem;
@@ -5139,7 +4740,7 @@ void Task_RecordedSelectTarget(SysTask *task, void *data) {
 }
 
 // Can the item be used on the selected party slot (an active battler)?
-#define ITEM_TARGET_ON_FIELD(work) (((work)->partyMenu->args->selectedSlot < 2 && (BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES) || BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG))) || (work)->partyMenu->args->selectedSlot < 1)
+#define ITEM_TARGET_ON_FIELD(work) (((work)->partyMenu->args->selectedMon < 2 && (BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES) || BattleSystem_GetBattleType((work)->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_TAG))) || (work)->partyMenu->args->selectedMon < 1)
 
 void Task_PlayerSelectItem(SysTask *task, void *data) {
     OpponentSelectItemWork *work = data;
@@ -5165,33 +4766,33 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     case SELECT_ITEM_STATE_OPEN_BAG:
         if (!PaletteData_GetSelectedBuffersBitmask(palette)) {
             BattleSystem_FreeInputForSubMenu(work->battleSystem);
-            work->bagMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleBagMenuArgs));
-            memset(work->bagMenu, 0, sizeof(BattleBagMenuArgs));
+            work->bagMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattleBagContext));
+            memset(work->bagMenu, 0, sizeof(BattleBagContext));
             work->bagMenu->battleSystem = work->battleSystem;
-            work->bagMenu->playerProfile = BattleSystem_GetPlayerProfile(work->battleSystem, work->battlerId);
+            work->bagMenu->profile = BattleSystem_GetPlayerProfile(work->battleSystem, work->battlerId);
             work->bagMenu->heapID = HEAP_ID_BATTLE;
             work->bagMenu->done = FALSE;
             work->bagMenu->bag = BattleSystem_GetBag(work->battleSystem);
             work->bagMenu->battlerId = work->battlerId;
-            work->bagMenu->key = work->key;
+            work->bagMenu->cursorActive = work->key;
             work->bagMenu->twoTargets = work->twoTargets;
             work->bagMenu->targetSemiInvulnerable = work->targetSemiInvulnerable;
             work->bagMenu->targetSubstitute = work->targetSubstitute;
-            work->bagMenu->embargoFlag = work->embargoFlag[work->battlerId];
+            work->bagMenu->embargo = work->embargoFlag[work->battlerId];
             BattleBagMenu_Create(work->bagMenu);
             work->state = SELECT_ITEM_STATE_WAIT_BAG;
         }
         break;
     case SELECT_ITEM_STATE_REOPEN_BAG:
-        work->bagMenu->key = work->key;
+        work->bagMenu->cursorActive = work->key;
         BattleBagMenu_Create(work->bagMenu);
         work->state++;
     case SELECT_ITEM_STATE_WAIT_BAG:
         if (work->bagMenu->done) {
             work->bagMenu->done = FALSE;
-            work->key = work->bagMenu->key;
-            if (work->bagMenu->item) {
-                switch (work->bagMenu->pocket) {
+            work->key = work->bagMenu->cursorActive;
+            if (work->bagMenu->selectedItem) {
+                switch (work->bagMenu->selectedPocket) {
                 case BTLPOCKETLIST_HP_PP_RESTORE:
                 case BTLPOCKETLIST_STATUS_RESTORE:
                     work->state = SELECT_ITEM_STATE_OPEN_PARTY;
@@ -5222,31 +4823,31 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         }
         work->partyMenu->args->battleSystem = work->battleSystem;
         work->partyMenu->args->heapID = HEAP_ID_BATTLE;
-        work->partyMenu->args->selectedSlot = 0;
+        work->partyMenu->args->selectedMon = 0;
         work->partyMenu->args->done = FALSE;
         work->partyMenu->args->move = MOVE_NONE;
         work->partyMenu->args->mode = 2;
-        work->partyMenu->args->item = work->bagMenu->item;
-        work->partyMenu->args->pocket = work->bagMenu->pocket;
+        work->partyMenu->args->item = work->bagMenu->selectedItem;
+        work->partyMenu->args->pocket = work->bagMenu->selectedPocket;
         work->partyMenu->args->battlerId = work->bagMenu->battlerId;
-        work->partyMenu->args->key = work->key;
-        work->partyMenu->args->selectedMonIndex = work->partyMenu->selectedMonIndex[work->battlerId];
-        work->partyMenu->args->partnerSelectedMonIndex = work->partyMenu->selectedMonIndex[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
+        work->partyMenu->args->cursorActive = work->key;
+        work->partyMenu->args->battlingMons[0] = work->partyMenu->selectedMonIndex[work->battlerId];
+        work->partyMenu->args->battlingMons[1] = work->partyMenu->selectedMonIndex[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
         if (work->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
-            work->partyMenu->args->embargoFlag = work->embargoFlag[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
-            work->partyMenu->args->partnerEmbargoFlag = work->embargoFlag[work->battlerId];
+            work->partyMenu->args->embargo[0] = work->embargoFlag[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
+            work->partyMenu->args->embargo[1] = work->embargoFlag[work->battlerId];
         } else {
-            work->partyMenu->args->embargoFlag = work->embargoFlag[work->battlerId];
-            work->partyMenu->args->partnerEmbargoFlag = work->embargoFlag[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
+            work->partyMenu->args->embargo[0] = work->embargoFlag[work->battlerId];
+            work->partyMenu->args->embargo[1] = work->embargoFlag[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
         }
         BATTLE_PARTY_MENU_START(work->partyMenu->args);
         work->state++;
     } break;
     case SELECT_ITEM_STATE_WAIT_PARTY:
         if (work->partyMenu->args->done) {
-            work->key = work->partyMenu->args->key;
+            work->key = work->partyMenu->args->cursorActive;
             work->partyMenu->args->done = FALSE;
-            if (work->partyMenu->args->selectedSlot == PARTY_SIZE) {
+            if (work->partyMenu->args->selectedMon == PARTY_SIZE) {
                 work->state = SELECT_ITEM_STATE_REOPEN_BAG;
             } else {
                 work->state = SELECT_ITEM_STATE_FADE_IN;
@@ -5263,15 +4864,15 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     case SELECT_ITEM_STATE_CHECK_ITEM:
         if (!PaletteData_GetSelectedBuffersBitmask(palette)) {
             PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 0);
-            if (work->bagMenu->item) {
+            if (work->bagMenu->selectedItem) {
                 work->state = SELECT_ITEM_STATE_PRINT_USED_MSG;
-                switch (work->bagMenu->pocket) {
+                switch (work->bagMenu->selectedPocket) {
                 case BTLPOCKETLIST_STATUS_RESTORE:
                     // item is ITEM_REVIVE or ITEM_MAX_REVIVE (written as a u16 wrap-around add)
-                    if ((u16)(work->bagMenu->item + (0x10000 - ITEM_REVIVE)) <= ITEM_MAX_REVIVE - ITEM_REVIVE) {
+                    if ((u16)(work->bagMenu->selectedItem + (0x10000 - ITEM_REVIVE)) <= ITEM_MAX_REVIVE - ITEM_REVIVE) {
                         work->state = SELECT_ITEM_STATE_REPLY;
                     } else if (ITEM_TARGET_ON_FIELD(work)) {
-                        if (work->bagMenu->item == ITEM_FULL_RESTORE) {
+                        if (work->bagMenu->selectedItem == ITEM_FULL_RESTORE) {
                             if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
                                 work->nextState = SELECT_ITEM_STATE_HP_MON_ANIM;
                             } else {
@@ -5291,7 +4892,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                     }
                     break;
                 case BTLPOCKETLIST_HP_PP_RESTORE:
-                    if (ITEM_TARGET_ON_FIELD(work) && GetItemAttr(work->bagMenu->item, ITEMATTR_HP_RESTORE, HEAP_ID_BATTLE)) {
+                    if (ITEM_TARGET_ON_FIELD(work) && GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_HP_RESTORE, HEAP_ID_BATTLE)) {
                         if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
                             work->nextState = SELECT_ITEM_STATE_HP_MON_ANIM;
                         } else {
@@ -5304,9 +4905,9 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
                     break;
                 case BTLPOCKETLIST_BATTLE_ITEMS:
                     // item is ITEM_POKE_DOLL or ITEM_FLUFFY_TAIL
-                    if ((u16)(work->bagMenu->item + (0x10000 - ITEM_POKE_DOLL)) <= ITEM_FLUFFY_TAIL - ITEM_POKE_DOLL) {
+                    if ((u16)(work->bagMenu->selectedItem + (0x10000 - ITEM_POKE_DOLL)) <= ITEM_FLUFFY_TAIL - ITEM_POKE_DOLL) {
                         work->state = SELECT_ITEM_STATE_REPLY;
-                    } else if (work->bagMenu->item == ITEM_GUARD_SPEC_) {
+                    } else if (work->bagMenu->selectedItem == ITEM_GUARD_SPEC_) {
                         if (BattleSystem_AreBattleAnimationsOn(work->battleSystem) == TRUE) {
                             work->nextState = SELECT_ITEM_STATE_EFFECT_ANIM;
                         } else {
@@ -5335,13 +4936,13 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         }
         break;
     case SELECT_ITEM_STATE_REPLY:
-        if (work->bagMenu->item == ITEM_NONE) {
+        if (work->bagMenu->selectedItem == ITEM_NONE) {
             input.item = 0xFF;
         } else {
-            input.item = work->bagMenu->item;
-            input.pocket = work->bagMenu->pocket;
+            input.item = work->bagMenu->selectedItem;
+            input.pocket = work->bagMenu->selectedPocket;
             if (input.pocket <= BTLPOCKETLIST_STATUS_RESTORE) {
-                input.target = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedSlot] + 1;
+                input.target = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedMon] + 1;
             }
         }
         REPLY_ITEM_SELECTION(work->battleSystem, work->battlerId, input);
@@ -5357,7 +4958,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         MsgData *msgData;
         usedMsg.id = msg_0197_01206;
         usedMsg.tag = TAG_ITEM;
-        usedMsg.param[0] = work->bagMenu->item;
+        usedMsg.param[0] = work->bagMenu->selectedItem;
         msgData = BattleSystem_GetMessageLoader(work->battleSystem);
         work->printerId = BattleSystem_PrintBattleMessage(work->battleSystem, msgData, &usedMsg, BattleSystem_GetTextFrameDelay(work->battleSystem));
         work->timer = 30;
@@ -5380,7 +4981,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     } break;
     case SELECT_ITEM_STATE_HP_MON_ANIM:
     case SELECT_ITEM_STATE_STATUS_MON_ANIM: {
-        int battlerId = work->partyMenu->args->selectedSlot * 2;
+        int battlerId = work->partyMenu->args->selectedMon * 2;
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &monAnimData, 1, 9, battlerId, battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, battlerId);
@@ -5389,11 +4990,11 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     } break;
     case SELECT_ITEM_STATE_EFFECT_ANIM: {
         OpponentData *opponentData;
-        if (work->bagMenu->item == ITEM_GUARD_SPEC_) {
+        if (work->bagMenu->selectedItem == ITEM_GUARD_SPEC_) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 0, 0, work->battlerId, work->battlerId, MOVE_MIST);
             opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
             OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
-        } else if (work->bagMenu->item == ITEM_DIRE_HIT) {
+        } else if (work->bagMenu->selectedItem == ITEM_DIRE_HIT) {
             BattleController_InitMoveAnimData(work->battleSystem, NULL, &battleItemAnimData, 0, 0, work->battlerId, work->battlerId, MOVE_FOCUS_ENERGY);
             opponentData = BattleSystem_GetOpponentData(work->battleSystem, work->battlerId);
             OpponentData_StartMoveAnimation(work->battleSystem, opponentData, (BattleAnimSystem *)BattleSystem_GetBattleAnimSystem(work->battleSystem), &battleItemAnimData);
@@ -5409,7 +5010,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         battleItemMsg.id = msg_0197_01203;
         battleItemMsg.tag = 12;
         battleItemMsg.param[0] = work->battlerId | (work->partyMenu->selectedMonIndex[work->battlerId] << 8);
-        switch (work->bagMenu->item) {
+        switch (work->bagMenu->selectedItem) {
         case ITEM_X_ATTACK:
             battleItemMsg.param[1] = 1;
             break;
@@ -5444,7 +5045,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     } break;
     case SELECT_ITEM_STATE_HP_RESTORE_ANIM:
     case SELECT_ITEM_STATE_STATUS_RESTORE_ANIM: {
-        int battlerId = work->partyMenu->args->selectedSlot * 2;
+        int battlerId = work->partyMenu->args->selectedMon * 2;
         OpponentData *opponentData;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &restoreAnimData, 1, 14, battlerId, battlerId, MOVE_NONE);
         opponentData = BattleSystem_GetOpponentData(work->battleSystem, battlerId);
@@ -5452,8 +5053,8 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->state++;
     } break;
     case SELECT_ITEM_STATE_UPDATE_HP_BAR: {
-        int battlerId = work->partyMenu->args->selectedSlot * 2;
-        int slot = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedSlot];
+        int battlerId = work->partyMenu->args->selectedMon * 2;
+        int slot = work->partyMenu->args->partyOrder[work->partyMenu->args->selectedMon];
         BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, battlerId);
         Pokemon *mon;
         u8 battlerType;
@@ -5461,9 +5062,9 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         battlerType = BattleSystem_GetBattlerType(work->battleSystem, battlerId);
         hpBar->type = BattleHpBar_Util_GetBarTypeFromBattlerSide(battlerType, BattleSystem_GetBattleType(work->battleSystem));
         mon = BattleSystem_GetPartyMon(work->battleSystem, battlerId, slot);
-        hpBar->hp = GetMonData(mon, MON_DATA_HP, NULL) - work->partyMenu->args->hp;
+        hpBar->hp = GetMonData(mon, MON_DATA_HP, NULL) - work->partyMenu->args->hpRestored;
         hpBar->maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-        hpBar->gainedHp = work->partyMenu->args->hp;
+        hpBar->gainedHp = work->partyMenu->args->hpRestored;
         if (GetMonData(mon, MON_DATA_STATUS, NULL) == 0) {
             hpBar->status = 0;
         }
@@ -5471,7 +5072,7 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
         work->state++;
     } break;
     case SELECT_ITEM_STATE_WAIT_HP_BAR: {
-        BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, work->partyMenu->args->selectedSlot * 2);
+        BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, work->partyMenu->args->selectedMon * 2);
         if (BattleHpBar_UpdateHpChange(hpBar) == -1) {
             BattleHpBar_Draw(hpBar, 0, 0x100);
             work->state++;
@@ -5479,12 +5080,12 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     } break;
     case SELECT_ITEM_STATE_PRINT_HP_MSG: {
         MsgData *msgData = BattleSystem_GetMessageLoader(work->battleSystem);
-        int battlerId = work->partyMenu->args->selectedSlot * 2;
-        if (work->partyMenu->args->hp) {
+        int battlerId = work->partyMenu->args->selectedMon * 2;
+        if (work->partyMenu->args->hpRestored) {
             hpMsg.id = msg_0197_01214;
             hpMsg.tag = 17;
             hpMsg.param[0] = battlerId | (work->partyMenu->selectedMonIndex[battlerId] << 8);
-            hpMsg.param[1] = work->partyMenu->args->hp;
+            hpMsg.param[1] = work->partyMenu->args->hpRestored;
         } else {
             hpMsg.id = msg_0197_01250;
             hpMsg.tag = TAG_NICKNAME;
@@ -5497,40 +5098,40 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
     case SELECT_ITEM_STATE_PRINT_STATUS_MSG: {
         int count = 0;
         int status;
-        int battlerId = work->partyMenu->args->selectedSlot * 2;
+        int battlerId = work->partyMenu->args->selectedMon * 2;
         BattleHpBar *hpBar = BattleSystem_GetHpBar(work->battleSystem, battlerId);
         MsgData *msgData;
-        if (GetMonData(BattleSystem_GetPartyMon(work->battleSystem, battlerId, work->partyMenu->args->partyOrder[work->partyMenu->args->selectedSlot]), MON_DATA_STATUS, NULL) == 0) {
+        if (GetMonData(BattleSystem_GetPartyMon(work->battleSystem, battlerId, work->partyMenu->args->partyOrder[work->partyMenu->args->selectedMon]), MON_DATA_STATUS, NULL) == 0) {
             hpBar->status = 0;
         }
         BattleHpBar_Draw(hpBar, hpBar->hp, 0x100);
         statusMsg.tag = TAG_NICKNAME;
         statusMsg.param[0] = battlerId | (work->partyMenu->selectedMonIndex[battlerId] << 8);
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_SLP_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_SLP_HEAL, HEAP_ID_BATTLE)) {
             status = 0;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_PSN_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_PSN_HEAL, HEAP_ID_BATTLE)) {
             status = 1;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_BRN_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_BRN_HEAL, HEAP_ID_BATTLE)) {
             status = 2;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_FRZ_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_FRZ_HEAL, HEAP_ID_BATTLE)) {
             status = 3;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_PRZ_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_PRZ_HEAL, HEAP_ID_BATTLE)) {
             status = 4;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_CFS_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_CFS_HEAL, HEAP_ID_BATTLE)) {
             status = 5;
             count++;
         }
-        if (GetItemAttr(work->bagMenu->item, ITEMATTR_INF_HEAL, HEAP_ID_BATTLE)) {
+        if (GetItemAttr(work->bagMenu->selectedItem, ITEMATTR_INF_HEAL, HEAP_ID_BATTLE)) {
             status = 6;
             count++;
         }
@@ -5673,7 +5274,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
             break;
         }
         BattleSystem_FreeInputForSubMenu(work->battleSystem);
-        work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
+        work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyContext));
         work->partyMenu->party = SaveArray_Party_Alloc(HEAP_ID_BATTLE);
         if ((BattleSystem_GetBattleType(work->battleSystem) & (BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI)) == (BATTLE_TYPE_LINK | BATTLE_TYPE_MULTI) || BattleSystem_GetBattleType(work->battleSystem) == (BATTLE_TYPE_TRAINER | BATTLE_TYPE_DOUBLES | BATTLE_TYPE_MULTI | BATTLE_TYPE_AI | BATTLE_TYPE_FRONTIER)) {
             // multi battles list both trainers' Pokemon, interleaved
@@ -5721,9 +5322,9 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
                 } while (i < BattleSystem_GetPartySize(work->battleSystem, secondBattler));
             }
             if (BattleSystem_GetBattlerType(work->battleSystem, work->battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
-                work->partyMenu->selectedSlot = 1;
+                work->partyMenu->selectedMon = 1;
             } else {
-                work->partyMenu->selectedSlot = 0;
+                work->partyMenu->selectedMon = 0;
             }
         } else {
             if ((BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_DOUBLES) && !(BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_MULTI)) {
@@ -5731,7 +5332,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
             } else {
                 firstBattler = work->battlerId;
             }
-            work->partyMenu->selectedSlot = BattleSystem_GetBattlerType(work->battleSystem, work->battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2 ? 1 : 0;
+            work->partyMenu->selectedMon = BattleSystem_GetBattlerType(work->battleSystem, work->battlerId) == BATTLER_TYPE_PLAYER_SIDE_SLOT_2 ? 1 : 0;
             party = BattleSystem_GetParty(work->battleSystem, work->battlerId);
             for (i = 0; i < Party_GetCount(party); i++) {
                 Party_AddMon(work->partyMenu->party, BattleSystem_GetPartyMon(work->battleSystem, firstBattler, work->partyOrder[firstBattler][i]));
@@ -5746,18 +5347,18 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
         work->partyMenu->mode = work->mode;
         work->partyMenu->item = work->item;
         work->partyMenu->battlerId = work->battlerId;
-        work->partyMenu->key = work->key;
+        work->partyMenu->cursorActive = work->key;
         if (!(MaskOfFlagNo(work->battlerId) & work->switchInFlag)) {
-            work->partyMenu->selectedMonIndex = work->selectedMonIndex[work->battlerId];
+            work->partyMenu->battlingMons[0] = work->selectedMonIndex[work->battlerId];
         } else {
-            work->partyMenu->selectedMonIndex = PARTY_SIZE;
+            work->partyMenu->battlingMons[0] = PARTY_SIZE;
         }
         if (BattleSystem_GetBattleType(work->battleSystem) & BATTLE_TYPE_MULTI) {
-            work->partyMenu->partnerSelectedMonIndex = PARTY_SIZE;
+            work->partyMenu->battlingMons[1] = PARTY_SIZE;
         } else if (!(MaskOfFlagNo(BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)) & work->switchInFlag)) {
-            work->partyMenu->partnerSelectedMonIndex = work->selectedMonIndex[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
+            work->partyMenu->battlingMons[1] = work->selectedMonIndex[BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId)];
         } else {
-            work->partyMenu->partnerSelectedMonIndex = PARTY_SIZE;
+            work->partyMenu->battlingMons[1] = PARTY_SIZE;
         }
         BATTLE_PARTY_MENU_START(work->partyMenu);
         work->state++;
@@ -5767,7 +5368,7 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
             break;
         }
         BattleSystem_RestoreInputAfterSubMenu(work->battleSystem);
-        BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->partyMenu->key);
+        BattleInput_SetKeyPressed(BattleSystem_GetBattleInput(work->battleSystem), work->partyMenu->cursorActive);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_MAIN_BG_F | PLTTBUF_MAIN_OBJ_F, 0xC00, -8, 7, 0, 0);
         PaletteData_BeginPaletteFade(palette, PLTTBUF_SUB_BG_F | PLTTBUF_SUB_OBJ_F, 0xFFFF, -8, 16, 0, 0);
         work->state++;
@@ -5777,10 +5378,10 @@ void Task_PlayerShowMonList(SysTask *task, void *data) {
             break;
         }
         PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 0);
-        if (work->partyMenu->selectedSlot == PARTY_SIZE) {
+        if (work->partyMenu->selectedMon == PARTY_SIZE) {
             BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, 0xFF);
         } else {
-            BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, work->partyMenu->partyOrder[work->partyMenu->selectedSlot] + 1);
+            BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, work->partyMenu->partyOrder[work->partyMenu->selectedMon] + 1);
         }
         BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
         Heap_Free(work->partyMenu->party);
@@ -6502,18 +6103,18 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
     case FORGET_MOVE_STATE_OPEN_PARTY:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
             BattleSystem_FreeInputForSubMenu(work->battleSystem);
-            work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyMenuArgs));
+            work->partyMenu = Heap_Alloc(HEAP_ID_BATTLE, sizeof(BattlePartyContext));
             work->partyMenu->party = BattleSystem_GetParty(work->battleSystem, work->battlerId);
             work->partyMenu->battleSystem = work->battleSystem;
             work->partyMenu->heapID = HEAP_ID_BATTLE;
-            work->partyMenu->selectedSlot = work->slot;
+            work->partyMenu->selectedMon = work->slot;
             work->partyMenu->move = work->move;
             work->partyMenu->done = FALSE;
             work->partyMenu->reservedMon = 0;
             work->partyMenu->mode = 3;
             work->partyMenu->item = ITEM_NONE;
             work->partyMenu->battlerId = work->battlerId;
-            work->partyMenu->key = 0;
+            work->partyMenu->cursorActive = 0;
             BATTLE_PARTY_MENU_START(work->partyMenu);
             work->state++;
         }
@@ -6527,10 +6128,10 @@ void Task_SelectMoveToForget(SysTask *task, void *data) {
         break;
     case FORGET_MOVE_STATE_REPLY:
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
-            if (work->partyMenu->moveSlot == MAX_MON_MOVES) {
+            if (work->partyMenu->selectedMove == MAX_MON_MOVES) {
                 BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, 0xFF);
             } else {
-                BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, work->partyMenu->moveSlot + 1);
+                BattleController_ReplyPartySelection(work->battleSystem, work->battlerId, work->partyMenu->selectedMove + 1);
             }
             BattleController_EmitCommandComplete(work->battleSystem, work->battlerId, work->command);
             Heap_Free(work->partyMenu);
