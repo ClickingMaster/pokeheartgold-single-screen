@@ -50,8 +50,8 @@ gVariableSpeedWalk_Cmd082:
 _020FDA28:
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00
 	.byte 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
-	.public sMovementScriptMachineStateFuncs
-sMovementScriptMachineStateFuncs:
+	.public gMovementScriptMachineStateFuncs
+gMovementScriptMachineStateFuncs:
 	.word MovementScriptMachineSub_Init
 	.word MovementScriptMachineSub_WaitReady
 	.word MovementScriptMachineSub_SetMovementCommand

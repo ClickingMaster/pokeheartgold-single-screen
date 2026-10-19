@@ -25,7 +25,11 @@ enum WarpSpinState {
 };
 
 // A quarter turn counterclockwise.
-void WarpSpin_RotatePlayer(WarpSpinTask *task) {
+static void WarpSpin_RotatePlayer(WarpSpinTask *task);
+static void Task_WarpSpinDeparture(SysTask *sysTask, void *data);
+static void Task_WarpSpinArrival(SysTask *sysTask, void *data);
+
+static void WarpSpin_RotatePlayer(WarpSpinTask *task) {
     switch (task->facing) {
     case DIR_NORTH:
         task->facing = DIR_WEST;
@@ -43,7 +47,8 @@ void WarpSpin_RotatePlayer(WarpSpinTask *task) {
     PlayerAvatar_SetFacingDirection(task->fieldSystem->playerAvatar, task->facing);
 }
 
-void Task_WarpSpinDeparture(SysTask *sysTask, WarpSpinTask *task) {
+static void Task_WarpSpinDeparture(SysTask *sysTask, void *data) {
+    WarpSpinTask *task = data;
     VecFx32 pos;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(task->fieldSystem->playerAvatar);
 
@@ -74,7 +79,8 @@ void Task_WarpSpinDeparture(SysTask *sysTask, WarpSpinTask *task) {
     }
 }
 
-void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task) {
+static void Task_WarpSpinArrival(SysTask *sysTask, void *data) {
+    WarpSpinTask *task = data;
     VecFx32 pos;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(task->fieldSystem->playerAvatar);
     int n;
@@ -127,8 +133,8 @@ void FieldSystem_StartWarpSpin(FieldSystem *fieldSystem, BOOL departing, int *do
     task->done = done;
     task->facing = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
     if (departing) {
-        SysTask_CreateOnMainQueue((SysTaskFunc)Task_WarpSpinDeparture, task, 100);
+        SysTask_CreateOnMainQueue(Task_WarpSpinDeparture, task, 100);
     } else {
-        SysTask_CreateOnMainQueue((SysTaskFunc)Task_WarpSpinArrival, task, 100);
+        SysTask_CreateOnMainQueue(Task_WarpSpinArrival, task, 100);
     }
 }

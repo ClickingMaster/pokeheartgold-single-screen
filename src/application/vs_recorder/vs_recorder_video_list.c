@@ -156,23 +156,23 @@ typedef struct VsRecorderTitleMsgIds {
     u32 msgIds[3];
 } VsRecorderTitleMsgIds;
 
-extern const TouchscreenHitbox sVsRecorderVideoListOpenHitbox;
-extern const TouchscreenHitbox sVsRecorderVideoListExitHitbox;
-extern const TouchscreenHitbox sVsRecorderOverwriteHitboxes[2];
-extern const VsRecorderTitleMsgIds sVsRecorderVideoListTitleMsgIds;
-extern const TouchscreenHitbox sVsRecorderSaveSlotHitboxes[4];
-extern const VsRecorderSlotButtonTable sVsRecorderSaveSlotMsgIds;
-extern const VsRecorderSlotButtonTable sVsRecorderSaveSlotAnims;
-extern const TouchscreenHitbox sVsRecorderVideoDetailHitboxes[4];
-extern const VsRecorderListConfig sVsRecorderVideoListConfig;
-extern const VsRecorderPartyIconOrder sVsRecorderScrollIconOrder;
-extern const VsRecorderPartyIconOrder sVsRecorderListIconOrder;
-extern const VsRecorderIconPositions sVsRecorderVideoListIconPositions;
+extern const TouchscreenHitbox gVsRecorderVideoListOpenHitbox;
+extern const TouchscreenHitbox gVsRecorderVideoListExitHitbox;
+extern const TouchscreenHitbox gVsRecorderOverwriteHitboxes[2];
+extern const VsRecorderTitleMsgIds gVsRecorderVideoListTitleMsgIds;
+extern const TouchscreenHitbox gVsRecorderSaveSlotHitboxes[4];
+extern const VsRecorderSlotButtonTable gVsRecorderSaveSlotMsgIds;
+extern const VsRecorderSlotButtonTable gVsRecorderSaveSlotAnims;
+extern const TouchscreenHitbox gVsRecorderVideoDetailHitboxes[4];
+extern const VsRecorderListConfig gVsRecorderVideoListConfig;
+extern const VsRecorderPartyIconOrder gVsRecorderScrollIconOrder;
+extern const VsRecorderPartyIconOrder gVsRecorderListIconOrder;
+extern const VsRecorderIconPositions gVsRecorderVideoListIconPositions;
 
 // the list entries are video headers; the icons read their party part
 #define VIDEO_PARTY(work, i) ((VsRecorderVideoParty *)(work)->net.videoList.headers[i])
 
-// VsRecorderVideoListScreen substates (sVsRecorderVideoListSubStates)
+// VsRecorderVideoListScreen substates (gVsRecorderVideoListSubStates)
 #define VIDEO_LIST_ENTER             1
 #define VIDEO_LIST_DOWNLOAD_LIST     2
 #define VIDEO_LIST_SHOW_LIST         3
@@ -249,7 +249,7 @@ void VsRecorder_OnRankingsReceived(void *arg, GlobalTerminalNetError *error) {
 }
 
 static void VsRecorder_PlaceVideoListIcons(VsRecorderWork *work) {
-    VsRecorderIconPositions positions = sVsRecorderVideoListIconPositions;
+    VsRecorderIconPositions positions = gVsRecorderVideoListIconPositions;
     int i, j;
     VsRecorderVideoListScreen *listWork = work->screenWork;
 
@@ -827,8 +827,8 @@ static void VsRecorder_SetSlotButtonName(VsRecorderTextSprite *button, VsRecorde
 static void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
     u8 *listWork = work->screenWork;
     VsRecorderTextSprite *button;
-    VsRecorderSlotButtonTable msgIds = sVsRecorderSaveSlotMsgIds;
-    VsRecorderSlotButtonTable anims = sVsRecorderSaveSlotAnims;
+    VsRecorderSlotButtonTable msgIds = gVsRecorderSaveSlotMsgIds;
+    VsRecorderSlotButtonTable anims = gVsRecorderSaveSlotAnims;
 
     struct {
         int y;
@@ -1124,7 +1124,7 @@ static void VsRecorder_CreateVideoListWindows(VsRecorderWork *work) {
     String *str;
     u32 x;
 
-    titles = sVsRecorderVideoListTitleMsgIds;
+    titles = gVsRecorderVideoListTitleMsgIds;
     InitWindow(window);
     AddWindowParameterized(work->bgConfig, window, GF_BG_LYR_MAIN_2, 3, 3, 20, 4, 14, 0x20);
     FillWindowPixelBuffer(window, 0);
@@ -1153,7 +1153,7 @@ BOOL VsRecorder_VideoListShowList(VsRecorderWork *work) {
         if (BattleRecord_Exists()) {
             BattleRecord_Delete();
         }
-        listWork->listConfig = sVsRecorderVideoListConfig;
+        listWork->listConfig = gVsRecorderVideoListConfig;
         listWork->listConfig.entries = NULL;
         listWork->listConfig.count = work->net.videoList.count;
         VsRecorder_LoadMonIconGfx(work);
@@ -1215,7 +1215,7 @@ BOOL VsRecorder_VideoListSelect(VsRecorderWork *work) {
         VsRecorder_RedrawNameList(&work->listWindow, work);
         OrbitCursor_MoveTarget(work->orbitCursors[0], 16, (s16)(work->listWindow.cursorRow * 24 + 76));
         VsRecorder_ScrollVideoListIcons(work);
-        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderVideoListOpenHitbox)) {
+        if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderVideoListOpenHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             if (work->net.videoList.headers[work->listWindow.cursor] != NULL) {
                 listWork->nextSubState = VIDEO_LIST_SHOW_DETAILS;
@@ -1223,7 +1223,7 @@ BOOL VsRecorder_VideoListSelect(VsRecorderWork *work) {
                 work->step++;
             }
         }
-        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderVideoListExitHitbox)) {
+        if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderVideoListExitHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             listWork->nextSubState = VIDEO_LIST_EXIT;
             work->step++;
@@ -1330,9 +1330,9 @@ BOOL VsRecorder_VideoListShowDetails(VsRecorderWork *work) {
         break;
     case VIDEO_LIST_SHOW_DETAILS_STEP_CREATE_HITBOXES:
         VsRecorder_LoadVideoDetails(work);
-        listWork->detailHitboxes = TouchHitboxController_Create(sVsRecorderVideoDetailHitboxes, 4, VsRecorder_OnVideoDetailsTouch, work, HEAP_ID_109);
-        listWork->slotHitboxes = TouchHitboxController_Create(sVsRecorderSaveSlotHitboxes, 4, VsRecorder_OnSaveSlotTouch, work, HEAP_ID_109);
-        listWork->overwriteHitboxes = TouchHitboxController_Create(sVsRecorderOverwriteHitboxes, 2, VsRecorder_OnOverwriteTouch, work, HEAP_ID_109);
+        listWork->detailHitboxes = TouchHitboxController_Create(gVsRecorderVideoDetailHitboxes, 4, VsRecorder_OnVideoDetailsTouch, work, HEAP_ID_109);
+        listWork->slotHitboxes = TouchHitboxController_Create(gVsRecorderSaveSlotHitboxes, 4, VsRecorder_OnSaveSlotTouch, work, HEAP_ID_109);
+        listWork->overwriteHitboxes = TouchHitboxController_Create(gVsRecorderOverwriteHitboxes, 2, VsRecorder_OnOverwriteTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case VIDEO_LIST_SHOW_DETAILS_STEP_CREATE_INFO:
@@ -1499,9 +1499,9 @@ BOOL VsRecorder_VideoListResume(VsRecorderWork *work) {
     }
     case VIDEO_LIST_RESUME_STEP_CREATE_HITBOXES:
         VsRecorder_LoadVideoDetails(work);
-        listWork->detailHitboxes = TouchHitboxController_Create(sVsRecorderVideoDetailHitboxes, 4, VsRecorder_OnVideoDetailsTouch, work, HEAP_ID_109);
-        listWork->slotHitboxes = TouchHitboxController_Create(sVsRecorderSaveSlotHitboxes, 4, VsRecorder_OnSaveSlotTouch, work, HEAP_ID_109);
-        listWork->overwriteHitboxes = TouchHitboxController_Create(sVsRecorderOverwriteHitboxes, 2, VsRecorder_OnOverwriteTouch, work, HEAP_ID_109);
+        listWork->detailHitboxes = TouchHitboxController_Create(gVsRecorderVideoDetailHitboxes, 4, VsRecorder_OnVideoDetailsTouch, work, HEAP_ID_109);
+        listWork->slotHitboxes = TouchHitboxController_Create(gVsRecorderSaveSlotHitboxes, 4, VsRecorder_OnSaveSlotTouch, work, HEAP_ID_109);
+        listWork->overwriteHitboxes = TouchHitboxController_Create(gVsRecorderOverwriteHitboxes, 2, VsRecorder_OnOverwriteTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case VIDEO_LIST_RESUME_STEP_CREATE_INFO:
@@ -1898,7 +1898,7 @@ static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
     int i;
     VsRecorderVideoListScreen *listWork = work->screenWork;
     int scroll = work->listWindow.scroll;
-    VsRecorderPartyIconOrder order = sVsRecorderListIconOrder;
+    VsRecorderPartyIconOrder order = gVsRecorderListIconOrder;
     int species[6] = { 0 };
     int forms[6] = { 0 };
     int j;
@@ -2029,7 +2029,7 @@ static void VsRecorder_ScrollVideoListIcons(VsRecorderWork *work) {
     }
     index = work->listWindow.scroll + row;
     {
-        VsRecorderPartyIconOrder order = sVsRecorderScrollIconOrder;
+        VsRecorderPartyIconOrder order = gVsRecorderScrollIconOrder;
         int species[6] = { 0 };
         int forms[6] = { 0 };
         layout = 0;

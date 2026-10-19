@@ -1,17 +1,17 @@
 #include "overlay_42.h"
 #include "sprite_transfer.h"
 
-const u8 sCharCellAnimVariants[4] = { 0, 0, 1, 1 };
-const u8 sPlayerCharIndices[8] = { 0, 1, 149, 150, 151, 152, 0, 0 };
-const u8 sCharSpriteAnimFrameLimits[12] = { 1, 255, 8, 2, 4, 16, 16, 2, 4, 0, 0, 0 };
-const u8 sAvatarCharIndices[16] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
+static const u8 sCharCellAnimVariants[4] = { 0, 0, 1, 1 };
+static const u8 sPlayerCharIndices[8] = { 0, 1, 149, 150, 151, 152, 0, 0 };
+static const u8 sCharSpriteAnimFrameLimits[12] = { 1, 255, 8, 2, 4, 16, 16, 2, 4, 0, 0, 0 };
+static const u8 sAvatarCharIndices[16] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
 
-const CharSpriteAnimUpdateFunc sCharSpriteAnimUpdateFuncs[10] = { NULL, CharSprite_UpdateAnimLoop, CharSprite_UpdateAnimWalk, CharSprite_UpdateAnimTurn, CharSprite_UpdateAnimRun, CharSprite_UpdateAnimBump, CharSprite_UpdateAnimWalkSlow, CharSprite_UpdateAnimWalkVeryFast, CharSprite_UpdateAnimWalkFast, NULL };
+static const CharSpriteAnimUpdateFunc sCharSpriteAnimUpdateFuncs[10] = { NULL, CharSprite_UpdateAnimLoop, CharSprite_UpdateAnimWalk, CharSprite_UpdateAnimTurn, CharSprite_UpdateAnimRun, CharSprite_UpdateAnimBump, CharSprite_UpdateAnimWalkSlow, CharSprite_UpdateAnimWalkVeryFast, CharSprite_UpdateAnimWalkFast, NULL };
 
-const CharSpriteAnimStartFunc sCharSpriteAnimStartFuncs[10] = { CharSprite_StartAnimStand, CharSprite_StartAnimLoop, CharSprite_StartAnimWalk, CharSprite_StartAnimTurn, CharSprite_StartAnimRun, CharSprite_StartAnimBump, CharSprite_StartAnimWalkSlow, CharSprite_StartAnimWalkVeryFast, CharSprite_StartAnimWalkFast, NULL };
+static const CharSpriteAnimStartFunc sCharSpriteAnimStartFuncs[10] = { CharSprite_StartAnimStand, CharSprite_StartAnimLoop, CharSprite_StartAnimWalk, CharSprite_StartAnimTurn, CharSprite_StartAnimRun, CharSprite_StartAnimBump, CharSprite_StartAnimWalkSlow, CharSprite_StartAnimWalkVeryFast, CharSprite_StartAnimWalkFast, NULL };
 
-const u32 sCellAnimFileIds[12] = { 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-const u16 sSpriteIdToCharIndex[305] = { 0, 0, 3, 2, 5, 3, 11, 4, 31, 5, 50, 6, 51, 7, 62, 8, 70, 9, 97, 1, 6, 10, 7, 11, 13, 12, 14, 13, 35, 14, 37, 15, 42, 16, 63, 17, 4, 18, 8, 19, 52, 20, 53, 21, 2, 22, 15, 23, 16, 24, 59, 25, 60, 26, 9, 27, 12, 28, 23, 29, 22, 30, 41, 31, 38, 32, 39, 33, 17, 34, 68, 35, 69, 36, 1, 37, 45, 38, 54, 39, 56, 40, 20, 41, 10, 42, 19, 43, 29, 44, 36, 45, 40, 46, 43, 47, 34, 48, 55, 49, 71, 50, 141, 51, 142, 52, 143, 53, 144, 54, 145, 55, 169, 56, 44, 58, 30, 59, 175, 94, 18, 103, 148, 114, 84, 115, 24, 116, 25, 117, 168, 132, 86, 135, 277, 139, 278, 140, 279, 141, 280, 142, 281, 143, 282, 144, 283, 145, 284, 146, 285, 147, 286, 148, 238, 149, 239, 150, 295, 151, 296, 152 };
+static const u32 sCellAnimFileIds[12] = { 3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+static const u16 sSpriteIdToCharIndex[305] = { 0, 0, 3, 2, 5, 3, 11, 4, 31, 5, 50, 6, 51, 7, 62, 8, 70, 9, 97, 1, 6, 10, 7, 11, 13, 12, 14, 13, 35, 14, 37, 15, 42, 16, 63, 17, 4, 18, 8, 19, 52, 20, 53, 21, 2, 22, 15, 23, 16, 24, 59, 25, 60, 26, 9, 27, 12, 28, 23, 29, 22, 30, 41, 31, 38, 32, 39, 33, 17, 34, 68, 35, 69, 36, 1, 37, 45, 38, 54, 39, 56, 40, 20, 41, 10, 42, 19, 43, 29, 44, 36, 45, 40, 46, 43, 47, 34, 48, 55, 49, 71, 50, 141, 51, 142, 52, 143, 53, 144, 54, 145, 55, 169, 56, 44, 58, 30, 59, 175, 94, 18, 103, 148, 114, 84, 115, 24, 116, 25, 117, 168, 132, 86, 135, 277, 139, 278, 140, 279, 141, 280, 142, 281, 143, 282, 144, 283, 145, 284, 146, 285, 147, 286, 148, 238, 149, 239, 150, 295, 151, 296, 152 };
 
 CharSpriteManager *CharSpriteManager_New(SpriteList *spriteList, PaletteData *paletteData, s32 maxSprites, enum HeapID heapID) {
     int i;

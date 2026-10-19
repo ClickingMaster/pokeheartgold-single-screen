@@ -9,6 +9,7 @@
 #include "field_effects.h"
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
+#include "overlay_01.h"
 
 // The tall grass a map object stands in: a billboard over the tile that rustles when the object walks in, then holds
 // its last frame until the object leaves the tile.
@@ -69,8 +70,6 @@ typedef struct TallGrassUnusedEffect {
 
 static void TallGrass_LoadGfx(TallGrass *grass);
 static void TallGrass_FreeGfx(TallGrass *grass);
-void TallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
-FieldEffect *TallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing);
 BOOL TallGrassEffect_Init(FieldEffect *effect, TallGrassEffect *work);
 BOOL TallGrassEffect_Destroy(FieldEffect *effect, TallGrassEffect *work);
 void TallGrassEffect_Update(FieldEffect *effect, TallGrassEffect *work);
@@ -81,7 +80,7 @@ void TallGrassUnusedEffect_Update(FieldEffect *effect, TallGrassUnusedEffect *wo
 void TallGrassUnusedEffect_Draw(FieldEffect *effect, TallGrassUnusedEffect *work);
 
 extern const FieldEffectBasicTemplate gTallGrassEffectTemplate;
-extern const FieldEffectBasicTemplate sTallGrassUnusedEffectTemplate; // created nowhere
+extern const FieldEffectBasicTemplate gTallGrassUnusedEffectTemplate; // created nowhere
 
 static const u32 sTallGrassRecord5Params[6] = { 0, 40, 1, 0, 0, 2 };
 

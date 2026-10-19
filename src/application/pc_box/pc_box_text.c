@@ -44,12 +44,12 @@ typedef struct PCBoxGridLayout {
     const GridCallbacks *callbacks;
 } PCBoxGridLayout;
 
-extern const u8 sPCBoxThumbnailTiles[];
-extern const WindowTemplate sPCBoxWindowTemplates[];
-extern const TouchscreenHitbox sPCBoxSlotHitboxes[];
-extern const TouchscreenHitbox sPCBoxPartyHitboxes[];
-extern const TouchscreenHitbox sPCBoxTrayPartyHitboxes[];
-extern const PCBoxGridLayout sPCBoxGridLayouts[];
+extern const u8 gPCBoxThumbnailTiles[];
+extern const WindowTemplate gPCBoxWindowTemplates[];
+extern const TouchscreenHitbox gPCBoxSlotHitboxes[];
+extern const TouchscreenHitbox gPCBoxPartyHitboxes[];
+extern const TouchscreenHitbox gPCBoxTrayPartyHitboxes[];
+extern const PCBoxGridLayout gPCBoxGridLayouts[];
 
 static void PCBox_PlaceSpriteOnTop(PCBoxView *view, u32 i, s16 x, s16 y, u32 v);
 static void PCBox_CopyWindowToTextObj(PCBoxView *view, Window *window, u32 index);
@@ -136,7 +136,7 @@ void PCBox_DrawBoxThumbnailMons(PCBoxWork *work, u32 box, void *dst) {
                 } else {
                     type = 8;
                 }
-                tile = (u16)(sPCBoxThumbnailTiles[type] + 0x20);
+                tile = (u16)(gPCBoxThumbnailTiles[type] + 0x20);
                 tile = (u16)((tile << 8) | tile);
                 for (yy = y; (s32)yy < (s32)(y + 2); yy = (u8)(yy + 1)) {
                     MIi_CpuClear16(tile, (u16 *)((u8 *)dst + ((x & 7) + ((yy & 7) * 8 + (u32)((u8 *)(((s32)yy >> 3) * 4) + (x >> 3)) * 64))), 2);
@@ -272,7 +272,7 @@ void PCBox_AddWindows(PCBoxWork *work) {
 
     FontID_Alloc(4, HEAP_ID_10);
     for (i = 0; i < 44; i++) {
-        AddWindow(work->view->bgConfig, &work->view->windows[i], &sPCBoxWindowTemplates[i]);
+        AddWindow(work->view->bgConfig, &work->view->windows[i], &gPCBoxWindowTemplates[i]);
     }
 }
 
@@ -1152,15 +1152,15 @@ void PCBox_DrawWindowFrame(PCBoxWork *work, int windowId) {
 }
 
 s32 PCBox_FindTouchedBoxSlot(void) {
-    return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxSlotHitboxes);
+    return TouchscreenHitbox_FindRectAtTouchNew(gPCBoxSlotHitboxes);
 }
 
 s32 PCBox_FindTouchedPartySlot(void) {
-    return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxPartyHitboxes);
+    return TouchscreenHitbox_FindRectAtTouchNew(gPCBoxPartyHitboxes);
 }
 
 s32 PCBox_FindTouchedTrayPartySlot(void) {
-    return TouchscreenHitbox_FindRectAtTouchNew(sPCBoxTrayPartyHitboxes);
+    return TouchscreenHitbox_FindRectAtTouchNew(gPCBoxTrayPartyHitboxes);
 }
 
 void PCBox_CreateModeGridInput(PCBoxWork *work) {
@@ -1181,13 +1181,13 @@ void PCBox_CreateModeGridInput(PCBoxWork *work) {
         break;
     }
     PCBox_FreeGridInput(work);
-    work->view->gridInput = GridInputHandler_Create(sPCBoxGridLayouts[layout].hitboxes, sPCBoxGridLayouts[layout].dpadBoxes, sPCBoxGridLayouts[layout].callbacks, work, TRUE, work->returnCursorPos, HEAP_ID_10);
+    work->view->gridInput = GridInputHandler_Create(gPCBoxGridLayouts[layout].hitboxes, gPCBoxGridLayouts[layout].dpadBoxes, gPCBoxGridLayouts[layout].callbacks, work, TRUE, work->returnCursorPos, HEAP_ID_10);
     PCBox_PlaceCursorOnGridInput(work, work->returnCursorPos);
 }
 
 void PCBox_CreateGridInput(PCBoxWork *work, int layout, int initialPos) {
     PCBox_FreeGridInput(work);
-    work->view->gridInput = GridInputHandler_Create(sPCBoxGridLayouts[layout].hitboxes, sPCBoxGridLayouts[layout].dpadBoxes, sPCBoxGridLayouts[layout].callbacks, work, TRUE, initialPos, HEAP_ID_10);
+    work->view->gridInput = GridInputHandler_Create(gPCBoxGridLayouts[layout].hitboxes, gPCBoxGridLayouts[layout].dpadBoxes, gPCBoxGridLayouts[layout].callbacks, work, TRUE, initialPos, HEAP_ID_10);
     PCBox_PlaceCursorOnGridInput(work, initialPos);
 }
 

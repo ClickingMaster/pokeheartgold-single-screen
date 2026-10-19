@@ -1206,8 +1206,8 @@ static BOOL WiFiPlazaInstrument_UpdateBalloonRise(WiFiPlazaInstrumentManager *ma
         if (direction != 4) {
             WiFiPlazaObj_SetDirection(effect->obj, direction);
             packed = ((u32(*)(WiFiPlazaObj *))WiFiPlazaObj_GetGridPos)(effect->obj);
-            position.unk0 = (s16)packed;
-            position.unk2 = (s16)(packed >> 16);
+            position.x = (s16)packed;
+            position.y = (s16)(packed >> 16);
             WiFiPlazaObj_SetGridPosAndDir(effect->obj, position, direction);
         }
     }

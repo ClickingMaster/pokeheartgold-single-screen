@@ -33,7 +33,7 @@
 // pocket tabs, buttons).
 
 // The cursor position tables are {x, y, anim, palette} per position.
-extern const u8 sListPocketCapacities[];
+extern const u8 gListPocketCapacities[];
 extern const u8 sCursorPositions[];
 extern const u8 sCursorPositionsY[];
 extern const u8 sCursorPositionsAnim[];
@@ -46,15 +46,15 @@ extern const u8 sQuantityCursorPositions[];
 extern const u8 sQuantityCursorPositionsY[];
 extern const u8 sQuantityCursorPositionsAnim[];
 extern const u8 sQuantityCursorPositionsPalette[];
-extern const SpriteResourceCountsListUnion sBagSpriteResourceCounts;
-extern const OamManagerParam sBagOamManagerParam;
-extern const OamCharTransferParam sBagOamCharTransferParam;
-extern const ManagedSpriteTemplate sBagSpriteTemplates[];
-extern const int sQuantityButtonCounts[];
-extern const int sHiddenQuantityButtonCounts[];
-extern const int sHiddenQuantityButtons[][4];
-extern const int sQuantityButtonSprites[][6];
-extern const int sQuantityButtonAnims[][6];
+extern const SpriteResourceCountsListUnion gBagSpriteResourceCounts;
+extern const OamManagerParam gBagOamManagerParam;
+extern const OamCharTransferParam gBagOamCharTransferParam;
+extern const ManagedSpriteTemplate gBagSpriteTemplates[];
+extern const int gQuantityButtonCounts[];
+extern const int gHiddenQuantityButtonCounts[];
+extern const int gHiddenQuantityButtons[][4];
+extern const int gQuantityButtonSprites[][6];
+extern const int gQuantityButtonAnims[][6];
 
 static void BagApp_DrawRegisteredItemIcon(BagApp *app, Window *window, int y, BOOL secondSlot);
 static BOOL BagApp_TextPrinterCallback(TextPrinterTemplate *printer, u16 event);
@@ -345,7 +345,7 @@ static int BagApp_GetNthItemSlotIndex(BagViewPocket *pocket, int pocketId, int n
     int i;
     int count;
     count = 0;
-    for (i = 0; i < sListPocketCapacities[pocketId]; i++) {
+    for (i = 0; i < gListPocketCapacities[pocketId]; i++) {
         if (pocket->slots[i].id != ITEM_NONE && pocket->slots[i].quantity != 0) {
             count++;
             if (count == n + 1) {
@@ -383,7 +383,7 @@ void BagApp_DrawItemList(BagApp *app, int scroll, int unused, BOOL dim) {
     }
     count = 0;
     k = BagApp_GetNthItemSlotIndex(pocket, app->bagView->pocketIndex, scroll);
-    for (; k < sListPocketCapacities[app->bagView->pocketIndex]; k++) {
+    for (; k < gListPocketCapacities[app->bagView->pocketIndex]; k++) {
         if (pocket->slots[k].id != ITEM_NONE && pocket->slots[k].quantity != 0) {
             if (dim == FALSE) {
                 BagApp_PrintItemListEntry(app, &app->dynWindows[first + count], app->itemNames[k], pocket, k);
@@ -582,11 +582,11 @@ static void BagApp_ShowTMHMTypeIcons(BagApp *app, u16 itemId, BOOL show) {
 }
 
 static void BagApp_CreateSpriteSystem(BagApp *app) {
-    SpriteResourceCountsListUnion counts = sBagSpriteResourceCounts;
+    SpriteResourceCountsListUnion counts = gBagSpriteResourceCounts;
     app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_6);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
-    OamManagerParam oamManagerParam = sBagOamManagerParam;
-    OamCharTransferParam oamCharTransferParam = sBagOamCharTransferParam;
+    OamManagerParam oamManagerParam = gBagOamManagerParam;
+    OamCharTransferParam oamCharTransferParam = gBagOamCharTransferParam;
     SpriteSystem_Init(app->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, NELEMS(app->sprites));
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &counts);
@@ -627,7 +627,7 @@ static void BagApp_LoadSpriteResources(BagApp *app) {
 }
 
 static void BagApp_CreateSprites(BagApp *app) {
-    const ManagedSpriteTemplate *template = sBagSpriteTemplates;
+    const ManagedSpriteTemplate *template = gBagSpriteTemplates;
     u32 i;
 
     for (i = 0; i < NELEMS(app->sprites); i++) {
@@ -748,7 +748,7 @@ static void BagApp_UpdatePageArrows(BagApp *app) {
 void BagApp_DrawItemIcons(BagApp *app, BagViewPocket *pocket, int count, BOOL update) {
     int i;
     for (i = 0; i < 6; i++) {
-        ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[1 + i], sBagSpriteTemplates[1 + i].x, sBagSpriteTemplates[1 + i].y, FX32_CONST(256));
+        ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[1 + i], gBagSpriteTemplates[1 + i].x, gBagSpriteTemplates[1 + i].y, FX32_CONST(256));
         if (i < count) {
             if (update) {
                 BagApp_SetItemIconSprite(app, i, app->itemIds[pocket->scroll + i]);
@@ -768,7 +768,7 @@ void BagApp_ShowMovingItemIcon(BagApp *app, BagViewPocket *pocket, int index) {
         slot = index % 6;
     }
     for (i = 0; i < 6; i++) {
-        ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[1 + i], sBagSpriteTemplates[1 + i].x, sBagSpriteTemplates[1 + i].y, FX32_CONST(256));
+        ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[1 + i], gBagSpriteTemplates[1 + i].x, gBagSpriteTemplates[1 + i].y, FX32_CONST(256));
         if (i == slot) {
             ManagedSprite_SetDrawFlag(app->sprites[1 + i], TRUE);
         } else {
@@ -830,9 +830,9 @@ void BagApp_ShowQuantityButtons(BagApp *app, int type, int max) {
     if (type == 2 && max > 99) {
         max = 99;
     }
-    for (i = 0; i < sQuantityButtonCounts[type - 2]; i++) {
-        ManagedSprite_SetDrawFlag(app->sprites[32 + sQuantityButtonSprites[type - 2][i]], TRUE);
-        ManagedSprite_SetAnim(app->sprites[32 + sQuantityButtonSprites[type - 2][i]], sQuantityButtonAnims[type - 2][i]);
+    for (i = 0; i < gQuantityButtonCounts[type - 2]; i++) {
+        ManagedSprite_SetDrawFlag(app->sprites[32 + gQuantityButtonSprites[type - 2][i]], TRUE);
+        ManagedSprite_SetAnim(app->sprites[32 + gQuantityButtonSprites[type - 2][i]], gQuantityButtonAnims[type - 2][i]);
     }
     unusedDigits = BagApp_GetUnusedDigitCount(max);
     if (unusedDigits != 0) {
@@ -840,8 +840,8 @@ void BagApp_ShowQuantityButtons(BagApp *app, int type, int max) {
             ManagedSprite_SetDrawFlag(app->sprites[32], FALSE);
             ManagedSprite_SetDrawFlag(app->sprites[35], FALSE);
         } else if (type - 2 == 1) {
-            for (i = 0; i < sHiddenQuantityButtonCounts[unusedDigits - 1]; i++) {
-                ManagedSprite_SetDrawFlag(app->sprites[32 + sHiddenQuantityButtons[unusedDigits - 1][i]], FALSE);
+            for (i = 0; i < gHiddenQuantityButtonCounts[unusedDigits - 1]; i++) {
+                ManagedSprite_SetDrawFlag(app->sprites[32 + gHiddenQuantityButtons[unusedDigits - 1][i]], FALSE);
             }
         }
     }

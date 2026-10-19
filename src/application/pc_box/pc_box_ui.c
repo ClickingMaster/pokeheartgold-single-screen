@@ -40,11 +40,11 @@ FS_EXTERN_OVERLAY(OVY_15);
 
 extern const OverlayManagerTemplate gOverlayTemplate_Bag;
 
-extern const u8 sPCBoxPartyDropRects[];
-extern const u8 sPCBoxTrayPartyDropRects[];
-extern const u8 sPCBoxSummaryPages[];
-extern const u8 sPCBoxBagPockets[];
-extern const PCBoxStateFunc sPCBoxStateTable[];
+extern const u8 gPCBoxPartyDropRects[];
+extern const u8 gPCBoxTrayPartyDropRects[];
+extern const u8 gPCBoxSummaryPages[];
+extern const u8 gPCBoxBagPockets[];
+extern const PCBoxStateFunc gPCBoxStateTable[];
 
 static void PCBox_StartHeldItemMoveWithIcon(PCBoxWork *work, u32 fromSlot, u32 toSlot, u32 partyLayout);
 static void PCBox_StartHeldItemMoveFromDropTarget(PCBoxWork *work, int toSlot, int partyLayout);
@@ -724,7 +724,7 @@ u32 PCBox_StartSummaryApp(PCBoxWork *work) {
     args->options = work->options;
     PokemonSummaryArgs_SetPlayer(args, Save_PlayerData_GetProfile(work->args->saveData));
     args->mode = 0;
-    PokemonSummary_SetPages(args, sPCBoxSummaryPages);
+    PokemonSummary_SetPages(args, gPCBoxSummaryPages);
     args->selectedMoveSlot = 0;
     args->exitedWithB = 0;
     args->moveToLearn = 0;
@@ -757,7 +757,7 @@ u32 PCBox_EndSummaryApp(PCBoxWork *work) {
 }
 
 u32 PCBox_StartBagApp(PCBoxWork *work) {
-    work->subAppArgs = Bag_CreateView(Save_Bag_Get(work->args->saveData), sPCBoxBagPockets, HEAP_ID_9);
+    work->subAppArgs = Bag_CreateView(Save_Bag_Get(work->args->saveData), gPCBoxBagPockets, HEAP_ID_9);
     BagView_Init(work->subAppArgs, work->args->saveData, 1, NULL, work->args->menuInputStatePtr);
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_15), OVY_LOAD_ASYNC);
     work->subApp = OverlayManager_New(&gOverlayTemplate_Bag, work->subAppArgs, HEAP_ID_9);
@@ -859,7 +859,7 @@ u32 PCBox_UpdateMoveModePartyDrag(PCBoxWork *work) {
             if (work->view->partyPanelLowered == 2) {
                 r = PCBox_GetTouchedBoxSlot(work->view->touchX, work->view->touchY);
             } else {
-                r = PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, sPCBoxPartyDropRects);
+                r = PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, gPCBoxPartyDropRects);
             }
             PCBox_SetupMonMove(work, work->selectedSlot, r);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
@@ -946,7 +946,7 @@ u32 PCBox_UpdateBoxTrayDrag(PCBoxWork *work) {
                 a = PCBox_GetTouchedBoxSlot(work->view->touchX, work->view->touchY);
             }
             if (a == 0xff) {
-                a = PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, sPCBoxTrayPartyDropRects);
+                a = PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, gPCBoxTrayPartyDropRects);
             }
             PCBox_SetupMonMove(work, work->selectedSlot, a);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
@@ -1460,7 +1460,7 @@ u32 PCBox_UpdateWithdrawDrag(PCBoxWork *work) {
             if (work->view->partyPanelLowered == 2) {
                 value = PCBox_GetTouchedPartySlot((s16)work->view->touchX,
                     (s16)work->view->touchY,
-                    sPCBoxTrayPartyDropRects);
+                    gPCBoxTrayPartyDropRects);
             }
             PCBox_SetupMonMoveToPartyEnd(work, work->selectedSlot, value);
             PCBox_SetSelectedIconOutlineVisible(work, 0);
@@ -1936,7 +1936,7 @@ int PCBox_UpdateItemTrayDrag(PCBoxWork *work) {
         if (!System_GetTouchHeldCoords(&x, &y)) {
             selected = PCBox_GetTouchedBoxSlot((s16)work->view->touchX, (s16)work->view->touchY);
             if (selected == 255) {
-                selected = PCBox_GetTouchedPartySlot((s16)work->view->touchX, (s16)work->view->touchY, sPCBoxTrayPartyDropRects);
+                selected = PCBox_GetTouchedPartySlot((s16)work->view->touchX, (s16)work->view->touchY, gPCBoxTrayPartyDropRects);
             }
             raw = selected;
             if (selected == 255) {
@@ -2188,7 +2188,7 @@ int PCBox_UpdateItemModePartyDrag(PCBoxWork *work) {
             if (work->view->partyPanelLowered == 2) {
                 other = (u16)PCBox_GetTouchedBoxSlot(work->view->touchX, work->view->touchY);
             } else {
-                other = (u16)PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, sPCBoxPartyDropRects);
+                other = (u16)PCBox_GetTouchedPartySlot(work->view->touchX, work->view->touchY, gPCBoxPartyDropRects);
             }
             busy = other;
             if (other == 255) {
@@ -2265,7 +2265,7 @@ u32 PCBox_AnimatePartySwappedItemMove(PCBoxWork *work) {
 }
 
 BOOL PCBox_RunStateMachine(PCBoxWork *work, int *state) {
-    *state = sPCBoxStateTable[*state](work);
+    *state = gPCBoxStateTable[*state](work);
     if (*state == PC_BOX_STATE_EXIT) {
         return FALSE;
     }

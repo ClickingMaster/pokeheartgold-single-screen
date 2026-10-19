@@ -66,7 +66,7 @@ enum CutInFlyerMode {
     CUT_IN_FLYER_PICK_UP,
 };
 
-// The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables sCutInFlyerModeSteps).
+// The flying Pokemon (FieldMoveCutIn.flyerEffect): a small state machine per mode (step tables gCutInFlyerModeSteps).
 typedef struct CutInFlyer {
     u8 mode;
     u8 step;
@@ -152,21 +152,21 @@ typedef struct FlyLanding {
 
 typedef BOOL (*FlyLandingStep)(FlyLanding *landing);
 
-extern const CutInScrollSpriteTemplate sCutInScrollSpriteTemplates[];
-extern const FieldEffectBasicTemplate sCutInScrollSpriteEffectTemplate;
-extern const FieldEffectBasicTemplate sCutInFlyerEffectTemplate;
-extern const FieldEffectBasicTemplate sTrainerJumpEffectTemplate;
-extern const FieldEffectBasicTemplate sTrainerClipEffectTemplate;
-extern const FieldEffectBasicTemplate sCutInModelEffectTemplate;
-extern CutInFlyerStep *const sCutInFlyerModeSteps[3];
-extern FlyLandingStep const sFlyLandingTaskSteps[6];
-extern const VecFx32 sCutInFlyerTakeOffOrigin;
-extern const VecFx32 sCutInFlyerTakeOffScale;
-extern const VecFx32 sCutInFlyerPickUpPos;
-extern const VecFx32 sCutInFlyerPickUpScale;
-extern const VecFx32 sCutInFlyerTrainerScale;
-extern const fx32 sTrainerJumpOffsets[12];
-extern const fx32 sTrainerHopOffsets[4];
+extern const CutInScrollSpriteTemplate gCutInScrollSpriteTemplates[];
+extern const FieldEffectBasicTemplate gCutInScrollSpriteEffectTemplate;
+extern const FieldEffectBasicTemplate gCutInFlyerEffectTemplate;
+extern const FieldEffectBasicTemplate gTrainerJumpEffectTemplate;
+extern const FieldEffectBasicTemplate gTrainerClipEffectTemplate;
+extern const FieldEffectBasicTemplate gCutInModelEffectTemplate;
+extern CutInFlyerStep *const gCutInFlyerModeSteps[3];
+extern FlyLandingStep const gFlyLandingTaskSteps[6];
+extern const VecFx32 gCutInFlyerTakeOffOrigin;
+extern const VecFx32 gCutInFlyerTakeOffScale;
+extern const VecFx32 gCutInFlyerPickUpPos;
+extern const VecFx32 gCutInFlyerPickUpScale;
+extern const VecFx32 gCutInFlyerTrainerScale;
+extern const fx32 gTrainerJumpOffsets[12];
+extern const fx32 gTrainerHopOffsets[4];
 
 static void Task_FlyLanding(SysTask *task, void *data);
 static Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species);
@@ -333,7 +333,7 @@ Sprite *FieldMoveCutIn_CreateMonSprite(FieldMoveCutIn *cutIn, VecFx32 *pos) {
 
 void FieldMoveCutIn_CreateScrollSprites(FieldMoveCutIn *cutIn, int mode) {
     int i;
-    const CutInScrollSpriteTemplate *template = sCutInScrollSpriteTemplates;
+    const CutInScrollSpriteTemplate *template = gCutInScrollSpriteTemplates;
     VecFx32 position;
     VecFx32 velocity;
     u32 animSeq;
@@ -362,7 +362,7 @@ static void FieldMoveCutIn_CreateScrollSprite(FieldMoveCutIn *cutIn, const VecFx
     args.mode = mode;
     args.cutIn = cutIn;
     args.velocity = *velocity;
-    FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInScrollSpriteEffectTemplate, position, animSeq, &args, 0x85);
+    FieldEffectPool_AddBasicEffect(cutIn->effectPool, &gCutInScrollSpriteEffectTemplate, position, animSeq, &args, 0x85);
 }
 
 BOOL CutInScrollSprite_Init(FieldEffect *effect, CutInScrollSprite *work) {
@@ -409,7 +409,7 @@ void CutInScrollSprite_Draw(FieldEffect *effect, CutInScrollSprite *work) {
 void FieldMoveCutIn_CreateFlyer(FieldMoveCutIn *cutIn) {
     VecFx32 pos = { 0, 0, 0 };
     FieldMoveCutIn *userData = cutIn;
-    cutIn->flyerEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInFlyerEffectTemplate, &pos, 0, &userData, 0x82);
+    cutIn->flyerEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &gCutInFlyerEffectTemplate, &pos, 0, &userData, 0x82);
 }
 
 u8 FieldMoveCutIn_GetFlyerStatus(FieldMoveCutIn *cutIn) {
@@ -440,7 +440,7 @@ void CutInFlyer_Destroy(FieldEffect *effect, CutInFlyer *flyer) {
 }
 
 void CutInFlyer_Update(FieldEffect *effect, CutInFlyer *flyer) {
-    CutInFlyerStep *steps = sCutInFlyerModeSteps[flyer->mode];
+    CutInFlyerStep *steps = gCutInFlyerModeSteps[flyer->mode];
     while (steps[flyer->step](flyer) == TRUE) {
     }
 }
@@ -458,8 +458,8 @@ void FieldMoveCutIn_StartFlyerTakeOff(FieldMoveCutIn *cutIn) {
     VecFx32 origin;
     VecFx32 scale;
     CutInFlyer *flyer;
-    origin = sCutInFlyerTakeOffOrigin;
-    scale = sCutInFlyerTakeOffScale;
+    origin = gCutInFlyerTakeOffOrigin;
+    scale = gCutInFlyerTakeOffScale;
     flyer = FieldEffect_GetState(cutIn->flyerEffect);
     flyer->mode = CUT_IN_FLYER_TAKE_OFF;
     flyer->step = 0;
@@ -522,8 +522,8 @@ BOOL CutInFlyer_Idle(CutInFlyer *flyer) {
 }
 
 void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
-    VecFx32 position = sCutInFlyerPickUpPos;
-    VecFx32 scale = sCutInFlyerPickUpScale;
+    VecFx32 position = gCutInFlyerPickUpPos;
+    VecFx32 scale = gCutInFlyerPickUpScale;
     VecFx32 matrix;
     VecFx32 trainerScale;
     CutInFlyer *flyer = FieldEffect_GetState(cutIn->flyerEffect);
@@ -563,7 +563,7 @@ void FieldMoveCutIn_StartFlyerPickUp(FieldMoveCutIn *cutIn) {
         values[1] = 0;
         values[2] = 0;
     }
-    trainerScale = sCutInFlyerTrainerScale;
+    trainerScale = gCutInFlyerTrainerScale;
     sprite = flyer->cutIn->trainerSprite;
     Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &matrix);
@@ -714,7 +714,7 @@ FieldEffect *FieldMoveCutIn_CreateTrainerJumpEffect(void *effectPool, Sprite *tr
     TrainerJumpArgs args;
 
     args.sprite = trainerSprite;
-    return FieldEffectPool_AddBasicEffect(effectPool, &sTrainerJumpEffectTemplate, &pos, 0, &args, 0x81);
+    return FieldEffectPool_AddBasicEffect(effectPool, &gTrainerJumpEffectTemplate, &pos, 0, &args, 0x81);
 }
 
 static void TrainerJumpEffect_Stop(FieldEffect *effect) {
@@ -761,7 +761,7 @@ BOOL TrainerJumpEffect_Init(FieldEffect *effect, TrainerJump *jump) {
 static void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
-        jump->offsetY = sTrainerJumpOffsets[jump->frame];
+        jump->offsetY = gTrainerJumpOffsets[jump->frame];
         FieldEffect_GetPosition(effect, &pos);
         pos.y = pos.y + jump->offsetY;
         Sprite_SetMatrix(jump->sprite, &pos);
@@ -776,7 +776,7 @@ static void TrainerJumpEffect_Jump(FieldEffect *effect, TrainerJump *jump) {
 static void TrainerJumpEffect_Hop(FieldEffect *effect, TrainerJump *jump) {
     VecFx32 pos;
     if (jump->step == 0) {
-        jump->offsetY = sTrainerHopOffsets[jump->frame];
+        jump->offsetY = gTrainerHopOffsets[jump->frame];
         FieldEffect_GetPosition(effect, &pos);
         pos.y = pos.y + jump->offsetY;
         Sprite_SetMatrix(jump->sprite, &pos);
@@ -817,7 +817,7 @@ void FlyLanding_Delete(SysTask *task) {
 
 static void Task_FlyLanding(SysTask *task, void *data) {
     FlyLanding *landing = data;
-    FlyLandingStep const *steps = sFlyLandingTaskSteps;
+    FlyLandingStep const *steps = gFlyLandingTaskSteps;
     while (steps[landing->state](landing) == TRUE) {
     }
     if (landing->drawSprites != FALSE) {
@@ -942,7 +942,7 @@ void FieldMoveCutIn_CreateTrainerClipEffect(FieldMoveCutIn *cutIn) {
 
     userData.sprite = cutIn->trainerSprite;
     userData.cutIn = cutIn;
-    cutIn->trainerClipEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sTrainerClipEffectTemplate, &pos, 0, &userData, 0x87);
+    cutIn->trainerClipEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &gTrainerClipEffectTemplate, &pos, 0, &userData, 0x87);
 }
 
 void FieldMoveCutIn_DestroyTrainerClipEffect(FieldMoveCutIn *cutIn) {
@@ -957,7 +957,7 @@ static void FieldMoveCutIn_CreateModelEffect(FieldMoveCutIn *cutIn) {
     FieldMoveCutIn *userData = cutIn;
     FieldMoveCutIn_LoadModel(cutIn);
     MapObject_CopyPositionVector(cutIn->otherObject, &pos);
-    cutIn->modelEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &sCutInModelEffectTemplate, &pos, 0, &userData, 0x83);
+    cutIn->modelEffect = FieldEffectPool_AddBasicEffect(cutIn->effectPool, &gCutInModelEffectTemplate, &pos, 0, &userData, 0x83);
 }
 
 BOOL CutInModelEffect_Init(FieldEffect *effect, CutInModelEffect *work) {

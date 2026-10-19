@@ -56,28 +56,28 @@ typedef struct PalPadListMenuEntry {
 
 typedef void (*PalPadRosterScrollCallback)(PalPadRoster *roster, PalPadGfx *gfx, s16 page, s16 prevPage);
 
-extern const u16 sPalPadRosterPageBaseTiles[3];
-extern const PalPadPanelLayout sPalPadPanelLayouts[3];
-extern const PalPadListMenuEntry sPalPadRosterFriendMenus[2][4];
-extern const SpriteTemplate sPalPadDeleteEffectSpriteTemplate;
-extern const TouchscreenHitbox sPalPadRosterHitboxes[];
-extern const PalPadSlotRect sPalPadRosterSlotRects[9];
+extern const u16 gPalPadRosterPageBaseTiles[3];
+extern const PalPadPanelLayout gPalPadPanelLayouts[3];
+extern const PalPadListMenuEntry gPalPadRosterFriendMenus[2][4];
+extern const SpriteTemplate gPalPadDeleteEffectSpriteTemplate;
+extern const TouchscreenHitbox gPalPadRosterHitboxes[];
+extern const PalPadSlotRect gPalPadRosterSlotRects[9];
 
 typedef struct PalPadSlotRectFromY {
     s16 y;
     u8 unk_02[8];
 } PalPadSlotRectFromY;
 
-extern const PalPadSlotRectFromY sPalPadRosterSlotY[9];
-extern const u32 sPalPadRosterNameColors[3];
+extern const PalPadSlotRectFromY gPalPadRosterSlotY[9];
+extern const u32 gPalPadRosterNameColors[3];
 
 extern const struct {
     u32 nameColor;
     TouchscreenListMenuTemplate template;
 } sPalPadRosterFriendMenuTemplate;
 
-extern const NNSG2dViewRect sPalPadRenderSurfaceRect;
-extern const PalPadRosterScrollCallback sPalPadRosterScrollCallbacks[4];
+extern const NNSG2dViewRect gPalPadRenderSurfaceRect;
+extern const PalPadRosterScrollCallback gPalPadRosterScrollCallbacks[4];
 
 static inline int Abs16(s16 value);
 static inline int AddTiles(int a, int b);
@@ -308,7 +308,7 @@ void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *g
     int j;
 
     for (i = 0; i < 3; i++) {
-        PalPadRosterPage_Init(&roster->pages[i], gfx, &sPalPadPanelLayouts[i], sPalPadRosterPageBaseTiles[i], heapId);
+        PalPadRosterPage_Init(&roster->pages[i], gfx, &gPalPadPanelLayouts[i], gPalPadRosterPageBaseTiles[i], heapId);
     }
     roster->trainerIcons = CharSpriteManager_New(gfx->spriteList, NULL, 16, heapId);
     CharSpriteManager_LoadAvatarChars(roster->trainerIcons, 1, 2, heapId);
@@ -319,12 +319,12 @@ void PalPadRoster_Setup(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *g
     for (i = 0; i < 2; i++) {
         roster->menuItems[i] = ListMenuItems_New(4, heapId);
         for (j = 0; j < 4; j++) {
-            ListMenuItems_AppendFromMsgData(roster->menuItems[i], gfx->msgData, sPalPadRosterFriendMenus[i][j].msgId, sPalPadRosterFriendMenus[i][j].value);
+            ListMenuItems_AppendFromMsgData(roster->menuItems[i], gfx->msgData, gPalPadRosterFriendMenus[i][j].msgId, gPalPadRosterFriendMenus[i][j].value);
         }
     }
     PalPad_AddWindow(gfx->bgConfig, &roster->msgWindow, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 11, 0x161, 15);
     roster->msgText = String_New(0x80, heapId);
-    template = sPalPadDeleteEffectSpriteTemplate;
+    template = gPalPadDeleteEffectSpriteTemplate;
     template.spriteList = gfx->spriteList;
     template.header = &gfx->spriteHeader;
     template.heapID = heapId;
@@ -522,7 +522,7 @@ static int PalPadRoster_HandleTouch(PalPadRoster *roster, PalPadShared *shared, 
     u32 hit;
     int delta;
 
-    hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadRosterHitboxes);
+    hit = TouchscreenHitbox_FindHitboxAtTouchNew(gPalPadRosterHitboxes);
     if (hit == (u32)-1) {
         return ROSTER_ACTION_NONE;
     }
@@ -588,7 +588,7 @@ static BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *sh
     if (roster->scrollStep >= 8) {
         ScheduleSetBgPosText(gfx->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, 0);
         ScheduleSetBgPosText(gfx->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, 0);
-        rect = sPalPadRenderSurfaceRect;
+        rect = gPalPadRenderSurfaceRect;
         GF_SetG2dRendererSurface(&gfx->renderSurface, &rect);
         PalPadRosterPage_Clear(&roster->pages[roster->scrollDir == 2 ? 2 : 1], gfx, &gfx->screens);
         PalPadRoster_DrawPage(roster, shared, gfx, roster->page, roster->cursor, 0, heapId);
@@ -601,11 +601,11 @@ static BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *sh
     }
     ScheduleSetBgPosText(gfx->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, offset);
     ScheduleSetBgPosText(gfx->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, offset);
-    rect = sPalPadRenderSurfaceRect;
+    rect = gPalPadRenderSurfaceRect;
     rect.posTopLeft.x += (u32)offset << FX32_SHIFT;
     GF_SetG2dRendererSurface(&gfx->renderSurface, &rect);
     if (roster->scrollStep % 2) {
-        PalPadRosterScrollCallback callback = sPalPadRosterScrollCallbacks[roster->scrollStep / 2];
+        PalPadRosterScrollCallback callback = gPalPadRosterScrollCallbacks[roster->scrollStep / 2];
         if (callback) {
             callback(roster, gfx, roster->page, roster->prevPage);
         }
@@ -806,8 +806,8 @@ static void PalPadRoster_StartDeleteEffect(PalPadRoster *roster, PalPadGfx *gfx)
     roster->lastFrame = 0;
     Sprite_SetAnimActiveFlag(roster->deleteEffect, TRUE);
     cursor = roster->cursor;
-    pos.x = sPalPadRosterSlotRects[cursor].x * 8;
-    pos.y = sPalPadRosterSlotY[cursor].y * 8 + 252;
+    pos.x = gPalPadRosterSlotRects[cursor].x * 8;
+    pos.y = gPalPadRosterSlotY[cursor].y * 8 + 252;
     pos.x <<= FX32_SHIFT;
     pos.y <<= FX32_SHIFT;
     Sprite_SetMatrix(roster->deleteEffect, &pos);
@@ -882,7 +882,7 @@ static void PalPadRoster_SetCursor(PalPadRosterPage *page, PalPadGfx *gfx, int c
         PalPadGfx_SetCursor(gfx, FALSE, 0xFF);
         return;
     }
-    const PalPadSlotRect *rect = &sPalPadRosterSlotRects[cursor];
+    const PalPadSlotRect *rect = &gPalPadRosterSlotRects[cursor];
     Sprite_SetPositionXY(gfx->cursor, (rect->x + 7) * 8, (rect->y + 2) * 8);
     PalPadGfx_SetCursor(gfx, TRUE, 0xFF);
 }
@@ -891,7 +891,7 @@ static void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gf
     int i;
 
     for (i = 0; i < 9; i++) {
-        const PalPadSlotRect *rect = &sPalPadRosterSlotRects[i];
+        const PalPadSlotRect *rect = &gPalPadRosterSlotRects[i];
         int palette = (highlight == TRUE && cursor == i) ? rect->selectedPalette : rect->palette;
         BgTilemapRectChangePalette(gfx->bgConfig, rect->bgId, rect->x + Abs16(page->layout.x), rect->y + Abs16(page->layout.y), rect->width, rect->height, palette);
     }
@@ -951,15 +951,15 @@ static void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, CharSpriteManage
     if (gender == 2) {
         PalPadRosterPage_DrawEmptySlot(page, gfx, screens, slot);
     } else {
-        position[0] = (page->layout.x + sPalPadRosterSlotRects[slot].x) * 8 + 8;
-        position[1] = (page->layout.y + sPalPadRosterSlotY[slot].y) * 8 + 262;
+        position[0] = (page->layout.x + gPalPadRosterSlotRects[slot].x) * 8 + 8;
+        position[1] = (page->layout.y + gPalPadRosterSlotY[slot].y) * 8 + 262;
         position[2] = 8;
         position[3] = 1;
         *(CharSprite **)(owner + offsetof(PalPadRosterPage, icons) + slot * sizeof(CharSprite *)) = CharSpriteManager_CreateSprite(trainerIcons, position, avatar, heapId);
     }
     string = String_New(0x80, heapId);
     CopyU16ArrayToString(string, FriendRoster_GetPlayerName(wifiList, friendSlot));
-    AddTextPrinterParameterizedWithColor((Window *)(owner + offsetof(PalPadRosterPage, window)), 4, string, sPalPadRosterSlotRects[slot].x * 8, sPalPadRosterSlotY[slot].y * 8 - 24, TEXT_SPEED_NOTRANSFER, sPalPadRosterNameColors[gender], NULL);
+    AddTextPrinterParameterizedWithColor((Window *)(owner + offsetof(PalPadRosterPage, window)), 4, string, gPalPadRosterSlotRects[slot].x * 8, gPalPadRosterSlotY[slot].y * 8 - 24, TEXT_SPEED_NOTRANSFER, gPalPadRosterNameColors[gender], NULL);
     String_Delete(string);
 }
 
@@ -978,7 +978,7 @@ static void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gf
     }
     screen = screens->data[1];
     offset *= 10; // sizeof(PalPadSlotRect)
-    CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, (u8)AddTiles(*(s16 *)((u8 *)sPalPadRosterSlotRects + offset), x), (u8)AddTiles(*(s16 *)((u8 *)sPalPadRosterSlotY + offset), y), 3, 4, screen->rawData, 0, 0, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
+    CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, (u8)AddTiles(*(s16 *)((u8 *)gPalPadRosterSlotRects + offset), x), (u8)AddTiles(*(s16 *)((u8 *)gPalPadRosterSlotY + offset), y), 3, 4, screen->rawData, 0, 0, (u8)(screen->screenWidth >> 3), (u8)(screen->screenHeight >> 3));
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
 

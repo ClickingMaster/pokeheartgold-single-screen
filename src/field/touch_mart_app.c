@@ -141,7 +141,7 @@ static void TouchMartApp_SetupText(TouchMartAppData *data);
 static void TouchMartApp_FreeText(TouchMartAppData *data);
 static void TouchMartApp_PrintCancel(TouchMartAppData *data, int leftAligned);
 static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection);
-static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data);
+static void TouchMartApp_RunTask(SysTask *task, void *env);
 static void TouchMartApp_HandleAction(TouchMartAppData *data, int action);
 static void TouchMartApp_LoadMainTilemap(TouchMartAppData *data, int screen);
 static int TouchMartApp_GetTouchedButton(TouchMartAppData *data, int buttonSet);
@@ -312,7 +312,7 @@ SysTask *TouchMartApp_Init(BgConfig *bgConfig, void *lastTouchMenuInput, FieldSy
     TouchMartAppData *data;
 
     Heap_Create(HEAP_ID_3, HEAP_ID_8, 3 << 15);
-    task = CreateSysTaskAndEnvironment((SysTaskFunc)TouchMartApp_RunTask, sizeof(TouchMartAppData), 10, HEAP_ID_8);
+    task = CreateSysTaskAndEnvironment(TouchMartApp_RunTask, sizeof(TouchMartAppData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->task = task;
     data->unk_00 = 0;
@@ -409,7 +409,8 @@ static BOOL TouchMartApp_IsSelectionValid(TouchMartAppData *data, u32 selection)
     return FALSE;
 }
 
-static void TouchMartApp_RunTask(SysTask *task, TouchMartAppData *data) {
+static void TouchMartApp_RunTask(SysTask *task, void *env) {
+    TouchMartAppData *data = env;
     int selection;
     switch (data->state) {
     case TOUCH_MART_STATE_WAIT_FADE:

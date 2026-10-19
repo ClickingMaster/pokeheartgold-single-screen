@@ -31,14 +31,14 @@
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
 // per-screen step tables, indexed by VsRecorderWork.subState
-extern VsRecorderScreenFunc sVsRecorderBoxDataSendSubStates[];
-extern VsRecorderScreenFunc sVsRecorderBoxDataViewSubStates[];
-extern VsRecorderScreenFunc sVsRecorderRankingsSubStates[];
-extern VsRecorderScreenFunc sVsRecorderVideoListSubStates[];
-extern VsRecorderScreenFunc sVsRecorderVideoSearchSubStates[];
-extern VsRecorderScreenFunc sVsRecorderNumberSearchSubStates[];
-extern VsRecorderScreenFunc sVsRecorderSendVideoSubStates[];
-extern VsRecorderScreenFunc sVsRecorderDeleteSubStates[];
+extern VsRecorderScreenFunc gVsRecorderBoxDataSendSubStates[];
+extern VsRecorderScreenFunc gVsRecorderBoxDataViewSubStates[];
+extern VsRecorderScreenFunc gVsRecorderRankingsSubStates[];
+extern VsRecorderScreenFunc gVsRecorderVideoListSubStates[];
+extern VsRecorderScreenFunc gVsRecorderVideoSearchSubStates[];
+extern VsRecorderScreenFunc gVsRecorderNumberSearchSubStates[];
+extern VsRecorderScreenFunc gVsRecorderSendVideoSubStates[];
+extern VsRecorderScreenFunc gVsRecorderDeleteSubStates[];
 
 static void VsRecorder_InitBgLayers(BgConfig *bgConfig);
 static void VsRecorder_InitSpriteSystem(VsRecorderWork *work);
@@ -445,44 +445,44 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_SEND:
-        done = sVsRecorderBoxDataSendSubStates[work->subState](work);
+        done = gVsRecorderBoxDataSendSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_VIEW:
-        done = sVsRecorderBoxDataViewSubStates[work->subState](work);
+        done = gVsRecorderBoxDataViewSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_RANKINGS:
     case VS_RECORDER_SCREEN_RANKINGS_LAST:
-        done = sVsRecorderRankingsSubStates[work->subState](work);
+        done = gVsRecorderRankingsSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_COLOSSEUM_TOP:
     case VS_RECORDER_SCREEN_FRONTIER_TOP:
-        done = sVsRecorderVideoListSubStates[work->subState](work);
+        done = gVsRecorderVideoListSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_NEWEST:
-        done = sVsRecorderVideoListSubStates[work->subState](work);
+        done = gVsRecorderVideoListSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH:
-        done = sVsRecorderVideoSearchSubStates[work->subState](work);
+        done = gVsRecorderVideoSearchSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH_NUMBER:
-        done = sVsRecorderNumberSearchSubStates[work->subState](work);
+        done = gVsRecorderNumberSearchSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEND_VIDEO:
-        done = sVsRecorderSendVideoSubStates[work->subState](work);
+        done = gVsRecorderSendVideoSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_EXIT:
         VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_NONE, TRUE, screen);
         break;
     case VS_RECORDER_SCREEN_DELETE:
-        done = sVsRecorderDeleteSubStates[work->subState](work);
+        done = gVsRecorderDeleteSubStates[work->subState](work);
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_MESSAGE:

@@ -33,7 +33,7 @@ static void LegendaryBirdObject_DeleteBillboard(LocalMapObject *object);
 // Per sprite id: the graphics info (terminated by spriteId 0xFFFF) and the effect flags
 // its effectFlagsIdx field selects.
 extern ObjectEventGraphicsInfo gObjectEventGraphicsInfos[];
-extern const MapObjectEffectFlags sSpriteEffectFlags[];
+extern const MapObjectEffectFlags gSpriteEffectFlags[];
 
 static const LegendaryBirdAnimateFunc sLegendaryBirdAnimateFuncs[] = {
     LegendaryBirdObject_AnimateIdle,
@@ -378,7 +378,7 @@ static const MapObjectEffectFlags *SpriteId_GetEffectFlags(u32 spriteId) {
     if (info == NULL) {
         return NULL;
     }
-    return &sSpriteEffectFlags[info->effectFlagsIdx];
+    return &gSpriteEffectFlags[info->effectFlagsIdx];
 }
 
 BOOL MapObject_IsBillboardAnimPaused(LocalMapObject *object) {

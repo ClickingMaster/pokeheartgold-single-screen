@@ -2,11 +2,11 @@
 	.public UnusedBillboardEffect_Destroy
 	.public UnusedBillboardEffect_Update
 	.public UnusedBillboardEffect_Draw
-	.public sVeryTallGrassRecordParams
+	.public gVeryTallGrassRecordParams
 
 	.rodata
 
-sVeryTallGrassRecordParams:
+gVeryTallGrassRecordParams:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

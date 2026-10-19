@@ -288,51 +288,51 @@ typedef void (*MimeJrTopInitTemplateFunc)(ManagedSpriteTemplate *template, u16 x
 typedef void (*MimeJrTopStartBurstFunc)(MimeJrTopGame *game, s16 x, s16 y);
 typedef void (*MimeJrTopRosterInitFunc)(PlazaGameRoster *roster, u32 fromLobby, SaveData *saveData, u32 voiceChat, PlazaGameArgs *args);
 
-extern const VecFx32 sMimeJrTopDemoTurnTiltAxis;
-extern const VecFx32 sMimeJrTopDemoSpinTiltAxis;
-extern const MimeJrTopGraphicsModes sMimeJrTopGraphicsModes;
-extern const MimeJrTopTopModels sMimeJrTopTopModels;
-extern const u16 sMimeJrTopEdgeColors[];
+extern const VecFx32 gMimeJrTopDemoTurnTiltAxis;
+extern const VecFx32 gMimeJrTopDemoSpinTiltAxis;
+extern const MimeJrTopGraphicsModes gMimeJrTopGraphicsModes;
+extern const MimeJrTopTopModels gMimeJrTopTopModels;
+extern const u16 gMimeJrTopEdgeColors[];
 extern const OamCharTransferParam gMimeJrTopOamCharTransferParam;
 extern const SpriteResourceCountsListUnion gMimeJrTopSpriteResourceCounts;
 extern const OamManagerParam gMimeJrTopOamManagerParam;
-extern const MimeJrTopBanks sMimeJrTopBanks;
-extern const MimeJrTopBgTemplates sMimeJrTopMainBgTemplates;
-extern const MimeJrTopBgTemplates sMimeJrTopSubBgTemplates;
-extern const MimeJrTopModelFiles sMimeJrTopAudienceModelFiles;
-extern const MimeJrTopDemoPath sMimeJrTopDemoPath;
-extern const u16 sMimeJrTopPopupPositions[4];
-extern const VecFx32 sMimeJrTopCameraPosition;
-extern const VecFx32 sMimeJrTopLightVector;
-extern const s16 sMimeJrTopRivalSpriteX[][3];
-extern const MimeJrTopRivalAnims sMimeJrTopRivalAnims;
-extern const MimeJrTopRivalAnims sMimeJrTopRivalSetAnims;
-extern const s16 sMimeJrTopRivalNamePositions[3][3][4];
-extern const MimeJrTopTouchData sMimeJrTopTouchData;
-extern const TouchscreenHitbox sMimeJrTopSelectionHitboxes[];
-extern const VecFx32 sMimeJrTopSpinTiltAxis;
-extern const VecFx32 sMimeJrTopTurnTiltAxis;
-extern const VecFx32 sMimeJrTopSettleTiltAxis;
-extern const VecFx32 sMimeJrTopSettleTouchTiltAxis;
-extern const VecFx32 sMimeJrTopWobbleTiltAxis;
-extern const int sMimeJrTopTierModels[][2];
-extern const int sMimeJrTopTierChangeModels[][2];
-extern const MimeJrTopWobbleChoice sMimeJrTopWobbleChoices[][4];
-extern const s32 sMimeJrTopWobbleWeights[][8];
-extern const u16 sMimeJrTopPopupLimits[];
-extern const MimeJrTopDoneFlags sMimeJrTopDance3DoneFlags;
-extern const MimeJrTopDoneFlags sMimeJrTopDance2DoneFlags;
-extern const MimeJrTopDoneFlags sMimeJrTopDance4DoneFlags;
-extern const MimeJrTopDoneFlags sMimeJrTopPopupDoneFlags;
-extern const MimeJrTopDoneFlags sMimeJrTopDance5DoneFlags;
-extern const MimeJrTopStarOrigins sMimeJrTopStarOrigins;
-extern const MimeJrTopOffsets sMimeJrTopBurstOffsetsX;
-extern const MimeJrTopOffsets sMimeJrTopBurstOffsetsY;
-extern const MimeJrTopRoutine sMimeJrTopRoutines[];
-extern const MimeJrTopRoutineValue sMimeJrTopRoutineCounts[];
-extern const MimeJrTopRoutineValue sMimeJrTopRoutineSpeeds[];
-extern const MimeJrTopRoutineTask sMimeJrTopRoutineTasks[];
-extern MimeJrTopPlayerPalettes sMimeJrTopPlayerPalettes[];
+extern const MimeJrTopBanks gMimeJrTopBanks;
+extern const MimeJrTopBgTemplates gMimeJrTopMainBgTemplates;
+extern const MimeJrTopBgTemplates gMimeJrTopSubBgTemplates;
+extern const MimeJrTopModelFiles gMimeJrTopAudienceModelFiles;
+extern const MimeJrTopDemoPath gMimeJrTopDemoPath;
+extern const u16 gMimeJrTopPopupPositions[4];
+extern const VecFx32 gMimeJrTopCameraPosition;
+extern const VecFx32 gMimeJrTopLightVector;
+extern const s16 gMimeJrTopRivalSpriteX[][3];
+extern const MimeJrTopRivalAnims gMimeJrTopRivalAnims;
+extern const MimeJrTopRivalAnims gMimeJrTopRivalSetAnims;
+extern const s16 gMimeJrTopRivalNamePositions[3][3][4];
+extern const MimeJrTopTouchData gMimeJrTopTouchData;
+extern const TouchscreenHitbox gMimeJrTopSelectionHitboxes[];
+extern const VecFx32 gMimeJrTopSpinTiltAxis;
+extern const VecFx32 gMimeJrTopTurnTiltAxis;
+extern const VecFx32 gMimeJrTopSettleTiltAxis;
+extern const VecFx32 gMimeJrTopSettleTouchTiltAxis;
+extern const VecFx32 gMimeJrTopWobbleTiltAxis;
+extern const int gMimeJrTopTierModels[][2];
+extern const int gMimeJrTopTierChangeModels[][2];
+extern const MimeJrTopWobbleChoice gMimeJrTopWobbleChoices[][4];
+extern const s32 gMimeJrTopWobbleWeights[][8];
+extern const u16 gMimeJrTopPopupLimits[];
+extern const MimeJrTopDoneFlags gMimeJrTopDance3DoneFlags;
+extern const MimeJrTopDoneFlags gMimeJrTopDance2DoneFlags;
+extern const MimeJrTopDoneFlags gMimeJrTopDance4DoneFlags;
+extern const MimeJrTopDoneFlags gMimeJrTopPopupDoneFlags;
+extern const MimeJrTopDoneFlags gMimeJrTopDance5DoneFlags;
+extern const MimeJrTopStarOrigins gMimeJrTopStarOrigins;
+extern const MimeJrTopOffsets gMimeJrTopBurstOffsetsX;
+extern const MimeJrTopOffsets gMimeJrTopBurstOffsetsY;
+extern const MimeJrTopRoutine gMimeJrTopRoutines[];
+extern const MimeJrTopRoutineValue gMimeJrTopRoutineCounts[];
+extern const MimeJrTopRoutineValue gMimeJrTopRoutineSpeeds[];
+extern const MimeJrTopRoutineTask gMimeJrTopRoutineTasks[];
+extern MimeJrTopPlayerPalettes gMimeJrTopPlayerPalettes[];
 
 // Command 22: the selection made on the entry screen and the parent's random seed.
 void MimeJrTop_ReceiveStart(int netId, int size, void *data, MimeJrTopApp *app) {
@@ -453,7 +453,7 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
     MimeJrTopGame_CreateDancerSprites(app->game);
     MimeJrTopGame_CreateDemoHand(app->game);
     MimeJrTop_LoadPlayerPalettes(app, MimeJrTop_GetPlayerIndex(app, app->netId));
-    audienceFiles = sMimeJrTopAudienceModelFiles;
+    audienceFiles = gMimeJrTopAudienceModelFiles;
     step = 5;
     i = 0;
     files = audienceFiles.files;
@@ -488,7 +488,7 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
     MimeJrTopModel_Load(&app->game->stage, app->resources.narc, 0x47);
     MimeJrTopModel_Init(&app->game->stage, app->start.selection);
     ModelInstance_SetVisible(&app->game->stage.instance, FALSE);
-    topModels = sMimeJrTopTopModels;
+    topModels = gMimeJrTopTopModels;
     n = topModels.files[MimeJrTop_GetPlayerIndex(app, app->netId)];
     MimeJrTopModel_Load(&app->game->top, app->resources.narc, n);
     MimeJrTopModel_Init(&app->game->top, app->start.selection);
@@ -576,7 +576,7 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         game->lastTouchY = 0;
         if (game->top.spinFrames) {
             MimeJrTopModel_ContinueSpin(&game->top, 1.0f);
-            spinAxis = sMimeJrTopDemoSpinTiltAxis;
+            spinAxis = gMimeJrTopDemoSpinTiltAxis;
             MTX_MultVec43(&spinAxis, &game->mimeJr[0].rotationFx, &game->tilt);
             return;
         }
@@ -596,7 +596,7 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
         game->lastTouchY = y;
     }
     MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
-    turnAxis = sMimeJrTopDemoTurnTiltAxis;
+    turnAxis = gMimeJrTopDemoTurnTiltAxis;
     MTX_MultVec43(&turnAxis, &game->mimeJr[0].rotationFx, &game->tilt);
     if (!IsSEPlaying(SEQ_SE_PL_KIRAKIRA)) {
         PlaySE(SEQ_SE_PL_KIRAKIRA);
@@ -606,7 +606,7 @@ void MimeJrTopGame_RubDemo(MimeJrTopGame *game, int x, int y) {
 }
 
 BOOL MimeJrTopGame_RunDemo(MimeJrTopGame *game) {
-    MimeJrTopDemoPath path = sMimeJrTopDemoPath;
+    MimeJrTopDemoPath path = gMimeJrTopDemoPath;
     s32 x;
     s32 frame;
     s32 y;
@@ -937,7 +937,7 @@ void MimeJrTop_InitGraphics(MimeJrTopApp *app) {
     MimeJrTop_InitSprites(app);
     reg_G3X_DISP3DCNT = (reg_G3X_DISP3DCNT & 0xFFFFCFFF) | 8;
     reg_G3X_DISP3DCNT = (reg_G3X_DISP3DCNT & 0xFFFFCFFF) | 0x20;
-    G3X_SetEdgeColorTable(sMimeJrTopEdgeColors);
+    G3X_SetEdgeColorTable(gMimeJrTopEdgeColors);
     HeapExp_FndInitAllocator(&app->resources.allocator, HEAP_ID_113, 0x20);
 }
 
@@ -981,15 +981,15 @@ void MimeJrTop_InitBgs(BgConfig *bgConfig) {
     MimeJrTopGraphicsModes modes;
     MimeJrTopBanks banks;
     GfGfx_DisableEngineAPlanes();
-    modes = sMimeJrTopGraphicsModes;
+    modes = gMimeJrTopGraphicsModes;
     SetBothScreensModesAndDisable((GraphicsModes *)&modes);
-    banks = sMimeJrTopBanks;
+    banks = gMimeJrTopBanks;
     GfGfx_SetBanks((GraphicsBanks *)&banks);
     MIi_CpuClear32(0, (void *)HW_BG_VRAM, 0x80000);
     MIi_CpuClear32(0, (void *)HW_DB_BG_VRAM, 0x20000);
     MIi_CpuClear32(0, (void *)HW_OBJ_VRAM, 0x40000);
     MIi_CpuClear32(0, (void *)HW_DB_OBJ_VRAM, 0x20000);
-    mainTemplates = sMimeJrTopMainBgTemplates;
+    mainTemplates = gMimeJrTopMainBgTemplates;
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, HEAP_ID_113);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 32, 0, HEAP_ID_113);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 32, 0, HEAP_ID_113);
@@ -1000,7 +1000,7 @@ void MimeJrTop_InitBgs(BgConfig *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    subTemplates = sMimeJrTopSubBgTemplates;
+    subTemplates = gMimeJrTopSubBgTemplates;
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 32, 0, HEAP_ID_113);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 32, 0, HEAP_ID_113);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 32, 0, HEAP_ID_113);
@@ -1168,7 +1168,7 @@ void MimeJrTop_DrawScene(MimeJrTopApp *app) {
     int a, b;
     Thunk_G3X_Reset();
     Camera_PushLookAtToNNSGlb();
-    light = sMimeJrTopLightVector;
+    light = gMimeJrTopLightVector;
     VEC_Normalize(&light, &light);
     NNS_G3dGlbLightVector(GX_LIGHTID_0, (s16)light.x, (s16)light.y, (s16)light.z);
     NNS_G3dGlbLightColor(GX_LIGHTID_0, 32767);
@@ -1257,7 +1257,7 @@ void MimeJrTopGame_SetMimeJrAnimation(MimeJrTopGame *game, int animation) {
 
 void MimeJrTop_InitCamera(MimeJrTopApp *app) {
     VecFx32 target = { 0, 0, 0 };
-    VecFx32 pos = sMimeJrTopCameraPosition;
+    VecFx32 pos = gMimeJrTopCameraPosition;
     Camera_Init_FromTargetAndPos(&target, &pos, 0xB60, 0, FALSE, app->resources.camera);
     Camera_SetPerspectiveClippingPlane((fx32)0xFFC18000, 0x3E8000, app->resources.camera);
     Camera_SetStaticPtr(app->resources.camera);
@@ -1309,10 +1309,10 @@ void MimeJrTopGame_CreatePopups(MimeJrTopGame *game) {
     SpriteManager *spriteManager = game->resources->spriteManager;
     int i;
     s16 *pos = (s16 *)positions;
-    positions[0] = sMimeJrTopPopupPositions[0];
-    positions[1] = sMimeJrTopPopupPositions[1];
-    positions[2] = sMimeJrTopPopupPositions[2];
-    positions[3] = sMimeJrTopPopupPositions[3];
+    positions[0] = gMimeJrTopPopupPositions[0];
+    positions[1] = gMimeJrTopPopupPositions[1];
+    positions[2] = gMimeJrTopPopupPositions[2];
+    positions[3] = gMimeJrTopPopupPositions[3];
     for (i = 0; i < 4; i++, pos++, game = (MimeJrTopGame *)((u8 *)game + 4)) {
         MimeJrTop_InitSpriteTemplate(&template, *pos, 224, NNS_G2D_VRAM_TYPE_2DMAIN, 1, 9004);
         template.bgPriority = 0;
@@ -1353,7 +1353,7 @@ void MimeJrTopGame_FreeStars(MimeJrTopGame *game) {
 
 // Sets the face and body animation of another player's top (anim: 0 spinning, 1 slow, 3 fallen).
 void MimeJrTopGame_SetRivalAnim(MimeJrTopGame *game, int player, int anim) {
-    MimeJrTopRivalAnims anims = sMimeJrTopRivalSetAnims;
+    MimeJrTopRivalAnims anims = gMimeJrTopRivalSetAnims;
     u16 slot = game->rivalSlots[player];
 
     ManagedSprite_SetAnim(game->rivalFaces[slot], anims.anims[anim][0]);
@@ -1361,7 +1361,7 @@ void MimeJrTopGame_SetRivalAnim(MimeJrTopGame *game, int player, int anim) {
 }
 
 int MimeJrTopGame_GetRivalAnim(MimeJrTopGame *game, int player) {
-    MimeJrTopRivalAnims anims = sMimeJrTopRivalAnims;
+    MimeJrTopRivalAnims anims = gMimeJrTopRivalAnims;
     u16 slot = game->rivalSlots[player];
     int face = ManagedSprite_GetActiveAnim(game->rivalFaces[slot]);
     int body = ManagedSprite_GetActiveAnim(game->rivalBodies[slot]);
@@ -1436,7 +1436,7 @@ void MimeJrTopGame_HideInstructions(MimeJrTopGame *game) {
 void MimeJrTop_LoadPlayerPalettes(MimeJrTopApp *app, int index) {
     PaletteData *palette = app->resources.palette;
     int i;
-    MimeJrTopPlayerPalettes *entry = &sMimeJrTopPlayerPalettes[index];
+    MimeJrTopPlayerPalettes *entry = &gMimeJrTopPlayerPalettes[index];
     for (i = 0; i < 4; i++) {
         PaletteData_LoadFromNarc(palette, NARC_a_1_9_3, 73, HEAP_ID_113, PLTTBUF_SUB_BG, 32, (u16)((i + 1) << 4), (u16)((*(int *)((u32)entry + app->game->playerCount * 80 + i * 4 - 76)) << 4));
     }
@@ -1452,7 +1452,7 @@ void MimeJrTopGame_ShowRivalNames(MimeJrTopApp *app, MimeJrTopGame *game) {
     s16 table[3][3][4];
     int tile = 256;
     int i;
-    ARRAY_ASSIGN(table, sMimeJrTopRivalNamePositions);
+    ARRAY_ASSIGN(table, gMimeJrTopRivalNamePositions);
     switch (game->playerCount) {
     case 2:
         GfGfxLoader_LoadScrnDataFromOpenNarc(game->resources->narc, 79, game->resources->bgConfig, GF_BG_LYR_SUB_3, 0, 0, FALSE, HEAP_ID_113);
@@ -1560,14 +1560,14 @@ void MimeJrTopGame_CreateRivalSprites(MimeJrTopApp *app, MimeJrTopGame *game) {
             continue;
         }
         game->rivalSlots[i] = n;
-        MimeJrTop_InitSpriteTemplate(&template, sMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
+        MimeJrTop_InitSpriteTemplate(&template, gMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
         template.drawPriority = 1;
         game->rivalFaces[n] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
-        MimeJrTop_InitSpriteTemplate(&template, sMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
+        MimeJrTop_InitSpriteTemplate(&template, gMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
         template.drawPriority = 2;
         game->rivalBodies[n] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(game->rivalBodies[n], MimeJrTop_GetPlayerIndex(app, i));
-        MimeJrTop_InitSpriteTemplate(&template, sMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
+        MimeJrTop_InitSpriteTemplate(&template, gMimeJrTopRivalSpriteX[game->playerCount - 1][n], 0xF0, NNS_G2D_VRAM_TYPE_2DSUB, 0, 9000);
         template.drawPriority = 3;
         game->rivalBadges[n] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
         ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(game->rivalBadges[n], MimeJrTop_GetPlayerIndex(app, i));
@@ -2109,7 +2109,7 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
     }
     switch (task->state) {
     case MIME_JR_TOP_TIER_MODELS_LOAD_TOP:
-        MimeJrTopModel_Load(a, task->resources->narc, sMimeJrTopTierModels[index][0]);
+        MimeJrTopModel_Load(a, task->resources->narc, gMimeJrTopTierModels[index][0]);
         MimeJrTopModel_Init(a, task->selection);
         task->state++;
         return;
@@ -2129,7 +2129,7 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
         task->state++;
         return;
     case MIME_JR_TOP_TIER_MODELS_LOAD_CHANGE:
-        MimeJrTopModel_Load(b, task->resources->narc, sMimeJrTopTierChangeModels[index][0]);
+        MimeJrTopModel_Load(b, task->resources->narc, gMimeJrTopTierChangeModels[index][0]);
         MimeJrTopModel_Init(b, task->selection);
         task->state++;
         return;
@@ -2182,13 +2182,13 @@ void MimeJrTopTierModels_Task(SysTask *sysTask, MimeJrTopTierModelsTask *task) {
 #undef FREE_TIER_MODELS
 
 void MimeJrTopGame_AddTierScore(MimeJrTopGame *game) {
-    MimeJrTopTierPoints points = sMimeJrTopTouchData.tierScores;
+    MimeJrTopTierPoints points = gMimeJrTopTouchData.tierScores;
 
     game->score += points.values[game->tier];
 }
 
 void MimeJrTopGame_AddTierBonus(MimeJrTopGame *game) {
-    MimeJrTopTierPoints points = sMimeJrTopTouchData.tierBonus;
+    MimeJrTopTierPoints points = gMimeJrTopTouchData.tierBonus;
     u32 index = game->tier;
 
     index--;
@@ -2364,9 +2364,9 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
     System_GetTouchHeldCoords(&x, &y);
     game->touched = FALSE;
     if (game->selection) {
-        hit = TouchscreenHitbox_FindHitboxAtPoint(sMimeJrTopSelectionHitboxes, x, y);
+        hit = TouchscreenHitbox_FindHitboxAtPoint(gMimeJrTopSelectionHitboxes, x, y);
     } else {
-        hit = TouchscreenHitbox_FindHitboxAtPoint(sMimeJrTopTouchData.hitboxes, x, y);
+        hit = TouchscreenHitbox_FindHitboxAtPoint(gMimeJrTopTouchData.hitboxes, x, y);
     }
     if (hit == -1) {
         game->lastTouchX = 0;
@@ -2374,7 +2374,7 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
         if (game->top.spinFrames) {
             MimeJrTopModel_ContinueSpin(&game->top, 1.0f);
             MimeJrTopModel_ContinueSpin(&game->mimeJr[0], 0.5f);
-            spinAxis = sMimeJrTopSpinTiltAxis;
+            spinAxis = gMimeJrTopSpinTiltAxis;
             MTX_MultVec43(&spinAxis, &game->mimeJr[0].rotationFx, &game->tilt);
             game->touched = TRUE;
             return;
@@ -2401,7 +2401,7 @@ void MimeJrTopGame_HandleTouch(MimeJrTopGame *game) {
     }
     MimeJrTopModel_Turn(&game->top, x, y, game->lastTouchX, game->lastTouchY, 2.0f, TRUE);
     MimeJrTopModel_Turn(&game->mimeJr[0], x, y, game->lastTouchX, game->lastTouchY, b, TRUE);
-    turnAxis = sMimeJrTopTurnTiltAxis;
+    turnAxis = gMimeJrTopTurnTiltAxis;
     MTX_MultVec43(&turnAxis, &game->mimeJr[0].rotationFx, &game->tilt);
     game->touched = TRUE;
     if (game->everTouched == FALSE) {
@@ -2458,7 +2458,7 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     s16 sx, sy;
     s16 vx, vy;
 
-    intervals = sMimeJrTopTouchData.wobbleIntervals;
+    intervals = gMimeJrTopTouchData.wobbleIntervals;
     game->wobbleTick++;
     if (game->wobbleTime != 0) {
         if (game->wobbleStep < 9) {
@@ -2493,7 +2493,7 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
         }
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            wobbleAxis = sMimeJrTopWobbleTiltAxis;
+            wobbleAxis = gMimeJrTopWobbleTiltAxis;
             MTX_MultVec43(&wobbleAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
         game->wobbleStep++;
@@ -2509,7 +2509,7 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
         x = (s16)(game->settleX.value >> 12);
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            settleAxis = sMimeJrTopSettleTiltAxis;
+            settleAxis = gMimeJrTopSettleTiltAxis;
             MTX_MultVec43(&settleAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
     } else if (game->touched == TRUE && game->settled == TRUE) {
@@ -2517,7 +2517,7 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
         x = (s16)(game->settleX.value >> 12);
         MimeJrTopModel_Turn(&game->top, 0, 0, x, y, 1.88f, FALSE);
         if (MimeJrTopModel_Turn(&game->mimeJr[0], 0, 0, x, y, 0.8f, FALSE)) {
-            settleTouchAxis = sMimeJrTopSettleTouchTiltAxis;
+            settleTouchAxis = gMimeJrTopSettleTouchTiltAxis;
             MTX_MultVec43(&settleTouchAxis, &game->mimeJr[0].rotationFx, &game->tilt);
         }
     }
@@ -2529,14 +2529,14 @@ void MimeJrTopGame_UpdateWobble(MimeJrTopGame *game) {
     rnd = LCRandom();
     SetLCRNGSeed(seed);
     rnd = (u32)rnd % 100;
-    total = sMimeJrTopWobbleWeights[game->tier][0];
+    total = gMimeJrTopWobbleWeights[game->tier][0];
     for (i = 0; i < 3; i++) {
         if (rnd < total) {
             break;
         }
-        total += sMimeJrTopWobbleChoices[game->tier][i + 1].weight;
+        total += gMimeJrTopWobbleChoices[game->tier][i + 1].weight;
     }
-    speed = sMimeJrTopWobbleChoices[game->tier][i].speed;
+    speed = gMimeJrTopWobbleChoices[game->tier][i].speed;
     dx = game->tilt.x >> 12;
     dz = game->tilt.z >> 12;
     if (game->tilt.z == 0) {
@@ -2754,8 +2754,8 @@ void MimeJrTopBurst_Task(SysTask *sysTask, MimeJrTopBurst *burst) {
     MimeJrTopTween *xTween1;
 
     allDone = TRUE;
-    xOffsets = sMimeJrTopBurstOffsetsX;
-    yOffsets = sMimeJrTopBurstOffsetsY;
+    xOffsets = gMimeJrTopBurstOffsetsX;
+    yOffsets = gMimeJrTopBurstOffsetsY;
 
     if (!IsPaletteFadeFinished() || burst->resources->connectionLost == TRUE) {
         for (i = 0; i < 3; i++) {
@@ -2876,7 +2876,7 @@ void MimeJrTopStars_Task(SysTask *sysTask, MimeJrTopStarsTask *task) {
         task->group = 0;
         task->state++;
     case 1:
-        origins = sMimeJrTopStarOrigins;
+        origins = gMimeJrTopStarOrigins;
         i = 0;
         startX = origins.values[task->group * 2];
         startY = origins.values[task->group * 2 + 1];
@@ -3167,14 +3167,14 @@ void MimeJrTopStage_UpdateFlash(MimeJrTopStageEffect *effect) {
 
 // Effects 1 and 3: two pop-up sprites rise from the bottom edge and sink back.
 void MimeJrTopStage_UpdatePopups(MimeJrTopStageEffect *effect) {
-    s16 limit[4] = { sMimeJrTopPopupLimits[0], sMimeJrTopPopupLimits[1], sMimeJrTopPopupLimits[2], sMimeJrTopPopupLimits[3] };
+    s16 limit[4] = { gMimeJrTopPopupLimits[0], gMimeJrTopPopupLimits[1], gMimeJrTopPopupLimits[2], gMimeJrTopPopupLimits[3] };
     MimeJrTopDoneFlags done;
     s16 x, y;
     s16 *limitp = limit;
     int i;
     ManagedSprite *sprite;
 
-    done = sMimeJrTopPopupDoneFlags;
+    done = gMimeJrTopPopupDoneFlags;
 
     if (effect->active != FALSE) {
         switch (effect->state) {
@@ -3524,16 +3524,16 @@ void MimeJrTopDance_Task(SysTask *sysTask, void *data) {
             MimeJrTopDance_SlideIn(dance);
         }
         if (dance->timer == 0 && level != 0 && level < 8) {
-            dance->timer = sMimeJrTopRoutines[level].timer;
+            dance->timer = gMimeJrTopRoutines[level].timer;
             dance->routineState = 0;
-            dance->count = sMimeJrTopRoutineCounts[level].value - 1;
-            dance->backSpeed = sMimeJrTopRoutineSpeeds[level].value;
-            dance->frontSpeed = sMimeJrTopRoutineSpeeds[level].value + 5;
+            dance->count = gMimeJrTopRoutineCounts[level].value - 1;
+            dance->backSpeed = gMimeJrTopRoutineSpeeds[level].value;
+            dance->frontSpeed = gMimeJrTopRoutineSpeeds[level].value + 5;
             for (i = 0; i < 2; i++) {
-                ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[i].sprite, sMimeJrTopRoutines[level].frontPalettes[i] + 4);
-                ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[2 + i].sprite, sMimeJrTopRoutines[level].backPalettes[i]);
+                ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[i].sprite, gMimeJrTopRoutines[level].frontPalettes[i] + 4);
+                ((MimeJrTopSetPaletteOffsetFunc)ManagedSprite_SetPaletteOverrideOffset)(dance->dancers[2 + i].sprite, gMimeJrTopRoutines[level].backPalettes[i]);
             }
-            SysTask_CreateOnMainQueue(sMimeJrTopRoutineTasks[level].func, dance, 0x1001);
+            SysTask_CreateOnMainQueue(gMimeJrTopRoutineTasks[level].func, dance, 0x1001);
         }
     } else if (dance->enabled == FALSE && dance->timer == 0 && dance->shown == TRUE) {
         MimeJrTopDance_SlideOut(dance);
@@ -3775,7 +3775,7 @@ BOOL MimeJrTopDancer_Circle(MimeJrTopDancer *dancer, int speed, s32 xdir, s32 cy
 }
 
 void MimeJrTopDance_Routine2(SysTask *sysTask, MimeJrTopDance *dance) {
-    MimeJrTopDoneFlags f = sMimeJrTopDance2DoneFlags;
+    MimeJrTopDoneFlags f = gMimeJrTopDance2DoneFlags;
     fx32 x, y;
     fx32 newX, newY;
     s32 i;
@@ -3881,7 +3881,7 @@ void MimeJrTopDance_Routine2(SysTask *sysTask, MimeJrTopDance *dance) {
 }
 
 void MimeJrTopDance_Routine3(SysTask *sysTask, MimeJrTopDance *dance) {
-    MimeJrTopDoneFlags f = sMimeJrTopDance3DoneFlags;
+    MimeJrTopDoneFlags f = gMimeJrTopDance3DoneFlags;
     fx32 x, y;
     fx32 newX, newY;
     s32 i;
@@ -3987,7 +3987,7 @@ void MimeJrTopDance_Routine3(SysTask *sysTask, MimeJrTopDance *dance) {
 }
 
 void MimeJrTopDance_Routine4(SysTask *sysTask, MimeJrTopDance *dance) {
-    MimeJrTopDoneFlags f = sMimeJrTopDance4DoneFlags;
+    MimeJrTopDoneFlags f = gMimeJrTopDance4DoneFlags;
     fx32 x, y;
     fx32 newX, newY;
     s32 i;
@@ -4107,7 +4107,7 @@ void MimeJrTopDance_Routine4(SysTask *sysTask, MimeJrTopDance *dance) {
 }
 
 void MimeJrTopDance_Routine5(SysTask *sysTask, MimeJrTopDance *dance) {
-    MimeJrTopDoneFlags f = sMimeJrTopDance5DoneFlags;
+    MimeJrTopDoneFlags f = gMimeJrTopDance5DoneFlags;
     fx32 x, y;
     fx32 newX, newY;
     s32 i;

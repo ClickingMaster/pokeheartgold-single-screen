@@ -24,7 +24,22 @@ enum BdhcLoadState {
     BDHC_LOAD_END,
 };
 
-BOOL Bdhc_IsPointInPlateBounds(BdhcPoint *first, BdhcPoint *second, BdhcPoint *point) {
+static BOOL Bdhc_IsPointInPlateBounds(BdhcPoint *first, BdhcPoint *second, BdhcPoint *point);
+static void Bdhc_GetPlateCorners(Bdhc *bdhc, int plate, BdhcPoint *corners);
+static void Bdhc_GetPlateNormal(Bdhc *bdhc, int plate, VecFx32 *normal);
+static void Bdhc_GetPlateConstant(Bdhc *bdhc, int plate, fx32 *constant);
+static void Bdhc_ResetHeightCandidates(BdhcHeightCandidate *candidates);
+static BOOL Bdhc_FindStrip(BdhcStrip *strips, int count, fx32 z, u16 *strip);
+static void Bdhc_ReadHeader(NARC *narc, BdhcHeader *header);
+static void Bdhc_SetBuffers(BdhcHeader *header, Bdhc *bdhc, u8 **buffer);
+static void Bdhc_ReadPoints(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+static void Bdhc_ReadNormals(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+static void Bdhc_ReadConstants(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+static void Bdhc_ReadPlates(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+static void Bdhc_ReadStrips(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+static void Bdhc_ReadAccessList(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
+
+static BOOL Bdhc_IsPointInPlateBounds(BdhcPoint *first, BdhcPoint *second, BdhcPoint *point) {
     fx32 *minX;
     fx32 *maxX;
     fx32 *minZ;
@@ -50,20 +65,20 @@ BOOL Bdhc_IsPointInPlateBounds(BdhcPoint *first, BdhcPoint *second, BdhcPoint *p
     return FALSE;
 }
 
-void Bdhc_GetPlateCorners(Bdhc *bdhc, int plate, BdhcPoint *corners) {
+static void Bdhc_GetPlateCorners(Bdhc *bdhc, int plate, BdhcPoint *corners) {
     corners[0] = bdhc->points[bdhc->plates[plate].firstPoint];
     corners[1] = bdhc->points[bdhc->plates[plate].secondPoint];
 }
 
-void Bdhc_GetPlateNormal(Bdhc *bdhc, int plate, VecFx32 *normal) {
+static void Bdhc_GetPlateNormal(Bdhc *bdhc, int plate, VecFx32 *normal) {
     *normal = bdhc->normals[bdhc->plates[plate].normal];
 }
 
-void Bdhc_GetPlateConstant(Bdhc *bdhc, int plate, fx32 *constant) {
+static void Bdhc_GetPlateConstant(Bdhc *bdhc, int plate, fx32 *constant) {
     *constant = bdhc->constants[bdhc->plates[plate].constant];
 }
 
-void Bdhc_ResetHeightCandidates(BdhcHeightCandidate *candidates) {
+static void Bdhc_ResetHeightCandidates(BdhcHeightCandidate *candidates) {
     int i;
 
     for (i = 0; i < BDHC_MAX_HEIGHT_CANDIDATES; i++) {
@@ -74,7 +89,7 @@ void Bdhc_ResetHeightCandidates(BdhcHeightCandidate *candidates) {
 }
 
 // Binary search for the strip that contains z.
-BOOL Bdhc_FindStrip(BdhcStrip *strips, int count, fx32 z, u16 *strip) {
+static BOOL Bdhc_FindStrip(BdhcStrip *strips, int count, fx32 z, u16 *strip) {
     int lo;
     int mid;
 
@@ -209,7 +224,7 @@ BOOL Bdhc_GetHeight(int mode, fx32 currentY, fx32 x, fx32 z, Bdhc *bdhc, fx32 *y
     }
 }
 
-void Bdhc_ReadHeader(NARC *narc, BdhcHeader *header) {
+static void Bdhc_ReadHeader(NARC *narc, BdhcHeader *header) {
     u32 magic[2];
 
     MI_CpuClear32(header, sizeof(BdhcHeader));
@@ -222,7 +237,7 @@ void Bdhc_ReadHeader(NARC *narc, BdhcHeader *header) {
     NARC_ReadFile(narc, 2, &header->accessListCount);
 }
 
-void Bdhc_SetBuffers(BdhcHeader *header, Bdhc *bdhc, u8 **buffer) {
+static void Bdhc_SetBuffers(BdhcHeader *header, Bdhc *bdhc, u8 **buffer) {
     s32 offset = 0;
 
     bdhc->points = (BdhcPoint *)*buffer;
@@ -240,27 +255,27 @@ void Bdhc_SetBuffers(BdhcHeader *header, Bdhc *bdhc, u8 **buffer) {
     GF_ASSERT(offset <= BDHC_BUFFER_SIZE);
 }
 
-void Bdhc_ReadPoints(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadPoints(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->pointsCount * sizeof(BdhcPoint), bdhc->points);
 }
 
-void Bdhc_ReadNormals(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadNormals(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->normalsCount * sizeof(VecFx32), bdhc->normals);
 }
 
-void Bdhc_ReadConstants(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadConstants(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->constantsCount * sizeof(fx32), bdhc->constants);
 }
 
-void Bdhc_ReadPlates(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadPlates(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->platesCount * sizeof(BdhcPlate), bdhc->plates);
 }
 
-void Bdhc_ReadStrips(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadStrips(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->stripsCount * sizeof(BdhcStrip), bdhc->strips);
 }
 
-void Bdhc_ReadAccessList(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
+static void Bdhc_ReadAccessList(NARC *narc, Bdhc *bdhc, BdhcHeader *header) {
     NARC_ReadFile(narc, header->accessListCount * sizeof(u16), bdhc->accessList);
 }
 

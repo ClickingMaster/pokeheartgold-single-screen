@@ -36,9 +36,9 @@ typedef struct PalPadButtonPalettes {
 extern const struct {
     u8 unk0;
     PalPadButtonPalettes returnButton;
-} sPalPadTables;
+} gPalPadTables;
 
-extern const TouchscreenHitbox sPalPadFriendCodeHitboxes[];
+extern const TouchscreenHitbox gPalPadFriendCodeHitboxes[];
 
 static NamingScreenArgs *PalPadNaming_CreateNamingArgs(PalPadNaming *naming, PalPadShared *shared, enum HeapID heapId);
 static BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared);
@@ -174,7 +174,7 @@ void PalPadFriendCode_Exit(PalPadFriendCode *friendCode, PalPadShared *shared, P
 }
 
 static BOOL PalPadFriendCode_HandleInput(PalPadFriendCode *friendCode, PalPadShared *shared) {
-    if (TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadFriendCodeHitboxes) == 0) {
+    if (TouchscreenHitbox_FindHitboxAtTouchNew(gPalPadFriendCodeHitboxes) == 0) {
         shared->inputState = TRUE;
         return TRUE;
     }
@@ -254,7 +254,7 @@ static void PalPadFriendCode_Hide(PalPadFriendCode *friendCode, PalPadGfx *gfx) 
 }
 
 static void PalPadFriendCode_HighlightReturn(PalPadFriendCode *friendCode, PalPadGfx *gfx, int highlight) {
-    PalPadButtonPalettes button = sPalPadTables.returnButton;
+    PalPadButtonPalettes button = gPalPadTables.returnButton;
 
     BgTilemapRectChangePalette(gfx->bgConfig, GF_BG_LYR_MAIN_2, 17, 20, 14, 4, button.palettes[highlight]);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);

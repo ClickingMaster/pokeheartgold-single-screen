@@ -65,17 +65,17 @@ typedef struct MainMenuUtilGift {
     u8 mon[1];
 } MainMenuUtilGift;
 
-extern enum HeapID sMainMenuUtilCryptoHeapId; // heap of the crypto library
+extern enum HeapID gMainMenuUtilCryptoHeapId; // heap of the crypto library
 extern MainMenuUtilWork gMainMenuUtilWork;
-extern MainMenuUtilSprites sMainMenuUtilSprites;
-extern G2dRenderer sMainMenuUtilRenderer;
-extern u32 sMainMenuUtilGiftSpriteWork[];
-extern u32 sMainMenuUtilVBlankWork[];
-extern const u8 sGiftCartridgePublicKey[];
-extern const ObjCharTransferTemplate sMainMenuUtilObjCharTransferTemplate;
-extern const BgTemplate sMainMenuUtilBgTemplate;
-extern const MainMenuUtilGiftPalettes sMainMenuUtilGiftPalettes;
-extern u32 sGiftCartridgeGameCodes[];
+extern MainMenuUtilSprites gMainMenuUtilSprites;
+extern G2dRenderer gMainMenuUtilRenderer;
+extern u32 gMainMenuUtilGiftSpriteWork[];
+extern u32 gMainMenuUtilVBlankWork[];
+extern const u8 gGiftCartridgePublicKey[];
+extern const ObjCharTransferTemplate gMainMenuUtilObjCharTransferTemplate;
+extern const BgTemplate gMainMenuUtilBgTemplate;
+extern const MainMenuUtilGiftPalettes gMainMenuUtilGiftPalettes;
+extern u32 gGiftCartridgeGameCodes[];
 extern u16 sAgbSpeciesMapNationalDex[];
 
 static void *MainMenuUtil_CryptoAlloc(u32 size);
@@ -87,21 +87,21 @@ static void MainMenuUtil_VBlankCB(void);
 static void MainMenuUtil_LoadGiftMonSprite(Sprite *sprite, Pokemon *mon, int species, int form, void *charData, u16 *narcIds);
 
 void MainMenuUtil_SetCryptoHeap(enum HeapID heapID) {
-    sMainMenuUtilCryptoHeapId = heapID;
+    gMainMenuUtilCryptoHeapId = heapID;
 }
 
 static void *MainMenuUtil_CryptoAlloc(u32 size) {
-    return Heap_Alloc(sMainMenuUtilCryptoHeapId, size);
+    return Heap_Alloc(gMainMenuUtilCryptoHeapId, size);
 }
 
-// A Mystery Gift GBA cartridge: one of the game codes of sGiftCartridgeGameCodes, with a payload signed with the key sGiftCartridgePublicKey
+// A Mystery Gift GBA cartridge: one of the game codes of gGiftCartridgeGameCodes, with a payload signed with the key gGiftCartridgePublicKey
 static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u8 payload[0x4A8];
     u8 signature[0x80];
     u32 gameCode = CTRDG_GetAgbGameCode();
     u32 code = (u8)(gameCode >> 24) | ((gameCode << 24) | (((gameCode >> 8) << 24) >> 8) | (((gameCode >> 16) << 24) >> 16));
     u32 i = 0;
-    if (i < sGiftCartridgeGameCodes[0]) {
+    if (i < gGiftCartridgeGameCodes[0]) {
         u32 *codes = (u32 *)(sAgbSpeciesMapNationalDex + 0x11F);
         do {
             if (code == *codes) {
@@ -110,7 +110,7 @@ static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
                 CTRDG_CpuCopy8((void *)0x08020000, signature, 0x80);
                 CTRDG_Enable(FALSE);
                 CRYPTO_SetAllocator(MainMenuUtil_CryptoAlloc, Heap_Free);
-                if (CRYPTO_VerifySignature(payload, 0x4A8, signature, sGiftCartridgePublicKey)) {
+                if (CRYPTO_VerifySignature(payload, 0x4A8, signature, gGiftCartridgePublicKey)) {
                     return TRUE;
                 }
             }
@@ -165,7 +165,7 @@ BOOL MainMenuUtil_ReadCartridgeGift(void *dest, int size) {
 }
 
 void MainMenuUtil_InitWork(enum HeapID heapID) {
-    memset(&sMainMenuUtilCryptoHeapId + 1, 0, sizeof(MainMenuUtilWork));
+    memset(&gMainMenuUtilCryptoHeapId + 1, 0, sizeof(MainMenuUtilWork));
     gMainMenuUtilWork.unk_004 = 1;
     gMainMenuUtilWork.heapId = heapID;
 }
@@ -181,7 +181,7 @@ void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u3
 }
 
 void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase) {
-    BgTemplate template = sMainMenuUtilBgTemplate;
+    BgTemplate template = gMainMenuUtilBgTemplate;
     template.size = screenSize;
     switch (screenSize) {
     case GF_BG_SCR_SIZE_256x256:
@@ -208,7 +208,7 @@ void MainMenuUtil_SetFadeWhite(u32 fadeWhite) {
 }
 
 void MainMenuUtil_StartFade(u32 fadeType, u32 nextState, int *state, u32 waitingState) {
-    MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
+    MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
     if (gMainMenuUtilWork.fadeWhite == FALSE) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)fadeType, (enum FadeType)fadeType, RGB_BLACK, 6, 1, work->heapId);
     } else {
@@ -338,7 +338,7 @@ u32 MainMenuTextPrinter_GetTileCount(MainMenuTextPrinter *printer) {
 }
 
 void MainMenuUtil_InitObjTransfer(void) {
-    ObjCharTransferTemplate template = sMainMenuUtilObjCharTransferTemplate;
+    ObjCharTransferTemplate template = gMainMenuUtilObjCharTransferTemplate;
     template.heapID = gMainMenuUtilWork.heapId;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(30, gMainMenuUtilWork.heapId);
@@ -351,20 +351,20 @@ u32 MainMenuUtil_SpritesActive(void) {
 }
 
 void MainMenuUtil_InitSprites(void) {
-    MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
+    MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
     int i;
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, gMainMenuUtilWork.heapId);
-    gMainMenuUtilWork.sprites.spriteList = G2dRenderer_Init(128, &sMainMenuUtilRenderer, gMainMenuUtilWork.heapId);
-    G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, 0, FX32_CONST(256));
-    *(fx32 *)((u8 *)sMainMenuUtilGiftSpriteWork + 0x10) = FX32_CONST(192);
+    gMainMenuUtilWork.sprites.spriteList = G2dRenderer_Init(128, &gMainMenuUtilRenderer, gMainMenuUtilWork.heapId);
+    G2dRenderer_SetSubSurfaceCoords(&gMainMenuUtilRenderer, 0, FX32_CONST(256));
+    *(fx32 *)((u8 *)gMainMenuUtilGiftSpriteWork + 0x10) = FX32_CONST(192);
     for (i = 0; i < 6; i++) {
         work->sprites.resMan[i] = Create2DGfxResObjMan(32, (GfGfxResType)i, work->heapId);
     }
 }
 
 MainMenuUtilSprites *MainMenuUtil_GetSpriteList(void) {
-    MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
+    MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
     GF_ASSERT(gMainMenuUtilWork.sprites.spriteList != NULL);
     return &work->sprites;
 }
@@ -401,8 +401,8 @@ void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFil
 }
 
 static void MainMenuUtil_SetSubScreenOffset(fx32 x, fx32 y) {
-    G2dRenderer_SetSubSurfaceCoords(&sMainMenuUtilRenderer, x, y);
-    *(fx32 *)((u8 *)sMainMenuUtilGiftSpriteWork + 0x10) = y;
+    G2dRenderer_SetSubSurfaceCoords(&gMainMenuUtilRenderer, x, y);
+    *(fx32 *)((u8 *)gMainMenuUtilGiftSpriteWork + 0x10) = y;
 }
 
 void MainMenuUtil_UpdateSprites(void) {
@@ -412,7 +412,7 @@ void MainMenuUtil_UpdateSprites(void) {
 // Per frame: the gift sprite of the sub screen appears after its delay and slides down; renders the sprites
 void MainMenuUtil_UpdateGiftSprite(int hideGiftSprite) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    if (sMainMenuUtilGiftSpriteWork[2]) {
+    if (gMainMenuUtilGiftSpriteWork[2]) {
         if (work->giftSpriteDelay == 0) {
             VecFx32 *pos;
             if (!Sprite_GetDrawFlag(work->giftSprite) && hideGiftSprite == FALSE) {
@@ -463,9 +463,9 @@ Sprite *MainMenuUtil_CreateSprite(u32 screen, Sprite *sprite, u32 x, u32 y, u32 
 
 void MainMenuUtil_FreeSprites(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    MainMenuUtilSprites *sprites = &sMainMenuUtilSprites;
+    MainMenuUtilSprites *sprites = &gMainMenuUtilSprites;
     int i;
-    if (sMainMenuUtilGiftSpriteWork[2]) {
+    if (gMainMenuUtilGiftSpriteWork[2]) {
         Sprite_Delete(work->giftSprite);
         work->giftSprite = NULL;
     }
@@ -499,7 +499,7 @@ u32 MainMenuUtil_GetVersionMaskBit(int spriteId) {
 
 static void MainMenuUtil_VBlankCB(void) {
     MainMenuUtilWork *work = &gMainMenuUtilWork;
-    if (sMainMenuUtilVBlankWork[9]) {
+    if (gMainMenuUtilVBlankWork[9]) {
         work->vblankCallback(work);
         work->vblankCallback = NULL;
     }
@@ -511,9 +511,9 @@ static void MainMenuUtil_VBlankCB(void) {
     OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
-// Palette of the gift graphics per gift type (pairs in sMainMenuUtilGiftPalettes, 0xFF-terminated)
+// Palette of the gift graphics per gift type (pairs in gMainMenuUtilGiftPalettes, 0xFF-terminated)
 int MainMenuUtil_GetGiftPalette(int giftType) {
-    MainMenuUtilGiftPalettes palettes = sMainMenuUtilGiftPalettes;
+    MainMenuUtilGiftPalettes palettes = gMainMenuUtilGiftPalettes;
     int i;
     u8 *entry;
     i = 0;

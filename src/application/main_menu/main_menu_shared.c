@@ -22,8 +22,8 @@ u8 *CommWireless_GetParentInfo(int index);
 BOOL CTRDG_IsAgbCartridge(void);
 void CTRDG_TerminateForPulledOut(void);
 
-extern enum HeapID sMainMenuUtilCryptoHeapId;
-extern u32 sMainMenuUtilVBlankWork[];
+extern enum HeapID gMainMenuUtilCryptoHeapId;
+extern u32 gMainMenuUtilVBlankWork[];
 
 u32 gMainMenuUtilWork[13];
 
@@ -47,7 +47,7 @@ void MainMenuUtil_ShowCardSubScreen(BgConfig *bgConfig, WonderCard *card) {
     Heap_Free(file);
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_SUB_1, 0, 0, 32, 24, palette + 8);
     ScheduleBgTilemapBufferTransfer(bgConfig, GF_BG_LYR_SUB_1);
-    sMainMenuUtilVBlankWork[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette;
+    gMainMenuUtilVBlankWork[9] = (u32)MainMenuUtil_LoadCardSubScreenPalette;
     sMainMenuUtilWork->bgConfig = bgConfig;
     switch (tag) {
     case MG_TAG_BATTLE_RULES:
@@ -189,7 +189,7 @@ void MainMenuUtil_StartSave(SaveData *saveData) {
 }
 
 int MainMenuUtil_RunSave(void) {
-    MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
+    MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
     int result;
 
     switch (sMainMenuUtilWork->saveState) {
@@ -220,7 +220,7 @@ int MainMenuUtil_RunSave(void) {
 }
 
 void MainMenuUtil_ResumeSave(void) {
-    MainMenuUtilWork *work = (MainMenuUtilWork *)(&sMainMenuUtilCryptoHeapId + 1);
+    MainMenuUtilWork *work = (MainMenuUtilWork *)(&gMainMenuUtilCryptoHeapId + 1);
 
     if (sMainMenuUtilWork->saveState == SAVE_STATE_PAUSED) {
         work->saveState = SAVE_STATE_WRITING;

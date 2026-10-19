@@ -18,8 +18,8 @@
 
 typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 
-extern const PokewalkerAppStateFunc sQuitMessageStates[];
-extern const PokewalkerAppStateFunc sEraseRecordsStates[];
+extern const PokewalkerAppStateFunc gQuitMessageStates[];
+extern const PokewalkerAppStateFunc gEraseRecordsStates[];
 
 int PokewalkerApp_QuitMessage_Enter(PokewalkerApp *app) {
     BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
@@ -27,7 +27,7 @@ int PokewalkerApp_QuitMessage_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_QuitMessage_Update(PokewalkerApp *app) {
-    app->state = sQuitMessageStates[app->state](app);
+    app->state = gQuitMessageStates[app->state](app);
     if (app->state == 4) {
         app->nextMode = 11;
         app->state = 0;
@@ -78,7 +78,7 @@ int PokewalkerApp_EraseRecords_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_EraseRecords_Update(PokewalkerApp *app) {
-    app->state = sEraseRecordsStates[app->state](app);
+    app->state = gEraseRecordsStates[app->state](app);
     if (app->state == 35) {
         app->state = 0;
         return 3;

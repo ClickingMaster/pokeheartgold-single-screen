@@ -96,10 +96,10 @@ FieldEffect *EmoteMark_Spawn(LocalMapObject *mapObject, int kind, BOOL playSound
 BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work);
 void MapObjectEmoteMarkEffect_Update(FieldEffect *effect, EmoteMarkEffect *work);
 
-// sEmoteMarkTemplate is a mark at a fixed position that nothing creates; sMapObjectEmoteMarkTemplate follows a
+// sEmoteMarkTemplate is a mark at a fixed position that nothing creates; gMapObjectEmoteMarkTemplate follows a
 // map object.
-extern const FieldEffectBasicTemplate sMapObjectEmoteMarkTemplate;
-extern const u32 sEmoteMarkRecordParams[6];
+extern const FieldEffectBasicTemplate gMapObjectEmoteMarkTemplate;
+extern const u32 gEmoteMarkRecordParams[6];
 
 EmoteMark *EmoteMark_New(FieldEffectManager *manager) {
     EmoteMark *emoteMark = FieldEffectManager_HeapAllocAndFill(manager, sizeof(EmoteMark), FALSE, 0);
@@ -154,7 +154,7 @@ static void EmoteMark_LoadExclamationGfx(EmoteMark *emoteMark) {
         FieldEffectManager_LoadBillboardResource(emoteMark->manager, EMOTE_MARK_EXCLAMATION_RESOURCE, 0x76);
         FieldEffectManager_LoadBillboardSequence(emoteMark->manager, EMOTE_MARK_EXCLAMATION_SEQUENCE, 0x8C);
         FieldEffectManager_LoadTexResource(emoteMark->manager, EMOTE_MARK_EXCLAMATION_TEXTURE, 0x11, TRUE);
-        FieldEffectManager_AddRecord(emoteMark->manager, EMOTE_MARK_EXCLAMATION_RECORD, EMOTE_MARK_EXCLAMATION_RESOURCE, EMOTE_MARK_EXCLAMATION_SEQUENCE, EMOTE_MARK_EXCLAMATION_TEXTURE, 0, sEmoteMarkRecordParams);
+        FieldEffectManager_AddRecord(emoteMark->manager, EMOTE_MARK_EXCLAMATION_RECORD, EMOTE_MARK_EXCLAMATION_RESOURCE, EMOTE_MARK_EXCLAMATION_SEQUENCE, EMOTE_MARK_EXCLAMATION_TEXTURE, 0, gEmoteMarkRecordParams);
     }
 }
 
@@ -164,7 +164,7 @@ static void EmoteMark_LoadQuestionGfx(EmoteMark *emoteMark) {
         FieldEffectManager_LoadBillboardResource(emoteMark->manager, EMOTE_MARK_QUESTION_RESOURCE, 0x7D);
         FieldEffectManager_LoadBillboardSequence(emoteMark->manager, EMOTE_MARK_QUESTION_SEQUENCE, 0x8C);
         FieldEffectManager_LoadTexResource(emoteMark->manager, EMOTE_MARK_QUESTION_TEXTURE, 0x18, TRUE);
-        FieldEffectManager_AddRecord(emoteMark->manager, EMOTE_MARK_QUESTION_RECORD, EMOTE_MARK_QUESTION_RESOURCE, EMOTE_MARK_QUESTION_SEQUENCE, EMOTE_MARK_QUESTION_TEXTURE, 0, sEmoteMarkRecordParams);
+        FieldEffectManager_AddRecord(emoteMark->manager, EMOTE_MARK_QUESTION_RECORD, EMOTE_MARK_QUESTION_RESOURCE, EMOTE_MARK_QUESTION_SEQUENCE, EMOTE_MARK_QUESTION_TEXTURE, 0, gEmoteMarkRecordParams);
     }
 }
 
@@ -325,7 +325,7 @@ FieldEffect *EmoteMark_Spawn(LocalMapObject *mapObject, int kind, BOOL playSound
     MapObject_CopyFacingVector(mapObject, &facing);
     VEC_Add(&position, &facing, &position);
     priority = MapObject_GetPriority(mapObject) + 1;
-    return FieldEffectManager_CreateEffect(manager, &sMapObjectEmoteMarkTemplate, &position, playSound, &args, priority);
+    return FieldEffectManager_CreateEffect(manager, &gMapObjectEmoteMarkTemplate, &position, playSound, &args, priority);
 }
 
 BOOL MapObjectEmoteMarkEffect_Init(FieldEffect *effect, EmoteMarkEffect *work) {

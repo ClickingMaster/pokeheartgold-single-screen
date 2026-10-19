@@ -36,9 +36,9 @@ typedef struct VsRecorderNumberPadKeys {
     VsRecorderNumberPadKey keys[12];
 } VsRecorderNumberPadKeys;
 
-extern const VsRecorderNumberPadFunc sVsRecorderNumberPadStates[];
-extern const VsRecorderNumberPadStartX sVsRecorderNumberPadStartX;
-extern const VsRecorderNumberPadKeys sVsRecorderNumberPadKeys;
+extern const VsRecorderNumberPadFunc gVsRecorderNumberPadStates[];
+extern const VsRecorderNumberPadStartX gVsRecorderNumberPadStartX;
+extern const VsRecorderNumberPadKeys gVsRecorderNumberPadKeys;
 
 // VsRecorderNumberPad.hitboxes: digits 0-11, then the keys
 #define NUMBER_PAD_KEY_0    12
@@ -183,7 +183,7 @@ static void VsRecorder_NumberPadInitLayout(VsRecorderNumberPad *pad) {
         pad->count += pad->config.groupLengths[i];
     }
     sel = 0;
-    startX = sVsRecorderNumberPadStartX;
+    startX = gVsRecorderNumberPadStartX;
     if (pad->config.groupLengths[0] != 4) {
         sel = 1;
     }
@@ -333,7 +333,7 @@ BOOL VsRecorder_NumberPadSwitchGroup(VsRecorderNumberPad *pad) {
 
 // one step of the number pad; TRUE when it closed
 BOOL VsRecorder_NumberPadMain(VsRecorderNumberPad *pad) {
-    BOOL result = sVsRecorderNumberPadStates[pad->state](pad);
+    BOOL result = gVsRecorderNumberPadStates[pad->state](pad);
 
     if (result == FALSE) {
         VsRecorder_NumberPadUpdateCursors(pad);
@@ -412,7 +412,7 @@ static void VsRecorder_NumberPadInitHitboxes(VsRecorderNumberPad *pad) {
     for (i = 0; i < 12; i++) {
         pad->digits[i].hitbox = &pad->hitboxes[i];
     }
-    keys = sVsRecorderNumberPadKeys;
+    keys = gVsRecorderNumberPadKeys;
     for (; i < 24; i++) {
         pad->hitboxes[i].rect.top = keys.keys[i - 12].y - keys.keys[i - 12].halfHeight;
         pad->hitboxes[i].rect.left = keys.keys[i - 12].x - keys.keys[i - 12].halfWidth;

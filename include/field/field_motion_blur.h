@@ -33,11 +33,6 @@ typedef struct FieldMotionBlur {
     FieldCapture *capture;
 } FieldMotionBlur;
 
-FieldCapture *FieldCapture_Start(const FieldCaptureConfig *config);
-void FieldCapture_Stop(FieldCapture **capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As);
-void FieldCapture_Task(SysTask *task, FieldCapture *capture);
-void FieldCapture_StartTask(SysTask *task, FieldCapture *capture);
-void FieldCapture_Init(FieldCaptureConfig *config);
 FieldMotionBlur *FieldMotionBlur_Start(int eva, int evb);
 void FieldMotionBlur_Stop(FieldMotionBlur **motionBlur);
 

@@ -39,10 +39,10 @@ void ParticleSystem_FreeAll(void);
 
 void MTX_Identity22_(MtxFx22 *mtx);
 
-extern const VecFx32 sParticleBaseScale;
-extern const GraphicsModes sParticleGraphicsModes;
-extern const BgTemplate sParticleCaptureBgTemplate;
-extern const GraphicsBanks sParticleGraphicsBanks;
+extern const VecFx32 gParticleBaseScale;
+extern const GraphicsModes gParticleGraphicsModes;
+extern const BgTemplate gParticleCaptureBgTemplate;
+extern const GraphicsBanks gParticleGraphicsBanks;
 
 static void Task_ParticleSetup_VWait(SysTask *task, void *data);
 static void Task_ParticleSetup_Main(SysTask *task, void *data);
@@ -193,7 +193,7 @@ static void Task_ParticleSetup_Main(SysTask *task, void *data) {
     if (particles->state == PARTICLES_STATE_READY) {
         ParticleSystem_ZeroAll();
         VecFx32 position = { 0, 0, 0 };
-        VecFx32 scale = sParticleBaseScale;
+        VecFx32 scale = gParticleBaseScale;
         MtxFx33 rotation;
         MTX_Identity33_(&rotation);
         NNS_G3dGlbSetBaseTrans(&position);
@@ -209,13 +209,13 @@ static void Task_ParticleSetup_Main(SysTask *task, void *data) {
 
 // 3D on BG0, the captured field image as a 256-colour bitmap on BG3 behind it; BG2 is cleared.
 static void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
-    GraphicsBanks banks = sParticleGraphicsBanks;
+    GraphicsBanks banks = gParticleGraphicsBanks;
     GraphicsModes modes;
     MtxFx22 matrix;
     BgTemplate template;
     GfGfx_SetBanks(&banks);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
-    modes = sParticleGraphicsModes;
+    modes = gParticleGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     FieldMap_ClearBgLayer3(fieldSystem->bgConfig);
     reg_G2_BG3CNT = (reg_G2_BG3CNT & 0x43) | 0x4884;
@@ -223,7 +223,7 @@ static void EncounterEffect_SetupParticleGraphics(FieldSystem *fieldSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
     MTX_Identity22_(&matrix);
     G2_SetBG3Affine(&matrix, 0, 0, 0, 0);
-    template = sParticleCaptureBgTemplate;
+    template = gParticleCaptureBgTemplate;
     InitBgFromTemplate(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 32, 0, HEAP_ID_FIELD1);
     BgClearTilemapBufferAndCommit(fieldSystem->bgConfig, GF_BG_LYR_MAIN_2);

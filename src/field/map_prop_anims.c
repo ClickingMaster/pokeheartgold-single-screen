@@ -44,7 +44,7 @@ typedef struct ElevatorAnim {
 } ElevatorAnim;
 
 // Poke Ball positions on the healing machine, relative to it (x, y and z of one VecFx32 per ball)
-extern const VecFx32 sHealingMachineBallOffsets[];
+extern const VecFx32 gHealingMachineBallOffsets[];
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 
 typedef struct MapPropModelPair {
@@ -52,7 +52,7 @@ typedef struct MapPropModelPair {
 } MapPropModelPair;
 
 // the two prop models whose animations PCProp_LoadAnimations loads
-extern const MapPropModelPair sPCPropModels;
+extern const MapPropModelPair gPCPropModels;
 
 static inline NNSG3dResMdl *MapPropModel_Get(AreaDataManager *areaDataManager, int mapPropId) {
     return NNS_G3dGetMdlByIdx(NNS_G3dGetMdlSet(*AreaDataManager_GetMapPropModel(mapPropId, areaDataManager)), 0);
@@ -99,9 +99,9 @@ BOOL PokecenterAnimRun(TaskManager *taskManager) {
         break;
     case HEAL_ANIM_STATE_PLACE_BALL: {
         VecFx32 rotation = { 0 };
-        pos.x = anim->machinePos.x + sHealingMachineBallOffsets[anim->ballIndex].x;
-        pos.y = anim->machinePos.y + sHealingMachineBallOffsets[anim->ballIndex].y;
-        pos.z = anim->machinePos.z + sHealingMachineBallOffsets[anim->ballIndex].z;
+        pos.x = anim->machinePos.x + gHealingMachineBallOffsets[anim->ballIndex].x;
+        pos.y = anim->machinePos.y + gHealingMachineBallOffsets[anim->ballIndex].y;
+        pos.z = anim->machinePos.z + gHealingMachineBallOffsets[anim->ballIndex].z;
         PlaySE(SEQ_SE_DP_BOWA);
         anim->ballProps[anim->ballIndex] = MapPropManager_LoadOne(fieldSystem->mapPropManager, MAP_PROP_HEALING_POKE_BALL, &pos, &rotation, fieldSystem->mapPropAnimationManager);
         anim->state++;
@@ -213,11 +213,11 @@ static BOOL ElevatorAnimRun(TaskManager *taskManager) {
     return FALSE;
 }
 
-// Loads the two one-shot animations of the first of the props sPCPropModels found on the map under the tag.
+// Loads the two one-shot animations of the first of the props gPCPropModels found on the map under the tag.
 void PCProp_LoadAnimations(FieldSystem *fieldSystem, u8 tag) {
     MapProp *prop;
     int model;
-    MapPropModelPair pair = sPCPropModels;
+    MapPropModelPair pair = gPCPropModels;
 
     if (FieldSystem_FindMapPropOfModels(fieldSystem, pair.models, 2, &prop, &model)) {
         NNSG3dResTex *texture = AreaDataManager_GetMapPropTexture(fieldSystem->areaDataManager);

@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "field/field_3d_model.h"
 
 #include "field_system.h"

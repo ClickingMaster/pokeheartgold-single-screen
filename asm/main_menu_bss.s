@@ -1,22 +1,22 @@
 	.include "asm/macros.inc"
-	.public sMigrateFromAgbIcons
-	.public sPmAgbSave
-	.public sPmAgbSaveCounter
-	.public sPmAgbRomHeader
-	.public sMainMenuUtilCryptoHeapId
+	.public gMigrateFromAgbIcons
+	.public gPmAgbSave
+	.public gPmAgbSaveCounter
+	.public gPmAgbRomHeader
+	.public gMainMenuUtilCryptoHeapId
 	.bss
 
-sMigrateFromAgbIcons:
+gMigrateFromAgbIcons:
 	.space 0x4
 
-sPmAgbSave:
+gPmAgbSave:
 	.space 0x10
 
-sPmAgbSaveCounter:
+gPmAgbSaveCounter:
 	.space 0x8
 
-sPmAgbRomHeader:
+gPmAgbRomHeader:
 	.space 0xFC
 
-sMainMenuUtilCryptoHeapId:
+gMainMenuUtilCryptoHeapId:
 	.space 0x4

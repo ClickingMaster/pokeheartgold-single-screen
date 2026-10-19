@@ -52,7 +52,7 @@ FS_EXTERN_OVERLAY(OVY_7);
 #define BALL_CAPSULE_EDITOR_SEALS_PER_PAGE 8
 #define BALL_CAPSULE_EDITOR_MAX_PAGES      10
 
-// Touch hitboxes (sBallCapsuleEditorHitboxes, then the placed seals): the case's seals, the page
+// Touch hitboxes (gBallCapsuleEditorHitboxes, then the placed seals): the case's seals, the page
 // arrows, the three buttons, the placed seals.
 #define BALL_CAPSULE_EDITOR_HITBOX_PREV_PAGE  8
 #define BALL_CAPSULE_EDITOR_HITBOX_NEXT_PAGE  9
@@ -66,7 +66,7 @@ FS_EXTERN_OVERLAY(OVY_7);
 #define BALL_CAPSULE_EDITOR_SELECT_BACK    12
 #define BALL_CAPSULE_EDITOR_SELECT_CONFIRM 13
 
-// Main modes, sBallCapsuleEditorModes
+// Main modes, gBallCapsuleEditorModes
 enum BallCapsuleEditorMode {
     BALL_CAPSULE_EDITOR_MODE_SELECT,
     BALL_CAPSULE_EDITOR_MODE_EDIT,
@@ -116,7 +116,7 @@ enum BallCapsuleMenuKind {
     BALL_CAPSULE_MENU_EMPTY_ON_MON,
 };
 
-// sBallCapsuleEditorMenuItems
+// gBallCapsuleEditorMenuItems
 enum BallCapsuleMenuItem {
     BALL_CAPSULE_MENU_ITEM_EDIT,
     BALL_CAPSULE_MENU_ITEM_QUIT,
@@ -280,19 +280,19 @@ typedef struct BallCapsuleEditorPokepicEffectParams {
     Pokemon *mon;
 } BallCapsuleEditorPokepicEffectParams;
 
-extern const TouchscreenListMenuTemplate sBallCapsuleEditorMenuTemplate;
-extern const OamCharTransferParam sBallCapsuleEditorOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sBallCapsuleEditorSpriteResourceCounts;
-extern const OamManagerParam sBallCapsuleEditorOamManagerParam;
-extern const BallCapsuleEditorCaseSealPositions sBallCapsuleEditorCaseSealPositions;
-extern const u32 sBallCapsuleEditorWindowFrameTiles[];
-extern const BallCapsuleEditorArrows sBallCapsuleEditorArrows;
-extern const BallCapsuleEditorCasePositions sBallCapsuleEditorCaseButtonPositions;
-extern const BallCapsuleEditorCasePositions sBallCapsuleEditorCaseButtonHitboxSizes;
-extern const TouchscreenHitbox sBallCapsuleEditorExitButtonHitboxes[];
-extern BOOL (*const sBallCapsuleEditorModes[])(BallCapsuleEditor *editor);
-extern const BallCapsuleEditorMenuItem sBallCapsuleEditorMenuItems[];
-extern const TouchscreenHitbox sBallCapsuleEditorHitboxes[];
+extern const TouchscreenListMenuTemplate gBallCapsuleEditorMenuTemplate;
+extern const OamCharTransferParam gBallCapsuleEditorOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gBallCapsuleEditorSpriteResourceCounts;
+extern const OamManagerParam gBallCapsuleEditorOamManagerParam;
+extern const BallCapsuleEditorCaseSealPositions gBallCapsuleEditorCaseSealPositions;
+extern const u32 gBallCapsuleEditorWindowFrameTiles[];
+extern const BallCapsuleEditorArrows gBallCapsuleEditorArrows;
+extern const BallCapsuleEditorCasePositions gBallCapsuleEditorCaseButtonPositions;
+extern const BallCapsuleEditorCasePositions gBallCapsuleEditorCaseButtonHitboxSizes;
+extern const TouchscreenHitbox gBallCapsuleEditorExitButtonHitboxes[];
+extern BOOL (*const gBallCapsuleEditorModes[])(BallCapsuleEditor *editor);
+extern const BallCapsuleEditorMenuItem gBallCapsuleEditorMenuItems[];
+extern const TouchscreenHitbox gBallCapsuleEditorHitboxes[];
 
 static void BallCapsuleEditor_LoadBattleOverlays(void);
 static void BallCapsuleEditor_ResetDisplay(enum HeapID heapID);
@@ -1319,7 +1319,7 @@ static void BallCapsuleEditor_CreateCaseSealSprites(BallCapsuleEditor *editor) {
         template.resIdList[GF_GFX_RES_TYPE_CHAR] = 25000 + i;
         *sprite++ = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
     }
-    positions = sBallCapsuleEditorCaseSealPositions;
+    positions = gBallCapsuleEditorCaseSealPositions;
     for (i = 0; i < BALL_CAPSULE_EDITOR_SEALS_PER_PAGE; i++) {
         ManagedSprite_SetPositionXY(editor->caseSprites[i], positions.positions[i].x, (s16)(positions.positions[i].y - 1));
         ManagedSprite_TickFrame(editor->caseSprites[i]);
@@ -1436,13 +1436,13 @@ static void BallCapsuleEditor_CreateMenu(BgConfig *bgConfig, Window *unusedWindo
     editor->display.menuItems = ListMenuItems_New(count, HEAP_ID_52);
     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0011_bin, HEAP_ID_52);
     for (i = 0; i < count; i++) {
-        string = NewString_ReadMsgData(msgData, sBallCapsuleEditorMenuItems[items[i]].msgId);
-        ListMenuItems_AddItem(editor->display.menuItems, string, (int)sBallCapsuleEditorMenuItems[items[i]].func);
+        string = NewString_ReadMsgData(msgData, gBallCapsuleEditorMenuItems[items[i]].msgId);
+        ListMenuItems_AddItem(editor->display.menuItems, string, (int)gBallCapsuleEditorMenuItems[items[i]].func);
         String_Delete(string);
     }
     DestroyMsgData(msgData);
     MI_CpuFill8(&header, 0, sizeof(TouchscreenListMenuHeader));
-    header.template = sBallCapsuleEditorMenuTemplate;
+    header.template = gBallCapsuleEditorMenuTemplate;
     header.listMenuItems = editor->display.menuItems;
     header.bgConfig = bgConfig;
     header.numWindows = (u8)count;
@@ -1560,10 +1560,10 @@ static void BallCapsuleEditor_InitSpriteSystem(BallCapsuleEditorDisplay *display
     SpriteResourceCountsListUnion resourceCounts;
 
     display->spriteSystem = SpriteSystem_Alloc(HEAP_ID_52);
-    oamManagerParam = sBallCapsuleEditorOamManagerParam;
-    oamCharTransferParam = sBallCapsuleEditorOamCharTransferParam;
+    oamManagerParam = gBallCapsuleEditorOamManagerParam;
+    oamCharTransferParam = gBallCapsuleEditorOamCharTransferParam;
     SpriteSystem_Init(display->spriteSystem, &oamManagerParam, &oamCharTransferParam, 32);
-    resourceCounts = sBallCapsuleEditorSpriteResourceCounts;
+    resourceCounts = gBallCapsuleEditorSpriteResourceCounts;
     display->spriteManager = SpriteManager_New(display->spriteSystem);
     if (SpriteSystem_InitSprites(display->spriteSystem, display->spriteManager, 128) == FALSE) {
         GF_AssertFail();
@@ -1594,7 +1594,7 @@ static void BallCapsuleEditor_CreateArrows(BallCapsuleEditor *editor) {
 
     int i;
 
-    data.arrows = sBallCapsuleEditorArrows;
+    data.arrows = gBallCapsuleEditorArrows;
     for (i = 0; i < 4; i++) {
         data.template.x = data.arrows.arrows[i].x;
         data.template.y = data.arrows.arrows[i].y;
@@ -1770,7 +1770,7 @@ static void BallCapsuleEditor_LoadMainBgGraphics(BgConfig *bgConfig, PaletteData
     rawData = charData->pRawData;
     DC_FlushRange(rawData, charData->szByte);
     for (i = 0; i < 9; i++) {
-        BG_LoadCharTilesData(bgConfig, GF_BG_LYR_MAIN_1, (u8 *)rawData + sBallCapsuleEditorWindowFrameTiles[i] * 32, 32, i + 1);
+        BG_LoadCharTilesData(bgConfig, GF_BG_LYR_MAIN_1, (u8 *)rawData + gBallCapsuleEditorWindowFrameTiles[i] * 32, 32, i + 1);
     }
     Heap_Free(allocation);
     PaletteData_LoadFromNarc(paletteData, NARC_a_0_8_7, 2, HEAP_ID_52, PLTTBUF_MAIN_BG, 0x20, 0xC0, 0x20);
@@ -2024,8 +2024,8 @@ static void BallCapsuleEditor_CreateCaseButtons(BallCapsuleEditor *editor) {
     template.resIdList[GF_GFX_RES_TYPE_ANIM] = 28021;
     sprites[BALL_CAPSULE_EDITOR_HITBOX_OK] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
     sprites[BALL_CAPSULE_EDITOR_HITBOX_CANCEL] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
-    positions = sBallCapsuleEditorCaseButtonPositions;
-    hitboxSizes = sBallCapsuleEditorCaseButtonHitboxSizes;
+    positions = gBallCapsuleEditorCaseButtonPositions;
+    hitboxSizes = gBallCapsuleEditorCaseButtonHitboxSizes;
     for (i = BALL_CAPSULE_EDITOR_HITBOX_PREV_PAGE; i < BALL_CAPSULE_EDITOR_HITBOX_FIRST_SEAL; i++) {
         ManagedSprite_SetPositionXY(editor->caseSprites[i], positions.positions[i].x, positions.positions[i].y);
         ManagedSprite_TickFrame(editor->caseSprites[i]);
@@ -2092,7 +2092,7 @@ static int BallCapsuleEditor_GetMenuKind(BallCapsuleEditor *editor, int capsule)
 }
 
 static BOOL BallCapsuleEditor_RunMode(BallCapsuleEditor *editor) {
-    BOOL ret = sBallCapsuleEditorModes[editor->mode](editor);
+    BOOL ret = gBallCapsuleEditorModes[editor->mode](editor);
     SpriteSystem_DrawSprites(editor->display.spriteManager);
     return ret;
 }
@@ -3009,7 +3009,7 @@ static int BallCapsuleEditor_GetTouchedCapsule(BallCapsuleEditor *editor) {
         }
         y += 56;
     }
-    found = TouchscreenHitbox_FindRectAtTouchNew(sBallCapsuleEditorExitButtonHitboxes);
+    found = TouchscreenHitbox_FindRectAtTouchNew(gBallCapsuleEditorExitButtonHitboxes);
     if (found == -1) {
         return -1;
     }
@@ -3286,7 +3286,7 @@ static void BallCapsuleEditor_InitHitboxes(BallCapsuleEditor *editor) {
     int i;
 
     for (i = 0; i < BALL_CAPSULE_EDITOR_HITBOX_FIRST_SEAL; i++) {
-        editor->display.hitboxes[i] = sBallCapsuleEditorHitboxes[i];
+        editor->display.hitboxes[i] = gBallCapsuleEditorHitboxes[i];
     }
     for (; i < BALL_CAPSULE_EDITOR_NUM_HITBOXES; i++) {
         editor->display.hitboxes[i] = empty;

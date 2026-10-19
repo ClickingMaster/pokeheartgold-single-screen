@@ -180,7 +180,7 @@ typedef struct PokedexEntryTabSwitchState {
     u8 fadeStart;
 } PokedexEntryTabSwitchState;
 
-// Weight check: the scale animation (sWeightCheckAnimFuncs[animIndex], one per weight-difference class)
+// Weight check: the scale animation (gWeightCheckAnimFuncs[animIndex], one per weight-difference class)
 typedef struct PokedexWeightCheckAnim {
     PokedexAppData *pokedexApp; // 0x00
     s32 dropOffset;             // 0x04 figures dropping onto the pans, fx32

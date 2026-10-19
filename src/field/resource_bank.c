@@ -23,6 +23,7 @@ static ResourceBankEntry *ResourceBank_FindFreeEntry(ResourceBank *bank);
 static void ResourceBankEntry_Set(ResourceBankEntry *entry, u32 id, void *data);
 static void ResourceBankEntry_Clear(ResourceBankEntry *entry);
 
+static void *ResourceBank_Alloc(ResourceBank *bank, u32 id, u32 size, BOOL atEnd);
 ResourceBank *ResourceBank_Create(enum HeapID parentHeapID, enum HeapID heapID, u32 heapSize, u32 capacity) {
     ResourceBank *bank;
     u32 entriesSize = capacity * sizeof(ResourceBankEntry);
@@ -64,7 +65,7 @@ void ResourceBank_Destroy(ResourceBank *bank) {
     }
 }
 
-void *ResourceBank_Alloc(ResourceBank *bank, u32 id, u32 size, BOOL atEnd) {
+static void *ResourceBank_Alloc(ResourceBank *bank, u32 id, u32 size, BOOL atEnd) {
     ResourceBankEntry *entry = ResourceBank_FindFreeEntry(bank);
     void *data;
 

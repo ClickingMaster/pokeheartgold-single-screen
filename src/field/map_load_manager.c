@@ -9,6 +9,7 @@
 #include "field/bdhc.h"
 #include "field/field_control.h"
 #include "field/map_load_buffers.h"
+#include "field/map_load_manager_internal.h"
 #include "field/map_prop.h"
 
 #include "comm_state.h"
@@ -229,14 +230,8 @@ static void CalcMapPosition(int matrixIndex, int width, MapMatrix *mapMatrix, Ve
 static void MapLoadManager_OnTileStep(u8 direction, MapLoadManager *mapLoadManager);
 static void PositionToTile(fx32 x, fx32 z, int *tileX, int *tileZ);
 static void MapLoadManager_RenderLoadedMap(int mapSlot, MapLoadManager *mapLoadManager, ModelAttributes *modelAttributes);
-int TileIndex_GetQuadrant(int tile, int stride);
-u8 MapLoadManager_GetMapSlotOfMatrixIndex(int matrixIndex, int unused, MapLoadManager *mapLoadManager);
-int MapLoadManager_GetMapMatrixIndex(MapLoadManager *mapLoadManager, u8 mapSlot);
-BOOL MapLoadManager_GetMapSlotAt(MapLoadManager *mapLoadManager, int x, int z, u8 *mapSlot);
-Bdhc *MapLoadManager_GetBdhc(MapLoadManager *mapLoadManager, u8 mapSlot);
-SoundplateStruct *MapLoadManager_GetSoundplates(MapLoadManager *mapLoadManager, u8 mapSlot);
 static void MapModelLoad_Cancel(SysTask *task);
-static void Task_LoadMapModel(SysTask *task, MapModelLoad *load);
+static void Task_LoadMapModel(SysTask *task, void *data);
 static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture, AreaMapAnimation *areaMapAnimation, BOOL *loaded, BOOL *loading);
 static NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture);
 
@@ -1500,7 +1495,8 @@ static void MapModelLoad_Cancel(SysTask *task) {
 }
 
 // Reads the model in chunks of 0xE000 bytes per frame, binds the area texture and sets up the render object
-static void Task_LoadMapModel(SysTask *task, MapModelLoad *load) {
+static void Task_LoadMapModel(SysTask *task, void *data) {
+    MapModelLoad *load = data;
     if (load->cancel == TRUE) {
         load->state = MAP_MODEL_LOAD_END;
     }
@@ -1577,7 +1573,7 @@ static SysTask *StartMapModelLoadTask(NARC *narc, u32 modelNo, int size, NNSG3dR
     *loaded = FALSE;
     load->loading = loading;
     load->cancel = FALSE;
-    return SysTask_CreateOnMainQueue((SysTaskFunc)Task_LoadMapModel, load, 1);
+    return SysTask_CreateOnMainQueue(Task_LoadMapModel, load, 1);
 }
 
 static NNSG3dResMdl *LoadMapModel(NARC *narc, u32 size, NNSG3dRenderObj *renderObj, NNSG3dResFileHeader **modelFile, NNSG3dResTex *texture) {

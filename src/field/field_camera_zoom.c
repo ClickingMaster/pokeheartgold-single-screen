@@ -5,6 +5,15 @@
 #include "heap.h"
 #include "sys_task_api.h"
 
+static void Task_FieldCameraZoom(SysTask *task, void *data);
+static void FieldCameraZoom_Idle(FieldCameraZoom *zoom);
+static void FieldCameraZoom_ZoomBy(FieldCameraZoom *zoom);
+static void FieldCameraZoom_ZoomBack(FieldCameraZoom *zoom);
+static void FieldCameraZoom_ApplyDistance(FieldCameraZoom *zoom);
+static void FieldCameraZoom_InitZoomBy(FieldCameraZoom *zoom);
+static void FieldCameraZoom_InitZoomBack(FieldCameraZoom *zoom);
+static BOOL FieldCameraZoom_Step(FieldCameraZoom *zoom);
+
 static void (*const sFieldCameraZoomFuncs[])(FieldCameraZoom *zoom) = {
     [FIELD_CAMERA_ZOOM_IDLE] = FieldCameraZoom_Idle,
     [FIELD_CAMERA_ZOOM_BY] = FieldCameraZoom_ZoomBy,
@@ -22,7 +31,7 @@ SysTask *FieldCameraZoom_Start(FieldSystem *fieldSystem, enum HeapID heapID) {
     zoom->camera = fieldSystem->camera;
     zoom->initialDistance = Camera_GetDistance(zoom->camera);
     zoom->distance = zoom->initialDistance;
-    return SysTask_CreateOnMainQueue((SysTaskFunc)Task_FieldCameraZoom, zoom, 0xFFFF);
+    return SysTask_CreateOnMainQueue(Task_FieldCameraZoom, zoom, 0xFFFF);
 }
 
 BOOL FieldCameraZoom_IsDone(SysTask *task) {
@@ -45,15 +54,16 @@ void FieldCameraZoom_Set(SysTask *task, int mode, fx32 amount, u32 duration) {
     zoom->elapsed = 0;
 }
 
-void Task_FieldCameraZoom(SysTask *task, FieldCameraZoom *zoom) {
+static void Task_FieldCameraZoom(SysTask *task, void *data) {
+    FieldCameraZoom *zoom = data;
     sFieldCameraZoomFuncs[zoom->mode](zoom);
 }
 
-void FieldCameraZoom_Idle(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_Idle(FieldCameraZoom *zoom) {
     zoom->done = TRUE;
 }
 
-void FieldCameraZoom_ZoomBy(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_ZoomBy(FieldCameraZoom *zoom) {
     switch (zoom->state) {
     case 0:
         FieldCameraZoom_InitZoomBy(zoom);
@@ -70,7 +80,7 @@ void FieldCameraZoom_ZoomBy(FieldCameraZoom *zoom) {
     FieldCameraZoom_ApplyDistance(zoom);
 }
 
-void FieldCameraZoom_ZoomBack(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_ZoomBack(FieldCameraZoom *zoom) {
     switch (zoom->state) {
     case 0:
         FieldCameraZoom_InitZoomBack(zoom);
@@ -87,21 +97,21 @@ void FieldCameraZoom_ZoomBack(FieldCameraZoom *zoom) {
     FieldCameraZoom_ApplyDistance(zoom);
 }
 
-void FieldCameraZoom_ApplyDistance(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_ApplyDistance(FieldCameraZoom *zoom) {
     Camera_SetDistance(zoom->distance, zoom->camera);
 }
 
-void FieldCameraZoom_InitZoomBy(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_InitZoomBy(FieldCameraZoom *zoom) {
     zoom->step = zoom->amount / (s32)zoom->duration;
     zoom->targetDistance = zoom->distance + zoom->amount;
 }
 
-void FieldCameraZoom_InitZoomBack(FieldCameraZoom *zoom) {
+static void FieldCameraZoom_InitZoomBack(FieldCameraZoom *zoom) {
     zoom->step = (zoom->initialDistance - zoom->distance) / (s32)zoom->duration;
     zoom->targetDistance = zoom->initialDistance;
 }
 
-BOOL FieldCameraZoom_Step(FieldCameraZoom *zoom) {
+static BOOL FieldCameraZoom_Step(FieldCameraZoom *zoom) {
     zoom->distance += zoom->step;
     zoom->elapsed++;
     if (zoom->elapsed >= zoom->duration) {

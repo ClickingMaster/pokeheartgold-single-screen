@@ -88,8 +88,8 @@ enum WobbuffetPopBonusTargetHitStep {
     WOBBUFFET_POP_BONUS_TARGET_HIT_HOP,
 };
 
-extern const u32 sWobbuffetPopCommands[];
-extern void (*const sWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
+extern const u32 gWobbuffetPopCommands[];
+extern void (*const gWobbuffetPopEventFuncs[])(WobbuffetPop *game, WobbuffetPopEvent *event);
 
 static void WobbuffetPopInflation_Start(BgConfig *bgConfig, int playerCount, int size, WobbuffetPopInflation *inflation);
 static void WobbuffetPopInflation_Stop(BgConfig *bgConfig, WobbuffetPopInflation *inflation);
@@ -2209,7 +2209,7 @@ BOOL WobbuffetPopPlazaScreen_Exit(OverlayManager *man, int *state) {
 }
 
 void WobbuffetPop_RegisterCommands(WobbuffetPop *game) {
-    Comm_RegisterCommandTable(sWobbuffetPopCommands, 4, game);
+    Comm_RegisterCommandTable(gWobbuffetPopCommands, 4, game);
 }
 
 u32 WobbuffetPop_GetEventCommandSize(void) {
@@ -2269,8 +2269,8 @@ BOOL WobbuffetPop_SendPlayerValue(void) {
 }
 
 BOOL WobbuffetPop_RunEvent(WobbuffetPop *game, WobbuffetPopEvent *event) {
-    if (sWobbuffetPopEventFuncs[event->kind] != NULL) {
-        sWobbuffetPopEventFuncs[event->kind](game, event);
+    if (gWobbuffetPopEventFuncs[event->kind] != NULL) {
+        gWobbuffetPopEventFuncs[event->kind](game, event);
         MI_CpuFill8(event, 0, sizeof(WobbuffetPopEvent));
         return TRUE;
     }

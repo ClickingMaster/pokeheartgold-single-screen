@@ -83,13 +83,13 @@ typedef struct VsRecorderRankingTeamCounts {
 
 BOOL VsRecorderApp_HasVisitedBattleFrontier(VsRecorderWork *work);
 
-extern const VsRecorderRankingTeamCounts sVsRecorderRankingTeamCounts;             // teams per kind: 16 trainer types, 12 months, 20 species
-extern const TouchscreenHitbox sVsRecorderRankingsHitboxes[];                      // SWITCH RANKINGS, SWITCH TEAMS, exit
-extern const VsRecorderRankingsWindowRect sVsRecorderRankingsButtonLabelWindows[]; // VsRecorderRankings.buttonLabels
-extern const VsRecorderRankingsWindowRect sVsRecorderRankingsThisWeekWindows[];    // VsRecorderRankings.windows, this week
-extern const VsRecorderRankingsWindowRect sVsRecorderRankingsLastWeekWindows[];    // VsRecorderRankings.windows, last week
-extern const VsRecorderListConfig sVsRecorderRankingsThisWeekListConfig;           // this week's ranking list
-extern const VsRecorderListConfig sVsRecorderRankingsLastWeekListConfig;           // last week's results list
+extern const VsRecorderRankingTeamCounts gVsRecorderRankingTeamCounts;             // teams per kind: 16 trainer types, 12 months, 20 species
+extern const TouchscreenHitbox gVsRecorderRankingsHitboxes[];                      // SWITCH RANKINGS, SWITCH TEAMS, exit
+extern const VsRecorderRankingsWindowRect gVsRecorderRankingsButtonLabelWindows[]; // VsRecorderRankings.buttonLabels
+extern const VsRecorderRankingsWindowRect gVsRecorderRankingsThisWeekWindows[];    // VsRecorderRankings.windows, this week
+extern const VsRecorderRankingsWindowRect gVsRecorderRankingsLastWeekWindows[];    // VsRecorderRankings.windows, last week
+extern const VsRecorderListConfig gVsRecorderRankingsThisWeekListConfig;           // this week's ranking list
+extern const VsRecorderListConfig gVsRecorderRankingsLastWeekListConfig;           // last week's results list
 
 // ranking list entry kinds (VsRecorderListEntry.msgId)
 #define RANKING_ENTRY_TRAINER_TYPE       10000
@@ -103,7 +103,7 @@ extern const VsRecorderListConfig sVsRecorderRankingsLastWeekListConfig;        
 
 #define RANKING_SCORE_MAX 9999999999999999999ULL
 
-// substates of the rankings screens (sVsRecorderRankingsSubStates)
+// substates of the rankings screens (gVsRecorderRankingsSubStates)
 #define RANKINGS_ENTER      1
 #define RANKINGS_DOWNLOAD   2
 #define RANKINGS_SWITCH     4
@@ -150,10 +150,10 @@ static void VsRecorder_InitRankingsList(VsRecorderWork *work) {
     VsRecorderRankings *rankings = work->screenWork;
 
     if (rankings->lastWeek == FALSE) {
-        rankings->listConfig = sVsRecorderRankingsThisWeekListConfig;
+        rankings->listConfig = gVsRecorderRankingsThisWeekListConfig;
         rankings->valueTemplate = NULL;
     } else {
-        rankings->listConfig = sVsRecorderRankingsLastWeekListConfig;
+        rankings->listConfig = gVsRecorderRankingsLastWeekListConfig;
         rankings->valueTemplate = NewString_ReadMsgData(work->recordMsgData, rankings->results[rankings->ranking].recordId + 94);
     }
     rankings->listConfig.count = rankings->teamCount;
@@ -229,7 +229,7 @@ static void VsRecorder_FillRankingEntries(VsRecorderWork *work) {
 // SWITCH RANKINGS / SWITCH TEAMS
 static void VsRecorder_CreateRankingsButtonLabels(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderRankingsWindowRect *rect = sVsRecorderRankingsButtonLabelWindows;
+    const VsRecorderRankingsWindowRect *rect = gVsRecorderRankingsButtonLabelWindows;
     int baseTile = 1;
     int i;
 
@@ -260,8 +260,8 @@ static void VsRecorder_RemoveRankingsButtonLabels(VsRecorderWork *work) {
 
 static void VsRecorder_CreateRankingsWindows(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderRankingsWindowRect *rect = sVsRecorderRankingsThisWeekWindows;
-    const VsRecorderRankingsWindowRect *lastWeekRect = sVsRecorderRankingsLastWeekWindows;
+    const VsRecorderRankingsWindowRect *rect = gVsRecorderRankingsThisWeekWindows;
+    const VsRecorderRankingsWindowRect *lastWeekRect = gVsRecorderRankingsLastWeekWindows;
     int baseTile = 1;
     VsRecorderRankings *rankings = work->screenWork;
     int i;
@@ -434,7 +434,7 @@ static void VsRecorder_FreeRankingsButtons(VsRecorderWork *work) {
 }
 
 static void VsRecorder_UpdateRankingTeamCount(VsRecorderRankings *rankings) {
-    VsRecorderRankingTeamCounts teamCounts = sVsRecorderRankingTeamCounts;
+    VsRecorderRankingTeamCounts teamCounts = gVsRecorderRankingTeamCounts;
     rankings->teamCount = teamCounts.counts[rankings->team];
 }
 
@@ -483,7 +483,7 @@ BOOL VsRecorder_RankingsInit(VsRecorderWork *work) {
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_2);
     BgClearTilemapBufferAndCommit(work->bgConfig, GF_BG_LYR_SUB_3);
     VsRecorder_InitBgBlend(&rankings->eva, &rankings->evb, 0);
-    rankings->hitboxController = TouchHitboxController_Create(sVsRecorderRankingsHitboxes, 3, VsRecorder_OnRankingsTouch, work, HEAP_ID_109);
+    rankings->hitboxController = TouchHitboxController_Create(gVsRecorderRankingsHitboxes, 3, VsRecorder_OnRankingsTouch, work, HEAP_ID_109);
     VsRecorder_SetSubState(work, RANKINGS_ENTER);
     return FALSE;
 }

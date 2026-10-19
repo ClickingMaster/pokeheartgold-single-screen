@@ -47,7 +47,7 @@ struct LockCapsuleCardView {
     BgConfig *bgConfig;
     MessageFormat *msgFormat;
     MsgData *msgData;
-    Window windows[11]; // card text boxes (sLockCapsuleCardTextBoxes)
+    Window windows[11]; // card text boxes (gLockCapsuleCardTextBoxes)
     u8 unk_2AB8[0x90];
     u32 baseTiles[11];
     u8 unk_2B74[0x24];
@@ -85,7 +85,7 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
-extern const WonderCardTextBox sLockCapsuleCardTextBoxes[11];
+extern const WonderCardTextBox gLockCapsuleCardTextBoxes[11];
 static u32 sLockCapsuleCardMenuInput;
 
 enum {
@@ -374,7 +374,7 @@ static void LockCapsuleCard_StartFade(LockCapsuleCardView *view, enum FadeType f
 }
 
 static void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int page) {
-    const WonderCardTextBox *boxes = sLockCapsuleCardTextBoxes;
+    const WonderCardTextBox *boxes = gLockCapsuleCardTextBoxes;
     u32 i;
     u32 baseTile;
     u32 color;
@@ -416,7 +416,7 @@ static void LockCapsuleCard_DrawCard(LockCapsuleCardView *view, int unused, int 
 }
 
 static int LockCapsuleCard_PrintTextBox(LockCapsuleCardView *view, Window *window, int boxId, int baseTile) {
-    const WonderCardTextBox *box = &sLockCapsuleCardTextBoxes[boxId];
+    const WonderCardTextBox *box = &gLockCapsuleCardTextBoxes[boxId];
 
     if (window->bgConfig == NULL) {
         AddWindowParameterized(view->bgConfig, window, GF_BG_LYR_MAIN_2, box->x, box->y, box->width, box->height, 15, baseTile);

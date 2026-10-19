@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "field/field_3d_model.h"
 #include "field/field_follow_mon.h"
 #include "field/map_load_manager.h"

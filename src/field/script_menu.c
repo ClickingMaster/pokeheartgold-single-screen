@@ -74,7 +74,28 @@ struct ScriptMenu {
     u16 unk_2DE;
 };
 
-void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData) {
+static void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
+static ScriptMenu *ScriptMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData);
+static void ScriptMenu_AppendItem(ScriptMenu *menu, u32 msgId, u32 value);
+static u32 ScriptMenu_GetItemsWidth(ScriptMenu *menu);
+static void ScriptMenu_SetupMultichoiceTemplate(ScriptMenu *menu);
+static void ScriptMenu_MultichoiceTask(SysTask *task, void *data);
+static void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width);
+static void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value);
+static u32 ScriptMenu_GetListItemsWidth(ScriptMenu *menu);
+static void ScriptMenu_SetupListTemplate(ScriptMenu *menu);
+static void ScriptMenu_ListItemPrintCallback(ScriptMenu *menu, s32 itemId, u8 onInit);
+static void ScriptMenu_ListMoveCursorCallback(ListMenu *listMenu, s32 itemId, u8 onInit);
+static void ScriptMenu_ListTask(SysTask *task, void *data);
+static void ScriptMenu_CloseList(ScriptMenu *menu);
+static void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed);
+static void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu);
+static void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y);
+static void ScriptMenu_FloorWindowTask(SysTask *task, void *data);
+static int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p);
+static void ScriptMenu_SetupGridTemplate(ScriptMenu *menu, u8 wide, u8 high);
+
+static void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData) {
     int i;
 
     if (msgData == NULL) {
@@ -114,7 +135,7 @@ void ScriptMenu_Init(FieldSystem *fieldSystem, ScriptMenu *menu, u8 x, u8 y, u8 
     *menu->ret_p = 0xEEEE;
 }
 
-ScriptMenu *ScriptMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData) {
+static ScriptMenu *ScriptMenu_New(FieldSystem *fieldSystem, u8 x, u8 y, u8 initCursorPos, u8 cancellable, u16 *ret_p, MessageFormat *msgFmt, Window *window, MsgData *msgData) {
     ScriptMenu *menu = Heap_Alloc(HEAP_ID_FIELD1, sizeof(ScriptMenu));
     if (menu == NULL) {
         return NULL;
@@ -148,10 +169,10 @@ void ScriptMenu_ShowMultichoice(ScriptMenu *menu) {
     DrawFrameAndWindow1(&menu->window, TRUE, 0x3D9, 11);
     ScriptMenu_SetupMultichoiceTemplate(menu);
     menu->menu2dPtr = Create2dMenu(&menu->menu2d, menu->initCursorPos, HEAP_ID_FIELD1);
-    menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_MultichoiceTask, menu, 0);
+    menu->task = SysTask_CreateOnMainQueue(ScriptMenu_MultichoiceTask, menu, 0);
 }
 
-void ScriptMenu_AppendItem(ScriptMenu *menu, u32 msgId, u32 value) {
+static void ScriptMenu_AppendItem(ScriptMenu *menu, u32 msgId, u32 value) {
     String *tmp = String_New(80, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, menu->strbufs[menu->count], tmp);
@@ -161,7 +182,7 @@ void ScriptMenu_AppendItem(ScriptMenu *menu, u32 msgId, u32 value) {
     menu->count++;
 }
 
-u32 ScriptMenu_GetItemsWidth(ScriptMenu *menu) {
+static u32 ScriptMenu_GetItemsWidth(ScriptMenu *menu) {
     u32 maxWidth = 0;
     int i;
 
@@ -179,7 +200,7 @@ u32 ScriptMenu_GetItemsWidth(ScriptMenu *menu) {
     return maxWidth + 12;
 }
 
-void ScriptMenu_SetupMultichoiceTemplate(ScriptMenu *menu) {
+static void ScriptMenu_SetupMultichoiceTemplate(ScriptMenu *menu) {
     menu->menu2d.items = (ListMenuItem *)menu->entries;
     menu->menu2d.window = &menu->window;
     menu->menu2d.fontId = 0;
@@ -194,7 +215,8 @@ void ScriptMenu_SetupMultichoiceTemplate(ScriptMenu *menu) {
     }
 }
 
-void ScriptMenu_MultichoiceTask(SysTask *task, ScriptMenu *menu) {
+static void ScriptMenu_MultichoiceTask(SysTask *task, void *data) {
+    ScriptMenu *menu = data;
     if (menu->delay != 0) {
         menu->delay--;
         return;
@@ -273,7 +295,7 @@ void ScriptMenu_ShowListWithWidth(ScriptMenu *menu, u16 width) {
     ScriptMenu_OpenListWindow(menu, width);
 }
 
-void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width) {
+static void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width) {
     if (menu->count > 8) {
         AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->window, GF_BG_LYR_MAIN_3, menu->x, menu->y, (u8)width, 16, 13, 0x3D);
     } else {
@@ -284,7 +306,7 @@ void ScriptMenu_OpenListWindow(ScriptMenu *menu, u32 width) {
     ScriptMenu_SetupListTemplate(menu);
     menu->listMenu = ListMenuInit(&menu->listTemplate, 0, menu->initCursorPos, HEAP_ID_FIELD1);
     ScriptMenu_PrintCursorHelpMessage(menu);
-    menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_ListTask, menu, 0);
+    menu->task = SysTask_CreateOnMainQueue(ScriptMenu_ListTask, menu, 0);
 }
 
 void ScriptMenu_ShowListAtPosition(ScriptMenu *menu, u16 *scroll_p, u16 *row_p) {
@@ -318,10 +340,10 @@ void ScriptMenu_ShowListAtPosition(ScriptMenu *menu, u16 *scroll_p, u16 *row_p) 
     menu->lastRow = *menu->scroll_p + *menu->row_p;
     menu->listMenu = ListMenuInit(&menu->listTemplate, *scroll_p, *row_p, HEAP_ID_FIELD1);
     ScriptMenu_PrintCursorHelpMessage(menu);
-    menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_ListTask, menu, 0);
+    menu->task = SysTask_CreateOnMainQueue(ScriptMenu_ListTask, menu, 0);
 }
 
-void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value) {
+static void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int value) {
     String *tmp = String_New(80, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
     StringExpandPlaceholders(menu->msgFmt, menu->strbufs[menu->count], tmp);
@@ -336,7 +358,7 @@ void ScriptMenu_AppendListItem(ScriptMenu *menu, int msgId, int helpMsgId, int v
     menu->count++;
 }
 
-u32 ScriptMenu_GetListItemsWidth(ScriptMenu *menu) {
+static u32 ScriptMenu_GetListItemsWidth(ScriptMenu *menu) {
     u32 maxWidth = 0;
     int i;
 
@@ -354,7 +376,7 @@ u32 ScriptMenu_GetListItemsWidth(ScriptMenu *menu) {
     return maxWidth + 12;
 }
 
-void ScriptMenu_SetupListTemplate(ScriptMenu *menu) {
+static void ScriptMenu_SetupListTemplate(ScriptMenu *menu) {
     menu->listTemplate.items = menu->items;
     menu->listTemplate.moveCursorFunc = (LM_MoveCursorFunc_t)ScriptMenu_ListMoveCursorCallback;
     menu->listTemplate.itemPrintFunc = (LM_ItemPrintFunc_t)ScriptMenu_ListItemPrintCallback;
@@ -376,7 +398,7 @@ void ScriptMenu_SetupListTemplate(ScriptMenu *menu) {
     menu->listTemplate.data = menu;
 }
 
-void ScriptMenu_ListItemPrintCallback(ScriptMenu *menu, s32 itemId, u8 onInit) {
+static void ScriptMenu_ListItemPrintCallback(ScriptMenu *menu, s32 itemId, u8 onInit) {
     if (itemId == -3) {
         ListMenuOverrideSetColors((ListMenu *)menu, 3, 15, 4);
     } else {
@@ -384,7 +406,7 @@ void ScriptMenu_ListItemPrintCallback(ScriptMenu *menu, s32 itemId, u8 onInit) {
     }
 }
 
-void ScriptMenu_ListMoveCursorCallback(ListMenu *listMenu, s32 itemId, u8 onInit) {
+static void ScriptMenu_ListMoveCursorCallback(ListMenu *listMenu, s32 itemId, u8 onInit) {
     u16 row;
     u16 scroll;
     ScriptMenu *menu;
@@ -399,7 +421,8 @@ void ScriptMenu_ListMoveCursorCallback(ListMenu *listMenu, s32 itemId, u8 onInit
     }
 }
 
-void ScriptMenu_ListTask(SysTask *task, ScriptMenu *menu) {
+static void ScriptMenu_ListTask(SysTask *task, void *data) {
+    ScriptMenu *menu = data;
     if (menu->delay != 0) {
         menu->delay--;
         return;
@@ -436,7 +459,7 @@ void ScriptMenu_ListTask(SysTask *task, ScriptMenu *menu) {
     }
 }
 
-void ScriptMenu_CloseList(ScriptMenu *menu) {
+static void ScriptMenu_CloseList(ScriptMenu *menu) {
     int i;
 
     PlaySE(SEQ_SE_DP_SELECT);
@@ -453,7 +476,7 @@ void ScriptMenu_CloseList(ScriptMenu *menu) {
     Heap_Free(menu);
 }
 
-void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed) {
+static void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed) {
     String *tmp = String_New(90, HEAP_ID_FIELD1);
     String *dest = String_New(90, HEAP_ID_FIELD1);
     FillWindowPixelBuffer(menu->printWindow, 15);
@@ -464,7 +487,7 @@ void ScriptMenu_PrintHelpMessage(ScriptMenu *menu, u32 msgId, u32 textSpeed) {
     String_Delete(dest);
 }
 
-void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu) {
+static void ScriptMenu_PrintCursorHelpMessage(ScriptMenu *menu) {
     ListMenuGetCurrentItemArrayId(menu->listMenu, &menu->cursorPos);
     if (menu->msgIds[menu->cursorPos] != 0xFF) {
         ScriptMenu_PrintHelpMessage(menu, menu->msgIds[menu->cursorPos], 0);
@@ -499,11 +522,11 @@ void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, 
     ScriptMenu_PrintMessage(menu, (u16)msg, flag, 16);
     menu->menu2d.window = &menu->window;
     CopyWindowToVram(&menu->window);
-    menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_FloorWindowTask, menu, 0);
+    menu->task = SysTask_CreateOnMainQueue(ScriptMenu_FloorWindowTask, menu, 0);
 }
 #pragma opt_propagation reset
 
-void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
+static void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
     String *tmp = String_New(90, HEAP_ID_FIELD1);
     String *dest = String_New(90, HEAP_ID_FIELD1);
     ReadMsgDataIntoString(menu->msgData, msgId, tmp);
@@ -513,7 +536,8 @@ void ScriptMenu_PrintMessage(ScriptMenu *menu, u16 msgId, u8 x, u8 y) {
     String_Delete(dest);
 }
 
-void ScriptMenu_FloorWindowTask(SysTask *task, ScriptMenu *menu) {
+static void ScriptMenu_FloorWindowTask(SysTask *task, void *data) {
+    ScriptMenu *menu = data;
     int i;
 
     if (*menu->ret_p != 0xFFFF) {
@@ -585,7 +609,7 @@ int MapNumToFloorNo(int mapId) {
     }
 }
 
-int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p) {
+static int GetFloorNameMessage(u32 mapId, int floor, u8 *width_p) {
     switch (mapId) {
     case MAP_GOLDENROD_DEPARTMENT_STORE_ELEVATOR:
         if (floor == 0) {
@@ -625,10 +649,10 @@ void ScriptMenu_ShowMultichoiceGrid(ScriptMenu *menu, u8 numColumns) {
     DrawFrameAndWindow1(&menu->window, TRUE, 0x3D9, 11);
     ScriptMenu_SetupGridTemplate(menu, numColumns, numRows);
     menu->menu2dPtr = Create2dMenu(&menu->menu2d, menu->initCursorPos, HEAP_ID_FIELD1);
-    menu->task = SysTask_CreateOnMainQueue((SysTaskFunc)ScriptMenu_MultichoiceTask, menu, 0);
+    menu->task = SysTask_CreateOnMainQueue(ScriptMenu_MultichoiceTask, menu, 0);
 }
 
-void ScriptMenu_SetupGridTemplate(ScriptMenu *menu, u8 wide, u8 high) {
+static void ScriptMenu_SetupGridTemplate(ScriptMenu *menu, u8 wide, u8 high) {
     menu->menu2d.items = (ListMenuItem *)menu->entries;
     menu->menu2d.window = &menu->window;
     menu->menu2d.fontId = 0;

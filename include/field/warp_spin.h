@@ -14,9 +14,6 @@ typedef struct WarpSpinTask {
     int facing;
 } WarpSpinTask;
 
-void WarpSpin_RotatePlayer(WarpSpinTask *task);
-void Task_WarpSpinDeparture(SysTask *sysTask, WarpSpinTask *task);
-void Task_WarpSpinArrival(SysTask *sysTask, WarpSpinTask *task);
 void FieldSystem_StartWarpSpin(FieldSystem *fieldSystem, BOOL departing, int *done);
 
 #endif // POKEHEARTGOLD_FIELD_WARP_SPIN_H

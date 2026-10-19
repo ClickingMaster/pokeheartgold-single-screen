@@ -16,10 +16,5 @@ typedef struct SpinSlideTask {
 } SpinSlideTask;
 
 BOOL PlayerAvatar_TryStartSpinSlide(FieldSystem *fieldSystem, PlayerAvatar *avatar, int facingDirection);
-void SpinSlide_Start(FieldSystem *fieldSystem, PlayerAvatar *avatar, int direction);
-int SpinSlide_RotateDirection(int direction);
-BOOL Task_SpinSlide(TaskManager *taskManager);
-void *SpinSlide_AllocZeroed(u32 size);
-void SpinSlide_Free(void *ptr);
 
 #endif // POKEHEARTGOLD_FIELD_SPIN_SLIDE_H

@@ -31,19 +31,19 @@
 // Placement offsets: [0..1] across for 2x1 objects, [2..3] along for 1x2 objects, [4..5] for 2x2 objects.
 extern const u8 gSafariZonePlacementOffsets[];
 
-BOOL MapId_IsSafariZone(u32 mapId);
-int SafariZone_GetAreaIndexAt(s32 x, s32 z);
-BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData);
-BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
-BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
-BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
-BOOL SafariZone_CanPlaceObjectOn(u8 behavior, BOOL blocked, u32 onWater);
+static BOOL MapId_IsSafariZone(u32 mapId);
+static int SafariZone_GetAreaIndexAt(s32 x, s32 z);
+static BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData);
+static BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
+static BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
+static BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater);
+static BOOL SafariZone_CanPlaceObjectOn(u8 behavior, BOOL blocked, u32 onWater);
 
-BOOL MapId_IsSafariZone(u32 mapId) {
+static BOOL MapId_IsSafariZone(u32 mapId) {
     return mapId == MAP_SAFARI_ZONE_ENTRANCE_EXTERIOR;
 }
 
-int SafariZone_GetAreaIndexAt(s32 x, s32 z) {
+static int SafariZone_GetAreaIndexAt(s32 x, s32 z) {
     int area = (x - SAFARI_AREA_MIN_X) / 32 + ((z - SAFARI_AREA_MIN_Z) / 32) * 3;
     if (area < 0 || area >= 6) {
         area = 0;
@@ -184,7 +184,7 @@ SafariDecorationArgs *SafariDecoration_CreateArgs(FieldSystem *fieldSystem, enum
     return args;
 }
 
-BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData) {
+static BOOL SafariZone_IsWaterObjectPlacementUnlocked(SaveData *saveData) {
     u32 trainerId = PlayerProfile_GetTrainerID(Save_PlayerData_GetProfile(saveData));
     int unlockLevel = SafariZone_GetObjectUnlockLevel(Save_SafariZone_Get(saveData));
     u8 digit = trainerId % 10;
@@ -253,11 +253,12 @@ u16 FieldSystem_GetFacingSafariObject(FieldSystem *fieldSystem, u16 *objectIndex
             return object->id;
         }
     }
+    // BUG: objectIndex is written without the NULL check made above.
     *objectIndex = 0;
     return 0xFF;
 }
 
-BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
+static BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
     u8 query[3];
     u8 behavior;
     BOOL blocked;
@@ -330,7 +331,7 @@ BOOL SafariZone_FindSpotFor1x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     return FALSE;
 }
 
-BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
+static BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
     u8 query[3];
     u8 behavior;
     BOOL blocked;
@@ -396,7 +397,7 @@ BOOL SafariZone_FindSpotFor2x1Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     return FALSE;
 }
 
-BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
+static BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 direction, fx32 y, s16 *outX, s16 *outZ, u8 onWater) {
     s8 offsets[2];
     int i;
 
@@ -441,7 +442,7 @@ BOOL SafariZone_FindSpotFor2x2Object(FieldSystem *fieldSystem, s16 x, s16 z, u8 
     return FALSE;
 }
 
-BOOL SafariZone_CanPlaceObjectOn(u8 behavior, BOOL blocked, u32 onWater) {
+static BOOL SafariZone_CanPlaceObjectOn(u8 behavior, BOOL blocked, u32 onWater) {
     if (onWater == FALSE) {
         return SafariZone_CanPlaceObjectOnLand(behavior, blocked);
     }

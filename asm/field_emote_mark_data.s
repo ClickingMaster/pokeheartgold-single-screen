@@ -19,8 +19,8 @@
 	.public MapObjectEmoteMarkEffect_Init
 	.public MapObjectEmoteMarkEffect_Update
 	.public sEmoteMarkTemplate
-	.public sMapObjectEmoteMarkTemplate
-	.public sEmoteMarkRecordParams
+	.public gMapObjectEmoteMarkTemplate
+	.public gEmoteMarkRecordParams
 
 	.rodata
 
@@ -31,13 +31,13 @@ sEmoteMarkTemplate:
 	.word EmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-sMapObjectEmoteMarkTemplate:
+gMapObjectEmoteMarkTemplate:
 	.word 0x00000044
 	.word MapObjectEmoteMarkEffect_Init
 	.word EmoteMarkEffect_Destroy
 	.word MapObjectEmoteMarkEffect_Update
 	.word EmoteMarkEffect_Draw
 
-sEmoteMarkRecordParams:
+gEmoteMarkRecordParams:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

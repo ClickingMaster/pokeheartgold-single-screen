@@ -5,6 +5,7 @@
 #include "constants/heap.h"
 #include "constants/items.h"
 #include "constants/pokemon.h"
+#include "constants/sndseq.h"
 #include "constants/species.h"
 
 #include "field_system.h"
@@ -74,8 +75,8 @@ BOOL ItemIsTMOrHM(u16 item) {
     return FALSE;
 }
 
-u16 GetOakJohtoDexRating(u16 count, u16 caughtAll, u16 *music) {
-    *music = 1194;
+u16 GetOakJohtoDexRating(u16 count, u16 playerGender, u16 *fanfare) {
+    *fanfare = SEQ_ME_HYOUKA1;
     if (count <= 9) {
         return 28;
     }
@@ -130,15 +131,15 @@ u16 GetOakJohtoDexRating(u16 count, u16 caughtAll, u16 *music) {
     if (count <= 253) {
         return 45;
     }
-    *music = 1199;
-    if (caughtAll) {
+    *fanfare = SEQ_ME_HYOUKA6;
+    if (playerGender) {
         return 23;
     }
     return 22;
 }
 
-u16 GetOakNationalDexRating(u16 count, u16 caughtAll, u16 *music) {
-    *music = 1194;
+u16 GetOakNationalDexRating(u16 count, u16 playerGender, u16 *fanfare) {
+    *fanfare = SEQ_ME_HYOUKA1;
     if (count <= 100) {
         return 46;
     }
@@ -172,8 +173,8 @@ u16 GetOakNationalDexRating(u16 count, u16 caughtAll, u16 *music) {
     if (count <= 483) {
         return 56;
     }
-    *music = 1199;
-    if (caughtAll) {
+    *fanfare = SEQ_ME_HYOUKA6;
+    if (playerGender) {
         return 25;
     }
     return 24;
@@ -184,7 +185,7 @@ u16 Save_GetPartyLead(SaveData *saveData) {
     u16 count = Party_GetCount(SaveArray_Party_Get(saveData));
 
     for (i = 0; i < count; i++) {
-        void *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
+        Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
         if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == 0) {
             return i;
         }
@@ -197,7 +198,7 @@ u16 Save_GetPartyLeadAlive(SaveData *saveData) {
     u16 count = Party_GetCount(SaveArray_Party_Get(saveData));
 
     for (i = 0; i < count; i++) {
-        void *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
+        Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), i);
         if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == 0 && GetMonData(mon, MON_DATA_HP, NULL) != 0) {
             return i;
         }
@@ -207,14 +208,14 @@ u16 Save_GetPartyLeadAlive(SaveData *saveData) {
 
 BOOL Save_PlayerHasAllRegisInParty(SaveData *saveData) {
     int found = 0;
-    void *party = SaveArray_Party_Get(saveData);
+    Party *party = SaveArray_Party_Get(saveData);
     int count = Party_GetCount(party);
     u16 species[6];
     int i;
     int j;
 
     for (i = 0; i < count; i++) {
-        species[i] = GetMonData(Party_GetMonByIndex(party, i), 5, NULL);
+        species[i] = GetMonData(Party_GetMonByIndex(party, i), MON_DATA_SPECIES, NULL);
     }
     for (i = 0; i < 3; i++) {
         for (j = 0; j < count; j++) {
@@ -242,6 +243,7 @@ static BOOL Task_SpinMapObject(TaskManager *taskManager) {
     product *= radius;
     position.x = (int)((product + 0x800) >> 12);
     radius = environment->zRadius;
+    // BUG: z takes the sine as well, so the object sways back and forth along a diagonal instead of circling.
     product = GF_SinDegNoWrap(environment->angle);
     product *= radius;
     position.z = (int)((product + 0x800) >> 12);

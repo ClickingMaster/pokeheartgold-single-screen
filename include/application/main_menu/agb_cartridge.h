@@ -11,7 +11,7 @@
 // Results of PmAgbCartridgeGetOffsets / PmAgbCartridge_LoadSave / the save functions
 #define PM_AGB_RESULT_OK                 0
 #define PM_AGB_RESULT_NO_CARTRIDGE       1 // no GBA cartridge inserted
-#define PM_AGB_RESULT_UNKNOWN_GAME       2 // game code not in sPmAgbRomCodeMappings
+#define PM_AGB_RESULT_UNKNOWN_GAME       2 // game code not in gPmAgbRomCodeMappings
 #define PM_AGB_RESULT_NO_FLASH           3 // no flash backup chip
 #define PM_AGB_RESULT_BAD_HEADER         4 // Nintendo logo or header checksum mismatch / save sectors missing
 #define PM_AGB_RESULT_SAVE_DAMAGED       5
@@ -30,7 +30,7 @@
 #define AGB_BOX_COUNT     14
 #define AGB_BOX_MON_COUNT 30
 
-// One entry of sPmAgbRomCodeMappings
+// One entry of gPmAgbRomCodeMappings
 typedef struct PmAgbCartridgeSpec {
     u32 gameCode; // "AXVE" etc.
     u8 gameType;  // 0 Ruby/Sapphire (fixed save layout), 1 FireRed/LeafGreen, 2 Emerald (layout from the ROM header)
@@ -38,7 +38,7 @@ typedef struct PmAgbCartridgeSpec {
     u16 language;
 } PmAgbCartridgeSpec;
 
-// sPmAgbCartridgeSpec
+// gPmAgbCartridgeSpec
 typedef struct PmAgbCartridge {
     PmAgbCartridgeSpec *spec; // the inserted game, NULL if none was identified
     int saveSlot;             // slot the next save goes to (-1: none)

@@ -67,25 +67,25 @@ typedef struct ApricornBoxListDesc {
     const u8 *messages;
 } ApricornBoxListDesc;
 
-extern const u8 sApricornBoxQuantityDigitX[];
-extern const TouchscreenListMenuTemplate sApricornBoxListMenuTemplates[2];
-extern const ResdatIdList sApricornBoxSpriteResources;
-extern const GraphicsModes sApricornBoxGraphicsModes;
-extern const u8 sApricornBoxListMenu0Messages[3];
-extern const u8 sApricornBoxListMenu1Messages[2];
-extern const ApricornBoxListDesc sApricornBoxListMenus[2];
-extern const OamCharTransferParam sApricornBoxOamCharTransferParam;
-extern const BgTemplate sApricornBoxBgTemplate_Sub3;
-extern const BgTemplate sApricornBoxBgTemplate_Main0;
-extern const u16 sApricornBoxApricornPositions[7][2];
-extern const BgTemplate sApricornBoxBgTemplate_Main3;
-extern const BgTemplate sApricornBoxBgTemplate_Main1;
-extern const BgTemplate sApricornBoxBgTemplate_Sub0;
-extern const BgTemplate sApricornBoxBgTemplate_Main2;
-extern const OamManagerParam sApricornBoxOamManagerParam;
-extern const GraphicsBanks sApricornBoxGraphicsBanks;
-extern const WindowTemplate sApricornBoxWindowTemplates[];
-extern const UnmanagedSpriteTemplate sApricornBoxSpriteTemplates[7];
+extern const u8 gApricornBoxQuantityDigitX[];
+extern const TouchscreenListMenuTemplate gApricornBoxListMenuTemplates[2];
+extern const ResdatIdList gApricornBoxSpriteResources;
+extern const GraphicsModes gApricornBoxGraphicsModes;
+extern const u8 gApricornBoxListMenu0Messages[3];
+extern const u8 gApricornBoxListMenu1Messages[2];
+extern const ApricornBoxListDesc gApricornBoxListMenus[2];
+extern const OamCharTransferParam gApricornBoxOamCharTransferParam;
+extern const BgTemplate gApricornBoxBgTemplate_Sub3;
+extern const BgTemplate gApricornBoxBgTemplate_Main0;
+extern const u16 gApricornBoxApricornPositions[7][2];
+extern const BgTemplate gApricornBoxBgTemplate_Main3;
+extern const BgTemplate gApricornBoxBgTemplate_Main1;
+extern const BgTemplate gApricornBoxBgTemplate_Sub0;
+extern const BgTemplate gApricornBoxBgTemplate_Main2;
+extern const OamManagerParam gApricornBoxOamManagerParam;
+extern const GraphicsBanks gApricornBoxGraphicsBanks;
+extern const WindowTemplate gApricornBoxWindowTemplates[];
+extern const UnmanagedSpriteTemplate gApricornBoxSpriteTemplates[7];
 
 static void ApricornBoxScreen_InitFromArgs(ApricornBoxScreen *screen);
 static void ApricornBoxScreen_RestoreMenuInputState(ApricornBoxScreen *screen);
@@ -795,8 +795,8 @@ void ApricornBoxScreen_UpdateCursor(ApricornBoxScreen *screen) {
         y = 168;
         break;
     default:
-        x = sApricornBoxApricornPositions[index][0] + 4;
-        y = sApricornBoxApricornPositions[index][1] - 16;
+        x = gApricornBoxApricornPositions[index][0] + 4;
+        y = gApricornBoxApricornPositions[index][1] - 16;
         break;
     }
     Sprite_SetPositionXY(screen->sprites[1], x, y);
@@ -830,7 +830,7 @@ static void ApricornBoxScreen_DrawApricornCount(ApricornBoxScreen *screen, u8 in
         AddTextPrinterParameterizedWithColor((Window *)(windowBase + windowOffset), 0, screen->string, (16 - width) / 2, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram((Window *)(windowBase + windowOffset));
     }
-    Sprite_SetPositionXY(*spriteSlot, sApricornBoxApricornPositions[index][0], sApricornBoxApricornPositions[index][1]);
+    Sprite_SetPositionXY(*spriteSlot, gApricornBoxApricornPositions[index][0], gApricornBoxApricornPositions[index][1]);
 }
 
 void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
@@ -842,7 +842,7 @@ void ApricornBoxScreen_PrintQuantity(ApricornBoxScreen *screen, int value) {
         BufferIntegerAsString(screen->msgFormat, 0, digits[i], 1, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(screen->msgFormat, screen->string, screen->numberTemplate);
         FillWindowPixelBuffer(&screen->windows[i + 8], 0);
-        AddTextPrinterParameterizedWithColor(&screen->windows[i + 8], 0, screen->string, sApricornBoxQuantityDigitX[i], 3, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
+        AddTextPrinterParameterizedWithColor(&screen->windows[i + 8], 0, screen->string, gApricornBoxQuantityDigitX[i], 3, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
         ScheduleWindowCopyToVram(&screen->windows[i + 8]);
         if (screen->apricornCounts[screen->selectedApricorn] < 10) {
             break;
@@ -981,12 +981,12 @@ static void ApricornBoxScreen_CreateJuiceMenu(ApricornBoxScreen *screen) {
     u8 y;
     u8 x;
     MI_CpuFill8(&header, 0, sizeof(header));
-    header.template = sApricornBoxListMenuTemplates[1];
+    header.template = gApricornBoxListMenuTemplates[1];
     header.listMenuItems = screen->listMenuItems;
     header.bgConfig = screen->bgConfig;
-    header.numWindows = sApricornBoxListMenus[screen->mode - 1].count;
-    y = sApricornBoxListMenus[screen->mode - 1].y;
-    x = sApricornBoxListMenus[screen->mode - 1].x;
+    header.numWindows = gApricornBoxListMenus[screen->mode - 1].count;
+    y = gApricornBoxListMenus[screen->mode - 1].y;
+    x = gApricornBoxListMenus[screen->mode - 1].x;
     screen->listMenu = TouchscreenListMenu_Create(screen->spawner, &header, (u8)screen->menuInputState, x, y, 8, 0);
 }
 
@@ -1132,9 +1132,9 @@ static void ApricornBoxScreen_StartMoveTask(ApricornBoxScreen *screen, int index
         move->x = 192 + index * 4;
         move->y = 96 + index * -10;
     } else {
-        base = sApricornBoxApricornPositions[move->apricorn][0];
+        base = gApricornBoxApricornPositions[move->apricorn][0];
         move->x = base + index * 4;
-        base = sApricornBoxApricornPositions[move->apricorn][1];
+        base = gApricornBoxApricornPositions[move->apricorn][1];
         move->y = base + index * -10;
     }
     dx = move->x - x;
@@ -1173,7 +1173,7 @@ static void ApricornBoxScreen_VBlankCB(ApricornBoxScreen *screen) {
 }
 
 static void ApricornBoxScreen_SetGfxBanks(void) {
-    GraphicsBanks banks = sApricornBoxGraphicsBanks;
+    GraphicsBanks banks = gApricornBoxGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -1181,37 +1181,37 @@ static void ApricornBoxScreen_InitBgs(ApricornBoxScreen *screen) {
     ApricornBoxScreen_SetGfxBanks();
     screen->bgConfig = BgConfig_Alloc(screen->heapId);
     {
-        GraphicsModes modes = sApricornBoxGraphicsModes;
+        GraphicsModes modes = gApricornBoxGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
     }
     reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
     {
-        BgTemplate template = sApricornBoxBgTemplate_Sub0;
+        BgTemplate template = gApricornBoxBgTemplate_Sub0;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_SUB_0);
     {
-        BgTemplate template = sApricornBoxBgTemplate_Sub3;
+        BgTemplate template = gApricornBoxBgTemplate_Sub3;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_SUB_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_SUB_3);
     {
-        BgTemplate template = sApricornBoxBgTemplate_Main0;
+        BgTemplate template = gApricornBoxBgTemplate_Main0;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_MAIN_0, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_MAIN_0);
     {
-        BgTemplate template = sApricornBoxBgTemplate_Main1;
+        BgTemplate template = gApricornBoxBgTemplate_Main1;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_MAIN_1);
     {
-        BgTemplate template = sApricornBoxBgTemplate_Main2;
+        BgTemplate template = gApricornBoxBgTemplate_Main2;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_MAIN_2);
     {
-        BgTemplate template = sApricornBoxBgTemplate_Main3;
+        BgTemplate template = gApricornBoxBgTemplate_Main3;
         InitBgFromTemplate(screen->bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
     }
     BgClearTilemapBufferAndCommit(screen->bgConfig, GF_BG_LYR_MAIN_3);
@@ -1299,7 +1299,7 @@ static void ApricornBoxScreen_AddWindows(ApricornBoxScreen *screen) {
     int i = 0;
     int tile;
     int y;
-    const WindowTemplate *template = sApricornBoxWindowTemplates;
+    const WindowTemplate *template = gApricornBoxWindowTemplates;
     Window *window = &screen->windows[0];
     for (; i < 11; i++) {
         AddWindow(screen->bgConfig, window, template);
@@ -1333,8 +1333,8 @@ static void ApricornBoxScreen_CreateListMenuItems(ApricornBoxScreen *screen) {
     int i;
     if (screen->mode != APRICORN_BOX_MODE_VIEW) {
         int offset = (screen->mode - 1) * 8;
-        const ApricornBoxListDesc *desc = (const ApricornBoxListDesc *)((const u8 *)sApricornBoxListMenus + offset);
-        screen->listMenuItems = ListMenuItems_New(*(const u16 *)((const u8 *)sApricornBoxListMenus + offset), screen->heapId);
+        const ApricornBoxListDesc *desc = (const ApricornBoxListDesc *)((const u8 *)gApricornBoxListMenus + offset);
+        screen->listMenuItems = ListMenuItems_New(*(const u16 *)((const u8 *)gApricornBoxListMenus + offset), screen->heapId);
         for (i = 0; i < desc->count; i++) {
             ListMenuItems_AppendFromMsgData(screen->listMenuItems, screen->msgData, desc->messages[i], i);
         }
@@ -1351,12 +1351,12 @@ static void ApricornBoxScreen_FreeListMenuItems(ApricornBoxScreen *screen) {
 static void ApricornBoxScreen_InitSpriteSystem(ApricornBoxScreen *screen) {
     GF_CreateVramTransferManager(32, screen->heapId);
     screen->spriteSystem = SpriteSystem_Alloc(screen->heapId);
-    SpriteSystem_Init(screen->spriteSystem, &sApricornBoxOamManagerParam, &sApricornBoxOamCharTransferParam, 3);
+    SpriteSystem_Init(screen->spriteSystem, &gApricornBoxOamManagerParam, &gApricornBoxOamCharTransferParam, 3);
     thunk_ClearMainOAM(screen->heapId);
     thunk_ClearSubOAM(screen->heapId);
     screen->spriteManager = SpriteManager_New(screen->spriteSystem);
     SpriteSystem_InitSprites(screen->spriteSystem, screen->spriteManager, 15);
-    SpriteSystem_LoadResourceDataFromFileIdListEx(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteResources, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteResources, 0, 0);
     screen->spawner = TouchscreenListMenuSpawner_Create(screen->heapId, NULL);
 }
 
@@ -1385,7 +1385,7 @@ static void ApricornBoxScreen_FreeSprites(ApricornBoxScreen *screen) {
 static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     int y;
     int i;
-    const UnmanagedSpriteTemplate *template = sApricornBoxSpriteTemplates;
+    const UnmanagedSpriteTemplate *template = gApricornBoxSpriteTemplates;
     const s16 *position;
     u8 *cursor;
     for (i = 0; i <= 1; template ++, i++) {
@@ -1394,10 +1394,10 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         Sprite_SetAnimActiveFlag(screen->sprites[i], TRUE);
     }
     Sprite_SetPriority(screen->sprites[1], 2);
-    position = (const s16 *)sApricornBoxApricornPositions;
+    position = (const s16 *)gApricornBoxApricornPositions;
     for (i = 0; i < 7; position += 2, i++) {
         cursor = (u8 *)screen + (u8)(i + 2) * sizeof(Sprite *);
-        ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[2]);
+        ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[2]);
         Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], position[0], position[1]);
         Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
         Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
@@ -1409,7 +1409,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         u8 *target;
         for (i = 0; i < 2; i++) {
             target = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)target)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[i + 3]);
+            ((ApricornBoxScreen *)target)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[i + 3]);
             Sprite_SetDrawFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
             Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
         }
@@ -1421,7 +1421,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         int anim;
         for (i = 0, y = 112, anim = 28; i < 2; anim += 2, y += 24, i++) {
             cursor = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[5]);
+            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[5]);
             Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 160, y);
             Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
             Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
@@ -1431,7 +1431,7 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
         for (i = 0; i < 4; i++) {
             int column;
             cursor = (u8 *)screen + (u8)(i + 11) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &sApricornBoxSpriteTemplates[6]);
+            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[6]);
             column = i % 2;
             Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 103 + (i / 2) * -22, 96 + column * 40);
             Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);

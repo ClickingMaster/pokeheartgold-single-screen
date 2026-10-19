@@ -14,6 +14,12 @@
 #include "player_avatar_movement.h"
 #include "sound_playback.h"
 
+static void SpinSlide_Start(FieldSystem *fieldSystem, PlayerAvatar *avatar, int direction);
+static int SpinSlide_RotateDirection(int direction);
+static BOOL Task_SpinSlide(TaskManager *taskManager);
+static void *SpinSlide_AllocZeroed(u32 size);
+static void SpinSlide_Free(void *ptr);
+
 BOOL PlayerAvatar_TryStartSpinSlide(FieldSystem *fieldSystem, PlayerAvatar *avatar, int facingDirection) {
     u8 behavior = MapObject_GetCurrentMetatileBehavior(PlayerAvatar_GetMapObject(avatar));
     int direction;
@@ -33,7 +39,7 @@ BOOL PlayerAvatar_TryStartSpinSlide(FieldSystem *fieldSystem, PlayerAvatar *avat
     return TRUE;
 }
 
-void SpinSlide_Start(FieldSystem *fieldSystem, PlayerAvatar *avatar, int direction) {
+static void SpinSlide_Start(FieldSystem *fieldSystem, PlayerAvatar *avatar, int direction) {
     SpinSlideTask *task = SpinSlide_AllocZeroed(sizeof(SpinSlideTask));
 
     task->fieldSystem = fieldSystem;
@@ -50,7 +56,7 @@ enum SpinSlideState {
 };
 
 // A quarter turn counterclockwise.
-int SpinSlide_RotateDirection(int direction) {
+static int SpinSlide_RotateDirection(int direction) {
     switch (direction) {
     case DIR_NORTH:
         return DIR_WEST;
@@ -65,7 +71,7 @@ int SpinSlide_RotateDirection(int direction) {
     }
 }
 
-BOOL Task_SpinSlide(TaskManager *taskManager) {
+static BOOL Task_SpinSlide(TaskManager *taskManager) {
     SpinSlideTask *task = TaskManager_GetEnvironment(taskManager);
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(task->avatar);
     u8 behavior = MapObject_GetCurrentMetatileBehavior(mapObject);
@@ -130,7 +136,7 @@ BOOL Task_SpinSlide(TaskManager *taskManager) {
     return FALSE;
 }
 
-void *SpinSlide_AllocZeroed(u32 size) {
+static void *SpinSlide_AllocZeroed(u32 size) {
     void *ptr = Heap_AllocAtEnd(HEAP_ID_FIELD1, size);
 
     GF_ASSERT(ptr != NULL);
@@ -138,6 +144,6 @@ void *SpinSlide_AllocZeroed(u32 size) {
     return ptr;
 }
 
-void SpinSlide_Free(void *ptr) {
+static void SpinSlide_Free(void *ptr) {
     Heap_FreeExplicit(HEAP_ID_FIELD1, ptr);
 }

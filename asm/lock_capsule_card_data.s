@@ -6,12 +6,12 @@
 	.public LockCapsuleCard_PrintNothing
 	.public LockCapsuleCard_PrintStatus
 	.public LockCapsuleCard_ShowCardMenu
-	.public sLockCapsuleCardTextBoxes
+	.public gLockCapsuleCardTextBoxes
 
 	.data
 
 	; page, x, y, width, height, font, colour, fill, message, print function, text x, text y
-sLockCapsuleCardTextBoxes:
+gLockCapsuleCardTextBoxes:
 	.word 0, 2, 2, 0xC, 2, 1, 0x00010200, -1, 0x25, LockCapsuleCard_PrintMessageOnly, 0, 0
 	.word 0, 6, 0x11, 0xB, 2, 1, 0x000F0200, -1, 0x29, LockCapsuleCard_PrintMessageOnly, 0, 0
 	.word 0, 2, 9, 0x1C, 4, 1, 0x00010200, -1, 0, LockCapsuleCard_PrintStatus, 0, 0

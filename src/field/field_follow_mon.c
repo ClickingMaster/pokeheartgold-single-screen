@@ -107,13 +107,13 @@ typedef struct FollowMonFlash {
     u16 blended[32];
 } FollowMonFlash;
 
-extern const MovementTable sFollowMonFastMovements;
-extern const MovementTable sFollowMonSlowMovements;
-extern const MovementTable sFollowMonStepMovements;
-extern const MovementTable sFollowMonRunMovements;
+extern const MovementTable gFollowMonFastMovements;
+extern const MovementTable gFollowMonSlowMovements;
+extern const MovementTable gFollowMonStepMovements;
+extern const MovementTable gFollowMonRunMovements;
 extern const HopHeightTable gFollowMonHopHeights;
 extern const HopOffsets gFollowMonHopIntoBallZOffsets;
-extern const VecFx32 sFollowMonRecallScale;
+extern const VecFx32 gFollowMonRecallScale;
 extern const VecFx32 gFollowMonHopIntoBallScale;
 
 const HopTable sFollowMonHopIntoBallTable = {
@@ -147,10 +147,10 @@ void FollowMon_MarkForRecreate(FieldSystem *fieldSystem) {
 
 // The next faster movement in direction after movement (8-11, then steps 12-15, runs 16-19, 20-23).
 u32 FollowMon_GetFasterMovement(u32 direction, u32 movement) {
-    MovementTable slow = sFollowMonSlowMovements;
-    MovementTable step = sFollowMonStepMovements;
-    MovementTable run = sFollowMonRunMovements;
-    MovementTable fast = sFollowMonFastMovements;
+    MovementTable slow = gFollowMonSlowMovements;
+    MovementTable step = gFollowMonStepMovements;
+    MovementTable run = gFollowMonRunMovements;
+    MovementTable fast = gFollowMonFastMovements;
     u8 i;
     for (i = 0; i < 4; i++) {
         if (movement == slow.movements[i]) {
@@ -707,7 +707,7 @@ static BOOL Task_FollowMonRecall(TaskManager *taskMan) {
             void *billboard;
             u32 plttKey, plttAddr;
             FollowMon_MoveToPlayer(fieldSystem, DIR_NORTH);
-            scale = sFollowMonRecallScale;
+            scale = gFollowMonRecallScale;
             billboard = MapObjectManager_GetFollowMonBillboard(fieldSystem->mapObjectManager);
             BillboardObject_SetScale(billboard, &scale);
             plttKey = BillboardObject_GetPlttKey(billboard);

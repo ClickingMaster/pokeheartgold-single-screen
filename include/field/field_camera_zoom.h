@@ -32,13 +32,5 @@ SysTask *FieldCameraZoom_Start(FieldSystem *fieldSystem, enum HeapID heapID);
 BOOL FieldCameraZoom_IsDone(SysTask *task);
 void FieldCameraZoom_End(SysTask *task);
 void FieldCameraZoom_Set(SysTask *task, int mode, fx32 amount, u32 duration);
-void Task_FieldCameraZoom(SysTask *task, FieldCameraZoom *zoom);
-void FieldCameraZoom_Idle(FieldCameraZoom *zoom);
-void FieldCameraZoom_ZoomBy(FieldCameraZoom *zoom);
-void FieldCameraZoom_ZoomBack(FieldCameraZoom *zoom);
-void FieldCameraZoom_ApplyDistance(FieldCameraZoom *zoom);
-void FieldCameraZoom_InitZoomBy(FieldCameraZoom *zoom);
-void FieldCameraZoom_InitZoomBack(FieldCameraZoom *zoom);
-BOOL FieldCameraZoom_Step(FieldCameraZoom *zoom);
 
 #endif // POKEHEARTGOLD_FIELD_CAMERA_ZOOM_H

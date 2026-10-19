@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "field/dynamic_terrain_height.h"
 #include "field/field_follow_mon.h"
 

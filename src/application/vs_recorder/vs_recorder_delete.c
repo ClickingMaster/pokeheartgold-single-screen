@@ -42,10 +42,10 @@ enum VsRecorderDeleteExitStep {
 };
 
 // YES / NO of the delete prompt
-extern const TouchscreenHitbox sVsRecorderDeleteYesHitbox;
-extern const TouchscreenHitbox sVsRecorderDeleteNoHitbox;
+extern const TouchscreenHitbox gVsRecorderDeleteYesHitbox;
+extern const TouchscreenHitbox gVsRecorderDeleteNoHitbox;
 
-// substates of the delete screen (sVsRecorderDeleteSubStates)
+// substates of the delete screen (gVsRecorderDeleteSubStates)
 #define DELETE_ENTER 1
 #define DELETE_MAIN  2
 #define DELETE_EXIT  3
@@ -199,11 +199,11 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
         PaletteData_BlendPalettes(work->plttData, PLTTBUF_SUB_OBJ, 12, (u8)deleteWork->fade, (u16)work->blendColor);
         break;
     case DELETE_MAIN_STEP_CONFIRM:
-        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteYesHitbox)) {
+        if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderDeleteYesHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             VsRecorder_PrintDeleteMessage(work, msg_0013_00283, 0);
             work->step++;
-        } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteNoHitbox)) {
+        } else if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderDeleteNoHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             deleteWork->cancelled = TRUE;
             VsRecorder_HideDeleteWindow(work);
@@ -211,12 +211,12 @@ BOOL VsRecorder_DeleteMain(VsRecorderWork *work) {
         }
         break;
     case DELETE_MAIN_STEP_CONFIRM_AGAIN:
-        if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteYesHitbox)) {
+        if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderDeleteYesHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             VsRecorder_ResetRecordSave(work);
             deleteWork->cancelled = FALSE;
             work->step++;
-        } else if (TouchscreenHitbox_TouchNewIsIn(&sVsRecorderDeleteNoHitbox)) {
+        } else if (TouchscreenHitbox_TouchNewIsIn(&gVsRecorderDeleteNoHitbox)) {
             VsRecorder_OnTouchConfirm(work);
             VsRecorder_HideDeleteWindow(work);
             deleteWork->cancelled = TRUE;

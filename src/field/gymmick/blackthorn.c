@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "field_system.h"
 #include "field_terrain.h"
 #include "map_object_movement_utilities.h"

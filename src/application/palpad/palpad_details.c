@@ -32,19 +32,19 @@ enum PalPadDetailsInput {
 
 typedef void (*PalPadDetailsPagePrinter)(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId);
 
-extern const TouchscreenHitbox sPalPadDetailsHitboxes[];
-extern const TouchscreenHitbox sPalPadDetailsFrontierHitboxes[];
-extern const u32 sPalPadDetailsSlotBaseTiles[3];
-extern const PalPadPanelLayout sPalPadPanelLayouts[3];
-extern const PalPadWindowSpec *const sPalPadDetailsPageWindowSpecs[8];
-extern const u8 sPalPadDetailsPageWindowCounts[8];
-extern const WindowTemplate sPalPadDetailsProfileWindowTemplates[8];
-extern const u8 sPalPadDetailsTabX[2][8];
-extern const u8 sPalPadDetailsTabWidths[2][8];
-extern const u8 sPalPadDetailsTabSrcY[2];
-extern const u16 sPalPadTables[];
-extern const PalPadDetailsPagePrinter sPalPadDetailsPagePrinters[3];
-extern const PalPadDetailsPagePrinter sPalPadDetailsFrontierPagePrinters[8];
+extern const TouchscreenHitbox gPalPadDetailsHitboxes[];
+extern const TouchscreenHitbox gPalPadDetailsFrontierHitboxes[];
+extern const u32 gPalPadDetailsSlotBaseTiles[3];
+extern const PalPadPanelLayout gPalPadPanelLayouts[3];
+extern const PalPadWindowSpec *const gPalPadDetailsPageWindowSpecs[8];
+extern const u8 gPalPadDetailsPageWindowCounts[8];
+extern const WindowTemplate gPalPadDetailsProfileWindowTemplates[8];
+extern const u8 gPalPadDetailsTabX[2][8];
+extern const u8 gPalPadDetailsTabWidths[2][8];
+extern const u8 gPalPadDetailsTabSrcY[2];
+extern const u16 gPalPadTables[];
+extern const PalPadDetailsPagePrinter gPalPadDetailsPagePrinters[3];
+extern const PalPadDetailsPagePrinter gPalPadDetailsFrontierPagePrinters[8];
 
 static inline int Abs16(s16 value);
 static BOOL PalPadDetails_IsLastPage(PalPadDetails *details, int page);
@@ -214,9 +214,9 @@ static int PalPadDetails_HandleTouch(PalPadDetails *details, PalPadShared *share
     s16 delta;
 
     if (details->hasFrontierPages) {
-        hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadDetailsFrontierHitboxes);
+        hit = TouchscreenHitbox_FindHitboxAtTouchNew(gPalPadDetailsFrontierHitboxes);
     } else {
-        hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadDetailsHitboxes);
+        hit = TouchscreenHitbox_FindHitboxAtTouchNew(gPalPadDetailsHitboxes);
     }
     if (hit == -1) {
         return PALPAD_DETAILS_STATE_INPUT;
@@ -307,13 +307,13 @@ void PalPadDetails_Setup(PalPadDetails *details, PalPadShared *shared, PalPadGfx
     PalPadDetails_LoadScreens(details->screens, gfx, heapId);
     PalPadDetails_AddProfileWindows(details, gfx);
     i = 0;
-    baseTile = sPalPadDetailsSlotBaseTiles;
-    layout = sPalPadPanelLayouts;
+    baseTile = gPalPadDetailsSlotBaseTiles;
+    layout = gPalPadPanelLayouts;
     slot = details->slots;
     do {
         PalPadDetailsSlot_Init(slot, gfx, layout, *baseTile, heapId);
-        specs = sPalPadDetailsPageWindowSpecs;
-        count = sPalPadDetailsPageWindowCounts;
+        specs = gPalPadDetailsPageWindowSpecs;
+        count = gPalPadDetailsPageWindowCounts;
         j = 0;
         do {
             PalPadDetailsSlot_AddWindows(slot, gfx, j, *count, *specs, heapId);
@@ -509,7 +509,7 @@ static void PalPadDetails_DrawTabs(PalPadDetails *details, PalPadGfx *gfx, int s
         ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
         return;
     }
-    CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, sPalPadDetailsTabX[details->hasFrontierPages][selected], 20, sPalPadDetailsTabWidths[details->hasFrontierPages][selected], 4, gfx->screens.data[1]->rawData, sPalPadDetailsTabX[details->hasFrontierPages][selected], sPalPadDetailsTabSrcY[details->hasFrontierPages], gfx->screens.data[1]->screenWidth >> 3, gfx->screens.data[1]->screenHeight >> 3);
+    CopyToBgTilemapRect(gfx->bgConfig, GF_BG_LYR_MAIN_2, gPalPadDetailsTabX[details->hasFrontierPages][selected], 20, gPalPadDetailsTabWidths[details->hasFrontierPages][selected], 4, gfx->screens.data[1]->rawData, gPalPadDetailsTabX[details->hasFrontierPages][selected], gPalPadDetailsTabSrcY[details->hasFrontierPages], gfx->screens.data[1]->screenWidth >> 3, gfx->screens.data[1]->screenHeight >> 3);
     ScheduleBgTilemapBufferTransfer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
 }
 
@@ -554,12 +554,12 @@ static void PalPadDetails_LoadScreens(PalPadDetailsScreen *screens, PalPadGfx *g
     u16 *fileId;
     int i;
 
-    fileIds[0] = sPalPadTables[23];
-    fileIds[1] = sPalPadTables[24];
+    fileIds[0] = gPalPadTables[23];
+    fileIds[1] = gPalPadTables[24];
     fileId = fileIds;
     i = 0;
-    fileIds[2] = sPalPadTables[25];
-    fileIds[3] = sPalPadTables[26];
+    fileIds[2] = gPalPadTables[25];
+    fileIds[3] = gPalPadTables[26];
     for (; i < 4; i++) {
         screens->file = GfGfxLoader_GetScrnDataFromOpenNarc(gfx->narc, *fileId, TRUE, &screens->data, heapId);
         screens++;
@@ -576,7 +576,7 @@ static void PalPadDetails_FreeScreens(PalPadDetailsScreen *screens) {
 }
 
 static void PalPadDetails_AddProfileWindows(PalPadDetails *details, PalPadGfx *gfx) {
-    const WindowTemplate *template = sPalPadDetailsProfileWindowTemplates;
+    const WindowTemplate *template = gPalPadDetailsProfileWindowTemplates;
     int i = 0;
     Window *window = details->profileWindows;
 
@@ -657,9 +657,9 @@ static void PalPadDetailsSlot_ClearWindows(PalPadDetailsSlot *slot, u32 page) {
 static void PalPadDetailsSlot_DrawPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, u32 page, void *unused, BOOL frontier, enum HeapID heapId) {
     PalPadDetailsSlot_Clear(slot, gfx);
     if (frontier) {
-        sPalPadDetailsFrontierPagePrinters[page](slot, shared, gfx, heapId);
+        gPalPadDetailsFrontierPagePrinters[page](slot, shared, gfx, heapId);
     } else {
-        sPalPadDetailsPagePrinters[page](slot, shared, gfx, heapId);
+        gPalPadDetailsPagePrinters[page](slot, shared, gfx, heapId);
     }
 }
 

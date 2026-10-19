@@ -144,83 +144,83 @@
 	.public RockDebris_Update
 	.public RockDebris_Render
 	.public sFlyLandingIdleSteps
-	.public sCutInTrainerPlttFiles
+	.public gCutInTrainerPlttFiles
 	.public sCutInFlyerHideSteps
-	.public sCutInTrainerCharFiles
-	.public sCutInTrainerAnimFiles
-	.public sCutInTrainerCellFiles
-	.public sFlyLandingPhases
+	.public gCutInTrainerCharFiles
+	.public gCutInTrainerAnimFiles
+	.public gCutInTrainerCellFiles
+	.public gFlyLandingPhases
 	.public sCutInFlyerTakeOffSteps
-	.public sCutInFlyWithObjectTrainerPos
-	.public sCutInFlyerPickUpPos
-	.public sFlyLandingFlyerScale
-	.public sCutInFlyerPickUpScale
-	.public sCutInFlyerTrainerScale
-	.public sCutInMonPos
-	.public sCutInFlyerScale
-	.public sFlyLandingSwoopCenter
-	.public sFlyLandingTrainerScale
-	.public sFlyLandingFlyAwayScale
-	.public sCutInFlyerModeSteps
-	.public sFlyLandingSwoopScale
-	.public sFlyLandingFlyAwayCenter
-	.public sCutInFlyerTakeOffOrigin
-	.public sCutInFlyerTakeOffScale
-	.public sCutInFlyTrainerPos
-	.public sCutInTrainerPos
-	.public sCutInFlyMonPos
+	.public gCutInFlyWithObjectTrainerPos
+	.public gCutInFlyerPickUpPos
+	.public gFlyLandingFlyerScale
+	.public gCutInFlyerPickUpScale
+	.public gCutInFlyerTrainerScale
+	.public gCutInMonPos
+	.public gCutInFlyerScale
+	.public gFlyLandingSwoopCenter
+	.public gFlyLandingTrainerScale
+	.public gFlyLandingFlyAwayScale
+	.public gCutInFlyerModeSteps
+	.public gFlyLandingSwoopScale
+	.public gFlyLandingFlyAwayCenter
+	.public gCutInFlyerTakeOffOrigin
+	.public gCutInFlyerTakeOffScale
+	.public gCutInFlyTrainerPos
+	.public gCutInTrainerPos
+	.public gCutInFlyMonPos
 	.public sCutInFlyerPickUpSteps
-	.public sTrainerHopOffsets
-	.public sTrainerClipEffectTemplate
-	.public sFlyLandingEffectTemplate
-	.public sCutInScrollSpriteEffectTemplate
-	.public sCutInFlyerEffectTemplate
-	.public sCutInModelEffectTemplate
-	.public sTrainerJumpEffectTemplate
-	.public sFlyLandingTaskSteps
+	.public gTrainerHopOffsets
+	.public gTrainerClipEffectTemplate
+	.public gFlyLandingEffectTemplate
+	.public gCutInScrollSpriteEffectTemplate
+	.public gCutInFlyerEffectTemplate
+	.public gCutInModelEffectTemplate
+	.public gTrainerJumpEffectTemplate
+	.public gFlyLandingTaskSteps
 	.public sFlyLandingSteps
-	.public sFieldMoveCutInFlyWithObjectSteps
-	.public sTrainerJumpOffsets
-	.public sFieldMoveCutInSteps
-	.public sFieldMoveCutInFlySteps
-	.public sCutInScrollSpriteTemplates
-	.public sPCPropModels
-	.public sFieldMoveArrivalSteps
-	.public sEscapeRopeSteps
-	.public sDigWithFollowMonSteps
-	.public sTeleportSteps
-	.public sTeleportWithFollowMonSteps
-	.public sDigSteps
-	.public sTeleportFollowMonSpinMovement
-	.public sEscapeRopeSpinMovement
-	.public sDigHoleMovement
-	.public sDigSinkMovement
-	.public sEscapeRopeSpinStartMovement
-	.public sArrivalSpinMovement
-	.public sRideEffectFileIds
-	.public sRockSmashEffectAtPlayerTemplate
-	.public sWhirlpoolEffectTemplate
-	.public sHeadbuttEffectAtFollowerTemplate
-	.public sWaterfallEffectTemplate
-	.public sRockClimbDebrisTemplate
-	.public sCutEffectAtPlayerTemplate
-	.public sRockSmashEffectAtFollowerTemplate
-	.public sHeadbuttEffectAtPlayerTemplate
-	.public sCutEffectAtFollowerTemplate
-	.public sRockDebrisTemplate
-	.public sRockDebrisWithFollowerTemplate
-	.public sScriptFieldMoveEffectDeleteFuncs
-	.public sScriptFieldMoveEffectCreateFuncs
-	.public sScriptFieldMoveEffectIsFinishedFuncs
+	.public gFieldMoveCutInFlyWithObjectSteps
+	.public gTrainerJumpOffsets
+	.public gFieldMoveCutInSteps
+	.public gFieldMoveCutInFlySteps
+	.public gCutInScrollSpriteTemplates
+	.public gPCPropModels
+	.public gFieldMoveArrivalSteps
+	.public gEscapeRopeSteps
+	.public gDigWithFollowMonSteps
+	.public gTeleportSteps
+	.public gTeleportWithFollowMonSteps
+	.public gDigSteps
+	.public gTeleportFollowMonSpinMovement
+	.public gEscapeRopeSpinMovement
+	.public gDigHoleMovement
+	.public gDigSinkMovement
+	.public gEscapeRopeSpinStartMovement
+	.public gArrivalSpinMovement
+	.public gRideEffectFileIds
+	.public gRockSmashEffectAtPlayerTemplate
+	.public gWhirlpoolEffectTemplate
+	.public gHeadbuttEffectAtFollowerTemplate
+	.public gWaterfallEffectTemplate
+	.public gRockClimbDebrisTemplate
+	.public gCutEffectAtPlayerTemplate
+	.public gRockSmashEffectAtFollowerTemplate
+	.public gHeadbuttEffectAtPlayerTemplate
+	.public gCutEffectAtFollowerTemplate
+	.public gRockDebrisTemplate
+	.public gRockDebrisWithFollowerTemplate
+	.public gScriptFieldMoveEffectDeleteFuncs
+	.public gScriptFieldMoveEffectCreateFuncs
+	.public gScriptFieldMoveEffectIsFinishedFuncs
 	.public gSafariZonePlacementOffsets
-	.public sShinyLeafMasks
-	.public sShinyLeafMonDataIds
-	.public sFollowMonJumpOnSpotMovements
-	.public sNatureGroups
-	.public sFollowMonGrowScale
-	.public sFollowMonShrinkScale
-	.public sHealingMachineBallOffsets
-	.public sHallOfFameBallOffsets
+	.public gShinyLeafMasks
+	.public gShinyLeafMonDataIds
+	.public gFollowMonJumpOnSpotMovements
+	.public gNatureGroups
+	.public gFollowMonGrowScale
+	.public gFollowMonShrinkScale
+	.public gHealingMachineBallOffsets
+	.public gHallOfFameBallOffsets
 	.include "overlay_02.inc"
 	.include "global.inc"
 
@@ -231,142 +231,142 @@
 sFlyLandingIdleSteps:
 	.word FlyLandingEffect_Idle
 
-sCutInTrainerPlttFiles:
+gCutInTrainerPlttFiles:
 	.byte 0x07, 0x00, 0x08, 0x00
 
 sCutInFlyerHideSteps:
 	.word CutInFlyer_Hide
 
-sCutInTrainerCharFiles:
+gCutInTrainerCharFiles:
 	.byte 0x11, 0x00, 0x14, 0x00, 0x17, 0x00
 
-sCutInTrainerAnimFiles:
+gCutInTrainerAnimFiles:
 	.byte 0x13, 0x00, 0x16, 0x00, 0x19, 0x00
 
-sCutInTrainerCellFiles:
+gCutInTrainerCellFiles:
 	.byte 0x12, 0x00, 0x15, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-sFlyLandingPhases:
+gFlyLandingPhases:
 	.word sFlyLandingIdleSteps, sFlyLandingSteps, 0x01, 0x0F
 
 sCutInFlyerTakeOffSteps:
 	.word CutInFlyer_TakeOff, CutInFlyer_Idle, 0x00, 0x06
 	.byte 0x01, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00
 
-sCutInFlyWithObjectTrainerPos:
+gCutInFlyWithObjectTrainerPos:
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x40, 0x05, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerPickUpPos:
+gCutInFlyerPickUpPos:
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x80, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sFlyLandingFlyerScale:
+gFlyLandingFlyerScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerPickUpScale:
+gCutInFlyerPickUpScale:
 	.byte 0x00, 0x14, 0x00, 0x00
 	.byte 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerTrainerScale:
+gCutInFlyerTrainerScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sCutInMonPos:
+gCutInMonPos:
 	.byte 0x00, 0x80, 0x12, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerScale:
+gCutInFlyerScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sFlyLandingSwoopCenter:
+gFlyLandingSwoopCenter:
 	.byte 0x00, 0x00, 0x08, 0x00
 	.byte 0x00, 0xF0, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sFlyLandingTrainerScale:
+gFlyLandingTrainerScale:
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sFlyLandingFlyAwayScale:
+gFlyLandingFlyAwayScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerModeSteps:
+gCutInFlyerModeSteps:
 	.word sCutInFlyerHideSteps
 	.word sCutInFlyerTakeOffSteps
 	.word sCutInFlyerPickUpSteps
 
-sFlyLandingSwoopScale:
+gFlyLandingSwoopScale:
 	.byte 0x00, 0x20, 0x00, 0x00
 	.byte 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sFlyLandingFlyAwayCenter:
+gFlyLandingFlyAwayCenter:
 	.byte 0x00, 0x80, 0x08, 0x00, 0x00, 0xF0, 0x04, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerTakeOffOrigin:
+gCutInFlyerTakeOffOrigin:
 	.byte 0x00, 0x80, 0x08, 0x00, 0x00, 0x80, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyerTakeOffScale:
+gCutInFlyerTakeOffScale:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyTrainerPos:
+gCutInFlyTrainerPos:
 	.byte 0x00, 0x00, 0x08, 0x00
 	.byte 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sCutInTrainerPos:
+gCutInTrainerPos:
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sCutInFlyMonPos:
+gCutInFlyMonPos:
 	.byte 0x00, 0x80, 0x12, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00
 
 sCutInFlyerPickUpSteps:
 	.word CutInFlyer_SwoopDown, CutInFlyer_PickUpTrainer, CutInFlyer_FlyAway, CutInFlyer_Done
 
-sTrainerHopOffsets:
+gTrainerHopOffsets:
 	.byte 0x00, 0xC0, 0xFF, 0xFF, 0x00, 0xA0, 0xFF, 0xFF, 0x00, 0x90, 0xFF, 0xFF, 0x00, 0x80, 0xFF, 0xFF
 
-sTrainerClipEffectTemplate:
+gTrainerClipEffectTemplate:
 	.byte 0x08, 0x00, 0x00, 0x00
 	.word TrainerClipEffect_Init
 	.word FieldEffect_DefaultDestroy
 	.word TrainerClipEffect_Update
 	.word FieldEffect_DefaultDraw
 
-sFlyLandingEffectTemplate:
+gFlyLandingEffectTemplate:
 	.byte 0x74, 0x00, 0x00, 0x00
 	.word FlyLandingEffect_Init
 	.word FlyLandingEffect_Destroy
 	.word FlyLandingEffect_Update
 	.word FieldEffect_DefaultDraw
 
-sCutInScrollSpriteEffectTemplate:
+gCutInScrollSpriteEffectTemplate:
 	.byte 0x24, 0x00, 0x00, 0x00
 	.word CutInScrollSprite_Init
 	.word CutInScrollSprite_Destroy
 	.word CutInScrollSprite_Update
 	.word CutInScrollSprite_Draw
 
-sCutInFlyerEffectTemplate:
+gCutInFlyerEffectTemplate:
 	.byte 0x68, 0x00, 0x00, 0x00
 	.word CutInFlyer_Init
 	.word CutInFlyer_Destroy
 	.word CutInFlyer_Update
 	.word CutInFlyer_Draw
 
-sCutInModelEffectTemplate:
+gCutInModelEffectTemplate:
 	.byte 0x0C, 0x00, 0x00, 0x00
 	.word CutInModelEffect_Init
 	.word CutInModelEffect_Destroy
 	.word CutInModelEffect_Update
 	.word CutInModelEffect_Draw
 
-sTrainerJumpEffectTemplate:
+gTrainerJumpEffectTemplate:
 	.byte 0x24, 0x00, 0x00, 0x00
 	.word TrainerJumpEffect_Init
 	.word FieldEffect_DefaultDestroy
 	.word TrainerJumpEffect_Update
 	.word FieldEffect_DefaultDraw
 
-sFlyLandingTaskSteps:
+gFlyLandingTaskSteps:
 	.word FlyLanding_SetPlayerVisible
 	.word FlyLanding_LoadGraphics
 	.word FlyLanding_CreateSprites
@@ -384,7 +384,7 @@ sFlyLandingSteps:
 	.word FlyLandingEffect_ShowPlayer
 	.word FlyLandingEffect_Done
 
-sFieldMoveCutInFlyWithObjectSteps:
+gFieldMoveCutInFlyWithObjectSteps:
 	.word FieldMoveCutIn_StepLoadSpriteGraphics
 	.word FieldMoveCutIn_StepCreateFlyTrainerSprite
 	.word FieldMoveCutIn_StepShowOtherObject
@@ -398,12 +398,12 @@ sFieldMoveCutInFlyWithObjectSteps:
 	.word FieldMoveCutIn_StepFreeSpriteGraphics
 	.word FieldMoveCutIn_StepFinish
 
-sTrainerJumpOffsets:
+gTrainerJumpOffsets:
 	.byte 0x00, 0x40, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0xC0, 0xFE, 0xFF, 0x00, 0x80, 0xFE, 0xFF
 	.byte 0x00, 0x60, 0xFE, 0xFF, 0x00, 0x40, 0xFE, 0xFF, 0x00, 0x40, 0xFE, 0xFF, 0x00, 0x40, 0xFE, 0xFF
 	.byte 0x00, 0x60, 0xFE, 0xFF, 0x00, 0x80, 0xFE, 0xFF, 0x00, 0xA0, 0xFE, 0xFF, 0x00, 0xC0, 0xFE, 0xFF
 
-sFieldMoveCutInSteps:
+gFieldMoveCutInSteps:
 	.word FieldMoveCutIn_StepLoadBannerGraphics
 	.word FieldMoveCutIn_StepCreateSprites
 	.word FieldMoveCutIn_StepInitWindow
@@ -419,7 +419,7 @@ sFieldMoveCutInSteps:
 	.word FieldMoveCutIn_StepEndWindow
 	.word FieldMoveCutIn_StepFinish
 
-sFieldMoveCutInFlySteps:
+gFieldMoveCutInFlySteps:
 	.word FieldMoveCutIn_StepLoadBannerGraphics
 	.word FieldMoveCutIn_StepCreateFlySprites
 	.word FieldMoveCutIn_StepInitWindow
@@ -444,7 +444,7 @@ sFieldMoveCutInFlySteps:
 	.word FieldMoveCutIn_StepEndWindow
 	.word FieldMoveCutIn_StepFinish
 
-sCutInScrollSpriteTemplates:
+gCutInScrollSpriteTemplates:
 	.byte 0x00, 0xF0, 0x00, 0x00, 0x00, 0xF0, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x85, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x04, 0x00, 0x00, 0x30, 0x04, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x85, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00
@@ -463,29 +463,29 @@ sCutInScrollSpriteTemplates:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0xD0, 0x0D, 0x00, 0x00, 0xC0, 0x07, 0x00, 0x00, 0x80, 0x01, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-sPCPropModels:
+gPCPropModels:
 	.byte 0x21, 0x00, 0x00, 0x00, 0x8A, 0x00, 0x00, 0x00
 
-sFieldMoveArrivalSteps:
+gFieldMoveArrivalSteps:
 	.word FieldMoveArrival_FadeIn
 	.word FieldMoveArrival_WaitFadeIn
 	.word FieldMoveArrival_Spin
 	.word FieldMoveArrival_Finish
 
-sEscapeRopeSteps:
+gEscapeRopeSteps:
 	.word FieldEscapeRope_SpinStart
 	.word FieldEscapeRope_SpinAndFadeOut
 	.word FieldEscapeRope_WaitFadeOut
 	.word FieldEscapeRope_Warp
 
-sDigWithFollowMonSteps:
+gDigWithFollowMonSteps:
 	.word FieldDig_SinkStart
 	.word FieldDig_DigHole
 	.word FieldDig_SpinAndFadeOut
 	.word FieldDig_WaitFadeOut
 	.word FieldDig_Warp
 
-sTeleportSteps:
+gTeleportSteps:
 	.word FieldMove_ShowCutIn
 	.word FieldMove_WaitCutIn
 	.word FieldTeleport_SpinStart
@@ -493,7 +493,7 @@ sTeleportSteps:
 	.word FieldTeleport_WaitFadeOut
 	.word FieldTeleport_Warp
 
-sTeleportWithFollowMonSteps:
+gTeleportWithFollowMonSteps:
 	.word FieldTeleport_FollowMonFlash
 	.word FieldTeleport_FollowMonSpinStart
 	.word FieldTeleport_FollowMonWaitSpin
@@ -501,7 +501,7 @@ sTeleportWithFollowMonSteps:
 	.word FieldTeleport_WaitFadeOut
 	.word FieldTeleport_Warp
 
-sDigSteps:
+gDigSteps:
 	.word FieldMove_ShowCutIn
 	.word FieldMove_WaitCutIn
 	.word FieldDig_SinkStart
@@ -510,29 +510,29 @@ sDigSteps:
 	.word FieldDig_WaitFadeOut
 	.word FieldDig_Warp
 
-sTeleportFollowMonSpinMovement:
+gTeleportFollowMonSpinMovement:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00
 	.byte 0xFE, 0x00, 0x00, 0x00
 
-sEscapeRopeSpinMovement:
+gEscapeRopeSpinMovement:
 	.byte 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x02, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00
 
-sDigHoleMovement:
+gDigHoleMovement:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00
 
-sDigSinkMovement:
+gDigSinkMovement:
 	.byte 0x01, 0x00, 0x01, 0x00
 	.byte 0x3C, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x3C, 0x00, 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x3C, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x3C, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00
 
-sEscapeRopeSpinStartMovement:
+gEscapeRopeSpinStartMovement:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x02, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x01, 0x00
@@ -541,7 +541,7 @@ sEscapeRopeSpinStartMovement:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00
 	.byte 0xFE, 0x00, 0x00, 0x00
 
-sArrivalSpinMovement:
+gArrivalSpinMovement:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00
@@ -550,88 +550,88 @@ sArrivalSpinMovement:
 	.byte 0x3C, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x3C, 0x00, 0x04, 0x00, 0x03, 0x00, 0x01, 0x00
 	.byte 0x3C, 0x00, 0x05, 0x00, 0x01, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00
 
-sRideEffectFileIds:
+gRideEffectFileIds:
 	.byte 0x10, 0x0F, 0x0E, 0x0B
 	.byte 0x0C, 0x09, 0xB4, 0x00, 0x00, 0x00, 0x0E, 0x01, 0x5A, 0x00, 0x00, 0x00
 
-sRockSmashEffectAtPlayerTemplate:
+gRockSmashEffectAtPlayerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00
 	.word RockSmashEffect_InitAtPlayer
 	.word RockSmashEffect_Destroy
 	.word RockSmashEffect_Update
 	.word RockSmashEffect_Render
 
-sWhirlpoolEffectTemplate:
+gWhirlpoolEffectTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00
 	.word WhirlpoolEffect_Init
 	.word WhirlpoolEffect_Destroy
 	.word WhirlpoolEffect_Update
 	.word WhirlpoolEffect_Render
 
-sHeadbuttEffectAtFollowerTemplate:
+gHeadbuttEffectAtFollowerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x14, 0x01, 0x00, 0x00
 	.word HeadbuttEffect_InitAtFollower
 	.word HeadbuttEffect_Destroy
 	.word HeadbuttEffect_Update
 	.word HeadbuttEffect_Render
 
-sWaterfallEffectTemplate:
+gWaterfallEffectTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xCC, 0x01, 0x00, 0x00
 	.word WaterfallEffect_Init
 	.word WaterfallEffect_Destroy
 	.word WaterfallEffect_Update
 	.word WaterfallEffect_Render
 
-sRockClimbDebrisTemplate:
+gRockClimbDebrisTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x10, 0x0D, 0x00, 0x00
 	.word RockClimbDebris_Init
 	.word RockClimbDebris_Destroy
 	.word RockClimbDebris_Update
 	.word RockClimbDebris_Render
 
-sCutEffectAtPlayerTemplate:
+gCutEffectAtPlayerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00
 	.word CutEffect_InitAtPlayer
 	.word CutEffect_Destroy
 	.word CutEffect_Update
 	.word CutEffect_Render
 
-sRockSmashEffectAtFollowerTemplate:
+gRockSmashEffectAtFollowerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00
 	.word RockSmashEffect_InitAtFollower
 	.word RockSmashEffect_Destroy
 	.word RockSmashEffect_Update
 	.word RockSmashEffect_Render
 
-sHeadbuttEffectAtPlayerTemplate:
+gHeadbuttEffectAtPlayerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x14, 0x01, 0x00, 0x00
 	.word HeadbuttEffect_InitAtPlayer
 	.word HeadbuttEffect_Destroy
 	.word HeadbuttEffect_Update
 	.word HeadbuttEffect_Render
 
-sCutEffectAtFollowerTemplate:
+gCutEffectAtFollowerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00
 	.word CutEffect_InitAtFollower
 	.word CutEffect_Destroy
 	.word CutEffect_Update
 	.word CutEffect_Render
 
-sRockDebrisTemplate:
+gRockDebrisTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x9C, 0x0E, 0x00, 0x00
 	.word RockDebris_Init
 	.word RockDebris_Destroy
 	.word RockDebris_Update
 	.word RockDebris_Render
 
-sRockDebrisWithFollowerTemplate:
+gRockDebrisWithFollowerTemplate:
 	.byte 0x00, 0x04, 0x00, 0x00, 0x9C, 0x0E, 0x00, 0x00
 	.word RockDebris_InitWithFollower
 	.word RockDebris_Destroy
 	.word RockDebris_Update
 	.word RockDebris_Render
 
-sScriptFieldMoveEffectDeleteFuncs:
+gScriptFieldMoveEffectDeleteFuncs:
 	.word CutEffect_Delete
 	.word RockSmashEffect_Delete
 	.word RockSmashEffect_Delete
@@ -639,7 +639,7 @@ sScriptFieldMoveEffectDeleteFuncs:
 	.word HeadbuttEffect_Delete
 	.word HeadbuttEffect_Delete
 
-sScriptFieldMoveEffectCreateFuncs:
+gScriptFieldMoveEffectCreateFuncs:
 	.word CutEffect_CreateAtPlayer
 	.word RockSmashEffect_CreateAtPlayer
 	.word RockSmashEffect_CreateAtFollower
@@ -647,7 +647,7 @@ sScriptFieldMoveEffectCreateFuncs:
 	.word HeadbuttEffect_CreateAtPlayer
 	.word HeadbuttEffect_CreateAtFollower
 
-sScriptFieldMoveEffectIsFinishedFuncs:
+gScriptFieldMoveEffectIsFinishedFuncs:
 	.word CutEffect_IsFinished
 	.word RockSmashEffect_IsFinished
 	.word RockSmashEffect_IsFinished
@@ -659,21 +659,21 @@ gSafariZonePlacementOffsets:
 	.byte 0xFF, 0x01, 0xFF, 0x01
 	.byte 0x01, 0xFF, 0x00, 0x00
 
-sShinyLeafMasks:
+gShinyLeafMasks:
 	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0x00, 0x00, 0x00
 
-sShinyLeafMonDataIds:
+gShinyLeafMonDataIds:
 	.byte 0xB5, 0x00, 0x00, 0x00
 	.byte 0xB6, 0x00, 0x00, 0x00, 0xB7, 0x00, 0x00, 0x00, 0xB8, 0x00, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x00
 
-sFollowMonJumpOnSpotMovements:
+gFollowMonJumpOnSpotMovements:
 	.byte 0x49, 0x00, 0x01, 0x00, 0x30, 0x00, 0x01, 0x00, 0x3E, 0x00, 0x01, 0x00, 0x4A, 0x00, 0x01, 0x00
 	.byte 0xFE, 0x00, 0x00, 0x00, 0x49, 0x00, 0x01, 0x00, 0x31, 0x00, 0x01, 0x00, 0x3E, 0x00, 0x01, 0x00
 	.byte 0x4A, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00, 0x49, 0x00, 0x01, 0x00, 0x32, 0x00, 0x01, 0x00
 	.byte 0x3E, 0x00, 0x01, 0x00, 0x4A, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00, 0x49, 0x00, 0x01, 0x00
 	.byte 0x33, 0x00, 0x01, 0x00, 0x3E, 0x00, 0x01, 0x00, 0x4A, 0x00, 0x01, 0x00, 0xFE, 0x00, 0x00, 0x00
 
-sNatureGroups:
+gNatureGroups:
 	.byte 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
@@ -682,15 +682,15 @@ sNatureGroups:
 	.byte 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00
 
-sFollowMonGrowScale:
+gFollowMonGrowScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
-sFollowMonShrinkScale:
+gFollowMonShrinkScale:
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
 	.data
 
-sHealingMachineBallOffsets:
+gHealingMachineBallOffsets:
 	.word -0x4800, 0xC000, -0x4800
 	.word 0x4800, 0xC000, -0x4800
 	.word -0x4800, 0xC000, 0
@@ -698,7 +698,7 @@ sHealingMachineBallOffsets:
 	.word -0x4800, 0xC000, 0x4800
 	.word 0x4800, 0xC000, 0x4800
 
-sHallOfFameBallOffsets:
+gHallOfFameBallOffsets:
 	.word -0x4800, 0xC000, -0x4800
 	.word 0x4800, 0xC000, -0x4800
 	.word -0x4800, 0xC000, 0

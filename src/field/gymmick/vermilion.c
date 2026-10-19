@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "fielddata/script/scr_seq/event_T06GYM0101.h"
 
 #include "field_system.h"

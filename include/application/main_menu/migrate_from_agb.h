@@ -63,7 +63,7 @@ typedef struct MigrateFromAgbButton {
     u8 unk_04[12];
 } MigrateFromAgbButton;
 
-// A mon icon waiting for the VBlank upload (sMigrateFromAgbIcons points at the 30 of the box)
+// A mon icon waiting for the VBlank upload (gMigrateFromAgbIcons points at the 30 of the box)
 typedef struct MigrateFromAgbIcon {
     u32 vramOffset;
     int palette;

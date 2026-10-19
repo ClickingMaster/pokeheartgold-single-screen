@@ -84,9 +84,5 @@ void HiddenObjectMovement_SetRevealed(LocalMapObject *object);
 
 
 int HiddenObjectCover_Spawn(LocalMapObject *object, int coverType);
-void TallGrass_Spawn(LocalMapObject *object, int mode);
-void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int checkFacing);
-void VeryTallGrass_Spawn(LocalMapObject *object, int mode);
-void VeryTallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int checkFacing);
 
 #endif // POKEHEARTGOLD_MAP_OBJECT_FOLLOW_INTERNAL_H

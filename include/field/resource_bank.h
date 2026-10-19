@@ -10,7 +10,6 @@ typedef struct ResourceBank ResourceBank;
 
 ResourceBank *ResourceBank_Create(enum HeapID parentHeapID, enum HeapID heapID, u32 heapSize, u32 capacity);
 void ResourceBank_Destroy(ResourceBank *bank);
-void *ResourceBank_Alloc(ResourceBank *bank, u32 id, u32 size, BOOL atEnd);
 void ResourceBank_Free(ResourceBank *bank, u32 id);
 void *ResourceBank_Get(ResourceBank *bank, u32 id);
 BOOL ResourceBank_Contains(ResourceBank *bank, u32 id);

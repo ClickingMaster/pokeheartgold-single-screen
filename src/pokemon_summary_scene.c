@@ -275,7 +275,7 @@ void PokemonSummary_ReloadPokepic(PokemonSummary *summary) {
     PokemonSummary_StartPokepicAnim(summary);
 }
 
-static const u8 sTouchButtons[][4] = {
+static const u8 gTouchButtons[][4] = {
     { 0,    1,    1,    4    },
     { 1,    2,    5,    15   },
     { 2,    4,    25,   10   },
@@ -312,7 +312,7 @@ static int PokemonSummary_GetTouchedButton(PokemonSummary *summary) {
     if (summary->args->monDataType != 2) {
         button = TouchscreenHitbox_FindRectAtTouchNew(sTouchButtonHitboxes);
         if (button != -1) {
-            button = sTouchButtons[button][0];
+            button = gTouchButtons[button][0];
         }
         return button;
     } else {
@@ -321,7 +321,7 @@ static int PokemonSummary_GetTouchedButton(PokemonSummary *summary) {
             return -1;
         }
         if (button != -1) {
-            button = sTouchButtons[button][0];
+            button = gTouchButtons[button][0];
         }
         return button;
     }

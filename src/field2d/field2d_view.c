@@ -1,9 +1,11 @@
+#include "field2d/field2d_object.h"
+
 #include "gf_gfx_loader.h"
 #include "overlay_42.h"
 
-const u8 sActionAnimKinds[] = { 0, 3, 2, 4, 0, 5, 6, 8, 7, 8, 2, 6 };
-const u8 sAnimKindKeepsFrame[] = { 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0 };
-const BgTemplate sField2DBgLayerBgTemplate = {
+static const u8 sActionAnimKinds[] = { 0, 3, 2, 4, 0, 5, 6, 8, 7, 8, 2, 6 };
+static const u8 sAnimKindKeepsFrame[] = { 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0 };
+static const BgTemplate sField2DBgLayerBgTemplate = {
     .x = 0,
     .y = 0,
     .bufferSize = 4096,
@@ -20,7 +22,7 @@ const BgTemplate sField2DBgLayerBgTemplate = {
 };
 
 s32 Field2DCommand_CheckStand(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
-    int action = Field2DObject_GetParam(object, 5);
+    int action = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION);
     if ((action == 0) || (action == 4)) {
         Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
@@ -29,8 +31,8 @@ s32 Field2DCommand_CheckStand(Field2DObject *object, Field2DMap *map, Field2DObj
 }
 
 s32 Field2DCommand_CheckTurn(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
-    int action = Field2DObject_GetParam(object, 5);
-    int direction = Field2DObject_GetParam(object, 6);
+    int action = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION);
+    int direction = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION);
     if (action == 0 && direction != command->direction) {
         Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
@@ -39,12 +41,12 @@ s32 Field2DCommand_CheckTurn(Field2DObject *object, Field2DMap *map, Field2DObje
 }
 
 s32 Field2DCommand_CheckWalk(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
-    int action = Field2DObject_GetParam(object, 5);
-    if ((action == 0) && (Field2DObject_IsMapBlockedInDirection(object, map, command->direction) != 1) && (Field2DObject_IsObjectInDirection(object, objectManager, command->direction) != 1)) {
+    int action = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION);
+    if ((action == FIELD2D_ACTION_STAND) && (Field2DObject_IsMapBlockedInDirection(object, map, command->direction) != 1) && (Field2DObject_IsObjectInDirection(object, objectManager, command->direction) != 1)) {
         Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
-    if ((action == 0) && (Field2DObject_GetParam(object, 10) >= 8)) {
+    if ((action == FIELD2D_ACTION_STAND) && (Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_STATE_FRAMES) >= 8)) {
         Field2DMove_Init(move, object, 5U, command->objectId, command->direction);
         return 1;
     }
@@ -56,7 +58,7 @@ s32 Field2DCommand_CheckRun(Field2DObject *object, Field2DMap *map, Field2DObjec
 }
 
 s32 Field2DCommand_CheckPause(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
-    if (Field2DObject_GetParam(object, 5) == 0) {
+    if (Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION) == FIELD2D_ACTION_STAND) {
         Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return 1;
     }
@@ -73,7 +75,7 @@ s32 Field2DCommand_CheckWalkSlow(Field2DObject *object, Field2DMap *map, Field2D
 }
 
 s32 Field2DCommand_CheckWalkInPlace(Field2DObject *object, Field2DMap *map, Field2DObjectManager *objectManager, Field2DCommand *command, Field2DMove *move) {
-    if (Field2DObject_GetParam(object, 5) == 0) {
+    if (Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION) == FIELD2D_ACTION_STAND) {
         Field2DMove_Init(move, object, command->action, command->objectId, command->direction);
         return TRUE;
     }
@@ -83,7 +85,7 @@ s32 Field2DCommand_CheckWalkInPlace(Field2DObject *object, Field2DMap *map, Fiel
 s32 Field2DObject_IsMapBlockedInDirection(Field2DObject *object, Field2DMap *map, u8 direction) {
     Field2DPoint targetPos = Field2DObject_GetPos(object);
     targetPos = Field2D_StepInDirection(targetPos, direction);
-    return Field2DMap_IsBlocked(map, targetPos.unk0 / 16, targetPos.unk2 / 16);
+    return Field2DMap_IsBlocked(map, targetPos.x / 16, targetPos.y / 16);
 }
 
 BOOL Field2DObject_IsObjectInDirection(Field2DObject *object, Field2DObjectManager *objectManager, u8 direction) {
@@ -163,9 +165,9 @@ void Field2DObjectSpriteManager_LoadAvatarChars(Field2DObjectSpriteManager *obje
 
 Field2DObjectSprite *Field2DObjectSpriteManager_CreateSprite(Field2DObjectSpriteManager *objectSpriteManager, Field2DObject *object, u32 priorityMode, enum HeapID heapID) {
     Field2DObjectSprite *objectSprite = Field2DObjectSpriteManager_GetFreeSprite(objectSpriteManager);
-    objectSprite->action = Field2DObject_GetParam(object, 5);
-    objectSprite->direction = Field2DObject_GetParam(object, 6);
-    objectSprite->id = Field2DObject_GetParam(object, 4);
+    objectSprite->action = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION);
+    objectSprite->direction = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION);
+    objectSprite->id = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ID);
     objectSprite->object = object;
     objectSprite->priorityMode = priorityMode;
     objectSprite->autoUpdate = 1;
@@ -173,11 +175,11 @@ Field2DObjectSprite *Field2DObjectSpriteManager_CreateSprite(Field2DObjectSprite
     objectSprite->savedAnimKind = 0;
 
     s16 spriteParams[4];
-    spriteParams[0] = Field2DObject_GetParam(object, 0);
-    spriteParams[1] = Field2DObject_GetParam(object, 1);
+    spriteParams[0] = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_X);
+    spriteParams[1] = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_Y);
     spriteParams[2] = Field2DObjectSprite_CalcDrawPriority(spriteParams[1], objectSprite->priorityMode);
     spriteParams[3] = objectSpriteManager->bgPriority;
-    objectSprite->charSprite = CharSpriteManager_CreateSprite(objectSpriteManager->charSprites, spriteParams, Field2DObject_GetParam(object, 7), heapID);
+    objectSprite->charSprite = CharSpriteManager_CreateSprite(objectSpriteManager->charSprites, spriteParams, Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_SPRITE_ID), heapID);
     Field2DObjectSprite_Update(objectSprite);
     return objectSprite;
 }
@@ -197,18 +199,18 @@ void Field2DObjectSpriteManager_Update(Field2DObjectSpriteManager *objectSpriteM
 
 void Field2DObjectSprite_Update(Field2DObjectSprite *objectSprite) {
     if (objectSprite->autoUpdate != 0) {
-        s32 action = Field2DObject_GetParam(objectSprite->object, 5);
-        s32 direction = Field2DObject_GetParam(objectSprite->object, 6);
-        s16 actionFrame = Field2DObject_GetParam(objectSprite->object, 8);
+        s32 action = Field2DObject_GetParam(objectSprite->object, FIELD2D_OBJECT_PARAM_ACTION);
+        s32 direction = Field2DObject_GetParam(objectSprite->object, FIELD2D_OBJECT_PARAM_DIRECTION);
+        s16 actionFrame = Field2DObject_GetParam(objectSprite->object, FIELD2D_OBJECT_PARAM_ACTION_FRAME);
         if ((objectSprite->action != action) || (objectSprite->direction != direction) || (actionFrame == 0)) {
             objectSprite->action = action;
             objectSprite->direction = direction;
             Field2DObjectSprite_StartAnim(objectSprite, Field2DObjectSprite_GetAnimKindForAction(objectSprite->charSprite, action), direction);
         }
-        Field2DPoint drawPos;
-        Field2DObjectSprite_GetDrawPos(objectSprite, &drawPos.unk2, &drawPos.unk0);
-        CharSprite_SetPosition(objectSprite->charSprite, drawPos.unk2, drawPos.unk0);
-        u16 drawPriority = Field2DObjectSprite_CalcDrawPriority(drawPos.unk0, objectSprite->priorityMode);
+        s16 x, y;
+        Field2DObjectSprite_GetDrawPos(objectSprite, &x, &y);
+        CharSprite_SetPosition(objectSprite->charSprite, x, y);
+        u16 drawPriority = Field2DObjectSprite_CalcDrawPriority(y, objectSprite->priorityMode);
         CharSprite_SetDrawPriority(objectSprite->charSprite, drawPriority);
         CharSprite_UpdateAnim(objectSprite->charSprite);
     }
@@ -232,7 +234,7 @@ void Field2DObjectSprite_SyncAnim(Field2DObjectSprite *objectSprite) {
 }
 
 void Field2DObjectSprite_SetPosition(Field2DObjectSprite *objectSprite, Field2DPoint pos) {
-    CharSprite_SetPosition(objectSprite->charSprite, pos.unk0, pos.unk2);
+    CharSprite_SetPosition(objectSprite->charSprite, pos.x, pos.y);
 }
 
 s32 Field2DObjectSprite_IsVisible(Field2DObjectSprite *objectSprite) {
@@ -264,7 +266,7 @@ u8 Field2DObjectSprite_GetPaletteOffset(Field2DObjectSprite *objectSprite) {
 }
 
 void Field2DObjectSprite_SetShadowPosition(Field2DObjectSprite *objectSprite, Field2DPoint pos) {
-    CharSprite_SetShadowPosition(objectSprite->charSprite, pos.unk0, pos.unk2);
+    CharSprite_SetShadowPosition(objectSprite->charSprite, pos.x, pos.y);
 }
 
 s32 Field2DObjectSprite_IsFree(Field2DObjectSprite *objectSprite) {
@@ -293,8 +295,8 @@ u8 Field2DObjectSprite_GetAnimKindForAction(CharSprite *charSprite, s32 action) 
 
 void Field2DObjectSprite_GetDrawPos(Field2DObjectSprite *objectSprite, s16 *x, s16 *y) {
     Field2DPoint drawPos = Field2DObject_GetDrawPos(objectSprite->object);
-    *x = drawPos.unk0;
-    *y = drawPos.unk2;
+    *x = drawPos.x;
+    *y = drawPos.y;
 }
 
 void Field2DObjectSprite_StartAnim(Field2DObjectSprite *objectSprite, u8 animKind, s32 direction) {
@@ -317,24 +319,26 @@ void Field2DObjectSprite_StartAnim(Field2DObjectSprite *objectSprite, u8 animKin
 
 void Field2DCamera_CenterOnObject(Field2DPoint *camera, Field2DObject *object) {
     Field2DPoint drawPos = Field2DObject_GetDrawPos(object);
-    Field2DCamera_Set(camera, drawPos.unk2 - 96, drawPos.unk0 - 112);
+    Field2DCamera_Set(camera, drawPos.y - 96, drawPos.x - 112);
 }
 
+// The camera's scroll is kept in a Field2DPoint the other way round from object positions: the vertical scroll in
+// its x field, the horizontal scroll in its y field.
 void Field2DCamera_Init(Field2DPoint *camera) {
-    memset(camera, 0, 4);
+    memset(camera, 0, sizeof(Field2DPoint));
 }
 
 void Field2DCamera_Set(Field2DPoint *camera, s16 y, s16 x) {
-    camera->unk0 = y;
-    camera->unk2 = x;
+    camera->x = y;
+    camera->y = x;
 }
 
 s16 Field2DCamera_GetY(Field2DPoint *camera) {
-    return camera->unk0;
+    return camera->x;
 }
 
 s16 Field2DCamera_GetX(Field2DPoint *camera) {
-    return camera->unk2;
+    return camera->y;
 }
 
 Field2DBgLayer *Field2DBgLayer_New(G2dRenderer *g2dRenderer, BgConfig *bgConfig, const Field2DBgLayerTemplate *template, enum HeapID heapID) {
@@ -489,7 +493,7 @@ void Field2DBgLayer_CopyTilemapRect(BgConfig *bgConfig, u8 bgId, u8 destX, u8 de
             }
             Field2DPoint blockSize;
             void *block = Field2DBgLayer_GetScreenBlock(buffer, (s8)(curSrcX / 32), blockY, layout, srcWidth, srcHeight, &blockSize);
-            CopyToBgTilemapRect(bgConfig, bgId, curDestX, destY, cols, rows, block, curSrcX % 32, blockSrcY, blockSize.unk0, blockSize.unk2);
+            CopyToBgTilemapRect(bgConfig, bgId, curDestX, destY, cols, rows, block, curSrcX % 32, blockSrcY, blockSize.x, blockSize.y);
             curSrcX += cols;
             curDestX += cols;
         }
@@ -520,8 +524,8 @@ u8 Field2DBgLayer_GetScreenBlockLayout(u8 width, u8 height) {
 void *Field2DBgLayer_GetScreenBlock(void *buffer, u8 blockX, u8 blockY, u8 layout, u8 width, u8 height, Field2DPoint *blockSize) {
     switch (layout) {
     case 0:
-        blockSize->unk0 = width;
-        blockSize->unk2 = height;
+        blockSize->x = width;
+        blockSize->y = height;
         return buffer;
     case 1:
         int blockWidth;
@@ -530,18 +534,18 @@ void *Field2DBgLayer_GetScreenBlock(void *buffer, u8 blockX, u8 blockY, u8 layou
         } else {
             blockWidth = width - (blockX << 5);
         }
-        blockSize->unk0 = blockWidth;
-        blockSize->unk2 = height;
+        blockSize->x = blockWidth;
+        blockSize->y = height;
         return buffer + blockX * ((s16)(height << 6));
     case 2:
-        blockSize->unk0 = width;
+        blockSize->x = width;
         int blockHeight;
         if (((blockY + 1) << 5) <= height) {
             blockHeight = 32;
         } else {
             blockHeight = height - (blockY << 5);
         }
-        blockSize->unk2 = blockHeight;
+        blockSize->y = blockHeight;
         return buffer + blockY * ((s16)(width << 6));
     case 3:
         int extent;
@@ -550,13 +554,13 @@ void *Field2DBgLayer_GetScreenBlock(void *buffer, u8 blockX, u8 blockY, u8 layou
         } else {
             extent = width - (blockX << 5);
         }
-        blockSize->unk0 = extent;
+        blockSize->x = extent;
         if (((blockY + 1) << 5) <= height) {
             extent = 32;
         } else {
             extent = height - (blockY << 5);
         }
-        blockSize->unk2 = extent;
+        blockSize->y = extent;
         u16 offset;
         if (blockY == 0) {
             offset = 0;

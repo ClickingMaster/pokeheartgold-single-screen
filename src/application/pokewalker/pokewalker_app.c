@@ -28,17 +28,17 @@ typedef struct PokewalkerAppModeEntry {
     PokewalkerAppModeFunc other[2];
 } PokewalkerAppModeEntry;
 
-extern const PokewalkerAppModeEntry sPokewalkerAppModeEnter[];  // enter
-extern const PokewalkerAppModeEntry sPokewalkerAppModeUpdate[]; // update
-extern const PokewalkerAppModeEntry sPokewalkerAppModeExit[];   // exit
-extern const GraphicsModes sPokewalkerAppGraphicsModes;
-extern const GraphicsBanks sPokewalkerAppGraphicsBanks;
-extern const BgTemplate sPokewalkerAppBgTemplate_Main1;
-extern const BgTemplate sPokewalkerAppBgTemplate_Main2;
-extern const BgTemplate sPokewalkerAppBgTemplate_Main3;
-extern const BgTemplate sPokewalkerAppBgTemplate_Sub0;
-extern const BgTemplate sPokewalkerAppBgTemplate_Sub1;
-extern const BgTemplate sPokewalkerAppBgTemplate_Sub2;
+extern const PokewalkerAppModeEntry gPokewalkerAppModeEnter[];  // enter
+extern const PokewalkerAppModeEntry gPokewalkerAppModeUpdate[]; // update
+extern const PokewalkerAppModeEntry gPokewalkerAppModeExit[];   // exit
+extern const GraphicsModes gPokewalkerAppGraphicsModes;
+extern const GraphicsBanks gPokewalkerAppGraphicsBanks;
+extern const BgTemplate gPokewalkerAppBgTemplate_Main1;
+extern const BgTemplate gPokewalkerAppBgTemplate_Main2;
+extern const BgTemplate gPokewalkerAppBgTemplate_Main3;
+extern const BgTemplate gPokewalkerAppBgTemplate_Sub0;
+extern const BgTemplate gPokewalkerAppBgTemplate_Sub1;
+extern const BgTemplate gPokewalkerAppBgTemplate_Sub2;
 BOOL PokewalkerApp_Init(OverlayManager *manager, int *state) {
     PokewalkerApp *app;
     Main_SetVBlankIntrCB(NULL, NULL);
@@ -104,14 +104,14 @@ BOOL PokewalkerApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 1:
-        *state = sPokewalkerAppModeEnter[app->mode].func(app);
+        *state = gPokewalkerAppModeEnter[app->mode].func(app);
         break;
     case 2:
-        *state = sPokewalkerAppModeUpdate[app->mode].func(app);
+        *state = gPokewalkerAppModeUpdate[app->mode].func(app);
         BgSetPosTextAndCommit(app->bgConfig, GF_BG_LYR_SUB_1, BG_POS_OP_SET_X, app->subBgScrollX);
         break;
     case 3:
-        *state = sPokewalkerAppModeExit[app->mode].func(app);
+        *state = gPokewalkerAppModeExit[app->mode].func(app);
         if (app->nextMode == 11) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 6, 1, HEAP_ID_154);
             *state = 4;
@@ -167,22 +167,22 @@ void PokewalkerApp_VBlankCB(void *arg) {
 }
 
 void PokewalkerApp_SetGxBanks(void) {
-    GraphicsBanks banks = sPokewalkerAppGraphicsBanks;
+    GraphicsBanks banks = gPokewalkerAppGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void PokewalkerApp_InitBgs(BgConfig *bgConfig) {
-    GraphicsModes modes = sPokewalkerAppGraphicsModes;
+    GraphicsModes modes = gPokewalkerAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &sPokewalkerAppBgTemplate_Main1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &sPokewalkerAppBgTemplate_Main2, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &sPokewalkerAppBgTemplate_Main3, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &gPokewalkerAppBgTemplate_Main1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_2, &gPokewalkerAppBgTemplate_Main2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_3, &gPokewalkerAppBgTemplate_Main3, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_2);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_3);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sPokewalkerAppBgTemplate_Sub0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sPokewalkerAppBgTemplate_Sub1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sPokewalkerAppBgTemplate_Sub2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &gPokewalkerAppBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &gPokewalkerAppBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &gPokewalkerAppBgTemplate_Sub2, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);

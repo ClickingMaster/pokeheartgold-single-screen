@@ -315,7 +315,7 @@ typedef struct DressUpPlttUpload {
     u32 size;
 } DressUpPlttUpload;
 
-extern const u8 sDressUpKeyPressTouchStates[2];
+extern const u8 gDressUpKeyPressTouchStates[2];
 
 static DressUpSlot *DressUpGfx_AddSlotObject(DressUpSlotTemplate *template);
 static BOOL DressUpGfx_IsTouchHeldOnSlot(DressUpSlot *slot);
@@ -4167,7 +4167,7 @@ static void DressUpButtonPanel_HandleKeys(DressUpButtonPanel *panel) {
     }
     if (panel->keyRepeat) {
         panel->keyRepeat--;
-        DressUpButtonPanel_OnTouch(panel->key, sDressUpKeyPressTouchStates[panel->keyRepeat ^ 1], panel);
+        DressUpButtonPanel_OnTouch(panel->key, gDressUpKeyPressTouchStates[panel->keyRepeat ^ 1], panel);
         return;
     }
     keys = gSystem.newKeys;

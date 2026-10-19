@@ -25,9 +25,9 @@ enum PalPadMenuItem {
     PALPAD_MENU_EXIT,
 };
 
-extern const TouchscreenHitbox sPalPadMenuHitboxes[];
-extern const u8 sPalPadMenuRegisterErrorMsgIds[];
-extern const u8 sPalPadMenuItemScreens[];
+extern const TouchscreenHitbox gPalPadMenuHitboxes[];
+extern const u8 gPalPadMenuRegisterErrorMsgIds[];
+extern const u8 gPalPadMenuItemScreens[];
 
 static void PalPadMenu_Show(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx);
 static BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gfx);
@@ -138,7 +138,7 @@ int PalPadMenu_Main(PalPadMenu *menu, PalPadShared *shared, PalPadGfx *gfx, enum
                 PalPadMenu_ClearMessage(menu);
                 shared->subState = PALPAD_MENU_STATE_INPUT;
             } else {
-                PalPadMenu_PrintMessage(menu, gfx, sPalPadMenuRegisterErrorMsgIds[result], heapId);
+                PalPadMenu_PrintMessage(menu, gfx, gPalPadMenuRegisterErrorMsgIds[result], heapId);
                 shared->subState = PALPAD_MENU_STATE_WAIT_MESSAGE;
             }
             break;
@@ -256,7 +256,7 @@ static BOOL PalPadMenu_HandleKeys(u32 *selection, u32 *inputState, PalPadGfx *gf
 }
 
 static BOOL PalPadMenu_HandleTouch(u32 *selection, u32 *inputState, PalPadGfx *gfx, BOOL *touched) {
-    int hit = TouchscreenHitbox_FindHitboxAtTouchNew(sPalPadMenuHitboxes);
+    int hit = TouchscreenHitbox_FindHitboxAtTouchNew(gPalPadMenuHitboxes);
 
     if (hit == -1) {
         return FALSE;
@@ -310,7 +310,7 @@ static void PalPadMenu_ClearHighlight(PalPadMenu *menu, PalPadGfx *gfx) {
 }
 
 static void PalPadMenu_SetNextScreen(u32 *selection, PalPadShared *shared) {
-    PalPadShared_SetNextScreen(shared, sPalPadMenuItemScreens[*selection], 0);
+    PalPadShared_SetNextScreen(shared, gPalPadMenuItemScreens[*selection], 0);
 }
 
 static void PalPadMenu_Hide(PalPadMenu *menu, PalPadGfx *gfx) {

@@ -7,7 +7,7 @@
 	.public TallGrassUnusedEffect_Update
 	.public TallGrassUnusedEffect_Draw
 	.public gTallGrassEffectTemplate
-	.public sTallGrassUnusedEffectTemplate
+	.public gTallGrassUnusedEffectTemplate
 	.include "asm/macros.inc"
 	.include "field_tall_grass_data.inc"
 	.include "global.inc"
@@ -21,7 +21,7 @@ gTallGrassEffectTemplate:
 	.word TallGrassEffect_Update
 	.word TallGrassEffect_Draw
 
-sTallGrassUnusedEffectTemplate:
+gTallGrassUnusedEffectTemplate:
 	.word 0x00000028
 	.word TallGrassUnusedEffect_Init
 	.word TallGrassUnusedEffect_Destroy

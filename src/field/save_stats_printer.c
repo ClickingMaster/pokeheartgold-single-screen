@@ -142,7 +142,7 @@ static int SaveStatsPrinter_GetHeight(struct SaveStatsPrinterStats *stats) {
     return 10;
 }
 
-// The save prompt layout: the location, then label / value lines (the Pokedex line only once it is enabled).
+// The save prompt layout: the location, then label / value lines.
 static void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer) {
     String *str;
     int y;
@@ -157,6 +157,8 @@ static void SaveStatsPrinter_PrintStats(struct SaveStatsPrinter *printer) {
     String_Delete(str);
 
     for (i = 1; i < 5; i++) {
+        // BUG: this tests the message id against the Pokedex row's index (3), which never matches, so the Pokedex
+        // line is printed even before the Pokedex is obtained.
         if (sMsgIdsSub[i] == 3 && printer->stats.dexOwned == 0) {
             continue;
         }
@@ -234,7 +236,7 @@ static void SaveStatsPrinter_PrintStatRows(struct SaveStatsPrinter *printer) {
     lineHeight = GetFontAttribute(0, 1) + GetFontAttribute(0, 3);
     row = sStatRows;
     for (i = 0; i < 9; i++, row++) {
-        if (printer->stats.dexOwned == 0 && (row->msgId == 0xB || row->msgId == 7)) {
+        if (printer->stats.dexOwned == 0 && (row->msgId == msg_0423_00011 || row->msgId == msg_0423_00007)) {
             continue;
         }
         str = ReadMsgData_ExpandPlaceholders(printer->msgFmt, printer->msgData, row->msgId, printer->heapId);

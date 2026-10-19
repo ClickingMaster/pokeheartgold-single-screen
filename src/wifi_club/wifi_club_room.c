@@ -61,7 +61,7 @@ void WifiClubRoom_Init(WifiClubRoom *room, enum HeapID heapID, NARC *narc, BgCon
     WifiClubRoom_InitBgs(room->bgConfig, heapID);
 
     Field2DPoint mapSize = WifiClubRoom_GetMapSize(mapIndex);
-    room->map = Field2DMap_New(mapSize.unk0, mapSize.unk2, heapID);
+    room->map = Field2DMap_New(mapSize.x, mapSize.y, heapID);
     Field2DMap_Load(room->map, WifiClubRoom_GetMapCells(mapIndex));
     room->objects = Field2DObjectManager_New(0x30, heapID);
     WifiClubRoom_CreateDrawers(room, playerSpriteId, heapID);
@@ -132,13 +132,13 @@ u8 WifiClubRoom_GetTalkPartnerId(WifiClubRoom *room) {
 s32 WifiClubRoom_GetTileAtPlayer(WifiClubRoom *room) {
     GF_ASSERT(room->player != NULL);
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
-    return Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16);
+    return Field2DMap_GetTag(room->map, pos.x / 16, pos.y / 16);
 }
 
 s32 WifiClubRoom_GetTileBelowPlayer(WifiClubRoom *room) {
     GF_ASSERT(room->player != NULL);
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
-    return Field2DMap_GetTag(room->map, pos.unk0 / 16, (pos.unk2 / 16) + 1);
+    return Field2DMap_GetTag(room->map, pos.x / 16, (pos.y / 16) + 1);
 }
 
 void WifiClubRoom_ShowFriendMarker(WifiClubRoom *room, WifiClubRoomPerson *person) {
@@ -177,7 +177,7 @@ WifiClubRoomPerson *WifiClubRoom_AddFriend(WifiClubRoom *room, s16 spriteId, s16
     WifiClubRoom_FindFriendSpawnPos(room, &pos[0], id - 1);
     if (room->player != NULL) {
         Field2DPoint playerPos = Field2DObject_GetPos(room->player->object);
-        if ((playerPos.unk0 == pos[0]) && (playerPos.unk2 == pos[1])) {
+        if ((playerPos.x == pos[0]) && (playerPos.y == pos[1])) {
             return NULL;
         }
     }
@@ -281,7 +281,7 @@ s32 WifiClubRoom_IsPlayerFacingCounter(WifiClubRoom *room) {
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
     u32 direction = Field2DObject_GetParam(room->player->object, 6);
     pos = Field2D_StepInDirection(pos, direction);
-    s32 tag = Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16);
+    s32 tag = Field2DMap_GetTag(room->map, pos.x / 16, pos.y / 16);
     if ((direction == 0) && (tag == 2)) {
         return 1;
     }
@@ -473,8 +473,8 @@ void WifiClubRoom_HideExitArrow(WifiClubRoom *room) {
 
 void WifiClubRoom_ShowFriendMarkerAt(WifiClubRoom *room, Field2DPoint pos, s32 drawPriority) {
     VecFx32 vec;
-    vec.x = (s16)(pos.unk0 + 8) * FX32_ONE;
-    vec.y = pos.unk2 * FX32_ONE;
+    vec.x = (s16)(pos.x + 8) * FX32_ONE;
+    vec.y = pos.y * FX32_ONE;
     Sprite_SetMatrix(room->gfx.friendMarkerSprite, &vec);
     Sprite_SetDrawPriority(room->gfx.friendMarkerSprite, drawPriority);
     Sprite_SetDrawFlag(room->gfx.friendMarkerSprite, 1);
@@ -490,7 +490,7 @@ s32 WifiClubRoom_IsPlayerAtEntrance(WifiClubRoom *room) {
     }
     Field2DPoint pos = Field2DObject_GetPos(room->player->object);
     u32 direction = Field2DObject_GetParam(room->player->object, 6);
-    if (Field2DMap_GetTag(room->map, pos.unk0 / 16, pos.unk2 / 16) == 0xF && direction == 1) {
+    if (Field2DMap_GetTag(room->map, pos.x / 16, pos.y / 16) == 0xF && direction == 1) {
         return 1;
     }
     return 0;
@@ -627,7 +627,7 @@ void WifiClubRoomPerson_AnimateWarp(WifiClubRoom *room, WifiClubRoomPerson *pers
     offset += 2048;
 
     s32 r1 = (offset >> 12);
-    pos.unk2 = (s16)pos.unk2 + (r1 >> 12);
+    pos.y = (s16)pos.y + (r1 >> 12);
 
     Field2DObjectSprite_SetPosition(person->drawer, pos);
     Field2DObjectSprite_SetShadowPosition(person->drawer, shadowPos);
@@ -643,7 +643,7 @@ void WifiClubRoomPerson_AnimateHop(WifiClubRoom *room, WifiClubRoomPerson *perso
         s32 sine = GF_SinDegNoWrap(temp_r0_2 / 6);
 
         s64 r6 = ((s64)sine << 14) + 2048;
-        pos.unk2 = (s16)pos.unk2 - ((s32)(r6 >> 12) >> 12);
+        pos.y = (s16)pos.y - ((s32)(r6 >> 12) >> 12);
     }
     Field2DObjectSprite_SetPosition(person->drawer, pos);
     Field2DObjectSprite_SetShadowPosition(person->drawer, shadowPos);

@@ -138,8 +138,8 @@ typedef struct UnownReportInfoPage {
     UnownReportTextBlock right;
 } UnownReportInfoPage;
 
-extern const ResdatIdList sUnownReportResdatIds;
-extern const TouchscreenHitbox sUnownReportHitboxes[];
+extern const ResdatIdList gUnownReportResdatIds;
+extern const TouchscreenHitbox gUnownReportHitboxes[];
 
 static void UnownReport_ResetDisplay();
 static int UnownReport_GetSeenPunctuationForms(Pokedex *pokedex, u8 *forms);
@@ -761,7 +761,7 @@ static int UnownReport_HandleKeys(UnownReportApp *app) {
 }
 
 static int UnownReport_HandleTouch(UnownReportApp *app, BOOL *touched) {
-    int hitbox = TouchscreenHitbox_FindHitboxAtTouchNew(sUnownReportHitboxes);
+    int hitbox = TouchscreenHitbox_FindHitboxAtTouchNew(gUnownReportHitboxes);
 
     if (hitbox == -1) {
         return UNOWN_REPORT_MAIN_INPUT;
@@ -1039,7 +1039,7 @@ static void UnownReport_InitSpriteSystem(UnownReportApp *app) {
     thunk_ClearSubOAM(app->heapID);
     app->spriteManager = SpriteManager_New(app->spriteSystem);
     SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 17);
-    SpriteSystem_LoadResourceDataFromFileIdListEx(app->spriteSystem, app->spriteManager, &sUnownReportResdatIds, 0, 0);
+    SpriteSystem_LoadResourceDataFromFileIdListEx(app->spriteSystem, app->spriteManager, &gUnownReportResdatIds, 0, 0);
     capacities = sUnownReportSpriteResourceCounts;
     app->iconManager = SpriteManager_New(app->spriteSystem);
     SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->iconManager, &capacities);

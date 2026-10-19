@@ -8,6 +8,8 @@
 
 u8 gMapLoadPrimaryBuffers[MAP_LOAD_BUFFER_COUNT][MAP_LOAD_PRIMARY_BUFFER_SIZE];
 
+static void MapLoadBuffers_Clear(int index, u32 primarySize, u32 secondarySize, MapLoadBuffers *buffers);
+
 MapLoadBuffers *MapLoadBuffers_New(BOOL withSecondary) {
     u8 i;
     MapLoadBuffers *buffers = Heap_Alloc(HEAP_ID_FIELD1, sizeof(MapLoadBuffers));
@@ -54,7 +56,7 @@ void MapLoadBuffers_GetSecondary(u32 index, MapLoadBuffers *buffers, void **out)
     *out = buffers->secondary[index];
 }
 
-void MapLoadBuffers_Clear(int index, u32 primarySize, u32 secondarySize, MapLoadBuffers *buffers) {
+static void MapLoadBuffers_Clear(int index, u32 primarySize, u32 secondarySize, MapLoadBuffers *buffers) {
     MI_CpuFill8(buffers->primary[index], 0, primarySize);
     MI_CpuFill8(buffers->secondary[index], 0, secondarySize);
 }

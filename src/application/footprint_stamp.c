@@ -44,8 +44,8 @@ u32 WiFiPlazaLobbyClient_GetOwnId(void *unused);
 int WiFiPlazaLobbyClient_IdToChannelSlot(u32 playerId);
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
 
-extern const FootprintStampEffectFuncs sFootprintStampEffectFuncs[];
-extern BOOL (*const sFootprintStampCameraEffectFuncs[])(FootprintStampBoard *unused, FootprintStampBoard *board, Camera *camera);
+extern const FootprintStampEffectFuncs gFootprintStampEffectFuncs[];
+extern BOOL (*const gFootprintStampCameraEffectFuncs[])(FootprintStampBoard *unused, FootprintStampBoard *board, Camera *camera);
 
 typedef struct FootprintStampBgTemplates {
     BgTemplate items[3];
@@ -1436,7 +1436,7 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
         FootprintStampBoard_Flash(board, &board->flash, phase, inkColumn);
     }
     if (board->cameraEffect) {
-        if (sFootprintStampCameraEffectFuncs[board->cameraEffect](board, board, camera) == TRUE) {
+        if (gFootprintStampCameraEffectFuncs[board->cameraEffect](board, board, camera) == TRUE) {
             board->cameraEffect = FOOTPRINT_STAMP_EFFECT_NONE;
         }
     }
@@ -1446,7 +1446,7 @@ void FootprintStampBoard_Update(FootprintStampBoard *board, Camera *camera, int 
             if (stamp->effectId == FOOTPRINT_STAMP_EFFECT_NONE && stamp->pendingEffect != FOOTPRINT_STAMP_EFFECT_NONE) {
                 stamp->effectId = stamp->pendingEffect;
             }
-            if (sFootprintStampEffectFuncs[stamp->effectId].update(board, stamp) == TRUE) {
+            if (gFootprintStampEffectFuncs[stamp->effectId].update(board, stamp) == TRUE) {
                 FootprintStampBoard_RemoveStamp(board, stamp, i);
             }
         }
@@ -1460,8 +1460,8 @@ static void FootprintStampBoard_Draw(FootprintStampBoard *board) {
         FootprintStampObj *stamp = board->stamps[i];
         if (stamp != NULL) {
             u32 effect = stamp->effectId;
-            if (sFootprintStampEffectFuncs[effect].draw != NULL) {
-                sFootprintStampEffectFuncs[effect].draw(board, stamp);
+            if (gFootprintStampEffectFuncs[effect].draw != NULL) {
+                gFootprintStampEffectFuncs[effect].draw(board, stamp);
             } else {
                 ModelInstance_Draw(&stamp->instance);
             }
@@ -1499,7 +1499,7 @@ void FootprintStampBoard_ResolveChains(FootprintStampBoard *board) {
         other = board->sorted[FOOTPRINT_STAMP_STAMPS_MAX - 1 - j];
         for (m = 0; m < numActive; m++) {
             stamp = board->sorted[m];
-            if (sFootprintStampEffectFuncs[stamp->effectId].hit(board, stamp, other) == TRUE && FootprintStamp_SetEffect(other, stamp->effectId) == TRUE && other->chain == 0xFF) {
+            if (gFootprintStampEffectFuncs[stamp->effectId].hit(board, stamp, other) == TRUE && FootprintStamp_SetEffect(other, stamp->effectId) == TRUE && other->chain == 0xFF) {
                 other->chain = stamp->chain;
                 FootprintStampBoard_AddToChain(board, stamp->chain, stamp->effectId);
                 break;

@@ -18,7 +18,7 @@
 #include "save_vars_flags.h"
 #include "string_util.h"
 
-extern const u16 sTrainerHouseDailyFlags[MAX_NUM_TRAINER_HOUSE_SETS];
+extern const u16 gTrainerHouseDailyFlags[MAX_NUM_TRAINER_HOUSE_SETS];
 
 BOOL PokewalkerApp_IsEventLogInvalid(PokewalkerIrRecord *records) {
     u16 maxSpecies = NATIONAL_DEX_COUNT;
@@ -196,7 +196,7 @@ void PokewalkerApp_GetTrainerHouseDailyFlags(SaveData *saveData, u8 *flags) {
     SaveVarsFlags *varsFlags = Save_VarsFlags_Get(saveData);
     int i;
     for (i = 0; i < MAX_NUM_TRAINER_HOUSE_SETS; i++) {
-        flags[i] = Save_VarsFlags_CheckFlagInArray(varsFlags, sTrainerHouseDailyFlags[i]);
+        flags[i] = Save_VarsFlags_CheckFlagInArray(varsFlags, gTrainerHouseDailyFlags[i]);
     }
 }
 
@@ -205,9 +205,9 @@ void PokewalkerApp_SetTrainerHouseDailyFlags(SaveData *saveData, const u8 *flags
     int i;
     for (i = 0; i < MAX_NUM_TRAINER_HOUSE_SETS; i++) {
         if (flags[i]) {
-            Save_VarsFlags_SetFlagInArray(varsFlags, sTrainerHouseDailyFlags[i]);
+            Save_VarsFlags_SetFlagInArray(varsFlags, gTrainerHouseDailyFlags[i]);
         } else {
-            Save_VarsFlags_ClearFlagInArray(varsFlags, sTrainerHouseDailyFlags[i]);
+            Save_VarsFlags_ClearFlagInArray(varsFlags, gTrainerHouseDailyFlags[i]);
         }
     }
 }

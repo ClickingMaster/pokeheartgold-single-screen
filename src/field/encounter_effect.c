@@ -50,7 +50,7 @@ typedef struct EncounterEffectFlash {
 
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
 
-extern void (*const sEncounterEffectFuncs[])(SysTask *task, EncounterEffectTask *effect);
+extern void (*const gEncounterEffectFuncs[])(SysTask *task, EncounterEffectTask *effect);
 
 static void Task_EncounterEffectFlash(SysTask *task, void *data);
 static void EncounterEffect_SetMasterBrightness(int screen, s32 brightness);
@@ -58,8 +58,10 @@ static void BrightnessInterp_Init(BrightnessInterp *interp, s32 start, s32 end, 
 static BOOL BrightnessInterp_Update(BrightnessInterp *interp);
 static void Task_ApplyBrightness(SysTask *task, void *data);
 
-void Task_RunEncounterEffect(SysTask *task, EncounterEffectTask *effect) {
-    sEncounterEffectFuncs[gEncounterEffectState.effect](task, effect);
+static void Task_RunEncounterEffect(SysTask *task, void *data);
+static void Task_RunEncounterEffect(SysTask *task, void *data) {
+    EncounterEffectTask *effect = data;
+    gEncounterEffectFuncs[gEncounterEffectState.effect](task, effect);
     gEncounterEffectState.frameCount++;
     OS_GetTick();
     OS_SetTick(0);
@@ -135,7 +137,7 @@ void EncounterEffect_Start(s32 effect, FieldSystem *fieldSystem, BOOL *done) {
     BOOL *taskDone;
     gEncounterEffectState.effect = effect;
     gEncounterEffectState.frameCount = 0;
-    task = CreateSysTaskAndEnvironment((SysTaskFunc)Task_RunEncounterEffect, sizeof(EncounterEffectTask), 5, HEAP_ID_FIELD1);
+    task = CreateSysTaskAndEnvironment(Task_RunEncounterEffect, sizeof(EncounterEffectTask), 5, HEAP_ID_FIELD1);
     effectTask = SysTask_GetData(task);
     effectTask->fieldSystem = fieldSystem;
     effectTask->done = done;

@@ -44,7 +44,7 @@ void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 #define PC_BOX_SLOT_COUNT       36
 #define PC_BOX_SLOT_NONE        0xFF
 
-// sPCBoxStateTable: state N runs PCBox_State_<Name>
+// gPCBoxStateTable: state N runs PCBox_State_<Name>
 enum PCBoxState {
     PC_BOX_STATE_INIT,
     PC_BOX_STATE_TEARDOWN,

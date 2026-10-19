@@ -266,4 +266,4 @@
 .public WobbuffetPop_QueueFinishEvent
 .public WobbuffetPop_QueueSyncEvent
 .public WobbuffetPop_QueueDemoEvent
-.public sWobbuffetPopBalloonAirRates
+.public gWobbuffetPopBalloonAirRates

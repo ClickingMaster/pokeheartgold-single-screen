@@ -154,41 +154,41 @@ enum SwalotPlopCommandId {
     SWALOT_PLOP_CMD_SYNC,
 };
 
-extern const u16 sSwalotPlopStageAnimFiles[];
-extern const u16 sSwalotPlopStageAnimModels[];
-extern const u16 sSwalotPlopSceneModelFiles[3];
-extern const u16 sSwalotPlopStageFiles[];
+extern const u16 gSwalotPlopStageAnimFiles[];
+extern const u16 gSwalotPlopStageAnimModels[];
+extern const u16 gSwalotPlopSceneModelFiles[3];
+extern const u16 gSwalotPlopStageFiles[];
 typedef struct SwalotPlopAnimRange {
     u8 start;
     u8 end;
 } SwalotPlopAnimRange;
 
-extern const SwalotPlopAnimRange sSwalotPlopSpecialAnimRanges[];
-extern const u16 sSwalotPlopSceneAnimFiles[6];
-extern const VecFx32 sSwalotPlopBodyOffset;
-extern const u32 sSwalotPlopHitPoints[];
-extern const u32 sSwalotPlopPhaseFrames[];
-extern const VecFx32 sSwalotPlopBodyBaseNormal;
-extern int (*const sSwalotPlopTiltFuncs[])(SwalotPlopBody *body, u32 frame, u32 duration);
-extern const ObjCharTransferTemplate sSwalotPlopObjCharTransfer;
-extern const GraphicsModes sSwalotPlopGraphicsModes;
-extern const s16 sSwalotPlopDemoCursorYs[];
-extern const BgTemplate sSwalotPlopMain1BgTemplate;
-extern const BgTemplate sSwalotPlopMain2BgTemplate;
-extern const BgTemplate sSwalotPlopSub0BgTemplate;
-extern const BgTemplate sSwalotPlopSub1BgTemplate;
-extern const BgTemplate sSwalotPlopSub2BgTemplate;
-extern const BgTemplate sSwalotPlopSub3BgTemplate;
-extern const u16 sSwalotPlopSeatAngles[][4];
-extern const u16 sSwalotPlopCameraAngles[][4];
-extern const u16 sSwalotPlopStageRotations[][4];
-extern const GraphicsBanks sSwalotPlopBanks;
-extern const u32 sSwalotPlopIntroNamePositions[];
-extern const u8 sSwalotPlopPopupPosX[];
-extern const u8 sSwalotPlopPopupPosY[];
-extern const NNSG3dResName sSwalotPlopSceneNodeNames[6][15];
-extern const u8 sSwalotPlopSceneAnimModels[6];
-extern const SwalotPlopCommand sSwalotPlopCommands[8];
+extern const SwalotPlopAnimRange gSwalotPlopSpecialAnimRanges[];
+extern const u16 gSwalotPlopSceneAnimFiles[6];
+extern const VecFx32 gSwalotPlopBodyOffset;
+extern const u32 gSwalotPlopHitPoints[];
+extern const u32 gSwalotPlopPhaseFrames[];
+extern const VecFx32 gSwalotPlopBodyBaseNormal;
+extern int (*const gSwalotPlopTiltFuncs[])(SwalotPlopBody *body, u32 frame, u32 duration);
+extern const ObjCharTransferTemplate gSwalotPlopObjCharTransfer;
+extern const GraphicsModes gSwalotPlopGraphicsModes;
+extern const s16 gSwalotPlopDemoCursorYs[];
+extern const BgTemplate gSwalotPlopMain1BgTemplate;
+extern const BgTemplate gSwalotPlopMain2BgTemplate;
+extern const BgTemplate gSwalotPlopSub0BgTemplate;
+extern const BgTemplate gSwalotPlopSub1BgTemplate;
+extern const BgTemplate gSwalotPlopSub2BgTemplate;
+extern const BgTemplate gSwalotPlopSub3BgTemplate;
+extern const u16 gSwalotPlopSeatAngles[][4];
+extern const u16 gSwalotPlopCameraAngles[][4];
+extern const u16 gSwalotPlopStageRotations[][4];
+extern const GraphicsBanks gSwalotPlopBanks;
+extern const u32 gSwalotPlopIntroNamePositions[];
+extern const u8 gSwalotPlopPopupPosX[];
+extern const u8 gSwalotPlopPopupPosY[];
+extern const NNSG3dResName gSwalotPlopSceneNodeNames[6][15];
+extern const u8 gSwalotPlopSceneAnimModels[6];
+extern const SwalotPlopCommand gSwalotPlopCommands[8];
 
 const u8 sSwalotPlopModelIds[] = { 0, 0, 0, 0 };
 
@@ -873,7 +873,7 @@ BOOL SwalotPlopGame_RunFinish(SwalotPlopGame *game, BOOL ready) {
 BOOL SwalotPlopGame_Update(SwalotPlopGame *game) {
     u32 phase = game->phase;
     u32 leader;
-    if (phase < 2 && sSwalotPlopPhaseFrames[phase] <= game->frame) {
+    if (phase < 2 && gSwalotPlopPhaseFrames[phase] <= game->frame) {
         game->phase = phase + 1;
         if (game->phase == SWALOT_PLOP_PHASE_FAST) {
             SwalotPlopSpeedUp_Start(&game->speedUp);
@@ -996,8 +996,8 @@ BOOL SwalotPlopCurve_Update(SwalotPlopCurve *curve) {
 }
 
 void SwalotPlop_GetPopupPos(int seat, int playerCount, int index, u32 *x, u32 *y) {
-    *x = *(const u32 *)(sSwalotPlopPopupPosX + playerCount * 0x80 + seat * 0x20 + index * 8);
-    *y = *(const u32 *)(sSwalotPlopPopupPosY + playerCount * 0x80 + seat * 0x20 + index * 8);
+    *x = *(const u32 *)(gSwalotPlopPopupPosX + playerCount * 0x80 + seat * 0x20 + index * 8);
+    *y = *(const u32 *)(gSwalotPlopPopupPosY + playerCount * 0x80 + seat * 0x20 + index * 8);
 }
 
 void SwalotPlopGame_ThrowDemoShot(SwalotPlopGame *game, s32 x, s32 y, s32 endX, u16 endY, int state) {
@@ -1033,7 +1033,7 @@ u32 SwalotPlopGame_GetHitPoints(SwalotPlopGame *game) {
     } else {
         index = (u8)combo;
     }
-    points = sSwalotPlopHitPoints[index];
+    points = gSwalotPlopHitPoints[index];
     if (game->phase == SWALOT_PLOP_PHASE_FASTEST) {
         points = points + points * 2;
     }
@@ -1217,7 +1217,7 @@ void SwalotPlopIntro_Init(SwalotPlopIntro *intro, SwalotPlopGfx *gfx, SwalotPlop
     string = String_New(128, heapId);
     u32 i;
     for (i = 0; i < playerCount; i++) {
-        const u32 *table = sSwalotPlopIntroNamePositions + localIndex * 32 + playerCount * 8 + i * 2;
+        const u32 *table = gSwalotPlopIntroNamePositions + localIndex * 32 + playerCount * 8 + i * 2;
         if (i != localIndex) {
             x = table[-8];
             u32 y = table[-7];
@@ -1321,7 +1321,7 @@ void SwalotPlopBody_Init(SwalotPlopGame *game, SwalotPlopBody *body) {
     body->pushRadius = 0xC8000;
     body->pushStrength = 123;
     body->mouthDepth = 0x50000;
-    offset = sSwalotPlopBodyOffset;
+    offset = gSwalotPlopBodyOffset;
     body->offset = offset;
     SwalotPlopBody_SetScale(body, 0x9C4);
     body->position = offset;
@@ -1334,7 +1334,7 @@ void SwalotPlopBody_Update(SwalotPlopGame *game, SwalotPlopBody *body) {
     } else {
         body->mouthOpen = TRUE;
     }
-    int (*getTilt)(SwalotPlopBody *, u32, u32) = sSwalotPlopTiltFuncs[game->phase];
+    int (*getTilt)(SwalotPlopBody *, u32, u32) = gSwalotPlopTiltFuncs[game->phase];
     int tilt = getTilt(body, game->frame, game->duration);
     SwalotPlopBody_SetTilt(body, tilt);
     body->mouthDepth = SwalotPlopBody_CalcMouthDepth(body, body->tilt);
@@ -1360,7 +1360,7 @@ void SwalotPlopBody_SetSpin(SwalotPlopBody *body, u16 spin) {
     MTX_Identity33_(&body->spinMtx);
     MTX_RotY33_(&body->spinMtx, FX_SinIdx(spin), FX_CosIdx(spin));
     MTX_Concat33(&body->tiltMtx, &body->spinMtx, &body->rotation);
-    MTX_MultVec33(&sSwalotPlopBodyBaseNormal, &body->rotation, &body->normal);
+    MTX_MultVec33(&gSwalotPlopBodyBaseNormal, &body->rotation, &body->normal);
     v.x = 0;
     v.y = 0;
     v.z = -body->mouthDepth;
@@ -2228,7 +2228,7 @@ BOOL SwalotPlopDemo_Update(SwalotPlopDemo *demo, SwalotPlopGame *game) {
             SwalotPlopCursor_Hide(&game->gfx.cursor);
             break;
         }
-        SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, sSwalotPlopDemoCursorYs[frame]);
+        SwalotPlopCursor_SetPos(&game->gfx.cursor, 128, gSwalotPlopDemoCursorYs[frame]);
         break;
     }
     case SWALOT_PLOP_DEMO_PAUSE:
@@ -2295,7 +2295,7 @@ BOOL SwalotPlopScoreReports_HasAll(SwalotPlopScoreReports *reports, u32 playerCo
 
 void SwalotPlopGfx_SetBanks(void) {
     GraphicsBanks banks;
-    banks = sSwalotPlopBanks;
+    banks = gSwalotPlopBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -2408,29 +2408,29 @@ void SwalotPlopGame_Draw(SwalotPlopGame *game, SwalotPlopGfx *gfx) {
 
 void SwalotPlopGfx_InitBgs(BgConfig **bgConfig, enum HeapID heapId) {
     *bgConfig = BgConfig_Alloc(heapId);
-    GraphicsModes modes = sSwalotPlopGraphicsModes;
+    GraphicsModes modes = gSwalotPlopGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    BgTemplate main1 = sSwalotPlopMain1BgTemplate;
+    BgTemplate main1 = gSwalotPlopMain1BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_MAIN_1);
-    BgTemplate main2 = sSwalotPlopMain2BgTemplate;
+    BgTemplate main2 = gSwalotPlopMain2BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_MAIN_2, &main2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_MAIN_2);
-    BgTemplate sub0 = sSwalotPlopSub0BgTemplate;
+    BgTemplate sub0 = gSwalotPlopSub0BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_0);
-    BgTemplate sub1 = sSwalotPlopSub1BgTemplate;
+    BgTemplate sub1 = gSwalotPlopSub1BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_1);
-    BgTemplate sub2 = sSwalotPlopSub2BgTemplate;
+    BgTemplate sub2 = gSwalotPlopSub2BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_2);
-    BgTemplate sub3 = sSwalotPlopSub3BgTemplate;
+    BgTemplate sub3 = gSwalotPlopSub3BgTemplate;
     InitBgFromTemplate(*bgConfig, GF_BG_LYR_SUB_3, &sub3, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_3, 0x20, 0, heapId);
     BgClearTilemapBufferAndCommit(*bgConfig, GF_BG_LYR_SUB_3);
@@ -2465,7 +2465,7 @@ void SwalotPlopGfx_InitSprites(SwalotPlopGfx *gfx, enum HeapID heapId) {
 
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 0x7E, 0, 0x1F, 0, 0x7E, 0, 0x1F, heapId);
-    template = sSwalotPlopObjCharTransfer;
+    template = gSwalotPlopObjCharTransfer;
     template.heapID = heapId;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_128K, GX_OBJVRAMMODE_CHAR_1D_128K);
     ObjPlttTransfer_Init(0x10, heapId);
@@ -2547,7 +2547,7 @@ void SwalotPlopGfx_InitCamera(SwalotPlopGfx *gfx, int playerCount, int localInde
     gfx->cameraTarget.y = 0;
     gfx->cameraTarget.z = 0;
     angle.x = 0xF112;
-    angle.y = sSwalotPlopCameraAngles[playerCount][localIndex];
+    angle.y = gSwalotPlopCameraAngles[playerCount][localIndex];
     angle.z = 0;
     Camera_Init_FromTargetDistanceAndAngle(&gfx->cameraTarget, 0x1D9000, &angle, 0xFA4, 0, TRUE, gfx->camera);
     up.x = 0;
@@ -2610,17 +2610,17 @@ void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId
 
     memset(scene, 0, sizeof(SwalotPlopScene));
     for (i = 0; i < 3; i++) {
-        ModelResource_LoadFromNarc(&scene->resources[i], narc, sSwalotPlopSceneModelFiles[i], heapId);
+        ModelResource_LoadFromNarc(&scene->resources[i], narc, gSwalotPlopSceneModelFiles[i], heapId);
         ModelInstance_Init(&scene->models[i], &scene->resources[i]);
         ModelInstance_SetVisible(&scene->models[i], FALSE);
         ModelInstance_SetPosition(&scene->models[i], 0, -0x122000, 0);
         ModelInstance_SetScale(&scene->models[i], 0x1800, 0x1800, 0x1800);
     }
     for (i = 0; i < 6; i++) {
-        ModelAnimation_LoadFromNarc(&scene->animations[i], &scene->resources[sSwalotPlopSceneAnimModels[i]], narc, sSwalotPlopSceneAnimFiles[i], heapId, allocator);
+        ModelAnimation_LoadFromNarc(&scene->animations[i], &scene->resources[gSwalotPlopSceneAnimModels[i]], narc, gSwalotPlopSceneAnimFiles[i], heapId, allocator);
         ModelAnimation_SetFrame(&scene->animations[i], 0);
         node = 0;
-        model = scene->resources[sSwalotPlopSceneAnimModels[i]].model;
+        model = scene->resources[gSwalotPlopSceneAnimModels[i]].model;
         dict = model != NULL ? &model->nodeInfo.dict : NULL;
         missing = dict == NULL;
         while ((!missing ? GetResNameByIdx(dict, node) : NULL) != NULL) {
@@ -2628,7 +2628,7 @@ void SwalotPlopScene_Init(SwalotPlopScene *scene, NARC *narc, enum HeapID heapId
             node++;
         }
         for (j = 0; j < 15; j++) {
-            id = dict != NULL ? NNS_G3dGetResDictIdxByName(dict, &sSwalotPlopSceneNodeNames[i][j]) : -1;
+            id = dict != NULL ? NNS_G3dGetResDictIdxByName(dict, &gSwalotPlopSceneNodeNames[i][j]) : -1;
             if (id != -1) {
                 NNS_G3dAnmObjEnableID(scene->animations[i].object, id);
             }
@@ -2743,11 +2743,11 @@ void SwalotPlopScene_SetAnimation(SwalotPlopScene *scene, u32 animation) {
     }
     old = scene->current;
     if (old != animation) {
-        ModelInstance_RemoveAnimation(&scene->models[sSwalotPlopSceneAnimModels[old]], &scene->animations[old]);
-        ModelInstance_AddAnimation(&scene->models[sSwalotPlopSceneAnimModels[animation]], &scene->animations[animation]);
+        ModelInstance_RemoveAnimation(&scene->models[gSwalotPlopSceneAnimModels[old]], &scene->animations[old]);
+        ModelInstance_AddAnimation(&scene->models[gSwalotPlopSceneAnimModels[animation]], &scene->animations[animation]);
         ModelAnimation_SetFrame(&scene->animations[animation], 0);
-        ModelInstance_SetVisible(&scene->models[sSwalotPlopSceneAnimModels[scene->current]], FALSE);
-        ModelInstance_SetVisible(&scene->models[sSwalotPlopSceneAnimModels[animation]], TRUE);
+        ModelInstance_SetVisible(&scene->models[gSwalotPlopSceneAnimModels[scene->current]], FALSE);
+        ModelInstance_SetVisible(&scene->models[gSwalotPlopSceneAnimModels[animation]], TRUE);
         scene->current = animation;
     }
 }
@@ -2786,13 +2786,13 @@ void SwalotPlopScene_UpdateSpecial(SwalotPlopScene *scene) {
         }
     } else {
         int i = scene->leader == 4 ? 0 : scene->leader + 1;
-        int start = sSwalotPlopSpecialAnimRanges[i].start << 12;
+        int start = gSwalotPlopSpecialAnimRanges[i].start << 12;
         int frame = scene->frame;
         if (frame < start) {
             scene->frame = start;
         } else {
             int next = frame + 0x2000;
-            if (next < (sSwalotPlopSpecialAnimRanges[i].end << 12)) {
+            if (next < (gSwalotPlopSpecialAnimRanges[i].end << 12)) {
                 scene->frame = next;
             } else {
                 scene->frame = start;
@@ -2817,7 +2817,7 @@ void SwalotPlop_RotateToSeat(const VecFx32 *src, VecFx32 *dst, int seat, int pla
     u16 angle;
 
     MTX_Identity33_(&matrix);
-    angle = sSwalotPlopSeatAngles[playerCount][seat];
+    angle = gSwalotPlopSeatAngles[playerCount][seat];
     MTX_RotY33_(&matrix, FX_SinIdx(angle), FX_CosIdx(angle));
     MTX_MultVec33(src, &matrix, dst);
 }
@@ -2827,7 +2827,7 @@ void SwalotPlop_RotateFromSeat(const VecFx32 *src, VecFx32 *dst, int seat, int p
     u16 angle;
 
     MTX_Identity33_(&matrix);
-    angle = sSwalotPlopSeatAngles[playerCount][seat];
+    angle = gSwalotPlopSeatAngles[playerCount][seat];
     MTX_RotY33_(&matrix, FX_SinIdx(angle), FX_CosIdx(angle));
     MTX_Inverse33(&matrix, &matrix);
     MTX_MultVec33(src, &matrix, dst);
@@ -3238,7 +3238,7 @@ void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc
         } else if (i == 1) {
             fileId = 37;
         } else {
-            fileId = sSwalotPlopStageFiles[playerCount - 1];
+            fileId = gSwalotPlopStageFiles[playerCount - 1];
         }
         ModelResource_LoadFromNarc(resource, narc, fileId, heapId);
         ModelInstance_Init(model, resource);
@@ -3248,14 +3248,14 @@ void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc
             ModelInstance_SetVisible(model, FALSE);
         }
         if ((u32)i <= 1) {
-            ModelInstance_SetRotation(model, sSwalotPlopStageRotations[playerCount - 1][localIndex], 1);
+            ModelInstance_SetRotation(model, gSwalotPlopStageRotations[playerCount - 1][localIndex], 1);
         } else {
             ModelInstance_SetRotation(model, GF_DegreeToSinCosIdxNoWrap(180), 1);
         }
     }
     for (i = 0; i < 3; i++) {
-        ModelAnimation_LoadFromNarc(&stage->animations[i], &stage->resources[sSwalotPlopStageAnimModels[i]], narc, sSwalotPlopStageAnimFiles[i], heapId, allocator);
-        ModelInstance_AddAnimation(&stage->models[sSwalotPlopStageAnimModels[i]], &stage->animations[i]);
+        ModelAnimation_LoadFromNarc(&stage->animations[i], &stage->resources[gSwalotPlopStageAnimModels[i]], narc, gSwalotPlopStageAnimFiles[i], heapId, allocator);
+        ModelInstance_AddAnimation(&stage->models[gSwalotPlopStageAnimModels[i]], &stage->animations[i]);
     }
     stage->animSpeed = FX32_ONE;
 }
@@ -3648,11 +3648,11 @@ void SwalotPlopSpeedUp_ResetTempo(SwalotPlopSpeedUp *speedUp) {
 }
 
 const SwalotPlopCommand *SwalotPlop_GetCommandTable(void) {
-    return sSwalotPlopCommands;
+    return gSwalotPlopCommands;
 }
 
 int SwalotPlop_GetCommandCount(void) {
-    return NELEMS(sSwalotPlopCommands);
+    return NELEMS(gSwalotPlopCommands);
 }
 
 void SwalotPlop_RegisterCommands(SwalotPlopApp *app) {

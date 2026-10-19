@@ -50,7 +50,7 @@
 .public CameraFocusObject_Pause
 .public CameraFocusObject_Resume
 .public gResidentBillboardSequenceIds
-.public sSpriteEffectFlags
+.public gSpriteEffectFlags
 .public gCameraFocusObjectDrawCallbacks
 .public gResidentBillboardModelIds
 .public gApricornTreeSpriteIds

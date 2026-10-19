@@ -34,21 +34,21 @@
 #include "touchscreen.h"
 #include "yes_no_prompt.h"
 
-extern const GraphicsBanks sPCBoxGfxBanks;
-extern const u8 sPCBoxSlotHitboxes[];
-extern const u8 sPCBoxPartyHitboxes[];
-extern const u8 sPCBoxTrayPartyHitboxes[];
+extern const GraphicsBanks gPCBoxGfxBanks;
+extern const u8 gPCBoxSlotHitboxes[];
+extern const u8 gPCBoxPartyHitboxes[];
+extern const u8 gPCBoxTrayPartyHitboxes[];
 extern const GraphicsModes gPCBoxGraphicsModes;
-extern const BgTemplate sPCBoxBgTemplate0;
-extern const BgTemplate sPCBoxBgTemplate1;
-extern const BgTemplate sPCBoxBgTemplate4;
-extern const BgTemplate sPCBoxBgTemplate2;
-extern const BgTemplate sPCBoxBgTemplate3;
-extern const BgTemplate sPCBoxBgTemplate5;
-extern const BgTemplate sPCBoxBgTemplate6;
-extern const u16 sPCBoxReleaseCheckMoves[];
-extern const u8 sPCBoxSlotGridRect[];
-extern const u8 sPCBoxTrayRects[];
+extern const BgTemplate gPCBoxBgTemplate0;
+extern const BgTemplate gPCBoxBgTemplate1;
+extern const BgTemplate gPCBoxBgTemplate4;
+extern const BgTemplate gPCBoxBgTemplate2;
+extern const BgTemplate gPCBoxBgTemplate3;
+extern const BgTemplate gPCBoxBgTemplate5;
+extern const BgTemplate gPCBoxBgTemplate6;
+extern const u16 gPCBoxReleaseCheckMoves[];
+extern const u8 gPCBoxSlotGridRect[];
+extern const u8 gPCBoxTrayRects[];
 
 static void PCBox_UpdateDetailPanel(PCBoxWork *work);
 static void PCBox_SwapBoxAndPartyMon(PCBoxWork *work, PCBoxMoveEntry *a, PCBoxMoveEntry *b);
@@ -152,7 +152,7 @@ void PCBox_StartPendingUpdateFunc(PCBoxView *view) {
 }
 
 void PCBox_SetGfxBanks(void) {
-    GfGfx_SetBanks(&sPCBoxGfxBanks);
+    GfGfx_SetBanks(&gPCBoxGfxBanks);
 }
 
 void PCBox_InitBgLayers(PCBoxWork *work) {
@@ -169,31 +169,31 @@ void PCBox_InitBgLayers(PCBoxWork *work) {
     modes = gPCBoxGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    bg0 = sPCBoxBgTemplate0;
+    bg0 = gPCBoxBgTemplate0;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_MAIN_0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_10);
 
-    bg1 = sPCBoxBgTemplate1;
+    bg1 = gPCBoxBgTemplate1;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_MAIN_1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_10);
 
-    bg2 = sPCBoxBgTemplate2;
+    bg2 = gPCBoxBgTemplate2;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_2, &bg2, GF_BG_TYPE_TEXT);
 
-    bg3 = sPCBoxBgTemplate3;
+    bg3 = gPCBoxBgTemplate3;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_MAIN_3, &bg3, GF_BG_TYPE_TEXT);
 
-    bg4 = sPCBoxBgTemplate4;
+    bg4 = gPCBoxBgTemplate4;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_10);
 
-    bg5 = sPCBoxBgTemplate5;
+    bg5 = gPCBoxBgTemplate5;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
 
-    bg6 = sPCBoxBgTemplate6;
+    bg6 = gPCBoxBgTemplate6;
     InitBgFromTemplate(work->view->bgConfig, GF_BG_LYR_SUB_2, &bg6, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(work->view->bgConfig, GF_BG_LYR_SUB_2);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_10);
@@ -1042,7 +1042,7 @@ void PCBox_ApplyMoveEntryIcons(PCBoxWork *work, PCBoxMoveEntry *e) {
 static s32 PCBox_GetReleaseCheckMoveIndex(u16 v) {
     u32 i;
     for (i = 0; i < 4; i++) {
-        if (v == sPCBoxReleaseCheckMoves[i]) {
+        if (v == gPCBoxReleaseCheckMoves[i]) {
             return i;
         }
     }
@@ -1368,7 +1368,7 @@ static u32 PCBox_IsPointInRect(s32 x, s32 y, const u8 *r) {
 }
 
 u32 PCBox_GetTouchedBoxSlot(s16 x, s16 y) {
-    if (PCBox_IsPointInRect(x, y, sPCBoxSlotGridRect) == 1) {
+    if (PCBox_IsPointInRect(x, y, gPCBoxSlotGridRect) == 1) {
         if (x < 12) {
             x = 0;
         } else if (x >= 156) {
@@ -1393,7 +1393,7 @@ u32 PCBox_GetTouchedPartySlot(s16 x, s16 y, const u8 *rect) {
 
 u32 PCBox_GetTouchedTrayBox(s16 x, s16 y) {
     u32 i;
-    const u8 *rect = sPCBoxTrayRects;
+    const u8 *rect = gPCBoxTrayRects;
     for (i = 0; i < 6; i++, rect += 4) {
         if (PCBox_IsPointInRect(x, y, rect) == 1) {
             return i + 0x80;

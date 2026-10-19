@@ -23,7 +23,7 @@ typedef struct MainMenuUtilSpriteRes {
     u8 unk_10[8];
 } MainMenuUtilSpriteRes;
 
-// Sprites of both screens (sMainMenuUtilSprites)
+// Sprites of both screens (gMainMenuUtilSprites)
 typedef struct MainMenuUtilSprites {
     SpriteList *spriteList;
     G2dRenderer renderer;

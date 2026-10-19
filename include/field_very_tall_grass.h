@@ -9,5 +9,6 @@ typedef struct VeryTallGrass VeryTallGrass;
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager);
 void VeryTallGrass_Free(VeryTallGrass *grass);
+void VeryTallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
 
 #endif // POKEHEARTGOLD_FIELD_VERY_TALL_GRASS_H

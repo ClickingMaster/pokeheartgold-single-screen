@@ -34,7 +34,6 @@ typedef struct SweetScentAnimWork {
     Field3dObject object;
 } SweetScentAnimWork;
 
-BOOL Task_UseSweetScentInField(TaskManager *taskManager);
 static void FieldSystem_StartSweetScentFollowMonAnim(FieldSystem *fieldSystem);
 static BOOL Task_SweetScentFollowMonAnim(TaskManager *taskManager);
 static void SweetScentFollowMonAnim_Load(enum HeapID heapID, FieldSystem *fieldSystem, SweetScentAnimWork *work);

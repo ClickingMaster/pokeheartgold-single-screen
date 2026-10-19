@@ -1,13 +1,15 @@
+#include "field2d/field2d_object.h"
+
 #include "overlay_42.h"
 
-const s8 sField2DDirectionOffsets[8] = { 0, 240, 0, 16, 240, 0, 16, 0 };
-const u8 sField2DOppositeDirections[4] = { 1, 0, 3, 2 };
+static const s8 sField2DDirectionOffsets[8] = { 0, -16, 0, 16, -16, 0, 16, 0 };
+static const u8 sField2DOppositeDirections[4] = { 1, 0, 3, 2 };
 
-const Field2DObjectStartFunc sField2DObjectStartFuncs[] = { Field2DObject_StartStand, Field2DObject_StartTurn, Field2DObject_StartWalk, Field2DObject_StartRun, Field2DObject_StartPause, Field2DObject_StartBump, Field2DObject_StartWalkSlow, Field2DObject_StartWalkFast, Field2DObject_StartWalkInPlaceVeryFast, Field2DObject_StartWalkInPlaceFast, Field2DObject_StartWalkInPlace, Field2DObject_StartWalkInPlaceSlow };
+static const Field2DObjectStartFunc sField2DObjectStartFuncs[] = { Field2DObject_StartStand, Field2DObject_StartTurn, Field2DObject_StartWalk, Field2DObject_StartRun, Field2DObject_StartPause, Field2DObject_StartBump, Field2DObject_StartWalkSlow, Field2DObject_StartWalkFast, Field2DObject_StartWalkInPlaceVeryFast, Field2DObject_StartWalkInPlaceFast, Field2DObject_StartWalkInPlace, Field2DObject_StartWalkInPlaceSlow };
 
-const Field2DObjectUpdateFunc sField2DObjectUpdateFuncs[] = { Field2DObject_UpdateStand, Field2DObject_UpdateTurn, Field2DObject_UpdateWalk, Field2DObject_UpdateRun, Field2DObject_UpdatePause, Field2DObject_UpdateBump, Field2DObject_UpdateWalk, Field2DObject_UpdateWalk, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace };
+static const Field2DObjectUpdateFunc sField2DObjectUpdateFuncs[] = { Field2DObject_UpdateStand, Field2DObject_UpdateTurn, Field2DObject_UpdateWalk, Field2DObject_UpdateRun, Field2DObject_UpdatePause, Field2DObject_UpdateBump, Field2DObject_UpdateWalk, Field2DObject_UpdateWalk, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace, Field2DObject_UpdateWalkInPlace };
 
-const Field2DCommandCheckFunc sField2DCommandCheckFuncs[] = { Field2DCommand_CheckStand, Field2DCommand_CheckTurn, Field2DCommand_CheckWalk, Field2DCommand_CheckRun, Field2DCommand_CheckPause, Field2DCommand_CheckBump, Field2DCommand_CheckWalkSlow, Field2DCommand_CheckWalk, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace };
+static const Field2DCommandCheckFunc sField2DCommandCheckFuncs[] = { Field2DCommand_CheckStand, Field2DCommand_CheckTurn, Field2DCommand_CheckWalk, Field2DCommand_CheckRun, Field2DCommand_CheckPause, Field2DCommand_CheckBump, Field2DCommand_CheckWalkSlow, Field2DCommand_CheckWalk, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace, Field2DCommand_CheckWalkInPlace };
 
 s32 Field2DMap_IsBlocked(Field2DMap *map, u16 x, u16 y) {
     GF_ASSERT(map);
@@ -68,10 +70,10 @@ Field2DObject *Field2DObjectManager_AddObject(Field2DObjectManager *objectManage
     GF_ASSERT(template);
     Field2DObject *object;
     object = Field2DObjectManager_GetFreeSlot(objectManager);
-    object->pos.unk0 = template->x;
-    object->pos.unk2 = template->y;
-    object->prevPos.unk0 = template->x;
-    object->prevPos.unk2 = template->y;
+    object->pos.x = template->x;
+    object->pos.y = template->y;
+    object->prevPos.x = template->x;
+    object->prevPos.y = template->y;
     object->id = template->id;
     object->action = template->action;
     object->direction = template->direction;
@@ -81,7 +83,7 @@ Field2DObject *Field2DObjectManager_AddObject(Field2DObjectManager *objectManage
 }
 
 void Field2DObject_Delete(void *object) {
-    memset(object, 0, 24);
+    memset(object, 0, sizeof(Field2DObject));
 }
 
 Field2DObject *Field2DObjectManager_FindById(Field2DObjectManager *objectManager, u8 id) {
@@ -99,7 +101,7 @@ Field2DObject *Field2DObjectManager_GetSlot(Field2DObjectManager *objectManager,
     if (objectManager->objects[index].active == 1) {
         return &objectManager->objects[index];
     }
-    return 0;
+    return NULL;
 }
 
 Field2DObject *Field2DObjectManager_GetById(Field2DObjectManager *objectManager, u8 id) {
@@ -114,37 +116,37 @@ s32 Field2DObject_GetParam(Field2DObject *object, s32 param) {
     s32 value;
     GF_ASSERT(object);
     switch (param) {
-    case 0:
-        value = object->pos.unk0;
+    case FIELD2D_OBJECT_PARAM_X:
+        value = object->pos.x;
         break;
-    case 1:
-        value = object->pos.unk2;
+    case FIELD2D_OBJECT_PARAM_Y:
+        value = object->pos.y;
         break;
-    case 2:
-        value = object->prevPos.unk0;
+    case FIELD2D_OBJECT_PARAM_PREV_X:
+        value = object->prevPos.x;
         break;
-    case 3:
-        value = object->prevPos.unk2;
+    case FIELD2D_OBJECT_PARAM_PREV_Y:
+        value = object->prevPos.y;
         break;
-    case 4:
+    case FIELD2D_OBJECT_PARAM_ID:
         value = object->id;
         break;
-    case 5:
+    case FIELD2D_OBJECT_PARAM_ACTION:
         value = object->action;
         break;
-    case 6:
+    case FIELD2D_OBJECT_PARAM_DIRECTION:
         value = object->direction;
         break;
-    case 7:
+    case FIELD2D_OBJECT_PARAM_SPRITE_ID:
         value = object->spriteId;
         break;
-    case 8:
+    case FIELD2D_OBJECT_PARAM_ACTION_FRAME:
         value = object->actionFrame;
         break;
-    case 9:
+    case FIELD2D_OBJECT_PARAM_ACTION_DURATION:
         value = object->actionDuration;
         break;
-    case 10:
+    case FIELD2D_OBJECT_PARAM_STATE_FRAMES:
         value = object->stateFrames;
         break;
     default:
@@ -156,39 +158,39 @@ s32 Field2DObject_GetParam(Field2DObject *object, s32 param) {
 void Field2DObject_SetParam(Field2DObject *object, u32 param, s32 value) {
     GF_ASSERT(object);
     switch (param) {
-    case 0:
-        object->pos.unk0 = value;
+    case FIELD2D_OBJECT_PARAM_X:
+        object->pos.x = value;
         return;
-    case 1:
-        object->pos.unk2 = value;
+    case FIELD2D_OBJECT_PARAM_Y:
+        object->pos.y = value;
         return;
-    case 2:
-        object->prevPos.unk0 = value;
+    case FIELD2D_OBJECT_PARAM_PREV_X:
+        object->prevPos.x = value;
         return;
-    case 3:
-        object->prevPos.unk2 = value;
+    case FIELD2D_OBJECT_PARAM_PREV_Y:
+        object->prevPos.y = value;
         return;
-    case 4:
+    case FIELD2D_OBJECT_PARAM_ID:
         object->id = value;
         return;
-    case 5:
-        GF_ASSERT(value < 12);
+    case FIELD2D_OBJECT_PARAM_ACTION:
+        GF_ASSERT(value < FIELD2D_ACTION_COUNT);
         object->action = value;
         return;
-    case 6:
+    case FIELD2D_OBJECT_PARAM_DIRECTION:
         GF_ASSERT(value < 4);
         object->direction = value;
         return;
-    case 7:
+    case FIELD2D_OBJECT_PARAM_SPRITE_ID:
         object->spriteId = value;
         return;
-    case 8:
+    case FIELD2D_OBJECT_PARAM_ACTION_FRAME:
         object->actionFrame = value;
         return;
-    case 9:
+    case FIELD2D_OBJECT_PARAM_ACTION_DURATION:
         object->actionDuration = value;
         return;
-    case 10:
+    case FIELD2D_OBJECT_PARAM_STATE_FRAMES:
         object->stateFrames = value;
         return;
     }
@@ -196,9 +198,8 @@ void Field2DObject_SetParam(Field2DObject *object, u32 param, s32 value) {
 }
 
 Field2DPoint Field2D_StepInDirection(Field2DPoint pos, s32 direction) {
-    s32 offsetIndex = direction * 2;
-    pos.unk0 = pos.unk0 + sField2DDirectionOffsets[direction * 2];
-    pos.unk2 = pos.unk2 + sField2DDirectionOffsets[direction * 2 + 1];
+    pos.x = pos.x + sField2DDirectionOffsets[direction * 2];
+    pos.y = pos.y + sField2DDirectionOffsets[direction * 2 + 1];
 
     return pos;
 }
@@ -226,23 +227,23 @@ Field2DPoint Field2DObject_GetPrevPos(Field2DObject *object) {
 }
 
 Field2DPoint Field2DObject_GetDrawPos(Field2DObject *object) {
-    s32 actionFrame = Field2DObject_GetParam(object, 8);
-    s32 actionDuration = Field2DObject_GetParam(object, 9);
+    s32 actionFrame = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME);
+    s32 actionDuration = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION);
 
     Field2DPoint drawPos = Field2DObject_GetPos(object);
     Field2DPoint prevPos = Field2DObject_GetPrevPos(object);
 
-    drawPos.unk0 -= prevPos.unk0;
-    drawPos.unk2 -= prevPos.unk2;
+    drawPos.x -= prevPos.x;
+    drawPos.y -= prevPos.y;
     if (actionFrame > 0) {
-        drawPos.unk0 = actionFrame * drawPos.unk0 / actionDuration;
-        drawPos.unk2 = actionFrame * drawPos.unk2 / actionDuration;
+        drawPos.x = actionFrame * drawPos.x / actionDuration;
+        drawPos.y = actionFrame * drawPos.y / actionDuration;
     } else {
-        drawPos.unk0 = 0;
-        drawPos.unk2 = 0;
+        drawPos.x = 0;
+        drawPos.y = 0;
     }
-    drawPos.unk0 += prevPos.unk0;
-    drawPos.unk2 += prevPos.unk2;
+    drawPos.x += prevPos.x;
+    drawPos.y += prevPos.y;
     return drawPos;
 }
 
@@ -260,19 +261,19 @@ Field2DObject *Field2DObject_FindObjectInDirection(Field2DObject *object, Field2
 
     Field2DPoint targetPos = Field2DObject_GetPos(object);
     targetPos = Field2D_StepInDirection(targetPos, direction);
-    id = Field2DObject_GetParam(object, 4);
+    id = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ID);
     capacity = Field2DObjectManager_GetCapacity(objectManager);
     for (u32 i = 0; i < capacity; i++) {
         Field2DObject *other = Field2DObjectManager_GetByIndex(objectManager, i);
-        if (other != 0) {
-            u32 otherId = Field2DObject_GetParam(other, 4);
+        if (other != NULL) {
+            u32 otherId = Field2DObject_GetParam(other, FIELD2D_OBJECT_PARAM_ID);
             if (otherId != id) {
                 Field2DPoint otherPos = Field2DObject_GetPos(other);
-                if ((otherPos.unk0 == targetPos.unk0) && (otherPos.unk2 == targetPos.unk2)) {
+                if ((otherPos.x == targetPos.x) && (otherPos.y == targetPos.y)) {
                     return other;
                 }
                 otherPos = Field2DObject_GetPrevPos(other);
-                if ((otherPos.unk0 == targetPos.unk0) && (otherPos.unk2 == targetPos.unk2)) {
+                if ((otherPos.x == targetPos.x) && (otherPos.y == targetPos.y)) {
                     return other;
                 }
             }
@@ -286,12 +287,12 @@ Field2DObject *Field2DObjectManager_FindObjectAt(Field2DObjectManager *objectMan
     for (u32 i = 0; i < capacity; i++) {
         Field2DObject *object = Field2DObjectManager_GetByIndex(objectManager, i);
         if (object != NULL) {
-            Field2DPoint struct0 = Field2DObject_GetPos(object);
-            if ((struct0.unk0 == pos.unk0) && (struct0.unk2 == pos.unk2)) {
+            Field2DPoint objectPos = Field2DObject_GetPos(object);
+            if ((objectPos.x == pos.x) && (objectPos.y == pos.y)) {
                 return object;
             }
-            struct0 = Field2DObject_GetPrevPos(object);
-            if ((struct0.unk0 == pos.unk0) && (struct0.unk2 == pos.unk2)) {
+            objectPos = Field2DObject_GetPrevPos(object);
+            if ((objectPos.x == pos.x) && (objectPos.y == pos.y)) {
                 return object;
             }
         }
@@ -305,7 +306,7 @@ void Field2DObject_StartMove(Field2DObject *object, Field2DMove *move) {
 }
 
 void Field2DObject_Update(Field2DObject *object) {
-    s32 done = sField2DObjectUpdateFuncs[Field2DObject_GetParam(object, 5)](object);
+    s32 done = sField2DObjectUpdateFuncs[Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION)](object);
     object->stateFrames++;
     if (done == 1) {
         Field2DObject_EndAction(object);
@@ -317,18 +318,18 @@ void Field2DObject_StartStand(Field2DObject *object, Field2DPoint pos, u32 direc
     GF_ASSERT(object);
     Field2DObject_SetPos(object, pos);
     Field2DObject_SetPrevPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_STAND);
 }
 
 void Field2DObject_StartTurn(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPos(object, pos);
     Field2DObject_SetPrevPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 1);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 2);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_TURN);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 2);
 }
 
 void Field2DObject_StartWalk(Field2DObject *object, Field2DPoint pos, u32 direction) {
@@ -336,10 +337,10 @@ void Field2DObject_StartWalk(Field2DObject *object, Field2DPoint pos, u32 direct
     Field2DPoint targetPos = Field2D_GetStepTarget(pos, direction);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, targetPos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 2);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 8);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 8);
 }
 
 void Field2DObject_StartRun(Field2DObject *object, Field2DPoint pos, u32 direction) {
@@ -347,28 +348,28 @@ void Field2DObject_StartRun(Field2DObject *object, Field2DPoint pos, u32 directi
     Field2DPoint targetPos = Field2D_GetStepTarget(pos, direction);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, targetPos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 3);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 4);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_RUN);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 4);
 }
 
 void Field2DObject_StartPause(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPos(object, pos);
     Field2DObject_SetPrevPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 4);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_PAUSE);
 }
 
 void Field2DObject_StartBump(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPos(object, pos);
     Field2DObject_SetPrevPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 5);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 16);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_BUMP);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 16);
 }
 
 void Field2DObject_StartWalkSlow(Field2DObject *object, Field2DPoint pos, u32 direction) {
@@ -376,10 +377,10 @@ void Field2DObject_StartWalkSlow(Field2DObject *object, Field2DPoint pos, u32 di
     Field2DPoint targetPos = Field2D_GetStepTarget(pos, direction);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, targetPos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 6);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 16);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_SLOW);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 16);
 }
 
 void Field2DObject_StartWalkFast(Field2DObject *object, Field2DPoint pos, u32 direction) {
@@ -387,50 +388,50 @@ void Field2DObject_StartWalkFast(Field2DObject *object, Field2DPoint pos, u32 di
     Field2DPoint targetPos = Field2D_GetStepTarget(pos, direction);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, targetPos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 7);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 4);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_FAST);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 4);
 }
 
 void Field2DObject_StartWalkInPlaceVeryFast(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 8);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 2);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_IN_PLACE_VERY_FAST);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 2);
 }
 
 void Field2DObject_StartWalkInPlaceFast(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 9);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 4);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_IN_PLACE_FAST);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 4);
 }
 
 void Field2DObject_StartWalkInPlace(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 10);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 8);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_IN_PLACE);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 8);
 }
 
 void Field2DObject_StartWalkInPlaceSlow(Field2DObject *object, Field2DPoint pos, u32 direction) {
     GF_ASSERT(object);
     Field2DObject_SetPrevPos(object, pos);
     Field2DObject_SetPos(object, pos);
-    Field2DObject_SetParam(object, 6, direction);
-    Field2DObject_SetParam(object, 5, 11);
-    Field2DObject_SetParam(object, 8, 0);
-    Field2DObject_SetParam(object, 9, 16);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION, direction);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION, FIELD2D_ACTION_WALK_IN_PLACE_SLOW);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, 0);
+    Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION, 16);
 }
 
 s32 Field2DObject_UpdateStand(Field2DObject *object) {
@@ -476,10 +477,10 @@ Field2DPoint Field2D_GetStepTarget(Field2DPoint pos, s32 direction) {
 }
 
 s32 Field2DObject_AdvanceActionFrame(Field2DObject *object) {
-    s32 actionFrame = Field2DObject_GetParam(object, 8);
-    s32 actionDuration = Field2DObject_GetParam(object, 9);
+    s32 actionFrame = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME);
+    s32 actionDuration = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_ACTION_DURATION);
     if (actionFrame < actionDuration) {
-        Field2DObject_SetParam(object, 8, actionFrame + 1);
+        Field2DObject_SetParam(object, FIELD2D_OBJECT_PARAM_ACTION_FRAME, actionFrame + 1);
         if ((actionFrame + 1) < actionDuration) {
             return 0;
         }
@@ -489,7 +490,7 @@ s32 Field2DObject_AdvanceActionFrame(Field2DObject *object) {
 
 void Field2DObject_EndAction(Field2DObject *object) {
     Field2DPoint pos = Field2DObject_GetPos(object);
-    u32 direction = Field2DObject_GetParam(object, 6);
+    u32 direction = Field2DObject_GetParam(object, FIELD2D_OBJECT_PARAM_DIRECTION);
     Field2DObject_StartStand(object, pos, direction);
 }
 

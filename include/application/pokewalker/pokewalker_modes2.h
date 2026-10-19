@@ -133,7 +133,7 @@ int PokewalkerApp_StrollReport_Enter(PokewalkerApp *app);
 int PokewalkerApp_StrollReport_Update(PokewalkerApp *app);
 int PokewalkerApp_StrollReport_Exit(PokewalkerApp *app);
 
-// States of mode 10 (sStrollReportStates).
+// States of mode 10 (gStrollReportStates).
 int PokewalkerApp_StrollReport_Start(PokewalkerApp *app);
 int PokewalkerApp_StrollReport_ShowResults(PokewalkerApp *app);
 int PokewalkerApp_StrollReport_WaitResultsFade(PokewalkerApp *app);

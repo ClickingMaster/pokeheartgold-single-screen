@@ -70,7 +70,7 @@ void FollowMonDraw_ClearBob(LocalMapObject *object);
 void MapObject_SetFacingAndUpdateDraw(LocalMapObject *object, u32 dir);
 u8 FollowMonObject_IsLarge(LocalMapObject *object);
 void MapObject_GetCoordsBehind(LocalMapObject *object, int *p_x, int *p_y);
-void TallGrass_SpawnAt(LocalMapObject *object, int animate, int x, int y, int checkFacing);
+FieldEffect *TallGrass_SpawnAt(LocalMapObject *object, int animate, int x, int y, int checkFacing);
 void VeryTallGrass_SpawnAt(LocalMapObject *object, int animate, int x, int y, int checkFacing);
 void FieldSystem_StartPalPadRegistration(FieldSystem *fieldSystem);
 void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int partySlot);

@@ -3,7 +3,7 @@
 	.include "global.inc"
 
 	.public gMapObjectMovementCallbacks
-	.public sMovementsByDirection
+	.public gMovementsByDirection
 	.public gMovementCmdTable
 
 	.rodata
@@ -531,7 +531,7 @@ sRandomLookAnyDirectionMovementCallbacks:
 	.word RandomLookMovement_Update
 	.word RandomLookMovement_Delete
 	.word MapObjectMovement_NoOpRestore
-sMovementsByDirection:
+gMovementsByDirection:
 	.word sFaceMovements
 	.word sWalkSlowerMovements
 	.word sWalkSlowMovements

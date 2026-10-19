@@ -22,7 +22,7 @@
 
 typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 
-extern const PokewalkerAppStateFunc sStartStrollStates[];
+extern const PokewalkerAppStateFunc gStartStrollStates[];
 
 int PokewalkerApp_WaitKeyToSave_Enter(PokewalkerApp *app) {
     return 2;
@@ -53,7 +53,7 @@ int PokewalkerApp_StartStroll_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StartStroll_Update(PokewalkerApp *app) {
-    app->state = sStartStrollStates[app->state](app);
+    app->state = gStartStrollStates[app->state](app);
     if (app->state == 8) {
         app->state = 0;
         return 3;

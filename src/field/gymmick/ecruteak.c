@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "constants/sprites.h"
 
 #include "field/map_object_billboard_motion.h"

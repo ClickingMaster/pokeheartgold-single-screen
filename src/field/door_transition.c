@@ -122,6 +122,13 @@ static const CameraTranslationPathTemplate sDoorCameraPaths[2] = {
      },
 };
 
+static void DoorTransition_StepCameraZoomIn(Camera *camera, u8 *step);
+static void DoorTransition_StepCameraZoomOut(Camera *camera, u8 *step);
+static int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening);
+static int DoorTransition_GetCameraPathIndex(int modelId);
+static BOOL Task_WaitDoorAnimation(TaskManager *taskman);
+static BOOL DoorTransition_ModelSkipsCameraZoom(FieldSystem *fieldSystem, int modelId);
+
 FieldTransitionWork *DoorTransition_New(void) {
     DoorTransitionWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(DoorTransitionWork));
     work->state = 0;
@@ -376,7 +383,7 @@ BOOL DoorTransition_WalkOutOfDoor(FieldSystem *fieldSystem, FieldTransitionWork 
 }
 
 // Narrows the field of view by 12 per call, 0x60 in total.
-void DoorTransition_StepCameraZoomIn(Camera *camera, u8 *step) {
+static void DoorTransition_StepCameraZoomIn(Camera *camera, u8 *step) {
     u8 delta = 12;
     int total = *step * delta;
     if (total > 0x60) {
@@ -392,7 +399,7 @@ void DoorTransition_StepCameraZoomIn(Camera *camera, u8 *step) {
 }
 
 // Widens the field of view by 16 per call, 0x60 in total.
-void DoorTransition_StepCameraZoomOut(Camera *camera, u8 *step) {
+static void DoorTransition_StepCameraZoomOut(Camera *camera, u8 *step) {
     int total = *step << 4;
     u8 delta;
     int angle;
@@ -412,7 +419,7 @@ void DoorTransition_StepCameraZoomOut(Camera *camera, u8 *step) {
     (*step)++;
 }
 
-int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening) {
+static int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening) {
     DoorAnimListEntry entry;
 
     NARC_ReadWholeMember(AreaDataManager_GetMapPropAnimListNarc(fieldSystem->areaDataManager), modelId, &entry);
@@ -445,7 +452,7 @@ int GetDoorSE(FieldSystem *fieldSystem, int modelId, BOOL opening) {
 }
 
 // Doors whose entry plays a camera path from sDoorCameraPaths; 0xFFFF for all others.
-int DoorTransition_GetCameraPathIndex(int modelId) {
+static int DoorTransition_GetCameraPathIndex(int modelId) {
     int ret = 0xFFFF;
     switch (modelId) {
     case 0x3D:
@@ -619,7 +626,7 @@ BOOL DoorTransition_WalkIntoSideDoor(FieldSystem *fieldSystem, FieldTransitionWo
     return FALSE;
 }
 
-BOOL Task_WaitDoorAnimation(TaskManager *taskman) {
+static BOOL Task_WaitDoorAnimation(TaskManager *taskman) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskman);
     u8 *tag = TaskManager_GetEnvironment(taskman);
     if (MapPropOneShotAnimationManager_IsAnimationLoopFinished(fieldSystem->mapPropOneShotAnimationManager, *tag)) {
@@ -990,7 +997,7 @@ BOOL Task_ArriveWithFade(TaskManager *taskman) {
 }
 
 // Doors that keep the camera still: in buildings models 0x3F, 0xA2 and 0xC5, outside model 0x7C.
-BOOL DoorTransition_ModelSkipsCameraZoom(FieldSystem *fieldSystem, int modelId) {
+static BOOL DoorTransition_ModelSkipsCameraZoom(FieldSystem *fieldSystem, int modelId) {
     if (MapHeader_IsInBuilding(fieldSystem->location->mapId)) {
         if (modelId == 0x3F || modelId == 0xA2 || modelId == 0xC5) {
             return TRUE;

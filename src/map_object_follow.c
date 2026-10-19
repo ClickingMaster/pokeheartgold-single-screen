@@ -6,7 +6,9 @@
 #include "field/field_follow_mon.h"
 
 #include "field_system.h"
+#include "field_tall_grass.h"
 #include "field_terrain.h"
+#include "field_very_tall_grass.h"
 #include "follow_mon.h"
 #include "map_object.h"
 #include "map_object_behavior_internal.h"

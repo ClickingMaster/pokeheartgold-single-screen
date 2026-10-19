@@ -63,9 +63,9 @@ typedef struct RocketExecutiveEffectWork {
     BOOL waveActive;
 } RocketExecutiveEffectWork;
 
-void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member);
-String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
-void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
+static void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member);
+static String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID);
+static void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params);
 
 enum TeamRocketState {
     TEAM_ROCKET_STATE_INIT,
@@ -216,7 +216,7 @@ void EncounterEffect_TeamRocket(SysTask *task, EncounterEffectTask *effect) {
     }
 }
 
-void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member) {
+static void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member) {
     NNSG2dScreenData *screen;
     void *file = GfGfxLoader_GetScrnDataFromOpenNarc(effect->narc, member, FALSE, &screen, HEAP_ID_FIELD1);
 
@@ -225,7 +225,7 @@ void RocketEffect_LoadBgScreen(EncounterEffectTask *effect, u8 bgId, int member)
     BgCommitTilemapBufferToVram(effect->fieldSystem->bgConfig, bgId);
 }
 
-String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
+static String *RocketEffect_GetTrainerNameString(u32 trainerId, enum HeapID heapID) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0189_bin, heapID);
     MessageFormat *msgFormat = MessageFormat_New(heapID);
     String *string = String_New(128, heapID);
@@ -279,7 +279,7 @@ enum RocketExecutiveState {
 // The trainer's picture slides in behind a window that opens from the middle of the screen,
 // with the trainer's name in a text window.
 #pragma opt_propagation off
-void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params) {
+static void RocketEffect_RunExecutiveIntro(SysTask *task, EncounterEffectTask *effect, const RocketExecutiveIntroParams *params) {
     enum HeapID heapID = HEAP_ID_FIELD1;
     RocketExecutiveEffectWork *work = effect->work;
 

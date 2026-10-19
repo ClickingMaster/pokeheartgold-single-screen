@@ -65,10 +65,10 @@ typedef struct EliteFourIntroWork {
     u8 unused[8];
 } EliteFourIntroWork;
 
-BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params);
-u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem);
-BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params);
-void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
+static BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params);
+static u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem);
+static BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params);
+static void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color);
 
 static const EliteFourIntroParams sEncounterEliteFourKarenIntroParams = {
     .opponentMember = 143,
@@ -273,7 +273,7 @@ enum GymLeaderIntroState {
     GYM_LEADER_INTRO_STATE_END,
 };
 
-BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params) {
+static BOOL LeadersEffect_RunGymLeaderIntro(EncounterEffectTask *effect, enum HeapID heapID, const GymLeaderIntroParams *params) {
     u32 state = effect->state;
     GymLeaderIntroWork *work = effect->work;
     String *string;
@@ -529,7 +529,7 @@ void EncounterEffect_Rival(SysTask *task, EncounterEffectTask *effect) {
     }
 }
 
-u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem) {
+static u32 LeadersEffect_GetPlayerGender(FieldSystem *fieldSystem) {
     return PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData));
 }
 
@@ -574,7 +574,7 @@ static inline void EliteFourIntro_CreateSprites(EncounterEffectSpriteManager *sp
 }
 
 // sprites[0]: player, [1]: opponent, [2] and [3]: their nameplates
-BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params) {
+static BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID heapID, const EliteFourIntroParams *params) {
     VecFx32 pos;
     VecFx32 initial;
     EliteFourIntroWork *work = effect->work;
@@ -821,7 +821,7 @@ BOOL LeadersEffect_RunEliteFourIntro(EncounterEffectTask *effect, enum HeapID he
     return FALSE;
 }
 
-void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color) {
+static void LeadersEffect_LoadBlendedSpritePalette(Sprite *sprite, enum HeapID heapID, s32 member, u8 amount, u16 color) {
     NNSG2dPaletteData *paletteData;
     void *file;
     NNSG2dImagePaletteProxy *proxy;

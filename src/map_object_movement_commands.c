@@ -96,9 +96,9 @@ enum MovementScriptMachineState {
 };
 
 
-extern const MovementScriptStateFunc sMovementScriptMachineStateFuncs[];
+extern const MovementScriptStateFunc gMovementScriptMachineStateFuncs[];
 extern const u32 _020FDA28[4];
-extern const u32 *const sMovementsByDirection[];
+extern const u32 *const gMovementsByDirection[];
 extern const MovementCommandFunc *const gMovementCmdTable[];
 extern const fx32 *gJumpHeightTables[];
 extern const u32 gVariableSpeedWalk_Cmd082[];
@@ -219,7 +219,7 @@ void EventObjectMovementMan_Delete(EventObjectMovementMan *movementMan) {
 
 void MovementScriptMachine(SysTask *task, void *data) {
     EventObjectMovementWork *work = data;
-    while (sMovementScriptMachineStateFuncs[work->state](work) == TRUE) {}
+    while (gMovementScriptMachineStateFuncs[work->state](work) == TRUE) {}
 }
 
 BOOL MovementScriptMachineSub_Init(EventObjectMovementWork *work) {
@@ -282,7 +282,7 @@ u32 GetMovementForDirection(s32 direction, u32 movement) {
     if (direction >= 4) {
         GF_AssertFail();
     }
-    table = sMovementsByDirection;
+    table = gMovementsByDirection;
     entry = *table;
     if (entry != NULL) {
         do {
@@ -305,7 +305,7 @@ u32 GetMovementForDirection(s32 direction, u32 movement) {
 
 s32 GetMovementDirection(u32 movement) {
     s32 i;
-    const u32 *const *table = sMovementsByDirection;
+    const u32 *const *table = gMovementsByDirection;
     const u32 *entry = *table;
 
     if (entry != NULL) {

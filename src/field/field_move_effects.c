@@ -170,22 +170,22 @@ typedef struct RideEffectFileIds {
     u16 whirlpoolAngles[4];     // by facing direction
 } RideEffectFileIds;
 
-extern const VecFx32 sHallOfFameBallOffsets[];
-extern RideEffectFileIds sRideEffectFileIds;
-extern const Field3dObjectTaskTemplate sRockSmashEffectAtPlayerTemplate;
-extern const Field3dObjectTaskTemplate sWhirlpoolEffectTemplate;
-extern const Field3dObjectTaskTemplate sHeadbuttEffectAtFollowerTemplate;
-extern const Field3dObjectTaskTemplate sWaterfallEffectTemplate;
-extern const Field3dObjectTaskTemplate sRockClimbDebrisTemplate;
-extern const Field3dObjectTaskTemplate sCutEffectAtPlayerTemplate;
-extern const Field3dObjectTaskTemplate sRockSmashEffectAtFollowerTemplate;
-extern const Field3dObjectTaskTemplate sHeadbuttEffectAtPlayerTemplate;
-extern const Field3dObjectTaskTemplate sCutEffectAtFollowerTemplate;
-extern const Field3dObjectTaskTemplate sRockDebrisTemplate;
-extern const Field3dObjectTaskTemplate sRockDebrisWithFollowerTemplate;
-extern void (*const sScriptFieldMoveEffectDeleteFuncs[])(Field3dObjectTask *task);
-extern Field3dObjectTask *(*const sScriptFieldMoveEffectCreateFuncs[])(FieldSystem *fieldSystem);
-extern BOOL (*const sScriptFieldMoveEffectIsFinishedFuncs[])(Field3dObjectTask *task);
+extern const VecFx32 gHallOfFameBallOffsets[];
+extern RideEffectFileIds gRideEffectFileIds;
+extern const Field3dObjectTaskTemplate gRockSmashEffectAtPlayerTemplate;
+extern const Field3dObjectTaskTemplate gWhirlpoolEffectTemplate;
+extern const Field3dObjectTaskTemplate gHeadbuttEffectAtFollowerTemplate;
+extern const Field3dObjectTaskTemplate gWaterfallEffectTemplate;
+extern const Field3dObjectTaskTemplate gRockClimbDebrisTemplate;
+extern const Field3dObjectTaskTemplate gCutEffectAtPlayerTemplate;
+extern const Field3dObjectTaskTemplate gRockSmashEffectAtFollowerTemplate;
+extern const Field3dObjectTaskTemplate gHeadbuttEffectAtPlayerTemplate;
+extern const Field3dObjectTaskTemplate gCutEffectAtFollowerTemplate;
+extern const Field3dObjectTaskTemplate gRockDebrisTemplate;
+extern const Field3dObjectTaskTemplate gRockDebrisWithFollowerTemplate;
+extern void (*const gScriptFieldMoveEffectDeleteFuncs[])(Field3dObjectTask *task);
+extern Field3dObjectTask *(*const gScriptFieldMoveEffectCreateFuncs[])(FieldSystem *fieldSystem);
+extern BOOL (*const gScriptFieldMoveEffectIsFinishedFuncs[])(Field3dObjectTask *task);
 
 NNSG3dResFileHeader **AreaDataManager_GetMapPropModel(u32 mapPropId, AreaDataManager *areaDataManager);
 void Field3dObject_SetXRotation(Field3dObject *object, u16 angle, int axis);
@@ -303,9 +303,9 @@ static BOOL Task_HallOfFameBallAnim(TaskManager *taskManager) {
         coords[0] = 0;
         coords[1] = 0;
         coords[2] = 0;
-        pos.x = env->basePos.x + sHallOfFameBallOffsets[env->numPlaced].x;
-        pos.y = env->basePos.y + sHallOfFameBallOffsets[env->numPlaced].y;
-        pos.z = env->basePos.z + sHallOfFameBallOffsets[env->numPlaced].z;
+        pos.x = env->basePos.x + gHallOfFameBallOffsets[env->numPlaced].x;
+        pos.y = env->basePos.y + gHallOfFameBallOffsets[env->numPlaced].y;
+        pos.z = env->basePos.z + gHallOfFameBallOffsets[env->numPlaced].z;
         PlaySE(SEQ_SE_DP_BOWA);
         env->ballProps[env->numPlaced] = MapPropManager_LoadOne(fieldSystem->mapPropManager, HALL_OF_FAME_BALL, &pos, &rotation, fieldSystem->mapPropAnimationManager);
         env->state++;
@@ -495,11 +495,11 @@ void CutEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, FieldMo
 }
 
 Field3dObjectTask *CutEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sCutEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gCutEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *CutEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sCutEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gCutEffectAtFollowerTemplate);
 }
 
 void CutEffect_Delete(Field3dObjectTask *task) {
@@ -551,11 +551,11 @@ void RockSmashEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, F
 }
 
 Field3dObjectTask *RockSmashEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockSmashEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gRockSmashEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *RockSmashEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockSmashEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gRockSmashEffectAtFollowerTemplate);
 }
 
 void RockSmashEffect_Delete(Field3dObjectTask *task) {
@@ -588,8 +588,8 @@ void WaterfallEffect_Update(Field3dObjectTask *task, FieldSystem *fieldSystem, W
 
     switch (effect->state) {
     case WATERFALL_EFFECT_STATE_LOAD: // one model per frame
-        modelFileIds = sRideEffectFileIds.waterfallModels;
-        animFileIds = sRideEffectFileIds.waterfallAnims;
+        modelFileIds = gRideEffectFileIds.waterfallModels;
+        animFileIds = gRideEffectFileIds.waterfallAnims;
         n = effect->numLoaded;
         FieldMoveEffectModel_Load(&effect->models[n], modelFileIds.ids[n], animFileIds.ids[n], 2, &effect->allocator);
         Field3dObject_SetPosAtPlayer(fieldSystem->playerAvatar, &effect->models[n].object);
@@ -628,7 +628,7 @@ void WaterfallEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, W
 }
 
 Field3dObjectTask *WaterfallEffect_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sWaterfallEffectTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gWaterfallEffectTemplate);
 }
 
 void WaterfallEffect_Delete(Field3dObjectTask *task) {
@@ -643,12 +643,12 @@ void WhirlpoolEffect_Init(Field3dObjectTask *task, FieldSystem *fieldSystem, Whi
     } files;
     int direction;
 
-    files.modelFileId = sRideEffectFileIds.whirlpool.ids[0];
-    files.animFileId = sRideEffectFileIds.whirlpool.ids[1];
-    files.angles[0] = sRideEffectFileIds.whirlpoolAngles[0];
-    files.angles[1] = sRideEffectFileIds.whirlpoolAngles[1];
-    files.angles[2] = sRideEffectFileIds.whirlpoolAngles[2];
-    files.angles[3] = sRideEffectFileIds.whirlpoolAngles[3];
+    files.modelFileId = gRideEffectFileIds.whirlpool.ids[0];
+    files.animFileId = gRideEffectFileIds.whirlpool.ids[1];
+    files.angles[0] = gRideEffectFileIds.whirlpoolAngles[0];
+    files.angles[1] = gRideEffectFileIds.whirlpoolAngles[1];
+    files.angles[2] = gRideEffectFileIds.whirlpoolAngles[2];
+    files.angles[3] = gRideEffectFileIds.whirlpoolAngles[3];
     memset(effect, 0, sizeof(WhirlpoolEffect));
     HeapExp_FndInitAllocator(&effect->allocator, HEAP_ID_FIELD1, 32);
     direction = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
@@ -674,7 +674,7 @@ void WhirlpoolEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, W
 }
 
 Field3dObjectTask *WhirlpoolEffect_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sWhirlpoolEffectTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gWhirlpoolEffectTemplate);
 }
 
 void WhirlpoolEffect_Delete(Field3dObjectTask *task) {
@@ -817,7 +817,7 @@ void RockClimbDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, R
 }
 
 Field3dObjectTask *RockClimbDebris_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockClimbDebrisTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gRockClimbDebrisTemplate);
 }
 
 void RockClimbDebris_Delete(Field3dObjectTask *task) {
@@ -930,11 +930,11 @@ void HeadbuttEffect_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, He
 }
 
 Field3dObjectTask *HeadbuttEffect_CreateAtPlayer(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sHeadbuttEffectAtPlayerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHeadbuttEffectAtPlayerTemplate);
 }
 
 Field3dObjectTask *HeadbuttEffect_CreateAtFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sHeadbuttEffectAtFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gHeadbuttEffectAtFollowerTemplate);
 }
 
 void HeadbuttEffect_Delete(Field3dObjectTask *task) {
@@ -1001,11 +1001,11 @@ void RockDebris_Render(Field3dObjectTask *task, FieldSystem *fieldSystem, RockDe
 }
 
 Field3dObjectTask *RockDebris_Create(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockDebrisTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gRockDebrisTemplate);
 }
 
 Field3dObjectTask *RockDebris_CreateWithFollower(FieldSystem *fieldSystem) {
-    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &sRockDebrisWithFollowerTemplate);
+    return Field3dObjectTaskManager_CreateTask(fieldSystem->mapSystems->field3dObjectTaskManager, &gRockDebrisWithFollowerTemplate);
 }
 
 void RockDebris_Delete(Field3dObjectTask *task) {
@@ -1112,12 +1112,12 @@ static void Task_ScriptFieldMoveEffect(SysTask *task, void *data) {
 
     switch (env->state) {
     case SCRIPT_FIELD_MOVE_EFFECT_WAIT:
-        if (sScriptFieldMoveEffectIsFinishedFuncs[env->kind](env->effect) == TRUE) {
+        if (gScriptFieldMoveEffectIsFinishedFuncs[env->kind](env->effect) == TRUE) {
             env->state++;
         }
         break;
     case SCRIPT_FIELD_MOVE_EFFECT_END:
-        sScriptFieldMoveEffectDeleteFuncs[env->kind](env->effect);
+        gScriptFieldMoveEffectDeleteFuncs[env->kind](env->effect);
         *env->done = TRUE;
         Heap_Free(env);
         SysTask_Destroy(task);
@@ -1128,7 +1128,7 @@ static void Task_ScriptFieldMoveEffect(SysTask *task, void *data) {
 void ScriptFieldMoveEffect_Start(FieldSystem *fieldSystem, u16 *done, int kind, enum HeapID heapID) {
     ScriptFieldMoveEffectTask *env = Heap_Alloc(heapID, sizeof(ScriptFieldMoveEffectTask));
     memset(env, 0, sizeof(ScriptFieldMoveEffectTask));
-    env->effect = sScriptFieldMoveEffectCreateFuncs[kind](fieldSystem);
+    env->effect = gScriptFieldMoveEffectCreateFuncs[kind](fieldSystem);
     env->done = done;
     env->kind = kind;
     *done = FALSE;

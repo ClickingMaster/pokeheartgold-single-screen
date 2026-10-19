@@ -74,7 +74,7 @@
 .public HiddenObjectMovement_Update
 .public HiddenObjectMovement_Delete
 .public HiddenObjectMovement_Resume
-.public sMovementsByDirection
+.public gMovementsByDirection
 .public gMapObjectMovementCallbacks
 .public gMovementCmdTable
 .public gMovementCmdSteps_001

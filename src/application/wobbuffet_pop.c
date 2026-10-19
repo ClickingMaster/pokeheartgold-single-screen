@@ -49,24 +49,24 @@ typedef struct WobbuffetPopModelFiles {
     int files[5];
 } WobbuffetPopModelFiles;
 
-extern const CameraAngle sWobbuffetPopCameraAngle;
-extern BOOL (*const sWobbuffetPopHostSteps[])(WobbuffetPop *game, WobbuffetPopSequence *sequence);
-extern const VecFx32 sWobbuffetPopCameraTarget;
-extern const GraphicsModes sWobbuffetPopGraphicsModes;
-extern const u8 sWobbuffetPopSeatOrders[][4];
-extern const u8 sWobbuffetPopNameWindowIndices[];
-extern const OamCharTransferParam sWobbuffetPopOamCharTransfer;
-extern const SpriteResourceCountsListUnion sWobbuffetPopSpriteResourceCounts;
-extern const OamManagerParam sWobbuffetPopOamManagerParam;
-extern const GraphicsBanks sWobbuffetPopBanks;
-extern const WobbuffetPopModelFiles sWobbuffetPopLocalModelFiles[];
-extern const WobbuffetPopModelFiles sWobbuffetPopSlotModelFiles0[];
-extern const WobbuffetPopModelFiles sWobbuffetPopSlotModelFiles1[];
-extern const WobbuffetPopModelFiles sWobbuffetPopSlotModelFiles2[];
-extern const WobbuffetPopModelFiles sWobbuffetPopSlotModelFiles3[];
-extern const BgTemplate sWobbuffetPopMainBgTemplates[3];
-extern const BgTemplate sWobbuffetPopSubBgTemplates[4];
-extern const s32 sWobbuffetPopBalloonAirRates[];
+extern const CameraAngle gWobbuffetPopCameraAngle;
+extern BOOL (*const gWobbuffetPopHostSteps[])(WobbuffetPop *game, WobbuffetPopSequence *sequence);
+extern const VecFx32 gWobbuffetPopCameraTarget;
+extern const GraphicsModes gWobbuffetPopGraphicsModes;
+extern const u8 gWobbuffetPopSeatOrders[][4];
+extern const u8 gWobbuffetPopNameWindowIndices[];
+extern const OamCharTransferParam gWobbuffetPopOamCharTransfer;
+extern const SpriteResourceCountsListUnion gWobbuffetPopSpriteResourceCounts;
+extern const OamManagerParam gWobbuffetPopOamManagerParam;
+extern const GraphicsBanks gWobbuffetPopBanks;
+extern const WobbuffetPopModelFiles gWobbuffetPopLocalModelFiles[];
+extern const WobbuffetPopModelFiles gWobbuffetPopSlotModelFiles0[];
+extern const WobbuffetPopModelFiles gWobbuffetPopSlotModelFiles1[];
+extern const WobbuffetPopModelFiles gWobbuffetPopSlotModelFiles2[];
+extern const WobbuffetPopModelFiles gWobbuffetPopSlotModelFiles3[];
+extern const BgTemplate gWobbuffetPopMainBgTemplates[3];
+extern const BgTemplate gWobbuffetPopSubBgTemplates[4];
+extern const s32 gWobbuffetPopBalloonAirRates[];
 
 enum WobbuffetPopAppState {
     WOBBUFFET_POP_APP_START_PLAYER_LIST,
@@ -356,12 +356,12 @@ static BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
     GF_TouchpadStartSampling(4);
     WobbuffetPop_CreateCameras(game);
     game->spriteSystem = SpriteSystem_Alloc(HEAP_ID_117);
-    SpriteSystem_Init(game->spriteSystem, &sWobbuffetPopOamManagerParam, &sWobbuffetPopOamCharTransfer, 32);
+    SpriteSystem_Init(game->spriteSystem, &gWobbuffetPopOamManagerParam, &gWobbuffetPopOamCharTransfer, 32);
     G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_64K);
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     game->spriteManager = SpriteManager_New(game->spriteSystem);
     SpriteSystem_InitSprites(game->spriteSystem, game->spriteManager, 224);
-    SpriteSystem_InitManagerWithCapacities(game->spriteSystem, game->spriteManager, (SpriteResourceCountsListUnion *)&sWobbuffetPopSpriteResourceCounts);
+    SpriteSystem_InitManagerWithCapacities(game->spriteSystem, game->spriteManager, (SpriteResourceCountsListUnion *)&gWobbuffetPopSpriteResourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(game->spriteSystem), 0, 352 * FX32_ONE);
     WobbuffetPop_CreateParticleSystem(game);
     game->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0012_bin, HEAP_ID_117);
@@ -620,14 +620,14 @@ static void WobbuffetPop_Delete3DVramMan(GF3DVramMan *vramMan) {
 }
 
 static void WobbuffetPop_CreateCameras(WobbuffetPop *game) {
-    VecFx32 target = sWobbuffetPopCameraTarget;
+    VecFx32 target = gWobbuffetPopCameraTarget;
 
     game->camera = Camera_New(HEAP_ID_117);
-    Camera_Init_FromTargetDistanceAndAngle(&target, 123 * FX32_ONE, &sWobbuffetPopCameraAngle, 4004, 1, FALSE, game->camera);
+    Camera_Init_FromTargetDistanceAndAngle(&target, 123 * FX32_ONE, &gWobbuffetPopCameraAngle, 4004, 1, FALSE, game->camera);
     Camera_SetPerspectiveClippingPlane(FX32_ONE, 900 * FX32_ONE, game->camera);
     Camera_SetStaticPtr(game->camera);
     game->particleCamera = Camera_New(HEAP_ID_117);
-    Camera_Init_FromTargetDistanceAndAngle(&target, 80 * FX32_ONE, &sWobbuffetPopCameraAngle, 4004, 1, FALSE, game->particleCamera);
+    Camera_Init_FromTargetDistanceAndAngle(&target, 80 * FX32_ONE, &gWobbuffetPopCameraAngle, 4004, 1, FALSE, game->particleCamera);
     Camera_SetPerspectiveClippingPlane(FX32_ONE, 900 * FX32_ONE, game->particleCamera);
 }
 
@@ -695,15 +695,15 @@ static void WobbuffetPop_InitBgs(BgConfig *bgConfig) {
     int i;
 
     GfGfx_DisableEngineAPlanes();
-    banks = sWobbuffetPopBanks;
+    banks = gWobbuffetPopBanks;
     GfGfx_SetBanks(&banks);
     MI_CpuClear32((void *)HW_BG_VRAM, HW_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_BG_VRAM, HW_DB_BG_VRAM_SIZE);
     MI_CpuClear32((void *)HW_OBJ_VRAM, HW_OBJ_VRAM_SIZE);
     MI_CpuClear32((void *)HW_DB_OBJ_VRAM, HW_DB_OBJ_VRAM_SIZE);
-    modes = sWobbuffetPopGraphicsModes;
+    modes = gWobbuffetPopGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
-    ARRAY_ASSIGN(templates, sWobbuffetPopMainBgTemplates);
+    ARRAY_ASSIGN(templates, gWobbuffetPopMainBgTemplates);
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &templates[0], GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_1);
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, 0);
@@ -718,11 +718,11 @@ static void WobbuffetPop_InitBgs(BgConfig *bgConfig) {
     BgSetPosTextAndCommit(bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
     G2_SetBG0Priority(2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
-    for (i = 0; i < NELEMS(sWobbuffetPopSubBgTemplates); i++) {
+    for (i = 0; i < NELEMS(gWobbuffetPopSubBgTemplates); i++) {
         if (i < 3) {
-            InitBgFromTemplate(bgConfig, (u8)(i + GF_BG_LYR_SUB_0), &sWobbuffetPopSubBgTemplates[i], GF_BG_TYPE_TEXT);
+            InitBgFromTemplate(bgConfig, (u8)(i + GF_BG_LYR_SUB_0), &gWobbuffetPopSubBgTemplates[i], GF_BG_TYPE_TEXT);
         } else {
-            InitBgFromTemplate(bgConfig, (u8)(i + GF_BG_LYR_SUB_0), &sWobbuffetPopSubBgTemplates[i], GF_BG_TYPE_AFFINE);
+            InitBgFromTemplate(bgConfig, (u8)(i + GF_BG_LYR_SUB_0), &gWobbuffetPopSubBgTemplates[i], GF_BG_TYPE_AFFINE);
         }
         BG_ClearCharDataRange((u8)(i + GF_BG_LYR_SUB_0), 0x20, 0, HEAP_ID_117);
         BgClearTilemapBufferAndCommit(bgConfig, (u8)(i + GF_BG_LYR_SUB_0));
@@ -788,7 +788,7 @@ static void WobbuffetPop_PrintPlayerNames(WobbuffetPop *game) {
             if (width & 1) {
                 x--;
             }
-            AddTextPrinterParameterizedWithColor((Window *)(windows + sizeof(Window) * (sWobbuffetPopNameWindowIndices + 4 * game->app->playerCount)[position]), 0, name, x, 0, 0, color, NULL);
+            AddTextPrinterParameterizedWithColor((Window *)(windows + sizeof(Window) * (gWobbuffetPopNameWindowIndices + 4 * game->app->playerCount)[position]), 0, name, x, 0, 0, color, NULL);
             Heap_Free(name);
         }
     }
@@ -997,15 +997,15 @@ static void WobbuffetPop_LoadModels(WobbuffetPop *game, NARC *narc) {
     common = &game->common;
     animationFile = NULL;
     index = WobbuffetPop_GetPlayerIndex(game, Comm_GetLocalNetId());
-    ModelResource_LoadFromNarc(&models->localResource, narc, sWobbuffetPopLocalModelFiles[index].files[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&models->localResource, narc, gWobbuffetPopLocalModelFiles[index].files[0], HEAP_ID_117);
     ModelInstance_Init(&models->localModel, &models->localResource);
     ModelInstance_SetPosition(&models->localModel, 0, -25 * FX32_ONE, 0);
     ModelInstance_SetScale(&models->localModel, FX32_ONE, FX32_ONE, FX32_ONE);
     ModelInstance_SetVisible(&models->localModel, TRUE);
-    ModelResource_LoadFromNarc(&models->slotResources[0], narc, sWobbuffetPopSlotModelFiles0[index].files[0], HEAP_ID_117);
-    ModelResource_LoadFromNarc(&models->slotResources[1], narc, sWobbuffetPopSlotModelFiles1[index].files[0], HEAP_ID_117);
-    ModelResource_LoadFromNarc(&models->slotResources[2], narc, sWobbuffetPopSlotModelFiles2[index].files[0], HEAP_ID_117);
-    ModelResource_LoadFromNarc(&models->slotResources[3], narc, sWobbuffetPopSlotModelFiles3[index].files[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&models->slotResources[0], narc, gWobbuffetPopSlotModelFiles0[index].files[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&models->slotResources[1], narc, gWobbuffetPopSlotModelFiles1[index].files[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&models->slotResources[2], narc, gWobbuffetPopSlotModelFiles2[index].files[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&models->slotResources[3], narc, gWobbuffetPopSlotModelFiles3[index].files[0], HEAP_ID_117);
     row = 0;
     for (; row < 8; row++) {
         for (type = 0; type < 4; type++) {
@@ -1353,10 +1353,10 @@ int WobbuffetPop_GetPlayerSeat(WobbuffetPop *game, int netId) {
     }
     GF_ASSERT(them != 0xFF && me != 0xFF);
     for (i = 0; i < game->app->playerCount; i++) {
-        if (me == sWobbuffetPopSeatOrders[game->app->playerCount][i]) {
+        if (me == gWobbuffetPopSeatOrders[game->app->playerCount][i]) {
             mePos = i;
         }
-        if (them == sWobbuffetPopSeatOrders[game->app->playerCount][i]) {
+        if (them == gWobbuffetPopSeatOrders[game->app->playerCount][i]) {
             themPos = i;
         }
     }
@@ -1552,7 +1552,7 @@ static BOOL WobbuffetPop_RunHostSteps(WobbuffetPop *game) {
     if (game->sequence.step >= WOBBUFFET_POP_HOST_DONE) {
         return TRUE;
     }
-    if (sWobbuffetPopHostSteps[game->sequence.step](game, sequence) == TRUE) {
+    if (gWobbuffetPopHostSteps[game->sequence.step](game, sequence) == TRUE) {
         sequence->step++;
         sequence->state = 0;
         sequence->timer = 0;
@@ -1685,7 +1685,7 @@ static s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 r
     } else {
         amount = request * 10;
     }
-    return sWobbuffetPopBalloonAirRates[balloon->selection] * amount / 100;
+    return gWobbuffetPopBalloonAirRates[balloon->selection] * amount / 100;
 }
 
 static void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request) {

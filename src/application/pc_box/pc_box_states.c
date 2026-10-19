@@ -41,14 +41,14 @@ typedef struct PCBoxSubApp {
     u32 nextState;
 } PCBoxSubApp;
 
-extern const PCBoxStateFunc sPCBoxStateTable[];
+extern const PCBoxStateFunc gPCBoxStateTable[];
 // {yes, no} handler pairs of the yes/no prompts; sPCBoxYesNoNoHandlers labels the "no" column.
 extern const PCBoxStateFunc sPCBoxYesNoHandlers[];
 extern const PCBoxStateFunc sPCBoxYesNoNoHandlers[];
-extern const PCBoxSubApp sPCBoxSubApps[];
-extern const PCBoxMenuEntry sPCBoxDepositMenu[];
-extern const PCBoxMenuEntry sPCBoxWithdrawMenu[];
-extern const PCBoxMenuEntry sPCBoxMoveMenu[];
+extern const PCBoxSubApp gPCBoxSubApps[];
+extern const PCBoxMenuEntry gPCBoxDepositMenu[];
+extern const PCBoxMenuEntry gPCBoxWithdrawMenu[];
+extern const PCBoxMenuEntry gPCBoxMoveMenu[];
 
 static inline u32 plus30(u32 n);
 static u32 PCBox_StartFadeIn(PCBoxWork *work, u32 v);
@@ -215,7 +215,7 @@ u32 PCBox_State_Delay(PCBoxWork *work) {
 
 u32 PCBox_State_WaitUpdateFunc(PCBoxWork *work) {
     if (work->view->updateFunc == NULL) {
-        return sPCBoxStateTable[work->nextState](work);
+        return gPCBoxStateTable[work->nextState](work);
     }
     return PC_BOX_STATE_WAIT_UPDATE_FUNC;
 }
@@ -255,7 +255,7 @@ u32 PCBox_State_WaitPaletteFlash(PCBoxWork *work) {
 }
 
 u32 PCBox_State_StartSubApp(PCBoxWork *work) {
-    sPCBoxSubApps[work->subAppIndex].start(work);
+    gPCBoxSubApps[work->subAppIndex].start(work);
     return PC_BOX_STATE_RUN_SUB_APP;
 }
 
@@ -264,8 +264,8 @@ u32 PCBox_State_RunSubApp(PCBoxWork *work) {
         return PC_BOX_STATE_RUN_SUB_APP;
     }
     OverlayManager_Delete(work->subApp);
-    sPCBoxSubApps[work->subAppIndex].end(work);
-    work->nextState = sPCBoxSubApps[work->subAppIndex].nextState;
+    gPCBoxSubApps[work->subAppIndex].end(work);
+    work->nextState = gPCBoxSubApps[work->subAppIndex].nextState;
     return PC_BOX_STATE_INIT;
 }
 
@@ -309,7 +309,7 @@ u32 PCBox_State_MoveModeInput(PCBoxWork *work) {
             System_GetTouchNewCoords((u32 *)(&work->view->touchX),
                 (u32 *)(&work->view->touchY));
             if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
-                PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+                PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
             }
             PCBox_ShowSlotMonInfo(work, input);
             PCBox_SetSpriteVisible(work->view, 9, 0);
@@ -434,7 +434,7 @@ u32 PCBox_State_MoveModeInput(PCBoxWork *work) {
     default:
         if (PCBox_GetSlotMonData(work, input, MON_DATA_SPECIES_EXISTS, NULL) != 0) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+            PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
             PCBox_ShowSlotMonInfo(work, input);
             PCBox_StartCursorSlide(work->view, 0x24, GridInputHandler_GetNextInput(work->view->gridInput));
             GridInputHandler_SetNextInput(work->view->gridInput, 0x24);
@@ -460,18 +460,18 @@ void PCBox_State_ReturnToActionMenu(PCBoxWork *work) {
     PCBox_ClearWindowFrame(work->view, 0x25);
     switch (work->args->mode) {
     case PC_BOX_MODE_WITHDRAW:
-        PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
+        PCBox_DrawActionMenu(work, gPCBoxWithdrawMenu, 4);
         PCBox_PrintMonActionMessage(work, work->selectedSlot, PC_BOX_MON_MSG_SELECTED, 0x27);
         msg = PC_BOX_STATE_RESUME_WITHDRAW_INPUT;
         break;
     case PC_BOX_MODE_DEPOSIT:
-        PCBox_DrawActionMenu(work, sPCBoxDepositMenu, 4);
+        PCBox_DrawActionMenu(work, gPCBoxDepositMenu, 4);
         PCBox_PrintMonActionMessage(work, work->selectedSlot, PC_BOX_MON_MSG_SELECTED, 0x27);
         msg = PC_BOX_STATE_RESUME_DEPOSIT_INPUT;
         break;
     case PC_BOX_MODE_MOVE_POKEMON:
     default:
-        PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+        PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
         msg = work->selectedSlot < PC_BOX_SLOT_PARTY_START ? 0x4d : 0x4e;
         break;
     }
@@ -494,11 +494,11 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
     PCBox_ShowSlotMonInfo(work, work->selectedSlot);
     if (work->summaryFromTray == 0) {
         if (work->args->mode == PC_BOX_MODE_WITHDRAW) {
-            PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
+            PCBox_DrawActionMenu(work, gPCBoxWithdrawMenu, 4);
         } else if (work->args->mode == PC_BOX_MODE_DEPOSIT) {
             PCBox_SetBoxArrowsVisible(work->view, 0);
             PCBox_SetIconsTranslucent(work, 1, 1);
-            PCBox_DrawActionMenu(work, sPCBoxDepositMenu, 4);
+            PCBox_DrawActionMenu(work, gPCBoxDepositMenu, 4);
         } else {
             if (work->selectedSlot >= PC_BOX_SLOT_PARTY_START) {
                 PCBox_SetIconsTranslucent(work, 1, 1);
@@ -508,7 +508,7 @@ void PCBox_State_ReturnFromSummary(PCBoxWork *work) {
             } else if (work->trayOpen != 0) {
                 PCBox_ShowBoxTray(work);
             }
-            PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+            PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
             PCBox_HideBottomButtons(work);
         }
         PCBox_ShowActionMenu(work->view->panels);
@@ -614,7 +614,7 @@ void PCBox_State_GiveItemFromBag(PCBoxWork *work) {
                 msg = PC_BOX_STATE_ITEM_MODE_PARTY_INPUT;
             }
         } else {
-            PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+            PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
             if (work->selectedSlot < PC_BOX_SLOT_PARTY_START) {
                 msg = PC_BOX_STATE_MOVE_MODE_INPUT;
             } else {
@@ -961,7 +961,7 @@ int PCBox_State_MoveModePartyInput(PCBoxWork *work) {
             PlaySE(SEQ_SE_DP_BOX02);
             System_GetTouchNewCoords((u32 *)&work->view->touchX, (u32 *)&work->view->touchY);
             if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
-                PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+                PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
             }
             PCBox_ShowSlotMonInfo(work, touch + 30);
             PCBox_SetSpriteVisible(work->view, 9, 0);
@@ -1045,7 +1045,7 @@ int PCBox_State_MoveModePartyInput(PCBoxWork *work) {
         default:
             if (PCBox_GetSlotMonData(work, input + 30, MON_DATA_SPECIES_EXISTS, NULL)) {
                 PlaySE(SEQ_SE_DP_DECIDE);
-                PCBox_DrawActionMenu(work, sPCBoxMoveMenu, 5);
+                PCBox_DrawActionMenu(work, gPCBoxMoveMenu, 5);
                 PCBox_ShowSlotMonInfo(work, input + 30);
                 PCBox_StartCursorSlide(work->view, 8, GridInputHandler_GetNextInput(work->view->gridInput));
                 GridInputHandler_SetNextInput(work->view->gridInput, 8);
@@ -1811,7 +1811,7 @@ int PCBox_State_WithdrawInput(PCBoxWork *work) {
         if (PCBox_GetSlotMonData(work, input, MON_DATA_SPECIES_EXISTS, NULL)) {
             System_GetTouchNewCoords((u32 *)&work->view->touchX, (u32 *)&work->view->touchY);
             if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
-                PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
+                PCBox_DrawActionMenu(work, gPCBoxWithdrawMenu, 4);
             }
             PlaySE(SEQ_SE_DP_BOX02);
             PCBox_ShowSlotMonInfo(work, input);
@@ -1921,7 +1921,7 @@ int PCBox_State_WithdrawInput(PCBoxWork *work) {
     default:
         if (PCBox_GetSlotMonData(work, input, MON_DATA_SPECIES_EXISTS, NULL)) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            PCBox_DrawActionMenu(work, sPCBoxWithdrawMenu, 4);
+            PCBox_DrawActionMenu(work, gPCBoxWithdrawMenu, 4);
             PCBox_ShowSlotMonInfo(work, input);
             PCBox_StartCursorSlide(work->view, 34, GridInputHandler_GetNextInput(work->view->gridInput));
             GridInputHandler_SetNextInput(work->view->gridInput, 34);
@@ -2002,7 +2002,7 @@ int PCBox_State_DepositInput(PCBoxWork *work) {
         if (PCBox_GetSlotMonData(work, (s32)choice + 30, MON_DATA_SPECIES_EXISTS, NULL)) {
             System_GetTouchNewCoords(&work->view->touchX, &work->view->touchY);
             if (PCBox_IsActionMenuOpen(work->view->panels) == 0) {
-                PCBox_DrawActionMenu(work, sPCBoxDepositMenu, 4);
+                PCBox_DrawActionMenu(work, gPCBoxDepositMenu, 4);
             }
             PlaySE(SEQ_SE_DP_BOX02);
             PCBox_ShowSlotMonInfo(work, (u32)(choice + 30));
@@ -2076,7 +2076,7 @@ int PCBox_State_DepositInput(PCBoxWork *work) {
     default:
         if (PCBox_GetSlotMonData(work, (s32)choice + 30, MON_DATA_SPECIES_EXISTS, NULL)) {
             PlaySE(SEQ_SE_DP_DECIDE);
-            PCBox_DrawActionMenu(work, sPCBoxDepositMenu, 4);
+            PCBox_DrawActionMenu(work, gPCBoxDepositMenu, 4);
             PCBox_ShowSlotMonInfo(work, (u32)(choice + 30));
             PCBox_StartCursorSlide(work->view, 7, GridInputHandler_GetNextInput(work->view->gridInput));
             GridInputHandler_SetNextInput(work->view->gridInput, 7);

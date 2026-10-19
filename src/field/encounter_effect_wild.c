@@ -149,9 +149,9 @@ static void WildEffectSine_Init(WildEffectSine *sine, s16 start, s16 peak, s16 s
 static void WildEffectSine_Update(WildEffectSine *sine);
 static void WildEffectStep_Init(WildEffectStep *step, WildEffectStepFunc func);
 static BOOL WildEffectStep_Run(WildEffectStep *step, void *work);
-static BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state);
-static BOOL RedEffect_FirstFlash(RedEffectWork *work, u32 *state);
-static BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state);
+static BOOL RedEffect_FillScreen(void *data, u32 *state);
+static BOOL RedEffect_FirstFlash(void *data, u32 *state);
+static BOOL RedEffect_SecondFlash(void *data, u32 *state);
 static void RedEffect_CreateSprite(NARC *narc, Sprite **sprite, EncounterEffectSpriteManager *spriteManager, EncounterEffectSpriteResources *spriteResources, int variant);
 static void WildEffect_RunCellGridRows(SysTask *task, EncounterEffectTask *effect, BOOL white);
 static void WildEffect_RunCellGridDiagonals(SysTask *task, EncounterEffectTask *effect, BOOL white);
@@ -514,9 +514,9 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
         RedEffect_CreateSprite(effect->narc, &work->sprite, &work->spriteManager, &work->spriteResources, 0);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         work->hBlankSystem = effect->fieldSystem->mapSystems->hBlankSystem;
-        WildEffectStep_Init(&work->steps[0], (WildEffectStepFunc)RedEffect_FillScreen);
-        WildEffectStep_Init(&work->steps[1], (WildEffectStepFunc)RedEffect_FirstFlash);
-        WildEffectStep_Init(&work->steps[2], (WildEffectStepFunc)RedEffect_SecondFlash);
+        WildEffectStep_Init(&work->steps[0], RedEffect_FillScreen);
+        WildEffectStep_Init(&work->steps[1], RedEffect_FirstFlash);
+        WildEffectStep_Init(&work->steps[2], RedEffect_SecondFlash);
         effect->state = WILD_EFFECT_STATE_START_FLASH;
         break;
     }
@@ -557,7 +557,8 @@ void EncounterEffect_PkmnTrainerRed(SysTask *task, EncounterEffectTask *effect) 
     }
 }
 
-static BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state) {
+static BOOL RedEffect_FillScreen(void *data, u32 *state) {
+    RedEffectWork *work = data;
     BOOL done;
 
     switch (*state) {
@@ -583,7 +584,8 @@ static BOOL RedEffect_FillScreen(RedEffectWork *work, u32 *state) {
     return FALSE;
 }
 
-static BOOL RedEffect_FirstFlash(RedEffectWork *work, u32 *state) {
+static BOOL RedEffect_FirstFlash(void *data, u32 *state) {
+    RedEffectWork *work = data;
     switch (*state) {
     case RED_STEP_STATE_START:
         HBlankSystem_Stop(work->hBlankSystem);
@@ -605,7 +607,8 @@ static BOOL RedEffect_FirstFlash(RedEffectWork *work, u32 *state) {
     return FALSE;
 }
 
-static BOOL RedEffect_SecondFlash(RedEffectWork *work, u32 *state) {
+static BOOL RedEffect_SecondFlash(void *data, u32 *state) {
+    RedEffectWork *work = data;
     switch (*state) {
     case RED_STEP_STATE_START:
         HBlankSystem_Stop(work->hBlankSystem);

@@ -21,8 +21,8 @@ typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
 
 #define LINK_MOTION(app) ((PokewalkerAppMotion *)(app)->unk_1F2C0)
 
-extern const PokewalkerAppStateFunc sLinkStates[];
-extern const s32 sCourseMenuCursorPositions[];
+extern const PokewalkerAppStateFunc gLinkStates[];
+extern const s32 gCourseMenuCursorPositions[];
 
 #include "global.h"
 
@@ -63,7 +63,7 @@ int PokewalkerApp_Link_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_Update(PokewalkerApp *app) {
-    app->state = sLinkStates[app->state](app);
+    app->state = gLinkStates[app->state](app);
     if (app->state == 67) {
         app->state = 0;
         return 3;
@@ -233,7 +233,7 @@ int PokewalkerApp_Link_ShowCourseMenu(PokewalkerApp *app) {
     PokewalkerApp_PrintCoursePage(app);
     PokewalkerApp_PrintExit(app, 6);
     PokewalkerApp_UpdatePageArrows(app, app->coursePage);
-    PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+    PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
     return 10;
 }
 
@@ -267,14 +267,14 @@ int PokewalkerApp_Link_HandleCourseMenu(PokewalkerApp *app) {
         if (button <= 4) {
             app->menuSelection = button;
             if (PokewalkerApp_GetSelectedCourse(app) >= 0) {
-                PokewalkerApp_SelectMenuItem(app, button, sCourseMenuCursorPositions[button], 11);
+                PokewalkerApp_SelectMenuItem(app, button, gCourseMenuCursorPositions[button], 11);
                 PlaySE(SEQ_SE_DP_DECIDE);
                 PokewalkerApp_PrintCourseInfo(app, app->coursePage, app->menuSelection);
                 return 65;
             }
             PokewalkerApp_PrintCourseInfo(app, app->coursePage, app->menuSelection);
             PlaySE(SEQ_SE_DP_SELECT);
-            PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+            PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
         } else if (button == 6) {
             PokewalkerApp_ChangeCoursePage(app, -1);
             PokewalkerApp_UpdatePageArrows(app, app->coursePage);
@@ -284,7 +284,7 @@ int PokewalkerApp_Link_HandleCourseMenu(PokewalkerApp *app) {
             PokewalkerApp_UpdatePageArrows(app, app->coursePage);
             PokewalkerApp_SetSpriteAnim(app, 4, 3);
         } else {
-            PokewalkerApp_SelectMenuItem(app, button, sCourseMenuCursorPositions[button], 11);
+            PokewalkerApp_SelectMenuItem(app, button, gCourseMenuCursorPositions[button], 11);
             PlaySE(SEQ_SE_DP_DECIDE);
             return 65;
         }
@@ -295,14 +295,14 @@ int PokewalkerApp_Link_HandleCourseMenu(PokewalkerApp *app) {
             app->menuSelection--;
             PlaySE(SEQ_SE_DP_SELECT);
         }
-        PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+        PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
         PokewalkerApp_PrintCourseInfo(app, app->coursePage, app->menuSelection);
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
         if (app->menuSelection < 5) {
             app->menuSelection++;
             PlaySE(SEQ_SE_DP_SELECT);
         }
-        PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+        PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
         PokewalkerApp_PrintCourseInfo(app, app->coursePage, app->menuSelection);
     } else if (gSystem.newKeys & PAD_KEY_LEFT) {
         PokewalkerApp_ChangeCoursePage(app, -1);
@@ -314,12 +314,12 @@ int PokewalkerApp_Link_HandleCourseMenu(PokewalkerApp *app) {
         PokewalkerApp_SetSpriteAnim(app, 4, 3);
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         if (app->menuSelection > 4) {
-            PokewalkerApp_SelectMenuItem(app, app->menuSelection, sCourseMenuCursorPositions[app->menuSelection], 11);
+            PokewalkerApp_SelectMenuItem(app, app->menuSelection, gCourseMenuCursorPositions[app->menuSelection], 11);
             PlaySE(SEQ_SE_DP_DECIDE);
             return 65;
         }
         if (PokewalkerApp_GetSelectedCourse(app) >= 0) {
-            PokewalkerApp_SelectMenuItem(app, app->menuSelection, sCourseMenuCursorPositions[app->menuSelection], 11);
+            PokewalkerApp_SelectMenuItem(app, app->menuSelection, gCourseMenuCursorPositions[app->menuSelection], 11);
             PlaySE(SEQ_SE_DP_DECIDE);
             return 65;
         }
@@ -340,7 +340,7 @@ int PokewalkerApp_Link_EndCourseMenu(PokewalkerApp *app) {
     case 2:
     case 3:
     case 4:
-        PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+        PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
         if (PokewalkerApp_GetSelectedCourse(app) < 0) {
             break;
         }
@@ -381,7 +381,7 @@ void PokewalkerApp_ChangeCoursePage(PokewalkerApp *app, int direction) {
             }
         }
     }
-    PokewalkerApp_SetCursorPosition(app, sCourseMenuCursorPositions[app->menuSelection]);
+    PokewalkerApp_SetCursorPosition(app, gCourseMenuCursorPositions[app->menuSelection]);
     PokewalkerApp_PrintCoursePage(app);
 }
 

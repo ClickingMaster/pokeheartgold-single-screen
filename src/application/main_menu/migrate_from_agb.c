@@ -56,7 +56,7 @@ BOOL CTRDG_IsExisting(void);
 void CTRDG_ReadAgbFlash(u16 sector, u32 offset, void *dest, u32 size);
 
 extern int gAgbCartridgePulledOutInSleep;
-extern MigrateFromAgbIcon *sMigrateFromAgbIcons;
+extern MigrateFromAgbIcon *gMigrateFromAgbIcons;
 
 enum {
     MIGRATE_STATE_READ_CARTRIDGE,
@@ -639,9 +639,9 @@ static void MigrateFromAgb_LoadMonIcon(int species, int isEgg, u32 personality, 
     Heap_Free(file);
 }
 
-// Loads a box slot's icon into sMigrateFromAgbIcons[index] for the VBlank upload (MigrateFromAgb_UploadBoxIcons)
+// Loads a box slot's icon into gMigrateFromAgbIcons[index] for the VBlank upload (MigrateFromAgb_UploadBoxIcons)
 static void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int index, Sprite *sprite, void *file, NARC *narc) {
-    MigrateFromAgbIcon *icon = sMigrateFromAgbIcons + index;
+    MigrateFromAgbIcon *icon = gMigrateFromAgbIcons + index;
     NNSG2dCharacterData *charData;
     if (sprite) {
         if (MigrateFromAgb_IsSpeciesUnavailable(species) == FALSE) {
@@ -661,7 +661,7 @@ static void MigrateFromAgb_PrepareBoxIcon(int species, int isEgg, int form, int 
 
 static void MigrateFromAgb_UploadBoxIcons(void) {
     int i;
-    MigrateFromAgbIcon *icon = sMigrateFromAgbIcons;
+    MigrateFromAgbIcon *icon = gMigrateFromAgbIcons;
     for (i = 0; i < AGB_BOX_MON_COUNT; i++, icon++) {
         if (icon->sprite != NULL) {
             DC_FlushRange(icon->charData, 0x200);
@@ -1384,7 +1384,7 @@ BOOL MigrateFromAgb_Init(OverlayManager *man, int *state) {
         OS_InitTick();
     }
     MainMenuUtil_IgnoreCartridgeIrq();
-    sMigrateFromAgbIcons = app->icons;
+    gMigrateFromAgbIcons = app->icons;
     return TRUE;
 }
 

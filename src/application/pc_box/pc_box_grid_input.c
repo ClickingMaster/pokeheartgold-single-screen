@@ -11,7 +11,7 @@
 #include "system.h"
 #include "touchscreen.h"
 
-extern const TouchscreenHitbox sPCBoxSummaryShortcutHitbox[];
+extern const TouchscreenHitbox gPCBoxSummaryShortcutHitbox[];
 
 void PCBox_GridOnKeyMove(PCBoxWork *work, u32 newTarget, u32 prevTarget) {
     PCBox_StartCursorSlide(work->view, newTarget, prevTarget);
@@ -710,7 +710,7 @@ u32 PCBox_IsSummaryShortcutPressed(PCBoxWork *work) {
     if (gSystem.newKeys & PAD_BUTTON_Y) {
         return 1;
     }
-    if (TouchscreenHitbox_TouchNewIsIn(sPCBoxSummaryShortcutHitbox) == TRUE) {
+    if (TouchscreenHitbox_TouchNewIsIn(gPCBoxSummaryShortcutHitbox) == TRUE) {
         return 1;
     }
     return 0;

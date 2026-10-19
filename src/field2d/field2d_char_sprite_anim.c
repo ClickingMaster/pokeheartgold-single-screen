@@ -1,7 +1,7 @@
 #include "overlay_42.h"
 #include "sprite_transfer.h"
 
-const Field2DMapCell sField2DMapCellNone = { 0xFFFFFFFF };
+static const Field2DMapCell sField2DMapCellNone = { 0xFFFFFFFF };
 
 void CharSprite_StartAnimStand(CharSprite *charSprite, s32 direction) {
     charSprite->direction = direction;

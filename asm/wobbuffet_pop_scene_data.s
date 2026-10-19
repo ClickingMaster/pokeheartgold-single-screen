@@ -4,8 +4,8 @@
 
 	.text
 	.public WobbuffetPop_RecvPlayerValue
-	.public sWobbuffetPopCommands
-	.public sWobbuffetPopEventFuncs
+	.public gWobbuffetPopCommands
+	.public gWobbuffetPopEventFuncs
 	.public WobbuffetPop_GetEventCommandSize
 	.public WobbuffetPop_GetPlayerValueCommandSize
 	.public WobbuffetPop_RecvEvent
@@ -19,11 +19,11 @@
 	.public WobbuffetPop_HandleDemoEvent
 	.rodata
 
-sWobbuffetPopBalloonAirRates:
+gWobbuffetPopBalloonAirRates:
 	.byte 0x64, 0x00, 0x00, 0x00, 0x7D, 0x00, 0x00, 0x00
 	.byte 0x58, 0x00, 0x00, 0x00
 
-sWobbuffetPopCommands:
+gWobbuffetPopCommands:
 	.word 0
 	.word CommCmd_GetSize0
 	.word 0
@@ -37,7 +37,7 @@ sWobbuffetPopCommands:
 	.word CommCmd_GetSize0
 	.word 0
 
-sWobbuffetPopEventFuncs:
+gWobbuffetPopEventFuncs:
 	.word 0
 	.word WobbuffetPop_HandlePumpEvent
 	.word WobbuffetPop_HandlePopEvent

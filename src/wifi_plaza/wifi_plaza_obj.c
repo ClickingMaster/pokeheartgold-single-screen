@@ -359,8 +359,8 @@ WiFiPlazaObj *WiFiPlazaObj_FindAt(WiFiPlazaObjManager *manager, s32 x, s32 y) {
     u8 *entry;
     int i;
 
-    pos.unk0 = x << 4;
-    pos.unk2 = y << 4;
+    pos.x = x << 4;
+    pos.y = y << 4;
     gridObj = Field2DObjectManager_FindObjectAt(manager->gridObjs, pos);
     if (gridObj == NULL) {
         return NULL;
@@ -385,10 +385,10 @@ BOOL WiFiPlazaObj_IsOnCell(WiFiPlazaObj *obj, s32 x, s32 y) {
     Field2DPoint current = Field2DObject_GetPos(obj->gridObj);
     Field2DPoint previous = Field2DObject_GetPrevPos(obj->gridObj);
 
-    if (current.unk0 == (x << 4) && current.unk2 == (y << 4)) {
+    if (current.x == (x << 4) && current.y == (y << 4)) {
         return TRUE;
     }
-    if (previous.unk0 == (x << 4) && previous.unk2 == (y << 4)) {
+    if (previous.x == (x << 4) && previous.y == (y << 4)) {
         return TRUE;
     }
     return FALSE;
@@ -400,8 +400,8 @@ BOOL WiFiPlazaObj_FindFreeNeighbor(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
 
     for (i = 0; i < 4; i++) {
         Field2DPoint next = Field2D_StepInDirection(current, sWiFiPlazaObjNeighborDirections[i]);
-        int y = next.unk2 / 16;
-        int x = next.unk0 / 16;
+        int y = next.y / 16;
+        int x = next.x / 16;
 
         if (WiFiPlazaMap_GetCollision(manager->map, x, y) != 1) {
             int attr = WiFiPlazaMap_GetTileAttr(manager->map, x, y);
@@ -532,7 +532,7 @@ BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
     u32 result;
 
     position = Field2D_StepInDirection(position, direction);
-    result = WiFiPlazaMap_GetTileTag(manager->map, position.unk0 / 16, position.unk2 / 16);
+    result = WiFiPlazaMap_GetTileTag(manager->map, position.x / 16, position.y / 16);
     if (result == tag) {
         return TRUE;
     }

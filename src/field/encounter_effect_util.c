@@ -33,7 +33,7 @@ struct FilledRect {
     u8 fill;
 };
 
-// 32x32 blocks fall one after another (every delay frames, columns in sBlockWipeColumnOrder, bottom row first)
+// 32x32 blocks fall one after another (every delay frames, columns in gBlockWipeColumnOrder, bottom row first)
 // and stack up until they cover the window.
 struct BlockWipe {
     Window *window;
@@ -64,7 +64,7 @@ struct ZigzagWipe {
     BOOL *done;
 };
 
-extern u8 sBlockWipeColumnOrder[];
+extern u8 gBlockWipeColumnOrder[];
 
 static FilledRect *MovingRect_New(enum HeapID heapID);
 static void MovingRect_Free(FilledRect *rect);
@@ -283,7 +283,7 @@ BOOL BlockWipe_Update(BlockWipe *wipe) {
             int block, x, y;
             wipe->timer = wipe->delay;
             block = wipe->started;
-            x = sBlockWipeColumnOrder[block % BLOCK_WIPE_COLUMNS] * BLOCK_WIPE_SIZE + BLOCK_WIPE_SIZE / 2;
+            x = gBlockWipeColumnOrder[block % BLOCK_WIPE_COLUMNS] * BLOCK_WIPE_SIZE + BLOCK_WIPE_SIZE / 2;
             y = ((u32)block / BLOCK_WIPE_COLUMNS) * BLOCK_WIPE_SIZE;
             MovingRect_Start(wipe->blocks[block], x, x, -16 - y, 176 - y, wipe->duration, wipe->window, BLOCK_WIPE_SIZE, BLOCK_WIPE_SIZE, wipe->fill);
             wipe->started++;

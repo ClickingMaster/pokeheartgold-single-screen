@@ -93,21 +93,21 @@ typedef struct TouchscreenChoiceMenuCoord {
     u16 nextColumn;
 } TouchscreenChoiceMenuCoord;
 
-extern const TouchscreenChoiceMenuCoord sTouchscreenChoiceMenuYesNoCursorX[];
-extern const TouchscreenChoiceMenuCoord sTouchscreenChoiceMenuYesNoCursorY[];
-extern const TouchscreenHitbox sTouchscreenChoiceMenuYesNoHitboxes[];
-extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub0;
-extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub1;
-extern const BgTemplate sTouchscreenChoiceMenuBgTemplate_Sub2;
+extern const TouchscreenChoiceMenuCoord gTouchscreenChoiceMenuYesNoCursorX[];
+extern const TouchscreenChoiceMenuCoord gTouchscreenChoiceMenuYesNoCursorY[];
+extern const TouchscreenHitbox gTouchscreenChoiceMenuYesNoHitboxes[];
+extern const BgTemplate gTouchscreenChoiceMenuBgTemplate_Sub0;
+extern const BgTemplate gTouchscreenChoiceMenuBgTemplate_Sub1;
+extern const BgTemplate gTouchscreenChoiceMenuBgTemplate_Sub2;
 // [itemCount - 2][selection * 3]: {x, y, anim} of the list cursor.
-extern const u8 sTouchscreenChoiceMenuListCursorX[][24];
-extern const u8 sTouchscreenChoiceMenuListCursorY[][24];
-extern const u8 sTouchscreenChoiceMenuListCursorAnim[][24];
+extern const u8 gTouchscreenChoiceMenuListCursorX[][24];
+extern const u8 gTouchscreenChoiceMenuListCursorY[][24];
+extern const u8 gTouchscreenChoiceMenuListCursorAnim[][24];
 // [itemCount - 2]: per list size, the neighbour of each row for up / down / left / right (-1: none).
-extern const s8 *sTouchscreenChoiceMenuListNeighbors[];
-extern const TouchscreenHitbox *sTouchscreenChoiceMenuListHitboxes[];
-extern const WindowTemplate *sTouchscreenChoiceMenuListWindowTemplates[];
-extern TouchscreenChoiceMenuStateFunc sTouchscreenChoiceMenuStateFuncs[];
+extern const s8 *gTouchscreenChoiceMenuListNeighbors[];
+extern const TouchscreenHitbox *gTouchscreenChoiceMenuListHitboxes[];
+extern const WindowTemplate *gTouchscreenChoiceMenuListWindowTemplates[];
+extern TouchscreenChoiceMenuStateFunc gTouchscreenChoiceMenuStateFuncs[];
 
 static void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData);
 static void TouchscreenChoiceMenu_LoadBgGraphics(TouchscreenChoiceMenuData *data);
@@ -153,9 +153,9 @@ SysTask *TouchscreenChoiceMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInpu
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     *dispCnt = (*dispCnt & 0xFFCFFFEF) | GX_OBJVRAMMODE_CHAR_1D_32K;
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sTouchscreenChoiceMenuBgTemplate_Sub0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sTouchscreenChoiceMenuBgTemplate_Sub1, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sTouchscreenChoiceMenuBgTemplate_Sub2, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &gTouchscreenChoiceMenuBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &gTouchscreenChoiceMenuBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &gTouchscreenChoiceMenuBgTemplate_Sub2, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_FIELD1);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_FIELD1);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_2, 0x20, 0, HEAP_ID_FIELD1);
@@ -228,7 +228,7 @@ static void TouchscreenChoiceMenu_Task(SysTask *task, void *taskData) {
             data->fieldSystem->startMenuState = 3;
         }
         G2S_BlendNone();
-    } else if (sTouchscreenChoiceMenuStateFuncs[data->state](data) == TRUE) {
+    } else if (gTouchscreenChoiceMenuStateFuncs[data->state](data) == TRUE) {
         data->fieldSystem->startMenuState = 0;
         FieldSystem_SwitchBottomScreenApp(data->fieldSystem, 0, NULL); // back to the start menu (app 0)
     }
@@ -285,7 +285,7 @@ static void TouchscreenChoiceMenu_ShowList(TouchscreenChoiceMenuData *data) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, count, data->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_8);
     NARC_Delete(narc);
     for (i = 0; i < count; i++) {
-        AddWindow(data->bgConfig, &data->listWindows[i], &sTouchscreenChoiceMenuListWindowTemplates[count - 2][i]);
+        AddWindow(data->bgConfig, &data->listWindows[i], &gTouchscreenChoiceMenuListWindowTemplates[count - 2][i]);
     }
     for (i = 0; i < count; i++) {
         FillWindowPixelBuffer(&data->listWindows[i], 0);
@@ -329,8 +329,8 @@ static void TouchscreenChoiceMenu_CreateCursor(TouchscreenChoiceMenuData *data, 
     template.spriteList = data->spriteList;
     template.header = &data->header;
     template.position.z = 0;
-    template.position.x = sTouchscreenChoiceMenuYesNoCursorX[selection].value << FX32_SHIFT;
-    template.position.y = (sTouchscreenChoiceMenuYesNoCursorY[selection].value + 256) << FX32_SHIFT;
+    template.position.x = gTouchscreenChoiceMenuYesNoCursorX[selection].value << FX32_SHIFT;
+    template.position.y = (gTouchscreenChoiceMenuYesNoCursorY[selection].value + 256) << FX32_SHIFT;
     template.scale.x = FX32_ONE;
     template.scale.y = FX32_ONE;
     template.scale.z = FX32_ONE;
@@ -429,7 +429,7 @@ BOOL TouchscreenChoiceMenu_State_ShowList(TouchscreenChoiceMenuData *data) {
 
 static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, int dir) {
     int cur = *selection;
-    s8 next = *(dir + &sTouchscreenChoiceMenuListNeighbors[count - 2][cur * 4]);
+    s8 next = *(dir + &gTouchscreenChoiceMenuListNeighbors[count - 2][cur * 4]);
     if (next == -1 || cur == next) {
         return FALSE;
     }
@@ -454,7 +454,7 @@ static BOOL TouchscreenChoiceMenu_MoveListSelection(int *selection, int count, i
     } while (0)
 
 BOOL TouchscreenChoiceMenu_State_ListInput(TouchscreenChoiceMenuData *data) {
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(sTouchscreenChoiceMenuListHitboxes[data->itemCount - 2]);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(gTouchscreenChoiceMenuListHitboxes[data->itemCount - 2]);
 
     if (hit != -1) {
         data->selection = hit;
@@ -508,8 +508,8 @@ BOOL TouchscreenChoiceMenu_State_ListWriteResult(TouchscreenChoiceMenuData *data
 
 static void TouchscreenChoiceMenu_SetYesNoCursorPos(TouchscreenChoiceMenuData *data, int selection) {
     VecFx32 pos;
-    pos.x = sTouchscreenChoiceMenuYesNoCursorX[selection].value << FX32_SHIFT;
-    pos.y = (sTouchscreenChoiceMenuYesNoCursorY[selection].value + 256) << FX32_SHIFT;
+    pos.x = gTouchscreenChoiceMenuYesNoCursorX[selection].value << FX32_SHIFT;
+    pos.y = (gTouchscreenChoiceMenuYesNoCursorY[selection].value + 256) << FX32_SHIFT;
     pos.z = 0;
     Sprite_SetMatrix(data->cursorSprite, &pos);
 }
@@ -518,20 +518,20 @@ static void TouchscreenChoiceMenu_SetListCursorPos(TouchscreenChoiceMenuData *da
     VecFx32 pos;
     count -= 2;
     selection *= 3;
-    pos.x = sTouchscreenChoiceMenuListCursorX[count][selection] << FX32_SHIFT;
-    pos.y = (sTouchscreenChoiceMenuListCursorY[count][selection] + 256) << FX32_SHIFT;
+    pos.x = gTouchscreenChoiceMenuListCursorX[count][selection] << FX32_SHIFT;
+    pos.y = (gTouchscreenChoiceMenuListCursorY[count][selection] + 256) << FX32_SHIFT;
     pos.z = 0;
-    Sprite_SetAnimCtrlSeq(data->cursorSprite, sTouchscreenChoiceMenuListCursorAnim[count][selection]);
+    Sprite_SetAnimCtrlSeq(data->cursorSprite, gTouchscreenChoiceMenuListCursorAnim[count][selection]);
     Sprite_SetMatrix(data->cursorSprite, &pos);
 }
 
 static void TouchscreenChoiceMenu_SetListCursorPressed(TouchscreenChoiceMenuData *data, int count) {
-    Sprite_SetAnimCtrlSeq(data->cursorSprite, sTouchscreenChoiceMenuListCursorAnim[count - 2][0] + 2);
+    Sprite_SetAnimCtrlSeq(data->cursorSprite, gTouchscreenChoiceMenuListCursorAnim[count - 2][0] + 2);
 }
 
 // 0 = YES, 1 = NO; B selects NO.
 static BOOL TouchscreenChoiceMenu_HandleYesNoInput(TouchscreenChoiceMenuData *data) {
-    int hit = TouchscreenHitbox_FindRectAtTouchNew(sTouchscreenChoiceMenuYesNoHitboxes);
+    int hit = TouchscreenHitbox_FindRectAtTouchNew(gTouchscreenChoiceMenuYesNoHitboxes);
 
     if (hit != -1) {
         if (hit == 0) {

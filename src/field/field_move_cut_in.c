@@ -70,19 +70,19 @@ static void FieldMoveCutIn_SetWindowRect(FieldMoveCutIn *cutIn, fx32 left, fx32 
 static void FieldMoveCutIn_CreateWindowTask(FieldMoveCutIn *cutIn);
 static void FieldMoveCutIn_DestroyWindowTask(FieldMoveCutIn *cutIn);
 
-extern const FieldMoveCutInStep sFieldMoveCutInSteps[];
-extern const FieldMoveCutInStep sFieldMoveCutInFlySteps[];
-extern const FieldMoveCutInStep sFieldMoveCutInFlyWithObjectSteps[];
-extern const VecFx32 sCutInTrainerPos;
-extern const VecFx32 sCutInMonPos;
-extern const VecFx32 sCutInFlyTrainerPos;
-extern const VecFx32 sCutInFlyMonPos;
-extern const VecFx32 sCutInFlyWithObjectTrainerPos;
-extern const VecFx32 sCutInFlyerScale;
-extern const u16 sCutInTrainerCharFiles[];
-extern const u16 sCutInTrainerAnimFiles[];
-extern const u16 sCutInTrainerCellFiles[];
-extern const u16 sCutInTrainerPlttFiles[];
+extern const FieldMoveCutInStep gFieldMoveCutInSteps[];
+extern const FieldMoveCutInStep gFieldMoveCutInFlySteps[];
+extern const FieldMoveCutInStep gFieldMoveCutInFlyWithObjectSteps[];
+extern const VecFx32 gCutInTrainerPos;
+extern const VecFx32 gCutInMonPos;
+extern const VecFx32 gCutInFlyTrainerPos;
+extern const VecFx32 gCutInFlyMonPos;
+extern const VecFx32 gCutInFlyWithObjectTrainerPos;
+extern const VecFx32 gCutInFlyerScale;
+extern const u16 gCutInTrainerCharFiles[];
+extern const u16 gCutInTrainerAnimFiles[];
+extern const u16 gCutInTrainerCellFiles[];
+extern const u16 gCutInTrainerPlttFiles[];
 
 // kind 0: the banner only (field moves), 1: Fly, 2: Fly with the follower. The trainer graphics are the gender's.
 void *FieldMoveCutIn_Start(FieldSystem *fieldSystem, int kind, Pokemon *mon, int gender) {
@@ -145,7 +145,7 @@ static void FieldMoveCutIn_Free(FieldMoveCutIn *cutIn) {
 
 static void Task_FieldMoveCutIn(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
-    const FieldMoveCutInStep *steps = sFieldMoveCutInSteps;
+    const FieldMoveCutInStep *steps = gFieldMoveCutInSteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
     }
     if (cutIn->drawSprites == TRUE) {
@@ -177,8 +177,8 @@ BOOL FieldMoveCutIn_StepCreateSprites(FieldMoveCutIn *cutIn) {
     if (cutIn->transferDone == FALSE) {
         return FALSE;
     }
-    trainerPos = sCutInTrainerPos;
-    monPos = sCutInMonPos;
+    trainerPos = gCutInTrainerPos;
+    monPos = gCutInMonPos;
     cutIn->trainerSprite = FieldMoveCutIn_CreateTrainerSprite(cutIn, &trainerPos);
     cutIn->monSprite = FieldMoveCutIn_CreateMonSprite(cutIn, &monPos);
     FieldMoveCutIn_CreateScrollSprites(cutIn, 1);
@@ -352,7 +352,7 @@ BOOL FieldMoveCutIn_StepFinish(FieldMoveCutIn *cutIn) {
 
 static void Task_FieldMoveCutInFly(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
-    const FieldMoveCutInStep *steps = sFieldMoveCutInFlySteps;
+    const FieldMoveCutInStep *steps = gFieldMoveCutInFlySteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
     }
     if (cutIn->drawSprites == TRUE) {
@@ -365,7 +365,7 @@ static void Task_FieldMoveCutInFly(SysTask *task, void *data) {
 
 static void Task_FieldMoveCutInFlyWithObject(SysTask *task, void *data) {
     FieldMoveCutIn *cutIn = data;
-    const FieldMoveCutInStep *steps = sFieldMoveCutInFlyWithObjectSteps;
+    const FieldMoveCutInStep *steps = gFieldMoveCutInFlyWithObjectSteps;
     while (steps[cutIn->state](cutIn) == TRUE) {
     }
     if (cutIn->drawSprites == TRUE) {
@@ -383,8 +383,8 @@ BOOL FieldMoveCutIn_StepCreateFlySprites(FieldMoveCutIn *cutIn) {
     if (cutIn->transferDone == FALSE) {
         return FALSE;
     }
-    trainerPos = sCutInFlyTrainerPos;
-    monPos = sCutInFlyMonPos;
+    trainerPos = gCutInFlyTrainerPos;
+    monPos = gCutInFlyMonPos;
     cutIn->trainerSprite = FieldMoveCutIn_CreateTrainerSprite(cutIn, &trainerPos);
     cutIn->monSprite = FieldMoveCutIn_CreateMonSprite(cutIn, &monPos);
     FieldMoveCutIn_CreateScrollSprites(cutIn, 1);
@@ -400,7 +400,7 @@ BOOL FieldMoveCutIn_StepCreateFlyTrainerSprite(FieldMoveCutIn *cutIn) {
     if (cutIn->transferDone == FALSE) {
         return FALSE;
     }
-    pos = sCutInFlyWithObjectTrainerPos;
+    pos = gCutInFlyWithObjectTrainerPos;
     pos.x = pos.x + cutIn->otherObjectOffset.x;
     pos.y = pos.y + cutIn->otherObjectOffset.z;
     cutIn->trainerSprite = FieldMoveCutIn_CreateTrainerSprite(cutIn, &pos);
@@ -714,23 +714,23 @@ static void FieldMoveCutIn_LoadSpriteResources(FieldMoveCutIn *cutIn, NARC *narc
     cutIn->resMan[GF_GFX_RES_TYPE_ANIM] = Create2DGfxResObjMan(2, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
 
     cutIn->charResources[0] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000014_NCGR, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
-    cutIn->charResources[1] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, sCutInTrainerCharFiles[cutIn->trainerGraphics], FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
+    cutIn->charResources[1] = AddCharResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CHAR], narc, gCutInTrainerCharFiles[cutIn->trainerGraphics], FALSE, 2, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_FIELD1);
     cutIn->charResources[2] = FieldMoveCutIn_AddMonCharResource(cutIn, narc);
 
     i = 0;
     cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, FALSE, 0, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
     i++;
     if (cutIn->trainerGraphics != 0) {
-        cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, sCutInTrainerPlttFiles[cutIn->trainerGraphics - 1], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
+        cutIn->plttResources[i] = AddPlttResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_PLTT], narc, gCutInTrainerPlttFiles[cutIn->trainerGraphics - 1], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 1, HEAP_ID_FIELD1);
         i++;
     }
     cutIn->plttResources[i] = FieldMoveCutIn_AddMonPlttResource(cutIn, narc);
 
     cutIn->cellResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000015_NCER, FALSE, 1, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
-    cutIn->cellResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, sCutInTrainerCellFiles[cutIn->trainerGraphics], FALSE, 2, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
+    cutIn->cellResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, gCutInTrainerCellFiles[cutIn->trainerGraphics], FALSE, 2, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     cutIn->cellResources[2] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_CELL], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, FALSE, 3, GF_GFX_RES_TYPE_CELL, HEAP_ID_FIELD1);
     cutIn->animResources[0] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, NARC_choose_starter_sub_res_choose_starter_sub_res_00000016_NANR, FALSE, 0, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
-    cutIn->animResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, sCutInTrainerAnimFiles[cutIn->trainerGraphics], FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
+    cutIn->animResources[1] = AddCellOrAnimResObjFromOpenNarc(cutIn->resMan[GF_GFX_RES_TYPE_ANIM], narc, gCutInTrainerAnimFiles[cutIn->trainerGraphics], FALSE, 1, GF_GFX_RES_TYPE_ANIM, HEAP_ID_FIELD1);
 
     cutIn->monCharData = FieldMoveCutIn_LoadMonChar(cutIn->mon, &cutIn->pokepicTemplate, HEAP_ID_FIELD1);
     cutIn->monPlttData = FieldMoveCutIn_LoadMonPltt(&cutIn->pokepicTemplate, HEAP_ID_FIELD1);
@@ -822,7 +822,7 @@ Sprite *FieldMoveCutIn_CreateFlyerSprite(FieldMoveCutIn *cutIn, VecFx32 *pos, in
     VecFx32 affineScale;
     Sprite *sprite;
 
-    affineScale = sCutInFlyerScale;
+    affineScale = gCutInFlyerScale;
     sprite = FieldMoveCutIn_CreateSprite(cutIn, pos, 0, 0, 0, -1, 0, drawPriority);
     Sprite_SetAffineOverwriteMode(sprite, NNS_G2D_RND_AFFINE_OVERWRITE_DOUBLE);
     Sprite_SetAffineMatrix(sprite, &affineMatrix);

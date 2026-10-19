@@ -9,6 +9,12 @@
 
 u32 GX_GetBankForLCDC(void);
 
+static FieldCapture *FieldCapture_Start(const FieldCaptureConfig *config);
+static void FieldCapture_Stop(FieldCapture **capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As);
+static void FieldCapture_Task(SysTask *task, void *data);
+static void FieldCapture_StartTask(SysTask *task, void *data);
+static void FieldCapture_Init(FieldCaptureConfig *config);
+
 static inline void FieldCapture_SetCaptureRegister(GXCaptureSize size, GXCaptureMode mode, GXCaptureSrcA srcA, GXCaptureSrcB srcB, GXCaptureDest dest, int eva, int evb) {
     reg_GX_DISPCAPCNT = REG_GX_DISPCAPCNT_FIELD(1, mode, 0, srcB, srcA, size, 0, dest, evb, eva);
 }
@@ -27,19 +33,19 @@ static const FieldCaptureConfig sMotionBlurConfig = {
     .heapID = HEAP_ID_FIELD1,
 };
 
-FieldCapture *FieldCapture_Start(const FieldCaptureConfig *config) {
-    SysTask *task = CreateSysTaskAndEnvironment((SysTaskFunc)FieldCapture_Task, sizeof(FieldCapture), 5, config->heapID);
+static FieldCapture *FieldCapture_Start(const FieldCaptureConfig *config) {
+    SysTask *task = CreateSysTaskAndEnvironment(FieldCapture_Task, sizeof(FieldCapture), 5, config->heapID);
     FieldCapture *capture = SysTask_GetData(task);
     capture->config = *config;
     capture->task = task;
     capture->started = FALSE;
     capture->savedLcdcBanks = GX_GetBankForLCDC();
     FieldCapture_Init(&capture->config);
-    SysTask_CreateOnVWaitQueue((SysTaskFunc)FieldCapture_StartTask, capture, 0);
+    SysTask_CreateOnVWaitQueue(FieldCapture_StartTask, capture, 0);
     return capture;
 }
 
-void FieldCapture_Stop(FieldCapture **capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As) {
+static void FieldCapture_Stop(FieldCapture **capture, GXDispMode dispMode, GXBGMode bgMode, GXBG0As bg0As) {
     GX_SetGraphicsMode(dispMode, bgMode, bg0As);
     GX_SetBankForLCDC((GXVRamLCDC)(*capture)->savedLcdcBanks);
     switch ((*capture)->config.dispMode) {
@@ -63,14 +69,16 @@ void FieldCapture_Stop(FieldCapture **capture, GXDispMode dispMode, GXBGMode bgM
     *capture = NULL;
 }
 
-void FieldCapture_Task(SysTask *task, FieldCapture *capture) {
+static void FieldCapture_Task(SysTask *task, void *data) {
+    FieldCapture *capture = data;
     if (capture->started) {
         FieldCapture_SetCaptureRegister(capture->config.size, capture->config.mode, capture->config.srcA, capture->config.srcB, capture->config.dest, capture->config.eva, capture->config.evb);
     }
 }
 
 // Runs once on the VBlank queue: switches the display to the capture bank.
-void FieldCapture_StartTask(SysTask *task, FieldCapture *capture) {
+static void FieldCapture_StartTask(SysTask *task, void *data) {
+    FieldCapture *capture = data;
     switch (capture->config.dispMode) {
     case GX_DISPMODE_VRAM_A:
         GX_SetBankForLCDC(GX_VRAM_LCDC_A);
@@ -93,7 +101,7 @@ void FieldCapture_StartTask(SysTask *task, FieldCapture *capture) {
     SysTask_Destroy(task);
 }
 
-void FieldCapture_Init(FieldCaptureConfig *config) {
+static void FieldCapture_Init(FieldCaptureConfig *config) {
     switch (config->dispMode) {
     case GX_DISPMODE_VRAM_A:
         MI_CpuClearFast((void *)HW_LCDC_VRAM, 0x20000);

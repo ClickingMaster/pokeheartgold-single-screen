@@ -117,8 +117,8 @@
 	.public _021E6B54
 	.public _021E6B60
 	.public _021E6B6C
-	.public sUnownReportResdatIds
-	.public sUnownReportHitboxes
+	.public gUnownReportResdatIds
+	.public gUnownReportHitboxes
 	.public sUnownReportGraphicsModes
 	.public sUnownReportOamCharTransferParam
 	.public sUnownReportSpriteResourceCounts

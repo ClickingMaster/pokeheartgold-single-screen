@@ -7,12 +7,12 @@
 // Primo's passwords: four easy chat words whose positions in the password word bank encode the player's trainer id
 // (the visible half), a check value and the reward (bonus box wallpaper 0-7 or the reward of the second check, 8-10).
 
-void PrimoPassword_RotateBitsRight(u8 *data, int size, u8 amount);
-int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4);
-int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4);
+static void PrimoPassword_RotateBitsRight(u8 *data, int size, u8 amount);
+static int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4);
+static int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4);
 
 // Rotates the bits of the byte array right by `amount`, the lowest bit of the last byte moving into the first byte.
-void PrimoPassword_RotateBitsRight(u8 *data, int size, u8 amount) {
+static void PrimoPassword_RotateBitsRight(u8 *data, int size, u8 amount) {
     u8 carry;
     int i;
     u8 *end;
@@ -38,7 +38,7 @@ void PrimoPassword_RotateBitsRight(u8 *data, int size, u8 amount) {
     } while (count-- != 0);
 }
 
-int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4) {
+static int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4) {
     s16 idx[4];
     u8 out[4];
     int count;
@@ -99,7 +99,7 @@ int PrimoPassword_DecodeWallpaper(WallpaperPasswordBank *bank, u16 trainerId, u1
     return -1;
 }
 
-int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4) {
+static int PrimoPassword_DecodeCheck2(WallpaperPasswordBank *bank, u16 trainerId, u16 word1, u16 word2, u16 word3, u16 word4) {
     s16 idx[4];
     u8 out[4];
     int count;

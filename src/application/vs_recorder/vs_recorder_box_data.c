@@ -112,17 +112,17 @@ typedef struct VsRecorderMsgIdPair {
     u32 msgIds[2];
 } VsRecorderMsgIdPair;
 
-extern const VsRecorderBoxWindowRect sVsRecorderBoxListTitleWindows[];          // the box list buttons' message ids follow it
-extern const TouchscreenHitbox sVsRecorderBoxDataHitboxes[];                    // box: next Pokemon, back
+extern const VsRecorderBoxWindowRect gVsRecorderBoxListTitleWindows[];          // the box list buttons' message ids follow it
+extern const TouchscreenHitbox gVsRecorderBoxDataHitboxes[];                    // box: next Pokemon, back
 extern const VsRecorderBoxWindowRect sVsRecorderBoxListButtonWindows[];         // box list buttons (2)
-extern const TouchscreenHitbox sVsRecorderBoxListHitboxes[];                    // box list: profile button, list, back
-extern const u32 sVsRecorderBoxDataWindowFillColors[];                          // fill colours of VsRecorderBoxData.windows
-extern const VsRecorderBoxWindowRect sVsRecorderBoxDataWindows[];               // VsRecorderBoxData.windows
-extern const TouchscreenHitbox sVsRecorderBoxDataSendHitboxes[];                // send: previous box, next box, exit, send
+extern const TouchscreenHitbox gVsRecorderBoxListHitboxes[];                    // box list: profile button, list, back
+extern const u32 gVsRecorderBoxDataWindowFillColors[];                          // fill colours of VsRecorderBoxData.windows
+extern const VsRecorderBoxWindowRect gVsRecorderBoxDataWindows[];               // VsRecorderBoxData.windows
+extern const TouchscreenHitbox gVsRecorderBoxDataSendHitboxes[];                // send: previous box, next box, exit, send
 extern const VsRecorderBoxWindowRect sVsRecorderBoxDataCategoryButtonWindows[]; // category buttons (6)
 extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];            // categories (6) and cancel
 
-// substates of sending box data (sVsRecorderBoxDataSendSubStates)
+// substates of sending box data (gVsRecorderBoxDataSendSubStates)
 #define BOX_DATA_SEND_MAIN            3
 #define BOX_DATA_SEND_CHANGE_BOX      4
 #define BOX_DATA_SEND_SHOW_CATEGORIES 5
@@ -132,7 +132,7 @@ extern const TouchscreenHitbox sVsRecorderBoxDataCategoryHitboxes[];            
 #define BOX_DATA_SEND_QUIT            9
 #define BOX_DATA_SEND_EXIT            10
 
-// substates of viewing box data (sVsRecorderBoxDataViewSubStates)
+// substates of viewing box data (gVsRecorderBoxDataViewSubStates)
 #define BOX_DATA_VIEW_SELECT_CATEGORY       3
 #define BOX_DATA_VIEW_DOWNLOAD              4
 #define BOX_DATA_VIEW_BOX_LIST_BACK         6
@@ -414,11 +414,11 @@ BOOL VsRecorder_BoxDataInit(VsRecorderWork *work) {
     VsRecorder_PackBoxForm(work->saveData, boxData->storage, boxData->box, &boxData->form);
     VsRecorder_SelectFirstBoxMon(boxData);
     VsRecorder_InitBgBlend(&boxData->eva, &boxData->evb, 0);
-    boxData->hitboxes[0] = TouchHitboxController_Create(sVsRecorderBoxDataSendHitboxes, 4, VsRecorder_OnBoxDataSendTouch, work, HEAP_ID_109);
+    boxData->hitboxes[0] = TouchHitboxController_Create(gVsRecorderBoxDataSendHitboxes, 4, VsRecorder_OnBoxDataSendTouch, work, HEAP_ID_109);
     boxData->hitboxes[1] = TouchHitboxController_Create(sVsRecorderBoxDataCategoryHitboxes, 7, VsRecorder_OnBoxDataSendCategoryTouch, work, HEAP_ID_109);
     boxData->hitboxes[2] = TouchHitboxController_Create(sVsRecorderBoxDataCategoryHitboxes, 7, VsRecorder_OnBoxDataViewCategoryTouch, work, HEAP_ID_109);
-    boxData->hitboxes[3] = TouchHitboxController_Create(sVsRecorderBoxListHitboxes, 3, VsRecorder_OnBoxListTouch, work, HEAP_ID_109);
-    boxData->hitboxes[4] = TouchHitboxController_Create(sVsRecorderBoxDataHitboxes, 2, VsRecorder_OnBoxDataBoxTouch, work, HEAP_ID_109);
+    boxData->hitboxes[3] = TouchHitboxController_Create(gVsRecorderBoxListHitboxes, 3, VsRecorder_OnBoxListTouch, work, HEAP_ID_109);
+    boxData->hitboxes[4] = TouchHitboxController_Create(gVsRecorderBoxDataHitboxes, 2, VsRecorder_OnBoxDataBoxTouch, work, HEAP_ID_109);
     boxData->card = FrontierCard_New(HEAP_ID_109);
     FrontierCard_InitFromSave(boxData->card, work->saveData);
     VsRecorder_SetSubState(work, 1);
@@ -716,8 +716,8 @@ BOOL VsRecorder_BoxDataViewQuit(VsRecorderWork *work) {
 
 void VsRecorder_CreateBoxDataWindows(VsRecorderWork *work) {
     Window *window;
-    const VsRecorderBoxWindowRect *rect = sVsRecorderBoxDataWindows;
-    const u32 *fill = sVsRecorderBoxDataWindowFillColors;
+    const VsRecorderBoxWindowRect *rect = gVsRecorderBoxDataWindows;
+    const u32 *fill = gVsRecorderBoxDataWindowFillColors;
     int baseTile = 0x101;
     int i;
 
@@ -824,7 +824,7 @@ static void VsRecorder_PrintBoxName(VsRecorderWork *work) {
 // Pokemon name and box name
 void VsRecorder_ClearBoxDataInfoWindows(VsRecorderWork *work) {
     Window *window;
-    const u32 *fill = sVsRecorderBoxDataWindowFillColors;
+    const u32 *fill = gVsRecorderBoxDataWindowFillColors;
     int i;
 
     for (i = 0, window = ((VsRecorderBoxData *)work->screenWork)->windows; i < 2; i++) {
@@ -1175,7 +1175,7 @@ void VsRecorder_CreateBoxListButtons(VsRecorderWork *work) {
     int i;
 
     baseTile = 1;
-    msgIds = *(const VsRecorderMsgIdPair *)((const u8 *)sVsRecorderBoxListTitleWindows + 0x14);
+    msgIds = *(const VsRecorderMsgIdPair *)((const u8 *)gVsRecorderBoxListTitleWindows + 0x14);
     rect = sVsRecorderBoxListButtonWindows;
     i = 0;
     window = boxData->buttons;
@@ -1257,7 +1257,7 @@ void VsRecorder_CreateBoxListTitle(VsRecorderWork *work) {
     u32 i;
 
     boxData = work->screenWork;
-    rect = sVsRecorderBoxListTitleWindows;
+    rect = gVsRecorderBoxListTitleWindows;
     baseTile = 1;
     i = 0;
     window = boxData->windows;

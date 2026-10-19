@@ -17,7 +17,7 @@ typedef struct WonderCardAlbum WonderCardAlbum;
 typedef BOOL (*WonderCardTextBoxFunc)(void *data, Window *window, u32 color);
 
 // A text box of the Wonder Card screens (tables: sWonderCardAlbumTextBoxes for the album,
-// sLockCapsuleCardTextBoxes for the special card).
+// gLockCapsuleCardTextBoxes for the special card).
 typedef struct WonderCardTextBox {
     int page; // card side it belongs to (0: front, 1: back); 2: kept on both sides
     u32 x;

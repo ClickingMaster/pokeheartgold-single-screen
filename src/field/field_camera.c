@@ -214,6 +214,13 @@ static const FieldCameraPreset sFieldCameraPresets[17] = {
      },
 };
 
+static FieldCameraShift *FieldCameraShift_New(enum HeapID heapID);
+static void FieldCameraShift_Free(FieldCameraShift *shift);
+static void FieldCamera_InitShift(FieldSystem *fieldSystem, u32 presetNo);
+static void FieldCameraShift_SetAngle(Camera *camera, const u16 *start, const u16 *end, u32 step, u8 total);
+static void FieldCameraShift_MoveLookAt(Camera *camera, const VecFx32 *offset, u32 step, u32 total);
+static s32 FieldCameraShift_GetStepDelta(s32 value, s32 step, s32 total);
+
 void FieldCamera_Create(const VecFx32 *target, FieldSystem *fieldSystem, u32 presetNo, BOOL withHistory) {
     const FieldCameraPreset *preset = &sFieldCameraPresets[presetNo];
     if (presetNo >= FIELD_CAMERA_PRESET_COUNT) {
@@ -238,17 +245,17 @@ void FieldCamera_Delete(FieldSystem *fieldSystem) {
     Camera_Delete(fieldSystem->camera);
 }
 
-FieldCameraShift *FieldCameraShift_New(enum HeapID heapID) {
+static FieldCameraShift *FieldCameraShift_New(enum HeapID heapID) {
     FieldCameraShift *shift = Heap_Alloc(heapID, sizeof(FieldCameraShift));
     MI_CpuFill8(shift, 0, sizeof(FieldCameraShift));
     return shift;
 }
 
-void FieldCameraShift_Free(FieldCameraShift *shift) {
+static void FieldCameraShift_Free(FieldCameraShift *shift) {
     Heap_Free(shift);
 }
 
-void FieldCamera_InitShift(FieldSystem *fieldSystem, u32 presetNo) {
+static void FieldCamera_InitShift(FieldSystem *fieldSystem, u32 presetNo) {
     FieldCameraShift *shift = fieldSystem->cameraShift;
     u8 mode;
 
@@ -334,7 +341,7 @@ void FieldCameraShift_Update(FieldCameraShift *shift) {
 }
 
 // Sets the camera's x angle to the point step/total of the way from start to end.
-void FieldCameraShift_SetAngle(Camera *camera, const u16 *start, const u16 *end, u32 step, u8 total) {
+static void FieldCameraShift_SetAngle(Camera *camera, const u16 *start, const u16 *end, u32 step, u8 total) {
     CameraAngle angle = { 0, 0, 0, 0 };
     s32 change;
     u16 initial = *start;
@@ -350,14 +357,14 @@ void FieldCameraShift_SetAngle(Camera *camera, const u16 *start, const u16 *end,
 }
 
 // Moves the look-at point by this step's part of offset (x and z only).
-void FieldCameraShift_MoveLookAt(Camera *camera, const VecFx32 *offset, u32 step, u32 total) {
+static void FieldCameraShift_MoveLookAt(Camera *camera, const VecFx32 *offset, u32 step, u32 total) {
     VecFx32 delta = { 0, 0, 0 };
     delta.x = FieldCameraShift_GetStepDelta(offset->x, step, total);
     delta.z = FieldCameraShift_GetStepDelta(offset->z, step, total);
     Camera_OffsetLookAtPosAndTarget(&delta, camera);
 }
 
-s32 FieldCameraShift_GetStepDelta(s32 value, s32 step, s32 total) {
+static s32 FieldCameraShift_GetStepDelta(s32 value, s32 step, s32 total) {
     s32 current = value * step / total;
     s32 previous = value * (step - 1) / total;
     return current - previous;

@@ -28,16 +28,16 @@ typedef struct PokedexWeightRange {
     u16 max;
 } PokedexWeightRange;
 
-extern const ManagedSpriteTemplate sPokedexSizeCheckSpriteTemplates[];
-extern PokedexWeightRange sWeightCheckDiffRanges[];
-extern BOOL (*const sWeightCheckAnimFuncs[])(PokedexWeightCheckAnim *anim);
+extern const ManagedSpriteTemplate gPokedexSizeCheckSpriteTemplates[];
+extern PokedexWeightRange gWeightCheckDiffRanges[];
+extern BOOL (*const gWeightCheckAnimFuncs[])(PokedexWeightCheckAnim *anim);
 
 void PokedexApp_SetupSizeCheckSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
     PokedexApp_LoadSizeCheckResources(pokedexApp);
     for (i = 1; i < 10; i++) {
-        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &sPokedexSizeCheckSpriteTemplates[i - 1]);
+        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &gPokedexSizeCheckSpriteTemplates[i - 1]);
     }
     PokedexApp_SetSizeCheckMonIcons(pokedexApp);
     PokedexApp_DrawSizeCheckMonPic(pokedexApp);
@@ -218,7 +218,7 @@ void PokedexApp_InitWeightCheckAnim(PokedexAppData *pokedexApp, PokedexWeightChe
     anim->monLighter = monLighter;
     diff = (heavier - lighter) / 10;
     for (i = 0; i < 17; i++) {
-        if (diff >= sWeightCheckDiffRanges[i].min && diff <= sWeightCheckDiffRanges[i].max) {
+        if (diff >= gWeightCheckDiffRanges[i].min && diff <= gWeightCheckDiffRanges[i].max) {
             anim->animIndex = i;
             return;
         }
@@ -245,7 +245,7 @@ BOOL PokedexApp_DropFiguresOntoPans(PokedexWeightCheckAnim *anim) {
 }
 
 BOOL PokedexApp_RunWeightCheckAnim(PokedexWeightCheckAnim *anim) {
-    return sWeightCheckAnimFuncs[anim->animIndex](anim);
+    return gWeightCheckAnimFuncs[anim->animIndex](anim);
 }
 
 // Rotation speed and acceleration, signed by which side is heavier.

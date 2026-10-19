@@ -50,38 +50,38 @@ void CommState_EndPlazaMatch(void);
 int Comm_FindFriendSlot(SaveData *saveData, void *friendData, u32 *index);
 void WiFiPlaza_SendMinigameResultNews(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
-extern const u8 sPlazaGameMimeJrTopSelectionWeights[];
-extern const u8 sPlazaGameWobbuffetPopSelectionWeights[];
-extern const u8 sPlazaGameSwalotPlopSelectionWeights[];
-extern const u8 sPlazaGameResultsFlashSlots[];
-extern const s16 sPlazaGameResultsRankOffsets[];
-extern const fx32 sPlazaGameTitleSlideOutEndX[];
-extern const fx32 sPlazaGameTitleSlideOutVelocity[];
-extern const u32 sPlazaGameTitleColors[];
-extern const fx32 sPlazaGameTitleSlideInVelocity[];
-extern const fx32 sPlazaGameTitleRestX[];
-extern const fx32 sPlazaGameTitleBounceX[];
-extern const fx32 sPlazaGameTitleBounceOutVelocity[];
-extern const fx32 sPlazaGameTitleBounceBackVelocity[];
-extern const fx32 sPlazaGameTitleSlideInStartX[];
-extern const GraphicsModes sPlazaGameResultsGraphicsModes;
-extern const s16 sPlazaGamePlayerSpritePositions[];
-extern const s16 sPlazaGamePlayerSpriteY[];
-extern const u8 sPlazaGameSeatOrders[][4];
-extern const ObjCharTransferTemplate sPlazaGameObjCharTransfer;
-extern const GraphicsModes sPlazaGameEntryGraphicsModes;
-extern const VecFx32 sPlazaGameSignWindowSpritePositions[2];
-extern const GraphicsBanks sPlazaGameEntryBanks;
-extern const GraphicsBanks sPlazaGameResultsBanks;
-extern const u8 sPlazaGameSeatRowsByCount[][12];
-extern const u8 sPlazaGameScreenRowsByCount[][12];
-extern const u8 sPlazaGameSeatAnimsByCount[][12];
-extern const u8 sPlazaGameSeatRows[][12];
-extern const u8 sPlazaGameSeatAnims[][12];
-extern const u16 sPlazaGameAltMessages[20][2];
-extern const PlazaGameBgTemplate sPlazaGameEntryBgTemplates[];
-extern const PlazaGameBgTemplate sPlazaGameResultsBgTemplates[];
-extern const u8 sPlazaGameCommands[];
+extern const u8 gPlazaGameMimeJrTopSelectionWeights[];
+extern const u8 gPlazaGameWobbuffetPopSelectionWeights[];
+extern const u8 gPlazaGameSwalotPlopSelectionWeights[];
+extern const u8 gPlazaGameResultsFlashSlots[];
+extern const s16 gPlazaGameResultsRankOffsets[];
+extern const fx32 gPlazaGameTitleSlideOutEndX[];
+extern const fx32 gPlazaGameTitleSlideOutVelocity[];
+extern const u32 gPlazaGameTitleColors[];
+extern const fx32 gPlazaGameTitleSlideInVelocity[];
+extern const fx32 gPlazaGameTitleRestX[];
+extern const fx32 gPlazaGameTitleBounceX[];
+extern const fx32 gPlazaGameTitleBounceOutVelocity[];
+extern const fx32 gPlazaGameTitleBounceBackVelocity[];
+extern const fx32 gPlazaGameTitleSlideInStartX[];
+extern const GraphicsModes gPlazaGameResultsGraphicsModes;
+extern const s16 gPlazaGamePlayerSpritePositions[];
+extern const s16 gPlazaGamePlayerSpriteY[];
+extern const u8 gPlazaGameSeatOrders[][4];
+extern const ObjCharTransferTemplate gPlazaGameObjCharTransfer;
+extern const GraphicsModes gPlazaGameEntryGraphicsModes;
+extern const VecFx32 gPlazaGameSignWindowSpritePositions[2];
+extern const GraphicsBanks gPlazaGameEntryBanks;
+extern const GraphicsBanks gPlazaGameResultsBanks;
+extern const u8 gPlazaGameSeatRowsByCount[][12];
+extern const u8 gPlazaGameScreenRowsByCount[][12];
+extern const u8 gPlazaGameSeatAnimsByCount[][12];
+extern const u8 gPlazaGameSeatRows[][12];
+extern const u8 gPlazaGameSeatAnims[][12];
+extern const u16 gPlazaGameAltMessages[20][2];
+extern const PlazaGameBgTemplate gPlazaGameEntryBgTemplates[];
+extern const PlazaGameBgTemplate gPlazaGameResultsBgTemplates[];
+extern const u8 gPlazaGameCommands[];
 
 enum PlazaGameKind {
     PLAZA_GAME_SWALOT_PLOP,
@@ -623,7 +623,7 @@ void PlazaGameSprites_Init(PlazaGameSprites *sprites, int count, int charCount, 
     NNS_G2dInitOamManagerModule();
     heap = *(volatile enum HeapID *)&heapId;
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heap);
-    template = sPlazaGameObjCharTransfer;
+    template = gPlazaGameObjCharTransfer;
     template.maxTasks = charCount;
     template.heapID = heap;
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
@@ -779,8 +779,8 @@ void PlazaGameMessageBox_Show(PlazaGameMessageBox *messageBox, PlazaGameText *te
 
     if (messageBox->colorVariant == 1) {
         for (i = 0; i < 20; i++) {
-            if (msgNo == sPlazaGameAltMessages[i][0]) {
-                msgNo = sPlazaGameAltMessages[i][1];
+            if (msgNo == gPlazaGameAltMessages[i][0]) {
+                msgNo = gPlazaGameAltMessages[i][1];
             }
         }
     }
@@ -837,11 +837,11 @@ PlazaGameEntry *PlazaGameEntry_New(const PlazaGameRoster *roster, u16 game, enum
     reg_G2S_DB_BLDCNT = 0;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     reg_GXS_DB_DISPCNT &= ~(REG_GXS_DB_DISPCNT_W0_MASK | REG_GXS_DB_DISPCNT_W1_MASK | REG_GXS_DB_DISPCNT_OW_MASK);
-    GfGfx_SetBanks(&sPlazaGameEntryBanks);
+    GfGfx_SetBanks(&gPlazaGameEntryBanks);
     entry->heapId = heapId;
     PlazaGameEntry_InitCommands(entry);
     PlazaGamePlayerInfo_Init(&entry->info, &entry->roster);
-    PlazaGameBg_Init(&entry->bg, &sPlazaGameEntryGraphicsModes, sPlazaGameEntryBgTemplates, 5, heapId);
+    PlazaGameBg_Init(&entry->bg, &gPlazaGameEntryGraphicsModes, gPlazaGameEntryBgTemplates, 5, heapId);
     PlazaGameSprites_Init(&entry->sprites, 16, 1, 1, heapId);
     PlazaGameGfx_Init(&entry->gfx, 1, heapId);
     PlazaGameText_Init(&entry->text, heapId);
@@ -980,13 +980,13 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         if (entry->roster.localIndex == 0) {
             switch (entry->game) {
             case PLAZA_GAME_SWALOT_PLOP:
-                selection = PlazaGame_PickWeighted(sPlazaGameSwalotPlopSelectionWeights, 3);
+                selection = PlazaGame_PickWeighted(gPlazaGameSwalotPlopSelectionWeights, 3);
                 break;
             case PLAZA_GAME_MIME_JR_TOP:
-                selection = PlazaGame_PickWeighted(sPlazaGameMimeJrTopSelectionWeights, 2);
+                selection = PlazaGame_PickWeighted(gPlazaGameMimeJrTopSelectionWeights, 2);
                 break;
             case PLAZA_GAME_WOBBUFFET_POP:
-                selection = PlazaGame_PickWeighted(sPlazaGameWobbuffetPopSelectionWeights, 3);
+                selection = PlazaGame_PickWeighted(gPlazaGameWobbuffetPopSelectionWeights, 3);
                 break;
             }
             Comm_SendCommand(26, &selection, sizeof(selection));
@@ -1092,14 +1092,14 @@ void PlazaGamePlayer_Init(PlazaGamePlayer *player, int count, int game, NNSG2dSc
     SetBgPriority(GF_BG_LYR_MAIN_1, 2);
     SetBgPriority(GF_BG_LYR_MAIN_0, 1);
     tableOffset = count * 12;
-    row = ((const u8 *)sPlazaGameSeatRowsByCount + tableOffset)[seat];
+    row = ((const u8 *)gPlazaGameSeatRowsByCount + tableOffset)[seat];
     AddWindowParameterized(bg->bgConfig, &player->window, GF_BG_LYR_MAIN_0, 5, row + 1, 26, 4, 12, index * 104 + 513);
     FillWindowPixelBuffer(&player->window, 0);
-    CopyToBgTilemapRect(bg->bgConfig, GF_BG_LYR_MAIN_1, 0, row, 32, 6, screen->rawData, 0, ((const u8 *)sPlazaGameScreenRowsByCount + tableOffset)[index], screen->screenWidth >> 3, screen->screenHeight >> 3);
+    CopyToBgTilemapRect(bg->bgConfig, GF_BG_LYR_MAIN_1, 0, row, 32, 6, screen->rawData, 0, ((const u8 *)gPlazaGameScreenRowsByCount + tableOffset)[index], screen->screenWidth >> 3, screen->screenHeight >> 3);
     y = row * 8;
-    anim = ((const u8 *)sPlazaGameSeatAnimsByCount + tableOffset)[seat];
-    spriteY = sPlazaGamePlayerSpriteY[anim * 2];
-    Sprite_SetAnimCtrlSeq(player->sprite = PlazaGameGfx_CreateSprite(gfxRes, sprites->spriteList, (u8)sPlazaGamePlayerSpritePositions[anim * 2], (u8)(spriteY + y), 0, heapId), anim);
+    anim = ((const u8 *)gPlazaGameSeatAnimsByCount + tableOffset)[seat];
+    spriteY = gPlazaGamePlayerSpriteY[anim * 2];
+    Sprite_SetAnimCtrlSeq(player->sprite = PlazaGameGfx_CreateSprite(gfxRes, sprites->spriteList, (u8)gPlazaGamePlayerSpritePositions[anim * 2], (u8)(spriteY + y), 0, heapId), anim);
     Sprite_SetPalOffset(player->sprite, index);
     Sprite_SetDrawFlag(player->sprite, FALSE);
     Sprite_SetAnimActiveFlag(player->sprite, TRUE);
@@ -1215,12 +1215,12 @@ int PlazaGamePlayer_UpdateSlide(PlazaGamePlayer *player) {
 
 void PlazaGamePlayer_SetSpritePos(PlazaGamePlayer *player, u32 x) {
     VecFx32 pos;
-    const u8(*rows)[12] = sPlazaGameSeatRows;
+    const u8(*rows)[12] = gPlazaGameSeatRows;
     u32 table = player->count - 1;
-    const u8(*anims)[12] = sPlazaGameSeatAnims;
+    const u8(*anims)[12] = gPlazaGameSeatAnims;
     u8 anim = anims[table][player->seat];
-    u8 y = sPlazaGamePlayerSpriteY[anim * 2] + rows[table][player->seat] * 8;
-    u8 spriteX = sPlazaGamePlayerSpritePositions[anim * 2];
+    u8 y = gPlazaGamePlayerSpriteY[anim * 2] + rows[table][player->seat] * 8;
+    u8 spriteX = gPlazaGamePlayerSpritePositions[anim * 2];
     pos.x = (spriteX + x) << FX32_SHIFT;
     pos.y = y << FX32_SHIFT;
     Sprite_SetMatrix(player->sprite, &pos);
@@ -1238,10 +1238,10 @@ int PlazaGame_GetRelativeSeat(u32 count, int index, u32 localIndex) {
     u32 i;
     int result;
     for (i = 0; i < count; i++) {
-        if (index == sPlazaGameSeatOrders[count - 1][i]) {
+        if (index == gPlazaGameSeatOrders[count - 1][i]) {
             seat = i;
         }
-        if (localIndex == sPlazaGameSeatOrders[count - 1][i]) {
+        if (localIndex == gPlazaGameSeatOrders[count - 1][i]) {
             localSeat = i;
         }
     }
@@ -1284,7 +1284,7 @@ void PlazaGameLineScroll_SetPlayer(PlazaGameLineScroll *lineScroll, PlazaGamePla
     stride = 12;
     for (i = 0; i < 48; i++) {
         int offset = i - 1;
-        int line = offset + sPlazaGameSeatRows[player->count - 1][player->seat] * 8;
+        int line = offset + gPlazaGameSeatRows[player->count - 1][player->seat] * 8;
         if (line < 0) {
             line += 192;
         }
@@ -1373,11 +1373,11 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
     u32 width;
     title->frame = 0;
     title->state = PLAZA_GAME_TITLE_SLIDE_IN;
-    PlazaGameMotion_Init(&title->motion, sPlazaGameTitleSlideInStartX[title->game], sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideInVelocity[title->game], 16);
+    PlazaGameMotion_Init(&title->motion, gPlazaGameTitleSlideInStartX[title->game], gPlazaGameTitleRestX[title->game], gPlazaGameTitleSlideInVelocity[title->game], 16);
     PlazaGameTitle_SetScroll(title, bg, title->motion.current >> FX32_SHIFT);
     FontID_Alloc(2, heapId);
     width = FontID_String_GetWidth(2, title->string, 0);
-    AddTextPrinterParameterizedWithColor(&title->window, 2, title->string, 80 - (width >> 1), 0, TEXT_SPEED_INSTANT, sPlazaGameTitleColors[title->game], NULL);
+    AddTextPrinterParameterizedWithColor(&title->window, 2, title->string, 80 - (width >> 1), 0, TEXT_SPEED_INSTANT, gPlazaGameTitleColors[title->game], NULL);
     FontID_Release(2);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 }
@@ -1385,7 +1385,7 @@ void PlazaGameTitle_StartSlideIn(PlazaGameTitle *title, PlazaGameBg *bg, enum He
 void PlazaGameTitle_StartSlideOut(PlazaGameTitle *title, PlazaGameBg *bg) {
     title->frame = 0;
     title->state = PLAZA_GAME_TITLE_SLIDE_OUT;
-    PlazaGameMotion_Init(&title->motion, sPlazaGameTitleRestX[title->game], sPlazaGameTitleSlideOutEndX[title->game], sPlazaGameTitleSlideOutVelocity[title->game], 8);
+    PlazaGameMotion_Init(&title->motion, gPlazaGameTitleRestX[title->game], gPlazaGameTitleSlideOutEndX[title->game], gPlazaGameTitleSlideOutVelocity[title->game], 8);
     PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
 }
 
@@ -1399,7 +1399,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
         title->frame++;
         if (done == 1) {
             PlaySE(SEQ_SE_PL_FCALL);
-            PlazaGameMotion_Init(&title->motion, sPlazaGameTitleRestX[title->game], sPlazaGameTitleBounceX[title->game], sPlazaGameTitleBounceOutVelocity[title->game], 4);
+            PlazaGameMotion_Init(&title->motion, gPlazaGameTitleRestX[title->game], gPlazaGameTitleBounceX[title->game], gPlazaGameTitleBounceOutVelocity[title->game], 4);
             title->state++;
             title->frame = 0;
         }
@@ -1409,7 +1409,7 @@ BOOL PlazaGameTitle_UpdateSlideIn(PlazaGameTitle *title, PlazaGameBg *bg) {
         PlazaGameTitle_ScheduleScroll(title, bg, title->motion.current >> FX32_SHIFT);
         title->frame++;
         if (done == 1) {
-            PlazaGameMotion_Init(&title->motion, sPlazaGameTitleBounceX[title->game], sPlazaGameTitleRestX[title->game], sPlazaGameTitleBounceBackVelocity[title->game], 4);
+            PlazaGameMotion_Init(&title->motion, gPlazaGameTitleBounceX[title->game], gPlazaGameTitleRestX[title->game], gPlazaGameTitleBounceBackVelocity[title->game], 4);
             title->state++;
             title->frame = 0;
         }
@@ -1526,11 +1526,11 @@ PlazaGameResults *PlazaGameResults_New(const PlazaGameRoster *roster, const Plaz
     reg_G2S_DB_BLDCNT = 0;
     reg_GX_DISPCNT &= ~(REG_GX_DISPCNT_W0_MASK | REG_GX_DISPCNT_W1_MASK | REG_GX_DISPCNT_OW_MASK);
     reg_GXS_DB_DISPCNT &= ~(REG_GXS_DB_DISPCNT_W0_MASK | REG_GXS_DB_DISPCNT_W1_MASK | REG_GXS_DB_DISPCNT_OW_MASK);
-    GfGfx_SetBanks(&sPlazaGameResultsBanks);
+    GfGfx_SetBanks(&gPlazaGameResultsBanks);
     results->heapId = heapId;
     PlazaGamePlayerInfo_Init(&results->info, &results->roster);
     GF_CreateVramTransferManager(16, heapId);
-    PlazaGameBg_Init(&results->bg, &sPlazaGameResultsGraphicsModes, sPlazaGameResultsBgTemplates, 6, heapId);
+    PlazaGameBg_Init(&results->bg, &gPlazaGameResultsGraphicsModes, gPlazaGameResultsBgTemplates, 6, heapId);
     PlazaGameSprites_Init(&results->sprites, 32, 2, 2, heapId);
     PlazaGameGfx_Init(&results->gfx, 2, heapId);
     PlazaGameText_Init(&results->text, heapId);
@@ -2071,7 +2071,7 @@ void PlazaGameResults_UpdateFlash(PlazaGameResults *results) {
             const u8 *slot;
             i = 0;
             if (i < results->roster.count) {
-                slot = sPlazaGameResultsFlashSlots;
+                slot = gPlazaGameResultsFlashSlots;
                 do {
                     if (results->data.ranks[i] == 0) {
                         u32 index = *slot;
@@ -2331,10 +2331,10 @@ void PlazaGameResults_ShowPlayer(PlazaGameResults *results, int index, int rank)
     } else {
         digits = 6;
     }
-    PlazaGamePlayer_PrintScore((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->data.scores[index], (s16)(176 - sPlazaGameResultsRankOffsets[4 - (rank + 1)]), 0, digits);
+    PlazaGamePlayer_PrintScore((PlazaGamePlayer *)((u8 *)players + offset), &results->text, results->data.scores[index], (s16)(176 - gPlazaGameResultsRankOffsets[4 - (rank + 1)]), 0, digits);
     PlazaGamePlayer_ScheduleTransfer((PlazaGamePlayer *)((u8 *)players + offset), &results->bg);
     PlazaGamePlayer_ShowRank((PlazaGamePlayer *)((u8 *)players + offset), rank);
-    PlazaGamePlayer_StartSlideIn((PlazaGamePlayer *)((u8 *)players + offset), sPlazaGameResultsRankOffsets[rank], 0);
+    PlazaGamePlayer_StartSlideIn((PlazaGamePlayer *)((u8 *)players + offset), gPlazaGameResultsRankOffsets[rank], 0);
 }
 
 BOOL PlazaGameResults_UpdatePlayers(PlazaGameResults *results) {
@@ -2464,7 +2464,7 @@ void PlazaGameSignWindow_Init(PlazaGameSignWindow *window, PlazaGameGfxRes *gfxR
     window->offset = 0;
     window->task = NULL;
     for (i = 0; i < 2; i++) {
-        window->sprites[i] = PlazaGameGfx_CreateSprite(gfxRes, spriteList, (s16)(sPlazaGameSignWindowSpritePositions[i].x >> FX32_SHIFT), (s16)(sPlazaGameSignWindowSpritePositions[i].y >> FX32_SHIFT), 0, heapId);
+        window->sprites[i] = PlazaGameGfx_CreateSprite(gfxRes, spriteList, (s16)(gPlazaGameSignWindowSpritePositions[i].x >> FX32_SHIFT), (s16)(gPlazaGameSignWindowSpritePositions[i].y >> FX32_SHIFT), 0, heapId);
         Sprite_SetAnimCtrlSeq(window->sprites[i], 5);
         Sprite_SetPriority(window->sprites[i], 0);
     }
@@ -2517,7 +2517,7 @@ void PlazaGameSignWindow_Move(PlazaGameSignWindow *window, int delta) {
         offset = window->offset;
     }
     for (i = 0; i < 2; i++) {
-        pos = sPlazaGameSignWindowSpritePositions[i];
+        pos = gPlazaGameSignWindowSpritePositions[i];
         if (i == 0) {
             float distance;
             if (offset > 0) {
@@ -2733,7 +2733,7 @@ void PlazaGameSign_FinishTask(SysTask *task, void *data) {
 }
 
 const void *PlazaGame_GetCommandTable(void) {
-    return sPlazaGameCommands;
+    return gPlazaGameCommands;
 }
 
 int PlazaGame_GetCommandCount(void) {

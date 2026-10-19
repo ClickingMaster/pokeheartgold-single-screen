@@ -166,7 +166,7 @@
 .public HiddenObjectMovement_GetCoverEffect
 .public HiddenObjectMovement_SetRevealed
 .public FieldEffect_Destroy
-.public sMovementsByDirection
+.public gMovementsByDirection
 .public gMovementCmdTable
 .public TrainerReveal_Spawn
 .public EmoteMark_IsDone
@@ -196,4 +196,4 @@
 	.public gJumpHeightTable1
 	.public gJumpHeightTable2
 	.public gJumpHeightTables
-	.public sMovementScriptMachineStateFuncs
+	.public gMovementScriptMachineStateFuncs

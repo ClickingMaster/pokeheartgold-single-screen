@@ -27,16 +27,16 @@
 
 // VS Recorder video transfers: downloading a found video, the video number search and sending the own video.
 
-extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotMsgIds;
-extern const VsRecorderSlotButtonTable sVsRecorderSearchSlotAnims;
-extern const TouchscreenHitbox sVsRecorderSearchSaveSlotHitboxes[4];
-extern const TouchscreenHitbox sVsRecorderSearchOverwriteHitboxes[2];
-extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
+extern const VsRecorderSlotButtonTable gVsRecorderSearchSlotMsgIds;
+extern const VsRecorderSlotButtonTable gVsRecorderSearchSlotAnims;
+extern const TouchscreenHitbox gVsRecorderSearchSaveSlotHitboxes[4];
+extern const TouchscreenHitbox gVsRecorderSearchOverwriteHitboxes[2];
+extern const TouchscreenHitbox gVsRecorderSearchDetailHitboxes[4];
 
 // flag byte of the video found by number (VsRecorderVideoList.flags of a listed video)
 #define NUMBER_SEARCH_VIDEO_FLAG(work) ((work)->net.videoBuffer[0x1D4C])
 
-// VsRecorderVideoSearch substates of the video search (sVsRecorderVideoSearchSubStates)
+// VsRecorderVideoSearch substates of the video search (gVsRecorderVideoSearchSubStates)
 #define SEARCH_SHOW_CONDITIONS   2
 #define SEARCH_EXIT              4
 #define SEARCH_OPEN_CONDITION    5
@@ -54,7 +54,7 @@ extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
 #define SEARCH_RESUME            30
 #define SEARCH_RETURN_TO_DETAILS 31
 
-// substates of the video number search (sVsRecorderNumberSearchSubStates)
+// substates of the video number search (gVsRecorderNumberSearchSubStates)
 #define NUMBER_SEARCH_SHOW_PAD          2
 #define NUMBER_SEARCH_PAD_MAIN          3
 #define NUMBER_SEARCH_CLOSE_PAD         4
@@ -74,7 +74,7 @@ extern const TouchscreenHitbox sVsRecorderSearchDetailHitboxes[4];
 #define NUMBER_SEARCH_SAVE              18
 #define NUMBER_SEARCH_RESUME            19
 
-// substates of sending the own video (sVsRecorderSendVideoSubStates)
+// substates of sending the own video (gVsRecorderSendVideoSubStates)
 #define SEND_VIDEO_UPLOAD 3
 #define SEND_VIDEO_EXIT   4
 
@@ -355,9 +355,9 @@ BOOL VsRecorder_VideoSearchResume(VsRecorderWork *work) {
         break;
     case SEARCH_RESUME_STEP_CREATE_HITBOXES:
         VsRecorder_LoadSearchResultDetails(work);
-        search->hitboxes = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnSearchDetailsTouch, work, HEAP_ID_109);
-        search->slotHitboxes = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnSearchSlotTouch, work, HEAP_ID_109);
-        search->overwriteHitboxes = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnSearchOverwriteTouch, work, HEAP_ID_109);
+        search->hitboxes = TouchHitboxController_Create(gVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnSearchDetailsTouch, work, HEAP_ID_109);
+        search->slotHitboxes = TouchHitboxController_Create(gVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnSearchSlotTouch, work, HEAP_ID_109);
+        search->overwriteHitboxes = TouchHitboxController_Create(gVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnSearchOverwriteTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case SEARCH_RESUME_STEP_CREATE_INFO:
@@ -717,9 +717,9 @@ BOOL VsRecorder_NumberSearchShowDetails(VsRecorderWork *work) {
             SetBgPriority(GF_BG_LYR_SUB_3, 2);
             VsRecorder_LoadFoundVideoDetails(work);
             VsRecorder_CreateSearchButtons(work);
-            search->hitboxes = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnNumberSearchDetailsTouch, work, HEAP_ID_109);
-            search->slotHitboxes = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnNumberSearchSlotTouch, work, HEAP_ID_109);
-            search->overwriteHitboxes = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnNumberSearchOverwriteTouch, work, HEAP_ID_109);
+            search->hitboxes = TouchHitboxController_Create(gVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnNumberSearchDetailsTouch, work, HEAP_ID_109);
+            search->slotHitboxes = TouchHitboxController_Create(gVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnNumberSearchSlotTouch, work, HEAP_ID_109);
+            search->overwriteHitboxes = TouchHitboxController_Create(gVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnNumberSearchOverwriteTouch, work, HEAP_ID_109);
             work->step++;
         }
         break;
@@ -952,8 +952,8 @@ static void VsRecorder_PrintSearchMessage(VsRecorderWork *work, int msgId, int s
 // the three slots and cancel
 void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work) {
     u8 *search = work->screenWork;
-    VsRecorderSlotButtonTable msgIds = sVsRecorderSearchSlotMsgIds;
-    VsRecorderSlotButtonTable anims = sVsRecorderSearchSlotAnims;
+    VsRecorderSlotButtonTable msgIds = gVsRecorderSearchSlotMsgIds;
+    VsRecorderSlotButtonTable anims = gVsRecorderSearchSlotAnims;
     VsRecorderGfx *gfx;
     const int *msgId;
     int y;
@@ -1175,9 +1175,9 @@ BOOL VsRecorder_NumberSearchResume(VsRecorderWork *work) {
                 SetBgPriority(GF_BG_LYR_SUB_1, 3);
                 SetBgPriority(GF_BG_LYR_SUB_2, 0);
                 SetBgPriority(GF_BG_LYR_SUB_3, 2);
-                search->hitboxes = TouchHitboxController_Create(sVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnNumberSearchDetailsTouch, work, HEAP_ID_109);
-                search->slotHitboxes = TouchHitboxController_Create(sVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnNumberSearchSlotTouch, work, HEAP_ID_109);
-                search->overwriteHitboxes = TouchHitboxController_Create(sVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnNumberSearchOverwriteTouch, work, HEAP_ID_109);
+                search->hitboxes = TouchHitboxController_Create(gVsRecorderSearchDetailHitboxes, 4, VsRecorder_OnNumberSearchDetailsTouch, work, HEAP_ID_109);
+                search->slotHitboxes = TouchHitboxController_Create(gVsRecorderSearchSaveSlotHitboxes, 4, VsRecorder_OnNumberSearchSlotTouch, work, HEAP_ID_109);
+                search->overwriteHitboxes = TouchHitboxController_Create(gVsRecorderSearchOverwriteHitboxes, 2, VsRecorder_OnNumberSearchOverwriteTouch, work, HEAP_ID_109);
                 work->step++;
             }
         }

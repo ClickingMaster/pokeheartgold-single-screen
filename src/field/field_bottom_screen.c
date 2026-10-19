@@ -13,7 +13,15 @@ FS_EXTERN_OVERLAY(OVY_19);
 
 static const BottomScreenOps sBottomScreenOps[];
 
-int FieldSystem_GetBottomScreenIndex(FieldSystem *fieldSystem) {
+static int FieldSystem_GetBottomScreenIndex(FieldSystem *fieldSystem);
+static void BottomScreen_Blank_Init(FieldSystem *fieldSystem);
+static void BottomScreen_Blank_End(FieldSystem *fieldSystem);
+static BOOL BottomScreen_Blank_IsDone(FieldSystem *fieldSystem);
+static void BottomScreen_ViewPhoto_Init(FieldSystem *fieldSystem);
+static void BottomScreen_ViewPhoto_End(FieldSystem *fieldSystem);
+static BOOL BottomScreen_ViewPhoto_IsDone(FieldSystem *fieldSystem);
+
+static int FieldSystem_GetBottomScreenIndex(FieldSystem *fieldSystem) {
     int type = fieldSystem->bottomScreenType;
     GF_ASSERT(type != 0);
     GF_ASSERT(type < 7);
@@ -40,28 +48,28 @@ BOOL FieldSystem_IsBottomScreenDone(FieldSystem *fieldSystem) {
     return sBottomScreenOps[FieldSystem_GetBottomScreenIndex(fieldSystem)].isDone(fieldSystem);
 }
 
-void BottomScreen_Blank_Init(FieldSystem *fieldSystem) {
+static void BottomScreen_Blank_Init(FieldSystem *fieldSystem) {
 }
 
-void BottomScreen_Blank_End(FieldSystem *fieldSystem) {
+static void BottomScreen_Blank_End(FieldSystem *fieldSystem) {
 }
 
-BOOL BottomScreen_Blank_IsDone(FieldSystem *fieldSystem) {
+static BOOL BottomScreen_Blank_IsDone(FieldSystem *fieldSystem) {
     return TRUE;
 }
 
-void BottomScreen_ViewPhoto_Init(FieldSystem *fieldSystem) {
+static void BottomScreen_ViewPhoto_Init(FieldSystem *fieldSystem) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_19), OVY_LOAD_ASYNC);
     fieldSystem->bottomScreenTask = FieldSystem_CreateViewPhotoTask(fieldSystem); // the bottom screen app task
 }
 
-void BottomScreen_ViewPhoto_End(FieldSystem *fieldSystem) {
+static void BottomScreen_ViewPhoto_End(FieldSystem *fieldSystem) {
     FieldSystem_DestroyViewPhotoTask(fieldSystem);
     fieldSystem->bottomScreenTask = NULL;
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_19));
 }
 
-BOOL BottomScreen_ViewPhoto_IsDone(FieldSystem *fieldSystem) {
+static BOOL BottomScreen_ViewPhoto_IsDone(FieldSystem *fieldSystem) {
     return TRUE;
 }
 

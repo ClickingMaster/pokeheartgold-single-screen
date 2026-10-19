@@ -96,30 +96,30 @@ typedef struct DowsingMchnSpriteParams {
     u8 animSeq;
 } DowsingMchnSpriteParams;
 
-extern const TouchscreenHitbox sDowsingMchnActionButtonHitbox;
-extern const TouchscreenHitbox sDowsingMchnExitButtonHitbox;
-extern const TouchscreenHitbox sDowsingMchnRunningShoesHitbox;
-extern const TouchscreenHitbox sDowsingMchnSearchAreaHitbox[];
+extern const TouchscreenHitbox gDowsingMchnActionButtonHitbox;
+extern const TouchscreenHitbox gDowsingMchnExitButtonHitbox;
+extern const TouchscreenHitbox gDowsingMchnRunningShoesHitbox;
+extern const TouchscreenHitbox gDowsingMchnSearchAreaHitbox[];
 // Interleaved {signalCap, gridValue} pairs, one per level.
 typedef struct DowsingMchnLevelParams {
     u8 signalCap;
     u8 gridValue;
 } DowsingMchnLevelParams;
 
-extern const DowsingMchnLevelParams sDowsingMchnLevelParams[];
-extern const u8 sDowsingMchnActionSpriteParams[];
-extern const u8 sDowsingMchnRunningShoesSpriteParams[];
-extern const u8 sDowsingMchnRunningShoesSprite2Params[];
-extern const u8 sDowsingMchnExitSpriteParams[];
-extern void (*const sDowsingMchnStepAngleFuncs[])(DowsingMchnAngle *angle);
-extern const BgTemplate sDowsingMchnBgTemplateSub0;
-extern const BgTemplate sDowsingMchnBgTemplateSub1;
-extern const BgTemplate sDowsingMchnBgTemplateSub2;
-extern const u16 sDowsingMchnGridMask[DOWSING_MCHN_GRID_SIZE];
-extern const u16 sDowsingMchnGridTiles[];
-extern const WindowTemplate sDowsingMchnWindowTemplates[DOWSING_MCHN_NUM_STRINGS];
-extern const u8 sDowsingMchnActionTypeToWindow[];
-extern const u8 sDowsingMchnLevelSignalGains[];
+extern const DowsingMchnLevelParams gDowsingMchnLevelParams[];
+extern const u8 gDowsingMchnActionSpriteParams[];
+extern const u8 gDowsingMchnRunningShoesSpriteParams[];
+extern const u8 gDowsingMchnRunningShoesSprite2Params[];
+extern const u8 gDowsingMchnExitSpriteParams[];
+extern void (*const gDowsingMchnStepAngleFuncs[])(DowsingMchnAngle *angle);
+extern const BgTemplate gDowsingMchnBgTemplateSub0;
+extern const BgTemplate gDowsingMchnBgTemplateSub1;
+extern const BgTemplate gDowsingMchnBgTemplateSub2;
+extern const u16 gDowsingMchnGridMask[DOWSING_MCHN_GRID_SIZE];
+extern const u16 gDowsingMchnGridTiles[];
+extern const WindowTemplate gDowsingMchnWindowTemplates[DOWSING_MCHN_NUM_STRINGS];
+extern const u8 gDowsingMchnActionTypeToWindow[];
+extern const u8 gDowsingMchnLevelSignalGains[];
 
 static void DowsingMchn_SetVramBanks(void);
 static void DowsingMchn_InitBgs(BgConfig *bgConfig);
@@ -240,13 +240,13 @@ static void DowsingMchn_InitBgs(BgConfig *bgConfig) {
     BgTemplate sub2;
 
     GXS_SetGraphicsMode(GX_BGMODE_0);
-    sub0 = sDowsingMchnBgTemplateSub0;
+    sub0 = gDowsingMchnBgTemplateSub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_8);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    sub1 = sDowsingMchnBgTemplateSub1;
+    sub1 = gDowsingMchnBgTemplateSub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
-    sub2 = sDowsingMchnBgTemplateSub2;
+    sub2 = gDowsingMchnBgTemplateSub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
 }
 
@@ -286,12 +286,12 @@ static void DowsingMchn_CreateWindows(DowsingMchn *dowsing) {
 
     FontID_Alloc(4, HEAP_ID_8);
     for (i = 0; i < DOWSING_MCHN_NUM_STRINGS; i++) {
-        AddWindow(dowsing->bgConfig, &dowsing->windows[i], &sDowsingMchnWindowTemplates[i]);
+        AddWindow(dowsing->bgConfig, &dowsing->windows[i], &gDowsingMchnWindowTemplates[i]);
         FillWindowPixelBuffer(&dowsing->windows[i], 0);
         AddTextPrinterParameterizedWithColor(&dowsing->windows[i], 4, dowsing->strings[i], 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 1, 0), NULL);
         CopyWindowPixelsToVram_TextMode(&dowsing->windows[i]);
     }
-    ScheduleWindowCopyToVram(&dowsing->windows[sDowsingMchnActionTypeToWindow[dowsing->actionType]]);
+    ScheduleWindowCopyToVram(&dowsing->windows[gDowsingMchnActionTypeToWindow[dowsing->actionType]]);
     ScheduleWindowCopyToVram(&dowsing->windows[DOWSING_MCHN_WINDOW_EXIT]);
 }
 
@@ -380,10 +380,10 @@ static void DowsingMchn_CreateButtonSprites(DowsingMchn *dowsing) {
     DowsingMchn_LoadSpriteResources(dowsing->buttonResObjs, dowsing->resMans, narc, 0x46, 7, 0x44, 0x45, 4, 0x1F2, 0x1F2, 0x1F2, 0x1F2);
     NARC_Delete(narc);
     DowsingMchn_CreateResourcesHeader(dowsing->buttonResObjs, dowsing->resMans, &header, 1);
-    DowsingMchn_CreateSprite(dowsing, 0, &header, sDowsingMchnActionSpriteParams);
-    DowsingMchn_CreateSprite(dowsing, 1, &header, sDowsingMchnRunningShoesSpriteParams);
-    DowsingMchn_CreateSprite(dowsing, 2, &header, sDowsingMchnRunningShoesSprite2Params);
-    DowsingMchn_CreateSprite(dowsing, 3, &header, sDowsingMchnExitSpriteParams);
+    DowsingMchn_CreateSprite(dowsing, 0, &header, gDowsingMchnActionSpriteParams);
+    DowsingMchn_CreateSprite(dowsing, 1, &header, gDowsingMchnRunningShoesSpriteParams);
+    DowsingMchn_CreateSprite(dowsing, 2, &header, gDowsingMchnRunningShoesSprite2Params);
+    DowsingMchn_CreateSprite(dowsing, 3, &header, gDowsingMchnExitSpriteParams);
     if (PlayerAvatar_CheckRunningShoesLock(FieldSystem_GetPlayerAvatar(dowsing->fieldSystem)) == 0) {
         Sprite_SetAnimCtrlSeq(dowsing->sprites[1], 3);
         Sprite_SetAnimCtrlSeq(dowsing->sprites[2], 11);
@@ -429,10 +429,10 @@ static void DowsingMchn_Task(SysTask *task, void *taskData) {
     if (dowsing->fieldSystem->suppressBottomScreenDim && FieldSystem_IsPlayerMovementAllowed(dowsing->fieldSystem)) {
         dowsing->fieldSystem->suppressBottomScreenDim = FALSE;
     }
-    if (dowsing->touchActive == FALSE && TouchscreenHitbox_FindHitboxAtTouchNew(sDowsingMchnSearchAreaHitbox) != -1) {
+    if (dowsing->touchActive == FALSE && TouchscreenHitbox_FindHitboxAtTouchNew(gDowsingMchnSearchAreaHitbox) != -1) {
         dowsing->touchActive = TRUE;
     }
-    if (FieldSystem_TaskIsRunning(dowsing->fieldSystem) == TRUE || TouchscreenHitbox_FindHitboxAtTouchHeld(sDowsingMchnSearchAreaHitbox) == -1 || dowsing->touchActive == FALSE) {
+    if (FieldSystem_TaskIsRunning(dowsing->fieldSystem) == TRUE || TouchscreenHitbox_FindHitboxAtTouchHeld(gDowsingMchnSearchAreaHitbox) == -1 || dowsing->touchActive == FALSE) {
         DowsingMchn_UpdateSignal(dowsing, -1);
         DowsingMchn_UpdateGrid(dowsing, FALSE);
         dowsing->anglesInitialized = FALSE;
@@ -633,7 +633,7 @@ static void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
                     dowsing->angles[i].target += 360;
                 }
             }
-            sDowsingMchnStepAngleFuncs[dowsing->level](&dowsing->angles[i]);
+            gDowsingMchnStepAngleFuncs[dowsing->level](&dowsing->angles[i]);
         }
     }
 }
@@ -642,9 +642,9 @@ static void DowsingMchn_UpdateTargetAngles(DowsingMchn *dowsing) {
 
 static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
     if (delta >= 0) {
-        int gain = delta * sDowsingMchnLevelSignalGains[dowsing->level];
+        int gain = delta * gDowsingMchnLevelSignalGains[dowsing->level];
         dowsing->signal = dowsing->signal + gain;
-        int cap = sDowsingMchnLevelParams[dowsing->level].signalCap;
+        int cap = gDowsingMchnLevelParams[dowsing->level].signalCap;
         if (dowsing->signal > cap) {
             dowsing->signal = cap;
         }
@@ -656,8 +656,8 @@ static void DowsingMchn_UpdateSignal(DowsingMchn *dowsing, int delta) {
 #pragma opt_propagation reset
 
 static void DowsingMchn_GetIndicatorAnim(DowsingMchn *dowsing, u16 *blink, u16 *palette) {
-    if (dowsing->signal > sDowsingMchnLevelParams[dowsing->level].signalCap) {
-        dowsing->signal = sDowsingMchnLevelParams[dowsing->level].signalCap;
+    if (dowsing->signal > gDowsingMchnLevelParams[dowsing->level].signalCap) {
+        dowsing->signal = gDowsingMchnLevelParams[dowsing->level].signalCap;
     }
     *blink = (dowsing->signal / 10) & 1;
     *palette = dowsing->signal / 20;
@@ -706,7 +706,7 @@ static void DowsingMchn_UpdateIndicatorPositions(DowsingMchn *dowsing) {
                 DowsingMchn_GetIndicatorPos(&pos, dowsing->angles[i].displayed);
                 Sprite_SetMatrix(dowsing->sprites[i + DOWSING_MCHN_SPRITE_INDICATORS], &pos);
                 DowsingMchn_SetSpriteRotation(dowsing->sprites[i + DOWSING_MCHN_SPRITE_INDICATORS], dowsing->angles[i].displayed);
-                sDowsingMchnStepAngleFuncs[dowsing->level](&dowsing->angles[i]);
+                gDowsingMchnStepAngleFuncs[dowsing->level](&dowsing->angles[i]);
             }
         }
     }
@@ -725,7 +725,7 @@ static u8 DowsingMchn_GetGridCellTarget(DowsingMchn *dowsing, u16 x, u16 y) {
         }
         return strength * 10 - 1;
     }
-    return sDowsingMchnLevelParams[level].gridValue;
+    return gDowsingMchnLevelParams[level].gridValue;
 }
 
 // Cells within distance 4 of the touched cell rise toward their target, the others fade out.
@@ -742,7 +742,7 @@ static void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
     }
     for (y = 0; y < DOWSING_MCHN_GRID_SIZE; y++) {
         for (x = 0; x < DOWSING_MCHN_GRID_SIZE; x++) {
-            if (sDowsingMchnGridMask[y] & (1 << x)) {
+            if (gDowsingMchnGridMask[y] & (1 << x)) {
                 continue;
             }
             if (touching == TRUE) {
@@ -773,7 +773,7 @@ static void DowsingMchn_UpdateGrid(DowsingMchn *dowsing, BOOL touching) {
             if (dowsing->grid[y][x] == 0) {
                 FillBgTilemapRect(dowsing->bgConfig, GF_BG_LYR_SUB_2, 0x1001, x + 3, y + 5, 1, 1, TILEMAP_FILL_OVWT_PAL);
             } else {
-                FillBgTilemapRect(dowsing->bgConfig, GF_BG_LYR_SUB_2, sDowsingMchnGridTiles[dowsing->grid[y][x] / 10], x + 3, y + 5, 1, 1, TILEMAP_FILL_OVWT_PAL);
+                FillBgTilemapRect(dowsing->bgConfig, GF_BG_LYR_SUB_2, gDowsingMchnGridTiles[dowsing->grid[y][x] / 10], x + 3, y + 5, 1, 1, TILEMAP_FILL_OVWT_PAL);
             }
         }
     }
@@ -850,7 +850,7 @@ static void DowsingMchn_UpdateActionLabel(DowsingMchn *dowsing) {
     }
     if (actionType != dowsing->actionType) {
         dowsing->actionType = actionType;
-        ScheduleWindowCopyToVram(&dowsing->windows[sDowsingMchnActionTypeToWindow[dowsing->actionType]]);
+        ScheduleWindowCopyToVram(&dowsing->windows[gDowsingMchnActionTypeToWindow[dowsing->actionType]]);
     }
 }
 
@@ -874,7 +874,7 @@ static void DowsingMchn_HandleActionButton(DowsingMchn *dowsing) {
     if (FieldSystem_IsFieldMapRunning(dowsing->fieldSystem) == TRUE) {
         DowsingMchn_UpdateActionLabel(dowsing);
     }
-    if (DowsingMchn_HandleButton(&sDowsingMchnActionButtonHitbox, dowsing->sprites[DOWSING_MCHN_SPRITE_ACTION], 5, 6)) {
+    if (DowsingMchn_HandleButton(&gDowsingMchnActionButtonHitbox, dowsing->sprites[DOWSING_MCHN_SPRITE_ACTION], 5, 6)) {
         gSystem.simulatedInputs = TRUE;
     }
 }
@@ -890,7 +890,7 @@ static void DowsingMchn_HandleRunningShoesButton(DowsingMchn *dowsing) {
     }
     Sprite_SetDrawFlag(dowsing->sprites[1], TRUE);
     Sprite_SetDrawFlag(dowsing->sprites[2], TRUE);
-    if (TouchscreenHitbox_TouchNewIsIn(&sDowsingMchnRunningShoesHitbox) == TRUE) {
+    if (TouchscreenHitbox_TouchNewIsIn(&gDowsingMchnRunningShoesHitbox) == TRUE) {
         avatar = FieldSystem_GetPlayerAvatar(dowsing->fieldSystem);
         lock = PlayerAvatar_CheckRunningShoesLock(avatar);
         if (lock == 0) {
@@ -914,7 +914,7 @@ static void DowsingMchn_HandleExitButton(DowsingMchn *dowsing) {
     }
     ScheduleWindowCopyToVram(&dowsing->windows[DOWSING_MCHN_WINDOW_EXIT]);
     Sprite_SetDrawFlag(dowsing->sprites[DOWSING_MCHN_SPRITE_EXIT], TRUE);
-    if (DowsingMchn_HandleButton(&sDowsingMchnExitButtonHitbox, dowsing->sprites[DOWSING_MCHN_SPRITE_EXIT], 8, 9)) {
+    if (DowsingMchn_HandleButton(&gDowsingMchnExitButtonHitbox, dowsing->sprites[DOWSING_MCHN_SPRITE_EXIT], 8, 9)) {
         dowsing->fieldSystem->lastTouchMenuInput = 11;
         MenuInputStateMgr_SetState(&dowsing->fieldSystem->menuInputState, MENU_INPUT_STATE_TOUCH);
     }

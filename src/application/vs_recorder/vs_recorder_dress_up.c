@@ -144,7 +144,7 @@ enum VsRecorderDressUpViewChangePhotoStep {
     DRESS_UP_VIEW_CHANGE_PHOTO_STEP_DONE,
 };
 
-extern const TouchscreenHitbox sVsRecorderSpeciesGroupHitboxes[]; // species groups (9)
+extern const TouchscreenHitbox gVsRecorderSpeciesGroupHitboxes[]; // species groups (9)
 
 // substates of sending a Dress-Up photo (gVsRecorderDressUpSendSubStates)
 #define DRESS_UP_SEND_MAIN   3
@@ -665,7 +665,7 @@ BOOL VsRecorder_DressUpViewSelectCategory(VsRecorderWork *work) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG3, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
-        dressUp->hitboxes = TouchHitboxController_Create(sVsRecorderSpeciesGroupHitboxes, 9, VsRecorder_OnDressUpCategoryTouch, work, HEAP_ID_109);
+        dressUp->hitboxes = TouchHitboxController_Create(gVsRecorderSpeciesGroupHitboxes, 9, VsRecorder_OnDressUpCategoryTouch, work, HEAP_ID_109);
         work->step++;
         break;
     case DRESS_UP_VIEW_SELECT_CATEGORY_STEP_FADE_IN:
@@ -1499,7 +1499,7 @@ static void VsRecorder_CreateDressUpCategoryWindows(VsRecorderWork *work) {
     const TouchscreenHitbox *hitbox;
 
     baseTile = 1;
-    hitbox = sVsRecorderSpeciesGroupHitboxes;
+    hitbox = gVsRecorderSpeciesGroupHitboxes;
     for (i = 0, window = ((VsRecorderDressUp *)work->screenWork)->windows; i < 9; i++) {
         x = hitbox->rect.left >> 3;
         y = hitbox->rect.top >> 3;

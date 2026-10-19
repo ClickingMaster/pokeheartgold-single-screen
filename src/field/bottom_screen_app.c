@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "constants/sprites.h"
+
 #include "field/pal_pad_registration.h"
 
 #include "assert.h"
@@ -101,52 +103,54 @@ static void Task_BottomScreenApps(SysTask *task, void *env);
 static void *UnionChatLogApp_Init(BgConfig *bgConfig, u16 *lastTouchMenuInput, FieldSystem *fieldSystem, void *args);
 static void UnionChatLogApp_Exit(BgConfig *bgConfig, void *app);
 static BOOL UnionChatLogApp_IsExitDone(BgConfig *bgConfig);
+static BOOL PalPadRegistration_TryShowTouchYesNo(PalPadRegistration *registration);
+static BOOL PalPadRegistration_IsTouchYesNoDone(PalPadRegistration *registration);
 
 // Facing one of these objects does not offer the touchscreen menu's talk action.
 static const u16 sSpriteIdsWithoutTalkAction[] = {
-    0x0196,
-    0x015E,
-    0x018C,
-    0x0199,
-    0x019A,
-    0x019B,
-    0x019C,
-    0x019D,
-    0x0193,
-    0x0194,
-    0x0054,
-    0x0055,
-    0x0056,
-    0x0057,
-    0x0106,
-    0x017D,
-    0x011F,
-    0x017B,
-    0x018D,
-    0x018E,
-    0x018F,
-    0x0190,
-    0x0191,
-    0x0192,
-    0x0120,
-    0x00B7,
-    0x0121,
-    0x0122,
-    0x0123,
-    0x0124,
-    0x015D,
-    0x0178,
-    0x00D2,
-    0x017C,
-    0x00EA,
-    0x0106,
-    0x00FB,
-    0x00FC,
-    0x00FD,
-    0x00FE,
-    0x00FF,
-    0x0100,
-    0x0101,
+    SPRITE_ICE,
+    SPRITE_GTOROPHY,
+    SPRITE_MEDAL,
+    SPRITE_ROTOMF,
+    SPRITE_ROTOMS,
+    SPRITE_ROTOMI,
+    SPRITE_ROTOMW,
+    SPRITE_ROTOMG,
+    SPRITE_STATUEHERO,
+    SPRITE_STATUEHEROINE,
+    SPRITE_ROCK,
+    SPRITE_BREAKROCK,
+    SPRITE_TREE,
+    SPRITE_MONSTARBALL,
+    SPRITE_BONGURI,
+    SPRITE_USOKKY,
+    SPRITE_AJI_PERU,
+    SPRITE_BTOROPHY,
+    SPRITE_SCROLL,
+    SPRITE_SIGNSHOES,
+    SPRITE_SIGNCLOTHES,
+    SPRITE_SIGNFLAG,
+    SPRITE_SIGNPOKEGEAR,
+    SPRITE_SIGNBALL,
+    SPRITE_BABYBOY1_10,
+    SPRITE_BABYBOY1_2,
+    SPRITE_BABYBOY1_11,
+    SPRITE_LEAG_DOOR2,
+    SPRITE_BABYBOY1_12,
+    SPRITE_BABYBOY1_13,
+    SPRITE_STOP,
+    SPRITE_STOROPHY,
+    SPRITE_POKEWALL,
+    SPRITE_JUPETTA,
+    SPRITE_MONO_PIP,
+    SPRITE_BONGURI, // listed twice
+    SPRITE_GATE_RIGHT,
+    SPRITE_GATE_LEFT,
+    SPRITE_BABYBOY1_5,
+    SPRITE_GATE_TOP,
+    SPRITE_GATE_BOTTOM,
+    SPRITE_BABYBOY1_8,
+    SPRITE_BABYBOY1_9,
 };
 
 static const BottomScreenAppTemplate sBottomScreenApps[] = {
@@ -397,7 +401,7 @@ BOOL PalPadRegistration_IsFriendRosterAppRunning(PalPadRegistration *registratio
     return FALSE;
 }
 
-BOOL PalPadRegistration_TryShowTouchYesNo(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_TryShowTouchYesNo(PalPadRegistration *registration) {
     u8 appId = FieldSystem_GetBottomScreenAppId(registration->fieldSystem);
     u8 state = FieldSystem_GetBottomScreenAppState(registration->fieldSystem);
     if (appId == BOTTOM_SCREEN_APP_CHOICE_MENU && state == BOTTOM_SCREEN_APP_STATE_RUNNING) {
@@ -408,7 +412,7 @@ BOOL PalPadRegistration_TryShowTouchYesNo(PalPadRegistration *registration) {
     return FALSE;
 }
 
-BOOL PalPadRegistration_IsTouchYesNoDone(PalPadRegistration *registration) {
+static BOOL PalPadRegistration_IsTouchYesNoDone(PalPadRegistration *registration) {
     u8 appId = FieldSystem_GetBottomScreenAppId(registration->fieldSystem);
     u32 state = FieldSystem_GetTouchscreenChoiceMenuState(registration->fieldSystem);
     if (appId == BOTTOM_SCREEN_APP_CHOICE_MENU && state == 6) { // 6: answered

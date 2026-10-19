@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "constants/metatile_behavior.h"
 
 #include "field/field_3d_model.h"

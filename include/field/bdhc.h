@@ -73,21 +73,7 @@ typedef struct BdhcLoadTask {
     SysTask **waitTask; // the task waits until this slot is empty
 } BdhcLoadTask;
 
-BOOL Bdhc_IsPointInPlateBounds(BdhcPoint *first, BdhcPoint *second, BdhcPoint *point);
-void Bdhc_GetPlateCorners(Bdhc *bdhc, int plate, BdhcPoint *corners);
-void Bdhc_GetPlateNormal(Bdhc *bdhc, int plate, VecFx32 *normal);
-void Bdhc_GetPlateConstant(Bdhc *bdhc, int plate, fx32 *constant);
-void Bdhc_ResetHeightCandidates(BdhcHeightCandidate *candidates);
-BOOL Bdhc_FindStrip(BdhcStrip *strips, int count, fx32 z, u16 *strip);
 BOOL Bdhc_GetHeight(int mode, fx32 currentY, fx32 x, fx32 z, Bdhc *bdhc, fx32 *y);
-void Bdhc_ReadHeader(NARC *narc, BdhcHeader *header);
-void Bdhc_SetBuffers(BdhcHeader *header, Bdhc *bdhc, u8 **buffer);
-void Bdhc_ReadPoints(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
-void Bdhc_ReadNormals(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
-void Bdhc_ReadConstants(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
-void Bdhc_ReadPlates(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
-void Bdhc_ReadStrips(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
-void Bdhc_ReadAccessList(NARC *narc, Bdhc *bdhc, BdhcHeader *header);
 void Task_LoadBdhc(SysTask *task, void *data);
 Bdhc *Bdhc_New(void);
 void Bdhc_Load(NARC *narc, u32 unused, Bdhc *bdhc, u8 *buffer);

@@ -63,7 +63,6 @@ typedef struct EncounterEffectHBlankWave {
 
 // Encounter effect core: overlay loading, the effect task, brightness flashes
 // and the interpolators.
-void Task_RunEncounterEffect(SysTask *task, EncounterEffectTask *effect);
 void EncounterEffect_LoadOverlay(s32 effect);
 void EncounterEffect_UnloadOverlay(s32 effect);
 void EncounterEffect_Start(s32 effect, FieldSystem *fieldSystem, BOOL *done);

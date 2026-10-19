@@ -185,24 +185,24 @@ BOOL CommClubLink_CardExchangeFinished(void);
 BOOL CommClubLink_IsStartingBattle(void);
 BOOL CommPlayerManager_IsInitialized(void);
 
-extern const u32 sTouchscreenMenuTextColors[];
-extern const TouchscreenHitbox sTouchscreenMenuButtonHitboxes[];
-extern const u32 sTouchscreenMenuActionMsgIds[];
-extern const TouchscreenMenuBgFile sTouchscreenMenuBgPalettes[];
-extern const TouchscreenMenuBgFile sTouchscreenMenuBgChars[];
-extern const TouchscreenMenuBgFile sTouchscreenMenuBgScreens[];
-extern const TouchscreenMenuIconAnim sTouchscreenMenuIconAnims[];
-extern const u32 sTouchscreenMenuCellIds[];
-extern const TouchscreenHitbox sTouchscreenMenuIconHitboxes[];
-extern const TouchscreenMenuIconInfo sTouchscreenMenuIcons[];
-extern const u8 sTouchscreenMenuLayouts[][8];
-extern const BgTemplate sTouchscreenMenuBgTemplate_Sub0;
-extern const BgTemplate sTouchscreenMenuBgTemplate_Sub1;
-extern const TouchscreenMenuPos sTouchscreenMenuIconPositions[];
-extern const TouchscreenMenuPos sTouchscreenMenuButtonPositions[];
-extern const TouchscreenMenuWindowPos sTouchscreenMenuIconWindowPositions[];
-extern const u8 sTouchscreenMenuIconNeighbors[][4][3];
-extern const u8 sTouchscreenMenuActionTypeToString[];
+extern const u32 gTouchscreenMenuTextColors[];
+extern const TouchscreenHitbox gTouchscreenMenuButtonHitboxes[];
+extern const u32 gTouchscreenMenuActionMsgIds[];
+extern const TouchscreenMenuBgFile gTouchscreenMenuBgPalettes[];
+extern const TouchscreenMenuBgFile gTouchscreenMenuBgChars[];
+extern const TouchscreenMenuBgFile gTouchscreenMenuBgScreens[];
+extern const TouchscreenMenuIconAnim gTouchscreenMenuIconAnims[];
+extern const u32 gTouchscreenMenuCellIds[];
+extern const TouchscreenHitbox gTouchscreenMenuIconHitboxes[];
+extern const TouchscreenMenuIconInfo gTouchscreenMenuIcons[];
+extern const u8 gTouchscreenMenuLayouts[][8];
+extern const BgTemplate gTouchscreenMenuBgTemplate_Sub0;
+extern const BgTemplate gTouchscreenMenuBgTemplate_Sub1;
+extern const TouchscreenMenuPos gTouchscreenMenuIconPositions[];
+extern const TouchscreenMenuPos gTouchscreenMenuButtonPositions[];
+extern const TouchscreenMenuWindowPos gTouchscreenMenuIconWindowPositions[];
+extern const u8 gTouchscreenMenuIconNeighbors[][4][3];
+extern const u8 gTouchscreenMenuActionTypeToString[];
 
 static void TouchscreenMenu_Task(SysTask *task, void *taskData);
 static void TouchscreenMenu_SetRunningShoesSprites(TouchscreenMenuData *data, int on);
@@ -285,8 +285,8 @@ SysTask *TouchscreenMenu_Create(BgConfig *bgConfig, u16 *lastTouchMenuInput, Fie
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     GXS_SetOBJVRamModeChar(GX_OBJVRAMMODE_CHAR_1D_32K);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sTouchscreenMenuBgTemplate_Sub0, GF_BG_TYPE_TEXT);
-    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sTouchscreenMenuBgTemplate_Sub1, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &gTouchscreenMenuBgTemplate_Sub0, GF_BG_TYPE_TEXT);
+    InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &gTouchscreenMenuBgTemplate_Sub1, GF_BG_TYPE_TEXT);
     task = CreateSysTaskAndEnvironment(TouchscreenMenu_Task, sizeof(TouchscreenMenuData), 10, HEAP_ID_8);
     data = SysTask_GetData(task);
     data->task = task;
@@ -435,8 +435,8 @@ static void TouchscreenMenu_Task(SysTask *task, void *taskData) {
             TouchscreenMenu_HandleTouchInput(data);
         }
     }
-    heldButton = TouchscreenHitbox_FindRectAtTouchHeld(sTouchscreenMenuButtonHitboxes);
-    newButton = TouchscreenHitbox_FindRectAtTouchNew(sTouchscreenMenuButtonHitboxes);
+    heldButton = TouchscreenHitbox_FindRectAtTouchHeld(gTouchscreenMenuButtonHitboxes);
+    newButton = TouchscreenHitbox_FindRectAtTouchNew(gTouchscreenMenuButtonHitboxes);
     TouchscreenMenu_HandleActionButton(data, heldButton);
     if (data->buttonsActive && TouchscreenMenu_UpdateRunningShoesVisibility(data) && !busy) {
         TouchscreenMenu_HandleRunningShoesButton(data, newButton);
@@ -533,7 +533,7 @@ static int TouchscreenMenu_GetActionType(TouchscreenMenuData *data) {
 
 static void TouchscreenMenu_PrintActionLabel(TouchscreenMenuData *data, int actionType) {
     FillWindowPixelBuffer(&data->actionWindow, 0);
-    AddTextPrinterParameterizedWithColor(&data->actionWindow, 4, data->actionStrings[sTouchscreenMenuActionTypeToString[actionType]], 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 1, 0), NULL);
+    AddTextPrinterParameterizedWithColor(&data->actionWindow, 4, data->actionStrings[gTouchscreenMenuActionTypeToString[actionType]], 0, 0, TEXT_SPEED_INSTANT, MAKE_TEXT_COLOR(15, 1, 0), NULL);
     Sprite_SetDrawFlag(data->sprites[TOUCHSCREEN_MENU_SPRITE_ACTION], TRUE);
 }
 
@@ -723,7 +723,7 @@ static void TouchscreenMenu_ShowNewIcons(TouchscreenMenuData *data) {
 
     oldCount = TouchscreenMenu_SumBytes(data->iconShown, TOUCHSCREEN_MENU_NUM_ICONS);
     count = oldCount;
-    iconAnim = sTouchscreenMenuIconAnims;
+    iconAnim = gTouchscreenMenuIconAnims;
     i = 0;
     while (i < TOUCHSCREEN_MENU_NUM_ICONS) {
         if (FieldSystem_ShouldDrawStartMenuIcon(data->fieldSystem, (StartMenuIcon)i) == TRUE && data->iconShown[i] == FALSE) {
@@ -761,14 +761,14 @@ static void TouchscreenMenu_LoadBgAndWindows(BgConfig *bgConfig, int variant, Wi
     const TouchscreenMenuWindowPos *pos;
     Window *window;
 
-    GfGfxLoader_LoadCharData(NARC_a_0_1_4, sTouchscreenMenuBgChars[variant].fileId, bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_8);
-    GfGfxLoader_LoadScrnData(NARC_a_0_1_4, sTouchscreenMenuBgScreens[variant].fileId, bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_8);
-    GfGfxLoader_GXLoadPal(NARC_a_0_1_4, sTouchscreenMenuBgPalettes[variant].fileId, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x200, HEAP_ID_8);
+    GfGfxLoader_LoadCharData(NARC_a_0_1_4, gTouchscreenMenuBgChars[variant].fileId, bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_8);
+    GfGfxLoader_LoadScrnData(NARC_a_0_1_4, gTouchscreenMenuBgScreens[variant].fileId, bgConfig, GF_BG_LYR_SUB_0, 0, 0, TRUE, HEAP_ID_8);
+    GfGfxLoader_GXLoadPal(NARC_a_0_1_4, gTouchscreenMenuBgPalettes[variant].fileId, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x200, HEAP_ID_8);
     AddWindowParameterized(bgConfig, actionWindow, GF_BG_LYR_SUB_1, 24, 20, 8, 2, 4, 0xD2);
     FillWindowPixelBuffer(actionWindow, 0);
     AddWindowParameterized(bgConfig, menuWindow, GF_BG_LYR_SUB_1, 9, 0, 10, 2, 4, 0xE2);
     FillWindowPixelBuffer(menuWindow, 0);
-    pos = sTouchscreenMenuIconWindowPositions;
+    pos = gTouchscreenMenuIconWindowPositions;
     window = iconWindows;
     for (i = 0, baseTile = 0xF6; i < 8; i++, baseTile += 0x12, pos++, window++) {
         AddWindowParameterized(bgConfig, window, GF_BG_LYR_SUB_1, pos->x, pos->y, 9, 2, 4, baseTile);
@@ -815,7 +815,7 @@ static u32 TouchscreenMenu_GetBallItem(u32 layout) {
 
 // Resource ids 100 + index: 0-6 icons of the layout, 7/8 registered item icons, 9 the buttons, 10 the ball item.
 static void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfxResMan **resMans, SpriteResource **resObjs, int index, int resId, int gender, Bag *bag, int layout) {
-    u8 icon = sTouchscreenMenuLayouts[layout][index];
+    u8 icon = gTouchscreenMenuLayouts[layout][index];
     NarcId narcId = NARC_a_0_1_4;
     int charFileId = 18;
     int plttFileId = 14;
@@ -826,7 +826,7 @@ static void TouchscreenMenu_LoadIconResources(FieldSystem *fieldSystem, GF_2DGfx
         if (icon == 2 && gender == PLAYER_GENDER_FEMALE) {
             charFileId = 27;
         } else {
-            charFileId = sTouchscreenMenuIcons[icon].charFileId;
+            charFileId = gTouchscreenMenuIcons[icon].charFileId;
             if (charFileId == 0xFFFF) {
                 BugContest *contest = FieldSystem_BugContest_Get(fieldSystem);
                 GF_ASSERT(contest != NULL);
@@ -912,7 +912,7 @@ static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     const TouchscreenMenuPos *pos;
 
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_RESOURCES; i++) {
-        CreateSpriteResourcesHeader(&data->headers[i], i + 100, i + 100, sTouchscreenMenuCellIds[i], sTouchscreenMenuCellIds[i], -1, -1, FALSE, 0, data->resMans[GF_GFX_RES_TYPE_CHAR], data->resMans[GF_GFX_RES_TYPE_PLTT], data->resMans[GF_GFX_RES_TYPE_CELL], data->resMans[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
+        CreateSpriteResourcesHeader(&data->headers[i], i + 100, i + 100, gTouchscreenMenuCellIds[i], gTouchscreenMenuCellIds[i], -1, -1, FALSE, 0, data->resMans[GF_GFX_RES_TYPE_CHAR], data->resMans[GF_GFX_RES_TYPE_PLTT], data->resMans[GF_GFX_RES_TYPE_CELL], data->resMans[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
     }
     template.spriteList = data->spriteList;
     template.header = data->headers;
@@ -926,8 +926,8 @@ static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
     template.heapID = HEAP_ID_8;
     for (i = 0; i < 9; i++) {
         template.header = &data->headers[i];
-        template.position.x = TouchscreenMenu_PosToFx32(sTouchscreenMenuIconPositions[i].x);
-        template.position.y = TouchscreenMenu_PosToFx32(sTouchscreenMenuIconPositions[i].y) + FX32_CONST(256);
+        template.position.x = TouchscreenMenu_PosToFx32(gTouchscreenMenuIconPositions[i].x);
+        template.position.y = TouchscreenMenu_PosToFx32(gTouchscreenMenuIconPositions[i].y) + FX32_CONST(256);
         data->sprites[i] = Sprite_CreateAffine(&template);
         Sprite_SetAnimActiveFlag(data->sprites[i], TRUE);
         Sprite_SetPriority(data->sprites[i], 0);
@@ -938,7 +938,7 @@ static void TouchscreenMenu_CreateSprites(TouchscreenMenuData *data) {
         TouchscreenMenuData *slot;
         int j;
         float half;
-        for (j = 9, slot = (TouchscreenMenuData *)((u8 *)data + 9 * sizeof(Sprite *)), pos = sTouchscreenMenuButtonPositions, half = 0.5f, header = &data->headers[9]; j < 15; pos++, slot = (TouchscreenMenuData *)((u8 *)slot + sizeof(Sprite *)), j++) {
+        for (j = 9, slot = (TouchscreenMenuData *)((u8 *)data + 9 * sizeof(Sprite *)), pos = gTouchscreenMenuButtonPositions, half = 0.5f, header = &data->headers[9]; j < 15; pos++, slot = (TouchscreenMenuData *)((u8 *)slot + sizeof(Sprite *)), j++) {
             template.header = header;
             template.position.x = TouchscreenMenu_PosToFx32Half(pos->x, half);
             template.position.y = TouchscreenMenu_PosToFx32Half(pos->y, half) + FX32_CONST(256);
@@ -991,7 +991,7 @@ static int TouchscreenMenu_FindNeighborIcon(int selection, int dir, const Touchs
     int ret = -1;
 
     for (i = 0; i < 3; i++) {
-        u8 icon = sTouchscreenMenuIconNeighbors[selection][dir][i];
+        u8 icon = gTouchscreenMenuIconNeighbors[selection][dir][i];
         if (icons[icon].shown != FALSE) {
             ret = icon;
             break;
@@ -1006,8 +1006,8 @@ static void TouchscreenMenu_HighlightIcon(TouchscreenMenuData *data, int selecti
     int offset = i;
 
     while (i < TOUCHSCREEN_MENU_NUM_ICONS) {
-        u8 icon = sTouchscreenMenuLayouts[data->layout][i];
-        u16 charFileId = sTouchscreenMenuIcons[icon].charFileId;
+        u8 icon = gTouchscreenMenuLayouts[data->layout][i];
+        u16 charFileId = gTouchscreenMenuIcons[icon].charFileId;
         int palette = 0;
         if (icon != TOUCHSCREEN_MENU_ICON_NONE && charFileId != 0xFFFF) {
             if (i == selection) {
@@ -1082,7 +1082,7 @@ static BOOL TouchscreenMenu_HandleTouchInput(TouchscreenMenuData *data) {
     if (data->selectedIconAnim == TRUE) {
         return TRUE;
     }
-    hit = TouchscreenHitbox_FindRectAtTouchNew(sTouchscreenMenuIconHitboxes);
+    hit = TouchscreenHitbox_FindRectAtTouchNew(gTouchscreenMenuIconHitboxes);
     if (hit > 0 && hit < 8) {
         if (data->icons[hit - 1].shown == FALSE) {
             return FALSE;
@@ -1182,7 +1182,7 @@ static void TouchscreenMenu_DrawWindowFrame(Window *window, u32 mode) {
 #undef TouchscreenMenu_FillFrameRow
 
 static void TouchscreenMenu_PrintFramedText(Window *window, String *string, int colorIndex) {
-    u32 color = sTouchscreenMenuTextColors[colorIndex];
+    u32 color = gTouchscreenMenuTextColors[colorIndex];
     FillWindowPixelBuffer(window, color);
     AddTextPrinterParameterizedWithColor(window, 0, string, 3, 0, TEXT_SPEED_INSTANT, color, NULL);
 }
@@ -1193,13 +1193,13 @@ static void TouchscreenMenu_LoadStrings(TouchscreenMenuData *data, u32 unused) {
 
     BufferPlayersName(data->msgFormat, 0, Save_PlayerData_GetProfile(data->fieldSystem->saveData));
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
-        u8 icon = sTouchscreenMenuLayouts[data->layout][i];
+        u8 icon = gTouchscreenMenuLayouts[data->layout][i];
         if (icon != TOUCHSCREEN_MENU_ICON_NONE) {
-            data->icons[i].label = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, sTouchscreenMenuIcons[icon].msgId, HEAP_ID_8);
+            data->icons[i].label = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, gTouchscreenMenuIcons[icon].msgId, HEAP_ID_8);
         }
     }
     for (j = 0; j < 5; j++) {
-        data->actionStrings[j] = NewString_ReadMsgData(data->msgData, sTouchscreenMenuActionMsgIds[j]);
+        data->actionStrings[j] = NewString_ReadMsgData(data->msgData, gTouchscreenMenuActionMsgIds[j]);
     }
     data->menuString = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, msg_0196_00012, HEAP_ID_8);
     data->unk_4C8 = ReadMsgData_ExpandPlaceholders(data->msgFormat, data->msgData, msg_0196_00013, HEAP_ID_8);
@@ -1409,12 +1409,12 @@ static void TouchscreenMenu_PrintBallInfo(TouchscreenMenuData *data) {
 static void TouchscreenMenu_InitIconFlags(TouchscreenMenuData *data) {
     int i;
     for (i = 0; i < TOUCHSCREEN_MENU_NUM_ICONS; i++) {
-        int icon = sTouchscreenMenuLayouts[data->layout][i];
+        int icon = gTouchscreenMenuLayouts[data->layout][i];
         if (icon != TOUCHSCREEN_MENU_ICON_NONE) {
             if (icon < TOUCHSCREEN_MENU_NUM_ICONS) {
                 data->iconShown[i] = FieldSystem_ShouldDrawStartMenuIcon(data->fieldSystem, (StartMenuIcon)icon);
             } else {
-                data->iconShown[i] = sTouchscreenMenuIcons[icon].enabled;
+                data->iconShown[i] = gTouchscreenMenuIcons[icon].enabled;
             }
         }
         data->icons[i].shown = data->iconShown[i];

@@ -1,3 +1,5 @@
+#include "global.h"
+
 #include "demo/legend.naix"
 #include "field/field_3d_model.h"
 

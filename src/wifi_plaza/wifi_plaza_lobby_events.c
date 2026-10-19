@@ -626,7 +626,7 @@ WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_Add(WiFiPlazaPlayerObjects *object
         BillboardResource_InitWithKeys(&resource, modelFile, tex, sWiFiPlazaBillboardRanges, &sequence, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(texture));
     }
     gridPos = Field2DObject_GetPos(player);
-    WiFiPlazaMap_PosToVecFx32(&gridPos.unk0, &position.x);
+    WiFiPlazaMap_PosToVecFx32(&gridPos.x, &position.x);
     position.z += FX32_ONE * 16;
     create.billboard = objects->billboards;
     create.resource = &resource;
@@ -662,7 +662,7 @@ u32 WiFiPlazaPlayerObject_IsCulled(WiFiPlazaPlayerObject *object) {
 
 void WiFiPlazaPlayerObject_SetGridPosition(WiFiPlazaPlayerObject *object, const Field2DPoint *gridPos) {
     VecFx32 position;
-    WiFiPlazaMap_PosToVecFx32(&gridPos->unk0, &position.x);
+    WiFiPlazaMap_PosToVecFx32(&gridPos->x, &position.x);
     position.z += FX32_ONE * 16;
     WiFiPlazaPlayerObject_SetPosition(object, &position);
 }

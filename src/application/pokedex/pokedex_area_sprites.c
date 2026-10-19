@@ -6,9 +6,9 @@
 #include "pokemon_icon_idx.h"
 #include "sprite_system.h"
 
-extern const u16 sPokedexAreaScrollbarSizeSteps[];
+extern const u16 gPokedexAreaScrollbarSizeSteps[];
 extern u8 sPokedexAreaMarkerSizes[]; // width and height of each area marker shape
-extern const ManagedSpriteTemplate sAreaMarkerSpriteTemplate;
+extern const ManagedSpriteTemplate gAreaMarkerSpriteTemplate;
 
 void PokedexApp_LoadAreaSpriteResources(PokedexAppData *pokedexApp) {
     SpriteSystem_LoadCharResObjFromOpenNarc(pokedexApp->spriteSystem, pokedexApp->spriteManager, pokedexApp->gfxNarc, NARC_zukan_gra_zukan_gra_00000076_NCGR_lz, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, 0xC550);
@@ -46,7 +46,7 @@ void PokedexApp_UpdateTimeOfDayCursor(PokedexAppData *pokedexApp) {
 }
 
 void PokedexApp_SetupAreaListScrollbar(PokedexAppData *pokedexApp) {
-    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.areas.nMaps, sPokedexAreaScrollbarSizeSteps, 9);
+    PokedexApp_SetScrollbarSizeAnim(pokedexApp, 5, (s8)pokedexApp->areaList.areas.nMaps, gPokedexAreaScrollbarSizeSteps, 9);
     PokedexApp_SyncAreaScrollbar(pokedexApp);
     PokedexApp_UpdateScrollArrows(pokedexApp, pokedexApp->areaListPos, (s8)pokedexApp->areaList.areas.nMaps, 6);
 }
@@ -86,7 +86,7 @@ void PokedexApp_CreateAreaMarkerSprites(PokedexAppData *pokedexApp) {
     u32 i;
 
     for (i = 9; i < 59; i++) {
-        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &sAreaMarkerSpriteTemplate);
+        pokedexApp->sprites[i] = PokedexApp_NewSprite(pokedexApp, &gAreaMarkerSpriteTemplate);
         PokedexApp_SetSpriteTranslucent(pokedexApp, i, TRUE);
         PokedexApp_SetSpriteVisible(pokedexApp, i, FALSE);
     }

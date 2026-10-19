@@ -24,20 +24,20 @@ void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
 s64 _ll_mul(s64 a, s64 b);
 
 // Board position of the touch grid lines (x every 16 pixels, y every 16 pixels).
-extern const fx32 sFootprintStampBoardXs[17];
-extern const fx32 sFootprintStampBoardYs[11];
+extern const fx32 gFootprintStampBoardXs[17];
+extern const fx32 gFootprintStampBoardYs[11];
 // Bounds of the three footprint sizes, relative to the stamp position.
 extern const fx32 sFootprintStampSizeBoundsLeft[];
 extern const fx32 sFootprintStampSizeBoundsRight[];
 extern const fx32 sFootprintStampSizeBoundsBottom[];
 extern const fx32 sFootprintStampSizeBoundsTop[];
-extern const s16 sFootprintStampCameraChainLengths[]; // chain length that moves the camera, by player count
-extern const u8 sFootprintStampNatureEffects[];       // enum FootprintStampEffect by nature
-extern const u16 sFootprintStampInkColors[][2];       // ink colors by OT id % 9, two columns
-extern const TouchscreenHitbox sFootprintStampPartyHitboxes[];
+extern const s16 gFootprintStampCameraChainLengths[]; // chain length that moves the camera, by player count
+extern const u8 gFootprintStampNatureEffects[];       // enum FootprintStampEffect by nature
+extern const u16 gFootprintStampInkColors[][2];       // ink colors by OT id % 9, two columns
+extern const TouchscreenHitbox gFootprintStampPartyHitboxes[];
 extern const u8 sFootprintStampSpeciesFootprints[]; // per species: [0] footprint type, [1] footprint size
 extern const u8 sFootprintStampSpeciesFootprintSizes[];
-extern const u8 sFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
+extern const u8 gFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
 
 enum FootprintStampAnimState {
     FOOTPRINT_STAMP_ANIM_START,
@@ -138,17 +138,17 @@ void FootprintStamp_TouchToBoardPos(void *unused, int x, int y, fx32 *outX, fx32
     if ((u32)i >= 17) {
         i = 16;
     }
-    *outX = sFootprintStampBoardXs[i];
+    *outX = gFootprintStampBoardXs[i];
     if ((u32)i < 16) {
-        *outX += ((sFootprintStampBoardXs[i + 1] - sFootprintStampBoardXs[i]) / 16) * (x % 16);
+        *outX += ((gFootprintStampBoardXs[i + 1] - gFootprintStampBoardXs[i]) / 16) * (x % 16);
     }
     i = y / 16;
     if ((u32)i >= 11) {
         i = 10;
     }
-    *outY = sFootprintStampBoardYs[i];
+    *outY = gFootprintStampBoardYs[i];
     if ((u32)i < 10) {
-        *outY += ((sFootprintStampBoardYs[i + 1] - sFootprintStampBoardYs[i]) / 16) * (y % 16);
+        *outY += ((gFootprintStampBoardYs[i + 1] - gFootprintStampBoardYs[i]) / 16) * (y % 16);
     }
 }
 
@@ -254,7 +254,7 @@ BOOL FootprintStampBoard_AddToChain(FootprintStampBoard *board, int chain, int e
     }
     board->chains[chain].size++;
     board->chains[chain].refs++;
-    if (board->cameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->pendingCameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->chains[chain].size >= sFootprintStampCameraChainLengths[board->playerCount]) {
+    if (board->cameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->pendingCameraEffect == FOOTPRINT_STAMP_EFFECT_NONE && board->chains[chain].size >= gFootprintStampCameraChainLengths[board->playerCount]) {
         board->pendingCameraEffect = effect;
         MI_CpuFill8(&board->flash, 0, sizeof(FootprintStampFlash));
         return TRUE;
@@ -299,7 +299,7 @@ BOOL FootprintStamp_SetEffect(FootprintStampObj *stamp, int effect) {
 }
 
 static u8 FootprintStamp_GetNatureEffect(FootprintStampObj *stamp) {
-    return sFootprintStampNatureEffects[GetNatureFromPersonality(stamp->mon.personality)];
+    return gFootprintStampNatureEffects[GetNatureFromPersonality(stamp->mon.personality)];
 }
 
 // A new stamp appears after two frames and starts its nature's effect after 40.
@@ -1362,12 +1362,12 @@ void FootprintStamp_ClearPlayerNameWindow(Window *windows, u32 index) {
 }
 
 u16 FootprintStamp_GetInkColor(u32 column, u32 otId) {
-    return sFootprintStampInkColors[otId % 9][column];
+    return gFootprintStampInkColors[otId % 9][column];
 }
 
 u32 FootprintStamp_GetTouchedPartySlot(const FootprintStampMon *party, int current) {
     u32 ret = FOOTPRINT_STAMP_TOUCH_NONE;
-    int slot = TouchscreenHitbox_FindRectAtTouchNew(sFootprintStampPartyHitboxes);
+    int slot = TouchscreenHitbox_FindRectAtTouchNew(gFootprintStampPartyHitboxes);
 
     if (slot < FOOTPRINT_STAMP_PARTY_SLOTS) {
         if (current != slot && party[slot].species != SPECIES_NONE && party[slot].species <= NATIONAL_DEX_COUNT) {
@@ -1402,7 +1402,7 @@ static u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
 }
 
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work) {
-    return WiFiPlazaLobbyClient_SetChannelCommands(sFootprintStampLinkCommands, 3, work);
+    return WiFiPlazaLobbyClient_SetChannelCommands(gFootprintStampLinkCommands, 3, work);
 }
 
 static BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter) {

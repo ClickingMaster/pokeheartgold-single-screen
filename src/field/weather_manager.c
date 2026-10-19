@@ -12,7 +12,7 @@
 #include "heap.h"
 #include "math_util.h"
 #include "oam_manager.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_transfer.h"
 
@@ -735,7 +735,7 @@ static u16 WeatherSystem_GetState(WeatherSystem *weatherSystem, int weather) {
 }
 
 static void Weather_SetBlendAlpha(u32 ev1, u32 ev2) {
-    G2x_SetBlendAlpha_(0x04000050, GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BD, ev1, ev2);
+    G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG2, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BD, ev1, ev2);
 }
 
 static void WeatherLerp_Init(WeatherLerp *lerp, s32 start, s32 end, s32 duration) {
@@ -2298,12 +2298,12 @@ static void WeatherTask_Flash(SysTask *task, void *data) {
     case WEATHER_STATE_FADE_OUT:
         switch (taskData->endStep) {
         case FLASH_END_FADE_OUT:
-            BeginNormalPaletteFade(3, 0, 0, 0x7FFF, 6, 1, HEAP_ID_FIELD1);
+            BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 6, 1, HEAP_ID_FIELD1);
             taskData->endStep++;
             break;
         case FLASH_END_FADE_IN:
             if (IsPaletteFadeFinished()) {
-                BeginNormalPaletteFade(3, 1, 1, 0x7FFF, 6, 1, HEAP_ID_FIELD1);
+                BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 6, 1, HEAP_ID_FIELD1);
                 taskData->endStep++;
             }
             break;

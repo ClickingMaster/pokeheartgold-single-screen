@@ -31,8 +31,6 @@ typedef struct PalPadRegistration {
 } PalPadRegistration;
 
 BOOL PalPadRegistration_IsFriendRosterAppRunning(PalPadRegistration *registration);
-BOOL PalPadRegistration_TryShowTouchYesNo(PalPadRegistration *registration);
-BOOL PalPadRegistration_IsTouchYesNoDone(PalPadRegistration *registration);
 BOOL PalPadRegistration_RunTouchYesNo(PalPadRegistration *registration);
 
 #endif // POKEHEARTGOLD_FIELD_PAL_PAD_REGISTRATION_H

@@ -9,8 +9,8 @@
 #include "sprite_resource_header.h"
 
 typedef struct Field2DPoint {
-    s16 unk0;
-    s16 unk2;
+    s16 x;
+    s16 y;
 } Field2DPoint;
 
 typedef struct Field2DCommand {

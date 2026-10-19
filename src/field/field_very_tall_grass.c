@@ -9,6 +9,7 @@
 #include "field_effects.h"
 #include "map_object.h"
 #include "map_object_movement_utilities.h"
+#include "overlay_01.h"
 
 // The very tall grass a map object stands in: like the tall grass, a billboard over the tile that rustles when the
 // object walks in, then holds its last frame until the object leaves the tile.
@@ -55,8 +56,6 @@ typedef struct VeryTallGrassEffect {
 
 static void VeryTallGrass_LoadGfx(VeryTallGrass *grass);
 static void VeryTallGrass_FreeGfx(VeryTallGrass *grass);
-void VeryTallGrass_Spawn(LocalMapObject *mapObject, BOOL animate);
-void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, BOOL animate, int x, int z, BOOL checkFacing);
 static BOOL VeryTallGrassEffect_Init(FieldEffect *effect, void *state);
 static void VeryTallGrassEffect_Destroy(FieldEffect *effect, void *state);
 static void VeryTallGrassEffect_Update(FieldEffect *effect, void *state);
@@ -70,7 +69,7 @@ static const FieldEffectBasicTemplate sVeryTallGrassEffectTemplate = {
     VeryTallGrassEffect_Draw,
 };
 
-extern const u32 sVeryTallGrassRecordParams[6];
+extern const u32 gVeryTallGrassRecordParams[6];
 
 VeryTallGrass *VeryTallGrass_New(FieldEffectManager *manager) {
     VeryTallGrass *grass = FieldEffectManager_HeapAllocAndFill(manager, sizeof(VeryTallGrass), FALSE, 0);
@@ -88,7 +87,7 @@ static void VeryTallGrass_LoadGfx(VeryTallGrass *grass) {
     FieldEffectManager_LoadBillboardResource(grass->manager, VERY_TALL_GRASS_RESOURCE, 0x7A);
     FieldEffectManager_LoadBillboardSequence(grass->manager, VERY_TALL_GRASS_SEQUENCE, 0x92);
     FieldEffectManager_LoadTexResource(grass->manager, VERY_TALL_GRASS_TEXTURE, 0x15, TRUE);
-    FieldEffectManager_AddRecord(grass->manager, VERY_TALL_GRASS_RECORD, VERY_TALL_GRASS_RESOURCE, VERY_TALL_GRASS_SEQUENCE, VERY_TALL_GRASS_TEXTURE, 0, sVeryTallGrassRecordParams);
+    FieldEffectManager_AddRecord(grass->manager, VERY_TALL_GRASS_RECORD, VERY_TALL_GRASS_RESOURCE, VERY_TALL_GRASS_SEQUENCE, VERY_TALL_GRASS_TEXTURE, 0, gVeryTallGrassRecordParams);
 }
 
 static void VeryTallGrass_FreeGfx(VeryTallGrass *grass) {

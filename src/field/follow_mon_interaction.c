@@ -263,61 +263,61 @@ typedef struct FollowMonGrowAndShrinkEnv {
     u16 frame;
 } FollowMonGrowAndShrinkEnv;
 
-extern const ShinyLeafMasks sShinyLeafMasks;
-extern const ShinyLeafMonDataIds sShinyLeafMonDataIds;
-extern const u8 sFollowMonJumpOnSpotMovements[];
-extern const u32 sNatureGroups[];
-extern const VecFx32 sFollowMonGrowScale;
-extern const VecFx32 sFollowMonShrinkScale;
+extern const ShinyLeafMasks gShinyLeafMasks;
+extern const ShinyLeafMonDataIds gShinyLeafMonDataIds;
+extern const u8 gFollowMonJumpOnSpotMovements[];
+extern const u32 gNatureGroups[];
+extern const VecFx32 gFollowMonGrowScale;
+extern const VecFx32 gFollowMonShrinkScale;
 
-int FollowMon_SelectInteraction(FieldSystem *fieldSystem);
-void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation);
-BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, const FollowMonSituation *situation);
-void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situation);
-void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetMapId(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetMood(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, FollowMonSituation *situation);
-void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *situation);
-void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situation);
-int FollowMonSituation_ConvertType(int type);
-int FollowMonSituation_ConvertItemPocket(int pocket);
-void FollowMonInteraction_LoadScript(FollowMonInteraction *interaction, int script);
-int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *interaction);
-BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, FollowMonInteractionStep *step);
-BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step);
-BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step);
-void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int flags);
-BOOL FollowMonInteraction_StepHasWait(FollowMonInteraction *interaction, FollowMonInteractionStep *step);
-void FollowMon_ExpandInteractionMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int msgNo);
-void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int flags, u8 accessory);
-void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapObject *object);
-void FollowMonMovement_PlaySound(const FollowMonMovementStep *move, u16 sound, u16 species, u8 form);
-void FollowMonMovement_ApplyFacing(FollowMonInteraction *interaction, const FollowMonMovementStep *move, LocalMapObject *object);
-void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapObject *object, u8 oldDirection);
-void FollowMon_GetCoordsInDirection(LocalMapObject *object, int direction, int *x, int *z);
-BOOL FollowMonMovement_Step(FollowMonInteraction *interaction, LocalMapObject *object);
-BOOL FollowMonMovement_HasNextStep(FollowMonInteraction *interaction);
-BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int movement);
-BOOL Task_FollowMonInteract(TaskManager *taskManager);
-void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageFormat);
-void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonInteraction *interaction);
+static int FollowMon_SelectInteraction(FieldSystem *fieldSystem);
+static void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, const FollowMonSituation *situation);
+static void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situation);
+static void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetMapId(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetMood(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, FollowMonSituation *situation);
+static void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *situation);
+static void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situation);
+static int FollowMonSituation_ConvertType(int type);
+static int FollowMonSituation_ConvertItemPocket(int pocket);
+static void FollowMonInteraction_LoadScript(FollowMonInteraction *interaction, int script);
+static int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *interaction);
+static BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, FollowMonInteractionStep *step);
+static BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step);
+static BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step);
+static void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int flags);
+static BOOL FollowMonInteraction_StepHasWait(FollowMonInteraction *interaction, FollowMonInteractionStep *step);
+static void FollowMon_ExpandInteractionMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int msgNo);
+static void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int flags, u8 accessory);
+static void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapObject *object);
+static void FollowMonMovement_PlaySound(const FollowMonMovementStep *move, u16 sound, u16 species, u8 form);
+static void FollowMonMovement_ApplyFacing(FollowMonInteraction *interaction, const FollowMonMovementStep *move, LocalMapObject *object);
+static void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapObject *object, u8 oldDirection);
+static void FollowMon_GetCoordsInDirection(LocalMapObject *object, int direction, int *x, int *z);
+static BOOL FollowMonMovement_Step(FollowMonInteraction *interaction, LocalMapObject *object);
+static BOOL FollowMonMovement_HasNextStep(FollowMonInteraction *interaction);
+static BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int movement);
+static BOOL Task_FollowMonInteract(TaskManager *taskManager);
+static void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageFormat);
+static void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonInteraction *interaction);
 BOOL FollowMonRule_CheckFriendship(int rule, int friendship);
 BOOL FollowMonRule_CheckMood(int rule, int mood);
 BOOL FollowMonRule_CheckSpeciesAttr(u32 rule, u32 value);
 BOOL FollowMonRule_CheckShinyLeaf(int leaf, u8 shinyLeaves);
-BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager);
-BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager);
+static BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager);
+static BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager);
 
 void FieldSystem_FollowMonInteract(FieldSystem *fieldSystem) {
     TaskManager_Call(fieldSystem->taskman, Task_FollowMonInteract, NULL);
 }
 
-int FollowMon_SelectInteraction(FieldSystem *fieldSystem) {
+static int FollowMon_SelectInteraction(FieldSystem *fieldSystem) {
     FollowMonSituation situation;
     int order[100];
     int *scan;
@@ -368,7 +368,7 @@ int FollowMon_SelectInteraction(FieldSystem *fieldSystem) {
     return 0;
 }
 
-void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
     fieldSystem->followMonInteraction->species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     fieldSystem->followMonInteraction->form = GetMonData(mon, MON_DATA_FORM, NULL);
@@ -385,7 +385,7 @@ void FollowMon_GetSituation(FieldSystem *fieldSystem, FollowMonSituation *situat
     FollowMonSituation_SetSpeciesAttr(fieldSystem->followMonInteraction->species, situation);
 }
 
-BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, const FollowMonSituation *situation) {
+static BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, const FollowMonSituation *situation) {
     u16 flag;
     u32 nearbyObject;
 
@@ -496,7 +496,7 @@ BOOL FollowMonRule_Matches(FieldSystem *fieldSystem, const FollowMonRule *rule, 
     return TRUE;
 }
 
-void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situation) {
+static void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situation) {
     ShinyLeafMonDataIds leafIds;
     int item;
     int hp;
@@ -558,20 +558,20 @@ void FollowMonSituation_SetMonCondition(Pokemon *mon, FollowMonSituation *situat
     situation->type1 = FollowMonSituation_ConvertType(type1);
     situation->type2 = FollowMonSituation_ConvertType(type2);
     situation->friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
-    situation->natureGroup = sNatureGroups[GetMonNature(mon)];
+    situation->natureGroup = gNatureGroups[GetMonNature(mon)];
     if (GetMonData(mon, MON_DATA_GENDER, NULL) == MON_MALE) {
         situation->gender = FOLLOW_MON_GENDER_MALE;
     } else {
         situation->gender = FOLLOW_MON_GENDER_NOT_MALE;
     }
-    leafIds = sShinyLeafMonDataIds;
+    leafIds = gShinyLeafMonDataIds;
     situation->shinyLeaves = 0;
     for (i = 0; i < 5; i++) {
         situation->shinyLeaves |= (u8)GetMonData(mon, leafIds.ids[i], NULL) << i;
     }
 }
 
-void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     LocalMapObject *object;
     int i;
     int count;
@@ -610,7 +610,7 @@ void FollowMonSituation_SetNearbyObjects(FieldSystem *fieldSystem, FollowMonSitu
     }
 }
 
-void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     int count = 0;
     BgEvent *events = Field_GetBgEvents(fieldSystem);
     int numEvents = Field_GetNumBgEvents(fieldSystem);
@@ -627,7 +627,7 @@ void FollowMonSituation_SetHiddenItems(FieldSystem *fieldSystem, FollowMonSituat
     situation->hiddenItems = count;
 }
 
-void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (LocalFieldData_GetWeatherType(Save_LocalFieldData_Get(fieldSystem->saveData))) {
     case WEATHER_SUNNY:
         situation->weather = FOLLOW_MON_WEATHER_SUNNY;
@@ -641,7 +641,7 @@ void FollowMonSituation_SetWeather(FieldSystem *fieldSystem, FollowMonSituation 
     }
 }
 
-void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     int x = MapObject_GetXCoord(FollowMon_GetMapObject(fieldSystem));
     int z = MapObject_GetZCoord(FollowMon_GetMapObject(fieldSystem));
     u8 behavior = GetMetatileBehavior(fieldSystem, x, z);
@@ -654,11 +654,11 @@ void FollowMonSituation_SetTerrain(FieldSystem *fieldSystem, FollowMonSituation 
     }
 }
 
-void FollowMonSituation_SetMapId(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetMapId(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     situation->mapId = fieldSystem->location->mapId;
 }
 
-void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (Field_GetTimeOfDay(fieldSystem)) {
     case RTC_TIMEOFDAY_MORN:
         situation->timeOfDay = FOLLOW_MON_TIME_MORN;
@@ -682,11 +682,11 @@ void FollowMonSituation_SetTimeOfDay(FieldSystem *fieldSystem, FollowMonSituatio
     }
 }
 
-void FollowMonSituation_SetMood(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetMood(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     situation->mood = FollowMonMood_Get(fieldSystem->followMonMood);
 }
 
-void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, FollowMonSituation *situation) {
+static void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int species, int form, FollowMonSituation *situation) {
     PartyExtraSub aprijuice;
     struct PokeathlonPerformanceStars stars;
     int stat;
@@ -716,7 +716,7 @@ void FollowMonSituation_SetBestPokeathlonStat(FieldSystem *fieldSystem, int spec
     situation->pokeathlonStat = stat;
 }
 
-void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *situation) {
+static void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *situation) {
     switch (MapObject_GetFacingDirection(fieldSystem->followMon.mapObject)) {
     case DIR_NORTH:
         situation->facing = FOLLOW_MON_FACING_NORTH;
@@ -736,7 +736,7 @@ void FollowMonSituation_SetFacing(FieldSystem *fieldSystem, FollowMonSituation *
     }
 }
 
-void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situation) {
+static void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situation) {
     u8 *attrs;
     if (species <= SPECIES_NONE || species > SPECIES_ARCEUS) {
         GF_AssertFail();
@@ -747,7 +747,7 @@ void FollowMonSituation_SetSpeciesAttr(int species, FollowMonSituation *situatio
     Heap_Free(attrs);
 }
 
-int FollowMonSituation_ConvertType(int type) {
+static int FollowMonSituation_ConvertType(int type) {
     switch (type) {
     case TYPE_NORMAL:
         return FOLLOW_MON_TYPE_NORMAL;
@@ -788,7 +788,7 @@ int FollowMonSituation_ConvertType(int type) {
     return FOLLOW_MON_TYPE_NONE;
 }
 
-int FollowMonSituation_ConvertItemPocket(int pocket) {
+static int FollowMonSituation_ConvertItemPocket(int pocket) {
     switch (pocket) {
     case POCKET_ITEMS:
         return FOLLOW_MON_POCKET_ITEMS;
@@ -816,7 +816,7 @@ FollowMonInteraction *FollowMonInteraction_New(enum HeapID heapId) {
     return interaction;
 }
 
-void FollowMonInteraction_LoadScript(FollowMonInteraction *interaction, int script) {
+static void FollowMonInteraction_LoadScript(FollowMonInteraction *interaction, int script) {
     int i;
 
     ReadWholeNarcMemberByIdPair(interaction->steps, NARC_a_2_2_1, script - 1);
@@ -861,7 +861,7 @@ static inline void FollowMonInteraction_CloseMessage(FieldSystem *fieldSystem, F
     interaction->state = INTERACTION_STATE_START_WAIT;
 }
 
-int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
+static int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
     FollowMonInteractionStep *step;
     u16 movement;
     u32 index = interaction->stepIndex;
@@ -935,11 +935,11 @@ int FollowMonInteraction_Run(FieldSystem *fieldSystem, FollowMonInteraction *int
     return FOLLOW_MON_INTERACTION_RUNNING;
 }
 
-BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
+static BOOL FollowMonInteraction_StepHasMovement(FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     return step->movement != 0;
 }
 
-BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
+static BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     u8 emote;
     if (MetatileBehavior_Is113Or114Or46((u8)fieldSystem->followMonInteraction->metatileBehavior) != FALSE) {
         return FALSE;
@@ -955,7 +955,7 @@ BOOL FollowMonInteraction_TryShowEmote(FieldSystem *fieldSystem, FollowMonIntera
     return FALSE;
 }
 
-BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
+static BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     Options *options;
     if (step->message != 0) {
         interaction->string = String_New(1024, HEAP_ID_FIELD2);
@@ -970,7 +970,7 @@ BOOL FollowMon_TryPrintInteractionMessage(FieldSystem *fieldSystem, FollowMonInt
     return FALSE;
 }
 
-void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int flags) {
+static void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int flags) {
     Options *options;
     interaction->string = String_New(1024, HEAP_ID_FIELD2);
     DialogBox_AddWindowToLayer3(fieldSystem->bgConfig, &interaction->window, GF_BG_LYR_MAIN_3);
@@ -981,12 +981,12 @@ void FollowMonInteraction_PrintGiftMessage(FieldSystem *fieldSystem, FollowMonIn
     fieldSystem->textbox_open = TRUE;
 }
 
-BOOL FollowMonInteraction_StepHasWait(FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
+static BOOL FollowMonInteraction_StepHasWait(FollowMonInteraction *interaction, FollowMonInteractionStep *step) {
     interaction->waitFrames = 0;
     return step->wait != 0;
 }
 
-void FollowMon_ExpandInteractionMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int msgNo) {
+static void FollowMon_ExpandInteractionMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int msgNo) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0265_bin, heapId);
     MessageFormat *messageFormat = MessageFormat_New(heapId);
     String *string;
@@ -999,7 +999,7 @@ void FollowMon_ExpandInteractionMessage(FieldSystem *fieldSystem, String *dest, 
 }
 
 // flags: bit 1 set for an accessory, clear for a shiny leaf; bit 0 set when it was given.
-void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int flags, u8 accessory) {
+static void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum HeapID heapId, int flags, u8 accessory) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0040_bin, heapId);
     MessageFormat *messageFormat = MessageFormat_New(heapId);
     String *string;
@@ -1027,7 +1027,7 @@ void FollowMon_ExpandGiftMessage(FieldSystem *fieldSystem, String *dest, enum He
     DestroyMsgData(msgData);
 }
 
-void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapObject *object) {
+static void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapObject *object) {
     VecFx32 pos;
     int species;
     MapObject_CopyPositionVector(object, &pos);
@@ -1046,7 +1046,7 @@ void FollowMonMovement_ApplyOffset(const FollowMonMovementStep *move, LocalMapOb
     MapObject_SetPositionVector(object, &pos);
 }
 
-void FollowMonMovement_PlaySound(const FollowMonMovementStep *move, u16 sound, u16 species, u8 form) {
+static void FollowMonMovement_PlaySound(const FollowMonMovementStep *move, u16 sound, u16 species, u8 form) {
     if (move->playSound == 0 || sound == 0) {
         return;
     }
@@ -1057,7 +1057,7 @@ void FollowMonMovement_PlaySound(const FollowMonMovementStep *move, u16 sound, u
     }
 }
 
-void FollowMonMovement_ApplyFacing(FollowMonInteraction *interaction, const FollowMonMovementStep *move, LocalMapObject *object) {
+static void FollowMonMovement_ApplyFacing(FollowMonInteraction *interaction, const FollowMonMovementStep *move, LocalMapObject *object) {
     if (move->facing != 0) {
         u8 direction = MapObject_GetFacingDirection(object);
         MapObject_SetFacingDirectionDirect(object, move->facing - 1);
@@ -1066,7 +1066,7 @@ void FollowMonMovement_ApplyFacing(FollowMonInteraction *interaction, const Foll
 }
 
 // When a large following Pokemon turned while facing east or west, rustle the grass beside it.
-void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapObject *object, u8 oldDirection) {
+static void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapObject *object, u8 oldDirection) {
     int x;
     int z;
     int behavior;
@@ -1087,7 +1087,7 @@ void FollowMon_TryShakeGrass(FollowMonInteraction *interaction, LocalMapObject *
     }
 }
 
-void FollowMon_GetCoordsInDirection(LocalMapObject *object, int direction, int *x, int *z) {
+static void FollowMon_GetCoordsInDirection(LocalMapObject *object, int direction, int *x, int *z) {
     *x = MapObject_GetXCoord(object);
     *z = MapObject_GetZCoord(object);
     switch (direction) {
@@ -1109,7 +1109,7 @@ void FollowMon_GetCoordsInDirection(LocalMapObject *object, int direction, int *
     }
 }
 
-BOOL FollowMonMovement_Step(FollowMonInteraction *interaction, LocalMapObject *object) {
+static BOOL FollowMonMovement_Step(FollowMonInteraction *interaction, LocalMapObject *object) {
     FollowMonMovementStep *move = &interaction->movements[interaction->movementIndex];
     if (interaction->movementFrame == 0) {
         FollowMonMovement_ApplyOffset(move, object);
@@ -1124,7 +1124,7 @@ BOOL FollowMonMovement_Step(FollowMonInteraction *interaction, LocalMapObject *o
     return FALSE;
 }
 
-BOOL FollowMonMovement_HasNextStep(FollowMonInteraction *interaction) {
+static BOOL FollowMonMovement_HasNextStep(FollowMonInteraction *interaction) {
     if (interaction->movementIndex >= 10) {
         return FALSE;
     }
@@ -1135,7 +1135,7 @@ BOOL FollowMonMovement_HasNextStep(FollowMonInteraction *interaction) {
     return TRUE;
 }
 
-BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int movement) {
+static BOOL FollowMonInteraction_RunMovement(FieldSystem *fieldSystem, FollowMonInteraction *interaction, int movement) {
     u8 direction;
     if (movement == 0) {
         GF_AssertFail();
@@ -1182,7 +1182,7 @@ static inline void FieldSystem_CloseFollowMonMessage(FieldSystem *fieldSystem) {
     fieldSystem->textbox_open = FALSE;
 }
 
-BOOL Task_FollowMonInteract(TaskManager *taskManager) {
+static BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
 
@@ -1324,7 +1324,7 @@ BOOL Task_FollowMonInteract(TaskManager *taskManager) {
     return FALSE;
 }
 
-void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageFormat) {
+static void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageFormat) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
     BoxPokemon *boxMon = Mon_GetBoxMon(mon);
     BufferBoxMonNickname(messageFormat, 0, boxMon);
@@ -1334,7 +1334,7 @@ void FollowMon_PlaceholdersSet(FieldSystem *fieldSystem, MessageFormat *messageF
     BufferItemName(messageFormat, 4, GetMonData(mon, MON_DATA_HELD_ITEM, NULL));
 }
 
-void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
+static void FollowMon_ApplyInteractionEffects(FieldSystem *fieldSystem, FollowMonInteraction *interaction) {
     Pokemon *mon = GetFirstAliveMonInParty_CrashIfNone(SaveArray_Party_Get(fieldSystem->saveData));
     int mood = FollowMonMood_Get(fieldSystem->followMonMood);
     int value = mood;
@@ -1550,7 +1550,7 @@ BOOL FollowMonRule_CheckSpeciesAttr(u32 rule, u32 value) {
 
 // TRUE when the Pokemon does not have shiny leaf `leaf` (1-5) yet.
 BOOL FollowMonRule_CheckShinyLeaf(int leaf, u8 shinyLeaves) {
-    ShinyLeafMasks masks = sShinyLeafMasks;
+    ShinyLeafMasks masks = gShinyLeafMasks;
     int i;
     for (i = 0; i < 5; i++) {
         if ((masks.masks[leaf - 1] & shinyLeaves) == 0) {
@@ -1579,7 +1579,7 @@ void FollowMon_JumpOnSpot(FieldSystem *fieldSystem, u8 count) {
     }
 }
 
-BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager) {
+static BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     FollowMonJumpOnSpotEnv *env = TaskManager_GetEnvironment(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
@@ -1596,7 +1596,7 @@ BOOL Task_FollowMonJumpOnSpot(TaskManager *taskManager) {
         break;
     case 2: {
         u8 direction = MapObject_GetFacingDirection(fieldSystem->followMon.mapObject);
-        env->movement = EventObjectMovementMan_Create(fieldSystem->followMon.mapObject, (const MovementScriptCommand *)(sFollowMonJumpOnSpotMovements + direction * 0x14));
+        env->movement = EventObjectMovementMan_Create(fieldSystem->followMon.mapObject, (const MovementScriptCommand *)(gFollowMonJumpOnSpotMovements + direction * 0x14));
         (*state)++;
         break;
     }
@@ -1627,7 +1627,7 @@ BOOL FollowMon_StartGrowAndShrink(FieldSystem *fieldSystem) {
 }
 
 // Grows the billboard to 1.5 times its size over 10 frames, holds it for 10 frames, then shrinks it back.
-BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager) {
+static BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     u32 *state = TaskManager_GetStatePtr(taskManager);
     FollowMonGrowAndShrinkEnv *env = TaskManager_GetEnvironment(taskManager);
@@ -1635,7 +1635,7 @@ BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager) {
     switch (*state) {
     case 0: {
         VecFx32 scale;
-        scale = sFollowMonGrowScale;
+        scale = gFollowMonGrowScale;
         env->frame++;
         scale.x = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
         scale.y = (s32)((double)env->frame * 2048.0 / 10.0 + 4096.0);
@@ -1655,7 +1655,7 @@ BOOL Task_FollowMonGrowAndShrink(TaskManager *taskManager) {
         break;
     case 2: {
         VecFx32 scale;
-        scale = sFollowMonShrinkScale;
+        scale = gFollowMonShrinkScale;
         env->frame++;
         if (env->frame >= 10) {
             (*state)++;

@@ -33,14 +33,14 @@
 #include "system.h"
 #include "text.h"
 
-extern int (*const sLinkSaveStates[])(PokewalkerApp *app);
-extern int (*const sStrollReportStates[])(PokewalkerApp *app);
-extern const GraphicsBanks sSelectMonGraphicsBanks;
-extern const GraphicsModes sSelectMonGraphicsModes;
-extern const ObjCharTransferTemplate sSelectMonObjCharTransferTemplate;
-extern const OverlayManagerTemplate sEventLogAppTemplate;
-extern const BgTemplate sBoxDisplayBgTemplateSub1;
-extern const BgTemplate sBoxDisplayBgTemplateSub3;
+extern int (*const gLinkSaveStates[])(PokewalkerApp *app);
+extern int (*const gStrollReportStates[])(PokewalkerApp *app);
+extern const GraphicsBanks gSelectMonGraphicsBanks;
+extern const GraphicsModes gSelectMonGraphicsModes;
+extern const ObjCharTransferTemplate gSelectMonObjCharTransferTemplate;
+extern const OverlayManagerTemplate gEventLogAppTemplate;
+extern const BgTemplate gBoxDisplayBgTemplateSub1;
+extern const BgTemplate gBoxDisplayBgTemplateSub3;
 
 BOOL IsFanfarePlayingOrWaiting(void);
 
@@ -132,7 +132,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_LinkSave_Update(PokewalkerApp *app) {
-    int state = sLinkSaveStates[app->state](app);
+    int state = gLinkSaveStates[app->state](app);
     app->state = state;
     if (state == 11) {
         app->state = 0;
@@ -306,17 +306,17 @@ int PokewalkerApp_SelectMon_Exit(PokewalkerApp *app) {
 }
 
 void PokewalkerApp_SelectMon_SetGxBanks(void) {
-    GraphicsBanks banks = sSelectMonGraphicsBanks;
+    GraphicsBanks banks = gSelectMonGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 void PokewalkerApp_SelectMon_SetGraphicsModes(BgConfig *bgConfig) {
-    GraphicsModes modes = sSelectMonGraphicsModes;
+    GraphicsModes modes = gSelectMonGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 }
 
 void PokewalkerApp_SelectMon_InitObjTransfer(void) {
-    ObjCharTransferTemplate template = sSelectMonObjCharTransferTemplate;
+    ObjCharTransferTemplate template = gSelectMonObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_154);
     ObjCharTransfer_ClearBuffers();
@@ -500,7 +500,7 @@ int PokewalkerApp_EventLog_Update(PokewalkerApp *app) {
         }
         break;
     case 1:
-        app->childApp = OverlayManager_New(&sEventLogAppTemplate, &app->eventLogSaveData, HEAP_ID_154);
+        app->childApp = OverlayManager_New(&gEventLogAppTemplate, &app->eventLogSaveData, HEAP_ID_154);
         app->state = 2;
         break;
     case 2:
@@ -545,7 +545,7 @@ int PokewalkerApp_StrollReport_Enter(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_StrollReport_Update(PokewalkerApp *app) {
-    int state = sStrollReportStates[app->state](app);
+    int state = gStrollReportStates[app->state](app);
     app->state = state;
     if (state == STROLL_REPORT_DONE) {
         app->state = 0;
@@ -1132,12 +1132,12 @@ void PokewalkerBoxDisplay_LoadBgGraphics(BgConfig *bgConfig, enum HeapID heapId)
 
 void PokewalkerBoxDisplay_InitBgs(BgConfig *bgConfig) {
     {
-        BgTemplate template = sBoxDisplayBgTemplateSub1;
+        BgTemplate template = gBoxDisplayBgTemplateSub1;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_1);
     }
     {
-        BgTemplate template = sBoxDisplayBgTemplateSub3;
+        BgTemplate template = gBoxDisplayBgTemplateSub3;
         InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_3, &template, GF_BG_TYPE_TEXT);
         BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_3);
     }
