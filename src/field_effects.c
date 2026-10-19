@@ -4,13 +4,13 @@
 
 #include "global.h"
 
+#include "field/field_effect_manager.h"
+
 #include "heap.h"
 #include "sys_task_api.h"
 
 // A fixed-size pool of field effects. Each active effect runs as a main-queue SysTask that calls its update
 // callback every frame; FieldEffectPool_DrawAll calls the draw callback of every started effect.
-
-typedef struct FieldEffect FieldEffect;
 
 typedef struct FieldEffectPool {
     int count;
@@ -18,9 +18,6 @@ typedef struct FieldEffectPool {
     enum HeapID heapID;
     FieldEffect *effects;
 } FieldEffectPool;
-
-typedef void (*FieldEffectFunc)(FieldEffect *, void *);
-typedef BOOL (*FieldEffectInitFunc)(FieldEffect *, void *);
 
 #define FIELD_EFFECT_FLAG_ACTIVE  (1 << 0)
 #define FIELD_EFFECT_FLAG_STARTED (1 << 1) // the init callback succeeded
@@ -43,24 +40,12 @@ struct FieldEffect {
     FieldEffectFunc extra2;
 };
 
+// A FieldEffectBasicTemplate with the two extra callbacks
 typedef struct FieldEffectTemplate {
-    u32 size; // bytes of the state area cleared before init
-    FieldEffectInitFunc init;
-    FieldEffectFunc destroy;
-    FieldEffectFunc update;
-    FieldEffectFunc draw;
+    FieldEffectBasicTemplate basic;
     FieldEffectFunc extra1;
     FieldEffectFunc extra2;
 } FieldEffectTemplate;
-
-// FieldEffectTemplate without the two extra callbacks
-typedef struct FieldEffectBasicTemplate {
-    u32 size;
-    FieldEffectInitFunc init;
-    FieldEffectFunc destroy;
-    FieldEffectFunc update;
-    FieldEffectFunc draw;
-} FieldEffectBasicTemplate;
 
 FieldEffectPool *FieldEffectPool_New(enum HeapID heapID, int count);
 static void FieldEffectPool_Free(FieldEffectPool *pool);
@@ -156,11 +141,11 @@ static FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const Field
         VecFx32 zero = { 0, 0, 0 };
         FieldEffect_SetPosition(effect, &zero);
     }
-    FieldEffect_ClearState(effect, template->size);
-    FieldEffect_SetInitFunc(effect, template->init);
-    FieldEffect_SetDestroyFunc(effect, template->destroy);
-    FieldEffect_SetUpdateFunc(effect, template->update);
-    FieldEffect_SetDrawFunc(effect, template->draw);
+    FieldEffect_ClearState(effect, template->basic.stateSize);
+    FieldEffect_SetInitFunc(effect, template->basic.init);
+    FieldEffect_SetDestroyFunc(effect, template->basic.destroy);
+    FieldEffect_SetUpdateFunc(effect, template->basic.update);
+    FieldEffect_SetDrawFunc(effect, template->basic.draw);
     FieldEffect_SetExtraFunc1(effect, template->extra1);
     FieldEffect_SetExtraFunc2(effect, template->extra2);
     task = FieldEffect_CreateTask(effect, priority);
@@ -181,7 +166,7 @@ static FieldEffect *FieldEffectPool_AddEffect(FieldEffectPool *pool, const Field
 
 FieldEffect *FieldEffectPool_AddBasicEffect(FieldEffectPool *pool, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
     FieldEffectTemplate full;
-    *(FieldEffectBasicTemplate *)&full = *template;
+    full.basic = *template;
     full.extra1 = FieldEffect_DefaultExtra1;
     full.extra2 = FieldEffect_DefaultExtra2;
     return FieldEffectPool_AddEffect(pool, &full, position, parameter, userData, priority);

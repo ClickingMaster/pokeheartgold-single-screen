@@ -6,16 +6,11 @@ typedef struct WindowView {
     void *bgConfig;
 } WindowView; // leading member of Window
 
-typedef struct CharDataView {
-    u8 filler_00[0x14];
-    void *pRawData;
-} CharDataView; // NNSG2dCharacterData
-
 int BgConfig_GetHeapId(void *bgConfig);
 u8 GetWindowBgId(WindowView *window);
 void *Heap_Alloc(int heapId, u32 size);
 void *BgGetCharPtr(int bgId);
-void *GfGfxLoader_GetCharData(int narcId, int member, int isCompressed, CharDataView **charData, int heapId);
+void *GfGfxLoader_GetCharData(int narcId, int member, int isCompressed, NNSG2dCharacterData **charData, int heapId);
 void BlitPixelRect4Bit(void *src, u8 srcX, u8 srcY, u8 srcWidth, u8 srcHeight, void *dest, u8 destWidth, u8 destHeight, u8 destX, u8 destY, u8 width, u8 height);
 void BG_LoadCharTilesData(void *bgConfig, int bgId, void *data, u32 size, u32 tileStart);
 void Heap_Free(void *ptr);
@@ -34,7 +29,7 @@ void LoadWindowFrameIconTiles(WindowView *window, int member, int baseTile, int 
         void *iconPixels;
         u32 tile10Offset;
         u32 tile11Offset;
-        CharDataView *charData;
+        NNSG2dCharacterData *charData;
     } locals;
 
     int heapId;

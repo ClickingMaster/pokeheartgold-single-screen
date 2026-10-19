@@ -31,10 +31,20 @@ typedef struct UnionRoomMessage {
     String *name;
     String *string1;
     String *string2;
-    u32 unkC;
-    u32 unk10;
+    u32 trainerId;
+    u32 gender;
     MailMessage mail;
 } UnionRoomMessage;
+
+#define UNION_CHAT_LOG_NUM_MESSAGES 30
+
+// The chat messages of the players in the room, shown by the chat log (union_chat_log.h). Once count reaches
+// UNION_CHAT_LOG_NUM_MESSAGES the oldest message is at head.
+typedef struct UnionChatLogMessages {
+    UnionRoomMessage slots[UNION_CHAT_LOG_NUM_MESSAGES];
+    int count;
+    int head;
+} UnionChatLogMessages;
 
 typedef struct UnionRoomObjects {
     struct UnionRoom *unionRoom;
@@ -43,7 +53,7 @@ typedef struct UnionRoomObjects {
     UnionRoomSlot slots[51];
     FieldSystem *fieldSystem;
     SavePalPad *palPad;
-    UnionRoomMessage *messages; // 30 entries + 2 words
+    UnionChatLogMessages *messages;
     u32 enabled;
     u32 unk4E4;
 } UnionRoomObjects;

@@ -7,14 +7,6 @@
 #include "heap.h"
 #include "sys_task_api.h"
 
-typedef struct RenderModel {
-    u32 loaded;
-    NNSG3dResFileHeader *file;
-    NNSG3dResMdlSet *set;
-    NNSG3dResMdl *model;
-    NNSG3dResTex *texture;
-} RenderModel;
-
 static void RenderModel_Clear(RenderModel *model);
 static void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *file, u32 index);
 static void RenderModel_BindTextures(RenderModel *model);

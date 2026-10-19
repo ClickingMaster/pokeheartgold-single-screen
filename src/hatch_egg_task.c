@@ -3,26 +3,10 @@
 #include "get_egg.h"
 #include "naming_screen.h"
 #include "hatch_egg_app.h"
+#include "hatch_egg_task_data.h"
 #include "trainer_memo.h"
 #include "field_overworld_transition.h"
 #include "field_overworld_restore.h"
-
-typedef enum HatchEggTaskState {
-    HATCHEGGTASKSTATE_LEAVE_OVERWORLD,
-    HATCHEGGTASKSTATE_OPEN_HATCH_APP,
-    HATCHEGGTASKSTATE_UPDATE_MON_INFO,
-    HATCHEGGTASKSTATE_OPEN_NAMING_SCREEN,
-    HATCHEGGTASKSTATE_SET_MON_NAME,
-    HATCHEGGTASKSTATE_LOAD_OVERWORLD,
-    HATCHEGGTASKSTATE_EXIT,
-} HatchEggTaskState;
-
-typedef struct HatchEggTaskData {
-    HatchEggTaskState state;
-    BOOL wantToNameNewMon;
-    NamingScreenArgs *namingScreenArgs;
-    HatchEggArgs args;
-} HatchEggTaskData;
 
 FS_EXTERN_OVERLAY(OVY_95);
 static const OverlayManagerTemplate sApplication_HatchEgg = {

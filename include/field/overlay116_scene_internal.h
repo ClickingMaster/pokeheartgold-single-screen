@@ -3,18 +3,13 @@
 
 #include "global.h"
 
-typedef struct Camera Camera;
+#include "field/encounter_effect.h"
+#include "field/field_motion_blur.h"
 
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-} Ov116CameraAngle;
-
-typedef struct {
-    u8 pad00[0x24];
-    Camera *camera;
-} Ov116FieldSystem;
+#include "camera.h"
+#include "gf_gfx_planes.h"
+#include "heap.h"
+#include "screen_fade_legacy.h"
 
 typedef struct {
     u32 distance;
@@ -37,51 +32,22 @@ typedef struct {
 } Ov116Sequence;
 
 typedef struct {
-    u32 state;
-    u32 done;
-    u32 unused08;
-    void *work;
-    Ov116FieldSystem *fieldSystem;
-    u32 *completionFlag;
-} Ov116Task;
-
-typedef struct {
-    void *effect;
+    FieldMotionBlur *motionBlur;
     u32 unused04;
     u32 index;
     s32 delay;
 } Ov116PanWork;
 
 typedef struct {
-    void *effect;
+    FieldMotionBlur *motionBlur;
     u8 pad04[4];
-    s32 perspectiveInterp[5];
-    s32 distanceInterp[5];
-    u32 unused30;
+    EncounterEffectInterp perspective;
+    EncounterEffectQuadInterp distance;
     s32 delay;
 } Ov116MoveWork;
 
-extern void Camera_SetPerspectiveAngle(u16, Camera *);
-extern void Camera_SetAnglePos(const Ov116CameraAngle *, Camera *);
-extern void Camera_SetDistance(s32, Camera *);
-extern u16 Camera_GetPerspectiveAngle(Camera *);
-extern s32 Camera_GetDistance(Camera *);
-extern void *Heap_Alloc(int, u32);
-extern void GfGfx_EngineATogglePlanes(int, int);
-extern void EncounterEffect_StartFlash(int, int, int, u32 *, int);
-extern void EncounterEffect_Finish(void *, void *);
-extern void EncounterEffectInterp_Init(void *, s32, s32, int);
-extern int EncounterEffectInterp_Update(void *);
-extern void EncounterEffectQuadInterp_Init(void *, s32, s32, s32, int);
-extern int EncounterEffectQuadInterp_Update(void *);
-extern u32 FieldMotionBlur_Start(u32, u32);
-extern void FieldMotionBlur_Stop(void *);
-extern void BeginNormalPaletteFade(int, int, int, u16, int, int, int);
-extern int IsPaletteFadeFinished(void);
-extern void SetMasterBrightnessByColor(int, u16);
-
-void EncounterEffect_Legendary(void *, Ov116Task *);
-void EncounterEffect_HoOh(void *, Ov116Task *);
-void EncounterEffect_Lugia(void *, Ov116Task *);
+void EncounterEffect_Legendary(SysTask *, EncounterEffectTask *);
+void EncounterEffect_HoOh(SysTask *, EncounterEffectTask *);
+void EncounterEffect_Lugia(SysTask *, EncounterEffectTask *);
 
 #endif

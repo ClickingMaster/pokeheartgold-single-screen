@@ -75,7 +75,7 @@ void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32
 }
 
 BOOL VoiceChat_RequestSession(u32 aid) {
-    Session *session = gVoiceChat.work->session;
+    VctSession *session = gVoiceChat.work->session;
     if (session == NULL) {
         session = VCT_CreateSession(aid);
         if (session == NULL) {
@@ -96,7 +96,7 @@ BOOL VoiceChat_RequestSession(u32 aid) {
 
 // The only caller passes 0.
 BOOL VoiceChat_AcceptSession(int unused) {
-    Session *session = gVoiceChat.work->session;
+    VctSession *session = gVoiceChat.work->session;
     if (session != NULL && session->mode == 4) {
         if (VCT_Response(session, 0) != 0) {
             return FALSE;
@@ -109,7 +109,7 @@ BOOL VoiceChat_AcceptSession(int unused) {
     return FALSE;
 }
 
-void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext) {
+void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
     switch (event) {
     case 9:
         VoiceChat_EndSession(session);
@@ -123,7 +123,7 @@ void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, Session *session
     }
 }
 
-void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext) {
+void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
     switch (event) {
     case 1:
         if (gVoiceChat.work->session != NULL) {
@@ -164,7 +164,7 @@ void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, voi
     }
 }
 
-void VoiceChat_EndSession(Session *session) {
+void VoiceChat_EndSession(VctSession *session) {
     VCT_StopStreaming(session);
     VCT_DeleteSession(session);
     gVoiceChat.work->session = NULL;
@@ -305,7 +305,7 @@ void VoiceChat_StartStream(void) {
 
 // The only caller passes the voice chat active flag.
 void VoiceChat_HangUp(int unused) {
-    Session *session = gVoiceChat.work->session;
+    VctSession *session = gVoiceChat.work->session;
     u32 callState;
     if (session == NULL || gVoiceChat.work->callState == VOICE_CHAT_CALL_IDLE) {
         WifiConnection_StopVoiceChat();

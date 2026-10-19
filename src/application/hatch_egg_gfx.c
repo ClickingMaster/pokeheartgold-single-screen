@@ -241,11 +241,11 @@ void HatchEggApp_VBlankCB(void *data) {
     // OS_IRQTABLE_INTR_CHECK: acknowledge the V-blank interrupt
     volatile u32 *dtcm = (volatile u32 *)0x027e0000;
     HatchEggApp *app = data;
-    PokepicManager_HandleLoadImgAndOrPltt(app->pokepicManager);
+    PokepicManager_HandleLoadImgAndOrPltt(app->gfx.pokepicManager);
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
-    PaletteData_PushTransparentBuffers(app->paletteData);
-    DoScheduledBgGpuUpdates(app->bgConfig);
+    PaletteData_PushTransparentBuffers(app->gfx.paletteData);
+    DoScheduledBgGpuUpdates(app->gfx.bgConfig);
     dtcm[0x3ff8 / 4] |= 1;
 }
 
@@ -388,9 +388,9 @@ void HatchEggParticles_Free(HatchEggParticles *particles) {
 
 void HatchEggApp_LoadSpriteResources(HatchEggApp *app) {
     HatchEggSpriteFiles eggFiles = sHatchEggSpriteFiles;
-    SpriteSystem *spriteSystem = app->spriteSystem;
-    SpriteManager *spriteManager = app->spriteManager;
-    PaletteData *paletteData = app->paletteData;
+    SpriteSystem *spriteSystem = app->gfx.spriteSystem;
+    SpriteManager *spriteManager = app->gfx.spriteManager;
+    PaletteData *paletteData = app->gfx.paletteData;
     SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_a_1_1_5, eggFiles.files[0], TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, 20000);
     SpriteSystem_LoadPaletteBuffer(paletteData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_a_1_1_5, eggFiles.files[1], FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 20001);
     SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_a_1_1_5, eggFiles.files[2], TRUE, 20002);
@@ -420,7 +420,7 @@ void HatchEggApp_CreateSprites(HatchEggApp *app) {
     template.resIdList[GF_GFX_RES_TYPE_ANIM] = 20003;
     template.resIdList[GF_GFX_RES_TYPE_MCEL] = bgPriority - 3;
     template.resIdList[GF_GFX_RES_TYPE_MANM] = bgPriority - 3;
-    app->eggSprite = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &template);
+    app->eggSprite = SpriteSystem_NewSprite(app->gfx.spriteSystem, app->gfx.spriteManager, &template);
     ManagedSprite_TickFrame(app->eggSprite);
     ManagedSprite_SetAffineOverwriteMode(app->eggSprite, 2);
     template.x = 0;
@@ -430,10 +430,10 @@ void HatchEggApp_CreateSprites(HatchEggApp *app) {
     template.resIdList[GF_GFX_RES_TYPE_PLTT] = 25001;
     template.resIdList[GF_GFX_RES_TYPE_CELL] = 25002;
     template.resIdList[GF_GFX_RES_TYPE_ANIM] = 25003;
-    app->topBar = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &template);
+    app->topBar = SpriteSystem_NewSprite(app->gfx.spriteSystem, app->gfx.spriteManager, &template);
     ManagedSprite_TickFrame(app->topBar);
     template.y = 144;
-    app->bottomBar = SpriteSystem_NewSprite(app->spriteSystem, app->spriteManager, &template);
+    app->bottomBar = SpriteSystem_NewSprite(app->gfx.spriteSystem, app->gfx.spriteManager, &template);
     ManagedSprite_TickFrame(app->bottomBar);
 }
 
@@ -505,27 +505,27 @@ void HatchEggApp_DeleteSprites(HatchEggApp *app) {
     Sprite_DeleteAndFreeResources(app->bottomBar);
 }
 
-void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app) {
+void HatchEggApp_InitSpriteSystem(HatchEggAppGraphics *gfx) {
     OamManagerParam oamManagerParam;
     OamCharTransferParam oamTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
-    app->spriteSystem = SpriteSystem_Alloc(HEAP_ID_70);
+    gfx->spriteSystem = SpriteSystem_Alloc(HEAP_ID_70);
     oamManagerParam = sHatchEggAppOamManagerParam;
     oamTransferParam = sHatchEggAppOamCharTransferParam;
-    SpriteSystem_Init(app->spriteSystem, &oamManagerParam, &oamTransferParam, 32);
+    SpriteSystem_Init(gfx->spriteSystem, &oamManagerParam, &oamTransferParam, 32);
     resourceCounts = sHatchEggAppSpriteResourceCounts;
-    app->spriteManager = SpriteManager_New(app->spriteSystem);
-    GF_ASSERT(SpriteSystem_InitSprites(app->spriteSystem, app->spriteManager, 255));
-    GF_ASSERT(SpriteSystem_InitManagerWithCapacities(app->spriteSystem, app->spriteManager, &resourceCounts));
+    gfx->spriteManager = SpriteManager_New(gfx->spriteSystem);
+    GF_ASSERT(SpriteSystem_InitSprites(gfx->spriteSystem, gfx->spriteManager, 255));
+    GF_ASSERT(SpriteSystem_InitManagerWithCapacities(gfx->spriteSystem, gfx->spriteManager, &resourceCounts));
 }
 
-void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app) {
-    SpriteSystem_FreeResourcesAndManager(app->spriteSystem, app->spriteManager);
-    SpriteSystem_Free(app->spriteSystem);
+void HatchEggApp_FreeSpriteSystem(HatchEggAppGraphics *gfx) {
+    SpriteSystem_FreeResourcesAndManager(gfx->spriteSystem, gfx->spriteManager);
+    SpriteSystem_Free(gfx->spriteSystem);
 }
 
 void HatchEggApp_CreatePokepic(HatchEggApp *app) {
-    Pokemon *mon = app->args->hatch.mon;
+    Pokemon *mon = app->args->args.mon;
     u32 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 yOffset = GetBoxMonPicHeight((BoxPokemon *)mon, 2);
     u32 isEgg = FALSE;
@@ -533,16 +533,16 @@ void HatchEggApp_CreatePokepic(HatchEggApp *app) {
     PokepicAnimScript animScript[10];
     SetMonData(mon, MON_DATA_IS_EGG, &isEgg);
     GetPokemonSpriteCharAndPlttNarcIds(&template, mon, 2);
-    NARC_ReadPokepicAnimScript(app->narc, animScript, (u16)species, 1);
-    app->pokepic = PokepicManager_CreatePokepic(app->pokepicManager, &template, 128, yOffset + 96, 0, 0, animScript, NULL);
+    NARC_ReadPokepicAnimScript(app->gfx.narc, animScript, (u16)species, 1);
+    app->pokepic = PokepicManager_CreatePokepic(app->gfx.pokepicManager, &template, 128, yOffset + 96, 0, 0, animScript, NULL);
 }
 
 void HatchEggApp_StartPokepicAnim(HatchEggApp *app) {
-    u32 species = GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL);
-    GetMonNature(app->args->hatch.mon);
+    u32 species = GetMonData(app->args->args.mon, MON_DATA_SPECIES, NULL);
+    GetMonNature(app->args->args.mon);
     // The call passes an argument Pokepic_StartAnim does not take.
     ((void (*)(Pokepic *, int))Pokepic_StartAnim)(app->pokepic, 1);
-    NARC_StartPokepicAnim(app->narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
+    NARC_StartPokepicAnim(app->gfx.narc, app->picManager, app->pokepic, (u16)species, 2, 0, 0);
 }
 
 void HatchEggApp_DeletePokepic(HatchEggApp *app) {

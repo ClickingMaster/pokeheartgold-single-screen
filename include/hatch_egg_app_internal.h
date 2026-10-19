@@ -4,21 +4,13 @@
 #include "bg_window.h"
 #include "filesystem.h"
 #include "gf_3d_vramman.h"
-#include "hatch_egg_task.h"
+#include "hatch_egg_task_data.h"
 #include "message_format.h"
 #include "palette.h"
 #include "particle_system.h"
 #include "pokepic.h"
 #include "pokepic_anim_internal.h"
 #include "sprite_system.h"
-
-// Layout of HatchEggTaskData, which the task passes as the overlay's args.
-typedef struct HatchEggAppArgs {
-    u32 taskState;
-    BOOL wantToNameNewMon; // set by the nickname prompt
-    void *namingScreenArgs;
-    HatchEggArgs hatch;
-} HatchEggAppArgs;
 
 typedef struct HatchEggParticlesParam {
     enum HeapID heapId;
@@ -45,44 +37,41 @@ typedef struct HatchEggYesNoMenu {
     Window buttons[2];            // 0x1C
 } HatchEggYesNoMenu;              // size: 0x3C
 
-typedef struct HatchEggApp {
-    HatchEggAppArgs *args;          // 0x00
-    BgConfig *bgConfig;             // 0x04
-    PaletteData *paletteData;       // 0x08
-    u32 printerId;                  // 0x0C
-    u32 textSpeed;                  // 0x10
-    u32 frame;                      // 0x14
-    Window window;                  // 0x18
-    u8 filler_28[0x10];             // 0x28
-    GF3DVramMan *vramMan;           // 0x38
-    PokepicManager *pokepicManager; // 0x3C
-    NARC *narc;                     // 0x40
-    HatchEggParticles *particles;   // 0x44
-    u8 filler_48[8];                // 0x48
-    SpriteManager *spriteManager;   // 0x50
-    SpriteSystem *spriteSystem;     // 0x54
-    PokepicAnimManager *picManager; // 0x58
-    u32 sceneType;                  // 0x5C: index into sHatchEggSceneFuncs
-    u32 state;                      // 0x60
-    s32 timer;                      // 0x64
-    u32 subState;                   // 0x68
-    u8 animParams[4];               // 0x6C
-    Pokepic *pokepic;               // 0x70
-    ManagedSprite *eggSprite;       // 0x74
-    ManagedSprite *topBar;          // 0x78
-    ManagedSprite *bottomBar;       // 0x7C
-    int shakeState;                 // 0x80
-    int shakeFrame;                 // 0x84
-    HatchEggYesNoMenu *yesNoMenu;   // 0x88
-} HatchEggApp;                      // size: 0x8C
+// The display state of the app; HatchEggApp_InitSpriteSystem and HatchEggApp_FreeSpriteSystem take it on its own.
+typedef struct HatchEggAppGraphics {
+    BgConfig *bgConfig;
+    PaletteData *paletteData;
+    u32 printerId;
+    u32 textSpeed;
+    u32 frame;
+    Window window;
+    u8 filler_28[0x10];
+    GF3DVramMan *vramMan;
+    PokepicManager *pokepicManager;
+    NARC *narc;
+    HatchEggParticles *particles;
+    u8 filler_48[8];
+    SpriteManager *spriteManager;
+    SpriteSystem *spriteSystem;
+} HatchEggAppGraphics;
 
-// HatchEggApp_InitSpriteSystem and HatchEggApp_FreeSpriteSystem are passed &app->bgConfig and address
-// the sprite system relative to it.
-typedef struct HatchEggAppFromBgConfig {
-    u8 filler_00[0x4C];
-    SpriteManager *spriteManager; // HatchEggApp 0x50
-    SpriteSystem *spriteSystem;   // HatchEggApp 0x54
-} HatchEggAppFromBgConfig;
+typedef struct HatchEggApp {
+    HatchEggTaskData *args;
+    HatchEggAppGraphics gfx;
+    PokepicAnimManager *picManager;
+    u32 sceneType; // index into sHatchEggSceneFuncs
+    u32 state;
+    s32 timer;
+    u32 subState;
+    u8 animParams[4];
+    Pokepic *pokepic;
+    ManagedSprite *eggSprite;
+    ManagedSprite *topBar;
+    ManagedSprite *bottomBar;
+    int shakeState;
+    int shakeFrame;
+    HatchEggYesNoMenu *yesNoMenu;
+} HatchEggApp;
 
 typedef struct HatchEggBgTemplates {
     BgTemplate templates[3];
@@ -111,8 +100,8 @@ void HatchEggApp_LoadSpriteResources(HatchEggApp *app);
 void HatchEggApp_CreateSprites(HatchEggApp *app);
 int HatchEggApp_UpdateEggShake(HatchEggApp *app, int pattern);
 void HatchEggApp_DeleteSprites(HatchEggApp *app);
-void HatchEggApp_InitSpriteSystem(HatchEggAppFromBgConfig *app);
-void HatchEggApp_FreeSpriteSystem(HatchEggAppFromBgConfig *app);
+void HatchEggApp_InitSpriteSystem(HatchEggAppGraphics *gfx);
+void HatchEggApp_FreeSpriteSystem(HatchEggAppGraphics *gfx);
 void HatchEggApp_CreatePokepic(HatchEggApp *app);
 void HatchEggApp_StartPokepicAnim(HatchEggApp *app);
 void HatchEggApp_DeletePokepic(HatchEggApp *app);

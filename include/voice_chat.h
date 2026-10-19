@@ -22,14 +22,14 @@ typedef struct VoiceChatWork {
     u8 streamBuffer[0x880];    // 0x088C
     u8 silenceBuffer[0x880];   // 0x110C, sent instead of the mic data while the lid is closed
     void (*endCallback)(void); // 0x198C
-    Session sessions[3];       // 0x1990
+    VctSession sessions[3];    // 0x1990
     int conferenceClients[4];  // 0x19D8
     u32 mode;                  // 0x19E8
     u32 callState;             // 0x19EC
     BOOL muted;                // 0x19F0
     u32 heapId;                // 0x19F4
     SndStrm stream;            // 0x19F8
-    Session *session;          // 0x1A54
+    VctSession *session;       // 0x1A54
     u8 samplingState;          // 0x1A58
     u8 restartSampling;        // 0x1A59
     u16 requestTimer;          // 0x1A5A
@@ -56,9 +56,9 @@ void VoiceChat_MicCallback(MICResult result, void *arg);
 void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg);
 BOOL VoiceChat_RequestSession(u32 aid);
 BOOL VoiceChat_AcceptSession(int unused);
-void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext);
-void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, Session *session, void *unusedContext);
-void VoiceChat_EndSession(Session *session);
+void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
+void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
+void VoiceChat_EndSession(VctSession *session);
 void VoiceChat_Update(void);
 BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size);
 void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId);

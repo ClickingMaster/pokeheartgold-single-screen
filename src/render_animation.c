@@ -8,23 +8,7 @@
 #include "gf_3d_render.h"
 #include "gf_gfx_loader.h"
 #include "heap.h"
-
-typedef struct RenderAnimation {
-    u32 flags;
-    fx32 frame;
-    void *file;
-    void *resource;
-    NNSG3dAnmObj *object;
-    NNSFndAllocator allocator;
-} RenderAnimation;
-
-typedef struct RenderModel {
-    u32 flags;
-    void *file;
-    NNSG3dResMdlSet *set;
-    NNSG3dResMdl *model;
-    NNSG3dResTex *texture;
-} RenderModel;
+#include "render_model.h"
 
 static void RenderAnimation_Clear(RenderAnimation *animation);
 static void RenderAnimation_InitOwned(RenderAnimation *animation, void *file, int unused);

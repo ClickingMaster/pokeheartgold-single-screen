@@ -2,20 +2,19 @@
 #define POKEHEARTGOLD_UNION_CHAT_LOG_H
 
 #include "bg_window.h"
-#include "field_player_effect_internal.h"
 #include "field_system.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "player_data.h"
 #include "sprite.h"
 #include "sys_task.h"
+#include "union_room_objects.h"
 #include "sprite_resource_header.h"
 #include "sprite_resource.h"
 
 // Field bottom-screen app 8 in the Union Room: a scrolling log of the chat messages of the players
 // in the room. Shown instead of the touch start menu; the "Menu" bar returns to it.
 
-#define UNION_CHAT_LOG_NUM_MESSAGES     30 // ring buffer of the Union Room manager
 #define UNION_CHAT_LOG_NUM_ROWS         3
 #define UNION_CHAT_LOG_NUM_ARROWS       2
 #define UNION_CHAT_LOG_SPRITE_UP        0
@@ -29,14 +28,6 @@ enum UnionChatLogState {
     UNION_CHAT_LOG_STATE_FREED,
 };
 
-// The 30 chat messages the Union Room manager keeps; Manager.messages
-// points at slots[0]. Once count reaches 30 the oldest message is at head.
-typedef struct UnionChatLogMessages {
-    MessageSlot slots[UNION_CHAT_LOG_NUM_MESSAGES];
-    int count; // 0x348
-    int head;  // 0x34C
-} UnionChatLogMessages;
-
 typedef struct UnionChatLogRow {
     Window name;
     Window message;
@@ -47,7 +38,7 @@ typedef struct UnionChatLogRow {
 
 typedef struct UnionChatLogData {
     u32 state;
-    Manager *unionRoom;
+    UnionRoomObjects *unionRoom;
     struct UnionRoom *unionRoomData;
     FieldSystem *fieldSystem;
     PlayerProfile *profile;

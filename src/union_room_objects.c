@@ -77,11 +77,11 @@ static void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object);
 static void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object);
 static void UnionRoomObjects_ShowRange(MapObjectManager *mapObjectManager, int first, int last);
 static void UnionRoomMessage_Init(UnionRoomMessage *message);
-static void UnionRoomMessages_Init(UnionRoomMessage *messages);
+static void UnionRoomMessages_Init(UnionChatLogMessages *messages);
 static void UnionRoomMessage_Free(UnionRoomMessage *message);
-static void UnionRoomMessages_FreeAll(UnionRoomMessage *messages);
-static UnionRoomMessage *UnionRoomMessages_New(int heapID);
-static void UnionRoomMessages_Free(UnionRoomMessage *messages);
+static void UnionRoomMessages_FreeAll(UnionChatLogMessages *messages);
+static UnionChatLogMessages *UnionRoomMessages_New(int heapID);
+static void UnionRoomMessages_Free(UnionChatLogMessages *messages);
 
 UnionRoomObjects *UnionRoomObjects_New(struct UnionRoom *unionRoom) {
     UnionRoomObjects *objects = Heap_Alloc(HEAP_ID_31, sizeof(UnionRoomObjects));
@@ -439,17 +439,17 @@ static void UnionRoomMessage_Init(UnionRoomMessage *message) {
     message->string1 = NULL;
     message->string2 = NULL;
     MailMsg_Init_WithBank(&message->mail, 0);
-    message->unk10 = 0;
-    message->unkC = 0;
+    message->gender = 0;
+    message->trainerId = 0;
 }
 
-static void UnionRoomMessages_Init(UnionRoomMessage *messages) {
+static void UnionRoomMessages_Init(UnionChatLogMessages *messages) {
     int i;
-    for (i = 0; i < 30; i++) {
-        UnionRoomMessage_Init(&messages[i]);
+    for (i = 0; i < UNION_CHAT_LOG_NUM_MESSAGES; i++) {
+        UnionRoomMessage_Init(&messages->slots[i]);
     }
-    *(u32 *)&messages[30] = 0;
-    *((u32 *)&messages[30] + 1) = 0;
+    messages->count = 0;
+    messages->head = 0;
 }
 
 static void UnionRoomMessage_Free(UnionRoomMessage *message) {
@@ -462,20 +462,20 @@ static void UnionRoomMessage_Free(UnionRoomMessage *message) {
     }
 }
 
-static void UnionRoomMessages_FreeAll(UnionRoomMessage *messages) {
+static void UnionRoomMessages_FreeAll(UnionChatLogMessages *messages) {
     int i;
-    for (i = 0; i < 30; i++) {
-        UnionRoomMessage_Free(&messages[i]);
+    for (i = 0; i < UNION_CHAT_LOG_NUM_MESSAGES; i++) {
+        UnionRoomMessage_Free(&messages->slots[i]);
     }
 }
 
-static UnionRoomMessage *UnionRoomMessages_New(int heapID) {
-    UnionRoomMessage *messages = Heap_Alloc((enum HeapID)heapID, 0x350);
+static UnionChatLogMessages *UnionRoomMessages_New(int heapID) {
+    UnionChatLogMessages *messages = Heap_Alloc((enum HeapID)heapID, sizeof(UnionChatLogMessages));
     UnionRoomMessages_Init(messages);
     return messages;
 }
 
-static void UnionRoomMessages_Free(UnionRoomMessage *messages) {
+static void UnionRoomMessages_Free(UnionChatLogMessages *messages) {
     UnionRoomMessages_FreeAll(messages);
     Heap_Free(messages);
 }

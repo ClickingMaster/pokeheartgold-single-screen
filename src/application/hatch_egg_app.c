@@ -193,17 +193,17 @@ static BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
     switch (app->state) {
     case HATCH_EGG_SCENE_SETUP: {
         HatchEggParticlesParam param;
-        HatchEggApp_LoadBackground(app->bgConfig, app->paletteData);
-        HatchEggApp_LoadWindowGfx(app->bgConfig, app->paletteData, app->frame);
-        HatchEggApp_CreateMessageWindow(app->bgConfig, &app->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 59, 14);
+        HatchEggApp_LoadBackground(app->gfx.bgConfig, app->gfx.paletteData);
+        HatchEggApp_LoadWindowGfx(app->gfx.bgConfig, app->gfx.paletteData, app->gfx.frame);
+        HatchEggApp_CreateMessageWindow(app->gfx.bgConfig, &app->gfx.window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 59, 14);
         HatchEggApp_LoadSpriteResources(app);
         HatchEggApp_CreateSprites(app);
-        HatchEggYesNoMenu_LoadGfx(app->yesNoMenu, app->paletteData, 21000, 21001, 21002, 21003);
+        HatchEggYesNoMenu_LoadGfx(app->yesNoMenu, app->gfx.paletteData, 21000, 21001, 21002, 21003);
         HatchEggApp_CreatePokepic(app);
         HatchEggApp_SetPokepicVanished(app, TRUE);
         param.heapId = HEAP_ID_70;
         param.fileId = 0;
-        app->particles = HatchEggParticles_New(&param);
+        app->gfx.particles = HatchEggParticles_New(&param);
         app->state++;
         break;
     }
@@ -240,8 +240,8 @@ static BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
     case HATCH_EGG_SCENE_HATCH:
         if (HatchEggApp_HatchEgg(app) == FALSE) {
             HatchEggApp_StartPokepicAnim(app);
-            PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
-            app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00000, app->args->hatch.mon, app->textSpeed);
+            PlayCry(GetMonData(app->args->args.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->args.mon, MON_DATA_FORM, NULL));
+            app->gfx.printerId = HatchEggApp_PrintMessage(&app->gfx.window, msg_0187_00000, app->args->args.mon, app->gfx.textSpeed);
             app->state++;
         }
         break;
@@ -257,13 +257,13 @@ static BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         }
         app->state++;
     case HATCH_EGG_SCENE_PRINT_NICKNAME_PROMPT:
-        if (TextPrinterCheckActive(app->printerId)) {
+        if (TextPrinterCheckActive(app->gfx.printerId)) {
             break;
         }
-        app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
+        app->gfx.printerId = HatchEggApp_PrintMessage(&app->gfx.window, msg_0187_00001, app->args->args.mon, app->gfx.textSpeed);
         app->state++;
     case HATCH_EGG_SCENE_SHOW_YES_NO:
-        if (TextPrinterCheckActive(app->printerId)) {
+        if (TextPrinterCheckActive(app->gfx.printerId)) {
             break;
         }
         if (PokepicAnimManager_GetAnimState(app->picManager, 0) != TRUE) {
@@ -305,13 +305,13 @@ static BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
     default:
         HatchEggApp_DeletePokepic(app);
         HatchEggApp_DeleteSprites(app);
-        HatchEggApp_RemoveMessageWindow(&app->window);
-        HatchEggApp_DestroyParticleSystem(app->particles->particleSystem);
-        HatchEggParticles_Free(app->particles);
+        HatchEggApp_RemoveMessageWindow(&app->gfx.window);
+        HatchEggApp_DestroyParticleSystem(app->gfx.particles->particleSystem);
+        HatchEggParticles_Free(app->gfx.particles);
         ret = FALSE;
         break;
     }
-    SpriteSystem_DrawSprites(app->spriteManager);
+    SpriteSystem_DrawSprites(app->gfx.spriteManager);
     return ret;
 }
 
@@ -320,18 +320,18 @@ static BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     switch (app->state) {
     case HATCH_EGG_SCENE_SETUP: {
         HatchEggParticlesParam param;
-        HatchEggApp_LoadBackground(app->bgConfig, app->paletteData);
-        HatchEggApp_LoadWindowGfx(app->bgConfig, app->paletteData, app->frame);
-        HatchEggApp_CreateMessageWindow(app->bgConfig, &app->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 59, 14);
+        HatchEggApp_LoadBackground(app->gfx.bgConfig, app->gfx.paletteData);
+        HatchEggApp_LoadWindowGfx(app->gfx.bgConfig, app->gfx.paletteData, app->gfx.frame);
+        HatchEggApp_CreateMessageWindow(app->gfx.bgConfig, &app->gfx.window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 59, 14);
         HatchEggApp_LoadSpriteResources(app);
         HatchEggApp_CreateSprites(app);
         ManagedSprite_SetDrawFlag(app->eggSprite, FALSE);
-        HatchEggYesNoMenu_LoadGfx(app->yesNoMenu, app->paletteData, 21000, 21001, 21002, 21003);
+        HatchEggYesNoMenu_LoadGfx(app->yesNoMenu, app->gfx.paletteData, 21000, 21001, 21002, 21003);
         HatchEggApp_CreatePokepic(app);
         HatchEggApp_SetPokepicVanished(app, TRUE);
         param.heapId = HEAP_ID_70;
         param.fileId = 1;
-        app->particles = HatchEggParticles_New(&param);
+        app->gfx.particles = HatchEggParticles_New(&param);
         app->state++;
         break;
     }
@@ -347,8 +347,8 @@ static BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     case 3:
         if (HatchEggApp_HatchManaphyEgg(app) == FALSE) {
             HatchEggApp_StartPokepicAnim(app);
-            PlayCry(GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->hatch.mon, MON_DATA_FORM, NULL));
-            app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00000, app->args->hatch.mon, app->textSpeed);
+            PlayCry(GetMonData(app->args->args.mon, MON_DATA_SPECIES, NULL), GetMonData(app->args->args.mon, MON_DATA_FORM, NULL));
+            app->gfx.printerId = HatchEggApp_PrintMessage(&app->gfx.window, msg_0187_00000, app->args->args.mon, app->gfx.textSpeed);
             app->state = HATCH_EGG_SCENE_WAIT_CRY;
         }
         break;
@@ -370,13 +370,13 @@ static BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         }
         app->state++;
     case HATCH_EGG_SCENE_PRINT_NICKNAME_PROMPT:
-        if (TextPrinterCheckActive(app->printerId)) {
+        if (TextPrinterCheckActive(app->gfx.printerId)) {
             break;
         }
-        app->printerId = HatchEggApp_PrintMessage(&app->window, msg_0187_00001, app->args->hatch.mon, app->textSpeed);
+        app->gfx.printerId = HatchEggApp_PrintMessage(&app->gfx.window, msg_0187_00001, app->args->args.mon, app->gfx.textSpeed);
         app->state++;
     case HATCH_EGG_SCENE_SHOW_YES_NO:
-        if (TextPrinterCheckActive(app->printerId)) {
+        if (TextPrinterCheckActive(app->gfx.printerId)) {
             break;
         }
         if (PokepicAnimManager_GetAnimState(app->picManager, 0) != TRUE) {
@@ -418,13 +418,13 @@ static BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
     default:
         HatchEggApp_DeletePokepic(app);
         HatchEggApp_DeleteSprites(app);
-        HatchEggApp_RemoveMessageWindow(&app->window);
-        HatchEggApp_DestroyParticleSystem(app->particles->particleSystem);
-        HatchEggParticles_Free(app->particles);
+        HatchEggApp_RemoveMessageWindow(&app->gfx.window);
+        HatchEggApp_DestroyParticleSystem(app->gfx.particles->particleSystem);
+        HatchEggParticles_Free(app->gfx.particles);
         ret = FALSE;
         break;
     }
-    SpriteSystem_DrawSprites(app->spriteManager);
+    SpriteSystem_DrawSprites(app->gfx.spriteManager);
     return ret;
 }
 
@@ -452,7 +452,7 @@ static BOOL HatchEggApp_WaitBeforeShake(HatchEggApp *app) {
 static BOOL HatchEggApp_ShakeEggOnce(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
-        if (HatchEggParticles_IsRunning(app->particles) != TRUE) {
+        if (HatchEggParticles_IsRunning(app->gfx.particles) != TRUE) {
             ManagedSprite_SetAnimationFrame(app->eggSprite, 1);
             app->subState++;
         }
@@ -487,7 +487,7 @@ static BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app) {
         if (status == 1) {
             PlaySE(SEQ_SE_DP_EGG01);
             ManagedSprite_SetAnimationFrame(app->eggSprite, 3);
-            HatchEggParticles_Emit(app->particles, 0);
+            HatchEggParticles_Emit(app->gfx.particles, 0);
         }
         if (status == 2) {
             app->timer = 0;
@@ -506,7 +506,7 @@ static BOOL HatchEggApp_ShakeEggTwice(HatchEggApp *app) {
 static BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app) {
     switch (app->subState) {
     case 0:
-        if (HatchEggParticles_IsRunning(app->particles) != TRUE) {
+        if (HatchEggParticles_IsRunning(app->gfx.particles) != TRUE) {
             app->subState++;
         }
         break;
@@ -515,7 +515,7 @@ static BOOL HatchEggApp_ShakeEggCrack(HatchEggApp *app) {
         if (status == 1) {
             PlaySE(SEQ_SE_DP_EGG01);
             ManagedSprite_SetAnimationFrame(app->eggSprite, 4);
-            HatchEggParticles_Emit(app->particles, 1);
+            HatchEggParticles_Emit(app->gfx.particles, 1);
         }
         if (status == 2) {
             app->timer = 0;
@@ -542,7 +542,7 @@ static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
     u32 plttOffset;
     switch (app->subState) {
     case 0:
-        if (HatchEggParticles_IsRunning(app->particles) == TRUE) {
+        if (HatchEggParticles_IsRunning(app->gfx.particles) == TRUE) {
             break;
         }
         ManagedSprite_SetAnimationFrame(app->eggSprite, 4);
@@ -554,8 +554,8 @@ static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
         if (status == 1) {
             ManagedSprite_SetAnimationFrame(app->eggSprite, 5);
             PlaySE(SEQ_SE_DP_BOWA3);
-            HatchEggParticles_Emit(app->particles, 2);
-            HatchEggParticles_Emit(app->particles, 3);
+            HatchEggParticles_Emit(app->gfx.particles, 2);
+            HatchEggParticles_Emit(app->gfx.particles, 3);
         }
         if (status == 2) {
             ManagedSprite_SetDrawFlag(app->eggSprite, FALSE);
@@ -569,9 +569,9 @@ static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
             break;
         }
         app->timer = 0;
-        PaletteData_BeginPaletteFade(app->paletteData, 1, 0xffff, 0, 0, 16, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 1, 0xffff, 0, 0, 16, 0xffff);
         plttOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(app->topBar->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
-        PaletteData_BeginPaletteFade(app->paletteData, 4, (u16)(0xffff ^ (1 << plttOffset)), 0, 0, 16, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 4, (u16)(0xffff ^ (1 << plttOffset)), 0, 0, 16, 0xffff);
         Pokepic_StartPaletteFade(app->pokepic, 0, 16, 0, 0xffff);
         app->subState++;
         break;
@@ -589,7 +589,7 @@ static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
         } else {
             done++;
         }
-        if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0 || done != 2 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
+        if (PaletteData_GetSelectedBuffersBitmask(app->gfx.paletteData) != 0 || done != 2 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
             break;
         }
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
@@ -606,18 +606,18 @@ static BOOL HatchEggApp_HatchEgg(HatchEggApp *app) {
         }
         app->timer = 0;
         Pokepic_StartPaletteFade(app->pokepic, 16, 0, 0, 0xffff);
-        PaletteData_BeginPaletteFade(app->paletteData, 1, 0xffff, 0, 16, 0, 0xffff);
-        PaletteData_BeginPaletteFade(app->paletteData, 4, 0xffff, 0, 16, 0, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 1, 0xffff, 0, 16, 0, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 4, 0xffff, 0, 16, 0, 0xffff);
         app->subState++;
         break;
     case 5:
-        if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
+        if (PaletteData_GetSelectedBuffersBitmask(app->gfx.paletteData) != 0 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
             break;
         }
         app->subState++;
         break;
     default:
-        if (HatchEggParticles_IsRunning(app->particles) == TRUE) {
+        if (HatchEggParticles_IsRunning(app->gfx.particles) == TRUE) {
             break;
         }
         app->subState = 0;
@@ -636,10 +636,10 @@ static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
     u32 plttOffset;
     switch (app->subState) {
     case 0:
-        HatchEggParticles_Emit(app->particles, 0);
-        HatchEggParticles_Emit(app->particles, 1);
-        HatchEggParticles_Emit(app->particles, 2);
-        HatchEggParticles_Emit(app->particles, 3);
+        HatchEggParticles_Emit(app->gfx.particles, 0);
+        HatchEggParticles_Emit(app->gfx.particles, 1);
+        HatchEggParticles_Emit(app->gfx.particles, 2);
+        HatchEggParticles_Emit(app->gfx.particles, 3);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         app->subState++;
         break;
@@ -660,9 +660,9 @@ static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
             break;
         }
         app->timer = 0;
-        PaletteData_BeginPaletteFade(app->paletteData, 1, 0xffff, 0, 0, 16, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 1, 0xffff, 0, 0, 16, 0xffff);
         plttOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(app->topBar->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
-        PaletteData_BeginPaletteFade(app->paletteData, 4, (u16)(0xffff ^ (1 << plttOffset)), 0, 0, 16, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 4, (u16)(0xffff ^ (1 << plttOffset)), 0, 0, 16, 0xffff);
         Pokepic_StartPaletteFade(app->pokepic, 0, 16, 0, 0xffff);
         app->subState++;
         break;
@@ -680,7 +680,7 @@ static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
         } else {
             done++;
         }
-        if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0 || done != 2 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
+        if (PaletteData_GetSelectedBuffersBitmask(app->gfx.paletteData) != 0 || done != 2 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
             break;
         }
         HatchEggApp_SetPokepicVanished(app, FALSE);
@@ -697,12 +697,12 @@ static BOOL HatchEggApp_HatchManaphyEgg(HatchEggApp *app) {
         }
         app->timer = 0;
         Pokepic_StartPaletteFade(app->pokepic, 16, 0, 0, 0xffff);
-        PaletteData_BeginPaletteFade(app->paletteData, 1, 0xffff, 0, 16, 0, 0xffff);
-        PaletteData_BeginPaletteFade(app->paletteData, 4, 0xffff, 0, 16, 0, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 1, 0xffff, 0, 16, 0, 0xffff);
+        PaletteData_BeginPaletteFade(app->gfx.paletteData, 4, 0xffff, 0, 16, 0, 0xffff);
         app->subState++;
         break;
     case 4:
-        if (PaletteData_GetSelectedBuffersBitmask(app->paletteData) != 0 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
+        if (PaletteData_GetSelectedBuffersBitmask(app->gfx.paletteData) != 0 || Pokepic_ResumePaletteFade(app->pokepic) != FALSE) {
             break;
         }
         app->subState++;
@@ -723,27 +723,27 @@ BOOL HatchEggApp_Init(OverlayManager *man, int *state) {
     app = OverlayManager_CreateAndGetData(man, sizeof(HatchEggApp), HEAP_ID_70);
     memset(app, 0, sizeof(HatchEggApp));
     app->args = OverlayManager_GetArgs(man);
-    app->textSpeed = Options_GetTextFrameDelay(app->args->hatch.options);
-    app->frame = Options_GetFrame(app->args->hatch.options);
-    app->vramMan = HatchEggApp_Create3DVramMan();
-    app->pokepicManager = PokepicManager_Create(HEAP_ID_70);
-    app->narc = NARC_New(NARC_a_1_8_0, HEAP_ID_70);
-    app->bgConfig = BgConfig_Alloc(HEAP_ID_70);
+    app->gfx.textSpeed = Options_GetTextFrameDelay(app->args->args.options);
+    app->gfx.frame = Options_GetFrame(app->args->args.options);
+    app->gfx.vramMan = HatchEggApp_Create3DVramMan();
+    app->gfx.pokepicManager = PokepicManager_Create(HEAP_ID_70);
+    app->gfx.narc = NARC_New(NARC_a_1_8_0, HEAP_ID_70);
+    app->gfx.bgConfig = BgConfig_Alloc(HEAP_ID_70);
     GF_CreateVramTransferManager(64, HEAP_ID_70);
     app->picManager = PokepicAnimManager_New(HEAP_ID_70, 1, 0);
-    PaletteData_SetAutoTransparent(app->paletteData = PaletteData_Init(HEAP_ID_70), TRUE);
-    PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_70);
-    PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_OBJ, 0x200, HEAP_ID_70);
-    PaletteData_AllocBuffers(app->paletteData, PLTTBUF_SUB_BG, 0x200, HEAP_ID_70);
-    PaletteData_LoadNarc(app->paletteData, NARC_graphic_font, 9, HEAP_ID_70, PLTTBUF_SUB_BG, 0x20, 0xF0);
+    PaletteData_SetAutoTransparent(app->gfx.paletteData = PaletteData_Init(HEAP_ID_70), TRUE);
+    PaletteData_AllocBuffers(app->gfx.paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_70);
+    PaletteData_AllocBuffers(app->gfx.paletteData, PLTTBUF_MAIN_OBJ, 0x200, HEAP_ID_70);
+    PaletteData_AllocBuffers(app->gfx.paletteData, PLTTBUF_SUB_BG, 0x200, HEAP_ID_70);
+    PaletteData_LoadNarc(app->gfx.paletteData, NARC_graphic_font, 9, HEAP_ID_70, PLTTBUF_SUB_BG, 0x20, 0xF0);
     HatchEggApp_HideLayers();
     HatchEggApp_InitBlend();
     HatchEggApp_InitParticleVram();
-    HatchEggApp_InitBgs(app->bgConfig);
-    HatchEggYesNoMenu_InitBgs(app->bgConfig);
-    HatchEggApp_InitSpriteSystem((HatchEggAppFromBgConfig *)&app->bgConfig);
+    HatchEggApp_InitBgs(app->gfx.bgConfig);
+    HatchEggYesNoMenu_InitBgs(app->gfx.bgConfig);
+    HatchEggApp_InitSpriteSystem(&app->gfx);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-    app->yesNoMenu = HatchEggYesNoMenu_New(app->bgConfig, app->spriteSystem, app->spriteManager, HEAP_ID_70);
+    app->yesNoMenu = HatchEggYesNoMenu_New(app->gfx.bgConfig, app->gfx.spriteSystem, app->gfx.spriteManager, HEAP_ID_70);
     Sound_Stop();
     Main_SetVBlankIntrCB(HatchEggApp_VBlankCB, app);
     return TRUE;
@@ -757,8 +757,8 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
         if (IsPaletteFadeFinished() == TRUE) {
             (*state)++;
         }
-        species = GetMonData(app->args->hatch.mon, MON_DATA_SPECIES, NULL);
-        NARC_ReadPokepicCryDelay(app->narc, app->animParams, (u16)species, 1);
+        species = GetMonData(app->args->args.mon, MON_DATA_SPECIES, NULL);
+        NARC_ReadPokepicCryDelay(app->gfx.narc, app->animParams, (u16)species, 1);
         if (species == SPECIES_MANAPHY) {
             app->sceneType = HATCH_EGG_SCENE_TYPE_MANAPHY;
         } else {
@@ -770,7 +770,7 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
         if (HatchEggApp_RunScene(app) == FALSE) {
             (*state)++;
         } else {
-            PokepicManager_DrawAll(app->pokepicManager);
+            PokepicManager_DrawAll(app->gfx.pokepicManager);
             HatchEggApp_Draw3D();
         }
         break;
@@ -786,25 +786,25 @@ BOOL HatchEggApp_Main(OverlayManager *man, int *state) {
 BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
     HatchEggApp *app = OverlayManager_GetData(man);
     HatchEggYesNoMenu_Free(app->yesNoMenu);
-    GF_3DVramMan_Delete(app->vramMan);
+    GF_3DVramMan_Delete(app->gfx.vramMan);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0 | GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_OFF);
-    PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_BG);
-    PaletteData_FreeBuffers(app->paletteData, PLTTBUF_MAIN_OBJ);
-    PaletteData_FreeBuffers(app->paletteData, PLTTBUF_SUB_BG);
-    PaletteData_Free(app->paletteData);
+    PaletteData_FreeBuffers(app->gfx.paletteData, PLTTBUF_MAIN_BG);
+    PaletteData_FreeBuffers(app->gfx.paletteData, PLTTBUF_MAIN_OBJ);
+    PaletteData_FreeBuffers(app->gfx.paletteData, PLTTBUF_SUB_BG);
+    PaletteData_Free(app->gfx.paletteData);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
-    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_1);
-    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_2);
-    FreeBgTilemapBuffer(app->bgConfig, GF_BG_LYR_MAIN_3);
-    Heap_Free(app->bgConfig);
+    FreeBgTilemapBuffer(app->gfx.bgConfig, GF_BG_LYR_MAIN_1);
+    FreeBgTilemapBuffer(app->gfx.bgConfig, GF_BG_LYR_MAIN_2);
+    FreeBgTilemapBuffer(app->gfx.bgConfig, GF_BG_LYR_MAIN_3);
+    Heap_Free(app->gfx.bgConfig);
     GF_DestroyVramTransferManager();
-    PokepicManager_Delete(app->pokepicManager);
+    PokepicManager_Delete(app->gfx.pokepicManager);
     PokepicAnimManager_Delete(app->picManager);
-    NARC_Delete(app->narc);
-    HatchEggApp_FreeSpriteSystem((HatchEggAppFromBgConfig *)&app->bgConfig);
+    NARC_Delete(app->gfx.narc);
+    HatchEggApp_FreeSpriteSystem(&app->gfx);
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_70);
     Main_SetVBlankIntrCB(NULL, NULL);

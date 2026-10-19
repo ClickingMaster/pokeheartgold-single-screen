@@ -4,18 +4,8 @@
 #include "global.h"
 
 #include "field_system.h"
+#include "ride_cutscene_task.h"
 #include "task.h"
-
-typedef struct AreaLightTaskEnv {
-    u8 state;
-    u8 param1;
-    u8 param2;
-    u8 pad03;
-    u32 mapId;
-    u32 x;
-    u32 y;
-    ModelAttributes light;
-} AreaLightTaskEnv;
 
 typedef struct GenderTaskEnv {
     u8 param;
