@@ -5,66 +5,55 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent;
-    u32 value;
-} Node;
-
-typedef struct {
-    int count;
-    void *head, *tail;
-} Container;
+#include "lobby_chat_request.h"
 
 typedef struct {
     u8 active;
-    Node *allocated, *value;
-    void **owner;
-    Node *pending;
+    LobbyRequestMapNode *allocated, *value;
+    LobbyRequestMapNode **owner;
+    LobbyRequestMapNode *pending;
 } Guard;
 
 extern int printf(const char *, ...);
 extern void abort(void);
 extern const char sStr_TreeInsertLengthError_3[];
 extern void *LobbyMem_Alloc(u32);
-extern void LobbyTree_InsertRebalance(Node *, void *);
-Node *LobbyRequestMap_InsertNode(Container *, void *, int, int, const u32 *);
-
-Node *LobbyRequestMap_InsertNode(Container *c, void *owner, int first, int last, const u32 *value) {
-    Node *node, *pending;
-    u32 *dest;
-    u32 *parent;
+extern void LobbyTree_InsertRebalance(LobbyRequestMapNode *, void *);
+LobbyRequestMapNode *LobbyRequestMap_InsertNode(LobbyRequestMap *map, LobbyRequestMapNode *parent, int left, int leftmost, LobbyRequest *const *request) {
+    LobbyRequestMapNode *node, *pending;
+    LobbyRequest **dest;
+    LobbyRequestMapNode **parentField;
     volatile Guard guard;
-    if (c->count == -1) {
+    if (map->count == -1) {
         printf(sStr_TreeInsertLengthError_3);
         abort();
     }
     guard.active = 0;
-    node = LobbyMem_Alloc(16);
-    guard.owner = &c->head;
-    dest = (u32 *)((u8 *)node + 12);
+    node = LobbyMem_Alloc(sizeof(LobbyRequestMapNode));
+    guard.owner = &map->root;
+    dest = &node->request;
     guard.pending = node;
     guard.allocated = node;
     if (dest) {
-        *dest = *value;
+        *dest = *request;
     }
     node->right = NULL;
     guard.pending = NULL;
     node->left = NULL;
-    parent = (u32 *)((u8 *)node + 8);
-    if (parent) {
-        *parent = (u32)owner;
+    parentField = &node->parent;
+    if (parentField) {
+        *parentField = parent;
     }
-    if (first) {
-        *(void **)owner = node;
+    if (left) {
+        parent->left = node;
     } else {
-        *(void **)((u8 *)owner + 4) = node;
+        parent->right = node;
     }
-    c->count++;
+    map->count++;
     guard.value = node;
-    LobbyTree_InsertRebalance(node, c->head);
-    if (last) {
-        c->tail = node;
+    LobbyTree_InsertRebalance(node, map->root);
+    if (leftmost) {
+        map->leftmost = node;
     }
     pending = guard.pending;
     if (pending) {

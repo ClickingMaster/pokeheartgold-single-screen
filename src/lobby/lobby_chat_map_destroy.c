@@ -3,25 +3,16 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct LobbyMap {
-    int count;
-    void *root;
-    void *leftmost;
-} LobbyMap;
+#include "lobby_chat_manager.h"
 
-void *LobbyUserMap_Destroy(LobbyMap *map);
-void *LobbyRequestMap_Destroy(LobbyMap *map);
-void LobbyUserMap_DestroyNodes(LobbyMap *map, void *node);
-void LobbyRequestMap_DestroyNodes(LobbyMap *map, void *node);
-
-void *LobbyUserMap_Destroy(LobbyMap *map) {
+void *LobbyUserMap_Destroy(LobbyUserMap *map) {
     if (map->root) {
         LobbyUserMap_DestroyNodes(map, map->root);
     }
     return map;
 }
 
-void *LobbyRequestMap_Destroy(LobbyMap *map) {
+void *LobbyRequestMap_Destroy(LobbyRequestMap *map) {
     if (map->root) {
         LobbyRequestMap_DestroyNodes(map, map->root);
     }

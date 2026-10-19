@@ -3,40 +3,12 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "lobby_chat_request.h"
+#include "lobby_chat_manager.h"
+#include "lobby_string.h"
 
-union Str {
-    struct L {
-        u32 flag : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } l;
-
-    struct S {
-        u8 flag : 1;
-        u8 size : 7;
-        char data[11];
-    } s;
-
-    u32 words[3];
-
-    const char *c_str() const {
-        return !l.flag ? s.data : l.data;
-    }
-};
-
-struct Manager {
-    u8 pad[0x4];
-    u32 state;
-    u8 pad2[0x88];
-    LobbyRequestMap requestMap;
-};
-
-extern "C" Manager *gLobbyChatManager;
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
-extern "C" void LobbyChat_StripChannelPrefix(Str *dst, Manager *m, Str *src);
+extern "C" void LobbyChat_StripChannelPrefix(Str *dst, LobbyChatManager *m, Str *src);
 extern "C" void LobbyChat_OnChannelModeChanged(void *self, const char *name, u32 x, u32 id);
 
 inline void KeyInit(LobbyRequest *k, u32 id) {
@@ -47,7 +19,7 @@ inline void KeyInit(LobbyRequest *k, u32 id) {
 
 extern "C" void LobbyChat_OnGetChannelMode(void *chat, int result, const char *name, u32 mode, u32 id);
 
-inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+inline LobbyRequestMapIterator FindIt(LobbyChatManager *m, u32 id) {
     LobbyRequest key;
     KeyInit(&key, id);
     LobbyRequest *kp = &key;
@@ -66,9 +38,9 @@ extern "C" void LobbyChat_OnGetChannelMode(void *chat, int result, const char *n
     }
     LobbyChat_OnChannelModeChanged(chat, name, mode, id);
     int sid = id;
-    Manager *m = gLobbyChatManager;
+    LobbyChatManager *m = gLobbyChatManager;
     LobbyRequestMapIterator it = FindIt(m, sid);
-    LobbyGetChannelModeRequest *h = it.node == &m->requestMap.header ? 0 : static_cast<LobbyGetChannelModeRequest *>(it.node->request);
+    LobbyGetChannelModeRequest *h = it.node == (LobbyRequestMapNode *)&m->requestMap.root ? 0 : (LobbyGetChannelModeRequest *)it.node->request;
     Str s;
     LobbyString_InitFromCStr(&s, name);
     Str t;

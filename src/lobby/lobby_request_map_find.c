@@ -5,44 +5,40 @@
 
 #include "lobby_chat_internal.h"
 
-#define W(p, n) (*(int *)((u8 *)(p) + (n)))
-#define U(p, n) (*(unsigned *)((u8 *)(p) + (n)))
-#define P(p, n) (*(void **)((u8 *)(p) + (n)))
-
-static void *LobbyRequestMap_LowerBound(void *c, void *key, void *node, void *best);
+static LobbyRequestMapNode *LobbyRequestMap_LowerBound(LobbyRequestMap *map, LobbyRequest **key, LobbyRequestMapNode *node, LobbyRequestMapNode *best);
 
 u32 LobbyRequest_GetParam(LobbyRequest *request) {
     return request->param;
 }
 
-void *LobbyU32Vector_Data(void *p) {
-    if (W(p, 4) == 0) {
+void *LobbyU32Vector_Data(LobbyU32Vector *vector) {
+    if (vector->size == 0) {
         return 0;
     }
-    return P(p, 0);
+    return vector->data;
 }
 
 void LobbyRequest_Destroy(void) {
 }
 
-void LobbyRequestMap_Find(Iter *out, Tree *tree, void *key) {
-    void *p = LobbyRequestMap_LowerBound(tree, key, P(tree, 4), (u8 *)tree + 4);
-    if (p == (u8 *)tree + 4 || U(P(key, 0), 4) < U(P(p, 12), 4)) {
-        out->current = (u8 *)tree + 4;
+void LobbyRequestMap_Find(Iter *out, LobbyRequestMap *map, LobbyRequest **key) {
+    LobbyRequestMapNode *p = LobbyRequestMap_LowerBound(map, key, map->root, (LobbyRequestMapNode *)&map->root);
+    if (p == (LobbyRequestMapNode *)&map->root || (*key)->id < p->request->id) {
+        out->current = &map->root;
     } else {
         out->current = p;
     }
 }
 
-static void *LobbyRequestMap_LowerBound(void *c, void *key, void *node, void *best) {
+static LobbyRequestMapNode *LobbyRequestMap_LowerBound(LobbyRequestMap *map, LobbyRequest **key, LobbyRequestMapNode *node, LobbyRequestMapNode *best) {
     if (node) {
-        unsigned n = U(P(key, 0), 4);
+        u32 n = (*key)->id;
         do {
-            if (U(P(node, 12), 4) >= n) {
+            if (node->request->id >= n) {
                 best = node;
-                node = P(node, 0);
+                node = node->left;
             } else {
-                node = P(node, 4);
+                node = node->right;
             }
         } while (node);
     }

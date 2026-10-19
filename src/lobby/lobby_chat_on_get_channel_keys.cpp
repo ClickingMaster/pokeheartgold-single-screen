@@ -3,42 +3,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "lobby_chat_request.h"
+#include "lobby_chat_manager.h"
 
-union String {
-    struct L {
-        u32 flag : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } l;
+extern "C" void LobbyString_InitFromCStr(Str *s, const char *t);
+extern "C" void LobbyString_Destroy(Str *s);
 
-    struct S {
-        u8 flag : 1;
-        u8 size : 7;
-        char data[11];
-    } s;
-
-    u32 w[3];
-
-    const char *c_str() const {
-        return !l.flag ? s.data : l.data;
-    }
-};
-
-extern "C" void LobbyString_InitFromCStr(String *s, const char *t);
-extern "C" void LobbyString_Destroy(String *s);
-
-struct Manager {
-    u8 pad[0x4];
-    u32 state;
-    u8 pad2[0x88];
-    LobbyRequestMap requestMap;
-};
-
-extern "C" Manager *gLobbyChatManager;
-extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
-extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
+extern "C" int LobbyChat_FindUserIdByNick(LobbyChatManager *m, Str *s);
+extern "C" void LobbyChat_StripChannelPrefix(Str *dst, LobbyChatManager *m, Str *s);
 
 inline void KeyInit(LobbyRequest *k, u32 id) {
     k->vtable = &gLobbyRequestVtable;
@@ -46,7 +17,7 @@ inline void KeyInit(LobbyRequest *k, u32 id) {
     k->param = 0;
 }
 
-inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+inline LobbyRequestMapIterator FindIt(LobbyChatManager *m, u32 id) {
     LobbyRequest key;
     KeyInit(&key, id);
     LobbyRequest *kp = &key;
@@ -68,7 +39,7 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *n
     if (user == NULL) {
         userId = -1;
     } else {
-        String s;
+        Str s;
         LobbyString_InitFromCStr(&s, user);
         userId = LobbyChat_FindUserIdByNick(gLobbyChatManager, &s);
         LobbyString_Destroy(&s);
@@ -76,13 +47,13 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *n
     int sid = id;
     u32 key, value;
     LobbyGetChannelKeysRequest *h;
-    Manager *m = gLobbyChatManager;
+    LobbyChatManager *m = gLobbyChatManager;
     LobbyRequestMapIterator it = FindIt(m, sid);
-    if (it.node == &m->requestMap.header) {
+    if (it.node == (LobbyRequestMapNode *)&m->requestMap.root) {
         h = 0;
     } else {
         LobbyRequestMapNode *nd = it.node;
-        h = static_cast<LobbyGetChannelKeysRequest *>(nd->request);
+        h = (LobbyGetChannelKeysRequest *)nd->request;
     }
     key = 0;
     value = key;
@@ -90,9 +61,9 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *n
         key = *keys;
         value = *values;
     }
-    String t;
+    Str t;
     LobbyString_InitFromCStr(&t, name);
-    String k;
+    Str k;
     LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     const char *str = k.c_str();
     LobbyGetChannelKeysCallback cb = h->callback;

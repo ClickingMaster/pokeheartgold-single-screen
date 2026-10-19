@@ -19,6 +19,15 @@ typedef union Str {
         u8 len : 7;
         char buf[11];
     } s;
+
+#ifdef __cplusplus
+    Str() {
+    }
+
+    const char *c_str() const {
+        return !l.isLong ? s.buf : l.ptr;
+    }
+#endif
 } Str;
 
 static inline BOOL StrIsShort(const Str *s) {

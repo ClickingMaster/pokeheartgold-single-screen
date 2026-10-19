@@ -3,32 +3,22 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent;
-    u8 data[4];
-} Node;
+#include "lobby_chat_manager.h"
 
-typedef struct {
-    int unused;
-    void *root;
-} Tree;
+extern int LobbyString_Compare(Str *, Str *);
 
-extern int LobbyString_Compare(void *, void *);
-void *LobbyChannelMap_FindInsertPos(Tree *, void *, Node **, u8 *, u8 *);
-
-void *LobbyChannelMap_FindInsertPos(Tree *w, void *key, Node **found, u8 *left, u8 *empty) {
-    void *parent;
-    Node *p;
+LobbyChannelMapNode *LobbyChannelMap_FindInsertPos(LobbyChannelMap *map, Str *key, LobbyChannelMapNode **found, u8 *left, u8 *empty) {
+    LobbyChannelMapNode *parent;
+    LobbyChannelMapNode *p;
     _Bool comparison;
     *found = 0;
-    p = w->root;
+    p = map->root;
     *left = 1;
     *empty = 1;
-    parent = &w->root;
+    parent = (LobbyChannelMapNode *)&map->root;
     while (p) {
         parent = p;
-        comparison = (_Bool)(LobbyString_Compare(key, p->data) < 0);
+        comparison = (_Bool)(LobbyString_Compare(key, &p->entry.name) < 0);
         if (comparison) {
             p = p->left;
             *left = 1;

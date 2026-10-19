@@ -3,42 +3,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "lobby_chat_request.h"
+#include "lobby_chat_manager.h"
 
-union String {
-    struct L {
-        u32 flag : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } l;
+extern "C" void LobbyString_InitFromCStr(Str *s, const char *t);
+extern "C" void LobbyString_Destroy(Str *s);
 
-    struct S {
-        u8 flag : 1;
-        u8 size : 7;
-        char data[11];
-    } s;
-
-    u32 w[3];
-
-    const char *c_str() const {
-        return !l.flag ? s.data : l.data;
-    }
-};
-
-extern "C" void LobbyString_InitFromCStr(String *s, const char *t);
-extern "C" void LobbyString_Destroy(String *s);
-
-struct Manager {
-    u8 pad[0x4];
-    u32 state;
-    u8 pad2[0x88];
-    LobbyRequestMap requestMap;
-};
-
-extern "C" Manager *gLobbyChatManager;
-extern "C" int LobbyChat_FindUserIdByNick(Manager *m, String *s);
-extern "C" void LobbyChat_StripChannelPrefix(String *dst, Manager *m, String *s);
+extern "C" int LobbyChat_FindUserIdByNick(LobbyChatManager *m, Str *s);
+extern "C" void LobbyChat_StripChannelPrefix(Str *dst, LobbyChatManager *m, Str *s);
 
 inline void KeyInit(LobbyRequest *k, u32 id) {
     k->vtable = &gLobbyRequestVtable;
@@ -46,7 +17,7 @@ inline void KeyInit(LobbyRequest *k, u32 id) {
     k->param = 0;
 }
 
-inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+inline LobbyRequestMapIterator FindIt(LobbyChatManager *m, u32 id) {
     LobbyRequest key;
     KeyInit(&key, id);
     LobbyRequest *kp = &key;
@@ -86,7 +57,7 @@ struct Vec {
     }
 };
 
-extern "C" Vec LobbyChat_AddChannelUsers(Manager *map, int count, const char **names, const String &key);
+extern "C" Vec LobbyChat_AddChannelUsers(LobbyChatManager *map, int count, const char **names, const Str &key);
 extern "C" void LobbyChat_OnEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id);
 #pragma push
 #pragma opt_propagation off
@@ -97,7 +68,7 @@ extern "C" void LobbyChat_OnEnumUsers(void *chat, int result, const char *name, 
     }
     Vec ids;
     if (count != 0) {
-        String s;
+        Str s;
         LobbyString_InitFromCStr(&s, name);
         Vec tmp = LobbyChat_AddChannelUsers(gLobbyChatManager, count, nicks, s);
         ids = tmp;
@@ -105,17 +76,17 @@ extern "C" void LobbyChat_OnEnumUsers(void *chat, int result, const char *name, 
         LobbyString_Destroy(&s);
     }
     int sid = id;
-    Manager *m = gLobbyChatManager;
+    LobbyChatManager *m = gLobbyChatManager;
     LobbyRequestMapIterator it = FindIt(m, sid);
     LobbyEnumUsersRequest *h;
-    if (it.node == &m->requestMap.header) {
+    if (it.node == (LobbyRequestMapNode *)&m->requestMap.root) {
         h = 0;
     } else {
         LobbyRequestMapNode *nd = it.node;
-        h = static_cast<LobbyEnumUsersRequest *>(nd->request);
+        h = (LobbyEnumUsersRequest *)nd->request;
     }
-    String t;
-    String k;
+    Str t;
+    Str k;
     LobbyString_InitFromCStr(&t, name);
     LobbyChat_StripChannelPrefix(&k, gLobbyChatManager, &t);
     u32 n = ids.count();

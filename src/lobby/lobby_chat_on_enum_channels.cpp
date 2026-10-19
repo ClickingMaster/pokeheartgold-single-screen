@@ -3,23 +3,12 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "lobby_chat_request.h"
+#include "lobby_chat_manager.h"
+#include "lobby_vector.h"
 
-struct String {
-    u32 w[3];
-};
-
-struct Manager {
-    u8 pad[0x4];
-    u32 state;
-    u8 pad2[0x88];
-    LobbyRequestMap requestMap;
-};
-
-extern "C" Manager *gLobbyChatManager;
-extern "C" void LobbyChat_StripChannelPrefixes(String *dst, Manager *mgr, u32 a, u32 b);
-extern "C" const char *LobbyU32Vector_Data(String *s);
-extern "C" void LobbyU32Vector_Destroy(String *s);
+extern "C" void LobbyChat_StripChannelPrefixes(LobbyU32Vector *dst, LobbyChatManager *mgr, u32 a, u32 b);
+extern "C" const char *LobbyU32Vector_Data(LobbyU32Vector *s);
+extern "C" void LobbyU32Vector_Destroy(LobbyU32Vector *s);
 
 inline void KeyInit(LobbyRequest *k, u32 id) {
     k->vtable = &gLobbyRequestVtable;
@@ -27,7 +16,7 @@ inline void KeyInit(LobbyRequest *k, u32 id) {
     k->param = 0;
 }
 
-inline LobbyRequestMapIterator FindIt(Manager *m, u32 id) {
+inline LobbyRequestMapIterator FindIt(LobbyChatManager *m, u32 id) {
     LobbyRequest key;
     KeyInit(&key, id);
     LobbyRequest *kp = &key;
@@ -42,17 +31,17 @@ extern "C" void LobbyChat_OnEnumChannels(void *chat, int result, u32 count, u32 
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == 5) {
         return;
     }
-    String str;
+    LobbyU32Vector str;
     LobbyChat_StripChannelPrefixes(&str, gLobbyChatManager, count, channels);
     int sid = id;
-    Manager *m = gLobbyChatManager;
+    LobbyChatManager *m = gLobbyChatManager;
     LobbyRequestMapIterator it = FindIt(m, sid);
     LobbyEnumChannelsRequest *h;
-    if (it.node == &m->requestMap.header) {
+    if (it.node == (LobbyRequestMapNode *)&m->requestMap.root) {
         h = 0;
     } else {
         LobbyRequestMapNode *nd = it.node;
-        h = static_cast<LobbyEnumChannelsRequest *>(nd->request);
+        h = (LobbyEnumChannelsRequest *)nd->request;
     }
     LobbyEnumChannelsCallback cb = h->callback;
     cb(result == 1, count, LobbyU32Vector_Data(&str), topics, userCounts, h->getParam());

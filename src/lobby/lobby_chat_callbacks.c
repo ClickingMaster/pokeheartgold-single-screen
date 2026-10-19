@@ -45,7 +45,7 @@ void LobbyChat_OnConnected(void *chat, int success) {
     }
     // stop the connect timeout
     timerId = 0;
-    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &timerId, 0);
+    LobbyTimerMap_EraseKey(&gLobbyChatManager->timerMap, &timerId, 0);
     if (!success) {
         manager = gLobbyChatManager;
         manager->lastError = 3;

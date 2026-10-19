@@ -1,19 +1,14 @@
 #include <nitro/types.h>
 
+extern "C" {
+#include <nitro/rtc.h>
+}
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern "C" int memcmp(const void *, const void *, u32);
 
-struct RTCDate {
-    u32 year, month, day, week;
-};
-
-struct RTCTime {
-    u32 hour, minute, second;
-};
-
 extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
-extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *, const RTCTime *);
 
 struct Tag {};
 

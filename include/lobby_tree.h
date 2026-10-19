@@ -69,6 +69,7 @@ LobbyUserIdSetNode *LobbyUserIdSet_FindInsertPos(LobbyUserIdSet *, int *, LobbyU
 void LobbyUserIdSet_Insert(LobbyUserIdSetInsertResult *, LobbyUserIdSet *, int *);
 LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *, LobbyUserIdSetNode *, int, int, const int *);
 void LobbyUserIdSet_Swap(LobbyUserIdSet *, LobbyUserIdSet *);
+void *LobbyUserMap_Destroy(LobbyUserMap *);
 void LobbyUserMap_DestroyNodes(LobbyUserMap *, LobbyUserMapNode *);
 void LobbyUserMap_Erase(Iterator *, LobbyUserMap *, Iterator);
 LobbyUserMapNode *LobbyUserMap_FindInsertPos(LobbyUserMap *, int *, LobbyUserMapNode **, u8 *, u8 *);

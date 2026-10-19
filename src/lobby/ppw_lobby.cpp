@@ -14,7 +14,9 @@ using std::va_list;
 extern "C" {
 #include <nitro/os/printf.h>
 }
+extern "C" {
 #include <nitro/rtc.h>
+}
 
 #include "overlay45_format_buffer_private.h"
 #include "overlay45_string_search.h"
@@ -2851,15 +2853,6 @@ void PPWLobby_OnSubmitQuestionnaire(int status) {
 namespace OnEnterMainChannel {
 using std::memcmp;
 
-typedef struct RTCDate {
-    u32 year, month, day, week;
-} RTCDate;
-
-typedef struct RTCTime {
-    u32 hour, minute, second;
-} RTCTime;
-
-extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
 extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 
 struct TrueType {};
@@ -4748,28 +4741,19 @@ struct Vec {
     }
 };
 
-struct Date {
-    u32 year, month, day, week;
-};
-
-struct Time {
-    u32 hour, minute, second;
-};
-
 struct Stamp {
     s64 v;
 };
 
 struct DateTime {
-    Date date;
-    Time time;
+    RTCDate date;
+    RTCTime time;
 };
 
 extern "C" PPWLobbyWork *gPPWLobbyWork;
 extern "C" char sStr_b_lib_c_time[];
 extern "C" int PPWLobby_DecodeMessageData(const char *, Vec *);
-extern "C" void DWC_GetDateTime(Date *, Time *);
-extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
+extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
 extern "C" void PPWLobby_SetChannelData(int, int, char *, Stamp *, int);
 extern "C" char *LobbyByteVector_Data(Vec *);
 extern "C" void LobbyTimerMap_EraseKey(void *, int *);

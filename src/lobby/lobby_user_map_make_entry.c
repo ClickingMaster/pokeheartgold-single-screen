@@ -5,38 +5,35 @@
 
 #include "lobby_chat_internal.h"
 
-#define W(p, o) (*(int *)((char *)(p) + (o)))
-#define A(p, o) ((void *)((char *)(p) + (o)))
-
-void LobbyUserMap_MakeEntry(IntStrPair *p, int a, const Str *b) {
-    W(p, 0) = a;
-    LobbyString_InitCopy(A(p, 4), b);
+void LobbyUserMap_MakeEntry(LobbyUserMapEntry *entry, int userId, const Str *nick) {
+    entry->userId = userId;
+    LobbyString_InitCopy(&entry->nick, nick);
 }
 
-int LobbyChat_AreChannelUsersEnumerated(LobbyChatManager *p, Str *key) {
+int LobbyChat_AreChannelUsersEnumerated(LobbyChatManager *manager, Str *key) {
     Iter n;
-    LobbyChannelMap_Find(&n, A(p, 0x80), key);
-    if (n.current == A(p, 0x84)) {
+    LobbyChannelMap_Find(&n, &manager->channelMap, key);
+    if (n.current == &manager->channelMap.root) {
         return 0;
     }
-    return W(n.current, 24);
+    return ((LobbyChannelMapNode *)n.current)->entry.channel.usersEnumerated;
 }
 
-int LobbyChat_SetChannelUsersEnumerated(LobbyChatManager *p, Str *key) {
+int LobbyChat_SetChannelUsersEnumerated(LobbyChatManager *manager, Str *key) {
     Iter n;
-    LobbyChannelMap_Find(&n, A(p, 0x80), key);
-    if (n.current == A(p, 0x84)) {
+    LobbyChannelMap_Find(&n, &manager->channelMap, key);
+    if (n.current == &manager->channelMap.root) {
         return 0;
     }
-    W(n.current, 24) = 1;
+    ((LobbyChannelMapNode *)n.current)->entry.channel.usersEnumerated = TRUE;
     return 1;
 }
 
-int LobbyChat_GetChannelUserLimit(LobbyChatManager *p, Str *key) {
+int LobbyChat_GetChannelUserLimit(LobbyChatManager *manager, Str *key) {
     Iter n;
-    LobbyChannelMap_Find(&n, A(p, 0x80), key);
-    if (n.current == A(p, 0x84)) {
+    LobbyChannelMap_Find(&n, &manager->channelMap, key);
+    if (n.current == &manager->channelMap.root) {
         return -1;
     }
-    return W(n.current, 40);
+    return ((LobbyChannelMapNode *)n.current)->entry.channel.userLimit;
 }

@@ -1,26 +1,16 @@
-#include <nitro/types.h>
+#include "global.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "../../lib/NitroDWC/src/tree-iterator4.h"
+#include "lobby_chat_manager.h"
 
-struct S {
-    int a;
-    void *anchor;
-};
-
-typedef Iterator It;
-void LobbyChannelMap_Find(It *, struct S *, void *);
-void LobbyChannelMap_Erase(It *, struct S *, Iterator);
-int LobbyChannelMap_EraseKey(struct S *, void *);
-
-int LobbyChannelMap_EraseKey(struct S *s, void *k) {
-    It it, out;
-    LobbyChannelMap_Find(&it, s, k);
-    if (it.current == &s->anchor) {
+int LobbyChannelMap_EraseKey(LobbyChannelMap *map, Str *key) {
+    Iterator it, out;
+    LobbyChannelMap_Find(&it, map, key);
+    if (it.current == &map->root) {
         return 0;
     }
-    LobbyChannelMap_Erase(&out, s, (Iterator) { it.current });
+    LobbyChannelMap_Erase(&out, map, (Iterator) { it.current });
     return 1;
 }

@@ -64,13 +64,13 @@ LobbyRequest *LobbyEnumChannelsRequest_Delete(LobbyRequest *request) {
     return request;
 }
 
-void LobbyRequestMap_Insert(InsertResult *out, Tree *t, LobbyRequest **val) {
-    Node *pos;
+void LobbyRequestMap_Insert(LobbyRequestMapInsertResult *out, LobbyRequestMap *map, LobbyRequest **val) {
+    LobbyRequestMapNode *pos;
     u8 insertLeft;
     u8 isLeftmost;
-    Node *parent = LobbyRequestMap_FindInsertPos(t, val, &pos, &insertLeft, &isLeftmost);
-    if (pos == NULL || pos->key.request->id < (*val)->id) {
-        out->node = LobbyRequestMap_InsertNode(t, parent, insertLeft, isLeftmost, val);
+    LobbyRequestMapNode *parent = LobbyRequestMap_FindInsertPos(map, val, &pos, &insertLeft, &isLeftmost);
+    if (pos == NULL || pos->request->id < (*val)->id) {
+        out->node = LobbyRequestMap_InsertNode(map, parent, insertLeft, isLeftmost, val);
         out->inserted = ov45_02255228[1];
         return;
     }

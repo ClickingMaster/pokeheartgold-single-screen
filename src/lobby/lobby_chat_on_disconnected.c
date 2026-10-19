@@ -20,7 +20,7 @@ void LobbyChat_OnDisconnected(void) {
     }
     // stop the connect timeout
     timerId = 0;
-    LobbyTimerMap_EraseKey(gLobbyChatManager->timerMap, &timerId, 0);
+    LobbyTimerMap_EraseKey(&gLobbyChatManager->timerMap, &timerId, 0);
     manager = gLobbyChatManager;
     if (manager->state == LOBBY_CHAT_STATE_DISCONNECTING) {
         if (!manager) {

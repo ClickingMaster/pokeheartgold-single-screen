@@ -2,20 +2,17 @@
 
 #include "dwc/net_common_internal.h"
 
-#include "lobby_tree.h"
+#include "lobby_chat_manager.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #define P(p, o) (*(void **)((char *)(p) + (o)))
-#define A(p, o) ((void *)((char *)(p) + (o)))
 
 extern void __msl_assertion_failed(char *, char *, char *, int);
 extern char sStr_DataNeNULL[];
 extern char sStr_ChatCallbacksC[];
 extern char sStr_ciCallbacksArrayElementFreeFn[];
 extern void LobbyString_Destroy(Str *);
-extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
-extern void LobbyRequestMap_DestroyNodes(void *p, void *node);
 extern void ciCallbacksArrayElementFreeFn(void *p);
 
 LobbyUserIdSetNode *LobbyUserIdSet_FindInsertPos(LobbyUserIdSet *set, int *key, LobbyUserIdSetNode **prev, u8 *left, u8 *first) {
@@ -62,15 +59,15 @@ LobbyUserMapNode *LobbyUserMap_FindInsertPos(LobbyUserMap *map, int *key, LobbyU
     return last;
 }
 
-void LobbyChannelMap_DestroyNodes(void *p, void *node) {
-    if (P(node, 0)) {
-        LobbyChannelMap_DestroyNodes(p, P(node, 0));
+void LobbyChannelMap_DestroyNodes(LobbyChannelMap *map, LobbyChannelMapNode *node) {
+    if (node->left) {
+        LobbyChannelMap_DestroyNodes(map, node->left);
     }
-    if (P(node, 4)) {
-        LobbyChannelMap_DestroyNodes(p, P(node, 4));
+    if (node->right) {
+        LobbyChannelMap_DestroyNodes(map, node->right);
     }
-    LobbyUserIdSet_Destroy(A(node, 28));
-    LobbyString_Destroy(A(node, 12));
+    LobbyUserIdSet_Destroy(&node->entry.channel.users);
+    LobbyString_Destroy(&node->entry.name);
     if (node) {
         DWC_Free(0, node, 0);
     }
@@ -135,12 +132,12 @@ void LobbyUserMap_DestroyNodes(LobbyUserMap *map, LobbyUserMapNode *node) {
     }
 }
 
-void LobbyRequestMap_DestroyNodes(void *p, void *node) {
-    if (P(node, 0)) {
-        LobbyRequestMap_DestroyNodes(p, P(node, 0));
+void LobbyRequestMap_DestroyNodes(LobbyRequestMap *map, LobbyRequestMapNode *node) {
+    if (node->left) {
+        LobbyRequestMap_DestroyNodes(map, node->left);
     }
-    if (P(node, 4)) {
-        LobbyRequestMap_DestroyNodes(p, P(node, 4));
+    if (node->right) {
+        LobbyRequestMap_DestroyNodes(map, node->right);
     }
     if (node) {
         DWC_Free(0, node, 0);

@@ -1,21 +1,18 @@
 #include "global.h"
 
-#include "lobby_tree.h"
+#include "lobby_chat_manager.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define P(p, o) (*(void **)((char *)(p) + (o)))
 
-extern void LobbyChannelMap_DestroyNodes(void *p, void *node);
-extern void *LobbyChannelMap_Destroy(void *p);
 
 extern u8 ov45_02255358[];
 
-void *LobbyChannelMap_Destroy(void *p) {
-    if (P(p, 4)) {
-        LobbyChannelMap_DestroyNodes(p, P(p, 4));
+void *LobbyChannelMap_Destroy(LobbyChannelMap *map) {
+    if (map->root) {
+        LobbyChannelMap_DestroyNodes(map, map->root);
     }
-    return p;
+    return map;
 }
 
 void LobbyUserIdSet_Insert(LobbyUserIdSetInsertResult *out, LobbyUserIdSet *set, int *key) {

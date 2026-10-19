@@ -3,58 +3,20 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-#include "lobby_chat_request.h"
+#include "lobby_chat_manager.h"
 
-union Str;
 extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
 extern "C" Str *LobbyString_Destroy(Str *);
 
-union Str {
-    struct L {
-        u32 flag : 1;
-        u32 capacity : 31;
-        u32 size;
-        char *data;
-    } l;
-
-    struct S {
-        u8 flag : 1;
-        u8 size : 7;
-        char data[11];
-    } s;
-
-    u32 words[3];
-
-    Str(const char *p) {
-        LobbyString_InitFromCStr(this, p);
-    }
-
-    void destroy() {
-        LobbyString_Destroy(this);
-    }
-
-    const char *c_str() const {
-        return !l.flag ? s.data : l.data;
-    }
-};
-
 extern "C" const u32 gLobbyChatNextRequestId;
 
-struct Mgr {
-    void *connection;
-    u32 state;
-    u8 pad[0x88];
-    LobbyRequestMap requestMap;
-};
-
-extern "C" Mgr *gLobbyChatManager;
 extern "C" void *LobbyMem_Alloc(u32);
 
-extern "C" Str LobbyChat_GetFullChannelName(Mgr *m, const Str &s);
+extern "C" Str LobbyChat_GetFullChannelName(LobbyChatManager *m, const Str &s);
 extern "C" void chatGetChannelModeA(void *chat, const char *channel, void (*callback)(), u32 param, u32 blocking);
 extern "C" void LobbyChat_OnGetChannelMode();
 
-inline Mgr *GetMgr() {
+inline LobbyChatManager *GetMgr() {
     return gLobbyChatManager;
 }
 
@@ -93,7 +55,7 @@ inline u32 GetId(LobbyCallbackRequest *h, IdTag, IdTag) {
 #pragma opt_common_subs off
 
 extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 callback, u32 param) {
-    Mgr *m = gLobbyChatManager;
+    LobbyChatManager *m = gLobbyChatManager;
     if (m == NULL) {
         return 4;
     }
@@ -108,11 +70,12 @@ extern "C" int LobbyChat_GetChannelModeAsync(const char *name, u32 callback, u32
     h = NewHandler(callback, param);
     LobbyRequestMap_Insert(&res, &m->requestMap, &h);
     u32 id = GetId(h, IdTag(), IdTag());
-    Str s(name);
+    Str s;
+    LobbyString_InitFromCStr(&s, name);
     Str t = LobbyChat_GetFullChannelName(GetMgr(), s);
     chatGetChannelModeA(GetMgr()->connection, t.c_str(), LobbyChat_OnGetChannelMode, id, 0);
-    t.destroy();
-    s.destroy();
+    LobbyString_Destroy(&t);
+    LobbyString_Destroy(&s);
     return 0;
 }
 

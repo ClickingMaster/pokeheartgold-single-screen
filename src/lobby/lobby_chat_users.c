@@ -7,18 +7,18 @@
 
 #include "lobby_chat_internal.h"
 
-void LobbyUserIdSet_Find(Iter *out, Tree *t, int *key) {
-    Node *n = LobbyUserIdSet_LowerBound(t, key, t->head.left, &t->head);
-    if (n == &t->head || *key < n->key.i) {
-        out->current = &t->head;
+void LobbyUserIdSet_Find(Iter *out, LobbyUserIdSet *set, int *key) {
+    LobbyUserIdSetNode *n = LobbyUserIdSet_LowerBound(set, key, set->root, (LobbyUserIdSetNode *)&set->root);
+    if (n == (LobbyUserIdSetNode *)&set->root || *key < n->userId) {
+        out->current = &set->root;
         return;
     }
     out->current = n;
 }
 
-Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res) {
+LobbyUserIdSetNode *LobbyUserIdSet_LowerBound(LobbyUserIdSet *set, int *key, LobbyUserIdSetNode *node, LobbyUserIdSetNode *res) {
     while (node != NULL) {
-        if (node->key.i >= *key) {
+        if (node->userId >= *key) {
             res = node;
             node = node->left;
         } else {
@@ -28,31 +28,31 @@ Node *LobbyUserIdSet_LowerBound(Tree *t, int *key, Node *node, Node *res) {
     return res;
 }
 
-BOOL LobbyUserMap_EraseKey(Tree *t, int *key) {
+BOOL LobbyUserMap_EraseKey(LobbyUserMap *map, int *key) {
     Iter it;
     Iter res;
     Iter tmp;
-    LobbyUserMap_Find(&it, t, key);
-    if (it.current == &t->head) {
+    LobbyUserMap_Find(&it, map, key);
+    if (it.current == &map->root) {
         return FALSE;
     }
     tmp.current = it.current;
-    LobbyUserMap_Erase(&res, t, tmp);
+    LobbyUserMap_Erase(&res, map, tmp);
     return TRUE;
 }
 
-void LobbyUserMap_Find(Iter *out, Tree *t, int *key) {
-    Node *n = LobbyUserMap_LowerBound(t, key, t->head.left, &t->head);
-    if (n == &t->head || *key < n->key.i) {
-        out->current = &t->head;
+void LobbyUserMap_Find(Iter *out, LobbyUserMap *map, int *key) {
+    LobbyUserMapNode *n = LobbyUserMap_LowerBound(map, key, map->root, (LobbyUserMapNode *)&map->root);
+    if (n == (LobbyUserMapNode *)&map->root || *key < n->entry.userId) {
+        out->current = &map->root;
         return;
     }
     out->current = n;
 }
 
-Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res) {
+LobbyUserMapNode *LobbyUserMap_LowerBound(LobbyUserMap *map, int *key, LobbyUserMapNode *node, LobbyUserMapNode *res) {
     while (node != NULL) {
-        if (node->key.i >= *key) {
+        if (node->entry.userId >= *key) {
             res = node;
             node = node->left;
         } else {
@@ -63,7 +63,7 @@ Node *LobbyUserMap_LowerBound(Tree *t, int *key, Node *node, Node *res) {
 }
 
 BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *channel) {
-    Tree *channels = (Tree *)manager->channelMap;
+    LobbyChannelMap *channels = &manager->channelMap;
     int id;
     Iter it;
     id = LobbyChat_GetUserIdFromNick(nick);
@@ -71,10 +71,10 @@ BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *chan
         return FALSE;
     }
     LobbyChannelMap_Find(&it, channels, channel);
-    if (it.current == &channels->head) {
+    if (it.current == &channels->root) {
         return FALSE;
     }
-    if (!LobbyUserIdSet_EraseKey((Tree *)((u8 *)it.current + 0x1c), &id)) {
+    if (!LobbyUserIdSet_EraseKey(&((LobbyChannelMapNode *)it.current)->entry.channel.users, &id)) {
         return FALSE;
     }
     LobbyChat_RemoveUserIfUnused(manager, id);

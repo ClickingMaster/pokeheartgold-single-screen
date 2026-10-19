@@ -8,12 +8,12 @@
 #include "lobby_chat_internal.h"
 
 void *LobbyChatManager_Destroy(LobbyChatManager *manager) {
-    LobbyTimerMap_Clear(manager->timerMap);
-    LobbyTimerMap_Destroy(manager->timerMap);
-    LobbyRequestMap_DeleteAll((Tree *)&manager->requestMap);
+    LobbyTimerMap_Clear(&manager->timerMap);
+    LobbyTimerMap_Destroy(&manager->timerMap);
+    LobbyRequestMap_DeleteAll(&manager->requestMap);
     LobbyRequestMap_Destroy(&manager->requestMap);
-    LobbyChannelMap_Destroy(manager->channelMap);
-    LobbyUserMap_Destroy(manager->userMap);
+    LobbyChannelMap_Destroy(&manager->channelMap);
+    LobbyUserMap_Destroy(&manager->userMap);
     LobbyString_Destroy(&manager->channelPrefix);
     LobbyString_Destroy(&manager->gameKey);
     LobbyString_Destroy(&manager->gameName);
@@ -31,21 +31,21 @@ void LobbyChat_StripChannelPrefix(Str *out, LobbyChatManager *manager, Str *name
     LobbyString_Substr(out, name, StrSize(&manager->channelPrefix), -1);
 }
 
-void LobbyChat_StripChannelPrefixes(Vec *out, LobbyChatManager *manager, int n, u32 *arr) {
+void LobbyChat_StripChannelPrefixes(LobbyU32Vector *out, LobbyChatManager *manager, int n, u32 *arr) {
     int i;
-    out->ptr = NULL;
+    out->data = NULL;
     out->size = 0;
-    out->cap = 0;
+    out->capacity = 0;
     for (i = 0; i < n; i++) {
         u32 v;
         v = arr[i] + StrSize(&manager->channelPrefix);
         TagTemp();
-        if (out->size < out->cap) {
+        if (out->size < out->capacity) {
             out->size++;
-            ((u32 *)out->ptr)[out->size - 1] = v;
+            out->data[out->size - 1] = v;
         } else {
-            Tag t1;
-            t1 = (Tag) { 0 };
+            LobbyTag t1;
+            t1 = (LobbyTag) { 0 };
             LobbyU32Vector_PushBackSlow(out, &v, t1);
         }
     }
@@ -58,7 +58,7 @@ void LobbyChat_FormatNick(char *buf, int userId) {
 }
 
 int LobbyChat_GetUserIdFromNick(Str *nick) {
-    Vec parts;
+    LobbyStringVector parts;
     Str separator;
     int id;
     LobbyString_InitFromCStr(&separator, sStr___2);
@@ -68,7 +68,7 @@ int LobbyChat_GetUserIdFromNick(Str *nick) {
         LobbyStringVector_Destroy(&parts);
         return -1;
     }
-    id = atol(StrData((Str *)parts.ptr + 1));
+    id = atol(StrData(&parts.data[1]));
     if (id == 0) {
         LobbyStringVector_Destroy(&parts);
         return -1;

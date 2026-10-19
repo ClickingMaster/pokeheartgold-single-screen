@@ -3,30 +3,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct AlignmentProbe {
-    u32 prefix;
-    u64 value;
-} AlignmentProbe;
+#include "lobby_timer.h"
 
-typedef char WordAlignedU64[(sizeof(AlignmentProbe) == 12) ? 1 : -1];
-
-typedef struct Body {
-    u64 a, b;
-    u32 c, d;
-} Body;
-
-typedef struct Record {
-    int type;
-    Body payload;
-} Record;
-
-void LobbyTimerMap_MakeEntry(Record *, int, Body *);
-
-void LobbyTimerMap_MakeEntry(Record *p, int type, Body *q) {
-    u8 *base = (u8 *)&p->payload;
-    p->type = type;
-    *(u64 *)base = q->a;
-    *(u64 *)(base + 8) = q->b;
-    *(u32 *)(base + 16) = q->c;
-    *(u32 *)(base + 20) = q->d;
+void LobbyTimerMap_MakeEntry(LobbyTimerMapEntry *entry, int id, LobbyTimer *timer) {
+    LobbyTimer *dst = &entry->timer;
+    entry->id = id;
+    dst->lastTime = timer->lastTime;
+    dst->interval = timer->interval;
+    dst->param = timer->param;
+    dst->callback = timer->callback;
 }

@@ -1,5 +1,9 @@
 #include <nitro/types.h>
 
+extern "C" {
+#include <nitro/rtc.h>
+}
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 extern "C" char *strncpy(char *, const char *, unsigned);
@@ -38,14 +42,6 @@ struct Str {
         LobbyString_Assign(this, &o);
         return *this;
     }
-};
-
-struct Date {
-    u32 year, month, day, week;
-};
-
-struct Time {
-    u32 hour, minute, second;
 };
 
 struct User {
@@ -120,8 +116,7 @@ extern "C" char sFmt_M_IntUnderscoreUint[];
 extern "C" void PPWLobby_TimerSendRecruitInfo();
 extern "C" u32 current_time(void);
 extern "C" Str LobbyString_FormatN(int, const char *, ...);
-extern "C" void DWC_GetDateTime(Date *, Time *);
-extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
+extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
 extern "C" RawEntry LobbyTimerMap_MakeEntry(int, const Info &);
 extern "C" Result LobbyTimerMap_Insert(Container *, const Entry &);
 extern "C" int PPW_LobbyStartRecruit(User *u);
@@ -175,8 +170,8 @@ extern "C" int PPW_LobbyStartRecruit(User *u) {
     }
     strncpy(u->name, value.CStr(), 19);
     Work *h = gPPWLobbyWork;
-    Date date;
-    Time time;
+    RTCDate date;
+    RTCTime time;
     DWC_GetDateTime(&date, &time);
     InsertEntry(&h->entries, ConvertEntry(Tag(), LobbyTimerMap_MakeEntry(3, Info(RTC_ConvertDateTimeToSecond(&date, &time), 21, PPWLobby_TimerSendRecruitInfo))));
     LobbyString_Destroy(&value);

@@ -1,21 +1,16 @@
 #include <nitro/types.h>
 
+extern "C" {
+#include <nitro/rtc.h>
+}
+
 #include "ppw_lobby_state.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <size_t.h>
 
-struct Date {
-    u32 year, month, day, week;
-};
-
-struct Time {
-    u32 hour, minute, second;
-};
-
-extern "C" void DWC_GetDateTime(Date *, Time *);
-extern "C" s64 RTC_ConvertDateTimeToSecond(const Date *, const Time *);
+extern "C" void DWC_GetDateTime(RTCDate *, RTCTime *);
 extern "C" void *LobbyMem_Alloc(u32);
 extern "C" void DWC_Free(int, void *, int);
 extern "C" char gPPWLobbyPlayersVtable[], gPPWLobbyPlayerVtable[];
@@ -103,8 +98,8 @@ struct Info {
         : id(5)
         , mid(0)
         , z(0) {
-        Time time;
-        Date date;
+        RTCTime time;
+        RTCDate date;
         DWC_GetDateTime(&date, &time);
         mid = RTC_ConvertDateTimeToSecond(&date, &time);
     }

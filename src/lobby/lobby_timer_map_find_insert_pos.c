@@ -3,28 +3,18 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct Node {
-    void *left, *right;
-    u32 parent, key;
-} Node;
+#include "lobby_timer.h"
 
-typedef struct {
-    u32 pad;
-    void *root;
-} Tree;
-
-Node *LobbyTimerMap_FindInsertPos(Tree *, const u32 *, Node **, u8 *, u8 *);
-
-Node *LobbyTimerMap_FindInsertPos(Tree *t, const u32 *key, Node **last, u8 *left, u8 *first) {
-    Node *n;
-    Node *parent = (Node *)&t->root;
+LobbyTimerMapNode *LobbyTimerMap_FindInsertPos(LobbyTimerMap *map, const u32 *key, LobbyTimerMapNode **last, u8 *left, u8 *first) {
+    LobbyTimerMapNode *n;
+    LobbyTimerMapNode *parent = (LobbyTimerMapNode *)&map->root;
     *last = NULL;
-    n = t->root;
+    n = map->root;
     *left = 1;
     *first = 1;
     while (n) {
         parent = n;
-        if (*key < n->key) {
+        if (*key < n->id) {
             n = n->left;
             *left = 1;
         } else {

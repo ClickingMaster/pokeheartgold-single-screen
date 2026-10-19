@@ -39,17 +39,17 @@ int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n) {
 }
 
 // Find the parent for a new node with this key, the last node not greater than it, and which side it goes on.
-Node *LobbyRequestMap_FindInsertPos(Tree *t, LobbyRequest **key, Node **pos, u8 *insertLeft, u8 *isLeftmost) {
-    Node *parent;
-    Node *n;
+LobbyRequestMapNode *LobbyRequestMap_FindInsertPos(LobbyRequestMap *map, LobbyRequest **key, LobbyRequestMapNode **pos, u8 *insertLeft, u8 *isLeftmost) {
+    LobbyRequestMapNode *parent;
+    LobbyRequestMapNode *n;
     *pos = NULL;
-    n = t->head.left;
+    n = map->root;
     *insertLeft = 1;
     *isLeftmost = 1;
-    parent = &t->head;
+    parent = (LobbyRequestMapNode *)&map->root;
     while (n != NULL) {
         parent = n;
-        if ((*key)->id < n->key.request->id) {
+        if ((*key)->id < n->request->id) {
             n = n->left;
             *insertLeft = 1;
         } else {
@@ -123,7 +123,7 @@ void LobbyMem_ReleaseReserve(void) {
     }
 }
 
-BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id) {
+BOOL LobbyRequestMap_DeleteKey(LobbyRequestMap *map, u32 id) {
     LobbyRequest key;
     Iter tmp;
     LobbyRequest *pk;
@@ -133,43 +133,43 @@ BOOL LobbyRequestMap_DeleteKey(Tree *t, u32 id) {
     key.id = id;
     key.param = 0;
     pk = &key;
-    LobbyRequestMap_Find(&it, t, &pk);
+    LobbyRequestMap_Find(&it, map, &pk);
     tmp = it;
-    if (it.current == &t->head) {
+    if (it.current == &map->root) {
         return FALSE;
     }
-    if (((Node *)it.current)->key.request != NULL) {
-        ((Node *)it.current)->key.request->vtable->destroyAndFree(((Node *)it.current)->key.request);
+    if (((LobbyRequestMapNode *)it.current)->request != NULL) {
+        ((LobbyRequestMapNode *)it.current)->request->vtable->destroyAndFree(((LobbyRequestMapNode *)it.current)->request);
     }
-    LobbyRequestMap_Erase(&res, t, tmp);
+    LobbyRequestMap_Erase(&res, map, tmp);
     return TRUE;
 }
 
-void LobbyRequestMap_DeleteAll(Tree *t) {
+void LobbyRequestMap_DeleteAll(LobbyRequestMap *map) {
     Iter it;
     Iter tmp;
     Iter res;
-    it.current = t->head.right;
-    while (it.current != &t->head) {
-        LobbyRequest *request = ((Node *)it.current)->key.request;
+    it.current = map->leftmost;
+    while (it.current != &map->root) {
+        LobbyRequest *request = ((LobbyRequestMapNode *)it.current)->request;
         if (request != NULL) {
             request->vtable->destroyAndFree(request);
         }
         tmp.current = it.current;
         ov45_02236E58(&it);
-        LobbyRequestMap_Erase(&res, t, tmp);
+        LobbyRequestMap_Erase(&res, map, tmp);
     }
 }
 
-void LobbyRequestMap_Erase(Iter *out, Tree *t, Iter pos) {
-    Node *n = pos.current;
-    if (n == t->head.right) {
+void LobbyRequestMap_Erase(Iter *out, LobbyRequestMap *map, Iter pos) {
+    LobbyRequestMapNode *n = pos.current;
+    if (n == map->leftmost) {
         ov45_02236E58(&pos);
-        t->head.right = pos.current;
+        map->leftmost = pos.current;
     }
-    out->current = LobbyTree_EraseRebalance(n, t->head.left);
+    out->current = LobbyTree_EraseRebalance(n, map->root);
     if (n != NULL) {
         DWC_Free(0, n, 0);
     }
-    t->count--;
+    map->count--;
 }

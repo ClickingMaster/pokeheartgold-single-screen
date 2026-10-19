@@ -1,21 +1,19 @@
 #include <nitro/types.h>
 
+extern "C" {
+#include <nitro/rtc.h>
+}
+
 #include "ppw_lobby_state.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+#include "lobby_timer.h"
+
 #include <string.h>
 using std::memcmp;
 
-typedef struct RTCDate {
-    u32 year, month, day, week;
-} RTCDate;
-
-typedef struct RTCTime {
-    u32 hour, minute, second;
-} RTCTime;
-
-extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
 extern "C" void MI_CpuCopy8(const void *src, void *dst, u32 size);
 
 typedef union Str {
@@ -51,14 +49,6 @@ typedef struct Tree {
     u32 unk;
     void *first;
 } Tree;
-
-typedef struct Timer {
-    u32 link[4];
-    s64 last;
-    s64 interval;
-    void *arg;
-    int (*fn)(void *);
-} Timer;
 
 typedef struct Pair {
     s64 v;
@@ -159,7 +149,7 @@ typedef struct Lobby {
     u8 pade0[0xe8 - 0xe0];
     Sub sub;
     u8 pad12c[0x134 - 0x12c];
-    Tree timers;
+    LobbyTimerMap timers;
     int x144;
     u8 pad148[0x170 - 0x148];
     Vec vec170;
@@ -192,8 +182,6 @@ extern "C" int PPW_LobbyShutdownAsync(void);
 extern "C" Vec *LobbyVipVector_Destroy(Vec *);
 extern "C" void *LobbyEventDeque_Destroy(void *);
 extern "C" Vec *LobbyEventVector_Destroy(Vec *);
-extern "C" void LobbyTimerMap_Clear(Tree *);
-extern "C" void *LobbyTimerMap_Destroy(Tree *);
 extern "C" void PPWLobbyPlayers_Clear(void *);
 extern "C" Vec *LobbyCharVector_Destroy(Vec *);
 extern "C" void *PPWLobbyPlayerSet_Destroy(Tree *);
@@ -201,7 +189,7 @@ extern "C" Str *LobbyString_Destroy(Str *);
 extern "C" int LobbyChat_GetLastError(void);
 extern "C" int DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void ov45_02236E58(Iterator *it);
-extern "C" void LobbyTimerMap_Erase(Iterator *result, Tree *t, Iterator node);
+extern "C" void LobbyTimerMap_Erase(Iterator *result, LobbyTimerMap *map, Iterator node);
 extern "C" void PPWLobbyPlayers_UpdateStates(void *);
 extern "C" void PPWLobbySchedule_Process(void *);
 extern "C" Str *LobbyString_InitFromCStr(Str *s, char *text);
@@ -346,10 +334,10 @@ static inline bool Lobby_IsError(void) {
     return gPPWLobbyWork != NULL && gPPWLobbyWork->GetState() == 10;
 }
 
-static inline int Timer_Update(Timer *t, s64 now) {
-    if (now - t->last > t->interval) {
-        t->last = now;
-        if (!t->fn(t->arg)) {
+static inline int Timer_Update(LobbyTimerMapNode *t, s64 now) {
+    if (now - t->timer.lastTime > t->timer.interval) {
+        t->timer.lastTime = now;
+        if (!t->timer.callback(t->timer.param)) {
             return 0;
         }
     }
@@ -371,10 +359,10 @@ static inline void Lobby_UpdateTimers(void) {
     Iterator it;
     DWC_GetDateTime(&date, &time);
     now = RTC_ConvertDateTimeToSecond(&date, &time);
-    it.current = w->timers.first;
+    it.current = w->timers.leftmost;
     end = &w->timers.root;
     while (it.current != end) {
-        if (!Timer_Update((Timer *)it.current, now)) {
+        if (!Timer_Update((LobbyTimerMapNode *)it.current, now)) {
             void *saved = it.current;
             Iterator res;
             ov45_02236E58(&it);

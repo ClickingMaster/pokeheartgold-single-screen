@@ -1,38 +1,27 @@
 #include <nitro/types.h>
 
+extern "C" {
+#include <nitro/rtc.h>
+}
+
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-struct RTCDate {
-    u32 year, month, day, week;
-};
+#include "lobby_chat_manager.h"
 
-struct RTCTime {
-    u32 hour, minute, second;
-};
-
-extern "C" s64 RTC_ConvertDateTimeToSecond(const RTCDate *date, const RTCTime *time);
 extern "C" void DWC_GetDateTime(RTCDate *date, RTCTime *time);
 extern "C" void chatThink(void *chat);
 
-struct Node {
-    Node *a, *b, *c;
-    u32 key;
-    s64 last;
-    s64 interval;
-    void *arg;
-    int (*cb)(void *arg);
-};
 struct It;
 extern "C" void ov45_02236E58(It *it);
 
 struct It {
-    Node *n;
+    LobbyTimerMapNode *n;
 
     It() {
     }
 
-    It(Node *p)
+    It(LobbyTimerMapNode *p)
         : n(p) {
     }
 
@@ -42,7 +31,7 @@ struct It {
     }
 
     It operator++(int) {
-        Node *old = n;
+        LobbyTimerMapNode *old = n;
         ov45_02236E58(this);
         return It(old);
     }
@@ -51,30 +40,12 @@ struct It {
         return n != o.n;
     }
 
-    Node *operator->() const {
+    LobbyTimerMapNode *operator->() const {
         return n;
     }
 };
 
-struct Tree {
-    u32 size;
-    Node header;
-};
-
-extern "C" It LobbyTimerMap_Erase(Tree *t, It pos);
-
-struct Mgr {
-    void *connection;
-    int state;
-    u8 pad8[0x54 - 0x8];
-    u32 unk54;
-    u32 lastError;
-    int connectedFrames;
-    u8 pad60[0x9C - 0x60];
-    Tree tree;
-};
-
-extern "C" Mgr *gLobbyChatManager;
+extern "C" It LobbyTimerMap_Erase(LobbyTimerMap *t, It pos);
 
 static inline bool IsFatal() {
     return gLobbyChatManager != NULL && gLobbyChatManager->state == 5;
@@ -84,22 +55,22 @@ static inline int GetState() {
     return gLobbyChatManager->state;
 }
 
-static inline bool Tick(Node *n, const s64 &now) {
-    if (now - n->last > n->interval) {
-        n->last = now;
-        if (!n->cb(n->arg)) {
+static inline bool Tick(LobbyTimerMapNode *n, const s64 &now) {
+    if (now - n->timer.lastTime > n->timer.interval) {
+        n->timer.lastTime = now;
+        if (!n->timer.callback(n->timer.param)) {
             return false;
         }
     }
     return true;
 }
 
-static inline void SetError(Mgr *m, u32 code) {
+static inline void SetError(LobbyChatManager *m, u32 code) {
     m->lastError = code;
     m->state = 5;
 }
 
-static inline void UpdateState(Mgr *m) {
+static inline void UpdateState(LobbyChatManager *m) {
     switch (m->state) {
     case 0:
     case 1:
@@ -117,17 +88,17 @@ static inline void UpdateState(Mgr *m) {
     }
 }
 
-static inline int Timer_Update(Node *t, s64 now) {
-    if (now - t->last > t->interval) {
-        t->last = now;
-        if (!t->cb(t->arg)) {
+static inline int Timer_Update(LobbyTimerMapNode *t, s64 now) {
+    if (now - t->timer.lastTime > t->timer.interval) {
+        t->timer.lastTime = now;
+        if (!t->timer.callback(t->timer.param)) {
             return 0;
         }
     }
     return 1;
 }
 
-static inline It Iterator_Make(Node *p) {
+static inline It Iterator_Make(LobbyTimerMapNode *p) {
     It t;
     t.n = p;
     return t;
@@ -138,7 +109,7 @@ extern "C" int LobbyChat_Process(void);
 #pragma opt_common_subs off
 
 extern "C" int LobbyChat_Process(void) {
-    Mgr *g = gLobbyChatManager;
+    LobbyChatManager *g = gLobbyChatManager;
     if (g == NULL) {
         return 0;
     }
@@ -149,30 +120,30 @@ extern "C" int LobbyChat_Process(void) {
     if (p != NULL) {
         chatThink(p);
     }
-    Mgr *w = gLobbyChatManager;
+    LobbyChatManager *w = gLobbyChatManager;
     RTCTime time;
     RTCDate date;
     s64 now;
-    Node *end;
+    LobbyTimerMapNode *end;
     It it;
     DWC_GetDateTime(&date, &time);
     now = RTC_ConvertDateTimeToSecond(&date, &time);
-    it.n = w->tree.header.c;
-    end = &w->tree.header;
-    for (Node *n = it.n; n != end; n = it.n) {
+    it.n = w->timerMap.leftmost;
+    end = (LobbyTimerMapNode *)&w->timerMap.root;
+    for (LobbyTimerMapNode *n = it.n; n != end; n = it.n) {
         if (!Timer_Update(n, now)) {
-            Node *saved = it.n;
+            LobbyTimerMapNode *saved = it.n;
             ov45_02236E58(&it);
-            LobbyTimerMap_Erase(&w->tree, Iterator_Make(saved));
+            LobbyTimerMap_Erase(&w->timerMap, Iterator_Make(saved));
         } else {
             ov45_02236E58(&it);
         }
     }
-    Mgr *g2 = gLobbyChatManager;
+    LobbyChatManager *g2 = gLobbyChatManager;
     if (g2 != NULL && g2->state == 5) {
         return 5;
     }
-    Mgr *m2 = gLobbyChatManager;
+    LobbyChatManager *m2 = gLobbyChatManager;
     if (g2->unk54 >= 3) {
         g2->unk54 = 0;
         SetError(gLobbyChatManager, 3);

@@ -29,6 +29,25 @@ typedef void (*LobbyGetChannelKeysCallback)(BOOL success, const char *channel, i
 typedef void (*LobbyEnumChannelsCallback)(BOOL success, u32 count, const char *channels, u32 topics, u32 userCounts, u32 param);
 typedef void (*LobbyEnumUsersCallback)(BOOL success, const char *channel, u32 count, void *userIds, u32 param);
 
+// The chat manager's requests by id. The root field is also the map's end node: end() points at it.
+typedef struct LobbyRequestMapNode {
+    struct LobbyRequestMapNode *left;
+    struct LobbyRequestMapNode *right;
+    struct LobbyRequestMapNode *parent;
+    LobbyRequest *request;
+} LobbyRequestMapNode;
+
+typedef struct LobbyRequestMap {
+    u32 count;
+    LobbyRequestMapNode *root;
+    LobbyRequestMapNode *leftmost;
+} LobbyRequestMap;
+
+typedef struct LobbyRequestMapInsertResult {
+    LobbyRequestMapNode *node;
+    u8 inserted;
+} LobbyRequestMapInsertResult;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,6 +58,10 @@ extern LobbyRequestVtable gLobbyGetChannelKeysRequestVtable;
 extern LobbyRequestVtable gLobbyEnterChannelRequestVtable;
 extern LobbyRequestVtable gLobbyEnumUsersRequestVtable;
 extern LobbyRequestVtable gLobbyEnumChannelsRequestVtable;
+
+void *LobbyRequestMap_Destroy(LobbyRequestMap *);
+void LobbyRequestMap_DestroyNodes(LobbyRequestMap *, LobbyRequestMapNode *);
+LobbyRequestMapNode *LobbyRequestMap_InsertNode(LobbyRequestMap *, LobbyRequestMapNode *, int, int, LobbyRequest *const *);
 
 #ifdef __cplusplus
 }
@@ -81,14 +104,6 @@ struct LobbyEnumUsersRequest : LobbyChatRequest {
     LobbyEnumUsersCallback callback;
 };
 
-// The chat manager's requests by id.
-struct LobbyRequestMapNode {
-    LobbyRequestMapNode *left;
-    LobbyRequestMapNode *right;
-    LobbyRequestMapNode *parent;
-    LobbyChatRequest *request;
-};
-
 struct LobbyRequestMapIterator {
     LobbyRequestMapNode *node;
 
@@ -97,23 +112,6 @@ struct LobbyRequestMapIterator {
 
     LobbyRequestMapIterator(LobbyRequestMapNode *node)
         : node(node) {
-    }
-};
-
-struct LobbyRequestMap {
-    u32 count;
-    LobbyRequestMapNode header;
-
-    LobbyRequestMapIterator end() {
-        return LobbyRequestMapIterator(&header);
-    }
-};
-
-struct LobbyRequestMapInsertResult {
-    LobbyRequestMapIterator position;
-    bool inserted;
-
-    LobbyRequestMapInsertResult() {
     }
 };
 
