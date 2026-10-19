@@ -85,6 +85,5 @@ void WiFiPlazaPlayerState_NextStep(WiFiPlazaPlayerState *state);
 void WiFiPlazaPlayerState_SetActive(WiFiPlazaPlayerStateManager *manager, u32 index, u8 active);
 void WiFiPlazaPlayerState_InitOwn(WiFiPlazaRoomWork *room);
 void WiFiPlazaPlayerState_InitOthers(WiFiPlazaRoomWork *room);
-void WiFiPlazaPlayerState_RunTileAction(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index, const WiFiPlazaTileAction *actions, u32 tile);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_PLAYER_STATE_H

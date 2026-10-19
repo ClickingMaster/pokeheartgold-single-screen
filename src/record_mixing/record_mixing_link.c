@@ -10,6 +10,7 @@ static void RecordMixingLink_RecvUnused108(int sender, int size, void *data, voi
 static void RecordMixingLink_RecvUnused109(int sender, int size, void *data, void *context);
 static void RecordMixingLink_RecvCloseYesNo(int sender, int size, void *data, void *context);
 static void RecordMixingLink_RecvJoinNotice(int sender, int size, void *data, void *context);
+static void RecordMixingLink_SendRecords(RecordMixingApp *room, int unused);
 static u32 RecordMixingLink_GetSize0(void);
 static u32 RecordMixingLink_GetSize1(void);
 static u32 RecordMixingLink_GetJoinRequestSize(void);
@@ -244,7 +245,7 @@ static void RecordMixingLink_RecvJoinNotice(int sender, int size, void *data, vo
     }
 }
 
-void RecordMixingLink_SendRecords(RecordMixingApp *room, int unused) {
+static void RecordMixingLink_SendRecords(RecordMixingApp *room, int unused) {
     int i;
     u32 checksum = 0;
     u32 *p = room->sendBuffer.records;

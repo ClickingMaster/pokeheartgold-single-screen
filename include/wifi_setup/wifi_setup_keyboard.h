@@ -72,18 +72,7 @@ void WifiSetupKeyboard_SetCanType(int canType);
 BOOL WifiSetupKeyboard_Exists(void);
 
 void WifiSetupKeyboard_SlideInRow0Task(void *task);
-void WifiSetupKeyboard_SlideInRow1Task(void *task);
-void WifiSetupKeyboard_SlideInRow2Task(void *task);
 void WifiSetupKeyboard_SlideInRow3Task(void *task);
-void WifiSetupKeyboard_SlideInButtonsTask(void *task);
-void WifiSetupKeyboard_InputTask(void);
-void WifiSetupKeyboard_HandleTouchPress(void);
-void WifiSetupKeyboard_HandleTouchRelease(void);
-void WifiSetupKeyboard_ToggleAltPage(void);
-void WifiSetupKeyboard_ToggleShift(void);
-void WifiSetupKeyboard_HandleTouchHold(void);
-void WifiSetupKeyboard_SetHoveredKey(int key);
-void WifiSetupKeyboard_HandleButtons(void);
 // Moves row `row` (4: the buttons) of page `page` to height y.
 void WifiSetupKeyboard_SetRowY();
 void WifiSetupKeyboard_SetPage(int page);
@@ -91,11 +80,6 @@ void WifiSetupKeyboard_SetKeyHighlight(int key, int highlighted);
 void WifiSetupKeyboard_UpdateCursor(void);
 void WifiSetupKeyboard_MoveCursor(int direction);
 void WifiSetupKeyboard_SlideOutButtonsTask(void *task);
-void WifiSetupKeyboard_SlideOutRow3Task(void *task);
-void WifiSetupKeyboard_SlideOutRow2Task(void *task);
-void WifiSetupKeyboard_SlideOutRow1Task(void *task);
-void WifiSetupKeyboard_SlideOutRow0Task(void *task);
-void WifiSetupKeyboard_DestroyTask(void *task);
 
 void WifiSetupSound_Play(int seq);
 

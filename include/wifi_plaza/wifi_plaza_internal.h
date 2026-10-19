@@ -1032,7 +1032,7 @@ void WiFiPlaza_GetLongitude(NARC *narc, enum HeapID heapID, int country, u16 reg
 extern const WiFiPlazaAvatarEntry gWiFiPlazaAvatars[16];
 extern u16 (*const gWiFiPlazaNewsEventSlotGetters[9])(WiFiPlazaNewsEvent *event, u32 index); // lobby slot of a news event per type
 extern const char *gWiFiPlazaLocationListKey;                                                 // lobby data key of the location list
-extern void (*const sWiFiPlazaPlayerObjectActions[])(WiFiPlazaPlayerObject *object);       // per player action
+extern void (*const gWiFiPlazaPlayerObjectActions[])(WiFiPlazaPlayerObject *object);       // per player action
 
 // lobby library
 int PPW_LobbyGetSchedule(WiFiPlazaLobbySchedule *data, u32 *size);

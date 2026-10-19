@@ -30,6 +30,17 @@ enum GlobalTerminalSocketError {
     GTS_SOCKET_ERROR_TOKEN,
 };
 
+// SOC_* socket interface values
+#define SOC_PF_INET      2
+#define SOC_SOCK_STREAM  1
+#define SOC_F_GETFL      3
+#define SOC_F_SETFL      4
+#define SOC_O_NONBLOCK   4
+#define SOC_SHUT_RDWR    2
+#define SOC_EAGAIN       -6
+#define SOC_EINPROGRESS  -26
+#define SOC_EISCONN      -30
+
 typedef struct GlobalTerminalSocket {
     GlobalTerminalNetLogin login;
     BOOL hasToken;
@@ -332,6 +343,7 @@ static int GlobalTerminalSocket_SendRequest(int command, void *payload, void *re
     case GTS_SOCKET_STATE_SEND:
     case GTS_SOCKET_STATE_RECEIVE:
         GlobalTerminalSocket_Unlock();
+        // BUG: the state and error are written after the lock is released, while the socket thread may run
         sGlobalTerminalSocket.state = GTS_SOCKET_STATE_ERROR;
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_BUSY;
         return 0;
@@ -513,13 +525,13 @@ static int GlobalTerminalSocket_ResolveHost(char *host, char *out) {
 
 static int GlobalTerminalSocket_Open(void) {
     char address[16];
-    sGlobalTerminalSocket.socket = SOC_Socket(2, 1, 0);
+    sGlobalTerminalSocket.socket = SOC_Socket(SOC_PF_INET, SOC_SOCK_STREAM, 0);
     if (sGlobalTerminalSocket.socket == -1) {
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_SOCKET;
         return 0;
     }
-    int mode = SOC_Fcntl(sGlobalTerminalSocket.socket, 3, 0);
-    if (SOC_Fcntl(sGlobalTerminalSocket.socket, 4, mode | 4) < 0) {
+    int mode = SOC_Fcntl(sGlobalTerminalSocket.socket, SOC_F_GETFL, 0);
+    if (SOC_Fcntl(sGlobalTerminalSocket.socket, SOC_F_SETFL, mode | SOC_O_NONBLOCK) < 0) {
         sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_NONBLOCKING;
         return 0;
     }
@@ -535,7 +547,7 @@ static void GlobalTerminalSocket_Close(void) {
     if (sGlobalTerminalSocket.socket == -1) {
         return;
     }
-    SOC_Shutdown(sGlobalTerminalSocket.socket, 2);
+    SOC_Shutdown(sGlobalTerminalSocket.socket, SOC_SHUT_RDWR);
     SOC_Close(sGlobalTerminalSocket.socket);
     sGlobalTerminalSocket.socket = -1;
 }
@@ -549,8 +561,8 @@ static int GlobalTerminalSocket_Connect(void) {
     GlobalTerminalSocketAddress address;
     u32 start;
     int result;
-    address.length = 8;
-    address.family = 2;
+    address.length = sizeof(address);
+    address.family = SOC_PF_INET;
     address.port = GlobalTerminalSocket_SwapBytes(sGlobalTerminalSocketSettings.port);
     address.address = sGlobalTerminalSocket.address;
     start = OS_GetTick() / GTS_SOCKET_TICKS_PER_SECOND;
@@ -559,7 +571,7 @@ static int GlobalTerminalSocket_Connect(void) {
         if (result >= 0) {
             break;
         }
-        if (result == -26) {
+        if (result == SOC_EINPROGRESS) {
             if (sGlobalTerminalSocket.connectTimeout != 0) {
                 int elapsed = OS_GetTick() / GTS_SOCKET_TICKS_PER_SECOND - start;
                 if (elapsed >= sGlobalTerminalSocket.connectTimeout) {
@@ -567,7 +579,7 @@ static int GlobalTerminalSocket_Connect(void) {
                     return 0;
                 }
             }
-        } else if (result == -30) {
+        } else if (result == SOC_EISCONN) {
             break;
         } else {
             sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_CONNECT;
@@ -594,7 +606,7 @@ static int GlobalTerminalSocket_Send(void) {
             size = sGlobalTerminalSocket.requestSize;
         }
         int result = SOC_Send(sGlobalTerminalSocket.socket, sGlobalTerminalSocket.request + sent, size, 0);
-        if (result != -6) {
+        if (result != SOC_EAGAIN) {
             if (result < 0) {
                 sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_SEND;
                 return 0;
@@ -635,7 +647,7 @@ static int GlobalTerminalSocket_Receive(void) {
     start = OS_GetTick() / GTS_SOCKET_TICKS_PER_SECOND;
     for (;;) {
         int result = SOC_Recv(sGlobalTerminalSocket.socket, sGlobalTerminalSocket.response + received, sGlobalTerminalSocket.responseSize - received, 0);
-        if (result != -6) {
+        if (result != SOC_EAGAIN) {
             if (result <= 0) {
                 sGlobalTerminalSocket.error = GTS_SOCKET_ERROR_RECEIVE;
                 return 0;

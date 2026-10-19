@@ -79,6 +79,60 @@ enum WiFiPlazaSurveyAppState {
     WIFI_PLAZA_SURVEY_APP_WAIT_FADE_OUT,
 };
 
+static void WiFiPlazaSurvey_VBlankCB(void *data);
+static void WiFiPlazaSurvey_InitGraphics(WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeGraphics(WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurvey_RenderSprites(WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurvey_DoVBlankUpdates(WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeBgs(WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages);
+static String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, int msgId);
+static String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo);
+static String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo, int answer);
+static void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID);
+static void WiFiPlazaSurveyAnswer_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static BOOL WiFiPlazaSurveyAnswer_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static void WiFiPlazaSurveyAnswer_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID);
+static BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurveyAnswer_PrintAnswers(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurveyAnswer_UpdateCursor(WiFiPlazaSurveyAnswer *answer);
+static void WiFiPlazaSurveyAnswer_StartCursorAnim(WiFiPlazaSurveyAnswer *answer);
+static void WiFiPlazaSurvey_InitMessageBox(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeMessageBox(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID);
+static void WiFiPlazaSurvey_PrintMessage(WiFiPlazaSurveyMessageBox *msgBox, String *string);
+static void WiFiPlazaSurvey_PrintMessageInstant(WiFiPlazaSurveyMessageBox *msgBox, String *string);
+static void WiFiPlazaSurvey_StartWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox);
+static void WiFiPlazaSurvey_StopWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox);
+static BOOL WiFiPlazaSurvey_IsMessageFinished(WiFiPlazaSurveyMessageBox *msgBox);
+static void WiFiPlazaSurvey_ClearMessageBox(WiFiPlazaSurveyMessageBox *msgBox);
+static void WiFiPlazaSurvey_CreateYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, enum HeapID heapID);
+static u32 WiFiPlazaSurvey_HandleYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID);
+static void WiFiPlazaSurvey_DestroyYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID);
+static void WiFiPlazaSurveyResults_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static BOOL WiFiPlazaSurveyResults_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static void WiFiPlazaSurveyResults_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID);
+static void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results);
+static void WiFiPlazaSurveyResults_PrintTitle(Window *window, WiFiPlazaSurveyMessages *messages, int msgId, u32 color);
+static void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyAnswerRecord *record, enum HeapID heapID, u32 color, u32 highlightColor, BOOL highlight);
+static void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyTally *tally, WiFiPlazaSurveyWork *work, int palette);
+static BOOL WiFiPlazaSurveyResults_UpdateBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyWork *work);
+static void WiFiPlazaSurveyResults_ShowLastWeek(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID);
+static void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL current, enum HeapID heapID);
+static void WiFiPlazaSurvey_FreeQuestion(WiFiPlazaSurveyQuestion *question);
+static String *WiFiPlazaSurvey_GetQuestionText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages);
+static String *WiFiPlazaSurvey_GetAnswerText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, int answer);
+static void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally);
+static u64 WiFiPlazaSurvey_GetBarLength(WiFiPlazaSurveyTally *tally, int answer, u32 maxLength);
+static void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, struct WiFiPlazaWork *lobby);
+
 static WiFiPlazaSurveyInitFunc sWiFiPlazaSurveyInitFuncs[] = {
     [WIFI_PLAZA_SURVEY_MODE_ANSWER] = WiFiPlazaSurveyAnswer_Init,
     [WIFI_PLAZA_SURVEY_MODE_RESULTS] = WiFiPlazaSurveyResults_Init,
@@ -175,7 +229,7 @@ BOOL WiFiPlazaSurvey_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void WiFiPlazaSurvey_VBlankCB(void *data) {
+static void WiFiPlazaSurvey_VBlankCB(void *data) {
     WiFiPlazaSurvey_DoVBlankUpdates(data);
 }
 
@@ -192,7 +246,7 @@ static const GraphicsBanks sWiFiPlazaSurveyGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_NONE,
 };
 
-void WiFiPlazaSurvey_InitGraphics(WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitGraphics(WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID) {
     Options *options = Save_PlayerData_GetOptionsAddr(saveData);
     work->narc = NARC_New(NARC_a_2_0_7, heapID);
     GF_CreateVramTransferManager(32, heapID);
@@ -201,18 +255,18 @@ void WiFiPlazaSurvey_InitGraphics(WiFiPlazaSurveyWork *work, SaveData *saveData,
     WiFiPlazaSurvey_InitSpriteSystem(work, heapID);
 }
 
-void WiFiPlazaSurvey_FreeGraphics(WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurvey_FreeGraphics(WiFiPlazaSurveyWork *work) {
     NARC_Delete(work->narc);
     GF_DestroyVramTransferManager();
     WiFiPlazaSurvey_FreeBgs(work);
     WiFiPlazaSurvey_FreeSpriteSystem(work);
 }
 
-void WiFiPlazaSurvey_RenderSprites(WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurvey_RenderSprites(WiFiPlazaSurveyWork *work) {
     SpriteList_RenderAndAnimateSprites(work->spriteList);
 }
 
-void WiFiPlazaSurvey_DoVBlankUpdates(WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurvey_DoVBlankUpdates(WiFiPlazaSurveyWork *work) {
     DoScheduledBgGpuUpdates(work->bgConfig);
     OamManager_ApplyAndResetBuffers();
     GF_RunVramTransferTasks();
@@ -286,7 +340,7 @@ static const GraphicsModes sWiFiPlazaSurveyGraphicsModes = {
     ._2d3dMode = GX_BG0_AS_2D,
 };
 
-void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum HeapID heapID) {
     int i;
     SetBothScreensModesAndDisable(&sWiFiPlazaSurveyGraphicsModes);
     work->bgConfig = BgConfig_Alloc(heapID);
@@ -305,7 +359,7 @@ void WiFiPlazaSurvey_InitBgs(WiFiPlazaSurveyWork *work, Options *options, enum H
     GfGfxLoader_GXLoadPal(NARC_a_1_9_6, 0, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, heapID);
 }
 
-void WiFiPlazaSurvey_FreeBgs(WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurvey_FreeBgs(WiFiPlazaSurveyWork *work) {
     int i;
     const u32 *layer = sWiFiPlazaSurveyBgLayers;
     for (i = 0; i < 4; i++, layer++) {
@@ -321,7 +375,7 @@ static const ObjCharTransferTemplate sWiFiPlazaSurveyObjCharTransferTemplate = {
     .heapID = HEAP_ID_129,
 };
 
-void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID heapID) {
     int i;
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 31, 0, 126, 0, 31, heapID);
@@ -340,7 +394,7 @@ void WiFiPlazaSurvey_InitSpriteSystem(WiFiPlazaSurveyWork *work, enum HeapID hea
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurvey_FreeSpriteSystem(WiFiPlazaSurveyWork *work) {
     int i;
     SpriteList_Delete(work->spriteList);
     for (i = 0; i < 4; i++) {
@@ -363,7 +417,7 @@ static const int sWiFiPlazaSurveyMsgBanks[WIFI_PLAZA_SURVEY_NUM_MSG_BANKS] = {
     NARC_msg_msg_0764_bin,
 };
 
-void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFiPlazaWork *lobby, enum HeapID heapID) {
     int i;
     messages->lobby = lobby;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_MSG_BANKS; i++) {
@@ -374,7 +428,7 @@ void WiFiPlazaSurvey_InitMessages(WiFiPlazaSurveyMessages *messages, struct WiFi
     messages->raw = String_New(256, heapID);
 }
 
-void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages) {
+static void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages) {
     int i;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_MSG_BANKS; i++) {
         DestroyMsgData(messages->msgData[i]);
@@ -384,7 +438,7 @@ void WiFiPlazaSurvey_FreeMessages(WiFiPlazaSurveyMessages *messages) {
     String_Delete(messages->raw);
 }
 
-String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, int msgId) {
+static String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, int msgId) {
     GF_ASSERT((u32)bank < WIFI_PLAZA_SURVEY_NUM_MSG_BANKS);
     ReadMsgDataIntoString(messages->msgData[bank], msgId, messages->raw);
     StringExpandPlaceholders(messages->format, messages->expanded, messages->raw);
@@ -392,7 +446,7 @@ String *WiFiPlazaSurvey_GetMessage(WiFiPlazaSurveyMessages *messages, int bank, 
 }
 
 // Questions 0-49 are in msg_0761 (bank 1), the special questions 50-59 in msg_0765 (bank 2).
-String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo) {
+static String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo) {
     if (questionNo >= 60) {
         GF_ASSERT(questionNo >= 60);
         questionNo = 0;
@@ -404,7 +458,7 @@ String *WiFiPlazaSurvey_GetQuestionTextFromMsg(WiFiPlazaSurveyMessages *messages
 }
 
 // Answers A-C of questions 0-49 are in msg_0758-0760 (banks 3-5), those of 50-59 in msg_0762-0764 (banks 6-8).
-String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo, int answer) {
+static String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, u32 questionNo, int answer) {
     if (questionNo >= 60) {
         GF_ASSERT(questionNo >= 60);
         questionNo = 0;
@@ -415,7 +469,7 @@ String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, 
     return WiFiPlazaSurvey_GetMessage(messages, answer + 6, questionNo - 50);
 }
 
-void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID) {
+static void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID) {
     PlayerProfile *profile = PlayerProfile_New(heapID);
     struct WiFiPlazaPlayer *player = WiFiPlazaWork_GetMyPlayer(messages->lobby);
     WiFiPlazaPlayer_CopyToProfile(player, profile, heapID);
@@ -423,15 +477,15 @@ void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int ind
     Heap_Free(profile);
 }
 
-void WiFiPlazaSurveyAnswer_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static void WiFiPlazaSurveyAnswer_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     WiFiPlazaSurveyAnswer_Setup(&mode->answer, messages, work, heapID);
 }
 
-BOOL WiFiPlazaSurveyAnswer_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static BOOL WiFiPlazaSurveyAnswer_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     return WiFiPlazaSurveyAnswer_Run(&mode->answer, messages, work, msgBox, args, heapID);
 }
 
-void WiFiPlazaSurveyAnswer_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurveyAnswer_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
     WiFiPlazaSurveyAnswer_Teardown(&mode->answer, messages, work);
 }
 
@@ -445,7 +499,7 @@ static const WindowTemplate sWiFiPlazaSurveyAnswerWindowTemplate = {
     .baseTile = 1,
 };
 
-void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
+static void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
     SpriteResourcesHeader header;
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 0xC7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x80, heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0xC8, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapID);
@@ -473,7 +527,7 @@ void WiFiPlazaSurveyAnswer_Setup(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyM
     }
 }
 
-BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     switch (answer->state) {
     case WIFI_PLAZA_SURVEY_ANSWER_PRINT_INTRO:
         WiFiPlazaSurvey_PrintMessage(msgBox, WiFiPlazaSurvey_GetMessage(messages, 0, msg_0777_00094));
@@ -562,7 +616,7 @@ BOOL WiFiPlazaSurveyAnswer_Run(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMes
     return FALSE;
 }
 
-void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
     int i;
     WiFiPlazaSurvey_FreeQuestion(&answer->question);
     RemoveWindow(&answer->window);
@@ -574,7 +628,7 @@ void WiFiPlazaSurveyAnswer_Teardown(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurv
     }
 }
 
-void WiFiPlazaSurveyAnswer_PrintAnswers(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurveyAnswer_PrintAnswers(WiFiPlazaSurveyAnswer *answer, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
     String *string;
     FillWindowPixelBuffer(&answer->window, 0);
     string = WiFiPlazaSurvey_GetAnswerText(&answer->question, messages, 0);
@@ -592,23 +646,23 @@ static const VecFx32 sWiFiPlazaSurveyCursorPositions[WIFI_PLAZA_SURVEY_NUM_ANSWE
     { FX32_CONST(72), FX32_CONST(112), 0 },
 };
 
-void WiFiPlazaSurveyAnswer_UpdateCursor(WiFiPlazaSurveyAnswer *answer) {
+static void WiFiPlazaSurveyAnswer_UpdateCursor(WiFiPlazaSurveyAnswer *answer) {
     Sprite_SetDrawFlag(answer->cursorSprite, TRUE);
     Sprite_SetMatrix(answer->cursorSprite, (VecFx32 *)&sWiFiPlazaSurveyCursorPositions[answer->cursor]);
 }
 
-void WiFiPlazaSurveyAnswer_StartCursorAnim(WiFiPlazaSurveyAnswer *answer) {
+static void WiFiPlazaSurveyAnswer_StartCursorAnim(WiFiPlazaSurveyAnswer *answer) {
     Sprite_SetAnimActiveFlag(answer->cursorSprite, TRUE);
 }
 
-void WiFiPlazaSurvey_InitMessageBox(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitMessageBox(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, SaveData *saveData, enum HeapID heapID) {
     AddWindowParameterized(work->bgConfig, &msgBox->window, GF_BG_LYR_MAIN_1, 2, 19, 27, 4, 4, 0x28);
     FillWindowPixelBuffer(&msgBox->window, 15);
     msgBox->string = String_New(256, heapID);
     msgBox->textSpeed = Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(saveData));
 }
 
-void WiFiPlazaSurvey_FreeMessageBox(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
+static void WiFiPlazaSurvey_FreeMessageBox(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
     if (TextPrinterCheckActive(msgBox->printerId)) {
         RemoveTextPrinter(msgBox->printerId);
     }
@@ -618,7 +672,7 @@ void WiFiPlazaSurvey_FreeMessageBox(WiFiPlazaSurveyMessageBox *msgBox, enum Heap
     WiFiPlazaSurvey_DestroyYesNoMenu(msgBox, heapID);
 }
 
-void WiFiPlazaSurvey_PrintMessage(WiFiPlazaSurveyMessageBox *msgBox, String *string) {
+static void WiFiPlazaSurvey_PrintMessage(WiFiPlazaSurveyMessageBox *msgBox, String *string) {
     if (TextPrinterCheckActive(msgBox->printerId)) {
         RemoveTextPrinter(msgBox->printerId);
     }
@@ -628,7 +682,7 @@ void WiFiPlazaSurvey_PrintMessage(WiFiPlazaSurveyMessageBox *msgBox, String *str
     DrawFrameAndWindow2(&msgBox->window, TRUE, 1, 5);
 }
 
-void WiFiPlazaSurvey_PrintMessageInstant(WiFiPlazaSurveyMessageBox *msgBox, String *string) {
+static void WiFiPlazaSurvey_PrintMessageInstant(WiFiPlazaSurveyMessageBox *msgBox, String *string) {
     if (TextPrinterCheckActive(msgBox->printerId)) {
         RemoveTextPrinter(msgBox->printerId);
     }
@@ -639,23 +693,23 @@ void WiFiPlazaSurvey_PrintMessageInstant(WiFiPlazaSurveyMessageBox *msgBox, Stri
     ScheduleWindowCopyToVram(&msgBox->window);
 }
 
-void WiFiPlazaSurvey_StartWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox) {
+static void WiFiPlazaSurvey_StartWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox) {
     GF_ASSERT(msgBox->waitingIcon == NULL);
     msgBox->waitingIcon = WaitingIcon_New(&msgBox->window, 1);
 }
 
-void WiFiPlazaSurvey_StopWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox) {
+static void WiFiPlazaSurvey_StopWaitingIcon(WiFiPlazaSurveyMessageBox *msgBox) {
     if (msgBox->waitingIcon) {
         WaitingIcon_Delete(msgBox->waitingIcon);
         msgBox->waitingIcon = NULL;
     }
 }
 
-BOOL WiFiPlazaSurvey_IsMessageFinished(WiFiPlazaSurveyMessageBox *msgBox) {
+static BOOL WiFiPlazaSurvey_IsMessageFinished(WiFiPlazaSurveyMessageBox *msgBox) {
     return !TextPrinterCheckActive(msgBox->printerId);
 }
 
-void WiFiPlazaSurvey_ClearMessageBox(WiFiPlazaSurveyMessageBox *msgBox) {
+static void WiFiPlazaSurvey_ClearMessageBox(WiFiPlazaSurveyMessageBox *msgBox) {
     if (TextPrinterCheckActive(msgBox->printerId)) {
         RemoveTextPrinter(msgBox->printerId);
     }
@@ -674,12 +728,12 @@ static const WindowTemplate sWiFiPlazaSurveyYesNoTemplate = {
     .baseTile = 0x94,
 };
 
-void WiFiPlazaSurvey_CreateYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
+static void WiFiPlazaSurvey_CreateYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
     GF_ASSERT(msgBox->yesNoMenu == NULL);
     msgBox->yesNoMenu = Std_CreateYesNoMenu(work->bgConfig, &sWiFiPlazaSurveyYesNoTemplate, 31, 6, heapID);
 }
 
-u32 WiFiPlazaSurvey_HandleYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
+static u32 WiFiPlazaSurvey_HandleYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
     int result = Handle2dMenuInput_DeleteOnFinish(msgBox->yesNoMenu, heapID);
     if (result != LIST_NOTHING_CHOSEN) {
         msgBox->yesNoMenu = NULL;
@@ -687,22 +741,22 @@ u32 WiFiPlazaSurvey_HandleYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum Heap
     return result;
 }
 
-void WiFiPlazaSurvey_DestroyYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
+static void WiFiPlazaSurvey_DestroyYesNoMenu(WiFiPlazaSurveyMessageBox *msgBox, enum HeapID heapID) {
     if (msgBox->yesNoMenu) {
         Clear2dMenuWindowAndDelete(msgBox->yesNoMenu, heapID);
         msgBox->yesNoMenu = NULL;
     }
 }
 
-void WiFiPlazaSurveyResults_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static void WiFiPlazaSurveyResults_Init(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     WiFiPlazaSurveyResults_Setup(&mode->results, messages, work, args, heapID);
 }
 
-BOOL WiFiPlazaSurveyResults_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static BOOL WiFiPlazaSurveyResults_Main(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     return WiFiPlazaSurveyResults_Run(&mode->results, messages, work, msgBox, args, heapID);
 }
 
-void WiFiPlazaSurveyResults_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
+static void WiFiPlazaSurveyResults_Exit(WiFiPlazaSurveyModeWork *mode, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work) {
     WiFiPlazaSurveyResults_Teardown(&mode->results);
 }
 
@@ -763,7 +817,7 @@ static const WindowTemplate sWiFiPlazaSurveyResultsWindowTemplates[WIFI_PLAZA_SU
      },
 };
 
-void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     int i;
     GfGfxLoader_GXLoadPalFromOpenNarc(work->narc, 0xC7, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x80, heapID);
     GfGfxLoader_LoadCharDataFromOpenNarc(work->narc, 0xC8, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapID);
@@ -783,7 +837,7 @@ void WiFiPlazaSurveyResults_Setup(WiFiPlazaSurveyResults *results, WiFiPlazaSurv
     WiFiPlazaSurvey_LoadLastWeekTotals(&results->lastWeekTally);
 }
 
-BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
+static BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyMessageBox *msgBox, WiFiPlazaSurveyArgs *args, enum HeapID heapID) {
     WiFiPlazaSurveyAnswerRecord record;
     WiFiPlazaSurveyAnswerRecord savedRecord;
     void *saveBlock;
@@ -928,7 +982,7 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
     return FALSE;
 }
 
-void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results) {
+static void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results) {
     int i;
     WiFiPlazaSurvey_FreeQuestion(&results->current);
     WiFiPlazaSurvey_FreeQuestion(&results->lastWeek);
@@ -939,7 +993,7 @@ void WiFiPlazaSurveyResults_Teardown(WiFiPlazaSurveyResults *results) {
     }
 }
 
-void WiFiPlazaSurveyResults_PrintTitle(Window *window, WiFiPlazaSurveyMessages *messages, int msgId, u32 color) {
+static void WiFiPlazaSurveyResults_PrintTitle(Window *window, WiFiPlazaSurveyMessages *messages, int msgId, u32 color) {
     String *string;
     u32 width;
     FillWindowPixelBuffer(window, 0);
@@ -950,7 +1004,7 @@ void WiFiPlazaSurveyResults_PrintTitle(Window *window, WiFiPlazaSurveyMessages *
 }
 
 // Prints the question's answers and, when the player answered this survey, the player's name and answer.
-void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyAnswerRecord *record, enum HeapID heapID, u32 color, u32 highlightColor, BOOL highlight) {
+static void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyAnswerRecord *record, enum HeapID heapID, u32 color, u32 highlightColor, BOOL highlight) {
     String *string;
     int width;
     u32 nameColor;
@@ -976,7 +1030,7 @@ void WiFiPlazaSurveyResults_PrintQuestion(WiFiPlazaSurveyResults *results, WiFiP
     ScheduleWindowCopyToVram(&results->windows[1]);
 }
 
-void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyTally *tally, WiFiPlazaSurveyWork *work, int palette) {
+static void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyTally *tally, WiFiPlazaSurveyWork *work, int palette) {
     int i;
     results->barFrame = 0;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_ANSWERS; i++) {
@@ -988,7 +1042,7 @@ void WiFiPlazaSurveyResults_StartBars(WiFiPlazaSurveyResults *results, WiFiPlaza
 }
 
 // Grows the three bars to their lengths over 20 frames, one pixel column at a time.
-BOOL WiFiPlazaSurveyResults_UpdateBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyWork *work) {
+static BOOL WiFiPlazaSurveyResults_UpdateBars(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyWork *work) {
     int limit;
     int i;
     int finished;
@@ -1027,7 +1081,7 @@ BOOL WiFiPlazaSurveyResults_UpdateBars(WiFiPlazaSurveyResults *results, WiFiPlaz
     return FALSE;
 }
 
-void WiFiPlazaSurveyResults_ShowLastWeek(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
+static void WiFiPlazaSurveyResults_ShowLastWeek(WiFiPlazaSurveyResults *results, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, enum HeapID heapID) {
     int i;
     Window *window;
     GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 0xCB, work->bgConfig, GF_BG_LYR_MAIN_0, 0, 0, FALSE, heapID);
@@ -1040,7 +1094,7 @@ void WiFiPlazaSurveyResults_ShowLastWeek(WiFiPlazaSurveyResults *results, WiFiPl
 }
 
 // current: this week's survey (fields 0-3 of the lobby's survey data), else last week's (fields 4-7).
-void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL current, enum HeapID heapID) {
+static void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL current, enum HeapID heapID) {
     int base;
     int i;
     const u16 *text;
@@ -1067,7 +1121,7 @@ void WiFiPlazaSurvey_InitQuestion(WiFiPlazaSurveyQuestion *question, BOOL curren
     }
 }
 
-void WiFiPlazaSurvey_FreeQuestion(WiFiPlazaSurveyQuestion *question) {
+static void WiFiPlazaSurvey_FreeQuestion(WiFiPlazaSurveyQuestion *question) {
     int i;
     String_Delete(question->question);
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_ANSWERS; i++) {
@@ -1075,14 +1129,14 @@ void WiFiPlazaSurvey_FreeQuestion(WiFiPlazaSurveyQuestion *question) {
     }
 }
 
-String *WiFiPlazaSurvey_GetQuestionText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages) {
+static String *WiFiPlazaSurvey_GetQuestionText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages) {
     if (question->hasCustomText == FALSE) {
         return WiFiPlazaSurvey_GetQuestionTextFromMsg(messages, question->questionNo);
     }
     return question->question;
 }
 
-String *WiFiPlazaSurvey_GetAnswerText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, int answer) {
+static String *WiFiPlazaSurvey_GetAnswerText(WiFiPlazaSurveyQuestion *question, WiFiPlazaSurveyMessages *messages, int answer) {
     if (question->hasCustomText == FALSE) {
         return WiFiPlazaSurvey_GetAnswerTextFromMsg(messages, question->questionNo, answer);
     }
@@ -1090,7 +1144,7 @@ String *WiFiPlazaSurvey_GetAnswerText(WiFiPlazaSurveyQuestion *question, WiFiPla
 }
 
 // Results from all Wi-Fi Plazas last week (fields 8-10).
-void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally) {
+static void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally) {
     int i;
     tally->total = 0;
     for (i = 0; i < WIFI_PLAZA_SURVEY_NUM_ANSWERS; i++) {
@@ -1099,13 +1153,13 @@ void WiFiPlazaSurvey_LoadLastWeekTotals(WiFiPlazaSurveyTally *tally) {
     }
 }
 
-u64 WiFiPlazaSurvey_GetBarLength(WiFiPlazaSurveyTally *tally, int answer, u32 maxLength) {
+static u64 WiFiPlazaSurvey_GetBarLength(WiFiPlazaSurveyTally *tally, int answer, u32 maxLength) {
     GF_ASSERT((u32)answer < WIFI_PLAZA_SURVEY_NUM_ANSWERS);
     return (u64)maxLength * tally->counts[answer] / tally->total;
 }
 
 // Results from this Wi-Fi Plaza alone: the answers of the up to 20 players in the lobby.
-void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, struct WiFiPlazaWork *lobby) {
+static void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, struct WiFiPlazaWork *lobby) {
     int i;
     memset(tally, 0, sizeof(WiFiPlazaSurveyTally));
     for (i = 0; i < 20; i++) {

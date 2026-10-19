@@ -28,7 +28,7 @@
 // An older version of the Nintendo WFC connection app, with a scrolling number instead of the touch number pad and a
 // Yes/No prompt instead of the touch YES/NO menu. Nothing in the game launches it.
 
-extern const u16 sNintendoWfcUnusedArrowPositions[2][2];
+extern const u16 gNintendoWfcUnusedArrowPositions[2][2];
 
 enum NintendoWfcUnusedInitState {
     NINTENDO_WFC_UNUSED_INIT_SETUP,
@@ -259,8 +259,8 @@ static void NintendoWfcUnused_CreateSprites(NintendoWfcUnused *wfc) {
     CreateSpriteResourcesHeader(&wfc->spriteHeader, 0, 0, 0, 0, -1, -1, 0, 0, wfc->resMan[0], wfc->resMan[1], wfc->resMan[2], wfc->resMan[3], NULL, NULL);
     NintendoWfcUnused_InitSpriteTemplate(&template, wfc, &wfc->spriteHeader, NNS_G2D_VRAM_TYPE_2DMAIN);
     for (i = 0; i < 2; i++) {
-        template.position.x = sNintendoWfcUnusedArrowPositions[i][0] << FX32_SHIFT;
-        template.position.y = sNintendoWfcUnusedArrowPositions[i][1] << FX32_SHIFT;
+        template.position.x = gNintendoWfcUnusedArrowPositions[i][0] << FX32_SHIFT;
+        template.position.y = gNintendoWfcUnusedArrowPositions[i][1] << FX32_SHIFT;
         wfc->arrows[i] = Sprite_CreateAffine(&template);
         Sprite_SetAnimActiveFlag(wfc->arrows[i], TRUE);
         Sprite_SetAnimCtrlSeq(wfc->arrows[i], i);

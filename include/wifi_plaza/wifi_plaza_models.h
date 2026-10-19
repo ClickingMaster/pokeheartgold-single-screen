@@ -158,7 +158,6 @@ typedef struct WiFiPlazaModelsPos {
     s16 y;
 } WiFiPlazaModelsPos;
 
-void WiFiPlazaModelSet_StartPropAnim(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot, s32 mode);
 void WiFiPlazaModelSet_SetPropAnimFrame(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, int slot, fx32 frame);
 
 WiFiPlazaModels *WiFiPlazaModels_Create(int group, int variant, WiFiPlazaMap *map, enum HeapID heapID, enum HeapID dataHeapID);

@@ -22,6 +22,5 @@ void CommState_SetErrorWatch(int, int);
 void Comm_SendParentCommandNoCopy(int, const void *, int);
 
 void DrawingSessionLink_RegisterCommands(void *arg);
-void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *work, int index);
 
 #endif

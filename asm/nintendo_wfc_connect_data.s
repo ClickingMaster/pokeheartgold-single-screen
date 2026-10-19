@@ -79,21 +79,19 @@
 	.extern NintendoWfcYesNo_UnusedState2
 	.extern NintendoWfcYesNo_WaitClose
 	.public gNintendoWfcYesNoCursorPositions
-	.public sNintendoWfcRoomNumUrl
-	.public sNintendoWfcHttp
+	.public gNintendoWfcRoomNumUrl
+	.public gNintendoWfcHttp
 	.public gNintendoWfcButtonSpritePositions
-	.public sNintendoWfcObjCharTransferTemplate
-	.public sNintendoWfcGraphicsModes
+	.public gNintendoWfcObjCharTransferTemplate
+	.public gNintendoWfcGraphicsModes
 	.public gNintendoWfcDigitSpritePositions
-	.public gNintendoWfcDigitSpritePositionsY
-	.public sNintendoWfcGraphicsBanks
+	.public gNintendoWfcGraphicsBanks
 	.public gNintendoWfcPadCursorPositions
-	.public gNintendoWfcPadCursorPositionsY
-	.public sNintendoWfcBgTemplate_Sub1
-	.public sNintendoWfcBgTemplate_Sub2
-	.public sNintendoWfcBgTemplate_Main1
-	.public sNintendoWfcBgTemplate_Main0
-	.public sNintendoWfcBgTemplate_Sub0
+	.public gNintendoWfcBgTemplate_Sub1
+	.public gNintendoWfcBgTemplate_Sub2
+	.public gNintendoWfcBgTemplate_Main1
+	.public gNintendoWfcBgTemplate_Main0
+	.public gNintendoWfcBgTemplate_Sub0
 	.public gNintendoWfcPadKeysUpFromLeftButton
 	.public gNintendoWfcPadKeysDownFromLeftButton
 	.public gNintendoWfcPadKeysUpFromRightButton
@@ -102,51 +100,47 @@
 	.public gNintendoWfcPadKeyFlashes
 	.public gNintendoWfcPadNeighbors
 	.public gNintendoWfcYesNoHitboxes
-	.public sNintendoWfcDownloadUrl
-	.public sNintendoWfcUploadUrl
-	.public sNintendoWfcInfoUrl
-	.public sNintendoWfcSetProfileUrl
-	.public sNintendoWfcModeInit
-	.public sNintendoWfcModeMain
-	.public sNintendoWfcModeExit
-	.public sNintendoWfcStates
-	.public sNintendoWfcNumberInputStates
+	.public gNintendoWfcDownloadUrl
+	.public gNintendoWfcUploadUrl
+	.public gNintendoWfcInfoUrl
+	.public gNintendoWfcSetProfileUrl
+	.public gNintendoWfcScreens
+	.public gNintendoWfcStates
+	.public gNintendoWfcNumberInputStates
 	.public gNintendoWfcPadHitboxes_Max100
 	.public gNintendoWfcPadHitboxes
-	.public sNintendoWfcYesNoStates
-	.public sNintendoWfcHttpFriendKey
+	.public gNintendoWfcYesNoStates
+	.public gNintendoWfcHttpFriendKey
 	.public gNintendoWfcHttpRequestBuffer
 	.public ov72_0223B900
 	.public gNintendoWfcHttpUploadFriendKey
 	.public gNintendoWfcHttpResponse
 	.public gNintendoWfcHttpShortResponse
-	.public sNintendoWfcGlobal
+	.public gNintendoWfcGlobal
 
 	.rodata
 
-sNintendoWfcUnusedWindowTemplate:
+gNintendoWfcUnusedWindowTemplate:
 	.byte 0x00, 0x17, 0x0D, 0x07, 0x04, 0x0D, 0x00, 0x00
 
 gNintendoWfcButtonSpritePositions:
 	.byte 0x28, 0x00, 0xB0, 0x00, 0x80, 0x00, 0xB0, 0x00
 	.byte 0xD8, 0x00, 0xB0, 0x00
 
-sNintendoWfcObjCharTransferTemplate:
+gNintendoWfcObjCharTransferTemplate:
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x43, 0x00, 0x00, 0x00
 
-sNintendoWfcGraphicsModes:
+gNintendoWfcGraphicsModes:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
 gNintendoWfcDigitSpritePositions:
 	.byte 0x60, 0x00
-
-gNintendoWfcDigitSpritePositionsY:
 	.byte 0x1D, 0x00, 0x80, 0x00, 0x1D, 0x00, 0xA0, 0x00, 0x1D, 0x00
 	.byte 0x50, 0x00, 0x1D, 0x00, 0x70, 0x00, 0x1D, 0x00, 0x90, 0x00, 0x1D, 0x00
 
-sNintendoWfcGraphicsBanks:
+gNintendoWfcGraphicsBanks:
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
@@ -154,32 +148,30 @@ sNintendoWfcGraphicsBanks:
 
 gNintendoWfcPadCursorPositions:
 	.byte 0x20, 0x00
-
-gNintendoWfcPadCursorPositionsY:
 	.byte 0x51, 0x00, 0x50, 0x00, 0x51, 0x00, 0x80, 0x00, 0x51, 0x00
 	.byte 0xAE, 0x00, 0x51, 0x00, 0xE0, 0x00, 0x51, 0x00, 0x20, 0x00, 0x80, 0x00, 0x50, 0x00, 0x80, 0x00
 	.byte 0x80, 0x00, 0x80, 0x00, 0xAE, 0x00, 0x80, 0x00, 0xE0, 0x00, 0x80, 0x00, 0x28, 0x00, 0xB0, 0x00
 	.byte 0x80, 0x00, 0xB0, 0x00, 0xD8, 0x00, 0xB0, 0x00
 
-sNintendoWfcBgTemplate_Sub1:
+gNintendoWfcBgTemplate_Sub1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x02, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-sNintendoWfcBgTemplate_Sub2:
+gNintendoWfcBgTemplate_Sub2:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sNintendoWfcBgTemplate_Main1:
+gNintendoWfcBgTemplate_Main1:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sNintendoWfcBgTemplate_Main0:
+gNintendoWfcBgTemplate_Main0:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-sNintendoWfcBgTemplate_Sub0:
+gNintendoWfcBgTemplate_Sub0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -228,36 +220,30 @@ gNintendoWfcYesNoHitboxes:
 
 	.data
 
-sNintendoWfcRoomNumUrl:
+gNintendoWfcRoomNumUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/battletower/roomnum.asp"
 	.balign 4, 0
 
-sNintendoWfcDownloadUrl:
+gNintendoWfcDownloadUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/battletower/download.asp"
 	.balign 4, 0
 
-sNintendoWfcUploadUrl:
+gNintendoWfcUploadUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/battletower/upload.asp"
 	.balign 4, 0
 
-sNintendoWfcInfoUrl:
+gNintendoWfcInfoUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/battletower/info.asp"
 	.balign 4, 0
 
-sNintendoWfcSetProfileUrl:
+gNintendoWfcSetProfileUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp"
 	.balign 4, 0
 
-sNintendoWfcModeInit:
-	.word NintendoWfc_SessionInit
+gNintendoWfcScreens:
+	.word NintendoWfc_SessionInit, NintendoWfc_SessionMain, NintendoWfc_SessionExit
 
-sNintendoWfcModeMain:
-	.word NintendoWfc_SessionMain
-
-sNintendoWfcModeExit:
-	.word NintendoWfc_SessionExit
-
-sNintendoWfcStates:
+gNintendoWfcStates:
 	.word NintendoWfc_AskConnect
 	.word NintendoWfc_HandleConnectChoice
 	.word NintendoWfc_StartConnect
@@ -316,7 +302,7 @@ sNintendoWfcStates:
 	.word NintendoWfc_ShowDwcError
 	.word NintendoWfc_WaitErrorDismiss
 
-sNintendoWfcNumberInputStates:
+gNintendoWfcNumberInputStates:
 	.word NintendoWfc_NumberInput_FadeOut
 	.word NintendoWfc_NumberInput_Setup
 	.word NintendoWfc_NumberInput_WaitFadeIn
@@ -344,15 +330,15 @@ gNintendoWfcPadHitboxes:
 	.byte 0x6C, 0x93, 0x6C, 0x93, 0x6C, 0x93, 0x9E, 0xC3, 0x6C, 0x93, 0xCC, 0xF3, 0xA4, 0xBB, 0x04, 0x4B
 	.byte 0xA4, 0xBB, 0x5C, 0xA3, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
 
-sNintendoWfcYesNoStates:
+gNintendoWfcYesNoStates:
 	.word NintendoWfcYesNo_Start, NintendoWfcYesNo_HandleInput, NintendoWfcYesNo_UnusedState2, NintendoWfcYesNo_WaitClose
 
 	.bss
 
-sNintendoWfcHttp:
+gNintendoWfcHttp:
 	.space 0xC
 
-sNintendoWfcHttpFriendKey:
+gNintendoWfcHttpFriendKey:
 	.space 0x8
 
 gNintendoWfcHttpRequestBuffer:
@@ -370,5 +356,5 @@ gNintendoWfcHttpResponse:
 gNintendoWfcHttpShortResponse:
 	.space 0x9
 
-sNintendoWfcGlobal:
+gNintendoWfcGlobal:
 	.space 0x14

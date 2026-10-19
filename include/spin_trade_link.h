@@ -34,7 +34,7 @@ typedef struct SpinTradeArgs {
 } SpinTradeArgs;
 
 void *SpinTradeLink_New(SpinTradeArgs *work, enum HeapID heapID);
-void SpinTradeLink_Close(SpinTradeLink *menu);
-void SpinTradeLink_Free(SpinTradeLink *menu);
+void SpinTradeLink_Close(SpinTradeLink *link);
+void SpinTradeLink_Free(SpinTradeLink *link);
 
 #endif

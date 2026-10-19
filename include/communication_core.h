@@ -12,20 +12,17 @@ int Comm_CountConnected(void);
 BOOL Comm_IsActive(void);
 void Comm_EnableKeySync(void);
 void Comm_DisableKeySync(void);
-BOOL Comm_GetLocalNetId(void);
-void Comm_SendFixedCommandNoCopy(s32 command, SafariZoneAreaSet *areaSet);
-void Comm_SendEmptyCommand(int command);
-BOOL Comm_HasLinkError();
-int Comm_GetMaxPlayers(u32 value);
-int Comm_GetMinPlayers(u32 value);
+int Comm_GetLocalNetId(void);
+BOOL Comm_SendFixedCommandNoCopy(int command, void *data);
+BOOL Comm_SendEmptyCommand(int command);
+BOOL Comm_HasLinkError(void);
+int Comm_GetMaxPlayers(int value);
+int Comm_GetMinPlayers(int value);
 int Comm_GetBattleSlot(int slot);
 void CommState_SetUnionAppLinkMode(void);
 void CommState_SetUnionRoomLinkMode(void);
-int Comm_ParentQueueHasCommand(int value);
+BOOL Comm_ParentQueueHasCommand(int value);
 BOOL Comm_IsWifiConnected(void);
-int Comm_GetBattleSlot(int);
 BOOL Comm_IsSendingMoveKeys(void);
-void CommState_SetUnionAppLinkMode(void);
-void CommState_SetUnionRoomLinkMode(void);
 
 #endif // POKEHEARTGOLD_COMMUNICATION_CORE_H

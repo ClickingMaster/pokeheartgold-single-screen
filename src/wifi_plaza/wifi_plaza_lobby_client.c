@@ -900,30 +900,26 @@ void WiFiPlazaLobbyClient_ClearPlayerRecord(WiFiPlazaLobbyClient *client, int id
 void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID) {
     int i;
     u32 capacity;
-    WiFiPlazaLobbyClient *p;
-    for (i = 0, p = client; i < 2; i++) {
-        GF_ASSERT(p->idLists[0].ids == NULL);
+    for (i = 0; i < 2; i++) {
+        GF_ASSERT(client->idLists[i].ids == NULL);
         if (i == 0) {
             capacity = lobbyCapacity;
         } else {
             capacity = channelCapacity;
         }
-        p->idLists[0].count = 0;
-        p->idLists[0].ids = Heap_Alloc(heapID, capacity * 4);
-        p->idLists[0].capacity = capacity;
+        client->idLists[i].count = 0;
+        client->idLists[i].ids = Heap_Alloc(heapID, capacity * 4);
+        client->idLists[i].capacity = capacity;
         WiFiPlazaLobbyClient_ClearIdList(client, i);
-        p = (WiFiPlazaLobbyClient *)((u8 *)p + sizeof(WiFiPlazaLobbyIdList));
     }
 }
 
 void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
     int i;
-    WiFiPlazaLobbyClient *p;
-    for (i = 0, p = client; i < 2; i++) {
-        GF_ASSERT(p->idLists[0].ids != NULL);
-        Heap_Free(p->idLists[0].ids);
-        p->idLists[0].ids = NULL;
-        p = (WiFiPlazaLobbyClient *)((u8 *)p + sizeof(WiFiPlazaLobbyIdList));
+    for (i = 0; i < 2; i++) {
+        GF_ASSERT(client->idLists[i].ids != NULL);
+        Heap_Free(client->idLists[i].ids);
+        client->idLists[i].ids = NULL;
     }
 }
 

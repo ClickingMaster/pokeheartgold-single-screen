@@ -57,6 +57,31 @@ typedef struct WiFiPlazaObjSpawn {
     u8 pad5[3];
 } WiFiPlazaObjSpawn;
 
+static void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command);
+static void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id);
+static u8 WiFiPlazaObj_RandomPick(const u8 *values, u32 count);
+static BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 direction, int tag);
+static void WiFiPlazaObj_InitTween(WiFiPlazaObjTween *tween, s32 start, s32 end, u32 duration);
+static BOOL WiFiPlazaObj_UpdateTween(WiFiPlazaObjTween *tween, u32 frame);
+static s32 WiFiPlazaObj_GetTweenValue(WiFiPlazaObjTween *tween);
+static WiFiPlazaObj *WiFiPlazaObj_AllocObj(WiFiPlazaObjManager *manager);
+static BOOL WiFiPlazaObj_IsFree(WiFiPlazaObj *obj);
+static void WiFiPlazaObj_HandlerIdle(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerSlideLeft(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerSlideRight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerSlideUp(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerSlideDown(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, u32 direction);
+static void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_HandlerResetHeight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager);
+static void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value);
+static void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value);
+
 static const u8 sWiFiPlazaObjWanderDirections[] = { 0, 1, 2, 3 };
 
 static const u8 sWiFiPlazaObjWanderTimers[] = { 32, 64, 128, 144 };
@@ -168,7 +193,7 @@ void WiFiPlazaObj_FadeToLightSet(WiFiPlazaObjManager *manager, int set) {
     WiFiPlazaObj_StartLightFade(&manager->light, sWiFiPlazaObjLightSets[set]);
 }
 
-void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command) {
+static void WiFiPlazaObj_PushCommand(WiFiPlazaObjManager *manager, Field2DCommand *command) {
     Field2DCommandQueue_Push(manager->commands, command);
 }
 
@@ -473,7 +498,7 @@ u32 WiFiPlazaObj_IsVisible(WiFiPlazaObj *obj) {
 }
 
 // Creates an object on every cell carrying one of the four spawn table tags.
-void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
     const WiFiPlazaObjSpawn *spawn = sWiFiPlazaObjMapSpawns;
     u32 i;
     u16 n;
@@ -514,7 +539,7 @@ void WiFiPlazaObj_SpawnMapObjects(WiFiPlazaObjManager *manager) {
     }
 }
 
-void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id) {
+static void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direction, int id) {
     Field2DCommand data;
 
     data.action = command;
@@ -523,11 +548,11 @@ void WiFiPlazaObj_QueueMove(WiFiPlazaObjManager *manager, int command, int direc
     WiFiPlazaObj_PushCommand(manager, &data);
 }
 
-u8 WiFiPlazaObj_RandomPick(const u8 *values, u32 count) {
+static u8 WiFiPlazaObj_RandomPick(const u8 *values, u32 count) {
     return values[MTRandom() % count];
 }
 
-BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 direction, int tag) {
+static BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *obj, s32 direction, int tag) {
     Field2DPoint position = Field2DObject_GetPos(obj->gridObj);
     u32 result;
 
@@ -539,14 +564,14 @@ BOOL WiFiPlazaObj_IsTagInDirection(WiFiPlazaObjManager *manager, WiFiPlazaObj *o
     return FALSE;
 }
 
-void WiFiPlazaObj_InitTween(WiFiPlazaObjTween *tween, s32 start, s32 end, u32 duration) {
+static void WiFiPlazaObj_InitTween(WiFiPlazaObjTween *tween, s32 start, s32 end, u32 duration) {
     tween->value = start;
     tween->start = start;
     tween->delta = end - start;
     tween->duration = duration;
 }
 
-BOOL WiFiPlazaObj_UpdateTween(WiFiPlazaObjTween *tween, u32 frame) {
+static BOOL WiFiPlazaObj_UpdateTween(WiFiPlazaObjTween *tween, u32 frame) {
     float frameFx;
     float durationFx;
     s32 scaled;
@@ -570,11 +595,11 @@ BOOL WiFiPlazaObj_UpdateTween(WiFiPlazaObjTween *tween, u32 frame) {
     return frame >= tween->duration;
 }
 
-s32 WiFiPlazaObj_GetTweenValue(WiFiPlazaObjTween *tween) {
+static s32 WiFiPlazaObj_GetTweenValue(WiFiPlazaObjTween *tween) {
     return tween->value;
 }
 
-WiFiPlazaObj *WiFiPlazaObj_AllocObj(WiFiPlazaObjManager *manager) {
+static WiFiPlazaObj *WiFiPlazaObj_AllocObj(WiFiPlazaObjManager *manager) {
     int i;
 
     for (i = 0; i < manager->count; i++) {
@@ -586,15 +611,15 @@ WiFiPlazaObj *WiFiPlazaObj_AllocObj(WiFiPlazaObjManager *manager) {
     return &manager->objs[i];
 }
 
-BOOL WiFiPlazaObj_IsFree(WiFiPlazaObj *obj) {
+static BOOL WiFiPlazaObj_IsFree(WiFiPlazaObj *obj) {
     return obj->gridObj == NULL;
 }
 
-void WiFiPlazaObj_HandlerIdle(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerIdle(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
 }
 
 // D-pad: walk (run while B is held) when already facing that way, otherwise turn.
-void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     int facing = Field2DObject_GetParam(obj->gridObj, 6);
     int id = Field2DObject_GetParam(obj->gridObj, 4);
     int moving = Field2DObject_GetParam(obj->gridObj, 5);
@@ -643,7 +668,7 @@ void WiFiPlazaObj_HandlerPlayerInput(WiFiPlazaObj *obj, WiFiPlazaObjManager *man
 }
 
 // Waits a random time, then turns or walks in a random direction (walks only onto its own tag, id + 4).
-void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     int id;
     int facing;
 
@@ -690,7 +715,7 @@ void WiFiPlazaObj_HandlerWander(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
 }
 
 // Waits 32 frames, then raises the avatar by 500 over 24 frames.
-void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     int done;
     VecFx32 position;
 
@@ -728,7 +753,7 @@ void WiFiPlazaObj_HandlerRiseOut(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager
 }
 
 // Lowers the avatar from 500 to the ground over 24 frames, then waits 32 frames.
-void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     int done;
     VecFx32 position;
 
@@ -767,24 +792,24 @@ void WiFiPlazaObj_HandlerDropIn(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager)
     }
 }
 
-void WiFiPlazaObj_HandlerSlideLeft(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerSlideLeft(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     WiFiPlazaObj_SlideOneCell(obj, manager, DIR_WEST);
 }
 
-void WiFiPlazaObj_HandlerSlideRight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerSlideRight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     WiFiPlazaObj_SlideOneCell(obj, manager, DIR_EAST);
 }
 
-void WiFiPlazaObj_HandlerSlideUp(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerSlideUp(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     WiFiPlazaObj_SlideOneCell(obj, manager, DIR_NORTH);
 }
 
-void WiFiPlazaObj_HandlerSlideDown(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerSlideDown(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     WiFiPlazaObj_SlideOneCell(obj, manager, DIR_SOUTH);
 }
 
 // Moves the avatar one cell (16 units) in `direction` over 4 frames, waits, then moves the grid object there.
-void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, u32 direction) {
+static void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, u32 direction) {
     VecFx32 startPos;
     VecFx32 position;
     Field2DPoint cellCopy;
@@ -868,7 +893,7 @@ void WiFiPlazaObj_SlideOneCell(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager, 
 }
 
 // Repeating hop: every 28 frames, 6-frame bounces (up 10, back 2) during the last 12 frames.
-void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     VecFx32 position;
     s16 phase;
     s32 degrees;
@@ -899,7 +924,7 @@ void WiFiPlazaObj_HandlerHop(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     }
 }
 
-void WiFiPlazaObj_HandlerResetHeight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
+static void WiFiPlazaObj_HandlerResetHeight(WiFiPlazaObj *obj, WiFiPlazaObjManager *manager) {
     VecFx32 position;
 
     WiFiPlazaPlayerObject_SetMode(obj->avatar, 1);
@@ -908,7 +933,7 @@ void WiFiPlazaObj_HandlerResetHeight(WiFiPlazaObj *obj, WiFiPlazaObjManager *man
     WiFiPlazaPlayerObject_SetPosition(obj->avatar, &position);
 }
 
-void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value) {
+static void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value) {
     light->value = value;
     light->start = value;
     light->delta = 0;
@@ -918,7 +943,7 @@ void WiFiPlazaObj_InitLight(WiFiPlazaObjLight *light, void *avatars, u32 value) 
     WiFiPlazaPlayerObjects_SetModelAlpha(avatars, value);
 }
 
-void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value) {
+static void WiFiPlazaObj_StartLightFade(WiFiPlazaObjLight *light, u32 value) {
     light->active = 1;
     light->start = light->value;
     light->delta = value - light->value;

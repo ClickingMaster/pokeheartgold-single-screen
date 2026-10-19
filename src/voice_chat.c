@@ -15,9 +15,20 @@ extern u8 *MIC_GetLastSamplingAddress(void);
 extern void MIC_StopAutoSampling(void);
 extern int Comm_IsWifiPeerLinkMode(void);
 
+static void VoiceChat_InitAudio(void);
+static void VoiceChat_MicCallback(MICResult result, void *arg);
+static void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg);
+static BOOL VoiceChat_RequestSession(u32 aid);
+static BOOL VoiceChat_AcceptSession(int unused);
+static void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
+static void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
+static void VoiceChat_EndSession(VctSession *session);
+static void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId);
+static void VoiceChat_StartStream(void);
+
 VoiceChat gVoiceChat;
 
-void VoiceChat_InitAudio(void) {
+static void VoiceChat_InitAudio(void) {
     int i;
 
     MIC_Init();
@@ -41,10 +52,10 @@ void VoiceChat_InitAudio(void) {
     VCT_EnableEchoCancel(1);
 }
 
-void VoiceChat_MicCallback(MICResult result, void *arg) {
+static void VoiceChat_MicCallback(MICResult result, void *arg) {
 }
 
-void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg) {
+static void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg) {
     u8 *address = arg; // the stream argument is the work, which starts with the mic buffer
     u32 i;
 
@@ -74,7 +85,7 @@ void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32
     gVoiceChat.work->samplingState = 2;
 }
 
-BOOL VoiceChat_RequestSession(u32 aid) {
+static BOOL VoiceChat_RequestSession(u32 aid) {
     VctSession *session = gVoiceChat.work->session;
     if (session == NULL) {
         session = VCT_CreateSession(aid);
@@ -95,7 +106,7 @@ BOOL VoiceChat_RequestSession(u32 aid) {
 }
 
 // The only caller passes 0.
-BOOL VoiceChat_AcceptSession(int unused) {
+static BOOL VoiceChat_AcceptSession(int unused) {
     VctSession *session = gVoiceChat.work->session;
     if (session != NULL && session->mode == 4) {
         if (VCT_Response(session, 0) != 0) {
@@ -109,7 +120,7 @@ BOOL VoiceChat_AcceptSession(int unused) {
     return FALSE;
 }
 
-void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
+static void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
     switch (event) {
     case 9:
         VoiceChat_EndSession(session);
@@ -123,7 +134,7 @@ void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *sess
     }
 }
 
-void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
+static void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext) {
     switch (event) {
     case 1:
         if (gVoiceChat.work->session != NULL) {
@@ -164,7 +175,7 @@ void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, 
     }
 }
 
-void VoiceChat_EndSession(VctSession *session) {
+static void VoiceChat_EndSession(VctSession *session) {
     VCT_StopStreaming(session);
     VCT_DeleteSession(session);
     gVoiceChat.work->session = NULL;
@@ -237,7 +248,7 @@ BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size) {
     return FALSE;
 }
 
-void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId) {
+static void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId) {
     u32 allocSize = size + 0x20;
     *allocation = Heap_Alloc((enum HeapID)heapId, allocSize);
     MI_CpuFill8(*allocation, 0, allocSize);
@@ -299,7 +310,7 @@ void VoiceChat_Init(int heapId, int codec, int count) {
     VCT_EnableEchoCancel(1);
 }
 
-void VoiceChat_StartStream(void) {
+static void VoiceChat_StartStream(void) {
     NNS_SndStrmStart(&gVoiceChat.work->stream);
 }
 

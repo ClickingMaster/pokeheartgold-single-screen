@@ -34,7 +34,7 @@ typedef struct NintendoWfcYesNoMenu {
     Window noWindow;
     enum HeapID heapID;
     u8 initialChoice;
-    u8 state; // index into sNintendoWfcYesNoStates
+    u8 state; // index into gNintendoWfcYesNoStates
     u8 bgPltt;
     u8 bgLayer;
     u8 fontPltt;

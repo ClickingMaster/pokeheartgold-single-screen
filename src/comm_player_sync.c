@@ -17,6 +17,31 @@
 #include "sys_task_api.h"
 #include "system.h"
 
+static void CommPlayerManager_SendPosition(int forceSend, int x, int z);
+static void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPosition *position);
+static void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused);
+static void CommPlayerManager_SendChangedHostPositions(FieldSystem *unused);
+static void CommPlayerManager_CreateAvatar(int netId);
+static void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap);
+static void CommPlayerManager_UpdateLocalMoveSpeed(FieldSystem *fieldSystem);
+static void CommPlayerManager_UpdateAvatars(FieldSystem *unused);
+static void CommPlayerManager_SendMoveEnabled(int value);
+static void CommPlayerManager_SetMoveEnabled(int value);
+static int CommPlayerManager_KeysToDirection(int unused, int keys);
+static BOOL CommPlayerManager_IsObjectEventAt(int x, int z);
+static BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId);
+static u32 CommPlayerManager_GetMoveDelay(int speed);
+static void CommPlayerManager_MoveHostPlayers(SysTask *task, CommPlayerManager *unused);
+static void CommPlayerManager_MoveAvatar(int netId);
+static int CommPlayerManager_GetHostX(int netId);
+static int CommPlayerManager_GetHostZ(int netId);
+static int CommPlayerManager_GetHostFrontX(int netId);
+static int CommPlayerManager_GetHostFrontZ(int netId);
+static void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value);
+static void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void);
+static int CommPlayerManager_GetOppositeDirection(int facing);
+static void CommPlayerManager_SetLocalMoveDelay(void);
+
 int Comm_GetLocalNetId(void);
 int Comm_IsNetIdConnected(int netId);
 BOOL Comm_IsActive(void);
@@ -82,7 +107,7 @@ void CommPlayerManager_InitLocalPlayer(void) {
     gCommPlayerManager->hostPositions[Comm_GetLocalNetId()].facing = PlayerAvatar_GetFacingDirection(gCommPlayerManager->fieldSystem->playerAvatar);
 }
 
-void CommPlayerManager_SendPosition(int forceSend, int x, int z) {
+static void CommPlayerManager_SendPosition(int forceSend, int x, int z) {
     u8 data[8];
     int facing = PlayerAvatar_GetFacingDirection(gCommPlayerManager->fieldSystem->playerAvatar);
     data[0] = x;
@@ -103,7 +128,7 @@ void CommPlayerManager_SendLocalPosition(int forceSend) {
     CommPlayerManager_SendPosition(forceSend, x, z);
 }
 
-void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPosition *position) {
+static void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPosition *position) {
     u8 data[8];
     u16 x = position->x;
     u16 z = position->z;
@@ -126,7 +151,7 @@ void CommPlayerManager_SendHostPosition(int netId, const CommPlayerPosition *pos
     Comm_SendParentCommand(0x17, data, 0);
 }
 
-void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused) {
+static void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused) {
     int moveState = PlayerAvatar_GetMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
     int playerMoveState = PlayerAvatar_GetPlayerMoveState(gCommPlayerManager->fieldSystem->playerAvatar);
     if (moveState == 0 && Comm_IsNetIdConnected(Comm_GetLocalNetId()) && gCommPlayerManager->localPositionSent == 0) {
@@ -138,7 +163,7 @@ void CommPlayerManager_SendPositionWhenStopped(FieldSystem *unused) {
     }
 }
 
-void CommPlayerManager_SendChangedHostPositions(FieldSystem *unused) {
+static void CommPlayerManager_SendChangedHostPositions(FieldSystem *unused) {
     int netId;
 
     for (netId = 0; netId < 8; netId++) {
@@ -161,7 +186,7 @@ u32 CommPlayerManager_sizeof(void) {
     return sizeof(CommPlayerManager);
 }
 
-void CommPlayerManager_CreateAvatar(int netId) {
+static void CommPlayerManager_CreateAvatar(int netId) {
     PlayerProfile *profile;
     PlayerAvatar *avatar;
     LocalMapObject *object;
@@ -197,7 +222,7 @@ void CommPlayerManager_CreateAvatar(int netId) {
     gCommPlayerManager->active[netId] = 1;
 }
 
-void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap) {
+static void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap) {
     PlayerAvatar *avatar;
     u8 *active;
     if (gCommPlayerManager == NULL) {
@@ -221,7 +246,7 @@ void CommPlayerManager_RemovePlayer(int netId, int keepActive, int deleteFromMap
     gCommPlayerManager->positionChanged[netId] = 1;
 }
 
-void CommPlayerManager_UpdateLocalMoveSpeed(FieldSystem *fieldSystem) {
+static void CommPlayerManager_UpdateLocalMoveSpeed(FieldSystem *fieldSystem) {
     int mode = 2;
     if (gSystem.heldKeys & PAD_BUTTON_B) {
         mode = 1;
@@ -244,7 +269,7 @@ void CommPlayerManager_Task(SysTask *task, void *fieldSystem) {
     }
 }
 
-void CommPlayerManager_UpdateAvatars(FieldSystem *unused) {
+static void CommPlayerManager_UpdateAvatars(FieldSystem *unused) {
     int i;
     u8 netId;
     for (i = 0; i < 8; i++) {
@@ -257,7 +282,7 @@ void CommPlayerManager_UpdateAvatars(FieldSystem *unused) {
     }
 }
 
-void CommPlayerManager_SendMoveEnabled(int value) {
+static void CommPlayerManager_SendMoveEnabled(int value) {
     if (gCommPlayerManager != NULL) {
         if (gCommPlayerManager->localMoveEnabled != value) {
             gCommPlayerManager->localMoveEnabled = value;
@@ -266,7 +291,7 @@ void CommPlayerManager_SendMoveEnabled(int value) {
     }
 }
 
-void CommPlayerManager_SetMoveEnabled(int value) {
+static void CommPlayerManager_SetMoveEnabled(int value) {
     if (gCommPlayerManager != NULL && gCommPlayerManager->localMoveEnabled != value) {
         gCommPlayerManager->localMoveEnabled = value;
         Comm_SendFixedCommand(0x3E, &gCommPlayerManager->localMoveEnabled);
@@ -313,7 +338,7 @@ void CommPlayerManager_FieldUpdate(FieldSystem *fieldSystem, int value) {
     }
 }
 
-int CommPlayerManager_KeysToDirection(int unused, int keys) {
+static int CommPlayerManager_KeysToDirection(int unused, int keys) {
     if (keys & PAD_KEY_LEFT) {
         return DIR_WEST;
     }
@@ -329,7 +354,7 @@ int CommPlayerManager_KeysToDirection(int unused, int keys) {
     return -1;
 }
 
-BOOL CommPlayerManager_IsObjectEventAt(int x, int z) {
+static BOOL CommPlayerManager_IsObjectEventAt(int x, int z) {
     int count = Field_GetNumObjectEvents(gCommPlayerManager->fieldSystem);
     const ObjectEvent *events = Field_GetObjectEvents(gCommPlayerManager->fieldSystem);
     int i;
@@ -341,7 +366,7 @@ BOOL CommPlayerManager_IsObjectEventAt(int x, int z) {
     return FALSE;
 }
 
-BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId) {
+static BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId) {
     int netId;
     if (x != 0xFFFF && z != 0xFFFF) {
         for (netId = 0; netId < 8; netId++) {
@@ -356,7 +381,7 @@ BOOL CommPlayerManager_IsPositionBlocked(int x, int z, int excludedNetId) {
     return FieldSystem_CheckTileCollision(gCommPlayerManager->fieldSystem, x, z);
 }
 
-u32 CommPlayerManager_GetMoveDelay(int speed) {
+static u32 CommPlayerManager_GetMoveDelay(int speed) {
     u32 delays[5] = { 2, 4, 8, 16, 2 };
     if (speed >= 5) {
         GF_AssertFail();
@@ -364,7 +389,7 @@ u32 CommPlayerManager_GetMoveDelay(int speed) {
     return delays[speed];
 }
 
-void CommPlayerManager_MoveHostPlayers(SysTask *task, CommPlayerManager *unused) {
+static void CommPlayerManager_MoveHostPlayers(SysTask *task, CommPlayerManager *unused) {
     int i;
     for (i = 0; i < 8; i++) {
         CommPlayerPosition *position;
@@ -487,7 +512,7 @@ void CommPlayerManager_ReceiveHostPosition(int unused, int size, const u8 *data)
     }
 }
 
-void CommPlayerManager_MoveAvatar(int netId) {
+static void CommPlayerManager_MoveAvatar(int netId) {
     CommPlayerPosition *position = &gCommPlayerManager->positions[netId];
     if (gCommPlayerManager->moveTimer[netId]) {
         gCommPlayerManager->moveTimer[netId]--;
@@ -642,7 +667,7 @@ int CommPlayerManager_GetPlayerFrontZ(int netId) {
     return gCommPlayerManager->positions[netId].z + GetDeltaYByFacingDirection(gCommPlayerManager->positions[netId].facing);
 }
 
-int CommPlayerManager_GetHostX(int netId) {
+static int CommPlayerManager_GetHostX(int netId) {
     if (gCommPlayerManager == NULL) {
         return 0xFFFF;
     }
@@ -655,7 +680,7 @@ int CommPlayerManager_GetHostX(int netId) {
     return gCommPlayerManager->hostPositions[netId].x;
 }
 
-int CommPlayerManager_GetHostZ(int netId) {
+static int CommPlayerManager_GetHostZ(int netId) {
     if (gCommPlayerManager == NULL) {
         return 0xFFFF;
     }
@@ -668,21 +693,21 @@ int CommPlayerManager_GetHostZ(int netId) {
     return gCommPlayerManager->hostPositions[netId].z;
 }
 
-int CommPlayerManager_GetHostFrontX(int netId) {
+static int CommPlayerManager_GetHostFrontX(int netId) {
     if (CommPlayerManager_GetHostX(netId) == 0xFFFF) {
         return 0xFFFF;
     }
     return gCommPlayerManager->hostPositions[netId].x + GetDeltaXByFacingDirection(gCommPlayerManager->hostPositions[netId].facing);
 }
 
-int CommPlayerManager_GetHostFrontZ(int netId) {
+static int CommPlayerManager_GetHostFrontZ(int netId) {
     if (CommPlayerManager_GetHostZ(netId) == 0xFFFF) {
         return 0xFFFF;
     }
     return gCommPlayerManager->hostPositions[netId].z + GetDeltaYByFacingDirection(gCommPlayerManager->hostPositions[netId].facing);
 }
 
-void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value) {
+static void CommPlayerManager_SetPlayerMoveEnabled(int netId, int value) {
     u8 *values = gCommPlayerManager->moveEnabled;
     if (values[netId] != value) {
         values[netId] = value;
@@ -755,7 +780,7 @@ void CommPlayerManager_RecvLockOnSpot(int netId, int size, const u8 *data) {
     }
 }
 
-void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void) {
+static void CommPlayerManager_HostLockFlaggedPlayersOnSpots(void) {
     int count;
     const u16 *table;
     u8 i;
@@ -823,7 +848,7 @@ BOOL CommPlayerManager_StepAllPlayersBack(void) {
     return TRUE;
 }
 
-int CommPlayerManager_GetOppositeDirection(int facing) {
+static int CommPlayerManager_GetOppositeDirection(int facing) {
     if (facing == DIR_NORTH) {
         return DIR_SOUTH;
     }
@@ -890,6 +915,6 @@ void CommPlayerManager_ForcePosition(void) {
     }
 }
 
-void CommPlayerManager_SetLocalMoveDelay(void) {
+static void CommPlayerManager_SetLocalMoveDelay(void) {
     gCommPlayerManager->localMoveDelay = 8;
 }

@@ -98,6 +98,39 @@ extern void DWC_SetUserSendCallback(void (*)(u32, s32));
 extern void DWC_SetUserRecvCallback(void (*)(u16, const u8 *, int));
 extern void DWC_SetUserRecvTimeoutCallback(void (*)(void));
 
+static void WifiConnection_Destroy(void);
+static void WifiConnection_FinishCancel(void);
+static void WifiConnection_LoginCallback(int result, int unused, void *param);
+static void WifiConnection_TimeoutCallback(void);
+static void WifiConnection_UpdateServersCallback(int result, int unused, void *param);
+static void WifiConnection_FriendStatusCallback(void);
+static void WifiConnection_DeleteFriendCallback(int index, int srcIndex);
+static void WifiConnection_BuddyFriendCallback(void);
+static void WifiConnection_ResetKeepAliveTimers(void);
+static void WifiConnection_SetRecvTimeouts(void);
+static void WifiConnection_OnConnected(int aid);
+static void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *param);
+static BOOL WifiConnection_EvalPlayerCallback(void);
+static void WifiConnection_SendDoneCallback(u32 result, s32 aid);
+static void WifiConnection_ReadPeerVoiceFlag(u32 header);
+static void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size);
+static void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isServer, u32 aid, int index, void *param);
+static void *WifiConnection_Alloc(int unused, u32 size, int alignment);
+static void WifiConnection_Free(int unused, void *ptr, u32 size);
+static int WifiConnection_CanSendToAll(void);
+static int WifiConnection_SendKeepAlive(int aid);
+static int WifiConnection_UpdateConnected(void);
+static void WifiConnection_ClearVoiceChatActive(void);
+static void WifiConnection_UpdateFriendStatus(void);
+static void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param);
+static void WifiConnection_ConnectedToServerCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param);
+static void WifiConnection_NewClientCallback(int index);
+static void WifiConnection_CreateTokenAndScanFriends(void);
+static void WifiConnection_StopServerMatchingCallback(void *param);
+static void WifiConnection_FreeRecvBuffer(int aid);
+static void WifiConnection_AllocRecvBuffer(int aid);
+static void WifiConnection_FreeRecvBuffers(void);
+
 static const DwcMatchOptMinComplete sWifiConnectionAnybodyMatchParams = {
     .valid = 1,
     .minEntry = 2,
@@ -163,7 +196,7 @@ int WifiConnection_Init(void *saveData, int heapId, u32 heapSize, int maxPlayers
     return 2;
 }
 
-void WifiConnection_Destroy(void) {
+static void WifiConnection_Destroy(void) {
     if (gWifiConnection != NULL) {
         WifiConnection_FreeRecvBuffers();
         if (gWifiConnection->extraHeapMemory != NULL) {
@@ -271,7 +304,7 @@ int WifiConnection_StartAnybodyMatchmaking(const char *name, int maxPlayers, int
     return 1;
 }
 
-void WifiConnection_FinishCancel(void) {
+static void WifiConnection_FinishCancel(void) {
     if (gWifiConnection->state == WIFI_CONNECTION_STATE_CANCEL_REQUESTED) {
         gWifiConnection->state = WIFI_CONNECTION_STATE_CANCELLED_BY_PEER;
     } else {
@@ -406,7 +439,7 @@ int WifiConnection_SendToAll(void *data, int size) {
     return 1;
 }
 
-void WifiConnection_LoginCallback(int result, int unused, void *param) {
+static void WifiConnection_LoginCallback(int result, int unused, void *param) {
     if (DWC_CheckDirtyFlag(gWifiConnection->userData)) {
         DWC_ClearDirtyFlag(gWifiConnection->userData);
         gWifiConnection->friendDataChanged = 1;
@@ -422,7 +455,7 @@ void WifiConnection_LoginCallback(int result, int unused, void *param) {
     gWifiConnection->state = WIFI_CONNECTION_STATE_ERROR;
 }
 
-void WifiConnection_TimeoutCallback(void) {
+static void WifiConnection_TimeoutCallback(void) {
     if (gWifiConnection->recvTimeoutArmed != 0) {
         DWC_CloseAllConnectionsHard();
         gWifiConnection->newClientIndex = -1;
@@ -430,7 +463,7 @@ void WifiConnection_TimeoutCallback(void) {
     }
 }
 
-void WifiConnection_UpdateServersCallback(int result, int unused, void *param) {
+static void WifiConnection_UpdateServersCallback(int result, int unused, void *param) {
     if (result == 0) {
         gWifiConnection->state = WIFI_CONNECTION_STATE_LOGGED_IN;
     } else {
@@ -438,22 +471,22 @@ void WifiConnection_UpdateServersCallback(int result, int unused, void *param) {
     }
 }
 
-void WifiConnection_FriendStatusCallback(void) {
+static void WifiConnection_FriendStatusCallback(void) {
 }
 
-void WifiConnection_DeleteFriendCallback(int index, int srcIndex) {
+static void WifiConnection_DeleteFriendCallback(int index, int srcIndex) {
     FriendRoster_MergeFriend(Save_FriendRoster_Get(gWifiConnection->saveData), index, srcIndex);
     FrontierSave_ClearRow(Save_Frontier_GetStatic(gWifiConnection->saveData), index, srcIndex);
 }
 
-void WifiConnection_BuddyFriendCallback(void) {
+static void WifiConnection_BuddyFriendCallback(void) {
 }
 
-void WifiConnection_ResetKeepAliveTimers(void) {
+static void WifiConnection_ResetKeepAliveTimers(void) {
     MI_CpuFill8(gWifiConnection->keepAliveTimers, 0, sizeof(gWifiConnection->keepAliveTimers));
 }
 
-void WifiConnection_SetRecvTimeouts(void) {
+static void WifiConnection_SetRecvTimeouts(void) {
     int i;
     for (i = 0; i < 4; i++) {
         DWC_SetRecvTimeoutTime((u8)i, 0);
@@ -475,7 +508,7 @@ void WifiConnection_SetRecvTimeouts(void) {
     WifiConnection_ResetKeepAliveTimers();
 }
 
-void WifiConnection_OnConnected(int aid) {
+static void WifiConnection_OnConnected(int aid) {
     int i;
     gWifiConnection->state = WIFI_CONNECTION_STATE_CONNECTED;
     for (i = 0; i < gWifiConnection->maxPlayers; i++) {
@@ -486,7 +519,7 @@ void WifiConnection_OnConnected(int aid) {
     WifiConnection_SetRecvTimeouts();
 }
 
-void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *param) {
+static void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *param) {
     WifiConnection *connection;
     if (result == 0) {
         if (cancelled == 0) {
@@ -504,16 +537,16 @@ void WifiConnection_AnybodyMatchedCallback(int result, int cancelled, void *para
     }
 }
 
-BOOL WifiConnection_EvalPlayerCallback(void) {
+static BOOL WifiConnection_EvalPlayerCallback(void) {
     return TRUE;
 }
 
-void WifiConnection_SendDoneCallback(u32 result, s32 aid) {
+static void WifiConnection_SendDoneCallback(u32 result, s32 aid) {
     gWifiConnection->sendBusy = 0;
     gWifiConnection->keepAliveTimers[aid] = 0;
 }
 
-void WifiConnection_ReadPeerVoiceFlag(u32 header) {
+static void WifiConnection_ReadPeerVoiceFlag(u32 header) {
     CommState_GetLinkMode();
     if (Comm_IsWifiPeerLinkMode() == 0) {
         if (header & 0x100) {
@@ -524,7 +557,7 @@ void WifiConnection_ReadPeerVoiceFlag(u32 header) {
     }
 }
 
-void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size) {
+static void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size) {
     void *buf;
     u32 header;
 
@@ -556,7 +589,7 @@ void WifiConnection_ReceiveCallback(u16 aid, const u8 *data, int size) {
     }
 }
 
-void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isServer, u32 aid, int index, void *param) {
+static void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isServer, u32 aid, int index, void *param) {
     gWifiConnection->sendBusy = 0;
     gWifiConnection->retryCount = 0;
     gWifiConnection->matchInProgress = 0;
@@ -573,7 +606,7 @@ void WifiConnection_ConnectionClosedCallback(int result, BOOL isLocal, BOOL isSe
     }
 }
 
-void *WifiConnection_Alloc(int unused, u32 size, int alignment) {
+static void *WifiConnection_Alloc(int unused, u32 size, int alignment) {
     OSIntrMode intr = OS_DisableInterrupts();
     void *result = NNS_FndAllocFromExpHeapEx(gWifiConnection->heap, size, alignment);
     if (result == NULL && gWifiConnection->extraHeapMemory != NULL) {
@@ -588,7 +621,7 @@ void *WifiConnection_Alloc(int unused, u32 size, int alignment) {
     return result;
 }
 
-void WifiConnection_Free(int unused, void *ptr, u32 size) {
+static void WifiConnection_Free(int unused, void *ptr, u32 size) {
     if (ptr != NULL) {
         OSIntrMode intr = OS_DisableInterrupts();
         if (NNS_FndGetGroupIDForMBlockExpHeap(ptr) == 0x10) {
@@ -674,7 +707,7 @@ int WifiConnection_CheckError(void) {
     return result;
 }
 
-int WifiConnection_CanSendToAll(void) {
+static int WifiConnection_CanSendToAll(void) {
     int i;
     int found = 0;
     i = found;
@@ -692,7 +725,7 @@ int WifiConnection_CanSendToAll(void) {
     return found;
 }
 
-int WifiConnection_SendKeepAlive(int aid) {
+static int WifiConnection_SendKeepAlive(int aid) {
     if (gWifiConnection->sendBusy == 0 && WifiConnection_CanSendToAll() != 0) {
         u32 mask = (u32)DWC_GetAIDBitmap();
         if ((mask & 0xFFFE) != 0) {
@@ -706,7 +739,7 @@ int WifiConnection_SendKeepAlive(int aid) {
     return 0;
 }
 
-int WifiConnection_UpdateConnected(void) {
+static int WifiConnection_UpdateConnected(void) {
     s32 state;
 
     DWC_ProcessFriendsMatch();
@@ -759,7 +792,7 @@ int WifiConnection_GetAid(void) {
     return -1;
 }
 
-void WifiConnection_ClearVoiceChatActive(void) {
+static void WifiConnection_ClearVoiceChatActive(void) {
     gWifiConnection->voiceChatActive = 0;
 }
 
@@ -968,7 +1001,7 @@ void WifiConnection_SetFriendStatusBuffer(u8 *data, int stride) {
     gWifiConnection->friendStatusStride = stride;
 }
 
-void WifiConnection_UpdateFriendStatus(void) {
+static void WifiConnection_UpdateFriendStatus(void) {
     int result;
     if (gWifiConnection->friendStatusData) {
         int n = gWifiConnection->friendStatusIndex & 31;
@@ -1040,7 +1073,7 @@ int WifiConnection_GetTargetFriendIndex(void) {
     return -1;
 }
 
-void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
+static void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
     int reject = 0;
     gWifiConnection->matchInProgress = 0;
     if (result == 0) {
@@ -1078,14 +1111,14 @@ void WifiConnection_GameServerMatchedCallback(int result, BOOL cancelled, BOOL s
     }
 }
 
-void WifiConnection_ConnectedToServerCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
+static void WifiConnection_ConnectedToServerCallback(int result, BOOL cancelled, BOOL self, BOOL isServer, int aid, void *param) {
     gWifiConnection->matchInProgress = 0;
     if (result == 0 && cancelled == 0) {
         WifiConnection_OnConnected(aid);
     }
 }
 
-void WifiConnection_NewClientCallback(int index) {
+static void WifiConnection_NewClientCallback(int index) {
     void (*callback)(int, void *);
     gWifiConnection->newClientIndex = index;
     callback = gWifiConnection->clientCallback;
@@ -1094,7 +1127,7 @@ void WifiConnection_NewClientCallback(int index) {
     }
 }
 
-void WifiConnection_CreateTokenAndScanFriends(void) {
+static void WifiConnection_CreateTokenAndScanFriends(void) {
     DwcAccData profileToken;
     DwcAccData newToken;
     int i;
@@ -1137,7 +1170,7 @@ void WifiConnection_SetVoiceUnmuted(u16 value) {
     gWifiConnection->voiceUnmuted = value;
 }
 
-void WifiConnection_StopServerMatchingCallback(void *param) {
+static void WifiConnection_StopServerMatchingCallback(void *param) {
     gWifiConnection->stopMatchingState = 2;
 }
 
@@ -1189,7 +1222,7 @@ void WifiConnection_SetDisconnectWhenAlone(u8 value) {
     gWifiConnection->disconnectWhenAlone = value;
 }
 
-void WifiConnection_FreeRecvBuffer(int aid) {
+static void WifiConnection_FreeRecvBuffer(int aid) {
     void *buffer = gWifiConnection->recvBuffers[aid];
     if (buffer) {
         if (gWifiConnection->recvBufferFromGameHeap[aid] == 1) {
@@ -1201,7 +1234,7 @@ void WifiConnection_FreeRecvBuffer(int aid) {
     }
 }
 
-void WifiConnection_AllocRecvBuffer(int aid) {
+static void WifiConnection_AllocRecvBuffer(int aid) {
     WifiConnection_FreeRecvBuffer(aid);
     if (gWifiConnection->recvBuffers[aid] == NULL) {
         if (gWifiConnection->heapId2 == 11) {
@@ -1215,7 +1248,7 @@ void WifiConnection_AllocRecvBuffer(int aid) {
     }
 }
 
-void WifiConnection_FreeRecvBuffers(void) {
+static void WifiConnection_FreeRecvBuffers(void) {
     s32 i;
     for (i = 0; i < 4; i++) {
         WifiConnection_FreeRecvBuffer(i);

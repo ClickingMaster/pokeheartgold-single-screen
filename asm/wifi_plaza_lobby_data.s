@@ -7,11 +7,11 @@
 	.public WiFiPlazaPlayerObject_PlayStandingSequence
 	.public WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.public WiFiPlazaPlayerObject_PlayWalkingSequence
-	.public sWiFiPlazaPlayerObjectActions
+	.public gWiFiPlazaPlayerObjectActions
 
 	.data
 
-sWiFiPlazaPlayerObjectActions:
+gWiFiPlazaPlayerObjectActions:
 	.word WiFiPlazaPlayerObject_ShowStandingSprite
 	.word WiFiPlazaPlayerObject_HoldWalkFrameThenRestart
 	.word WiFiPlazaPlayerObject_PlayStandingSequence

@@ -73,27 +73,11 @@ void WifiSetupKeypad_SetCanType(int canType);
 void WifiSetupKeypad_SetCanAdvance(int canAdvance);
 BOOL WifiSetupKeypad_Exists(void);
 
-void WifiSetupKeypad_SlideInRow0Task(void *task);
-void WifiSetupKeypad_SlideInRow1Task(void *task);
-void WifiSetupKeypad_SlideInRow2Task(void *task);
-void WifiSetupKeypad_SlideInRow3Task(void *task);
-void WifiSetupKeypad_SlideInButtonsTask(void *task);
-void WifiSetupKeypad_InputTask(void *task);
-void WifiSetupKeypad_HandleTouchPress(void);
-void WifiSetupKeypad_HandleTouchRelease(void);
-void WifiSetupKeypad_HandleTouchHold(void);
-void WifiSetupKeypad_SetHoveredKey(int key);
-void WifiSetupKeypad_HandleButtons(void);
 // Moves row `row` (4: the buttons) to height y.
 void WifiSetupKeypad_SetRowY();
 void WifiSetupKeypad_SetKeyHighlight(int key, int highlighted);
 void WifiSetupKeypad_UpdateCursor(void);
 void WifiSetupKeypad_MoveCursor(int direction);
 void WifiSetupKeypad_SlideOutButtonsTask(void *task);
-void WifiSetupKeypad_SlideOutRow3Task(void *task);
-void WifiSetupKeypad_SlideOutRow2Task(void *task);
-void WifiSetupKeypad_SlideOutRow1Task(void *task);
-void WifiSetupKeypad_SlideOutRow0Task(void *task);
-void WifiSetupKeypad_DestroyTask(void *task);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_KEYPAD_H

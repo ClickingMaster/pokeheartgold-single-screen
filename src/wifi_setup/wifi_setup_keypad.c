@@ -7,6 +7,18 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+static void WifiSetupKeypad_SlideInRow0Task(void *task);
+static void WifiSetupKeypad_SlideInRow1Task(void *task);
+static void WifiSetupKeypad_SlideInRow2Task(void *task);
+static void WifiSetupKeypad_SlideInRow3Task(void *task);
+static void WifiSetupKeypad_SlideInButtonsTask(void *task);
+static void WifiSetupKeypad_InputTask(void *task);
+static void WifiSetupKeypad_HandleTouchPress(void);
+static void WifiSetupKeypad_HandleTouchRelease(void);
+static void WifiSetupKeypad_HandleTouchHold(void);
+static void WifiSetupKeypad_SetHoveredKey(int key);
+static void WifiSetupKeypad_HandleButtons(void);
+
 // Numeric keypad, first part: creation, the accessors used by the screens, the slide-in animation
 // and the per-frame input handling (touch press, release and hold, D-pad and buttons).
 
@@ -94,7 +106,7 @@ BOOL WifiSetupKeypad_Exists(void) {
 // Each slide-in task raises one row by 12 pixels per frame until it reaches its place, then starts
 // the next row from the bottom of the screen.
 
-void WifiSetupKeypad_SlideInRow0Task(void *task) {
+static void WifiSetupKeypad_SlideInRow0Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[0]->attr01;
@@ -109,7 +121,7 @@ void WifiSetupKeypad_SlideInRow0Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_SlideInRow1Task);
 }
 
-void WifiSetupKeypad_SlideInRow1Task(void *task) {
+static void WifiSetupKeypad_SlideInRow1Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[3]->attr01;
@@ -124,7 +136,7 @@ void WifiSetupKeypad_SlideInRow1Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_SlideInRow2Task);
 }
 
-void WifiSetupKeypad_SlideInRow2Task(void *task) {
+static void WifiSetupKeypad_SlideInRow2Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[6]->attr01;
@@ -139,7 +151,7 @@ void WifiSetupKeypad_SlideInRow2Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_SlideInRow3Task);
 }
 
-void WifiSetupKeypad_SlideInRow3Task(void *task) {
+static void WifiSetupKeypad_SlideInRow3Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[9]->attr01;
@@ -154,7 +166,7 @@ void WifiSetupKeypad_SlideInRow3Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_SlideInButtonsTask);
 }
 
-void WifiSetupKeypad_SlideInButtonsTask(void *task) {
+static void WifiSetupKeypad_SlideInButtonsTask(void *task) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupKeypad->buttons[0], 0, &x, &y);
     y -= 12;
@@ -167,14 +179,14 @@ void WifiSetupKeypad_SlideInButtonsTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeypad_InputTask);
 }
 
-void WifiSetupKeypad_InputTask(void *task) {
+static void WifiSetupKeypad_InputTask(void *task) {
     WifiSetupKeypad_HandleTouchPress();
     WifiSetupKeypad_HandleTouchRelease();
     WifiSetupKeypad_HandleTouchHold();
     WifiSetupKeypad_HandleButtons();
 }
 
-void WifiSetupKeypad_HandleTouchPress(void) {
+static void WifiSetupKeypad_HandleTouchPress(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos;
@@ -220,7 +232,7 @@ void WifiSetupKeypad_HandleTouchPress(void) {
 }
 
 // A key is typed when the stylus is lifted on the key it went down on.
-void WifiSetupKeypad_HandleTouchRelease(void) {
+static void WifiSetupKeypad_HandleTouchRelease(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos;
@@ -271,7 +283,7 @@ void WifiSetupKeypad_HandleTouchRelease(void) {
 
 // Highlights the key under the stylus while it stays on the key it went down on. Holding the
 // delete key repeats it: after 40 frames, then every 7 frames.
-void WifiSetupKeypad_HandleTouchHold(void) {
+static void WifiSetupKeypad_HandleTouchHold(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos;
@@ -331,7 +343,7 @@ done:
     gWifiSetupKeypad->repeatTimer = 0;
 }
 
-void WifiSetupKeypad_SetHoveredKey(int key) {
+static void WifiSetupKeypad_SetHoveredKey(int key) {
     if (key == gWifiSetupKeypad->hoveredKey) {
         return;
     }
@@ -341,7 +353,7 @@ void WifiSetupKeypad_SetHoveredKey(int key) {
 }
 
 // D-pad moves the cursor, A types the key under it, B deletes.
-void WifiSetupKeypad_HandleButtons(void) {
+static void WifiSetupKeypad_HandleButtons(void) {
     WifiSetupKeypad *keypad;
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
         WifiSetupKeypad_MoveCursor(0);

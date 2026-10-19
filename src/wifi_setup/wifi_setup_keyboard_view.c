@@ -5,6 +5,13 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+static inline void SetKeyPalette(GXOamAttr *oam, u32 palette);
+static void WifiSetupKeyboard_SlideOutRow3Task(void *task);
+static void WifiSetupKeyboard_SlideOutRow2Task(void *task);
+static void WifiSetupKeyboard_SlideOutRow1Task(void *task);
+static void WifiSetupKeyboard_SlideOutRow0Task(void *task);
+static void WifiSetupKeyboard_DestroyTask(void *task);
+
 // Software keyboard, third part: page switching, key highlight, cursor, the slide-out animation
 // and teardown.
 
@@ -226,7 +233,7 @@ void WifiSetupKeyboard_SlideOutButtonsTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow3Task);
 }
 
-void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
+static void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
     WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[36]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
@@ -238,7 +245,7 @@ void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow2Task);
 }
 
-void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
+static void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
     WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[24]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
@@ -250,7 +257,7 @@ void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow1Task);
 }
 
-void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
+static void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
     WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[12]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
@@ -262,7 +269,7 @@ void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutRow0Task);
 }
 
-void WifiSetupKeyboard_SlideOutRow0Task(void *task) {
+static void WifiSetupKeyboard_SlideOutRow0Task(void *task) {
     WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[0]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
@@ -276,7 +283,7 @@ void WifiSetupKeyboard_SlideOutRow0Task(void *task) {
 
 WifiSetupKeyboard *gWifiSetupKeyboard;
 
-void WifiSetupKeyboard_DestroyTask(void *task) {
+static void WifiSetupKeyboard_DestroyTask(void *task) {
     int page, row;
     WifiSetupTask_DestroyLater(0, task);
     for (page = 0; page < 3; page++) {

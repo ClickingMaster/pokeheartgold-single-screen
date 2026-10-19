@@ -2,6 +2,10 @@
 
 #include "wifi_plaza/wifi_plaza_internal.h"
 
+static u8 WiFiPlazaHistory_RemoveOldest(WiFiPlazaHistory *history);
+static void WiFiPlazaHistory_UpdateChecksum(WiFiPlazaHistory *history);
+static void WiFiPlazaHistory_CheckChecksum(WiFiPlazaHistory *history);
+
 // The last activities of the own player (WiFiPlazaPlayer.slots / slotData), a ring of 13 entries kept with a CRC.
 
 void WiFiPlazaHistory_Init(WiFiPlazaHistory *history, SaveData *save) {
@@ -46,7 +50,7 @@ BOOL WiFiPlazaHistory_ReplaceValue(WiFiPlazaHistory *history, s32 oldValue, s32 
 }
 
 // Removes the oldest entry and returns its id (24 if there is none).
-u8 WiFiPlazaHistory_RemoveOldest(WiFiPlazaHistory *history) {
+static u8 WiFiPlazaHistory_RemoveOldest(WiFiPlazaHistory *history) {
     u8 id;
 
     WiFiPlazaHistory_CheckChecksum(history);
@@ -91,11 +95,11 @@ s32 WiFiPlazaHistory_GetValue(WiFiPlazaHistory *history, u32 index) {
     return history->values[slot];
 }
 
-void WiFiPlazaHistory_UpdateChecksum(WiFiPlazaHistory *history) {
+static void WiFiPlazaHistory_UpdateChecksum(WiFiPlazaHistory *history) {
     history->crc = SaveArray_CalcCRC16(history->save, history, offsetof(WiFiPlazaHistory, save));
 }
 
-void WiFiPlazaHistory_CheckChecksum(WiFiPlazaHistory *history) {
+static void WiFiPlazaHistory_CheckChecksum(WiFiPlazaHistory *history) {
     u16 crc = SaveArray_CalcCRC16(history->save, history, offsetof(WiFiPlazaHistory, save));
 
     if (crc != history->crc) {

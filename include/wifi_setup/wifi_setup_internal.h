@@ -127,11 +127,6 @@ int WifiSetup_PickSetupAccessPoint(const WifiSetupApEntryList *current, const Wi
 void WifiSetup_SimpleStartThread(void *arg);
 int WifiSetup_AesKeyWrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
 int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u32 keyLength);
-void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out);
-int WifiSetup_AesSetEncryptKey(u32 *roundKeys, const u8 *key, int keyBits);
-int WifiSetup_AesSetDecryptKey(u32 *roundKeys, const u8 *key, int keyBits);
-void WifiSetup_AesEncryptBlock(const u32 *roundKeys, int rounds, const u8 *in, u8 *out);
-void WifiSetup_AesDecryptBlock(const u32 *roundKeys, int rounds, const u8 *in, u8 *out);
 
 // MD5
 void WifiSetup_Md5Init(WifiSetupMd5Context *context);
@@ -152,7 +147,6 @@ void WifiSetup_WorkFree(void *ptr);
 int WifiSetup_FormatMacAddress(char *dst, const s8 *mac);
 int WifiSetup_StartSimpleStart(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSetupWorkAllocFunc alloc, WifiSetupWorkFreeFunc free, u32 stackSize);
 int WifiSetup_StopSimpleStart(void);
-int WifiSetup_GetSimpleStartStatus(s32 *status);
 int WifiSetup_GetSimpleStartResult(void *dst);
 void WifiSetup_ReportSimpleStartStatus(void);
 

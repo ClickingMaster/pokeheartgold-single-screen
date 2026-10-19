@@ -26,8 +26,6 @@
 // and chat message broadcast in the player's beacon, and the language greeting learned from a foreign player.
 
 void CommState_SetLinkMode13RequestMode0(void);
-u32 CommPlayerInfo_GetCountry(int netId);
-u32 CommPlayerInfo_GetRegion(int netId);
 TrainerCardData *TrainerCardData_New(enum HeapID heapID);
 BOOL Comm_SendCommandNoCopy(int command, void *data, int size);
 

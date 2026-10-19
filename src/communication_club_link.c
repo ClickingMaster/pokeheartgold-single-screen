@@ -7,6 +7,8 @@
 #include "script_manager.h"
 #include "trainer_card_data.h"
 
+static void CommClubLink_CheckPartnerState5E(void);
+
 void FillScreenWithColor(int screen, u16 color);
 int LinkSync_GetPlayerState(int index);
 void CommState_FrameDummy(int, void *);
@@ -271,7 +273,7 @@ void CommClubLink_ChildShowRoom(void) {
     }
 }
 
-void CommClubLink_CheckPartnerState5E(void) {
+static void CommClubLink_CheckPartnerState5E(void) {
     int i;
 
     for (i = 0; i < Comm_CountConnected(); i++) {

@@ -12,6 +12,7 @@ static void DrawingSessionLink_ReceiveDummy100(int netId, int size, void *data, 
 static void DrawingSessionLink_ReceiveEvent15(int netId, int size, void *data, void *context);
 static void DrawingSessionLink_ReceiveJoinNotice(int value, int size, void *data, void *context);
 static void DrawingSessionLink_ReceiveSetJoinState1(int netId, int size, void *data, void *context);
+static void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *work, int index);
 static void *DrawingSessionLink_GetChunkRecvBuffer(int index, void *context, int size);
 static u32 DrawingSessionLink_GetSize4(void);
 static u32 DrawingSessionLink_GetJoinRequestSize(void);
@@ -292,7 +293,7 @@ static void DrawingSessionLink_ReceiveSetJoinState1(int netId, int size, void *d
     work->joinState = 1;
 }
 
-void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *work, int index) {
+static void DrawingSessionLink_SendPictureChunk(DrawingSessionWork *work, int index) {
     MIi_CpuCopyFast((const u32 *)((u8 *)work->canvasWindow.pixelBuffer + index * 0x3e8), (u32 *)work->sendChunk.data, 0x3e8);
     {
         int i;

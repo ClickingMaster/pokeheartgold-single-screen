@@ -5,6 +5,9 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+static void WifiSetupKeyboard_SlideInRow1Task(void *task);
+static void WifiSetupKeyboard_SlideInRow2Task(void *task);
+
 // Software keyboard, first part of the slide-in animation:
 // each task raises one key row by 12 pixels per frame until it reaches its place, then starts the
 // next row from the bottom of the screen.
@@ -24,7 +27,7 @@ void WifiSetupKeyboard_SlideInRow0Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideInRow1Task);
 }
 
-void WifiSetupKeyboard_SlideInRow1Task(void *task) {
+static void WifiSetupKeyboard_SlideInRow1Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 word = gWifiSetupKeyboard->keys[12]->attr01;
@@ -39,7 +42,7 @@ void WifiSetupKeyboard_SlideInRow1Task(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideInRow2Task);
 }
 
-void WifiSetupKeyboard_SlideInRow2Task(void *task) {
+static void WifiSetupKeyboard_SlideInRow2Task(void *task) {
     WifiSetupKeyRowPosition pos;
     WifiSetupKeyRowPosition *p = &pos;
     u32 word = gWifiSetupKeyboard->keys[24]->attr01;

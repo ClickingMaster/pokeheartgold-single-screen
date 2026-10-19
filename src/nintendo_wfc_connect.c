@@ -169,7 +169,7 @@ typedef struct NintendoWfcNumberInput {
     s8 value;    // entered value, -1: quit
     u8 cursor;   // pad key under the cursor
     s16 digitPos;
-    u8 state; // index into sNintendoWfcNumberInputStates
+    u8 state; // index into gNintendoWfcNumberInputStates
     u8 nextState;
     s8 digits[3]; // -1: empty
     u8 unk_B;
@@ -200,10 +200,10 @@ typedef struct NintendoWfcConnect {
     NintendoWifiConnectArgs *args;
     BgConfig *bgConfig;
     u8 padding_0008[8];
-    int mode; // index into the sNintendoWfcMode* tables
-    int nextMode;
+    int screen; // index into gNintendoWfcScreens (there is only screen 0)
+    int nextScreen;
     int unk_0018;
-    int state; // index into sNintendoWfcStates
+    int state; // index into gNintendoWfcStates
     int nextState;
     void *heapMem;
     NNSFndHeapHandle expHeap;
@@ -294,12 +294,14 @@ typedef struct NintendoWfcGlobal {
     u8 unk_8[0xC];
 } NintendoWfcGlobal;
 
-typedef int (*NintendoWfcModeFunc)(NintendoWfcConnect *wfc, int state);
+typedef int (*NintendoWfcScreenFunc)(NintendoWfcConnect *wfc, int state);
 
-// One row per mode: {init, main, exit}.
-typedef struct NintendoWfcModeRow {
-    NintendoWfcModeFunc func[3];
-} NintendoWfcModeRow;
+// The init, main and exit functions of each screen.
+typedef struct NintendoWfcScreenFuncs {
+    NintendoWfcScreenFunc init;
+    NintendoWfcScreenFunc main;
+    NintendoWfcScreenFunc exit;
+} NintendoWfcScreenFuncs;
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 
@@ -337,38 +339,34 @@ void BattleRoomDownload_SetTrainers(BattleRoomDownload *data, void *records, u32
 void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *data, u8 *out);
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 a, u32 b);
 
-extern NintendoWfcHttp sNintendoWfcHttp;
-extern u8 sNintendoWfcHttpFriendKey[];
+extern NintendoWfcHttp gNintendoWfcHttp;
+extern u8 gNintendoWfcHttpFriendKey[];
 extern u8 gNintendoWfcHttpRequestBuffer[];
 extern u8 ov72_0223B900[];
 extern u8 gNintendoWfcHttpUploadFriendKey[];
 extern NintendoWfcHttpResponse gNintendoWfcHttpResponse;
 extern u8 gNintendoWfcHttpShortResponse[];
-extern NintendoWfcGlobal sNintendoWfcGlobal;
-extern const char sNintendoWfcRoomNumUrl[];
-extern const char sNintendoWfcDownloadUrl[];
-extern const char sNintendoWfcUploadUrl[];
-extern const char sNintendoWfcInfoUrl[];
-extern const char sNintendoWfcSetProfileUrl[];
-extern const NintendoWfcModeRow sNintendoWfcModeInit[];
-extern const NintendoWfcModeRow sNintendoWfcModeMain[];
-extern const NintendoWfcModeRow sNintendoWfcModeExit[];
-extern int (*const sNintendoWfcStates[])(NintendoWfcConnect *wfc);
-extern int (*const sNintendoWfcNumberInputStates[])(NintendoWfcConnect *wfc);
-extern int (*const sNintendoWfcYesNoStates[])(NintendoWfcYesNoMenu *menu);
-extern const ObjCharTransferTemplate sNintendoWfcObjCharTransferTemplate;
-extern const GraphicsModes sNintendoWfcGraphicsModes;
-extern const GraphicsBanks sNintendoWfcGraphicsBanks;
-extern const BgTemplate sNintendoWfcBgTemplate_Sub1;
-extern const BgTemplate sNintendoWfcBgTemplate_Sub2;
-extern const BgTemplate sNintendoWfcBgTemplate_Main1;
-extern const BgTemplate sNintendoWfcBgTemplate_Main0;
-extern const BgTemplate sNintendoWfcBgTemplate_Sub0;
+extern NintendoWfcGlobal gNintendoWfcGlobal;
+extern const char gNintendoWfcRoomNumUrl[];
+extern const char gNintendoWfcDownloadUrl[];
+extern const char gNintendoWfcUploadUrl[];
+extern const char gNintendoWfcInfoUrl[];
+extern const char gNintendoWfcSetProfileUrl[];
+extern const NintendoWfcScreenFuncs gNintendoWfcScreens[];
+extern int (*const gNintendoWfcStates[])(NintendoWfcConnect *wfc);
+extern int (*const gNintendoWfcNumberInputStates[])(NintendoWfcConnect *wfc);
+extern int (*const gNintendoWfcYesNoStates[])(NintendoWfcYesNoMenu *menu);
+extern const ObjCharTransferTemplate gNintendoWfcObjCharTransferTemplate;
+extern const GraphicsModes gNintendoWfcGraphicsModes;
+extern const GraphicsBanks gNintendoWfcGraphicsBanks;
+extern const BgTemplate gNintendoWfcBgTemplate_Sub1;
+extern const BgTemplate gNintendoWfcBgTemplate_Sub2;
+extern const BgTemplate gNintendoWfcBgTemplate_Main1;
+extern const BgTemplate gNintendoWfcBgTemplate_Main0;
+extern const BgTemplate gNintendoWfcBgTemplate_Sub0;
 extern const u16 gNintendoWfcButtonSpritePositions[][2];
 extern const u16 gNintendoWfcDigitSpritePositions[][3][2];
-extern const u16 gNintendoWfcDigitSpritePositionsY[][3][2];
 extern const u16 gNintendoWfcPadCursorPositions[][2];
-extern const u16 gNintendoWfcPadCursorPositionsY[][2];
 extern const u8 gNintendoWfcPadKeysUpFromLeftButton[];
 extern const u8 gNintendoWfcPadKeysDownFromLeftButton[];
 extern const u8 gNintendoWfcPadKeysUpFromRightButton[];
@@ -412,7 +410,7 @@ static void NintendoWfc_SetDigitSpritePosition(Sprite *sprite, int index, int tw
 static void *NintendoWfc_Alloc(void *unused, u32 size, int alignment);
 static void NintendoWfc_Free(u32 unused, void *ptr);
 static int NintendoWfc_GetWifiIconLevel(void);
-static void NintendoWfc_SetNextMode(NintendoWfcConnect *wfc, int mode, int a2);
+static void NintendoWfc_SetNextScreen(NintendoWfcConnect *wfc, int screen, int a2);
 static void NintendoWfc_InitGraphics(NintendoWfcConnect *wfc);
 static void NintendoWfc_FreeGraphics(NintendoWfcConnect *wfc);
 static void NintendoWfc_InitBgs(BgConfig *bgConfig);
@@ -469,9 +467,9 @@ void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
 void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWifiUploadRecord *record);
 void NintendoWfcHttp_RequestInfo(void);
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
-int NintendoWfc_SessionInit(NintendoWfcConnect *wfc);
-int NintendoWfc_SessionMain(NintendoWfcConnect *wfc);
-int NintendoWfc_SessionExit(NintendoWfcConnect *wfc);
+int NintendoWfc_SessionInit(NintendoWfcConnect *wfc, int state);
+int NintendoWfc_SessionMain(NintendoWfcConnect *wfc, int state);
+int NintendoWfc_SessionExit(NintendoWfcConnect *wfc, int state);
 int NintendoWfc_AskConnect(NintendoWfcConnect *wfc);
 int NintendoWfc_HandleConnectChoice(NintendoWfcConnect *wfc);
 int NintendoWfc_AskLogOut(NintendoWfcConnect *wfc);
@@ -547,14 +545,14 @@ int NintendoWfcYesNo_UnusedState2(void);
 BOOL NintendoWfcYesNo_WaitClose(NintendoWfcYesNoMenu *menu);
 
 void NintendoWfcHttp_Init(u32 profileId, u64 friendKey) {
-    sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
-    sNintendoWfcHttp.result = 0;
-    sNintendoWfcHttp.profileId = profileId;
-    sNintendoWfcHttp.friendKey = friendKey;
+    gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
+    gNintendoWfcHttp.result = 0;
+    gNintendoWfcHttp.profileId = profileId;
+    gNintendoWfcHttp.friendKey = friendKey;
 }
 
 void NintendoWfcHttp_Update(void) {
-    switch (sNintendoWfcHttp.state) {
+    switch (gNintendoWfcHttp.state) {
     case NINTENDO_WFC_HTTP_NONE:
     case NINTENDO_WFC_HTTP_IDLE:
     case NINTENDO_WFC_HTTP_DONE:
@@ -562,16 +560,16 @@ void NintendoWfcHttp_Update(void) {
     case NINTENDO_WFC_HTTP_ROOM_COUNT:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-            sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() > 0) {
-                sNintendoWfcHttp.result = gNintendoWfcHttpResponse.status;
+                gNintendoWfcHttp.result = gNintendoWfcHttpResponse.status;
             } else {
-                sNintendoWfcHttp.result = -2;
+                gNintendoWfcHttp.result = -2;
             }
             GameStats_Shutdown();
             break;
@@ -580,24 +578,24 @@ void NintendoWfcHttp_Update(void) {
     case NINTENDO_WFC_HTTP_DOWNLOAD:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-            sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() == 2616) {
-                sNintendoWfcHttp.result = 0;
+                gNintendoWfcHttp.result = 0;
             } else {
                 switch (*gNintendoWfcHttpResponse.buffer) {
                 case 2:
-                    sNintendoWfcHttp.result = -3;
+                    gNintendoWfcHttp.result = -3;
                     break;
                 case 5:
-                    sNintendoWfcHttp.result = -2;
+                    gNintendoWfcHttp.result = -2;
                     break;
                 default:
-                    sNintendoWfcHttp.result = -5;
+                    gNintendoWfcHttp.result = -5;
                     break;
                 }
             }
@@ -608,27 +606,27 @@ void NintendoWfcHttp_Update(void) {
     case NINTENDO_WFC_HTTP_UPLOAD:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-            sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             switch (gNintendoWfcHttpResponse.status) {
             case 1:
-                sNintendoWfcHttp.result = 0;
+                gNintendoWfcHttp.result = 0;
                 break;
             case 2:
-                sNintendoWfcHttp.result = -3;
+                gNintendoWfcHttp.result = -3;
                 break;
             case 4:
-                sNintendoWfcHttp.result = -1;
+                gNintendoWfcHttp.result = -1;
                 break;
             case 5:
-                sNintendoWfcHttp.result = -2;
+                gNintendoWfcHttp.result = -2;
                 break;
             default:
-                sNintendoWfcHttp.result = -5;
+                gNintendoWfcHttp.result = -5;
                 break;
             }
             GameStats_Shutdown();
@@ -638,27 +636,27 @@ void NintendoWfcHttp_Update(void) {
     case NINTENDO_WFC_HTTP_INFO:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-            sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             switch (gNintendoWfcHttpResponse.status) {
             case 1:
-                sNintendoWfcHttp.result = 0;
+                gNintendoWfcHttp.result = 0;
                 break;
             case 3:
-                sNintendoWfcHttp.result = 1;
+                gNintendoWfcHttp.result = 1;
                 break;
             case 4:
-                sNintendoWfcHttp.result = 2;
+                gNintendoWfcHttp.result = 2;
                 break;
             case 5:
-                sNintendoWfcHttp.result = -2;
+                gNintendoWfcHttp.result = -2;
                 break;
             default:
-                sNintendoWfcHttp.result = -5;
+                gNintendoWfcHttp.result = -5;
                 break;
             }
             GameStats_Shutdown();
@@ -668,30 +666,30 @@ void NintendoWfcHttp_Update(void) {
     case NINTENDO_WFC_HTTP_SET_PROFILE:
         switch (GameStats_Update()) {
         case 1:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-            sNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.result = NintendoWfcHttp_ConvertError(GameStats_GetError());
             GameStats_Shutdown();
             break;
         case 7:
-            sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+            gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
             if (GameStats_GetResponseLength() == 8) {
-                sNintendoWfcHttp.result = 0;
+                gNintendoWfcHttp.result = 0;
             } else {
                 switch (gNintendoWfcHttpResponse.status) {
                 case 1:
-                    sNintendoWfcHttp.result = 0;
+                    gNintendoWfcHttp.result = 0;
                     break;
                 case 3:
-                    sNintendoWfcHttp.result = 1;
+                    gNintendoWfcHttp.result = 1;
                     break;
                 case 4:
-                    sNintendoWfcHttp.result = 2;
+                    gNintendoWfcHttp.result = 2;
                     break;
                 case 5:
-                    sNintendoWfcHttp.result = -2;
+                    gNintendoWfcHttp.result = -2;
                     break;
                 default:
-                    sNintendoWfcHttp.result = -5;
+                    gNintendoWfcHttp.result = -5;
                     break;
                 }
             }
@@ -704,19 +702,19 @@ void NintendoWfcHttp_Update(void) {
     case 7:
     case 9:
     case 11:
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -4;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -4;
         GameStats_Shutdown();
         break;
     }
 }
 
 BOOL NintendoWfcHttp_IsDone(void) {
-    switch (sNintendoWfcHttp.state) {
+    switch (gNintendoWfcHttp.state) {
     case NINTENDO_WFC_HTTP_IDLE:
         return TRUE;
     case NINTENDO_WFC_HTTP_DONE:
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_IDLE;
         return TRUE;
     default:
         return FALSE;
@@ -724,17 +722,17 @@ BOOL NintendoWfcHttp_IsDone(void) {
 }
 
 s32 NintendoWfcHttp_GetResult(void) {
-    return sNintendoWfcHttp.result;
+    return gNintendoWfcHttp.result;
 }
 
 void NintendoWfcHttp_RequestRoomCount(int rank) {
     GameStats_Start();
-    sNintendoWfcHttp.rank = rank - 1;
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcRoomNumUrl, gNintendoWfcHttpRequestBuffer, 1, gNintendoWfcHttpShortResponse, 2)) {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_ROOM_COUNT;
+    gNintendoWfcHttp.rank = rank - 1;
+    if (NintendoWfcHttp_StartRequest(gNintendoWfcRoomNumUrl, gNintendoWfcHttpRequestBuffer, 1, gNintendoWfcHttpShortResponse, 2)) {
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_ROOM_COUNT;
     } else {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -5;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
 }
@@ -742,13 +740,13 @@ void NintendoWfcHttp_RequestRoomCount(int rank) {
 void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer) {
     gNintendoWfcHttpResponse.buffer = buffer;
     GameStats_Start();
-    sNintendoWfcHttp.rank = rank - 1;
-    sNintendoWfcHttp.room = room - 1;
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcDownloadUrl, gNintendoWfcHttpRequestBuffer, 2, buffer, 0xA38)) {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DOWNLOAD;
+    gNintendoWfcHttp.rank = rank - 1;
+    gNintendoWfcHttp.room = room - 1;
+    if (NintendoWfcHttp_StartRequest(gNintendoWfcDownloadUrl, gNintendoWfcHttpRequestBuffer, 2, buffer, 0xA38)) {
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DOWNLOAD;
     } else {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -5;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
 }
@@ -764,27 +762,27 @@ void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWif
     ov72_0223B900[0x19] = room - 1;
     ov72_0223B900[0x1A] = winCount;
     dst = gNintendoWfcHttpUploadFriendKey;
-    src = sNintendoWfcHttpFriendKey;
+    src = gNintendoWfcHttpFriendKey;
     n = 8;
     do {
         *dst++ = *src++;
     } while (--n);
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcUploadUrl, gNintendoWfcHttpRequestBuffer, 239, gNintendoWfcHttpShortResponse, 2)) {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_UPLOAD;
+    if (NintendoWfcHttp_StartRequest(gNintendoWfcUploadUrl, gNintendoWfcHttpRequestBuffer, 239, gNintendoWfcHttpShortResponse, 2)) {
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_UPLOAD;
     } else {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -5;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
 }
 
 void NintendoWfcHttp_RequestInfo(void) {
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcInfoUrl, gNintendoWfcHttpRequestBuffer, 0, gNintendoWfcHttpShortResponse, 2)) {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_INFO;
+    if (NintendoWfcHttp_StartRequest(gNintendoWfcInfoUrl, gNintendoWfcHttpRequestBuffer, 0, gNintendoWfcHttpShortResponse, 2)) {
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_INFO;
     } else {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -5;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
 }
@@ -794,17 +792,17 @@ void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response
     memcpy(gNintendoWfcHttpRequestBuffer, profile, sizeof(WifiServerProfile));
     gNintendoWfcHttpResponse.buffer = (u8 *)response;
     GameStats_Start();
-    if (NintendoWfcHttp_StartRequest(sNintendoWfcSetProfileUrl, gNintendoWfcHttpRequestBuffer, sizeof(WifiServerProfile), gNintendoWfcHttpResponse.buffer, 8)) {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_SET_PROFILE;
+    if (NintendoWfcHttp_StartRequest(gNintendoWfcSetProfileUrl, gNintendoWfcHttpRequestBuffer, sizeof(WifiServerProfile), gNintendoWfcHttpResponse.buffer, 8)) {
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_SET_PROFILE;
     } else {
-        sNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
-        sNintendoWfcHttp.result = -5;
+        gNintendoWfcHttp.state = NINTENDO_WFC_HTTP_DONE;
+        gNintendoWfcHttp.result = -5;
         GameStats_Shutdown();
     }
 }
 
 static BOOL NintendoWfcHttp_StartRequest(const char *url, void *request, int requestSize, void *response, int responseSize) {
-    int result = GameStats_PrepareRequest(url, sNintendoWfcHttp.profileId, request, requestSize, response, responseSize);
+    int result = GameStats_PrepareRequest(url, gNintendoWfcHttp.profileId, request, requestSize, response, responseSize);
     switch (result) {
     case 0:
         return TRUE;
@@ -893,8 +891,8 @@ BOOL NintendoWfc_Init(OverlayManager *man, int *state) {
         wfc = OverlayManager_CreateAndGetData(man, sizeof(NintendoWfcConnect), HEAP_ID_67);
         memset(wfc, 0, sizeof(NintendoWfcConnect));
         wfc->bgConfig = BgConfig_Alloc(HEAP_ID_67);
-        sNintendoWfcGlobal.wfc = wfc;
-        modes = sNintendoWfcGraphicsModes;
+        gNintendoWfcGlobal.wfc = wfc;
+        modes = gNintendoWfcGraphicsModes;
         SetBothScreensModesAndDisable(&modes);
         wfc->msgFormat = MessageFormat_New_Custom(11, 32, HEAP_ID_67);
         wfc->msgDataTower = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0774_bin, HEAP_ID_67);
@@ -929,13 +927,13 @@ BOOL NintendoWfc_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case NINTENDO_WFC_MAIN_WAIT_STARTUP:
         if (CommWireless_IsStartedUp()) {
-            sNintendoWfcGlobal.heap = wfc->expHeap;
+            gNintendoWfcGlobal.heap = wfc->expHeap;
             DWC_SetMemFunc(NintendoWfc_Alloc, NintendoWfc_Free);
             *state = NINTENDO_WFC_MAIN_SESSION_INIT;
         }
         break;
     case NINTENDO_WFC_MAIN_SESSION_INIT:
-        *state = sNintendoWfcModeInit[wfc->mode].func[0](wfc, *state);
+        *state = gNintendoWfcScreens[wfc->screen].init(wfc, *state);
         break;
     case NINTENDO_WFC_MAIN_WAIT_FADE_IN:
         if (IsPaletteFadeFinished()) {
@@ -943,11 +941,11 @@ BOOL NintendoWfc_Main(OverlayManager *man, int *state) {
         }
         break;
     case NINTENDO_WFC_MAIN_SESSION_MAIN:
-        *state = sNintendoWfcModeMain[wfc->mode].func[0](wfc, *state);
+        *state = gNintendoWfcScreens[wfc->screen].main(wfc, *state);
         break;
     case NINTENDO_WFC_MAIN_SESSION_EXIT:
         if (IsPaletteFadeFinished()) {
-            *state = sNintendoWfcModeExit[wfc->mode].func[0](wfc, *state);
+            *state = gNintendoWfcScreens[wfc->screen].exit(wfc, *state);
         }
         break;
     case NINTENDO_WFC_MAIN_DONE:
@@ -992,21 +990,21 @@ static void NintendoWfc_VBlankCB(void *arg) {
 }
 
 static void NintendoWfc_SetGfxBanks(void) {
-    GraphicsBanks banks = sNintendoWfcGraphicsBanks;
+    GraphicsBanks banks = gNintendoWfcGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
 static void NintendoWfc_InitArgs(NintendoWfcConnect *wfc, OverlayManager *man) {
     wfc->args = OverlayManager_GetArgs(man);
-    wfc->mode = 0;
-    NintendoWfc_SetNextMode(wfc, 0, 0);
+    wfc->screen = 0;
+    NintendoWfc_SetNextScreen(wfc, 0, 0);
 }
 
 static void NintendoWfc_ExitDummy(NintendoWfcConnect *wfc) {
 }
 
 static void NintendoWfc_InitObjTransfer(void) {
-    ObjCharTransferTemplate template = sNintendoWfcObjCharTransferTemplate;
+    ObjCharTransferTemplate template = gNintendoWfcObjCharTransferTemplate;
     ObjCharTransfer_Init(&template);
     ObjPlttTransfer_Init(20, HEAP_ID_67);
     ObjCharTransfer_ClearBuffers();
@@ -1141,7 +1139,7 @@ static void NintendoWfc_SetSpritePosition(Sprite *sprite, int x, int y) {
 }
 
 static void NintendoWfc_MovePadCursor(Sprite *sprite, int key) {
-    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcPadCursorPositions[key][0], gNintendoWfcPadCursorPositionsY[key][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcPadCursorPositions[key][0], gNintendoWfcPadCursorPositions[key][1] + 256);
     if (key < 10) {
         Sprite_SetAnimCtrlSeq(sprite, 1);
     } else {
@@ -1154,12 +1152,12 @@ static void NintendoWfc_MoveDigitCursor(Sprite *sprite, int index, int twoDigits
 }
 
 static void NintendoWfc_SetDigitSpritePosition(Sprite *sprite, int index, int twoDigits) {
-    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], gNintendoWfcDigitSpritePositionsY[twoDigits][index][0] + 256);
+    NintendoWfc_SetSpritePosition(sprite, gNintendoWfcDigitSpritePositions[twoDigits][index][0], gNintendoWfcDigitSpritePositions[twoDigits][index][1] + 256);
 }
 
 static void *NintendoWfc_Alloc(void *unused, u32 size, int alignment) {
     OSIntrMode enabled = OS_DisableInterrupts();
-    void *result = NNS_FndAllocFromExpHeapEx(sNintendoWfcGlobal.heap, size, alignment);
+    void *result = NNS_FndAllocFromExpHeapEx(gNintendoWfcGlobal.heap, size, alignment);
     OS_RestoreInterrupts(enabled);
     return result;
 }
@@ -1170,7 +1168,7 @@ static void NintendoWfc_Free(u32 unused, void *ptr) {
         return;
     }
     enabled = OS_DisableInterrupts();
-    NNS_FndFreeToExpHeap(sNintendoWfcGlobal.heap, ptr);
+    NNS_FndFreeToExpHeap(gNintendoWfcGlobal.heap, ptr);
     OS_RestoreInterrupts(enabled);
 }
 
@@ -1178,8 +1176,8 @@ static int NintendoWfc_GetWifiIconLevel(void) {
     return 3 - DWC_GetLinkLevel();
 }
 
-static void NintendoWfc_SetNextMode(NintendoWfcConnect *wfc, int mode, int a2) {
-    wfc->nextMode = mode;
+static void NintendoWfc_SetNextScreen(NintendoWfcConnect *wfc, int screen, int a2) {
+    wfc->nextScreen = screen;
     wfc->unk_0018 = a2;
 }
 
@@ -1207,7 +1205,7 @@ static void NintendoWfc_FreeGraphics(NintendoWfcConnect *wfc) {
     ObjPlttTransfer_Destroy();
 }
 
-int NintendoWfc_SessionInit(NintendoWfcConnect *wfc) {
+int NintendoWfc_SessionInit(NintendoWfcConnect *wfc, int state) {
     NintendoWfc_InitStrings(wfc);
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 8, 1, HEAP_ID_67);
     NintendoWfc_InitBgs(wfc->bgConfig);
@@ -1239,12 +1237,12 @@ int NintendoWfc_SessionInit(NintendoWfcConnect *wfc) {
     return NINTENDO_WFC_MAIN_WAIT_FADE_IN;
 }
 
-int NintendoWfc_SessionMain(NintendoWfcConnect *wfc) {
+int NintendoWfc_SessionMain(NintendoWfcConnect *wfc, int state) {
     u32 prevState;
     int result;
     WirelessStatusIcon_SetLevel(NintendoWfc_GetWifiIconLevel());
     prevState = wfc->state;
-    result = sNintendoWfcStates[prevState](wfc);
+    result = gNintendoWfcStates[prevState](wfc);
     if (prevState != wfc->state) {
         wfc->subState = 0;
         wfc->subTimer = 0;
@@ -1252,7 +1250,7 @@ int NintendoWfc_SessionMain(NintendoWfcConnect *wfc) {
     return result;
 }
 
-int NintendoWfc_SessionExit(NintendoWfcConnect *wfc) {
+int NintendoWfc_SessionExit(NintendoWfcConnect *wfc, int state) {
     if (wfc->paletteCycle.task != NULL) {
         SysTask_Destroy(wfc->paletteCycle.task);
         wfc->paletteCycle.task = NULL;
@@ -1262,29 +1260,29 @@ int NintendoWfc_SessionExit(NintendoWfcConnect *wfc) {
     NintendoWfc_RemoveWindows(wfc);
     NintendoWfc_FreeBgs(wfc->bgConfig);
     wfc->paletteCycle.active = 0;
-    wfc->mode = wfc->nextMode;
-    if (wfc->mode == 0) {
+    wfc->screen = wfc->nextScreen;
+    if (wfc->screen == 0) {
         return NINTENDO_WFC_MAIN_DONE;
     }
     return NINTENDO_WFC_MAIN_SESSION_INIT;
 }
 
 static void NintendoWfc_InitBgs(BgConfig *bgConfig) {
-    BgTemplate main0 = sNintendoWfcBgTemplate_Main0;
+    BgTemplate main0 = gNintendoWfcBgTemplate_Main0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_0, &main0, GF_BG_TYPE_TEXT);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, FALSE);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_MAIN_0);
-    BgTemplate main1 = sNintendoWfcBgTemplate_Main1;
+    BgTemplate main1 = gNintendoWfcBgTemplate_Main1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_MAIN_1, &main1, GF_BG_TYPE_TEXT);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, FALSE);
-    BgTemplate sub0 = sNintendoWfcBgTemplate_Sub0;
+    BgTemplate sub0 = gNintendoWfcBgTemplate_Sub0;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_0, &sub0, GF_BG_TYPE_TEXT);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, FALSE);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_0);
-    BgTemplate sub1 = sNintendoWfcBgTemplate_Sub1;
+    BgTemplate sub1 = gNintendoWfcBgTemplate_Sub1;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_1, &sub1, GF_BG_TYPE_TEXT);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, FALSE);
-    BgTemplate sub2 = sNintendoWfcBgTemplate_Sub2;
+    BgTemplate sub2 = gNintendoWfcBgTemplate_Sub2;
     InitBgFromTemplate(bgConfig, GF_BG_LYR_SUB_2, &sub2, GF_BG_TYPE_TEXT);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG2, TRUE);
     BgClearTilemapBufferAndCommit(bgConfig, GF_BG_LYR_SUB_2);
@@ -1467,7 +1465,7 @@ int NintendoWfc_HandleConnectChoice(NintendoWfcConnect *wfc) {
     if (choice) {
         if (choice == 2) {
             CommState_FreeWfcSession();
-            NintendoWfc_SetNextMode(wfc, 0, 0);
+            NintendoWfc_SetNextScreen(wfc, 0, 0);
             wfc->state = NINTENDO_WFC_STATE_START_EXIT;
         } else {
             NintendoWfc_PrintMessage(wfc, wfc->msgDataWfc, msg_0778_00001, 1, 0xF0F);
@@ -1495,7 +1493,7 @@ int NintendoWfc_HandleLogOutChoice(NintendoWfcConnect *wfc) {
             }
         } else {
             if (DWC_CheckInet() == 0) {
-                NintendoWfc_SetNextMode(wfc, 0, 0);
+                NintendoWfc_SetNextScreen(wfc, 0, 0);
                 wfc->state = NINTENDO_WFC_STATE_START_EXIT;
             } else {
                 wfc->state = NINTENDO_WFC_STATE_PRINT_DISCONNECTING;
@@ -2236,7 +2234,7 @@ int NintendoWfc_PrintDisconnecting(NintendoWfcConnect *wfc) {
 
 int NintendoWfc_CloseConnection(NintendoWfcConnect *wfc) {
     DWC_CleanupInet();
-    NintendoWfc_SetNextMode(wfc, 0, 0);
+    NintendoWfc_SetNextScreen(wfc, 0, 0);
     wfc->state = NINTENDO_WFC_STATE_PRINT_DISCONNECTED;
     return NINTENDO_WFC_MAIN_SESSION_MAIN;
 }
@@ -2325,7 +2323,7 @@ int NintendoWfc_Disconnect(NintendoWfcConnect *wfc) {
     default:
         wfc->subTimer++;
         if (wfc->subTimer > 30) {
-            NintendoWfc_SetNextMode(wfc, 0, 0);
+            NintendoWfc_SetNextScreen(wfc, 0, 0);
             wfc->state = NINTENDO_WFC_STATE_START_EXIT;
         }
         break;
@@ -2485,7 +2483,7 @@ static int NintendoWfc_StartNumberInput(NintendoWfcConnect *wfc, int a1, int max
 }
 
 static int NintendoWfc_RunNumberInput(NintendoWfcConnect *wfc) {
-    if (sNintendoWfcNumberInputStates[wfc->numberInput.state](wfc) == 1) {
+    if (gNintendoWfcNumberInputStates[wfc->numberInput.state](wfc) == 1) {
         return wfc->numberInput.value;
     }
     return 0;
@@ -2901,7 +2899,7 @@ static void NintendoWfcYesNo_Init(NintendoWfcYesNoMenu *menu) {
 }
 
 static int NintendoWfcYesNo_Run(NintendoWfcYesNoMenu *menu) {
-    int result = sNintendoWfcYesNoStates[menu->state](menu);
+    int result = gNintendoWfcYesNoStates[menu->state](menu);
     if (result == 1) {
         return menu->choice + 1;
     }

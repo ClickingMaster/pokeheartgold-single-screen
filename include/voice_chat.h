@@ -51,19 +51,9 @@ typedef struct VoiceChat {
 
 extern VoiceChat gVoiceChat;
 
-void VoiceChat_InitAudio(void);
-void VoiceChat_MicCallback(MICResult result, void *arg);
-void VoiceChat_StreamCallback(BOOL isAlarm, int numChannels, void **buffers, u32 size, int format, void *arg);
-BOOL VoiceChat_RequestSession(u32 aid);
-BOOL VoiceChat_AcceptSession(int unused);
-void VoiceChat_ConferenceEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
-void VoiceChat_PhoneEventCallback(u32 unusedId, u32 event, VctSession *session, void *unusedContext);
-void VoiceChat_EndSession(VctSession *session);
 void VoiceChat_Update(void);
 BOOL VoiceChat_ReceiveData(u32 aid, void *data, u32 size);
-void VoiceChat_AllocAligned(void **allocation, void **aligned, u32 size, u32 heapId);
 void VoiceChat_Init(int heapId, int codec, int count);
-void VoiceChat_StartStream(void);
 void VoiceChat_HangUp(int unused);
 void VoiceChat_SetEndCallback(void (*callback)(void));
 void VoiceChat_Shutdown(void);

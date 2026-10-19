@@ -6,6 +6,7 @@
 
 #include "assert.h"
 #include "communication_packet_pool.h"
+#include "communication_player_state.h"
 #include "heap.h"
 
 // Link command layer: byte rings and packet queues that cut the outgoing commands into frames, and the command
@@ -61,10 +62,6 @@ static void CommCmd_RecvShutdown(int netId, int size, void *data, void *context)
 static void CommCmd_RecvNotReady(int netId, int size, void *data, void *context);
 
 void Comm_RecvShutdown(int netId, int size, void *data, void *context);
-void CommPlayerInfo_RecvPlayerEntry(int netId, int size, void *src, void *context);
-void CommPlayerInfo_RecvEntry(int netId, int size, void *packet, void *context);
-void CommPlayerInfo_RecvSetUnk3A4(int netId, int size, void *data, void *context);
-u32 CommPlayerInfo_GetEntrySize(void);
 void CommState_RecvJoinRequest(int netId, int size, void *data, void *context);
 void CommState_RecvJoinReply(int netId, int size, void *data, void *context);
 u32 CommState_GetJoinMessageSize(void);

@@ -45,12 +45,49 @@ extern int PacketPool_HasCommand(void *queue, int);
 extern int Comm_GetMaxChildren(u16);
 extern int Comm_IsWifiLinkMode(int);
 
+static int Comm_InitWork(int create, int packetSize);
+static void Comm_ResetBuffers(void);
+static void Comm_Reset(void);
+static void Comm_OnTransferModeChanged(void);
+static void Comm_ResetNetIdBuffers(int slot);
+static void Comm_ResetDisconnectedNetIds(void);
+static void Comm_OnChildJoined(int slot);
+static void Comm_UpdateTransferMode(void);
+static void Comm_RequestTransferMode(int connected);
+static int Comm_GetTransferMode(void);
+static void Comm_VBlankSendTask(void);
+static void Comm_ShutdownWhenRequested(void);
+static void Comm_UpdateChildSend(void);
+static BOOL Comm_FillParentFrameFromChildren(int slot);
+static void Comm_SendParentFrame(void);
+static BOOL Comm_HasNoChildBacklog(void);
+static void Comm_UpdateParentSend(void);
+static void Comm_OnParentFrameReceived(int netId, const u8 *data, int size);
+static void Comm_OnChildFrameReceived(int slot, const u8 *data, int size);
+static void Comm_OnChildFrameSent(void *ptr);
+static void Comm_OnParentFrameSent(void *ptr);
+static void Comm_SendChildFrame(void);
+static inline u32 CommWork_Random(CommWork *w, u32 max);
+static void Comm_ScrambleDirectionKeys(void);
+static int Comm_ReadFrameKeys(const u8 *data, int slot);
+static int Comm_WriteFrameKeys(u8 *data);
+static int Comm_BuildChildFrame(u8 *data);
+static void Comm_BuildParentFrame(u8 *data);
+static BOOL Comm_IsSendSkippedThisFrame(void);
+static void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCursor *cursor);
+static void Comm_ReceiveCommands(ByteRing *ring, int netId, u8 *buffer, PacketCursor *cursor);
+static void Comm_ReceiveFromParent(void);
+static void Comm_ReceiveFromChildren(void);
+static int Comm_IsKeySyncEnabled(void);
+static void Comm_UpdateTransferModeHandshake(void);
+static int Comm_GetChildFrameSize(u16 linkMode);
+
 CommCore gCommCore;
 CommSendStages gCommSendStages = {
     { 4, 4 }
 };
 
-int Comm_InitWork(int create, int packetSize) {
+static int Comm_InitWork(int create, int packetSize) {
     int existing = 0;
     int count;
     int i;
@@ -110,7 +147,7 @@ int Comm_InitWork(int create, int packetSize) {
     return 1;
 }
 
-void Comm_ResetBuffers(void) {
+static void Comm_ResetBuffers(void) {
     int count = Comm_GetMaxChildren((u16)CommState_GetLinkMode()) + 1;
     int length;
     int i;
@@ -165,7 +202,7 @@ void Comm_ResetBuffers(void) {
     gCommCore.work->unk_6B7 = 0;
 }
 
-void Comm_Reset(void) {
+static void Comm_Reset(void) {
     gCommCore.work->childFrameIndex = 0;
     gCommCore.work->parentFrameIndex = 0;
     gCommCore.work->continuousSend = 1;
@@ -174,11 +211,11 @@ void Comm_Reset(void) {
     gCommSendStages.stage[1] = 4;
 }
 
-void Comm_OnTransferModeChanged(void) {
+static void Comm_OnTransferModeChanged(void) {
     Comm_ResetBuffers();
 }
 
-void Comm_ResetNetIdBuffers(int slot) {
+static void Comm_ResetNetIdBuffers(int slot) {
     int count;
     CommWork *work;
     int length;
@@ -199,7 +236,7 @@ void Comm_ResetNetIdBuffers(int slot) {
     gCommCore.work->recvCursors[slot].received = 0;
 }
 
-void Comm_ResetDisconnectedNetIds(void) {
+static void Comm_ResetDisconnectedNetIds(void) {
     int i;
     for (i = 1; i < 8; i++) {
         if (!Comm_IsNetIdConnected((u16)i) && gCommCore.work->waitingFirstFrame[i] == 0) {
@@ -208,7 +245,7 @@ void Comm_ResetDisconnectedNetIds(void) {
     }
 }
 
-void Comm_OnChildJoined(int slot) {
+static void Comm_OnChildJoined(int slot) {
     Comm_ResetNetIdBuffers(slot);
 }
 
@@ -232,7 +269,7 @@ int Comm_StartScan(int a, int b, int c) {
     return result;
 }
 
-void Comm_UpdateTransferMode(void) {
+static void Comm_UpdateTransferMode(void) {
     int changed = 0;
     if (Comm_GetLocalNetId() == 0) {
         if (gCommSendStages.stage[0] != 4) {
@@ -255,7 +292,7 @@ void Comm_UpdateTransferMode(void) {
     Comm_UpdateTransferModeHandshake();
 }
 
-void Comm_RequestTransferMode(int connected) {
+static void Comm_RequestTransferMode(int connected) {
     int state = gCommCore.work->transferMode;
     if (state == 0 && connected == 1) {
         gCommCore.work->transferMode = 3;
@@ -274,7 +311,7 @@ void Comm_RequestTransferMode0(void) {
     Comm_RequestTransferMode(0);
 }
 
-int Comm_GetTransferMode(void) {
+static int Comm_GetTransferMode(void) {
     int state = gCommCore.work->transferMode;
     if (state == 2) {
         return 1;
@@ -324,7 +361,7 @@ int Comm_ConnectToParent(int value) {
     return CommWireless_ConnectToParent(value);
 }
 
-void Comm_VBlankSendTask(void) {
+static void Comm_VBlankSendTask(void) {
     if (gCommCore.updateLock != 0) {
         Comm_SendChildFrame();
         if (Comm_GetLocalNetId() == 0 && Comm_IsNetIdConnected(0)) {
@@ -334,7 +371,7 @@ void Comm_VBlankSendTask(void) {
     }
 }
 
-void Comm_ShutdownWhenRequested(void) {
+static void Comm_ShutdownWhenRequested(void) {
     if (CommWireless_IsShutdownRequested()) {
         if (Comm_GetLocalNetId() == 0) {
             if (CommWireless_GetConnectedChildren() == 0) {
@@ -417,7 +454,7 @@ void Comm_ResetWorkAndParents(void) {
     gCommCore.updateLock = lock;
 }
 
-void Comm_UpdateChildSend(void) {
+static void Comm_UpdateChildSend(void) {
     int i;
     int count;
 
@@ -489,7 +526,7 @@ void Comm_UpdateChildSend(void) {
     }
 }
 
-BOOL Comm_FillParentFrameFromChildren(int slot) {
+static BOOL Comm_FillParentFrameFromChildren(int slot) {
     int bad = 0;
     int stride = Comm_GetChildFrameSize((u16)CommState_GetLinkMode());
     int count = Comm_GetMaxChildren((u16)CommState_GetLinkMode()) + 1;
@@ -515,7 +552,7 @@ BOOL Comm_FillParentFrameFromChildren(int slot) {
     return TRUE;
 }
 
-void Comm_SendParentFrame(void) {
+static void Comm_SendParentFrame(void) {
     int count;
     int i;
 
@@ -557,7 +594,7 @@ void Comm_SendParentFrame(void) {
     }
 }
 
-BOOL Comm_HasNoChildBacklog(void) {
+static BOOL Comm_HasNoChildBacklog(void) {
     int count = Comm_GetMaxChildren((u16)CommState_GetLinkMode()) + 1;
     int i;
     for (i = 1; i < count; i++) {
@@ -568,7 +605,7 @@ BOOL Comm_HasNoChildBacklog(void) {
     return TRUE;
 }
 
-void Comm_UpdateParentSend(void) {
+static void Comm_UpdateParentSend(void) {
     int count = Comm_GetMaxChildren((u16)CommState_GetLinkMode()) + 1;
     int i;
 
@@ -622,7 +659,7 @@ void Comm_RecvParentFrameCallback(int netId, const u8 *data, int size) {
     Comm_OnParentFrameReceived(netId, data, size);
 }
 
-void Comm_OnParentFrameReceived(int netId, const u8 *data, int size) {
+static void Comm_OnParentFrameReceived(int netId, const u8 *data, int size) {
     int stride;
     int count;
     int i;
@@ -681,7 +718,7 @@ void Comm_RecvChildFrameCallback(int netId, const u8 *data, int size) {
     Comm_OnChildFrameReceived(netId, data, size);
 }
 
-void Comm_OnChildFrameReceived(int slot, const u8 *data, int size) {
+static void Comm_OnChildFrameReceived(int slot, const u8 *data, int size) {
     int frameSize;
 
     gCommCore.work->childSentFrames[slot]--;
@@ -738,7 +775,7 @@ void Comm_RecvPeerFrameCallback(int slot, const u8 *data) {
     gCommCore.work->waitingFirstFrame[slot] = 0;
 }
 
-void Comm_OnChildFrameSent(void *ptr) {
+static void Comm_OnChildFrameSent(void *ptr) {
     if (ptr != NULL) {
         gCommSendStages.stage[1]++;
     } else {
@@ -746,7 +783,7 @@ void Comm_OnChildFrameSent(void *ptr) {
     }
 }
 
-void Comm_OnParentFrameSent(void *ptr) {
+static void Comm_OnParentFrameSent(void *ptr) {
     if (ptr != NULL) {
         gCommSendStages.stage[0]++;
     } else {
@@ -754,7 +791,7 @@ void Comm_OnParentFrameSent(void *ptr) {
     }
 }
 
-void Comm_SendChildFrame(void) {
+static void Comm_SendChildFrame(void) {
     int frameSize;
 
     if (gCommCore.work == NULL) {
@@ -800,7 +837,7 @@ static inline u32 CommWork_Random(CommWork *w, u32 max) {
     return (u32)((((u64)rng->state >> 32) * max) >> 32);
 }
 
-void Comm_ScrambleDirectionKeys(void) {
+static void Comm_ScrambleDirectionKeys(void) {
     CommWork *w = gCommCore.work;
     u16 result = 0;
     if (w->keyScrambleMode == 0 || !(w->heldKeys & PAD_PLUS_KEY_MASK)) {
@@ -848,7 +885,7 @@ void Comm_ScrambleDirectionKeys(void) {
     gCommCore.work->heldKeys += result;
 }
 
-int Comm_ReadFrameKeys(const u8 *data, int slot) {
+static int Comm_ReadFrameKeys(const u8 *data, int slot) {
     u8 value;
     u8 direction;
     int decoded;
@@ -873,7 +910,7 @@ int Comm_ReadFrameKeys(const u8 *data, int slot) {
     return 1;
 }
 
-int Comm_WriteFrameKeys(u8 *data) {
+static int Comm_WriteFrameKeys(u8 *data) {
     u16 flags;
     if (gCommCore.work->keysLocked != 0) {
         return 0;
@@ -902,7 +939,7 @@ int Comm_WriteFrameKeys(u8 *data) {
     return 0;
 }
 
-int Comm_BuildChildFrame(u8 *data) {
+static int Comm_BuildChildFrame(u8 *data) {
     ByteWriter receive;
     int count = Comm_GetChildFrameSize((u16)CommState_GetLinkMode());
 
@@ -935,7 +972,7 @@ int Comm_BuildChildFrame(u8 *data) {
     return 1;
 }
 
-void Comm_BuildParentFrame(u8 *data) {
+static void Comm_BuildParentFrame(u8 *data) {
     ByteWriter receive;
     u16 value;
 
@@ -959,7 +996,7 @@ void Comm_BuildParentFrame(u8 *data) {
     }
 }
 
-BOOL Comm_IsSendSkippedThisFrame(void) {
+static BOOL Comm_IsSendSkippedThisFrame(void) {
     int divisor = gCommCore.work->sendSkipInterval;
     if (divisor == 0) {
         return FALSE;
@@ -1044,7 +1081,7 @@ int Comm_GetSendBufferFreeSpace(void) {
     return ByteRing_GetFreeSize(&gCommCore.work->childSendRing);
 }
 
-void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCursor *cursor) {
+static void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCursor *cursor) {
     Comm_CallCommandRecv(netId, command, size, data);
     cursor->command = 0xEE;
     cursor->size = 0xFFFF;
@@ -1052,7 +1089,7 @@ void Comm_FinishCommand(int netId, int command, int size, void *data, PacketCurs
     cursor->received = 0;
 }
 
-void Comm_ReceiveCommands(ByteRing *ring, int netId, u8 *buffer, PacketCursor *cursor) {
+static void Comm_ReceiveCommands(ByteRing *ring, int netId, u8 *buffer, PacketCursor *cursor) {
     while (ByteRing_GetReadableSize(ring)) {
         int command = cursor->command;
         if (command == 0xEE) {
@@ -1110,7 +1147,7 @@ void Comm_ReceiveCommands(ByteRing *ring, int netId, u8 *buffer, PacketCursor *c
     }
 }
 
-void Comm_ReceiveFromParent(void) {
+static void Comm_ReceiveFromParent(void) {
     if (gCommCore.work != NULL && gCommCore.work->receiveStopped == 0) {
         ByteRing_Commit(&gCommCore.work->parentRecvRing);
         if (ByteRing_GetReadableSize(&gCommCore.work->parentRecvRing) > 0) {
@@ -1119,7 +1156,7 @@ void Comm_ReceiveFromParent(void) {
     }
 }
 
-void Comm_ReceiveFromChildren(void) {
+static void Comm_ReceiveFromChildren(void) {
     int count;
     int i;
 
@@ -1215,7 +1252,7 @@ void Comm_DisableKeySync(void) {
     }
 }
 
-int Comm_IsKeySyncEnabled(void) {
+static int Comm_IsKeySyncEnabled(void) {
     if (gCommCore.work != NULL) {
         return gCommCore.work->heldKeys & 0x8000;
     }
@@ -1229,7 +1266,7 @@ int Comm_SendParentCommandNoCopyUnchecked(int command, void *data, int size) {
     return PacketPool_Enqueue(&gCommCore.work->parentQueue, command, data, size, 1, 0);
 }
 
-void Comm_UpdateTransferModeHandshake(void) {
+static void Comm_UpdateTransferModeHandshake(void) {
     s32 result;
 
     if (gCommCore.work == NULL) {
@@ -1317,7 +1354,7 @@ int Comm_HasLinkError(void) {
     return CommWireless_IsLinkLost();
 }
 
-int Comm_GetChildFrameSize(u16 linkMode) {
+static int Comm_GetChildFrameSize(u16 linkMode) {
     if ((u32)Comm_GetMaxChildren(linkMode) >= 5) {
         return 12;
     }

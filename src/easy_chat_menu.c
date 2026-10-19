@@ -33,16 +33,17 @@ struct ECMenu {
     u8 knownWords[0xBB];
 };
 
-ECMenu *ECMenu_New(enum HeapID heapID, EasyChatArgs *args);
-void ECMenu_Delete(ECMenu *menu);
-void ECMenu_BuildCategoryLists(ECMenu *menu);
+static void ECMenu_BuildCategoryLists(ECMenu *menu);
 static u32 ECMenuBuild_Pokemon(ECMenu *menu, const u16 *words, u32 count, u16 *dest);
 static u32 ECMenuBuild_Move(ECMenu *menu, const u16 *words, u32 count, u16 *dest);
 static u32 ECMenuBuild_TrendySayings(ECMenu *menu, const u16 *words, u32 count, u16 *dest);
 static u32 ECMenuBuild_Greetings(ECMenu *menu, const u16 *words, u32 count, u16 *dest);
 static u32 ECMenuBuild_Generic(ECMenu *menu, const u16 *words, u32 count, u16 *dest);
-void ECMenu_BuildInitialLists(ECMenu *menu);
-u32 ECMenu_CollectKnownWords(ECMenu *menu, const u16 *words, u16 *dest, u32 destIndex);
+static void ECMenu_BuildInitialLists(ECMenu *menu);
+static u32 ECMenu_CollectKnownWords(ECMenu *menu, const u16 *words, u16 *dest, u32 destIndex);
+
+ECMenu *ECMenu_New(enum HeapID heapID, EasyChatArgs *args);
+void ECMenu_Delete(ECMenu *menu);
 u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
 void ECMenu_GetCategoryWordString(ECMenu *menu, u32 category, u32 index, String *dest);
 u16 ECMenu_GetCategoryWord(ECMenu *menu, u32 category, u32 index);
@@ -3228,7 +3229,7 @@ void ECMenu_Delete(ECMenu *menu) {
     }
 }
 
-void ECMenu_BuildCategoryLists(ECMenu *menu) {
+static void ECMenu_BuildCategoryLists(ECMenu *menu) {
     int i;
     u32 total;
     u32 n;
@@ -3348,7 +3349,7 @@ static u32 ECMenuBuild_Generic(ECMenu *menu, const u16 *words, u32 count, u16 *d
     return count;
 }
 
-void ECMenu_BuildInitialLists(ECMenu *menu) {
+static void ECMenu_BuildInitialLists(ECMenu *menu) {
     u32 total = 0;
     u32 i;
 
@@ -3359,7 +3360,7 @@ void ECMenu_BuildInitialLists(ECMenu *menu) {
     }
 }
 
-u32 ECMenu_CollectKnownWords(ECMenu *menu, const u16 *words, u16 *dest, u32 destIndex) {
+static u32 ECMenu_CollectKnownWords(ECMenu *menu, const u16 *words, u16 *dest, u32 destIndex) {
     u32 n = 0;
 
     while (*words != 0xFFFF) {

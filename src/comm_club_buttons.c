@@ -51,15 +51,15 @@ enum CommClubButtonsState {
     COMM_CLUB_BUTTONS_STATE_HOLD_TOUCH,
 };
 
-void CommClubButtons_Task(SysTask *task, void *taskData);
-void CommClubButtons_SetVramBanks(void);
-void CommClubButtons_InitBgs(BgConfig *bgConfig);
+static void CommClubButtons_Task(SysTask *task, void *taskData);
+static void CommClubButtons_SetVramBanks(void);
+static void CommClubButtons_InitBgs(BgConfig *bgConfig);
 static void CommClubButtons_FreeBgs(BgConfig *bgConfig);
-void CommClubButtons_AddWindows(CommClubButtonsData *data);
+static void CommClubButtons_AddWindows(CommClubButtonsData *data);
 static void CommClubButtons_RemoveWindows(CommClubButtonsData *data);
-void CommClubButtons_LoadGraphics(CommClubButtonsData *data);
-void CommClubButtons_DrawButtons(CommClubButtonsData *data);
-void CommClubButtons_SetButtonPalette(CommClubButtonsData *data, u8 palette);
+static void CommClubButtons_LoadGraphics(CommClubButtonsData *data);
+static void CommClubButtons_DrawButtons(CommClubButtonsData *data);
+static void CommClubButtons_SetButtonPalette(CommClubButtonsData *data, u8 palette);
 
 const TouchscreenHitbox sCommClubButtonsOneButtonHitboxes[] = {
     { 0x50, 0x7F, 0x00, 0xFF },
@@ -124,7 +124,7 @@ BOOL CommClubButtons_IsExitDone(void) {
     return TRUE;
 }
 
-void CommClubButtons_Task(SysTask *task, void *taskData) {
+static void CommClubButtons_Task(SysTask *task, void *taskData) {
     CommClubButtonsData *data = taskData;
     const CommClubButtonsLayout *layout = &sCommClubButtonsLayouts[data->count - 1];
 
@@ -178,13 +178,13 @@ void CommClubButtons_Task(SysTask *task, void *taskData) {
     }
 }
 
-void CommClubButtons_SetVramBanks(void) {
+static void CommClubButtons_SetVramBanks(void) {
     GX_SetBankForSubBG(GX_VRAM_SUB_BG_32_H);
     GX_SetBankForSubOBJ(GX_VRAM_SUB_OBJ_16_I);
     reg_GXS_DB_DISPCNT = (reg_GXS_DB_DISPCNT & 0xFFCFFFEF) | 0x10;
 }
 
-void CommClubButtons_InitBgs(BgConfig *bgConfig) {
+static void CommClubButtons_InitBgs(BgConfig *bgConfig) {
     GXS_SetGraphicsMode(GX_BGMODE_0);
 
     {
@@ -218,7 +218,7 @@ static void CommClubButtons_FreeBgs(BgConfig *bgConfig) {
     FreeBgTilemapBuffer(bgConfig, GF_BG_LYR_SUB_0);
 }
 
-void CommClubButtons_AddWindows(CommClubButtonsData *data) {
+static void CommClubButtons_AddWindows(CommClubButtonsData *data) {
     u32 i;
     const CommClubButtonsLayout *layout = &sCommClubButtonsLayouts[data->count - 1];
 
@@ -236,7 +236,7 @@ static void CommClubButtons_RemoveWindows(CommClubButtonsData *data) {
     }
 }
 
-void CommClubButtons_LoadGraphics(CommClubButtonsData *data) {
+static void CommClubButtons_LoadGraphics(CommClubButtonsData *data) {
     NNSG2dScreenData *scrnData;
     void *raw;
     NARC *narc = NARC_New(NARC_a_2_3_7, HEAP_ID_8);
@@ -250,7 +250,7 @@ void CommClubButtons_LoadGraphics(CommClubButtonsData *data) {
     NARC_Delete(narc);
 }
 
-void CommClubButtons_DrawButtons(CommClubButtonsData *data) {
+static void CommClubButtons_DrawButtons(CommClubButtonsData *data) {
     u16 i;
     String *str;
     const CommClubButtonsLayout *layout;
@@ -278,7 +278,7 @@ void CommClubButtons_DrawButtons(CommClubButtonsData *data) {
     ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_1);
 }
 
-void CommClubButtons_SetButtonPalette(CommClubButtonsData *data, u8 palette) {
+static void CommClubButtons_SetButtonPalette(CommClubButtonsData *data, u8 palette) {
     const CommClubButtonsLayout *layout = &sCommClubButtonsLayouts[data->count - 1];
     BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_SUB_1, layout->x, (u8)(layout->y + (layout->spacing + 6) * data->pressedButton), 0x20, 6, palette);
     ScheduleBgTilemapBufferTransfer(data->bgConfig, GF_BG_LYR_SUB_1);

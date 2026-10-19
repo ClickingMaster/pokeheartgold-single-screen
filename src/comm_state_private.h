@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "save_link_ruleset.h"
+
 typedef struct DWCUserData DWCUserData;
 
 typedef struct DWCFriendData {
@@ -132,16 +134,13 @@ void Comm_SetWifiContinuousSend(int value);
 int WiFiPlazaLobbyClient_IsInLobby(void);
 int WiFiPlazaLobbyClient_Update(void);
 int WiFiPlazaLobbyClient_IsDisconnected(void);
-int CommPlayerInfo_GetCountry(int netId);
-int CommPlayerInfo_GetRegion(int netId);
-void CommPlayerInfo_SaveRecords(SaveData *saveData);
 
 u32 CommState_GetSyncPacketSize(void);
 void CommState_Init(SaveData *saveData, s8 linkMode);
 void CommState_Free(void);
 BOOL CommState_Exists(void);
-void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules);
-void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules);
+void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, LinkBattleRuleset *rules);
+void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, LinkBattleRuleset *rules);
 void CommState_ConnectToSlot(s8 slot);
 void CommState_RestartScan(void);
 void CommState_ShutdownWait(void);
@@ -321,8 +320,6 @@ void WiFiPlazaLobbyClient_EndMatch(void);
 void WiFiPlazaLobbyClient_Shutdown(void);
 int WiFiPlazaLobbyClient_WasMatchCancelled(void);
 
-DWCFriendData *CommPlayerInfo_GetExchangeToken(int netId);
-u16 *CommPlayerInfo_GetGroupName(int netId);
 void Comm_RecvParentFrameCallback(void);
 void Comm_RecvChildFrameCallback(void);
 void Comm_RecvPeerFrameCallback(void);

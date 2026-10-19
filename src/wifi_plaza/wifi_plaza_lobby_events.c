@@ -797,7 +797,7 @@ void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
             object->action = action;
         }
         object->actionFrame = actionFrame;
-        sWiFiPlazaPlayerObjectActions[action](object);
+        gWiFiPlazaPlayerObjectActions[action](object);
         gridPos = Field2DObject_GetDrawPos(object->player);
         WiFiPlazaPlayerObject_SetGridPosition(object, &gridPos);
     }

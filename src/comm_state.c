@@ -25,7 +25,7 @@ typedef struct CommStateWork {
     void (*stateFunc)(void);
     SaveData *saveData;
     PlayerProfile *profile;
-    s32 rules;
+    LinkBattleRuleset *rules;
     u32 wifiError;
     s32 wifiErrorArg1;
     s32 wifiErrorArg2;
@@ -56,6 +56,84 @@ typedef struct CommStateWork {
     u8 plazaLobbyStarted;
 } CommStateWork;
 
+static void CommState_Init(SaveData *saveData, s8 linkMode);
+static void CommState_Free(void);
+static void CommState_ShutdownWait(void);
+static void CommState_SetState(void (*stateFunc)(), int timer);
+static void CommState_EndWireless(void);
+static void CommState_StopWireless(void);
+static void CommState_ParentStart(void);
+static void CommState_WaitLinked(void);
+static void CommState_ParentLinked(void);
+static void CommState_ChildStartScan(void);
+static void CommState_ChildScanning(void);
+static void CommState_ChildConnecting(void);
+static void CommState_ChildWaitLinked(void);
+static void CommState_ChildRescanStop(void);
+static void CommState_ChildRescan(void);
+static void CommState_ChildLinked(void);
+static void CommState_RestartScanStop(void);
+static void CommState_RestartScanStart(void);
+static void CommState_Idle(void);
+static void CommState_FreeWhenDone(void);
+static void CommState_ResumeParentWaitAlone(void);
+static void CommState_ResumeChildStop(void);
+static void CommState_ShutdownWaitStopped(void);
+static void CommState_AlternateInit(void);
+static void CommState_AlternateScan(void);
+static void CommState_AlternateWaitStopped(void);
+static void CommState_AlternateStartParent(void);
+static void CommState_AlternateParentWait(void);
+static void CommState_AlternateStartScan(void);
+static void CommState_JoinWaitStopped(void);
+static void CommState_JoinStartScan(void);
+static void CommState_JoinConnect(void);
+static void CommState_JoinWaitLinked(void);
+static void CommState_JoinWaitReply(void);
+static void CommState_Joined(void);
+static void CommState_JoinFailed(void);
+static void CommState_JoinRetry(void);
+static void CommState_AlternateLinked(void);
+static void CommState_RestartIdle(void);
+static void CommState_ReconnectStop(void);
+static void CommState_ReconnectScan(void);
+static void CommState_ReconnectWaitParent(void);
+static void CommState_ReconnectWaitLinked(void);
+static void CommState_BeaconWatch(void);
+static void CommState_OnBeacon(u32 ggid, s32 info);
+static void CommState_BeaconWatchScan(void);
+static void CommState_BeaconWatchInit(void);
+static void CommState_MysteryGiftParentStart(void);
+static void CommState_MysteryGiftChildStart(void);
+static void CommState_WifiFailed(void);
+static void CommState_WifiTimedOut(void);
+static void CommState_WifiDisconnected(void);
+static void CommState_WifiCancelled(void);
+static void CommState_WifiConnected(void);
+static void CommState_WifiLobby(void);
+static void CommState_WifiStartMatch(void);
+static void CommState_WifiJoinLobby(void);
+static void CommState_WifiDisconnect(void);
+static void CommState_WifiShutdown(void);
+static BOOL CommState_CheckDwcError(void);
+static void CommState_WifiLogin(void);
+static void CommState_WifiClubStart(void);
+static void CommState_SetErrorScreen(s8 errorScreen);
+static void CommState_PlazaStart(void);
+static void CommState_PlazaWaitLobby(void);
+static void CommState_PlazaLobby(void);
+static s32 CommState_PlazaCheckWifiResult(s32 result);
+static s32 CommState_PlazaUpdateLobby(void);
+static int CommState_PlazaUpdate(void);
+static void CommState_PlazaUpdateMatch(s32 *matchResult);
+static void CommState_PlazaLogout(void);
+static void CommState_PlazaWaitLogout(void);
+static void CommState_PlazaLobbyFailed(void);
+static void CommState_PlazaMatchConnected(void);
+static void CommState_PlazaMatching(void);
+static void CommState_PlazaEndMatch(void);
+static void CommState_PlazaTimedOut(void);
+
 CommStateWork *gCommState = NULL;
 
 void (*const gCommLinkedStates[3])(void) = { CommState_ParentLinked, CommState_ChildLinked, NULL };
@@ -68,7 +146,7 @@ u32 CommState_GetSyncPacketSize(void) {
     return 70;
 }
 
-void CommState_Init(SaveData *saveData, s8 linkMode) {
+static void CommState_Init(SaveData *saveData, s8 linkMode) {
     if (gCommState == NULL) {
         GF_ASSERT(saveData);
         CommWireless_StartUp();
@@ -91,7 +169,7 @@ void CommState_Init(SaveData *saveData, s8 linkMode) {
     }
 }
 
-void CommState_Free(void) {
+static void CommState_Free(void) {
     if (gCommState) {
         Comm_FreeCommandTable();
         if (gCommState->wifiClubData) {
@@ -112,7 +190,7 @@ BOOL CommState_Exists(void) {
     return gCommState ? TRUE : FALSE;
 }
 
-void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules) {
+void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, LinkBattleRuleset *rules) {
     if (!Comm_IsActive()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, linkMode);
@@ -122,7 +200,7 @@ void CommState_StartParentSession(SaveData *saveData, s8 linkMode, s8 beaconId, 
     }
 }
 
-void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, s32 rules) {
+void CommState_StartChildSession(SaveData *saveData, s8 linkMode, s8 beaconId, LinkBattleRuleset *rules) {
     if (!Comm_IsActive()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_15, 28800);
         CommState_Init(saveData, linkMode);
@@ -142,7 +220,7 @@ void CommState_RestartScan(void) {
     CommState_SetState(CommState_RestartScanStop, 0);
 }
 
-void CommState_ShutdownWait(void) {
+static void CommState_ShutdownWait(void) {
     if (gCommState->shutdownTimer > 0) {
         gCommState->shutdownTimer--;
     } else if (!gCommState->shutdownTimer) {
@@ -309,12 +387,12 @@ void CommState_Main(void) {
     }
 }
 
-void CommState_SetState(void (*stateFunc)(), int timer) {
+static void CommState_SetState(void (*stateFunc)(), int timer) {
     gCommState->stateFunc = stateFunc;
     gCommState->timer = timer;
 }
 
-void CommState_EndWireless(void) {
+static void CommState_EndWireless(void) {
     if (!CommState_IsWifi()) {
         if (!CommWireless_IsIdle()) {
             return;
@@ -326,14 +404,14 @@ void CommState_EndWireless(void) {
     CommState_SetState(CommState_Idle, 0);
 }
 
-void CommState_StopWireless(void) {
+static void CommState_StopWireless(void) {
     if (CommWireless_Stop()) {
         Comm_ResetWork();
         CommState_SetState(CommState_EndWireless, 0);
     }
 }
 
-void CommState_ParentStart(void) {
+static void CommState_ParentStart(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
@@ -344,19 +422,19 @@ void CommState_ParentStart(void) {
     }
 }
 
-void CommState_WaitLinked(void) {
+static void CommState_WaitLinked(void) {
     if (Comm_IsNetIdConnected(Comm_GetLocalNetId()) != FALSE) {
         CommState_SetState(CommState_ParentLinked, 0);
     }
 }
 
-void CommState_ParentLinked(void) {
+static void CommState_ParentLinked(void) {
     if (!Comm_IsActive()) {
         CommState_SetState(CommState_FreeWhenDone, 0);
     }
 }
 
-void CommState_ChildStartScan(void) {
+static void CommState_ChildStartScan(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, gCommState->rules);
@@ -367,18 +445,18 @@ void CommState_ChildStartScan(void) {
     }
 }
 
-void CommState_ChildScanning(void) {
+static void CommState_ChildScanning(void) {
     CommWireless_UpdateParents();
 }
 
-void CommState_ChildConnecting(void) {
+static void CommState_ChildConnecting(void) {
     CommWireless_UpdateParents();
     if (Comm_ConnectToParent(gCommState->slot)) {
         CommState_SetState(CommState_ChildWaitLinked, 10);
     }
 }
 
-void CommState_ChildWaitLinked(void) {
+static void CommState_ChildWaitLinked(void) {
     if (Comm_HasLinkError()) {
         CommState_SetState(CommState_ChildRescanStop, 0);
     }
@@ -387,12 +465,12 @@ void CommState_ChildWaitLinked(void) {
     }
 }
 
-void CommState_ChildRescanStop(void) {
+static void CommState_ChildRescanStop(void) {
     CommWireless_Stop();
     CommState_SetState(CommState_ChildRescan, 2);
 }
 
-void CommState_ChildRescan(void) {
+static void CommState_ChildRescan(void) {
     if (gCommState->timer) {
         gCommState->timer--;
         return;
@@ -403,18 +481,18 @@ void CommState_ChildRescan(void) {
     }
 }
 
-void CommState_ChildLinked(void) {
+static void CommState_ChildLinked(void) {
     if (!Comm_IsActive()) {
         CommState_SetState(CommState_FreeWhenDone, 0);
     }
 }
 
-void CommState_RestartScanStop(void) {
+static void CommState_RestartScanStop(void) {
     CommWireless_Stop();
     CommState_SetState(CommState_RestartScanStart, 2);
 }
 
-void CommState_RestartScanStart(void) {
+static void CommState_RestartScanStart(void) {
     if (gCommState->timer) {
         gCommState->timer--;
         return;
@@ -425,16 +503,16 @@ void CommState_RestartScanStart(void) {
     }
 }
 
-void CommState_Idle(void) {
+static void CommState_Idle(void) {
 }
 
-void CommState_FreeWhenDone(void) {
+static void CommState_FreeWhenDone(void) {
     if (!Comm_IsActive()) {
         CommState_Free();
     }
 }
 
-void CommState_ResumeParentWaitAlone(void) {
+static void CommState_ResumeParentWaitAlone(void) {
     if (Comm_CountConnected() <= 1) {
         Wireless_SetEntryClosed(0);
         Comm_ResetInTransferMode1();
@@ -449,14 +527,14 @@ void CommState_ResumeParentWaitAlone(void) {
     CommState_SetState(CommState_AlternateWaitStopped, 0);
 }
 
-void CommState_ResumeChildStop(void) {
+static void CommState_ResumeChildStop(void) {
     if (CommWireless_Stop()) {
         Comm_ResetWork();
         CommState_SetState(CommState_AlternateWaitStopped, 0);
     }
 }
 
-void CommState_ShutdownWaitStopped(void) {
+static void CommState_ShutdownWaitStopped(void) {
     if (gCommState->timer) {
         gCommState->timer--;
     }
@@ -466,7 +544,7 @@ void CommState_ShutdownWaitStopped(void) {
     }
 }
 
-void CommState_AlternateInit(void) {
+static void CommState_AlternateInit(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
         Wireless_SetMaxEntries(gCommState->maxEntries);
@@ -478,7 +556,7 @@ void CommState_AlternateInit(void) {
     }
 }
 
-void CommState_AlternateScan(void) {
+static void CommState_AlternateScan(void) {
     CommWireless_UpdateParents();
     if (gCommState->timer) {
         gCommState->timer--;
@@ -489,13 +567,13 @@ void CommState_AlternateScan(void) {
     }
 }
 
-void CommState_AlternateWaitStopped(void) {
+static void CommState_AlternateWaitStopped(void) {
     if (CommWireless_Stop()) {
         CommState_SetState(CommState_AlternateStartParent, 0);
     }
 }
 
-void CommState_AlternateStartParent(void) {
+static void CommState_AlternateStartParent(void) {
     if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->renewTgid, 512, 1)) {
         // Equivalent to MATH_Rand32(&gCommState->mathRandContext, 0);
         MATHRandContext32 *mathRandContext = &gCommState->mathRandContext;
@@ -507,7 +585,7 @@ void CommState_AlternateStartParent(void) {
     }
 }
 
-void CommState_AlternateParentWait(void) {
+static void CommState_AlternateParentWait(void) {
     if (!CommWireless_HasSentBeacons()) {
         if (Comm_GetConnectedChildren()) {
             gCommState->renewTgid = 1;
@@ -525,7 +603,7 @@ void CommState_AlternateParentWait(void) {
     }
 }
 
-void CommState_AlternateStartScan(void) {
+static void CommState_AlternateStartScan(void) {
     if (CommWireless_IsIdle() && Comm_StartScan(0, 0, 512)) {
         Comm_RequestTransferMode1();
         // Equivalent to u32 rand = MATH_Rand32(&gCommState->mathRandContext, 32)
@@ -538,20 +616,20 @@ void CommState_AlternateStartScan(void) {
     }
 }
 
-void CommState_JoinWaitStopped(void) {
+static void CommState_JoinWaitStopped(void) {
     if (CommWireless_Stop()) {
         CommState_SetState(CommState_JoinStartScan, 0);
     }
 }
 
-void CommState_JoinStartScan(void) {
+static void CommState_JoinStartScan(void) {
     if (CommWireless_IsIdle() && Comm_StartScan(0, 0, 512)) {
         Comm_RequestTransferMode1();
         CommState_SetState(CommState_JoinConnect, 100);
     }
 }
 
-void CommState_JoinConnect(void) {
+static void CommState_JoinConnect(void) {
     if (CommWireless_GetParentMemberCount(gCommState->slot) && Comm_ConnectToParent(gCommState->slot)) {
         CommState_SetState(CommState_JoinWaitLinked, 100);
         return;
@@ -567,7 +645,7 @@ void CommState_JoinConnect(void) {
     CommState_SetState(CommState_JoinRetry, 0);
 }
 
-void CommState_JoinWaitLinked(void) {
+static void CommState_JoinWaitLinked(void) {
     if (Comm_HasLinkError()) {
         CommState_SetState(CommState_JoinRetry, 0);
         return;
@@ -584,7 +662,7 @@ void CommState_JoinWaitLinked(void) {
     CommState_SetState(CommState_JoinRetry, 0);
 }
 
-void CommState_JoinWaitReply(void) {
+static void CommState_JoinWaitReply(void) {
     if (Comm_HasLinkError()) {
         CommState_SetState(CommState_JoinRetry, 0);
         return;
@@ -608,16 +686,16 @@ void CommState_JoinWaitReply(void) {
     CommState_SetState(CommState_JoinRetry, 0);
 }
 
-void CommState_Joined(void) {
+static void CommState_Joined(void) {
     if (Comm_HasLinkError()) {
         CommState_SetState(CommState_JoinRetry, 0);
     }
 }
 
-void CommState_JoinFailed(void) {
+static void CommState_JoinFailed(void) {
 }
 
-void CommState_JoinRetry(void) {
+static void CommState_JoinRetry(void) {
     gCommState->joinReply = 0;
     if (CommWireless_Stop()) {
         if (gCommState->joinRetries) {
@@ -629,7 +707,7 @@ void CommState_JoinRetry(void) {
     }
 }
 
-void CommState_AlternateLinked(void) {
+static void CommState_AlternateLinked(void) {
     if (!Comm_GetConnectedChildren()) {
         if (!CommState_ReportsErrors() && CommWireless_Stop()) {
             CommState_SetState(CommState_AlternateStartScan, 0);
@@ -642,7 +720,7 @@ void CommState_AlternateLinked(void) {
     }
 }
 
-void CommState_RestartIdle(void) {
+static void CommState_RestartIdle(void) {
     if (CommWireless_IsIdle() && Comm_StartParent(0, gCommState->renewTgid, 512, 0)) {
         Comm_RequestTransferMode1();
         CommState_SetState(CommState_Idle, 0);
@@ -691,13 +769,13 @@ void CommState_JoinSpinTrade(s8 slot) {
     CommState_SetState(CommState_JoinWaitStopped, 0);
 }
 
-void CommState_ReconnectStop(void) {
+static void CommState_ReconnectStop(void) {
     if (CommWireless_Stop()) {
         CommState_SetState(CommState_ReconnectScan, 0);
     }
 }
 
-void CommState_ReconnectScan(void) {
+static void CommState_ReconnectScan(void) {
     if (CommWireless_IsIdle()) {
         gCommState->linkMode = COMM_TYPE_13;
         if (Comm_StartScan(0, 0, 512)) {
@@ -707,7 +785,7 @@ void CommState_ReconnectScan(void) {
     }
 }
 
-void CommState_ReconnectWaitParent(void) {
+static void CommState_ReconnectWaitParent(void) {
     if (CommWireless_GetParentMemberCount(gCommState->slot) && Comm_ConnectToParent(gCommState->slot)) {
         CommState_SetState(CommState_ReconnectWaitLinked, 100);
         return;
@@ -726,7 +804,7 @@ void CommState_ReconnectWaitParent(void) {
     }
 }
 
-void CommState_ReconnectWaitLinked(void) {
+static void CommState_ReconnectWaitLinked(void) {
     if (gCommState->timer > 90) {
         gCommState->timer--;
         return;
@@ -821,11 +899,11 @@ void CommState_SetMaxEntries(s8 maxEntries) {
     }
 }
 
-void CommState_BeaconWatch(void) {
+static void CommState_BeaconWatch(void) {
     CommWireless_UpdateParents();
 }
 
-void CommState_OnBeacon(u32 ggid, s32 info) {
+static void CommState_OnBeacon(u32 ggid, s32 info) {
     switch (ggid) {
     case 0x333:
         if (info == 15) {
@@ -844,14 +922,14 @@ void CommState_OnBeacon(u32 ggid, s32 info) {
     }
 }
 
-void CommState_BeaconWatchScan(void) {
+static void CommState_BeaconWatchScan(void) {
     if (Comm_StartScan(1, 1, 32)) {
         Comm_RequestTransferMode1();
         CommState_SetState(CommState_BeaconWatch, 0);
     }
 }
 
-void CommState_BeaconWatchInit(void) {
+static void CommState_BeaconWatchInit(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 0);
         CommPlayerInfo_Init(gCommState->saveData, 0);
@@ -900,7 +978,7 @@ BOOL CommState_StopForReset(void) {
     return FALSE;
 }
 
-void CommState_MysteryGiftParentStart(void) {
+static void CommState_MysteryGiftParentStart(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, 0);
@@ -911,7 +989,7 @@ void CommState_MysteryGiftParentStart(void) {
     }
 }
 
-void CommState_MysteryGiftChildStart(void) {
+static void CommState_MysteryGiftChildStart(void) {
     if (CommWireless_IsStartedUp()) {
         CommWireless_Init(gCommState->profile, 1);
         CommPlayerInfo_Init(gCommState->saveData, 0);
@@ -922,22 +1000,22 @@ void CommState_MysteryGiftChildStart(void) {
     }
 }
 
-void CommState_WifiFailed(void) {
+static void CommState_WifiFailed(void) {
 }
 
-void CommState_WifiTimedOut(void) {
+static void CommState_WifiTimedOut(void) {
     if (WifiConnection_Update(0) < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
     }
 }
 
-void CommState_WifiDisconnected(void) {
+static void CommState_WifiDisconnected(void) {
 }
 
-void CommState_WifiCancelled(void) {
+static void CommState_WifiCancelled(void) {
 }
 
-void CommState_WifiConnected(void) {
+static void CommState_WifiConnected(void) {
     Comm_SetWifiConnected(1);
     s32 status = WifiConnection_Update(0);
     if ((status >= 10) && (status < 20)) {
@@ -975,7 +1053,7 @@ void CommState_SetWifiError(u32 error, s32 type, s32 status) {
     }
 }
 
-void CommState_WifiLobby(void) {
+static void CommState_WifiLobby(void) {
     s32 status = WifiConnection_Update(0);
     if ((status >= 10) && (status < 20)) {
         CommState_SetState(CommState_WifiCancelled, 0);
@@ -992,7 +1070,7 @@ void CommState_WifiLobby(void) {
     }
 }
 
-void CommState_WifiStartMatch(void) {
+static void CommState_WifiStartMatch(void) {
     if (WifiConnection_Update(1) < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
         return;
@@ -1049,7 +1127,7 @@ s32 CommState_GetWifiMatchStatus(void) {
     return 2;
 }
 
-void CommState_WifiJoinLobby(void) {
+static void CommState_WifiJoinLobby(void) {
     WifiConnection_SetReceiveCallbacks(&Comm_RecvChildFrameCallback, &Comm_RecvParentFrameCallback);
     switch (WifiConnection_StartMatchmaking(-1, 4, 1) + 4) {
     case 4:
@@ -1073,7 +1151,7 @@ void CommState_WifiJoinLobby(void) {
     }
 }
 
-void CommState_WifiDisconnect(void) {
+static void CommState_WifiDisconnect(void) {
     Comm_SetWifiConnected(0);
     if (WifiConnection_Disconnect(gCommState->waitHostDisconnect) && WifiConnection_FinishDisconnect()) {
         CommPlayerInfo_Free();
@@ -1126,7 +1204,7 @@ u32 *CommState_GetWifiError(void) {
     return &gCommState->wifiError;
 }
 
-void CommState_WifiShutdown(void) {
+static void CommState_WifiShutdown(void) {
     Comm_SetWifiConnected(0);
     if (WifiConnection_Disconnect(0)) {
         WifiConnection_FinishDisconnect();
@@ -1255,7 +1333,7 @@ void CommState_FreeWiiMessageWfcSession(void) {
     }
 }
 
-BOOL CommState_CheckDwcError(void) {
+static BOOL CommState_CheckDwcError(void) {
     if (gCommState == NULL) {
         return FALSE;
     }
@@ -1272,7 +1350,7 @@ BOOL CommState_CheckDwcError(void) {
     return FALSE;
 }
 
-void CommState_WifiLogin(void) {
+static void CommState_WifiLogin(void) {
     s32 loginState = WifiConnection_UpdateLogin();
     gCommState->timer--;
     if (loginState == 27) {
@@ -1296,7 +1374,7 @@ void CommState_WifiLogin(void) {
     }
 }
 
-void CommState_WifiClubStart(void) {
+static void CommState_WifiClubStart(void) {
     if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x35400);
         if (Comm_StartParent(1, 1, 512, 1)) {
@@ -1449,7 +1527,7 @@ int CommState_IsWifi(void) {
     return Comm_IsWifiLinkMode();
 }
 
-void CommState_SetErrorScreen(s8 errorScreen) {
+static void CommState_SetErrorScreen(s8 errorScreen) {
     if (gCommState) {
         gCommState->errorScreen = errorScreen;
     }
@@ -1546,7 +1624,7 @@ void CommState_SetSingleBattleWifiLinkMode(void) {
     WifiConnection_SetReceiveCallbacks(&Comm_RecvChildFrameCallback, &Comm_RecvParentFrameCallback);
 }
 
-void CommState_PlazaStart(void) {
+static void CommState_PlazaStart(void) {
     if (CommWireless_IsStartedUp()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x60000);
         if (Comm_StartParent(1, 1, 512, 1)) {
@@ -1560,7 +1638,7 @@ void CommState_PlazaStart(void) {
     }
 }
 
-void CommState_PlazaWaitLobby(void) {
+static void CommState_PlazaWaitLobby(void) {
     gCommState->timer--;
     if (gCommState->timer <= 0) {
         CommState_SetState(CommState_WifiFailed, 0);
@@ -1572,13 +1650,13 @@ void CommState_PlazaWaitLobby(void) {
     }
 }
 
-void CommState_PlazaLobby(void) {
+static void CommState_PlazaLobby(void) {
     if (CommState_PlazaUpdate()) {
         return;
     }
 }
 
-s32 CommState_PlazaCheckWifiResult(s32 result) {
+static s32 CommState_PlazaCheckWifiResult(s32 result) {
     s32 ok = 1;
     if ((result >= 10) && (result < 20)) {
         CommState_SetState(CommState_WifiCancelled, 0);
@@ -1604,7 +1682,7 @@ s32 CommState_PlazaCheckWifiResult(s32 result) {
     return ok;
 }
 
-s32 CommState_PlazaUpdateLobby(void) {
+static s32 CommState_PlazaUpdateLobby(void) {
     s32 ok = 1;
     u32 lobbyState = WiFiPlazaLobbyClient_Update();
     switch (lobbyState) {
@@ -1621,7 +1699,7 @@ s32 CommState_PlazaUpdateLobby(void) {
     return ok;
 }
 
-int CommState_PlazaUpdate(void) {
+static int CommState_PlazaUpdate(void) {
     s32 ret = CommState_PlazaCheckWifiResult(WifiConnection_Update(0));
     if (ret) {
         return CommState_PlazaUpdateLobby();
@@ -1629,7 +1707,7 @@ int CommState_PlazaUpdate(void) {
     return ret;
 }
 
-void CommState_PlazaUpdateMatch(s32 *matchResult) {
+static void CommState_PlazaUpdateMatch(s32 *matchResult) {
     s32 status = WifiConnection_Update(0);
     if (status >= 20) {
         *matchResult = status;
@@ -1642,12 +1720,12 @@ void CommState_PlazaUpdateMatch(s32 *matchResult) {
     CommState_PlazaUpdateLobby();
 }
 
-void CommState_PlazaLogout(void) {
+static void CommState_PlazaLogout(void) {
     WiFiPlazaLobbyClient_Shutdown();
     CommState_SetState(CommState_PlazaWaitLogout, 0);
 }
 
-void CommState_PlazaWaitLogout(void) {
+static void CommState_PlazaWaitLogout(void) {
     WifiConnection_Update(0);
     CommState_PlazaUpdateLobby();
     if (WiFiPlazaLobbyClient_IsDisconnected()) {
@@ -1658,10 +1736,10 @@ void CommState_PlazaWaitLogout(void) {
     }
 }
 
-void CommState_PlazaLobbyFailed(void) {
+static void CommState_PlazaLobbyFailed(void) {
 }
 
-void CommState_PlazaMatchConnected(void) {
+static void CommState_PlazaMatchConnected(void) {
     CommState_PlazaUpdate();
     if (WiFiPlazaLobbyClient_WasMatchCancelled() == 1) {
         WiFiPlazaLobbyClient_EndMatch();
@@ -1669,7 +1747,7 @@ void CommState_PlazaMatchConnected(void) {
     }
 }
 
-void CommState_PlazaMatching(void) {
+static void CommState_PlazaMatching(void) {
 
     if (WiFiPlazaLobbyClient_WasMatchCancelled() == 1) {
         WiFiPlazaLobbyClient_EndMatch();
@@ -1688,7 +1766,7 @@ void CommState_PlazaMatching(void) {
     }
 }
 
-void CommState_PlazaEndMatch(void) {
+static void CommState_PlazaEndMatch(void) {
     if (WifiConnection_Update(1) < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
         return;
@@ -1700,7 +1778,7 @@ void CommState_PlazaEndMatch(void) {
     }
 }
 
-void CommState_PlazaTimedOut(void) {
+static void CommState_PlazaTimedOut(void) {
     if (WifiConnection_Update(0) < 0) {
         CommState_SetState(CommState_WifiFailed, 0);
     }

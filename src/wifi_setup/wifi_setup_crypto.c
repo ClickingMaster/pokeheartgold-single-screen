@@ -28,6 +28,12 @@ typedef struct WifiSetupBlock8 {
         (ct)[3] = (u8)(st);         \
     }
 
+static void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out);
+static int WifiSetup_AesSetEncryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits);
+static int WifiSetup_AesSetDecryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits);
+static void WifiSetup_AesEncryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[16]);
+static void WifiSetup_AesDecryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 ct[16], u8 pt[16]);
+
 static const u32 sWifiSetupAesRcon[10] = {
     0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000, 0x1B000000, 0x36000000
 };
@@ -181,7 +187,7 @@ int WifiSetup_AesKeyUnwrap(u8 *out, const u8 *in, u32 length, const void *key, u
 
 #pragma opt_strength_reduction reset
 
-void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out) {
+static void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out) {
     out[0] = a[0] ^ b[0];
     out[1] = a[1] ^ b[1];
     out[2] = a[2] ^ b[2];
@@ -192,7 +198,7 @@ void WifiSetup_XorBlock8(const u8 *a, const u8 *b, u8 *out) {
     out[7] = a[7] ^ b[7];
 }
 
-int WifiSetup_AesSetEncryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
+static int WifiSetup_AesSetEncryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     int i = 0;
     u32 temp;
 
@@ -254,7 +260,7 @@ int WifiSetup_AesSetEncryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int
     return 0;
 }
 
-int WifiSetup_AesSetDecryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
+static int WifiSetup_AesSetDecryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     int Nr, i, j;
     u32 temp;
 
@@ -286,7 +292,7 @@ int WifiSetup_AesSetDecryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int
     return Nr;
 }
 
-void WifiSetup_AesEncryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[16]) {
+static void WifiSetup_AesEncryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[16]) {
     u32 s0, s1, s2, s3, t0, t1, t2, t3;
 #ifndef FULL_UNROLL
     int r;
@@ -407,7 +413,7 @@ void WifiSetup_AesEncryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt
     PUTU32(ct + 12, s3);
 }
 
-void WifiSetup_AesDecryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 ct[16], u8 pt[16]) {
+static void WifiSetup_AesDecryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 ct[16], u8 pt[16]) {
     u32 s0, s1, s2, s3, t0, t1, t2, t3;
 #ifndef FULL_UNROLL
     int r;

@@ -41,7 +41,7 @@ typedef struct WiFiPlazaInstrumentWave {
     fx32 value;
 } WiFiPlazaInstrumentWave;
 
-// Entry of sWiFiPlazaInstrumentModelDescs: which model, texture file and animations a model slot uses
+// Entry of gWiFiPlazaInstrumentModelDescs: which model, texture file and animations a model slot uses
 typedef struct WiFiPlazaInstrumentModelDesc {
     u8 model;   // index into WiFiPlazaInstrumentManager.models
     u8 texture; // index into WiFiPlazaInstrumentManager.textures
@@ -51,7 +51,7 @@ typedef struct WiFiPlazaInstrumentModelDesc {
 // Four models flying out of the player and back (effect types 0-8)
 typedef struct WiFiPlazaInstrumentBurst {
     s16 frame;
-    u16 kind; // sWiFiPlazaInstrumentBurstStartFuncs / UpdateFuncs index (< 3)
+    u16 kind; // gWiFiPlazaInstrumentBurstStartFuncs / UpdateFuncs index (< 3)
     u16 count;
     u8 active;
     u8 phase;

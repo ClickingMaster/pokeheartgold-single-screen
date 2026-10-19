@@ -408,43 +408,43 @@ BOOL WifiClub_IsMatchingActivity(s32 netId) {
     WifiClubStatusData *status = CommState_GetWifiClubData();
     u8 own = status->own.status;
     u8 other = status->friends[netId].status;
-    if (own == 0xC && other == 5) {
+    if (own == WIFI_CLUB_STATUS_SEEK_LV50_DOUBLE && other == WIFI_CLUB_STATUS_IN_LV50_DOUBLE) {
         return TRUE;
     }
-    if (own == 0xD && other == 6) {
+    if (own == WIFI_CLUB_STATUS_SEEK_LV100_DOUBLE && other == WIFI_CLUB_STATUS_IN_LV100_DOUBLE) {
         return TRUE;
     }
-    if (own == 0xE && other == 7) {
+    if (own == WIFI_CLUB_STATUS_SEEK_FREE_DOUBLE && other == WIFI_CLUB_STATUS_IN_FREE_DOUBLE) {
         return TRUE;
     }
-    if (own == 9 && other == 2) {
+    if (own == WIFI_CLUB_STATUS_SEEK_LV50_SINGLE && other == WIFI_CLUB_STATUS_IN_LV50_SINGLE) {
         return TRUE;
     }
-    if (own == 0xA && other == 3) {
+    if (own == WIFI_CLUB_STATUS_SEEK_LV100_SINGLE && other == WIFI_CLUB_STATUS_IN_LV100_SINGLE) {
         return TRUE;
     }
-    if (own == 0xB && other == 4) {
+    if (own == WIFI_CLUB_STATUS_SEEK_FREE_SINGLE && other == WIFI_CLUB_STATUS_IN_FREE_SINGLE) {
         return TRUE;
     }
-    if (own == 0xF && other == 8) {
+    if (own == WIFI_CLUB_STATUS_SEEK_TRADE && other == WIFI_CLUB_STATUS_TRADING) {
         return TRUE;
     }
-    if (own == 0x13 && other == 0x12) {
+    if (own == WIFI_CLUB_STATUS_SEEK_COOK && other == WIFI_CLUB_STATUS_COOKING) {
         return TRUE;
     }
-    if (own == 0x15 && other == 0x14) {
+    if (own == WIFI_CLUB_STATUS_SEEK_FRONTIER && other == WIFI_CLUB_STATUS_IN_FRONTIER) {
         return TRUE;
     }
-    if (own == 0x17 && other == 0x16) {
+    if (own == WIFI_CLUB_STATUS_SEEK_GAME_1 && other == WIFI_CLUB_STATUS_PLAYING_GAME_1) {
         return TRUE;
     }
-    if (own == 0x19 && other == 0x18) {
+    if (own == WIFI_CLUB_STATUS_SEEK_GAME_2 && other == WIFI_CLUB_STATUS_PLAYING_GAME_2) {
         return TRUE;
     }
-    if (own == 0x1B && other == 0x1A) {
+    if (own == WIFI_CLUB_STATUS_SEEK_GAME_3 && other == WIFI_CLUB_STATUS_PLAYING_GAME_3) {
         return TRUE;
     }
-    if (own == 0x10 && other == 1) {
+    if (own == WIFI_CLUB_STATUS_IN_ROOM && other == WIFI_CLUB_STATUS_VOICE_CHAT) {
         return TRUE;
     }
     return FALSE;

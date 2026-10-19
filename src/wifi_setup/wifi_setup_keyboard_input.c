@@ -5,6 +5,16 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
+static void WifiSetupKeyboard_SlideInButtonsTask(void *task);
+static void WifiSetupKeyboard_InputTask(void);
+static void WifiSetupKeyboard_HandleTouchPress(void);
+static void WifiSetupKeyboard_HandleTouchRelease(void);
+static void WifiSetupKeyboard_ToggleAltPage(void);
+static void WifiSetupKeyboard_ToggleShift(void);
+static void WifiSetupKeyboard_HandleTouchHold(void);
+static void WifiSetupKeyboard_SetHoveredKey(int key);
+static void WifiSetupKeyboard_HandleButtons(void);
+
 // Software keyboard, second part: end of the slide-in animation and the per-frame input handling
 // (touch press, release and hold, D-pad and buttons).
 
@@ -36,7 +46,7 @@ void WifiSetupKeyboard_SlideInRow3Task(void *task) {
 
 #pragma opt_propagation reset
 
-void WifiSetupKeyboard_SlideInButtonsTask(void *task) {
+static void WifiSetupKeyboard_SlideInButtonsTask(void *task) {
     int x, y;
     WifiSetupOamBlock_GetPosition(gWifiSetupKeyboard->buttons[0], 0, &x, &y);
     y -= 12;
@@ -49,14 +59,14 @@ void WifiSetupKeyboard_SlideInButtonsTask(void *task) {
     WifiSetupTask_SetFunc(task, (WifiSetupTaskFunc)WifiSetupKeyboard_InputTask);
 }
 
-void WifiSetupKeyboard_InputTask(void) {
+static void WifiSetupKeyboard_InputTask(void) {
     WifiSetupKeyboard_HandleTouchPress();
     WifiSetupKeyboard_HandleTouchRelease();
     WifiSetupKeyboard_HandleTouchHold();
     WifiSetupKeyboard_HandleButtons();
 }
 
-void WifiSetupKeyboard_HandleTouchPress(void) {
+static void WifiSetupKeyboard_HandleTouchPress(void) {
     WifiSetupRect rect;
     int i;
     if (!WifiSetupInput_IsTouchPressed(&gWifiSetupInputPanelRect)) {
@@ -103,7 +113,7 @@ void WifiSetupKeyboard_HandleTouchPress(void) {
     }
 }
 
-void WifiSetupKeyboard_HandleTouchRelease(void) {
+static void WifiSetupKeyboard_HandleTouchRelease(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos, *size;
@@ -174,19 +184,19 @@ void WifiSetupKeyboard_HandleTouchRelease(void) {
     }
 }
 
-void WifiSetupKeyboard_ToggleAltPage(void) {
+static void WifiSetupKeyboard_ToggleAltPage(void) {
     WifiSetupKeyboard_SetPage(gWifiSetupKeyboard->page == 2 ? 0 : 2);
     WifiSetupSound_Play(1);
 }
 
-void WifiSetupKeyboard_ToggleShift(void) {
+static void WifiSetupKeyboard_ToggleShift(void) {
     WifiSetupKeyboard_SetPage(gWifiSetupKeyboard->page != 1 ? 1 : 0);
     WifiSetupSound_Play(1);
 }
 
 // Highlights the key under the stylus while it stays on the key it went down on; holding the
 // delete key repeats it after 40 frames, then every 7 frames.
-void WifiSetupKeyboard_HandleTouchHold(void) {
+static void WifiSetupKeyboard_HandleTouchHold(void) {
     WifiSetupRect rect;
     int i;
     const WifiSetupPoint *pos, *size;
@@ -247,7 +257,7 @@ reset:
     gWifiSetupKeyboard->repeatTimer = 0;
 }
 
-void WifiSetupKeyboard_SetHoveredKey(int key) {
+static void WifiSetupKeyboard_SetHoveredKey(int key) {
     if (key == gWifiSetupKeyboard->hoveredKey) {
         return;
     }
@@ -257,7 +267,7 @@ void WifiSetupKeyboard_SetHoveredKey(int key) {
 }
 
 // D-pad moves the cursor, A types the key under it, B deletes, X and Y switch pages.
-void WifiSetupKeyboard_HandleButtons(void) {
+static void WifiSetupKeyboard_HandleButtons(void) {
     int key;
     if (WifiSetupInput_IsKeyRepeated(PAD_KEY_LEFT)) {
         WifiSetupKeyboard_MoveCursor(WIFI_SETUP_CURSOR_LEFT);

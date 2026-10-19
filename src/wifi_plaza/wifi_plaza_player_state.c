@@ -278,6 +278,7 @@ static BOOL WiFiPlazaPlayerState_HasHandler(WiFiPlazaPlayerState *state);
 static void WiFiPlazaPlayerStateFrame_Init(WiFiPlazaPlayerStateFrame *frame, const WiFiPlazaPlayerStateHandlers *handlers, void *arg, u32 step, void *work);
 static void WiFiPlazaPlayerStateFrame_Clear(WiFiPlazaPlayerStateFrame *frame);
 static BOOL WiFiPlazaPlayerState_IsDirectionHeld(int direction);
+static void WiFiPlazaPlayerState_RunTileAction(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index, const WiFiPlazaTileAction *actions, u32 tile);
 static WiFiPlazaObj *WiFiPlazaPlayerState_CreateOwnPlayer(WiFiPlazaRoomWork *room, int id);
 static void WiFiPlazaPlayerState_CreateOwnPlayerAt(WiFiPlazaRoomWork *room, int id, int x, int y, s32 direction);
 static void WiFiPlazaPlayerBounce_Start(WiFiPlazaPlayerBounce *bounce);
@@ -828,7 +829,7 @@ static BOOL WiFiPlazaPlayerState_IsDirectionHeld(int direction) {
 }
 
 // Starts the action of the first table entry listing `tile`
-void WiFiPlazaPlayerState_RunTileAction(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index, const WiFiPlazaTileAction *actions, u32 tile) {
+static void WiFiPlazaPlayerState_RunTileAction(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room, u32 index, const WiFiPlazaTileAction *actions, u32 tile) {
     void *work = WiFiPlazaPlayerState_GetWork(state);
     WiFiPlazaPlayerStateManager *manager = WiFiPlazaRoom_GetPlayerStates(room);
     int i;

@@ -89,6 +89,36 @@ enum WiFiPlazaAnswerStep {
     WIFI_PLAZA_ANSWER_END,
 };
 
+static int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player);
+static String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId);
+static String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 listener);
+static BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner);
+static void WiFiPlazaTalk_Free(WiFiPlazaTalk *talk);
+static void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, WiFiPlazaPlayerState *state, u8 waitStep);
+static void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state);
+static void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalk_PrintGreeting(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 timeOfDay, WiFiPlazaPlayer *speaker, WiFiPlazaPlayer *listener);
+static void WiFiPlazaTalk_BufferGreeting(WiFiPlazaRoomWork *room, u32 slot, u32 timeOfDay, WiFiPlazaPlayer *player);
+static BOOL WiFiPlazaTalk_PrintTimeRemark(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalk_BufferInstrument(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 slot, u32 mine);
+static void WiFiPlazaTalk_UpdatePartnerWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalk_StartMenuTimer(WiFiPlazaTalk *talk);
+static void WiFiPlazaTalk_StopMenuTimer(WiFiPlazaTalk *talk);
+static void WiFiPlazaTalk_UpdateMenuWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalk_CountMenuTimer(WiFiPlazaTalk *talk);
+static void WiFiPlazaTalk_SetHistory(WiFiPlazaTalk *talk, WiFiPlazaPlayer *partner);
+static void WiFiPlazaTalkMenu_Init(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg, u32 lastItem);
+static void WiFiPlazaTalkMenu_InitRandom(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 range, u32 count, u32 firstMsg, u32 lastItem);
+static void WiFiPlazaTalkMenu_InitInfoCounter(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalkMenu_InitTimeEvents(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalkMenu_InitPlazaGames(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalkMenu_Free(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room);
+static void WiFiPlazaTalkReply_Init(WiFiPlazaTalkReply *reply);
+static void WiFiPlazaTalkReply_Start(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby, u16 value, u16 awaited);
+static void WiFiPlazaTalkReply_Update(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby);
+static BOOL WiFiPlazaTalkReply_IsDone(WiFiPlazaTalkReply *reply);
+static u16 WiFiPlazaTalkReply_GetStatus(WiFiPlazaTalkReply *reply);
+
 static const u8 sWiFiPlazaInfoCounterMsgs[8] = { 31, 32, 33, 34, 35, 40, 36, 37 };
 
 static const ListMenuTemplate sWiFiPlazaTalkMenuTemplate = {
@@ -1691,7 +1721,7 @@ BOOL WiFiPlazaTalk_Reception(WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *roo
     return FALSE;
 }
 
-int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player) {
+static int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player) {
     // the player's local time; the hour is its low byte
     struct {
         u32 time;
@@ -1735,7 +1765,7 @@ int WiFiPlazaTalk_GetTimeOfDay(WiFiPlazaPlayer *player) {
     }
 }
 
-String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId) {
+static String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId) {
     u32 i;
 
     if (WiFiPlazaWork_IsSpecialVisitor(WiFiPlazaRoom_GetLobby(room), playerIndex) == 1) {
@@ -1749,7 +1779,7 @@ String *WiFiPlazaTalk_GetMsg(WiFiPlazaRoomWork *room, u32 playerIndex, u32 msgId
     return WiFiPlazaRoom_GetMsgString(room, 3, msgId);
 }
 
-String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 listener) {
+static String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 listener) {
     WiFiPlazaWork *lobby = WiFiPlazaRoom_GetLobby(room);
     int speakerHighlighted = WiFiPlazaWork_IsSpecialVisitor(lobby, speaker);
     int listenerHighlighted = WiFiPlazaWork_IsSpecialVisitor(lobby, listener);
@@ -1765,7 +1795,7 @@ String *WiFiPlazaTalk_GetReunionMsg(WiFiPlazaRoomWork *room, u32 speaker, u32 li
     return WiFiPlazaRoom_GetMsgString(room, 3, msgId);
 }
 
-BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner) {
+static BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner) {
     WiFiPlazaPlayer *me;
     WiFiPlazaPlayer *partnerPlayer;
 
@@ -1785,16 +1815,16 @@ BOOL WiFiPlazaTalk_Init(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, s32 partner) 
     return TRUE;
 }
 
-void WiFiPlazaTalk_Free(WiFiPlazaTalk *talk) {
+static void WiFiPlazaTalk_Free(WiFiPlazaTalk *talk) {
 }
 
-void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, WiFiPlazaPlayerState *state, u8 waitStep) {
+static void WiFiPlazaTalk_SetNextStep(WiFiPlazaTalk *talk, u8 frames, u8 nextStep, WiFiPlazaPlayerState *state, u8 waitStep) {
     talk->timer = frames;
     talk->nextStep = nextStep;
     WiFiPlazaPlayerState_SetStep(state, waitStep);
 }
 
-void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state) {
+static void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state) {
     if (talk->timer != 0) {
         talk->timer--;
     } else {
@@ -1802,13 +1832,13 @@ void WiFiPlazaTalk_WaitTimer(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state) {
     }
 }
 
-void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalk_WaitMessage(WiFiPlazaTalk *talk, WiFiPlazaPlayerState *state, WiFiPlazaRoomWork *room) {
     if (WiFiPlazaRoom_IsMessageFinished(room)) {
         WiFiPlazaPlayerState_SetStep(state, talk->nextStep);
     }
 }
 
-void WiFiPlazaTalk_PrintGreeting(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 timeOfDay, WiFiPlazaPlayer *speaker, WiFiPlazaPlayer *listener) {
+static void WiFiPlazaTalk_PrintGreeting(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 timeOfDay, WiFiPlazaPlayer *speaker, WiFiPlazaPlayer *listener) {
     u32 speakerLanguage;
     u32 listenerLanguage;
     u32 msgId;
@@ -1821,7 +1851,7 @@ void WiFiPlazaTalk_PrintGreeting(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFi
     WiFiPlazaRoom_PrintMessage(room, WiFiPlazaRoom_GetMsgString(room, 3, msgId));
 }
 
-void WiFiPlazaTalk_BufferGreeting(WiFiPlazaRoomWork *room, u32 slot, u32 timeOfDay, WiFiPlazaPlayer *player) {
+static void WiFiPlazaTalk_BufferGreeting(WiFiPlazaRoomWork *room, u32 slot, u32 timeOfDay, WiFiPlazaPlayer *player) {
     switch (WiFiPlazaPlayer_GetLanguage(player)) {
     case LANGUAGE_JAPANESE:
         WiFiPlazaRoom_BufferJPGreeting(room, slot, timeOfDay);
@@ -1847,7 +1877,7 @@ void WiFiPlazaTalk_BufferGreeting(WiFiPlazaRoomWork *room, u32 slot, u32 timeOfD
     }
 }
 
-BOOL WiFiPlazaTalk_PrintTimeRemark(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room) {
+static BOOL WiFiPlazaTalk_PrintTimeRemark(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room) {
     WiFiPlazaPlayer *me = WiFiPlazaWork_GetMyPlayer(lobby);
     WiFiPlazaPlayer *partner = WiFiPlazaWork_GetPlayer(lobby, talk->partner);
     u32 msgId;
@@ -1877,7 +1907,7 @@ BOOL WiFiPlazaTalk_PrintTimeRemark(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, Wi
     return FALSE;
 }
 
-void WiFiPlazaTalk_BufferInstrument(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 slot, u32 mine) {
+static void WiFiPlazaTalk_BufferInstrument(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, WiFiPlazaRoomWork *room, u32 slot, u32 mine) {
     WiFiPlazaPlayer *me = WiFiPlazaWork_GetMyPlayer(lobby);
     WiFiPlazaPlayer *partner = WiFiPlazaWork_GetPlayer(lobby, talk->partner);
     u32 instrument;
@@ -1890,7 +1920,7 @@ void WiFiPlazaTalk_BufferInstrument(WiFiPlazaTalk *talk, WiFiPlazaWork *lobby, W
     WiFiPlazaRoom_BufferInstrumentName(room, instrument, slot);
 }
 
-void WiFiPlazaTalk_UpdatePartnerWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalk_UpdatePartnerWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) {
     if (WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaRoom_GetLobby(room)) == 450) { // "Umm... Hold on a second..."
         WiFiPlazaRoom_HideWaitingIcon(room);
         WiFiPlazaRoom_BufferPlayerName(room, talk->partner, 0);
@@ -1899,17 +1929,17 @@ void WiFiPlazaTalk_UpdatePartnerWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *roo
     }
 }
 
-void WiFiPlazaTalk_StartMenuTimer(WiFiPlazaTalk *talk) {
+static void WiFiPlazaTalk_StartMenuTimer(WiFiPlazaTalk *talk) {
     talk->menuTimer = 0;
     talk->menuOpen = TRUE;
 }
 
-void WiFiPlazaTalk_StopMenuTimer(WiFiPlazaTalk *talk) {
+static void WiFiPlazaTalk_StopMenuTimer(WiFiPlazaTalk *talk) {
     talk->menuTimer = 0;
     talk->menuOpen = FALSE;
 }
 
-void WiFiPlazaTalk_UpdateMenuWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalk_UpdateMenuWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) {
     String *message;
 
     if (talk->menuOpen == TRUE && (s16)talk->menuTimer == 450) { // "What's wrong? Are you OK?"
@@ -1919,7 +1949,7 @@ void WiFiPlazaTalk_UpdateMenuWait(WiFiPlazaTalk *talk, WiFiPlazaRoomWork *room) 
     }
 }
 
-void WiFiPlazaTalk_CountMenuTimer(WiFiPlazaTalk *talk) {
+static void WiFiPlazaTalk_CountMenuTimer(WiFiPlazaTalk *talk) {
     s16 frames;
 
     if (talk->menuOpen == TRUE) {
@@ -1930,7 +1960,7 @@ void WiFiPlazaTalk_CountMenuTimer(WiFiPlazaTalk *talk) {
     }
 }
 
-void WiFiPlazaTalk_SetHistory(WiFiPlazaTalk *talk, WiFiPlazaPlayer *partner) {
+static void WiFiPlazaTalk_SetHistory(WiFiPlazaTalk *talk, WiFiPlazaPlayer *partner) {
     u32 avatar = WiFiPlazaPlayer_GetAvatarIndex(partner);
 
     talk->historyPending = TRUE;
@@ -1938,7 +1968,7 @@ void WiFiPlazaTalk_SetHistory(WiFiPlazaTalk *talk, WiFiPlazaPlayer *partner) {
     talk->historyId = WiFiPlazaPlayer_GetLobbyId(partner);
 }
 
-void WiFiPlazaTalkMenu_Init(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg, u32 lastItem) {
+static void WiFiPlazaTalkMenu_Init(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 count, u32 firstMsg, u32 lastItem) {
     u32 i;
 
     WiFiPlazaRoom_CreateListItems(room, count);
@@ -1965,7 +1995,7 @@ void WiFiPlazaTalkMenu_Init(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u3
     menu->template.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaTalkMenu_InitRandom(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 range, u32 count, u32 firstMsg, u32 lastItem) {
+static void WiFiPlazaTalkMenu_InitRandom(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room, u32 range, u32 count, u32 firstMsg, u32 lastItem) {
     u32 i;
 
     WiFiPlazaRoom_CreateListItemsWithValue(room, count, range);
@@ -1997,7 +2027,7 @@ void WiFiPlazaTalkMenu_InitRandom(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *ro
     menu->template.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaTalkMenu_InitInfoCounter(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalkMenu_InitInfoCounter(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
     s32 i;
 
     WiFiPlazaRoom_CreateListItems(room, 8);
@@ -2011,7 +2041,7 @@ void WiFiPlazaTalkMenu_InitInfoCounter(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWor
     menu->template.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaTalkMenu_InitTimeEvents(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalkMenu_InitTimeEvents(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
     s32 i;
 
     WiFiPlazaRoom_CreateListItems(room, 4);
@@ -2027,7 +2057,7 @@ void WiFiPlazaTalkMenu_InitTimeEvents(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork
     menu->template.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaTalkMenu_InitPlazaGames(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalkMenu_InitPlazaGames(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
     s32 i;
 
     WiFiPlazaRoom_CreateListItems(room, 4);
@@ -2043,15 +2073,15 @@ void WiFiPlazaTalkMenu_InitPlazaGames(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork
     menu->template.items = WiFiPlazaRoom_GetListItems(room);
 }
 
-void WiFiPlazaTalkMenu_Free(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
+static void WiFiPlazaTalkMenu_Free(WiFiPlazaTalkMenu *menu, WiFiPlazaRoomWork *room) {
     WiFiPlazaRoom_DeleteListItems(room);
 }
 
-void WiFiPlazaTalkReply_Init(WiFiPlazaTalkReply *reply) {
+static void WiFiPlazaTalkReply_Init(WiFiPlazaTalkReply *reply) {
     reply->active = FALSE;
 }
 
-void WiFiPlazaTalkReply_Start(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby, u16 value, u16 awaited) {
+static void WiFiPlazaTalkReply_Start(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby, u16 value, u16 awaited) {
     if (reply->active != FALSE) {
         GF_AssertFail();
     }
@@ -2061,7 +2091,7 @@ void WiFiPlazaTalkReply_Start(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby, u
     reply->startStatus = WiFiPlazaWork_GetTalkState(lobby);
 }
 
-void WiFiPlazaTalkReply_Update(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby) {
+static void WiFiPlazaTalkReply_Update(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby) {
     if (reply->active != FALSE) {
         reply->status = WiFiPlazaWork_GetTalkState(lobby);
         if (reply->status == reply->awaited) {
@@ -2075,10 +2105,10 @@ void WiFiPlazaTalkReply_Update(WiFiPlazaTalkReply *reply, WiFiPlazaWork *lobby) 
     }
 }
 
-BOOL WiFiPlazaTalkReply_IsDone(WiFiPlazaTalkReply *reply) {
+static BOOL WiFiPlazaTalkReply_IsDone(WiFiPlazaTalkReply *reply) {
     return reply->active != TRUE;
 }
 
-u16 WiFiPlazaTalkReply_GetStatus(WiFiPlazaTalkReply *reply) {
+static u16 WiFiPlazaTalkReply_GetStatus(WiFiPlazaTalkReply *reply) {
     return reply->status;
 }

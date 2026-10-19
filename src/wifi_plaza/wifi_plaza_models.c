@@ -68,6 +68,7 @@ static void WiFiPlazaModelSet_RemoveProp(WiFiPlazaModelSet *set, WiFiPlazaProp *
 static u16 WiFiPlazaProp_GetKind(WiFiPlazaProp *prop);
 static void WiFiPlazaProp_SetPos(WiFiPlazaProp *prop, WiFiPlazaModelsPos pos);
 static u32 WiFiPlazaProp_GetPos(WiFiPlazaProp *prop);
+static void WiFiPlazaModelSet_StartPropAnim(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot, s32 mode);
 static void WiFiPlazaModelSet_StartPropAnimWithCallback(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot, s32 mode, WiFiPlazaPropCallback callback);
 static void WiFiPlazaModelSet_StopPropAnim(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot);
 static void WiFiPlazaModelSet_StopPropAnims(WiFiPlazaModelSet *set, WiFiPlazaProp *prop);
@@ -428,7 +429,7 @@ static u32 WiFiPlazaProp_GetPos(WiFiPlazaProp *prop) {
     return result;
 }
 
-void WiFiPlazaModelSet_StartPropAnim(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot, s32 mode) {
+static void WiFiPlazaModelSet_StartPropAnim(WiFiPlazaModelSet *set, WiFiPlazaProp *prop, s32 slot, s32 mode) {
     WiFiPlazaModelSet_StartPropAnimWithCallback(set, prop, slot, mode, NULL);
 }
 

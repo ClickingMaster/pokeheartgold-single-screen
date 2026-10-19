@@ -22,7 +22,6 @@ typedef struct CommClubLink {
     Party *party;
 } CommClubLink;
 extern CommClubLink *gCommClubLink;
-void CommPlayerInfo_SendLocal(void);
 void CommClub_OnParentConnected(void);
 void CommClub_OnChildStarted(void);
 BOOL CommWireless_IsStartedUp(void);
@@ -31,7 +30,6 @@ BOOL CommState_IsLinked(void);
 u32 CommPlayerManager_sizeof(void);
 void CommPlayerManager_Init(void *, FieldSystem *, int);
 void CommPlayerManager_ResumeFieldOnce(void);
-void CommPlayerInfo_HostRedistribute(void);
 void CommPlayerManager_ResyncLocalPlayer(void);
 void CommPlayerManager_SendLocalPosition(int);
 BOOL CommPlayerManager_StepAllPlayersBack(void);
@@ -51,7 +49,6 @@ BOOL Comm_SendCommandNoCopy(int, void *, int);
 void CommClubLink_Free(void);
 void CommClubLink_HostShowRoom(void);
 void CommClubLink_ChildShowRoom(void);
-void CommClubLink_CheckPartnerState5E(void);
 void CommClubLink_StartBattle(void);
 #include "encounter.h"
 #include "screen_fade.h"

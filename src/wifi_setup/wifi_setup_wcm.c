@@ -10,9 +10,10 @@ extern u8 gWifiSetupWcmSearchSsid[32];
 extern u8 WCM_Bssid_Any[]; // BSSID ff:ff:ff:ff:ff:ff (any)
 extern u8 WCM_Essid_Any[]; // SSID of 0xFF bytes (any)
 
+static void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event);
+static int WifiSetupWcm_ReturnToIdle(void);
+
 s32 WifiSetup_NotifyStatus(s32 arg);
-void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event);
-int WifiSetupWcm_ReturnToIdle(void);
 int WifiSetupWcm_CopyApList(u8 *dst, int max);
 int WifiSetupWcm_StartSearch(const u8 *bssid, const u8 *ssid, int len, int option);
 int WifiSetupWcm_StopSearch(void);
@@ -33,7 +34,7 @@ s32 WifiSetup_NotifyStatus(s32 arg) {
     return 0;
 }
 
-void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
+static void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
     if (!event) {
         return;
     }
@@ -203,7 +204,7 @@ void WifiSetupWcm_HandleEvent(WifiSetupWcmEvent *event) {
 }
 
 // Starts the request that leads back to the idle state (stop the search, disconnect, or start up).
-int WifiSetupWcm_ReturnToIdle(void) {
+static int WifiSetupWcm_ReturnToIdle(void) {
     switch (gWifiSetupWcm.state) {
     case WIFI_SETUP_WCM_STATE_SEARCHING:
         if (WCM_SearchAsync(NULL, NULL, 0) != 3) {

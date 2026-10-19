@@ -2,6 +2,8 @@
 
 #include "wifi_setup/wifi_setup_internal.h"
 
+static int WifiSetup_GetSimpleStartStatus(s32 *status);
+
 void WifiSetup_EncodeLittleEndian(u8 *dst, const u32 *src, u32 len) {
     u32 i = 0;
     while (i < len) {
@@ -176,7 +178,7 @@ int WifiSetup_StopSimpleStart(void) {
     return -10;
 }
 
-int WifiSetup_GetSimpleStartStatus(s32 *status) {
+static int WifiSetup_GetSimpleStartStatus(s32 *status) {
     status[0] = gWifiSetupWork.state;
     if (gWifiSetupConfig.deadline == -1) {
         status[1] = -1;

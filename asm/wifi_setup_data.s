@@ -105,8 +105,6 @@
 	.extern WifiSetup_ConnectAccessPoint
 	.extern WifiSetup_Sleep
 	.extern WifiSetup_NotifyStatus
-	.extern WifiSetupWcm_HandleEvent
-	.extern WifiSetupWcm_ReturnToIdle
 	.extern WifiSetupWcm_CopyApList
 	.extern WifiSetupWcm_StartSearch
 	.extern WifiSetupWcm_StopSearch
@@ -156,11 +154,6 @@
 	.extern WifiSetup_SimpleStartThread
 	.extern WifiSetup_AesKeyWrap
 	.extern WifiSetup_AesKeyUnwrap
-	.extern WifiSetup_XorBlock8
-	.extern WifiSetup_AesSetEncryptKey
-	.extern WifiSetup_AesSetDecryptKey
-	.extern WifiSetup_AesEncryptBlock
-	.extern WifiSetup_AesDecryptBlock
 	.extern WifiSetup_Md5Init
 	.extern WifiSetup_Md5Update
 	.extern WifiSetup_Md5Final
@@ -177,7 +170,6 @@
 	.extern WifiSetup_FormatMacAddress
 	.extern WifiSetup_StartSimpleStart
 	.extern WifiSetup_StopSimpleStart
-	.extern WifiSetup_GetSimpleStartStatus
 	.extern WifiSetup_GetSimpleStartResult
 	.extern WifiSetup_ReportSimpleStartStatus
 	.global sWifiSetupSecurityRecordTypes

@@ -19,27 +19,27 @@
 
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 
-extern const u16 sWiFiPlazaLight1Colors[];
-extern const u16 sWiFiPlazaLightColorSets[][5];
-extern void (*const sWiFiPlazaEventEffectPhaseUpdates[])(WiFiPlazaEventEffect *effect, int arg);
-extern void (*const sWiFiPlazaEventEffectPhaseStarts[])(WiFiPlazaEventEffect *effect, u32 arg);
-extern const u8 sWiFiPlazaEventPhase3PropIds[];
-extern const u32 sWiFiPlazaEventPhase3PropGroups[][2];
-extern const u8 sWiFiPlazaEventPhase4Steps[];
-extern const u8 sWiFiPlazaEventPhase4HideSteps[];
-extern const u32 sWiFiPlazaEventPhase5Thresholds[];
-extern const u32 sWiFiPlazaEventPhase5AnimSpeeds[];
-extern const u8 sWiFiPlazaEventModelIds3[];
-extern const u8 sWiFiPlazaEventModelIds4[];
-extern const u8 sWiFiPlazaEventModelIds2[];
-extern const u8 sWiFiPlazaEventModelIds5[];
-extern const u8 sWiFiPlazaEventModelIds1[];
-extern const u8 sWiFiPlazaEventModelIds6[];
-extern const u8 sWiFiPlazaEventModelIds0[];
-extern const u8 sWiFiPlazaMoverMarkerTags[];
-extern const u16 sWiFiPlazaMoverSounds[][6];
-extern BOOL (*const sWiFiPlazaEventWobbleSteps[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
-extern BOOL (*const sWiFiPlazaEventWobbleInits[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+extern const u16 gWiFiPlazaLight1Colors[];
+extern const u16 gWiFiPlazaLightColorSets[][5];
+extern void (*const gWiFiPlazaEventEffectPhaseUpdates[])(WiFiPlazaEventEffect *effect, int arg);
+extern void (*const gWiFiPlazaEventEffectPhaseStarts[])(WiFiPlazaEventEffect *effect, u32 arg);
+extern const u8 gWiFiPlazaEventPhase3PropIds[];
+extern const u32 gWiFiPlazaEventPhase3PropGroups[][2];
+extern const u8 gWiFiPlazaEventPhase4Steps[];
+extern const u8 gWiFiPlazaEventPhase4HideSteps[];
+extern const u32 gWiFiPlazaEventPhase5Thresholds[];
+extern const u32 gWiFiPlazaEventPhase5AnimSpeeds[];
+extern const u8 gWiFiPlazaEventModelIds3[];
+extern const u8 gWiFiPlazaEventModelIds4[];
+extern const u8 gWiFiPlazaEventModelIds2[];
+extern const u8 gWiFiPlazaEventModelIds5[];
+extern const u8 gWiFiPlazaEventModelIds1[];
+extern const u8 gWiFiPlazaEventModelIds6[];
+extern const u8 gWiFiPlazaEventModelIds0[];
+extern const u8 gWiFiPlazaMoverMarkerTags[];
+extern const u16 gWiFiPlazaMoverSounds[][6];
+extern BOOL (*const gWiFiPlazaEventWobbleSteps[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
+extern BOOL (*const gWiFiPlazaEventWobbleInits[])(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index);
 
 enum WiFiPlazaSurveyGuideStep {
     WIFI_PLAZA_SURVEY_GUIDE_GREET,
@@ -121,7 +121,7 @@ static void WiFiPlazaLight_FadeToColorSet(WiFiPlazaLight *light, int set) {
     light->lightsFrom[0][2] = light->lights[0][2];
     light->lightsFrom[0][3] = light->lights[0][3];
     light->lightTimers[0] = 0;
-    colors = sWiFiPlazaLightColorSets[set];
+    colors = gWiFiPlazaLightColorSets[set];
     WiFiPlazaLight_UnpackColor((s8 *)light->lightsTo[0], colors);
     for (i = 0; i < 4; i++) {
         light->materialsFrom[i][0] = light->materials[i][0];
@@ -139,7 +139,7 @@ static void WiFiPlazaLight_FadeLight1(WiFiPlazaLight *light, int set) {
     light->lightsFrom[1][2] = light->lights[1][2];
     light->lightsFrom[1][3] = light->lights[1][3];
     light->lightTimers[1] = 0;
-    WiFiPlazaLight_UnpackColor((s8 *)light->lightsTo[1], &sWiFiPlazaLight1Colors[set]);
+    WiFiPlazaLight_UnpackColor((s8 *)light->lightsTo[1], &gWiFiPlazaLight1Colors[set]);
 }
 
 static void WiFiPlazaLight_FadeToThirdSet(WiFiPlazaLight *light, int set) {
@@ -408,7 +408,7 @@ static void WiFiPlazaEventEffect_RunPhase(WiFiPlazaEventEffect *effect, int inde
         GF_AssertFail();
     }
     if ((u32)index < 6) {
-        sWiFiPlazaEventEffectPhaseUpdates[index](effect, arg);
+        gWiFiPlazaEventEffectPhaseUpdates[index](effect, arg);
     }
 }
 
@@ -427,16 +427,16 @@ void WiFiPlazaEventEffect_UpdatePhase3(WiFiPlazaEventEffect *effect, u32 tick) {
         const u8 *id;
         int result;
 
-        id = sWiFiPlazaEventPhase3PropIds;
+        id = gWiFiPlazaEventPhase3PropIds;
         i = 0;
         do {
             int show;
             int active = 0;
 
-            if ((i & 3) == sWiFiPlazaEventPhase3PropGroups[effect->step][0]) {
+            if ((i & 3) == gWiFiPlazaEventPhase3PropGroups[effect->step][0]) {
                 show = 1;
                 active = 1;
-            } else if ((i & 3) == sWiFiPlazaEventPhase3PropGroups[effect->step][1]) {
+            } else if ((i & 3) == gWiFiPlazaEventPhase3PropGroups[effect->step][1]) {
                 show = 0;
                 active = 1;
             }
@@ -467,8 +467,8 @@ void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
     if (tick % 6 != 0) {
         return;
     }
-    kind = sWiFiPlazaEventPhase4Steps[effect->step * 2];
-    WiFiPlazaEvent_GetModelList(sWiFiPlazaEventPhase4HideSteps[effect->step * 2], &list);
+    kind = gWiFiPlazaEventPhase4Steps[effect->step * 2];
+    WiFiPlazaEvent_GetModelList(gWiFiPlazaEventPhase4HideSteps[effect->step * 2], &list);
     for (i = 0; i < list.count; i++) {
         if (WiFiPlazaModels_ShowEffectProp(effect->models, list.ids[i], FALSE, 0x1000) != 1) {
             GF_AssertFail();
@@ -486,9 +486,9 @@ void WiFiPlazaEventEffect_UpdatePhase4(WiFiPlazaEventEffect *effect, u32 tick) {
 void WiFiPlazaEventEffect_UpdatePhase5(WiFiPlazaEventEffect *effect, u32 value) {
     u32 step = effect->step;
 
-    if (step < 3 && sWiFiPlazaEventPhase5Thresholds[step * 2] < value) {
-        WiFiPlazaModels_TriggerStageShows(effect->models, sWiFiPlazaEventPhase5AnimSpeeds[step * 2]);
-        WiFiPlazaModels_TriggerStageBursts(effect->models, sWiFiPlazaEventPhase5AnimSpeeds[effect->step * 2]);
+    if (step < 3 && gWiFiPlazaEventPhase5Thresholds[step * 2] < value) {
+        WiFiPlazaModels_TriggerStageShows(effect->models, gWiFiPlazaEventPhase5AnimSpeeds[step * 2]);
+        WiFiPlazaModels_TriggerStageBursts(effect->models, gWiFiPlazaEventPhase5AnimSpeeds[effect->step * 2]);
         PlaySE(SEQ_SE_PL_140_2);
         effect->step++;
     }
@@ -503,7 +503,7 @@ static void WiFiPlazaEventEffect_StartPhase(WiFiPlazaEventEffect *effect, u32 in
         step[1] = 0;
         step[2] = 0;
         step[3] = 0;
-        sWiFiPlazaEventEffectPhaseStarts[index](effect, arg);
+        gWiFiPlazaEventEffectPhaseStarts[index](effect, arg);
         effect->effect = index;
     }
 }
@@ -534,31 +534,31 @@ static void WiFiPlazaEvent_GetModelList(u32 kind, WiFiPlazaEventModelList *list)
     switch (kind) {
     case 0:
         list->count = 6;
-        list->ids = sWiFiPlazaEventModelIds0;
+        list->ids = gWiFiPlazaEventModelIds0;
         break;
     case 1:
         list->count = 2;
-        list->ids = sWiFiPlazaEventModelIds1;
+        list->ids = gWiFiPlazaEventModelIds1;
         break;
     case 2:
         list->count = 2;
-        list->ids = sWiFiPlazaEventModelIds2;
+        list->ids = gWiFiPlazaEventModelIds2;
         break;
     case 3:
         list->count = 1;
-        list->ids = sWiFiPlazaEventModelIds3;
+        list->ids = gWiFiPlazaEventModelIds3;
         break;
     case 4:
         list->count = 1;
-        list->ids = sWiFiPlazaEventModelIds4;
+        list->ids = gWiFiPlazaEventModelIds4;
         break;
     case 5:
         list->count = 2;
-        list->ids = sWiFiPlazaEventModelIds5;
+        list->ids = gWiFiPlazaEventModelIds5;
         break;
     case 6:
         list->count = 3;
-        list->ids = sWiFiPlazaEventModelIds6;
+        list->ids = gWiFiPlazaEventModelIds6;
         break;
     default:
         GF_AssertFail();
@@ -684,7 +684,7 @@ static WiFiPlazaEventMovers *WiFiPlazaEventMovers_Create(WiFiPlazaRoomWork *room
     work->range = -8 - work->baseX;
     work->baseX <<= 16;
     work->range <<= 16;
-    tag = sWiFiPlazaMoverMarkerTags;
+    tag = gWiFiPlazaMoverMarkerTags;
     i = 0;
     for (; i < 3; i++, tag++) {
         WiFiPlazaMap_FindTileTag(work->map, *tag, &pos[1], &pos[0], 0);
@@ -802,14 +802,14 @@ static void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 in
             case 0:
                 if (WiFiPlazaModels_StartMoverAnim1(work->models, index) == 1) {
                     if (index % 3 == 2) {
-                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][1]);
-                        if (sWiFiPlazaMoverSounds[type][4] != 0xFFFE) {
-                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][4]);
+                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][1]);
+                        if (gWiFiPlazaMoverSounds[type][4] != 0xFFFE) {
+                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][4]);
                         }
                     } else {
-                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][0]);
-                        if (sWiFiPlazaMoverSounds[type][2] != 0xFFFE) {
-                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][2]);
+                        WiFiPlazaEventMovers_PlayCry(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][0]);
+                        if (gWiFiPlazaMoverSounds[type][2] != 0xFFFE) {
+                            WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][2]);
                         }
                     }
                     WiFiPlazaWork_ClearGroupActionRequest(work->lobby, index * 3 + i);
@@ -825,9 +825,9 @@ static void WiFiPlazaEventMovers_StartActions(WiFiPlazaEventMovers *work, u32 in
                 if (WiFiPlazaModels_StartMoverAnim3(work->models, index) == 1) {
                     WiFiPlazaWork_ClearGroupActionRequest(work->lobby, index * 3 + i);
                     if (index % 3 == 2) {
-                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][5]);
+                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][5]);
                     } else {
-                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, sWiFiPlazaMoverSounds[type][3]);
+                        WiFiPlazaEventMovers_PlaySE(hasOwnSelection, isOwnIndex, isOwnColumn, gWiFiPlazaMoverSounds[type][3]);
                     }
                 }
                 break;
@@ -873,13 +873,13 @@ static BOOL WiFiPlazaEventWobble_Start(WiFiPlazaEventWobble *wobble, int kind, W
     }
     wobble->kind = kind;
     wobble->active = TRUE;
-    sWiFiPlazaEventWobbleInits[kind](wobble, models, index);
+    gWiFiPlazaEventWobbleInits[kind](wobble, models, index);
     return TRUE;
 }
 
 static BOOL WiFiPlazaEventWobble_Update(WiFiPlazaEventWobble *wobble, WiFiPlazaModels *models, int index) {
     if (wobble->active != FALSE) {
-        if (sWiFiPlazaEventWobbleSteps[wobble->kind](wobble, models, index) == TRUE) {
+        if (gWiFiPlazaEventWobbleSteps[wobble->kind](wobble, models, index) == TRUE) {
             u8 *p = (u8 *)wobble;
 
             p[0] = 0;

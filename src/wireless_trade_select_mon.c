@@ -117,7 +117,6 @@ void WirelessTrade_SetWork(FieldSystem *fieldSystem, WirelessTradeSelectMon *wor
 
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
-void CommPlayerInfo_RecordTrades(SaveData *saveData, int count);
 int Comm_SendCommandNoCopy(int command, void *data, int size);
 void CommState_FrameDummy(enum HeapID heapID, BgConfig *bgConfig);
 void Comm_InitSyncedSave(s32 *state);
@@ -688,8 +687,8 @@ static BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             WirelessTradeSelectMon_LoadPartyIcons(work->party, 0, work);
             WirelessTradeSelectMon_LoadPartyIcons(work->partnerParty, 6, work);
-            for (i = 0; i < 2; i++, work = (WirelessTradeSelectMon *)((u8 *)work + sizeof(Sprite *))) {
-                Sprite_SetDrawFlag(work->cursorSprites[0], TRUE);
+            for (i = 0; i < 2; i++) {
+                Sprite_SetDrawFlag(work->cursorSprites[i], TRUE);
             }
         }
         break;
@@ -829,20 +828,13 @@ static int WirelessTradeSelectMon_RunSelect(WirelessTradeSelectMon *work) {
 
 static void WirelessTradeSelectMon_FreeSprites(WirelessTradeSelectMon *work) {
     int i;
-    u8 *shifted;
-    u32 offset;
 
     SpriteTransfer_DeleteCharTransferTask(work->resObjs[0][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_DeleteCharTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_CHAR]);
     SpriteTransfer_DeletePlttTransferTask(work->resObjs[0][GF_GFX_RES_TYPE_PLTT]);
     SpriteTransfer_DeletePlttTransferTask(work->resObjs[1][GF_GFX_RES_TYPE_PLTT]);
-    offset = 0xB3 * 4;
-    i = 0;
-    shifted = (u8 *)work;
-    while (i < 4) {
-        Destroy2DGfxResObjMan(*(GF_2DGfxResMan **)(shifted + offset));
-        i++;
-        shifted += sizeof(GF_2DGfxResMan *);
+    for (i = 0; i < 4; i++) {
+        Destroy2DGfxResObjMan(work->resMan[i]);
     }
     SpriteList_Delete(work->spriteList);
     OamManager_Free();

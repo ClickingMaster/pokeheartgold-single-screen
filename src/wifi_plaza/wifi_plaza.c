@@ -2214,16 +2214,14 @@ static void WiFiPlazaGroups_ClearActionRequest(WiFiPlazaGroups *groups, u32 plac
 
 // The place (group * 3 + seat) of id, or -1.
 static int WiFiPlazaGroups_FindPlace(WiFiPlazaGroups *groups, int id) {
-    WiFiPlazaGroups *row = groups;
     int i;
     int j;
     for (i = 0; i < 9; i++) {
         for (j = 0; j < 3; j++) {
-            if (id == row->ids[0][j]) {
+            if (id == groups->ids[i][j]) {
                 return i * 3 + j;
             }
         }
-        row = (WiFiPlazaGroups *)((u8 *)row + sizeof(row->ids[0]));
     }
     return -1;
 }

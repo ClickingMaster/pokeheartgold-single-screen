@@ -13,25 +13,28 @@
 // Wi-Fi USB connector screen: waits for the USB connector scan (WifiSetupUsbScan) and reacts to its
 // result with dialogs; the exit code picks the next screen. Also the creation of the BG 2 screen copy.
 
-// values of gWifiSetupUsbConnectorExit
-#define USB_CONNECTOR_RUNNING 0
-#define USB_CONNECTOR_BACK    1
+// values of gWifiSetupUsbConnectorExit: the screen that follows
+enum WifiSetupUsbConnectorExit {
+    USB_CONNECTOR_RUNNING,
+    USB_CONNECTOR_DONE,  // the connector is set up
+    USB_CONNECTOR_BACK,  // back to the connection list
+    USB_CONNECTOR_RETRY, // back to the connector intro
+};
 
-void WifiSetupUsbConnector_Start(void);
-void WifiSetupUsbConnector_WaitFadeIn(void);
-void WifiSetupUsbConnector_WaitButtonBar(void);
-void WifiSetupUsbConnector_Main(void);
-void WifiSetupUsbConnector_HandleInput(void);
-void WifiSetupUsbConnector_Update(void);
-void WifiSetupUsbConnector_CheckButtons(void);
-void WifiSetupUsbConnector_Exit(void);
-void WifiSetupUsbConnector_WaitFadeOut(void);
-void WifiSetupUsbConnector_End(void);
-void WifiSetupUsbConnector_ScanCallback(int result);
-void WifiSetupUsbConnector_WaitNotFound(void);
-void WifiSetupUsbConnector_WaitNotFoundClosed(void);
-void WifiSetupUsbConnector_WaitChoice(void);
-void WifiSetupUsbConnector_WaitChoiceClosed(void);
+static void WifiSetupUsbConnector_WaitFadeIn(void);
+static void WifiSetupUsbConnector_WaitButtonBar(void);
+static void WifiSetupUsbConnector_Main(void);
+static void WifiSetupUsbConnector_HandleInput(void);
+static void WifiSetupUsbConnector_Update(void);
+static void WifiSetupUsbConnector_CheckButtons(void);
+static void WifiSetupUsbConnector_Exit(void);
+static void WifiSetupUsbConnector_WaitFadeOut(void);
+static void WifiSetupUsbConnector_End(void);
+static void WifiSetupUsbConnector_WaitNotFound(void);
+static void WifiSetupUsbConnector_WaitNotFoundClosed(void);
+static void WifiSetupUsbConnector_WaitChoice(void);
+static void WifiSetupUsbConnector_WaitChoiceClosed(void);
+
 
 void WifiSetupUsbConnector_Start(void) {
     WifiSetupFade_Start(2, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, 8);
@@ -39,7 +42,7 @@ void WifiSetupUsbConnector_Start(void) {
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitFadeIn);
 }
 
-void WifiSetupUsbConnector_WaitFadeIn(void) {
+static void WifiSetupUsbConnector_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
@@ -47,7 +50,7 @@ void WifiSetupUsbConnector_WaitFadeIn(void) {
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitButtonBar);
 }
 
-void WifiSetupUsbConnector_WaitButtonBar(void) {
+static void WifiSetupUsbConnector_WaitButtonBar(void) {
     if (WifiSetupButtonBar_GetSelected() == -2) {
         return;
     }
@@ -55,13 +58,13 @@ void WifiSetupUsbConnector_WaitButtonBar(void) {
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Main);
 }
 
-void WifiSetupUsbConnector_Main(void) {
+static void WifiSetupUsbConnector_Main(void) {
     WifiSetupUsbConnector_HandleInput();
     WifiSetupUsbConnector_Update();
     WifiSetupUsbConnector_CheckButtons();
 }
 
-void WifiSetupUsbConnector_HandleInput(void) {
+static void WifiSetupUsbConnector_HandleInput(void) {
     if (WifiSetupInput_IsKeyPressed(PAD_BUTTON_B)) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
@@ -71,45 +74,45 @@ void WifiSetupUsbConnector_HandleInput(void) {
     }
 }
 
-void WifiSetupUsbConnector_Update(void) {
+static void WifiSetupUsbConnector_Update(void) {
 }
 
-void WifiSetupUsbConnector_CheckButtons(void) {
+static void WifiSetupUsbConnector_CheckButtons(void) {
     if (gWifiSetupUsbConnectorExit != USB_CONNECTOR_RUNNING) {
         return;
     }
     if (WifiSetupButtonBar_GetSelected() != 0) {
         return;
     }
-    gWifiSetupUsbConnectorExit = 2;
+    gWifiSetupUsbConnectorExit = USB_CONNECTOR_BACK;
     WifiSetupSound_Stop();
     WifiSetupSound_Play(7);
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Exit);
 }
 
-void WifiSetupUsbConnector_Exit(void) {
+static void WifiSetupUsbConnector_Exit(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitFadeOut);
 }
 
-void WifiSetupUsbConnector_WaitFadeOut(void) {
+static void WifiSetupUsbConnector_WaitFadeOut(void) {
     if (WifiSetupFade_IsActive(1) != 0) {
         return;
     }
     WifiSetupButtonBar_Close();
-    if (gWifiSetupUsbConnectorExit == 2 || gWifiSetupUsbConnectorExit == 3) {
+    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_BACK || gWifiSetupUsbConnectorExit == USB_CONNECTOR_RETRY) {
         WifiSetupFade_Start(3, 1, GX_BLEND_PLANEMASK_BG0, 8);
     }
     WifiSetupFade_Start(3, 0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_OBJ, 8);
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_End);
 }
 
-void WifiSetupUsbConnector_End(void) {
+static void WifiSetupUsbConnector_End(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    if (gWifiSetupUsbConnectorExit == 2) {
+    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_BACK) {
         if (WifiSetupFade_IsActive(1) != 0) {
             return;
         }
@@ -120,15 +123,15 @@ void WifiSetupUsbConnector_End(void) {
     WifiSetupUsbScan_End();
     WifiSetupBusyIcon_Destroy();
     WifiSetupText_FreeBgCanvas(0);
-    if (gWifiSetupUsbConnectorExit == 2 || gWifiSetupUsbConnectorExit == 3) {
+    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_BACK || gWifiSetupUsbConnectorExit == USB_CONNECTOR_RETRY) {
         WifiSetupMessage_Hide();
         WifiSetupDisplay_HidePlanes(1, GX_PLANEMASK_BG0);
     }
     WifiSetupDisplay_HidePlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_OBJ);
-    if (gWifiSetupUsbConnectorExit == 2) {
+    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_BACK) {
         WifiSetupApp_SetTransition(2, 1);
         WifiSetupApp_SetStateFunc(WifiSetupConnectionList_Init);
-    } else if (gWifiSetupUsbConnectorExit == 3) {
+    } else if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_RETRY) {
         WifiSetupApp_SetTransition(2, 1);
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnectorIntro_Init);
     } else {
@@ -143,7 +146,7 @@ void WifiSetupUsbConnector_ScanCallback(int result) {
     }
     switch (result) {
     case 0:
-        gWifiSetupUsbConnectorExit = 3;
+        gWifiSetupUsbConnectorExit = USB_CONNECTOR_RETRY;
         WifiSetupSound_Stop();
         WifiSetupSound_Play(0x12);
         WifiSetupDialog_Open(0x10, 1, 1, -1, 0);
@@ -151,7 +154,7 @@ void WifiSetupUsbConnector_ScanCallback(int result) {
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitNotFound);
         break;
     case 1:
-        gWifiSetupUsbConnectorExit = USB_CONNECTOR_BACK;
+        gWifiSetupUsbConnectorExit = USB_CONNECTOR_DONE;
         WifiSetupSound_Stop();
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Exit);
         break;
@@ -163,7 +166,7 @@ void WifiSetupUsbConnector_ScanCallback(int result) {
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitChoice);
         break;
     case 3:
-        gWifiSetupUsbConnectorExit = 2;
+        gWifiSetupUsbConnectorExit = USB_CONNECTOR_BACK;
         WifiSetupSound_Stop();
         WifiSetupSound_Play(9);
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Exit);
@@ -171,7 +174,7 @@ void WifiSetupUsbConnector_ScanCallback(int result) {
     }
 }
 
-void WifiSetupUsbConnector_WaitNotFound(void) {
+static void WifiSetupUsbConnector_WaitNotFound(void) {
     if (WifiSetupDialog_GetSelected() != 0) {
         return;
     }
@@ -180,34 +183,34 @@ void WifiSetupUsbConnector_WaitNotFound(void) {
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitNotFoundClosed);
 }
 
-void WifiSetupUsbConnector_WaitNotFoundClosed(void) {
+static void WifiSetupUsbConnector_WaitNotFoundClosed(void) {
     if (WifiSetupDialog_IsOpen() != 0) {
         return;
     }
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Exit);
 }
 
-void WifiSetupUsbConnector_WaitChoice(void) {
+static void WifiSetupUsbConnector_WaitChoice(void) {
     int r = WifiSetupDialog_GetSelected();
     if (r != 0) {
         if (r != 1) {
             return;
         }
-        gWifiSetupUsbConnectorExit = 3;
+        gWifiSetupUsbConnectorExit = USB_CONNECTOR_RETRY;
         WifiSetupSound_Play(6);
     } else {
-        gWifiSetupUsbConnectorExit = USB_CONNECTOR_BACK;
+        gWifiSetupUsbConnectorExit = USB_CONNECTOR_DONE;
         WifiSetupSound_Play(7);
     }
     WifiSetupDialog_Close();
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitChoiceClosed);
 }
 
-void WifiSetupUsbConnector_WaitChoiceClosed(void) {
+static void WifiSetupUsbConnector_WaitChoiceClosed(void) {
     if (WifiSetupDialog_IsOpen() != 0) {
         return;
     }
-    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_BACK) {
+    if (gWifiSetupUsbConnectorExit == USB_CONNECTOR_DONE) {
         WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Exit);
         return;
     }

@@ -9,6 +9,7 @@
 
 #include "communication_command.h"
 #include "communication_core.h"
+#include "communication_player_state.h"
 #include "heap.h"
 #include "mail_message.h"
 #include "player_data.h"
@@ -113,7 +114,6 @@ typedef struct CommBssid {
 
 int WVR_StartUpAsync(int mode, void (*callback)(void *, int), void *arg);
 int WVR_TerminateAsync(void (*callback)(void *), void *arg);
-int CommPlayerInfo_DropDisconnected(void);
 
 int CommState_GetLinkMode(void);
 int CommState_GetBeaconId(void);

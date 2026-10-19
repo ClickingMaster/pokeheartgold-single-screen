@@ -5,6 +5,10 @@
 #include "overlay_13_thumb_1.h"
 #include "poke_overlay.h"
 
+static void UnloadOVY13(void);
+static void RunNintendoWFCSetupAndReset(void *unused, enum HeapID heapID);
+static BOOL NintendoWFCSetupApp_Init(OverlayManager *man, int *state);
+
 FS_EXTERN_OVERLAY(OVY_0);
 FS_EXTERN_OVERLAY(OVY_13);
 FS_EXTERN_OVERLAY(OVY_38);
@@ -23,12 +27,12 @@ BOOL LoadOVY13(void) {
     return HandleLoadOverlay(FS_OVERLAY_ID(OVY_13), OVY_LOAD_ASYNC);
 }
 
-void UnloadOVY13(void) {
+static void UnloadOVY13(void) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_13));
 }
 
 // Runs the Nintendo WFC setup utility, then resets the system.
-void RunNintendoWFCSetupAndReset(void *unused, enum HeapID heapID) {
+static void RunNintendoWFCSetupAndReset(void *unused, enum HeapID heapID) {
     LoadDwcOverlay();
     LoadOVY13();
     RunWifiSetupApp(heapID);
@@ -45,7 +49,7 @@ void UnloadOVY38(void) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_38));
 }
 
-BOOL NintendoWFCSetupApp_Init(OverlayManager *man, int *state) {
+static BOOL NintendoWFCSetupApp_Init(OverlayManager *man, int *state) {
     void *args;
 
     Heap_Create(HEAP_ID_3, HEAP_ID_48, 0x41000);
