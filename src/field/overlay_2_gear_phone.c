@@ -69,7 +69,7 @@ String *GetPhoneBookEntryName(GearPhoneRingManager *gearPhone, enum HeapID heapI
     return str;
 }
 
-void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 callerId, u32 a2, u8 a3, u8 isScriptedCall, u8 callScriptID) {
+void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 callerId, u32 recentCallersChunk, u8 a3, u8 isScriptedCall, u8 callScriptID) {
     if (callerId >= NUM_PHONE_CONTACTS) {
         gearPhone->callerId = 0xFF;
         gearPhone->callerParams[0] = 0xFF;
@@ -77,7 +77,7 @@ void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 ca
         GF_ASSERT(FALSE);
     } else {
         gearPhone->callerId = callerId;
-        gearPhone->callerParams[0] = a2;
+        gearPhone->callerParams[0] = recentCallersChunk;
         gearPhone->callerParams[1] = a3;
     }
 

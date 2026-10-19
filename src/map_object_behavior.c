@@ -648,8 +648,8 @@ LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManag
     return NULL;
 }
 
-SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18) {
-    return TrainerApproach_CreateTask(fieldSystem, trainer, player, movement, remaining, unk10, unk14, unk18);
+SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex) {
+    return TrainerApproach_CreateTask(fieldSystem, trainer, player, movement, remaining, unk10, encounterType, trainerIndex);
 }
 
 BOOL TrainerApproach_IsDone(SysTask *task) {
@@ -663,7 +663,7 @@ void TrainerApproach_Delete(SysTask *task) {
     TrainerApproach_DestroyTask(task);
 }
 
-SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18) {
+SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex) {
     TrainerApproachWork *work = Heap_AllocAtEnd(HEAP_ID_FIELD1, sizeof(TrainerApproachWork));
     SysTask *task;
     if (work == NULL) {
@@ -673,8 +673,8 @@ SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *tr
     work->direction = movement;
     work->distance = remaining;
     work->unk10 = unk10;
-    work->encounterType = unk14;
-    work->trainerIndex = unk18;
+    work->encounterType = encounterType;
+    work->trainerIndex = trainerIndex;
     work->fieldSystem = fieldSystem;
     work->trainer = trainer;
     work->player = player;

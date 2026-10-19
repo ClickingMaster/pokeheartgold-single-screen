@@ -386,7 +386,7 @@ static BOOL Task_WildEncounter(TaskManager *taskManager) {
         encounter->state++;
         break;
     case 4:
-        ov02_BattleExit_HandleRoamerAction(fieldSystem, encounter->setup);
+        Roamers_UpdateAfterBattle(fieldSystem, encounter->setup);
         CallTask_FadeFromBlack(taskManager);
         encounter->state++;
         break;

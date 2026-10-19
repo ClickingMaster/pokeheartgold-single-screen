@@ -125,10 +125,10 @@ int TrainerSight_IsPathBlocked(LocalMapObject *object, int direction, int distan
 u32 MapObject_GetTrainerNum(LocalMapObject *object);
 u32 MapObjectBehavior_GetTrainerNum(LocalMapObject *object);
 LocalMapObject *MapObjectManager_FindTrainerPartner(void *unused, MapObjectManager *manager, LocalMapObject *exclude, u32 trainerNum);
-SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18);
+SysTask *TrainerApproach_Start(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex);
 BOOL TrainerApproach_IsDone(SysTask *task);
 void TrainerApproach_Delete(SysTask *task);
-SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int unk14, int unk18);
+SysTask *TrainerApproach_CreateTask(FieldSystem *fieldSystem, LocalMapObject *trainer, PlayerAvatar *player, int movement, int remaining, int unk10, int encounterType, int trainerIndex);
 BOOL TrainerApproach_GetDone(SysTask *task);
 void TrainerApproach_DestroyTask(SysTask *task);
 void TrainerApproach_Task(SysTask *task, void *data);

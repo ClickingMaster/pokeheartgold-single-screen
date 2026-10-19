@@ -123,7 +123,7 @@ typedef struct LegendaryWingEnv {
     SysTask *animTask;
     u8 kind;
     u16 state;
-    u8 filler_14[4];
+    u8 padding_14[4];
 } LegendaryWingEnv;
 
 typedef struct HideoutAlarmEnv {
@@ -150,7 +150,7 @@ typedef struct CameraShake {
     u16 period;
     fx32 angleStep;
     Camera *camera;
-    u8 filler_1C[4];
+    u8 padding_1C[4];
     VecFx32 target;
     VecFx32 base;
 } CameraShake;

@@ -81,7 +81,7 @@ typedef struct FollowMonSituation {
     s8 mood;
     u8 pokeathlonStat;
     u8 facing;
-    u8 filler_18[2];
+    u8 padding_18[2];
     u16 mapId;
 } FollowMonSituation;
 

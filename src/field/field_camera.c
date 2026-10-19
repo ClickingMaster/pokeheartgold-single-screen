@@ -38,7 +38,7 @@ struct FieldCameraShift {
     u8 padding6;
     u8 mode;                       // preset number + 1
     FieldCameraShiftMotion motion; // target angle, offset still to apply
-    u8 filler_18[0x10];
+    u8 padding_18[0x10];
     BOOL active;
     u16 startAngle;
     u16 reverse;

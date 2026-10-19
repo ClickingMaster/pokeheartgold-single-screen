@@ -78,7 +78,7 @@ typedef struct CutInFlyer {
     int timer;
     VecFx32 origin;
     VecFx32 offset;
-    u8 filler_20[0xC];
+    u8 padding_20[0xC];
     VecFx32 scale;
     fx32 rotation; // degrees
     int unk_3C;
@@ -174,7 +174,7 @@ extern const fx32 sTrainerHopOffsets[4];
 
 static void Task_FlyLanding(SysTask *task, void *data);
 static Roamer *Roamers_GetActiveRoamerBySpecies(RoamerSaveData *roamerSave, u32 species);
-static void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId);
+static void Roamers_RelocateFromMap(RoamerSaveData *roamerSave, u32 mapId);
 BOOL CutInScrollSprite_Init(FieldEffect *effect, CutInScrollSprite *work);
 void CutInScrollSprite_Destroy(FieldEffect *effect, CutInScrollSprite *work);
 void CutInScrollSprite_Update(FieldEffect *effect, CutInScrollSprite *work);
@@ -1038,7 +1038,7 @@ BOOL FieldMoveCutIn_StepWaitModelEffect(FieldMoveCutIn *cutIn) {
     return FALSE;
 }
 
-void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *setup) {
+void Roamers_UpdateAfterBattle(FieldSystem *fieldSystem, BattleSetup *setup) {
     Pokemon *mon = Party_GetMonByIndex(setup->party[BATTLER_ENEMY], 0);
     RoamerSaveData *roamerSave = Save_Roamers_Get(fieldSystem->saveData);
     u32 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -1058,13 +1058,13 @@ void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *s
             SetRoamerData(roamer, ROAMER_DATA_HP, hp);
             SetRoamerData(roamer, ROAMER_DATA_STATUS, status);
         }
-        ov02_RepelActiveRoamersFromMapNo(roamerSave, fieldSystem->location->mapId);
+        Roamers_RelocateFromMap(roamerSave, fieldSystem->location->mapId);
     } else if ((u16)((s32)LCRandom() % 100) < 30) {
-        ov02_RepelActiveRoamersFromMapNo(roamerSave, fieldSystem->location->mapId);
+        Roamers_RelocateFromMap(roamerSave, fieldSystem->location->mapId);
     }
 }
 
-static void ov02_RepelActiveRoamersFromMapNo(RoamerSaveData *roamerSave, u32 mapId) {
+static void Roamers_RelocateFromMap(RoamerSaveData *roamerSave, u32 mapId) {
     u8 i;
     for (i = 0; i < ROAMER_MAX; i++) {
         if (GetRoamerIsActiveByIndex(roamerSave, i) && mapId == GetRoamMapByLocationIdx(Roamer_GetLocation(roamerSave, i))) {

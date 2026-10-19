@@ -13,7 +13,7 @@ typedef struct {
     EncounterEffectSpriteManager spriteManager;
     EncounterEffectSpriteResources spriteResources;
     Sprite *sprite;
-} Ov114WorkA;
+} FrontierOrLinkSingleEffectWork;
 
 typedef struct {
     EncounterEffectSpriteManager spriteManager;
@@ -21,7 +21,7 @@ typedef struct {
     Sprite *sprites[4];
     EncounterEffectQuadInterp horiz;
     EncounterEffectQuadInterp vert;
-} Ov114WorkB;
+} DoubleEffectWork;
 
 void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ctx);
 void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx);

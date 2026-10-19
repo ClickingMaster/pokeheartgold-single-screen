@@ -81,7 +81,7 @@ void FollowMon_JumpOnSpot(FieldSystem *fieldSystem, u8 count);
 BOOL FollowMon_StartGrowAndShrink(FieldSystem *fieldSystem);
 void StartShayminRevertToLandForm(TaskManager *taskManager);
 
-void ov02_BattleExit_HandleRoamerAction(FieldSystem *fieldSystem, BattleSetup *setup);
+void Roamers_UpdateAfterBattle(FieldSystem *fieldSystem, BattleSetup *setup);
 void ShakeScreen(TaskManager *taskManager, u32 amplitudeX, u32 amplitudeY, u32 repeats, u16 period);
 void LanceFliesAway(TaskManager *taskManager, LocalMapObject *lance, LocalMapObject *dragoniteObject);
 void OpenAlphHiddenRoom(TaskManager *taskManager, u32 msgNo);

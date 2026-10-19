@@ -17,7 +17,7 @@ void EncounterEffect_FrontierOrLinkSingle(SysTask *task, EncounterEffectTask *ct
     VecFx32 tmp5;
     VecFx32 tmp6;
     BOOL done;
-    Ov114WorkA *work = ctx->work;
+    FrontierOrLinkSingleEffectWork *work = ctx->work;
 
     switch (ctx->state) {
     case FRONTIER_SINGLE_STATE_LOAD:
@@ -109,12 +109,12 @@ void EncounterEffect_Double(SysTask *task, EncounterEffectTask *ctx) {
     BOOL done;
     int i;
     EncounterEffectQuadInterp *interp;
-    Ov114WorkB *work = ctx->work;
+    DoubleEffectWork *work = ctx->work;
 
     switch (ctx->state) {
     case DOUBLE_EFFECT_STATE_LOAD:
-        ctx->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(Ov114WorkB));
-        memset(ctx->work, 0, sizeof(Ov114WorkB));
+        ctx->work = Heap_Alloc(HEAP_ID_FIELD1, sizeof(DoubleEffectWork));
+        memset(ctx->work, 0, sizeof(DoubleEffectWork));
         work = ctx->work;
         EncounterEffect_InitSprites(&work->spriteManager, 4, 1);
         EncounterEffect_LoadSpriteResources(ctx->narc, &work->spriteManager, &work->spriteResources, 0, 1, 4, 6, 5, 0x927c0);

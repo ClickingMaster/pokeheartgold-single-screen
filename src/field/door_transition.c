@@ -92,7 +92,7 @@ typedef struct DoorTransitionTaskWork {
 typedef struct DoorAnimListEntry {
     u32 unk_00;
     u8 doorType;
-    u8 filler05[0x13];
+    u8 padding_05[0x13];
 } DoorAnimListEntry;
 
 typedef struct DoorModelList {

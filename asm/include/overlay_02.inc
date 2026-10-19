@@ -471,7 +471,7 @@
 .public FlyLanding_Start
 .public FlyLanding_IsDone
 .public FlyLanding_Delete
-.public ov02_BattleExit_HandleRoamerAction
+.public Roamers_UpdateAfterBattle
 .public PlayerStepEvent_RepelCounterDecrement
 .public PokecenterAnimCreate
 .public ElevatorAnimCreate

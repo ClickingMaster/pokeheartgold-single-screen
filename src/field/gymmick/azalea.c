@@ -49,7 +49,7 @@ typedef struct AzaleaGymmickSpinarakRideData {
 } AzaleaGymmickSpinarakRideData; // size: 0x08
 
 typedef struct AzaleaGymmickLocalData {
-    u8 filler_00[4];
+    u8 padding_00[4];
     int spinarakMapPropIds[4];
     u8 nodeIdx;
     u8 switchState;
@@ -322,8 +322,8 @@ void FlipAzaleaGymSwitch(FieldSystem *fieldSystem, u8 switchNo) {
         switch2 = Field3dObjectList_GetRenderObjectByID(fieldSystem->renderObjManager, 117);
         MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &switch1->renderObj, 116, switchStateBefore);
         MapPropAnimationManager_RemoveAnimationFromRenderObj(fieldSystem->mapPropAnimationManager, &switch2->renderObj, 117, switchStateBefore);
-        u8 r0 = (gymmickUnion->azalea.switches >> 0) & 1;
-        if (r0) {
+        u8 switchStateAfter = (gymmickUnion->azalea.switches >> 0) & 1;
+        if (switchStateAfter) {
             MapPropAnimationManager_AddAnimationToRenderObj(116, 1, TRUE, &switch1->renderObj, fieldSystem->mapPropAnimationManager);
             MapPropAnimationManager_AddAnimationToRenderObj(117, 1, TRUE, &switch2->renderObj, fieldSystem->mapPropAnimationManager);
         } else {

@@ -17,7 +17,7 @@ enum RadioMusicPlayingSeq {
 };
 
 String *GetPhoneBookEntryName(GearPhoneRingManager *gearPhone, enum HeapID heapID);
-void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *phoneRingManager, u8 callerId, u32 a2, u8 a3, u8 isScriptedCall, u8 callScriptID);
+void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *phoneRingManager, u8 callerId, u32 recentCallersChunk, u8 a3, u8 isScriptedCall, u8 callScriptID);
 u8 GearPhoneRingManager_GetCallerParams(GearPhoneRingManager *gearPhone, GearPhoneCallerParams *params);
 BOOL GearPhoneRingManager_TryStartCall(GearPhoneRingManager *gearPhone);
 enum RadioMusicPlayingSeq GetRadioMusicPlayingSeq(void);
