@@ -451,8 +451,8 @@ BOOL VsRecorder_MenuPrevScheme(VsRecorderWork *work) {
     switch (work->step) {
     case SCHEME_STEP_PICK:
         work->fade = 0;
-        if (*(volatile u8 *)&work->colorScheme != 0) {
-            work->colorScheme = work->colorScheme - 1;
+        if (work->colorScheme != 0) {
+            work->colorScheme--;
         } else {
             work->colorScheme = 6;
         }

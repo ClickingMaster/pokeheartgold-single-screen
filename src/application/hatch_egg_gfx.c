@@ -169,12 +169,10 @@ static const f32 sHatchEggShakeScalesY[][10] = {
 };
 
 void HatchEggApp_HideLayers(void) {
-    // DISPCNT / DB_DISPCNT: turn off BG0-3 and OBJ
-    volatile u32 *dispcntMain = (volatile u32 *)0x04000000, *dispcntSub = (volatile u32 *)0x04001000;
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    *dispcntMain &= 0xffffe0ff;
-    *dispcntSub &= 0xffffe0ff;
+    reg_GX_DISPCNT &= 0xFFFFE0FF;
+    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
 }
 
 void HatchEggApp_InitBlend(void) {
@@ -238,15 +236,13 @@ void HatchEggApp_InitBgs(BgConfig *bgConfig) {
 }
 
 void HatchEggApp_VBlankCB(void *data) {
-    // OS_IRQTABLE_INTR_CHECK: acknowledge the V-blank interrupt
-    volatile u32 *dtcm = (volatile u32 *)0x027e0000;
     HatchEggApp *app = data;
     PokepicManager_HandleLoadImgAndOrPltt(app->gfx.pokepicManager);
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
     PaletteData_PushTransparentBuffers(app->gfx.paletteData);
     DoScheduledBgGpuUpdates(app->gfx.bgConfig);
-    dtcm[0x3ff8 / 4] |= 1;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 void HatchEggApp_Draw3D(void) {
@@ -446,7 +442,8 @@ static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
     s16 y;
     f32 scaleX;
     f32 scaleY;
-    if (shake[0] == 0) {
+    switch (shake[0]) {
+    case 0:
         if (shake[1] >= 10) {
             shake[0]++;
             shake[1] = 0;
@@ -472,15 +469,16 @@ static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
             }
             if (finished != 3) {
                 shake[1]++;
-                goto running;
+                break;
             }
             shake[0]++;
         }
+        // fallthrough
+    default:
+        shake[0] = 0;
+        shake[1] = 0;
+        return FALSE;
     }
-    shake[0] = 0;
-    shake[1] = 0;
-    return FALSE;
-running:
     return TRUE;
 }
 

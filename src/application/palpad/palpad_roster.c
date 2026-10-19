@@ -647,20 +647,14 @@ static int PalPadRoster_HandleFriendMenu(PalPadRoster *roster, u32 *inputState, 
         return PALPAD_ROSTER_STATE_FRIEND_MENU;
     }
     result = TouchscreenListMenu_HandleInput(roster->menu);
-    if (result == 3) {
-        goto cancel;
+    if (result != 3 && result != LIST_CANCEL) {
+        if (result == LIST_NOTHING_CHOSEN) {
+            return PALPAD_ROSTER_STATE_FRIEND_MENU;
+        }
+    } else {
+        PalPadGfx_SetArrowsVisible(gfx, TRUE);
+        result = PALPAD_ROSTER_STATE_INPUT;
     }
-    if (result == LIST_CANCEL) {
-        goto cancel;
-    }
-    if (result == LIST_NOTHING_CHOSEN) {
-        return PALPAD_ROSTER_STATE_FRIEND_MENU;
-    }
-    goto close;
-cancel:
-    PalPadGfx_SetArrowsVisible(gfx, TRUE);
-    result = PALPAD_ROSTER_STATE_INPUT;
-close:
     PalPadRoster_ClearMessage(roster);
     *inputState = TouchscreenListMenu_WasLastInputTouch(roster->menu);
     TouchscreenListMenu_Destroy(roster->menu);

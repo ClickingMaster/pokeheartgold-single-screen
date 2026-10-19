@@ -198,13 +198,8 @@ BOOL PokewalkerIr_VerifyPacket(u32 size) {
     }
     if (gPokewalkerIrLink.active) {
         // waits for the rest of the packet (the loop counter is passed but unused)
-        u32 i = 0;
-        goto test;
-loop:
-        i++;
-test:
-        if (i < size) {
-            goto loop;
+        u32 i;
+        for (i = 0; i < size; i++) {
         }
         ((void (*)(u32))PokewalkerIr_MarkDisconnected)(i);
     }
@@ -593,8 +588,7 @@ void PokewalkerIr_RequestChunk(void) {
     }
 
 void PokewalkerIr_OnReceiveComplete(void) {
-    int i, offset;
-    u32 *words;
+    int i;
     PokewalkerIrRecord *record;
     float elapsed = _f_ulltof(((OS_GetTick() - gPokewalkerIrWork.transferStartTick) << 6) / 33514) / 1000.0f;
     (void)elapsed;
@@ -606,9 +600,8 @@ void PokewalkerIr_OnReceiveComplete(void) {
         return;
     case 72:
         gPokewalkerIrWork.status->watts = SWAP16(gPokewalkerIrWork.status->watts);
-        for (i = 0, offset = 0; i < 7; i++, offset += 4) {
-            words = (u32 *)((u8 *)gPokewalkerIrWork.status + offset + 0x70);
-            *words = SWAP32(*words);
+        for (i = 0; i < 7; i++) {
+            gPokewalkerIrWork.status->unk_70[i] = SWAP32(gPokewalkerIrWork.status->unk_70[i]);
         }
         gPokewalkerIrWork.status->unk_00 = SWAP32(gPokewalkerIrWork.status->unk_00);
         gPokewalkerIrWork.status->unk_04 = SWAP32(gPokewalkerIrWork.status->unk_04);
@@ -659,7 +652,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
                 return;
             }
             gPokewalkerIrTransfer.step = 176;
-            PokewalkerIr_BeginTransfer((void *)((u8 *)gPokewalkerIrWork.blocks + 4), (u32)((void *)0xB804), 576);
+            PokewalkerIr_BeginTransfer(gPokewalkerIrWork.blocks->block0, (u32)((void *)0xB804), sizeof(gPokewalkerIrWork.blocks->block0));
             PokewalkerIr_SendChunk();
             return;
         case 178:
@@ -729,7 +722,7 @@ void PokewalkerIr_OnConnect(int result) {
     switch (gPokewalkerIrTransfer.command) {
     case 0xF0:
         PokewalkerIr_StoreClock();
-        MI_CpuCopy8((u8 *)gPokewalkerIrWork.identity + 0x10, gPokewalkerIrSendBuffer, 0x28);
+        MI_CpuCopy8(&gPokewalkerIrWork.identity->clock, gPokewalkerIrSendBuffer, sizeof(PokewalkerIrClock));
         PokewalkerIr_Send(gPokewalkerIrSendBuffer, 0x74, gPokewalkerIrTransfer.command, 1);
         break;
     case 0xFE:
@@ -746,11 +739,11 @@ void PokewalkerIr_OnConnect(int result) {
         break;
     case 0xE0:
         PokewalkerIr_StoreClock();
-        PokewalkerIr_Send((u8 *)gPokewalkerIrWork.identity + 0x10, 0x28, gPokewalkerIrTransfer.command, 1);
+        PokewalkerIr_Send(&gPokewalkerIrWork.identity->clock, sizeof(PokewalkerIrClock), gPokewalkerIrTransfer.command, 1);
         break;
     case 0x2A:
         PokewalkerIr_StoreClock();
-        PokewalkerIr_Send((u8 *)gPokewalkerIrWork.identity + 0x10, 0x28, gPokewalkerIrTransfer.step, 1);
+        PokewalkerIr_Send(&gPokewalkerIrWork.identity->clock, sizeof(PokewalkerIrClock), gPokewalkerIrTransfer.step, 1);
         PokewalkerIr_SetError(15);
         PokewalkerIr_Disconnect();
         break;

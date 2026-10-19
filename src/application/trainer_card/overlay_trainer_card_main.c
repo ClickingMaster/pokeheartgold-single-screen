@@ -518,7 +518,7 @@ static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained
             TrainerCardPaletteTable table = sTrainerCardHGSSPalettes;
             if (stars > 5) {
                 GF_AssertFail();
-                fileId = *(volatile u32 *)&table.members[0];
+                fileId = table.members[0];
             } else {
                 fileId = table.members[stars];
             }
@@ -529,7 +529,7 @@ static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained
         TrainerCardPaletteTable table = sTrainerCardDiamondPalettes;
         if (stars > 5) {
             GF_AssertFail();
-            fileId = *(volatile u32 *)&table.members[0];
+            fileId = table.members[0];
         } else {
             fileId = table.members[stars];
         }
@@ -537,7 +537,7 @@ static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained
         TrainerCardPaletteTable table = sTrainerCardPearlPalettes;
         if (stars > 5) {
             GF_AssertFail();
-            fileId = *(volatile u32 *)&table.members[0];
+            fileId = table.members[0];
         } else {
             fileId = table.members[stars];
         }
@@ -545,7 +545,7 @@ static void TrainerCardMain_LoadCardColorPalette(u32 stars, BOOL pokedexObtained
         TrainerCardPaletteTable table = sTrainerCardPlatinumPalettes;
         if (stars > 5) {
             GF_AssertFail();
-            fileId = *(volatile u32 *)&table.members[0];
+            fileId = table.members[0];
         } else {
             fileId = table.members[stars];
         }

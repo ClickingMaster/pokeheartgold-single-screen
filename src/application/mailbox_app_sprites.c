@@ -190,7 +190,7 @@ void MailboxApp_ShowMailMonIcons(MailboxApp *app) {
         };
     } icon;
     u32 i;
-    register Mail *mail = app->data->mail[app->selectedMail];
+    Mail *mail = app->data->mail[app->selectedMail];
     NNSG2dCharacterData *charData;
     void *charFile;
     u32 imageLoc;

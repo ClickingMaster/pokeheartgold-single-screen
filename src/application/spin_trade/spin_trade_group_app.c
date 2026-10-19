@@ -595,11 +595,10 @@ static void SpinTradeGroup_VBlankTask(SysTask *task, void *data) {
 
 // VBlank callback; registered with the app pointer as its argument
 static void SpinTradeGroup_VBlankCallback(void *data) {
-    volatile u32 *a = (volatile u32 *)0x027e0000;
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(data);
-    a[0x3ff8 / 4] |= 1;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void SpinTradeGroup_SetGraphicsBanks(void) {

@@ -1055,14 +1055,12 @@ static void ScratchOffCards_FreeResources(ScratchOffCardsWork *work) {
 }
 
 static void ScratchOffCards_ResetDisplay(void) {
-    volatile u32 *dispcnt = &reg_GX_DISPCNT;
-    volatile u32 *dispcntSub = &reg_GXS_DB_DISPCNT;
     Main_SetVBlankIntrCB(NULL, NULL);
     Main_SetHBlankIntrCB(NULL, NULL);
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    *dispcnt &= 0xFFFFE0FF;
-    *dispcntSub &= 0xFFFFE0FF;
+    reg_GX_DISPCNT &= 0xFFFFE0FF;
+    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
 }
 
 static void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
@@ -1358,34 +1356,35 @@ static void ScratchOffCards_FillCells(ScratchOffCardsWork *work) {
     u8 symbol = LCRandom() % 4;
     failures = 0;
     for (i = 0; i < 9; i++) {
-retry:
-        j = LCRandom() % 9;
-        if (work->cells[j] == SCRATCH_CELL_EMPTY) {
-            failures = 0;
-            work->cells[j] = symbol;
-            if (i == 2 || i == 4 || i == 6) {
-                symbol++;
-                if (symbol == 4) {
-                    symbol = 0;
-                }
-            }
-        } else {
-            failures++;
-            if (failures < 30) {
-                goto retry;
-            }
-            failures = 0;
-            for (k = 0; k < 9; k++) {
-                if (work->cells[k] == SCRATCH_CELL_EMPTY) {
-                    work->cells[k] = symbol;
-                    if (i == 2 || i == 4 || i == 6) {
-                        symbol++;
-                        if (symbol == 4) {
-                            symbol = 0;
-                        }
+        while (TRUE) {
+            j = LCRandom() % 9;
+            if (work->cells[j] == SCRATCH_CELL_EMPTY) {
+                failures = 0;
+                work->cells[j] = symbol;
+                if (i == 2 || i == 4 || i == 6) {
+                    symbol++;
+                    if (symbol == 4) {
+                        symbol = 0;
                     }
-                    break;
                 }
+                break;
+            }
+            failures++;
+            if (failures >= 30) {
+                failures = 0;
+                for (k = 0; k < 9; k++) {
+                    if (work->cells[k] == SCRATCH_CELL_EMPTY) {
+                        work->cells[k] = symbol;
+                        if (i == 2 || i == 4 || i == 6) {
+                            symbol++;
+                            if (symbol == 4) {
+                                symbol = 0;
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
             }
         }
     }

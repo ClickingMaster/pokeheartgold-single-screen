@@ -45,7 +45,6 @@ extern void CommState_StartMysteryGiftParent(void *saveData, void *linkMode);
 extern void CommState_StartMysteryGiftChild(void *saveData, int linkMode);
 extern void *CommWireless_GetParentMail(int slot);
 
-#define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
 
 static const CommCommand sMysteryGiftCommCommands[2] = {
     {
@@ -81,7 +80,7 @@ void MysteryGiftComm_ParentWaitStartup(void) {
     int i;
     if (Comm_IsNetIdConnected(Comm_GetLocalNetId())) {
         for (i = 0; i < 16; i++) {
-            VOLATILE_WORK->unk_3C1[i] = 0;
+            sMysteryGiftCommWork->unk_3C1[i] = 0;
         }
         CommPlayerInfo_SendLocal();
         MysteryGiftComm_SetState(MysteryGiftComm_ParentCollectProfiles, 0);
@@ -91,8 +90,8 @@ void MysteryGiftComm_ParentWaitStartup(void) {
 void MysteryGiftComm_ParentCollectProfiles(void) {
     int i;
     for (i = 0; i < 16; i++) {
-        if (VOLATILE_WORK->profiles[i] == NULL && Comm_IsNetIdConnected((u16)i) == 1) {
-            VOLATILE_WORK->profiles[i] = CommPlayerInfo_GetProfile(i);
+        if (sMysteryGiftCommWork->profiles[i] == NULL && Comm_IsNetIdConnected((u16)i) == 1) {
+            sMysteryGiftCommWork->profiles[i] = CommPlayerInfo_GetProfile(i);
         }
     }
 }

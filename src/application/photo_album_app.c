@@ -1245,7 +1245,7 @@ static void PhotoAlbumApp_InitBgs(PhotoAlbumApp *app) {
     modes = sPhotoAlbumAppGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     // POWCNT1: main engine on the bottom screen
-    *(volatile u16 *)0x04000304 &= ~0x8000;
+    reg_GX_POWCNT &= ~0x8000;
     template4 = sPhotoAlbumBgTemplate4;
     InitBgFromTemplate(app->bgConfig, GF_BG_LYR_SUB_0, &template4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(app->bgConfig, GF_BG_LYR_SUB_0);

@@ -180,8 +180,8 @@ u32 PCBox_State_Exit(PCBoxWork *work) {
     NARC_Delete(work->view->iconNarc);
     NARC_Delete(work->view->personalNarc);
     GF_TouchpadStopSampling();
-    *(volatile u16 *)0x04000050 = 0;
-    *(volatile u16 *)0x04001050 = 0;
+    reg_G2_BLDCNT = 0;
+    reg_G2S_DB_BLDCNT = 0;
     GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);
     GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     Heap_Free(work->view);
@@ -1295,14 +1295,10 @@ u32 PCBox_State_EndBoxTrayDrag(PCBoxWork *work) {
     }
     if (PCBox_GetSlotMonData(work, work->selectedSlot, MON_DATA_SPECIES_EXISTS, NULL) == 0) {
         PCBox_ClearMonInfo(work);
-        goto done;
-    }
-    if (selected != 0xff) {
-        if (high == 0) {
-            goto done;
+    } else if (selected != 0xff) {
+        if (high != 0) {
+            PCBox_ShowSlotMonInfo(work, work->selectedSlot);
         }
-        PCBox_ShowSlotMonInfo(work, work->selectedSlot);
-        goto done;
     } else {
         selected = work->selectedSlot;
         if ((u32)selected >= 0x1e) {
@@ -1329,24 +1325,23 @@ u32 PCBox_State_EndBoxTrayDrag(PCBoxWork *work) {
                 }
             }
         }
-    }
-    if (current != 0xff && (current & 0x80) != 0) {
-        u32 next = (current ^ 0x80) + (work->trayBox / 6) * 6;
-        if (work->activeBox != next) {
-            s32 index = work->selectedSlot;
-            if ((u32)index < 0x1e) {
-                PCBox_PrintMonActionMessage(work, 0, PC_BOX_MON_MSG_BOX_FULL, 0x25);
-            } else if (PCBox_PartyHasOtherUsableMon(work, index - 0x1e) == 1) {
-                PCBox_PrintMonActionMessage(work, 0, PC_BOX_MON_MSG_BOX_FULL, 0x25);
-            } else {
-                PCBox_PrintReleaseMessage(work, PC_BOX_RELEASE_MSG_LAST_MON, 0x25);
+        if (current != 0xff && (current & 0x80) != 0) {
+            u32 next = (current ^ 0x80) + (work->trayBox / 6) * 6;
+            if (work->activeBox != next) {
+                s32 index = work->selectedSlot;
+                if ((u32)index < 0x1e) {
+                    PCBox_PrintMonActionMessage(work, 0, PC_BOX_MON_MSG_BOX_FULL, 0x25);
+                } else if (PCBox_PartyHasOtherUsableMon(work, index - 0x1e) == 1) {
+                    PCBox_PrintMonActionMessage(work, 0, PC_BOX_MON_MSG_BOX_FULL, 0x25);
+                } else {
+                    PCBox_PrintReleaseMessage(work, PC_BOX_RELEASE_MSG_LAST_MON, 0x25);
+                }
+                PlaySE(SEQ_SE_DP_BOX03);
+                work->nextState = PC_BOX_STATE_RESUME_BOX_TRAY_INPUT;
+                return PC_BOX_STATE_WAIT_BUTTON;
             }
-            PlaySE(SEQ_SE_DP_BOX03);
-            work->nextState = PC_BOX_STATE_RESUME_BOX_TRAY_INPUT;
-            return PC_BOX_STATE_WAIT_BUTTON;
         }
     }
-done:
     GridInputHandler_SetButtonInputMode(work->view->gridInput, TRUE);
     return PC_BOX_STATE_BOX_TRAY_INPUT;
 }

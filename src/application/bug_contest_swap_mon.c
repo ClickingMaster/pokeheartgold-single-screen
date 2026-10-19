@@ -547,20 +547,14 @@ static void BugContestSwapMon_InitYesNoPrompt(BugContestSwapMon *swapMon) {
 static int BugContestSwapMon_GetInitialState(int noPokemonCaught) {
     switch (noPokemonCaught) {
     case FALSE:
-        goto chooseMon;
+        return SWAP_MON_STATE_CHOOSE_MON;
     case TRUE:
-        goto showCaughtMon;
+        return SWAP_MON_STATE_SHOW_CAUGHT_MON;
     default:
-        goto invalid;
+        GF_AssertFail();
+        GF_AssertFail();
+        return SWAP_MON_STATE_SHOW_CAUGHT_MON;
     }
-chooseMon:
-    return SWAP_MON_STATE_CHOOSE_MON;
-showCaughtMon:
-    return SWAP_MON_STATE_SHOW_CAUGHT_MON;
-invalid:
-    GF_AssertFail();
-    GF_AssertFail();
-    return SWAP_MON_STATE_SHOW_CAUGHT_MON;
 }
 
 static void BugContestSwapMon_SetBanks(void) {

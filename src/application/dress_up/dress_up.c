@@ -2655,16 +2655,15 @@ static BOOL DressUpTray_AnimateToPage(DressUpTray *tray, int group, int page) {
 // next / previous page of the group that has objects on it
 static int DressUpTray_CyclePage(DressUpTray *tray, int group, BOOL reverse) {
     int start = DressUpTray_GetGroupPage(tray, group);
-    volatile DressUpTray *shifted = (volatile DressUpTray *)((u8 *)tray + group * sizeof(DressUpTrayGroup));
     int i;
-    for (i = 1; i < shifted->groups[0].pageCount; i++) {
+    for (i = 1; i < tray->groups[group].pageCount; i++) {
         int page;
         if (reverse == FALSE) {
-            page = (i + start) % shifted->groups[0].pageCount;
+            page = (i + start) % tray->groups[group].pageCount;
         } else {
             page = start - i;
             if (page < 0) {
-                page += shifted->groups[0].pageCount;
+                page += tray->groups[group].pageCount;
             }
         }
         {
@@ -4756,34 +4755,27 @@ static void DressUpCountdown_Sync(DressUpCountdown *countdown) {
 }
 
 static void DressUpCountdown_DrawDigits(DressUpCountdown *countdown) {
-    struct {
-        volatile int value, digit;
-    } state;
-
-    state.value = countdown->value;
+    int digit;
+    int value = countdown->value;
     int divisor = 1;
     int i;
-    DressUpCountdown *cursor;
-    divisor *= 10;
-    i = 0;
-    cursor = countdown;
-    for (; i < 2; i++) {
-        int quotient = state.value / divisor;
-        state.digit = quotient;
-        if (quotient > 10) {
+    for (i = 1; i < 2; i++) {
+        divisor *= 10;
+    }
+    for (i = 0; i < 2; i++) {
+        digit = value / divisor;
+        if (digit > 10) {
             GF_AssertFail();
         }
-        Sprite_SetAnimCtrlSeq(cursor->digits[0], state.digit);
-        u32 consumed = (u32)state.digit * (u32)divisor;
-        state.value = (s32)((u32)state.value - consumed);
+        Sprite_SetAnimCtrlSeq(countdown->digits[i], digit);
+        value -= digit * divisor;
         divisor /= 10;
         if (countdown->warning == FALSE && countdown->value <= 10) {
-            Sprite_SetPalIndexRespectVramOffset(cursor->digits[0], 1);
+            Sprite_SetPalIndexRespectVramOffset(countdown->digits[i], 1);
             if (i == 1) {
                 countdown->warning = TRUE;
             }
         }
-        cursor = (DressUpCountdown *)((u8 *)cursor + sizeof(Sprite *));
     }
 }
 

@@ -1287,11 +1287,7 @@ static void MigrateFromAgb_VBlankCB(MigrateFromAgbApp *app) {
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(app->bgConfig);
-    {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
-        volatile u32 *dtcm = (volatile u32 *)0x027E0000;
-        dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
-    }
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 // The checks before the boxes are shown: 0 OK, 5 fewer than six Pokemon, 6 the Pal Park is not empty

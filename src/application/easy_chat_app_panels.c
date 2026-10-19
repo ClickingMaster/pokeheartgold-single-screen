@@ -355,26 +355,23 @@ static void EasyChatSentenceView_HBlankCallback(EasyChatSentenceView *sentence) 
 
 static void EasyChatSentenceView_ToggleScrollWindows(EasyChatSentenceView *sentence, BOOL enable) {
 #pragma unused(sentence)
-    volatile u16 *winIn = (volatile u16 *)0x04000048;
-    volatile u16 *winOut = (volatile u16 *)0x0400004A;
-
-    *winOut = (*winOut & ~0x3F) | 0x1F;
+    reg_G2_WINOUT = (reg_G2_WINOUT & ~0x3F) | 0x1F;
     if (enable) {
-        *winIn = (*winIn & ~0x3F) | 0x1A;
-        *winIn = (*winIn & ~0x3F00) | 0x1B00;
-        *(volatile u16 *)0x04000040 = 0xFF;
-        *(volatile u16 *)0x04000044 = 0x30;
-        *(volatile u16 *)0x04000042 = 0xFF;
-        *(volatile u16 *)0x04000046 = 0xA0C0;
-        *(volatile u32 *)0x04000000 = (*(volatile u32 *)0x04000000 & 0xFFFF1FFF) | 0x6000;
+        reg_G2_WININ = (reg_G2_WININ & ~0x3F) | 0x1A;
+        reg_G2_WININ = (reg_G2_WININ & ~0x3F00) | 0x1B00;
+        reg_G2_WIN0H = 0xFF;
+        reg_G2_WIN0V = 0x30;
+        reg_G2_WIN1H = 0xFF;
+        reg_G2_WIN1V = 0xA0C0;
+        reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFFF1FFF) | 0x6000;
     } else {
-        *winIn = (*winIn & ~0x3F) | 0x1F;
-        *winIn = (*winIn & ~0x3F00) | 0x1F00;
-        *(volatile u16 *)0x04000040 = 0;
-        *(volatile u16 *)0x04000044 = 0;
-        *(volatile u16 *)0x04000042 = 0;
-        *(volatile u16 *)0x04000046 = 0;
-        *(volatile u32 *)0x04000000 &= 0xFFFF1FFF;
+        reg_G2_WININ = (reg_G2_WININ & ~0x3F) | 0x1F;
+        reg_G2_WININ = (reg_G2_WININ & ~0x3F00) | 0x1F00;
+        reg_G2_WIN0H = 0;
+        reg_G2_WIN0V = 0;
+        reg_G2_WIN1H = 0;
+        reg_G2_WIN1V = 0;
+        reg_GX_DISPCNT &= 0xFFFF1FFF;
     }
 }
 
@@ -382,8 +379,7 @@ void EasyChatSentenceView_StartScroll(EasyChatSentenceView *sentence, u8 directi
     sentence->scrollFrames = 0;
     sentence->scrollDirection = direction;
     if (sentence->scrollDirection == 1) {
-        volatile u16 *winIn = (volatile u16 *)0x04000048;
-        *winIn = (*winIn & ~0x3F) | 0x1B;
+        reg_G2_WININ = (reg_G2_WININ & ~0x3F) | 0x1B;
     }
     Main_SetHBlankIntrCB((GFIntrCB)EasyChatSentenceView_HBlankCallback, sentence);
 }
@@ -1425,14 +1421,13 @@ void EasyChatWordListView_StartFadeOut(EasyChatWordListView *wordList) {
 
 BOOL EasyChatWordListView_UpdateFadeOut(EasyChatWordListView *wordList) {
     if (wordList->fadeDone == 0) {
-        if (!EasyChatBlendFade_IsAlphaDone(&wordList->fade)) {
-            goto notDone;
+        if (EasyChatBlendFade_IsAlphaDone(&wordList->fade)) {
+            ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
+            return TRUE;
         }
-        ToggleBgLayer(GF_BG_LYR_MAIN_2, GF_PLANE_TOGGLE_OFF);
+    } else {
         return TRUE;
     }
-    return TRUE;
-notDone:
     return FALSE;
 }
 

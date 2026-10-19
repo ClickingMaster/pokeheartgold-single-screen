@@ -621,7 +621,7 @@ static void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
 }
 
 static void TrainerCardSignature_SetDoneButtonSpriteSeq(Sprite **sprite, int pressed) {
-    const volatile u16 *anims = sTrainerCardSignatureDoneButtonPos;
+    const u16 *anims = sTrainerCardSignatureDoneButtonPos;
     if (pressed == 0) {
         Sprite_SetAnimCtrlSeq(*sprite, anims[2] + 1);
     } else {
@@ -997,17 +997,11 @@ static void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves) {
             PlaySE(SEQ_SE_DP_KYU01);
         }
     }
-    if (moves[0] * moves[2] < 0) {
-        goto play;
+    if (moves[0] * moves[2] < 0 || moves[1] * moves[3] < 0) {
+        if (!IsSEPlaying(SEQ_SE_DP_KYU01)) {
+            PlaySE(SEQ_SE_DP_KYU01);
+        }
     }
-    if (moves[1] * moves[3] >= 0) {
-        goto done;
-    }
-play:
-    if (!IsSEPlaying(SEQ_SE_DP_KYU01)) {
-        PlaySE(SEQ_SE_DP_KYU01);
-    }
-done:
     moves[0] = moves[2];
     moves[1] = moves[3];
     moves[2] = 0;

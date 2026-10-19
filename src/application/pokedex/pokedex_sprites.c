@@ -266,19 +266,13 @@ void PokedexApp_SetMonIconSub(PokedexAppData *pokedexApp, u32 species, u32 form,
 // Shows list entry entry's icon in sprite slot sprite (translucent while only seen).
 void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
     ManagedSprite **sprites = pokedexApp->sprites;
-    PokedexListEntry *volatile entries;
-    u32 form, species, offset;
+    u32 form, species;
 
     ManagedSprite_SetDrawFlag(sprites[sprite], FALSE);
-    offset = (u32)entry * 4;
-    {
-        PokedexListEntry *base = pokedexApp->listEntries;
-        species = ((PokedexListEntry *)((u8 *)base + offset))->species;
-        entries = base;
-    }
+    species = pokedexApp->listEntries[entry].species;
     if (species != SPECIES_NONE) {
         form = Pokedex_GetSeenFormByIdx(pokedexApp->args->pokedex, species, 0);
-        species = ((PokedexListEntry *)((u8 *)entries + offset))->species;
+        species = pokedexApp->listEntries[entry].species;
         if (species == SPECIES_PICHU) {
             if (form == 2) {
                 form = 1;
@@ -288,7 +282,7 @@ void PokedexApp_SetListIcon(PokedexAppData *pokedexApp, int entry, int sprite) {
         }
         PokedexApp_SetMonIcon(pokedexApp, species, form, sprite);
         ManagedSprite_SetDrawFlag(sprites[sprite], TRUE);
-        if (((PokedexListEntry *)((u8 *)pokedexApp->listEntries + offset))->caughtState == 1) {
+        if (pokedexApp->listEntries[entry].caughtState == 1) {
             PokedexApp_SetSpriteTranslucent(pokedexApp, sprite, TRUE);
         } else {
             PokedexApp_SetSpriteTranslucent(pokedexApp, sprite, FALSE);

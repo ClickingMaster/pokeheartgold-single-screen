@@ -514,12 +514,10 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
 }
 
 static void DrawingSession_VBlankCB(void *bgConfig) {
-    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
-    volatile u32 *dtcm = (volatile u32 *)0x027E0000;
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
     DoScheduledBgGpuUpdates(bgConfig);
-    dtcm[0x3FF8 / 4] |= OS_IE_VBLANK;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void DrawingSession_SetVramBanks(void) {
@@ -1446,30 +1444,18 @@ static u32 DrawingSession_CountPlayerProfiles(void) {
 }
 
 static void DrawingSession_PrintMemberNames(Window *windows, int unused, u32 color, DrawingSessionWork *work) {
-    int ownId = Comm_GetLocalNetId();
     int i;
-    int member;
-    int icon;
+    int ownId = Comm_GetLocalNetId();
     Window *window;
 
     if (DrawingSession_UpdateMembers(work)) {
-        volatile int counter = 0;
-        member = 0;
-        icon = 0;
-        do {
-            if (!work->members[member].cur) {
-                Sprite_SetDrawFlag(work->memberIcons[icon], FALSE);
+        for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
+            if (!work->members[i].cur) {
+                Sprite_SetDrawFlag(work->memberIcons[i], FALSE);
             } else {
-                Sprite_SetDrawFlag(work->memberIcons[icon], TRUE);
+                Sprite_SetDrawFlag(work->memberIcons[i], TRUE);
             }
-            int next = counter + 1;
-            member++;
-            icon++;
-            counter = next;
-            if (next >= DRAWING_SESSION_MAX_MEMBERS) {
-                break;
-            }
-        } while (1);
+        }
         i = 0;
         window = windows;
         for (; i < DRAWING_SESSION_MAX_MEMBERS; i++, window++) {

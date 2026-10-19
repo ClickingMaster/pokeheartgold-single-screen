@@ -2499,8 +2499,6 @@ static int BallCapsuleEditor_ConfirmQuitEdit(BallCapsuleEditor *editor) {
             break;
         }
         switch (editor->subStateValue) {
-        case YESNORESPONSE_WAIT:
-            goto other;
         case YESNORESPONSE_YES:
             BallCapsuleEditor_RestoreEditedCapsule(editor);
             BallCapsuleEditor_RestoreSealCounts(editor);
@@ -2514,8 +2512,8 @@ static int BallCapsuleEditor_ConfirmQuitEdit(BallCapsuleEditor *editor) {
         case YESNORESPONSE_NO:
             result = BALL_CAPSULE_EDIT_INPUT;
             break;
+        case YESNORESPONSE_WAIT:
         default:
-other:
             result = BALL_CAPSULE_EDIT_CONFIRM_QUIT;
             break;
         }
@@ -2563,12 +2561,8 @@ static int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             editor->subState++;
         }
         break;
-    case 2: {
-        volatile u32 *clear = (u32 *)&effectParams;
-        clear[0] = 0;
-        clear[1] = 0;
-        clear[2] = 0;
-    }
+    case 2:
+        memset(&effectParams, 0, sizeof(effectParams));
         effectParams.kind = 1;
         effectParams.mon = editor->previewMon;
         capsuleId = editor->cursorCapsule[0] + 1;

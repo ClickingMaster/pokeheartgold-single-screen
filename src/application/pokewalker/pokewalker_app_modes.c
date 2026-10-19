@@ -428,59 +428,55 @@ void PokewalkerApp_SelectMon_ShowMonInfo(int box, int slot, PokewalkerApp *app) 
     PokewalkerSelectMonWork *work = (PokewalkerSelectMonWork *)&app->selectMonState;
     PokewalkerSelectMonInfo info;
 
-    if (box == -1 || slot == -1) {
-        goto noMon;
-    }
-
-    info.state = 2;
-    if (box == 18) {
-        Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(app->saveData), slot);
-        u8 i;
-        s32 markings;
-        info.personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-        info.species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-        info.form = GetMonData(mon, MON_DATA_FORM, NULL);
-        GetMonData(mon, MON_DATA_NICKNAME, info.nickname);
-        info.isShiny = MonIsShiny(mon);
-        info.gender = GetMonData(mon, MON_DATA_GENDER, NULL);
-        markings = GetMonData(mon, MON_DATA_MARKINGS, NULL);
-        for (i = 0; i < 6; i++) {
-            if ((markings >> i) & 1) {
-                info.markings[i] = 1;
-            } else {
-                info.markings[i] = 0;
+    if (box != -1 && slot != -1) {
+        info.state = 2;
+        if (box == 18) {
+            Pokemon *mon = Party_GetMonByIndex(SaveArray_Party_Get(app->saveData), slot);
+            u8 i;
+            s32 markings;
+            info.personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+            info.species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+            info.form = GetMonData(mon, MON_DATA_FORM, NULL);
+            GetMonData(mon, MON_DATA_NICKNAME, info.nickname);
+            info.isShiny = MonIsShiny(mon);
+            info.gender = GetMonData(mon, MON_DATA_GENDER, NULL);
+            markings = GetMonData(mon, MON_DATA_MARKINGS, NULL);
+            for (i = 0; i < 6; i++) {
+                if ((markings >> i) & 1) {
+                    info.markings[i] = 1;
+                } else {
+                    info.markings[i] = 0;
+                }
             }
-        }
-        info.heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
-        info.level = GetMonData(mon, MON_DATA_LEVEL, NULL);
-        PokewalkerBoxDisplay_ShowMon(work->boxDisplay, &info);
-        return;
-    } else {
-        s32 markings;
-        u8 i;
-        PokewalkerBoxMon boxMonInfo;
-        PokewalkerApp_SelectMon_GetBoxMon(SaveArray_PCStorage_Get(app->saveData), box, slot, &boxMonInfo);
-        info.personality = boxMonInfo.personality;
-        info.species = boxMonInfo.species;
-        info.form = boxMonInfo.form;
-        CopyU16StringArrayN(info.nickname, boxMonInfo.nickname, POKEMON_NAME_LENGTH + 1);
-        info.isShiny = boxMonInfo.isShiny;
-        info.gender = boxMonInfo.gender;
-        markings = boxMonInfo.markings;
-        for (i = 0; i < 6; i++) {
-            if ((markings >> i) & 1) {
-                info.markings[i] = 1;
-            } else {
-                info.markings[i] = 0;
+            info.heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+            info.level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+            PokewalkerBoxDisplay_ShowMon(work->boxDisplay, &info);
+            return;
+        } else {
+            s32 markings;
+            u8 i;
+            PokewalkerBoxMon boxMonInfo;
+            PokewalkerApp_SelectMon_GetBoxMon(SaveArray_PCStorage_Get(app->saveData), box, slot, &boxMonInfo);
+            info.personality = boxMonInfo.personality;
+            info.species = boxMonInfo.species;
+            info.form = boxMonInfo.form;
+            CopyU16StringArrayN(info.nickname, boxMonInfo.nickname, POKEMON_NAME_LENGTH + 1);
+            info.isShiny = boxMonInfo.isShiny;
+            info.gender = boxMonInfo.gender;
+            markings = boxMonInfo.markings;
+            for (i = 0; i < 6; i++) {
+                if ((markings >> i) & 1) {
+                    info.markings[i] = 1;
+                } else {
+                    info.markings[i] = 0;
+                }
             }
+            info.heldItem = boxMonInfo.heldItem;
+            info.level = boxMonInfo.level;
+            PokewalkerBoxDisplay_ShowMon(work->boxDisplay, &info);
+            return;
         }
-        info.heldItem = boxMonInfo.heldItem;
-        info.level = boxMonInfo.level;
-        PokewalkerBoxDisplay_ShowMon(work->boxDisplay, &info);
-        return;
     }
-
-noMon:
     info.state = 0;
     PokewalkerBoxDisplay_ShowMon(work->boxDisplay, &info);
 }

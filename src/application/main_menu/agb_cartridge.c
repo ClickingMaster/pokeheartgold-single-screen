@@ -65,6 +65,14 @@ typedef struct PmAgbSave {
     PmAgbRomHeader header;
 } PmAgbSave;
 
+// The start of the trainer info sector (the trainer id is not word aligned)
+typedef struct AgbTrainerInfo {
+    u8 playerName[8];
+    u8 playerGender;
+    u8 unk_09;
+    u8 trainerId[4];
+} AgbTrainerInfo;
+
 // The four encrypted substructures of an AgbBoxMon
 typedef union AgbBoxMonSubstruct {
     u32 words[3];
@@ -180,6 +188,7 @@ u16 PmAgbCartridge_GetLanguage(void) {
 
 static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
     AgbRomHeader header;
+    AgbRomHeader *rom;
     u8 *bytes;
     u32 gameCode;
     int i;
@@ -202,10 +211,11 @@ static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
         return PM_AGB_RESULT_UNKNOWN_GAME;
     }
     CTRDG_Enable(TRUE);
-    bytes = (u8 *)&header;
-    CTRDG_CpuCopy32((const void *)0x08000000, bytes, sizeof(AgbRomHeader));
+    rom = &header;
+    bytes = (u8 *)rom;
+    CTRDG_CpuCopy32((const void *)0x08000000, rom, sizeof(AgbRomHeader));
     for (j = 0; j < 156; j++) {
-        if (sAgbCartNintendoLogo[j] != bytes[j + 4]) {
+        if (sAgbCartNintendoLogo[j] != rom->logo[j]) {
             return PM_AGB_RESULT_BAD_HEADER;
         }
     }
@@ -215,7 +225,7 @@ static int IdentifyPmAgbCartridge(PmAgbCartridgeSpec *specs, int count) {
         sum += bytes[k];
     }
     sum = -(sum + 0x19);
-    if (bytes[0xBD] != sum) {
+    if (rom->checksum != sum) {
         return PM_AGB_RESULT_BAD_HEADER;
     }
     return PM_AGB_RESULT_OK;
@@ -489,8 +499,8 @@ static void *PmAgbCartridge_GetTrainerInfo(void) {
 
 // The player's trainer id
 u32 PmAgbCartridge_GetTrainerId(void) {
-    u8 *trainerInfo = PmAgbCartridge_GetTrainerInfo();
-    return (trainerInfo[0xD] << 24) | (trainerInfo[0xC] << 16) | (trainerInfo[0xB] << 8) | trainerInfo[0xA];
+    AgbTrainerInfo *trainerInfo = PmAgbCartridge_GetTrainerInfo();
+    return (trainerInfo->trainerId[3] << 24) | (trainerInfo->trainerId[2] << 16) | (trainerInfo->trainerId[1] << 8) | trainerInfo->trainerId[0];
 }
 
 void *PmAgbCartridge_GetPlayerName(void *unused) {
@@ -1240,10 +1250,9 @@ u32 AGB_GetBoxMonData(AgbBoxMon *mon, int field, u8 *dest) {
 
 // Only the nickname, language, flags, OT name and species can be set
 void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {
-    u8 *box = (u8 *)mon;
     const u8 *in = value;
     AgbBoxMonSubstruct *growth;
-    u8 *misc;
+    AgbBoxMonSubstruct *misc;
     int i;
     growth = NULL;
     misc = NULL;
@@ -1256,9 +1265,9 @@ void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {
         u16 checksum = AGB_CalcBoxMonChecksum(mon);
         u16 stored = mon->checksum;
         if (checksum != stored) {
-            box[0x13] = (box[0x13] & ~1) | 1;
-            box[0x13] |= 4;
-            *(u32 *)(misc + 4) |= 0x40000000;
+            mon->isBadEgg = TRUE;
+            mon->isEgg = TRUE;
+            misc->words[1] |= 1u << 30;
             AGB_EncryptBoxMon(mon);
             return;
         }
@@ -1266,32 +1275,32 @@ void AGB_SetBoxMonData(AgbBoxMon *mon, int field, const void *value) {
     switch (field) {
     case AGB_MON_DATA_NICKNAME:
         for (i = 0; i < 10; i++) {
-            box[i + 8] = in[i];
+            mon->nickname[i] = in[i];
         }
         break;
     case AGB_MON_DATA_LANGUAGE:
-        box[0x12] = in[0];
+        mon->language = in[0];
         break;
     case AGB_MON_DATA_IS_BAD_EGG:
-        box[0x13] = (box[0x13] & ~1) | (in[0] & 1);
+        mon->isBadEgg = in[0];
         break;
     case AGB_MON_DATA_HAS_SPECIES:
-        box[0x13] = (box[0x13] & ~2) | ((in[0] & 1) << 1);
+        mon->hasSpecies = in[0];
         break;
     case AGB_MON_DATA_SANITY_IS_EGG:
-        box[0x13] = (box[0x13] & ~4) | ((in[0] & 1) << 2);
+        mon->isEgg = in[0];
         break;
     case AGB_MON_DATA_OT_NAME:
         for (i = 0; i < 7; i++) {
-            box[i + 0x14] = in[i];
+            mon->otName[i] = in[i];
         }
         break;
     case AGB_MON_DATA_SPECIES:
         growth->growth.species = in[0] + (in[1] << 8);
         if (growth->growth.species != 0) {
-            box[0x13] |= 2;
+            mon->hasSpecies = TRUE;
         } else {
-            box[0x13] &= ~2;
+            mon->hasSpecies = FALSE;
         }
         break;
     }

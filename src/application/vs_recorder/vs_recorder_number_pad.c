@@ -385,11 +385,11 @@ static void VsRecorder_NumberPadBack(VsRecorderNumberPad *pad) {
         return;
     }
     int index = pad->cursors[0].value;
-    *(volatile int *)&pad->digits[index].value = 0;
-    ManagedSprite_SetAnim(pad->digits[index].sprite, VsRecorder_GetDigitAnim(*(volatile int *)&pad->digits[index].value, pad->digits[index].enabled));
+    pad->digits[index].value = 0;
+    ManagedSprite_SetAnim(pad->digits[index].sprite, VsRecorder_GetDigitAnim(pad->digits[index].value, pad->digits[index].enabled));
     u32 group = pad->digits[index].group;
     if (index > 0) {
-        ManagedSprite_SetAnim(pad->digits[index - 1].sprite, VsRecorder_GetDigitAnim(*(volatile int *)&pad->digits[index - 1].value, pad->digits[index - 1].enabled));
+        ManagedSprite_SetAnim(pad->digits[index - 1].sprite, VsRecorder_GetDigitAnim(pad->digits[index - 1].value, pad->digits[index - 1].enabled));
         u32 prevGroup = pad->digits[index - 1].group;
         if (group != prevGroup) {
             pad->action = VS_RECORDER_NUMBER_PAD_ACTION_GROUP;

@@ -508,11 +508,7 @@ static void MainMenuUtil_VBlankCB(void) {
     if (work->bgConfig) {
         DoScheduledBgGpuUpdates(work->bgConfig);
     }
-    {
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
-        volatile u32 *dtcm = (volatile u32 *)0x027E0000;
-        dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
-    }
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 // Palette of the gift graphics per gift type (pairs in sMainMenuUtilGiftPalettes, 0xFF-terminated)

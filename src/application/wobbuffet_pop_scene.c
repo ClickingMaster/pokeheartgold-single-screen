@@ -1911,7 +1911,7 @@ static BOOL WobbuffetPopScoreDisplay_RollDigits(WobbuffetPopScoreDisplay *displa
             prior = 1;
         } else {
             prior = 0;
-            int old = *(volatile u8 *)&d->current[0];
+            int old = d->current[0];
             d->current[0] += 23;
             int goal = d->goal[0];
             int lifted = goal + 160;

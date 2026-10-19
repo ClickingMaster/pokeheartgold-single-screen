@@ -45,10 +45,10 @@ BOOL PokewalkerApp_Init(OverlayManager *manager, int *state) {
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    *(volatile u32 *)0x04000000 &= 0xFFFFE0FF;
-    *(volatile u32 *)0x04001000 &= 0xFFFFE0FF;
-    *(volatile u16 *)0x04000050 = 0;
-    *(volatile u16 *)0x04001050 = 0;
+    reg_GX_DISPCNT &= 0xFFFFE0FF;
+    reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
+    reg_G2_BLDCNT = 0;
+    reg_G2S_DB_BLDCNT = 0;
     Sys_SetSoftResetDisableFlag(0x10);
     Heap_Create(HEAP_ID_3, HEAP_ID_154, 0x70000);
     app = OverlayManager_CreateAndGetData(manager, sizeof(PokewalkerApp), HEAP_ID_154);
@@ -77,7 +77,7 @@ void PokewalkerApp_Setup(PokewalkerApp *app) {
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     PokewalkerApp_LoadStrings(app);
     Main_SetVBlankIntrCB(PokewalkerApp_VBlankCB, app);
-    *(volatile u16 *)0x04000304 &= 0xFFFF7FFF;
+    reg_GX_POWCNT &= 0xFFFF7FFF;
     ToggleBgLayer(GF_BG_LYR_SUB_0, 1);
 }
 

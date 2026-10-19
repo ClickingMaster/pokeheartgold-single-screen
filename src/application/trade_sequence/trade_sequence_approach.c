@@ -401,12 +401,10 @@ static BOOL TradeSequenceApproach_IsFlightDone(TradeSequenceApproachFlight *flig
 }
 
 static void TradeSequenceApproach_SetFlightTargets(TradeSequenceApproachFlight *flight, fx32 radiusX, fx32 radiusY, fx32 scale, int frames) {
-    volatile int divisor = frames;
-
     if (frames != 0) {
-        flight->radiusXStep = (radiusX - flight->radiusX) / divisor;
-        flight->radiusYStep = (radiusY - flight->radiusY) / divisor;
-        flight->scaleStep = (scale - flight->scale) / divisor;
+        flight->radiusXStep = (radiusX - flight->radiusX) / frames;
+        flight->radiusYStep = (radiusY - flight->radiusY) / frames;
+        flight->scaleStep = (scale - flight->scale) / frames;
         flight->radiusXTarget = radiusX;
         flight->radiusYTarget = radiusY;
         flight->scaleTarget = scale;

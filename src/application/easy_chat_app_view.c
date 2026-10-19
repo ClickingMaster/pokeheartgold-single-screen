@@ -253,12 +253,10 @@ static void EasyChatAppView_MainTask(SysTask *task, void *data) {
 
 static void EasyChatAppView_VBlankTask(SysTask *task, void *data) {
     EasyChatAppView *view = data;
-    volatile u32 *dtcm = (volatile u32 *)0x027E0000; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
-
     DoScheduledBgGpuUpdates(view->bgConfig);
     SpriteList_RenderAndAnimateSprites(view->spriteList);
     OamManager_ApplyAndResetBuffers();
-    dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 void EasyChatAppView_StartCommand(EasyChatAppView *view, u32 command) {
