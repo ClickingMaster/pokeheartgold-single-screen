@@ -25,7 +25,7 @@
 	.public gPokedexOamCharTransferParam
 	.public gSpriteResourceCapacities
 	.public gListScrollbarSizeThresholds
-	.public sPokedexAreaMarkerSizes
+	.public gPokedexAreaMarkerSizes
 	.public gPokedexOamManagerParam
 	.public gMonIconSpriteTemplate
 	.public gTypeIconSpriteTemplate
@@ -98,7 +98,7 @@ gListScrollbarSizeThresholds:
 	.byte 0xB4, 0x00, 0xE1, 0x00, 0x0E, 0x01, 0x3B, 0x01, 0x68, 0x01, 0x95, 0x01, 0xC2, 0x01, 0xEF, 0x01
 	.size gListScrollbarSizeThresholds,.-gListScrollbarSizeThresholds
 
-sPokedexAreaMarkerSizes:
+gPokedexAreaMarkerSizes:
 	.byte 0x08, 0x08
 	.byte 0x10, 0x08
 	.byte 0x18, 0x08
@@ -111,7 +111,7 @@ sPokedexAreaMarkerSizes:
 	.byte 0x08, 0x28
 	.byte 0x10, 0x10
 	.byte 0x18, 0x10
-	.size sPokedexAreaMarkerSizes,.-sPokedexAreaMarkerSizes
+	.size gPokedexAreaMarkerSizes,.-gPokedexAreaMarkerSizes
 
 gPokedexOamManagerParam:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00

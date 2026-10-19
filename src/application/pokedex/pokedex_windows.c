@@ -1151,13 +1151,9 @@ void PokedexApp_SetupAreaWindows(PokedexAppData *pokedexApp) {
 
 void PokedexApp_FreeAreaWindows(PokedexAppData *pokedexApp) {
     u32 i;
-    u8 *window = (u8 *)pokedexApp;
 
-    i = 0;
-    window += offsetof(PokedexAppData, windows);
-    for (; i < 14; i++) {
-        ClearWindowTilemapAndScheduleTransfer((Window *)window);
-        window += sizeof(Window);
+    for (i = 0; i < 14; i++) {
+        ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[i]);
     }
     PokedexApp_RemoveAllWindows(pokedexApp);
 }
@@ -1170,22 +1166,19 @@ void PokedexApp_DrawTimeOfDayLabel(PokedexAppData *pokedexApp) {
 
 // The area list: six rows (windows 8-13 on cells 17-22) around the selected area areaListPos.
 void PokedexApp_DrawAreaList(PokedexAppData *pokedexApp) {
-    u32 i = 0;
-    u8 *windows = (u8 *)pokedexApp;
+    u32 i;
 
-    windows += offsetof(PokedexAppData, windows);
-    for (; i < 6; i++) {
-        u32 offset = (i + 8) * sizeof(Window);
+    for (i = 0; i < 6; i++) {
         int index, x, y;
 
-        FillWindowPixelBuffer((Window *)(windows + offset), 0);
+        FillWindowPixelBuffer(&pokedexApp->windows[i + 8], 0);
         index = pokedexApp->areaListPos + i - 2;
         if (index >= 0 && index < pokedexApp->areaList.areas.nMaps) {
             PokedexApp_PrintFormattedMessage(pokedexApp, pokedexApp->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(pokedexApp, index), 72, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
         }
-        CopyWindowPixelsToVram_TextMode((Window *)(windows + offset));
-        x = GetWindowX((Window *)(windows + offset));
-        y = GetWindowY((Window *)(windows + offset));
+        CopyWindowPixelsToVram_TextMode(&pokedexApp->windows[i + 8]);
+        x = GetWindowX(&pokedexApp->windows[i + 8]);
+        y = GetWindowY(&pokedexApp->windows[i + 8]);
         BgCellManager_DrawCellAt(pokedexApp->bgCellManager, i + 17, (s8)x, (s8)y);
     }
 }
@@ -1271,13 +1264,9 @@ void PokedexApp_SetupSizeCheckWindows(PokedexAppData *pokedexApp) {
 
 void PokedexApp_FreeSizeCheckWindows(PokedexAppData *pokedexApp) {
     u32 i;
-    u8 *window = (u8 *)pokedexApp;
 
-    i = 0;
-    window += offsetof(PokedexAppData, windows);
-    for (; i < 13; i++) {
-        ClearWindowTilemapAndScheduleTransfer((Window *)window);
-        window += sizeof(Window);
+    for (i = 0; i < 13; i++) {
+        ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[i]);
     }
     PokedexApp_RemoveAllWindows(pokedexApp);
 }
@@ -1285,36 +1274,23 @@ void PokedexApp_FreeSizeCheckWindows(PokedexAppData *pokedexApp) {
 // Screen 4 (unidentified species): title and message.
 void PokedexApp_SetupEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
-    u8 *window;
 
     PokedexApp_AddWindows(pokedexApp, sPokedexEntryMenuWindowTemplates, 2);
-    i = 0;
-    window = (u8 *)pokedexApp;
-    window += offsetof(PokedexAppData, windows);
-    for (; i < 2; i++) {
-        FillWindowPixelBuffer((Window *)window, 0);
-        window += sizeof(Window);
+    for (i = 0; i < 2; i++) {
+        FillWindowPixelBuffer(&pokedexApp->windows[i], 0);
     }
     PokedexApp_PrintMessage(&pokedexApp->windows[0], pokedexApp->msgData, msg_0802_00173, 0, 0, 4, MAKE_TEXT_COLOR(2, 1, 0), 0);
     PokedexApp_PrintMessage(&pokedexApp->windows[1], pokedexApp->msgData, msg_0802_00174, 60, 0, 4, MAKE_TEXT_COLOR(15, 12, 0), 2);
-    i = 0;
-    window = (u8 *)pokedexApp;
-    window += offsetof(PokedexAppData, windows);
-    for (; i < 2; i++) {
-        ScheduleWindowCopyToVram((Window *)window);
-        window += sizeof(Window);
+    for (i = 0; i < 2; i++) {
+        ScheduleWindowCopyToVram(&pokedexApp->windows[i]);
     }
 }
 
 void PokedexApp_FreeEntryMenuWindows(PokedexAppData *pokedexApp) {
     u32 i;
-    u8 *window = (u8 *)pokedexApp;
 
-    i = 0;
-    window += offsetof(PokedexAppData, windows);
-    for (; i < 2; i++) {
-        ClearWindowTilemapAndScheduleTransfer((Window *)window);
-        window += sizeof(Window);
+    for (i = 0; i < 2; i++) {
+        ClearWindowTilemapAndScheduleTransfer(&pokedexApp->windows[i]);
     }
     PokedexApp_RemoveAllWindows(pokedexApp);
 }

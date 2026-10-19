@@ -120,8 +120,7 @@ extern u32 gMigrateFromAgbIcons;
 extern u32 gPmAgbSaveCounter;
 extern PmAgbRomHeader gPmAgbRomHeader;
 extern const u16 gAgbKeepFirstAbilitySpecies[];
-extern u16 sAgbSpeciesMap[];
-extern u16 sAgbSpeciesMapNationalDex[];
+extern u16 gAgbSpeciesMap[144][2]; // GBA species index, national dex number
 
 static void *AGB_GetBoxMonSubstruct(AgbBoxMon *mon, u32 personality, u32 which);
 
@@ -1315,8 +1314,8 @@ int TranslateAgbSpecies(int species) {
     u32 i;
     if (species >= 277) {
         for (i = 0; i < 144; i++) {
-            if (species == sAgbSpeciesMap[i * 2]) {
-                return sAgbSpeciesMapNationalDex[i * 2];
+            if (species == gAgbSpeciesMap[i][0]) {
+                return gAgbSpeciesMap[i][1];
             }
         }
     }

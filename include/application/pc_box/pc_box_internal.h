@@ -387,7 +387,7 @@ typedef struct PCBoxView {
     FontSystem *fontSystem;
     PCBoxTextObj textObjs[2];
     YesNoPrompt *yesNoPrompt;
-    u16 yesNoHandler; // index into sPCBoxYesNoHandlers
+    u16 yesNoHandler; // row of gPCBoxYesNoHandlers
     u16 unk_043A;
     u32 rowCursorPos;
     u32 fadeNextState;

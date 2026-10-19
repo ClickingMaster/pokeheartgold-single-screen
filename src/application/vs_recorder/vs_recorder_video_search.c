@@ -304,14 +304,12 @@ static void VsRecorder_CreateSearchResultIcons(VsRecorderWork *work) {
 static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
-    VsRecorderVideoSearch *row;
+    VsRecorderVideoSearch *search = work->screenWork;
 
-    for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoSearch *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoSearch *icon = row;
-
-        for (i = 0; i < 6; i++, icon = (VsRecorderVideoSearch *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
-            if (icon->icons[0][0].sprite != NULL) {
-                ManagedSprite_SetDrawFlag(icon->icons[0][0].sprite, draw);
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 6; i++) {
+            if (search->icons[j][i].sprite != NULL) {
+                ManagedSprite_SetDrawFlag(search->icons[j][i].sprite, draw);
             }
         }
     }
@@ -320,16 +318,14 @@ static void VsRecorder_SetSearchResultIconsDrawFlag(VsRecorderWork *work, BOOL d
 static void VsRecorder_FreeSearchResultIcons(VsRecorderWork *work) {
     int i;
     int j;
-    VsRecorderVideoSearch *row = work->screenWork;
+    VsRecorderVideoSearch *search = work->screenWork;
 
     VsRecorder_SetVBlankPaused(work, TRUE);
-    for (j = 0; j < 5; row = (VsRecorderVideoSearch *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoSearch *icon = row;
-
-        for (i = 0; i < 6; i++, icon = (VsRecorderVideoSearch *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
-            if (icon->icons[0][0].sprite != NULL) {
-                VsRecorder_DeleteMonIcon(work, icon->icons[0][0].resId, icon->icons[0][0].sprite);
-                icon->icons[0][0].sprite = NULL;
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 6; i++) {
+            if (search->icons[j][i].sprite != NULL) {
+                VsRecorder_DeleteMonIcon(work, search->icons[j][i].resId, search->icons[j][i].sprite);
+                search->icons[j][i].sprite = NULL;
             }
         }
     }

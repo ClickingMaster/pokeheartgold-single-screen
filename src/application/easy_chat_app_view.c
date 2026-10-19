@@ -15,7 +15,7 @@
 #include "obj_char_transfer.h"
 #include "palette.h"
 #include "pm_string.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sprite.h"
 #include "sprite_resource_header.h"
 #include "sys_task_api.h"
@@ -367,7 +367,7 @@ void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command) {
 
     switch (command->state) {
     case 0:
-        BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 5, 1, HEAP_ID_35);
+        BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 5, 1, HEAP_ID_35);
         command->state++;
         return;
     case 1:
@@ -424,7 +424,7 @@ static void EasyChatAppView_InitBgs(EasyChatViewCommand *command) {
 void EasyChatAppView_Cmd_FadeIn(SysTask *task, EasyChatViewCommand *command) {
     switch (command->state) {
     case 0:
-        BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 5, 1, HEAP_ID_35);
+        BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 5, 1, HEAP_ID_35);
         command->state++;
         return;
     case 1:

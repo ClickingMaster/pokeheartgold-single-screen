@@ -19,7 +19,7 @@
 #include "pokemon.h"
 #include "pokepic.h"
 #include "render_window.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_resource_header.h"
@@ -282,7 +282,7 @@ static BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) 
     G2_BlendNone();
     WirelessStatusIcon_Create();
     WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_56);
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 16, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 16, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -383,7 +383,7 @@ static BOOL TradeSequenceSend_ReplaceMonWithModel(TradeSequenceSend *send, u32 *
         break;
     case TRADE_SEND_REPLACE_WAIT_BOUNCES:
         if (TradeSequenceSend_GetBounceCount(send) >= 2 || TradeSequenceSend_IsBounceDone(send) == TRUE) {
-            BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 24, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 24, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

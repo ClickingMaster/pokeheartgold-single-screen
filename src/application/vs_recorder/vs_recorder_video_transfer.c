@@ -989,16 +989,12 @@ void VsRecorder_CreateSearchSlotButtons(VsRecorderWork *work) {
 }
 
 void VsRecorder_FreeSearchSlotButtons(VsRecorderWork *work) {
-    VsRecorderTextSprite *button;
     VsRecorderVideoSearch *search = work->screenWork;
     int i;
 
-    button = search->buttons;
     for (i = 0; i < 4; i++) {
-        VsRecorder_FreeTextSprite(button);
-        Sprite_DeleteAndFreeResources(search->buttons[0].sprite);
-        button++;
-        search = (VsRecorderVideoSearch *)((u8 *)search + sizeof(VsRecorderTextSprite));
+        VsRecorder_FreeTextSprite(&search->buttons[i]);
+        Sprite_DeleteAndFreeResources(search->buttons[i].sprite);
     }
     VsRecorder_FreeButtonGfx(work);
 }

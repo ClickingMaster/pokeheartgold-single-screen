@@ -871,13 +871,12 @@ static void VsRecorder_CreateSlotButtons(VsRecorderWork *work) {
 }
 
 static void VsRecorder_FreeSlotButtons(VsRecorderWork *work) {
-    int i = 0;
-    VsRecorderTextSprite *button = ((VsRecorderVideoListScreen *)work->screenWork)->buttons;
+    int i;
     VsRecorderVideoListScreen *listWork = work->screenWork;
 
-    for (; i < 4; i++, button++, listWork = (VsRecorderVideoListScreen *)((u8 *)listWork + sizeof(VsRecorderTextSprite))) {
-        VsRecorder_FreeTextSprite(button);
-        Sprite_DeleteAndFreeResources(listWork->buttons[0].sprite);
+    for (i = 0; i < 4; i++) {
+        VsRecorder_FreeTextSprite(&listWork->buttons[i]);
+        Sprite_DeleteAndFreeResources(listWork->buttons[i].sprite);
     }
     VsRecorder_FreeButtonGfx(work);
 }
@@ -1735,11 +1734,10 @@ BOOL VsRecorder_VideoListShowSlots(VsRecorderWork *work) {
 }
 
 static void VsRecorder_RemoveDetailsButtonWindow(VsRecorderWork *work) {
-    u8 *listWork = work->screenWork;
+    VsRecorderVideoListScreen *listWork = work->screenWork;
 
-    ClearWindowTilemapAndCopyToVram(&((VsRecorderVideoListScreen *)listWork)->buttonWindows[0]);
-    listWork += offsetof(VsRecorderVideoListScreen, buttonWindows);
-    RemoveWindow((Window *)listWork);
+    ClearWindowTilemapAndCopyToVram(&listWork->buttonWindows[0]);
+    RemoveWindow(&listWork->buttonWindows[0]);
 }
 
 static void VsRecorder_PrintDetailsButtonLabel(VsRecorderWork *work, int msgId) {
@@ -1788,13 +1786,12 @@ static void VsRecorder_CreateOverwriteWindows(VsRecorderWork *work) {
 }
 
 static void VsRecorder_RemoveOverwriteWindows(VsRecorderWork *work) {
-    u8 *listWork = work->screenWork;
+    VsRecorderVideoListScreen *listWork = work->screenWork;
 
-    ClearWindowTilemapAndCopyToVram(&((VsRecorderVideoListScreen *)listWork)->buttonWindows[0]);
-    RemoveWindow(&((VsRecorderVideoListScreen *)listWork)->buttonWindows[0]);
-    ClearWindowTilemapAndCopyToVram(&((VsRecorderVideoListScreen *)listWork)->buttonWindows[1]);
-    listWork += offsetof(VsRecorderVideoListScreen, buttonWindows[1]);
-    RemoveWindow((Window *)listWork);
+    ClearWindowTilemapAndCopyToVram(&listWork->buttonWindows[0]);
+    RemoveWindow(&listWork->buttonWindows[0]);
+    ClearWindowTilemapAndCopyToVram(&listWork->buttonWindows[1]);
+    RemoveWindow(&listWork->buttonWindows[1]);
 }
 
 // details: video info / profile toggle, play, save, back
@@ -1955,14 +1952,12 @@ static void VsRecorder_CreateVideoListIcons(VsRecorderWork *work) {
 static void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw) {
     int i;
     int j;
-    VsRecorderVideoListScreen *row;
+    VsRecorderVideoListScreen *listWork = work->screenWork;
 
-    for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoListScreen *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoListScreen *icon = row;
-
-        for (i = 0; i < 6; i++, icon = (VsRecorderVideoListScreen *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
-            if (icon->icons[0][0].sprite != NULL) {
-                ManagedSprite_SetDrawFlag(icon->icons[0][0].sprite, draw);
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 6; i++) {
+            if (listWork->icons[j][i].sprite != NULL) {
+                ManagedSprite_SetDrawFlag(listWork->icons[j][i].sprite, draw);
             }
         }
     }
@@ -1971,15 +1966,13 @@ static void VsRecorder_SetVideoListIconsDrawFlag(VsRecorderWork *work, BOOL draw
 static void VsRecorder_FreeVideoListIcons(VsRecorderWork *work) {
     int i;
     int j;
-    VsRecorderVideoListScreen *row;
+    VsRecorderVideoListScreen *listWork = work->screenWork;
 
-    for (j = 0, row = work->screenWork; j < 5; row = (VsRecorderVideoListScreen *)((u8 *)row + sizeof(row->icons[0])), j++) {
-        VsRecorderVideoListScreen *icon = row;
-
-        for (i = 0; i < 6; i++, icon = (VsRecorderVideoListScreen *)((u8 *)icon + sizeof(VsRecorderVideoListIcon))) {
-            if (icon->icons[0][0].sprite != NULL) {
-                VsRecorder_DeleteMonIcon(work, icon->icons[0][0].resId, icon->icons[0][0].sprite);
-                icon->icons[0][0].sprite = NULL;
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 6; i++) {
+            if (listWork->icons[j][i].sprite != NULL) {
+                VsRecorder_DeleteMonIcon(work, listWork->icons[j][i].resId, listWork->icons[j][i].sprite);
+                listWork->icons[j][i].sprite = NULL;
             }
         }
     }

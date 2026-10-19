@@ -19,7 +19,7 @@
 #include "pokemon.h"
 #include "pokepic.h"
 #include "render_window.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "swap_3d_buffers.h"
@@ -298,7 +298,7 @@ static BOOL TradeSequenceReceive_SetupScreens(TradeSequenceReceive *receive, u32
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     G2_SetBlendAlpha(GX_BLEND_PLANEMASK_BG0, GX_BLEND_PLANEMASK_BG2, 16, 0);
-    BeginNormalPaletteFade(3, 1, 1, RGB_BLACK, 16, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 16, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -410,7 +410,7 @@ static BOOL TradeSequenceReceive_ShowMessages(TradeSequenceReceive *receive, u32
         break;
     case TRADE_RECEIVE_MSG_FADE_OUT:
         if (++receive->timer > 10) {
-            BeginNormalPaletteFade(3, 0, 0, RGB_BLACK, 16, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 16, 1, HEAP_ID_57);
             ++*state;
         }
         break;

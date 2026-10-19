@@ -21,7 +21,7 @@
 #include "pokemon.h"
 #include "render_text.h"
 #include "render_window.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite_resource_header.h"
 #include "swap_3d_buffers.h"
@@ -435,7 +435,7 @@ BOOL FootprintStamp_Init(OverlayManager *man, int *state) {
     FootprintStamp_CreatePlayerSprites(work);
     FootprintStamp_ShowParty(work);
     work->yesNoPrompt = YesNoPrompt_Create(HEAP_ID_125);
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_125);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_125);
     if (work->args->lobby != NULL) {
         WiFiPlazaWork_SetLowVolume(work->args->lobby, 1);
     }
@@ -561,7 +561,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
         if (!IsPaletteFadeFinished()) {
             StopPaletteFade();
         }
-        BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_125);
+        BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_125);
         (*state)++;
         break;
     case FOOTPRINT_STAMP_STATE_WAIT_FADE_OUT:

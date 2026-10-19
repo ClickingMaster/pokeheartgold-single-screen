@@ -303,20 +303,13 @@ void VsRecorder_FreeResources(VsRecorderWork *work) {
     GF_TouchpadStopSampling();
     TouchHitboxController_Destroy(work->hitboxController);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
-    {
-        VsRecorderWork *cursor;
-        i = 0;
-        cursor = work;
-        do {
-            if (cursor->savedVideos[0]) {
-                Heap_Free(cursor->savedVideos[0]);
-            }
-            if (cursor->videoOwners[0]) {
-                Heap_Free(cursor->videoOwners[0]);
-            }
-            i++;
-            cursor = (VsRecorderWork *)((u8 *)cursor + sizeof(void *));
-        } while (i < 4);
+    for (i = 0; i < 4; i++) {
+        if (work->savedVideos[i]) {
+            Heap_Free(work->savedVideos[i]);
+        }
+        if (work->videoOwners[i]) {
+            Heap_Free(work->videoOwners[i]);
+        }
     }
     FontSystem_Delete(work->fontSystem);
     DestroyMsgData(work->msgData);

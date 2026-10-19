@@ -763,18 +763,17 @@ static void VsRecorder_NumberPadPlaceCursorOnKey(VsRecorderNumberPad *pad, int k
 
 // the key press (anim 3) hides itself when it ends; the key cursor shows unless the input was a touch
 static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
-    VsRecorderNumberPad *entry;
     int i;
 
     ManagedSprite_TickFrame(pad->cursors[0].sprite);
     ManagedSprite_TickFrame(pad->cursors[1].sprite);
     ManagedSprite_TickFrame(pad->cursors[2].sprite);
 
-    for (i = 1, entry = (VsRecorderNumberPad *)((u8 *)pad + sizeof(VsRecorderNumberPadDigit)); i < 3; i++, entry = (VsRecorderNumberPad *)((u8 *)entry + sizeof(VsRecorderNumberPadDigit))) {
-        u32 anim = ManagedSprite_GetActiveAnim(entry->cursors[0].sprite);
+    for (i = 1; i < 3; i++) {
+        u32 anim = ManagedSprite_GetActiveAnim(pad->cursors[i].sprite);
         if (anim == 3) {
-            if (ManagedSprite_IsAnimated(entry->cursors[0].sprite) == FALSE) {
-                ManagedSprite_SetAnim(entry->cursors[0].sprite, entry->cursors[0].value);
+            if (ManagedSprite_IsAnimated(pad->cursors[i].sprite) == FALSE) {
+                ManagedSprite_SetAnim(pad->cursors[i].sprite, pad->cursors[i].value);
                 if (pad->touchInput == TRUE) {
                     VsRecorder_NumberPadSetCursorDrawFlag(pad, 1, FALSE);
                 } else {
@@ -783,8 +782,8 @@ static void VsRecorder_NumberPadUpdateCursors(VsRecorderNumberPad *pad) {
                 VsRecorder_NumberPadSetCursorDrawFlag(pad, 2, FALSE);
             }
         } else {
-            if (anim != entry->cursors[0].value) {
-                ManagedSprite_SetAnim(entry->cursors[0].sprite, entry->cursors[0].value);
+            if (anim != pad->cursors[i].value) {
+                ManagedSprite_SetAnim(pad->cursors[i].sprite, pad->cursors[i].value);
             }
             if (ManagedSprite_GetActiveAnim(pad->cursors[2].sprite) != 3) {
                 if (pad->touchInput == TRUE) {
@@ -831,7 +830,6 @@ static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL anim
     s16 position[2];
     if (pad->count > 0) {
         VsRecorderNumberPadDigit *digit = pad->digits;
-        VsRecorderNumberPad *separator = pad;
         do {
             if (i >= pad->groupFirst && i < pad->groupEnd) {
                 if (i == pad->groupFirst) {
@@ -855,8 +853,8 @@ static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL anim
                 digit->frames = 2;
                 digit->scaleStep = 0;
             }
-            if (i == separator->separators[0].value && separators != 2) {
-                ManagedSprite_GetPositionXY(separator->separators[0].sprite, &position[1], &position[0]);
+            if (i == pad->separators[separators].value && separators != 2) {
+                ManagedSprite_GetPositionXY(pad->separators[separators].sprite, &position[1], &position[0]);
                 if (pad->groupFirst == pad->groupEnd) {
                     x += 8;
                 } else if (i > pad->groupFirst && i < pad->groupEnd) {
@@ -865,13 +863,12 @@ static void VsRecorder_NumberPadLayoutDigits(VsRecorderNumberPad *pad, BOOL anim
                     x += 8;
                 }
                 if (!animate) {
-                    ManagedSprite_SetPositionXY(separator->separators[0].sprite, x, position[0]);
+                    ManagedSprite_SetPositionXY(pad->separators[separators].sprite, x, position[0]);
                 } else {
-                    separator->separators[0].dx = (x - position[1]) / 2;
-                    separator->separators[0].dy = 0;
-                    separator->separators[0].frames = 2;
+                    pad->separators[separators].dx = (x - position[1]) / 2;
+                    pad->separators[separators].dy = 0;
+                    pad->separators[separators].frames = 2;
                 }
-                separator = (VsRecorderNumberPad *)((u8 *)separator + sizeof(VsRecorderNumberPadDigit));
                 separators++;
             }
             digit++;

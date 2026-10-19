@@ -10,7 +10,7 @@
 
 #include "math_util.h"
 #include "message_format.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "string_util.h"
 #include "sys_task_api.h"
@@ -39,7 +39,7 @@ extern const s32 gCourseMenuCursorPositions[];
 #include "pm_string.h"
 #include "pokemon.h"
 #include "save_local_field_data.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "system.h"
 #include "text.h"
@@ -119,7 +119,7 @@ int PokewalkerApp_Link_WaitPointAtCard(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_FadeOutToSelectMon(PokewalkerApp *app) {
-    BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_154);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_154);
     return 4;
 }
 
@@ -132,7 +132,7 @@ int PokewalkerApp_Link_WaitFadeOutToSelectMon(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_FadeIn(PokewalkerApp *app) {
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return 6;
 }
 
@@ -1336,7 +1336,7 @@ int PokewalkerApp_Link_EndSendBack(PokewalkerApp *app) {
 }
 
 int PokewalkerApp_Link_FadeOut(PokewalkerApp *app) {
-    BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_154);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_154);
     return 63;
 }
 

@@ -1277,14 +1277,8 @@ static void ApricornBoxScreen_FreeStrings(ApricornBoxScreen *screen) {
     for (i = 0; i < 7; i++) {
         String_Delete(screen->apricornNames[i]);
     }
-    {
-        u8 *cursor;
-        int j;
-        j = 0;
-        cursor = (u8 *)screen;
-        for (; j < 22; j++, cursor += sizeof(String *)) {
-            String_Delete(((ApricornBoxScreen *)cursor)->infoTexts[0]);
-        }
+    for (i = 0; i < 22; i++) {
+        String_Delete(screen->infoTexts[i]);
     }
     String_Delete(screen->numberTemplate);
     String_Delete(screen->closeText);
@@ -1387,7 +1381,6 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     int i;
     const UnmanagedSpriteTemplate *template = gApricornBoxSpriteTemplates;
     const s16 *position;
-    u8 *cursor;
     for (i = 0; i <= 1; template ++, i++) {
         screen->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, template);
         Sprite_SetDrawFlag(screen->sprites[i], TRUE);
@@ -1396,22 +1389,19 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     Sprite_SetPriority(screen->sprites[1], 2);
     position = (const s16 *)gApricornBoxApricornPositions;
     for (i = 0; i < 7; position += 2, i++) {
-        cursor = (u8 *)screen + (u8)(i + 2) * sizeof(Sprite *);
-        ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[2]);
-        Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], position[0], position[1]);
-        Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
-        Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
-        Sprite_SetAnimCtrlSeq(((ApricornBoxScreen *)cursor)->sprites[0], i + 9);
-        Sprite_SetPriority(((ApricornBoxScreen *)cursor)->sprites[0], 2);
+        screen->sprites[(u8)(i + 2)] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[2]);
+        Sprite_SetPositionXY(screen->sprites[(u8)(i + 2)], position[0], position[1]);
+        Sprite_SetAnimActiveFlag(screen->sprites[(u8)(i + 2)], FALSE);
+        Sprite_SetDrawFlag(screen->sprites[(u8)(i + 2)], TRUE);
+        Sprite_SetAnimCtrlSeq(screen->sprites[(u8)(i + 2)], i + 9);
+        Sprite_SetPriority(screen->sprites[(u8)(i + 2)], 2);
     }
     switch (screen->mode) {
     case APRICORN_BOX_MODE_BLENDER: {
-        u8 *target;
         for (i = 0; i < 2; i++) {
-            target = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)target)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[i + 3]);
-            Sprite_SetDrawFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
-            Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)target)->sprites[0], TRUE);
+            screen->sprites[(u8)(i + 9)] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[i + 3]);
+            Sprite_SetDrawFlag(screen->sprites[(u8)(i + 9)], TRUE);
+            Sprite_SetAnimActiveFlag(screen->sprites[(u8)(i + 9)], TRUE);
         }
         Sprite_SetAnimCtrlSeq(screen->sprites[9], screen->juiceServings + 16);
         Sprite_SetPaletteOverride(screen->sprites[9], screen->topMixIndex + 5);
@@ -1420,24 +1410,22 @@ static void ApricornBoxScreen_CreateSprites(ApricornBoxScreen *screen) {
     case APRICORN_BOX_MODE_KURT: {
         int anim;
         for (i = 0, y = 112, anim = 28; i < 2; anim += 2, y += 24, i++) {
-            cursor = (u8 *)screen + (u8)(i + 9) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[5]);
-            Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 160, y);
-            Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
-            Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], TRUE);
-            Sprite_SetAnimCtrlSeq(((ApricornBoxScreen *)cursor)->sprites[0], anim);
-            Sprite_SetPriority(((ApricornBoxScreen *)cursor)->sprites[0], 1);
+            screen->sprites[(u8)(i + 9)] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[5]);
+            Sprite_SetPositionXY(screen->sprites[(u8)(i + 9)], 160, y);
+            Sprite_SetDrawFlag(screen->sprites[(u8)(i + 9)], FALSE);
+            Sprite_SetAnimActiveFlag(screen->sprites[(u8)(i + 9)], TRUE);
+            Sprite_SetAnimCtrlSeq(screen->sprites[(u8)(i + 9)], anim);
+            Sprite_SetPriority(screen->sprites[(u8)(i + 9)], 1);
         }
         for (i = 0; i < 4; i++) {
             int column;
-            cursor = (u8 *)screen + (u8)(i + 11) * sizeof(Sprite *);
-            ((ApricornBoxScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[6]);
+            screen->sprites[(u8)(i + 11)] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, &gApricornBoxSpriteTemplates[6]);
             column = i % 2;
-            Sprite_SetPositionXY(((ApricornBoxScreen *)cursor)->sprites[0], 103 + (i / 2) * -22, 96 + column * 40);
-            Sprite_SetDrawFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
-            Sprite_SetAnimActiveFlag(((ApricornBoxScreen *)cursor)->sprites[0], FALSE);
-            Sprite_SetAnimCtrlSeq(((ApricornBoxScreen *)cursor)->sprites[0], 24 + column * 2);
-            Sprite_SetPriority(((ApricornBoxScreen *)cursor)->sprites[0], 1);
+            Sprite_SetPositionXY(screen->sprites[(u8)(i + 11)], 103 + (i / 2) * -22, 96 + column * 40);
+            Sprite_SetDrawFlag(screen->sprites[(u8)(i + 11)], FALSE);
+            Sprite_SetAnimActiveFlag(screen->sprites[(u8)(i + 11)], FALSE);
+            Sprite_SetAnimCtrlSeq(screen->sprites[(u8)(i + 11)], 24 + column * 2);
+            Sprite_SetPriority(screen->sprites[(u8)(i + 11)], 1);
         }
         break;
     }

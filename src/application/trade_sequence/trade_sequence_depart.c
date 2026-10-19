@@ -12,7 +12,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_resource_header.h"
@@ -319,7 +319,7 @@ static BOOL TradeSequenceDepart_SetupScreens(TradeSequenceDepart *depart, u32 *s
     TradeSequenceDepart_InitBgs(depart);
     TradeSequenceDepart_Init3D(depart);
     TradeSequenceDepart_CreateStreaks(depart);
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 8, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -403,7 +403,7 @@ static BOOL TradeSequenceDepart_FlyThroughBottomScreen(TradeSequenceDepart *depa
             }
         }
         if (TradeSequenceDepart_IsFlightOutOfView(depart->flightTask)) {
-            BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 4, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 4, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

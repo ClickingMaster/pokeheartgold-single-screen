@@ -342,21 +342,19 @@ void PokedexApp_ScrollListIconsForward(PokedexAppData *pokedexApp, int first, in
 
     int sprite, base;
     u16 i, count = 0;
-    u8 *slot;
 
     i = count;
     base = (row + 5) * 5;
     for (; i < 30; i++) {
         sprite = first + i + pokedexApp->iconPage * 30;
-        slot = (u8 *)pokedexApp + sprite * sizeof(ManagedSprite *);
-        ManagedSprite_GetPositionXY(*(ManagedSprite **)(slot + offsetof(PokedexAppData, sprites)), &pos.x, &pos.y);
+        ManagedSprite_GetPositionXY(pokedexApp->sprites[sprite], &pos.x, &pos.y);
         if (pos.y == -16) {
             pos.y = 224;
             PokedexApp_SetListIcon(pokedexApp, count + AddInts(base, 15 * pokedexApp->listPage), sprite);
             count++;
         }
         pos.y += dy;
-        ManagedSprite_SetPositionXY(*(ManagedSprite **)(slot + offsetof(PokedexAppData, sprites)), pos.x, pos.y);
+        ManagedSprite_SetPositionXY(pokedexApp->sprites[sprite], pos.x, pos.y);
     }
 }
 

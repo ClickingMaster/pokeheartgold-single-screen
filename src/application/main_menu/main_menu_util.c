@@ -76,7 +76,7 @@ extern const ObjCharTransferTemplate gMainMenuUtilObjCharTransferTemplate;
 extern const BgTemplate gMainMenuUtilBgTemplate;
 extern const MainMenuUtilGiftPalettes gMainMenuUtilGiftPalettes;
 extern u32 gGiftCartridgeGameCodes[];
-extern u16 sAgbSpeciesMapNationalDex[];
+extern u16 gAgbSpeciesMap[144][2];
 
 static void *MainMenuUtil_CryptoAlloc(u32 size);
 static int MainMenuUtil_CheckGiftCartridgeSignature(void);
@@ -102,7 +102,7 @@ static int MainMenuUtil_CheckGiftCartridgeSignature(void) {
     u32 code = (u8)(gameCode >> 24) | ((gameCode << 24) | (((gameCode >> 8) << 24) >> 8) | (((gameCode >> 16) << 24) >> 16));
     u32 i = 0;
     if (i < gGiftCartridgeGameCodes[0]) {
-        u32 *codes = (u32 *)(sAgbSpeciesMapNationalDex + 0x11F);
+        u32 *codes = (u32 *)gAgbSpeciesMap[144]; // gGiftCartridgeGameCodes follows the species map
         do {
             if (code == *codes) {
                 CTRDG_Enable(TRUE);

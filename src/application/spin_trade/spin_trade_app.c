@@ -32,7 +32,7 @@
 #include "render_animation.h"
 #include "render_model.h"
 #include "render_window.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "spin_trade_link.h"
@@ -661,7 +661,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     SpinTrade_StartJumpTask(app);
     SpinTrade_StartButtonFlashTask(app);
     SpinTrade_StartHoverTask(app);
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 8, 1, HEAP_ID_102);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 8, 1, HEAP_ID_102);
     return TRUE;
 }
 
@@ -1399,7 +1399,7 @@ BOOL SpinTrade_State_WaitDisconnect(SpinTradeApp *app) {
 BOOL SpinTrade_State_FadeOut(SpinTradeApp *app) {
     int bgm;
 
-    BeginNormalPaletteFade(2, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_102);
+    BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 8, 1, HEAP_ID_102);
     bgm = app->bgm;
     if (bgm != GF_GetCurrentPlayingBGM()) {
         FieldBGM_Play(NULL, bgm);

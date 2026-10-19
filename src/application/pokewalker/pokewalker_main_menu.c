@@ -9,7 +9,7 @@
 #include "pokemon.h"
 #include "pokemon_storage_system.h"
 #include "save_arrays.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound.h"
 #include "sound_playback.h"
 #include "sound_system.h"
@@ -50,7 +50,7 @@ int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
         u16 strollState;
     } walkerState;
     PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     if (PCStorage_CountEmptySpotsInAllBoxes(storage) < 5) {
         PokewalkerApp_RemoveWindowBank(app, 3);
         PokewalkerApp_AddWindowBank(app, 1);

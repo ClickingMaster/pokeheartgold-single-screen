@@ -589,7 +589,7 @@ static void EasyChatSentenceView_UpdateSliderThumb(EasyChatSentenceView *sentenc
 static void EasyChatMessageParser_Init(EasyChatMessageParser *parser, EasyChatSentenceView *sentence) {
     parser->string = EasyChatApp_GetMessageString(sentence->app, HEAP_ID_35);
     parser->cursor = String_cstr(parser->string);
-    if (*parser->cursor == 0xFFFE) {
+    if (*parser->cursor == EXT_CTRL_CODE_BEGIN) {
         parser->state = EC_PARSE_WORD;
     } else {
         parser->state = EC_PARSE_TEXT;
@@ -608,13 +608,13 @@ static int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *des
     case EC_PARSE_TEXT:
         while (parser->state == EC_PARSE_TEXT) {
             switch (*parser->cursor) {
-            case 0xE000:
+            case CHAR_LF:
                 parser->state = EC_PARSE_NEWLINE;
                 break;
             case EOS:
                 parser->state = EC_PARSE_END;
                 break;
-            case 0xFFFE:
+            case EXT_CTRL_CODE_BEGIN:
                 parser->state = EC_PARSE_WORD;
                 break;
             default:
@@ -637,13 +637,13 @@ static int EasyChatMessageParser_Next(EasyChatMessageParser *parser, String *des
         return EC_PARSE_END;
     }
     switch (*parser->cursor) {
-    case 0xE000:
+    case CHAR_LF:
         parser->state = EC_PARSE_NEWLINE;
         break;
     case EOS:
         parser->state = EC_PARSE_END;
         break;
-    case 0xFFFE:
+    case EXT_CTRL_CODE_BEGIN:
         parser->state = EC_PARSE_WORD;
         break;
     default:

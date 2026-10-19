@@ -8,7 +8,7 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sys_task_api.h"
 #include "text.h"
@@ -149,7 +149,7 @@ BOOL TradeSequenceExchange_Main(void *data, int *state) {
 
 static BOOL TradeSequenceExchange_SetupScreens(TradeSequenceExchange *exchange, u32 *state) {
     TradeSequenceExchange_InitBgs(exchange);
-    BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 8, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -170,7 +170,7 @@ static BOOL TradeSequenceExchange_Slide(TradeSequenceExchange *exchange, u32 *st
     case TRADE_EXCHANGE_SLIDE_WAIT_SLIDE:
         if (exchange->slideDone) {
             PlaySE(SEQ_SE_DP_KOUKAN03);
-            BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

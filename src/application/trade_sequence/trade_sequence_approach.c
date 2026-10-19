@@ -12,7 +12,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_resource_header.h"
@@ -204,7 +204,7 @@ static BOOL TradeSequenceApproach_SetupScreens(TradeSequenceApproach *approach, 
     TradeSequenceApproach_InitBgs(approach);
     TradeSequenceApproach_Init3D(approach);
     TradeSequenceApproach_CreateSprite(approach);
-    BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 8, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -227,7 +227,7 @@ static BOOL TradeSequenceApproach_Run(TradeSequenceApproach *approach, u32 *stat
         break;
     case TRADE_APPROACH_WAIT_FLIGHT:
         if (TradeSequenceApproach_IsFlightDone(&approach->flight)) {
-            BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

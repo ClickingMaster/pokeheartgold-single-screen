@@ -39,7 +39,7 @@
 #include "pokepic.h"
 #include "render_text.h"
 #include "render_window.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "sprite.h"
@@ -1378,7 +1378,7 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case DRESS_UP_STATE_INIT:
     case DRESS_UP_STATE_FADE_IN:
-        BeginNormalPaletteFade(1, 5, 5, RGB_BLACK, 6, 1, HEAP_ID_13);
+        BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_UNK_5, FADE_TYPE_UNK_5, RGB_BLACK, 6, 1, HEAP_ID_13);
         *state = DRESS_UP_STATE_WAIT_FADE_IN;
         break;
     case DRESS_UP_STATE_WAIT_FADE_IN:
@@ -1460,7 +1460,7 @@ BOOL DressUp_Main(OverlayManager *man, int *state) {
         }
         break;
     case DRESS_UP_STATE_FADE_OUT:
-        BeginNormalPaletteFade(1, 0, 0, RGB_BLACK, 6, 1, HEAP_ID_13);
+        BeginNormalPaletteFade(FADE_MAIN_THEN_SUB, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_13);
         (*state)++;
         break;
     case DRESS_UP_STATE_WAIT_FADE_OUT:

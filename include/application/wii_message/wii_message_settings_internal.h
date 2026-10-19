@@ -43,7 +43,7 @@ typedef struct WiiMessageSettings {
     u32 currentApp;
     u32 unk_84;
     u32 nextApp;
-    u32 unk_8C;
+    u32 followingApp; // the app after nextApp
     u32 unk_90;
     void *childArgs;
     WifiServerProfile request;
@@ -57,7 +57,7 @@ typedef struct WiiMessageSettings {
     u32 serverSessionStarted;
 } WiiMessageSettings;
 
-void WiiMessageSettings_SetNextApp(WiiMessageSettings *app, int nextApp, int unused);
+void WiiMessageSettings_SetNextApp(WiiMessageSettings *app, int nextApp, int followingApp);
 void WiiMessageSettings_Quit(WiiMessageSettings *app);
 void WiiMessageSettings_SetScreenStartState(WiiMessageSettings *app, int state);
 u8 WiiMessageSettings_GetScreenStartState(WiiMessageSettings *app);

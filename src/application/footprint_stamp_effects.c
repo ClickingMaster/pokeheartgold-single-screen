@@ -23,20 +23,23 @@ int WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, voi
 void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
 s64 _ll_mul(s64 a, s64 b);
 
+// Footprint of a species (by species number).
+typedef struct FootprintStampSpeciesFootprint {
+    u8 type;
+    u8 size;
+    u8 padding[2];
+} FootprintStampSpeciesFootprint;
+
 // Board position of the touch grid lines (x every 16 pixels, y every 16 pixels).
 extern const fx32 gFootprintStampBoardXs[17];
 extern const fx32 gFootprintStampBoardYs[11];
 // Bounds of the three footprint sizes, relative to the stamp position.
-extern const fx32 sFootprintStampSizeBoundsLeft[];
-extern const fx32 sFootprintStampSizeBoundsRight[];
-extern const fx32 sFootprintStampSizeBoundsBottom[];
-extern const fx32 sFootprintStampSizeBoundsTop[];
+extern const FootprintStampBounds gFootprintStampSizeBounds[3];
 extern const s16 gFootprintStampCameraChainLengths[]; // chain length that moves the camera, by player count
 extern const u8 gFootprintStampNatureEffects[];       // enum FootprintStampEffect by nature
 extern const u16 gFootprintStampInkColors[][2];       // ink colors by OT id % 9, two columns
 extern const TouchscreenHitbox gFootprintStampPartyHitboxes[];
-extern const u8 sFootprintStampSpeciesFootprints[]; // per species: [0] footprint type, [1] footprint size
-extern const u8 sFootprintStampSpeciesFootprintSizes[];
+extern const FootprintStampSpeciesFootprint gFootprintStampSpeciesFootprints[];
 extern const u8 gFootprintStampLinkCommands[]; // link command table: player joined, player left, stamp received
 
 enum FootprintStampAnimState {
@@ -207,10 +210,10 @@ void FootprintStamp_GetBounds(ModelInstance *instance, FootprintStampMon *mon, F
 
     GF_ASSERT(size < 3);
     ModelInstance_GetPosition(instance, &x, &y, &z);
-    bounds->left = x + sFootprintStampSizeBoundsLeft[size * 4];
-    bounds->right = x + sFootprintStampSizeBoundsRight[size * 4];
-    bounds->bottom = y + sFootprintStampSizeBoundsBottom[size * 4];
-    bounds->top = y + sFootprintStampSizeBoundsTop[size * 4];
+    bounds->left = x + gFootprintStampSizeBounds[size].left;
+    bounds->right = x + gFootprintStampSizeBounds[size].right;
+    bounds->bottom = y + gFootprintStampSizeBounds[size].bottom;
+    bounds->top = y + gFootprintStampSizeBounds[size].top;
     if (scaled == TRUE) {
         ModelInstance_GetScale(instance, &scaleX, &scaleY, &scaleZ);
         length = bounds->right - bounds->left;
@@ -1391,14 +1394,14 @@ u32 FootprintStamp_GetFootprintType(u32 species, int form, u32 showArceusFootpri
     if (species == SPECIES_ARCEUS && showArceusFootprint == 0) {
         return 0;
     }
-    return sFootprintStampSpeciesFootprints[species * 4];
+    return gFootprintStampSpeciesFootprints[species].type;
 }
 
 static u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
     if (species == SPECIES_GIRATINA && form > 0) {
         return 2;
     }
-    return sFootprintStampSpeciesFootprintSizes[species * 4];
+    return gFootprintStampSpeciesFootprints[species].size;
 }
 
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work) {

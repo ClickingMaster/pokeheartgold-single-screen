@@ -426,7 +426,6 @@ BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state) {
 static void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     int i;
     Options *options;
-    u8 *entry;
     screen->menuInputState = MenuInputStateMgr_GetState(screen->app->args->menuInputStatePtr);
     screen->saveData = screen->app->args->saveData;
     options = Save_PlayerData_GetOptionsAddr(screen->saveData);
@@ -436,17 +435,11 @@ static void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen) {
     ApricornBox_GetJuice(screen->apricornBox, screen->app->juiceIndex, &screen->juiceRecord);
     ApricornJuice_RankFlavors(&screen->juiceRecord, &screen->juice);
     AprijuiceScreen_LoadParty(screen);
-    i = 0;
-    if (i < screen->numMons) {
-        entry = (u8 *)screen;
-        do {
-            if (screen->app->partySlot == ((AprijuiceScreen *)entry)->mons[0].slot) {
-                screen->selectedMon = i;
-                return;
-            }
-            i++;
-            entry += sizeof(AprijuiceMon);
-        } while (i < screen->numMons);
+    for (i = 0; i < screen->numMons; i++) {
+        if (screen->app->partySlot == screen->mons[i].slot) {
+            screen->selectedMon = i;
+            return;
+        }
     }
 }
 
@@ -630,18 +623,15 @@ static void AprijuiceScreen_LoadParty(AprijuiceScreen *screen) {
     int count;
     int i;
     int valid;
-    u8 *entries;
     screen->party = SaveArray_Party_Get(screen->saveData);
     count = Party_GetCount(screen->party);
     valid = 0;
     i = valid;
     if (count > 0) {
-        entries = (u8 *)screen;
-        entries += offsetof(AprijuiceScreen, mons);
         do {
             Pokemon *mon = Party_GetMonByIndex(screen->party, i);
             if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == 0) {
-                AprijuiceMon_Init((AprijuiceMon *)(entries + valid++ * sizeof(AprijuiceMon)), screen->party, mon, (u8)i, screen->heapId);
+                AprijuiceMon_Init(&screen->mons[valid++], screen->party, mon, (u8)i, screen->heapId);
             }
             i++;
         } while (i < count);
@@ -1065,17 +1055,14 @@ static void AprijuiceScreen_CreateSprites(AprijuiceScreen *screen) {
     int yStars;
     int x;
     u8 *slot;
-    u8 *cursor = (u8 *)screen;
     const UnmanagedSpriteTemplate *template = sAprijuiceSpriteTemplates;
     i = 0;
-    cursor = (u8 *)screen;
     do {
-        ((AprijuiceScreen *)cursor)->sprites[0] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, template);
-        Sprite_SetDrawFlag(((AprijuiceScreen *)cursor)->sprites[0], TRUE);
-        Sprite_SetAnimActiveFlag(((AprijuiceScreen *)cursor)->sprites[0], TRUE);
-        Sprite_SetPriority(((AprijuiceScreen *)cursor)->sprites[0], 1);
+        screen->sprites[i] = SpriteSystem_CreateSpriteFromResourceHeader(screen->spriteSystem, screen->spriteManager, template);
+        Sprite_SetDrawFlag(screen->sprites[i], TRUE);
+        Sprite_SetAnimActiveFlag(screen->sprites[i], TRUE);
+        Sprite_SetPriority(screen->sprites[i], 1);
         template ++;
-        cursor += sizeof(Sprite *);
         i++;
     } while (i <= 2);
     Sprite_SetDrawFlag(screen->sprites[2], FALSE);
@@ -1231,11 +1218,6 @@ static void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon 
     int index;
     u8 level;
 
-    struct {
-        const u8 *bytes;
-        int offset;
-    } bar;
-
     if ((s8)entry->aprijuice.stats[stat] == 0) {
         Sprite_SetDrawFlag(screen->sprites[stat + 3], FALSE);
     } else {
@@ -1247,11 +1229,9 @@ static void AprijuiceScreen_DrawStatStars(AprijuiceScreen *screen, AprijuiceMon 
         }
     }
     index = stat * 5;
-    bar.bytes = (const u8 *)entry + offsetof(AprijuiceMon, performance);
-    bar.offset = stat * sizeof(entry->performance.stats[0]);
     level = (u8)((entry->stars.stars >> (stat * 3)) & 7);
     for (i = 0; i < 5; i++, index++) {
-        if (i > (s32)(((const struct TodayPerformanceStat *)(bar.bytes + bar.offset))->hi)) {
+        if (i > (s32)entry->performance.stats[stat].hi) {
             AprijuiceScreen_SetStarSprite(screen, index, 0xFF, 0);
         } else if (i > level) {
             AprijuiceScreen_SetStarSprite(screen, index, 7, 1);

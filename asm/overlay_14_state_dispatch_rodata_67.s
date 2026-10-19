@@ -242,8 +242,7 @@
 	.public gPCBoxWithdrawMenu
 	.public gPCBoxMoveMenu
 	.public gPCBoxSubApps
-	.public sPCBoxYesNoHandlers
-	.public sPCBoxYesNoNoHandlers
+	.public gPCBoxYesNoHandlers
 	.public gPCBoxStateTable
 	.public gPCBoxTrayCursorX
 	.public gPCBoxOutlineOffsetsX
@@ -365,19 +364,12 @@ gPCBoxSubApps:
 	.word PCBox_StartBagApp, PCBox_EndBagApp, 0x00000011
 	.word PCBox_StartNamingScreenApp, PCBox_EndNamingScreenApp, 0x00000010
 
-sPCBoxYesNoHandlers:
-	.word PCBox_TakeHeldItemToBag
-
-sPCBoxYesNoNoHandlers:
-	.word PCBox_State_ReturnToActionMenu
-	.word PCBox_ConfirmRelease
-	.word PCBox_State_CancelRelease
-	.word PCBox_PutAwayHeldItem
-	.word PCBox_State_CancelPutAwayItem
-	.word PCBox_ConfirmExit
-	.word PCBox_CancelExit
-	.word PCBox_CancelExit
-	.word PCBox_ConfirmExit
+gPCBoxYesNoHandlers:
+	.word PCBox_TakeHeldItemToBag, PCBox_State_ReturnToActionMenu
+	.word PCBox_ConfirmRelease, PCBox_State_CancelRelease
+	.word PCBox_PutAwayHeldItem, PCBox_State_CancelPutAwayItem
+	.word PCBox_ConfirmExit, PCBox_CancelExit
+	.word PCBox_CancelExit, PCBox_ConfirmExit
 
 gPCBoxStateTable:
 	.word PCBox_State_Init

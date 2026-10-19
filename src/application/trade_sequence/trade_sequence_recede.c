@@ -12,7 +12,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "sprite.h"
 #include "sprite_resource_header.h"
@@ -209,7 +209,7 @@ static BOOL TradeSequenceRecede_SetupScreens(TradeSequenceRecede *recede, u32 *s
     TradeSequenceRecede_CreateSprite(recede);
     recede->swapScreens = FALSE;
     SysTask_CreateOnVWaitQueue(TradeSequenceRecede_ScreenSwapTask, recede, 0);
-    BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 3, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 3, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -238,7 +238,7 @@ static BOOL TradeSequenceRecede_Run(TradeSequenceRecede *recede, u32 *state) {
         break;
     case TRADE_RECEDE_WAIT_SPRITE_ANIM:
         if (!Sprite_IsAnimated(recede->sprite)) {
-            BeginNormalPaletteFade(0, 0, 0, RGB_WHITE, 16, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_WHITE, 16, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

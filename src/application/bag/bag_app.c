@@ -107,18 +107,9 @@ extern const BgTemplate gBgTemplate_Sub1;
 extern const BgTemplate gBgTemplate_Sub2;
 extern const BgTemplate gBgTemplate_Sub3;
 extern const u8 gPocketCapacities[];
-extern const u8 sButtonNavTable[];
-extern const u8 sButtonNavTableDown[];
-extern const u8 sButtonNavTableLeft[];
-extern const u8 sButtonNavTableRight[];
-extern const u8 sMoveNavTable[];
-extern const u8 sMoveNavTableDown[];
-extern const u8 sMoveNavTableLeft[];
-extern const u8 sMoveNavTableRight[];
-extern const u8 sItemMenuNavTable[];
-extern const u8 sItemMenuNavTableDown[];
-extern const u8 sItemMenuNavTableLeft[];
-extern const u8 sItemMenuNavTableRight[];
+extern const u8 gBagAppButtonNavTable[][4];
+extern const u8 gBagAppMoveNavTable[][4];
+extern const u8 gBagAppItemMenuNavTable[][4];
 extern u8 gItemMenuCursorButtons[]; // not const: BagApp_HandleItemMenuInput stores the cursor before reading it
 extern const TouchscreenHitbox *const gTouchHitboxTables[];
 extern int (*const gItemActionFuncs[])(BagApp *app);
@@ -137,6 +128,14 @@ extern const BagAppWindowPos gItemMenuWindowPositions[];
 extern const BagAppWindowPos gQuantityDigitWindowPositions[];
 extern s32 gDebugSubScreenLayoutCount;
 extern s32 gDebugSubScreenLayout;
+
+// columns of the cursor navigation tables: the button or slot reached by each direction
+enum BagAppNavDirection {
+    BAG_NAV_UP,
+    BAG_NAV_DOWN,
+    BAG_NAV_LEFT,
+    BAG_NAV_RIGHT,
+};
 
 enum {
     BAG_STATE_WAIT_FADE_IN,
@@ -906,13 +905,13 @@ static int BagApp_State_HandleInput(BagApp *app) {
     u8 pressed[5];
 
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
-        app->cursorButton = sButtonNavTable[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_UP];
         changed++;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
-        app->cursorButton = sButtonNavTableDown[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_DOWN];
         changed++;
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        target = sButtonNavTableLeft[app->cursorButton * 4];
+        target = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_LEFT];
         if (target == 14) {
             return BagApp_PressButton(app, BAG_BUTTON_PREV_PAGE, &pressed[4], 1, 2, FALSE);
         }
@@ -929,7 +928,7 @@ static int BagApp_State_HandleInput(BagApp *app) {
             }
         }
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        target = sButtonNavTableRight[app->cursorButton * 4];
+        target = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_RIGHT];
         if (target == 15) {
             return BagApp_PressButton(app, BAG_BUTTON_NEXT_PAGE, &pressed[3], 1, 2, FALSE);
         }
@@ -1348,16 +1347,16 @@ static void BagApp_StartMoveItem(BagApp *app) {
 
 static int BagApp_GetMoveCursorFromDpad(int slot) {
     if (gSystem.newKeys & PAD_KEY_UP) {
-        return sMoveNavTable[slot * 4] - 8;
+        return gBagAppMoveNavTable[slot][BAG_NAV_UP] - 8;
     }
     if (gSystem.newKeys & PAD_KEY_DOWN) {
-        return sMoveNavTableDown[slot * 4] - 8;
+        return gBagAppMoveNavTable[slot][BAG_NAV_DOWN] - 8;
     }
     if (gSystem.newKeys & PAD_KEY_LEFT) {
-        return sMoveNavTableLeft[slot * 4] - 8;
+        return gBagAppMoveNavTable[slot][BAG_NAV_LEFT] - 8;
     }
     if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        return sMoveNavTableRight[slot * 4] - 8;
+        return gBagAppMoveNavTable[slot][BAG_NAV_RIGHT] - 8;
     }
     return slot;
 }
@@ -1585,13 +1584,13 @@ static int BagApp_HandleItemMenuInput(BagApp *app) {
     int selected;
 
     if (gSystem.newKeys & PAD_KEY_UP) {
-        next = sItemMenuNavTable[old * 4];
+        next = gBagAppItemMenuNavTable[old][BAG_NAV_UP];
     } else if (gSystem.newKeys & PAD_KEY_DOWN) {
-        next = sItemMenuNavTableDown[old * 4];
+        next = gBagAppItemMenuNavTable[old][BAG_NAV_DOWN];
     } else if (gSystem.newKeys & PAD_KEY_LEFT) {
-        next = sItemMenuNavTableLeft[old * 4];
+        next = gBagAppItemMenuNavTable[old][BAG_NAV_LEFT];
     } else if (gSystem.newKeys & PAD_KEY_RIGHT) {
-        next = sItemMenuNavTableRight[old * 4];
+        next = gBagAppItemMenuNavTable[old][BAG_NAV_RIGHT];
     }
     if (next != old) {
         app->menuCursor = next;
@@ -2209,12 +2208,12 @@ static int BagApp_State_HoldItemSelectInput(BagApp *app) {
 
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         ++changed;
-        app->cursorButton = sButtonNavTable[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_UP];
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         ++changed;
-        app->cursorButton = sButtonNavTableDown[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_DOWN];
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        int current = app->cursorButton, next = sButtonNavTableLeft[current * 4];
+        int current = app->cursorButton, next = gBagAppButtonNavTable[current][BAG_NAV_LEFT];
         if (next == 14) {
             result = BagApp_PressButton(app, BAG_BUTTON_PREV_PAGE, &pressedLeft, 0, 2, FALSE);
             if (result == 1) {
@@ -2235,7 +2234,7 @@ static int BagApp_State_HoldItemSelectInput(BagApp *app) {
             }
         }
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        int current = app->cursorButton, next = sButtonNavTableRight[current * 4];
+        int current = app->cursorButton, next = gBagAppButtonNavTable[current][BAG_NAV_RIGHT];
         if (next == 15) {
             result = BagApp_PressButton(app, BAG_BUTTON_NEXT_PAGE, &pressedRight, 0, 2, FALSE);
             if (result == 1) {
@@ -2350,12 +2349,12 @@ static int BagApp_State_SellSelectInput(BagApp *app) {
 
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         ++changed;
-        app->cursorButton = sButtonNavTable[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_UP];
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         ++changed;
-        app->cursorButton = sButtonNavTableDown[app->cursorButton * 4];
+        app->cursorButton = gBagAppButtonNavTable[app->cursorButton][BAG_NAV_DOWN];
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_LEFT) {
-        int current = app->cursorButton, next = sButtonNavTableLeft[current * 4];
+        int current = app->cursorButton, next = gBagAppButtonNavTable[current][BAG_NAV_LEFT];
         if (next == 14) {
             result = BagApp_PressButton(app, BAG_BUTTON_PREV_PAGE, &pressedLeft, 1, 4, FALSE);
             if (result == 1) {
@@ -2376,7 +2375,7 @@ static int BagApp_State_SellSelectInput(BagApp *app) {
             }
         }
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_RIGHT) {
-        int current = app->cursorButton, next = sButtonNavTableRight[current * 4];
+        int current = app->cursorButton, next = gBagAppButtonNavTable[current][BAG_NAV_RIGHT];
         if (next == 15) {
             result = BagApp_PressButton(app, BAG_BUTTON_NEXT_PAGE, &pressedRight, 1, 4, FALSE);
             if (result == 1) {

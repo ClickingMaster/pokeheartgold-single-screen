@@ -32,20 +32,18 @@
 // Bag application: item list, message boxes, quantity and money windows, sprites (cursor, item icons,
 // pocket tabs, buttons).
 
-// The cursor position tables are {x, y, anim, palette} per position.
+// Cursor sprite position, animation and palette of each button, move-item slot and quantity button.
+typedef struct BagAppCursorPos {
+    u8 x;
+    u8 y;
+    u8 anim;
+    u8 palette;
+} BagAppCursorPos;
+
 extern const u8 gListPocketCapacities[];
-extern const u8 sCursorPositions[];
-extern const u8 sCursorPositionsY[];
-extern const u8 sCursorPositionsAnim[];
-extern const u8 sCursorPositionsPalette[];
-extern const u8 sMoveCursorPositions[];
-extern const u8 sMoveCursorPositionsY[];
-extern const u8 sMoveCursorPositionsAnim[];
-extern const u8 sMoveCursorPositionsPalette[];
-extern const u8 sQuantityCursorPositions[];
-extern const u8 sQuantityCursorPositionsY[];
-extern const u8 sQuantityCursorPositionsAnim[];
-extern const u8 sQuantityCursorPositionsPalette[];
+extern const BagAppCursorPos gBagAppCursorPositions[];
+extern const BagAppCursorPos gBagAppMoveCursorPositions[];
+extern const BagAppCursorPos gBagAppQuantityCursorPositions[];
 extern const SpriteResourceCountsListUnion gBagSpriteResourceCounts;
 extern const OamManagerParam gBagOamManagerParam;
 extern const OamCharTransferParam gBagOamCharTransferParam;
@@ -660,10 +658,9 @@ static void BagApp_ClearField648(BagApp *app) {
 }
 
 void BagApp_SetCursorPosition(BagApp *app, s32 button) {
-    u32 offset = button * 4;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sCursorPositions[offset], sCursorPositionsY[offset], FX32_CONST(256));
-    ManagedSprite_SetAnim(app->sprites[20], sCursorPositionsAnim[offset]);
-    ManagedSprite_SetPaletteOverride(app->sprites[20], sCursorPositionsPalette[offset]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], gBagAppCursorPositions[button].x, gBagAppCursorPositions[button].y, FX32_CONST(256));
+    ManagedSprite_SetAnim(app->sprites[20], gBagAppCursorPositions[button].anim);
+    ManagedSprite_SetPaletteOverride(app->sprites[20], gBagAppCursorPositions[button].palette);
     ManagedSprite_SetDrawFlag(app->sprites[20], TRUE);
 }
 
@@ -674,7 +671,7 @@ void BagApp_HideCursor(BagApp *app) {
 void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
     GF_ASSERT(slot < 9);
     if (slot == 8) {
-        ManagedSprite_SetAnim(app->sprites[20], sMoveCursorPositionsAnim[slot * 4]);
+        ManagedSprite_SetAnim(app->sprites[20], gBagAppMoveCursorPositions[slot].anim);
     } else {
         BagView *bagView = app->bagView;
         BagViewPocket *pocket = &bagView->pockets[bagView->pocketIndex];
@@ -687,16 +684,15 @@ void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
             ManagedSprite_SetAnim(app->sprites[20], 20);
         }
     }
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sMoveCursorPositions[slot * 4], sMoveCursorPositionsY[slot * 4], FX32_CONST(256));
-    ManagedSprite_SetPaletteOverride(app->sprites[20], sMoveCursorPositionsPalette[slot * 4]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], gBagAppMoveCursorPositions[slot].x, gBagAppMoveCursorPositions[slot].y, FX32_CONST(256));
+    ManagedSprite_SetPaletteOverride(app->sprites[20], gBagAppMoveCursorPositions[slot].palette);
 }
 
 void BagApp_SetQuantityCursorPosition(BagApp *app, s32 index) {
     GF_ASSERT(index < 8);
-    index <<= 2;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sQuantityCursorPositions[index], sQuantityCursorPositionsY[index], FX32_CONST(256));
-    ManagedSprite_SetAnim(app->sprites[20], sQuantityCursorPositionsAnim[index]);
-    ManagedSprite_SetPaletteOverride(app->sprites[20], sQuantityCursorPositionsPalette[index]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], gBagAppQuantityCursorPositions[index].x, gBagAppQuantityCursorPositions[index].y, FX32_CONST(256));
+    ManagedSprite_SetAnim(app->sprites[20], gBagAppQuantityCursorPositions[index].anim);
+    ManagedSprite_SetPaletteOverride(app->sprites[20], gBagAppQuantityCursorPositions[index].palette);
 }
 
 void BagApp_LoadPocketObjPalette(BagApp *app, int pocket) {

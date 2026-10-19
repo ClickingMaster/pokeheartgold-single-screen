@@ -436,11 +436,9 @@ static void PokedexEntryPopup_CreateResourceManagers(PokedexEntryPopup *popup) {
 
 static void PokedexEntryPopup_DestroyResourceManagers(PokedexEntryPopup *popup) {
     int i;
-    u8 *cur = (u8 *)popup;
 
     for (i = 0; i < 4; i++) {
-        Destroy2DGfxResObjMan(((PokedexEntryPopup *)cur)->resourceManagers[0]);
-        cur += sizeof(GF_2DGfxResMan *);
+        Destroy2DGfxResObjMan(popup->resourceManagers[i]);
     }
 }
 

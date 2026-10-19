@@ -236,7 +236,7 @@ BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work) {
             ok = FALSE;
             if (work->selection == 0) {
                 ok = TRUE;
-            } else if (BattleRecordHeader_GetField(work->savedVideos[work->selection], 5, ok) == 1) {
+            } else if (BattleRecordHeader_GetField(work->savedVideos[work->selection], 5, 0) == 1) {
                 ok = TRUE;
             } else if (work->battleResult == 1) {
                 ok = TRUE;

@@ -42,9 +42,8 @@ typedef struct PCBoxSubApp {
 } PCBoxSubApp;
 
 extern const PCBoxStateFunc gPCBoxStateTable[];
-// {yes, no} handler pairs of the yes/no prompts; sPCBoxYesNoNoHandlers labels the "no" column.
-extern const PCBoxStateFunc sPCBoxYesNoHandlers[];
-extern const PCBoxStateFunc sPCBoxYesNoNoHandlers[];
+// {yes, no} handler pairs of the yes/no prompts
+extern const PCBoxStateFunc gPCBoxYesNoHandlers[][2];
 extern const PCBoxSubApp gPCBoxSubApps[];
 extern const PCBoxMenuEntry gPCBoxDepositMenu[];
 extern const PCBoxMenuEntry gPCBoxWithdrawMenu[];
@@ -238,10 +237,10 @@ u32 PCBox_State_HandleYesNo(PCBoxWork *work) {
     switch (input) {
     case YESNORESPONSE_YES:
         YesNoPrompt_Reset(work->view->yesNoPrompt);
-        return sPCBoxYesNoHandlers[work->view->yesNoHandler * 2](work);
+        return gPCBoxYesNoHandlers[work->view->yesNoHandler][0](work);
     case YESNORESPONSE_NO:
         YesNoPrompt_Reset(work->view->yesNoPrompt);
-        return sPCBoxYesNoNoHandlers[work->view->yesNoHandler * 2](work);
+        return gPCBoxYesNoHandlers[work->view->yesNoHandler][1](work);
     default:
         return PC_BOX_STATE_HANDLE_YES_NO;
     }

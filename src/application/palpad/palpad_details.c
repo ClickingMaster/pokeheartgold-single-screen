@@ -92,7 +92,7 @@ void PalPadDetails_Init(PalPadDetails *details, PalPadShared *shared, PalPadGfx 
 int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     switch (shared->subState) {
     case PALPAD_DETAILS_STATE_INIT:
-        *(vu16 *)&details->friendChangeHeld = FALSE;
+        details->friendChangeHeld = FALSE;
         details->page = 0;
         // fallthrough
     case PALPAD_DETAILS_STATE_SHOW:
@@ -113,9 +113,9 @@ int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *
         }
         break;
     case PALPAD_DETAILS_STATE_CHANGE_FRIEND: // previous / next friend; repeats while the key is held
-        if (*(vu16 *)&details->friendChangeHeld) {
-            (*(vu16 *)&details->friendChangeDelay)--;
-            if (*(vu16 *)&details->friendChangeDelay) {
+        if (details->friendChangeHeld) {
+            details->friendChangeDelay--;
+            if (details->friendChangeDelay) {
                 break;
             }
         }
@@ -123,7 +123,7 @@ int PalPadDetails_Main(PalPadDetails *details, PalPadShared *shared, PalPadGfx *
             PlaySE(SEQ_SE_DP_BUTTON3);
             PalPadDetails_HideForFriendChange(details, gfx);
             PalPadShared_SetNextScreen(shared, PALPAD_SCREEN_DETAILS, PALPAD_DETAILS_STATE_SHOW);
-            *(vu16 *)&details->friendChangeHeld = TRUE;
+            details->friendChangeHeld = TRUE;
             return 1;
         }
         shared->subState = PALPAD_DETAILS_STATE_INPUT;
@@ -682,7 +682,7 @@ void PalPadDetails_PrintUnionRoomPage(PalPadDetailsSlot *slot, PalPadShared *sha
     i = 0;
     y = 0;
     do {
-        PalPadDetailsSlot_Print(slot, 0, 2, shared, gfx, 0x14 + i, 0, (u8)y, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
+        PalPadDetailsSlot_Print(slot, 0, 2, shared, gfx, msg_0779_00020 + i, 0, (u8)y, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
         PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], i + 1));
         PalPadDetailsSlot_Print(slot, 0, 2, shared, gfx, msg_0779_00022, 0, (u8)y, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
         y += 0x18;
@@ -698,7 +698,7 @@ void PalPadDetails_PrintBattleTowerPage(PalPadDetailsSlot *slot, PalPadShared *s
     FrontierSave *frontier = Save_Frontier_GetStatic(shared->saveData);
 
     PalPadDetailsSlot_Print(slot, 2, 0, shared, gfx, msg_0779_00029, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
-    PalPadDetailsSlot_Print(slot, 2, 1, shared, gfx, FrontierSave_GetStat(frontier, 0x64, shared->friends.slots[shared->selectedFriend]) + 0x22, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
+    PalPadDetailsSlot_Print(slot, 2, 1, shared, gfx, FrontierSave_GetStat(frontier, 0x64, shared->friends.slots[shared->selectedFriend]) + msg_0779_00034, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x71, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 2, 1, shared, gfx, msg_0779_00037, 0x70, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 1);
     PalPadDetailsSlot_Print(slot, 2, 1, shared, gfx, msg_0779_00036, 0, 0x18, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
@@ -717,7 +717,7 @@ void PalPadDetails_PrintBattleFactoryPage(PalPadDetailsSlot *slot, PalPadShared 
     PalPadDetailsSlot_Print(slot, 3, 1, shared, gfx, msg_0779_00038, 0, 0, 0x10200, raw, expanded, 0);
     PalPadDetailsSlot_Print(slot, 3, 1, shared, gfx, msg_0779_00040, 0xD0, 0, 0x10200, raw, expanded, 2);
 
-    message = FrontierSave_GetStat(frontier, 0x66, shared->friends.slots[shared->selectedFriend]) == 0 ? 0x22 : 0x23;
+    message = FrontierSave_GetStat(frontier, 0x66, shared->friends.slots[shared->selectedFriend]) == 0 ? msg_0779_00034 : msg_0779_00035;
     PalPadDetailsSlot_Print(slot, 3, 2, shared, gfx, message, 0, 0, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x73, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 3, 2, shared, gfx, msg_0779_00037, 0x70, 0, 0x10200, raw, expanded, 1);
@@ -732,7 +732,7 @@ void PalPadDetails_PrintBattleFactoryPage(PalPadDetailsSlot *slot, PalPadShared 
     PalPadDetailsSlot_Print(slot, 3, 3, shared, gfx, msg_0779_00039, 0, 0, 0x10200, raw, expanded, 0);
     PalPadDetailsSlot_Print(slot, 3, 3, shared, gfx, msg_0779_00040, 0xD0, 0, 0x10200, raw, expanded, 2);
 
-    message = FrontierSave_GetStat(frontier, 0x68, shared->friends.slots[shared->selectedFriend]) == 0 ? 0x22 : 0x23;
+    message = FrontierSave_GetStat(frontier, 0x68, shared->friends.slots[shared->selectedFriend]) == 0 ? msg_0779_00034 : msg_0779_00035;
     PalPadDetailsSlot_Print(slot, 3, 4, shared, gfx, message, 0, 0, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x77, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 3, 4, shared, gfx, msg_0779_00037, 0x70, 0, 0x10200, raw, expanded, 1);
@@ -758,7 +758,7 @@ void PalPadDetails_PrintBattleCastlePage(PalPadDetailsSlot *slot, PalPadShared *
     PalPadDetailsSlot_Print(slot, 4, 0, shared, gfx, msg_0779_00031, 0, 0, 0x10200, raw, expanded, 0);
     PalPadDetailsSlot_Print(slot, 4, 0, shared, gfx, msg_0779_00041, 0x68, 0x14, 0x10200, raw, expanded, 0);
     value = FrontierSave_GetStat(frontier, 0x6c, shared->friends.slots[shared->selectedFriend]);
-    PalPadDetailsSlot_Print(slot, 4, 0, shared, gfx, value == 0 ? 0x22 : 0x23, 0, 0x30, 0x10200, raw, expanded, 0);
+    PalPadDetailsSlot_Print(slot, 4, 0, shared, gfx, value == 0 ? msg_0779_00034 : msg_0779_00035, 0, 0x30, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x87, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 4, 0, shared, gfx, msg_0779_00045, 0x70, 0x30, 0x10200, raw, expanded, 1);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x88, shared->friends.slots[shared->selectedFriend]));
@@ -792,7 +792,7 @@ void PalPadDetails_PrintBattleHallPage(PalPadDetailsSlot *slot, PalPadShared *sh
         NULL);
     String_Delete(species);
     value = FrontierSave_GetStat(frontier, 0x6a, shared->friends.slots[shared->selectedFriend]);
-    PalPadDetailsSlot_Print(slot, 5, 0, shared, gfx, value == 0 ? 0x22 : 0x23, 0, 0x30, 0x10200, raw, expanded, 0);
+    PalPadDetailsSlot_Print(slot, 5, 0, shared, gfx, value == 0 ? msg_0779_00034 : msg_0779_00035, 0, 0x30, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x7b, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 5, 0, shared, gfx, msg_0779_00037, 0x70, 0x30, 0x10200, raw, expanded, 1);
     PalPadDetailsSlot_Print(slot, 5, 0, shared, gfx, msg_0779_00036, 0, 0x48, 0x10200, raw, expanded, 0);
@@ -811,7 +811,7 @@ void PalPadDetails_PrintBattleArcadePage(PalPadDetailsSlot *slot, PalPadShared *
 
     PalPadDetailsSlot_Print(slot, 6, 0, shared, gfx, msg_0779_00033, 0, 0, 0x10200, raw, expanded, 0);
     value = FrontierSave_GetStat(frontier, 0x6e, shared->friends.slots[shared->selectedFriend]);
-    PalPadDetailsSlot_Print(slot, 6, 0, shared, gfx, value == 0 ? 0x22 : 0x23, 0, 0x18, 0x10200, raw, expanded, 0);
+    PalPadDetailsSlot_Print(slot, 6, 0, shared, gfx, value == 0 ? msg_0779_00034 : msg_0779_00035, 0, 0x18, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferNumber(gfx, FrontierSave_GetStat(frontier, 0x8f, shared->friends.slots[shared->selectedFriend]));
     PalPadDetailsSlot_Print(slot, 6, 0, shared, gfx, msg_0779_00046, 0x70, 0x18, 0x10200, raw, expanded, 1);
     PalPadDetailsSlot_Print(slot, 6, 0, shared, gfx, msg_0779_00036, 0, 0x30, 0x10200, raw, expanded, 0);

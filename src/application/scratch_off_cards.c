@@ -234,8 +234,7 @@ extern const BgTemplate gScratchOffCardsBgTemplate_Main2;
 extern const BgTemplate gScratchOffCardsBgTemplate_Sub3;
 extern const s8 gScratchOffCardsBounceX[][8];
 extern const ScratchOffCardsBounds gScratchOffCardsCellBounds[9];
-extern const s16 sScratchOffCardsCellOrigins[];
-extern const s16 sScratchOffCardsCellOriginsY[];
+extern const s16 gScratchOffCardsCellOrigins[][2]; // x, y of each cell
 extern const ScratchOffCardsPos gScratchOffCardsCellPositions[9];
 extern const TouchscreenHitbox gScratchOffCardsCellHitboxes[10];
 extern const GraphicsBanks gScratchOffCardsGraphicsBanks;
@@ -1535,8 +1534,8 @@ static int ScratchOffCards_CheckCellRevealed(ScratchOffCardsWork *work, u8 cellN
     int left;
     int top;
     count = 0;
-    left = sScratchOffCardsCellOrigins[cellNo * 2];
-    top = sScratchOffCardsCellOriginsY[cellNo * 2];
+    left = gScratchOffCardsCellOrigins[cellNo][0];
+    top = gScratchOffCardsCellOrigins[cellNo][1];
     for (y = top; y < top + 20; y++) {
         for (x = left; x < left + 25; x++) {
             if (work->scratchMask[0][y * 240 + x] == 1) {

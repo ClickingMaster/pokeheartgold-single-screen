@@ -10,7 +10,7 @@
 #include "pokemon_storage_system.h"
 #include "save.h"
 #include "save_arrays.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "sound_playback.h"
 #include "system.h"
 #include "text.h"
@@ -22,7 +22,7 @@ extern const PokewalkerAppStateFunc gQuitMessageStates[];
 extern const PokewalkerAppStateFunc gEraseRecordsStates[];
 
 int PokewalkerApp_QuitMessage_Enter(PokewalkerApp *app) {
-    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_154);
     return 2;
 }
 

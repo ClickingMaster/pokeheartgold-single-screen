@@ -1105,16 +1105,12 @@ void MysteryGiftAnim_DeleteGiftSubSprite(MysteryGiftAnimData *anim) {
 
 void MysteryGiftAnim_UpdateSprites(MysteryGiftAnimData *anim) {
     int i;
-    MysteryGiftAnimData *cursor;
-
-    i = 0;
-    cursor = anim;
-    for (; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
-        if (cursor->sparkles[0].sprite != NULL) {
-            Sprite_UpdateAnim(cursor->sparkles[0].sprite, FX32_CONST(2));
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
+        if (anim->sparkles[i].sprite != NULL) {
+            Sprite_UpdateAnim(anim->sparkles[i].sprite, FX32_CONST(2));
         }
-        if (cursor->ribbons[0].sprite != NULL) {
-            Sprite_UpdateAnim(cursor->ribbons[0].sprite, FX32_CONST(2));
+        if (anim->ribbons[i].sprite != NULL) {
+            Sprite_UpdateAnim(anim->ribbons[i].sprite, FX32_CONST(2));
         }
     }
     if (anim->giftMain.sprite != NULL) {
@@ -1127,64 +1123,56 @@ void MysteryGiftAnim_UpdateSprites(MysteryGiftAnimData *anim) {
 
 void MysteryGiftAnim_CreateSparkles(MysteryGiftAnimData *anim) {
     int i;
-    MysteryGiftAnimData *cursor;
-
-    i = 0;
-    cursor = anim;
-    for (; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
-        cursor->sparkles[0].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DMAIN);
-        Sprite_TryChangeAnimSeq(cursor->sparkles[0].sprite, 1);
-        Sprite_SetAnimationFrame(cursor->sparkles[0].sprite, 0);
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
+        anim->sparkles[i].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DMAIN);
+        Sprite_TryChangeAnimSeq(anim->sparkles[i].sprite, 1);
+        Sprite_SetAnimationFrame(anim->sparkles[i].sprite, 0);
     }
 }
 
 void MysteryGiftAnim_CreateSparkleSprites(MysteryGiftAnimData *anim) {
     s32 i;
-    MysteryGiftAnimData *cursor = anim;
 
-    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
         if (i < 20) {
-            cursor->sparkles[0].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DMAIN);
-            Sprite_TryChangeAnimSeq(cursor->sparkles[0].sprite, 1);
-            Sprite_SetAnimationFrame(cursor->sparkles[0].sprite, 0);
+            anim->sparkles[i].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DMAIN);
+            Sprite_TryChangeAnimSeq(anim->sparkles[i].sprite, 1);
+            Sprite_SetAnimationFrame(anim->sparkles[i].sprite, 0);
         } else {
-            cursor->sparkles[0].sprite = NULL;
+            anim->sparkles[i].sprite = NULL;
         }
     }
 }
 
 void MysteryGiftAnim_CreateRibbons(MysteryGiftAnimData *anim) {
-    int i = 0;
-    MysteryGiftAnimData *cursor = anim;
+    int i;
 
-    for (; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
-        cursor->ribbons[0].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DSUB);
-        Sprite_TryChangeAnimSeq(cursor->ribbons[0].sprite, 5);
-        Sprite_SetAnimationFrame(cursor->ribbons[0].sprite, 0);
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
+        anim->ribbons[i].sprite = MysteryGiftAnim_CreateSprite(anim, NNS_G2D_VRAM_TYPE_2DSUB);
+        Sprite_TryChangeAnimSeq(anim->ribbons[i].sprite, 5);
+        Sprite_SetAnimationFrame(anim->ribbons[i].sprite, 0);
     }
 }
 
 void MysteryGiftAnim_DeleteSparkles(MysteryGiftAnimData *anim) {
     s32 i;
-    MysteryGiftAnimData *cursor = anim;
 
-    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
-        if (cursor->sparkles[0].sprite != NULL) {
-            Sprite_Delete(cursor->sparkles[0].sprite);
-            cursor->sparkles[0].sprite = NULL;
-            SysTask_Destroy(cursor->sparkles[0].task);
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
+        if (anim->sparkles[i].sprite != NULL) {
+            Sprite_Delete(anim->sparkles[i].sprite);
+            anim->sparkles[i].sprite = NULL;
+            SysTask_Destroy(anim->sparkles[i].task);
         }
     }
 }
 
 void MysteryGiftAnim_DeleteRibbons(MysteryGiftAnimData *anim) {
     s32 i;
-    MysteryGiftAnimData *cursor = anim;
 
-    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++, cursor = NEXT_PARTICLE(cursor)) {
-        Sprite_Delete(cursor->ribbons[0].sprite);
-        cursor->ribbons[0].sprite = NULL;
-        SysTask_Destroy(cursor->ribbons[0].task);
+    for (i = 0; i < MYSTERY_GIFT_PARTICLE_COUNT; i++) {
+        Sprite_Delete(anim->ribbons[i].sprite);
+        anim->ribbons[i].sprite = NULL;
+        SysTask_Destroy(anim->ribbons[i].task);
     }
 }
 
@@ -1239,6 +1227,7 @@ void MysteryGiftAnim_InitSparkles(MysteryGiftAnimData *anim) {
         cursor->sparkles[0].radiusX = cursor->sparkles[0].amplitude;
         cursor->sparkles[0].radiusY = cursor->sparkles[0].amplitude;
         pos = *Sprite_GetMatrixPtr(cursor->sparkles[0].sprite);
+        // the sign test and the value draw separate random numbers
         if ((int)LCRandom() % 224 + 16 > 0) {
             rounded = 0.5f + (float)(((int)LCRandom() % 224 + 16) << FX32_SHIFT);
         } else {
@@ -1288,6 +1277,7 @@ void MysteryGiftAnim_StartSparkleTasks(MysteryGiftAnimData *anim) {
         } else {
             cursor->sparkles[0].delay = (s32)(LCRandom() % 5) + 5;
         }
+        // BUG: the random delay chosen above is overwritten, so every sparkle starts moving at once
         cursor->sparkles[0].delay = 0;
         cursor->sparkles[0].radiusX = cursor->sparkles[0].amplitude;
         cursor->sparkles[0].radiusY = cursor->sparkles[0].amplitude;

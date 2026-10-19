@@ -9,7 +9,7 @@
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
-#include "screen_fade_legacy.h"
+#include "screen_fade.h"
 #include "swap_3d_buffers.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
@@ -240,7 +240,7 @@ static void TradeSequenceArrive_Draw(TradeSequenceArrive *arrive) {
 static BOOL TradeSequenceArrive_SetupScreens(TradeSequenceArrive *arrive, u32 *state) {
     TradeSequenceArrive_InitBgs(arrive);
     TradeSequenceArrive_Init3D(arrive);
-    BeginNormalPaletteFade(0, 1, 1, RGB_WHITE, 8, 1, HEAP_ID_57);
+    BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_WHITE, 8, 1, HEAP_ID_57);
     return TRUE;
 }
 
@@ -302,7 +302,7 @@ static BOOL TradeSequenceArrive_ZoomOut(TradeSequenceArrive *arrive, u32 *state)
     case TRADE_ARRIVE_ZOOM_DELAY:
         arrive->timer++;
         if (arrive->timer > 13) {
-            BeginNormalPaletteFade(0, 0, 0, RGB_BLACK, 8, 1, HEAP_ID_57);
+            BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 8, 1, HEAP_ID_57);
             (*state)++;
         }
         break;

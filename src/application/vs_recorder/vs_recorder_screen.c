@@ -271,35 +271,19 @@ void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int
 }
 
 void VsRecorder_FreeMenuRowText(VsRecorderWork *work) {
-    struct {
-        int i;
-        VsRecorderMenuRow *rows[2];
-    } local;
-
+    int i;
     int j;
-    VsRecorderMenuRow *choiceRow;
-    VsRecorderMenuRow *pathRow;
-    VsRecorderMenuRow **cursor;
+    VsRecorderMenuRow *rows[2];
 
-    local.i = 0;
-    choiceRow = work->choiceRows;
-    pathRow = work->pathRows;
-    do {
-        local.rows[0] = choiceRow;
-        local.rows[1] = pathRow;
-        j = 0;
-        cursor = local.rows;
-        while (j < 2) {
-            TextOBJLayout_Delete((*cursor)->textLayout);
-            TextOBJ_Destroy((*cursor)->text);
-            ObjCharTransfer_FreeCharSpace(&(*cursor)->charAlloc);
-            j++;
-            cursor++;
+    for (i = 0; i < 5; i++) {
+        rows[0] = &work->choiceRows[i];
+        rows[1] = &work->pathRows[i];
+        for (j = 0; j < 2; j++) {
+            TextOBJLayout_Delete(rows[j]->textLayout);
+            TextOBJ_Destroy(rows[j]->text);
+            ObjCharTransfer_FreeCharSpace(&rows[j]->charAlloc);
         }
-        choiceRow++;
-        pathRow++;
-        local.i++;
-    } while (local.i < 5);
+    }
 }
 
 // label for a sprite of the given screen (vram); palette 9999 main / 10000 sub
@@ -1128,7 +1112,6 @@ void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgDa
     } else {
         i = 0;
         if (list->rows > 0) {
-            VsRecorderWork *cursor = work;
             int y = 4;
             do {
                 String *name = String_New(0xFF, HEAP_ID_109);
@@ -1137,7 +1120,7 @@ void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgDa
                 u32 width;
 
                 String16_FormatInteger(number, i + 1, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-                CopyU16ArrayToString(name, (const u16 *)cursor->net.videoList.headers[0]);
+                CopyU16ArrayToString(name, (const u16 *)work->net.videoList.headers[i]);
                 VsRecorder_SanitizeName(work, name);
                 width = FontID_String_GetWidth(0, number, 0);
                 AddTextPrinterParameterizedWithColor(window, 0, number, 16 - width, y, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 0), NULL);
@@ -1146,8 +1129,7 @@ void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgDa
                 String_Delete(name);
                 String_Delete(number);
                 String_Delete(template);
-                cursor = (VsRecorderWork *)((u8 *)cursor + sizeof(GlobalTerminalNetVideoHeader *));
-                y += 0x18;
+                y += 24;
                 i++;
             } while (i < list->rows);
         }
@@ -1924,14 +1906,10 @@ void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
         int i = 0;
         net->videoList.count = result;
         if (net->videoList.count > 0) {
-            VsRecorderWork *source = work;
-            GlobalTerminalNetVideoHeader *dest = work->net.videoList.videos;
             do {
-                GF_ASSERT(source->net.videoList.headers[0]);
-                MI_CpuCopy8(source->net.videoList.headers[0], dest, sizeof(GlobalTerminalNetVideoHeader));
-                work->net.videoList.flags[i] = source->net.videoList.headers[0]->data[0x27];
-                source = (VsRecorderWork *)((u8 *)source + sizeof(GlobalTerminalNetVideoHeader *));
-                dest++;
+                GF_ASSERT(work->net.videoList.headers[i]);
+                MI_CpuCopy8(work->net.videoList.headers[i], &work->net.videoList.videos[i], sizeof(GlobalTerminalNetVideoHeader));
+                work->net.videoList.flags[i] = work->net.videoList.headers[i]->data[0x27];
                 i++;
             } while (i < net->videoList.count);
         }
@@ -1942,42 +1920,41 @@ void VsRecorder_OnVideoListReceived(VsRecorderWork *work, int *state) {
 void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {
     int i;
     int result;
-    u8 *slot;
-    slot = (u8 *)work;
-    for (i = 0; i < 4; i++, slot += sizeof(void *)) {
+
+    for (i = 0; i < 4; i++) {
         BattleRecord_Load(work->saveData, HEAP_ID_109, &result, NULL, i);
         switch (result) {
         case 0:
-            ((VsRecorderWork *)slot)->savedVideos[0] = NULL;
-            ((VsRecorderWork *)slot)->videoOwners[0] = NULL;
+            work->savedVideos[i] = NULL;
+            work->videoOwners[i] = NULL;
             if (i == 0) {
-                ((VsRecorderWork *)slot)->videoOwners[0] = FrontierCard_New(HEAP_ID_109);
-                FrontierCard_InitFromSave(((VsRecorderWork *)slot)->videoOwners[0], work->saveData);
+                work->videoOwners[i] = FrontierCard_New(HEAP_ID_109);
+                FrontierCard_InitFromSave(work->videoOwners[i], work->saveData);
             }
             break;
         case 2:
-            ((VsRecorderWork *)slot)->savedVideos[0] = NULL;
-            ((VsRecorderWork *)slot)->videoOwners[0] = NULL;
+            work->savedVideos[i] = NULL;
+            work->videoOwners[i] = NULL;
             if (i == 0) {
-                ((VsRecorderWork *)slot)->videoOwners[0] = FrontierCard_New(HEAP_ID_109);
-                FrontierCard_InitFromSave(((VsRecorderWork *)slot)->videoOwners[0], work->saveData);
+                work->videoOwners[i] = FrontierCard_New(HEAP_ID_109);
+                FrontierCard_InitFromSave(work->videoOwners[i], work->saveData);
             }
             break;
         case 3:
-            ((VsRecorderWork *)slot)->savedVideos[0] = NULL;
-            ((VsRecorderWork *)slot)->videoOwners[0] = NULL;
+            work->savedVideos[i] = NULL;
+            work->videoOwners[i] = NULL;
             if (i == 0) {
-                ((VsRecorderWork *)slot)->videoOwners[0] = FrontierCard_New(HEAP_ID_109);
-                FrontierCard_InitFromSave(((VsRecorderWork *)slot)->videoOwners[0], work->saveData);
+                work->videoOwners[i] = FrontierCard_New(HEAP_ID_109);
+                FrontierCard_InitFromSave(work->videoOwners[i], work->saveData);
             }
             break;
         case 1:
-            ((VsRecorderWork *)slot)->savedVideos[0] = BattleRecord_CopyHeader(HEAP_ID_109);
+            work->savedVideos[i] = BattleRecord_CopyHeader(HEAP_ID_109);
             if (i == 0) {
-                ((VsRecorderWork *)slot)->videoOwners[0] = FrontierCard_New(HEAP_ID_109);
-                FrontierCard_InitFromSave(((VsRecorderWork *)slot)->videoOwners[0], work->saveData);
+                work->videoOwners[i] = FrontierCard_New(HEAP_ID_109);
+                FrontierCard_InitFromSave(work->videoOwners[i], work->saveData);
             } else {
-                ((VsRecorderWork *)slot)->videoOwners[0] = BattleRecord_CopyProfile(HEAP_ID_109);
+                work->videoOwners[i] = BattleRecord_CopyProfile(HEAP_ID_109);
             }
             break;
         }
@@ -1989,17 +1966,15 @@ void VsRecorder_LoadSavedVideos(VsRecorderWork *work) {
 
 void VsRecorder_FreeSavedVideos(VsRecorderWork *work) {
     int i;
-    u8 *slot = (u8 *)work;
-    void *zero1 = NULL;
-    void *zero2 = NULL;
-    for (i = 0; i < 4; i++, slot += sizeof(void *)) {
-        if (((VsRecorderWork *)slot)->savedVideos[0] != NULL) {
-            Heap_Free(((VsRecorderWork *)slot)->savedVideos[0]);
-            ((VsRecorderWork *)slot)->savedVideos[0] = zero1;
+
+    for (i = 0; i < 4; i++) {
+        if (work->savedVideos[i] != NULL) {
+            Heap_Free(work->savedVideos[i]);
+            work->savedVideos[i] = NULL;
         }
-        if (((VsRecorderWork *)slot)->videoOwners[0] != NULL) {
-            Heap_Free(((VsRecorderWork *)slot)->videoOwners[0]);
-            ((VsRecorderWork *)slot)->videoOwners[0] = zero2;
+        if (work->videoOwners[i] != NULL) {
+            Heap_Free(work->videoOwners[i]);
+            work->videoOwners[i] = NULL;
         }
     }
 }
@@ -2337,28 +2312,25 @@ void VsRecorder_CreateVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work)
 
 void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work) {
     int i;
-    VsRecorderVideoInfo *icon;
     SpriteManager_UnloadPlttObjById(work->spriteManager, 100000);
     SpriteManager_UnloadCellObjById(work->spriteManager, 100000);
     SpriteManager_UnloadAnimObjById(work->spriteManager, 100000);
     i = 0;
-    icon = info;
     do {
-        if (icon->monIcons[0]) {
+        if (info->monIcons[i]) {
             SpriteManager_UnloadCharObjById(work->spriteManager, i + 100000);
-            Sprite_DeleteAndFreeResources(icon->monIcons[0]);
-            icon->monIcons[0] = NULL;
+            Sprite_DeleteAndFreeResources(info->monIcons[i]);
+            info->monIcons[i] = NULL;
         }
         i++;
-        icon = (VsRecorderVideoInfo *)((u8 *)icon + sizeof(ManagedSprite *));
     } while (i < 12);
     VsRecorder_RemoveVideoInfoWindows(info, work);
 }
 
 void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw) {
     int i;
-    for (i = 0; i < 12; i++, info = (VsRecorderVideoInfo *)((u8 *)info + sizeof(ManagedSprite *))) {
-        ManagedSprite *sprite = info->monIcons[0];
+    for (i = 0; i < 12; i++) {
+        ManagedSprite *sprite = info->monIcons[i];
         if (sprite != NULL) {
             ManagedSprite_SetDrawFlag(sprite, draw);
         }
@@ -2849,15 +2821,13 @@ void VsRecorder_MessageScreen(VsRecorderWork *work) {
 // TRUE if one of the saved videos 1-3 has this video number
 BOOL VsRecorder_IsVideoSaved(VsRecorderWork *work, u64 number) {
     int i = 1;
-    u8 *slot;
-    slot = (u8 *)work + sizeof(void *);
+
     do {
-        void *header = ((VsRecorderWork *)slot)->savedVideos[0];
+        void *header = work->savedVideos[i];
         if (header != NULL && BattleRecordHeader_GetField(header, 4, 0) == number) {
             return TRUE;
         }
         i++;
-        slot += sizeof(void *);
     } while (i < 4);
     return FALSE;
 }

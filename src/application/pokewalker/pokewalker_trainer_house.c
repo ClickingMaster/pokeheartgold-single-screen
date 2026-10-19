@@ -22,7 +22,6 @@ extern const u16 gTrainerHouseDailyFlags[MAX_NUM_TRAINER_HOUSE_SETS];
 
 BOOL PokewalkerApp_IsEventLogInvalid(PokewalkerIrRecord *records) {
     u16 maxSpecies = NATIONAL_DEX_COUNT;
-    u16 minusSeven = -7;
     int i;
     for (i = 0; i < 24; i++, records++) {
         if (records->eventType != 0) {
@@ -34,7 +33,7 @@ BOOL PokewalkerApp_IsEventLogInvalid(PokewalkerIrRecord *records) {
             if (species == SPECIES_NONE) {
                 return TRUE;
             }
-            if ((u16)(records->gameVersion + minusSeven) <= 1) { // 7 or 8
+            if (records->gameVersion == VERSION_HEARTGOLD || records->gameVersion == VERSION_SOULSILVER) {
                 if (species > maxSpecies || records->peerSpecies > maxSpecies) {
                     return TRUE;
                 }

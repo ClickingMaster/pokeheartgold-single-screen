@@ -261,7 +261,7 @@ void PCBox_FreePaletteData(PCBoxWork *work) {
 
 void PCBox_SetBlendEnabled(int enabled) {
     if (enabled == 1) {
-        G2x_SetBlendAlpha_(0x04000050, 0, 42, 6, 10);
+        G2x_SetBlendAlpha_(REG_BLDCNT_ADDR, GX_BLEND_PLANEMASK_NONE, GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_BD, 6, 10);
     } else {
         reg_G2_BLDCNT = 0;
     }
