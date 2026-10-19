@@ -14,15 +14,14 @@
 
 // How the course sprite factory sets up the Pokemon objects.
 typedef struct PokeathlonCourseObjectsTemplate {
-    BOOL loadAtOnce;               // 0x00
-    int priority;                  // 0x04
-    BOOL vramTransfer;             // 0x08
-    int vram;                      // 0x0C: 1 main, 2 sub, 3 both
-    NNS_G2D_VRAM_TYPE whichScreen; // 0x10
-    int sizeTypes[12];             // 0x14
+    BOOL loadAtOnce;
+    int priority;
+    BOOL vramTransfer;
+    int vram; // 1 main, 2 sub, 3 both
+    NNS_G2D_VRAM_TYPE whichScreen;
+    int sizeTypes[12];
 } PokeathlonCourseObjectsTemplate;
 
-// Course object code (OVY_96, not yet tidied).
 void *PokeathlonCourseMonGfx_GetSprite(void *gfx);
 BOOL PokeathlonCourseMonGfx_IsShiftedUp(void *gfx);
 void PokeathlonCourseMonGfx_SetScale(void *gfx, void *scale, void *y);
@@ -31,33 +30,32 @@ PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(void *objects, u8 inde
 void *PokeathlonCourseMonObject_GetGfx(void *object);
 void PokeathlonCourseMonObject_SetPosition(PokeathlonCourseMonObject *object, int x, int y, int moveShadow);
 
-// ---------------------------------------------------------------------------------------------
 // Sprite pool: resources loaded from NARCs into four resource managers, sprites created from
 // them up front and handed out by resource id and kind.
 
 typedef struct PokeathlonCourseSpritePoolResources {
-    u32 id;                     // 0x00
-    SpriteResource *objects[4]; // 0x04: char, palette, cell, animation
+    u32 id;
+    SpriteResource *objects[4]; // char, palette, cell, animation
 } PokeathlonCourseSpritePoolResources;
 
 struct PokeathlonCourseSpritePoolSprite {
-    u16 taken;      // 0x00
-    u16 shown;      // 0x02
-    Sprite *sprite; // 0x04
-    u16 kind;       // 0x08
-    u16 resId;      // 0x0A
+    u16 taken;
+    u16 shown;
+    Sprite *sprite;
+    u16 kind;
+    u16 resId;
 };
 
 struct PokeathlonCourseSpritePool {
-    enum HeapID heapId;                             // 0x000
-    int count;                                      // 0x004
-    PokeathlonCourseSpritePoolTemplate template;    // 0x008
-    SpriteList *spriteList;                         // 0x014
-    G2dRenderer renderer;                           // 0x018
-    GF_2DGfxResMan *resMans[4];                     // 0x140
-    PokeathlonCourseSpritePoolResources *resources; // 0x150
-    PokeathlonCourseSpritePoolSprite *sprites;      // 0x154
-}; // size: 0x158
+    enum HeapID heapId;
+    int count;
+    PokeathlonCourseSpritePoolTemplate template;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMans[4];
+    PokeathlonCourseSpritePoolResources *resources;
+    PokeathlonCourseSpritePoolSprite *sprites;
+};
 
 void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, s32 radius);
 void PokeathlonCourseObject_SetCollision(PokeathlonCourseMonObject *object, s32 offsetY, s32 radius);

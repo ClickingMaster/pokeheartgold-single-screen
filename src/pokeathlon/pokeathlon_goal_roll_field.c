@@ -240,7 +240,6 @@ void PokeathlonGoalRoll_MoveMons(PokeathlonCourseData *course) {
     }
 }
 
-// PokeathlonGoalRoll_IsWithinAngle as this call was built: with a u16 angle.
 typedef BOOL (*PokeathlonGoalRollIsWithinAngleFunc)(const VecFx32 *a, const VecFx32 *b, u16 angle);
 
 // The balls against the Pokemon (pushed, kicked, knocking a Pokemon back) and the goal posts.
@@ -1088,7 +1087,6 @@ static BOOL PokeathlonGoalRoll_IntersectWall(const VecFx32 *a, const VecFx32 *b,
     }
     VEC_Subtract(b, a, &direction);
     VEC_Normalize(&direction, &direction);
-    // the absolute values are taken by multiplying with -1 (as built)
     if (a->y == b->y) {
         distC = (s32)((u32)a->y - (u32)c->y);
         if (distC < 0) {

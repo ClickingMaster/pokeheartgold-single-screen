@@ -8,35 +8,33 @@
 #include "heap.h"
 #include "math_util.h"
 
-// The computer participants of Ring Drop (the host runs them). Every few frames a computer Pokemon that can act
-// decides: dash at an opponent close in front of it, jump when crowded, chase the opponent with the least stamina,
-// wait, or walk to a random spot. After a number of decisions it may go to its switch spot and switch, the more
-// likely the more tired it is.
+// The computer participants of Ring Drop (the host runs them). Every few frames a computer Pokemon dashes, jumps,
+// chases an opponent, waits or walks to a random spot, and the more tired it is the more likely it goes to switch.
 
 #define RING_DROP_PARTICIPANTS    4
 #define RING_DROP_MON_FALLING_OUT 3
 #define RING_DROP_MON_RETURNING   4
 
-// One computer participant (0xC).
+// One computer participant.
 struct PokeathlonRingDropCpuPlayer {
-    PokeathlonCourseData *course; // 0x0
-    s8 waitFrames;                // 0x4
-    s8 decisions;                 // 0x5: left until it considers switching
-    s8 period;                    // 0x6: frames between decisions
-    s8 chased;                    // 0x7: participant it follows, -1 none
-    u32 participant : 2;          // 0x8
+    PokeathlonCourseData *course;
+    s8 waitFrames;
+    s8 decisions; // left until it considers switching
+    s8 period;    // frames between decisions
+    s8 chased;    // participant it follows, -1 none
+    u32 participant : 2;
     u32 unk08_2 : 2;
     u32 goingToSwitch : 1;
     u32 chasing : 1;
     u32 unk08_6 : 26;
-}; // size: 0xC
+};
 
 struct PokeathlonRingDropCpu {
-    enum HeapID heapId;                     // 0x00
-    PokeathlonCourseData *course;           // 0x04
-    PokeathlonRingDropCpuPlayer players[3]; // 0x08: participants count..3
-    volatile u8 count;                      // 0x2C
-}; // size: 0x30
+    enum HeapID heapId;
+    PokeathlonCourseData *course;
+    PokeathlonRingDropCpuPlayer players[3]; // participants count..3
+    volatile u8 count;
+};
 
 s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, u8 participant);
 VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, u8 participant);

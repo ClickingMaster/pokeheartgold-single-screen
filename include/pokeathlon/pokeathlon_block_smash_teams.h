@@ -4,12 +4,8 @@
 #include "pokeathlon/pokeathlon_block_smash.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 
-// Block Smash: the own team's Pokemon (the active one hits, the other two wait at the side), the
-// other teams' rows on the touch screen and the CPU participants.
-//
-// Every hit costs the active Pokemon stamina; at 0 it is exhausted until it recovered 8. Hitting the
-// weak spot fills the gauge by 30; a full gauge (100) gives every hit +150 power for 90 frames.
-// Swiping up switches to the next Pokemon (the gauge drops by 10).
+// Block Smash: the own team's Pokemon, the other teams' rows on the touch screen and the CPU participants. Every
+// hit costs stamina; hitting the weak spot fills the gauge, and a full gauge gives every hit +150 power for 90 frames.
 
 enum PokeathlonBlockSmashMonMode {
     BLOCK_SMASH_MON_READY,
@@ -18,21 +14,21 @@ enum PokeathlonBlockSmashMonMode {
     BLOCK_SMASH_MON_SWITCHING,
 };
 
-// The own team (0x48).
+// The own team.
 struct PokeathlonBlockSmashMon {
-    enum HeapID heapId;           // 0x00
-    SpriteSystem *spriteSystem;   // 0x04
-    SpriteManager *spriteManager; // 0x08
-    PokeathlonCourseData *course; // 0x0C
+    enum HeapID heapId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    PokeathlonCourseData *course;
     // 0: the active Pokemon, 1: its hit effect, 2: the mark above it, 3: the switch smoke, 4: the ball,
     // 5, 6: the waiting Pokemon, 7, 8: their marks
-    ManagedSprite *sprites[9];             // 0x10
-    PokeathlonBlockSmashMember members[3]; // 0x34
-    u32 member : 2;                        // 0x40: the active Pokemon
+    ManagedSprite *sprites[9];
+    PokeathlonBlockSmashMember members[3];
+    u32 member : 2; // the active Pokemon
     u32 mode : 8;
     u32 frames : 11; // counts up every frame (stamina recovery)
     u32 gaugeTimer : 11;
-    u32 gauge : 8; // 0x44: 0-100
+    u32 gauge : 8; // 0-100
     u32 gaugeFull : 1;
     u32 tired : 1; // the active Pokemon's stamina is low
     u32 switchState : 6;
@@ -43,11 +39,11 @@ struct PokeathlonBlockSmashMon {
 // One of the other teams' rows (the touch screen's upper part).
 typedef struct PokeathlonBlockSmashRival {
     PokeathlonCourseData *course;
-    void *monPics[3];          // 0x04
-    u32 maxStamina[3];         // 0x10
-    ManagedSprite *sprites[6]; // 0x1C: 0: score drop, 1: falling block, 2: stamina mark, 3: gauge effect, 4, 5: switch effects
-    SysTask *switchTask;       // 0x34
-    u32 newMember : 2;         // 0x38
+    void *monPics[3];
+    u32 maxStamina[3];
+    ManagedSprite *sprites[6]; // 0: score drop, 1: falling block, 2: stamina mark, 3: gauge effect, 4, 5: switch effects
+    SysTask *switchTask;
+    u32 newMember : 2;
     u32 switchState : 4;
     u32 switchFrames : 8;
     u32 switching : 1;
@@ -56,16 +52,16 @@ typedef struct PokeathlonBlockSmashRival {
     u32 participant : 2;
     u32 column : 2;
     u32 unk38_29 : 3;
-} PokeathlonBlockSmashRival; // size: 0x3C
+} PokeathlonBlockSmashRival;
 
 struct PokeathlonBlockSmashRivals {
-    enum HeapID heapId;                  // 0x00
-    SpriteSystem *spriteSystem;          // 0x04
-    SpriteManager *spriteManager;        // 0x08
-    PokeathlonCourseData *course;        // 0x0C
-    PokeathlonCourseMonObjects *monPics; // 0x10
-    PokeathlonBlockSmashRival rows[3];   // 0x14
-}; // size: 0xC8
+    enum HeapID heapId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    PokeathlonCourseData *course;
+    PokeathlonCourseMonObjects *monPics;
+    PokeathlonBlockSmashRival rows[3];
+};
 
 enum PokeathlonBlockSmashCpuMode {
     BLOCK_SMASH_CPU_READY,
@@ -76,30 +72,30 @@ enum PokeathlonBlockSmashCpuMode {
 
 // A participant without a player (the host plays them; same rules as the own team).
 typedef struct PokeathlonBlockSmashCpuPlayer {
-    PokeathlonCourseData *course;          // 0x00
-    PokeathlonBlockSmashMember members[3]; // 0x04
-    int blockHealth;                       // 0x10
-    u32 score : 8;                         // 0x14
+    PokeathlonCourseData *course;
+    PokeathlonBlockSmashMember members[3];
+    int blockHealth;
+    u32 score : 8;
     u32 modeFrames : 8;
     u32 gauge : 8;
     u32 mode : 6;
     u32 member : 2;
-    u32 frames : 11; // 0x18
+    u32 frames : 11;
     u32 gaugeTimer : 11;
     u32 wait : 8; // frames until the next decision
     u32 participant : 2;
-    u32 sinceHit : 8; // 0x1C
+    u32 sinceHit : 8;
     u32 recentlyHit : 1;
     u32 gaugeFull : 1;
     u32 unk1C_10 : 22;
     u32 unk20;
-} PokeathlonBlockSmashCpuPlayer; // size: 0x24
+} PokeathlonBlockSmashCpuPlayer;
 
 struct PokeathlonBlockSmashCpu {
-    enum HeapID heapId;                       // 0x00
-    PokeathlonCourseData *course;             // 0x04
-    PokeathlonBlockSmashCpuPlayer players[3]; // 0x08
-    u32 count;                                // 0x74
+    enum HeapID heapId;
+    PokeathlonCourseData *course;
+    PokeathlonBlockSmashCpuPlayer players[3];
+    u32 count;
 };
 
 PokeathlonBlockSmashMon *PokeathlonBlockSmashMon_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);

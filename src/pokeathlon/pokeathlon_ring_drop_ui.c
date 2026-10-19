@@ -29,32 +29,31 @@
 #define RING_DROP_UI_SPRITE_COUNT     18
 
 struct PokeathlonRingDropUi {
-    PokeathlonCourseData *course;                      // 0x00
-    enum HeapID heapId;                                // 0x04
-    SpriteSystem *spriteSystem;                        // 0x08
-    SpriteManager *spriteManager;                      // 0x0C
-    PokeathlonCourseSpriteResources *resources;        // 0x10: the course sprite resources
-    BgConfig *bgConfig;                                // 0x14
-    MsgData *msgData;                                  // 0x18
-    MessageFormat *msgFormat;                          // 0x1C
-    u16 iconPalette;                                   // 0x20
-    u8 participant;                                    // 0x22: the own one
-    NARC *iconNarc;                                    // 0x24
-    void *digitsBuffer;                                // 0x28
-    NNSG2dScreenData *digits;                          // 0x2C: the score digits' tilemap
-    Window nameWindow;                                 // 0x30
-    Window nextNameWindow;                             // 0x40
-    Window labelWindow;                                // 0x50
-    ManagedSprite *sprites[RING_DROP_UI_SPRITE_COUNT]; // 0x60
-    Sprite *timerDigits[2];                            // 0xA8
-    String *memberNames[RING_DROP_TEAM_SIZE];          // 0xB0
-    s8 switchDelays[RING_DROP_PARTICIPANTS];           // 0xBC
-    u8 switchStep;                                     // 0xC0
-    u16 score;                                         // 0xC2
-    BOOL ranksHidden;                                  // 0xC4
-}; // size: 0xC8
+    PokeathlonCourseData *course;
+    enum HeapID heapId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    PokeathlonCourseSpriteResources *resources; // the course sprite resources
+    BgConfig *bgConfig;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    u16 iconPalette;
+    u8 participant; // the own one
+    NARC *iconNarc;
+    void *digitsBuffer;
+    NNSG2dScreenData *digits; // the score digits' tilemap
+    Window nameWindow;
+    Window nextNameWindow;
+    Window labelWindow;
+    ManagedSprite *sprites[RING_DROP_UI_SPRITE_COUNT];
+    Sprite *timerDigits[2];
+    String *memberNames[RING_DROP_TEAM_SIZE];
+    s8 switchDelays[RING_DROP_PARTICIPANTS];
+    u8 switchStep;
+    u16 score;
+    BOOL ranksHidden;
+};
 
-// ui->sprites[index], addressed from the start of the UI (as the code does it)
 #define RING_DROP_UI_SPRITE(ui, index) (*(ManagedSprite **)((u8 *)(ui) + offsetof(PokeathlonRingDropUi, sprites) + (index) * sizeof(ManagedSprite *)))
 
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, u32 participant, u32 member, void *info);
@@ -571,7 +570,6 @@ static void PokeathlonRingDropUi_PrintNextName(PokeathlonRingDropUi *ui, s32 mem
 }
 
 static void PokeathlonRingDropUi_SetPicPosition(PokeathlonRingDropUi *ui, s32 sprite, s32 x, s32 y) {
-    // (the code passes x and y without narrowing them)
     ((void (*)(ManagedSprite *, s32, s32, fx32))ManagedSprite_SetPositionXYWithSubscreenOffset)(ui->sprites[sprite], x, y, FX32_CONST(480));
     ((void (*)(ManagedSprite *, s32, s32, fx32))ManagedSprite_SetPositionXYWithSubscreenOffset)(ui->sprites[sprite + 2], x, (s16)(y - 24), FX32_CONST(480));
 }

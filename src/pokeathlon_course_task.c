@@ -15,14 +15,14 @@ enum {
 };
 
 typedef struct PokeathlonCourseTaskArgs {
-    SaveData *saveData; // 0x00
-    u32 mode;           // 0x04
-    u16 points;         // 0x08
-    u16 totalPoints;    // 0x0A
-    u8 course;          // 0x0C
-    u8 rank;            // 0x0D
-    u8 shouldFreeHeap;  // 0x0E
-    u8 isSupreme;       // 0x0F
+    SaveData *saveData;
+    u32 mode;
+    u16 points;
+    u16 totalPoints;
+    u8 course;
+    u8 rank;
+    u8 shouldFreeHeap;
+    u8 isSupreme;
 } PokeathlonCourseTaskArgs;
 
 typedef struct PokeathlonCourseTaskEnv {

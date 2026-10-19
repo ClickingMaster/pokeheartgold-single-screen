@@ -59,7 +59,6 @@ enum PokeathlonRelayRunInitState {
 typedef char PokeathlonRelayRunSizeCheck[(sizeof(PokeathlonRelayRun) == 0x648 && sizeof(PokeathlonRelayRunTeam) == 0xD4 && sizeof(PokeathlonRelayRunMember) == 0x1C && sizeof(PokeathlonRelayRunPacket) == 0x28 && sizeof(PokeathlonRelayRunTouch) == 0x24 && sizeof(PokeathlonRelayRunLink) == 0x118) ? 1 : -1];
 typedef char PokeathlonRelayRunLayoutCheck[(offsetof(PokeathlonRelayRun, teams) == 0x30 && offsetof(PokeathlonRelayRun, finished) == 0x3C0 && offsetof(PokeathlonRelayRun, cpu) == 0x3DC && offsetof(PokeathlonRelayRun, obstacles) == 0x4D4 && offsetof(PokeathlonRelayRun, timer) == 0x640 && offsetof(PokeathlonRelayRunTeam, position) == 0x7C && offsetof(PokeathlonRelayRunTeam, laps) == 0x9C && offsetof(PokeathlonRelayRunTeam, owner) == 0xD0) ? 1 : -1];
 
-// NitroSDK fixed-point square root, declared by no general header.
 fx32 FX_Sqrt(fx32 x);
 
 f32 _fflt(int value);
@@ -373,7 +372,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
             break;
         }
         own = PokeathlonCourse_GetNetId(course);
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)relayRun->bgConfig); // takes the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)relayRun->bgConfig);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collisions, NARC_a_1_7_0, 12);
         for (i = 0; i < 12; i++) {
@@ -464,7 +463,6 @@ BOOL PokeathlonRelayRun_ShowResults(PokeathlonCourseData *course) {
     int i;
     PokeathlonCourseScoreList_Init(gfx);
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-        // read through an int-returning type and truncated again
         int distance = (u16)((int (*)(PokeathlonCourseData *, int))PokeathlonCourse_GetReceivedScore)(course, (u8)i);
         PokeathlonCourse_AddScoreEntry2(course, gfx, i, distance, (u32)distance >> 10, (distance % RELAY_RUN_TRACK_LENGTH) * 10 / RELAY_RUN_TRACK_LENGTH, 0, 1, 2, 1, msg_0309_00297);
     }
@@ -691,8 +689,6 @@ BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state) {
     return TRUE;
 }
 
-// teamCursor and dragCursor are relayRun moved on by i teams / i flags, so that ->teams[0] / ->dragging[0] is
-// team i's (the loop below walks them that way).
 static inline void PokeathlonRelayRun_ClearDrag(PokeathlonRelayRun *teamCursor, PokeathlonRelayRun *dragCursor) {
     dragCursor->dragging[0] = FALSE;
     teamCursor->teams[0].heldFrames = 0;
@@ -950,7 +946,6 @@ static BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
             PokeathlonCourse_SetFinishCallback(course, PokeathlonRelayRun_SaveResult);
             if (!PokeathlonCourse_GetNetId(course)) {
                 for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-                    // team i through relayRun moved by i teams (shifted->teams[0])
                     PokeathlonRelayRun *shifted = (PokeathlonRelayRun *)((u8 *)relayRun + i * sizeof(PokeathlonRelayRunTeam));
                     for (j = 0; j < RELAY_RUN_MEMBERS; j++) {
                         s32 distance = shifted->teams[0].distance[j] / RELAY_RUN_TRACK_LENGTH;
@@ -1813,7 +1808,7 @@ static int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, 
             return edgeHits.hits[i];
         }
         onEdge = FALSE;
-        if (i == 0 && i == 2) { // never true: the start point is tested against the vertical edges' line only
+        if (i == 0 && i == 2) {
             if (a.y == shape->edges[i][0].y) {
                 if (shape->edges[i][0].x < shape->edges[i][1].x) {
                     lo = shape->edges[i][0].x;

@@ -14,13 +14,13 @@
 
 // What the course reports about a Pokemon for its sprite (the layout of PokeathlonCourseMonInfo).
 typedef struct PokeathlonDiscCatchMonInfo {
-    u16 species;     // 0x00
-    u16 form;        // 0x02
-    u16 isLarge;     // 0x04
-    u8 shiny;        // 0x06
-    u8 gender;       // 0x07
-    int participant; // 0x08
-    u32 personality; // 0x0C
+    u16 species;
+    u16 form;
+    u16 isLarge;
+    u8 shiny;
+    u8 gender;
+    int participant;
+    u32 personality;
 } PokeathlonDiscCatchMonInfo;
 
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);

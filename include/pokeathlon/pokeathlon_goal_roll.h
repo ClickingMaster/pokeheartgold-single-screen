@@ -14,13 +14,8 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// Goal Roll (Pokeathlon event 9): the four participants' teams of three Pokemon share one field
-// with a goal in each corner. Touching a Pokemon and dragging moves it; a Pokemon that dashes into
-// a ball kicks it away. A ball that rolls into a goal scores for the team that kicked it last
-// (1 point, 2 for the big ball) and takes a point from the goal's owner; an own goal only costs a
-// point. Field coordinates are whole pixels of the 256 x 192 touch screen (fx32). The match lasts
-// 2700 frames; the host simulates the field and sends a frame packet each frame; the participants
-// without a player are steered by a simple CPU.
+// Goal Roll: four teams of three Pokemon kick two balls into the goals in the corners of the field. A goal scores
+// for the team that kicked the ball last (2 points for the big ball) and costs the goal's owner a point.
 
 #define GOAL_ROLL_PARTICIPANTS 4
 #define GOAL_ROLL_TEAM_SIZE    3
@@ -28,62 +23,60 @@
 #define GOAL_ROLL_BALLS        2
 #define GOAL_ROLL_NO_MON       12 // "no Pokemon" in the 0..11 mon indices
 
-// Sprite pool of the event (the course sprite helpers' view of it).
 typedef struct PokeathlonGoalRollSprite {
-    u16 active;     // 0x00
-    u16 shown;      // 0x02
-    Sprite *sprite; // 0x04
-    u16 kind;       // 0x08
-    u16 id;         // 0x0A
+    u16 active;
+    u16 shown;
+    Sprite *sprite;
+    u16 kind;
+    u16 id;
 } PokeathlonGoalRollSprite;
 
 typedef struct PokeathlonGoalRollSpritePoolConfig {
-    s32 capacity;        // 0x00
-    s32 resourceCount;   // 0x04
-    u8 managerCounts[4]; // 0x08
+    s32 capacity;
+    s32 resourceCount;
+    u8 managerCounts[4];
 } PokeathlonGoalRollSpritePoolConfig;
 
 typedef struct PokeathlonGoalRollSpritePool {
-    u32 heapId;                                // 0x00
-    s32 used;                                  // 0x04
-    PokeathlonGoalRollSpritePoolConfig config; // 0x08
-    void *spriteList;                          // 0x14
-    G2dRenderer renderer;                      // 0x18
+    u32 heapId;
+    s32 used;
+    PokeathlonGoalRollSpritePoolConfig config;
+    void *spriteList;
+    G2dRenderer renderer;
     void *resources[4];
     u8 *resourceRecords;
     PokeathlonGoalRollSprite *records;
 } PokeathlonGoalRollSpritePool;
 
-// A Pokemon's object in the course's 3D object list (PokeathlonCourseMonObjects_Get).
 typedef struct PokeathlonGoalRollMonObject {
-    void *object;              // 0x00
-    void *sprite1;             // 0x04
-    void *sprite2;             // 0x08
-    u8 markerOffsetY[4];       // 0x0C
-    s32 offsetY;               // 0x10
-    s32 offsetX;               // 0x14
-    s32 halfHeight;            // 0x18
-    s32 radius;                // 0x1C
-    s32 x;                     // 0x20
-    s32 y;                     // 0x24
-    s32 center;                // 0x28
-    s32 bottom;                // 0x2C
-    s32 height;                // 0x30
-    u32 state;                 // 0x34
-    u32 anim;                  // 0x38
-    s32 priority;              // 0x3C
-    u32 hideSecondary;         // 0x40
-} PokeathlonGoalRollMonObject; // size: 0x44
+    void *object;
+    void *sprite1;
+    void *sprite2;
+    u8 markerOffsetY[4];
+    s32 offsetY;
+    s32 offsetX;
+    s32 halfHeight;
+    s32 radius;
+    s32 x;
+    s32 y;
+    s32 center;
+    s32 bottom;
+    s32 height;
+    u32 state;
+    u32 anim;
+    s32 priority;
+    u32 hideSecondary;
+} PokeathlonGoalRollMonObject;
 
 typedef struct PokeathlonGoalRollMonObjects {
-    u32 heapId;                                          // 0x00
-    int count;                                           // 0x04
-    int baseDrawPriority;                                // 0x08
-    u32 loaded;                                          // 0x0C
-    void *spriteList;                                    // 0x10
-    void *gfxManager;                                    // 0x14
-    void *resources;                                     // 0x18
-    PokeathlonGoalRollMonObject entries[GOAL_ROLL_MONS]; // 0x1C
+    u32 heapId;
+    int count;
+    int baseDrawPriority;
+    u32 loaded;
+    void *spriteList;
+    void *gfxManager;
+    void *resources;
+    PokeathlonGoalRollMonObject entries[GOAL_ROLL_MONS];
 } PokeathlonGoalRollMonObjects;
 
 typedef struct PokeathlonGoalRollResources {
@@ -94,7 +87,6 @@ typedef struct PokeathlonGoalRollResources {
     u8 unk1C[0x98];
 } PokeathlonGoalRollResources;
 
-// mode of a Pokemon
 #define GOAL_ROLL_MODE_WALK    0
 #define GOAL_ROLL_MODE_DASH    1 // released after a short touch: kicks the balls it runs into
 #define GOAL_ROLL_MODE_STUNNED 2 // hit by a kicked ball without power left
@@ -106,115 +98,111 @@ typedef struct PokeathlonGoalRollResources {
 #define GOAL_ROLL_MOTION_2         2
 #define GOAL_ROLL_MOTION_KNOCKBACK 3 // hit by a kicked ball: spins while pushed back
 
-// One Pokemon on the field.
 typedef struct PokeathlonGoalRollMon {
-    PokeathlonGoalRollMonObject *object;       // 0x00
-    PokeathlonGoalRollSprite *dashSprite;      // 0x04: shown while dashing or stunned
-    PokeathlonGoalRollSprite *trailSprites[3]; // 0x08: dash trail, used in turn
-    s32 startX;                                // 0x14
-    s32 startY;                                // 0x18
-    u32 unk1C;                                 // 0x1C
-    int radius;                                // 0x20
-    VecFx32 target;                            // 0x24: where it walks to
-    VecFx32 position;                          // 0x30
-    VecFx32 direction;                         // 0x3C
-    int motion;                                // 0x48
-    VecFx32 motionStep;                        // 0x4C
-    s16 motionFrames;                          // 0x58
-    s16 motionWait;                            // 0x5A
-    u16 facing;                                // 0x5C: 1..4
-    u16 goals;                                 // 0x5E
-    u8 stunTimer;                              // 0x60
-    u8 recoverTimer;                           // 0x61
-    u8 trailIndex;                             // 0x62
-    u8 trailCooldown;                          // 0x63
-    fx32 walkSpeed;                            // 0x64
-    fx32 dashSpeed;                            // 0x68
-    u16 kickAngle;                             // 0x6C: half width of the kick cone, in degrees
-    u16 unk6E;                                 // 0x6E
-    u8 maxPower;                               // 0x70
-    u8 power;                                  // 0x71: lost when hit by a kicked ball, recovers over time
-    u8 kickPower;                              // 0x72
-    u8 kickRow;                                // 0x73: row of the ball speed tables
-    u8 powerLevel;                             // 0x74
-    u8 kickLevel;                              // 0x75: how long a kicked ball keeps going (gPokeathlonGoalRollKickSpeeds)
-    u8 unk76[2];                               // 0x76
-    int mode;                                  // 0x78
-} PokeathlonGoalRollMon;                       // size: 0x7C
+    PokeathlonGoalRollMonObject *object;
+    PokeathlonGoalRollSprite *dashSprite;      // shown while dashing or stunned
+    PokeathlonGoalRollSprite *trailSprites[3]; // dash trail, used in turn
+    s32 startX;
+    s32 startY;
+    u32 unk1C;
+    int radius;
+    VecFx32 target; // where it walks to
+    VecFx32 position;
+    VecFx32 direction;
+    int motion;
+    VecFx32 motionStep;
+    s16 motionFrames;
+    s16 motionWait;
+    u16 facing; // 1..4
+    u16 goals;
+    u8 stunTimer;
+    u8 recoverTimer;
+    u8 trailIndex;
+    u8 trailCooldown;
+    fx32 walkSpeed;
+    fx32 dashSpeed;
+    u16 kickAngle; // half width of the kick cone, in degrees
+    u16 unk6E;
+    u8 maxPower;
+    u8 power; // lost when hit by a kicked ball, recovers over time
+    u8 kickPower;
+    u8 kickRow; // row of the ball speed tables
+    u8 powerLevel;
+    u8 kickLevel; // how long a kicked ball keeps going (gPokeathlonGoalRollKickSpeeds)
+    u8 unk76[2];
+    int mode;
+} PokeathlonGoalRollMon;
 
-// ball kind
 #define GOAL_ROLL_BALL_NONE  0
 #define GOAL_ROLL_BALL_SMALL 1 // radius 8, 1 point
 #define GOAL_ROLL_BALL_BIG   2 // radius 12, 2 points
 
-// ball state
 #define GOAL_ROLL_BALL_ROLLING 0
 #define GOAL_ROLL_BALL_SCORED  1
 #define GOAL_ROLL_BALL_KICKED  2
 #define GOAL_ROLL_BALL_WAITING 3
 
 typedef struct PokeathlonGoalRollBall {
-    PokeathlonGoalRollSprite *sprite;       // 0x00
-    PokeathlonGoalRollSprite *effectSprite; // 0x04
-    VecFx32 position;                       // 0x08
-    VecFx32 velocity;                       // 0x14
-    VecFx32 direction;                      // 0x20
-    u8 touching[GOAL_ROLL_MONS];            // 0x2C
-    u8 kind;                                // 0x38
-    u8 state;                               // 0x39
-    u8 timer;                               // 0x3A
-    u8 lastKicker;                          // 0x3B: mon index, GOAL_ROLL_NO_MON if none
-    u8 step;                                // 0x3C
-    u8 steps;                               // 0x3D
-    u8 speedTable;                          // 0x3E
-    u8 scored;                              // 0x3F
-    u8 speed;                               // 0x40
-    u8 speedRow;                            // 0x41
-    u8 spawnPoint;                          // 0x42: where it last appeared (gPokeathlonGoalRollBallSpawnPoints)
-    u8 wait;                                // 0x43
-    u8 shownState;                          // 0x44: state shown last (every participant)
-    u8 strength;                            // 0x45
-    u16 kickLevel;                          // 0x46: of the last kick
-    int bounced;                            // 0x48
-} PokeathlonGoalRollBall;                   // size: 0x4C
+    PokeathlonGoalRollSprite *sprite;
+    PokeathlonGoalRollSprite *effectSprite;
+    VecFx32 position;
+    VecFx32 velocity;
+    VecFx32 direction;
+    u8 touching[GOAL_ROLL_MONS];
+    u8 kind;
+    u8 state;
+    u8 timer;
+    u8 lastKicker; // mon index, GOAL_ROLL_NO_MON if none
+    u8 step;
+    u8 steps;
+    u8 speedTable;
+    u8 scored;
+    u8 speed;
+    u8 speedRow;
+    u8 spawnPoint; // where it last appeared (gPokeathlonGoalRollBallSpawnPoints)
+    u8 wait;
+    u8 shownState; // state shown last (every participant)
+    u8 strength;
+    u16 kickLevel; // of the last kick
+    int bounced;
+} PokeathlonGoalRollBall;
 
 // Blinking name plate of a participant (top of the touch screen).
 typedef struct PokeathlonGoalRollPlate {
-    u8 state;                         // 0x00
-    u8 id;                            // 0x01
-    volatile u8 timer;                // 0x02
-    s8 unk03;                         // 0x03
-    SysTask *task;                    // 0x04
-    struct PokeathlonGoalRoll *owner; // 0x08
-    u8 delay;                         // 0x0C
-    u8 toggle;                        // 0x0D
-    u8 gained;                        // 0x0E: 1 = scored, 0 = lost a point
-    u8 bigBall;                       // 0x0F
-} PokeathlonGoalRollPlate;            // size: 0x10
+    u8 state;
+    u8 id;
+    volatile u8 timer;
+    s8 unk03;
+    SysTask *task;
+    struct PokeathlonGoalRoll *owner;
+    u8 delay;
+    u8 toggle;
+    u8 gained; // 1 = scored, 0 = lost a point
+    u8 bigBall;
+} PokeathlonGoalRollPlate;
 
-// A participant's touch input state.
 typedef struct PokeathlonGoalRollTouch {
-    int newPress; // 0x00: set on the first frame of a touch
-    int held;     // 0x04
-    int unk08;    // 0x08
+    int newPress; // set on the first frame of a touch
+    int held;
+    int unk08;
 } PokeathlonGoalRollTouch;
 
 // The top screen (timer, the own name).
 typedef struct PokeathlonGoalRollDisplay {
-    enum HeapID heapId;                         // 0x00
-    PokeathlonCourseData *course;               // 0x04
-    Sprite *timerDigits[2];                     // 0x08
-    BgConfig *bgConfig;                         // 0x10
-    Window nameWindow;                          // 0x14
-    Window messageWindow;                       // 0x24
-    MsgData *msgData;                           // 0x34
-    MessageFormat *msgFormat;                   // 0x38
-    NNSG2dScreenData *digitScreen;              // 0x3C
-    void *digitScreenData;                      // 0x40
-    u32 ownScore;                               // 0x44
-    u32 secondWindShown;                        // 0x48: "Second Wind!" (the second ball) shown instead of the timer
-    PokeathlonGoalRollSprite *timerLabelSprite; // 0x4C: hidden once the message replaces the timer
-} PokeathlonGoalRollDisplay;                    // size: 0x50
+    enum HeapID heapId;
+    PokeathlonCourseData *course;
+    Sprite *timerDigits[2];
+    BgConfig *bgConfig;
+    Window nameWindow;
+    Window messageWindow;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    NNSG2dScreenData *digitScreen;
+    void *digitScreenData;
+    u32 ownScore;
+    u32 secondWindShown;                        // "Second Wind!" (the second ball) shown instead of the timer
+    PokeathlonGoalRollSprite *timerLabelSprite; // hidden once the message replaces the timer
+} PokeathlonGoalRollDisplay;
 
 // The CPU: per participant the order in which it moves its three Pokemon.
 typedef struct PokeathlonGoalRollCpuSlot {
@@ -223,36 +211,36 @@ typedef struct PokeathlonGoalRollCpuSlot {
 } PokeathlonGoalRollCpuSlot;
 
 typedef struct PokeathlonGoalRollCpuTeam {
-    PokeathlonGoalRollCpuSlot order[3]; // 0x00: [0] the striker, then the other two
-    PokeathlonGoalRollMon *mons[3];     // 0x18
-} PokeathlonGoalRollCpuTeam;            // size: 0x24
+    PokeathlonGoalRollCpuSlot order[3]; // [0] the striker, then the other two
+    PokeathlonGoalRollMon *mons[3];
+} PokeathlonGoalRollCpuTeam;
 
 typedef struct PokeathlonGoalRollCpu {
-    PokeathlonGoalRollCpuTeam teams[GOAL_ROLL_PARTICIPANTS]; // 0x00
-    PokeathlonGoalRollBall *balls;                           // 0x90
-    u32 run;                                                 // 0x94: set every `interval` frames
-    u8 cpuCount;                                             // 0x98
-    u8 current;                                              // 0x99
-    u8 timer;                                                // 0x9A
-    u8 interval;                                             // 0x9B
-    u8 orderSlot;                                            // 0x9C
-    u8 firstCpu;                                             // 0x9D
-    u8 humanCount;                                           // 0x9E
-    u8 unk9F;                                                // 0x9F
-} PokeathlonGoalRollCpu;                                     // size: 0xA0
+    PokeathlonGoalRollCpuTeam teams[GOAL_ROLL_PARTICIPANTS];
+    PokeathlonGoalRollBall *balls;
+    u32 run; // set every `interval` frames
+    u8 cpuCount;
+    u8 current;
+    u8 timer;
+    u8 interval;
+    u8 orderSlot;
+    u8 firstCpu;
+    u8 humanCount;
+    u8 unk9F;
+} PokeathlonGoalRollCpu;
 
-// Screen shake (Ring Drop; the task is defined with the Goal Roll CPU code).
+// Screen shake (Ring Drop).
 typedef struct PokeathlonScreenShake {
-    SpriteSystem *spriteSystem; // 0x00
-    BgConfig *bgConfig;         // 0x04
-    SysTask *task;              // 0x08
-    fx32 offset;                // 0x0C
-    fx32 step;                  // 0x10
-    s8 frame;                   // 0x14
-    u8 duration;                // 0x15
-    u8 magnitude;               // 0x16
-    u8 unk17;                   // 0x17
-    u32 direction;              // 0x18
+    SpriteSystem *spriteSystem;
+    BgConfig *bgConfig;
+    SysTask *task;
+    fx32 offset;
+    fx32 step;
+    s8 frame;
+    u8 duration;
+    u8 magnitude;
+    u8 unk17;
+    u32 direction;
 } PokeathlonScreenShake;
 
 // NARC a/1/7/0 member 8: the move parameters per stat level (indexed by the Pokemon's levels).
@@ -267,21 +255,21 @@ typedef struct PokeathlonGoalRollMonParams {
 
 // A participant's input (in the course's data copy area).
 typedef struct PokeathlonGoalRollInput {
-    u32 touching; // 0x00
-    u8 x;         // 0x04
-    u8 y;         // 0x05
+    u32 touching;
+    u8 x;
+    u8 y;
 } PokeathlonGoalRollInput;
 
 // The frame the host sends every frame.
 typedef struct PokeathlonGoalRollFramePacket {
-    u8 monX[GOAL_ROLL_MONS];     // 0x00
-    u8 monY[GOAL_ROLL_MONS];     // 0x0C
-    u8 ballX[GOAL_ROLL_BALLS];   // 0x18
-    u8 ballY[GOAL_ROLL_BALLS];   // 0x1A: see PokeathlonGoalRoll_EncodeBallY
-    s32 states;                  // 0x1C: 2 bits facing - 1 per mon, 2 bits state per ball (<< 24),
-                                 //       score slot (<< 28), big ball (bit 30), second ball active (bit 31)
-    s32 flags;                   // 0x20: 2 bits mode per mon, time up (bit 24), score (<< 25)
-} PokeathlonGoalRollFramePacket; // size: 0x24
+    u8 monX[GOAL_ROLL_MONS];
+    u8 monY[GOAL_ROLL_MONS];
+    u8 ballX[GOAL_ROLL_BALLS];
+    u8 ballY[GOAL_ROLL_BALLS]; // see PokeathlonGoalRoll_EncodeBallY
+    s32 states;                // 2 bits facing - 1 per mon, 2 bits state per ball (<< 24), score slot (<< 28),
+                               // big ball (bit 30), second ball active (bit 31)
+    s32 flags;                 // 2 bits mode per mon, time up (bit 24), score (<< 25)
+} PokeathlonGoalRollFramePacket;
 
 // gPokeathlonGoalRollPaletteData: the plate flash palettes (two for a lost point, two for a goal), followed by the
 // total points window template (gPokeathlonGoalRollWindowData) and the four goal palettes.
@@ -297,39 +285,39 @@ typedef struct PokeathlonGoalRollPaletteData {
 
 // The event's work (PokeathlonCourse_GetWork).
 typedef struct PokeathlonGoalRoll {
-    PokeathlonGoalRollSpritePool *spritePool;                                // 0x000
-    BgConfig *bgConfig;                                                      // 0x004
-    Window scoreWindow;                                                      // 0x008
-    Window nameWindows[GOAL_ROLL_PARTICIPANTS];                              // 0x018
-    enum HeapID heapId;                                                      // 0x058
-    PokeathlonGoalRollMon mons[GOAL_ROLL_PARTICIPANTS][GOAL_ROLL_TEAM_SIZE]; // 0x05C
-    PokeathlonGoalRollBall balls[GOAL_ROLL_BALLS];                           // 0x62C
-    PokeathlonGoalRollSprite *goalSprites[GOAL_ROLL_PARTICIPANTS];           // 0x6C4
-    PokeathlonGoalRollSprite *goalFlashSprites[GOAL_ROLL_PARTICIPANTS];      // 0x6D4
-    PokeathlonGoalRollSprite *goalLabelSprites[GOAL_ROLL_PARTICIPANTS];      // 0x6E4
-    s32 scores[GOAL_ROLL_PARTICIPANTS];                                      // 0x6F4
-    PokeathlonGoalRollTouch touch[GOAL_ROLL_PARTICIPANTS];                   // 0x704
-    u8 heldMon[GOAL_ROLL_PARTICIPANTS];                                      // 0x734: mon index touched by each participant
-    int timer;                                                               // 0x738: frames left
-    u8 packetScoreSlot;                                                      // 0x73C: whose score goes into the next frame packet
-    u8 unk73D;                                                               // 0x73D
-    u8 timeUp;                                                               // 0x73E
-    u8 unk73F[3];                                                            // 0x73F
-    u8 holdFrames;                                                           // 0x742
-    u8 bigBallMisses;                                                        // 0x743
-    PokeathlonGoalRollResources *resources;                                  // 0x744
-    PokeathlonGoalRollMonObjects *monObjects;                                // 0x748
-    PokeathlonGoalRollCpu *cpu;                                              // 0x74C
-    PokeathlonGoalRollDisplay *display;                                      // 0x750
-    VecFx32 walls[8];                                                        // 0x754
-    u8 ballInGoalArea[4];                                                    // 0x7B4: per ball, for the sound
-    String *plateStrings[3];                                                 // 0x7B8
-    String *nameStrings[GOAL_ROLL_PARTICIPANTS];                             // 0x7C4
-    PokeathlonGoalRollPlate plates[GOAL_ROLL_PARTICIPANTS];                  // 0x7D4
-    u8 shownScores[GOAL_ROLL_PARTICIPANTS];                                  // 0x814
-    u8 leading[GOAL_ROLL_PARTICIPANTS];                                      // 0x818
-    void *sortWork;                                                          // 0x81C
-} PokeathlonGoalRoll;                                                        // size: 0x820
+    PokeathlonGoalRollSpritePool *spritePool;
+    BgConfig *bgConfig;
+    Window scoreWindow;
+    Window nameWindows[GOAL_ROLL_PARTICIPANTS];
+    enum HeapID heapId;
+    PokeathlonGoalRollMon mons[GOAL_ROLL_PARTICIPANTS][GOAL_ROLL_TEAM_SIZE];
+    PokeathlonGoalRollBall balls[GOAL_ROLL_BALLS];
+    PokeathlonGoalRollSprite *goalSprites[GOAL_ROLL_PARTICIPANTS];
+    PokeathlonGoalRollSprite *goalFlashSprites[GOAL_ROLL_PARTICIPANTS];
+    PokeathlonGoalRollSprite *goalLabelSprites[GOAL_ROLL_PARTICIPANTS];
+    s32 scores[GOAL_ROLL_PARTICIPANTS];
+    PokeathlonGoalRollTouch touch[GOAL_ROLL_PARTICIPANTS];
+    u8 heldMon[GOAL_ROLL_PARTICIPANTS]; // mon index touched by each participant
+    int timer;                          // frames left
+    u8 packetScoreSlot;                 // whose score goes into the next frame packet
+    u8 unk73D;
+    u8 timeUp;
+    u8 unk73F[3];
+    u8 holdFrames;
+    u8 bigBallMisses;
+    PokeathlonGoalRollResources *resources;
+    PokeathlonGoalRollMonObjects *monObjects;
+    PokeathlonGoalRollCpu *cpu;
+    PokeathlonGoalRollDisplay *display;
+    VecFx32 walls[8];
+    u8 ballInGoalArea[4]; // per ball, for the sound
+    String *plateStrings[3];
+    String *nameStrings[GOAL_ROLL_PARTICIPANTS];
+    PokeathlonGoalRollPlate plates[GOAL_ROLL_PARTICIPANTS];
+    u8 shownScores[GOAL_ROLL_PARTICIPANTS];
+    u8 leading[GOAL_ROLL_PARTICIPANTS];
+    void *sortWork;
+} PokeathlonGoalRoll;
 
 BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course);
 BOOL PokeathlonGoalRoll_Draw(PokeathlonCourseData *course);

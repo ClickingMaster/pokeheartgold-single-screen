@@ -11,15 +11,14 @@
 #include "filesystem.h"
 #include "sprite_system.h"
 
-// Two course screens: the link screen "Waiting for everyone's selection..." (msg 309 #310), and
-// the introduction of the next event (msg 309 #197-245): its banner, number, rules and best
-// record on the bottom screen, and the pages "Rules" and "Controls" behind the touch buttons.
+// Two course screens: the link screen "Waiting for everyone's selection..." and the introduction of the next
+// event, with its banner, rules and best record and the "Rules" and "Controls" pages.
 
 typedef struct PokeathlonCourseWait {
-    enum HeapID heapId;                     // 0x00
-    BgConfig *bgConfig;                     // 0x04
-    PokeathlonCourseMessageBox *messageBox; // 0x08
-    int timer;                              // 0x0C
+    enum HeapID heapId;
+    BgConfig *bgConfig;
+    PokeathlonCourseMessageBox *messageBox;
+    int timer;
 } PokeathlonCourseWait;
 
 enum PokeathlonEventIntroPage {
@@ -29,25 +28,25 @@ enum PokeathlonEventIntroPage {
 };
 
 typedef struct PokeathlonEventIntro {
-    PokeathlonCourseData *course;  // 0x00
-    BgConfig *bgConfig;            // 0x04
-    NARC *narc;                    // 0x08: a/2/1/9
-    enum HeapID heapId;            // 0x0C
-    SpriteSystem *spriteSystem;    // 0x10
-    SpriteManager *spriteManager;  // 0x14
-    u32 page;                      // 0x18: enum PokeathlonEventIntroPage
-    int timer;                     // 0x1C
-    u8 event;                      // 0x20
-    u8 animStep;                   // 0x21: animation of the event's mascot
-    u8 round;                      // 0x22
-    u8 unk23;                      // 0x23
-    BOOL linkMode;                 // 0x24
-    BOOL showRecord;               // 0x28
-    BOOL zooming;                  // 0x2C
-    PokeathlonTextContext *text;   // 0x30
-    PokeathlonEventBanner *banner; // 0x34
-    ManagedSprite *sprites[4];     // 0x38: buttons, mascot, Pokemon
-} PokeathlonEventIntro;            // size: 0x48
+    PokeathlonCourseData *course;
+    BgConfig *bgConfig;
+    NARC *narc; // a/2/1/9
+    enum HeapID heapId;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    u32 page; // enum PokeathlonEventIntroPage
+    int timer;
+    u8 event;
+    u8 animStep; // animation of the event's mascot
+    u8 round;
+    u8 unk23;
+    BOOL linkMode;
+    BOOL showRecord;
+    BOOL zooming;
+    PokeathlonTextContext *text;
+    PokeathlonEventBanner *banner;
+    ManagedSprite *sprites[4]; // buttons, mascot, Pokemon
+} PokeathlonEventIntro;
 
 BOOL PokeathlonCourseWait_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCourseWait_Main(void);

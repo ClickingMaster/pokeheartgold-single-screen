@@ -12,91 +12,86 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// The opening and closing ceremonies of a Pokeathlon course (msg 309 #0-31). The opening
-// introduces the teams (course name, then every team with its three Pokemon and a line about
-// its record); the closing gives the bonus points (Challenge Bonus, No-Miss Bonus, points
-// leader, prize for effort), adds up the event points and names the winner, its medals and
-// records. The host decides the introductions and the awards and sends them with the course
-// data; every player shows them in step with the others.
+// The opening and closing ceremonies of a Pokeathlon course. The host decides the introductions and the awards and
+// sends them with the course data; every player shows them in step with the others.
 
-// One team's introduction line, chosen by the host (8 bytes).
+// One team's introduction line, chosen by the host.
 typedef struct PokeathlonCourseCeremonyIntro {
     u32 msgId;      // msg 311 # (NPC team) or msg 309 # (player)
     u32 value : 24; // the number in the line
     u32 cheer : 8;  // 0..12: pitch of the crowd's cheer (sPokeathlonCourseCeremonyCheerPitches)
 } PokeathlonCourseCeremonyIntro;
 
-// What the host sends for the opening (at course data copy area + 0x28).
+// What the host sends for the opening.
 typedef struct PokeathlonCourseCeremonyOpeningData {
-    PokeathlonCourseCeremonyIntro intros[4]; // 0x00
-    u8 messageCount;                         // 0x20: how far the host's text is
-    u8 waiting : 1;                          // 0x21: a player is behind the host
+    PokeathlonCourseCeremonyIntro intros[4];
+    u8 messageCount; // how far the host's text is
+    u8 waiting : 1;  // a player is behind the host
     u8 allFinished : 1;
     u8 unk21_2 : 6;
 } PokeathlonCourseCeremonyOpeningData;
 
-// What the host sends for the closing (at course data copy area + 0x28).
+// What the host sends for the closing.
 typedef struct PokeathlonCourseCeremonyClosingData {
-    u8 challengeBonus[4];      // 0x00: per team
-    u32 effortPrizeKind : 3;   // 0x04: statistic of the prize for effort (4: none)
+    u8 challengeBonus[4];      // per team
+    u32 effortPrizeKind : 3;   // statistic of the prize for effort (4: none)
     u32 effortPrizeMons : 12;  // bit per Pokemon (team * 3 + member)
     u32 noMissMons : 12;       // Pokemon that did not miss
-    u32 unk04_27 : 5;          //
-    u32 maxEffort : 16;        // 0x08
+    u32 unk04_27 : 5;
+    u32 maxEffort : 16;
     u32 pointsLeaderMons : 12; // Pokemon that collected the most points
     u32 waiting : 1;           // a player is behind the host
     u32 allFinished : 1;
     u32 unk08_30 : 2;
-    u8 messageCount;   // 0x0C: how far the host's text is
-    u8 drawingLots[4]; // 0x0D: tie-break order of the teams
+    u8 messageCount;   // how far the host's text is
+    u8 drawingLots[4]; // tie-break order of the teams
 } PokeathlonCourseCeremonyClosingData;
 
-// What every player sends back (at course data copy area + 0x00, the host keeps them at
-// + 0x50 + 0x28 * participant).
+// What every player sends back.
 typedef struct PokeathlonCourseCeremonySync {
     u8 messageCount;
     u8 printing;
     u8 finished;
 } PokeathlonCourseCeremonySync;
 
-// A Pokemon of a participant's team (0x28, PokeathlonCourse_GetParticipantMons).
+// A Pokemon of a participant's team (PokeathlonCourse_GetParticipantMons).
 typedef struct PokeathlonCourseCeremonyMon {
-    u16 species;      // 0x00
-    u16 form;         // 0x02
-    u8 unk04[0xE];    // 0x04
-    u16 nickname[11]; // 0x12
+    u16 species;
+    u16 form;
+    u8 unk04[0xE];
+    u16 nickname[11];
 } PokeathlonCourseCeremonyMon;
 
-// Statistics of a Pokemon in the events of the course (PokeathlonCourseData field data, 0x20).
+// Statistics of a Pokemon in the events of the course (PokeathlonCourseData field data).
 typedef struct PokeathlonCourseMonEventStats {
-    u32 failed;      // 0x00
-    u32 jumped;      // 0x04
-    u32 points;      // 0x08
-    u32 hit;         // 0x0C
-    u32 fellDown;    // 0x10
-    u32 dashed;      // 0x14
-    u32 switched;    // 0x18
-    u32 selfImpeded; // 0x1C
+    u32 failed;
+    u32 jumped;
+    u32 points;
+    u32 hit;
+    u32 fellDown;
+    u32 dashed;
+    u32 switched;
+    u32 selfImpeded;
 } PokeathlonCourseMonEventStats;
 
 // Result of the ceremony kept in the field data for the course statistics.
 typedef struct PokeathlonCourseCeremonyResult {
     u8 unk000[0x180];
-    u32 awards; // 0x180: bonus awards of the player's team
+    u32 awards; // bonus awards of the player's team
     u8 unk184[0x4C];
-    u16 won : 1;          // 0x1D0
-    u16 fewestPoints : 1; //
-    u16 place : 2;        //
-    u16 unk1D0_4 : 12;    //
-    u16 points;           // 0x1D2
+    u16 won : 1;
+    u16 fewestPoints : 1;
+    u16 place : 2;
+    u16 unk1D0_4 : 12;
+    u16 points;
 } PokeathlonCourseCeremonyResult;
 
 // Team points of the closing ceremony: counts up to the points, three digit sprites.
 typedef struct PokeathlonCourseCeremonyScore {
-    ManagedSprite *sprites[4]; // 0x00: plate, hundreds, tens, ones
-    u32 points;                // 0x10
-    u32 shownPoints;           // 0x14
-    BOOL counting;             // 0x18
+    ManagedSprite *sprites[4]; // plate, hundreds, tens, ones
+    u32 points;
+    u32 shownPoints;
+    BOOL counting;
 } PokeathlonCourseCeremonyScore;
 
 // Place of a team, after sorting by points.
@@ -130,13 +125,13 @@ typedef struct PokeathlonCourseConfettiPiece {
 } PokeathlonCourseConfettiPiece;
 
 typedef struct PokeathlonCourseConfetti {
-    enum HeapID heapId;                       // 0x000
-    PokeathlonCourseConfettiPiece pieces[15]; // 0x004
-    SpriteSystem *spriteSystem;               // 0x16C
-    SpriteManager *spriteManager;             // 0x170
-    u32 timer;                                // 0x174
-    u32 delay;                                // 0x178
-    BOOL active;                              // 0x17C
+    enum HeapID heapId;
+    PokeathlonCourseConfettiPiece pieces[15];
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    u32 timer;
+    u32 delay;
+    BOOL active;
 } PokeathlonCourseConfetti;
 
 typedef struct PokeathlonCourseCeremonyCryTask {
@@ -147,43 +142,43 @@ typedef struct PokeathlonCourseCeremonyCryTask {
 } PokeathlonCourseCeremonyCryTask;
 
 typedef struct PokeathlonCourseCeremony {
-    enum HeapID heapId;                               // 0x00
-    BgConfig *bgConfig;                               // 0x04
-    SysTask *cryTask;                                 // 0x08
-    PokeathlonCourseMessageBox *messageBox;           // 0x0C
-    PokeathlonCourseSpriteResources *spriteResources; // 0x10
-    PokeathlonCourseMonObjects *objects;              // 0x14: the 12 Pokemon
-    SpriteSystem *spriteSystem;                       // 0x18
-    SpriteManager *spriteManager;                     // 0x1C
+    enum HeapID heapId;
+    BgConfig *bgConfig;
+    SysTask *cryTask;
+    PokeathlonCourseMessageBox *messageBox;
+    PokeathlonCourseSpriteResources *spriteResources;
+    PokeathlonCourseMonObjects *objects; // the 12 Pokemon
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
 
     union {
-        ManagedSprite *sprites[26]; // 0x20
+        ManagedSprite *sprites[26];
 
         struct {
-            ManagedSprite *trainerSprites[5];  // 0x20: four teams and the host of the ceremony
-            ManagedSprite *scoreSprites[4][4]; // 0x34
-            ManagedSprite *monPicSprites[3];   // 0x74: the winning team
-            ManagedSprite *medalSprites[2];    // 0x80
+            ManagedSprite *trainerSprites[5]; // four teams and the host of the ceremony
+            ManagedSprite *scoreSprites[4][4];
+            ManagedSprite *monPicSprites[3]; // the winning team
+            ManagedSprite *medalSprites[2];
         };
     };
 
-    PokeathlonCourseCeremonyCryTask *cryData; // 0x88
-    PokeathlonCourseCeremonyScore *scores;    // 0x8C: four teams
-    PokeathlonCourseConfetti *confetti;       // 0x90
-    int timer;                                // 0x94
-    BOOL cryActive;                           // 0x98
-    PokeathlonCourseCeremonyRank ranks[4];    // 0x9C
-    u8 awardCounts[4];                        // 0xAC
-    u8 cheering;                              // 0xB0
-    u8 course;                                // 0xB1
-    u8 team;                                  // 0xB2
-    u8 member;                                // 0xB3
-    u8 counter;                               // 0xB4
-    u8 state;                                 // 0xB5
-    u8 unkB6;                                 // 0xB6
-    u8 messageCount;                          // 0xB7
-    BOOL finished;                            // 0xB8
-} PokeathlonCourseCeremony;                   // size: 0xBC
+    PokeathlonCourseCeremonyCryTask *cryData;
+    PokeathlonCourseCeremonyScore *scores; // four teams
+    PokeathlonCourseConfetti *confetti;
+    int timer;
+    BOOL cryActive;
+    PokeathlonCourseCeremonyRank ranks[4];
+    u8 awardCounts[4];
+    u8 cheering;
+    u8 course;
+    u8 team;
+    u8 member;
+    u8 counter;
+    u8 state;
+    u8 unkB6;
+    u8 messageCount;
+    BOOL finished;
+} PokeathlonCourseCeremony;
 
 typedef u32 (*PokeathlonCourseCeremonyAwardTest)(PokeathlonCourseData *course, int team, int member);
 

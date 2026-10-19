@@ -65,11 +65,9 @@ enum PokeathlonEventIntroFadeOutState {
 
 FS_EXTERN_OVERLAY(OVY_98);
 
-// Not declared by a header yet.
 void SetBothScreensBrightnessByColor(u16 color);
 void GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 
-// Copied as a whole (one block copy).
 typedef struct EventIntroBgTemplates {
     BgTemplate templates[7];
 } EventIntroBgTemplates;
@@ -744,8 +742,7 @@ static void PokeathlonEventIntro_ResetMascot(PokeathlonEventIntro *intro) {
     PokeathlonEventIntro_SetMascotAnim(intro);
 }
 
-// Places the templates (in .data) at the positions of layout 0 and creates the sprites. The
-// template is written through one pointer and read through another.
+// Places the templates at the positions of layout 0 and creates the sprites.
 
 static void PokeathlonEventIntro_CreateSprites(PokeathlonEventIntro *intro) {
     const s16(*position)[2] = sPokeathlonEventIntroSpritePositions;

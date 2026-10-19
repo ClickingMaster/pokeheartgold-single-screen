@@ -64,7 +64,7 @@ u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
-int PokeathlonCourse_GetTouchRadius(); // called with and without an argument
+int PokeathlonCourse_GetTouchRadius();
 int PokeathlonCourse_GetSpriteSizeType(void *mon);
 int PokeathlonCourse_GetCollisionSizeClass(void *mon);
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonLampJumpMonView *view);
@@ -125,8 +125,6 @@ static void PokeathlonLampJump_Init3D(PokeathlonLampJump *lampJump);
 
 void GF_SndSetTrackPitchByPlayerNo(int playerNo, u32 tracks, int pitch);
 
-// NitroSystem G3D
-
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int value);
 Sprite *PokeathlonCourse_CreateTimerDigitSpriteAlt(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
 void PokeathlonCourseObject_GetCollisionCircle(void *sprite, int x, int y, fx32 *outX, fx32 *outY, int *outRadius);
@@ -139,7 +137,7 @@ void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSpri
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 
 extern int gPokeathlonLampJumpTrampolineRed; // red of the next trampoline vertex
-extern u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon (not const: reloaded after every call)
+extern u8 gPokeathlonLampJumpSoundPlayers[]; // sound player of each Pokemon
 
 static void PokeathlonLampJump_CalcLine(PokeathlonLampJumpTrampoline *trampoline, int line, u8 monA, u8 monB);
 static void PokeathlonLampJump_UpdateJump(PokeathlonCourseData *course, PokeathlonLampJump *lampJump, u8 mon);
@@ -457,7 +455,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
             Sprite **playerSprite = (Sprite **)PokeathlonCourse_CreateHudSpritesInPool(course, 192, (int)lampJump->spriteResources, lampJump->scene);
             Sprite_SetDrawPriority(*playerSprite, 1);
         }
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)lampJump->bgConfig); // takes the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)lampJump->bgConfig);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(offsets, NARC_a_1_7_0, 16);
         for (monIndex = 0; monIndex < 3; monIndex++) {
@@ -810,7 +808,7 @@ static void PokeathlonLampJump_HandleTouch(PokeathlonCourseData *course) {
         lampJump->holdFrames = 0;
     }
     if (PokeathlonCourse_GetNetId(course) == 0) {
-        // the host gathers the first word of every player's link block (0x28 bytes each)
+        // the host gathers the first word of every player's link block
         PokeathlonLampJumpSyncBlock *gathered = (PokeathlonLampJumpSyncBlock *)PokeathlonCourse_ToBytes(data + 0x28);
         PokeathlonLampJumpSyncBlock *hostBlock = (PokeathlonLampJumpSyncBlock *)PokeathlonCourse_ToBytes(data + 0x50);
         *hostBlock = *(PokeathlonLampJumpSyncBlock *)PokeathlonCourse_ToBytes(data);
@@ -1203,8 +1201,6 @@ static u8 PokeathlonLampJump_ScoreLamp(PokeathlonLampJumpMon *mon) {
 }
 
 void PokeathlonLampJump_UpdateJumps(PokeathlonCourseData *course, PokeathlonLampJump *lampJump) {
-    // three cursors, each moved on by one Pokemon (matching): monRow->mons[0] and jumpRow->jumps[0] are
-    // the current Pokemon's
     PokeathlonLampJump *monRow;
     PokeathlonLampJump *jumpRow;
     PokeathlonLampJumpMon *mon;
@@ -1493,8 +1489,6 @@ void PokeathlonLampJump_CreateSprites(PokeathlonLampJump *lampJump, PokeathlonCo
         PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->playerSprites[i], 13 + i);
         PokeathlonCourseSpritePoolSprite_Show(lampJump->playerSprites[i], 1, 1);
     }
-    // (sic) 4 each: the fourth effect sprite of a Pokemon lands in timer, the fourth effect sprite in
-    // timerDigits[0]; both are set again later.
     for (i = 0; i < 4; i++) {
         lampJump->mons[i].effectSprite = PokeathlonCourseSpritePool_CreateAndTake(scene, 1, 3, 101, 7);
         PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->mons[i].effectSprite, 11);

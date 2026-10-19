@@ -75,7 +75,6 @@ enum PokeathlonCirclePushInitState {
     CIRCLE_PUSH_INIT_DONE,
 };
 
-// NitroSDK math (not declared by a header yet).
 void MATH_QSort(void *head, u32 num, u32 width, int (*compare)(const void *, const void *), void *stackBuffer);
 
 void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCourseMonInfo *info);
@@ -118,7 +117,7 @@ void PokeathlonCourseMonObject_SetAffineMatrix(void *object, VecFx32 *matrix);
 void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
 void PokeathlonCourseMonObject_Move(PokeathlonCourseMonObject *object, int dx, int dy, int anim, int moveShadow);
 void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *objects, u8 index, int vram, void *palette);
-int PokeathlonCourse_GetTouchRadius(); // called with and without an argument
+int PokeathlonCourse_GetTouchRadius();
 Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, PokeathlonCourseSpritePool *pool);
 
 // Where each Pokemon of each team starts.
@@ -127,7 +126,6 @@ typedef struct CirclePushStartPosition {
     u16 y;
 } CirclePushStartPosition;
 
-// Copied as a whole (block copies).
 typedef struct CirclePushTimerTiles {
     u16 tiles[8];
 } CirclePushTimerTiles;
@@ -156,7 +154,6 @@ typedef struct CirclePushCollision {
     s32 radius;
 } CirclePushCollision;
 
-// Locals of RunHost that live on the stack.
 typedef struct CirclePushHostFrame {
     int count;
     u8 *copyArea;
@@ -519,7 +516,6 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         }
         PokeathlonCirclePushZoneMarkers_CreateSprites(circlePush->zoneMarkers, circlePush->spritePool);
         for (i = 0; i < 12; i++) {
-            // A view of the event moved so that its first Pokemon is the i-th one.
             PokeathlonCirclePush *view = (PokeathlonCirclePush *)&((PokeathlonCirclePushMon(*)[3])circlePush)[i / 3][i % 3];
             view->mons[0][0].effectSprite = PokeathlonCourseSpritePool_Take(circlePush->spritePool, 104, 4);
             Sprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite_GetSprite(view->mons[0][0].effectSprite), 2);
@@ -803,7 +799,6 @@ BOOL PokeathlonCirclePush_End(PokeathlonCourseData *course, u8 *state) {
     for (team = 0; team < 4; team++) {
         int points = 0;
         int member = points;
-        // Walks through the team by moving a view of the event one Pokemon on.
         PokeathlonCirclePush *view = circlePush;
         for (; member < 3; member++) {
             points += view->mons[0][0].points;
@@ -1114,7 +1109,6 @@ static void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course) {
     if (!circlePush->scoring) {
         int player = 0;
         u8 *inputs = frame.copyArea + 80;
-        // The touches are reached through a view of the event moved one touch on per player.
         PokeathlonCirclePush *view = circlePush;
         PokeathlonCirclePushMon *teamMons = circlePush->mons[0];
         for (; player < 4; player++, inputs += 40, view = (PokeathlonCirclePush *)((u8 *)view + sizeof(PokeathlonCirclePushTouch)), teamMons += 3) {

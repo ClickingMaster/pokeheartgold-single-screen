@@ -11,15 +11,15 @@
 #include "sprite_resource.h"
 #include "sprite_resource_header.h"
 
-// The race of Hurdle Dash (Pokeathlon event 0): running, jumping and tripping over the hurdles, the
-// Pokemon of the participants without a player, the ranking and the standings on the touch screen.
+// The race of Hurdle Dash: running, jumping and tripping over the hurdles, the Pokemon of the participants without
+// a player, the ranking and the standings on the touch screen.
 
-// A hurdle on a lane (0x10): a standing sprite and a knocked-over one.
+// A hurdle on a lane: a standing sprite and a knocked-over one.
 typedef struct PokeathlonHurdle {
-    BOOL visible;                                     // 0x0
-    PokeathlonCourseSpritePoolSprite *standingSprite; // 0x4: PokeathlonCourseSpritePoolSprite
-    PokeathlonCourseSpritePoolSprite *knockedSprite;  // 0x8: PokeathlonCourseSpritePoolSprite
-    BOOL standing;                                    // 0xC
+    BOOL visible;
+    PokeathlonCourseSpritePoolSprite *standingSprite;
+    PokeathlonCourseSpritePoolSprite *knockedSprite;
+    BOOL standing;
 } PokeathlonHurdle;
 
 // The hurdles of a lane: four sprites placed again and again further down the track.
@@ -28,19 +28,19 @@ typedef struct PokeathlonHurdleDashLane {
     int next;
 } PokeathlonHurdleDashLane;
 
-// The track (0xC24): where the hurdles are, one flag per 8 pixels of each lane. The host loads one of
+// The track: where the hurdles are, one flag per 8 pixels of each lane. The host loads one of
 // three layouts (NARC a/2/2/6) into layoutToSend, the course link copies it into layout for everyone.
 typedef struct PokeathlonHurdleDashTrack {
-    PokeathlonHurdleDashLane lanes[3]; // 0x000
-    u8 layoutToSend[3][512];           // 0x018
-    u8 layout[3][512];                 // 0x618
-    int lastHurdle[3];                 // 0xC18: last flag of each lane a hurdle was placed for
+    PokeathlonHurdleDashLane lanes[3];
+    u8 layoutToSend[3][512];
+    u8 layout[3][512];
+    int lastHurdle[3]; // last flag of each lane a hurdle was placed for
 } PokeathlonHurdleDashTrack;
 
 // The dust a running Pokemon kicks up: five sprites per lane.
 typedef struct PokeathlonHurdleDashDust {
     BOOL active;
-    PokeathlonCourseSpritePoolSprite *sprite; // PokeathlonCourseSpritePoolSprite
+    PokeathlonCourseSpritePoolSprite *sprite;
 } PokeathlonHurdleDashDust;
 
 typedef struct PokeathlonHurdleDashDustLane {
@@ -50,22 +50,22 @@ typedef struct PokeathlonHurdleDashDustLane {
 
 // One of the 12 Pokemon of the standings bar on the touch screen.
 typedef struct PokeathlonHurdleDashStandingsMon {
-    Sprite *icon;  // 0x0
-    Sprite *frame; // 0x4: the colour of the Pokemon's team
-    Sprite *rank;  // 0x8
-    u8 unkC[4];    // 0xC
+    Sprite *icon;
+    Sprite *frame; // the colour of the Pokemon's team
+    Sprite *rank;
+    u8 unkC[4];
 } PokeathlonHurdleDashStandingsMon;
 
-// The standings bar (0x244): the 12 Pokemon icons in the order of the race.
+// The standings bar: the 12 Pokemon icons in the order of the race.
 typedef struct PokeathlonHurdleDashStandings {
-    enum HeapID heapId;                        // 0x000
-    SpriteList *spriteList;                    // 0x004
-    G2dRenderer renderer;                      // 0x008
-    GF_2DGfxResMan *resMans[6];                // 0x130
-    SpriteResource *resources[4];              // 0x148
-    u8 unk158[8];                              // 0x158
-    SpriteResourcesHeader header;              // 0x160
-    PokeathlonHurdleDashStandingsMon mons[12]; // 0x184
+    enum HeapID heapId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMans[6];
+    SpriteResource *resources[4];
+    u8 unk158[8];
+    SpriteResourcesHeader header;
+    PokeathlonHurdleDashStandingsMon mons[12];
 } PokeathlonHurdleDashStandings;
 
 // The Pokemon of the standings bar (species and form).
@@ -77,32 +77,32 @@ typedef struct PokeathlonHurdleDashStandingsMonId {
 // A participant's link packet (block 0 of the data copy area is the own one, blocks 2 to 5 those of the
 // four participants).
 typedef struct PokeathlonHurdleDashPacket {
-    u16 distances[3];   // 0x00
-    u8 unk06;           // 0x06
-    u8 unk07;           // 0x07
-    u8 unk08;           // 0x08
-    u8 done;            // 0x09: the participant's race is over
-    u16 finishTimes[3]; // 0x0A
-    u16 finished[3];    // 0x10
-    u8 unk16[0xE];      // 0x16
+    u16 distances[3];
+    u8 unk06;
+    u8 unk07;
+    u8 unk08;
+    u8 done; // the participant's race is over
+    u16 finishTimes[3];
+    u16 finished[3];
+    u8 unk16[0xE];
 } PokeathlonHurdleDashPacket;
 
 // The host's packet (block 1 sent, block 6 received).
 typedef struct PokeathlonHurdleDashStatus {
-    u32 allDone;         // 0x00
-    u16 distances[4][3]; // 0x04
-    u8 ranks[6];         // 0x1C: a nibble per Pokemon, the low one first
+    u32 allDone;
+    u16 distances[4][3];
+    u8 ranks[6]; // a nibble per Pokemon, the low one first
 } PokeathlonHurdleDashStatus;
 
 // The ranking of the 12 Pokemon (a sorted list).
 typedef struct PokeathlonHurdleDashRankNode {
     struct PokeathlonHurdleDashRankNode *prev;
     struct PokeathlonHurdleDashRankNode *next;
-    u16 distance;   // 0x08
-    u16 index;      // 0x0A
-    u16 finishTime; // 0x0C
-    u16 finished;   // 0x0E
-    u32 tied;       // 0x10: same rank as the node before it
+    u16 distance;
+    u16 index;
+    u16 finishTime;
+    u16 finished;
+    u32 tied; // same rank as the node before it
 } PokeathlonHurdleDashRankNode;
 
 // The ranking of the 12 Pokemon by their team rank (the standings bar).

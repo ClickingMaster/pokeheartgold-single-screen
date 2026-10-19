@@ -149,7 +149,6 @@ typedef struct PokeathlonGoalRollVec4 {
     VecFx32 v[4];
 } PokeathlonGoalRollVec4;
 
-// Frame locals of PokeathlonGoalRoll_Init.
 typedef struct PokeathlonGoalRollInitWork {
     u16 ownCoords[GOAL_ROLL_TEAM_SIZE][2];
     VecFx32 goalPositions[GOAL_ROLL_PARTICIPANTS];
@@ -161,8 +160,6 @@ typedef struct PokeathlonGoalRollInitWork {
     PokeathlonGoalRollMonView views[GOAL_ROLL_MONS];
 } PokeathlonGoalRollInitWork;
 
-// The goal sprites are set up through one cursor that moves by one pointer per goal, so that
-// goal->goalSprites[0], goal->goalFlashSprites[0] and goal->goalLabelSprites[0] address goal i.
 #define GOAL_CURSOR_NEXT(cursor) ((PokeathlonGoalRoll *)((u32 *)(cursor) + 1))
 
 static void PokeathlonGoalRoll_SetGfxBanks(void);
@@ -187,8 +184,6 @@ static inline void PokeathlonGoalRoll_SetModelSize(PokeathlonCourseData *course,
     PokeathlonCourseObject_SetCollision((u8 *)object, sizes[size - 1].width, sizes[size - 1].height);
 }
 
-// PokeathlonGoalRollCpu_New as this call was built: with an int count and the course mode as an
-// extra (unused) argument.
 typedef PokeathlonGoalRollCpu *(*PokeathlonGoalRollCpuNewFunc)(u32 heapId, int cpuCount, int mode);
 
 BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
@@ -519,7 +514,6 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
     PokeathlonGoalRoll_DestroyPlateTasks(goalRoll);
     PokeathlonGoalRoll_FreeStrings(course);
     RemoveWindow(&goalRoll->scoreWindow);
-    // the cursor starts at the work and is moved to the name windows after `i` is set
     window = (Window *)goalRoll;
     i = 0;
     window = (Window *)((u8 *)window + offsetof(PokeathlonGoalRoll, nameWindows));
@@ -595,7 +589,6 @@ BOOL PokeathlonGoalRoll_State_Finish(PokeathlonCourseData *course, u8 *state) {
     if (PokeathlonCourse_GetNetId(savedCourse)) {
         return TRUE;
     }
-    // the cursor walks the scores
     for (i = 0; i < 4; i++) {
         PokeathlonCourse_SetEventScore(savedCourse, (u8)i, (u16)goalRoll->scores[0]);
         goalRoll = GOAL_CURSOR_NEXT(goalRoll);
@@ -855,10 +848,8 @@ static inline void PokeathlonGoalRoll_ClearVec(VecFx32 *vec) {
     vec->z = 0;
 }
 
-// PokeathlonGoalRollDisplay_DrawScore as this call was built: with a u8 score.
 typedef void (*PokeathlonGoalRollDrawScoreFunc)(PokeathlonGoalRollDisplay *display, u8 score);
 
-// PokeathlonGoalRoll_PlayGoalAreaSE as this call was built: with u8 arguments.
 typedef void (*PokeathlonGoalRollPlayGoalAreaSEFunc)(PokeathlonGoalRoll *goalRoll, u8 ballIndex, u8 bigBall, u8 code);
 
 // Every participant: shows the frame the host sent.
@@ -1013,7 +1004,6 @@ static void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
     PokeathlonGoalRoll_RefreshPlates(goalRoll);
 }
 
-// PokeathlonGoalRollDisplay_SetScore as this call was built: with u8 arguments.
 typedef void (*PokeathlonGoalRollSetScoreFunc)(PokeathlonGoalRollDisplay *display, u8 score, u8 participant);
 
 static void PokeathlonGoalRoll_ApplyFrameScore(PokeathlonCourseData *course) {

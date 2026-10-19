@@ -38,7 +38,7 @@ typedef struct PokeathlonBoxArgs_SelectedMon {
     u8 isShiny;
     u8 gender;
     u16 nickname[11];
-} PokeathlonBoxArgs_SelectedMon; // size: 0x28
+} PokeathlonBoxArgs_SelectedMon;
 
 typedef struct PokeathlonBoxArgs {
     PokeathlonCourseArgs *courseArgs;
@@ -71,20 +71,20 @@ typedef struct PokeathlonBox_StatChange {
     s8 direction; // > 0 up, < 0 down, 0 unchanged
     u8 stars[5];  // per star: 0 hidden, 1-4 animation
     u8 padding_6[2];
-} PokeathlonBox_StatChange; // size: 0x8
+} PokeathlonBox_StatChange;
 
 typedef struct PokeathlonBox_MonInfo {
-    u32 personality;  // 0x00
-    u16 species;      // 0x04
-    u8 isShiny;       // 0x06
-    u8 form;          // 0x07
-    u8 gender;        // 0x08
-    u8 displayMode;   // 0x09
-    u16 nickname[11]; // 0x0A
+    u32 personality;
+    u16 species;
+    u8 isShiny;
+    u8 form;
+    u8 gender;
+    u8 displayMode;
+    u16 nickname[11];
     u8 medals[5];
     u8 unk25;
     u16 unk26;
-    PokeathlonBox_StatChange statChanges[5]; // 0x28, power/skill/speed/jump/stamina
+    PokeathlonBox_StatChange statChanges[5]; // power/skill/speed/jump/stamina
 } PokeathlonBox_MonInfo;
 
 typedef struct PokeathlonBox_SpriteResources {
@@ -93,57 +93,57 @@ typedef struct PokeathlonBox_SpriteResources {
     SpriteResource *cellResObj;
     SpriteResource *animResObj;
     u8 padding[0x8];
-} PokeathlonBox_SpriteResources; // size: 0x18
+} PokeathlonBox_SpriteResources;
 
 typedef struct PokeathlonBox_StatRow {
     Sprite *sprite;
     Sprite *sprites[5];
-} PokeathlonBox_StatRow; // size: 0x18
+} PokeathlonBox_StatRow;
 
 typedef struct PokeathlonBox_SubGraphics {
-    enum HeapID heapID;                         // 0x000 / 0x078
-    SpriteList *spriteList;                     // 0x004 / 0x07C
-    G2dRenderer renderer;                       // 0x008 / 0x080
-    GF_2DGfxResMan *mgrs[6];                    // 0x130 / 0x1A8
-    PokeathlonBox_SpriteResources resources[3]; // 0x148 / 0x1C0
-    u8 padding_190[0x24];                       // 0x190 / 0x208
-    Sprite *sprites[5];                         // 0x1B4 / 0x22C
-    Sprite *unk1C8[5];                          // 0x1C8 / 0x23C
-    PokeathlonBox_StatRow statRows[5];          // 0x1DC / 0x250
-    Sprite *monPicSprite;                       // 0x254 / 0x2C8
-    void *monPicChars;                          // 0x258 / 0x2CC
-    u8 monPicPalette[0x20];                     // 0x25C / 0x2D0
-    u32 monPicCharOffset;                       // 0x27C / 0x2F0
-    u32 monPicPlttOffset;                       // 0x280 / 0x2F4
+    enum HeapID heapID;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *mgrs[6];
+    PokeathlonBox_SpriteResources resources[3];
+    u8 padding_190[0x24];
+    Sprite *sprites[5];
+    Sprite *unk1C8[5];
+    PokeathlonBox_StatRow statRows[5];
+    Sprite *monPicSprite;
+    void *monPicChars;
+    u8 monPicPalette[0x20];
+    u32 monPicCharOffset;
+    u32 monPicPlttOffset;
 } PokeathlonBox_SubGraphics;
 
 typedef struct PokeathlonBox_Graphics {
-    enum HeapID heapID;            // 0x000
-    BgConfig *bgConfig;            // 0x004
-    Window window1;                // 0x008
-    Window window2;                // 0x018
-    Window window3;                // 0x028
-    Window window4;                // 0x038
-    Window window5;                // 0x048
-    Window window6;                // 0x058
-    u16 courseId;                  // 0x068
-    u16 isSupreme;                 // 0x06A
-    MsgData *msgData;              // 0x06C
-    MessageFormat *msgFormat;      // 0x070
-    String *nickname;              // 0x074
-    PokeathlonBox_SubGraphics sub; // 0x078
-} PokeathlonBox_Graphics;          // size: 0x2FC
+    enum HeapID heapID;
+    BgConfig *bgConfig;
+    Window window1;
+    Window window2;
+    Window window3;
+    Window window4;
+    Window window5;
+    Window window6;
+    u16 courseId;
+    u16 isSupreme;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *nickname;
+    PokeathlonBox_SubGraphics sub;
+} PokeathlonBox_Graphics;
 
 typedef struct PokeathlonBox {
-    BgConfig *bgConfig; // 0x0
-    u32 state;          // 0x4
+    BgConfig *bgConfig;
+    u32 state;
     u32 monSelector;
     PokeathlonBox_Graphics *graphics;
     PokeathlonBox_SelectedMon selectedMons[3];
     BOOL cancelled;
-    SaveData *saveData; // 0x2C
+    SaveData *saveData;
     u32 courseId;
-} PokeathlonBox; // size: 0x34
+} PokeathlonBox;
 
 BOOL PokeathlonBox_Init(OverlayManager *manager);
 BOOL PokeathlonBox_Main(OverlayManager *manager);

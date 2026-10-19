@@ -26,7 +26,6 @@ enum PokeathlonRecordScreenState {
     RECORD_SCREEN_STATE_EXIT,
 };
 
-// NitroSDK MATH (bit count); no repo header declares it
 u32 MATH_CountPopulation(u32 value);
 
 // Course record app
@@ -40,7 +39,7 @@ typedef struct PokeathlonCourseRecordEntry {
     u16 eventScores[3];
     u16 totalScore; // event scores plus bonus points
     PokeathlonRecordMon mons[3];
-} PokeathlonCourseRecordEntry; // size: 0x2C
+} PokeathlonCourseRecordEntry;
 
 typedef struct PokeathlonCourseRecordBgTemplates {
     BgTemplate templates[8];
@@ -69,9 +68,9 @@ typedef struct PokeathlonCourseRecord {
     PokeathlonSpriteContext *spriteContext;
     ManagedSprite *sprites[26];
     PokeathlonCourseRecordSelection selection;
-} PokeathlonCourseRecord; // size: 0x94
+} PokeathlonCourseRecord;
 
-// Trophies app (PokeathlonTrophies_Init / PokeathlonTrophies_Main / PokeathlonTrophies_Exit)
+// Trophies app
 
 typedef struct PokeathlonTrophiesSummary {
     PlayerProfile *profile;
@@ -83,7 +82,7 @@ typedef struct PokeathlonTrophiesSummary {
     u8 medalistCount; // species that won all five medals
     u8 potentialTrophies;
     u8 gender;
-} PokeathlonTrophiesSummary; // size: 0x1C
+} PokeathlonTrophiesSummary;
 
 typedef struct PokeathlonTrophiesBgTemplates {
     BgTemplate templates[4];
@@ -97,7 +96,7 @@ typedef struct PokeathlonTrophies {
     PokeathlonTextContext *textContext;
     PokeathlonSpriteContext *spriteContext;
     ManagedSprite *sprites[67];
-} PokeathlonTrophies; // size: 0x124
+} PokeathlonTrophies;
 
 // Medals app
 
@@ -131,7 +130,7 @@ typedef struct PokeathlonMedals {
     PokeathlonTextContext *textContext;
     PokeathlonSpriteContext *spriteContext;
     ManagedSprite *sprites[50];
-} PokeathlonMedals; // size: 0x4D0
+} PokeathlonMedals;
 
 void PokeathlonMedals_OnButton(PokeathlonMedals *work, int newTarget, int prevTarget);
 void PokeathlonMedals_OnSwitchToTouchMode(PokeathlonMedals *work, int newTarget, int prevTarget);
@@ -153,7 +152,7 @@ typedef struct PokeathlonEventRecordEntry {
 typedef struct PokeathlonEventRecords {
     PokeathlonEventRecordEntry entries[5];
     u32 timesJoined;
-} PokeathlonEventRecords; // size: 0x2C
+} PokeathlonEventRecords;
 
 typedef struct PokeathlonEventRecordDefaultEntry {
     u16 unk0;
@@ -165,7 +164,7 @@ typedef struct PokeathlonEventRecordData {
     PokeathlonEventRecordArgs *args;
     PokeathlonEventRecords records[10]; // solo records with the trophy target inserted at its rank
     String *string;
-} PokeathlonEventRecordData; // size: 0x1C0
+} PokeathlonEventRecordData;
 
 typedef struct PokeathlonEventRecordBgTemplates {
     BgTemplate templates[6];
@@ -185,6 +184,6 @@ typedef struct PokeathlonEventRecord {
     BOOL modeSwitchRequested;
     BOOL eventChanged;
     BOOL noRecord[10];
-} PokeathlonEventRecord; // size: 0xE4
+} PokeathlonEventRecord;
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_RECORD_SCREENS_H

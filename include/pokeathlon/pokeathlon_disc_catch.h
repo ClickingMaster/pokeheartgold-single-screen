@@ -12,12 +12,8 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// Disc Catch (Pokeathlon event 4): the four participants' teams of three Pokemon share the touch
-// screen; discs fly down from the top screen along a wavy path. Dragging a Pokemon moves it, tapping
-// it makes it jump; a Pokemon that jumps under a landing disc catches it (1, 2, 3 or 5 points by the
-// disc). Pokemon push each other around and the ones pushed off the field come back after 90 frames.
-// The event runs for 1800 frames (60 seconds); the host simulates the field and sends a frame packet
-// each frame; the participants without a player are steered by a simple CPU.
+// Disc Catch: discs fly down from the top screen and the Pokemon catch them by jumping under them as they land
+// (1, 2, 3 or 5 points by the disc). Dragging a Pokemon moves it, tapping it makes it jump.
 
 #define DISC_CATCH_PARTICIPANTS 4
 #define DISC_CATCH_TEAM_SIZE    3
@@ -25,17 +21,17 @@
 #define DISC_CATCH_DISCS        2
 #define DISC_CATCH_NO_MON       12 // "no Pokemon" in the 0..11 mon indices
 
-typedef struct PokeathlonDiscCatchScoreboard PokeathlonDiscCatchScoreboard; // the top screen (0xE8)
+typedef struct PokeathlonDiscCatchScoreboard PokeathlonDiscCatchScoreboard; // the top screen
 typedef struct PokeathlonDiscCatchCpu PokeathlonDiscCatchCpu;               // the participants without a player (host only)
 
 // A Pokemon's abilities, from its ratings (NARC a/1/7/0 file 7).
 typedef struct PokeathlonDiscCatchStats {
-    u8 jumpFrames;          // 0x00: half the jump
-    u8 jumpHeight;          // 0x01
-    u8 jump;                // 0x02: the jump rating; 0 can't jump
-    fx32 power;             // 0x04: how hard it pushes the Pokemon it runs into
-    fx32 speed;             // 0x08: the longest step per frame
-} PokeathlonDiscCatchStats; // size: 0xC
+    u8 jumpFrames; // half the jump
+    u8 jumpHeight;
+    u8 jump;    // the jump rating; 0 can't jump
+    fx32 power; // how hard it pushes the Pokemon it runs into
+    fx32 speed; // the longest step per frame
+} PokeathlonDiscCatchStats;
 
 enum PokeathlonDiscCatchMonState {
     DISC_CATCH_MON_JUMPING = 1,
@@ -46,15 +42,15 @@ enum PokeathlonDiscCatchMonState {
 
 // One Pokemon on the field (positions in touch screen pixels, fx32).
 typedef struct PokeathlonDiscCatchMon {
-    PokeathlonCourseData *course;      // 0x00
-    PokeathlonCourseMonObject *monPic; // 0x04: its course 3D object (PokeathlonCourseMonObjects_Get)
-    PokeathlonDiscCatchStats *stats;   // 0x08
-    u32 state;                         // 0x0C
-    VecFx32 target;                    // 0x10: where it walks to
-    VecFx32 position;                  // 0x1C
-    VecFx32 direction;                 // 0x28
-    VecFx32 velocity;                  // 0x34: while knocked back
-    u32 jumpTimer : 8;                 // 0x40
+    PokeathlonCourseData *course;
+    PokeathlonCourseMonObject *monPic; // its course 3D object (PokeathlonCourseMonObjects_Get)
+    PokeathlonDiscCatchStats *stats;
+    u32 state;
+    VecFx32 target; // where it walks to
+    VecFx32 position;
+    VecFx32 direction;
+    VecFx32 velocity; // while knocked back
+    u32 jumpTimer : 8;
     u32 jumpSignal : 8;                // frames the jump is reported in the frame packet
     u32 index : 4;                     // 0..11
     u32 facing : 4;                    // 1..4
@@ -64,11 +60,11 @@ typedef struct PokeathlonDiscCatchMon {
     u32 moving : 1;
     u32 draggedOff : 1; // dragged to a spot off the field
     u32 unk40_30 : 2;
-    u8 respawnWait; // 0x44
-    u8 participant; // 0x45
-    u8 member;      // 0x46
+    u8 respawnWait;
+    u8 participant;
+    u8 member;
     u8 unk47;
-} PokeathlonDiscCatchMon; // size: 0x48
+} PokeathlonDiscCatchMon;
 
 typedef struct PokeathlonDiscCatchResult {
     u32 participant : 2; // its index
@@ -78,21 +74,21 @@ typedef struct PokeathlonDiscCatchResult {
 
 // A participant's team.
 typedef struct PokeathlonDiscCatchTeam {
-    s16 touchX;           // 0x00
-    s16 touchY;           // 0x02
-    u32 touchFrames : 14; // 0x04
+    s16 touchX;
+    s16 touchY;
+    u32 touchFrames : 14;
     u32 touchNew : 1;
     u32 touching : 1;
     u32 lastTouchFrames : 13; // of the last touch: up to 5 is a tap
     u32 holding : 1;
     u32 heldMon : 2;
-    PokeathlonDiscCatchMon mons[DISC_CATCH_TEAM_SIZE]; // 0x08
-    PokeathlonDiscCatchResult result;                  // 0xE0
-} PokeathlonDiscCatchTeam;                             // size: 0xE4
+    PokeathlonDiscCatchMon mons[DISC_CATCH_TEAM_SIZE];
+    PokeathlonDiscCatchResult result;
+} PokeathlonDiscCatchTeam;
 
 typedef struct PokeathlonDiscCatchField {
-    u8 touching[DISC_CATCH_MONS][DISC_CATCH_MONS];          // 0x00: pairs of Pokemon in contact
-    PokeathlonDiscCatchTeam teams[DISC_CATCH_PARTICIPANTS]; // 0x90
+    u8 touching[DISC_CATCH_MONS][DISC_CATCH_MONS]; // pairs of Pokemon in contact
+    PokeathlonDiscCatchTeam teams[DISC_CATCH_PARTICIPANTS];
 } PokeathlonDiscCatchField;
 
 enum PokeathlonDiscCatchDiscState {
@@ -107,22 +103,22 @@ enum PokeathlonDiscCatchDiscState {
 
 // A disc in flight (two at most).
 typedef struct PokeathlonDiscCatchDisc {
-    s16 x;         // 0x00
-    s16 progress;  // 0x02: down the two screens, 0..480
-    u32 owner : 2; // 0x04: who caught it
+    s16 x;
+    s16 progress;  // down the two screens, 0..480
+    u32 owner : 2; // who caught it
     u32 state : 3;
     u32 active : 1;
     u32 timer : 8;
     u32 unk4_14 : 18;
-    u8 index;              // 0x08
-    u8 path;               // 0x09: shape of the path, 0..14
-    u8 speed;              // 0x0A
-} PokeathlonDiscCatchDisc; // size: 0xC
+    u8 index;
+    u8 path; // shape of the path, 0..14
+    u8 speed;
+} PokeathlonDiscCatchDisc;
 
 typedef struct PokeathlonDiscCatchDiscs {
-    PokeathlonDiscCatchTeam *teams;                  // 0x00
-    PokeathlonDiscCatchDisc discs[DISC_CATCH_DISCS]; // 0x04
-    u32 delay : 8;                                   // 0x1C: frames to the next disc
+    PokeathlonDiscCatchTeam *teams;
+    PokeathlonDiscCatchDisc discs[DISC_CATCH_DISCS];
+    u32 delay : 8;                                   // frames to the next disc
     u32 phase : 4;                                   // by the time left
     u32 unk1C_12 : 20;
 } PokeathlonDiscCatchDiscs;
@@ -137,16 +133,16 @@ typedef struct PokeathlonDiscCatchDiscPacket {
 
 // The frame packet (the host's, and each participant's touch input in the same layout).
 typedef struct PokeathlonDiscCatchFrame {
-    u32 touchX : 8; // 0x00
+    u32 touchX : 8;
     u32 touchY : 8;
     u32 touching : 1;
     u32 unk0_17 : 15;
-    u8 monX[DISC_CATCH_MONS]; // 0x04: the Pokemon's places in the course's 3D field
-    u8 monY[DISC_CATCH_MONS]; // 0x10
-    u32 facings : 24;         // 0x1C: 2 bits per Pokemon, facing - 1
+    u8 monX[DISC_CATCH_MONS]; // the Pokemon's places in the course's 3D field
+    u8 monY[DISC_CATCH_MONS];
+    u32 facings : 24;         // 2 bits per Pokemon, facing - 1
     u32 seconds : 6;          // time left
     u32 scoreParticipant : 2; // whose score this packet carries (round robin)
-    u32 score : 7;            // 0x20
+    u32 score : 7;
     u32 fallen : 12;          // a bit per Pokemon
     u32 jumped : 12;
     u32 finished : 1;
@@ -154,75 +150,75 @@ typedef struct PokeathlonDiscCatchFrame {
 
 // Squashes a Pokemon that taps without being able to jump.
 typedef struct PokeathlonDiscCatchSquash {
-    PokeathlonCourseMonObject *monPic; // 0x00
-    SysTask *task;                     // 0x04
-    f32 scale;                         // 0x08
-    u16 frames;                        // 0x0C
-    u16 state;                         // 0x0E
+    PokeathlonCourseMonObject *monPic;
+    SysTask *task;
+    f32 scale;
+    u16 frames;
+    u16 state;
 } PokeathlonDiscCatchSquash;
 
 typedef struct PokeathlonDiscCatchMonSprites {
-    ManagedSprite *splash;            // 0x00: where it fell off
-    PokeathlonDiscCatchSquash squash; // 0x04
-    fx32 fallScale;                   // 0x14
-    u32 jumpFrame : 8;                // 0x18
+    ManagedSprite *splash; // where it fell off
+    PokeathlonDiscCatchSquash squash;
+    fx32 fallScale;
+    u32 jumpFrame : 8;
     u32 fallFrames : 8;
     u32 jumping : 1;
     u32 squashed : 1;
     u32 falling : 1;
     u32 fallen : 1;
     u32 unk18_20 : 12;
-} PokeathlonDiscCatchMonSprites; // size: 0x1C
+} PokeathlonDiscCatchMonSprites;
 
 typedef struct PokeathlonDiscCatchDiscSprites {
-    ManagedSprite *disc[2];   // 0x00: on the top screen, on the touch screen
-    ManagedSprite *shadow[2]; // 0x08
-    ManagedSprite *points;    // 0x10
-    ManagedSprite *sparkle;   // 0x14
-    u32 angle : 16;           // 0x18
+    ManagedSprite *disc[2]; // on the top screen, on the touch screen
+    ManagedSprite *shadow[2];
+    ManagedSprite *points;
+    ManagedSprite *sparkle;
+    u32 angle : 16;
     u32 shownState : 8;
     u32 unk18_24 : 8;
-} PokeathlonDiscCatchDiscSprites; // size: 0x1C
+} PokeathlonDiscCatchDiscSprites;
 
 typedef struct PokeathlonDiscCatchSprites {
-    PokeathlonDiscCatchScoreboard *scoreboard;              // 0x000
-    PokeathlonDiscCatchDiscSprites discs[DISC_CATCH_DISCS]; // 0x004
-    PokeathlonDiscCatchMonSprites mons[DISC_CATCH_MONS];    // 0x03C
-    u16 shownScores[DISC_CATCH_PARTICIPANTS];               // 0x18C
-} PokeathlonDiscCatchSprites;                               // size: 0x194
+    PokeathlonDiscCatchScoreboard *scoreboard;
+    PokeathlonDiscCatchDiscSprites discs[DISC_CATCH_DISCS];
+    PokeathlonDiscCatchMonSprites mons[DISC_CATCH_MONS];
+    u16 shownScores[DISC_CATCH_PARTICIPANTS];
+} PokeathlonDiscCatchSprites;
 
 // Shakes the top screen when the own team catches a disc.
 typedef struct PokeathlonDiscCatchShake {
-    SpriteSystem *spriteSystem; // 0x00
-    BgConfig *bgConfig;         // 0x04
-    SysTask *task;              // 0x08
-    s8 distance;                // 0x0C
-    s8 frames;                  // 0x0D
-    u32 flip;                   // 0x10
-} PokeathlonDiscCatchShake;     // size: 0x14
+    SpriteSystem *spriteSystem;
+    BgConfig *bgConfig;
+    SysTask *task;
+    s8 distance;
+    s8 frames;
+    u32 flip;
+} PokeathlonDiscCatchShake;
 
 typedef struct PokeathlonDiscCatch {
-    enum HeapID heapId;                                                            // 0x000
-    PokeathlonCourseData *course;                                                  // 0x004
-    BgConfig *bgConfig;                                                            // 0x008
-    SpriteSystem *spriteSystem;                                                    // 0x00C
-    SpriteManager *spriteManager;                                                  // 0x010
-    MessageFormat *messageFormat;                                                  // 0x014
-    MsgData *msgData;                                                              // 0x018
-    PokeathlonCourseSpriteResources *monPicResources;                              // 0x01C
-    void *monPics;                                                                 // 0x020
-    Window window;                                                                 // 0x024
-    PokeathlonDiscCatchStats stats[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE]; // 0x034
-    PokeathlonDiscCatchScoreboard *scoreboard;                                     // 0x0C4
-    PokeathlonDiscCatchCpu *cpu;                                                   // 0x0C8
-    PokeathlonDiscCatchField field;                                                // 0x0CC
-    PokeathlonDiscCatchDiscs discs;                                                // 0x4EC
-    int timer;                                                                     // 0x50C: frames left
-    PokeathlonDiscCatchSprites sprites;                                            // 0x510
-    u8 bgFrameTimer;                                                               // 0x6A4
-    u8 bgFrame;                                                                    // 0x6A5
-    PokeathlonDiscCatchShake shake;                                                // 0x6A8
-} PokeathlonDiscCatch;                                                             // size: 0x6BC
+    enum HeapID heapId;
+    PokeathlonCourseData *course;
+    BgConfig *bgConfig;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    MessageFormat *messageFormat;
+    MsgData *msgData;
+    PokeathlonCourseSpriteResources *monPicResources;
+    void *monPics;
+    Window window;
+    PokeathlonDiscCatchStats stats[DISC_CATCH_PARTICIPANTS][DISC_CATCH_TEAM_SIZE];
+    PokeathlonDiscCatchScoreboard *scoreboard;
+    PokeathlonDiscCatchCpu *cpu;
+    PokeathlonDiscCatchField field;
+    PokeathlonDiscCatchDiscs discs;
+    int timer; // frames left
+    PokeathlonDiscCatchSprites sprites;
+    u8 bgFrameTimer;
+    u8 bgFrame;
+    PokeathlonDiscCatchShake shake;
+} PokeathlonDiscCatch;
 
 void PokeathlonDiscCatch_SetMonScaleCenter(PokeathlonCourseMonObject *monPic, int falling);
 BOOL PokeathlonDiscCatchMon_IsTouching(PokeathlonDiscCatchMon *mon, PokeathlonDiscCatchMon *other);

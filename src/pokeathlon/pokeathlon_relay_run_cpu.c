@@ -93,7 +93,6 @@ void PokeathlonRelayRunCpu_SetTeam(PokeathlonRelayRunCpu *cpu, u8 index, Pokeath
 void PokeathlonRelayRunCpu_SetObstacles(PokeathlonRelayRunCpu *cpu, s32 *layout) {
     int i;
 
-    // (steps cpu itself through the obstacles, as built)
     for (i = 0; i < RELAY_RUN_OBSTACLES; i++, layout++, cpu = (PokeathlonRelayRunCpu *)((u8 *)cpu + sizeof(PokeathlonRelayRunCpuObstacle))) {
         int kind, y, x;
 
@@ -244,7 +243,7 @@ static void PokeathlonRelayRunCpu_Think(PokeathlonCourseData *course, Pokeathlon
                 *laneScore += 2;
             }
         }
-        // obstacles ahead overlapping the lane (NB: the penalty goes to laneScores[obstacle index], as built)
+        // obstacles ahead overlapping the lane
         for (j = 0; j < RELAY_RUN_OBSTACLES; j++) {
             if (!obstacles[j].active) {
                 break;

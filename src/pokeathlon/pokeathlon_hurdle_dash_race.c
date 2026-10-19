@@ -39,7 +39,6 @@ typedef char PokeathlonHurdleDashLayoutCheck[(offsetof(PokeathlonHurdleDash, tra
     (node)->next = (at);             \
     (at)->prev = (node)
 
-// Sound helpers no header declares yet.
 void PlaySEOnPlayer(u32 seqNo, u32 playerNo);
 void SetPlayerPan(u32 playerNo, s32 pan);
 
@@ -274,8 +273,6 @@ static void PokeathlonHurdleDashMon_StartJump(PokeathlonCourseData *course, u32 
         PokeathlonCourseMonObject_GetSpritePosition(mon->monObject, &mon->x, &mon->y);
     }
 }
-
-// The third argument (the runner's speed) is not used.
 
 static void PokeathlonHurdleDashMon_Update(int lane, PokeathlonHurdleDashMon *mon, f32 *speed) {
     switch (mon->state) {

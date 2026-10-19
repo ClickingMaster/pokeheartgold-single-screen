@@ -40,7 +40,6 @@ BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *object, int paused);
 void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *object);
 
-// Screen templates (asm data).
 extern const GraphicsModes sPennantCaptureGraphicsModes;
 extern const BgTemplate sPennantCaptureBgTemplate_Sub0;
 extern const BgTemplate sPennantCaptureBgTemplate_Sub1;

@@ -507,7 +507,6 @@ static int PokeathlonGoalRollCpu_ThinkFlex(PokeathlonCourseData *course, u8 part
     return result;
 }
 
-// PokeathlonGoalRollCpu_MoveToEmptierQuadrant with the participant passed as int (this call was built against such a declaration).
 typedef int (*PokeathlonGoalRollCpuSpreadFunc)(PokeathlonGoalRollMon *mon, PokeathlonGoalRollCpuTeam *teams, int participant);
 
 static int PokeathlonGoalRollCpu_ApplyFlexDecision(PokeathlonGoalRollMon *mon, PokeathlonGoalRollBall *ball, int decision, int participant, PokeathlonGoalRollCpuTeam *teams) {
@@ -650,7 +649,7 @@ static BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, c
     return VEC_Mag(&delta) < radiusA + radiusB;
 }
 
-// Screen shake task (started by PokeathlonScreenShake_Start in the next event's code).
+// Screen shake task (started by PokeathlonScreenShake_Start).
 void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake) {
     int sign;
     int x;

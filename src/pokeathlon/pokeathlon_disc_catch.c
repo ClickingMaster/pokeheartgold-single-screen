@@ -79,10 +79,8 @@ BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *monPic, fx
 void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *monPic, f32 scaleX, f32 scaleY);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *monPics, int paused);
 
-// The runtime's division, called directly once.
 s32 _s32_div_f(s32 dividend, s32 divisor);
 
-// NitroSDK (no header declares it)
 void MATH_QSort(void *head, u32 num, u32 size, s32 (*compare)(const void *, const void *), void *work);
 
 extern const VecFx32 gPokeathlonDiscCatchTouchDistances;
@@ -105,7 +103,6 @@ typedef struct PokeathlonDiscCatchBgTemplates {
 
 extern const PokeathlonDiscCatchBgTemplates gPokeathlonDiscCatchBgTemplates;
 
-// The loops over the teams' results step a pointer to the result itself.
 #define NEXT_TEAM_RESULT(result) ((PokeathlonDiscCatchResult *)((u8 *)(result) + sizeof(PokeathlonDiscCatchTeam)))
 
 // A Pokemon sprite and the y its draw order goes by.
@@ -401,7 +398,6 @@ static void PokeathlonDiscCatchMon_Respawn(PokeathlonDiscCatchMon *mon) {
     mon->knockedBack = FALSE;
 }
 
-// The update called the movement through a declaration that also passes the course.
 typedef void (*PokeathlonDiscCatchMoveFunc)(PokeathlonDiscCatchMon *mon, PokeathlonCourseData *course);
 #define MoveWithCourse ((PokeathlonDiscCatchMoveFunc)PokeathlonDiscCatchMon_Move)
 
@@ -840,7 +836,6 @@ u32 PokeathlonDiscCatch_Finish(PokeathlonCourseData *course, u8 *state) {
     return 0;
 }
 
-// Event template entry 0.
 u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     switch (PokeathlonCourse_GetEventInitState(course)) {
@@ -887,7 +882,7 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
         work->cpu = PokeathlonDiscCatchCpu_New(course, work->heapId);
         PokeathlonCourse_InitMarkers(course);
         PokeathlonDiscCatchShake_Init(&work->shake, work->bgConfig, work->spriteSystem);
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // the callback gets the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         PokeathlonDiscCatch_InitMons(work);
         if (PokeathlonCourse_GetNetId(course) == 0) {
@@ -907,7 +902,6 @@ u32 PokeathlonDiscCatch_Init(PokeathlonCourseData *course) {
     return 0;
 }
 
-// Event template entry 1.
 u32 PokeathlonDiscCatch_Draw(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     GF_ASSERT(work != NULL);
@@ -915,7 +909,6 @@ u32 PokeathlonDiscCatch_Draw(PokeathlonCourseData *course) {
     return 1;
 }
 
-// Event template entry 2.
 u32 PokeathlonDiscCatch_ShowResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
@@ -930,7 +923,7 @@ u32 PokeathlonDiscCatch_ShowResults(PokeathlonCourseData *course) {
     return 1;
 }
 
-// Event template entry 3: frees everything Init created.
+// Frees everything Init created.
 u32 PokeathlonDiscCatch_Exit(PokeathlonCourseData *course) {
     PokeathlonDiscCatch *work = PokeathlonCourse_GetWork(course);
     PokeathlonCourse_FreeMarkers(course);
@@ -951,7 +944,6 @@ u32 PokeathlonDiscCatch_Exit(PokeathlonCourseData *course) {
 
 // x of a disc on its path: a slant by the path (0..14, 7 straight down) plus a wave.
 s16 PokeathlonDiscCatch_GetDiscX(int progress, int path) {
-    // (the division is called directly: it comes before the sine)
     s16 x = (s16)(_s32_div_f(38 * (progress * (path - 7)), 1000) + 128);
     return (s16)(x + ((GF_SinDeg((u16)(progress << 1)) << 6) >> 16));
 }

@@ -193,7 +193,6 @@ BOOL PokeathlonRingDrop_State_Finish(PokeathlonCourseData *course, u8 *state) {
             if (!PokeathlonCourse_GetNetId(course)) {
                 int i;
                 PokeathlonRingDropMonFlags *flags;
-                // one cursor over the players' flags words
                 for (i = 0, flags = &ringDrop->players[0].mon.flags; i < RING_DROP_PARTICIPANTS; i++, flags = (PokeathlonRingDropMonFlags *)((u8 *)flags + sizeof(PokeathlonRingDropPlayer))) {
                     PokeathlonCourse_SetEventScore(course, (u8)i, flags->bits.score);
                 }

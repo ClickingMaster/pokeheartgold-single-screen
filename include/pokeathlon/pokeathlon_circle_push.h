@@ -11,13 +11,8 @@
 #include "bg_window.h"
 #include "sys_task_api.h"
 
-// Circle Push (Pokeathlon event 2; template gPokeathlonCirclePushEvent = {Init, Main, CalcResults, Exit},
-// states gPokeathlonCirclePushStates = {FadeIn, Play, End}). The twelve Pokemon of the four teams push each
-// other in a ring; dragging a Pokemon makes it run after the stylus. Pokemon in the bonus zones
-// score when the round's timer runs out (six rounds); Pokemon pushed out of the ring come back
-// at their start. The host moves every Pokemon (the players send their touches) and sends the
-// result every frame; every player draws from that packet. The top screen is
-// PokeathlonCirclePushDisplay.
+// Circle Push: the twelve Pokemon of the four teams push each other in a ring. Pokemon in the bonus zones score
+// when the round's timer runs out; Pokemon pushed out of the ring come back at their start.
 
 enum PokeathlonCirclePushMonState {
     CIRCLE_PUSH_MON_OUT,
@@ -25,35 +20,35 @@ enum PokeathlonCirclePushMonState {
     CIRCLE_PUSH_MON_AT_START,
 };
 
-// One of the twelve Pokemon (0x90).
+// One of the twelve Pokemon.
 typedef struct PokeathlonCirclePushMon {
-    PokeathlonCourseMonObject *object;              // 0x00
-    PokeathlonCourseSpritePoolSprite *effectSprite; // 0x04: shadow, and the effects of scoring
-    PokeathlonCourseSpritePoolSprite *tiredSprite;  // 0x08: shown while the Pokemon is exhausted
-    fx32 x;                                         // 0x0C: drawn position
-    fx32 y;                                         // 0x10
-    u8 unk14[4];                                    // 0x14
-    u32 state;                                      // 0x18: 0 out of the ring, 1 in it, 2 back at the start
-    VecFx32 target;                                 // 0x1C: where it runs to
-    VecFx32 position;                               // 0x28
-    VecFx32 velocity;                               // 0x34
-    u8 direction;                                   // 0x40: 1..4
-    u8 pushing;                                     // 0x41
-    u16 points;                                     // 0x42
-    u8 exhausted;                                   // 0x44
-    u8 exhaustTimer;                                // 0x45
-    u8 boost;                                       // 0x46: speed bonus right after a touch
-    s8 boostTimer;                                  // 0x47
-    u16 palette[16];                                // 0x48
-    u16 grayPalette[16];                            // 0x68: out of the ring
-    u8 unk88;                                       // 0x88
-    u8 runSpeed;                                    // 0x89: from the Pokemon's power
-    u16 pushSpeed;                                  // 0x8A: from its speed
-    u16 maxStamina;                                 // 0x8C
-    u16 stamina;                                    // 0x8E
+    PokeathlonCourseMonObject *object;
+    PokeathlonCourseSpritePoolSprite *effectSprite; // shadow, and the effects of scoring
+    PokeathlonCourseSpritePoolSprite *tiredSprite;  // shown while the Pokemon is exhausted
+    fx32 x;                                         // drawn position
+    fx32 y;
+    u8 unk14[4];
+    u32 state;      // 0 out of the ring, 1 in it, 2 back at the start
+    VecFx32 target; // where it runs to
+    VecFx32 position;
+    VecFx32 velocity;
+    u8 direction; // 1..4
+    u8 pushing;
+    u16 points;
+    u8 exhausted;
+    u8 exhaustTimer;
+    u8 boost; // speed bonus right after a touch
+    s8 boostTimer;
+    u16 palette[16];
+    u16 grayPalette[16]; // out of the ring
+    u8 unk88;
+    u8 runSpeed;   // from the Pokemon's power
+    u16 pushSpeed; // from its speed
+    u16 maxStamina;
+    u16 stamina;
 } PokeathlonCirclePushMon;
 
-// Speeds and stamina by performance stat (NARC a/1/7/0 #1, 60 bytes).
+// Speeds and stamina by performance stat (NARC a/1/7/0 #1).
 typedef struct PokeathlonCirclePushRingData {
     u32 pushSpeeds[5];
     u32 staminas[5];
@@ -61,9 +56,9 @@ typedef struct PokeathlonCirclePushRingData {
 } PokeathlonCirclePushRingData;
 
 typedef struct PokeathlonCirclePushTouch {
-    BOOL pressed; // 0x0: first frame of a touch
-    BOOL held;    // 0x4
-    u8 unk8[4];   // 0x8
+    BOOL pressed; // first frame of a touch
+    BOOL held;
+    u8 unk8[4];
 } PokeathlonCirclePushTouch;
 
 // A bonus zone of a layout (sPokeathlonCirclePushLayoutZones[layout], up to 4).
@@ -74,106 +69,105 @@ typedef struct PokeathlonCirclePushZone {
 } PokeathlonCirclePushZone;
 
 typedef struct PokeathlonCirclePushZoneMarker {
-    BOOL shown;                               // 0x0
-    const PokeathlonCirclePushZone *zone;     // 0x4
-    u32 layout;                               // 0x8
-    PokeathlonCourseSpritePoolSprite *sprite; // 0xC
+    BOOL shown;
+    const PokeathlonCirclePushZone *zone;
+    u32 layout;
+    PokeathlonCourseSpritePoolSprite *sprite;
 } PokeathlonCirclePushZoneMarker;
 
 typedef struct PokeathlonCirclePushZoneMarkers {
-    PokeathlonCirclePushZoneMarker markers[8]; // 0x00
-    u32 next;                                  // 0x80
-} PokeathlonCirclePushZoneMarkers;             // size: 0x84
+    PokeathlonCirclePushZoneMarker markers[8];
+    u32 next;
+} PokeathlonCirclePushZoneMarkers;
 
 // The ring's effects: the change of the zone layout between rounds (slide, cross fade, shake)
 // and the bounce of a Pokemon that scored.
 typedef struct PokeathlonCirclePushEffects {
-    u8 state;                                 // 0x00
-    u8 fadeState;                             // 0x01
-    u8 slideState;                            // 0x02
-    u8 bounceActive;                          // 0x03
-    SysTask *changeTask;                      // 0x04
-    SysTask *slideTask;                       // 0x08
-    SysTask *fadeTask;                        // 0x0C
-    SysTask *shakeTask;                       // 0x10
-    SysTask *bounceTask;                      // 0x14
-    u16 fadeTimer;                            // 0x18
-    u16 slideTimer;                           // 0x1A
-    u16 oldLayout;                            // 0x1C
-    u16 newLayout;                            // 0x1E
-    PokeathlonCirclePushZoneMarkers *markers; // 0x20
-    s16 shakeOffset;                          // 0x24
-    u16 shakeStep;                            // 0x26
-    u32 bounceMon;                            // 0x28: 12: none
-    s16 bounceOffset;                         // 0x2C
-    u16 bounceStep;                           // 0x2E
-    PokeathlonCourseData *course;             // 0x30
+    u8 state;
+    u8 fadeState;
+    u8 slideState;
+    u8 bounceActive;
+    SysTask *changeTask;
+    SysTask *slideTask;
+    SysTask *fadeTask;
+    SysTask *shakeTask;
+    SysTask *bounceTask;
+    u16 fadeTimer;
+    u16 slideTimer;
+    u16 oldLayout;
+    u16 newLayout;
+    PokeathlonCirclePushZoneMarkers *markers;
+    s16 shakeOffset;
+    u16 shakeStep;
+    u32 bounceMon; // 12: none
+    s16 bounceOffset;
+    u16 bounceStep;
+    PokeathlonCourseData *course;
 } PokeathlonCirclePushEffects;
 
-// What the host sends every frame (at course data copy area + 0x28, received at + 0xF0).
+// What the host sends every frame.
 typedef struct PokeathlonCirclePushPacket {
-    u8 x[12];      // 0x00
-    u8 y[12];      // 0x0C
-    s32 shapeBits; // 0x18: 2 bits per Pokemon: direction - 1; bits 24..: timer
-    s32 stateBits; // 0x1C: 2 bits per Pokemon: state; bits 24..27: zone layout, 28..31: scoring Pokemon
-    s32 flagBits;  // 0x20: bit per Pokemon: exhausted; 12: over; 13: round starts; 14: scoring; 15..17:
+    u8 x[12];
+    u8 y[12];
+    s32 shapeBits; // 2 bits per Pokemon: direction - 1; bits 24..: timer
+    s32 stateBits; // 2 bits per Pokemon: state; bits 24..27: zone layout, 28..31: scoring Pokemon
+    s32 flagBits;  // bit per Pokemon: exhausted; 12: over; 13: round starts; 14: scoring; 15..17:
                    // effect; 18..25: points of a team; 26..27: that team; 28..31: round
 } PokeathlonCirclePushPacket;
 
-// What every player sends (at course data copy area + 0x00, the host keeps them at + 0x50 +
-// 0x28 * participant).
+// What every player sends.
 typedef struct PokeathlonCirclePushInput {
-    BOOL touching; // 0x00
-    u8 x;          // 0x04
-    u8 y;          // 0x05
-    u8 unk06[2];   // 0x06
-    u8 ready;      // 0x08: the effects of the zone change are over
+    BOOL touching;
+    u8 x;
+    u8 y;
+    u8 unk06[2];
+    u8 ready; // the effects of the zone change are over
     u8 unk09[0x1B];
-} PokeathlonCirclePushInput; // size: 0x24
+} PokeathlonCirclePushInput;
 
-// The CPU players (0x4EC).
+// The CPU players.
 typedef struct PokeathlonCirclePushAiMon {
-    int cell;                          // 0x00: of the 7x5 grid of the ring, -1 outside
-    int speed;                         // 0x04
-    u16 *stamina;                      // 0x08
-    VecFx32 *position;                 // 0x0C
-    u32 *state;                        // 0x10
-    int slot;                          // 0x14: team * 3 + member
-    VecFx32 *target;                   // 0x18: NULL for the players' Pokemon
-    PokeathlonCourseMonObject *object; // 0x1C
+    int cell; // of the 7x5 grid of the ring, -1 outside
+    int speed;
+    u16 *stamina;
+    VecFx32 *position;
+    u32 *state;
+    int slot;        // team * 3 + member
+    VecFx32 *target; // NULL for the players' Pokemon
+    PokeathlonCourseMonObject *object;
 } PokeathlonCirclePushAiMon;
 
 typedef struct PokeathlonCirclePushAiCell {
-    int x;         // 0x00: column, then pixel
-    int y;         // 0x04
-    int pixelX;    // 0x08
-    int pixelY;    // 0x0C
-    void *inRing;  // 0x10
-    int cellIndex; // 0x14
-    int score;     // 0x18
-    int index;     // 0x1C
+    int x; // column, then pixel
+    int y;
+    int pixelX;
+    int pixelY;
+    void *inRing;
+    int cellIndex;
+    int score;
+    int index;
 } PokeathlonCirclePushAiCell;
 
 typedef struct PokeathlonCirclePushAiZone {
-    int radius; // 0
+    int radius;
     u16 x;
     u16 y;
 } PokeathlonCirclePushAiZone;
 
 typedef struct PokeathlonCirclePushAi {
-    PokeathlonCirclePushAiMon mons[12];   // 0x000
-    PokeathlonCirclePushAiCell cells[25]; // 0x180
-    int zoneCells[4];                     // 0x4A0
-    BOOL moving;                          // 0x4B0
-    int skipped[12];                      // 0x4B4
-    u8 teamCount;                         // 0x4E4
-    u8 team;                              // 0x4E5
-    u8 timer;                             // 0x4E6
-    u8 interval;                          // 0x4E7
-    u8 member;                            // 0x4E8
-    u8 firstTeam;                         // 0x4E9
-    u8 firstTeam2;                        // 0x4EA
-} PokeathlonCirclePushAi;                 // size: 0x4EC
+    PokeathlonCirclePushAiMon mons[12];
+    PokeathlonCirclePushAiCell cells[25];
+    int zoneCells[4];
+    BOOL moving;
+    int skipped[12];
+    u8 teamCount;
+    u8 team;
+    u8 timer;
+    u8 interval;
+    u8 member;
+    u8 firstTeam;
+    u8 firstTeam2;
+} PokeathlonCirclePushAi;
 
 typedef struct PokeathlonCirclePushStack {
     u8 mons[12];
@@ -181,55 +175,55 @@ typedef struct PokeathlonCirclePushStack {
 } PokeathlonCirclePushStack;
 
 typedef struct PokeathlonCirclePush {
-    BgConfig *bgConfig;                               // 0x000
-    Window scoreWindow;                               // 0x004
-    enum HeapID heapId;                               // 0x014
-    PokeathlonCourseSpritePool *spritePool;           // 0x018
-    Sprite *markerSprite;                             // 0x01C
-    PokeathlonCirclePushMon mons[4][3];               // 0x020
-    int scores[4];                                    // 0x6E0
-    PokeathlonCirclePushTouch touches[4];             // 0x6F0
-    u8 heldMons[4];                                   // 0x720: per player, 12: none
-    u8 packetTeam;                                    // 0x724: team whose score the next packet carries
-    u8 timerTick;                                     // 0x725
-    u8 timer;                                         // 0x726: 0..43
-    u8 round;                                         // 0x727
-    u8 roundDelay;                                    // 0x728
-    u8 over;                                          // 0x729
-    u8 changeLayout;                                  // 0x72A
-    u8 scoreZones;                                    // 0x72B
-    PokeathlonCirclePushZoneMarkers *zoneMarkers;     // 0x72C
-    u16 layout;                                       // 0x730: drawn
-    u16 nextLayout;                                   // 0x732
-    void *ringScreenFile;                             // 0x734
-    NNSG2dScreenData *ringScreen;                     // 0x738
-    u8 grayed[12];                                    // 0x73C: drawn with the gray palette
-    u8 roundStart;                                    // 0x748
-    u8 scoringDelay;                                  // 0x749
-    u8 scoring;                                       // 0x74A
-    u8 scoringMon;                                    // 0x74B: 12: none
-    u8 scoringEffect;                                 // 0x74C
-    u8 scoringTimer;                                  // 0x74D
-    u8 scoringCount;                                  // 0x74E
-    u8 scoringIndex;                                  // 0x74F
-    u8 scoringMons[12];                               // 0x750
-    u8 scoringPoints[12];                             // 0x75C
-    PokeathlonCourseSpriteResources *spriteResources; // 0x768
-    void *objects;                                    // 0x76C
-    PokeathlonCirclePushAi *ai;                       // 0x770
-    PokeathlonCirclePushDisplay *display;             // 0x774
+    BgConfig *bgConfig;
+    Window scoreWindow;
+    enum HeapID heapId;
+    PokeathlonCourseSpritePool *spritePool;
+    Sprite *markerSprite;
+    PokeathlonCirclePushMon mons[4][3];
+    int scores[4];
+    PokeathlonCirclePushTouch touches[4];
+    u8 heldMons[4]; // per player, 12: none
+    u8 packetTeam;  // team whose score the next packet carries
+    u8 timerTick;
+    u8 timer; // 0..43
+    u8 round;
+    u8 roundDelay;
+    u8 over;
+    u8 changeLayout;
+    u8 scoreZones;
+    PokeathlonCirclePushZoneMarkers *zoneMarkers;
+    u16 layout; // drawn
+    u16 nextLayout;
+    void *ringScreenFile;
+    NNSG2dScreenData *ringScreen;
+    u8 grayed[12]; // drawn with the gray palette
+    u8 roundStart;
+    u8 scoringDelay;
+    u8 scoring;
+    u8 scoringMon; // 12: none
+    u8 scoringEffect;
+    u8 scoringTimer;
+    u8 scoringCount;
+    u8 scoringIndex;
+    u8 scoringMons[12];
+    u8 scoringPoints[12];
+    PokeathlonCourseSpriteResources *spriteResources;
+    void *objects;
+    PokeathlonCirclePushAi *ai;
+    PokeathlonCirclePushDisplay *display;
 
     struct {
         u16 state;
         u16 timer;
-    } falls[12]; // 0x778: Pokemon falling out of the ring
+    } falls[12]; // Pokemon falling out of the ring
 
-    BOOL alarm;                          // 0x7A8
-    PokeathlonCirclePushEffects effects; // 0x7AC
-    u8 targetOutOfRing[12];              // 0x7E0: the held Pokemon is dragged out
-    BOOL waitingForReady;                // 0x7EC
-    void *sortBuffer;                    // 0x7F0
-} PokeathlonCirclePush;                  // size: 0x7F4
+    BOOL alarm;
+    PokeathlonCirclePushEffects effects;
+    u8 targetOutOfRing[12]; // the held Pokemon is dragged out
+    BOOL waitingForReady;
+    void *sortBuffer;
+} PokeathlonCirclePush;
 
 BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course);
 BOOL PokeathlonCirclePush_Main(PokeathlonCourseData *course);

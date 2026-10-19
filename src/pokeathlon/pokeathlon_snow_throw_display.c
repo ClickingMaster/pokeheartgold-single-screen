@@ -215,7 +215,6 @@ static void PokeathlonSnowThrowDisplay_LoadMonPics(PokeathlonSnowThrowDisplay *d
     u8 *pic = (u8 *)display;
     PokepicTemplate template;
 
-    // (steps a byte pointer through monPics, as built)
     do {
         GetMonSpriteCharAndPlttNarcIdsEx(&template, mons->species, mons->gender, 0, mons->isShiny, (u8)mons->form, mons->personality);
         ((PokeathlonSnowThrowMonPic *)(pic + offsetof(PokeathlonSnowThrowDisplay, monPics)))->character = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId) template.narcID, template.charDataID, display->heapId, mons->personality, FALSE, 0, mons->species);
@@ -231,7 +230,7 @@ static void PokeathlonSnowThrowDisplay_LoadMonPics(PokeathlonSnowThrowDisplay *d
 static void PokeathlonSnowThrowDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display, PokeathlonCourseMonInfo *mons) {
     VecFx32 position;
     int i;
-    volatile int x; // (kept in memory, as built)
+    volatile int x;
     u8 *slot;
     PokeathlonCourseMonInfo *mon;
 
@@ -282,7 +281,7 @@ static void PokeathlonSnowThrowDisplay_TransferMonPics(PokeathlonSnowThrowDispla
     }
 }
 
-// Each picture has its own 0xD00 bytes (after 0x300) of the resource's VRAM and its own palette (after the first).
+// Each picture has its own part of the resource's VRAM and its own palette (after the first).
 static void PokeathlonSnowThrowDisplay_GetPicVramOffsets(PokeathlonCourseSpritePool *pool, PokeathlonSnowThrowDisplay *display) {
     SpriteResource *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 0);
     SpriteResource *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, 101, 1);

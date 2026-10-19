@@ -61,8 +61,6 @@ enum PokeathlonResultsState {
     RESULTS_STATE_WAIT_FADE_OUT,
 };
 
-// Declared by no public header.
-
 PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *scoreList, u8 rank);
 int PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *scoreList);
 int PokeathlonCourseScoreList_GetField04(PokeathlonCourseScoreList *scoreList);
@@ -334,7 +332,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_AdvanceEventInitState(course);
         break;
     case RESULTS_INIT_LOAD_GRAPHICS:
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)announcement->bgConfig); // takes the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)announcement->bgConfig);
         PokeathlonResults_InitBgs(announcement->bgConfig, announcement->heapId);
         PokeathlonEventBanner_AddWindows(announcement->banner, announcement->bgConfig);
         PokeathlonResults_LoadBgGfx(announcement);

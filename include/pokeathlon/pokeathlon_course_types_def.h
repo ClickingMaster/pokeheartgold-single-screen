@@ -5,8 +5,6 @@
 
 #include "sprite.h"
 
-// Structs shared by the Pokeathlon course and its events (the Pokemon objects are defined below, the rest in
-// pokeathlon_course_objects.h, pokeathlon_course_internal.h and pokeathlon_course_ui.h).
 typedef struct PokeathlonCourseSpritePoolTemplate PokeathlonCourseSpritePoolTemplate;
 typedef struct PokeathlonCourseSpritePoolSprite PokeathlonCourseSpritePoolSprite;
 typedef struct PokeathlonCourseSpritePool PokeathlonCourseSpritePool;
@@ -27,18 +25,18 @@ typedef struct PokeathlonCourseMessageBox PokeathlonCourseMessageBox;
 
 struct PokeathlonCourseData;
 
-// What the Pokemon sprite loader needs to know about one Pokemon (0x10).
+// What the Pokemon sprite loader needs to know about one Pokemon.
 struct PokeathlonCourseMonInfo {
-    u16 species;     // 0x00
-    u16 form;        // 0x02
-    u16 isLarge;     // 0x04: overworld sprite uses the 64x64 frames (follower parameter byte 1)
-    u8 isShiny;      // 0x06
-    u8 gender;       // 0x07
-    int participant; // 0x08
-    u32 personality; // 0x0C
+    u16 species;
+    u16 form;
+    u16 isLarge; // overworld sprite uses the 64x64 frames (follower parameter byte 1)
+    u8 isShiny;
+    u8 gender;
+    int participant;
+    u32 personality;
 };
 
-// A Pokemon on a course screen: its sprite plus a shadow and a player marker (0x44). Created by the course
+// A Pokemon on a course screen: its sprite plus a shadow and a player marker. Created by the course
 // sprite factory (PokeathlonCourseMonObjects_Load).
 struct PokeathlonCourseMonObject {
     PokeathlonCourseMonGfx *gfx; // the loaded Pokemon sprite
@@ -61,21 +59,21 @@ struct PokeathlonCourseMonObject {
 };
 
 struct PokeathlonCourseMonObjects {
-    enum HeapID heapId;                         // 0x000
-    int count;                                  // 0x004
-    int baseDrawPriority;                       // 0x008
-    BOOL loaded;                                // 0x00C
-    SpriteList *spriteList;                     // 0x010
-    PokeathlonCourseMonGfxManager *gfxManager;  // 0x014
-    PokeathlonCourseSpriteResources *resources; // 0x018
-    PokeathlonCourseMonObject objects[12];      // 0x01C
+    enum HeapID heapId;
+    int count;
+    int baseDrawPriority;
+    BOOL loaded;
+    SpriteList *spriteList;
+    PokeathlonCourseMonGfxManager *gfxManager;
+    PokeathlonCourseSpriteResources *resources;
+    PokeathlonCourseMonObject objects[12];
 };
 
 // What PokeathlonCourseSpritePool_New sets up: sprite and resource capacities.
 struct PokeathlonCourseSpritePoolTemplate {
-    int capacity;      // 0x00: sprites
-    int resourceCount; // 0x04: resource ids
-    u8 resCounts[4];   // 0x08: char, palette, cell, animation
+    int capacity;      // sprites
+    int resourceCount; // resource ids
+    u8 resCounts[4];   // char, palette, cell, animation
 };
 
 // PokeathlonCourse_GetMode, PokeathlonCourseArgsLayout.mode

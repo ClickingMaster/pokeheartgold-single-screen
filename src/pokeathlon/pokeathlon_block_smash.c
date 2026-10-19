@@ -507,7 +507,7 @@ typedef struct PokeathlonBlockSmashMonInfo {
     u32 unkC;
 } PokeathlonBlockSmashMonInfo;
 
-// Event template entry 0: sets up the event over several frames; TRUE when done.
+// Sets up the event over several frames; TRUE when done.
 BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     int i, j;
@@ -582,7 +582,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         }
         PokeathlonBlockSmash_PrintInitialText(work);
         PokeathlonBlockSmash_CreateTeamRows(course);
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // the callback gets the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig);
         WirelessStatusIcon_CreateOnScreenIfConnected(1);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
@@ -612,14 +612,12 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     return FALSE;
 }
 
-// Event template entry 1.
 BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     SpriteSystem_DrawSprites(work->spriteManager);
     return TRUE;
 }
 
-// Event template entry 2.
 BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course) {
     PokeathlonCourseScoreList *graphics = PokeathlonCourse_GetGraphicsSystem(course);
     int i;
@@ -635,7 +633,7 @@ BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course) {
     return TRUE;
 }
 
-// Event template entry 3: frees everything Init created.
+// Frees everything Init created.
 BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course) {
     PokeathlonBlockSmash *work = PokeathlonCourse_GetWork(course);
     PokeathlonBlockSmash_DeleteTeamRows(work);

@@ -176,7 +176,7 @@ static void PokeathlonEventRecord_VBlankCallback(PokeathlonEventRecord *work) {
 
     SpriteSystem_TransferOam();
     DoScheduledBgGpuUpdates(work->bgConfig);
-    *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK), DTCM address as a literal
+    *(vu32 *)(dtcm + 0x3FF8) |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
 }
 
 static void PokeathlonEventRecord_InitBgs(PokeathlonEventRecord *work) {
@@ -752,7 +752,7 @@ static String *PokeathlonEventRecord_GetLinkPlayerName(PokeathlonEventRecordData
     GF_ASSERT(data != NULL);
     records = (u8 *)&data->args->recordsLink[event];
     string = data->string;
-    // link records store each rank's player name 0x18 bytes apart, from offset 0x30
+    // the player name of each rank in the link records
     CopyU16ArrayToString(string, (const u16 *)(records + 0x30 + rank * 0x18));
     return data->string;
 }

@@ -36,13 +36,10 @@ extern const OamManagerParam gPokeathlonRingDropOamManagerParam;
 extern const ManagedSpriteTemplate gPokeathlonRingDropSpriteTemplate;
 extern const PokeathlonRingDropBgTemplates gPokeathlonRingDropBgTemplates;
 
-// Sound (declared by no header)
 BOOL PlaySE_SetVolume(u16 seqNo, int volume);
 
-// NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
-// The code calls these with an int member.
 #define PokeathlonRingDropUi_SetMemberSwitching(ui, participant, member, switching) (((void (*)(PokeathlonRingDropUi *, u8, int, int))PokeathlonRingDropUi_SetSwitching)((ui), (participant), (member), (switching)))
 #define PokeathlonRingDrop_GetTeamMemberParams(course, participant, member)         (((PokeathlonRingDropMemberParams * (*)(PokeathlonCourseData *, u8, int)) PokeathlonRingDrop_GetMemberParams)((course), (participant), (member)))
 
@@ -623,7 +620,6 @@ static void PokeathlonRingDropDisplay_ApplyFramePacket(PokeathlonRingDropDisplay
     }
 }
 
-// PokeathlonCourseMonObjects_Get as the first call in PokeathlonRingDropDisplay_Init was built: with an int index.
 typedef void *(*PokeathlonRingDropGetMonObjectFunc)(void *monObjects, int index);
 
 void PokeathlonRingDropDisplay_Init(PokeathlonRingDropDisplay *display, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonRingDropUi *ui, void *monObjects, enum HeapID heapId) {
@@ -741,7 +737,6 @@ void PokeathlonRingDropDisplay_Free(PokeathlonRingDropDisplay *display) {
     GF_ASSERT(display->statusSprite != NULL);
     Sprite_DeleteAndFreeResources(display->statusSprite);
     for (i = 0, mon = display->mons; i < RING_DROP_PARTICIPANTS; i++, mon++) {
-        // one cursor over the five sprite pointers
         for (j = 0, cursor = mon; j < 5; j++, cursor = (PokeathlonRingDropMonSprites *)((u8 *)cursor + sizeof(ManagedSprite *))) {
             Sprite_DeleteAndFreeResources(cursor->chargeSprite);
         }
@@ -754,7 +749,6 @@ void PokeathlonRingDropDisplay_StopAnimations(PokeathlonRingDropDisplay *display
     PokeathlonRingDropDisplay *group = display;
     BOOL animate = FALSE;
 
-    // one cursor per participant, one over the five sprite pointers
     do {
         PokeathlonRingDropDisplay *cursor;
         j = 0;

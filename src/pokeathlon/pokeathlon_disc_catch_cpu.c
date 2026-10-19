@@ -52,7 +52,7 @@ void PokeathlonDiscCatchCpu_Delete(PokeathlonDiscCatchCpu *cpu) {
     Heap_Free(cpu);
 }
 
-// NB: each CPU team is compared with the score of team 0, 1, 2 (its own index among the CPU teams),
+// Each CPU team is compared with the score of team 0, 1, 2 (its own index among the CPU teams),
 // not with its own score.
 #pragma opt_lifetimes off
 #pragma opt_common_subs off

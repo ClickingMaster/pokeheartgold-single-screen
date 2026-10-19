@@ -19,7 +19,6 @@ enum {
     PLATE_STATE_FLASH,
 };
 
-// NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
@@ -31,10 +30,8 @@ void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, 
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
 SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonGoalRollSpritePool *pool);
 
-// declared writable here: the plate task was built so (the loads stay in order with the stores)
 extern PokeathlonGoalRollPaletteData gPokeathlonGoalRollPaletteData;
 
-// BgTilemapRectChangePalette as the plate task was built: with int arguments.
 typedef void (*PokeathlonGoalRollChangePaletteFunc)(BgConfig *bgConfig, int bgId, int x, int y, int width, int height, int palette);
 #define ChangePlatePalette ((PokeathlonGoalRollChangePaletteFunc)BgTilemapRectChangePalette)
 

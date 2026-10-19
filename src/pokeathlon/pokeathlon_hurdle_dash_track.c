@@ -335,7 +335,7 @@ static void PokeathlonHurdleDashStandings_InitResourcesHeader(PokeathlonHurdleDa
     CreateSpriteResourcesHeader(&standings->header, 0x80, 0x80, 0x80, 0x80, -1, -1, FALSE, 0, standings->resMans[GF_GFX_RES_TYPE_CHAR], standings->resMans[GF_GFX_RES_TYPE_PLTT], standings->resMans[GF_GFX_RES_TYPE_CELL], standings->resMans[GF_GFX_RES_TYPE_ANIM], NULL, NULL);
 }
 
-// The icon (its own Pokemon icon tiles, 0x200 bytes each), team frame and rank of each Pokemon; Pokemon
+// The icon, team frame and rank of each Pokemon; Pokemon
 // that don't exist are hidden.
 
 static void PokeathlonHurdleDashStandings_CreateSprites(PokeathlonHurdleDashStandings *standings, PokeathlonHurdleDashStandingsMonId *mons) {

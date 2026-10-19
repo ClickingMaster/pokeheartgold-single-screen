@@ -16,7 +16,6 @@ void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, s3
 void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourseObject_GetCollisionCircle(PokeathlonCourseMonObject *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
 
-// The code calls these two with u8 arguments.
 #define PokeathlonRingDrop_GetMonObject(objects, index)    (((void *(*)(void *, u8))PokeathlonCourseMonObjects_Get)((objects), (index)))
 #define PokeathlonRingDrop_SetMonObjectDrawn(object, draw) (((void (*)(void *, u8))PokeathlonCourseMonObject_SetDrawFlag)((object), (draw)))
 
@@ -35,7 +34,6 @@ typedef struct PokeathlonRingDropSwitchSpot {
     s16 radius;
 } PokeathlonRingDropSwitchSpot;
 
-// gPokeathlonRingDropSwitchSpots[participant] (the code reads y and radius through the labels gPokeathlonRingDropSwitchSpotsY and gPokeathlonRingDropSwitchSpotsRadius).
 extern const PokeathlonRingDropSwitchSpot gPokeathlonRingDropSwitchSpots[], gPokeathlonRingDropSwitchSpotsY[], gPokeathlonRingDropSwitchSpotsRadius[];
 // The direction 4 (PokeathlonRingDrop_GetDirection measures the angle from it).
 extern VecFx32 gPokeathlonRingDropDirectionReference;
@@ -462,7 +460,6 @@ void PokeathlonRingDrop_UpdateMons(PokeathlonRingDropPlayer *players, Pokeathlon
 }
 
 // Host: writes the Pokemon into the frame packet to send.
-// (The work is reached from its contacts field, which the players follow.)
 #define RING_DROP_CONTACTS_TO(field) (offsetof(PokeathlonRingDrop, field) - offsetof(PokeathlonRingDrop, contacts))
 
 void PokeathlonRingDrop_BuildFramePacket(u8 (*contacts)[RING_DROP_PARTICIPANTS], PokeathlonCourseData *course) {

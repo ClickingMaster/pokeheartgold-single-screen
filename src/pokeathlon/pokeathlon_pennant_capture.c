@@ -32,7 +32,7 @@ void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, s3
 void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 
 extern const GraphicsBanks sPennantCaptureGraphicsBanks;
-extern const VecFx32 sPennantCaptureSpritePoolTemplate; // sprite pool template
+extern const VecFx32 sPennantCaptureSpritePoolTemplate;
 
 enum PokeathlonPennantCaptureInitState {
     PENNANT_CAPTURE_INIT_CREATE,
@@ -184,7 +184,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
             break;
         }
         own = PokeathlonCourse_GetNetId(course);
-        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // takes the BgConfig
+        PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig);
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collisions, NARC_a_1_7_0, 14);
         s32 i;
@@ -199,7 +199,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
                 PokeathlonPennantCaptureCollision *collision = &collisions[PokeathlonCourse_GetCollisionSizeClass(PokeathlonPennantCapture_GetPerformance(course, i))]; // size 1-3
                 PokeathlonCourseObject_SetCollision(object, collision[-1].offsetY, collision[-1].radius);
             }
-            object = PokeathlonCourseMonObjects_Get(work->monObjects, i & 0xFF); // (not (u8)i: that is shared with the call above)
+            object = PokeathlonCourseMonObjects_Get(work->monObjects, i & 0xFF);
             teamId = i / 3;
             PokeathlonPennantCapturePlayer *player = &work->players[teamId];
             player->monObjects[memberOnField] = object;

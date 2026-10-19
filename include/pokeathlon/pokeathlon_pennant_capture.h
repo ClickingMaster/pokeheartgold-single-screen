@@ -13,90 +13,86 @@
 #include "pm_string.h"
 #include "sprite.h"
 
-// Pennant Capture (Pokeathlon event 1): the four participants' Pokemon run around a walled field
-// with obstacle blocks, pick up the pennants that appear at fixed spots (at most 9 carried) and
-// score by carrying them into the goal area at the bottom of the field. Colliding with another
-// Pokemon that runs in the same direction knocks it down and takes up to two of its pennants.
-// Field coordinates are whole units (512 x 512); the touch screen shows a 256 x 192 window
-// centred on the own Pokemon. The participants without a player are steered by a simple CPU.
+// Pennant Capture: the Pokemon pick up the pennants that appear around a walled field (at most 9 carried) and
+// score by carrying them into the goal area at the bottom. Running into a Pokemon takes up to two of its pennants.
 
 // The movement parameters of one of the three Pokemon (one per team member).
 typedef struct PokeathlonPennantCaptureMoveParams {
-    f32 unk00;                        // 0x00
-    f32 unk04;                        // 0x04
-    f32 knockbackScale;               // 0x08: share of the own speed passed on to a Pokemon it knocks down
-    s32 knockdownTime;                // 0x0C: base of the frames a knocked-down Pokemon stays down
-    u8 maxSpeed;                      // 0x10
-    u8 unk11[3];                      // 0x11
-} PokeathlonPennantCaptureMoveParams; // size: 0x14
+    f32 unk00;
+    f32 unk04;
+    f32 knockbackScale; // share of the own speed passed on to a Pokemon it knocks down
+    s32 knockdownTime;  // base of the frames a knocked-down Pokemon stays down
+    u8 maxSpeed;
+    u8 unk11[3];
+} PokeathlonPennantCaptureMoveParams;
 
 // One participant's team on the field (the Pokemon currently running is `member`).
 typedef struct PokeathlonPennantCapturePlayer {
-    void *monObjects[3];                              // 0x00: one course object per team member
-    PokeathlonPennantCaptureMoveParams moveParams[3]; // 0x0C
-    PokeathlonCourseSpritePoolSprite *carrySprite;    // 0x48: shown above the Pokemon while active
-    void *pointSprites[2];                            // 0x4C: "+points" effects, used alternately
-    PokeathlonCourseSpritePoolSprite *pennantSprite;  // 0x54: pennant count change effect
-    VecFx32 position;                                 // 0x58: field position (fx32)
-    VecFx32 velocity;                                 // 0x64
-    s16 drawOffsetY;                                  // 0x70
-    u8 flashTimer;                                    // 0x72
-    u8 shownPennants;                                 // 0x73
-    s32 wallSide;                                     // 0x74: side of the obstacle hit last (0 = none)
-    u16 nextPointSprite;                              // 0x78
-    u16 holdTime;                                     // 0x7A: frames the touch was held (human players)
-    VecFx32 cpuFrom;                                  // 0x7C: CPU: where the current path starts; human: where the touch drag started
-    VecFx32 cpuTarget;                                // 0x88: CPU: where it leads; human: where the touch drag is now
-    u8 contacts[4];                                   // 0x94: touching the other participants' Pokemon
-    u32 participant;                                  // 0x98
-    u8 swapPending;                                   // 0x9C: set once a deposit finished
-    u8 swapPhase;                                     // 0x9D
-    u8 swapState;                                     // 0x9E: team member swap shown on the top screen
-    u8 swapStep;                                      // 0x9F
-    u8 swapTimer;                                     // 0xA0
-    u8 unkA1;                                         // 0xA1
-    u8 knockdownTimer;                                // 0xA2
-    u8 active;                                        // 0xA3
-    u8 freezeTimer;                                   // 0xA4: frames without movement after a collision
-    u8 cpuHasTarget;                                  // 0xA5: CPU: a path is chosen; human: a flick is pending
-    u8 knockedDown;                                   // 0xA6
-    u8 pointsToAdd;                                   // 0xA7: deposited pennants still to be counted
-    u8 depositDelay;                                  // 0xA8
-    u8 depositSteps;                                  // 0xA9
-    u8 pennants;                                      // 0xAA: carried pennants (at most 9)
-    u8 depositing;                                    // 0xAB
-    u16 score;                                        // 0xAC
-    u16 shownScore;                                   // 0xAE: score as last received from the host
-    u8 direction;                                     // 0xB0: 1-4, see PokeathlonPennantCapture_GetDirection
-    u8 member;                                        // 0xB1: team member on the field
-    u8 unkB2;                                         // 0xB2
-    u8 touchingPennant[5];                            // 0xB3
-} PokeathlonPennantCapturePlayer;                     // size: 0xB8
+    void *monObjects[3]; // one course object per team member
+    PokeathlonPennantCaptureMoveParams moveParams[3];
+    PokeathlonCourseSpritePoolSprite *carrySprite;   // shown above the Pokemon while active
+    void *pointSprites[2];                           // "+points" effects, used alternately
+    PokeathlonCourseSpritePoolSprite *pennantSprite; // pennant count change effect
+    VecFx32 position;                                // field position (fx32)
+    VecFx32 velocity;
+    s16 drawOffsetY;
+    u8 flashTimer;
+    u8 shownPennants;
+    s32 wallSide; // side of the obstacle hit last (0 = none)
+    u16 nextPointSprite;
+    u16 holdTime;      // frames the touch was held (human players)
+    VecFx32 cpuFrom;   // CPU: where the current path starts; human: where the touch drag started
+    VecFx32 cpuTarget; // CPU: where it leads; human: where the touch drag is now
+    u8 contacts[4];    // touching the other participants' Pokemon
+    u32 participant;
+    u8 swapPending; // set once a deposit finished
+    u8 swapPhase;
+    u8 swapState; // team member swap shown on the top screen
+    u8 swapStep;
+    u8 swapTimer;
+    u8 unkA1;
+    u8 knockdownTimer;
+    u8 active;
+    u8 freezeTimer;  // frames without movement after a collision
+    u8 cpuHasTarget; // CPU: a path is chosen; human: a flick is pending
+    u8 knockedDown;
+    u8 pointsToAdd; // deposited pennants still to be counted
+    u8 depositDelay;
+    u8 depositSteps;
+    u8 pennants; // carried pennants (at most 9)
+    u8 depositing;
+    u16 score;
+    u16 shownScore; // score as last received from the host
+    u8 direction;   // 1-4, see PokeathlonPennantCapture_GetDirection
+    u8 member;      // team member on the field
+    u8 unkB2;
+    u8 touchingPennant[5];
+} PokeathlonPennantCapturePlayer;
 
 // An obstacle block (32 x 32 units).
 typedef struct PokeathlonPennantCaptureObstacle {
-    void *object;                             // 0x00: NULL ends the list
-    PokeathlonCourseSpritePoolSprite *sprite; // 0x04
-    u16 x;                                    // 0x08
-    u16 y;                                    // 0x0A
+    void *object; // NULL ends the list
+    PokeathlonCourseSpritePoolSprite *sprite;
+    u16 x;
+    u16 y;
 } PokeathlonPennantCaptureObstacle;
 
 // One of the ten two-sprite field objects; the CPU players head for them.
 typedef struct PokeathlonPennantCaptureFieldItem {
-    void *object;                                   // 0x00: NULL ends the list
-    PokeathlonCourseSpritePoolSprite *sprite;       // 0x04
-    PokeathlonCourseSpritePoolSprite *shadowSprite; // 0x08
-    u16 x;                                          // 0x0C
-    u16 y;                                          // 0x0E
+    void *object; // NULL ends the list
+    PokeathlonCourseSpritePoolSprite *sprite;
+    PokeathlonCourseSpritePoolSprite *shadowSprite;
+    u16 x;
+    u16 y;
 } PokeathlonPennantCaptureFieldItem;
 
 typedef struct PokeathlonPennantCapturePennant {
-    u32 active;                                   // 0x00
-    PokeathlonCourseSpritePoolSprite *sprite;     // 0x04
-    PokeathlonCourseSpritePoolSprite *poleSprite; // 0x08
-    u32 spot;                                     // 0x0C: index into PokeathlonPennantCapturePennants.spots
-    u16 x;                                        // 0x10
-    u16 y;                                        // 0x12
+    u32 active;
+    PokeathlonCourseSpritePoolSprite *sprite;
+    PokeathlonCourseSpritePoolSprite *poleSprite;
+    u32 spot; // index into PokeathlonPennantCapturePennants.spots
+    u16 x;
+    u16 y;
 } PokeathlonPennantCapturePennant;
 
 typedef struct PokeathlonPennantCapturePoint {
@@ -106,10 +102,10 @@ typedef struct PokeathlonPennantCapturePoint {
 
 // The five pennants on the field and the 20 spots they appear at, in turn.
 typedef struct PokeathlonPennantCapturePennants {
-    PokeathlonPennantCapturePennant pennants[5]; // 0x00
-    PokeathlonPennantCapturePoint spots[20];     // 0x64
-    u16 nextSpot;                                // 0xB4
-    u16 count;                                   // 0xB6
+    PokeathlonPennantCapturePennant pennants[5];
+    PokeathlonPennantCapturePoint spots[20];
+    u16 nextSpot;
+    u16 count;
 } PokeathlonPennantCapturePennants;
 
 // The event's work (PokeathlonCourse_GetWork).
@@ -120,52 +116,52 @@ typedef struct PokeathlonPennantCaptureTouch {
 } PokeathlonPennantCaptureTouch;
 
 typedef struct PokeathlonPennantCapture {
-    BgConfig *bgConfig;                                   // 0x000
-    Window scoreWindow;                                   // 0x004
-    enum HeapID heapId;                                   // 0x014
-    void *bgCharsFile;                                    // 0x018: the file bgChars points into
-    NNSG2dCharacterData *bgChars;                         // 0x01C: the animated BG0 tiles (6 frames)
-    PokeathlonCourseSpritePool *spritePool;               // 0x020
-    PokeathlonPennantCapturePlayer players[4];            // 0x024
-    PokeathlonPennantCaptureTouch touches[4];             // 0x304: host: the participants' touch state
-    BOOL dragging[4];                                     // 0x334: the touch started on the own Pokemon
-    PokeathlonCourseSpriteResources *monResources;        // 0x344: PokeathlonCourseSpriteResources
-    void *monObjects;                                     // 0x348: PokeathlonCourseMonObjects
-    void *pickupEffects[4];                               // 0x34C: SEQ_SE_GS_THLON06, used in turn
-    void *dropEffects[4];                                 // 0x35C: SEQ_SE_GS_SAA, used in turn
-    struct PokeathlonPennantCaptureCpu *cpu;              // 0x36C
-    struct PokeathlonPennantCaptureDisplay *display;      // 0x370
-    u32 layoutChoice;                                     // 0x374: host: the field layout it picked (0-19), sent to everyone as layoutFileId
-    u32 layoutFileId;                                     // 0x378: field layout member in NARC 227
-    PokeathlonPennantCaptureObstacle obstacles[20];       // 0x37C
-    PokeathlonPennantCaptureFieldItem fieldItems[10];     // 0x46C
-    u16 timeLeft;                                         // 0x50C: frames until the event ends
-    u8 finished;                                          // 0x50E
-    u8 unk50F;                                            // 0x50F
-    u8 heldTooLong;                                       // 0x510: stronger friction while set
-    u8 bgAnimFrame;                                       // 0x511
-    u8 bgAnimTimer;                                       // 0x512
-    u8 shownPennantSpots[5];                              // 0x513
-    u8 nextPickupEffect;                                  // 0x518
-    u8 hitReported;                                       // 0x519
-    u8 nextDropEffect;                                    // 0x51A
-    u8 flicked;                                           // 0x51B: a flick was made this frame
-    u16 hitY;                                             // 0x51C
-    u16 hitX;                                             // 0x51E
-    u16 flickY;                                           // 0x520: field position of the last flick
-    u16 flickX;                                           // 0x522
-    u32 pickupEffectX[4];                                 // 0x524
-    u32 pickupEffectY[4];                                 // 0x534
-    u32 dropEffectX[4];                                   // 0x544
-    u32 dropEffectY[4];                                   // 0x554
-    PokeathlonPennantCapturePennants pennants;            // 0x564
-    PokeathlonPennantCapturePoint obstaclePositions[20];  // 0x61C
-    PokeathlonPennantCapturePoint fieldItemPositions[10]; // 0x66C
-    u8 unk694[0x28];                                      // 0x694
-    u8 pennantsFull[4];                                   // 0x6BC: touched a pennant while carrying 9
+    BgConfig *bgConfig;
+    Window scoreWindow;
+    enum HeapID heapId;
+    void *bgCharsFile;            // the file bgChars points into
+    NNSG2dCharacterData *bgChars; // the animated BG0 tiles (6 frames)
+    PokeathlonCourseSpritePool *spritePool;
+    PokeathlonPennantCapturePlayer players[4];
+    PokeathlonPennantCaptureTouch touches[4]; // host: the participants' touch state
+    BOOL dragging[4];                         // the touch started on the own Pokemon
+    PokeathlonCourseSpriteResources *monResources;
+    void *monObjects;       // PokeathlonCourseMonObjects
+    void *pickupEffects[4]; // SEQ_SE_GS_THLON06, used in turn
+    void *dropEffects[4];   // SEQ_SE_GS_SAA, used in turn
+    struct PokeathlonPennantCaptureCpu *cpu;
+    struct PokeathlonPennantCaptureDisplay *display;
+    u32 layoutChoice; // host: the field layout it picked (0-19), sent to everyone as layoutFileId
+    u32 layoutFileId; // field layout member in NARC 227
+    PokeathlonPennantCaptureObstacle obstacles[20];
+    PokeathlonPennantCaptureFieldItem fieldItems[10];
+    u16 timeLeft; // frames until the event ends
+    u8 finished;
+    u8 unk50F;
+    u8 heldTooLong; // stronger friction while set
+    u8 bgAnimFrame;
+    u8 bgAnimTimer;
+    u8 shownPennantSpots[5];
+    u8 nextPickupEffect;
+    u8 hitReported;
+    u8 nextDropEffect;
+    u8 flicked; // a flick was made this frame
+    u16 hitY;
+    u16 hitX;
+    u16 flickY; // field position of the last flick
+    u16 flickX;
+    u32 pickupEffectX[4];
+    u32 pickupEffectY[4];
+    u32 dropEffectX[4];
+    u32 dropEffectY[4];
+    PokeathlonPennantCapturePennants pennants;
+    PokeathlonPennantCapturePoint obstaclePositions[20];
+    PokeathlonPennantCapturePoint fieldItemPositions[10];
+    u8 unk694[0x28];
+    u8 pennantsFull[4]; // touched a pennant while carrying 9
 } PokeathlonPennantCapture;
 
-// The frame state the host sends to all participants (link data block at +0xF0, 0x28 bytes).
+// The frame state the host sends to all participants.
 // words[0-3]: per participant x (bits 0-8), y (9-17), score (18-27), pennants (28-31).
 // words[4]: drop effect x, y, bit 18 new drop effect, bits 19-22 hidden participants,
 //           bits 23-30 swap state per participant (2 bits each).
@@ -175,7 +171,7 @@ typedef struct PokeathlonPennantCapture {
 typedef struct PokeathlonPennantCaptureFrame {
     u32 words[6];
     u16 spots[5];
-    u16 timeLeft; // 0x22
+    u16 timeLeft;
 } PokeathlonPennantCaptureFrame;
 
 // Link data as seen by the frame update: own block, the other participants' blocks, the frame.
@@ -187,11 +183,11 @@ typedef struct PokeathlonPennantCaptureLinkData {
 
 // A participant's team member on the top screen.
 typedef struct PokeathlonPennantCaptureDisplayMon {
-    PokeathlonCourseSpritePoolSprite *icon;      // 0x00
-    PokeathlonCourseSpritePoolSprite *carryMark; // 0x04
-    PokeathlonCourseSpritePoolSprite *frame;     // 0x08
-    u8 active;                                   // 0x0C
-    u8 unk0D[0xF];                               // 0x0D
+    PokeathlonCourseSpritePoolSprite *icon;
+    PokeathlonCourseSpritePoolSprite *carryMark;
+    PokeathlonCourseSpritePoolSprite *frame;
+    u8 active;
+    u8 unk0D[0xF];
 } PokeathlonPennantCaptureDisplayMon;
 
 // One of the three team members' battle pictures (two are kept in VRAM, slid in and out in turn).
@@ -207,42 +203,42 @@ typedef struct PokeathlonPennantCaptureCounter {
 
 // The top screen (score, the participants' Pokemon, the timer).
 typedef struct PokeathlonPennantCaptureDisplay {
-    enum HeapID heapId;            // 0x000
-    PokeathlonCourseData *course;  // 0x004
-    BgConfig *bgConfig;            // 0x008
-    Window window;                 // 0x00C
-    MsgData *msgData;              // 0x01C
-    MessageFormat *msgFormat;      // 0x020
-    void *scoreScreenFile;         // 0x024
-    NNSG2dScreenData *scoreScreen; // 0x028
-    u8 unk02C[0xC];                // 0x02C
+    enum HeapID heapId;
+    PokeathlonCourseData *course;
+    BgConfig *bgConfig;
+    Window window;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    void *scoreScreenFile;
+    NNSG2dScreenData *scoreScreen;
+    u8 unk02C[0xC];
 
     union {
-        PokeathlonPennantCaptureDisplayMon mons[4]; // stride 0x1C; the last entry's tail is iconFiles[0-2]
+        PokeathlonPennantCaptureDisplayMon mons[4];
 
         struct {
             u8 filler[0x64];
-            void *iconFiles[12]; // 0x09C
+            void *iconFiles[12];
         } raw;
-    } u; // 0x038
+    } u;
 
-    NNSG2dCharacterData *iconChars[12];           // 0x0CC
-    u8 iconPalettes[12];                          // 0x0FC
-    PokeathlonPennantCaptureMonPic monPics[3];    // 0x108
-    u32 picCharOffsets[2];                        // 0x120
-    u32 picPlttOffsets[2];                        // 0x128
-    void *picSprites[2];                          // 0x130
-    PokeathlonCourseSpritePoolSprite *goalSprite; // 0x138
-    void *statusSprites[4][4];                    // 0x13C
-    void *pointSprites[4][2];                     // 0x17C
-    int picState;                                 // 0x19C
-    u16 picSlot;                                  // 0x1A0
-    u16 nextPointSprite;                          // 0x1A2
-    u8 shownMember[4];                            // 0x1A4
-    String *names[3];                             // 0x1A8
-    Sprite *timerDigits[2];                       // 0x1B4
-    PokeathlonPennantCaptureCounter counters[3];  // 0x1BC
-} PokeathlonPennantCaptureDisplay;                // size: 0x1C8
+    NNSG2dCharacterData *iconChars[12];
+    u8 iconPalettes[12];
+    PokeathlonPennantCaptureMonPic monPics[3];
+    u32 picCharOffsets[2];
+    u32 picPlttOffsets[2];
+    void *picSprites[2];
+    PokeathlonCourseSpritePoolSprite *goalSprite;
+    void *statusSprites[4][4];
+    void *pointSprites[4][2];
+    int picState;
+    u16 picSlot;
+    u16 nextPointSprite;
+    u8 shownMember[4];
+    String *names[3];
+    Sprite *timerDigits[2];
+    PokeathlonPennantCaptureCounter counters[3];
+} PokeathlonPennantCaptureDisplay;
 
 // The per-level move parameter tables (tenths), indexed by the Pokemon's performance levels.
 typedef struct PokeathlonPennantCaptureMoveTables {
@@ -291,32 +287,32 @@ typedef struct PokeathlonPennantCaptureCpuObject {
 
 // One of the 6 x 8 cells (32 x 32) around the CPU's Pokemon, rated each time it picks a new target.
 typedef struct PokeathlonPennantCaptureCpuCell {
-    int x;       // 0x00: cell centre
-    int y;       // 0x04
-    int targetX; // 0x08: a random point of the cell
-    int targetY; // 0x0C
-    s16 score;   // 0x10
-    s16 index;   // 0x12
+    int x; // cell centre
+    int y;
+    int targetX; // a random point of the cell
+    int targetY;
+    s16 score;
+    s16 index;
 } PokeathlonPennantCaptureCpuCell;
 
 // The CPU of the participants without a player (one decision per CPU every `interval` frames).
 typedef struct PokeathlonPennantCaptureCpu {
-    PokeathlonPennantCaptureCpuPlayer players[4];     // 0x000
-    PokeathlonPennantCaptureCpuObject obstacles[20];  // 0x020
-    PokeathlonPennantCaptureCpuObject fieldItems[10]; // 0x110
-    PokeathlonPennantCapturePennant *pennants;        // 0x188
-    u32 unk18C;                                       // 0x18C
-    PokeathlonPennantCaptureCpuCell cells[48];        // 0x190
-    u32 thinking;                                     // 0x550
-    u8 cpuCount;                                      // 0x554
-    u8 cursor;                                        // 0x555
-    u8 timer;                                         // 0x556
-    u8 interval;                                      // 0x557
-    u8 firstCpu;                                      // 0x558
-    u8 humanCount;                                    // 0x559
-} PokeathlonPennantCaptureCpu;                        // size: 0x55C
+    PokeathlonPennantCaptureCpuPlayer players[4];
+    PokeathlonPennantCaptureCpuObject obstacles[20];
+    PokeathlonPennantCaptureCpuObject fieldItems[10];
+    PokeathlonPennantCapturePennant *pennants;
+    u32 unk18C;
+    PokeathlonPennantCaptureCpuCell cells[48];
+    u32 thinking;
+    u8 cpuCount;
+    u8 cursor;
+    u8 timer;
+    u8 interval;
+    u8 firstCpu;
+    u8 humanCount;
+} PokeathlonPennantCaptureCpu;
 
-// Resource ids of sprite sets (gPokeathlonPennantCaptureSpriteIds, defined with the override object between the display parts).
+// Resource ids of sprite sets (gPokeathlonPennantCaptureSpriteIds).
 typedef struct PokeathlonPennantCaptureSpriteIds {
     u32 ids[2];
 } PokeathlonPennantCaptureSpriteIds;

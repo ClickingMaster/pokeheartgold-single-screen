@@ -26,7 +26,6 @@ void *PokeathlonCourseScoreList_New(enum HeapID heapId) {
 
 void PokeathlonCourseScoreList_Free(void *ptr) {
     int i = 0;
-    // entryBase: as in PokeathlonCourseScoreList_New
     PokeathlonCourseScoreList *entryBase = ptr;
 
     do {

@@ -22,33 +22,33 @@
 // Banner of an event (NARC a/2/2/1 members by event, msg 309 names): picture on sub BG 3, name
 // and place windows.
 struct PokeathlonEventBanner {
-    enum HeapID heapId; // 0x00
-    BgConfig *bgConfig; // 0x04
-    u32 event;          // 0x08
-    NARC *narc;         // 0x0C
-    Window nameWindow;  // 0x10
-    Window placeWindow; // 0x20
-}; // size: 0x30
+    enum HeapID heapId;
+    BgConfig *bgConfig;
+    u32 event;
+    NARC *narc;
+    Window nameWindow;
+    Window placeWindow;
+};
 
 // The message box of the commentator (msg 309, and msg 311 for the lines of the NPC teams).
 struct PokeathlonCourseMessageBox {
-    BgConfig *bgConfig;       // 0x00
-    MessageFormat *msgFormat; // 0x04
-    MsgData *msgData;         // 0x08: msg 309
-    MsgData *npcMsgData;      // 0x0C: msg 311
-    String *string;           // 0x10
-    enum HeapID heapId;       // 0x14
-    Window window;            // 0x18
-    BOOL linkMode;            // 0x28: keep the box busy a little longer after printing
-    s32 printerId;            // 0x2C
-    WaitingIcon *waitingIcon; // 0x30
-    u32 holdTimer : 16;       // 0x34
+    BgConfig *bgConfig;
+    MessageFormat *msgFormat;
+    MsgData *msgData;    // msg 309
+    MsgData *npcMsgData; // msg 311
+    String *string;
+    enum HeapID heapId;
+    Window window;
+    BOOL linkMode; // keep the box busy a little longer after printing
+    s32 printerId;
+    WaitingIcon *waitingIcon;
+    u32 holdTimer : 16;
     u32 textSpeed : 8;
     u32 bgLayer : 3;
     u32 unk34_27 : 1;
     u32 busy : 1;
     u32 unk34_29 : 3;
-}; // size: 0x38
+};
 
 void PokeathlonCourse_LoadSpritePalette(ManagedSprite *sprite, NarcId narcId, int fileId, BOOL mainScreen, BOOL grayScale, enum HeapID heapId);
 int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass);

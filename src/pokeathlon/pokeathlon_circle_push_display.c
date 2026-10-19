@@ -28,8 +28,6 @@ void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *spr
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
 SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *scene, int id, int type);
 
-// The resource ids of the two picture sprites (102, 103) lie 0x20 bytes after the coordinates in
-// the read-only data of their defining file.
 extern PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords;
 
 static void PokeathlonCirclePushDisplay_PrintRound(PokeathlonCirclePushDisplay *display, u32 round);

@@ -12,11 +12,8 @@
 #include "msgdata.h"
 #include "sprite_system.h"
 
-// Ring Drop (Pokeathlon event 7): the four participants each have one of their three Pokemon in
-// the ring at a time and try to push the others out. Touching the switch button at the top of the
-// touch screen swaps the Pokemon in the ring for the next team member. A Pokemon's stamina drains
-// while it is in the ring and refills on the bench. The match lasts 1800 frames; the host runs the
-// ring and sends a frame packet each frame.
+// Ring Drop: each participant has one of its three Pokemon in the ring at a time and tries to push the others
+// out. A Pokemon's stamina drains while it is in the ring and refills on the bench.
 
 #define RING_DROP_PARTICIPANTS 4
 #define RING_DROP_TEAM_SIZE    3
@@ -53,23 +50,23 @@ typedef struct PokeathlonRingDropUi PokeathlonRingDropUi;
 // A team member's numbers, from its performance stats 0-3 (PokeathlonRingDrop_InitMemberParams,
 // table NARC 170 #9).
 typedef struct PokeathlonRingDropMemberParams {
-    s32 dashPower;                // 0x00: push of a dash (x3)
-    s32 dashDamage;               // 0x04: stamina a dash takes from the Pokemon hit (x2)
-    fx32 stamina;                 // 0x08: the maximum
-    fx32 speed;                   // 0x0C: walking speed
-    s32 pressPower;               // 0x10: push of landing on a Pokemon
-    s32 pressDamage;              // 0x14
-    u8 jumpType;                  // 0x18: row of gPokeathlonRingDropJumpHeights (jump heights) and gPokeathlonRingDropFallSpeeds (fall speeds)
-} PokeathlonRingDropMemberParams; // size: 0x1C
+    s32 dashPower;  // push of a dash (x3)
+    s32 dashDamage; // stamina a dash takes from the Pokemon hit (x2)
+    fx32 stamina;   // the maximum
+    fx32 speed;     // walking speed
+    s32 pressPower; // push of landing on a Pokemon
+    s32 pressDamage;
+    u8 jumpType; // row of gPokeathlonRingDropJumpHeights (jump heights) and gPokeathlonRingDropFallSpeeds (fall speeds)
+} PokeathlonRingDropMemberParams;
 
 // A team member's 3D object and stamina.
 typedef struct PokeathlonRingDropMember {
-    PokeathlonCourseMonObject *object;            // 0x00: the course mon object
-    const PokeathlonRingDropMemberParams *params; // 0x04
-    fx32 stamina;                                 // 0x08
-    u32 index : 4;                                // 0x0C: of the mon object (participant * 3 + member)
+    PokeathlonCourseMonObject *object;
+    const PokeathlonRingDropMemberParams *params;
+    fx32 stamina;
+    u32 index : 4; // of the mon object (participant * 3 + member)
     u32 unk0C_4 : 28;
-} PokeathlonRingDropMember; // size: 0x10
+} PokeathlonRingDropMember;
 
 typedef union PokeathlonRingDropMonFlags {
     u32 raw;
@@ -95,34 +92,34 @@ struct PokeathlonRingDropPlayer;
 
 // The Pokemon a participant has in the ring.
 typedef struct PokeathlonRingDropMon {
-    PokeathlonCourseData *course;                          // 0x00
-    PokeathlonRingDropMember *member;                      // 0x04: the member in the ring
-    struct PokeathlonRingDropPlayer *player;               // 0x08: the player this is part of
-    PokeathlonRingDropUi *ui;                              // 0x0C
-    struct PokeathlonRingDropMon *attacker;                // 0x10: the last Pokemon that pushed this one
-    s32 state;                                             // 0x14: RING_DROP_MON_*
-    s32 attackerState;                                     // 0x18: the attacker's state when it pushed
-    s16 targetX;                                           // 0x1C: of a dash
-    s16 targetY;                                           // 0x1E
-    VecFx32 destination;                                   // 0x20: where it walks to
-    VecFx32 position;                                      // 0x2C
-    VecFx32 dashDirection;                                 // 0x38
-    VecFx32 velocity;                                      // 0x44
-    fx32 height;                                           // 0x50: of a jump
-    fx32 fallSpeed;                                        // 0x54
-    s8 staggerFrames;                                      // 0x58
-    s8 dashFrames;                                         // 0x59
-    s8 jumpFrames;                                         // 0x5A
-    s8 fallOutFrames;                                      // 0x5B
-    s8 restFrames;                                         // 0x5C: while exhausted
-    s8 hitFrames;                                          // 0x5D: frozen after a hit
-    s8 returnFrames;                                       // 0x5E
-    u8 status;                                             // 0x5F: the switch button's look (PokeathlonRingDropMon_UpdateStatus)
-    PokeathlonRingDropMonFlags flags;                      // 0x60
-    u32 hitMarkFrames;                                     // 0x64: attacker and hit stay in the frame packet that long
-    PokeathlonRingDropMember members[RING_DROP_TEAM_SIZE]; // 0x68
-    u32 index;                                             // 0x98: the participant
-} PokeathlonRingDropMon;                                   // size: 0x9C
+    PokeathlonCourseData *course;
+    PokeathlonRingDropMember *member;        // the member in the ring
+    struct PokeathlonRingDropPlayer *player; // the player this is part of
+    PokeathlonRingDropUi *ui;
+    struct PokeathlonRingDropMon *attacker; // the last Pokemon that pushed this one
+    s32 state;                              // RING_DROP_MON_*
+    s32 attackerState;                      // the attacker's state when it pushed
+    s16 targetX;                            // of a dash
+    s16 targetY;
+    VecFx32 destination; // where it walks to
+    VecFx32 position;
+    VecFx32 dashDirection;
+    VecFx32 velocity;
+    fx32 height; // of a jump
+    fx32 fallSpeed;
+    s8 staggerFrames;
+    s8 dashFrames;
+    s8 jumpFrames;
+    s8 fallOutFrames;
+    s8 restFrames; // while exhausted
+    s8 hitFrames;  // frozen after a hit
+    s8 returnFrames;
+    u8 status; // the switch button's look (PokeathlonRingDropMon_UpdateStatus)
+    PokeathlonRingDropMonFlags flags;
+    u32 hitMarkFrames; // attacker and hit stay in the frame packet that long
+    PokeathlonRingDropMember members[RING_DROP_TEAM_SIZE];
+    u32 index; // the participant
+} PokeathlonRingDropMon;
 
 // The host's record of a participant's touch.
 typedef struct PokeathlonRingDropTouch {
@@ -136,16 +133,16 @@ typedef struct PokeathlonRingDropTouch {
 
 // A participant: the touch state the host tracks and the Pokemon in the ring.
 typedef struct PokeathlonRingDropPlayer {
-    s16 touchX;                    // 0x00
-    s16 touchY;                    // 0x02
-    s16 touchStartX;               // 0x04
-    s16 touchStartY;               // 0x06
-    PokeathlonRingDropTouch touch; // 0x08
-    PokeathlonRingDropMon mon;     // 0x0C
-} PokeathlonRingDropPlayer;        // size: 0xA8
+    s16 touchX;
+    s16 touchY;
+    s16 touchStartX;
+    s16 touchStartY;
+    PokeathlonRingDropTouch touch;
+    PokeathlonRingDropMon mon;
+} PokeathlonRingDropPlayer;
 
-// The course's data copy area holds 0x28-byte slots: [0] the own input, [1] the frame packet the
-// host builds, [2..5] the participants' inputs (host), [6] the frame packet received.
+// The course's data copy area holds [0] the own input, [1] the frame packet the host builds, [2..5] the
+// participants' inputs (host) and [6] the frame packet received.
 #define RING_DROP_DATA_SLOT_SIZE 0x28
 #define RING_DROP_DATA_FRAME_OUT (1 * RING_DROP_DATA_SLOT_SIZE)
 #define RING_DROP_DATA_INPUTS    (2 * RING_DROP_DATA_SLOT_SIZE)
@@ -153,27 +150,27 @@ typedef struct PokeathlonRingDropPlayer {
 
 // A participant's input.
 typedef struct PokeathlonRingDropInput {
-    u32 x : 8; // 0x00
+    u32 x : 8;
     u32 y : 8;
     u32 touching : 1;
     u32 switchState : 2; // the switch animation's progress, see PokeathlonRingDropMonFlags
     u32 unk00_19 : 13;
-    u32 unk04[7];          // 0x04
-    u32 unk20;             // 0x20
-} PokeathlonRingDropInput; // size: 0x24
+    u32 unk04[7];
+    u32 unk20;
+} PokeathlonRingDropInput;
 
 // One participant's Pokemon in the frame packet.
 typedef struct PokeathlonRingDropMonPacket {
-    u8 x;             // 0x00
-    u8 y;             // 0x01
-    u8 height : 6;    // 0x02: jump height
-    u8 hit : 2;       //       1: tackle hit, 2: press hit
-    u8 score;         // 0x03
-    u8 state : 4;     // 0x04
-    u8 attacker : 2;  //       see PokeathlonRingDropMonFlags
-    u8 member : 2;    //       team member in the ring
-    u8 status : 3;    // 0x05: the own participant's status sprite
-    u8 direction : 2; //       minus 1
+    u8 x;
+    u8 y;
+    u8 height : 6; // jump height
+    u8 hit : 2;    // 1: tackle hit, 2: press hit
+    u8 score;
+    u8 state : 4;
+    u8 attacker : 2;  // see PokeathlonRingDropMonFlags
+    u8 member : 2;    // team member in the ring
+    u8 status : 3;    // the own participant's status sprite
+    u8 direction : 2; // minus 1
     u8 switchState : 2;
     u8 unk5_7 : 1;
 } PokeathlonRingDropMonPacket;
@@ -190,31 +187,31 @@ typedef union PokeathlonRingDropFrameMarks {
 
 // The frame the host sends.
 typedef struct PokeathlonRingDropFramePacket {
-    PokeathlonRingDropMonPacket mons[RING_DROP_PARTICIPANTS]; // 0x00
-    u32 unk18;                                                // 0x18
-    PokeathlonRingDropFrameMarks marks;                       // 0x1C
-    u32 unk20_0 : 3;                                          // 0x20
-    u32 timer : 16;                                           //       frames left
+    PokeathlonRingDropMonPacket mons[RING_DROP_PARTICIPANTS];
+    u32 unk18;
+    PokeathlonRingDropFrameMarks marks;
+    u32 unk20_0 : 3;
+    u32 timer : 16; // frames left
     u32 unk20_19 : 12;
     u32 finished : 1;
-} PokeathlonRingDropFramePacket; // size: 0x24
+} PokeathlonRingDropFramePacket;
 
 // The sprites of a participant's Pokemon.
 typedef struct PokeathlonRingDropMonSprites {
-    PokeathlonCourseMonObject *monObject;     // 0x00
-    ManagedSprite *chargeSprite;              // 0x04
-    ManagedSprite *markSprite;                // 0x08: above the Pokemon
-    ManagedSprite *switchSprite;              // 0x0C: the ball going up and coming down
-    ManagedSprite *dustSprite;                // 0x10: where a Pokemon lands
-    ManagedSprite *hitSprite;                 // 0x14: between two Pokemon that collide
-    int state;                                // 0x18: the last packet state
-    u16 palettes[RING_DROP_TEAM_SIZE][2][16]; // 0x1C: normal and grey per team member
-    fx32 jumpScale;                           // 0xDC
-    u8 unkE0;                                 // 0xE0
-    s8 jumpFrames;                            // 0xE1
-    s8 switchFrames;                          // 0xE2
-    u8 unkE3;                                 // 0xE3
-    u32 squashFrames : 8;                     // 0xE4
+    PokeathlonCourseMonObject *monObject;
+    ManagedSprite *chargeSprite;
+    ManagedSprite *markSprite;                // above the Pokemon
+    ManagedSprite *switchSprite;              // the ball going up and coming down
+    ManagedSprite *dustSprite;                // where a Pokemon lands
+    ManagedSprite *hitSprite;                 // between two Pokemon that collide
+    int state;                                // the last packet state
+    u16 palettes[RING_DROP_TEAM_SIZE][2][16]; // normal and grey per team member
+    fx32 jumpScale;
+    u8 unkE0;
+    s8 jumpFrames;
+    s8 switchFrames;
+    u8 unkE3;
+    u32 squashFrames : 8;
     u32 switchStep : 4;
     u32 switchState : 2;
     u32 member : 2;
@@ -226,41 +223,41 @@ typedef struct PokeathlonRingDropMonSprites {
     u32 unkE4_22 : 1;
     u32 hit : 2;
     u32 unkE4_25 : 7;
-} PokeathlonRingDropMonSprites; // size: 0xE8
+} PokeathlonRingDropMonSprites;
 
 // Everything every participant shows of the frame packet.
 typedef struct PokeathlonRingDropDisplay {
-    PokeathlonRingDropUi *ui;                                  // 0x000: PokeathlonRingDrop.ui
-    SpriteSystem *spriteSystem;                                // 0x004
-    SpriteManager *spriteManager;                              // 0x008
-    ManagedSprite *statusSprite;                               // 0x00C
-    PokeathlonRingDropMonSprites mons[RING_DROP_PARTICIPANTS]; // 0x010
-    u16 scores[RING_DROP_PARTICIPANTS];                        // 0x3B0
-    u8 status;                                                 // 0x3B8
-    u8 bumped : 1;                                             // 0x3B9
+    PokeathlonRingDropUi *ui;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *statusSprite;
+    PokeathlonRingDropMonSprites mons[RING_DROP_PARTICIPANTS];
+    u16 scores[RING_DROP_PARTICIPANTS];
+    u8 status;
+    u8 bumped : 1;
     u8 unk3B9_1 : 7;
-    u16 unk3BA;              // 0x3BA
-} PokeathlonRingDropDisplay; // size: 0x3BC
+    u16 unk3BA;
+} PokeathlonRingDropDisplay;
 
 typedef struct PokeathlonRingDrop {
-    enum HeapID heapId;                                                                       // 0x000
-    BgConfig *bgConfig;                                                                       // 0x004
-    SpriteSystem *spriteSystem;                                                               // 0x008
-    SpriteManager *spriteManager;                                                             // 0x00C
-    MessageFormat *msgFormat;                                                                 // 0x010
-    MsgData *msgData;                                                                         // 0x014
-    PokeathlonCourseSpriteResources *resources;                                               // 0x018
-    void *monObjects;                                                                         // 0x01C
-    Window window;                                                                            // 0x020
-    PokeathlonRingDropMemberParams memberParams[RING_DROP_PARTICIPANTS][RING_DROP_TEAM_SIZE]; // 0x030
-    PokeathlonRingDropUi *ui;                                                                 // 0x180
-    struct PokeathlonRingDropCpu *cpu;                                                        // 0x184: the computer participants
-    u8 contacts[RING_DROP_PARTICIPANTS][RING_DROP_PARTICIPANTS];                              // 0x188: pairs whose push was taken already
-    PokeathlonRingDropPlayer players[RING_DROP_PARTICIPANTS];                                 // 0x198
-    int timer;                                                                                // 0x438: frames left
-    PokeathlonRingDropDisplay display;                                                        // 0x43C
-    PokeathlonScreenShake shake;                                                              // 0x7F8
-} PokeathlonRingDrop;                                                                         // size: 0x814
+    enum HeapID heapId;
+    BgConfig *bgConfig;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    MessageFormat *msgFormat;
+    MsgData *msgData;
+    PokeathlonCourseSpriteResources *resources;
+    void *monObjects;
+    Window window;
+    PokeathlonRingDropMemberParams memberParams[RING_DROP_PARTICIPANTS][RING_DROP_TEAM_SIZE];
+    PokeathlonRingDropUi *ui;
+    struct PokeathlonRingDropCpu *cpu;                           // the computer participants
+    u8 contacts[RING_DROP_PARTICIPANTS][RING_DROP_PARTICIPANTS]; // pairs whose push was taken already
+    PokeathlonRingDropPlayer players[RING_DROP_PARTICIPANTS];
+    int timer; // frames left
+    PokeathlonRingDropDisplay display;
+    PokeathlonScreenShake shake;
+} PokeathlonRingDrop;
 
 void PokeathlonScreenShake_Start(PokeathlonScreenShake *shake, int magnitude, int duration);
 BOOL PokeathlonRingDrop_IsOnSwitchButton(int x, int y);

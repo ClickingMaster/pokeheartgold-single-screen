@@ -18,7 +18,6 @@
 #include "pm_string.h"
 #include "text.h"
 
-// NitroSDK fixed-point square root (not declared in lib/include yet)
 fx32 FX_Sqrt(fx32 x);
 
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
@@ -42,7 +41,6 @@ void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *
 void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
 VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *sprite);
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
-// in the top screen code
 void ov96_02208374(PokeathlonPennantCaptureDisplay *display, u16 score);
 BOOL ov96_02208448(PokeathlonPennantCaptureDisplay *display, int member);
 BOOL ov96_02208608(PokeathlonPennantCaptureDisplay *display, int participant);
@@ -928,7 +926,6 @@ static inline void PokeathlonPennantCapture_ZeroVec(VecFx32 *v) {
     memset(v, 0, sizeof(*v));
 }
 
-// Written as byte address arithmetic: indexing contacts[] directly does not match.
 #define CONTACT(player, i) (*((u8 *)((u32)(player) + (u32)(i)) + 0x94))
 
 static int PokeathlonPennantCapture_CollidePlayers(PokeathlonCourseData *course, PokeathlonPennantCapturePlayer *players, VecFx32 *out) {
@@ -1246,7 +1243,6 @@ static BOOL PokeathlonPennantCapture_CanDeposit(PokeathlonPennantCapturePlayer *
     return FALSE;
 }
 
-// Called as if it returned its argument (it does: r0 is left unchanged).
 static u8 PokeathlonPennantCapture_GetDepositPoints(u8 pennants) {
 }
 

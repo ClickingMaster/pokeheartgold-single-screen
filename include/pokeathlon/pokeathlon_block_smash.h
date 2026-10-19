@@ -14,11 +14,8 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
-// Block Smash (Pokeathlon event 3): every participant breaks a stack of ten blocks dropped onto the
-// touch screen by tapping it; each hit takes the active Pokemon's power off the top block's health
-// (100), more when the weak spot marked on the block is tapped. A broken stack is rebuilt. The team's
-// three Pokemon are switched by swiping the active one up; the top screen shows the four
-// participants' scores. The event runs for 900 frames (30 seconds).
+// Block Smash: every participant breaks stacks of ten blocks by tapping them; each hit takes the active Pokemon's
+// power off the top block's health, more when the weak spot marked on the block is tapped.
 
 // PokeathlonBlockSmashBlocks.state
 enum {
@@ -26,8 +23,8 @@ enum {
     BLOCKS_STATE_READY,
 };
 
-typedef struct PokeathlonBlockSmashMon PokeathlonBlockSmashMon;       // the own team (0x48)
-typedef struct PokeathlonBlockSmashRivals PokeathlonBlockSmashRivals; // the other teams' Pokemon (0xC8)
+typedef struct PokeathlonBlockSmashMon PokeathlonBlockSmashMon;       // the own team
+typedef struct PokeathlonBlockSmashRivals PokeathlonBlockSmashRivals; // the other teams' Pokemon
 typedef struct PokeathlonBlockSmashCpu PokeathlonBlockSmashCpu;       // the participants without a player (host only)
 
 // What the active Pokemon brings to a hit (one word per team member in PokeathlonBlockSmashMon).
@@ -40,60 +37,60 @@ typedef struct PokeathlonBlockSmashMember {
 
 // One block of the stack (heap object).
 typedef struct PokeathlonBlockSmashBlock {
-    ManagedSprite *sprite; // 0x00
-    ManagedSprite *spot;   // 0x04: the weak spot marked on the block
-    s16 health;            // 0x08: 100 when dropped
-    s16 spotX;             // 0x0A: offset of the weak spot from the block
-    s16 spotY;             // 0x0C
+    ManagedSprite *sprite;
+    ManagedSprite *spot; // the weak spot marked on the block
+    s16 health;          // 100 when dropped
+    s16 spotX;           // offset of the weak spot from the block
+    s16 spotY;
     u16 unkE;
-    u32 spotSlot : 4; // 0x10: one of the four weak spot positions
+    u32 spotSlot : 4; // one of the four weak spot positions
     u32 fallSpeed : 8;
     u32 state : 8; // 1 = falling, 2 = landed
     u32 index : 7; // place in the stack (0 = bottom)
     u32 active : 1;
     u32 unk10_28 : 4;
-} PokeathlonBlockSmashBlock; // size: 0x14
+} PokeathlonBlockSmashBlock;
 
 // A fragment thrown off a broken block.
 typedef struct PokeathlonBlockSmashFragment {
-    ManagedSprite *sprite;      // 0x00
-    int active;                 // 0x04
-    fx32 velocityX;             // 0x08
-    fx32 velocityY;             // 0x0C
-    s16 x;                      // 0x10
-    s16 y;                      // 0x12
-} PokeathlonBlockSmashFragment; // size: 0x14
+    ManagedSprite *sprite;
+    int active;
+    fx32 velocityX;
+    fx32 velocityY;
+    s16 x;
+    s16 y;
+} PokeathlonBlockSmashFragment;
 
 // The stack of blocks on the touch screen.
 typedef struct PokeathlonBlockSmashBlocks {
-    PokeathlonCourseData *course;               // 0x000
-    SpriteSystem *spriteSystem;                 // 0x004
-    SpriteManager *spriteManager;               // 0x008
-    ManagedSprite *hitSprite;                   // 0x00C
-    ManagedSprite *missSprite;                  // 0x010
-    PokeathlonBlockSmashFragment fragments[16]; // 0x014
-    PokeathlonBlockSmashBlock *blocks[10];      // 0x154
-    u32 dropTimer : 16;                         // 0x17C
+    PokeathlonCourseData *course;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *hitSprite;
+    ManagedSprite *missSprite;
+    PokeathlonBlockSmashFragment fragments[16];
+    PokeathlonBlockSmashBlock *blocks[10];
+    u32 dropTimer : 16;
     u32 score : 16;                             // blocks broken in total (at most 200)
-    u32 state : 4;                              // 0x180: 1 = dropping a new stack, 2 = ready to be hit
+    u32 state : 4;                              // 1 = dropping a new stack, 2 = ready to be hit
     u32 count : 4;                              // blocks dropped / left on the stack
     u32 unk180_8 : 24;
-} PokeathlonBlockSmashBlocks; // size: 0x184
+} PokeathlonBlockSmashBlocks;
 
 // A participant's row on the top screen: the active Pokemon's icon and the score bars.
 typedef struct PokeathlonBlockSmashTeamRow {
-    u8 member;                 // 0x00: the Pokemon the icon shows
-    ManagedSprite *icon;       // 0x04
-    ManagedSprite *switching;  // 0x08: shown instead of the icon while the team switches Pokemon
-    ManagedSprite *bars[20];   // 0x0C: one per 5 blocks
-    ManagedSprite *stars[5];   // 0x5C: shown once all 20 bars are full
-} PokeathlonBlockSmashTeamRow; // size: 0x70
+    u8 member; // the Pokemon the icon shows
+    ManagedSprite *icon;
+    ManagedSprite *switching; // shown instead of the icon while the team switches Pokemon
+    ManagedSprite *bars[20];  // one per 5 blocks
+    ManagedSprite *stars[5];  // shown once all 20 bars are full
+} PokeathlonBlockSmashTeamRow;
 
 // The top screen's rows and what their Pokemon icons are loaded from.
 typedef struct PokeathlonBlockSmashTeamIcons {
-    NARC *narc;                          // 0x000: the Pokemon icons
-    PokeathlonBlockSmashTeamRow rows[4]; // 0x004
-    u16 plttId;                          // 0x1C4
+    NARC *narc; // the Pokemon icons
+    PokeathlonBlockSmashTeamRow rows[4];
+    u16 plttId;
 } PokeathlonBlockSmashTeamIcons;
 
 // The swipe that switches the active Pokemon.
@@ -107,36 +104,35 @@ typedef struct PokeathlonBlockSmashSwipe {
 
 // The event's work (PokeathlonCourse_GetWork).
 typedef struct PokeathlonBlockSmash {
-    enum HeapID heapId;                             // 0x000
-    BgConfig *bgConfig;                             // 0x004
-    SpriteSystem *spriteSystem;                     // 0x008
-    SpriteManager *spriteManager;                   // 0x00C
-    void *monPics;                                  // 0x010: the other teams' Pokemon
-    PokeathlonCourseSpriteResources *iconResources; // 0x014
-    String *names[3];                               // 0x018: the own team's nicknames
-    ManagedSprite *timerFrame;                      // 0x024
-    ManagedSprite *switchButton;                    // 0x028
-    Sprite *scoreDigits[3];                         // 0x02C
-    Sprite *timerDigits[2];                         // 0x038
-    PokeathlonBlockSmashBlocks *blocks;             // 0x040
-    PokeathlonBlockSmashRivals *rivals;             // 0x044
-    PokeathlonBlockSmashCpu *cpu;                   // 0x048
-    PokeathlonBlockSmashMon *mon;                   // 0x04C
-    PokeathlonBlockSmashTeamIcons icons;            // 0x050
-    Window windows[4];                              // 0x218
-    MsgData *msgData;                               // 0x258
-    MessageFormat *msgFormat;                       // 0x25C
-    int timer;                                      // 0x260: frames left
-    PokeathlonBlockSmashSwipe swipe;                // 0x264
-    SysTask *shakeTask;                             // 0x268
-    s8 shakeOffset;                                 // 0x26C
-    u8 shakeDecay;                                  // 0x26D
-    u8 shakeSide;                                   // 0x26E
-} PokeathlonBlockSmash;                             // size: 0x270
+    enum HeapID heapId;
+    BgConfig *bgConfig;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    void *monPics; // the other teams' Pokemon
+    PokeathlonCourseSpriteResources *iconResources;
+    String *names[3]; // the own team's nicknames
+    ManagedSprite *timerFrame;
+    ManagedSprite *switchButton;
+    Sprite *scoreDigits[3];
+    Sprite *timerDigits[2];
+    PokeathlonBlockSmashBlocks *blocks;
+    PokeathlonBlockSmashRivals *rivals;
+    PokeathlonBlockSmashCpu *cpu;
+    PokeathlonBlockSmashMon *mon;
+    PokeathlonBlockSmashTeamIcons icons;
+    Window windows[4];
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    int timer; // frames left
+    PokeathlonBlockSmashSwipe swipe;
+    SysTask *shakeTask;
+    s8 shakeOffset;
+    u8 shakeDecay;
+    u8 shakeSide;
+} PokeathlonBlockSmash;
 
-// A participant's entry in the link data. Each participant sends its own as the first word of its
-// 0x28 block (PokeathlonCourse_GetDataCopyArea); the host collects them into the four words of its
-// block at 0x28, which every participant receives at 0xF0.
+// A participant's entry in the link data. Each participant sends its own as the first word of its block; the host
+// collects them into the four words of its own block, which every participant receives.
 typedef struct PokeathlonBlockSmashReport {
     u32 score : 8;
     u32 stamina : 8; // the active Pokemon's
@@ -148,15 +144,15 @@ typedef struct PokeathlonBlockSmashReport {
     u32 unk1D : 3;
 } PokeathlonBlockSmashReport;
 
-// The host's block of the link data as every participant receives it (0xF0).
+// The host's block of the link data as every participant receives it.
 typedef struct PokeathlonBlockSmashFrame {
-    PokeathlonBlockSmashReport reports[4]; // 0x00
-    u32 unk10 : 16;                        // 0x10
+    PokeathlonBlockSmashReport reports[4];
+    u32 unk10 : 16;
     u32 finished : 1;                      // the host's timer ran out
     u32 unk10_17 : 15;
 } PokeathlonBlockSmashFrame;
 
-// A participant's 0x28 block of the link data (the part that is copied).
+// A participant's block of the link data (the part that is copied).
 typedef struct PokeathlonBlockSmashLinkBlock {
     u32 words[9];
 } PokeathlonBlockSmashLinkBlock;

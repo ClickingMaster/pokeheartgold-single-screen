@@ -116,10 +116,8 @@ void PokeathlonCourseMonObject_SetAnim(PokeathlonCourseMonObject *object, int an
 BOOL PokeathlonCourseMonObject_IsAnimated(PokeathlonCourseMonObject *object);
 void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *objects, u8 index, int vram, void *palette);
 
-// Not declared by a header yet.
 void SetBothScreensBrightnessByColor(u16 color);
 
-// NitroSDK math (not declared by a header yet).
 u32 MATH_CountPopulation(u32 value);
 void MATH_QSort(void *head, u32 num, u32 width, int (*compare)(const void *, const void *), void *stackBuffer);
 
@@ -951,7 +949,6 @@ static void PokeathlonCourseCeremony_CreateTrainerSprites(PokeathlonCourseCeremo
     ManagedSpriteTemplate template = { 0 };
     int i;
     int x = 32;
-    // Walks through trainerSprites by moving a view of the ceremony one pointer on.
     PokeathlonCourseCeremony *cursor = ceremony;
 
     for (i = 0; i < 5;) {

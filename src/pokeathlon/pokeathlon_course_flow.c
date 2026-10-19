@@ -462,7 +462,7 @@ u32 PokeathlonCourse_State_SendEvents(PokeathlonCourseData *course) {
     return 0;
 }
 
-// Waits for the event that was running in the sub overlay to end.
+// Waits for the event that was running to end.
 u32 PokeathlonCourse_State_RunEventOverlay(PokeathlonCourseData *course) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     if (OverlayManager_Run(layout->subOverlay)) {
@@ -1925,7 +1925,6 @@ BOOL PokeathlonCourse_IsInRange(int x, int y, int targetX, int targetY, int rang
     VEC_Subtract(&a, &b, &delta);
     {
         int magnitude = VEC_Mag(&delta);
-        // the volatile accesses are needed to match
         **(int *volatile *)&distance = magnitude;
         if (magnitude < (*(volatile int *)&range << FX32_SHIFT)) {
             return TRUE;

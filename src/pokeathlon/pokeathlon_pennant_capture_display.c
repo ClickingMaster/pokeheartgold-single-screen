@@ -35,14 +35,11 @@ SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool 
 void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
 void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
 void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
-// in the object linked between the two parts of the top screen code (picture sprites)
 
 extern const u8 sPennantCaptureTimerDigitX[];
 extern const u8 sPennantCaptureTimerDigitAnims[];
 extern const PokeathlonPennantCaptureSpriteIds gPokeathlonPennantCaptureSpriteIds[];
 
-// Several loops below walk a display-typed cursor by one array element per step instead of indexing
-// (fields are read at their offset from the cursor); that is the form the code matches with.
 #define DISPLAY_CURSOR_STEP(cursor, size) ((PokeathlonPennantCaptureDisplay *)((u8 *)(cursor) + (size)))
 
 static void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *display, int participant, int member);

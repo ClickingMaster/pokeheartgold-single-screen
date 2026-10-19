@@ -84,10 +84,9 @@ typedef struct PokeathlonSnowThrowTeamMarkPositions {
     VecFx32 positions[SNOW_THROW_TEAMS - 1];
 } PokeathlonSnowThrowTeamMarkPositions;
 
-// NitroSDK MATH_QSort (no header declares it)
 void MATH_QSort(void *base, u32 count, u32 width, int (*compare)(const void *, const void *), void *context);
 
-// A snowball as sorted for drawing (8).
+// A snowball as sorted for drawing.
 typedef struct PokeathlonSnowThrowDrawOrder {
     u16 own;
     u16 index;
@@ -454,14 +453,14 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
         } else {
             PokeathlonSnowThrowViewAnims anims = sSnowThrowViewAnims;
 
-            PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // takes the BgConfig
+            PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig);
             PokeathlonCourse_SetEventDrawEnabled(course, 1);
             own = PokeathlonCourse_GetNetId(course);
             for (k = 0; k < SNOW_THROW_MONS - SNOW_THROW_MEMBERS; k++) {
                 work->monObjects[k] = PokeathlonCourseMonObjects_Get(work->monObjectList, (u8)k);
                 object = work->monObjects[k];
                 PokeathlonCourseMonObject_SetDrawFlag(object, TRUE);
-                mon = ((u8)(((own + 1) * SNOW_THROW_MEMBERS) % SNOW_THROW_MONS) + k) % SNOW_THROW_MONS; // PokeathlonSnowThrow_OtherMon
+                mon = ((u8)(((own + 1) * SNOW_THROW_MEMBERS) % SNOW_THROW_MONS) + k) % SNOW_THROW_MONS;
                 x = sSnowThrowOtherMonX[k];
                 y = sSnowThrowOtherMonY[k];
                 PokeathlonCourseMonObject_SetAnimState(object, anims.animStates[k / SNOW_THROW_MEMBERS]);
@@ -913,7 +912,6 @@ static void PokeathlonSnowThrow_PackPacket(PokeathlonSnowThrow *work, Pokeathlon
     int x, z, team;
     u8 *ballBytes, *monBytes, *packetBytes;
 
-    // (steps byte pointers through the snowballs, the Pokemon and the packet, as built)
 #define BALL ((PokeathlonSnowThrowBall *)(ballBytes + offsetof(PokeathlonSnowThrow, balls)))
 #define MON  ((PokeathlonSnowThrowMon *)(monBytes + offsetof(PokeathlonSnowThrow, mons)))
     for (i = 0, shift = 0, ballBytes = (u8 *)work, monBytes = (u8 *)work, packetBytes = (u8 *)packet; i < SNOW_THROW_MONS; shift += 2, ballBytes += sizeof(PokeathlonSnowThrowBall), packetBytes += sizeof(u16), monBytes += sizeof(PokeathlonSnowThrowMon), i++) {
@@ -1326,7 +1324,7 @@ static void PokeathlonSnowThrow_PrintScore(PokeathlonSnowThrow *work, u16 score)
 
 // Host: stun and energy recovery of every Pokemon.
 static void PokeathlonSnowThrow_UpdateMons(PokeathlonCourseData *course) {
-    volatile PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course); // (re-read after each write, as built)
+    volatile PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     int i;
 
     for (i = 0; i < SNOW_THROW_MONS; i++) {
@@ -1379,7 +1377,6 @@ static void PokeathlonSnowThrow_MoveBalls(PokeathlonCourseData *course) {
     }
 }
 
-// PokeathlonCourse_AddMonCounter as HitMons calls it: the participant and member are passed as bytes.
 typedef void (*PokeathlonSnowThrowAddMonCounterFunc)(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int amount);
 
 // Host: a flying snowball within 3 units of another team's Pokemon hits it: a hit for the thrower, energy off the
