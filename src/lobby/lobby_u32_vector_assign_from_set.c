@@ -17,10 +17,10 @@ void LobbyU32Vector_Reallocate(LobbyU32Vector *, u32, u32);
 void LobbyU32Vector_AssignFromSet(LobbyU32Vector *, Iter, Iter);
 
 typedef struct {
-    volatile u8 fillFlag, reserveFlag;
+    u8 fillFlag, reserveFlag;
     u8 pad[2];
 
-    volatile struct {
+    struct {
         LobbyUserIdSetNode *a;
         int b;
         LobbyUserIdSetNode *c;

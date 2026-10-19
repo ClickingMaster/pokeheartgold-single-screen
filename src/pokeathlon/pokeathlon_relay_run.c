@@ -1699,80 +1699,46 @@ static void PokeathlonRelayRun_FindNearbyObstacles(PokeathlonRelayRun *relayRun,
 // The outline of an obstacle from its layout entry: a 48x48 (kind 1) or 32x32 box centred on it, with its edges
 // moved out by inset (the runner's radius); a slow patch is the 64x64 square around it.
 
-void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, volatile s32 *shape) {
+void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, PokeathlonRelayRunObstacleShape *shape) {
     s32 word = *entry;
     u32 kind = (u8)word;
     int y = (u8)(word >> 8);
     int x = (u16)(word >> 16);
     u32 size;
     y += 32;
-    shape[0] = kind;
+    shape->kind = kind;
     if (kind == RELAY_RUN_OBSTACLE_SLOW_PATCH) {
-        shape[1] = x - 32;
-        shape[2] = y - 32;
+        shape->corners[0].x = x - 32;
+        shape->corners[0].y = y - 32;
         return;
     }
     size = kind == 1 ? 48 : 32;
     x -= size / 2;
     y -= size / 2;
-    // corners: top left, top right, bottom right, bottom left
-    shape[1] = x;
-    shape[2] = y;
-    shape[3] = x + size;
-    shape[4] = y;
-    shape[5] = x + size;
-    shape[6] = y + size;
-    shape[7] = x;
-    shape[8] = y + size;
-    // edges: top, right, bottom, left
-    {
-        int ax = shape[1], ay = shape[2];
-        shape[9] = ax;
-        shape[10] = ay;
-    }
-    {
-        int ax = shape[3], ay = shape[4];
-        shape[11] = ax;
-        shape[12] = ay;
-    }
-    {
-        int ax = shape[3], ay = shape[4];
-        shape[13] = ax;
-        shape[14] = ay;
-    }
-    {
-        int ax = shape[5], ay = shape[6];
-        shape[15] = ax;
-        shape[16] = ay;
-    }
-    {
-        int ax = shape[5], ay = shape[6];
-        shape[17] = ax;
-        shape[18] = ay;
-    }
-    {
-        int ax = shape[7], ay = shape[8];
-        shape[19] = ax;
-        shape[20] = ay;
-    }
-    {
-        int ax = shape[7], ay = shape[8];
-        shape[21] = ax;
-        shape[22] = ay;
-    }
-    {
-        int ax = shape[1], ay = shape[2];
-        shape[23] = ax;
-        shape[24] = ay;
-    }
-    shape[10] -= inset;
-    shape[12] -= inset;
-    shape[13] += inset;
-    shape[15] += inset;
-    shape[18] += inset;
-    shape[20] += inset;
-    shape[21] -= inset;
-    shape[23] -= inset;
+    shape->corners[0].x = x;
+    shape->corners[0].y = y;
+    shape->corners[1].x = x + size;
+    shape->corners[1].y = y;
+    shape->corners[2].x = x + size;
+    shape->corners[2].y = y + size;
+    shape->corners[3].x = x;
+    shape->corners[3].y = y + size;
+    shape->edges[0][0] = shape->corners[0];
+    shape->edges[0][1] = shape->corners[1];
+    shape->edges[1][0] = shape->corners[1];
+    shape->edges[1][1] = shape->corners[2];
+    shape->edges[2][0] = shape->corners[2];
+    shape->edges[2][1] = shape->corners[3];
+    shape->edges[3][0] = shape->corners[3];
+    shape->edges[3][1] = shape->corners[0];
+    shape->edges[0][0].y -= inset;
+    shape->edges[0][1].y -= inset;
+    shape->edges[1][0].x += inset;
+    shape->edges[1][1].x += inset;
+    shape->edges[2][0].y += inset;
+    shape->edges[2][1].y += inset;
+    shape->edges[3][0].x -= inset;
+    shape->edges[3][1].x -= inset;
 }
 
 // Moves a runner from start to end past a box obstacle: returns which edge (RELAY_RUN_HIT_TOP ..) or corner
@@ -1958,7 +1924,7 @@ u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wa
     PokeathlonRelayRun_FindNearbyObstacles(relayRun, from->x, walls, patches, &counts[1], &counts[0]);
     onPatch = FALSE;
     for (i = 0; i < counts[0]; i++) {
-        PokeathlonRelayRun_GetObstacleShape(radius, patches[i], (volatile s32 *)&patchShape);
+        PokeathlonRelayRun_GetObstacleShape(radius, patches[i], &patchShape);
         if (PokeathlonRelayRun_IsOnSlowPatch(from, &patchShape)) {
             onPatch = TRUE;
             break;
@@ -1967,7 +1933,7 @@ u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wa
     result = RELAY_RUN_HIT_NONE;
     for (i = 0; i < counts[1]; i++) {
         int hit;
-        PokeathlonRelayRun_GetObstacleShape(radius, walls[i], (volatile s32 *)&wallShape);
+        PokeathlonRelayRun_GetObstacleShape(radius, walls[i], &wallShape);
         hit = PokeathlonRelayRun_CollideWithObstacle(from, to, radius, &wallShape, &stop);
         if (hit != RELAY_RUN_HIT_NONE) {
             if (hit >= RELAY_RUN_HIT_INSIDE_TOP) {

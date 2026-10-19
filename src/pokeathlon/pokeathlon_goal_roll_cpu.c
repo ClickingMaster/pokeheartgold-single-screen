@@ -526,11 +526,9 @@ static int PokeathlonGoalRollCpu_MoveToEmptierQuadrant(PokeathlonGoalRollMon *mo
         for (j = 0; j < 3; j++) {
             PokeathlonGoalRollMon *other = teams[i].order[j].mon;
             int quadrant = PokeathlonGoalRollCpu_GetQuadrant(128, 96, other->position.x / 4096, other->position.y / 4096);
-            if (quadrant == 4) {
-                goto next;
+            if (quadrant != 4) {
+                counts[quadrant]++;
             }
-            counts[quadrant]++;
-next:;
         }
     }
     chosen = 0;

@@ -399,7 +399,7 @@ u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
     switch (action) {
     case FRONTIER_DATA_RESET:
         mask ^= 0xFFFF;
-        data->state.flags = mask & *(volatile u16 *)&data->state.flags;
+        data->state.flags = mask & data->state.flags;
         break;
     case FRONTIER_DATA_SET:
         data->state.flags |= mask;

@@ -50,7 +50,7 @@ Node *PPWLobbyPlayerSet_InsertNode(List *l, Node *parent, u8 left, u8 flag, Sess
         abort();
     }
     {
-        volatile Tag t = { 0 };
+        Tag t = { 0 };
     }
     n = LobbyMem_Alloc(sizeof(Node));
     h.c = &l->root;
@@ -146,9 +146,9 @@ Node *PPWLobbyPlayerSet_FindInsertPos(List *l, Session **key, Node **parent, u8 
 
 Vec *LobbyU32Vector_Destroy2(Vec *v) {
     if (v->ptr != NULL) {
-        u32 n = *(volatile u32 *)&v->size;
-        volatile Tag a = { 0 };
-        *(volatile u32 *)&v->size -= n;
+        u32 n = v->size;
+        Tag a = { 0 };
+        v->size -= n;
         if (v->ptr != NULL) {
             DWC_Free(0, v->ptr, 0);
         }

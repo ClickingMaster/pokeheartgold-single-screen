@@ -23,6 +23,11 @@
 #define GOAL_ROLL_BALLS        2
 #define GOAL_ROLL_NO_MON       12 // "no Pokemon" in the 0..11 mon indices
 
+// The course's data copy area holds [0] the own input, [1] the frame packet the host builds, [2..5] the
+// participants' inputs (host) and [6] the frame packet received.
+#define GOAL_ROLL_DATA_SLOT_SIZE 0x28
+#define GOAL_ROLL_DATA_FRAME_IN  (6 * GOAL_ROLL_DATA_SLOT_SIZE)
+
 typedef struct PokeathlonGoalRollSprite {
     u16 active;
     u16 shown;

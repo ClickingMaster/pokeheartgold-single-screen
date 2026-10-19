@@ -306,7 +306,7 @@ BOOL PokeathlonRelayRun_SaveScores(PokeathlonCourseData *course, u8 *state);
 void PokeathlonRelayRun_DrawTeams(PokeathlonCourseData *course, int own, PokeathlonRelayRunTeam *team, PokeathlonRelayRunLink *link);
 void PokeathlonRelayRun_ScrollObstacles(PokeathlonRelayRun *relayRun, int x);
 void PokeathlonRelayRun_InitMember(PokeathlonCourseData *course, void *setupFile, u8 participant, u8 member, PokeathlonRelayRunTeam *team);
-void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, volatile s32 *shape);
+void PokeathlonRelayRun_GetObstacleShape(int inset, const s32 *entry, PokeathlonRelayRunObstacleShape *shape);
 u16 PokeathlonRelayRun_CollideWithObstacles(PokeathlonRelayRun *relayRun, int wallState, int radius, VecFx32 *from, VecFx32 *to, VecFx32 *out);
 f32 PokeathlonRelayRunTeam_GetMaxSpeed(PokeathlonRelayRunTeam *team, int member);
 void PokeathlonRelayRun_AddFlick(const VecFx32 *velocity, const VecFx32 *flick, VecFx32 *out);

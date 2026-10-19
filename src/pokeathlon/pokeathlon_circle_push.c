@@ -1739,7 +1739,7 @@ static void PokeathlonCirclePush_PushMons(PokeathlonCirclePush *circlePush) {
                 }
                 // The push goes on in its own direction when it hits nearly head-on (cos >= 1/sqrt(2)), else
                 // only its share towards the next Pokemon.
-                if (PokeathlonCirclePush_Cosine(node->push, &node->delta[node->next.index]) >= FX_SinCosTable_[0x401]) {
+                if (PokeathlonCirclePush_Cosine(node->push, &node->delta[node->next.index]) >= FX_CosIdx(0x2000)) {
                     push = *node->push;
                 } else {
                     PokeathlonCirclePush_Project(node->push, &node->delta[node->next.index], &push);

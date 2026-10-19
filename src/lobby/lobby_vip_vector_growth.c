@@ -15,7 +15,7 @@ typedef struct {
 
 typedef struct {
     VipRecord *data;
-    volatile u32 size;
+    u32 size;
     u32 capacity;
 } VipVector;
 

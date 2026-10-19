@@ -613,7 +613,7 @@ void SwalotPlopParticles_Free(SwalotPlopGfx *gfx, SwalotPlopParticle *particle);
 void SwalotPlopParticles_Update(SwalotPlopParticle *particles);
 void SwalotPlopParticles_Spawn(SwalotPlopParticle *particles, s32 x, s32 y);
 void SwalotPlop_CalcArcStep(int step, int steps, int radius, int startAngle, int endAngle, int *x, int *y);
-void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc, int playerCount, int localIndex, enum HeapID heapId, NNSFndAllocator *volatile allocator);
+void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc, int playerCount, int localIndex, enum HeapID heapId, NNSFndAllocator *allocator);
 void SwalotPlopStage_Free(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NNSFndAllocator *allocator);
 void SwalotPlopStage_Draw(SwalotPlopStage *stage);
 void SwalotPlopStage_StartMouth(SwalotPlopStage *stage);

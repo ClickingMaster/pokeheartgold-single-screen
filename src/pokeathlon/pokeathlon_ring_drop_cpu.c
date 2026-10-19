@@ -33,7 +33,7 @@ struct PokeathlonRingDropCpu {
     enum HeapID heapId;
     PokeathlonCourseData *course;
     PokeathlonRingDropCpuPlayer players[3]; // participants count..3
-    volatile u8 count;
+    u8 count;
 };
 
 s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, u8 participant);

@@ -145,8 +145,6 @@ void WifiSetupSettings_Init(void) {
     WifiSetupApp_SetStateFunc(WifiSetupSettings_FadeIn);
 }
 
-#define REG16(a)    (*(vu16 *)(a))
-#define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
 static void WifiSetupSettings_LoadGraphics(void) {
     WifiSetupGraphicsPath23 scrName;
@@ -155,7 +153,7 @@ static void WifiSetupSettings_LoadGraphics(void) {
     scrName = gWifiSetupSettingsJb3ListBackNscPath;
     plttName = gWifiSetupSettingsYbBgStep2NclPath;
     charName = gWifiSetupSettingsYbBgStep21NclPath;
-    REG16(0x0400000C) = (REG16(0x0400000C) & 0x43) | 0xe18;
+    G2_SetBG2ControlText(GX_BG_SCRSIZE_TEXT_256x256, GX_BG_COLORMODE_16, GX_BG_SCRBASE_0x7000, GX_BG_CHARBASE_0x18000);
     WifiSetup_LoadGraphics(gWifiSetupSettingsYbObjKbNclPath, GX_LoadOBJPltt);
     WifiSetup_LoadGraphics(gWifiSetupSettingsJbBgStep2NcgPath, GX_LoadBG3Char);
     WifiSetup_LoadGraphics(gWifiSetupSettingsJbBgStep21NcgPath, GX_LoadBG2Char);
@@ -176,12 +174,12 @@ static void WifiSetupSettings_LoadGraphics(void) {
         data = WifiSetupFile_Load(path, 0, 4);
         gWifiSetupSettings.work->charData = data;
     }
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    REG16(0x0400000A) = (u16)((REG16(0x0400000A) & ~3) | 2);
-    SET_PRI3(0x0400000C);
-    REG16(0x0400000E) = (u16)((REG16(0x0400000E) & ~3) | 2);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(2);
+    G2_SetBG2Priority(3);
+    G2_SetBG3Priority(2);
 }
 
 static void WifiSetupSettings_ResetPosition(void) {
@@ -507,9 +505,9 @@ static void WifiSetupSettings_Exit(void) {
     WifiSetup_LoadGraphics(gWifiSetupSettingsYbObjMainNclPath, GX_LoadOBJPltt);
     WifiSetupDisplay_HidePlanes(1, GX_PLANEMASK_BG0);
     WifiSetupDisplay_HidePlanes(0, GX_PLANEMASK_BG0 | GX_PLANEMASK_BG2 | GX_PLANEMASK_BG3 | GX_PLANEMASK_OBJ);
-    *(vu32 *)0x04000010 = 0;
-    *(vu32 *)0x04000018 = 0;
-    *(vu16 *)0x0400000c = (*(vu16 *)0x0400000c & 0x43) | 0xe10;
+    G2_SetBG0Offset(0, 0);
+    G2_SetBG2Offset(0, 0);
+    G2_SetBG2ControlText(GX_BG_SCRSIZE_TEXT_256x256, GX_BG_COLORMODE_16, GX_BG_SCRBASE_0x7000, GX_BG_CHARBASE_0x10000);
     int selection = gWifiSetupSettings.work->selection;
     switch (selection) {
     case 0:

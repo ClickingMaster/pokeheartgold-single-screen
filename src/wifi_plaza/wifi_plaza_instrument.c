@@ -168,30 +168,18 @@ void WiFiPlazaInstrument_Delete(WiFiPlazaInstrumentManager *manager) {
 
 void WiFiPlazaInstrument_Update(WiFiPlazaInstrumentManager *manager) {
     int i;
-    u8 *effect = (u8 *)manager;
-    u32 stride = 0xD1;
 
-    i = 0;
-    effect += 0x10;
-    stride <<= 4; // sizeof(WiFiPlazaInstrumentEffect)
-    for (; i < WIFI_PLAZA_INSTRUMENT_PLAYERS; i++, effect += stride) {
-        WiFiPlazaInstrument_UpdateEffect(manager, (WiFiPlazaInstrumentEffect *)effect);
+    for (i = 0; i < WIFI_PLAZA_INSTRUMENT_PLAYERS; i++) {
+        WiFiPlazaInstrument_UpdateEffect(manager, &manager->effects[i]);
     }
 }
 
 void WiFiPlazaInstrument_Draw(WiFiPlazaInstrumentManager *manager) {
     int i;
-    u8 *effect;
-    u32 stride;
 
     WiFiPlazaObj_GetOwnPlayer(manager->objManager);
-    effect = (u8 *)manager;
-    stride = 0xD1;
-    i = 0;
-    effect += 0x10;
-    stride <<= 4; // sizeof(WiFiPlazaInstrumentEffect)
-    for (; i < WIFI_PLAZA_INSTRUMENT_PLAYERS; i++, effect += stride) {
-        WiFiPlazaInstrument_DrawEffect(manager, (WiFiPlazaInstrumentEffect *)effect);
+    for (i = 0; i < WIFI_PLAZA_INSTRUMENT_PLAYERS; i++) {
+        WiFiPlazaInstrument_DrawEffect(manager, &manager->effects[i]);
     }
 }
 
@@ -440,18 +428,13 @@ static BOOL WiFiPlazaInstrument_HasModel(WiFiPlazaInstrumentEffect *effect, u32 
 }
 
 static void WiFiPlazaInstrument_SetModel(WiFiPlazaInstrumentManager *manager, WiFiPlazaInstrumentEffect *effect, u32 index, const WiFiPlazaInstrumentModelDesc *desc) {
-    u32 offset;
-    const WiFiPlazaInstrumentModelDesc **descs;
-
     if (index >= WIFI_PLAZA_INSTRUMENT_EFFECT_MODELS) {
         GF_AssertFail();
     }
-    descs = effect->descs;
-    offset = index * 4;
-    if (*(const WiFiPlazaInstrumentModelDesc **)((u8 *)descs + offset) != NULL) {
+    if (effect->descs[index] != NULL) {
         GF_AssertFail();
     }
-    *(const WiFiPlazaInstrumentModelDesc **)((u8 *)descs + offset) = desc;
+    effect->descs[index] = desc;
     ModelInstance_Init(&effect->models[index], &manager->models[desc->model]);
 }
 

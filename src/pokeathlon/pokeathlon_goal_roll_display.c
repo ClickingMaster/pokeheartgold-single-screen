@@ -301,8 +301,7 @@ void PokeathlonGoalRoll_SortOtherMonsOrder(PokeathlonGoalRoll *goalRoll, Pokeath
 
 // Course callback at the end of the match: the own team's total.
 void PokeathlonGoalRoll_OnTimeUp(PokeathlonCourseData *course) {
-    void *area = PokeathlonCourse_GetDataCopyArea(course);
-    PokeathlonCourse_ToBytes((u8 *)area + 0xF0);
+    PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + GOAL_ROLL_DATA_FRAME_IN);
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetWork(course);
     u32 score = PokeathlonGoalRollDisplay_GetScore(goalRoll->display);
     PokeathlonCourse_SetRecordScore(course, score);

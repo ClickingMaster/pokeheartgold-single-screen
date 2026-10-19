@@ -844,9 +844,7 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
 }
 
 void MimeJrTop_FreeGame(MimeJrTopApp *app) {
-    NNSFndAllocator *allocator;
     int i;
-    u32 offset;
 
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
@@ -869,15 +867,10 @@ void MimeJrTop_FreeGame(MimeJrTopApp *app) {
     ModelAnimation_Free(&app->game->mimeJr[1].animations[0], &app->resources.allocator);
     ModelAnimation_Free(&app->game->mimeJr[2].animations[0], &app->resources.allocator);
 
-    i = 0;
-    allocator = (NNSFndAllocator *)app;
-    offset = i;
-    allocator = (NNSFndAllocator *)((u8 *)allocator + 0x6C);
-    for (; i < 8; i++) {
-        MimeJrTopModel_Free((MimeJrTopModel *)((u8 *)app->game->audience + offset));
-        ModelAnimation_Free((ModelAnimation *)((u8 *)&app->game->audience[0].animations[0] + offset), allocator);
-        ModelAnimation_Free((ModelAnimation *)((u8 *)&app->game->audience[0].animations[1] + offset), allocator);
-        offset += sizeof(MimeJrTopModel);
+    for (i = 0; i < 8; i++) {
+        MimeJrTopModel_Free(&app->game->audience[i]);
+        ModelAnimation_Free(&app->game->audience[i].animations[0], &app->resources.allocator);
+        ModelAnimation_Free(&app->game->audience[i].animations[1], &app->resources.allocator);
     }
 
     PlazaGameSign_Free(app->sign);
@@ -920,20 +913,11 @@ BOOL MimeJrTop_Exit(OverlayManager *man, int *state) {
         }
         LinkSync_StartSync(0xE7);
         (*state)++;
-        goto return_false;
     } else {
-        if (LinkSync_IsSynced(0xE7) == TRUE) {
-            goto return_true;
+        if (LinkSync_IsSynced(0xE7) == TRUE || Comm_CountConnected() < CommPlayerInfo_CountAccepted()) {
+            return TRUE;
         }
-        result = Comm_CountConnected();
-        if (result >= CommPlayerInfo_CountAccepted()) {
-            goto return_false;
-        }
-        goto return_true;
     }
-return_true:
-    return TRUE;
-return_false:
     return FALSE;
 }
 

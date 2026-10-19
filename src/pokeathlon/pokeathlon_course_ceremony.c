@@ -564,252 +564,250 @@ BOOL PokeathlonCourseClosing_Awards(PokeathlonCourseData *course, u8 *state) {
         waiting = PokeathlonCourseCeremony_SyncClosing(course);
     }
     PokeathlonCourseMessageBox_Update(ceremony->messageBox);
-    if (PokeathlonCourseMessageBox_IsBusy(ceremony->messageBox) || waiting) {
-        goto end;
-    }
-    msgFormat = PokeathlonCourseMessageBox_GetMsgFormat(ceremony->messageBox);
-    msgId = -1;
-    switch (ceremony->state) {
-    case CLOSING_STATE_GREETING:
-        msgId = msg_0309_00003;
-        ceremony->state = CLOSING_STATE_CHALLENGE_BONUS;
-        break;
-    case CLOSING_STATE_CHALLENGE_BONUS:
-        msgId = msg_0309_00004;
-        ceremony->state = CLOSING_STATE_ADD_CHALLENGE_BONUS;
-        break;
-    case CLOSING_STATE_ADD_CHALLENGE_BONUS:
-        for (i = 0; i < 4; i++) {
-            int points = PokeathlonCourseCeremony_GetChallengeBonus(course, (u8)i);
-            PokeathlonCourseCeremony_AddPoints(ceremony->scores, (u8)i, points);
-        }
-        ceremony->state = CLOSING_STATE_TEAM_BONUSES;
-        // fallthrough
-    case CLOSING_STATE_TEAM_BONUSES:
-        if (ceremony->team >= 4) {
-            ceremony->team = 0;
-            msgId = msg_0309_00006;
-            ceremony->state = CLOSING_STATE_NO_MISS_BONUS;
-        } else {
-            int points;
-            msgId = msg_0309_00005;
-            points = PokeathlonCourseCeremony_GetChallengeBonus(course, ceremony->team);
-            PokeathlonCourseCeremony_BufferTeamPoints(course, ceremony->team, points);
-            ceremony->team++;
-        }
-        break;
-    case CLOSING_STATE_NO_MISS_BONUS:
-        if (PokeathlonCourseCeremony_HasNoMissBonus(course)) {
-            msgId = msg_0309_00007;
-            ceremony->state = CLOSING_STATE_NO_MISS_MONS;
-        } else {
-            msgId = msg_0309_00009;
-            ceremony->state = CLOSING_STATE_POINTS_LEADER;
-        }
-        break;
-    case CLOSING_STATE_NO_MISS_MONS:
-        if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
-            if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountNoMissMons(course)) {
+    if (!PokeathlonCourseMessageBox_IsBusy(ceremony->messageBox) && !waiting) {
+        msgFormat = PokeathlonCourseMessageBox_GetMsgFormat(ceremony->messageBox);
+        msgId = -1;
+        switch (ceremony->state) {
+        case CLOSING_STATE_GREETING:
+            msgId = msg_0309_00003;
+            ceremony->state = CLOSING_STATE_CHALLENGE_BONUS;
+            break;
+        case CLOSING_STATE_CHALLENGE_BONUS:
+            msgId = msg_0309_00004;
+            ceremony->state = CLOSING_STATE_ADD_CHALLENGE_BONUS;
+            break;
+        case CLOSING_STATE_ADD_CHALLENGE_BONUS:
+            for (i = 0; i < 4; i++) {
+                int points = PokeathlonCourseCeremony_GetChallengeBonus(course, (u8)i);
+                PokeathlonCourseCeremony_AddPoints(ceremony->scores, (u8)i, points);
+            }
+            ceremony->state = CLOSING_STATE_TEAM_BONUSES;
+            // fallthrough
+        case CLOSING_STATE_TEAM_BONUSES:
+            if (ceremony->team >= 4) {
                 ceremony->team = 0;
-                ceremony->member = 0;
-                ceremony->counter = 0;
-                msgId = msg_0309_00010;
+                msgId = msg_0309_00006;
+                ceremony->state = CLOSING_STATE_NO_MISS_BONUS;
+            } else {
+                int points;
+                msgId = msg_0309_00005;
+                points = PokeathlonCourseCeremony_GetChallengeBonus(course, ceremony->team);
+                PokeathlonCourseCeremony_BufferTeamPoints(course, ceremony->team, points);
+                ceremony->team++;
+            }
+            break;
+        case CLOSING_STATE_NO_MISS_BONUS:
+            if (PokeathlonCourseCeremony_HasNoMissBonus(course)) {
+                msgId = msg_0309_00007;
+                ceremony->state = CLOSING_STATE_NO_MISS_MONS;
+            } else {
+                msgId = msg_0309_00009;
                 ceremony->state = CLOSING_STATE_POINTS_LEADER;
-            } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsNoMissMon, PokeathlonCourseCeremony_GetNoMissPoints(ceremony))) {
-                msgId = msg_0309_00008;
             }
-        }
-        break;
-    case CLOSING_STATE_POINTS_LEADER:
-        msgId = msg_0309_00011;
-        ceremony->state = CLOSING_STATE_POINTS_LEADER_MONS;
-        break;
-    case CLOSING_STATE_POINTS_LEADER_MONS:
-        if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
-            if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountPointsLeaders(course)) {
-                ceremony->team = 0;
-                ceremony->member = 0;
-                ceremony->counter = 0;
-                msgId = msg_0309_00010;
-                ceremony->state = CLOSING_STATE_EFFORT_PRIZE;
-            } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsPointsLeader, PokeathlonCourseCeremony_GetPointsLeaderPoints(ceremony))) {
-                msgId = msg_0309_00012;
-            }
-        }
-        break;
-    case CLOSING_STATE_EFFORT_PRIZE:
-        if (PokeathlonCourseCeremony_GetEffortPrizeKind(course) != 4) {
-            msgId = msg_0309_00014;
-            ceremony->state = CLOSING_STATE_EFFORT_PRIZE_KIND;
-        } else {
-            ceremony->state = CLOSING_STATE_EVENT_POINTS;
-        }
-        break;
-    case CLOSING_STATE_EFFORT_PRIZE_KIND:
-        msgId = PokeathlonCourseCeremony_GetEffortPrizeKind(course) + 15;
-        ceremony->state = CLOSING_STATE_EFFORT_PRIZE_MONS;
-        break;
-    case CLOSING_STATE_EFFORT_PRIZE_MONS:
-        if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
-            if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountEffortPrizes(course)) {
-                ceremony->team = 0;
-                ceremony->member = 0;
-                ceremony->counter = 0;
-                msgId = msg_0309_00021;
-                ceremony->state = CLOSING_STATE_EVENT_POINTS;
-            } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsEffortPrizeMon, PokeathlonCourseCeremony_GetEffortPrizePoints(ceremony))) {
-                msgId = msg_0309_00020;
-            }
-        }
-        break;
-    case CLOSING_STATE_EVENT_POINTS:
-        msgId = msg_0309_00022;
-        ceremony->state = CLOSING_STATE_COUNT_EVENT_POINTS;
-        StopBGM(GF_GetCurrentPlayingBGM(), 16);
-        PlaySE(SEQ_SE_DP_CON_033);
-        break;
-    case CLOSING_STATE_COUNT_EVENT_POINTS:
-        if (PokeathlonCourseCeremony_AreScoresCounted(ceremony->scores)) {
-            if ((s32)ceremony->timer++ > 30) {
-                rounds = PokeathlonCourse_GetMode(course);
-                if (rounds == 0) {
-                    rounds = 3;
-                } else {
-                    rounds = 4;
-                }
-                ceremony->timer = 0;
-                if (ceremony->counter >= (u8)rounds) {
+            break;
+        case CLOSING_STATE_NO_MISS_MONS:
+            if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
+                if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountNoMissMons(course)) {
+                    ceremony->team = 0;
+                    ceremony->member = 0;
                     ceremony->counter = 0;
-                    ceremony->state = CLOSING_STATE_RANK_TEAMS;
-                } else {
-                    msgId = msg_0309_00023;
-                    PokeathlonCourseCeremony_BufferNumber(msgFormat, ceremony->counter + 1, 1, 0);
-                    for (i = 0; i < 4; i++) {
-                        int points = PokeathlonCourseCeremony_GetEventPoints(course, (u8)i, ceremony->counter);
-                        PokeathlonCourseCeremony_AddPoints(ceremony->scores, (u8)i, (u16)points);
-                    }
-                    ceremony->counter++;
+                    msgId = msg_0309_00010;
+                    ceremony->state = CLOSING_STATE_POINTS_LEADER;
+                } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsNoMissMon, PokeathlonCourseCeremony_GetNoMissPoints(ceremony))) {
+                    msgId = msg_0309_00008;
                 }
             }
-        }
-        break;
-    case CLOSING_STATE_RANK_TEAMS:
-        PokeathlonCourseCeremony_GetDrawingLots(course, drawingLots);
-        PokeathlonCourseCeremony_RankTeams(ceremony->scores, ceremony->ranks, drawingLots);
-        if (ceremony->ranks[0].place == ceremony->ranks[1].place) {
-            ceremony->state = CLOSING_STATE_TIE;
-        } else {
-            ceremony->state = CLOSING_STATE_WINNER_POINTS;
-        }
-        break;
-    case CLOSING_STATE_TIE:
-        msgId = msg_0309_00024;
-        PokeathlonCourseCeremony_BreakTie(ceremony->ranks);
-        ceremony->state = CLOSING_STATE_WINNER_POINTS;
-        break;
-    case CLOSING_STATE_WINNER_POINTS:
-        msgId = msg_0309_00025;
-        PokeathlonCourseCeremony_BufferNumber(msgFormat, PokeathlonCourseCeremony_GetPoints(ceremony->scores, (u8)ceremony->ranks[0].team), 3, 0);
-        PokeathlonCourseCeremony_SaveResult(course, ceremony->scores);
-        ceremony->state = CLOSING_STATE_LOAD_WINNER_BG;
-        break;
-    case CLOSING_STATE_LOAD_WINNER_BG:
-        PokeathlonCourseCeremony_LoadWinnerBg(ceremony->bgConfig, ceremony->heapId);
-        ceremony->state = CLOSING_STATE_WINNER;
-        // fallthrough
-    case CLOSING_STATE_WINNER: {
-        int winner = ceremony->ranks[0].team;
-        msgId = msg_0309_00026;
-        BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, winner));
-        PokeathlonCourseCeremony_ShowWinnerTeam(course, (u8)winner);
-        PokeathlonCourseConfetti_Start(ceremony->confetti, TRUE);
-        PokeathlonCourseCeremony_SetTrainerPose(ceremony->trainerSprites, course, winner, TRAINER_POSE_CHEERING, ceremony->heapId);
-        ManagedSprite_SetAnim(ceremony->trainerSprites[winner], 1);
-        StopSE(SEQ_SE_DP_CON_033, 0);
-        PlaySE(SEQ_SE_GS_VOICE10);
-        PlaySE(SEQ_SE_GS_VOICE07);
-        PlayBGM(SEQ_GS_PT_VICTORY);
-        if (ceremony->course == 10) {
-            ceremony->state = CLOSING_STATE_WELL_DONE;
-        } else {
-            ceremony->state = CLOSING_STATE_MEDALS;
-        }
-        break;
-    }
-    case CLOSING_STATE_WELL_DONE:
-        msgId = msg_0309_00030;
-        BufferPokeathlonCourseName(msgFormat, 0, ceremony->course);
-        ceremony->state = CLOSING_STATE_FAREWELL;
-        break;
-    case CLOSING_STATE_MEDALS:
-        msgId = msg_0309_00027;
-        BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, ceremony->ranks[0].team));
-        ManagedSprite_SetDrawFlag(ceremony->medalSprites[0], TRUE);
-        BufferPokeathlonMedalName(msgFormat, 1, PokeathlonCourseCeremony_GetCourseMedal(ceremony->course, 0));
-        if (ceremony->course >= 5) {
-            msgId = msg_0309_00028;
-            ManagedSprite_SetDrawFlag(ceremony->medalSprites[1], TRUE);
-            BufferPokeathlonMedalName(msgFormat, 2, PokeathlonCourseCeremony_GetCourseMedal(ceremony->course, 1));
-        }
-        ceremony->state = CLOSING_STATE_RECORD;
-        break;
-    case CLOSING_STATE_RECORD: {
-        u32 courseId = ceremony->course;
-        u32 winner;
-        int own;
-        int points;
-        PokeathlonSave *pokeathlonSave;
-        if (PokeathlonCourse_GetMode(course) != POKEATHLON_COURSE_MODE_SOLO) {
-            goto noRecord;
-        }
-        winner = ceremony->ranks[0].team;
-        own = PokeathlonCourse_GetNetId(course);
-        if (winner != (u32)own) {
-            goto noRecord;
-        }
-        GF_ASSERT(winner == 0);
-        pokeathlonSave = PokeathlonSave_dummy2(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(course)));
-        points = (s32)PokeathlonCourseCeremony_GetPoints(ceremony->scores, (u8)ceremony->ranks[0].team);
-        // The best total of the course.
-        if (pokeathlonSave->prefix.nativeHalfwords[courseId * 22 + 3] < (u32)points) {
-            msgId = msg_0309_00029;
-            BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, ceremony->ranks[0].team));
-            BufferPokeathlonCourseName(msgFormat, 1, courseId);
-        }
-        goto next;
-noRecord:
-        msgId = msg_0309_00030;
-        BufferPokeathlonCourseName(msgFormat, 0, courseId);
-next:
-        ceremony->state = CLOSING_STATE_FAREWELL;
-        break;
-    }
-    case CLOSING_STATE_FAREWELL:
-        msgId = msg_0309_00031;
-        StopSE(SEQ_SE_GS_VOICE10, 120);
-        ceremony->finished = TRUE;
-        ceremony->state = CLOSING_STATE_END;
-        break;
-    case CLOSING_STATE_END:
-        if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_SOLO || PokeathlonCourseCeremony_IsClosingFinished(course)) {
-            if (PokeathlonCourseCeremony_IsCryActive(ceremony)) {
-                Heap_Free(ceremony->cryData);
-                SysTask_Destroy(ceremony->cryTask);
+            break;
+        case CLOSING_STATE_POINTS_LEADER:
+            msgId = msg_0309_00011;
+            ceremony->state = CLOSING_STATE_POINTS_LEADER_MONS;
+            break;
+        case CLOSING_STATE_POINTS_LEADER_MONS:
+            if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
+                if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountPointsLeaders(course)) {
+                    ceremony->team = 0;
+                    ceremony->member = 0;
+                    ceremony->counter = 0;
+                    msgId = msg_0309_00010;
+                    ceremony->state = CLOSING_STATE_EFFORT_PRIZE;
+                } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsPointsLeader, PokeathlonCourseCeremony_GetPointsLeaderPoints(ceremony))) {
+                    msgId = msg_0309_00012;
+                }
             }
-            PokeathlonCourseMessageBox_Close(ceremony->messageBox);
-            PokeathlonCourse_SetNextState(course, CEREMONY_STEP_FADE_OUT);
-            return FALSE;
+            break;
+        case CLOSING_STATE_EFFORT_PRIZE:
+            if (PokeathlonCourseCeremony_GetEffortPrizeKind(course) != 4) {
+                msgId = msg_0309_00014;
+                ceremony->state = CLOSING_STATE_EFFORT_PRIZE_KIND;
+            } else {
+                ceremony->state = CLOSING_STATE_EVENT_POINTS;
+            }
+            break;
+        case CLOSING_STATE_EFFORT_PRIZE_KIND:
+            msgId = PokeathlonCourseCeremony_GetEffortPrizeKind(course) + 15;
+            ceremony->state = CLOSING_STATE_EFFORT_PRIZE_MONS;
+            break;
+        case CLOSING_STATE_EFFORT_PRIZE_MONS:
+            if (!PokeathlonCourseCeremony_IsCryActive(ceremony)) {
+                if (ceremony->counter >= (u32)PokeathlonCourseCeremony_CountEffortPrizes(course)) {
+                    ceremony->team = 0;
+                    ceremony->member = 0;
+                    ceremony->counter = 0;
+                    msgId = msg_0309_00021;
+                    ceremony->state = CLOSING_STATE_EVENT_POINTS;
+                } else if (PokeathlonCourseCeremony_AwardNextMon(course, PokeathlonCourseCeremony_IsEffortPrizeMon, PokeathlonCourseCeremony_GetEffortPrizePoints(ceremony))) {
+                    msgId = msg_0309_00020;
+                }
+            }
+            break;
+        case CLOSING_STATE_EVENT_POINTS:
+            msgId = msg_0309_00022;
+            ceremony->state = CLOSING_STATE_COUNT_EVENT_POINTS;
+            StopBGM(GF_GetCurrentPlayingBGM(), 16);
+            PlaySE(SEQ_SE_DP_CON_033);
+            break;
+        case CLOSING_STATE_COUNT_EVENT_POINTS:
+            if (PokeathlonCourseCeremony_AreScoresCounted(ceremony->scores)) {
+                if ((s32)ceremony->timer++ > 30) {
+                    rounds = PokeathlonCourse_GetMode(course);
+                    if (rounds == 0) {
+                        rounds = 3;
+                    } else {
+                        rounds = 4;
+                    }
+                    ceremony->timer = 0;
+                    if (ceremony->counter >= (u8)rounds) {
+                        ceremony->counter = 0;
+                        ceremony->state = CLOSING_STATE_RANK_TEAMS;
+                    } else {
+                        msgId = msg_0309_00023;
+                        PokeathlonCourseCeremony_BufferNumber(msgFormat, ceremony->counter + 1, 1, 0);
+                        for (i = 0; i < 4; i++) {
+                            int points = PokeathlonCourseCeremony_GetEventPoints(course, (u8)i, ceremony->counter);
+                            PokeathlonCourseCeremony_AddPoints(ceremony->scores, (u8)i, (u16)points);
+                        }
+                        ceremony->counter++;
+                    }
+                }
+            }
+            break;
+        case CLOSING_STATE_RANK_TEAMS:
+            PokeathlonCourseCeremony_GetDrawingLots(course, drawingLots);
+            PokeathlonCourseCeremony_RankTeams(ceremony->scores, ceremony->ranks, drawingLots);
+            if (ceremony->ranks[0].place == ceremony->ranks[1].place) {
+                ceremony->state = CLOSING_STATE_TIE;
+            } else {
+                ceremony->state = CLOSING_STATE_WINNER_POINTS;
+            }
+            break;
+        case CLOSING_STATE_TIE:
+            msgId = msg_0309_00024;
+            PokeathlonCourseCeremony_BreakTie(ceremony->ranks);
+            ceremony->state = CLOSING_STATE_WINNER_POINTS;
+            break;
+        case CLOSING_STATE_WINNER_POINTS:
+            msgId = msg_0309_00025;
+            PokeathlonCourseCeremony_BufferNumber(msgFormat, PokeathlonCourseCeremony_GetPoints(ceremony->scores, (u8)ceremony->ranks[0].team), 3, 0);
+            PokeathlonCourseCeremony_SaveResult(course, ceremony->scores);
+            ceremony->state = CLOSING_STATE_LOAD_WINNER_BG;
+            break;
+        case CLOSING_STATE_LOAD_WINNER_BG:
+            PokeathlonCourseCeremony_LoadWinnerBg(ceremony->bgConfig, ceremony->heapId);
+            ceremony->state = CLOSING_STATE_WINNER;
+            // fallthrough
+        case CLOSING_STATE_WINNER: {
+            int winner = ceremony->ranks[0].team;
+            msgId = msg_0309_00026;
+            BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, winner));
+            PokeathlonCourseCeremony_ShowWinnerTeam(course, (u8)winner);
+            PokeathlonCourseConfetti_Start(ceremony->confetti, TRUE);
+            PokeathlonCourseCeremony_SetTrainerPose(ceremony->trainerSprites, course, winner, TRAINER_POSE_CHEERING, ceremony->heapId);
+            ManagedSprite_SetAnim(ceremony->trainerSprites[winner], 1);
+            StopSE(SEQ_SE_DP_CON_033, 0);
+            PlaySE(SEQ_SE_GS_VOICE10);
+            PlaySE(SEQ_SE_GS_VOICE07);
+            PlayBGM(SEQ_GS_PT_VICTORY);
+            if (ceremony->course == 10) {
+                ceremony->state = CLOSING_STATE_WELL_DONE;
+            } else {
+                ceremony->state = CLOSING_STATE_MEDALS;
+            }
+            break;
         }
-        break;
-    default:
-        GF_AssertFail();
-        break;
+        case CLOSING_STATE_WELL_DONE:
+            msgId = msg_0309_00030;
+            BufferPokeathlonCourseName(msgFormat, 0, ceremony->course);
+            ceremony->state = CLOSING_STATE_FAREWELL;
+            break;
+        case CLOSING_STATE_MEDALS:
+            msgId = msg_0309_00027;
+            BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, ceremony->ranks[0].team));
+            ManagedSprite_SetDrawFlag(ceremony->medalSprites[0], TRUE);
+            BufferPokeathlonMedalName(msgFormat, 1, PokeathlonCourseCeremony_GetCourseMedal(ceremony->course, 0));
+            if (ceremony->course >= 5) {
+                msgId = msg_0309_00028;
+                ManagedSprite_SetDrawFlag(ceremony->medalSprites[1], TRUE);
+                BufferPokeathlonMedalName(msgFormat, 2, PokeathlonCourseCeremony_GetCourseMedal(ceremony->course, 1));
+            }
+            ceremony->state = CLOSING_STATE_RECORD;
+            break;
+        case CLOSING_STATE_RECORD: {
+            u32 courseId = ceremony->course;
+            u32 winner;
+            int own;
+            int points;
+            PokeathlonSave *pokeathlonSave;
+            if (PokeathlonCourse_GetMode(course) != POKEATHLON_COURSE_MODE_SOLO) {
+                goto noRecord;
+            }
+            winner = ceremony->ranks[0].team;
+            own = PokeathlonCourse_GetNetId(course);
+            if (winner != (u32)own) {
+                goto noRecord;
+            }
+            GF_ASSERT(winner == 0);
+            pokeathlonSave = PokeathlonSave_dummy2(Save_Pokeathlon_Get(PokeathlonCourse_GetSaveData(course)));
+            points = (s32)PokeathlonCourseCeremony_GetPoints(ceremony->scores, (u8)ceremony->ranks[0].team);
+            // The best total of the course.
+            if (pokeathlonSave->prefix.nativeHalfwords[courseId * 22 + 3] < (u32)points) {
+                msgId = msg_0309_00029;
+                BufferPlayersName(msgFormat, 0, PokeathlonCourse_GetPlayerProfileFromData(course, ceremony->ranks[0].team));
+                BufferPokeathlonCourseName(msgFormat, 1, courseId);
+            }
+            goto next;
+noRecord:
+            msgId = msg_0309_00030;
+            BufferPokeathlonCourseName(msgFormat, 0, courseId);
+next:
+            ceremony->state = CLOSING_STATE_FAREWELL;
+            break;
+        }
+        case CLOSING_STATE_FAREWELL:
+            msgId = msg_0309_00031;
+            StopSE(SEQ_SE_GS_VOICE10, 120);
+            ceremony->finished = TRUE;
+            ceremony->state = CLOSING_STATE_END;
+            break;
+        case CLOSING_STATE_END:
+            if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_SOLO || PokeathlonCourseCeremony_IsClosingFinished(course)) {
+                if (PokeathlonCourseCeremony_IsCryActive(ceremony)) {
+                    Heap_Free(ceremony->cryData);
+                    SysTask_Destroy(ceremony->cryTask);
+                }
+                PokeathlonCourseMessageBox_Close(ceremony->messageBox);
+                PokeathlonCourse_SetNextState(course, CEREMONY_STEP_FADE_OUT);
+                return FALSE;
+            }
+            break;
+        default:
+            GF_AssertFail();
+            break;
+        }
+        if (msgId != -1) {
+            PokeathlonCourseMessageBox_Print(ceremony->messageBox, msgId);
+            ceremony->messageCount++;
+        }
     }
-    if (msgId != -1) {
-        PokeathlonCourseMessageBox_Print(ceremony->messageBox, msgId);
-        ceremony->messageCount++;
-    }
-end:
     return FALSE;
 }
 

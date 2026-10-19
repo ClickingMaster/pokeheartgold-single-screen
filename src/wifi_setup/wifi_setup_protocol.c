@@ -22,10 +22,19 @@ extern char sStr_MELCO[];
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 extern u8 gWifiSetupJoinReply[];
-extern u8 gWifiSetupSecurityRecords[];
+extern WifiSetupAossKeyRecords gWifiSetupSecurityRecords[];
 
 extern u8 gWifiSetupPeerAddress[];
 extern u8 sWifiSetupSecurityRecordTypes[];
+
+// Item of a reply record: type, data length, offset of the next item (0 for the last one), data
+typedef struct WifiSetupAossItem {
+    u8 type;
+    u8 reserved;
+    u16 length;
+    u16 next;
+    u8 data[1];
+} WifiSetupAossItem;
 
 extern s8 ov13_0224CFB8[];
 extern u8 gWifiSetupCipherSeed[];
@@ -39,10 +48,10 @@ static int WifiSetup_CheckPeer(int value, const void *data);
 static int WifiSetup_CheckReplySequence(const u8 *a, u8 *b);
 static int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst);
 static int WifiSetup_ReadLittleEndian(const u8 *src, int length);
-static int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst);
-static int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst);
+static int WifiSetup_ParseWepRecord(const u8 *src, WifiSetupKeyRecord *dst);
+static int WifiSetup_ParseWpaRecord(const u8 *src, WifiSetupWpaKeyRecord *dst);
 static int WifiSetup_ParseType70Record(const u8 *a, void *dst);
-static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other);
+static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, WifiSetupAossKeyRecords *out, u8 *other);
 static int WifiSetup_IsEncryptionRequested(int value);
 static int WifiSetup_SendJoinRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg);
 static int WifiSetup_SendSettingsRequest(void *unused, const WifiSetupAossPacketParams *params, void *arg);
@@ -260,7 +269,7 @@ static int WifiSetup_HandleSettingsReply(int state, WifiSetupAossReceived *recei
         }
         return -1;
     }
-    WifiSetup_MemFill(gWifiSetupSecurityRecords, 0, 0x6A0);
+    WifiSetup_MemFill(gWifiSetupSecurityRecords, 0, 2 * sizeof(WifiSetupAossKeyRecords));
     value = WifiSetup_NetToHost16(header->bodyLength);
     if (WifiSetup_ParseSecurityRecords(0, body->bytes, value, gWifiSetupSecurityRecords, gWifiSetupJoinReply) < 0) {
         (*counter)++;
@@ -393,49 +402,49 @@ static int WifiSetup_CheckReplySequence(const u8 *a, u8 *b) {
 }
 
 static int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst) {
-    const u8 *entry;
+    const WifiSetupAossItem *entry;
     u8 *dst80;
     int length;
 
     WifiSetup_MemFill(dst, 0, 0x104);
     dst80 = dst;
-    entry = src;
+    entry = (const WifiSetupAossItem *)src;
     dst80 += 0x80;
     for (;;) {
-        length = WifiSetup_NetToHost16(*(const u16 *)(entry + 2));
+        length = WifiSetup_NetToHost16(entry->length);
         if (length <= 0) {
             return -1;
         }
-        switch (entry[0]) {
+        switch (entry->type) {
         case 0:
-            WifiSetup_MemCopy(dst, entry + 6, length);
+            WifiSetup_MemCopy(dst, entry->data, length);
             break;
         case 1:
-            WifiSetup_MemCopy(dst80, entry + 6, length);
+            WifiSetup_MemCopy(dst80, entry->data, length);
             break;
         case 2:
-            WifiSetup_MemCopy(dst + 0x100, entry + 6, length);
+            WifiSetup_MemCopy(dst + 0x100, entry->data, length);
             break;
         case 3:
         case 4:
             // called through an int-returning type: with the u16 return type the "<= 0" test becomes "== 0"
-            if (((int (*)(int))WifiSetup_NetToHost16)(entry[6]) <= 0) {
+            if (((int (*)(int))WifiSetup_NetToHost16)(entry->data[0]) <= 0) {
                 return -2;
             }
             break;
         case 5:
-            gWifiSetupState.address = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry + 6, length));
+            gWifiSetupState.address = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry->data, length));
             break;
         case 6:
-            gWifiSetupState.netmask = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry + 6, length));
+            gWifiSetupState.netmask = WifiSetup_NetToHost32(WifiSetup_ReadLittleEndian(entry->data, length));
             break;
         default:
             return -1;
         }
-        if (*(const u16 *)(entry + 4) == 0) {
+        if (entry->next == 0) {
             break;
         }
-        entry = src + WifiSetup_NetToHost16(*(const u16 *)(entry + 4));
+        entry = (const WifiSetupAossItem *)(src + WifiSetup_NetToHost16(entry->next));
     }
     return 0;
 }
@@ -451,20 +460,20 @@ static int WifiSetup_ReadLittleEndian(const u8 *src, int length) {
     return value;
 }
 
-static int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst) {
-    const u8 *entry = src + 6;
+static int WifiSetup_ParseWepRecord(const u8 *src, WifiSetupKeyRecord *dst) {
+    const WifiSetupAossItem *entry = (const WifiSetupAossItem *)(src + 6);
     const u8 *base;
-    u8 *dst08 = dst + 8;
-    u8 *dstF0 = dst + 0xF0;
-    u8 *dstB0 = dst + 0xB0;
-    u8 *dst70 = dst + 0x70;
-    u8 *dst30 = dst + 0x30;
+    u8 *text = dst->text;
+    u8 *key3 = dst->fields[3];
+    u8 *key2 = dst->fields[2];
+    u8 *key1 = dst->fields[1];
+    u8 *key0 = dst->fields[0];
     u32 length;
-    base = entry;
+    base = (const u8 *)entry;
 
     for (;;) {
-        length = WifiSetup_NetToHost16(*(const u16 *)(entry + 2));
-        switch (entry[0]) {
+        length = WifiSetup_NetToHost16(entry->length);
+        switch (entry->type) {
         case 0x10:
         case 0x11:
         case 0x12:
@@ -488,56 +497,56 @@ static int WifiSetup_ParseWepRecord(const u8 *src, u8 *dst) {
             }
             break;
         }
-        switch (entry[0]) {
+        switch (entry->type) {
         case 0x10:
         case 0x20:
-            WifiSetup_MemCopy(dst30, entry + 6, length);
-            *(int *)(dst + 4) = length;
+            WifiSetup_MemCopy(key0, entry->data, length);
+            dst->length = length;
             break;
         case 0x11:
         case 0x21:
-            WifiSetup_MemCopy(dst70, entry + 6, length);
-            *(int *)(dst + 4) = length;
+            WifiSetup_MemCopy(key1, entry->data, length);
+            dst->length = length;
             break;
         case 0x12:
         case 0x22:
-            WifiSetup_MemCopy(dstB0, entry + 6, length);
-            *(int *)(dst + 4) = length;
+            WifiSetup_MemCopy(key2, entry->data, length);
+            dst->length = length;
             break;
         case 0x13:
         case 0x23:
-            WifiSetup_MemCopy(dstF0, entry + 6, length);
-            *(int *)(dst + 4) = length;
+            WifiSetup_MemCopy(key3, entry->data, length);
+            dst->length = length;
             break;
         case 0x15:
         case 0x25:
-            if (length != 0 && entry[5 + length] != 0) {
+            if (length != 0 && entry->data[length - 1] != 0) {
                 return -1;
             }
-            WifiSetup_MemCopy(dst08, entry + 6, length);
+            WifiSetup_MemCopy(text, entry->data, length);
             break;
         default:
             return -1;
         }
-        if (*(const u16 *)(entry + 4) == 0) {
+        if (entry->next == 0) {
             break;
         }
-        entry = base + WifiSetup_NetToHost16(*(const u16 *)(entry + 4));
+        entry = (const WifiSetupAossItem *)(base + WifiSetup_NetToHost16(entry->next));
     }
     return 0;
 }
 
-static int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst) {
-    const u8 *entry = src + 6;
+static int WifiSetup_ParseWpaRecord(const u8 *src, WifiSetupWpaKeyRecord *dst) {
+    const WifiSetupAossItem *entry = (const WifiSetupAossItem *)(src + 6);
     const u8 *base;
-    u8 *dst08 = dst + 8;
-    u8 *dst30 = dst + 0x30;
+    u8 *text = dst->text;
+    u8 *key = dst->key;
     u32 length;
-    base = entry;
+    base = (const u8 *)entry;
 
     for (;;) {
-        length = WifiSetup_NetToHost16(*(const u16 *)(entry + 2));
-        switch (entry[0]) {
+        length = WifiSetup_NetToHost16(entry->length);
+        switch (entry->type) {
         case 0x30:
         case 0x40:
             if (length > 0x40) {
@@ -551,44 +560,44 @@ static int WifiSetup_ParseWpaRecord(const u8 *src, u8 *dst) {
             }
             break;
         }
-        switch (entry[0]) {
+        switch (entry->type) {
         case 0x30:
         case 0x40:
-            WifiSetup_MemCopy(dst30, entry + 6, length);
-            *(int *)(dst + 4) = length;
+            WifiSetup_MemCopy(key, entry->data, length);
+            dst->length = length;
             break;
         case 0x35:
         case 0x45:
-            if (length != 0 && entry[5 + length] != 0) {
+            if (length != 0 && entry->data[length - 1] != 0) {
                 return -1;
             }
-            WifiSetup_MemCopy(dst08, entry + 6, length);
+            WifiSetup_MemCopy(text, entry->data, length);
             break;
         default:
             return -1;
         }
-        if (*(const u16 *)(entry + 4) == 0) {
+        if (entry->next == 0) {
             break;
         }
-        entry = base + WifiSetup_NetToHost16(*(const u16 *)(entry + 4));
+        entry = (const WifiSetupAossItem *)(base + WifiSetup_NetToHost16(entry->next));
     }
     return 0;
 }
 
 static int WifiSetup_ParseType70Record(const u8 *a, void *dst) {
-    const u8 *item = a + 6;
-    int size = WifiSetup_NetToHost16(*(u16 *)(item + 2));
+    const WifiSetupAossItem *item = (const WifiSetupAossItem *)(a + 6);
+    int size = WifiSetup_NetToHost16(item->length);
     if (size <= 0) {
         return -1;
     }
-    if (item[0] != 0x70) {
+    if (item->type != 0x70) {
         return -1;
     }
-    WifiSetup_MemCopy(dst, item + 6, size);
+    WifiSetup_MemCopy(dst, item->data, size);
     return 0;
 }
 
-static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out, u8 *other) {
+static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, WifiSetupAossKeyRecords *out, u8 *other) {
     int flags = 0;
     if (remaining <= 0) {
         return -2;
@@ -599,7 +608,7 @@ static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out,
         if (record->type == sWifiSetupSecurityRecordTypes[id]) {
             break;
         }
-        int skip = WifiSetup_NetToHost16(*(u16 *)(p + 2)) + 4;
+        int skip = WifiSetup_NetToHost16(record->length) + 4;
         remaining -= skip;
         p += skip;
         if (remaining <= 0) {
@@ -609,31 +618,28 @@ static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out,
     u16 encoded = record->length;
     p += 4;
     int size = WifiSetup_NetToHost16(encoded);
-    u8 *base = out + id * 0x350;
-    u8 *first;
+    WifiSetupAossKeyRecords *records = &out[id];
     u32 offset;
     u8 *otherCopy;
     otherCopy = other;
     offset = (id + 3) * 128;
-    first = base;
-    first += 8;
     do {
         int r;
         switch (p[0]) {
         case 3:
-            r = WifiSetup_ParseWepRecord(p, first);
+            r = WifiSetup_ParseWepRecord(p, &records->wep64);
             flags |= 1;
             break;
         case 4:
-            r = WifiSetup_ParseWepRecord(p, base + 0x138);
+            r = WifiSetup_ParseWepRecord(p, &records->wep128);
             flags |= 2;
             break;
         case 5:
-            r = WifiSetup_ParseWpaRecord(p, base + 0x268);
+            r = WifiSetup_ParseWpaRecord(p, &records->wpaTkip);
             flags |= 4;
             break;
         case 6:
-            r = WifiSetup_ParseWpaRecord(p, base + 0x2d8);
+            r = WifiSetup_ParseWpaRecord(p, &records->wpaAes);
             flags |= 8;
             break;
         case 10:

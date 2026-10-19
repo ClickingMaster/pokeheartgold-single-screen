@@ -139,8 +139,8 @@ static void BattleFactoryApp_BufferNumber(BattleFactoryApp *app, u32 field, s32 
 static void BattleFactoryApp_BufferSpeciesName(BattleFactoryApp *app, u32 field, BoxPokemon *boxMon);
 static void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
 static void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId);
-static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party);
-static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender);
+static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId, Party *party);
+static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId, u16 species, u8 gender);
 static void BattleFactoryApp_FreeGraphics(BattleFactoryApp *app);
 static void BattleFactoryApp_ResumeAfterSummary(BattleFactoryApp *app);
 static void BattleFactoryApp_DisableDisplay(void);
@@ -2140,7 +2140,7 @@ static void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *win
     ScheduleWindowCopyToVram(window);
 }
 
-static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, Party *party) {
+static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window, int monIndex, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId, Party *party) {
     Pokemon *mon;
     String *name;
     String *format;
@@ -2172,14 +2172,14 @@ static void BattleFactoryApp_PrintMonName(BattleFactoryApp *app, Window *window,
     ScheduleWindowCopyToVram(window);
 }
 
-static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, volatile u8 bg, u8 fontId, u16 species, u8 gender) {
+static void BattleFactoryApp_PrintPartnerMonName(BattleFactoryApp *app, Window *window, int x, int y, u8 fg, u8 shadow, u8 bg, u8 fontId, u16 species, u8 gender) {
     MsgData *speciesNames;
     String *string;
     u8 width;
     int genderMsg;
     int color;
 
-    FillWindowPixelBuffer(window, (u8)bg);
+    FillWindowPixelBuffer(window, bg);
     speciesNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, HEAP_ID_100);
     string = NewString_ReadMsgData(speciesNames, (u16)species);
     DestroyMsgData(speciesNames);

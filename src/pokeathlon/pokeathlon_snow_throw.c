@@ -1324,15 +1324,15 @@ static void PokeathlonSnowThrow_PrintScore(PokeathlonSnowThrow *work, u16 score)
 
 // Host: stun and energy recovery of every Pokemon.
 static void PokeathlonSnowThrow_UpdateMons(PokeathlonCourseData *course) {
-    volatile PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
+    PokeathlonSnowThrow *work = PokeathlonCourse_GetWork(course);
     int i;
 
     for (i = 0; i < SNOW_THROW_MONS; i++) {
         if (work->mons[i].stunTimer != 0) {
-            work->mons[i].stunTimer = work->mons[i].stunTimer - 1;
+            work->mons[i].stunTimer--;
         }
         if (work->mons[i].energy < SNOW_THROW_MAX_ENERGY) {
-            work->mons[i].energy = work->mons[i].energy + 1;
+            work->mons[i].energy++;
         }
         if (work->mons[i].stunTimer != 0) {
             work->mons[i].condition = SNOW_THROW_STUNNED;

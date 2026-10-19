@@ -231,39 +231,30 @@ static void PokeathlonSnowThrowDisplay_CreatePicSprites(PokeathlonCourseSpritePo
     VecFx32 position;
     int i;
     volatile int x;
-    u8 *slot;
     PokeathlonCourseMonInfo *mon;
 
     for (i = 0; i < SNOW_THROW_MEMBERS; i++) {
         PokeathlonCourseSpritePool_CreateSprite(pool, 3, 2, 101, 2);
     }
     mon = mons;
-    slot = (u8 *)display;
     i = 0;
     x = 16;
     for (; i < SNOW_THROW_MEMBERS; i++) {
-        void **picSprite = (void **)(slot + offsetof(PokeathlonSnowThrowDisplay, picSprites));
-        void **tiredSprite = (void **)(slot + offsetof(PokeathlonSnowThrowDisplay, tiredSprites));
-
-        *picSprite = PokeathlonCourseSpritePool_Take(pool, 101, 2);
+        display->picSprites[i] = PokeathlonCourseSpritePool_Take(pool, 101, 2);
         position.z = 0;
         position.x = x << FX32_SHIFT;
         position.y = (GetMonPicHeightBySpeciesGenderForm(mon->species, mon->gender, 0, mon->form, mon->personality) + 376) << FX32_SHIFT;
-        PokeathlonCourseSpritePoolSprite_SetPosition(*picSprite, &position);
-        PokeathlonCourseSpritePoolSprite_SetAnim(*picSprite, i + 1);
-        PokeathlonCourseSpritePoolSprite_Show(*picSprite, TRUE, TRUE);
-        PokeathlonCourseSpritePoolSprite_SetDrawPriority(*picSprite, 19 - i);
-        *tiredSprite = PokeathlonCourseSpritePool_Take(pool, 101, 5);
-        PokeathlonCourseSpritePoolSprite_SetAnim(*tiredSprite, 0);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[i], &position);
+        PokeathlonCourseSpritePoolSprite_SetAnim(display->picSprites[i], i + 1);
+        PokeathlonCourseSpritePoolSprite_Show(display->picSprites[i], TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(display->picSprites[i], 19 - i);
+        display->tiredSprites[i] = PokeathlonCourseSpritePool_Take(pool, 101, 5);
+        PokeathlonCourseSpritePoolSprite_SetAnim(display->tiredSprites[i], 0);
         position.y -= FX32_CONST(16);
-        PokeathlonCourseSpritePoolSprite_SetPosition(*tiredSprite, &position);
-        PokeathlonCourseSpritePoolSprite_SetDrawPriority(*tiredSprite, 4);
-        {
-            int next = x + 50;
-            mon++;
-            slot += sizeof(void *);
-            x = next;
-        }
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->tiredSprites[i], &position);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(display->tiredSprites[i], 4);
+        mon++;
+        x += 50;
     }
     PokeathlonSnowThrowDisplay_LoadMonPics(display, mons);
     PokeathlonSnowThrowDisplay_GetPicVramOffsets(pool, display);

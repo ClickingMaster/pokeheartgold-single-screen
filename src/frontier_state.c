@@ -175,7 +175,7 @@ int Save_Frontier_GetHallFlags(SaveData *save) {
     return (int)((u8 *)Save_Frontier_GetStatic(save) + 0x161c);
 }
 
-void HallFlags_SetField(u32 address, u32 field, u32 index, u32 unused, u8 *volatile input) {
+void HallFlags_SetField(u32 address, u32 field, u32 index, u32 unused, void *input) {
     u8 *value = input;
     switch (field) {
     case HALL_FLAGS_HAS_STREAK:
@@ -306,7 +306,7 @@ u32 Save_Frontier_GetCastleFlags(SaveData *save) {
     return (u32)((u8 *)Save_Frontier_GetStatic(save) + 0x1620);
 }
 
-void CastleFlags_SetField(u32 address, u32 field, u32 index, u32 unused, u8 *volatile input) {
+void CastleFlags_SetField(u32 address, u32 field, u32 index, u32 unused, void *input) {
     u8 *value = input;
     switch (field) {
     case CASTLE_FLAGS_HAS_STREAK:
@@ -434,7 +434,7 @@ void *Save_Frontier_GetArcadeFlags(SaveData *save) {
     return (u8 *)Save_Frontier_GetStatic(save) + 0x1624;
 }
 
-void ArcadeFlags_SetField(void *address, u32 field, u32 index, u32 unused, u8 *volatile input) {
+void ArcadeFlags_SetField(void *address, u32 field, u32 index, u32 unused, void *input) {
     u8 *value = input;
     if (field == ARCADE_FLAGS_HAS_STREAK) {
         if (*value >= 1) {

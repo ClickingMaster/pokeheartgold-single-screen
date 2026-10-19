@@ -985,7 +985,7 @@ BOOL SwalotPlopCurve_Update(SwalotPlopCurve *curve) {
     s32 slopePart = (s32)(((s64)curve->slope * (step << 12) + 0x800) >> 12);
     s32 curvePart = (s32)(((s64)curve->curvature * ((step * step) << 12) + 0x800) >> 12);
     curve->value = curve->start + (slopePart + FX_Div(curvePart, 0x2000));
-    s32 current = *(volatile s32 *)&curve->step;
+    s32 current = curve->step;
     s32 duration = curve->duration;
     s32 next = current + 1;
     if (next <= duration) {
@@ -3227,11 +3227,10 @@ void SwalotPlop_CalcArcStep(int step, int steps, int radius, int startAngle, int
     *y = FxMul(GF_SinDegNoWrap(angle), r) >> 12;
 }
 
-void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc, int playerCount, int localIndex, enum HeapID heapId, NNSFndAllocator *volatile allocator) {
+void SwalotPlopStage_Init(SwalotPlopStage *stage, SwalotPlopGfx *gfx, NARC *narc, int playerCount, int localIndex, enum HeapID heapId, NNSFndAllocator *allocator) {
     int i, fileId;
     ModelInstance *model;
     ModelResource *resource;
-    allocator = allocator;
     resource = stage->resources;
     model = stage->models;
     for (i = 0; i < 3; i++, resource++, model++) {

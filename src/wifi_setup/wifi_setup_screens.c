@@ -158,8 +158,6 @@ extern void WifiSetupText_FreeCanvas(void *);
 extern s32 FX_DivS32(s32 a, s32 b);
 extern int swprintf(u16 *buf, u32 n, const u16 *fmt, ...);
 
-#define REG16(a)    (*(vu16 *)(a))
-#define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
 static void WifiSetupClient_OnStatus(s32 *status);
 static void *WifiSetupClient_Alloc(u32 size);
@@ -512,9 +510,9 @@ void WifiSetupScreens_Init(void) {
         WifiSetup_LoadGraphics(sStr_CharJtStep1_NscL, GXS_LoadBG1Scr);
         break;
     }
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000A);
+    G2S_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
     WifiSetupDisplay_ShowPlanes(1, GX_PLANEMASK_BG1);
     WifiSetupDisplay_ShowPlanes(0, GX_PLANEMASK_BG1);
     WifiSetupApp_SetStateFunc(WifiSetupScreens_FadeIn);
@@ -563,10 +561,10 @@ static void WifiSetupTopMenu_LoadGraphics(void) {
     WifiSetup_LoadGraphics(sStr_CharJbBgStep1_NclL_2, GX_LoadBGPltt);
     WifiSetup_LoadGraphics(sStr_CharJb2MenuNscL, GX_LoadBG2Scr);
     gWifiSetupTopMenu.graphics = WifiSetupFile_Load(WifiSetup_LocalizePath(name.text), NULL, 4);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTopMenu_FadeIn(void) {
@@ -723,11 +721,11 @@ static void WifiSetupEraseConfirm_Init(void) {
 
 static void WifiSetupEraseConfirm_LoadGraphics(void) {
     WifiSetup_LoadGraphics(sStr_CharYb5MultiNscL, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupEraseConfirm_FadeIn(void) {
@@ -866,11 +864,11 @@ static void WifiSetupEraseDone_Init(void) {
 
 static void WifiSetupEraseDone_LoadGraphics(void) {
     WifiSetup_LoadGraphics(sStr_CharYb5MultiNscL_2, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupEraseDone_FadeIn(void) {
@@ -954,11 +952,11 @@ static void WifiSetupSystemInfo_Init(void) {
 
 static void WifiSetupSystemInfo_LoadGraphics(void) {
     WifiSetup_LoadGraphics(sStr_CharJb5InfoNscL, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupSystemInfo_DrawInfo(void) {
@@ -1115,10 +1113,10 @@ static void WifiSetupOptions_LoadGraphics(void) {
     DC_FlushRange(pal, 0x200);
     GX_LoadBGPltt(pal, 0, 0x200);
     WifiSetupFile_Free(pal);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupOptions_FadeIn(void) {
@@ -1292,11 +1290,11 @@ static void WifiSetupTransferring_Init(void) {
 
 static void WifiSetupTransferring_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferringYb5MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferring_FadeIn(void) {
@@ -1377,11 +1375,11 @@ static void WifiSetupTransferDone_Init(void) {
 }
 
 static void WifiSetupTransferDone_LoadGraphics(void) {
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferDone_FadeIn(void) {
@@ -1462,11 +1460,11 @@ static void WifiSetupTransferInfo_Init(void) {
 }
 
 static void WifiSetupTransferInfo_LoadGraphics(void) {
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferInfo_FadeIn(void) {
@@ -1556,11 +1554,11 @@ static void WifiSetupTransferIntro_Init(void) {
 
 static void WifiSetupTransferIntro_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferIntroYb5MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferIntro_FadeIn(void) {
@@ -1674,10 +1672,10 @@ static void WifiSetupTransferCancelled_Init(void) {
 
 static void WifiSetupTransferCancelled_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferCancelledYb5MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferCancelled_FadeIn(void) {
@@ -1741,11 +1739,11 @@ static void WifiSetupTransferFailed_Init(void) {
 
 static void WifiSetupTransferFailed_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferFailedYb5MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferFailed_FadeIn(void) {
@@ -1874,11 +1872,11 @@ static void WifiSetupTransferConfirm_Init(void) {
 
 static void WifiSetupTransferConfirm_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferConfirmJb5MoveNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferConfirm_FadeIn(void) {
@@ -1981,7 +1979,7 @@ static void WifiSetupTransferConfirm_OnTransferEvent(void) {
 }
 
 static int WifiSetupTransferWait_IsLidClosed(void) {
-    return ((*(vu16 *)0x027FFFA8 & 0x8000) >> 15) ? TRUE : FALSE;
+    return PAD_DetectFold() ? TRUE : FALSE;
 }
 
 static void WifiSetupTransferWait_Init(void) {
@@ -1996,11 +1994,11 @@ static void WifiSetupTransferWait_Init(void) {
 
 static void WifiSetupTransferWait_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTransferWaitYb5MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTransferWait_FadeIn(void) {
@@ -2128,7 +2126,7 @@ static void WifiSetupTransferWait_OnTransferEvent(int a) {
 }
 
 static int WifiSetupAoss_IsLidClosed(void) {
-    return ((*(vu16 *)0x027FFFA8 & 0x8000) >> 15) ? TRUE : FALSE;
+    return PAD_DetectFold() ? TRUE : FALSE;
 }
 
 void WifiSetupAoss_Init(void) {
@@ -2148,11 +2146,11 @@ static void WifiSetupAoss_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupAossJbBgStep3NcgPath, GX_LoadBG2Char);
     WifiSetup_LoadGraphics(gWifiSetupAossYbBgStep3NclPath, GX_LoadBGPltt);
     WifiSetup_LoadGraphics(gWifiSetupAossXb4MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupAoss_FadeIn(void) {
@@ -2342,10 +2340,10 @@ static void WifiSetupAossDone_Init(void) {
 
 static void WifiSetupAossDone_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupAossDoneXb4MultiNscPath, GX_LoadBG2Scr);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x0400000A);
-    SET_PRI3(0x0400000C);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupAossDone_FadeIn(void) {
@@ -2430,12 +2428,12 @@ static void WifiSetupListScreen_LoadGraphics(void) {
     WifiSetupBgScreen_Create(gWifiSetupListScreen.work->bgScreenFile);
     WifiSetupBgScreen_MarkDirty();
     gWifiSetupListScreen.work->paletteFile = WifiSetupFile_Load(WifiSetup_LocalizePath(b.text), 0, 4);
-    SET_PRI3(0x04001008);
-    SET_PRI3(0x0400100A);
-    SET_PRI3(0x04000008);
-    REG16(0x0400000A) = (u16)((REG16(0x0400000A) & ~3) | 2);
-    SET_PRI3(0x0400000C);
-    REG16(0x0400000E) = (u16)((REG16(0x0400000E) & ~3) | 2);
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(3);
+    G2_SetBG1Priority(2);
+    G2_SetBG2Priority(3);
+    G2_SetBG3Priority(2);
 }
 
 static void WifiSetupListScreen_CreateScrollBar(void) {
@@ -2917,9 +2915,9 @@ static void WifiSetupListScreen_ScrollBgTask(void) {
     if (!gWifiSetupListScreen.work->bgScrollDirty) {
         return;
     }
-    x = ((FX_ModS32(gWifiSetupListScreen.position, 28) - 50) << 16) & 0x01ff0000;
-    *(vu32 *)0x04000010 = x;
-    *(vu32 *)0x04000018 = x;
+    x = FX_ModS32(gWifiSetupListScreen.position, 28) - 50;
+    G2_SetBG0Offset(0, x);
+    G2_SetBG2Offset(0, x);
     gWifiSetupListScreen.work->bgScrollDirty = 0;
 }
 
@@ -3074,11 +3072,11 @@ static void WifiSetupTextEntry_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupTextEntryJbBgStep3NcgPath, GX_LoadBG2Char);
     WifiSetup_LoadGraphics(gWifiSetupTextEntryYbBgStep3NclPath, GX_LoadBGPltt);
     WifiSetup_LoadGraphics(gWifiSetupTextEntryXb4EditNscPath, GX_LoadBG2Scr);
-    *(vu16 *)0x04001008 = (*(vu16 *)0x04001008 & ~3) | 3;
-    *(vu16 *)0x0400100a = (*(vu16 *)0x0400100a & ~3) | 3;
-    *(vu16 *)0x04000008 = (*(vu16 *)0x04000008 & ~3) | 2;
-    *(vu16 *)0x0400000a = (*(vu16 *)0x0400000a & ~3) | 3;
-    *(vu16 *)0x0400000c = (*(vu16 *)0x0400000c & ~3) | 3;
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(2);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 static void WifiSetupTextEntry_FadeIn(void) {

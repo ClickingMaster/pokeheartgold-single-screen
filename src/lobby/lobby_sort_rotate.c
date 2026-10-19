@@ -21,8 +21,8 @@ void LobbySort_UpperBound(It *out, It first, It last, const int *key);
 void LobbySort_Rotate(It *out, It first, It middle, It last) {
     Pair *m, *a, *b, *result;
     Pair temp1, temp2;
-    a = ((volatile It *)&first)->p;
-    m = ((volatile It *)&middle)->p;
+    a = first.p;
+    m = middle.p;
     if (a == m) {
         *out = last;
         return;

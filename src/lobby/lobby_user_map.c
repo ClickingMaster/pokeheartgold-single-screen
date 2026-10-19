@@ -19,10 +19,10 @@ extern void LobbyString_InitCopy(void *, void *);
 
 LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *set, LobbyUserIdSetNode *parent, int left, int last, const int *key) {
     struct {
-        volatile u8 byte;
+        u8 byte;
         u8 pad[3];
-        LobbyUserIdSetNode *volatile a, *volatile b;
-        void *volatile owner;
+        LobbyUserIdSetNode *a, *b;
+        void *owner;
         LobbyUserIdSetNode *volatile cleanup;
     } f;
 
@@ -106,7 +106,7 @@ void LobbyUserMap_Erase(Iterator *out, LobbyUserMap *map, Iterator node) {
 
 LobbyUserMapNode *LobbyUserMap_InsertNode(LobbyUserMap *map, LobbyUserMapNode *parent, int left, int first, LobbyUserMapEntry *entry) {
     struct {
-        volatile u8 flag;
+        u8 flag;
         LobbyUserMapNode *a, *b;
         LobbyUserMapNode **root;
         LobbyUserMapNode *volatile owned;

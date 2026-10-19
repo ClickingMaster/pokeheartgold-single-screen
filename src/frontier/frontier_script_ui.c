@@ -870,42 +870,15 @@ void FrontierMap_ShakeTask(SysTask *task, FrontierMapShake *shake) {
     }
 }
 
-static inline void SetWindow0Rect(int left, int top, int right, int bottom) {
-    reg_G2_WIN0H = ((left << 8) & 0xFF00) | right;
-    reg_G2_WIN0V = ((top << 8) & 0xFF00) | bottom;
-}
-
-static inline void SetWindow0Inside(int planes, int effect) {
-    volatile u16 *reg = &reg_G2_WININ;
-    int value = (reg[0] & ~0x3F) | planes;
-    if (effect) {
-        value |= 0x20;
-    }
-    reg[0] = value;
-}
-
-static inline void SetWindowOutside(int planes, int effect) {
-    volatile u16 *reg = &reg_G2_WINOUT;
-    int value = (reg[0] & ~0x3F) | planes;
-    if (effect) {
-        value |= 0x20;
-    }
-    reg[0] = value;
-}
-
-static inline void SetVisibleWindows(u32 windows) {
-    reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFFF1FFF) | windows;
-}
-
 void FrontierMap_WindowTask(SysTask *task, FrontierMapWindowTask *data) {
     if (data->delay <= 0) {
         if (data->enable == TRUE) {
-            SetWindow0Inside(0xF, TRUE);
-            SetWindowOutside(0x1F, TRUE);
-            SetWindow0Rect(data->left, data->top, data->right, data->bottom);
-            SetVisibleWindows(REG_GX_DISPCNT_W0_MASK);
+            G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3, TRUE);
+            G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
+            G2_SetWnd0Position(data->left, data->top, data->right, data->bottom);
+            GX_SetVisibleWnd(GX_WNDMASK_W0);
         } else {
-            SetVisibleWindows(0);
+            GX_SetVisibleWnd(GX_WNDMASK_NONE);
         }
         SysTask_Destroy(task);
         MI_CpuFill8(data, 0, sizeof(FrontierMapWindowTask));

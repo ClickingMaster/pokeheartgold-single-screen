@@ -64,11 +64,11 @@ void WifiSetupAddressEntry_LoadGraphics(void) {
     WifiSetup_LoadGraphics(gWifiSetupAddressEntryJbBgStep3NcgPath, GX_LoadBG2Char);
     WifiSetup_LoadGraphics(gWifiSetupAddressEntryYbBgStep3NclPath, GX_LoadBGPltt);
     WifiSetup_LoadGraphics(gWifiSetupAddressEntryXb4EditAddrNscPath, GX_LoadBG2Scr);
-    *(vu16 *)0x04001008 = (*(vu16 *)0x04001008 & ~3) | 3;
-    *(vu16 *)0x0400100a = (*(vu16 *)0x0400100a & ~3) | 3;
-    *(vu16 *)0x04000008 = (*(vu16 *)0x04000008 & ~3) | 2;
-    *(vu16 *)0x0400000a = (*(vu16 *)0x0400000a & ~3) | 3;
-    *(vu16 *)0x0400000c = (*(vu16 *)0x0400000c & ~3) | 3;
+    G2S_SetBG0Priority(3);
+    G2S_SetBG1Priority(3);
+    G2_SetBG0Priority(2);
+    G2_SetBG1Priority(3);
+    G2_SetBG2Priority(3);
 }
 
 void WifiSetupAddressEntry_FadeIn(void) {

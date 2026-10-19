@@ -892,7 +892,6 @@ static void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
     int i;
     int j;
     const u32 *bgIds;
-    u32 offset;
 
     GF_DestroyVramTransferManager();
     bgIds = sWiFiPlazaRoomBgIds;
@@ -901,17 +900,10 @@ static void WiFiPlazaRoom_FreeGraphics(WiFiPlazaRoomGraphics *graphics) {
     }
     Heap_Free(graphics->bgConfig);
     DestroyCellTransferStateManager(graphics->cellTransfer);
-    // cellTransfer = NULL, then resManagers[0-3]
-    offset = offsetof(WiFiPlazaRoomGraphics, cellTransfer);
-    j = 0;
-    *(void **)((u8 *)graphics + offset) = NULL;
-    bgIds = (const u32 *)graphics;
-    offset -= sizeof(graphics->resManagers);
-    do {
-        Destroy2DGfxResObjMan(*(GF_2DGfxResMan **)((u8 *)bgIds + offset));
-        j++;
-        bgIds++;
-    } while (j < 4);
+    graphics->cellTransfer = NULL;
+    for (j = 0; j < 4; j++) {
+        Destroy2DGfxResObjMan(graphics->resManagers[j]);
+    }
     SpriteList_Delete(graphics->spriteList);
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
@@ -1168,18 +1160,11 @@ static void WiFiPlazaListMenu_Free(WiFiPlazaListMenu *menu, WiFiPlazaRoomGraphic
 
 static void WiFiPlazaListMenu_CreateItems(WiFiPlazaListMenu *menu, u32 count, enum HeapID heapID, int value) {
     u32 i;
-    u32 offset;
     GF_ASSERT(menu->items == NULL);
     menu->items = ListMenuItems_New(count, heapID);
-    i = 0;
     menu->itemCount = count;
-    if (i < count) {
-        offset = i;
-        do {
-            ((int *)((u8 *)menu->items + offset))[1] = value;
-            i++;
-            offset += sizeof(ListMenuItem);
-        } while (i < count);
+    for (i = 0; i < count; i++) {
+        menu->items[i].value = value;
     }
 }
 

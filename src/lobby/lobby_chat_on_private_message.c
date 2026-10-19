@@ -58,7 +58,7 @@ static inline char *TextChars(Text *t) {
     }
 }
 
-static inline int Compare(register char *key, char *str, Text *strText, Text *keyText, int len) {
+static inline int Compare(char *key, char *str, Text *strText, Text *keyText, int len) {
     int result;
     LobbyString_InitFromCStr(strText, str);
     LobbyString_InitFromCStr(keyText, key);
@@ -75,9 +75,9 @@ void LobbyChat_OnPrivateMessage(void *, char *, char *, int, void *);
 void LobbyChat_OnPrivateMessage(void *chat, char *nick, char *message, int type, void *param) {
     struct {
         Text messageStr, floodStr, nickStr, serverStr;
-        volatile Callbacks messageCallbacks;
+        Callbacks messageCallbacks;
         Text senderNick;
-        volatile Callbacks floodCallbacks;
+        Callbacks floodCallbacks;
         Text separator, text;
         Vector vector;
     } frame;

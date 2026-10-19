@@ -2,16 +2,8 @@
 
 #include "wifi_setup/wifi_setup.h"
 
-// Keys received from the setup access point
-typedef struct WifiSetupKeyRecord {
-    u32 unused;
-    int length;
-    u8 text[0x28];
-    u8 fields[4][0x40];
-} WifiSetupKeyRecord;
-
-extern WifiSetupKeyRecord ov13_0224D8C0;
-extern WifiSetupKeyRecord ov13_0224D930;
+extern WifiSetupWpaKeyRecord ov13_0224D8C0;
+extern WifiSetupWpaKeyRecord ov13_0224D930;
 extern WifiSetupKeyRecord gWifiSetupWep64Record;
 extern WifiSetupKeyRecord gWifiSetupWep128Record;
 
@@ -19,11 +11,11 @@ int WifiSetup_CheckPrintable(const void *str, int length);
 
 // Copy the keys of the requested settings that were received into the result.
 int WifiSetup_StoreAossResult(WifiSetupRequest *request) {
-    WifiSetupKeyRecord *a = &ov13_0224D8C0;
+    WifiSetupWpaKeyRecord *a = &ov13_0224D8C0;
     u8 *dst = request->result;
     WifiSetupKeyRecord *wep64 = &gWifiSetupWep64Record;
     WifiSetupKeyRecord *wep128 = &gWifiSetupWep128Record;
-    WifiSetupKeyRecord *b = &ov13_0224D930;
+    WifiSetupWpaKeyRecord *b = &ov13_0224D930;
 
     if (dst == NULL) {
         return -1;
@@ -51,20 +43,20 @@ int WifiSetup_StoreAossResult(WifiSetupRequest *request) {
         WifiSetup_MemCopy(dst + 0x71, wep128->text, WifiSetup_StrLen(wep128->text));
     }
     if (request->requestMask & 4) {
-        if (WifiSetup_CheckPrintable(a->fields[0], a->length - 1)) {
+        if (WifiSetup_CheckPrintable(a->key, a->length - 1)) {
             goto fail;
         }
-        WifiSetup_MemCopy(dst + 0x92, a->fields[0], a->length);
+        WifiSetup_MemCopy(dst + 0x92, a->key, a->length);
         if (WifiSetup_CheckPrintable(a->text, WifiSetup_StrLen(a->text))) {
             goto fail;
         }
         WifiSetup_MemCopy(dst + 0xD2, a->text, WifiSetup_StrLen(a->text));
     }
     if (request->requestMask & 8) {
-        if (WifiSetup_CheckPrintable(b->fields[0], b->length - 1)) {
+        if (WifiSetup_CheckPrintable(b->key, b->length - 1)) {
             goto fail;
         }
-        WifiSetup_MemCopy(dst + 0xF3, b->fields[0], b->length);
+        WifiSetup_MemCopy(dst + 0xF3, b->key, b->length);
         if (WifiSetup_CheckPrintable(b->text, WifiSetup_StrLen(b->text))) {
             goto fail;
         }

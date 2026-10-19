@@ -249,7 +249,7 @@ int WifiSetupMessage_Show(int a, int b, int c) {
         return 0;
     }
     WifiSetup_LoadGraphics(sStr_CharJtNullNscL, GXS_LoadBG0Scr);
-    *(vu32 *)0x04001010 = 0x01920000;
+    G2S_SetBG0Offset(0, 402);
     canvas = WifiSetupText_InitBgCanvas(1, 0);
     text = WifiSetupText_GetStringWithDigit(gWifiSetupTextBank, a, b, c);
     flags = WifiSetup_GetTextFlags();

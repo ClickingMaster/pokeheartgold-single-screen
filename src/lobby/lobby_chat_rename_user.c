@@ -20,7 +20,7 @@ int LobbyChat_RenameUser(LobbyChatManager *manager, const Str *oldNick, const St
         volatile u8 second;
 
         struct {
-            volatile u8 x;
+            u8 x;
         } first = { 0 };
 
         second = 0;

@@ -126,6 +126,32 @@ typedef struct WifiSetupAossReceived {
     WifiSetupAossPacket packet;
 } WifiSetupAossReceived;
 
+// WEP keys received from the setup access point: the key length and the four keys
+typedef struct WifiSetupKeyRecord {
+    u32 unused;
+    int length;
+    u8 text[40];
+    u8 fields[4][64];
+} WifiSetupKeyRecord;
+
+// WPA key received from the setup access point
+typedef struct WifiSetupWpaKeyRecord {
+    u32 unused;
+    int length;
+    u8 text[40];
+    u8 key[64];
+} WifiSetupWpaKeyRecord;
+
+// Keys of every security mode received in the settings reply
+typedef struct WifiSetupAossKeyRecords {
+    u8 padding_00[8];
+    WifiSetupKeyRecord wep64;
+    WifiSetupKeyRecord wep128;
+    WifiSetupWpaKeyRecord wpaTkip;
+    WifiSetupWpaKeyRecord wpaAes;
+    u8 padding_348[8];
+} WifiSetupAossKeyRecords;
+
 typedef struct WifiSetupPollTime {
     int seconds;
     int microseconds;

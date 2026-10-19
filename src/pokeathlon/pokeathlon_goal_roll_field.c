@@ -853,10 +853,7 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
     }
     int result = GOAL_ROLL_WALL_NONE;
     u8 beyondCorner = 0, crossesCorner = 0;
-    if (!checkCorners) {
-        goto edges;
-    }
-    {
+    if (checkCorners) {
         switch (quadrant) {
         case 0:
             cornerStart.x = -0x20000;
@@ -915,7 +912,6 @@ static int PokeathlonGoalRoll_CollideWithWalls(VecFx32 *position, VecFx32 *previ
             }
         }
     }
-edges:
     if (position->y < 0x70000) {
         s32 edge = (s32)((u32)radius + 16);
         if (position->y < TO_FX32(edge) && previous->y == TO_FX32((s32)(16U - (u32)radius))) {

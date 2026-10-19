@@ -80,7 +80,7 @@ void PokeathlonRingDropMon_Update(PokeathlonRingDropMon *mon, PokeathlonCourseDa
         int frames = mon->hitFrames - 1;
         mon->hitFrames = frames;
         if (mon->hitFrames > 0) {
-            goto done;
+            return;
         }
     }
     switch (mon->state) {
@@ -215,7 +215,6 @@ void PokeathlonRingDropMon_Update(PokeathlonRingDropMon *mon, PokeathlonCourseDa
         break;
     }
     PokeathlonRingDropMon_ApplyGravity(mon);
-done:;
 }
 
 // A dash towards target (ground pixels): 4 frames of wind-up, then 6 frames of speeding up.
@@ -419,7 +418,7 @@ PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCou
 }
 
 void PokeathlonRingDropMon_NextMember(PokeathlonRingDropMon *mon) {
-    u32 member = (*(volatile PokeathlonRingDropMonFlags *)&mon->flags).bits.member;
+    u32 member = mon->flags.bits.member;
     member = (member + 1) % RING_DROP_TEAM_SIZE;
     mon->flags.bits.member = member;
     mon->member = &mon->player->mon.members[mon->flags.bits.member];

@@ -873,9 +873,9 @@ u32 PokeathlonCourse_State_StartResults(PokeathlonCourseData *course) {
 
 u32 PokeathlonCourse_State_WaitResultsStart(PokeathlonCourseData *course) {
     if (PokeathlonCourse_RunSubStateLoop(course)) {
-        u8 *dataCopy = PokeathlonCourse_GetDataCopyArea(course);
-        dataCopy[0x24] = 0;
-        dataCopy[0x4C] = 1;
+        PokeathlonCoursePacket *packets = (PokeathlonCoursePacket *)PokeathlonCourse_GetDataCopyArea(course);
+        packets[0].isHostPacket = 0;
+        packets[1].isHostPacket = 1;
         PokeathlonCourseLink_SetCheckSize(PokeathlonCourse_GetSystem(course), TRUE);
         PokeathlonCourse_SetStateTransitionType(course, 11);
         PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_RUN_RESULTS);
@@ -936,9 +936,9 @@ u32 PokeathlonCourse_State_StartClosing(PokeathlonCourseData *course) {
 
 u32 PokeathlonCourse_State_WaitClosingStart(PokeathlonCourseData *course) {
     if (PokeathlonCourse_RunSubStateLoop(course)) {
-        u8 *dataCopy = PokeathlonCourse_GetDataCopyArea(course);
-        dataCopy[0x24] = 0;
-        dataCopy[0x4C] = 1;
+        PokeathlonCoursePacket *packets = (PokeathlonCoursePacket *)PokeathlonCourse_GetDataCopyArea(course);
+        packets[0].isHostPacket = 0;
+        packets[1].isHostPacket = 1;
         PokeathlonCourseLink_SetCheckSize(PokeathlonCourse_GetSystem(course), TRUE);
         PokeathlonCourse_SetStateTransitionType(course, 12);
         PokeathlonCourse_SetNextState(course, POKEATHLON_COURSE_STATE_RUN_CLOSING);
@@ -1325,22 +1325,17 @@ static void PokeathlonCourse_InsertRankEntry(u32 order, PokeathlonCourseRankEntr
         top[4] = *entry;
         i = 4;
         p = &top[4];
-        goto loop;
-loop: {
-    if (!PokeathlonCourse_BeatsRecord(p[-1].score, p->score, order)) {
-        goto finished;
+        do {
+            if (!PokeathlonCourse_BeatsRecord(p[-1].score, p->score, order)) {
+                return;
+            }
+            temp = p[-1];
+            p[-1] = *p;
+            *p = temp;
+            i--;
+            p--;
+        } while (i > 0);
     }
-    temp = p[-1];
-    p[-1] = *p;
-    *p = temp;
-    i--;
-    p--;
-    if (i > 0) {
-        goto loop;
-    }
-}
-    }
-finished:;
 }
 
 static void PokeathlonCourse_CopySoloRanking(PokeathlonCourseData *course, PokeathlonCourseEventRecord *record, PokeathlonCourseRankEntry *top) {
@@ -1925,8 +1920,8 @@ BOOL PokeathlonCourse_IsInRange(int x, int y, int targetX, int targetY, int rang
     VEC_Subtract(&a, &b, &delta);
     {
         int magnitude = VEC_Mag(&delta);
-        **(int *volatile *)&distance = magnitude;
-        if (magnitude < (*(volatile int *)&range << FX32_SHIFT)) {
+        *distance = magnitude;
+        if (magnitude < (range << FX32_SHIFT)) {
             return TRUE;
         }
         return FALSE;

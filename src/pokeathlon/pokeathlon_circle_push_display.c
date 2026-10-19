@@ -287,9 +287,9 @@ void PokeathlonCirclePushDisplay_GetPicVramLocations(PokeathlonCourseSpritePool 
     u8 i;
 
     for (i = 0; i < 2; i++) {
-        NNSG2dImagePaletteProxy *volatile paletteProxy;
-        SpriteResource *volatile charResource;
-        SpriteResource *volatile paletteResource;
+        NNSG2dImagePaletteProxy *paletteProxy;
+        SpriteResource *charResource;
+        SpriteResource *paletteResource;
         NNSG2dImageProxy *imageProxy;
         u32 id = ids[i];
 

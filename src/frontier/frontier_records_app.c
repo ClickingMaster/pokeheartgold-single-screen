@@ -89,7 +89,7 @@ typedef struct FrontierRecordsButtonFlash {
     u8 paletteOn : 4;
     u8 paletteOff : 4;
     u8 state;
-    volatile u8 timer;
+    u8 timer;
     u8 x;
     u8 y;
     u8 width;
@@ -1455,15 +1455,15 @@ static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
         return RUN_STATE_BUTTON_FLASH;
     case GRID_MENU_CURSOR_MOVE:
         PlaySE(SEQ_SE_DP_SELECT);
-        goto exit;
+        break;
     case GRID_MENU_BUTTON_MODE:
     case GRID_MENU_NOTHING_CHOSEN:
-        goto exit;
+        break;
     default:
         groups = app->groups;
         if (groups[input].count == 0) {
             PlaySE(SEQ_SE_DP_CUSTOM06);
-            goto exit;
+            break;
         }
         PlaySE(SEQ_SE_DP_DECIDE);
         app->letter = input;
@@ -1474,7 +1474,6 @@ static u8 FrontierRecordsApp_HandleLetterInput(FrontierRecordsApp *app) {
         app->nextState = RUN_STATE_SHOW_SPECIES;
         return RUN_STATE_BUTTON_FLASH;
     }
-exit:
     return RUN_STATE_LETTERS;
 }
 

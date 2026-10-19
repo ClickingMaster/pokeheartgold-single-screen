@@ -361,27 +361,21 @@ static BOOL PokeathlonCirclePush_IsInCircle(int x, int y, int centerX, int cente
 // The bonus zones of layout as circles for the CPU players; returns how many there are.
 static u8 PokeathlonCirclePush_GetZoneCircles(int layout, PokeathlonCirclePushAiZone *circles) {
     int i;
-    u8 count;
-    int offset;
-    int tableOffset;
-    count = 0;
-    i = count;
-    offset = count;
-    tableOffset = layout << 2;
-    for (; i < 4; i++, offset += 8, circles++) {
-        const u8 *zones = *(const u8 *volatile *)((u8 *)sPokeathlonCirclePushLayoutZones + tableOffset);
-        const PokeathlonCirclePushZone *zone = (const PokeathlonCirclePushZone *)(zones + offset);
+    u8 count = 0;
+    for (i = 0; i < 4; i++, circles++) {
+        const PokeathlonCirclePushZone *zones = sPokeathlonCirclePushLayoutZones[layout];
+        const PokeathlonCirclePushZone *zone = &zones[i];
         u32 kind = zone->kind;
         if (!kind) {
             circles->radius = 0;
             circles->x = 0;
             circles->y = 0;
         } else {
-            const u16 *kindData = *(const u16 *volatile *)((u8 *)sPokeathlonCirclePushZoneKinds + kind * 4 - 4);
+            const u16 *kindData = sPokeathlonCirclePushZoneKinds[kind - 1];
             circles->radius = kindData[0];
             circles->x = zone->x;
             circles->y = zone->y;
-            count = (u8)(count + 1);
+            count++;
         }
     }
     return count;
