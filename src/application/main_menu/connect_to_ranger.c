@@ -122,7 +122,6 @@ enum {
 u16 gConnectToRanger_PlayerName[8]; // player name in Pokemon Ranger's character set
 u16 gConnectToRanger_TrainerId[10]; // trainer ID as five digits
 
-extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int level);
 
 static const GraphicsModes sConnectToRangerGraphicsModes = {

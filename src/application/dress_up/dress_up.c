@@ -596,8 +596,6 @@ static void DressUpCountdown_StartPulse(DressUpCountdown *countdown, DressUpCoun
 static void DressUpCountdown_UpdatePulse(DressUpCountdownPulse *pulse);
 static void DressUp_StopBackdropAnim(DressUpBackdropAnim *anim);
 
-void TextOBJ_UpdatePosition(TextOBJ *object);
-
 DressUpSlotList *DressUpGfx_CreateSlotList(int count, enum HeapID heapID) {
     DressUpSlotList *list = Heap_Alloc(heapID, sizeof(DressUpSlotList));
     list->slots = Heap_Alloc(heapID, count * sizeof(DressUpSlot));

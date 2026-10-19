@@ -10,6 +10,7 @@
 #include "msgdata/msg.naix"
 
 #include "bg_window.h"
+#include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -42,7 +43,6 @@ void CRYPTO_SetAllocator(void *(*alloc)(u32), void (*free)(void *));
 BOOL CRYPTO_VerifySignature(const void *data, u32 size, const void *signature, const void *publicKey);
 
 int AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *string, int x, int y, int textSpeed, u32 color, void *callback);
-int FontID_String_GetWidth(int fontId, String *string, int letterSpacing);
 u8 GetFontAttribute(u8 fontId, int attr);
 u32 GetMonGender(void *mon);
 u32 MonIsShiny(void *mon);

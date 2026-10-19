@@ -89,7 +89,6 @@ int WM_Reset(void (*callback)(void *arg));
 int WM_StartScan(void (*callback)(void *arg), void *scanParam);
 int WM_EndScan(void (*callback)(void *arg));
 int WM_GetAllowedChannel(void);
-void OS_Terminate(void);
 u32 _u32_div_f(u32 dividend, u32 divisor);
 
 extern MysteryGiftBeacon sMysteryGiftBeacon;

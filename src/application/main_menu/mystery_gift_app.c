@@ -148,7 +148,6 @@ typedef struct MysteryGiftLinkState {
 
 extern BOOL CTRDG_IsExisting();
 extern fx32 FX_Sqrt(fx32 value);
-extern void CommWireless_Terminate(void);
 extern void WirelessStatusIcon_SetLevel(int level);
 extern void CommState_StartBeaconWatch(SaveData *saveData);
 extern void CommState_StopBeaconWatch(void);

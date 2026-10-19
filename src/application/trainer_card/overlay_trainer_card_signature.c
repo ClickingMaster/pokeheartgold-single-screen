@@ -94,12 +94,12 @@ static void TrainerCardSignature_UpdatePenSound(TrainerCardSignature *signature)
 static void TrainerCardSignature_PlayPenSoundOnTurn(s8 *moves);
 static void TrainerCardSignature_SetDoneButtonHidden(TrainerCardSignature *signature, int hide);
 
-int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state);
-int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signature, int state);
-int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state);
-int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state);
-int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state);
-int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state);
+static int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state);
 
 static TrainerCardSignatureStateFunc sTrainerCardSignatureStateFuncs[] = {
     NULL,
@@ -637,7 +637,7 @@ static void TrainerCardSignature_SetDoneButtonPressed(Sprite **sprite, int press
     }
 }
 
-int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_Draw(TrainerCardSignature *signature, int state) {
     TrainerCardSignature_HandleTouch(signature);
     TrainerCardSignature_PrintPenNamesDummy(signature->penNameWindows, 0, MAKE_TEXT_COLOR(14, 12, 15), signature);
     TrainerCardSignature_TakeNewStroke(signature);
@@ -663,7 +663,7 @@ static void TrainerCardSignature_ShowYesNoPrompt(BgConfig *bgConfig, YesNoPrompt
     YesNoPrompt_InitFromTemplate(yesNoPrompt, &template);
 }
 
-int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signature, int state) {
     if (TrainerCardSignature_IsPrinterDone(signature->textPrinterId)) {
         TrainerCardSignature_ShowYesNoPrompt(signature->bgConfig, signature->yesNoPrompt);
         TrainerCardSignature_SetDoneButtonHidden(signature, 1);
@@ -673,7 +673,7 @@ int TrainerCardSignature_State_WaitConfirmMessage(TrainerCardSignature *signatur
     return state;
 }
 
-int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, int state) {
     switch (YesNoPrompt_HandleInput(signature->yesNoPrompt)) {
     case YESNORESPONSE_YES:
         GameStats_AddScore(signature->gameStats, SCORE_EVENT_TRAINER_CARD_SIGNED);
@@ -694,7 +694,7 @@ int TrainerCardSignature_State_ConfirmPrompt(TrainerCardSignature *signature, in
     return state;
 }
 
-int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int state) {
     switch (YesNoPrompt_HandleInput(signature->yesNoPrompt)) {
     case YESNORESPONSE_YES:
         signature->state = TRAINER_CARD_SIGNATURE_STATE_DRAW;
@@ -714,14 +714,14 @@ int TrainerCardSignature_State_ErasePrompt(TrainerCardSignature *signature, int 
     return state;
 }
 
-int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_PrintEraseMessage(TrainerCardSignature *signature, int state) {
     TrainerCardSignature_PrintMessage(signature, msg_0252_00011);
     signature->state = TRAINER_CARD_SIGNATURE_STATE_WAIT_ERASE_MESSAGE;
     TrainerCardSignature_UpdateCanvas(signature);
     return state;
 }
 
-int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state) {
+static int TrainerCardSignature_State_WaitEraseMessage(TrainerCardSignature *signature, int state) {
     if (TrainerCardSignature_IsPrinterDone(signature->textPrinterId)) {
         signature->state = TRAINER_CARD_SIGNATURE_STATE_ERASE_PROMPT;
         TrainerCardSignature_ShowYesNoPrompt(signature->bgConfig, signature->yesNoPrompt);

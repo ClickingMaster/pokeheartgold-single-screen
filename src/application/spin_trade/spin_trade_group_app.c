@@ -41,6 +41,7 @@
 #include "union_room_avatar.h"
 #include "union_room_talk.h"
 #include "vram_transfer_manager.h"
+#include "wireless_manager.h"
 #include "wireless_status_icon.h"
 
 enum SpinTradeGroupState {
@@ -195,7 +196,6 @@ typedef struct SpinTradeGroupBlinkFrame {
     u8 palette;
 } SpinTradeGroupBlinkFrame;
 
-u32 Wireless_GetConnectedBitmap(void);
 void CommState_SetSpinTradeLinkMode(void);
 void CommState_SetMaxEntries(int count);
 void Comm_InitSyncedSave(s32 *state);

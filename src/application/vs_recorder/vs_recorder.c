@@ -28,7 +28,6 @@
 
 // VS Recorder app core: resources, BG / sprite setup, V-blank and the screen dispatcher.
 
-void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
 // per-screen step tables, indexed by VsRecorderWork.subState

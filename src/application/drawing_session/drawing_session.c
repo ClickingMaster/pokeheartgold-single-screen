@@ -9,6 +9,7 @@
 
 #include "assert.h"
 #include "comm_state.h"
+#include "comm_wireless.h"
 #include "communication_core.h"
 #include "communication_player_state.h"
 #include "filesystem_files_def.h"
@@ -33,6 +34,7 @@
 #include "text.h"
 #include "touchpad.h"
 #include "touchscreen.h"
+#include "union_room_objects.h"
 #include "union_room_talk.h"
 #include "vram_transfer_manager.h"
 #include "wireless_manager.h"
@@ -82,8 +84,6 @@ extern BOOL Comm_SendParentCommand(int command, const void *data, int size);
 extern int Comm_IsParentQueueEmpty(void);
 extern int Comm_IsChildQueueEmpty(void);
 extern void CommState_SetMaxEntries(int count);
-extern void CommWireless_SetDetectDrops(BOOL value);
-extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
 extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work);
 
 static void DrawingSession_VBlankCB(void *bgConfig);

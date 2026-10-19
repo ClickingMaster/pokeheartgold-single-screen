@@ -45,7 +45,6 @@
 #include "wifi_connection.h"
 #include "wireless_status_icon.h"
 
-void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 void SetBothScreensBrightnessByColor(u16 color);
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *dst);
 fx32 FX_Sqrt(fx32 x);

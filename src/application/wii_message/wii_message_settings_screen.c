@@ -4,6 +4,7 @@
 
 #include "application/wii_message/wii_message_settings_internal.h"
 #include "application/wii_message/wii_number.h"
+#include "dwc/dwc_account_internal.h"
 #include "gts/gts_server.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0188.h"
@@ -21,6 +22,7 @@
 #include "sound_playback.h"
 #include "touchpad.h"
 #include "vram_transfer_manager.h"
+#include "wifi_connection.h"
 #include "wireless_status_icon.h"
 
 // States of WiiMessageSettingsScreen_Main, indexes into sWiiMessageSettingsScreenStates.
@@ -173,8 +175,6 @@ void DWC_NASLoginAsync(void);
 int DWC_NASLoginProcess(void);
 void DWC_ShutdownGHTTP(void);
 void DWC_ShutdownFriendsMatch(void);
-s32 WifiConnection_ClassifyErrorCode(s32 errorCode, u32 errorType);
-u64 DWC_CreateFriendKey(void *userData);
 
 enum WiiMessageSettingsScreenMainState {
     WII_MESSAGE_SETTINGS_SCREEN_MAIN_WAIT_FADE_IN,

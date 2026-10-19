@@ -48,7 +48,6 @@
 
 BOOL GF_TouchpadStartRecording(TPData *data, u32 capacity, u32 frequency);
 int GF_TouchpadUpdate(SwalotPlopTouch *out, int mode, u32 threshold);
-void TextOBJ_UpdatePosition(TextOBJ *object);
 void SetBothScreensBrightnessByColor(u16 color);
 void GF_SndHandleSetTempoRatio(int handleNo, int ratio);
 void NNS_G3dMdlSetMdlAmbAll(NNSG3dResMdl *model, GXRgb color);

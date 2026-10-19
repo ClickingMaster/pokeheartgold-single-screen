@@ -35,6 +35,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
+#include "wireless_status_icon.h"
 
 // VS Recorder screen helpers: menu row labels, fades, message and list windows, the trainer profile and battle video
 // info panels, the touch indicator and the message screens.
@@ -84,8 +85,6 @@ static void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll);
 static void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y);
 static void VsRecorder_FlipScreensTask(SysTask *task, void *data);
 static void VsRecorder_VBlankTask(SysTask *task, void *data);
-
-void WirelessStatusIcon_Refresh(void);
 
 typedef struct VsRecorderWindowRectSet {
     VsRecorderWindowRect rects[5];

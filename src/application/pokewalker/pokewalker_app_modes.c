@@ -43,7 +43,6 @@ extern const BgTemplate sBoxDisplayBgTemplateSub1;
 extern const BgTemplate sBoxDisplayBgTemplateSub3;
 
 BOOL IsFanfarePlayingOrWaiting(void);
-void NNS_G2dInitOamManagerModule(void);
 
 enum StrollReportState {
     STROLL_REPORT_START,

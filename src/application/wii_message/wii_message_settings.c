@@ -27,7 +27,6 @@ typedef struct WiiMessageSettingsAppEntry {
     u32 unloadNetwork;
 } WiiMessageSettingsAppEntry;
 
-void CommWireless_Terminate(void);
 void WirelessStatusIcon_SetLevel(int level);
 void DWC_SetMemFunc(void *(*alloc)(int, u32, int), void (*free)(int, void *));
 int DWC_GetLinkLevel(void);

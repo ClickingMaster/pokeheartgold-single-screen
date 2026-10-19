@@ -53,12 +53,7 @@ extern u8 TextPrinterCheckActive(u8 printerId);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
 BOOL CTRDG_IsExisting(void);
-BOOL CTRDG_IsPulledOut(void);
 void CTRDG_ReadAgbFlash(u16 sector, u32 offset, void *dest, u32 size);
-BOOL NNS_G2dGetUnpackedBGCharacterData(void *file, NNSG2dCharacterData **charData);
-BOOL OS_IsTickAvailable(void);
-void OS_InitTick(void);
-u64 OS_GetTick(void);
 
 extern int gAgbCartridgePulledOutInSleep;
 extern MigrateFromAgbIcon *sMigrateFromAgbIcons;

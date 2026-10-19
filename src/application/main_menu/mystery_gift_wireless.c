@@ -43,8 +43,6 @@ extern void CommState_RequestShutdown(void);
 extern int Comm_SendParentCommandNoCopy(int command, void *data, void *size);
 extern void CommState_StartMysteryGiftParent(void *saveData, void *linkMode);
 extern void CommState_StartMysteryGiftChild(void *saveData, int linkMode);
-extern void *CommWireless_GetParentMail(int slot);
-
 
 static const CommCommand sMysteryGiftCommCommands[2] = {
     {

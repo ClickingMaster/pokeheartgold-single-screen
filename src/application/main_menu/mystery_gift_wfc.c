@@ -73,7 +73,6 @@ int DWC_NdGetProgress(u32 *received, u32 *total);
 void Comm_InitDwc(int heapID);
 void CommState_InitMysteryGiftWfcSession(SaveData *saveData);
 void CommState_FreeMysteryGiftWfcSession(void);
-void CommWireless_Terminate(void);
 
 extern MysteryGiftWfcStatus sMysteryGiftWfcStatus;
 extern const char sStr_IPGE[];

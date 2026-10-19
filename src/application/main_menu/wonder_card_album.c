@@ -17,7 +17,9 @@
 
 #include "bg_window.h"
 #include "comm_state.h"
+#include "comm_wireless.h"
 #include "communication_core.h"
+#include "communication_player_state.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
@@ -100,8 +102,6 @@ extern u32 FontID_String_GetCenterAlignmentX(u32 fontId, String *string, u32 let
 extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
-extern void CommWireless_SetCustomBeacon(void *src);
-extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
 static u32 sWonderCardAlbumMenuInput;
