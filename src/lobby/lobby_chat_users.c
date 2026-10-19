@@ -80,3 +80,13 @@ BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *chan
     LobbyChat_RemoveUserIfUnused(manager, id);
     return TRUE;
 }
+
+int LobbyUserIdSet_EraseKey(LobbyUserIdSet *set, void *key) {
+    Iter it, out;
+    LobbyUserIdSet_Find(&it, set, key);
+    if (it.current == &set->root) {
+        return 0;
+    }
+    LobbyUserIdSet_Erase(&out, set, (Iterator) { it.current });
+    return 1;
+}

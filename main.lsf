@@ -1502,8 +1502,7 @@ Overlay OVY_45
     Object src/lobby/lobby_event_deque_iterator_at.o
     Object src/lobby/lobby_event_deque_add_back_capacity.o
     Object src/lobby/lobby_event_deque_capacity.o
-    Object src/lobby/lobby_vip_vector_reallocate.o
-    Object src/lobby/lobby_vip_vector_recommend_size.o
+    Object src/lobby/lobby_vip_vector_growth.o
     Object src/lobby/lobby_event_vector_reallocate.o
     Object src/lobby/lobby_event_deque_map_insert_range.o
     Object src/lobby/lobby_event_deque_map_copy_range.o
@@ -1556,7 +1555,6 @@ Overlay OVY_45
     Object src/lobby/lobby_chat_add_channel_users.o
     Object src/lobby/lobby_chat_remove_user_if_unused.o
     Object src/lobby/lobby_chat_users.o
-    Object src/lobby/lobby_user_id_set_erase_key.o
     Object src/lobby/lobby_chat_remove_channel.o
     Object src/lobby/lobby_u32_vector_assign_from_set.o
     Object src/lobby/lobby_channel_map_erase_key.o

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "ecb1f4e5b371657b26717122a2881f38da105353",
+  "commit": "8d77252d68bf13c2307a059436d95c46e943733c",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a2abbc9f9845fc97f8db2b4d5c1a4a06a207950624f7e27ec09811d50f20e813",
+    "ARM9": "139704ed2b9d203b850ecfae9864b819a1fce4719d78ebfd277db2fc970e2ea1",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -2749,7 +2749,7 @@
       "cpu": "ARM9",
       "module": "OVY_45",
       "object": "lobby_chat_users.o",
-      "bytes": 484,
+      "bytes": 564,
       "status": "c",
       "source": "src/lobby/lobby_chat_users.c"
     },
@@ -3076,14 +3076,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_user_id_set_erase_key.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/lobby/lobby_user_id_set_erase_key.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "lobby_user_map.o",
       "bytes": 748,
       "status": "c",
@@ -3116,18 +3108,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "lobby_vip_vector_reallocate.o",
-      "bytes": 112,
+      "object": "lobby_vip_vector_growth.o",
+      "bytes": 316,
       "status": "c",
-      "source": "src/lobby/lobby_vip_vector_reallocate.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "lobby_vip_vector_recommend_size.o",
-      "bytes": 204,
-      "status": "c",
-      "source": "src/lobby/lobby_vip_vector_recommend_size.c"
+      "source": "src/lobby/lobby_vip_vector_growth.c"
     },
     {
       "cpu": "ARM9",
