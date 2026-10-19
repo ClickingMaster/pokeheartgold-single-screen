@@ -52,18 +52,6 @@ typedef struct FrontierLinkPartnerCheckEnv {
     u16 outputVar;
 } FrontierLinkPartnerCheckEnv;
 
-typedef struct FrontierFsysBattleTotalsView {
-    u8 filler[0x24];
-    u16 x;
-    u16 z;
-    u16 y;
-} FrontierFsysBattleTotalsView;
-
-typedef struct FieldSystemFrontierFsysView {
-    u8 filler[0xA0];
-    FrontierFsysBattleTotalsView *inner;
-} FieldSystemFrontierFsysView;
-
 extern void FrontierData_SetTowerSeed(FrontierData *frontierData, u32 value);
 extern u32 FrontierData_GetTowerSeed(FrontierData *frontierData);
 
@@ -81,7 +69,7 @@ static BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
 void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar);
 u32 BattleTower_ClaimRecordMilestone(SaveData *saveData);
 u32 BattleTower_GetRecordMilestone(SaveData *saveData);
-void FrontierFieldSystem_AddBattleTotals(FieldSystemFrontierFsysView *outer, const int *delta);
+void FrontierFieldSystem_AddBattleTotals(FieldSystem *fieldSystem, const int *delta);
 u32 BattleTower_NextRandom(u32 value);
 static u32 BattleTower_NextSeed(u32 value);
 u32 BattleTower_InitSeed(SaveData *saveData);
@@ -392,11 +380,11 @@ u32 BattleTower_GetRecordMilestone(SaveData *saveData) {
     return 3;
 }
 
-void FrontierFieldSystem_AddBattleTotals(FieldSystemFrontierFsysView *outer, const int *delta) {
-    FrontierFsysBattleTotalsView *inner = outer->inner;
-    inner->x += delta[0];
-    inner->y += delta[1];
-    inner->z += delta[2];
+void FrontierFieldSystem_AddBattleTotals(FieldSystem *fieldSystem, const int *delta) {
+    FrontierFieldSystem *frontierFsys = fieldSystem->frontierFsys;
+    frontierFsys->totalTurns += delta[0];
+    frontierFsys->totalTimesFainted += delta[1];
+    frontierFsys->totalDamage += delta[2];
 }
 
 u32 BattleTower_NextRandom(u32 value) {

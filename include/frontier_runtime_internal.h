@@ -3,18 +3,9 @@
 
 #include "global.h"
 
+#include "frontier/frontier_map.h"
+
 #include "overlay_manager.h"
-
-typedef struct FrontierObjectGfxSlot {
-    u16 value;
-    u16 pad;
-} FrontierObjectGfxSlot;
-
-typedef struct FrontierObjectSlot {
-    u8 pad[12];
-    u16 value;
-    u8 rest[46];
-} FrontierObjectSlot;
 
 typedef struct FrontierWork {
     void *launchArgs;
@@ -32,11 +23,10 @@ typedef struct FrontierWork {
     u16 taskId;
     u8 exitRequested;
     u8 pad_023;
-    FrontierObjectGfxSlot objectGfx[24];
-    FrontierObjectSlot objects[32];
-    u8 pad_804[0x200];
-    u16 spriteState[8];
-    u8 pad_a14[0x40];
+    FrontierMapObjectGfx objectGfx[FRONTIER_MAP_OBJECT_GFX_MAX];
+    FrontierMapObject objects[FRONTIER_MAP_OBJECT_MAX];
+    u8 padding_884[0x200];
+    FrontierMapSpriteState spriteState;
 } FrontierWork;
 
 typedef struct FrontierLaunchArgsInternal {
@@ -45,14 +35,10 @@ typedef struct FrontierLaunchArgsInternal {
     u8 mode;
 } FrontierLaunchArgsInternal;
 
-void *FrontierMap_Init(void);
-void FrontierMap_Free(void *);
 void FrontierSystem_Delete(void *);
 void *FrontierSystem_Create(FrontierWork *, int, u8);
 void FrontierSystem_AddTask(void *, u8, u16);
 int FrontierSystem_Main(void *);
-void FrontierMap_SaveObjects(void *);
-void FrontierMap_RestoreObjects(void *);
 void FrontierSystem_ChangeMsgBank(void *, u8, int);
 void *FrontierSystem_SaveVars(void *, int);
 void FrontierSystem_RestoreVars(void *, void *);

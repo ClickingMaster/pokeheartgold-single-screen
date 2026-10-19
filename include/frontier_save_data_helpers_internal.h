@@ -3,18 +3,7 @@
 
 #include "global.h"
 
-typedef struct Overlay80Bits {
-    u8 padding[0x10];
-    u8 unused : 1;
-    u8 value : 2;
-} Overlay80Bits;
-
-typedef struct Overlay80Counter {
-    u8 padding_00[0xD];
-    u8 count;
-    u8 padding_0E[0xC];
-    u16 base;
-} Overlay80Counter;
+#include "scrcmd_9.h"
 
 u32 FrontierTrainer_GetClassSprite(u8 value);
 u32 BattleTower_NextRandom(u32 value);

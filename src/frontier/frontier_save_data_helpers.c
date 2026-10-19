@@ -1,73 +1,56 @@
 #include "frontier_save_data_helpers_internal.h"
 
 void BattleTower_GenerateOpponents(void *data, void *saveData) {
-    u8 *p = data;
-    s32 index;
-    u16 *source;
-    u16 *out1;
-    u32 temp;
-    u16 values1[2];
-    u16 values2[2];
-    u8 *entry;
-    u16 *out2;
+    FrontierFieldSystem *tower = data;
+    int i;
+    u16 species[2];
+    u16 items[2];
 
-    switch (p[0xF]) {
-    case 4:
-    case 5:
-        BattleTower_GetRoomTrainer(saveData, p + 0x78, (u8)(p[0xC] - 1));
+    switch (tower->towerMode) {
+    case TOWER_MODE_WIFI:
+    case TOWER_MODE_WIFI_PRACTICE:
+        BattleTower_GetRoomTrainer(saveData, &tower->opponents[0], (u8)(tower->currentBattleNumber - 1));
         return;
-    case 2:
-    case 3:
-    case 6:
-        BattleTower_GenerateTrainerMons(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 4), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
-        index = 0;
-        if (index < p[0xE]) {
-            source = (u16 *)(p + 0xA8);
-            out1 = values1;
-            entry = p;
-            out2 = values2;
-            do {
-                temp = (u32)(*source << 21);
-                *out1 = temp >> 21;
-                *out2 = *(u16 *)(entry + 0xAA);
-                source += 0x1C;
-                out1++;
-                entry += 0x38;
-                out2++;
-                index++;
-            } while (index < p[0xE]);
+    case TOWER_MODE_MULTI:
+    case TOWER_MODE_LINK:
+    case TOWER_MODE_6:
+        BattleTower_GenerateTrainerMons(data, &tower->opponents[0], tower->trainersInCurrentRound[(tower->currentBattleNumber - 1) * 2], tower->numMons, NULL, NULL, 0, tower->heapID);
+        for (i = 0; i < tower->numMons; i++) {
+            species[i] = tower->opponents[0].frontierMons[i].species;
+            items[i] = tower->opponents[0].frontierMons[i].item;
         }
-        BattleTower_GenerateTrainerMons(data, p + 0x188, *(u16 *)(p + 0x3E + (((p[0xC] - 1) * 2 + 1) * 2)), p[0xE], values1, values2, 0, *(u32 *)(p + 4));
+        BattleTower_GenerateTrainerMons(data, &tower->opponents[1], tower->trainersInCurrentRound[(tower->currentBattleNumber - 1) * 2 + 1], tower->numMons, species, items, 0, tower->heapID);
         return;
     default:
-        BattleTower_GenerateTrainerMons(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 2), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
+        BattleTower_GenerateTrainerMons(data, &tower->opponents[0], tower->trainersInCurrentRound[tower->currentBattleNumber - 1], tower->numMons, NULL, NULL, 0, tower->heapID);
         return;
     }
 }
 
 u32 BattleTower_GetTrainerSprite(void *data, u32 index) {
-    u8 *p = data;
-    return FrontierTrainer_GetClassSprite((u8) * (u16 *)(p + index * 0x110 + 0x7C));
+    FrontierFieldSystem *tower = data;
+    return FrontierTrainer_GetClassSprite((u8)tower->opponents[index].trainerClass);
 }
 
 void BattleTower_SetPalmerDefeated(void *data, u32 value) {
-    ((Overlay80Bits *)data)->value = (u8)value;
+    FrontierFieldSystem *tower = data;
+    tower->palmerDefeated = (u8)value;
 }
 
 u32 BattleTower_IncBattleNumber(void *data) {
-    u8 *p = data;
-    p[0xD]++;
-    if (p[0xF] != 6) {
-        *(u32 *)(p + 8) = BattleTower_NextRandom(*(u32 *)(p + 8));
+    FrontierFieldSystem *tower = data;
+    tower->curWinStreak++;
+    if (tower->towerMode != TOWER_MODE_6) {
+        tower->randomState = BattleTower_NextRandom(tower->randomState);
     }
-    p[0xC]++;
-    return p[0xC];
+    tower->currentBattleNumber++;
+    return tower->currentBattleNumber;
 }
 
 u32 Overlay80Counter_GetSumCapped(void *data) {
-    Overlay80Counter *p = data;
-    u32 byte = *(volatile u8 *)&p->count;
-    u32 result = p->base + byte;
+    FrontierFieldSystem *tower = data;
+    u32 streak = *(volatile u8 *)&tower->curWinStreak;
+    u32 result = tower->currentBattleInSession + streak;
     u32 ret = 0xFFFF;
     if (result <= ret) {
         ret = (u16)result;

@@ -118,7 +118,7 @@ BOOL Frontier_Exit(OverlayManager *manager, int *state) {
 }
 
 void Frontier_CreateMap(FrontierWork *work) {
-    work->map = FrontierMap_Init();
+    work->map = FrontierMap_Init(work);
     work->mapActive = 1;
 }
 
@@ -129,12 +129,12 @@ void Frontier_FreeMap(FrontierWork *work) {
 
 void Frontier_ResetMapObjects(FrontierWork *work) {
     int i;
-    for (i = 0; i < 24; i++) {
-        work->objectGfx[i].value = 0xffff;
+    for (i = 0; i < FRONTIER_MAP_OBJECT_GFX_MAX; i++) {
+        work->objectGfx[i].id = FRONTIER_MAP_NO_ID;
     }
     MI_CpuFill8(work->objects, 0, sizeof(work->objects));
-    for (i = 0; i < 32; i++) {
-        work->objects[i].value = 0xffff;
+    for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
+        work->objects[i].template.id = FRONTIER_MAP_NO_ID;
     }
 }
 
@@ -199,15 +199,15 @@ void *Frontier_GetMapObject(FrontierWork *work, int index) {
 }
 
 void *Frontier_GetMapSpriteState(FrontierWork *work) {
-    return work->spriteState;
+    return &work->spriteState;
 }
 
 void Frontier_ResetMapSpriteState(FrontierWork *work) {
     int i;
-    MI_CpuFill8(work->spriteState, 0, 8);
+    MI_CpuFill8(work->spriteState.resourceIds, 0, 8);
     i = 0;
     do {
-        work->spriteState[i] = 0xffff;
+        work->spriteState.resourceIds[i] = FRONTIER_MAP_NO_ID;
         i++;
-    } while (i < 8);
+    } while (i < FRONTIER_MAP_SPRITE_MAX);
 }
