@@ -109,57 +109,57 @@ typedef struct PhotoEntry {
 } PhotoEntry;
 
 typedef struct PhotoAlbumApp {
-    enum HeapID heapId;                          // 0x000
-    int state;                                   // 0x004
-    u16 subState;                                // 0x008
-    u16 timer;                                   // 0x00A
-    int nextMenuState;                           // 0x00C
-    PhotoAlbumArgs *args;                        // 0x010
-    BgConfig *bgConfig;                          // 0x014
-    u8 fadeRunning : 1;                          // 0x018
-    u8 zoomChanged : 1;                          // 0x018
-    u8 bgToggleReq : 1;                          // 0x018
-    u8 bgToggleVal : 1;                          // 0x018
-    u8 pageFlipPhase : 4;                        // 0x018
-    u8 curPage;                                  // 0x019
-    u8 numPages;                                 // 0x01A
-    u8 cursorX;                                  // 0x01B
-    u8 cursorY;                                  // 0x01C
-    u8 spriteCol;                                // 0x01D
-    u8 spriteRow;                                // 0x01E
-    u8 slotIdx;                                  // 0x01F
-    u8 mode;                                     // 0x020: 1 = moving a photo, 2 = deleting
-    u8 printerId;                                // 0x021
-    u8 textDelay;                                // 0x022
-    u8 frame;                                    // 0x023
-    MsgData *msgData;                            // 0x024
-    MessageFormat *messageFormat;                // 0x028
-    String *str_2C;                              // 0x02C
-    String *str_30;                              // 0x030
-    String *strs_34[5];                          // 0x034
-    String *strs_48[2];                          // 0x048
-    Window windows[3];                           // 0x050
-    TouchscreenListMenuSpawner *listMenuSpawner; // 0x080
-    TouchscreenListMenu *listMenu;               // 0x084
-    ListMenuItem *listMenuItems;                 // 0x088
-    YesNoPrompt *yesNoPrompt;                    // 0x08C
-    SpriteSystem *spriteSystem;                  // 0x090
-    SpriteManager *spriteManager;                // 0x094
-    Sprite *sprites[5];                          // 0x098
-    NNSG2dScreenData *screen_AC;                 // 0x0AC
-    void *screenFile_B0;                         // 0x0B0
-    NNSG2dScreenData *photoIcons;                // 0x0B4
-    void *photoIconsFile;                        // 0x0B8
-    NNSG2dScreenData *pageArrows;                // 0x0BC
-    void *pageArrowsFile;                        // 0x0C0
-    u8 numPhotosPrev;                            // 0x0C4
-    u8 numPhotos;                                // 0x0C5
-    u8 filler_C6[0x2];                           // 0x0C6
-    Photo *photos;                               // 0x0C8
-    PhotoEntry entries[PHOTO_ALBUM_MAX];         // 0x0CC
-    PhotoAlbum *photoAlbum;                      // 0x1EC
-    fx32 zoom;                                   // 0x1F0
-} PhotoAlbumApp;                                 // size: 0x1F4
+    enum HeapID heapId;
+    int state;
+    u16 subState;
+    u16 timer;
+    int nextMenuState;
+    PhotoAlbumArgs *args;
+    BgConfig *bgConfig;
+    u8 fadeRunning : 1;
+    u8 zoomChanged : 1;
+    u8 bgToggleReq : 1;
+    u8 bgToggleVal : 1;
+    u8 pageFlipPhase : 4;
+    u8 curPage;
+    u8 numPages;
+    u8 cursorX;
+    u8 cursorY;
+    u8 spriteCol;
+    u8 spriteRow;
+    u8 slotIdx;
+    u8 mode; // 1 = moving a photo, 2 = deleting
+    u8 printerId;
+    u8 textDelay;
+    u8 frame;
+    MsgData *msgData;
+    MessageFormat *messageFormat;
+    String *str_2C;
+    String *str_30;
+    String *strs_34[5];
+    String *strs_48[2];
+    Window windows[3];
+    TouchscreenListMenuSpawner *listMenuSpawner;
+    TouchscreenListMenu *listMenu;
+    ListMenuItem *listMenuItems;
+    YesNoPrompt *yesNoPrompt;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    Sprite *sprites[5];
+    NNSG2dScreenData *screen_AC;
+    void *screenFile_B0;
+    NNSG2dScreenData *photoIcons;
+    void *photoIconsFile;
+    NNSG2dScreenData *pageArrows;
+    void *pageArrowsFile;
+    u8 numPhotosPrev;
+    u8 numPhotos;
+    u8 filler_C6[0x2];
+    Photo *photos;
+    PhotoEntry entries[PHOTO_ALBUM_MAX];
+    PhotoAlbum *photoAlbum;
+    fx32 zoom;
+} PhotoAlbumApp;
 
 typedef struct PhotoAlbumTask {
     PhotoAlbumApp *app;

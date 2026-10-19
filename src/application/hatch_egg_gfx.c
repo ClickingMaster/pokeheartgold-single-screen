@@ -437,8 +437,8 @@ void HatchEggApp_CreateSprites(HatchEggApp *app) {
     ManagedSprite_TickFrame(app->bottomBar);
 }
 
-// Plays one frame of shake pattern `pattern` (tables sHatchEggShakeOffsetsX/762C: position offsets, 0xFF = end;
-// sHatchEggShakeScalesX/7770: affine scale, 0 = end). Returns FALSE when the pattern has ended.
+// Plays one frame of shake pattern `pattern` (tables sHatchEggShakeOffsetsX/Y: position offsets, 0xFF = end;
+// sHatchEggShakeScalesX/Y: affine scale, 0 = end). Returns FALSE when the pattern has ended.
 static BOOL HatchEggApp_StepEggShake(HatchEggApp *app, int pattern) {
     int *shake = &app->shakeState;
     int finished;

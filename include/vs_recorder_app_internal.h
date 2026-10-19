@@ -9,9 +9,8 @@
 #include "field_system.h"
 #include "overlay_manager.h"
 
-// The VS Recorder application of the main ARM9 part: from the VS Recorder item (mode 0) or the Global Terminal
-// (modes 1-6) it runs the recorder screens of overlay 40 (VsRecorderWork) and, when a video is chosen, plays the
-// recorded battle back, then returns to the screens.
+// The VS Recorder application: from the VS Recorder item (mode 0) or the Global Terminal (modes 1-6) it runs
+// the recorder screens (VsRecorderWork) and, when a video is chosen, plays the recorded battle back.
 
 typedef struct VsRecorderApp {
     u32 state;

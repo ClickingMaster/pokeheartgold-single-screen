@@ -1013,7 +1013,6 @@ static void SwapMonPanels_StartScroll(SwapMonPanels *panels, int slot, void *scr
 static void SwapMonPanels_Scroll(SwapMonPanels *panels) {
     int i;
     u8 *slot = (u8 *)panels;
-    // walks panels[] with a byte pointer
     for (i = 0; i < 2; i++, slot += sizeof(SwapMonPanel *)) {
         if (!SwapMonPanel_IsScrollDone(((SwapMonPanels *)slot)->panels[0])) {
             SwapMonPanel_Scroll(((SwapMonPanels *)slot)->panels[0]);

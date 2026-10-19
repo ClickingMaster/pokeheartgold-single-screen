@@ -42,109 +42,109 @@ void ParticleSystem_DeleteAllEmitters(SPLEmitter *emitter);
 
 // A party Pokemon that can drink the juice.
 typedef struct AprijuiceMon {
-    Pokemon *mon;                                  // 0x00
-    u16 species;                                   // 0x04
-    u8 level;                                      // 0x06
-    u8 gender;                                     // 0x07
-    u8 slot;                                       // 0x08
-    u8 hFlip;                                      // 0x09
-    u8 filler_0A[2];                               // 0x0A
-    String *name;                                  // 0x0C
-    PartyExtraSub aprijuice;                       // 0x10
-    u8 filler_15;                                  // 0x15
-    struct PokeathlonPerformanceStars stars;       // 0x16
-    struct PokeathlonTodayPerformance performance; // 0x1E
-} AprijuiceMon;                                    // size: 0x34
+    Pokemon *mon;
+    u16 species;
+    u8 level;
+    u8 gender;
+    u8 slot;
+    u8 hFlip;
+    u8 filler_0A[2];
+    String *name;
+    PartyExtraSub aprijuice;
+    u8 filler_15;
+    struct PokeathlonPerformanceStars stars;
+    struct PokeathlonTodayPerformance performance;
+} AprijuiceMon;
 
 // The 3D part of the Aprijuice screen: the Pokemon picture and the particle effect.
 typedef struct AprijuiceScene {
-    enum HeapID heapId;             // 0x00
-    GF3DVramMan *vramMan;           // 0x04
-    Camera *camera;                 // 0x08
-    PokepicManager *pokepicManager; // 0x0C
-    u8 padding_10[0x10];            // 0x10
-    Pokepic *pokepic;               // 0x20
-    SPLEmitter *emitter;            // 0x24
-} AprijuiceScene;                   // size: 0x28
+    enum HeapID heapId;
+    GF3DVramMan *vramMan;
+    Camera *camera;
+    PokepicManager *pokepicManager;
+    u8 padding_10[0x10];
+    Pokepic *pokepic;
+    SPLEmitter *emitter;
+} AprijuiceScene;
 
-// The Aprijuice screen (OVY_59 second app): give the juice to a party Pokemon and show its Performance change.
+// The Aprijuice screen: give the juice to a party Pokemon and show its Performance change.
 typedef struct AprijuiceScreen {
-    enum HeapID heapId;                         // 0x000
-    ApricornBoxApp *app;                        // 0x004
-    SaveData *saveData;                         // 0x008
-    u8 padding_0C[4];                           // 0x00C
-    Party *party;                               // 0x010
-    SaveApricornBox *apricornBox;               // 0x014
-    ApricornJuice juiceRecord;                  // 0x018
-    ApricornBoxJuice juice;                     // 0x020
-    struct PokeathlonPerformanceStars oldStars; // 0x02E
-    u8 stat;                                    // 0x036
-    u8 starCount;                               // 0x037
-    u8 starsShown;                              // 0x038
-    s8 starDelta[5];                            // 0x039
-    u8 numChanged;                              // 0x03E
-    u8 filler_3F;                               // 0x03F
-    u16 subState;                               // 0x040
-    u16 animState;                              // 0x042
-    MenuInputState menuInputState;              // 0x044
-    u8 juiceUsed;                               // 0x048
-    u8 numMons;                                 // 0x049
-    u8 selectedMon;                             // 0x04A
-    u8 textFrameDelay;                          // 0x04B
-    u8 frame;                                   // 0x04C
-    u8 textPrinterId;                           // 0x04D
-    u8 filler_4E;                               // 0x04E
-    u8 activeTasks;                             // 0x04F
-    u8 filler_50;                               // 0x050
-    u8 timer;                                   // 0x051
-    u8 filler_52[2];                            // 0x052
-    BgConfig *bgConfig;                         // 0x054
-    u8 padding_58[4];                           // 0x058
-    MsgData *msgData;                           // 0x05C
-    MessageFormat *msgFormat;                   // 0x060
-    String *string;                             // 0x064
-    String *string2;                            // 0x068
-    String *levelTemplate;                      // 0x06C, message 4
-    String *genderSymbols[2];                   // 0x070, messages 10-11
-    AprijuiceScene *scene;                      // 0x078
-    AprijuiceMon mons[PARTY_SIZE];              // 0x07C
-    Window windows[10];                         // 0x1B4
-    YesNoPrompt *yesNoPrompt;                   // 0x254
-    SpriteSystem *spriteSystem;                 // 0x258
-    SpriteManager *spriteManager;               // 0x25C
-    Sprite *sprites[34];                        // 0x260
-    NARC *narc;                                 // 0x2E8
-    u8 padding_2EC[8];                          // 0x2EC
-} AprijuiceScreen;                              // size: 0x2F4
+    enum HeapID heapId;
+    ApricornBoxApp *app;
+    SaveData *saveData;
+    u8 padding_0C[4];
+    Party *party;
+    SaveApricornBox *apricornBox;
+    ApricornJuice juiceRecord;
+    ApricornBoxJuice juice;
+    struct PokeathlonPerformanceStars oldStars;
+    u8 stat;
+    u8 starCount;
+    u8 starsShown;
+    s8 starDelta[5];
+    u8 numChanged;
+    u8 filler_3F;
+    u16 subState;
+    u16 animState;
+    MenuInputState menuInputState;
+    u8 juiceUsed;
+    u8 numMons;
+    u8 selectedMon;
+    u8 textFrameDelay;
+    u8 frame;
+    u8 textPrinterId;
+    u8 filler_4E;
+    u8 activeTasks;
+    u8 filler_50;
+    u8 timer;
+    u8 filler_52[2];
+    BgConfig *bgConfig;
+    u8 padding_58[4];
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    String *string2;
+    String *levelTemplate;    // message 4
+    String *genderSymbols[2]; // messages 10-11
+    AprijuiceScene *scene;
+    AprijuiceMon mons[PARTY_SIZE];
+    Window windows[10];
+    YesNoPrompt *yesNoPrompt;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    Sprite *sprites[34];
+    NARC *narc;
+    u8 padding_2EC[8];
+} AprijuiceScreen;
 
 // Pops a Performance star in (grows and spins) or out (shrinks and hides it) (task).
 typedef struct AprijuiceStarTask {
-    AprijuiceScreen *owner; // 0x00
-    u8 hide;                // 0x04
-    u8 filler_05;           // 0x05
-    u8 timer;               // 0x06
-    u8 filler_07;           // 0x07
-    fx32 scaleStep;         // 0x08
-    u16 angle;              // 0x0C
-    s16 angleStep;          // 0x0E
-    VecFx32 scale;          // 0x10
-    Sprite *sprite;         // 0x1C
-} AprijuiceStarTask;        // size: 0x20
+    AprijuiceScreen *owner;
+    u8 hide;
+    u8 filler_05;
+    u8 timer;
+    u8 filler_07;
+    fx32 scaleStep;
+    u16 angle;
+    s16 angleStep;
+    VecFx32 scale;
+    Sprite *sprite;
+} AprijuiceStarTask;
 
 // Shakes the Pokemon picture (task).
 typedef struct AprijuiceShakeTask {
-    AprijuiceScreen *owner; // 0x00
-    u8 counter;             // 0x04
-    u8 phase;               // 0x05
-    u8 delta;               // 0x06
-} AprijuiceShakeTask;       // size: 0x08
+    AprijuiceScreen *owner;
+    u8 counter;
+    u8 phase;
+    u8 delta;
+} AprijuiceShakeTask;
 
 // Particle effect and white fade of the Pokemon picture (task).
 typedef struct AprijuiceFadeTask {
-    AprijuiceScreen *owner; // 0x00
-    u8 timer;               // 0x04
-    u8 state;               // 0x05
-} AprijuiceFadeTask;        // size: 0x08
+    AprijuiceScreen *owner;
+    u8 timer;
+    u8 state;
+} AprijuiceFadeTask;
 void AprijuiceScene_InitCamera(AprijuiceScene *scene, enum HeapID heapId);
 
 static void AprijuiceScreen_InitFromArgs(AprijuiceScreen *screen);
@@ -1521,7 +1521,7 @@ static void AprijuiceScene_Init3D(void) {
     reg_G3_VIEWPORT = 0xBFFF0000;
 }
 
-static void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan) { // vramMan is unused
+static void AprijuiceScene_ReserveVram(GF3DVramMan *vramMan) {
     u32 tex = NNS_GfdDefaultFuncAllocTexVram(0x8000, FALSE, 0);
     u32 pltt = NNS_GfdDefaultFuncAllocPlttVram(0xA0, FALSE, 0);
     if (tex == 0) {

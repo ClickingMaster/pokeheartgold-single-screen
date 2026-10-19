@@ -78,57 +78,57 @@ enum MoveRelearnerQuestion {
 
 // Camera and Pokemon picture of the 3D top screen.
 typedef struct MoveRelearnerMonPic {
-    Camera *camera;                 // 0x00
-    PokepicManager *pokepicManager; // 0x04
-    u8 padding_08[0x10];            // 0x08
-    Pokepic *pokepic;               // 0x18
-} MoveRelearnerMonPic;              // size: 0x1C
+    Camera *camera;
+    PokepicManager *pokepicManager;
+    u8 padding_08[0x10];
+    Pokepic *pokepic;
+} MoveRelearnerMonPic;
 
 // Palette flash of a pressed bottom-screen button, then MoveRelearner_Main continues with nextState.
 typedef struct MoveRelearnerButtonFlash {
-    u8 x;                   // 0x0
-    u8 y;                   // 0x1
-    u8 width;               // 0x2
-    u8 height;              // 0x3
-    u16 timer;              // 0x4
-    u16 state;              // 0x6
-    int nextState;          // 0x8
-} MoveRelearnerButtonFlash; // size: 0xC
+    u8 x;
+    u8 y;
+    u8 width;
+    u8 height;
+    u16 timer;
+    u16 state;
+    int nextState;
+} MoveRelearnerButtonFlash;
 
 typedef struct MoveRelearner {
-    MoveRelearnerArgs *args;                            // 0x000
-    BgConfig *bgConfig;                                 // 0x004
-    Window windows[MOVE_RELEARNER_NUM_WINDOWS];         // 0x008
-    MsgData *msgData;                                   // 0x0F8
-    MessageFormat *msgFormat;                           // 0x0FC
-    String *string;                                     // 0x100
-    String *ppLabel;                                    // 0x104
-    String *ppFormat;                                   // 0x108
-    u8 padding_10C[4];                                  // 0x10C
-    ListMenuItem *moveList;                             // 0x110
-    u8 padding_114[4];                                  // 0x114
-    YesNoPrompt *yesNoPrompt;                           // 0x118
-    SpriteSystem *spriteSystem;                         // 0x11C
-    SpriteManager *spriteManager;                       // 0x120
-    ManagedSprite *sprites[MOVE_RELEARNER_NUM_SPRITES]; // 0x124, see MoveRelearner_InitSprites
-    MoveRelearnerMonPic monPic;                         // 0x154
-    PokemonSummaryArgs summary;                         // 0x170
-    OverlayManager *summaryManager;                     // 0x1AC
-    int nextState;                                      // 0x1B0, state after the current message
-    MenuInputState menuInputState;                      // 0x1B4
-    u8 numMoves;                                        // 0x1B8, entries of moveList
-    u8 textPrinterId;                                   // 0x1B9
-    u8 question;                                        // 0x1BA, enum MoveRelearnerQuestion
-    u8 unk_1BB;                                         // 0x1BB
-    u8 unk_1BC;                                         // 0x1BC
-    u8 filler_1BD[3];                                   // 0x1BD
-    void *screenFile;                                   // 0x1C0
-    NNSG2dScreenData *screenData;                       // 0x1C4, button tiles copied to the bottom screen
-    GridInputHandler *gridInput;                        // 0x1C8
-    u16 lastGridInput;                                  // 0x1CC
-    u16 learnButtonActive;                              // 0x1CE
-    MoveRelearnerButtonFlash buttonFlash;               // 0x1D0
-} MoveRelearner;                                        // size: 0x1DC
+    MoveRelearnerArgs *args;
+    BgConfig *bgConfig;
+    Window windows[MOVE_RELEARNER_NUM_WINDOWS];
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    String *ppLabel;
+    String *ppFormat;
+    u8 padding_10C[4];
+    ListMenuItem *moveList;
+    u8 padding_114[4];
+    YesNoPrompt *yesNoPrompt;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    ManagedSprite *sprites[MOVE_RELEARNER_NUM_SPRITES]; // see MoveRelearner_InitSprites
+    MoveRelearnerMonPic monPic;
+    PokemonSummaryArgs summary;
+    OverlayManager *summaryManager;
+    int nextState; // state after the current message
+    MenuInputState menuInputState;
+    u8 numMoves; // entries of moveList
+    u8 textPrinterId;
+    u8 question; // enum MoveRelearnerQuestion
+    u8 unk_1BB;
+    u8 unk_1BC;
+    u8 filler_1BD[3];
+    void *screenFile;
+    NNSG2dScreenData *screenData; // button tiles copied to the bottom screen
+    GridInputHandler *gridInput;
+    u16 lastGridInput;
+    u16 learnButtonActive;
+    MoveRelearnerButtonFlash buttonFlash;
+} MoveRelearner;
 
 // What answering the yes/no question does, per MoveRelearnerQuestion.
 typedef struct MoveRelearnerYesNoAction {
@@ -136,7 +136,7 @@ typedef struct MoveRelearnerYesNoAction {
     int (*onNo)(MoveRelearner *relearner);
 } MoveRelearnerYesNoAction;
 
-NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
+NarcId MoveCategoryIcon_GetNarc(u32 category);
 
 static void MoveRelearner_Setup(MoveRelearner *relearner);
 static void MoveRelearner_Teardown(MoveRelearner *relearner);
@@ -1102,7 +1102,6 @@ static void MoveRelearner_PrintListRow(MoveRelearner *relearner, int scrollOffse
     BufferIntegerAsString(relearner->msgFormat, 0, maxPP, 2, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     BufferIntegerAsString(relearner->msgFormat, 1, maxPP, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     StringExpandPlaceholders(relearner->msgFormat, relearner->string, relearner->ppFormat);
-    // int coordinates: y + 16 is computed again for this call
     ((u8(*)(Window *, u32, String *, int, int, u32, u32, PrinterCallback_t))AddTextPrinterParameterizedWithColor)(&relearner->windows[10], 0, relearner->string, 45, y + 16, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 }
 
@@ -1438,7 +1437,7 @@ static void MoveRelearner_SetTypeIcon(MoveRelearner *relearner, u16 move, u16 in
 static void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
     u32 i = 0;
     s32 y = 40;
-    u8 *shifted = (u8 *)relearner; // advanced by one sprite per row
+    u8 *shifted = (u8 *)relearner;
 
     for (; i < MOVE_RELEARNER_VISIBLE_ROWS;) {
         ManagedSprite_SetPositionXY(((MoveRelearner *)shifted)->sprites[4], 22, y);

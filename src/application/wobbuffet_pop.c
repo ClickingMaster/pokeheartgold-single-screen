@@ -38,9 +38,6 @@ void GX_EndLoadTexPltt(void);
 void CommState_FrameDummy(enum HeapID heapId, BgConfig *bgConfig);
 void SetBothScreensBrightnessByColor(u16 color);
 
-// Defined in the other parts of the overlay.
-
-// Defined in this file.
 static BOOL WobbuffetPop_Init(OverlayManager *man, int *state);
 static BOOL WobbuffetPop_Main(OverlayManager *man, int *state);
 static BOOL WobbuffetPop_Exit(OverlayManager *man, int *state);
@@ -596,7 +593,7 @@ static void WobbuffetPop_VBlankCB(void *data) {
         game->inflation.hideBg = FALSE;
     }
     DoScheduledBgGpuUpdates(game->bgConfig);
-    // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM address as a constant
+    // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
     dtcm = (vu32 *)0x027E0000;
     dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
 }
@@ -1105,8 +1102,6 @@ static void WobbuffetPop_RemoveModelSlot(WobbuffetPop *game, int row, int type) 
     models->slots[row][type].active = FALSE;
 }
 
-// The balloon slots are walked by byte offset from the start of the model set: `slot` points to a
-// WobbuffetPopModels shifted by whole slots, so its slots[0][0] is the current slot.
 #define MODEL_SLOT(slot) (((WobbuffetPopModels *)(slot))->slots[0][0])
 
 static void WobbuffetPop_AnimateModelSlots(WobbuffetPop *game) {

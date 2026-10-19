@@ -4,9 +4,9 @@
 
 // The leading fields of the Aprijuice scene
 typedef struct AprijuiceSceneHeader {
-    enum HeapID heapId; // 0x00
-    void *vramMan;      // 0x04
-    Camera *camera;     // 0x08
+    enum HeapID heapId;
+    void *vramMan;
+    Camera *camera;
 } AprijuiceSceneHeader;
 
 void AprijuiceScene_InitCamera(AprijuiceSceneHeader *scene, enum HeapID heapId);

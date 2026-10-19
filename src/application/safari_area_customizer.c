@@ -46,19 +46,19 @@
 
 // Sprite resources of the area picture sprites (12 = the 6 slots of the set and the 6 areas of a page).
 typedef struct SafariAreaCustomizerSpriteRes {
-    enum HeapID heapId;                // 0x000
-    int transferMode;                  // 0x004
-    u16 unk_08;                        // 0x008
-    u16 unk_0A;                        // 0x00A
-    u16 maxSprites;                    // 0x00C
-    u16 vram;                          // 0x00E
-    SpriteList *spriteList;            // 0x010
-    SpriteList *externalSpriteList;    // 0x014
-    G2dRenderer renderer;              // 0x018
-    u8 padding_140[4];                 // 0x140
-    GF_2DGfxResMan *resMan[4];         // 0x144
-    GF_2DGfxResObjList *resObjList[4]; // 0x154
-} SafariAreaCustomizerSpriteRes;       // size: 0x164
+    enum HeapID heapId;
+    int transferMode;
+    u16 unk_08;
+    u16 unk_0A;
+    u16 maxSprites;
+    u16 vram;
+    SpriteList *spriteList;
+    SpriteList *externalSpriteList;
+    G2dRenderer renderer;
+    u8 padding_140[4];
+    GF_2DGfxResMan *resMan[4];
+    GF_2DGfxResObjList *resObjList[4];
+} SafariAreaCustomizerSpriteRes;
 
 enum SafariAreaCustomizerState {
     SAC_STATE_SETUP,
@@ -117,61 +117,61 @@ enum SafariAreaCustomizerFadeState {
 };
 
 typedef struct SafariAreaCustomizer {
-    enum HeapID heapId;                                       // 0x00000
-    int state;                                                // 0x00004
-    int subState;                                             // 0x00008
-    int nextState;                                            // 0x0000C
-    u32 touchMode;                                            // 0x00010
-    SafariAreaCustomizerArgs *args;                           // 0x00014
-    SafariZone *safariZone;                                   // 0x00018
-    SafariZoneAreaSet areaSet;                                // 0x0001C
-    MsgData *msgData;                                         // 0x00304
-    MessageFormat *msgFormat;                                 // 0x00308
-    String *string;                                           // 0x0030C
-    String *labelStrings[5];                                  // 0x00310
-    String *menuStrings[4];                                   // 0x00324
-    String *pageTemplate;                                     // 0x00334
-    String *countTemplate;                                    // 0x00338
-    u8 padding_33C[4];                                        // 0x0033C
-    BgConfig *bgConfig;                                       // 0x00340
-    TouchscreenListMenuSpawner *listMenuSpawner;              // 0x00344
-    SafariAreaCustomizerSpriteRes *spriteRes;                 // 0x00348
-    SpriteSystem *spriteSystem;                               // 0x0034C
-    SpriteManager *spriteManager;                             // 0x00350
-    Sprite *sprites[6];                                       // 0x00354: 0 slot cursor, 1 area cursor, 4/5 page arrows
-    ManagedSprite *areaSprites[2 * NUM_AREA_SLOTS];           // 0x0036C: 2 banks of 6, swapped when the page changes
-    FontSystem *fontSystem;                                   // 0x0039C
-    TextOBJLayout *fontLayout;                                // 0x003A0
-    TextOBJ *textObj;                                         // 0x003A4
-    ObjCharSpaceReservation charTransfer;                     // 0x003A8
-    Window windows[15];                                       // 0x003B4
-    Window textObjWindow;                                     // 0x004A4
-    ListMenuItem *areaMenuItems;                              // 0x004B4
-    ListMenuItem *confirmMenuItems;                           // 0x004B8
-    TouchscreenListMenu *listMenu;                            // 0x004BC
-    YesNoPrompt *yesNoPrompt;                                 // 0x004C0
-    void (*onSwitchToButtons)(struct SafariAreaCustomizer *); // 0x004C4
-    void (*onSwitchToTouch)(struct SafariAreaCustomizer *);   // 0x004C8
-    void *selectFrameScreenFile;                              // 0x004CC
-    void *pageScreenFile;                                     // 0x004D0
-    NNSG2dScreenData *selectFrameScreen;                      // 0x004D4
-    NNSG2dScreenData *pageScreen;                             // 0x004D8
-    u8 padding_4DC[0x18000];                                  // 0x004DC
-    u8 textSpeed;                                             // 0x184DC
-    u8 frame;                                                 // 0x184DD
-    u8 page;                                                  // 0x184DE
-    u8 selectedSlot;                                          // 0x184DF
-    u8 cursorPos;                                             // 0x184E0
-    u8 animFrame;                                             // 0x184E1
-    u8 scrollPending : 1;                                     // 0x184E2
-    u8 pageDir : 1;                                           // 0x184E2
-    u8 spriteBank : 1;                                        // 0x184E2
-    u8 mode : 5;                                              // 0x184E2
-    u8 objectsUnlocked;                                       // 0x184E3
-    s16 mainBgY;                                              // 0x184E4
-    s16 subBgY;                                               // 0x184E6
-    BOOL modified;                                            // 0x184E8
-} SafariAreaCustomizer;                                       // size: 0x184EC
+    enum HeapID heapId;
+    int state;
+    int subState;
+    int nextState;
+    u32 touchMode;
+    SafariAreaCustomizerArgs *args;
+    SafariZone *safariZone;
+    SafariZoneAreaSet areaSet;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    String *labelStrings[5];
+    String *menuStrings[4];
+    String *pageTemplate;
+    String *countTemplate;
+    u8 padding_33C[4];
+    BgConfig *bgConfig;
+    TouchscreenListMenuSpawner *listMenuSpawner;
+    SafariAreaCustomizerSpriteRes *spriteRes;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    Sprite *sprites[6];                             // 0 slot cursor, 1 area cursor, 4/5 page arrows
+    ManagedSprite *areaSprites[2 * NUM_AREA_SLOTS]; // 2 banks of 6, swapped when the page changes
+    FontSystem *fontSystem;
+    TextOBJLayout *fontLayout;
+    TextOBJ *textObj;
+    ObjCharSpaceReservation charTransfer;
+    Window windows[15];
+    Window textObjWindow;
+    ListMenuItem *areaMenuItems;
+    ListMenuItem *confirmMenuItems;
+    TouchscreenListMenu *listMenu;
+    YesNoPrompt *yesNoPrompt;
+    void (*onSwitchToButtons)(struct SafariAreaCustomizer *);
+    void (*onSwitchToTouch)(struct SafariAreaCustomizer *);
+    void *selectFrameScreenFile;
+    void *pageScreenFile;
+    NNSG2dScreenData *selectFrameScreen;
+    NNSG2dScreenData *pageScreen;
+    u8 padding_4DC[0x18000];
+    u8 textSpeed;
+    u8 frame;
+    u8 page;
+    u8 selectedSlot;
+    u8 cursorPos;
+    u8 animFrame;
+    u8 scrollPending : 1;
+    u8 pageDir : 1;
+    u8 spriteBank : 1;
+    u8 mode : 5;
+    u8 objectsUnlocked;
+    s16 mainBgY;
+    s16 subBgY;
+    BOOL modified;
+} SafariAreaCustomizer;
 
 typedef struct SafariAreaCustomizerBgTemplates {
     BgTemplate templates[8];

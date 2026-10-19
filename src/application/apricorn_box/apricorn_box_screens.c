@@ -46,19 +46,19 @@ int ApricornJuice_GetTopMixIndex(void *data);
 
 // Moves a sprite in a straight line to (x, y) (task).
 typedef struct ApricornBoxMoveTask {
-    ApricornBoxScreen *owner; // 0x00
-    u8 state;                 // 0x04
-    u8 frames;                // 0x05
-    u8 frame;                 // 0x06
-    u8 apricorn;              // 0x07
-    s16 x;                    // 0x08
-    s16 y;                    // 0x0A
-    fx32 dx;                  // 0x0C
-    fx32 dy;                  // 0x10
-    fx32 curX;                // 0x14
-    fx32 curY;                // 0x18
-    Sprite *sprite;           // 0x1C
-} ApricornBoxMoveTask;        // size: 0x20
+    ApricornBoxScreen *owner;
+    u8 state;
+    u8 frames;
+    u8 frame;
+    u8 apricorn;
+    s16 x;
+    s16 y;
+    fx32 dx;
+    fx32 dy;
+    fx32 curX;
+    fx32 curY;
+    Sprite *sprite;
+} ApricornBoxMoveTask;
 
 typedef struct ApricornBoxListDesc {
     u16 count;

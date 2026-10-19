@@ -133,72 +133,70 @@ typedef struct ScratchOffCardsFlags {
 } ScratchOffCardsFlags;
 
 typedef struct ScratchOffCardsWork {
-    OverlayManager *manager;                     // 0x000
-    u32 unk_004;                                 // 0x004
-    u8 subState;                                 // 0x008
-    u8 mode;                                     // 0x009
-    u8 unk_00A[2];                               // 0x00A
-    u8 result;                                   // 0x00C
-    u8 timer;                                    // 0x00D
-    u8 cardNo;                                   // 0x00E
-    u8 delay;                                    // 0x00F
-    s16 slideX;                                  // 0x010
-    s16 bgScrollX;                               // 0x012
-    u8 mosaic;                                   // 0x014
-    u8 chosenCards[3];                           // 0x015
-    u8 unk_018;                                  // 0x018
-    u8 unk_019[3];                               // 0x019
-    VecFx32 cardScale;                           // 0x01C
-    u8 unk_028[0xC];                             // 0x028
-    void *paletteFadeTask;                       // 0x034
-    MsgData *msgData;                            // 0x038
-    MessageFormat *msgFormat;                    // 0x03C
-    String *string;                              // 0x040
-    String *stringBuffer;                        // 0x044
-    u8 unk_048[0x10];                            // 0x048
-    BgConfig *bgConfig;                          // 0x058
-    Window windows[16];                          // 0x05C
-    PaletteData *paletteData;                    // 0x15C
-    MessagePrinter *messagePrinter;              // 0x160
-    Options *options;                            // 0x164
-    SaveData *saveData;                          // 0x168
-    ScratchOffCardsSpriteGfx spriteGfx;          // 0x16C
-    ScratchOffCardsSprite *cardIconSprites[4];   // 0x2F8
-    ScratchOffCardsSprite *cellSprites[9];       // 0x308
-    ScratchOffCardsSprite *cardChoiceSprites[4]; // 0x32C
-    ScratchOffCardsSprite *buttonSprite;         // 0x33C
-    ScratchOffCardsSprite *messageSprite;        // 0x340
-    ScratchOffCardsSprite *highlightSprites[3];  // 0x344
-    ScratchOffCardsSprite *resultSprites[3];     // 0x350
-    ScratchOffCardsSprite *winSprite;            // 0x35C
-    u8 cells[9];                                 // 0x360
-    u8 unk_369;                                  // 0x369
-    u16 prizes[4];                               // 0x36A
-    u16 unk_372;                                 // 0x372
-    u16 *resultOut;                              // 0x374
-    u16 *prizeItems;                             // 0x378
-    u16 *prizeKinds;                             // 0x37C
-    NARC *narc;                                  // 0x380
-    void *scratchLayerFile;                      // 0x384
-    NNSG2dCharacterData *scratchLayer;           // 0x388
-    u8 *scratchPixels;                           // 0x38C
-    YesNoPrompt *yesNoPrompt;                    // 0x390
-    u8 touchedCells[9];                          // 0x394
-    u8 matchFrame;                               // 0x39D
-    u8 matchTimer;                               // 0x39E
-    u8 matchedSymbol;                            // 0x39F
-    ScratchOffCardsFlags flags;                  // 0x3A0
-    u8 revealedCount;                            // 0x3A1
-    u8 revealed[3];                              // 0x3A2
-    u8 cellRevealed[9];                          // 0x3A5
-    u8 unk_3AE[10];                              // 0x3AE
-    TouchOutput touch;                           // 0x3B8
-    u8 scratchMask[160][240];                    // 0x3FA
-    u8 unk_99FA[2];                              // 0x99FA
+    OverlayManager *manager;
+    u32 unk_004;
+    u8 subState;
+    u8 mode;
+    u8 unk_00A[2];
+    u8 result;
+    u8 timer;
+    u8 cardNo;
+    u8 delay;
+    s16 slideX;
+    s16 bgScrollX;
+    u8 mosaic;
+    u8 chosenCards[3];
+    u8 unk_018;
+    u8 unk_019[3];
+    VecFx32 cardScale;
+    u8 unk_028[0xC];
+    void *paletteFadeTask;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    String *stringBuffer;
+    u8 unk_048[0x10];
+    BgConfig *bgConfig;
+    Window windows[16];
+    PaletteData *paletteData;
+    MessagePrinter *messagePrinter;
+    Options *options;
+    SaveData *saveData;
+    ScratchOffCardsSpriteGfx spriteGfx;
+    ScratchOffCardsSprite *cardIconSprites[4];
+    ScratchOffCardsSprite *cellSprites[9];
+    ScratchOffCardsSprite *cardChoiceSprites[4];
+    ScratchOffCardsSprite *buttonSprite;
+    ScratchOffCardsSprite *messageSprite;
+    ScratchOffCardsSprite *highlightSprites[3];
+    ScratchOffCardsSprite *resultSprites[3];
+    ScratchOffCardsSprite *winSprite;
+    u8 cells[9];
+    u8 unk_369;
+    u16 prizes[4];
+    u16 unk_372;
+    u16 *resultOut;
+    u16 *prizeItems;
+    u16 *prizeKinds;
+    NARC *narc;
+    void *scratchLayerFile;
+    NNSG2dCharacterData *scratchLayer;
+    u8 *scratchPixels;
+    YesNoPrompt *yesNoPrompt;
+    u8 touchedCells[9];
+    u8 matchFrame;
+    u8 matchTimer;
+    u8 matchedSymbol;
+    ScratchOffCardsFlags flags;
+    u8 revealedCount;
+    u8 revealed[3];
+    u8 cellRevealed[9];
+    u8 unk_3AE[10];
+    TouchOutput touch;
+    u8 scratchMask[160][240];
+    u8 unk_99FA[2];
 } ScratchOffCardsWork;
 
-// Some loops walk the work struct itself one pointer at a time and read sprite arrays through it
-// (cursor->cellSprites[0] is cellSprites[i] after i steps).
 #define NEXT_SPRITE_SLOT(cursor) ((ScratchOffCardsWork *)((u8 *)(cursor) + sizeof(void *)))
 
 typedef struct ScratchOffCardsPos {
@@ -218,7 +216,6 @@ typedef struct ScratchOffCardsBounds {
     u8 right;
 } ScratchOffCardsBounds;
 
-// Palette fade helper (no public header declares the heap argument).
 void *PaletteBlink_New(PaletteData *paletteData, u32 buffer, u32 palette, enum HeapID heapID);
 void PaletteBlink_Delete(void *task);
 
@@ -226,7 +223,7 @@ extern const TouchscreenHitbox sScratchOffCardsLastCardButtonHitbox[2];
 extern const TouchscreenHitbox sScratchOffCardsNextCardButtonHitbox[2];
 extern const ScratchOffCardsSpritePos sScratchOffCardsResultSpritePositions[3];
 extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositions[4];
-extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositionsY[]; // sScratchOffCardsCardChoicePositions[0].y
+extern const ScratchOffCardsPos sScratchOffCardsCardChoicePositionsY[];
 extern const GraphicsModes sScratchOffCardsGraphicsModes;
 extern const TouchscreenHitbox sScratchOffCardsCardChoiceHitboxes[];
 extern const BgTemplate sScratchOffCardsBgTemplate_Sub2;
@@ -238,7 +235,7 @@ extern const BgTemplate sScratchOffCardsBgTemplate_Sub3;
 extern const s8 sScratchOffCardsBounceX[][8];
 extern const ScratchOffCardsBounds sScratchOffCardsCellBounds[9];
 extern const s16 sScratchOffCardsCellOrigins[];
-extern const s16 sScratchOffCardsCellOriginsY[]; // sScratchOffCardsCellOrigins[1]
+extern const s16 sScratchOffCardsCellOriginsY[];
 extern const ScratchOffCardsPos sScratchOffCardsCellPositions[9];
 extern const TouchscreenHitbox sScratchOffCardsCellHitboxes[10];
 extern const GraphicsBanks sScratchOffCardsGraphicsBanks;
@@ -617,7 +614,7 @@ static int ScratchOffCards_ShowCard(ScratchOffCardsWork *work) {
     case SCRATCH_OFF_CARDS_SHOW_PLACE_SPRITES: {
         int j = 0;
         int y = 26;
-        ScratchOffCardsWork *cursor = work; // advanced by one sprite pointer per iteration
+        ScratchOffCardsWork *cursor = work;
         for (; j < 4; j++) {
             ScratchOffCardsSprite_SetPosition(cursor->cardIconSprites[0], work->slideX + 60, y);
             ScratchOffCardsSprite_SetVisible(cursor->cardIconSprites[0], TRUE);
@@ -1173,7 +1170,7 @@ static void ScratchOffCards_VBlank(ScratchOffCardsWork *work) {
         DoScheduledBgGpuUpdates(work->bgConfig);
         GF_RunVramTransferTasks();
         OamManager_ApplyAndResetBuffers();
-        // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM base as a literal
+        // OS_SetIrqCheckFlag(OS_IE_V_BLANK)
         dtcm = (vu32 *)0x027E0000;
         dtcm[0x3FF8 / 4] |= OS_IE_V_BLANK;
     }
@@ -1492,7 +1489,7 @@ static void ScratchOffCards_ClearRevealedCells(ScratchOffCardsWork *work) {
 static void ScratchOffCards_ScratchCell(ScratchOffCardsWork *work, int cellNo) {
     int i = 0;
     if (i < work->touch.count) {
-        ScratchOffCardsWork *cursor = work; // advanced by one touch sample per iteration
+        ScratchOffCardsWork *cursor = work;
         const ScratchOffCardsBounds *bounds = &sScratchOffCardsCellBounds[cellNo];
         int left = bounds->left;
         do {

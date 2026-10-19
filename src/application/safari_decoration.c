@@ -52,57 +52,57 @@ typedef struct SafariDecorationSpot {
 } SafariDecorationSpot;
 
 typedef struct SafariDecorationArgsView {
-    SaveData *saveData;                   // 0x00
-    MenuInputStateMgr *menuInputStateMgr; // 0x04
-    SafariDecorationSpot spots[4];        // 0x08
-    u8 isSurfing;                         // 0x18
-    u8 area;                              // 0x19
-    u8 height;                            // 0x1A
-    u16 placedObject;                     // 0x1C: 255 if nothing was placed
-    u8 *cursorPos;                        // 0x20: list position kept by the field between visits
+    SaveData *saveData;
+    MenuInputStateMgr *menuInputStateMgr;
+    SafariDecorationSpot spots[4];
+    u8 isSurfing;
+    u8 area;
+    u8 height;
+    u16 placedObject; // 255 if nothing was placed
+    u8 *cursorPos;    // list position kept by the field between visits
 } SafariDecorationArgsView;
 
 // One entry of the list of objects the player can place.
 typedef struct SafariDecorationObject {
-    u8 objectId;               // 0x0
-    u8 sizeClass;              // 0x1: index into SafariDecorationArgsView.spots
-    SafariObjectConfig config; // 0x2
-} SafariDecorationObject;      // size: 0x5
+    u8 objectId;
+    u8 sizeClass; // index into SafariDecorationArgsView.spots
+    SafariObjectConfig config;
+} SafariDecorationObject;
 
 typedef struct SafariDecorationAnim {
-    void *file;           // 0x00
-    void *resAnm;         // 0x04
-    NNSG3dAnmObj *anmObj; // 0x08
-    fx32 frame;           // 0x0C
-    u8 padding_10[4];     // 0x10
-} SafariDecorationAnim;   // size: 0x14
+    void *file;
+    void *resAnm;
+    NNSG3dAnmObj *anmObj;
+    fx32 frame;
+    u8 padding_10[4];
+} SafariDecorationAnim;
 
 typedef struct SafariDecorationModel {
-    NNSG3dResFileHeader *file;     // 0x00
-    NNSG3dResMdlSet *mdlSet;       // 0x04
-    NNSG3dResMdl *mdl;             // 0x08
-    NNSG3dResTex *tex;             // 0x0C
-    NNSG3dRenderObj renderObj;     // 0x10
-    SafariDecorationAnim anims[4]; // 0x64
-    u16 loaded;                    // 0xB4
-    u16 numAnims;                  // 0xB6
-} SafariDecorationModel;           // size: 0xB8
+    NNSG3dResFileHeader *file;
+    NNSG3dResMdlSet *mdlSet;
+    NNSG3dResMdl *mdl;
+    NNSG3dResTex *tex;
+    NNSG3dRenderObj renderObj;
+    SafariDecorationAnim anims[4];
+    u16 loaded;
+    u16 numAnims;
+} SafariDecorationModel;
 
 // The 3D preview of the object under the cursor (top screen).
 typedef struct SafariDecorationModelView {
-    Camera *camera;              // 0x00
-    NNSFndAllocator allocator;   // 0x04
-    enum HeapID heapId;          // 0x14
-    NARC *modelNarc;             // 0x18
-    NARC *modelInfoNarc;         // 0x1C
-    NARC *animNarc;              // 0x20
-    SafariDecorationModel model; // 0x24
-    VecFx32 target;              // 0xDC
-    void *plttVramManWork;       // 0xE8
-    void *texVramManWork;        // 0xEC
-    u8 visible;                  // 0xF0
-    u8 timeOfDay;                // 0xF1
-} SafariDecorationModelView;     // size: 0xF4
+    Camera *camera;
+    NNSFndAllocator allocator;
+    enum HeapID heapId;
+    NARC *modelNarc;
+    NARC *modelInfoNarc;
+    NARC *animNarc;
+    SafariDecorationModel model;
+    VecFx32 target;
+    void *plttVramManWork;
+    void *texVramManWork;
+    u8 visible;
+    u8 timeOfDay;
+} SafariDecorationModelView;
 
 // Header of a model's entry in the model info NARC.
 typedef struct SafariDecorationModelInfo {
@@ -139,58 +139,58 @@ enum SafariDecorationFadeState {
 };
 
 typedef struct SafariDecoration {
-    enum HeapID heapId;                  // 0x000
-    int state;                           // 0x004
-    int setupState;                      // 0x008
-    int nextState;                       // 0x00C
-    u32 touchMode;                       // 0x010
-    u32 scrollTasks;                     // 0x014: running page scroll tasks
-    u8 textSpeed;                        // 0x018
-    u8 frame;                            // 0x019
-    u8 area;                             // 0x01A
-    SafariDecorationArgsView *args;      // 0x01C
-    SafariZone *safariZone;              // 0x020
-    SafariZoneAreaSet areaSet;           // 0x024
-    MsgData *msgData;                    // 0x30C
-    MessageFormat *msgFormat;            // 0x310
-    String *tmpString;                   // 0x314
-    String *string;                      // 0x318
-    String *placeMessages[4];            // 0x31C
-    String *pageTemplate;                // 0x32C
-    String *backText;                    // 0x330
-    SafariDecorationObject *objects;     // 0x334
-    SafariDecorationModelView modelView; // 0x338
-    u8 timeOfDay;                        // 0x42C
-    u8 numObjects;                       // 0x42D
-    u8 numPages;                         // 0x42E
-    u8 unk_42F;                          // 0x42F
-    u8 page;                             // 0x430
-    u8 cursorPos;                        // 0x431
-    u8 selection;                        // 0x432
-    u8 selectedObjectId;                 // 0x433
-    u8 modelUpdatePending;               // 0x434
-    u8 objectSlotsLeft;                  // 0x435
-    BgConfig *bgConfig;                  // 0x438
-    SpriteSystem *spriteSystem;          // 0x43C
-    SpriteManager *spriteManager;        // 0x440
-    Sprite *sprites[4];                  // 0x444: 0 cursor, 1 back button, 2/3 page arrows
-    Window windows[12];                  // 0x454: 6 + the 6 object name windows of a page
-    YesNoPrompt *yesNoPrompt;            // 0x514
-    void *listFrameScreenFile;           // 0x518
-    NNSG2dScreenData *listFrameScreen;   // 0x51C
-    void *listScreenFile;                // 0x520
-    NNSG2dScreenData *listScreen;        // 0x524
-    void *confirmScreenFile;             // 0x528
-    NNSG2dScreenData *confirmScreen;     // 0x52C
-} SafariDecoration;                      // size: 0x530
+    enum HeapID heapId;
+    int state;
+    int setupState;
+    int nextState;
+    u32 touchMode;
+    u32 scrollTasks; // running page scroll tasks
+    u8 textSpeed;
+    u8 frame;
+    u8 area;
+    SafariDecorationArgsView *args;
+    SafariZone *safariZone;
+    SafariZoneAreaSet areaSet;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *tmpString;
+    String *string;
+    String *placeMessages[4];
+    String *pageTemplate;
+    String *backText;
+    SafariDecorationObject *objects;
+    SafariDecorationModelView modelView;
+    u8 timeOfDay;
+    u8 numObjects;
+    u8 numPages;
+    u8 unk_42F;
+    u8 page;
+    u8 cursorPos;
+    u8 selection;
+    u8 selectedObjectId;
+    u8 modelUpdatePending;
+    u8 objectSlotsLeft;
+    BgConfig *bgConfig;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    Sprite *sprites[4]; // 0 cursor, 1 back button, 2/3 page arrows
+    Window windows[12]; // 6 + the 6 object name windows of a page
+    YesNoPrompt *yesNoPrompt;
+    void *listFrameScreenFile;
+    NNSG2dScreenData *listFrameScreen;
+    void *listScreenFile;
+    NNSG2dScreenData *listScreen;
+    void *confirmScreenFile;
+    NNSG2dScreenData *confirmScreen;
+} SafariDecoration;
 
 typedef struct SafariDecorationScrollTask {
-    u32 *taskCount;           // 0x00
-    SafariDecoration *decor;  // 0x04
-    u8 dir;                   // 0x08
-    u8 timer;                 // 0x09
-    u8 padding_0A[10];        // 0x0A
-} SafariDecorationScrollTask; // size: 0x14
+    u32 *taskCount;
+    SafariDecoration *decor;
+    u8 dir;
+    u8 timer;
+    u8 padding_0A[10];
+} SafariDecorationScrollTask;
 
 typedef struct SafariDecorationCameraPos {
     u16 distance;

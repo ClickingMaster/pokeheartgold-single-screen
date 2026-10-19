@@ -126,86 +126,86 @@ enum BallCapsuleMenuItem {
 };
 
 typedef struct BallCapsuleEditorCapsule {
-    u32 partySlot;    // 0x0, party slot of the Pokémon the capsule is on, or BALL_CAPSULE_EDITOR_NO_MON
-    CAPSULE *capsule; // 0x4
+    u32 partySlot; // party slot of the Pokémon the capsule is on, or BALL_CAPSULE_EDITOR_NO_MON
+    CAPSULE *capsule;
 } BallCapsuleEditorCapsule;
 
 typedef struct BallCapsuleEditorCapsuleIcon {
-    u32 partySlot;         // 0x0, copy of BallCapsuleEditorCapsule.partySlot
-    BOOL hasSeals;         // 0x4, also the icon's animation
-    ManagedSprite *sprite; // 0x8
+    u32 partySlot; // copy of BallCapsuleEditorCapsule.partySlot
+    BOOL hasSeals; // also the icon's animation
+    ManagedSprite *sprite;
 } BallCapsuleEditorCapsuleIcon;
 
 // A seal placed on the capsule being edited.
 typedef struct BallCapsuleEditorSeal {
-    BOOL active;               // 0x0
-    SEAL seal;                 // 0x4
-    u8 filler_7;               // 0x7
-    ManagedSprite *sprite;     // 0x8
-    TouchscreenHitbox *hitbox; // 0xC, one of BallCapsuleEditorDisplay.hitboxes
+    BOOL active;
+    SEAL seal;
+    u8 filler_7;
+    ManagedSprite *sprite;
+    TouchscreenHitbox *hitbox; // one of BallCapsuleEditorDisplay.hitboxes
 } BallCapsuleEditorSeal;
 
 // Passed on its own to BallCapsuleEditor_InitSpriteSystem / FreeSpriteSystem.
 typedef struct BallCapsuleEditorDisplay {
-    u32 heldSeal;                                                 // 0x000 (0x0D4), the placed seal being dragged, or BALL_CAPSULE_EDITOR_NONE
-    BOOL inputEnabled;                                            // 0x004 (0x0D8)
-    SpriteSystem *spriteSystem;                                   // 0x008 (0x0DC)
-    SpriteManager *spriteManager;                                 // 0x00C (0x0E0)
-    BgConfig *bgConfig;                                           // 0x010 (0x0E4)
-    PaletteData *paletteData;                                     // 0x014 (0x0E8)
-    Window windows[13];                                           // 0x018 (0x0EC), 0: message, 3: top screen text, 5-12: seal counts
-    ListMenuItem *menuItems;                                      // 0x0E8 (0x1BC)
-    u8 unk_0EC[4];                                                // 0x0EC (0x1C0)
-    PokepicManager *pokepicManager;                               // 0x0F0 (0x1C4)
-    Pokepic *pokepic;                                             // 0x0F4 (0x1C8)
-    int pokepicY;                                                 // 0x0F8 (0x1CC)
-    u8 unk_0FC[0x1C];                                             // 0x0FC (0x1D0)
-    TouchHitboxController *hitboxController;                      // 0x118 (0x1EC)
-    TouchscreenHitbox hitboxes[BALL_CAPSULE_EDITOR_NUM_HITBOXES]; // 0x11C (0x1F0)
-    YesNoPrompt *yesNoPrompt;                                     // 0x170 (0x244)
-    TouchscreenListMenuSpawner *menuSpawner;                      // 0x174 (0x248)
-} BallCapsuleEditorDisplay;                                       // size: 0x178
+    u32 heldSeal; // the placed seal being dragged, or BALL_CAPSULE_EDITOR_NONE
+    BOOL inputEnabled;
+    SpriteSystem *spriteSystem;
+    SpriteManager *spriteManager;
+    BgConfig *bgConfig;
+    PaletteData *paletteData;
+    Window windows[13]; // 0: message, 3: top screen text, 5-12: seal counts
+    ListMenuItem *menuItems;
+    u8 unk_0EC[4];
+    PokepicManager *pokepicManager;
+    Pokepic *pokepic;
+    int pokepicY;
+    u8 unk_0FC[0x1C];
+    TouchHitboxController *hitboxController;
+    TouchscreenHitbox hitboxes[BALL_CAPSULE_EDITOR_NUM_HITBOXES];
+    YesNoPrompt *yesNoPrompt;
+    TouchscreenListMenuSpawner *menuSpawner;
+} BallCapsuleEditorDisplay;
 
 typedef struct BallCapsuleEditor {
-    BallCapsuleEditorArgs *args;                             // 0x000
-    BallCapsuleEditorCapsule capsules[MAX_CAPSULES];         // 0x004
-    SEALBAG *sealBag;                                        // 0x064
-    CAPSULE savedCapsule;                                    // 0x068, the edited capsule as it was before editing
-    u8 savedSealCounts[SEAL_MAX + 1];                        // 0x080, the seal bag before editing
-    u8 filler_D1[3];                                         // 0x0D1
-    BallCapsuleEditorDisplay display;                        // 0x0D4
-    TouchscreenListMenu *menu;                               // 0x24C
-    void *pokepicEffect;                                     // 0x250, BallSealEffect_New
-    BallThrow *ballData;                                     // 0x254
-    GF3DVramMan *vramMan;                                    // 0x258
-    FontSystem *fontSystem;                                  // 0x25C
-    TextOBJ *buttonLabels[2];                                // 0x260, OK / CANCEL
-    ObjCharSpaceReservation buttonLabelChars[2];             // 0x268
-    u32 unk_280;                                             // 0x280
-    void *pokepicAnim;                                       // 0x284, PokepicAnimManager_New
-    BOOL sortSeals;                                          // 0x288
-    BallCapsuleEditorCapsuleIcon capsuleIcons[MAX_CAPSULES]; // 0x28C
-    ManagedSprite *cursors[2];                               // 0x31C
-    ManagedSprite *monIcons[PARTY_SIZE];                     // 0x324
-    ManagedSprite *arrows[4];                                // 0x33C
-    BallCapsuleEditorSeal seals[MAX_SEALS_ON_CAPSULE];       // 0x34C
-    u8 unk_3CC[0x20];                                        // 0x3CC
-    int cursorCapsule[2];                                    // 0x3EC, 0: the selected capsule, 1: the capsule to switch with
-    u32 mode;                                                // 0x3F4
-    u32 unk_3F8;                                             // 0x3F8
-    u32 state;                                               // 0x3FC
-    u32 returnState;                                         // 0x400
-    int subState;                                            // 0x404
-    int subStateValue;                                       // 0x408, Yes/No answer or frame counter
-    MenuInputState menuInputState;                           // 0x40C
-    int timer;                                               // 0x410
-    ManagedSprite *caseSprites[13];                          // 0x414, 0-7: seals of the page, 8-12: page arrows and buttons
-    int page;                                                // 0x448
-    int pageCount;                                           // 0x44C
-    u8 pageSeals[BALL_CAPSULE_EDITOR_SEALS_PER_PAGE];        // 0x450, seal ids shown on the page (0: none)
-    Pokemon *previewMon;                                     // 0x458
-    NARC *pokepicAnimNarc;                                   // 0x45C
-} BallCapsuleEditor;                                         // size: 0x460
+    BallCapsuleEditorArgs *args;
+    BallCapsuleEditorCapsule capsules[MAX_CAPSULES];
+    SEALBAG *sealBag;
+    CAPSULE savedCapsule;             // the edited capsule as it was before editing
+    u8 savedSealCounts[SEAL_MAX + 1]; // the seal bag before editing
+    u8 filler_D1[3];
+    BallCapsuleEditorDisplay display;
+    TouchscreenListMenu *menu;
+    void *pokepicEffect; // BallSealEffect_New
+    BallThrow *ballData;
+    GF3DVramMan *vramMan;
+    FontSystem *fontSystem;
+    TextOBJ *buttonLabels[2]; // OK / CANCEL
+    ObjCharSpaceReservation buttonLabelChars[2];
+    u32 unk_280;
+    void *pokepicAnim; // PokepicAnimManager_New
+    BOOL sortSeals;
+    BallCapsuleEditorCapsuleIcon capsuleIcons[MAX_CAPSULES];
+    ManagedSprite *cursors[2];
+    ManagedSprite *monIcons[PARTY_SIZE];
+    ManagedSprite *arrows[4];
+    BallCapsuleEditorSeal seals[MAX_SEALS_ON_CAPSULE];
+    u8 unk_3CC[0x20];
+    int cursorCapsule[2]; // 0: the selected capsule, 1: the capsule to switch with
+    u32 mode;
+    u32 unk_3F8;
+    u32 state;
+    u32 returnState;
+    int subState;
+    int subStateValue; // Yes/No answer or frame counter
+    MenuInputState menuInputState;
+    int timer;
+    ManagedSprite *caseSprites[13]; // 0-7: seals of the page, 8-12: page arrows and buttons
+    int page;
+    int pageCount;
+    u8 pageSeals[BALL_CAPSULE_EDITOR_SEALS_PER_PAGE]; // seal ids shown on the page (0: none)
+    Pokemon *previewMon;
+    NARC *pokepicAnimNarc;
+} BallCapsuleEditor;
 
 typedef struct BallCapsuleEditorMenuItem {
     u32 msgId;
@@ -448,7 +448,6 @@ static void BallCapsuleEditor_LoadBattleOverlays(void) {
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_7), OVY_LOAD_ASYNC);
 }
 
-// Overlay static initializer: the one .sinit entry of this overlay points at the function above.
 #pragma define_section SINIT ".sinit" abs32 RWX
 #pragma section SINIT begin
 SDK_FORCE_EXPORT static void (*NitroStaticInit_[])(void) = { BallCapsuleEditor_LoadBattleOverlays };
@@ -767,7 +766,7 @@ static void BallCapsuleEditor_InitBgs(BgConfig *bgConfig) {
 
 static void BallCapsuleEditor_VBlankCB(void *data) {
     BallCapsuleEditor *editor = data;
-    vu32 *dtcm = (vu32 *)0x027E0000; // for OS_SetIrqCheckFlag below, with the DTCM address as a constant
+    vu32 *dtcm = (vu32 *)0x027E0000; // for OS_SetIrqCheckFlag below
 
     PokepicManager_HandleLoadImgAndOrPltt(editor->display.pokepicManager);
     SpriteSystem_TransferOam();
@@ -835,7 +834,7 @@ static void BallCapsuleEditor_ShiftSealsToCapsule(BallCapsuleEditor *editor) {
 static void BallCapsuleEditor_LoadSeals(BallCapsuleEditor *editor) {
     const SEAL *seal = editor->capsules[editor->cursorCapsule[0]].capsule->seals;
     int i = 0;
-    BallCapsuleEditor *shifted = editor; // shifted by i seals: seals[0] through it is seals[i]
+    BallCapsuleEditor *shifted = editor;
 
     do {
         if (seal->kind != SEAL_NONE) {
@@ -957,7 +956,7 @@ static void BallCapsuleEditor_SortSeals(BallCapsuleEditor *editor) {
     copy = seals;
     {
         s32 *sorted;
-        BallCapsuleEditor *dst = editor; // shifted by n seals: seals[0] through it is seals[n]
+        BallCapsuleEditor *dst = editor;
         s32 n = 0;
         sorted = order;
         u8 *src = copy.bytes;
@@ -1107,7 +1106,6 @@ static BOOL BallCapsuleEditor_IsCapsuleChanged(BallCapsuleEditor *editor) {
     s32 i = 0;
     const SEAL *saved = editor->capsules[editor->cursorCapsule[0]].capsule->seals;
 
-    // editor is shifted by i seals: seals[0] through it is seals[i]
     for (; i < MAX_SEALS_ON_CAPSULE; i++, saved++, editor = (BallCapsuleEditor *)((u8 *)editor + sizeof(BallCapsuleEditorSeal))) {
         if (editor->seals[0].seal.kind != saved->kind || editor->seals[0].seal.x != saved->x || editor->seals[0].seal.y != saved->y) {
             return TRUE;
@@ -1514,7 +1512,7 @@ static void BallCapsuleEditor_PlaceMonIcons(BallCapsuleEditor *editor) {
         ManagedSprite_SetDrawFlag(editor->monIcons[i], FALSE);
     }
     {
-        BallCapsuleEditor *shifted; // shifted by j capsules: capsules[0] through it is capsules[j]
+        BallCapsuleEditor *shifted;
         s32 j;
         for (j = 0, shifted = editor; j < MAX_CAPSULES; j++, shifted = (BallCapsuleEditor *)((u8 *)shifted + sizeof(BallCapsuleEditorCapsule))) {
             u32 partySlot = shifted->capsules[0].partySlot;
@@ -1762,7 +1760,6 @@ static void BallCapsuleEditor_DeleteCapsuleIcons(BallCapsuleEditor *editor) {
     Sprite_DeleteAndFreeResources(editor->cursors[1]);
 }
 
-// (frame is passed but not used)
 static void BallCapsuleEditor_LoadMainBgGraphics(BgConfig *bgConfig, PaletteData *paletteData, int frame) {
     NNSG2dCharacterData *charData;
     void *allocation;
