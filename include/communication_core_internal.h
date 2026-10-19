@@ -99,9 +99,6 @@ typedef union CommSendStages {
     u32 align;
 } CommSendStages;
 
-extern CommCore gCommCore;
-extern CommSendStages gCommSendStages;
-
 int Comm_StartParent(int a, int b, int c, int d);
 int Comm_StartScan(int a, int b, int c);
 void Comm_RequestTransferMode1(void);

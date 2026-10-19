@@ -152,6 +152,7 @@ typedef struct PokemonSummary {
     u32 boxIconSprite; // which of sprites 73/74 shows the box Pokemon's icon next
 } PokemonSummary;
 
+void PokemonSummary_Init3D(PokemonSummary *summary);
 void PokemonSummary_AddWindows(PokemonSummary *summary);
 void PokemonSummary_AddPageWindows(PokemonSummary *summary);
 void PokemonSummary_RemovePageWindows(PokemonSummary *summary);

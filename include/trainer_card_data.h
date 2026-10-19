@@ -46,6 +46,7 @@ typedef struct TrainerCardData {
 } TrainerCardData;
 
 TrainerCardAppArgs *TrainerCardAppArgs_New(enum HeapID heapID);
+TrainerCardData *TrainerCardData_New(enum HeapID);
 void TrainerCardData_Build(u8 unk_04_0, u8 liveIgt, u8 unk_02, u8 caseVariant, FieldSystem *fieldSystem, TrainerCardAppArgs *trainerCard);
 void TrainerCardData_Free(TrainerCardAppArgs *trainerCard);
 void LinkTrainerCard_StartTask(FieldSystem *fieldSystem);

@@ -11,6 +11,15 @@
 #include "save_wifi_history.h"
 #include "wifi_connection.h"
 
+static void WiFiPlazaLobbyClient_InitializeEx(int value, int mode);
+static void WiFiPlazaLobbyClient_ClearErrors(void);
+static BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client);
+static void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID);
+static void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client);
+static void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID);
+static void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client);
+static void WiFiPlazaLobbyClient_ClearIdList(WiFiPlazaLobbyClient *client, int which);
+
 // The lobby client of the Wi-Fi Plaza, on top of the lobby library: the lobby state, the location of every lobby
 // slot, the message tables, the lobby time and up to three matchmaking sessions.
 
@@ -135,7 +144,7 @@ void WiFiPlazaLobbyClient_Initialize(int value) {
     WiFiPlazaLobbyClient_InitializeEx(value, 0);
 }
 
-void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
+static void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     void (*callbacks[17])(void);
     void *userData;
     GF_ASSERT(gWiFiPlazaLobbyClient != NULL);
@@ -775,7 +784,7 @@ BOOL WiFiPlazaLobbyClient_CheckResult(int result) {
     return ret;
 }
 
-void WiFiPlazaLobbyClient_ClearErrors(void) {
+static void WiFiPlazaLobbyClient_ClearErrors(void) {
     gWiFiPlazaLobbyClient->ownRecordError = 0;
     gWiFiPlazaLobbyClient->requestError = 0;
 }
@@ -794,7 +803,7 @@ int WiFiPlazaLobbyClient_ChannelToLib(int channel) {
 // each slot (entry time, channel) and the two id lists (the lobby, the current channel).
 
 // Adds the own country and region to the lobby locations (once) and sends the list.
-BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
+static BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     int country = WifiHistory_GetPlayerCountry(client->wifiHistory);
     int region = WiFiHistory_GetPlayerRegion(client->wifiHistory);
     int i;
@@ -819,14 +828,14 @@ BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client) {
     return WiFiPlazaLobbyClient_CheckResult(PPW_LobbySetChannelData(-1, 0, gWiFiPlazaLocationListKey, client->locations, sizeof(client->locations)));
 }
 
-void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
+static void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID) {
     u32 bytes = size * 20;
     gWiFiPlazaLobbyClient->playerData = Heap_Alloc(heapID, bytes);
     memset(gWiFiPlazaLobbyClient->playerData, 0, bytes);
     gWiFiPlazaLobbyClient->playerDataSize = size;
 }
 
-void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client) {
+static void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client) {
     Heap_Free(gWiFiPlazaLobbyClient->playerData);
 }
 
@@ -897,7 +906,7 @@ void WiFiPlazaLobbyClient_ClearPlayerRecord(WiFiPlazaLobbyClient *client, int id
     bytes[11] = 0;
 }
 
-void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID) {
+static void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID) {
     int i;
     u32 capacity;
     for (i = 0; i < 2; i++) {
@@ -914,7 +923,7 @@ void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCa
     }
 }
 
-void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
+static void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
     int i;
     for (i = 0; i < 2; i++) {
         GF_ASSERT(client->idLists[i].ids != NULL);
@@ -923,7 +932,7 @@ void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client) {
     }
 }
 
-void WiFiPlazaLobbyClient_ClearIdList(WiFiPlazaLobbyClient *client, int which) {
+static void WiFiPlazaLobbyClient_ClearIdList(WiFiPlazaLobbyClient *client, int which) {
     int i;
     client->idLists[which].count = 0;
     for (i = 0; i < client->idLists[which].capacity; i++) {

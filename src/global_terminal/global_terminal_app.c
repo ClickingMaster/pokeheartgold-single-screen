@@ -15,6 +15,11 @@ enum GlobalTerminalAppState {
     GLOBAL_TERMINAL_APP_END,
 };
 
+static void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data);
+static void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data);
+static void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align);
+static void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size);
+
 // DWC allocations of the Wi-Fi apps run by GlobalTerminalApp_Main (set once the DWC heap exists).
 static NNSFndHeapHandle sDwcHeap;
 
@@ -116,7 +121,7 @@ BOOL GlobalTerminalApp_Exit(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data) {
+static void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data) {
     if (data->wifiLoaded == 0) {
         LoadDwcOverlay();
         LoadOVY38();
@@ -128,7 +133,7 @@ void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data) {
     }
 }
 
-void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data) {
+static void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data) {
     if (data->wifiLoaded == 1) {
         NNS_FndDestroyExpHeap(data->dwcHeap);
         Heap_Free(data->heapBuffer);
@@ -139,7 +144,7 @@ void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data) {
     }
 }
 
-void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align) {
+static void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align) {
     void *ptr;
     OSIntrMode intrMode = OS_DisableInterrupts();
     ptr = NNS_FndAllocFromExpHeapEx(sDwcHeap, size, align);
@@ -147,7 +152,7 @@ void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align) {
     return ptr;
 }
 
-void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size) {
+static void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size) {
     if (ptr != NULL) {
         OSIntrMode intrMode = OS_DisableInterrupts();
         NNS_FndFreeToExpHeap(sDwcHeap, ptr);

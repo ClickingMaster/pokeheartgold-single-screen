@@ -61,6 +61,11 @@ typedef struct LobbyStringVectorBuffer {
 extern "C" {
 #endif
 
+LobbyCharVector *LobbyCharVector_Destroy(LobbyCharVector *);
+char *LobbyCharVector_Data(LobbyCharVector *);
+void LobbyCharVector_Grow(LobbyCharVector *, u32);
+u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
+LobbyStringVector *LobbyStringVector_Destroy(LobbyStringVector *);
 LobbyCharVectorBuffer *LobbyCharVectorBuffer_Destroy(LobbyCharVectorBuffer *);
 void LobbyCharVectorBuffer_Allocate(LobbyCharVectorBuffer *, u32, LobbyTag);
 void LobbyStringVector_EraseAtEnd(LobbyStringVector *, u32, LobbyTag);

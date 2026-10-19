@@ -6,8 +6,6 @@
 
 #include "ppw_lobby_internal.h"
 
-extern void *LobbyString_InitCopy(void *, void *);
-
-void *PPWLobby_GetChannelBaseName(u8 *p, u8 *q) {
-    return LobbyString_InitCopy(p, q + 88);
+Str *PPWLobby_GetChannelBaseName(Str *out, PPWLobbyWork *work) {
+    return LobbyString_InitCopy(out, &work->channelBaseName);
 }

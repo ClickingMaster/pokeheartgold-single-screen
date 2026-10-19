@@ -1,4 +1,5 @@
-#include "overlay104_scene_internal.h"
+#include "magnet_train_cutscene_internal.h"
+#include "overlay_104.h"
 
 static void MagnetTrainCutscene_InitGraphics(void);
 static void MagnetTrainCutscene_SetupCamera(MagnetTrainCutsceneWork *work);
@@ -7,13 +8,9 @@ static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work);
 static BOOL MagnetTrainCutscene_IsStepAnimDone(MagnetTrainCutsceneModel *model, int idx);
 static void MagnetTrainCutscene_StartStepFadeOut(int idx, enum HeapID heapId);
 
-BOOL MagnetTrainCutscene_Init(OverlayManager *man, int *state);
-BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state);
-BOOL MagnetTrainCutscene_Exit(OverlayManager *man, int *state);
-
-static const u32 sSeTableA[3] = { 0x6D5, 0x6F3, 0x6F1 };
+static const u32 sSeTableA[3] = { SEQ_SE_GS_LINEAR, SEQ_SE_GS_LINEAR_LR3, SEQ_SE_GS_LINEAR_LR2 };
 static const VecFx32 sModelScale = { FX32_ONE, FX32_ONE, FX32_ONE };
-static const u32 sSeTableB[3] = { 0x6D6, 0x6F2, 0x6F0 };
+static const u32 sSeTableB[3] = { SEQ_SE_GS_LINEAR_LR, SEQ_SE_GS_LINEAR3, SEQ_SE_GS_LINEAR2 };
 static const GXRgb sEdgeColors[8] = { 0x0000, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084, 0x1084 };
 static const u16 sClipPlanes[2][3][2] = {
     { { 0x0096, 0x06A4 }, { 0x0096, 0x0384 }, { 0x0096, 0x0384 } },
@@ -33,16 +30,16 @@ static const MtxFx33 sIdentityRot = {
      }
 };
 static const GraphicsBanks sBanks = {
-    (GXVRamBG)0x04,
-    (GXVRamBGExtPltt)0x00,
-    (GXVRamSubBG)0x80,
-    (GXVRamSubBGExtPltt)0x00,
-    (GXVRamOBJ)0x20,
-    (GXVRamOBJExtPltt)0x00,
-    (GXVRamSubOBJ)0x100,
-    (GXVRamSubOBJExtPltt)0x00,
-    (GXVRamTex)0x03,
-    (GXVRamTexPltt)0x10,
+    GX_VRAM_BG_128_C,
+    GX_VRAM_BGEXTPLTT_NONE,
+    GX_VRAM_SUB_BG_32_H,
+    GX_VRAM_SUB_BGEXTPLTT_NONE,
+    GX_VRAM_OBJ_16_F,
+    GX_VRAM_OBJEXTPLTT_NONE,
+    GX_VRAM_SUB_OBJ_16_I,
+    GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    GX_VRAM_TEX_01_AB,
+    GX_VRAM_TEXPLTT_0123_E,
 };
 static const VecFx32 sCameraOffsets[2][3] = {
     { { 0x00065CA8, 0x0003C3AA, -0x00080AA2 },  { 0x00018000, 0x00039F71, -0x00051BCB }, { 0x00000000, 0x00013885, -0x0001C7CD } },
@@ -103,15 +100,15 @@ BOOL MagnetTrainCutscene_Init(OverlayManager *man, int *state) {
     u8 i;
     MagnetTrainCutsceneArgs *args;
 
-    Heap_Create(HEAPID(3), HEAPID(0x95), 0x31000);
-    work = OverlayManager_CreateAndGetData(man, sizeof(MagnetTrainCutsceneWork), HEAPID(0x95));
+    Heap_Create(HEAP_ID_3, HEAP_ID_149, 0x31000);
+    work = OverlayManager_CreateAndGetData(man, sizeof(MagnetTrainCutsceneWork), HEAP_ID_149);
     memset(work, 0, sizeof(MagnetTrainCutsceneWork));
     args = OverlayManager_GetArgs(man);
     work->variant = args->variant;
     work->gender = args->gender;
     work->isNight = args->isNight;
     work->unk167 = 0;
-    work->camera = Camera_New(HEAPID(0x95));
+    work->camera = Camera_New(HEAP_ID_149);
     MagnetTrainCutscene_InitGraphics();
     MagnetTrainCutscene_LoadModels(work);
     MagnetTrainCutscene_SetupCamera(work);
@@ -122,7 +119,7 @@ BOOL MagnetTrainCutscene_Init(OverlayManager *man, int *state) {
     NNS_G3dGlbMaterialColorDiffAmb(args->lighting->diffuse, args->lighting->ambient, args->lighting->diffAmbFlag);
     NNS_G3dGlbMaterialColorSpecEmi(args->lighting->specular, args->lighting->emission, args->lighting->specEmiFlag);
     NNS_G3dGlbPolygonAttr(args->lighting->polygonAttr[0], (GXPolygonMode)args->lighting->polygonAttr[1], (GXCull)args->lighting->polygonAttr[2], args->lighting->polygonAttr[3], args->lighting->polygonAttr[4], args->lighting->polygonAttr[5]);
-    BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAPID(0x95));
+    BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, 0, 6, 1, HEAP_ID_149);
     return TRUE;
 }
 
@@ -140,7 +137,7 @@ BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state) {
     switch (*state) {
     case 0:
         if (MagnetTrainCutscene_IsStepAnimDone(model, work->step)) {
-            MagnetTrainCutscene_StartStepFadeOut(work->step, HEAPID(0x95));
+            MagnetTrainCutscene_StartStepFadeOut(work->step, HEAP_ID_149);
             (*state)++;
         }
         break;
@@ -152,21 +149,21 @@ BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state) {
                 ret = TRUE;
             } else {
                 MagnetTrainCutscene_SetupCamera(work);
-                BeginAppScreenFade(0, HEAPID(0x95));
+                BeginAppScreenFade(0, HEAP_ID_149);
                 *state = 0;
             }
         }
         break;
     }
-    if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame == 0) {
+    if (model->anmObj[0]->frame == 0) {
         PlaySE((u16)work->seTable[work->step]);
         if (work->step == 2) {
             Sound_SetSceneAndPlayBGM(0x44, SEQ_GS_E_LINEAR, 1);
         }
     }
     for (i = 0; i < 2; i++) {
-        MagnetTrainCutsceneAnmObj *anmObj = model->anmObj[i];
-        if (anmObj->frame + FX32_ONE < anmObj->anm->numFrames * FX32_ONE) {
+        NNSG3dAnmObj *anmObj = model->anmObj[i];
+        if (anmObj->frame + FX32_ONE < NNS_G3dAnmObjGetNumFrame(anmObj)) {
             anmObj->frame = anmObj->frame + FX32_ONE;
         }
     }
@@ -178,7 +175,7 @@ BOOL MagnetTrainCutscene_Main(OverlayManager *man, int *state) {
         Camera_PushLookAtToNNSGlb();
         GF3dRender_DrawModel(&model->obj, &pos, &rot, &scale);
     }
-    RequestSwap3DBuffers((GXSortMode)1, (GXBufferMode)1);
+    RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_W);
     return ret;
 }
 
@@ -200,7 +197,7 @@ BOOL MagnetTrainCutscene_Exit(OverlayManager *man, int *state) {
     Camera_Delete(work->camera);
     OverlayManager_FreeData(man);
     GF3dRender_DeleteSimpleManager();
-    Heap_Destroy(HEAPID(0x95));
+    Heap_Destroy(HEAP_ID_149);
     return TRUE;
 }
 
@@ -212,7 +209,7 @@ static void MagnetTrainCutscene_InitGraphics(void) {
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
     MagnetTrainCutscene_SetGfxBanks();
-    GF3dRender_InitSimpleManager(HEAPID(0x95));
+    GF3dRender_InitSimpleManager(HEAP_ID_149);
     reg_G3X_DISP3DCNT = (u16)((reg_G3X_DISP3DCNT & ~0x3000) | 0x20);
     G3X_SetEdgeColorTable(sEdgeColors);
     GfGfx_SwapDisplay();
@@ -246,8 +243,8 @@ static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work) {
     MagnetTrainCutsceneModelIds *entry;
     NARC *narc;
 
-    narc = NARC_New((NarcId)0xEB, HEAPID(0x95));
-    HeapExp_FndInitAllocator(&work->allocator, HEAPID(0x95), 4);
+    narc = NARC_New(NARC_a_2_3_3, HEAP_ID_149);
+    HeapExp_FndInitAllocator(&work->allocator, HEAP_ID_149, 4);
     if (work->variant == 0) {
         if (work->isNight == 0) {
             if (work->gender == 0) {
@@ -282,7 +279,7 @@ static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work) {
     for (i = 0; i < 3; i++) {
         model = &work->models[i];
         entry = &ids[i];
-        model->file = NARC_AllocAndReadWholeMember(narc, ids[i].modelFileId, HEAPID(0x95));
+        model->file = NARC_AllocAndReadWholeMember(narc, ids[i].modelFileId, HEAP_ID_149);
         GF3dRender_InitObjFromHeader(&model->obj, &model->mdl, &model->file);
         tex = NNS_G3dGetTex(work->models[i].file);
         if (i == 2) {
@@ -293,7 +290,7 @@ static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work) {
         }
         for (j = 0; j < 2; j++) {
             void *anm;
-            model->anmFile[j] = NARC_AllocAndReadWholeMember(narc, entry->anmFileIds[j], HEAPID(0x95));
+            model->anmFile[j] = NARC_AllocAndReadWholeMember(narc, entry->anmFileIds[j], HEAP_ID_149);
             anm = NNS_G3dGetAnmByIdx(model->anmFile[j], 0);
             model->anmObj[j] = NNS_G3dAllocAnmObj(&work->allocator, anm, model->mdl);
             NNS_G3dAnmObjInit(model->anmObj[j], anm, model->mdl, tex);
@@ -305,11 +302,11 @@ static void MagnetTrainCutscene_LoadModels(MagnetTrainCutsceneWork *work) {
 
 static BOOL MagnetTrainCutscene_IsStepAnimDone(MagnetTrainCutsceneModel *model, int idx) {
     if (idx + 1 >= 3) {
-        if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame + FX32_ONE == 205 * FX32_ONE) {
+        if (model->anmObj[0]->frame + FX32_ONE == 205 * FX32_ONE) {
             return TRUE;
         }
     } else {
-        if (((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->frame + FX32_ONE == ((MagnetTrainCutsceneAnmObj *)model->anmObj[0])->anm->numFrames * FX32_ONE) {
+        if (model->anmObj[0]->frame + FX32_ONE == NNS_G3dAnmObjGetNumFrame(model->anmObj[0])) {
             return TRUE;
         }
     }

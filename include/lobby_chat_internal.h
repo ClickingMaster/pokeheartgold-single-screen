@@ -13,7 +13,6 @@
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 
-void LobbyString_InitCopy(void *dst, const void *src);
 
 static inline void StrInit(Str *s) {
     u32 i;
@@ -28,13 +27,10 @@ static inline void PairInit(LobbyUserMapEntry *p, int *k, Str *v) {
     LobbyString_InitCopy(&p->nick, v);
 }
 
-void LobbyString_Substr(void *a, void *b, u32 len, int d);
 void LobbyRequestMap_DeleteAll(LobbyRequestMap *map);
-void LobbyString_Destroy(void *p);
 
 typedef Iterator Iter;
 
-int LobbyString_Compare(Str *a, Str *b);
 void LobbyUserIdSet_Find(Iter *out, LobbyUserIdSet *set, int *key);
 
 static inline BOOL StrLess(Str *a, Str *b) {
@@ -42,14 +38,11 @@ static inline BOOL StrLess(Str *a, Str *b) {
 }
 
 u32 current_time(void);
-void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
 extern char sFmt_N_UnderscoreIntUnderscoreUint[];
 extern char sStr___2[];
-void LobbyString_InitFromCStr(Str *s, const char *cstr);
-void LobbyChat_SplitString(LobbyStringVector *out, Str *s, Str *sep, int n);
-void LobbyStringVector_Destroy(LobbyStringVector *v);
+void LobbyChat_SplitString(LobbyStringVector *out, const Str *s, Str *sep, int n);
 long atol(const char *s);
-int LobbyChat_GetUserIdFromNick(Str *s);
+int LobbyChat_GetUserIdFromNick(const Str *s);
 
 LobbyUserMapEntry *LobbyUserMap_GetOrInsert(LobbyUserMap *map, int *key);
 
@@ -64,7 +57,6 @@ enum LobbyChatResult {
 int LobbyChat_GetFullChannelName(Str *out, LobbyChatManager *manager, Str *name);
 
 void *LobbyMem_Alloc(u32 size);
-int LobbyString_CompareCStr(Str *a, const char *b);
 void *LobbyChatManager_Destroy(LobbyChatManager *manager);
 
 // Commands need a session that is logged in and has not failed.
@@ -92,7 +84,6 @@ static inline void TagTemp(void) {
 
 void LobbyU32Vector_PushBackSlow(LobbyU32Vector *v, u32 *val, LobbyTag t);
 void *LobbyU32Vector_Data(LobbyU32Vector *vector);
-Str *LobbyString_Concat(Str *out, Str *a, Str *b);
 
 static inline BOOL StrEqC(Str *a, const char *b) {
     return LobbyString_CompareCStr(a, b) == 0;
@@ -135,7 +126,7 @@ int LobbyChat_SetChannelUsersEnumerated(LobbyChatManager *manager, Str *channel)
 int LobbyChat_GetChannelUserLimit(LobbyChatManager *manager, Str *channel);
 int LobbyChat_AddChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
 LobbyChannelCallbacks *LobbyChat_GetChannelCallbacks(LobbyChatManager *manager, Str *key);
-void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId);
+void LobbyChat_GetUserNick(Str *out, LobbyChatManager *manager, int userId, ...);
 int LobbyChat_LeaveChannel(const char *channel);
 void LobbyChat_RemoveChannel(LobbyChatManager *manager, Str *channel);
 BOOL LobbyChat_RemoveChannelUser(LobbyChatManager *manager, Str *nick, Str *channel);
@@ -168,9 +159,6 @@ LobbyRequest *LobbyRequest_Delete(LobbyRequest *request);
 void LobbyRequest_Destroy(void);
 u32 LobbyRequest_GetParam(LobbyRequest *request);
 u32 LobbyRequest_GetId(LobbyRequest *request);
-void LobbyString_Assign(Str *dst, Str *src);
-void LobbyString_AssignCStr(Str *s, const char *cstr);
-int LobbyString_FindFirstOfChars(Str *s, const char *chars, u32 pos, u32 n);
 void *LobbyTree_EraseRebalance(void *node, void *root);
 LobbyUserIdSetNode *LobbyUserIdSet_LowerBound(LobbyUserIdSet *set, int *key, LobbyUserIdSetNode *node, LobbyUserIdSetNode *res);
 BOOL LobbyUserMap_EraseKey(LobbyUserMap *map, int *key);

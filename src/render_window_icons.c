@@ -16,6 +16,8 @@
 #include "sys_task_api.h"
 #include "systask_environment.h"
 
+#define POKEMON_PIC_WINDOW_RES_ID 0x15CD5
+
 #define POKEMON_PIC_FRAME_SIZE (10 * 10 * 32)
 
 // Window decorations: the text printer's down arrow and the waiting icon (NARC a/0/3/8 members 0x16/0x17 drawn
@@ -87,7 +89,7 @@ static const ManagedSpriteTemplate sPokemonPicWindowSpriteTemplate = {
     .drawPriority = 0,
     .pal = 0,
     .vram = NNS_G2D_VRAM_TYPE_2DMAIN,
-    .resIdList = { 0x15CD5, 0x15CD5, 0x15CD5, 0x15CD5, 0, 0 },
+    .resIdList = { POKEMON_PIC_WINDOW_RES_ID, POKEMON_PIC_WINDOW_RES_ID, POKEMON_PIC_WINDOW_RES_ID, POKEMON_PIC_WINDOW_RES_ID, 0, 0 },
     .bgPriority = 0,
     .vramTransfer = 0,
 };
@@ -99,7 +101,7 @@ void LoadDownArrowTiles(Window *window, u32 baseTile) {
 // Same tiles as LoadUserFrameGfx2, with the transparent pixels set to color.
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 frame, enum HeapID heapId) {
     NNSG2dCharacterData *charData;
-    void *charFile = GfGfxLoader_GetCharData((NarcId)0x26, (s32)GetUserFrameGfx2TilesMember(frame), FALSE, &charData, heapId);
+    void *charFile = GfGfxLoader_GetCharData(NARC_a_0_3_8, (s32)GetUserFrameGfx2TilesMember(frame), FALSE, &charData, heapId);
     u8 *tiles = Heap_Alloc(heapId, 0x240);
     u32 i;
 
@@ -124,8 +126,8 @@ void LoadMapSignpostFrameAndGraphic(BgConfig *bgConfig, u8 bgId, u16 baseTile, u
     void *plttFile;
     NNSG2dPaletteData *pltt;
 
-    GfGfxLoader_LoadCharData((NarcId)0x24, 0, bgConfig, (GFBgLayer)bgId, baseTile, 0x3C0, FALSE, heapId);
-    plttFile = AllocAndReadWholeNarcMemberByIdPair((NarcId)0x24, 1, heapId);
+    GfGfxLoader_LoadCharData(NARC_a_0_3_6, 0, bgConfig, (GFBgLayer)bgId, baseTile, 0x3C0, FALSE, heapId);
+    plttFile = AllocAndReadWholeNarcMemberByIdPair(NARC_a_0_3_6, 1, heapId);
     NNS_G2dGetUnpackedPaletteData(plttFile, &pltt);
     BG_LoadPlttData(bgId, (u8 *)pltt->pRawData + type * 0x20, 0x20, plttNum << 5);
     Heap_FreeExplicit(heapId, plttFile);
@@ -143,7 +145,7 @@ void LoadMapSignpostGraphic(BgConfig *bgConfig, u32 bgId, u16 baseTile, BOOL typ
     } else {
         map += 2;
     }
-    GfGfxLoader_LoadCharData((NarcId)36, map, bgConfig, (GFBgLayer)bgId, baseTile, 768, FALSE, (enum HeapID)heapId);
+    GfGfxLoader_LoadCharData(NARC_a_0_3_6, map, bgConfig, (GFBgLayer)bgId, baseTile, 768, FALSE, (enum HeapID)heapId);
 }
 
 void DrawSignpostFrameTilemap(BgConfig *bgConfig, u8 bgId, u8 x, u8 y, u8 width, u8 height, u8 paletteNum, u16 baseTile) {
@@ -229,7 +231,7 @@ WaitingIcon *WaitingIcon_New(Window *window, int baseTile) {
         memcpy(icon->frameTiles[i], buffer, 128);
     }
     Heap_Free(buffer);
-    charFile = GfGfxLoader_GetCharData((NarcId)38, 23, FALSE, &charData, (enum HeapID)heapId);
+    charFile = GfGfxLoader_GetCharData(NARC_a_0_3_8, 23, FALSE, &charData, (enum HeapID)heapId);
     BlitPixelRect4Bit(charData->pRawData, 0, 0, 16, 128, icon->frameTiles, 16, 128, 0, 0, 16, 128);
     Heap_Free(charFile);
     icon->window = window;
@@ -365,10 +367,10 @@ void PokemonPicWindow_InitSpriteManager(PokemonPicWindow *picWindow, enum HeapID
 }
 
 void PokemonPicWindow_LoadSpriteResources(PokemonPicWindow *picWindow) {
-    FieldSpriteManager_AddPlttRes(&picWindow->spriteManager, (NarcId)0x26, 0x32, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 0x15CD5);
-    FieldSpriteManager_AddCellRes(&picWindow->spriteManager, (NarcId)0x26, 0x30, FALSE, 0x15CD5);
-    FieldSpriteManager_AddAnimRes(&picWindow->spriteManager, (NarcId)0x26, 0x2F, FALSE, 0x15CD5);
-    FieldSpriteManager_AddCharRes(&picWindow->spriteManager, (NarcId)0x26, 0x31, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 0x15CD5);
+    FieldSpriteManager_AddPlttRes(&picWindow->spriteManager, NARC_a_0_3_8, 0x32, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, POKEMON_PIC_WINDOW_RES_ID);
+    FieldSpriteManager_AddCellRes(&picWindow->spriteManager, NARC_a_0_3_8, 0x30, FALSE, POKEMON_PIC_WINDOW_RES_ID);
+    FieldSpriteManager_AddAnimRes(&picWindow->spriteManager, NARC_a_0_3_8, 0x2F, FALSE, POKEMON_PIC_WINDOW_RES_ID);
+    FieldSpriteManager_AddCharRes(&picWindow->spriteManager, NARC_a_0_3_8, 0x31, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, POKEMON_PIC_WINDOW_RES_ID);
 }
 
 void PokemonPicWindow_CreateSprite(PokemonPicWindow *picWindow, int x, int y) {
@@ -411,14 +413,14 @@ void PokemonPicWindow_LoadGfx(PokemonPicWindow *picWindow, PokepicTemplate *temp
     CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame0Rect, buffer);
     frame1Rect = sPokemonPicFrame1Rect;
     CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame1Rect, (u8 *)buffer + POKEMON_PIC_FRAME_SIZE);
-    resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_CHAR], 0x15CD5);
+    resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_CHAR], POKEMON_PIC_WINDOW_RES_ID);
     imageProxy = SpriteTransfer_GetCharProxy(resource);
     location = NNS_G2dGetImageLocation(imageProxy, NNS_G2D_VRAM_TYPE_2DMAIN);
     DC_FlushRange(buffer, 2 * POKEMON_PIC_FRAME_SIZE);
     GX_LoadOBJ(buffer, location, 2 * POKEMON_PIC_FRAME_SIZE);
     Heap_Free(buffer);
     buffer = AllocAndLoadPltt16FromNarc((NarcId) template->narcID, template->palDataID, (enum HeapID)picWindow->spriteManager.heapID);
-    resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_PLTT], 0x15CD5);
+    resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_PLTT], POKEMON_PIC_WINDOW_RES_ID);
     imageProxy = (NNSG2dImageProxy *)SpriteTransfer_GetPaletteProxy(resource, imageProxy);
     location = NNS_G2dGetImagePaletteLocation((NNSG2dImagePaletteProxy *)imageProxy, NNS_G2D_VRAM_TYPE_2DMAIN);
     DC_FlushRange(buffer, 0x20);

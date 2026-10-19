@@ -23,17 +23,11 @@ public:
 extern "C" {
 #endif
 
-Str *LobbyString_InitFromCStr(Str *, const char *);
-Str *LobbyString_Destroy(Str *);
-LobbyCharVector *LobbyCharVector_Destroy(LobbyCharVector *);
-char *LobbyCharVector_Data(LobbyCharVector *);
-u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
 void LobbyCharVector_AppendZerosSlow(LobbyCharVector *, u32);
 
 #ifdef __cplusplus
 void LobbyCharVector_AppendZeros(LobbyCharVector *, u32, LobbyCharVectorTypes::ResizeDispatch);
 Str *LobbyString_ReplaceRange(Str *, u32, u32, const char *, const char *, LobbyStringTypes::RangeDispatch);
-void LobbyString_Reserve(Str *, u32);
 }
 
 inline u32 LobbyCharVectorTypes::Allocator::recommend(LobbyCharVector *vector, u32 growth) {

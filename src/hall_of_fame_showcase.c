@@ -87,62 +87,61 @@ typedef struct HallOfFameShowcase {
 } HallOfFameShowcase;
 
 extern const TouchscreenHitbox gHallOfFameShowcaseHitboxes[];
-extern const GraphicsModes sShowcaseGraphicsModes;
-extern const OamCharTransferParam sShowcaseOamCharTransferParam;
-extern const SpriteResourceCountsListUnion sShowcaseSpriteResourceCounts;
-extern const OamManagerParam sShowcaseOamManagerParam;
-extern const TileRect sShowcaseMonPicRect;
-extern const GridCallbacks sShowcaseGridCallbacks;
-extern const s16 sShowcaseIconPositions[];
-extern const s16 sShowcaseIconPositionsY[];
-extern const BgTemplate sShowcaseBgTemplate_Main1;
-extern const BgTemplate sShowcaseBgTemplate_Sub0;
-extern const BgTemplate sShowcaseBgTemplate_Sub1;
-extern const BgTemplate sShowcaseBgTemplate_Main0;
-extern const TouchscreenHitbox sShowcaseGridHitboxes[];
-extern const GraphicsBanks sShowcaseGraphicsBanks;
-extern const ManagedSpriteTemplate sShowcasePartyIconSpriteTemplate;
-extern const DpadMenuBox sShowcaseGridDpadBoxes[];
-extern const WindowTemplate sShowcaseWindowTemplates[];
-extern const ManagedSpriteTemplate sShowcaseMonPicSpriteTemplate1;
-extern const ManagedSpriteTemplate sShowcaseMonPicSpriteTemplate2;
-extern const ManagedSpriteTemplate sShowcaseCursorSpriteTemplate;
-extern const ManagedSpriteTemplate sShowcasePrevPageSpriteTemplate;
-extern const ManagedSpriteTemplate sShowcaseNextPageSpriteTemplate;
-extern const ManagedSpriteTemplate sShowcaseExitSpriteTemplate;
+extern const GraphicsModes gHallOfFameShowcaseGraphicsModes;
+extern const OamCharTransferParam gHallOfFameShowcaseOamCharTransferParam;
+extern const SpriteResourceCountsListUnion gHallOfFameShowcaseSpriteResourceCounts;
+extern const OamManagerParam gHallOfFameShowcaseOamManagerParam;
+extern const TileRect gHallOfFameShowcaseMonPicRect;
+extern const GridCallbacks gHallOfFameShowcaseGridCallbacks;
+extern const s16 gHallOfFameShowcaseIconPositions[][2];
+extern const BgTemplate gHallOfFameShowcaseBgTemplate_Main1;
+extern const BgTemplate gHallOfFameShowcaseBgTemplate_Sub0;
+extern const BgTemplate gHallOfFameShowcaseBgTemplate_Sub1;
+extern const BgTemplate gHallOfFameShowcaseBgTemplate_Main0;
+extern const TouchscreenHitbox gHallOfFameShowcaseGridHitboxes[];
+extern const GraphicsBanks gHallOfFameShowcaseGraphicsBanks;
+extern const ManagedSpriteTemplate gHallOfFameShowcasePartyIconSpriteTemplate;
+extern const DpadMenuBox gHallOfFameShowcaseGridDpadBoxes[];
+extern const WindowTemplate gHallOfFameShowcaseWindowTemplates[];
+extern const ManagedSpriteTemplate gHallOfFameShowcaseMonPicSpriteTemplate1;
+extern const ManagedSpriteTemplate gHallOfFameShowcaseMonPicSpriteTemplate2;
+extern const ManagedSpriteTemplate gHallOfFameShowcaseCursorSpriteTemplate;
+extern const ManagedSpriteTemplate gHallOfFameShowcasePrevPageSpriteTemplate;
+extern const ManagedSpriteTemplate gHallOfFameShowcaseNextPageSpriteTemplate;
+extern const ManagedSpriteTemplate gHallOfFameShowcaseExitSpriteTemplate;
 
-void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_LoadMainObjChar(const void *src, u32 offset, u32 size);
-void HallOfFameShowcase_LoadSubObjChar(const void *src, u32 offset, u32 size);
-void HallOfFameShowcase_LoadMainObjPltt(const void *src, u32 offset, u32 size);
-void HallOfFameShowcase_SetGfxBanks(void);
-void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_DeleteSprite(HallOfFameShowcase *showcase, u32 index);
-void HallOfFameShowcase_FreeSprites(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_CreateGridInput(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_FreeGridInput(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_LoadMainObjChar(const void *src, u32 offset, u32 size);
+static void HallOfFameShowcase_LoadSubObjChar(const void *src, u32 offset, u32 size);
+static void HallOfFameShowcase_LoadMainObjPltt(const void *src, u32 offset, u32 size);
+static void HallOfFameShowcase_SetGfxBanks(void);
+static void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_DeleteSprite(HallOfFameShowcase *showcase, u32 index);
+static void HallOfFameShowcase_FreeSprites(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_CreateGridInput(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_FreeGridInput(HallOfFameShowcase *showcase);
 void HallOfFameShowcase_GridOnButton(void);
 void HallOfFameShowcase_GridOnSwitchToTouchMode(void);
 void HallOfFameShowcase_GridOnTouch(HallOfFameShowcase *showcase, int target);
 void HallOfFameShowcase_GridOnKeyMove(HallOfFameShowcase *showcase, int target);
-void HallOfFameShowcase_BeginFadeIn(void);
-void HallOfFameShowcase_BeginFadeOut(void);
-int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta);
-void HallOfFameShowcase_HideMonDetail(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index);
-int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase);
-void HallOfFameShowcase_MoveCursor(HallOfFameShowcase *showcase, int target);
-void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 spriteIndex, u32 position, int charResId, u32 plttResId);
-int HallOfFameShowcase_GetOverworldModelFileId(int species, int form, int isFemale);
+static void HallOfFameShowcase_BeginFadeIn(void);
+static void HallOfFameShowcase_BeginFadeOut(void);
+static int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta);
+static void HallOfFameShowcase_HideMonDetail(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index);
+static int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase);
+static void HallOfFameShowcase_MoveCursor(HallOfFameShowcase *showcase, int target);
+static void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 spriteIndex, u32 position, int charResId, u32 plttResId);
+static int HallOfFameShowcase_GetOverworldModelFileId(int species, int form, int isFemale);
 
 BOOL HallOfFameShowcase_Init(OverlayManager *man, int *state) {
     HallOfFameShowcase *showcase;
@@ -218,7 +217,7 @@ BOOL HallOfFameShowcase_Main(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase) {
     vu32 *dtcm = (vu32 *)0x027E0000;
 
     DoScheduledBgGpuUpdates(showcase->bgConfig);
@@ -226,26 +225,26 @@ void HallOfFameShowcase_VBlankCB(HallOfFameShowcase *showcase) {
     dtcm[(HW_INTR_CHECK_BUF - HW_DTCM) / 4] |= OS_IE_V_BLANK; // OS_SetIrqCheckFlag, through the DTCM base address
 }
 
-void HallOfFameShowcase_LoadMainObjChar(const void *src, u32 offset, u32 size) {
+static void HallOfFameShowcase_LoadMainObjChar(const void *src, u32 offset, u32 size) {
     DC_FlushRange(src, size);
     GX_LoadOBJ(src, offset, size);
 }
 
-void HallOfFameShowcase_LoadSubObjChar(const void *src, u32 offset, u32 size) {
+static void HallOfFameShowcase_LoadSubObjChar(const void *src, u32 offset, u32 size) {
     DC_FlushRange(src, size);
     GXS_LoadOBJ(src, offset, size);
 }
 
-void HallOfFameShowcase_LoadMainObjPltt(const void *src, u32 offset, u32 size) {
+static void HallOfFameShowcase_LoadMainObjPltt(const void *src, u32 offset, u32 size) {
     DC_FlushRange(src, size);
     GX_LoadOBJPltt(src, offset, size);
 }
 
-void HallOfFameShowcase_SetGfxBanks(void) {
-    GfGfx_SetBanks(&sShowcaseGraphicsBanks);
+static void HallOfFameShowcase_SetGfxBanks(void) {
+    GfGfx_SetBanks(&gHallOfFameShowcaseGraphicsBanks);
 }
 
-void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase) {
     GraphicsModes modes;
     BgTemplate bg0;
     BgTemplate bg1;
@@ -254,23 +253,23 @@ void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase) {
     NARC *narc;
 
     showcase->bgConfig = BgConfig_Alloc(HEAP_ID_59);
-    modes = sShowcaseGraphicsModes;
+    modes = gHallOfFameShowcaseGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
 
-    bg0 = sShowcaseBgTemplate_Main0;
+    bg0 = gHallOfFameShowcaseBgTemplate_Main0;
     InitBgFromTemplate(showcase->bgConfig, GF_BG_LYR_MAIN_0, &bg0, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(showcase->bgConfig, GF_BG_LYR_MAIN_0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 0x20, 0, HEAP_ID_59);
 
-    bg1 = sShowcaseBgTemplate_Main1;
+    bg1 = gHallOfFameShowcaseBgTemplate_Main1;
     InitBgFromTemplate(showcase->bgConfig, GF_BG_LYR_MAIN_1, &bg1, GF_BG_TYPE_TEXT);
 
-    bg4 = sShowcaseBgTemplate_Sub0;
+    bg4 = gHallOfFameShowcaseBgTemplate_Sub0;
     InitBgFromTemplate(showcase->bgConfig, GF_BG_LYR_SUB_0, &bg4, GF_BG_TYPE_TEXT);
     BgClearTilemapBufferAndCommit(showcase->bgConfig, GF_BG_LYR_SUB_0);
     BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_59);
 
-    bg5 = sShowcaseBgTemplate_Sub1;
+    bg5 = gHallOfFameShowcaseBgTemplate_Sub1;
     InitBgFromTemplate(showcase->bgConfig, GF_BG_LYR_SUB_1, &bg5, GF_BG_TYPE_TEXT);
 
     narc = NARC_New(NARC_a_0_9_7, HEAP_ID_59);
@@ -286,7 +285,7 @@ void HallOfFameShowcase_InitBgs(HallOfFameShowcase *showcase) {
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, (enum GFPalSlotOffset)0x1E0, HEAP_ID_59);
 }
 
-void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase) {
     FreeBgTilemapBuffer(showcase->bgConfig, GF_BG_LYR_SUB_1);
     FreeBgTilemapBuffer(showcase->bgConfig, GF_BG_LYR_SUB_0);
     FreeBgTilemapBuffer(showcase->bgConfig, GF_BG_LYR_MAIN_1);
@@ -294,7 +293,7 @@ void HallOfFameShowcase_FreeBgs(HallOfFameShowcase *showcase) {
     Heap_Free(showcase->bgConfig);
 }
 
-void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
     OamManagerParam oamParam;
     OamCharTransferParam charTransferParam;
     SpriteResourceCountsListUnion resourceCounts;
@@ -303,10 +302,10 @@ void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
 
     showcase->spriteSystem = SpriteSystem_Alloc(HEAP_ID_59);
     showcase->spriteManager = SpriteManager_New(showcase->spriteSystem);
-    oamParam = sShowcaseOamManagerParam;
-    charTransferParam = sShowcaseOamCharTransferParam;
+    oamParam = gHallOfFameShowcaseOamManagerParam;
+    charTransferParam = gHallOfFameShowcaseOamCharTransferParam;
     SpriteSystem_Init(showcase->spriteSystem, &oamParam, &charTransferParam, 32);
-    resourceCounts = sShowcaseSpriteResourceCounts;
+    resourceCounts = gHallOfFameShowcaseSpriteResourceCounts;
     SpriteSystem_InitSprites(showcase->spriteSystem, showcase->spriteManager, HOF_SHOWCASE_NUM_SPRITES);
     SpriteSystem_InitManagerWithCapacities(showcase->spriteSystem, showcase->spriteManager, &resourceCounts);
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(showcase->spriteSystem), 0, FX32_CONST(512));
@@ -334,26 +333,26 @@ void HallOfFameShowcase_InitSprites(HallOfFameShowcase *showcase) {
     }
     NARC_Delete(narc);
 
-    showcase->sprites[0] = SpriteSystem_NewSpriteWithYOffset(showcase->spriteSystem, showcase->spriteManager, &sShowcaseMonPicSpriteTemplate1, FX32_CONST(512));
-    showcase->sprites[1] = SpriteSystem_NewSpriteWithYOffset(showcase->spriteSystem, showcase->spriteManager, &sShowcaseMonPicSpriteTemplate2, FX32_CONST(512));
+    showcase->sprites[0] = SpriteSystem_NewSpriteWithYOffset(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcaseMonPicSpriteTemplate1, FX32_CONST(512));
+    showcase->sprites[1] = SpriteSystem_NewSpriteWithYOffset(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcaseMonPicSpriteTemplate2, FX32_CONST(512));
     ManagedSprite_SetDrawFlag(showcase->sprites[0], FALSE);
     ManagedSprite_SetDrawFlag(showcase->sprites[1], FALSE);
-    showcase->sprites[14] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &sShowcaseCursorSpriteTemplate);
-    showcase->sprites[HOF_SHOWCASE_SPRITE_PREV_PAGE] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &sShowcasePrevPageSpriteTemplate);
-    showcase->sprites[HOF_SHOWCASE_SPRITE_NEXT_PAGE] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &sShowcaseNextPageSpriteTemplate);
-    showcase->sprites[HOF_SHOWCASE_SPRITE_EXIT] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &sShowcaseExitSpriteTemplate);
+    showcase->sprites[14] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcaseCursorSpriteTemplate);
+    showcase->sprites[HOF_SHOWCASE_SPRITE_PREV_PAGE] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcasePrevPageSpriteTemplate);
+    showcase->sprites[HOF_SHOWCASE_SPRITE_NEXT_PAGE] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcaseNextPageSpriteTemplate);
+    showcase->sprites[HOF_SHOWCASE_SPRITE_EXIT] = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &gHallOfFameShowcaseExitSpriteTemplate);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 }
 
-void HallOfFameShowcase_DeleteSprite(HallOfFameShowcase *showcase, u32 index) {
+static void HallOfFameShowcase_DeleteSprite(HallOfFameShowcase *showcase, u32 index) {
     if (showcase->sprites[index] != NULL) {
         Sprite_DeleteAndFreeResources(showcase->sprites[index]);
         showcase->sprites[index] = NULL;
     }
 }
 
-void HallOfFameShowcase_FreeSprites(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_FreeSprites(HallOfFameShowcase *showcase) {
     u32 i;
 
     for (i = 0; i < HOF_SHOWCASE_NUM_SPRITES; i++) {
@@ -363,7 +362,7 @@ void HallOfFameShowcase_FreeSprites(HallOfFameShowcase *showcase) {
     SpriteSystem_Free(showcase->spriteSystem);
 }
 
-void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase) {
     u32 i;
 
     for (i = 0; i < HOF_SHOWCASE_NUM_SPRITES; i++) {
@@ -373,7 +372,7 @@ void HallOfFameShowcase_TickSprites(HallOfFameShowcase *showcase) {
     }
 }
 
-void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase) {
     showcase->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0181_bin, HEAP_ID_59);
     showcase->speciesNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0237_bin, HEAP_ID_59);
     showcase->moveNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0750_bin, HEAP_ID_59);
@@ -386,7 +385,7 @@ void HallOfFameShowcase_InitStrings(HallOfFameShowcase *showcase) {
     showcase->mon.otname = showcase->otName;
 }
 
-void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase) {
     String_Delete(showcase->otName);
     String_Delete(showcase->nickname);
     String_Delete(showcase->stringBuf2);
@@ -397,13 +396,13 @@ void HallOfFameShowcase_FreeStrings(HallOfFameShowcase *showcase) {
     DestroyMsgData(showcase->msgData);
 }
 
-void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
     u32 i;
     u32 width;
 
     FontID_Alloc(4, HEAP_ID_59);
     for (i = 0; i < HOF_SHOWCASE_NUM_WINDOWS; i++) {
-        AddWindow(showcase->bgConfig, &showcase->windows[i], &sShowcaseWindowTemplates[i]);
+        AddWindow(showcase->bgConfig, &showcase->windows[i], &gHallOfFameShowcaseWindowTemplates[i]);
     }
     FillWindowPixelBuffer(&showcase->windows[16], 0);
     ReadMsgDataIntoString(showcase->msgData, msg_0181_00006, showcase->stringBuf);
@@ -413,7 +412,7 @@ void HallOfFameShowcase_InitWindows(HallOfFameShowcase *showcase) {
     ScheduleWindowCopyToVram(&showcase->windows[16]);
 }
 
-void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase) {
     u32 i;
 
     for (i = 0; i < HOF_SHOWCASE_NUM_WINDOWS; i++) {
@@ -422,11 +421,11 @@ void HallOfFameShowcase_FreeWindows(HallOfFameShowcase *showcase) {
     FontID_Release(4);
 }
 
-void HallOfFameShowcase_CreateGridInput(HallOfFameShowcase *showcase) {
-    showcase->gridInput = GridInputHandler_Create(sShowcaseGridHitboxes, sShowcaseGridDpadBoxes, &sShowcaseGridCallbacks, showcase, TRUE, 0, HEAP_ID_59);
+static void HallOfFameShowcase_CreateGridInput(HallOfFameShowcase *showcase) {
+    showcase->gridInput = GridInputHandler_Create(gHallOfFameShowcaseGridHitboxes, gHallOfFameShowcaseGridDpadBoxes, &gHallOfFameShowcaseGridCallbacks, showcase, TRUE, 0, HEAP_ID_59);
 }
 
-void HallOfFameShowcase_FreeGridInput(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_FreeGridInput(HallOfFameShowcase *showcase) {
     GridInputHandler_Free(showcase->gridInput);
 }
 
@@ -444,11 +443,11 @@ void HallOfFameShowcase_GridOnKeyMove(HallOfFameShowcase *showcase, int target) 
     HallOfFameShowcase_MoveCursor(showcase, target);
 }
 
-void HallOfFameShowcase_BeginFadeIn(void) {
+static void HallOfFameShowcase_BeginFadeIn(void) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_59);
 }
 
-void HallOfFameShowcase_BeginFadeOut(void) {
+static void HallOfFameShowcase_BeginFadeOut(void) {
     BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_59);
 }
 
@@ -468,7 +467,7 @@ static inline void HallOfFameShowcase_StartNextPage(HallOfFameShowcase *showcase
     PlaySE(SEQ_SE_DP_SELECT);
 }
 
-int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
+static int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
     u32 input;
 
     switch (showcase->state) {
@@ -546,7 +545,7 @@ int HallOfFameShowcase_HandleInput(HallOfFameShowcase *showcase) {
     return TRUE;
 }
 
-void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase) {
     u32 i;
 
     for (i = 2; i <= 13; i++) {
@@ -557,7 +556,7 @@ void HallOfFameShowcase_DeletePartyIcons(HallOfFameShowcase *showcase) {
     }
 }
 
-void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
+static void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
     struct {
         int windowIndex;
         int resIdBase;
@@ -632,7 +631,7 @@ void HallOfFameShowcase_ChangeRecord(HallOfFameShowcase *showcase, int delta) {
     showcase->iconSet ^= 1;
 }
 
-void HallOfFameShowcase_HideMonDetail(HallOfFameShowcase *showcase) {
+static void HallOfFameShowcase_HideMonDetail(HallOfFameShowcase *showcase) {
     ManagedSprite_SetDrawFlag(showcase->sprites[0], FALSE);
     ManagedSprite_SetDrawFlag(showcase->sprites[1], FALSE);
     BgFillTilemapBufferAndSchedule(showcase->bgConfig, GF_BG_LYR_SUB_0, 0);
@@ -681,9 +680,9 @@ static inline void HallOfFameShowcase_PrintMonDetail(HallOfFameShowcase *showcas
     }
 }
 
-void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
+static void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     PokepicTemplate pokepic;
-    TileRect picRect = sShowcaseMonPicRect;
+    TileRect picRect = gHallOfFameShowcaseMonPicRect;
     s8 yOffset[4];
     s32 firstWindow;
     u32 gender;
@@ -726,7 +725,7 @@ void HallOfFameShowcase_ShowMonDetail(HallOfFameShowcase *showcase, u32 index) {
     showcase->monDetailSet ^= 1;
 }
 
-int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase) {
+static int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase) {
     if (showcase->buttonAnimTimer == 0) {
         ManagedSprite_SetPaletteOverride(showcase->sprites[showcase->pressedButton], 1);
     } else if (showcase->buttonAnimTimer == 4) {
@@ -739,7 +738,7 @@ int HallOfFameShowcase_AnimateButtonPress(HallOfFameShowcase *showcase) {
     return TRUE;
 }
 
-void HallOfFameShowcase_MoveCursor(HallOfFameShowcase *showcase, int target) {
+static void HallOfFameShowcase_MoveCursor(HallOfFameShowcase *showcase, int target) {
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(showcase->gridInput, target);
 
     ManagedSprite_SetPositionXY(showcase->sprites[14], box->left, box->top);
@@ -752,7 +751,7 @@ void HallOfFameShowcase_MoveCursor(HallOfFameShowcase *showcase, int target) {
     ManagedSprite_SetAnim(showcase->sprites[14], target);
 }
 
-void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 spriteIndex, u32 position, int charResId, u32 plttResId) {
+static void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 spriteIndex, u32 position, int charResId, u32 plttResId) {
     u8 modelInfo[4];
     ManagedSpriteTemplate template;
     NARC *narc;
@@ -785,13 +784,13 @@ void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 sprite
     SpriteSystem_LoadCharResObjFromOpenNarc(showcase->spriteSystem, showcase->spriteManager, narc, charFile, TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, charResId);
     NARC_Delete(narc);
 
-    template = sShowcasePartyIconSpriteTemplate;
+    template = gHallOfFameShowcasePartyIconSpriteTemplate;
     template.resIdList[GF_GFX_RES_TYPE_CHAR] = charResId;
     template.resIdList[GF_GFX_RES_TYPE_PLTT] = plttResId;
     template.resIdList[GF_GFX_RES_TYPE_CELL] = cellAnimResId;
     template.resIdList[GF_GFX_RES_TYPE_ANIM] = cellAnimResId;
-    template.x = sShowcaseIconPositions[position * 2];
-    template.y = sShowcaseIconPositionsY[position * 2];
+    template.x = gHallOfFameShowcaseIconPositions[position][0];
+    template.y = gHallOfFameShowcaseIconPositions[position][1];
     sprites = showcase->sprites;
     spriteOffset = spriteIndex * sizeof(ManagedSprite *);
     *(ManagedSprite **)((u8 *)sprites + spriteOffset) = SpriteSystem_NewSprite(showcase->spriteSystem, showcase->spriteManager, &template);
@@ -825,7 +824,7 @@ void HallOfFameShowcase_CreatePartyIcon(HallOfFameShowcase *showcase, u32 sprite
     Heap_Free(modelFile);
 }
 
-int HallOfFameShowcase_GetOverworldModelFileId(int species, int form, int isFemale) {
+static int HallOfFameShowcase_GetOverworldModelFileId(int species, int form, int isFemale) {
     int member;
 
     if (species <= SPECIES_NONE || species > NATIONAL_DEX_COUNT) {

@@ -38,7 +38,6 @@ static void TrainerCardData_SetRecords(u32 linkCount, u32 linkBattleWins, u32 li
 static void TrainerCardData_SetBadges(PlayerProfile *profile, FieldSystem *fieldSystem, TrainerCardData *card);
 static BOOL Task_LinkTrainerCard(TaskManager *taskManager);
 
-TrainerCardData *TrainerCardData_New(enum HeapID heapID);
 
 static inline u32 GameStats_GetLinkCount(GameStats *stats) {
     return GameStats_GetCapped(stats, GAME_STAT_UNK33)

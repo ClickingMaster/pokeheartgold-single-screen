@@ -80,7 +80,7 @@ BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32
     return TRUE;
 }
 
-void LobbyCharVector_PushBackSlow(CharVec *s, const char *c) {
+void LobbyCharVector_PushBackSlow(LobbyCharVector *s, const char *c) {
     TouchTag();
     LobbyCharVector_RecommendSize(s, 1);
     LobbyCharVector_AppendFillSlow(s, 1, c);

@@ -52,5 +52,16 @@ int ApricornJuice_GetFlavorTotal(ApricornJuice *);
 void ApricornJuice_RankFlavors(void *, void *);
 void ApricornBox_SetMixState(SaveApricornBox *, u32);
 int ApricornJuice_GetFlavorNameIndex(void *);
+u32 Save_ApricornBox_sizeof(void);
+u32 ApricornJuiceRecord_sizeof(void);
+void Save_ApricornBox_Init(SaveApricornBox *);
+u32 ApricornBox_GetMixState(SaveApricornBox *);
+BOOL ApricornBox_QueueApricorn(SaveApricornBox *, int, u32);
+int ApricornBox_GetMixProgressLevel(SaveApricornBox *);
+u8 ApricornBox_GetJuiceServings(SaveApricornBox *);
+int ApricornJuice_GetTopMixIndex(void *);
+int ApricornBox_UseJuiceServing(SaveApricornBox *);
+ApricornRecord *ApricornRecord_New(SaveApricornBox *, PlayerProfile *, u32, enum HeapID);
+void ApricornBox_StoreJuiceRecords(SaveApricornBox *, ApricornRecord *, int, int);
 
 #endif

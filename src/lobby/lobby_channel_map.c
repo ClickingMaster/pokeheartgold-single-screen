@@ -8,9 +8,7 @@
 #include "lobby_chat_manager.h"
 
 extern u8 ov45_02255358[];
-extern int LobbyString_Compare(Str *, Str *);
 extern void *LobbyTree_EraseRebalance(void *, void *);
-extern void LobbyString_Destroy(Str *);
 
 static inline int isLess(Str *a, Str *b) {
     return LobbyString_Compare(a, b) < 0;

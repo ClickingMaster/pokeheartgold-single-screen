@@ -16,6 +16,7 @@
 #include "heap.h"
 #include "message_format.h"
 #include "model_animation.h"
+#include "model_box_test.h"
 #include "msgdata.h"
 #include "overlay_42.h"
 #include "overlay_manager.h"
@@ -381,17 +382,6 @@ typedef struct WiFiPlazaEarthRegion {
     s16 y;
 } WiFiPlazaEarthRegion;
 
-// Same layout as the model box test bounds.
-typedef struct WiFiPlazaBoxTestBounds {
-    s16 width;
-    s16 height;
-    s16 depth;
-    s16 pad06;
-    fx32 scaleX;
-    fx32 scaleY;
-    fx32 scaleZ;
-} WiFiPlazaBoxTestBounds;
-
 // Lobby callbacks (with the work as the last argument).
 typedef struct WiFiPlazaCallbacks {
     void (*onPlayerEnter)(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn);
@@ -708,7 +698,6 @@ u16 WiFiPlazaWork_GetTalkPartner(WiFiPlazaWork *work);
 u8 WiFiPlazaWork_IsFirstTalk(WiFiPlazaWork *work);
 u8 WiFiPlazaWork_GetTalkState(WiFiPlazaWork *work);
 u16 WiFiPlazaWork_GetTalkPartnerMessage(WiFiPlazaWork *work);
-BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index);
 BOOL WiFiPlazaWork_IsTalkOver(WiFiPlazaWork *work);
 void WiFiPlazaWork_GetTalkTimeoutCounter(WiFiPlazaWork *work);
 void WiFiPlazaWork_SetTalkPartnerArrived(WiFiPlazaWork *work);
@@ -728,48 +717,10 @@ void WiFiPlazaWork_SetSurveyTally(WiFiPlazaWork *work, const WiFiPlazaTallyCache
 BOOL WiFiPlazaWork_GetSurveyTally(WiFiPlazaWork *work, WiFiPlazaTallyCache *tally);
 void WiFiPlazaWork_NewPlayerInfo(WiFiPlazaWork *work);
 void WiFiPlazaWork_FreePlayerInfo(WiFiPlazaWork *work);
-void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn);
-void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work);
-void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out);
-void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, enum HeapID heapID);
-void WiFiPlazaProfile_UpdateChecksum(WiFiPlazaProfile *profile, SaveData *save);
-BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save);
-void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size);
-void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer);
-void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state);
-void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state);
-void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state);
-void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state);
-void WiFiPlaza_NewPlayerProfile(PlayerProfile **profile, enum HeapID heapID);
-void WiFiPlaza_FreePlayerProfile(PlayerProfile **profile);
-void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProfile *src, enum HeapID heapID);
-void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state);
-u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state);
 
 BOOL WiFiPlaza_Init(OverlayManager *man, int *state);
 BOOL WiFiPlaza_Main(OverlayManager *man, int *state);
 BOOL WiFiPlaza_Exit(OverlayManager *man, int *state);
-WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID);
-void WiFiPlazaWork_Delete(WiFiPlazaWork *work);
-
-BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
-void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
-void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
-void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot);
-void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *session);
-void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *session);
-void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session);
-void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which);
-void WiFiPlazaGroups_Init(WiFiPlazaGroups *groups);
-void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups);
-
-void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place, u32 slot);
-u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights);
-void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value);
-void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code);
-void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end);
-void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer);
-void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer);
 
 void WiFiPlazaHistory_Init(WiFiPlazaHistory *history, SaveData *save);
 void WiFiPlazaHistory_Add(WiFiPlazaHistory *history, int id, s32 value);
@@ -881,7 +832,6 @@ int WiFiPlazaLobbyClient_Update(void);
 u32 WiFiPlazaLobbyClient_GetLastError(void);
 u32 WiFiPlazaLobbyClient_ToErrorCode(u32 error);
 void WiFiPlazaLobbyClient_Initialize(int value);
-void WiFiPlazaLobbyClient_InitializeEx(int value, int mode);
 BOOL WiFiPlazaLobbyClient_IsInLobby(void);
 void WiFiPlazaLobbyClient_Shutdown(void);
 BOOL WiFiPlazaLobbyClient_IsDisconnected(void);
@@ -939,13 +889,9 @@ void *WiFiPlazaLobbyClient_GetSurveyText(int field);
 u8 WiFiPlazaLobbyClient_GetSurveyFlag(int which, int index);
 void WiFiPlazaLobbyClient_EndMatch(void);
 BOOL WiFiPlazaLobbyClient_CheckResult(int result);
-void WiFiPlazaLobbyClient_ClearErrors(void);
 int WiFiPlazaLobbyClient_ChannelFromLib(int libChannel);
 int WiFiPlazaLobbyClient_ChannelToLib(int channel);
 
-BOOL WiFiPlazaLobbyClient_AddOwnLocation(WiFiPlazaLobbyClient *client);
-void WiFiPlazaLobbyClient_AllocPlayerData(WiFiPlazaLobbyClient *client, u32 size, enum HeapID heapID);
-void WiFiPlazaLobbyClient_FreePlayerData(WiFiPlazaLobbyClient *client);
 void WiFiPlazaLobbyClient_SetPlayerData(WiFiPlazaLobbyClient *client, int id, const void *data);
 void WiFiPlazaLobbyClient_CopyPlayerData(WiFiPlazaLobbyClient *client, int id, const void *data, u32 size);
 WiFiPlazaPlayer *WiFiPlazaLobbyClient_GetPlayerData(WiFiPlazaLobbyClient *client, int id);
@@ -953,9 +899,6 @@ void WiFiPlazaLobbyClient_ClearPlayerData(WiFiPlazaLobbyClient *client, int id);
 void WiFiPlazaLobbyClient_SetPlayerRecord(WiFiPlazaLobbyClient *client, int id, const WiFiPlazaLobbyPlayerRecord *record);
 WiFiPlazaLobbyPlayerRecord *WiFiPlazaLobbyClient_GetPlayerRecord(WiFiPlazaLobbyClient *client, int id);
 void WiFiPlazaLobbyClient_ClearPlayerRecord(WiFiPlazaLobbyClient *client, int id);
-void WiFiPlazaLobbyClient_AllocIdLists(WiFiPlazaLobbyClient *client, u32 lobbyCapacity, u32 channelCapacity, enum HeapID heapID);
-void WiFiPlazaLobbyClient_FreeIdLists(WiFiPlazaLobbyClient *client);
-void WiFiPlazaLobbyClient_ClearIdList(WiFiPlazaLobbyClient *client, int which);
 void WiFiPlazaLobbyClient_AddToIdList(WiFiPlazaLobbyClient *client, int id, int which);
 void WiFiPlazaLobbyClient_RemoveFromIdList(WiFiPlazaLobbyClient *client, int id, int which);
 int WiFiPlazaLobbyClient_FindInIdList(WiFiPlazaLobbyClient *client, int id, int which);
@@ -1015,14 +958,10 @@ void WiFiPlazaPlayerObject_StopEffect(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_SetEffectStep(WiFiPlazaPlayerObject *object, u8 step);
 void WiFiPlazaPlayerObject_SetVisible(WiFiPlazaPlayerObject *object, int visible);
 u32 WiFiPlazaPlayerObject_IsVisible(WiFiPlazaPlayerObject *object);
-void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_ShowStandingSprite(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_PlayStandingSequence(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_HoldWalkFrameThenRestart(WiFiPlazaPlayerObject *object);
 void WiFiPlazaPlayerObject_PlayWalkingSequence(WiFiPlazaPlayerObject *object);
-void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object);
-BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action);
-void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object);
 
 BOOL WiFiPlaza_IsSpriteInView(void *sprite);
 
@@ -1080,7 +1019,6 @@ u8 BillboardObject_GetSequence(void *sprite);
 u32 BillboardObject_GetSequenceFrame(void *sprite);
 void *BillboardObject_GetModelNoCast(void *sprite);
 const VecFx32 *BillboardObject_GetScale(void *sprite);
-BOOL GF3d_BoundsBoxTest(const VecFx32 *translation, const WiFiPlazaBoxTestBounds *bounds);
 u32 NNS_G3dMdlGetMdlLightEnableFlag(const NNSG3dResMdl *pResMdl, u32 matID);
 void NNS_G3dMdlSetMdlLightEnableFlagAll(NNSG3dResMdl *pResMdl, u32 light);
 void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *pResMdl, u32 polygonID);

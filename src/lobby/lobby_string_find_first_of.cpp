@@ -5,7 +5,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern "C" void LobbyString_FindFirstOfChars(Str *self, const char *data, int pos, u32 n);
 extern "C" void LobbyString_FindFirstOf(Str *self, const Str &str, int pos);
 
 extern "C" void LobbyString_FindFirstOf(Str *self, const Str &str, int pos) {

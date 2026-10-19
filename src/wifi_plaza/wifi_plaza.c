@@ -40,7 +40,6 @@ typedef struct WiFiPlaza {
 
 FS_EXTERN_OVERLAY(OVY_42);
 
-
 // What PPW_LobbyGetTimeInfo reports: the lobby time first.
 typedef struct WiFiPlazaLobbyTime {
     s64 time;
@@ -48,25 +47,52 @@ typedef struct WiFiPlazaLobbyTime {
 } WiFiPlazaLobbyTime;
 
 static void WiFiPlaza_VBlankTask(SysTask *task, void *data);
+static WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID);
+static void WiFiPlazaWork_Delete(WiFiPlazaWork *work);
 static void WiFiPlazaWork_Update(WiFiPlazaWork *work);
 static void WiFiPlazaWork_VBlankDummy(WiFiPlazaWork *work);
 static u32 WiFiPlazaPlayer_GetTrainerID(WiFiPlazaPlayer *player);
+static BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index);
 static BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID heapID);
+static void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn);
 static void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work);
 static void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work);
+static void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work);
 static void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work);
+static void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out);
 static void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work);
+static void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, enum HeapID heapID);
 static void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work);
+static void WiFiPlazaProfile_UpdateChecksum(WiFiPlazaProfile *profile, SaveData *save);
+static BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save);
+static void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size);
 static void WiFiPlaza_ClearEventFlags(u32 *flags);
+static void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer);
+static void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state);
+static void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state);
+static void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state);
 static int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state);
+static void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state);
+static void WiFiPlaza_NewPlayerProfile(PlayerProfile **profile, enum HeapID heapID);
+static void WiFiPlaza_FreePlayerProfile(PlayerProfile **profile);
+static void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProfile *src, enum HeapID heapID);
+static void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state);
+static u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state);
 static void WiFiPlaza_ClearTapToyPlayedFlags(u8 *buffer);
 static void WiFiPlazaTalkSession_Init(WiFiPlazaTalkSession *session);
 static void WiFiPlazaTalkSession_Reset(WiFiPlazaTalkSession *session);
 static void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session);
+static BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
+static void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
+static void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *session, u32 slot);
+static void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot);
 static void WiFiPlazaTalkSession_ResetTalkCount(WiFiPlazaTalkSession *session, u32 slot);
 static void WiFiPlazaTalkSession_SetMessage(WiFiPlazaTalkSession *session, int value);
 static void WiFiPlazaWork_SendTalkAnswer(WiFiPlazaWork *work, int id, u16 value);
 static void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id);
+static void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *session);
+static void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *session);
+static void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session);
 static BOOL WiFiPlazaTalkSession_IsWithinTimeout(WiFiPlazaTalkSession *session);
 static s16 WiFiPlazaTalkSession_GetTimeoutCounter(WiFiPlazaTalkSession *session);
 static void WiFiPlaza_HandleChatNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
@@ -77,6 +103,9 @@ static void WiFiPlaza_HandleVisitorProfilesNews(WiFiPlazaWork *work, const WiFiP
 static void WiFiPlaza_HandlePlazaNewsNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
 static void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
 static void WiFiPlaza_HandleUnusedNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg);
+static void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which);
+static void WiFiPlazaGroups_Init(WiFiPlazaGroups *groups);
+static void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups);
 static void WiFiPlazaGroups_Update(WiFiPlazaGroups *groups);
 static int WiFiPlazaGroups_Join(WiFiPlazaGroups *groups, u32 id, u32 value);
 static void WiFiPlazaGroups_Leave(WiFiPlazaGroups *groups, u32 id);
@@ -99,12 +128,19 @@ static void WiFiPlaza_RecvTapToyPlayed(int id, const void *data, u32 size, void 
 static void WiFiPlaza_RecvJoinGroup(int id, const void *data, u32 size, void *arg);
 static void WiFiPlaza_RecvGroupAction(int id, const void *data, u32 size, void *arg);
 static void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights);
+static void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place, u32 slot);
+static u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights);
+static void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value);
 static u32 WiFiPlaza_GetSlotFlag(u8 *flags, u32 slot);
 static void WiFiPlazaWordSet_Init(WiFiPlazaWordSet *wordSet, enum HeapID heapID);
 static void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet);
+static void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code);
 static u32 WiFiPlazaWordSet_HasWords(WiFiPlazaWordSet *wordSet, u32 slot);
 static u16 *WiFiPlazaWordSet_GetWords(WiFiPlazaWordSet *wordSet, u32 slot);
 static void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u16 *words);
+static void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end);
+static void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer);
+static void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer);
 static u32 WiFiPlazaTimer_GetCounter(WiFiPlazaTimer *timer);
 static u32 WiFiPlazaTimer_GetPhase(WiFiPlazaTimer *timer);
 
@@ -224,7 +260,7 @@ static void WiFiPlaza_VBlankTask(SysTask *task, void *data) {
     WiFiPlazaWork_VBlankDummy(plaza->work);
 }
 
-WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
+static WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     WiFiPlazaCallbacks callbacks;
     int i;
     WiFiPlazaWork *work = Heap_Alloc(heapID, sizeof(WiFiPlazaWork));
@@ -254,7 +290,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     return work;
 }
 
-void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
+static void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     WiFiPlazaPlayerSurvey survey;
     int i;
     void *surveySave;
@@ -1158,7 +1194,7 @@ u16 WiFiPlazaWork_GetTalkPartnerMessage(WiFiPlazaWork *work) {
     return work->talk.partnerMessage;
 }
 
-BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index) {
+static BOOL WiFiPlazaWork_CanTalkWith(WiFiPlazaWork *work, u32 index) {
     GF_ASSERT(index < 20);
     if (work->talk.talkCounts[index] >= 6) {
         return FALSE;
@@ -1317,7 +1353,7 @@ static BOOL WiFiPlaza_IsNameTerminated(const u16 *name, u32 count, enum HeapID h
 }
 
 // Lobby callback: a player entered the plaza (isOwn: the own player, whose profile is synchronised).
-void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn) {
+static void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn) {
     s64 time;
     int country;
     int region;
@@ -1418,7 +1454,7 @@ static void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaW
 }
 
 // Lobby callback: a lobby event (0: the lobby opened); most of them start a timer in WiFiPlazaWork.eventSchedule.
-void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
+static void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
     WiFiPlazaLobbyTime now;
     int notify = 0;
     int which;
@@ -1520,7 +1556,7 @@ static void WiFiPlaza_OnOwnRecord(const WiFiPlazaPlayer *data, u32 size, WiFiPla
 
 // Fills out with the country and region of the own player, of every player in the lobby and of the 20 lobby
 // location entries.
-void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
+static void WiFiPlaza_FillPlaces(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
     WiFiPlazaPlayerList list;
     int country;
     int region;
@@ -1556,7 +1592,7 @@ static void WiFiPlazaWork_CheckClosingTime(WiFiPlazaWork *work) {
     }
 }
 
-void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, enum HeapID heapID) {
+static void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, enum HeapID heapID) {
     PlayerProfile *playerProfile;
     Party *party;
     SaveWiFiHistory *history;
@@ -1628,11 +1664,11 @@ static void WiFiPlazaWork_SendOwnRecord(WiFiPlazaWork *work) {
     WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
 }
 
-void WiFiPlazaProfile_UpdateChecksum(WiFiPlazaProfile *profile, SaveData *save) {
+static void WiFiPlazaProfile_UpdateChecksum(WiFiPlazaProfile *profile, SaveData *save) {
     profile->crc = SaveArray_CalcCRC16(save, &profile->player, sizeof(WiFiPlazaPlayer));
 }
 
-BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save) {
+static BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save) {
     u16 crc = SaveArray_CalcCRC16(save, &profile->player, sizeof(WiFiPlazaPlayer));
     if (crc != profile->crc) {
         GF_AssertFail();
@@ -1641,7 +1677,7 @@ BOOL WiFiPlazaProfile_IsChecksumValid(WiFiPlazaProfile *profile, SaveData *save)
     return TRUE;
 }
 
-void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size) {
+static void WiFiPlazaProfile_SetFromLobbyRecord(WiFiPlazaProfile *profile, const WiFiPlazaPlayer *src, u32 size) {
     profile->player = *src;
     if (size <= sizeof(WiFiPlazaPlayer)) {
         MI_CpuCopy8(src, &profile->player, size);
@@ -1657,7 +1693,7 @@ static void WiFiPlaza_ClearEventFlags(u32 *flags) {
 }
 
 // Counts down the four lobby timers of state; each one raises a flag in flags[2] when it runs out.
-void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer) {
+static void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, WiFiPlazaGroups *groups, WiFiPlazaTimer *timer) {
     if (state->closeTimer - 1 >= 0) {
         state->closeTimer--;
         if (state->closeTimer == 840) {
@@ -1701,7 +1737,7 @@ void WiFiPlazaEventSchedule_Update(WiFiPlazaEventSchedule *state, u32 *flags, Wi
     }
 }
 
-void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state) {
+static void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state) {
     state->flag0 = 0;
     state->flag1 = 0;
     state->mode2 = 0;
@@ -1717,7 +1753,7 @@ void WiFiPlazaEventSchedule_Init(WiFiPlazaEventSchedule *state) {
     state->paradeDelay = -1;
 }
 
-void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
+static void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
     if (state->lowVolume == 1) {
         GF_SndHandleSetPlayerVolume(7, 42);
     } else {
@@ -1725,7 +1761,7 @@ void WiFiPlazaEventSchedule_ApplyVolume(WiFiPlazaEventSchedule *state) {
     }
 }
 
-void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state) {
+static void WiFiPlazaSessionState_StartCooldown(WiFiPlazaSessionState *state) {
     state->timer = 900;
 }
 
@@ -1733,22 +1769,22 @@ static int WiFiPlazaSessionState_IsCoolingDown(WiFiPlazaSessionState *state) {
     return state->timer > 0;
 }
 
-void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state) {
+static void WiFiPlazaSessionState_UpdateCooldown(WiFiPlazaSessionState *state) {
     if (state->timer > 0) {
         state->timer--;
     }
 }
 
-void WiFiPlaza_NewPlayerProfile(PlayerProfile **profile, enum HeapID heapID) {
+static void WiFiPlaza_NewPlayerProfile(PlayerProfile **profile, enum HeapID heapID) {
     *profile = PlayerProfile_New(heapID);
 }
 
-void WiFiPlaza_FreePlayerProfile(PlayerProfile **profile) {
+static void WiFiPlaza_FreePlayerProfile(PlayerProfile **profile) {
     Heap_Free(*profile);
 }
 
 // Copies the own lobby record into *profile (with the name the lobby has).
-void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProfile *src, enum HeapID heapID) {
+static void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProfile *src, enum HeapID heapID) {
     WiFiPlazaPlayer *player = Heap_Alloc(heapID, sizeof(WiFiPlazaPlayer));
     MIi_CpuCopyFast((const u32 *)&src->player, (u32 *)player, sizeof(WiFiPlazaPlayer));
     MI_CpuCopy8(src->lobbyName, player->name, sizeof(player->name));
@@ -1756,11 +1792,11 @@ void WiFiPlazaProfile_CopyToPlayerProfile(PlayerProfile **profile, WiFiPlazaProf
     Heap_Free(player);
 }
 
-void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state) {
+static void WiFiPlazaSessionState_SetAppQuitForClosing(WiFiPlazaSessionState *state) {
     state->appQuitForClosing = 1;
 }
 
-u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
+static u8 WiFiPlazaSessionState_DidAppQuitForClosing(WiFiPlazaSessionState *state) {
     return state->appQuitForClosing;
 }
 
@@ -1790,22 +1826,22 @@ static void WiFiPlazaTalkSession_Abort(WiFiPlazaTalkSession *session) {
     session->role = WIFI_PLAZA_TALK_ROLE_NONE;
 }
 
-BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
+static BOOL WiFiPlazaTalkSession_HasTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
     return (session->talkedWith & (1 << slot)) != 0;
 }
 
-void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
+static void WiFiPlazaTalkSession_SetTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
     session->talkedWith |= 1 << slot;
 }
 
-void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
+static void WiFiPlazaTalkSession_ClearTalkedWith(WiFiPlazaTalkSession *session, u32 slot) {
     GF_ASSERT(slot < 20);
     session->talkedWith &= ~(1 << slot);
 }
 
-void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
+static void WiFiPlazaTalkSession_IncTalkCount(WiFiPlazaTalkSession *session, u32 slot) {
     int value;
 
     GF_ASSERT(slot < 20);
@@ -1837,18 +1873,18 @@ static void WiFiPlazaWork_SendTalkEnd(WiFiPlazaWork *work, int id) {
     WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->talk.sendMessage, 4);
 }
 
-void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_StartTimeout(WiFiPlazaTalkSession *session) {
     session->timeoutActive = 1;
     session->timeoutCounter = 0;
 }
 
-void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_StopTimeout(WiFiPlazaTalkSession *session) {
     session->timeoutActive = 0;
     session->timeoutCounter = 0;
 }
 
 // Counts timeoutCounter up to 900 while timeoutActive is set.
-void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session) {
+static void WiFiPlazaTalkSession_UpdateTimeout(WiFiPlazaTalkSession *session) {
     if (session->timeoutActive == 1) {
         int value = session->timeoutCounter + 1;
         if (value <= 900) {
@@ -2082,19 +2118,19 @@ static void WiFiPlaza_HandleMinigameResultNews(WiFiPlazaWork *work, const WiFiPl
 static void WiFiPlaza_HandleUnusedNews(WiFiPlazaWork *work, const WiFiPlazaLobbyMessage *msg) {
 }
 
-void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
+static void WiFiPlazaWork_AddLobbyEventNotice(WiFiPlazaWork *work, int which) {
     WiFiPlazaLobbyNotice notice;
     notice.time = &work->currentTime;
     notice.which = which;
     WiFiPlazaNews_AddLobbyEventNotice(work->news, &notice);
 }
 
-void WiFiPlazaGroups_Init(WiFiPlazaGroups *groups) {
+static void WiFiPlazaGroups_Init(WiFiPlazaGroups *groups) {
     memset(groups, 0, sizeof(WiFiPlazaGroups));
     MIi_CpuClear32(0xFFFFFFFF, (u32 *)groups->ids, sizeof(groups->ids));
 }
 
-void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups) {
+static void WiFiPlazaGroups_Start(WiFiPlazaGroups *groups) {
     groups->active = 1;
 }
 
@@ -2400,7 +2436,7 @@ static void WiFiPlazaGroupWeights_Init(WiFiPlazaGroupWeights *weights) {
 }
 
 // The first time the player of a lobby slot reports a place, the weight of that place's group is halved.
-void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place, u32 slot) {
+static void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place, u32 slot) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2414,7 +2450,7 @@ void WiFiPlazaGroupWeights_ReportPlace(WiFiPlazaGroupWeights *weights, u32 place
 }
 
 // A random group by weight; returns its first place (group * 3).
-u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights) {
+static u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights) {
     int sum = 0;
     int i = 0;
     u32 target;
@@ -2437,7 +2473,7 @@ u32 WiFiPlazaGroupWeights_PickGroup(WiFiPlazaGroupWeights *weights) {
     return 0;
 }
 
-void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value) {
+static void WiFiPlaza_SetSlotFlag(u8 *flags, u32 slot, u8 value) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2466,7 +2502,7 @@ static void WiFiPlazaWordSet_Free(WiFiPlazaWordSet *wordSet) {
 }
 
 // Sets the flag of a lobby slot; flag 1 also makes its four words from code.
-void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code) {
+static void WiFiPlazaWordSet_Set(WiFiPlazaWordSet *wordSet, u32 slot, u8 flag, u32 code) {
     if (slot >= 20) {
         GF_AssertFail();
     }
@@ -2522,13 +2558,13 @@ static void WiFiPlaza_MakeWordsFromCode(WallpaperPasswordBank *bank, u32 code, u
     words[3] = WallpaperPasswordBank_GetWordAtIndex(bank, (c + d) % count);
 }
 
-void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end) {
+static void WiFiPlazaTimer_Init(WiFiPlazaTimer *timer, int start, int end) {
     timer->active = 0;
     timer->elapsed = 0;
     timer->duration = (end - start) * 30;
 }
 
-void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer) {
+static void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer) {
     timer->active = 1;
     timer->elapsed = 0;
     WiFiPlazaLobbyClient_GetTime(&timer->start);
@@ -2536,7 +2572,7 @@ void WiFiPlazaTimer_Start(WiFiPlazaTimer *timer) {
 
 // Runs the timer (30 per second of WiFiPlazaLobbyClient_GetTime time) and steps its phase through sWiFiPlazaTimerPhases; phase 5 for 120
 // updates at the end.
-void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
+static void WiFiPlazaTimer_Update(WiFiPlazaTimer *timer) {
     s64 now;
     s64 delta;
     int accum;

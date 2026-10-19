@@ -87,8 +87,4 @@
 
 	.public BgCellManager_NoTransfer
 
-	.public GlobalTerminalApp_LoadWifi
-	.public GlobalTerminalApp_UnloadWifi
-	.public GlobalTerminalApp_DwcAlloc
-	.public GlobalTerminalApp_DwcFree
 	.public _021D1108

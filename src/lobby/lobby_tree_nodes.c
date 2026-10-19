@@ -12,8 +12,6 @@ extern void __msl_assertion_failed(char *, char *, char *, int);
 extern char sStr_DataNeNULL[];
 extern char sStr_ChatCallbacksC[];
 extern char sStr_ciCallbacksArrayElementFreeFn[];
-extern void LobbyString_Destroy(Str *);
-extern int LobbyString_Compare(Str *, Str *);
 extern void ciCallbacksArrayElementFreeFn(void *p);
 
 void *LobbyUserMap_Destroy(LobbyUserMap *map) {

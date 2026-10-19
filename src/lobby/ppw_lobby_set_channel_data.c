@@ -3,24 +3,25 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <stdarg.h>
-#define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
-extern u8 *volatile gPPWLobbyWork;
+#include "ppw_lobby_internal.h"
+#include "ppw_lobby_state.h"
+
 extern int PPWLobby_SetChannelData();
 int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e);
 
 int PPW_LobbySetChannelData(void *a, void *b, void *c, void *d, void *e) {
-    u8 *root = gPPWLobbyWork;
-    if (!root) {
+    PPWLobbyWork *work = gPPWLobbyWork;
+    if (!work) {
         return 4;
     }
-    if (root) {
-        if (W(root, 0) == 10) {
+    if (work) {
+        if (work->state == PPW_LOBBY_STATE_ERROR) {
             return 7;
         }
     }
-    if (root) {
-        if (W(gPPWLobbyWork, 0) != 8) {
+    if (work) {
+        if (PPWLobby_GetState() != PPW_LOBBY_STATE_READY) {
             return 4;
         }
     }

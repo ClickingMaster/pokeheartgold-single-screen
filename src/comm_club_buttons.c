@@ -61,28 +61,28 @@ static void CommClubButtons_LoadGraphics(CommClubButtonsData *data);
 static void CommClubButtons_DrawButtons(CommClubButtonsData *data);
 static void CommClubButtons_SetButtonPalette(CommClubButtonsData *data, u8 palette);
 
-const TouchscreenHitbox sCommClubButtonsOneButtonHitboxes[] = {
+static const TouchscreenHitbox sCommClubButtonsOneButtonHitboxes[] = {
     { 0x50, 0x7F, 0x00, 0xFF },
     { 0xFF, 0x00, 0x00, 0x00 },
 };
 
-const WindowTemplate sCommClubButtonsOneButtonWindowTemplates[] = {
+static const WindowTemplate sCommClubButtonsOneButtonWindowTemplates[] = {
     { 4, 1, 12, 30, 2, 4, 1 },
 };
 
-const TouchscreenHitbox sCommClubButtonsTwoButtonHitboxes[] = {
+static const TouchscreenHitbox sCommClubButtonsTwoButtonHitboxes[] = {
     { 0x28, 0x57, 0x00, 0xFF },
     { 0x60, 0x8F, 0x00, 0xFF },
     { 0xFF, 0x00, 0x00, 0x00 },
 };
 
-const WindowTemplate sCommClubButtonsTwoButtonWindowTemplates[] = {
+static const WindowTemplate sCommClubButtonsTwoButtonWindowTemplates[] = {
     { 4, 1, 7,  30, 2, 4, 1    },
     { 4, 1, 14, 30, 2, 4, 0x3D },
 };
 
 // Indexed by button count - 1.
-const CommClubButtonsLayout sCommClubButtonsLayouts[] = {
+static const CommClubButtonsLayout sCommClubButtonsLayouts[] = {
     { sCommClubButtonsOneButtonWindowTemplates, sCommClubButtonsOneButtonHitboxes, 0, 10, 0 },
     { sCommClubButtonsTwoButtonWindowTemplates, sCommClubButtonsTwoButtonHitboxes, 0, 5,  1 },
 };

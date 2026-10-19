@@ -10,9 +10,7 @@
 
 extern u8 gPPWLobbyMainChannelSecretMode[];
 
-void PPWLobbyChannel_GetName(Str *out, PPWLobbyChannel *channel);
 void LobbyChat_SetChannelMode(const char *channel, const u8 *mode);
-void PPWLobby_SendMessage(int id, int channelKind, int type, int unused, int mode, const void *data, u32 size);
 void LobbyEventDeque_EraseAtBegin(LobbyEventDeque *deque, u32 count, LobbyTag tag);
 BOOL PPWLobbyPlayers_IsFull(PPWLobbyPlayers *players);
 

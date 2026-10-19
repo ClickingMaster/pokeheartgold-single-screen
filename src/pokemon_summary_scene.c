@@ -25,9 +25,7 @@ static void ConditionChart_GetVertex(const ConditionChartVertexAnim *src, Condit
 static void ConditionChart_GetStep(const ConditionChartVertex *from, const ConditionChartVertex *to, ConditionChartVertex *out);
 static int PokemonSummary_GetTouchedButton(PokemonSummary *summary);
 
-void PokemonSummary_Init3D(void);
-
-void PokemonSummary_Init3D(void) {
+void PokemonSummary_Init3D(PokemonSummary *summary) {
     NNS_G3dInit();
     G3X_Init();
     G3X_InitMtxStack();

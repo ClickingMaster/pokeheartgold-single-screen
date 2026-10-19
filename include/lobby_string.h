@@ -48,4 +48,38 @@ static inline const char *StrData(Str *s) {
     return StrIsShort(s) ? s->s.buf : s->l.ptr;
 }
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+Str *LobbyString_InitCopy(Str *, const Str *);
+Str *LobbyString_InitFromCStr(Str *, const char *);
+Str *LobbyString_InitSubstring(Str *, Str *, u32, u32);
+Str *LobbyString_Destroy(Str *);
+Str *LobbyString_Assign(Str *, const Str *);
+void LobbyString_AssignCStr(Str *, const char *);
+void LobbyString_Append(Str *, void *);
+void LobbyString_AppendCStr(Str *, const char *);
+Str *LobbyString_Replace(Str *, u32, u32, const Str *);
+void LobbyString_ReplaceCStr(Str *, u32, u32, const char *);
+Str *LobbyString_ReplaceSubstring(Str *, u32, u32, Str *, u32, u32);
+void LobbyString_Reserve(Str *, u32);
+int LobbyString_Compare(const Str *, const Str *);
+int LobbyString_CompareCStr(const Str *, const char *);
+int LobbyString_FindFirstOfChars(Str *, const char *, u32, u32);
+void LobbyString_Substr(Str *, Str *, u32, u32);
+Str *LobbyString_Concat(Str *, Str *, Str *);
+Str *LobbyString_ConcatCStr(Str *, Str *, char *);
+void LobbyString_Format(Str *, const char *, ...);
+void LobbyString_FormatN(Str *, u32, const char *, ...);
+#ifdef __cplusplus
+int LobbyString_Equals(const Str &, const Str &);
+#else
+int LobbyString_Equals(const Str *, const Str *);
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // POKEHEARTGOLD_LOBBY_STRING_H

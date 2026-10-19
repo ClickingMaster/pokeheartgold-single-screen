@@ -6,6 +6,7 @@
 
 #include "heap.h"
 #include "screen_fade_effects.h"
+#include "screen_fade_internal.h"
 #include "screen_window_wipe.h"
 #include "sys_task_api.h"
 #include "system.h"
@@ -74,9 +75,6 @@ static void ScreenFade_HoldFadeColor(ScreenFade *fade);
 static void PaletteFade_Clear(PaletteFade *fade);
 
 void GXx_SetMasterBrightness_(vu16 *reg, s32 brightness);
-
-void SetBothScreensBrightnessByColor(u16 color);
-void FillScreenWithColor(int screen, u16 color);
 
 static const FadeFunc sFadeFuncPtrs[] = {
     FadeFunc_00,

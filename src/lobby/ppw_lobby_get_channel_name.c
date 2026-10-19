@@ -5,38 +5,36 @@
 #include <stdarg.h>
 
 #include "ppw_lobby_internal.h"
+#include "ppw_lobby_state.h"
 
-#define W(p, o) (*(u32 *)((u8 *)(p) + (o)))
-
-extern u8 *volatile gPPWLobbyWork;
 extern int PPWLobby_SendMessage();
 int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d);
 int PPW_LobbyGetMyUserId(void);
 
-void PPWLobby_GetChannelName(Str *p, u8 *q, int x) {
+void PPWLobby_GetChannelName(Str *out, PPWLobbyChannel *channels, int subChannel) {
     volatile Str copy;
-    if (!x) {
-        PPWLobbyChannel_GetName((u8 *)p, q);
-        copy = *p;
+    if (!subChannel) {
+        PPWLobbyChannel_GetName(out, &channels[0]);
+        copy = *out;
         return;
     }
-    PPWLobbyChannel_GetName((u8 *)p, q + 24);
-    copy = *p;
+    PPWLobbyChannel_GetName(out, &channels[1]);
+    copy = *out;
 }
 
 int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d) {
-    u8 *root = gPPWLobbyWork;
-    if (!root) {
+    PPWLobbyWork *work = gPPWLobbyWork;
+    if (!work) {
         return 4;
     }
-    if (root) {
-        if (W(root, 0) == 10) {
+    if (work) {
+        if (work->state == PPW_LOBBY_STATE_ERROR) {
             return 7;
         }
     }
-    if (root) {
-        if (W(gPPWLobbyWork, 0) != 8) {
+    if (work) {
+        if (PPWLobby_GetState() != PPW_LOBBY_STATE_READY) {
             return 4;
         }
     }
@@ -44,17 +42,17 @@ int PPW_LobbySendChannelBinaryMessage(int a, void *b, void *c, void *d) {
 }
 
 int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d) {
-    u8 *root = gPPWLobbyWork;
-    if (!root) {
+    PPWLobbyWork *work = gPPWLobbyWork;
+    if (!work) {
         return 4;
     }
-    if (root) {
-        if (W(root, 0) == 10) {
+    if (work) {
+        if (work->state == PPW_LOBBY_STATE_ERROR) {
             return 7;
         }
     }
-    if (root) {
-        if (W(gPPWLobbyWork, 0) != 8) {
+    if (work) {
+        if (PPWLobby_GetState() != PPW_LOBBY_STATE_READY) {
             return 4;
         }
     }
@@ -62,9 +60,9 @@ int PPW_LobbySendPlayerBinaryMessage(int a, void *b, void *c, void *d) {
 }
 
 int PPW_LobbyGetMyUserId(void) {
-    u8 *p = gPPWLobbyWork;
-    if (p) {
-        return W(p, 76);
+    PPWLobbyWork *work = gPPWLobbyWork;
+    if (work) {
+        return work->userId;
     }
     return -1;
 }

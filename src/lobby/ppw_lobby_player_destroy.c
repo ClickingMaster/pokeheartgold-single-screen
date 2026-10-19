@@ -6,22 +6,18 @@
 
 #include "ppw_lobby_internal.h"
 
-#define P(p, o) (*(u8 **)((u8 *)(p) + (o)))
-
 extern u8 gPPWLobbyPlayersVtable[];
-extern int PPWLobbyPlayerSet_Destroy();
-extern int LobbyCharVector_Destroy();
-extern int PPWLobbyPlayers_Clear();
+void *PPWLobbyPlayerSet_Destroy(u32 *playerSet);
 
-u8 *PPWLobbyPlayer_Destroy(u8 *p) {
-    LobbyCharVector_Destroy(p + 24);
-    return p;
+PPWLobbyPlayer *PPWLobbyPlayer_Destroy(PPWLobbyPlayer *player) {
+    LobbyCharVector_Destroy(&player->userProfile);
+    return player;
 }
 
-u8 *PPWLobbyPlayers_Destroy(u8 *p) {
-    P(p, 0) = gPPWLobbyPlayersVtable;
-    PPWLobbyPlayers_Clear(p);
-    LobbyCharVector_Destroy(p + 40);
-    PPWLobbyPlayerSet_Destroy(p + 4);
-    return p;
+PPWLobbyPlayers *PPWLobbyPlayers_Destroy(PPWLobbyPlayers *players) {
+    players->vtable = gPPWLobbyPlayersVtable;
+    PPWLobbyPlayers_Clear(players);
+    LobbyCharVector_Destroy(&players->self.userProfile);
+    PPWLobbyPlayerSet_Destroy(players->playerSet);
+    return players;
 }

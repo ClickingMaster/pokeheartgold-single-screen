@@ -62,8 +62,6 @@ extern const BgTemplate gPokemonSummaryBgTemplate4;
 extern const BgTemplate gPokemonSummaryBgTemplate5;
 extern const BgTemplate gPokemonSummaryBgTemplate6;
 
-void PokemonSummary_Init3D(PokemonSummary *summary);
-
 extern const TouchscreenHitbox gPokemonSummaryCancelButtonHitbox[];
 extern const TouchscreenHitbox gPokemonSummarySwapButtonHitbox[];
 extern const TouchscreenHitbox gPokemonSummaryConfirmButtonHitbox[];

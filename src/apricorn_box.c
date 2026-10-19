@@ -49,18 +49,6 @@ static u8 GetJuiceFlavorLevel(int type, u8 value);
 static void PackJuiceFlavor(u16 *out, u8 *pair, int type);
 static void ClearApricornJuiceRecord(void *data);
 
-u32 Save_ApricornBox_sizeof(void);
-u32 ApricornJuiceRecord_sizeof(void);
-void Save_ApricornBox_Init(SaveApricornBox *apricornBox);
-u32 ApricornBox_GetMixState(SaveApricornBox *apricornBox);
-BOOL ApricornBox_QueueApricorn(SaveApricornBox *box, int apricorn, u32 value);
-int ApricornBox_GetMixProgressLevel(SaveApricornBox *box);
-u8 ApricornBox_GetJuiceServings(SaveApricornBox *box);
-int ApricornJuice_GetTopMixIndex(void *data);
-int ApricornBox_UseJuiceServing(SaveApricornBox *box);
-ApricornRecord *ApricornRecord_New(SaveApricornBox *box, PlayerProfile *profile, u32 value, enum HeapID heapId);
-void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records, int count, int skip);
-
 static const u16 sApricornBallItems[] = {
     ITEM_LEVEL_BALL,
     ITEM_MOON_BALL,

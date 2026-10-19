@@ -14,8 +14,6 @@ extern char sStr_TreeInsertLengthError_4[];
 extern void *LobbyMem_Alloc(u32);
 extern void LobbyTree_InsertRebalance(void *, void *);
 extern void *LobbyTree_EraseRebalance(void *, void *);
-extern void LobbyString_Destroy(void *);
-extern void LobbyString_InitCopy(void *, void *);
 
 LobbyUserIdSetNode *LobbyUserIdSet_InsertNode(LobbyUserIdSet *set, LobbyUserIdSetNode *parent, int left, int last, const int *key) {
     struct {

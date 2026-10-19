@@ -1,5 +1,7 @@
 #include "texture_animation.h"
 
+#include <nnsys/g3d_internal.h>
+
 #include "global.h"
 
 #include "ascii_util.h"
@@ -30,8 +32,6 @@ static void *TextureAnimation_GetTextureData(TextureAnimation *animation, const 
 static void *TextureAnimation_GetPaletteData(TextureAnimation *animation, const BillboardTexPlttIndex *indices);
 static u32 Texture_GetImageVramOffset(NNSG3dResTex *texture, u32 *entry);
 static u32 Texture_GetImageSize(NNSG3dResTex *texture, u32 *entry);
-
-void *NNS_G3dGetResDataByName(const NNSG3dResDict *, const NNSG3dResName *);
 
 TextureAnimationPool *TextureAnimationPool_New(int count, enum HeapID heapID) {
     TextureAnimationPool *pool = Heap_Alloc(heapID, sizeof(*pool));

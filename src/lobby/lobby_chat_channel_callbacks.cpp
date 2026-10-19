@@ -5,8 +5,6 @@
 
 #include "lobby_chat_manager.h"
 
-extern "C" void LobbyString_InitFromCStr(Str *s, const char *t);
-extern "C" void LobbyString_Destroy(Str *s);
 
 extern "C" int LobbyChat_FindUserIdByNick(LobbyChatManager *m, Str *s);
 extern "C" void LobbyChat_StripChannelPrefix(Str *dst, LobbyChatManager *m, Str *s);

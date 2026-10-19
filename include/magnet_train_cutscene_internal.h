@@ -1,7 +1,9 @@
-#ifndef POKEHEARTGOLD_OVERLAY104_SCENE_INTERNAL_H
-#define POKEHEARTGOLD_OVERLAY104_SCENE_INTERNAL_H
+#ifndef POKEHEARTGOLD_MAGNET_TRAIN_CUTSCENE_INTERNAL_H
+#define POKEHEARTGOLD_MAGNET_TRAIN_CUTSCENE_INTERNAL_H
 
 #include "global.h"
+
+#include "constants/sndseq.h"
 
 #include "camera.h"
 #include "filesystem.h"
@@ -10,31 +12,18 @@
 #include "heap.h"
 #include "overlay_manager.h"
 #include "screen_fade.h"
-#include "sound_system.h"
-#include "system.h"
 #include "sound_playback.h"
+#include "sound_system.h"
 #include "swap_3d_buffers.h"
+#include "system.h"
 #include "ui_util.h"
-
-#define HEAPID(n) ((enum HeapID)(n))
-
-typedef struct MagnetTrainCutsceneAnmHeader {
-    u32 unk00;
-    u16 numFrames;
-} MagnetTrainCutsceneAnmHeader;
-
-typedef struct MagnetTrainCutsceneAnmObj {
-    fx32 frame;
-    u32 unk04;
-    const MagnetTrainCutsceneAnmHeader *anm;
-} MagnetTrainCutsceneAnmObj;
 
 typedef struct MagnetTrainCutsceneModel {
     NNSG3dRenderObj obj;
     NNSG3dResMdl *mdl;
     NNSG3dResFileHeader *file;
     void *anmFile[2];
-    void *anmObj[2];
+    NNSG3dAnmObj *anmObj[2];
 } MagnetTrainCutsceneModel;
 
 typedef struct MagnetTrainCutsceneWork {

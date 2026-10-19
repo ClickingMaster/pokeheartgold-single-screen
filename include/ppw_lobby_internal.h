@@ -12,6 +12,8 @@
 
 #include "../lib/NitroDWC/src/tree-iterator4.h"
 
+#include "ppw_lobby_work.h"
+
 typedef struct DequeBuf {
     u32 **ptr;
     u32 begin;
@@ -51,8 +53,6 @@ extern unsigned char __lower_mapC[];
 void *LobbyMem_Alloc(u32);
 void LobbyEventDequeMap_LengthError(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-Str *LobbyString_Replace(Str *, u32, u32, void *);
-void LobbyString_ReplaceCStr(Str *, u32, u32, const char *);
 
 typedef struct Tag {
     u8 c;
@@ -93,14 +93,7 @@ typedef struct List {
 
 typedef Iterator NodeIter;
 
-typedef struct CharVec {
-    char *ptr;
-    u32 size;
-    u32 cap;
-} CharVec;
-
-u32 LobbyCharVector_RecommendSize(CharVec *, u32);
-void LobbyCharVector_AppendFillSlow(CharVec *, u32, const char *);
+void LobbyCharVector_AppendFillSlow(LobbyCharVector *, u32, const char *);
 u32 LobbyU32Vector_RecommendSize(Vec *, u32);
 void LobbyU32Vector_AppendFillSlow(Vec *, u32, u32 *);
 void LobbyTreeIterator_Advance(NodeIter *);
@@ -171,11 +164,6 @@ extern char sFmt_Hex_3[];
 extern char sStr_A[];
 extern char sStr__[];
 extern char sFmt_Str_3[];
-void LobbyString_FormatN(Str *out, u32 width, const char *fmt, ...);
-void LobbyString_Destroy(Str *s);
-void LobbyString_Append(Str *s, void *arg);
-void LobbyString_AppendCStr(Str *s, const char *arg);
-void LobbyString_AssignCStr(Str *s, const char *arg);
 int DWC_Base64Encode(const void *src, u32 len, char *dst, u32 dstLen);
 void MI_CpuFill8(void *dst, u8 val, u32 size);
 void LobbyEventDequeMap_Allocate(DequeBuf *d, u32 n, Tag unused);
@@ -200,7 +188,7 @@ BOOL PPWLobbyPlayers_Add(SessionMgr *m, int id);
 BOOL PPWLobbyPlayers_Remove(SessionMgr *m, int id);
 Session *PPWLobbyPlayers_Find(SessionMgr *m, int id);
 
-void LobbyCharVector_PushBackSlow(CharVec *s, const char *c);
+void LobbyCharVector_PushBackSlow(LobbyCharVector *s, const char *c);
 void LobbyEventDequeMapBuffer_Allocate(DequeBuf *d, u32 n);
 void LobbyEventDequeMapBuffer_AppendRange(DequeBuf *d, Iter *a, Iter *b);
 Vec *LobbyEventDequeMapBuffer_Destroy(Vec *v);
@@ -216,23 +204,14 @@ BOOL PPWLobbyPlayer_HasProfiles(Session *s);
 BOOL PPWLobbyPlayers_IsFull(SessionMgr *m);
 BOOL PPWLobby_EncodeMessage(int type, int mode, u32 value, const void *data, u32 len, Str *out);
 
-// The lobby work: its channels, players, web requests and the event schedule the server sends.
-u8 *PPWLobby_GetWork(void);
-void *PPWLobby_GetChannelBaseName(u8 *out, u8 *work);
-void *PPWLobbyChannel_GetName(u8 *out, u8 *channel);
-void PPWLobby_GetChannelName(Str *out, u8 *work, int subChannel);
-u8 *PPWLobbyPlayer_Destroy(u8 *player);
-u8 *PPWLobbyPlayers_Destroy(u8 *players);
-u8 *PPWLobbyWebRequest_Delete(u8 *request);
-u8 *PPWLobbySchedule_Init(u8 *schedule);
-int PPWLobbySchedule_CanStart(void *schedule);
-int PPWLobbySchedule_Start(void *schedule);
-int PPWLobbySchedule_GetQuestionnaire(void *schedule, void *out);
-int PPWLobbySchedule_SetQuestionnaire(void *schedule, void *in);
+// The state of the lobby library (PPWLobbyState), read from the current work.
+static inline int PPWLobby_GetState(void) {
+    PPWLobbyWork *volatile *work = &gPPWLobbyWork;
+    return (*work)->state;
+}
+
+// The web requests and the event schedule the server sends (the work's own functions are in ppw_lobby_work.h).
 int PPWLobbySchedule_IsSizeValid(void *schedule, void *data, u32 size);
-int PPWLobbySchedule_Copy(u8 *schedule, u8 *out, u32 *size);
-void PPWLobbySchedule_CopyToVector(u32 *out, u8 *schedule);
-void *LobbyEventVector_Data(void *vector);
 void LobbyEventDeque_EraseAtBegin(void *deque, u32 n);
 void LobbyEventDeque_LengthError(const char *message);
 void LobbySort_GetTemporaryBuffer(void *buffer, int n);

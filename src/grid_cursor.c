@@ -1,13 +1,9 @@
 #include "grid_cursor.h"
 
-#include <nitro/fs/overlay.h>
-
 #include "global.h"
 
+#include "box_mon_selector.h"
 #include "heap.h"
-
-// StepPosition uses the field overlay's id (1) both to read position->y and as its left edge result.
-FS_EXTERN_OVERLAY(field);
 
 static void GridPanel2_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy);
 static void GridPanel2_Enter(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move);
@@ -101,7 +97,7 @@ static void GridPanel1_Move(GridCursor *cursor, GridPosition *position, const u8
             return;
         }
     } else {
-        if (*(u8 *)cursor->userData == 0x12) {
+        if (*cursor->page == BOX_MON_SELECTOR_PARTY_PAGE) {
             move.value = 0;
             GridCursor_EnterPanel(cursor, 6, &move);
             return;
@@ -133,7 +129,7 @@ static void GridPanel3_Move(GridCursor *cursor, GridPosition *position, const u8
     }
     switch (type) {
     case GRID_EXIT_LEFT:
-        if (*(u8 *)cursor->userData == 0x12) {
+        if (*cursor->page == BOX_MON_SELECTOR_PARTY_PAGE) {
             move.value = 0;
             GridCursor_EnterPanel(cursor, 6, &move);
             return;
@@ -141,7 +137,7 @@ static void GridPanel3_Move(GridCursor *cursor, GridPosition *position, const u8
         GridCursor_EnterPanel(cursor, 2, &move);
         return;
     case GRID_EXIT_RIGHT:
-        if (*(u8 *)cursor->userData == 0x12) {
+        if (*cursor->page == BOX_MON_SELECTOR_PARTY_PAGE) {
             move.value = 0;
             GridCursor_EnterPanel(cursor, 6, &move);
             return;
@@ -213,14 +209,14 @@ static void GridPanel5_Move(GridCursor *cursor, GridPosition *position, const u8
     case GRID_EXIT_RIGHT:
         break;
     case GRID_EXIT_UP:
-        if (*(u8 *)cursor->userData == 0x12) {
+        if (*cursor->page == BOX_MON_SELECTOR_PARTY_PAGE) {
             GridCursor_EnterPanel(cursor, 6, &move);
             return;
         }
         GridCursor_EnterPanel(cursor, 2, &move);
         return;
     case GRID_EXIT_DOWN:
-        if (*(u8 *)cursor->userData == 0x12) {
+        if (*cursor->page == BOX_MON_SELECTOR_PARTY_PAGE) {
             GridCursor_EnterPanel(cursor, 6, &move);
             return;
         }
@@ -342,7 +338,7 @@ void GridCursor_EnterPanel(GridCursor *cursor, u8 type, const GridMove *move) {
     cursor->entries[cursor->current].select(cursor, &cursor->positions[cursor->current], cursor->entries[cursor->current].dimensions, move);
 }
 
-GridCursor *GridCursor_New(enum HeapID heapId, void *userData) {
+GridCursor *GridCursor_New(enum HeapID heapId, u8 *page) {
     GridCursor *cursor = Heap_Alloc(heapId, sizeof(GridCursor));
     u32 i;
 
@@ -355,7 +351,7 @@ GridCursor *GridCursor_New(enum HeapID heapId, void *userData) {
     cursor->count = 6;
     cursor->positions = Heap_Alloc(heapId, cursor->count * sizeof(GridPosition));
     memset(cursor->positions, 0, cursor->count * sizeof(GridPosition));
-    cursor->userData = userData;
+    cursor->page = page;
     return cursor;
 }
 

@@ -69,7 +69,7 @@ void GF_TouchpadSetSamplingState(u16 mode, u8 autoRead, TPData *data, u32 capaci
     gTouchpadState.capacity = capacity;
     gTouchpadState.count = count;
     gTouchpadState.write = write;
-    TouchSamples_Clear(gTouchpadState.samples, 9);
+    TouchSamples_Clear(gTouchpadState.samples, NELEMS(gTouchpadState.samples));
 }
 
 void TouchSamples_Clear(TPData *data, int count) {
@@ -119,14 +119,14 @@ int GF_TouchpadUpdate(TouchOutput *out, int mode, u32 threshold) {
         if (out) {
             TouchOutput_Clear(out);
         }
-        if (mode == 2) {
+        if (mode == TOUCHPAD_RECORD_NONE) {
             return 1;
         }
         return 0;
     }
     if (gTouchpadState.mode) {
         latest = TP_GetLatestIndexInAuto();
-        TouchSamples_Calibrate(gTouchpadState.samples, 9);
+        TouchSamples_Calibrate(gTouchpadState.samples, NELEMS(gTouchpadState.samples));
         if (out) {
             TouchOutput_CollectValid(out, latest);
         }
@@ -166,7 +166,7 @@ int GF_TouchpadStartAutoSampling(u32 frequency) {
     int retries = 0;
     u32 busy;
     do {
-        TP_RequestAutoSamplingStartAsync(0, (u16)frequency, gTouchpadState.samples, 9);
+        TP_RequestAutoSamplingStartAsync(0, (u16)frequency, gTouchpadState.samples, NELEMS(gTouchpadState.samples));
         TP_WaitBusy(2);
         busy = TP_CheckBusy(2);
         if (busy) {
@@ -181,11 +181,11 @@ int GF_TouchpadStartAutoSampling(u32 frequency) {
 
 int GF_TouchpadRecordSamples(int mode, int latest, u32 threshold) {
     switch (mode) {
-    case 1:
-    case 3:
+    case TOUCHPAD_RECORD_MOVES_WRAP:
+    case TOUCHPAD_RECORD_MOVES:
         return GF_TouchpadRecordMoves(mode, latest, threshold);
-    case 4:
-    case 5:
+    case TOUCHPAD_RECORD_ALL_WRAP:
+    case TOUCHPAD_RECORD_ALL:
         return GF_TouchpadRecordAll(mode, latest, threshold);
     default:
         return 1;
@@ -197,7 +197,7 @@ int GF_TouchpadRecordMoves(int mode, int latest, u32 threshold) {
     for (i = 0; i < gTouchpadState.count; i++) {
         s16 index = latest - gTouchpadState.count + i + 1;
         if (index < 0) {
-            index += 9;
+            index += NELEMS(gTouchpadState.samples);
         }
         if (gTouchpadState.samples[index].touch == 1 && gTouchpadState.samples[index].validity == 0) {
             int dx, dy, prev;
@@ -211,7 +211,7 @@ int GF_TouchpadRecordMoves(int mode, int latest, u32 threshold) {
                 gTouchpadState.buffer[gTouchpadState.write] = gTouchpadState.samples[index];
                 gTouchpadState.write++;
                 if (gTouchpadState.write >= gTouchpadState.capacity) {
-                    if (mode == 1) {
+                    if (mode == TOUCHPAD_RECORD_MOVES_WRAP) {
                         gTouchpadState.write %= gTouchpadState.capacity;
                     } else {
                         return -1;
@@ -228,12 +228,12 @@ int GF_TouchpadRecordAll(int mode, int latest, u32 threshold) {
     for (i = 0; i < gTouchpadState.count; i++) {
         s16 index = latest - gTouchpadState.count + i + 1;
         if (index < 0) {
-            index += 9;
+            index += NELEMS(gTouchpadState.samples);
         }
         gTouchpadState.buffer[gTouchpadState.write] = gTouchpadState.samples[index];
         gTouchpadState.write++;
         if (gTouchpadState.write >= gTouchpadState.capacity) {
-            if (mode == 4) {
+            if (mode == TOUCHPAD_RECORD_ALL_WRAP) {
                 gTouchpadState.write %= gTouchpadState.capacity;
             } else {
                 return -1;
@@ -260,7 +260,7 @@ void TouchOutput_CollectValid(TouchOutput *out, int latest) {
     for (i = 0; i < gTouchpadState.count; i++) {
         s16 index = latest - gTouchpadState.count + i + 1;
         if (index < 0) {
-            index += 9;
+            index += NELEMS(gTouchpadState.samples);
         }
         if (gTouchpadState.samples[index].validity == 0) {
             out->samples[out->count] = gTouchpadState.samples[index];

@@ -25,9 +25,13 @@ static WiFiPlazaPlayerObject *WiFiPlazaPlayerObjects_GetFreeObject(WiFiPlazaPlay
 static BOOL WiFiPlazaPlayerObject_IsUsed(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_Clear(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object);
+static void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_EffectTurnAround(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_EffectSetWalkFrameOnce(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *object);
+static BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action);
+static void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_ApplyVisibility(WiFiPlazaPlayerObject *object);
 static void WiFiPlazaPlayerObject_ApplyLightFlags(void *sprite, WiFiPlazaPlayerObject *object);
 
@@ -782,7 +786,7 @@ static void WiFiPlazaPlayerObject_DrawModel(WiFiPlazaPlayerObject *object) {
 }
 
 // Follows the player's action (field 5) and its frame (field 8) and moves the sprite to the player's position.
-void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_FollowPlayer(WiFiPlazaPlayerObject *object) {
     int action;
     u32 actionFrame;
     Field2DPoint gridPos;
@@ -852,7 +856,7 @@ void WiFiPlazaPlayerObject_PlayWalkingSequence(WiFiPlazaPlayerObject *object) {
     }
 }
 
-void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_UpdateEffect(WiFiPlazaPlayerObject *object) {
     if (object->mode == 0 && object->effectActive == 1) {
         sWiFiPlazaPlayerObjectEffects[object->effect](object);
     }
@@ -891,7 +895,7 @@ static void WiFiPlazaPlayerObject_EffectWalkInPlace(WiFiPlazaPlayerObject *objec
     object->timer = (object->timer + 1) % 8;
 }
 
-BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action) {
+static BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action) {
     switch (action) {
     case 2:
     case 3:
@@ -905,7 +909,7 @@ BOOL WiFiPlazaPlayerObject_ActionKeepsSequence(u32 action) {
     }
 }
 
-void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object) {
+static void WiFiPlazaPlayerObject_UpdateCulling(WiFiPlazaPlayerObject *object) {
     if (WiFiPlazaPlayerObject_IsUsed(object)) {
         if (WiFiPlaza_IsSpriteInView(object->sprite) == FALSE) {
             object->culled = 1;

@@ -27,8 +27,6 @@ typedef void (*WifiReceiveCallback)(u32 aid, void *data, u16 size);
 
 typedef struct WifiConnection WifiConnection;
 
-extern WifiConnection *gWifiConnection;
-
 int WifiConnection_Init(void *saveData, int heapId, u32 heapSize, int maxPlayers);
 int WifiConnection_UpdateLogin(void);
 void WifiConnection_SetReceiveCallbacks(WifiReceiveCallback recvLocal, WifiReceiveCallback recv);

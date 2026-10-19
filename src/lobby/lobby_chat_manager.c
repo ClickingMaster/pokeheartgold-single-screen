@@ -57,7 +57,7 @@ void LobbyChat_FormatNick(Str *out, int userId) {
     LobbyString_FormatN(out, 0x14, sFmt_N_UnderscoreIntUnderscoreUint, userId, time % 1000);
 }
 
-int LobbyChat_GetUserIdFromNick(Str *nick) {
+int LobbyChat_GetUserIdFromNick(const Str *nick) {
     LobbyStringVector parts;
     Str separator;
     int id;

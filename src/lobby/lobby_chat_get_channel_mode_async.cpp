@@ -5,8 +5,6 @@
 
 #include "lobby_chat_manager.h"
 
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-extern "C" Str *LobbyString_Destroy(Str *);
 
 extern "C" const u32 gLobbyChatNextRequestId;
 

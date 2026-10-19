@@ -7,8 +7,6 @@
 
 extern "C" unsigned long strlen(const char *);
 extern "C" void MI_CpuFill8(void *, u8, u32);
-extern "C" Str *LobbyString_InitFromCStr(Str *, const char *);
-extern "C" Str *LobbyString_Destroy(Str *);
 
 extern "C" const u32 gLobbyChatNextRequestId;
 

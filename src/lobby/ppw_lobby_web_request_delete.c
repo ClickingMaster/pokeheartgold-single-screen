@@ -6,16 +6,14 @@
 #include <nitro/code32.h>
 #include <stdarg.h>
 
-extern int LobbyCharVector_Destroy();
-extern int LobbyString_Destroy();
-u8 *PPWLobbyWebRequest_Delete(u8 *p);
+#include "ppw_lobby_work.h"
 
-u8 *PPWLobbyWebRequest_Delete(u8 *p) {
-    LobbyCharVector_Destroy(p + 40);
-    LobbyString_Destroy(p + 24);
-    LobbyString_Destroy(p + 12);
-    if (p) {
-        DWC_Free(0, p, 0);
+PPWLobbyWebRequest *PPWLobbyWebRequest_Delete(PPWLobbyWebRequest *request) {
+    LobbyCharVector_Destroy(&request->body);
+    LobbyString_Destroy(&request->page);
+    LobbyString_Destroy(&request->key);
+    if (request) {
+        DWC_Free(0, request, 0);
     }
-    return p;
+    return request;
 }

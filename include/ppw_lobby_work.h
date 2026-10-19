@@ -126,6 +126,29 @@ typedef struct PPWLobbyWork {
     PPWLobbySchedule schedule;
 } PPWLobbyWork;
 
+// A web request of the lobby (schedule, VIP list, profile check, questionnaire), sent through the stats upload
+// client (key and server for StatsUpload_Start; page, pid and body for the upload). It is retried up to retries
+// times and reports its answer to callback.
+typedef struct PPWLobbyWebRequest PPWLobbyWebRequest;
+
+typedef struct PPWLobbyWebRequestVtable {
+    void *unk_00;
+    void (*destroy)(PPWLobbyWebRequest *request);
+} PPWLobbyWebRequestVtable;
+
+struct PPWLobbyWebRequest {
+    const PPWLobbyWebRequestVtable *vtable;
+    int retries;
+    int server;
+    Str key;
+    Str page;
+    int pid;
+    LobbyCharVector body;
+    void (*callback)(BOOL success, void *data, u32 size, void *param);
+    void *param;
+    BOOL useLastHash;
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -133,6 +156,43 @@ extern "C" {
 extern PPWLobbyWork *gPPWLobbyWork;
 
 PPWLobbyWork *PPWLobby_GetWork(void);
+Str *PPWLobby_GetChannelBaseName(Str *, PPWLobbyWork *);
+void PPWLobbyChannel_GetName(Str *, PPWLobbyChannel *);
+void PPWLobby_GetChannelName(Str *, PPWLobbyChannel *, int);
+PPWLobbyPlayer *PPWLobbyPlayer_Destroy(PPWLobbyPlayer *);
+PPWLobbyPlayers *PPWLobbyPlayers_Destroy(PPWLobbyPlayers *);
+PPWLobbyWebRequest *PPWLobbyWebRequest_Delete(PPWLobbyWebRequest *);
+void PPWLobby_GenerateChannelBaseName(Str *);
+int PPWLobby_GetWebResultError(u32);
+int PPWLobby_HandleLibraryData(BOOL, BOOL, int, int, const char *, const u8 *, u32, u32);
+void PPWLobby_HandleReceivedData(BOOL, BOOL, const char *, int, const char *, const char *, u32);
+void PPWLobby_OnCheckProfile(BOOL, u8 *, u32);
+void PPWLobby_OnEnterSubChannel(int, int, int, int);
+void PPWLobby_OnEnumChannels(int, int, char **, int, int *);
+void PPWLobby_OnExcessFlood(int);
+void PPWLobby_OnGetChannelKeys(BOOL, const char *, int, const char *, const char *, u32);
+void PPWLobby_OnGetChannelTime(BOOL, const char *, int, const char *, const char *, u32);
+void PPWLobby_OnGetLobbyData(BOOL, const char *, int, const char *, const char *, u32);
+void PPWLobby_OnGetQuestionnaire(BOOL, u8 *, u32);
+void PPWLobby_OnGetSchedule(BOOL, u8 *, u32);
+void PPWLobby_OnGetVip(BOOL, u8 *, u32);
+void PPWLobby_OnPlayerMessage(int, int, int);
+void PPWLobby_OnSubmitQuestionnaire(BOOL, u8 *, u32);
+void PPWLobby_OnTopicChanged(void);
+int PPWLobby_ParseWebResponse(BOOL, u8 *, u32, void **, u32 *);
+int PPWLobby_SetChannelData(int, int, const char *, const void *, u32);
+void PPWLobby_StartCheckProfile(void);
+int PPWLobby_TimerPollChannelMode(void);
+int PPWLobby_TimerRequestChannelTime(void);
+int PPWLobby_TimerRequestLobbyData(void);
+int PPWLobby_TimerSendRecruitInfo(void);
+int PPWLobby_TimerUploadSystemProfile(void);
+int PPWLobby_TimerUploadUserProfile(void);
+int PPW_LobbyGetLastError(void);
+int PPW_LobbyInitResultToLastError(int);
+int PPW_LobbySubmitQuestionnaire(int);
+int PPW_LobbyToErrorCode(int);
+int PPWLobby_SendMessage(int, int, int, int, int, const void *, u32);
 BOOL PPWLobbySchedule_GetQuestionnaire(PPWLobbySchedule *, void *);
 BOOL PPWLobbySchedule_SetQuestionnaire(PPWLobbySchedule *, const void *);
 void PPWLobbySchedule_Process(PPWLobbySchedule *);

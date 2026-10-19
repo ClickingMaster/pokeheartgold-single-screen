@@ -6,8 +6,6 @@
 
 #include "ppw_lobby_internal.h"
 
-extern u8 *gPPWLobbyWork;
-
-u8 *PPWLobby_GetWork(void) {
+PPWLobbyWork *PPWLobby_GetWork(void) {
     return gPPWLobbyWork;
 }

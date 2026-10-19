@@ -133,6 +133,7 @@ enum WifiClubAppState {
     WIFI_CLUB_STATE_WRITE_SAVE,
 };
 
+
 static const u8 sProfileButtonPressAnims[4] = { 0, 2, 4, 0 };
 
 static const u8 sRosterSlotTextY[4] = { 8, 7, 5, 7 };
@@ -428,12 +429,12 @@ static const GraphicsBanks sWifiClubGraphicsBanks = {
     .texpltt = GX_VRAM_TEXPLTT_NONE,
 };
 
-WifiClubMenuItem WifiClubSeekItem_PlazaGames = { .strno = msg_0778_00034, .value = WIFI_CLUB_SEEK_MENU_PLAZA_GAMES };
-WifiClubMenuItem WifiClubSeekItem_Cancel = { .strno = msg_0778_00041, .value = LIST_CANCEL };
-WifiClubMenuItem WifiClubSeekItem_Frontier = { .strno = msg_0778_00032, .value = WIFI_CLUB_STATUS_SEEK_FRONTIER };
-WifiClubMenuItem WifiClubSeekItem_Cook = { .strno = msg_0778_00030, .value = WIFI_CLUB_STATUS_SEEK_COOK };
+static WifiClubMenuItem sWifiClubSeekItem_PlazaGames = { .strno = msg_0778_00034, .value = WIFI_CLUB_SEEK_MENU_PLAZA_GAMES };
+static WifiClubMenuItem sWifiClubSeekItem_Cancel = { .strno = msg_0778_00041, .value = LIST_CANCEL };
+static WifiClubMenuItem sWifiClubSeekItem_Frontier = { .strno = msg_0778_00032, .value = WIFI_CLUB_STATUS_SEEK_FRONTIER };
+static WifiClubMenuItem sWifiClubSeekItem_Cook = { .strno = msg_0778_00030, .value = WIFI_CLUB_STATUS_SEEK_COOK };
 
-WifiClubProfilePageFunc WifiClubProfilePageFuncs[7] = {
+static WifiClubProfilePageFunc sWifiClubProfilePageFuncs[7] = {
     WifiClub_DrawProfileSummary,
     WifiClub_DrawProfilePlazaGames,
     WifiClub_DrawProfileBattleTower,
@@ -443,7 +444,7 @@ WifiClubProfilePageFunc WifiClubProfilePageFuncs[7] = {
     WifiClub_DrawProfileBattleArcade,
 };
 
-ListMenuTemplate WifiClubSeekMenuTemplate = {
+static ListMenuTemplate sWifiClubSeekMenuTemplate = {
     .items = NULL,
     .moveCursorFunc = WifiClub_ListMenuCursorCallback,
     .itemPrintFunc = NULL,
@@ -472,21 +473,21 @@ WifiClubMenuItem WifiClubPlazaGameItems[4] = {
     { .strno = msg_0778_00041, .value = LIST_CANCEL }
 };
 
-WifiClubMenuItem WifiClubSingleBattleItems[4] = {
+static WifiClubMenuItem sWifiClubSingleBattleItems[4] = {
     { .strno = msg_0778_00095, .value = WIFI_CLUB_STATUS_SEEK_FREE_SINGLE          },
     { .strno = msg_0778_00096, .value = WIFI_CLUB_STATUS_SEEK_LV50_SINGLE           },
     { .strno = msg_0778_00097, .value = WIFI_CLUB_STATUS_SEEK_LV100_SINGLE          },
     { .strno = msg_0778_00041, .value = LIST_CANCEL }
 };
 
-WifiClubMenuItem WifiClubDoubleBattleItems[4] = {
+static WifiClubMenuItem sWifiClubDoubleBattleItems[4] = {
     { .strno = msg_0778_00098, .value = WIFI_CLUB_STATUS_SEEK_FREE_DOUBLE          },
     { .strno = msg_0778_00099, .value = WIFI_CLUB_STATUS_SEEK_LV50_DOUBLE          },
     { .strno = msg_0778_00100, .value = WIFI_CLUB_STATUS_SEEK_LV100_DOUBLE          },
     { .strno = msg_0778_00041, .value = LIST_CANCEL }
 };
 
-WifiClubMenuItem WifiClubSeekMenuItems[10] = {
+static WifiClubMenuItem sWifiClubSeekMenuItems[10] = {
     { .strno = msg_0778_00093, .value = WIFI_CLUB_SEEK_MENU_SINGLE_BATTLE },
     { .strno = msg_0778_00094, .value = WIFI_CLUB_SEEK_MENU_DOUBLE_BATTLE },
     { .strno = msg_0778_00028, .value = WIFI_CLUB_STATUS_SEEK_TRADE },
@@ -499,7 +500,7 @@ WifiClubMenuItem WifiClubSeekMenuItems[10] = {
     { .strno = 0,              .value = 0  }
 };
 
-WifiClubStateFunc WifiClubStateFuncs[72] = {
+static WifiClubStateFunc sWifiClubStateFuncs[72] = {
     WifiClub_State_Start,
     WifiClub_State_CreateConnectPrompt,
     WifiClub_State_ConnectPrompt,
@@ -1000,7 +1001,7 @@ BOOL WifiClub_Main(OverlayManager *man, int *state) {
         break;
     case WIFI_CLUB_MAIN_RUN:
         int curState = data->state;
-        WifiClubStateFunc stateFunc = WifiClubStateFuncs[curState];
+        WifiClubStateFunc stateFunc = sWifiClubStateFuncs[curState];
         if (stateFunc != NULL) {
             *sCurrentState = curState;
             *state = stateFunc(data, mainState);
@@ -2736,8 +2737,8 @@ s32 WifiClub_State_CancelSeekingPrompt(WifiClubApp *app, s32 mainState) {
 
 s32 WifiClub_State_OpenSeekMenu(WifiClubApp *app, s32 mainState) {
     s32 listLen = 3;
-    ListMenuTemplate listMenuTemplate = WifiClubSeekMenuTemplate;
-    WifiClubMenuItem *listMenuItems = WifiClubSeekMenuItems;
+    ListMenuTemplate listMenuTemplate = sWifiClubSeekMenuTemplate;
+    WifiClubMenuItem *listMenuItems = sWifiClubSeekMenuItems;
 
     if (WifiClub_IsPoffinCookingAvailable(app) == 1) {
         listLen++;
@@ -2745,7 +2746,7 @@ s32 WifiClub_State_OpenSeekMenu(WifiClubApp *app, s32 mainState) {
         listMenuTemplate.maxShowed++;
 
         s32 index = listLen - 1;
-        listMenuItems[index] = WifiClubSeekItem_Cook;
+        listMenuItems[index] = sWifiClubSeekItem_Cook;
     }
     if (WifiClub_HasBattleFrontier(app) == 1) {
         listLen++;
@@ -2753,7 +2754,7 @@ s32 WifiClub_State_OpenSeekMenu(WifiClubApp *app, s32 mainState) {
         listMenuTemplate.maxShowed++;
 
         s32 index = listLen - 1;
-        listMenuItems[index] = WifiClubSeekItem_Frontier;
+        listMenuItems[index] = sWifiClubSeekItem_Frontier;
     }
     if (WifiClub_ArePlazaGamesAvailable(app) == 1) {
         listLen++;
@@ -2761,11 +2762,11 @@ s32 WifiClub_State_OpenSeekMenu(WifiClubApp *app, s32 mainState) {
         listMenuTemplate.maxShowed++;
 
         s32 index = listLen - 1;
-        listMenuItems[index] = WifiClubSeekItem_PlazaGames;
+        listMenuItems[index] = sWifiClubSeekItem_PlazaGames;
     }
     listMenuTemplate.totalItems++;
     listMenuTemplate.maxShowed++;
-    listMenuItems[listLen] = WifiClubSeekItem_Cancel;
+    listMenuItems[listLen] = sWifiClubSeekItem_Cancel;
     app->menuItems = ListMenuItems_New(listLen + 1, HEAP_ID_53);
 
     for (s32 i = 0; i < listLen + 1; i++) {
@@ -2907,14 +2908,14 @@ s32 WifiClub_OpenSeekSubmenu(WifiClubApp *app, s32 menuChoice) {
     switch (menuChoice) {
     case 0:
         app->submenuKind = 1;
-        listMenuItems = WifiClubSingleBattleItems;
-        listLen = NELEMS(WifiClubSingleBattleItems);
+        listMenuItems = sWifiClubSingleBattleItems;
+        listLen = NELEMS(sWifiClubSingleBattleItems);
         listMenuTemplate = sBattleSubmenuTemplate;
         break;
     case 1:
         app->submenuKind = 0;
-        listMenuItems = WifiClubDoubleBattleItems;
-        listLen = NELEMS(WifiClubDoubleBattleItems);
+        listMenuItems = sWifiClubDoubleBattleItems;
+        listLen = NELEMS(sWifiClubDoubleBattleItems);
         listMenuTemplate = sBattleSubmenuTemplate;
         break;
     case 29:
@@ -4464,7 +4465,7 @@ void WifiClub_DrawProfilePage(WifiClubApp *app, enum HeapID heapID) {
         WifiClub_CoverFrontierPageTabs(app);
     }
     FillWindowPixelBuffer(&app->roster.profileWindow, 0);
-    WifiClubProfilePageFuncs[app->roster.profilePage](app, heapID);
+    sWifiClubProfilePageFuncs[app->roster.profilePage](app, heapID);
     ScheduleBgTilemapBufferTransfer(app->bgConfig, GF_BG_LYR_SUB_2);
     ScheduleWindowCopyToVram(&app->roster.profileWindow);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);

@@ -11,6 +11,15 @@ enum TouchpadMode {
     TOUCHPAD_MODE_SAMPLING,
 };
 
+// GF_TouchpadUpdate: how the frame's samples are added to the record buffer
+enum TouchpadRecordMode {
+    TOUCHPAD_RECORD_MOVES_WRAP = 1, // samples that moved by the threshold; a full buffer starts over
+    TOUCHPAD_RECORD_NONE,
+    TOUCHPAD_RECORD_MOVES,    // samples that moved by the threshold; stops when the buffer is full
+    TOUCHPAD_RECORD_ALL_WRAP, // every sample; a full buffer starts over
+    TOUCHPAD_RECORD_ALL,      // every sample; stops when the buffer is full
+};
+
 typedef struct TouchpadState {
     TPData *buffer; // record buffer of GF_TouchpadStartRecording
     u32 capacity;

@@ -6,7 +6,7 @@
 // position and scaled by the box scale.
 BOOL WiFiPlaza_IsSpriteInView(void *sprite) {
     VecFx32 position;
-    WiFiPlazaBoxTestBounds bounds;
+    BoxTestBounds bounds;
     MtxFx33 rotation;
     NNSG3dResMdl *model = BillboardObject_GetModel(sprite);
     NNSG3dResMdlInfo *info;

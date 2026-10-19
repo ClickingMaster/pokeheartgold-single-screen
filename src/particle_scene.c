@@ -115,7 +115,7 @@ ParticleScene *ParticleScene_New(ParticleSceneParam *param) {
     ParticleScene *scene = Heap_Alloc(param->heapID, sizeof(*scene));
     GF_ASSERT(scene != NULL);
     scene->param = *param;
-    scene->context = ParticleScene_NewParticleSystemFromNarc(scene->param.heapID, (NarcId)119, scene->param.resource);
+    scene->context = ParticleScene_NewParticleSystemFromNarc(scene->param.heapID, NARC_a_1_1_9, scene->param.resource);
     ParticleSystem_SetPerspectiveType(scene->context, 1);
     return scene;
 }

@@ -72,28 +72,7 @@ static inline int GetState(const PPWLobbyWork &work) {
     return work.state;
 }
 
-// A web request of the lobby (schedule, VIP list, profile check, questionnaire), sent through the stats upload
-// client (key and server for StatsUpload_Start; page, pid and body for the upload). It is retried up to retries
-// times and reports its answer to callback.
-typedef struct Request Request;
-
-typedef struct RequestVtable {
-    void *unk_00;
-    void (*destroy)(Request *request);
-} RequestVtable;
-
-struct Request {
-    const RequestVtable *vtable;
-    int retries;
-    int server;
-    Str key;
-    Str page;
-    int pid;
-    LobbyCharVector body;
-    void (*callback)(BOOL success, void *data, u32 size, void *param);
-    void *param;
-    BOOL useLastHash;
-};
+typedef PPWLobbyWebRequest Request;
 
 extern "C" Request *gPPWLobbyCurrentRequest;
 extern "C" Request *gPPWLobbyFinishedRequest;
@@ -112,8 +91,7 @@ void *PPWLobbyPlayerSet_Destroy(u32 *);
 int LobbyChat_GetLastError(void);
 void LobbyTreeIterator_Advance(Iterator *);
 void LobbyTimerMap_Erase(Iterator *, LobbyTimerMap *, Iterator);
-void PPWLobby_OnEnumChannels(void);
-void LobbyChat_EnumChannelsAsync(const char *, void (*)(void), int);
+void LobbyChat_EnumChannelsAsync(const char *, void (*)(int, int, char **, int, int *), int);
 }
 
 extern "C" int PPW_LobbyProcess(void);

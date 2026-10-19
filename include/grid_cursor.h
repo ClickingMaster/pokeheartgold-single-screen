@@ -41,7 +41,7 @@ struct GridCursor {
     u8 count;
     u8 canCancel;
     u8 padding;
-    void *userData;
+    u8 *page; // the box mon selector page
     const GridEntry *entries;
     GridPosition *positions;
 };
@@ -49,7 +49,7 @@ struct GridCursor {
 int GridCursor_StepPosition(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy);
 void GridCursor_SelectPanel(GridCursor *cursor, u8 type);
 void GridCursor_EnterPanel(GridCursor *cursor, u8 type, const GridMove *move);
-GridCursor *GridCursor_New(enum HeapID heapId, void *userData);
+GridCursor *GridCursor_New(enum HeapID heapId, u8 *page);
 void GridCursor_Init(GridCursor *cursor, u8 canCancel);
 void GridCursor_Delete(GridCursor *cursor);
 void GridCursor_SetPosition(GridCursor *cursor, u8 type, u8 index);

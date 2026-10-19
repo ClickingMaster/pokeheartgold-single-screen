@@ -30,10 +30,6 @@ const OverlayManagerTemplate *VsRecorderApp_GetTemplate(u8 mode);
 BOOL GlobalTerminalApp_Init(OverlayManager *man, int *state);
 BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state);
 BOOL GlobalTerminalApp_Exit(OverlayManager *man, int *state);
-void GlobalTerminalApp_LoadWifi(GlobalTerminalApp *data);
-void GlobalTerminalApp_UnloadWifi(GlobalTerminalApp *data);
-void *GlobalTerminalApp_DwcAlloc(int name, u32 size, int align);
-void GlobalTerminalApp_DwcFree(int name, void *ptr, u32 size);
 
 BOOL GlobalTerminalConnect_Init(OverlayManager *man, int *state);
 BOOL GlobalTerminalConnect_Main(OverlayManager *man, int *state);

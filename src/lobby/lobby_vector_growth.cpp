@@ -20,8 +20,6 @@ void *memcpy(void *, const void *, unsigned);
 void *LobbyMem_Alloc(u32);
 void DWC_Free(int, void *, u32);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-Str *LobbyString_InitCopy(Str *, const Str *);
-int LobbyString_Destroy(Str *);
 u32 LobbyStringVector_RecommendSize(LobbyStringVector *, u32);
 u32 LobbyCharVector_RecommendSize(LobbyCharVector *, u32);
 void LobbyStringVector_AppendCopiesSlow(LobbyStringVector *, u32, const Str &);
