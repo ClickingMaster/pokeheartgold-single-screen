@@ -11,6 +11,8 @@ typedef struct RenderModel {
     NNSG3dResTex *texture;
 } RenderModel;
 
+void RenderModel_LoadFromNarc(RenderModelStorage *, int, NARC *, int, enum HeapID, BOOL);
+void RenderModel_BindTexturesOnVBlank(RenderModelStorage *);
 void RenderModel_Free(RenderModelStorage *data);
 
 #endif // POKEHEARTGOLD_RENDER_MODEL_H

@@ -136,8 +136,6 @@ typedef struct MoveRelearnerYesNoAction {
     int (*onNo)(MoveRelearner *relearner);
 } MoveRelearnerYesNoAction;
 
-NarcId MoveCategoryIcon_GetNarc(u32 category);
-
 static void MoveRelearner_Setup(MoveRelearner *relearner);
 static void MoveRelearner_Teardown(MoveRelearner *relearner);
 static void MoveRelearner_VBlankCB(MoveRelearner *relearner);
@@ -1455,7 +1453,7 @@ static void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
 
 static void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, u16 move) {
     int category = GetMoveAttr(move, MOVEATTR_CLASS);
-    NarcId narc = MoveCategoryIcon_GetNarc(category);
+    NarcId narc = MoveCategoryIcon_GetNarc();
     int file = MoveCategoryIcon_GetCharFile(category);
 
     SpriteSystem_ReplaceCharResObj(relearner->spriteSystem, relearner->spriteManager, narc, file, TRUE, 0xB8AA);

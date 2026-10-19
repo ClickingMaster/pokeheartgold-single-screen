@@ -396,7 +396,7 @@ static void FieldShadowEffect_DrawFriendShadow(FieldEffect *effect, FieldShadowE
         pos.x -= 0x800;
         pos.y -= 0x4000;
         pos.z += 0x1000;
-        RenderObj_DrawAt((int)renderObj, &pos);
+        RenderObj_DrawAt(renderObj, &pos);
     }
 }
 

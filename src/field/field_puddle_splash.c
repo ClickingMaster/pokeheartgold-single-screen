@@ -107,5 +107,5 @@ static void PuddleSplashEffect_Update(FieldEffect *effect, PuddleSplashEffect *w
 static void PuddleSplashEffect_Draw(FieldEffect *effect, PuddleSplashEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
-    RenderObj_DrawAt((int)&work->renderObj, &position);
+    RenderObj_DrawAt(&work->renderObj, &position);
 }

@@ -103,5 +103,5 @@ static void MudSplashEffect_Update(FieldEffect *effect, MudSplashEffect *work) {
 static void MudSplashEffect_Draw(FieldEffect *effect, MudSplashEffect *work) {
     VecFx32 position;
     FieldEffect_GetPosition(effect, &position);
-    RenderObj_DrawAt((int)&work->renderObj, &position);
+    RenderObj_DrawAt(&work->renderObj, &position);
 }

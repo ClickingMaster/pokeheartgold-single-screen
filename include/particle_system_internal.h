@@ -32,7 +32,6 @@ typedef struct ParticleSystem {
 
 void ParticleSystem_Draw(ParticleSystem *system);
 void ParticleSystem_Calc(ParticleSystem *system);
-void ParticleSystem_CreateEmitter(ParticleSystem *system, int resNo, void (*callback)(SPLEmitter *));
 void ParticleSystem_DeleteAllEmitters(ParticleSystem *system);
 void ParticleSystem_DeleteEmitter(ParticleSystem *system, SPLEmitter *emitter);
 void ParticleSystem_GetCameraUp(ParticleSystem *system, VecFx32 *out);

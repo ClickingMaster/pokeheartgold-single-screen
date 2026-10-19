@@ -130,6 +130,6 @@ static void HiddenObjectCoverEffect_Draw(FieldEffect *effect, HiddenObjectCoverE
 
     if (coverEffect->unk_04 != TRUE) {
         FieldEffect_GetPosition(effect, &translation);
-        RenderObj_DrawAt((int)coverEffect->args.renderObj, &translation);
+        RenderObj_DrawAt(coverEffect->args.renderObj, &translation);
     }
 }

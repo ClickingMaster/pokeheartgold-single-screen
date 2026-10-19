@@ -74,8 +74,6 @@ extern const TouchscreenHitbox gPokemonSummaryRibbonHitboxes[];
 
 #define FillBgTilemapRect_U32(bgConfig, bgId, fillValue, x, y, width, height, mode) ((void (*)(BgConfig *, u8, u32, u8, u8, u8, u8, u8))FillBgTilemapRect)(bgConfig, bgId, fillValue, x, y, width, height, mode)
 
-NarcId MoveCategoryIcon_GetNarc(u32 category);
-
 #define Sprite_SetFlipMode_Int(sprite, flip) ((void (*)(Sprite *, int))Sprite_SetFlipMode)(sprite, flip)
 #define GetRibbonAttr_Int(ribbon, attr)      ((u32(*)(int, RibbonAttr))GetRibbonAttr)(ribbon, attr)
 
@@ -2691,7 +2689,7 @@ static void PokemonSummary_SwapMoveTypeSprites(PokemonSummary *summary, u8 slotA
 
 static void PokemonSummary_SetMoveCategorySprite(PokemonSummary *summary, u16 move) {
     int category = GetMoveAttr(move, MOVEATTR_CLASS);
-    NarcId narc = MoveCategoryIcon_GetNarc(category);
+    NarcId narc = MoveCategoryIcon_GetNarc();
     int charFile = MoveCategoryIcon_GetCharFile(category);
     SpriteSystem_ReplaceCharResObj(summary->spriteSystem, summary->spriteManager, narc, charFile, TRUE, 10);
     thunk_Sprite_SetPaletteOverride(summary->sprites[18], MoveCategoryIcon_GetPalette(category) + 3);

@@ -296,6 +296,6 @@ static void FootprintEffect_Draw(FieldEffect *effect, FootprintEffect *work) {
         FieldEffect_GetPosition(effect, &position);
         NNSi_G3dModifyPolygonAttrMask(work->model->model, TRUE, 0x1F << 16);
         NNS_G3dMdlSetMdlAlphaAll(work->model->model, work->alpha);
-        RenderObj_DrawAt((int)work->renderObj, &position);
+        RenderObj_DrawAt(work->renderObj, &position);
     }
 }

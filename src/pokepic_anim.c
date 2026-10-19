@@ -124,45 +124,45 @@ static void PokepicMotion_ApplyValue(int op, int *base, int *value, int *dest);
 static void PokepicMotion_SetTarget(u8 target, PokepicMotion *motion, PokepicScriptAnim *anim);
 static void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type);
 
-void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_CopyVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_AddVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_MulVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SubVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_DivVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_ModVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetVarIfCompare(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_LoopStart(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_LoopEnd(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetAttrFromVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_AddAttrFromVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetOrAddAttr(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_Sin(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_Cos(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetPosFromVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_AddPosFromVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetOffsetFromVar(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_Wait(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartPaletteFade(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_WaitPaletteFade(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_RunMotions(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_SetScaleMode(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartWaveMotion(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartWaveMotionOverDuration(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartAccelMotion(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartLinearMotion(PokepicScriptAnim *anim);
-void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim);
-void PokepicMotion_UpdateWave(PokepicMotion *motion);
-void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion);
-void PokepicMotion_UpdateAccel(PokepicMotion *motion);
-void PokepicMotion_UpdateLinear(PokepicMotion *motion);
-void PokepicMotion_UpdateAccelToLimit(PokepicMotion *motion);
+static void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_CopyVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_AddVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_MulVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SubVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_DivVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_ModVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetVarIfCompare(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_LoopStart(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_LoopEnd(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetAttrFromVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_AddAttrFromVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetOrAddAttr(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_Sin(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_Cos(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetPosFromVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_AddPosFromVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetOffsetFromVar(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_Wait(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartPaletteFade(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_WaitPaletteFade(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_RunMotions(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_SetScaleMode(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartWaveMotion(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartWaveMotionOverDuration(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartAccelMotion(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartLinearMotion(PokepicScriptAnim *anim);
+static void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim);
+static void PokepicMotion_UpdateWave(PokepicMotion *motion);
+static void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion);
+static void PokepicMotion_UpdateAccel(PokepicMotion *motion);
+static void PokepicMotion_UpdateLinear(PokepicMotion *motion);
+static void PokepicMotion_UpdateAccelToLimit(PokepicMotion *motion);
 
 static const PokepicMotionType sPokepicMotionTypes[] = {
     { PokepicMotion_UpdateWave,             6, 1 },
@@ -494,17 +494,17 @@ static void PokepicScriptAnim_AdjustYForScale(PokepicScriptAnim *anim) {
     Pokepic_AddAttr(anim->pic, POKEPIC_Y, -anim->scaleY / 8);
 }
 
-void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_End(PokepicScriptAnim *anim) {
     PokepicScriptAnimCmd_ResetTransform(anim);
     anim->yield = 1;
     anim->done = 1;
 }
 
-void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_Yield(PokepicScriptAnim *anim) {
     anim->yield = 1;
 }
 
-void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim) {
     Pokepic_SetAttr(anim->pic, POKEPIC_X, anim->baseX);
     Pokepic_SetAttr(anim->pic, POKEPIC_Y, anim->baseY);
     Pokepic_SetAttr(anim->pic, POKEPIC_ZROT, 0);
@@ -513,48 +513,48 @@ void PokepicScriptAnimCmd_ResetTransform(PokepicScriptAnim *anim) {
     Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEH, 0x100);
 }
 
-void PokepicScriptAnimCmd_CopyVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_CopyVar(PokepicScriptAnim *anim) {
     u8 dest, src;
     PokepicScriptAnim_ReadVarIndexPair(anim, &dest, &src);
     anim->vars[dest] = anim->vars[src];
 }
 
-void PokepicScriptAnimCmd_AddVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_AddVar(PokepicScriptAnim *anim) {
     u8 dest;
     s32 a, b;
     PokepicScriptAnim_ReadDestVarAndOperands(anim, &dest, &a, &b);
     anim->vars[dest] = a + b;
 }
 
-void PokepicScriptAnimCmd_MulVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_MulVar(PokepicScriptAnim *anim) {
     u8 dest;
     s32 a, b;
     PokepicScriptAnim_ReadDestVarAndOperands(anim, &dest, &a, &b);
     anim->vars[dest] = a * b;
 }
 
-void PokepicScriptAnimCmd_SubVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SubVar(PokepicScriptAnim *anim) {
     u8 dest;
     s32 a, b;
     PokepicScriptAnim_ReadDestAndOperands(anim, &dest, &a, &b);
     anim->vars[dest] = a - b;
 }
 
-void PokepicScriptAnimCmd_DivVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_DivVar(PokepicScriptAnim *anim) {
     u8 dest;
     s32 a, b;
     PokepicScriptAnim_ReadDestAndOperands(anim, &dest, &a, &b);
     anim->vars[dest] = a / b;
 }
 
-void PokepicScriptAnimCmd_ModVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_ModVar(PokepicScriptAnim *anim) {
     u8 dest;
     s32 a, b;
     PokepicScriptAnim_ReadDestAndOperands(anim, &dest, &a, &b);
     anim->vars[dest] = a % b;
 }
 
-void PokepicScriptAnimCmd_SetVarIfCompare(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetVarIfCompare(PokepicScriptAnim *anim) {
     s32 b;
     s32 a;
     s32 newValue;
@@ -593,14 +593,14 @@ void PokepicScriptAnimCmd_SetVarIfCompare(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_SetVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetVar(PokepicScriptAnim *anim) {
     u8 dest;
     PokepicScriptAnim_ReadVarIndex(anim, &dest);
     anim->cursor++;
     anim->vars[dest] = (u32)PokepicScriptAnim_GetScriptWord(anim->cursor);
 }
 
-void PokepicScriptAnimCmd_LoopStart(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_LoopStart(PokepicScriptAnim *anim) {
     GF_ASSERT(anim->loopStart == NULL);
     anim->cursor++;
     anim->loopStart = anim->cursor;
@@ -608,7 +608,7 @@ void PokepicScriptAnimCmd_LoopStart(PokepicScriptAnim *anim) {
     anim->loopIndex = 0;
 }
 
-void PokepicScriptAnimCmd_LoopEnd(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_LoopEnd(PokepicScriptAnim *anim) {
     anim->loopIndex++;
     if (anim->loopIndex >= anim->loopCount) {
         anim->loopStart = NULL;
@@ -619,7 +619,7 @@ void PokepicScriptAnimCmd_LoopEnd(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_SetAttrFromVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetAttrFromVar(PokepicScriptAnim *anim) {
     s32 attr;
     u8 var;
     PokepicScriptAnim_ReadArg(anim, &attr);
@@ -627,7 +627,7 @@ void PokepicScriptAnimCmd_SetAttrFromVar(PokepicScriptAnim *anim) {
     Pokepic_SetAttr(anim->pic, attr, anim->vars[var]);
 }
 
-void PokepicScriptAnimCmd_AddAttrFromVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_AddAttrFromVar(PokepicScriptAnim *anim) {
     s32 attr;
     u8 var;
     PokepicScriptAnim_ReadArg(anim, &attr);
@@ -635,7 +635,7 @@ void PokepicScriptAnimCmd_AddAttrFromVar(PokepicScriptAnim *anim) {
     Pokepic_AddAttr(anim->pic, attr, anim->vars[var]);
 }
 
-void PokepicScriptAnimCmd_SetOrAddAttr(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetOrAddAttr(PokepicScriptAnim *anim) {
     struct {
         u8 command;
         u8 valueType;
@@ -665,7 +665,7 @@ void PokepicScriptAnimCmd_SetOrAddAttr(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_Sin(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_Sin(PokepicScriptAnim *anim) {
     u8 dest;
     s32 angle;
     s32 amplitude;
@@ -673,7 +673,7 @@ void PokepicScriptAnimCmd_Sin(PokepicScriptAnim *anim) {
     anim->vars[dest] = (FX_SinCosTable_[(angle >> 4) * 2] * amplitude) >> 12;
 }
 
-void PokepicScriptAnimCmd_Cos(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_Cos(PokepicScriptAnim *anim) {
     u8 dest;
     s32 angle;
     s32 amplitude;
@@ -681,7 +681,7 @@ void PokepicScriptAnimCmd_Cos(PokepicScriptAnim *anim) {
     anim->vars[dest] = (FX_CosIdx(angle) * amplitude) >> 12;
 }
 
-void PokepicScriptAnimCmd_SetPosFromVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetPosFromVar(PokepicScriptAnim *anim) {
     u8 args[2];
     PokepicScriptAnim_ReadVarIndex(anim, &args[1]);
     PokepicScriptAnim_ReadArgByte(anim, &args[0]);
@@ -694,7 +694,7 @@ void PokepicScriptAnimCmd_SetPosFromVar(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_AddPosFromVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_AddPosFromVar(PokepicScriptAnim *anim) {
     u8 args[2];
     PokepicScriptAnim_ReadVarIndex(anim, &args[1]);
     PokepicScriptAnim_ReadArgByte(anim, &args[0]);
@@ -707,7 +707,7 @@ void PokepicScriptAnimCmd_AddPosFromVar(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim) {
     s32 value;
     u8 args[4];
     s32 *target;
@@ -748,7 +748,7 @@ void PokepicScriptAnimCmd_SetOrAddTransform(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim) {
     if (anim->reverseX != 0) {
         Pokepic_SetAttr(anim->pic, POKEPIC_X, anim->baseX - (anim->x + anim->dx));
     } else {
@@ -757,7 +757,7 @@ void PokepicScriptAnimCmd_ApplyPosition(PokepicScriptAnim *anim) {
     Pokepic_SetAttr(anim->pic, POKEPIC_Y, anim->baseY + anim->y + anim->dy);
 }
 
-void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim) {
     Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEW, anim->scaleX + 0x100);
     Pokepic_SetAttr(anim->pic, POKEPIC_AFFINEH, anim->scaleY + 0x100);
     Pokepic_SetAttr(anim->pic, POKEPIC_ZROT, (u16)anim->rotation);
@@ -774,7 +774,7 @@ void PokepicScriptAnimCmd_ApplyTransform(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_SetOffsetFromVar(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetOffsetFromVar(PokepicScriptAnim *anim) {
     u8 var;
     u8 target;
     PokepicScriptAnim_ReadVarIndex(anim, &var);
@@ -789,12 +789,12 @@ void PokepicScriptAnimCmd_SetOffsetFromVar(PokepicScriptAnim *anim) {
     }
 }
 
-void PokepicScriptAnimCmd_Wait(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_Wait(PokepicScriptAnim *anim) {
     PokepicScriptAnim_ReadArg(anim, (s32 *)&anim->delay);
     anim->yield = 1;
 }
 
-void PokepicScriptAnimCmd_StartPaletteFade(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartPaletteFade(PokepicScriptAnim *anim) {
     s32 duration;
     u8 args[4];
     PokepicScriptAnim_ReadArgByte(anim, &args[2]);
@@ -804,18 +804,18 @@ void PokepicScriptAnimCmd_StartPaletteFade(PokepicScriptAnim *anim) {
     Pokepic_StartPaletteFade(anim->pic, args[2], args[1], args[0], duration);
 }
 
-void PokepicScriptAnimCmd_WaitPaletteFade(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_WaitPaletteFade(PokepicScriptAnim *anim) {
     if (Pokepic_ResumePaletteFade(anim->pic)) {
         anim->waitPaletteFade = 1;
         anim->yield = 1;
     }
 }
 
-void PokepicScriptAnimCmd_RunMotions(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_RunMotions(PokepicScriptAnim *anim) {
     anim->runMotions = 1;
 }
 
-void PokepicScriptAnimCmd_SetScaleMode(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_SetScaleMode(PokepicScriptAnim *anim) {
     u8 mode;
     BOOL valid;
     BOOL keepsFeet;
@@ -832,23 +832,23 @@ void PokepicScriptAnimCmd_SetScaleMode(PokepicScriptAnim *anim) {
     GF_ASSERT(valid);
 }
 
-void PokepicScriptAnimCmd_StartWaveMotion(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartWaveMotion(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 0);
 }
 
-void PokepicScriptAnimCmd_StartWaveMotionOverDuration(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartWaveMotionOverDuration(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 1);
 }
 
-void PokepicScriptAnimCmd_StartAccelMotion(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartAccelMotion(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 2);
 }
 
-void PokepicScriptAnimCmd_StartLinearMotion(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartLinearMotion(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 3);
 }
 
-void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim) {
+static void PokepicScriptAnimCmd_StartAccelMotionToLimit(PokepicScriptAnim *anim) {
     PokepicScriptAnim_StartMotion(anim, 4);
 }
 
@@ -918,7 +918,7 @@ static void PokepicScriptAnim_StartMotion(PokepicScriptAnim *anim, int type) {
     }
 }
 
-void PokepicMotion_UpdateWave(PokepicMotion *motion) {
+static void PokepicMotion_UpdateWave(PokepicMotion *motion) {
     u16 angle = motion->wave.startAngle + motion->wave.angleStep * (motion->wave.frame + 1);
     switch (motion->wave.waveform) {
     case 0x1e:
@@ -944,7 +944,7 @@ void PokepicMotion_UpdateWave(PokepicMotion *motion) {
     }
 }
 
-void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion) {
+static void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion) {
     u16 angle = motion->wave.startAngle + motion->wave.angleStep * (motion->wave.frame + 1) / motion->wave.duration;
     switch (motion->wave.waveform) {
     case 0x1e:
@@ -970,7 +970,7 @@ void PokepicMotion_UpdateWaveOverDuration(PokepicMotion *motion) {
     }
 }
 
-void PokepicMotion_UpdateAccel(PokepicMotion *motion) {
+static void PokepicMotion_UpdateAccel(PokepicMotion *motion) {
     int delta = motion->accel.velocity + motion->accel.acceleration * motion->accel.frame;
     *motion->value += delta;
     PokepicMotion_ApplyValue(motion->op, &motion->base, motion->value, motion->dest);
@@ -980,7 +980,7 @@ void PokepicMotion_UpdateAccel(PokepicMotion *motion) {
     }
 }
 
-void PokepicMotion_UpdateLinear(PokepicMotion *motion) {
+static void PokepicMotion_UpdateLinear(PokepicMotion *motion) {
     *motion->value = (motion->linear.frame + 1) * motion->linear.total / motion->linear.duration;
     PokepicMotion_ApplyValue(motion->op, &motion->base, motion->value, motion->dest);
     motion->linear.frame++;
@@ -989,7 +989,7 @@ void PokepicMotion_UpdateLinear(PokepicMotion *motion) {
     }
 }
 
-void PokepicMotion_UpdateAccelToLimit(PokepicMotion *motion) {
+static void PokepicMotion_UpdateAccelToLimit(PokepicMotion *motion) {
     int delta = motion->accel.velocity + motion->accel.acceleration * motion->accel.frame;
     *motion->value += delta;
     if (motion->op == 0x18 || motion->op == 0x1a) {

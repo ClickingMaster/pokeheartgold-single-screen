@@ -211,7 +211,7 @@ static void MapObjectModelEffect_Draw(FieldEffect *effect, MapObjectModelEffect 
     VecFx32 position;
 
     FieldEffect_GetPosition(effect, &position);
-    RenderObj_DrawAt((int)work->renderObj, &position);
+    RenderObj_DrawAt(work->renderObj, &position);
 }
 
 void MapObjectModelList_Init(FieldEffectManager *manager) {

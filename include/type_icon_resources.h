@@ -19,6 +19,7 @@ void thunk_ManagedSprite_DeleteAndFreeResources(ManagedSprite *managedSprite);
 void MoveCategoryIcon_DeleteSprite(ManagedSprite *managedSprite);
 int MoveCategoryIcon_GetCharFile(u32 category);
 u32 MoveCategoryIcon_GetPalette(u32 category);
+NarcId MoveCategoryIcon_GetNarc(void);
 void MoveCategoryIcon_LoadChar(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int category, int resId);
 void MoveCategoryIcon_UnloadChar(SpriteManager *spriteManager, int resource);
 

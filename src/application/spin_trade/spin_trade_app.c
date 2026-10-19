@@ -132,11 +132,6 @@ typedef struct SpinTradeLinkMenu {
     u16 confirmMask;
 } SpinTradeLinkMenu;
 
-// Animation object of RenderAnimation_LoadFromNarc
-typedef struct SpinTradeRenderAnim {
-    u8 unk_00[0x24];
-} SpinTradeRenderAnim;
-
 // Egg sitting on the turntable
 typedef struct SpinTradeEgg {
     BOOL active;
@@ -180,7 +175,7 @@ typedef struct SpinTradeObjects {
     RenderModelStorage eggModel;
     RenderModelStorage shadowModel;
     RenderModelStorage markerModels[5];
-    SpinTradeRenderAnim markerAnims[5];
+    RenderAnimation markerAnims[5];
     SpinTradeEgg eggs[SPIN_TRADE_MAX_PLAYERS];
     SpinTradeShadow shadows[5];
     SpinTradeMarker markers[5];
@@ -433,15 +428,6 @@ BOOL Comm_SyncedSave(SaveData *saveData, int unused, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *SpinTradeLink_GetReceivedParty(SpinTradeLinkMenu *menu, int netId);
-void RenderModel_LoadFromNarc(RenderModelStorage *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
-void RenderModel_BindTexturesOnVBlank(RenderModelStorage *model);
-void RenderAnimation_LoadFromNarc(SpinTradeRenderAnim *anim, int unused, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
-void RenderAnimation_FreeFile(SpinTradeRenderAnim *anim);
-void RenderAnimation_AllocObjectForModel(SpinTradeRenderAnim *anim, RenderModelStorage *model, enum HeapID heapId);
-void RenderAnimation_InitObjectForModel(SpinTradeRenderAnim *anim, RenderModelStorage *model);
-BOOL RenderAnimation_Advance(SpinTradeRenderAnim *anim, fx32 step, BOOL loop);
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *obj, RenderModelStorage *model, SpinTradeRenderAnim *anim);
-void RenderObj_DrawRotated(NNSG3dRenderObj *obj, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
 
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state);
 BOOL SpinTradeApp_Exit(OverlayManager *man, int *state);
@@ -1983,7 +1969,7 @@ static void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     const int *modelIds;
     const int *animIds;
     RenderModelStorage *model;
-    SpinTradeRenderAnim *anim;
+    RenderAnimation *anim;
     RenderModelStorage *animModel;
     SpinTradeObjects *objects = &app->objects;
 
@@ -2068,7 +2054,7 @@ static void SpinTrade_DrawEggs(SpinTradeApp *app) {
                 RenderObj_DrawRotated(&shadow->renderObj, &shadow->position, &shadow->scale, shadow->rotation);
             }
             if (marker->active) {
-                RenderObj_DrawAt((int)&marker->renderObj, &marker->position);
+                RenderObj_DrawAt(&marker->renderObj, &marker->position);
             }
             i++;
             egg++;

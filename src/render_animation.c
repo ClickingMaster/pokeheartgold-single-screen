@@ -23,20 +23,6 @@ static void RenderObj_Init(NNSG3dRenderObj *object, NNSG3dResMdl *model);
 static void RenderObj_AddAnimObj(NNSG3dRenderObj *object, NNSG3dAnmObj *animation);
 static void RenderObj_AddAnimation(NNSG3dRenderObj *object, RenderAnimation *animation);
 
-void RenderAnimation_LoadFromNarc(RenderAnimation *animation, int unused, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
-void RenderAnimation_FreeFile(RenderAnimation *animation);
-void RenderAnimation_AllocObjectForModel(RenderAnimation *animation, RenderModel *model, enum HeapID heapID);
-void RenderAnimation_InitObjectForModel(RenderAnimation *animation, RenderModel *model);
-void RenderAnimation_InitForModel(RenderAnimation *animation, RenderModel *model, RenderAnimation *source, int unused, enum HeapID heapID);
-void RenderAnimation_Free(RenderAnimation *animation);
-BOOL RenderAnimation_Advance(RenderAnimation *animation, fx32 step, BOOL loop);
-BOOL RenderAnimation_IsDone(RenderAnimation *animation);
-void RenderObj_InitFromModel(NNSG3dRenderObj *object, RenderModelStorage *model);
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *model, RenderAnimation *animation);
-void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const MtxFx33 *rotation);
-void RenderObj_DrawAt(int object, VecFx32 *position);
-void RenderObj_DrawRotated(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
-
 static const VecFx32 sRenderObjUnitScale = {
     .x = FX32_ONE,
     .y = FX32_ONE,
@@ -99,7 +85,7 @@ static void RenderAnimation_AllocObject(RenderAnimation *animation, NNSG3dResMdl
     GF_ASSERT(animation->object != NULL);
 }
 
-void RenderAnimation_AllocObjectForModel(RenderAnimation *animation, RenderModel *model, enum HeapID heapID) {
+void RenderAnimation_AllocObjectForModel(RenderAnimation *animation, RenderModelStorage *model, enum HeapID heapID) {
     RenderAnimation_AllocObject(animation, model->model, heapID);
 }
 
@@ -107,11 +93,12 @@ static void RenderAnimation_InitObject(RenderAnimation *animation, NNSG3dResMdl 
     NNS_G3dAnmObjInit(animation->object, animation->resource, model, texture);
 }
 
-void RenderAnimation_InitObjectForModel(RenderAnimation *animation, RenderModel *model) {
+void RenderAnimation_InitObjectForModel(RenderAnimation *animation, RenderModelStorage *data) {
+    RenderModel *model = (RenderModel *)data;
     RenderAnimation_InitObject(animation, model->model, model->texture);
 }
 
-void RenderAnimation_InitForModel(RenderAnimation *animation, RenderModel *model, RenderAnimation *source, int unused, enum HeapID heapID) {
+void RenderAnimation_InitForModel(RenderAnimation *animation, RenderModelStorage *model, RenderAnimation *source, int unused, enum HeapID heapID) {
     RenderAnimation_InitFromAnimation(animation, source, unused);
     RenderAnimation_AllocObjectForModel(animation, model, heapID);
     RenderAnimation_InitObjectForModel(animation, model);
@@ -200,8 +187,8 @@ void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecF
     GF3dRender_DrawModel(object, position, rotation, scale);
 }
 
-void RenderObj_DrawAt(int object, VecFx32 *position) {
-    RenderObj_Draw((NNSG3dRenderObj *)object, position, &sRenderObjUnitScale, &sRenderObjIdentityRotation);
+void RenderObj_DrawAt(NNSG3dRenderObj *object, VecFx32 *position) {
+    RenderObj_Draw(object, position, &sRenderObjUnitScale, &sRenderObjIdentityRotation);
 }
 
 void RenderObj_DrawRotated(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles) {

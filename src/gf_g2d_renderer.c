@@ -1,11 +1,8 @@
 #include "gf_g2d_renderer.h"
 
+#include <nnsys/g2d_renderer_internal.h>
+
 #include "global.h"
-
-void NNS_G2dInitRenderSurface(NNSG2dRenderSurface *surface);
-void NNS_G2dAddRendererTargetSurface(NNSG2dRendererInstance *renderer, NNSG2dRenderSurface *surface);
-
-void GF_InitG2dRenderSurface(NNSG2dRenderSurface *surface, NNSG2dViewRect *rect, NNSG2dOamRegisterFunction oam, NNSG2dAffineRegisterFunction affine, NNSG2dRndCellCullingFunction culling, NNSG2dSurfaceType type, NNSG2dRendererInstance *renderer);
 
 void GF_InitG2dRenderer(NNSG2dRendererInstance *instance, fx32 zOffset) {
     NNS_G2dInitRenderer(instance);

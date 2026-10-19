@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "library/spl_internal.h"
 #include "nnsys/gfd_internal.h"
 
 #include "camera.h"
@@ -47,24 +48,6 @@ static const VecFx32 sParticleCameraTarget = { 0, 0, 0 };
 // [0]: system whose resource is being loaded, [1]: param of the running ParticleSystem_CreateEmitterWithParam.
 static void *sParticleSystemCallbackState[2];
 static ParticleSystem *sParticleSystems[16];
-
-extern void *SPL_Init(ParticleAllocFunc alloc, int, int, int, int, int);
-extern void SPL_Load(void *, void *);
-extern void SPL_LoadTexByVRAMManager(void *);
-extern int SPL_LoadTexByCallbackFunction(void *, texAllocFun);
-extern void SPL_LoadTexPlttByVRAMManager(void *);
-extern int SPL_LoadTexPlttByCallbackFunction(void *, plttAllocFun);
-extern void SPL_Draw(void *, void *);
-extern void SPL_Calc(void *);
-extern SPLEmitter *SPL_Create(SPLManager *, int, void (*)(SPLEmitter *));
-extern void SPL_DeleteAll(void *);
-extern void SPL_Delete(void *, SPLEmitter *);
-extern void spl_calc_gravity(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-extern void spl_calc_random(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-extern void spl_calc_magnet(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-extern void spl_calc_spin(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-extern void spl_calc_scfield(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
-extern void spl_calc_convergence(const void *, SPLParticle *, VecFx32 *, SPLEmitter *);
 
 static void ParticleSystem_LoadResource(ParticleSystem *system);
 static void ParticleSystem_LoadResourceTask(SysTask *task, ParticleSystem *system);
@@ -389,8 +372,9 @@ int ParticleSystem_CalcAll(void) {
     return count;
 }
 
-void ParticleSystem_CreateEmitter(ParticleSystem *system, int resNo, void (*callback)(SPLEmitter *)) {
-    system->emitter = SPL_Create(system->manager, resNo, callback);
+void ParticleSystem_CreateEmitter(SPLEmitter *emitter, int resNo, const VecFx32 *position) {
+    ParticleSystem *system = (ParticleSystem *)emitter;
+    system->emitter = SPL_Create(system->manager, resNo, position);
 }
 
 void ParticleSystem_CreateEmitterWithParam(SPLEmitter *emitter, int resNo, void (*callback)(SPLEmitter *), void *arg) {

@@ -1,3 +1,5 @@
+#include "g2d_cell_culling.h"
+
 #include "global.h"
 
 // A cell whose cellAttr bit 11 is set is followed by its bounding rectangle.
@@ -8,8 +10,6 @@ typedef struct CellWithBounds {
     s16 minX;
     s16 minY;
 } CellWithBounds;
-
-BOOL GF_G2dIsCellVisible(const NNSG2dCellData *cell, const MtxFx32 *mtx, const NNSG2dViewRect *rect);
 
 BOOL GF_G2dIsCellVisible(const NNSG2dCellData *cell_, const MtxFx32 *mtx, const NNSG2dViewRect *rect) {
     const CellWithBounds *cell = (const CellWithBounds *)cell_;

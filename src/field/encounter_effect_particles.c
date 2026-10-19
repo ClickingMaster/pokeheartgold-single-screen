@@ -35,7 +35,6 @@ struct EncounterEffectParticles {
     u32 plttOffset; // next free palette VRAM offset
 };
 
-void ParticleSystem_CreateEmitter(SPLEmitter *system, int resNo, const VecFx32 *position);
 void ParticleSystem_FreeAll(void);
 
 void MTX_Identity22_(MtxFx22 *mtx);

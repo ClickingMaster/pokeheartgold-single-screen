@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "g2d_cell_culling.h"
+#include "gf_g2d_renderer.h"
 #include "sprite.h"
 
 // NNS OAM manager instance (opaque here)
@@ -25,10 +27,6 @@ BOOL NNS_G2dGetNewOamManagerInstance(OamInstance *, u16, u16, u16, u16, int);
 void NNS_G2dApplyAndResetOamManagerBuffer(OamInstance *);
 BOOL NNS_G2dEntryOamManagerOamWithAffineIdx(OamInstance *, const GXOamAttr *, u16);
 u16 NNS_G2dEntryOamManagerAffine(OamInstance *, const MtxFx22 *);
-
-// G2d renderer setup (unk_02025C44 group)
-void GF_InitG2dRenderSurface(NNSG2dRenderSurface *, NNSG2dViewRect *, NNSG2dOamRegisterFunction, NNSG2dAffineRegisterFunction, NNSG2dRndCellCullingFunction, NNS_G2D_VRAM_TYPE, NNSG2dRendererInstance *);
-BOOL GF_G2dIsCellVisible(const NNSG2dCellData *, const MtxFx32 *, const NNSG2dViewRect *);
 
 static OamManager *sOamManager;
 
@@ -85,9 +83,9 @@ void OamManager_Free(void) {
 void OamManager_InitRenderSurface(NNSG2dRenderSurface *surface, NNSG2dViewRect *rect, NNS_G2D_VRAM_TYPE type, NNSG2dRendererInstance *instance) {
     GF_ASSERT(sOamManager != NULL);
     if (type == NNS_G2D_VRAM_TYPE_2DMAIN) {
-        GF_InitG2dRenderSurface(surface, rect, OamManager_EntryMainOam, OamManager_EntryMainAffine, GF_G2dIsCellVisible, type, instance);
+        GF_InitG2dRenderSurface(surface, rect, OamManager_EntryMainOam, OamManager_EntryMainAffine, GF_G2dIsCellVisible, (NNSG2dSurfaceType)type, instance);
     } else {
-        GF_InitG2dRenderSurface(surface, rect, OamManager_EntrySubOam, OamManager_EntrySubAffine, GF_G2dIsCellVisible, type, instance);
+        GF_InitG2dRenderSurface(surface, rect, OamManager_EntrySubOam, OamManager_EntrySubAffine, GF_G2dIsCellVisible, (NNSG2dSurfaceType)type, instance);
     }
 }
 

@@ -14,10 +14,6 @@ static void RenderModel_BindTexturesTask(SysTask *task, void *data);
 static void RenderModel_FreeFile(RenderModel *model);
 static void RenderModel_ReleaseTextures(RenderModel *model);
 
-void RenderModel_LoadFromNarc(RenderModel *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
-void RenderModel_BindTexturesOnVBlank(RenderModel *model);
-void RenderModel_Free(RenderModelStorage *data);
-
 static void RenderModel_Clear(RenderModel *model) {
     u32 count = sizeof(*model);
     u8 *bytes = (u8 *)model;
@@ -35,7 +31,8 @@ static void RenderModel_InitFromFile(RenderModel *model, NNSG3dResFileHeader *fi
     model->texture = NNS_G3dGetTex(file);
 }
 
-void RenderModel_LoadFromNarc(RenderModel *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd) {
+void RenderModel_LoadFromNarc(RenderModelStorage *data, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd) {
+    RenderModel *model = (RenderModel *)data;
     void *file = GfGfxLoader_LoadFromOpenNarc(narc, fileId, FALSE, heapID, atEnd);
     RenderModel_InitFromFile(model, file, index);
 }
@@ -51,7 +48,7 @@ static void RenderModel_BindTexturesTask(SysTask *task, void *data) {
     SysTask_Destroy(task);
 }
 
-void RenderModel_BindTexturesOnVBlank(RenderModel *model) {
+void RenderModel_BindTexturesOnVBlank(RenderModelStorage *model) {
     SysTask *task = SysTask_CreateOnVBlankQueue(RenderModel_BindTexturesTask, model, 0xFFFF);
     GF_ASSERT(task != NULL);
 }

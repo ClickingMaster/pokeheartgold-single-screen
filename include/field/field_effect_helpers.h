@@ -7,12 +7,6 @@
 
 // Helpers the field effect renderers share: model animations, render objects, effect accessors and billboards.
 
-void RenderAnimation_Free(RenderAnimation *animation);
-BOOL RenderAnimation_Advance(RenderAnimation *animation, fx32 step, BOOL loop);
-BOOL RenderAnimation_IsDone(RenderAnimation *animation);
-void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *model, RenderAnimation *animation);
-void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const MtxFx33 *rotation);
-
 void *FieldEffect_GetState(FieldEffect *effect);
 int FieldEffect_GetParam(FieldEffect *effect);
 void FieldEffect_SetPosition(FieldEffect *effect, const VecFx32 *position);
