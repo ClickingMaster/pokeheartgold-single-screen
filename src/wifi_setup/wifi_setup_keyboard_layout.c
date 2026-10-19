@@ -7,22 +7,18 @@
 
 // Software keyboard: key sizes and row placement. Compiled without -ipa file (see Makefile).
 
-typedef struct RowCounts {
-    u8 counts[5];
-} RowCounts;
-
 const WifiSetupPoint ov13_02244F60 = { 0x1C, 0x02 };
 const WifiSetupPoint gWifiSetupKeyboardButtonSize = { 120, 18 }; // button size
 const WifiSetupPoint gWifiSetupKeyboardKeySize = { 17, 18 };     // character key size
 
 // number of buttons, character keys and extra keys in each of the five rows (row 4: buttons)
-static const RowCounts sButtonsPerRow = {
+static const WifiSetupKeyRowCounts sButtonsPerRow = {
     { 0, 0, 0, 0, 2 }
 };
-static const RowCounts sCharKeysPerRow = {
+static const WifiSetupKeyRowCounts sCharKeysPerRow = {
     { 12, 12, 12, 11, 0 }
 };
-static const RowCounts sExtraKeysPerRow = {
+static const WifiSetupKeyRowCounts sExtraKeysPerRow = {
     { 1, 1, 1, 1, 0 }
 };
 
@@ -33,9 +29,9 @@ static inline u32 OamPos(u32 attr, int x, int y) {
 // Moves every object of row `row` (0-3: key rows, 4: buttons) to height y; the row's text is
 // taken from page `page`.
 void WifiSetupKeyboard_SetRowY(int page, int row, int y) {
-    RowCounts charKeys = sCharKeysPerRow;
-    RowCounts extraKeys = sExtraKeysPerRow;
-    RowCounts buttons = sButtonsPerRow;
+    WifiSetupKeyRowCounts charKeys = sCharKeysPerRow;
+    WifiSetupKeyRowCounts extraKeys = sExtraKeysPerRow;
+    WifiSetupKeyRowCounts buttons = sButtonsPerRow;
     int key;
     int i;
     int start = row * 12;

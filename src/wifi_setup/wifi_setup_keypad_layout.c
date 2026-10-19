@@ -7,23 +7,19 @@
 
 // Numeric keypad: key sizes and row placement. Compiled without -ipa file (see Makefile).
 
-typedef struct RowCounts {
-    u8 counts[5];
-} RowCounts;
-
 const WifiSetupPoint gWifiSetupKeypadExtraKeySize = { 0x1C, 0x14 }; // extra key size
 const WifiSetupPoint gWifiSetupKeypadDigitKeySize = { 0x1C, 0x14 }; // digit key size
 static const WifiSetupPoint sUnused = { 0x0C, 0x04 };
 const WifiSetupPoint gWifiSetupKeypadButtonSize = { 0x78, 0x12 }; // button size
 
 // number of digit keys, extra keys and buttons in each of the five rows (row 4: buttons)
-static const RowCounts sDigitKeysPerRow = {
+static const WifiSetupKeyRowCounts sDigitKeysPerRow = {
     { 3, 3, 3, 1, 0 }
 };
-static const RowCounts sButtonsPerRow = {
+static const WifiSetupKeyRowCounts sButtonsPerRow = {
     { 0, 0, 0, 0, 2 }
 };
-static const RowCounts sExtraKeysPerRow = {
+static const WifiSetupKeyRowCounts sExtraKeysPerRow = {
     { 0, 0, 0, 2, 0 }
 };
 // position of the key labels in their row canvas (read by WifiSetupKeypad_Create)
@@ -35,9 +31,9 @@ static inline u32 OamPos(u32 attr, int x, int y) {
 
 // Moves every object of row `row` (0-3: key rows, 4: buttons) to height y.
 void WifiSetupKeypad_SetRowY(int row, int y) {
-    RowCounts digitKeys = sDigitKeysPerRow;
-    RowCounts extraKeys = sExtraKeysPerRow;
-    RowCounts buttons = sButtonsPerRow;
+    WifiSetupKeyRowCounts digitKeys = sDigitKeysPerRow;
+    WifiSetupKeyRowCounts extraKeys = sExtraKeysPerRow;
+    WifiSetupKeyRowCounts buttons = sButtonsPerRow;
     int key;
     int i;
     int start = row * 3;

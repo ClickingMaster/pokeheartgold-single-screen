@@ -8,11 +8,6 @@
 // Software keyboard, third part: page switching, key highlight, cursor, the slide-out animation
 // and teardown.
 
-typedef struct RowPosition {
-    int y;
-    int x;
-} RowPosition;
-
 static inline void SetKeyPalette(GXOamAttr *oam, u32 palette) {
     oam->attr01 &= ~0xc00u;
     oam->attr2 = (oam->attr2 & ~0xf000u) | (palette << 12);
@@ -221,7 +216,7 @@ void WifiSetupKeyboard_MoveCursor(int direction) {
 // extra, unused argument.
 
 void WifiSetupKeyboard_SlideOutButtonsTask(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 word = WifiSetupOamBlock_GetOam(gWifiSetupKeyboard->buttons[0], 0)->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
@@ -233,7 +228,7 @@ void WifiSetupKeyboard_SlideOutButtonsTask(void *task) {
 }
 
 void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[36]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
@@ -245,7 +240,7 @@ void WifiSetupKeyboard_SlideOutRow3Task(void *task) {
 }
 
 void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[24]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
@@ -257,7 +252,7 @@ void WifiSetupKeyboard_SlideOutRow2Task(void *task) {
 }
 
 void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[12]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;
@@ -269,7 +264,7 @@ void WifiSetupKeyboard_SlideOutRow1Task(void *task) {
 }
 
 void WifiSetupKeyboard_SlideOutRow0Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 word = gWifiSetupKeyboard->keys[0]->attr01;
     pos.x = (word & 0x1ff0000) >> 16;
     pos.y = (word & 0xff) + 12;

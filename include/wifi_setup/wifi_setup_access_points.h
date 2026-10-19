@@ -6,6 +6,7 @@
 #include "global.h"
 
 #include "wifi_setup/wifi_setup_connection.h"
+#include "wifi_setup/wifi_setup_internal.h"
 
 // Access-point data of the access-point setup (ARM code in overlay 13): the scan for nearby access
 // points, the saved connection settings (four 0x100-byte backup pages, the first three editable)
@@ -38,14 +39,6 @@ typedef struct WifiSetupConnections {
     WifiSetupConnection edit; // 0x400
     MATHCRC16Table crcTable;  // 0x4F8
 } WifiSetupConnections;
-
-// Result of the setup client (see WifiSetupClient_StoreResult).
-typedef struct WifiSetupClientResultData {
-    u8 ssid[0x20];
-    int keyType;
-    int unk_24;
-    u8 wepKeys[4][0x20];
-} WifiSetupClientResultData;
 
 typedef struct WifiSetupSound {
     NNSSndArc arc;
@@ -82,7 +75,7 @@ void WifiSetupConnections_FormatSecondaryDns(char *buf);
 u8 WifiSetupConnections_GetSetupMethod(int index);
 void WifiSetupConnections_Edit(int index);
 void WifiSetupConnections_SaveEdit(void);
-void WifiSetupConnections_SetFromClientResult(WifiSetupClientResultData *result);
+void WifiSetupConnections_SetFromClientResult(WifiSetupResult *result);
 void WifiSetupConnections_SetFromInfo(u8 *info);
 WifiSetupConnections *WifiSetupConnections_Get(void);
 void WifiSetupConnections_Erase(int index);

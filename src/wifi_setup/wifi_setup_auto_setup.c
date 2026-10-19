@@ -20,11 +20,6 @@
 // search -> connect -> receive the settings -> done, and the access-point scan screen.
 // Ends with the start of the connection slot screen.
 
-// Copies of path strings (the path is localised in place).
-typedef struct WifiSetupPath22 {
-    char text[22];
-} WifiSetupPath22;
-
 // rect index in gWifiSetupSettingsCursorPairRects per cursor item
 typedef struct WifiSetupSettingsCursorRects {
     u8 rects[14];

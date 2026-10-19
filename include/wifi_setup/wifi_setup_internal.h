@@ -92,9 +92,14 @@ extern WifiSetupWork gWifiSetupWork;
 extern WifiSetupConfig gWifiSetupConfig;
 extern OSThread gWifiSetupThread;
 
-// result block handed to the caller (WifiSetup_GetSimpleStartResult)
+// result block handed to the caller (WifiSetup_GetSimpleStartResult): the settings received from the
+// setup access point
 typedef struct WifiSetupResult {
-    u32 words[58];
+    u8 ssid[32];
+    int keyType; // WM_WEPMODE_*, 4-5: WPA
+    int unk_24;
+    u8 wepKeys[4][32];
+    u8 wpaKey[64];
 } WifiSetupResult;
 
 extern WifiSetupResult gWifiSetupResult;

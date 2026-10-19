@@ -9,14 +9,9 @@
 // each task raises one key row by 12 pixels per frame until it reaches its place, then starts the
 // next row from the bottom of the screen.
 
-typedef struct RowPosition {
-    int y;
-    int x;
-} RowPosition;
-
 void WifiSetupKeyboard_SlideInRow0Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 word = gWifiSetupKeyboard->keys[0]->attr01;
     p->x = (word & 0x1ff0000) >> 16;
     p->y = (word & 0xff) - 12;
@@ -30,8 +25,8 @@ void WifiSetupKeyboard_SlideInRow0Task(void *task) {
 }
 
 void WifiSetupKeyboard_SlideInRow1Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 word = gWifiSetupKeyboard->keys[12]->attr01;
     p->x = (word & 0x1ff0000) >> 16;
     p->y = (word & 0xff) - 12;
@@ -45,8 +40,8 @@ void WifiSetupKeyboard_SlideInRow1Task(void *task) {
 }
 
 void WifiSetupKeyboard_SlideInRow2Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 word = gWifiSetupKeyboard->keys[24]->attr01;
     p->x = (word & 0x1ff0000) >> 16;
     p->y = (word & 0xff) - 12;

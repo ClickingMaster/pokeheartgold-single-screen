@@ -3,31 +3,33 @@
 #include "wifi_setup/wifi_setup.h"
 #include "wifi_setup/wifi_setup_wcm.h"
 
-typedef struct Pair {
+// Number of tries and the delay between them
+typedef struct WifiSetupAossRetry {
     s16 max;
     s16 delay;
-} Pair;
+} WifiSetupAossRetry;
 
-typedef struct Config {
+typedef struct WifiSetupAossAddresses {
     u32 ip;
-    u32 pad[3];
+    u8 padding_04[12];
     u32 gateway;
-} Config;
+} WifiSetupAossAddresses;
 
-typedef struct Context {
+typedef struct WifiSetupAossConnectInfo {
     u8 bytes[60];
-} Context;
+} WifiSetupAossConnectInfo;
 
-typedef struct Params {
+typedef struct WifiSetupAossPacketParams {
     u8 bytes[24];
-} Params;
+} WifiSetupAossPacketParams;
 
-typedef struct Data {
+// Packet received from the access point (gWifiSetupState.data)
+typedef struct WifiSetupAossReceived {
     int socket;
     int length;
-    u32 pad;
+    u8 padding_08[4];
     u8 bytes[1500];
-} Data;
+} WifiSetupAossReceived;
 
 typedef struct AossSession {
     SocAddress address;
@@ -37,26 +39,25 @@ typedef struct AossSession {
     SocAddress remote;
     int attempts;
     int option;
-    Pair retry;
-    Pair connection;
-    Config config;
-    Context context;
-    Params params;
+    WifiSetupAossRetry retry;
+    WifiSetupAossRetry connection;
+    WifiSetupAossAddresses config;
+    WifiSetupAossConnectInfo context;
+    WifiSetupAossPacketParams params;
 } AossSession;
 
 extern void *ov13_0224CF9C;
 extern s8 ov13_0224CFB8[];
 extern int gWifiSetupSocket;
 
-void WifiSetup_InitPacketAddresses(int, Params *, void *);
+void WifiSetup_InitPacketAddresses(int, WifiSetupAossPacketParams *, void *);
 int WifiSetup_FindAossAccessPoint(void *);
-int WifiSetup_InitAossConnectInfo(Context *);
-int WifiSetup_ConnectAccessPoint(Context *, int *);
-int WifiSetup_SendRequest(int, Config *, Params *, int);
-int WifiSetup_HandlePacket(int, Data *, int *, Params *, int);
-int WifiSetup_StoreAossResult(WifiSetupRequest *);
+int WifiSetup_InitAossConnectInfo(WifiSetupAossConnectInfo *);
+int WifiSetup_ConnectAccessPoint(WifiSetupAossConnectInfo *, int *);
+int WifiSetup_SendRequest(int, WifiSetupAossAddresses *, WifiSetupAossPacketParams *, int);
+int WifiSetup_HandlePacket(int, WifiSetupAossReceived *, int *, WifiSetupAossPacketParams *, int);
 
-static const Pair sWifiSetupUnsetConnection = {
+static const WifiSetupAossRetry sWifiSetupUnsetConnection = {
     .max = -1,
     .delay = -1,
 };
@@ -69,7 +70,7 @@ static inline int GetTimeout(WifiSetupRequest *request) {
     return request->receiveTimeout;
 }
 
-static inline void ClearRetry(Pair *pair, int *mode) {
+static inline void ClearRetry(WifiSetupAossRetry *pair, int *mode) {
     *(s16 *)((u32)pair) = 0;
     *mode = 0;
     *(s16 *)((u32)pair + 2) = 0;
@@ -83,7 +84,7 @@ int WifiSetup_RunAossSession(WifiSetupRequest *request) {
     int mode;
     int nextMode;
     u32 ip;
-    Data *data;
+    WifiSetupAossReceived *data;
     int seconds;
     int microseconds;
     int timeout;
@@ -100,7 +101,7 @@ int WifiSetup_RunAossSession(WifiSetupRequest *request) {
     zero = mode;
     session.attempts = zero;
     ip = zero;
-    WifiSetup_MemFill(&session.params, mode, sizeof(Params));
+    WifiSetup_MemFill(&session.params, mode, sizeof(WifiSetupAossPacketParams));
     session.connection.max = request->connectRetries;
     if (session.connection.max == -1) {
         session.connection.max = 10;
@@ -161,7 +162,7 @@ int WifiSetup_RunAossSession(WifiSetupRequest *request) {
         i++;
     }
     WifiSetup_SetStatus(1);
-    WifiSetup_MemFill(&session.context, 0, sizeof(Context));
+    WifiSetup_MemFill(&session.context, 0, sizeof(WifiSetupAossConnectInfo));
     if (WifiSetup_InitAossConnectInfo(&session.context)) {
         request->error = 15;
         WifiSetup_FreeWorkBuffers();
@@ -225,7 +226,7 @@ int WifiSetup_RunAossSession(WifiSetupRequest *request) {
     }
 restart:
     data = gWifiSetupState.data;
-    WifiSetup_MemFill(&session.config, 0, sizeof(Config));
+    WifiSetup_MemFill(&session.config, 0, sizeof(WifiSetupAossAddresses));
     session.config.gateway = 0xc0a80b65;
     session.config.ip = 0xc0a80b01;
     seconds = (timeout) / 1000;

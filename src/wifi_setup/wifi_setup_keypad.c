@@ -10,11 +10,6 @@
 // Numeric keypad, first part: creation, the accessors used by the screens, the slide-in animation
 // and the per-frame input handling (touch press, release and hold, D-pad and buttons).
 
-typedef struct RowPosition {
-    int y;
-    int x;
-} RowPosition;
-
 void WifiSetupKeypad_Create(void) {
     u16 box[4];
     u32 numObjs;
@@ -101,8 +96,8 @@ BOOL WifiSetupKeypad_Exists(void) {
 // the next row from the bottom of the screen. The row's x position is read but unused.
 
 void WifiSetupKeypad_SlideInRow0Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[0]->attr01;
     p->x = (attr & 0x1ff0000) >> 16;
     p->y = (attr & 0xff) - 12;
@@ -116,8 +111,8 @@ void WifiSetupKeypad_SlideInRow0Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow1Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[3]->attr01;
     p->x = (attr & 0x1ff0000) >> 16;
     p->y = (attr & 0xff) - 12;
@@ -131,8 +126,8 @@ void WifiSetupKeypad_SlideInRow1Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow2Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[6]->attr01;
     p->x = (attr & 0x1ff0000) >> 16;
     p->y = (attr & 0xff) - 12;
@@ -146,8 +141,8 @@ void WifiSetupKeypad_SlideInRow2Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideInRow3Task(void *task) {
-    RowPosition pos;
-    RowPosition *p = &pos;
+    WifiSetupKeyRowPosition pos;
+    WifiSetupKeyRowPosition *p = &pos;
     u32 attr = gWifiSetupKeypad->keys[9]->attr01;
     p->x = (attr & 0x1ff0000) >> 16;
     p->y = (attr & 0xff) - 12;

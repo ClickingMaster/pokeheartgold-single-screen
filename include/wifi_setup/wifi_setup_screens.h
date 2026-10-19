@@ -8,6 +8,19 @@
 // Access-point setup screens: the list screen and the text entry screen shared with the screens that
 // follow them.
 
+// Copies of path strings (the path is localised in place).
+typedef struct WifiSetupPath22 {
+    char text[22];
+} WifiSetupPath22;
+
+typedef struct WifiSetupPath23 {
+    char text[23];
+} WifiSetupPath23;
+
+typedef struct WifiSetupPath25 {
+    char text[25];
+} WifiSetupPath25;
+
 // One row of the list screen (0x2A bytes).
 typedef struct WifiSetupListRow {
     u8 text[40];

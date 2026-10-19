@@ -2,6 +2,7 @@
 
 #include "global.h"
 
+#include "dwc/dwc_bm_internal.h"
 #include "wifi_setup/wifi_setup_app.h"
 #include "wifi_setup/wifi_setup_connection_screens.h"
 #include "wifi_setup/wifi_setup_internal.h"
@@ -27,27 +28,6 @@ typedef struct WifiSetupClientStatus {
     int timeLeft;
     int error;
 } WifiSetupClientStatus;
-
-// View of the setup client's result block (WifiSetupResult, 0xE8 bytes).
-typedef struct WifiSetupClientResult {
-    u8 ssid[0x20];
-    int securityType;
-    int unk_24;
-    u8 unk_28[0xC0];
-} WifiSetupClientResult;
-
-// Copies of path strings (the path is localised in place).
-typedef struct WifiSetupPath22 {
-    char text[22];
-} WifiSetupPath22;
-
-typedef struct WifiSetupPath23 {
-    char text[23];
-} WifiSetupPath23;
-
-typedef struct WifiSetupPath25 {
-    char text[25];
-} WifiSetupPath25;
 
 typedef struct WifiSetupBytePair {
     u8 values[2];
@@ -75,11 +55,6 @@ typedef struct WifiSetupWaitScreen {
 typedef struct WifiSetupBox {
     u16 x, y, width, height;
 } WifiSetupBox;
-
-typedef struct WifiSetupWiFiInfo {
-    u64 id;
-    u8 unk_08[0xC];
-} WifiSetupWiFiInfo;
 
 extern WifiSetupClientStatus *gWifiSetupClientStatus;
 extern WifiSetupTopMenu gWifiSetupTopMenu;
@@ -176,10 +151,9 @@ extern u8 *WifiSetupConnections_GetEdit(void);
 extern void WifiSetupConnections_SetSsid(void *);
 extern void WifiSetupConnections_GetSsid(void *);
 extern void WifiSetupConnections_Edit(int);
-extern void WifiSetupConnections_SetFromClientResult(WifiSetupClientResult *a);
 extern void WifiSetupConnections_Reset(void);
+extern void WifiSetupConnections_SetFromClientResult(WifiSetupResult *result);
 extern void WifiSetupText_FreeCanvas(void *);
-extern void DWCi_BM_GetWiFiInfo(WifiSetupWiFiInfo *info);
 extern s32 FX_DivS32(s32 a, s32 b);
 extern int swprintf(u16 *buf, u32 n, const u16 *fmt, ...);
 
@@ -439,7 +413,7 @@ void WifiSetupClient_Stop(void) {
 }
 
 int WifiSetupClient_GetResult(void) {
-    WifiSetupClientResult buf;
+    WifiSetupResult buf;
     switch (gWifiSetupClientStatus->state) {
     case 0:
     case 1:
@@ -454,7 +428,7 @@ int WifiSetupClient_GetResult(void) {
         if (WifiSetup_GetSimpleStartResult(&buf) != 1) {
             OS_Terminate();
         }
-        if (buf.securityType >= 0 && buf.securityType <= 3 && buf.unk_24 == 1) {
+        if (buf.keyType >= 0 && buf.keyType <= 3 && buf.unk_24 == 1) {
             return 3;
         }
         return 5;
@@ -464,7 +438,7 @@ int WifiSetupClient_GetResult(void) {
 }
 
 void WifiSetupClient_StoreResult(void) {
-    WifiSetupClientResult buf;
+    WifiSetupResult buf;
     if (WifiSetup_GetSimpleStartResult(&buf) != 1) {
         OS_Terminate();
     }
@@ -987,7 +961,7 @@ static void WifiSetupSystemInfo_LoadGraphics(void) {
 }
 
 static void WifiSetupSystemInfo_DrawInfo(void) {
-    WifiSetupWiFiInfo info;
+    DwcWiFiInfo info;
     u32 parts[4];
     u16 buf[0x14];
     u8 mac[6];
@@ -998,8 +972,8 @@ static void WifiSetupSystemInfo_DrawInfo(void) {
     swprintf(buf, 0x14, gWifiSetupSystemInfoMacFormat, mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     WifiSetupText_DrawInRect(win, 8, 0x40, 0xf0, 0x1c, 2, 0x480, buf);
     DWCi_BM_GetWiFiInfo(&info);
-    if (info.id != 0) {
-        id = info.id;
+    if (info.userId != 0) {
+        id = info.userId;
         parts[3] = (id % 10) * 1000;
         id /= 10;
         for (i = 0; i < 3; i++) {
@@ -1116,7 +1090,7 @@ static void WifiSetupOptions_Init(void) {
 static void WifiSetupOptions_LoadGraphics(void) {
     WifiSetupPath22 a;
     WifiSetupPath23 b;
-    WifiSetupWiFiInfo info;
+    DwcWiFiInfo info;
     u8 *src;
     u8 *dst;
     int i;
@@ -1128,7 +1102,7 @@ static void WifiSetupOptions_LoadGraphics(void) {
     gWifiSetupOptions.graphics = WifiSetupFile_Load(WifiSetup_LocalizePath(b.text), NULL, 4);
     pal = WifiSetupFile_Load(WifiSetup_LocalizePath(a.text), NULL, 4);
     DWCi_BM_GetWiFiInfo(&info);
-    if (info.id == 0) {
+    if (info.userId == 0) {
         src = pal + 0xc0;
         dst = pal + 0x40;
         for (i = 0; i < 2; i++) {
@@ -1213,14 +1187,14 @@ static void WifiSetupOptions_Update(void) {
 }
 
 static void WifiSetupOptions_CheckButtons(void) {
-    WifiSetupWiFiInfo info;
+    DwcWiFiInfo info;
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
         WifiSetupSound_Play(7);
         break;
     case 1:
         DWCi_BM_GetWiFiInfo(&info);
-        if (gWifiSetupOptions.selected != 0 && info.id == 0) {
+        if (gWifiSetupOptions.selected != 0 && info.userId == 0) {
             WifiSetupSound_Play(9);
             WifiSetupButtonBar_SetSelected(-1);
             return;

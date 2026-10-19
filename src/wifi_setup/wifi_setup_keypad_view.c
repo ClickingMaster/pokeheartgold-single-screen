@@ -8,11 +8,6 @@
 
 // Numeric keypad, second part: key highlight, cursor, the slide-out animation and teardown.
 
-typedef struct RowPosition {
-    int y;
-    int x;
-} RowPosition;
-
 static inline void SetKeyPalette(GXOamAttr *oam, u32 palette) {
     oam->attr01 &= ~0xc00u;
     oam->attr2 = (oam->attr2 & ~0xf000u) | (palette << 12);
@@ -72,7 +67,7 @@ void WifiSetupKeypad_MoveCursor(int direction) {
 // starts the row above it; the buttons go first.
 
 void WifiSetupKeypad_SlideOutButtonsTask(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 attr = WifiSetupOamBlock_GetOam(gWifiSetupKeypad->buttons[0], 0)->attr01;
     pos.x = (attr & 0x1ff0000) >> 16;
     pos.y = (attr & 0xff) + 12;
@@ -84,7 +79,7 @@ void WifiSetupKeypad_SlideOutButtonsTask(void *task) {
 }
 
 void WifiSetupKeypad_SlideOutRow3Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 attr = gWifiSetupKeypad->keys[9]->attr01;
     pos.x = (attr & 0x1ff0000) >> 16;
     pos.y = (attr & 0xff) + 12;
@@ -96,7 +91,7 @@ void WifiSetupKeypad_SlideOutRow3Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideOutRow2Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 attr = gWifiSetupKeypad->keys[6]->attr01;
     pos.x = (attr & 0x1ff0000) >> 16;
     pos.y = (attr & 0xff) + 12;
@@ -108,7 +103,7 @@ void WifiSetupKeypad_SlideOutRow2Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideOutRow1Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 attr = gWifiSetupKeypad->keys[3]->attr01;
     pos.x = (attr & 0x1ff0000) >> 16;
     pos.y = (attr & 0xff) + 12;
@@ -120,7 +115,7 @@ void WifiSetupKeypad_SlideOutRow1Task(void *task) {
 }
 
 void WifiSetupKeypad_SlideOutRow0Task(void *task) {
-    RowPosition pos;
+    WifiSetupKeyRowPosition pos;
     u32 attr = gWifiSetupKeypad->keys[0]->attr01;
     pos.x = (attr & 0x1ff0000) >> 16;
     pos.y = (attr & 0xff) + 12;

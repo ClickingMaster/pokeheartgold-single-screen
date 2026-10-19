@@ -16,12 +16,11 @@ typedef struct Id8 {
     u8 b[8];
 } Id8;
 
-// gWifiSetupClientSettings
-typedef struct WifiSetupSettings {
-    u8 unk_00[20];
-    s8 unk_14;
-    u8 unk_15[43];
-} WifiSetupSettings;
+// gWifiSetupClientSettings, followed by the SSID received from the setup access point
+typedef struct WifiSetupClientSettings {
+    u8 padding_00[20];
+    s8 ssid[32];
+} WifiSetupClientSettings;
 
 // gWifiSetupReply
 typedef struct WifiSetupReply {
@@ -38,7 +37,7 @@ extern u8 gWifiSetupRecordBuffer[2048]; // record buffer
 extern u8 gWifiSetupSettingsKey[8];
 extern u8 gWifiSetupTimestampDigest[24];
 extern WifiSetupReply gWifiSetupReply;
-extern WifiSetupSettings gWifiSetupClientSettings;
+extern WifiSetupClientSettings gWifiSetupClientSettings;
 
 int SOC_Socket(int domain, int type, int protocol);
 int SOC_Bind(int socket, void *addr);
@@ -197,7 +196,7 @@ int WifiSetup_RunSession(void) {
             if (SOC_RecvFrom(sock, gWifiSetupPacketBuffer, 2048, 4, &recv) > 0) {
                 gWifiSetupWork.recordLength = WifiSetup_ReadPacket(gWifiSetupPacketBuffer, 5, gWifiSetupRecordBuffer, gWifiSetupSettingsKey);
                 if (gWifiSetupWork.recordLength && WifiSetup_ParseSettingsRecords(gWifiSetupRecordBuffer)) {
-                    if (gWifiSetupClientSettings.unk_14) {
+                    if (gWifiSetupClientSettings.ssid[0]) {
                         gWifiSetupWork.unk_00 = 1;
                     } else {
                         gWifiSetupWork.unk_00 = 0;

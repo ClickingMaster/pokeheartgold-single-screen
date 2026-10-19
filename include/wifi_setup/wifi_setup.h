@@ -75,6 +75,7 @@ void *WifiSetup_Alloc(int size);
 void WifiSetup_Free(void *ptr);
 int WifiSetup_RunAoss(WifiSetupRequest *request);
 int WifiSetup_RunAossSession(WifiSetupRequest *request);
+int WifiSetup_StoreAossResult(WifiSetupRequest *);
 u32 WifiSetup_NextHostAddress(u32 value, u32 mask);
 void WifiSetup_FreeWorkBuffers(void);
 void WifiSetup_InitState(WifiSetupRequest *request);

@@ -20,11 +20,6 @@
 // (prompt, test, "connection succeeded"), and the screens before and after the Wi-Fi USB connector
 // screen.
 
-// Copies of path strings (the path is localised in place).
-typedef struct WifiSetupPath22 {
-    char text[22];
-} WifiSetupPath22;
-
 typedef struct WifiSetupPaletteRows {
     u8 rows[4];
 } WifiSetupPaletteRows;
@@ -36,9 +31,12 @@ typedef struct WifiSetupTestPromptMessages {
 
 // parameters of the connection test (DWC_AC_Create)
 typedef struct WifiSetupConnectionTestParams {
-    u8 unk_00[10];
+    void *(*alloc)(int heap, int size);
+    void (*free)(int heap, void *ptr, int size);
+    u8 dmaNo;
+    u8 powerMode;
     u8 slot; // 1-3, 4 for the Wi-Fi USB connector
-    u8 unk_0B;
+    u8 skipNetCheck;
 } WifiSetupConnectionTestParams;
 
 extern u8 gWifiSetupConnectionListSlotIconTemplates[];              // slot icon template per setup method (3 = empty)

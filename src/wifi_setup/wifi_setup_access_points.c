@@ -337,7 +337,7 @@ void WifiSetupConnections_SaveEdit(void) {
     WifiSetupConnections_WritePage(work->index);
 }
 
-void WifiSetupConnections_SetFromClientResult(WifiSetupClientResultData *src) {
+void WifiSetupConnections_SetFromClientResult(WifiSetupResult *src) {
     WifiSetupConnections *d = gWifiSetupConnections;
     WifiSetupConnection *w = &d->edit;
     u32 len;

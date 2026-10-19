@@ -53,6 +53,17 @@ typedef struct WifiSetupRect {
     u16 bottom;
 } WifiSetupRect;
 
+// Position of a key row of the software keyboard or the numeric keypad while it slides in or out.
+typedef struct WifiSetupKeyRowPosition {
+    int y;
+    int x;
+} WifiSetupKeyRowPosition;
+
+// Number of keys of one kind in each of the five rows of the keyboard or keypad (row 4: buttons).
+typedef struct WifiSetupKeyRowCounts {
+    u8 counts[5];
+} WifiSetupKeyRowCounts;
+
 typedef void (*WifiSetupTaskFunc)(void *task, void *arg);
 
 typedef struct WifiSetupTask {

@@ -6,16 +6,16 @@
 extern int gWifiSetupSocket[2];
 extern u32 gWifiSetupCrc32Table[256];
 
-typedef struct {
+typedef struct WifiSetupAossApEntry {
     u32 length;
     u8 data[0x4c];
     u32 flags;
-} Entry;
+} WifiSetupAossApEntry;
 
-typedef struct {
+typedef struct WifiSetupAossApList {
     u32 count;
-    Entry entries[64];
-} List;
+    WifiSetupAossApEntry entries[64];
+} WifiSetupAossApList;
 
 extern char sStr_ESSID_AOSS[];
 extern char sStr_MELCO[];
@@ -25,27 +25,29 @@ extern char sStr_MELCO[];
 extern u8 gWifiSetupJoinReply[];
 extern u8 gWifiSetupSecurityRecords[];
 
-typedef struct Packet {
-    u8 pad[6];
+// Packet header (see WifiSetup_WritePacketHeader) followed by the body
+typedef struct WifiSetupAossPacket {
+    u16 version;
+    u8 padding_02[4];
     u16 kind;
-    u8 gap[2];
+    u8 padding_08[2];
     u16 result;
     u16 flags;
     u8 mode;
-    u8 padf;
+    u8 protocol;
     u8 address[8];
     u16 length;
     u16 other;
     u8 data[1];
-} Packet;
+} WifiSetupAossPacket;
 
 extern u8 gWifiSetupPeerAddress[];
 extern u8 sWifiSetupSecurityRecordTypes[];
 
-typedef struct {
+typedef struct WifiSetupAossRecordHeader {
     u8 type, reserved;
     u16 length;
-} Header;
+} WifiSetupAossRecordHeader;
 
 extern s8 ov13_0224CFB8[];
 extern u8 gWifiSetupCipherSeed[];
@@ -54,7 +56,7 @@ extern u8 gWifiSetupCipherKey[];
 static int WifiSetup_HandleJoinReply(int state, void *packet, int *counter, void *context);
 static int WifiSetup_HandleSettingsReply(int state, void *packet, int *counter, void *context);
 static int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void *context);
-static int WifiSetup_DecryptPacket(Packet *p);
+static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p);
 static int WifiSetup_CheckPeer(int value, const void *data);
 static int WifiSetup_CheckReplySequence(const u8 *a, u8 *b);
 static int WifiSetup_ParseJoinReply(const u8 *src, u8 *dst);
@@ -85,7 +87,7 @@ static void WifiSetup_ScrambleXorHalf(s8 *in, u8 *out, int length);
 static void WifiSetup_ScrambleSwapHalves(u8 *dst, s32 size, u8 *tmp);
 
 int WifiSetup_CheckPrintable(const u8 *data, int length);
-int WifiSetup_FindAossAccessPoint(List *list);
+int WifiSetup_FindAossAccessPoint(WifiSetupAossApList *list);
 int WifiSetup_InitAossConnectInfo(void *out);
 void WifiSetup_InitPacketAddresses(int count, u8 *dst, const void *src);
 int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context);
@@ -102,7 +104,7 @@ int WifiSetup_CheckPrintable(const u8 *data, int length) {
     return 0;
 }
 
-int WifiSetup_FindAossAccessPoint(List *list) {
+int WifiSetup_FindAossAccessPoint(WifiSetupAossApList *list) {
     int result = 0;
     int matches = 0;
     int i;
@@ -166,22 +168,22 @@ int WifiSetup_SetStatus(int value) {
 }
 
 int WifiSetup_HandlePacket(int state, void *packet, int *counter, void *context) {
-    u8 *header = (u8 *)packet + 0xC;
+    WifiSetupAossPacket *header = (WifiSetupAossPacket *)((u8 *)packet + 0xC);
     int type;
 
-    if (WifiSetup_NetToHost16(U16_AT(header, 0)) < 1) {
+    if (WifiSetup_NetToHost16(header->version) < 1) {
         (*counter)++;
         return state;
     }
-    if (U8_AT(header, 0xF) != 0x11) {
+    if (header->protocol != 0x11) {
         (*counter)++;
         return state;
     }
-    if (WifiSetup_DecryptPacket((Packet *)((u8 *)packet + 0xC)) > 0) {
+    if (WifiSetup_DecryptPacket((WifiSetupAossPacket *)((u8 *)packet + 0xC)) > 0) {
         (*counter)++;
         return state;
     }
-    type = WifiSetup_NetToHost16(U16_AT(header, 6));
+    type = WifiSetup_NetToHost16(header->kind);
     switch (type) {
     case 0x1010:
         state = WifiSetup_HandleJoinReply(state, packet, counter, context);
@@ -334,7 +336,7 @@ static int WifiSetup_HandleDoneReply(int state, void *packet, int *counter, void
     return -1;
 }
 
-static int WifiSetup_DecryptPacket(Packet *p) {
+static int WifiSetup_DecryptPacket(WifiSetupAossPacket *p) {
     u8 address[8];
     u16 *body = &p->length;
     int result;
@@ -613,9 +615,9 @@ static int WifiSetup_ParseSecurityRecords(int id, u8 *p, int remaining, u8 *out,
     if (remaining <= 0) {
         return -2;
     }
-    Header *record;
+    WifiSetupAossRecordHeader *record;
     for (;;) {
-        record = (Header *)p;
+        record = (WifiSetupAossRecordHeader *)p;
         if (record->type == sWifiSetupSecurityRecordTypes[id]) {
             break;
         }
