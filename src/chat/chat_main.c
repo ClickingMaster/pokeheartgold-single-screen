@@ -6,9 +6,6 @@
 #include <nitro/code32.h>
 #include <string.h>
 
-extern void __msl_assertion_failed(const char *, const char *, const char *, int);
-extern int sprintf(char *, const char *, ...);
-extern char *strchr(const char *, int);
 extern int gChatCryptVersion; // 0, the number sent with the CRYPT command
 extern const char sStr_ciThink[];
 extern const char sStr_ciSendNick[];
@@ -122,20 +119,26 @@ extern const struct {
 extern char ciCookieBuffer[];
 extern int ciCookieCounter;
 
-#define ASSERT(cond, message, func, line)                            \
-    if (!(cond)) {                                                   \
-        __msl_assertion_failed(message, sStr_ChatMainC, func, line); \
-    }
+#define ASSERT(cond, message, func, line)                                \
+    do {                                                                 \
+        if (!(cond)) {                                                   \
+            __msl_assertion_failed(message, sStr_ChatMainC, func, line); \
+        }                                                                \
+    } while (0)
 #define ASSERT_CHAT(chat, func, line) ASSERT(chat, sStr_ChatNeNULL_4, func, line)
-#define ASSERT_CHANNEL(name, func, line)            \
-    ASSERT(name, sStr_ChannelNeNULL_3, func, line); \
-    ASSERT(*name, sStr_Channel0_Ne0_3, func, line);
+#define ASSERT_CHANNEL(name, func, line)                \
+    do {                                                \
+        ASSERT(name, sStr_ChannelNeNULL_3, func, line); \
+        ASSERT(*name, sStr_Channel0_Ne0_3, func, line); \
+    } while (0)
 // A string argument of chatConnectDoit: asserted and required.
-#define REQUIRE_STRING(s, message, line)                        \
-    ASSERT((s) && (s)[0], message, sStr_chatConnectDoit, line); \
-    if (!(s) || !(s)[0]) {                                      \
-        return NULL;                                            \
-    }
+#define REQUIRE_STRING(s, message, line)                            \
+    do {                                                            \
+        ASSERT((s) && (s)[0], message, sStr_chatConnectDoit, line); \
+        if (!(s) || !(s)[0]) {                                      \
+            return NULL;                                            \
+        }                                                           \
+    } while (0)
 
 static inline void ConnectFailed(ChatConnection *chat);
 static BOOL ciCheckForID(ChatConnection *chat, int id);

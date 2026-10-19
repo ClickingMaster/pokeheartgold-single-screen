@@ -5,7 +5,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern const char sStr_ciInChannel[];
 extern const char sStr_ciHashString[];
 extern const char sStr_ciChannelLeft[];
@@ -92,18 +91,24 @@ extern const char sStr_NickNeNULL[];
 extern const char sStr_Nick0_Ne0[];
 extern const char sStr_StrlenNickLtMAX_NAME[];
 
-#define ASSERT(cond, message, func, line)                               \
-    if (!(cond)) {                                                      \
-        __msl_assertion_failed(message, sStr_ChatChannelC, func, line); \
-    }
-#define ASSERT_CHANNEL(name, func, line)          \
-    ASSERT(name, sStr_ChannelNeNULL, func, line); \
-    ASSERT(*name, sStr_Channel0_Ne0, func, line); \
-    ASSERT(strlen(name) < 257, sStr_StrlenChannelLtMAX_CHANNEL, func, line);
-#define ASSERT_NICK(nick, func, line)          \
-    ASSERT(nick, sStr_UserNeNULL, func, line); \
-    ASSERT(*nick, sStr_User0_Ne0, func, line); \
-    ASSERT(strlen(nick) < 128, sStr_StrlenUserLtMAX_NAME, func, line);
+#define ASSERT(cond, message, func, line)                                   \
+    do {                                                                    \
+        if (!(cond)) {                                                      \
+            __msl_assertion_failed(message, sStr_ChatChannelC, func, line); \
+        }                                                                   \
+    } while (0)
+#define ASSERT_CHANNEL(name, func, line)                                         \
+    do {                                                                         \
+        ASSERT(name, sStr_ChannelNeNULL, func, line);                            \
+        ASSERT(*name, sStr_Channel0_Ne0, func, line);                            \
+        ASSERT(strlen(name) < 257, sStr_StrlenChannelLtMAX_CHANNEL, func, line); \
+    } while (0)
+#define ASSERT_NICK(nick, func, line)                                      \
+    do {                                                                   \
+        ASSERT(nick, sStr_UserNeNULL, func, line);                         \
+        ASSERT(*nick, sStr_User0_Ne0, func, line);                         \
+        ASSERT(strlen(nick) < 128, sStr_StrlenUserLtMAX_NAME, func, line); \
+    } while (0)
 
 static ChatChannel *ciGetChannel(ChatConnection *chat, const char *channel);
 static int ciEnteringChannelCompareFn(const void *a, const void *b);

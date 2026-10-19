@@ -13,8 +13,6 @@
 // they collect, completion, which queues the user callback, and cancellation), the channel mode strings, and the
 // handlers of the lines received from the server, one per server command.
 
-extern void __msl_assertion_failed(const char *, const char *, const char *, int);
-extern long atol(const char *);
 extern const char sStr_ciGetNextID[];
 extern const char sStr_ciAddFilter[];
 extern const char sStr_ciParseMode[];
@@ -46,7 +44,6 @@ extern const char sStr_PasswordNeNULL[];
 extern const char sStr_StrlenPasswordLtMAX_PASSWORD[];
 extern const char sStr_B_UnderscoreStar[];
 extern const char sStr_ModeNeNULL[];
-extern char *strchr(const char *, int);
 extern const char sStr_ciParseValue[];
 extern const char sStr_ciUTMHandler[];
 extern const char sStr_ciATMHandler[];
@@ -142,10 +139,12 @@ extern const char sStr_DataNumBansGe0[];
 extern const char sStr_USRIP[];
 extern const char sStr_Backslash_2[];
 
-#define ASSERT(cond, message, func, line)                                \
-    if (!(cond)) {                                                       \
-        __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
-    }
+#define ASSERT(cond, message, func, line)                                    \
+    do {                                                                     \
+        if (!(cond)) {                                                       \
+            __msl_assertion_failed(message, sStr_ChatHandlersC, func, line); \
+        }                                                                    \
+    } while (0)
 #define ASSERT_CHAT(chat, func, line)          ASSERT(chat, sStr_ChatNeNULL_3, func, line)
 #define ASSERT_EXPR(cond, message, func, line) ((cond) ? (void)0 : __msl_assertion_failed(message, sStr_ChatHandlersC, func, line))
 
@@ -2813,7 +2812,7 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
 
 // Fails the enter request (request type 1) of the channel in the second parameter.
 #define FAIL_ENTER(chat, message, func, line, reason)                           \
-    {                                                                           \
+    do {                                                                        \
         char *channel;                                                          \
         ChatRequest *request;                                                   \
         ASSERT(message->paramCount == 3, sStr_MessageNumParamsEq3, func, line); \
@@ -2833,7 +2832,7 @@ void ciErrNoSuchChannelHandler(ChatConnection *chat, ChatMessage *message) {
         results[1] = reason;                                                    \
         results[2] = (u32)channel;                                              \
         ciFinishFilter(chat, request, results);                                 \
-    }
+    } while (0)
 
 // 405: too many channels.
 void ciErrTooManyChannelsHandler(ChatConnection *chat, ChatMessage *message) {

@@ -5,7 +5,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-extern void __msl_assertion_failed(const char *, const char *, const char *, int);
 extern const char sStr_DataNeNULL[];
 extern const char sStr_ChatCallbacksC[];
 extern const char sStr_DataTypeGe0[];
@@ -36,29 +35,33 @@ extern const char sStr_SrcParamsNumBansGe0[];
 extern const char sStr_SrcParamsNumSuggestedNicksGe0[];
 extern const char sStr_SrcParamsNumGe0[];
 
-#define ASSERT_CHAT(chat, func, line)                                             \
-    if (!(chat)) {                                                                \
-        __msl_assertion_failed(sStr_ChatNeNULL, sStr_ChatCallbacksC, func, line); \
-    }
-#define ASSERT_CALLBACK(callback, func, line)                                                   \
-    if (!(callback)) {                                                                          \
-        __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, func, line);               \
-    }                                                                                           \
-    if ((callback)->type < 0) {                                                                 \
-        __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line);              \
-    }                                                                                           \
-    if ((callback)->type >= CALLBACK_NUM) {                                                     \
-        __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line);   \
-    }                                                                                           \
-    if (!(callback)->callback) {                                                                \
-        __msl_assertion_failed(sStr_DataCallbackNeNULL, sStr_ChatCallbacksC, func, line);       \
-    }                                                                                           \
-    if (!(callback)->param) {                                                                   \
-        __msl_assertion_failed(sStr_DataCallbackParamsNeNULL, sStr_ChatCallbacksC, func, line); \
-    }                                                                                           \
-    if ((callback)->id < 0) {                                                                   \
-        __msl_assertion_failed(sStr_DataID_Ge0, sStr_ChatCallbacksC, func, line);               \
-    }
+#define ASSERT_CHAT(chat, func, line)                                                 \
+    do {                                                                              \
+        if (!(chat)) {                                                                \
+            __msl_assertion_failed(sStr_ChatNeNULL, sStr_ChatCallbacksC, func, line); \
+        }                                                                             \
+    } while (0)
+#define ASSERT_CALLBACK(callback, func, line)                                                       \
+    do {                                                                                            \
+        if (!(callback)) {                                                                          \
+            __msl_assertion_failed(sStr_DataNeNULL, sStr_ChatCallbacksC, func, line);               \
+        }                                                                                           \
+        if ((callback)->type < 0) {                                                                 \
+            __msl_assertion_failed(sStr_DataTypeGe0, sStr_ChatCallbacksC, func, line);              \
+        }                                                                                           \
+        if ((callback)->type >= CALLBACK_NUM) {                                                     \
+            __msl_assertion_failed(sStr_DataTypeLtCALLBACK_NUM, sStr_ChatCallbacksC, func, line);   \
+        }                                                                                           \
+        if (!(callback)->callback) {                                                                \
+            __msl_assertion_failed(sStr_DataCallbackNeNULL, sStr_ChatCallbacksC, func, line);       \
+        }                                                                                           \
+        if (!(callback)->param) {                                                                   \
+            __msl_assertion_failed(sStr_DataCallbackParamsNeNULL, sStr_ChatCallbacksC, func, line); \
+        }                                                                                           \
+        if ((callback)->id < 0) {                                                                   \
+            __msl_assertion_failed(sStr_DataID_Ge0, sStr_ChatCallbacksC, func, line);               \
+        }                                                                                           \
+    } while (0)
 
 void ciFreeCallbackData(ChatCallback *callback) {
     ASSERT_CALLBACK(callback, sStr_ciFreeCallbackData, 171);
@@ -336,23 +339,28 @@ void ciCleanupCallbacks(ChatConnection *chat) {
     ArrayFree(chat->callbacks);
 }
 
-#define ASSERT(test, string, line) \
-    if (!(test))                   \
-    __msl_assertion_failed(string, sStr_ChatCallbacksC, sStr_ciAddCallback_, line)
+#define ASSERT(test, string, line)                                                          \
+    do {                                                                                    \
+        if (!(test)) {                                                                      \
+            __msl_assertion_failed(string, sStr_ChatCallbacksC, sStr_ciAddCallback_, line); \
+        }                                                                                   \
+    } while (0)
 #define FAIL()                     \
-    {                              \
+    do {                           \
         DWCi_GsFree(dst);          \
         DWCi_GsFree(item.channel); \
         return FALSE;              \
-    }
+    } while (0)
 // Copies the string argument i into the stored parameters.
-#define COPY_STRING(i)                           \
-    if (src[i]) {                                \
-        dst[i] = (u32)goastrdup((char *)src[i]); \
-        if (!dst[i]) {                           \
-            FAIL();                              \
-        }                                        \
-    }
+#define COPY_STRING(i)                               \
+    do {                                             \
+        if (src[i]) {                                \
+            dst[i] = (u32)goastrdup((char *)src[i]); \
+            if (!dst[i]) {                           \
+                FAIL();                              \
+            }                                        \
+        }                                            \
+    } while (0)
 
 BOOL ciAddCallback_(ChatConnection *chat, int type, void *func, u32 *src, void *user, int id, char *channel, int size) {
     ChatCallback item;
