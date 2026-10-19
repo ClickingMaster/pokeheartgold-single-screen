@@ -164,30 +164,30 @@ enum NintendoWfcYesNoState {
 
 // Number pad on the sub screen (rank / Battle Room number entry).
 typedef struct NintendoWfcNumberInput {
-    u8 unk_0;             // 0x0
-    u8 maxValue;          // 0x1, 100: three digits
-    s8 value;             // 0x2, entered value, -1: quit
-    u8 cursor;            // 0x3, pad key under the cursor
-    s16 digitPos;         // 0x4
-    u8 state;             // 0x6, index into sNintendoWfcNumberInputStates
-    u8 nextState;         // 0x7
-    s8 digits[3];         // 0x8, -1: empty
-    u8 unk_B;             // 0xB
-} NintendoWfcNumberInput; // size: 0xC
+    u8 unk_0;
+    u8 maxValue; // 100: three digits
+    s8 value;    // entered value, -1: quit
+    u8 cursor;   // pad key under the cursor
+    s16 digitPos;
+    u8 state; // index into sNintendoWfcNumberInputStates
+    u8 nextState;
+    s8 digits[3]; // -1: empty
+    u8 unk_B;
+} NintendoWfcNumberInput;
 
 // Brief palette flash of a pressed button: a sprite, or a rectangle of a bg layer.
 typedef struct NintendoWfcButtonFlash {
-    u8 isBgRect;          // 0x0
-    u8 state;             // 0x1
-    u8 target;            // 0x2, sprite index or bg layer
-    u8 timer;             // 0x3
-    u8 width;             // 0x4
-    u8 height;            // 0x5
-    u8 x;                 // 0x6
-    u8 y;                 // 0x7
-    u16 pressedPltt;      // 0x8
-    u16 normalPltt;       // 0xA
-} NintendoWfcButtonFlash; // size: 0xC
+    u8 isBgRect;
+    u8 state;
+    u8 target; // sprite index or bg layer
+    u8 timer;
+    u8 width;
+    u8 height;
+    u8 x;
+    u8 y;
+    u16 pressedPltt;
+    u16 normalPltt;
+} NintendoWfcButtonFlash;
 
 #define NINTENDO_WFC_SPRITE_DIGIT_0       0
 #define NINTENDO_WFC_SPRITE_PAD_CURSOR    3
@@ -197,68 +197,68 @@ typedef struct NintendoWfcButtonFlash {
 #define NINTENDO_WFC_SPRITE_COUNT         9
 
 typedef struct NintendoWfcConnect {
-    NintendoWifiConnectArgs *args;              // 0x0000
-    BgConfig *bgConfig;                         // 0x0004
-    u8 filler_0008[8];                          // 0x0008
-    int mode;                                   // 0x0010, index into the sNintendoWfcMode* tables
-    int nextMode;                               // 0x0014
-    int unk_0018;                               // 0x0018
-    int state;                                  // 0x001C, index into sNintendoWfcStates
-    int nextState;                              // 0x0020
-    void *heapMem;                              // 0x0024
-    NNSFndHeapHandle expHeap;                   // 0x0028
-    u8 connection[0x64];                        // 0x002C, passed to DWC_InitInetEx
-    u32 ownRank;                                // 0x0090
-    u32 rank;                                   // 0x0094
-    int roomCount;                              // 0x0098
-    u32 room;                                   // 0x009C
-    u8 downloadBuffer[0xA38];                   // 0x00A0
-    FrontierWifiUploadRecord uploadRecord;      // 0x0AD8
-    u8 filler_0BBC[0x14];                       // 0x0BBC
-    MessageFormat *msgFormat;                   // 0x0BD0
-    MsgData *msgDataTower;                      // 0x0BD4, Wi-Fi Battle Tower (bank 774)
-    MsgData *msgDataWfc;                        // 0x0BD8, Nintendo WFC (bank 778)
-    MsgData *msgDataError;                      // 0x0BDC, Nintendo WFC errors (bank 800)
-    String *msgString;                          // 0x0BE0
-    String *titleString;                        // 0x0BE4
-    String *unk_0BE8;                           // 0x0BE8
-    String *unk_0BEC;                           // 0x0BEC
-    String *errorString;                        // 0x0BF0
-    u32 textPrinterId;                          // 0x0BF4
-    SpriteList *spriteList;                     // 0x0BF8
-    G2dRenderer renderer;                       // 0x0BFC
-    GF_2DGfxResMan *resMan[4];                  // 0x0D24
-    SpriteResource *resObjs[12];                // 0x0D34
-    SpriteResourcesHeader spriteHeaders[3];     // 0x0D64
-    u8 filler_0DD0[0x24];                       // 0x0DD0
-    Sprite *sprites[NINTENDO_WFC_SPRITE_COUNT]; // 0x0DF4
-    Window msgWindow;                           // 0x0E18
-    Window unk_0E28;                            // 0x0E28
-    Window unk_0E38;                            // 0x0E38
-    Window titleWindow;                         // 0x0E48
-    Window errorWindow;                         // 0x0E58
-    u8 filler_0E68[0xE4];                       // 0x0E68
-    WaitingIcon *waitingIcon;                   // 0x0F4C
-    int dwcError;                               // 0x0F50
-    int dwcErrorCode;                           // 0x0F54
-    int dwcErrorType;                           // 0x0F58
-    int httpResult;                             // 0x0F5C
-    int messageTimer;                           // 0x0F60
-    WifiServerProfile profile;                  // 0x0F64
-    u32 profileResponse[2];                     // 0x0FC8
-    s16 subState;                               // 0x0FD0
-    s16 subTimer;                               // 0x0FD2
-    int timeoutCounter;                         // 0x0FD4
-    NintendoWfcPaletteCycle paletteCycle;       // 0x0FD8
-    YesNoPrompt *yesNoPrompt;                   // 0x1308
-    NintendoWfcNumberInput numberInput;         // 0x130C
-    Window numberInputWindow;                   // 0x1318
-    Window buttonWindows[3];                    // 0x1328
-    NintendoWfcButtonFlash buttonFlash;         // 0x1358
-    u16 padColumn[2];                           // 0x1364, pad column to return to from the bottom rows
-    u32 twoDigits;                              // 0x1368
-    NintendoWfcYesNoMenu yesNoMenu;             // 0x136C
-} NintendoWfcConnect;                           // size: 0x13A4
+    NintendoWifiConnectArgs *args;
+    BgConfig *bgConfig;
+    u8 filler_0008[8];
+    int mode; // index into the sNintendoWfcMode* tables
+    int nextMode;
+    int unk_0018;
+    int state; // index into sNintendoWfcStates
+    int nextState;
+    void *heapMem;
+    NNSFndHeapHandle expHeap;
+    u8 connection[0x64]; // passed to DWC_InitInetEx
+    u32 ownRank;
+    u32 rank;
+    int roomCount;
+    u32 room;
+    u8 downloadBuffer[0xA38];
+    FrontierWifiUploadRecord uploadRecord;
+    u8 filler_0BBC[0x14];
+    MessageFormat *msgFormat;
+    MsgData *msgDataTower; // Wi-Fi Battle Tower
+    MsgData *msgDataWfc;   // Nintendo WFC
+    MsgData *msgDataError; // Nintendo WFC errors
+    String *msgString;
+    String *titleString;
+    String *unk_0BE8;
+    String *unk_0BEC;
+    String *errorString;
+    u32 textPrinterId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[4];
+    SpriteResource *resObjs[12];
+    SpriteResourcesHeader spriteHeaders[3];
+    u8 filler_0DD0[0x24];
+    Sprite *sprites[NINTENDO_WFC_SPRITE_COUNT];
+    Window msgWindow;
+    Window unk_0E28;
+    Window unk_0E38;
+    Window titleWindow;
+    Window errorWindow;
+    u8 filler_0E68[0xE4];
+    WaitingIcon *waitingIcon;
+    int dwcError;
+    int dwcErrorCode;
+    int dwcErrorType;
+    int httpResult;
+    int messageTimer;
+    WifiServerProfile profile;
+    u32 profileResponse[2];
+    s16 subState;
+    s16 subTimer;
+    int timeoutCounter;
+    NintendoWfcPaletteCycle paletteCycle;
+    YesNoPrompt *yesNoPrompt;
+    NintendoWfcNumberInput numberInput;
+    Window numberInputWindow;
+    Window buttonWindows[3];
+    NintendoWfcButtonFlash buttonFlash;
+    u16 padColumn[2]; // pad column to return to from the bottom rows
+    u32 twoDigits;
+    NintendoWfcYesNoMenu yesNoMenu;
+} NintendoWfcConnect;
 
 enum NintendoWfcHttpState {
     NINTENDO_WFC_HTTP_NONE,
@@ -273,37 +273,36 @@ enum NintendoWfcHttpState {
 
 // The HTTP request state of the Wi-Fi Battle Tower (gamestats) requests.
 typedef struct NintendoWfcHttp {
-    volatile s32 state; // 0x00, 1: idle, 2/4/6/8/10: request running, 12: done
-    s32 result;         // 0x04
-    u32 profileId;      // 0x08
-    u64 friendKey;      // 0x0C
-    u8 rank;            // 0x14, first byte of the request buffer gNintendoWfcHttpRequestBuffer
-    u8 room;            // 0x15
+    volatile s32 state; // 1: idle, 2/4/6/8/10: request running, 12: done
+    s32 result;
+    u32 profileId;
+    u64 friendKey;
+    u8 rank; // first byte of the request buffer gNintendoWfcHttpRequestBuffer
+    u8 room;
 } NintendoWfcHttp;
 
 typedef struct NintendoWfcHttpResponse {
     u8 unk_0[3];
-    volatile u8 status; // 0x3, first byte of the response buffer gNintendoWfcHttpShortResponse
+    volatile u8 status; // first byte of the response buffer gNintendoWfcHttpShortResponse
     u32 unk_4;
-    u8 *buffer; // 0x8
+    u8 *buffer;
 } NintendoWfcHttpResponse;
 
 typedef struct NintendoWfcGlobal {
-    NNSFndHeapHandle heap;   // 0x0, heap of the DWC allocator callbacks
-    NintendoWfcConnect *wfc; // 0x4
+    NNSFndHeapHandle heap; // heap of the DWC allocator callbacks
+    NintendoWfcConnect *wfc;
     u8 unk_8[0xC];
 } NintendoWfcGlobal;
 
 typedef int (*NintendoWfcModeFunc)(NintendoWfcConnect *wfc, int state);
 
-// One row per mode: {init, main, exit}. Each column is addressed through its own label.
+// One row per mode: {init, main, exit}.
 typedef struct NintendoWfcModeRow {
     NintendoWfcModeFunc func[3];
 } NintendoWfcModeRow;
 
 typedef struct BattleRoomDownload BattleRoomDownload;
 
-// Defined in OVY_0 / OVY_38 (DWC and HTTP wrappers); not declared in any header.
 int DWC_GetLastError(void *code);
 int DWC_GetLastErrorEx(int *code, u32 *category);
 void DWC_ClearError(void);
@@ -328,7 +327,6 @@ void GameStats_Shutdown(void);
 int GameStats_GetError(void);
 int GameStats_GetResponseLength(void);
 
-// Defined in other ARM9 sources; not declared in their headers.
 void CommState_InitWfcSession(SaveData *saveData);
 void CommState_FreeWfcSession(void);
 void CommState_ShowRestartErrorAndHalt(void);
@@ -1854,7 +1852,6 @@ int NintendoWfc_HandleChallengeRoomInput(NintendoWfcConnect *wfc) {
         if (value > 0) {
             DWC_GetDateTime(date, time);
             wfc->room = value;
-            // BattleRoomDownload_IsRoomMarked takes u32 group/entry; they are passed as u8 values
             if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->battleRoomDownload, (u8)wfc->rank, (u8)wfc->room, date)) {
                 wfc->state = NINTENDO_WFC_STATE_PRINT_ROOM_UNAVAILABLE;
             } else {
@@ -1899,7 +1896,6 @@ int NintendoWfc_WaitTrainersDownload(NintendoWfcConnect *wfc) {
         case 0: {
             u32 time[3];
             u32 date[4];
-            // BattleRoomDownload_SetTrainers/BattleRoomDownload_MarkRoom take u32; rank and room are passed as u8 values
             BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_START_SAVE, NINTENDO_WFC_STATE_PRINT_TRAINERS_RECEIVED);
             DWC_GetDateTime(date, time);
@@ -2115,7 +2111,6 @@ int NintendoWfc_WaitLeadersDownload(NintendoWfcConnect *wfc) {
         wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
-            // BattleRoomDownload_SetLeaders takes u32; rank and room are passed as u8 values
             BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->battleRoomDownload, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, NINTENDO_WFC_STATE_START_SAVE, NINTENDO_WFC_STATE_PRINT_LEADERS_RECEIVED);
             break;

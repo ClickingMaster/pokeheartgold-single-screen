@@ -84,66 +84,66 @@ enum NintendoWfcUnusedState {
 typedef struct BattleRoomDownload BattleRoomDownload;
 
 typedef struct NintendoWfcUnused {
-    NintendoWifiConnectArgs *args;              // 0x0000
-    BgConfig *bgConfig;                         // 0x0004
-    u8 filler_0008[8];                          // 0x0008
-    int mode;                                   // 0x0010, index into sNintendoWfcUnusedModes
-    int nextMode;                               // 0x0014
-    int unk_0018;                               // 0x0018
-    int state;                                  // 0x001C, index into sNintendoWfcUnusedStates
-    int nextState;                              // 0x0020
-    void *heapMem;                              // 0x0024
-    NNSFndHeapHandle expHeap;                   // 0x0028
-    u8 connection[0x64];                        // 0x002C, passed to DWC_InitInetEx
-    u32 ownRank;                                // 0x0090
-    u32 rank;                                   // 0x0094
-    int roomCount;                              // 0x0098
-    u32 room;                                   // 0x009C
-    u8 downloadBuffer[0xA38];                   // 0x00A0
-    FrontierWifiUploadRecord uploadRecord;      // 0x0AD8
-    u8 filler_0BBC[0x14];                       // 0x0BBC
-    MessageFormat *msgFormat;                   // 0x0BD0
-    MsgData *msgDataTower;                      // 0x0BD4, Wi-Fi Battle Tower (bank 799)
-    MsgData *msgDataWfc;                        // 0x0BD8, Nintendo WFC (bank 778)
-    MsgData *msgDataError;                      // 0x0BDC, Nintendo WFC errors (bank 800)
-    String *msgString;                          // 0x0BE0
-    String *titleString;                        // 0x0BE4
-    String *roomString;                         // 0x0BE8
-    String *rankString;                         // 0x0BEC
-    String *errorString;                        // 0x0BF0
-    u32 textPrinterId;                          // 0x0BF4
-    SpriteList *spriteList;                     // 0x0BF8
-    G2dRenderer renderer;                       // 0x0BFC
-    GF_2DGfxResMan *resMan[4];                  // 0x0D24
-    SpriteResource *resObjs[4];                 // 0x0D34
-    u8 filler_0D44[0x20];                       // 0x0D44
-    SpriteResourcesHeader spriteHeader;         // 0x0D64
-    u8 filler_0D88[0x48];                       // 0x0D88
-    Sprite *arrows[2];                          // 0x0DD0, up/down arrows next to the number windows
-    Window msgWindow;                           // 0x0DD8
-    Window rankWindow;                          // 0x0DE8
-    Window roomWindow;                          // 0x0DF8
-    Window titleWindow;                         // 0x0E08
-    Window errorWindow;                         // 0x0E18
-    u8 filler_0E28[0xE4];                       // 0x0E28
-    WaitingIcon *waitingIcon;                   // 0x0F0C
-    int dwcError;                               // 0x0F10
-    int dwcErrorCode;                           // 0x0F14
-    int dwcErrorType;                           // 0x0F18
-    int httpResult;                             // 0x0F1C
-    int messageTimer;                           // 0x0F20
-    WifiServerProfile profile;                  // 0x0F24
-    u32 profileResponse[2];                     // 0x0F88
-    s16 subState;                               // 0x0F90
-    s16 subTimer;                               // 0x0F92
-    int timeoutCounter;                         // 0x0F94
-    NintendoWfcPaletteCycle paletteCycle;       // 0x0F98
-    YesNoPrompt *yesNoPrompt;                   // 0x12C8
-} NintendoWfcUnused;                            // size: 0x12CC
+    NintendoWifiConnectArgs *args;
+    BgConfig *bgConfig;
+    u8 filler_0008[8];
+    int mode; // index into sNintendoWfcUnusedModes
+    int nextMode;
+    int unk_0018;
+    int state; // index into sNintendoWfcUnusedStates
+    int nextState;
+    void *heapMem;
+    NNSFndHeapHandle expHeap;
+    u8 connection[0x64]; // passed to DWC_InitInetEx
+    u32 ownRank;
+    u32 rank;
+    int roomCount;
+    u32 room;
+    u8 downloadBuffer[0xA38];
+    FrontierWifiUploadRecord uploadRecord;
+    u8 filler_0BBC[0x14];
+    MessageFormat *msgFormat;
+    MsgData *msgDataTower; // Wi-Fi Battle Tower
+    MsgData *msgDataWfc;   // Nintendo WFC
+    MsgData *msgDataError; // Nintendo WFC errors
+    String *msgString;
+    String *titleString;
+    String *roomString;
+    String *rankString;
+    String *errorString;
+    u32 textPrinterId;
+    SpriteList *spriteList;
+    G2dRenderer renderer;
+    GF_2DGfxResMan *resMan[4];
+    SpriteResource *resObjs[4];
+    u8 filler_0D44[0x20];
+    SpriteResourcesHeader spriteHeader;
+    u8 filler_0D88[0x48];
+    Sprite *arrows[2]; // up/down arrows next to the number windows
+    Window msgWindow;
+    Window rankWindow;
+    Window roomWindow;
+    Window titleWindow;
+    Window errorWindow;
+    u8 filler_0E28[0xE4];
+    WaitingIcon *waitingIcon;
+    int dwcError;
+    int dwcErrorCode;
+    int dwcErrorType;
+    int httpResult;
+    int messageTimer;
+    WifiServerProfile profile;
+    u32 profileResponse[2];
+    s16 subState;
+    s16 subTimer;
+    int timeoutCounter;
+    NintendoWfcPaletteCycle paletteCycle;
+    YesNoPrompt *yesNoPrompt;
+} NintendoWfcUnused;
 
 typedef struct NintendoWfcUnusedGlobal {
-    NintendoWfcUnused *wfc; // 0x0
-    NNSFndHeapHandle heap;  // 0x4, heap of the DWC allocator callbacks
+    NintendoWfcUnused *wfc;
+    NNSFndHeapHandle heap; // heap of the DWC allocator callbacks
 } NintendoWfcUnusedGlobal;
 
 typedef int (*NintendoWfcUnusedModeFunc)(NintendoWfcUnused *wfc, int state);
@@ -183,7 +183,6 @@ void NintendoWfcHttp_RequestDownload(int rank, int room, void *buffer);
 void NintendoWfcHttp_RequestUpload(int rank, int room, int winCount, FrontierWifiUploadRecord *record);
 void NintendoWfcHttp_RequestInfo(void);
 void NintendoWfcHttp_RequestSetProfile(WifiServerProfile *profile, u32 *response);
-// The definition takes (u32 profileId, u64 friendKey); this app passes the key as two words.
 void NintendoWfcHttp_Init(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
 
 BOOL LoadOVY38(void);
@@ -200,7 +199,6 @@ BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *data, u32 group, u32 en
 void BattleRoomDownload_SetTrainers(BattleRoomDownload *data, void *records, u32 a, u32 b);
 void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *data, u8 *out);
 void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 a, u32 b);
-// A record mixing state; this copy calls it where OVY_72 calls WifiConnection_ClassifyErrorCode.
 int RecordMixing_State_AbortLeave(int errorCode, int errorType);
 
 int NintendoWfcUnused_SessionInit(NintendoWfcUnused *wfc, int state);

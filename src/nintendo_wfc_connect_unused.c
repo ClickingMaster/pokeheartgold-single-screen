@@ -25,10 +25,8 @@
 #include "vram_transfer_manager.h"
 #include "wireless_status_icon.h"
 
-// An older copy of the Nintendo WFC connection app of OVY_72: the Wi-Fi Battle Room downloads and uploads with the
-// same states, but with a scrolling number instead of the touch number pad and a YesNoPrompt instead of the touch
-// YES/NO menu. Nothing launches it except LaunchApplication_DeadstrippedFunction, which loads OVY_72 for it (the
-// HTTP requests are OVY_72's).
+// An older version of the Nintendo WFC connection app, with a scrolling number instead of the touch number pad and a
+// Yes/No prompt instead of the touch YES/NO menu. Nothing in the game launches it.
 
 extern const u16 sNintendoWfcUnusedArrowPositions[2][2];
 
@@ -346,7 +344,7 @@ static void NintendoWfcUnused_FreeGraphics(NintendoWfcUnused *wfc) {
     while (i < 4) {
         Destroy2DGfxResObjMan(p->resMan[0]);
         i++;
-        p = (NintendoWfcUnused *)((u8 *)p + sizeof(GF_2DGfxResMan *)); // walks resMan[] through a shifted base pointer
+        p = (NintendoWfcUnused *)((u8 *)p + sizeof(GF_2DGfxResMan *));
     }
     SpriteList_Delete(wfc->spriteList);
     wfc->spriteList = NULL;

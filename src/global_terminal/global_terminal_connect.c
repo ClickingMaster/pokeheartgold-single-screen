@@ -89,11 +89,11 @@ enum GlobalTerminalConnectDisconnectStep {
 
 // The GlobalTerminalApp the connect app is started with.
 typedef struct GlobalTerminalConnectArgs {
-    GlobalTerminalLaunchArgs *launchArgs; // 0x00
-    BOOL disconnect;                      // 0x04, second run after the VS Recorder: only disconnect
-    u8 unk_08[0x14 - 0x08];               // 0x08
-    u8 wifiConnection[0x7C - 0x14];       // 0x14
-    BOOL isConnected;                     // 0x7C
+    GlobalTerminalLaunchArgs *launchArgs;
+    BOOL disconnect; // second run after the VS Recorder: only disconnect
+    u8 unk_08[0x14 - 0x08];
+    u8 wifiConnection[0x7C - 0x14];
+    BOOL isConnected;
 } GlobalTerminalConnectArgs;
 
 typedef struct GlobalTerminalConnectBgTemplates {
@@ -102,48 +102,48 @@ typedef struct GlobalTerminalConnectBgTemplates {
 
 // SysTask data: the BG palette cycles through 21 palettes blended between the 4 base palettes
 typedef struct GlobalTerminalConnectPaletteCycle {
-    SysTask *task;           // 0x000
-    u32 enabled;             // 0x004
-    u16 basePalettes[4][16]; // 0x008
-    u16 palettes[21][16];    // 0x088
-    s16 index;               // 0x328
-    s8 direction;            // 0x32A
-    u8 frame;                // 0x32B
-    u32 screens;             // 0x32C, 0 = both, 1 = main, 2 = sub
+    SysTask *task;
+    u32 enabled;
+    u16 basePalettes[4][16];
+    u16 palettes[21][16];
+    s16 index;
+    s8 direction;
+    u8 frame;
+    u32 screens; // 0 = both, 1 = main, 2 = sub
 } GlobalTerminalConnectPaletteCycle;
 
 typedef struct GlobalTerminalConnectWork {
-    GlobalTerminalConnectArgs *args;                // 0x00
-    BgConfig *bgConfig;                             // 0x04
-    u32 state;                                      // 0x08
-    u32 nextState;                                  // 0x0C
-    s32 serverError;                                // 0x10
-    s32 dwcResult;                                  // 0x14
-    s32 errorCode;                                  // 0x18
-    s32 errorType;                                  // 0x1C
-    MessageFormat *msgFormat;                       // 0x20
-    MsgData *msgDataGts;                            // 0x24
-    MsgData *msgDataConnecting;                     // 0x28
-    MsgData *msgDataWifi;                           // 0x2C
-    u8 unk_30[4];                                   // 0x30
-    String *string;                                 // 0x34
-    String *title;                                  // 0x38
-    String *errorString;                            // 0x3C
-    u32 printerId;                                  // 0x40
-    Window messageWindow;                           // 0x44
-    Window titleWindow;                             // 0x54
-    Window errorWindow;                             // 0x64
-    u8 unk_74[0x84 - 0x74];                         // 0x74
-    YesNoPrompt *yesNoPrompt;                       // 0x84
-    WaitingIcon *waitingIcon;                       // 0x88
-    u32 unk_8C;                                     // 0x8C
-    u32 textSpeed;                                  // 0x90
-    u32 substate;                                   // 0x94
-    s32 timer;                                      // 0x98
-    u32 unk_9C;                                     // 0x9C
-    u8 unk_A0[8];                                   // 0xA0
-    GlobalTerminalConnectPaletteCycle paletteCycle; // 0xA8
-} GlobalTerminalConnectWork;                        // size 0x3D8
+    GlobalTerminalConnectArgs *args;
+    BgConfig *bgConfig;
+    u32 state;
+    u32 nextState;
+    s32 serverError;
+    s32 dwcResult;
+    s32 errorCode;
+    s32 errorType;
+    MessageFormat *msgFormat;
+    MsgData *msgDataGts;
+    MsgData *msgDataConnecting;
+    MsgData *msgDataWifi;
+    u8 unk_30[4];
+    String *string;
+    String *title;
+    String *errorString;
+    u32 printerId;
+    Window messageWindow;
+    Window titleWindow;
+    Window errorWindow;
+    u8 unk_74[0x84 - 0x74];
+    YesNoPrompt *yesNoPrompt;
+    WaitingIcon *waitingIcon;
+    u32 unk_8C;
+    u32 textSpeed;
+    u32 substate;
+    s32 timer;
+    u32 unk_9C;
+    u8 unk_A0[8];
+    GlobalTerminalConnectPaletteCycle paletteCycle;
+} GlobalTerminalConnectWork;
 
 void GF_TouchpadResetSampling(void);
 void GF_TouchpadStartSampling(int frequency);
@@ -484,8 +484,7 @@ static void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) 
     palette = 0;
     outer = 0;
     {
-        // 3 x 7 palettes: base palette n blended towards base palette n+1 in steps of 3/16 (color 0 unchanged);
-        // the source and target colors are addressed relative to the work
+        // 3 x 7 palettes: base palette n blended towards base palette n+1 in steps of 3/16 (color 0 unchanged)
         int blend;
         int last;
         u8 *dest = (u8 *)work + 0x130;
@@ -507,7 +506,6 @@ static void GlobalTerminalConnect_LoadGraphics(GlobalTerminalConnectWork *work) 
                 source = src + 2;
                 coefficient = (u8)(blend >> 8);
                 for (i = 1; i < 16; i++) {
-                    // called with an int fraction (no u8 truncation)
                     ((void (*)(const u16 *, u16 *, u16, int, u16))BlendPalette)((u16 *)source, (u16 *)dst, 1, coefficient, *(u16 *)(color + 0xB0));
                     color += 2;
                     dst += 2;
@@ -1003,7 +1001,6 @@ void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord 
     dst->mailField0 = src->mailField0;
     dst->mailField1 = src->mailField1;
     {
-        // 10 groups of 4 bytes, the destination stepped as a whole struct pointer
         const u8 *s = src->items;
         GlobalTerminalNetDressUpForm *d = dst;
         for (i = 0; i < 10; i++) {

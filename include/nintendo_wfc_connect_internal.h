@@ -26,7 +26,7 @@ typedef struct NintendoWfcPaletteCycle {
     u32 screens; // 0: both, 1: main only, 2: sub only
 } NintendoWfcPaletteCycle;
 
-// Touch YES/NO menu on the sub screen (texts from message bank 191).
+// Touch YES/NO menu on the sub screen.
 typedef struct NintendoWfcYesNoMenu {
     BgConfig *bgConfig;
     Sprite *cursorSprite;

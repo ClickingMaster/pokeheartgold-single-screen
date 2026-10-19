@@ -198,7 +198,6 @@ void GlobalTerminalNet_PackBoxData(SaveData *saveData, PCStorage *storage, int b
     PCStorage_GetBoxName(storage, box, name);
     CopyStringToU16Array(name, form->name, 20);
     String_Delete(name);
-    // walks two byte pointers (2- and 4-byte strides) instead of indexing the arrays
     for (i = 0, halves = (u8 *)form, words = (u8 *)form; i < 30; i++, halves += 2, words += 4) {
         *(u16 *)(halves + 40) = PCStorage_GetMonDataByIndexPair(storage, box, i, 5, NULL);
         *(u32 *)(words + 100) = PCStorage_GetMonDataByIndexPair(storage, box, i, 0, NULL);

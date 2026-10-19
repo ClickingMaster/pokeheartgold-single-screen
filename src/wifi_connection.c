@@ -22,64 +22,64 @@ enum WifiMatchType {
     WIFI_MATCH_TYPE_CLIENT,
 };
 
-// 0x1108 bytes, 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
+// 32-byte aligned inside a Heap_Alloc'd block (rawAlloc).
 struct WifiConnection {
-    u8 sendBuffer[0x100];                    // 0x0000, 4-byte header + payload
-    DwcAccData *friendList;                  // 0x0100, 32 entries
-    DwcControl loginControl;                 // 0x0104
-    DwcUserData *userData;                   // 0x0F10
-    NetConnection libConfig;                 // 0x0F14
-    void *saveData;                          // 0x0F78
-    void *rawAlloc;                          // 0x0F7C
-    void *recvBuffers[4];                    // 0x0F80
-    void *heapMemory;                        // 0x0F90
-    NNSFndHeapHandle heap;                   // 0x0F94
-    void *extraHeapMemory;                   // 0x0F98
-    NNSFndHeapHandle extraHeap;              // 0x0F9C
-    u32 extraHeapFreeSize;                   // 0x0FA0
-    WifiReceiveCallback recvLocalCallback;   // 0x0FA4
-    WifiReceiveCallback recvCallback;        // 0x0FA8
-    void (*disconnectCallback)(int, void *); // 0x0FAC
-    void *disconnectCallbackArg;             // 0x0FB0
-    void (*clientCallback)(int, void *);     // 0x0FB4
-    void *clientCallbackArg;                 // 0x0FB8
-    BOOL (*connectFilterCallback)(int);      // 0x0FBC
-    void (*errorCallback)(int);              // 0x0FC0
-    char matchFilter[0x80];                  // 0x0FC4
-    u8 friendStatus[32];                     // 0x1044
-    u8 *friendStatusData;                    // 0x1064
-    int friendStatusStride;                  // 0x1068
-    int friendStatusIndex;                   // 0x106C
-    int state;                               // 0x1070
-    int matchType;                           // 0x1074
-    int sendBusy;                            // 0x1078
-    int maxPlayers;                          // 0x107C
-    int conferenceAidMask;                   // 0x1080
-    int heapId;                              // 0x1084
-    int heapId2;                             // 0x1088
-    u32 heapSize;                            // 0x108C
-    int voiceChatActive;                     // 0x1090
-    int targetFriendIndex;                   // 0x1094
-    int newClientIndex;                      // 0x1098
-    int voiceChatEnabled;                    // 0x109C
-    int matchInProgress;                     // 0x10A0
-    int voiceChatMode;                       // 0x10A4
-    int recvTimeoutArmed;                    // 0x10A8
-    int keepAliveTimers[8];                  // 0x10AC
-    int retryCount;                          // 0x10CC
-    int peerVoiceFlag;                       // 0x10D0
-    u16 ownVoiceFlag;                        // 0x10D4
-    u16 voiceUnmuted;                        // 0x10D6
-    int matchedAidBitmap;                    // 0x10D8
-    u8 sendSequence;                         // 0x10DC
-    u8 recvSequence;                         // 0x10DD
-    u8 forceError;                           // 0x10DE
-    u8 unk_10DF;                             // 0x10DF
-    u8 stopMatchingState;                    // 0x10E0
-    u8 recvBufferFromGameHeap[4];            // 0x10E1
-    u8 disconnectWhenAlone;                  // 0x10E5
-    u8 friendDataChanged;                    // 0x10E6
-    u8 filler_10E7[0x1108 - 0x10E7];         // 0x10E7
+    u8 sendBuffer[0x100];   // 4-byte header + payload
+    DwcAccData *friendList; // 32 entries
+    DwcControl loginControl;
+    DwcUserData *userData;
+    NetConnection libConfig;
+    void *saveData;
+    void *rawAlloc;
+    void *recvBuffers[4];
+    void *heapMemory;
+    NNSFndHeapHandle heap;
+    void *extraHeapMemory;
+    NNSFndHeapHandle extraHeap;
+    u32 extraHeapFreeSize;
+    WifiReceiveCallback recvLocalCallback;
+    WifiReceiveCallback recvCallback;
+    void (*disconnectCallback)(int, void *);
+    void *disconnectCallbackArg;
+    void (*clientCallback)(int, void *);
+    void *clientCallbackArg;
+    BOOL (*connectFilterCallback)(int);
+    void (*errorCallback)(int);
+    char matchFilter[0x80];
+    u8 friendStatus[32];
+    u8 *friendStatusData;
+    int friendStatusStride;
+    int friendStatusIndex;
+    int state;
+    int matchType;
+    int sendBusy;
+    int maxPlayers;
+    int conferenceAidMask;
+    int heapId;
+    int heapId2;
+    u32 heapSize;
+    int voiceChatActive;
+    int targetFriendIndex;
+    int newClientIndex;
+    int voiceChatEnabled;
+    int matchInProgress;
+    int voiceChatMode;
+    int recvTimeoutArmed;
+    int keepAliveTimers[8];
+    int retryCount;
+    int peerVoiceFlag;
+    u16 ownVoiceFlag;
+    u16 voiceUnmuted;
+    int matchedAidBitmap;
+    u8 sendSequence;
+    u8 recvSequence;
+    u8 forceError;
+    u8 unk_10DF;
+    u8 stopMatchingState;
+    u8 recvBufferFromGameHeap[4];
+    u8 disconnectWhenAlone;
+    u8 friendDataChanged;
+    u8 filler_10E7[0x1108 - 0x10E7];
 };
 
 WifiConnection *gWifiConnection;
@@ -746,7 +746,6 @@ int WifiConnection_UpdateConnected(void) {
     if ((u32)state - WIFI_CONNECTION_STATE_CONNECTED <= 1) {
         s32 i;
         for (i = 0; i < gWifiConnection->maxPlayers; i++) {
-            // byte-offset form kept: indexing keepAliveTimers[i] directly compiles differently
             u8 *timers = (u8 *)gWifiConnection + i * 4;
             u32 next = *(u32 *)(timers + offsetof(WifiConnection, keepAliveTimers));
             s32 old = *(volatile s32 *)(timers + offsetof(WifiConnection, keepAliveTimers));

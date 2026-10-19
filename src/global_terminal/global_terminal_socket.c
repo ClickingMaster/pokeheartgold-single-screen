@@ -7,9 +7,8 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// Socket client of the Global Terminal server. GlobalTerminalNet (Thumb) calls the GlobalTerminalServer_ API;
-// each request runs on its own thread: fetch the login token, open a socket, connect, send the XOR-encoded
-// request, receive the response into the caller's buffer.
+// Socket client of the Global Terminal server: each request runs on its own thread (login token, socket, connect,
+// XOR-encoded request, response into the caller's buffer).
 
 #define GTS_SOCKET_TICKS_PER_SECOND 523656
 
@@ -32,31 +31,31 @@ enum GlobalTerminalSocketError {
 };
 
 typedef struct GlobalTerminalSocket {
-    GlobalTerminalNetLogin login; // 0x000, the auth token is stored from 0x06
-    BOOL hasToken;                // 0x138
-    int state;                    // 0x13C
-    char host[0xC0];              // 0x140
-    u8 unk_200[0x40];             // 0x200
-    u16 port;                     // 0x240
-    u16 unk_242;                  // 0x242
-    int connectTimeout;           // 0x244, seconds, 0 = none
-    int sendTimeout;              // 0x248
-    int receiveTimeout;           // 0x24C
-    int error;                    // 0x250
-    int requestSize;              // 0x254
-    u8 *request;                  // 0x258, size + command + login + payload, XOR-encoded after the size
-    int responseSize;             // 0x25C
-    u8 *response;                 // 0x260, caller's buffer: size + data
-    u32 address;                  // 0x264, IPv4 address of host
-    int cancel;                   // 0x268
-    int socket;                   // 0x26C
-    int threadPriority;           // 0x270
-} GlobalTerminalSocket;           // size 0x274
+    GlobalTerminalNetLogin login;
+    BOOL hasToken;
+    int state;
+    char host[0xC0];
+    u8 unk_200[0x40];
+    u16 port;
+    u16 unk_242;
+    int connectTimeout; // seconds, 0 = none
+    int sendTimeout;
+    int receiveTimeout;
+    int error;
+    int requestSize;
+    u8 *request; // size + command + login + payload, XOR-encoded after the size
+    int responseSize;
+    u8 *response; // caller's buffer: size + data
+    u32 address;  // IPv4 address of host
+    int cancel;
+    int socket;
+    int threadPriority;
+} GlobalTerminalSocket;
 
 // The socket settings
 typedef struct GlobalTerminalSocketSettings {
     u8 unk_00[0x40];
-    u16 port; // 0x40
+    u16 port;
 } GlobalTerminalSocketSettings;
 
 typedef struct GlobalTerminalServerCommandIds {
@@ -70,7 +69,7 @@ typedef struct GlobalTerminalSocketToken {
 // filled by DWC_SVLGetTokenAsync
 typedef struct GlobalTerminalSocketTokenRequest {
     u8 unk_00[0x45];
-    GlobalTerminalSocketToken token; // 0x45
+    GlobalTerminalSocketToken token;
     u8 unk_172[2];
 } GlobalTerminalSocketTokenRequest;
 
@@ -98,31 +97,31 @@ typedef struct GlobalTerminalServerHeader {
 
 typedef struct GlobalTerminalServerDressUpUpload {
     u32 data[56];
-} GlobalTerminalServerDressUpUpload; // 0xE0
+} GlobalTerminalServerDressUpUpload;
 
 typedef struct GlobalTerminalServerIdRequest {
     u16 unk_00;
     u16 unk_02;
     int idLow;
     int idHigh;
-} GlobalTerminalServerIdRequest; // 0x0C
+} GlobalTerminalServerIdRequest;
 
 typedef struct GlobalTerminalServerBoxData {
     u32 data[135];
-} GlobalTerminalServerBoxData; // 0x21C
+} GlobalTerminalServerBoxData;
 
 typedef struct GlobalTerminalServerBoxUpload {
     int tray;
     GlobalTerminalServerBoxData box;
-} GlobalTerminalServerBoxUpload; // 0x220
+} GlobalTerminalServerBoxUpload;
 
 typedef struct GlobalTerminalServerRankingsRequest {
     u32 data[9];
-} GlobalTerminalServerRankingsRequest; // 0x24
+} GlobalTerminalServerRankingsRequest;
 
 typedef struct GlobalTerminalServerVideoUpload {
     u32 data[1875];
-} GlobalTerminalServerVideoUpload; // 0x1D4C
+} GlobalTerminalServerVideoUpload;
 
 typedef struct GlobalTerminalServerVideoSearchParams {
     u32 data[4];
@@ -133,17 +132,17 @@ typedef struct GlobalTerminalServerVideoSearch {
     u16 unk_02;
     GlobalTerminalServerVideoSearchParams params;
     int unk_14[2];
-} GlobalTerminalServerVideoSearch; // 0x1C
+} GlobalTerminalServerVideoSearch;
 
 typedef struct GlobalTerminalServerVideoList {
     u16 kind;
     u16 unk_02;
     int data[6];
-} GlobalTerminalServerVideoList; // 0x1C
+} GlobalTerminalServerVideoList;
 
 extern GlobalTerminalSocket sGlobalTerminalSocket;
-extern char sGlobalTerminalSocketHost[];                           // sGlobalTerminalSocket.host
-extern GlobalTerminalSocketSettings sGlobalTerminalSocketSettings; // sGlobalTerminalSocket.unk_200
+extern char sGlobalTerminalSocketHost[];
+extern GlobalTerminalSocketSettings sGlobalTerminalSocketSettings;
 extern OSThread sGlobalTerminalSocketThread;
 extern OSMutex sGlobalTerminalSocketMutex;
 extern u8 sGlobalTerminalSocketThreadStackEnd[];

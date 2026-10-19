@@ -37,11 +37,11 @@ enum GlobalTerminalSocketState {
 typedef struct GlobalTerminalNet GlobalTerminalNet;
 
 typedef struct GlobalTerminalNetError {
-    u32 isError;          // 0x00
-    u32 type;             // 0x04, 0 = server status, 1 = cancelled, 2 = request result
-    u32 command;          // 0x08
-    u32 code;             // 0x0C
-} GlobalTerminalNetError; // size 0x10
+    u32 isError;
+    u32 type; // 0 = server status, 1 = cancelled, 2 = request result
+    u32 command;
+    u32 code;
+} GlobalTerminalNetError;
 
 typedef void (*GlobalTerminalNetResponseFunc)(void *arg, GlobalTerminalNetError *error);
 typedef BOOL (*GlobalTerminalNetCompleteFunc)(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
@@ -49,96 +49,96 @@ typedef int (*GlobalTerminalNetStepFunc)(GlobalTerminalNet *net, void *stepWork)
 typedef void (*GlobalTerminalNetMessageFunc)(void *arg, String *message);
 
 typedef struct GlobalTerminalNetCallbacks {
-    void *arg;                                    // 0x00
-    GlobalTerminalNetResponseFunc onResponse[10]; // 0x04, one per request, in command order
-} GlobalTerminalNetCallbacks;                     // size 0x2C
+    void *arg;
+    GlobalTerminalNetResponseFunc onResponse[10]; // one per request, in command order
+} GlobalTerminalNetCallbacks;
 
 typedef struct GlobalTerminalNetArgs {
-    u32 dwcProfileId;                         // 0x00
-    enum HeapID heapID;                       // 0x04
-    SaveData *saveData;                       // 0x08
-    GlobalTerminalNetCallbacks callbacks;     // 0x0C
-    GlobalTerminalNetMessageFunc messageFunc; // 0x38
-    void *messageArg;                         // 0x3C
-} GlobalTerminalNetArgs;                      // size 0x40
+    u32 dwcProfileId;
+    enum HeapID heapID;
+    SaveData *saveData;
+    GlobalTerminalNetCallbacks callbacks;
+    GlobalTerminalNetMessageFunc messageFunc;
+    void *messageArg;
+} GlobalTerminalNetArgs;
 
 // login block handed to the server client (GlobalTerminalServer_Init)
 typedef struct GlobalTerminalNetLogin {
-    u32 dwcProfileId;     // 0x00
-    u8 gameVersion;       // 0x04
-    u8 unk_05;            // 0x05, always 2
-    u8 token[0x132];      // 0x06
-} GlobalTerminalNetLogin; // size 0x138
+    u32 dwcProfileId;
+    u8 gameVersion;
+    u8 unk_05; // always 2
+    u8 token[0x132];
+} GlobalTerminalNetLogin;
 
 // dress-up photo as sent to the server (SaveFashionDataSub without its unsent parts)
 typedef struct GlobalTerminalNetDressUpForm {
-    u32 magic;                  // 0x00
-    u32 personality;            // 0x04
-    u32 otId;                   // 0x08
-    u16 species;                // 0x0C
-    u16 secondText[8];          // 0x0E
-    s8 z;                       // 0x1E
-    u8 x;                       // 0x1F
-    u8 y;                       // 0x20
-    u8 form;                    // 0x21
-    u8 unk_22[2];               // 0x22
-    u32 itemMask;               // 0x24
-    u16 mailMsgBank;            // 0x28
-    u16 mailMsgNo;              // 0x2A
-    u16 mailField0;             // 0x2C
-    u16 mailField1;             // 0x2E
-    u8 items[40];               // 0x30
-    u8 backdrop;                // 0x58
-    u8 language;                // 0x59
-    u16 unk_5A;                 // 0x5A
-    u16 crc;                    // 0x5C
-    u16 unk_5E;                 // 0x5E
-} GlobalTerminalNetDressUpForm; // size 0x60
+    u32 magic;
+    u32 personality;
+    u32 otId;
+    u16 species;
+    u16 secondText[8];
+    s8 z;
+    u8 x;
+    u8 y;
+    u8 form;
+    u8 unk_22[2];
+    u32 itemMask;
+    u16 mailMsgBank;
+    u16 mailMsgNo;
+    u16 mailField0;
+    u16 mailField1;
+    u8 items[40];
+    u8 backdrop;
+    u8 language;
+    u16 unk_5A;
+    u16 crc;
+    u16 unk_5E;
+} GlobalTerminalNetDressUpForm;
 
-// view of SaveFashionDataSub (include/fashion_case.h only declares fillers there)
+// the layout of SaveFashionDataSub
 typedef struct GlobalTerminalNetDressUpRecord {
-    u32 magic;                // 0x00
-    u32 personality;          // 0x04
-    u32 otId;                 // 0x08
-    u16 species;              // 0x0C
-    u8 nickname[0x24 - 0x0E]; // 0x0E, 11 u16
-    u16 secondText[8];        // 0x24
-    s8 z;                     // 0x34
-    u8 x;                     // 0x35
-    u8 y;                     // 0x36
-    u8 form;                  // 0x37
-    u8 unk_38[4];             // 0x38
-    u32 itemMask;             // 0x3C
-    u16 mailMsgBank;          // 0x40
-    u16 mailMsgNo;            // 0x42
-    u16 mailField0;           // 0x44
-    u16 mailField1;           // 0x46
-    u8 items[40];             // 0x48
-    u8 backdrop;              // 0x70
-    u8 language;              // 0x71
+    u32 magic;
+    u32 personality;
+    u32 otId;
+    u16 species;
+    u8 nickname[0x24 - 0x0E];
+    u16 secondText[8];
+    s8 z;
+    u8 x;
+    u8 y;
+    u8 form;
+    u8 unk_38[4];
+    u32 itemMask;
+    u16 mailMsgBank;
+    u16 mailMsgNo;
+    u16 mailField0;
+    u16 mailField1;
+    u8 items[40];
+    u8 backdrop;
+    u8 language;
 } GlobalTerminalNetDressUpRecord;
 
 // box as sent to the server
 typedef struct GlobalTerminalNetBoxForm {
-    u16 name[20];              // 0x000
-    u16 species[30];           // 0x028
-    u32 personality[30];       // 0x064
-    u32 otIds[30];             // 0x0DC, mon data 7
-    u32 eggFlags;              // 0x154, bit per slot (mon data 174 == 494)
-    u8 forms[30];              // 0x158, mon data 112
-    u8 wallpaper;              // 0x176
-    u8 category;               // 0x177
-    u8 unk_178[0x198 - 0x178]; // 0x178
-    u16 crc;                   // 0x198
-    u8 unk_19A[2];             // 0x19A
-} GlobalTerminalNetBoxForm;    // size 0x19C
+    u16 name[20];
+    u16 species[30];
+    u32 personality[30];
+    u32 otIds[30];
+    u32 eggFlags; // bit per slot
+    u8 forms[30];
+    u8 wallpaper;
+    u8 category;
+    u8 unk_178[0x198 - 0x178];
+    u16 crc;
+    u8 unk_19A[2];
+} GlobalTerminalNetBoxForm;
 
 typedef struct GlobalTerminalNetPair {
     u32 recordId;
     u32 value;
 } GlobalTerminalNetPair;
 
-// 8-byte header of the rankings request, built from a 0x24-byte source by GlobalTerminalNet_SetRankingsHeader
+// header of the rankings request, built by GlobalTerminalNet_SetRankingsHeader
 typedef struct GlobalTerminalNetRankingsHeader {
     u8 version;
     u8 unk_01;
@@ -163,13 +163,13 @@ typedef struct GlobalTerminalNetRankingsSource {
 } GlobalTerminalNetRankingsSource;
 
 typedef struct GlobalTerminalNetVideoSearch {
-    u16 species;  // 0x00
-    u8 facility;  // 0x02
-    u8 country;   // 0x03
-    u8 region;    // 0x04
-    u8 unk_05[3]; // 0x05
-    u32 unk_08;   // 0x08
-    u32 unk_0C;   // 0x0C
+    u16 species;
+    u8 facility;
+    u8 country;
+    u8 region;
+    u8 unk_05[3];
+    u32 unk_08;
+    u32 unk_0C;
 } GlobalTerminalNetVideoSearch;
 
 typedef union GlobalTerminalNetRequest {
@@ -191,7 +191,7 @@ typedef union GlobalTerminalNetRequest {
     void *video;                         // 23000
     GlobalTerminalNetVideoSearch search; // 23001 kind 0
     u32 unk_00;                          // 23001 kinds 1 and 2
-} GlobalTerminalNetRequest;              // size 0x21C
+} GlobalTerminalNetRequest;
 
 typedef struct GlobalTerminalNetStepWork {
     u32 unk_00;
@@ -200,48 +200,48 @@ typedef struct GlobalTerminalNetStepWork {
 } GlobalTerminalNetStepWork;
 
 struct GlobalTerminalNet {
-    SaveData *saveData;                       // 0x000
-    GlobalTerminalNetMessageFunc messageFunc; // 0x004
-    void *messageArg;                         // 0x008
-    GlobalTerminalNetLogin login;             // 0x00C
-    enum HeapID heapID;                       // 0x144
-    int status;                               // 0x148
-    int prevStatus;                           // 0x14C
-    GlobalTerminalNetCallbacks callbacks;     // 0x150
-    GlobalTerminalNetError error;             // 0x17C
-    void *osHeapMemory;                       // 0x18C
-    GlobalTerminalNetRequest request;         // 0x190
+    SaveData *saveData;
+    GlobalTerminalNetMessageFunc messageFunc;
+    void *messageArg;
+    GlobalTerminalNetLogin login;
+    enum HeapID heapID;
+    int status;
+    int prevStatus;
+    GlobalTerminalNetCallbacks callbacks;
+    GlobalTerminalNetError error;
+    void *osHeapMemory;
+    GlobalTerminalNetRequest request;
 
     union {
         u32 word;
         u16 half;
         u8 bytes[4];
-    } requestArg; // 0x3AC
+    } requestArg;
 
-    u32 requestArgHigh;                         // 0x3B0
-    void *responseBuffer;                       // 0x3B4
-    int initialized;                            // 0x3B8
-    u32 sequence;                               // 0x3BC
-    u32 sequenceStep;                           // 0x3C0
-    int isRunning;                              // 0x3C4
-    u32 unk_3C8;                                // 0x3C8
-    GlobalTerminalNetStepWork stepWork;         // 0x3CC
-    u8 unk_3D8[8];                              // 0x3D8
-    int errorCode;                              // 0x3E0
-    int errorType;                              // 0x3E4
-    int pendingCommand;                         // 0x3E8
-    int activeCommand;                          // 0x3EC
-    u32 searchKind;                             // 0x3F0
-    MsgData *msgData;                           // 0x3F4
-    MessageFormat *msgFormat;                   // 0x3F8
-    String *string;                             // 0x3FC
-    GlobalTerminalNetResponseFunc responseFunc; // 0x400
-    u8 unk_404[8];                              // 0x404
-    GlobalTerminalNetCompleteFunc completeFunc; // 0x40C
-    u8 unk_410;                                 // 0x410
-    u8 sendDelay;                               // 0x411
-    u8 unk_412[2];                              // 0x412
-}; // size 0x414
+    u32 requestArgHigh;
+    void *responseBuffer;
+    int initialized;
+    u32 sequence;
+    u32 sequenceStep;
+    int isRunning;
+    u32 unk_3C8;
+    GlobalTerminalNetStepWork stepWork;
+    u8 unk_3D8[8];
+    int errorCode;
+    int errorType;
+    int pendingCommand;
+    int activeCommand;
+    u32 searchKind;
+    MsgData *msgData;
+    MessageFormat *msgFormat;
+    String *string;
+    GlobalTerminalNetResponseFunc responseFunc;
+    u8 unk_404[8];
+    GlobalTerminalNetCompleteFunc completeFunc;
+    u8 unk_410;
+    u8 sendDelay;
+    u8 unk_412[2];
+};
 
 // battle video header in the 23001 response
 typedef struct GlobalTerminalNetVideoHeader {

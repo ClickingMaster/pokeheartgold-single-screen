@@ -22,13 +22,13 @@ typedef struct GlobalTerminalAppArgs {
 // Also the args of the Global Terminal connect app.
 typedef struct GlobalTerminalApp {
     GlobalTerminalAppArgs *args;
-    int disconnect;           // 0x04, set for the second connect app run: only disconnect
-    OverlayManager *subApp;   // 0x08
-    void *heapBuffer;         // 0x0C
-    NNSFndHeapHandle dwcHeap; // 0x10, inside heapBuffer, 32-byte aligned
+    int disconnect; // set for the second connect app run: only disconnect
+    OverlayManager *subApp;
+    void *heapBuffer;
+    NNSFndHeapHandle dwcHeap; // inside heapBuffer, 32-byte aligned
     u8 wifiConnection[0x78 - 0x14];
-    int wifiLoaded;  // 0x78
-    int isConnected; // 0x7C, set by the connect app
+    int wifiLoaded;
+    int isConnected; // set by the connect app
 } GlobalTerminalApp;
 
 void WirelessStatusIcon_SetLevel(int level);
