@@ -975,7 +975,7 @@ void WiFiPlazaLobbyClient_OnMatchInfo(int id, WiFiPlazaLobbyMatchInfo *info);
 void WiFiPlazaLobbyClient_OnMatchClosed(int id, const WiFiPlazaLobbyMatchInfo *info);
 void WiFiPlazaLobbyClient_OnLobbyEvent(u32 event);
 void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u32 size);
-BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result);
+BOOL WiFiPlazaLobbyClient_OnScheduleReceived(int result);
 void WiFiPlazaLobbyClient_OnSpecialVisitorsReceived(int result, const void *data, u32 size);
 void WiFiPlazaLobbyClient_OnSurveyReceived(int result, const void *data);
 void WiFiPlazaLobbyClient_OnSurveySubmitted(void);

@@ -119,8 +119,8 @@ struct Vec {
 struct Info {
     int id;
     u16 one;
-    u8 a;
-    u8 b;
+    u8 version;
+    u8 language;
     u8 mac[6];
     u16 pad;
     int pad2;
@@ -130,10 +130,10 @@ struct Packet {
     Info info;
     u32 out0, out1;
     int mode;
-    u32 d4;
-    u32 d38;
-    u16 d3c;
-    u16 d3e;
+    u32 trainerId;
+    u32 gender;
+    u16 country;
+    u16 region;
 };
 
 struct Out {
@@ -160,7 +160,7 @@ struct Op {
     Vec vec;
     void (*cb)(void);
     int x38;
-    int x3c;
+    int useLastHash;
 
     Op(int f, const char *n, const char *h, int i, const u8 *first, const u8 *last)
         : vtbl(&gPPWLobbyWebRequestVtable)
@@ -172,7 +172,7 @@ struct Op {
         , vec()
         , cb(PPWLobby_OnSubmitQuestionnaire)
         , x38(0)
-        , x3c(0) {
+        , useLastHash(0) {
         vec.Assign(Iter(first), Iter(last));
     }
 };
@@ -186,15 +186,15 @@ extern "C" void StatsUpload_Stop(void);
 
 struct Data {
     u8 pad0[4];
-    u32 x4;
+    u32 trainerId;
     u8 pad8[0x38 - 8];
-    u8 x38;
-    u8 x39;
+    u8 gender;
+    u8 language;
     u8 pad3a[2];
-    u16 x3c;
-    u8 x3e;
+    u16 country;
+    u8 region;
     u8 pad3f[3];
-    u8 x42;
+    u8 version;
 };
 
 extern "C" PPWLobbyWork *gPPWLobbyWork;
@@ -234,18 +234,18 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
         const Data *d2 = GetData(gPPWLobbyWork);
         info.id = gPPWLobbyWork->userId;
         info.one = 1;
-        info.a = d2->x42;
-        info.b = d2->x39;
+        info.version = d2->version;
+        info.language = d2->language;
         OS_GetMacAddress(info.mac);
         p.info = info;
     }
     p.out0 = out.a;
     p.out1 = out.b;
     p.mode = mode;
-    p.d4 = d->x4;
-    p.d38 = d->x38;
-    p.d3c = d->x3c;
-    p.d3e = d->x3e;
+    p.trainerId = d->trainerId;
+    p.gender = d->gender;
+    p.country = d->country;
+    p.region = d->region;
     x = gPPWLobbyWork->userId;
     host = gPPWLobbySubmitQuestionnaireUrl;
     name = gPPWLobbyStatsUploadKey;
@@ -256,7 +256,7 @@ extern "C" int PPW_LobbySubmitQuestionnaire(int mode) {
         gPPWLobbyCurrentRequest = o;
         StatsUpload_Start(o->flag, o->a.CStr());
         int ret;
-        if (o->x3c) {
+        if (o->useLastHash) {
             u32 n = o->vec.size;
             ret = StatsUpload_UploadWithLastHash(o->b.CStr(), o->id, LobbyByteVector_Data(&o->vec), n, 0);
         } else {
@@ -709,8 +709,8 @@ struct Config {
 struct Info {
     u32 x;
     u16 one;
-    u8 a;
-    u8 b;
+    u8 version;
+    u8 language;
     u8 mac[6];
     u8 rest[6];
     Config cfg;
@@ -735,7 +735,7 @@ struct Obj {
     Vec data;
     void (*cb)(int, int, int);
     int x38;
-    int x3c;
+    int useLastHash;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
         : vtbl(&gPPWLobbyWebRequestVtable)
@@ -747,7 +747,7 @@ struct Obj {
         , data()
         , cb(PPWLobby_OnCheckProfile)
         , x38(0)
-        , x3c(0) {
+        , useLastHash(0) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
     }
 };
@@ -772,8 +772,8 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
     ReqMethod flag;
     info.x = gPPWLobbyWork->userId;
     info.one = 1;
-    info.a = f->version;
-    info.b = f->language;
+    info.version = f->version;
+    info.language = f->language;
     OS_GetMacAddress(info.mac);
     info.cfg = *c;
     x = gPPWLobbyWork->userId;
@@ -788,7 +788,7 @@ extern "C" void PPWLobby_StartCheckProfile(void) {
     gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
-    if (o->x3c) {
+    if (o->useLastHash) {
         u32 n = o->data.size;
         ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, LobbyByteVector_Data(&o->data), n, 0);
     } else {
@@ -2189,8 +2189,8 @@ struct Vec {
 struct Info {
     u32 x;
     u16 one;
-    u8 a;
-    u8 b;
+    u8 version;
+    u8 language;
     u8 mac[6];
     u8 rest[6];
 };
@@ -2214,7 +2214,7 @@ struct Obj {
     Vec data;
     void (*cb)(void);
     int x38;
-    int x3c;
+    int useLastHash;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
         : vtbl(&gPPWLobbyWebRequestVtable)
@@ -2226,7 +2226,7 @@ struct Obj {
         , data()
         , cb(PPWLobby_OnGetSchedule)
         , x38(0)
-        , x3c(1) {
+        , useLastHash(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
     }
 };
@@ -2274,8 +2274,8 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
     info.x = gPPWLobbyWork->userId;
     info.one = 1;
-    info.a = f->version;
-    info.b = f->language;
+    info.version = f->version;
+    info.language = f->language;
     OS_GetMacAddress(info.mac);
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetScheduleUrl;
@@ -2289,7 +2289,7 @@ extern "C" void PPWLobby_OnCheckProfile(int a0, int a1, int a2) {
     gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
-    if (o->x3c) {
+    if (o->useLastHash) {
         u32 n = o->data.size;
         ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, LobbyByteVector_Data(&o->data), n, 0);
     } else {
@@ -2404,8 +2404,8 @@ struct Vec {
 struct Info {
     u32 x;
     u16 one;
-    u8 a;
-    u8 b;
+    u8 version;
+    u8 language;
     u8 mac[6];
     u16 r14;
     u32 r16;
@@ -2435,7 +2435,7 @@ struct Obj {
     Vec data;
     void (*cb)(int, int, int);
     int x38;
-    int x3c;
+    int useLastHash;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info2 &info)
         : vtbl(&gPPWLobbyWebRequestVtable)
@@ -2447,7 +2447,7 @@ struct Obj {
         , data()
         , cb(PPWLobby_OnGetVip)
         , x38(0)
-        , x3c(1) {
+        , useLastHash(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info2)));
     }
 };
@@ -2486,7 +2486,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     if (r == 0 && !PPWLobbySchedule_IsSizeValid(&gPPWLobbyWork->schedule, buf, len)) {
         r = 2;
     }
-    int ok2 = gPPWLobbyWork->callbacks.onEvent12Result(r, buf);
+    int ok2 = gPPWLobbyWork->callbacks.onScheduleReceived(r, buf);
     if (r != 0) {
         PPWLobbyWork *g = gPPWLobbyWork;
         g->error = 4;
@@ -2502,8 +2502,8 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
     info.x = gPPWLobbyWork->userId;
     info.one = 1;
-    info.a = f->version;
-    info.b = f->language;
+    info.version = f->version;
+    info.language = f->language;
     OS_GetMacAddress(info.mac);
     i2.info = info;
     i2.extra = p->trainerId;
@@ -2518,7 +2518,7 @@ extern "C" void PPWLobby_OnGetSchedule(int a0, int a1, int a2) {
     new (o) Obj(flag, name, host, x, i2);
     gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
-    if (o->x3c) {
+    if (o->useLastHash) {
         u32 n = o->data.size;
         ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, LobbyByteVector_Data(&o->data), n, 0);
     } else {
@@ -2633,8 +2633,8 @@ struct Vec {
 struct Info {
     u32 x;
     u16 one;
-    u8 a;
-    u8 b;
+    u8 version;
+    u8 language;
     u8 mac[6];
     u8 rest[6];
 };
@@ -2658,7 +2658,7 @@ struct Obj {
     Vec data;
     void (*cb)(void);
     int x38;
-    int x3c;
+    int useLastHash;
 
     Obj(int f, const char *n, const char *h, u32 x_, const Info &info)
         : vtbl(&gPPWLobbyWebRequestVtable)
@@ -2670,7 +2670,7 @@ struct Obj {
         , data()
         , cb(PPWLobby_OnGetQuestionnaire)
         , x38(0)
-        , x3c(1) {
+        , useLastHash(1) {
         data.Assign(Iter((const u8 *)&info), Iter((const u8 *)&info + sizeof(Info)));
     }
 };
@@ -2717,8 +2717,8 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     const PPWLobbyUserProfile *f = (const PPWLobbyUserProfile *)LobbyByteVector_Data(&gPPWLobbyWork->players.self.userProfile);
     info.x = gPPWLobbyWork->userId;
     info.one = 1;
-    info.a = f->version;
-    info.b = f->language;
+    info.version = f->version;
+    info.language = f->language;
     OS_GetMacAddress(info.mac);
     x = gPPWLobbyWork->userId;
     host = gPPWLobbyGetQuestionnaireUrl;
@@ -2732,7 +2732,7 @@ extern "C" void PPWLobby_OnGetVip(int a0, int a1, int a2) {
     gPPWLobbyCurrentRequest = o;
     StatsUpload_Start(o->flag, o->name.CStr());
     int ret;
-    if (o->x3c) {
+    if (o->useLastHash) {
         u32 n = o->data.size;
         ret = StatsUpload_UploadWithLastHash(o->host.CStr(), o->x, LobbyByteVector_Data(&o->data), n, 0);
     } else {

@@ -283,7 +283,7 @@ void WiFiPlazaLobbyClient_OnOwnRecord(int result, const WiFiPlazaPlayer *data, u
     }
 }
 
-BOOL WiFiPlazaLobbyClient_OnEvent12Result(int result) {
+BOOL WiFiPlazaLobbyClient_OnScheduleReceived(int result) {
     if (result == 0) {
         return TRUE;
     }

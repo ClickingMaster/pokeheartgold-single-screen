@@ -151,7 +151,7 @@ void WiFiPlazaLobbyClient_InitializeEx(int value, int mode) {
     callbacks[9] = (void (*)(void))WiFiPlazaLobbyClient_OnMatchClosed;
     callbacks[10] = (void (*)(void))WiFiPlazaLobbyClient_OnLobbyEvent;
     callbacks[11] = (void (*)(void))WiFiPlazaLobbyClient_OnOwnRecord;
-    callbacks[12] = (void (*)(void))WiFiPlazaLobbyClient_OnEvent12Result;
+    callbacks[12] = (void (*)(void))WiFiPlazaLobbyClient_OnScheduleReceived;
     callbacks[13] = (void (*)(void))WiFiPlazaLobbyClient_OnSpecialVisitorsReceived;
     callbacks[14] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveyReceived;
     callbacks[15] = (void (*)(void))WiFiPlazaLobbyClient_OnSurveySubmitted;

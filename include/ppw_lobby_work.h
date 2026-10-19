@@ -17,7 +17,7 @@ typedef struct PPWLobbyCallbacks {
     void (*onMatchClosed)(int, void *);
     void (*onLobbyEvent)(void);
     void (*onOwnRecord)(int, void *, u32);
-    int (*onEvent12Result)(int, void *);
+    int (*onScheduleReceived)(int, void *);
     void (*onSpecialVisitorsReceived)(int, void *, u32);
     void (*onSurveyReceived)(int, void *);
     void (*onSurveySubmitted)(s32);
