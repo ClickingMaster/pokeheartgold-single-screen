@@ -9,6 +9,7 @@
 #include "frontier/frontier_link_messages.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_system.h"
+#include "frontier/frontier_trainer_record.h"
 #include "frontier/frontier_trainers.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0031.h"
@@ -45,7 +46,6 @@ void CastleChallenge_Clear(void *challenge);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, u32 amount);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 u32 FrontierTrainer_GetClassSprite(u8 trainerClass);
-void *FrontierTrainer_Load(void *dst, u16 trainerId, u32 heapId, u32 size);
 void FrontierTrainer_GenerateMons(int count, u16 trainerId, u16 partnerTrainerId, u16 *setIds, FrontierMon *mons, u8 *ivs, void **personalities, u8 hasPartner);
 void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
 
@@ -391,11 +391,11 @@ u8 BattleCastleData_GetBattleNo(BattleCastleData *data) {
 }
 
 u32 BattleCastleData_GetTrainerSprite(BattleCastleData *data, u32 index) {
-    u8 trainer[0x30];
+    FrontierTrainerRecord trainer;
     u8 trainerNo = data->battleNo + index * 7;
-    void *record = FrontierTrainer_Load(trainer, data->trainerIds[trainerNo], HEAP_ID_FIELD2, 0xCC);
+    void *record = FrontierTrainer_Load(&trainer, data->trainerIds[trainerNo], HEAP_ID_FIELD2, NARC_a_2_0_2);
     Heap_Free(record);
-    return FrontierTrainer_GetClassSprite((u8) * (u16 *)(trainer + 4));
+    return FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
 void BattleCastleData_ResetRanks(BattleCastleData *data) {

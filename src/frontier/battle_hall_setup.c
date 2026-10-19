@@ -9,6 +9,7 @@
 #include "frontier/battle_hall_data.h"
 #include "frontier/frontier.h"
 #include "frontier/frontier_link_lobby.h"
+#include "frontier/frontier_trainer_record.h"
 
 #include "communication_core.h"
 #include "communication_player_state.h"
@@ -53,9 +54,8 @@ u32 HallTypeRanks_Get(u32 cell, void *ranks);
 fx32 FX_Sqrt(fx32 x);
 
 u8 BattleHall_GetLevelRank(BattleHallData *data);
-void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, u8 level);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleHallTrainerRecord *record, int count, int battler, enum HeapID heapID);
+void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_GenerateWithRandomOtId(FrontierMon *frontierMon, u16 setId, int index, u8 ivs, int pid, enum HeapID heapID, u32 narcId);
 
 // Picks a trainer class for each of the count trainers of the battle: from the classes of the rank (2 in 3) or of the
@@ -236,7 +236,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     u8 index;
     int playerCount;
     int aiFlags;
-    BattleHallTrainerRecord trainer;
+    FrontierTrainerRecord trainer;
     int i;
     s32 opponentCount;
 
@@ -258,7 +258,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[index], HEAP_ID_FIELD2, 204));
+    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[index], HEAP_ID_FIELD2, NARC_a_2_0_2));
     FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY, HEAP_ID_FIELD2);
     Party_InitWithMaxSize(setup->party[BATTLER_ENEMY], opponentCount);
     rank = HallTypeRanks_Get(data->cell, data->typeRanks[data->type]);
@@ -284,7 +284,7 @@ BattleSetup *BattleHall_NewBattleSetup(BattleHallData *data, FrontierLaunchArgs 
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
         PlayerProfile_Copy(CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId()), setup->profile[BATTLER_PLAYER2]);
-        Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[index + 1], HEAP_ID_FIELD2, 204));
+        Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[index + 1], HEAP_ID_FIELD2, NARC_a_2_0_2));
         FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY2, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->party[BATTLER_ENEMY2], opponentCount);
         mon = AllocMonZeroed(HEAP_ID_FIELD2);

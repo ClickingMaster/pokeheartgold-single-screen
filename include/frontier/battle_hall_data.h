@@ -15,14 +15,6 @@
 #define HALL_TYPE_RANKS_SIZE       9  // 18 ranks of 4 bits
 #define HALL_LINK_MON_BUFFER_SIZE  0x200
 
-// A trainer as FrontierTrainer_Load reads it.
-typedef struct BattleHallTrainerRecord {
-    u32 unk_00;            // 0x00
-    u16 trainerClass;      // 0x04
-    u16 unk_06;            // 0x06
-    u8 filler_08[0x28];    // 0x08
-} BattleHallTrainerRecord; // size 0x30
-
 // The Battle Hall's script data (BattleHallData_Alloc, Frontier_GetData while the Hall's scripts run).
 typedef struct BattleHallData {
     enum HeapID heapId;                                  // 0x000

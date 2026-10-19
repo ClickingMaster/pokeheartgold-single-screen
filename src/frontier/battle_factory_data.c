@@ -7,6 +7,7 @@
 
 #include "frontier/battle_factory_setup.h"
 #include "frontier/frontier_link_messages.h"
+#include "frontier/frontier_trainer_record.h"
 
 #include "error_handling.h"
 #include "frontier_save_access.h"
@@ -23,13 +24,6 @@
 // The Battle Factory's script data: rentals and opponents generated from Battle Factory sets, the player's rental
 // party, trades and the record kept in the FactoryChallenge save.
 
-// A trainer as FrontierTrainer_Load reads it.
-typedef struct BattleFactoryTrainer {
-    u32 id;
-    u16 trainerClass;
-    u8 filler_06[0x2A];
-} BattleFactoryTrainer;
-
 BattleFactoryData *gBattleFactoryData;
 
 void *Save_Frontier_GetFactoryChallenge(SaveData *saveData);
@@ -41,7 +35,6 @@ int FactoryFlags_GetField(int flags, int field, u8 index, int a3);
 u32 BattleFactory_GetBestStreakStat(u8 type, u8 levelMode);
 u32 BattleFactory_GetBestTradeCountStat(u8 type, u8 levelMode);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
-void *FrontierTrainer_Load(BattleFactoryTrainer *trainer, int trainerId, enum HeapID heapId, int narcId);
 int FrontierTrainer_GetClassSprite(int trainerClass);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void Frontier_AddRentalMonToParty(SaveData *saveData, Party *party, Pokemon *mon);
@@ -406,7 +399,7 @@ u8 BattleFactory_GetBattleNo(BattleFactoryData *data) {
 }
 
 int BattleFactory_GetTrainerSprite(BattleFactoryData *data, int partner) {
-    BattleFactoryTrainer trainer;
+    FrontierTrainerRecord trainer;
     void *raw;
     int index = (u8)(data->battleNo + partner * 7);
     raw = FrontierTrainer_Load(&trainer, data->trainerIds[index], HEAP_ID_FIELD2, NARC_a_2_0_2);

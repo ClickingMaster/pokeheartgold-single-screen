@@ -28,7 +28,8 @@ typedef struct FrontierMon {
             u32 spdIv : 5;
             u32 spAtkIv : 5;
             u32 spDefIv : 5;
-            u32 dummy : 2;
+            u32 hasNickname : 1;
+            u32 unused : 1;
         };
         u32 ivsWord;
     };

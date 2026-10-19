@@ -7,6 +7,7 @@
 #include "constants/trainer_class.h"
 
 #include "battle/battle_setup.h"
+#include "frontier/frontier_trainer_record.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0193.h"
 
@@ -25,6 +26,7 @@
 #include "pm_version.h"
 #include "pokemon.h"
 #include "save_wifi_history.h"
+#include "scrcmd_9.h"
 #include "sprite.h"
 #include "string_util.h"
 #include "trainer_memo.h"
@@ -34,22 +36,11 @@
 // Pokemon sets (narc 205); a set becomes a FrontierMon (the record the facilities store) and then a Pokemon.
 
 // First u16s of a trainer's narc member.
-typedef struct FrontierTrainer {
+typedef struct FrontierTrainerEntry {
     u16 trainerClass;
     u16 numMons;
     u16 monIds[];
-} FrontierTrainer;
-
-typedef struct FrontierTrainerRecord {
-    u32 id;
-    u16 trainerClass;
-    u16 unk_06;
-    u16 name[8];
-    u16 introMsgBank;
-    u16 introMsgNo;
-    u8 introMsgFields[4];
-    u16 messages[8];     // win and lose easy chat messages
-} FrontierTrainerRecord; // size: 0x30
+} FrontierTrainerEntry;
 
 // Pokemon set (narc 205 member).
 typedef struct FrontierMonSet {
@@ -61,34 +52,6 @@ typedef struct FrontierMonSet {
     u16 form;
 } FrontierMonSet;
 
-typedef struct FrontierMon {
-    u16 species : 11;
-    u16 form : 5;
-    u16 item;
-    u16 moves[4];
-    u32 otId;
-    u32 pid;
-    union {
-        struct {
-            u32 hpIv : 5;
-            u32 atkIv : 5;
-            u32 defIv : 5;
-            u32 speedIv : 5;
-            u32 spAtkIv : 5;
-            u32 spDefIv : 5;
-            u32 hasNickname : 1;
-            u32 unused : 1;
-        };
-        u32 ivsWord;
-    };
-    u8 evs[6];
-    u8 ppUps;
-    u8 language;
-    u8 ability;
-    u8 friendship;
-    u16 nickname[11];
-} FrontierMon; // size: 0x38
-
 typedef struct FrontierMonParam {
     u8 pp;
     u8 value;
@@ -97,7 +60,6 @@ typedef struct FrontierMonParam {
 
 void *FrontierData_AllocMember(s32 fileId, enum HeapID heapID, NarcId narcId);
 void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId);
-void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum HeapID heapID, NarcId narcId);
 u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, u8 itemIndex, BOOL useItemTable, enum HeapID heapID, NarcId narcId);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 u16 FrontierTrainer_GetClassSprite(u16 value);
@@ -111,7 +73,7 @@ void FrontierTrainer_SetBattleTrainer(BattleSetup *battleSetup, FrontierTrainerR
 u32 FrontierMon_GenerateWithRandomOtId(FrontierMon *mon, u16 setId, int itemIndex, u8 iv, int pid, enum HeapID heapID, NarcId narcId);
 void FrontierMon_GenerateList(FrontierMon *mons, u16 *setIds, u8 *ivs, u32 *pids, u32 *otIds, int count, enum HeapID heapID, NarcId narcId);
 int FrontierTrainer_GetMonIv(u32 trainerIndex);
-BOOL FrontierTrainer_PickMonSets(FrontierTrainer *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
+BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID);
 void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *otIds, u8 hasPartner);
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field);
 int Frontier_GetPlayerSpriteId(PlayerProfile *profile);
@@ -127,7 +89,7 @@ void FrontierData_ReadMember(void *dest, s32 fileId, NarcId narcId) {
 
 void *FrontierTrainer_Load(FrontierTrainerRecord *record, int trainerId, enum HeapID heapID, NarcId narcId) {
     MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0027_bin, heapID);
-    FrontierTrainer *trainer;
+    FrontierTrainerEntry *trainer;
     String *string;
 
     MI_CpuFill8(record, 0, sizeof(FrontierTrainerRecord));
@@ -181,7 +143,7 @@ u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, 
     mon->hpIv = iv;
     mon->atkIv = iv;
     mon->defIv = iv;
-    mon->speedIv = iv;
+    mon->spdIv = iv;
     mon->spAtkIv = iv;
     mon->spDefIv = iv;
     int count = 0;
@@ -201,7 +163,7 @@ u32 FrontierMon_Generate(FrontierMon *mon, u32 setId, u32 otId, u32 pid, u8 iv, 
             mon->evs[i] = ev;
         }
     }
-    mon->ppUps = 0;
+    mon->ppUp = 0;
     mon->language = gGameLanguage;
     u32 ability = GetMonBaseStat(mon->species, BASE_ABILITY_2);
     if (ability) {
@@ -243,7 +205,7 @@ void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level) {
     for (; i < 4; i++, iter = (FrontierMon *)((u8 *)iter + 2), shift += 2) {
         param.move = iter->moves[0];
         SetMonData(mon, MON_DATA_MOVE1 + i, &param.move);
-        param.value = (frontierMon->ppUps >> shift) & 3;
+        param.value = (frontierMon->ppUp >> shift) & 3;
         SetMonData(mon, MON_DATA_MOVE1_PP_UPS + i, &param.value);
         param.pp = GetMonData(mon, MON_DATA_MOVE1_MAX_PP + i, NULL);
         SetMonData(mon, MON_DATA_MOVE1_PP + i, &param.pp);
@@ -515,7 +477,7 @@ int FrontierTrainer_GetMonIv(u32 trainerIndex) {
 // Picks count different sets (no repeated species or item) for a trainer, avoiding the excluded species and items
 // for the first 50 tries. Returns TRUE if the exclusion had to be dropped.
 // heapID is unused.
-BOOL FrontierTrainer_PickMonSets(FrontierTrainer *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID) {
+BOOL FrontierTrainer_PickMonSets(FrontierTrainerEntry *trainer, const u16 *excludedSpecies, const u16 *excludedItems, int numExcluded, int count, u16 *setIds, enum HeapID heapID) {
     FrontierMonSet sets[6];
     u16 setId;
     int tries;
@@ -559,7 +521,7 @@ void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, 
     FrontierMonSet set;
     u16 species[4];
     u16 items[4];
-    FrontierTrainer *trainer;
+    FrontierTrainerEntry *trainer;
     int i;
 
     trainer = FrontierTrainer_Load(&record, trainerIndex, HEAP_ID_FIELD2, NARC_a_2_0_2);

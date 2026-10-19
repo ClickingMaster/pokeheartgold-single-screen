@@ -8,6 +8,7 @@
 #include "battle/battle_setup.h"
 #include "frontier/battle_castle_data.h"
 #include "frontier/frontier.h"
+#include "frontier/frontier_trainer_record.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -24,11 +25,6 @@
 
 // Battle Castle trainers and battles: the trainers of a round, the battle setup of a castle battle, the party kept
 // between battles, the round tiles and spending castle points.
-
-// A trainer as FrontierTrainer_Load reads it.
-typedef struct BattleCastleTrainerRecord {
-    u8 data[0x30];
-} BattleCastleTrainerRecord;
 
 // Trainer ids of a round: regular trainers, and the 7th battle of a round.
 typedef struct BattleCastleTrainerRange {
@@ -49,8 +45,7 @@ static const BattleCastleTrainerRange sBattleCastleTrainerRanges[] = {
     { 200, 299, 200, 299 },
 };
 
-void *FrontierTrainer_Load(BattleCastleTrainerRecord *record, int trainerId, enum HeapID heapID, int narcId);
-void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, BattleCastleTrainerRecord *record, int count, int battler, enum HeapID heapID);
+void FrontierTrainer_SetBattleTrainer(BattleSetup *setup, FrontierTrainerRecord *record, int count, int battler, enum HeapID heapID);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void FrontierSave_SubStat(FrontierSave *frontierSave, int stat, int substat, int amount);
 void FrontierSave_AddStat(FrontierSave *frontierSave, int stat, int substat, int amount);
@@ -144,7 +139,7 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
     int count;
     BattleSetup *setup;
     Pokemon *mon;
-    BattleCastleTrainerRecord trainer;
+    FrontierTrainerRecord trainer;
 
     HealParty(data->opponentParty);
     setup = BattleSetup_New(HEAP_ID_FIELD2, BattleCastle_GetBattleType(data->type));
@@ -162,7 +157,7 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[data->battleNo], HEAP_ID_FIELD2, 204));
+    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[data->battleNo], HEAP_ID_FIELD2, NARC_a_2_0_2));
     FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY, HEAP_ID_FIELD2);
     Party_InitWithMaxSize(setup->party[BATTLER_ENEMY], BattleCastle_GetOpponentMonCount(data->type, FALSE));
     for (j = 0; j < BATTLER_MAX; j++) {
@@ -179,7 +174,7 @@ BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchA
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
         PlayerProfile_Copy(CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId()), setup->profile[BATTLER_PLAYER2]);
-        Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, 204));
+        Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, NARC_a_2_0_2));
         FrontierTrainer_SetBattleTrainer(setup, &trainer, opponentCount, BATTLER_ENEMY2, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->party[BATTLER_ENEMY2], BattleCastle_GetOpponentMonCount(data->type, FALSE));
         mon = AllocMonZeroed(HEAP_ID_FIELD2);

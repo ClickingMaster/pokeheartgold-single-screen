@@ -6,6 +6,7 @@
 
 #include "frontier/battle_hall_setup.h"
 #include "frontier/frontier_link_messages.h"
+#include "frontier/frontier_trainer_record.h"
 
 #include "frontier_save_access.h"
 #include "heap.h"
@@ -50,7 +51,6 @@ int BattleHall_GetBestStreakStat(int type);
 int BattleHall_GetSpeciesStat(int type);
 int BattleHall_GetSpeciesRecordsType(int type);
 u32 FrontierStat_GetFriendIndex(u32 stat);
-void *FrontierTrainer_Load(BattleHallTrainerRecord *record, u32 trainerId, enum HeapID heapID, u32 narcId);
 void FrontierTrainer_GetClassSprite(u8 trainerClass);
 void Frontier_RecordLinkPlayerLocations(SaveData *saveData);
 int BattleHall_GetLevelRank(BattleHallData *data);
@@ -315,8 +315,8 @@ u8 BattleHallData_GetBattleNo(BattleHallData *data) {
 }
 
 void BattleHallData_GetTrainerSprite(BattleHallData *data, u32 index) {
-    BattleHallTrainerRecord trainer;
-    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[(u8)(index + data->battleNo * 2)], HEAP_ID_FIELD2, 204));
+    FrontierTrainerRecord trainer;
+    Heap_Free(FrontierTrainer_Load(&trainer, data->trainerIds[(u8)(index + data->battleNo * 2)], HEAP_ID_FIELD2, NARC_a_2_0_2));
     FrontierTrainer_GetClassSprite((u8)trainer.trainerClass);
 }
 
