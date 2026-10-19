@@ -393,13 +393,13 @@ static void PokeathlonCourse_LoadMonPicEx(ManagedSprite *sprite, PokeathlonCours
     Heap_Free(buffer);
 }
 
-void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const u16 *monForm, int palette, NARC *narc, u32 offset, enum HeapID heapId) {
+void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const PokeathlonCourseMonInfo *info, int palette, NARC *narc, u32 offset, enum HeapID heapId) {
     NNSG2dCharacterData *charData;
-    void *file = GfGfxLoader_GetCharDataFromOpenNarc(narc, GetMonIconNaixEx(monForm[0], FALSE, monForm[1]), FALSE, &charData, heapId);
+    void *file = GfGfxLoader_GetCharDataFromOpenNarc(narc, GetMonIconNaixEx(info->species, FALSE, info->form), FALSE, &charData, heapId);
     GF_ASSERT(file);
     PokeathlonCourse_LoadSpriteCharsAt(sprite->sprite, charData->pRawData, 0x200, offset);
     Heap_Free(file);
-    ManagedSprite_SetPaletteOverride(sprite, palette + GetMonIconPaletteEx(monForm[0], monForm[1], FALSE));
+    ManagedSprite_SetPaletteOverride(sprite, palette + GetMonIconPaletteEx(info->species, info->form, FALSE));
 }
 
 static void PokeathlonCourse_LoadSpriteCharsAt(Sprite *sprite, void *data, u32 size, u32 offset) {

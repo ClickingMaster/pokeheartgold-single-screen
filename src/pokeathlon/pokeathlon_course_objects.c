@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_internal.h"
+
 #include "assert.h"
 #include "heap.h"
 #include "sprite_transfer.h"
@@ -118,8 +120,8 @@ BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx
     return FALSE;
 }
 
-void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, void *scale, void *scaleY) {
-    PokeathlonCourseMonGfx_SetScale(PokeathlonCourseMonObject_GetGfx(object), scale, scaleY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, f32 scaleX, f32 scaleY) {
+    PokeathlonCourseMonGfx_SetScale(PokeathlonCourseMonObject_GetGfx(object), scaleX, scaleY);
 }
 
 BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object) {

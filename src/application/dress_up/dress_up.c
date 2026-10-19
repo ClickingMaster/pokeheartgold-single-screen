@@ -4650,11 +4650,9 @@ static void DressUpHud_SetCountIcons(DressUpCountIcons *icons, int count) {
 
 static void DressUpHud_DestroyCountIcons(DressUpCountIcons *icons, GF_2DGfxResMan **resMans) {
     int i = 0;
-    DressUpCountIcons *cursor = icons;
     do {
-        Sprite_Delete(cursor->sprites[0]);
+        Sprite_Delete(icons->sprites[i]);
         i++;
-        cursor = (DressUpCountIcons *)((u8 *)cursor + sizeof(Sprite *));
     } while (i < DRESS_UP_COUNT_ICON_NUM);
     DressUp_FreeSpriteRes(icons->resources, resMans);
 }

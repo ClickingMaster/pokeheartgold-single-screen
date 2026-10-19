@@ -9,6 +9,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_circle_push_display.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
@@ -77,48 +78,7 @@ enum PokeathlonCirclePushInitState {
 
 void MATH_QSort(void *head, u32 num, u32 width, int (*compare)(const void *, const void *), void *stackBuffer);
 
-void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCourseMonInfo *info);
-u8 *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, int member);
-u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
-u32 PokeathlonCourse_GetSpriteSizeType(u8 *performance);
-u32 PokeathlonCourse_GetCollisionSizeClass(u8 *performance);
-void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int baseY, void *resources, PokeathlonCourseSpritePool *pool, int whichScreen, int count, void *positions);
-BOOL PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
-Sprite *PokeathlonCourse_AddMarker(PokeathlonCourseData *course, PokeathlonCourseMonObject *object, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority);
-void PokeathlonCourse_InitMarkers(PokeathlonCourseData *course);
-void PokeathlonCourse_FreeMarkers(PokeathlonCourseData *course);
-void PokeathlonCourse_SetMarkerAnim(PokeathlonCourseData *course, u8 member, int anim);
-void PokeathlonCourse_StopMarkerAnims(PokeathlonCourseData *course);
-void PokeathlonCourse_SetHudPlanes(PokeathlonCourseData *course, int planes);
-BOOL PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
-BOOL PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, u32 counter, u32 count);
-void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
-BOOL PokeathlonCourse_IsInRange(int x, int y, int targetX, int targetY, int range, int *distance);
-PokeathlonCourseMonInfo *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *gfx);
-void PokeathlonCourseMonGfx_LoadPalette(PokeathlonCourseMonInfo *info, enum HeapID heapId, u16 *palette);
-int PokeathlonCourseMonGfx_GetTopRow(PokeathlonCourseMonGfx *gfx);
-void PokeathlonCourse_InitObjTransfer(ObjCharTransferTemplate *charTemplate, int plttCount, enum HeapID heapId, GXOBJVRamModeChar modeMain, GXOBJVRamModeChar modeSub);
-void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *scoreList, int mode);
-void PokeathlonCourseScoreList_Init(PokeathlonCourseScoreList *scoreList);
-void PokeathlonCourseScoreList_AddPointsToTotals(PokeathlonCourseScoreList *scoreList);
-void PokeathlonCourseScoreList_SaveEventPoints(PokeathlonCourseScoreList *scoreList, int mode);
-void PokeathlonCourse_AddScoreEntry(PokeathlonCourseData *course, PokeathlonCourseScoreList *scoreList, u32 participant, u32 score, u8 idx, u8 digits, u32 msgId);
-PokeathlonCourseSpriteResources *PokeathlonCourseSprites_CreateResources(enum HeapID heapId, int flags, int charVram);
-void PokeathlonCourseSprites_FreeResources(PokeathlonCourseSpriteResources *resources);
-PokeathlonCourseMonObjects *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int baseDrawPriority, PokeathlonCourseSpriteResources *resources, SpriteList *spriteList);
-void PokeathlonCourseMonObjects_Free(PokeathlonCourseMonObjects *objects);
-void PokeathlonCourseMonObjects_Load(PokeathlonCourseMonObjects *objects, int count, PokeathlonCourseMonInfo *infos, PokeathlonCourseObjectsTemplate *template, BOOL priority, BOOL baseIndex);
-BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *objects);
-void PokeathlonCourseMonObject_SetDrawFlag(void *object, int draw);
-void PokeathlonCourseMonObject_SetShadowDrawFlag(void *object, int draw);
-void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
-void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *object, int mode);
-void PokeathlonCourseMonObject_SetAffineMatrix(void *object, VecFx32 *matrix);
-void PokeathlonCourseMonObject_SetAnimState(void *object, int state);
-void PokeathlonCourseMonObject_Move(PokeathlonCourseMonObject *object, int dx, int dy, int anim, int moveShadow);
 void PokeathlonCourseMonObjects_SetPalette(PokeathlonCourseMonObjects *objects, u8 index, int vram, void *palette);
-int PokeathlonCourse_GetTouchRadius();
-Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, PokeathlonCourseSpritePool *pool);
 
 // Where each Pokemon of each team starts.
 typedef struct CirclePushStartPosition {
@@ -531,7 +491,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
     }
     case CIRCLE_PUSH_INIT_LOAD_MONS: {
         PokeathlonCourseMonInfo infos[12];
-        PokeathlonCourseObjectsTemplate template;
+        PokeathlonCourseMonGfxTemplate template;
         s32 i;
         for (i = 0; i < 12; i++) {
             PokeathlonCirclePushMon *mon;
@@ -554,10 +514,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
         s32 i;
         int own;
 
-        struct {
-            u16 x;
-            u16 y;
-        } ownPositions[3];
+        PokeathlonCoursePoint ownPositions[3];
 
         CirclePushCollision collision[3];
         VecFx32 scale;
@@ -625,7 +582,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
             }
             PokeathlonCourseMonObject_SetAffineMatrix(object, &scale);
             if (PokeathlonCourse_GetNetId(course) == 0) {
-                PokeathlonCirclePush_MakePacket(circlePush, (PokeathlonCirclePushPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28));
+                PokeathlonCirclePush_MakePacket(circlePush, (PokeathlonCirclePushPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + POKEATHLON_COURSE_DATA_FRAME_OUT));
             }
             if (team == own) {
                 ownPositions[member].x = x;
@@ -633,7 +590,7 @@ BOOL PokeathlonCirclePush_Init(PokeathlonCourseData *course) {
                 Sprite_SetDrawPriority(PokeathlonCourse_AddMarker(course, object, circlePush->spriteResources, PokeathlonCourseSpritePool_GetSpriteList(circlePush->spritePool), 1), 3);
             }
         }
-        PokeathlonCourse_CreateStartSpritesInPool(course, 0, circlePush->spriteResources, circlePush->spritePool, 1, 3, ownPositions);
+        PokeathlonCourse_CreateStartSpritesInPool(course, 0, circlePush->spriteResources, circlePush->spritePool, NNS_G2D_VRAM_TYPE_2DMAIN, 3, ownPositions);
         ReadWholeNarcMemberByIdPair(ringData, NARC_a_1_7_0, 1);
         {
             int team;
@@ -958,7 +915,7 @@ static BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course) {
     copyArea = PokeathlonCourse_GetDataCopyArea(course);
     input = (PokeathlonCirclePushInput *)PokeathlonCourse_ToBytes(copyArea);
     input->touching = FALSE;
-    copyArea = PokeathlonCourse_ToBytes(copyArea + 0xF0);
+    copyArea = PokeathlonCourse_ToBytes(copyArea + POKEATHLON_COURSE_DATA_FRAME_IN);
     {
         s32 flagBits = ((PokeathlonCirclePushPacket *)copyArea)->flagBits;
         u8 over = (flagBits >> 12) & 1;
@@ -966,7 +923,7 @@ static BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course) {
             PokeathlonCourseSpritePool_PauseAnims(circlePush->spritePool, TRUE);
             PokeathlonCourseObjects_PauseAnims(circlePush->objects, TRUE);
             PokeathlonCourse_StopMarkerAnims(course);
-            u32 score = PokeathlonCirclePushDisplay_GetScore(circlePush->display);
+            u16 score = PokeathlonCirclePushDisplay_GetScore(circlePush->display);
             PokeathlonCourse_SetRecordScore(course, score);
             PokeathlonCirclePush_PrintScore(circlePush, score);
             return TRUE;
@@ -988,7 +945,7 @@ static BOOL PokeathlonCirclePush_Update(PokeathlonCourseData *course) {
         circlePush->changeLayout = 0;
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         input->x = gSystem.touchX;
@@ -1054,7 +1011,7 @@ static void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course) {
                     scores[team] += circlePush->scoringPoints[circlePush->scoringIndex];
                     circlePush->scoringIndex++;
                     circlePush->scoringTimer = 6;
-                    PokeathlonCourse_AddMonCounter(course, team, (u8)(circlePush->scoringMon % 3), 3, 1);
+                    PokeathlonCourse_AddMonCounter(course, team, circlePush->scoringMon % 3, 3, 1);
                 }
             } else {
                 circlePush->scoringTimer--;
@@ -1168,9 +1125,9 @@ static void PokeathlonCirclePush_RunHost(PokeathlonCourseData *course) {
 }
 
 static inline void SetMonAnim(PokeathlonCourseData *course, PokeathlonCirclePush *circlePush, PokeathlonCirclePushMon *mon, int index, int team, u8 own, int anim, int x, int y, VecFx32 *pos, u8 scoring, Sprite *sprite) {
-    void *object;
+    PokeathlonCourseMonObject *object;
 
-    switch (PokeathlonCourse_GetPerformance(course, index / 3, index % 3)[7]) {
+    switch (PokeathlonCourse_GetPerformance(course, index / 3, index % 3)->heightClass) {
     case 1:
         pos->y -= 0x8000;
         break;
@@ -1228,7 +1185,7 @@ static void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
     u8 outOfRing[12];
 
     circlePush = PokeathlonCourse_GetWork(course);
-    packet = (PokeathlonCirclePushPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    packet = (PokeathlonCirclePushPacket *)PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + POKEATHLON_COURSE_DATA_FRAME_IN);
     own = PokeathlonCourse_GetNetId(course);
     scoringMon = (packet->stateBits >> 28) & 0xF;
     layout = (packet->stateBits >> 24) & 0xF;
@@ -1307,7 +1264,7 @@ static void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
                     offset = offsets.offsets[circlePush->falls[i].timer / 2];
                 }
                 circlePush->falls[i].timer++;
-                PokeathlonCourseMonObject_SetAffineOverwriteMode(mon->object, 1);
+                PokeathlonCourseMonObject_SetAffineOverwriteMode(mon->object, NNS_G2D_RND_AFFINE_OVERWRITE_NORMAL);
                 Sprite_SetAffineScale(sprite, &scale);
                 if (circlePush->falls[i].timer >= 12) {
                     circlePush->falls[i].state = FALL_STATE_FALLEN;
@@ -1326,7 +1283,7 @@ static void PokeathlonCirclePush_UpdateScreen(PokeathlonCourseData *course) {
             scale.x = FX32_ONE;
             scale.y = FX32_ONE;
             scale.z = FX32_ONE;
-            PokeathlonCourseMonObject_SetAffineOverwriteMode(mon->object, 0);
+            PokeathlonCourseMonObject_SetAffineOverwriteMode(mon->object, NNS_G2D_RND_AFFINE_OVERWRITE_NONE);
             if (exhausted) {
                 PokeathlonCourseSpritePoolSprite_Show(mon->tiredSprite, TRUE, TRUE);
                 if ((i / 3) == own && !IsSEPlaying(SEQ_SE_GS_W146)) {
@@ -1557,7 +1514,7 @@ static void PokeathlonCirclePush_SetTarget(int x, int y, const VecFx32 *position
 // The team's Pokemon nearest to the touch (12: none in reach).
 
 static u8 PokeathlonCirclePush_FindTouchedMon(PokeathlonCirclePush *circlePush, u8 team, u16 x, u16 y) {
-    int range = PokeathlonCourse_GetTouchRadius(circlePush);
+    int range = PokeathlonCourse_GetTouchRadius();
     fx32 nearest = range << FX32_SHIFT;
     u8 i;
     u8 count = 0;

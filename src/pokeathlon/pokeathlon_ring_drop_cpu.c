@@ -4,6 +4,8 @@
 
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_ring_drop.h"
+
 #include "assert.h"
 #include "heap.h"
 #include "math_util.h"
@@ -35,21 +37,6 @@ struct PokeathlonRingDropCpu {
     PokeathlonRingDropCpuPlayer players[3]; // participants count..3
     u8 count;
 };
-
-s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, u8 participant);
-VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, u8 participant);
-void PokeathlonRingDrop_GetMonScreenPosition(PokeathlonCourseData *course, u8 participant, VecFx32 *out);
-u8 PokeathlonRingDrop_GetMonDirection(PokeathlonCourseData *course, u8 participant);
-u8 PokeathlonRingDrop_GetMonStamina(PokeathlonCourseData *course, u8 participant);
-u32 PokeathlonRingDrop_GetMonStaminaPercent(PokeathlonCourseData *course, u8 participant);
-int PokeathlonRingDrop_IsMonSwitching(PokeathlonCourseData *course, u8 participant);
-int PokeathlonRingDrop_IsMonPushed(PokeathlonCourseData *course, u8 participant);
-int PokeathlonRingDrop_CanMonAct(PokeathlonCourseData *course, u8 participant);
-void PokeathlonRingDrop_SetMonTarget(PokeathlonCourseData *course, u8 participant, const s16 *target);
-void PokeathlonRingDrop_RequestJump(PokeathlonCourseData *course, u8 participant);
-void PokeathlonRingDrop_StartMonSwitch(PokeathlonCourseData *course, u8 participant);
-void PokeathlonRingDrop_SetMonDestination(PokeathlonCourseData *course, u8 participant, const s16 *position);
-int PokeathlonRingDrop_GetDirection(const VecFx32 *vec);
 
 // Chance (percent) of a dash by the best opponent kind (0 none, 1 close, 2 near in front, 3 close in front).
 // Chance of a jump by the number of close opponents (1..3).

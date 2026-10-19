@@ -1,11 +1,11 @@
-#include "pokeathlon/pokeathlon_hurdle_dash_race.h"
-
 #include "global.h"
 
 #include "constants/species.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_hurdle_dash_race.h"
 
 #include "assert.h"
 #include "bg_window.h"
@@ -22,16 +22,6 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "touchscreen.h"
-
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, u8 kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
-BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(PokeathlonCourseSpritePoolSprite *entry);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, const VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
 
 static void PokeathlonHurdleDashStandings_LoadResources(PokeathlonHurdleDashStandings *standings);
 static void PokeathlonHurdleDashStandings_InitResourcesHeader(PokeathlonHurdleDashStandings *standings);
@@ -379,6 +369,7 @@ static void PokeathlonHurdleDashStandings_CreateSprites(PokeathlonHurdleDashStan
         Sprite_SetDrawPriority(standings->mons[i].frame, 3);
         Sprite_SetDrawPriority(standings->mons[i].rank, 1);
         PokeathlonHurdleDashStandings_SetMonX(standings, i, x);
+        // BUG: this shows the rank again for a slot without a Pokemon.
         Sprite_SetDrawFlag(standings->mons[i].rank, TRUE);
         NARC_ReadWholeMember(narc, GetMonIconNaixEx(species, FALSE, form), buffer);
         NNS_G2dGetUnpackedBGCharacterData(buffer, &charData);
@@ -432,7 +423,7 @@ void PokeathlonHurdleDashDust_Free(PokeathlonHurdleDashDustLane *lanes) {
     Heap_Free(lanes);
 }
 
-void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, const VecFx32 *position) {
+void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, VecFx32 *position) {
     PokeathlonHurdleDashDustLane *selected;
     PokeathlonHurdleDashDust *dust;
     if (lane >= 3) {

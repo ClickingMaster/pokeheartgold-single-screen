@@ -1,12 +1,16 @@
 #include "global.h"
 
+#include "application/choose_starter/choose_starter_sub_res.naix"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
 #include "assert.h"
 #include "bg_window.h"
+#include "char_tiles.h"
 #include "filesystem.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
@@ -19,22 +23,6 @@
 #include "pokemon_icon_idx.h"
 #include "sprite.h"
 #include "text.h"
-
-Sprite *PokeathlonCourseSprites_CreateTimerDigit(PokeathlonCourseSpriteResources *resources, SpriteList *spriteList, int priority, enum HeapID heapId);
-void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narc, int file, int id, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narc, int file, int id);
-void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narc, int file, int id);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int id, int anim);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int show);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *sprite, int anim);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *sprite, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *sprite);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *sprite, int priority);
-void *CharTiles_AllocAndLoadMonPicAsObjFromNarc(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int isAnimated, int whichFacing, u16 species);
-void *AllocAndLoadPltt16FromNarc(u16 plttNarc, u16 plttFile, u32 heapId);
 
 extern const u8 sPennantCaptureTimerDigitX[];
 extern const u8 sPennantCaptureTimerDigitAnims[];
@@ -98,12 +86,12 @@ void PokeathlonPennantCaptureDisplay_Delete(PokeathlonPennantCaptureDisplay *dis
 }
 
 void PokeathlonPennantCaptureDisplay_LoadBgGfx(PokeathlonPennantCaptureDisplay *display) {
-    GfGfxLoader_LoadCharData((NarcId)0xE2, 5, display->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, display->heapId);
-    GfGfxLoader_LoadCharData((NarcId)0xE2, 6, display->bgConfig, GF_BG_LYR_SUB_2, 0, 0x2000, FALSE, display->heapId);
-    GfGfxLoader_LoadScrnData((NarcId)0xE2, 7, display->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, display->heapId);
-    GfGfxLoader_LoadScrnData((NarcId)0xE2, 8, display->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, display->heapId);
-    display->scoreScreenFile = GfGfxLoader_GetScrnData((NarcId)0xE2, 9, FALSE, &display->scoreScreen, display->heapId);
-    GfGfxLoader_GXLoadPal((NarcId)0xE2, 4, (enum GFPalLoadLocation)4, (enum GFPalSlotOffset)0, 0x40, display->heapId);
+    GfGfxLoader_LoadCharData(NARC_a_2_2_4, 5, display->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, display->heapId);
+    GfGfxLoader_LoadCharData(NARC_a_2_2_4, 6, display->bgConfig, GF_BG_LYR_SUB_2, 0, 0x2000, FALSE, display->heapId);
+    GfGfxLoader_LoadScrnData(NARC_a_2_2_4, 7, display->bgConfig, GF_BG_LYR_SUB_1, 0, 0, FALSE, display->heapId);
+    GfGfxLoader_LoadScrnData(NARC_a_2_2_4, 8, display->bgConfig, GF_BG_LYR_SUB_2, 0, 0, FALSE, display->heapId);
+    display->scoreScreenFile = GfGfxLoader_GetScrnData(NARC_a_2_2_4, 9, FALSE, &display->scoreScreen, display->heapId);
+    GfGfxLoader_GXLoadPal(NARC_a_2_2_4, 4, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x40, display->heapId);
     PokeathlonPennantCaptureDisplay_SetScore(display, 0);
 }
 
@@ -116,16 +104,16 @@ void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptur
     ids[0] = gPokeathlonPennantCaptureSpriteIds[1].ids[0];
     ids[1] = gPokeathlonPennantCaptureSpriteIds[1].ids[1];
     for (i = 0; i < 2; i++) {
-        PokeathlonCourseSpritePool_LoadChar(pool, 0x5D, 9, *id, 2);
-        PokeathlonCourseSpritePool_LoadPltt(pool, 0x5D, 6, *id, 2, 1);
-        PokeathlonCourseSpritePool_LoadCell(pool, 0x5D, 10, *id);
-        PokeathlonCourseSpritePool_LoadAnim(pool, 0x5D, 10, *id);
+        PokeathlonCourseSpritePool_LoadChar(pool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000009_NCGR, *id, 2);
+        PokeathlonCourseSpritePool_LoadPltt(pool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000006_NCLR, *id, 2, 1);
+        PokeathlonCourseSpritePool_LoadCell(pool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, *id);
+        PokeathlonCourseSpritePool_LoadAnim(pool, NARC_application_choose_starter_choose_starter_sub_res, NARC_choose_starter_sub_res_choose_starter_sub_res_00000010_NCER, *id);
         id++;
     }
-    PokeathlonCourseSpritePool_LoadChar(pool, 0xE2, 13, 0x65, 2);
-    PokeathlonCourseSpritePool_LoadPltt(pool, 0xE2, 10, 0x65, 2, 8);
-    PokeathlonCourseSpritePool_LoadCell(pool, 0xE2, 12, 0x65);
-    PokeathlonCourseSpritePool_LoadAnim(pool, 0xE2, 11, 0x65);
+    PokeathlonCourseSpritePool_LoadChar(pool, NARC_a_2_2_4, 13, 0x65, 2);
+    PokeathlonCourseSpritePool_LoadPltt(pool, NARC_a_2_2_4, 10, 0x65, 2, 8);
+    PokeathlonCourseSpritePool_LoadCell(pool, NARC_a_2_2_4, 12, 0x65);
+    PokeathlonCourseSpritePool_LoadAnim(pool, NARC_a_2_2_4, 11, 0x65);
 }
 
 void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, PokeathlonCourseSpritePool *pool, PokeathlonCourseSpriteResources *resources) {
@@ -142,22 +130,22 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     status = display->statusSprites[0];
     point = display->pointSprites[0];
     for (; participant < 4; participant++) {
-        row->u.mons[0].icon = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 2);
-        row->u.mons[0].frame = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 3);
-        row->u.mons[0].carryMark = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 10);
-        status[2] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 19);
+        row->u.mons[0].icon = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 2);
+        row->u.mons[0].frame = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 3);
+        row->u.mons[0].carryMark = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 10);
+        status[2] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 19);
         PokeathlonCourseSpritePoolSprite_SetAnim(status[2], 0);
         PokeathlonCourseSpritePoolSprite_Show(status[2], 1, 1);
-        status[1] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 21);
+        status[1] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 21);
         PokeathlonCourseSpritePoolSprite_SetAnim(status[1], 9);
         PokeathlonCourseSpritePoolSprite_Show(status[1], 1, 1);
-        status[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 20);
+        status[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 20);
         PokeathlonCourseSpritePoolSprite_SetAnim(row->u.mons[0].icon, participant + 19);
         PokeathlonCourseSpritePoolSprite_SetAnim(row->u.mons[0].frame, participant + 5);
         PokeathlonCourseSpritePoolSprite_SetAnim(status[0], 3);
         PokeathlonCourseSpritePoolSprite_Show(status[0], 1, 1);
         for (i = 0; i < 2; i++) {
-            point[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 24);
+            point[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 24);
             PokeathlonCourseSpritePoolSprite_SetAnim(point[i], 2);
         }
         row = DISPLAY_CURSOR_STEP(row, sizeof(PokeathlonPennantCaptureDisplayMon));
@@ -165,7 +153,7 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
         point += 2;
     }
     initialPosition = gPokeathlonPennantCaptureInitialPosition;
-    display->goalSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 22);
+    display->goalSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 0x65, 22);
     PokeathlonCourseSpritePoolSprite_SetAnim(display->goalSprite, 4);
     PokeathlonCourseSpritePoolSprite_Show(display->goalSprite, 1, 1);
     PokeathlonCourseSpritePoolSprite_SetPosition(display->goalSprite, &initialPosition);
@@ -252,13 +240,13 @@ void PokeathlonPennantCaptureDisplay_LoadIcons(PokeathlonPennantCaptureDisplay *
 }
 
 void PokeathlonPennantCaptureDisplay_LoadMonPics(PokeathlonPennantCaptureDisplay *display, const PokeathlonPennantCapturePicMon *mons) {
-    u16 ids[7];
+    PokepicTemplate template;
     int i = 0;
 
     for (; i < 3; i++) {
-        GetMonSpriteCharAndPlttNarcIdsEx((PokepicTemplate *)ids, mons[i].species, mons[i].gender, 2, mons[i].shiny, (u8)mons[i].form, mons[i].personality);
-        display->monPics[i].character = CharTiles_AllocAndLoadMonPicAsObjFromNarc(ids[0], ids[1], display->heapId, mons[i].personality, 0, 2, mons[i].species);
-        display->monPics[i].palette = AllocAndLoadPltt16FromNarc(ids[0], ids[2], display->heapId);
+        GetMonSpriteCharAndPlttNarcIdsEx(&template, mons[i].species, mons[i].gender, 2, mons[i].shiny, (u8)mons[i].form, mons[i].personality);
+        display->monPics[i].character = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId)template.narcID, template.charDataID, display->heapId, mons[i].personality, FALSE, 2, mons[i].species);
+        display->monPics[i].palette = AllocAndLoadPltt16FromNarc((NarcId)template.narcID, template.palDataID, display->heapId);
     }
 }
 

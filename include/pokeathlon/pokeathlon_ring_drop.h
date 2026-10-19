@@ -143,10 +143,6 @@ typedef struct PokeathlonRingDropPlayer {
 
 // The course's data copy area holds [0] the own input, [1] the frame packet the host builds, [2..5] the
 // participants' inputs (host) and [6] the frame packet received.
-#define RING_DROP_DATA_SLOT_SIZE 0x28
-#define RING_DROP_DATA_FRAME_OUT (1 * RING_DROP_DATA_SLOT_SIZE)
-#define RING_DROP_DATA_INPUTS    (2 * RING_DROP_DATA_SLOT_SIZE)
-#define RING_DROP_DATA_FRAME_IN  (6 * RING_DROP_DATA_SLOT_SIZE)
 
 // A participant's input.
 typedef struct PokeathlonRingDropInput {
@@ -197,13 +193,19 @@ typedef struct PokeathlonRingDropFramePacket {
 } PokeathlonRingDropFramePacket;
 
 // The sprites of a participant's Pokemon.
+// The sprites that go with a Pokemon in the ring (PokeathlonRingDropMonSprites.sprites).
+enum PokeathlonRingDropMonSprite {
+    RING_DROP_MON_SPRITE_CHARGE,
+    RING_DROP_MON_SPRITE_MARK,   // above the Pokemon
+    RING_DROP_MON_SPRITE_SWITCH, // the ball going up and coming down
+    RING_DROP_MON_SPRITE_DUST,   // where a Pokemon lands
+    RING_DROP_MON_SPRITE_HIT,    // between two Pokemon that collide
+    RING_DROP_MON_SPRITE_COUNT,
+};
+
 typedef struct PokeathlonRingDropMonSprites {
     PokeathlonCourseMonObject *monObject;
-    ManagedSprite *chargeSprite;
-    ManagedSprite *markSprite;                // above the Pokemon
-    ManagedSprite *switchSprite;              // the ball going up and coming down
-    ManagedSprite *dustSprite;                // where a Pokemon lands
-    ManagedSprite *hitSprite;                 // between two Pokemon that collide
+    ManagedSprite *sprites[RING_DROP_MON_SPRITE_COUNT];
     int state;                                // the last packet state
     u16 palettes[RING_DROP_TEAM_SIZE][2][16]; // normal and grey per team member
     fx32 jumpScale;
@@ -249,7 +251,7 @@ typedef struct PokeathlonRingDrop {
     PokeathlonCourseSpriteResources *resources;
     void *monObjects;
     Window window;
-    PokeathlonRingDropMemberParams memberParams[RING_DROP_PARTICIPANTS][RING_DROP_TEAM_SIZE];
+    PokeathlonRingDropMemberParams memberParams[RING_DROP_PARTICIPANTS * RING_DROP_TEAM_SIZE];
     PokeathlonRingDropUi *ui;
     struct PokeathlonRingDropCpu *cpu;                           // the computer participants
     u8 contacts[RING_DROP_PARTICIPANTS][RING_DROP_PARTICIPANTS]; // pairs whose push was taken already
@@ -271,19 +273,19 @@ BOOL PokeathlonRingDrop_Init(PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonRingDrop_Exit(PokeathlonCourseData *course);
-s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, int participant);
-VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, int participant);
-void PokeathlonRingDrop_GetMonScreenPosition(PokeathlonCourseData *course, int participant, fx32 *out);
-u32 PokeathlonRingDrop_GetMonDirection(PokeathlonCourseData *course, int participant);
-u8 PokeathlonRingDrop_GetMonStamina(PokeathlonCourseData *course, int participant);
-u8 PokeathlonRingDrop_GetMonStaminaPercent(PokeathlonCourseData *course, int participant);
-u32 PokeathlonRingDrop_IsMonSwitching(PokeathlonCourseData *course, int participant);
-u32 PokeathlonRingDrop_IsMonPushed(PokeathlonCourseData *course, int participant);
-BOOL PokeathlonRingDrop_CanMonAct(PokeathlonCourseData *course, int participant);
-void PokeathlonRingDrop_SetMonTarget(PokeathlonCourseData *course, int participant, const s16 *target);
-void PokeathlonRingDrop_RequestJump(PokeathlonCourseData *course, int participant);
-void PokeathlonRingDrop_StartMonSwitch(PokeathlonCourseData *course, int participant);
-void PokeathlonRingDrop_SetMonDestination(PokeathlonCourseData *course, int participant, const s16 *position);
+s32 PokeathlonRingDrop_GetMonState(PokeathlonCourseData *course, u8 participant);
+VecFx32 *PokeathlonRingDrop_GetMonPosition(PokeathlonCourseData *course, u8 participant);
+void PokeathlonRingDrop_GetMonScreenPosition(PokeathlonCourseData *course, u8 participant, VecFx32 *out);
+u32 PokeathlonRingDrop_GetMonDirection(PokeathlonCourseData *course, u8 participant);
+u8 PokeathlonRingDrop_GetMonStamina(PokeathlonCourseData *course, u8 participant);
+u8 PokeathlonRingDrop_GetMonStaminaPercent(PokeathlonCourseData *course, u8 participant);
+u32 PokeathlonRingDrop_IsMonSwitching(PokeathlonCourseData *course, u8 participant);
+u32 PokeathlonRingDrop_IsMonPushed(PokeathlonCourseData *course, u8 participant);
+BOOL PokeathlonRingDrop_CanMonAct(PokeathlonCourseData *course, u8 participant);
+void PokeathlonRingDrop_SetMonTarget(PokeathlonCourseData *course, u8 participant, const s16 *target);
+void PokeathlonRingDrop_RequestJump(PokeathlonCourseData *course, u8 participant);
+void PokeathlonRingDrop_StartMonSwitch(PokeathlonCourseData *course, u8 participant);
+void PokeathlonRingDrop_SetMonDestination(PokeathlonCourseData *course, u8 participant, const s16 *position);
 int PokeathlonRingDrop_GetDirection(const VecFx32 *vec);
 
 void PokeathlonRingDrop_InitSprites(PokeathlonRingDrop *ringDrop);

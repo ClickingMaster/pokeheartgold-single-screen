@@ -78,6 +78,6 @@ void PokeathlonCourse_LoadPlayerTrainerPic(Sprite *sprite, PokeathlonCourseData 
 u16 PokeathlonCourse_GetTrainerPicFileId(u32 kind);
 void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId);
 void PokeathlonCourse_LoadMonPicWithPalette(ManagedSprite *sprite, PokeathlonCourseMonInfo *info, BOOL mainScreen, u32 palette, enum HeapID heapId, BOOL loadPalette);
-void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const u16 *monForm, int palette, NARC *narc, u32 offset, enum HeapID heapId);
+void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, const PokeathlonCourseMonInfo *info, int palette, NARC *narc, u32 offset, enum HeapID heapId);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_COURSE_UI_H

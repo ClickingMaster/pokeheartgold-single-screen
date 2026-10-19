@@ -164,7 +164,8 @@ int PokeathlonHurdleDashTrack_GetHurdleAt(PokeathlonHurdleDashTrack *track, int 
 void PokeathlonHurdleDashStandings_SetMonX(PokeathlonHurdleDashStandings *standings, int index, int x);
 void PokeathlonHurdleDashStandings_SetRank(PokeathlonHurdleDashStandings *standings, u32 index, u32 rank);
 void PokeathlonHurdleDashStandings_SetMonDrawFlag(PokeathlonHurdleDashStandings *standings, int index, BOOL draw);
-void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, const VecFx32 *position);
+void PokeathlonHurdleDashDust_Spawn(PokeathlonHurdleDashDustLane *lanes, u32 lane, VecFx32 *position);
 void PokeathlonHurdleDashDust_Scroll(PokeathlonHurdleDashDustLane *lanes, u32 lane, u32 distance);
+void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *, const PokeathlonHurdleDashTable *, const PokeathlonHurdleDashParams *, PokeathlonHurdleDashTrack *, PokeathlonCourseSpritePool *, PokeathlonCourseMonObjects *, u8, PokeathlonHurdleDashRunner *);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_HURDLE_DASH_RACE_H

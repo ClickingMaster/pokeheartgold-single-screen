@@ -12,24 +12,6 @@
 // Helpers of the course Pokemon objects (position conversions, collision circle) and the
 // sprite pool the events use for their own sprites.
 
-// How the course sprite factory sets up the Pokemon objects.
-typedef struct PokeathlonCourseObjectsTemplate {
-    BOOL loadAtOnce;
-    int priority;
-    BOOL vramTransfer;
-    int vram; // 1 main, 2 sub, 3 both
-    NNS_G2D_VRAM_TYPE whichScreen;
-    int sizeTypes[12];
-} PokeathlonCourseObjectsTemplate;
-
-void *PokeathlonCourseMonGfx_GetSprite(void *gfx);
-BOOL PokeathlonCourseMonGfx_IsShiftedUp(void *gfx);
-void PokeathlonCourseMonGfx_SetScale(void *gfx, void *scale, void *y);
-void PokeathlonCourseMonGfx_ShiftLargeUp(void *gfxManager);
-PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(void *objects, u8 index);
-void *PokeathlonCourseMonObject_GetGfx(void *object);
-void PokeathlonCourseMonObject_SetPosition(PokeathlonCourseMonObject *object, int x, int y, int moveShadow);
-
 // Sprite pool: resources loaded from NARCs into four resource managers, sprites created from
 // them up front and handed out by resource id and kind.
 
@@ -68,7 +50,7 @@ void PokeathlonCourseObject_GetCollisionCenter(PokeathlonCourseMonObject *object
 void PokeathlonCourseObject_CenterToGround(PokeathlonCourseMonObject *object, int x, int y, int *outX, int *outY);
 void PokeathlonCourseObject_GroundToCenter(PokeathlonCourseMonObject *object, s32 x, s32 y, s32 *outX, s32 *outY);
 BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
-void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, void *scale, void *scaleY);
+void PokeathlonCourseObject_SetScale(PokeathlonCourseMonObject *object, f32 scaleX, f32 scaleY);
 BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object);
 void PokeathlonCourseObjects_ShiftLargeUp(PokeathlonCourseMonObjects *objects);
 void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused);

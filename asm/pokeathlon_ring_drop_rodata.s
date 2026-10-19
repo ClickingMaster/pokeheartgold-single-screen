@@ -10,8 +10,6 @@
 	.public gPokeathlonRingDropMonStartPositions
 	.public gPokeathlonRingDropOamCharTransferParam
 	.public gPokeathlonRingDropSwitchSpots
-	.public gPokeathlonRingDropSwitchSpotsY
-	.public gPokeathlonRingDropSwitchSpotsRadius
 	.public gPokeathlonRingDropSpriteResourceCounts
 	.public gPokeathlonRingDropBgLayers
 	.public gPokeathlonRingDropOamManagerParam
@@ -52,13 +50,7 @@ gPokeathlonRingDropOamCharTransferParam:
 	.byte 0x10, 0x00, 0x30, 0x00, 0x10, 0x00, 0x30, 0x00
 
 gPokeathlonRingDropSwitchSpots:
-	.byte 0x30, 0x00
-
-gPokeathlonRingDropSwitchSpotsY:
-	.byte 0x30, 0x00
-
-gPokeathlonRingDropSwitchSpotsRadius:
-	.byte 0x40, 0x00, 0xD0, 0x00
+	.byte 0x30, 0x00, 0x30, 0x00, 0x40, 0x00, 0xD0, 0x00
 	.byte 0x30, 0x00, 0x40, 0x00, 0x20, 0x00, 0x90, 0x00, 0x40, 0x00, 0xE0, 0x00, 0x90, 0x00, 0x40, 0x00
 
 gPokeathlonRingDropSpriteResourceCounts:

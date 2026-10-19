@@ -5,6 +5,8 @@
 #include "constants/sndseq.h"
 
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 
 #include "assert.h"
@@ -20,13 +22,6 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "text.h"
-
-void PokeathlonCourse_GetMonInfo(PokeathlonCourseData *course, int participant, int member, PokeathlonCirclePushMonView *view);
-void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *scene, int priority, int whichScreen, int resId, int kind);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *scene, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
-SpriteResource **PokeathlonCourseSpritePool_GetResourceSlot(PokeathlonCourseSpritePool *scene, int id, int type);
 
 extern PokeathlonCirclePushNameplateCoords gPokeathlonCirclePushNameplateCoords;
 
@@ -128,17 +123,17 @@ void PokeathlonCirclePushDisplay_CreateSprites(PokeathlonCourseSpritePool *scene
     Sprite *eventSprite;
     PokeathlonCirclePushDisplayAnim *anim = &display->anim;
 
-    PokeathlonCourseSpritePool_CreateSprite(scene, 0, 2, 105, 8);
-    PokeathlonCourseSpritePool_CreateSprite(scene, 0, 2, 105, 9);
-    PokeathlonCourseSpritePool_CreateSprite(scene, 1, 2, 105, 10);
+    PokeathlonCourseSpritePool_CreateSprite(scene, 0, NNS_G2D_VRAM_TYPE_2DSUB, 105, 8);
+    PokeathlonCourseSpritePool_CreateSprite(scene, 0, NNS_G2D_VRAM_TYPE_2DSUB, 105, 9);
+    PokeathlonCourseSpritePool_CreateSprite(scene, 1, NNS_G2D_VRAM_TYPE_2DSUB, 105, 10);
     for (i = 0; i < 2; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(scene, 0, 2, 105, 11);
+        PokeathlonCourseSpritePool_CreateSprite(scene, 0, NNS_G2D_VRAM_TYPE_2DSUB, 105, 11);
     }
     for (i = 0; i < 4; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(scene, 1, 2, 105, 12);
+        PokeathlonCourseSpritePool_CreateSprite(scene, 1, NNS_G2D_VRAM_TYPE_2DSUB, 105, 12);
     }
     for (i = 0; i < 4; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(scene, 1, 2, 105, 13);
+        PokeathlonCourseSpritePool_CreateSprite(scene, 1, NNS_G2D_VRAM_TYPE_2DSUB, 105, 13);
     }
 
     anim->unkB4 = PokeathlonCourseSpritePool_Take(scene, 105, 8);
@@ -305,11 +300,11 @@ void PokeathlonCirclePushDisplay_GetPicVramLocations(PokeathlonCourseSpritePool 
 void PokeathlonCirclePushDisplay_LoadMonPics(PokeathlonCirclePushDisplay *display) {
     int i;
     PokepicTemplate pokepic;
-    PokeathlonCirclePushMonView view;
+    PokeathlonCourseMonInfo view;
 
     for (i = 0; i < 12; i++) {
         PokeathlonCourse_GetMonInfo(display->course, i / 3, i % 3, &view);
-        GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, view.species, view.gender, 2, view.shiny, (u8)view.form, view.personality);
+        GetMonSpriteCharAndPlttNarcIdsEx(&pokepic, view.species, view.gender, 2, view.isShiny, (u8)view.form, view.personality);
         display->anim.monPics[i].charData = CharTiles_AllocAndLoadMonPicAsObjFromNarc((NarcId)pokepic.narcID, pokepic.charDataID, display->heapId, view.personality, FALSE, 2, view.species);
         display->anim.monPics[i].paletteData = AllocAndLoadPltt16FromNarc((NarcId)pokepic.narcID, pokepic.palDataID, display->heapId);
     }

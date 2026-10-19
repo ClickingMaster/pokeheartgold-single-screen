@@ -2,11 +2,13 @@
 
 #include "global.h"
 
+#include "constants/sdk_extras.h"
 #include "constants/sndseq.h"
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 
@@ -52,27 +54,6 @@ enum PokeathlonSnowThrowInitState {
 typedef char PokeathlonSnowThrowSizeCheck[(sizeof(PokeathlonSnowThrow) == 0x5F4 && sizeof(PokeathlonSnowThrowBall) == 0x48 && sizeof(PokeathlonSnowThrowMon) == 0x20 && sizeof(PokeathlonSnowThrowPacket) == 0x28 && sizeof(PokeathlonSnowThrowLink) == 0x118 && offsetof(PokeathlonSnowThrow, balls) == 0xB8 && offsetof(PokeathlonSnowThrow, mons) == 0x418 && offsetof(PokeathlonSnowThrow, cpu) == 0x5DC && offsetof(PokeathlonSnowThrow, timer) == 0x5E8) ? 1 : -1];
 
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *result);
-
-void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
-PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, PokeathlonCourseSpritePoolTemplate *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *pool, BOOL paused);
-void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
-void PokeathlonCourseSpritePoolSprite_SetScale(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *scale, int affineType);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
 
 // The animation state (facing) of each other team's Pokemon, by its place in the view.
 typedef struct PokeathlonSnowThrowViewAnims {
@@ -457,7 +438,7 @@ BOOL PokeathlonSnowThrow_Init(PokeathlonCourseData *course) {
             PokeathlonCourse_SetEventDrawEnabled(course, 1);
             own = PokeathlonCourse_GetNetId(course);
             for (k = 0; k < SNOW_THROW_MONS - SNOW_THROW_MEMBERS; k++) {
-                work->monObjects[k] = PokeathlonCourseMonObjects_Get(work->monObjectList, (u8)k);
+                work->monObjects[k] = PokeathlonCourseMonObjects_Get(work->monObjectList, k);
                 object = work->monObjects[k];
                 PokeathlonCourseMonObject_SetDrawFlag(object, TRUE);
                 mon = ((u8)(((own + 1) * SNOW_THROW_MEMBERS) % SNOW_THROW_MONS) + k) % SNOW_THROW_MONS;
@@ -651,16 +632,16 @@ static void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, Pokeath
     PokeathlonSnowThrow_SetTimerDigits(work, SNOW_THROW_DURATION / 30);
     for (i = 0; i < SNOW_THROW_MONS; i++) {
         work->balls[i].index = i;
-        work->balls[i].sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 3, 106, 3);
-        work->balls[i].shadowSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 3, 106, 4);
-        work->balls[i].splashSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 3, 106, 6);
+        work->balls[i].sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DBOTH, 106, 3);
+        work->balls[i].shadowSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DBOTH, 106, 4);
+        work->balls[i].splashSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DBOTH, 106, 6);
         PokeathlonCourseSpritePoolSprite_SetAnim(work->balls[i].shadowSprite, 1);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->balls[i].sprite, 20);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->balls[i].shadowSprite, 1000);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->balls[i].splashSprite, 5);
     }
     for (i = 0; i < SNOW_THROW_MONS; i++) {
-        work->mons[i].stunSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 3, 106, 9);
+        work->mons[i].stunSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DBOTH, 106, 9);
         PokeathlonCourseSpritePoolSprite_SetAnim(work->mons[i].stunSprite, 2);
         scale.x = FX32_ONE;
         scale.y = FX32_ONE;
@@ -669,11 +650,11 @@ static void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, Pokeath
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->mons[i].stunSprite, 4);
     }
     for (i = 0; i < SNOW_THROW_MEMBERS; i++) {
-        work->hitMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 105, 11);
+        work->hitMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 105, 11);
         PokeathlonCourseSpritePoolSprite_SetAnim(work->hitMarks[i], 6);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->hitMarks[i], 2);
     }
-    work->frameSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 1, 105, 7);
+    work->frameSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 105, 7);
     framePosition.x = 8 * FX32_ONE;
     framePosition.y = 8 * FX32_ONE;
     framePosition.z = 0;
@@ -684,7 +665,7 @@ static void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, Pokeath
     teamMarkPositions = sSnowThrowTeamMarkPositions;
     anim = (own + 1) % SNOW_THROW_TEAMS;
     for (i = 0; i < SNOW_THROW_TEAMS - 1; i++) {
-        work->teamMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 1, 105, 8);
+        work->teamMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 105, 8);
         PokeathlonCourseSpritePoolSprite_SetPosition(work->teamMarks[i], &teamMarkPositions.positions[i]);
         PokeathlonCourseSpritePoolSprite_SetAnim(work->teamMarks[i], anim + 1);
         PokeathlonCourseSpritePoolSprite_Show(work->teamMarks[i], TRUE, TRUE);
@@ -692,7 +673,7 @@ static void PokeathlonSnowThrow_CreateSprites(PokeathlonSnowThrow *work, Pokeath
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->teamMarks[i], 3);
     }
     for (i = 0; i < SNOW_THROW_MONS - SNOW_THROW_MEMBERS; i++) {
-        work->tiredMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 1, 105, 10);
+        work->tiredMarks[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 105, 10);
         PokeathlonCourseSpritePoolSprite_SetAnim(work->tiredMarks[i], 0);
         PokeathlonCourseSpritePoolSprite_SetDrawPriority(work->tiredMarks[i], 4);
     }
@@ -975,7 +956,7 @@ static BOOL PokeathlonSnowThrow_Update(PokeathlonCourseData *course) {
         }
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         touch->x = gSystem.touchX;

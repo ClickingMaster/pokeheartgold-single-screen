@@ -11,7 +11,7 @@
 // caller passes (u8 member indices; a mon object where the object helpers expect a course object).
 PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *objects, u8 index);
 PokeathlonCourseMonGfx *PokeathlonCourseMonObject_GetGfx(PokeathlonCourseMonObject *object);
-PokeathlonHurdleDashMonView *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *gfx);
+PokeathlonCourseMonInfo *PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonGfx *gfx);
 u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int mon);
 void *PokeathlonCourse_GetPerformance(PokeathlonCourseData *course, int participant, u8 mon);
 int PokeathlonCourse_GetCollisionSizeClass(void *performance);
@@ -27,8 +27,6 @@ PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCour
 Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
 void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
 
-void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, PokeathlonCourseSpritePool *scene, PokeathlonCourseMonObjects *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner);
-
 // Sets up one of the player's Pokemon in its lane: its stats from the event tables, its object and the
 // jump marker, rank and boost sprites.
 void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const PokeathlonHurdleDashTable *table, const PokeathlonHurdleDashParams *params, PokeathlonHurdleDashTrack *track, PokeathlonCourseSpritePool *scene, PokeathlonCourseMonObjects *monObjects, u8 lane, PokeathlonHurdleDashRunner *runner) {
@@ -40,7 +38,7 @@ void PokeathlonHurdleDashRunner_Init(PokeathlonCourseData *course, const Pokeath
     int x;
     int member;
     PokeathlonCourseMonGfx *gfx;
-    PokeathlonHurdleDashMonView *info;
+    PokeathlonCourseMonInfo *info;
     u8 *stats;
     int performance;
     Sprite *sprite;

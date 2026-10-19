@@ -1,6 +1,9 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_course_ui.h"
 #include "pokeathlon/pokeathlon_results_announcement.h"
 
 #include "bg_window.h"
@@ -20,20 +23,6 @@
 
 void NNS_G2dSetImageLocation(NNSG2dImageProxy *proxy, NNS_G2D_VRAM_TYPE type, u32 addr);
 void NNS_G2dSetImagePaletteLocation(NNSG2dImagePaletteProxy *proxy, NNS_G2D_VRAM_TYPE type, u32 addr);
-u16 PokeathlonCourse_GetNpcTeamSpriteId(u8 team);
-void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *scene, int index, int id);
-void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id);
-void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *scene, int narcId, int fileId, int id);
-Sprite *PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *scene, int priority, int screen, u16 resId, u8 anim);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *scene, u8 resId, u8 anim);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *sprite, int shown, int draw);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *sprite);
-SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonCourseSpritePool *scene);
-void PokeathlonCourse_LoadTrainerPicIntoSprite(Sprite *sprite, u32 fileId, int index, enum HeapID heapId);
-void PokeathlonCourse_LoadPlayerTrainerPic(Sprite *sprite, PokeathlonCourseData *course, u32 participant, int index);
-int PokeathlonCourse_GetNpcTrainerPicFileId(int trainerClass);
 
 static void PokeathlonResults_LoadPlateResources(PokeathlonResultsAnnouncementPlates *plates);
 static void PokeathlonResults_InitPlateResourcesHeader(PokeathlonResultsAnnouncementPlates *plates);
@@ -127,7 +116,7 @@ void PokeathlonResults_InitPlates(PokeathlonResultsAnnouncementPlates *plates, i
 }
 
 // Shows the next free plate at (x, y) for a ranking entry.
-PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonResultsAnnouncementScore *score) {
+PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonCourseScore *score) {
     PokeathlonResultsAnnouncementPlate *plate;
     PokeathlonParticipantData *participant;
     BOOL isNpc;
@@ -429,7 +418,7 @@ void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *s
     String *name;
     PokeathlonResultsAnnouncementScoreboardTeam *team;
     for (i = 0; i < 4; i++) {
-        sprite = PokeathlonCourseSpritePool_CreateSprite(scoreboard->scene, 0, 2, 104, 3);
+        sprite = PokeathlonCourseSpritePool_CreateSprite(scoreboard->scene, 0, NNS_G2D_VRAM_TYPE_2DSUB, 104, 3);
         pos.z = 0;
         pos.x = (i * 64) << FX32_SHIFT;
         pos.y = (y + 16) << FX32_SHIFT;
@@ -439,7 +428,7 @@ void PokeathlonResults_InitScoreboard(PokeathlonResultsAnnouncementScoreboard *s
         Sprite_SetPalIndexRespectVramOffset(sprite, i);
         Sprite_SetDrawPriority(sprite, 2);
         for (j = 0; j < 3; j++) {
-            sprite = PokeathlonCourseSpritePool_CreateSprite(scoreboard->scene, 0, 2, 104, 4);
+            sprite = PokeathlonCourseSpritePool_CreateSprite(scoreboard->scene, 0, NNS_G2D_VRAM_TYPE_2DSUB, 104, 4);
             pos.z = 0;
             pos.x = (i * 64 + 8 + j * 16) << FX32_SHIFT;
             pos.y = (y + 24) << FX32_SHIFT;

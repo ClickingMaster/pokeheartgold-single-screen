@@ -5,6 +5,7 @@
 #include "msgdata/msg.naix"
 #include "pokeathlon/pokeathlon.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_save.h"
 
@@ -207,8 +208,8 @@ Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int bas
     return &layout->countSprite;
 }
 
-Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx) {
-    return PokeathlonCourse_CreateHudSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(eventGfx));
+Sprite **PokeathlonCourse_CreateHudSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, PokeathlonCourseSpritePool *pool) {
+    return PokeathlonCourse_CreateHudSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(pool));
 }
 
 // Creates count "Start" sprites at the given positions (offset by baseY).
@@ -230,8 +231,8 @@ void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY
     layout->startState = 0;
 }
 
-void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions) {
-    PokeathlonCourse_CreateStartSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(eventGfx), whichScreen, count, positions);
+void PokeathlonCourse_CreateStartSpritesInPool(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, PokeathlonCourseSpritePool *pool, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions) {
+    PokeathlonCourse_CreateStartSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(pool), whichScreen, count, positions);
 }
 
 // "Start" animation, then "3, 2, 1" (one step every 21 frames). Returns TRUE when the event may begin.
@@ -337,7 +338,7 @@ void PokeathlonCourse_FreeMarkers(PokeathlonCourseData *course) {
     }
 }
 
-void PokeathlonCourse_SetMarkerAnim(PokeathlonCourseData *course, int index, int seq) {
+void PokeathlonCourse_SetMarkerAnim(PokeathlonCourseData *course, u8 index, int seq) {
     Sprite_TryChangeAnimSeq(((PokeathlonCourseLayout *)course)->markers.markers[index].sprite, seq);
 }
 
@@ -1641,7 +1642,7 @@ static void PokeathlonCourse_MarkerTask(SysTask *task, void *data) {
 
 // Adds to a counter of a participant's Pokemon (counter 0: the course's own count). On the host the counters
 // of every participant are kept; the others keep only their own, which they send at the end.
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u32 participant, u32 mon, int counter, int amount) {
+void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 mon, int counter, int amount) {
     PokeathlonCourseLayout *layout = (PokeathlonCourseLayout *)course;
     if (counter == 0) {
         if (participant != PokeathlonCourse_GetNetId(course)) {

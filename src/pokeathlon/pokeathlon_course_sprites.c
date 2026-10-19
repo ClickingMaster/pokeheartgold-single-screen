@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "constants/sdk_extras.h"
 #include "constants/species.h"
 
 #include "pokeathlon/pokeathlon_course_internal.h"
@@ -657,7 +658,7 @@ BOOL PokeathlonCourseMonObjects_IsLoaded(PokeathlonCourseMonObjects *objects) {
     return objects->loaded;
 }
 
-PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *objects, int index) {
+PokeathlonCourseMonObject *PokeathlonCourseMonObjects_Get(PokeathlonCourseMonObjects *objects, u8 index) {
     GF_ASSERT(index < objects->count);
     return &objects->objects[index];
 }
@@ -698,7 +699,7 @@ static Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObject
     cellMan = PokeathlonCourseSprites_GetResMan(objects->resources, GF_GFX_RES_TYPE_CELL);
     animMan = PokeathlonCourseSprites_GetResMan(objects->resources, GF_GFX_RES_TYPE_ANIM);
     CreateSpriteResourcesHeader(&header, resourceId, 0x17, resourceId, resourceId, -1, -1, 0, priority, charMan, plttMan, cellMan, animMan, NULL, NULL);
-    if (whichScreen == NNS_G2D_VRAM_TYPE_MAX) {
+    if (whichScreen == NNS_G2D_VRAM_TYPE_2DBOTH) {
         whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;
     }
     template.spriteList = objects->spriteList;
@@ -720,7 +721,7 @@ static Sprite *PokeathlonCourseMonObjects_CreateSprite(PokeathlonCourseMonObject
     return sprite;
 }
 
-void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *object, BOOL draw) {
+void PokeathlonCourseMonObject_SetDrawFlag(PokeathlonCourseMonObject *object, u8 draw) {
     Sprite *sprite = PokeathlonCourseMonGfx_GetSprite(object->gfx);
     Sprite_SetDrawFlag(sprite, draw);
     if (object->shadowSprite != NULL) {

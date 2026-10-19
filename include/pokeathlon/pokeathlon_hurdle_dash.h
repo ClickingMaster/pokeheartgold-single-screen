@@ -120,29 +120,12 @@ typedef struct PokeathlonHurdleDash {
     u8 started;
 } PokeathlonHurdleDash;
 
-// What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team (for the Pokemon sprite loader).
-typedef struct PokeathlonHurdleDashMonView {
-    u16 species;
-    u16 form;
-    u16 isLarge;
-    u8 isShiny;
-    u8 gender;
-    u32 participant;
-    u32 personality;
-} PokeathlonHurdleDashMonView;
-
 // A Pokemon of a team in the course data (PokeathlonCourse_GetParticipantMons).
 typedef struct PokeathlonHurdleDashTeamMon {
     u16 species;
     u16 form;
     u8 unk04[0x24];
 } PokeathlonHurdleDashTeamMon;
-
-typedef struct PokeathlonHurdleDashSceneConfig {
-    s32 capacity;
-    s32 resourceCount;
-    u8 resCounts[4];
-} PokeathlonHurdleDashSceneConfig;
 
 // NARC a/1/7/0 member 10.
 typedef struct PokeathlonHurdleDashParams {

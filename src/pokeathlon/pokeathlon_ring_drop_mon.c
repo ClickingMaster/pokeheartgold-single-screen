@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_ring_drop.h"
@@ -15,8 +16,6 @@
 #include "string_util.h"
 #include "text.h"
 
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int counter, int amount);
-u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, int member);
 BOOL PlaySEOnPlayer(u16 seqNo, int player);
 
 extern const s16 gPokeathlonRingDropMonStartPositions[][2];
@@ -233,7 +232,7 @@ static void PokeathlonRingDropMon_StartDash(PokeathlonRingDropMon *mon, const s1
     if (mon->flags.bits.switching) {
         GF_AssertFail();
     }
-    mon->flags.raw &= 0xBFFFFFFF;
+    mon->flags.bits.hasTarget = FALSE;
     vec.x = target[0] << FX32_SHIFT;
     vec.y = target[1] << FX32_SHIFT;
     VEC_Subtract(&vec, &mon->position, &mon->dashDirection);
@@ -277,10 +276,10 @@ static void PokeathlonRingDropMon_StartJump(PokeathlonRingDropMon *mon) {
     GF_ASSERT(mon->state == RING_DROP_MON_STAND || mon->state == RING_DROP_MON_RETURN);
     GF_ASSERT(mon->flags.bits.exhausted == 0);
     GF_ASSERT(mon->flags.bits.switching == 0);
-    mon->flags.raw &= 0xDFFFFFFF;
+    mon->flags.bits.jumpRequested = FALSE;
     mon->jumpFrames = 5;
     if (mon->member->params->jumpType) {
-        PokeathlonCourse_AddMonCounter(mon->course, (u8)mon->flags.bits.participant, (u8)mon->flags.bits.member, 2, 1);
+        PokeathlonCourse_AddMonCounter(mon->course, mon->flags.bits.participant, mon->flags.bits.member, 2, 1);
     }
     PokeathlonRingDropMon_SetState(mon, RING_DROP_MON_JUMP_START);
 }
@@ -388,6 +387,7 @@ void PokeathlonRingDrop_InitMemberParams(PokeathlonCourseData *course) {
             params->dashDamage = (int)PokeathlonRingDrop_ToFx32(table[1][stats[0]], half) / 10;
             params->stamina = (int)PokeathlonRingDrop_ToFx32(table[2][stats[3]], half);
             params->speed = (int)PokeathlonRingDrop_ToFx32(table[3][stats[1]], half) / 10;
+            // BUG: the press power and the press damage both come from row 5; row 4 is never used.
             params->pressPower = (int)PokeathlonRingDrop_ToFx32(table[5][stats[2]], half) / 10;
             params->pressDamage = (int)PokeathlonRingDrop_ToFx32(table[5][stats[2]], half) / 10;
             params->jumpType = stats[2];
@@ -396,25 +396,22 @@ void PokeathlonRingDrop_InitMemberParams(PokeathlonCourseData *course) {
 }
 
 PokeathlonRingDropMemberParams *PokeathlonRingDrop_GetMemberParams(PokeathlonCourseData *course, u8 participant, u8 member) {
-    u8 *params;
-    u32 p = participant;
-    u32 m = member;
-    params = PokeathlonCourse_GetWork(course);
+    PokeathlonRingDropMemberParams *params;
+    PokeathlonRingDrop *ringDrop = PokeathlonCourse_GetWork(course);
+    if (ringDrop == NULL) {
+        GF_AssertFail();
+    }
+    if (participant >= RING_DROP_PARTICIPANTS) {
+        GF_AssertFail();
+    }
+    if (member >= RING_DROP_TEAM_SIZE) {
+        GF_AssertFail();
+    }
+    params = &ringDrop->memberParams[participant * RING_DROP_TEAM_SIZE + member];
     if (params == NULL) {
         GF_AssertFail();
     }
-    if (p >= RING_DROP_PARTICIPANTS) {
-        GF_AssertFail();
-    }
-    if (m >= RING_DROP_TEAM_SIZE) {
-        GF_AssertFail();
-    }
-    params += offsetof(PokeathlonRingDrop, memberParams);
-    params += (p * RING_DROP_TEAM_SIZE + m) * sizeof(PokeathlonRingDropMemberParams);
-    if (params == NULL) {
-        GF_AssertFail();
-    }
-    return (PokeathlonRingDropMemberParams *)params;
+    return params;
 }
 
 void PokeathlonRingDropMon_NextMember(PokeathlonRingDropMon *mon) {

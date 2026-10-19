@@ -121,23 +121,6 @@ typedef struct PokeathlonResultsAnnouncement {
     BOOL finished;
 } PokeathlonResultsAnnouncement;
 
-// An entry of the course's ranking (PokeathlonCourseScoreList_GetRanked).
-typedef struct PokeathlonResultsAnnouncementScore {
-    u32 participant;
-    u8 unk04[5];
-    u8 rank;
-    u16 points;
-    s32 score;
-    String *text;
-    String *name;
-} PokeathlonResultsAnnouncementScore;
-
-typedef struct PokeathlonResultsAnnouncementSceneConfig {
-    u32 capacity;
-    u32 resourceCount;
-    u32 resCounts;
-} PokeathlonResultsAnnouncementSceneConfig;
-
 typedef struct PokeathlonResultsAnnouncementBgTemplates {
     BgTemplate templates[6];
 } PokeathlonResultsAnnouncementBgTemplates;
@@ -162,7 +145,7 @@ PokeathlonResultsAnnouncementPlates *PokeathlonResults_NewPlates(enum HeapID hea
 void PokeathlonResults_FreePlates(PokeathlonResultsAnnouncementPlates *plates);
 void PokeathlonResults_DrawPlates(PokeathlonResultsAnnouncementPlates *plates);
 void PokeathlonResults_InitPlates(PokeathlonResultsAnnouncementPlates *plates, int unused);
-PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonResultsAnnouncementScore *score);
+PokeathlonResultsAnnouncementPlate *PokeathlonResults_ShowPlate(PokeathlonResultsAnnouncementPlates *plates, int x, int y, PokeathlonCourseScore *score);
 void PokeathlonResults_HidePlate(PokeathlonResultsAnnouncementPlate *plate);
 void PokeathlonResults_GetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int *x, int *y);
 void PokeathlonResults_SetPlatePos(PokeathlonResultsAnnouncementPlate *plate, int x, int y);

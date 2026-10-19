@@ -162,7 +162,7 @@ void PokeathlonCourseScoreList_Rank(PokeathlonCourseScoreList *list, int mode) {
     }
 }
 
-PokeathlonCourseScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, u32 index) {
+PokeathlonCourseScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, u8 index) {
     if (index >= 4) {
         GF_AssertFail();
     }

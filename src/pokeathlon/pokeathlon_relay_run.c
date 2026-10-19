@@ -7,6 +7,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 
@@ -63,34 +64,6 @@ fx32 FX_Sqrt(fx32 x);
 
 f32 _fflt(int value);
 
-void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
-PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, PokeathlonCourseSpritePoolTemplate *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePool_PauseAnims(PokeathlonCourseSpritePool *pool, BOOL paused);
-void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
-BOOL PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
-void PokeathlonCourseObjects_PauseAnims(PokeathlonCourseMonObjects *objects, BOOL paused);
-void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(void *object, s32 radius);
-void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-BOOL PokeathlonCourseObject_IsInTouchRange(PokeathlonCourseMonObject *object, fx32 x, fx32 y, s32 targetX, s32 targetY);
-s32 PokeathlonCourseObject_GetCollisionRadius(PokeathlonCourseMonObject *object);
-
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
-void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, s32 *radius);
 BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 u32 GF_SndCountPlayingSeqOnPlayer(u32 playerNo);
 
@@ -376,7 +349,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
         PokeathlonCourse_SetEventDrawEnabled(course, 1);
         ReadWholeNarcMemberByIdPair(collisions, NARC_a_1_7_0, 12);
         for (i = 0; i < 12; i++) {
-            PokeathlonCourseMonObject *object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, (u8)i);
+            PokeathlonCourseMonObject *object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, i);
             int member = i % RELAY_RUN_MEMBERS;
             int teamId;
             int y;
@@ -387,7 +360,7 @@ BOOL PokeathlonRelayRun_Init(PokeathlonCourseData *course) {
                 PokeathlonRelayRunCollision *collision = &collisions[PokeathlonCourse_GetCollisionSizeClass(PokeathlonCourse_GetPerformance(course, i / RELAY_RUN_MEMBERS, i % RELAY_RUN_MEMBERS))];
                 PokeathlonCourseObject_SetCollision(object, collision[-1].offsetY, collision[-1].radius);
             }
-            object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, (u8)i);
+            object = PokeathlonCourseMonObjects_Get(relayRun->monObjects, i);
             teamId = i / RELAY_RUN_MEMBERS;
             team = &relayRun->teams[teamId];
             team->monObjects[member] = object;
@@ -559,19 +532,19 @@ static void PokeathlonRelayRun_CreateSprites(PokeathlonRelayRun *relayRun, Pokea
     int i;
     VecFx32 position;
     for (i = 0; i < RELAY_RUN_OBSTACLES; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 6);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 6);
     }
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 7);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 9);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 11);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 13);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 7);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 9);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 11);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 13);
     }
     for (i = 0; i < 4; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, 1, 104, 14);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 14);
     }
-    PokeathlonCourseSpritePool_CreateSprite(spritePool, 1, 1, 104, 12);
-    PokeathlonCourseSpritePool_CreateSprite(spritePool, 1, 1, 104, 15);
+    PokeathlonCourseSpritePool_CreateSprite(spritePool, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 12);
+    PokeathlonCourseSpritePool_CreateSprite(spritePool, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 104, 15);
     for (i = 0; i < RELAY_RUN_OBSTACLES; i++) {
         relayRun->obstacles[i].sprite = PokeathlonCourseSpritePool_Take(spritePool, 104, 6);
     }
@@ -957,7 +930,7 @@ static BOOL PokeathlonRelayRun_Update(PokeathlonCourseData *course) {
         }
     }
     if (System_GetTouchNew()) {
-        PokeathlonCourse_AddMonCounter(course, (u8)PokeathlonCourse_GetNetId(course), 3, 0, 1);
+        PokeathlonCourse_AddMonCounter(course, PokeathlonCourse_GetNetId(course), 3, 0, 1);
     }
     if (System_GetTouchHeld()) {
         touch->x = gSystem.touchX;
@@ -1774,6 +1747,7 @@ static int PokeathlonRelayRun_CollideWithObstacle(VecFx32 *start, VecFx32 *end, 
             return edgeHits.hits[i];
         }
         onEdge = FALSE;
+        // BUG: i is never both 0 and 2, so every edge takes the second test (the one meant for the vertical edges).
         if (i == 0 && i == 2) {
             if (a.y == shape->edges[i][0].y) {
                 if (shape->edges[i][0].x < shape->edges[i][1].x) {

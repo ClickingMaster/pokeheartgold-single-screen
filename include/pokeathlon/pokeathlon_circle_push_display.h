@@ -13,17 +13,6 @@
 // Circle Push: the top screen, with the player names, the round counter, the scoreboard and the idle animations
 // shown while nothing else is.
 
-// What PokeathlonCourse_GetMonInfo reports about one Pokemon of a team.
-typedef struct PokeathlonCirclePushMonView {
-    u16 species;
-    u16 form;
-    u16 isLarge;
-    u8 shiny;
-    u8 gender;
-    u32 participant;
-    u32 personality;
-} PokeathlonCirclePushMonView;
-
 // Front picture of one of the 12 Pokemon, uncompressed, for upload into a picture sprite.
 typedef struct PokeathlonCirclePushMonPic {
     void *charData;

@@ -797,8 +797,6 @@
 	.public gPokeathlonRingDropMonStartPositions
 	.public gPokeathlonRingDropOamCharTransferParam
 	.public gPokeathlonRingDropSwitchSpots
-	.public gPokeathlonRingDropSwitchSpotsY
-	.public gPokeathlonRingDropSwitchSpotsRadius
 	.public gPokeathlonRingDropSpriteResourceCounts
 	.public gPokeathlonRingDropBgLayers
 	.public gPokeathlonRingDropOamManagerParam

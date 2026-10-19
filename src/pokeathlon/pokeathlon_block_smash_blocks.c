@@ -1,9 +1,10 @@
-#include "pokeathlon/pokeathlon_block_smash.h"
-
 #include "global.h"
 
 #include "constants/sndseq.h"
 
+#include "pokeathlon/pokeathlon_block_smash.h"
+#include "pokeathlon/pokeathlon_block_smash_teams.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
@@ -35,9 +36,7 @@ typedef struct PokeathlonBlockSmashSpot {
     s16 y;
 } PokeathlonBlockSmashSpot;
 
-void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, int mon, int counter, int amount);
 void GF_SndSetTrackPitchBySeqNo(u16 seqNo, u32 trackMask, int pitch);
-ManagedSprite *PokeathlonBlockSmash_NewMainSprite(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u16 x, u16 y, u16 anim, u16 priority);
 extern const TouchscreenHitbox *gPokeathlonBlockSmashSpotHitboxes[3];
 
 static void PokeathlonBlockSmashBlocks_UpdateDrop(PokeathlonBlockSmashBlocks *blocks);
@@ -227,7 +226,7 @@ BOOL PokeathlonBlockSmashBlocks_IsTopBlockTouched(PokeathlonBlockSmashBlocks *bl
 // A tap on the top block: `power` comes off the blocks from the top down (more on the weak spot or
 // a strong hit), broken blocks throw fragments. Returns the number of blocks broken; `*cleared`
 // tells whether that emptied the stack.
-u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int member, s16 power, int hitSpot, int strongHit, BOOL *cleared) {
+u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, u8 member, s16 power, int hitSpot, int strongHit, BOOL *cleared) {
     int count;
     int broken = 0, i, anim;
     int x, y;
@@ -277,7 +276,7 @@ u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int membe
             power = -block->health;
             broken++;
             PokeathlonBlockSmashFragments_Spawn(blocks->fragments, 4, position.x, position.y);
-            PokeathlonCourse_AddMonCounter(blocks->course, (u8)PokeathlonCourse_GetNetId(blocks->course), member, 3, 1);
+            PokeathlonCourse_AddMonCounter(blocks->course, PokeathlonCourse_GetNetId(blocks->course), member, 3, 1);
         }
     }
     if (broken) {

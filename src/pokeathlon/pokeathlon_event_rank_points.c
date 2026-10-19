@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_internal.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 
@@ -7,14 +8,12 @@
 // of the event score adds 5. At most 200.
 extern const u8 gPokeathlonEventRankPoints[4];
 
-PokeathlonEventPointsEntry *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *list, int index);
-
 void PokeathlonEvent_CalcRankPoints(PokeathlonCourseScoreList *list) {
     u8 ranks[4];
     u8 ties[4];
     u8 table[4];
     u8 i, j;
-    PokeathlonEventPointsEntry *entry;
+    PokeathlonCourseScore *entry;
     u16 points;
     u8 last;
 

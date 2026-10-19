@@ -1,5 +1,6 @@
 #include "global.h"
 
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_pennant_capture.h"
 
@@ -20,11 +21,6 @@ static const PokeathlonPennantCaptureSpriteIds sPicResIds3 = {
     { 0x66, 0x67 }
 };
 
-void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, u8 resId, u8 kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, u8 resId, u8 kind);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
-
 // The two picture sprites of the top screen.
 void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool *pool, PokeathlonPennantCaptureDisplay *display) {
     PokeathlonPennantCaptureSpriteIds resIds = gPokeathlonPennantCaptureSpriteIds;
@@ -33,10 +29,10 @@ void PokeathlonPennantCaptureDisplay_CreatePicSprites(PokeathlonCourseSpritePool
     Sprite *sprite;
     int i;
     for (i = 0; i < 2; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, resIds.ids[i], kinds.ids[i]);
+        PokeathlonCourseSpritePool_CreateSprite(pool, 3, NNS_G2D_VRAM_TYPE_2DSUB, (u8)resIds.ids[i], (u8)kinds.ids[i]);
     }
     for (i = 0; i < 2; i++) {
-        display->picSprites[i] = PokeathlonCourseSpritePool_Take(pool, resIds.ids[i], kinds.ids[i]);
+        display->picSprites[i] = PokeathlonCourseSpritePool_Take(pool, (u8)resIds.ids[i], (u8)kinds.ids[i]);
         sprite = PokeathlonCourseSpritePoolSprite_GetSprite(display->picSprites[i]);
         position.z = 0;
         position.x = 40 << FX32_SHIFT;

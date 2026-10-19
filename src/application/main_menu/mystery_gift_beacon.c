@@ -89,7 +89,6 @@ int WM_Reset(void (*callback)(void *arg));
 int WM_StartScan(void (*callback)(void *arg), void *scanParam);
 int WM_EndScan(void (*callback)(void *arg));
 int WM_GetAllowedChannel(void);
-u32 _u32_div_f(u32 dividend, u32 divisor);
 
 extern MysteryGiftBeacon gMysteryGiftBeacon;
 extern const char *gMysteryGiftBeaconStateNames[];
@@ -403,7 +402,7 @@ void MysteryGiftBeacon_StartReceive(MysteryGiftBeaconPacket *packet) {
     gMysteryGiftBeacon.work->dataId = packet->id;
     gMysteryGiftBeacon.work->dataSize = packet->size;
     MysteryGiftBeaconWork *work = gMysteryGiftBeacon.work;
-    work->packetCount = _u32_div_f(work->dataSize - 1, MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE) + 1;
+    work->packetCount = (work->dataSize - 1) / MYSTERY_GIFT_BEACON_PACKET_DATA_SIZE + 1;
     gMysteryGiftBeacon.work->packetsReceived = 0;
     gMysteryGiftBeacon.work->mismatches = 0;
     for (int i = 0; i < gMysteryGiftBeacon.work->packetCount; i++) {

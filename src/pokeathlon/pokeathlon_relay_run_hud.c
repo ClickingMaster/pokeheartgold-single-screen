@@ -5,6 +5,7 @@
 #include "msgdata/msg/msg_0309.h"
 #include "nnsys/g2d/load/g2d_NCG_load.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_relay_run.h"
 
@@ -23,21 +24,6 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
-
-void PokeathlonCourseSpritePool_LoadChar(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram);
-void PokeathlonCourseSpritePool_LoadPltt(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId, int vram, int count);
-void PokeathlonCourseSpritePool_LoadCell(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_LoadAnim(PokeathlonCourseSpritePool *pool, int narcId, int fileId, int resId);
-void PokeathlonCourseSpritePool_CreateSprite(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_Take(PokeathlonCourseSpritePool *pool, int resId, int kind);
-PokeathlonCourseSpritePoolSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonCourseSpritePool *pool, int priority, int whichScreen, int resId, int kind);
-void PokeathlonCourseSpritePoolSprite_Show(PokeathlonCourseSpritePoolSprite *entry, BOOL shown, BOOL draw);
-void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonCourseSpritePoolSprite *entry, int seq);
-void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonCourseSpritePoolSprite *entry, VecFx32 *position);
-VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(PokeathlonCourseSpritePoolSprite *entry);
-Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(PokeathlonCourseSpritePoolSprite *entry);
-void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite *entry, int priority);
-
 
 extern const u32 gPokeathlonRelayRunPicIds[];              // touch screen sprite resource ids
 extern const VecFx32 sRelayRunMapStartOffset;              // track map: offset of the start from its centre
@@ -134,13 +120,13 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonC
     PokeathlonCourseSpritePoolSprite *plate;
     VecFx32 timerPosition, platePosition;
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 2);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 3);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 8);
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 10);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 2);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 3);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 8);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 10);
     }
     for (i = 0; i < 2; i++) {
-        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, 2, 101, 16);
+        PokeathlonCourseSpritePool_CreateSprite(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 16);
     }
     for (i = 0; i < RELAY_RUN_TEAMS; i++) {
         hud->map.teams[i].icon = PokeathlonCourseSpritePool_Take(spritePool, 101, 2);
@@ -151,7 +137,7 @@ void PokeathlonRelayRunHud_CreateSprites(PokeathlonRelayRunHud *hud, PokeathlonC
         PokeathlonCourseSpritePoolSprite_SetAnim(hud->map.teams[i].colorMark, i + 4);
         PokeathlonCourseSpritePoolSprite_SetAnim(hud->map.teams[i].swapMark, 10);
     }
-    plate = PokeathlonCourseSpritePool_CreateAndTake(spritePool, 3, 2, 101, 17);
+    plate = PokeathlonCourseSpritePool_CreateAndTake(spritePool, 3, NNS_G2D_VRAM_TYPE_2DSUB, 101, 17);
     PokeathlonCourseSpritePoolSprite_Show(plate, TRUE, TRUE);
     PokeathlonCourseSpritePoolSprite_SetAnim(plate, 11);
     platePosition.z = 0;

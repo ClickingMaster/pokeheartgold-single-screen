@@ -6,7 +6,10 @@
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0309.h"
+#include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
+#include "pokeathlon/pokeathlon_course_ui.h"
 
 #include "bg_window.h"
 #include "brightness.h"
@@ -61,31 +64,6 @@ enum PokeathlonResultsState {
     RESULTS_STATE_WAIT_FADE_OUT,
 };
 
-PokeathlonResultsAnnouncementScore *PokeathlonCourseScoreList_GetRanked(PokeathlonCourseScoreList *scoreList, u8 rank);
-int PokeathlonCourseScoreList_GetCount(PokeathlonCourseScoreList *scoreList);
-int PokeathlonCourseScoreList_GetField04(PokeathlonCourseScoreList *scoreList);
-int PokeathlonCourseScoreList_GetEventPoints(PokeathlonCourseScoreList *scoreList, u32 event, int participant);
-void *PokeathlonCourseSpritePool_New(enum HeapID heapId, const void *config);
-void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *scene);
-void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *scene);
-void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *scene);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *scene, int mainX, int mainY, int subX, int subY);
-PokeathlonEventBanner *PokeathlonEventBanner_New(u32 event, enum HeapID heapId);
-void PokeathlonEventBanner_Free(PokeathlonEventBanner *banner);
-void PokeathlonEventBanner_AddWindows(PokeathlonEventBanner *banner, BgConfig *bgConfig);
-void PokeathlonEventBanner_LoadGraphics(PokeathlonEventBanner *banner);
-void PokeathlonEventBanner_PrintTexts(PokeathlonEventBanner *banner);
-PokeathlonCourseMessageBox *PokeathlonCourseMessageBox_New(enum HeapID heapId);
-void PokeathlonCourseMessageBox_Init(PokeathlonCourseMessageBox *messageBox, BgConfig *bgConfig, int bgLayer, int mode, SaveData *saveData);
-void PokeathlonCourseMessageBox_Free(PokeathlonCourseMessageBox *messageBox);
-void PokeathlonCourseMessageBox_Update(PokeathlonCourseMessageBox *messageBox);
-void PokeathlonCourseMessageBox_Print(PokeathlonCourseMessageBox *messageBox, int msgId);
-void PokeathlonCourseMessageBox_Close(PokeathlonCourseMessageBox *messageBox);
-MessageFormat *PokeathlonCourseMessageBox_GetMsgFormat(PokeathlonCourseMessageBox *messageBox);
-u32 PokeathlonCourseMessageBox_IsBusy(PokeathlonCourseMessageBox *messageBox);
-void PokeathlonCourse_LoadTrainerPic(ManagedSprite *sprite, int fileId, int index, enum HeapID heapId);
-int PokeathlonCourse_GetTrainerPicFileId(int kind);
-
 static void PokeathlonResults_SetGfxBanks(void);
 static void PokeathlonResults_InitBgs(BgConfig *bgConfig, enum HeapID heapId);
 static void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcement);
@@ -121,10 +99,10 @@ static const WindowTemplate sResultsAnnouncementWindowTemplate = {
     .baseTile = 1,
 };
 
-static const PokeathlonResultsAnnouncementSceneConfig sResultsAnnouncementSceneConfig = {
+static const PokeathlonCourseSpritePoolTemplate sResultsAnnouncementSceneConfig = {
     .capacity = 24,
     .resourceCount = 3,
-    .resCounts = 0x3030303,
+    .resCounts = { 3, 3, 3, 3 },
 };
 
 static const GraphicsModes sResultsAnnouncementGraphicsModes = {
@@ -287,7 +265,7 @@ void PokeathlonResults_PrintTitle(Window *window, enum HeapID heapId) {
 
 BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
     PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
-    PokeathlonResultsAnnouncementSceneConfig sceneConfig;
+    PokeathlonCourseSpritePoolTemplate sceneConfig;
     PokeathlonResultsAnnouncementAffine affine;
     PokeathlonCourseScoreList *scoreList;
     int value;
@@ -358,7 +336,7 @@ BOOL PokeathlonResults_Init(PokeathlonCourseData *course) {
     case RESULTS_INIT_CHOOSE_COMMENT:
         if (PokeathlonCourse_GetNetId(course) == 0) {
             // the host picks the announcer's closing comment (one of 5) for everyone
-            u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+            u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + POKEATHLON_COURSE_DATA_FRAME_OUT);
             *comment = MTRandom() % 5;
         }
         if (PokeathlonCourse_GetMode(course) == POKEATHLON_COURSE_MODE_LINK) {
@@ -470,7 +448,7 @@ static void PokeathlonResults_LoadBgGfx(PokeathlonResultsAnnouncement *announcem
 
 // Byte 2 of the host's block: every player has seen the whole announcement.
 static BOOL PokeathlonResults_AllPlayersFinished(PokeathlonCourseData *course) {
-    return PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0)[2];
+    return PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + POKEATHLON_COURSE_DATA_FRAME_IN)[2];
 }
 
 // State 0 of the screen: the announcer's lines, the ranking, the winner and the scoreboard.
@@ -480,7 +458,7 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
     PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     MessageFormat *messageFormat;
     int msgId;
-    PokeathlonResultsAnnouncementScore *ranked[4];
+    PokeathlonCourseScore *ranked[4];
     int i;
 
     done = FALSE;
@@ -502,7 +480,7 @@ BOOL PokeathlonResults_Run(PokeathlonCourseData *course, u8 *state) {
                 break;
             }
             for (i = 0; i < 4; i++) {
-                ranked[i] = PokeathlonCourseScoreList_GetRanked(PokeathlonCourse_GetGraphicsSystem(course), (u8)i);
+                ranked[i] = PokeathlonCourseScoreList_GetRanked(PokeathlonCourse_GetGraphicsSystem(course), i);
             }
             if (ranked[0]->rank == ranked[1]->rank) {
                 msgId = msg_0309_00254; // "This... was a very close competition!"
@@ -748,7 +726,7 @@ static BOOL PokeathlonResults_HasMorePlates(PokeathlonResultsAnnouncementRanking
 static PokeathlonResultsAnnouncementPlate *PokeathlonResults_AddPlate(PokeathlonResultsAnnouncementRanking *ranking, PokeathlonCourseData *course, int x, int y) {
     PokeathlonCourseScoreList *scoreList = PokeathlonCourse_GetGraphicsSystem(course);
     int last = PokeathlonCourseScoreList_GetCount(scoreList) - 1;
-    PokeathlonResultsAnnouncementScore *score = PokeathlonCourseScoreList_GetRanked(scoreList, last - ranking->next);
+    PokeathlonCourseScore *score = PokeathlonCourseScoreList_GetRanked(scoreList, last - ranking->next);
     ranking->next++;
     return PokeathlonResults_ShowPlate(ranking->plates, x, y, score);
 }
@@ -776,7 +754,7 @@ static u32 PokeathlonResults_GetIntroMessage(PokeathlonCourseData *course) {
 // One of 5 comments per round, picked by the host.
 static u32 PokeathlonResults_GetCommentMessage(PokeathlonCourseData *course) {
     u32 round = PokeathlonCourse_GetRound(course);
-    u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    u8 *comment = PokeathlonCourse_ToBytes(PokeathlonCourse_GetDataCopyArea(course) + POKEATHLON_COURSE_DATA_FRAME_IN);
     u32 msgId;
     if (*comment >= 5) {
         GF_AssertFail();
@@ -843,8 +821,8 @@ static void PokeathlonResults_CreateSprite(PokeathlonResultsAnnouncement *announ
 static BOOL PokeathlonResults_WaitForPlayers(PokeathlonCourseData *course) {
     PokeathlonResultsAnnouncement *announcement = PokeathlonCourse_GetWork(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
-    u8 *out = PokeathlonCourse_ToBytes(data + 0x28); // the host's block for the others
-    u8 *host = PokeathlonCourse_ToBytes(data + 0xF0);
+    u8 *out = PokeathlonCourse_ToBytes(data + POKEATHLON_COURSE_DATA_FRAME_OUT); // the host's block for the others
+    u8 *host = PokeathlonCourse_ToBytes(data + POKEATHLON_COURSE_DATA_FRAME_IN);
     u8 self = (u8)PokeathlonCourse_GetNetId(course);
     u8 progress = (u8)announcement->messageCount;
     BOOL behind = FALSE;
@@ -856,7 +834,7 @@ static BOOL PokeathlonResults_WaitForPlayers(PokeathlonCourseData *course) {
         int i;
         int count;
         out[1] = progress;
-        dst = PokeathlonCourse_ToBytes(data + 0x50);
+        dst = PokeathlonCourse_ToBytes(data + POKEATHLON_COURSE_DATA_INPUTS);
         src = PokeathlonCourse_ToBytes(data);
         n = 0x24;
         while (n != 0) {
@@ -866,7 +844,7 @@ static BOOL PokeathlonResults_WaitForPlayers(PokeathlonCourseData *course) {
         i = 0;
         count = PokeathlonCourse_GetParticipantCount(course);
         if (count > 0) {
-            u8 *block = data + 0x50;
+            u8 *block = data + POKEATHLON_COURSE_DATA_INPUTS;
             do {
                 u8 *player = PokeathlonCourse_ToBytes(block);
                 if (player[0] < progress || player[1] == TRUE) {

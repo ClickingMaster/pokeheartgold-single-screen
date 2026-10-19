@@ -4,6 +4,7 @@
 
 #include "msgdata/msg/msg_0309.h"
 #include "pokeathlon/pokeathlon_course_internal.h"
+#include "pokeathlon/pokeathlon_course_objects.h"
 #include "pokeathlon/pokeathlon_course_types_def.h"
 #include "pokeathlon/pokeathlon_event_points.h"
 #include "pokeathlon/pokeathlon_pennant_capture_play.h"
@@ -20,19 +21,8 @@
 #include "system.h"
 #include "wireless_status_icon.h"
 
-void PokeathlonCourseSpritePool_Draw(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseSpritePool_Free(PokeathlonCourseSpritePool *pool);
-PokeathlonCourseSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, VecFx32 *template);
-void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonCourseSpritePool *pool, fx32 mainX, fx32 mainY, fx32 subX, fx32 subY);
-void PokeathlonCourseSpritePool_SetResourceId(PokeathlonCourseSpritePool *pool, int index, u32 id);
-void PokeathlonCourseSpritePool_TransferResources(PokeathlonCourseSpritePool *pool);
-void PokeathlonCourseObject_SetCollision(void *object, s32 offsetY, s32 radius);
-void PokeathlonCourseObject_SetGroundPosition(PokeathlonCourseMonObject *object, s32 x, s32 y);
-void PokeathlonCourseObject_SetTouchRadius(PokeathlonCourseMonObject *object, s32 radius);
-void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-
 extern const GraphicsBanks sPennantCaptureGraphicsBanks;
-extern const VecFx32 sPennantCaptureSpritePoolTemplate;
+extern const PokeathlonCourseSpritePoolTemplate sPennantCaptureSpritePoolTemplate;
 
 enum PokeathlonPennantCaptureInitState {
     PENNANT_CAPTURE_INIT_CREATE,
@@ -83,7 +73,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
     PokeathlonCourseMonGfxTemplate template;
     PokeathlonPennantCaptureMoveTables moveTables;
     ObjCharTransferTemplate charTransfer;
-    VecFx32 poolTemplate;
+    PokeathlonCourseSpritePoolTemplate poolTemplate;
     PokeathlonPennantCaptureIconMon icons[12];
     PokeathlonPennantCaptureCollision collisions[3];
     PokeathlonCoursePoint ownPosition;
@@ -190,7 +180,7 @@ BOOL PokeathlonPennantCapture_Init(PokeathlonCourseData *course) {
         s32 i;
         int j;
         for (i = 0; i < 12; i++) {
-            PokeathlonCourseMonObject *object = PokeathlonCourseMonObjects_Get(work->monObjects, (u8)i);
+            PokeathlonCourseMonObject *object = PokeathlonCourseMonObjects_Get(work->monObjects, i);
             memberOnField = i % 3;
             if (memberOnField == 0) {
                 PokeathlonCourseMonObject_SetDrawFlag(object, TRUE);

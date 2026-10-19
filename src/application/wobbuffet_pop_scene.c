@@ -509,11 +509,9 @@ static s32 WobbuffetPop_GetInflationPercent(WobbuffetPop *game) {
 
 BOOL WobbuffetPop_LaunchPuff(WobbuffetPop *game, const WobbuffetPopPump *pump) {
     int i;
-    u8 *scan;
 
-    // Walks the puffs by moving the game pointer.
-    for (i = 0, scan = (u8 *)game; i < 40; i++, scan += sizeof(WobbuffetPopPuff)) {
-        if (((WobbuffetPop *)scan)->puffs[0].active == FALSE) {
+    for (i = 0; i < 40; i++) {
+        if (game->puffs[i].active == FALSE) {
             WobbuffetPop_ShowBonusPopup(game, game->bonusPopups, pump->bonus, pump->netId, WobbuffetPopPuff_Init(game, pump, &game->puffs[i]));
             return TRUE;
         }
@@ -700,14 +698,12 @@ static ManagedSprite *WobbuffetPop_CreatePuffSprite(WobbuffetPop *game, const u8
 
 void WobbuffetPop_FreePuffs(WobbuffetPop *game) {
     s32 i;
-    u8 *p = (u8 *)game;
 
     for (i = 0; i < 40; i++) {
-        if (((WobbuffetPop *)p)->puffs[0].active == TRUE) {
-            Sprite_DeleteAndFreeResources(((WobbuffetPop *)p)->puffs[0].sprite);
-            ((WobbuffetPop *)p)->puffs[0].active = FALSE;
+        if (game->puffs[i].active == TRUE) {
+            Sprite_DeleteAndFreeResources(game->puffs[i].sprite);
+            game->puffs[i].active = FALSE;
         }
-        p += sizeof(WobbuffetPopPuff);
     }
 }
 
@@ -901,8 +897,7 @@ static BOOL WobbuffetPop_PopBalloon(WobbuffetPop *game) {
     game->inflation.air = 0;
     game->inflation.pendingAir = 0;
     for (i = 0; i < 4; i++) {
-        game->inflation.playerAir[0] = 0;
-        game = (WobbuffetPop *)((u8 *)game + 4);
+        game->inflation.playerAir[i] = 0;
     }
     PlaySE(SEQ_SE_PL_BALLOON07);
     confetti->active = TRUE;
@@ -933,11 +928,9 @@ void WobbuffetPop_InitBalloonIcons(WobbuffetPop *game) {
 
 void WobbuffetPop_FreeBalloonIcons(WobbuffetPop *game) {
     s32 i;
-    u8 *p = (u8 *)game;
 
     for (i = 0; i < 5; i++) {
-        Sprite_DeleteAndFreeResources(((WobbuffetPop *)p)->balloonIcons[0].sprite);
-        p += sizeof(WobbuffetPopBalloonIcon);
+        Sprite_DeleteAndFreeResources(game->balloonIcons[i].sprite);
     }
 }
 

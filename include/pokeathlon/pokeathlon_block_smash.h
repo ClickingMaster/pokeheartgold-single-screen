@@ -139,7 +139,7 @@ typedef struct PokeathlonBlockSmashReport {
     u32 gauge : 8;
     u32 member : 2; // the active Pokemon
     u32 gaugeFull : 1;
-    u32 switchingFrame : 1; // set by the host from `switching`
+    u32 showSwitching : 1; // the row shows the switching icon; set by the host from `switching`
     u32 switching : 1;
     u32 unk1D : 3;
 } PokeathlonBlockSmashReport;
@@ -164,7 +164,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Draw(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_ShowResults(PokeathlonCourseData *course);
 BOOL PokeathlonBlockSmash_Exit(PokeathlonCourseData *course);
-u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, int member, s16 power, int hitSpot, int strongHit, BOOL *cleared);
+u16 PokeathlonBlockSmashBlocks_Hit(PokeathlonBlockSmashBlocks *blocks, u8 member, s16 power, int hitSpot, int strongHit, BOOL *cleared);
 PokeathlonBlockSmashBlocks *PokeathlonBlockSmashBlocks_New(enum HeapID heapId, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PokeathlonCourseData *course);
 void PokeathlonBlockSmashBlocks_Delete(PokeathlonBlockSmashBlocks *blocks);
 void PokeathlonBlockSmashBlocks_Update(PokeathlonBlockSmashBlocks *blocks);

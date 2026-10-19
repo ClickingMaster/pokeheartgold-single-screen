@@ -19,6 +19,7 @@
 #include "save_vars_flags.h"
 #include "screen_fade.h"
 #include "sound.h"
+#include "sound_gb.h"
 #include "sound_playback.h"
 #include "sound_system.h"
 #include "system.h"
@@ -66,7 +67,6 @@ enum PokeathlonEventIntroFadeOutState {
 FS_EXTERN_OVERLAY(OVY_98);
 
 void SetBothScreensBrightnessByColor(u16 color);
-void GF_SndReadSeqVariable(u16 seqNo, u32 variable, s16 *value);
 
 typedef struct EventIntroBgTemplates {
     BgTemplate templates[7];
