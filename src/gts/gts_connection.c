@@ -418,26 +418,24 @@ int GtsConnection_AskDisconnect(GtsApp *app) {
 // back to the GTS (screen 7 checks its status) when connected, anything else disconnects and leaves the app.
 int GtsConnection_HandleDisconnectMenu(GtsApp *app) {
     int result = Handle2dMenuInput_DeleteOnFinish(app->disconnectMenu, HEAP_ID_61);
-    if (result == -1) {
-        goto done;
-    }
-    if (result == -2) {
-        if (DWC_CheckInet() == 0) {
-            app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
-            goto done;
+    if (result != -1) {
+        if (result == -2) {
+            if (DWC_CheckInet() == 0) {
+                app->state = GTS_CONNECTION_STATE_ASK_CONNECT;
+            } else {
+                Gts_SetNextScreen(app, 7, 11);
+                app->statusCheckCaller = 1;
+                app->state = GTS_CONNECTION_STATE_FADE_OUT;
+            }
+        } else {
+            if (DWC_CheckInet() != 0) {
+                DWC_CleanupInet();
+            }
+            CommState_FreeWfcSession();
+            Gts_SetNextScreen(app, 0, 0);
+            app->state = GTS_CONNECTION_STATE_FADE_OUT;
         }
-        Gts_SetNextScreen(app, 7, 11);
-        app->statusCheckCaller = 1;
-        app->state = GTS_CONNECTION_STATE_FADE_OUT;
-        goto done;
     }
-    if (DWC_CheckInet() != 0) {
-        DWC_CleanupInet();
-    }
-    CommState_FreeWfcSession();
-    Gts_SetNextScreen(app, 0, 0);
-    app->state = GTS_CONNECTION_STATE_FADE_OUT;
-done:
     return GTS_APP_STATE_RUN_SCREEN;
 }
 

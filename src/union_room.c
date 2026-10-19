@@ -28,7 +28,7 @@ enum UnionRoomConnectRequest {
 BOOL Comm_SendParentCommand(int command, void *data, int size);
 UnionRoomRecord *CommWireless_GetParentInfo(int netId);
 BOOL CommWireless_GetParentProfile(int netId);
-u8 *CommWireless_GetRuleset(void);
+void *CommWireless_GetRuleset(void);
 void CommState_StartAlternateSearch(void);
 BOOL CommState_IsAlternateLinked(void);
 BOOL CommState_GetJoinResult(void);
@@ -152,15 +152,15 @@ BOOL UnionRoom_AnyOtherPlayerPresent(void) {
 }
 
 void UnionRoom_ParentLinked(struct UnionRoom *unionRoom) {
-    u8 *profile;
+    UnionRoomStatus *status;
     if (unionRoom->timer > 0) {
         unionRoom->timer -= 1;
         return;
     }
 
     gUnionRoomScratch.waitFrames++;
-    profile = CommWireless_GetRuleset();
-    if (Comm_GetConnectedChildren() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && profile[0x1C] != 4) {
+    status = CommWireless_GetRuleset();
+    if (Comm_GetConnectedChildren() != 0 && UnionRoom_AnyOtherPlayerPresent() == TRUE && status->activity != 4) {
         CommPlayerInfo_SendLocal();
         CommState_SetErrorWatch(1, 1);
         UnionRoom_SetBeaconActivity(11);
@@ -335,14 +335,10 @@ int UnionRoom_GetPlayerActivityType(struct UnionRoom *unionRoom, int objId) {
     case 7:
     case 8:
     case 11:
-        goto unavailable;
+        return 5;
     default:
-        goto unsupported;
+        return 5;
     }
-unavailable:
-    return 5;
-unsupported:
-    return 5;
 }
 
 int UnionRoom_RequestJoinPlayer(struct UnionRoom *unionRoom, int objId, int kind) {

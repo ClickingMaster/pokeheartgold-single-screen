@@ -16,7 +16,7 @@ typedef struct RenderAnimation {
     NNSFndAllocator allocator;
 } RenderAnimation;
 
-void RenderObj_InitFromModel(NNSG3dRenderObj *object, void *model);
+void RenderObj_InitFromModel(NNSG3dRenderObj *object, RenderModelStorage *model);
 void RenderObj_DrawAt(int object, VecFx32 *position);
 
 #endif // POKEHEARTGOLD_RENDER_ANIMATION_H

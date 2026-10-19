@@ -96,9 +96,9 @@ typedef struct NintendoWfcUnused {
     NNSFndHeapHandle expHeap;
     u8 connection[0x64]; // passed to DWC_InitInetEx
     u32 ownRank;
-    u32 rank;
+    int rank;
     int roomCount;
-    u32 room;
+    int room;
     u8 downloadBuffer[0xA38];
     FrontierWifiUploadRecord uploadRecord;
     u8 padding_0BBC[0x14];

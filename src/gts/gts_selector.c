@@ -573,24 +573,22 @@ static int GtsSelector_HandleGroupInput(GtsSelector *selector, const u8 *enabled
             PlaySE(SEQ_SE_DP_SELECT);
             return button;
         }
-        goto none;
-    }
-
-    keys = gSystem.newKeys;
-    if (keys & PAD_BUTTON_A) {
-        if (selector->cursor == 9) {
+    } else {
+        keys = gSystem.newKeys;
+        if (keys & PAD_BUTTON_A) {
+            if (selector->cursor == 9) {
+                return -2;
+            }
+            GF_ASSERT(selector->cursor < 9);
+            if (enabled == NULL || enabled[selector->cursor] != FALSE) {
+                PlaySE(SEQ_SE_DP_SELECT);
+                return selector->cursor;
+            }
+        } else if (keys & PAD_BUTTON_B) {
+            PlaySE(SEQ_SE_DP_SELECT);
             return -2;
         }
-        GF_ASSERT(selector->cursor < 9);
-        if (enabled == NULL || enabled[selector->cursor] != FALSE) {
-            PlaySE(SEQ_SE_DP_SELECT);
-            return selector->cursor;
-        }
-    } else if (keys & PAD_BUTTON_B) {
-        PlaySE(SEQ_SE_DP_SELECT);
-        return -2;
     }
-none:
     return -1;
 }
 
@@ -650,27 +648,24 @@ static int GtsSelector_HandleLetterInput(GtsSelector *selector, const u8 *enable
             return button;
         }
         // enabled[first letter + button], indexed the other way round.
-        if (button != -2 && enabled && !gGtsSelectorGroupStarts[selector->group][enabled + button]) {
-            goto none;
+        if (button == -2 || !enabled || gGtsSelectorGroupStarts[selector->group][enabled + button]) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            return button;
         }
-        PlaySE(SEQ_SE_DP_SELECT);
-        return button;
     } else if (gSystem.newKeys & PAD_BUTTON_A) {
         button = GtsSelector_GetLetter(selector, selector->cursor);
         if (button == -1) {
             return button;
         }
         // enabled[first letter + button], indexed the other way round.
-        if (button != -2 && enabled && !gGtsSelectorGroupStarts[selector->group][enabled + button]) {
-            goto none;
+        if (button == -2 || !enabled || gGtsSelectorGroupStarts[selector->group][enabled + button]) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            return button;
         }
-        PlaySE(SEQ_SE_DP_SELECT);
-        return button;
     } else if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_DP_SELECT);
         return -2;
     }
-none:
     return -1;
 }
 
@@ -1163,20 +1158,15 @@ static void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
 // EITHER, male, female.
 static void GtsSelector_ShowGenders(GtsSelector *selector) {
     int i;
-    int offset;
     String *string;
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 31, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_GENDERS);
-    i = 0;
-    offset = i;
-    do {
+    for (i = 0; i < 3; i++) {
         string = NewString_ReadMsgData(selector->gtsMsgData, i + 124);
-        GtsSelector_PrintString(selector->cellManager, (Window *)((u8 *)selector->windows + offset), string, 2, MAKE_TEXT_COLOR(15, 14, 2));
+        GtsSelector_PrintString(selector->cellManager, &selector->windows[i], string, 2, MAKE_TEXT_COLOR(15, 14, 2));
         String_Delete(string);
-        i++;
-        offset += sizeof(Window);
-    } while (i < 3);
+    }
     GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 32, 0);
     BgCellManager_DrawCell(selector->cellManager, 0);
@@ -1201,7 +1191,7 @@ static void GtsSelector_ShowLevels(GtsSelector *selector) {
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 49);
     selector->cursor = 0;
     selector->savedCursor = 0;
-    cursor = *(volatile int *)&selector->cursor;
+    cursor = selector->cursor;
     Gts_SetSpritePosition(selector->cursorSprite, sGtsSelectorSpeciesCursorPositions[cursor].x, sGtsSelectorSpeciesCursorPositions[cursor].y);
     BgCellManager_DrawCell(selector->cellManager, 0);
     BgCellManager_StartCellMove(selector->cellManager, 0, -4, 0, 4);
@@ -1263,23 +1253,19 @@ int GtsSelector_OpenSpeciesGroups(GtsSelector *selector) {
 
 int GtsSelector_HandleSpeciesGroups(GtsSelector *selector) {
     u32 group = GtsSelector_HandleGroupInput(selector, selector->enabled);
-    if (group == (u32)-2) {
-        goto cancel;
+    if (group != (u32)-2) {
+        if (group <= 8) {
+            Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+            selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_GROUPS;
+            selector->group = group;
+        }
+    } else {
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
+        selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
+        selector->nextState = GTS_SELECTOR_STATE_CLOSE_SPECIES_GROUPS;
+        selector->group = -1;
     }
-    if (group > 8) {
-        goto done;
-    }
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_GROUPS;
-    selector->group = group;
-    goto done;
-cancel:
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
-    selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
-    selector->nextState = GTS_SELECTOR_STATE_CLOSE_SPECIES_GROUPS;
-    selector->group = -1;
-done:
     return -1;
 }
 
@@ -1287,21 +1273,18 @@ int GtsSelector_CloseSpeciesGroups(GtsSelector *selector) {
     int state;
     GtsSelector_RemoveWindows(selector, GTS_SELECTOR_PAGE_SPECIES_GROUPS);
     Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    if (selector->group < 0) {
-        goto cancel;
-    }
-    GF_ASSERT(selector->group <= 8);
-    // A group of one letter skips the letters.
-    if (gGtsSelectorLetterGroups[selector->group].count == 1) {
-        selector->letter = 0;
-        state = GTS_SELECTOR_STATE_OPEN_SPECIES_LIST;
+    if (selector->group >= 0) {
+        GF_ASSERT(selector->group <= 8);
+        // A group of one letter skips the letters.
+        if (gGtsSelectorLetterGroups[selector->group].count == 1) {
+            selector->letter = 0;
+            state = GTS_SELECTOR_STATE_OPEN_SPECIES_LIST;
+        } else {
+            state = GTS_SELECTOR_STATE_OPEN_SPECIES_LETTERS;
+        }
     } else {
-        state = GTS_SELECTOR_STATE_OPEN_SPECIES_LETTERS;
+        return -2;
     }
-    goto setState;
-cancel:
-    return -2;
-setState:
     selector->state = state;
     return -1;
 }
@@ -1376,31 +1359,23 @@ int GtsSelector_OpenSpeciesLetters(GtsSelector *selector) {
 }
 
 int GtsSelector_HandleSpeciesLetters(GtsSelector *selector) {
-    int letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
+    u32 letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
     switch (letter) {
     case 0:
     case 1:
     case 2:
     case 3:
     case 4:
-        goto accepted;
-    default:
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_LETTERS;
+        selector->letter = letter;
+        break;
+    case (u32)-2:
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_LETTERS;
+        selector->letter = -1;
         break;
     }
-    if (letter == -2) {
-        goto cancel;
-    }
-    goto done;
-accepted:
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_LETTERS;
-    selector->letter = letter;
-    goto done;
-cancel:
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_CLOSE_SPECIES_LETTERS;
-    selector->letter = -1;
-done:
     return -1;
 }
 
@@ -1567,35 +1542,29 @@ int GtsSelector_OpenCountryGroups(GtsSelector *selector) {
 
 int GtsSelector_HandleCountryGroups(GtsSelector *selector) {
     u32 group = GtsSelector_HandleCountryGroupInput(selector, selector->enabled);
-    if (group == 10) {
-        goto any;
+    switch (group) {
+    case (u32)-2:
+        BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
+        selector->nextState = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
+        selector->group = -1;
+        break;
+    case 10:
+        BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
+        selector->nextState = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
+        selector->group = -2;
+        break;
+    case (u32)-1:
+        break;
+    default:
+        GF_ASSERT(group <= 8);
+        selector->group = group;
+        selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
+        break;
     }
-    if (group == (u32)-2) {
-        goto cancel;
-    }
-    if (group == (u32)-1) {
-        goto done;
-    }
-    goto chosen;
-cancel:
-    BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
-    selector->nextState = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
-    selector->group = -1;
-    goto done;
-any:
-    BgCellManager_StartCellMove(selector->cellManager, 0, 4, 0, 4);
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_WAIT_HIDE;
-    selector->nextState = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
-    selector->group = -2;
-    goto done;
-chosen:
-    GF_ASSERT(group <= 8);
-    selector->group = group;
-    selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_GROUPS;
-done:
     return -1;
 }
 
@@ -1650,15 +1619,12 @@ int GtsSelector_ReopenCountryGroups(GtsSelector *selector) {
 // The group's letters, greyed out without any country.
 int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
     int i;
-    int offset;
     BgCellManager_LoadCellTilemap(selector->cellManager, 0, NARC_a_1_0_0, 32, 1);
     BgCellManager_GetCellTilemap(selector->cellManager, 0);
     GtsSelector_AddWindows(selector, GTS_SELECTOR_PAGE_LETTERS);
     MI_CpuFill8(selector->enabled, TRUE, sizeof(selector->enabled));
     GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, selector->windows, selector->group + 110, 2, MAKE_TEXT_COLOR(15, 14, 2));
-    i = 1;
-    offset = sizeof(Window);
-    do {
+    for (i = 1; i < 4; i++) {
         int color;
         if (GtsSelector_CountCountriesOfLetter(selector, gGtsSelectorGroupStarts[selector->group] + i - 1) > 0) {
             color = MAKE_TEXT_COLOR(15, 14, 2);
@@ -1667,10 +1633,8 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
             color = MAKE_TEXT_COLOR(8, 9, 2);
             selector->enabled[gGtsSelectorGroupStarts[selector->group] + i - 1] = FALSE;
         }
-        GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, (Window *)((u8 *)selector->windows + offset), sGtsSelectorLetterMsgs[gGtsSelectorLetterGroups[selector->group].first + i - 1], 5, color);
-        i++;
-        offset += sizeof(Window);
-    } while (i < 4);
+        GtsSelector_PrintMessage(selector->cellManager, selector->gtsMsgData, &selector->windows[i], sGtsSelectorLetterMsgs[gGtsSelectorLetterGroups[selector->group].first + i - 1], 5, color);
+    }
     GtsSelector_PrintButtonLabel(selector->cellManager, selector->gtsMsgData, &selector->windows[14], msg_0775_00068);
     BgCellManager_DrawCellAt(selector->cellManager, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(selector->cursorSprite, 47);
@@ -1690,31 +1654,23 @@ int GtsSelector_OpenCountryLetters(GtsSelector *selector) {
 }
 
 int GtsSelector_HandleCountryLetters(GtsSelector *selector) {
-    int letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
+    u32 letter = GtsSelector_HandleLetterInput(selector, selector->enabled);
     switch (letter) {
     case 0:
     case 1:
     case 2:
     case 3:
     case 4:
-        goto accepted;
-    default:
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_LETTERS;
+        selector->letter = letter;
+        break;
+    case (u32)-2:
+        Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
+        selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_LETTERS;
+        selector->letter = -1;
         break;
     }
-    if (letter == -2) {
-        goto cancel;
-    }
-    goto done;
-accepted:
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_LETTERS;
-    selector->letter = letter;
-    goto done;
-cancel:
-    Sprite_SetDrawFlag(selector->cursorSprite, FALSE);
-    selector->state = GTS_SELECTOR_STATE_CLOSE_COUNTRY_LETTERS;
-    selector->letter = -1;
-done:
     return -1;
 }
 

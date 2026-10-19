@@ -191,13 +191,12 @@ BOOL NintendoWfcUnused_Exit(OverlayManager *man, int *state) {
 }
 
 static void NintendoWfcUnused_VBlankCB(void *arg) {
-    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // for the OS IRQ check flag
     NintendoWfcUnused *wfc = arg;
 
     GF_RunVramTransferTasks();
     DoScheduledBgGpuUpdates(wfc->bgConfig);
     OamManager_ApplyAndResetBuffers();
-    irqCheck[0x3FF8 / 4] |= 1;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void NintendoWfcUnused_SetGfxBanks(void) {
@@ -335,16 +334,11 @@ static void NintendoWfcUnused_InitGraphics(NintendoWfcUnused *wfc) {
 
 static void NintendoWfcUnused_FreeGraphics(NintendoWfcUnused *wfc) {
     int i;
-    NintendoWfcUnused *p;
 
     SpriteTransfer_DeleteCharTransferTask(wfc->resObjs[0]);
     SpriteTransfer_DeletePlttTransferTask(wfc->resObjs[1]);
-    i = 0;
-    p = wfc;
-    while (i < 4) {
-        Destroy2DGfxResObjMan(p->resMan[0]);
-        i++;
-        p = (NintendoWfcUnused *)((u8 *)p + sizeof(GF_2DGfxResMan *));
+    for (i = 0; i < 4; i++) {
+        Destroy2DGfxResObjMan(wfc->resMan[i]);
     }
     SpriteList_Delete(wfc->spriteList);
     wfc->spriteList = NULL;

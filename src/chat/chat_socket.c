@@ -603,50 +603,46 @@ static BOOL ciSocketParseNextLine(ChatSocket *socket) {
     char *line = socket->input.data, *end, *last;
     char saved;
     int i;
-    if (!*line) {
-        goto fail;
-    }
-    while (*line == '\r' || *line == '\n') {
-        line++;
-    }
-    if (!*line) {
-        goto fail;
-    }
-    end = line;
-    last = line;
-    while (*end != '\n' && *end != '\r' && *end) {
-        if (*end != ' ') {
-            last = end;
+    if (*line) {
+        while (*line == '\r' || *line == '\n') {
+            line++;
         }
-        end++;
+        if (*line) {
+            end = line;
+            last = line;
+            while (*end != '\n' && *end != '\r' && *end) {
+                if (*end != ' ') {
+                    last = end;
+                }
+                end++;
+            }
+            if (*end) {
+                saved = last[1];
+                last[1] = 0;
+                FREE_PART(socket->message.text);
+                FREE_PART(socket->message.prefix);
+                FREE_PART(socket->message.nick);
+                FREE_PART(socket->message.user);
+                FREE_PART(socket->message.host);
+                FREE_PART(socket->message.command);
+                FREE_PART(socket->message.middle);
+                FREE_PART(socket->message.trailing);
+                for (i = 0; i < socket->message.paramCount; i++) {
+                    FREE_PART(socket->message.params[i]);
+                }
+                FREE_PART(socket->message.params);
+                socket->message.paramCount = 0;
+                memset(&socket->message, 0, sizeof(ChatMessage));
+                if (!ciParseMessage(socket, line)) {
+                    memset(&socket->message, 0, sizeof(ChatMessage));
+                    return FALSE;
+                }
+                last[1] = saved;
+                ciBufferClipFront(&socket->input, end - socket->input.data);
+                return TRUE;
+            }
+        }
     }
-    if (!*end) {
-        goto fail;
-    }
-    saved = last[1];
-    last[1] = 0;
-    FREE_PART(socket->message.text);
-    FREE_PART(socket->message.prefix);
-    FREE_PART(socket->message.nick);
-    FREE_PART(socket->message.user);
-    FREE_PART(socket->message.host);
-    FREE_PART(socket->message.command);
-    FREE_PART(socket->message.middle);
-    FREE_PART(socket->message.trailing);
-    for (i = 0; i < socket->message.paramCount; i++) {
-        FREE_PART(socket->message.params[i]);
-    }
-    FREE_PART(socket->message.params);
-    socket->message.paramCount = 0;
-    memset(&socket->message, 0, sizeof(ChatMessage));
-    if (!ciParseMessage(socket, line)) {
-        memset(&socket->message, 0, sizeof(ChatMessage));
-        return FALSE;
-    }
-    last[1] = saved;
-    ciBufferClipFront(&socket->input, end - socket->input.data);
-    return TRUE;
-fail:
     return FALSE;
 }
 

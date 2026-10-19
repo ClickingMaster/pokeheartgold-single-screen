@@ -257,26 +257,26 @@ void ScreenWindow_SetOutside(u32 planeMask, BOOL effect, int screen) {
     }
 }
 
+static inline GXWndPlane GetWindowPlane(volatile GXWndPlane *reg) {
+    return *reg;
+}
+
 s8 ScreenWindow_GetInside(int window, int screen) {
-    volatile s8 result;
+    GXWndPlane plane;
     if (window == 0) {
         if (screen == 0) {
-            result = *(volatile u8 *)&reg_G2_WININ;
+            plane = GetWindowPlane((volatile GXWndPlane *)&reg_G2_WININ);
         } else {
-            result = *(volatile u8 *)&reg_G2S_DB_WININ;
+            plane = GetWindowPlane((volatile GXWndPlane *)&reg_G2S_DB_WININ);
         }
     } else {
         if (screen == 0) {
-            result = *((volatile u8 *)&reg_G2_WININ + 1);
+            plane = GetWindowPlane((volatile GXWndPlane *)&reg_G2_WININ + 1);
         } else {
-            result = *((volatile u8 *)&reg_G2S_DB_WININ + 1);
+            plane = GetWindowPlane((volatile GXWndPlane *)&reg_G2S_DB_WININ + 1);
         }
     }
-    return result;
-}
-
-static inline GXWndPlane GetWindowPlane(volatile GXWndPlane *reg) {
-    return *reg;
+    return *(s8 *)&plane;
 }
 
 s8 ScreenWindow_GetOutside(int screen) {

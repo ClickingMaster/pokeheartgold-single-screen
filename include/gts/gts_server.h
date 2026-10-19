@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "save_wii_message.h"
+
 // Requests to the GTS server (gamestats2.gs.nintendowifi.net/pokemondpds), one at a time: start a request,
 // call GtsServer_Update every frame until GtsServer_IsRequestDone, then read GtsServer_GetResult.
 // The Wii message settings (OVY_75) use them for common/setProfile.asp.
@@ -22,6 +24,6 @@ void GtsServer_RequestSearchEx(const void *criteria, void *response);
 void GtsServer_RequestExchange(void *arg, const void *record, void *response);
 void GtsServer_RequestExchangeFinish(void);
 void GtsServer_RequestInfo(void);
-void GtsServer_RequestSetProfile(void *profile, void *response);
+void GtsServer_RequestSetProfile(WifiServerProfile *profile, void *response);
 
 #endif // POKEHEARTGOLD_GTS_SERVER_H

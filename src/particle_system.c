@@ -397,10 +397,10 @@ void ParticleSystem_CreateEmitterWithParam(SPLEmitter *emitter, int resNo, void 
     ParticleSystem *system = (ParticleSystem *)emitter;
     SPLEmitter *result;
 
-    *(void *volatile *)&sParticleSystemCallbackState[1] = arg;
+    sParticleSystemCallbackState[1] = arg;
     result = SPL_CreateWithInitialize(system->manager, resNo, callback);
-    *(void *volatile *)&sParticleSystemCallbackState[1] = NULL;
-    *(void *volatile *)&system->emitter = result;
+    sParticleSystemCallbackState[1] = NULL;
+    system->emitter = result;
 }
 
 BOOL ParticleSystem_GetActiveEmitterCount(SPLEmitter *emitter) {
@@ -456,58 +456,52 @@ void ParticleEmitter_GetAxis(SPLEmitter *emitter, VecFx16 *axis) {
 
 static void *ParticleEmitter_FindField(SPLEmitter *emitter, int type) {
     SPLResource *resource = emitter->p_res;
-    register int j;
+    int j;
     int count = resource->fld_num;
-    register SPLField *field;
+    SPLField *field;
 
     if (count == 0) {
         return NULL;
     }
-    j = 0;
-    if (count > 0) {
-        field = resource->fld_ary;
-        do {
-            if (field == NULL) {
-                goto next;
+    for (j = 0; j < count; j++) {
+        field = &resource->fld_ary[j];
+        if (field == NULL) {
+            continue;
+        }
+        switch (type) {
+        case PARTICLE_FIELD_GRAVITY:
+            if (field->p_exec == spl_calc_gravity) {
+                return (void *)field->p_obj;
             }
-            switch (type) {
-            case PARTICLE_FIELD_GRAVITY:
-                if (field->p_exec == spl_calc_gravity) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            case PARTICLE_FIELD_RANDOM:
-                if (field->p_exec == spl_calc_random) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            case PARTICLE_FIELD_MAGNET:
-                if (field->p_exec == spl_calc_magnet) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            case PARTICLE_FIELD_SPIN:
-                if (field->p_exec == spl_calc_spin) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            case PARTICLE_FIELD_SCFIELD:
-                if (field->p_exec == spl_calc_scfield) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            case PARTICLE_FIELD_CONVERGENCE:
-                if (field->p_exec == spl_calc_convergence) {
-                    return (void *)field->p_obj;
-                }
-                break;
-            default:
-                return NULL;
+            break;
+        case PARTICLE_FIELD_RANDOM:
+            if (field->p_exec == spl_calc_random) {
+                return (void *)field->p_obj;
             }
-next:
-            j++;
-            field++;
-        } while (j < count);
+            break;
+        case PARTICLE_FIELD_MAGNET:
+            if (field->p_exec == spl_calc_magnet) {
+                return (void *)field->p_obj;
+            }
+            break;
+        case PARTICLE_FIELD_SPIN:
+            if (field->p_exec == spl_calc_spin) {
+                return (void *)field->p_obj;
+            }
+            break;
+        case PARTICLE_FIELD_SCFIELD:
+            if (field->p_exec == spl_calc_scfield) {
+                return (void *)field->p_obj;
+            }
+            break;
+        case PARTICLE_FIELD_CONVERGENCE:
+            if (field->p_exec == spl_calc_convergence) {
+                return (void *)field->p_obj;
+            }
+            break;
+        default:
+            return NULL;
+        }
     }
     return NULL;
 }

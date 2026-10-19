@@ -1127,57 +1127,55 @@ static int PokemonSummary_UpdateCondition(PokemonSummary *summary) {
     Pokemon *mon;
     u8 old;
 
-    if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) == 0) {
-        goto no_input;
+    if ((gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) != 0) {
+        if (summary->args->monDataType == 2) {
+            BoxPokemon *boxMon = PokemonSummary_GetShownMon(summary);
+            mon = AllocMonZeroed(HEAP_ID_19);
+            CopyBoxPokemonToPokemon(boxMon, mon);
+        } else {
+            mon = PokemonSummary_GetShownMon(summary);
+        }
+        summary->unk7BE = 0;
+        old = summary->mon.contestStats[0];
+        summary->mon.contestStats[0] = GetMonData(mon, MON_DATA_COOL, NULL);
+        if (old != summary->mon.contestStats[0]) {
+            summary->unk7BE |= 1;
+        }
+        old = summary->mon.contestStats[1];
+        summary->mon.contestStats[1] = GetMonData(mon, MON_DATA_BEAUTY, NULL);
+        if (old != summary->mon.contestStats[1]) {
+            summary->unk7BE |= 2;
+        }
+        old = summary->mon.contestStats[2];
+        summary->mon.contestStats[2] = GetMonData(mon, MON_DATA_CUTE, NULL);
+        if (old != summary->mon.contestStats[2]) {
+            summary->unk7BE |= 4;
+        }
+        old = summary->mon.contestStats[3];
+        summary->mon.contestStats[3] = GetMonData(mon, MON_DATA_SMART, NULL);
+        if (old != summary->mon.contestStats[3]) {
+            summary->unk7BE |= 8;
+        }
+        old = summary->mon.contestStats[4];
+        summary->mon.contestStats[4] = GetMonData(mon, MON_DATA_TOUGH, NULL);
+        if (old != summary->mon.contestStats[4]) {
+            summary->unk7BE |= 0x10;
+        }
+        summary->mon.contestStats[5] = GetMonData(mon, MON_DATA_SHEEN, NULL);
+        if (summary->args->monDataType == 2) {
+            Heap_Free(mon);
+        }
+        LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_19);
+        LoadUserFrameGfx2(summary->bgConfig, GF_BG_LYR_MAIN_1, 0x3E2, 13, Options_GetFrame(summary->args->options), HEAP_ID_19);
+        if (summary->unk7BE == 0) {
+            PokemonSummary_PrintConditionChangeMessage(summary, 0xFE);
+            return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
+        }
+        PokemonSummary_InitConditionChart(summary);
+        PokemonSummary_InitSheenSparkles(summary);
+        PokemonSummary_ShowConditionChangeSprites(summary);
+        return POKEMON_SUMMARY_STATE_SHOW_CONDITION_CHANGES;
     }
-    if (summary->args->monDataType == 2) {
-        BoxPokemon *boxMon = PokemonSummary_GetShownMon(summary);
-        mon = AllocMonZeroed(HEAP_ID_19);
-        CopyBoxPokemonToPokemon(boxMon, mon);
-    } else {
-        mon = PokemonSummary_GetShownMon(summary);
-    }
-    summary->unk7BE = 0;
-    old = summary->mon.contestStats[0];
-    summary->mon.contestStats[0] = GetMonData(mon, MON_DATA_COOL, NULL);
-    if (old != summary->mon.contestStats[0]) {
-        summary->unk7BE |= 1;
-    }
-    old = summary->mon.contestStats[1];
-    summary->mon.contestStats[1] = GetMonData(mon, MON_DATA_BEAUTY, NULL);
-    if (old != summary->mon.contestStats[1]) {
-        summary->unk7BE |= 2;
-    }
-    old = summary->mon.contestStats[2];
-    summary->mon.contestStats[2] = GetMonData(mon, MON_DATA_CUTE, NULL);
-    if (old != summary->mon.contestStats[2]) {
-        summary->unk7BE |= 4;
-    }
-    old = summary->mon.contestStats[3];
-    summary->mon.contestStats[3] = GetMonData(mon, MON_DATA_SMART, NULL);
-    if (old != summary->mon.contestStats[3]) {
-        summary->unk7BE |= 8;
-    }
-    old = summary->mon.contestStats[4];
-    summary->mon.contestStats[4] = GetMonData(mon, MON_DATA_TOUGH, NULL);
-    if (old != summary->mon.contestStats[4]) {
-        summary->unk7BE |= 0x10;
-    }
-    summary->mon.contestStats[5] = GetMonData(mon, MON_DATA_SHEEN, NULL);
-    if (summary->args->monDataType == 2) {
-        Heap_Free(mon);
-    }
-    LoadFontPal1(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_14_OFFSET, HEAP_ID_19);
-    LoadUserFrameGfx2(summary->bgConfig, GF_BG_LYR_MAIN_1, 0x3E2, 13, Options_GetFrame(summary->args->options), HEAP_ID_19);
-    if (summary->unk7BE == 0) {
-        PokemonSummary_PrintConditionChangeMessage(summary, 0xFE);
-        return POKEMON_SUMMARY_STATE_WAIT_CONDITION_EXIT;
-    }
-    PokemonSummary_InitConditionChart(summary);
-    PokemonSummary_InitSheenSparkles(summary);
-    PokemonSummary_ShowConditionChangeSprites(summary);
-    return POKEMON_SUMMARY_STATE_SHOW_CONDITION_CHANGES;
-no_input:
     return POKEMON_SUMMARY_STATE_UPDATE_CONDITION;
 }
 

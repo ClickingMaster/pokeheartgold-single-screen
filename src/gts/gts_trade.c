@@ -79,8 +79,6 @@ int GtsTrade_Main(GtsApp *app, int state) {
     Pokemon *deposited;
     u16 species;
     int ret = 3;
-    u32 receivedSpecies;
-    u32 receivedPersonality;
 
     switch (app->state) {
     case 0:
@@ -104,29 +102,20 @@ int GtsTrade_Main(GtsApp *app, int state) {
             mon = GtsTrade_GetReceivedMon(app, kind);
             deposited = AllocMonZeroed(HEAP_ID_61);
             GtsSave_GetStoredMon((void *)app->args->gtsSave, deposited);
-            receivedSpecies = GetMonData(mon, MON_DATA_SPECIES, NULL);
-            if (receivedSpecies != GetMonData(deposited, MON_DATA_SPECIES, NULL)) {
-                goto checkEvolution;
-            }
-            receivedPersonality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-            if (receivedPersonality == GetMonData(deposited, MON_DATA_PERSONALITY, NULL)) {
-                goto noEvolution;
-            }
-checkEvolution:
-            species = GetMonEvolution(NULL, mon, EVOCTX_TRADE, (u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL), &methodAfterCheck);
-            if (species != SPECIES_NONE) {
-                GtsArgs *args = app->args;
-                app->evolutionTask = EvolutionScene_New(NULL, mon, species, args->options, args->unk38, args->pokedex, args->bag, args->gameStats, methodAfterCheck, 4, HEAP_ID_61);
-                app->state = 1;
+            if (GetMonData(mon, MON_DATA_SPECIES, NULL) != GetMonData(deposited, MON_DATA_SPECIES, NULL) || GetMonData(mon, MON_DATA_PERSONALITY, NULL) != GetMonData(deposited, MON_DATA_PERSONALITY, NULL)) {
+                species = GetMonEvolution(NULL, mon, EVOCTX_TRADE, (u16)GetMonData(mon, MON_DATA_HELD_ITEM, NULL), &methodAfterCheck);
+                if (species != SPECIES_NONE) {
+                    GtsArgs *args = app->args;
+                    app->evolutionTask = EvolutionScene_New(NULL, mon, species, args->options, args->unk38, args->pokedex, args->bag, args->gameStats, methodAfterCheck, 4, HEAP_ID_61);
+                    app->state = 1;
+                } else {
+                    Gts_SetNextScreen(app, 1, 0);
+                    ret = 4;
+                }
             } else {
                 Gts_SetNextScreen(app, 1, 0);
                 ret = 4;
             }
-            goto freeDeposited;
-noEvolution:
-            Gts_SetNextScreen(app, 1, 0);
-            ret = 4;
-freeDeposited:
             Heap_Free(deposited);
         } else {
             Gts_SetNextScreen(app, 1, 0);

@@ -71,7 +71,7 @@ extern "C" void chatEnumUsersA(void *chat, const char *channel, void *callback, 
 
 extern "C" void LobbyChat_OnEnterChannelEnumUsers(void *chat, int result, const char *name, int count, const char **nicks, u32 modes, u32 id);
 extern "C" void LobbyChat_OnEnterChannel(void *chat, int ok, int error, const char *name, u32 id);
-extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, u32 *keys, u32 *values, u32 id);
+extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, const char **keys, const char **values, u32 id);
 extern "C" void LobbyChat_OnBroadcastKeyChanged(void *chat, char *channel, char *nick, void *key, void *value);
 extern "C" void LobbyChat_OnGetChannelMode(void *chat, int result, const char *name, u32 mode, u32 id);
 
@@ -195,7 +195,7 @@ extern "C" void LobbyChat_OnEnterChannel(void *chat, int ok, int error, const ch
 #pragma push
 #pragma opt_propagation off
 
-extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, u32 *keys, u32 *values, u32 id) {
+extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *name, const char *user, int count, const char **keys, const char **values, u32 id) {
     if (gLobbyChatManager != NULL && gLobbyChatManager->state == LOBBY_CHAT_STATE_ERROR) {
         return;
     }
@@ -212,7 +212,7 @@ extern "C" void LobbyChat_OnGetChannelKeys(void *chat, int result, const char *n
         LobbyString_Destroy(&s);
     }
     int sid = id;
-    u32 key, value;
+    const char *key, *value;
     LobbyGetChannelKeysRequest *h;
     LobbyChatManager *m = gLobbyChatManager;
     LobbyRequestMapIterator it = FindIt(m, sid);

@@ -292,16 +292,16 @@ int GridCursor_StepPosition(GridCursor *cursor, GridPosition *position, const u8
 
     if (dx != 0) {
         x = position->x + dx;
-        y = ((s8 *)position)[FS_OVERLAY_ID(field)];
+        y = position->y;
         if (x < 0) {
-            result = FS_OVERLAY_ID(field);
+            result = GRID_EXIT_LEFT;
         } else if (x >= width) {
             result = GRID_EXIT_RIGHT;
         } else if ((u8)(x + y * width) >= dimensions[2]) {
             result = GRID_EXIT_RIGHT;
         }
         if (result != GRID_EXIT_NONE) {
-            goto done;
+            return result;
         }
         position->x = x;
         position->index = x + y * width;
@@ -318,15 +318,12 @@ int GridCursor_StepPosition(GridCursor *cursor, GridPosition *position, const u8
             result = GRID_EXIT_DOWN;
         }
         if (result != GRID_EXIT_NONE) {
-            goto done;
+            return result;
         }
         position->y = y;
         position->index = x + y * width;
     }
     return GRID_EXIT_NONE;
-
-done:
-    return result;
 }
 
 void GridCursor_SelectPanel(GridCursor *cursor, u8 type) {

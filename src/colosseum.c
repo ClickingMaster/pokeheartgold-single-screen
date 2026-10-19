@@ -188,20 +188,17 @@ BOOL Colosseum_FinishPartyMenu(ColosseumEntry *entry, FieldSystem *fieldSystem) 
         return FALSE;
     }
     MI_CpuCopy8(entry->partyMenuArgs->selectedOrder, entry->selectedOrder, 6);
-    if (entry->partyMenuArgs->partySlot == 6) {
-        goto confirm;
+    switch (entry->partyMenuArgs->partySlot) {
+    case 7:
+        entry->partyMenuResult = COLOSSEUM_PARTY_MENU_CANCEL;
+        break;
+    case 6:
+        entry->partyMenuResult = COLOSSEUM_PARTY_MENU_CONFIRM;
+        break;
+    default:
+        entry->partyMenuResult = COLOSSEUM_PARTY_MENU_SUMMARY;
+        break;
     }
-    if (entry->partyMenuArgs->partySlot != 7) {
-        goto summary;
-    }
-    entry->partyMenuResult = COLOSSEUM_PARTY_MENU_CANCEL;
-    goto done;
-confirm:
-    entry->partyMenuResult = COLOSSEUM_PARTY_MENU_CONFIRM;
-    goto done;
-summary:
-    entry->partyMenuResult = COLOSSEUM_PARTY_MENU_SUMMARY;
-done:
     entry->partySlot = entry->partyMenuArgs->partySlot;
     Heap_Free(entry->partyMenuArgs);
     entry->partyMenuArgs = NULL;

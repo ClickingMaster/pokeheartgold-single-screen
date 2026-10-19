@@ -310,7 +310,7 @@ void FontOAM_CopyWindowChars(Window *window, int width, int height, int x, int y
     GF_ASSERT(window->width >= width + x);
     GF_ASSERT(window->height >= height + y);
     for (int i = 0; i < height; i++) {
-        sourceOffset = ((volatile Window *)window)->width * (i + y);
+        sourceOffset = window->width * (i + y);
         sourceOffset += x;
         memcpy((u8 *)charBuf + i * width * 32, (u8 *)window->pixelBuffer + sourceOffset * 32, width * 32);
     }

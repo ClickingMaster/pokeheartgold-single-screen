@@ -9,6 +9,14 @@
 #include "sprite_system.h"
 #include "sys_task_api.h"
 
+typedef struct OrbitCursorArgs {
+    int count;
+    enum HeapID heapId;
+    int resBase;
+    int fixedPalette;
+    fx32 yOffset;
+} OrbitCursorArgs;
+
 typedef struct OrbitCursorSprite {
     ManagedSprite *sprite;
     s16 x;
@@ -39,7 +47,7 @@ typedef struct OrbitCursor {
     int unk_104;
 } OrbitCursor;
 
-OrbitCursor *OrbitCursor_New(int count, enum HeapID heapId, int resBase, int fixedPalette, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData);
+OrbitCursor *OrbitCursor_New(OrbitCursorArgs args, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData);
 void OrbitCursor_ReloadPalette(OrbitCursor *p, int palette);
 void OrbitCursor_LoadResources(OrbitCursor *p, int palette);
 void OrbitCursor_CreateSprites(OrbitCursor *p);

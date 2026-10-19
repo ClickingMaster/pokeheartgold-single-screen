@@ -24,8 +24,8 @@ struct PackedMix {
 };
 
 typedef struct FlavorPair {
-    volatile u8 id;
-    volatile u8 value;
+    u8 id;
+    u8 value;
 } FlavorPair;
 
 typedef struct ApricornJuiceResult {
@@ -341,12 +341,9 @@ void ApricornJuice_RankFlavors(void *input_, void *out_) {
                 if (a == b && pairs[i].id < pairs[j].id) {
                     continue;
                 }
-                tmp.id = pairs[i].id;
-                tmp.value = pairs[i].value;
-                pairs[i].id = pairs[j].id;
-                pairs[i].value = pairs[j].value;
-                pairs[j].id = tmp.id;
-                pairs[j].value = tmp.value;
+                tmp = pairs[i];
+                pairs[i] = pairs[j];
+                pairs[j] = tmp;
             }
         }
     }
@@ -532,47 +529,42 @@ void ApricornBox_StoreJuiceRecords(SaveApricornBox *box, ApricornRecord *records
         return;
     }
     do {
-        if (outerIndex == skip) {
-            goto next_record;
-        }
-        if (!ApricornJuice_IsValid(&records->data)) {
-            goto next_record;
-        }
-        foundIndex = 0;
-        found = FALSE;
-        {
-            ApricornRecord *boxRecord = box->juiceRecords;
-            j = found;
-            do {
-                if (ApricornRecord_IsSameTrainer(records, boxRecord)) {
-                    foundIndex = (u8)j;
-                    found = TRUE;
-                    break;
-                }
-                j++;
-                boxRecord++;
-            } while (j < 3);
-        }
-        if (numRecords >= 3) {
-            destIndex = 2;
-            found = TRUE;
-        } else if (found) {
-            destIndex = (u8)(numRecords - 1);
-        } else {
-            destIndex = (u8)numRecords;
-            numRecords++;
-        }
-        if (found && (u32)foundIndex < destIndex) {
-            int limit = numRecords - 1;
-            if (foundIndex < limit) {
+        if (outerIndex != skip && ApricornJuice_IsValid(&records->data)) {
+            foundIndex = 0;
+            found = FALSE;
+            {
+                ApricornRecord *boxRecord = box->juiceRecords;
+                j = found;
                 do {
-                    box->juiceRecords[foundIndex] = box->juiceRecords[foundIndex + 1];
-                    foundIndex++;
-                } while (foundIndex < limit);
+                    if (ApricornRecord_IsSameTrainer(records, boxRecord)) {
+                        foundIndex = (u8)j;
+                        found = TRUE;
+                        break;
+                    }
+                    j++;
+                    boxRecord++;
+                } while (j < 3);
             }
+            if (numRecords >= 3) {
+                destIndex = 2;
+                found = TRUE;
+            } else if (found) {
+                destIndex = (u8)(numRecords - 1);
+            } else {
+                destIndex = (u8)numRecords;
+                numRecords++;
+            }
+            if (found && (u32)foundIndex < destIndex) {
+                int limit = numRecords - 1;
+                if (foundIndex < limit) {
+                    do {
+                        box->juiceRecords[foundIndex] = box->juiceRecords[foundIndex + 1];
+                        foundIndex++;
+                    } while (foundIndex < limit);
+                }
+            }
+            box->juiceRecords[destIndex] = *records;
         }
-        box->juiceRecords[destIndex] = *records;
-next_record:
         records++;
         outerIndex++;
     } while (outerIndex < count);

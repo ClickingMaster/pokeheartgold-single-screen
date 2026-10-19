@@ -16,6 +16,8 @@
 #include "sys_task_api.h"
 #include "systask_environment.h"
 
+#define POKEMON_PIC_FRAME_SIZE (10 * 10 * 32)
+
 // Window decorations: the text printer's down arrow and the waiting icon (NARC a/0/3/8 members 0x16/0x17 drawn
 // over frame tiles 10-11), map signposts (NARC a/0/3/6) and the framed Pokemon picture window (a/0/3/8 0x2F-0x32).
 
@@ -404,16 +406,16 @@ void PokemonPicWindow_LoadGfx(PokemonPicWindow *picWindow, PokepicTemplate *temp
     NNSG2dImageProxy *imageProxy;
     u32 location;
 
-    buffer = Heap_Alloc((enum HeapID)picWindow->spriteManager.heapID, 0x1900);
+    buffer = Heap_Alloc((enum HeapID)picWindow->spriteManager.heapID, 2 * POKEMON_PIC_FRAME_SIZE);
     frame0Rect = sPokemonPicFrame0Rect;
     CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame0Rect, buffer);
     frame1Rect = sPokemonPicFrame1Rect;
-    CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame1Rect, (u8 *)buffer + 0xC80);
+    CharTiles_LoadRectAsObjFromNarc((NarcId) template->narcID, template->charDataID, (enum HeapID)picWindow->spriteManager.heapID, &frame1Rect, (u8 *)buffer + POKEMON_PIC_FRAME_SIZE);
     resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_CHAR], 0x15CD5);
     imageProxy = SpriteTransfer_GetCharProxy(resource);
     location = NNS_G2dGetImageLocation(imageProxy, NNS_G2D_VRAM_TYPE_2DMAIN);
-    DC_FlushRange(buffer, 0x1900);
-    GX_LoadOBJ(buffer, location, 0x1900);
+    DC_FlushRange(buffer, 2 * POKEMON_PIC_FRAME_SIZE);
+    GX_LoadOBJ(buffer, location, 2 * POKEMON_PIC_FRAME_SIZE);
     Heap_Free(buffer);
     buffer = AllocAndLoadPltt16FromNarc((NarcId) template->narcID, template->palDataID, (enum HeapID)picWindow->spriteManager.heapID);
     resource = SpriteResourceCollection_Find(picWindow->spriteManager.spriteResManagers[GF_GFX_RES_TYPE_PLTT], 0x15CD5);

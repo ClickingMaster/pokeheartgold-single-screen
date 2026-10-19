@@ -11,6 +11,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "msgdata.h"
+#include "orbit_cursor.h"
 #include "palette.h"
 #include "pokepic.h"
 #include "render_text.h"
@@ -27,19 +28,6 @@
 
 // VS Recorder app core: resources, BG / sprite setup, V-blank and the screen dispatcher.
 
-// arguments of the banner object (OrbitCursor_New), passed by value
-typedef struct VsRecorderBannerArgs {
-    int count;
-    enum HeapID heapID;
-    int resBase;
-    int mode;
-    fx32 yOffset;
-} VsRecorderBannerArgs;
-
-void *OrbitCursor_New(VsRecorderBannerArgs args, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PaletteData *plttData);
-BOOL OrbitCursor_Start(void *banner, int colorScheme);
-BOOL OrbitCursor_SetActive(void *banner, int active);
-BOOL OrbitCursor_SetVisible(void *banner, int flag);
 void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void VsRecorderApp_CountMenuChoices(VsRecorderWork *work);
 
@@ -212,7 +200,7 @@ static const BgTemplate sVsRecorderBgTemplates[] = {
      },
 };
 void VsRecorder_InitResources(VsRecorderWork *work) {
-    VsRecorderBannerArgs args;
+    OrbitCursorArgs args;
     NNSG2dPaletteData *pltt;
     void *file;
 
@@ -258,9 +246,9 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
         Heap_Free(file);
     }
     args.count = 12;
-    args.heapID = HEAP_ID_109;
+    args.heapId = HEAP_ID_109;
     args.resBase = 1;
-    args.mode = work->mode;
+    args.fixedPalette = work->mode;
     args.yOffset = FX32_CONST(256);
     work->orbitCursors[0] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
     OrbitCursor_Start(work->orbitCursors[0], work->colorScheme);

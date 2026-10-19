@@ -135,12 +135,12 @@ static BOOL GlobalTerminalNet_SeqShowError(GlobalTerminalNet *net);
 static BOOL GlobalTerminalNet_SeqWaitButton(GlobalTerminalNet *net);
 static BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net);
 static BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net);
-static BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-static BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-static BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-static BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-static BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
-static BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+static BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
+static BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
+static BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
+static BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
+static BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
+static BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
 static BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net);
 static void GlobalTerminalNet_PrintMessage(GlobalTerminalNet *net, String *message);
 static void GlobalTerminalNet_ShowErrorMessage(GlobalTerminalNet *net, int msgId, int errorNumber);
@@ -490,14 +490,14 @@ BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net) {
             }
         }
         GlobalTerminalNet_PollStatus(net);
-        if (net->completeFunc != NULL) {
-            if (net->completeFunc(net, &net->responseFunc) == TRUE) {
-                net->completeFunc = NULL;
-                if (net->responseFunc != NULL) {
-                    net->responseFunc(net->callbacks.arg, &net->error);
-                    net->responseFunc = NULL;
+        if (net->pendingResponse.completeFunc != NULL) {
+            if (net->pendingResponse.completeFunc(net, &net->pendingResponse) == TRUE) {
+                net->pendingResponse.completeFunc = NULL;
+                if (net->pendingResponse.func != NULL) {
+                    net->pendingResponse.func(net->callbacks.arg, &net->error);
+                    net->pendingResponse.func = NULL;
                 }
-                MI_CpuFill8(&net->responseFunc, 0, 16);
+                MI_CpuFill8(&net->pendingResponse, 0, sizeof(net->pendingResponse));
                 net->activeCommand = GTS_REQUEST_NONE;
             }
         }
@@ -601,10 +601,10 @@ static BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
             net->error.command = 0;
             net->error.code = 7;
             net->error.isError = 1;
-            net->completeFunc = GlobalTerminalNet_CompleteError;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteError;
             break;
         case GTS_SOCKET_STATE_DONE:
-            net->completeFunc = GlobalTerminalNet_CompleteResponse;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteResponse;
             GlobalTerminalNet_HandleResponse(net);
             break;
         case GTS_SOCKET_STATE_ERROR:
@@ -612,7 +612,7 @@ static BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
             net->error.command = 0;
             net->error.code = GlobalTerminalServer_GetError();
             net->error.isError = 1;
-            net->completeFunc = GlobalTerminalNet_CompleteError;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteError;
             break;
         }
         net->prevStatus = net->status;
@@ -620,30 +620,30 @@ static BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
     return TRUE;
 }
 
-static BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_CompleteResponse(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     return TRUE;
 }
 
-static BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_CompleteVideoUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     return TRUE;
 }
 
 // stores the server's number for the uploaded video in the recording and saves it; done when the save finished
-static BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
-    int result = VsRecorder_SaveRecordNumber(net->saveData, response->numberLow, response->numberHigh, (u8 *)responseFunc + 4, (u8 *)responseFunc + 6);
+    int result = VsRecorder_SaveRecordNumber(net->saveData, response->numberLow, response->numberHigh, &pending->saveState, &pending->saveWriteState);
     return (u32)(result - 2) <= 1;
 }
 
-static BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_CompleteDressUpUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     return TRUE;
 }
 
-static BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_CompleteBoxUploadFailed(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     return TRUE;
 }
 
-static BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
+static BOOL GlobalTerminalNet_CompleteError(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending) {
     return TRUE;
 }
 
@@ -653,60 +653,60 @@ static BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
 
     GlobalTerminalServer_GetResponseSize(response);
     GF_ASSERT(net->activeCommand == response->command);
-    net->responseFunc = NULL;
+    net->pendingResponse.func = NULL;
     switch (response->command) {
     case 0:
         break;
     case GTS_REQUEST_DRESS_UP_UPLOAD:
         result = GlobalTerminalNet_CheckDressUpUploadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[0];
+        net->pendingResponse.func = net->callbacks.onResponse[0];
         if (!result) {
-            net->completeFunc = GlobalTerminalNet_CompleteDressUpUploadFailed;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteDressUpUploadFailed;
         }
         break;
     case GTS_REQUEST_DRESS_UP_DOWNLOAD:
         result = GlobalTerminalNet_CheckDressUpDownloadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[1];
+        net->pendingResponse.func = net->callbacks.onResponse[1];
         break;
     case GTS_REQUEST_BOX_UPLOAD:
         result = GlobalTerminalNet_CheckBoxUploadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[2];
+        net->pendingResponse.func = net->callbacks.onResponse[2];
         if (!result) {
-            net->completeFunc = GlobalTerminalNet_CompleteBoxUploadFailed;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteBoxUploadFailed;
         }
         break;
     case GTS_REQUEST_BOX_DOWNLOAD:
         result = GlobalTerminalNet_CheckBoxDownloadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[3];
+        net->pendingResponse.func = net->callbacks.onResponse[3];
         break;
     case GTS_REQUEST_22000:
         result = GlobalTerminalNet_Check22000Result(net, response);
-        net->responseFunc = net->callbacks.onResponse[4];
+        net->pendingResponse.func = net->callbacks.onResponse[4];
         break;
     case GTS_REQUEST_RANKINGS:
         result = GlobalTerminalNet_CheckRankingsResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[5];
+        net->pendingResponse.func = net->callbacks.onResponse[5];
         break;
     case GTS_REQUEST_VIDEO_UPLOAD:
         result = GlobalTerminalNet_CheckVideoUploadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[6];
+        net->pendingResponse.func = net->callbacks.onResponse[6];
         if (!result) {
-            net->completeFunc = GlobalTerminalNet_CompleteVideoUploadFailed;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_CompleteVideoUploadFailed;
         } else {
-            net->completeFunc = GlobalTerminalNet_SaveUploadedVideoNumber;
+            net->pendingResponse.completeFunc = GlobalTerminalNet_SaveUploadedVideoNumber;
         }
         break;
     case GTS_REQUEST_VIDEO_SEARCH:
         result = GlobalTerminalNet_CheckVideoSearchResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[7];
+        net->pendingResponse.func = net->callbacks.onResponse[7];
         break;
     case GTS_REQUEST_VIDEO_DOWNLOAD:
         result = GlobalTerminalNet_CheckVideoDownloadResult(net, response);
-        net->responseFunc = net->callbacks.onResponse[8];
+        net->pendingResponse.func = net->callbacks.onResponse[8];
         break;
     case GTS_REQUEST_23003:
         result = GlobalTerminalNet_Check23003Result(net, response);
-        net->responseFunc = net->callbacks.onResponse[9];
+        net->pendingResponse.func = net->callbacks.onResponse[9];
         break;
     }
     if (!result) {

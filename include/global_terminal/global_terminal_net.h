@@ -44,7 +44,8 @@ typedef struct GlobalTerminalNetError {
 } GlobalTerminalNetError;
 
 typedef void (*GlobalTerminalNetResponseFunc)(void *arg, GlobalTerminalNetError *error);
-typedef BOOL (*GlobalTerminalNetCompleteFunc)(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc);
+typedef struct GlobalTerminalNetPendingResponse GlobalTerminalNetPendingResponse;
+typedef BOOL (*GlobalTerminalNetCompleteFunc)(GlobalTerminalNet *net, GlobalTerminalNetPendingResponse *pending);
 typedef int (*GlobalTerminalNetStepFunc)(GlobalTerminalNet *net, void *stepWork);
 typedef void (*GlobalTerminalNetMessageFunc)(void *arg, String *message);
 
@@ -87,7 +88,7 @@ typedef struct GlobalTerminalNetDressUpForm {
     u16 mailMsgNo;
     u16 mailField0;
     u16 mailField1;
-    u8 items[40];
+    u8 items[10][4];
     u8 backdrop;
     u8 language;
     u16 unk_5A;
@@ -101,7 +102,7 @@ typedef struct GlobalTerminalNetDressUpRecord {
     u32 personality;
     u32 otId;
     u16 species;
-    u8 nickname[0x24 - 0x0E];
+    u16 nickname[11];
     u16 secondText[8];
     s8 z;
     u8 x;
@@ -113,7 +114,7 @@ typedef struct GlobalTerminalNetDressUpRecord {
     u16 mailMsgNo;
     u16 mailField0;
     u16 mailField1;
-    u8 items[40];
+    u8 items[10][4];
     u8 backdrop;
     u8 language;
 } GlobalTerminalNetDressUpRecord;
@@ -199,6 +200,15 @@ typedef struct GlobalTerminalNetStepWork {
     u32 unk_08;
 } GlobalTerminalNetStepWork;
 
+// The callback of the finished request and the step that completes it (called until it returns TRUE).
+struct GlobalTerminalNetPendingResponse {
+    GlobalTerminalNetResponseFunc func;
+    u16 saveState; // VsRecorder_SaveRecordNumber
+    u16 saveWriteState;
+    u8 unk_08[4];
+    GlobalTerminalNetCompleteFunc completeFunc;
+};
+
 struct GlobalTerminalNet {
     SaveData *saveData;
     GlobalTerminalNetMessageFunc messageFunc;
@@ -235,9 +245,7 @@ struct GlobalTerminalNet {
     MsgData *msgData;
     MessageFormat *msgFormat;
     String *string;
-    GlobalTerminalNetResponseFunc responseFunc;
-    u8 unk_404[8];
-    GlobalTerminalNetCompleteFunc completeFunc;
+    GlobalTerminalNetPendingResponse pendingResponse;
     u8 unk_410;
     u8 sendDelay;
     u8 unk_412[2];

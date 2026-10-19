@@ -25,7 +25,7 @@ struct LobbyRequest {
 
 typedef void (*LobbyEnterChannelCallback)(BOOL success, int error, const char *channel, u32 param);
 typedef void (*LobbyGetChannelModeCallback)(BOOL success, const char *channel, u32 mode, u32 param);
-typedef void (*LobbyGetChannelKeysCallback)(BOOL success, const char *channel, int userId, u32 key, u32 value, u32 param);
+typedef void (*LobbyGetChannelKeysCallback)(BOOL success, const char *channel, int userId, const char *key, const char *value, u32 param);
 typedef void (*LobbyEnumChannelsCallback)(BOOL success, u32 count, const char *channels, u32 topics, u32 userCounts, u32 param);
 typedef void (*LobbyEnumUsersCallback)(BOOL success, const char *channel, u32 count, void *userIds, u32 param);
 

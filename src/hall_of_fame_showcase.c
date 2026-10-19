@@ -151,11 +151,11 @@ BOOL HallOfFameShowcase_Init(OverlayManager *man, int *state) {
     HBlankInterruptDisable();
     GfGfx_EngineASetPlanes(0);
     GfGfx_EngineBSetPlanes(0);
-    *(volatile u16 *)0x04000050 = 0;
-    *(volatile u16 *)0x04001050 = 0;
+    G2_BlendNone();
+    G2S_BlendNone();
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
-    *(volatile u16 *)0x04000304 &= 0xFFFF7FFF;
+    GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     Heap_Create(HEAP_ID_3, HEAP_ID_59, 0x40000);
     showcase = OverlayManager_CreateAndGetData(man, sizeof(HallOfFameShowcase), HEAP_ID_59);
     MI_CpuFill8(showcase, 0, sizeof(HallOfFameShowcase));

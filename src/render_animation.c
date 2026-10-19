@@ -31,7 +31,7 @@ void RenderAnimation_InitForModel(RenderAnimation *animation, RenderModel *model
 void RenderAnimation_Free(RenderAnimation *animation);
 BOOL RenderAnimation_Advance(RenderAnimation *animation, fx32 step, BOOL loop);
 BOOL RenderAnimation_IsDone(RenderAnimation *animation);
-void RenderObj_InitFromModel(NNSG3dRenderObj *object, void *model);
+void RenderObj_InitFromModel(NNSG3dRenderObj *object, RenderModelStorage *model);
 void RenderObj_InitWithAnimation(NNSG3dRenderObj *object, RenderModelStorage *model, RenderAnimation *animation);
 void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const MtxFx33 *rotation);
 void RenderObj_DrawAt(int object, VecFx32 *position);
@@ -179,8 +179,8 @@ static void RenderObj_Init(NNSG3dRenderObj *object, NNSG3dResMdl *model) {
     NNS_G3dRenderObjInit(object, model);
 }
 
-void RenderObj_InitFromModel(NNSG3dRenderObj *object, void *model) {
-    RenderObj_Init(object, *(NNSG3dResMdl **)((u8 *)model + 0xC));
+void RenderObj_InitFromModel(NNSG3dRenderObj *object, RenderModelStorage *model) {
+    RenderObj_Init(object, model->model);
 }
 
 static void RenderObj_AddAnimObj(NNSG3dRenderObj *object, NNSG3dAnmObj *animation) {

@@ -16,15 +16,14 @@ static BOOL OrbitCursor_StepToward(s16 x, s16 y, float fx, float fy, float *outX
 fx32 FX_Sqrt(fx32 x);
 u16 FX_Atan2Idx(fx32 y, fx32 x);
 
-OrbitCursor *OrbitCursor_New(volatile int count, volatile enum HeapID heapId, volatile int resBase, volatile int fixedPalette, fx32 yOffset, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData) {
-    enum HeapID heap = heapId;
-    OrbitCursor *motion = Heap_Alloc(heap, sizeof(OrbitCursor));
+OrbitCursor *OrbitCursor_New(OrbitCursorArgs args, SpriteSystem *spriteSys, SpriteManager *spriteMan, PaletteData *plttData) {
+    OrbitCursor *motion = Heap_Alloc(args.heapId, sizeof(OrbitCursor));
 
-    motion->count = count;
-    motion->heapId = heap;
-    motion->resBase = resBase;
-    motion->fixedPalette = fixedPalette;
-    motion->yOffset = yOffset;
+    motion->count = args.count;
+    motion->heapId = args.heapId;
+    motion->resBase = args.resBase;
+    motion->fixedPalette = args.fixedPalette;
+    motion->yOffset = args.yOffset;
     motion->spriteSys = spriteSys;
     motion->spriteMan = spriteMan;
     motion->plttData = plttData;

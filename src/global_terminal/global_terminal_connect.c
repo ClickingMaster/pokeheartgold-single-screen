@@ -1001,15 +1001,13 @@ void GlobalTerminalNet_DressUpToUploadForm(const GlobalTerminalNetDressUpRecord 
     dst->mailField0 = src->mailField0;
     dst->mailField1 = src->mailField1;
     {
-        const u8 *s = src->items;
-        GlobalTerminalNetDressUpForm *d = dst;
+        const u8 *item = src->items[0];
         for (i = 0; i < 10; i++) {
-            d->items[0] = s[0];
-            d->items[1] = s[1];
-            d->items[2] = s[2];
-            d->items[3] = s[3];
-            s += 4;
-            d = (GlobalTerminalNetDressUpForm *)((u8 *)d + 4);
+            dst->items[i][0] = item[0];
+            dst->items[i][1] = item[1];
+            dst->items[i][2] = item[2];
+            dst->items[i][3] = item[3];
+            item += 4;
         }
     }
     dst->backdrop = src->backdrop;
@@ -1037,25 +1035,19 @@ void GlobalTerminalNet_UploadFormToDressUp(const GlobalTerminalNetDressUpForm *s
     dst->mailField0 = src->mailField0;
     dst->mailField1 = src->mailField1;
     {
-        const u8 *s = src->items;
-        GlobalTerminalNetDressUpRecord *d = dst;
+        const u8 *item = src->items[0];
         for (i = 0; i < 10; i++) {
-            d->items[0] = s[0];
-            d->items[1] = s[1];
-            d->items[2] = s[2];
-            d->items[3] = s[3];
-            s += 4;
-            d = (GlobalTerminalNetDressUpRecord *)((u8 *)d + 4);
+            dst->items[i][0] = item[0];
+            dst->items[i][1] = item[1];
+            dst->items[i][2] = item[2];
+            dst->items[i][3] = item[3];
+            item += 4;
         }
     }
     dst->backdrop = src->backdrop;
     dst->language = src->language;
-    {
-        GlobalTerminalNetDressUpRecord *p = dst;
-        for (i = 0; i < 11; i++) {
-            *(u16 *)&p->nickname[0] = 0xFFFF;
-            p = (GlobalTerminalNetDressUpRecord *)((u8 *)p + 2);
-        }
+    for (i = 0; i < 11; i++) {
+        dst->nickname[i] = EOS;
     }
     dst->unk_38[0] = 0;
 }

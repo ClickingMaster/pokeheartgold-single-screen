@@ -985,12 +985,11 @@ BOOL NintendoWfc_Exit(OverlayManager *man, int *state) {
 }
 
 static void NintendoWfc_VBlankCB(void *arg) {
-    volatile u32 *irqCheck = (volatile u32 *)0x027E0000; // for the OS IRQ check flag
     NintendoWfcConnect *wfc = arg;
     GF_RunVramTransferTasks();
     DoScheduledBgGpuUpdates(wfc->bgConfig);
     OamManager_ApplyAndResetBuffers();
-    irqCheck[0x3FF8 / 4] |= 1;
+    OS_SetIrqCheckFlag(OS_IE_V_BLANK);
 }
 
 static void NintendoWfc_SetGfxBanks(void) {

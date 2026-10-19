@@ -389,12 +389,9 @@ static void BillboardObject_LoadModel(BillboardObject *object, BillboardResource
 }
 
 static void BillboardObject_AddTextureAnimation(Billboard *billboard, BillboardObject *object, BillboardResource *resource) {
-    register BillboardResource *res = resource;
-    register BillboardObject *obj = object;
-    register Billboard *parent = billboard;
-    obj->resourceTexture = BillboardResource_GetTexture(res);
-    obj->gfxSequence = res->gfxSequence;
-    obj->textureAnimation = TextureAnimationPool_Add(parent->textureAnimationPool, &obj->gfxSequence, obj->resourceTexture, obj->texKey, obj->paletteKey, obj->frame);
+    object->resourceTexture = BillboardResource_GetTexture(resource);
+    object->gfxSequence = resource->gfxSequence;
+    object->textureAnimation = TextureAnimationPool_Add(billboard->textureAnimationPool, &object->gfxSequence, object->resourceTexture, object->texKey, object->paletteKey, object->frame);
 }
 
 static void BillboardObject_LoadModelWithKeys(BillboardObject *object, BillboardResource *resource) {
@@ -587,7 +584,7 @@ static void BillboardObject_UpdateTexPlttSequence(BillboardObject *object) {
 }
 
 static void Billboard_SetModelTexture(NNSG3dResMdl *model, NNSG3dResTex *texture, u8 index) {
-    register u8 *materialBlock;
+    u8 *materialBlock;
     NNSG3dResDict *materialDict;
     u32 *entry;
     u16 value;

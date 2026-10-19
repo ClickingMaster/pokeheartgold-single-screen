@@ -1,3 +1,5 @@
+#include "particle_scene.h"
+
 #include "global.h"
 
 #include "gf_3d_vramman.h"
@@ -5,12 +7,11 @@
 #include "particle_system.h"
 #include "swap_3d_buffers.h"
 
-typedef struct ParticleScene {
-    enum HeapID heapID;
-    int resource;
+struct ParticleScene {
+    ParticleSceneParam param;
     u32 unused;
     SPLEmitter *context;
-} ParticleScene;
+};
 
 static void ParticleScene_Setup3D(void);
 static u32 ParticleScene_AllocTexVram(u32 size, BOOL compressed);
@@ -19,16 +20,6 @@ static SPLEmitter *ParticleScene_NewParticleSystem(enum HeapID heapID);
 static SPLEmitter *ParticleScene_NewParticleSystemFromNarc(enum HeapID heapID, NarcId narc, int file);
 static void ParticleScene_FreeParticleSystem(SPLEmitter *context);
 static void ParticleScene_SetEmitterPosition(SPLEmitter *emitter);
-
-void ParticleScene_HidePlanes(void);
-void ParticleScene_SetBlend(void);
-GF3DVramMan *ParticleScene_CreateVramMan(enum HeapID heapID);
-void ParticleScene_ReserveVram(void);
-void ParticleScene_DrawAndSwap(void);
-ParticleScene *ParticleScene_New(ParticleScene *settings);
-void ParticleScene_CreateEmitter(ParticleScene *scene, int resource);
-BOOL ParticleScene_IsActive(ParticleScene *scene);
-void ParticleScene_Free(ParticleScene *scene);
 
 void ParticleScene_HidePlanes(void) {
     GfGfx_DisableEngineAPlanes();
@@ -120,16 +111,11 @@ static void ParticleScene_SetEmitterPosition(SPLEmitter *emitter) {
     SPL_SetEmitterPosition(emitter, &position);
 }
 
-ParticleScene *ParticleScene_New(ParticleScene *settings) {
-    ParticleScene *scene = Heap_Alloc(settings->heapID, sizeof(*scene));
-    GF_ASSERT(scene != NULL); /* Preserve the original settings-read order before initializing the scene. */
-    {
-        enum HeapID heapID = ((volatile ParticleScene *)settings)->heapID;
-        int resource = ((volatile ParticleScene *)settings)->resource;
-        scene->heapID = heapID;
-        scene->resource = resource;
-    }
-    scene->context = ParticleScene_NewParticleSystemFromNarc(scene->heapID, (NarcId)119, scene->resource);
+ParticleScene *ParticleScene_New(ParticleSceneParam *param) {
+    ParticleScene *scene = Heap_Alloc(param->heapID, sizeof(*scene));
+    GF_ASSERT(scene != NULL);
+    scene->param = *param;
+    scene->context = ParticleScene_NewParticleSystemFromNarc(scene->param.heapID, (NarcId)119, scene->param.resource);
     ParticleSystem_SetPerspectiveType(scene->context, 1);
     return scene;
 }

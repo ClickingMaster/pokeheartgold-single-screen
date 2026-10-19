@@ -600,13 +600,13 @@ void GtsServer_RequestInfo(void) {
     }
 }
 
-// profile is a WifiServerProfile; the console's MAC address is filled in.
-void GtsServer_RequestSetProfile(void *profile, void *response) {
-    OS_GetMacAddress((u8 *)profile + 0x1C);
-    memcpy(gGtsServerRequest, profile, 0x64);
+// The console's MAC address is filled in.
+void GtsServer_RequestSetProfile(WifiServerProfile *profile, void *response) {
+    OS_GetMacAddress(profile->macAddress);
+    memcpy(gGtsServerRequest, profile, sizeof(WifiServerProfile));
     gGtsServerPending.response = response;
     GameStats_Start();
-    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp", gGtsServerRequest, 0x64, gGtsServerPending.response, 8)) {
+    if (GtsServer_StartRequest("http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp", gGtsServerRequest, sizeof(WifiServerProfile), gGtsServerPending.response, 8)) {
         gGtsServer.state = GTS_SERVER_STATE_SET_PROFILE;
     } else {
         gGtsServer.state = GTS_SERVER_STATE_DONE;

@@ -29,6 +29,7 @@
 #include "palette.h"
 #include "palette_blink.h"
 #include "palette_vram_addr.h"
+#include "particle_scene.h"
 #include "party.h"
 #include "pm_string.h"
 #include "pokedex.h"
@@ -39,6 +40,7 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "screen_fade.h"
+#include "seal_case.h"
 #include "sound_chatot.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
@@ -52,23 +54,6 @@
 
 // The evolution scene: the old and the new Pokemon's pictures flash and swap scale while particles play, then the
 // Pokemon's data is updated and any moves it learns at its new level are taught.
-
-typedef struct ParticleScene ParticleScene;
-
-typedef struct EvolutionParticleSceneParam {
-    enum HeapID heapId;
-    int resource;
-} EvolutionParticleSceneParam;
-
-void ParticleScene_HidePlanes(void);
-void ParticleScene_SetBlend(void);
-GF3DVramMan *ParticleScene_CreateVramMan(enum HeapID heapID);
-void ParticleScene_ReserveVram(void);
-void ParticleScene_DrawAndSwap(void);
-ParticleScene *ParticleScene_New(EvolutionParticleSceneParam *param);
-void ParticleScene_CreateEmitter(ParticleScene *scene, int resource);
-BOOL ParticleScene_IsActive(ParticleScene *scene);
-void ParticleScene_Free(ParticleScene *scene);
 
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 frame, enum HeapID heapId);
@@ -790,9 +775,9 @@ static void EvolutionScene_Run(EvolutionTaskData *data) {
         break;
     case EVO_STATE_START_PARTICLES:
         if (--data->timer == 0) {
-            EvolutionParticleSceneParam param;
+            ParticleSceneParam param;
 
-            param.heapId = data->heapId;
+            param.heapID = data->heapId;
             param.resource = 0;
             data->particleScene = ParticleScene_New(&param);
             ParticleScene_CreateEmitter(data->particleScene, 0);
@@ -1150,7 +1135,7 @@ static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
     int value;
     Pokemon *shedinja;
     Mail *mail;
-    u8 mailData[0x18];
+    CAPSULE capsule;
 
     switch (data->evolutionCondition) {
     case EVO_LEVEL_NINJASK:
@@ -1193,8 +1178,8 @@ static void EvolutionScene_ApplyEvolutionEffects(EvolutionTaskData *data) {
         SetMonData(shedinja, MON_DATA_MAIL, mail);
         Heap_Free(mail);
         SetMonData(shedinja, MON_DATA_BALL_CAPSULE_ID, &value);
-        MI_CpuClearFast(mailData, sizeof(mailData));
-        SetMonData(shedinja, MON_DATA_BALL_CAPSULE, mailData);
+        MI_CpuClearFast(&capsule, sizeof(capsule));
+        SetMonData(shedinja, MON_DATA_BALL_CAPSULE, &capsule);
         UpdateMonAbility(shedinja);
         CalcMonLevelAndStats(shedinja);
         Party_AddMon(data->party, shedinja);

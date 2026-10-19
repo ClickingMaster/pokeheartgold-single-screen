@@ -240,21 +240,8 @@ void CodeEntry_CreateCursorSprites(CodeEntryApp *app) {
     CodeEntry_SetCursorVisible(app, 2, FALSE);
 }
 
-typedef struct CodeEntryButtonSpriteTemplate {
-    s16 x;
-    s16 y;
-    s16 z;
-    u16 animation;
-    int drawPriority;
-    volatile int pal;
-    NNS_G2D_VRAM_TYPE vram;
-    int resIdList[GF_GFX_RES_TYPE_MAX];
-    int bgPriority;
-    int vramTransfer;
-} CodeEntryButtonSpriteTemplate;
-
 void CodeEntry_CreateButtonSprites(CodeEntryApp *app) {
-    CodeEntryButtonSpriteTemplate template;
+    ManagedSpriteTemplate template;
     SpriteSystem *spriteSystem = app->spriteSystem;
     SpriteManager *spriteManager = app->spriteManager;
 
@@ -274,9 +261,9 @@ void CodeEntry_CreateButtonSprites(CodeEntryApp *app) {
     template.resIdList[GF_GFX_RES_TYPE_ANIM] = 1002;
     template.resIdList[GF_GFX_RES_TYPE_MCEL] = noResource;
     template.resIdList[GF_GFX_RES_TYPE_MANM] = noResource;
-    app->buttons[0].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, (ManagedSpriteTemplate *)&template);
+    app->buttons[0].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
     template.pal = 1;
-    app->buttons[1].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, (ManagedSpriteTemplate *)&template);
+    app->buttons[1].sprite = SpriteSystem_NewSprite(spriteSystem, spriteManager, &template);
     ManagedSprite_SetPositionXY(app->buttons[0].sprite, (app->hitboxes[CODE_ENTRY_HITBOX_BACK].rect.left + app->hitboxes[CODE_ENTRY_HITBOX_BACK].rect.right) / 2, (app->hitboxes[CODE_ENTRY_HITBOX_BACK].rect.top + app->hitboxes[CODE_ENTRY_HITBOX_BACK].rect.bottom) / 2);
     ManagedSprite_SetAnim(app->buttons[0].sprite, 0);
     ManagedSprite_TickFrame(app->buttons[0].sprite);

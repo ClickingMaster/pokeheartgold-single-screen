@@ -998,14 +998,14 @@ int NintendoWfcUnused_StartLeadersRankInput(NintendoWfcUnused *wfc) {
 int NintendoWfcUnused_HandleLeadersRankInput(NintendoWfcUnused *wfc) {
     if (gSystem.newAndRepeatedKeys & PAD_KEY_UP) {
         wfc->rank++;
-        if (*(volatile int *)&wfc->rank > 10) {
+        if (wfc->rank > 10) {
             wfc->rank = 1;
         }
         NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, wfc->rank, 2);
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         wfc->rank--;
-        if (*(volatile int *)&wfc->rank < 1) {
+        if (wfc->rank < 1) {
             wfc->rank = 10;
         }
         NintendoWfcUnused_PrintNumber(&wfc->rankWindow, wfc->rankString, wfc->rank, 2);
@@ -1049,7 +1049,7 @@ int NintendoWfcUnused_HandleLeadersRoomInput(NintendoWfcUnused *wfc) {
         PlaySE(SEQ_SE_DP_SELECT);
     } else if (gSystem.newAndRepeatedKeys & PAD_KEY_DOWN) {
         wfc->room--;
-        if (*(volatile int *)&wfc->room < 1) {
+        if (wfc->room < 1) {
             wfc->room = wfc->roomCount;
         }
         NintendoWfcUnused_PrintNumber(&wfc->roomWindow, wfc->roomString, wfc->room, 3);

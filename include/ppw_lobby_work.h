@@ -11,7 +11,7 @@ typedef struct PPWLobbyCallbacks {
     void (*onPlayerLeave)(int);
     void (*onEvent3)(int, int, int, void *);
     void (*onMessage)(int, int, int, void *, u32);
-    void (*onLocationsChanged)(int, int, int, int, int, char *, u32, int);
+    void (*onLocationsChanged)(int, int, int, int, const char *, const void *, u32, u32);
     void (*onPlayerRecordChanged)(int, const void *);
     void (*onPlayerUpdate)(int, const u8 *, u32);
     void (*onMatchInfo)(int, void *);

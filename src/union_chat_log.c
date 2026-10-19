@@ -532,7 +532,7 @@ static int UnionChatLog_HandleTouchButtons(UnionChatLogData *data) {
                     for (i = 0; i < 10; i++) {
                         UnionChatLogPeer *peer = CommWireless_GetParentInfo(i);
                         if (peer) {
-                            register UnionChatLogPeerChat *chat = &peer->chat;
+                            UnionChatLogPeerChat *chat = &peer->chat;
                             if (data->unionRoom->slots[i].state == 2 && chat->trainerId == data->log->slots[index].trainerId) {
                                 PlaySE(SEQ_SE_DP_BUTTON3);
                                 data->unionRoom->slots[i].emoteRequest = 1;
