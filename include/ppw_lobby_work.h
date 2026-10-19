@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_PPW_LOBBY_WORK_H
 #define POKEHEARTGOLD_PPW_LOBBY_WORK_H
 
+#include "lobby_event_deque.h"
 #include "overlay45_format_buffer_private.h"
 
 // The callbacks the game passes to PPW_LobbyInitializeAsync, in table order.
@@ -15,7 +16,7 @@ typedef struct PPWLobbyCallbacks {
     void (*onPlayerUpdate)(int, const u8 *, u32);
     void (*onMatchInfo)(int, void *);
     void (*onMatchClosed)(int, void *);
-    void (*onLobbyEvent)(void);
+    void (*onLobbyEvent)(u32);
     void (*onOwnRecord)(int, void *, u32);
     int (*onScheduleReceived)(int, void *);
     void (*onSpecialVisitorsReceived)(int, void *, u32);
@@ -62,11 +63,46 @@ typedef struct PPWLobbyTime {
     s64 seconds;
 } PPWLobbyTime;
 
+// A special visitor of the lobby: player id and visitor value, as the game receives them.
+typedef struct PPWLobbyVipRecord {
+    u32 id;
+    u32 value;
+} PPWLobbyVipRecord;
+
+typedef struct PPWLobbyVipVector {
+    PPWLobbyVipRecord *data;
+    u32 size;
+    u32 capacity;
+} PPWLobbyVipVector;
+
+// The schedule record as the server sends it and PPWLobbySchedule_Copy writes it: a header and the timed events.
+typedef struct PPWLobbyScheduleRecord {
+    u32 lockTime;
+    u32 unk_04;
+    u32 roomFlag;
+    u8 roomType;
+    u8 season;
+    u16 eventCount;
+    LobbyEvent events[1];
+} PPWLobbyScheduleRecord;
+
+// The event schedule the server sends for the lobby, and the questionnaire.
 typedef struct PPWLobbySchedule {
     int state;
     int hasTime;
     PPWLobbyTime time;
-    u8 unk_10[0x1C];
+    s64 startTime;
+    BOOL startRequested;
+    u32 lockTime;
+    u32 unk_20;
+    u32 roomFlag;
+    u8 roomType;
+    u8 season;
+    LobbyEventVector events;
+    LobbyEventDeque pendingEvents;
+    PPWLobbyVipVector vips;
+    u8 questionnaire[0x2D8];
+    BOOL hasQuestionnaire;
 } PPWLobbySchedule;
 
 typedef struct PPWLobbyWork {
@@ -87,8 +123,28 @@ typedef struct PPWLobbyWork {
     PPWLobbyPlayers players;
     u32 timers[4];
     PPWLobbySchedule schedule;
-    u8 unk_170[0x30C];
 } PPWLobbyWork;
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern PPWLobbyWork *gPPWLobbyWork;
+
+PPWLobbyWork *PPWLobby_GetWork(void);
+BOOL PPWLobbySchedule_GetQuestionnaire(PPWLobbySchedule *, void *);
+BOOL PPWLobbySchedule_SetQuestionnaire(PPWLobbySchedule *, const void *);
+void PPWLobbySchedule_Process(PPWLobbySchedule *);
+BOOL PPWLobbySchedule_CanStart(PPWLobbySchedule *);
+BOOL PPWLobbySchedule_Start(PPWLobbySchedule *);
+PPWLobbySchedule *PPWLobbySchedule_Init(PPWLobbySchedule *);
+BOOL PPWLobbySchedule_Copy(PPWLobbySchedule *, PPWLobbyScheduleRecord *, u32 *);
+void PPWLobbySchedule_CopyToVector(LobbyCharVector *, PPWLobbySchedule *);
+LobbyEvent *LobbyEventVector_Data(LobbyEventVector *);
+
+#ifdef __cplusplus
+}
+#endif
 
 // The start of the player record the game uploads as its user profile.
 typedef struct PPWLobbyUserProfile {

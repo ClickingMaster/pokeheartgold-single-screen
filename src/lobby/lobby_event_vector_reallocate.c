@@ -7,12 +7,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct LobbyEventVector {
-    LobbyEvent *data;
-    u32 size;
-    u32 capacity;
-} LobbyEventVector;
-
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 extern void LobbyEventVector_Allocate(LobbyEventVector *, u32, LobbyTag);
 void LobbyEventVector_Reallocate(LobbyEventVector *, LobbyTag, u32);

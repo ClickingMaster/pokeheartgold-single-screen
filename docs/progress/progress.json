@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "8d77252d68bf13c2307a059436d95c46e943733c",
+  "commit": "ed8f60e903a851eceeac255d032a275de7a0755f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "139704ed2b9d203b850ecfae9864b819a1fce4719d78ebfd277db2fc970e2ea1",
+    "ARM9": "5a15485e4db6251638fee858c3b8103faa29a55496574835935323e4cedf142d",
     "ARM7": "0da6130037bf22ae4d82025de682c24b6ced4ea7599a82c3eb6c6eb29c8b9efc"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -3316,26 +3316,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "ppw_lobby_schedule_copy.o",
-      "bytes": 152,
+      "object": "ppw_lobby_schedule.o",
+      "bytes": 424,
       "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_copy.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ppw_lobby_schedule_copy_to_vector.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_copy_to_vector.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ppw_lobby_schedule_init.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_init.c"
+      "source": "src/lobby/ppw_lobby_schedule.c"
     },
     {
       "cpu": "ARM9",
@@ -3348,18 +3332,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "ppw_lobby_schedule_process.o",
-      "bytes": 476,
+      "object": "ppw_lobby_schedule_progress.o",
+      "bytes": 884,
       "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_process.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ppw_lobby_schedule_questionnaire.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_questionnaire.c"
+      "source": "src/lobby/ppw_lobby_schedule_progress.c"
     },
     {
       "cpu": "ARM9",
@@ -3368,14 +3344,6 @@
       "bytes": 76,
       "status": "cpp",
       "source": "src/lobby/ppw_lobby_schedule_set_vip_records.cpp"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "ppw_lobby_schedule_start.o",
-      "bytes": 332,
-      "status": "c",
-      "source": "src/lobby/ppw_lobby_schedule_start.c"
     },
     {
       "cpu": "ARM9",

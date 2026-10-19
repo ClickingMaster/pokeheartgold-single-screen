@@ -1479,9 +1479,7 @@ Overlay OVY_45
     Object src/lobby/lobby_event_deque_map_destroy.o
     Object src/lobby/ppw_lobby_player_set_destroy_nodes.o
     Object src/lobby/lobby_vector_growth.o
-    Object src/lobby/ppw_lobby_schedule_init.o
-    Object src/lobby/ppw_lobby_schedule_copy.o
-    Object src/lobby/ppw_lobby_schedule_copy_to_vector.o
+    Object src/lobby/ppw_lobby_schedule.o
     Object src/lobby/ppw_lobby_schedule_load.o
     Object src/lobby/lobby_event_deque_assign.o
     Object src/lobby/lobby_event_deque_append_range.o
@@ -1496,9 +1494,7 @@ Overlay OVY_45
     Object src/lobby/ppw_lobby_schedule_set_vip_records.o
     Object src/lobby/lobby_vip_vector_assign_range.o
     Object src/lobby/ppw_lobby_schedule_validate_vip_records.o
-    Object src/lobby/ppw_lobby_schedule_questionnaire.o
-    Object src/lobby/ppw_lobby_schedule_process.o
-    Object src/lobby/ppw_lobby_schedule_start.o
+    Object src/lobby/ppw_lobby_schedule_progress.o
     Object src/lobby/lobby_event_deque_iterator_at.o
     Object src/lobby/lobby_event_deque_add_back_capacity.o
     Object src/lobby/lobby_event_deque_capacity.o

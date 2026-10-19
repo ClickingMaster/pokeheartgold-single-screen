@@ -76,6 +76,13 @@ inline LobbyEventDequeMapIterator::LobbyEventDequeMapIterator(LobbyEventDequeMap
 }
 #endif
 
+// The schedule's events in time order, before they are queued in the deque.
+typedef struct LobbyEventVector {
+    LobbyEvent *data;
+    u32 size;
+    u32 capacity;
+} LobbyEventVector;
+
 // The buffer the map grows through; allocator points at the capacity of the map it grows.
 typedef struct LobbyEventDequeMapBuffer {
     LobbyEventDequeMap map;
